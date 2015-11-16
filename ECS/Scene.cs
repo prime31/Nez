@@ -17,7 +17,7 @@ namespace Nez
 		public Physics.Physics physics;
 
 		public bool enablePostProcessing;
-		readonly List<PostProcessingStep> _postProcessingSteps = new List<PostProcessingStep>();
+		readonly List<PostProcessor> _postProcessors = new List<PostProcessor>();
 
 		/// <summary>
 		/// The list of entities within this Scene
@@ -52,7 +52,10 @@ namespace Nez
 
 
 		internal void end()
-		{}
+		{
+			foreach( var renderer in _renderers )
+				renderer.onSceneEnd();
+		}
 
 
 		internal void update()
@@ -78,8 +81,16 @@ namespace Nez
 
 		internal void render()
 		{
+			var lastRendererHadRenderTexture = false;
 			foreach( var renderer in _renderers )
+			{
+				// MonoGame follows the XNA bullshit so it will clear the entire buffer if we change the render target
+				if( lastRendererHadRenderTexture )
+					Graphics.defaultGraphics.graphicsDevice.Clear( clearColor );
+				
 				renderer.render( this );
+				lastRendererHadRenderTexture = renderer.renderTexture != null;
+			}
 		}
 
 
@@ -95,26 +106,13 @@ namespace Nez
 			if( !enablePostProcessing )
 				return;
 
-			foreach( var step in _postProcessingSteps )
+			foreach( var step in _postProcessors )
 			{
 				if( !step.enabled )
 					continue;
-				
-				// TODO: support post processing
-				// _activeRenderTarget: RT that the scene was drawn into
-				// _activeInputSource: RT used for post effet
-//				var temp = _activeRenderTarget;
-//				_activeRenderTarget = _activeInputSource;
-//				_activeInputSource = temp;
-//				_device.SetRenderTarget(_activeRenderTarget);
-//
-//				step.process( _activeInputSource, _activeRenderTarget );
-			}
 
-//			_device.SetRenderTargets( _oldBindings );
-//			Graphics.defaultGraphics.spriteBatch.Begin();
-//			Graphics.defaultGraphics.spriteBatch.Draw(_activeRenderTarget, Vector2.Zero, Color.White);
-//			Graphics.defaultGraphics.spriteBatch.End();
+				step.process();
+			}
 		}
 
 
@@ -169,6 +167,18 @@ namespace Nez
 		public void removeRenderer( Renderer renderer )
 		{
 			_renderers.Remove( renderer );
+		}
+
+
+		public void addPostProcessStep( PostProcessor step )
+		{
+			_postProcessors.Add( step );
+		}
+
+
+		public void removePostProcessingStep( PostProcessor step )
+		{
+			_postProcessors.Remove( step );
 		}
 
 		#endregion

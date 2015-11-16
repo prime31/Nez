@@ -76,7 +76,7 @@ namespace Nez
 		{
 			get
 			{
-				// TODO: origin and scale need to be taken into account here
+				// TODO: origin and scale/zoom need to be taken into account here
 				return RectangleExtension.fromFloats( entity.position.X + position.X, entity.position.Y + position.Y, width, height );
 			}
 		}

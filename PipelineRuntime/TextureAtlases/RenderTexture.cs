@@ -45,6 +45,12 @@ namespace Nez.TextureAtlases
 			texture2D = null;
 		}
 
+
+		public static implicit operator RenderTarget2D( RenderTexture tex )
+		{
+			return tex.renderTarget2D;
+		}
+
 	}
 }
 

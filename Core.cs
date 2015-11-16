@@ -9,7 +9,7 @@ namespace Nez
 	public class Core : Game
 	{
 		/// <summary>
-		/// facilitates easy access the GraphicsDevice and global Content instance
+		/// facilitates easy access to the global Content instance
 		/// </summary>
 		public static Core instance;
 		public static Emitter<CoreEvents> emitter;
@@ -18,6 +18,7 @@ namespace Nez
 		public static bool exitOnEscapeKeypress = true;
 		public static bool pauseOnFocusLost = true;
 		public static bool enableDebugRender = false;
+		public static GraphicsDevice graphicsDevice;
 		/// <summary>
 		/// total number of frames that have passed
 		/// </summary>
@@ -25,7 +26,7 @@ namespace Nez
 
 		public Scene nextScene;
 		Scene _scene;
-		internal GraphicsDeviceManager _graphics;
+		GraphicsDeviceManager _graphicsManager;
 
 
 		/// <summary>
@@ -43,57 +44,19 @@ namespace Nez
 			instance = this;
 			emitter = new Emitter<CoreEvents>( new CoreEventsComparer() );
 
-			_graphics = new GraphicsDeviceManager( this );
-			_graphics.PreferredBackBufferWidth = width;
-			_graphics.PreferredBackBufferHeight = height;
-			_graphics.IsFullScreen = false;
-			_graphics.SynchronizeWithVerticalRetrace = true;
-			_graphics.DeviceReset += onGraphicsDeviceReset;
+			_graphicsManager = new GraphicsDeviceManager( this );
+			_graphicsManager.PreferredBackBufferWidth = width;
+			_graphicsManager.PreferredBackBufferHeight = height;
+			_graphicsManager.IsFullScreen = false;
+			_graphicsManager.SynchronizeWithVerticalRetrace = true;
+			_graphicsManager.DeviceReset += onGraphicsDeviceReset;
 
 			Window.AllowUserResizing = true;
 
 			Content.RootDirectory = "Content";
 			IsMouseVisible = true;
 			IsFixedTimeStep = false;
-
-			// TODO
-			this.width = width;
-			this.height = height;
 		}
-
-
-		int width;
-		int height;
-//		void updateView()
-//		{
-//			var screenWidth = GraphicsDevice.PresentationParameters.BackBufferWidth;
-//			var screenHeight = GraphicsDevice.PresentationParameters.BackBufferHeight;
-//			int drawWidth;
-//			int drawHeight;
-//
-//			if( screenWidth / width > screenHeight / height )
-//			{
-//				drawWidth = (int)( screenHeight / height * width );
-//				drawHeight = (int)screenHeight;
-//			}
-//			else
-//			{
-//				drawWidth = (int)screenWidth;
-//				drawHeight = (int)( screenWidth / width * height );
-//			}
-//
-//			Graphics.defaultGraphics.masterRenderMatrix = Matrix.CreateScale( drawWidth / (float)width );
-//
-//			GraphicsDevice.Viewport = new Viewport
-//			{
-//				X = (int)( screenWidth / 2 - drawWidth / 2 ),
-//				Y = (int)( screenHeight / 2 - drawHeight / 2 ),
-//				Width = drawWidth,
-//				Height = drawHeight,
-//				MinDepth = 0,
-//				MaxDepth = 1
-//			};
-//		}
 
 
 		/// <summary>
@@ -104,9 +67,10 @@ namespace Nez
 		void onGraphicsDeviceReset( object sender, EventArgs e )
 		{
 			emitter.emit( CoreEvents.GraphicsDeviceReset );
-			//updateView();
 		}
 
+
+		#region Game overides
 
 		protected override void Initialize()
 		{
@@ -114,7 +78,7 @@ namespace Nez
 
 			// prep the default Graphics system
 			Graphics.defaultGraphics = new Graphics( GraphicsDevice );
-			//Tracker.Initialize();
+			graphicsDevice = GraphicsDevice;
 		}
 
 
@@ -172,6 +136,8 @@ namespace Nez
 			}
 		}
 
+		#endregion
+
 
 		/// <summary>
 		/// Called after a Scene ends, before the next Scene begins
@@ -180,6 +146,22 @@ namespace Nez
 		{
 			emitter.emit( CoreEvents.SceneChanged );
 			GC.Collect();
+		}
+
+
+		/// <summary>
+		/// sets the screen size and applies the changes
+		/// </summary>
+		/// <param name="width">Width.</param>
+		/// <param name="height">Height.</param>
+		/// <param name="isFullScreen">If set to <c>true</c> is full screen.</param>
+		public void setScreenSize( int width, int height, bool isFullScreen = false )
+		{
+			_graphicsManager.PreferredBackBufferWidth = width;
+			_graphicsManager.PreferredBackBufferHeight = height;
+			_graphicsManager.IsFullScreen = isFullScreen;
+			//graphicsManager.ApplyChanges();
+			Debug.warn( "setScreenSize doesnt work properly on OS X. It causes a crash with no stack trace" );
 		}
 
 	}

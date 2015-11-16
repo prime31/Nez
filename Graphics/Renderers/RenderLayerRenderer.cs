@@ -16,7 +16,7 @@ namespace Nez
 		public int renderLayer;
 
 
-		public RenderLayerRenderer( int renderLayer )
+		public RenderLayerRenderer( int renderLayer, int renderOrder = 0 ) : base( renderOrder )
 		{
 			blendState = BlendState.AlphaBlend;
 			samplerState = SamplerState.PointClamp;

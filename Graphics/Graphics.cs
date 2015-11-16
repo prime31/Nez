@@ -75,6 +75,19 @@ namespace Nez
 		}
 
 
+		public void unload()
+		{
+			if( pixelTexture != null )
+				pixelTexture.unload();
+
+			if( particleTexture != null )
+				particleTexture.unload();
+
+			spriteBatch.Dispose();
+			spriteBatch = null;
+		}
+
+
 		#region Line
 
 		public void drawLine( Vector2 start, Vector2 end, Color color )

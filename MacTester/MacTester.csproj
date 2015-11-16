@@ -61,11 +61,25 @@
     <Compile Include="Game1.cs" />
     <Compile Include="Main.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Scenes.cs" />
+    <Compile Include="SceneTwo\SimplePostProcessor.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Info.plist" />
     <None Include="Content\Content.mgcb" />
     <None Include="packages.config" />
+    <None Include="Content\Effects\Bevels.fx" />
+    <None Include="Content\Effects\BlackOut.fx" />
+    <None Include="Content\Effects\ColorFlip.fx" />
+    <None Include="Content\Effects\GeometryEffect.fx" />
+    <None Include="Content\Effects\Grayscale.fx" />
+    <None Include="Content\Effects\HighContrast.fx" />
+    <None Include="Content\Effects\Invert.fx" />
+    <None Include="Content\Effects\MultiTexture.fx" />
+    <None Include="Content\Effects\NoEffect.fx" />
+    <None Include="Content\Effects\RainbowH.fx" />
+    <None Include="Content\Effects\SpriteEffect.fx" />
+    <None Include="Content\Effects\SpriteEffectEffect.xnb" />
   </ItemGroup>
   <Import Project="..\Nez.projitems" Label="Shared" Condition="Exists('..\Nez.projitems')" />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
@@ -77,14 +91,25 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Content\Images\" />
+    <Folder Include="SceneTwo\" />
+    <Folder Include="Content\Effects\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bin\**\*.*">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-  </ItemGroup>
-  <ItemGroup>
-    <BundleResource Include="Content\Images\moon.png" />
+    <Content Include="Content\Effects\Bevels.ogl.mgfxo" />
+    <Content Include="Content\Effects\BlackOut.ogl.mgfxo" />
+    <Content Include="Content\Effects\ColorFlip.ogl.mgfxo" />
+    <Content Include="Content\Effects\GeometryEffect.ogl.mgfxo" />
+    <Content Include="Content\Effects\Grayscale.ogl.mgfxo" />
+    <Content Include="Content\Effects\HighContrast.ogl.mgfxo" />
+    <Content Include="Content\Effects\Invert.ogl.mgfxo" />
+    <Content Include="Content\Effects\MultiTexture.ogl.mgfxo" />
+    <Content Include="Content\Effects\NoEffect.ogl.mgfxo" />
+    <Content Include="Content\Effects\RainbowH.ogl.mgfxo" />
+    <Content Include="Content\Effects\SpriteEffect.ogl.mgfxo" />
+    <Content Include="Content\Images\moon.png" />
   </ItemGroup>
   <ItemGroup>
     <InterfaceDefinition Include="MainMenu.xib" />

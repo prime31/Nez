@@ -58,11 +58,15 @@ namespace Nez
 			}
 		}
 
+		/// <summary>
+		/// world-space bounds of the camera. useful for culling.
+		/// </summary>
+		/// <value>The bounds.</value>
 		public Rectangle bounds
 		{
 			get
 			{
-				if( _matrixesAreDirty )
+				if( _matrixesAreDirty || ( _viewportAdapter != null && _viewportAdapter.hasDirtyMatrix ) )
 					updateMatrixes();
 
 				var topLeft = screenToWorldPoint( Vector2.Zero );
@@ -95,6 +99,23 @@ namespace Nez
 			}
 		}
 
+		public ViewportAdapter _viewportAdapter;
+		/// <summary>
+		/// used for automatic scaling/boxing of the viewport and translation to/from world/screen positions
+		/// </summary>
+		public ViewportAdapter viewportAdapter
+		{
+			get { return _viewportAdapter; }
+			set
+			{
+				if( _viewportAdapter != value )
+				{
+					_viewportAdapter = value;
+					_matrixesAreDirty = true;
+				}
+			}
+		}
+
 		float _near = -10f;
 		float _far = 10f;
 		bool _matrixesAreDirty = true;
@@ -102,7 +123,7 @@ namespace Nez
 		#endregion
 
 
-		public Camera2D( GraphicsDevice graphicsDevice, float near = -10, float far = 10 )
+		public Camera2D( GraphicsDevice graphicsDevice, float near = 0, float far = 1 )
 		{
 			_graphicsDevice = graphicsDevice;
 
@@ -121,9 +142,17 @@ namespace Nez
 				Matrix.CreateRotationZ( rotation ) * // rotation
 				Matrix.CreateTranslation( (int)origin.X, (int)origin.Y, 0f ); // translate -origin
 
-			Matrix.Invert( ref _inverseTransformMatrix, out _inverseTransformMatrix );
+			// if we have a ViewportAdapter take it into account
+			if( _viewportAdapter != null )
+				_transformMatrix *= _viewportAdapter.scaleMatrix;
+
+
+			Matrix.Invert( ref _transformMatrix, out _inverseTransformMatrix );
 
 			_matrixesAreDirty = false;
+
+			if( _viewportAdapter != null )
+				_viewportAdapter.hasDirtyMatrix = false;
 		}
 
 
@@ -169,12 +198,18 @@ namespace Nez
 
 		public Vector2 worldToScreenPoint( Vector2 worldPosition )
 		{
-			return Vector2.Transform( worldPosition, transformMatrix );
+			var pos = Vector2.Transform( worldPosition, transformMatrix );
+
+			if( _viewportAdapter != null )
+				pos = _viewportAdapter.screenToVirtualViewport( pos );
+			return pos;
 		}
 
 
 		public Vector2 screenToWorldPoint( Vector2 screenPosition )
 		{
+			if( _viewportAdapter != null )
+				screenPosition = _viewportAdapter.pointToVirtualViewport( screenPosition );
 			return Vector2.Transform( screenPosition, inverseTransformMatrix );
 		}
 

@@ -18,16 +18,13 @@ namespace Nez
 			Right
 		}
 
-		static GeometryBatch _geometryBatch;
-		static SpriteBatch _spriteBatch;
+		static Graphics _graphics;
 		static SpriteFont _font;
-		static Matrix _projectionMatrix;
-		static Matrix _viewMatrix;
 
 		// constants
 		const float FONT_SIZE = 14;
-		const float ELEMENT_HEIGHT = 30;
-		const float SHORT_ELEMENT_HEIGHT = 20;
+		const float ELEMENT_HEIGHT = 20;
+		const float SHORT_ELEMENT_HEIGHT = 15;
 		const float ELEMENT_PADDING = 10;
 		static Vector2 FONT_SCALE;
 
@@ -58,15 +55,11 @@ namespace Nez
 
 		public static void init( GraphicsDevice device, SpriteFont font )
 		{
-			_geometryBatch = new GeometryBatch( device );
-			_spriteBatch = new SpriteBatch( device );
+			_graphics = new Graphics( device );
 
 			_font = font;
 			var scale = FONT_SIZE / _font.MeasureString( " " ).Y;
 			FONT_SCALE = new Vector2( scale, scale );
-
-			_projectionMatrix = Matrix.CreateOrthographicOffCenter( 0, device.Viewport.Width, device.Viewport.Height, 0, -1, 1 );
-			_viewMatrix = Matrix.Identity;
 		}
 
 
@@ -89,7 +82,7 @@ namespace Nez
 
 			var y = _lastY + ELEMENT_PADDING + ( elementHeight - FONT_SIZE ) * 0.5f;
 
-			_spriteBatch.DrawString( _font, text, new Vector2( x, y ), color, 0, Vector2.Zero, FONT_SCALE, SpriteEffects.None, 0 );
+			_graphics.spriteBatch.DrawString( _font, text, new Vector2( x, y ), color, 0, Vector2.Zero, FONT_SCALE, SpriteEffects.None, 0 );
 		}
 
 
@@ -117,10 +110,9 @@ namespace Nez
 
 		public static void beginWindow( float x, float y, float width, float height )
 		{
-			_spriteBatch.Begin();
+			_graphics.spriteBatch.Begin();
 
-			_geometryBatch.beginCustomDraw( _projectionMatrix, _viewMatrix );
-			_geometryBatch.fillRectangle( x, y, width, height, WINDOW_COLOR );
+			_graphics.drawRect( x, y, width, height, WINDOW_COLOR );
 
 			_elementX = x + ELEMENT_PADDING;
 			_lastY = y;
@@ -132,8 +124,7 @@ namespace Nez
 
 		public static void endWindow()
 		{
-			_geometryBatch.endCustomDraw();
-			_spriteBatch.End();
+			_graphics.spriteBatch.End();
 		}
 
 
@@ -147,8 +138,8 @@ namespace Nez
 				ret = Input.leftMouseButtonReleased;
 				color = Input.leftMouseButtonDown ? BUTTON_COLOR_DOWN : BUTTON_COLOR_ACTIVE;
 			}
-			
-			_geometryBatch.fillRectangle( _elementX, _lastY + ELEMENT_PADDING, _elementWidth, ELEMENT_HEIGHT, color );
+
+			_graphics.drawRect( _elementX, _lastY + ELEMENT_PADDING, _elementWidth, ELEMENT_HEIGHT, color );
 			drawString( text, FONT_COLOR );
 			endElement();
 
@@ -177,10 +168,10 @@ namespace Nez
 			}
 
 			drawString( text, FONT_COLOR, TextAlign.Left );
-			_geometryBatch.fillRectangle( toggleX, _lastY + ELEMENT_PADDING, ELEMENT_HEIGHT, ELEMENT_HEIGHT, color );
+			_graphics.drawRect( toggleX, _lastY + ELEMENT_PADDING, ELEMENT_HEIGHT, ELEMENT_HEIGHT, color );
 
 			if( isChecked || isToggleActive )
-				_geometryBatch.fillRectangle( toggleX + 5, _lastY + ELEMENT_PADDING + 5, ELEMENT_HEIGHT - 10, ELEMENT_HEIGHT - 10, toggleCheckColor );
+				_graphics.drawRect( toggleX + 3, _lastY + ELEMENT_PADDING + 3, ELEMENT_HEIGHT - 6, ELEMENT_HEIGHT - 6, toggleCheckColor );
 
 			endElement();
 
@@ -209,8 +200,8 @@ namespace Nez
 				}
 			}
 				
-			_geometryBatch.fillRectangle( _elementX, _lastY + ELEMENT_PADDING, _elementWidth, SHORT_ELEMENT_HEIGHT, SLIDER_BG );
-			_geometryBatch.fillRectangle( _elementX + thumbPos, _lastY + ELEMENT_PADDING, SHORT_ELEMENT_HEIGHT, SHORT_ELEMENT_HEIGHT, color );
+			_graphics.drawRect( _elementX, _lastY + ELEMENT_PADDING, _elementWidth, SHORT_ELEMENT_HEIGHT, SLIDER_BG );
+			_graphics.drawRect( _elementX + thumbPos, _lastY + ELEMENT_PADDING, SHORT_ELEMENT_HEIGHT, SHORT_ELEMENT_HEIGHT, color );
 			drawString( value.ToString( "F" ), FONT_COLOR, TextAlign.Center, SHORT_ELEMENT_HEIGHT );
 			endElement();
 
@@ -238,8 +229,8 @@ namespace Nez
 				}
 			}
 
-			_geometryBatch.fillRectangle( _elementX, _lastY + ELEMENT_PADDING, _elementWidth, ELEMENT_HEIGHT, SLIDER_BG );
-			_geometryBatch.fillRectangle( _elementX, _lastY + ELEMENT_PADDING, thumbPos, ELEMENT_HEIGHT, color );
+			_graphics.drawRect( _elementX, _lastY + ELEMENT_PADDING, _elementWidth, ELEMENT_HEIGHT, SLIDER_BG );
+			_graphics.drawRect( _elementX, _lastY + ELEMENT_PADDING, thumbPos, ELEMENT_HEIGHT, color );
 			drawString( value.ToString( "F" ), FONT_COLOR );
 			endElement();
 
@@ -249,8 +240,8 @@ namespace Nez
 
 		public static void header( string text )
 		{
-			// expand the header to full width and ue a shorter element height
-			_geometryBatch.fillRectangle( _elementX - ELEMENT_PADDING, _lastY + ELEMENT_PADDING, _elementWidth + ELEMENT_PADDING * 2, SHORT_ELEMENT_HEIGHT, HEADER_BG );
+			// expand the header to full width and use a shorter element height
+			_graphics.drawRect( _elementX - ELEMENT_PADDING, _lastY + ELEMENT_PADDING, _elementWidth + ELEMENT_PADDING * 2, SHORT_ELEMENT_HEIGHT, HEADER_BG );
 			drawString( text, FONT_COLOR, TextAlign.Center, SHORT_ELEMENT_HEIGHT );
 			endElement( SHORT_ELEMENT_HEIGHT );
 		}
