@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="16" height="9" tilewidth="16" tileheight="16" nextobjectid="10">
+ <tileset firstgid="1" name="collisionTiles" tilewidth="16" tileheight="16" tilecount="1">
+  <image source="collisionTiles.png" width="16" height="16"/>
+ </tileset>
+ <tileset firstgid="2" name="visualtile" tilewidth="16" tileheight="16" tilecount="64">
+  <image source="tilesheet.png" width="128" height="128"/>
+ </tileset>
+ <imagelayer name="sky">
+  <image source="background.png"/>
+ </imagelayer>
+ <layer name="visualbg" width="16" height="9">
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAAA42RSw7CMAxER0ApQu0m/DZ0x5IdHICj5Sg5So/SozBDXGGiVMKSNVYzzx8VyLEDIiox/NYfz4l5Zl7cW43fO/4KjDM/lMYFXnMOWeORvOpAfTBvFZ6eqexBb+RsdJkT/1Kfu72vTFv6WsfJZzpWeuKZ3xJnJvZOW/JMNN/dE+dMwe7qTMXMfZrKzT1zbXvpbnE2J/J73GSFtF/4Zz4cp/rvCLZHyfn9FW8+fD/zQAIAAA==
+  </data>
+ </layer>
+ <layer name="visualbgalt" width="16" height="9">
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAAA9NjYEgwA2IGEoAIA4MClD6gC9RrCtUPZDPoIakDijOY4TGHB6gfmY+u3haI7ZD4wmjq0QG6elxAmEj/AtU9IEYdvQATA0MDITVCQDdz4XC3BlA/EDNoAeWBYa8Ai0dsQItIvwMA0G8dlUACAAA=
+  </data>
+ </layer>
+ <layer name="collision" width="16" height="9" visible="0" opacity="0.34">
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAAA2NggABGBsoArfQzEqGGVPuxmcmIxQxSzUQ3g5B+bPLYzMEmh08dsfqogQFVK5qPQAIAAA==
+  </data>
+ </layer>
+ <objectgroup name="portals">
+  <properties>
+   <property name="id" value="1"/>
+  </properties>
+  <object id="1" name="beta" type="portal" x="61" y="27" width="6" height="6">
+   <properties>
+    <property name="target" value="4"/>
+   </properties>
+  </object>
+  <object id="4" name="alpha" type="portal" x="20" y="12" width="6" height="6">
+   <properties>
+    <property name="target" value="1"/>
+   </properties>
+  </object>
+  <object id="9" name="wtf" x="160" y="0" width="32" height="32">
+   <ellipse/>
+  </object>
+ </objectgroup>
+ <layer name="visualfg" width="16" height="9">
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAAA2NgGAVDGSgAsTyUJgdoALE6lCYHAADs3qsyQAIAAA==
+  </data>
+ </layer>
+ <objectgroup name="markers">
+  <object id="5" name="spawn" type="spawn" x="56" y="118" width="5" height="5">
+   <ellipse/>
+  </object>
+  <object id="8" name="exit" type="exit" x="3" y="46" width="11" height="18">
+   <properties>
+    <property name="target" value="4"/>
+   </properties>
+  </object>
+ </objectgroup>
+</map>

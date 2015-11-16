@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Nez", "Nez.shproj", "{F502197A-004C-49F4-AAB1-7DC314DAFEDF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PipelineImporter", "PipelineImporter\PipelineImporter.csproj", "{63E831F4-B847-4150-B5AF-CBE059EE27B8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PipelineRuntime", "PipelineRuntime\PipelineRuntime.csproj", "{660E8ACC-2C43-450C-96C0-90D88DE2609B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MacTester", "MacTester\MacTester.csproj", "{6B8FFDF3-CE46-4D92-AD6B-9F69E8E9E6CD}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{63E831F4-B847-4150-B5AF-CBE059EE27B8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{63E831F4-B847-4150-B5AF-CBE059EE27B8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{63E831F4-B847-4150-B5AF-CBE059EE27B8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{63E831F4-B847-4150-B5AF-CBE059EE27B8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{660E8ACC-2C43-450C-96C0-90D88DE2609B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{660E8ACC-2C43-450C-96C0-90D88DE2609B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{660E8ACC-2C43-450C-96C0-90D88DE2609B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{660E8ACC-2C43-450C-96C0-90D88DE2609B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6B8FFDF3-CE46-4D92-AD6B-9F69E8E9E6CD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6B8FFDF3-CE46-4D92-AD6B-9F69E8E9E6CD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6B8FFDF3-CE46-4D92-AD6B-9F69E8E9E6CD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6B8FFDF3-CE46-4D92-AD6B-9F69E8E9E6CD}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal

@@ -1,0 +1,13 @@
+PipelineImporter/bin
+PipelineImporter/obj
+packages/MonoGame.Framework.MacOS.3.4.0.459
+packages/MarkerMetro.Unity.Ionic.Zlib.2.0.0.14
+packages/MonoGame.Framework.Content.Pipeline.Portable.3.2.99.1-Beta
+PipelineRuntime/bin
+PipelineRuntime/obj
+packages/MonoGame.Framework.Portable.3.2.99.1-Beta
+packages/Newtonsoft.Json.7.0.1
+MacTester/bin
+MacTester/Content/bin
+MacTester/Content/obj
+MacTester/obj
