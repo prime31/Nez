@@ -79,7 +79,7 @@ namespace Nez
 
 		public override void update()
 		{
-			elapsedTimeInState += Core.deltaTime;
+			elapsedTimeInState += Time.deltaTime;
 
 			if( _stateMethods.tick != null )
 				_stateMethods.tick();

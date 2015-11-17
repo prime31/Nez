@@ -60,6 +60,9 @@
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\ViewportAdapters\BoxingViewportAdapter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\PostProcessing\PostProcessor.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ECS\Camera.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Utils\Time.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Utils\CoroutineManager.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Utils\Coroutine.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="$(MSBuildThisFileDirectory)Graphics\ViewportAdapters\" />

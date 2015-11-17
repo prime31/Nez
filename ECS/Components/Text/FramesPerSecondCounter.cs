@@ -68,7 +68,7 @@ namespace Nez
 
 		public override void update()
 		{
-			currentFramesPerSecond = 1.0f / Core.deltaTime;
+			currentFramesPerSecond = 1.0f / Time.unscaledDeltaTime;
 			_sampleBuffer.Enqueue( currentFramesPerSecond );
 
 			if( _sampleBuffer.Count > maximumSamples )

@@ -61,7 +61,7 @@ namespace Nez
 
 		public override void update()
 		{
-			_bufferCounter -= Core.deltaTime;
+			_bufferCounter -= Time.unscaledDeltaTime;
 
 			var check = false;
 			foreach( var node in nodes )
@@ -92,7 +92,7 @@ namespace Nez
 				}
 				else
 				{
-					_repeatCounter -= Core.deltaTime;
+					_repeatCounter -= Time.unscaledDeltaTime;
 					if( _repeatCounter <= 0 )
 					{
 						isRepeating = true;

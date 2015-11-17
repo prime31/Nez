@@ -14,7 +14,6 @@ namespace Nez
 
 		public Camera camera;
 		public Color clearColor = Color.CornflowerBlue;
-		public float sceneActiveDuration;
 		public Physics.Physics physics;
 
 		/// <summary>
@@ -71,7 +70,6 @@ namespace Nez
 
 		internal void update()
 		{
-			sceneActiveDuration += Core.deltaTime;
 			entities.updateLists();
 
 			foreach( var entity in entities )
@@ -134,7 +132,7 @@ namespace Nez
 		/// <returns></returns>
 		public bool onInterval( float interval )
 		{
-			return (int)(( sceneActiveDuration - Core.deltaTime ) / interval ) < (int)( sceneActiveDuration / interval );
+			return (int)(( Time.timeSinceSceneLoad - Time.deltaTime ) / interval ) < (int)( Time.timeSinceSceneLoad / interval );
 		}
 
 

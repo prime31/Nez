@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Nez;
+using System.Collections;
 
 
 namespace MacTester
@@ -30,7 +31,7 @@ namespace MacTester
 
 			if( Input.leftMouseButtonPressed )
 			{
-				Debug.log( "bounds: {0}", scene.camera.bounds );
+				Debug.log( "camera bounds: {0}", scene.camera.bounds );
 			}
 
 			if( Input.mouseWheelDelta != 0 )

@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Graphics;
+using System.Collections;
 
 
 namespace Nez
@@ -12,9 +13,10 @@ namespace Nez
 		/// facilitates easy access to the global Content instance
 		/// </summary>
 		public static Core instance;
+		/// <summary>
+		/// core emitter. emits only Core level events.
+		/// </summary>
 		public static Emitter<CoreEvents> emitter;
-		public static float deltaTime;
-		public static float timeScale = 1f;
 		public static bool exitOnEscapeKeypress = true;
 		public static bool pauseOnFocusLost = true;
 		public static bool enableDebugRender = false;
@@ -27,6 +29,7 @@ namespace Nez
 		public Scene nextScene;
 		Scene _scene;
 		GraphicsDeviceManager _graphicsManager;
+		CoroutineManager _coroutineManager = new CoroutineManager();
 
 
 		/// <summary>
@@ -90,9 +93,11 @@ namespace Nez
 		{
 			if( pauseOnFocusLost && !IsActive )
 				return;
-			
-			deltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds * timeScale;
+
+			// update all our systems
+			Time.update( (float)gameTime.ElapsedGameTime.TotalSeconds );
 			Input.update();
+			_coroutineManager.update();
 
 			if( exitOnEscapeKeypress && Input.getKeyDown( Keys.Escape ) )
 			{
@@ -145,6 +150,7 @@ namespace Nez
 		protected virtual void onSceneTransition()
 		{
 			emitter.emit( CoreEvents.SceneChanged );
+			Time.sceneChanged();
 			GC.Collect();
 		}
 
@@ -162,6 +168,18 @@ namespace Nez
 			_graphicsManager.IsFullScreen = isFullScreen;
 			//graphicsManager.ApplyChanges();
 			Debug.warn( "setScreenSize doesnt work properly on OS X. It causes a crash with no stack trace" );
+		}
+
+
+		/// <summary>
+		/// starts a coroutine. Coroutines can yeild ints/floats to delay for seconds or yeild to other calls to startCoroutine.
+		/// Yielding null will make the coroutine get ticked the next frame.
+		/// </summary>
+		/// <returns>The coroutine.</returns>
+		/// <param name="enumerator">Enumerator.</param>
+		public ICoroutine startCoroutine( IEnumerator enumerator )
+		{
+			return _coroutineManager.startCoroutine( enumerator );
 		}
 
 	}
