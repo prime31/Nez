@@ -11,31 +11,27 @@ namespace Nez
 	/// </summary>
 	public class RenderLayerExcludeRenderer : Renderer
 	{
-		public BlendState blendState;
-		public SamplerState samplerState;
-		public Effect effect;
 		public int excludeRenderLayer;
 
 
-		public RenderLayerExcludeRenderer( int excludeRenderLayer, int renderOrder = 0 ) : base( renderOrder )
+		public RenderLayerExcludeRenderer( int excludeRenderLayer, Camera camera = null, int renderOrder = 0 ) : base( camera, renderOrder )
 		{
-			blendState = BlendState.AlphaBlend;
-			samplerState = SamplerState.PointClamp;
 			this.excludeRenderLayer = excludeRenderLayer;
 		}
 
 
 		public override void render( Scene scene )
 		{
-			Graphics.defaultGraphics.spriteBatch.Begin( SpriteSortMode.Deferred, blendState, samplerState, DepthStencilState.None, RasterizerState.CullNone, effect, scene.camera.transformMatrix );
+			var cam = camera ?? scene.camera;
+			beginRender( cam );
 
 			foreach( var renderable in scene.renderableComponents )
 			{
 				if( renderable.renderLayer != excludeRenderLayer && renderable.enabled )
-					renderable.render( Graphics.defaultGraphics );
+					renderable.render( Graphics.defaultGraphics, cam );
 			}
 
-			Graphics.defaultGraphics.spriteBatch.End();
+			endRender();
 		}
 
 	}

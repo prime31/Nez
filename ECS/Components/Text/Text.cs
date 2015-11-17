@@ -125,7 +125,7 @@ namespace Nez
 		}
 
 
-		public override void render( Graphics graphics )
+		public override void render( Graphics graphics, Camera camera )
 		{
 			graphics.spriteBatch.DrawString( font, text, renderPosition, color, rotation, origin, scale * zoom, spriteEffects, layerDepth );
 		}

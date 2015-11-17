@@ -1,9 +1,12 @@
 ﻿<Properties StartupItem="MacTester/MacTester.csproj" MonoDevelop.MonoMac.LastXamMacNagTime="11/16/2015 8:37:49 AM" RefactoringSettings.EnableRefactorings="True">
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="MacTester/Game1.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Graphics/Renderers/Renderer.cs">
     <Files>
-      <File FileName="MacTester/Game1.cs" Line="33" Column="28" />
-      <File FileName="Core.cs" Line="158" Column="50" />
+      <File FileName="MacTester/Game1.cs" Line="33" Column="5" />
+      <File FileName="Core.cs" Line="29" Column="12" />
+      <File FileName="MacTester/Scenes.cs" Line="45" Column="32" />
+      <File FileName="Graphics/Renderers/Renderer.cs" Line="82" Column="16" />
+      <File FileName="ECS/Camera.cs" Line="183" Column="46" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>

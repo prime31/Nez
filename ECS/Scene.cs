@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Nez.Physics;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Content;
 
 
 namespace Nez
@@ -11,10 +12,16 @@ namespace Nez
 		// cache used across all scenes so it is static
 		internal static EntityCache _entityCache;
 
-		public Camera2D camera;
+		public Camera camera;
 		public Color clearColor = Color.CornflowerBlue;
 		public float sceneActiveDuration;
 		public Physics.Physics physics;
+
+		/// <summary>
+		/// Scene-specific ContentManager. Use it to load up any resources that are needed only by this scene. If you have global/multi-scene
+		/// resources you can use Core.instance.Content to load them since Nez will not ever unload them.
+		/// </summary>
+		public ContentManager contentManager;
 
 		public bool enablePostProcessing;
 		readonly List<PostProcessor> _postProcessors = new List<PostProcessor>();
@@ -38,10 +45,11 @@ namespace Nez
 
 		public Scene( int physicsSystemCellSize = 100 )
 		{
-			camera = new Camera2D( Graphics.defaultGraphics.graphicsDevice );
+			camera = new Camera( Graphics.defaultGraphics.graphicsDevice );
 			physics = new Physics.Physics( physicsSystemCellSize );
 			entities = new EntityList( this );
 			renderableComponents = new RenderableComponentList();
+			contentManager = new ContentManager( Core.instance.Services, Core.instance.Content.RootDirectory );
 		}
 
 
@@ -54,7 +62,10 @@ namespace Nez
 		internal void end()
 		{
 			foreach( var renderer in _renderers )
-				renderer.onSceneEnd();
+				renderer.unload();
+
+			camera.unload();
+			contentManager.Dispose();
 		}
 
 
@@ -73,7 +84,6 @@ namespace Nez
 
 		internal void preRender()
 		{
-			// TODO: if enablePostProcessing is true set a proper renderTarget
 			Graphics.defaultGraphics.graphicsDevice.SetRenderTarget( null );
 			Graphics.defaultGraphics.graphicsDevice.Clear( clearColor );
 		}
@@ -84,7 +94,8 @@ namespace Nez
 			var lastRendererHadRenderTexture = false;
 			foreach( var renderer in _renderers )
 			{
-				// MonoGame follows the XNA bullshit so it will clear the entire buffer if we change the render target
+				// MonoGame follows the XNA bullshit implementation so it will clear the entire buffer if we change the render target even if null.
+				// Because of that, we track when we are done with our RenderTextures and clear the scene at that time.
 				if( lastRendererHadRenderTexture )
 					Graphics.defaultGraphics.graphicsDevice.Clear( clearColor );
 				
@@ -108,10 +119,8 @@ namespace Nez
 
 			foreach( var step in _postProcessors )
 			{
-				if( !step.enabled )
-					continue;
-
-				step.process();
+				if( step.enabled )
+					step.process();
 			}
 		}
 

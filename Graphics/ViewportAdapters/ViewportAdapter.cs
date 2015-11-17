@@ -7,8 +7,6 @@ namespace Nez
 {
 	public class ViewportAdapter
 	{
-		public bool hasDirtyMatrix;
-
 		public virtual int virtualWidth
 		{
 			get { return _graphicsDevice.Viewport.Width; }

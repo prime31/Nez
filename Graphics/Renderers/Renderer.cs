@@ -23,6 +23,27 @@ namespace Nez
 		static public Comparison<Renderer> compareRenderOrder = ( a, b ) => { return Math.Sign( a.renderOrder - b.renderOrder ); };
 
 		/// <summary>
+		/// BlendState used by the SpriteBatch
+		/// </summary>
+		public BlendState blendState = BlendState.AlphaBlend;
+
+		/// <summary>
+		/// SamplerState used by the SpriteBatch
+		/// </summary>
+		public SamplerState samplerState = SamplerState.PointClamp;
+
+		/// <summary>
+		/// Effect used by the SpriteBatch
+		/// </summary>
+		public Effect effect;
+
+		/// <summary>
+		/// the Camera this renderer uses for rendering (really its transformMatrix and bounds for culling). If it is null, the scenes Camera
+		/// will be used.
+		/// </summary>
+		public Camera camera;
+
+		/// <summary>
 		/// specifies the order in which the Renderers will be called by the scene
 		/// </summary>
 		public readonly int renderOrder = 0;
@@ -38,13 +59,47 @@ namespace Nez
 		public Color renderTextureClearColor = Color.Transparent;
 
 
-		public Renderer( int renderOrder )
+		public Renderer( Camera camera, int renderOrder )
 		{
+			this.camera = camera;
 			this.renderOrder = renderOrder;
 		}
 
 
+		/// <summary>
+		/// if a RenderTexture is used this will set it up. The SpriteBatch is also started.
+		/// </summary>
+		/// <param name="cam">Cam.</param>
+		protected virtual void beginRender( Camera cam )
+		{
+			// if we have a renderTexture render into it
+			if( renderTexture != null )
+			{
+				Graphics.defaultGraphics.graphicsDevice.SetRenderTarget( renderTexture );
+				Graphics.defaultGraphics.graphicsDevice.Clear( renderTextureClearColor );
+			}
+
+			// MonoGame resets the Viewport to the RT size without asking so we have to let the Camera know to update itself
+			cam.forceMatrixUpdate();
+
+			Graphics.defaultGraphics.spriteBatch.Begin( SpriteSortMode.Deferred, blendState, samplerState, DepthStencilState.None, RasterizerState.CullNone, effect, cam.transformMatrix );
+		}
+
+
 		abstract public void render( Scene scene );
+
+
+		/// <summary>
+		/// ends the SpriteBatch and clears the RenderTarget if it had a RenderTexture
+		/// </summary>
+		protected virtual void endRender()
+		{
+			Graphics.defaultGraphics.spriteBatch.End();
+
+			// clear the RenderTarget so that we render to the screen if we were using a RenderTexture
+			if( renderTexture != null )
+				Graphics.defaultGraphics.graphicsDevice.SetRenderTarget( null );
+		}
 
 
 		/// <summary>
@@ -68,7 +123,7 @@ namespace Nez
 		/// <summary>
 		/// called when a scene is ended. use this for cleanup.
 		/// </summary>
-		public virtual void onSceneEnd()
+		public virtual void unload()
 		{
 			if( renderTexture != null )
 			{

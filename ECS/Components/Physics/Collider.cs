@@ -22,8 +22,6 @@ namespace Nez
 			get
 			{
 				// TODO: cache this and block with a dirty flag so that we only update when necessary
-				if( entity == null )
-					return RectangleExtension.fromFloats( position.X, position.Y, width, height );
 				return RectangleExtension.fromFloats( entity.position.X + position.X, entity.position.Y + position.Y, width, height );
 			}
 		}

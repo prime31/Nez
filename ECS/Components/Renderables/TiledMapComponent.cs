@@ -97,9 +97,9 @@ namespace Nez
 		}
 
 
-		public override void render( Graphics graphics )
+		public override void render( Graphics graphics, Camera camera )
 		{
-			tiledmap.draw( graphics.spriteBatch, renderPosition, layerDepth, entity.scene.camera.bounds );
+			tiledmap.draw( graphics.spriteBatch, renderPosition, layerDepth, camera.bounds );
 		}
 
 

@@ -26,6 +26,29 @@ namespace Nez
 			return new Rectangle( rect.X, rect.Y, rect.Width, rect.Height );
 		}
 
+
+		/// <summary>
+		/// scales the rect. chainable. returns itself.
+		/// </summary>
+		/// <param name="rect">Rect.</param>
+		/// <param name="scale">Scale.</param>
+		public static Rectangle scale( this Rectangle rect, Vector2 scale )
+		{
+			rect.X = (int)( rect.X * scale.X );
+			rect.Y = (int)( rect.Y * scale.Y );
+			rect.Width = (int)( rect.Width * scale.X );
+			rect.Height = (int)( rect.Height * scale.Y );
+
+			return rect;
+		}
+
+
+		public static Rectangle translate( this Rectangle rect, Vector2 vec )
+		{
+			rect.Location += vec.ToPoint();
+			return rect;
+		}
+
 		
 		public static bool rayIntersects( this Rectangle rect, Ray2D ray, out float distance )
 		{

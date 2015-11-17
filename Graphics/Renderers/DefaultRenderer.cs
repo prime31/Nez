@@ -7,37 +7,22 @@ namespace Nez
 {
 	public class DefaultRenderer : Renderer
 	{
-		public BlendState blendState;
-		public SamplerState samplerState;
-		public Effect effect;
-
-
-		public DefaultRenderer( int renderOrder = 0 ) : base( renderOrder )
-		{
-			blendState = BlendState.AlphaBlend;
-			samplerState = SamplerState.PointClamp;
-		}
+		public DefaultRenderer( Camera camera = null, int renderOrder = 0 ) : base( camera, renderOrder )
+		{}
 
 
 		public override void render( Scene scene )
 		{
-			// if we have a renderTexture render into it
-			if( renderTexture != null )
-			{
-				Graphics.defaultGraphics.graphicsDevice.SetRenderTarget( renderTexture );
-				Graphics.defaultGraphics.graphicsDevice.Clear( renderTextureClearColor );
-			}
+			var cam = camera ?? scene.camera;
+			beginRender( cam );
 
-			Graphics.defaultGraphics.spriteBatch.Begin( SpriteSortMode.Deferred, blendState, samplerState, DepthStencilState.None, RasterizerState.CullNone, effect, scene.camera.transformMatrix );
 			foreach( var renderable in scene.renderableComponents )
 			{
 				if( renderable.enabled )
-					renderable.render( Graphics.defaultGraphics );
+					renderable.render( Graphics.defaultGraphics, cam );
 			}
-			Graphics.defaultGraphics.spriteBatch.End();
 
-			// clear the RenderTarget so that we render to the screen
-			Graphics.defaultGraphics.graphicsDevice.SetRenderTarget( null );
+			endRender();
 		}
 
 	}

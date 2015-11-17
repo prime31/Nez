@@ -35,9 +35,10 @@ namespace Nez
 		{}
 
 
-		public override void render( Graphics graphics )
+		public override void render( Graphics graphics, Camera camera )
 		{
-			graphics.spriteBatch.Draw( subtexture, renderPosition, subtexture.sourceRect, color, rotation, origin, scale * zoom, spriteEffects, layerDepth );
+			if( camera.bounds.Intersects( bounds ) )
+				graphics.spriteBatch.Draw( subtexture, renderPosition, subtexture.sourceRect, color, rotation, origin, scale * zoom, spriteEffects, layerDepth );
 		}
 	}
 }

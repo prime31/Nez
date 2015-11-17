@@ -33,7 +33,6 @@ namespace Nez
 			var scaleX = (float)viewportWidth / _virtualWidth;
 			var scaleY = (float)viewportHeight / _virtualHeight;
 			scaleMatrix = Matrix.CreateScale( scaleX, scaleY, 1.0f );
-			hasDirtyMatrix = true;
 		}
 
 	}

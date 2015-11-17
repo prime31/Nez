@@ -12,7 +12,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)Core.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)CoreEvents.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Debug\Debug.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)ECS\Camera2D.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ECS\Component.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ECS\Entity.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ECS\Scene.cs" />
@@ -60,6 +59,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\ViewportAdapters\ScalingViewportAdapter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\ViewportAdapters\BoxingViewportAdapter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\PostProcessing\PostProcessor.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ECS\Camera.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="$(MSBuildThisFileDirectory)Graphics\ViewportAdapters\" />

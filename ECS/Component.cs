@@ -66,10 +66,6 @@ namespace Nez
 		{}
 
 
-		public virtual void render( Graphics graphics )
-		{}
-
-
 		public virtual void debugRender( Graphics graphics )
 		{}
 

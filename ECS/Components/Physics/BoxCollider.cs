@@ -7,16 +7,6 @@ namespace Nez
 {
 	public class BoxCollider : Collider
 	{
-		public enum CollisionResponse
-		{
-			Slide,
-			Stick,
-			Deflect
-		}
-
-
-		public CollisionResponse collisionResponse;
-
 		float _width;
 		public override float width
 		{

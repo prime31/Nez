@@ -76,8 +76,8 @@ namespace Nez
 		{
 			get
 			{
-				// TODO: origin and scale/zoom need to be taken into account here
-				return RectangleExtension.fromFloats( entity.position.X + position.X, entity.position.Y + position.Y, width, height );
+				// TODO: take scale into account as well
+				return RectangleExtension.fromFloats( entity.position.X + position.X - origin.X * zoom, entity.position.Y + position.Y - origin.Y * zoom, width * zoom, height * zoom );
 			}
 		}
 
@@ -96,24 +96,14 @@ namespace Nez
 		{}
 
 
-		#region Component overrides
-
-		public override void onAddedToEntity()
+		public virtual void render( Graphics graphics, Camera camera )
 		{}
 
 
-		public override void onRemovedFromEntity()
-		{}
-
-
-		public override void onEnabled()
-		{}
-
-
-		public override void onDisabled()
-		{}
-
-		#endregion
+		public override void debugRender( Graphics graphics )
+		{
+			graphics.drawHollowRect( bounds, Color.Yellow );
+		}
 
 
 		public void faceLeft()
@@ -165,7 +155,7 @@ namespace Nez
 					if( i != 0 || j != 0 )
 					{
 						position = originalPosition + new Vector2( i * offset, j * offset );
-						render( graphics );
+						//render( graphics );
 					}
 				}
 			}

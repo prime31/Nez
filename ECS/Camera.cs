@@ -6,7 +6,7 @@ using Microsoft.Xna.Framework.Graphics;
 namespace Nez
 {
 	// TODO: all matrix creation should be done via Create method that takes a ref Matrix
-	public class Camera2D
+	public class Camera
 	{
 		#region Fields and Properties
 
@@ -58,6 +58,7 @@ namespace Nez
 			}
 		}
 
+		Rectangle _bounds;
 		/// <summary>
 		/// world-space bounds of the camera. useful for culling.
 		/// </summary>
@@ -66,14 +67,23 @@ namespace Nez
 		{
 			get
 			{
-				if( _matrixesAreDirty || ( _viewportAdapter != null && _viewportAdapter.hasDirtyMatrix ) )
+				if( _matrixesAreDirty )
 					updateMatrixes();
 
-				var topLeft = screenToWorldPoint( Vector2.Zero );
-				// TODO: virtual viewports will require this to change
-				var bottomRight = screenToWorldPoint( new Vector2( _graphicsDevice.Viewport.Width, _graphicsDevice.Viewport.Height ) );
+				if( _boundsAreDirty )
+				{
+					var topLeft = screenToWorldPoint( Vector2.Zero );
+					// TODO: certain virtual viewports (any that change the Viewport will require this to change
+					var bottomRight = screenToWorldPoint( new Vector2( _graphicsDevice.Viewport.Width, _graphicsDevice.Viewport.Height ) );
 
-				return new Rectangle( (int)topLeft.X, (int)topLeft.Y, (int)( bottomRight.X - topLeft.X ), (int)( bottomRight.Y - topLeft.Y ) );
+					_bounds.Location = topLeft.ToPoint();
+					_bounds.Width = (int)( bottomRight.X - topLeft.X );
+					_bounds.Height = (int)( bottomRight.Y - topLeft.Y );
+
+					_boundsAreDirty = false;
+				}
+
+				return _bounds;
 			}
 		}
 
@@ -119,11 +129,12 @@ namespace Nez
 		float _near = -10f;
 		float _far = 10f;
 		bool _matrixesAreDirty = true;
+		bool _boundsAreDirty = true;
 
 		#endregion
 
 
-		public Camera2D( GraphicsDevice graphicsDevice, float near = 0, float far = 1 )
+		public Camera( GraphicsDevice graphicsDevice, float near = 0, float far = 1 )
 		{
 			_graphicsDevice = graphicsDevice;
 
@@ -131,6 +142,19 @@ namespace Nez
 			zoom = 1;
 			_near = near;
 			_far = far;
+
+			// listen for screen resizes and graphics resets so we can dirty our bounds when it happens
+			Core.emitter.addObserver( CoreEvents.GraphicsDeviceReset, onGraphicsDeviceReset );
+		}
+
+
+		void onGraphicsDeviceReset()
+		{
+			_boundsAreDirty = true;
+
+			// if we have a viewport adapter we also dirty the matrixes since it will be modifying itself
+			if( viewportAdapter != null )
+				_matrixesAreDirty = true;
 		}
 
 
@@ -144,15 +168,29 @@ namespace Nez
 
 			// if we have a ViewportAdapter take it into account
 			if( _viewportAdapter != null )
-				_transformMatrix *= _viewportAdapter.scaleMatrix;
+				Matrix.Multiply( ref _transformMatrix, ref _viewportAdapter.scaleMatrix, out _transformMatrix );
 
-
+			// calculate our inverse as well
 			Matrix.Invert( ref _transformMatrix, out _inverseTransformMatrix );
 
+			// whenever the Matrixes change the bounds are then invalid
+			_boundsAreDirty = true;
 			_matrixesAreDirty = false;
+		}
 
-			if( _viewportAdapter != null )
-				_viewportAdapter.hasDirtyMatrix = false;
+
+		/// <summary>
+		/// this forces the matrix and bounds dirty
+		/// </summary>
+		public void forceMatrixUpdate()
+		{
+			_matrixesAreDirty = _boundsAreDirty = true;
+		}
+
+
+		public void unload()
+		{
+			Core.emitter.removeObserver( CoreEvents.GraphicsDeviceReset, onGraphicsDeviceReset );
 		}
 
 
@@ -165,7 +203,11 @@ namespace Nez
 
 		public void centerOrigin()
 		{
-			origin = new Vector2( _graphicsDevice.Viewport.Width / 2f, _graphicsDevice.Viewport.Height / 2f );
+			if( viewportAdapter != null )
+				origin = new Vector2( viewportAdapter.virtualWidth / 2f, viewportAdapter.virtualHeight / 2f );
+			else
+				origin = new Vector2( _graphicsDevice.Viewport.Width / 2f, _graphicsDevice.Viewport.Height / 2f );
+			
 			_matrixesAreDirty = true;
 		}
 
@@ -196,6 +238,11 @@ namespace Nez
 		}
 
 
+		/// <summary>
+		/// converts a point from world coordinates to screen
+		/// </summary>
+		/// <returns>The to screen point.</returns>
+		/// <param name="worldPosition">World position.</param>
 		public Vector2 worldToScreenPoint( Vector2 worldPosition )
 		{
 			var pos = Vector2.Transform( worldPosition, transformMatrix );
@@ -206,6 +253,11 @@ namespace Nez
 		}
 
 
+		/// <summary>
+		/// converts a oint from screen coordinates to world
+		/// </summary>
+		/// <returns>The to world point.</returns>
+		/// <param name="screenPosition">Screen position.</param>
 		public Vector2 screenToWorldPoint( Vector2 screenPosition )
 		{
 			if( _viewportAdapter != null )
@@ -214,9 +266,18 @@ namespace Nez
 		}
 
 
+		/// <summary>
+		/// converts a oint from screen coordinates to world
+		/// </summary>
+		/// <returns>The to world point.</returns>
+		/// <param name="screenPosition">Screen position.</param>
 		public Vector2 screenToWorldPoint( Point screenPosition ) => screenToWorldPoint( screenPosition.ToVector2() );
 
 
+		/// <summary>
+		/// gets this cameras project matrix
+		/// </summary>
+		/// <returns>The projection matrix.</returns>
 		public Matrix getProjectionMatrix()
 		{
 			// TODO: block with dirty flag. needs to be made dirty when Viewport size changes
@@ -224,6 +285,10 @@ namespace Nez
 		}
 
 
+		/// <summary>
+		/// gets the view-projection matrix which is the transformMatrix * the projection matrix
+		/// </summary>
+		/// <returns>The view projection matrix.</returns>
 		public Matrix getViewProjectionMatrix()
 		{
 			// TODO: block with dirty flag and use Matrix.Multiply to cache Matrixes

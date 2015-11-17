@@ -24,13 +24,18 @@ namespace MacTester
 		}
 
 
-		protected override void Update(GameTime gameTime)
+		protected override void Update( GameTime gameTime )
 		{
 			base.Update( gameTime );
 
 			if( Input.leftMouseButtonPressed )
 			{
-				
+				Debug.log( "bounds: {0}", scene.camera.bounds );
+			}
+
+			if( Input.mouseWheelDelta != 0 )
+			{
+				scene.camera.move( new Vector2( Input.mouseWheelDelta * 0.001f, Input.mouseWheelDelta * 0.001f ) );
 			}
 		}
 

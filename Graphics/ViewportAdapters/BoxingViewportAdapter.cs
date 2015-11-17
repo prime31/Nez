@@ -36,7 +36,6 @@ namespace Nez
 			_graphicsDevice.Viewport = new Viewport( x, y, drawWidth, drawHeight );
 
 			scaleMatrix = Matrix.CreateScale( drawWidth / (float)virtualWidth );
-			hasDirtyMatrix = true;
 		}
 
 
