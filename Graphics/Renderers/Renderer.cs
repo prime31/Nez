@@ -8,7 +8,7 @@ namespace Nez
 {
 	/// <summary>
 	/// Renderers are added to a Scene and handle all of the actual calls to RenderableComponent.render and Entity.debugRender.
-	/// A simple Renderer could just start the Graphics.defaultGraphics spriteBatch or it could create its own local Graphics instance
+	/// A simple Renderer could just start the Graphics.instanceGraphics spriteBatch or it could create its own local Graphics instance
 	/// if it needs it for some kind of custom rendering.
 	/// 
 	/// Note that it is a best practice to ensure all Renderers that render to a RenderTexture have lower renderOrders to avoid issues
@@ -58,6 +58,12 @@ namespace Nez
 		/// </summary>
 		public Color renderTextureClearColor = Color.Transparent;
 
+		/// <summary>
+		/// if true and a renderTexture is present the RenderTarget will not be reset to null. This is useful when you have multiple
+		/// renderers that should all be rendering into the same RenderTarget.
+		/// </summary>
+		public bool clearRenderTargetAfterRender = true;
+
 
 		public Renderer( Camera camera, int renderOrder )
 		{
@@ -75,18 +81,18 @@ namespace Nez
 			// if we have a renderTexture render into it
 			if( renderTexture != null )
 			{
-				Graphics.defaultGraphics.graphicsDevice.SetRenderTarget( renderTexture );
-				Graphics.defaultGraphics.graphicsDevice.Clear( renderTextureClearColor );
+				Graphics.instance.graphicsDevice.SetRenderTarget( renderTexture );
+				Graphics.instance.graphicsDevice.Clear( renderTextureClearColor );
 			}
 
 			// MonoGame resets the Viewport to the RT size without asking so we have to let the Camera know to update itself
 			cam.forceMatrixUpdate();
 
-			Graphics.defaultGraphics.spriteBatch.Begin( SpriteSortMode.Deferred, blendState, samplerState, DepthStencilState.None, RasterizerState.CullNone, effect, cam.transformMatrix );
+			Graphics.instance.spriteBatch.Begin( SpriteSortMode.Deferred, blendState, samplerState, DepthStencilState.None, RasterizerState.CullNone, effect, cam.transformMatrix );
 		}
 
 
-		abstract public void render( Scene scene );
+		abstract public void render( Scene scene, bool shouldDebugRender );
 
 
 		/// <summary>
@@ -94,11 +100,11 @@ namespace Nez
 		/// </summary>
 		protected virtual void endRender()
 		{
-			Graphics.defaultGraphics.spriteBatch.End();
+			Graphics.instance.spriteBatch.End();
 
 			// clear the RenderTarget so that we render to the screen if we were using a RenderTexture
-			if( renderTexture != null )
-				Graphics.defaultGraphics.graphicsDevice.SetRenderTarget( null );
+			if( renderTexture != null && clearRenderTargetAfterRender )
+				Graphics.instance.graphicsDevice.SetRenderTarget( null );
 		}
 
 
@@ -106,17 +112,13 @@ namespace Nez
 		/// default debugRender method just loops through all entities and calls entity.debugRender
 		/// </summary>
 		/// <param name="scene">Scene.</param>
-		public virtual void debugRender( Scene scene )
+		protected virtual void debugRender( Scene scene )
 		{
-			Graphics.defaultGraphics.spriteBatch.Begin( SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.None, RasterizerState.CullNone, null, scene.camera.transformMatrix );
-
 			foreach( var entity in scene.entities )
 			{
 				if( entity.enabled )
-					entity.debugRender( Graphics.defaultGraphics );
+					entity.debugRender( Graphics.instance );
 			}
-
-			Graphics.defaultGraphics.spriteBatch.End();
 		}
 
 

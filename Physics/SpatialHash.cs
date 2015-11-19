@@ -9,8 +9,6 @@ namespace Nez.Physics
 	{
 		int _cellSize;
 		int _inverseCellSize;
-		// TODO: this data structure is ridiculous. what we want is a two-int keyed dictionary [int,int] -> List<Collider> but
-		// it need not have the full hash filled in so I'm not sure what is the best solution...
 		IntIntDictionary _cellDict = new IntIntDictionary();
 		HashSet<Collider> _tempHashset = new HashSet<Collider>();
 
@@ -171,7 +169,7 @@ namespace Nez.Physics
 
 
 	/// <summary>
-	/// craps a Unit32,List<Collider> Dictionary. It's main purpose is to hash the int,int x,y coordinates into a single
+	/// wraps a Unit32,List<Collider> Dictionary. It's main purpose is to hash the int,int x,y coordinates into a single
 	/// Uint32 key which hashes perfectly resulting in an O(1) lookup.
 	/// </summary>
 	class IntIntDictionary

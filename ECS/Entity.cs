@@ -43,6 +43,7 @@ namespace Nez
 				}
 			}
 		}
+
 		/// <summary>
 		/// specifies how often this entitys update method should be called. 1 means every frame, 2 is every other, etc
 		/// </summary>
@@ -140,12 +141,11 @@ namespace Nez
 		/// <summary>
 		/// Called when this entity is added to a scene
 		/// </summary>
-		/// <param name="scene">Scene.</param>
 		public virtual void onAddedToScene()
 		{
 			// if we have a collider, we need to let it register with the Physics system when we are added to a scene
 			if( collider != null )
-				collider.registerColliderWithPhysicsSystem();
+				collider.onEntityAddedToScene();
 		}
 
 
@@ -155,7 +155,7 @@ namespace Nez
 		public virtual void onRemovedFromScene()
 		{
 			if( collider != null )
-				collider.unregisterColliderWithPhysicsSystem();
+				collider.onEntityRemovedFromScene();
 		}
 
 
@@ -239,7 +239,8 @@ namespace Nez
 		#region Movement with Collision Checks
 
 		/// <summary>
-		/// attempts to move deltaX, deltaY. if a collision occurs movement will stop at the point of collision
+		/// attempts to move deltaX, deltaY. if a collision occurs movement will stop at the point of collision. always use this method to
+		/// move an Entity that has colliders! It handles updating the spatial hash.
 		/// </summary>
 		/// <param name="deltaX">Delta x.</param>
 		/// <param name="deltaY">Delta y.</param>

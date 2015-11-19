@@ -37,6 +37,11 @@ namespace Nez
 		List<CoroutineImpl> _shouldRunNextFrame = new List<CoroutineImpl>();
 
 
+		/// <summary>
+		/// adds the IEnumerator to the CoroutineManager. Coroutines get ticked before Update is called each frame.
+		/// </summary>
+		/// <returns>The coroutine.</returns>
+		/// <param name="enumerator">Enumerator.</param>
 		public ICoroutine startCoroutine( IEnumerator enumerator )
 		{
 			// find or create a CoroutineImpl

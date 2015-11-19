@@ -11,12 +11,26 @@ namespace Nez.TextureAtlases
 		public RenderTarget2D renderTarget2D;
 
 
+		/// <summary>
+		/// Creates a RenderTexture with the passed in size
+		/// </summary>
+		/// <param name="graphicsDevice">Graphics device.</param>
+		/// <param name="width">Width.</param>
+		/// <param name="height">Height.</param>
 		public RenderTexture( GraphicsDevice graphicsDevice, int width, int height )
 		{
 			renderTarget2D = new RenderTarget2D( graphicsDevice, width, height );
 			texture2D = (Texture2D)renderTarget2D;
 			textureBounds = new Rectangle( 0, 0, width, height );
 		}
+
+
+		/// <summary>
+		/// Creates a RenderTexture with the full size of the back buffer
+		/// </summary>
+		/// <param name="graphicsDevice">Graphics device.</param>
+		public RenderTexture( GraphicsDevice graphicsDevice ) : this( graphicsDevice, graphicsDevice.PresentationParameters.BackBufferWidth, graphicsDevice.PresentationParameters.BackBufferHeight )
+		{}
 
 
 		/// <summary>

@@ -82,7 +82,7 @@ namespace Nez
 		}
 
 		/// <summary>
-		/// helper method for setting the origin in normalized fashion (0-1 for x and y)
+		/// helper property for setting the origin in normalized fashion (0-1 for x and y)
 		/// </summary>
 		/// <value>The origin normalized.</value>
 		public Vector2 originNormalized
@@ -100,9 +100,14 @@ namespace Nez
 		{}
 
 
+		/// <summary>
+		/// renders the bounds only if there is no collider
+		/// </summary>
+		/// <param name="graphics">Graphics.</param>
 		public override void debugRender( Graphics graphics )
 		{
-			graphics.drawHollowRect( bounds, Color.Yellow );
+			if( entity.collider == null )
+				graphics.drawHollowRect( bounds, Color.Yellow );
 		}
 
 

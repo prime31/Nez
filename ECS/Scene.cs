@@ -44,7 +44,7 @@ namespace Nez
 
 		public Scene( int physicsSystemCellSize = 100 )
 		{
-			camera = new Camera( Graphics.defaultGraphics.graphicsDevice );
+			camera = new Camera( Graphics.instance.graphicsDevice );
 			physics = new Physics.Physics( physicsSystemCellSize );
 			entities = new EntityList( this );
 			renderableComponents = new RenderableComponentList();
@@ -74,7 +74,7 @@ namespace Nez
 
 			foreach( var entity in entities )
 			{
-				if( entity.enabled && ( entity.updateInterval == 1 || Core.frameCount % entity.updateInterval == 0 ) )
+				if( entity.enabled && ( entity.updateInterval == 1 || Time.frameCount % entity.updateInterval == 0 ) )
 					entity.update();
 			}
 		}
@@ -82,12 +82,12 @@ namespace Nez
 
 		internal void preRender()
 		{
-			Graphics.defaultGraphics.graphicsDevice.SetRenderTarget( null );
-			Graphics.defaultGraphics.graphicsDevice.Clear( clearColor );
+			Graphics.instance.graphicsDevice.SetRenderTarget( null );
+			Graphics.instance.graphicsDevice.Clear( clearColor );
 		}
 
 
-		internal void render()
+		internal void render( bool enableDebugRender )
 		{
 			var lastRendererHadRenderTexture = false;
 			foreach( var renderer in _renderers )
@@ -95,18 +95,11 @@ namespace Nez
 				// MonoGame follows the XNA bullshit implementation so it will clear the entire buffer if we change the render target even if null.
 				// Because of that, we track when we are done with our RenderTextures and clear the scene at that time.
 				if( lastRendererHadRenderTexture )
-					Graphics.defaultGraphics.graphicsDevice.Clear( clearColor );
+					Graphics.instance.graphicsDevice.Clear( clearColor );
 				
-				renderer.render( this );
+				renderer.render( this, enableDebugRender );
 				lastRendererHadRenderTexture = renderer.renderTexture != null;
 			}
-		}
-
-
-		internal void debugRender()
-		{
-			foreach( var renderer in _renderers )
-				renderer.debugRender( this );
 		}
 
 
@@ -132,7 +125,7 @@ namespace Nez
 		/// <returns></returns>
 		public bool onInterval( float interval )
 		{
-			return (int)(( Time.timeSinceSceneLoad - Time.deltaTime ) / interval ) < (int)( Time.timeSinceSceneLoad / interval );
+			return (int)( ( Time.timeSinceSceneLoad - Time.deltaTime ) / interval ) < (int)( Time.timeSinceSceneLoad / interval );
 		}
 
 

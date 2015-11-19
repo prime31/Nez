@@ -21,14 +21,10 @@ namespace Nez
 		public static bool pauseOnFocusLost = true;
 		public static bool enableDebugRender = false;
 		public static GraphicsDevice graphicsDevice;
-		/// <summary>
-		/// total number of frames that have passed
-		/// </summary>
-		public static uint frameCount;
 
 		public Scene nextScene;
 		Scene _scene;
-		GraphicsDeviceManager _graphicsManager;
+		protected GraphicsDeviceManager _graphicsManager;
 		CoroutineManager _coroutineManager = new CoroutineManager();
 
 
@@ -48,6 +44,7 @@ namespace Nez
 			emitter = new Emitter<CoreEvents>( new CoreEventsComparer() );
 
 			_graphicsManager = new GraphicsDeviceManager( this );
+			//_graphicsManager.PreferredDepthStencilFormat = DepthFormat.Depth24Stencil8; // defaults to Depth24
 			_graphicsManager.PreferredBackBufferWidth = width;
 			_graphicsManager.PreferredBackBufferHeight = height;
 			_graphicsManager.IsFullScreen = false;
@@ -80,7 +77,7 @@ namespace Nez
 			base.Initialize();
 
 			// prep the default Graphics system
-			Graphics.defaultGraphics = new Graphics( GraphicsDevice );
+			Graphics.instance = new Graphics( GraphicsDevice );
 			graphicsDevice = GraphicsDevice;
 		}
 
@@ -119,8 +116,6 @@ namespace Nez
 				if( _scene != null )
 					_scene.begin();
 			}
-
-			frameCount++;
 		}
 
 
@@ -132,11 +127,7 @@ namespace Nez
 			if( _scene != null )
 			{
 				_scene.preRender();
-				_scene.render();
-
-				if( enableDebugRender )
-					_scene.debugRender();
-				
+				_scene.render( enableDebugRender );
 				_scene.postRender();
 			}
 		}

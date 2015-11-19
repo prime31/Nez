@@ -10,6 +10,10 @@ namespace Nez
 		public static float unscaledDeltaTime;
 		public static float timeSinceSceneLoad;
 		public static float timeScale = 1f;
+		/// <summary>
+		/// total number of frames that have passed
+		/// </summary>
+		public static uint frameCount;
 
 
 		public static void update( float dt )
@@ -18,6 +22,7 @@ namespace Nez
 			deltaTime = dt * timeScale;
 			unscaledDeltaTime = dt;
 			timeSinceSceneLoad += dt;
+			frameCount++;
 		}
 
 

@@ -4,7 +4,7 @@ using System.Linq;
 using Microsoft.Xna.Framework.Content;
 
 
-namespace MonoGame.Extended.Content
+namespace Nez.Content
 {
 	internal static class ContentReaderExtensions
 	{

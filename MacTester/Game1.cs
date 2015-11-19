@@ -18,7 +18,7 @@ namespace MacTester
 			base.Initialize();
 
 			var spriteFont = Content.Load<SpriteFont>( "bin/MacOSX/Fonts/DefaultFont" );
-			Graphics.defaultGraphics.defaultFont = spriteFont;
+			Graphics.instance.defaultFont = spriteFont;
 			IMGUI.init( GraphicsDevice, spriteFont );
 
 			scene = Scenes.sceneOne();
@@ -31,7 +31,7 @@ namespace MacTester
 
 			if( Input.leftMouseButtonPressed )
 			{
-				Debug.log( "camera bounds: {0}", scene.camera.bounds );
+				Debug.log( "camera bounds: {0}, presention bounds: {1}, viewport: {2}", scene.camera.bounds, GraphicsDevice.PresentationParameters.Bounds.Size, graphicsDevice.Viewport.Bounds.Size );
 			}
 
 			if( Input.mouseWheelDelta != 0 )
@@ -54,6 +54,12 @@ namespace MacTester
 
 			if( IMGUI.button( "Scene 2" ) )
 				nextScene = Scenes.sceneTwo();
+
+			if( IMGUI.button( "Scene 3 Box" ) )
+				nextScene = Scenes.sceneThree( true );
+
+			if( IMGUI.button( "Scene 3 Circle" ) )
+				nextScene = Scenes.sceneThree( false );
 
 			IMGUI.endWindow();			
 		}

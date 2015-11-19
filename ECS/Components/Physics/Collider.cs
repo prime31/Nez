@@ -12,7 +12,39 @@ namespace Nez
 		/// position is added to entity.position to get the final position for the collider
 		/// </summary>
 		public Vector2 position;
+		Vector2 _origin;
+		public Vector2 origin
+		{
+			get { return _origin; }
+			set
+			{
+				if( _origin != value )
+				{
+					unregisterColliderWithPhysicsSystem();
+					_origin = value;
+					registerColliderWithPhysicsSystem();
+				}
+			}
+		}
+
+		/// <summary>
+		/// helper property for setting the origin in normalized fashion (0-1 for x and y)
+		/// </summary>
+		/// <value>The origin normalized.</value>
+		public Vector2 originNormalized
+		{
+			get { return new Vector2( origin.X / width, origin.Y / height ); }
+			set { origin = new Vector2( value.X * width, value.Y * height ); }
+		}
+
+		/// <summary>
+		/// if this collider is a trigger it will not cause collisions but it will still trigger events
+		/// </summary>
 		public bool isTrigger;
+
+		/// <summary>
+		/// physicsLayer can be used as a filter when dealing with collisions.
+		/// </summary>
 		public int physicsLayer;
 		public abstract float width { get; set; }
 		public abstract float height { get; set; }
@@ -22,9 +54,11 @@ namespace Nez
 			get
 			{
 				// TODO: cache this and block with a dirty flag so that we only update when necessary
-				return RectangleExtension.fromFloats( entity.position.X + position.X, entity.position.Y + position.Y, width, height );
+				return RectangleExtension.fromFloats( entity.position.X + position.X - origin.X, entity.position.Y + position.Y - origin.Y, width, height );
 			}
 		}
+
+		protected bool _isParentEntityAddedToScene;
 
 
 		public Collider()
@@ -64,11 +98,33 @@ namespace Nez
 
 
 		/// <summary>
+		/// Called when the parent entity is added to a scene
+		/// </summary>
+		public virtual void onEntityAddedToScene()
+		{
+			_isParentEntityAddedToScene = true;
+			registerColliderWithPhysicsSystem();
+		}
+
+
+		/// <summary>
+		/// Called when the parent entity is removed from a scene
+		/// </summary>
+		public virtual void onEntityRemovedFromScene()
+		{
+			unregisterColliderWithPhysicsSystem();
+			_isParentEntityAddedToScene = false;
+		}
+
+
+		/// <summary>
 		/// the parent Entity will call this at various times (when added to a scene, enabled, etc)
 		/// </summary>
 		public virtual void registerColliderWithPhysicsSystem()
 		{
-			entity.scene.physics.addCollider( this );
+			// entity could be null if proper such as origin are changed before we are added to an Entity
+			if( _isParentEntityAddedToScene )
+				entity.scene.physics.addCollider( this );
 		}
 
 
@@ -77,7 +133,8 @@ namespace Nez
 		/// </summary>
 		public virtual void unregisterColliderWithPhysicsSystem()
 		{
-			entity.scene.physics.removeCollider( this, true );
+			if( _isParentEntityAddedToScene )
+				entity.scene.physics.removeCollider( this, true );
 		}
 
 

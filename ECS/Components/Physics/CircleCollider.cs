@@ -44,6 +44,13 @@ namespace Nez
 		}
 
 
+		public CircleCollider( float radius, Vector2 origin )
+		{
+			this.radius = radius;
+			this.origin = origin;
+		}
+
+
 		public override void debugRender( Graphics graphics )
 		{
 			graphics.drawCircle( bounds.getCenter(), radius, Color.IndianRed );

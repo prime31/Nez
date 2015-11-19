@@ -4,7 +4,7 @@ using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 
 
-namespace MonoGame.Extended.Content
+namespace Nez.Content
 {
 	public static class ContentManagerExtensions
 	{

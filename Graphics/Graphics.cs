@@ -12,7 +12,7 @@ namespace Nez
 	/// </summary>
 	public class Graphics
 	{
-		public static Graphics defaultGraphics;
+		public static Graphics instance;
 
 		public GraphicsDevice graphicsDevice;
 		/// <summary>

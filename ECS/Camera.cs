@@ -280,7 +280,7 @@ namespace Nez
 		/// <returns>The projection matrix.</returns>
 		public Matrix getProjectionMatrix()
 		{
-			// TODO: block with dirty flag. needs to be made dirty when Viewport size changes
+			// not currently blocked with a dirty flag due to the core engine not using this
 			return Matrix.CreateOrthographicOffCenter( 0, _graphicsDevice.Viewport.Width, _graphicsDevice.Viewport.Height, 0, _near, _far );
 		}
 
@@ -291,7 +291,7 @@ namespace Nez
 		/// <returns>The view projection matrix.</returns>
 		public Matrix getViewProjectionMatrix()
 		{
-			// TODO: block with dirty flag and use Matrix.Multiply to cache Matrixes
+			// not currently blocked with a dirty flag due to the core engine not using this
 			return transformMatrix * getProjectionMatrix();
 		}
 

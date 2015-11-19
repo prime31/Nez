@@ -56,6 +56,10 @@ namespace Nez
 		}
 
 
+		public BoxCollider( Rectangle rect ) : this( rect.X, rect.Y, rect.Width, rect.Height )
+		{}
+
+
 		#region Collisions
 
 		public override bool collidesWith( Vector2 from, Vector2 to )

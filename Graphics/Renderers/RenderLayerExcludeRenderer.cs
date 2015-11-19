@@ -20,7 +20,7 @@ namespace Nez
 		}
 
 
-		public override void render( Scene scene )
+		public override void render( Scene scene, bool shouldDebugRender )
 		{
 			var cam = camera ?? scene.camera;
 			beginRender( cam );
@@ -28,8 +28,11 @@ namespace Nez
 			foreach( var renderable in scene.renderableComponents )
 			{
 				if( renderable.renderLayer != excludeRenderLayer && renderable.enabled )
-					renderable.render( Graphics.defaultGraphics, cam );
+					renderable.render( Graphics.instance, cam );
 			}
+
+			if( shouldDebugRender )
+				debugRender( scene );
 
 			endRender();
 		}
