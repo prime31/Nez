@@ -3,7 +3,7 @@ using Microsoft.Xna.Framework.Content.Pipeline;
 using System.Xml.Serialization;
 
 
-namespace Nez.Content.Pipeline.BitmapFonts
+namespace Nez
 {
 	[ContentImporter( ".fnt", DefaultProcessor = "BitmapFontProcessor", DisplayName = "BMFont Importer" )]
 	public class BitmapFontImporter : ContentImporter<BitmapFontFile>

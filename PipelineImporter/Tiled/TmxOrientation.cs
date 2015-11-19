@@ -1,6 +1,6 @@
 using System.Xml.Serialization;
 
-namespace Nez.Content.Pipeline.Tiled
+namespace Nez
 {
     public enum TmxOrientation
     {

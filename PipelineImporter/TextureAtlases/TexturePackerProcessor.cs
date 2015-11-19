@@ -2,7 +2,7 @@
 using Microsoft.Xna.Framework.Content.Pipeline;
 
 
-namespace Nez.Content.Pipeline.TextureAtlases
+namespace Nez
 {
 	[ContentProcessor( DisplayName = "TexturePacker Processor" )]
 	public class TexturePackerProcessor : ContentProcessor<TexturePackerFile, TexturePackerProcessorResult>

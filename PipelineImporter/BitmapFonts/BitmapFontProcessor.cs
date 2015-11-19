@@ -4,7 +4,7 @@ using Microsoft.Xna.Framework.Content.Pipeline;
 using System.ComponentModel;
 
 
-namespace Nez.Content.Pipeline.BitmapFonts
+namespace Nez
 {
 	[ContentProcessor( DisplayName = "BMFont Processor" )]
 	public class BitmapFontProcessor : ContentProcessor<BitmapFontFile, BitmapFontProcessorResult>

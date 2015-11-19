@@ -4,7 +4,7 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectTypeGuids>{948B3504-5B70-4649-8FE4-BDE1FB46EC69};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
-    <ProjectGuid>{6B8FFDF3-CE46-4D92-AD6B-9F69E8E9E6CD}</ProjectGuid>
+    <ProjectGuid>{673882A8-9246-4246-865F-48CFE00B115E}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <RootNamespace>MacTester</RootNamespace>
     <MonoMacResourcePrefix>Resources</MonoMacResourcePrefix>
@@ -26,6 +26,7 @@
     <EnablePackageSigning>false</EnablePackageSigning>
     <EnableCodeSigning>false</EnableCodeSigning>
     <CreatePackage>false</CreatePackage>
+    <Profiling>false</Profiling>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>full</DebugType>
@@ -42,9 +43,13 @@
     <CodeSigningKey>Developer ID Application</CodeSigningKey>
     <EnableCodeSigning>true</EnableCodeSigning>
     <EnablePackageSigning>false</EnablePackageSigning>
+    <Profiling>false</Profiling>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Drawing" />
     <Reference Include="MonoMac" />
     <Reference Include="MonoGame.Framework">
@@ -61,13 +66,15 @@
     <Compile Include="Game1.cs" />
     <Compile Include="Main.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Scenes.cs" />
-    <Compile Include="SceneTwo\SimplePostProcessor.cs" />
     <Compile Include="SceneThree\SimpleMoonMover.cs" />
+    <Compile Include="SceneTwo\SimplePostProcessor.cs" />
+    <Compile Include="Scenes.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Info.plist" />
     <None Include="Content\Content.mgcb" />
+    <None Include="Content\Fonts\DefaultFont.spritefont" />
+    <None Include="Content\Fonts\graphicpixel.ttf" />
     <None Include="packages.config" />
     <None Include="Content\Effects\Bevels.fx" />
     <None Include="Content\Effects\BlackOut.fx" />
@@ -80,21 +87,6 @@
     <None Include="Content\Effects\NoEffect.fx" />
     <None Include="Content\Effects\RainbowH.fx" />
     <None Include="Content\Effects\SpriteEffect.fx" />
-    <None Include="Content\Effects\SpriteEffectEffect.xnb" />
-  </ItemGroup>
-  <Import Project="..\Nez.projitems" Label="Shared" Condition="Exists('..\Nez.projitems')" />
-  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
-  <ItemGroup>
-    <ProjectReference Include="..\PipelineRuntime\PipelineRuntime.csproj">
-      <Project>{660E8ACC-2C43-450C-96C0-90D88DE2609B}</Project>
-      <Name>PipelineRuntime</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Content\Images\" />
-    <Folder Include="SceneTwo\" />
-    <Folder Include="Content\Effects\" />
-    <Folder Include="SceneThree\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bin\**\*.*">
@@ -111,9 +103,22 @@
     <Content Include="Content\Effects\NoEffect.ogl.mgfxo" />
     <Content Include="Content\Effects\RainbowH.ogl.mgfxo" />
     <Content Include="Content\Effects\SpriteEffect.ogl.mgfxo" />
-    <Content Include="Content\Images\moon.png" />
+    <Content Include="Content\Effects\SpriteEffectEffect.xnb" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <ItemGroup>
+    <ProjectReference Include="..\Nez-PCL\Nez.csproj">
+      <Project>{60B7197D-D0D5-405C-90A2-A56903E9B039}</Project>
+      <Name>Nez</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Content\Fonts\" />
   </ItemGroup>
   <ItemGroup>
     <InterfaceDefinition Include="MainMenu.xib" />
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Content\Images\moon.png" />
   </ItemGroup>
 </Project>

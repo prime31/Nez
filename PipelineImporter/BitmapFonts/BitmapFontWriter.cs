@@ -2,7 +2,7 @@ using Microsoft.Xna.Framework.Content.Pipeline;
 using Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler;
 
 
-namespace Nez.Content.Pipeline.BitmapFonts
+namespace Nez
 {
 	[ContentTypeWriter]
 	public class BitmapFontWriter : ContentTypeWriter<BitmapFontProcessorResult>

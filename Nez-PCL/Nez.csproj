@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectTypeGuids>{786C830F-07A1-408B-BD7F-6EE04809D6DB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <ProjectGuid>{60B7197D-D0D5-405C-90A2-A56903E9B039}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <RootNamespace>Nez</RootNamespace>
+    <AssemblyName>Nez</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkProfile>Profile158</TargetFrameworkProfile>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug</OutputPath>
+    <DefineConstants>DEBUG;</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <ConsolePause>false</ConsolePause>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>full</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release</OutputPath>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <ConsolePause>false</ConsolePause>
+  </PropertyGroup>
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
+  <ItemGroup>
+    <Reference Include="MonoGame.Framework">
+      <HintPath>..\packages\MonoGame.Framework.Portable.3.2.99.1-Beta\lib\portable-net40+sl50+win+wpa81+wp80+MonoAndroid10+MonoTouch10\MonoGame.Framework.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Debug\" />
+    <Folder Include="ECS\" />
+    <Folder Include="Graphics\" />
+    <Folder Include="Input\" />
+    <Folder Include="Math\" />
+    <Folder Include="Physics\" />
+    <Folder Include="Stuff\" />
+    <Folder Include="Utils\" />
+    <Folder Include="PipelineRuntime\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Debug\Debug.cs" />
+    <Compile Include="ECS\Camera.cs" />
+    <Compile Include="ECS\Component.cs" />
+    <Compile Include="ECS\Entity.cs" />
+    <Compile Include="ECS\Scene.cs" />
+    <Compile Include="ECS\Components\Physics\BoxCollider.cs" />
+    <Compile Include="ECS\Components\Physics\CircleCollider.cs" />
+    <Compile Include="ECS\Components\Physics\Collider.cs" />
+    <Compile Include="ECS\Components\Physics\MultiCollider.cs" />
+    <Compile Include="ECS\Components\Renderables\Image.cs" />
+    <Compile Include="ECS\Components\Renderables\RenderableComponent.cs" />
+    <Compile Include="ECS\Components\Renderables\Sprite.cs" />
+    <Compile Include="ECS\Components\Renderables\TiledMapComponent.cs" />
+    <Compile Include="ECS\Components\Text\FramesPerSecondCounter.cs" />
+    <Compile Include="ECS\Components\Text\Text.cs" />
+    <Compile Include="ECS\Components\Util\StateKitLite.cs" />
+    <Compile Include="ECS\InternalUtils\ComponentList.cs" />
+    <Compile Include="ECS\InternalUtils\EntityList.cs" />
+    <Compile Include="ECS\InternalUtils\EntityTagLists.cs" />
+    <Compile Include="ECS\InternalUtils\RenderableComponentList.cs" />
+    <Compile Include="Graphics\GeometryBatch.cs" />
+    <Compile Include="Graphics\Graphics.cs" />
+    <Compile Include="Graphics\PrimitiveBatch.cs" />
+    <Compile Include="Graphics\PostProcessing\PostProcessor.cs" />
+    <Compile Include="Graphics\Renderers\DefaultRenderer.cs" />
+    <Compile Include="Graphics\Renderers\RenderLayerExcludeRenderer.cs" />
+    <Compile Include="Graphics\Renderers\RenderLayerRenderer.cs" />
+    <Compile Include="Graphics\Renderers\Renderer.cs" />
+    <Compile Include="Graphics\ViewportAdapters\BoxingViewportAdapter.cs" />
+    <Compile Include="Graphics\ViewportAdapters\ScalingViewportAdapter.cs" />
+    <Compile Include="Graphics\ViewportAdapters\ViewportAdapter.cs" />
+    <Compile Include="Input\GamePadData.cs" />
+    <Compile Include="Input\Input.cs" />
+    <Compile Include="Input\VirtualAxis.cs" />
+    <Compile Include="Input\VirtualButton.cs" />
+    <Compile Include="Input\VirtualInput.cs" />
+    <Compile Include="Input\VirtualIntegerAxis.cs" />
+    <Compile Include="Input\VirtualJoystick.cs" />
+    <Compile Include="Math\Mathf.cs" />
+    <Compile Include="Math\RectangleExtension.cs" />
+    <Compile Include="Math\Vector2Extension.cs" />
+    <Compile Include="Physics\Bounds.cs" />
+    <Compile Include="Physics\Collisions.cs" />
+    <Compile Include="Physics\Physics.cs" />
+    <Compile Include="Physics\Ray2D.cs" />
+    <Compile Include="Physics\SpatialHash.cs" />
+    <Compile Include="Stuff\IMGUI\IMGUI.cs" />
+    <Compile Include="Utils\Coroutine.cs" />
+    <Compile Include="Utils\CoroutineManager.cs" />
+    <Compile Include="Utils\Emitter.cs" />
+    <Compile Include="Utils\EntityCache.cs" />
+    <Compile Include="Utils\Time.cs" />
+    <Compile Include="Core.cs" />
+    <Compile Include="CoreEvents.cs" />
+    <Compile Include="PipelineRuntime\BitmapFonts\BitmapFont.cs" />
+    <Compile Include="PipelineRuntime\BitmapFonts\BitmapFontExtensions.cs" />
+    <Compile Include="PipelineRuntime\BitmapFonts\BitmapFontReader.cs" />
+    <Compile Include="PipelineRuntime\BitmapFonts\BitmapFontRegion.cs" />
+    <Compile Include="PipelineRuntime\ContentExtensions\ContentManagerExtensions.cs" />
+    <Compile Include="PipelineRuntime\ContentExtensions\ContentReaderExtensions.cs" />
+    <Compile Include="PipelineRuntime\TextureAtlases\RenderTexture.cs" />
+    <Compile Include="PipelineRuntime\TextureAtlases\Subtexture.cs" />
+    <Compile Include="PipelineRuntime\TextureAtlases\Texture.cs" />
+    <Compile Include="PipelineRuntime\TextureAtlases\TextureAtlas.cs" />
+    <Compile Include="PipelineRuntime\TextureAtlases\TextureAtlasReader.cs" />
+    <Compile Include="PipelineRuntime\Tiled\TiledImageLayer.cs" />
+    <Compile Include="PipelineRuntime\Tiled\TiledLayer.cs" />
+    <Compile Include="PipelineRuntime\Tiled\TiledMap.cs" />
+    <Compile Include="PipelineRuntime\Tiled\TiledMapOrientation.cs" />
+    <Compile Include="PipelineRuntime\Tiled\TiledMapReader.cs" />
+    <Compile Include="PipelineRuntime\Tiled\TiledObject.cs" />
+    <Compile Include="PipelineRuntime\Tiled\TiledObjectGroup.cs" />
+    <Compile Include="PipelineRuntime\Tiled\TiledRenderOrder.cs" />
+    <Compile Include="PipelineRuntime\Tiled\TiledTile.cs" />
+    <Compile Include="PipelineRuntime\Tiled\TiledTileLayer.cs" />
+    <Compile Include="PipelineRuntime\Tiled\TiledTileSet.cs" />
+  </ItemGroup>
+</Project>

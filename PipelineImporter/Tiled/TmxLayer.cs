@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.Xml.Serialization;
 
 
-namespace Nez.Content.Pipeline.Tiled
+namespace Nez
 {
 	[XmlInclude( typeof( TmxTileLayer ) )]
 	[XmlInclude( typeof( TmxImageLayer ) )]

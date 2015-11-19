@@ -19,7 +19,7 @@ namespace MacTester
 		public SimplePostProcessor( RenderTexture renderTexture )
 		{
 			_renderTexture = renderTexture;
-			_effect = Core.instance.Content.Load<Effect>( "Effects/SpriteEffectEffect" );
+			//_effect = Core.instance.Content.Load<Effect>( "Effects/SpriteEffectEffect" );
 			_effect = new Effect( Core.graphicsDevice, File.ReadAllBytes( "Content/Effects/Invert.ogl.mgfxo" ) );
 			sourceRect = new Rectangle( 250, 10, _renderTexture.textureBounds.Width * 2, _renderTexture.textureBounds.Height * 2 );
 		}

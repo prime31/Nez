@@ -1,7 +1,7 @@
 ﻿using System.Xml.Serialization;
 
 
-namespace Nez.Content.Pipeline.Tiled
+namespace Nez
 {
 	// be careful! these need to match up exactly with TiledRenderOrder in the runtime!
 	public enum TmxRenderOrder

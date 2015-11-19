@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Xml.Serialization;
 
-namespace Nez.Content.Pipeline.Tiled
+namespace Nez
 {
     public class TmxImageLayer : TmxLayer
     {

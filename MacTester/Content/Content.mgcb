@@ -16,6 +16,17 @@
 
 #---------------------------------- Content ---------------------------------#
 
+#begin Fonts/DefaultFont.spritefont
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/processorParam:TextureFormat=Color
+/build:Fonts/DefaultFont.spritefont
+
+#begin Fonts/graphicpixel.ttf
+/importer:
+/processor:
+/build:Fonts/graphicpixel.ttf
+
 #begin Tilemap/background.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -57,9 +68,15 @@
 /processorParam:TextureFormat=Color
 /build:Tilemap/tilesheet.png
 
-#begin Fonts/DefaultFont.spritefont
-/importer:FontDescriptionImporter
-/processor:FontDescriptionProcessor
+#begin Images/moon.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:Fonts/DefaultFont.spritefont
+/build:Images/moon.png
 

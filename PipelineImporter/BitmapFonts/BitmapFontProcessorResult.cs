@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 
 
-namespace Nez.Content.Pipeline.BitmapFonts
+namespace Nez
 {
 	public class BitmapFontProcessorResult
 	{

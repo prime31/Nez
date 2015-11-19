@@ -1,5 +1,5 @@
 
-namespace Nez.Content.Pipeline.Tiled
+namespace Nez
 {
 	public class TiledMapProcessorResult
 	{

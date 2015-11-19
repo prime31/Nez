@@ -73,7 +73,7 @@ namespace MacTester
 		{
 			var scene = new Scene();
 			scene.addRenderer( new DefaultRenderer() );
-			scene.clearColor = Color.BlanchedAlmond;
+			scene.clearColor = useBoxColliders ? Color.BlanchedAlmond : Color.Azure;
 			var moonTexture = scene.contentManager.Load<Texture2D>( "Images/moon" );
 
 

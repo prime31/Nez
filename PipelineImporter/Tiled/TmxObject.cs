@@ -3,7 +3,7 @@ using Microsoft.Xna.Framework;
 using System.Collections.Generic;
 
 
-namespace Nez.Content.Pipeline.Tiled
+namespace Nez
 {
 	public class TmxObject
 	{

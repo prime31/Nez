@@ -1,12 +1,20 @@
-﻿using System;
+﻿#region Using Statements
+using System;
+
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Storage;
+using Microsoft.Xna.Framework.Input;
 using Nez;
-using System.Collections;
 
+
+#endregion
 
 namespace MacTester
 {
+	/// <summary>
+	/// This is the main type for your game.
+	/// </summary>
 	public class Game1 : Core
 	{
 		public Game1() : base( 256 * 4, 144 * 4 )
@@ -16,6 +24,8 @@ namespace MacTester
 		protected override void Initialize()
 		{
 			base.Initialize();
+		
+			Window.AllowUserResizing = true;
 
 			var spriteFont = Content.Load<SpriteFont>( "bin/MacOSX/Fonts/DefaultFont" );
 			Graphics.instance.defaultFont = spriteFont;
@@ -63,7 +73,6 @@ namespace MacTester
 
 			IMGUI.endWindow();			
 		}
-
 	}
 }
 
