@@ -8,7 +8,7 @@ using Nez.TextureAtlases;
 namespace Nez
 {
 	/// <summary>
-	/// wrapper class that holds in instance of a SpriteBatch, GeometryBatch and helpers so that it can be passed around and draw anything
+	/// wrapper class that holds in instance of a SpriteBatch and helpers so that it can be passed around and draw anything.
 	/// </summary>
 	public class Graphics
 	{
@@ -19,13 +19,11 @@ namespace Nez
 		/// All 2D rendering is done through this SpriteBatch instance
 		/// </summary>
 		public SpriteBatch spriteBatch;
-		public SpriteFont defaultFont; // TODO: add support for a default font
 
 		/// <summary>
-		/// Matrix that handles scaling for fullscreen. Automatically set by Monocle when the game switches from fullscreen to windowed mode.
-		/// All your rendering should use this Matrix and the default Renderers use it
+		/// default font is loaded up and stored here for easy access. Nez uses it for the DebugConsole
 		/// </summary>
-		public Matrix masterRenderMatrix;
+		public SpriteFont spriteFont;
 
 		/// <summary>
 		/// A subtexture used to draw particle systems.
@@ -45,9 +43,10 @@ namespace Nez
 		Rectangle _tempRect;
 
 
-		public Graphics( GraphicsDevice graphicsDevice )
+		public Graphics( GraphicsDevice graphicsDevice, SpriteFont font )
 		{
 			this.graphicsDevice = graphicsDevice;
+			spriteFont = font;
 			spriteBatch = new SpriteBatch( graphicsDevice );
 
 			var tex = createSingleColorTexture( 2, 2, Color.White );

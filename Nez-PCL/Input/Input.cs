@@ -55,7 +55,7 @@ namespace Nez
 		/// true the entire time the key is down
 		/// </summary>
 		/// <returns><c>true</c>, if key down was gotten, <c>false</c> otherwise.</returns>
-		public static bool getKeyDown( Keys key )
+		public static bool isKeyDown( Keys key )
 		{
 			return _currentKbState.IsKeyDown( key );
 		}
@@ -65,7 +65,7 @@ namespace Nez
 		/// only true if down this frame
 		/// </summary>
 		/// <returns><c>true</c>, if key pressed was gotten, <c>false</c> otherwise.</returns>
-		public static bool getKeyPressed( Keys key )
+		public static bool isKeyPressed( Keys key )
 		{
 			return _currentKbState.IsKeyDown( key ) && !_previousKbState.IsKeyDown( key );
 		}
@@ -75,39 +75,39 @@ namespace Nez
 		/// true only the frame the key is released
 		/// </summary>
 		/// <returns><c>true</c>, if key up was gotten, <c>false</c> otherwise.</returns>
-		public static bool getKeyReleased( Keys key )
+		public static bool isKeyReleased( Keys key )
 		{
 			return !_currentKbState.IsKeyUp( key ) && _previousKbState.IsKeyUp( key );
 		}
 
 
 		/// <summary>
-		/// true while the keys are down
+		/// true while either of the keys are down
 		/// </summary>
 		/// <returns><c>true</c>, if key down was gotten, <c>false</c> otherwise.</returns>
-		public static bool areKeysDown( Keys keyA, Keys keyB )
+		public static bool isKeyDown( Keys keyA, Keys keyB )
 		{
-			return getKeyDown( keyA ) && getKeyDown( keyB );
+			return isKeyDown( keyA ) || isKeyDown( keyB );
 		}
 
 
 		/// <summary>
-		/// only true if the keys are down this frame
+		/// only true if one of the keys is down this frame
 		/// </summary>
 		/// <returns><c>true</c>, if key pressed was gotten, <c>false</c> otherwise.</returns>
-		public static bool areKeysPressed( Keys keyA, Keys keyB )
+		public static bool isKeyPressed( Keys keyA, Keys keyB )
 		{
-			return getKeyPressed( keyA ) && getKeyPressed( keyB );
+			return isKeyPressed( keyA ) || isKeyPressed( keyB );
 		}
 
 
 		/// <summary>
-		/// true only the frame the keys are released
+		/// true only the frame one of the keys are released
 		/// </summary>
 		/// <returns><c>true</c>, if key up was gotten, <c>false</c> otherwise.</returns>
-		public static bool areKeysReleased( Keys keyA, Keys keyB )
+		public static bool isKeyReleased( Keys keyA, Keys keyB )
 		{
-			return getKeyReleased( keyA ) && getKeyReleased( keyB );
+			return isKeyReleased( keyA ) || isKeyReleased( keyB );
 		}
 
 		#endregion

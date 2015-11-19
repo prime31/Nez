@@ -219,9 +219,9 @@ namespace Nez
 
 			public override void update()
 			{
-				if( Input.getKeyDown( positive ) )
+				if( Input.isKeyDown( positive ) )
 				{
-					if( Input.getKeyDown( negative ) )
+					if( Input.isKeyDown( negative ) )
 					{
 						switch( overlapBehavior )
 						{
@@ -248,7 +248,7 @@ namespace Nez
 						_value = 1;
 					}
 				}
-				else if( Input.getKeyDown( negative ) )
+				else if( Input.isKeyDown( negative ) )
 				{
 					turned = false;
 					_value = -1;

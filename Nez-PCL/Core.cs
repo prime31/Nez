@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Graphics;
 using System.Collections;
 using Nez.Systems;
+using Nez.Console;
 
 
 namespace Nez
@@ -25,8 +26,8 @@ namespace Nez
 
 		public Scene nextScene;
 		Scene _scene;
-		GraphicsDeviceManager _graphicsManager;
 		CoroutineManager _coroutineManager = new CoroutineManager();
+		internal GraphicsDeviceManager _graphicsManager;
 
 
 		/// <summary>
@@ -68,7 +69,7 @@ namespace Nez
 		/// <param name="e">E.</param>
 		void onGraphicsDeviceReset( object sender, EventArgs e )
 		{
-			// TODO: coalese these to avoid spamming
+			// TODO: coalese these to avoid spamming once we have a scheduler/timer
 			emitter.emit( CoreEvents.GraphicsDeviceReset );
 		}
 
@@ -80,7 +81,8 @@ namespace Nez
 			base.Initialize();
 
 			// prep the default Graphics system
-			Graphics.instance = new Graphics( GraphicsDevice );
+			var font = Content.Load<SpriteFont>( "NezFont" );
+			Graphics.instance = new Graphics( GraphicsDevice, font );
 			graphicsDevice = GraphicsDevice;
 		}
 
@@ -95,7 +97,7 @@ namespace Nez
 			Input.update();
 			_coroutineManager.update();
 
-			if( exitOnEscapeKeypress && Input.getKeyDown( Keys.Escape ) )
+			if( exitOnEscapeKeypress && Input.isKeyDown( Keys.Escape ) )
 			{
 				Exit();
 				return;
@@ -115,6 +117,8 @@ namespace Nez
 				if( _scene != null )
 					_scene.begin();
 			}
+
+			DebugConsole.instance.update();
 		}
 
 
@@ -122,13 +126,15 @@ namespace Nez
 		{
 			if( pauseOnFocusLost && !IsActive )
 				return;
-			
+
 			if( _scene != null )
 			{
 				_scene.preRender();
 				_scene.render( enableDebugRender );
 				_scene.postRender();
 			}
+
+			DebugConsole.instance.render();
 		}
 
 		#endregion

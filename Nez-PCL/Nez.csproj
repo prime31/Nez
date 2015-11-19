@@ -37,6 +37,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+    <None Include="Content\NezFont.xnb" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Debug\" />
@@ -48,6 +49,8 @@
     <Folder Include="Stuff\" />
     <Folder Include="Utils\" />
     <Folder Include="PipelineRuntime\" />
+    <Folder Include="Utils\DebugConsole\" />
+    <Folder Include="Content\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Debug\Debug.cs" />
@@ -125,5 +128,7 @@
     <Compile Include="PipelineRuntime\Tiled\TiledTile.cs" />
     <Compile Include="PipelineRuntime\Tiled\TiledTileLayer.cs" />
     <Compile Include="PipelineRuntime\Tiled\TiledTileSet.cs" />
+    <Compile Include="Utils\DebugConsole\DebugConsole.cs" />
+    <Compile Include="Utils\DebugConsole\DefaultCommands.cs" />
   </ItemGroup>
 </Project>

@@ -177,19 +177,19 @@ namespace Nez
 
 			public override bool isDown
 			{
-				get { return Input.getKeyDown( Key ); }
+				get { return Input.isKeyDown( Key ); }
 			}
 
 
 			public override bool isPressed
 			{
-				get { return Input.getKeyPressed( Key ); }
+				get { return Input.isKeyPressed( Key ); }
 			}
 
 
 			public override bool isReleased
 			{
-				get { return Input.getKeyReleased( Key ); }
+				get { return Input.isKeyReleased( Key ); }
 			}
 		}
 

@@ -49,7 +49,7 @@ namespace MacTester
 			image.originNormalized = new Vector2( 0.5f, 0.5f );
 			image.zoom = 2f;
 			entity.addComponent( image );
-			entity.addComponent( new FramesPerSecondCounter( Graphics.instance.defaultFont, Color.White, FramesPerSecondCounter.FPSDockPosition.TopLeft ) );
+			entity.addComponent( new FramesPerSecondCounter( Graphics.instance.spriteFont, Color.White, FramesPerSecondCounter.FPSDockPosition.TopLeft ) );
 			entity.position.Y = 120;
 
 

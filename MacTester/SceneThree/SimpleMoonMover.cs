@@ -15,14 +15,14 @@ namespace MacTester
 		{
 			var moveDir = Vector2.Zero;
 
-			if( Input.getKeyDown( Keys.Left ) )
+			if( Input.isKeyDown( Keys.Left ) )
 				moveDir.X = -1f;
-			else if( Input.getKeyDown( Keys.Right ) )
+			else if( Input.isKeyDown( Keys.Right ) )
 				moveDir.X = 1f;
 
-			if( Input.getKeyDown( Keys.Up ) )
+			if( Input.isKeyDown( Keys.Up ) )
 				moveDir.Y = -1f;
-			else if( Input.getKeyDown( Keys.Down ) )
+			else if( Input.isKeyDown( Keys.Down ) )
 				moveDir.Y = 1f;
 
 			entity.move( moveDir.X * _speed, moveDir.Y * _speed );

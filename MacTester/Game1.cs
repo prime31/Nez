@@ -27,11 +27,15 @@ namespace MacTester
 		
 			Window.AllowUserResizing = true;
 
-			var spriteFont = Content.Load<SpriteFont>( "bin/MacOSX/Fonts/DefaultFont" );
-			Graphics.instance.defaultFont = spriteFont;
-			IMGUI.init( GraphicsDevice, spriteFont );
-
+			// prep IMGUI for use
+			IMGUI.init( GraphicsDevice, Graphics.instance.spriteFont );
 			scene = Scenes.sceneOne();
+		}
+
+
+		protected override void LoadContent()
+		{
+			base.LoadContent();
 		}
 
 

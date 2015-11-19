@@ -104,6 +104,7 @@
     <Content Include="Content\Effects\RainbowH.ogl.mgfxo" />
     <Content Include="Content\Effects\SpriteEffect.ogl.mgfxo" />
     <Content Include="Content\Effects\SpriteEffectEffect.xnb" />
+    <Content Include="Content\NezFont.xnb" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

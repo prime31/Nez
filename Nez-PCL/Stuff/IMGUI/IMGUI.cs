@@ -19,7 +19,6 @@ namespace Nez
 		}
 
 		static Graphics _graphics;
-		static SpriteFont _font;
 
 		// constants
 		const float FONT_SIZE = 14;
@@ -55,10 +54,9 @@ namespace Nez
 
 		public static void init( GraphicsDevice device, SpriteFont font )
 		{
-			_graphics = new Graphics( device );
+			_graphics = new Graphics( device, font );
 
-			_font = font;
-			var scale = FONT_SIZE / _font.MeasureString( " " ).Y;
+			var scale = FONT_SIZE / _graphics.spriteFont.MeasureString( " " ).Y;
 			FONT_SCALE = new Vector2( scale, scale );
 		}
 
@@ -68,7 +66,7 @@ namespace Nez
 		static void drawString( string text, Color color, TextAlign align = TextAlign.Center, float elementHeight = ELEMENT_HEIGHT )
 		{
 			// center align the text
-			var textSize = _font.MeasureString( text ) * FONT_SCALE.Y;
+			var textSize = _graphics.spriteFont.MeasureString( text ) * FONT_SCALE.Y;
 			float x = _elementX;
 			switch( align )
 			{
@@ -82,7 +80,7 @@ namespace Nez
 
 			var y = _lastY + ELEMENT_PADDING + ( elementHeight - FONT_SIZE ) * 0.5f;
 
-			_graphics.spriteBatch.DrawString( _font, text, new Vector2( x, y ), color, 0, Vector2.Zero, FONT_SCALE, SpriteEffects.None, 0 );
+			_graphics.spriteBatch.DrawString( _graphics.spriteFont, text, new Vector2( x, y ), color, 0, Vector2.Zero, FONT_SCALE, SpriteEffects.None, 0 );
 		}
 
 

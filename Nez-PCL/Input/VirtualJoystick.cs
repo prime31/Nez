@@ -172,9 +172,9 @@ namespace Nez
 			public override void update()
 			{
 				//X Axis
-				if( Input.getKeyDown( left ) )
+				if( Input.isKeyDown( left ) )
 				{
-					if( Input.getKeyDown( right ) )
+					if( Input.isKeyDown( right ) )
 					{
 						switch( overlapBehavior )
 						{
@@ -200,7 +200,7 @@ namespace Nez
 						_value.X = -1;
 					}
 				}
-				else if( Input.getKeyDown( right ) )
+				else if( Input.isKeyDown( right ) )
 				{
 					_turnedX = false;
 					_value.X = 1;
@@ -212,9 +212,9 @@ namespace Nez
 				}
 
 				//Y Axis
-				if( Input.getKeyDown( up ) )
+				if( Input.isKeyDown( up ) )
 				{
-					if( Input.getKeyDown( down ) )
+					if( Input.isKeyDown( down ) )
 					{
 						switch( overlapBehavior )
 						{
@@ -240,7 +240,7 @@ namespace Nez
 						_value.Y = -1;
 					}
 				}
-				else if( Input.getKeyDown( down ) )
+				else if( Input.isKeyDown( down ) )
 				{
 					_turnedY = false;
 					_value.Y = 1;
