@@ -20,7 +20,7 @@ namespace Nez
 					// store the old bounds so we can update ourself after modifying them
 					var oldBounds = bounds;
 					_width = value;
-					if( entity != null )
+					if( entity != null && _isParentEntityAddedToScene )
 						entity.scene.physics.updateCollider( this, ref oldBounds );
 				}
 			}
@@ -40,11 +40,15 @@ namespace Nez
 					// store the old bounds so we can update ourself after modifying them
 					var oldBounds = bounds;
 					_height = value;
-					if( entity != null )
+					if( entity != null && _isParentEntityAddedToScene )
 						entity.scene.physics.updateCollider( this, ref oldBounds );
 				}
 			}
 		}
+
+
+		public BoxCollider()
+		{}
 
 
 		public BoxCollider( float x, float y, float width, float height )

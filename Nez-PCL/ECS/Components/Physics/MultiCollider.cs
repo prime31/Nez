@@ -13,13 +13,13 @@ namespace Nez
 		public override float width
 		{
 			get { return bounds.Width; }
-			set { throw new NotImplementedException(); }
+			set { throw new Exception( "width/height are not settable on MultiColliders" ); }
 		}
 
 		public override float height
 		{
 			get { return bounds.Height; }
-			set { throw new NotImplementedException(); }
+			set { throw new Exception( "width/height are not settable on MultiColliders" ); }
 		}
 
 		public override Rectangle bounds
@@ -89,7 +89,9 @@ namespace Nez
 			// that means we dont call through on onEnabled/disabled and the other Collider methods
 			colliders.Add( collider );
 			collider.entity = entity;
-			entity.scene.physics.updateCollider( this, ref oldBounds );
+
+			if( entity != null && _isParentEntityAddedToScene )
+				entity.scene.physics.updateCollider( this, ref oldBounds );
 		}
 
 
@@ -100,7 +102,9 @@ namespace Nez
 
 			colliders.Remove( collider );
 			collider.entity = null;
-			entity.scene.physics.updateCollider( this, ref oldBounds );
+
+			if( entity != null && _isParentEntityAddedToScene )
+				entity.scene.physics.updateCollider( this, ref oldBounds );
 		}
 
 

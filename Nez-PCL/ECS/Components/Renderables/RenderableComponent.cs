@@ -7,13 +7,22 @@ namespace Nez
 {
 	public abstract class RenderableComponent : Component
 	{
+		// TODO: should width/height be multiplied by scale when they are returned?
 		public abstract float width { get; }
 		public abstract float height { get; }
 
 		public Vector2 position;
 		public Vector2 origin;
 		public Vector2 scale = Vector2.One;
-		public float zoom = 1.0f;
+
+		/// <summary>
+		/// shortcut for setting uniform scale
+		/// </summary>
+		public float zoom
+		{
+			set { scale = new Vector2( value, value ); }
+		}
+
 		public float rotation;
 		/// <summary>
 		/// standard SpriteBatch layerdepth
@@ -75,8 +84,7 @@ namespace Nez
 		{
 			get
 			{
-				// TODO: take scale into account as well
-				return RectangleExtension.fromFloats( entity.position.X + position.X - origin.X * zoom, entity.position.Y + position.Y - origin.Y * zoom, width * zoom, height * zoom );
+				return RectangleExtension.fromFloats( entity.position.X + position.X - origin.X * scale.X, entity.position.Y + position.Y - origin.Y * scale.Y, width * scale.X, height * scale.Y );
 			}
 		}
 
@@ -100,13 +108,14 @@ namespace Nez
 
 
 		/// <summary>
-		/// renders the bounds only if there is no collider
+		/// renders the bounds only if there is no collider. Always renders a square on the origin.
 		/// </summary>
 		/// <param name="graphics">Graphics.</param>
 		public override void debugRender( Graphics graphics )
 		{
 			if( entity.collider == null )
 				graphics.drawHollowRect( bounds, Color.Yellow );
+			graphics.drawPixel( entity.position, Color.DarkOrchid, 4 );
 		}
 
 

@@ -90,7 +90,7 @@ namespace Nez
 		public override void render( Graphics graphics, Camera camera )
 		{
 			// we override render and use position instead of entityPosition. this keeps the text in place even if the entity moves
-			graphics.spriteBatch.DrawString( font, text, position, color, rotation, origin, scale * zoom, spriteEffects, layerDepth );
+			graphics.spriteBatch.DrawString( font, text, position, color, rotation, origin, scale, spriteEffects, layerDepth );
 		}
 
 

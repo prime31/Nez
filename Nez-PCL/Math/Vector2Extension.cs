@@ -15,6 +15,7 @@ namespace Nez
 			vec.X = Mathf.round( vec.X );
 			vec.Y = Mathf.round( vec.Y );
 		}
+
 	}
 }
 

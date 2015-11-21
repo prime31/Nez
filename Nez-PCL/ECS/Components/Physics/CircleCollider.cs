@@ -16,7 +16,8 @@ namespace Nez
 				// store the old bounds so we can update ourself after modifying them
 				var oldBounds = bounds;
 				radius = value * 0.5f;
-				entity.scene.physics.updateCollider( this, ref oldBounds );
+				if( entity != null && _isParentEntityAddedToScene )
+					entity.scene.physics.updateCollider( this, ref oldBounds );
 			}
 		}
 
@@ -32,9 +33,14 @@ namespace Nez
 				// store the old bounds so we can update ourself after modifying them
 				var oldBounds = bounds;
 				radius = value * 0.5f;
-				entity.scene.physics.updateCollider( this, ref oldBounds );
+				if( entity != null && _isParentEntityAddedToScene )
+					entity.scene.physics.updateCollider( this, ref oldBounds );
 			}
 		}
+
+
+		public CircleCollider()
+		{}
 
 
 		public CircleCollider( float radius )

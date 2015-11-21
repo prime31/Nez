@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework;
 
 namespace Nez
 {
+	// TODO: should colliders have a scale property as well or is it enough to set width/height?
 	public abstract class Collider
 	{
 		public Entity entity;
@@ -101,6 +102,19 @@ namespace Nez
 		/// </summary>
 		public virtual void onEntityAddedToScene()
 		{
+			if( width == 0 || height == 0 )
+			{
+				var renderable = entity.getComponent<RenderableComponent>();
+				Debug.warnIf( renderable == null, "Collider has no width/height and no RenderableComponent. Can't figure out how to size it." );
+				if( renderable != null )
+				{
+					var renderableBounds = renderable.bounds;
+
+					width = renderableBounds.Width;
+					height = renderableBounds.Height;
+					originNormalized = renderable.originNormalized;
+				}
+			}
 			_isParentEntityAddedToScene = true;
 			registerColliderWithPhysicsSystem();
 		}

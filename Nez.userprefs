@@ -1,6 +1,10 @@
-﻿<Properties MonoDevelop.MonoMac.LastXamMacNagTime="11/19/2015 3:56:58 AM" StartupItem="MacTester/MacTester.csproj">
+﻿<Properties MonoDevelop.MonoMac.LastXamMacNagTime="11/21/2015 2:39:02 AM" StartupItem="MacTester/MacTester.csproj">
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.Workbench />
+  <MonoDevelop.Ide.Workbench ActiveDocument="MacTester/Game1.cs">
+    <Files>
+      <File FileName="MacTester/Game1.cs" Line="24" Column="39" />
+    </Files>
+  </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
     <BreakpointStore />
   </MonoDevelop.Ide.DebuggingService.Breakpoints>

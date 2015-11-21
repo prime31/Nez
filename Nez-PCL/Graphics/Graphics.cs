@@ -290,9 +290,17 @@ namespace Nez
 		}
 
 
-		public void drawPixel( Vector2 position, Color color )
+		public void drawPixel( Vector2 position, Color color, int size = 1 )
 		{
-			spriteBatch.Draw( pixelTexture, position, pixelTexture.sourceRect, color );
+			var sourceRect = pixelTexture.sourceRect;
+			if( size != 1 )
+			{
+				position.X -= size * 0.5f;
+				position.Y -= size * 0.5f;
+				sourceRect.Width *= size;
+				sourceRect.Height *= size;
+			}
+			spriteBatch.Draw( pixelTexture, position, sourceRect, color );
 		}
 
 		#endregion

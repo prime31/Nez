@@ -33,6 +33,7 @@ namespace MacTester
 		{
 			var scene = new Scene();
 			scene.clearColor = Color.Coral;
+			var moonTexture = scene.contentManager.Load<Texture2D>( "Images/moon" );
 
 			// setup a renderer that renders everything to a RenderTexture making sure its order is before standard renderers!
 			var renderer = new DefaultRenderer( scene.camera, -1 );
@@ -45,20 +46,20 @@ namespace MacTester
 
 			// stick a couple moons on screen
 			var entity = scene.createAndAddEntity<Entity>( "moon" );
-			var image = new Image( scene.contentManager.Load<Texture2D>( "Images/moon" ) );
+			var image = new Image( moonTexture );
 			image.originNormalized = new Vector2( 0.5f, 0.5f );
 			image.zoom = 2f;
 			entity.addComponent( image );
 			entity.addComponent( new FramesPerSecondCounter( Graphics.instance.spriteFont, Color.White, FramesPerSecondCounter.FPSDockPosition.TopLeft ) );
 			entity.position.Y = 120;
+			entity.collider = new BoxCollider();
 
 
 			entity = scene.createAndAddEntity<Entity>( "new-moon" );
-			image = new Image( scene.contentManager.Load<Texture2D>( "Images/moon" ) );
+			image = new Image( moonTexture );
 			entity.position.X = 130;
 			entity.position.Y = 130;
 			entity.addComponent( image );
-			entity.collider = new BoxCollider( 0, 0, image.width, image.height );
 
 			// add a post processor to display the RenderTexture
 			var postProcessor = new SimplePostProcessor( renderer.renderTexture );
@@ -84,9 +85,9 @@ namespace MacTester
 				ent.position = pos;
 				ent.addComponent( new Image( moonTexture ) );
 				if( useBoxColliders )
-					ent.collider = new BoxCollider( moonTexture.Bounds );
+					ent.collider = new BoxCollider();
 				else
-					ent.collider = new CircleCollider( moonTexture.Width * 0.5f );
+					ent.collider = new CircleCollider();
 			};
 
 			moonMaker( new Vector2( 400, 10 ), "moon1" );
@@ -98,20 +99,15 @@ namespace MacTester
 			// create a player moon
 			var entity = scene.createAndAddEntity<Entity>( "player-moon" );
 			entity.addComponent( new SimpleMoonMover() );
+			entity.position = new Vector2( 220, 220 );
 			var sprite = new Sprite<int>( new Subtexture( moonTexture ) );
 			sprite.color = Color.Blue;
 			entity.addComponent( sprite );
+
 			if( useBoxColliders )
-			{
-				entity.collider = new BoxCollider( sprite.bounds );
-			}
+				entity.collider = new BoxCollider();
 			else
-			{
-				// Sprites have a centered origin so we have to center the origin of our CircleCollider as well
-				entity.collider = new CircleCollider( moonTexture.Width * 0.5f );
-				entity.collider.originNormalized = new Vector2( 0.5f, 0.5f );
-			}
-			entity.position = new Vector2( 220, 220 );
+				entity.collider = new CircleCollider();
 
 			return scene;
 		}
