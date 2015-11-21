@@ -47,6 +47,10 @@ namespace Nez
 		}
 
 
+		/// <summary>
+		/// zero param constructor requires that a RenderableComponent be on the entity so that the collider can size itself when the
+		/// entity is added to the scene.
+		/// </summary>
 		public BoxCollider()
 		{}
 
