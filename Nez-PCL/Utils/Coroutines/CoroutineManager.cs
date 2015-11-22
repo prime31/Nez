@@ -20,6 +20,9 @@ namespace Nez.Systems
 		class CoroutineImpl : ICoroutine
 		{
 			public IEnumerator enumerator;
+			/// <summary>
+			/// anytime a delay is yielded it is added to the waitTimer which tracks the delays
+			/// </summary>
 			public float waitTimer;
 			public bool isDone;
 			public CoroutineImpl waitForCoroutine;
@@ -29,10 +32,17 @@ namespace Nez.Systems
 			{
 				isDone = true;
 			}
+
+
+			internal void reset()
+			{
+				waitTimer = 0;
+				isDone = false;
+				waitForCoroutine = null;
+			}
 		}
 
 
-		Stack<CoroutineImpl> _coroutineCache = new Stack<CoroutineImpl>();
 		List<CoroutineImpl> _unblockedCoroutines = new List<CoroutineImpl>();
 		List<CoroutineImpl> _shouldRunNextFrame = new List<CoroutineImpl>();
 
@@ -45,17 +55,11 @@ namespace Nez.Systems
 		public ICoroutine startCoroutine( IEnumerator enumerator )
 		{
 			// find or create a CoroutineImpl
-			CoroutineImpl coroutine = null;
-			if( _coroutineCache.Count > 0 )
-				coroutine = _coroutineCache.Pop();
-			else
-				coroutine = new CoroutineImpl();
+			var coroutine = QuickCache<CoroutineImpl>.pop();
 
 			// setup the coroutine and add it
 			coroutine.enumerator = enumerator;
-			coroutine.waitTimer = 0;
-			coroutine.isDone = false;
-			coroutine.waitForCoroutine = null;
+			coroutine.reset();
 
 			_shouldRunNextFrame.Add( coroutine );
 
@@ -73,7 +77,7 @@ namespace Nez.Systems
 				if( coroutine.isDone )
 				{
 					coroutine.isDone = true;
-					_coroutineCache.Push( coroutine );
+					QuickCache<CoroutineImpl>.push( coroutine );
 					continue;
 				}
 
@@ -105,7 +109,7 @@ namespace Nez.Systems
 				if( !coroutine.enumerator.MoveNext() )
 				{
 					coroutine.isDone = true;
-					_coroutineCache.Push( coroutine );
+					QuickCache<CoroutineImpl>.push( coroutine );
 					continue;
 				}
 
@@ -137,6 +141,7 @@ namespace Nez.Systems
 			_unblockedCoroutines.AddRange( _shouldRunNextFrame );
 			_shouldRunNextFrame.Clear();
 		}
+	
 	}
 }
 

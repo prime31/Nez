@@ -6,6 +6,7 @@ using System.Collections;
 using Nez.Systems;
 using Nez.Console;
 using Nez.Tweens;
+using Nez.Timers;
 
 
 namespace Nez
@@ -25,11 +26,12 @@ namespace Nez
 		public static bool enableDebugRender = false;
 		public static GraphicsDevice graphicsDevice;
 
-		public Scene nextScene;
+		internal GraphicsDeviceManager _graphicsManager;
 		Scene _scene;
+		Scene _nextScene;
 		CoroutineManager _coroutineManager = new CoroutineManager();
 		TweenManager _tweenManager = new TweenManager();
-		internal GraphicsDeviceManager _graphicsManager;
+		TimerManager _timerManager = new TimerManager();
 
 
 		/// <summary>
@@ -38,7 +40,7 @@ namespace Nez
 		public static Scene scene
 		{
 			get { return instance._scene; }
-			set { instance.nextScene = value; }
+			set { instance._nextScene = value; }
 		}
 
 
@@ -99,6 +101,7 @@ namespace Nez
 			Input.update();
 			_coroutineManager.update();
 			_tweenManager.update();
+			_timerManager.update();
 
 			if( exitOnEscapeKeypress && Input.isKeyDown( Keys.Escape ) )
 			{
@@ -109,12 +112,12 @@ namespace Nez
 			if( _scene != null )
 				_scene.update();
 
-			if( _scene != nextScene )
+			if( _scene != _nextScene )
 			{
 				if( _scene != null )
 					_scene.end();
 
-				_scene = nextScene;
+				_scene = _nextScene;
 				onSceneTransition();
 
 				if( _scene != null )
@@ -170,6 +173,8 @@ namespace Nez
 		}
 
 
+		#region Systems access
+
 		/// <summary>
 		/// starts a coroutine. Coroutines can yeild ints/floats to delay for seconds or yeild to other calls to startCoroutine.
 		/// Yielding null will make the coroutine get ticked the next frame.
@@ -180,6 +185,21 @@ namespace Nez
 		{
 			return _coroutineManager.startCoroutine( enumerator );
 		}
+
+
+		/// <summary>
+		/// schedules a one-time or repeating timer that will call the passed in Action
+		/// </summary>
+		/// <param name="timeInSeconds">Time in seconds.</param>
+		/// <param name="repeats">If set to <c>true</c> repeats.</param>
+		/// <param name="context">Context.</param>
+		/// <param name="onTime">On time.</param>
+		public ITimer schedule( float timeInSeconds, bool repeats, object context, Action<ITimer> onTime )
+		{
+			return _timerManager.schedule( timeInSeconds, repeats, context, onTime );
+		}
+
+		#endregion
 
 	}
 }

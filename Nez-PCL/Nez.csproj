@@ -54,6 +54,8 @@
     <Folder Include="Utils\Tweens\" />
     <Folder Include="Utils\Tweens\Easing\" />
     <Folder Include="Utils\Tweens\Interfaces\" />
+    <Folder Include="Utils\Timers\" />
+    <Folder Include="Utils\Coroutines\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Debug\Debug.cs" />
@@ -102,8 +104,6 @@
     <Compile Include="Physics\Ray2D.cs" />
     <Compile Include="Physics\SpatialHash.cs" />
     <Compile Include="Stuff\IMGUI\IMGUI.cs" />
-    <Compile Include="Utils\Coroutine.cs" />
-    <Compile Include="Utils\CoroutineManager.cs" />
     <Compile Include="Utils\Emitter.cs" />
     <Compile Include="Utils\EntityCache.cs" />
     <Compile Include="Utils\Time.cs" />
@@ -146,7 +146,11 @@
     <Compile Include="Utils\QuickCache.cs" />
     <Compile Include="Utils\Tweens\PropertyTweens.cs" />
     <Compile Include="Utils\Tweens\TweenManager.cs" />
-    <Compile Include="Utils\Tweens\ActionTask.cs" />
     <Compile Include="Utils\ReflectionUtils.cs" />
+    <Compile Include="Utils\Coroutines\Coroutine.cs" />
+    <Compile Include="Utils\Coroutines\CoroutineManager.cs" />
+    <Compile Include="Utils\Timers\TimerManager.cs" />
+    <Compile Include="Utils\Timers\ITimer.cs" />
+    <Compile Include="Utils\Timers\Timer.cs" />
   </ItemGroup>
 </Project>

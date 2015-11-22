@@ -64,16 +64,16 @@ namespace MacTester
 			enableDebugRender = IMGUI.toggle( "Debug Render", enableDebugRender );
 
 			if( IMGUI.button( "Scene 1" ) )
-				nextScene = Scenes.sceneOne();
+				scene = Scenes.sceneOne();
 
 			if( IMGUI.button( "Scene 2" ) )
-				nextScene = Scenes.sceneTwo();
+				scene = Scenes.sceneTwo();
 
 			if( IMGUI.button( "Scene 3 Box" ) )
-				nextScene = Scenes.sceneThree( true );
+				scene = Scenes.sceneThree( true );
 
 			if( IMGUI.button( "Scene 3 Circle" ) )
-				nextScene = Scenes.sceneThree( false );
+				scene = Scenes.sceneThree( false );
 
 			IMGUI.endWindow();			
 		}

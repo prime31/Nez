@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
 using System.IO;
+using Microsoft.Xna.Framework.Content;
 
 
 namespace Nez.TextureAtlases
@@ -46,7 +47,7 @@ namespace Nez.TextureAtlases
 		}
 
 
-		public override void load( GraphicsDevice graphicsDevice, Stream fileStream )
+		public override void load( string imagePath, ContentManager content )
 		{
 			throw new Exception( "Cannot load a RenderTexture" );
 		}

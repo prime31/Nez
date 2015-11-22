@@ -1,7 +1,9 @@
 ﻿using System;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Content;
 using System.IO;
+using Nez.Content;
 
 
 namespace Nez.TextureAtlases
@@ -36,17 +38,13 @@ namespace Nez.TextureAtlases
 		}
 
 
-		/// <summary>
-		/// this is a lot uglier then it needs to be due to PCL. Use it like this:
-		/// using( var fileStream = new FileStream( Core.instance.Content.RootDirectory + imagePath, FileMode.Open ) )
-		///     load( Core.instance.graphicsDevice, fileStream );
-		/// </summary>
-		/// <param name="graphicsDevice">Graphics device.</param>
-		/// <param name="fileStream">File stream.</param>
-		public virtual void load( GraphicsDevice graphicsDevice, Stream fileStream )
+		public virtual void load( string imagePath, ContentManager content )
 		{
-			texture2D = Texture2D.FromStream( graphicsDevice, fileStream );
-			textureBounds = new Rectangle( 0, 0, texture2D.Width, texture2D.Height );
+			using( var stream = content.openStream( imagePath ) )
+			{
+				texture2D = Texture2D.FromStream( content.getGraphicsDevice(), stream );
+				textureBounds = new Rectangle( 0, 0, texture2D.Width, texture2D.Height );
+			}
 		}
 
 

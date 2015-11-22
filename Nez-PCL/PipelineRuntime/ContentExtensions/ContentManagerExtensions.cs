@@ -10,6 +10,7 @@ namespace Nez.Content
 	{
 		public const string DirectorySeparatorChar = "/";
 
+
 		public static Stream openStream( this ContentManager contentManager, string path )
 		{
 			return TitleContainer.OpenStream( contentManager.RootDirectory + DirectorySeparatorChar + path );
