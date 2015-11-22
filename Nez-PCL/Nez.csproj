@@ -51,6 +51,9 @@
     <Folder Include="PipelineRuntime\" />
     <Folder Include="Utils\DebugConsole\" />
     <Folder Include="Content\" />
+    <Folder Include="Utils\Tweens\" />
+    <Folder Include="Utils\Tweens\Easing\" />
+    <Folder Include="Utils\Tweens\Interfaces\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Debug\Debug.cs" />
@@ -130,5 +133,20 @@
     <Compile Include="PipelineRuntime\Tiled\TiledTileSet.cs" />
     <Compile Include="Utils\DebugConsole\DebugConsole.cs" />
     <Compile Include="Utils\DebugConsole\DefaultCommands.cs" />
+    <Compile Include="Utils\Tweens\Easing\EaseType.cs" />
+    <Compile Include="Utils\Tweens\Easing\Easing.cs" />
+    <Compile Include="Utils\Tweens\Easing\Lerps.cs" />
+    <Compile Include="Utils\Tweens\Interfaces\ITweenable.cs" />
+    <Compile Include="Utils\Tweens\AbstractTweenable.cs" />
+    <Compile Include="Utils\Tweens\Interfaces\ITween.cs" />
+    <Compile Include="Utils\Tweens\Interfaces\ITweenTarget.cs" />
+    <Compile Include="Utils\Tweens\Interfaces\ITweenControl.cs" />
+    <Compile Include="Utils\Tweens\Tween.cs" />
+    <Compile Include="Utils\Tweens\Tweens.cs" />
+    <Compile Include="Utils\QuickCache.cs" />
+    <Compile Include="Utils\Tweens\PropertyTweens.cs" />
+    <Compile Include="Utils\Tweens\TweenManager.cs" />
+    <Compile Include="Utils\Tweens\ActionTask.cs" />
+    <Compile Include="Utils\ReflectionUtils.cs" />
   </ItemGroup>
 </Project>

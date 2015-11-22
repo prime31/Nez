@@ -18,6 +18,11 @@ namespace Nez.Systems
 		}
 
 
+		/// <summary>
+		/// if using an enum as the generic constraint you may want to pass in a custom comparer to avoid boxing/unboxing. See the CoreEventsComparer
+		/// for an example implementation.
+		/// </summary>
+		/// <param name="customComparer">Custom comparer.</param>
 		public Emitter( IEqualityComparer<T> customComparer )
 		{
 			_messageTable = new Dictionary<T,List<Action>>( customComparer );

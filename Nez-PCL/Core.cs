@@ -5,6 +5,7 @@ using Microsoft.Xna.Framework.Graphics;
 using System.Collections;
 using Nez.Systems;
 using Nez.Console;
+using Nez.Tweens;
 
 
 namespace Nez
@@ -27,6 +28,7 @@ namespace Nez
 		public Scene nextScene;
 		Scene _scene;
 		CoroutineManager _coroutineManager = new CoroutineManager();
+		TweenManager _tweenManager = new TweenManager();
 		internal GraphicsDeviceManager _graphicsManager;
 
 
@@ -96,6 +98,7 @@ namespace Nez
 			Time.update( (float)gameTime.ElapsedGameTime.TotalSeconds );
 			Input.update();
 			_coroutineManager.update();
+			_tweenManager.update();
 
 			if( exitOnEscapeKeypress && Input.isKeyDown( Keys.Escape ) )
 			{

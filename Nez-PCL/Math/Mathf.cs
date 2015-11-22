@@ -40,9 +40,21 @@ namespace Nez
 		{
 			if( value < 0f )
 				return 0f;
-			
+
 			if( value > 1f )
 				return 1f;
+
+			return value;
+		}
+
+
+		public static float clamp( float value, float min, float max )
+		{
+			if( value < min )
+				return min;
+
+			if( value > max )
+				return max;
 
 			return value;
 		}
@@ -103,6 +115,50 @@ namespace Nez
 			else
 				return 0;
 		}
+
+
+		public static float deltaAngle( float current, float target )
+		{
+			var num = Mathf.repeat( target - current, 360f );
+			if( num > 180f )
+				num -= 360f;
+
+			return num;
+		}
+
+
+		#region wrappers for Math doubles
+
+		public static float sqrt( float val )
+		{
+			return (float)Math.Sqrt( val );
+		}
+
+
+		public static float pow( float x, float y )
+		{
+			return (float)Math.Pow( x, y );
+		}
+
+
+		public static float sin( float f )
+		{
+			return (float)Math.Sin( f );
+		}
+
+
+		public static float cos( float f )
+		{
+			return (float)Math.Cos( f );
+		}
+
+
+		public static float exp( float power )
+		{
+			return (float)Math.Exp( power );
+		}
+
+		#endregion
 
 
 		#region Vector2
