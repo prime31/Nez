@@ -40,14 +40,14 @@ namespace Nez
 		}
 
 
-		~ViewportAdapter()
+		protected virtual void onGraphicsDeviceReset()
+		{}
+
+
+		public void unload()
 		{
 			Core.emitter.removeObserver( CoreEvents.GraphicsDeviceReset, onGraphicsDeviceReset );
 		}
-
-
-		protected virtual void onGraphicsDeviceReset()
-		{}
 
 
 		public virtual Vector2 pointToVirtualViewport( Vector2 point )

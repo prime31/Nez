@@ -72,9 +72,8 @@ namespace Nez
 
 				if( _boundsAreDirty )
 				{
-					var topLeft = screenToWorldPoint( Vector2.Zero );
-					// TODO: certain virtual viewports (any that change the Viewport will require this to change
-					var bottomRight = screenToWorldPoint( new Vector2( _graphicsDevice.Viewport.Width, _graphicsDevice.Viewport.Height ) );
+					var topLeft = screenToWorldPoint( new Vector2( _graphicsDevice.Viewport.X, _graphicsDevice.Viewport.Y ) );
+					var bottomRight = screenToWorldPoint( new Vector2( _graphicsDevice.Viewport.X + _graphicsDevice.Viewport.Width, _graphicsDevice.Viewport.Y + _graphicsDevice.Viewport.Height ) );
 
 					_bounds.Location = topLeft.ToPoint();
 					_bounds.Width = (int)( bottomRight.X - topLeft.X );
@@ -109,7 +108,7 @@ namespace Nez
 			}
 		}
 
-		public ViewportAdapter _viewportAdapter;
+		ViewportAdapter _viewportAdapter;
 		/// <summary>
 		/// used for automatic scaling/boxing of the viewport and translation to/from world/screen positions
 		/// </summary>
@@ -122,6 +121,7 @@ namespace Nez
 				{
 					_viewportAdapter = value;
 					_matrixesAreDirty = true;
+					_boundsAreDirty = true;
 				}
 			}
 		}
@@ -191,6 +191,11 @@ namespace Nez
 		public void unload()
 		{
 			Core.emitter.removeObserver( CoreEvents.GraphicsDeviceReset, onGraphicsDeviceReset );
+			if( viewportAdapter != null )
+			{
+				viewportAdapter.unload();
+				viewportAdapter = null;
+			}
 		}
 
 

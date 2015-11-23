@@ -15,8 +15,8 @@ namespace Nez
 
 		protected override void onGraphicsDeviceReset()
 		{
-			float screenWidth = _graphicsDevice.PresentationParameters.BackBufferWidth;
-			float screenHeight = _graphicsDevice.PresentationParameters.BackBufferHeight;
+			var screenWidth = _graphicsDevice.PresentationParameters.BackBufferWidth;
+			var screenHeight = _graphicsDevice.PresentationParameters.BackBufferHeight;
 			int drawWidth, drawHeight;
 
 			if( screenWidth / virtualWidth > screenHeight / virtualHeight )
