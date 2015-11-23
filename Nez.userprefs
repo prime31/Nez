@@ -1,4 +1,4 @@
-﻿<Properties MonoDevelop.MonoMac.LastXamMacNagTime="11/21/2015 2:39:02 AM" StartupItem="MacTester/MacTester.csproj">
+﻿<Properties MonoDevelop.MonoMac.LastXamMacNagTime="11/21/2015 2:39:02 AM" StartupItem="MacTester/MacTester.csproj" RefactoringSettings.EnableRefactorings="True">
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
   <MonoDevelop.Ide.Workbench ActiveDocument="MacTester/Game1.cs">
     <Files>

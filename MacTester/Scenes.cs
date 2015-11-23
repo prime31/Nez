@@ -3,26 +3,32 @@ using Nez;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
 using Nez.TextureAtlases;
+using Nez.Tiled;
 
 
 namespace MacTester
 {
 	public static class Scenes
 	{
-		public static Scene sceneOne()
+		public static Scene sceneOne( bool useScalingViewportAdapter = true )
 		{
 			var scene = new Scene();
 			scene.clearColor = Color.Black;
 
 			// add a default renderer which will render everything
 			scene.addRenderer( new DefaultRenderer() );
-			scene.camera._viewportAdapter = new ScalingViewportAdapter( Core.graphicsDevice, 256, 144 );
-			Core.instance.setScreenSize( 256 * 4, 144 * 4 );
+
+			if( useScalingViewportAdapter )
+				scene.camera.viewportAdapter = new ScalingViewportAdapter( Core.graphicsDevice, 256, 144 );
+			else
+				scene.camera.viewportAdapter = new BoxingViewportAdapter( Core.graphicsDevice, 256, 144 );
+			Core.setScreenSize( 256 * 4, 144 * 4 );
 
 
 			// load a TiledMap and move it back so is drawn before other entities
 			var tiledEntity = scene.createAndAddEntity<Entity>( "tiled-map-entity" );
-			tiledEntity.addComponent( new TiledMapComponent( "bin/MacOSX/Tilemap/tilemap", "collision" ) );
+			var tiledmap = scene.contentManager.Load<TiledMap>( "bin/MacOSX/Tilemap/tilemap" );
+			tiledEntity.addComponent( new TiledMapComponent( tiledmap, "collision" ) );
 			tiledEntity.depth += 5;
 
 			return scene;

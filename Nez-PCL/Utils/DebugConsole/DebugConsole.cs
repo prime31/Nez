@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework.Input;
 using System.Reflection;
 using System.Text;
 using Microsoft.Xna.Framework;
+using System.Text.RegularExpressions;
 
 
 namespace Nez.Console
@@ -21,6 +22,13 @@ namespace Nez.Console
 		const float REPEAT_DELAY = 0.5f;
 		const float REPEAT_EVERY = 1 / 30f;
 		const float OPACITY = 0.65f;
+
+		// render constants
+		Vector2 FONT_SCALE;
+		const float FONT_SIZE = 14;
+		const int HORIZONTAL_PADDING = 10;
+		const int BOTTOM_MARGIN = 50;
+		const int LINE_HEIGHT = 20;
 
 		bool enabled = true;
 		bool isOpen;
@@ -56,26 +64,43 @@ namespace Nez.Console
 			_sorted = new List<string>();
 			functionKeyActions = new Action[12];
 
+			var scale = FONT_SIZE / Graphics.instance.spriteFont.MeasureString( " " ).Y;
+			FONT_SCALE = new Vector2( scale, scale );
+
 			buildCommandsList();
+		}
+
+
+		public void log( Exception e )
+		{
+			log( e.Message );
+
+			var str = e.StackTrace;
+			var parts = str.Split( new string[] { "\n" }, StringSplitOptions.RemoveEmptyEntries );
+			foreach( var line in parts )
+			{
+				var lineWithoutPath = Regex.Replace( line, @"in\s\/.*?\/.*?(\w+\.cs)", "$1" );
+				log( lineWithoutPath );
+			}
 		}
 
 
 		public void log( object obj )
 		{
-			string str = obj.ToString();
+			var str = obj.ToString();
 
 			// Split the string if you overlow horizontally
 			var maxWidth = Core.graphicsDevice.PresentationParameters.BackBufferWidth - 40;
 			var screenHeight = Core.graphicsDevice.PresentationParameters.BackBufferHeight;
 
-			while( Graphics.instance.spriteFont.MeasureString( str ).X > maxWidth )
+			while( Graphics.instance.spriteFont.MeasureString( str ).X * FONT_SCALE.X > maxWidth )
 			{
 				var split = -1;
 				for( int i = 0; i < str.Length; i++ )
 				{
 					if( str[i] == ' ' )
 					{
-						if( Graphics.instance.spriteFont.MeasureString( str.Substring( 0, i ) ).X <= maxWidth )
+						if( Graphics.instance.spriteFont.MeasureString( str.Substring( 0, i ) ).X * FONT_SCALE.X <= maxWidth )
 							split = i;
 						else
 							break;
@@ -155,7 +180,7 @@ namespace Nez.Console
 					_repeatKey = null;
 			}
 
-			foreach( Keys key in _currentState.GetPressedKeys() )
+			foreach( var key in _currentState.GetPressedKeys() )
 			{
 				if( _oldState[key] == KeyState.Up )
 				{
@@ -189,67 +214,67 @@ namespace Nez.Console
 					}
 				break;
 
-				case (Keys.D1):
+				case( Keys.D1 ):
 					if( _currentState[Keys.LeftShift] == KeyState.Down || _currentState[Keys.RightShift] == KeyState.Down )
 						_currentText += '!';
 					else
 						_currentText += '1';
 				break;
-				case (Keys.D2):
+				case( Keys.D2 ):
 					if( _currentState[Keys.LeftShift] == KeyState.Down || _currentState[Keys.RightShift] == KeyState.Down )
 						_currentText += '@';
 					else
 						_currentText += '2';
 				break;
-				case (Keys.D3):
+				case( Keys.D3 ):
 					if( _currentState[Keys.LeftShift] == KeyState.Down || _currentState[Keys.RightShift] == KeyState.Down )
 						_currentText += '#';
 					else
 						_currentText += '3';
 				break;
-				case (Keys.D4):
+				case( Keys.D4 ):
 					if( _currentState[Keys.LeftShift] == KeyState.Down || _currentState[Keys.RightShift] == KeyState.Down )
 						_currentText += '$';
 					else
 						_currentText += '4';
 				break;
-				case (Keys.D5):
+				case( Keys.D5 ):
 					if( _currentState[Keys.LeftShift] == KeyState.Down || _currentState[Keys.RightShift] == KeyState.Down )
 						_currentText += '%';
 					else
 						_currentText += '5';
 				break;
-				case (Keys.D6):
+				case( Keys.D6 ):
 					if( _currentState[Keys.LeftShift] == KeyState.Down || _currentState[Keys.RightShift] == KeyState.Down )
 						_currentText += '^';
 					else
 						_currentText += '6';
 				break;
-				case (Keys.D7):
+				case( Keys.D7 ):
 					if( _currentState[Keys.LeftShift] == KeyState.Down || _currentState[Keys.RightShift] == KeyState.Down )
 						_currentText += '&';
 					else
 						_currentText += '7';
 				break;
-				case (Keys.D8):
+				case( Keys.D8 ):
 					if( _currentState[Keys.LeftShift] == KeyState.Down || _currentState[Keys.RightShift] == KeyState.Down )
 						_currentText += '*';
 					else
 						_currentText += '8';
 				break;
-				case (Keys.D9):
+				case( Keys.D9 ):
 					if( _currentState[Keys.LeftShift] == KeyState.Down || _currentState[Keys.RightShift] == KeyState.Down )
 						_currentText += '(';
 					else
 						_currentText += '9';
 				break;
-				case (Keys.D0):
+				case( Keys.D0 ):
 					if( _currentState[Keys.LeftShift] == KeyState.Down || _currentState[Keys.RightShift] == KeyState.Down )
 						_currentText += ')';
 					else
 						_currentText += '0';
 				break;
-				case (Keys.OemComma):
+				case( Keys.OemComma):
 					if( _currentState[Keys.LeftShift] == KeyState.Down || _currentState[Keys.RightShift] == KeyState.Down )
 						_currentText += '<';
 					else
@@ -444,10 +469,11 @@ namespace Nez.Console
 			
 			var screenWidth = Core.graphicsDevice.PresentationParameters.BackBufferWidth;
 			var screenHeight = Core.graphicsDevice.PresentationParameters.BackBufferHeight;
+			var workingWidth = screenWidth - 2 * HORIZONTAL_PADDING;
 
 			Graphics.instance.spriteBatch.Begin();
 
-			Graphics.instance.drawRect( 10, screenHeight - 50, screenWidth - 20, 40, Color.Black * OPACITY );
+			Graphics.instance.drawRect( HORIZONTAL_PADDING, screenHeight - BOTTOM_MARGIN, workingWidth, 40, Color.Black * OPACITY );
 			if( _underscore )
 				Graphics.instance.spriteBatch.DrawString( Graphics.instance.spriteFont, ">" + _currentText + "_", new Vector2( 20, screenHeight - 42 ), Color.White );
 			else
@@ -455,10 +481,14 @@ namespace Nez.Console
 
 			if( _drawCommands.Count > 0 )
 			{
-				int height = 10 + ( 30 * _drawCommands.Count );
-				Graphics.instance.drawRect( 10, screenHeight - height - 60, screenWidth - 20, height, Color.Black * OPACITY );
+				var height = 10 + ( LINE_HEIGHT * _drawCommands.Count );
+				Graphics.instance.drawRect( HORIZONTAL_PADDING, screenHeight - height - 60, workingWidth, height, Color.Black * OPACITY );
 				for( int i = 0; i < _drawCommands.Count; i++ )
-					Graphics.instance.spriteBatch.DrawString( Graphics.instance.spriteFont, _drawCommands[i], new Vector2( 20, screenHeight - 92 - ( 30 * i ) ), _drawCommands[i].IndexOf( ">" ) == 0 ? Color.Yellow : Color.White );
+				{
+					var position = new Vector2( 20, screenHeight - 92 - ( LINE_HEIGHT * i ) );
+					var color = _drawCommands[i].IndexOf( ">" ) == 0 ? Color.Yellow : Color.White;
+					Graphics.instance.spriteBatch.DrawString( Graphics.instance.spriteFont, _drawCommands[i], position, color, 0, Vector2.Zero, FONT_SCALE, Microsoft.Xna.Framework.Graphics.SpriteEffects.None, 0 );
+				}
 			}
 
 			Graphics.instance.spriteBatch.End();
@@ -586,7 +616,14 @@ namespace Nez.Console
 									param[i] = argBool( args[i] );
 							}
 
-							method.Invoke( null, param );
+							try
+							{
+								method.Invoke( null, param );
+							}
+							catch( Exception e )
+							{
+								log( e );
+							}
 						}
 					};
 

@@ -50,6 +50,7 @@ namespace Nez
 		#pragma warning disable 0414
 		static float _windowHeight;
 		static float _elementWidth;
+		static Point _mouseInWorldCoords;
 
 
 		public static void init( GraphicsDevice device, SpriteFont font )
@@ -87,14 +88,14 @@ namespace Nez
 		static bool isMouseOverElement()
 		{
 			var rect = new Rectangle( (int)_elementX, (int)_lastY + (int)ELEMENT_PADDING, (int)_elementWidth, (int)ELEMENT_HEIGHT );
-			return rect.Contains( Input.mousePosition );
+			return rect.Contains( _mouseInWorldCoords );
 		}
 
 
 		static bool isMouseBetween( float left, float right )
 		{
 			var rect = new Rectangle( (int)left, (int)_lastY + (int)ELEMENT_PADDING, (int)right - (int)left, (int)ELEMENT_HEIGHT );
-			return rect.Contains( Input.mousePosition );
+			return rect.Contains( _mouseInWorldCoords );
 		}
 
 
@@ -117,6 +118,7 @@ namespace Nez
 			_windowWidth = width;
 			_windowHeight = height;
 			_elementWidth = _windowWidth - 2f * ELEMENT_PADDING;
+			_mouseInWorldCoords = Input.mousePosition - new Point( _graphics.graphicsDevice.Viewport.X, _graphics.graphicsDevice.Viewport.Y );
 		}
 
 
@@ -187,7 +189,7 @@ namespace Nez
 			{
 				if( Input.leftMouseButtonDown )
 				{
-					var localMouseX = Input.mousePosition.X - _elementX - SHORT_ELEMENT_HEIGHT * 0.5f;
+					var localMouseX = _mouseInWorldCoords.X - _elementX - SHORT_ELEMENT_HEIGHT * 0.5f;
 					value = MathHelper.Clamp( localMouseX / workingWidth, 0, 1 );
 					thumbPos = workingWidth * value;
 					color = SLIDER_THUMB_BG_DOWN;
@@ -216,7 +218,7 @@ namespace Nez
 			{
 				if( Input.leftMouseButtonDown )
 				{
-					var localMouseX = Input.mousePosition.X - _elementX;
+					var localMouseX = _mouseInWorldCoords.X - _elementX;
 					value = MathHelper.Clamp( localMouseX / _elementWidth, 0, 1 );
 					thumbPos = _elementWidth * value;
 					color = SLIDER_THUMB_BG_DOWN;

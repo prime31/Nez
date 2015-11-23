@@ -72,9 +72,9 @@ namespace Nez.Console
 			}
 
 			if( tagIndex < 0 )
-				DebugConsole.instance.log( Core.scene.entities.Count.ToString() );
+				DebugConsole.instance.log( "Total entities: " + Core.scene.entities.Count.ToString() );
 			else
-				DebugConsole.instance.log( Core.scene.findEntitiesByTag( tagIndex ).Count.ToString() );
+				DebugConsole.instance.log( "Total entities with tag [" + tagIndex + "] " + Core.scene.findEntitiesByTag( tagIndex ).Count.ToString() );
 		}
 
 

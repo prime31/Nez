@@ -45,7 +45,7 @@ namespace MacTester
 
 			if( Input.leftMouseButtonPressed )
 			{
-				Debug.log( "camera bounds: {0}, presention bounds: {1}, viewport: {2}", scene.camera.bounds, GraphicsDevice.PresentationParameters.Bounds.Size, graphicsDevice.Viewport.Bounds.Size );
+				Debug.log( "camera bounds: {0}, presention bounds: {1}, viewport: {2}", scene.camera.bounds, GraphicsDevice.PresentationParameters.Bounds.Size, graphicsDevice.Viewport.Bounds );
 			}
 
 			if( Input.mouseWheelDelta != 0 )
@@ -63,8 +63,11 @@ namespace MacTester
 
 			enableDebugRender = IMGUI.toggle( "Debug Render", enableDebugRender );
 
-			if( IMGUI.button( "Scene 1" ) )
-				scene = Scenes.sceneOne();
+			if( IMGUI.button( "Scene 1 Scaling" ) )
+				scene = Scenes.sceneOne( true );
+
+			if( IMGUI.button( "Scene 1 Boxing" ) )
+				scene = Scenes.sceneOne( false );
 
 			if( IMGUI.button( "Scene 2" ) )
 				scene = Scenes.sceneTwo();

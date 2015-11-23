@@ -63,6 +63,7 @@ namespace Nez
 				_renderers[i].unload();
 
 			camera.unload();
+			camera = null;
 			contentManager.Dispose();
 		}
 

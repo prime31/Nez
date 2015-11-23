@@ -163,12 +163,12 @@ namespace Nez
 		/// <param name="width">Width.</param>
 		/// <param name="height">Height.</param>
 		/// <param name="isFullScreen">If set to <c>true</c> is full screen.</param>
-		public void setScreenSize( int width, int height, bool isFullScreen = false )
+		public static void setScreenSize( int width, int height, bool isFullScreen = false )
 		{
-			_graphicsManager.PreferredBackBufferWidth = width;
-			_graphicsManager.PreferredBackBufferHeight = height;
-			_graphicsManager.IsFullScreen = isFullScreen;
-			//graphicsManager.ApplyChanges();
+			instance._graphicsManager.PreferredBackBufferWidth = width;
+			instance._graphicsManager.PreferredBackBufferHeight = height;
+			instance._graphicsManager.IsFullScreen = isFullScreen;
+			//instance._graphicsManager.ApplyChanges();
 			Debug.warn( "setScreenSize doesnt work properly on OS X. It causes a crash with no stack trace" );
 		}
 
@@ -181,9 +181,9 @@ namespace Nez
 		/// </summary>
 		/// <returns>The coroutine.</returns>
 		/// <param name="enumerator">Enumerator.</param>
-		public ICoroutine startCoroutine( IEnumerator enumerator )
+		public static ICoroutine startCoroutine( IEnumerator enumerator )
 		{
-			return _coroutineManager.startCoroutine( enumerator );
+			return instance._coroutineManager.startCoroutine( enumerator );
 		}
 
 
@@ -194,9 +194,9 @@ namespace Nez
 		/// <param name="repeats">If set to <c>true</c> repeats.</param>
 		/// <param name="context">Context.</param>
 		/// <param name="onTime">On time.</param>
-		public ITimer schedule( float timeInSeconds, bool repeats, object context, Action<ITimer> onTime )
+		public static ITimer schedule( float timeInSeconds, bool repeats, object context, Action<ITimer> onTime )
 		{
-			return _timerManager.schedule( timeInSeconds, repeats, context, onTime );
+			return instance._timerManager.schedule( timeInSeconds, repeats, context, onTime );
 		}
 
 		#endregion

@@ -26,9 +26,9 @@ namespace Nez
 		Collider[] _colliders;
 
 
-		public TiledMapComponent( string contentPath, string collisionLayerName = null )
+		public TiledMapComponent( TiledMap tiledmap, string collisionLayerName = null )
 		{
-			tiledmap = Core.instance.Content.Load<TiledMap>( contentPath );
+			this.tiledmap = tiledmap;
 
 			if( collisionLayerName != null )
 				_collisionLayer = tiledmap.getLayer<TiledTileLayer>( collisionLayerName );
