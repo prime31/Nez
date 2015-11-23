@@ -37,7 +37,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
-    <None Include="Content\NezFont.xnb" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Debug\" />
@@ -50,12 +49,12 @@
     <Folder Include="Utils\" />
     <Folder Include="PipelineRuntime\" />
     <Folder Include="Utils\DebugConsole\" />
-    <Folder Include="Content\" />
     <Folder Include="Utils\Tweens\" />
     <Folder Include="Utils\Tweens\Easing\" />
     <Folder Include="Utils\Tweens\Interfaces\" />
     <Folder Include="Utils\Timers\" />
     <Folder Include="Utils\Coroutines\" />
+    <Folder Include="ECS\Components\Renderables\Sprites\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Debug\Debug.cs" />
@@ -69,7 +68,6 @@
     <Compile Include="ECS\Components\Physics\MultiCollider.cs" />
     <Compile Include="ECS\Components\Renderables\Image.cs" />
     <Compile Include="ECS\Components\Renderables\RenderableComponent.cs" />
-    <Compile Include="ECS\Components\Renderables\Sprite.cs" />
     <Compile Include="ECS\Components\Renderables\TiledMapComponent.cs" />
     <Compile Include="ECS\Components\Text\FramesPerSecondCounter.cs" />
     <Compile Include="ECS\Components\Text\Text.cs" />
@@ -152,5 +150,7 @@
     <Compile Include="Utils\Timers\TimerManager.cs" />
     <Compile Include="Utils\Timers\ITimer.cs" />
     <Compile Include="Utils\Timers\Timer.cs" />
+    <Compile Include="ECS\Components\Renderables\Sprites\Sprite.cs" />
+    <Compile Include="ECS\Components\Renderables\Sprites\SpriteAnimation.cs" />
   </ItemGroup>
 </Project>

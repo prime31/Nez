@@ -1,6 +1,7 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using System.Collections.Generic;
 
 
 namespace Nez.TextureAtlases
@@ -37,6 +38,25 @@ namespace Nez.TextureAtlases
 		/// <param name="height">Height.</param>
 		public Subtexture( Texture2D texture, float x, float y, float width, float height ) : this( texture, (int)x, (int)y, (int)width, (int)height )
 		{}
+
+
+		public static List<Subtexture> subtexturesFromAtlas( Texture2D texture, int cellWidth, int cellHeight )
+		{
+			var subtextures = new List<Subtexture>();
+
+			var cols = texture.Width / cellWidth;
+			var rows = texture.Height / cellHeight;
+
+			for( var y = 0; y < rows; y++ )
+			{
+				for( var x = 0; x < cols; x++ )
+				{
+					subtextures.Add( new Subtexture( texture, new Rectangle( x * cellWidth, y * cellHeight, cellWidth, cellHeight ) ) );
+				}
+			}
+
+			return subtextures;
+		}
 
 
 		public override string ToString()

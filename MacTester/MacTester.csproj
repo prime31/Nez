@@ -121,5 +121,6 @@
   </ItemGroup>
   <ItemGroup>
     <BundleResource Include="Content\Images\moon.png" />
+    <BundleResource Include="Content\Images\plume.tga" />
   </ItemGroup>
 </Project>

@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
 using Nez.TextureAtlases;
 using Nez.Tiled;
+using Nez.Sprites;
 
 
 namespace MacTester
@@ -30,6 +31,23 @@ namespace MacTester
 			var tiledmap = scene.contentManager.Load<TiledMap>( "bin/MacOSX/Tilemap/tilemap" );
 			tiledEntity.addComponent( new TiledMapComponent( tiledmap, "collision" ) );
 			tiledEntity.depth += 5;
+
+			var plumeTexture = scene.contentManager.Load<Texture2D>( "Images/plume" );
+			var subtextures = Subtexture.subtexturesFromAtlas( plumeTexture, 16, 16 );
+			var spriteAnimation = new SpriteAnimation( subtextures )
+			{
+				loop = true,
+				fps = 10
+			};
+
+			var sprite = new Sprite<int>( subtextures[0] );
+			sprite.onAnimationCompletedEvent += key => Debug.log( "animation done: {0}", key );
+			sprite.addAnimation( 0, spriteAnimation );
+			sprite.play( 0 );
+
+			var spriteEntity = scene.createAndAddEntity<Entity>( "sprite-dude" );
+			spriteEntity.position = new Vector2( 40, 40 );
+			spriteEntity.addComponent( sprite );
 
 			return scene;
 		}

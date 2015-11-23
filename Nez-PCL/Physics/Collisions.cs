@@ -80,9 +80,9 @@ namespace Nez
 
 		static public Vector2 closestPointOnLine( Vector2 lineA, Vector2 lineB, Vector2 closestTo )
 		{
-			Vector2 v = lineB - lineA;
-			Vector2 w = closestTo - lineA;
-			float t = Vector2.Dot( w, v ) / Vector2.Dot( v, v );
+			var v = lineB - lineA;
+			var w = closestTo - lineA;
+			var t = Vector2.Dot( w, v ) / Vector2.Dot( v, v );
 			t = MathHelper.Clamp( t, 0, 1 );
 
 			return lineA + v * t;

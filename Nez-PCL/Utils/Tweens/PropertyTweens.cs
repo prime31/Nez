@@ -9,21 +9,27 @@ namespace Nez.Tweens
 	/// <summary>
 	/// generic ITweenTarget used for all property tweens
 	/// </summary>
-	public class PropertyTarget<T> : ITweenTarget<T> where T : struct
+	class PropertyTarget<T> : ITweenTarget<T> where T : struct
 	{
 		protected object _target;
+		FieldInfo _fieldInfo;
 		protected Action<T> _setter;
 		protected Func<T> _getter;
 
 
 		public void setTweenedValue( T value )
 		{
-			_setter( value );
+			if( _fieldInfo != null )
+				_fieldInfo.SetValue( _target, value );
+			else
+				_setter( value );
 		}
 
 
 		public T getTweenedValue()
 		{
+			if( _fieldInfo != null )
+				return (T)_fieldInfo.GetValue( _target );
 			return _getter();
 		}
 
@@ -31,10 +37,15 @@ namespace Nez.Tweens
 		public PropertyTarget( object target, string propertyName )
 		{
 			_target = target;
-			_setter = ReflectionUtils.setterForProperty<Action<T>>( target, propertyName );
-			_getter = ReflectionUtils.getterForProperty<Func<T>>( target, propertyName );
 
-			Debug.assertIsNotNull( _setter, "either the property (" + propertyName + ") setter or getter could not be found on the object " + target );
+			// try to fetch the field. if we dont find it this is a property
+			if( ( _fieldInfo = target.GetType().GetField( propertyName ) ) == null )
+			{
+				_setter = ReflectionUtils.setterForProperty<Action<T>>( target, propertyName );
+				_getter = ReflectionUtils.getterForProperty<Func<T>>( target, propertyName );
+			}
+
+			Debug.assertIsTrue( _setter != null || _fieldInfo != null, "either the property (" + propertyName + ") setter or getter could not be found on the object " + target );
 		}
 
 
@@ -60,7 +71,6 @@ namespace Nez.Tweens
 		public static ITween<float> floatPropertyTo( object self, string propertyName, float to, float duration )
 		{
 			var tweenTarget = new PropertyTarget<float>( self, propertyName );
-
 			var tween = TweenManager.cacheFloatTweens ? QuickCache<FloatTween>.pop() : new FloatTween();
 			tween.initialize( tweenTarget, to, duration );
 
