@@ -127,6 +127,8 @@ namespace Nez
 			}
 		}
 
+		Vector2 _movementRemainder = Vector2.Zero;
+
 
 		public Entity()
 		{
@@ -246,13 +248,13 @@ namespace Nez
 		/// </summary>
 		/// <param name="deltaX">Delta x.</param>
 		/// <param name="deltaY">Delta y.</param>
-		public void move( float deltaX, float deltaY )
+		public bool move( float deltaX, float deltaY, ICollisionCallback collisionHandler = null, ITriggerCallback triggerHandler = null )
 		{
 			// no collider? just move and forget about it
 			if( collider == null )
 			{
 				position += new Vector2( deltaX, deltaY );
-				return;
+				return false;
 			}
 
 			// store our pre-move bounds so that we can use it to update ourself in the physics system after moving
@@ -261,34 +263,48 @@ namespace Nez
 			// fetch anything that we might collide with along the way
 			var neighbors = scene.physics.boxcastExcludingSelf( collider, deltaX, deltaY );
 
-			moveX( deltaX, neighbors );
-			moveY( deltaY, neighbors );
+			var collideX = moveX( deltaX, neighbors, collisionHandler, triggerHandler );
+			var collideY = moveY( deltaY, neighbors, collisionHandler, triggerHandler );
 			position.round();
 
 			// back into the physics system we go
 			scene.physics.updateCollider( collider, ref oldBounds );
+
+			return collideX || collideY;
 		}
 
 
-		void moveX( float amount, HashSet<Collider> neighbors )
+		bool moveX( float amount, HashSet<Collider> neighbors, ICollisionCallback collisionHandler = null, ITriggerCallback triggerHandler = null )
 		{
-			var xRemainder = amount;
-			var moveAmount = Mathf.roundToInt( xRemainder );
+			_movementRemainder.X += amount;
+			var moveAmount = Mathf.roundToInt( _movementRemainder.X );
 
 			if( moveAmount == 0 )
-				return;
-
+				return false;
+			
 			var sign = Math.Sign( moveAmount );
 			var deltaSinglePixelMovement = new Vector2( sign, 0f );
 			while( moveAmount != 0 )
 			{
-				xRemainder -= moveAmount;
+				_movementRemainder.X -= sign;
 				foreach( var neighbor in neighbors )
 				{
 					if( collider.collidesWithAtPosition( neighbor, position + deltaSinglePixelMovement ) )
 					{
-						// TODO: deal with triggers here. we shouldnt bail out and we should let the two colliders know about each other
-						return;
+						// if we have a trigger notify the listener but we dont alter movement
+						if( neighbor.isTrigger || collider.isTrigger )
+						{
+							if( triggerHandler != null )
+								triggerHandler.onTriggerEnter( neighbor );
+						}
+						else
+						{
+							// hit a non-trigger. that's all folks. we bail here
+							if( collisionHandler != null )
+								collisionHandler.onCollisionEnter( neighbor, sign > 0 ? CollisionDirection.Right : CollisionDirection.Left );
+							_movementRemainder.X = 0f;
+							return true;
+						}
 					}
 				}
 
@@ -296,22 +312,24 @@ namespace Nez
 				position.X += sign;
 				moveAmount -= sign;
 			}
+
+			return false;
 		}
 
 
-		void moveY( float amount, HashSet<Collider> neighbors )
+		bool moveY( float amount, HashSet<Collider> neighbors, ICollisionCallback collisionHandler = null, ITriggerCallback triggerHandler = null )
 		{
-			var yRemainder = amount;
-			var moveAmount = Mathf.roundToInt( yRemainder );
+			_movementRemainder.Y += amount;
+			var moveAmount = Mathf.roundToInt( _movementRemainder.Y );
 
 			if( moveAmount == 0 )
-				return;
+				return false;
 
 			var sign = Math.Sign( moveAmount );
 			var deltaSinglePixelMovement = new Vector2( 0f, sign );
 			while( moveAmount != 0 )
 			{
-				yRemainder -= moveAmount;
+				_movementRemainder.Y -= sign;
 				var b = collider.bounds.clone();
 				b.Y += sign;
 
@@ -319,8 +337,20 @@ namespace Nez
 				{
 					if( collider.collidesWithAtPosition( neighbor, position + deltaSinglePixelMovement ) )
 					{
-						// collision. done here
-						return;
+						// if we have a trigger notify the listener but we dont alter movement
+						if( neighbor.isTrigger || collider.isTrigger )
+						{
+							if( triggerHandler != null )
+								triggerHandler.onTriggerEnter( neighbor );
+						}
+						else
+						{
+							// hit a non-trigger. that's all folks. we bail here
+							if( collisionHandler != null )
+								collisionHandler.onCollisionEnter( neighbor, sign > 0 ? CollisionDirection.Below : CollisionDirection.Above );
+							_movementRemainder.Y = 0f;
+							return true;
+						}
 					}
 				}
 
@@ -328,6 +358,8 @@ namespace Nez
 				position.Y += sign;
 				moveAmount -= sign;
 			}
+
+			return false;
 		}
 			
 		#endregion

@@ -6,7 +6,7 @@ using Microsoft.Xna.Framework;
 
 namespace MacTester
 {
-	public class SimpleMoonMover : Component
+	public class SimpleMoonMover : Component, ICollisionCallback, ITriggerCallback
 	{
 		float _speed = 10f;
 
@@ -25,8 +25,21 @@ namespace MacTester
 			else if( Input.isKeyDown( Keys.Down ) )
 				moveDir.Y = 1f;
 
-			entity.move( moveDir.X * _speed, moveDir.Y * _speed );
+			entity.move( moveDir.X * _speed, moveDir.Y * _speed, this, this );
 		}
+
+
+		public void onCollisionEnter( Collider collider, CollisionDirection direction )
+		{
+			Debug.log( "Collided with {0} direction: {1}", collider.entity, direction );
+		}
+
+
+		public void onTriggerEnter( Collider other )
+		{
+			Debug.log( "Triggered with {0}", other.entity );
+		}
+
 	}
 }
 

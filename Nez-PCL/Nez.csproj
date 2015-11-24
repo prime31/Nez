@@ -152,5 +152,7 @@
     <Compile Include="Utils\Timers\Timer.cs" />
     <Compile Include="ECS\Components\Renderables\Sprites\Sprite.cs" />
     <Compile Include="ECS\Components\Renderables\Sprites\SpriteAnimation.cs" />
+    <Compile Include="Physics\ICollisionCallback.cs" />
+    <Compile Include="Physics\ITriggerCallback.cs" />
   </ItemGroup>
 </Project>

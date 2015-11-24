@@ -103,7 +103,7 @@ namespace MacTester
 
 
 			// create some moons
-			Action<Vector2,string> moonMaker = ( Vector2 pos, string name ) =>
+			Action<Vector2,string,bool> moonMaker = ( Vector2 pos, string name, bool isTrigger ) =>
 			{
 				var ent = scene.createAndAddEntity<Entity>( name );
 				ent.position = pos;
@@ -112,12 +112,14 @@ namespace MacTester
 					ent.collider = new BoxCollider();
 				else
 					ent.collider = new CircleCollider();
+
+				ent.collider.isTrigger = isTrigger;
 			};
 
-			moonMaker( new Vector2( 400, 10 ), "moon1" );
-			moonMaker( new Vector2( 10, 10 ), "moon2" );
-			moonMaker( new Vector2( 50, 500 ), "moon3" );
-			moonMaker( new Vector2( 500, 250 ), "moon4" );
+			moonMaker( new Vector2( 400, 10 ), "moon1", false );
+			moonMaker( new Vector2( 10, 10 ), "moon2", false );
+			moonMaker( new Vector2( 50, 500 ), "moon3", true );
+			moonMaker( new Vector2( 500, 250 ), "moon4", false );
 
 
 			// create a player moon
