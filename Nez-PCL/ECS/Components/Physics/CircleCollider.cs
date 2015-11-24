@@ -17,7 +17,7 @@ namespace Nez
 				var oldBounds = bounds;
 				radius = value * 0.5f;
 				if( entity != null && _isParentEntityAddedToScene )
-					entity.scene.physics.updateCollider( this, ref oldBounds );
+					Physics.updateCollider( this, ref oldBounds );
 			}
 		}
 
@@ -34,7 +34,7 @@ namespace Nez
 				var oldBounds = bounds;
 				radius = value * 0.5f;
 				if( entity != null && _isParentEntityAddedToScene )
-					entity.scene.physics.updateCollider( this, ref oldBounds );
+					Physics.updateCollider( this, ref oldBounds );
 			}
 		}
 

@@ -261,14 +261,14 @@ namespace Nez
 			var oldBounds = collider.bounds;
 
 			// fetch anything that we might collide with along the way
-			var neighbors = scene.physics.boxcastExcludingSelf( collider, deltaX, deltaY );
+			var neighbors = Physics.boxcastExcludingSelf( collider, deltaX, deltaY );
 
 			var collideX = moveX( deltaX, neighbors, collisionHandler, triggerHandler );
 			var collideY = moveY( deltaY, neighbors, collisionHandler, triggerHandler );
 			position.round();
 
 			// back into the physics system we go
-			scene.physics.updateCollider( collider, ref oldBounds );
+			Physics.updateCollider( collider, ref oldBounds );
 
 			return collideX || collideY;
 		}

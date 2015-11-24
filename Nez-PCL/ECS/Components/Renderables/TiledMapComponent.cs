@@ -81,7 +81,7 @@ namespace Nez
 				collider.entity = entity;
 				_colliders[i] = collider;
 
-				entity.scene.physics.addCollider( collider );
+				Physics.addCollider( collider );
 			}
 		}
 
@@ -92,7 +92,7 @@ namespace Nez
 				return;
 
 			foreach( var collider in _colliders )
-				entity.scene.physics.removeCollider( collider, true );
+				Physics.removeCollider( collider, true );
 			_colliders = null;
 		}
 

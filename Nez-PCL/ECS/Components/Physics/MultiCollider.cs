@@ -91,7 +91,7 @@ namespace Nez
 			collider.entity = entity;
 
 			if( entity != null && _isParentEntityAddedToScene )
-				entity.scene.physics.updateCollider( this, ref oldBounds );
+				Physics.updateCollider( this, ref oldBounds );
 		}
 
 
@@ -104,7 +104,7 @@ namespace Nez
 			collider.entity = null;
 
 			if( entity != null && _isParentEntityAddedToScene )
-				entity.scene.physics.updateCollider( this, ref oldBounds );
+				Physics.updateCollider( this, ref oldBounds );
 		}
 
 

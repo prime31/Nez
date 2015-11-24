@@ -46,13 +46,23 @@ namespace MacTester
 
 			if( Input.leftMouseButtonPressed )
 			{
-				Debug.log( "camera bounds: {0}, presention bounds: {1}, viewport: {2}", scene.camera.bounds, GraphicsDevice.PresentationParameters.Bounds.Size, graphicsDevice.Viewport.Bounds );
+				//Debug.log( "camera bounds: {0}, presention bounds: {1}, viewport: {2}", scene.camera.bounds, GraphicsDevice.PresentationParameters.Bounds.Size, graphicsDevice.Viewport.Bounds );
 
 				var spriteDude = scene.findEntity( "sprite-dude" );
 				if( spriteDude != null )
 				{
 					var worldPos = scene.camera.screenToWorldPoint( Input.mousePosition );
 					PropertyTweens.vector2PropertyTo( spriteDude, "position", worldPos, 0.5f ).setLoops( LoopType.PingPong, 1 ).start();
+				}
+
+				var playerDude = scene.findEntity( "player-moon" );
+				if( playerDude != null )
+				{
+					var hit = Physics.raycast( playerDude.position + new Vector2( 64f, 0f ), playerDude.position + new Vector2( 128f, 0f ) );
+					if( hit.collider != null )
+					{
+						Debug.log( "ray HIT {0}, collider: {1}", hit.distance, hit.collider.entity );
+					}
 				}
 			}
 

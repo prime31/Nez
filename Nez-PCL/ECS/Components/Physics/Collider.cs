@@ -45,7 +45,7 @@ namespace Nez
 		/// <summary>
 		/// physicsLayer can be used as a filter when dealing with collisions.
 		/// </summary>
-		public int physicsLayer;
+		public int physicsLayer = 1 << 0;
 		public abstract float width { get; set; }
 		public abstract float height { get; set; }
 
@@ -137,7 +137,7 @@ namespace Nez
 		{
 			// entity could be null if proper such as origin are changed before we are added to an Entity
 			if( _isParentEntityAddedToScene )
-				entity.scene.physics.addCollider( this );
+				Physics.addCollider( this );
 		}
 
 
@@ -147,7 +147,7 @@ namespace Nez
 		public virtual void unregisterColliderWithPhysicsSystem()
 		{
 			if( _isParentEntityAddedToScene )
-				entity.scene.physics.removeCollider( this, true );
+				Physics.removeCollider( this, true );
 		}
 
 

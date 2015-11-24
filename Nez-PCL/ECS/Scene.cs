@@ -13,7 +13,6 @@ namespace Nez
 
 		public Camera camera;
 		public Color clearColor = Color.CornflowerBlue;
-		public Physics physics;
 
 		/// <summary>
 		/// Scene-specific ContentManager. Use it to load up any resources that are needed only by this scene. If you have global/multi-scene
@@ -44,7 +43,7 @@ namespace Nez
 		public Scene( int physicsSystemCellSize = 100 )
 		{
 			camera = new Camera( Graphics.instance.graphicsDevice );
-			physics = new Physics( physicsSystemCellSize );
+			Physics.reset( physicsSystemCellSize );
 			entities = new EntityList( this );
 			renderableComponents = new RenderableComponentList();
 			contentManager = new ContentManager( Core.instance.Services, Core.instance.Content.RootDirectory );

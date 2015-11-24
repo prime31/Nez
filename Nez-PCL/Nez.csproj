@@ -154,5 +154,7 @@
     <Compile Include="ECS\Components\Renderables\Sprites\SpriteAnimation.cs" />
     <Compile Include="Physics\ICollisionCallback.cs" />
     <Compile Include="Physics\ITriggerCallback.cs" />
+    <Compile Include="Physics\RaycastHit.cs" />
+    <Compile Include="Math\Flags.cs" />
   </ItemGroup>
 </Project>

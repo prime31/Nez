@@ -42,6 +42,10 @@ namespace Nez
 		}
 
 
+		/// <summary>
+		/// returns all the Colliders in the SpatialHash
+		/// </summary>
+		/// <returns>The all objects.</returns>
 		public HashSet<Collider> getAllObjects()
 		{
 			return _cellDict.getAllObjects();
@@ -53,7 +57,8 @@ namespace Nez
 		/// </summary>
 		/// <returns>The neighbors.</returns>
 		/// <param name="bounds">Bounds.</param>
-		public HashSet<Collider> boxcast( ref Rectangle bounds, Collider excludeCollider = null )
+		/// <param name="layerMask">Layer mask.</param>
+		public HashSet<Collider> boxcast( ref Rectangle bounds, Collider excludeCollider, int layerMask )
 		{
 			_tempHashset.Clear();
 
@@ -73,7 +78,8 @@ namespace Nez
 					{
 						var collider = cell[i];
 
-						if( collider == excludeCollider )
+						// skip this collider if it is our excludeCollider or if it doesnt match our layerMask
+						if( collider == excludeCollider || !Flags.isFlagSet( layerMask, collider.physicsLayer ) )
 							continue;
 
 						if( bounds.Intersects( collider.bounds ) )
@@ -86,7 +92,13 @@ namespace Nez
 		}
 
 
-		public bool raycast( Vector2 start, Vector2 end )
+		/// <summary>
+		/// casts a ray from start to end. Returns true if the ray hits a collider.
+		/// </summary>
+		/// <param name="start">Start.</param>
+		/// <param name="end">End.</param>
+		/// <param name="distance">Distance.</param>
+		public RaycastHit raycast( Vector2 start, Vector2 end, int layerMask )
 		{
 			var ray = new Ray2D( start, end - start );
 
@@ -97,16 +109,25 @@ namespace Nez
 			var minY = Math.Min( start.Y, end.Y );
 
 			var bounds = RectangleExtension.fromFloats( minX, minY, minX + maxX, minY + maxY );
-			var potentials = boxcast( ref bounds );
+			var potentials = boxcast( ref bounds, null, layerMask );
+			float fraction;
 			foreach( var pot in potentials )
 			{
-				// TODO: is rayIntersects performant enough? profile it.
-				float distance;
-				if( pot.bounds.rayIntersects( ray, out distance ) && distance <= 1.0f )
-					return true;
+				// only hit triggers if we are set to do so
+				if( pot.isTrigger && !Physics.raycastsHitTriggers )
+					continue;
+				
+				// TODO: is rayIntersects performant enough? profile it. Collisions.rectToLine might be faster
+				// TODO: this is only an AABB check. It should be defered to the collider for other shapes
+				if( pot.bounds.rayIntersects( ray, out fraction ) && fraction <= 1.0f )
+				{
+					float distance;
+					Vector2.Distance( ref start, ref end, out distance );
+					return new RaycastHit( pot, fraction, distance * fraction );
+				}
 			}
 
-			return false;
+			return new RaycastHit();
 		}
 
 
