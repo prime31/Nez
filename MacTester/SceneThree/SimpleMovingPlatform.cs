@@ -147,7 +147,7 @@ namespace MacTester
 			var entities = entity.scene.findEntitiesByTag( 0 );
 			for( var i = 0; i < entities.Count; i++ )
 			{
-				if( entities[i].collider != entity.collider )
+				if( entities[i].collider != entity.collider && entities[i].collider != null )
 					list.Add( entities[i] );
 			}
 
@@ -164,7 +164,7 @@ namespace MacTester
 			var entities = entity.scene.findEntitiesByTag( 0 );
 			for( var i = 0; i < entities.Count; i++ )
 			{
-				if( entities[i].collider == entity.collider )
+				if( entities[i].collider == entity.collider || entities[i].collider == null )
 					continue;
 				
 				if( entities[i].collider.collidesWithAtPosition( entity.collider, entities[i].position - new Vector2( 0f, -1f ) ) )

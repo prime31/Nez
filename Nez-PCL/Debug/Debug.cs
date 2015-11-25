@@ -177,7 +177,10 @@ namespace Nez
 			if( _debugDrawItems.Count == 0 )
 				return;
 
-			Graphics.instance.spriteBatch.Begin();
+			if( Core.scene != null && Core.scene.camera != null )
+				Graphics.instance.spriteBatch.Begin( transformMatrix: Core.scene.camera.transformMatrix );
+			else
+				Graphics.instance.spriteBatch.Begin();
 
 			for( var i = _debugDrawItems.Count - 1; i >= 0; i-- )
 			{
@@ -194,6 +197,13 @@ namespace Nez
 		public static void drawLine( Vector2 start, Vector2 end, Color color, float duration = 0f )
 		{
 			_debugDrawItems.Add( new DebugDrawItem( start, end, color, duration ) );
+		}
+
+
+		[Conditional( "DEBUG" )]
+		public static void drawHollowRect( Rectangle rectangle, Color color, float duration = 0f )
+		{
+			_debugDrawItems.Add( new DebugDrawItem( rectangle, color, duration ) );
 		}
 
 		#endregion

@@ -130,7 +130,6 @@ namespace MacTester
 			// add an animation to "moon4" to test moving collisions
 			scene.findEntity( "moon4" ).addComponent( new SimpleMovingPlatform( 250, 400 ) );
 
-
 			// create a player moon
 			var entity = scene.createAndAddEntity<Entity>( "player-moon" );
 			entity.addComponent( new SimpleMoonMover() );
@@ -143,6 +142,10 @@ namespace MacTester
 				entity.collider = new BoxCollider();
 			else
 				entity.collider = new CircleCollider();
+
+			// add a follow camera
+			var camFollow = scene.createAndAddEntity<Entity>( "camera-follow" );
+			camFollow.addComponent( new FollowCamera( entity ) );
 
 			return scene;
 		}

@@ -163,5 +163,6 @@
     <Compile Include="ECS\Components\Renderables\Particles\ParticleSystem.cs" />
     <Compile Include="ECS\Components\Renderables\Particles\ParticleType.cs" />
     <Compile Include="Math\Colors.cs" />
+    <Compile Include="ECS\Components\FollowCamera.cs" />
   </ItemGroup>
 </Project>
