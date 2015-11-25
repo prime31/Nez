@@ -12,6 +12,11 @@ namespace Nez.TextureAtlases
 	public class Subtexture : Texture
 	{
 		public Rectangle sourceRect;
+
+		public Vector2 center
+		{
+			get { return sourceRect.Size.ToVector2() * 0.5f; }
+		}
 		
 
 		public Subtexture( Texture2D texture, Rectangle sourceRect ) : base( texture )

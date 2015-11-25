@@ -71,7 +71,10 @@ namespace MacTester
 				var playerDude = scene.findEntity( "player-moon" );
 				if( playerDude != null )
 				{
-					var hit = Physics.raycast( playerDude.position + new Vector2( 64f, 0f ), playerDude.position + new Vector2( 128f, 0f ) );
+					var start = playerDude.position + new Vector2( 64f, 0f );
+					var end = playerDude.position + new Vector2( 128f, 0f );
+					Debug.drawLine( start, end, Color.Black, 2f );
+					var hit = Physics.raycast( start, end );
 					if( hit.collider != null )
 					{
 						Debug.log( "ray HIT {0}, collider: {1}", hit.distance, hit.collider.entity );
@@ -107,7 +110,7 @@ namespace MacTester
 
 			IMGUI.beginWindow( GraphicsDevice.Viewport.Width - 150, 0, 150, 300 );
 
-			enableDebugRender = IMGUI.toggle( "Debug Render", enableDebugRender );
+			debugRenderEnabled = IMGUI.toggle( "Debug Render", debugRenderEnabled );
 
 			if( IMGUI.button( "Scene 1 Scaling" ) )
 				scene = Scenes.sceneOne( true );

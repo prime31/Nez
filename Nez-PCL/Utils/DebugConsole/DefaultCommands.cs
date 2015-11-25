@@ -119,7 +119,15 @@ namespace Nez.Console
 		static private void physics()
 		{
 			//Engine.Pooler.Log();
-			DebugConsole.instance.log( "SpatialHash collider count: " + Physics.getAllColliders().Count );
+			DebugConsole.instance.log( "Physics system collider count: " + Physics.getAllColliders().Count );
+		}
+
+
+		[Command( "debug-render", "enables/disables debug rendering" )]
+		static private void debugRender()
+		{
+			Core.debugRenderEnabled = !Core.debugRenderEnabled;
+			DebugConsole.instance.log( string.Format( "Debug rendering {0}", Core.debugRenderEnabled ? "enabled" : "disabled" ) );
 		}
 
 

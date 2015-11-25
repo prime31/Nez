@@ -70,6 +70,7 @@
     <Compile Include="SceneTwo\SimplePostProcessor.cs" />
     <Compile Include="Scenes.cs" />
     <Compile Include="SceneThree\SimpleMovingPlatform.cs" />
+    <Compile Include="SceneTwo\SimpleParticles.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Info.plist" />

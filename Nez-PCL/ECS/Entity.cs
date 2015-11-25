@@ -268,7 +268,7 @@ namespace Nez
 
 			var collideX = moveX( deltaX, neighbors, collisionHandler, triggerHandler );
 			var collideY = moveY( deltaY, neighbors, collisionHandler, triggerHandler );
-			position.round();
+			Mathf.round( ref position );
 
 			// let Physics know about our new position
 			Physics.updateCollider( collider, ref oldBounds );

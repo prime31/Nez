@@ -201,7 +201,7 @@ namespace Nez
 
 		public void roundPosition()
 		{
-			position.round();
+			Mathf.round( ref position );
 			_matrixesAreDirty = true;
 		}
 

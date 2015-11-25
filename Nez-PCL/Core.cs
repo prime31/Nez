@@ -23,7 +23,7 @@ namespace Nez
 		public static Emitter<CoreEvents> emitter;
 		public static bool exitOnEscapeKeypress = true;
 		public static bool pauseOnFocusLost = true;
-		public static bool enableDebugRender = false;
+		public static bool debugRenderEnabled = false;
 		public static GraphicsDevice graphicsDevice;
 
 		internal GraphicsDeviceManager _graphicsManager;
@@ -124,7 +124,9 @@ namespace Nez
 					_scene.begin();
 			}
 
+			#if DEBUG
 			DebugConsole.instance.update();
+			#endif
 		}
 
 
@@ -136,11 +138,15 @@ namespace Nez
 			if( _scene != null )
 			{
 				_scene.preRender();
-				_scene.render( enableDebugRender );
+				_scene.render( debugRenderEnabled );
 				_scene.postRender();
 			}
 
+			#if DEBUG
 			DebugConsole.instance.render();
+			if( debugRenderEnabled )
+				Debug.render();
+			#endif
 		}
 
 		#endregion

@@ -163,12 +163,6 @@ namespace Nez
 
 		#region Vector2
 
-		static public Vector2 perpendicular( this Vector2 vector )
-		{
-			return new Vector2( -vector.Y, vector.X );
-		}
-
-
 		static public float angleBetweenVectors( Vector2 from, Vector2 to )
 		{
 			return (float)Math.Atan2( to.Y - from.Y, to.X - from.X );
@@ -178,6 +172,60 @@ namespace Nez
 		static public Vector2 angleToVector( float angleRadians, float length )
 		{
 			return new Vector2( (float)Math.Cos( angleRadians ) * length, (float)Math.Sin( angleRadians ) * length );
+		}
+
+
+		static public void floor( ref Vector2 val )
+		{
+			val.X = (int)val.X;
+			val.Y = (int)val.Y;
+		}
+
+
+		static public Vector2 floor( Vector2 val )
+		{
+			return new Vector2( (int)val.X, (int)val.Y );
+		}
+
+
+		/// <summary>
+		/// rounds the x and y values in place
+		/// </summary>
+		/// <param name="vec">Vec.</param>
+		public static void round( ref Vector2 vec )
+		{
+			vec.X = Mathf.round( vec.X );
+			vec.Y = Mathf.round( vec.Y );
+		}
+
+
+		/// <summary>
+		/// rounds the x and y values and returns a new Vector2
+		/// </summary>
+		/// <param name="vec">Vec.</param>
+		public static Vector2 round( Vector2 vec )
+		{
+			return new Vector2( Mathf.round( vec.X ), Mathf.round( vec.Y ) );
+		}
+
+
+		/// <summary>
+		/// helper for moving a value around in a circle.
+		/// </summary>
+		static public Vector2 rotateAround( Vector2 position, float speed )
+		{
+			var time = Time.time * speed;
+
+			var x = (float)Math.Cos( time );
+			var y = (float)Math.Sin( time );
+
+			return new Vector2( position.X + x, position.Y + y );
+		}
+
+
+		static public Vector2 perpendicularVector( Vector2 vector )
+		{
+			return new Vector2( -vector.Y, vector.X );
 		}
 
 		#endregion

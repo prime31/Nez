@@ -55,6 +55,7 @@
     <Folder Include="Utils\Timers\" />
     <Folder Include="Utils\Coroutines\" />
     <Folder Include="ECS\Components\Renderables\Sprites\" />
+    <Folder Include="ECS\Components\Renderables\Particles\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Debug\Debug.cs" />
@@ -156,5 +157,11 @@
     <Compile Include="Physics\ITriggerCallback.cs" />
     <Compile Include="Physics\RaycastHit.cs" />
     <Compile Include="Math\Flags.cs" />
+    <Compile Include="Debug\DebugDrawItem.cs" />
+    <Compile Include="Math\Random.cs" />
+    <Compile Include="ECS\Components\Renderables\Particles\Particle.cs" />
+    <Compile Include="ECS\Components\Renderables\Particles\ParticleSystem.cs" />
+    <Compile Include="ECS\Components\Renderables\Particles\ParticleType.cs" />
+    <Compile Include="Math\Colors.cs" />
   </ItemGroup>
 </Project>

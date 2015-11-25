@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
+using Microsoft.Xna.Framework;
+using System.Collections.Generic;
 
 
 namespace Nez
@@ -15,6 +17,9 @@ namespace Nez
 			Info,
 			Trace
 		}
+
+
+		#region Logging
 
 		[DebuggerHidden]
 		static void log( LogType type, string format, params object[] args )
@@ -104,6 +109,10 @@ namespace Nez
 			log( LogType.Trace, format, args );
 		}
 
+		#endregion
+
+
+		#region Asserts
 
 		[Conditional( "DEBUG" )]
 		[DebuggerHidden]
@@ -154,6 +163,40 @@ namespace Nez
 			if( first == second )
 				System.Diagnostics.Debug.Assert( false, string.Format( message, args ) );
 		}
+
+		#endregion
+
+
+		#region Drawing
+
+		static List<DebugDrawItem> _debugDrawItems = new List<DebugDrawItem>();
+
+		[Conditional( "DEBUG" )]
+		internal static void render()
+		{
+			if( _debugDrawItems.Count == 0 )
+				return;
+
+			Graphics.instance.spriteBatch.Begin();
+
+			for( var i = _debugDrawItems.Count - 1; i >= 0; i-- )
+			{
+				var item = _debugDrawItems[i];
+				if( item.draw( Graphics.instance ) )
+					_debugDrawItems.RemoveAt( i );
+			}
+
+			Graphics.instance.spriteBatch.End();
+		}
+
+
+		[Conditional( "DEBUG" )]
+		public static void drawLine( Vector2 start, Vector2 end, Color color, float duration = 0f )
+		{
+			_debugDrawItems.Add( new DebugDrawItem( start, end, color, duration ) );
+		}
+
+		#endregion
 
 	}
 }

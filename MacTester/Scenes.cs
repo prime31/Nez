@@ -85,6 +85,11 @@ namespace MacTester
 			entity.position.Y = 130;
 			entity.addComponent( image );
 
+
+			entity = scene.createAndAddEntity<Entity>( "particles" );
+			entity.addComponent( new SimpleParticles() );
+
+
 			// add a post processor to display the RenderTexture
 			var postProcessor = new SimplePostProcessor( renderer.renderTexture );
 			scene.addPostProcessStep( postProcessor );

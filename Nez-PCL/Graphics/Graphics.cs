@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
 using System.Collections.Generic;
 using Nez.TextureAtlases;
+using System.Diagnostics;
 
 
 namespace Nez
@@ -30,7 +31,7 @@ namespace Nez
 		/// Will be generated at startup, but you can replace this with a subtexture from your Atlas to reduce texture swaps.
 		/// Should be a 2x2 white pixel
 		/// </summary>
-		static public Subtexture particleTexture;
+		public Subtexture particleTexture;
 
 		/// <summary>
 		/// A subtexture used to draw rectangles, lines, circles, etc. 
@@ -188,12 +189,12 @@ namespace Nez
 		public void drawCircle( Vector2 position, float radius, Color color, int resolution = 12 )
 		{
 			var last = Vector2.UnitX * radius;
-			var lastP = last.perpendicular();
+			var lastP = Mathf.perpendicularVector( last );
 
 			for( int i = 1; i <= resolution; i++ )
 			{
 				var at = Mathf.angleToVector( i * MathHelper.PiOver2 / resolution, radius );
-				var atP = at.perpendicular();
+				var atP = Mathf.perpendicularVector( at );
 
 				drawLine( position + last, position + at, color );
 				drawLine( position - last, position - at, color );
