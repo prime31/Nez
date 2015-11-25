@@ -55,7 +55,6 @@ namespace Nez
 		{
 			if( camera == null )
 				camera = entity.scene.camera;
-			camera.centerOrigin();
 
 			follow( _targetEntity );
 

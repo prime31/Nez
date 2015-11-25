@@ -72,12 +72,31 @@ namespace Nez
 
 				if( _boundsAreDirty )
 				{
+					// top-left and bottom-right are needed by either rotated or non-rotated bounds
 					var topLeft = screenToWorldPoint( new Vector2( _graphicsDevice.Viewport.X, _graphicsDevice.Viewport.Y ) );
 					var bottomRight = screenToWorldPoint( new Vector2( _graphicsDevice.Viewport.X + _graphicsDevice.Viewport.Width, _graphicsDevice.Viewport.Y + _graphicsDevice.Viewport.Height ) );
 
-					_bounds.Location = topLeft.ToPoint();
-					_bounds.Width = (int)( bottomRight.X - topLeft.X );
-					_bounds.Height = (int)( bottomRight.Y - topLeft.Y );
+					if( rotation != 0 )
+					{
+						// special care for rotated bounds. we need to find our absolute min/max values and create the bounds from that
+						var topRight = screenToWorldPoint( new Vector2( _graphicsDevice.Viewport.X + _graphicsDevice.Viewport.Width, _graphicsDevice.Viewport.Y ) );
+						var bottomLeft = screenToWorldPoint( new Vector2( _graphicsDevice.Viewport.X, _graphicsDevice.Viewport.Y + _graphicsDevice.Viewport.Height ) );	
+
+						var minX = (int)Mathf.minOf( topLeft.X, bottomRight.X, topRight.X, bottomLeft.X );
+						var maxX = (int)Mathf.maxOf( topLeft.X, bottomRight.X, topRight.X, bottomLeft.X );
+						var minY = (int)Mathf.minOf( topLeft.Y, bottomRight.Y, topRight.Y, bottomLeft.Y );
+						var maxY = (int)Mathf.maxOf( topLeft.Y, bottomRight.Y, topRight.Y, bottomLeft.Y );
+
+						_bounds.Location = new Point( minX, minY );
+						_bounds.Width = (int)( maxX - minX );
+						_bounds.Height = (int)( maxY - minY );
+					}
+					else
+					{
+						_bounds.Location = topLeft.ToPoint();
+						_bounds.Width = (int)( bottomRight.X - topLeft.X );
+						_bounds.Height = (int)( bottomRight.Y - topLeft.Y );
+					}
 
 					_boundsAreDirty = false;
 				}

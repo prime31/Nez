@@ -127,6 +127,18 @@ namespace Nez
 		}
 
 
+		public static float minOf( float a, float b, float c, float d )
+		{
+			return Math.Min( a, Math.Min( b, Math.Min( c, d ) ) );
+		}
+
+
+		public static float maxOf( float a, float b, float c, float d )
+		{
+			return Math.Max( a, Math.Max( b, Math.Max( c, d ) ) );
+		}
+
+
 		#region wrappers for Math doubles
 
 		public static float sqrt( float val )
