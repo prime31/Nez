@@ -24,7 +24,7 @@ namespace Nez
 
 		public void update()
 		{
-			// Life
+			// life
 			life -= Time.deltaTime;
 			if( life <= 0 )
 			{
@@ -32,7 +32,7 @@ namespace Nez
 				return;
 			}
 
-			// Color switch
+			// color switch
 			if( colorSwitch > 0 )
 			{
 				colorSwitch -= Time.deltaTime;
@@ -48,16 +48,16 @@ namespace Nez
 				}
 			}
 
-			// Speed
+			// speed
 			position += speed * Time.deltaTime;
 			speed += type.acceleration * Time.deltaTime;
 			if( type.speedMultiplier != 1 )
-				speed *= (float)Math.Pow( type.speedMultiplier, Time.deltaTime );
+				speed *= Mathf.pow( type.speedMultiplier, Time.deltaTime );
 
 			// rotation
 			rotation += rotationRate * Time.deltaTime;
 
-			// Scale Out
+			// scale out
 			size += sizeChange * Time.deltaTime;
 		}
 

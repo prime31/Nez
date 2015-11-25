@@ -155,6 +155,8 @@ namespace MacTester
 		}
 
 
+		// this should probably be a method (isRidingCollider( Collider )) on the Entity so that it can decide if it is riding the collider or not.
+		// The entity could then be riding for other situations such as ledge hanging on a moving platform.
 		List<Entity> getAllRidingActors()
 		{
 			var list = new List<Entity>();

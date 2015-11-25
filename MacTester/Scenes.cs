@@ -32,6 +32,8 @@ namespace MacTester
 			tiledEntity.addComponent( new TiledMapComponent( tiledmap, "collision" ) );
 			tiledEntity.depth += 5;
 
+
+			// create a sprite animation from an atlas
 			var plumeTexture = scene.contentManager.Load<Texture2D>( "Images/plume" );
 			var subtextures = Subtexture.subtexturesFromAtlas( plumeTexture, 16, 16 );
 			var spriteAnimation = new SpriteAnimation( subtextures )
@@ -41,7 +43,6 @@ namespace MacTester
 			};
 
 			var sprite = new Sprite<int>( subtextures[0] );
-			sprite.onAnimationCompletedEvent += key => Debug.log( "animation done: {0}", key );
 			sprite.addAnimation( 0, spriteAnimation );
 			sprite.play( 0 );
 
