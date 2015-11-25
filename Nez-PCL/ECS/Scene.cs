@@ -40,10 +40,9 @@ namespace Nez
 		}
 
 
-		public Scene( int physicsSystemCellSize = 100 )
+		public Scene()
 		{
 			camera = new Camera( Graphics.instance.graphicsDevice );
-			Physics.reset( physicsSystemCellSize );
 			entities = new EntityList( this );
 			renderableComponents = new RenderableComponentList();
 			contentManager = new ContentManager( Core.instance.Services, Core.instance.Content.RootDirectory );
@@ -53,6 +52,7 @@ namespace Nez
 		internal void begin()
 		{
 			Debug.warnIf( _renderers.Count == 0, "Scene has begun with no renderer. Are you sure you want to run a Scene without a renderer?" );
+			Physics.reset();
 		}
 
 
@@ -61,6 +61,7 @@ namespace Nez
 			for( var i = 0; i < _renderers.Count; i++ )
 				_renderers[i].unload();
 
+			entities.removeAllEntities();
 			camera.unload();
 			camera = null;
 			contentManager.Dispose();

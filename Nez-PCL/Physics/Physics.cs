@@ -10,12 +10,19 @@ namespace Nez
 		static SpatialHash _spatialHash;
 
 		public const int AllLayers = -1;
+		public static int spatialHashCellSize = 100;
 		public static bool raycastsHitTriggers = false;
 
 
-		public static void reset( int cellSize = 100 )
+		public static void reset()
 		{
-			_spatialHash = new SpatialHash( cellSize );
+			_spatialHash = new SpatialHash( spatialHashCellSize );
+		}
+
+
+		public static HashSet<Collider> getAllColliders()
+		{
+			return _spatialHash.getAllObjects();
 		}
 
 

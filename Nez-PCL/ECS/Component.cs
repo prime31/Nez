@@ -49,7 +49,7 @@ namespace Nez
 
 
 		/// <summary>
-		/// Called when this component is removed from its entity
+		/// Called when this component is removed from its entity. Do all cleanup here.
 		/// </summary>
 		public virtual void onRemovedFromEntity()
 		{}

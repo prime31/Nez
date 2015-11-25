@@ -11,6 +11,10 @@ namespace Nez
 		int _inverseCellSize;
 		IntIntDictionary _cellDict = new IntIntDictionary();
 		HashSet<Collider> _tempHashset = new HashSet<Collider>();
+		/// <summary>
+		/// we keep this around to avoid allocating it every time a raycast happens
+		/// </summary>
+		RaycastHit[] _hitArray = new RaycastHit[1];
 
 
 		public SpatialHash( int cellSize = 100 )
@@ -92,14 +96,11 @@ namespace Nez
 		}
 
 
-		/// <summary>
-		/// casts a ray from start to end. Returns true if the ray hits a collider.
-		/// </summary>
-		/// <param name="start">Start.</param>
-		/// <param name="end">End.</param>
-		/// <param name="distance">Distance.</param>
-		public RaycastHit raycast( Vector2 start, Vector2 end, int layerMask )
+
+		public void raycastAll( Vector2 start, Vector2 end, RaycastHit[] hits, int layerMask )
 		{
+			Debug.assertIsFalse( hits.Length == 0, "An empty hits array was passed in. No hits will ever be returned." );
+			var hitCounter = 0;
 			var ray = new Ray2D( start, end - start );
 
 			// first we get a bounding box for the ray so that we can find all the potential hits
@@ -116,18 +117,36 @@ namespace Nez
 				// only hit triggers if we are set to do so
 				if( pot.isTrigger && !Physics.raycastsHitTriggers )
 					continue;
-				
+
 				// TODO: is rayIntersects performant enough? profile it. Collisions.rectToLine might be faster
 				// TODO: this is only an AABB check. It should be defered to the collider for other shapes
 				if( pot.bounds.rayIntersects( ray, out fraction ) && fraction <= 1.0f )
 				{
 					float distance;
 					Vector2.Distance( ref start, ref end, out distance );
-					return new RaycastHit( pot, fraction, distance * fraction );
+					hits[hitCounter].setValues( pot, fraction, distance * fraction );
+
+					// increment the hit counter and if it has reached the array size limit we are done
+					hitCounter++;
+					if( hitCounter == hits.Length )
+						return;
 				}
 			}
+		}
 
-			return new RaycastHit();
+
+		/// <summary>
+		/// casts a ray from start to end. Returns true if the ray hits a collider.
+		/// </summary>
+		/// <param name="start">Start.</param>
+		/// <param name="end">End.</param>
+		/// <param name="distance">Distance.</param>
+		public RaycastHit raycast( Vector2 start, Vector2 end, int layerMask )
+		{
+			// cleanse the collider before proceeding
+			_hitArray[0].reset();
+			raycastAll( start, end, _hitArray, layerMask );
+			return _hitArray[0];
 		}
 
 

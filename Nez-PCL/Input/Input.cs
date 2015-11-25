@@ -198,6 +198,12 @@ namespace Nez
 			get { return _currentMouseState.Position; }
 		}
 
+
+		public static Point mousePositionDelta
+		{
+			get { return _currentMouseState.Position - _previousMouseState.Position; }
+		}
+
 		#endregion
 
 	}

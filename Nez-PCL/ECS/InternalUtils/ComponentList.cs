@@ -43,8 +43,26 @@ namespace Nez
 		}
 
 
+		/// <summary>
+		/// removes all components from the component list
+		/// </summary>
+		public void removeAllComponents()
+		{
+			for( var i = 0; i < _components.Count; i++ )
+			{
+				// deal with renderLayer list if necessary
+				if( _components[i] is RenderableComponent )
+					_entity.scene.renderableComponents.remove( _components[i] as RenderableComponent );
+				
+				_components[i].onRemovedFromEntity();
+				_components[i].entity = null;
+			}
+		}
+
+
 		public void updateLists()
 		{
+			// handle removals
 			if( _componentsToRemove.Count > 0 )
 			{
 				for( var i = 0; i < _componentsToRemove.Count; i++ )
@@ -56,11 +74,13 @@ namespace Nez
 						_entity.scene.renderableComponents.remove( component as RenderableComponent );
 
 					_components.Remove( component );
-					component.entity = null;
 					component.onRemovedFromEntity();
+					component.entity = null;
 				}
+				_componentsToRemove.Clear();
 			}
 
+			// handle additions
 			if( _componentsToAdd.Count > 0 )
 			{
 				for( var i = 0; i < _componentsToAdd.Count; i++ )

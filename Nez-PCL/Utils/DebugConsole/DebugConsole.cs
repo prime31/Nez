@@ -481,7 +481,7 @@ namespace Nez.Console
 
 			if( _drawCommands.Count > 0 )
 			{
-				var height = 10 + ( LINE_HEIGHT * _drawCommands.Count );
+				var height = 20 + ( LINE_HEIGHT * _drawCommands.Count );
 				Graphics.instance.drawRect( HORIZONTAL_PADDING, screenHeight - height - 60, workingWidth, height, Color.Black * OPACITY );
 				for( int i = 0; i < _drawCommands.Count; i++ )
 				{

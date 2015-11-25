@@ -26,6 +26,21 @@ namespace Nez
 			this.distance = distance;
 		}
 
+
+		internal void setValues( Collider collider, float fraction, float distance )
+		{
+			this.collider = collider;
+			this.fraction = fraction;
+			this.distance = distance;
+		}
+
+
+		internal void reset()
+		{
+			collider = null;
+			fraction = distance = 0f;
+		}
+
 	}
 }
 

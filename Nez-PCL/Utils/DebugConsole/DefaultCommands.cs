@@ -115,6 +115,14 @@ namespace Nez.Console
 		}
 
 
+		[Command( "physics", "Logs the total Collider count in the spatial hash" )]
+		static private void physics()
+		{
+			//Engine.Pooler.Log();
+			DebugConsole.instance.log( "SpatialHash collider count: " + Physics.getAllColliders().Count );
+		}
+
+
 		[Command( "help", "Shows usage help for a given command" )]
 		static private void help( string command )
 		{

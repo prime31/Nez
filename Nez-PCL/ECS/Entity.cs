@@ -160,6 +160,9 @@ namespace Nez
 		{
 			if( collider != null )
 				collider.onEntityRemovedFromScene();
+
+			// detach all our components when removed from a scene
+			components.removeAllComponents();
 		}
 
 
@@ -267,7 +270,7 @@ namespace Nez
 			var collideY = moveY( deltaY, neighbors, collisionHandler, triggerHandler );
 			position.round();
 
-			// back into the physics system we go
+			// let Physics know about our new position
 			Physics.updateCollider( collider, ref oldBounds );
 
 			return collideX || collideY;

@@ -121,6 +121,9 @@ namespace MacTester
 			moonMaker( new Vector2( 50, 500 ), "moon3", true );
 			moonMaker( new Vector2( 500, 250 ), "moon4", false );
 
+			// add an animation to "moon4" to test moving collisions
+			scene.findEntity( "moon4" ).addComponent( new SimpleMovingPlatform( 250, 400 ) );
+
 
 			// create a player moon
 			var entity = scene.createAndAddEntity<Entity>( "player-moon" );

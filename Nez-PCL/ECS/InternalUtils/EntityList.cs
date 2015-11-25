@@ -70,6 +70,22 @@ namespace Nez
 		}
 
 
+		/// <summary>
+		/// removes all entities from the entities list and passes them back to the entity cache
+		/// </summary>
+		public void removeAllEntities()
+		{
+			for( var i = 0; i < _entities.Count; i++ )
+			{
+				_entities[i].onRemovedFromScene();
+				_entities[i].scene = null;
+				Scene._entityCache.push( _entities[i] );
+			}
+
+			_entities.Clear();
+		}
+
+
 		public bool contains( Entity entity )
 		{
 			return _entities.Contains( entity ) || _entitiesToAdd.Contains( entity );
@@ -94,6 +110,7 @@ namespace Nez
 
 		public void updateLists()
 		{
+			// handle removals
 			if( _entitiesToRemove.Count > 0 )
 			{
 				for( var i = 0; i < _entitiesToRemove.Count; i++ )
@@ -108,10 +125,11 @@ namespace Nez
 					entity.onRemovedFromScene();
 					entity.scene = null;
 					Scene._entityCache.push( entity );
-					// Tracker.EntityRemoved(entity);
 				}
+				_entitiesToRemove.Clear();
 			}
 
+			// handle additions
 			if( _entitiesToAdd.Count > 0 )
 			{
 				for( var i = 0; i < _entitiesToAdd.Count; i++ )
@@ -125,7 +143,6 @@ namespace Nez
 
 					// handle the tagList
 					addToTagList( entity );
-					// Tracker.EntityAdded(entity);
 				}
 
 				// now that all entities are added to the scene, we loop through again and call onAwake
