@@ -63,7 +63,7 @@ namespace Nez.TextureAtlasGenerator
 			sprites.Sort( compareSpriteIndices );
 
 			context.Logger.LogImportantMessage(
-				"Packed {0} sprites into a {1}x{2} sheet, {3}% efficiency",
+				"\nPacked {0} sprites into a {1}x{2} sheet, {3}% efficiency",
 				sprites.Count, outputWidth, outputHeight,
 				totalSpriteSize * 100 / outputWidth / outputHeight );
 

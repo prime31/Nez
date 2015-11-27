@@ -15,8 +15,8 @@ namespace Nez.Sprites
 
 	public class SpriteAnimation
 	{
-		public float fps = 5;
-		public bool loop;
+		public float fps = 10;
+		public bool loop = true;
 		public bool pingPong;
 		public float delay = 0f;
 		public AnimationCompletionBehavior completionBehavior;

@@ -6,6 +6,7 @@ using System.ComponentModel;
 using System;
 using Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler;
 using Nez.TextureAtlases;
+using Microsoft.Xna.Framework;
 
 
 namespace Nez.TextureAtlasGenerator
@@ -15,10 +16,11 @@ namespace Nez.TextureAtlasGenerator
 	{
 		protected override void Write( ContentWriter output, TextureAtlasContent value )
 		{
-			// Write out all the members of 'value'                
+			// Write out all the members
 			output.WriteObject( value.texture );
 			output.WriteObject( value.spriteRectangles );
 			output.WriteObject( value.spriteNames );
+			output.WriteObject( value.spriteAnimationDetails );
 		}
 
 

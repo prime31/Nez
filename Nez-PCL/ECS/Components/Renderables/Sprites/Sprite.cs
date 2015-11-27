@@ -60,8 +60,22 @@ namespace Nez.Sprites
 		}
 
 
+		/// <summary>
+		/// Sprite needs a Subtexture at constructor time so that it knows how to size itself
+		/// </summary>
+		/// <param name="subtexture">Subtexture.</param>
 		public Sprite( Subtexture subtexture ) : this( null, subtexture )
 		{}
+
+
+		/// <summary>
+		/// Sprite needs a Subtexture at constructor time so the first frame of the passed in animation will be used for this constructor
+		/// </summary>
+		/// <param name="subtexture">Subtexture.</param>
+		public Sprite( TEnum animationKey, SpriteAnimation animation ) : this( null, animation.frames[0] )
+		{
+			addAnimation( animationKey, animation );
+		}
 
 
 		#region Component overrides

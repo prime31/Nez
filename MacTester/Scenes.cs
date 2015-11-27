@@ -62,9 +62,6 @@ namespace MacTester
 			scene.camera.centerOrigin();
 			var moonTexture = scene.contentManager.Load<Texture2D>( "Images/moon" );
 
-			// texture atlas tester
-			var textureAtlas = scene.contentManager.Load<TextureAtlas>( "bin/MacOSX/TextureAtlasTest/AtlasImages" );
-
 			// setup a renderer that renders everything to a RenderTexture making sure its order is before standard renderers!
 			var renderer = new DefaultRenderer( scene.camera, -1 );
 			renderer.renderTexture = new RenderTexture( Core.graphicsDevice, 320, 240 );
@@ -92,6 +89,10 @@ namespace MacTester
 			entity.addComponent( image );
 
 
+			// texture atlas tester
+			var anotherAtlas = scene.contentManager.Load<TextureAtlas>( "bin/MacOSX/TextureAtlasTest/AnotherAtlas" );
+			var textureAtlas = scene.contentManager.Load<TextureAtlas>( "bin/MacOSX/TextureAtlasTest/AtlasImages" );
+
 			entity = scene.createAndAddEntity<Entity>( "texture-atlas-sprite" );
 			entity.position.Y = 330;
 			entity.position.X = 30;
@@ -106,10 +107,14 @@ namespace MacTester
 			spriteAnimation.addFrame( textureAtlas.getSubtexture( "Ninja_Idle_1" ) );
 			spriteAnimation.addFrame( textureAtlas.getSubtexture( "Ninja_Idle_2" ) );
 			spriteAnimation.addFrame( textureAtlas.getSubtexture( "Ninja_Idle_3" ) );
+			spriteAnimation.addFrame( anotherAtlas.getSubtexture( "Ninja_Air Dash_0" ) );
+			spriteAnimation.addFrame( anotherAtlas.getSubtexture( "Ninja_Air Dash_1" ) );
+			spriteAnimation.addFrame( anotherAtlas.getSubtexture( "Ninja_Air Dash_2" ) );
+			spriteAnimation.addFrame( anotherAtlas.getSubtexture( "Ninja_Air Dash_3" ) );
 
-			var sprite = new Sprite<int>( spriteAnimation.frames[0] );
+			var sprite = new Sprite<int>( 1, anotherAtlas.getSpriteAnimation( "hardLanding" ) );
 			sprite.addAnimation( 0, spriteAnimation );
-			sprite.play( 0 );
+			sprite.play( 1 );
 			entity.addComponent( sprite );
 
 

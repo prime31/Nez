@@ -6,6 +6,7 @@
 // Copyright (C) Microsoft Corporation. All rights reserved.
 //-----------------------------------------------------------------------------
 using Nez.Textures;
+using Nez.Sprites;
 
 
 #endregion
@@ -24,11 +25,7 @@ using Microsoft.Xna.Framework.Content;
 namespace Nez.TextureAtlases
 {
 	/// <summary>
-	/// A sprite sheet contains many individual sprite images, packed into different
-	/// areas of a single larger texture, along with information describing where in
-	/// that texture each sprite is located. Sprite sheets can make your game drawing
-	/// more efficient, because they reduce the number of times the graphics hardware
-	/// needs to switch from one texture to another.
+	/// runtime component of the TextureAtlasGenerator. Stores the main Texture2D and all relevant metadata
 	/// </summary>
 	public class TextureAtlas
 	{
@@ -47,12 +44,19 @@ namespace Nez.TextureAtlases
 		/// </summary>
 		readonly Dictionary<string,int> _subtextureMap;
 
+		/// <summary>
+		/// stores a map of the name of the sprite animation (derived from the folder name) to a Point. The Point x/y values are the
+		/// start/end indexes of the subtextures for the animation frames.
+		/// </summary>
+		readonly Dictionary<string,Point> _spriteAnimationDetails;
 
-		public TextureAtlas( Texture2D texture, List<Rectangle> spriteRectangles, Dictionary<string,int> subtextureMap )
+
+		public TextureAtlas( Texture2D texture, List<Rectangle> spriteRectangles, Dictionary<string,int> subtextureMap, Dictionary<string,Point> spriteAnimationDetails )
 		{
 			this.texture = texture;
 			subtextures = new List<Subtexture>();
 			_subtextureMap = subtextureMap;
+			_spriteAnimationDetails = spriteAnimationDetails;
 
 			// create subtextures for reach rect for easy access
 			for( var i = 0; i < spriteRectangles.Count; i++ )
@@ -69,6 +73,11 @@ namespace Nez.TextureAtlases
 		}
 
 
+		/// <summary>
+		/// gets the Subtexture for the passed in image name
+		/// </summary>
+		/// <returns>The subtexture.</returns>
+		/// <param name="name">Name.</param>
 		public Subtexture getSubtexture( string name )
 		{
 			int index;
@@ -76,6 +85,28 @@ namespace Nez.TextureAtlases
 				return getSubtexture( index );
 
 			throw new KeyNotFoundException( name );
+		}
+
+
+		/// <summary>
+		/// returns a SpriteAnimation given an animationName where the animationName is the folder that contains the images
+		/// </summary>
+		/// <returns>The sprite animation.</returns>
+		/// <param name="animationName">Animation name.</param>
+		public SpriteAnimation getSpriteAnimation( string animationName )
+		{
+			Point point;
+			if( _spriteAnimationDetails.TryGetValue( animationName, out point ) )
+			{
+				var animation = new SpriteAnimation();
+
+				for( var i = point.X; i < point.Y; i++ )
+					animation.addFrame( subtextures[i] );
+
+				return animation;
+			}
+
+			throw new KeyNotFoundException( animationName );
 		}
 
 

@@ -86,3 +86,9 @@
 /processorParam:Compress=False
 /build:TextureAtlasTest/AtlasImages.xml
 
+#begin TextureAtlasTest/AnotherAtlas.xml
+/importer:XmlImporter
+/processor:TextureAtlasProcessor
+/processorParam:Compress=False
+/build:TextureAtlasTest/AnotherAtlas.xml
+

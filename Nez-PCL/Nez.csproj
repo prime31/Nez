@@ -56,8 +56,8 @@
     <Folder Include="Utils\Coroutines\" />
     <Folder Include="ECS\Components\Renderables\Sprites\" />
     <Folder Include="ECS\Components\Renderables\Particles\" />
-    <Folder Include="PipelineRuntime\TextureAtlasGenerator\" />
     <Folder Include="Graphics\Textures\" />
+    <Folder Include="PipelineRuntime\TextureAtlas\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Debug\Debug.cs" />
@@ -166,7 +166,7 @@
     <Compile Include="Graphics\Textures\Texture.cs" />
     <Compile Include="PipelineRuntime\TexturePacker\TexturePackerAtlas.cs" />
     <Compile Include="PipelineRuntime\TexturePacker\TexturePackerAtlasReader.cs" />
-    <Compile Include="PipelineRuntime\TextureAtlasGenerator\TextureAtlas.cs" />
-    <Compile Include="PipelineRuntime\TextureAtlasGenerator\TextureAtlasReader.cs" />
+    <Compile Include="PipelineRuntime\TextureAtlas\TextureAtlas.cs" />
+    <Compile Include="PipelineRuntime\TextureAtlas\TextureAtlasReader.cs" />
   </ItemGroup>
 </Project>

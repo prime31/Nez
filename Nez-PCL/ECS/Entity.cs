@@ -136,7 +136,7 @@ namespace Nez
 		}
 
 
-		public Entity( string name )
+		public Entity( string name ) : this()
 		{
 			this.name = name;
 		}

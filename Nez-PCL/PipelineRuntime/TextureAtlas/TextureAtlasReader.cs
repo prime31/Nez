@@ -18,7 +18,8 @@ namespace Nez.TextureAtlases
 
 				// Discard the rest of the SpriteSheet data as we are only reloading GPU resources for now
 				input.ReadObject<List<Rectangle>>();
-				input.ReadObject<Dictionary<string, int>>();
+				input.ReadObject<Dictionary<string,int>>();
+				input.ReadObject<Dictionary<string,Point>>();
 
 				return existingInstance;
 			}
@@ -27,9 +28,10 @@ namespace Nez.TextureAtlases
 				// Create a fresh TextureAtlas instance
 				var texture = input.ReadObject<Texture2D>();
 				var spriteRectangles = input.ReadObject<List<Rectangle>>();
-				var spriteNames = input.ReadObject<Dictionary<string, int>>();
+				var spriteNames = input.ReadObject<Dictionary<string,int>>();
+				var spriteAnimationDetails = input.ReadObject<Dictionary<string,Point>>();
 
-				return new TextureAtlas( texture, spriteRectangles, spriteNames );
+				return new TextureAtlas( texture, spriteRectangles, spriteNames, spriteAnimationDetails );
 			}
 		}
 	}

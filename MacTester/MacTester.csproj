@@ -95,6 +95,32 @@
     <None Include="Content\Images\TextureAtlas\Ninja_Idle_1.png" />
     <None Include="Content\Images\TextureAtlas\Ninja_Idle_2.png" />
     <None Include="Content\Images\TextureAtlas\Ninja_Idle_3.png" />
+    <None Include="Content\Images\AnotherAtlas\airDash\Ninja_Air Dash_0.png" />
+    <None Include="Content\Images\AnotherAtlas\airDash\Ninja_Air Dash_1.png" />
+    <None Include="Content\Images\AnotherAtlas\airDash\Ninja_Air Dash_2.png" />
+    <None Include="Content\Images\AnotherAtlas\airDash\Ninja_Air Dash_3.png" />
+    <None Include="Content\Images\AnotherAtlas\land\Ninja_Landing_0.png" />
+    <None Include="Content\Images\AnotherAtlas\land\Ninja_Landing_1.png" />
+    <None Include="Content\Images\AnotherAtlas\land\Ninja_Landing_2.png" />
+    <None Include="Content\Images\AnotherAtlas\land\Ninja_Landing_3.png" />
+    <None Include="Content\Images\AnotherAtlas\land\Ninja_Landing_4.png" />
+    <None Include="Content\Images\AnotherAtlas\land\Ninja_Landing_5.png" />
+    <None Include="Content\Images\AnotherAtlas\hardLanding\Ninja_Hard Landing_0.png" />
+    <None Include="Content\Images\AnotherAtlas\hardLanding\Ninja_Hard Landing_1.png" />
+    <None Include="Content\Images\AnotherAtlas\hardLanding\Ninja_Hard Landing_2.png" />
+    <None Include="Content\Images\AnotherAtlas\hardLanding\Ninja_Hard Landing_3.png" />
+    <None Include="Content\Images\AnotherAtlas\hardLanding\Ninja_Hard Landing_4.png" />
+    <None Include="Content\Images\AnotherAtlas\hardLanding\Ninja_Hard Landing_5.png" />
+    <None Include="Content\Images\AnotherAtlas\hardLanding\Ninja_Hard Landing_6.png" />
+    <None Include="Content\Images\AnotherAtlas\hardLanding\Ninja_Hard Landing_7.png" />
+    <None Include="Content\Images\AnotherAtlas\airSlash\Ninja_Air Slash_0.png" />
+    <None Include="Content\Images\AnotherAtlas\airSlash\Ninja_Air Slash_1.png" />
+    <None Include="Content\Images\AnotherAtlas\airSlash\Ninja_Air Slash_2.png" />
+    <None Include="Content\Images\AnotherAtlas\airSlash\Ninja_Air Slash_3.png" />
+    <None Include="Content\Images\AnotherAtlas\airSlash\Ninja_Air Slash_4.png" />
+    <None Include="Content\Images\AnotherAtlas\airSlash\Ninja_Air Slash_5.png" />
+    <None Include="Content\Images\AnotherAtlas\airSlash\Ninja_Air Slash_6.png" />
+    <None Include="Content\Images\AnotherAtlas\airSlash\Ninja_Air Slash_7.png" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bin\**\*.*">
@@ -124,6 +150,7 @@
   <ItemGroup>
     <Folder Include="Content\Fonts\" />
     <Folder Include="Content\Images\TextureAtlas\" />
+    <Folder Include="Content\Images\AnotherAtlas\" />
   </ItemGroup>
   <ItemGroup>
     <InterfaceDefinition Include="MainMenu.xib" />
