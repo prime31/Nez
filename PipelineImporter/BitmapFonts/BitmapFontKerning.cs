@@ -1,7 +1,8 @@
 using System;
 using System.Xml.Serialization;
 
-namespace Nez
+
+namespace Nez.BitmapFontImporter
 {
 	// ---- AngelCode BmFont XML serializer ----------------------
 	// ---- By DeadlyDan @ deadlydan@gmail.com -------------------
@@ -10,12 +11,12 @@ namespace Nez
     public class BitmapFontKerning
 	{
 		[XmlAttribute ( "first" )]
-		public int First;
+		public int first;
 		
 		[XmlAttribute ( "second" )]
-		public int Second;
+		public int second;
 		
 		[XmlAttribute ( "amount" )]
-		public int Amount;
+		public int amount;
 	}	
 }

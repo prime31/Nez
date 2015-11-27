@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.Xml.Serialization;
 
 
-namespace Nez
+namespace Nez.BitmapFontImporter
 {
 	// ---- AngelCode BmFont XML serializer ----------------------
 	// ---- By DeadlyDan @ deadlydan@gmail.com -------------------
@@ -12,21 +12,21 @@ namespace Nez
     public class BitmapFontFile
 	{
 		[XmlElement("info")]
-		public BitmapFontInfo Info;
+		public BitmapFontInfo info;
 		
 		[XmlElement("common")]
-		public BitmapFontCommon Common;
+		public BitmapFontCommon common;
 
 		[XmlArray("pages")]
 		[XmlArrayItem("page")]
-		public List<BitmapFontPage> Pages;
+		public List<BitmapFontPage> pages;
 
 		[XmlArray("chars")]
 		[XmlArrayItem("char")]
-		public List<BitmapFontChar> Chars;
+		public List<BitmapFontChar> chars;
 		
 		[XmlArray("kernings")]
 		[XmlArrayItem("kerning")]
-		public List<BitmapFontKerning> Kernings;
+		public List<BitmapFontKerning> kernings;
 	}	
 }

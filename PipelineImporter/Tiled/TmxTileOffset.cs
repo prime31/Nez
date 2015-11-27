@@ -1,7 +1,7 @@
 using System.Xml.Serialization;
 
 
-namespace Nez
+namespace Nez.TiledMaps
 {
 	[XmlRoot( ElementName = "tileoffset" )]
 	public class TmxTileOffset

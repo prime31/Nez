@@ -5,7 +5,7 @@ using System.Xml.Serialization;
 using Microsoft.Xna.Framework.Content.Pipeline;
 
 
-namespace Nez
+namespace Nez.TiledMaps
 {
 	[ContentImporter( ".tmx", DefaultProcessor = "TiledMapProcessor", DisplayName = "Tiled Map Importer" )]
 	public class TiledMapImporter : ContentImporter<TmxMap>

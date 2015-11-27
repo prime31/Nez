@@ -4,7 +4,7 @@ using Microsoft.Xna.Framework.Content.Pipeline;
 using Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler;
 
 
-namespace Nez
+namespace Nez.TexturePackerImporter
 {
 	[ContentTypeWriter]
 	public class TexturePackerWriter : ContentTypeWriter<TexturePackerProcessorResult>

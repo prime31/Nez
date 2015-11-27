@@ -7,7 +7,7 @@ using Microsoft.Xna.Framework.Content.Pipeline;
 using System.ComponentModel;
 
 
-namespace Nez
+namespace Nez.TiledMaps
 {
 	[ContentProcessor( DisplayName = "Tiled Map Processor" )]
 	public class TiledMapProcessor : ContentProcessor<TmxMap,TiledMapProcessorResult>

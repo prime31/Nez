@@ -3,7 +3,7 @@ using Microsoft.Xna.Framework.Content.Pipeline;
 using Newtonsoft.Json;
 
 
-namespace Nez
+namespace Nez.TexturePackerImporter
 {
 	[ContentImporter( ".json", DefaultProcessor = "TexturePackerProcessor", DisplayName = "TexturePacker JSON Importer" )]
 	public class TexturePackerJsonImporter : ContentImporter<TexturePackerFile>

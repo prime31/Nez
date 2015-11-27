@@ -2,7 +2,7 @@ using Microsoft.Xna.Framework.Content.Pipeline;
 using Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler;
 
 
-namespace Nez
+namespace Nez.BitmapFontImporter
 {
 	[ContentTypeWriter]
 	public class BitmapFontWriter : ContentTypeWriter<BitmapFontProcessorResult>
@@ -15,10 +15,10 @@ namespace Nez
 				writer.Write( textureAsset );
 
 			var fontFile = result.fontFile;
-			writer.Write( fontFile.Common.lineHeight );
-			writer.Write( fontFile.Chars.Count );
+			writer.Write( fontFile.common.lineHeight );
+			writer.Write( fontFile.chars.Count );
 
-			foreach( var c in fontFile.Chars )
+			foreach( var c in fontFile.chars )
 			{
 				writer.Write( c.id );
 				writer.Write( c.page );

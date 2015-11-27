@@ -2,7 +2,7 @@
 using Microsoft.Xna.Framework.Content.Pipeline;
 
 
-namespace Nez
+namespace Nez.TexturePackerImporter
 {
 	[ContentProcessor( DisplayName = "TexturePacker Processor" )]
 	public class TexturePackerProcessor : ContentProcessor<TexturePackerFile, TexturePackerProcessorResult>

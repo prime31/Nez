@@ -1,7 +1,8 @@
 using System.Collections.Generic;
 using System.Xml.Serialization;
 
-namespace Nez
+
+namespace Nez.TiledMaps
 {
     public class TmxImageLayer : TmxLayer
     {

@@ -3,7 +3,7 @@ using Microsoft.Xna.Framework;
 using System.Collections.Generic;
 
 
-namespace Nez
+namespace Nez.TiledMaps
 {
 	public class TmxObject
 	{

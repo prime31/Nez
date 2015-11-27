@@ -1,5 +1,5 @@
 
-namespace Nez
+namespace Nez.TiledMaps
 {
 	public class TiledMapProcessorResult
 	{

@@ -8,7 +8,7 @@ using Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler;
 using System.Diagnostics;
 
 
-namespace Nez
+namespace Nez.TiledMaps
 {
 	[ContentTypeWriter]
 	public class TiledMapWriter : ContentTypeWriter<TiledMapProcessorResult>

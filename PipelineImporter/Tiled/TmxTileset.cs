@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.Xml.Serialization;
 
 
-namespace Nez
+namespace Nez.TiledMaps
 {
 	[XmlRoot( ElementName = "tileset" )]
 	public class TmxTileset
