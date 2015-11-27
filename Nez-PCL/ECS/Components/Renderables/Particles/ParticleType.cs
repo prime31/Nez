@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using Nez.TextureAtlases;
+using Nez.Textures;
 using Microsoft.Xna.Framework;
 
 

@@ -99,7 +99,8 @@ namespace MacTester
 
 			if( Input.mouseWheelDelta != 0 )
 			{
-				scene.camera.move( new Vector2( Input.mouseWheelDelta * 0.001f, Input.mouseWheelDelta * 0.001f ) );
+				scene.camera.zoomIn( Input.mouseWheelDelta * 0.0001f );
+				//scene.camera.move( new Vector2( Input.mouseWheelDelta * 0.001f, Input.mouseWheelDelta * 0.001f ) );
 			}
 		}
 

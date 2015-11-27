@@ -3,7 +3,7 @@ using System.Linq;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Nez.Content;
-using Nez.TextureAtlases;
+using Nez.Textures;
 
 
 namespace Nez.BitmapFonts

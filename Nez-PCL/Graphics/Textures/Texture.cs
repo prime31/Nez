@@ -6,12 +6,24 @@ using System.IO;
 using Nez.Content;
 
 
-namespace Nez.TextureAtlases
+namespace Nez.Textures
 {
 	public class Texture
 	{
+		/// <summary>
+		/// the actual Texture2D
+		/// </summary>
 		public Texture2D texture2D;
+
+		/// <summary>
+		/// the full bounds of the Texture2D
+		/// </summary>
 		public Rectangle textureBounds;
+
+		/// <summary>
+		/// is this texture loaded?
+		/// </summary>
+		/// <value><c>true</c> if is loaded; otherwise, <c>false</c>.</value>
 		public bool isLoaded { get { return texture2D != null; } }
 
 

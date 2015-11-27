@@ -1,6 +1,6 @@
 ﻿using System;
 using Nez;
-using Nez.TextureAtlases;
+using Nez.Textures;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System.IO;

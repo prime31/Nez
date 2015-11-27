@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Nez.TextureAtlases;
+using Nez.Textures;
 
 
 namespace Nez.Tiled

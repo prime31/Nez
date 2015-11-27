@@ -2,9 +2,10 @@
 using Nez;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
-using Nez.TextureAtlases;
+using Nez.Textures;
 using Nez.Tiled;
 using Nez.Sprites;
+using Nez.TextureAtlases;
 
 
 namespace MacTester
@@ -58,7 +59,11 @@ namespace MacTester
 		{
 			var scene = new Scene();
 			scene.clearColor = Color.Coral;
+			scene.camera.centerOrigin();
 			var moonTexture = scene.contentManager.Load<Texture2D>( "Images/moon" );
+
+			// texture atlas tester
+			var textureAtlas = scene.contentManager.Load<TextureAtlas>( "bin/MacOSX/TextureAtlasTest/AtlasImages" );
 
 			// setup a renderer that renders everything to a RenderTexture making sure its order is before standard renderers!
 			var renderer = new DefaultRenderer( scene.camera, -1 );
@@ -85,6 +90,27 @@ namespace MacTester
 			entity.position.X = 130;
 			entity.position.Y = 130;
 			entity.addComponent( image );
+
+
+			entity = scene.createAndAddEntity<Entity>( "texture-atlas-sprite" );
+			entity.position.Y = 330;
+			entity.position.X = 30;
+
+			// create a sprite animation from an atlas
+			var spriteAnimation = new SpriteAnimation()
+			{
+				loop = true,
+				fps = 10
+			};
+			spriteAnimation.addFrame( textureAtlas.getSubtexture( "Ninja_Idle_0" ) );
+			spriteAnimation.addFrame( textureAtlas.getSubtexture( "Ninja_Idle_1" ) );
+			spriteAnimation.addFrame( textureAtlas.getSubtexture( "Ninja_Idle_2" ) );
+			spriteAnimation.addFrame( textureAtlas.getSubtexture( "Ninja_Idle_3" ) );
+
+			var sprite = new Sprite<int>( spriteAnimation.frames[0] );
+			sprite.addAnimation( 0, spriteAnimation );
+			sprite.play( 0 );
+			entity.addComponent( sprite );
 
 
 			entity = scene.createAndAddEntity<Entity>( "particles" );
@@ -142,6 +168,14 @@ namespace MacTester
 				entity.collider = new BoxCollider();
 			else
 				entity.collider = new CircleCollider();
+
+
+			var uglyBackgroundEntity = scene.createAndAddEntity<Entity>( "bg" );
+			uglyBackgroundEntity.depth = 5;
+			var image = new Image( scene.contentManager.Load<Texture2D>( "Images/dots-512" ) );
+			image.zoom = 5f;
+			uglyBackgroundEntity.addComponent( image );
+
 
 			// add a follow camera
 			var camFollow = scene.createAndAddEntity<Entity>( "camera-follow" );

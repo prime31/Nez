@@ -1,4 +1,4 @@
-using Nez.TextureAtlases;
+using Nez.Textures;
 
 
 namespace Nez.BitmapFonts

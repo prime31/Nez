@@ -4,7 +4,7 @@ using Microsoft.Xna.Framework.Graphics;
 using System.Collections.Generic;
 
 
-namespace Nez.TextureAtlases
+namespace Nez.Textures
 {
 	/// <summary>
 	/// represents a single element in a texture atlas consisting of a texture and the source rectangle for the frame

@@ -56,6 +56,8 @@
     <Folder Include="Utils\Coroutines\" />
     <Folder Include="ECS\Components\Renderables\Sprites\" />
     <Folder Include="ECS\Components\Renderables\Particles\" />
+    <Folder Include="PipelineRuntime\TextureAtlasGenerator\" />
+    <Folder Include="Graphics\Textures\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Debug\Debug.cs" />
@@ -114,11 +116,6 @@
     <Compile Include="PipelineRuntime\BitmapFonts\BitmapFontRegion.cs" />
     <Compile Include="PipelineRuntime\ContentExtensions\ContentManagerExtensions.cs" />
     <Compile Include="PipelineRuntime\ContentExtensions\ContentReaderExtensions.cs" />
-    <Compile Include="PipelineRuntime\TextureAtlases\RenderTexture.cs" />
-    <Compile Include="PipelineRuntime\TextureAtlases\Subtexture.cs" />
-    <Compile Include="PipelineRuntime\TextureAtlases\Texture.cs" />
-    <Compile Include="PipelineRuntime\TextureAtlases\TextureAtlas.cs" />
-    <Compile Include="PipelineRuntime\TextureAtlases\TextureAtlasReader.cs" />
     <Compile Include="PipelineRuntime\Tiled\TiledImageLayer.cs" />
     <Compile Include="PipelineRuntime\Tiled\TiledLayer.cs" />
     <Compile Include="PipelineRuntime\Tiled\TiledMap.cs" />
@@ -164,5 +161,12 @@
     <Compile Include="ECS\Components\Renderables\Particles\ParticleType.cs" />
     <Compile Include="Math\Colors.cs" />
     <Compile Include="ECS\Components\FollowCamera.cs" />
+    <Compile Include="Graphics\Textures\RenderTexture.cs" />
+    <Compile Include="Graphics\Textures\Subtexture.cs" />
+    <Compile Include="Graphics\Textures\Texture.cs" />
+    <Compile Include="PipelineRuntime\TexturePacker\TexturePackerAtlas.cs" />
+    <Compile Include="PipelineRuntime\TexturePacker\TexturePackerAtlasReader.cs" />
+    <Compile Include="PipelineRuntime\TextureAtlasGenerator\TextureAtlas.cs" />
+    <Compile Include="PipelineRuntime\TextureAtlasGenerator\TextureAtlasReader.cs" />
   </ItemGroup>
 </Project>

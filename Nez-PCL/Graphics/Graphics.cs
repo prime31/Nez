@@ -2,7 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
 using System.Collections.Generic;
-using Nez.TextureAtlases;
+using Nez.Textures;
 using System.Diagnostics;
 
 

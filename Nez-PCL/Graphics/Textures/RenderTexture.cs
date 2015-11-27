@@ -5,7 +5,7 @@ using System.IO;
 using Microsoft.Xna.Framework.Content;
 
 
-namespace Nez.TextureAtlases
+namespace Nez.Textures
 {
 	public class RenderTexture : Texture
 	{

@@ -5,13 +5,13 @@ using Nez.Content;
 
 namespace Nez.TextureAtlases
 {
-	public class TextureAtlasReader : ContentTypeReader<TextureAtlas>
+	public class TexturePackerAtlasReader : ContentTypeReader<TexturePackerAtlas>
 	{
-		protected override TextureAtlas Read( ContentReader reader, TextureAtlas existingInstance )
+		protected override TexturePackerAtlas Read( ContentReader reader, TexturePackerAtlas existingInstance )
 		{
 			var assetName = reader.getRelativeAssetPath( reader.ReadString() );
 			var texture = reader.ContentManager.Load<Texture2D>( assetName );
-			var atlas = new TextureAtlas( texture );
+			var atlas = new TexturePackerAtlas( texture );
 
 			var regionCount = reader.ReadInt32();
 			for( var i = 0; i < regionCount; i++ )

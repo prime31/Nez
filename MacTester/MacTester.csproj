@@ -89,6 +89,12 @@
     <None Include="Content\Effects\NoEffect.fx" />
     <None Include="Content\Effects\RainbowH.fx" />
     <None Include="Content\Effects\SpriteEffect.fx" />
+    <None Include="Content\Images\TextureAtlas\background.png" />
+    <None Include="Content\Images\TextureAtlas\tree.png" />
+    <None Include="Content\Images\TextureAtlas\Ninja_Idle_0.png" />
+    <None Include="Content\Images\TextureAtlas\Ninja_Idle_1.png" />
+    <None Include="Content\Images\TextureAtlas\Ninja_Idle_2.png" />
+    <None Include="Content\Images\TextureAtlas\Ninja_Idle_3.png" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bin\**\*.*">
@@ -117,6 +123,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Content\Fonts\" />
+    <Folder Include="Content\Images\TextureAtlas\" />
   </ItemGroup>
   <ItemGroup>
     <InterfaceDefinition Include="MainMenu.xib" />
@@ -124,5 +131,6 @@
   <ItemGroup>
     <BundleResource Include="Content\Images\moon.png" />
     <BundleResource Include="Content\Images\plume.tga" />
+    <BundleResource Include="Content\Images\dots-512.png" />
   </ItemGroup>
 </Project>

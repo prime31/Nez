@@ -1,5 +1,5 @@
 ﻿using System;
-using Nez.TextureAtlases;
+using Nez.Textures;
 using Microsoft.Xna.Framework.Graphics;
 
 

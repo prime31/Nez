@@ -47,12 +47,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
-    <None Include="BitmapFonts\.DS_Store" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Tiled\" />
     <Folder Include="BitmapFonts\" />
-    <Folder Include="TextureAtlases\" />
+    <Folder Include="TexturePacker\" />
+    <Folder Include="TextureAtlasGenerator\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Tiled\TiledMapImporter.cs" />
@@ -85,16 +85,20 @@
     <Compile Include="BitmapFonts\BitmapFontProcessor.cs" />
     <Compile Include="BitmapFonts\BitmapFontProcessorResult.cs" />
     <Compile Include="BitmapFonts\BitmapFontWriter.cs" />
-    <Compile Include="TextureAtlases\TexturePackerFile.cs" />
-    <Compile Include="TextureAtlases\TexturePackerJsonImporter.cs" />
-    <Compile Include="TextureAtlases\TexturePackerMeta.cs" />
-    <Compile Include="TextureAtlases\TexturePackerPoint.cs" />
-    <Compile Include="TextureAtlases\TexturePackerProcessor.cs" />
-    <Compile Include="TextureAtlases\TexturePackerProcessorResult.cs" />
-    <Compile Include="TextureAtlases\TexturePackerRectangle.cs" />
-    <Compile Include="TextureAtlases\TexturePackerRegion.cs" />
-    <Compile Include="TextureAtlases\TexturePackerSize.cs" />
-    <Compile Include="TextureAtlases\TexturePackerWriter.cs" />
+    <Compile Include="TexturePacker\TexturePackerFile.cs" />
+    <Compile Include="TexturePacker\TexturePackerJsonImporter.cs" />
+    <Compile Include="TexturePacker\TexturePackerMeta.cs" />
+    <Compile Include="TexturePacker\TexturePackerPoint.cs" />
+    <Compile Include="TexturePacker\TexturePackerProcessor.cs" />
+    <Compile Include="TexturePacker\TexturePackerProcessorResult.cs" />
+    <Compile Include="TexturePacker\TexturePackerRectangle.cs" />
+    <Compile Include="TexturePacker\TexturePackerRegion.cs" />
+    <Compile Include="TexturePacker\TexturePackerSize.cs" />
+    <Compile Include="TexturePacker\TexturePackerWriter.cs" />
+    <Compile Include="TextureAtlasGenerator\TextureAtlasPacker.cs" />
+    <Compile Include="TextureAtlasGenerator\TextureAtlasContent.cs" />
+    <Compile Include="TextureAtlasGenerator\TextureAtlasProcessor.cs" />
+    <Compile Include="TextureAtlasGenerator\TextureAtlasWriter.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Nez-PCL\Nez.csproj">

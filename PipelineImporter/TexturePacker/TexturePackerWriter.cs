@@ -34,13 +34,13 @@ namespace Nez
 
 		public override string GetRuntimeType( TargetPlatform targetPlatform )
 		{
-			return typeof( Nez.TextureAtlases.TextureAtlas ).AssemblyQualifiedName;
+			return typeof( Nez.TextureAtlases.TexturePackerAtlas ).AssemblyQualifiedName;
 		}
 
 
 		public override string GetRuntimeReader( TargetPlatform targetPlatform )
 		{
-			return typeof( Nez.TextureAtlases.TextureAtlasReader ).AssemblyQualifiedName;
+			return typeof( Nez.TextureAtlases.TexturePackerAtlasReader ).AssemblyQualifiedName;
 		}
 	}
 }

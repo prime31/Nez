@@ -231,6 +231,9 @@ namespace Nez
 				origin = new Vector2( viewportAdapter.virtualWidth / 2f, viewportAdapter.virtualHeight / 2f );
 			else
 				origin = new Vector2( _graphicsDevice.Viewport.Width / 2f, _graphicsDevice.Viewport.Height / 2f );
+
+			// offset our position to match the new center
+			position += origin;
 			
 			_matrixesAreDirty = true;
 		}

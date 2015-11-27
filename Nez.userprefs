@@ -1,8 +1,13 @@
-﻿<Properties MonoDevelop.MonoMac.LastXamMacNagTime="11/21/2015 2:39:02 AM" StartupItem="MacTester/MacTester.csproj" RefactoringSettings.EnableRefactorings="True">
+﻿<Properties MonoDevelop.MonoMac.LastXamMacNagTime="11/27/2015 7:26:44 AM" StartupItem="MacTester/MacTester.csproj" RefactoringSettings.EnableRefactorings="True">
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="MacTester/Game1.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="PipelineImporter/Tiled/TiledMapProcessor.cs">
     <Files>
-      <File FileName="MacTester/Game1.cs" Line="24" Column="39" />
+      <File FileName="MacTester/Game1.cs" Line="103" Column="7" />
+      <File FileName="Nez-PCL/ECS/Entity.cs" Line="1" Column="1" />
+      <File FileName="MacTester/SceneThree/SimpleMovingPlatform.cs" Line="1" Column="1" />
+      <File FileName="PipelineImporter/TextureAtlasGenerator/SpriteSheetProcessor.cs" Line="34" Column="4" />
+      <File FileName="PipelineImporter/Tiled/TiledMapProcessor.cs" Line="73" Column="2" />
+      <File FileName="PipelineImporter/TextureAtlasGenerator/SpriteSheetContent.cs" Line="1" Column="1" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
