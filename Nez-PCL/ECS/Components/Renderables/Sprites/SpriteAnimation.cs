@@ -22,8 +22,8 @@ namespace Nez.Sprites
 		public AnimationCompletionBehavior completionBehavior;
 
 		public List<Subtexture> frames = new List<Subtexture>();
-		public float secondsPerFrame;
-		public float iterationDuration;
+		internal float secondsPerFrame;
+		internal float iterationDuration;
 		public float totalDuration;
 
 		bool _hasBeenPreparedForUse;

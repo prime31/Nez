@@ -33,5 +33,7 @@ namespace Nez.TextureAtlasGenerator
 		/// and point.y is the last frame. The indexs are for the spriteRectangles array
 		/// </summary>
 		public Dictionary<string,Point> spriteAnimationDetails = new Dictionary<string,Point>();
+
+		public int animationFPS;
 	}
 }

@@ -20,6 +20,7 @@ namespace Nez.TextureAtlases
 				input.ReadObject<List<Rectangle>>();
 				input.ReadObject<Dictionary<string,int>>();
 				input.ReadObject<Dictionary<string,Point>>();
+				input.ReadInt32();
 
 				return existingInstance;
 			}
@@ -30,8 +31,9 @@ namespace Nez.TextureAtlases
 				var spriteRectangles = input.ReadObject<List<Rectangle>>();
 				var spriteNames = input.ReadObject<Dictionary<string,int>>();
 				var spriteAnimationDetails = input.ReadObject<Dictionary<string,Point>>();
+				var animationFPS = input.ReadInt32();
 
-				return new TextureAtlas( texture, spriteRectangles, spriteNames, spriteAnimationDetails );
+				return new TextureAtlas( texture, spriteRectangles, spriteNames, spriteAnimationDetails, animationFPS );
 			}
 		}
 	}

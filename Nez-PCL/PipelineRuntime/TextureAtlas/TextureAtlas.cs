@@ -50,13 +50,16 @@ namespace Nez.TextureAtlases
 		/// </summary>
 		readonly Dictionary<string,Point> _spriteAnimationDetails;
 
+		readonly int _animationFPS;
 
-		public TextureAtlas( Texture2D texture, List<Rectangle> spriteRectangles, Dictionary<string,int> subtextureMap, Dictionary<string,Point> spriteAnimationDetails )
+
+		public TextureAtlas( Texture2D texture, List<Rectangle> spriteRectangles, Dictionary<string,int> subtextureMap, Dictionary<string,Point> spriteAnimationDetails, int animationFPS )
 		{
 			this.texture = texture;
 			subtextures = new List<Subtexture>();
 			_subtextureMap = subtextureMap;
 			_spriteAnimationDetails = spriteAnimationDetails;
+			_animationFPS = animationFPS;
 
 			// create subtextures for reach rect for easy access
 			for( var i = 0; i < spriteRectangles.Count; i++ )
@@ -98,7 +101,10 @@ namespace Nez.TextureAtlases
 			Point point;
 			if( _spriteAnimationDetails.TryGetValue( animationName, out point ) )
 			{
-				var animation = new SpriteAnimation();
+				var animation = new SpriteAnimation
+				{
+					fps = _animationFPS
+				};
 
 				for( var i = point.X; i < point.Y; i++ )
 					animation.addFrame( subtextures[i] );

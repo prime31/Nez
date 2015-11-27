@@ -35,10 +35,19 @@ namespace Nez.TextureAtlasGenerator
 
 		bool _compress;
 		[DefaultValue( false )]
-		public bool Compress
+		public bool CompressTexture
 		{
 			get { return _compress; }
 			set { _compress = value; }
+		}
+
+
+		float _animationFPS = 10f;
+		[DefaultValue( 10f )]
+		public float AnimationFPS
+		{
+			get { return _animationFPS; }
+			set { _animationFPS = value; }
 		}
 
 
@@ -48,7 +57,10 @@ namespace Nez.TextureAtlasGenerator
 		public override TextureAtlasContent Process( string[] input, ContentProcessorContext context )
 		{
 			logger = context.Logger;
-			var textureAtlas = new TextureAtlasContent();
+			var textureAtlas = new TextureAtlasContent
+			{
+				animationFPS = (int)AnimationFPS
+			};
 			var sourceSprites = new List<BitmapContent>();
 			var imagePaths = new List<string>();
 

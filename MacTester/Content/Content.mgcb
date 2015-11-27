@@ -83,12 +83,14 @@
 #begin TextureAtlasTest/AtlasImages.xml
 /importer:XmlImporter
 /processor:TextureAtlasProcessor
-/processorParam:Compress=False
+/processorParam:CompressTexture=False
+/processorParam:AnimationFPS=10
 /build:TextureAtlasTest/AtlasImages.xml
 
 #begin TextureAtlasTest/AnotherAtlas.xml
 /importer:XmlImporter
 /processor:TextureAtlasProcessor
-/processorParam:Compress=False
+/processorParam:CompressTexture=False
+/processorParam:AnimationFPS=15
 /build:TextureAtlasTest/AnotherAtlas.xml
 
