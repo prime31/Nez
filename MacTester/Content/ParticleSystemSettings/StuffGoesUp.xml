@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<XnaContent xmlns:Nez="Nez">
+  <Asset Type="Nez:ParticleType">
+    <color>FF99FFFF</color>
+    <color2>FFFFFFFF</color2>
+    <colorSwitch>2</colorSwitch>
+    <colorSwitchLoop>true</colorSwitchLoop>
+    <speed>10</speed>
+    <speedRange>12</speedRange>
+    <speedMultiplier>1</speedMultiplier>
+    <acceleration>12 -78</acceleration>
+    <direction>9</direction>
+    <directionRange>23</directionRange>
+    <life>8</life>
+    <lifeRange>5</lifeRange>
+    <size>23</size>
+    <sizeRange>0</sizeRange>
+    <rotated>true</rotated>
+    <randomRotate>false</randomRotate>
+    <rotationRate>0</rotationRate>
+    <rotationRateRange>0</rotationRateRange>
+    <scaleOut>true</scaleOut>
+  </Asset>
+</XnaContent>

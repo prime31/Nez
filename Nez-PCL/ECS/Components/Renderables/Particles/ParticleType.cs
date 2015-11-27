@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Nez.Textures;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Content;
 
 
 namespace Nez
@@ -10,6 +11,7 @@ namespace Nez
 	{
 		static private List<ParticleType> AllTypes = new List<ParticleType>();
 
+		[ContentSerializerIgnore]
 		public Subtexture subtexture;
 		public Color color;
 		public Color color2;

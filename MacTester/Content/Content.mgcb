@@ -94,3 +94,13 @@
 /processorParam:AnimationFPS=15
 /build:TextureAtlasTest/AnotherAtlas.xml
 
+#begin ParticleSystemSettings/StuffGoesUp.xml
+/importer:XmlImporter
+/processor:ParticleSystemSettingsProcessor
+/build:ParticleSystemSettings/StuffGoesUp.xml
+
+#begin ParticleSystemSettings/Temp.xml
+/importer:XmlImporter
+/processor:XmlTemplateMakerProcessor
+/build:ParticleSystemSettings/Temp.xml
+

@@ -1,24 +1,10 @@
-#region File Description
-//-----------------------------------------------------------------------------
-// SpriteSheetProcessor.cs
-//
-// Microsoft Game Technology Group
-// Copyright (C) Microsoft Corporation. All rights reserved.
-//-----------------------------------------------------------------------------
-using System.ComponentModel;
-using Microsoft.Xna.Framework;
-
-
-#endregion
-
-#region Using Statements
 using System.IO;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework.Content.Pipeline;
 using Microsoft.Xna.Framework.Content.Pipeline.Graphics;
+using System.ComponentModel;
+using Microsoft.Xna.Framework;
 
-
-#endregion
 
 namespace Nez.TextureAtlasGenerator
 {
@@ -34,6 +20,7 @@ namespace Nez.TextureAtlasGenerator
 		public static ContentBuildLogger logger;
 
 		bool _compress;
+		[Description( "Enable/disable texture compression" )]
 		[DefaultValue( false )]
 		public bool CompressTexture
 		{
@@ -43,6 +30,7 @@ namespace Nez.TextureAtlasGenerator
 
 
 		float _animationFPS = 10f;
+		[Description( "FPS value used when creating SpriteAnimations" )]
 		[DefaultValue( 10f )]
 		public float AnimationFPS
 		{
@@ -52,7 +40,7 @@ namespace Nez.TextureAtlasGenerator
 
 
 		/// <summary>
-		/// Converts an array of sprite filenames into a sprite sheet object.
+		/// Converts an array of sprite filenames into a texture atlas object.
 		/// </summary>
 		public override TextureAtlasContent Process( string[] input, ContentProcessorContext context )
 		{

@@ -117,7 +117,6 @@ namespace MacTester
 			sprite.play( 1 );
 			entity.addComponent( sprite );
 
-
 			entity = scene.createAndAddEntity<Entity>( "particles" );
 			entity.addComponent( new SimpleParticles() );
 

@@ -53,6 +53,8 @@
     <Folder Include="BitmapFonts\" />
     <Folder Include="TexturePacker\" />
     <Folder Include="TextureAtlasGenerator\" />
+    <Folder Include="ParticleSystemSettings\" />
+    <Folder Include="XMLTemplateMaker\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Tiled\TiledMapImporter.cs" />
@@ -99,6 +101,8 @@
     <Compile Include="TextureAtlasGenerator\TextureAtlasContent.cs" />
     <Compile Include="TextureAtlasGenerator\TextureAtlasProcessor.cs" />
     <Compile Include="TextureAtlasGenerator\TextureAtlasWriter.cs" />
+    <Compile Include="ParticleSystemSettings\ParticleSystemSettingsProcessor.cs" />
+    <Compile Include="XMLTemplateMaker\XmlTemplateMakerProcessor.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Nez-PCL\Nez.csproj">
