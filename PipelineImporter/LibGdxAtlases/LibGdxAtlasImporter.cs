@@ -7,7 +7,8 @@ using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
 
-namespace Nez
+
+namespace Nez.LibGdxAtlases
 {
 	[ContentImporter( ".atlas", DefaultProcessor = "LibGdxAtlasProcessor", DisplayName = "libGDX Atlas Importer" )]
 	public class LibGdxAtlasImporter : ContentImporter<LibGdxAtlasFile>
@@ -46,46 +47,49 @@ namespace Nez
 						float width = 0;
 						float height = 0;
 
-						if (readTuple(reader) == 2) { // size is only optional for an atlas packed with an old TexturePacker.
-							context.Logger.LogMessage(""+tuple[0]);
-							width = int.Parse(tuple[0]);
-							height = int.Parse(tuple[1]);
-							readTuple(reader);
+						if( readTuple( reader ) == 2 )
+						{
+							// size is only optional for an atlas packed with an old TexturePacker.
+							context.Logger.LogMessage( "" + tuple[0] );
+							width = int.Parse( tuple[0] );
+							height = int.Parse( tuple[1] );
+							readTuple( reader );
 						}
 						context.Logger.LogMessage( "Width, Height: {0}, {1}", width, height );
 						string format = tuple[0];
 
-						readTuple(reader);
+						readTuple( reader );
 						string min = tuple[0];
 						string max = tuple[1];
 
-						String direction = readValue(reader);
+						String direction = readValue( reader );
 						bool repeatX = false;
 						bool repeatY = false;
-						if (direction.Equals("x"))
+						if( direction.Equals( "x" ) )
 							repeatX = true;
-						else if (direction.Equals("y"))
+						else if( direction.Equals( "y" ) )
 							repeatY = true;
-						else if (direction.Equals("xy")) {
+						else if( direction.Equals( "xy" ) )
+						{
 							repeatX = true;
 							repeatY = true;
 						}
 
-						pageImage = new LibGdxAtlasPage(imageName, width, height, false, format, min, max, repeatX, repeatY);
-						pages.Add(pageImage);
+						pageImage = new LibGdxAtlasPage( imageName, width, height, false, format, min, max, repeatX, repeatY );
+						pages.Add( pageImage );
 					}
 					else
 					{
-						bool rotate = Boolean.Parse(readValue(reader));
+						bool rotate = Boolean.Parse( readValue( reader ) );
 
-						readTuple(reader);
-						int left = int.Parse(tuple[0]);
-						int top = int.Parse(tuple[1]);
+						readTuple( reader );
+						int left = int.Parse( tuple[0] );
+						int top = int.Parse( tuple[1] );
 						context.Logger.LogMessage( "X, Y: {0}, {1}", top, left );
 
-						readTuple(reader);
-						int width = int.Parse(tuple[0]);
-						int height = int.Parse(tuple[1]);
+						readTuple( reader );
+						int width = int.Parse( tuple[0] );
+						int height = int.Parse( tuple[1] );
 						context.Logger.LogMessage( "width, height: {0}, {1}", width, height );
 
 						LibGdxAtlasRegion region = new LibGdxAtlasRegion();
@@ -98,33 +102,35 @@ namespace Nez
 						region.name = line;
 						region.rotate = rotate;
 
-						if (readTuple(reader) == 4) { // split is optional
+						if( readTuple( reader ) == 4 )
+						{ // split is optional
 							//region.splits = new int[] {Integer.parseInt(tuple[0]), Integer.parseInt(tuple[1]),
 							//	Integer.parseInt(tuple[2]), Integer.parseInt(tuple[3])};
 
-							if (readTuple(reader) == 4) { // pad is optional, but only present with splits
-							//	region.pads = new int[] {Integer.parseInt(tuple[0]), Integer.parseInt(tuple[1]),
-							//		Integer.parseInt(tuple[2]), Integer.parseInt(tuple[3])};
+							if( readTuple( reader ) == 4 )
+							{ // pad is optional, but only present with splits
+								//	region.pads = new int[] {Integer.parseInt(tuple[0]), Integer.parseInt(tuple[1]),
+								//		Integer.parseInt(tuple[2]), Integer.parseInt(tuple[3])};
 
-								readTuple(reader);
+								readTuple( reader );
 							}
 						}
 
-						region.originalSize.x = int.Parse(tuple[0]);
-						region.originalSize.y = int.Parse(tuple[1]);
+						region.originalSize.x = int.Parse( tuple[0] );
+						region.originalSize.y = int.Parse( tuple[1] );
 						context.Logger.LogMessage( "Original size: {0}, {1}", region.originalSize.x, region.originalSize.y );
 
-						readTuple(reader);
-						region.offset.x = int.Parse(tuple[0]);
-						region.offset.y = int.Parse(tuple[1]);
+						readTuple( reader );
+						region.offset.x = int.Parse( tuple[0] );
+						region.offset.y = int.Parse( tuple[1] );
 						context.Logger.LogMessage( "Offset: {0}, {1}", region.offset.x, region.offset.y );
 
-						region.index = int.Parse(readValue(reader));
-						context.Logger.LogMessage( "Index: {0}", region.index);
+						region.index = int.Parse( readValue( reader ) );
+						context.Logger.LogMessage( "Index: {0}", region.index );
 
 						//if (flip) region.flip = true;
 
-						regions.Add(region);
+						regions.Add( region );
 					}
 				}
 
@@ -223,10 +229,11 @@ namespace Nez
 
 		}
 
-		private List<int>GetDimensions(string line, ContentBuildLogger logger)
+
+		private List<int> GetDimensions( string line, ContentBuildLogger logger )
 		{
-			int colonPosition = line.IndexOf(':');
-			int comaPosition = line.IndexOf(',');
+			int colonPosition = line.IndexOf( ':' );
+			int comaPosition = line.IndexOf( ',' );
 
 			List<int> res = new List<int>();
 			string x = line.Substring( colonPosition + 1, comaPosition - colonPosition - 1 ).Trim();
@@ -234,33 +241,41 @@ namespace Nez
 			logger.LogMessage( x );
 			logger.LogMessage( y );
 
-			res.Add(int.Parse( x ));
-			res.Add(int.Parse( y ));
+			res.Add( int.Parse( x ) );
+			res.Add( int.Parse( y ) );
 
 			return res;
 		}
 
+
 		/** Returns the number of tuple values read (1, 2 or 4). */
-		static int readTuple (StreamReader reader) {
+		static int readTuple( StreamReader reader )
+		{
 			String line = reader.ReadLine();
-			int colon = line.IndexOf(':');
-			if (colon == -1) throw new Exception("Invalid line: " + line);
+			int colon = line.IndexOf( ':' );
+			if( colon == -1 )
+				throw new Exception( "Invalid line: " + line );
 			int i = 0, lastMatch = colon + 1;
-			for (i = 0; i < 3; i++) {
-				int comma = line.IndexOf(',', lastMatch);
-				if (comma == -1) break;
-				tuple[i] = line.Substring(lastMatch, comma-lastMatch).Trim();
+			for( i = 0; i < 3; i++ )
+			{
+				int comma = line.IndexOf( ',', lastMatch );
+				if( comma == -1 )
+					break;
+				tuple[i] = line.Substring( lastMatch, comma - lastMatch ).Trim();
 				lastMatch = comma + 1;
 			}
-			tuple[i] = line.Substring(lastMatch).Trim();
+			tuple[i] = line.Substring( lastMatch ).Trim();
 			return i + 1;
 		}
 
-		static String readValue (StreamReader reader) {
+
+		static String readValue( StreamReader reader )
+		{
 			String line = reader.ReadLine();
-			int colon = line.IndexOf(':');
-			if (colon == -1) throw new Exception("Invalid line: " + line);
-			return line.Substring(colon + 1).Trim();
+			int colon = line.IndexOf( ':' );
+			if( colon == -1 )
+				throw new Exception( "Invalid line: " + line );
+			return line.Substring( colon + 1 ).Trim();
 		}
 	}
 }

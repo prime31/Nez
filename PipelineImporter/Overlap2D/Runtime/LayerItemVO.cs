@@ -23,6 +23,7 @@ SOFTWARE.
 */
 using System;
 
+
 namespace Nez.Overlap2D.Runtime
 {
 	public class LayerItemVO
@@ -31,26 +32,32 @@ namespace Nez.Overlap2D.Runtime
 		public bool isLocked = false;
 		public bool isVisible = false;
 
-		public LayerItemVO() {
+		public LayerItemVO()
+		{
 
 		}
 
-		public LayerItemVO(String name) {
+		public LayerItemVO( String name )
+		{
 			layerName = name;
 			isVisible = true;
 		}
 
-		public LayerItemVO(LayerItemVO vo) {
+		public LayerItemVO( LayerItemVO vo )
+		{
 			layerName = vo.layerName;
 			isLocked = vo.isLocked;
 			isVisible = vo.isVisible;
 		}
 
-		public static LayerItemVO createDefault() {
+		public static LayerItemVO createDefault()
+		{
 			LayerItemVO layerItemVO = new LayerItemVO();
 			layerItemVO.layerName = "Default";
 			layerItemVO.isVisible = true;
 			return layerItemVO;
-		}	}
+		}
+
+	}
 }
 

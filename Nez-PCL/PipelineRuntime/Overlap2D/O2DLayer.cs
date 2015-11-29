@@ -1,7 +1,7 @@
 ﻿using System;
 
 
-namespace Nez
+namespace Nez.Overlap2D
 {
 	public class O2DLayer
 	{

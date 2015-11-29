@@ -7,6 +7,7 @@ using Microsoft.Xna.Framework;
 using System.Diagnostics;
 using Nez.TextureAtlases;
 
+
 namespace Nez.LibGdxAtlases
 {
 	public class LibGdxAtlasReader : ContentTypeReader<LibGdxAtlas>

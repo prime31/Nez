@@ -1,7 +1,7 @@
 ﻿using System;
 
 
-namespace Nez
+namespace Nez.LibGdxAtlases
 {
 	public class LibGdxAtlasRect
 	{
@@ -10,9 +10,9 @@ namespace Nez
 		public int w;
 		public int h;
 
+
 		public LibGdxAtlasRect()
-		{
-		}
+		{}
 	}
 }
 

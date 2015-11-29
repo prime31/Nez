@@ -1,7 +1,7 @@
 ﻿using System;
 
 
-namespace Nez
+namespace Nez.Overlap2D
 {
 	public class O2DMainItem
 	{
@@ -10,16 +10,16 @@ namespace Nez
 		public String itemName = "";
 		public String[] tags = null;
 		public String customVars = "";
-		public float x; 
+		public float x;
 		public float y;
-		public float scaleX	=	1f; 
+		public float scaleX	=	1f;
 		public float scaleY	=	1f;
 		public float originX	= 0;
 		public float originY	= 0;
 		public float rotation;
 		public int zIndex = 0;
 		public String layerName = "";
-		public float[] tint = {1, 1, 1, 1};
+		public float[] tint = { 1, 1, 1, 1 };
 
 		public String shaderName = "";
 

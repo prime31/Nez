@@ -25,76 +25,106 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 
+
 namespace Nez.Overlap2D.Runtime
 {
 	public class CustomVariables
 	{
-		private Dictionary<String, String> variables = new Dictionary<String, String>();
+		Dictionary<String,String> variables = new Dictionary<String,String>();
 
-		public CustomVariables() {
 
+		public CustomVariables()
+		{
 		}
 
-		public void loadFromString(String varString) {
+		public void loadFromString( String varString )
+		{
 			variables.Clear();
-			String[] vars = varString.Split(';');
-			for(int i = 0; i < vars.Length; i++) {
-				String[] tmp = vars[i].Split(':');
-				if(tmp.Length > 1) {
-					setVariable(tmp[0], tmp[1]);
+			String[] vars = varString.Split( ';' );
+			for( int i = 0; i < vars.Length; i++ )
+			{
+				String[] tmp = vars[i].Split( ':' );
+				if( tmp.Length > 1 )
+				{
+					setVariable( tmp[0], tmp[1] );
 				}
 			}
 		}
 
-		public String saveAsString() {
+		public String saveAsString()
+		{
 			String result = "";
-			foreach (var entry in variables) {
+			foreach( var entry in variables )
+			{
 				String key = entry.Key;
 				String value = entry.Value;
 				result += key + ":" + value + ";";
 			}
-			if(result.Length > 0) {
-				result = result.Substring(0, result.Length-1);
+			if( result.Length > 0 )
+			{
+				result = result.Substring( 0, result.Length - 1 );
 			}
 
 			return result;
 		}
 
-		public void setVariable(String key, String value) {
-			variables.Add(key, value);
+
+		public void setVariable( String key, String value )
+		{
+			variables.Add( key, value );
 		}
 
-		public void removeVariable(String key) {
-			variables.Remove(key);
+
+		public void removeVariable( String key )
+		{
+			variables.Remove( key );
 		}
 
-		public String getStringVariable(String key) {
+
+		public String getStringVariable( String key )
+		{
 			return variables[key];
 		}
 
-		public int getIntegerVariable(String key) {
+
+		public int getIntegerVariable( String key )
+		{
 			int result = 0;
-			try {
-				result = int.Parse(variables[key]);
-			} catch(Exception e) {}
+			try
+			{
+				result = int.Parse( variables[key] );
+			}
+			catch( Exception )
+			{
+			}
 
 			return result;
 		}
 
-		public float getFloatVariable(String key) {
+
+		public float getFloatVariable( String key )
+		{
 			float result = 0;
-			try {
-				result = float.Parse(variables[key]);
-			} catch(Exception e) {}
+			try
+			{
+				result = float.Parse( variables[key] );
+			}
+			catch( Exception )
+			{
+			}
 
 			return result;
 		}
 
-		public Dictionary<String, String> getHashMap() {
+
+		public Dictionary<String, String> getHashMap()
+		{
 			return variables;
 		}
 
-		public int getCount() {
+
+		public int getCount()
+		{
 			return variables.Count;
 		}
 	}
