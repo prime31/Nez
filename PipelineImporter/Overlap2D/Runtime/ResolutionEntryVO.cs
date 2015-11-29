@@ -23,7 +23,6 @@ SOFTWARE.
 */
 using System;
 
-
 namespace Nez.Overlap2D.Runtime
 {
 	public class ResolutionEntryVO
@@ -34,50 +33,34 @@ namespace Nez.Overlap2D.Runtime
 		public int height;
 		public int baseResolution;
 
-
-		public override String ToString()
-		{
-			if( width == 0 && height == 0 )
+		public override String ToString() {
+			if (width == 0 && height == 0) {
 				return name;
-
+			}
 			return width + "x" + height + " (" + name + ")";
 		}
 
-
-		public float getMultiplier( ResolutionEntryVO originalResolution )
-		{
-			float mul;
-			if( baseResolution == 0 )
-			{
-				mul = (float)originalResolution.width / width;
+		public override bool Equals(Object obj) {
+			if (obj == null) {
+				return false;
 			}
-			else
-			{
-				mul = (float)originalResolution.height / height;
+
+			ResolutionEntryVO other = obj as ResolutionEntryVO;
+			if ((System.Object)other == null) {
+				return false;
+			}
+
+			return other.name.Equals(name);
+		}
+
+		public float getMultiplier(ResolutionEntryVO originalResolution) {
+			float mul;
+			if(baseResolution == 0) {
+				mul = (float)originalResolution.width/width;
+			} else {
+				mul = (float)originalResolution.height/height;
 			}
 			return mul;
-		}
-
-
-		public override bool Equals( Object obj )
-		{
-			if( obj == null )
-				return false;
-
-			var other = obj as ResolutionEntryVO;
-			if( (System.Object)other == null )
-			{
-				return false;
-			}
-
-			return other.name.Equals( name );
-		}
-
-
-		public override int GetHashCode()
-		{
-			return base.GetHashCode();
-		}
-	}
+		}	}
 }
 

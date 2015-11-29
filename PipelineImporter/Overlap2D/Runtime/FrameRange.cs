@@ -23,7 +23,6 @@ SOFTWARE.
 */
 using System;
 
-
 namespace Nez.Overlap2D.Runtime
 {
 	public class FrameRange
@@ -32,13 +31,11 @@ namespace Nez.Overlap2D.Runtime
 		public int startFrame;
 		public int endFrame;
 
-		public FrameRange()
-		{
+		public FrameRange() {
 
 		}
 
-		public FrameRange( String name, int startFrame, int endFrame )
-		{
+		public FrameRange(String name, int startFrame, int endFrame) {
 			this.name = name;
 			this.startFrame = startFrame;
 			this.endFrame = endFrame;

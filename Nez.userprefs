@@ -1,9 +1,12 @@
-﻿<Properties MonoDevelop.MonoMac.LastXamMacNagTime="11/29/2015 10:04:21 PM" StartupItem="MacTester/MacTester.csproj" RefactoringSettings.EnableRefactorings="True">
+﻿<Properties MonoDevelop.MonoMac.LastXamMacNagTime="11/27/2015 8:37:49 PM" StartupItem="MacTester/MacTester.csproj" RefactoringSettings.EnableRefactorings="True">
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="MacTester/Scenes.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="PipelineImporter/XMLTemplateMaker/XmlTemplateMakerProcessor.cs">
     <Files>
       <File FileName="MacTester/Game1.cs" Line="1" Column="1" />
-      <File FileName="MacTester/Scenes.cs" Line="200" Column="8" />
+      <File FileName="MacTester/Scenes.cs" Line="1" Column="1" />
+      <File FileName="Nez-PCL/ECS/Components/Renderables/Particles/ParticleType.cs" Line="15" Column="32" />
+      <File FileName="PipelineImporter/ParticleSystemSettings/ParticleSystemSettingsProcessor.cs" Line="10" Column="1" />
+      <File FileName="PipelineImporter/XMLTemplateMaker/XmlTemplateMakerProcessor.cs" Line="19" Column="4" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>

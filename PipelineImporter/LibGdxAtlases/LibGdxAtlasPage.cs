@@ -1,7 +1,7 @@
 ﻿using System;
 
 
-namespace Nez.LibGdxAtlases
+namespace Nez
 {
 	public class LibGdxAtlasPage
 	{
@@ -15,8 +15,7 @@ namespace Nez.LibGdxAtlases
 		public bool uWrap;
 		public bool vWrap;
 
-
-		public LibGdxAtlasPage( string textureFile, float width, float height, bool useMipMaps, string format, string minFilter, string magFilter, bool uWrap, bool vWrap )
+		public LibGdxAtlasPage(string textureFile, float width, float height, bool useMipMaps, string format, string minFilter, string magFilter, bool uWrap, bool vWrap)
 		{
 			this.textureFile = textureFile;
 			this.width = width;

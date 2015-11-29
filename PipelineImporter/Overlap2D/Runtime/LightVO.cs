@@ -23,18 +23,12 @@ SOFTWARE.
 */
 using System;
 
-
 namespace Nez.Overlap2D.Runtime
 {
 	public class LightVO : MainItemVO
 	{
 		//public int itemId = -1;
-		public enum LightType
-		{
-			POINT,
-			CONE
-		};
-
+		public enum LightType {POINT, CONE};
 		public LightType type;
 		public int rays = 12;
 		public float distance = 300;
@@ -44,9 +38,7 @@ namespace Nez.Overlap2D.Runtime
 		public bool isStatic = true;
 		public bool isXRay = true;
 
-
-		public LightVO()
-		{
+		public LightVO() {
 			tint = new float[4];
 			tint[0] = 1f;
 			tint[1] = 1f;
@@ -54,9 +46,7 @@ namespace Nez.Overlap2D.Runtime
 			tint[3] = 1f;
 		}
 
-
-		public LightVO( LightVO vo ) : base( vo )
-		{
+		public LightVO(LightVO vo) : base(vo) {
 			type = vo.type;
 			rays = vo.rays;
 			distance = vo.distance;

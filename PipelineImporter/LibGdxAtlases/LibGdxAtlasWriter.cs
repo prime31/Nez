@@ -3,8 +3,7 @@ using System.IO;
 using Microsoft.Xna.Framework.Content.Pipeline;
 using Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler;
 
-
-namespace Nez.LibGdxAtlases
+namespace Nez
 {
 	[ContentTypeWriter]
 	public class LibGdxAtlasDWriter : ContentTypeWriter<LibGdxAtlasProcessorResult>
@@ -18,7 +17,7 @@ namespace Nez.LibGdxAtlases
 			foreach( var page in data.pages )
 			{
 				LibGdxAtlasProcessor.logger.LogMessage( "Writing page: {0}", page.textureFile );
-				writer.Write( Path.GetFileNameWithoutExtension( page.textureFile ) );
+				writer.Write( Path.GetFileNameWithoutExtension(page.textureFile) );
 				int count = 0;
 				foreach( var region in data.regions )
 				{

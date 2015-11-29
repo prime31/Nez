@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using Nez.TextureAtlases;
 using Nez.Textures;
 
-
 namespace Nez.LibGdxAtlases
 {
 	public class LibGdxAtlas
@@ -15,8 +14,7 @@ namespace Nez.LibGdxAtlases
 		{
 		}
 
-		public Subtexture getSubtexture( string name )
-		{
+		public Subtexture getSubtexture(string name) {
 			foreach( var a in atlases )
 			{
 				if( a.containsSubtexture( name ) )

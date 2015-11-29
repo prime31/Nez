@@ -23,7 +23,6 @@ SOFTWARE.
 */
 using System;
 
-
 namespace Nez.Overlap2D.Runtime
 {
 	public class Image9patchVO : MainItemVO
@@ -32,12 +31,10 @@ namespace Nez.Overlap2D.Runtime
 		public float width = 0;
 		public float height = 0;
 
-		public Image9patchVO() : base()
-		{
+		public Image9patchVO() : base() {
 		}
 
-		public Image9patchVO( Image9patchVO vo ) : base( vo )
-		{
+		public Image9patchVO(Image9patchVO vo) : base(vo) {
 			imageName = vo.imageName;
 			width = vo.width;
 			height = vo.height;

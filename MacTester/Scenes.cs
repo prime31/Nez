@@ -9,7 +9,6 @@ using Nez.TextureAtlases;
 using Nez.Overlap2D;
 using Nez.LibGdxAtlases;
 
-
 namespace MacTester
 {
 	public static class Scenes
@@ -31,7 +30,7 @@ namespace MacTester
 
 			// load a TiledMap and move it back so is drawn before other entities
 			var tiledEntity = scene.createAndAddEntity<Entity>( "tiled-map-entity" );
-			var tiledmap = scene.contentManager.Load<TiledMap>( "bin/MacOSX/Tilemap/tilemap" );
+			var tiledmap = scene.contentManager.Load<TiledMap>( "Tilemap/tilemap" );
 			tiledEntity.addComponent( new TiledMapComponent( tiledmap, "collision" ) );
 			tiledEntity.depth += 5;
 
@@ -39,7 +38,8 @@ namespace MacTester
 			// create a sprite animation from an atlas
 			var plumeTexture = scene.contentManager.Load<Texture2D>( "Images/plume" );
 			var subtextures = Subtexture.subtexturesFromAtlas( plumeTexture, 16, 16 );
-			var spriteAnimation = new SpriteAnimation( subtextures ) {
+			var spriteAnimation = new SpriteAnimation( subtextures )
+			{
 				loop = true,
 				fps = 10
 			};
@@ -99,7 +99,8 @@ namespace MacTester
 			entity.position.X = 30;
 
 			// create a sprite animation from an atlas
-			var spriteAnimation = new SpriteAnimation() {
+			var spriteAnimation = new SpriteAnimation()
+			{
 				loop = true,
 				fps = 10
 			};
@@ -194,21 +195,19 @@ namespace MacTester
 			scene.addRenderer( new DefaultRenderer() );
 			scene.clearColor = Color.Aquamarine;
 
+			var o2ds = scene.contentManager.Load<O2DScene>( "Overlap2D/MainScene" );
 			var sceneEntity = scene.createAndAddEntity<Entity>( "overlap2d-scene-entity" );
-			var o2ds = scene.contentManager.Load<O2DScene>( "bin/MacOSX/Overlap2D/MainScene" );
-			var sceneTexture = scene.contentManager.Load<LibGdxAtlas>( "bin/MacOSX/Overlap2D/packatlas" );
+			var sceneTexture = scene.contentManager.Load<LibGdxAtlas>( "Overlap2D/packatlas" );
 			foreach( var si in o2ds.sImages )
 			{
-				try
-				{
-					var i = new Image( sceneTexture.getSubtexture( si.imageName ) );
+				try {
+					var i = new Image(sceneTexture.getSubtexture(si.imageName));
 					i.position = new Vector2( si.x, -si.y );
 					i.origin = new Vector2( si.originX, si.originY );
 					i.scale = new Vector2( si.scaleX, si.scaleY );
 					sceneEntity.addComponent( i );
+				} catch(Exception) {
 				}
-				catch( Exception )
-				{}
 			}
 
 

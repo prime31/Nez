@@ -4,7 +4,6 @@ using Microsoft.Xna.Framework.Content.Pipeline;
 using Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler;
 using Nez.Overlap2D.Runtime;
 
-
 namespace Nez.Overlap2D
 {
 	[ContentTypeWriter]
@@ -15,14 +14,14 @@ namespace Nez.Overlap2D
 			Overlap2DProcessor.logger.LogMessage( "qui" );
 			var scene = result.scene;
 			Overlap2DProcessor.logger.LogMessage( "{0}", scene.sceneName );
-			writer.Write( scene.sceneName );
+			writer.Write(scene.sceneName);
 			Overlap2DProcessor.logger.LogMessage( "prova" );
 			Overlap2DProcessor.logger.LogMessage( "" + scene.composite.sImages );
 			Overlap2DProcessor.logger.LogMessage( "Processing {0} simple images", scene.composite.sImages.Count );
 			writer.Write( scene.composite.sImages.Count );
 			foreach( var si in scene.composite.sImages )
 			{
-				Overlap2DProcessor.logger.LogMessage( "Processing image {0}", si.imageName );
+				Overlap2DProcessor.logger.LogMessage("Processing image {0}", si.imageName );
 				writer.Write( si.uniqueId );
 				writer.Write( si.itemIdentifier );
 				writer.Write( si.itemName );

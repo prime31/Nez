@@ -1,7 +1,7 @@
 ﻿using System;
 
 
-namespace Nez.Overlap2D
+namespace Nez
 {
 	public class O2DSimpleImage : O2DMainItem
 	{

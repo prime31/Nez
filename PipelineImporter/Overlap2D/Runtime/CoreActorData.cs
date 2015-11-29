@@ -23,7 +23,6 @@ SOFTWARE.
 */
 using System;
 
-
 namespace Nez.Overlap2D.Runtime
 {
 	public class CoreActorData
@@ -34,3 +33,4 @@ namespace Nez.Overlap2D.Runtime
 		public CustomVariables customVars = null;
 	}
 }
+

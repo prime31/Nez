@@ -1,8 +1,7 @@
 ﻿using System;
 using Microsoft.Xna.Framework.Content.Pipeline;
 
-
-namespace Nez.LibGdxAtlases
+namespace Nez
 {
 	[ContentProcessor( DisplayName = "libGDX Atlas Processor" )]
 	public class LibGdxAtlasProcessor : ContentProcessor<LibGdxAtlasFile, LibGdxAtlasProcessorResult>
