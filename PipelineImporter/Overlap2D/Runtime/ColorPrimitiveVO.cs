@@ -23,15 +23,18 @@ SOFTWARE.
 */
 using System;
 
+
 namespace Nez.Overlap2D.Runtime
 {
 	public class ColorPrimitiveVO : MainItemVO
 	{
-		public ColorPrimitiveVO() : base() {
+		public ColorPrimitiveVO() : base()
+		{
 		}
 
-		public ColorPrimitiveVO(ColorPrimitiveVO vo) : base(vo) {
-		}	
+		public ColorPrimitiveVO( ColorPrimitiveVO vo ) : base( vo )
+		{
+		}
 	}
 }
 

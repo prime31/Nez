@@ -23,6 +23,7 @@ SOFTWARE.
 */
 using System;
 
+
 namespace Nez.Overlap2D.Runtime
 {
 	public class Circle
@@ -31,11 +32,11 @@ namespace Nez.Overlap2D.Runtime
 		public float y;
 		public float radius;
 
-		public Circle ()
+		public Circle()
 		{
 		}
 
-		public Circle (float x, float y, float radius)
+		public Circle( float x, float y, float radius )
 		{
 			this.x = x;
 			this.y = y;
@@ -44,4 +45,3 @@ namespace Nez.Overlap2D.Runtime
 
 	}
 }
-

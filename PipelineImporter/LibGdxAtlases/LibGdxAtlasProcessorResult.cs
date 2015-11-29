@@ -1,6 +1,7 @@
 ﻿using System;
 
-namespace Nez
+
+namespace Nez.LibGdxAtlases
 {
 	public class LibGdxAtlasProcessorResult
 	{
