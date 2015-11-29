@@ -104,3 +104,37 @@
 /processor:XmlTemplateMakerProcessor
 /build:ParticleSystemSettings/Temp.xml
 
+#begin Overlap2D/MainScene.dt
+/importer:Overlap2DImporter
+/processor:Overlap2DProcessor
+/build:Overlap2D/MainScene.dt
+
+#begin Overlap2D/pack.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Overlap2D/pack.png
+
+#begin Overlap2D/pack2.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Overlap2D/pack2.png
+
+#begin Overlap2D/packatlas.atlas
+/importer:LibGdxAtlasImporter
+/processor:LibGdxAtlasProcessor
+/build:Overlap2D/packatlas.atlas
+
