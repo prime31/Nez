@@ -6,7 +6,8 @@ using Nez.Textures;
 using Nez.Tiled;
 using Nez.Sprites;
 using Nez.TextureAtlases;
-
+using Nez.Overlap2D;
+using Nez.LibGdxAtlases;
 
 namespace MacTester
 {
@@ -29,7 +30,7 @@ namespace MacTester
 
 			// load a TiledMap and move it back so is drawn before other entities
 			var tiledEntity = scene.createAndAddEntity<Entity>( "tiled-map-entity" );
-			var tiledmap = scene.contentManager.Load<TiledMap>( "bin/MacOSX/Tilemap/tilemap" );
+			var tiledmap = scene.contentManager.Load<TiledMap>( "Tilemap/tilemap" );
 			tiledEntity.addComponent( new TiledMapComponent( tiledmap, "collision" ) );
 			tiledEntity.depth += 5;
 
@@ -184,6 +185,31 @@ namespace MacTester
 			// add a follow camera
 			var camFollow = scene.createAndAddEntity<Entity>( "camera-follow" );
 			camFollow.addComponent( new FollowCamera( entity ) );
+
+			return scene;
+		}
+
+		public static Scene sceneOverlap2D()
+		{
+			var scene = new Scene();
+			scene.addRenderer( new DefaultRenderer() );
+			scene.clearColor = Color.Aquamarine;
+
+			var o2ds = scene.contentManager.Load<O2DScene>( "Overlap2D/MainScene" );
+			var sceneEntity = scene.createAndAddEntity<Entity>( "overlap2d-scene-entity" );
+			var sceneTexture = scene.contentManager.Load<LibGdxAtlas>( "Overlap2D/packatlas" );
+			foreach( var si in o2ds.sImages )
+			{
+				try {
+					var i = new Image(sceneTexture.getSubtexture(si.imageName));
+					i.position = new Vector2( si.x, -si.y );
+					i.origin = new Vector2( si.originX, si.originY );
+					i.scale = new Vector2( si.scaleX, si.scaleY );
+					sceneEntity.addComponent( i );
+				} catch(Exception) {
+				}
+			}
+
 
 			return scene;
 		}

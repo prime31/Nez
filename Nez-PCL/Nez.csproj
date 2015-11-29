@@ -168,5 +168,12 @@
     <Compile Include="PipelineRuntime\TexturePacker\TexturePackerAtlasReader.cs" />
     <Compile Include="PipelineRuntime\TextureAtlas\TextureAtlas.cs" />
     <Compile Include="PipelineRuntime\TextureAtlas\TextureAtlasReader.cs" />
+    <Compile Include="PipelineRuntime\LibGdxAtlases\LibGdxAtlas.cs" />
+    <Compile Include="PipelineRuntime\LibGdxAtlases\LibGdxAtlasReader.cs" />
+    <Compile Include="PipelineRuntime\Overlap2D\O2DLayer.cs" />
+    <Compile Include="PipelineRuntime\Overlap2D\O2DMainItem.cs" />
+    <Compile Include="PipelineRuntime\Overlap2D\O2DScene.cs" />
+    <Compile Include="PipelineRuntime\Overlap2D\O2DSceneReader.cs" />
+    <Compile Include="PipelineRuntime\Overlap2D\O2DSimpleImage.cs" />
   </ItemGroup>
 </Project>
