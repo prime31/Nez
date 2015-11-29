@@ -90,6 +90,15 @@ namespace Nez.TextureAtlases
 			throw new KeyNotFoundException( name );
 		}
 
+		/// <summary>
+		/// checks whether the subtexture is contained in this atlas.
+		/// </summary>
+		/// <returns><c>true</c>, if subtexture is containsed, <c>false</c> otherwise.</returns>
+		/// <param name="name">the image name</param>
+		public bool containsSubtexture(string name) {
+			int index;
+			return (_subtextureMap.TryGetValue(name, out index));
+		}
 
 		/// <summary>
 		/// returns a SpriteAnimation given an animationName where the animationName is the folder that contains the images
