@@ -1,5 +1,7 @@
 using Microsoft.Xna.Framework.Content.Pipeline;
 using Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler;
+using System.Collections.Generic;
+using Microsoft.Xna.Framework.Content.Pipeline.Graphics;
 
 
 namespace Nez.BitmapFontImporter
@@ -9,11 +11,12 @@ namespace Nez.BitmapFontImporter
 	{
 		protected override void Write( ContentWriter writer, BitmapFontProcessorResult result )
 		{
-			writer.Write( result.textureAssets.Count );
+			// write our textures
+			writer.Write( result.textures.Count );
+			foreach( var tex in result.textures )
+				writer.WriteObject( tex );
 
-			foreach( var textureAsset in result.textureAssets )
-				writer.Write( textureAsset );
-
+			// write the font data
 			var fontFile = result.fontFile;
 			writer.Write( fontFile.common.lineHeight );
 			writer.Write( fontFile.chars.Count );

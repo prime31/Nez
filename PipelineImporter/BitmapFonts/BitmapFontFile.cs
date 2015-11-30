@@ -8,25 +8,25 @@ namespace Nez.BitmapFontImporter
 	// ---- By DeadlyDan @ deadlydan@gmail.com -------------------
 	// ---- There's no license restrictions, use as you will. ----
 	// ---- Credits to http://www.angelcode.com/ -----------------
-	[XmlRoot("font")]
-    public class BitmapFontFile
+	[XmlRoot( "font" )]
+	public class BitmapFontFile
 	{
-		[XmlElement("info")]
+		[XmlElement( "info" )]
 		public BitmapFontInfo info;
 		
-		[XmlElement("common")]
+		[XmlElement( "common" )]
 		public BitmapFontCommon common;
 
-		[XmlArray("pages")]
-		[XmlArrayItem("page")]
+		[XmlArray( "pages" )]
+		[XmlArrayItem( "page" )]
 		public List<BitmapFontPage> pages;
 
-		[XmlArray("chars")]
-		[XmlArrayItem("char")]
+		[XmlArray( "chars" )]
+		[XmlArrayItem( "char" )]
 		public List<BitmapFontChar> chars;
 		
-		[XmlArray("kernings")]
-		[XmlArrayItem("kerning")]
+		[XmlArray( "kernings" )]
+		[XmlArrayItem( "kerning" )]
 		public List<BitmapFontKerning> kernings;
-	}	
+	}
 }

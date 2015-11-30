@@ -12,18 +12,10 @@ namespace Nez.BitmapFonts
 	{
 		protected override BitmapFont Read( ContentReader reader, BitmapFont existingInstance )
 		{
-			var textureAssetCount = reader.ReadInt32();
-			var assets = new List<string>();
-
-			for( var i = 0; i < textureAssetCount; i++ )
-			{
-				var assetName = reader.ReadString();
-				assets.Add( assetName );
-			}
-
-			var textures = assets
-                .Select( textureName => reader.ContentManager.Load<Texture2D>( reader.getRelativeAssetPath( textureName ) ) )
-                .ToArray();
+			var totalTextures = reader.ReadInt32();
+			var textures = new Texture2D[totalTextures];
+			for( var i = 0; i < totalTextures; i++ )
+				textures[i] = reader.ReadObject<Texture2D>();
 
 			var lineHeight = reader.ReadInt32();
 			var regionCount = reader.ReadInt32();
