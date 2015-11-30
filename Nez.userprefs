@@ -1,15 +1,14 @@
-﻿<Properties MonoDevelop.MonoMac.LastXamMacNagTime="11/30/2015 3:39:46 AM" StartupItem="MacTester/MacTester.csproj" RefactoringSettings.EnableRefactorings="True">
+﻿<Properties MonoDevelop.MonoMac.LastXamMacNagTime="11/30/2015 9:26:26 PM" StartupItem="MacTester/MacTester.csproj" RefactoringSettings.EnableRefactorings="True">
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="MacTester/Scenes.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="PipelineImporter/JsonImpoter/JsonImporter.cs">
     <Files>
-      <File FileName="MacTester/Game1.cs" Line="1" Column="1" />
-      <File FileName="MacTester/Scenes.cs" Line="67" Column="1" />
+      <File FileName="MacTester/Scenes.cs" Line="1" Column="1" />
+      <File FileName="Nez-PCL/Math/RectangleExtension.cs" Line="1" Column="1" />
+      <File FileName="PipelineImporter/JsonImpoter/JsonImporter.cs" Line="19" Column="48" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
-    <BreakpointStore>
-      <Breakpoint file="/Users/desaro/Documents/dev/MonoGame/Nez/MacTester/Scenes.cs" line="70" column="1" />
-    </BreakpointStore>
+    <BreakpointStore />
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
   <MonoDevelop.Ide.DebuggingService.PinnedWatches />
 </Properties>

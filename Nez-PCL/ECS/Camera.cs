@@ -10,9 +10,48 @@ namespace Nez
 	{
 		#region Fields and Properties
 
-		public Vector2 position;
-		public float rotation;
-		public Vector2 origin;
+		protected Vector2 _position;
+		public Vector2 position
+		{
+			get { return _position; }
+			set
+			{
+				if( _position != value )
+				{
+					_position = value;
+					forceMatrixUpdate();
+				}
+			}
+		}
+
+		protected Vector2 _origin;
+		public Vector2 origin
+		{
+			get { return _origin; }
+			set
+			{
+				if( _origin != value )
+				{
+					_origin = value;
+					forceMatrixUpdate();
+				}
+			}
+		}
+
+		protected float _rotation;
+		public float rotation
+		{
+			get { return _rotation; }
+			set
+			{
+				if( _rotation != value )
+				{
+					_rotation = value;
+					forceMatrixUpdate();
+				}
+			}
+		}
+
 		readonly GraphicsDevice _graphicsDevice;
 
 		float _zoom;
@@ -32,8 +71,7 @@ namespace Nez
 			get { return _minimumZoom; }
 			set
 			{
-				if( value < 0 )
-					throw new ArgumentException( "MinimumZoom must be greater than zero" );
+				Debug.assertIsTrue( value > 0, "MinimumZoom must be greater than zero" );
 
 				if( zoom < value )
 					zoom = minimumZoom;
@@ -48,8 +86,7 @@ namespace Nez
 			get { return _maximumZoom; }
 			set
 			{
-				if( value < 0 )
-					throw new ArgumentException( "MaximumZoom must be greater than zero" );
+				Debug.assertIsTrue( value > 0, "MaximumZoom must be greater than zero" );
 
 				if( zoom > value )
 					zoom = value;
@@ -220,7 +257,7 @@ namespace Nez
 
 		public void roundPosition()
 		{
-			Mathf.round( ref position );
+			Mathf.round( ref _position );
 			_matrixesAreDirty = true;
 		}
 
@@ -234,22 +271,18 @@ namespace Nez
 
 			// offset our position to match the new center
 			position += origin;
-			
-			_matrixesAreDirty = true;
 		}
 
 
 		public void move( Vector2 direction )
 		{
 			position += Vector2.Transform( direction, Matrix.CreateRotationZ( -rotation ) );
-			_matrixesAreDirty = true;
 		}
 
 
 		public void rotate( float deltaRadians )
 		{
 			rotation += deltaRadians;
-			_matrixesAreDirty = true;
 		}
 
 

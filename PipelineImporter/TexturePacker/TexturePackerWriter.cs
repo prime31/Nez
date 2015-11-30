@@ -12,22 +12,22 @@ namespace Nez.TexturePackerImporter
 		protected override void Write( ContentWriter writer, TexturePackerProcessorResult result )
 		{
 			var data = result.Data;
-			var metadata = data.Metadata;
+			var metadata = data.metadata;
 
 			var assetName = Path.GetFileNameWithoutExtension( metadata.image );
 
 			writer.Write( assetName );
-			writer.Write( data.Regions.Count );
+			writer.Write( data.regions.Count );
 
-			foreach( var region in data.Regions )
+			foreach( var region in data.regions )
 			{
-				var regionName = Path.GetFileNameWithoutExtension( region.Filename );
+				var regionName = Path.GetFileNameWithoutExtension( region.filename );
 
 				writer.Write( regionName );
-				writer.Write( region.Frame.X );
-				writer.Write( region.Frame.Y );
-				writer.Write( region.Frame.Width );
-				writer.Write( region.Frame.Height );
+				writer.Write( region.frame.x );
+				writer.Write( region.frame.y );
+				writer.Write( region.frame.width );
+				writer.Write( region.frame.height );
 			}
 		}
 

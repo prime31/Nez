@@ -4,12 +4,12 @@ using Newtonsoft.Json;
 
 namespace Nez.TexturePackerImporter
 {
-    public class TexturePackerFile
-    {
-        [JsonProperty("frames")]
-        public List<TexturePackerRegion> Regions;
+	public class TexturePackerFile
+	{
+		[JsonProperty( "frames" )]
+		public List<TexturePackerRegion> regions;
 
-        [JsonProperty("meta")]
-        public TexturePackerMeta Metadata;
-    }
+		[JsonProperty( "meta" )]
+		public TexturePackerMeta metadata;
+	}
 }

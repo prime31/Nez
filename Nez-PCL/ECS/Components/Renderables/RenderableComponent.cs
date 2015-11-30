@@ -11,8 +11,45 @@ namespace Nez
 		public abstract float width { get; }
 		public abstract float height { get; }
 
-		public Vector2 position;
-		public Vector2 origin;
+		protected Vector2 _position;
+		public Vector2 position
+		{
+			get { return _position; }
+			set
+			{
+				if( _position != value )
+				{
+					_position = value;
+				}
+			}
+		}
+
+		protected Vector2 _origin;
+		public Vector2 origin
+		{
+			get { return _origin; }
+			set
+			{
+				if( _origin != value )
+				{
+					_origin = value;
+				}
+			}
+		}
+
+		protected float _rotation;
+		public float rotation
+		{
+			get { return _rotation; }
+			set
+			{
+				if( _rotation != value )
+				{
+					_rotation = value;
+				}
+			}
+		}
+
 		public Vector2 scale = Vector2.One;
 
 		/// <summary>
@@ -23,7 +60,7 @@ namespace Nez
 			set { scale = new Vector2( value, value ); }
 		}
 
-		public float rotation;
+
 		/// <summary>
 		/// standard SpriteBatch layerdepth
 		/// </summary>
@@ -31,7 +68,7 @@ namespace Nez
 		public Color color = Color.White;
 		public SpriteEffects spriteEffects = SpriteEffects.None;
 
-		int _renderLayer;
+		protected int _renderLayer;
 		public int renderLayer
 		{
 			get { return _renderLayer; }
@@ -77,14 +114,14 @@ namespace Nez
 
 		public Vector2 renderPosition
 		{
-			get { return entity.position + position; }
+			get { return entity.position + _position; }
 		}
 			
 		public Rectangle bounds
 		{
 			get
 			{
-				return RectangleExtension.fromFloats( entity.position.X + position.X - origin.X * scale.X, entity.position.Y + position.Y - origin.Y * scale.Y, width * scale.X, height * scale.Y );
+				return RectangleExtension.fromFloats( entity.position.X + _position.X - _origin.X * scale.X, entity.position.Y + _position.Y - _origin.Y * scale.Y, width * scale.X, height * scale.Y );
 			}
 		}
 
@@ -94,7 +131,7 @@ namespace Nez
 		/// <value>The origin normalized.</value>
 		public Vector2 originNormalized
 		{
-			get { return new Vector2( origin.X / width, origin.Y / height ); }
+			get { return new Vector2( _origin.X / width, _origin.Y / height ); }
 			set { origin = new Vector2( value.X * width, value.Y * height ); }
 		}
 
@@ -153,7 +190,7 @@ namespace Nez
 		void drawOutline( Graphics graphics, Color outlineColor, int offset = 1 )
 		{
 			// save the stuff we are going to modify so we can restore it later
-			var originalPosition = position;
+			var originalPosition = _position;
 			var originalColor = color;
 			var originalLayerDepth = layerDepth;
 
@@ -167,14 +204,14 @@ namespace Nez
 				{
 					if( i != 0 || j != 0 )
 					{
-						position = originalPosition + new Vector2( i * offset, j * offset );
+						_position = originalPosition + new Vector2( i * offset, j * offset );
 						//render( graphics );
 					}
 				}
 			}
 
 			// restore changed state
-			position = originalPosition;
+			_position = originalPosition;
 			color = originalColor;
 			layerDepth = originalLayerDepth;
 		}

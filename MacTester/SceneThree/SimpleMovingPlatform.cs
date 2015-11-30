@@ -64,14 +64,14 @@ namespace MacTester
 			if( deltaX != 0f )
 			{
 				// TODO: remainder
-				entity.position.X += deltaX;
+				entity.position += new Vector2( deltaX, 0f );
 				moveX( deltaX, allActors, ridingActors );
 			}
 
 			if( deltaY != 0f )
 			{
 				// TODO: remainder
-				entity.position.Y += deltaY;
+				entity.position += new Vector2( 0f, deltaY );
 				moveY( deltaY, allActors, ridingActors );
 			}
 

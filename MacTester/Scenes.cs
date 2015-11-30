@@ -82,14 +82,13 @@ namespace MacTester
 			image.zoom = 2f;
 			entity.addComponent( image );
 			entity.addComponent( new FramesPerSecondCounter( Graphics.instance.spriteFont, Color.White, FramesPerSecondCounter.FPSDockPosition.TopLeft ) );
-			entity.position.Y = 120;
+			entity.position = new Vector2( 120f, 0f );
 			entity.collider = new BoxCollider();
 
 
 			entity = scene.createAndAddEntity<Entity>( "new-moon" );
 			image = new Image( moonTexture );
-			entity.position.X = 130;
-			entity.position.Y = 130;
+			entity.position = new Vector2( 130f, 130f );
 			entity.addComponent( image );
 
 
@@ -102,8 +101,7 @@ namespace MacTester
 			var textureAtlas = scene.contentManager.Load<TextureAtlas>( "bin/MacOSX/TextureAtlasTest/AtlasImages" );
 
 			entity = scene.createAndAddEntity<Entity>( "texture-atlas-sprite" );
-			entity.position.Y = 330;
-			entity.position.X = 30;
+			entity.position = new Vector2( 30f, 330f );
 
 			// create a sprite animation from an atlas
 			var spriteAnimation = new SpriteAnimation()

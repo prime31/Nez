@@ -11,12 +11,26 @@ namespace Nez
 		/// the scene this entity belongs to
 		/// </summary>
 		public Scene scene;
+
 		/// <summary>
 		/// entity name. useful for doing scene-wide searches for an entity
 		/// </summary>
 		public string name;
-		// TODO: should this be a property that fires a onEntityPositionChangedevent?
-		public Vector2 position;
+
+		// TODO: should this fire onEntityPositionChangedEvent?
+		protected Vector2 _position;
+		public Vector2 position
+		{
+			get { return _position; }
+			set
+			{
+				if( _position != value )
+				{
+					_position = value;
+				}
+			}
+		}
+
 		/// <summary>
 		/// list of all the components currently attached to this entity
 		/// </summary>
@@ -268,7 +282,7 @@ namespace Nez
 
 			var collideX = moveX( deltaX, neighbors, collisionHandler, triggerHandler );
 			var collideY = moveY( deltaY, neighbors, collisionHandler, triggerHandler );
-			Mathf.round( ref position );
+			position = _position.round();
 
 			// let Physics know about our new position
 			Physics.updateCollider( collider, ref oldBounds );
@@ -292,7 +306,7 @@ namespace Nez
 				_movementRemainder.X -= sign;
 				foreach( var neighbor in neighbors )
 				{
-					if( collider.collidesWithAtPosition( neighbor, position + deltaSinglePixelMovement ) )
+					if( collider.collidesWithAtPosition( neighbor, _position + deltaSinglePixelMovement ) )
 					{
 						// if we have a trigger notify the listener but we dont alter movement
 						if( neighbor.isTrigger || collider.isTrigger )
@@ -312,7 +326,7 @@ namespace Nez
 				}
 
 				// all clear
-				position.X += sign;
+				position += deltaSinglePixelMovement;
 				moveAmount -= sign;
 			}
 
@@ -338,7 +352,7 @@ namespace Nez
 
 				foreach( var neighbor in neighbors )
 				{
-					if( collider.collidesWithAtPosition( neighbor, position + deltaSinglePixelMovement ) )
+					if( collider.collidesWithAtPosition( neighbor, _position + deltaSinglePixelMovement ) )
 					{
 						// if we have a trigger notify the listener but we dont alter movement
 						if( neighbor.isTrigger || collider.isTrigger )
@@ -358,7 +372,7 @@ namespace Nez
 				}
 
 				// all clear
-				position.Y += sign;
+				position += deltaSinglePixelMovement;
 				moveAmount -= sign;
 			}
 

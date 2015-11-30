@@ -20,6 +20,10 @@ namespace Nez
 		}
 
 
+		/// <summary>
+		/// clones and returns a new Rectangle with the same data as the current rectangle
+		/// </summary>
+		/// <param name="rect">Rect.</param>
 		public static Rectangle clone( this Rectangle rect )
 		{
 			return new Rectangle( rect.X, rect.Y, rect.Width, rect.Height );
@@ -232,12 +236,22 @@ namespace Nez
 		}
 
 
+		/// <summary>
+		/// gets the center point of the rectangle as a Vector2
+		/// </summary>
+		/// <returns>The center.</returns>
+		/// <param name="rect">Rect.</param>
 		public static Vector2 getCenter( this Rectangle rect )
 		{
 			return new Vector2( rect.X + rect.Width / 2, rect.Y + rect.Height / 2 );
 		}
 
 
+		/// <summary>
+		/// gets the position of the rectangle as a Vector2
+		/// </summary>
+		/// <returns>The position.</returns>
+		/// <param name="rect">Rect.</param>
 		public static Vector2 getPosition( this Rectangle rect )
 		{
 			return new Vector2( rect.X, rect.Y );

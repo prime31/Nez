@@ -39,21 +39,17 @@ namespace Nez
 					break;
 				case FPSDockPosition.TopRight:
 					_horizontalAlign = HorizontalAlign.Right;
-					position.X = Core.graphicsDevice.Viewport.Width;
-					position.Y = 0;
+					position = new Vector2( Core.graphicsDevice.Viewport.Width, 0f );
 					break;
 				case FPSDockPosition.BottomLeft:
 					_horizontalAlign = HorizontalAlign.Left;
 					_verticalAlign = VerticalAlign.Bottom;
-					position.X = 0;
-					position.Y = Core.graphicsDevice.Viewport.Height;
 					position = new Vector2( 0, Core.graphicsDevice.Viewport.Height );
 					break;
 				case FPSDockPosition.BottomRight:
 					_horizontalAlign = HorizontalAlign.Right;
 					_verticalAlign = VerticalAlign.Bottom;
-					position.X = Core.graphicsDevice.Viewport.Width;
-					position.Y = Core.graphicsDevice.Viewport.Height;
+					position = new Vector2( Core.graphicsDevice.Viewport.Width, Core.graphicsDevice.Viewport.Height );
 					break;
 			}
 		}

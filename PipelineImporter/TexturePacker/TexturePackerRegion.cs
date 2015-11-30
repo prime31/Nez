@@ -3,32 +3,33 @@
 
 namespace Nez.TexturePackerImporter
 {
-    public class TexturePackerRegion
-    {
-        [JsonProperty("filename")]
-        public string Filename;
+	public class TexturePackerRegion
+	{
+		[JsonProperty( "filename" )]
+		public string filename;
 
-        [JsonProperty("frame")]
-        public TexturePackerRectangle Frame;
+		[JsonProperty( "frame" )]
+		public TexturePackerRectangle frame;
 
-        [JsonProperty("rotated")]
-        public bool IsRotated;
+		[JsonProperty( "rotated" )]
+		public bool isRotated;
 
-        [JsonProperty("trimmed")]
-        public bool IsTrimmed;
+		[JsonProperty( "trimmed" )]
+		public bool isTrimmed;
 
-        [JsonProperty("spriteSourceSize")]
-        public TexturePackerRectangle SourceRectangle;
+		[JsonProperty( "spriteSourceSize" )]
+		public TexturePackerRectangle sourceRectangle;
 
-        [JsonProperty("sourceSize")]
-        public TexturePackerSize SourceSize;
+		[JsonProperty( "sourceSize" )]
+		public TexturePackerSize sourceSize;
 
-        [JsonProperty("pivot")]
-        public TexturePackerPoint PivotPoint;
+		[JsonProperty( "pivot" )]
+		public TexturePackerPoint pivotPoint;
 
-        public override string ToString()
-        {
-            return string.Format("{0} {1}", Filename, Frame);
-        }
-    }
+
+		public override string ToString()
+		{
+			return string.Format( "{0} {1}", filename, frame );
+		}
+	}
 }

@@ -8,11 +8,24 @@ namespace Nez
 	public abstract class Collider
 	{
 		public Entity entity;
+
 		/// <summary>
 		/// position is added to entity.position to get the final position for the collider
 		/// </summary>
-		public Vector2 position;
-		Vector2 _origin;
+		protected Vector2 _position;
+		public Vector2 position
+		{
+			get { return _position; }
+			set
+			{
+				if( _position != value )
+				{
+					_position = value;
+				}
+			}
+		}
+
+		protected Vector2 _origin;
 		public Vector2 origin
 		{
 			get { return _origin; }
@@ -33,7 +46,7 @@ namespace Nez
 		/// <value>The origin normalized.</value>
 		public Vector2 originNormalized
 		{
-			get { return new Vector2( origin.X / width, origin.Y / height ); }
+			get { return new Vector2( _origin.X / width, _origin.Y / height ); }
 			set { origin = new Vector2( value.X * width, value.Y * height ); }
 		}
 
@@ -54,7 +67,7 @@ namespace Nez
 			get
 			{
 				// TODO: cache this and block with a dirty flag so that we only update when necessary
-				return RectangleExtension.fromFloats( entity.position.X + position.X - origin.X, entity.position.Y + position.Y - origin.Y, width, height );
+				return RectangleExtension.fromFloats( entity.position.X + _position.X - _origin.X, entity.position.Y + _position.Y - _origin.Y, width, height );
 			}
 		}
 
@@ -67,11 +80,13 @@ namespace Nez
 
 		public bool collidesWithAtPosition( Collider collider, Vector2 position )
 		{
+			// store off the position so we can restore it after the check
 			var savedPosition = entity.position;
 			entity.position = position;
 
 			var result = collidesWith( collider );
 
+			// restore position
 			entity.position = savedPosition;
 			return result;
 		}

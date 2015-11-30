@@ -103,21 +103,23 @@ namespace Nez
 
 		void updateCentering()
 		{
+			var oldOrigin = _origin;
+
 			if( _horizontalAlign == HorizontalAlign.Left )
-				origin.X = 0;
+				oldOrigin.X = 0;
 			else if( _horizontalAlign == HorizontalAlign.Center )
-				origin.X = _size.X / 2;
+				oldOrigin.X = _size.X / 2;
 			else
-				origin.X = _size.X;
+				oldOrigin.X = _size.X;
 
 			if( _verticalAlign == VerticalAlign.Top )
-				origin.Y = 0;
+				oldOrigin.Y = 0;
 			else if( _verticalAlign == VerticalAlign.Center )
-				origin.Y = _size.Y / 2;
+				oldOrigin.Y = _size.Y / 2;
 			else
-				origin.Y = _size.Y;
+				oldOrigin.Y = _size.Y;
 
-			origin = new Vector2( (int)origin.X, (int)origin.Y );
+			origin = new Vector2( (int)oldOrigin.X, (int)oldOrigin.Y );
 		}
 
 
