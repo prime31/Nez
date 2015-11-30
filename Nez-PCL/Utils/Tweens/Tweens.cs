@@ -1,13 +1,11 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
+using Microsoft.Xna.Framework;
 
 
 /// <summary>
 /// concrete implementations of all tweenable types
 /// </summary>
-using Microsoft.Xna.Framework;
-
-
 namespace Nez.Tweens
 {
 	public class IntTween : Tween<int>
