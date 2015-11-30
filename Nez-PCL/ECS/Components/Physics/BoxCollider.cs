@@ -22,6 +22,7 @@ namespace Nez
 					_width = value;
 					if( entity != null && _isParentEntityAddedToScene )
 						Physics.updateCollider( this, ref oldBounds );
+					_areBoundsDirty = true;
 				}
 			}
 		}
@@ -42,6 +43,7 @@ namespace Nez
 					_height = value;
 					if( entity != null && _isParentEntityAddedToScene )
 						Physics.updateCollider( this, ref oldBounds );
+					_areBoundsDirty = true;
 				}
 			}
 		}
@@ -57,7 +59,7 @@ namespace Nez
 
 		public BoxCollider( float x, float y, float width, float height )
 		{
-			position = new Vector2( x, y );
+			_position = new Vector2( x, y );
 			_width = width;
 			_height = height;
 		}

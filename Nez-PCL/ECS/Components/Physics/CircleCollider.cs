@@ -18,6 +18,7 @@ namespace Nez
 				radius = value * 0.5f;
 				if( entity != null && _isParentEntityAddedToScene )
 					Physics.updateCollider( this, ref oldBounds );
+				_areBoundsDirty = true;
 			}
 		}
 
@@ -35,6 +36,7 @@ namespace Nez
 				radius = value * 0.5f;
 				if( entity != null && _isParentEntityAddedToScene )
 					Physics.updateCollider( this, ref oldBounds );
+				_areBoundsDirty = true;
 			}
 		}
 
@@ -56,7 +58,7 @@ namespace Nez
 		public CircleCollider( float radius, Vector2 origin )
 		{
 			this.radius = radius;
-			this.origin = origin;
+			_origin = origin;
 		}
 
 

@@ -61,7 +61,7 @@ namespace Nez
 			set
 			{
 				_zoom = MathHelper.Clamp( value, _minimumZoom, _maximumZoom );
-				_matrixesAreDirty = true;
+				_areMatrixesDirty = true;
 			}
 		}
 
@@ -104,10 +104,10 @@ namespace Nez
 		{
 			get
 			{
-				if( _matrixesAreDirty )
+				if( _areMatrixesDirty )
 					updateMatrixes();
 
-				if( _boundsAreDirty )
+				if( _areBoundsDirty )
 				{
 					// top-left and bottom-right are needed by either rotated or non-rotated bounds
 					var topLeft = screenToWorldPoint( new Vector2( _graphicsDevice.Viewport.X, _graphicsDevice.Viewport.Y ) );
@@ -135,7 +135,7 @@ namespace Nez
 						_bounds.Height = (int)( bottomRight.Y - topLeft.Y );
 					}
 
-					_boundsAreDirty = false;
+					_areBoundsDirty = false;
 				}
 
 				return _bounds;
@@ -147,7 +147,7 @@ namespace Nez
 		{
 			get
 			{
-				if( _matrixesAreDirty )
+				if( _areMatrixesDirty )
 					updateMatrixes();
 				return _transformMatrix;
 			}
@@ -158,7 +158,7 @@ namespace Nez
 		{
 			get
 			{
-				if( _matrixesAreDirty )
+				if( _areMatrixesDirty )
 					updateMatrixes();
 				return _inverseTransformMatrix;
 			}
@@ -176,16 +176,16 @@ namespace Nez
 				if( _viewportAdapter != value )
 				{
 					_viewportAdapter = value;
-					_matrixesAreDirty = true;
-					_boundsAreDirty = true;
+					_areMatrixesDirty = true;
+					_areBoundsDirty = true;
 				}
 			}
 		}
 
 		float _near = -10f;
 		float _far = 10f;
-		bool _matrixesAreDirty = true;
-		bool _boundsAreDirty = true;
+		bool _areMatrixesDirty = true;
+		bool _areBoundsDirty = true;
 
 		#endregion
 
@@ -206,11 +206,11 @@ namespace Nez
 
 		void onGraphicsDeviceReset()
 		{
-			_boundsAreDirty = true;
+			_areBoundsDirty = true;
 
 			// if we have a viewport adapter we also dirty the matrixes since it will be modifying itself
 			if( viewportAdapter != null )
-				_matrixesAreDirty = true;
+				_areMatrixesDirty = true;
 		}
 
 
@@ -230,8 +230,8 @@ namespace Nez
 			Matrix.Invert( ref _transformMatrix, out _inverseTransformMatrix );
 
 			// whenever the Matrixes change the bounds are then invalid
-			_boundsAreDirty = true;
-			_matrixesAreDirty = false;
+			_areBoundsDirty = true;
+			_areMatrixesDirty = false;
 		}
 
 
@@ -240,7 +240,7 @@ namespace Nez
 		/// </summary>
 		public void forceMatrixUpdate()
 		{
-			_matrixesAreDirty = _boundsAreDirty = true;
+			_areMatrixesDirty = _areBoundsDirty = true;
 		}
 
 
@@ -258,7 +258,7 @@ namespace Nez
 		public void roundPosition()
 		{
 			Mathf.round( ref _position );
-			_matrixesAreDirty = true;
+			_areMatrixesDirty = true;
 		}
 
 

@@ -21,6 +21,7 @@ namespace Nez
 				if( _position != value )
 				{
 					_position = value;
+					_areBoundsDirty = true;
 				}
 			}
 		}
@@ -36,6 +37,7 @@ namespace Nez
 					unregisterColliderWithPhysicsSystem();
 					_origin = value;
 					registerColliderWithPhysicsSystem();
+					_areBoundsDirty = true;
 				}
 			}
 		}
@@ -62,16 +64,22 @@ namespace Nez
 		public abstract float width { get; set; }
 		public abstract float height { get; set; }
 
+		protected Rectangle _bounds;
 		public virtual Rectangle bounds
 		{
 			get
 			{
-				// TODO: cache this and block with a dirty flag so that we only update when necessary
-				return RectangleExtension.fromFloats( entity.position.X + _position.X - _origin.X, entity.position.Y + _position.Y - _origin.Y, width, height );
+				if( _areBoundsDirty )
+				{
+					_bounds = RectangleExtension.fromFloats( entity.position.X + _position.X - _origin.X, entity.position.Y + _position.Y - _origin.Y, width, height );
+				}
+
+				return _bounds;
 			}
 		}
 
 		protected bool _isParentEntityAddedToScene;
+		protected bool _areBoundsDirty = true;
 
 
 		public Collider()

@@ -20,6 +20,7 @@ namespace Nez
 				if( _position != value )
 				{
 					_position = value;
+					_areBoundsDirty = true;
 				}
 			}
 		}
@@ -33,6 +34,7 @@ namespace Nez
 				if( _origin != value )
 				{
 					_origin = value;
+					_areBoundsDirty = true;
 				}
 			}
 		}
@@ -46,6 +48,7 @@ namespace Nez
 				if( _rotation != value )
 				{
 					_rotation = value;
+					_areBoundsDirty = true;
 				}
 			}
 		}
@@ -117,11 +120,17 @@ namespace Nez
 			get { return entity.position + _position; }
 		}
 			
+		protected Rectangle _bounds;
 		public Rectangle bounds
 		{
 			get
 			{
-				return RectangleExtension.fromFloats( entity.position.X + _position.X - _origin.X * scale.X, entity.position.Y + _position.Y - _origin.Y * scale.Y, width * scale.X, height * scale.Y );
+				if( _areBoundsDirty )
+				{
+					_bounds = RectangleExtension.fromFloats( entity.position.X + _position.X - _origin.X * scale.X, entity.position.Y + _position.Y - _origin.Y * scale.Y, width * scale.X, height * scale.Y );
+				}
+
+				return _bounds;
 			}
 		}
 
@@ -134,6 +143,8 @@ namespace Nez
 			get { return new Vector2( _origin.X / width, _origin.Y / height ); }
 			set { origin = new Vector2( value.X * width, value.Y * height ); }
 		}
+
+		protected bool _areBoundsDirty = true;
 
 
 		public RenderableComponent()
