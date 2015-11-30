@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
+using Nez.Systems;
 
 
 namespace Nez
@@ -16,9 +17,9 @@ namespace Nez
 
 		/// <summary>
 		/// Scene-specific ContentManager. Use it to load up any resources that are needed only by this scene. If you have global/multi-scene
-		/// resources you can use Core.instance.Content to load them since Nez will not ever unload them.
+		/// resources you can use Core.contentManager to load them since Nez will not ever unload them.
 		/// </summary>
-		public ContentManager contentManager;
+		public NezContentManager contentManager;
 
 		public bool enablePostProcessing;
 		readonly List<PostProcessor> _postProcessors = new List<PostProcessor>();
@@ -45,7 +46,7 @@ namespace Nez
 			camera = new Camera( Graphics.instance.graphicsDevice );
 			entities = new EntityList( this );
 			renderableComponents = new RenderableComponentList();
-			contentManager = new ContentManager( Core.instance.Services, Core.instance.Content.RootDirectory );
+			contentManager = new NezContentManager();
 		}
 
 

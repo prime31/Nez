@@ -8,6 +8,7 @@ using Nez.Sprites;
 using Nez.TextureAtlases;
 using Nez.Overlap2D;
 using Nez.LibGdxAtlases;
+using Nez.BitmapFonts;
 
 
 namespace MacTester
@@ -18,6 +19,7 @@ namespace MacTester
 		{
 			var scene = new Scene();
 			scene.clearColor = Color.Black;
+
 
 			// add a default renderer which will render everything
 			scene.addRenderer( new DefaultRenderer() );
@@ -62,6 +64,7 @@ namespace MacTester
 			scene.clearColor = Color.Coral;
 			scene.camera.centerOrigin();
 			var moonTexture = scene.contentManager.Load<Texture2D>( "Images/moon" );
+			var bmFont = scene.contentManager.Load<BitmapFont>( "bin/MacOSX/Fonts/pixelfont" );
 
 			// setup a renderer that renders everything to a RenderTexture making sure its order is before standard renderers!
 			var renderer = new DefaultRenderer( scene.camera, -1 );
@@ -90,6 +93,10 @@ namespace MacTester
 			entity.addComponent( image );
 
 
+			entity = scene.createAndAddEntity<Entity>( "bmfont" );
+			entity.addComponent( new BMFontText( bmFont, "This text is a BMFont", new Vector2( 0, 30 ), Color.Black ) );
+
+
 			// texture atlas tester
 			var anotherAtlas = scene.contentManager.Load<TextureAtlas>( "bin/MacOSX/TextureAtlasTest/AnotherAtlas" );
 			var textureAtlas = scene.contentManager.Load<TextureAtlas>( "bin/MacOSX/TextureAtlasTest/AtlasImages" );
@@ -99,7 +106,8 @@ namespace MacTester
 			entity.position.X = 30;
 
 			// create a sprite animation from an atlas
-			var spriteAnimation = new SpriteAnimation() {
+			var spriteAnimation = new SpriteAnimation()
+			{
 				loop = true,
 				fps = 10
 			};
@@ -208,7 +216,8 @@ namespace MacTester
 					sceneEntity.addComponent( i );
 				}
 				catch( Exception )
-				{}
+				{
+				}
 			}
 
 

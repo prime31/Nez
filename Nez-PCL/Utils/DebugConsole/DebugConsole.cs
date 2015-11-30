@@ -89,6 +89,15 @@ namespace Nez.Console
 		{
 			var str = obj.ToString();
 
+			// split up multi-line logs and log each line seperately
+			var parts = str.Split( new string[] { "\n" }, StringSplitOptions.RemoveEmptyEntries );
+			if( parts.Length > 1 )
+			{
+				foreach( var line in parts )
+					log( line );
+				return;
+			}
+
 			// Split the string if you overlow horizontally
 			var maxWidth = Core.graphicsDevice.PresentationParameters.BackBufferWidth - 40;
 			var screenHeight = Core.graphicsDevice.PresentationParameters.BackBufferHeight;
@@ -96,7 +105,7 @@ namespace Nez.Console
 			while( Graphics.instance.spriteFont.MeasureString( str ).X * FONT_SCALE.X > maxWidth )
 			{
 				var split = -1;
-				for( int i = 0; i < str.Length; i++ )
+				for( var i = 0; i < str.Length; i++ )
 				{
 					if( str[i] == ' ' )
 					{

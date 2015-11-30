@@ -24,24 +24,36 @@ namespace Nez.Console
 	public partial class DebugConsole
 	{
 		[Command( "clear", "Clears the terminal" )]
-		static public void clear()
+		static void clear()
 		{
 			DebugConsole.instance._drawCommands.Clear();
 		}
 
 
 		[Command( "exit", "Exits the game" )]
-		static private void exit()
+		static void exit()
 		{
-			Core.instance.Exit();
+			Core.exit();
+		}
+
+
+		[Command( "assets", "Logs all loaded assets. Pass 's' for scene assets or 'g' for global assets" )]
+		static void logLoadedAssets( string whichAssets = "s" )
+		{
+			if( whichAssets == "s" )
+				DebugConsole.instance.log( Core.scene.contentManager.logLoadedAssets() );
+			else if( whichAssets == "g" )
+				DebugConsole.instance.log( Core.contentManager.logLoadedAssets() );
+			else
+				DebugConsole.instance.log( "Invalid parameter" );
 		}
 
 
 		[Command( "vsync", "Enables or disables vertical sync" )]
 		static private void vsync( bool enabled = true )
 		{
-			Core.instance._graphicsManager.SynchronizeWithVerticalRetrace = enabled;
-			//Core.instance._graphicsManager.ApplyChanges(); // crashes mac
+			Core._instance._graphicsManager.SynchronizeWithVerticalRetrace = enabled;
+			//Core._instance._graphicsManager.ApplyChanges(); // crashes mac
 
 			DebugConsole.instance.log( "Vertical Sync " + ( enabled ? "Enabled" : "Disabled" ) );
 		}
@@ -50,7 +62,7 @@ namespace Nez.Console
 		[Command( "fixed", "Enables or disables fixed time step" )]
 		static private void fixedTimestep( bool enabled = true )
 		{
-			Core.instance.IsFixedTimeStep = enabled;
+			Core._instance.IsFixedTimeStep = enabled;
 			DebugConsole.instance.log( "Fixed Time Step " + ( enabled ? "Enabled" : "Disabled" ) );
 		}
 
@@ -58,7 +70,7 @@ namespace Nez.Console
 		[Command( "framerate", "Sets the target framerate" )]
 		static private void framerate( float target )
 		{
-			Core.instance.TargetElapsedTime = TimeSpan.FromSeconds( 1.0 / target );
+			Core._instance.TargetElapsedTime = TimeSpan.FromSeconds( 1.0 / target );
 		}
 
 
@@ -78,7 +90,7 @@ namespace Nez.Console
 		}
 
 
-		[Command( "tracker", "Logs all tracked objects in the scene. Set mode to 'e' for just entities, or 'c' for just components" )]
+		//[Command( "tracker", "Logs all tracked objects in the scene. Set mode to 'e' for just entities, or 'c' for just components" )]
 		static private void tracker( string mode )
 		{
 			if( Core.scene == null )
@@ -107,7 +119,7 @@ namespace Nez.Console
 		}
 
 
-		[Command( "pooler", "Logs the pooled Entity counts" )]
+		//[Command( "pooler", "Logs the pooled Entity counts" )]
 		static private void pooler()
 		{
 			//Engine.Pooler.Log();

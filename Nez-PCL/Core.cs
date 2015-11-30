@@ -14,10 +14,6 @@ namespace Nez
 	public class Core : Game
 	{
 		/// <summary>
-		/// facilitates easy access to the global Content instance
-		/// </summary>
-		public static Core instance;
-		/// <summary>
 		/// core emitter. emits only Core level events.
 		/// </summary>
 		public static Emitter<CoreEvents> emitter;
@@ -26,9 +22,21 @@ namespace Nez
 		public static bool debugRenderEnabled = false;
 		public static GraphicsDevice graphicsDevice;
 
+		/// <summary>
+		/// global content manager for loading any assets that should stick around between scenes
+		/// </summary>
+		public static NezContentManager contentManager;
+
+		/// <summary>
+		/// facilitates easy access to the global Content instance for internal classes
+		/// </summary>
+		internal static Core _instance;
+
 		internal GraphicsDeviceManager _graphicsManager;
 		Scene _scene;
 		Scene _nextScene;
+
+		// globally accessible systems
 		CoroutineManager _coroutineManager = new CoroutineManager();
 		TweenManager _tweenManager = new TweenManager();
 		TimerManager _timerManager = new TimerManager();
@@ -39,14 +47,14 @@ namespace Nez
 		/// </summary>
 		public static Scene scene
 		{
-			get { return instance._scene; }
-			set { instance._nextScene = value; }
+			get { return _instance._scene; }
+			set { _instance._nextScene = value; }
 		}
 
 
 		public Core( int width = 1280, int height = 720 )
 		{
-			instance = this;
+			_instance = this;
 			emitter = new Emitter<CoreEvents>( new CoreEventsComparer() );
 
 			_graphicsManager = new GraphicsDeviceManager( this );
@@ -61,6 +69,7 @@ namespace Nez
 			//Window.AllowUserResizing = true;
 
 			Content.RootDirectory = "Content";
+			contentManager = new NezContentManager( Services, Content.RootDirectory );
 			IsMouseVisible = true;
 			IsFixedTimeStep = false;
 		}
@@ -76,6 +85,16 @@ namespace Nez
 			// TODO: coalese these to avoid spamming once we have a scheduler/timer
 			emitter.emit( CoreEvents.GraphicsDeviceReset );
 		}
+
+
+		#region Passthroughs to Game
+
+		public static void exit()
+		{
+			_instance.Exit();
+		}
+
+		#endregion
 
 
 		#region Game overides
@@ -171,9 +190,9 @@ namespace Nez
 		/// <param name="isFullScreen">If set to <c>true</c> is full screen.</param>
 		public static void setScreenSize( int width, int height, bool isFullScreen = false )
 		{
-			instance._graphicsManager.PreferredBackBufferWidth = width;
-			instance._graphicsManager.PreferredBackBufferHeight = height;
-			instance._graphicsManager.IsFullScreen = isFullScreen;
+			_instance._graphicsManager.PreferredBackBufferWidth = width;
+			_instance._graphicsManager.PreferredBackBufferHeight = height;
+			_instance._graphicsManager.IsFullScreen = isFullScreen;
 			//instance._graphicsManager.ApplyChanges();
 			Debug.warn( "setScreenSize doesnt work properly on OS X. It causes a crash with no stack trace" );
 		}
@@ -189,7 +208,7 @@ namespace Nez
 		/// <param name="enumerator">Enumerator.</param>
 		public static ICoroutine startCoroutine( IEnumerator enumerator )
 		{
-			return instance._coroutineManager.startCoroutine( enumerator );
+			return _instance._coroutineManager.startCoroutine( enumerator );
 		}
 
 
@@ -202,7 +221,7 @@ namespace Nez
 		/// <param name="onTime">On time.</param>
 		public static ITimer schedule( float timeInSeconds, bool repeats, object context, Action<ITimer> onTime )
 		{
-			return instance._timerManager.schedule( timeInSeconds, repeats, context, onTime );
+			return _instance._timerManager.schedule( timeInSeconds, repeats, context, onTime );
 		}
 
 		#endregion
