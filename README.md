@@ -25,7 +25,7 @@ Nez needs to have the DefaultContent/Fonts/NezFont.xnb file placed in your proje
 
 ### Pipeline Importers
 
-Nez comes stock with a decent bunch of Pipeline tool importors including:
+Nez comes stock with a decent bunch of Pipeline tool importers including:
 
 - **Texture Atlas Generator**: give it a directory or a list of files and it will combine them all into a single atlas and provide easy access to the source UVs of each image. Also includes a per-folder sprite animation generation.
 - **Tiled**: import [Tiled](http://www.mapeditor.org/) maps. Covers tile, image and object layers and rendering with full culling support built in along with optimized collider generation.
