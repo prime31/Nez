@@ -47,7 +47,7 @@ namespace Nez
 					_verticalAlign = VerticalAlign.Bottom;
 					position.X = 0;
 					position.Y = Core.graphicsDevice.Viewport.Height;
-					position = new Vector2( 0, Core.instance.GraphicsDevice.Viewport.Height );
+					position = new Vector2( 0, Core.graphicsDevice.Viewport.Height );
 					break;
 				case FPSDockPosition.BottomRight:
 					_horizontalAlign = HorizontalAlign.Right;

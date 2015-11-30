@@ -43,6 +43,7 @@ namespace Nez.XmlTemplateMaker
 		{
 			foreach( var assembly in AppDomain.CurrentDomain.GetAssemblies() )
 			{
+				context.Logger.LogMessage( "checking assembly: {0}...", assembly.GetName().Name );
 				foreach( var type in assembly.GetTypes() )
 				{
 					if( type.FullName == inputClass )
@@ -50,7 +51,7 @@ namespace Nez.XmlTemplateMaker
 				}
 			}
 
-			throw new Exception( "Could not locate the Type for the class " + inputClass );
+			throw new Exception( "Could not locate the Type for the class " + inputClass + ". Did you add a reference to the DLL that contains the class in the Pipeline References?" );
 		}
 	}
 }

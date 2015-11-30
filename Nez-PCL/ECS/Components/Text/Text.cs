@@ -39,10 +39,6 @@ namespace Nez
 		}
 
 
-		public Text()
-		{}
-
-
 		public Text( SpriteFont font, string text, Vector2 position, Color color, HorizontalAlign horizontalAlign = HorizontalAlign.Center, VerticalAlign verticalAlign = VerticalAlign.Top )
 		{
 			_font = font;

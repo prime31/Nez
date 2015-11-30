@@ -175,5 +175,7 @@
     <Compile Include="PipelineRuntime\Overlap2D\O2DScene.cs" />
     <Compile Include="PipelineRuntime\Overlap2D\O2DSceneReader.cs" />
     <Compile Include="PipelineRuntime\Overlap2D\O2DSimpleImage.cs" />
+    <Compile Include="Utils\NezContentManager.cs" />
+    <Compile Include="ECS\Components\Text\BMFontText.cs" />
   </ItemGroup>
 </Project>
