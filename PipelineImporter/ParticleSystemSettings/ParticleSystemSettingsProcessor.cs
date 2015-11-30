@@ -12,6 +12,7 @@ namespace Nez.ParticleSystemSettings
 	/// to create the template easily). At runtime you can load it up like so:
 	/// 
 	/// var particleType = content.Load<ParticleType>( "ParticleSystemSettings/XmlFileName" );
+	/// particleType.loadParticleTexture( contentManager );
 	/// </summary>
 	[ContentProcessor( DisplayName = "Particle System Settings Processor" )]
 	public class ParticleSystemSettingsProcessor : ContentProcessor<ParticleType,ParticleType>
@@ -22,4 +23,3 @@ namespace Nez.ParticleSystemSettings
 		}
 	}
 }
-

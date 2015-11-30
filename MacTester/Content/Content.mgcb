@@ -13,6 +13,7 @@
 /reference:../../PipelineImporter/bin/Debug/Ionic.ZLib.dll
 /reference:../../PipelineImporter/bin/Debug/Newtonsoft.Json.dll
 /reference:../../PipelineImporter/bin/Debug/PipelineImporter.dll
+/reference:../../Nez-PCL/bin/Debug/Nez.dll
 
 #---------------------------------- Content ---------------------------------#
 
@@ -21,11 +22,6 @@
 /processor:FontDescriptionProcessor
 /processorParam:TextureFormat=Color
 /build:Fonts/DefaultFont.spritefont
-
-#begin Fonts/graphicpixel.ttf
-/importer:
-/processor:
-/build:Fonts/graphicpixel.ttf
 
 #begin Tilemap/background.png
 /importer:TextureImporter
@@ -137,4 +133,10 @@
 /importer:LibGdxAtlasImporter
 /processor:LibGdxAtlasProcessor
 /build:Overlap2D/packatlas.atlas
+
+#begin Fonts/pixelfont.fnt
+/importer:BitmapFontImporter
+/processor:BitmapFontProcessor
+/processorParam:CompressTexture=False
+/build:Fonts/pixelfont.fnt
 

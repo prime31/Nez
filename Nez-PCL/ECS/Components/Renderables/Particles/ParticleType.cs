@@ -3,13 +3,14 @@ using System.Collections.Generic;
 using Nez.Textures;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
+using Microsoft.Xna.Framework.Graphics;
 
 
 namespace Nez
 {
 	public class ParticleType
 	{
-		static private List<ParticleType> AllTypes = new List<ParticleType>();
+		static private List<ParticleType> AllPartcileTypes = new List<ParticleType>();
 
 		[ContentSerializerIgnore]
 		public Subtexture subtexture;
@@ -33,6 +34,11 @@ namespace Nez
 		public float rotationRateRange;
 		public bool scaleOut;
 
+		[ContentSerializer]
+		string particleTexture;
+		[ContentSerializer]
+		Rectangle particleTexturesourceRect;
+
 
 		public ParticleType()
 		{
@@ -48,7 +54,7 @@ namespace Nez
 			sizeRange = 0;
 			rotated = true;
 
-			AllTypes.Add( this );
+			AllPartcileTypes.Add( this );
 		}
 
 
@@ -75,7 +81,22 @@ namespace Nez
 			rotationRateRange = copy.rotationRateRange;
 			scaleOut = copy.scaleOut;
 
-			AllTypes.Add( this );
+			AllPartcileTypes.Add( this );
+		}
+
+
+		/// <summary>
+		/// if a ParticleType is loaded from an xml config file this method should be called to handle loading the texture if one is present
+		/// </summary>
+		/// <param name="content">Content.</param>
+		public void loadParticleTexture( ContentManager content )
+		{
+			if( particleTexture != null )
+			{
+				var texture = content.Load<Texture2D>( particleTexture );
+				subtexture = new Subtexture( texture, particleTexturesourceRect );
+				particleTexture = null;
+			}
 		}
 
 

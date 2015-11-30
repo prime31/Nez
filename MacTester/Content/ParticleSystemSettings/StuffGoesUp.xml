@@ -20,5 +20,7 @@
     <rotationRate>0</rotationRate>
     <rotationRateRange>0</rotationRateRange>
     <scaleOut>true</scaleOut>
+	<particleTexture>Images/moon</particleTexture>
+	<particleTexturesourceRect>0 0 128 128</particleTexturesourceRect>
   </Asset>
 </XnaContent>
