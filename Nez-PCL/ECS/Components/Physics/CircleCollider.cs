@@ -38,6 +38,15 @@ namespace Nez
 			}
 		}
 
+		public override Rectangle bounds
+		{
+			get
+			{
+				// TODO: cache this and block with a dirty flag so that we only update when necessary
+				return RectangleExtension.fromFloats( entity.position.X + position.X - radius, entity.position.Y + position.Y - radius, width, height );
+			}
+		}
+
 
 		/// <summary>
 		/// zero param constructor requires that a RenderableComponent be on the entity so that the collider can size itself when the
@@ -62,6 +71,7 @@ namespace Nez
 
 		public override void debugRender( Graphics graphics )
 		{
+			graphics.drawCircle( bounds.getCenter(), 1, Color.Beige );
 			graphics.drawCircle( bounds.getCenter(), radius, Color.IndianRed );
 		}
 
