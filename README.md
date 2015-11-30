@@ -1,10 +1,25 @@
 ## Nez
 
+Nez aims to be a lightweight 2D game engine that sits on top of MonoGame/FNA. It provides a solid base for you to build a 2D game on. Some of the many features it includes are:
+
+- Scene/Entity/Component system with automatic Entity tag tracking and Component render layer tracking
+- SpatialHash for super fast broadphase physics lookups (note that Nez does not provide any physics engine. It provides collision data that you can do whatever you want to with it.)
+- AABB collision/trigger detection along with circle and line collisions and raycasts against the SpatialHash
+- in-game debug console extendable by adding an attribute to any static method
+- extensible rendering system. Add/remove renderers and post processors as needed.
+- built-in coroutine support
+- tweening system. Tween any int/float/Vector/quaternion/color/rectangle field or property
+- sprites with sprite animations
+- optimized event emitter for core events that you can also add to any class of your own
+- scheduler for delayed and repeating tasks
+- synchronous or asynchronous asset loading
+- tons more stuff
+
 
 
 ### Setup
 
-Nez needs to have the DefaultContent/Fonts/NezFont.xnb file placed in your projects Content folder.
+Nez needs to have the DefaultContent/Fonts/NezFont.xnb file placed in your projects Content folder. It sets up the font as the default for all text and it's debug console
 
 
 
@@ -13,7 +28,7 @@ Nez needs to have the DefaultContent/Fonts/NezFont.xnb file placed in your proje
 Nez comes stock with a decent bunch of Pipeline tool importors including:
 
 - **Texture Atlas Generator**: give it a directory or a list of files and it will combine them all into a single atlas and provide easy access to the source UVs of each image. Also includes a per-folder sprite animation generation.
-- **Tiled**: import [Tiled](http://www.mapeditor.org/) maps. Covers tile, image and object layers and rendering with full culling support built in.
+- **Tiled**: import [Tiled](http://www.mapeditor.org/) maps. Covers tile, image and object layers and rendering with full culling support built in along with optimized collider generation.
 - **Bitmap Fonts**: imports BMFont files (from programs like [Glyph Designer](https://71squared.com/glyphdesigner), [Littera](http://kvazars.com/littera/), etc). Outputs a single xnb file and includes SpriteBatch extension methods to display text.
 - **LibGdxAtlases**: imports libGDX texture atlases
 - **Overlap2D**: imports [Overlap2D](http://overlap2d.com/) projects. Imports almost all of the data but currently only offers renderers for the basics (no fancy stuff like Spriter animations, lights, etc).
