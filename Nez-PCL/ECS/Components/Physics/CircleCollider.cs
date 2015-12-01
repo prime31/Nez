@@ -60,12 +60,28 @@ namespace Nez
 		{}
 
 
+		/// <summary>
+		/// creates a CircleCollider with radius. Note that when specifying a radius if using a RenderableComponent on the Entity as well you
+		/// will need to set the origin to align the CircleCollider. For example, if the RenderableComponent has a 0,0 origin and a CircleCollider
+		/// with a radius of 1.5f * renderable.width is created you can offset the origin by just setting the originNormalied to the center
+		/// divided by the scaled size:
+		/// 
+		/// 	entity.collider = new CircleCollider( moonTexture.Width * 1.5f );
+		///     entity.collider.originNormalized = Vector2Extension.halfVector() / 1.5f;
+		/// </summary>
+		/// <param name="radius">Radius.</param>
 		public CircleCollider( float radius )
 		{
 			_radius = radius;
 		}
 
 
+		/// <summary>
+		/// creates a <see cref="Nez.CircleCollider"/> with radius. Note that when specifying a radius if using a RenderableComponent on the Entity as well you
+		/// will need to set the appropriate origin to align the <see cref="Nez.CircleCollider"/>
+		/// </summary>
+		/// <param name="radius">Radius.</param>
+		/// <param name="origin">Origin.</param>
 		public CircleCollider( float radius, Vector2 origin )
 		{
 			_radius = radius;
@@ -76,7 +92,7 @@ namespace Nez
 		public override void debugRender( Graphics graphics )
 		{
 			graphics.drawCircle( bounds.getCenter(), _radius, Color.IndianRed );
-			graphics.drawPixel( entity.position + localPosition, Color.Blue, 4 );
+			graphics.drawPixel( bounds.getCenter(), Color.IndianRed, 4 );
 		}
 
 

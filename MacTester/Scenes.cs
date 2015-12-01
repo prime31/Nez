@@ -74,7 +74,7 @@ namespace MacTester
 			// stick a couple moons on screen
 			var entity = scene.createAndAddEntity<Entity>( "moon" );
 			var image = new Image( moonTexture );
-			image.originNormalized = new Vector2( 0.5f, 0.5f );
+			image.originNormalized = Vector2Extension.halfVector();
 			image.zoom = 2f;
 			entity.addComponent( image );
 			entity.addComponent( new FramesPerSecondCounter( Graphics.instance.spriteFont, Color.White, FramesPerSecondCounter.FPSDockPosition.TopLeft ) );

@@ -141,8 +141,10 @@ namespace Nez
 					// circle colliders need special care with the origin
 					if( this is CircleCollider )
 					{
-						if( renderable.origin.X == 0f && renderable.origin.Y == 0f )
-							originNormalized = Vector2Extension.halfVector();
+						// fetch the Renderable's center, transfer it to local coordinates and use that as the origin of our collider
+						var center = renderableBounds.Center;
+						var localCenter = center.ToVector2() - entity.position;
+						origin = localCenter;
 					}
 					else
 					{
