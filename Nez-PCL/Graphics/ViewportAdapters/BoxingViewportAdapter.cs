@@ -33,7 +33,7 @@ namespace Nez
 
 			var x = (int)( screenWidth / 2 ) - ( drawWidth / 2 );
 			var y = (int)( screenHeight / 2 ) - ( drawHeight / 2 );
-			_graphicsDevice.Viewport = new Viewport( x, y, drawWidth, drawHeight );
+			viewport = new Viewport( x, y, drawWidth, drawHeight );
 
 			scaleMatrix = Matrix.CreateScale( drawWidth / (float)virtualWidth );
 		}
@@ -41,8 +41,8 @@ namespace Nez
 
 		public override Vector2 pointToVirtualViewport( Vector2 point )
 		{
-			point.X -= _graphicsDevice.Viewport.X;
-			point.Y -= _graphicsDevice.Viewport.Y;
+			point.X -= viewport.X;
+			point.Y -= viewport.Y;
 
 			return point;
 		}
@@ -50,8 +50,8 @@ namespace Nez
 
 		public override Vector2 screenToVirtualViewport( Vector2 point )
 		{
-			point.X += _graphicsDevice.Viewport.X;
-			point.Y += _graphicsDevice.Viewport.Y;
+			point.X += viewport.X;
+			point.Y += viewport.Y;
 
 			return point;
 		}

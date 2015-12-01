@@ -52,7 +52,7 @@ namespace Nez
 		}
 
 
-		public Core( int width = 1280, int height = 720 )
+		public Core( int width = 1280, int height = 720, bool isFullScreen = false)
 		{
 			_instance = this;
 			emitter = new Emitter<CoreEvents>( new CoreEventsComparer() );
@@ -61,7 +61,7 @@ namespace Nez
 			//_graphicsManager.PreferredDepthStencilFormat = DepthFormat.Depth24Stencil8; // defaults to Depth24
 			_graphicsManager.PreferredBackBufferWidth = width;
 			_graphicsManager.PreferredBackBufferHeight = height;
-			_graphicsManager.IsFullScreen = false;
+			_graphicsManager.IsFullScreen = isFullScreen;
 			_graphicsManager.SynchronizeWithVerticalRetrace = true;
 			_graphicsManager.DeviceReset += onGraphicsDeviceReset;
 
