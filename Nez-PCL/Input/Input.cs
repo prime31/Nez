@@ -30,7 +30,7 @@ namespace Nez
 
 			int count = 0;
 			try {
-				for (var i = 0 ; i < 4 ; i++) {
+				for (var i = 0 ; i < 2 ; i++) {
 					Microsoft.Xna.Framework.Input.GamePad.GetCapabilities((PlayerIndex)i);
 					count++;
 				}
