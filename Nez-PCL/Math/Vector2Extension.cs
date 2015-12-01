@@ -14,6 +14,16 @@ namespace Nez
 		{
 			return new Vector2( Mathf.round( vec.X ), Mathf.round( vec.Y ) );
 		}
+
+
+		/// <summary>
+		/// returns a 0.5, 0.5 vector
+		/// </summary>
+		/// <returns>The vector.</returns>
+		public static Vector2 halfVector()
+		{
+			return new Vector2( 0.5f, 0.5f );
+		}
 	}
 }
 
