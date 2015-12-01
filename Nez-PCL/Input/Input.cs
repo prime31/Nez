@@ -28,6 +28,17 @@ namespace Nez
 			_previousMouseState = new MouseState();
 			_currentMouseState = Microsoft.Xna.Framework.Input.Mouse.GetState();
 
+			int count = 0;
+			try {
+				for (var i = 0 ; i < 4 ; i++) {
+					Microsoft.Xna.Framework.Input.GamePad.GetCapabilities((PlayerIndex)i);
+					count++;
+				}
+			} catch (Exception e) {
+			} finally {
+				MAX_SUPPORTED_GAMEPADS = count;
+			}
+
 			for( var i = 0; i < MAX_SUPPORTED_GAMEPADS; i++ )
 				gamePads[i] = new GamePadData( (PlayerIndex)i );
 		}
