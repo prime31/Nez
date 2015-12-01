@@ -5,7 +5,6 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Nez
 {
-	// TODO: all matrix creation should be done via Create method that takes a ref Matrix
 	public class Camera
 	{
 		#region Fields and Properties
@@ -216,11 +215,15 @@ namespace Nez
 
 		void updateMatrixes()
 		{
-			_transformMatrix =
-				Matrix.CreateTranslation( -(int)position.X, -(int)position.Y, 0f ) * // position
-				Matrix.CreateScale( zoom, zoom, 1f ) * // scale ->
-				Matrix.CreateRotationZ( rotation ) * // rotation
-				Matrix.CreateTranslation( (int)origin.X, (int)origin.Y, 0f ); // translate -origin
+			Matrix tempMat;
+
+			_transformMatrix = Matrix.CreateTranslation( -position.X, -position.Y, 0f ); // position
+			Matrix.CreateScale( zoom, zoom, 1f, out tempMat ); // scale ->
+			Matrix.Multiply( ref _transformMatrix, ref tempMat, out _transformMatrix );
+			Matrix.CreateRotationZ( rotation, out tempMat ); // rotation
+			Matrix.Multiply( ref _transformMatrix, ref tempMat, out _transformMatrix );
+			Matrix.CreateTranslation( (int)origin.X, (int)origin.Y, 0f, out tempMat ); // translate -origin
+			Matrix.Multiply( ref _transformMatrix, ref tempMat, out _transformMatrix );
 
 			// if we have a ViewportAdapter take it into account
 			if( _viewportAdapter != null )
@@ -229,7 +232,7 @@ namespace Nez
 			// calculate our inverse as well
 			Matrix.Invert( ref _transformMatrix, out _inverseTransformMatrix );
 
-			// whenever the Matrixes change the bounds are then invalid
+			// whenever the matrix changes the bounds are then invalid
 			_areBoundsDirty = true;
 			_areMatrixesDirty = false;
 		}
@@ -314,7 +317,7 @@ namespace Nez
 
 
 		/// <summary>
-		/// converts a oint from screen coordinates to world
+		/// converts a point from screen coordinates to world
 		/// </summary>
 		/// <returns>The to world point.</returns>
 		/// <param name="screenPosition">Screen position.</param>

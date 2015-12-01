@@ -56,6 +56,14 @@ namespace Nez
 
 
 		/// <summary>
+		/// called when the entity's position changes. This allows components to be aware that they have moved due to the parent
+		/// entity moving.
+		/// </summary>
+		public virtual void onEntityPositionChanged()
+		{}
+
+
+		/// <summary>
 		/// called in the same frame as onAddedToEntity but after all pending component changes are committed
 		/// </summary>
 		public virtual void onAwake()

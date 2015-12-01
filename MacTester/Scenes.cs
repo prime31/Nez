@@ -41,7 +41,8 @@ namespace MacTester
 			// create a sprite animation from an atlas
 			var plumeTexture = scene.contentManager.Load<Texture2D>( "Images/plume" );
 			var subtextures = Subtexture.subtexturesFromAtlas( plumeTexture, 16, 16 );
-			var spriteAnimation = new SpriteAnimation( subtextures ) {
+			var spriteAnimation = new SpriteAnimation( subtextures )
+			{
 				loop = true,
 				fps = 10
 			};
@@ -183,7 +184,7 @@ namespace MacTester
 			var uglyBackgroundEntity = scene.createAndAddEntity<Entity>( "bg" );
 			uglyBackgroundEntity.depth = 5;
 			var image = new Image( scene.contentManager.Load<Texture2D>( "Images/dots-512" ) );
-			image.zoom = 5f;
+			image.zoom = 4f;
 			uglyBackgroundEntity.addComponent( image );
 
 
@@ -194,10 +195,12 @@ namespace MacTester
 			return scene;
 		}
 
+
 		public static Scene sceneOverlap2D()
 		{
 			var scene = new Scene();
 			scene.addRenderer( new DefaultRenderer() );
+			scene.camera.centerOrigin();
 			scene.clearColor = Color.Aquamarine;
 
 			var sceneEntity = scene.createAndAddEntity<Entity>( "overlap2d-scene-entity" );

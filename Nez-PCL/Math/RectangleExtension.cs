@@ -20,6 +20,57 @@ namespace Nez
 		}
 
 
+		public static void calculateBounds( ref Rectangle rect, Vector2 parentPosition, Vector2 position, Vector2 origin, Vector2 scale, float rotation, float width, float height )
+		{
+			if( rotation == 0f )
+			{
+				rect.X = (int)( parentPosition.X + position.X - origin.X * scale.X );
+				rect.Y = (int)( parentPosition.Y + position.Y - origin.Y * scale.Y );
+				rect.Width = (int)( width * scale.X );
+				rect.Height = (int)( height * scale.Y );
+			}
+			else
+			{
+				// special care for rotated bounds. we need to find our absolute min/max values and create the bounds from that
+				var worldPosX = parentPosition.X + position.X;
+				var worldPosY = parentPosition.Y + position.Y;
+
+				Matrix tempMat;
+				// set the reference point to world reference taking origin into account
+				var transformMatrix = Matrix.CreateTranslation( -worldPosX - origin.X, -worldPosY - origin.Y, 0f );
+				Matrix.CreateScale( scale.X, scale.Y, 1f, out tempMat ); // scale ->
+				Matrix.Multiply( ref transformMatrix, ref tempMat, out transformMatrix );
+				Matrix.CreateRotationZ( rotation, out tempMat ); // rotate ->
+				Matrix.Multiply( ref transformMatrix, ref tempMat, out transformMatrix );
+				Matrix.CreateTranslation( worldPosX, worldPosY, 0f, out tempMat ); // translate back
+				Matrix.Multiply( ref transformMatrix, ref tempMat, out transformMatrix );
+
+
+				// get all four corners in world space
+				var topLeft = new Vector2( worldPosX, worldPosY );
+				var topRight = new Vector2( worldPosX + width, worldPosY );
+				var bottomLeft = new Vector2( worldPosX, worldPosY + height );
+				var bottomRight = new Vector2( worldPosX + width, worldPosY + height );
+
+				// transform the corners into our work space
+				Vector2.Transform( ref topLeft, ref transformMatrix, out topLeft );
+				Vector2.Transform( ref topRight,ref transformMatrix, out topRight );
+				Vector2.Transform( ref bottomLeft, ref transformMatrix, out bottomLeft );
+				Vector2.Transform( ref bottomRight, ref transformMatrix, out bottomRight );
+
+				// find the min and max values so we can concoct our bounding box
+				var minX = (int)Mathf.minOf( topLeft.X, bottomRight.X, topRight.X, bottomLeft.X );
+				var maxX = (int)Mathf.maxOf( topLeft.X, bottomRight.X, topRight.X, bottomLeft.X );
+				var minY = (int)Mathf.minOf( topLeft.Y, bottomRight.Y, topRight.Y, bottomLeft.Y );
+				var maxY = (int)Mathf.maxOf( topLeft.Y, bottomRight.Y, topRight.Y, bottomLeft.Y );
+
+				rect.Location = new Point( minX, minY );
+				rect.Width = (int)( maxX - minX );
+				rect.Height = (int)( maxY - minY );
+			}
+		}
+
+
 		/// <summary>
 		/// clones and returns a new Rectangle with the same data as the current rectangle
 		/// </summary>
@@ -31,25 +82,22 @@ namespace Nez
 
 
 		/// <summary>
-		/// scales the rect. chainable. returns itself.
+		/// scales the rect
 		/// </summary>
 		/// <param name="rect">Rect.</param>
 		/// <param name="scale">Scale.</param>
-		public static Rectangle scale( this Rectangle rect, Vector2 scale )
+		public static void scale( ref Rectangle rect, Vector2 scale )
 		{
 			rect.X = (int)( rect.X * scale.X );
 			rect.Y = (int)( rect.Y * scale.Y );
 			rect.Width = (int)( rect.Width * scale.X );
 			rect.Height = (int)( rect.Height * scale.Y );
-
-			return rect;
 		}
 
 
-		public static Rectangle translate( this Rectangle rect, Vector2 vec )
+		public static void translate( ref Rectangle rect, Vector2 vec )
 		{
 			rect.Location += vec.ToPoint();
-			return rect;
 		}
 
 		

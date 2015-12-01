@@ -66,6 +66,14 @@ namespace MacTester
 								sprite.unPause();
 						})
 						.start();
+
+					PropertyTweens.vector2PropertyTo( spriteDude.getComponent<RenderableComponent>(), "scale", new Vector2( 1.5f, 2.5f ), 2f )
+						.setLoops( LoopType.PingPong, 1 )
+						.start();
+
+					PropertyTweens.floatPropertyTo( spriteDude.getComponent<RenderableComponent>(), "rotation", MathHelper.PiOver2, 2f )
+						.setLoops( LoopType.PingPong, 1 )
+						.start();
 				}
 
 				var playerDude = scene.findEntity( "player-moon" );

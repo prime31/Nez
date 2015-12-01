@@ -17,16 +17,22 @@ namespace Nez
 		/// </summary>
 		public string name;
 
-		// TODO: should this fire onEntityPositionChangedEvent?
 		protected Vector2 _position;
 		public Vector2 position
 		{
 			get { return _position; }
 			set
 			{
-				if( _position != value )
+				_position = value;
+
+				// notify our children of our changed position
+				if( collider != null )
+					collider.onEntityPositionChanged();
+
+				for( var i = 0; i < components.Count; i++ )
 				{
-					_position = value;
+					if( components[i].enabled )
+						components[i].onEntityPositionChanged();
 				}
 			}
 		}
@@ -274,18 +280,20 @@ namespace Nez
 				return false;
 			}
 
-			// store our pre-move bounds so that we can use it to update ourself in the physics system after moving
-			var oldBounds = collider.bounds;
+			// remove ourself from the physics system until after we are done moving
+			Physics.removeCollider( collider, true );
 
 			// fetch anything that we might collide with along the way
 			var neighbors = Physics.boxcastExcludingSelf( collider, deltaX, deltaY );
 
 			var collideX = moveX( deltaX, neighbors, collisionHandler, triggerHandler );
 			var collideY = moveY( deltaY, neighbors, collisionHandler, triggerHandler );
-			position = _position.round();
+
+			// set our new position which will trigger child component/collider bounds updates
+			position = _position;
 
 			// let Physics know about our new position
-			Physics.updateCollider( collider, ref oldBounds );
+			Physics.addCollider( collider );
 
 			return collideX || collideY;
 		}
@@ -326,7 +334,7 @@ namespace Nez
 				}
 
 				// all clear
-				position += deltaSinglePixelMovement;
+				_position += deltaSinglePixelMovement;
 				moveAmount -= sign;
 			}
 
@@ -372,7 +380,7 @@ namespace Nez
 				}
 
 				// all clear
-				position += deltaSinglePixelMovement;
+				_position += deltaSinglePixelMovement;
 				moveAmount -= sign;
 			}
 

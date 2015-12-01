@@ -53,7 +53,19 @@ namespace Nez
 			}
 		}
 
-		public Vector2 scale = Vector2.One;
+		protected Vector2 _scale = Vector2.One;
+		public Vector2 scale
+		{
+			get { return _scale; }
+			set
+			{
+				if( _scale != value )
+				{
+					_scale = value;
+					_areBoundsDirty = true;
+				}
+			}
+		}
 
 		/// <summary>
 		/// shortcut for setting uniform scale
@@ -95,7 +107,6 @@ namespace Nez
 			{
 				return ( spriteEffects & SpriteEffects.FlipHorizontally ) == SpriteEffects.FlipHorizontally;
 			}
-
 			set
 			{
 				spriteEffects = value ? ( spriteEffects | SpriteEffects.FlipHorizontally ) : ( spriteEffects & ~SpriteEffects.FlipHorizontally );
@@ -108,7 +119,6 @@ namespace Nez
 			{
 				return ( spriteEffects & SpriteEffects.FlipVertically ) == SpriteEffects.FlipVertically;
 			}
-
 			set
 			{
 				spriteEffects = value ? ( spriteEffects | SpriteEffects.FlipVertically ) : ( spriteEffects & ~SpriteEffects.FlipVertically );
@@ -127,7 +137,8 @@ namespace Nez
 			{
 				if( _areBoundsDirty )
 				{
-					_bounds = RectangleExtension.fromFloats( entity.position.X + _position.X - _origin.X * scale.X, entity.position.Y + _position.Y - _origin.Y * scale.Y, width * scale.X, height * scale.Y );
+					RectangleExtension.calculateBounds( ref _bounds, entity.position, _position, _origin, _scale, _rotation, width, height );
+					_areBoundsDirty = false;
 				}
 
 				return _bounds;
@@ -149,6 +160,12 @@ namespace Nez
 
 		public RenderableComponent()
 		{}
+
+
+		public override void onEntityPositionChanged()
+		{
+			_areBoundsDirty = true;
+		}
 
 
 		public virtual void render( Graphics graphics, Camera camera )

@@ -51,9 +51,7 @@ namespace MacTester
 			if( deltaX == 0f && deltaY == 0f )
 				return;
 
-			// store our pre-move bounds so that we can use it to update ourself in the physics system after moving
-			// this also allows pushed actors to move freely since this collider will be in it's original position in the physics
-			// system until after all the pushed actors are pushed.
+			// remove ourself from the physics system until after we are done moving
 			var oldBounds = entity.collider.bounds;
 			Physics.removeCollider( entity.collider, ref oldBounds );
 

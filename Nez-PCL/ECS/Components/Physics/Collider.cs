@@ -36,8 +36,8 @@ namespace Nez
 				{
 					unregisterColliderWithPhysicsSystem();
 					_origin = value;
-					registerColliderWithPhysicsSystem();
 					_areBoundsDirty = true;
+					registerColliderWithPhysicsSystem();
 				}
 			}
 		}
@@ -58,7 +58,7 @@ namespace Nez
 		public bool isTrigger;
 
 		/// <summary>
-		/// physicsLayer can be used as a filter when dealing with collisions.
+		/// physicsLayer can be used as a filter when dealing with collisions. The Flags class has methods to assist with bitmasks.
 		/// </summary>
 		public int physicsLayer = 1 << 0;
 		public abstract float width { get; set; }
@@ -72,6 +72,7 @@ namespace Nez
 				if( _areBoundsDirty )
 				{
 					_bounds = RectangleExtension.fromFloats( entity.position.X + _position.X - _origin.X, entity.position.Y + _position.Y - _origin.Y, width, height );
+					_areBoundsDirty = false;
 				}
 
 				return _bounds;
@@ -88,7 +89,7 @@ namespace Nez
 
 		public bool collidesWithAtPosition( Collider collider, Vector2 position )
 		{
-			// store off the position so we can restore it after the check
+			// store off the position so we can restore it after the check. we ignore position changes on the entity while we do this so that
 			var savedPosition = entity.position;
 			entity.position = position;
 
@@ -96,6 +97,7 @@ namespace Nez
 
 			// restore position
 			entity.position = savedPosition;
+
 			return result;
 		}
 
@@ -150,6 +152,12 @@ namespace Nez
 		{
 			unregisterColliderWithPhysicsSystem();
 			_isParentEntityAddedToScene = false;
+		}
+
+
+		public virtual void onEntityPositionChanged()
+		{
+			_areBoundsDirty = true;
 		}
 
 
