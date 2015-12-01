@@ -40,7 +40,7 @@ namespace Nez
 			}
 		}
 
-		public virtual Rectangle bounds
+		public override Rectangle bounds
 		{
 			get
 			{
