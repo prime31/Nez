@@ -41,6 +41,21 @@ namespace Nez
 		}
 
 
+		/// <summary>
+		/// helper that creates a scene with the DefaultRenderer attached and ready for use
+		/// </summary>
+		/// <returns>The with default renderer.</returns>
+		public static Scene createWithDefaultRenderer( Color? clearColor = null )
+		{
+			var scene = new Scene();
+
+			if( clearColor.HasValue )
+				scene.clearColor = clearColor.Value;
+			scene.addRenderer( new DefaultRenderer( scene.camera ) );
+			return scene;
+		}
+
+
 		public Scene()
 		{
 			camera = new Camera( Graphics.instance.graphicsDevice );

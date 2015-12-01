@@ -17,12 +17,7 @@ namespace MacTester
 	{
 		public static Scene sceneOne( bool useScalingViewportAdapter = true )
 		{
-			var scene = new Scene();
-			scene.clearColor = Color.Black;
-
-
-			// add a default renderer which will render everything
-			scene.addRenderer( new DefaultRenderer() );
+			var scene = Scene.createWithDefaultRenderer( Color.Black );
 
 			if( useScalingViewportAdapter )
 				scene.camera.viewportAdapter = new ScalingViewportAdapter( Core.graphicsDevice, 256, 144 );
@@ -84,7 +79,7 @@ namespace MacTester
 			entity.addComponent( image );
 			entity.addComponent( new FramesPerSecondCounter( Graphics.instance.spriteFont, Color.White, FramesPerSecondCounter.FPSDockPosition.TopLeft ) );
 			entity.position = new Vector2( 120f, 0f );
-			entity.collider = new BoxCollider();
+			entity.collider = new CircleCollider( moonTexture.Width * 1.5f );
 
 
 			entity = scene.createAndAddEntity<Entity>( "new-moon" );
@@ -139,9 +134,7 @@ namespace MacTester
 
 		public static Scene sceneThree( bool useBoxColliders = true )
 		{
-			var scene = new Scene();
-			scene.addRenderer( new DefaultRenderer() );
-			scene.clearColor = useBoxColliders ? Color.BlanchedAlmond : Color.Azure;
+			var scene = Scene.createWithDefaultRenderer( useBoxColliders ? Color.BlanchedAlmond : Color.Azure );
 			var moonTexture = scene.contentManager.Load<Texture2D>( "Images/moon" );
 
 
@@ -163,6 +156,7 @@ namespace MacTester
 			moonMaker( new Vector2( 10, 10 ), "moon2", false );
 			moonMaker( new Vector2( 50, 500 ), "moon3", true );
 			moonMaker( new Vector2( 500, 250 ), "moon4", false );
+
 
 			// add an animation to "moon4" to test moving collisions
 			scene.findEntity( "moon4" ).addComponent( new SimpleMovingPlatform( 250, 400 ) );
@@ -198,10 +192,8 @@ namespace MacTester
 
 		public static Scene sceneOverlap2D()
 		{
-			var scene = new Scene();
-			scene.addRenderer( new DefaultRenderer() );
+			var scene = Scene.createWithDefaultRenderer( Color.Aquamarine );
 			scene.camera.centerOrigin();
-			scene.clearColor = Color.Aquamarine;
 
 			var sceneEntity = scene.createAndAddEntity<Entity>( "overlap2d-scene-entity" );
 			var o2ds = scene.contentManager.Load<O2DScene>( "bin/MacOSX/Overlap2D/MainScene" );
@@ -211,7 +203,7 @@ namespace MacTester
 				try
 				{
 					var i = new Image( sceneTexture.getSubtexture( si.imageName ) );
-					i.position = new Vector2( si.x, -si.y );
+					i.localPosition = new Vector2( si.x, -si.y );
 					i.origin = new Vector2( si.originX, si.originY );
 					i.scale = new Vector2( si.scaleX, si.scaleY );
 					sceneEntity.addComponent( i );
