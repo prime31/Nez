@@ -40,6 +40,19 @@ namespace Nez
 			}
 		}
 
+		public virtual Rectangle bounds
+		{
+			get
+			{
+				if( _areBoundsDirty )
+				{
+					_bounds = RectangleExtension.fromFloats( entity.position.X + _position.X - radius, entity.position.Y + _position.Y - radius, width, height );
+					_areBoundsDirty = false;
+				}
+
+				return _bounds;
+			}
+		}
 
 		/// <summary>
 		/// zero param constructor requires that a RenderableComponent be on the entity so that the collider can size itself when the
