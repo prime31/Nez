@@ -43,7 +43,7 @@ namespace Nez
 		{
 			_font = font;
 			_text = text;
-			this.position = position;
+			_localPosition = position;
 			this.color = color;
 			_horizontalAlign = horizontalAlign;
 			_verticalAlign = verticalAlign;

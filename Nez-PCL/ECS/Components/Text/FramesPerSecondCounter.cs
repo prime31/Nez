@@ -39,17 +39,17 @@ namespace Nez
 					break;
 				case FPSDockPosition.TopRight:
 					_horizontalAlign = HorizontalAlign.Right;
-					position = new Vector2( Core.graphicsDevice.Viewport.Width, 0f );
+					localPosition = new Vector2( Core.graphicsDevice.Viewport.Width, 0f );
 					break;
 				case FPSDockPosition.BottomLeft:
 					_horizontalAlign = HorizontalAlign.Left;
 					_verticalAlign = VerticalAlign.Bottom;
-					position = new Vector2( 0, Core.graphicsDevice.Viewport.Height );
+					localPosition = new Vector2( 0, Core.graphicsDevice.Viewport.Height );
 					break;
 				case FPSDockPosition.BottomRight:
 					_horizontalAlign = HorizontalAlign.Right;
 					_verticalAlign = VerticalAlign.Bottom;
-					position = new Vector2( Core.graphicsDevice.Viewport.Width, Core.graphicsDevice.Viewport.Height );
+					localPosition = new Vector2( Core.graphicsDevice.Viewport.Width, Core.graphicsDevice.Viewport.Height );
 					break;
 			}
 		}
@@ -86,7 +86,7 @@ namespace Nez
 		public override void render( Graphics graphics, Camera camera )
 		{
 			// we override render and use position instead of entityPosition. this keeps the text in place even if the entity moves
-			graphics.spriteBatch.DrawString( font, text, position, color, rotation, origin, scale, spriteEffects, layerDepth );
+			graphics.spriteBatch.DrawString( font, text, localPosition, color, rotation, origin, scale, spriteEffects, layerDepth );
 		}
 
 
@@ -94,7 +94,7 @@ namespace Nez
 		{
 			// due to the override of position in render we have to do the same here
 			var rect = bounds;
-			rect.Location = position.ToPoint();
+			rect.Location = localPosition.ToPoint();
 			graphics.drawHollowRect( rect, Color.Yellow );
 		}
 

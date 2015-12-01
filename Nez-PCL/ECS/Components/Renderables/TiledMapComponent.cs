@@ -45,7 +45,7 @@ namespace Nez
 		public TiledTile getTileAtWorldPosition( Vector2 worldPos )
 		{
 			// offset the passed in world position to compensate for the entity position
-			worldPos -= position;
+			worldPos -= localPosition;
 			return _collisionLayer.getTileAtWorldPosition( worldPos );
 		}
 
@@ -58,7 +58,7 @@ namespace Nez
 		public List<TiledTile> getTilesIntersectingBounds( Rectangle bounds )
 		{
 			// offset the passed in world position to compensate for the entity position
-			bounds.Location -= position.ToPoint();
+			bounds.Location -= localPosition.ToPoint();
 			return _collisionLayer.getTilesIntersectingBounds( bounds );
 		}
 

@@ -59,7 +59,7 @@ namespace Nez
 
 		public BoxCollider( float x, float y, float width, float height )
 		{
-			_position = new Vector2( x, y );
+			_localPosition = new Vector2( x, y );
 			_width = width;
 			_height = height;
 		}
@@ -87,7 +87,7 @@ namespace Nez
 		public override bool collidesWith( CircleCollider circle )
 		{
 			var b = bounds;
-			return Collisions.rectToCircle( b.X, b.Y, b.Width, b.Height, circle.bounds.getCenter(), circle.radius );
+			return Collisions.rectToCircle( b.X, b.Y, b.Width, b.Height, circle.bounds.getCenter(), circle._radius );
 		}
 
 

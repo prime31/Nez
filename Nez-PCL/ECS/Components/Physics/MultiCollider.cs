@@ -26,21 +26,21 @@ namespace Nez
 		{
 			get
 			{
-				var x = colliders[0].position.X;
-				var y = colliders[0].position.Y;
-				var right = colliders[0].position.X + colliders[0].width;
-				var bottom = colliders[0].position.Y + colliders[0].height;
+				var x = colliders[0].localPosition.X;
+				var y = colliders[0].localPosition.Y;
+				var right = colliders[0].localPosition.X + colliders[0].width;
+				var bottom = colliders[0].localPosition.Y + colliders[0].height;
 
 				for( var i = 1; i < colliders.Count; i++ )
 				{
-					if( colliders[i].position.X < x )
-						x = colliders[i].position.X;
-					if( colliders[i].position.Y < y )
-						y = colliders[i].position.Y;
-					if( colliders[i].position.X + colliders[i].width > right )
-						right = colliders[i].position.X + colliders[i].width;
-					if( colliders[i].position.Y + colliders[i].height > bottom )
-						bottom = colliders[i].position.Y + colliders[i].height;
+					if( colliders[i].localPosition.X < x )
+						x = colliders[i].localPosition.X;
+					if( colliders[i].localPosition.Y < y )
+						y = colliders[i].localPosition.Y;
+					if( colliders[i].localPosition.X + colliders[i].width > right )
+						right = colliders[i].localPosition.X + colliders[i].width;
+					if( colliders[i].localPosition.Y + colliders[i].height > bottom )
+						bottom = colliders[i].localPosition.Y + colliders[i].height;
 				}
 
 

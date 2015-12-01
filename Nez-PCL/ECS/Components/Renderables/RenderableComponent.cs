@@ -5,21 +5,24 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Nez
 {
+	/// <summary>
+	/// by default, a RenderableComponent faces up/right. You can use the flipX/Y or face* method to adjust that to suit your needs.
+	/// </summary>
 	public abstract class RenderableComponent : Component
 	{
 		// TODO: should width/height be multiplied by scale when they are returned?
 		public abstract float width { get; }
 		public abstract float height { get; }
 
-		protected Vector2 _position;
-		public Vector2 position
+		protected Vector2 _localPosition;
+		public Vector2 localPosition
 		{
-			get { return _position; }
+			get { return _localPosition; }
 			set
 			{
-				if( _position != value )
+				if( _localPosition != value )
 				{
-					_position = value;
+					_localPosition = value;
 					_areBoundsDirty = true;
 				}
 			}
@@ -127,7 +130,7 @@ namespace Nez
 
 		public Vector2 renderPosition
 		{
-			get { return entity.position + _position; }
+			get { return entity.position + _localPosition; }
 		}
 			
 		protected Rectangle _bounds;
@@ -137,7 +140,7 @@ namespace Nez
 			{
 				if( _areBoundsDirty )
 				{
-					RectangleExtension.calculateBounds( ref _bounds, entity.position, _position, _origin, _scale, _rotation, width, height );
+					RectangleExtension.calculateBounds( ref _bounds, entity.position, _localPosition, _origin, _scale, _rotation, width, height );
 					_areBoundsDirty = false;
 				}
 
@@ -178,15 +181,18 @@ namespace Nez
 		/// <param name="graphics">Graphics.</param>
 		public override void debugRender( Graphics graphics )
 		{
+			// if we have no collider draw our bounds
 			if( entity.collider == null )
 				graphics.drawHollowRect( bounds, Color.Yellow );
-			graphics.drawPixel( entity.position, Color.DarkOrchid, 4 );
+
+			// draw a square for our pivot/origin
+			graphics.drawPixel( renderPosition, Color.DarkOrchid, 4 );
 		}
 
 
 		public void faceLeft()
 		{
-			spriteEffects = spriteEffects & SpriteEffects.FlipHorizontally;
+			spriteEffects = spriteEffects | SpriteEffects.FlipHorizontally;
 		}
 
 
@@ -198,13 +204,13 @@ namespace Nez
 
 		public void faceUp()
 		{
-			spriteEffects = spriteEffects & SpriteEffects.FlipVertically;
+			spriteEffects = spriteEffects & ~SpriteEffects.FlipVertically;
 		}
 
 
 		public void faceDown()
 		{
-			spriteEffects = spriteEffects & ~SpriteEffects.FlipVertically;
+			spriteEffects = spriteEffects | SpriteEffects.FlipVertically;
 		}
 
 
@@ -218,7 +224,7 @@ namespace Nez
 		void drawOutline( Graphics graphics, Color outlineColor, int offset = 1 )
 		{
 			// save the stuff we are going to modify so we can restore it later
-			var originalPosition = _position;
+			var originalPosition = _localPosition;
 			var originalColor = color;
 			var originalLayerDepth = layerDepth;
 
@@ -232,14 +238,14 @@ namespace Nez
 				{
 					if( i != 0 || j != 0 )
 					{
-						_position = originalPosition + new Vector2( i * offset, j * offset );
+						_localPosition = originalPosition + new Vector2( i * offset, j * offset );
 						//render( graphics );
 					}
 				}
 			}
 
 			// restore changed state
-			_position = originalPosition;
+			_localPosition = originalPosition;
 			color = originalColor;
 			layerDepth = originalLayerDepth;
 		}

@@ -6,20 +6,26 @@ namespace Nez
 {
 	public class CircleCollider : Collider
 	{
-		public float radius;
-
-		public override float width
+		public float _radius;
+		public float radius
 		{
-			get { return radius * 2f; }
+			get { return _radius; }
 			set
 			{
 				// store the old bounds so we can update ourself after modifying them
 				var oldBounds = bounds;
-				radius = value * 0.5f;
+				_radius = value;
+				_areBoundsDirty = true;
+
 				if( entity != null && _isParentEntityAddedToScene )
 					Physics.updateCollider( this, ref oldBounds );
-				_areBoundsDirty = true;
 			}
+		}
+
+		public override float width
+		{
+			get { return _radius * 2f; }
+			set { radius = value * 0.5f; }
 		}
 
 		/// <summary>
@@ -28,16 +34,8 @@ namespace Nez
 		/// <value>The height.</value>
 		public override float height
 		{
-			get { return radius * 2f; }
-			set
-			{
-				// store the old bounds so we can update ourself after modifying them
-				var oldBounds = bounds;
-				radius = value * 0.5f;
-				if( entity != null && _isParentEntityAddedToScene )
-					Physics.updateCollider( this, ref oldBounds );
-				_areBoundsDirty = true;
-			}
+			get { return _radius * 2f; }
+			set { radius = value * 0.5f; }
 		}
 
 		public override Rectangle bounds
@@ -46,7 +44,7 @@ namespace Nez
 			{
 				if( _areBoundsDirty )
 				{
-					_bounds = RectangleExtension.fromFloats( entity.position.X + _position.X - radius, entity.position.Y + _position.Y - radius, width, height );
+					_bounds = RectangleExtension.fromFloats( entity.position.X + _localPosition.X + origin.X - _radius, entity.position.Y + _localPosition.Y + origin.Y - _radius, width, height );
 					_areBoundsDirty = false;
 				}
 
@@ -64,20 +62,21 @@ namespace Nez
 
 		public CircleCollider( float radius )
 		{
-			this.radius = radius;
+			_radius = radius;
 		}
 
 
 		public CircleCollider( float radius, Vector2 origin )
 		{
-			this.radius = radius;
+			_radius = radius;
 			_origin = origin;
 		}
 
 
 		public override void debugRender( Graphics graphics )
 		{
-			graphics.drawCircle( bounds.getCenter(), radius, Color.IndianRed );
+			graphics.drawCircle( bounds.getCenter(), _radius, Color.IndianRed );
+			graphics.drawPixel( entity.position + localPosition, Color.Blue, 4 );
 		}
 
 
@@ -85,19 +84,19 @@ namespace Nez
 
 		public override bool collidesWith( Vector2 from, Vector2 to )
 		{
-			return Collisions.circleToLine( bounds.getPosition(), radius, from, to );
+			return Collisions.circleToLine( bounds.getPosition(), _radius, from, to );
 		}
 
 
 		public override bool collidesWith( BoxCollider boxCollider )
 		{
-			return Collisions.boundsToCircle( boxCollider.bounds, bounds.getCenter(), radius );
+			return Collisions.boundsToCircle( boxCollider.bounds, bounds.getCenter(), _radius );
 		}
 
 
 		public override bool collidesWith( CircleCollider circle )
 		{
-			return Vector2.DistanceSquared( bounds.getCenter(), circle.bounds.getCenter() ) < ( radius + circle.radius ) * ( radius + circle.radius );
+			return Vector2.DistanceSquared( bounds.getCenter(), circle.bounds.getCenter() ) < ( _radius + circle._radius ) * ( _radius + circle._radius );
 		}
 
 
@@ -111,7 +110,7 @@ namespace Nez
 
 		public override string ToString()
 		{
-			return string.Format( "[CircleCollider: bounds: {0}, radius: {1}", bounds, radius );
+			return string.Format( "[CircleCollider: bounds: {0}, radius: {1}", bounds, _radius );
 		}
 
 	}

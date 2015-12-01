@@ -12,15 +12,15 @@ namespace Nez
 		/// <summary>
 		/// position is added to entity.position to get the final position for the collider
 		/// </summary>
-		protected Vector2 _position;
-		public Vector2 position
+		protected Vector2 _localPosition;
+		public Vector2 localPosition
 		{
-			get { return _position; }
+			get { return _localPosition; }
 			set
 			{
-				if( _position != value )
+				if( _localPosition != value )
 				{
-					_position = value;
+					_localPosition = value;
 					_areBoundsDirty = true;
 				}
 			}
@@ -71,7 +71,7 @@ namespace Nez
 			{
 				if( _areBoundsDirty )
 				{
-					_bounds = RectangleExtension.fromFloats( entity.position.X + _position.X - _origin.X, entity.position.Y + _position.Y - _origin.Y, width, height );
+					_bounds = RectangleExtension.fromFloats( entity.position.X + _localPosition.X - _origin.X, entity.position.Y + _localPosition.Y - _origin.Y, width, height );
 					_areBoundsDirty = false;
 				}
 
@@ -137,7 +137,17 @@ namespace Nez
 
 					width = renderableBounds.Width;
 					height = renderableBounds.Height;
-					originNormalized = renderable.originNormalized;
+
+					// circle colliders need special care with the origin
+					if( this is CircleCollider )
+					{
+						if( renderable.origin.X == 0f && renderable.origin.Y == 0f )
+							originNormalized = Vector2Extension.halfVector();
+					}
+					else
+					{
+						originNormalized = renderable.originNormalized;
+					}
 				}
 			}
 			_isParentEntityAddedToScene = true;
