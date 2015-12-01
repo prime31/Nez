@@ -334,7 +334,10 @@ namespace Nez
 		/// </summary>
 		/// <returns>The to world point.</returns>
 		/// <param name="screenPosition">Screen position.</param>
-		public Vector2 screenToWorldPoint( Point screenPosition ) => screenToWorldPoint( screenPosition.ToVector2() );
+		public Vector2 screenToWorldPoint( Point screenPosition )
+		{
+			return screenToWorldPoint( screenPosition.ToVector2() );
+		}
 
 
 		/// <summary>
