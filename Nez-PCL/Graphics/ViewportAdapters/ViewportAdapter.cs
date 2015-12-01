@@ -31,11 +31,15 @@ namespace Nez
 
 		protected GraphicsDevice _graphicsDevice;
 
+		public Viewport viewport;
+
 
 		public ViewportAdapter( GraphicsDevice graphicsDevice )
 		{
 			_graphicsDevice = graphicsDevice;
 			scaleMatrix = Matrix.Identity;
+			// We set the viewport to the current so that we do not have an empty one
+			viewport = _graphicsDevice.Viewport;
 			Core.emitter.addObserver( CoreEvents.GraphicsDeviceReset, onGraphicsDeviceReset );
 		}
 

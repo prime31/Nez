@@ -85,6 +85,9 @@ namespace Nez
 				Graphics.instance.graphicsDevice.Clear( renderTextureClearColor );
 			}
 
+			// Sets the current camera viewport 
+			Graphics.instance.graphicsDevice.Viewport = cam.viewportAdapter.viewport;
+
 			// MonoGame resets the Viewport to the RT size without asking so we have to let the Camera know to update itself
 			cam.forceMatrixUpdate();
 
