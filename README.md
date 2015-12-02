@@ -19,7 +19,7 @@ Nez aims to be a lightweight 2D game engine that sits on top of MonoGame/FNA. It
 
 ### Setup
 
-Nez needs to have the DefaultContent/Fonts/NezFont.xnb file placed in your projects Content folder. It sets up the font as the default for all text and it's debug console
+Nez needs to have the DefaultContent/Fonts/NezDefaultBMFont.xnb file placed in your projects Content folder. It sets up the font as the default for all text and it's debug console
 
 
 
