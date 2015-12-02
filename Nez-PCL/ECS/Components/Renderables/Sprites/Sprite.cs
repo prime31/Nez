@@ -14,26 +14,15 @@ namespace Nez.Sprites
 	{
 		public override float width
 		{
-			get { return _subtexture.sourceRect.Width; }
+			get { return subtexture.sourceRect.Width; }
 		}
 
 		public override float height
 		{
-			get { return _subtexture.sourceRect.Height; }
+			get { return subtexture.sourceRect.Height; }
 		}
 
-		Subtexture _subtexture;
-		public Subtexture subtexture
-		{
-			get { return _subtexture; }
-			set
-			{
-				// preserve the origin if the texture size changes
-				var oldOriginNormalized = originNormalized;
-				_subtexture = value;
-				originNormalized = oldOriginNormalized;
-			}
-		}
+		Subtexture subtexture;
 
 		public System.Action<TEnum> onAnimationCompletedEvent;
 		public bool isPlaying { get; private set; }
@@ -54,7 +43,7 @@ namespace Nez.Sprites
 
 		public Sprite( IEqualityComparer<TEnum> customComparer, Subtexture subtexture )
 		{
-			_subtexture = subtexture;
+			this.subtexture = subtexture;
 			originNormalized = new Vector2( 0.5f, 0.5f );
 			_animations = new Dictionary<TEnum,SpriteAnimation>( customComparer );
 		}
@@ -72,7 +61,7 @@ namespace Nez.Sprites
 		/// Sprite needs a Subtexture at constructor time so the first frame of the passed in animation will be used for this constructor
 		/// </summary>
 		/// <param name="subtexture">Subtexture.</param>
-		public Sprite( TEnum animationKey, SpriteAnimation animation ) : this( null, animation.frames[0] )
+		public Sprite( TEnum animationKey, SpriteAnimation animation ) : this( null, animation.frames[0].subtexture )
 		{
 			addAnimation( animationKey, animation );
 		}
@@ -138,10 +127,11 @@ namespace Nez.Sprites
 						case AnimationCompletionBehavior.RemainOnFinalFrame:
 							return;
 						case AnimationCompletionBehavior.RevertToFirstFrame:
-							_subtexture = _currentAnimation.frames[0];
+							subtexture = _currentAnimation.frames[0].subtexture;
+							origin = _currentAnimation.frames[0].origin;
 							return;
 						case AnimationCompletionBehavior.HideSprite:
-							_subtexture = null;
+							subtexture = null;
 							_currentAnimation = null;
 							return;
 					}
@@ -179,7 +169,8 @@ namespace Nez.Sprites
 			if( desiredFrame != currentFrame )
 			{
 				currentFrame = desiredFrame;
-				_subtexture = _currentAnimation.frames[currentFrame];
+				subtexture = _currentAnimation.frames[currentFrame].subtexture;
+				origin = _currentAnimation.frames[currentFrame].origin;
 				handleFrameChanged();
 
 				// ping-pong needs special care. we don't want to double the frame time when wrapping so we man-handle the totalElapsedTime
@@ -196,8 +187,8 @@ namespace Nez.Sprites
 
 		public override void render( Graphics graphics, Camera camera )
 		{
-			if( _subtexture != null && camera.bounds.Intersects( bounds ) )
-				graphics.spriteBatch.Draw( _subtexture, renderPosition, _subtexture.sourceRect, color, rotation, origin, scale, spriteEffects, layerDepth );
+			if( subtexture != null && camera.bounds.Intersects( bounds ) )
+				graphics.spriteBatch.Draw( subtexture, renderPosition, subtexture.sourceRect, color, rotation, origin, scale, spriteEffects, layerDepth );
 		}
 
 		#endregion
@@ -229,7 +220,8 @@ namespace Nez.Sprites
 			isPlaying = true;
 			_isReversed = false;
 			currentFrame = startFrame;
-			_subtexture = _currentAnimation.frames[currentFrame];
+			subtexture = _currentAnimation.frames[currentFrame].subtexture;
+			origin = _currentAnimation.frames[currentFrame].origin;
 
 			_totalElapsedTime = (float)startFrame * _currentAnimation.secondsPerFrame;
 		}
@@ -262,7 +254,7 @@ namespace Nez.Sprites
 		public void stop()
 		{
 			isPlaying = false;
-			_subtexture = null;
+			subtexture = null;
 			_currentAnimation = null;
 		}
 
