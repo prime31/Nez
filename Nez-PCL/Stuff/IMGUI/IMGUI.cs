@@ -1,6 +1,7 @@
 ﻿using System;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
+using Nez.BitmapFonts;
 
 
 namespace Nez
@@ -21,7 +22,7 @@ namespace Nez
 		static Graphics _graphics;
 
 		// constants
-		const float FONT_SIZE = 14;
+		const float FONT_LINE_HEIGHT = 11;
 		const float ELEMENT_HEIGHT = 20;
 		const float SHORT_ELEMENT_HEIGHT = 15;
 		const float ELEMENT_PADDING = 10;
@@ -53,11 +54,11 @@ namespace Nez
 		static Point _mouseInWorldCoords;
 
 
-		public static void init( GraphicsDevice device, SpriteFont font )
+		public static void init( GraphicsDevice device, BitmapFont font )
 		{
 			_graphics = new Graphics( device, font );
 
-			var scale = FONT_SIZE / _graphics.spriteFont.MeasureString( " " ).Y;
+			var scale = FONT_LINE_HEIGHT / _graphics.bitmapFont.lineHeight;
 			FONT_SCALE = new Vector2( scale, scale );
 		}
 
@@ -67,7 +68,7 @@ namespace Nez
 		static void drawString( string text, Color color, TextAlign align = TextAlign.Center, float elementHeight = ELEMENT_HEIGHT )
 		{
 			// center align the text
-			var textSize = _graphics.spriteFont.MeasureString( text ) * FONT_SCALE.Y;
+			var textSize = _graphics.bitmapFont.measureString( text ) * FONT_SCALE.Y;
 			float x = _elementX;
 			switch( align )
 			{
@@ -79,9 +80,9 @@ namespace Nez
 					break;
 			}
 
-			var y = _lastY + ELEMENT_PADDING + ( elementHeight - FONT_SIZE ) * 0.5f;
+			var y = _lastY + ELEMENT_PADDING + ( elementHeight - FONT_LINE_HEIGHT ) * 0.7f;
 
-			_graphics.spriteBatch.DrawString( _graphics.spriteFont, text, new Vector2( x, y ), color, 0, Vector2.Zero, FONT_SCALE, SpriteEffects.None, 0 );
+			_graphics.spriteBatch.DrawString( _graphics.bitmapFont, text, new Vector2( x, y ), color, 0, Vector2.Zero, FONT_SCALE, SpriteEffects.None, 0 );
 		}
 
 

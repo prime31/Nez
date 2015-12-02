@@ -61,6 +61,7 @@ namespace MacTester
 			scene.camera.centerOrigin();
 			var moonTexture = scene.contentManager.Load<Texture2D>( "Images/moon" );
 			var bmFont = scene.contentManager.Load<BitmapFont>( "bin/MacOSX/Fonts/pixelfont" );
+			bmFont.spacing = 2f;
 
 			// setup a renderer that renders everything to a RenderTexture making sure its order is before standard renderers!
 			var renderer = new DefaultRenderer( scene.camera, -1 );
@@ -77,7 +78,7 @@ namespace MacTester
 			image.originNormalized = Vector2Extension.halfVector();
 			image.zoom = 2f;
 			entity.addComponent( image );
-			entity.addComponent( new FramesPerSecondCounter( Graphics.instance.spriteFont, Color.White, FramesPerSecondCounter.FPSDockPosition.TopLeft ) );
+			entity.addComponent( new FramesPerSecondCounter( Graphics.instance.bitmapFont, Color.White, FramesPerSecondCounter.FPSDockPosition.TopLeft ) );
 			entity.position = new Vector2( 120f, 0f );
 			entity.collider = new CircleCollider( moonTexture.Width * 1.5f );
 
@@ -89,7 +90,8 @@ namespace MacTester
 
 
 			entity = scene.createAndAddEntity<Entity>( "bmfont" );
-			entity.addComponent( new BMFontText( bmFont, "This text is a BMFont", new Vector2( 0, 30 ), Color.Black ) );
+			entity.addComponent( new Text( Graphics.instance.bitmapFont, "This text is a BMFont\nPOOOP", new Vector2( 0, 30 ), Color.White ) );
+			entity.addComponent( new Text( bmFont, "This text is a BMFont\nPOOOP", new Vector2( 0, 70 ), Color.Black ) );
 
 
 			// texture atlas tester

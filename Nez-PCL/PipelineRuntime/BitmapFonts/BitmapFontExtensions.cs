@@ -7,6 +7,9 @@ using System.Text;
 
 namespace Nez.BitmapFonts
 {
+	/// <summary>
+	/// provides the full SpriteFont assortment of DrawString methods
+	/// </summary>
 	public static class BitmapFontExtensions
 	{
 		/// <summary>

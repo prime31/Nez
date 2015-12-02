@@ -1,6 +1,7 @@
 ﻿using System;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
+using Nez.BitmapFonts;
 
 
 namespace Nez
@@ -24,8 +25,9 @@ namespace Nez
 
 		protected HorizontalAlign _horizontalAlign;
 		protected VerticalAlign _verticalAlign;
-		SpriteFont _font;
-		string _text;
+		protected SpriteFont _spriteFont;
+		protected BitmapFont _bitmapFont;
+		protected string _text;
 		Vector2 _size;
 
 		public override float width
@@ -39,25 +41,50 @@ namespace Nez
 		}
 
 
-		public Text( SpriteFont font, string text, Vector2 position, Color color, HorizontalAlign horizontalAlign = HorizontalAlign.Center, VerticalAlign verticalAlign = VerticalAlign.Top )
+		public Text( BitmapFont font, string text, Vector2 position, Color color )
 		{
-			_font = font;
+			_bitmapFont = font;
 			_text = text;
 			_localPosition = position;
 			this.color = color;
-			_horizontalAlign = horizontalAlign;
-			_verticalAlign = verticalAlign;
+			_horizontalAlign = HorizontalAlign.Center;
+			_verticalAlign = VerticalAlign.Top;
 
 			updateSize();
 		}
 
 
-		public SpriteFont font
+		public Text( SpriteFont font, string text, Vector2 position, Color color )
 		{
-			get { return _font; }
+			_spriteFont = font;
+			_text = text;
+			_localPosition = position;
+			this.color = color;
+			_horizontalAlign = HorizontalAlign.Center;
+			_verticalAlign = VerticalAlign.Top;
+
+			updateSize();
+		}
+
+
+		public SpriteFont spriteFont
+		{
+			get { return _spriteFont; }
 			set
 			{
-				_font = value;
+				_spriteFont = value;
+				_bitmapFont = null;
+				updateSize();
+			}
+		}
+
+		public BitmapFont bitmapFont
+		{
+			get { return _bitmapFont; }
+			set
+			{
+				_bitmapFont = value;
+				_spriteFont = null;
 				updateSize();
 			}
 		}
@@ -96,7 +123,11 @@ namespace Nez
 
 		void updateSize()
 		{
-			_size = font.MeasureString( text );
+			if( _bitmapFont != null )
+				_size = _bitmapFont.measureString( text );
+			else
+				_size = _spriteFont.MeasureString( text );
+			
 			updateCentering();
 		}
 
@@ -125,7 +156,10 @@ namespace Nez
 
 		public override void render( Graphics graphics, Camera camera )
 		{
-			graphics.spriteBatch.DrawString( font, text, renderPosition, color, rotation, origin, scale, spriteEffects, layerDepth );
+			if( _bitmapFont != null )
+				graphics.spriteBatch.DrawString( _bitmapFont, text, renderPosition, color, rotation, origin, scale, spriteEffects, layerDepth );
+			else
+				graphics.spriteBatch.DrawString( _spriteFont, text, renderPosition, color, rotation, origin, scale, spriteEffects, layerDepth );
 		}
 
 	}

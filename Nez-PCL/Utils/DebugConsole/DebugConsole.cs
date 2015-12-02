@@ -5,6 +5,8 @@ using System.Reflection;
 using System.Text;
 using Microsoft.Xna.Framework;
 using System.Text.RegularExpressions;
+using Nez.BitmapFonts;
+using Microsoft.Xna.Framework.Graphics;
 
 
 namespace Nez.Console
@@ -25,10 +27,11 @@ namespace Nez.Console
 
 		// render constants
 		Vector2 FONT_SCALE;
-		const float FONT_SIZE = 14;
+		const float FONT_LINE_HEIGHT = 11;
 		const int HORIZONTAL_PADDING = 10;
-		const int BOTTOM_MARGIN = 50;
-		const int LINE_HEIGHT = 20;
+		const int BOTTOM_MARGIN = 30;
+		const int BOTTOM_CONSOLE_HEIGHT = 20;
+		const int LINE_HEIGHT = 14;
 
 		bool enabled = true;
 		bool isOpen;
@@ -64,7 +67,7 @@ namespace Nez.Console
 			_sorted = new List<string>();
 			functionKeyActions = new Action[12];
 
-			var scale = FONT_SIZE / Graphics.instance.spriteFont.MeasureString( " " ).Y;
+			var scale = FONT_LINE_HEIGHT / Graphics.instance.bitmapFont.lineHeight;
 			FONT_SCALE = new Vector2( scale, scale );
 
 			buildCommandsList();
@@ -102,14 +105,14 @@ namespace Nez.Console
 			var maxWidth = Core.graphicsDevice.PresentationParameters.BackBufferWidth - 40;
 			var screenHeight = Core.graphicsDevice.PresentationParameters.BackBufferHeight;
 
-			while( Graphics.instance.spriteFont.MeasureString( str ).X * FONT_SCALE.X > maxWidth )
+			while( Graphics.instance.bitmapFont.measureString( str ).X * FONT_SCALE.X > maxWidth )
 			{
 				var split = -1;
 				for( var i = 0; i < str.Length; i++ )
 				{
 					if( str[i] == ' ' )
 					{
-						if( Graphics.instance.spriteFont.MeasureString( str.Substring( 0, i ) ).X * FONT_SCALE.X <= maxWidth )
+						if( Graphics.instance.bitmapFont.measureString( str.Substring( 0, i ) ).X * FONT_SCALE.X <= maxWidth )
 							split = i;
 						else
 							break;
@@ -439,7 +442,7 @@ namespace Nez.Console
 			var data = _currentText.Split( new char[] { ' ', ',' }, StringSplitOptions.RemoveEmptyEntries );
 			if( _commandHistory.Count == 0 || _commandHistory[0] != _currentText )
 				_commandHistory.Insert( 0, _currentText );
-			_drawCommands.Insert( 0, ">" + _currentText );
+			_drawCommands.Insert( 0, "> " + _currentText );
 			_currentText = "";
 			_seekIndex = -1;
 
@@ -482,21 +485,23 @@ namespace Nez.Console
 
 			Graphics.instance.spriteBatch.Begin();
 
-			Graphics.instance.drawRect( HORIZONTAL_PADDING, screenHeight - BOTTOM_MARGIN, workingWidth, 40, Color.Black * OPACITY );
+			Graphics.instance.drawRect( HORIZONTAL_PADDING, screenHeight - BOTTOM_MARGIN, workingWidth, BOTTOM_CONSOLE_HEIGHT, Color.Black * OPACITY );
+			var commandLineString = "> " + _currentText;
 			if( _underscore )
-				Graphics.instance.spriteBatch.DrawString( Graphics.instance.spriteFont, ">" + _currentText + "_", new Vector2( 20, screenHeight - 42 ), Color.White );
-			else
-				Graphics.instance.spriteBatch.DrawString( Graphics.instance.spriteFont, ">" + _currentText, new Vector2( 20, screenHeight - 42 ), Color.White );
+				commandLineString += "_";
+			
+			Graphics.instance.spriteBatch.DrawString( Graphics.instance.bitmapFont, commandLineString, new Vector2( 20, screenHeight - BOTTOM_CONSOLE_HEIGHT - FONT_LINE_HEIGHT * 0.35f ), Color.White );
 
 			if( _drawCommands.Count > 0 )
 			{
-				var height = 20 + ( LINE_HEIGHT * _drawCommands.Count );
-				Graphics.instance.drawRect( HORIZONTAL_PADDING, screenHeight - height - 60, workingWidth, height, Color.Black * OPACITY );
+				var height = LINE_HEIGHT * _drawCommands.Count + 15;
+				var topOfHistoryRect = screenHeight - height - BOTTOM_CONSOLE_HEIGHT - 20;
+				Graphics.instance.drawRect( HORIZONTAL_PADDING, topOfHistoryRect, workingWidth, height, Color.Black * OPACITY );
 				for( int i = 0; i < _drawCommands.Count; i++ )
 				{
-					var position = new Vector2( 20, screenHeight - 92 - ( LINE_HEIGHT * i ) );
+					var position = new Vector2( 20, topOfHistoryRect + height - 20 - LINE_HEIGHT * i );
 					var color = _drawCommands[i].IndexOf( ">" ) == 0 ? Color.Yellow : Color.White;
-					Graphics.instance.spriteBatch.DrawString( Graphics.instance.spriteFont, _drawCommands[i], position, color, 0, Vector2.Zero, FONT_SCALE, Microsoft.Xna.Framework.Graphics.SpriteEffects.None, 0 );
+					Graphics.instance.spriteBatch.DrawString( Graphics.instance.bitmapFont, _drawCommands[i], position, color, 0, Vector2.Zero, FONT_SCALE, SpriteEffects.None, 0 );
 				}
 			}
 

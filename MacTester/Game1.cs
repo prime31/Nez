@@ -30,7 +30,7 @@ namespace MacTester
 			Window.AllowUserResizing = true;
 
 			// prep IMGUI for use
-			IMGUI.init( GraphicsDevice, Graphics.instance.spriteFont );
+			IMGUI.init( GraphicsDevice, Graphics.instance.bitmapFont );
 			scene = Scenes.sceneOne();
 		}
 

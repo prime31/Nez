@@ -7,6 +7,7 @@ using Nez.Systems;
 using Nez.Console;
 using Nez.Tweens;
 using Nez.Timers;
+using Nez.BitmapFonts;
 
 
 namespace Nez
@@ -104,7 +105,7 @@ namespace Nez
 			base.Initialize();
 
 			// prep the default Graphics system
-			var font = Content.Load<SpriteFont>( "NezFont" );
+			var font = Content.Load<BitmapFont>( "NezDefaultBMFont" );
 			Graphics.instance = new Graphics( GraphicsDevice, font );
 			graphicsDevice = GraphicsDevice;
 		}

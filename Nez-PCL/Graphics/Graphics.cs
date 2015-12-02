@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework;
 using System.Collections.Generic;
 using Nez.Textures;
 using System.Diagnostics;
+using Nez.BitmapFonts;
 
 
 namespace Nez
@@ -24,7 +25,7 @@ namespace Nez
 		/// <summary>
 		/// default font is loaded up and stored here for easy access. Nez uses it for the DebugConsole
 		/// </summary>
-		public SpriteFont spriteFont;
+		public BitmapFont bitmapFont;
 
 		/// <summary>
 		/// A subtexture used to draw particle systems.
@@ -44,11 +45,11 @@ namespace Nez
 		Rectangle _tempRect;
 
 
-		public Graphics( GraphicsDevice graphicsDevice, SpriteFont font )
+		public Graphics( GraphicsDevice graphicsDevice, BitmapFont font )
 		{
 			this.graphicsDevice = graphicsDevice;
-			spriteFont = font;
 			spriteBatch = new SpriteBatch( graphicsDevice );
+			bitmapFont = font;
 
 			var tex = createSingleColorTexture( 2, 2, Color.White );
 			particleTexture = new Subtexture( tex, 0, 0, 2, 2 );
