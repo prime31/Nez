@@ -6,7 +6,7 @@ namespace Nez.BitmapFonts
 	public class BitmapFontRegion
 	{
 		public char character;
-		public Subtexture textureRegion { get; private set; }
+		public Subtexture textureRegion;
 		public int xOffset;
 		public int yOffset;
 		public int xAdvance;

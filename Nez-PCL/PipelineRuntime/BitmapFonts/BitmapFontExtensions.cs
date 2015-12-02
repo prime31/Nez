@@ -2,67 +2,123 @@ using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Nez.TextureAtlases;
+using System.Text;
 
 
 namespace Nez.BitmapFonts
 {
 	public static class BitmapFontExtensions
 	{
-		public static void drawString( this SpriteBatch spriteBatch, BitmapFont bitmapFont, string text, Vector2 position, Color color )
+		/// <summary>
+		/// Submit a text string of sprites for drawing in the current batch.
+		/// </summary>
+		/// <param name="spriteFont">A font.</param>
+		/// <param name="text">The text which will be drawn.</param>
+		/// <param name="position">The drawing location on screen.</param>
+		/// <param name="color">A color mask.</param>
+		public static void DrawString( this SpriteBatch spriteBatch, BitmapFont spriteFont, string text, Vector2 position, Color color )
 		{
-			var dx = position.X;
-			var dy = position.Y;
-
-			for( var i = 0; i < text.Length; i++ )
-			{
-				var character = text[i];
-				var fontRegion = bitmapFont.getCharacterRegion( character );
-				if( fontRegion != null )
-				{
-					var charPosition = new Vector2( dx + fontRegion.xOffset, dy + fontRegion.yOffset );
-
-					spriteBatch.Draw( fontRegion.textureRegion.texture2D, charPosition, fontRegion.textureRegion.sourceRect, color );
-					//spriteBatch.Draw( fontRegion.textureRegion, charPosition, color );
-					dx += fontRegion.xAdvance;
-				}
-
-				if( character == '\n' )
-				{
-					dy += bitmapFont.lineHeight;
-					dx = position.X;
-				}
-			}
+			var source = new BitmapFont.CharacterSource( text );
+			spriteFont.drawInto(
+				spriteBatch, ref source, position, color, 0, Vector2.Zero, Vector2.One, SpriteEffects.None, 0f );
 		}
 
 
-		public static void drawString( this SpriteBatch spriteBatch, BitmapFont bitmapFont, string text, Vector2 position, Color color, int wrapWidth )
+		/// <summary>
+		/// Submit a text string of sprites for drawing in the current batch.
+		/// </summary>
+		/// <param name="spriteFont">A font.</param>
+		/// <param name="text">The text which will be drawn.</param>
+		/// <param name="position">The drawing location on screen.</param>
+		/// <param name="color">A color mask.</param>
+		/// <param name="rotation">A rotation of this string.</param>
+		/// <param name="origin">Center of the rotation. 0,0 by default.</param>
+		/// <param name="scale">A scaling of this string.</param>
+		/// <param name="effects">Modificators for drawing. Can be combined.</param>
+		/// <param name="layerDepth">A depth of the layer of this string.</param>
+		public static void DrawString( this SpriteBatch spriteBatch, BitmapFont spriteFont, string text, Vector2 position, Color color,
+			float rotation, Vector2 origin, float scale, SpriteEffects effects, float layerDepth )
 		{
-			var dx = position.X;
-			var dy = position.Y;
-			var sentences = text.Split( new[] { '\n' }, StringSplitOptions.None );
+			var scaleVec = new Vector2( scale, scale );
+			var source = new BitmapFont.CharacterSource( text );
+			spriteFont.drawInto( spriteBatch, ref source, position, color, rotation, origin, scaleVec, effects, layerDepth );
+		}
 
-			foreach( var sentence in sentences )
-			{
-				var words = sentence.Split( new[] { ' ' }, StringSplitOptions.None );
 
-				for( var i = 0; i < words.Length; i++ )
-				{
-					var word = words[i];
-					var size = bitmapFont.getStringRectangle( word, Vector2.Zero );
+		/// <summary>
+		/// Submit a text string of sprites for drawing in the current batch.
+		/// </summary>
+		/// <param name="spriteFont">A font.</param>
+		/// <param name="text">The text which will be drawn.</param>
+		/// <param name="position">The drawing location on screen.</param>
+		/// <param name="color">A color mask.</param>
+		/// <param name="rotation">A rotation of this string.</param>
+		/// <param name="origin">Center of the rotation. 0,0 by default.</param>
+		/// <param name="scale">A scaling of this string.</param>
+		/// <param name="effects">Modificators for drawing. Can be combined.</param>
+		/// <param name="layerDepth">A depth of the layer of this string.</param>
+		public static void DrawString( this SpriteBatch spriteBatch, BitmapFont spriteFont, string text, Vector2 position, Color color,
+			float rotation, Vector2 origin, Vector2 scale, SpriteEffects effects, float layerDepth )
+		{
+			var source = new BitmapFont.CharacterSource( text );
+			spriteFont.drawInto( spriteBatch, ref source, position, color, rotation, origin, scale, effects, layerDepth );
+		}
 
-					if( i != 0 && dx + size.Width >= wrapWidth )
-					{
-						dy += bitmapFont.lineHeight;
-						dx = position.X;
-					}
 
-					drawString( spriteBatch, bitmapFont, word, new Vector2( dx, dy ), color );
-					dx += size.Width + bitmapFont.getCharacterRegion( ' ' ).xAdvance;
-				}
+		/// <summary>
+		/// Submit a text string of sprites for drawing in the current batch.
+		/// </summary>
+		/// <param name="spriteFont">A font.</param>
+		/// <param name="text">The text which will be drawn.</param>
+		/// <param name="position">The drawing location on screen.</param>
+		/// <param name="color">A color mask.</param>
+		public static void DrawString( this SpriteBatch spriteBatch, BitmapFont spriteFont, StringBuilder text, Vector2 position, Color color )
+		{
+			var source = new BitmapFont.CharacterSource( text );
+			spriteFont.drawInto( spriteBatch, ref source, position, color, 0, Vector2.Zero, Vector2.One, SpriteEffects.None, 0f );
+		}
 
-				dx = position.X;
-				dy += bitmapFont.lineHeight;
-			}
+
+		/// <summary>
+		/// Submit a text string of sprites for drawing in the current batch.
+		/// </summary>
+		/// <param name="spriteFont">A font.</param>
+		/// <param name="text">The text which will be drawn.</param>
+		/// <param name="position">The drawing location on screen.</param>
+		/// <param name="color">A color mask.</param>
+		/// <param name="rotation">A rotation of this string.</param>
+		/// <param name="origin">Center of the rotation. 0,0 by default.</param>
+		/// <param name="scale">A scaling of this string.</param>
+		/// <param name="effects">Modificators for drawing. Can be combined.</param>
+		/// <param name="layerDepth">A depth of the layer of this string.</param>
+		public static void DrawString(
+			this SpriteBatch spriteBatch, BitmapFont spriteFont, StringBuilder text, Vector2 position, Color color,
+			float rotation, Vector2 origin, float scale, SpriteEffects effects, float layerDepth )
+		{
+			var scaleVec = new Vector2( scale, scale );
+			var source = new BitmapFont.CharacterSource( text );
+			spriteFont.drawInto( spriteBatch, ref source, position, color, rotation, origin, scaleVec, effects, layerDepth );
+		}
+
+
+		/// <summary>
+		/// Submit a text string of sprites for drawing in the current batch.
+		/// </summary>
+		/// <param name="spriteFont">A font.</param>
+		/// <param name="text">The text which will be drawn.</param>
+		/// <param name="position">The drawing location on screen.</param>
+		/// <param name="color">A color mask.</param>
+		/// <param name="rotation">A rotation of this string.</param>
+		/// <param name="origin">Center of the rotation. 0,0 by default.</param>
+		/// <param name="scale">A scaling of this string.</param>
+		/// <param name="effects">Modificators for drawing. Can be combined.</param>
+		/// <param name="layerDepth">A depth of the layer of this string.</param>
+		public static void DrawString(
+			this SpriteBatch spriteBatch, BitmapFont spriteFont, StringBuilder text, Vector2 position, Color color,
+			float rotation, Vector2 origin, Vector2 scale, SpriteEffects effects, float layerDepth )
+		{
+			var source = new BitmapFont.CharacterSource( text );
+			spriteFont.drawInto( spriteBatch, ref source, position, color, rotation, origin, scale, effects, layerDepth );
 		}
 
 	}
