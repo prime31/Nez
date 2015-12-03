@@ -23,6 +23,12 @@ namespace Nez.Timers
 		}
 
 
+		public T getContext<T>()
+		{
+			return (T)context;
+		}
+
+
 		internal bool tick()
 		{
 			if( _elapsedTime > _timeInSeconds )
@@ -47,6 +53,17 @@ namespace Nez.Timers
 			this.context = context;
 			_onTime = onTime;
 		}
+
+
+		/// <summary>
+		/// nulls out the object references so the GC can pick them up if needed
+		/// </summary>
+		internal void unload()
+		{
+			context = null;
+			_onTime = null;
+		}
+
 	}
 }
 

@@ -12,6 +12,14 @@ namespace Nez
 		/// call stop to stop this timer from being run again. This has no effect on a non-repeating timer.
 		/// </summary>
 		void stop();
+
+		/// <summary>
+		/// returns the context casted to T as a convenience
+		/// </summary>
+		/// <returns>The context.</returns>
+		/// <typeparam name="T">The 1st type parameter.</typeparam>
+		T getContext<T>();
+
 	}
 }
 

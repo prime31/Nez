@@ -11,15 +11,15 @@ namespace MacTester
 	public class SimplePostProcessor : PostProcessor
 	{
 		public Rectangle sourceRect;
-		
+
 		RenderTexture _renderTexture;
 		Effect _effect;
 
 
-		public SimplePostProcessor( RenderTexture renderTexture )
+		public SimplePostProcessor( RenderTexture renderTexture, Effect effect )
 		{
 			_renderTexture = renderTexture;
-			_effect = new Effect( Core.graphicsDevice, File.ReadAllBytes( "Content/Effects/Invert.ogl.mgfxo" ) );
+			_effect = effect;
 			sourceRect = new Rectangle( 250, 10, _renderTexture.textureBounds.Width * 2, _renderTexture.textureBounds.Height * 2 );
 		}
 

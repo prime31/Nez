@@ -15,11 +15,21 @@ namespace Nez.Timers
 			{
 				// tick our timer. if it returns true it is done so we remove it
 				if( _timers[i].tick() )
+				{
+					_timers[i].unload();
 					_timers.RemoveAt( i );
+				}
 			}
 		}
 
 
+		/// <summary>
+		/// schedules a one-time or repeating timer that will call the passed in Action
+		/// </summary>
+		/// <param name="timeInSeconds">Time in seconds.</param>
+		/// <param name="repeats">If set to <c>true</c> repeats.</param>
+		/// <param name="context">Context.</param>
+		/// <param name="onTime">On time.</param>
 		internal ITimer schedule( float timeInSeconds, bool repeats, object context, Action<ITimer> onTime )
 		{
 			var timer = QuickCache<Timer>.pop();

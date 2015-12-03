@@ -126,7 +126,8 @@ namespace MacTester
 
 
 			// add a post processor to display the RenderTexture
-			var postProcessor = new SimplePostProcessor( renderer.renderTexture );
+			var effect = scene.contentManager.LoadEffect( "Content/Effects/Invert.ogl.mgfxo" );
+			var postProcessor = new SimplePostProcessor( renderer.renderTexture, effect );
 			scene.addPostProcessStep( postProcessor );
 			scene.enablePostProcessing = true;
 

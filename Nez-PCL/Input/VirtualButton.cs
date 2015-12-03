@@ -64,15 +64,15 @@ namespace Nez
 			_bufferCounter -= Time.unscaledDeltaTime;
 
 			var check = false;
-			foreach( var node in nodes )
+			for( var i = 0; i < nodes.Count; i++ )
 			{
-				node.update();
-				if( node.isPressed )
+				nodes[i].update();
+				if( nodes[i].isPressed )
 				{
 					_bufferCounter = bufferTime;
 					check = true;
 				}
-				else if( node.isDown )
+				else if( nodes[i].isDown )
 				{
 					check = true;
 				}

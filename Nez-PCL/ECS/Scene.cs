@@ -172,7 +172,7 @@ namespace Nez
 		#endregion
 
 
-		#region Renderer Management
+		#region Renderer/PostProcessor Management
 
 		public void addRenderer( Renderer renderer )
 		{

@@ -53,7 +53,7 @@ namespace Nez
 		}
 
 
-		public Core( int width = 1280, int height = 720, bool isFullScreen = false)
+		public Core( int width = 1280, int height = 720, bool isFullScreen = false )
 		{
 			_instance = this;
 			emitter = new Emitter<CoreEvents>( new CoreEventsComparer() );
