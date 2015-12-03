@@ -1,0 +1,214 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Policies>
+  <PolicySet name="NewP31XamarinPolicy">
+    <TextStylePolicy inheritsSet="VisualStudio" inheritsScope="text/plain" scope="text/x-csharp">
+      <FileWidth>120</FileWidth>
+      <TabsToSpaces>False</TabsToSpaces>
+      <NoTabsAfterNonTabs>True</NoTabsAfterNonTabs>
+    </TextStylePolicy>
+    <CSharpFormattingPolicy inheritsSet="Mono" inheritsScope="text/x-csharp" scope="text/x-csharp">
+      <IndentSwitchBody>True</IndentSwitchBody>
+      <IndentBreakStatements>False</IndentBreakStatements>
+      <AnonymousMethodBraceStyle>NextLine</AnonymousMethodBraceStyle>
+      <PropertyBraceStyle>NextLine</PropertyBraceStyle>
+      <PropertyGetBraceStyle>NextLine</PropertyGetBraceStyle>
+      <PropertySetBraceStyle>NextLine</PropertySetBraceStyle>
+      <EventBraceStyle>NextLine</EventBraceStyle>
+      <EventAddBraceStyle>NextLine</EventAddBraceStyle>
+      <EventRemoveBraceStyle>NextLine</EventRemoveBraceStyle>
+      <StatementBraceStyle>NextLine</StatementBraceStyle>
+      <ElseNewLinePlacement>NewLine</ElseNewLinePlacement>
+      <CatchNewLinePlacement>NewLine</CatchNewLinePlacement>
+      <FinallyNewLinePlacement>NewLine</FinallyNewLinePlacement>
+      <BeforeMethodDeclarationParentheses>False</BeforeMethodDeclarationParentheses>
+      <WithinMethodDeclarationParentheses>True</WithinMethodDeclarationParentheses>
+      <BeforeMethodCallParentheses>False</BeforeMethodCallParentheses>
+      <WithinMethodCallParentheses>True</WithinMethodCallParentheses>
+      <BeforeConstructorDeclarationParentheses>False</BeforeConstructorDeclarationParentheses>
+      <WithinConstructorDeclarationParentheses>True</WithinConstructorDeclarationParentheses>
+      <BeforeIndexerDeclarationBracket>False</BeforeIndexerDeclarationBracket>
+      <BeforeDelegateDeclarationParentheses>False</BeforeDelegateDeclarationParentheses>
+      <AfterDelegateDeclarationParameterComma>True</AfterDelegateDeclarationParameterComma>
+      <WithinDelegateDeclarationParentheses>True</WithinDelegateDeclarationParentheses>
+      <NewParentheses>False</NewParentheses>
+      <IfParentheses>False</IfParentheses>
+      <WhileParentheses>False</WhileParentheses>
+      <ForParentheses>False</ForParentheses>
+      <ForeachParentheses>False</ForeachParentheses>
+      <CatchParentheses>False</CatchParentheses>
+      <LockParentheses>False</LockParentheses>
+      <UsingParentheses>False</UsingParentheses>
+      <WithinParentheses>True</WithinParentheses>
+      <WithinIfParentheses>True</WithinIfParentheses>
+      <WithinWhileParentheses>True</WithinWhileParentheses>
+      <WithinForParentheses>True</WithinForParentheses>
+      <WithinForEachParentheses>True</WithinForEachParentheses>
+      <WithinCatchParentheses>True</WithinCatchParentheses>
+      <WithinSwitchParentheses>True</WithinSwitchParentheses>
+      <WithinLockParentheses>True</WithinLockParentheses>
+      <WithinUsingParentheses>True</WithinUsingParentheses>
+      <WithinSizeOfParentheses>True</WithinSizeOfParentheses>
+      <WithinTypeOfParentheses>True</WithinTypeOfParentheses>
+      <WithinNewParentheses>True</WithinNewParentheses>
+      <SpacesBeforeBrackets>False</SpacesBeforeBrackets>
+      <BlankLinesAfterUsings>2</BlankLinesAfterUsings>
+      <BlankLinesBetweenTypes>2</BlankLinesBetweenTypes>
+    </CSharpFormattingPolicy>
+    <TextStylePolicy inheritsSet="Mono" inheritsScope="text/plain" scope="text/plain">
+      <FileWidth>120</FileWidth>
+      <TabWidth>4</TabWidth>
+      <EolMarker>Unix</EolMarker>
+    </TextStylePolicy>
+    <DotNetNamingPolicy>
+      <DirectoryNamespaceAssociation>None</DirectoryNamespaceAssociation>
+      <ResourceNamePolicy>FileFormatDefault</ResourceNamePolicy>
+    </DotNetNamingPolicy>
+    <NameConventionPolicy>
+      <Rules>
+        <NamingRule>
+          <Name>Namespaces</Name>
+          <AffectedEntity>Namespace</AffectedEntity>
+          <VisibilityMask>VisibilityMask</VisibilityMask>
+          <NamingStyle>PascalCase</NamingStyle>
+          <IncludeInstanceMembers>True</IncludeInstanceMembers>
+          <IncludeStaticEntities>True</IncludeStaticEntities>
+        </NamingRule>
+        <NamingRule>
+          <Name>Types</Name>
+          <AffectedEntity>Class, Struct, Enum, Delegate</AffectedEntity>
+          <VisibilityMask>Public</VisibilityMask>
+          <NamingStyle>PascalCase</NamingStyle>
+          <IncludeInstanceMembers>True</IncludeInstanceMembers>
+          <IncludeStaticEntities>True</IncludeStaticEntities>
+        </NamingRule>
+        <NamingRule>
+          <Name>Interfaces</Name>
+          <RequiredPrefixes>
+            <String>I</String>
+          </RequiredPrefixes>
+          <AffectedEntity>Interface</AffectedEntity>
+          <VisibilityMask>Public</VisibilityMask>
+          <NamingStyle>PascalCase</NamingStyle>
+          <IncludeInstanceMembers>True</IncludeInstanceMembers>
+          <IncludeStaticEntities>True</IncludeStaticEntities>
+        </NamingRule>
+        <NamingRule>
+          <Name>Attributes</Name>
+          <RequiredSuffixes>
+            <String>Attribute</String>
+          </RequiredSuffixes>
+          <AffectedEntity>CustomAttributes</AffectedEntity>
+          <VisibilityMask>Public</VisibilityMask>
+          <NamingStyle>PascalCase</NamingStyle>
+          <IncludeInstanceMembers>True</IncludeInstanceMembers>
+          <IncludeStaticEntities>True</IncludeStaticEntities>
+        </NamingRule>
+        <NamingRule>
+          <Name>Event Arguments</Name>
+          <RequiredSuffixes>
+            <String>EventArgs</String>
+          </RequiredSuffixes>
+          <AffectedEntity>CustomEventArgs</AffectedEntity>
+          <VisibilityMask>Public</VisibilityMask>
+          <NamingStyle>PascalCase</NamingStyle>
+          <IncludeInstanceMembers>True</IncludeInstanceMembers>
+          <IncludeStaticEntities>True</IncludeStaticEntities>
+        </NamingRule>
+        <NamingRule>
+          <Name>Exceptions</Name>
+          <RequiredSuffixes>
+            <String>Exception</String>
+          </RequiredSuffixes>
+          <AffectedEntity>CustomExceptions</AffectedEntity>
+          <VisibilityMask>VisibilityMask</VisibilityMask>
+          <NamingStyle>PascalCase</NamingStyle>
+          <IncludeInstanceMembers>True</IncludeInstanceMembers>
+          <IncludeStaticEntities>True</IncludeStaticEntities>
+        </NamingRule>
+        <NamingRule>
+          <Name>Methods</Name>
+          <AffectedEntity>Methods, Field, ReadonlyField, Event, TypeParameter, LambdaParameter, LocalVariable</AffectedEntity>
+          <VisibilityMask>Protected, Public</VisibilityMask>
+          <NamingStyle>CamelCase</NamingStyle>
+          <IncludeInstanceMembers>True</IncludeInstanceMembers>
+          <IncludeStaticEntities>True</IncludeStaticEntities>
+        </NamingRule>
+        <NamingRule>
+          <Name>Static Readonly Fields</Name>
+          <AffectedEntity>ReadonlyField</AffectedEntity>
+          <VisibilityMask>Protected, Public</VisibilityMask>
+          <NamingStyle>PascalCase</NamingStyle>
+          <IncludeInstanceMembers>False</IncludeInstanceMembers>
+          <IncludeStaticEntities>True</IncludeStaticEntities>
+        </NamingRule>
+        <NamingRule>
+          <Name>Fields</Name>
+          <AffectedEntity>Field</AffectedEntity>
+          <VisibilityMask>Protected, Public</VisibilityMask>
+          <NamingStyle>PascalCase</NamingStyle>
+          <IncludeInstanceMembers>True</IncludeInstanceMembers>
+          <IncludeStaticEntities>True</IncludeStaticEntities>
+        </NamingRule>
+        <NamingRule>
+          <Name>ReadOnly Fields</Name>
+          <AffectedEntity>ReadonlyField</AffectedEntity>
+          <VisibilityMask>Protected, Public</VisibilityMask>
+          <NamingStyle>PascalCase</NamingStyle>
+          <IncludeInstanceMembers>True</IncludeInstanceMembers>
+          <IncludeStaticEntities>False</IncludeStaticEntities>
+        </NamingRule>
+        <NamingRule>
+          <Name>Constant Fields</Name>
+          <AffectedEntity>ConstantField</AffectedEntity>
+          <VisibilityMask>Protected, Public</VisibilityMask>
+          <NamingStyle>PascalCase</NamingStyle>
+          <IncludeInstanceMembers>True</IncludeInstanceMembers>
+          <IncludeStaticEntities>True</IncludeStaticEntities>
+        </NamingRule>
+        <NamingRule>
+          <Name>Properties</Name>
+          <AffectedEntity>Property</AffectedEntity>
+          <VisibilityMask>Protected, Public</VisibilityMask>
+          <NamingStyle>PascalCase</NamingStyle>
+          <IncludeInstanceMembers>True</IncludeInstanceMembers>
+          <IncludeStaticEntities>True</IncludeStaticEntities>
+        </NamingRule>
+        <NamingRule>
+          <Name>Events</Name>
+          <AffectedEntity>Event</AffectedEntity>
+          <VisibilityMask>Protected, Public</VisibilityMask>
+          <NamingStyle>PascalCase</NamingStyle>
+          <IncludeInstanceMembers>True</IncludeInstanceMembers>
+          <IncludeStaticEntities>True</IncludeStaticEntities>
+        </NamingRule>
+        <NamingRule>
+          <Name>Enum Members</Name>
+          <AffectedEntity>EnumMember</AffectedEntity>
+          <VisibilityMask>VisibilityMask</VisibilityMask>
+          <NamingStyle>PascalCase</NamingStyle>
+          <IncludeInstanceMembers>True</IncludeInstanceMembers>
+          <IncludeStaticEntities>True</IncludeStaticEntities>
+        </NamingRule>
+        <NamingRule>
+          <Name>Parameters</Name>
+          <AffectedEntity>Parameter</AffectedEntity>
+          <VisibilityMask>VisibilityMask</VisibilityMask>
+          <NamingStyle>CamelCase</NamingStyle>
+          <IncludeInstanceMembers>True</IncludeInstanceMembers>
+          <IncludeStaticEntities>True</IncludeStaticEntities>
+        </NamingRule>
+        <NamingRule>
+          <Name>Type Parameters</Name>
+          <RequiredPrefixes>
+            <String>T</String>
+          </RequiredPrefixes>
+          <AffectedEntity>TypeParameter</AffectedEntity>
+          <VisibilityMask>VisibilityMask</VisibilityMask>
+          <NamingStyle>PascalCase</NamingStyle>
+          <IncludeInstanceMembers>True</IncludeInstanceMembers>
+          <IncludeStaticEntities>True</IncludeStaticEntities>
+        </NamingRule>
+      </Rules>
+    </NameConventionPolicy>
+  </PolicySet>
+</Policies>
