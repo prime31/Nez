@@ -30,7 +30,7 @@ namespace Nez
 
 		protected override void onGraphicsDeviceReset()
 		{
-			_graphicsDevice.Viewport = new Viewport( 0, 0, _graphicsDevice.PresentationParameters.BackBufferWidth, _graphicsDevice.PresentationParameters.BackBufferHeight );
+			viewport = new Viewport( 0, 0, _graphicsDevice.PresentationParameters.BackBufferWidth, _graphicsDevice.PresentationParameters.BackBufferHeight );
 
 			var scaleX = (float)viewportWidth / _virtualWidth;
 			var scaleY = (float)viewportHeight / _virtualHeight;
