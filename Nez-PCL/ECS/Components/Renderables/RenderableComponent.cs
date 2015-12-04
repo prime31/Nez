@@ -171,6 +171,11 @@ namespace Nez
 		}
 
 
+		/// <summary>
+		/// called by a Renderer. The Camera can be used for culling and the Graphics instance to draw with.
+		/// </summary>
+		/// <param name="graphics">Graphics.</param>
+		/// <param name="camera">Camera.</param>
 		public virtual void render( Graphics graphics, Camera camera )
 		{}
 

@@ -120,6 +120,10 @@ namespace Nez
 		}
 
 		Collider _collider;
+		/// <summary>
+		/// the Collider managed by this Entity. Setting this property automatically registers the Collider with the Physics system.
+		/// </summary>
+		/// <value>The collider.</value>
 		public Collider collider
 		{
 			get { return _collider; }
@@ -193,6 +197,9 @@ namespace Nez
 		{}
 
 
+		/// <summary>
+		/// called each frame as long as the Entity is enabled
+		/// </summary>
 		public virtual void update()
 		{
 			components.updateLists();
@@ -205,6 +212,10 @@ namespace Nez
 		}
 
 
+		/// <summary>
+		/// called if Core.debugRenderEnabled is true by the default renderers. Custom renderers can choose to call it or not.
+		/// </summary>
+		/// <param name="graphics">Graphics.</param>
 		public virtual void debugRender( Graphics graphics )
 		{
 			for( var i = 0; i < components.Count; i++ )

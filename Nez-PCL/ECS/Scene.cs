@@ -12,27 +12,40 @@ namespace Nez
 		// cache used across all scenes so it is static
 		internal static EntityCache _entityCache;
 
+		/// <summary>
+		/// default scene Camera
+		/// </summary>
 		public Camera camera;
+
+		/// <summary>
+		/// clear color that is used in preRender to clear the screen
+		/// </summary>
 		public Color clearColor = Color.CornflowerBlue;
 
 		/// <summary>
 		/// Scene-specific ContentManager. Use it to load up any resources that are needed only by this scene. If you have global/multi-scene
 		/// resources you can use Core.contentManager to load them since Nez will not ever unload them.
 		/// </summary>
-		public NezContentManager contentManager;
+		public readonly NezContentManager contentManager;
 
+		/// <summary>
+		/// global toggle for PostProcessors
+		/// </summary>
 		public bool enablePostProcessing;
-		readonly List<PostProcessor> _postProcessors = new List<PostProcessor>();
 
 		/// <summary>
 		/// The list of entities within this Scene
 		/// </summary>
 		public EntityList entities;
 
-		public RenderableComponentList renderableComponents;
+		/// <summary>
+		/// Manages a list of all the RenderableComponents that are currently on scene Entitys
+		/// </summary>
+		public readonly RenderableComponentList renderableComponents;
 
 		List<Renderer> _renderers = new List<Renderer>();
 		Dictionary<int,double> _actualDepthLookup = new Dictionary<int,double>();
+		readonly List<PostProcessor> _postProcessors = new List<PostProcessor>();
 
 
 		static Scene()
@@ -136,7 +149,7 @@ namespace Nez
 		#region Utils
 
 		/// <summary>
-		/// Returns whether the Scene timer has passed the given time interval since the last frame. Ex: given 2.0f, this will return true once every 2 seconds
+		/// Returns whether the timeSinceSceneLoad has passed the given time interval since the last frame. Ex: given 2.0f, this will return true once every 2 seconds
 		/// </summary>
 		/// <param name="interval">The time interval to check for</param>
 		/// <returns></returns>

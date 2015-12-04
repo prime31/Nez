@@ -12,21 +12,7 @@ namespace Nez.Overlap2D
 		public string sceneName;
 
 		public O2DScene()
-		{
-		}
-
-		/*
-		public void draw( SpriteBatch spriteBatch, Vector2 position, float layerDepth, Rectangle cameraClipBounds )
-		{
-			// render any visible image or tile layer
-			foreach( var layer in layers )
-			{
-				if( !layer.visible )
-					continue;
-
-				layer.draw( spriteBatch, position, layerDepth, cameraClipBounds );
-			}
-		}*/
+		{}
 
 	}
 }

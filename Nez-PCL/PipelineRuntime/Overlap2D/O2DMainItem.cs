@@ -20,12 +20,11 @@ namespace Nez.Overlap2D
 		public int zIndex = 0;
 		public String layerName = "";
 		public float[] tint = { 1, 1, 1, 1 };
-
 		public String shaderName = "";
 
+
 		public O2DMainItem()
-		{
-		}
+		{}
 	}
 }
 

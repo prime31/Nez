@@ -7,13 +7,14 @@ namespace Nez.Console
 	/// <summary>
 	/// add this attribute to any static method
 	/// </summary>
-	public class Command : Attribute
+	[AttributeUsage( AttributeTargets.Method, AllowMultiple = false )]
+	public class CommandAttribute : Attribute
 	{
 		public string name;
 		public string help;
 
 
-		public Command( string name, string help )
+		public CommandAttribute( string name, string help )
 		{
 			this.name = name;
 			this.help = help;

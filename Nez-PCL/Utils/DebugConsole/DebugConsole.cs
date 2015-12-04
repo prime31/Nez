@@ -554,11 +554,11 @@ namespace Nez.Console
 
 		void processMethod( MethodInfo method )
 		{
-			Command attr = null;
+			CommandAttribute attr = null;
 			{
-				var attrs = method.GetCustomAttributes( typeof( Command ), false );
+				var attrs = method.GetCustomAttributes( typeof( CommandAttribute ), false );
 				if( attrs.Length > 0 )
-					attr = attrs[0] as Command;
+					attr = attrs[0] as CommandAttribute;
 			}
 
 			if( attr != null )

@@ -9,9 +9,9 @@ namespace Nez.Overlap2D
 		public bool isRepeat = false;
 		public bool isPolygon = false;
 
+
 		public O2DSimpleImage() : base()
-		{
-		}
+		{}
 	}
 }
 

@@ -70,6 +70,9 @@ namespace Nez
 		{}
 
 
+		/// <summary>
+		/// called each frame as long as the Entity and Component are enabled
+		/// </summary>
 		public virtual void update()
 		{}
 
