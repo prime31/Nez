@@ -7,7 +7,7 @@ The Nez rendering setup was designed to be really easy to get up and running but
 - **RenderLayerRenderer**: renders only the RenderableComponents in your Scene that are on renderLayer
 - **RenderLayerExcludeRenderer**: renders all the RenderableComponents in your Scene that are not on renderLayer
 
-You are free to subclass Renderer and render things in any way that you want. The Renderer class provides a solid, configurable base that lets you customize various attributes as well as render to a RenderTexture instead of directly to the framebuffer. If you do decide to render to a RenderTexture in most cases you will want to use a PostProcessor to draw it later.
+You are free to subclass Renderer and render things in any way that you want. The Scene contains a renderableComponents field that contains all the RenderableComponents for easy access and filtering. The RenderableComponentList provides easy access to all the RenderableComponents or just those on a specific renderLayer. The Renderer class provides a solid, configurable base that lets you customize various attributes as well as render to a RenderTexture instead of directly to the framebuffer. If you do decide to render to a RenderTexture in most cases you will want to use a PostProcessor to draw it later.
 
 
 Post Processing
