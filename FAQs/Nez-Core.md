@@ -71,3 +71,9 @@ Debug
 ==========
 The Debug class provides logging, asserts and a few drawing methods. These methods are only compiled into DEBUG builds so you can use them freely throughout your code and when you do a non-DEBUG build none of them will be compiled into your game.
 
+
+Flags
+==========
+Do you love the ability to pack lots of data into a single int but hate the syntax of dealing with it? The Flags class is there to help. It includes helper methods for dealing with ints to check if bits are set and to set/unset them. Very handy for dealing with Collider.physicsLayer.
+
+
