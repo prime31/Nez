@@ -273,10 +273,10 @@ namespace Nez
 			Vector2 p1;
 			Vector2 p2;
 
-			for( var i = 0; i < polygon.worldSpacePoints.Count; i++ )
+			for( var i = 0; i < polygon.worldSpacePoints.Length; i++ )
 			{
 				p1 = polygon.worldSpacePoints[i];
-				if( i + 1 >= polygon.worldSpacePoints.Count )
+				if( i + 1 >= polygon.worldSpacePoints.Length )
 					p2 = polygon.worldSpacePoints[0];
 				else
 					p2 = polygon.worldSpacePoints[i + 1];
@@ -289,18 +289,19 @@ namespace Nez
 		}
 
 
+		// http://www.dyn4j.org/2010/01/sat/
 		// http://www.bitlush.com/posts/circle-vs-polygon-collision-detection-in-c-sharp
 		public static bool polygonToCircle( PolygonCollider polygon, Vector2 circleCenter, float circleRadius )
 		{
 			var radiusSquared = circleRadius * circleRadius;
-			var vertex = polygon.worldSpacePoints[polygon.worldSpacePoints.Count - 1];
+			var vertex = polygon.worldSpacePoints[polygon.worldSpacePoints.Length - 1];
 
 			var nearestDistance = float.MaxValue;
 			var nearestIsInside = false;
 			var nearestVertex = -1;
 			var lastIsInside = false;
 
-			for( var i = 0; i < polygon.worldSpacePoints.Count; i++ )
+			for( var i = 0; i < polygon.worldSpacePoints.Length; i++ )
 			{
 				var nextVertex = polygon.worldSpacePoints[i];
 				var axis = circleCenter - vertex;
@@ -390,8 +391,8 @@ namespace Nez
 			result.intersect = true;
 			result.willIntersect = true;
 
-			var edgeCountA = polygonA.edges.Count;
-			var edgeCountB = polygonB.edges.Count;
+			var edgeCountA = polygonA.edges.Length;
+			var edgeCountB = polygonB.edges.Length;
 			var minIntervalDistance = float.PositiveInfinity;
 			var translationAxis = new Vector2();
 			Vector2 edge;
@@ -444,8 +445,7 @@ namespace Nez
 				if( !result.intersect && !result.willIntersect )
 					break;
 
-				// Check if the current interval distance is the minimum one. If so store
-				// the interval distance and the current distance.
+				// Check if the current interval distance is the minimum one. If so store the interval distance and the current distance.
 				// This will be used to calculate the minimum translation vector
 				intervalDist = Math.Abs( intervalDist );
 				if( intervalDist < minIntervalDistance )
@@ -482,7 +482,7 @@ namespace Nez
 			var d = Vector2.Dot( axis, polygon.worldSpacePoints[0] );
 			min = d;
 			max = d;
-			for( var i = 0; i < polygon.worldSpacePoints.Count; i++ )
+			for( var i = 0; i < polygon.worldSpacePoints.Length; i++ )
 			{
 				d = Vector2.Dot( polygon.worldSpacePoints[i], axis );
 				if( d < min )

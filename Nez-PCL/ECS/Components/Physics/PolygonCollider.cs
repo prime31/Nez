@@ -6,6 +6,9 @@ using System.Text;
 
 namespace Nez
 {
+	/// <summary>
+	/// Polygons should be defined in clockwise fashion.
+	/// </summary>
 	public class PolygonCollider : Collider
 	{
 		public override float width
@@ -20,19 +23,20 @@ namespace Nez
 			set { throw new NotSupportedException(); }
 		}
 
+		// TODO: should this use world space points? It is used in Collisions.polygonToPolygon
 		public Vector2 center
 		{
 			get
 			{
 				float totalX = 0;
 				float totalY = 0;
-				for( var i = 0; i < _points.Count; i++ )
+				for( var i = 0; i < _points.Length; i++ )
 				{
 					totalX += _points[i].X;
 					totalY += _points[i].Y;
 				}
 
-				return new Vector2( totalX / (float)_points.Count, totalY / (float)_points.Count );
+				return new Vector2( totalX / (float)_points.Length, totalY / (float)_points.Length );
 			}
 		}
 
@@ -50,7 +54,7 @@ namespace Nez
 					var maxX = float.NegativeInfinity;
 					var maxY = float.NegativeInfinity;
 
-					for( var i = 0; i < _points.Count; i++ )
+					for( var i = 0; i < _points.Length; i++ )
 					{
 						var pt = _points[i] + positionOffset;
 
@@ -77,28 +81,26 @@ namespace Nez
 		/// Polygon edges
 		/// </summary>
 		/// <value>The edges.</value>
-		public List<Vector2> edges { get { return _edges; } }
+		public Vector2[] edges { get { return _edges; } }
 
 		/// <summary>
 		/// Polygon points in object space
 		/// </summary>
 		/// <value>The local points.</value>
-		public List<Vector2> localPoints { get { return _points; } }
+		public Vector2[] localPoints { get { return _points; } }
 
 		/// <summary>
 		/// Polygon points converted to world space
 		/// </summary>
 		/// <value>The world space points.</value>
-		public List<Vector2> worldSpacePoints
+		public Vector2[] worldSpacePoints
 		{
 			get
 			{
 				if( _areWorldSpacePointsDirty )
 				{
-					_worldSpacePoints.Clear();
-
-					for( var i = 0; i < _points.Count; i++ )
-						_worldSpacePoints.Add( _points[i] + entity.position + _localPosition - _origin );
+					for( var i = 0; i < _points.Length; i++ )
+						_worldSpacePoints[i] = _points[i] + entity.position + _localPosition - _origin;
 
 					_areWorldSpacePointsDirty = false;
 				}
@@ -106,9 +108,9 @@ namespace Nez
 			}
 		}
 
-		List<Vector2> _points = new List<Vector2>();
-		List<Vector2> _edges = new List<Vector2>();
-		List<Vector2> _worldSpacePoints = new List<Vector2>();
+		Vector2[] _points;
+		Vector2[] _edges;
+		Vector2[] _worldSpacePoints;
 
 		/// <summary>
 		/// Flag indicating if we need to recalculate the worldSpacePoints. Any change in position or entity.position dirties the flag.
@@ -117,13 +119,27 @@ namespace Nez
 		bool _areWorldSpacePointsDirty = true;
 
 
-		public PolygonCollider( List<Vector2> points )
+		public PolygonCollider( Vector2[] points )
 		{
-			_points = points;
 			// first and last point must be the same so that we end up with a closed polygon
-			if( _points[0] != _points[points.Count - 1] )
-				_points.Add( _points[0] );
-			
+			var isPolygonClosed = true;
+			if( points[0] != points[points.Length - 1] )
+				isPolygonClosed = false;
+
+			// create the array with an extra element if we need to close the poly
+			_points = new Vector2[ isPolygonClosed ? points.Length : points.Length + 1];
+
+			// copy our points over
+			for( int i = 0; i < points.Length; i++ )
+				_points[i] = points[i];
+
+			// close the polygon if necessary
+			if( !isPolygonClosed )
+				_points[_points.Length - 1] = points[0];
+				
+
+			_edges = new Vector2[_points.Length];
+			_worldSpacePoints = new Vector2[_points.Length];
 			buildEdges();
 		}
 
@@ -139,17 +155,16 @@ namespace Nez
 		{
 			Vector2 p1;
 			Vector2 p2;
-			_edges.Clear();
 
-			for( var i = 0; i < _points.Count; i++ )
+			for( var i = 0; i < _points.Length; i++ )
 			{
 				p1 = _points[i];
-				if( i + 1 >= _points.Count )
+				if( i + 1 >= _points.Length )
 					p2 = _points[0];
 				else
 					p2 = _points[i + 1];
 
-				_edges.Add( p2 - p1 );
+				_edges[i] = p2 - p1;
 			}
 		}
 
@@ -198,7 +213,7 @@ namespace Nez
 		public override string ToString()
 		{
 			var builder = new StringBuilder();
-			for( var i = 0; i < _points.Count; i++ )
+			for( var i = 0; i < _points.Length; i++ )
 			{
 				if( i > 0 )
 					builder.Append( " " );
