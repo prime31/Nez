@@ -5,6 +5,10 @@ using Microsoft.Xna.Framework;
 
 namespace Nez
 {
+	/// <summary>
+	/// Collider that encompases one or more sub-colliders. Note that if you change the position/size of a sub-collider you have to make sure
+	/// the bounds are dirtied on this collider for the update to take place in the Physics system.
+	/// </summary>
 	public class MultiCollider : Collider
 	{
 		public List<Collider> colliders = new List<Collider>();
@@ -26,27 +30,33 @@ namespace Nez
 		{
 			get
 			{
-				var x = colliders[0].localPosition.X;
-				var y = colliders[0].localPosition.Y;
-				var right = colliders[0].localPosition.X + colliders[0].width;
-				var bottom = colliders[0].localPosition.Y + colliders[0].height;
-
-				for( var i = 1; i < colliders.Count; i++ )
+				if( _areBoundsDirty )
 				{
-					if( colliders[i].localPosition.X < x )
-						x = colliders[i].localPosition.X;
-					if( colliders[i].localPosition.Y < y )
-						y = colliders[i].localPosition.Y;
-					if( colliders[i].localPosition.X + colliders[i].width > right )
-						right = colliders[i].localPosition.X + colliders[i].width;
-					if( colliders[i].localPosition.Y + colliders[i].height > bottom )
-						bottom = colliders[i].localPosition.Y + colliders[i].height;
+					var x = colliders[0].localPosition.X;
+					var y = colliders[0].localPosition.Y;
+					var right = colliders[0].localPosition.X + colliders[0].width;
+					var bottom = colliders[0].localPosition.Y + colliders[0].height;
+
+					for( var i = 1; i < colliders.Count; i++ )
+					{
+						if( colliders[i].localPosition.X < x )
+							x = colliders[i].localPosition.X;
+						if( colliders[i].localPosition.Y < y )
+							y = colliders[i].localPosition.Y;
+						if( colliders[i].localPosition.X + colliders[i].width > right )
+							right = colliders[i].localPosition.X + colliders[i].width;
+						if( colliders[i].localPosition.Y + colliders[i].height > bottom )
+							bottom = colliders[i].localPosition.Y + colliders[i].height;
+					}
+
+					if( entity == null )
+						return RectangleExtension.fromFloats( x, y, right - x, bottom - y );
+					return RectangleExtension.fromFloats( entity.position.X + x, entity.position.Y + y, right - x, bottom - y );
+
+					_areBoundsDirty = false;
 				}
 
-
-				if( entity == null )
-					return RectangleExtension.fromFloats( x, y, right - x, bottom - y );
-				return RectangleExtension.fromFloats( entity.position.X + x, entity.position.Y + y, right - x, bottom - y );
+				return _bounds;
 			}
 		}
 
@@ -62,7 +72,8 @@ namespace Nez
 
 		public override void registerColliderWithPhysicsSystem()
 		{
-			// we just set all of our colliders to have the proper entity. sub-colliders dont end up in the physics system
+			// we just set all of our colliders to have the proper entity. sub-colliders dont end up in the physics system. only
+			// ourself with the full bounds does.
 			for( var i = 0; i < colliders.Count; i++ )
 				colliders[i].entity = entity;
 
@@ -144,6 +155,16 @@ namespace Nez
 		{
 			for( var i = 0; i < colliders.Count; i++ )
 				if( colliders[i].collidesWith( list ) )
+					return true;
+
+			return false;
+		}
+
+
+		public override bool collidesWith( PolygonCollider polygon )
+		{
+			for( var i = 0; i < colliders.Count; i++ )
+				if( colliders[i].collidesWith( polygon ) )
 					return true;
 
 			return false;

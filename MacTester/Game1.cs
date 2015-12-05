@@ -136,6 +136,9 @@ namespace MacTester
 			if( IMGUI.button( "Scene 3 Circle" ) )
 				scene = Scenes.sceneThree( false );
 
+			if( IMGUI.button( "Scene 4" ) )
+				scene = Scenes.sceneFour();
+
 			if( IMGUI.button( "Overlap2D Scene" ) )
 				scene = Scenes.sceneOverlap2D();
 

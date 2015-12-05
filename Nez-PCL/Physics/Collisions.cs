@@ -17,14 +17,15 @@ namespace Nez
 			Left = 8,
 			Right = 4,
 			BottomLeft = 10,
-			BottomRight = 6
-		};
+			BottomRight = 6}
+
+		;
 
 
 
 		#region Line
 
-		static public bool lineCheck( Vector2 a1, Vector2 a2, Vector2 b1, Vector2 b2 )
+		static public bool lineToLine( Vector2 a1, Vector2 a2, Vector2 b1, Vector2 b2 )
 		{
 			Vector2 b = a2 - a1;
 			Vector2 d = b2 - b1;
@@ -47,7 +48,7 @@ namespace Nez
 		}
 
 
-		static public bool lineCheck( Vector2 a1, Vector2 a2, Vector2 b1, Vector2 b2, out Vector2 intersection )
+		static public bool lineToLine( Vector2 a1, Vector2 a2, Vector2 b1, Vector2 b2, out Vector2 intersection )
 		{
 			intersection = Vector2.Zero;
 
@@ -86,6 +87,12 @@ namespace Nez
 			t = MathHelper.Clamp( t, 0, 1 );
 
 			return lineA + v * t;
+		}
+
+
+		static public bool circleToCircle( Vector2 circleCenter1, float circleRadius1, Vector2 circleCenter2, float circleRadius2 )
+		{
+			return Vector2.DistanceSquared( circleCenter1, circleCenter2 ) < ( circleRadius1 + circleRadius2 ) * ( circleRadius1 + circleRadius2 );
 		}
 
 
@@ -185,7 +192,7 @@ namespace Nez
 				{
 					edgeFrom = new Vector2( rX, rY );
 					edgeTo = new Vector2( rX + rW, rY );
-					if( Collisions.lineCheck( edgeFrom, edgeTo, lineFrom, lineTo ) )
+					if( Collisions.lineToLine( edgeFrom, edgeTo, lineFrom, lineTo ) )
 						return true;
 				}
 
@@ -193,7 +200,7 @@ namespace Nez
 				{
 					edgeFrom = new Vector2( rX, rY + rH );
 					edgeTo = new Vector2( rX + rW, rY + rH );
-					if( Collisions.lineCheck( edgeFrom, edgeTo, lineFrom, lineTo ) )
+					if( Collisions.lineToLine( edgeFrom, edgeTo, lineFrom, lineTo ) )
 						return true;
 				}
 
@@ -201,7 +208,7 @@ namespace Nez
 				{
 					edgeFrom = new Vector2( rX, rY );
 					edgeTo = new Vector2( rX, rY + rH );
-					if( Collisions.lineCheck( edgeFrom, edgeTo, lineFrom, lineTo ) )
+					if( Collisions.lineToLine( edgeFrom, edgeTo, lineFrom, lineTo ) )
 						return true;
 				}
 
@@ -209,7 +216,7 @@ namespace Nez
 				{
 					edgeFrom = new Vector2( rX + rW, rY );
 					edgeTo = new Vector2( rX + rW, rY + rH );
-					if( Collisions.lineCheck( edgeFrom, edgeTo, lineFrom, lineTo ) )
+					if( Collisions.lineToLine( edgeFrom, edgeTo, lineFrom, lineTo ) )
 						return true;
 				}
 			}
@@ -233,6 +240,273 @@ namespace Nez
 		static public bool rectToPoint( Rectangle rect, Vector2 point )
 		{
 			return rectToPoint( rect.X, rect.Y, rect.Width, rect.Height, point );
+		}
+
+		#endregion
+
+
+		#region Polygon
+
+		// Structure that stores the results of the PolygonCollision function
+		public struct PolygonCollisionResult
+		{
+			/// <summary>
+			/// Are the polygons going to intersect forward in time?
+			/// </summary>
+			public bool willIntersect;
+
+			/// <summary>
+			/// Are the polygons currently intersecting
+			/// </summary>
+			public bool intersect;
+
+			/// <summary>
+			/// The translation to apply to polygon A to push the polygons appart.
+			/// </summary>
+			public Vector2 minimumTranslationVector;
+		}
+
+
+		// currently, this is just a brute force check of each polygon edge
+		public static bool polygonToLine( PolygonCollider polygon, Vector2 lineFrom, Vector2 lineTo )
+		{
+			Vector2 p1;
+			Vector2 p2;
+
+			for( var i = 0; i < polygon.worldSpacePoints.Count; i++ )
+			{
+				p1 = polygon.worldSpacePoints[i];
+				if( i + 1 >= polygon.worldSpacePoints.Count )
+					p2 = polygon.worldSpacePoints[0];
+				else
+					p2 = polygon.worldSpacePoints[i + 1];
+
+				if( lineToLine( p1, p2, lineFrom, lineTo ) )
+					return true;
+			}
+
+			return false;
+		}
+
+
+		// http://www.bitlush.com/posts/circle-vs-polygon-collision-detection-in-c-sharp
+		public static bool polygonToCircle( PolygonCollider polygon, Vector2 circleCenter, float circleRadius )
+		{
+			var radiusSquared = circleRadius * circleRadius;
+			var vertex = polygon.worldSpacePoints[polygon.worldSpacePoints.Count - 1];
+
+			var nearestDistance = float.MaxValue;
+			var nearestIsInside = false;
+			var nearestVertex = -1;
+			var lastIsInside = false;
+
+			for( var i = 0; i < polygon.worldSpacePoints.Count; i++ )
+			{
+				var nextVertex = polygon.worldSpacePoints[i];
+				var axis = circleCenter - vertex;
+				var distance = axis.LengthSquared() - radiusSquared;
+
+				if( distance <= 0 )
+					return true;
+
+				var isInside = false;
+				var edge = nextVertex - vertex;
+				var edgeLengthSquared = edge.LengthSquared();
+
+				if( edgeLengthSquared != 0 )
+				{
+					var dot = Vector2.Dot( edge, axis );
+
+					if( dot >= 0 && dot <= edgeLengthSquared )
+					{
+						var projection = vertex + ( dot / edgeLengthSquared ) * edge;
+
+						axis = projection - circleCenter;
+
+						if( axis.LengthSquared() <= radiusSquared )
+						{
+							return true;
+						}
+						else
+						{
+							if( edge.X > 0 )
+							{
+								if( axis.Y > 0 )
+									return false;
+							}
+							else if( edge.X < 0 )
+							{
+								if( axis.Y < 0 )
+									return false;
+							}
+							else if( edge.Y > 0 )
+							{
+								if( axis.X < 0 )
+									return false;
+							}
+							else
+							{
+								if( axis.X > 0 )
+									return false;
+							}
+
+							isInside = true;
+						}
+					}
+				}
+
+				if( distance < nearestDistance )
+				{
+					nearestDistance = distance;
+					nearestIsInside = isInside || lastIsInside;
+					nearestVertex = i;
+				}
+
+				vertex = nextVertex;
+				lastIsInside = isInside;
+			}
+
+			if( nearestVertex == 0 )
+			{
+				return nearestIsInside || lastIsInside;
+			}
+			else
+			{
+				return nearestIsInside;
+			}
+		}
+
+
+		/// <summary>
+		/// Check if polygon A is going to collide with polygon B for the given velocity
+		/// </summary>
+		/// <returns>The to polygon.</returns>
+		/// <param name="polygonA">Polygon a.</param>
+		/// <param name="polygonB">Polygon b.</param>
+		/// <param name="velocity">Velocity.</param>
+		public static PolygonCollisionResult polygonToPolygon( PolygonCollider polygonA, PolygonCollider polygonB, Vector2 velocity = default(Vector2) )
+		{
+			var result = new PolygonCollisionResult();
+			result.intersect = true;
+			result.willIntersect = true;
+
+			var edgeCountA = polygonA.edges.Count;
+			var edgeCountB = polygonB.edges.Count;
+			var minIntervalDistance = float.PositiveInfinity;
+			var translationAxis = new Vector2();
+			Vector2 edge;
+
+			// Loop through all the edges of both polygons
+			for( var edgeIndex = 0; edgeIndex < edgeCountA + edgeCountB; edgeIndex++ )
+			{
+				if( edgeIndex < edgeCountA )
+					edge = polygonA.edges[edgeIndex];
+				else
+					edge = polygonB.edges[edgeIndex - edgeCountA];
+
+
+				// ===== 1. Find if the polygons are currently intersecting =====
+
+				// Find the axis perpendicular to the current edge
+				var axis = new Vector2( -edge.Y, edge.X );
+				axis.Normalize();
+
+				// Find the projection of the polygon on the current axis
+				var minA = 0f;
+				var minB = 0f;
+				var maxA = 0f;
+				var maxB = 0f;
+				projectPolygon( axis, polygonA, ref minA, ref maxA );
+				projectPolygon( axis, polygonB, ref minB, ref maxB );
+
+				// Check if the polygon projections are currentlty intersecting
+				if( intervalDistance( minA, maxA, minB, maxB ) > 0 )
+					result.intersect = false;
+
+
+				// ===== 2. Now find if the polygons *will* intersect =====
+
+				// Project the velocity on the current axis
+				var velocityProjection = Vector2.Dot( axis, velocity );
+
+				// Get the projection of polygon A during the movement
+				if( velocityProjection < 0 )
+					minA += velocityProjection;
+				else
+					maxA += velocityProjection;
+
+				// Do the same test as above for the new projection
+				var intervalDist = intervalDistance( minA, maxA, minB, maxB );
+				if( intervalDist > 0 )
+					result.willIntersect = false;
+
+				// If the polygons are not intersecting and won't intersect, exit the loop
+				if( !result.intersect && !result.willIntersect )
+					break;
+
+				// Check if the current interval distance is the minimum one. If so store
+				// the interval distance and the current distance.
+				// This will be used to calculate the minimum translation vector
+				intervalDist = Math.Abs( intervalDist );
+				if( intervalDist < minIntervalDistance )
+				{
+					minIntervalDistance = intervalDist;
+					translationAxis = axis;
+
+					var d = polygonA.center - polygonB.center;
+					if( Vector2.Dot( d, translationAxis ) < 0 )
+						translationAxis = -translationAxis;
+				}
+			}
+
+			// The minimum translation vector can be used to push the polygons appart.
+			// First moves the polygons by their velocity
+			// then move polygonA by MinimumTranslationVector.
+			if( result.willIntersect )
+				result.minimumTranslationVector = translationAxis * minIntervalDistance;
+
+			return result;
+		}
+
+
+		/// <summary>
+		/// Calculate the projection of a polygon on an axis and returns it as a [min, max] interval
+		/// </summary>
+		/// <param name="axis">Axis.</param>
+		/// <param name="polygon">Polygon.</param>
+		/// <param name="min">Minimum.</param>
+		/// <param name="max">Max.</param>
+		static void projectPolygon( Vector2 axis, PolygonCollider polygon, ref float min, ref float max )
+		{
+			// To project a point on an axis use the dot product
+			var d = Vector2.Dot( axis, polygon.worldSpacePoints[0] );
+			min = d;
+			max = d;
+			for( var i = 0; i < polygon.worldSpacePoints.Count; i++ )
+			{
+				d = Vector2.Dot( polygon.worldSpacePoints[i], axis );
+				if( d < min )
+					min = d;
+				else if( d > max )
+					max = d;
+			}
+		}
+
+
+		/// <summary>
+		/// Calculate the distance between [minA, maxA] and [minB, maxB]. The distance will be negative if the intervals overlap
+		/// </summary>
+		/// <returns>The distance.</returns>
+		/// <param name="minA">Minimum a.</param>
+		/// <param name="maxA">Max a.</param>
+		/// <param name="minB">Minimum b.</param>
+		/// <param name="maxB">Max b.</param>
+		static float intervalDistance( float minA, float maxA, float minB, float maxB )
+		{
+			if( minA < minB )
+				return minB - maxA;
+			else
+				return minA - maxB;
 		}
 
 		#endregion

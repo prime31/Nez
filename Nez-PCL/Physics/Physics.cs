@@ -80,6 +80,12 @@ namespace Nez
 
 
 		// TODO: all boxcast methods should sort nearest-to-furthest
+		/// <summary>
+		/// returns a HashSet of all colliders with bounds that are intersected by collider.bounds. Note that this is a broadphase check so it
+		/// only checks bounds and does not do individual Collider-to-Collider checks!
+		/// </summary>
+		/// <param name="bounds">Bounds.</param>
+		/// <param name="layerMask">Layer mask.</param>
 		public static HashSet<Collider> boxcast( Rectangle bounds, int layerMask = AllLayers )
 		{
 			return _spatialHash.boxcast( ref bounds, null, layerMask );
@@ -87,7 +93,7 @@ namespace Nez
 
 
 		/// <summary>
-		/// returns a HashSet of all colliders that are intersected by collider.bounds excluding the passed-in collider (self)
+		/// returns a HashSet of all colliders with bounds that are intersected by collider.bounds excluding the passed-in collider (self)
 		/// </summary>
 		/// <returns>The neighbors excluding self.</returns>
 		/// <param name="collider">Collider.</param>

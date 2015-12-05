@@ -140,9 +140,3 @@
 /processorParam:CompressTexture=False
 /build:Fonts/pixelfont.fnt
 
-#begin Fonts/pixelmix.fnt
-/importer:BitmapFontImporter
-/processor:BitmapFontProcessor
-/processorParam:CompressTexture=False
-/build:Fonts/pixelmix.fnt
-

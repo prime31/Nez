@@ -112,13 +112,19 @@ namespace Nez
 
 		public override bool collidesWith( CircleCollider circle )
 		{
-			return Vector2.DistanceSquared( bounds.getCenter(), circle.bounds.getCenter() ) < ( _radius + circle._radius ) * ( _radius + circle._radius );
+			return Collisions.circleToCircle( bounds.getCenter(), _radius, circle.bounds.getCenter(), circle._radius );
 		}
 
 
 		public override bool collidesWith( MultiCollider list )
 		{
 			return list.collidesWith( this );
+		}
+
+
+		public override bool collidesWith( PolygonCollider polygon )
+		{
+			return Collisions.polygonToCircle( polygon, bounds.getCenter(), _radius );
 		}
 
 		#endregion

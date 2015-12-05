@@ -20,6 +20,18 @@ namespace Nez
 		}
 
 
+		/// <summary>
+		/// creates a Rectangle given min/max points (top-left, bottom-right points)
+		/// </summary>
+		/// <returns>The minimum max points.</returns>
+		/// <param name="min">Minimum.</param>
+		/// <param name="max">Max.</param>
+		public static Rectangle fromMinMaxPoints( Point min, Point max )
+		{
+			return new Rectangle( min.X, min.Y, max.X - min.X, max.Y - min.Y );
+		}
+
+
 		public static void calculateBounds( ref Rectangle rect, Vector2 parentPosition, Vector2 position, Vector2 origin, Vector2 scale, float rotation, float width, float height )
 		{
 			if( rotation == 0f )

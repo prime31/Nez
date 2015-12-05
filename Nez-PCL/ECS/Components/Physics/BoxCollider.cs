@@ -96,6 +96,12 @@ namespace Nez
 			return list.collidesWith( this );
 		}
 
+
+		public override bool collidesWith( PolygonCollider polygon )
+		{
+			throw new NotImplementedException();
+		}
+
 		#endregion
 
 

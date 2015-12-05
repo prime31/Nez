@@ -160,6 +160,20 @@ namespace Nez
 				drawLine( position + points[points.Length - 1], position + points[0], color, thickness );
 		}
 
+
+		public void drawPolygon( Vector2 position, List<Vector2> points, Color color, bool closePoly = true, float thickness = 1 )
+		{
+			if( points.Count < 2 )
+				return;
+
+			for( int i = 1; i < points.Count; i++ )
+				drawLine( position + points[i - 1], position + points[i], color, thickness );
+
+
+			if( closePoly )
+				drawLine( position + points[points.Count - 1], position + points[0], color, thickness );
+		}
+
 		#endregion
 
 

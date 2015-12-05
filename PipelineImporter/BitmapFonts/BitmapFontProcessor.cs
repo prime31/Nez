@@ -25,7 +25,7 @@ namespace Nez.BitmapFontImporter
 		{
 			try
 			{
-				context.Logger.LogMessage( "Processing BMFont" );
+				context.Logger.LogMessage( "Processing BMFont, Kerning pairs: {0}", bitmapFontFile.kernings.Count );
 				var result = new BitmapFontProcessorResult( bitmapFontFile );
 
 				foreach( var fontPage in bitmapFontFile.pages )

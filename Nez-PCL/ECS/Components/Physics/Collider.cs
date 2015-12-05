@@ -20,8 +20,10 @@ namespace Nez
 			{
 				if( _localPosition != value )
 				{
+					unregisterColliderWithPhysicsSystem();
 					_localPosition = value;
 					_areBoundsDirty = true;
+					registerColliderWithPhysicsSystem();
 				}
 			}
 		}
@@ -110,6 +112,8 @@ namespace Nez
 				return collidesWith( collider as CircleCollider );
 			else if( collider is MultiCollider )
 				return collidesWith( collider as MultiCollider );
+			else if( collider is PolygonCollider )
+				return collidesWith( collider as PolygonCollider );
 			else
 				throw new NotImplementedException( "Collisions against the collider type are not implemented!" );
 		}
@@ -119,6 +123,7 @@ namespace Nez
 		public abstract bool collidesWith( BoxCollider boxCollider );
 		public abstract bool collidesWith( CircleCollider circle );
 		public abstract bool collidesWith( MultiCollider list );
+		public abstract bool collidesWith( PolygonCollider polygon );
 
 
 

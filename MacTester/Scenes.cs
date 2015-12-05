@@ -9,6 +9,7 @@ using Nez.TextureAtlases;
 using Nez.Overlap2D;
 using Nez.LibGdxAtlases;
 using Nez.BitmapFonts;
+using System.Collections.Generic;
 
 
 namespace MacTester
@@ -216,6 +217,48 @@ namespace MacTester
 				}
 			}
 
+
+			return scene;
+		}
+
+
+		public static Scene sceneFour()
+		{
+			var scene = Scene.createWithDefaultRenderer( Color.Aquamarine );
+			scene.camera.centerOrigin();
+			var moonTexture = scene.contentManager.Load<Texture2D>( "Images/moon" );
+
+			var entity = scene.createAndAddEntity<Entity>( "moon" );
+			var image = new Image( moonTexture );
+			image.originNormalized = Vector2Extension.halfVector();
+			entity.addComponent( image );
+			entity.position = new Vector2( 200, 200 );
+
+			var points = new List<Vector2>();
+			points.Add( new Vector2( -50, -50 ) );
+			points.Add( new Vector2( 0, -70 ) );
+			points.Add( new Vector2( 50, -40 ) );
+			points.Add( new Vector2( 50, 50 ) );
+			points.Add( new Vector2( -50, 50 ) );
+			points.Add( new Vector2( -50, -50 ) );
+			entity.collider = new PolygonCollider( points );
+
+
+			entity = scene.createAndAddEntity<Entity>( "moon2" );
+			image = new Image( moonTexture );
+			image.originNormalized = Vector2Extension.halfVector();
+			entity.addComponent( image );
+			entity.position = new Vector2( 500, 500 );
+
+			points = new List<Vector2>();
+			points.Add( new Vector2( -50, -50 ) );
+			points.Add( new Vector2( 50, 30 ) );
+			points.Add( new Vector2( -40, 40 ) );
+			points.Add( new Vector2( -50, -50 ) );
+
+			//entity.collider = new PolygonCollider( points );
+			entity.collider = new CircleCollider();
+			entity.addComponent( new SimpleMoonMover() );
 
 			return scene;
 		}

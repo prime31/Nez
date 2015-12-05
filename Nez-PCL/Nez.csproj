@@ -177,5 +177,6 @@
     <Compile Include="PipelineRuntime\Overlap2D\O2DSimpleImage.cs" />
     <Compile Include="Utils\NezContentManager.cs" />
     <Compile Include="ECS\Components\Renderables\Sprites\SpriteAnimationFrame.cs" />
+    <Compile Include="ECS\Components\Physics\PolygonCollider.cs" />
   </ItemGroup>
 </Project>
