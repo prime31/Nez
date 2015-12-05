@@ -178,5 +178,6 @@
     <Compile Include="Utils\NezContentManager.cs" />
     <Compile Include="ECS\Components\Renderables\Sprites\SpriteAnimationFrame.cs" />
     <Compile Include="ECS\Components\Physics\PolygonCollider.cs" />
+    <Compile Include="ECS\Components\Physics\OrientedBoxCollider.cs" />
   </ItemGroup>
 </Project>

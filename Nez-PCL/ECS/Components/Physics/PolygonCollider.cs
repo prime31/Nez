@@ -198,7 +198,7 @@ namespace Nez
 		public override bool collidesWith( PolygonCollider polygon )
 		{
 			var result = Collisions.polygonToPolygon( this, polygon );
-			return result.intersect || result.willIntersect;
+			return result.intersects;
 		}
 
 		#endregion

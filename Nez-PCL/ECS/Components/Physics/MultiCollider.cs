@@ -49,10 +49,7 @@ namespace Nez
 							bottom = colliders[i].localPosition.Y + colliders[i].height;
 					}
 
-					if( entity == null )
-						return RectangleExtension.fromFloats( x, y, right - x, bottom - y );
-					return RectangleExtension.fromFloats( entity.position.X + x, entity.position.Y + y, right - x, bottom - y );
-
+					_bounds = RectangleExtension.fromFloats( entity.position.X + x, entity.position.Y + y, right - x, bottom - y );
 					_areBoundsDirty = false;
 				}
 

@@ -251,14 +251,9 @@ namespace Nez
 		public struct PolygonCollisionResult
 		{
 			/// <summary>
-			/// Are the polygons going to intersect forward in time?
-			/// </summary>
-			public bool willIntersect;
-
-			/// <summary>
 			/// Are the polygons currently intersecting
 			/// </summary>
-			public bool intersect;
+			public bool intersects;
 
 			/// <summary>
 			/// The translation to apply to polygon A to push the polygons appart.
@@ -385,11 +380,10 @@ namespace Nez
 		/// <param name="polygonA">Polygon a.</param>
 		/// <param name="polygonB">Polygon b.</param>
 		/// <param name="velocity">Velocity.</param>
-		public static PolygonCollisionResult polygonToPolygon( PolygonCollider polygonA, PolygonCollider polygonB, Vector2 velocity = default(Vector2) )
+		public static PolygonCollisionResult polygonToPolygon( PolygonCollider polygonA, PolygonCollider polygonB )
 		{
 			var result = new PolygonCollisionResult();
-			result.intersect = true;
-			result.willIntersect = true;
+			result.intersects = true;
 
 			var edgeCountA = polygonA.edges.Length;
 			var edgeCountB = polygonB.edges.Length;
@@ -421,10 +415,13 @@ namespace Nez
 				projectPolygon( axis, polygonB, ref minB, ref maxB );
 
 				// Check if the polygon projections are currentlty intersecting
-				if( intervalDistance( minA, maxA, minB, maxB ) > 0 )
-					result.intersect = false;
+				var intervalDist = intervalDistance( minA, maxA, minB, maxB );
+				if( intervalDist > 0 )
+					result.intersects = false;
 
 
+				/* here we could project a Velocity onto the axis and do another check with the velocity added to the projection.
+				 * for now this is removed since no other collision methods take velocity into account
 				// ===== 2. Now find if the polygons *will* intersect =====
 
 				// Project the velocity on the current axis
@@ -440,9 +437,10 @@ namespace Nez
 				var intervalDist = intervalDistance( minA, maxA, minB, maxB );
 				if( intervalDist > 0 )
 					result.willIntersect = false;
+				*/
 
 				// If the polygons are not intersecting and won't intersect, exit the loop
-				if( !result.intersect && !result.willIntersect )
+				if( !result.intersects )
 					break;
 
 				// Check if the current interval distance is the minimum one. If so store the interval distance and the current distance.
@@ -462,8 +460,8 @@ namespace Nez
 			// The minimum translation vector can be used to push the polygons appart.
 			// First moves the polygons by their velocity
 			// then move polygonA by MinimumTranslationVector.
-			if( result.willIntersect )
-				result.minimumTranslationVector = translationAxis * minIntervalDistance;
+			//if( result.willIntersect )
+			//	result.minimumTranslationVector = translationAxis * minIntervalDistance;
 
 			return result;
 		}
