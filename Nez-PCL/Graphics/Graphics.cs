@@ -16,7 +16,6 @@ namespace Nez
 	{
 		public static Graphics instance;
 
-		public GraphicsDevice graphicsDevice;
 		/// <summary>
 		/// All 2D rendering is done through this SpriteBatch instance
 		/// </summary>
@@ -45,10 +44,9 @@ namespace Nez
 		Rectangle _tempRect;
 
 
-		public Graphics( GraphicsDevice graphicsDevice, BitmapFont font )
+		public Graphics( BitmapFont font )
 		{
-			this.graphicsDevice = graphicsDevice;
-			spriteBatch = new SpriteBatch( graphicsDevice );
+			spriteBatch = new SpriteBatch( Core.graphicsDevice );
 			bitmapFont = font;
 
 			var tex = createSingleColorTexture( 2, 2, Color.White );
@@ -66,7 +64,7 @@ namespace Nez
 		/// <param name="color">Color.</param>
 		Texture2D createSingleColorTexture( int width, int height, Color color )
 		{
-			var texture = new Texture2D( graphicsDevice, width, height );
+			var texture = new Texture2D( Core.graphicsDevice, width, height );
 			var data = new Color[width * height];
 			for( var i = 0; i < data.Length; i++ )
 				data[i] = color;

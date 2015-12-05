@@ -66,7 +66,7 @@ namespace MacTester
 
 			// setup a renderer that renders everything to a RenderTexture making sure its order is before standard renderers!
 			var renderer = new DefaultRenderer( scene.camera, -1 );
-			renderer.renderTexture = new RenderTexture( Core.graphicsDevice, 320, 240 );
+			renderer.renderTexture = new RenderTexture( 320, 240 );
 			renderer.renderTextureClearColor = Color.CornflowerBlue;
 			scene.addRenderer( renderer );
 

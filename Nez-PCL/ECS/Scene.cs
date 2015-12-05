@@ -71,7 +71,7 @@ namespace Nez
 
 		public Scene()
 		{
-			camera = new Camera( Graphics.instance.graphicsDevice );
+			camera = new Camera();
 			entities = new EntityList( this );
 			renderableComponents = new RenderableComponentList();
 			contentManager = new NezContentManager();
@@ -112,8 +112,8 @@ namespace Nez
 
 		internal void preRender()
 		{
-			Graphics.instance.graphicsDevice.SetRenderTarget( null );
-			Graphics.instance.graphicsDevice.Clear( clearColor );
+			Core.graphicsDevice.SetRenderTarget( null );
+			Core.graphicsDevice.Clear( clearColor );
 		}
 
 
@@ -125,7 +125,7 @@ namespace Nez
 				// MonoGame follows the XNA bullshit implementation so it will clear the entire buffer if we change the render target even if null.
 				// Because of that, we track when we are done with our RenderTextures and clear the scene at that time.
 				if( lastRendererHadRenderTexture )
-					Graphics.instance.graphicsDevice.Clear( clearColor );
+					Core.graphicsDevice.Clear( clearColor );
 				
 				_renderers[i].render( this, enableDebugRender );
 				lastRendererHadRenderTexture = _renderers[i].renderTexture != null;

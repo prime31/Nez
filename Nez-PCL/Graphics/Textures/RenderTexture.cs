@@ -18,9 +18,9 @@ namespace Nez.Textures
 		/// <param name="graphicsDevice">Graphics device.</param>
 		/// <param name="width">Width.</param>
 		/// <param name="height">Height.</param>
-		public RenderTexture( GraphicsDevice graphicsDevice, int width, int height )
+		public RenderTexture( int width, int height )
 		{
-			renderTarget2D = new RenderTarget2D( graphicsDevice, width, height );
+			renderTarget2D = new RenderTarget2D( Core.graphicsDevice, width, height );
 			texture2D = (Texture2D)renderTarget2D;
 			textureBounds = new Rectangle( 0, 0, width, height );
 		}
@@ -30,7 +30,7 @@ namespace Nez.Textures
 		/// Creates a RenderTexture with the full size of the back buffer
 		/// </summary>
 		/// <param name="graphicsDevice">Graphics device.</param>
-		public RenderTexture( GraphicsDevice graphicsDevice ) : this( graphicsDevice, graphicsDevice.PresentationParameters.BackBufferWidth, graphicsDevice.PresentationParameters.BackBufferHeight )
+		public RenderTexture() : this( Core.graphicsDevice.PresentationParameters.BackBufferWidth, Core.graphicsDevice.PresentationParameters.BackBufferHeight )
 		{}
 
 
@@ -39,7 +39,7 @@ namespace Nez.Textures
 		/// </summary>
 		/// <param name="graphicsDevice">Graphics device.</param>
 		/// <param name="tex">Tex.</param>
-		public RenderTexture( GraphicsDevice graphicsDevice, Texture tex ) : this( graphicsDevice, tex.textureBounds.Width, tex.textureBounds.Height )
+		public RenderTexture( Texture tex ) : this( tex.textureBounds.Width, tex.textureBounds.Height )
 		{
 			var data = new Color[tex.textureBounds.Width * tex.textureBounds.Height];
 			tex.texture2D.GetData<Color>( data );

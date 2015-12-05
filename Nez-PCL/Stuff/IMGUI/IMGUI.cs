@@ -54,9 +54,9 @@ namespace Nez
 		static Point _mouseInWorldCoords;
 
 
-		public static void init( GraphicsDevice device, BitmapFont font )
+		public static void init( BitmapFont font )
 		{
-			_graphics = new Graphics( device, font );
+			_graphics = new Graphics( font );
 
 			var scale = FONT_LINE_HEIGHT / _graphics.bitmapFont.lineHeight;
 			FONT_SCALE = new Vector2( scale, scale );
@@ -119,7 +119,7 @@ namespace Nez
 			_windowWidth = width;
 			_windowHeight = height;
 			_elementWidth = _windowWidth - 2f * ELEMENT_PADDING;
-			_mouseInWorldCoords = Input.mousePosition - new Point( _graphics.graphicsDevice.Viewport.X, _graphics.graphicsDevice.Viewport.Y );
+			_mouseInWorldCoords = Input.mousePosition - new Point( Core.graphicsDevice.Viewport.X, Core.graphicsDevice.Viewport.Y );
 		}
 
 

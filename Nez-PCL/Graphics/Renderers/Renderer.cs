@@ -81,14 +81,14 @@ namespace Nez
 			// if we have a renderTexture render into it
 			if( renderTexture != null )
 			{
-				Graphics.instance.graphicsDevice.SetRenderTarget( renderTexture );
-				Graphics.instance.graphicsDevice.Clear( renderTextureClearColor );
+				Core.graphicsDevice.SetRenderTarget( renderTexture );
+				Core.graphicsDevice.Clear( renderTextureClearColor );
 			}
 
 			// Sets the current camera viewport if the camera has one
 			if( cam.viewportAdapter != null )
 			{
-				Graphics.instance.graphicsDevice.Viewport = cam.viewportAdapter.viewport;
+				Core.graphicsDevice.Viewport = cam.viewportAdapter.viewport;
 			}
 
 			// MonoGame resets the Viewport to the RT size without asking so we have to let the Camera know to update itself
@@ -110,7 +110,7 @@ namespace Nez
 
 			// clear the RenderTarget so that we render to the screen if we were using a RenderTexture
 			if( renderTexture != null && clearRenderTargetAfterRender )
-				Graphics.instance.graphicsDevice.SetRenderTarget( null );
+				Core.graphicsDevice.SetRenderTarget( null );
 		}
 
 

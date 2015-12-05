@@ -37,9 +37,9 @@ namespace Nez.Textures
 		}
 
 
-		public Texture( GraphicsDevice graphicsDevice, int width, int height, Color color )
+		public Texture( int width, int height, Color color )
 		{
-			texture2D = new Texture2D( graphicsDevice, width, height );
+			texture2D = new Texture2D( Core.graphicsDevice, width, height );
 			var data = new Color[width * height];
 
 			for( var i = 0; i < data.Length; i++ )

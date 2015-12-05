@@ -51,8 +51,6 @@ namespace Nez
 			}
 		}
 
-		readonly GraphicsDevice _graphicsDevice;
-
 		float _zoom;
 		public float zoom
 		{
@@ -109,14 +107,14 @@ namespace Nez
 				if( _areBoundsDirty )
 				{
 					// top-left and bottom-right are needed by either rotated or non-rotated bounds
-					var topLeft = screenToWorldPoint( new Vector2( _graphicsDevice.Viewport.X, _graphicsDevice.Viewport.Y ) );
-					var bottomRight = screenToWorldPoint( new Vector2( _graphicsDevice.Viewport.X + _graphicsDevice.Viewport.Width, _graphicsDevice.Viewport.Y + _graphicsDevice.Viewport.Height ) );
+					var topLeft = screenToWorldPoint( new Vector2( Core.graphicsDevice.Viewport.X, Core.graphicsDevice.Viewport.Y ) );
+					var bottomRight = screenToWorldPoint( new Vector2( Core.graphicsDevice.Viewport.X + Core.graphicsDevice.Viewport.Width, Core.graphicsDevice.Viewport.Y + Core.graphicsDevice.Viewport.Height ) );
 
 					if( rotation != 0 )
 					{
 						// special care for rotated bounds. we need to find our absolute min/max values and create the bounds from that
-						var topRight = screenToWorldPoint( new Vector2( _graphicsDevice.Viewport.X + _graphicsDevice.Viewport.Width, _graphicsDevice.Viewport.Y ) );
-						var bottomLeft = screenToWorldPoint( new Vector2( _graphicsDevice.Viewport.X, _graphicsDevice.Viewport.Y + _graphicsDevice.Viewport.Height ) );	
+						var topRight = screenToWorldPoint( new Vector2( Core.graphicsDevice.Viewport.X + Core.graphicsDevice.Viewport.Width, Core.graphicsDevice.Viewport.Y ) );
+						var bottomLeft = screenToWorldPoint( new Vector2( Core.graphicsDevice.Viewport.X, Core.graphicsDevice.Viewport.Y + Core.graphicsDevice.Viewport.Height ) );	
 
 						var minX = (int)Mathf.minOf( topLeft.X, bottomRight.X, topRight.X, bottomLeft.X );
 						var maxX = (int)Mathf.maxOf( topLeft.X, bottomRight.X, topRight.X, bottomLeft.X );
@@ -189,10 +187,8 @@ namespace Nez
 		#endregion
 
 
-		public Camera( GraphicsDevice graphicsDevice, float near = 0, float far = 1 )
+		public Camera( float near = 0, float far = 1 )
 		{
-			_graphicsDevice = graphicsDevice;
-
 			rotation = 0;
 			zoom = 1;
 			_near = near;
@@ -270,7 +266,7 @@ namespace Nez
 			if( viewportAdapter != null )
 				origin = new Vector2( viewportAdapter.virtualWidth / 2f, viewportAdapter.virtualHeight / 2f );
 			else
-				origin = new Vector2( _graphicsDevice.Viewport.Width / 2f, _graphicsDevice.Viewport.Height / 2f );
+				origin = new Vector2( Core.graphicsDevice.Viewport.Width / 2f, Core.graphicsDevice.Viewport.Height / 2f );
 
 			// offset our position to match the new center
 			position += origin;
@@ -347,7 +343,7 @@ namespace Nez
 		public Matrix getProjectionMatrix()
 		{
 			// not currently blocked with a dirty flag due to the core engine not using this
-			return Matrix.CreateOrthographicOffCenter( 0, _graphicsDevice.Viewport.Width, _graphicsDevice.Viewport.Height, 0, _near, _far );
+			return Matrix.CreateOrthographicOffCenter( 0, Core.graphicsDevice.Viewport.Width, Core.graphicsDevice.Viewport.Height, 0, _near, _far );
 		}
 
 
