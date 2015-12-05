@@ -241,7 +241,7 @@ namespace MacTester
 			points.Add( new Vector2( 50, 50 ) );
 			points.Add( new Vector2( -50, 50 ) );
 			points.Add( new Vector2( -50, -50 ) );
-			entity.collider = new PolygonCollider( points );
+			entity.collider = new PolygonCollider( points.ToArray() );
 
 
 			entity = scene.createAndAddEntity<Entity>( "moon2" );
@@ -256,8 +256,7 @@ namespace MacTester
 			points.Add( new Vector2( -40, 40 ) );
 			points.Add( new Vector2( -50, -50 ) );
 
-			//entity.collider = new PolygonCollider( points );
-			entity.collider = new CircleCollider();
+			entity.collider = new PolygonCollider( points.ToArray() );
 			entity.addComponent( new SimpleMoonMover() );
 
 			return scene;
