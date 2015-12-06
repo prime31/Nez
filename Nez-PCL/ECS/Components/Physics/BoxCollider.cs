@@ -65,6 +65,10 @@ namespace Nez
 		}
 
 
+		public BoxCollider( float width, float height ) : this( 0, 0, width, height )
+		{}
+
+
 		public BoxCollider( Rectangle rect ) : this( rect.X, rect.Y, rect.Width, rect.Height )
 		{}
 

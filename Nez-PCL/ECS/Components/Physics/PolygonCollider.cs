@@ -23,20 +23,20 @@ namespace Nez
 			set { throw new NotSupportedException(); }
 		}
 
-		// TODO: should this use world space points? It is used in Collisions.polygonToPolygon
-		public Vector2 center
+		protected float _rotation;
+		public float rotation
 		{
-			get
+			get { return _rotation; }
+			set
 			{
-				float totalX = 0;
-				float totalY = 0;
-				for( var i = 0; i < _points.Length; i++ )
+				if( _rotation != value )
 				{
-					totalX += _points[i].X;
-					totalY += _points[i].Y;
+					unregisterColliderWithPhysicsSystem();
+					_rotation = value;
+					_areBoundsDirty = true;
+					_areWorldSpacePointsDirty = true;
+					registerColliderWithPhysicsSystem();
 				}
-
-				return new Vector2( totalX / (float)_points.Length, totalY / (float)_points.Length );
 			}
 		}
 
@@ -46,17 +46,15 @@ namespace Nez
 			{
 				if( _areBoundsDirty )
 				{
-					var positionOffset = new Vector2( entity.position.X + _localPosition.X - _origin.X, entity.position.Y + _localPosition.Y - _origin.Y );
-
 					// we need to find the min/max x/y values
 					var minX = float.PositiveInfinity;
 					var minY = float.PositiveInfinity;
 					var maxX = float.NegativeInfinity;
 					var maxY = float.NegativeInfinity;
 
-					for( var i = 0; i < _points.Length; i++ )
+					for( var i = 0; i < worldSpacePoints.Length; i++ )
 					{
-						var pt = _points[i] + positionOffset;
+						var pt = worldSpacePoints[i];
 
 						if( pt.X < minX )
 							minX = pt.X;
@@ -81,16 +79,10 @@ namespace Nez
 		/// Polygon edges
 		/// </summary>
 		/// <value>The edges.</value>
-		public Vector2[] edges { get { return _edges; } }
+		public Vector2[] edges;
 
 		/// <summary>
-		/// Polygon points in object space
-		/// </summary>
-		/// <value>The local points.</value>
-		public Vector2[] localPoints { get { return _points; } }
-
-		/// <summary>
-		/// Polygon points converted to world space
+		/// Polygon points converted to world space with transformations applied
 		/// </summary>
 		/// <value>The world space points.</value>
 		public Vector2[] worldSpacePoints
@@ -99,24 +91,58 @@ namespace Nez
 			{
 				if( _areWorldSpacePointsDirty )
 				{
-					for( var i = 0; i < _points.Length; i++ )
-						_worldSpacePoints[i] = _points[i] + entity.position + _localPosition - _origin;
+					if( _rotation == 0f )
+					{
+						for( var i = 0; i < _points.Length; i++ )
+							_worldSpacePoints[i] = _points[i] + entity.position + _localPosition - _origin;						
+					}
+					else
+					{
+						var matrix = transformMatrix;
+						Vector2.Transform( _points, ref matrix, _worldSpacePoints );
+					}
 
 					_areWorldSpacePointsDirty = false;
+					buildEdges();
 				}
 				return _worldSpacePoints;
 			}
 		}
 
-		Vector2[] _points;
-		Vector2[] _edges;
-		Vector2[] _worldSpacePoints;
+		Matrix _transformMatrix;
+		protected Matrix transformMatrix
+		{
+			get
+			{
+				var worldPosX = entity.position.X + _localPosition.X;
+				var worldPosY = entity.position.Y + _localPosition.Y;
+				var tempMat = Matrix.Identity;
+
+				// set the reference point taking origin into account
+				_transformMatrix = Matrix.CreateTranslation( -_origin.X, -_origin.Y, 0f ); // origin
+				Matrix.CreateRotationZ( _rotation, out tempMat ); // rotation
+				Matrix.Multiply( ref _transformMatrix, ref tempMat, out _transformMatrix );
+				Matrix.CreateTranslation( _origin.X, _origin.Y, 0f, out tempMat ); // translate back from our origin
+				Matrix.Multiply( ref _transformMatrix, ref tempMat, out _transformMatrix );
+				Matrix.CreateTranslation( worldPosX, worldPosY, 0f, out tempMat ); // translate to our world space position
+				Matrix.Multiply( ref _transformMatrix, ref tempMat, out _transformMatrix );
+
+				return _transformMatrix;
+			}
+		}
+
+		protected Vector2[] _points;
+		protected Vector2[] _worldSpacePoints;
 
 		/// <summary>
 		/// Flag indicating if we need to recalculate the worldSpacePoints. Any change in position or entity.position dirties the flag.
 		/// Technically, this should dirty for origin/localPosition changes but if Entity is used to move it will properly get updated.
 		/// </summary>
 		bool _areWorldSpacePointsDirty = true;
+
+
+		protected PolygonCollider()
+		{}
 
 
 		public PolygonCollider( Vector2[] points )
@@ -138,9 +164,8 @@ namespace Nez
 				_points[_points.Length - 1] = points[0];
 				
 
-			_edges = new Vector2[_points.Length];
+			edges = new Vector2[_points.Length];
 			_worldSpacePoints = new Vector2[_points.Length];
-			buildEdges();
 		}
 
 
@@ -151,20 +176,20 @@ namespace Nez
 		}
 
 
-		void buildEdges()
+		protected virtual void buildEdges()
 		{
 			Vector2 p1;
 			Vector2 p2;
 
-			for( var i = 0; i < _points.Length; i++ )
+			for( var i = 0; i < worldSpacePoints.Length; i++ )
 			{
-				p1 = _points[i];
-				if( i + 1 >= _points.Length )
-					p2 = _points[0];
+				p1 = worldSpacePoints[i];
+				if( i + 1 >= worldSpacePoints.Length )
+					p2 = worldSpacePoints[0];
 				else
-					p2 = _points[i + 1];
+					p2 = worldSpacePoints[i + 1];
 
-				_edges[i] = p2 - p1;
+				edges[i] = p2 - p1;
 			}
 		}
 
@@ -206,7 +231,8 @@ namespace Nez
 
 		public override void debugRender( Graphics graphics )
 		{
-			graphics.drawPolygon( entity.position + _localPosition, _points, Color.DarkRed, false );
+			graphics.drawPolygon( Vector2.Zero, worldSpacePoints, Color.DarkRed, false );
+			graphics.drawPixel( entity.position + _localPosition - _origin, Color.Yellow, 2 );
 		}
 
 

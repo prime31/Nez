@@ -17,10 +17,8 @@ namespace Nez
 			Left = 8,
 			Right = 4,
 			BottomLeft = 10,
-			BottomRight = 6}
-
-		;
-
+			BottomRight = 6
+		};
 
 
 		#region Line
@@ -388,7 +386,7 @@ namespace Nez
 			var edgeCountA = polygonA.edges.Length;
 			var edgeCountB = polygonB.edges.Length;
 			var minIntervalDistance = float.PositiveInfinity;
-			var translationAxis = new Vector2();
+			//var translationAxis = new Vector2();
 			Vector2 edge;
 
 			// Loop through all the edges of both polygons
@@ -449,11 +447,12 @@ namespace Nez
 				if( intervalDist < minIntervalDistance )
 				{
 					minIntervalDistance = intervalDist;
-					translationAxis = axis;
 
-					var d = polygonA.center - polygonB.center;
-					if( Vector2.Dot( d, translationAxis ) < 0 )
-						translationAxis = -translationAxis;
+					// this relies on a center property and is really only useful if we use the velocity calculations above
+					//translationAxis = axis;
+					//var d = polygonA.center - polygonB.center;
+					//if( Vector2.Dot( d, translationAxis ) < 0 )
+					//	translationAxis = -translationAxis;
 				}
 			}
 
@@ -505,6 +504,58 @@ namespace Nez
 				return minB - maxA;
 			else
 				return minA - maxB;
+		}
+
+
+		/// <summary>
+		/// returns true if the OBBs overlap
+		/// </summary>
+		/// <returns><c>true</c>, if box collider to oriented box collider was orienteded, <c>false</c> otherwise.</returns>
+		/// <param name="first">First.</param>
+		/// <param name="second">Second.</param>
+		public static bool orientedBoxColliderToOrientedBoxCollider( OrientedBoxCollider first, OrientedBoxCollider second )
+		{
+			// we have to check both directions for OBBs
+			return orientedBoxColliderOverlapsOneWay( first, second ) && orientedBoxColliderOverlapsOneWay( second, first );
+		}
+
+
+		/// <summary>
+		/// Returns true if other overlaps any dimension of this
+		/// </summary>
+		/// <returns><c>true</c>, if way was overlaps1ed, <c>false</c> otherwise.</returns>
+		/// <param name="other">Other.</param>
+		static bool orientedBoxColliderOverlapsOneWay( OrientedBoxCollider first, OrientedBoxCollider second )
+		{
+			// TODO: something is a bit off here. we get tiny penetrations which causes stuck collisions
+			for( var i = 0; i < 2; i++ )
+			{
+				var t = Vector2.Dot( second.worldSpacePoints[0], first.edges[i] );
+
+				// find the extent of box 2 on axis a
+				var tMin = t;
+				var tMax = t;
+
+				for( var j = 1; j < 4; j++ )
+				{
+					t = Vector2.Dot( second.worldSpacePoints[j], first.edges[i] );
+					if( t < tMin )
+						tMin = t;
+					else if( t > tMax )
+						tMax = t;
+				}
+
+				// we have to subtract off the origin
+				// See if [tMin, tMax] intersects [0, 1]
+				if( tMin > 1f + first._corner0ProjectionsOnEdges[i] || tMax < first._corner0ProjectionsOnEdges[i] )
+				{
+					// there was no intersection along this dimension so the boxes cannot possibly overlap.
+					return false;
+				}
+			}
+
+			// there was no dimension along which there is no intersection. Therefore the boxes overlap.
+			return true;
 		}
 
 		#endregion

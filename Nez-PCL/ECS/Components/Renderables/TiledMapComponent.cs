@@ -7,7 +7,6 @@ using System.Collections.Generic;
 
 namespace Nez
 {
-	// TODO: add scale support? not really sure if it should exist or not though so give it some thought
 	public class TiledMapComponent : RenderableComponent
 	{
 		public TiledMap tiledmap;

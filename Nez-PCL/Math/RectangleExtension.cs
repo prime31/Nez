@@ -57,7 +57,7 @@ namespace Nez
 				Matrix.CreateTranslation( worldPosX, worldPosY, 0f, out tempMat ); // translate back
 				Matrix.Multiply( ref transformMatrix, ref tempMat, out transformMatrix );
 
-
+				// TODO: this is a bit silly. we can just leave the worldPos translation in the Matrix and avoid this
 				// get all four corners in world space
 				var topLeft = new Vector2( worldPosX, worldPosY );
 				var topRight = new Vector2( worldPosX + width, worldPosY );

@@ -245,6 +245,7 @@ namespace MacTester
 			points.Add( new Vector2( -50, 50 ) );
 			points.Add( new Vector2( -50, -50 ) );
 			entity.collider = new PolygonCollider( points.ToArray() );
+			( entity.collider as PolygonCollider ).rotation = MathHelper.PiOver2;
 
 
 			entity = scene.createAndAddEntity<Entity>( "moon2" );
@@ -260,7 +261,18 @@ namespace MacTester
 			points.Add( new Vector2( -50, -50 ) );
 
 			entity.collider = new PolygonCollider( points.ToArray() );
+			entity.collider = new OrientedBoxCollider( 128, 128 );
+			( entity.collider as PolygonCollider ).rotation = MathHelper.PiOver4;
 			entity.addComponent( new SimpleMoonMover() );
+
+
+			entity = scene.createAndAddEntity<Entity>( "moon2" );
+			image = new Image( moonTexture );
+			image.originNormalized = Vector2Extension.halfVector();
+			entity.addComponent( image );
+			entity.position = new Vector2( 700, 300 );
+			entity.collider = new OrientedBoxCollider( 128, 128 );
+			( entity.collider as OrientedBoxCollider ).rotation = MathHelper.PiOver4 + 0.1f;
 
 			return scene;
 		}
