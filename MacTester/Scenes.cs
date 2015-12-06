@@ -24,7 +24,9 @@ namespace MacTester
 				scene.camera.viewportAdapter = new ScalingViewportAdapter( Core.graphicsDevice, 256, 144 );
 			else
 				scene.camera.viewportAdapter = new BoxingViewportAdapter( Core.graphicsDevice, 256, 144 );
-			Core.setScreenSize( 256 * 4, 144 * 4 );
+			Screen.backBufferWidth = 256 * 4; 
+			Screen.backBufferHeight = 144 * 4;
+			Screen.applyChanges();
 
 
 			// load a TiledMap and move it back so is drawn before other entities
@@ -189,6 +191,7 @@ namespace MacTester
 			// add a follow camera
 			var camFollow = scene.createAndAddEntity<Entity>( "camera-follow" );
 			camFollow.addComponent( new FollowCamera( entity ) );
+			camFollow.addComponent( new CameraShake() );
 
 			return scene;
 		}

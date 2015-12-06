@@ -53,9 +53,7 @@ namespace Nez.Console
 		[Command( "vsync", "Enables or disables vertical sync" )]
 		static private void vsync( bool enabled = true )
 		{
-			Core._instance._graphicsManager.SynchronizeWithVerticalRetrace = enabled;
-			//Core._instance._graphicsManager.ApplyChanges(); // crashes mac
-
+			Screen.synchronizeWithVerticalRetrace = enabled;
 			DebugConsole.instance.log( "Vertical Sync " + ( enabled ? "Enabled" : "Disabled" ) );
 		}
 

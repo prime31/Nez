@@ -88,6 +88,10 @@ namespace MacTester
 						Debug.log( "ray HIT {0}, collider: {1}", hit.distance, hit.collider.entity );
 					}
 				}
+
+				var cam = scene.findEntity( "camera-follow" );
+				if( cam != null && cam.getComponent<CameraShake>() != null )
+					cam.getComponent<CameraShake>().shake();
 			}
 
 			// allow click-drag to move the camera

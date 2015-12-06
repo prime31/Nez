@@ -33,7 +33,6 @@ namespace Nez
 		/// </summary>
 		internal static Core _instance;
 
-		internal GraphicsDeviceManager _graphicsManager;
 		Scene _scene;
 		Scene _nextScene;
 
@@ -58,16 +57,13 @@ namespace Nez
 			_instance = this;
 			emitter = new Emitter<CoreEvents>( new CoreEventsComparer() );
 
-			_graphicsManager = new GraphicsDeviceManager( this );
-			//_graphicsManager.PreferredDepthStencilFormat = DepthFormat.Depth24Stencil8; // defaults to Depth24
-			_graphicsManager.PreferredBackBufferWidth = width;
-			_graphicsManager.PreferredBackBufferHeight = height;
-			_graphicsManager.IsFullScreen = isFullScreen;
-			_graphicsManager.SynchronizeWithVerticalRetrace = true;
-			_graphicsManager.DeviceReset += onGraphicsDeviceReset;
-
-			// HACK: not sure how to do this the PCL way
-			//Window.AllowUserResizing = true;
+			var graphicsManager = new GraphicsDeviceManager( this );
+			graphicsManager.PreferredBackBufferWidth = width;
+			graphicsManager.PreferredBackBufferHeight = height;
+			graphicsManager.IsFullScreen = isFullScreen;
+			graphicsManager.SynchronizeWithVerticalRetrace = true;
+			graphicsManager.DeviceReset += onGraphicsDeviceReset;
+			Screen.initialize( graphicsManager );
 
 			Content.RootDirectory = "Content";
 			contentManager = new NezContentManager( Services, Content.RootDirectory );
@@ -180,22 +176,6 @@ namespace Nez
 			emitter.emit( CoreEvents.SceneChanged );
 			Time.sceneChanged();
 			GC.Collect();
-		}
-
-
-		/// <summary>
-		/// sets the screen size and applies the changes
-		/// </summary>
-		/// <param name="width">Width.</param>
-		/// <param name="height">Height.</param>
-		/// <param name="isFullScreen">If set to <c>true</c> is full screen.</param>
-		public static void setScreenSize( int width, int height, bool isFullScreen = false )
-		{
-			_instance._graphicsManager.PreferredBackBufferWidth = width;
-			_instance._graphicsManager.PreferredBackBufferHeight = height;
-			_instance._graphicsManager.IsFullScreen = isFullScreen;
-			//instance._graphicsManager.ApplyChanges();
-			Debug.warn( "setScreenSize doesnt work properly on OS X. It causes a crash with no stack trace" );
 		}
 
 
