@@ -82,7 +82,7 @@ namespace MacTester
 					var start = playerDude.position + new Vector2( 64f, 0f );
 					var end = playerDude.position + new Vector2( 128f, 0f );
 					Debug.drawLine( start, end, Color.Black, 2f );
-					var hit = Physics.raycast( start, end );
+					var hit = Physics.raycastBroadphase( start, end );
 					if( hit.collider != null )
 					{
 						Debug.log( "ray HIT {0}, collider: {1}", hit.distance, hit.collider.entity );

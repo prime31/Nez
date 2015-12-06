@@ -295,7 +295,7 @@ namespace Nez
 			Physics.removeCollider( collider, true );
 
 			// fetch anything that we might collide with along the way
-			var neighbors = Physics.boxcastExcludingSelf( collider, deltaX, deltaY );
+			var neighbors = Physics.boxcastBroadphaseExcludingSelf( collider, deltaX, deltaY );
 
 			var collideX = moveX( deltaX, neighbors, collisionHandler, triggerHandler );
 			var collideY = moveY( deltaY, neighbors, collisionHandler, triggerHandler );

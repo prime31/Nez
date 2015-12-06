@@ -5,7 +5,10 @@ using Microsoft.Xna.Framework;
 /// <summary>
 /// This class still needs a lot of love. It should probably technically be a PolygonCollider subclass so that it can piggyback on top of
 /// all the PolygonCollider collider methods. They can then have a special branch for when we have an OrientedBoxCollider-to-OrientedBoxCollider
-/// collision to hit the fast code path. Rotation currently doesn't take into account the origin either.
+/// collision to hit the fast code path.
+/// 
+/// - rotation currently doesn't take into account the origin
+/// - points are in local space but overlapsOneWay really wants them to be in world space
 /// </summary>
 namespace Nez.Experimental
 {
@@ -102,7 +105,7 @@ namespace Nez.Experimental
 			_edges[0] = _points[1] - _points[0];
 			_edges[1] = _points[3] - _points[0];
 
-			// Make the length of each axis 1/edge length so we know any dot product must be less than 1 to fall within the edge.
+			// make the length of each axis 1/edge length so we know any dot product must be less than 1 to fall within the edge.
 			for( var i = 0; i < 2; ++i )
 			{
 				_edges[i] /= _edges[i].LengthSquared();
@@ -118,7 +121,7 @@ namespace Nez.Experimental
 		/// <param name="other">Other.</param>
 		bool overlapsOneWay( OrientedBoxCollider other )
 		{
-			for( var i = 0; i < 2; ++i )
+			for( var i = 0; i < 2; i++ )
 			{
 				var t = Vector2.Dot( other._points[0], _edges[i] );
 
@@ -126,10 +129,9 @@ namespace Nez.Experimental
 				var tMin = t;
 				var tMax = t;
 
-				for( var j = 1; j < 4; ++j )
+				for( var j = 1; j < 4; j++ )
 				{
 					t = Vector2.Dot( other._points[j], _edges[i] );
-
 					if( t < tMin )
 						tMin = t;
 					else if( t > tMax )
@@ -140,7 +142,7 @@ namespace Nez.Experimental
 				// See if [tMin, tMax] intersects [0, 1]
 				if( ( tMin > 1 + _corner0ProjectionsOnEdges[i] ) || ( tMax < _corner0ProjectionsOnEdges[i] ) )
 				{
-					// There was no intersection along this dimension so the boxes cannot possibly overlap.
+					// there was no intersection along this dimension so the boxes cannot possibly overlap.
 					return false;
 				}
 			}
@@ -155,8 +157,8 @@ namespace Nez.Experimental
 			var centroid = ( _points[0] + _points[1] + _points[2] + _points[3] ) / 4;
 			var translation = newCenter - centroid;
 
-			for( var c = 0; c < 4; ++c )
-				_points[c] += translation;
+			for( var i = 0; i < 4; i++ )
+				_points[i] += translation;
 
 			computeEdges();
 		}

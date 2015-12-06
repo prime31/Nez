@@ -20,6 +20,10 @@ namespace Nez
 		}
 
 
+		/// <summary>
+		/// gets all the Colliders managed by the SpatialHash
+		/// </summary>
+		/// <returns>The all colliders.</returns>
 		public static HashSet<Collider> getAllColliders()
 		{
 			return _spatialHash.getAllObjects();
@@ -79,14 +83,13 @@ namespace Nez
 		}
 
 
-		// TODO: all boxcast methods should sort nearest-to-furthest
 		/// <summary>
 		/// returns a HashSet of all colliders with bounds that are intersected by collider.bounds. Note that this is a broadphase check so it
 		/// only checks bounds and does not do individual Collider-to-Collider checks!
 		/// </summary>
 		/// <param name="bounds">Bounds.</param>
 		/// <param name="layerMask">Layer mask.</param>
-		public static HashSet<Collider> boxcast( Rectangle bounds, int layerMask = AllLayers )
+		public static HashSet<Collider> boxcastBroadphase( Rectangle bounds, int layerMask = AllLayers )
 		{
 			return _spatialHash.boxcast( ref bounds, null, layerMask );
 		}
@@ -97,7 +100,7 @@ namespace Nez
 		/// </summary>
 		/// <returns>The neighbors excluding self.</returns>
 		/// <param name="collider">Collider.</param>
-		public static HashSet<Collider> boxcastExcludingSelf( Collider collider, int layerMask = AllLayers )
+		public static HashSet<Collider> boxcastBroadphaseExcludingSelf( Collider collider, int layerMask = AllLayers )
 		{
 			var bounds = collider.bounds;
 			return _spatialHash.boxcast( ref bounds, collider, layerMask );
@@ -111,7 +114,7 @@ namespace Nez
 		/// <returns>The excluding self.</returns>
 		/// <param name="collider">Collider.</param>
 		/// <param name="bounds">Bounds.</param>
-		public static HashSet<Collider> boxcastExcludingSelf( Collider collider, ref Rectangle bounds, int layerMask = AllLayers )
+		public static HashSet<Collider> boxcastBroadphaseExcludingSelf( Collider collider, ref Rectangle bounds, int layerMask = AllLayers )
 		{
 			return _spatialHash.boxcast( ref bounds, collider, layerMask );
 		}
@@ -123,7 +126,7 @@ namespace Nez
 		/// </summary>
 		/// <returns>The neighbors excluding self.</returns>
 		/// <param name="collider">Collider.</param>
-		public static HashSet<Collider> boxcastExcludingSelf( Collider collider, float deltaX, float deltaY, int layerMask = AllLayers )
+		public static HashSet<Collider> boxcastBroadphaseExcludingSelf( Collider collider, float deltaX, float deltaY, int layerMask = AllLayers )
 		{
 			var sweptBounds = collider.bounds.getSweptBroadphaseBounds( deltaX, deltaY );
 			return _spatialHash.boxcast( ref sweptBounds, collider, layerMask );
@@ -136,7 +139,7 @@ namespace Nez
 		/// <param name="start">Start.</param>
 		/// <param name="end">End.</param>
 		/// <param name="layerMask">Layer mask.</param>
-		public static RaycastHit raycast( Vector2 start, Vector2 end, int layerMask = AllLayers )
+		public static RaycastHit raycastBroadphase( Vector2 start, Vector2 end, int layerMask = AllLayers )
 		{
 			return _spatialHash.raycast( start, end, layerMask );
 		}
