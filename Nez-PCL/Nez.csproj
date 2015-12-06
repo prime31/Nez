@@ -58,6 +58,7 @@
     <Folder Include="ECS\Components\Renderables\Particles\" />
     <Folder Include="Graphics\Textures\" />
     <Folder Include="PipelineRuntime\TextureAtlas\" />
+    <Folder Include="Physics\QuadTree\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Debug\Debug.cs" />
@@ -181,5 +182,9 @@
     <Compile Include="ECS\Components\Physics\OrientedBoxCollider.cs" />
     <Compile Include="ECS\Components\CameraShake.cs" />
     <Compile Include="Utils\Screen.cs" />
+    <Compile Include="Physics\QuadTree\QuadTree.cs" />
+    <Compile Include="Physics\QuadTree\QuadTreeObject.cs" />
+    <Compile Include="Physics\QuadTree\QuadTreeNode.cs" />
+    <Compile Include="Physics\QuadTree\IQuadTreeStorable.cs" />
   </ItemGroup>
 </Project>

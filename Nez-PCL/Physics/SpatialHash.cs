@@ -3,14 +3,23 @@ using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 
 
-namespace Nez
+namespace Nez.Spatial
 {	
 	public class SpatialHash
 	{
 		int _cellSize;
 		int _inverseCellSize;
+
+		/// <summary>
+		/// the Dictionary that holds all of the data
+		/// </summary>
 		IntIntDictionary _cellDict = new IntIntDictionary();
+
+		/// <summary>
+		/// shared HashSet used to return collision info
+		/// </summary>
 		HashSet<Collider> _tempHashset = new HashSet<Collider>();
+
 		/// <summary>
 		/// we keep this around to avoid allocating it every time a raycast happens
 		/// </summary>
