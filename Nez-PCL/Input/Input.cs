@@ -1,6 +1,7 @@
 ﻿using System;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Input.Touch;
 using System.Collections.Generic;
 
 
@@ -18,7 +19,10 @@ namespace Nez
 		static MouseState _previousMouseState;
 		static MouseState _currentMouseState;
 		static internal List<VirtualInput> _virtualInputs = new List<VirtualInput>();
-
+		static TouchCollection _previousTouches;
+		static TouchCollection _currentTouches;
+		static List<GestureSample> _previousGestures = new List<GestureSample>();
+		static List<GestureSample> _currentGestures = new List<GestureSample>();
 
 		static Input()
 		{
@@ -46,6 +50,9 @@ namespace Nez
 
 			for( var i = 0; i < MAX_SUPPORTED_GAMEPADS; i++ )
 				gamePads[i] = new GamePadData( (PlayerIndex)i );
+
+			Core.emitter.addObserver (CoreEvents.GraphicsDeviceReset, OnGraphicsDeviceReset);
+			OnGraphicsDeviceReset ();
 		}
 
 
@@ -62,8 +69,30 @@ namespace Nez
 
 			for( var i = 0; i < _virtualInputs.Count; i++ )
 				_virtualInputs[i].update();
+
+			_previousTouches = _currentTouches;
+			_currentTouches = TouchPanel.GetState();
+
+			_previousGestures = _currentGestures;
+			_currentGestures.Clear ();
+			while (TouchPanel.IsGestureAvailable) {
+				GestureSample gesture = TouchPanel.ReadGesture ();
+				_currentGestures.Add (gesture);
+			}
+
 		}
 
+		public static void OnGraphicsDeviceReset()
+		{
+			// TODO: find a way to grab the GameWindow OnOrientationChange event inside the PCL
+			// For the time being you can just call this method hooking the event on your own
+			// Game class like this: 			
+			// Window.OrientationChanged += OnOrientationChanged;
+
+			TouchPanel.DisplayWidth = Core.graphicsDevice.Viewport.Width;
+			TouchPanel.DisplayHeight = Core.graphicsDevice.Viewport.Height;
+			TouchPanel.DisplayOrientation = Core.graphicsDevice.PresentationParameters.DisplayOrientation;
+		}
 
 		#region Keyboard
 
@@ -222,6 +251,25 @@ namespace Nez
 
 		#endregion
 
+		#region Touches
+
+		public static TouchCollection CurrentTouches {
+			get { return _currentTouches; }
+		}
+
+		public static TouchCollection PreviousTouches {
+			get { return _previousTouches; }
+		}
+
+		public static List<GestureSample> PreviousGestures {
+			get { return _previousGestures; }
+		}
+
+		public static List<GestureSample> CurrentGestures {
+			get { return _currentGestures; }
+		}
+
+		#endregion
 	}
 }
 
