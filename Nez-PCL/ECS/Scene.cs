@@ -44,7 +44,7 @@ namespace Nez
 		public readonly RenderableComponentList renderableComponents;
 
 		List<Renderer> _renderers = new List<Renderer>();
-		Dictionary<int,double> _actualDepthLookup = new Dictionary<int,double>();
+		Dictionary<int,double> _actualEntityOrderLookup = new Dictionary<int,double>();
 		readonly List<PostProcessor> _postProcessors = new List<PostProcessor>();
 
 
@@ -160,22 +160,22 @@ namespace Nez
 
 
 		/// <summary>
-		/// handles fine grained depth sorting for entities. When an entity sets it's depth this method will be called which will
-		/// set the actualDepth of the entity.
+		/// handles fine grained ordering of entities. When an entity sets it's order this method will be called which will
+		/// set the actualOrder of the entity.
 		/// </summary>
 		/// <param name="entity">Entity.</param>
-		internal void setActualDepth( Entity entity )
+		internal void setActualOrder( Entity entity )
 		{
 			const double theta = .000001f;
 
 			// if an entity is already at the requested depth we increment the depth by theta and set the entities actual depth based on
 			// the already present depth value from the previous entity
 			double add = 0;
-			if( _actualDepthLookup.TryGetValue( entity._depth, out add ) )
-				_actualDepthLookup[entity._depth] += theta;
+			if( _actualEntityOrderLookup.TryGetValue( entity._order, out add ) )
+				_actualEntityOrderLookup[entity._order] += theta;
 			else
-				_actualDepthLookup.Add( entity._depth, theta );
-			entity._actualDepth = entity._depth - add;
+				_actualEntityOrderLookup.Add( entity._order, theta );
+			entity._actualOrder = entity._order - add;
 
 			// mark lists unsorted
 			entities.markTagUnsorted();

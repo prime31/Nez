@@ -25,9 +25,10 @@ Entity Lifecycle methods:
 
 Some of the key/important properties on an Entity are the following:
 
-- **updateInterval**: specifies how often this Entities update method should be called. 1 means every frame, 2 is every other, etc
-- **tag**: use this however you want to. It can later be used to query the scene for all Entities with a specific tag (**Scene.findEntitiesByTag**)
+- **order**: controls the order of Entities. This affects the order in which update is called on each Entity as well as the order of the tag lists.
+- **tag**: use this however you want to. It can later be used to query the scene for all Entities with a specific tag (**Scene.findEntitiesByTag**).
 - **collider**:  the Collider managed by this Entity. Setting this property automatically registers the Collider with the Physics system.
+- **updateInterval**: specifies how often this Entities update method should be called. 1 means every frame, 2 is every other, etc
 
 
 Component

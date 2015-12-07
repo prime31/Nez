@@ -103,18 +103,23 @@ namespace Nez
 			}
 		}
 
-		internal double _actualDepth = 0;
-		internal int _depth = 0;
-		public int depth
+		internal double _actualOrder = 0;
+		internal int _order = 0;
+
+		/// <summary>
+		/// render order of this Entity. Also used to sort tag lists on scene.entities
+		/// </summary>
+		/// <value>The order.</value>
+		public int order
 		{
-			get { return _depth; }
+			get { return _order; }
 			set
 			{
-				if( _depth != value )
+				if( _order != value )
 				{
-					_depth = value;
+					_order = value;
 					if( scene != null )
-						scene.setActualDepth( this );
+						scene.setActualOrder( this );
 				}
 			}
 		}
@@ -403,7 +408,7 @@ namespace Nez
 
 		public override string ToString()
 		{
-			return string.Format(" [Entity: tag: {0}, enabled: {1}, depth: {2}, name: {3}]", tag, enabled, depth, name );
+			return string.Format(" [Entity: tag: {0}, enabled: {1}, depth: {2}, name: {3}]", tag, enabled, order, name );
 		}
 
 	}

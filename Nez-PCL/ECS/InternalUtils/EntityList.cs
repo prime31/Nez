@@ -8,7 +8,7 @@ namespace Nez
 	public class EntityList : IEnumerable<Entity>, IEnumerable
 	{
 		// global depth sort for Entity lists
-		static public Comparison<Entity> compareEntityDepth = ( a, b ) => { return Math.Sign( b._actualDepth - a._actualDepth ); };
+		static public Comparison<Entity> compareEntityOrder = ( a, b ) => { return Math.Sign( b._actualOrder - a._actualOrder ); };
 
 		public Scene scene;
 
@@ -139,7 +139,7 @@ namespace Nez
 					_entities.Add( entity );
 					entity.scene = scene;
 					entity.onAddedToScene();
-					scene.setActualDepth( entity );
+					scene.setActualOrder( entity );
 
 					// handle the tagList
 					addToTagList( entity );
@@ -155,7 +155,7 @@ namespace Nez
 
 			if( _isEntityListUnsorted )
 			{
-				_entities.Sort( compareEntityDepth );
+				_entities.Sort( compareEntityOrder );
 				_isEntityListUnsorted = false;
 			}
 
@@ -165,7 +165,7 @@ namespace Nez
 				for( var i = 0; i < _unsortedTags.Count; i++ )
 				{
 					var tag = _unsortedTags[i];
-					_entityDict[tag].Sort( EntityList.compareEntityDepth );
+					_entityDict[tag].Sort( EntityList.compareEntityOrder );
 				}
 
 				_unsortedTags.Clear();

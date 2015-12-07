@@ -45,7 +45,7 @@ namespace Nez
 				for( var i = 0; i < _unsortedTags.Count; i++ )
 				{
 					var tag = _unsortedTags[i];
-					_entityDict[tag].Sort( EntityList.compareEntityDepth );
+					_entityDict[tag].Sort( EntityList.compareEntityOrder );
 				}
 
 				_unsortedTags.Clear();

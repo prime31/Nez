@@ -33,7 +33,7 @@ namespace MacTester
 			var tiledEntity = scene.createAndAddEntity<Entity>( "tiled-map-entity" );
 			var tiledmap = scene.contentManager.Load<TiledMap>( "bin/MacOSX/Tilemap/tilemap" );
 			tiledEntity.addComponent( new TiledMapComponent( tiledmap, "collision" ) );
-			tiledEntity.depth += 5;
+			tiledEntity.order += 5;
 
 
 			// create a sprite animation from an atlas
@@ -182,7 +182,7 @@ namespace MacTester
 
 
 			var uglyBackgroundEntity = scene.createAndAddEntity<Entity>( "bg" );
-			uglyBackgroundEntity.depth = 5;
+			uglyBackgroundEntity.order = 5;
 			var image = new Image( scene.contentManager.Load<Texture2D>( "Images/dots-512" ) );
 			image.zoom = 4f;
 			uglyBackgroundEntity.addComponent( image );
