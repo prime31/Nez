@@ -24,6 +24,7 @@ namespace Nez
 		static List<GestureSample> _previousGestures = new List<GestureSample>();
 		static List<GestureSample> _currentGestures = new List<GestureSample>();
 
+
 		static Input()
 		{
 			_previousKbState = new KeyboardState();
@@ -51,8 +52,8 @@ namespace Nez
 			for( var i = 0; i < MAX_SUPPORTED_GAMEPADS; i++ )
 				gamePads[i] = new GamePadData( (PlayerIndex)i );
 
-			Core.emitter.addObserver (CoreEvents.GraphicsDeviceReset, OnGraphicsDeviceReset);
-			OnGraphicsDeviceReset ();
+			Core.emitter.addObserver( CoreEvents.GraphicsDeviceReset, onGraphicsDeviceReset );
+			onGraphicsDeviceReset();
 		}
 
 
@@ -74,15 +75,16 @@ namespace Nez
 			_currentTouches = TouchPanel.GetState();
 
 			_previousGestures = _currentGestures;
-			_currentGestures.Clear ();
-			while (TouchPanel.IsGestureAvailable) {
-				GestureSample gesture = TouchPanel.ReadGesture ();
-				_currentGestures.Add (gesture);
+			_currentGestures.Clear();
+			while( TouchPanel.IsGestureAvailable )
+			{
+				var gesture = TouchPanel.ReadGesture();
+				_currentGestures.Add( gesture );
 			}
-
 		}
+	
 
-		public static void OnGraphicsDeviceReset()
+		public static void onGraphicsDeviceReset()
 		{
 			// TODO: find a way to grab the GameWindow OnOrientationChange event inside the PCL
 			// For the time being you can just call this method hooking the event on your own
@@ -93,6 +95,7 @@ namespace Nez
 			TouchPanel.DisplayHeight = Core.graphicsDevice.Viewport.Height;
 			TouchPanel.DisplayOrientation = Core.graphicsDevice.PresentationParameters.DisplayOrientation;
 		}
+
 
 		#region Keyboard
 
@@ -251,25 +254,31 @@ namespace Nez
 
 		#endregion
 
+
 		#region Touches
 
-		public static TouchCollection CurrentTouches {
+		public static TouchCollection currentTouches
+		{
 			get { return _currentTouches; }
 		}
 
-		public static TouchCollection PreviousTouches {
+		public static TouchCollection previousTouches
+		{
 			get { return _previousTouches; }
 		}
 
-		public static List<GestureSample> PreviousGestures {
+		public static List<GestureSample> previousGestures
+		{
 			get { return _previousGestures; }
 		}
 
-		public static List<GestureSample> CurrentGestures {
+		public static List<GestureSample> currentGestures
+		{
 			get { return _currentGestures; }
 		}
 
 		#endregion
+	
 	}
 }
 
