@@ -1,75 +1,36 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 
 
-namespace Nez
+namespace Nez.Experimental
 {
-	public struct Particle
+	/// <summary>
+	/// the internal fields are calculated at particle creation time based on the random variance. We store them because we need
+	/// them later for calculating values during the particles lifetime.
+	/// </summary>
+	public class Particle
 	{
-		public ParticleType type;
-		public bool isActive;
-		public Color color;
 		public Vector2 position;
-		public Vector2 speed;
-		public float size;
-		public float life;
-		public float colorSwitch;
+		public Vector2 direction;
+		public Vector2 startPos;
+		public Color color;
+		// stored at particle creation time and used for lerping the color
+		internal Color startColor;
+		// stored at particle creation time and used for lerping the color
+		internal Color finishColor;
 		public float rotation;
-		public float rotationRate;
-		public float sizeChange;
-
-		public Vector2 renderPosition { get { return Mathf.floor( position ); } }
-
-
-		public void update()
-		{
-			// life
-			life -= Time.deltaTime;
-			if( life <= 0 )
-			{
-				isActive = false;
-				return;
-			}
-
-			// color switch
-			if( colorSwitch > 0 )
-			{
-				colorSwitch -= Time.deltaTime;
-				if( colorSwitch <= 0 )
-				{
-					if( type.colorSwitchLoop )
-						colorSwitch = type.colorSwitch;
-
-					if( color == type.color )
-						color = type.color2;
-					else
-						color = type.color;
-				}
-			}
-
-			// speed
-			position += speed * Time.deltaTime;
-			speed += type.acceleration * Time.deltaTime;
-			if( type.speedMultiplier != 1 )
-				speed *= Mathf.pow( type.speedMultiplier, Time.deltaTime );
-
-			// rotation
-			rotation += rotationRate * Time.deltaTime;
-
-			// scale out
-			size += sizeChange * Time.deltaTime;
-		}
-
-
-		public void render( Graphics graphics, Camera camera )
-		{
-			if( type.subtexture == null )
-				graphics.spriteBatch.Draw( graphics.particleTexture, renderPosition, graphics.particleTexture.sourceRect, color, rotation, Vector2.One, size * 0.5f, SpriteEffects.None, 0 );
-			else
-				graphics.spriteBatch.Draw( type.subtexture.texture2D, renderPosition, type.subtexture.sourceRect, color, rotation, type.subtexture.center, size, SpriteEffects.None, 0 );
-		}
-
+		public float rotationDelta;
+		public float radialAcceleration;
+		public float tangentialAcceleration;
+		public float radius;
+		public float radiusDelta;
+		public float angle;
+		public float degreesPerSecond;
+		public float particleSize;
+		public float particleSizeDelta;
+		public float timeToLive;
+		// stored at particle creation time and used for lerping the color
+		internal float particleLifetime;
 	}
 }
 

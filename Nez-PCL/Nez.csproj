@@ -55,10 +55,11 @@
     <Folder Include="Utils\Timers\" />
     <Folder Include="Utils\Coroutines\" />
     <Folder Include="ECS\Components\Renderables\Sprites\" />
-    <Folder Include="ECS\Components\Renderables\Particles\" />
     <Folder Include="Graphics\Textures\" />
     <Folder Include="PipelineRuntime\TextureAtlas\" />
     <Folder Include="Physics\QuadTree\" />
+    <Folder Include="ECS\Components\Renderables\Particles_CRAP\" />
+    <Folder Include="ECS\Components\Renderables\Particles\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Debug\Debug.cs" />
@@ -99,8 +100,6 @@
     <Compile Include="Input\VirtualIntegerAxis.cs" />
     <Compile Include="Input\VirtualJoystick.cs" />
     <Compile Include="Math\Mathf.cs" />
-    <Compile Include="Math\RectangleExtension.cs" />
-    <Compile Include="Math\Vector2Extension.cs" />
     <Compile Include="Physics\Collisions.cs" />
     <Compile Include="Physics\Physics.cs" />
     <Compile Include="Physics\Ray2D.cs" />
@@ -157,10 +156,6 @@
     <Compile Include="Math\Flags.cs" />
     <Compile Include="Debug\DebugDrawItem.cs" />
     <Compile Include="Math\Random.cs" />
-    <Compile Include="ECS\Components\Renderables\Particles\Particle.cs" />
-    <Compile Include="ECS\Components\Renderables\Particles\ParticleSystem.cs" />
-    <Compile Include="ECS\Components\Renderables\Particles\ParticleType.cs" />
-    <Compile Include="Math\Colors.cs" />
     <Compile Include="ECS\Components\FollowCamera.cs" />
     <Compile Include="Graphics\Textures\RenderTexture.cs" />
     <Compile Include="Graphics\Textures\Subtexture.cs" />
@@ -186,5 +181,13 @@
     <Compile Include="Physics\QuadTree\QuadTreeObject.cs" />
     <Compile Include="Physics\QuadTree\QuadTreeNode.cs" />
     <Compile Include="Physics\QuadTree\IQuadTreeStorable.cs" />
+    <Compile Include="ECS\Components\Renderables\Particles_CRAP\Particle.cs" />
+    <Compile Include="ECS\Components\Renderables\Particles_CRAP\ParticleSystem.cs" />
+    <Compile Include="ECS\Components\Renderables\Particles_CRAP\ParticleType.cs" />
+    <Compile Include="ECS\Components\Renderables\Particles\ParticleEmitter.cs" />
+    <Compile Include="ECS\Components\Renderables\Particles\Particle.cs" />
+    <Compile Include="Math\ColorExt.cs" />
+    <Compile Include="Math\RectangleExt.cs" />
+    <Compile Include="Math\Vector2Ext.cs" />
   </ItemGroup>
 </Project>
