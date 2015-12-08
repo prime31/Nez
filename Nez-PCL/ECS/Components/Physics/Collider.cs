@@ -73,7 +73,7 @@ namespace Nez
 			{
 				if( _areBoundsDirty )
 				{
-					_bounds = RectangleExtension.fromFloats( entity.position.X + _localPosition.X - _origin.X, entity.position.Y + _localPosition.Y - _origin.Y, width, height );
+					_bounds = RectangleExt.fromFloats( entity.position.X + _localPosition.X - _origin.X, entity.position.Y + _localPosition.Y - _origin.Y, width, height );
 					_areBoundsDirty = false;
 				}
 

@@ -14,8 +14,8 @@ namespace MacTester
 		{
 			_prototype = new ParticleType
 			{
-				color = Colors.hexToColor( "B8F8B8" ),
-				color2 = Colors.hexToColor( "00B800" ),
+				color = ColorExt.hexToColor( "B8F8B8" ),
+				color2 = ColorExt.hexToColor( "00B800" ),
 				colorSwitch = 1,
 				size = 8f,
 				sizeRange = 13f,

@@ -118,7 +118,7 @@ namespace Nez.Spatial
 			var maxY = Math.Max( start.Y, end.Y );
 			var minY = Math.Min( start.Y, end.Y );
 
-			var bounds = RectangleExtension.fromFloats( minX, minY, minX + maxX, minY + maxY );
+			var bounds = RectangleExt.fromFloats( minX, minY, minX + maxX, minY + maxY );
 			var potentials = boxcast( ref bounds, null, layerMask );
 			float fraction;
 			foreach( var pot in potentials )

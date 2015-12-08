@@ -233,7 +233,7 @@ namespace Nez.BitmapFonts
 				if( requiresTransformation )
 					Vector2.Transform( ref p, ref _transformationMatrix, out p );
 
-				var destRect = RectangleExtension.fromFloats
+				var destRect = RectangleExt.fromFloats
 				(
 					p.X, p.Y, 
 					currentFontRegion.width * scale.X,

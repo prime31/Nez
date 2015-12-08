@@ -80,7 +80,8 @@ namespace Nez.Tweens
 
 		public static Color unclampedLerp( Color from, Color to, float t )
 		{
-			return new Color( from.R + ( to.R - from.R ) * t, from.G + ( to.G - from.G ) * t, from.B + ( to.B - from.B ) * t, from.A + ( to.A - from.A ) * t );
+			var t256 = (int)( t * 256 );
+			return new Color( from.R + ( to.R - from.R ) * t256 / 256, from.G + ( to.G - from.G ) * t256 / 256, from.B + ( to.B - from.B ) * t256 / 256, from.A + ( to.A - from.A ) * t256 / 256 );
 		}
 
 

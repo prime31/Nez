@@ -67,7 +67,7 @@ namespace Nez
 							maxY = pt.Y;
 					}
 
-					_bounds = RectangleExtension.fromMinMaxPoints( new Point( (int)minX, (int)minY ), new Point( (int)maxX, (int)maxY ) );
+					_bounds = RectangleExt.fromMinMaxPoints( new Point( (int)minX, (int)minY ), new Point( (int)maxX, (int)maxY ) );
 					_areBoundsDirty = false;
 				}
 

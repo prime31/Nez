@@ -44,7 +44,7 @@ namespace Nez
 			{
 				if( _areBoundsDirty )
 				{
-					_bounds = RectangleExtension.fromFloats( entity.position.X + _localPosition.X + origin.X - _radius, entity.position.Y + _localPosition.Y + origin.Y - _radius, width, height );
+					_bounds = RectangleExt.fromFloats( entity.position.X + _localPosition.X + origin.X - _radius, entity.position.Y + _localPosition.Y + origin.Y - _radius, width, height );
 					_areBoundsDirty = false;
 				}
 

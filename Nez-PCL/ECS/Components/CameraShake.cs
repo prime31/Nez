@@ -22,6 +22,7 @@ namespace Nez
 		/// in shakeDirection * intensity being the offset the camera is moved</param>
 		public void shake( float shakeIntensity = 15f, float shakeDegredation = 0.9f, Vector2 shakeDirection = default( Vector2 ) )
 		{
+			enabled = true;
 			if( _shakeIntensity < shakeIntensity )
 			{
 				_shakeDirection = shakeDirection;
@@ -53,7 +54,10 @@ namespace Nez
 				_shakeOffset *= _shakeIntensity;
 				_shakeIntensity *= -_shakeDegredation;
 				if( Math.Abs( _shakeIntensity ) <= 0.01f )
+				{
 					_shakeIntensity = 0f;
+					enabled = false;
+				}
 			}
 
 			entity.scene.camera.position += _shakeOffset;

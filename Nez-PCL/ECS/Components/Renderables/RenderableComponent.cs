@@ -140,7 +140,7 @@ namespace Nez
 			{
 				if( _areBoundsDirty )
 				{
-					RectangleExtension.calculateBounds( ref _bounds, entity.position, _localPosition, _origin, _scale, _rotation, width, height );
+					RectangleExt.calculateBounds( ref _bounds, entity.position, _localPosition, _origin, _scale, _rotation, width, height );
 					_areBoundsDirty = false;
 				}
 

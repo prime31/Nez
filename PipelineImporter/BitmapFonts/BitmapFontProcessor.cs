@@ -52,7 +52,6 @@ namespace Nez.BitmapFontImporter
 				}
 
 				return result;
-
 			}
 			catch( Exception ex )
 			{

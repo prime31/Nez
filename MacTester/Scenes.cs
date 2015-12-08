@@ -10,6 +10,7 @@ using Nez.Overlap2D;
 using Nez.LibGdxAtlases;
 using Nez.BitmapFonts;
 using System.Collections.Generic;
+using System.IO;
 
 
 namespace MacTester
@@ -78,7 +79,7 @@ namespace MacTester
 			// stick a couple moons on screen
 			var entity = scene.createAndAddEntity<Entity>( "moon" );
 			var image = new Image( moonTexture );
-			image.originNormalized = Vector2Extension.halfVector();
+			image.originNormalized = Vector2Ext.halfVector();
 			image.zoom = 2f;
 			entity.addComponent( image );
 			entity.addComponent( new FramesPerSecondCounter( Graphics.instance.bitmapFont, Color.White, FramesPerSecondCounter.FPSDockPosition.TopLeft ) );
@@ -233,7 +234,7 @@ namespace MacTester
 
 			var entity = scene.createAndAddEntity<Entity>( "moon" );
 			var image = new Image( moonTexture );
-			image.originNormalized = Vector2Extension.halfVector();
+			image.originNormalized = Vector2Ext.halfVector();
 			entity.addComponent( image );
 			entity.position = new Vector2( 200, 200 );
 
@@ -250,7 +251,7 @@ namespace MacTester
 
 			entity = scene.createAndAddEntity<Entity>( "moon2" );
 			image = new Image( moonTexture );
-			image.originNormalized = Vector2Extension.halfVector();
+			image.originNormalized = Vector2Ext.halfVector();
 			entity.addComponent( image );
 			entity.position = new Vector2( 500, 500 );
 
@@ -268,11 +269,68 @@ namespace MacTester
 
 			entity = scene.createAndAddEntity<Entity>( "moon2" );
 			image = new Image( moonTexture );
-			image.originNormalized = Vector2Extension.halfVector();
+			image.originNormalized = Vector2Ext.halfVector();
 			entity.addComponent( image );
 			entity.position = new Vector2( 700, 300 );
 			entity.collider = new OrientedBoxCollider( 128, 128 );
 			( entity.collider as OrientedBoxCollider ).rotation = MathHelper.PiOver4 + 0.1f;
+
+			return scene;
+		}
+
+
+		public static Scene sceneFive()
+		{
+			var scene = Scene.createWithDefaultRenderer( Color.Black );
+			scene.camera.centerOrigin();
+
+			var particles = new string[]
+			{
+				"bin/MacOSX/ParticleDesigner/Atomic Bubble",
+				"bin/MacOSX/ParticleDesigner/Blue Flame",
+				"bin/MacOSX/ParticleDesigner/Blue Galaxy",
+				"bin/MacOSX/ParticleDesigner/Comet",
+				"bin/MacOSX/ParticleDesigner/Crazy Blue",
+				"bin/MacOSX/ParticleDesigner/Electrons",
+				"bin/MacOSX/ParticleDesigner/Foam",
+				"bin/MacOSX/ParticleDesigner/Giros Gratis",
+				"bin/MacOSX/ParticleDesigner/huo1",
+				"bin/MacOSX/ParticleDesigner/Into The Blue",
+				"bin/MacOSX/ParticleDesigner/JasonChoi_Flash",
+				"bin/MacOSX/ParticleDesigner/JasonChoi_rising up",
+				"bin/MacOSX/ParticleDesigner/JasonChoi_Swirl01",
+				"bin/MacOSX/ParticleDesigner/Meks Blood Spill",
+				"bin/MacOSX/ParticleDesigner/Plasma Glow",
+				"bin/MacOSX/ParticleDesigner/Real Popcorn",
+				"bin/MacOSX/ParticleDesigner/Shooting Fireball",
+				"bin/MacOSX/ParticleDesigner/The Sun",
+				"bin/MacOSX/ParticleDesigner/Touch Up",
+				"bin/MacOSX/ParticleDesigner/Trippy",
+				"bin/MacOSX/ParticleDesigner/Winner Stars",
+				"bin/MacOSX/ParticleDesigner/wu1"
+			};
+
+			var whichEmitter = particles[Nez.Random.range( 0, particles.Length - 1 )];
+			whichEmitter = particles[15];
+
+			var entity = scene.createAndAddEntity<Entity>( "particles" );
+			var particleEmitter = scene.contentManager.Load<Nez.Experimental.ParticleEmitter>( whichEmitter );
+			particleEmitter.sourcePosition = new Vector2( Screen.backBufferWidth / 2, Screen.backBufferHeight / 2 );
+			entity.addComponent( particleEmitter );
+
+			using( var stream = new MemoryStream( particleEmitter.tempImageData ) )
+			{
+				var tex = Texture2D.FromStream( Core.graphicsDevice, stream );
+				particleEmitter.subtexture = new Subtexture( tex );
+			}
+			particleEmitter.tempImageData = null;
+
+
+			entity = scene.createAndAddEntity<Entity>( "text" );
+			var textComp = new Text( Graphics.instance.bitmapFont, whichEmitter, new Vector2( 0, 0 ), Color.White );
+			textComp.scale = new Vector2( 3, 3 );
+			textComp.origin = Vector2.Zero;
+			entity.addComponent( textComp );
 
 			return scene;
 		}
