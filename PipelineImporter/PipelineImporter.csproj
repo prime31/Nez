@@ -56,6 +56,8 @@
     <Folder Include="TextureAtlasGenerator\" />
     <Folder Include="ParticleSystemSettings\" />
     <Folder Include="XMLTemplateMaker\" />
+    <Folder Include="ParticleDesigner\" />
+    <Folder Include="ParticleDesigner\ConversionTypes\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Tiled\TiledMapImporter.cs" />
@@ -144,6 +146,14 @@
     <Compile Include="Overlap2D\Runtime\SpriterVO.cs" />
     <Compile Include="Overlap2D\Runtime\TextBoxVO.cs" />
     <Compile Include="Overlap2D\Runtime\Vector2.cs" />
+    <Compile Include="ParticleDesigner\ParticleDesignerImporter.cs" />
+    <Compile Include="ParticleDesigner\ParticleEmitterConfig.cs" />
+    <Compile Include="ParticleDesigner\ConversionTypes\ParticleDesignerColor.cs" />
+    <Compile Include="ParticleDesigner\ConversionTypes\ParticleDesignerFloatValue.cs" />
+    <Compile Include="ParticleDesigner\ConversionTypes\ParticleDesignerIntValue.cs" />
+    <Compile Include="ParticleDesigner\ConversionTypes\ParticleDesignerVector2.cs" />
+    <Compile Include="ParticleDesigner\ParticleDesignerProcessor.cs" />
+    <Compile Include="ParticleDesigner\ConversionTypes\ParticleDesignerTexture.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Nez-PCL\Nez.csproj">
