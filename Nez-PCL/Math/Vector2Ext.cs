@@ -4,7 +4,7 @@ using Microsoft.Xna.Framework;
 
 namespace Nez
 {
-	public static class Vector2Extension
+	public static class Vector2Ext
 	{
 		/// <summary>
 		/// rounds the x and y values in place

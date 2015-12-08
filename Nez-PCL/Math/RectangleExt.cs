@@ -4,7 +4,7 @@ using Microsoft.Xna.Framework;
 
 namespace Nez
 {
-	public static class RectangleExtension
+	public static class RectangleExt
 	{
 		/// <summary>
 		/// returns a rectangle from the passed in floats
