@@ -113,10 +113,21 @@ namespace Nez.Systems
 
 
 		/// <summary>
+		/// checks to see if an asset with assetName is loaded
+		/// </summary>
+		/// <returns><c>true</c> if this instance is asset loaded the specified assetName; otherwise, <c>false</c>.</returns>
+		/// <param name="assetName">Asset name.</param>
+		public bool IsAssetLoaded( string assetName )
+		{
+			return LoadedAssets.ContainsKey( assetName );
+		}
+
+
+		/// <summary>
 		/// provides a string suitable for logging with all the currently loaded assets and effects
 		/// </summary>
 		/// <returns>The loaded assets.</returns>
-		public string logLoadedAssets()
+		internal string logLoadedAssets()
 		{
 			var builder = new StringBuilder();
 			foreach( var asset in LoadedAssets.Keys )
