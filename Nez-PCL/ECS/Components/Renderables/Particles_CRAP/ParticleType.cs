@@ -113,7 +113,7 @@ namespace Nez
 			particle.position = position;
 
 			if( subtexture == null )
-				particle.size = (int)Random.range( size - sizeRange, size + sizeRange );
+				particle.size = Random.range( size - sizeRange, size + sizeRange );
 			else
 				particle.size = Random.range( size - sizeRange, size + sizeRange );
 			
