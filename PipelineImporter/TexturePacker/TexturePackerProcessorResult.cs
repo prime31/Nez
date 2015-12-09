@@ -2,6 +2,6 @@
 {
 	public class TexturePackerProcessorResult
 	{
-		public TexturePackerFile Data;
+		public TexturePackerFile data;
 	}
 }

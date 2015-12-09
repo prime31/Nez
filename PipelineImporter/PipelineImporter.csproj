@@ -147,13 +147,16 @@
     <Compile Include="Overlap2D\Runtime\TextBoxVO.cs" />
     <Compile Include="Overlap2D\Runtime\Vector2.cs" />
     <Compile Include="ParticleDesigner\ParticleDesignerImporter.cs" />
-    <Compile Include="ParticleDesigner\ParticleEmitterConfig.cs" />
     <Compile Include="ParticleDesigner\ConversionTypes\ParticleDesignerColor.cs" />
     <Compile Include="ParticleDesigner\ConversionTypes\ParticleDesignerFloatValue.cs" />
     <Compile Include="ParticleDesigner\ConversionTypes\ParticleDesignerIntValue.cs" />
     <Compile Include="ParticleDesigner\ConversionTypes\ParticleDesignerVector2.cs" />
     <Compile Include="ParticleDesigner\ParticleDesignerProcessor.cs" />
     <Compile Include="ParticleDesigner\ConversionTypes\ParticleDesignerTexture.cs" />
+    <Compile Include="ParticleDesigner\ParticleDesignerContent.cs" />
+    <Compile Include="ParticleDesigner\ParticleDesignerProcessorResult.cs" />
+    <Compile Include="ParticleDesigner\ParticleDesignerWriter.cs" />
+    <Compile Include="ParticleDesigner\ParticleDesignerEmitterConfig.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Nez-PCL\Nez.csproj">

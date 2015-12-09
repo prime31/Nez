@@ -1,7 +1,7 @@
 ﻿using System;
 
 
-namespace Nez.Experimental
+namespace Nez.Particles
 {
 	public enum ParticleEmitterType
 	{

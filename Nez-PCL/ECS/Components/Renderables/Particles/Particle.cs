@@ -2,7 +2,7 @@
 using Microsoft.Xna.Framework;
 
 
-namespace Nez.Experimental
+namespace Nez.Particles
 {
 	/// <summary>
 	/// the internal fields are calculated at particle creation time based on the random variance. We store them because we need
@@ -31,6 +31,13 @@ namespace Nez.Experimental
 		public float timeToLive;
 		// stored at particle creation time and used for lerping the color
 		internal float particleLifetime;
+
+
+		public void update()
+		{
+			
+		}
+
 	}
 }
 

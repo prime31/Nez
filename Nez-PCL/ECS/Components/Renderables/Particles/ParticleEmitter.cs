@@ -6,57 +6,22 @@ using Nez.Textures;
 using System.IO;
 
 
-namespace Nez.Experimental
+namespace Nez.Particles
 {
 	public class ParticleEmitter : Nez.RenderableComponent
 	{
 		public override float width { get { return 5f; } }
 		public override float height { get { return 5f; } }
 
-		/////////////////// Particle iVars
-		public Blend blendFuncSource;
-		public Blend blendFuncDestination;
-		public ParticleEmitterType emitterType;
-		public Subtexture subtexture;
-
-		public Vector2 sourcePosition, sourcePositionVariance;
-		public float angle, angleVariance;
-		public float speed, speedVariance;
-		public float radialAcceleration, tangentialAcceleration;
-		public float radialAccelVariance, tangentialAccelVariance;
-		public Vector2 gravity;
-		public float particleLifespan, particleLifespanVariance;
-		public Color startColor, startColorVariance;
-		public Color finishColor, finishColorVariance;
-		public float startParticleSize, startParticleSizeVariance;
-		public float finishParticleSize, finishParticleSizeVariance;
-		public uint maxParticles;
-		public int particleCount;
-		public float emissionRate;
+		int particleCount;
 		float emitCounter;
 		float elapsedTime;
-		public float duration;
-		public float rotationStart, rotationStartVariance;
-		public float rotationEnd, rotationEndVariance;
 
-		//////////////////// Particle ivars only used when a maxRadius value is provided.  These values are used for
-		//////////////////// the special purpose of creating the spinning portal emitter
-		// Max radius at which particles are drawn when rotating
-		public float maxRadius;
-		// Variance of the maxRadius
-		public float maxRadiusVariance;
-		// The speed at which a particle moves from maxRadius to minRadius
-		public float radiusSpeed;
-		// Radius from source below which a particle dies
-		public float minRadius;
-		// Variance of the minRadius
-		public float minRadiusVariance;
-		// Numeber of degress to rotate a particle around the source pos per second
-		public float rotatePerSecond;
-		// Variance in degrees for rotatePerSecond
-		public float rotatePerSecondVariance;
 
+		// optional texture-related fields settable via the XML files
 		public byte[] tempImageData;
+		public string particleTextureName;
+		public Rectangle particleTexturesourceRect;
 
 
 		//////////////////// Particle Emitter iVars
@@ -68,16 +33,29 @@ namespace Nez.Experimental
 		BlendState _blendState;
 		SpriteBatch _spriteBatch;
 		bool _emitOnAwake;
+		ParticleEmitterConfig _emitterConfig;
 
 
-		public ParticleEmitter( bool emitOnAwake = true )
+		public ParticleEmitter( ParticleEmitterConfig particleEmitterConfig, bool emitOnAwake = true )
 		{
+			_emitterConfig = particleEmitterConfig;
 			_emitOnAwake = emitOnAwake;
 		}
 
 
-		public ParticleEmitter() : this( true )
-		{}
+		/// <summary>
+		/// creates the SpriteBatch and loads the texture if it is available
+		/// </summary>
+		void initialize()
+		{
+			if( _spriteBatch == null )
+			{
+				_spriteBatch = new SpriteBatch( Core.graphicsDevice );
+				_blendState = new BlendState();
+				_blendState.ColorSourceBlend = _blendState.AlphaSourceBlend = _emitterConfig.blendFuncSource;
+				_blendState.ColorDestinationBlend = _blendState.AlphaDestinationBlend = _emitterConfig.blendFuncDestination;
+			}
+		}
 
 
 		public override void onAwake()
@@ -99,14 +77,14 @@ namespace Nez.Experimental
 		public override void update()
 		{
 			// if the emitter is active and the emission rate is greater than zero then emit particles
-			if( _active && emissionRate > 0 )
+			if( _active && _emitterConfig.emissionRate > 0 )
 			{
-				var rate = 1.0f / emissionRate;
+				var rate = 1.0f / _emitterConfig.emissionRate;
 
-				if( particleCount < maxParticles )
+				if( particleCount < _emitterConfig.maxParticles )
 					emitCounter += Time.deltaTime;
 
-				while( _emitting && particleCount < maxParticles && emitCounter > rate )
+				while( _emitting && particleCount < _emitterConfig.maxParticles && emitCounter > rate )
 				{
 					addParticle();
 					emitCounter -= rate;
@@ -114,7 +92,7 @@ namespace Nez.Experimental
 
 				elapsedTime += Time.deltaTime;
 
-				if( duration != -1 && duration < elapsedTime )
+				if( _emitterConfig.duration != -1 && _emitterConfig.duration < elapsedTime )
 				{
 					_emitting = false;
 
@@ -142,7 +120,7 @@ namespace Nez.Experimental
 				if( currentParticle.timeToLive > 0 )
 				{
 					// if maxRadius is greater than 0 then the particles are going to spin otherwise they are effected by speed and gravity
-					if( emitterType == ParticleEmitterType.Radial )
+					if( _emitterConfig.emitterType == ParticleEmitterType.Radial )
 					{
 						// FIX 2
 						// update the angle of the particle from the sourcePosition and the radius.  This is only done of the particles are rotating
@@ -150,8 +128,8 @@ namespace Nez.Experimental
 						currentParticle.radius += currentParticle.radiusDelta * Time.deltaTime;
 
 						Vector2 tmp;
-						tmp.X = sourcePosition.X - Mathf.cos( currentParticle.angle ) * currentParticle.radius;
-						tmp.Y = sourcePosition.Y - Mathf.sin( currentParticle.angle ) * currentParticle.radius;
+						tmp.X = _emitterConfig.sourcePosition.X - Mathf.cos( currentParticle.angle ) * currentParticle.radius;
+						tmp.Y = _emitterConfig.sourcePosition.Y - Mathf.sin( currentParticle.angle ) * currentParticle.radius;
 						currentParticle.position = tmp;
 					}
 					else
@@ -174,7 +152,7 @@ namespace Nez.Experimental
 						tangential.Y = newy;
 						tangential = tangential * currentParticle.tangentialAcceleration;
 
-						tmp = radial + tangential + gravity;
+						tmp = radial + tangential + _emitterConfig.gravity;
 						tmp = tmp * Time.deltaTime;
 						currentParticle.direction = currentParticle.direction + tmp;
 						tmp = currentParticle.direction * Time.deltaTime;
@@ -238,25 +216,7 @@ namespace Nez.Experimental
 
 		public void emit()
 		{
-			if( _spriteBatch == null )
-			{
-				_spriteBatch = new SpriteBatch( Core.graphicsDevice );
-				_blendState = new BlendState();
-				_blendState.ColorSourceBlend = _blendState.AlphaSourceBlend = blendFuncSource;
-				_blendState.ColorDestinationBlend = _blendState.AlphaDestinationBlend = blendFuncDestination;
-			}
-
-			// extract our Texture if we have one
-			if( tempImageData != null )
-			{
-				using( var stream = new MemoryStream( tempImageData ) )
-				{
-					var tex = Texture2D.FromStream( Core.graphicsDevice, stream );
-					subtexture = new Subtexture( tex );
-				}
-				tempImageData = null;
-			}
-
+			initialize();
 			reset();
 		}
 
@@ -264,7 +224,7 @@ namespace Nez.Experimental
 		bool addParticle()
 		{
 			// If we have already reached the maximum number of particles then do nothing
-			if( particleCount == maxParticles )
+			if( particleCount == _emitterConfig.maxParticles )
 				return false;
 
 			// Take the next particle out of the particle pool we have created and initialize it
@@ -282,47 +242,47 @@ namespace Nez.Experimental
 		{
 			var particle = new Particle();
 
-			// init the position of the particle.  This is based on the source position of the particle emitter
-			// plus a configured variance.  The Random.minusOneToOne macro allows the number to be both positive
+			// init the position of the particle. This is based on the source position of the particle emitter
+			// plus a configured variance. The Random.minusOneToOne method allows the number to be both positive
 			// and negative
-			particle.position.X = sourcePosition.X + sourcePositionVariance.X * Random.minusOneToOne();
-			particle.position.Y = sourcePosition.Y + sourcePositionVariance.Y * Random.minusOneToOne();
-			particle.startPos.X = sourcePosition.X;
-			particle.startPos.Y = sourcePosition.Y;
+			particle.position.X = _emitterConfig.sourcePosition.X + _emitterConfig.sourcePositionVariance.X * Random.minusOneToOne();
+			particle.position.Y = _emitterConfig.sourcePosition.Y + _emitterConfig.sourcePositionVariance.Y * Random.minusOneToOne();
+			particle.startPos.X = _emitterConfig.sourcePosition.X;
+			particle.startPos.Y = _emitterConfig.sourcePosition.Y;
 
 			// init the direction of the particle.  The newAngle is calculated using the angle passed in and the
 			// angle variance.
-			var newAngle = MathHelper.ToRadians( angle + angleVariance * Random.minusOneToOne() );
+			var newAngle = MathHelper.ToRadians( _emitterConfig.angle + _emitterConfig.angleVariance * Random.minusOneToOne() );
 
-			// create a new GLKVector2 using the newAngle
+			// create a new Vector2 using the newAngle
 			var vector = new Vector2( Mathf.cos( newAngle ), Mathf.sin( newAngle ) );
 
 			// calculate the vectorSpeed using the speed and speedVariance which has been passed in
-			var vectorSpeed = speed + speedVariance * Random.minusOneToOne();
+			var vectorSpeed = _emitterConfig.speed + _emitterConfig.speedVariance * Random.minusOneToOne();
 
 			// the particles direction vector is calculated by taking the vector calculated above and
 			// multiplying that by the speed
 			particle.direction = vector * vectorSpeed;
 
 			// calculate the particles life span using the life span and variance passed in
-			particle.timeToLive = MathHelper.Max( 0, particleLifespan + particleLifespanVariance * Random.minusOneToOne() );
+			particle.timeToLive = MathHelper.Max( 0, _emitterConfig.particleLifespan + _emitterConfig.particleLifespanVariance * Random.minusOneToOne() );
 			particle.particleLifetime = particle.timeToLive;
 
-			var startRadius = maxRadius + maxRadiusVariance * Random.minusOneToOne();
-			var endRadius = minRadius + minRadiusVariance * Random.minusOneToOne();
+			var startRadius = _emitterConfig.maxRadius + _emitterConfig.maxRadiusVariance * Random.minusOneToOne();
+			var endRadius = _emitterConfig.minRadius + _emitterConfig.minRadiusVariance * Random.minusOneToOne();
 
 			// set the default diameter of the particle from the source position
 			particle.radius = startRadius;
 			particle.radiusDelta = (endRadius - startRadius) / particle.timeToLive;
-			particle.angle = MathHelper.ToRadians( angle + angleVariance * Random.minusOneToOne() );
-			particle.degreesPerSecond = MathHelper.ToRadians( rotatePerSecond + rotatePerSecondVariance * Random.minusOneToOne() );
+			particle.angle = MathHelper.ToRadians( _emitterConfig.angle + _emitterConfig.angleVariance * Random.minusOneToOne() );
+			particle.degreesPerSecond = MathHelper.ToRadians( _emitterConfig.rotatePerSecond + _emitterConfig.rotatePerSecondVariance * Random.minusOneToOne() );
 
-			particle.radialAcceleration = radialAcceleration + radialAccelVariance * Random.minusOneToOne();
-			particle.tangentialAcceleration = tangentialAcceleration + tangentialAccelVariance * Random.minusOneToOne();
+			particle.radialAcceleration = _emitterConfig.radialAcceleration + _emitterConfig.radialAccelVariance * Random.minusOneToOne();
+			particle.tangentialAcceleration = _emitterConfig.tangentialAcceleration + _emitterConfig.tangentialAccelVariance * Random.minusOneToOne();
 
 			// calculate the particle size using the start and finish particle sizes
-			var particleStartSize = startParticleSize + startParticleSizeVariance * Random.minusOneToOne();
-			var particleFinishSize = finishParticleSize + finishParticleSizeVariance * Random.minusOneToOne();
+			var particleStartSize = _emitterConfig.startParticleSize + _emitterConfig.startParticleSizeVariance * Random.minusOneToOne();
+			var particleFinishSize = _emitterConfig.finishParticleSize + _emitterConfig.finishParticleSizeVariance * Random.minusOneToOne();
 			particle.particleSizeDelta = ( particleFinishSize - particleStartSize ) / particle.timeToLive;
 			particle.particleSize = MathHelper.Max( 0, particleStartSize );
 
@@ -331,10 +291,10 @@ namespace Nez.Experimental
 			// of the start color passed in along with the variance are used to calculate the start color
 			particle.startColor = new Color
 			(
-				(int)( startColor.R + startColorVariance.R * Random.minusOneToOne() ),
-				(int)( startColor.G + startColorVariance.G * Random.minusOneToOne() ),
-				(int)( startColor.B + startColorVariance.B * Random.minusOneToOne() ),
-				(int)( startColor.A + startColorVariance.A * Random.minusOneToOne() )
+				(int)( _emitterConfig.startColor.R + _emitterConfig.startColorVariance.R * Random.minusOneToOne() ),
+				(int)( _emitterConfig.startColor.G + _emitterConfig.startColorVariance.G * Random.minusOneToOne() ),
+				(int)( _emitterConfig.startColor.B + _emitterConfig.startColorVariance.B * Random.minusOneToOne() ),
+				(int)( _emitterConfig.startColor.A + _emitterConfig.startColorVariance.A * Random.minusOneToOne() )
 			);
 			particle.color = particle.startColor;
 
@@ -342,15 +302,15 @@ namespace Nez.Experimental
 			// way as the start color above
 			particle.finishColor = new Color
 			(
-				(int)( finishColor.R + finishColorVariance.R * Random.minusOneToOne() ),
-				(int)( finishColor.G + finishColorVariance.G * Random.minusOneToOne() ),
-				(int)( finishColor.B + finishColorVariance.B * Random.minusOneToOne() ),
-				(int)( finishColor.A + finishColorVariance.A * Random.minusOneToOne() )
+				(int)( _emitterConfig.finishColor.R + _emitterConfig.finishColorVariance.R * Random.minusOneToOne() ),
+				(int)( _emitterConfig.finishColor.G + _emitterConfig.finishColorVariance.G * Random.minusOneToOne() ),
+				(int)( _emitterConfig.finishColor.B + _emitterConfig.finishColorVariance.B * Random.minusOneToOne() ),
+				(int)( _emitterConfig.finishColor.A + _emitterConfig.finishColorVariance.A * Random.minusOneToOne() )
 			);
 
 			// calculate the rotation
-			var startA = MathHelper.ToRadians( rotationStart + rotationStartVariance * Random.minusOneToOne() );
-			var endA = MathHelper.ToRadians( rotationEnd + rotationEndVariance * Random.minusOneToOne() );
+			var startA = MathHelper.ToRadians( _emitterConfig.rotationStart + _emitterConfig.rotationStartVariance * Random.minusOneToOne() );
+			var endA = MathHelper.ToRadians( _emitterConfig.rotationEnd + _emitterConfig.rotationEndVariance * Random.minusOneToOne() );
 			particle.rotation = startA;
 			particle.rotationDelta = ( endA - startA ) / particle.timeToLive;
 
@@ -374,10 +334,10 @@ namespace Nez.Experimental
 				var particle = _particles[_particleIndex];
 
 				// TODO: should position be added to entity.position and localPosition
-				if( subtexture == null )
+				if( _emitterConfig.subtexture == null )
 					_spriteBatch.Draw( graphics.particleTexture, particle.position, graphics.particleTexture.sourceRect, particle.color, particle.rotation, Vector2.One, particle.particleSize * 0.5f, SpriteEffects.None, layerDepth );
 				else
-					_spriteBatch.Draw( subtexture, particle.position, subtexture.sourceRect, particle.color, particle.rotation, subtexture.center, particle.particleSize / subtexture.sourceRect.Width, SpriteEffects.None, layerDepth );
+					_spriteBatch.Draw( _emitterConfig.subtexture, particle.position, _emitterConfig.subtexture.sourceRect, particle.color, particle.rotation, _emitterConfig.subtexture.center, particle.particleSize / _emitterConfig.subtexture.sourceRect.Width, SpriteEffects.None, layerDepth );
 				
 				_particleIndex++;
 			}

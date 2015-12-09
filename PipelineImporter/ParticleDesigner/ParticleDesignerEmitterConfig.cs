@@ -5,7 +5,7 @@ using System.Xml.Serialization;
 namespace Nez.ParticleDesignerImporter
 {
 	[XmlRoot( "particleEmitterConfig" )]
-	public class ParticleEmitterConfig
+	public class ParticleDesignerEmitterConfig
 	{
 		[XmlElement]
 		public ParticleDesignerVector2 sourcePosition;

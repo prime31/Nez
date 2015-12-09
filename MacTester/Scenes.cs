@@ -11,6 +11,7 @@ using Nez.LibGdxAtlases;
 using Nez.BitmapFonts;
 using System.Collections.Generic;
 using System.IO;
+using Nez.Particles;
 
 
 namespace MacTester
@@ -315,10 +316,11 @@ namespace MacTester
 				lastEmitter = 0;
 			var whichEmitter = particles[lastEmitter++];
 
+
 			var entity = scene.createAndAddEntity<Entity>( "particles" );
-			var particleEmitter = scene.contentManager.Load<Nez.Experimental.ParticleEmitter>( whichEmitter );
-			particleEmitter.sourcePosition = new Vector2( Screen.backBufferWidth / 2, Screen.backBufferHeight / 2 );
-			entity.addComponent( particleEmitter );
+			var particleEmitterConfig = scene.contentManager.Load<ParticleEmitterConfig>( whichEmitter );
+			particleEmitterConfig.sourcePosition = new Vector2( Screen.backBufferWidth / 2, Screen.backBufferHeight / 2 );
+			entity.addComponent( new ParticleEmitter( particleEmitterConfig ) );
 
 
 			entity = scene.createAndAddEntity<Entity>( "text" );

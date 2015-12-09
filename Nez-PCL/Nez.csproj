@@ -60,6 +60,7 @@
     <Folder Include="Physics\QuadTree\" />
     <Folder Include="ECS\Components\Renderables\Particles_CRAP\" />
     <Folder Include="ECS\Components\Renderables\Particles\" />
+    <Folder Include="PipelineRuntime\ParticleDesigner\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Debug\Debug.cs" />
@@ -190,5 +191,7 @@
     <Compile Include="Math\RectangleExt.cs" />
     <Compile Include="Math\Vector2Ext.cs" />
     <Compile Include="ECS\Components\Renderables\Particles\ParticleEmitterType.cs" />
+    <Compile Include="ECS\Components\Renderables\Particles\ParticleEmitterConfig.cs" />
+    <Compile Include="PipelineRuntime\ParticleDesigner\ParticleEmitterConfigReader.cs" />
   </ItemGroup>
 </Project>

@@ -11,7 +11,7 @@ namespace Nez.TexturePackerImporter
 		{
 			try
 			{
-				var output = new TexturePackerProcessorResult { Data = input };
+				var output = new TexturePackerProcessorResult { data = input };
 				return output;
 			}
 			catch( Exception ex )

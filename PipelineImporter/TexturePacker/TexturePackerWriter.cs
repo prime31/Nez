@@ -11,7 +11,7 @@ namespace Nez.TexturePackerImporter
 	{
 		protected override void Write( ContentWriter writer, TexturePackerProcessorResult result )
 		{
-			var data = result.Data;
+			var data = result.data;
 			var metadata = data.metadata;
 
 			var assetName = Path.GetFileNameWithoutExtension( metadata.image );
