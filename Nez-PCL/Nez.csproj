@@ -189,5 +189,6 @@
     <Compile Include="Math\ColorExt.cs" />
     <Compile Include="Math\RectangleExt.cs" />
     <Compile Include="Math\Vector2Ext.cs" />
+    <Compile Include="ECS\Components\Renderables\Particles\ParticleEmitterType.cs" />
   </ItemGroup>
 </Project>

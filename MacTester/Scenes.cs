@@ -279,6 +279,7 @@ namespace MacTester
 		}
 
 
+		static int lastEmitter = 0;
 		public static Scene sceneFive()
 		{
 			var scene = Scene.createWithDefaultRenderer( Color.Black );
@@ -310,25 +311,19 @@ namespace MacTester
 				"bin/MacOSX/ParticleDesigner/wu1"
 			};
 
-			var whichEmitter = particles[Nez.Random.range( 0, particles.Length - 1 )];
-			whichEmitter = particles[15];
+			if( lastEmitter == particles.Length )
+				lastEmitter = 0;
+			var whichEmitter = particles[lastEmitter++];
 
 			var entity = scene.createAndAddEntity<Entity>( "particles" );
 			var particleEmitter = scene.contentManager.Load<Nez.Experimental.ParticleEmitter>( whichEmitter );
 			particleEmitter.sourcePosition = new Vector2( Screen.backBufferWidth / 2, Screen.backBufferHeight / 2 );
 			entity.addComponent( particleEmitter );
 
-			using( var stream = new MemoryStream( particleEmitter.tempImageData ) )
-			{
-				var tex = Texture2D.FromStream( Core.graphicsDevice, stream );
-				particleEmitter.subtexture = new Subtexture( tex );
-			}
-			particleEmitter.tempImageData = null;
-
 
 			entity = scene.createAndAddEntity<Entity>( "text" );
 			var textComp = new Text( Graphics.instance.bitmapFont, whichEmitter, new Vector2( 0, 0 ), Color.White );
-			textComp.scale = new Vector2( 3, 3 );
+			textComp.scale = new Vector2( 2, 2 );
 			textComp.origin = Vector2.Zero;
 			entity.addComponent( textComp );
 

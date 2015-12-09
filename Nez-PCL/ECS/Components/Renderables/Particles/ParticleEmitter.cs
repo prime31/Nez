@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework.Graphics;
 using Nez.Textures;
+using System.IO;
 
 
 namespace Nez.Experimental
@@ -13,7 +14,9 @@ namespace Nez.Experimental
 		public override float height { get { return 5f; } }
 
 		/////////////////// Particle iVars
-		public int emitterType;
+		public Blend blendFuncSource;
+		public Blend blendFuncDestination;
+		public ParticleEmitterType emitterType;
 		public Subtexture subtexture;
 
 		public Vector2 sourcePosition, sourcePositionVariance;
@@ -29,9 +32,9 @@ namespace Nez.Experimental
 		public float finishParticleSize, finishParticleSizeVariance;
 		public uint maxParticles;
 		public int particleCount;
-		public float emissionRate; // emissionRate = particleEmitter.maxParticles / particleEmitter.particleLifespan
-		public float emitCounter;
-		public float elapsedTime;
+		public float emissionRate;
+		float emitCounter;
+		float elapsedTime;
 		public float duration;
 		public float rotationStart, rotationStartVariance;
 		public float rotationEnd, rotationEndVariance;
@@ -57,13 +60,40 @@ namespace Nez.Experimental
 
 
 		//////////////////// Particle Emitter iVars
-		bool _active = true;
+		bool _active = false;
+		bool _emitting;
 		// Stores the number of particles that are going to be rendered
 		int _particleIndex;
-
 		List<Particle> _particles = new List<Particle>();
-		const int kEmitterTypeGravity = 0;
-		const int kEmitterTypeRadial = 1;
+		BlendState _blendState;
+		SpriteBatch _spriteBatch;
+		bool _emitOnAwake;
+
+
+		public ParticleEmitter( bool emitOnAwake = true )
+		{
+			_emitOnAwake = emitOnAwake;
+		}
+
+
+		public ParticleEmitter() : this( true )
+		{}
+
+
+		public override void onAwake()
+		{
+			if( _emitOnAwake )
+				emit();
+		}
+
+
+		public override void onRemovedFromEntity()
+		{
+			_spriteBatch.Dispose();
+			_spriteBatch = null;
+			_blendState.Dispose();
+			_blendState = null;
+		}
 
 
 		public override void update()
@@ -76,7 +106,7 @@ namespace Nez.Experimental
 				if( particleCount < maxParticles )
 					emitCounter += Time.deltaTime;
 
-				while( particleCount < maxParticles && emitCounter > rate )
+				while( _emitting && particleCount < maxParticles && emitCounter > rate )
 				{
 					addParticle();
 					emitCounter -= rate;
@@ -85,7 +115,13 @@ namespace Nez.Experimental
 				elapsedTime += Time.deltaTime;
 
 				if( duration != -1 && duration < elapsedTime )
-					stopParticleEmitter();
+				{
+					_emitting = false;
+
+					// when we hit our duration we dont emit any more particles. once all our particles are done we stop the emitter
+					if( _particleIndex == 0 )
+						stopParticleEmitter();
+				}
 			}
 
 
@@ -106,7 +142,7 @@ namespace Nez.Experimental
 				if( currentParticle.timeToLive > 0 )
 				{
 					// if maxRadius is greater than 0 then the particles are going to spin otherwise they are effected by speed and gravity
-					if( emitterType == kEmitterTypeRadial )
+					if( emitterType == ParticleEmitterType.Radial )
 					{
 						// FIX 2
 						// update the angle of the particle from the sourcePosition and the radius.  This is only done of the particles are rotating
@@ -149,7 +185,8 @@ namespace Nez.Experimental
 					}
 
 					// update the particles color. we do the lerp from finish-to-start because timeToLive counts from particleLifespan to 0
-					ColorExt.lerp( ref currentParticle.startColor, ref currentParticle.finishColor, out currentParticle.color, currentParticle.particleLifetime - currentParticle.timeToLive );
+					var t = ( currentParticle.particleLifetime - currentParticle.timeToLive ) / currentParticle.particleLifetime;
+					ColorExt.lerp( ref currentParticle.startColor, ref currentParticle.finishColor, out currentParticle.color, t );
 
 					// update the particle size
 					currentParticle.particleSize += currentParticle.particleSizeDelta * Time.deltaTime;
@@ -189,12 +226,38 @@ namespace Nez.Experimental
 		public void reset()
 		{
 			_active = true;
+			_emitting = true;
 			elapsedTime = 0;
+
 			for( var i = 0; i < particleCount; i++ )
 				_particles[i].timeToLive = 0;
 
 			emitCounter = 0;
-			emissionRate = maxParticles / particleLifespan;
+		}
+
+
+		public void emit()
+		{
+			if( _spriteBatch == null )
+			{
+				_spriteBatch = new SpriteBatch( Core.graphicsDevice );
+				_blendState = new BlendState();
+				_blendState.ColorSourceBlend = _blendState.AlphaSourceBlend = blendFuncSource;
+				_blendState.ColorDestinationBlend = _blendState.AlphaDestinationBlend = blendFuncDestination;
+			}
+
+			// extract our Texture if we have one
+			if( tempImageData != null )
+			{
+				using( var stream = new MemoryStream( tempImageData ) )
+				{
+					var tex = Texture2D.FromStream( Core.graphicsDevice, stream );
+					subtexture = new Subtexture( tex );
+				}
+				tempImageData = null;
+			}
+
+			reset();
 		}
 
 
@@ -286,8 +349,8 @@ namespace Nez.Experimental
 			);
 
 			// calculate the rotation
-			var startA = rotationStart + rotationStartVariance * Random.minusOneToOne();
-			var endA = rotationEnd + rotationEndVariance * Random.minusOneToOne();
+			var startA = MathHelper.ToRadians( rotationStart + rotationStartVariance * Random.minusOneToOne() );
+			var endA = MathHelper.ToRadians( rotationEnd + rotationEndVariance * Random.minusOneToOne() );
 			particle.rotation = startA;
 			particle.rotationDelta = ( endA - startA ) / particle.timeToLive;
 
@@ -297,8 +360,13 @@ namespace Nez.Experimental
 
 		public override void render( Graphics graphics, Camera camera )
 		{
+			if( !_active )
+				return;
+			
 			// reset the particle index before updating the particles in this emitter
 			_particleIndex = 0;
+
+			_spriteBatch.Begin( blendState:_blendState, samplerState:SamplerState.LinearClamp, transformMatrix:entity.scene.camera.transformMatrix );
 
 			// loop through all the particles updating their location and color
 			while( _particleIndex < particleCount )
@@ -307,12 +375,14 @@ namespace Nez.Experimental
 
 				// TODO: should position be added to entity.position and localPosition
 				if( subtexture == null )
-					graphics.spriteBatch.Draw( graphics.particleTexture, particle.position, graphics.particleTexture.sourceRect, particle.color, particle.rotation, Vector2.One, particle.particleSize * 0.5f, SpriteEffects.None, layerDepth );
+					_spriteBatch.Draw( graphics.particleTexture, particle.position, graphics.particleTexture.sourceRect, particle.color, particle.rotation, Vector2.One, particle.particleSize * 0.5f, SpriteEffects.None, layerDepth );
 				else
-					graphics.spriteBatch.Draw( subtexture, particle.position, subtexture.sourceRect, particle.color, particle.rotation, subtexture.center, particle.particleSize / subtexture.sourceRect.Width, SpriteEffects.None, layerDepth );
+					_spriteBatch.Draw( subtexture, particle.position, subtexture.sourceRect, particle.color, particle.rotation, subtexture.center, particle.particleSize / subtexture.sourceRect.Width, SpriteEffects.None, layerDepth );
 				
 				_particleIndex++;
 			}
+
+			_spriteBatch.End();
 		}
 
 	}
