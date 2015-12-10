@@ -47,7 +47,7 @@ namespace Nez
 			_text = text;
 			_localPosition = position;
 			this.color = color;
-			_horizontalAlign = HorizontalAlign.Center;
+			_horizontalAlign = HorizontalAlign.Left;
 			_verticalAlign = VerticalAlign.Top;
 
 			updateSize();
@@ -60,7 +60,7 @@ namespace Nez
 			_text = text;
 			_localPosition = position;
 			this.color = color;
-			_horizontalAlign = HorizontalAlign.Center;
+			_horizontalAlign = HorizontalAlign.Left;
 			_verticalAlign = VerticalAlign.Top;
 
 			updateSize();

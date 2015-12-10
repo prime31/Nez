@@ -14,6 +14,11 @@ namespace Nez
 		void stop();
 
 		/// <summary>
+		/// resets the elapsed time of the timer to 0
+		/// </summary>
+		void reset();
+
+		/// <summary>
 		/// returns the context casted to T as a convenience
 		/// </summary>
 		/// <returns>The context.</returns>

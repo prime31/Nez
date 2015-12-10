@@ -139,6 +139,12 @@ namespace Nez
 		}
 
 
+		public static bool isEven( int value )
+		{
+			return value % 2 == 0;
+		}
+
+
 		#region wrappers for Math doubles
 
 		public static float sqrt( float val )

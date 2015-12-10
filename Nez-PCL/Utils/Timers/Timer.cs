@@ -23,6 +23,12 @@ namespace Nez.Timers
 		}
 
 
+		public void reset()
+		{
+			_elapsedTime = 0f;
+		}
+
+
 		public T getContext<T>()
 		{
 			return (T)context;
@@ -31,7 +37,8 @@ namespace Nez.Timers
 
 		internal bool tick()
 		{
-			if( _elapsedTime > _timeInSeconds )
+			// if stop was called before the tick then isDone will be true and we should not tick again no matter what
+			if( !_isDone && _elapsedTime > _timeInSeconds )
 			{
 				_elapsedTime -= _timeInSeconds;
 				_onTime( this );

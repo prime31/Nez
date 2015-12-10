@@ -18,12 +18,26 @@ namespace Nez
 
 		public static int backBufferWidth
 		{
+			get { return _graphicsManager.GraphicsDevice.PresentationParameters.BackBufferWidth; }
+			set { _graphicsManager.GraphicsDevice.PresentationParameters.BackBufferWidth = value; }
+		}
+
+
+		public static int backBufferHeight
+		{
+			get { return _graphicsManager.GraphicsDevice.PresentationParameters.BackBufferHeight; }
+			set { _graphicsManager.GraphicsDevice.PresentationParameters.BackBufferHeight = value; }
+		}
+
+
+		public static int preferredBackBufferWidth
+		{
 			get { return _graphicsManager.PreferredBackBufferWidth; }
 			set { _graphicsManager.PreferredBackBufferWidth = value; }
 		}
 
 
-		public static int backBufferHeight
+		public static int preferredBackBufferHeight
 		{
 			get { return _graphicsManager.PreferredBackBufferHeight; }
 			set { _graphicsManager.PreferredBackBufferHeight = value; }
