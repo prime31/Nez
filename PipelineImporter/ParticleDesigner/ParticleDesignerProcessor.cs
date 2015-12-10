@@ -6,6 +6,7 @@ using Ionic.Zlib;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework.Graphics;
 using Nez.Particles;
+using Microsoft.Xna.Framework.Content.Pipeline.Processors;
 
 
 namespace Nez.ParticleDesignerImporter
@@ -47,19 +48,26 @@ namespace Nez.ParticleDesignerImporter
 					}
 				}
 
-				// using raw tiff data for now. this resulted in bad compression artifacts
+				var tempFile = Path.Combine( Path.GetTempPath(), "tempParticleTexture.tif" );
+				File.WriteAllBytes( tempFile, result.textureTiffData );
+				context.Logger.LogMessage( "writing tiff to temp file: {0}", tempFile );
 
-//				var tempFile = Path.Combine( Path.GetTempPath(), "tempParticleTexture.tif" );
-//				File.WriteAllBytes( tempFile, result.textureTiffData );
-//				context.Logger.LogMessage( "writing tiff to temp file: {0}", tempFile );
-//
-//				context.Logger.LogMessage( "running TextureImportor on tiff" );
-//				var textureImporter = new TextureImporter();
-//				result.texture = textureImporter.Import( tempFile, input.context ) as Texture2DContent;
-//				result.texture.Name = input.emitterConfig.texture.name;
-//
-//				context.Logger.LogMessage( "deleting temp file" );
-//				File.Delete( tempFile );
+				context.Logger.LogMessage( "running TextureImportor on tiff" );
+				var textureImporter = new TextureImporter();
+				result.texture = textureImporter.Import( tempFile, input.context ) as Texture2DContent;
+				result.texture.Name = input.emitterConfig.texture.name;
+
+				context.Logger.LogMessage( "deleting temp file" );
+				File.Delete( tempFile );
+
+				// process
+				context.Logger.LogMessage( "processing TextureContent" );
+				var textureProcessor = new TextureProcessor {
+					GenerateMipmaps = false,
+					TextureFormat = TextureProcessorOutputFormat.Color
+				};
+				result.texture = (Texture2DContent)textureProcessor.Process( result.texture, context );
+				context.Logger.LogMessage( "TextureContent processed" );
 			}
 
 			result.particleEmitterConfig = input.emitterConfig;

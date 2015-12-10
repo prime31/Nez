@@ -63,8 +63,9 @@ namespace Nez.ParticleDesignerImporter
 			writer.Write( (int)blendForParticleDesignerInt( value.particleEmitterConfig.blendFuncDestination ) );
 
 			// use raw tiff data for now
-			//writer.WriteObject( value.texture );
+			writer.WriteObject( value.texture );
 
+			#if USE_RAW_TIFFS
 			if( value.textureTiffData != null )
 			{
 				writer.Write( value.textureTiffData.Length );
@@ -74,6 +75,7 @@ namespace Nez.ParticleDesignerImporter
 			{
 				writer.Write( 0 );
 			}
+			#endif
 		}
 
 

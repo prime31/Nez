@@ -6,7 +6,7 @@ using System.Xml.Serialization;
 
 namespace Nez.ParticleDesignerImporter
 {
-	[ContentImporter( ".pex", DefaultProcessor = "ParticleDesignerImpoter", DisplayName = "Particle Designer Importer" )]
+	[ContentImporter( ".pex", DefaultProcessor = "ParticleDesignerProcessor", DisplayName = "Particle Designer Importer" )]
 	public class ParticleDesignerImporter : ContentImporter<ParticleDesignerContent>
 	{
 		public override ParticleDesignerContent Import( string filename, ContentImporterContext context )

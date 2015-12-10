@@ -56,10 +56,11 @@ namespace Nez.ParticleDesigner
 			emitterConfig.blendFuncDestination = (Blend)reader.ReadInt32();
 
 
-			// this is for when the ParticleDesignerWriter writes a Texture2DContent. compression killed it though so it was removed
-			//var texture = reader.ReadObject<Texture2D>();
-			//emitterConfig.subtexture = new Nez.Textures.Subtexture( texture );
+			var texture = reader.ReadObject<Texture2D>();
+			emitterConfig.subtexture = new Nez.Textures.Subtexture( texture );
 
+			#if USE_RAW_TIFFS
+			// raw tiffs from a byte[] were originally used. Leaving this here for now just in case textures dont end up working
 			var tiffSize = reader.ReadInt32();
 			if( tiffSize > 0 )
 			{
@@ -70,7 +71,7 @@ namespace Nez.ParticleDesigner
 					emitterConfig.subtexture = new Subtexture( tex );
 				}
 			}
-
+			#endif
 
 
 			return emitterConfig;
