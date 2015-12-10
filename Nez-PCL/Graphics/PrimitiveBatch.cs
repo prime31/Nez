@@ -61,6 +61,19 @@ namespace Nez
 
 
 		/// <summary>
+		/// draws directly in screen space at full viewport size
+		/// </summary>
+		public void begin()
+		{
+			var projection = Matrix.CreateOrthographicOffCenter( 0, Core.graphicsDevice.Viewport.Width,
+					Core.graphicsDevice.Viewport.Height, 0, 0, 1 );
+			var view = Matrix.CreateLookAt( Vector3.Zero, Vector3.Forward, Vector3.Up );
+
+			begin( ref projection, ref view );
+		}
+
+
+		/// <summary>
 		/// Begin is called to tell the PrimitiveBatch what kind of primitives will be
 		/// drawn, and to prepare the graphics card to render those primitives.
 		/// </summary>

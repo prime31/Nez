@@ -8,7 +8,7 @@ namespace Nez
 	public class EntityList : IEnumerable<Entity>, IEnumerable
 	{
 		// global depth sort for Entity lists
-		static public Comparison<Entity> compareEntityOrder = ( a, b ) => { return Math.Sign( b._actualOrder - a._actualOrder ); };
+		internal static Comparison<Entity> compareEntityOrder = ( a, b ) => { return Math.Sign( b._actualOrder - a._actualOrder ); };
 
 		public Scene scene;
 

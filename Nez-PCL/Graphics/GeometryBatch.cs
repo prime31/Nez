@@ -9,11 +9,11 @@ using Microsoft.Xna.Framework.Graphics;
 
 
 // TODO: use a temp array of verts instead of creating new arrays for every call
-
-
-
 namespace Nez
 {
+	/// <summary>
+	/// wrapper with some helper methods for using the PrimitiveBatch
+	/// </summary>
 	public class GeometryBatch
 	{
 		public const int CircleSegments = 32;

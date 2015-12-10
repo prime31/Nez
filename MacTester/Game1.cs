@@ -149,7 +149,7 @@ namespace MacTester
 			if( IMGUI.button( "Overlap2D Scene" ) )
 				scene = Scenes.sceneOverlap2D();
 
-			IMGUI.endWindow();			
+			IMGUI.endWindow();
 		}
 	}
 }

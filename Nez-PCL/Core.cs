@@ -18,9 +18,25 @@ namespace Nez
 		/// core emitter. emits only Core level events.
 		/// </summary>
 		public static Emitter<CoreEvents> emitter;
+
+		/// <summary>
+		/// enables/disables if we should quit the app when escape is pressed
+		/// </summary>
 		public static bool exitOnEscapeKeypress = true;
+
+		/// <summary>
+		/// enables/disables pausing when focus is lost. No update or render methods will be called if true when not in focus.
+		/// </summary>
 		public static bool pauseOnFocusLost = true;
+
+		/// <summary>
+		/// enables/disables debug rendering
+		/// </summary>
 		public static bool debugRenderEnabled = false;
+
+		/// <summary>
+		/// global access to the graphicsDevice
+		/// </summary>
 		public static GraphicsDevice graphicsDevice;
 
 		/// <summary>
@@ -35,6 +51,11 @@ namespace Nez
 
 		Scene _scene;
 		Scene _nextScene;
+
+		/// <summary>
+		/// used to coalesce GraphicsDeviceReset events
+		/// </summary>
+		ITimer _graphicsDeviceChangeTimer;
 
 		// globally accessible systems
 		CoroutineManager _coroutineManager = new CoroutineManager();
@@ -79,8 +100,19 @@ namespace Nez
 		/// <param name="e">E.</param>
 		void onGraphicsDeviceReset( object sender, EventArgs e )
 		{
-			// TODO: coalese these to avoid spamming once we have a scheduler/timer
-			emitter.emit( CoreEvents.GraphicsDeviceReset );
+			// we coalese these to avoid spamming events
+			if( _graphicsDeviceChangeTimer != null )
+			{
+				_graphicsDeviceChangeTimer.reset();
+			}
+			else
+			{
+				_graphicsDeviceChangeTimer = schedule( 0.05f, false, this, t =>
+				{
+					( this as Core )._graphicsDeviceChangeTimer = null;
+					emitter.emit( CoreEvents.GraphicsDeviceReset );
+				} );
+			}
 		}
 
 
