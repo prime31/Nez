@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Nez.Systems;
+using Nez.Textures;
+using Microsoft.Xna.Framework.Graphics;
 
 
 namespace Nez
@@ -43,6 +45,9 @@ namespace Nez
 		/// </summary>
 		public readonly RenderableComponentList renderableComponents;
 
+		RenderTexture _sceneRenderTexture;
+		RenderTexture _destinationRenderTexture;
+
 		List<Renderer> _renderers = new List<Renderer>();
 		Dictionary<int,double> _actualEntityOrderLookup = new Dictionary<int,double>();
 		readonly List<PostProcessor> _postProcessors = new List<PostProcessor>();
@@ -75,6 +80,7 @@ namespace Nez
 			entities = new EntityList( this );
 			renderableComponents = new RenderableComponentList();
 			contentManager = new NezContentManager();
+			_sceneRenderTexture = new RenderTexture();
 		}
 
 
@@ -82,6 +88,7 @@ namespace Nez
 		{
 			Debug.warnIf( _renderers.Count == 0, "Scene has begun with no renderer. Are you sure you want to run a Scene without a renderer?" );
 			Physics.reset();
+			Core.emitter.addObserver( CoreEvents.GraphicsDeviceReset, onGraphicsDeviceReset );
 		}
 
 
@@ -90,10 +97,18 @@ namespace Nez
 			for( var i = 0; i < _renderers.Count; i++ )
 				_renderers[i].unload();
 
+			for( var i = 0; i < _postProcessors.Count; i++ )
+				_postProcessors[i].unload();
+
+			Core.emitter.removeObserver( CoreEvents.GraphicsDeviceReset, onGraphicsDeviceReset );
 			entities.removeAllEntities();
 			camera.unload();
 			camera = null;
 			contentManager.Dispose();
+			_sceneRenderTexture.unload();
+
+			if( _destinationRenderTexture != null )
+				_destinationRenderTexture.unload();
 		}
 
 
@@ -112,8 +127,13 @@ namespace Nez
 
 		internal void preRender()
 		{
-			Core.graphicsDevice.SetRenderTarget( null );
-			Core.graphicsDevice.Clear( clearColor );
+			// Renderers should always have those that require RenderTextures first. They clear themselves and set themselves as
+			// the current RenderTarget
+			if( _renderers[0].renderTexture == null )
+			{
+				Core.graphicsDevice.SetRenderTarget( _sceneRenderTexture );
+				Core.graphicsDevice.Clear( clearColor );
+			}
 		}
 
 
@@ -125,7 +145,10 @@ namespace Nez
 				// MonoGame follows the XNA bullshit implementation so it will clear the entire buffer if we change the render target even if null.
 				// Because of that, we track when we are done with our RenderTextures and clear the scene at that time.
 				if( lastRendererHadRenderTexture )
+				{
+					Core.graphicsDevice.SetRenderTarget( _sceneRenderTexture );
 					Core.graphicsDevice.Clear( clearColor );
+				}
 				
 				_renderers[i].render( this, enableDebugRender );
 				lastRendererHadRenderTexture = _renderers[i].renderTexture != null;
@@ -135,14 +158,33 @@ namespace Nez
 
 		internal void postRender()
 		{
-			if( !enablePostProcessing )
-				return;
-
-			for( var i = 0; i < _postProcessors.Count; i++ )
+			var enabledCounter = 0;
+			if( enablePostProcessing )
 			{
-				if( _postProcessors[i].enabled )
-					_postProcessors[i].process();
+				for( var i = 0; i < _postProcessors.Count; i++ )
+				{
+					if( _postProcessors[i].enabled )
+					{
+						var isEven = Mathf.isEven( enabledCounter );
+						enabledCounter++;
+						_postProcessors[i].process( isEven ? _sceneRenderTexture : _destinationRenderTexture, isEven ? _destinationRenderTexture : _sceneRenderTexture );
+					}
+				}
 			}
+
+			Core.graphicsDevice.SetRenderTarget( null );
+			Graphics.instance.spriteBatch.Begin( SpriteSortMode.Deferred, BlendState.Opaque );
+			Graphics.instance.spriteBatch.Draw( Mathf.isEven( enabledCounter ) ? _sceneRenderTexture : _destinationRenderTexture, Vector2.Zero, Color.White );
+			Graphics.instance.spriteBatch.End();
+		}
+
+
+		void onGraphicsDeviceReset()
+		{
+			_sceneRenderTexture.resizeToFitBackbuffer();
+
+			if( _destinationRenderTexture != null )
+				_destinationRenderTexture.resizeToFitBackbuffer();
 		}
 
 
@@ -200,13 +242,18 @@ namespace Nez
 		}
 
 
-		public void addPostProcessStep( PostProcessor step )
+		public void addPostProcessor( PostProcessor step )
 		{
 			_postProcessors.Add( step );
+			_postProcessors.Sort( PostProcessor.comparePostProcessorOrder );
+
+			// lazily create the 2nd RenderTexture for post processing only when a PostProcessor is added
+			if( _destinationRenderTexture == null )
+				_destinationRenderTexture = new RenderTexture();
 		}
 
 
-		public void removePostProcessingStep( PostProcessor step )
+		public void removePostProcessor( PostProcessor step )
 		{
 			_postProcessors.Remove( step );
 		}

@@ -9,18 +9,31 @@ namespace Nez.Textures
 	/// <summary>
 	/// represents a single element in a texture atlas consisting of a texture and the source rectangle for the frame
 	/// </summary>
-	public class Subtexture : Texture
+	public class Subtexture
 	{
+		/// <summary>
+		/// the actual Texture2D
+		/// </summary>
+		public Texture2D texture2D;
+
+		/// <summary>
+		/// rectangle in the Texture2D for this element
+		/// </summary>
 		public Rectangle sourceRect;
 
+		/// <summary>
+		/// center of the sourceRect if it had a 0,0 origin. This is basically the center in sourceRect-space.
+		/// </summary>
+		/// <value>The center.</value>
 		public Vector2 center
 		{
 			get { return sourceRect.Size.ToVector2() * 0.5f; }
 		}
 		
 
-		public Subtexture( Texture2D texture, Rectangle sourceRect ) : base( texture )
+		public Subtexture( Texture2D texture, Rectangle sourceRect )
 		{
+			this.texture2D = texture;
 			this.sourceRect = sourceRect;
 		}
 
@@ -64,9 +77,23 @@ namespace Nez.Textures
 		}
 
 
+		public virtual void unload()
+		{
+			texture2D.Dispose();
+			texture2D = null;
+		}
+
+
+		public static implicit operator Texture2D( Subtexture tex )
+		{
+			return tex.texture2D;
+		}
+
+
 		public override string ToString()
 		{
 			return string.Format( "{0}", sourceRect );
 		}
+	
 	}
 }

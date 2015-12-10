@@ -8,7 +8,7 @@ namespace Nez
 	public class RenderableComponentList : IEnumerable<RenderableComponent>, IEnumerable
 	{
 		// global layerDepth sort for RenderableComponent lists
-		static public Comparison<RenderableComponent> compareComponentLayerDepth = ( a, b ) => { return Math.Sign( b.layerDepth - a.layerDepth ); };
+		internal static Comparison<RenderableComponent> compareComponentLayerDepth = ( a, b ) => { return Math.Sign( b.layerDepth - a.layerDepth ); };
 
 		/// <summary>
 		/// list of components added to the entity

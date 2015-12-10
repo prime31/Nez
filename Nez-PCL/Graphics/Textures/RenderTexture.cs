@@ -7,7 +7,7 @@ using Microsoft.Xna.Framework.Content;
 
 namespace Nez.Textures
 {
-	public class RenderTexture : Texture
+	public class RenderTexture
 	{
 		public RenderTarget2D renderTarget2D;
 
@@ -21,8 +21,6 @@ namespace Nez.Textures
 		public RenderTexture( int width, int height )
 		{
 			renderTarget2D = new RenderTarget2D( Core.graphicsDevice, width, height );
-			texture2D = (Texture2D)renderTarget2D;
-			textureBounds = new Rectangle( 0, 0, width, height );
 		}
 
 
@@ -30,7 +28,7 @@ namespace Nez.Textures
 		/// Creates a RenderTexture with the full size of the back buffer
 		/// </summary>
 		/// <param name="graphicsDevice">Graphics device.</param>
-		public RenderTexture() : this( Core.graphicsDevice.PresentationParameters.BackBufferWidth, Core.graphicsDevice.PresentationParameters.BackBufferHeight )
+		public RenderTexture() : this( Screen.backBufferWidth, Screen.backBufferHeight )
 		{}
 
 
@@ -39,29 +37,55 @@ namespace Nez.Textures
 		/// </summary>
 		/// <param name="graphicsDevice">Graphics device.</param>
 		/// <param name="tex">Tex.</param>
-		public RenderTexture( Texture tex ) : this( tex.textureBounds.Width, tex.textureBounds.Height )
+		public RenderTexture( Texture2D tex ) : this( tex.Bounds.Width, tex.Bounds.Height )
 		{
-			var data = new Color[tex.textureBounds.Width * tex.textureBounds.Height];
-			tex.texture2D.GetData<Color>( data );
+			var data = new Color[tex.Bounds.Width * tex.Bounds.Height];
+			tex.GetData<Color>( data );
 			renderTarget2D.SetData<Color>( data );
 		}
 
 
-		public override void load( string imagePath, ContentManager content )
-		{
-			throw new Exception( "Cannot load a RenderTexture" );
-		}
-
-
-		public override void unload()
+		/// <summary>
+		/// disposes of the RenderTarget2D
+		/// </summary>
+		public void unload()
 		{
 			renderTarget2D.Dispose();
 			renderTarget2D = null;
-			texture2D = null;
+		}
+
+
+		/// <summary>
+		/// resizes the RenderTarget2D to match the back buffer size
+		/// </summary>
+		public void resizeToFitBackbuffer()
+		{
+			resize( Screen.backBufferWidth, Screen.backBufferHeight );
+		}
+
+
+		/// <summary>
+		/// resizes the RenderTarget2D to the specified size
+		/// </summary>
+		/// <param name="width">Width.</param>
+		/// <param name="height">Height.</param>
+		public void resize( int width, int height )
+		{
+			// unload if necessary
+			if( renderTarget2D != null )
+				unload();
+			
+			renderTarget2D = new RenderTarget2D( Core.graphicsDevice, width, height );
 		}
 
 
 		public static implicit operator RenderTarget2D( RenderTexture tex )
+		{
+			return tex.renderTarget2D;
+		}
+
+
+		public static implicit operator Texture2D( RenderTexture tex )
 		{
 			return tex.renderTarget2D;
 		}

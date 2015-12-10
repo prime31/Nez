@@ -160,7 +160,6 @@
     <Compile Include="ECS\Components\FollowCamera.cs" />
     <Compile Include="Graphics\Textures\RenderTexture.cs" />
     <Compile Include="Graphics\Textures\Subtexture.cs" />
-    <Compile Include="Graphics\Textures\Texture.cs" />
     <Compile Include="PipelineRuntime\TexturePacker\TexturePackerAtlas.cs" />
     <Compile Include="PipelineRuntime\TexturePacker\TexturePackerAtlasReader.cs" />
     <Compile Include="PipelineRuntime\TextureAtlas\TextureAtlas.cs" />

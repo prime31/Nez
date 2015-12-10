@@ -20,7 +20,7 @@ namespace Nez
 		/// <summary>
 		/// Comparison used to sort renderers
 		/// </summary>
-		static public Comparison<Renderer> compareRenderOrder = ( a, b ) => { return Math.Sign( a.renderOrder - b.renderOrder ); };
+		static internal Comparison<Renderer> compareRenderOrder = ( a, b ) => { return Math.Sign( a.renderOrder - b.renderOrder ); };
 
 		/// <summary>
 		/// SpriteSortMode used by the SpriteBatch

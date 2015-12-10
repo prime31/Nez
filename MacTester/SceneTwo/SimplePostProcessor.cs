@@ -16,21 +16,23 @@ namespace MacTester
 		Effect _effect;
 
 
-		public SimplePostProcessor( RenderTexture renderTexture, Effect effect )
+		public SimplePostProcessor( RenderTexture renderTexture, Effect effect ) : base( 0 )
 		{
 			_renderTexture = renderTexture;
 			_effect = effect;
-			sourceRect = new Rectangle( 250, 10, _renderTexture.textureBounds.Width * 2, _renderTexture.textureBounds.Height * 2 );
+			sourceRect = new Rectangle( 250, 10, _renderTexture.renderTarget2D.Bounds.Width * 2, _renderTexture.renderTarget2D.Bounds.Height * 2 );
 		}
 
 
-		public override void process()
+		public override void process( RenderTexture source, RenderTexture destination  )
 		{
+			Core.graphicsDevice.SetRenderTarget( destination );
+
 			Graphics.instance.spriteBatch.Begin( effect: _effect );
-			Graphics.instance.spriteBatch.Draw( _renderTexture.texture2D, null, sourceRect );
+			Graphics.instance.spriteBatch.Draw( source, Vector2.Zero, Color.White );
+			Graphics.instance.spriteBatch.Draw( _renderTexture, null, sourceRect );
 			Graphics.instance.spriteBatch.End();
 		}
-
 	}
 }
 

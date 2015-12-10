@@ -26,10 +26,11 @@ namespace MacTester
 				scene.camera.viewportAdapter = new ScalingViewportAdapter( Core.graphicsDevice, 256, 144 );
 			else
 				scene.camera.viewportAdapter = new BoxingViewportAdapter( Core.graphicsDevice, 256, 144 );
-			Screen.backBufferWidth = 256 * 4; 
-			Screen.backBufferHeight = 144 * 4;
-			Screen.applyChanges();
+			scene.camera.centerOrigin();
 
+			Screen.preferredBackBufferWidth = 256 * 4; 
+			Screen.preferredBackBufferHeight = 144 * 4;
+			Screen.applyChanges();
 
 			// load a TiledMap and move it back so is drawn before other entities
 			var tiledEntity = scene.createAndAddEntity<Entity>( "tiled-map-entity" );
@@ -95,8 +96,8 @@ namespace MacTester
 
 
 			entity = scene.createAndAddEntity<Entity>( "bmfont" );
-			entity.addComponent( new Text( Graphics.instance.bitmapFont, "This text is a BMFont\nPOOOP", new Vector2( 0, 30 ), Color.White ) );
-			entity.addComponent( new Text( bmFont, "This text is a BMFont\nPOOOP", new Vector2( 0, 70 ), Color.Black ) );
+			entity.addComponent( new Text( Graphics.instance.bitmapFont, "This text is a BMFont\nPOOOP", new Vector2( 0, 30 ), Color.Red ) );
+			entity.addComponent( new Text( bmFont, "This text is a BMFont\nPOOOP", new Vector2( 0, 70 ), Color.Cornsilk ) );
 
 
 			// texture atlas tester
@@ -133,7 +134,7 @@ namespace MacTester
 			// add a post processor to display the RenderTexture
 			var effect = scene.contentManager.LoadEffect( "Content/Effects/Invert.ogl.mgfxo" );
 			var postProcessor = new SimplePostProcessor( renderer.renderTexture, effect );
-			scene.addPostProcessStep( postProcessor );
+			scene.addPostProcessor( postProcessor );
 			scene.enablePostProcessing = true;
 
 			return scene;
@@ -288,13 +289,15 @@ namespace MacTester
 
 			var particles = new string[]
 			{
+				"bin/MacOSX/ParticleDesigner/Fire",
+				"bin/MacOSX/ParticleDesigner/Snow",
+				"bin/MacOSX/ParticleDesigner/Leaves",
 				"bin/MacOSX/ParticleDesigner/Atomic Bubble",
 				"bin/MacOSX/ParticleDesigner/Blue Flame",
 				"bin/MacOSX/ParticleDesigner/Blue Galaxy",
 				"bin/MacOSX/ParticleDesigner/Comet",
 				"bin/MacOSX/ParticleDesigner/Crazy Blue",
 				"bin/MacOSX/ParticleDesigner/Electrons",
-				"bin/MacOSX/ParticleDesigner/Foam",
 				"bin/MacOSX/ParticleDesigner/Giros Gratis",
 				"bin/MacOSX/ParticleDesigner/huo1",
 				"bin/MacOSX/ParticleDesigner/Into The Blue",
