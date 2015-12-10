@@ -18,12 +18,6 @@ namespace Nez.Particles
 		float elapsedTime;
 
 
-		// optional texture-related fields settable via the XML files
-		public byte[] tempImageData;
-		public string particleTextureName;
-		public Rectangle particleTexturesourceRect;
-
-
 		//////////////////// Particle Emitter iVars
 		bool _active = false;
 		bool _emitting;
@@ -48,6 +42,7 @@ namespace Nez.Particles
 		/// </summary>
 		void initialize()
 		{
+			// if the spriteBatch is null we have to do our initial setup
 			if( _spriteBatch == null )
 			{
 				_spriteBatch = new SpriteBatch( Core.graphicsDevice );
