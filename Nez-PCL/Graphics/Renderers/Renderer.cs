@@ -23,6 +23,11 @@ namespace Nez
 		static public Comparison<Renderer> compareRenderOrder = ( a, b ) => { return Math.Sign( a.renderOrder - b.renderOrder ); };
 
 		/// <summary>
+		/// SpriteSortMode used by the SpriteBatch
+		/// </summary>
+		public SpriteSortMode spriteSortMode = SpriteSortMode.Deferred;
+
+		/// <summary>
 		/// BlendState used by the SpriteBatch
 		/// </summary>
 		public BlendState blendState = BlendState.AlphaBlend;
@@ -31,6 +36,16 @@ namespace Nez
 		/// SamplerState used by the SpriteBatch
 		/// </summary>
 		public SamplerState samplerState = SamplerState.PointClamp;
+
+		/// <summary>
+		/// DepthStencilState used by the SpriteBatch
+		/// </summary>
+		public DepthStencilState depthStencilState = DepthStencilState.None;
+
+		/// <summary>
+		/// RasterizerState used by the SpriteBatch
+		/// </summary>
+		public RasterizerState rasterizerState = RasterizerState.CullNone;
 
 		/// <summary>
 		/// Effect used by the SpriteBatch
@@ -94,7 +109,7 @@ namespace Nez
 			// MonoGame resets the Viewport to the RT size without asking so we have to let the Camera know to update itself
 			cam.forceMatrixUpdate();
 
-			Graphics.instance.spriteBatch.Begin( SpriteSortMode.Deferred, blendState, samplerState, DepthStencilState.None, RasterizerState.CullNone, effect, cam.transformMatrix );
+			Graphics.instance.spriteBatch.Begin( spriteSortMode, blendState, samplerState, depthStencilState, rasterizerState, effect, cam.transformMatrix );
 		}
 
 

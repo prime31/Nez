@@ -30,6 +30,18 @@ namespace Nez
 		}
 
 
+		public static int monitorWidth
+		{
+			get { return GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width; }
+		}
+
+
+		public static int monitorHeight
+		{
+			get { return GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height; }
+		}
+
+
 		public static SurfaceFormat preferredBackBufferFormat
 		{
 			get { return _graphicsManager.PreferredBackBufferFormat; }
