@@ -58,7 +58,6 @@
     <Folder Include="Graphics\Textures\" />
     <Folder Include="PipelineRuntime\TextureAtlas\" />
     <Folder Include="Physics\QuadTree\" />
-    <Folder Include="ECS\Components\Renderables\Particles_CRAP\" />
     <Folder Include="ECS\Components\Renderables\Particles\" />
     <Folder Include="PipelineRuntime\ParticleDesigner\" />
     <Folder Include="Utils\Analysis\" />
@@ -181,9 +180,6 @@
     <Compile Include="Physics\QuadTree\QuadTreeObject.cs" />
     <Compile Include="Physics\QuadTree\QuadTreeNode.cs" />
     <Compile Include="Physics\QuadTree\IQuadTreeStorable.cs" />
-    <Compile Include="ECS\Components\Renderables\Particles_CRAP\Particle.cs" />
-    <Compile Include="ECS\Components\Renderables\Particles_CRAP\ParticleSystem.cs" />
-    <Compile Include="ECS\Components\Renderables\Particles_CRAP\ParticleType.cs" />
     <Compile Include="ECS\Components\Renderables\Particles\ParticleEmitter.cs" />
     <Compile Include="ECS\Components\Renderables\Particles\Particle.cs" />
     <Compile Include="Math\ColorExt.cs" />

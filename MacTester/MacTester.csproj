@@ -70,7 +70,6 @@
     <Compile Include="SceneThree\SimpleMoonMover.cs" />
     <Compile Include="SceneTwo\SimplePostProcessor.cs" />
     <Compile Include="SceneThree\SimpleMovingPlatform.cs" />
-    <Compile Include="SceneTwo\SimpleParticles.cs" />
     <Compile Include="Scenes.cs" />
   </ItemGroup>
   <ItemGroup>

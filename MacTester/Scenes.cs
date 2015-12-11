@@ -127,9 +127,6 @@ namespace MacTester
 			sprite.play( 1 );
 			entity.addComponent( sprite );
 
-			entity = scene.createAndAddEntity<Entity>( "particles" );
-			entity.addComponent( new SimpleParticles() );
-
 
 			// add a post processor to display the RenderTexture
 			var effect = scene.contentManager.LoadEffect( "Content/Effects/Invert.ogl.mgfxo" );

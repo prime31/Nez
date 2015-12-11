@@ -9,7 +9,7 @@ namespace Nez.XmlTemplateMaker
 {
 	/// <summary>
 	/// Simple little importer that's sole purpose is to print out a template XML file for any class. The template XML can then be used to
-	/// create custom XML-to-object importors in just a few lines of code. See the ParticleSystemSettingsProcessor for an example.
+	/// create custom XML-to-object importors in just a few lines of code. See the bottom of this file for an example.
 	/// 
 	/// The XML file passed to this processor should just be a System.string with the namespace.class of the type that you want a tempalte for.
 	/// The template will be dumped to the Pipeline console but note that it will have utf-16 instead of utf-8 so you need to change that.
@@ -56,3 +56,21 @@ namespace Nez.XmlTemplateMaker
 	}
 }
 
+
+/* Example from old particle system. ParticleType was a class with a bunch of particle properties
+/// <summary>
+/// Particle system settings processor. Create an XML file based on the ParticleType XML template (you can use the XmlTemplateMakerProcessor
+/// to create the template easily). At runtime you can load it up like so:
+/// 
+/// var particleType = content.Load<ParticleType>( "ParticleSystemSettings/XmlFileName" );
+/// particleType.loadParticleTexture( contentManager );
+/// </summary>
+[ContentProcessor( DisplayName = "Particle System Settings Processor" )]
+public class ParticleSystemSettingsProcessor : ContentProcessor<ParticleType,ParticleType>
+{
+	public override ParticleType Process( ParticleType input, ContentProcessorContext context )
+	{
+		return input;
+	}
+}
+*/
