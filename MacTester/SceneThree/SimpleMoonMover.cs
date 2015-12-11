@@ -26,7 +26,7 @@ namespace MacTester
 				moveDir.Y = 1f;
 
 			if( moveDir != Vector2.Zero )
-				entity.move( moveDir.X * _speed, moveDir.Y * _speed, this, this );
+				entity.moveActor( moveDir.X * _speed, moveDir.Y * _speed, this, this );
 		}
 
 

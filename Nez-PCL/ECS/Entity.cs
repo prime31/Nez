@@ -287,7 +287,7 @@ namespace Nez
 		/// </summary>
 		/// <param name="deltaX">Delta x.</param>
 		/// <param name="deltaY">Delta y.</param>
-		public bool move( float deltaX, float deltaY, ICollisionCallback collisionHandler = null, ITriggerCallback triggerHandler = null )
+		public bool moveActor( float deltaX, float deltaY, ICollisionCallback collisionHandler = null, ITriggerCallback triggerHandler = null )
 		{
 			// no collider? just move and forget about it
 			if( collider == null )
@@ -302,8 +302,8 @@ namespace Nez
 			// fetch anything that we might collide with along the way
 			var neighbors = Physics.boxcastBroadphaseExcludingSelf( collider, deltaX, deltaY );
 
-			var collideX = moveX( deltaX, neighbors, collisionHandler, triggerHandler );
-			var collideY = moveY( deltaY, neighbors, collisionHandler, triggerHandler );
+			var collideX = moveActorX( deltaX, neighbors, collisionHandler, triggerHandler );
+			var collideY = moveActorY( deltaY, neighbors, collisionHandler, triggerHandler );
 
 			// set our new position which will trigger child component/collider bounds updates
 			position = _position;
@@ -315,7 +315,7 @@ namespace Nez
 		}
 
 
-		bool moveX( float amount, HashSet<Collider> neighbors, ICollisionCallback collisionHandler = null, ITriggerCallback triggerHandler = null )
+		bool moveActorX( float amount, HashSet<Collider> neighbors, ICollisionCallback collisionHandler = null, ITriggerCallback triggerHandler = null )
 		{
 			_movementRemainder.X += amount;
 			var moveAmount = Mathf.roundToInt( _movementRemainder.X );
@@ -358,7 +358,7 @@ namespace Nez
 		}
 
 
-		bool moveY( float amount, HashSet<Collider> neighbors, ICollisionCallback collisionHandler = null, ITriggerCallback triggerHandler = null )
+		bool moveActorY( float amount, HashSet<Collider> neighbors, ICollisionCallback collisionHandler = null, ITriggerCallback triggerHandler = null )
 		{
 			_movementRemainder.Y += amount;
 			var moveAmount = Mathf.roundToInt( _movementRemainder.Y );
@@ -403,6 +403,99 @@ namespace Nez
 			return false;
 		}
 			
+
+		/// <summary>
+		/// solid movement does not care about collisions for the movement itself. A solid will always get to its final destination. It will,
+		/// however push any Actors in its way and caryy any actors riding on it.
+		/// </summary>
+		/// <param name="deltaX">Delta x.</param>
+		/// <param name="deltaY">Delta y.</param>
+		/// <param name="allActors">All actors.</param>
+		/// <param name="ridingActors">Riding actors.</param>
+		public void moveSolid( float deltaX, float deltaY, List<Entity> allActors, List<Entity> ridingActors )
+		{
+			if( deltaX == 0f && deltaY == 0f )
+				return;
+
+			// remove ourself from the physics system until after we are done moving
+			Physics.removeCollider( collider, true );
+
+			if( deltaX != 0f )
+			{
+				position += new Vector2( deltaX, 0f );
+				moveSolidX( deltaX, allActors, ridingActors );
+			}
+
+			if( deltaY != 0f )
+			{
+				position += new Vector2( 0f, deltaY );
+				moveSolidY( deltaY, allActors, ridingActors );
+			}
+
+			// let Physics know about our new position
+			Physics.addCollider( collider );
+		}
+
+
+		void moveSolidX( float amount, List<Entity> allActors, List<Entity> ridingActors )
+		{
+			for( var i = 0; i < allActors.Count; i++ )
+			{
+				var actor = allActors[i];
+
+				if( actor.collider.collidesWith( collider ) )
+				{
+					// push. deal with moving left/right
+					float moveAmount;
+					if( amount > 0f )
+						moveAmount = collider.bounds.Right - actor.collider.bounds.Left;
+					else
+						moveAmount = collider.bounds.Left - actor.collider.bounds.Right;
+
+					if( actor.moveActor( moveAmount, 0 ) )
+					{
+						// TODO: dont do this. we need an event for this
+						scene.removeEntity( actor );
+					}
+				}
+				else if( ridingActors.Contains( actor ) )
+				{
+					// riding
+					actor.moveActor( amount, 0 );
+				}
+			}
+		}
+
+
+		void moveSolidY( float amount, List<Entity> allActors, List<Entity> ridingActors )
+		{
+			for( var i = 0; i < allActors.Count; i++ )
+			{
+				var actor = allActors[i];
+
+				if( actor.collider.collidesWith( collider ) )
+				{
+					// push. deal with moving up/down
+					float moveAmount;
+					if( amount > 0f )
+						moveAmount = collider.bounds.Bottom - actor.collider.bounds.Top;
+					else
+						moveAmount = collider.bounds.Top - actor.collider.bounds.Bottom;
+
+					if( actor.moveActor( 0, moveAmount ) )
+					{
+						// TODO: dont do this. we need an event for this
+						scene.removeEntity( actor );
+					}
+				}
+				else if( ridingActors.Contains( actor ) )
+				{
+					// riding
+					actor.moveActor( 0, amount );
+				}
+			}
+		}
+
 		#endregion
 
 
