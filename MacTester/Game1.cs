@@ -7,6 +7,7 @@ using Nez;
 using Nez.Tweens;
 using Nez.Sprites;
 using Nez.Analysis;
+using Nez.Particles;
 
 
 namespace MacTester
@@ -86,9 +87,20 @@ namespace MacTester
 					}
 				}
 
+
 				var cam = scene.findEntity( "camera-follow" );
 				if( cam != null && cam.getComponent<CameraShake>() != null )
 					cam.getComponent<CameraShake>().shake();
+
+
+				var particles = scene.findEntity( "particles" );
+				if( particles != null && particles.getComponent<ParticleEmitter>() != null )
+				{
+					if( particles.getComponent<ParticleEmitter>().isPlaying )
+						particles.getComponent<ParticleEmitter>().pause();
+					else
+						particles.getComponent<ParticleEmitter>().play();
+				}
 			}
 
 			// allow click-drag to move the camera

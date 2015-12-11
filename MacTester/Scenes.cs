@@ -321,8 +321,8 @@ namespace MacTester
 
 
 			var entity = scene.createAndAddEntity<Entity>( "particles" );
+			entity.position = new Vector2( Screen.backBufferWidth / 2, Screen.backBufferHeight / 2 );
 			var particleEmitterConfig = scene.contentManager.Load<ParticleEmitterConfig>( whichEmitter );
-			particleEmitterConfig.sourcePosition = new Vector2( Screen.backBufferWidth / 2, Screen.backBufferHeight / 2 );
 			entity.addComponent( new ParticleEmitter( particleEmitterConfig ) );
 
 

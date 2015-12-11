@@ -73,7 +73,7 @@ namespace Nez.Console
 		}
 
 
-		[Command( "count", "Logs amount of Entities in the Scene. Pass a tagIndex to count only Entities with that tag" )]
+		[Command( "entity-count", "Logs amount of Entities in the Scene. Pass a tagIndex to count only Entities with that tag" )]
 		static private void count( int tagIndex = -1 )
 		{
 			if( Core.scene == null )

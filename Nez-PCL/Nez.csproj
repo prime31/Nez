@@ -83,7 +83,6 @@
     <Compile Include="ECS\InternalUtils\EntityList.cs" />
     <Compile Include="ECS\InternalUtils\EntityTagLists.cs" />
     <Compile Include="ECS\InternalUtils\RenderableComponentList.cs" />
-    <Compile Include="Graphics\GeometryBatch.cs" />
     <Compile Include="Graphics\Graphics.cs" />
     <Compile Include="Graphics\PrimitiveBatch.cs" />
     <Compile Include="Graphics\PostProcessing\PostProcessor.cs" />
