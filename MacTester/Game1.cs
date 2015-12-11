@@ -1,6 +1,4 @@
-﻿#region Using Statements
-using System;
-
+﻿using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Storage;
@@ -8,9 +6,8 @@ using Microsoft.Xna.Framework.Input;
 using Nez;
 using Nez.Tweens;
 using Nez.Sprites;
+using Nez.Analysis;
 
-
-#endregion
 
 namespace MacTester
 {

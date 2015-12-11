@@ -9,7 +9,7 @@ namespace Nez
 	/// <summary>
 	/// Post Processing step for rendering actions after everthing done.
 	/// </summary>
-	public abstract class PostProcessor
+	public class PostProcessor
 	{
 		internal static Comparison<PostProcessor> comparePostProcessorOrder = ( a, b ) =>
 		{
@@ -19,22 +19,38 @@ namespace Nez
 		/// <summary>
 		/// Step is Enabled or not.
 		/// </summary>
-		public bool enabled { get; protected set; }
+		public bool enabled;
 
 		/// <summary>
 		/// specifies the order in which the Renderers will be called by the scene
 		/// </summary>
 		public readonly int executionOrder = 0;
 
+		/// <summary>
+		/// The effect used to render with
+		/// </summary>
+		public Effect effect;
 
-		public PostProcessor( int executionOrder )
+
+		public PostProcessor( int executionOrder, Effect effect = null )
 		{
 			enabled = true;
 			this.executionOrder = executionOrder;
+			this.effect = effect;
 		}
 
 
-		abstract public void process( RenderTexture source, RenderTexture destination );
+		/// <summary>
+		/// this is the meat method here. The source passed in contains the full scene with any previous PostProcessors
+		/// rendering. Render it into the destination RenderTexture. The drawFullScreenQuad methods are there to make
+		/// the process even easier
+		/// </summary>
+		/// <param name="source">Source.</param>
+		/// <param name="destination">Destination.</param>
+		public virtual void process( RenderTexture source, RenderTexture destination )
+		{
+			drawFullscreenQuad( source, destination, effect );
+		}
 
 
 		/// <summary>

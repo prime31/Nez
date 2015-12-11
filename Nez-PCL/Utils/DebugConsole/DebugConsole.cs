@@ -34,7 +34,7 @@ namespace Nez.Console
 		const int LINE_HEIGHT = 14;
 
 		bool enabled = true;
-		bool isOpen;
+		internal bool isOpen;
 		Dictionary<string,CommandInfo> _commands;
 		List<string> _sorted;
 

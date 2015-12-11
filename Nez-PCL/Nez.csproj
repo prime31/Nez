@@ -61,6 +61,7 @@
     <Folder Include="ECS\Components\Renderables\Particles_CRAP\" />
     <Folder Include="ECS\Components\Renderables\Particles\" />
     <Folder Include="PipelineRuntime\ParticleDesigner\" />
+    <Folder Include="Utils\Analysis\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Debug\Debug.cs" />
@@ -192,5 +193,8 @@
     <Compile Include="ECS\Components\Renderables\Particles\ParticleEmitterType.cs" />
     <Compile Include="ECS\Components\Renderables\Particles\ParticleEmitterConfig.cs" />
     <Compile Include="PipelineRuntime\ParticleDesigner\ParticleEmitterConfigReader.cs" />
+    <Compile Include="Utils\Analysis\TimeRuler.cs" />
+    <Compile Include="Utils\Analysis\Layout.cs" />
+    <Compile Include="Utils\Analysis\StopWatch.cs" />
   </ItemGroup>
 </Project>

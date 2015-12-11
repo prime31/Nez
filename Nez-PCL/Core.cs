@@ -8,6 +8,7 @@ using Nez.Console;
 using Nez.Tweens;
 using Nez.Timers;
 using Nez.BitmapFonts;
+using Nez.Analysis;
 
 
 namespace Nez
@@ -144,6 +145,11 @@ namespace Nez
 			if( pauseOnFocusLost && !IsActive )
 				return;
 
+			#if DEBUG
+			TimeRuler.instance.startFrame();
+			TimeRuler.instance.beginMark( "update", Color.Green );
+			#endif
+
 			// update all our systems
 			Time.update( (float)gameTime.ElapsedGameTime.TotalSeconds );
 			Input.update();
@@ -173,6 +179,7 @@ namespace Nez
 			}
 
 			#if DEBUG
+			TimeRuler.instance.endMark( "update" );
 			DebugConsole.instance.update();
 			#endif
 		}
@@ -183,6 +190,10 @@ namespace Nez
 			if( pauseOnFocusLost && !IsActive )
 				return;
 
+			#if DEBUG
+			TimeRuler.instance.beginMark( "draw", Color.Gold );
+			#endif
+
 			if( _scene != null )
 			{
 				_scene.preRender();
@@ -191,7 +202,13 @@ namespace Nez
 			}
 
 			#if DEBUG
-			DebugConsole.instance.render();
+			TimeRuler.instance.endMark( "draw" );
+
+			if( DebugConsole.instance.isOpen )
+				DebugConsole.instance.render();
+			else
+				TimeRuler.instance.render();
+			
 			if( debugRenderEnabled )
 				Debug.render();
 			#endif

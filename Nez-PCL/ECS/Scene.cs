@@ -172,6 +172,7 @@ namespace Nez
 				}
 			}
 
+			// render our final result to the backbuffer
 			Core.graphicsDevice.SetRenderTarget( null );
 			Graphics.instance.spriteBatch.Begin( SpriteSortMode.Deferred, BlendState.Opaque );
 			Graphics.instance.spriteBatch.Draw( Mathf.isEven( enabledCounter ) ? _sceneRenderTexture : _destinationRenderTexture, Vector2.Zero, Color.White );
