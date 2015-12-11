@@ -13,17 +13,37 @@ namespace Nez
 
 
 		/// <summary>
-		/// warms up the cache filling it with a max of howMany objects
+		/// warms up the cache filling it with a max of cacheCount objects
 		/// </summary>
-		/// <param name="howMany">How many.</param>
-		public static void warmCache( int howMany = 3 )
+		/// <param name="cacheCount">new cache count</param>
+		public static void warmCache( int cacheCount )
 		{
-			howMany -= _objectStack.Count;
-			if( howMany > 0 )
+			cacheCount -= _objectStack.Count;
+			if( cacheCount > 0 )
 			{
-				for( var i = 0; i < howMany; i++ )
+				for( var i = 0; i < cacheCount; i++ )
 					_objectStack.Push( new T() );
 			}
+		}
+
+
+		/// <summary>
+		/// trims the cache down to cacheCount items
+		/// </summary>
+		/// <param name="cacheCount">Cache count.</param>
+		public static void trimCache( int cacheCount )
+		{
+			while( cacheCount > _objectStack.Count )
+				_objectStack.Pop();
+		}
+
+
+		/// <summary>
+		/// clears out the cache
+		/// </summary>
+		public static void clearCache()
+		{
+			_objectStack.Clear();
 		}
 
 

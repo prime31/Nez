@@ -13,7 +13,11 @@ namespace Nez.Particles
 		public Blend blendFuncSource;
 		public Blend blendFuncDestination;
 
-		public Vector2 sourcePosition, sourcePositionVariance;
+		/// <summary>
+		/// sourcePosition is read in but internally it is not used. The ParticleEmitter.localPosition is what the emitter will use for positioning
+		/// </summary>
+		public Vector2 sourcePosition;
+		public Vector2 sourcePositionVariance;
 		public float speed, speedVariance;
 		public float particleLifespan, particleLifespanVariance;
 		public float angle, angleVariance;
@@ -47,8 +51,6 @@ namespace Nez.Particles
 		public float rotatePerSecond;
 		// Variance in degrees for rotatePerSecond
 		public float rotatePerSecondVariance;
-
-		//public int particleCount;
 
 
 		public ParticleEmitterConfig()
