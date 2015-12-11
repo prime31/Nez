@@ -144,6 +144,34 @@ namespace Nez
 		}
 
 
+		/// <summary>
+		/// Gets all the components of type T
+		/// </summary>
+		/// <returns>The components.</returns>
+		/// <typeparam name="T">The 1st type parameter.</typeparam>
+		public List<T> getComponents<T>() where T : Component
+		{
+			var comps = new List<T>();
+
+			for( var i = 0; i < _components.Count; i++ )
+			{
+				var component = _components[i];
+				if( component is T )
+					comps.Add( component as T );
+			}
+
+			// we also check the pending components just in case addComponent and getComponent are called in the same frame
+			for( var i = 0; i < _componentsToAdd.Count; i++ )
+			{
+				var component = _componentsToAdd[i];
+				if( component is T )
+					comps.Add( component as T );
+			}
+
+			return comps;
+		}
+
+
 		#region IEnumerable and array access
 
 		public Component this[int index]

@@ -258,6 +258,17 @@ namespace Nez
 
 
 		/// <summary>
+		/// Gets all the components of type T
+		/// </summary>
+		/// <returns>The component.</returns>
+		/// <typeparam name="T">The 1st type parameter.</typeparam>
+		public List<T> getComponents<T>() where T : Component
+		{
+			return components.getComponents<T>();
+		}
+
+
+		/// <summary>
 		/// removes a Component from the components list
 		/// </summary>
 		/// <param name="component">The Component to remove</param>
