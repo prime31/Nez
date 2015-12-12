@@ -32,6 +32,26 @@ namespace Nez
 		}
 
 
+		/// <summary>
+		/// calculates the union of the two Rectangles. The result will be a rectangle that encompasses the other two.
+		/// </summary>
+		/// <param name="first">First.</param>
+		/// <param name="second">Second.</param>
+		/// <param name="result">Result.</param>
+		public static void union( ref Rectangle first, ref Rectangle second, out Rectangle result )
+		{
+			var xMin = MathHelper.Min( first.X, second.X );
+			var xMax = MathHelper.Max( first.Right, second.Right );
+			var yMin = MathHelper.Min( first.Y, second.Y );
+			var yMax = MathHelper.Max( first.Right, second.Right );
+
+			result.X = (int)xMin;
+			result.Y = (int)yMin;
+			result.Width = (int)( xMax - xMin );
+			result.Height = (int)( yMax - yMin );
+		}
+
+
 		public static void calculateBounds( ref Rectangle rect, Vector2 parentPosition, Vector2 position, Vector2 origin, Vector2 scale, float rotation, float width, float height )
 		{
 			if( rotation == 0f )
@@ -113,7 +133,7 @@ namespace Nez
 		}
 
 		
-		public static bool rayIntersects( this Rectangle rect, Ray2D ray, out float distance )
+		public static bool rayIntersects( ref Rectangle rect, Ray2D ray, out float distance )
 		{
 			distance = 0f;
 			var maxValue = float.MaxValue;

@@ -55,6 +55,15 @@ namespace Nez
 		}
 
 		/// <summary>
+		/// represents the absolute position to this Collider. It is entity.position + localPosition - origin.
+		/// </summary>
+		/// <value>The absolute position.</value>
+		public Vector2 absolutePosition
+		{
+			get { return entity.position + _localPosition - _origin; }
+		}
+
+		/// <summary>
 		/// if this collider is a trigger it will not cause collisions but it will still trigger events
 		/// </summary>
 		public bool isTrigger;
@@ -82,7 +91,7 @@ namespace Nez
 		}
 
 		protected bool _isParentEntityAddedToScene;
-		protected bool _areBoundsDirty = true;
+		internal bool _areBoundsDirty = true;
 
 
 		public Collider()

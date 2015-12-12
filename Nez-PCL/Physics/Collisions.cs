@@ -94,15 +94,15 @@ namespace Nez
 		}
 
 
-		static public bool circleToLine( Vector2 cPosiition, float cRadius, Vector2 lineFrom, Vector2 lineTo )
+		static public bool circleToLine( Vector2 circleCenter, float radius, Vector2 lineFrom, Vector2 lineTo )
 		{
-			return Vector2.DistanceSquared( cPosiition, closestPointOnLine( lineFrom, lineTo, cPosiition ) ) < cRadius * cRadius;
+			return Vector2.DistanceSquared( circleCenter, closestPointOnLine( lineFrom, lineTo, circleCenter ) ) < radius * radius;
 		}
 
 
-		static public bool circleToPoint( Vector2 cPosition, float cRadius, Vector2 point )
+		static public bool circleToPoint( Vector2 circleCenter, float radius, Vector2 point )
 		{
-			return Vector2.DistanceSquared( cPosition, point ) < cRadius * cRadius;
+			return Vector2.DistanceSquared( circleCenter, point ) < radius * radius;
 		}
 
 		#endregion
@@ -110,22 +110,22 @@ namespace Nez
 
 		#region Bounds/Rect
 
-		static public bool rectToCircle( float rX, float rY, float rW, float rH, Vector2 cPosition, float cRadius )
+		static public bool rectToCircle( float rX, float rY, float rW, float rH, Vector2 circleCenter, float radius )
 		{
 			//Check if the circle contains the rectangle's center-point
-			if( Collisions.circleToPoint( cPosition, cRadius, new Vector2( rX + rW / 2, rY + rH / 2 ) ) )
+			if( Collisions.circleToPoint( circleCenter, radius, new Vector2( rX + rW / 2, rY + rH / 2 ) ) )
 				return true;
 
 			//Check the circle against the relevant edges
 			Vector2 edgeFrom;
 			Vector2 edgeTo;
-			var sector = getSector( rX, rY, rW, rH, cPosition );
+			var sector = getSector( rX, rY, rW, rH, circleCenter );
 
 			if( ( sector & PointSectors.Top ) != 0 )
 			{
 				edgeFrom = new Vector2( rX, rY );
 				edgeTo = new Vector2( rX + rW, rY );
-				if( circleToLine( cPosition, cRadius, edgeFrom, edgeTo ) )
+				if( circleToLine( circleCenter, radius, edgeFrom, edgeTo ) )
 					return true;
 			}
 
@@ -133,7 +133,7 @@ namespace Nez
 			{
 				edgeFrom = new Vector2( rX, rY + rH );
 				edgeTo = new Vector2( rX + rW, rY + rH );
-				if( circleToLine( cPosition, cRadius, edgeFrom, edgeTo ) )
+				if( circleToLine( circleCenter, radius, edgeFrom, edgeTo ) )
 					return true;
 			}
 
@@ -141,7 +141,7 @@ namespace Nez
 			{
 				edgeFrom = new Vector2( rX, rY );
 				edgeTo = new Vector2( rX, rY + rH );
-				if( circleToLine( cPosition, cRadius, edgeFrom, edgeTo ) )
+				if( circleToLine( circleCenter, radius, edgeFrom, edgeTo ) )
 					return true;
 			}
 
@@ -149,11 +149,17 @@ namespace Nez
 			{
 				edgeFrom = new Vector2( rX + rW, rY );
 				edgeTo = new Vector2( rX + rW, rY + rH );
-				if( circleToLine( cPosition, cRadius, edgeFrom, edgeTo ) )
+				if( circleToLine( circleCenter, radius, edgeFrom, edgeTo ) )
 					return true;
 			}
 
 			return false;
+		}
+
+
+		static public bool rectToCircle( ref Rectangle rect, Vector2 cPosition, float cRadius )
+		{
+			return rectToCircle( rect.X, rect.Y, rect.Width, rect.Height, cPosition, cRadius );
 		}
 
 
@@ -163,9 +169,15 @@ namespace Nez
 		}
 
 
-		static public bool boundsToCircle( Rectangle bounds, Vector2 cPosition, float cRadius )
+		static public bool rectToLine( ref Rectangle rect, Vector2 lineFrom, Vector2 lineTo )
 		{
-			return rectToCircle( bounds.X, bounds.Y, bounds.Width, bounds.Height, cPosition, cRadius );
+			return rectToLine( rect.X, rect.Y, rect.Width, rect.Height, lineFrom, lineTo );
+		}
+
+
+		static public bool rectToLine( Rectangle rect, Vector2 lineFrom, Vector2 lineTo )
+		{
+			return rectToLine( rect.X, rect.Y, rect.Width, rect.Height, lineFrom, lineTo );
 		}
 
 
@@ -220,12 +232,6 @@ namespace Nez
 			}
 
 			return false;
-		}
-
-
-		static public bool rectToLine( Rectangle rect, Vector2 lineFrom, Vector2 lineTo )
-		{
-			return rectToLine( rect.X, rect.Y, rect.Width, rect.Height, lineFrom, lineTo );
 		}
 
 

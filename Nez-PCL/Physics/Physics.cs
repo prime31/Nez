@@ -21,6 +21,8 @@ namespace Nez
 		}
 
 
+		#region Collider management
+
 		/// <summary>
 		/// gets all the Colliders managed by the SpatialHash
 		/// </summary>
@@ -83,6 +85,58 @@ namespace Nez
 			_spatialHash.register( collider );
 		}
 
+		#endregion
+
+
+		/// <summary>
+		/// casts a ray from start to end and returns the first hit of a collider that matches layerMask
+		/// </summary>
+		/// <param name="start">Start.</param>
+		/// <param name="end">End.</param>
+		/// <param name="layerMask">Layer mask.</param>
+		public static RaycastHit linecast( Vector2 start, Vector2 end, int layerMask = AllLayers )
+		{
+			return _spatialHash.raycast( start, end, layerMask );
+		}
+
+
+		/// <summary>
+		/// check if a collider falls within a rectangular area
+		/// </summary>
+		/// <returns>The rectangle.</returns>
+		/// <param name="rect">Rect.</param>
+		/// <param name="layerMask">Layer mask.</param>
+		public static Collider overlapRectangle( Rectangle rect, int layerMask = AllLayers )
+		{
+			return _spatialHash.overlapRectangle( ref rect, layerMask );
+		}
+
+
+		/// <summary>
+		/// check if a collider falls within a circular area
+		/// </summary>
+		/// <returns>The circle.</returns>
+		/// <param name="center">Center.</param>
+		/// <param name="radius">Radius.</param>
+		/// <param name="layerMask">Layer mask.</param>
+		public static Collider overlapCircle( Vector2 center, float radius, int layerMask = AllLayers )
+		{
+			return _spatialHash.overlapCircle( center, radius, layerMask );
+		}
+
+
+		/// <summary>
+		/// check if a collider overlaps a point in space
+		/// </summary>
+		/// <returns>The point.</returns>
+		/// <param name="point">Point.</param>
+		/// <param name="layerMask">Layer mask.</param>
+		public static Collider overlapPoint( Vector2 point, int layerMask = AllLayers )
+		{
+			throw new NotImplementedException();
+		}
+
+		#region Broadphase methods
 
 		/// <summary>
 		/// returns a HashSet of all colliders with bounds that are intersected by collider.bounds. Note that this is a broadphase check so it
@@ -90,9 +144,9 @@ namespace Nez
 		/// </summary>
 		/// <param name="bounds">Bounds.</param>
 		/// <param name="layerMask">Layer mask.</param>
-		public static HashSet<Collider> boxcastBroadphase( Rectangle bounds, int layerMask = AllLayers )
+		public static HashSet<Collider> boxcastBroadphase( Rectangle rect, int layerMask = AllLayers )
 		{
-			return _spatialHash.boxcast( ref bounds, null, layerMask );
+			return _spatialHash.boxcastBroadphase( ref rect, null, layerMask );
 		}
 
 
@@ -104,7 +158,7 @@ namespace Nez
 		public static HashSet<Collider> boxcastBroadphaseExcludingSelf( Collider collider, int layerMask = AllLayers )
 		{
 			var bounds = collider.bounds;
-			return _spatialHash.boxcast( ref bounds, collider, layerMask );
+			return _spatialHash.boxcastBroadphase( ref bounds, collider, layerMask );
 		}
 
 
@@ -115,9 +169,9 @@ namespace Nez
 		/// <returns>The excluding self.</returns>
 		/// <param name="collider">Collider.</param>
 		/// <param name="bounds">Bounds.</param>
-		public static HashSet<Collider> boxcastBroadphaseExcludingSelf( Collider collider, ref Rectangle bounds, int layerMask = AllLayers )
+		public static HashSet<Collider> boxcastBroadphaseExcludingSelf( Collider collider, ref Rectangle rect, int layerMask = AllLayers )
 		{
-			return _spatialHash.boxcast( ref bounds, collider, layerMask );
+			return _spatialHash.boxcastBroadphase( ref rect, collider, layerMask );
 		}
 
 
@@ -130,21 +184,10 @@ namespace Nez
 		public static HashSet<Collider> boxcastBroadphaseExcludingSelf( Collider collider, float deltaX, float deltaY, int layerMask = AllLayers )
 		{
 			var sweptBounds = collider.bounds.getSweptBroadphaseBounds( deltaX, deltaY );
-			return _spatialHash.boxcast( ref sweptBounds, collider, layerMask );
+			return _spatialHash.boxcastBroadphase( ref sweptBounds, collider, layerMask );
 		}
 
-
-		/// <summary>
-		/// casts a ray from start to end and returns the first hit of a collider that matches layerMask
-		/// </summary>
-		/// <param name="start">Start.</param>
-		/// <param name="end">End.</param>
-		/// <param name="layerMask">Layer mask.</param>
-		public static RaycastHit raycastBroadphase( Vector2 start, Vector2 end, int layerMask = AllLayers )
-		{
-			return _spatialHash.raycast( start, end, layerMask );
-		}
-
+		#endregion
 	}
 }
 

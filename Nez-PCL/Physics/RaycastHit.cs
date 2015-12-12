@@ -3,16 +3,21 @@
 
 namespace Nez
 {
+	/// <summary>
+	/// TODO: fraction and distance are not accurate for non-BoxColliders! They only check the bounds currently.
+	/// </summary>
 	public struct RaycastHit
 	{
 		/// <summary>
 		/// The collider hit by the ray
 		/// </summary>
 		public Collider collider;
+
 		/// <summary>
 		/// Fraction of the distance along the ray that the hit occurred.
 		/// </summary>
 		public float fraction;
+
 		/// <summary>
 		/// The distance from the ray origin to the impact point
 		/// </summary>

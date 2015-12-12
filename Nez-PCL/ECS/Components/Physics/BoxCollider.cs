@@ -9,10 +9,7 @@ namespace Nez
 		float _width;
 		public override float width
 		{
-			get
-			{
-				return _width;
-			}
+			get { return _width; }
 			set
 			{
 				if( value != _width )

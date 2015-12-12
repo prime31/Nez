@@ -32,24 +32,17 @@ namespace Nez
 			{
 				if( _areBoundsDirty )
 				{
-					var x = colliders[0].localPosition.X;
-					var y = colliders[0].localPosition.Y;
-					var right = colliders[0].localPosition.X + colliders[0].width;
-					var bottom = colliders[0].localPosition.Y + colliders[0].height;
-
-					for( var i = 1; i < colliders.Count; i++ )
+					_bounds = new Rectangle();
+					for( var i = 0; i < colliders.Count; i++ )
 					{
-						if( colliders[i].localPosition.X < x )
-							x = colliders[i].localPosition.X;
-						if( colliders[i].localPosition.Y < y )
-							y = colliders[i].localPosition.Y;
-						if( colliders[i].localPosition.X + colliders[i].width > right )
-							right = colliders[i].localPosition.X + colliders[i].width;
-						if( colliders[i].localPosition.Y + colliders[i].height > bottom )
-							bottom = colliders[i].localPosition.Y + colliders[i].height;
+						// we temporarily set the entity here so that we can calculate the bounds then unset it
+						colliders[i].entity = entity;
+						colliders[i]._areBoundsDirty = true;
+						var b = colliders[i].bounds;
+						colliders[i].entity = null;
+						RectangleExt.union( ref _bounds, ref b, out _bounds );
 					}
 
-					_bounds = RectangleExt.fromFloats( entity.position.X + x, entity.position.Y + y, right - x, bottom - y );
 					_areBoundsDirty = false;
 				}
 

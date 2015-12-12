@@ -106,7 +106,7 @@ namespace Nez
 
 		public override bool collidesWith( BoxCollider boxCollider )
 		{
-			return Collisions.boundsToCircle( boxCollider.bounds, bounds.getCenter(), _radius );
+			return Collisions.rectToCircle( boxCollider.bounds, bounds.getCenter(), _radius );
 		}
 
 
