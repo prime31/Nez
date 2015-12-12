@@ -20,11 +20,6 @@ namespace Nez.Spatial
 		/// </summary>
 		HashSet<Collider> _tempHashset = new HashSet<Collider>();
 
-		/// <summary>
-		/// we keep this around to avoid allocating it every time a raycast happens
-		/// </summary>
-		RaycastHit[] _hitArray = new RaycastHit[1];
-
 
 		public SpatialHash( int cellSize = 100 )
 		{
@@ -161,127 +156,6 @@ namespace Nez.Spatial
 			}
 
 			return _tempHashset;
-		}
-
-
-		/// <summary>
-		/// casts a ray from start to end. Returns true if the ray hits a collider.
-		/// </summary>
-		/// <param name="start">Start.</param>
-		/// <param name="end">End.</param>
-		/// <param name="distance">Distance.</param>
-		public RaycastHit raycast( Vector2 start, Vector2 end, int layerMask )
-		{
-			// cleanse the collider before proceeding
-			_hitArray[0].reset();
-			raycastAll( start, end, _hitArray, layerMask );
-			return _hitArray[0];
-		}
-
-
-		public void raycastAll( Vector2 start, Vector2 end, RaycastHit[] hits, int layerMask )
-		{
-			Debug.assertIsFalse( hits.Length == 0, "An empty hits array was passed in. No hits will ever be returned." );
-			var hitCounter = 0;
-			var ray = new Ray2D( start, end - start );
-
-			// first we get a bounding box for the ray so that we can find all the potential hits
-			var maxX = Math.Max( start.X, end.X );
-			var minX = Math.Min( start.X, end.X );
-			var maxY = Math.Max( start.Y, end.Y );
-			var minY = Math.Min( start.Y, end.Y );
-
-			var bounds = RectangleExt.fromFloats( minX, minY, minX + maxX, minY + maxY );
-			var potentials = boxcastBroadphase( ref bounds, null, layerMask );
-			float fraction;
-			foreach( var pot in potentials )
-			{
-				// only hit triggers if we are set to do so
-				if( pot.isTrigger && !Physics.raycastsHitTriggers )
-					continue;
-
-				// TODO: is rayIntersects performant enough? profile it. Collisions.rectToLine might be faster
-				// TODO: this is only an AABB check. It should be defered to the collider for other shapes
-				var colliderBounds = pot.bounds;
-				if( RectangleExt.rayIntersects( ref colliderBounds, ray, out fraction ) && fraction <= 1.0f )
-				{
-					// if this is a BoxCollider we are all done. if it isnt we need to check for a more detailed collision
-					if( pot is BoxCollider || pot.collidesWith( start, end ) )
-					{
-						float distance;
-						Vector2.Distance( ref start, ref end, out distance );
-						hits[hitCounter].setValues( pot, fraction, distance * fraction );
-
-						// increment the hit counter and if it has reached the array size limit we are done
-						hitCounter++;
-						if( hitCounter == hits.Length )
-							return;
-					}
-				}
-			}
-		}
-
-
-		public Collider overlapRectangle( ref Rectangle rect, int layerMask )
-		{
-			var potentials = boxcastBroadphase( ref rect, null, layerMask );
-			foreach( var collider in potentials )
-			{
-				if( collider is BoxCollider )
-				{
-					return collider;
-				}
-				else if( collider is CircleCollider && Collisions.rectToCircle( ref rect, collider.bounds.getCenter(), collider.bounds.Width * 0.5f ) )
-				{
-					return collider;
-				}
-				else if( collider is MultiCollider )
-				{
-					throw new NotImplementedException( "overlapCircle against this collider type are not implemented!" );
-				}
-				else if( collider is PolygonCollider )
-				{
-					throw new NotImplementedException( "overlapCircle against this collider type are not implemented!" );
-				}
-				else
-				{
-					throw new NotImplementedException( "overlapCircle against this collider type are not implemented!" );
-				}
-			}
-
-			return null;
-		}
-
-
-		public Collider overlapCircle( Vector2 center, float radius, int layerMask )
-		{
-			var bounds = RectangleExt.fromFloats( center.X - radius, center.Y - radius, radius * 2f, radius * 2f );
-			var potentials = boxcastBroadphase( ref bounds, null, layerMask );
-			foreach( var collider in potentials )
-			{
-				if( collider is BoxCollider && Collisions.rectToCircle( collider.bounds, center, radius ) )
-				{
-					return collider;
-				}
-				else if( collider is CircleCollider && Collisions.circleToCircle( center, radius, collider.bounds.getCenter(), collider.bounds.Width * 0.5f ) )
-				{
-					return collider;
-				}
-				else if( collider is MultiCollider )
-				{
-					throw new NotImplementedException( "overlapCircle against this collider type are not implemented!" );
-				}
-				else if( collider is PolygonCollider && Collisions.polygonToCircle( collider as PolygonCollider, center, radius ) )
-				{
-					return collider;
-				}
-				else
-				{
-					throw new NotImplementedException( "overlapCircle against this collider type are not implemented!" );
-				}
-			}
-
-			return null;
 		}
 
 	}
