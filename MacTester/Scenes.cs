@@ -321,6 +321,7 @@ namespace MacTester
 			entity.position = new Vector2( Screen.backBufferWidth / 2, Screen.backBufferHeight / 2 );
 			var particleEmitterConfig = scene.contentManager.Load<ParticleEmitterConfig>( whichEmitter );
 			entity.addComponent( new ParticleEmitter( particleEmitterConfig ) );
+			entity.getComponent<ParticleEmitter>().collisionConfig.enabled = true;
 
 
 			entity = scene.createAndAddEntity<Entity>( "text" );
@@ -328,6 +329,18 @@ namespace MacTester
 			textComp.scale = new Vector2( 2, 2 );
 			textComp.origin = Vector2.Zero;
 			entity.addComponent( textComp );
+
+
+			var moonTexture = scene.contentManager.Load<Texture2D>( "Images/moon" );
+			entity = scene.createAndAddEntity<Entity>( "moon1" );
+			entity.position = new Vector2( Screen.backBufferWidth / 2, Screen.backBufferHeight / 2 + 100 );
+			entity.addComponent( new Image( moonTexture ) );
+			entity.collider = new CircleCollider();
+
+			entity = scene.createAndAddEntity<Entity>( "moon2" );
+			entity.position = new Vector2( Screen.backBufferWidth / 2 - 100, Screen.backBufferHeight / 2 + 100 );
+			entity.addComponent( new Image( moonTexture ) );
+			entity.collider = new CircleCollider();
 
 			return scene;
 		}

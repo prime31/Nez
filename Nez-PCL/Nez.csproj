@@ -191,5 +191,6 @@
     <Compile Include="Utils\Analysis\TimeRuler.cs" />
     <Compile Include="Utils\Analysis\Layout.cs" />
     <Compile Include="Utils\Analysis\StopWatch.cs" />
+    <Compile Include="ECS\Components\Renderables\Particles\ParticleCollisionConfig.cs" />
   </ItemGroup>
 </Project>

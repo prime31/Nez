@@ -19,6 +19,11 @@ namespace Nez.Particles
 		public float elapsedTime { get { return _elapsedTime; } }
 
 		/// <summary>
+		/// config object with various properties to deal with particle collisions
+		/// </summary>
+		public ParticleCollisionConfig collisionConfig;
+
+		/// <summary>
 		/// keeps track of how many particles should be emitted
 		/// </summary>
 		float _emitCounter;
@@ -50,6 +55,15 @@ namespace Nez.Particles
 			_particles = new List<Particle>( (int)_emitterConfig.maxParticles );
 			QuickCache<Particle>.warmCache( (int)_emitterConfig.maxParticles );
 
+			// set some sensible defaults
+			collisionConfig.bounce = 0f;
+			collisionConfig.collidesWithLayers = Physics.AllLayers;
+			collisionConfig.dampen = 0f;
+			collisionConfig.gravity = new Vector2( 0f, 100f );
+			collisionConfig.lifetimeLoss = 0f;
+			collisionConfig.minKillSpeed = float.MaxValue;
+			collisionConfig.radiusScale = 0.5f;
+
 			initialize();
 		}
 
@@ -64,6 +78,7 @@ namespace Nez.Particles
 			_blendState.ColorSourceBlend = _blendState.AlphaSourceBlend = _emitterConfig.blendFuncSource;
 			_blendState.ColorDestinationBlend = _blendState.AlphaDestinationBlend = _emitterConfig.blendFuncDestination;
 		}
+
 
 		#region Component/RenderableComponent
 
@@ -115,6 +130,8 @@ namespace Nez.Particles
 				}
 			}
 
+			// prep data for the particle.update method
+			var rootPosition = renderPosition;
 
 			// loop through all the particles updating their location and color
 			for( var i = _particles.Count - 1; i >= 0; i-- )
@@ -123,7 +140,7 @@ namespace Nez.Particles
 				var currentParticle = _particles[i];
 
 				// if update returns true that means the particle is done
-				if( currentParticle.update( _emitterConfig ) )
+				if( currentParticle.update( _emitterConfig, ref collisionConfig, rootPosition ) )
 				{
 					QuickCache<Particle>.push( currentParticle );
 					_particles.RemoveAt( i );
@@ -153,6 +170,24 @@ namespace Nez.Particles
 			}
 
 			_spriteBatch.End();
+		}
+
+
+		public override void debugRender( Graphics graphics )
+		{
+			// we still render when we are paused
+			if( !_active && !_isPaused )
+				return;
+
+			var rootPosition = renderPosition;
+
+			// loop through all the particles updating their location and color
+			for( var i = 0; i < _particles.Count; i++ )
+			{
+				var currentParticle = _particles[i];
+				//graphics.drawCircle( rootPosition + currentParticle.position, currentParticle.particleSize * 0.5f, Color.IndianRed );
+				graphics.drawHollowRect( rootPosition + currentParticle.position - new Vector2( currentParticle.particleSize * 0.5f, currentParticle.particleSize * 0.5f ), currentParticle.particleSize, currentParticle.particleSize, Color.IndianRed );
+			}
 		}
 
 		#endregion

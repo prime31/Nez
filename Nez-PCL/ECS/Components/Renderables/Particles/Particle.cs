@@ -31,9 +31,16 @@ namespace Nez.Particles
 		// stored at particle creation time and used for lerping the color
 		float particleLifetime;
 
+		/// <summary>
+		/// flag indicating if this particle has already collided so that we know not to move it in the normal fashion
+		/// </summary>
+		bool _collided;
+
 
 		public void initialize( ParticleEmitterConfig emitterConfig )
 		{
+			_collided = false;
+
 			// init the position of the Particle. This is based on the source position of the particle emitter
 			// plus a configured variance. The Random.minusOneToOne method allows the number to be both positive
 			// and negative
@@ -110,7 +117,7 @@ namespace Nez.Particles
 		/// updates the particle. Returns true when the particle is no longer alive
 		/// </summary>
 		/// <param name="emitterConfig">Emitter config.</param>
-		public bool update( ParticleEmitterConfig emitterConfig )
+		public bool update( ParticleEmitterConfig emitterConfig, ref ParticleCollisionConfig collisionConfig, Vector2 rootPosition )
 		{
 			// FIX 1
 			// reduce the life span of the particle
@@ -130,7 +137,9 @@ namespace Nez.Particles
 					Vector2 tmp;
 					tmp.X = -Mathf.cos( angle ) * radius;
 					tmp.Y = -Mathf.sin( angle ) * radius;
-					position = tmp;
+
+					if( !_collided )
+						position = tmp;
 				}
 				else
 				{
@@ -152,7 +161,9 @@ namespace Nez.Particles
 					tmp = tmp * Time.deltaTime;
 					direction = direction + tmp;
 					tmp = direction * Time.deltaTime;
-					position = position + tmp;
+
+					if( !_collided )
+						position = position + tmp;
 				}
 
 				// update the particles color. we do the lerp from finish-to-start because timeToLive counts from particleLifespan to 0
@@ -165,6 +176,23 @@ namespace Nez.Particles
 
 				// update the rotation of the particle
 				rotation += rotationDelta * Time.deltaTime;
+
+
+				if( collisionConfig.enabled )
+				{
+					// if we already collided we have to handle the collision response
+					if( _collided )
+					{
+						// TODO: handle after collision movement. we need to track velocity for this
+						position += new Vector2( 0f, -5f ) + collisionConfig.gravity * Time.deltaTime;
+					}
+					
+					var collider = Physics.overlapCircle( rootPosition + position, particleSize * 0.5f * collisionConfig.radiusScale, collisionConfig.collidesWithLayers );
+					if( collider != null )
+					{
+						_collided = true;
+					}
+				}
 			}
 			else
 			{

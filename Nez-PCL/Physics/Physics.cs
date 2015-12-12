@@ -214,13 +214,15 @@ namespace Nez
 			var potentials = _spatialHash.boxcastBroadphase( ref bounds, null, layerMask );
 			foreach( var collider in potentials )
 			{
-				if( collider is BoxCollider && Collisions.rectToCircle( collider.bounds, center, radius ) )
+				if( collider is BoxCollider )
 				{
-					return collider;
+					if( Collisions.rectToCircle( collider.bounds, center, radius ) )
+						return collider;
 				}
-				else if( collider is CircleCollider && Collisions.circleToCircle( center, radius, collider.bounds.getCenter(), collider.bounds.Width * 0.5f ) )
+				else if( collider is CircleCollider )
 				{
-					return collider;
+					if( Collisions.circleToCircle( center, radius, collider.bounds.getCenter(), collider.bounds.Width * 0.5f ) )
+						return collider;
 				}
 				else if( collider is MultiCollider )
 				{
