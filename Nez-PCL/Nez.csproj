@@ -61,6 +61,7 @@
     <Folder Include="ECS\Components\Renderables\Particles\" />
     <Folder Include="PipelineRuntime\ParticleDesigner\" />
     <Folder Include="Utils\Analysis\" />
+    <Folder Include="ECS\Systems\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Debug\Debug.cs" />
@@ -198,7 +199,9 @@
     <Compile Include="ECS\InternalUtils\Matcher.cs" />
     <Compile Include="Utils\BitSet.cs" />
     <Compile Include="ECS\InternalUtils\ComponentTypeManager.cs" />
-    <Compile Include="ECS\EntityProcessor.cs" />
     <Compile Include="ECS\InternalUtils\EntityProcessorList.cs" />
+    <Compile Include="ECS\EntitySystem.cs" />
+    <Compile Include="ECS\Systems\EntityProcessingSystem.cs" />
+    <Compile Include="ECS\Systems\ProcessingSystem.cs" />
   </ItemGroup>
 </Project>

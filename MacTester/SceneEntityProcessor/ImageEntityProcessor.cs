@@ -1,21 +1,18 @@
 ﻿using System;
 using Nez;
+using System.Collections.Generic;
 
 namespace MacTester
 {
-	public class ImageEntityProcessor : EntityProcessor
+	public class ImageEntityProcessor : EntityProcessingSystem
 	{
 		public ImageEntityProcessor(Matcher matcher) : base(matcher)
 		{
 		}
 
-		public override void update()
+		public override void process(Entity entity)
 		{
-			base.update();
-			foreach( var entity in _entities )
-			{
-				Debug.log( "ImageEntityProcessor -> " + entity.name );
-			}
+			Debug.log( "ImageEntityProcessor -> " + entity.name );
 		}
 
 	}

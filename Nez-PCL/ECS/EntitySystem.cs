@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace Nez
 {
-	public class EntityProcessor
+	public class EntitySystem
 	{
 		protected Matcher _matcher;
 		public Matcher matcher
@@ -25,7 +25,12 @@ namespace Nez
 			}
 		}
 
-		public EntityProcessor(Matcher matcher)
+		public EntitySystem()
+		{
+			_matcher = Matcher.empty();
+		}
+
+		public EntitySystem(Matcher matcher) : this()
 		{
 			_matcher = matcher;
 		}
@@ -69,18 +74,18 @@ namespace Nez
 		{
 		}
 
-		public virtual void begin()
+		protected void begin()
 		{
 		}
 
-		public virtual void update()
+		public void update()
 		{
 			begin();
 			process(_entities);
 			end();
 		}
 
-		public virtual void end()
+		protected void end()
 		{
 		}
 	}

@@ -88,6 +88,11 @@ namespace Nez
 			return this;
 		}
 
+		public static Matcher empty()
+		{
+			return new Matcher();
+		}
+
 		public override string ToString()
 		{
 			StringBuilder builder = new StringBuilder(1024);

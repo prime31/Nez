@@ -6,18 +6,18 @@ namespace Nez
 {
 	public class EntityProcessorList
 	{
-		protected List<EntityProcessor> _processors = new List<EntityProcessor>();
+		protected List<EntitySystem> _processors = new List<EntitySystem>();
 
 		public EntityProcessorList()
 		{
 		}
 
-		public void add(EntityProcessor processor)
+		public void add(EntitySystem processor)
 		{
 			_processors.Add( processor );
 		}
 
-		public void remove(EntityProcessor processor)
+		public void remove(EntitySystem processor)
 		{
 			_processors.Remove( processor );
 		}
