@@ -193,5 +193,6 @@
     <Compile Include="Utils\Analysis\StopWatch.cs" />
     <Compile Include="ECS\Components\Renderables\Particles\ParticleCollisionConfig.cs" />
     <Compile Include="ECS\Components\Renderables\SimplePolygon.cs" />
+    <Compile Include="ECS\Components\Renderables\Sprites\SpriteTrail.cs" />
   </ItemGroup>
 </Project>

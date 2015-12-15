@@ -94,6 +94,7 @@ namespace Nez
 			}
 		}
 
+
 		#region IEnumerable and array access
 
 		public RenderableComponent this[int index]
