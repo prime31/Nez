@@ -91,7 +91,7 @@ namespace MacTester
 
 			entity = scene.createAndAddEntity<Entity>( "new-moon" );
 			image = new Image( moonTexture );
-			entity.position = new Vector2( 130f, 130f );
+			entity.position = new Vector2( 130f, 230f );
 			entity.addComponent( image );
 
 

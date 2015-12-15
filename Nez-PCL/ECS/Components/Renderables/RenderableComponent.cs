@@ -134,7 +134,7 @@ namespace Nez
 		}
 			
 		protected Rectangle _bounds;
-		public Rectangle bounds
+		public virtual Rectangle bounds
 		{
 			get
 			{

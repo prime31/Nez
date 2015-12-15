@@ -46,28 +46,7 @@ namespace Nez
 			{
 				if( _areBoundsDirty )
 				{
-					// we need to find the min/max x/y values
-					var minX = float.PositiveInfinity;
-					var minY = float.PositiveInfinity;
-					var maxX = float.NegativeInfinity;
-					var maxY = float.NegativeInfinity;
-
-					for( var i = 0; i < worldSpacePoints.Length; i++ )
-					{
-						var pt = worldSpacePoints[i];
-
-						if( pt.X < minX )
-							minX = pt.X;
-						if( pt.X > maxX )
-							maxX = pt.X;
-
-						if( pt.Y < minY )
-							minY = pt.Y;
-						if( pt.Y > maxY )
-							maxY = pt.Y;
-					}
-
-					_bounds = RectangleExt.fromMinMaxPoints( new Point( (int)minX, (int)minY ), new Point( (int)maxX, (int)maxY ) );
+					_bounds = RectangleExt.boundsFromPolygonPoints( worldSpacePoints );
 					_areBoundsDirty = false;
 				}
 

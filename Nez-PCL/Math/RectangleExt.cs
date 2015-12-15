@@ -52,6 +52,38 @@ namespace Nez
 		}
 
 
+		/// <summary>
+		/// given the points of a polygon calculates the bounds
+		/// </summary>
+		/// <returns>The from polygon points.</returns>
+		/// <param name="points">Points.</param>
+		public static Rectangle boundsFromPolygonPoints( Vector2[] points )
+		{
+			// we need to find the min/max x/y values
+			var minX = float.PositiveInfinity;
+			var minY = float.PositiveInfinity;
+			var maxX = float.NegativeInfinity;
+			var maxY = float.NegativeInfinity;
+
+			for( var i = 0; i < points.Length; i++ )
+			{
+				var pt = points[i];
+
+				if( pt.X < minX )
+					minX = pt.X;
+				if( pt.X > maxX )
+					maxX = pt.X;
+
+				if( pt.Y < minY )
+					minY = pt.Y;
+				if( pt.Y > maxY )
+					maxY = pt.Y;
+			}
+
+			return RectangleExt.fromMinMaxPoints( new Point( (int)minX, (int)minY ), new Point( (int)maxX, (int)maxY ) );
+		}
+
+
 		public static void calculateBounds( ref Rectangle rect, Vector2 parentPosition, Vector2 position, Vector2 origin, Vector2 scale, float rotation, float width, float height )
 		{
 			if( rotation == 0f )
