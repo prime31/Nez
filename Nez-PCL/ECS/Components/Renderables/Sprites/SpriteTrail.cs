@@ -90,18 +90,45 @@ namespace Nez.Sprites
 		{
 			get { return _sprite.height; }
 		}
-			
+
+		/// <summary>
+		/// how far does the Sprite have to move before a new instance is spawned
+		/// </summary>
 		public float minDistanceBetweenInstances = 30f;
+
+		/// <summary>
+		/// total duration of the fade from initialColor to fadeToColor
+		/// </summary>
 		public float fadeDuration = 0.8f;
+
+		/// <summary>
+		/// delay before starting the color fade
+		/// </summary>
 		public float fadeDelay = 0.1f;
+
+		/// <summary>
+		/// initial color of the trail instances
+		/// </summary>
 		public Color initialColor = Color.White;
+
+		/// <summary>
+		/// final color that will be lerped to over the course of fadeDuration
+		/// </summary>
 		public Color fadeToColor = Color.TransparentBlack;
 
 		Stack<SpriteTrailInstance> _availableSpriteTrailInstances;
 		List<SpriteTrailInstance> _liveSpriteTrailInstances;
 		Vector2 _lastPosition;
 		Sprite _sprite;
+
+		/// <summary>
+		/// flag when true it will always add a new instance regardless of the distance check
+		/// </summary>
 		bool _isFirstInstance;
+
+		/// <summary>
+		/// if awaitingDisable all instances are allowed to fade out before the component is disabled
+		/// </summary>
 		bool _awaitingDisable;
 
 
@@ -181,6 +208,9 @@ namespace Nez.Sprites
 		}
 
 
+		/// <summary>
+		/// stores the last position for distance calculations and spawns a new trail instance if there is one available in the stack
+		/// </summary>
 		void spawnInstance()
 		{
 			_lastPosition = _sprite.renderPosition;
