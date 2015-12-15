@@ -117,6 +117,23 @@ namespace MacTester
 				scene.camera.zoomIn( Input.mouseWheelDelta * 0.0001f );
 				//scene.camera.move( new Vector2( Input.mouseWheelDelta * 0.001f, Input.mouseWheelDelta * 0.001f ) );
 			}
+
+			if( Input.rightMouseButtonPressed )
+			{
+				var entity = scene.findEntity( "text" );
+				if( entity != null )
+				{
+					scene.removeEntity( entity );
+				}
+				else
+				{
+					entity = scene.createAndAddEntity<Entity>( "text" );
+					var textComp = new Text( Graphics.instance.bitmapFont, "text only", new Vector2( 0, 0 ), Color.White );
+					textComp.scale = new Vector2( 2, 2 );
+					textComp.origin = Vector2.Zero;
+					entity.addComponent( textComp );
+				}
+			}
 		}
 
 
@@ -152,6 +169,9 @@ namespace MacTester
 			if( IMGUI.button( "Overlap2D Scene" ) )
 				scene = Scenes.sceneOverlap2D();
 
+			if( IMGUI.button( "Processor Scene" ) )
+				scene = Scenes.processorScene();
+			
 			IMGUI.endWindow();
 		}
 	}

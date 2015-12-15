@@ -24,7 +24,6 @@ namespace Nez
 		/// </summary>
 		List<Component> _componentsToRemove = new List<Component>();
 
-
 		public ComponentList( Entity entity )
 		{
 			this._entity = entity;
@@ -73,6 +72,9 @@ namespace Nez
 					if( component is RenderableComponent )
 						_entity.scene.renderableComponents.remove( component as RenderableComponent );
 
+					_entity.componentBits.Set(ComponentTypeManager.getIndexFor( component.GetType() ), false);
+					_entity.scene.entityProcessors.onComponentRemoved( _entity );
+
 					_components.Remove( component );
 					component.onRemovedFromEntity();
 					component.entity = null;
@@ -89,6 +91,9 @@ namespace Nez
 
 					if( component is RenderableComponent )
 						_entity.scene.renderableComponents.add( component as RenderableComponent );
+
+					_entity.componentBits.Set(ComponentTypeManager.getIndexFor( component.GetType() ));
+					_entity.scene.entityProcessors.onComponentAdded( _entity );
 
 					_components.Add( component );
 					component.onAddedToEntity();

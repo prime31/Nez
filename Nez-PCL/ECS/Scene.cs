@@ -52,6 +52,7 @@ namespace Nez
 		Dictionary<int,double> _actualEntityOrderLookup = new Dictionary<int,double>();
 		readonly List<PostProcessor> _postProcessors = new List<PostProcessor>();
 
+		public readonly EntityProcessorList entityProcessors;
 
 		static Scene()
 		{
@@ -81,6 +82,7 @@ namespace Nez
 			renderableComponents = new RenderableComponentList();
 			contentManager = new NezContentManager();
 			_sceneRenderTexture = new RenderTexture();
+			entityProcessors = new EntityProcessorList();
 		}
 
 
@@ -89,6 +91,7 @@ namespace Nez
 			Debug.warnIf( _renderers.Count == 0, "Scene has begun with no renderer. Are you sure you want to run a Scene without a renderer?" );
 			Physics.reset();
 			Core.emitter.addObserver( CoreEvents.GraphicsDeviceReset, onGraphicsDeviceReset );
+			entityProcessors.begin();
 		}
 
 
@@ -109,6 +112,8 @@ namespace Nez
 
 			if( _destinationRenderTexture != null )
 				_destinationRenderTexture.unload();
+
+			entityProcessors.end();
 		}
 
 
@@ -116,6 +121,7 @@ namespace Nez
 		{
 			entities.updateLists();
 			renderableComponents.updateLists();
+			entityProcessors.update();
 
 			for( var i = 0; i < entities.Count; i++ )
 			{

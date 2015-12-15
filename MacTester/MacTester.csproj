@@ -71,6 +71,8 @@
     <Compile Include="SceneTwo\SimplePostProcessor.cs" />
     <Compile Include="SceneThree\SimpleMovingPlatform.cs" />
     <Compile Include="Scenes.cs" />
+    <Compile Include="SceneEntityProcessor\TextEntityProcessor.cs" />
+    <Compile Include="SceneEntityProcessor\ImageEntityProcessor.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Info.plist" />
@@ -151,6 +153,7 @@
     <Folder Include="Content\Fonts\" />
     <Folder Include="Content\Images\TextureAtlas\" />
     <Folder Include="Content\Images\AnotherAtlas\" />
+    <Folder Include="SceneEntityProcessor\" />
   </ItemGroup>
   <ItemGroup>
     <InterfaceDefinition Include="MainMenu.xib" />

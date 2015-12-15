@@ -158,6 +158,11 @@ namespace Nez
 
 		Vector2 _movementRemainder = Vector2.Zero;
 
+		private BitSet _componentBits = new BitSet();
+		public BitSet componentBits
+		{
+			get { return _componentBits; }
+		}
 
 		public Entity()
 		{
