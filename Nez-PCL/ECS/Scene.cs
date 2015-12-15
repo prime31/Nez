@@ -115,6 +115,7 @@ namespace Nez
 		internal void update()
 		{
 			entities.updateLists();
+			renderableComponents.updateLists();
 
 			for( var i = 0; i < entities.Count; i++ )
 			{

@@ -9,6 +9,7 @@ namespace Nez
 	{
 		// global layerDepth sort for RenderableComponent lists
 		internal static Comparison<RenderableComponent> compareComponentLayerDepth = ( a, b ) => { return Math.Sign( b.layerDepth - a.layerDepth ); };
+		internal static Comparison<RenderableComponent> compareComponents = ( a, b ) => { return b.layerDepth.CompareTo( a.layerDepth ); };
 
 		/// <summary>
 		/// list of components added to the entity
@@ -20,6 +21,7 @@ namespace Nez
 		/// </summary>
 		Dictionary<int,List<RenderableComponent>> _componentsByRenderLayer;
 		List<int> _unsortedRenderLayers;
+		bool _componentsNeedSort = true;
 
 
 		public RenderableComponentList()
@@ -50,6 +52,12 @@ namespace Nez
 		}
 
 
+		internal void setNeedsComponentSort()
+		{
+			_componentsNeedSort = true;
+		}
+
+
 		void addToRenderLayerList( RenderableComponent component, int renderLayer )
 		{
 			var list = componentsWithRenderLayer( renderLayer );
@@ -58,6 +66,7 @@ namespace Nez
 			list.Add( component );
 			if( !_unsortedRenderLayers.Contains( renderLayer ) )
 				_unsortedRenderLayers.Add( renderLayer );
+			_componentsNeedSort = true;
 		}
 
 
@@ -76,6 +85,12 @@ namespace Nez
 
 		public void updateLists()
 		{
+			if( _componentsNeedSort )
+			{
+				_components.Sort( compareComponents );
+				_componentsNeedSort = false;
+			}
+			
 			if( _unsortedRenderLayers.Count > 0 )
 			{
 				foreach( var renderLayer in _unsortedRenderLayers )

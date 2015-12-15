@@ -126,6 +126,9 @@ namespace MacTester
 			sprite.addAnimation( 0, spriteAnimation );
 			sprite.play( 1 );
 			entity.addComponent( sprite );
+			entity.addComponent( new SimpleMoonMover() );
+			entity.addComponent( new SpriteTrail( sprite ) );
+			entity.getComponent<SpriteTrail>().enableSpriteTrail();
 
 
 			// add a post processor to display the RenderTexture

@@ -1,16 +1,11 @@
 ﻿using System;
 using Nez.Textures;
 using Microsoft.Xna.Framework;
-using System.Collections.Generic;
 
 
 namespace Nez.Sprites
 {
-	/// <summary>
-	/// Sprite class handles the display and animation of a sprite. It uses a suggested Enum as a key (you can use an int as well if you
-	/// prefer). If you do use an Enum it is recommended to pass in a IEqualityComparer when using an enum like CoreEvents does.
-	/// </summary>
-	public class Sprite<TEnum> : RenderableComponent where TEnum : struct, IConvertible, IComparable, IFormattable
+	public class Sprite : RenderableComponent
 	{
 		public override float width
 		{
@@ -22,248 +17,20 @@ namespace Nez.Sprites
 			get { return subtexture.sourceRect.Height; }
 		}
 
-		Subtexture subtexture;
-
-		public System.Action<TEnum> onAnimationCompletedEvent;
-		public bool isPlaying { get; private set; }
-		public int currentFrame { get; private set; }
-
-		Dictionary<TEnum,SpriteAnimation> _animations;
-
-		// playback state
-		SpriteAnimation _currentAnimation;
-		TEnum _currentAnimationKey;
-		float _totalElapsedTime;
-		float _elapsedDelay;
-		int _completedIterations;
-		bool _delayComplete;
-		bool _isReversed;
-		bool _isLoopingBackOnPingPong;
+		public Subtexture subtexture;
 
 
-		public Sprite( IEqualityComparer<TEnum> customComparer, Subtexture subtexture )
+		public Sprite( Subtexture subtexture )
 		{
 			this.subtexture = subtexture;
 			originNormalized = new Vector2( 0.5f, 0.5f );
-			_animations = new Dictionary<TEnum,SpriteAnimation>( customComparer );
-		}
-
-
-		/// <summary>
-		/// Sprite needs a Subtexture at constructor time so that it knows how to size itself
-		/// </summary>
-		/// <param name="subtexture">Subtexture.</param>
-		public Sprite( Subtexture subtexture ) : this( null, subtexture )
-		{}
-
-
-		/// <summary>
-		/// Sprite needs a Subtexture at constructor time so the first frame of the passed in animation will be used for this constructor
-		/// </summary>
-		/// <param name="subtexture">Subtexture.</param>
-		public Sprite( TEnum animationKey, SpriteAnimation animation ) : this( null, animation.frames[0].subtexture )
-		{
-			addAnimation( animationKey, animation );
-		}
-
-
-		#region Component overrides
-
-		public override void update()
-		{
-			if( _currentAnimation == null || !isPlaying )
-				return;
-
-			// handle delay
-			if( !_delayComplete && _elapsedDelay < _currentAnimation.delay )
-			{
-				_elapsedDelay += Time.deltaTime;
-				if( _elapsedDelay >= _currentAnimation.delay )
-					_delayComplete = true;
-
-				return;
-			}
-
-			// count backwards if we are going in reverse
-			if( _isReversed )
-				_totalElapsedTime -= Time.deltaTime;
-			else
-				_totalElapsedTime += Time.deltaTime;
-
-
-			_totalElapsedTime = Mathf.clamp( _totalElapsedTime, 0f, _currentAnimation.totalDuration );
-			_completedIterations = Mathf.floorToInt( _totalElapsedTime / _currentAnimation.iterationDuration );
-			_isLoopingBackOnPingPong = false;
-
-
-			// handle ping pong loops. if loop is false but pingPongLoop is true we allow a single forward-then-backward iteration
-			if( _currentAnimation.pingPong )
-			{
-				if( _currentAnimation.loop || _completedIterations < 2 )
-					_isLoopingBackOnPingPong = _completedIterations % 2 != 0;
-			}
-
-
-			var elapsedTime = 0f;
-			if( _totalElapsedTime < _currentAnimation.iterationDuration )
-			{
-				elapsedTime = _totalElapsedTime;
-			}
-			else
-			{
-				elapsedTime = _totalElapsedTime % _currentAnimation.iterationDuration;
-
-				// if we arent looping and elapsedTime is 0 we are done. Handle it appropriately
-				if( !_currentAnimation.loop && elapsedTime == 0 )
-				{
-					// the animation is done so fire our event
-					if( onAnimationCompletedEvent != null )
-						onAnimationCompletedEvent( _currentAnimationKey );
-
-					isPlaying = false;
-
-					switch( _currentAnimation.completionBehavior )
-					{
-						case AnimationCompletionBehavior.RemainOnFinalFrame:
-							return;
-						case AnimationCompletionBehavior.RevertToFirstFrame:
-							subtexture = _currentAnimation.frames[0].subtexture;
-							origin = _currentAnimation.frames[0].origin;
-							return;
-						case AnimationCompletionBehavior.HideSprite:
-							subtexture = null;
-							_currentAnimation = null;
-							return;
-					}
-				}
-			}
-
-
-			// if we reversed the animation and we reached 0 total elapsed time handle un-reversing things and loop continuation
-			if( _isReversed && _totalElapsedTime <= 0 )
-			{
-				_isReversed = false;
-
-				if( _currentAnimation.loop )
-				{
-					_totalElapsedTime = 0f;
-				}
-				else
-				{
-					// the animation is done so fire our event
-					if( onAnimationCompletedEvent != null )
-						onAnimationCompletedEvent( _currentAnimationKey );
-
-					isPlaying = false;
-					return;
-				}
-			}
-
-			// time goes backwards when we are reversing a ping-pong loop
-			if( _isLoopingBackOnPingPong )
-				elapsedTime = _currentAnimation.iterationDuration - elapsedTime;
-
-
-			// fetch our desired frame
-			var desiredFrame = Mathf.floorToInt( elapsedTime / _currentAnimation.secondsPerFrame );
-			if( desiredFrame != currentFrame )
-			{
-				currentFrame = desiredFrame;
-				subtexture = _currentAnimation.frames[currentFrame].subtexture;
-				origin = _currentAnimation.frames[currentFrame].origin;
-				handleFrameChanged();
-
-				// ping-pong needs special care. we don't want to double the frame time when wrapping so we man-handle the totalElapsedTime
-				if( _currentAnimation.pingPong && ( currentFrame == 0 || currentFrame == _currentAnimation.frames.Count - 1 ) )
-				{
-					if( _isReversed )
-						_totalElapsedTime -= _currentAnimation.secondsPerFrame;
-					else
-						_totalElapsedTime += _currentAnimation.secondsPerFrame;
-				}
-			}
 		}
 
 
 		public override void render( Graphics graphics, Camera camera )
 		{
 			if( subtexture != null && camera.bounds.Intersects( bounds ) )
-				graphics.spriteBatch.Draw( subtexture, renderPosition, subtexture.sourceRect, color, rotation, origin, scale, spriteEffects, layerDepth );
-		}
-
-		#endregion
-
-
-		public void addAnimation( TEnum key, SpriteAnimation animation )
-		{
-			_animations[key] = animation;
-		}
-
-
-		#region Playback
-
-		/// <summary>
-		/// plays the animation at the given index. You can cache the indices by calling animationIndexForAnimationName.
-		/// </summary>
-		/// <param name="animationKey">Animation key.</param>
-		/// <param name="startFrame">Start frame.</param>
-		public void play( TEnum animationKey, int startFrame = 0 )
-		{
-			Debug.assertIsTrue( _animations.ContainsKey( animationKey ), "Attempted to play an animation that doesnt exist" );
-
-			var animation = _animations[animationKey];
-
-			animation.prepareForUse();
-
-			_currentAnimationKey = animationKey;
-			_currentAnimation = animation;
-			isPlaying = true;
-			_isReversed = false;
-			currentFrame = startFrame;
-			subtexture = _currentAnimation.frames[currentFrame].subtexture;
-			origin = _currentAnimation.frames[currentFrame].origin;
-
-			_totalElapsedTime = (float)startFrame * _currentAnimation.secondsPerFrame;
-		}
-
-
-		public bool isAnimationPlaying( TEnum animationKey )
-		{
-			return _currentAnimation != null && _currentAnimationKey.Equals( animationKey );
-		}
-
-
-		public void pause()
-		{
-			isPlaying = false;
-		}
-
-
-		public void unPause()
-		{
-			isPlaying = true;
-		}
-
-
-		public void reverseAnimation()
-		{
-			_isReversed = !_isReversed;
-		}
-
-
-		public void stop()
-		{
-			isPlaying = false;
-			subtexture = null;
-			_currentAnimation = null;
-		}
-
-		#endregion
-
-
-		void handleFrameChanged()
-		{
-			// TODO: add animation frame triggers
+				graphics.spriteBatch.Draw( subtexture, renderPosition, subtexture.sourceRect, color, rotation, origin, scale, spriteEffects, _layerDepth );
 		}
 
 	}

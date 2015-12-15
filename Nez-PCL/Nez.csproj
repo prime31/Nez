@@ -148,7 +148,6 @@
     <Compile Include="Utils\Timers\TimerManager.cs" />
     <Compile Include="Utils\Timers\ITimer.cs" />
     <Compile Include="Utils\Timers\Timer.cs" />
-    <Compile Include="ECS\Components\Renderables\Sprites\Sprite.cs" />
     <Compile Include="ECS\Components\Renderables\Sprites\SpriteAnimation.cs" />
     <Compile Include="Physics\ICollisionCallback.cs" />
     <Compile Include="Physics\ITriggerCallback.cs" />
@@ -194,5 +193,7 @@
     <Compile Include="ECS\Components\Renderables\Particles\ParticleCollisionConfig.cs" />
     <Compile Include="ECS\Components\Renderables\SimplePolygon.cs" />
     <Compile Include="ECS\Components\Renderables\Sprites\SpriteTrail.cs" />
+    <Compile Include="ECS\Components\Renderables\Sprites\SpriteT.cs" />
+    <Compile Include="ECS\Components\Renderables\Sprites\Sprite.cs" />
   </ItemGroup>
 </Project>

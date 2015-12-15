@@ -77,12 +77,24 @@ namespace Nez
 		{
 			set { scale = new Vector2( value, value ); }
 		}
-
-
+			
 		/// <summary>
-		/// standard SpriteBatch layerdepth
+		/// standard SpriteBatch layerdepth. 0 is in front and 1 is in back. Changing this value will trigger a sort of the renderableComponents
+		/// list on the scene.
 		/// </summary>
-		public float layerDepth = 0f;
+		public float layerDepth
+		{
+			get { return _layerDepth; }
+			set
+			{
+				_layerDepth = value;
+
+				if( entity != null && entity.scene != null )
+					entity.scene.renderableComponents.setNeedsComponentSort();
+			}
+		}
+		protected float _layerDepth;
+
 		public Color color = Color.White;
 		public SpriteEffects spriteEffects = SpriteEffects.None;
 
@@ -98,7 +110,7 @@ namespace Nez
 					_renderLayer = value;
 
 					// if we have an entity then we are being managed by a ComponentList so we need to let it know that we changed renderLayers
-					if( entity != null )
+					if( entity != null && entity.scene != null )
 						entity.scene.renderableComponents.updateRenderableRenderLayer( this, oldRenderLayer, _renderLayer );
 				}
 			}

@@ -179,15 +179,15 @@ namespace Nez
 			}
 		}
 
-		float _near = -10f;
-		float _far = 10f;
+		float _near = -100f;
+		float _far = 100f;
 		bool _areMatrixesDirty = true;
 		bool _areBoundsDirty = true;
 
 		#endregion
 
 
-		public Camera( float near = 0, float far = 1 )
+		public Camera( float near = -100, float far = 100 )
 		{
 			rotation = 0;
 			zoom = 1;
