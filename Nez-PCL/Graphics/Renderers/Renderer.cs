@@ -23,7 +23,8 @@ namespace Nez
 		static internal Comparison<Renderer> compareRenderOrder = ( a, b ) => { return Math.Sign( a.renderOrder - b.renderOrder ); };
 
 		/// <summary>
-		/// SpriteSortMode used by the SpriteBatch
+		/// SpriteSortMode used by the SpriteBatch. Use BackToFront when drawing transparent sprites and FrontToBack when drawing opaque sprites
+		/// if you want the depth value to be taken into account.
 		/// </summary>
 		public SpriteSortMode spriteSortMode = SpriteSortMode.Deferred;
 
@@ -53,8 +54,8 @@ namespace Nez
 		public Effect effect;
 
 		/// <summary>
-		/// the Camera this renderer uses for rendering (really its transformMatrix and bounds for culling). If it is null, the scenes Camera
-		/// will be used.
+		/// the Camera this renderer uses for rendering (really its transformMatrix and bounds for culling). This is a convenience field and isnt
+		/// required. Renderer subclasses can pick the camera used when calling beginRender.
 		/// </summary>
 		public Camera camera;
 
@@ -88,7 +89,8 @@ namespace Nez
 
 
 		/// <summary>
-		/// if a RenderTexture is used this will set it up. The SpriteBatch is also started.
+		/// if a RenderTexture is used this will set it up. The SpriteBatch is also started. The passed in Camera will be used to set the ViewPort
+		/// (if a ViewportAdapter is present) and for the SpriteBatch transform Matrix.
 		/// </summary>
 		/// <param name="cam">Cam.</param>
 		protected virtual void beginRender( Camera cam )
@@ -114,6 +116,16 @@ namespace Nez
 
 
 		abstract public void render( Scene scene, bool shouldDebugRender );
+
+
+		/// <summary>
+		/// force flushes the SpriteBatch by calling End then Begin on it.
+		/// </summary>
+		protected void flushSpriteBatch( Camera cam )
+		{
+			Graphics.instance.spriteBatch.End();
+			Graphics.instance.spriteBatch.Begin( spriteSortMode, blendState, samplerState, depthStencilState, rasterizerState, effect, cam.transformMatrix );
+		}
 
 
 		/// <summary>
