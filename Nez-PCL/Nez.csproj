@@ -72,7 +72,6 @@
     <Compile Include="ECS\Components\Physics\CircleCollider.cs" />
     <Compile Include="ECS\Components\Physics\Collider.cs" />
     <Compile Include="ECS\Components\Physics\MultiCollider.cs" />
-    <Compile Include="ECS\Components\Renderables\Image.cs" />
     <Compile Include="ECS\Components\Renderables\RenderableComponent.cs" />
     <Compile Include="ECS\Components\Renderables\TiledMapComponent.cs" />
     <Compile Include="ECS\Components\Text\FramesPerSecondCounter.cs" />

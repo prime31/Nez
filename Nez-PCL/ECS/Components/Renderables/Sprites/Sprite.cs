@@ -1,6 +1,7 @@
 ﻿using System;
 using Nez.Textures;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 
 
 namespace Nez.Sprites
@@ -25,6 +26,10 @@ namespace Nez.Sprites
 			this.subtexture = subtexture;
 			originNormalized = new Vector2( 0.5f, 0.5f );
 		}
+
+
+		public Sprite( Texture2D texture ) : this( new Subtexture( texture ) )
+		{}
 
 
 		public override void render( Graphics graphics, Camera camera )

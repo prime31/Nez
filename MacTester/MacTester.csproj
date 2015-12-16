@@ -71,6 +71,7 @@
     <Compile Include="SceneTwo\SimplePostProcessor.cs" />
     <Compile Include="SceneThree\SimpleMovingPlatform.cs" />
     <Compile Include="Scenes.cs" />
+    <Compile Include="SceneThree\SimpleMoonOutlineRenderer.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Info.plist" />

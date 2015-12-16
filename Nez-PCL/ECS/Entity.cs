@@ -425,22 +425,32 @@ namespace Nez
 		/// <param name="ridingActors">Riding actors.</param>
 		public void moveSolid( float deltaX, float deltaY, List<Entity> allActors, List<Entity> ridingActors )
 		{
-			if( deltaX == 0f && deltaY == 0f )
+			// add the movement to our remainder from previous moves, round the remainder than remove the amount we will move this frame
+			_movementRemainder.X += deltaX;
+			_movementRemainder.Y += deltaY;
+
+			var moveX = Mathf.roundToInt( _movementRemainder.X );
+			var moveY = Mathf.roundToInt( _movementRemainder.Y );
+
+			_movementRemainder.X -= moveX;
+			_movementRemainder.Y -= moveY;
+
+			if( moveX == 0f && moveY == 0f )
 				return;
 
 			// remove ourself from the physics system until after we are done moving
 			Physics.removeCollider( collider, true );
 
-			if( deltaX != 0f )
+			if( moveX != 0f )
 			{
-				position += new Vector2( deltaX, 0f );
-				moveSolidX( deltaX, allActors, ridingActors );
+				position += new Vector2( moveX, 0f );
+				moveSolidX( moveX, allActors, ridingActors );
 			}
 
-			if( deltaY != 0f )
+			if( moveY != 0f )
 			{
-				position += new Vector2( 0f, deltaY );
-				moveSolidY( deltaY, allActors, ridingActors );
+				position += new Vector2( 0f, moveY );
+				moveSolidY( moveY, allActors, ridingActors );
 			}
 
 			// let Physics know about our new position
@@ -448,7 +458,7 @@ namespace Nez
 		}
 
 
-		void moveSolidX( float amount, List<Entity> allActors, List<Entity> ridingActors )
+		void moveSolidX( int amount, List<Entity> allActors, List<Entity> ridingActors )
 		{
 			for( var i = 0; i < allActors.Count; i++ )
 			{
@@ -457,7 +467,7 @@ namespace Nez
 				if( actor.collider.collidesWith( collider ) )
 				{
 					// push. deal with moving left/right
-					float moveAmount;
+					int moveAmount;
 					if( amount > 0f )
 						moveAmount = collider.bounds.Right - actor.collider.bounds.Left;
 					else

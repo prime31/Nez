@@ -146,6 +146,20 @@ namespace Nez
 
 
 		/// <summary>
+		/// rounds value and returns it and 
+		/// </summary>
+		/// <returns>The with remainder.</returns>
+		/// <param name="value">Value.</param>
+		/// <param name="roundedAmount">roundedAmount.</param>
+		public static float roundWithRoundedAmount( float value, out float roundedAmount )
+		{
+			var rounded = Mathf.round( value );
+			roundedAmount = value - ( rounded * Mathf.round( value / rounded ) );
+			return rounded;
+		}
+
+
+		/// <summary>
 		/// Maps a value from some arbitrary range to the 0 to 1 range
 		/// </summary>
 		/// <param name="value">Value.</param>

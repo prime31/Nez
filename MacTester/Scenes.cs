@@ -80,8 +80,7 @@ namespace MacTester
 
 			// stick a couple moons on screen
 			var entity = scene.createAndAddEntity<Entity>( "moon" );
-			var image = new Image( moonTexture );
-			image.originNormalized = Vector2Ext.halfVector();
+			var image = new Sprite( moonTexture );
 			image.zoom = 2f;
 			entity.addComponent( image );
 			entity.addComponent( new FramesPerSecondCounter( Graphics.instance.bitmapFont, Color.White, FramesPerSecondCounter.FPSDockPosition.TopLeft ) );
@@ -90,7 +89,7 @@ namespace MacTester
 
 
 			entity = scene.createAndAddEntity<Entity>( "new-moon" );
-			image = new Image( moonTexture );
+			image = new Sprite( moonTexture );
 			entity.position = new Vector2( 130f, 230f );
 			entity.addComponent( image );
 
@@ -152,7 +151,7 @@ namespace MacTester
 			{
 				var ent = scene.createAndAddEntity<Entity>( name );
 				ent.position = pos;
-				ent.addComponent( new Image( moonTexture ) );
+				ent.addComponent( new Sprite( moonTexture ) );
 				if( useBoxColliders )
 					ent.collider = new BoxCollider();
 				else
@@ -162,7 +161,7 @@ namespace MacTester
 			};
 
 			moonMaker( new Vector2( 400, 10 ), "moon1", false );
-			moonMaker( new Vector2( 10, 10 ), "moon2", false );
+			moonMaker( new Vector2( 0, 0 ), "moon2", false );
 			moonMaker( new Vector2( 50, 500 ), "moon3", true );
 			moonMaker( new Vector2( 500, 250 ), "moon4", false );
 
@@ -174,9 +173,9 @@ namespace MacTester
 			var entity = scene.createAndAddEntity<Entity>( "player-moon" );
 			entity.addComponent( new SimpleMoonMover() );
 			entity.position = new Vector2( 220, 220 );
-			var sprite = new Sprite<int>( new Subtexture( moonTexture ) );
-			sprite.color = Color.Blue;
+			var sprite = new Sprite( moonTexture );
 			entity.addComponent( sprite );
+			entity.addComponent( new SimpleMoonOutlineRenderer( sprite ) );
 
 			if( useBoxColliders )
 				entity.collider = new BoxCollider();
@@ -186,7 +185,7 @@ namespace MacTester
 
 			var uglyBackgroundEntity = scene.createAndAddEntity<Entity>( "bg" );
 			uglyBackgroundEntity.order = 5;
-			var image = new Image( scene.contentManager.Load<Texture2D>( "Images/dots-512" ) );
+			var image = new Sprite( scene.contentManager.Load<Texture2D>( "Images/dots-512" ) );
 			image.zoom = 4f;
 			uglyBackgroundEntity.addComponent( image );
 
@@ -212,7 +211,7 @@ namespace MacTester
 			{
 				try
 				{
-					var i = new Image( sceneTexture.getSubtexture( si.imageName ) );
+					var i = new Sprite( sceneTexture.getSubtexture( si.imageName ) );
 					i.localPosition = new Vector2( si.x, -si.y );
 					i.origin = new Vector2( si.originX, si.originY );
 					i.scale = new Vector2( si.scaleX, si.scaleY );
@@ -235,7 +234,7 @@ namespace MacTester
 			var moonTexture = scene.contentManager.Load<Texture2D>( "Images/moon" );
 
 			var entity = scene.createAndAddEntity<Entity>( "moon" );
-			var image = new Image( moonTexture );
+			var image = new Sprite( moonTexture );
 			image.originNormalized = Vector2Ext.halfVector();
 			entity.addComponent( image );
 			entity.position = new Vector2( 200, 200 );
@@ -252,7 +251,7 @@ namespace MacTester
 
 
 			entity = scene.createAndAddEntity<Entity>( "moon2" );
-			image = new Image( moonTexture );
+			image = new Sprite( moonTexture );
 			image.originNormalized = Vector2Ext.halfVector();
 			entity.addComponent( image );
 			entity.position = new Vector2( 500, 500 );
@@ -270,7 +269,7 @@ namespace MacTester
 
 
 			entity = scene.createAndAddEntity<Entity>( "moon2" );
-			image = new Image( moonTexture );
+			image = new Sprite( moonTexture );
 			image.originNormalized = Vector2Ext.halfVector();
 			entity.addComponent( image );
 			entity.position = new Vector2( 700, 300 );
@@ -337,12 +336,12 @@ namespace MacTester
 			var moonTexture = scene.contentManager.Load<Texture2D>( "Images/moon" );
 			entity = scene.createAndAddEntity<Entity>( "moon1" );
 			entity.position = new Vector2( Screen.backBufferWidth / 2, Screen.backBufferHeight / 2 + 100 );
-			entity.addComponent( new Image( moonTexture ) );
+			entity.addComponent( new Sprite( moonTexture ) );
 			entity.collider = new CircleCollider();
 
 			entity = scene.createAndAddEntity<Entity>( "moon2" );
 			entity.position = new Vector2( Screen.backBufferWidth / 2 - 100, Screen.backBufferHeight / 2 + 100 );
-			entity.addComponent( new Image( moonTexture ) );
+			entity.addComponent( new Sprite( moonTexture ) );
 			entity.collider = new CircleCollider();
 
 			return scene;
