@@ -56,6 +56,12 @@ namespace MacTester
 			spriteEntity.position = new Vector2( 40, 40 );
 			spriteEntity.addComponent( sprite );
 
+			if( useScalingViewportAdapter )
+			{
+				scene.addPostProcessor( new SimpleBloomPostProcessor( scene.contentManager ) );
+				scene.enablePostProcessing = true;
+			}
+
 			return scene;
 		}
 
