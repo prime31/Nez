@@ -50,7 +50,8 @@ namespace Nez
 
 
 		/// <summary>
-		/// revmoes the collider from the physics system. uses brute force if useColliderBoundsForRemovalLookup is false
+		/// removes the collider from the physics system. uses brute force if useColliderBoundsForRemovalLookup is false. Only resort
+		/// to the brute force method if you already moved the Entity/Collider before wanting to remove it.
 		/// </summary>
 		/// <param name="collider">Collider.</param>
 		/// <param name="useColliderBoundsForRemovalLookup">If set to <c>true</c> use collider bounds for removal lookup.</param>

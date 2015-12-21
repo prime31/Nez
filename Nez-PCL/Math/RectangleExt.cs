@@ -118,7 +118,7 @@ namespace Nez
 
 				// transform the corners into our work space
 				Vector2.Transform( ref topLeft, ref transformMatrix, out topLeft );
-				Vector2.Transform( ref topRight,ref transformMatrix, out topRight );
+				Vector2.Transform( ref topRight, ref transformMatrix, out topRight );
 				Vector2.Transform( ref bottomLeft, ref transformMatrix, out bottomLeft );
 				Vector2.Transform( ref bottomRight, ref transformMatrix, out bottomRight );
 
@@ -281,7 +281,7 @@ namespace Nez
 
 			return new float?( num );
 		}
-	
+
 
 		/// <summary>
 		/// returns a Bounds the spans the current bounds and the provided delta positions
@@ -345,6 +345,44 @@ namespace Nez
 				moveX = 0.0f;
 
 			return true;
+		}
+
+
+		/// <summary>
+		/// Calculates the signed depth of intersection between two rectangles.
+		/// </summary>
+		/// <returns>
+		/// The amount of overlap between two intersecting rectangles. These depth values can be negative depending on which sides the rectangles
+		/// intersect. This allows callers to determine the correct direction to push objects in order to resolve collisions.
+		/// If the rectangles are not intersecting, Vector2.Zero is returned.
+		/// </returns>
+		public static Vector2 getIntersectionDepth( ref Rectangle rectA, ref Rectangle rectB )
+		{
+			// calculate half sizes
+			var halfWidthA = rectA.Width / 2.0f;
+			var halfHeightA = rectA.Height / 2.0f;
+			var halfWidthB = rectB.Width / 2.0f;
+			var halfHeightB = rectB.Height / 2.0f;
+
+			// calculate centers
+			var centerA = new Vector2( rectA.Left + halfWidthA, rectA.Top + halfHeightA );
+			var centerB = new Vector2( rectB.Left + halfWidthB, rectB.Top + halfHeightB );
+
+			// calculate current and minimum-non-intersecting distances between centers
+			var distanceX = centerA.X - centerB.X;
+			var distanceY = centerA.Y - centerB.Y;
+			var minDistanceX = halfWidthA + halfWidthB;
+			var minDistanceY = halfHeightA + halfHeightB;
+
+			// if we are not intersecting at all, return (0, 0)
+			if( Math.Abs( distanceX ) >= minDistanceX || Math.Abs( distanceY ) >= minDistanceY )
+				return Vector2.Zero;
+
+			// calculate and return intersection depths
+			var depthX = distanceX > 0 ? minDistanceX - distanceX : -minDistanceX - distanceX;
+			var depthY = distanceY > 0 ? minDistanceY - distanceY : -minDistanceY - distanceY;
+
+			return new Vector2( depthX, depthY );
 		}
 
 

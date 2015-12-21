@@ -41,6 +41,11 @@ namespace MacTester
 			var height = Screen.backBufferHeight;
 			var format = Screen.backBufferFormat;
 
+			// normally we would want the backBufferWidth/Height but we are rendering to a small RenderTexture in this scene so no reason
+			// to use such large render targets
+			width = 256;
+			height = 144;
+
 			// Create two rendertargets for the bloom processing. These are half the size of the backbuffer, in order to minimize fillrate costs. Reducing
 			// the resolution in this way doesn't hurt quality, because we are going to be blurring the bloom images in any case.
 			width /= 2;

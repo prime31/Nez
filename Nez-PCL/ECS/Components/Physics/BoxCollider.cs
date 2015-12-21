@@ -74,8 +74,7 @@ namespace Nez
 
 		public override bool collidesWith( Vector2 from, Vector2 to )
 		{
-			var b = bounds;
-			return Collisions.rectToLine( b.X, b.Y, b.Width, b.Height, from, to );
+			return Collisions.rectToLine( bounds, from, to );
 		}
 
 
@@ -87,8 +86,7 @@ namespace Nez
 
 		public override bool collidesWith( CircleCollider circle )
 		{
-			var b = bounds;
-			return Collisions.rectToCircle( b.X, b.Y, b.Width, b.Height, circle.bounds.getCenter(), circle._radius );
+			return Collisions.rectToCircle( bounds, circle.bounds.getCenter(), circle._radius );
 		}
 
 
