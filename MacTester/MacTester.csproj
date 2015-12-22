@@ -73,6 +73,9 @@
     <Compile Include="Scenes.cs" />
     <Compile Include="SceneEntityProcessor\TextEntityProcessor.cs" />
     <Compile Include="SceneEntityProcessor\ImageEntityProcessor.cs" />
+    <Compile Include="SceneThree\SimpleMoonOutlineRenderer.cs" />
+    <Compile Include="SceneOne\SimpleBloomPostProcessor.cs" />
+    <Compile Include="SceneOne\BloomSettings.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Info.plist" />
@@ -141,6 +144,9 @@
     <Content Include="Content\Effects\SpriteEffect.ogl.mgfxo" />
     <Content Include="Content\Effects\SpriteEffectEffect.xnb" />
     <Content Include="Content\NezDefaultBMFont.xnb" />
+    <Content Include="Content\Effects\BloomCombine.ogl.mgfxo" />
+    <Content Include="Content\Effects\BloomExtract.ogl.mgfxo" />
+    <Content Include="Content\Effects\GaussianBlur.ogl.mgfxo" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
@@ -154,6 +160,7 @@
     <Folder Include="Content\Images\TextureAtlas\" />
     <Folder Include="Content\Images\AnotherAtlas\" />
     <Folder Include="SceneEntityProcessor\" />
+    <Folder Include="SceneOne\" />
   </ItemGroup>
   <ItemGroup>
     <InterfaceDefinition Include="MainMenu.xib" />

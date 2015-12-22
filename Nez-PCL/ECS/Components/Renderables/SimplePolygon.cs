@@ -43,8 +43,13 @@ namespace Nez
 				{
 					if( _rotation == 0f )
 					{
-						for( var i = 0; i < _points.Length; i++ )
-							_worldSpacePoints[i] = _points[i] + entity.position + _localPosition - _origin;						
+						for (var i = 0; i < _points.Length; i++) {
+							if (entity != null) {
+								_worldSpacePoints[i] = _points[i] + entity.position + _localPosition - _origin;						
+							} else {
+								_worldSpacePoints[i] = _points[i] + _localPosition - _origin;						
+							}
+						}
 					}
 					else
 					{

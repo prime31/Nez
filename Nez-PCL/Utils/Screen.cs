@@ -56,6 +56,12 @@ namespace Nez
 		}
 
 
+		public static SurfaceFormat backBufferFormat
+		{
+			get { return _graphicsManager.GraphicsDevice.PresentationParameters.BackBufferFormat; }
+		}
+
+
 		public static SurfaceFormat preferredBackBufferFormat
 		{
 			get { return _graphicsManager.PreferredBackBufferFormat; }

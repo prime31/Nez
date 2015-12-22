@@ -63,10 +63,10 @@ namespace Nez
 		/// <summary>
 		/// helper for drawing a texture into a rendertarget, optionally using a custom shader to apply postprocessing effects.
 		/// </summary>
-		protected void drawFullscreenQuad( Texture2D texture, RenderTexture renderTexture, Effect effect = null )
+		protected void drawFullscreenQuad( Texture2D texture, RenderTarget2D renderTexture, Effect effect = null )
 		{
 			Core.graphicsDevice.SetRenderTarget( renderTexture );
-			drawFullscreenQuad( texture, renderTexture.renderTarget2D.Width, renderTexture.renderTarget2D.Height, effect );
+			drawFullscreenQuad( texture, renderTexture.Width, renderTexture.Height, effect );
 		}
 
 

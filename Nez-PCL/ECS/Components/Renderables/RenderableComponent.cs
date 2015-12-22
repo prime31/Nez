@@ -232,22 +232,22 @@ namespace Nez
 
 
 		// TODO: these make no sense here. if they are called in a Components render method it will create an infinite loop
-		void drawOutline( Graphics graphics, int offset = 1 )
+		public void drawOutline( Graphics graphics, Camera camera, int offset = 1 )
 		{
-			drawOutline( graphics, Color.Black, offset );
+			drawOutline( graphics, camera, Color.Black, offset );
 		}
 
 
-		void drawOutline( Graphics graphics, Color outlineColor, int offset = 1 )
+		public void drawOutline( Graphics graphics, Camera camera, Color outlineColor, int offset = 1 )
 		{
 			// save the stuff we are going to modify so we can restore it later
 			var originalPosition = _localPosition;
 			var originalColor = color;
-			var originalLayerDepth = layerDepth;
+			var originalLayerDepth = _layerDepth;
 
 			// set our new values
 			color = outlineColor;
-			layerDepth++;
+			_layerDepth += 0.01f;
 
 			for( var i = -1; i < 2; i++ )
 			{
@@ -256,7 +256,7 @@ namespace Nez
 					if( i != 0 || j != 0 )
 					{
 						_localPosition = originalPosition + new Vector2( i * offset, j * offset );
-						//render( graphics );
+						render( graphics, camera );
 					}
 				}
 			}
@@ -264,7 +264,7 @@ namespace Nez
 			// restore changed state
 			_localPosition = originalPosition;
 			color = originalColor;
-			layerDepth = originalLayerDepth;
+			_layerDepth = originalLayerDepth;
 		}
 
 	}
