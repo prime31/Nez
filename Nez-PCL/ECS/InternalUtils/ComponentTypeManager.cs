@@ -38,16 +38,19 @@ namespace Nez
 
 		public static void initialize()
 		{
+			var currentdomain = typeof(string).Assembly.GetType ("System.AppDomain").GetProperty("CurrentDomain").GetGetMethod().Invoke (null, new object[] {});
+			var getassemblies = currentdomain.GetType ().GetMethod ("GetAssemblies", new Type[]{ });
+			var assemblies = getassemblies.Invoke (currentdomain, new object[]{ }) as Assembly[];
+
 			// HACK: make sure this works with PCL change below
 			//foreach( var type in Assembly.GetEntryAssembly().GetTypes() )
-			foreach( var type in Assembly.GetExecutingAssembly().GetTypes() )
-			{
-				if( typeof( Component ).IsAssignableFrom( type ) )
-				{
-					add(type);
+			foreach (var assembly in assemblies) {
+				foreach (var type in assembly.GetTypes()) {
+					if (typeof(Component).IsAssignableFrom (type)) {
+						add (type);
+					}
 				}
 			}
-
 		}
 	}
 }
