@@ -335,6 +335,20 @@ namespace Nez
 
 		#endregion
 
+		#region Processors
+
+		public void addProcessor(EntitySystem processor)
+		{
+			processor.scene = this;
+			entityProcessors.add (processor);
+		}
+
+		public T getProcessor<T>() where T : EntitySystem
+		{
+			return entityProcessors.getProcessor<T>();
+		}
+
+		#endregion
 	}
 }
 

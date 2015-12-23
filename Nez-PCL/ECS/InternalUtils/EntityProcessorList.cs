@@ -74,6 +74,18 @@ namespace Nez
 		{
 		}
 
+		public T getProcessor<T>() where T : EntitySystem
+		{
+			for( var i = 0; i < _processors.Count; i++ )
+			{
+				var processor = _processors[i];
+				if( processor is T )
+					return processor as T;
+			}
+
+			return null;
+		}
+
 	}
 }
 

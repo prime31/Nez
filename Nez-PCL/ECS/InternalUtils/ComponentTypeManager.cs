@@ -42,8 +42,6 @@ namespace Nez
 			var getassemblies = currentdomain.GetType ().GetMethod ("GetAssemblies", new Type[]{ });
 			var assemblies = getassemblies.Invoke (currentdomain, new object[]{ }) as Assembly[];
 
-			// HACK: make sure this works with PCL change below
-			//foreach( var type in Assembly.GetEntryAssembly().GetTypes() )
 			foreach (var assembly in assemblies) {
 				foreach (var type in assembly.GetTypes()) {
 					if (typeof(Component).IsAssignableFrom (type)) {

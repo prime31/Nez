@@ -74,7 +74,7 @@ namespace Nez
 		{
 		}
 
-		protected void begin()
+		protected virtual void begin()
 		{
 		}
 
@@ -85,7 +85,7 @@ namespace Nez
 			end();
 		}
 
-		protected void end()
+		protected virtual void end()
 		{
 		}
 	}
