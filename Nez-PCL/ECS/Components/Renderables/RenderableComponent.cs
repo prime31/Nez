@@ -99,6 +99,10 @@ namespace Nez
 		public SpriteEffects spriteEffects = SpriteEffects.None;
 
 		protected int _renderLayer;
+		/// <summary>
+		/// lower renderLayers are in the front and higher are in the back, just like layerDepth but not clamped to 0-1
+		/// </summary>
+		/// <value>The render layer.</value>
 		public int renderLayer
 		{
 			get { return _renderLayer; }

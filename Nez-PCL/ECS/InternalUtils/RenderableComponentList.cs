@@ -8,12 +8,12 @@ namespace Nez
 	public class RenderableComponentList : IEnumerable<RenderableComponent>, IEnumerable
 	{
 		// global sorts for RenderableComponent lists. The main list is sorted by renderLayer first then layerDepth. Each renderLayerList is sorted by layerDepth.
-		internal static Comparison<RenderableComponent> compareComponentLayerDepth = ( a, b ) => { return Math.Sign( a.layerDepth - b.layerDepth ); };
+		internal static Comparison<RenderableComponent> compareComponentLayerDepth = ( a, b ) => { return Math.Sign( b.layerDepth - a.layerDepth ); };
 		internal static Comparison<RenderableComponent> compareComponents = ( a, b ) =>
 		{
-			var res = a.renderLayer.CompareTo( b.renderLayer );
+			var res = b.renderLayer.CompareTo( a.renderLayer );
 			if( res == 0 )
-				return a.layerDepth.CompareTo( b.layerDepth );
+				return b.layerDepth.CompareTo( a.layerDepth );
 			return res;
 		};
 
