@@ -66,7 +66,8 @@ namespace Nez
 
 		public void remove( Entity entity )
 		{
-			_entitiesToRemove.Add( entity );
+			if (!_entitiesToRemove.Contains(entity))
+				_entitiesToRemove.Add( entity );
 		}
 
 
