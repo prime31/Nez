@@ -43,13 +43,12 @@ namespace Nez
 				{
 					if( _rotation == 0f )
 					{
-						for (var i = 0; i < _points.Length; i++) {
-							if (entity != null) {
-								_worldSpacePoints[i] = _points[i] + entity.position + _localPosition - _origin;						
-							} else {
-								_worldSpacePoints[i] = _points[i] + _localPosition - _origin;						
-							}
-						}
+					    var positionAddition = _localPosition - _origin;
+					    if( entity != null )
+					        positionAddition += entity.position;
+
+						for( var i = 0; i < _points.Length; i++ )
+							_worldSpacePoints[i] = _points[i] + positionAddition;
 					}
 					else
 					{
@@ -78,8 +77,15 @@ namespace Nez
 		{
 			get
 			{
-				var worldPosX = entity.position.X + _localPosition.X;
-				var worldPosY = entity.position.Y + _localPosition.Y;
+				var worldPosX = _localPosition.X;
+				var worldPosY = _localPosition.Y;
+				
+				if( entity != null )
+				{
+				    worldPosX += entity.position.X;
+				    worldPosY += entity.position.Y;
+				}
+				
 				var tempMat = Matrix.Identity;
 
 				// set the reference point taking origin into account

@@ -144,7 +144,7 @@ namespace Nez
 		}
 
 
-		internal void render( bool enableDebugRender )
+		internal void render( bool debugRenderEnabled )
 		{
 			var lastRendererHadRenderTexture = false;
 			for( var i = 0; i < _renderers.Count; i++ )
@@ -156,8 +156,8 @@ namespace Nez
 					Core.graphicsDevice.SetRenderTarget( _sceneRenderTexture );
 					Core.graphicsDevice.Clear( clearColor );
 				}
-				
-				_renderers[i].render( this, enableDebugRender );
+
+				_renderers[i].render( this, debugRenderEnabled );
 				lastRendererHadRenderTexture = _renderers[i].renderTexture != null;
 			}
 		}
