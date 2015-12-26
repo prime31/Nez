@@ -100,7 +100,7 @@ namespace Nez
 
 		public bool collidesWithAtPosition( Collider collider, Vector2 position )
 		{
-			// store off the position so we can restore it after the check. we ignore position changes on the entity while we do this so that
+			// store off the position so we can restore it after the check
 			var savedPosition = entity.position;
 			entity.position = position;
 
@@ -113,6 +113,11 @@ namespace Nez
 		}
 
 
+		/// <summary>
+		/// this amounts to an overlap check. Returns true if an overlap of the Colliders is occuring.
+		/// </summary>
+		/// <returns><c>true</c>, if with was collidesed, <c>false</c> otherwise.</returns>
+		/// <param name="collider">Collider.</param>
 		public bool collidesWith( Collider collider )
 		{
 			if( collider is BoxCollider )

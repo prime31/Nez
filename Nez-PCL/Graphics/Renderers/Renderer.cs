@@ -80,6 +80,13 @@ namespace Nez
 		/// </summary>
 		public bool clearRenderTargetAfterRender = true;
 
+		/// <summary>
+		/// flag for this renderer that decides if it should debug render or not. The render method receives a bool (debugRenderEnabled)
+		/// letting the renderer know if the global debug rendering is on/off. The renderer then uses the local bool to decide if it
+		/// should debug render or not.
+		/// </summary>
+		public bool shouldDebugRender = true;
+
 
 		public Renderer( Camera camera, int renderOrder )
 		{
@@ -115,7 +122,7 @@ namespace Nez
 		}
 
 
-		abstract public void render( Scene scene, bool shouldDebugRender );
+		abstract public void render( Scene scene, bool debugRenderEnabled );
 
 
 		/// <summary>

@@ -82,8 +82,9 @@ namespace Nez
 
 		public override bool collidesWith( PolygonCollider polygon )
 		{
-			if( polygon is OrientedBoxCollider )
-				return Collisions.orientedBoxColliderToOrientedBoxCollider( this, polygon as OrientedBoxCollider );
+			// TODO: orientedBoxColliderToOrientedBoxCollider overlaps a couple pixels sometimes
+			//if( polygon is OrientedBoxCollider )
+			//	return Collisions.orientedBoxColliderToOrientedBoxCollider( this, polygon as OrientedBoxCollider );
 
 			// cant shortcut since the other one is not an OBB
 			var result = Collisions.polygonToPolygon( this, polygon );
