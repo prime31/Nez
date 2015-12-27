@@ -28,6 +28,15 @@ namespace MacTester
 		}
 
 
+		public override void onEntityPositionChanged()
+		{
+			base.onEntityPositionChanged();
+
+			// our sprite is disabled so we need to forward the call over to it so it can update its bounds for rendering
+			_sprite.onEntityPositionChanged();
+		}
+
+
 		public override void render( Graphics graphics, Camera camera )
 		{
 			_sprite.drawOutline( graphics, camera, 3 );
