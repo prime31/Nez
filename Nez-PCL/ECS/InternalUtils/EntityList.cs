@@ -66,7 +66,10 @@ namespace Nez
 
 		public void remove( Entity entity )
 		{
-			_entitiesToRemove.Add( entity );
+			Debug.warnIf( _entitiesToRemove.Contains( entity ), "You are trying to remove an entity ({0}) that you already removed", entity.name );
+
+			if( _entitiesToRemove.Contains( entity ) )
+				_entitiesToRemove.Add( entity );
 		}
 
 
