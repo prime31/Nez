@@ -103,21 +103,21 @@ namespace Nez
 			}
 		}
 
-		internal double _actualOrder = 0;
-		internal int _order = 0;
+		internal double _actualUpdateOrder = 0;
+		internal int _updateOrder = 0;
 
 		/// <summary>
-		/// render order of this Entity. Also used to sort tag lists on scene.entities
+		/// update order of this Entity. Also used to sort tag lists on scene.entities
 		/// </summary>
 		/// <value>The order.</value>
-		public int order
+		public int updateOrder
 		{
-			get { return _order; }
+			get { return _updateOrder; }
 			set
 			{
-				if( _order != value )
+				if( _updateOrder != value )
 				{
-					_order = value;
+					_updateOrder = value;
 					if( scene != null )
 						scene.setActualOrder( this );
 				}
@@ -522,7 +522,7 @@ namespace Nez
 
 		public override string ToString()
 		{
-			return string.Format(" [Entity: tag: {0}, enabled: {1}, depth: {2}, name: {3}]", tag, enabled, order, name );
+			return string.Format(" [Entity: name: {0}, tag: {1}, enabled: {2}, depth: {3}]", name, tag, enabled, updateOrder );
 		}
 
 	}
