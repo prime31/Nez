@@ -32,7 +32,7 @@ namespace Nez
 					renderable.render( Graphics.instance, cam );
 			}
 
-			if( debugRenderEnabled && debugRenderEnabled )
+			if( shouldDebugRender && debugRenderEnabled )
 				debugRender( scene );
 
 			endRender();
