@@ -96,8 +96,8 @@ namespace Nez
 
 		public override void debugRender( Graphics graphics )
 		{
-			graphics.drawPolygon( Vector2.Zero, worldSpacePoints, Color.DarkRed, true );
-			graphics.drawPixel( entity.position + _localPosition - _origin, Color.Yellow, 2 );
+			graphics.spriteBatch.drawPolygon( Vector2.Zero, worldSpacePoints, Color.DarkRed, true );
+			graphics.spriteBatch.drawPixel( entity.position + _localPosition - _origin, Color.Yellow, 2 );
 		}
 	}
 }

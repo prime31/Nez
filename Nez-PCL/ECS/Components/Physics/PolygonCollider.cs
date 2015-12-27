@@ -24,6 +24,7 @@ namespace Nez
 		}
 
 		protected float _rotation;
+
 		public float rotation
 		{
 			get { return _rotation; }
@@ -51,6 +52,22 @@ namespace Nez
 				}
 
 				return _bounds;
+			}
+		}
+
+		public Vector2 center
+		{
+			get
+			{
+				float totalX = 0;
+				float totalY = 0;
+				for( var i = 0; i < worldSpacePoints.Length; i++ )
+				{
+					totalX += _worldSpacePoints[i].X;
+					totalY += _worldSpacePoints[i].Y;
+				}
+
+				return new Vector2( totalX / (float)_worldSpacePoints.Length, totalY / (float)_worldSpacePoints.Length );
 			}
 		}
 
@@ -89,6 +106,7 @@ namespace Nez
 		}
 
 		Matrix _transformMatrix;
+
 		protected Matrix transformMatrix
 		{
 			get
@@ -121,7 +139,8 @@ namespace Nez
 
 
 		protected PolygonCollider()
-		{}
+		{
+		}
 
 
 		public PolygonCollider( Vector2[] points )
@@ -210,8 +229,8 @@ namespace Nez
 
 		public override void debugRender( Graphics graphics )
 		{
-			graphics.drawPolygon( Vector2.Zero, worldSpacePoints, Color.DarkRed, false );
-			graphics.drawPixel( entity.position + _localPosition - _origin, Color.Yellow, 2 );
+			graphics.spriteBatch.drawPolygon( Vector2.Zero, worldSpacePoints, Color.DarkRed, false );
+			graphics.spriteBatch.drawPixel( entity.position + _localPosition - _origin, Color.Yellow, 2 );
 		}
 
 

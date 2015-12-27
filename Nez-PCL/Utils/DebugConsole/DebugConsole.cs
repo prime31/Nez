@@ -485,7 +485,7 @@ namespace Nez.Console
 
 			Graphics.instance.spriteBatch.Begin();
 
-			Graphics.instance.drawRect( HORIZONTAL_PADDING, screenHeight - BOTTOM_MARGIN, workingWidth, BOTTOM_CONSOLE_HEIGHT, Color.Black * OPACITY );
+			Graphics.instance.spriteBatch.drawRect( HORIZONTAL_PADDING, screenHeight - BOTTOM_MARGIN, workingWidth, BOTTOM_CONSOLE_HEIGHT, Color.Black * OPACITY );
 			var commandLineString = "> " + _currentText;
 			if( _underscore )
 				commandLineString += "_";
@@ -496,7 +496,7 @@ namespace Nez.Console
 			{
 				var height = LINE_HEIGHT * _drawCommands.Count + 15;
 				var topOfHistoryRect = screenHeight - height - BOTTOM_CONSOLE_HEIGHT - 20;
-				Graphics.instance.drawRect( HORIZONTAL_PADDING, topOfHistoryRect, workingWidth, height, Color.Black * OPACITY );
+				Graphics.instance.spriteBatch.drawRect( HORIZONTAL_PADDING, topOfHistoryRect, workingWidth, height, Color.Black * OPACITY );
 				for( int i = 0; i < _drawCommands.Count; i++ )
 				{
 					var position = new Vector2( 20, topOfHistoryRect + height - 20 - LINE_HEIGHT * i );

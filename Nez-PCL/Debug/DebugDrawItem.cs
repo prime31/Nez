@@ -48,10 +48,10 @@ namespace Nez
 			switch( _drawType )
 			{
 				case DebugDrawType.Line:
-					graphics.drawLine( start, end, color );
+					graphics.spriteBatch.drawLine( start, end, color );
 					break;
 				case DebugDrawType.HollowRectangle:
-					graphics.drawHollowRect( rectangle, color );
+					graphics.spriteBatch.drawHollowRect( rectangle, color );
 					break;
 			}
 

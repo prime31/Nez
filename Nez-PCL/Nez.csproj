@@ -194,5 +194,6 @@
     <Compile Include="ECS\Components\Renderables\Sprites\SpriteTrail.cs" />
     <Compile Include="ECS\Components\Renderables\Sprites\SpriteT.cs" />
     <Compile Include="ECS\Components\Renderables\Sprites\Sprite.cs" />
+    <Compile Include="Graphics\SpriteBatchExt.cs" />
   </ItemGroup>
 </Project>

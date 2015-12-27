@@ -73,7 +73,7 @@ namespace Nez
 
 		public override void debugRender( Graphics graphics )
 		{
-			graphics.drawHollowRect( bounds, Color.LightGoldenrodYellow );
+			graphics.spriteBatch.drawHollowRect( bounds, Color.LightGoldenrodYellow );
 			for( var i = 0; i < colliders.Count; i++ )
 				colliders[i].debugRender( graphics );
 		}
