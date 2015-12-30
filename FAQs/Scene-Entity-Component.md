@@ -8,7 +8,7 @@ Scene
 ==========
 The root of the ECS. Scenes can be thought of as the different parts of your game such as the menu, levels, credits, etc. Scenes manage a list of Entities, Renderers and PostProcessors (via add/remove methods) and call their methods at the appropriate times. You can also use the Scene to locate Entities via the **findEntity** and **findEntitiesByTag** methods. Scenes are also created with a Camera that you can choose to use or not.
 
-Scene's also provide a ContentManager (Scene.contentManager) that you can use to load up scene-specific content. When the scene is finished the content will be unloaded automatically. If you need to load global content (anything that would be used by several scenes) you can use the Core.contentManager which is not every explicitly unloaded.
+Scene's also provide a ContentManager (Scene.contentManager) that you can use to load up scene-specific content. When the scene is finished the content will be unloaded automatically. If you need to load global content (anything that would be used by several scenes) you can use the Core.contentManager which is not ever explicitly unloaded.
 
 
 Entity
@@ -25,7 +25,7 @@ Entity Lifecycle methods:
 
 Some of the key/important properties on an Entity are the following:
 
-- **order**: controls the order of Entities. This affects the order in which update is called on each Entity as well as the order of the tag lists.
+- **updateOrder**: controls the order of Entities. This affects the order in which update is called on each Entity as well as the order of the tag lists.
 - **tag**: use this however you want to. It can later be used to query the scene for all Entities with a specific tag (**Scene.findEntitiesByTag**).
 - **collider**:  the Collider managed by this Entity. Setting this property automatically registers the Collider with the Physics system.
 - **updateInterval**: specifies how often this Entities update method should be called. 1 means every frame, 2 is every other, etc
@@ -38,7 +38,7 @@ Components are added to and managed by an Entity. They make up the meat of your 
 
 Component Lifecycle methods:
 
-- **onAddedToEntity**: Called when this entity is added to a scene
+- **onAddedToEntity**: Called when this Component is added to an entity
 - **onRemovedFromEntity**:  Called when this component is removed from its entity. Do all cleanup here.
 - **onEntityPositionChanged**: called when the entity's position changes. This allows components to be aware that they have moved due to the parent entity moving.
 - **onAwake**: called in the same frame as onAddedToEntity but after all pending component changes are committed
