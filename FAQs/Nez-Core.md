@@ -21,7 +21,7 @@ Be careful not to confuse the Nez Physics system with realistic physics simulati
 TimerManager
 ==========
 
-The TimerManager is a simple helper that lets you pass in an Action that can be called once or repeately with or without a delay. The **Core.schedule** method provides easy access to the TimerManager. When you call **schedule** you get back an ITimer object that has a **stop** method that can be used to top the timer from firing again. Timers are automatically cached and reused so fire up as many as you need.
+The TimerManager is a simple helper that lets you pass in an Action that can be called once or repeately with or without a delay. The **Core.schedule** method provides easy access to the TimerManager. When you call **schedule** you get back an ITimer object that has a **stop** method that can be used to stop the timer from firing again. Timers are automatically cached and reused so fire up as many as you need.
 
 
 CoroutineManager
