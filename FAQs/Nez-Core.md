@@ -64,7 +64,7 @@ As you can probably guess, Input gets you access to all input (mouse, keyboard, 
 - **Pressed**: true only the frame that a button/key is pressed
 - **Released**: true only the frame that a button/key is released
 
-Several virtual input classes are also provided which let you combine multiple input types into a single class that you can query. For example, you can setup a VirtualButton that can map to a variety of differnt input types that should result in some object moving to the right. You can create the VirtualButton with the D key, right arrow key and Dpad-right and just query it to know if any of those were pressed. The same applies to other common scenarios as well. Have a look in the Input folder for the different virtual inputs available.
+Several virtual input classes are also provided which let you combine multiple input types into a single class that you can query. For example, you can setup a VirtualButton that can map to a variety of different input types that should result in some object moving to the right. You can create the VirtualButton with the D key, right arrow key and Dpad-right and just query it to know if any of those were pressed. The same applies to other common scenarios as well. Have a look in the Input folder for the different virtual inputs available.
 
 
 Debug
