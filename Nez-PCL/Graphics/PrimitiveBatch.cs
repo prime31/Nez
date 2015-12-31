@@ -72,7 +72,7 @@ namespace Nez
 		/// <param name="view">The view.</param>
 		public void begin( ref Matrix projection, ref Matrix view )
 		{
-			Debug.assertIsFalse( _hasBegun, "Invalid state. End must be called before Begin can be called again." );
+			Assert.isFalse( _hasBegun, "Invalid state. End must be called before Begin can be called again." );
 
 			// tell our basic effect to begin.
 			_basicEffect.Projection = projection;
@@ -102,8 +102,8 @@ namespace Nez
 
 		public void addVertex( Vector2 vertex, Color color, PrimitiveType primitiveType )
 		{
-			Debug.assertIsTrue( _hasBegun, "Invalid state. Begin must be called before AddVertex can be called." );
-			Debug.assertIsFalse( primitiveType == PrimitiveType.LineStrip || primitiveType == PrimitiveType.TriangleStrip || primitiveType == PrimitiveType.LineList, "The specified primitiveType is not supported by PrimitiveBatch" );
+			Assert.isTrue( _hasBegun, "Invalid state. Begin must be called before AddVertex can be called." );
+			Assert.isFalse( primitiveType == PrimitiveType.LineStrip || primitiveType == PrimitiveType.TriangleStrip || primitiveType == PrimitiveType.LineList, "The specified primitiveType is not supported by PrimitiveBatch" );
 
 			if( _triangleVertsCount >= _triangleVertices.Length )
 				flushTriangles();

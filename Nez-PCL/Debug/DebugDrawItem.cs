@@ -1,5 +1,7 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
+using Nez.BitmapFonts;
+using Microsoft.Xna.Framework.Graphics;
 
 
 namespace Nez
@@ -9,12 +11,24 @@ namespace Nez
 		enum DebugDrawType
 		{
 			Line,
-			HollowRectangle
+			HollowRectangle,
+			BitmapFontText,
+			SpriteFontText
 		}
-		
+
+		// used for Line items
 		public Vector2 start;
 		public Vector2 end;
 		public Rectangle rectangle;
+
+		// used for Text items
+		public string text;
+		public BitmapFont bitmapFont;
+		public SpriteFont spriteFont;
+		public Vector2 position;
+		public float scale;
+
+		// shared by multiple items
 		public Color color;
 		public float duration;
 
@@ -40,6 +54,30 @@ namespace Nez
 		}
 
 
+		public DebugDrawItem( BitmapFont bitmapFont, String text, Vector2 position, Color color, float duration, float scale )
+		{
+			this.bitmapFont = bitmapFont;
+			this.text = text;
+			this.position = position;
+			this.color = color;
+			this.scale = scale;
+			this.duration = duration;
+			_drawType = DebugDrawType.BitmapFontText;
+		}
+
+
+		public DebugDrawItem( SpriteFont spriteFont, String text, Vector2 position, Color color, float duration, float scale )
+		{
+			this.spriteFont = spriteFont;
+			this.text = text;
+			this.position = position;
+			this.color = color;
+			this.scale = scale;
+			this.duration = duration;
+			_drawType = DebugDrawType.SpriteFontText;
+		}
+
+
 		/// <summary>
 		/// returns true if we are done with this debug draw item
 		/// </summary>
@@ -53,6 +91,12 @@ namespace Nez
 				case DebugDrawType.HollowRectangle:
 					graphics.spriteBatch.drawHollowRect( rectangle, color );
 					break;
+				case DebugDrawType.BitmapFontText:
+					graphics.spriteBatch.DrawString( bitmapFont, text, position, color, 0f, Vector2.Zero, scale, SpriteEffects.None, 0f );
+					break;
+				case DebugDrawType.SpriteFontText:
+					graphics.spriteBatch.DrawString( spriteFont, text, position, color, 0f, Vector2.Zero, scale, SpriteEffects.None, 0f );
+				break;
 			}
 
 			duration -= Time.deltaTime;

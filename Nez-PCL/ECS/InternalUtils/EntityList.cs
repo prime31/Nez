@@ -98,7 +98,7 @@ namespace Nez
 		internal void addToTagList( Entity entity )
 		{
 			var list = entitiesWithTag( entity.tag );
-			Debug.assertIsFalse( list.Contains( entity ), "Entity tag list already contains this entity: {0}", entity );
+			Assert.isFalse( list.Contains( entity ), "Entity tag list already contains this entity: {0}", entity );
 
 			list.Add( entity );
 			_unsortedTags.Add( entity.tag );

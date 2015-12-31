@@ -2,6 +2,8 @@
 using System.Diagnostics;
 using Microsoft.Xna.Framework;
 using System.Collections.Generic;
+using Nez.BitmapFonts;
+using Microsoft.Xna.Framework.Graphics;
 
 
 namespace Nez
@@ -112,61 +114,6 @@ namespace Nez
 		#endregion
 
 
-		#region Asserts
-
-		[Conditional( "DEBUG" )]
-		[DebuggerHidden]
-		public static void assertIsTrue( bool condition, string message, params object[] args )
-		{
-			if( !condition )
-				System.Diagnostics.Debug.Assert( false, string.Format( message, args ) );
-		}
-
-
-		[Conditional( "DEBUG" )]
-		[DebuggerHidden]
-		public static void assertIsFalse( bool condition, string message, params object[] args )
-		{
-			assertIsTrue( !condition, message, args );
-		}
-
-
-		[Conditional( "DEBUG" )]
-		[DebuggerHidden]
-		public static void assertIsNull( object obj, string message, params object[] args )
-		{
-			assertIsTrue( obj == null, message, args );
-		}
-
-
-		[Conditional( "DEBUG" )]
-		[DebuggerHidden]
-		public static void assertIsNotNull( object obj, string message, params object[] args )
-		{
-			assertIsTrue( obj != null, message, args );
-		}
-
-
-		[Conditional( "DEBUG" )]
-		[DebuggerHidden]
-		public static void assertAreEqual( object first, object second, string message, params object[] args )
-		{
-			if( first != second )
-				System.Diagnostics.Debug.Assert( false, string.Format( message, args ) );
-		}
-
-
-		[Conditional( "DEBUG" )]
-		[DebuggerHidden]
-		public static void assertAreNotEqual( object first, object second, string message, params object[] args )
-		{
-			if( first == second )
-				System.Diagnostics.Debug.Assert( false, string.Format( message, args ) );
-		}
-
-		#endregion
-
-
 		#region Drawing
 
 		static List<DebugDrawItem> _debugDrawItems = new List<DebugDrawItem>();
@@ -204,6 +151,20 @@ namespace Nez
 		public static void drawHollowRect( Rectangle rectangle, Color color, float duration = 0f )
 		{
 			_debugDrawItems.Add( new DebugDrawItem( rectangle, color, duration ) );
+		}
+
+
+		[Conditional( "DEBUG" )]
+		public static void drawText( BitmapFont font, string text, Vector2 position, Color color, float duration = 0f, float scale = 1f )
+		{
+			_debugDrawItems.Add( new DebugDrawItem( font, text, position, color, duration, scale ) );
+		}
+
+
+		[Conditional( "DEBUG" )]
+		public static void drawText( SpriteFont font, string text, Vector2 position, Color color, float duration = 0f, float scale = 1f )
+		{
+			_debugDrawItems.Add( new DebugDrawItem( font, text, position, color, duration, scale ) );
 		}
 
 		#endregion

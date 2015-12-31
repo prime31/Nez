@@ -57,7 +57,7 @@ namespace Nez
 		internal void addEntity( Entity entity )
 		{
 			var list = getEntitiesWithTag( entity.tag );
-			Debug.assertIsFalse( list.Contains( entity ), "Entity tag list already contains this entity" );
+			Assert.isFalse( list.Contains( entity ), "Entity tag list already contains this entity" );
 
 			list.Add( entity );
 			_areAnyUnsorted = true;
