@@ -61,6 +61,7 @@
     <Folder Include="ECS\Components\Renderables\Particles\" />
     <Folder Include="PipelineRuntime\ParticleDesigner\" />
     <Folder Include="Utils\Analysis\" />
+    <Folder Include="Physics\Shapes\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Debug\Debug.cs" />
@@ -171,7 +172,6 @@
     <Compile Include="Utils\NezContentManager.cs" />
     <Compile Include="ECS\Components\Renderables\Sprites\SpriteAnimationFrame.cs" />
     <Compile Include="ECS\Components\Physics\PolygonCollider.cs" />
-    <Compile Include="ECS\Components\Physics\OrientedBoxCollider.cs" />
     <Compile Include="ECS\Components\CameraShake.cs" />
     <Compile Include="Utils\Screen.cs" />
     <Compile Include="Physics\QuadTree\QuadTree.cs" />
@@ -194,6 +194,13 @@
     <Compile Include="ECS\Components\Renderables\Sprites\SpriteTrail.cs" />
     <Compile Include="ECS\Components\Renderables\Sprites\SpriteT.cs" />
     <Compile Include="ECS\Components\Renderables\Sprites\Sprite.cs" />
+    <Compile Include="Physics\Shapes\Shape.cs" />
+    <Compile Include="Physics\Shapes\Polygon.cs" />
+    <Compile Include="Physics\Shapes\ShapeCollisionResult.cs" />
+    <Compile Include="Physics\Shapes\ShapeCollisions.cs" />
+    <Compile Include="Physics\Shapes\Circle.cs" />
+    <Compile Include="Physics\Shapes\Box.cs" />
     <Compile Include="Graphics\SpriteBatchExt.cs" />
+    <Compile Include="Debug\Assert.cs" />
   </ItemGroup>
 </Project>
