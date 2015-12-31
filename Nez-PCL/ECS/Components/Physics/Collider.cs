@@ -182,6 +182,43 @@ namespace Nez
 		}
 
 
+		/// <summary>
+		/// checks to see if this Collider collides with collider. If it does, true will be returned and result will be populated
+		/// with collision data
+		/// </summary>
+		/// <returns><c>true</c>, if with was collidesed, <c>false</c> otherwise.</returns>
+		/// <param name="collider">Collider.</param>
+		/// <param name="result">Result.</param>
+		public bool collidesWith( Collider collider, out ShapeCollisionResult result )
+		{
+			return shape.collidesWithShape( collider.shape, out result );
+		}
+
+
+		/// <summary>
+		/// checks to see if this Collider with motion applied (delta movement vector) collides with collider. If it does, true will be
+		/// returned and result will be populated.
+		/// with collision data
+		/// </summary>
+		/// <returns><c>true</c>, if with was collidesed, <c>false</c> otherwise.</returns>
+		/// <param name="collider">Collider.</param>
+		/// <param name="motion">Motion.</param>
+		/// <param name="result">Result.</param>
+		public bool collidesWith( Collider collider, Vector2 motion, out ShapeCollisionResult result )
+		{
+			// alter the shapes position so that it is in the place it would be after movement so we can check for overlaps
+			var oldPosition = shape.position;
+			shape.position = absolutePosition + motion;
+
+			var didCollide = shape.collidesWithShape( collider.shape, out result );
+
+			// return the shapes position to where it was before the check
+			shape.position = oldPosition;
+
+			return didCollide;
+		}
+
+
 		public virtual void debugRender( Graphics graphics )
 		{
 			graphics.spriteBatch.drawHollowRect( bounds, Color.IndianRed );

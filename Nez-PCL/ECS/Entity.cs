@@ -344,11 +344,8 @@ namespace Nez
 		{
 			foreach( var neighbor in neighbors )
 			{
-				// alter the shapes position so that it is in the place it would be after movement so we can check for overlaps
-				collider.shape.position = collider.absolutePosition + motion;
-
 				ShapeCollisionResult result;
-				if( collider.shape.collidesWithShape( neighbor.shape, out result ) )
+				if( collider.collidesWith( neighbor, motion, out result ) )
 				{
 					// if we have a trigger notify the listener but we dont alter movement
 					if( neighbor.isTrigger )
