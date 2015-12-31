@@ -30,12 +30,22 @@ namespace Nez
 		}
 
 
+		public static int fastFloorToInt( float x )
+		{
+			return x > 0 ? (int)x : (int)x - 1;
+		}
+
+
 		public static int roundToInt( float f )
 		{
 			return (int)Math.Round( (double)f );
 		}
 
 
+		/// <summary>
+		/// clamps value between 0 and 1
+		/// </summary>
+		/// <param name="value">Value.</param>
 		public static float clamp01( float value )
 		{
 			if( value < 0f )
@@ -84,6 +94,13 @@ namespace Nez
 		}
 
 
+		/// <summary>
+		/// lerps an angle in degrees between a and b. handles wrapping around 360
+		/// </summary>
+		/// <returns>The angle.</returns>
+		/// <param name="a">The alpha component.</param>
+		/// <param name="b">The blue component.</param>
+		/// <param name="t">T.</param>
 		public static float lerpAngle( float a, float b, float t )
 		{
 			float num = Mathf.repeat( b - a, 360f );
@@ -108,6 +125,12 @@ namespace Nez
 		}
 
 
+		/// <summary>
+		/// if value >= threshold returns its sign else returns 0
+		/// </summary>
+		/// <returns>The threshold.</returns>
+		/// <param name="value">Value.</param>
+		/// <param name="threshold">Threshold.</param>
 		static public float signThreshold( float value, float threshold )
 		{
 			if( Math.Abs( value ) >= threshold )
@@ -240,6 +263,17 @@ namespace Nez
 			return (float)Math.Exp( power );
 		}
 
+
+		/// <summary>
+		/// returns the angle whose tangent is the quotient of two specified numbers
+		/// </summary>
+		/// <param name="y">The y coordinate.</param>
+		/// <param name="x">The x coordinate.</param>
+		public static float atan2( float y, float x )
+		{
+			return (float)Math.Atan2( y, x );
+		}
+
 		#endregion
 
 
@@ -247,7 +281,7 @@ namespace Nez
 
 		static public float angleBetweenVectors( Vector2 from, Vector2 to )
 		{
-			return (float)Math.Atan2( to.Y - from.Y, to.X - from.X );
+			return Mathf.atan2( to.Y - from.Y, to.X - from.X );
 		}
 
 

@@ -4,11 +4,15 @@ using Microsoft.Xna.Framework;
 
 
 namespace Nez.Spatial
-{	
+{
 	public class SpatialHash
 	{
+		public Rectangle gridBounds = new Rectangle();
+
+
+		RaycastResultParser _raycastParser;
 		int _cellSize;
-		int _inverseCellSize;
+		float _inverseCellSize;
 
 		/// <summary>
 		/// the Dictionary that holds all of the data
@@ -24,16 +28,42 @@ namespace Nez.Spatial
 		public SpatialHash( int cellSize = 100 )
 		{
 			_cellSize = cellSize;
-			_inverseCellSize = 1 / _cellSize;
+			_inverseCellSize = 1f / _cellSize;
+			_raycastParser = new RaycastResultParser( cellSize );
 		}
 
 
+		/// <summary>
+		/// gets the cell x,y values for a world-space x,y value
+		/// </summary>
+		/// <returns>The coords.</returns>
+		/// <param name="x">The x coordinate.</param>
+		/// <param name="y">The y coordinate.</param>
 		Point cellCoords( int x, int y )
 		{
 			return new Point( Mathf.floorToInt( x * _inverseCellSize ), Mathf.floorToInt( y * _inverseCellSize ) );
 		}
 
 
+		/// <summary>
+		/// gets the cell x,y values for a world-space x,y value
+		/// </summary>
+		/// <returns>The coords.</returns>
+		/// <param name="x">The x coordinate.</param>
+		/// <param name="y">The y coordinate.</param>
+		Point cellCoords( float x, float y )
+		{
+			return new Point( Mathf.floorToInt( x * _inverseCellSize ), Mathf.floorToInt( y * _inverseCellSize ) );
+		}
+
+
+		/// <summary>
+		/// gets the cell at the world-space x,y value. If the cell is empty and createCellIfEmpty is true a new cell will be created.
+		/// </summary>
+		/// <returns>The at position.</returns>
+		/// <param name="x">The x coordinate.</param>
+		/// <param name="y">The y coordinate.</param>
+		/// <param name="createCellIfEmpty">If set to <c>true</c> create cell if empty.</param>
 		List<Collider> cellAtPosition( int x, int y, bool createCellIfEmpty = false )
 		{
 			List<Collider> cell = null;
@@ -59,6 +89,13 @@ namespace Nez.Spatial
 			var bounds = obj.bounds;
 			var p1 = cellCoords( bounds.X, bounds.Y );
 			var p2 = cellCoords( bounds.Right, bounds.Bottom );
+
+			// update our bounds to keep track of our grid size
+			if( !gridBounds.Contains( p1 ) )
+				RectangleExt.union( ref gridBounds, ref p1, out gridBounds );
+
+			if( !gridBounds.Contains( p2 ) )
+				RectangleExt.union( ref gridBounds, ref p2, out gridBounds );
 
 			for( var x = p1.X; x <= p2.X; x++ )
 			{
@@ -86,7 +123,10 @@ namespace Nez.Spatial
 				for( var y = p1.Y; y <= p2.Y; y++ )
 				{
 					// the cell should always exist since this collider should be in all queryed cells
-					cellAtPosition( x, y ).Remove( obj );
+					var cell = cellAtPosition( x, y );
+					Assert.isNotNull( cell, "removing Collider [{0}] from a cell that it is not present in", obj );
+					if( cell != null )
+						cell.Remove( obj );
 				}
 			}
 		}
@@ -108,6 +148,36 @@ namespace Nez.Spatial
 		}
 
 
+		/// <summary>
+		/// debug draws the contents of the spatial hash. Note that Core.debugRenderEnabled must be true or nothing will be displayed.
+		/// </summary>
+		/// <param name="secondsToDisplay">Seconds to display.</param>
+		/// <param name="textScale">Text scale.</param>
+		public void debugDraw( float secondsToDisplay, float textScale = 1f )
+		{
+			for( var x = gridBounds.X; x <= gridBounds.Right; x++ )
+			{
+				for( var y = gridBounds.Y; y <= gridBounds.Bottom; y++ )
+				{
+					var cell = cellAtPosition( x, y );
+					if( cell != null && cell.Count > 0 )
+						debugDrawCellDetails( x, y, cell.Count, secondsToDisplay, textScale );
+				}
+			}
+		}
+
+
+		void debugDrawCellDetails( int x, int y, int cellCount, float secondsToDisplay = 0.5f, float textScale = 1f )
+		{
+			Debug.drawHollowRect( new Rectangle( x * _cellSize, y * _cellSize, _cellSize, _cellSize ), Color.Red, secondsToDisplay );
+
+			if( cellCount > 0 )
+			{
+				var textPosition = new Vector2( (float)x * (float)_cellSize + 0.5f * _cellSize, (float)y * (float)_cellSize + 0.5f * _cellSize );
+				Debug.drawText( Graphics.instance.bitmapFont, cellCount.ToString(), textPosition, Color.DarkGreen, secondsToDisplay, textScale );
+			}
+		}
+
 
 		/// <summary>
 		/// returns all the Colliders in the SpatialHash
@@ -125,7 +195,7 @@ namespace Nez.Spatial
 		/// <returns>The neighbors.</returns>
 		/// <param name="bounds">Bounds.</param>
 		/// <param name="layerMask">Layer mask.</param>
-		public HashSet<Collider> boxcastBroadphase( ref Rectangle bounds, Collider excludeCollider, int layerMask )
+		public HashSet<Collider> aabbBroadphase( ref Rectangle bounds, Collider excludeCollider, int layerMask )
 		{
 			_tempHashset.Clear();
 
@@ -158,6 +228,82 @@ namespace Nez.Spatial
 			return _tempHashset;
 		}
 
+
+		public int linecastAll( Vector2 start, Vector2 end, RaycastHit[] hits, int layerMask )
+		{
+			var ray = new Ray2D( start, end );
+			_raycastParser.start( ref ray, hits, layerMask );
+
+			// get our start/end position in the same space as our grid
+			start.X *= _inverseCellSize;
+			start.Y *= _inverseCellSize;
+			var endCell = cellCoords( end.X, end.Y );
+
+			// TODO: check gridBounds to ensure the ray starts/ends in the grid. watch out for end cells since they report out of bounds due to int comparison
+
+			// what voxel are we on
+			var intX = Mathf.fastFloorToInt( start.X );
+			var intY = Mathf.fastFloorToInt( start.Y );
+
+			// which way we go
+			var stepX = Math.Sign( ray.direction.X );
+			var stepY = Math.Sign( ray.direction.Y );
+
+			// Calculate cell boundaries. when the step is positive, the next cell is after this one meening we add 1.
+			// If negative, cell is before this one in which case dont add to boundary
+			var boundaryX = intX + ( stepX > 0 ? 1 : 0 );
+			var boundaryY = intY + ( stepY > 0 ? 1 : 0 );
+
+			// determine the value of t at which the ray crosses the first vertical voxel boundary. same for y/horizontal.
+			// The minimum of these two values will indicate how much we can travel along the ray and still remain in the current voxel
+			// may be infinite for near vertical/horizontal rays
+			var tMaxX = ( boundaryX - start.X ) / ray.direction.X;
+			var tMaxY = ( boundaryY - start.Y ) / ray.direction.Y;
+			if( ray.direction.X == 0f )
+				tMaxX = float.PositiveInfinity;
+			if( ray.direction.Y == 0f )
+				tMaxY = float.PositiveInfinity;
+
+			// how far do we have to walk before crossing a cell from a cell boundary. may be infinite for near vertical/horizontal rays
+			var tDeltaX = stepX / ray.direction.X;
+			var tDeltaY = stepY / ray.direction.Y;
+
+			// start walking and returning the intersecting cells.
+			var cell = cellAtPosition( intX, intY );
+			//debugDrawCellDetails( intX, intY, cell != null ? cell.Count : 0 );
+			if( _raycastParser.checkRayIntersection( intX, intY, cell ) )
+			{
+				_raycastParser.reset();
+				return _raycastParser.hitCounter;
+			}
+
+			while( intX != endCell.X || intY != endCell.Y )
+			{
+				if( tMaxX < tMaxY )
+				{
+					intX += stepX;
+					tMaxX += tDeltaX;
+				}
+				else
+				{
+					intY += stepY;
+					tMaxY += tDeltaY;
+				}
+
+				cell = cellAtPosition( intX, intY );
+				//debugDrawCellDetails( intX, intY, cell != null ? cell.Count : 0 );
+				if( _raycastParser.checkRayIntersection( intX, intY, cell ) )
+				{
+					_raycastParser.reset();
+					return _raycastParser.hitCounter;
+				}
+			}
+
+			// make sure we are reset
+			_raycastParser.reset();
+			return _raycastParser.hitCounter;
+		}
+	
 	}
 
 
@@ -231,6 +377,109 @@ namespace Nez.Spatial
 			_store.Clear();
 		}
 
+	}
+
+
+	class RaycastResultParser
+	{
+		public RaycastHit[] hits;
+		public int hitCounter;
+
+		static Comparison<RaycastHit> compareRaycastHits = ( a, b ) => { return a.distance.CompareTo( b.distance ); };
+		//int _cellSize;
+		RaycastHit _tempHit;
+		//Rectangle _hitTesterRect; see note in checkRayIntersection
+		List<Collider> _checkedColliders = new List<Collider>();
+		Ray2D _ray;
+		int _layerMask;
+
+
+		public RaycastResultParser( int cellSize )
+		{
+			//_cellSize = cellSize;
+			//_hitTesterRect = new Rectangle( 0, 0, _cellSize, _cellSize );
+		}
+
+
+		public void start( ref Ray2D ray, RaycastHit[] hits, int layerMask )
+		{
+			_ray = ray;
+			this.hits = hits;
+			_layerMask = layerMask;
+			hitCounter = 0;
+		}
+
+
+		/// <summary>
+		/// returns true if the hits array gets filled
+		/// </summary>
+		/// <returns><c>true</c>, if ray intersection was checked, <c>false</c> otherwise.</returns>
+		/// <param name="ray">Ray.</param>
+		/// <param name="cellX">Cell x.</param>
+		/// <param name="cellY">Cell y.</param>
+		/// <param name="cell">Cell.</param>
+		/// <param name="hits">Hits.</param>
+		/// <param name="hitCounter">Hit counter.</param>
+		public bool checkRayIntersection( int cellX, int cellY, List<Collider> cell )
+		{
+			if( cell == null )
+				return false;
+			
+			float fraction;
+			for( var i = 0; i < cell.Count; i++ )
+			{
+				var potential = cell[i];
+
+				// manage which colliders we already processed
+				if( _checkedColliders.Contains( potential ) )
+					continue;
+				_checkedColliders.Add( potential );
+
+				// only hit triggers if we are set to do so and make sure the Collider is on the layerMask
+				if( potential.isTrigger && !Physics.raycastsHitTriggers && !Flags.isFlagSet( _layerMask, potential.physicsLayer ) )
+					continue;
+
+				// TODO: is rayIntersects performant enough? profile it. Collisions.rectToLine might be faster
+				// TODO: if the bounds check returned more data we wouldnt have to do any more for a BoxCollider check
+				// first a bounds check before doing a shape test
+				var colliderBounds = potential.bounds;
+				if( RectangleExt.rayIntersects( ref colliderBounds, ref _ray, out fraction ) && fraction <= 1.0f )
+				{
+					// check to see if the raycast hit at a 0 fraction which would indicate that it started inside the collider
+					if( !Physics.raycastsStartInColliders && fraction == 0f )
+						continue;
+
+					// TODO: if this is a BoxCollider we are all done. if it isnt we need to check for a more detailed collision
+					if( potential.shape.collidesWithLine( _ray.start, _ray.end, out _tempHit ) )
+					{
+						// TODO: make sure the collision point is in the current cell and if it isnt store it off for later evaluation
+						//_hitTesterRect.X = cellX * _cellSize;
+						//_hitTesterRect.Y = cellY * _cellSize;
+						//if( !_hitTesterRect.Contains( _tempHit.point ) )
+
+						hits[hitCounter] = _tempHit;
+						hits[hitCounter].collider = potential;
+
+						// increment the hit counter and if it has reached the array size limit we are done
+						hitCounter++;
+						if( hitCounter == hits.Length - 1 )
+						{
+							Array.Sort( hits, compareRaycastHits );
+							return true;
+						}
+					}
+				}
+			}
+
+			return false;
+		}
+
+
+		public void reset()
+		{
+			hits = null;
+			_checkedColliders.Clear();
+		}
 	}
 
 }

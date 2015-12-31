@@ -1,4 +1,5 @@
 ﻿using System;
+using Microsoft.Xna.Framework;
 
 
 namespace Nez
@@ -23,20 +24,48 @@ namespace Nez
 		/// </summary>
 		public float distance;
 
+		/// <summary>
+		/// The point in world space where the ray hit the collider's surface
+		/// </summary>
+		public Vector2 point;
 
-		public RaycastHit( Collider collider, float fraction, float distance )
+		/// <summary>
+		/// The normal vector of the surface hit by the ray
+		/// </summary>
+		public Vector2 normal;
+
+		/// <summary>
+		/// The centroid of the primitive used to perform the cast. Where the shape would be positioned for it to contact.
+		/// </summary>
+		public Vector2 centroid;
+
+
+		public RaycastHit( Collider collider, float fraction, float distance, Vector2 point, Vector2 normal )
 		{
 			this.collider = collider;
 			this.fraction = fraction;
 			this.distance = distance;
+			this.point = point;
+			this.normal = normal;
+			this.centroid = Vector2.Zero;
 		}
 
 
-		internal void setValues( Collider collider, float fraction, float distance )
+		internal void setValues( Collider collider, float fraction, float distance, Vector2 point )
 		{
 			this.collider = collider;
 			this.fraction = fraction;
 			this.distance = distance;
+			this.point = point;
+		}
+
+
+		internal void setValues( float fraction, float distance, Vector2 point, Vector2 normal )
+		{
+			this.fraction = fraction;
+			this.distance = distance;
+			this.point = point;
+			this.normal = normal;
 		}
 
 

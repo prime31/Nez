@@ -53,6 +53,19 @@ namespace Nez
 
 
 		/// <summary>
+		/// Update first to be the union of first and point
+		/// </summary>
+		/// <param name="first">First.</param>
+		/// <param name="point">Point.</param>
+		/// <param name="result">Result.</param>
+		public static void union( ref Rectangle first, ref Point point, out Rectangle result )
+		{
+			var rect = new Rectangle( point.X, point.Y, 0, 0 );
+			union( ref first, ref rect, out result );
+		}
+
+
+		/// <summary>
 		/// given the points of a polygon calculates the bounds
 		/// </summary>
 		/// <returns>The from polygon points.</returns>
@@ -165,21 +178,21 @@ namespace Nez
 		}
 
 		
-		public static bool rayIntersects( ref Rectangle rect, Ray2D ray, out float distance )
+		public static bool rayIntersects( ref Rectangle rect, ref Ray2D ray, out float distance )
 		{
 			distance = 0f;
 			var maxValue = float.MaxValue;
 
 			if( Math.Abs( ray.direction.X ) < 1E-06f )
 			{
-				if( ( ray.position.X < rect.X ) || ( ray.position.X > rect.X + rect.Width ) )
+				if( ( ray.start.X < rect.X ) || ( ray.start.X > rect.X + rect.Width ) )
 					return false;
 			}
 			else
 			{
 				float num11 = 1f / ray.direction.X;
-				float num8 = ( rect.X - ray.position.X ) * num11;
-				float num7 = ( rect.X + rect.Width - ray.position.X ) * num11;
+				float num8 = ( rect.X - ray.start.X ) * num11;
+				float num7 = ( rect.X + rect.Width - ray.start.X ) * num11;
 				if( num8 > num7 )
 				{
 					float num14 = num8;
@@ -197,7 +210,7 @@ namespace Nez
 
 			if( Math.Abs( ray.direction.Y ) < 1E-06f )
 			{
-				if( ( ray.position.Y < rect.Y ) || ( ray.position.Y > rect.Y + rect.Height ) )
+				if( ( ray.start.Y < rect.Y ) || ( ray.start.Y > rect.Y + rect.Height ) )
 				{
 					return false;
 				}
@@ -205,8 +218,8 @@ namespace Nez
 			else
 			{
 				float num10 = 1f / ray.direction.Y;
-				float num6 = ( rect.Y - ray.position.Y ) * num10;
-				float num5 = ( rect.Y + rect.Height - ray.position.Y ) * num10;
+				float num6 = ( rect.Y - ray.start.Y ) * num10;
+				float num5 = ( rect.Y + rect.Height - ray.start.Y ) * num10;
 				if( num6 > num5 )
 				{
 					float num13 = num6;
