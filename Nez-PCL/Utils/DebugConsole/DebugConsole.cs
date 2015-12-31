@@ -545,6 +545,23 @@ namespace Nez.Console
 				foreach( var method in type.GetMethods( BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic ) )
 					processMethod( method );
 
+			try
+			{
+				var currentdomain = typeof( string ).Assembly.GetType( "System.AppDomain" ).GetProperty( "CurrentDomain" ).GetGetMethod().Invoke( null, new object[] { } );
+				var getassemblies = currentdomain.GetType().GetMethod( "GetAssemblies", new Type[]{ } );
+				var assemblies = getassemblies.Invoke( currentdomain, new object[]{ } ) as Assembly[];
+
+				foreach( var assembly in assemblies )
+					foreach( var type in assembly.GetTypes() )
+						foreach( var method in type.GetMethods( BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic ) )
+							processMethod( method );
+			}
+			catch( Exception e )
+			{
+				Debug.log( "DebugConsole pooped itself trying to get all the loaded assemblies. {0}", e );
+			}
+
+
 			// Maintain the sorted command list
 			foreach( var command in _commands )
 				_sorted.Add( command.Key );

@@ -286,7 +286,7 @@ namespace Nez
 		/// <param name="entity">The Entity to add</param>
 		public void addEntity( Entity entity )
 		{
-			Debug.assertIsFalse( entities.contains( entity ), "You are attempting to add the same entity to a scene twice: {0}", entity );
+			Assert.isFalse( entities.contains( entity ), "You are attempting to add the same entity to a scene twice: {0}", entity );
 			entities.add( entity );
 		}
 
