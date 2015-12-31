@@ -1,20 +1,20 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
+using Nez.PhysicsShapes;
 
 
 namespace Nez
 {
 	public class CircleCollider : Collider
 	{
-		public float _radius;
 		public float radius
 		{
-			get { return _radius; }
+			get { return ((Circle)shape).radius; }
 			set
 			{
 				// store the old bounds so we can update ourself after modifying them
 				var oldBounds = bounds;
-				_radius = value;
+				((Circle)shape).radius = value;
 				_areBoundsDirty = true;
 
 				if( entity != null && _isParentEntityAddedToScene )
@@ -22,35 +22,6 @@ namespace Nez
 			}
 		}
 
-		public override float width
-		{
-			get { return _radius * 2f; }
-			set { radius = value * 0.5f; }
-		}
-
-		/// <summary>
-		/// for a circle, height is radius * 2
-		/// </summary>
-		/// <value>The height.</value>
-		public override float height
-		{
-			get { return _radius * 2f; }
-			set { radius = value * 0.5f; }
-		}
-
-		public override Rectangle bounds
-		{
-			get
-			{
-				if( _areBoundsDirty )
-				{
-					_bounds = RectangleExt.fromFloats( entity.position.X + _localPosition.X + origin.X - _radius, entity.position.Y + _localPosition.Y + origin.Y - _radius, width, height );
-					_areBoundsDirty = false;
-				}
-
-				return _bounds;
-			}
-		}
 
 		/// <summary>
 		/// zero param constructor requires that a RenderableComponent be on the entity so that the collider can size itself when the
@@ -72,7 +43,7 @@ namespace Nez
 		/// <param name="radius">Radius.</param>
 		public CircleCollider( float radius )
 		{
-			_radius = radius;
+			new Circle( radius );
 		}
 
 
@@ -84,55 +55,21 @@ namespace Nez
 		/// <param name="origin">Origin.</param>
 		public CircleCollider( float radius, Vector2 origin )
 		{
-			_radius = radius;
+			new Circle( radius );
 			_origin = origin;
 		}
 
 
 		public override void debugRender( Graphics graphics )
 		{
-			graphics.spriteBatch.drawCircle( bounds.getCenter(), _radius, Color.IndianRed );
+			graphics.spriteBatch.drawCircle( bounds.getCenter(), ((Circle)shape).radius, Color.IndianRed );
 			graphics.spriteBatch.drawPixel( bounds.getCenter(), Color.IndianRed, 4 );
 		}
 
 
-		#region Collisions
-
-		public override bool collidesWith( Vector2 from, Vector2 to )
-		{
-			return Collisions.circleToLine( bounds.getPosition(), _radius, from, to );
-		}
-
-
-		public override bool collidesWith( BoxCollider boxCollider )
-		{
-			return Collisions.rectToCircle( boxCollider.bounds, bounds.getCenter(), _radius );
-		}
-
-
-		public override bool collidesWith( CircleCollider circle )
-		{
-			return Collisions.circleToCircle( bounds.getCenter(), _radius, circle.bounds.getCenter(), circle._radius );
-		}
-
-
-		public override bool collidesWith( MultiCollider list )
-		{
-			return list.collidesWith( this );
-		}
-
-
-		public override bool collidesWith( PolygonCollider polygon )
-		{
-			return Collisions.polygonToCircle( polygon, bounds.getCenter(), _radius );
-		}
-
-		#endregion
-
-
 		public override string ToString()
 		{
-			return string.Format( "[CircleCollider: bounds: {0}, radius: {1}", bounds, _radius );
+			return string.Format( "[CircleCollider: bounds: {0}, radius: {1}", bounds, ((Circle)shape).radius );
 		}
 
 	}

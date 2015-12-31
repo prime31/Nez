@@ -1,22 +1,22 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
+using Nez.PhysicsShapes;
 
 
 namespace Nez
 {
 	public class BoxCollider : Collider
 	{
-		float _width;
-		public override float width
+		public float width
 		{
-			get { return _width; }
+			get { return ((Box)shape).width; }
 			set
 			{
-				if( value != _width )
+				if( value != ((Box)shape).width )
 				{
 					// store the old bounds so we can update ourself after modifying them
 					var oldBounds = bounds;
-					_width = value;
+					((Box)shape).width = value;
 					if( entity != null && _isParentEntityAddedToScene )
 						Physics.updateCollider( this, ref oldBounds );
 					_areBoundsDirty = true;
@@ -24,20 +24,19 @@ namespace Nez
 			}
 		}
 
-		float _height;
-		public override float height
+		public float height
 		{
 			get
 			{
-				return _height;
+				return ((Box)shape).height;
 			}
 			set
 			{
-				if( value != _height )
+				if( value != ((Box)shape).height )
 				{
 					// store the old bounds so we can update ourself after modifying them
 					var oldBounds = bounds;
-					_height = value;
+					((Box)shape).height = value;
 					if( entity != null && _isParentEntityAddedToScene )
 						Physics.updateCollider( this, ref oldBounds );
 					_areBoundsDirty = true;
@@ -57,8 +56,7 @@ namespace Nez
 		public BoxCollider( float x, float y, float width, float height )
 		{
 			_localPosition = new Vector2( x, y );
-			_width = width;
-			_height = height;
+			shape = new Box( width, height );
 		}
 
 
@@ -68,40 +66,6 @@ namespace Nez
 
 		public BoxCollider( Rectangle rect ) : this( rect.X, rect.Y, rect.Width, rect.Height )
 		{}
-
-
-		#region Collisions
-
-		public override bool collidesWith( Vector2 from, Vector2 to )
-		{
-			return Collisions.rectToLine( bounds, from, to );
-		}
-
-
-		public override bool collidesWith( BoxCollider boxCollider )
-		{
-			return bounds.Intersects( boxCollider.bounds );
-		}
-
-
-		public override bool collidesWith( CircleCollider circle )
-		{
-			return Collisions.rectToCircle( bounds, circle.bounds.getCenter(), circle._radius );
-		}
-
-
-		public override bool collidesWith( MultiCollider list )
-		{
-			return list.collidesWith( this );
-		}
-
-
-		public override bool collidesWith( PolygonCollider polygon )
-		{
-			throw new NotImplementedException();
-		}
-
-		#endregion
 
 
 		public override string ToString()
