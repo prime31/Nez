@@ -25,8 +25,36 @@ namespace MacTester
 			else if( Input.isKeyDown( Keys.Down ) )
 				moveDir.Y = 1f;
 
+
 			if( moveDir != Vector2.Zero )
-				entity.moveActor( moveDir.X * _speed, moveDir.Y * _speed, this, this );
+			{
+				var movement = moveDir * _speed;
+				entity.moveActor( movement );
+			}
+		}
+
+
+		void move( Vector2 movement )
+		{
+			Physics.removeCollider( entity.collider, true );
+
+			var neighbors = Physics.boxcastBroadphaseExcludingSelf( entity.collider, movement.X, movement.Y );
+			foreach( var neighbor in neighbors )
+			{
+				neighbor.shape.position = neighbor.entity.position;
+				ShapeCollisionResult result;
+				entity.collider.shape.position = entity.position + movement;
+
+				if( entity.collider.shape.collidesWithShape( neighbor.shape, out result ) )
+				{
+					movement -= result.minimumTranslationVector;
+					Debug.log( "collided result: {0}. new movement: {1}", result, movement );
+				}
+			}
+
+			entity.position += movement;
+
+			Physics.addCollider( entity.collider );
 		}
 
 

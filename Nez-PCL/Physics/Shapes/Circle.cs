@@ -17,11 +17,12 @@ namespace Nez.PhysicsShapes
 
 		internal override void recalculateBounds( Collider collider )
 		{
+			position = collider.absolutePosition;
 			bounds = RectangleExt.fromFloats( collider.entity.position.X + collider.localPosition.X + collider.origin.X - radius, collider.entity.position.Y + collider.localPosition.Y + collider.origin.Y - radius, radius * 2f, radius * 2f );
 		}
 
 
-		public override bool collidesWithShape( Shape other, Vector2 deltaMovement, out ShapeCollisionResult result )
+		public override bool collidesWithShape( Shape other, out ShapeCollisionResult result )
 		{
 			result = new ShapeCollisionResult();
 

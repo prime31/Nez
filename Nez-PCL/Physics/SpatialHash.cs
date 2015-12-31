@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
+using Nez.PhysicsShapes;
 
 
 namespace Nez.Spatial
@@ -11,8 +12,26 @@ namespace Nez.Spatial
 
 
 		RaycastResultParser _raycastParser;
+
+		/// <summary>
+		/// the size of each cell in the hash
+		/// </summary>
 		int _cellSize;
+
+		/// <summary>
+		/// 1 over the cell size. cached result due to it being used a lot.
+		/// </summary>
 		float _inverseCellSize;
+
+		/// <summary>
+		/// cached box used for overlap checks
+		/// </summary>
+		Box _overlapTestBox = new Box( 0f, 0f );
+
+		/// <summary>
+		/// cached circle used for overlap checks
+		/// </summary>
+		Circle _overlapTestCirce = new Circle( 0f );
 
 		/// <summary>
 		/// the Dictionary that holds all of the data
@@ -189,6 +208,8 @@ namespace Nez.Spatial
 		}
 
 
+		#region hash queries
+
 		/// <summary>
 		/// returns all objects in cells that the bounding box intersects
 		/// </summary>
@@ -229,7 +250,15 @@ namespace Nez.Spatial
 		}
 
 
-		public int linecastAll( Vector2 start, Vector2 end, RaycastHit[] hits, int layerMask )
+		/// <summary>
+		/// casts a line through the spatial hash and fills the hits array up with any colliders that the line hits
+		/// </summary>
+		/// <returns>the number of Colliders returned</returns>
+		/// <param name="start">Start.</param>
+		/// <param name="end">End.</param>
+		/// <param name="hits">Hits.</param>
+		/// <param name="layerMask">Layer mask.</param>
+		public int linecast( Vector2 start, Vector2 end, RaycastHit[] hits, int layerMask )
 		{
 			var ray = new Ray2D( start, end );
 			_raycastParser.start( ref ray, hits, layerMask );
@@ -304,6 +333,114 @@ namespace Nez.Spatial
 			return _raycastParser.hitCounter;
 		}
 	
+
+		/// <summary>
+		/// gets all the colliders that fall within the specified rect
+		/// </summary>
+		/// <returns>the number of Colliders returned</returns>
+		/// <param name="rect">Rect.</param>
+		/// <param name="results">Results.</param>
+		/// <param name="layerMask">Layer mask.</param>
+		public int overlapRectangle( ref Rectangle rect, Collider[] results, int layerMask )
+		{
+			_overlapTestBox.updateBox( rect.Width, rect.Height );
+			_overlapTestBox.position = rect.Location.ToVector2();
+
+			var resultCounter = 0;
+			var potentials = aabbBroadphase( ref rect, null, layerMask );
+			foreach( var collider in potentials )
+			{
+				if( collider is BoxCollider )
+				{
+					results[resultCounter] = collider;
+					resultCounter++;
+				}
+				else if( collider is CircleCollider )
+				{
+					if( Collisions.rectToCircle( ref rect, collider.bounds.getCenter(), collider.bounds.Width * 0.5f ) )
+					{
+						results[resultCounter] = collider;
+						resultCounter++;
+					}
+				}
+				else if( collider is PolygonCollider )
+				{
+					ShapeCollisionResult res;
+					if( collider.shape.collidesWithShape( _overlapTestBox, out res ) )
+					{
+						results[resultCounter] = collider;
+						resultCounter++;
+					}
+				}
+				else
+				{
+					throw new NotImplementedException( "overlapRectangle against this collider type is not implemented!" );
+				}
+
+				// if our results array is full return
+				if( resultCounter == results.Length )
+					return resultCounter;
+			}
+
+			return resultCounter;
+		}
+
+
+		/// <summary>
+		/// gets all the colliders that fall within the specified circle
+		/// </summary>
+		/// <returns>the number of Colliders returned</returns>
+		/// <param name="circleCenter">Circle center.</param>
+		/// <param name="radius">Radius.</param>
+		/// <param name="results">Results.</param>
+		/// <param name="layerMask">Layer mask.</param>
+		public int overlapCircle( Vector2 circleCenter, float radius, Collider[] results, int layerMask )
+		{
+			var bounds = RectangleExt.fromFloats( circleCenter.X - radius, circleCenter.Y - radius, radius * 2f, radius * 2f );
+
+			_overlapTestCirce.radius = radius;
+			_overlapTestCirce.position = circleCenter;
+
+			ShapeCollisionResult res;
+			var resultCounter = 0;
+			var potentials = aabbBroadphase( ref bounds, null, layerMask );
+			foreach( var collider in potentials )
+			{
+				if( collider is BoxCollider )
+				{
+					results[resultCounter] = collider;
+					resultCounter++;
+				}
+				else if( collider is CircleCollider )
+				{
+					if( collider.shape.collidesWithShape( _overlapTestCirce, out res ) )
+					{
+						results[resultCounter] = collider;
+						resultCounter++;
+					}
+				}
+				else if( collider is PolygonCollider )
+				{
+					if( collider.shape.collidesWithShape( _overlapTestCirce, out res ) )
+					{
+						results[resultCounter] = collider;
+						resultCounter++;
+					}
+				}
+				else
+				{
+					throw new NotImplementedException( "overlapCircle against this collider type is not implemented!" );
+				}
+
+				// if our results array is full return
+				if( resultCounter == results.Length )
+					return resultCounter;
+			}
+
+			return resultCounter;
+		}
+
+		#endregion
 	}
 
 
@@ -382,14 +519,16 @@ namespace Nez.Spatial
 
 	class RaycastResultParser
 	{
-		public RaycastHit[] hits;
 		public int hitCounter;
 
 		static Comparison<RaycastHit> compareRaycastHits = ( a, b ) => { return a.distance.CompareTo( b.distance ); };
+
 		//int _cellSize;
-		RaycastHit _tempHit;
 		//Rectangle _hitTesterRect; see note in checkRayIntersection
+		RaycastHit[] _hits;
+		RaycastHit _tempHit;
 		List<Collider> _checkedColliders = new List<Collider>();
+		List<RaycastHit> _cellHits = new List<RaycastHit>();
 		Ray2D _ray;
 		int _layerMask;
 
@@ -404,7 +543,7 @@ namespace Nez.Spatial
 		public void start( ref Ray2D ray, RaycastHit[] hits, int layerMask )
 		{
 			_ray = ray;
-			this.hits = hits;
+			_hits = hits;
 			_layerMask = layerMask;
 			hitCounter = 0;
 		}
@@ -457,18 +596,25 @@ namespace Nez.Spatial
 						//_hitTesterRect.Y = cellY * _cellSize;
 						//if( !_hitTesterRect.Contains( _tempHit.point ) )
 
-						hits[hitCounter] = _tempHit;
-						hits[hitCounter].collider = potential;
-
-						// increment the hit counter and if it has reached the array size limit we are done
-						hitCounter++;
-						if( hitCounter == hits.Length - 1 )
-						{
-							Array.Sort( hits, compareRaycastHits );
-							return true;
-						}
+						_tempHit.collider = potential;
+						_cellHits.Add( _tempHit );
 					}
 				}
+			}
+
+			if( _cellHits.Count == 0 )
+				return false;
+
+			// all done processing the cell. sort the results and pack the hits into the result array
+			_cellHits.Sort( compareRaycastHits );
+			for( var i = 0; i < _cellHits.Count; i++ )
+			{
+				_hits[hitCounter] = _cellHits[i];
+
+				// increment the hit counter and if it has reached the array size limit we are done
+				hitCounter++;
+				if( hitCounter == _hits.Length )
+					return true;
 			}
 
 			return false;
@@ -477,9 +623,11 @@ namespace Nez.Spatial
 
 		public void reset()
 		{
-			hits = null;
+			_hits = null;
 			_checkedColliders.Clear();
+			_cellHits.Clear();
 		}
+	
 	}
 
 }

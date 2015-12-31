@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework;
 using System.Collections.Generic;
 using Nez.Spatial;
+using Nez.PhysicsShapes;
 
 
 namespace Nez
@@ -29,10 +30,17 @@ namespace Nez
 		/// </summary>
 		static RaycastHit[] _hitArray = new RaycastHit[1];
 
+		/// <summary>
+		/// allocation avoidance for overlap checks and shape casts
+		/// </summary>
+		static Collider[] _colliderArray = new Collider[1];
+
 
 		public static void reset()
 		{
 			_spatialHash = new SpatialHash( spatialHashCellSize );
+			_hitArray[0].reset();
+			_colliderArray[0] = null;
 		}
 
 
@@ -129,10 +137,18 @@ namespace Nez
 		}
 
 
+		/// <summary>
+		/// casts a line through the spatial hash and fills the hits array up with any colliders that the line hits
+		/// </summary>
+		/// <returns>The all.</returns>
+		/// <param name="start">Start.</param>
+		/// <param name="end">End.</param>
+		/// <param name="hits">Hits.</param>
+		/// <param name="layerMask">Layer mask.</param>
 		public static int linecastAll( Vector2 start, Vector2 end, RaycastHit[] hits, int layerMask = AllLayers )
 		{
 			Assert.isFalse( hits.Length == 0, "An empty hits array was passed in. No hits will ever be returned." );
-			return _spatialHash.linecastAll( start, end, hits, layerMask );
+			return _spatialHash.linecast( start, end, hits, layerMask );
 		}
 
 
@@ -156,32 +172,23 @@ namespace Nez
 		/// <param name="layerMask">Layer mask.</param>
 		public static Collider overlapRectangle( ref Rectangle rect, int layerMask = AllLayers )
 		{
-			var potentials = _spatialHash.aabbBroadphase( ref rect, null, layerMask );
-			foreach( var collider in potentials )
-			{
-				if( collider is BoxCollider )
-				{
-					return collider;
-				}
-				else if( collider is CircleCollider && Collisions.rectToCircle( ref rect, collider.bounds.getCenter(), collider.bounds.Width * 0.5f ) )
-				{
-					return collider;
-				}
-				else if( collider is MultiCollider )
-				{
-					throw new NotImplementedException( "overlapCircle against this collider type are not implemented!" );
-				}
-				else if( collider is PolygonCollider )
-				{
-					throw new NotImplementedException( "overlapCircle against this collider type are not implemented!" );
-				}
-				else
-				{
-					throw new NotImplementedException( "overlapCircle against this collider type are not implemented!" );
-				}
-			}
+			_colliderArray[0] = null;
+			_spatialHash.overlapRectangle( ref rect, _colliderArray, layerMask );
+			return _colliderArray[0];
+		}
 
-			return null;			
+
+		/// <summary>
+		/// gets all the colliders that fall within the specified rect
+		/// </summary>
+		/// <returns>the number of Colliders returned</returns>
+		/// <param name="rect">Rect.</param>
+		/// <param name="results">Results.</param>
+		/// <param name="layerMask">Layer mask.</param>
+		public static int overlapRectangleAll( ref Rectangle rect, Collider[] results, int layerMask = AllLayers )
+		{
+			Assert.isFalse( results.Length == 0, "An empty results array was passed in. No results will ever be returned." );
+			return _spatialHash.overlapRectangle( ref rect, results, layerMask );
 		}
 
 
@@ -194,47 +201,24 @@ namespace Nez
 		/// <param name="layerMask">Layer mask.</param>
 		public static Collider overlapCircle( Vector2 center, float radius, int layerMask = AllLayers )
 		{
-			var bounds = RectangleExt.fromFloats( center.X - radius, center.Y - radius, radius * 2f, radius * 2f );
-			var potentials = _spatialHash.aabbBroadphase( ref bounds, null, layerMask );
-			foreach( var collider in potentials )
-			{
-				if( collider is BoxCollider )
-				{
-					if( Collisions.rectToCircle( collider.bounds, center, radius ) )
-						return collider;
-				}
-				else if( collider is CircleCollider )
-				{
-					if( Collisions.circleToCircle( center, radius, collider.bounds.getCenter(), collider.bounds.Width * 0.5f ) )
-						return collider;
-				}
-				else if( collider is MultiCollider )
-				{
-					throw new NotImplementedException( "overlapCircle against this collider type are not implemented!" );
-				}
-				//else if( collider is PolygonCollider && Collisions.polygonToCircle( collider as PolygonCollider, center, radius ) )
-				{
-					return collider;
-				}
-				//else
-				{
-					throw new NotImplementedException( "overlapCircle against this collider type are not implemented!" );
-				}
-			}
-
-			return null;
+			_colliderArray[0] = null;
+			_spatialHash.overlapCircle( center, radius, _colliderArray, layerMask );
+			return _colliderArray[0];
 		}
 
 
 		/// <summary>
-		/// check if a collider overlaps a point in space
+		/// gets all the colliders that fall within the specified circle
 		/// </summary>
-		/// <returns>The point.</returns>
-		/// <param name="point">Point.</param>
+		/// <returns>the number of Colliders returned</returns>
+		/// <param name="center">Center.</param>
+		/// <param name="radius">Radius.</param>
+		/// <param name="results">Results.</param>
 		/// <param name="layerMask">Layer mask.</param>
-		public static Collider overlapPoint( Vector2 point, int layerMask = AllLayers )
+		public static int overlapCircleAll( Vector2 center, float radius, Collider[] results, int layerMask = AllLayers )
 		{
-			throw new NotImplementedException();
+			Assert.isFalse( results.Length == 0, "An empty results array was passed in. No results will ever be returned." );
+			return _spatialHash.overlapCircle( center, radius, results, layerMask );
 		}
 
 
@@ -246,7 +230,7 @@ namespace Nez
 		/// </summary>
 		/// <param name="bounds">Bounds.</param>
 		/// <param name="layerMask">Layer mask.</param>
-		public static HashSet<Collider> boxcastBroadphase( Rectangle rect, int layerMask = AllLayers )
+		public static IEnumerable<Collider> boxcastBroadphase( Rectangle rect, int layerMask = AllLayers )
 		{
 			return _spatialHash.aabbBroadphase( ref rect, null, layerMask );
 		}
@@ -257,7 +241,7 @@ namespace Nez
 		/// </summary>
 		/// <returns>The neighbors excluding self.</returns>
 		/// <param name="collider">Collider.</param>
-		public static HashSet<Collider> boxcastBroadphaseExcludingSelf( Collider collider, int layerMask = AllLayers )
+		public static IEnumerable<Collider> boxcastBroadphaseExcludingSelf( Collider collider, int layerMask = AllLayers )
 		{
 			var bounds = collider.bounds;
 			return _spatialHash.aabbBroadphase( ref bounds, collider, layerMask );
@@ -271,19 +255,19 @@ namespace Nez
 		/// <returns>The excluding self.</returns>
 		/// <param name="collider">Collider.</param>
 		/// <param name="bounds">Bounds.</param>
-		public static HashSet<Collider> boxcastBroadphaseExcludingSelf( Collider collider, ref Rectangle rect, int layerMask = AllLayers )
+		public static IEnumerable<Collider> boxcastBroadphaseExcludingSelf( Collider collider, ref Rectangle rect, int layerMask = AllLayers )
 		{
 			return _spatialHash.aabbBroadphase( ref rect, collider, layerMask );
 		}
 
 
 		/// <summary>
-		/// returns a HashSet of all colliders that are intersected by collider.bounds expanded to incorporate deltaX/deltaY
+		/// returns all colliders that are intersected by collider.bounds expanded to incorporate deltaX/deltaY
 		/// excluding the passed-in collider (self)
 		/// </summary>
 		/// <returns>The neighbors excluding self.</returns>
 		/// <param name="collider">Collider.</param>
-		public static HashSet<Collider> boxcastBroadphaseExcludingSelf( Collider collider, float deltaX, float deltaY, int layerMask = AllLayers )
+		public static IEnumerable<Collider> boxcastBroadphaseExcludingSelf( Collider collider, float deltaX, float deltaY, int layerMask = AllLayers )
 		{
 			var sweptBounds = collider.bounds.getSweptBroadphaseBounds( deltaX, deltaY );
 			return _spatialHash.aabbBroadphase( ref sweptBounds, collider, layerMask );

@@ -21,8 +21,9 @@ namespace Nez.PhysicsShapes
 
 		internal override void recalculateBounds( Collider collider )
 		{
+			position = collider.absolutePosition;
 			bounds = RectangleExt.boundsFromPolygonPoints( points );
-			bounds.Location += collider.absolutePosition.ToPoint();
+			bounds.Location += position.ToPoint();
 		}
 
 
@@ -40,7 +41,7 @@ namespace Nez.PhysicsShapes
 		}
 
 
-		public override bool collidesWithShape( Shape other, Vector2 deltaMovement, out ShapeCollisionResult result )
+		public override bool collidesWithShape( Shape other, out ShapeCollisionResult result )
 		{
 			result = new ShapeCollisionResult();
 

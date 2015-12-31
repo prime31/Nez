@@ -97,22 +97,6 @@ namespace Nez
 		{}
 
 
-		public bool collidesWithAtPosition( Collider collider, Vector2 position )
-		{
-			// store off the position so we can restore it after the check
-			var savedPosition = entity.position;
-			entity.position = position;
-
-			//var result = collidesWith( collider );
-			var result = false;
-
-			// restore position
-			entity.position = savedPosition;
-
-			return result;
-		}
-
-
 		/// <summary>
 		/// Called when the parent entity is added to a scene
 		/// </summary>

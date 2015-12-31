@@ -20,16 +20,18 @@ namespace Nez.PhysicsShapes
 		}
 
 
+		public void updateBox( float width, float height )
+		{
+			points[0] = new Vector2( 0, 0 );
+			points[1] = new Vector2( width, 0 );
+			points[2] = new Vector2( width, height );
+			points[3] = new Vector2( 0, height );
+		}
+
+
 		static Vector2[] buildBox( float width, float height )
 		{
 			var verts = new Vector2[4];
-			var halfWidth = width * 0.5f;
-			var halfHeight = height * 0.5f;
-
-			verts[0] = new Vector2( -halfWidth, -halfHeight );
-			verts[1] = new Vector2( halfWidth, -halfHeight );
-			verts[2] = new Vector2( halfWidth, halfHeight );
-			verts[3] = new Vector2( -halfWidth, halfHeight );
 
 			verts[0] = new Vector2( 0, 0 );
 			verts[1] = new Vector2( width, 0 );

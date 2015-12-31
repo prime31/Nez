@@ -110,50 +110,9 @@ namespace Nez
 
 		#region Bounds/Rect
 
-		static public bool rectToCircle( float rX, float rY, float rW, float rH, Vector2 circleCenter, float radius )
+		static public bool rectToCircle( Rectangle rect, Vector2 cPosition, float cRadius )
 		{
-			// Check if the circle contains the rectangle's center-point
-			if( Collisions.circleToPoint( circleCenter, radius, new Vector2( rX + rW / 2, rY + rH / 2 ) ) )
-				return true;
-
-			//Check the circle against the relevant edges
-			Vector2 edgeFrom;
-			Vector2 edgeTo;
-			var sector = getSector( rX, rY, rW, rH, circleCenter );
-
-			if( ( sector & PointSectors.Top ) != 0 )
-			{
-				edgeFrom = new Vector2( rX, rY );
-				edgeTo = new Vector2( rX + rW, rY );
-				if( circleToLine( circleCenter, radius, edgeFrom, edgeTo ) )
-					return true;
-			}
-
-			if( ( sector & PointSectors.Bottom ) != 0 )
-			{
-				edgeFrom = new Vector2( rX, rY + rH );
-				edgeTo = new Vector2( rX + rW, rY + rH );
-				if( circleToLine( circleCenter, radius, edgeFrom, edgeTo ) )
-					return true;
-			}
-
-			if( ( sector & PointSectors.Left ) != 0 )
-			{
-				edgeFrom = new Vector2( rX, rY );
-				edgeTo = new Vector2( rX, rY + rH );
-				if( circleToLine( circleCenter, radius, edgeFrom, edgeTo ) )
-					return true;
-			}
-
-			if( ( sector & PointSectors.Right ) != 0 )
-			{
-				edgeFrom = new Vector2( rX + rW, rY );
-				edgeTo = new Vector2( rX + rW, rY + rH );
-				if( circleToLine( circleCenter, radius, edgeFrom, edgeTo ) )
-					return true;
-			}
-
-			return false;
+			return rectToCircle( rect.X, rect.Y, rect.Width, rect.Height, cPosition, cRadius );
 		}
 
 
@@ -163,9 +122,50 @@ namespace Nez
 		}
 
 
-		static public bool rectToCircle( Rectangle rect, Vector2 cPosition, float cRadius )
+		static public bool rectToCircle( float rectX, float rectY, float rectWidth, float rectHeight, Vector2 circleCenter, float radius )
 		{
-			return rectToCircle( rect.X, rect.Y, rect.Width, rect.Height, cPosition, cRadius );
+			// Check if the circle contains the rectangle's center-point
+			if( Collisions.circleToPoint( circleCenter, radius, new Vector2( rectX + rectWidth / 2, rectY + rectHeight / 2 ) ) )
+				return true;
+
+			// Check the circle against the relevant edges
+			Vector2 edgeFrom;
+			Vector2 edgeTo;
+			var sector = getSector( rectX, rectY, rectWidth, rectHeight, circleCenter );
+
+			if( ( sector & PointSectors.Top ) != 0 )
+			{
+				edgeFrom = new Vector2( rectX, rectY );
+				edgeTo = new Vector2( rectX + rectWidth, rectY );
+				if( circleToLine( circleCenter, radius, edgeFrom, edgeTo ) )
+					return true;
+			}
+
+			if( ( sector & PointSectors.Bottom ) != 0 )
+			{
+				edgeFrom = new Vector2( rectX, rectY + rectHeight );
+				edgeTo = new Vector2( rectX + rectWidth, rectY + rectHeight );
+				if( circleToLine( circleCenter, radius, edgeFrom, edgeTo ) )
+					return true;
+			}
+
+			if( ( sector & PointSectors.Left ) != 0 )
+			{
+				edgeFrom = new Vector2( rectX, rectY );
+				edgeTo = new Vector2( rectX, rectY + rectHeight );
+				if( circleToLine( circleCenter, radius, edgeFrom, edgeTo ) )
+					return true;
+			}
+
+			if( ( sector & PointSectors.Right ) != 0 )
+			{
+				edgeFrom = new Vector2( rectX + rectWidth, rectY );
+				edgeTo = new Vector2( rectX + rectWidth, rectY + rectHeight );
+				if( circleToLine( circleCenter, radius, edgeFrom, edgeTo ) )
+					return true;
+			}
+
+			return false;
 		}
 
 

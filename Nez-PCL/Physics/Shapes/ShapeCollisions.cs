@@ -409,10 +409,11 @@ namespace Nez.PhysicsShapes
 		public static bool lineToPoly( Vector2 start, Vector2 end, Polygon polygon, out RaycastHit hit )
 		{
 			hit = new RaycastHit();
-			Vector2 normal = Vector2.Zero;
-			Vector2 intersectionPoint = Vector2.Zero;
-			float fraction = float.MaxValue;
+			var normal = Vector2.Zero;
+			var intersectionPoint = Vector2.Zero;
+			var fraction = float.MaxValue;
 			var hasIntersection = false;
+
 			for( int j = polygon.points.Length - 1, i = 0; i < polygon.points.Length; j = i, i++ )
 			{
 				var edge1 = polygon.position + polygon.points[j];

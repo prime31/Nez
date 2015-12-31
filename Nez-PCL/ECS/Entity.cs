@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
+using System.Linq;
 
 
 namespace Nez
@@ -156,8 +157,6 @@ namespace Nez
 			}
 		}
 
-		Vector2 _movementRemainder = Vector2.Zero;
-
 
 		public Entity()
 		{
@@ -285,6 +284,84 @@ namespace Nez
 		{
 			for( var i = 0; i < components.Count; i++ )
 				removeComponent( components[i] );
+		}
+
+		#endregion
+
+
+		#region Movement helpers
+
+		/// <summary>
+		/// moves the entity taking collision into account
+		/// </summary>
+		/// <param name="motion">Motion.</param>
+		public void moveActor( Vector2 motion, bool stepXYSeparatelyForMultiCollisions = true )
+		{
+			// no collider? just move and forget about it
+			if( collider == null )
+			{
+				position += motion;
+				return;
+			}
+				
+			// remove ourself from the physics system until after we are done moving
+			Physics.removeCollider( collider, true );
+
+			// fetch anything that we might collide with along the way
+			var neighbors = Physics.boxcastBroadphaseExcludingSelf( collider, motion.X, motion.Y );
+
+			// if we have more than once possible collision we have to break this up into separate x/y movement
+			if( stepXYSeparatelyForMultiCollisions && neighbors.Count() > 1 )
+			{
+				if( motion.X != 0f )
+				{
+					var xMotion = new Vector2( motion.X, 0f );
+					moveActorCollisionChecks( neighbors, ref xMotion );
+					motion.X = xMotion.X;
+				}
+
+				if( motion.Y != 0f )
+				{
+					var yMotion = new Vector2( 0f, motion.Y );
+					moveActorCollisionChecks( neighbors, ref yMotion );
+					motion.Y = yMotion.Y;
+				}
+			}
+			else
+			{
+				moveActorCollisionChecks( neighbors, ref motion );
+			}
+
+			// set our new position which will trigger child component/collider bounds updates
+			position += motion;
+
+			// let Physics know about our new position
+			Physics.addCollider( collider );
+		}
+
+
+		void moveActorCollisionChecks( IEnumerable<Collider> neighbors, ref Vector2 motion )
+		{
+			foreach( var neighbor in neighbors )
+			{
+				// alter the shapes position so that it is in the place it would be after movement so we can check for overlaps
+				collider.shape.position = collider.absolutePosition + motion;
+
+				ShapeCollisionResult result;
+				if( collider.shape.collidesWithShape( neighbor.shape, out result ) )
+				{
+					// if we have a trigger notify the listener but we dont alter movement
+					if( neighbor.isTrigger )
+					{
+						// TODO: notifiy listener
+						Debug.log( "hit trigger: {0}", neighbor.entity );
+						continue;
+					}
+
+					// hit. alter our motion by the MTV and continue looping in case there are other collisions
+					motion -= result.minimumTranslationVector;
+				}
+			}
 		}
 
 		#endregion
