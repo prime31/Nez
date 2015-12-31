@@ -152,8 +152,11 @@ namespace Nez
 		/// default debugRender method just loops through all entities and calls entity.debugRender
 		/// </summary>
 		/// <param name="scene">Scene.</param>
-		protected virtual void debugRender( Scene scene )
+		protected virtual void debugRender( Scene scene, Camera cam )
 		{
+			Graphics.instance.spriteBatch.End();
+			Graphics.instance.spriteBatch.Begin( transformMatrix: cam.transformMatrix );
+
 			for( var i = 0; i < scene.entities.Count; i++ )
 			{
 				var entity = scene.entities[i];

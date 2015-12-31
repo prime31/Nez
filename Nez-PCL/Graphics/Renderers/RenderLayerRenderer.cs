@@ -33,7 +33,7 @@ namespace Nez
 			}
 
 			if( shouldDebugRender && debugRenderEnabled )
-				debugRender( scene );
+				debugRender( scene, cam );
 
 			endRender();
 		}
