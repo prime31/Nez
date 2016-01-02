@@ -43,11 +43,19 @@ namespace Nez.PhysicsShapes
 		}
 
 
+		public Rectangle minkowskiDifference( Box other )
+		{
+			var topLeft = position.ToPoint() - RectangleExt.getMax( ref other.bounds );
+			var fullSize = bounds.Size + other.bounds.Size;
+			return new Rectangle( topLeft.X, topLeft.Y, fullSize.X, fullSize.Y );
+		}
+
+
 		public override bool collidesWithShape( Shape other, out ShapeCollisionResult result )
 		{
 			// special, high-performance cases
-
-			//if( other is Box )
+			if( other is Box )
+				return ShapeCollisions.boxToBox( this, other as Box, out result );
 
 			//if( other is Circle )
 

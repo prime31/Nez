@@ -72,6 +72,12 @@ namespace Nez
 			fraction = distance = 0f;
 		}
 
+
+		public override string ToString()
+		{
+			return string.Format( "[RaycastHit] fraction: {0}, distance: {1}, normal: {2}, centroid: {3}", fraction, distance, normal, centroid );
+		}
+
 	}
 }
 

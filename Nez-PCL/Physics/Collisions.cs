@@ -181,10 +181,10 @@ namespace Nez
 		}
 
 
-		static public bool rectToLine( float rX, float rY, float rW, float rH, Vector2 lineFrom, Vector2 lineTo )
+		static public bool rectToLine( float rectX, float rectY, float rectWidth, float rectHeight, Vector2 lineFrom, Vector2 lineTo )
 		{
-			var fromSector = Collisions.getSector( rX, rY, rW, rH, lineFrom );
-			var toSector = Collisions.getSector( rX, rY, rW, rH, lineTo );
+			var fromSector = Collisions.getSector( rectX, rectY, rectWidth, rectHeight, lineFrom );
+			var toSector = Collisions.getSector( rectX, rectY, rectWidth, rectHeight, lineTo );
 
 			if( fromSector == PointSectors.Center || toSector == PointSectors.Center )
 				return true;
@@ -194,38 +194,38 @@ namespace Nez
 			{
 				var both = fromSector | toSector;
 
-				//Do line checks against the edges
+				// Do line checks against the edges
 				Vector2 edgeFrom;
 				Vector2 edgeTo;
 
 				if( ( both & PointSectors.Top ) != 0 )
 				{
-					edgeFrom = new Vector2( rX, rY );
-					edgeTo = new Vector2( rX + rW, rY );
+					edgeFrom = new Vector2( rectX, rectY );
+					edgeTo = new Vector2( rectX + rectWidth, rectY );
 					if( Collisions.lineToLine( edgeFrom, edgeTo, lineFrom, lineTo ) )
 						return true;
 				}
 
 				if( ( both & PointSectors.Bottom ) != 0 )
 				{
-					edgeFrom = new Vector2( rX, rY + rH );
-					edgeTo = new Vector2( rX + rW, rY + rH );
+					edgeFrom = new Vector2( rectX, rectY + rectHeight );
+					edgeTo = new Vector2( rectX + rectWidth, rectY + rectHeight );
 					if( Collisions.lineToLine( edgeFrom, edgeTo, lineFrom, lineTo ) )
 						return true;
 				}
 
 				if( ( both & PointSectors.Left ) != 0 )
 				{
-					edgeFrom = new Vector2( rX, rY );
-					edgeTo = new Vector2( rX, rY + rH );
+					edgeFrom = new Vector2( rectX, rectY );
+					edgeTo = new Vector2( rectX, rectY + rectHeight );
 					if( Collisions.lineToLine( edgeFrom, edgeTo, lineFrom, lineTo ) )
 						return true;
 				}
 
 				if( ( both & PointSectors.Right ) != 0 )
 				{
-					edgeFrom = new Vector2( rX + rW, rY );
-					edgeTo = new Vector2( rX + rW, rY + rH );
+					edgeFrom = new Vector2( rectX + rectWidth, rectY );
+					edgeTo = new Vector2( rectX + rectWidth, rectY + rectHeight );
 					if( Collisions.lineToLine( edgeFrom, edgeTo, lineFrom, lineTo ) )
 						return true;
 				}

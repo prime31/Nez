@@ -17,6 +17,95 @@ namespace Nez.PhysicsShapes
 			return false;
 		}
 
+
+		#region Box to Box
+
+		/// <summary>
+		/// checks the result of a box being moved by deltaMovement with second
+		/// </summary>
+		/// <returns><c>true</c>, if to box cast was boxed, <c>false</c> otherwise.</returns>
+		/// <param name="first">First.</param>
+		/// <param name="second">Second.</param>
+		/// <param name="deltaMovement">Delta movement.</param>
+		/// <param name="hit">Hit.</param>
+		public static bool boxToBoxCast( Box first, Box second, Vector2 deltaMovement, out RaycastHit hit )
+		{
+			// http://hamaluik.com/posts/swept-aabb-collision-using-minkowski-difference/
+			Debug.log( "boxToBoxCast has issues and still needs some love" );
+
+			hit = new RaycastHit();
+
+			// first we check for an overlap. if we have an overlap we dont do the sweep test
+			var minkowskiDiff = minkowskiDifference( first, second );
+			if( minkowskiDiff.Contains( 0f, 0f ) )
+			{
+				// calculate the MTV. if it is zero then we can just call this a non-collision
+				var mtv = RectangleExt.getClosestPointOnBoundsToOrigin( ref minkowskiDiff );
+				if( mtv == Vector2.Zero )
+					return false;
+						
+				hit.normal = -mtv;
+				hit.normal.Normalize();
+				hit.distance = 0f;
+				hit.fraction = 0f;
+
+				return true;
+			}
+			else
+			{
+				Debug.drawHollowRect( minkowskiDiff, Color.Black, 0.2f );
+				Debug.drawLine( Vector2.Zero, deltaMovement, Color.Black, 0.2f );
+
+				var rectTo = Collisions.rectToLine( minkowskiDiff, Vector2.Zero, deltaMovement );
+				if( rectTo )
+					Debug.log( "rectToLine" );
+				
+				// ray-cast the relativeMotion vector against the Minkowski AABB
+				var ray = new Ray2D( Vector2.Zero, deltaMovement );
+				float fraction;
+				if( RectangleExt.rayIntersects( ref minkowskiDiff, ref ray, out fraction ) && fraction <= 1.0f )
+				{
+					Debug.log( "fraction: {0}", fraction );
+					return true;
+				}
+			}
+
+			return false;
+		}
+
+
+		public static bool boxToBox( Box first, Box second, out ShapeCollisionResult result )
+		{
+			result = new ShapeCollisionResult();
+
+			var minkowskiDiff = minkowskiDifference( first, second );
+			if( minkowskiDiff.Contains( 0f, 0f ) )
+			{
+				// calculate the MTV. if it is zero then we can just call this a non-collision
+				result.minimumTranslationVector = RectangleExt.getClosestPointOnBoundsToOrigin( ref minkowskiDiff );
+				if( result.minimumTranslationVector == Vector2.Zero )
+					return false;
+				
+				result.normal = -result.minimumTranslationVector;
+				result.normal.Normalize();
+
+				return true;
+			}
+
+			return false;
+		}
+
+
+		static Rectangle minkowskiDifference( Box first, Box second )
+		{
+			var topLeft = first.position.ToPoint() - RectangleExt.getMax( ref second.bounds );
+			var fullSize = first.bounds.Size + second.bounds.Size;
+
+			return new Rectangle( topLeft.X, topLeft.Y, fullSize.X, fullSize.Y );
+		}
+
+		#endregion
+
 		
 		#region Polygon to Polygon
 

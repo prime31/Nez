@@ -211,7 +211,7 @@ namespace Nez
 			shape.position = absolutePosition + motion;
 
 			var didCollide = shape.collidesWithShape( collider.shape, out result );
-
+			
 			// return the shapes position to where it was before the check
 			shape.position = oldPosition;
 

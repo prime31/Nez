@@ -399,6 +399,45 @@ namespace Nez
 		}
 
 
+		public static Vector2 getClosestPointOnBoundsToOrigin( ref Rectangle rect )
+		{
+			var max = RectangleExt.getMax( ref rect );
+			var minDist = Math.Abs( rect.Location.X );
+			var boundsPoint = new Vector2( rect.Location.X, 0 );
+
+			if( Math.Abs( max.X ) < minDist )
+			{
+				minDist = Math.Abs( max.X );
+				boundsPoint = new Vector2( max.X, 0 );
+			}
+
+			if( Math.Abs( max.Y ) < minDist )
+			{
+				minDist = Math.Abs( max.Y );
+				boundsPoint = new Vector2( 0, max.Y );
+			}
+
+			if( Math.Abs( rect.Location.Y ) < minDist )
+			{
+				minDist = Math.Abs( rect.Location.Y );
+				boundsPoint = new Vector2( 0, rect.Location.Y );
+			}
+
+			return boundsPoint;
+		}
+
+
+		/// <summary>
+		/// gets the center point of the rectangle as a Vector2
+		/// </summary>
+		/// <returns>The center.</returns>
+		/// <param name="rect">Rect.</param>
+		public static Vector2 getCenter( ref Rectangle rect )
+		{
+			return new Vector2( rect.X + rect.Width / 2, rect.Y + rect.Height / 2 );
+		}
+
+
 		/// <summary>
 		/// gets the center point of the rectangle as a Vector2
 		/// </summary>
@@ -411,11 +450,22 @@ namespace Nez
 
 
 		/// <summary>
+		/// gets the max point of the rectangle, the bottom-right corner
+		/// </summary>
+		/// <returns>The max.</returns>
+		/// <param name="rect">Rect.</param>
+		public static Point getMax( ref Rectangle rect )
+		{
+			return new Point( rect.Right, rect.Bottom );
+		}
+
+
+		/// <summary>
 		/// gets the position of the rectangle as a Vector2
 		/// </summary>
 		/// <returns>The position.</returns>
 		/// <param name="rect">Rect.</param>
-		public static Vector2 getPosition( this Rectangle rect )
+		public static Vector2 getPosition( ref Rectangle rect )
 		{
 			return new Vector2( rect.X, rect.Y );
 		}
