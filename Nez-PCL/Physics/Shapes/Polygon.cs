@@ -7,6 +7,7 @@ namespace Nez.PhysicsShapes
 	public class Polygon : Shape
 	{
 		public Vector2[] points;
+		internal bool isBox;
 
 
 		public Polygon( Vector2[] points )
@@ -16,14 +17,7 @@ namespace Nez.PhysicsShapes
 
 
 		public Polygon( int vertCount, float radius ) : this( buildSymmetricalPolygon( vertCount, radius ) )
-		{}
-
-
-		internal override void recalculateBounds( Collider collider )
 		{
-			position = collider.absolutePosition;
-			bounds = RectangleExt.boundsFromPolygonPoints( points );
-			bounds.Location += position.ToPoint();
 		}
 
 
@@ -38,6 +32,38 @@ namespace Nez.PhysicsShapes
 			}
 
 			return verts;
+		}
+
+
+		internal override void recalculateBounds( Collider collider )
+		{
+			position = collider.absolutePosition;
+			bounds = RectangleExt.boundsFromPolygonPoints( points );
+			bounds.Location += position.ToPoint();
+		}
+
+
+		//Don t know  adjancent vertices  so take each vertex
+		//If you know adjancent vertices, perfrom hill climbing algorithm
+		public Vector2 getFarthestPointInDirection( Vector2 direction )
+		{
+			var index = 0;
+			float dot;
+			float maxDot;
+			Vector2.Dot( ref points[index], ref direction, out maxDot );
+
+			for( int i = 1; i < points.Length; i++ )
+			{
+				Vector2.Dot( ref points[i], ref direction, out dot );
+
+				if( dot > maxDot )
+				{
+					maxDot = dot;
+					index = i;
+				}
+			}
+
+			return points[index];
 		}
 
 

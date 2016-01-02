@@ -4,9 +4,6 @@ using Microsoft.Xna.Framework;
 
 namespace Nez
 {
-	/// <summary>
-	/// TODO: fraction and distance are not accurate for non-BoxColliders! They only check the bounds currently.
-	/// </summary>
 	public struct RaycastHit
 	{
 		/// <summary>

@@ -32,9 +32,9 @@ namespace Nez
 		public void removeHorizontalTranslation( Vector2 deltaMovement )
 		{
 			// http://dev.yuanworks.com/2013/03/19/little-ninja-physics-and-collision-detection/
-			// a is the vector that is only in the y-direction that we want. Projecting it on the normal gives us the
-			// responseDistance that we already have. We know a.x is 0 so it simplifies to a = r / normal.y
-			// a dot normal = responseDistance
+			// fix is the vector that is only in the y-direction that we want. Projecting it on the normal gives us the
+			// responseDistance that we already have (MTV). We know fix.x should be 0 so it simplifies to fix = r / normal.y
+			// fix dot normal = responseDistance
 
 			// check if the lateral motion is undesirable and if so remove it and fix the response
 			if( Math.Sign( normal.X ) != Math.Sign( deltaMovement.X ) || ( deltaMovement.X == 0f && normal.X != 0f ) )
@@ -47,7 +47,6 @@ namespace Nez
 				if( Math.Abs( normal.X ) != 1f && Math.Abs( fix ) < Math.Abs( deltaMovement.Y * 3f ) )
 				{
 					minimumTranslationVector = new Vector2( 0f, -fix );
-					Debug.log( "second: {0}", minimumTranslationVector );
 				}
 			}
 		}

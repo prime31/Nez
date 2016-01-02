@@ -15,6 +15,7 @@ namespace Nez.PhysicsShapes
 
 		public Box( float width, float height ) : base( buildBox( width, height ) )
 		{
+			isBox = true;
 			this.width = width;
 			this.height = height;
 		}
@@ -39,6 +40,19 @@ namespace Nez.PhysicsShapes
 			verts[3] = new Vector2( 0, height );
 
 			return verts;
+		}
+
+
+		public override bool collidesWithShape( Shape other, out ShapeCollisionResult result )
+		{
+			// special, high-performance cases
+
+			//if( other is Box )
+
+			//if( other is Circle )
+
+			// fallthrough to standard cases
+			return base.collidesWithShape( other, out result );
 		}
 
 	}

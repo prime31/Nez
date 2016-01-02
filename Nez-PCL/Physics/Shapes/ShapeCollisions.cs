@@ -39,7 +39,7 @@ namespace Nez.PhysicsShapes
 				// if timeOfCollision is less than 0 this is an overlap
 				if( timeOfCollision < 0f )
 				{
-					hit.centroid = first.position - hit.normal * ( timeOfCollision * 1.01f );
+					hit.centroid = first.position - hit.normal * timeOfCollision;
 				}
 				else
 				{
@@ -65,9 +65,9 @@ namespace Nez.PhysicsShapes
 			result = new ShapeCollisionResult();
 			float timeOfCollision;
 
-			if( polygonToPolygon( first, second, Vector2.Zero, out result.normal, out timeOfCollision ) )
+			if( polygonToPolygon( first, second, null, out result.normal, out timeOfCollision ) )
 			{
-				result.minimumTranslationVector = result.normal * ( timeOfCollision * 1.0f );
+				result.minimumTranslationVector = result.normal * ( timeOfCollision );
 				return true;
 			}
 
@@ -87,7 +87,7 @@ namespace Nez.PhysicsShapes
 		/// <param name="deltaMovement">Delta movement.</param>
 		/// <param name="responseNormal">Response normal.</param>
 		/// <param name="timeOfCollision">Time of collision.</param>
-		static bool polygonToPolygon( Polygon first, Polygon second, Vector2 deltaMovement, out Vector2 responseNormal, out float timeOfCollision )
+		static bool polygonToPolygon( Polygon first, Polygon second, Vector2? deltaMovement, out Vector2 responseNormal, out float timeOfCollision )
 		{
 			timeOfCollision = float.MinValue;
 			responseNormal = Vector2.Zero;
@@ -98,24 +98,32 @@ namespace Nez.PhysicsShapes
 			// All the separation axes
 			var iNumAxes = 0;
 
-			_satAxisArray[iNumAxes] = new Vector2( -deltaMovement.Y, deltaMovement.X );
-			var fVel2 = Vector2.Dot( deltaMovement, deltaMovement );
-			if( fVel2 > 0.00001f )
+
+			if( deltaMovement.HasValue )
 			{
-				if( !intervalIntersect(	first, second, _satAxisArray[iNumAxes], polygonOffset, deltaMovement, out _satTimerPerAxis[iNumAxes] ) )
-					return false;
-				iNumAxes++;
+				_satAxisArray[iNumAxes] = new Vector2( -deltaMovement.Value.Y, deltaMovement.Value.X );
+				var fVel2 = Vector2.Dot( deltaMovement.Value, deltaMovement.Value );
+				if( fVel2 > 0.00001f )
+				{
+					if( !intervalIntersect(	first, second, ref _satAxisArray[iNumAxes], ref polygonOffset, ref deltaMovement, out _satTimerPerAxis[iNumAxes] ) )
+						return false;
+					iNumAxes++;
+				}
 			}
 
 			// test separation axes of A
 			for( int j = first.points.Length - 1, i = 0; i < first.points.Length; j = i, i++ )
 			{
-				var E0 = first.points[j];
-				var E1 = first.points[i];
-				var edge = E1 - E0;
+				// we only need to check 2 axis for boxes
+				if( second.isBox && i == 2 )
+					break;
+				
+				var point0 = first.points[j];
+				var point1 = first.points[i];
+				var edge = point1 - point0;
 				_satAxisArray[iNumAxes] = new Vector2( -edge.Y, edge.X );
 
-				if( !intervalIntersect(	first, second, _satAxisArray[iNumAxes], polygonOffset, deltaMovement, out _satTimerPerAxis[iNumAxes] ) )
+				if( !intervalIntersect(	first, second, ref _satAxisArray[iNumAxes], ref polygonOffset, ref deltaMovement, out _satTimerPerAxis[iNumAxes] ) )
 					return false;
 				iNumAxes++;
 			}
@@ -123,12 +131,16 @@ namespace Nez.PhysicsShapes
 			// test separation axes of B
 			for( int j = second.points.Length - 1, i = 0; i < second.points.Length; j = i, i++ )
 			{
-				var E0 = second.points[j];
-				var E1 = second.points[i];
-				var edge = E1 - E0;
+				// we only need to check 2 axis for boxes
+				if( second.isBox && i == 2 )
+					break;
+
+				var point0 = second.points[j];
+				var point1 = second.points[i];
+				var edge = point1 - point0;
 				_satAxisArray[iNumAxes] = new Vector2( -edge.Y, edge.X );
 
-				if( !intervalIntersect(	first, second, _satAxisArray[iNumAxes], polygonOffset, deltaMovement, out _satTimerPerAxis[iNumAxes] ) )
+				if( !intervalIntersect(	first, second, ref _satAxisArray[iNumAxes], ref polygonOffset, ref deltaMovement, out _satTimerPerAxis[iNumAxes] ) )
 					return false;
 				iNumAxes++;
 			}
@@ -144,7 +156,7 @@ namespace Nez.PhysicsShapes
 		}
 
 
-		static bool intervalIntersect( Polygon first, Polygon second, Vector2 axis, Vector2 shapeOffset, Vector2 deltaMovement, out float taxis )
+		static bool intervalIntersect( Polygon first, Polygon second, ref Vector2 axis, ref Vector2 shapeOffset, ref Vector2? deltaMovement, out float taxis )
 		{
 			taxis = float.MinValue;
 			float min0, max0;
@@ -162,7 +174,11 @@ namespace Nez.PhysicsShapes
 			// separated, test dynamic intervals
 			if( d0 > 0.0f || d1 > 0.0f )
 			{
-				var v = Vector2.Dot( deltaMovement, axis );
+				// if we have no velocity we are done
+				if( !deltaMovement.HasValue )
+					return false;
+				
+				var v = Vector2.Dot( deltaMovement.Value, axis );
 
 				// small velocity, so only the overlap test will be relevant. 
 				if( Math.Abs( v ) < 0.0000001f )
