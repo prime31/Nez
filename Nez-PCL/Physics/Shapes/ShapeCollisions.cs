@@ -31,8 +31,6 @@ namespace Nez.PhysicsShapes
 		public static bool boxToBoxCast( Box first, Box second, Vector2 deltaMovement, out RaycastHit hit )
 		{
 			// http://hamaluik.com/posts/swept-aabb-collision-using-minkowski-difference/
-			Debug.log( "boxToBoxCast has issues and still needs some love" );
-
 			hit = new RaycastHit();
 
 			// first we check for an overlap. if we have an overlap we dont do the sweep test
@@ -53,19 +51,17 @@ namespace Nez.PhysicsShapes
 			}
 			else
 			{
-				Debug.drawHollowRect( minkowskiDiff, Color.Black, 0.2f );
-				Debug.drawLine( Vector2.Zero, deltaMovement, Color.Black, 0.2f );
-
-				var rectTo = Collisions.rectToLine( minkowskiDiff, Vector2.Zero, deltaMovement );
-				if( rectTo )
-					Debug.log( "rectToLine" );
-				
 				// ray-cast the relativeMotion vector against the Minkowski AABB
-				var ray = new Ray2D( Vector2.Zero, deltaMovement );
+				var ray = new Ray2D( Vector2.Zero, -deltaMovement );
 				float fraction;
 				if( RectangleExt.rayIntersects( ref minkowskiDiff, ref ray, out fraction ) && fraction <= 1.0f )
 				{
-					Debug.log( "fraction: {0}", fraction );
+					hit.fraction = fraction;
+					hit.distance = deltaMovement.Length() * fraction;
+					hit.normal = -deltaMovement;
+					hit.normal.Normalize();
+					hit.centroid = first.bounds.getCenter() + deltaMovement * fraction;
+
 					return true;
 				}
 			}

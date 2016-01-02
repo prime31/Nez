@@ -34,30 +34,6 @@ namespace MacTester
 		}
 
 
-		void move( Vector2 movement )
-		{
-			Physics.removeCollider( entity.collider, true );
-
-			var neighbors = Physics.boxcastBroadphaseExcludingSelf( entity.collider, movement.X, movement.Y );
-			foreach( var neighbor in neighbors )
-			{
-				neighbor.shape.position = neighbor.entity.position;
-				ShapeCollisionResult result;
-				entity.collider.shape.position = entity.position + movement;
-
-				if( entity.collider.shape.collidesWithShape( neighbor.shape, out result ) )
-				{
-					movement -= result.minimumTranslationVector;
-					Debug.log( "collided result: {0}. new movement: {1}", result, movement );
-				}
-			}
-
-			entity.position += movement;
-
-			Physics.addCollider( entity.collider );
-		}
-
-
 		public void onCollisionEnter( Collider collider, CollisionDirection direction )
 		{
 			Debug.log( "Collided with {0} direction: {1}", collider.entity, direction );
