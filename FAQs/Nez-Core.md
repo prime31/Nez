@@ -5,7 +5,7 @@ The root class in the Nez world is the Core class which is a subclass of the Gam
 
 Graphics
 ==========
-Nez will create an instance of the Graphics class (available via Graphics.instance) for you at startup. It includes a default BitmapFont so you can be up and running right away with good looking text (MonoGames SpriteFont has some terrible compression going on) and should cover most of your rendering needs. Graphics provides direct access to a SpriteBatch and also includes a bunch of helpers for drawing rectangles, circles, lines, etc.
+Nez will create an instance of the Graphics class (available via Graphics.instance) for you at startup. It includes a default BitmapFont so you can be up and running right away with good looking text (MonoGames SpriteFont has some terrible compression going on) and should cover most of your rendering needs. Graphics provides direct access to a SpriteBatch and there is a SpriteBatch extension class with a bunch of helpers for drawing rectangles, circles, lines, etc.
 
 
 Scene
@@ -21,7 +21,7 @@ Be careful not to confuse the Nez Physics system with realistic physics simulati
 TimerManager
 ==========
 
-The TimerManager is a simple helper that lets you pass in an Action that can be called once or repeately with or without a delay. The **Core.schedule** method provides easy access to the TimerManager. When you call **schedule** you get back an ITimer object that has a **stop** method that can be used to top the timer from firing again. Timers are automatically cached and reused so fire up as many as you need.
+The TimerManager is a simple helper that lets you pass in an Action that can be called once or repeately with or without a delay. The **Core.schedule** method provides easy access to the TimerManager. When you call **schedule** you get back an ITimer object that has a **stop** method that can be used to stop the timer from firing again. Timers are automatically cached and reused so fire up as many as you need.
 
 
 CoroutineManager
@@ -64,7 +64,7 @@ As you can probably guess, Input gets you access to all input (mouse, keyboard, 
 - **Pressed**: true only the frame that a button/key is pressed
 - **Released**: true only the frame that a button/key is released
 
-Several virtual input classes are also provided which let you combine multiple input types into a single class that you can query. For example, you can setup a VirtualButton that can map to a variety of differnt input types that should result in some object moving to the right. You can create the VirtualButton with the D key, right arrow key and Dpad-right and just query it to know if any of those were pressed. The same applies to other common scenarios as well. Have a look in the Input folder for the different virtual inputs available.
+Several virtual input classes are also provided which let you combine multiple input types into a single class that you can query. For example, you can setup a VirtualButton that can map to a variety of different input types that should result in some object moving to the right. You can create the VirtualButton with the D key, right arrow key and Dpad-right and just query it to know if any of those were pressed. The same applies to other common scenarios as well. Have a look in the Input folder for the different virtual inputs available.
 
 
 Debug

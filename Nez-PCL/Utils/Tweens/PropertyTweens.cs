@@ -45,7 +45,7 @@ namespace Nez.Tweens
 				_getter = ReflectionUtils.getterForProperty<Func<T>>( target, propertyName );
 			}
 
-			Debug.assertIsTrue( _setter != null || _fieldInfo != null, "either the property (" + propertyName + ") setter or getter could not be found on the object " + target );
+			Assert.isTrue( _setter != null || _fieldInfo != null, "either the property (" + propertyName + ") setter or getter could not be found on the object " + target );
 		}
 
 

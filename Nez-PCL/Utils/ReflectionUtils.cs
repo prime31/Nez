@@ -21,7 +21,7 @@ namespace Nez
 			var propInfo = targetObject.GetType().GetProperty( propertyName );
 			#endif
 
-			Debug.assertIsNotNull( propInfo, "could not find property with name: " + propertyName );
+			Assert.isNotNull( propInfo, "could not find property with name: " + propertyName );
 
 			#if NETFX_CORE
 			// Windows Phone/Store new API
@@ -45,7 +45,7 @@ namespace Nez
 			var propInfo = targetObject.GetType().GetProperty( propertyName );
 			#endif
 
-			Debug.assertIsNotNull( propInfo, "could not find property with name: " + propertyName );
+			Assert.isNotNull( propInfo, "could not find property with name: " + propertyName );
 
 			#if NETFX_CORE
 			// Windows Phone/Store new API

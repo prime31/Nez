@@ -215,11 +215,11 @@ namespace Nez
 			// if an entity is already at the requested depth we increment the depth by theta and set the entities actual depth based on
 			// the already present depth value from the previous entity
 			double add = 0;
-			if( _actualEntityOrderLookup.TryGetValue( entity._order, out add ) )
-				_actualEntityOrderLookup[entity._order] += theta;
+			if( _actualEntityOrderLookup.TryGetValue( entity._updateOrder, out add ) )
+				_actualEntityOrderLookup[entity._updateOrder] += theta;
 			else
-				_actualEntityOrderLookup.Add( entity._order, theta );
-			entity._actualOrder = entity._order - add;
+				_actualEntityOrderLookup.Add( entity._updateOrder, theta );
+			entity._actualUpdateOrder = entity._updateOrder - add;
 
 			// mark lists unsorted
 			entities.markTagUnsorted();
@@ -286,7 +286,7 @@ namespace Nez
 		/// <param name="entity">The Entity to add</param>
 		public void addEntity( Entity entity )
 		{
-			Debug.assertIsFalse( entities.contains( entity ), "You are attempting to add the same entity to a scene twice: {0}", entity );
+			Assert.isFalse( entities.contains( entity ), "You are attempting to add the same entity to a scene twice: {0}", entity );
 			entities.add( entity );
 		}
 

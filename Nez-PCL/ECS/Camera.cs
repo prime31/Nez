@@ -68,7 +68,7 @@ namespace Nez
 			get { return _minimumZoom; }
 			set
 			{
-				Debug.assertIsTrue( value > 0, "MinimumZoom must be greater than zero" );
+				Assert.isTrue( value > 0, "MinimumZoom must be greater than zero" );
 
 				if( zoom < value )
 					zoom = minimumZoom;
@@ -83,7 +83,7 @@ namespace Nez
 			get { return _maximumZoom; }
 			set
 			{
-				Debug.assertIsTrue( value > 0, "MaximumZoom must be greater than zero" );
+				Assert.isTrue( value > 0, "MaximumZoom must be greater than zero" );
 
 				if( zoom > value )
 					zoom = value;

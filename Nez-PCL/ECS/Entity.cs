@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
+using System.Linq;
 
 
 namespace Nez
@@ -103,21 +104,21 @@ namespace Nez
 			}
 		}
 
-		internal double _actualOrder = 0;
-		internal int _order = 0;
+		internal double _actualUpdateOrder = 0;
+		internal int _updateOrder = 0;
 
 		/// <summary>
-		/// render order of this Entity. Also used to sort tag lists on scene.entities
+		/// update order of this Entity. Also used to sort tag lists on scene.entities
 		/// </summary>
 		/// <value>The order.</value>
-		public int order
+		public int updateOrder
 		{
-			get { return _order; }
+			get { return _updateOrder; }
 			set
 			{
-				if( _order != value )
+				if( _updateOrder != value )
 				{
-					_order = value;
+					_updateOrder = value;
 					if( scene != null )
 						scene.setActualOrder( this );
 				}
@@ -155,8 +156,6 @@ namespace Nez
 				}
 			}
 		}
-
-		Vector2 _movementRemainder = Vector2.Zero;
 
 
 		public Entity()
@@ -290,229 +289,74 @@ namespace Nez
 		#endregion
 
 
-		#region Movement with Collision Checks
+		#region Movement helpers
 
 		/// <summary>
-		/// attempts to move deltaX, deltaY. if a collision occurs movement will stop at the point of collision. always use this method to
-		/// move an Entity that has colliders! It handles updating the spatial hash.
+		/// moves the entity taking collision into account
 		/// </summary>
-		/// <param name="deltaX">Delta x.</param>
-		/// <param name="deltaY">Delta y.</param>
-		public bool moveActor( float deltaX, float deltaY, ICollisionCallback collisionHandler = null, ITriggerCallback triggerHandler = null )
+		/// <param name="motion">Motion.</param>
+		public void moveActor( Vector2 motion, bool stepXYSeparatelyForMultiCollisions = true )
 		{
 			// no collider? just move and forget about it
 			if( collider == null )
 			{
-				position += new Vector2( deltaX, deltaY );
-				return false;
+				position += motion;
+				return;
 			}
-
+				
 			// remove ourself from the physics system until after we are done moving
 			Physics.removeCollider( collider, true );
 
 			// fetch anything that we might collide with along the way
-			var neighbors = Physics.boxcastBroadphaseExcludingSelf( collider, deltaX, deltaY );
+			var neighbors = Physics.boxcastBroadphaseExcludingSelf( collider, motion.X, motion.Y );
 
-			var collideX = moveActorX( deltaX, neighbors, collisionHandler, triggerHandler );
-			var collideY = moveActorY( deltaY, neighbors, collisionHandler, triggerHandler );
+			// if we have more than once possible collision we have to break this up into separate x/y movement
+			if( stepXYSeparatelyForMultiCollisions && neighbors.Count() > 1 )
+			{
+				if( motion.X != 0f )
+				{
+					var xMotion = new Vector2( motion.X, 0f );
+					moveActorCollisionChecks( neighbors, ref xMotion );
+					motion.X = xMotion.X;
+				}
+
+				if( motion.Y != 0f )
+				{
+					var yMotion = new Vector2( 0f, motion.Y );
+					moveActorCollisionChecks( neighbors, ref yMotion );
+					motion.Y = yMotion.Y;
+				}
+			}
+			else
+			{
+				moveActorCollisionChecks( neighbors, ref motion );
+			}
 
 			// set our new position which will trigger child component/collider bounds updates
-			position = _position;
-
-			// let Physics know about our new position
-			Physics.addCollider( collider );
-
-			return collideX || collideY;
-		}
-
-
-		bool moveActorX( float amount, HashSet<Collider> neighbors, ICollisionCallback collisionHandler = null, ITriggerCallback triggerHandler = null )
-		{
-			_movementRemainder.X += amount;
-			var moveAmount = Mathf.roundToInt( _movementRemainder.X );
-
-			if( moveAmount == 0 )
-				return false;
-			
-			var sign = Math.Sign( moveAmount );
-			var deltaSinglePixelMovement = new Vector2( sign, 0f );
-			while( moveAmount != 0 )
-			{
-				_movementRemainder.X -= sign;
-				foreach( var neighbor in neighbors )
-				{
-					if( collider.collidesWithAtPosition( neighbor, _position + deltaSinglePixelMovement ) )
-					{
-						// if we have a trigger notify the listener but we dont alter movement
-						if( neighbor.isTrigger || collider.isTrigger )
-						{
-							if( triggerHandler != null )
-								triggerHandler.onTriggerEnter( neighbor );
-						}
-						else
-						{
-							// hit a non-trigger. that's all folks. we bail here
-							if( collisionHandler != null )
-								collisionHandler.onCollisionEnter( neighbor, sign > 0 ? CollisionDirection.Right : CollisionDirection.Left );
-							_movementRemainder.X = 0f;
-							return true;
-						}
-					}
-				}
-
-				// all clear
-				_position += deltaSinglePixelMovement;
-				moveAmount -= sign;
-			}
-
-			return false;
-		}
-
-
-		bool moveActorY( float amount, HashSet<Collider> neighbors, ICollisionCallback collisionHandler = null, ITriggerCallback triggerHandler = null )
-		{
-			_movementRemainder.Y += amount;
-			var moveAmount = Mathf.roundToInt( _movementRemainder.Y );
-
-			if( moveAmount == 0 )
-				return false;
-
-			var sign = Math.Sign( moveAmount );
-			var deltaSinglePixelMovement = new Vector2( 0f, sign );
-			while( moveAmount != 0 )
-			{
-				_movementRemainder.Y -= sign;
-				var b = collider.bounds.clone();
-				b.Y += sign;
-
-				foreach( var neighbor in neighbors )
-				{
-					if( collider.collidesWithAtPosition( neighbor, _position + deltaSinglePixelMovement ) )
-					{
-						// if we have a trigger notify the listener but we dont alter movement
-						if( neighbor.isTrigger || collider.isTrigger )
-						{
-							if( triggerHandler != null )
-								triggerHandler.onTriggerEnter( neighbor );
-						}
-						else
-						{
-							// hit a non-trigger. that's all folks. we bail here
-							if( collisionHandler != null )
-								collisionHandler.onCollisionEnter( neighbor, sign > 0 ? CollisionDirection.Below : CollisionDirection.Above );
-							_movementRemainder.Y = 0f;
-							return true;
-						}
-					}
-				}
-
-				// all clear
-				_position += deltaSinglePixelMovement;
-				moveAmount -= sign;
-			}
-
-			return false;
-		}
-			
-
-		/// <summary>
-		/// solid movement does not care about collisions for the movement itself. A solid will always get to its final destination. It will,
-		/// however push any Actors in its way and caryy any actors riding on it.
-		/// </summary>
-		/// <param name="deltaX">Delta x.</param>
-		/// <param name="deltaY">Delta y.</param>
-		/// <param name="allActors">All actors.</param>
-		/// <param name="ridingActors">Riding actors.</param>
-		public void moveSolid( float deltaX, float deltaY, List<Entity> allActors, List<Entity> ridingActors )
-		{
-			// add the movement to our remainder from previous moves, round the remainder than remove the amount we will move this frame
-			_movementRemainder.X += deltaX;
-			_movementRemainder.Y += deltaY;
-
-			var moveX = Mathf.roundToInt( _movementRemainder.X );
-			var moveY = Mathf.roundToInt( _movementRemainder.Y );
-
-			_movementRemainder.X -= moveX;
-			_movementRemainder.Y -= moveY;
-
-			if( moveX == 0f && moveY == 0f )
-				return;
-
-			// remove ourself from the physics system until after we are done moving
-			Physics.removeCollider( collider, true );
-
-			if( moveX != 0f )
-			{
-				position += new Vector2( moveX, 0f );
-				moveSolidX( moveX, allActors, ridingActors );
-			}
-
-			if( moveY != 0f )
-			{
-				position += new Vector2( 0f, moveY );
-				moveSolidY( moveY, allActors, ridingActors );
-			}
+			position += motion;
 
 			// let Physics know about our new position
 			Physics.addCollider( collider );
 		}
 
 
-		void moveSolidX( int amount, List<Entity> allActors, List<Entity> ridingActors )
+		void moveActorCollisionChecks( IEnumerable<Collider> neighbors, ref Vector2 motion )
 		{
-			for( var i = 0; i < allActors.Count; i++ )
+			foreach( var neighbor in neighbors )
 			{
-				var actor = allActors[i];
-
-				if( actor.collider.collidesWith( collider ) )
+				ShapeCollisionResult result;
+				if( collider.collidesWith( neighbor, motion, out result ) )
 				{
-					// push. deal with moving left/right
-					int moveAmount;
-					if( amount > 0f )
-						moveAmount = collider.bounds.Right - actor.collider.bounds.Left;
-					else
-						moveAmount = collider.bounds.Left - actor.collider.bounds.Right;
-
-					if( actor.moveActor( moveAmount, 0 ) )
+					// if we have a trigger notify the listener but we dont alter movement
+					if( neighbor.isTrigger )
 					{
-						// TODO: dont do this. we need an event for this
-						scene.removeEntity( actor );
+						// TODO: notifiy listener
+						Debug.log( "hit trigger: {0}", neighbor.entity );
+						continue;
 					}
-				}
-				else if( ridingActors.Contains( actor ) )
-				{
-					// riding
-					actor.moveActor( amount, 0 );
-				}
-			}
-		}
 
-
-		void moveSolidY( float amount, List<Entity> allActors, List<Entity> ridingActors )
-		{
-			for( var i = 0; i < allActors.Count; i++ )
-			{
-				var actor = allActors[i];
-
-				if( actor.collider.collidesWith( collider ) )
-				{
-					// push. deal with moving up/down
-					float moveAmount;
-					if( amount > 0f )
-						moveAmount = collider.bounds.Bottom - actor.collider.bounds.Top;
-					else
-						moveAmount = collider.bounds.Top - actor.collider.bounds.Bottom;
-
-					if( actor.moveActor( 0, moveAmount ) )
-					{
-						// TODO: dont do this. we need an event for this
-						scene.removeEntity( actor );
-					}
-				}
-				else if( ridingActors.Contains( actor ) )
-				{
-					// riding
-					actor.moveActor( 0, amount );
+					// hit. alter our motion by the MTV and continue looping in case there are other collisions
+					motion -= result.minimumTranslationVector;
 				}
 			}
 		}
@@ -522,7 +366,7 @@ namespace Nez
 
 		public override string ToString()
 		{
-			return string.Format(" [Entity: tag: {0}, enabled: {1}, depth: {2}, name: {3}]", tag, enabled, order, name );
+			return string.Format(" [Entity: name: {0}, tag: {1}, enabled: {2}, depth: {3}]", name, tag, enabled, updateOrder );
 		}
 
 	}

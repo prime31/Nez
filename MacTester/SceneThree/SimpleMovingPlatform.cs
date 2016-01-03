@@ -40,9 +40,12 @@ namespace MacTester
 			var deltaX = Nez.Tweens.Lerps.unclampedLerp( _minX, _maxX, alpha ) - entity.position.X;
 
 			// TODO: probably query Physics to fetch the actors that we will intersect instead of blindly grabbing them all
-			var allActors = getAllActors();
-			var ridingActors = getAllRidingActors();
-			entity.moveSolid( deltaX, deltaY, allActors, ridingActors );
+			//var allActors = getAllActors();
+			//var ridingActors = getAllRidingActors();
+
+			// TODO: recreate moveSolid
+			entity.moveActor( new Vector2( deltaX, deltaY ) );
+			//entity.moveSolid( deltaX, deltaY, allActors, ridingActors );
 		}
 
 
@@ -73,8 +76,8 @@ namespace MacTester
 				if( entities[i].collider == entity.collider || entities[i].collider == null )
 					continue;
 				
-				if( entities[i].collider.collidesWithAtPosition( entity.collider, entities[i].position - new Vector2( 0f, -1f ) ) )
-					list.Add( entities[i] );
+				//if( entities[i].collider.collidesWithAtPosition( entity.collider, entities[i].position - new Vector2( 0f, -1f ) ) )
+				//	list.Add( entities[i] );
 			}
 
 			return list;

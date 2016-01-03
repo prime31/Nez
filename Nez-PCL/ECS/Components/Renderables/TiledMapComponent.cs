@@ -129,18 +129,18 @@ namespace Nez
 				switch( obj.tiledObjectType )
 				{
 					case TiledObject.TiledObjectType.Ellipse:
-						graphics.drawCircle( new Vector2( renderPosition.X + obj.x + obj.width * 0.5f, renderPosition.Y + obj.y + obj.height * 0.5f ), obj.width * 0.5f, Color.Black );
+						graphics.spriteBatch.drawCircle( new Vector2( renderPosition.X + obj.x + obj.width * 0.5f, renderPosition.Y + obj.y + obj.height * 0.5f ), obj.width * 0.5f, Color.Black );
 						break;
 					case TiledObject.TiledObjectType.Image:
 						throw new NotImplementedException( "Image layers are not yet supported" );
 					case TiledObject.TiledObjectType.Polygon:
-						graphics.drawPoints( renderPosition, obj.polyPoints, Color.Black, true );
+						graphics.spriteBatch.drawPoints( renderPosition, obj.polyPoints, Color.Black, true );
 						break;
 					case TiledObject.TiledObjectType.Polyline:
-						graphics.drawPoints( renderPosition, obj.polyPoints, Color.Black, false );
+						graphics.spriteBatch.drawPoints( renderPosition, obj.polyPoints, Color.Black, false );
 						break;
 					case TiledObject.TiledObjectType.None:
-						graphics.drawHollowRect( renderPosition.X + obj.x, renderPosition.Y + obj.y, obj.width, obj.height, Color.Wheat );
+						graphics.spriteBatch.drawHollowRect( renderPosition.X + obj.x, renderPosition.Y + obj.y, obj.width, obj.height, Color.Wheat );
 						break;
 					default:
 						throw new ArgumentOutOfRangeException();

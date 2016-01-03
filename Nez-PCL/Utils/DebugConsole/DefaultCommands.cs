@@ -67,7 +67,7 @@ namespace Nez.Console
 
 
 		[Command( "framerate", "Sets the target framerate" )]
-		static private void framerate( float target )
+		static private void framerate( float target = 60f )
 		{
 			Core._instance.TargetElapsedTime = TimeSpan.FromSeconds( 1.0 / target );
 		}
@@ -127,9 +127,10 @@ namespace Nez.Console
 
 
 		[Command( "physics", "Logs the total Collider count in the spatial hash" )]
-		static private void physics()
+		static private void physics( float secondsToDisplay = 5f )
 		{
-			//Engine.Pooler.Log();
+			Core.debugRenderEnabled = true;
+			Physics.debugDraw( secondsToDisplay );
 			DebugConsole.instance.log( "Physics system collider count: " + Physics.getAllColliders().Count );
 		}
 

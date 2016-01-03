@@ -68,7 +68,7 @@ namespace Nez
 
 		public StateKitLite()
 		{
-			Debug.assertIsTrue( typeof( TEnum ).IsEnum, "[StateKitLite] TEnum generic constraint failed! You must use an enum when declaring your subclass!" );
+			Assert.isTrue( typeof( TEnum ).IsEnum, "[StateKitLite] TEnum generic constraint failed! You must use an enum when declaring your subclass!" );
 
 			// cache all of our state methods
 			var enumValues = (TEnum[])Enum.GetValues( typeof( TEnum ) );
