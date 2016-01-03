@@ -188,7 +188,7 @@ namespace Nez.Sprites
 		/// <param name="startFrame">Start frame.</param>
 		public void play( TEnum animationKey, int startFrame = 0 )
 		{
-			Debug.assertIsTrue( _animations.ContainsKey( animationKey ), "Attempted to play an animation that doesnt exist" );
+			Assert.isTrue( _animations.ContainsKey( animationKey ), "Attempted to play an animation that doesnt exist" );
 
 			var animation = _animations[animationKey];
 

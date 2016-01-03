@@ -53,6 +53,19 @@ namespace Nez
 
 
 		/// <summary>
+		/// Update first to be the union of first and point
+		/// </summary>
+		/// <param name="first">First.</param>
+		/// <param name="point">Point.</param>
+		/// <param name="result">Result.</param>
+		public static void union( ref Rectangle first, ref Point point, out Rectangle result )
+		{
+			var rect = new Rectangle( point.X, point.Y, 0, 0 );
+			union( ref first, ref rect, out result );
+		}
+
+
+		/// <summary>
 		/// given the points of a polygon calculates the bounds
 		/// </summary>
 		/// <returns>The from polygon points.</returns>
@@ -165,24 +178,24 @@ namespace Nez
 		}
 
 		
-		public static bool rayIntersects( ref Rectangle rect, Ray2D ray, out float distance )
+		public static bool rayIntersects( ref Rectangle rect, ref Ray2D ray, out float distance )
 		{
 			distance = 0f;
 			var maxValue = float.MaxValue;
 
 			if( Math.Abs( ray.direction.X ) < 1E-06f )
 			{
-				if( ( ray.position.X < rect.X ) || ( ray.position.X > rect.X + rect.Width ) )
+				if( ( ray.start.X < rect.X ) || ( ray.start.X > rect.X + rect.Width ) )
 					return false;
 			}
 			else
 			{
-				float num11 = 1f / ray.direction.X;
-				float num8 = ( rect.X - ray.position.X ) * num11;
-				float num7 = ( rect.X + rect.Width - ray.position.X ) * num11;
+				var num11 = 1f / ray.direction.X;
+				var num8 = ( rect.X - ray.start.X ) * num11;
+				var num7 = ( rect.X + rect.Width - ray.start.X ) * num11;
 				if( num8 > num7 )
 				{
-					float num14 = num8;
+					var num14 = num8;
 					num8 = num7;
 					num7 = num14;
 				}
@@ -190,26 +203,24 @@ namespace Nez
 				distance = MathHelper.Max( num8, distance );
 				maxValue = MathHelper.Min( num7, maxValue );
 				if( distance > maxValue )
-				{
-					return false;  
-				}  
+					return false;
 			}
 
 			if( Math.Abs( ray.direction.Y ) < 1E-06f )
 			{
-				if( ( ray.position.Y < rect.Y ) || ( ray.position.Y > rect.Y + rect.Height ) )
+				if( ( ray.start.Y < rect.Y ) || ( ray.start.Y > rect.Y + rect.Height ) )
 				{
 					return false;
 				}
 			}
 			else
 			{
-				float num10 = 1f / ray.direction.Y;
-				float num6 = ( rect.Y - ray.position.Y ) * num10;
-				float num5 = ( rect.Y + rect.Height - ray.position.Y ) * num10;
+				var num10 = 1f / ray.direction.Y;
+				var num6 = ( rect.Y - ray.start.Y ) * num10;
+				var num5 = ( rect.Y + rect.Height - ray.start.Y ) * num10;
 				if( num6 > num5 )
 				{
-					float num13 = num6;
+					var num13 = num6;
 					num6 = num5;
 					num5 = num13;
 				}
@@ -386,6 +397,48 @@ namespace Nez
 		}
 
 
+		public static Vector2 getClosestPointOnBoundsToOrigin( ref Rectangle rect )
+		{
+			var max = RectangleExt.getMax( ref rect );
+			var minDist = Math.Abs( rect.Location.X );
+			var boundsPoint = new Vector2( rect.Location.X, 0 );
+
+			if( Math.Abs( max.X ) < minDist )
+			{
+				minDist = Math.Abs( max.X );
+				boundsPoint.X = max.X;
+				boundsPoint.Y = 0f;
+			}
+
+			if( Math.Abs( max.Y ) < minDist )
+			{
+				minDist = Math.Abs( max.Y );
+				boundsPoint.X = 0f;
+				boundsPoint.Y = max.Y;
+			}
+
+			if( Math.Abs( rect.Location.Y ) < minDist )
+			{
+				minDist = Math.Abs( rect.Location.Y );
+				boundsPoint.X = 0;
+				boundsPoint.Y = rect.Location.Y;
+			}
+
+			return boundsPoint;
+		}
+
+
+		/// <summary>
+		/// gets the center point of the rectangle as a Vector2
+		/// </summary>
+		/// <returns>The center.</returns>
+		/// <param name="rect">Rect.</param>
+		public static Vector2 getCenter( ref Rectangle rect )
+		{
+			return new Vector2( rect.X + rect.Width / 2, rect.Y + rect.Height / 2 );
+		}
+
+
 		/// <summary>
 		/// gets the center point of the rectangle as a Vector2
 		/// </summary>
@@ -398,11 +451,22 @@ namespace Nez
 
 
 		/// <summary>
+		/// gets the max point of the rectangle, the bottom-right corner
+		/// </summary>
+		/// <returns>The max.</returns>
+		/// <param name="rect">Rect.</param>
+		public static Point getMax( ref Rectangle rect )
+		{
+			return new Point( rect.Right, rect.Bottom );
+		}
+
+
+		/// <summary>
 		/// gets the position of the rectangle as a Vector2
 		/// </summary>
 		/// <returns>The position.</returns>
 		/// <param name="rect">Rect.</param>
-		public static Vector2 getPosition( this Rectangle rect )
+		public static Vector2 getPosition( ref Rectangle rect )
 		{
 			return new Vector2( rect.X, rect.Y );
 		}

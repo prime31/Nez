@@ -1,5 +1,6 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
+using Nez.PhysicsShapes;
 
 
 namespace Nez
@@ -8,6 +9,7 @@ namespace Nez
 	public abstract class Collider
 	{
 		public Entity entity;
+		public Shape shape;
 
 		/// <summary>
 		/// position is added to entity.position to get the final position for the collider
@@ -50,8 +52,8 @@ namespace Nez
 		/// <value>The origin normalized.</value>
 		public Vector2 originNormalized
 		{
-			get { return new Vector2( _origin.X / width, _origin.Y / height ); }
-			set { origin = new Vector2( value.X * width, value.Y * height ); }
+			get { return new Vector2( _origin.X / bounds.Width, _origin.Y / bounds.Height ); }
+			set { origin = new Vector2( value.X * bounds.Width, value.Y * bounds.Height ); }
 		}
 
 		/// <summary>
@@ -72,21 +74,18 @@ namespace Nez
 		/// physicsLayer can be used as a filter when dealing with collisions. The Flags class has methods to assist with bitmasks.
 		/// </summary>
 		public int physicsLayer = 1 << 0;
-		public abstract float width { get; set; }
-		public abstract float height { get; set; }
 
-		protected Rectangle _bounds;
 		public virtual Rectangle bounds
 		{
 			get
 			{
 				if( _areBoundsDirty )
 				{
-					_bounds = RectangleExt.fromFloats( entity.position.X + _localPosition.X - _origin.X, entity.position.Y + _localPosition.Y - _origin.Y, width, height );
+					shape.recalculateBounds( this );
 					_areBoundsDirty = false;
 				}
 
-				return _bounds;
+				return shape.bounds;
 			}
 		}
 
@@ -98,68 +97,32 @@ namespace Nez
 		{}
 
 
-		public bool collidesWithAtPosition( Collider collider, Vector2 position )
-		{
-			// store off the position so we can restore it after the check
-			var savedPosition = entity.position;
-			entity.position = position;
-
-			var result = collidesWith( collider );
-
-			// restore position
-			entity.position = savedPosition;
-
-			return result;
-		}
-
-
-		/// <summary>
-		/// this amounts to an overlap check. Returns true if an overlap of the Colliders is occuring.
-		/// </summary>
-		/// <returns><c>true</c>, if with was collidesed, <c>false</c> otherwise.</returns>
-		/// <param name="collider">Collider.</param>
-		public bool collidesWith( Collider collider )
-		{
-			if( collider is BoxCollider )
-				return collidesWith( collider as BoxCollider );
-			else if( collider is CircleCollider )
-				return collidesWith( collider as CircleCollider );
-			else if( collider is MultiCollider )
-				return collidesWith( collider as MultiCollider );
-			else if( collider is PolygonCollider )
-				return collidesWith( collider as PolygonCollider );
-			else
-				throw new NotImplementedException( "Collisions against the collider type are not implemented!" );
-		}
-
-
-		public abstract bool collidesWith( Vector2 from, Vector2 to );
-		public abstract bool collidesWith( BoxCollider boxCollider );
-		public abstract bool collidesWith( CircleCollider circle );
-		public abstract bool collidesWith( MultiCollider list );
-		public abstract bool collidesWith( PolygonCollider polygon );
-
-
-
 		/// <summary>
 		/// Called when the parent entity is added to a scene
 		/// </summary>
 		public virtual void onEntityAddedToScene()
 		{
-			if( width == 0 || height == 0 )
+			if( shape == null )
 			{
+				// we only deal with boxes and circles here
+				Assert.isTrue( this is BoxCollider || this is CircleCollider, "Only box and circle colliders can be created automatically" );
+
 				var renderable = entity.getComponent<RenderableComponent>();
-				Debug.warnIf( renderable == null, "Collider has no width/height and no RenderableComponent. Can't figure out how to size it." );
+				Debug.warnIf( renderable == null, "Collider has no shape and no RenderableComponent. Can't figure out how to size it." );
 				if( renderable != null )
 				{
 					var renderableBounds = renderable.bounds;
 
-					width = renderableBounds.Width;
-					height = renderableBounds.Height;
+					var width = renderableBounds.Width;
+					var height = renderableBounds.Height;
 
 					// circle colliders need special care with the origin
 					if( this is CircleCollider )
 					{
+						var circle = this as CircleCollider;
+						circle.shape = new Circle( width * 0.5f );
+						circle.radius = width * 0.5f;
+
 						// fetch the Renderable's center, transfer it to local coordinates and use that as the origin of our collider
 						var center = renderableBounds.Center;
 						var localCenter = center.ToVector2() - entity.position;
@@ -167,8 +130,14 @@ namespace Nez
 					}
 					else
 					{
+						var box = this as BoxCollider;
+						box.shape = new Box( width, height );
+						box.width = width;
+						box.height = height;
 						originNormalized = renderable.originNormalized;
 					}
+
+					shape.position = entity.position;
 				}
 			}
 			_isParentEntityAddedToScene = true;
@@ -213,9 +182,46 @@ namespace Nez
 		}
 
 
+		/// <summary>
+		/// checks to see if this Collider collides with collider. If it does, true will be returned and result will be populated
+		/// with collision data
+		/// </summary>
+		/// <returns><c>true</c>, if with was collidesed, <c>false</c> otherwise.</returns>
+		/// <param name="collider">Collider.</param>
+		/// <param name="result">Result.</param>
+		public bool collidesWith( Collider collider, out ShapeCollisionResult result )
+		{
+			return shape.collidesWithShape( collider.shape, out result );
+		}
+
+
+		/// <summary>
+		/// checks to see if this Collider with motion applied (delta movement vector) collides with collider. If it does, true will be
+		/// returned and result will be populated.
+		/// with collision data
+		/// </summary>
+		/// <returns><c>true</c>, if with was collidesed, <c>false</c> otherwise.</returns>
+		/// <param name="collider">Collider.</param>
+		/// <param name="motion">Motion.</param>
+		/// <param name="result">Result.</param>
+		public bool collidesWith( Collider collider, Vector2 motion, out ShapeCollisionResult result )
+		{
+			// alter the shapes position so that it is in the place it would be after movement so we can check for overlaps
+			var oldPosition = shape.position;
+			shape.position = absolutePosition + motion;
+
+			var didCollide = shape.collidesWithShape( collider.shape, out result );
+			
+			// return the shapes position to where it was before the check
+			shape.position = oldPosition;
+
+			return didCollide;
+		}
+
+
 		public virtual void debugRender( Graphics graphics )
 		{
-			graphics.drawHollowRect( bounds, Color.IndianRed );
+			graphics.spriteBatch.drawHollowRect( bounds, Color.IndianRed );
 		}
 
 	}

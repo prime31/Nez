@@ -164,7 +164,7 @@ namespace Nez.Particles
 				var currentParticle = _particles[i];
 
 				if( _emitterConfig.subtexture == null )
-					_spriteBatch.Draw( graphics.particleTexture, rootPosition + currentParticle.position, graphics.particleTexture.sourceRect, currentParticle.color, currentParticle.rotation, Vector2.One, currentParticle.particleSize * 0.5f, SpriteEffects.None, layerDepth );
+					_spriteBatch.Draw( graphics.pixelTexture, rootPosition + currentParticle.position, graphics.pixelTexture.sourceRect, currentParticle.color, currentParticle.rotation, Vector2.One, currentParticle.particleSize * 0.5f, SpriteEffects.None, layerDepth );
 				else
 					_spriteBatch.Draw( _emitterConfig.subtexture, rootPosition + currentParticle.position, _emitterConfig.subtexture.sourceRect, currentParticle.color, currentParticle.rotation, _emitterConfig.subtexture.center, currentParticle.particleSize / _emitterConfig.subtexture.sourceRect.Width, SpriteEffects.None, layerDepth );
 			}
@@ -185,8 +185,8 @@ namespace Nez.Particles
 			for( var i = 0; i < _particles.Count; i++ )
 			{
 				var currentParticle = _particles[i];
-				//graphics.drawCircle( rootPosition + currentParticle.position, currentParticle.particleSize * 0.5f, Color.IndianRed );
-				graphics.drawHollowRect( rootPosition + currentParticle.position - new Vector2( currentParticle.particleSize * 0.5f, currentParticle.particleSize * 0.5f ), currentParticle.particleSize, currentParticle.particleSize, Color.IndianRed );
+				//graphics.spriteBatch.drawCircle( rootPosition + currentParticle.position, currentParticle.particleSize * 0.5f, Color.IndianRed );
+				graphics.spriteBatch.drawHollowRect( rootPosition + currentParticle.position - new Vector2( currentParticle.particleSize * 0.5f, currentParticle.particleSize * 0.5f ), currentParticle.particleSize, currentParticle.particleSize, Color.IndianRed );
 			}
 		}
 

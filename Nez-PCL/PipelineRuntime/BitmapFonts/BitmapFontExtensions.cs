@@ -19,10 +19,10 @@ namespace Nez.BitmapFonts
 		/// <param name="text">The text which will be drawn.</param>
 		/// <param name="position">The drawing location on screen.</param>
 		/// <param name="color">A color mask.</param>
-		public static void DrawString( this SpriteBatch spriteBatch, BitmapFont spriteFont, string text, Vector2 position, Color color )
+		public static void DrawString( this SpriteBatch spriteBatch, BitmapFont bitmapFont, string text, Vector2 position, Color color )
 		{
 			var source = new BitmapFont.CharacterSource( text );
-			spriteFont.drawInto(
+			bitmapFont.drawInto(
 				spriteBatch, ref source, position, color, 0, Vector2.Zero, Vector2.One, SpriteEffects.None, 0f );
 		}
 
@@ -39,12 +39,12 @@ namespace Nez.BitmapFonts
 		/// <param name="scale">A scaling of this string.</param>
 		/// <param name="effects">Modificators for drawing. Can be combined.</param>
 		/// <param name="layerDepth">A depth of the layer of this string.</param>
-		public static void DrawString( this SpriteBatch spriteBatch, BitmapFont spriteFont, string text, Vector2 position, Color color,
+		public static void DrawString( this SpriteBatch spriteBatch, BitmapFont bitmapFont, string text, Vector2 position, Color color,
 			float rotation, Vector2 origin, float scale, SpriteEffects effects, float layerDepth )
 		{
 			var scaleVec = new Vector2( scale, scale );
 			var source = new BitmapFont.CharacterSource( text );
-			spriteFont.drawInto( spriteBatch, ref source, position, color, rotation, origin, scaleVec, effects, layerDepth );
+			bitmapFont.drawInto( spriteBatch, ref source, position, color, rotation, origin, scaleVec, effects, layerDepth );
 		}
 
 
@@ -60,11 +60,11 @@ namespace Nez.BitmapFonts
 		/// <param name="scale">A scaling of this string.</param>
 		/// <param name="effects">Modificators for drawing. Can be combined.</param>
 		/// <param name="layerDepth">A depth of the layer of this string.</param>
-		public static void DrawString( this SpriteBatch spriteBatch, BitmapFont spriteFont, string text, Vector2 position, Color color,
+		public static void DrawString( this SpriteBatch spriteBatch, BitmapFont bitmapFont, string text, Vector2 position, Color color,
 			float rotation, Vector2 origin, Vector2 scale, SpriteEffects effects, float layerDepth )
 		{
 			var source = new BitmapFont.CharacterSource( text );
-			spriteFont.drawInto( spriteBatch, ref source, position, color, rotation, origin, scale, effects, layerDepth );
+			bitmapFont.drawInto( spriteBatch, ref source, position, color, rotation, origin, scale, effects, layerDepth );
 		}
 
 
@@ -75,10 +75,10 @@ namespace Nez.BitmapFonts
 		/// <param name="text">The text which will be drawn.</param>
 		/// <param name="position">The drawing location on screen.</param>
 		/// <param name="color">A color mask.</param>
-		public static void DrawString( this SpriteBatch spriteBatch, BitmapFont spriteFont, StringBuilder text, Vector2 position, Color color )
+		public static void DrawString( this SpriteBatch spriteBatch, BitmapFont bitmapFont, StringBuilder text, Vector2 position, Color color )
 		{
 			var source = new BitmapFont.CharacterSource( text );
-			spriteFont.drawInto( spriteBatch, ref source, position, color, 0, Vector2.Zero, Vector2.One, SpriteEffects.None, 0f );
+			bitmapFont.drawInto( spriteBatch, ref source, position, color, 0, Vector2.Zero, Vector2.One, SpriteEffects.None, 0f );
 		}
 
 
@@ -95,12 +95,12 @@ namespace Nez.BitmapFonts
 		/// <param name="effects">Modificators for drawing. Can be combined.</param>
 		/// <param name="layerDepth">A depth of the layer of this string.</param>
 		public static void DrawString(
-			this SpriteBatch spriteBatch, BitmapFont spriteFont, StringBuilder text, Vector2 position, Color color,
+			this SpriteBatch spriteBatch, BitmapFont bitmapFont, StringBuilder text, Vector2 position, Color color,
 			float rotation, Vector2 origin, float scale, SpriteEffects effects, float layerDepth )
 		{
 			var scaleVec = new Vector2( scale, scale );
 			var source = new BitmapFont.CharacterSource( text );
-			spriteFont.drawInto( spriteBatch, ref source, position, color, rotation, origin, scaleVec, effects, layerDepth );
+			bitmapFont.drawInto( spriteBatch, ref source, position, color, rotation, origin, scaleVec, effects, layerDepth );
 		}
 
 
@@ -117,11 +117,11 @@ namespace Nez.BitmapFonts
 		/// <param name="effects">Modificators for drawing. Can be combined.</param>
 		/// <param name="layerDepth">A depth of the layer of this string.</param>
 		public static void DrawString(
-			this SpriteBatch spriteBatch, BitmapFont spriteFont, StringBuilder text, Vector2 position, Color color,
+			this SpriteBatch spriteBatch, BitmapFont bitmapFont, StringBuilder text, Vector2 position, Color color,
 			float rotation, Vector2 origin, Vector2 scale, SpriteEffects effects, float layerDepth )
 		{
 			var source = new BitmapFont.CharacterSource( text );
-			spriteFont.drawInto( spriteBatch, ref source, position, color, rotation, origin, scale, effects, layerDepth );
+			bitmapFont.drawInto( spriteBatch, ref source, position, color, rotation, origin, scale, effects, layerDepth );
 		}
 
 	}

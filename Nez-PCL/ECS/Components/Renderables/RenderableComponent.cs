@@ -204,10 +204,10 @@ namespace Nez
 		{
 			// if we have no collider draw our bounds
 			if( entity.collider == null )
-				graphics.drawHollowRect( bounds, Color.Yellow );
+				graphics.spriteBatch.drawHollowRect( bounds, Color.Yellow );
 
 			// draw a square for our pivot/origin
-			graphics.drawPixel( renderPosition, Color.DarkOrchid, 4 );
+			graphics.spriteBatch.drawPixel( renderPosition, Color.DarkOrchid, 4 );
 		}
 
 

@@ -7,8 +7,8 @@ namespace Nez
 {
 	public class EntityList : IEnumerable<Entity>, IEnumerable
 	{
-		// global depth sort for Entity lists
-		internal static Comparison<Entity> compareEntityOrder = ( a, b ) => { return Math.Sign( b._actualOrder - a._actualOrder ); };
+		// global updateOrder sort for Entity lists
+		internal static Comparison<Entity> compareEntityOrder = ( a, b ) => { return Math.Sign( b._actualUpdateOrder - a._actualUpdateOrder ); };
 
 		public Scene scene;
 
@@ -66,7 +66,9 @@ namespace Nez
 
 		public void remove( Entity entity )
 		{
-			if (!_entitiesToRemove.Contains(entity))
+			Debug.warnIf( _entitiesToRemove.Contains( entity ), "You are trying to remove an entity ({0}) that you already removed", entity.name );
+
+			if( _entitiesToRemove.Contains( entity ) )
 				_entitiesToRemove.Add( entity );
 		}
 
@@ -96,7 +98,7 @@ namespace Nez
 		internal void addToTagList( Entity entity )
 		{
 			var list = entitiesWithTag( entity.tag );
-			Debug.assertIsFalse( list.Contains( entity ), "Entity tag list already contains this entity: {0}", entity );
+			Assert.isFalse( list.Contains( entity ), "Entity tag list already contains this entity: {0}", entity );
 
 			list.Add( entity );
 			_unsortedTags.Add( entity.tag );

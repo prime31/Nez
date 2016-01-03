@@ -62,6 +62,7 @@
     <Folder Include="PipelineRuntime\ParticleDesigner\" />
     <Folder Include="Utils\Analysis\" />
     <Folder Include="ECS\Systems\" />
+    <Folder Include="Physics\Shapes\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Debug\Debug.cs" />
@@ -72,7 +73,6 @@
     <Compile Include="ECS\Components\Physics\BoxCollider.cs" />
     <Compile Include="ECS\Components\Physics\CircleCollider.cs" />
     <Compile Include="ECS\Components\Physics\Collider.cs" />
-    <Compile Include="ECS\Components\Physics\MultiCollider.cs" />
     <Compile Include="ECS\Components\Renderables\RenderableComponent.cs" />
     <Compile Include="ECS\Components\Renderables\TiledMapComponent.cs" />
     <Compile Include="ECS\Components\Text\FramesPerSecondCounter.cs" />
@@ -172,7 +172,6 @@
     <Compile Include="Utils\NezContentManager.cs" />
     <Compile Include="ECS\Components\Renderables\Sprites\SpriteAnimationFrame.cs" />
     <Compile Include="ECS\Components\Physics\PolygonCollider.cs" />
-    <Compile Include="ECS\Components\Physics\OrientedBoxCollider.cs" />
     <Compile Include="ECS\Components\CameraShake.cs" />
     <Compile Include="Utils\Screen.cs" />
     <Compile Include="Physics\QuadTree\QuadTree.cs" />
@@ -202,5 +201,13 @@
     <Compile Include="ECS\EntitySystem.cs" />
     <Compile Include="ECS\Systems\EntityProcessingSystem.cs" />
     <Compile Include="ECS\Systems\ProcessingSystem.cs" />
+    <Compile Include="Physics\Shapes\Shape.cs" />
+    <Compile Include="Physics\Shapes\Polygon.cs" />
+    <Compile Include="Physics\Shapes\ShapeCollisionResult.cs" />
+    <Compile Include="Physics\Shapes\ShapeCollisions.cs" />
+    <Compile Include="Physics\Shapes\Circle.cs" />
+    <Compile Include="Physics\Shapes\Box.cs" />
+    <Compile Include="Graphics\SpriteBatchExt.cs" />
+    <Compile Include="Debug\Assert.cs" />
   </ItemGroup>
 </Project>

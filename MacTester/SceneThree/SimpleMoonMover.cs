@@ -25,8 +25,12 @@ namespace MacTester
 			else if( Input.isKeyDown( Keys.Down ) )
 				moveDir.Y = 1f;
 
+
 			if( moveDir != Vector2.Zero )
-				entity.moveActor( moveDir.X * _speed, moveDir.Y * _speed, this, this );
+			{
+				var movement = moveDir * _speed;
+				entity.moveActor( movement );
+			}
 		}
 
 

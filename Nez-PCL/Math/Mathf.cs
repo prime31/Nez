@@ -30,12 +30,22 @@ namespace Nez
 		}
 
 
+		public static int fastFloorToInt( float x )
+		{
+			return x > 0 ? (int)x : (int)x - 1;
+		}
+
+
 		public static int roundToInt( float f )
 		{
 			return (int)Math.Round( (double)f );
 		}
 
 
+		/// <summary>
+		/// clamps value between 0 and 1
+		/// </summary>
+		/// <param name="value">Value.</param>
 		public static float clamp01( float value )
 		{
 			if( value < 0f )
@@ -84,6 +94,13 @@ namespace Nez
 		}
 
 
+		/// <summary>
+		/// lerps an angle in degrees between a and b. handles wrapping around 360
+		/// </summary>
+		/// <returns>The angle.</returns>
+		/// <param name="a">The alpha component.</param>
+		/// <param name="b">The blue component.</param>
+		/// <param name="t">T.</param>
 		public static float lerpAngle( float a, float b, float t )
 		{
 			float num = Mathf.repeat( b - a, 360f );
@@ -108,6 +125,12 @@ namespace Nez
 		}
 
 
+		/// <summary>
+		/// if value >= threshold returns its sign else returns 0
+		/// </summary>
+		/// <returns>The threshold.</returns>
+		/// <param name="value">Value.</param>
+		/// <param name="threshold">Threshold.</param>
 		static public float signThreshold( float value, float threshold )
 		{
 			if( Math.Abs( value ) >= threshold )
@@ -146,7 +169,7 @@ namespace Nez
 
 
 		/// <summary>
-		/// rounds value and returns it and 
+		/// rounds value and returns it and the amount that was rounded
 		/// </summary>
 		/// <returns>The with remainder.</returns>
 		/// <param name="value">Value.</param>
@@ -209,6 +232,44 @@ namespace Nez
 		}
 
 
+		/// <summary>
+		/// the rotation is relative to the current position not the total rotation.  For example, if you are currently at 90 degrees and
+		/// want to rotate to 135 degrees, you would use an angle of 45, not 135.
+		/// </summary>
+		/// <returns>The around.</returns>
+		/// <param name="point">Point.</param>
+		/// <param name="center">Center.</param>
+		/// <param name="angleInDegrees">Angle in degrees.</param>
+		public static Vector2 rotateAround( Vector2 point, Vector2 center, float angleInDegrees )
+		{
+			angleInDegrees = MathHelper.ToRadians( angleInDegrees );
+			var cos = Mathf.cos( angleInDegrees );
+			var sin = Mathf.sin( angleInDegrees );
+			var rotatedX = cos * ( point.X - center.X ) - sin * ( point.Y - center.Y ) + center.X;
+			var rotatedY = sin * ( point.X - center.X ) + cos * ( point.Y - center.Y ) + center.Y;
+
+			return new Vector2( rotatedX, rotatedY );
+		}
+
+
+		/// <summary>
+		/// gets a point on the circumference of the circle given its center, radius and angle
+		/// </summary>
+		/// <returns>The on circle.</returns>
+		/// <param name="circleCenter">Circle center.</param>
+		/// <param name="radius">Radius.</param>
+		/// <param name="angleInDegrees">Angle in degrees.</param>
+		public static Vector2 pointOnCircle( Vector2 circleCenter, float radius, float angleInDegrees )
+		{
+			var radians = MathHelper.ToRadians( angleInDegrees );
+			return new Vector2
+			{
+				X = Mathf.cos( radians ) * radius + circleCenter.X,
+				Y = Mathf.sin( radians ) * radius + circleCenter.Y
+			};
+		}
+
+
 		#region wrappers for Math doubles
 
 		public static float sqrt( float val )
@@ -240,6 +301,17 @@ namespace Nez
 			return (float)Math.Exp( power );
 		}
 
+
+		/// <summary>
+		/// returns the angle whose tangent is the quotient of two specified numbers
+		/// </summary>
+		/// <param name="y">The y coordinate.</param>
+		/// <param name="x">The x coordinate.</param>
+		public static float atan2( float y, float x )
+		{
+			return (float)Math.Atan2( y, x );
+		}
+
 		#endregion
 
 
@@ -247,7 +319,7 @@ namespace Nez
 
 		static public float angleBetweenVectors( Vector2 from, Vector2 to )
 		{
-			return (float)Math.Atan2( to.Y - from.Y, to.X - from.X );
+			return Mathf.atan2( to.Y - from.Y, to.X - from.X );
 		}
 
 

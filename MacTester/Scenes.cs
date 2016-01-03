@@ -12,6 +12,8 @@ using Nez.BitmapFonts;
 using System.Collections.Generic;
 using System.IO;
 using Nez.Particles;
+using Nez.PhysicsShapes;
+using System.Linq;
 
 
 namespace MacTester
@@ -36,7 +38,7 @@ namespace MacTester
 			var tiledEntity = scene.createAndAddEntity<Entity>( "tiled-map-entity" );
 			var tiledmap = scene.contentManager.Load<TiledMap>( "bin/MacOSX/Tilemap/tilemap" );
 			tiledEntity.addComponent( new TiledMapComponent( tiledmap, "collision" ) );
-			tiledEntity.order += 5;
+			tiledEntity.updateOrder += 5;
 
 
 			// create a sprite animation from an atlas
@@ -189,13 +191,6 @@ namespace MacTester
 				entity.collider = new CircleCollider();
 
 
-			var uglyBackgroundEntity = scene.createAndAddEntity<Entity>( "bg" );
-			uglyBackgroundEntity.order = 5;
-			var image = new Sprite( scene.contentManager.Load<Texture2D>( "Images/dots-512" ) );
-			image.zoom = 4f;
-			uglyBackgroundEntity.addComponent( image );
-
-
 			// add a follow camera
 			var camFollow = scene.createAndAddEntity<Entity>( "camera-follow" );
 			camFollow.addComponent( new FollowCamera( entity ) );
@@ -228,7 +223,6 @@ namespace MacTester
 				}
 			}
 
-
 			return scene;
 		}
 
@@ -241,46 +235,17 @@ namespace MacTester
 
 			var entity = scene.createAndAddEntity<Entity>( "moon" );
 			var image = new Sprite( moonTexture );
-			image.originNormalized = Vector2Ext.halfVector();
 			entity.addComponent( image );
 			entity.position = new Vector2( 200, 200 );
-
-			var points = new List<Vector2>();
-			points.Add( new Vector2( -50, -50 ) );
-			points.Add( new Vector2( 0, -70 ) );
-			points.Add( new Vector2( 50, -40 ) );
-			points.Add( new Vector2( 50, 50 ) );
-			points.Add( new Vector2( -50, 50 ) );
-			points.Add( new Vector2( -50, -50 ) );
-			entity.collider = new PolygonCollider( points.ToArray() );
-			( entity.collider as PolygonCollider ).rotation = MathHelper.PiOver2;
-
+			entity.collider = new PolygonCollider( 5, 100 );
+		
 
 			entity = scene.createAndAddEntity<Entity>( "moon2" );
 			image = new Sprite( moonTexture );
-			image.originNormalized = Vector2Ext.halfVector();
 			entity.addComponent( image );
-			entity.position = new Vector2( 500, 500 );
-
-			points = new List<Vector2>();
-			points.Add( new Vector2( -50, -50 ) );
-			points.Add( new Vector2( 50, 30 ) );
-			points.Add( new Vector2( -40, 40 ) );
-			points.Add( new Vector2( -50, -50 ) );
-
-			entity.collider = new PolygonCollider( points.ToArray() );
-			entity.collider = new OrientedBoxCollider( 128, 128 );
-			( entity.collider as PolygonCollider ).rotation = MathHelper.PiOver4;
 			entity.addComponent( new SimpleMoonMover() );
-
-
-			entity = scene.createAndAddEntity<Entity>( "moon2" );
-			image = new Sprite( moonTexture );
-			image.originNormalized = Vector2Ext.halfVector();
-			entity.addComponent( image );
-			entity.position = new Vector2( 700, 300 );
-			entity.collider = new OrientedBoxCollider( 128, 128 );
-			( entity.collider as OrientedBoxCollider ).rotation = MathHelper.PiOver4 + 0.1f;
+			entity.position = new Vector2( 500, 500 );
+			entity.collider = new PolygonCollider( 7, 60 );
 
 			return scene;
 		}
