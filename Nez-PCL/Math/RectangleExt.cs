@@ -190,12 +190,12 @@ namespace Nez
 			}
 			else
 			{
-				float num11 = 1f / ray.direction.X;
-				float num8 = ( rect.X - ray.start.X ) * num11;
-				float num7 = ( rect.X + rect.Width - ray.start.X ) * num11;
+				var num11 = 1f / ray.direction.X;
+				var num8 = ( rect.X - ray.start.X ) * num11;
+				var num7 = ( rect.X + rect.Width - ray.start.X ) * num11;
 				if( num8 > num7 )
 				{
-					float num14 = num8;
+					var num14 = num8;
 					num8 = num7;
 					num7 = num14;
 				}
@@ -203,9 +203,7 @@ namespace Nez
 				distance = MathHelper.Max( num8, distance );
 				maxValue = MathHelper.Min( num7, maxValue );
 				if( distance > maxValue )
-				{
-					return false;  
-				}  
+					return false;
 			}
 
 			if( Math.Abs( ray.direction.Y ) < 1E-06f )
@@ -217,12 +215,12 @@ namespace Nez
 			}
 			else
 			{
-				float num10 = 1f / ray.direction.Y;
-				float num6 = ( rect.Y - ray.start.Y ) * num10;
-				float num5 = ( rect.Y + rect.Height - ray.start.Y ) * num10;
+				var num10 = 1f / ray.direction.Y;
+				var num6 = ( rect.Y - ray.start.Y ) * num10;
+				var num5 = ( rect.Y + rect.Height - ray.start.Y ) * num10;
 				if( num6 > num5 )
 				{
-					float num13 = num6;
+					var num13 = num6;
 					num6 = num5;
 					num5 = num13;
 				}
@@ -408,19 +406,22 @@ namespace Nez
 			if( Math.Abs( max.X ) < minDist )
 			{
 				minDist = Math.Abs( max.X );
-				boundsPoint = new Vector2( max.X, 0 );
+				boundsPoint.X = max.X;
+				boundsPoint.Y = 0f;
 			}
 
 			if( Math.Abs( max.Y ) < minDist )
 			{
 				minDist = Math.Abs( max.Y );
-				boundsPoint = new Vector2( 0, max.Y );
+				boundsPoint.X = 0f;
+				boundsPoint.Y = max.Y;
 			}
 
 			if( Math.Abs( rect.Location.Y ) < minDist )
 			{
 				minDist = Math.Abs( rect.Location.Y );
-				boundsPoint = new Vector2( 0, rect.Location.Y );
+				boundsPoint.X = 0;
+				boundsPoint.Y = rect.Location.Y;
 			}
 
 			return boundsPoint;

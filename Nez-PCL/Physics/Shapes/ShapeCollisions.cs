@@ -28,7 +28,7 @@ namespace Nez.PhysicsShapes
 		/// <param name="second">Second.</param>
 		/// <param name="deltaMovement">Delta movement.</param>
 		/// <param name="hit">Hit.</param>
-		public static bool boxToBoxCast( Box first, Box second, Vector2 deltaMovement, out RaycastHit hit )
+		public static bool boxToBoxCast( Box first, Box second, Vector2 movement, out RaycastHit hit )
 		{
 			// http://hamaluik.com/posts/swept-aabb-collision-using-minkowski-difference/
 			hit = new RaycastHit();
@@ -52,15 +52,15 @@ namespace Nez.PhysicsShapes
 			else
 			{
 				// ray-cast the relativeMotion vector against the Minkowski AABB
-				var ray = new Ray2D( Vector2.Zero, -deltaMovement );
+				var ray = new Ray2D( Vector2.Zero, -movement );
 				float fraction;
 				if( RectangleExt.rayIntersects( ref minkowskiDiff, ref ray, out fraction ) && fraction <= 1.0f )
 				{
 					hit.fraction = fraction;
-					hit.distance = deltaMovement.Length() * fraction;
-					hit.normal = -deltaMovement;
+					hit.distance = movement.Length() * fraction;
+					hit.normal = -movement;
 					hit.normal.Normalize();
-					hit.centroid = first.bounds.getCenter() + deltaMovement * fraction;
+					hit.centroid = first.bounds.getCenter() + movement * fraction;
 
 					return true;
 				}
@@ -81,7 +81,7 @@ namespace Nez.PhysicsShapes
 				result.minimumTranslationVector = RectangleExt.getClosestPointOnBoundsToOrigin( ref minkowskiDiff );
 				if( result.minimumTranslationVector == Vector2.Zero )
 					return false;
-				
+
 				result.normal = -result.minimumTranslationVector;
 				result.normal.Normalize();
 
