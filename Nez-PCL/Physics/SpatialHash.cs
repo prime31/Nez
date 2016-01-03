@@ -575,7 +575,10 @@ namespace Nez.Spatial
 				_checkedColliders.Add( potential );
 
 				// only hit triggers if we are set to do so and make sure the Collider is on the layerMask
-				if( potential.isTrigger && !Physics.raycastsHitTriggers && !Flags.isFlagSet( _layerMask, potential.physicsLayer ) )
+				if( potential.isTrigger && !Physics.raycastsHitTriggers )
+					continue;
+
+				if( !Flags.isFlagSet (_layerMask, potential.physicsLayer) )
 					continue;
 
 				// TODO: is rayIntersects performant enough? profile it. Collisions.rectToLine might be faster
