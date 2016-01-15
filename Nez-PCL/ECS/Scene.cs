@@ -11,9 +11,6 @@ namespace Nez
 {
 	public class Scene
 	{
-		// cache used across all scenes so it is static
-		internal static EntityCache _entityCache;
-
 		/// <summary>
 		/// default scene Camera
 		/// </summary>
@@ -51,12 +48,6 @@ namespace Nez
 		List<Renderer> _renderers = new List<Renderer>();
 		Dictionary<int,double> _actualEntityOrderLookup = new Dictionary<int,double>();
 		readonly List<PostProcessor> _postProcessors = new List<PostProcessor>();
-
-
-		static Scene()
-		{
-			_entityCache = new EntityCache();
-		}
 
 
 		/// <summary>
@@ -266,13 +257,13 @@ namespace Nez
 		#region Entity Management
 
 		/// <summary>
-		/// add the Entity to this Scene, and return it. Entity type must have the PooledEntityAttribute for a cached Entity to be used
+		/// add the Entity to this Scene, and return it
 		/// </summary>
-		/// <typeparam name="T">Pooled Entity type to create</typeparam>
+		/// <typeparam name="T">entity type</typeparam>
 		/// <returns></returns>
 		public T createAndAddEntity<T>( string name ) where T : Entity, new()
 		{
-			var entity = _entityCache.create<T>();
+			var entity = new T();
 			entity.name = name;
 			addEntity( entity );
 
