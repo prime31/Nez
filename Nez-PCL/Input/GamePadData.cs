@@ -12,6 +12,7 @@ namespace Nez
 		PlayerIndex _playerIndex;
 		GamePadState _previousState;
 		GamePadState _currentState;
+		float _rumbleTime;
 
 
 		internal GamePadData( PlayerIndex playerIndex )
@@ -26,12 +27,27 @@ namespace Nez
 		{
 			_previousState = _currentState;
 			_currentState = Microsoft.Xna.Framework.Input.GamePad.GetState( _playerIndex );
+
+			if( _rumbleTime > 0f )
+			{
+				_rumbleTime -= Time.deltaTime;
+				if( _rumbleTime <= 0f )
+					GamePad.SetVibration( _playerIndex, 0, 0 );
+			}
 		}
 
 
-		public void setVibration( float left, float right )
+		public void setVibration( float left, float right, float duration )
 		{
+			_rumbleTime = duration;
 			GamePad.SetVibration( _playerIndex, left, right );
+		}
+
+
+		public void stopVibration()
+		{
+			GamePad.SetVibration( _playerIndex, 0, 0 );
+			_rumbleTime = 0f;
 		}
 
 

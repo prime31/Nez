@@ -77,7 +77,7 @@ namespace MacTester
 					var hit = Physics.linecast( start, end );
 					if( hit.collider != null )
 					{
-						Debug.log( "ray HIT {0}, collider: {1}", hit.distance, hit.collider.entity );
+						Debug.log( "ray HIT {0}, collider: {1}", hit, hit.collider.entity );
 					}
 				}
 

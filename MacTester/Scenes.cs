@@ -237,15 +237,18 @@ namespace MacTester
 			var image = new Sprite( moonTexture );
 			entity.addComponent( image );
 			entity.position = new Vector2( 200, 200 );
-			entity.collider = new PolygonCollider( 5, 100 );
-		
+			//entity.collider = new PolygonCollider( 5, 100 );
+			entity.collider = new BoxCollider();
+
 
 			entity = scene.createAndAddEntity<Entity>( "moon2" );
 			image = new Sprite( moonTexture );
 			entity.addComponent( image );
 			entity.addComponent( new SimpleMoonMover() );
 			entity.position = new Vector2( 500, 500 );
-			entity.collider = new PolygonCollider( 7, 60 );
+			//entity.collider = new PolygonCollider( 7, 60 );
+			//entity.collider = new BoxCollider();
+			entity.collider = new CircleCollider();
 
 			return scene;
 		}
