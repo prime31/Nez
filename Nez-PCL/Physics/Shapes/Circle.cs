@@ -24,7 +24,8 @@ namespace Nez.PhysicsShapes
 
 		public override bool collidesWithShape( Shape other, out ShapeCollisionResult result )
 		{
-			result = new ShapeCollisionResult();
+			if( other is Box )
+				return ShapeCollisions.circleToBox( this, other as Box, out result );
 
 			if( other is Circle )
 				return ShapeCollisions.circleToCircle( this, other as Circle, out result );
@@ -32,7 +33,7 @@ namespace Nez.PhysicsShapes
 			if( other is Polygon )
 				return ShapeCollisions.circleToPolygon( this, other as Polygon, out result );
 
-			return false;
+			throw new NotImplementedException( string.Format( "Collisions of Circle to {0} are not supported", other ) );
 		}
 
 

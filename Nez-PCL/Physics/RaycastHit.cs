@@ -75,7 +75,7 @@ namespace Nez
 
 		public override string ToString()
 		{
-			return string.Format( "[RaycastHit] fraction: {0}, distance: {1}, normal: {2}, centroid: {3}", fraction, distance, normal, centroid );
+			return string.Format( "[RaycastHit] fraction: {0}, distance: {1}, normal: {2}, centroid: {3}, point: {4}", fraction, distance, normal, centroid, point );
 		}
 
 	}

@@ -105,7 +105,6 @@
     <Compile Include="Physics\SpatialHash.cs" />
     <Compile Include="Stuff\IMGUI\IMGUI.cs" />
     <Compile Include="Utils\Emitter.cs" />
-    <Compile Include="Utils\EntityCache.cs" />
     <Compile Include="Utils\Time.cs" />
     <Compile Include="Core.cs" />
     <Compile Include="CoreEvents.cs" />
@@ -201,5 +200,6 @@
     <Compile Include="Physics\Shapes\Box.cs" />
     <Compile Include="Graphics\SpriteBatchExt.cs" />
     <Compile Include="Debug\Assert.cs" />
+    <Compile Include="Physics\Shapes\RealtimeCollisions.cs" />
   </ItemGroup>
 </Project>

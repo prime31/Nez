@@ -6,6 +6,9 @@ namespace Nez
 {
 	public static class Mathf
 	{
+		public static float epsilon = 0.00001f;
+
+
 		public static float round( float f )
 		{
 			return (float)Math.Round( (double)f );
