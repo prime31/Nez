@@ -6,7 +6,7 @@ using Microsoft.Xna.Framework;
 
 namespace MacTester
 {
-	public class SimpleMoonMover : Component, ICollisionCallback, ITriggerCallback
+	public class SimpleMoonMover : Component
 	{
 		float _speed = 10f;
 
@@ -32,19 +32,6 @@ namespace MacTester
 				entity.moveActor( movement );
 			}
 		}
-
-
-		public void onCollisionEnter( Collider collider, CollisionDirection direction )
-		{
-			Debug.log( "Collided with {0} direction: {1}", collider.entity, direction );
-		}
-
-
-		public void onTriggerEnter( Collider other )
-		{
-			Debug.log( "Triggered with {0}", other.entity );
-		}
-
 	}
 }
 
