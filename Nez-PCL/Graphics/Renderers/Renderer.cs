@@ -109,14 +109,9 @@ namespace Nez
 				Core.graphicsDevice.Clear( renderTextureClearColor );
 			}
 
-			// Sets the current camera viewport if the camera has one
-			if( cam.viewportAdapter != null )
-			{
-				Core.graphicsDevice.Viewport = cam.viewportAdapter.viewport;
-			}
-
+			// TODO: is this necessary? I think it is only needed when manually setting the viewport
 			// MonoGame resets the Viewport to the RT size without asking so we have to let the Camera know to update itself
-			cam.forceMatrixUpdate();
+			//cam.forceMatrixUpdate();
 
 			Graphics.instance.spriteBatch.Begin( spriteSortMode, blendState, samplerState, depthStencilState, rasterizerState, effect, cam.transformMatrix );
 		}

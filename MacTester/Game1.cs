@@ -39,13 +39,15 @@ namespace MacTester
 
 			if( Input.leftMouseButtonPressed )
 			{
-				//Debug.log( "camera bounds: {0}, presention bounds: {1}, viewport: {2}", scene.camera.bounds, GraphicsDevice.PresentationParameters.Bounds.Size, graphicsDevice.Viewport.Bounds );
+				var screenPt = scene.camera.screenToWorldPoint( Input.scaledMousePosition );
+				var worldPt = scene.camera.worldToScreenPoint( screenPt );
+				Debug.log( "mouse pos: {0}, scaled mouse pos: {1}, screen to world point: {2}, world to screen point: {3}", Input.mousePosition, Input.scaledMousePosition, screenPt, worldPt );
 
 				var spriteDude = scene.findEntity( "sprite-dude" );
 				if( spriteDude != null )
 				{
 					spriteDude.getComponent<Sprite<int>>().pause();
-					var worldPos = scene.camera.screenToWorldPoint( Input.mousePosition );
+					var worldPos = scene.camera.screenToWorldPoint( Input.scaledMousePosition );
 					PropertyTweens.vector2PropertyTo( spriteDude, "position", worldPos, 0.5f )
 						.setLoops( LoopType.PingPong, 1 )
 						.setContext( spriteDude )
@@ -101,21 +103,12 @@ namespace MacTester
 			if( Input.leftMouseButtonDown )
 			{
 				var deltaPos = Input.mousePositionDelta.ToVector2();
-
-				// if we have a viewport adapter it may be scaling things so deal with that
-				if( scene.camera.viewportAdapter != null )
-				{
-					deltaPos.X /= scene.camera.viewportAdapter.scaleMatrix.Scale.X;
-					deltaPos.Y /= scene.camera.viewportAdapter.scaleMatrix.Scale.Y;
-				}
-
 				scene.camera.position -= deltaPos;
 			}
 
 			if( Input.mouseWheelDelta != 0 )
 			{
 				scene.camera.zoomIn( Input.mouseWheelDelta * 0.0001f );
-				//scene.camera.move( new Vector2( Input.mouseWheelDelta * 0.001f, Input.mouseWheelDelta * 0.001f ) );
 			}
 		}
 
@@ -128,10 +121,10 @@ namespace MacTester
 
 			debugRenderEnabled = IMGUI.toggle( "Debug Render", debugRenderEnabled );
 
-			if( IMGUI.button( "Scene 1 Scaling" ) )
+			if( IMGUI.button( "Scene 1 ShowAll" ) )
 				scene = Scenes.sceneOne( true );
 
-			if( IMGUI.button( "Scene 1 Boxing" ) )
+			if( IMGUI.button( "Scene 1 NoBorder" ) )
 				scene = Scenes.sceneOne( false );
 
 			if( IMGUI.button( "Scene 2" ) )

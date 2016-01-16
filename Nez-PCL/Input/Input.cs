@@ -14,6 +14,14 @@ namespace Nez
 		public static GamePadData[] gamePads = new GamePadData[MAX_SUPPORTED_GAMEPADS];
 		public const float DEFAULT_DEADZONE = 0.1f;
 
+		/// <summary>
+		/// set by the Scene and used to scale mouse input
+		/// </summary>
+		internal static Vector2 _resolutionScale;
+		/// <summary>
+		/// set by the Scene and used to scale mouse input
+		/// </summary>
+		internal static Point _resolutionOffset;
 		static KeyboardState _previousKbState;
 		static KeyboardState _currentKbState;
 		static MouseState _previousMouseState;
@@ -244,6 +252,16 @@ namespace Nez
 		public static Point mousePosition
 		{
 			get { return _currentMouseState.Position; }
+		}
+
+
+		public static Vector2 scaledMousePosition
+		{
+			get
+			{
+				var mousePosition = _currentMouseState.Position - _resolutionOffset;
+				return mousePosition.ToVector2() * _resolutionScale;
+			}
 		}
 
 

@@ -88,9 +88,6 @@
     <Compile Include="Graphics\Renderers\RenderLayerExcludeRenderer.cs" />
     <Compile Include="Graphics\Renderers\RenderLayerRenderer.cs" />
     <Compile Include="Graphics\Renderers\Renderer.cs" />
-    <Compile Include="Graphics\ViewportAdapters\BoxingViewportAdapter.cs" />
-    <Compile Include="Graphics\ViewportAdapters\ScalingViewportAdapter.cs" />
-    <Compile Include="Graphics\ViewportAdapters\ViewportAdapter.cs" />
     <Compile Include="Input\GamePadData.cs" />
     <Compile Include="Input\Input.cs" />
     <Compile Include="Input\VirtualAxis.cs" />

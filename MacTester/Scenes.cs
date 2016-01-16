@@ -20,19 +20,16 @@ namespace MacTester
 {
 	public static class Scenes
 	{
-		public static Scene sceneOne( bool useScalingViewportAdapter = true )
+		public static Scene sceneOne( bool showAll = true )
 		{
 			var scene = Scene.createWithDefaultRenderer( Color.Black );
 
-			if( useScalingViewportAdapter )
-				scene.camera.viewportAdapter = new ScalingViewportAdapter( Core.graphicsDevice, 256, 144 );
+			if( showAll )
+				scene.setDesignResolution( 256, 144, Scene.SceneResolutionPolicy.ShowAllPixelPerfect );
 			else
-				scene.camera.viewportAdapter = new BoxingViewportAdapter( Core.graphicsDevice, 256, 144 );
-			scene.camera.centerOrigin();
+				scene.setDesignResolution( 256, 144, Scene.SceneResolutionPolicy.NoBorderPixelPerfect );
 
-			Screen.preferredBackBufferWidth = 256 * 4; 
-			Screen.preferredBackBufferHeight = 144 * 4;
-			Screen.applyChanges();
+			Screen.setBackBufferSize( 256 * 4, 144 * 4 );
 
 			// load a TiledMap and move it back so is drawn before other entities
 			var tiledEntity = scene.createAndAddEntity<Entity>( "tiled-map-entity" );
@@ -40,6 +37,10 @@ namespace MacTester
 			tiledEntity.addComponent( new TiledMapComponent( tiledmap, "collision" ) );
 			tiledEntity.updateOrder += 5;
 
+			var tiledEntityTwo = scene.createAndAddEntity<Entity>( "tiled-map-entity-two" );
+			tiledEntityTwo.position = new Vector2( 256, 0 );
+			tiledEntityTwo.addComponent<TiledMapComponent>( new TiledMapComponent( tiledmap, "collision" ) );
+			tiledEntityTwo.updateOrder += 5;
 
 			// create a sprite animation from an atlas
 			var plumeTexture = scene.contentManager.Load<Texture2D>( "Images/plume" );
@@ -58,10 +59,10 @@ namespace MacTester
 			spriteEntity.position = new Vector2( 40, 40 );
 			spriteEntity.addComponent( sprite );
 
-			if( useScalingViewportAdapter )
+			if( showAll )
 			{
 				scene.addPostProcessor( new SimpleBloomPostProcessor( scene.contentManager ) );
-				scene.enablePostProcessing = true;
+				//scene.enablePostProcessing = true;
 			}
 
 			return scene;
@@ -72,7 +73,6 @@ namespace MacTester
 		{
 			var scene = new Scene();
 			scene.clearColor = Color.Coral;
-			scene.camera.centerOrigin();
 			var moonTexture = scene.contentManager.Load<Texture2D>( "Images/moon" );
 			var bmFont = scene.contentManager.Load<BitmapFont>( "bin/MacOSX/Fonts/pixelfont" );
 			bmFont.spacing = 2f;
@@ -203,7 +203,6 @@ namespace MacTester
 		public static Scene sceneOverlap2D()
 		{
 			var scene = Scene.createWithDefaultRenderer( Color.Aquamarine );
-			scene.camera.centerOrigin();
 
 			var sceneEntity = scene.createAndAddEntity<Entity>( "overlap2d-scene-entity" );
 			var o2ds = scene.contentManager.Load<O2DScene>( "bin/MacOSX/Overlap2D/MainScene" );
@@ -230,7 +229,6 @@ namespace MacTester
 		public static Scene sceneFour()
 		{
 			var scene = Scene.createWithDefaultRenderer( Color.Aquamarine );
-			scene.camera.centerOrigin();
 			var moonTexture = scene.contentManager.Load<Texture2D>( "Images/moon" );
 
 			var entity = scene.createAndAddEntity<Entity>( "moon" );
@@ -258,7 +256,6 @@ namespace MacTester
 		public static Scene sceneFive()
 		{
 			var scene = Scene.createWithDefaultRenderer( Color.Black );
-			scene.camera.centerOrigin();
 
 			var particles = new string[]
 			{

@@ -23,8 +23,6 @@ namespace Nez.PhysicsShapes
 		{
 			hit = new RaycastHit();
 			throw new NotImplementedException( "this should probably be in each Shape class and it still needs to be implemented ;)" );
-
-			return false;
 		}
 
 

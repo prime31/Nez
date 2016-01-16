@@ -97,6 +97,14 @@ namespace Nez
 			Debug.warn( "noop. applyChanges doesnt work properly on OS X. It causes a crash with no stack trace due to a MonoGame bug." );
 		}
 
+
+		public static void setBackBufferSize( int width, int height )
+		{
+			backBufferWidth = width;
+			backBufferHeight = height;
+			applyChanges();
+		}
+
 	}
 }
 

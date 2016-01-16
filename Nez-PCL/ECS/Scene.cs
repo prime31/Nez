@@ -11,6 +11,52 @@ namespace Nez
 {
 	public class Scene
 	{
+		public enum SceneResolutionPolicy
+		{
+			/// <summary>
+			/// Default. RenderTexture matches the sceen size
+			/// </summary>
+			None,
+			/// <summary>
+			/// The entire application is visible in the specified area without trying to preserve the original aspect ratio. 
+			/// Distortion can occur, and the application may appear stretched or compressed.
+			/// </summary>
+			ExactFit,
+			/// <summary>
+			/// The entire application fills the specified area, without distortion but possibly with some cropping, 
+			/// while maintaining the original aspect ratio of the application.
+			/// </summary>
+			NoBorder,
+			/// <summary>
+			/// 
+			/// </summary>
+			NoBorderPixelPerfect,
+			/// <summary>
+			/// The entire application is visible in the specified area without distortion while maintaining the original 
+			/// aspect ratio of the application. Borders can appear on two sides of the application.
+			/// </summary>
+			ShowAll,
+			/// <summary>
+			/// 
+			/// </summary>
+			ShowAllPixelPerfect,
+			/// <summary>
+			/// The application takes the height of the design resolution size and modifies the width of the internal
+			/// canvas so that it fits the aspect ratio of the device.
+			/// no distortion will occur however you must make sure your application works on different
+			/// aspect ratios
+			/// </summary>
+			FixedHeight,
+			/// <summary>
+			/// The application takes the width of the design resolution size and modifies the height of the internal
+			/// canvas so that it fits the aspect ratio of the device.
+			/// no distortion will occur however you must make sure your application works on different
+			/// aspect ratios
+			/// </summary>
+			FixedWidth
+		}
+
+
 		/// <summary>
 		/// default scene Camera
 		/// </summary>
@@ -20,6 +66,11 @@ namespace Nez
 		/// clear color that is used in preRender to clear the screen
 		/// </summary>
 		public Color clearColor = Color.CornflowerBlue;
+
+		/// <summary>
+		/// clear color for the final render of the RenderTexture to the framebuffer
+		/// </summary>
+		public Color letterboxColor = Color.Black;
 
 		/// <summary>
 		/// Scene-specific ContentManager. Use it to load up any resources that are needed only by this scene. If you have global/multi-scene
@@ -42,12 +93,44 @@ namespace Nez
 		/// </summary>
 		public readonly RenderableComponentList renderableComponents;
 
+		/// <summary>
+		/// default resolution size used for all scenes
+		/// </summary>
+		static Point defaultDesignResolutionSize;
+
+		/// <summary>
+		/// default resolution policy used for all scenes
+		/// </summary>
+		static SceneResolutionPolicy defaultSceneResolutionPolicy = SceneResolutionPolicy.None;
+
+		/// <summary>
+		/// resolution policy used by the scene
+		/// </summary>
+		SceneResolutionPolicy _resolutionPolicy;
+
+		/// <summary>
+		/// design resolution size used by the scene
+		/// </summary>
+		Point _designResolutionSize;
+
+		/// <summary>
+		/// this gets setup based on the resolution policy and is used for the final blit of the RenderTexture
+		/// </summary>
+		Rectangle finalRenderDestinationRect;
+
 		RenderTexture _sceneRenderTexture;
 		RenderTexture _destinationRenderTexture;
 
 		List<Renderer> _renderers = new List<Renderer>();
 		Dictionary<int,double> _actualEntityOrderLookup = new Dictionary<int,double>();
 		readonly List<PostProcessor> _postProcessors = new List<PostProcessor>();
+
+
+		public static void setDefaultDesignResolution( int width, int height, SceneResolutionPolicy sceneResolutionPolicy )
+		{
+			defaultDesignResolutionSize = new Point( width, height );
+			defaultSceneResolutionPolicy = sceneResolutionPolicy;
+		}
 
 
 		/// <summary>
@@ -72,6 +155,11 @@ namespace Nez
 			renderableComponents = new RenderableComponentList();
 			contentManager = new NezContentManager();
 			_sceneRenderTexture = new RenderTexture();
+
+			// setup our resolution policy and commit it
+			_resolutionPolicy = defaultSceneResolutionPolicy;
+			_designResolutionSize = defaultDesignResolutionSize;
+			updateResolutionScaler();
 		}
 
 
@@ -166,19 +254,162 @@ namespace Nez
 
 			// render our final result to the backbuffer
 			Core.graphicsDevice.SetRenderTarget( null );
-			Graphics.instance.spriteBatch.Begin( SpriteSortMode.Deferred, BlendState.Opaque );
-			Graphics.instance.spriteBatch.Draw( Mathf.isEven( enabledCounter ) ? _sceneRenderTexture : _destinationRenderTexture, Vector2.Zero, Color.White );
+			Core.graphicsDevice.Clear( letterboxColor );
+			Graphics.instance.spriteBatch.Begin( SpriteSortMode.Deferred, BlendState.Opaque, SamplerState.PointClamp );
+			Graphics.instance.spriteBatch.Draw( Mathf.isEven( enabledCounter ) ? _sceneRenderTexture : _destinationRenderTexture, finalRenderDestinationRect, Color.White );
 			Graphics.instance.spriteBatch.End();
 		}
 
 
 		void onGraphicsDeviceReset()
 		{
-			_sceneRenderTexture.resizeToFitBackbuffer();
+			updateResolutionScaler();
+		}
+
+
+		#region Resolution Policy
+
+		public void setDesignResolution( int width, int height, SceneResolutionPolicy sceneResolutionPolicy )
+		{
+			_designResolutionSize = new Point( width, height );
+			_resolutionPolicy = sceneResolutionPolicy;
+			updateResolutionScaler();
+		}
+
+
+		void updateResolutionScaler()
+		{
+			var designSize = _designResolutionSize;
+			var screenSize = new Point( Screen.backBufferWidth, Screen.backBufferHeight );
+			var screenAspectRatio = (float)screenSize.X / (float)screenSize.Y;
+
+			var renderTextureWidth = screenSize.X;
+			var renderTextureHeight = screenSize.Y;
+
+			var resolutionScaleX = (float)screenSize.X / (float)designSize.X;
+			var resolutionScaleY = (float)screenSize.Y / (float)designSize.Y;
+
+			var rectCalculated = false;
+
+			switch( _resolutionPolicy )
+			{
+				case SceneResolutionPolicy.None:
+					finalRenderDestinationRect.X = finalRenderDestinationRect.Y = 0;
+					finalRenderDestinationRect.Width = screenSize.X;
+					finalRenderDestinationRect.Height = screenSize.Y;
+					rectCalculated = true;
+					break;
+				case SceneResolutionPolicy.ExactFit:
+					// exact design size render texture
+					renderTextureWidth = designSize.X;
+					renderTextureHeight = designSize.Y;
+					break;
+				case SceneResolutionPolicy.NoBorder:
+					// exact design size render texture
+					renderTextureWidth = designSize.X;
+					renderTextureHeight = designSize.Y;
+
+					resolutionScaleX = resolutionScaleY = Math.Max( resolutionScaleX, resolutionScaleY );
+					break;
+				case SceneResolutionPolicy.NoBorderPixelPerfect:
+					// exact design size render texture
+					renderTextureWidth = designSize.X;
+					renderTextureHeight = designSize.Y;
+
+					var scale = 1;
+					if( (float)designSize.X / (float)designSize.Y < screenAspectRatio )
+					{
+						var floatScale = (float)screenSize.X / (float)designSize.X;
+						scale = Mathf.ceilToInt( floatScale );
+					}
+					else
+					{
+						var floatScale = (float)screenSize.Y / (float)designSize.Y;
+						scale = Mathf.ceilToInt( floatScale );
+					}
+
+					if( scale == 0 )
+						scale = 1;
+
+					finalRenderDestinationRect.Width = Mathf.ceilToInt( designSize.X * scale );
+					finalRenderDestinationRect.Height = Mathf.ceilToInt( designSize.Y * scale );
+					finalRenderDestinationRect.X = ( screenSize.X - finalRenderDestinationRect.Width ) / 2;
+					finalRenderDestinationRect.Y = ( screenSize.Y - finalRenderDestinationRect.Height ) / 2;
+					rectCalculated = true;
+
+					break;
+				case SceneResolutionPolicy.ShowAll:
+					resolutionScaleX = resolutionScaleY = Math.Min( resolutionScaleX, resolutionScaleY );
+
+					renderTextureWidth = designSize.X;
+					renderTextureHeight = designSize.Y;
+					break;
+				case SceneResolutionPolicy.ShowAllPixelPerfect:
+					// exact design size render texture
+					renderTextureWidth = designSize.X;
+					renderTextureHeight = designSize.Y;
+
+					scale = 1;
+					if( (float)designSize.X / (float)designSize.Y > screenAspectRatio )
+						scale = screenSize.X / designSize.X;
+					else
+						scale = screenSize.Y / designSize.Y;
+
+					if( scale == 0 )
+						scale = 1;
+
+					finalRenderDestinationRect.Width = Mathf.ceilToInt( designSize.X * scale );
+					finalRenderDestinationRect.Height = Mathf.ceilToInt( designSize.Y * scale );
+					finalRenderDestinationRect.X = ( screenSize.X - finalRenderDestinationRect.Width ) / 2;
+					finalRenderDestinationRect.Y = ( screenSize.Y - finalRenderDestinationRect.Height ) / 2;
+					rectCalculated = true;
+
+					break;
+				case SceneResolutionPolicy.FixedHeight:
+					resolutionScaleX = resolutionScaleY;
+					designSize.X = Mathf.ceilToInt( screenSize.X / resolutionScaleX );
+
+					// exact design size render texture for height but not width
+					renderTextureWidth = designSize.X;
+					renderTextureHeight = designSize.Y;
+					break;
+				case SceneResolutionPolicy.FixedWidth:
+					resolutionScaleY = resolutionScaleX;
+					designSize.Y = Mathf.ceilToInt( screenSize.Y / resolutionScaleY );
+
+					// exact design size render texture for width but not height
+					renderTextureWidth = designSize.X;
+					renderTextureHeight = designSize.Y;
+					break;
+			}
+
+			if( !rectCalculated )
+			{
+				// calculate the display rect of the RenderTexture
+				var renderWidth = designSize.X * resolutionScaleX;
+				var renderHeight = designSize.Y * resolutionScaleY;
+
+				finalRenderDestinationRect = RectangleExt.fromFloats( ( screenSize.X - renderWidth ) / 2, ( screenSize.Y - renderHeight ) / 2, renderWidth, renderHeight );
+			}
+
+
+			// set some values in the Input class to translate mouse position to our scaled resolution
+			var scaleX = renderTextureWidth / (float)finalRenderDestinationRect.Width;
+			var scaleY = renderTextureHeight / (float)finalRenderDestinationRect.Height;
+
+			Input._resolutionScale = new Vector2( scaleX, scaleY );
+			Input._resolutionOffset = finalRenderDestinationRect.Location;
+
+			Debug.log( "finalRenderDestinationRect: {0}, render texture: {1}, {2}", finalRenderDestinationRect, renderTextureWidth, renderTextureHeight );
+
+			// resize our RenderTextures
+			_sceneRenderTexture.resize( renderTextureWidth, renderTextureHeight );
 
 			if( _destinationRenderTexture != null )
-				_destinationRenderTexture.resizeToFitBackbuffer();
+				_destinationRenderTexture.resize( renderTextureWidth, renderTextureHeight );
 		}
+
+		#endregion
 
 
 		#region Utils
@@ -275,10 +506,11 @@ namespace Nez
 		/// adds an Entity to the Scene's Entities list
 		/// </summary>
 		/// <param name="entity">The Entity to add</param>
-		public void addEntity( Entity entity )
+		public Entity addEntity( Entity entity )
 		{
 			Assert.isFalse( entities.contains( entity ), "You are attempting to add the same entity to a scene twice: {0}", entity );
 			entities.add( entity );
+			return entity;
 		}
 
 
