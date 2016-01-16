@@ -12,10 +12,17 @@ namespace Nez.PhysicsShapes
 		static float[] _satTimerPerAxis = new float[64];
 
 
+		/// <summary>
+		/// swept collision check
+		/// </summary>
+		/// <param name="first">First.</param>
+		/// <param name="second">Second.</param>
+		/// <param name="deltaMovement">Delta movement.</param>
+		/// <param name="hit">Hit.</param>
 		public static bool collide( Shape first, Shape second, Vector2 deltaMovement, out RaycastHit hit )
 		{
-			throw new NotImplementedException( "this should probably be in the Shape class" );
 			hit = new RaycastHit();
+			throw new NotImplementedException( "this should probably be in each Shape class and it still needs to be implemented ;)" );
 
 			return false;
 		}
@@ -439,6 +446,13 @@ namespace Nez.PhysicsShapes
 		}
 
 
+		/// <summary>
+		/// note: if circle center lies in the box the collision result will be incorrect!
+		/// </summary>
+		/// <returns><c>true</c>, if to box was circled, <c>false</c> otherwise.</returns>
+		/// <param name="first">First.</param>
+		/// <param name="second">Second.</param>
+		/// <param name="result">Result.</param>
 		public static bool circleToBox( Circle first, Box second, out ShapeCollisionResult result )
 		{
 			result = new ShapeCollisionResult();

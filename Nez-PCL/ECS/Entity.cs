@@ -246,6 +246,17 @@ namespace Nez
 
 
 		/// <summary>
+		/// Adds a Component to the components list returning it
+		/// </summary>
+		public T addComponent<T>( T component ) where T : Component
+		{
+			component.entity = this;
+			components.add( component );
+			return component;
+		}
+
+
+		/// <summary>
 		/// Gets the first component of type T and returns it. If no components are found returns null
 		/// </summary>
 		/// <returns>The component.</returns>

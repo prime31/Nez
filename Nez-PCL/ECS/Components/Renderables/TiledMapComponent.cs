@@ -64,35 +64,22 @@ namespace Nez
 
 		#region Component overrides
 
+		public override void onEntityPositionChanged()
+		{
+			removeColliders();
+			addColliders();
+		}
+
+
 		public override void onAddedToEntity()
 		{
-			if( _collisionLayer == null )
-				return;
-
-			// fetch the collision layer and its rects for collision
-			var collisionRects = _collisionLayer.getCollisionRectangles();
-
-			// create colliders for the rects we received
-			_colliders = new Collider[collisionRects.Count];
-			for( var i = 0; i < collisionRects.Count; i++ )
-			{
-				var collider = new BoxCollider( collisionRects[i].X, collisionRects[i].Y, collisionRects[i].Width, collisionRects[i].Height );
-				collider.entity = entity;
-				_colliders[i] = collider;
-
-				Physics.addCollider( collider );
-			}
+			addColliders();
 		}
 
 
 		public override void onRemovedFromEntity()
 		{
-			if( _colliders == null )
-				return;
-
-			foreach( var collider in _colliders )
-				Physics.removeCollider( collider, true );
-			_colliders = null;
+			removeColliders();
 		}
 
 
@@ -112,6 +99,42 @@ namespace Nez
 				foreach( var collider in _colliders )
 					collider.debugRender( graphics );
 			}
+		}
+
+		#endregion
+
+
+		#region Colliders
+
+		void addColliders()
+		{
+			if( _collisionLayer == null )
+				return;
+
+			// fetch the collision layer and its rects for collision
+			var collisionRects = _collisionLayer.getCollisionRectangles();
+
+			// create colliders for the rects we received
+			_colliders = new Collider[collisionRects.Count];
+			for( var i = 0; i < collisionRects.Count; i++ )
+			{
+				var collider = new BoxCollider( collisionRects[i].X + renderPosition.X, collisionRects[i].Y + renderPosition.Y, collisionRects[i].Width, collisionRects[i].Height );
+				collider.entity = entity;
+				_colliders[i] = collider;
+
+				Physics.addCollider( collider );
+			}
+		}
+
+
+		void removeColliders()
+		{
+			if( _colliders == null )
+				return;
+
+			foreach( var collider in _colliders )
+				Physics.removeCollider( collider, true );
+			_colliders = null;
 		}
 
 		#endregion
