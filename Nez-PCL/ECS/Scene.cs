@@ -81,6 +81,11 @@ namespace Nez
 		public Color letterboxColor = Color.Black;
 
 		/// <summary>
+		/// SamplerState used for the final draw of the RenderTexture to the framebuffer
+		/// </summary>
+		public SamplerState samplerState = SamplerState.PointClamp;
+
+		/// <summary>
 		/// Scene-specific ContentManager. Use it to load up any resources that are needed only by this scene. If you have global/multi-scene
 		/// resources you can use Core.contentManager to load them since Nez will not ever unload them.
 		/// </summary>
@@ -269,7 +274,7 @@ namespace Nez
 			// render our final result to the backbuffer
 			Core.graphicsDevice.SetRenderTarget( null );
 			Core.graphicsDevice.Clear( letterboxColor );
-			Graphics.instance.spriteBatch.Begin( SpriteSortMode.Deferred, BlendState.Opaque, SamplerState.PointClamp );
+			Graphics.instance.spriteBatch.Begin( SpriteSortMode.Deferred, BlendState.Opaque, samplerState );
 			Graphics.instance.spriteBatch.Draw( Mathf.isEven( enabledCounter ) ? _sceneRenderTexture : _destinationRenderTexture, finalRenderDestinationRect, Color.White );
 			Graphics.instance.spriteBatch.End();
 		}
@@ -311,6 +316,16 @@ namespace Nez
 
 			var rectCalculated = false;
 
+			// calculate the scale used by the PixelPerfect variants
+			float scale;
+			if( (float)designSize.X / (float)designSize.Y > screenAspectRatio )
+				scale = screenSize.X / designSize.X;
+			else
+				scale = screenSize.Y / designSize.Y;
+
+			if( scale == 0 )
+				scale = 1;
+
 			switch( _resolutionPolicy )
 			{
 				case SceneResolutionPolicy.None:
@@ -336,7 +351,8 @@ namespace Nez
 					renderTextureWidth = designSize.X;
 					renderTextureHeight = designSize.Y;
 
-					var scale = 1;
+					// we are going to do some cropping so we need to use floats for the scale then round up
+					scale = 1;
 					if( (float)designSize.X / (float)designSize.Y < screenAspectRatio )
 					{
 						var floatScale = (float)screenSize.X / (float)designSize.X;
@@ -369,14 +385,6 @@ namespace Nez
 					renderTextureWidth = designSize.X;
 					renderTextureHeight = designSize.Y;
 
-					if( (float)designSize.X / (float)designSize.Y > screenAspectRatio )
-						scale = screenSize.X / designSize.X;
-					else
-						scale = screenSize.Y / designSize.Y;
-
-					if( scale == 0 )
-						scale = 1;
-
 					finalRenderDestinationRect.Width = Mathf.ceilToInt( designSize.X * scale );
 					finalRenderDestinationRect.Height = Mathf.ceilToInt( designSize.Y * scale );
 					finalRenderDestinationRect.X = ( screenSize.X - finalRenderDestinationRect.Width ) / 2;
@@ -395,14 +403,6 @@ namespace Nez
 				case SceneResolutionPolicy.FixedHeightPixelPerfect:
 					// start with exact design size render texture height. the width may change
 					renderTextureHeight = designSize.Y;
-
-					if( (float)designSize.X / (float)designSize.Y > screenAspectRatio )
-						scale = screenSize.X / designSize.X;
-					else
-						scale = screenSize.Y / designSize.Y;
-
-					if( scale == 0 )
-						scale = 1;
 
 					finalRenderDestinationRect.Width = Mathf.ceilToInt( designSize.X * resolutionScaleX );
 					finalRenderDestinationRect.Height = Mathf.ceilToInt( designSize.Y * scale );
@@ -423,14 +423,6 @@ namespace Nez
 				case SceneResolutionPolicy.FixedWidthPixelPerfect:
 					// start with exact design size render texture width. the height may change
 					renderTextureWidth = designSize.X;
-
-					if( (float)designSize.X / (float)designSize.Y > screenAspectRatio )
-						scale = screenSize.X / designSize.X;
-					else
-						scale = screenSize.Y / designSize.Y;
-
-					if( scale == 0 )
-						scale = 1;
 
 					finalRenderDestinationRect.Width = Mathf.ceilToInt( designSize.X * scale );
 					finalRenderDestinationRect.Height = Mathf.ceilToInt( designSize.Y * resolutionScaleY );

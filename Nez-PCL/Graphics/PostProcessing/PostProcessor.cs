@@ -31,6 +31,11 @@ namespace Nez
 		/// </summary>
 		public Effect effect;
 
+		/// <summary>
+		/// SamplerState used for the drawFullscreenQuad method
+		/// </summary>
+		public SamplerState samplerState = SamplerState.PointClamp;
+
 
 		public PostProcessor( int executionOrder, Effect effect = null )
 		{
@@ -84,7 +89,7 @@ namespace Nez
 		/// </summary>
 		protected void drawFullscreenQuad( Texture2D texture, int width, int height, Effect effect )
 		{
-			Graphics.instance.spriteBatch.Begin( 0, BlendState.Opaque, null, null, null, effect );
+			Graphics.instance.spriteBatch.Begin( 0, BlendState.Opaque, samplerState, DepthStencilState.None, RasterizerState.CullNone, effect );
 			Graphics.instance.spriteBatch.Draw( texture, new Rectangle( 0, 0, width, height ), Color.White );
 			Graphics.instance.spriteBatch.End();
 		}
