@@ -28,7 +28,7 @@ namespace Nez
 			/// </summary>
 			NoBorder,
 			/// <summary>
-			/// 
+			/// Pixel perfect version of NoBorder. Scaling is limited to integer values.
 			/// </summary>
 			NoBorderPixelPerfect,
 			/// <summary>
@@ -37,7 +37,7 @@ namespace Nez
 			/// </summary>
 			ShowAll,
 			/// <summary>
-			/// 
+			/// Pixel perfect version of ShowAll. Scaling is limited to integer values.
 			/// </summary>
 			ShowAllPixelPerfect,
 			/// <summary>
@@ -48,12 +48,20 @@ namespace Nez
 			/// </summary>
 			FixedHeight,
 			/// <summary>
+			/// Pixel perfect version of FixedHeight. Scaling is limited to integer values.
+			/// </summary>
+			FixedHeightPixelPerfect,
+			/// <summary>
 			/// The application takes the width of the design resolution size and modifies the height of the internal
 			/// canvas so that it fits the aspect ratio of the device.
 			/// no distortion will occur however you must make sure your application works on different
 			/// aspect ratios
 			/// </summary>
-			FixedWidth
+			FixedWidth,
+			/// <summary>
+			/// Pixel perfect version of FixedWidth. Scaling is limited to integer values.
+			/// </summary>
+			FixedWidthPixelPerfect
 		}
 
 
@@ -126,6 +134,12 @@ namespace Nez
 		readonly List<PostProcessor> _postProcessors = new List<PostProcessor>();
 
 
+		/// <summary>
+		/// sets the default design size and resolution policy that new scenes will use
+		/// </summary>
+		/// <param name="width">Width.</param>
+		/// <param name="height">Height.</param>
+		/// <param name="sceneResolutionPolicy">Scene resolution policy.</param>
 		public static void setDefaultDesignResolution( int width, int height, SceneResolutionPolicy sceneResolutionPolicy )
 		{
 			defaultDesignResolutionSize = new Point( width, height );
@@ -156,10 +170,9 @@ namespace Nez
 			contentManager = new NezContentManager();
 			_sceneRenderTexture = new RenderTexture();
 
-			// setup our resolution policy and commit it
+			// setup our resolution policy. we'll commit it in begin
 			_resolutionPolicy = defaultSceneResolutionPolicy;
 			_designResolutionSize = defaultDesignResolutionSize;
-			updateResolutionScaler();
 		}
 
 
@@ -167,6 +180,7 @@ namespace Nez
 		{
 			Debug.warnIf( _renderers.Count == 0, "Scene has begun with no renderer. Are you sure you want to run a Scene without a renderer?" );
 			Physics.reset();
+			updateResolutionScaler();
 			Core.emitter.addObserver( CoreEvents.GraphicsDeviceReset, onGraphicsDeviceReset );
 		}
 
@@ -269,6 +283,12 @@ namespace Nez
 
 		#region Resolution Policy
 
+		/// <summary>
+		/// sets the design size and resolution policy then updates the render textures
+		/// </summary>
+		/// <param name="width">Width.</param>
+		/// <param name="height">Height.</param>
+		/// <param name="sceneResolutionPolicy">Scene resolution policy.</param>
 		public void setDesignResolution( int width, int height, SceneResolutionPolicy sceneResolutionPolicy )
 		{
 			_designResolutionSize = new Point( width, height );
@@ -349,7 +369,6 @@ namespace Nez
 					renderTextureWidth = designSize.X;
 					renderTextureHeight = designSize.Y;
 
-					scale = 1;
 					if( (float)designSize.X / (float)designSize.Y > screenAspectRatio )
 						scale = screenSize.X / designSize.X;
 					else
@@ -373,6 +392,26 @@ namespace Nez
 					renderTextureWidth = designSize.X;
 					renderTextureHeight = designSize.Y;
 					break;
+				case SceneResolutionPolicy.FixedHeightPixelPerfect:
+					// start with exact design size render texture height. the width may change
+					renderTextureHeight = designSize.Y;
+
+					if( (float)designSize.X / (float)designSize.Y > screenAspectRatio )
+						scale = screenSize.X / designSize.X;
+					else
+						scale = screenSize.Y / designSize.Y;
+
+					if( scale == 0 )
+						scale = 1;
+
+					finalRenderDestinationRect.Width = Mathf.ceilToInt( designSize.X * resolutionScaleX );
+					finalRenderDestinationRect.Height = Mathf.ceilToInt( designSize.Y * scale );
+					finalRenderDestinationRect.X = ( screenSize.X - finalRenderDestinationRect.Width ) / 2;
+					finalRenderDestinationRect.Y = ( screenSize.Y - finalRenderDestinationRect.Height ) / 2;
+					rectCalculated = true;
+
+					renderTextureWidth = (int)( designSize.X * resolutionScaleX / scale );
+					break;
 				case SceneResolutionPolicy.FixedWidth:
 					resolutionScaleY = resolutionScaleX;
 					designSize.Y = Mathf.ceilToInt( screenSize.Y / resolutionScaleY );
@@ -381,8 +420,30 @@ namespace Nez
 					renderTextureWidth = designSize.X;
 					renderTextureHeight = designSize.Y;
 					break;
+				case SceneResolutionPolicy.FixedWidthPixelPerfect:
+					// start with exact design size render texture width. the height may change
+					renderTextureWidth = designSize.X;
+
+					if( (float)designSize.X / (float)designSize.Y > screenAspectRatio )
+						scale = screenSize.X / designSize.X;
+					else
+						scale = screenSize.Y / designSize.Y;
+
+					if( scale == 0 )
+						scale = 1;
+
+					finalRenderDestinationRect.Width = Mathf.ceilToInt( designSize.X * scale );
+					finalRenderDestinationRect.Height = Mathf.ceilToInt( designSize.Y * resolutionScaleY );
+					finalRenderDestinationRect.X = ( screenSize.X - finalRenderDestinationRect.Width ) / 2;
+					finalRenderDestinationRect.Y = ( screenSize.Y - finalRenderDestinationRect.Height ) / 2;
+					rectCalculated = true;
+
+					renderTextureHeight = (int)( designSize.Y * resolutionScaleY / scale );
+
+					break;
 			}
 
+			// if we didnt already calculate a rect (None and all pixel perfect variants calculate it themselves) calculate it now
 			if( !rectCalculated )
 			{
 				// calculate the display rect of the RenderTexture
@@ -400,13 +461,15 @@ namespace Nez
 			Input._resolutionScale = new Vector2( scaleX, scaleY );
 			Input._resolutionOffset = finalRenderDestinationRect.Location;
 
-			Debug.log( "finalRenderDestinationRect: {0}, render texture: {1}, {2}", finalRenderDestinationRect, renderTextureWidth, renderTextureHeight );
-
 			// resize our RenderTextures
 			_sceneRenderTexture.resize( renderTextureWidth, renderTextureHeight );
 
 			if( _destinationRenderTexture != null )
 				_destinationRenderTexture.resize( renderTextureWidth, renderTextureHeight );
+
+			// notify the PostProcessors of the change
+			for( var i = 0; i < _postProcessors.Count; i++ )
+				_postProcessors[i].onBackBufferSizeChanged( renderTextureWidth, renderTextureHeight );
 		}
 
 		#endregion

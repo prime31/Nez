@@ -121,7 +121,7 @@ namespace Nez
 			_windowWidth = width;
 			_windowHeight = height;
 			_elementWidth = _windowWidth - 2f * ELEMENT_PADDING;
-			_mouseInWorldCoords = Input.mousePosition - new Point( Core.graphicsDevice.Viewport.X, Core.graphicsDevice.Viewport.Y );
+			_mouseInWorldCoords = Input.rawMousePosition - new Point( Core.graphicsDevice.Viewport.X, Core.graphicsDevice.Viewport.Y );
 		}
 
 

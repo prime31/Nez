@@ -98,10 +98,15 @@ namespace Nez
 		}
 
 
-		public static void setBackBufferSize( int width, int height )
+		/// <summary>
+		/// sets the preferredBackBuffer then applies the changes
+		/// </summary>
+		/// <param name="width">Width.</param>
+		/// <param name="height">Height.</param>
+		public static void updatePreferredBackBufferSize( int width, int height )
 		{
-			backBufferWidth = width;
-			backBufferHeight = height;
+			preferredBackBufferWidth = width;
+			preferredBackBufferHeight = height;
 			applyChanges();
 		}
 

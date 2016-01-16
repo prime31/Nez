@@ -249,12 +249,20 @@ namespace Nez
 		}
 
 
-		public static Point mousePosition
+		/// <summary>
+		/// unscaled mouse position. This is the actual screen space value
+		/// </summary>
+		/// <value>The raw mouse position.</value>
+		public static Point rawMousePosition
 		{
 			get { return _currentMouseState.Position; }
 		}
 
 
+		/// <summary>
+		/// this takes into account the SceneResolutionPolicy and returns the value scaled to the RenderTextures coordinates
+		/// </summary>
+		/// <value>The scaled mouse position.</value>
 		public static Vector2 scaledMousePosition
 		{
 			get

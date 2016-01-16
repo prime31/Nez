@@ -41,6 +41,15 @@ namespace Nez
 
 
 		/// <summary>
+		/// called when the default scene RenderTexture is resized
+		/// </summary>
+		/// <param name="newWidth">New width.</param>
+		/// <param name="newHeight">New height.</param>
+		public virtual void onBackBufferSizeChanged( int newWidth, int newHeight )
+		{}
+
+
+		/// <summary>
 		/// this is the meat method here. The source passed in contains the full scene with any previous PostProcessors
 		/// rendering. Render it into the destination RenderTexture. The drawFullScreenQuad methods are there to make
 		/// the process even easier

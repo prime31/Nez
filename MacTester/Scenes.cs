@@ -25,11 +25,9 @@ namespace MacTester
 			var scene = Scene.createWithDefaultRenderer( Color.Black );
 
 			if( showAll )
-				scene.setDesignResolution( 256, 144, Scene.SceneResolutionPolicy.ShowAllPixelPerfect );
+				scene.setDesignResolution( 256, 144, Scene.SceneResolutionPolicy.FixedHeightPixelPerfect );
 			else
 				scene.setDesignResolution( 256, 144, Scene.SceneResolutionPolicy.NoBorderPixelPerfect );
-
-			Screen.setBackBufferSize( 256 * 4, 144 * 4 );
 
 			// load a TiledMap and move it back so is drawn before other entities
 			var tiledEntity = scene.createAndAddEntity<Entity>( "tiled-map-entity" );

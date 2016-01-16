@@ -37,11 +37,16 @@ namespace MacTester
 		{
 			base.Update( gameTime );
 
+			if( Input.rightMouseButtonPressed )
+			{
+				Debug.log( "window size: {0} x {1}", Window.ClientBounds.Width, Window.ClientBounds.Height );
+			}
+
 			if( Input.leftMouseButtonPressed )
 			{
 				var screenPt = scene.camera.screenToWorldPoint( Input.scaledMousePosition );
 				var worldPt = scene.camera.worldToScreenPoint( screenPt );
-				Debug.log( "mouse pos: {0}, scaled mouse pos: {1}, screen to world point: {2}, world to screen point: {3}", Input.mousePosition, Input.scaledMousePosition, screenPt, worldPt );
+				Debug.log( "mouse pos: {0}, scaled mouse pos: {1}, screen to world point: {2}, world to screen point: {3}", Input.rawMousePosition, Input.scaledMousePosition, screenPt, worldPt );
 
 				var spriteDude = scene.findEntity( "sprite-dude" );
 				if( spriteDude != null )
