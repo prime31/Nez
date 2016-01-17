@@ -278,6 +278,17 @@ namespace Nez
 			get { return _currentMouseState.Position - _previousMouseState.Position; }
 		}
 
+
+		public static Vector2 scaledMousePositionDelta
+		{
+			get
+			{
+				var pastPos = ( _previousMouseState.Position - _resolutionOffset ).ToVector2();
+				pastPos *= _resolutionScale;
+				return scaledMousePosition - pastPos;
+			}
+		}
+
 		#endregion
 
 
