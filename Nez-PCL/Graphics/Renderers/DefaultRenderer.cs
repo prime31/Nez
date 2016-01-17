@@ -20,7 +20,7 @@ namespace Nez
 			{
 				var renderable = scene.renderableComponents[i];
 				if( renderable.enabled )
-					renderable.render( Graphics.instance, cam );
+					renderAfterStateCheck( renderable, cam );
 			}
 				
 			if( shouldDebugRender && debugRenderEnabled )
@@ -28,6 +28,5 @@ namespace Nez
 
 			endRender();
 		}
-
 	}
 }

@@ -196,5 +196,6 @@
     <Compile Include="Graphics\SpriteBatchExt.cs" />
     <Compile Include="Debug\Assert.cs" />
     <Compile Include="Physics\Shapes\RealtimeCollisions.cs" />
+    <Compile Include="ECS\Components\Renderables\RenderState.cs" />
   </ItemGroup>
 </Project>

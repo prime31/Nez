@@ -247,6 +247,11 @@ namespace Nez
 				{
 					Core.graphicsDevice.SetRenderTarget( _sceneRenderTexture );
 					Core.graphicsDevice.Clear( clearColor );
+
+					// force a Camera matrix update to account for the new Viewport size
+					if( _renderers[i].camera != null )
+						_renderers[i].camera.forceMatrixUpdate();
+					camera.forceMatrixUpdate();
 				}
 
 				_renderers[i].render( this, debugRenderEnabled );
@@ -317,14 +322,17 @@ namespace Nez
 			var rectCalculated = false;
 
 			// calculate the scale used by the PixelPerfect variants
-			float scale;
-			if( (float)designSize.X / (float)designSize.Y > screenAspectRatio )
-				scale = screenSize.X / designSize.X;
-			else
-				scale = screenSize.Y / designSize.Y;
+			var scale = 1;
+			if( _resolutionPolicy != SceneResolutionPolicy.None )
+			{
+				if( (float)designSize.X / (float)designSize.Y > screenAspectRatio )
+					scale = screenSize.X / designSize.X;
+				else
+					scale = screenSize.Y / designSize.Y;
 
-			if( scale == 0 )
-				scale = 1;
+				if( scale == 0 )
+					scale = 1;
+			}
 
 			switch( _resolutionPolicy )
 			{

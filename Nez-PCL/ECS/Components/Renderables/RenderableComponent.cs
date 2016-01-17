@@ -10,6 +10,11 @@ namespace Nez
 	/// </summary>
 	public abstract class RenderableComponent : Component
 	{
+		/// <summary>
+		/// used by Renderers to specify how this sprite should be rendered.
+		/// </summary>
+		public RenderState renderState;
+		
 		// TODO: should width/height be multiplied by scale when they are returned?
 		public abstract float width { get; }
 		public abstract float height { get; }
@@ -192,8 +197,7 @@ namespace Nez
 		/// </summary>
 		/// <param name="graphics">Graphics.</param>
 		/// <param name="camera">Camera.</param>
-		public virtual void render( Graphics graphics, Camera camera )
-		{}
+		public abstract void render( Graphics graphics, Camera camera );
 
 
 		/// <summary>
@@ -235,7 +239,13 @@ namespace Nez
 		}
 
 
-		// TODO: these make no sense here. if they are called in a Components render method it will create an infinite loop
+		/// <summary>
+		/// Draws the Renderable with an outline. Note that this should be called on disabled Renderables since they shouldnt take part in default
+		/// rendering if they need an ouline.
+		/// </summary>
+		/// <param name="graphics">Graphics.</param>
+		/// <param name="camera">Camera.</param>
+		/// <param name="offset">Offset.</param>
 		public void drawOutline( Graphics graphics, Camera camera, int offset = 1 )
 		{
 			drawOutline( graphics, camera, Color.Black, offset );

@@ -29,19 +29,9 @@ namespace Nez
 		public SpriteSortMode spriteSortMode = SpriteSortMode.Deferred;
 
 		/// <summary>
-		/// BlendState used by the SpriteBatch
-		/// </summary>
-		public BlendState blendState = BlendState.AlphaBlend;
-
-		/// <summary>
 		/// SamplerState used by the SpriteBatch
 		/// </summary>
 		public SamplerState samplerState = SamplerState.PointClamp;
-
-		/// <summary>
-		/// DepthStencilState used by the SpriteBatch
-		/// </summary>
-		public DepthStencilState depthStencilState = DepthStencilState.None;
 
 		/// <summary>
 		/// RasterizerState used by the SpriteBatch
@@ -49,9 +39,9 @@ namespace Nez
 		public RasterizerState rasterizerState = RasterizerState.CullNone;
 
 		/// <summary>
-		/// Effect used by the SpriteBatch
+		/// RenderState used by the SpriteBatch. Any RenderableComponent can override this.
 		/// </summary>
-		public Effect effect;
+		public RenderState renderState = new RenderState();
 
 		/// <summary>
 		/// the Camera this renderer uses for rendering (really its transformMatrix and bounds for culling). This is a convenience field and isnt
@@ -75,7 +65,7 @@ namespace Nez
 		public Color renderTextureClearColor = Color.Transparent;
 
 		/// <summary>
-		/// if true and a renderTexture is present the RenderTarget will not be reset to null. This is useful when you have multiple
+		/// if true and a renderTexture is present the RenderTarget will be reset to null. This is useful when you have multiple
 		/// renderers that should all be rendering into the same RenderTarget.
 		/// </summary>
 		public bool clearRenderTargetAfterRender = true;
@@ -86,6 +76,11 @@ namespace Nez
 		/// should debug render or not.
 		/// </summary>
 		public bool shouldDebugRender = true;
+
+		/// <summary>
+		/// holds the current RenderState of the last rendered Renderable (or the Renderer.renderState if no changes were made)
+		/// </summary>
+		RenderState _currentRenderState;
 
 
 		public Renderer( Camera camera, int renderOrder )
@@ -109,11 +104,8 @@ namespace Nez
 				Core.graphicsDevice.Clear( renderTextureClearColor );
 			}
 
-			// TODO: is this necessary? I think it is only needed when manually setting the viewport
-			// MonoGame resets the Viewport to the RT size without asking so we have to let the Camera know to update itself
-			//cam.forceMatrixUpdate();
-
-			Graphics.instance.spriteBatch.Begin( spriteSortMode, blendState, samplerState, depthStencilState, rasterizerState, effect, cam.transformMatrix );
+			_currentRenderState = renderState;
+			Graphics.instance.spriteBatch.Begin( spriteSortMode, _currentRenderState.blendState, samplerState, _currentRenderState.depthStencilState, rasterizerState, _currentRenderState.effect, cam.transformMatrix );
 		}
 
 
@@ -121,12 +113,36 @@ namespace Nez
 
 
 		/// <summary>
+		/// renders the RenderableComponent flushing the SpriteBatch and resetting RenderState if necessary
+		/// </summary>
+		/// <param name="renderable">Renderable.</param>
+		/// <param name="cam">Cam.</param>
+		protected void renderAfterStateCheck( RenderableComponent renderable, Camera cam )
+		{
+			// check for RenderState changes
+			if( renderable.renderState != null && renderable.renderState != _currentRenderState )
+			{
+				_currentRenderState = renderable.renderState;
+				flushSpriteBatch( cam );
+			}
+			else if( renderable.renderState == null && _currentRenderState != renderState )
+			{
+				_currentRenderState = renderState;
+				flushSpriteBatch( cam );
+			}
+
+			renderable.render( Graphics.instance, cam );
+		}
+
+
+
+		/// <summary>
 		/// force flushes the SpriteBatch by calling End then Begin on it.
 		/// </summary>
-		protected void flushSpriteBatch( Camera cam )
+		void flushSpriteBatch( Camera cam )
 		{
 			Graphics.instance.spriteBatch.End();
-			Graphics.instance.spriteBatch.Begin( spriteSortMode, blendState, samplerState, depthStencilState, rasterizerState, effect, cam.transformMatrix );
+			Graphics.instance.spriteBatch.Begin( spriteSortMode, _currentRenderState.blendState, samplerState, _currentRenderState.depthStencilState, rasterizerState, _currentRenderState.effect, cam.transformMatrix );
 		}
 
 
