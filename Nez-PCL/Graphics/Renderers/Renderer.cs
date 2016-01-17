@@ -123,6 +123,8 @@ namespace Nez
 			if( renderable.renderState != null && renderable.renderState != _currentRenderState )
 			{
 				_currentRenderState = renderable.renderState;
+				if( _currentRenderState.effect != null )
+					_currentRenderState.onPreRender( cam );
 				flushSpriteBatch( cam );
 			}
 			else if( renderable.renderState == null && _currentRenderState != renderState )

@@ -20,7 +20,7 @@ namespace Nez.Textures
 		/// <param name="height">Height.</param>
 		public RenderTexture( int width, int height )
 		{
-			renderTarget2D = new RenderTarget2D( Core.graphicsDevice, width, height );
+			renderTarget2D = new RenderTarget2D( Core.graphicsDevice, width, height, false, SurfaceFormat.Color, Screen.preferredDepthStencilFormat );
 		}
 
 

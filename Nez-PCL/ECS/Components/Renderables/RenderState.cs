@@ -44,10 +44,10 @@ namespace Nez
 			return new RenderState {
 				depthStencilState = new DepthStencilState {
 					StencilEnable = true,
-					StencilFunction = CompareFunction.LessEqual,
+					StencilFunction = CompareFunction.Equal,
 					StencilPass = StencilOperation.Keep,
 					ReferenceStencil = stencilRef,
-					DepthBufferEnable = false,
+					DepthBufferEnable = false
 				}
 			};
 		}
@@ -83,7 +83,7 @@ namespace Nez
 				blendState = new BlendState {
 					ColorSourceBlend = Blend.DestinationColor,
 					ColorDestinationBlend = Blend.Zero,
-					ColorBlendFunction = BlendFunction.Add
+					ColorBlendFunction = BlendFunction.Add,
 				}
 			};
 		}
@@ -139,6 +139,17 @@ namespace Nez
 		{
 			this.depthStencilState = depthStencilState;
 			this.effect = effect;
+		}
+
+
+		/// <summary>
+		/// called when the RenderState is initialy set right before SpriteBatch.Begin to allow any Effects to have parameters set if necessary
+		/// based on the Camera Matrix. This will only be called if there is a non-null Effect.
+		/// </summary>
+		/// <param name="camera">Camera.</param>
+		public virtual void onPreRender( Camera camera )
+		{
+			
 		}
 
 	}
