@@ -107,6 +107,15 @@ namespace Nez
 		public readonly RenderableComponentList renderableComponents;
 
 		/// <summary>
+		/// gets the size of the sceneRenderTexture
+		/// </summary>
+		/// <value>The size of the scene render texture.</value>
+		public Vector2 sceneRenderTextureSize
+		{
+			get { return new Vector2( _sceneRenderTexture.renderTarget2D.Width, _sceneRenderTexture.renderTarget2D.Height ); }
+		}
+
+		/// <summary>
 		/// default resolution size used for all scenes
 		/// </summary>
 		static Point defaultDesignResolutionSize;
