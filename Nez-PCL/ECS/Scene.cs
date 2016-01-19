@@ -212,6 +212,10 @@ namespace Nez
 
 		internal void update()
 		{
+			// we set the RenderTarget here so that the Viewport will match the RenderTarget properly
+			Core.graphicsDevice.SetRenderTarget( _sceneRenderTexture );
+
+			// update our lists in case they have any changes
 			entities.updateLists();
 			renderableComponents.updateLists();
 
@@ -227,7 +231,7 @@ namespace Nez
 		internal void preRender()
 		{
 			// Renderers should always have those that require RenderTextures first. They clear themselves and set themselves as
-			// the current RenderTarget
+			// the current RenderTarget when they render
 			if( _renderers[0].renderTexture == null )
 			{
 				Core.graphicsDevice.SetRenderTarget( _sceneRenderTexture );
