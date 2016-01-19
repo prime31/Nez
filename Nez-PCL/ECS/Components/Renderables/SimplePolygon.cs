@@ -5,6 +5,9 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Nez
 {
+	/// <summary>
+	/// renders a basic, CCW, convex polygon
+	/// </summary>
 	public class SimplePolygon : RenderableComponent
 	{
 		public override float width

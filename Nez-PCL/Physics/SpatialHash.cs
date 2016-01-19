@@ -300,7 +300,7 @@ namespace Nez.Spatial
 			// start walking and returning the intersecting cells.
 			while( true )
 			{
-				cell = cellAtPosition( intX, intY );
+				var cell = cellAtPosition( intX, intY );
 				//debugDrawCellDetails( intX, intY, cell != null ? cell.Count : 0 );
 				if( _raycastParser.checkRayIntersection( intX, intY, cell ) )
 				{

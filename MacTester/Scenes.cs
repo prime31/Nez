@@ -23,9 +23,10 @@ namespace MacTester
 		public static Scene sceneOne( bool showAll = true )
 		{
 			var scene = Scene.createWithDefaultRenderer( Color.Black );
+			scene.letterboxColor = Color.MonoGameOrange;
 
 			if( showAll )
-				scene.setDesignResolution( 256, 144, Scene.SceneResolutionPolicy.FixedHeightPixelPerfect );
+				scene.setDesignResolution( 256, 144, Scene.SceneResolutionPolicy.ShowAllPixelPerfect );
 			else
 				scene.setDesignResolution( 256, 144, Scene.SceneResolutionPolicy.NoBorderPixelPerfect );
 
@@ -60,7 +61,7 @@ namespace MacTester
 			if( showAll )
 			{
 				scene.addPostProcessor( new SimpleBloomPostProcessor( scene.contentManager ) );
-				//scene.enablePostProcessing = true;
+				scene.enablePostProcessing = true;
 			}
 
 			return scene;
@@ -244,6 +245,7 @@ namespace MacTester
 			//entity.collider = new PolygonCollider( 7, 60 );
 			//entity.collider = new BoxCollider();
 			entity.collider = new CircleCollider();
+
 
 			return scene;
 		}
