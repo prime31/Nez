@@ -145,6 +145,8 @@
     <Content Include="Content\Effects\BloomCombine.ogl.mgfxo" />
     <Content Include="Content\Effects\BloomExtract.ogl.mgfxo" />
     <Content Include="Content\Effects\GaussianBlur.ogl.mgfxo" />
+    <Content Include="Content\Images\mask.jpg" />
+    <Content Include="Content\Images\tile.png" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
