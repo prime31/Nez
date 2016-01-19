@@ -50,7 +50,7 @@ namespace Nez
 		/// </summary>
 		/// <param name="newWidth">New width.</param>
 		/// <param name="newHeight">New height.</param>
-		public virtual void onBackBufferSizeChanged( int newWidth, int newHeight )
+		public virtual void onSceneBackBufferSizeChanged( int newWidth, int newHeight )
 		{}
 
 

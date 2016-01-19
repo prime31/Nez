@@ -467,9 +467,12 @@ namespace Nez
 			if( _destinationRenderTexture != null )
 				_destinationRenderTexture.resize( renderTextureWidth, renderTextureHeight );
 
-			// notify the PostProcessors of the change
+			// notify the PostProcessors and Renderers of the change in render texture size
 			for( var i = 0; i < _postProcessors.Count; i++ )
-				_postProcessors[i].onBackBufferSizeChanged( renderTextureWidth, renderTextureHeight );
+				_postProcessors[i].onSceneBackBufferSizeChanged( renderTextureWidth, renderTextureHeight );
+
+			for( var i = 0; i < _renderers.Count; i++ )
+				_renderers[i].onSceneBackBufferSizeChanged( renderTextureWidth, renderTextureHeight );
 		}
 
 		#endregion

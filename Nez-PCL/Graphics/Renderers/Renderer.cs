@@ -137,7 +137,6 @@ namespace Nez
 		}
 
 
-
 		/// <summary>
 		/// force flushes the SpriteBatch by calling End then Begin on it.
 		/// </summary>
@@ -177,6 +176,15 @@ namespace Nez
 					entity.debugRender( Graphics.instance );
 			}
 		}
+
+
+		/// <summary>
+		/// called when the default scene RenderTexture is resized
+		/// </summary>
+		/// <param name="newWidth">New width.</param>
+		/// <param name="newHeight">New height.</param>
+		public virtual void onSceneBackBufferSizeChanged( int newWidth, int newHeight )
+		{}
 
 
 		/// <summary>
