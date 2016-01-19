@@ -12,9 +12,17 @@ namespace Nez.PhysicsShapes
 		static float[] _satTimerPerAxis = new float[64];
 
 
-		public static bool collide( Shape first, Shape second, Vector2 deltaMovement )
+		/// <summary>
+		/// swept collision check
+		/// </summary>
+		/// <param name="first">First.</param>
+		/// <param name="second">Second.</param>
+		/// <param name="deltaMovement">Delta movement.</param>
+		/// <param name="hit">Hit.</param>
+		public static bool collide( Shape first, Shape second, Vector2 deltaMovement, out RaycastHit hit )
 		{
-			return false;
+			hit = new RaycastHit();
+			throw new NotImplementedException( "this should probably be in each Shape class and it still needs to be implemented ;)" );
 		}
 
 
@@ -51,7 +59,7 @@ namespace Nez.PhysicsShapes
 			}
 			else
 			{
-				// ray-cast the relativeMotion vector against the Minkowski AABB
+				// ray-cast the movement vector against the Minkowski AABB
 				var ray = new Ray2D( Vector2.Zero, -movement );
 				float fraction;
 				if( RectangleExt.rayIntersects( ref minkowskiDiff, ref ray, out fraction ) && fraction <= 1.0f )
@@ -79,6 +87,7 @@ namespace Nez.PhysicsShapes
 			{
 				// calculate the MTV. if it is zero then we can just call this a non-collision
 				result.minimumTranslationVector = RectangleExt.getClosestPointOnBoundsToOrigin( ref minkowskiDiff );
+
 				if( result.minimumTranslationVector == Vector2.Zero )
 					return false;
 
@@ -188,7 +197,7 @@ namespace Nez.PhysicsShapes
 			{
 				_satAxisArray[iNumAxes] = new Vector2( -deltaMovement.Value.Y, deltaMovement.Value.X );
 				var fVel2 = Vector2.Dot( deltaMovement.Value, deltaMovement.Value );
-				if( fVel2 > 0.00001f )
+				if( fVel2 > Mathf.epsilon )
 				{
 					if( !intervalIntersect(	first, second, ref _satAxisArray[iNumAxes], ref polygonOffset, ref deltaMovement, out _satTimerPerAxis[iNumAxes] ) )
 						return false;
@@ -435,6 +444,39 @@ namespace Nez.PhysicsShapes
 		}
 
 
+		/// <summary>
+		/// note: if circle center lies in the box the collision result will be incorrect!
+		/// </summary>
+		/// <returns><c>true</c>, if to box was circled, <c>false</c> otherwise.</returns>
+		/// <param name="first">First.</param>
+		/// <param name="second">Second.</param>
+		/// <param name="result">Result.</param>
+		public static bool circleToBox( Circle first, Box second, out ShapeCollisionResult result )
+		{
+			result = new ShapeCollisionResult();
+
+			var closestPointOnBounds = RectangleExt.getClosestPointOnRectangleBorderToPoint( ref second.bounds, first.position );
+
+			float sqrDistance;
+			Vector2.DistanceSquared( ref closestPointOnBounds, ref first.position, out sqrDistance );
+
+			// see if the point on the box is less than radius from the circle
+			if( sqrDistance <= first.radius * first.radius )
+			{
+				var distanceToCircle = first.position - closestPointOnBounds;
+				var depth = distanceToCircle.Length() - first.radius;
+
+				result.point = closestPointOnBounds;
+				result.normal = Vector2.Normalize( distanceToCircle );
+				result.minimumTranslationVector = depth * result.normal;
+
+				return true;
+			}
+
+			return false;
+		}
+
+
 		public static bool circleToPolygon( Circle circle, Polygon polygon, out ShapeCollisionResult result )
 		{
 			result = new ShapeCollisionResult();
@@ -494,10 +536,7 @@ namespace Nez.PhysicsShapes
 			}
 
 			result.normal.Normalize();
-			Debug.drawLine( result.point, result.point + result.normal * 40, Color.Blue, 1f );
-
 			result.minimumTranslationVector = result.normal * -seperationDistance;
-			Debug.log( "Circle hits poly: distance1: {0}, fix: {1}", distance1, result.minimumTranslationVector );
 
 			return true;
 		}
@@ -523,6 +562,7 @@ namespace Nez.PhysicsShapes
 				if( lineToLine( edge1, edge2, start, end, out intersection ) )
 				{
 					hasIntersection = true;
+					// TODO: is this the correct way to get the fraction?
 					var distanceFraction = ( intersection.X - start.X ) / ( end.X - start.X );
 					if( distanceFraction < fraction )
 					{
@@ -547,55 +587,40 @@ namespace Nez.PhysicsShapes
 		}
 
 
-		public static bool lineToCircle( Vector2 start, Vector2 end, Circle circle, out RaycastHit hit )
+		public static bool lineToCircle( Vector2 start, Vector2 end, Circle s, out RaycastHit hit )
 		{
 			hit = new RaycastHit();
-			float a, b, c, det;
 
-			var lineDir = end - start;
-			var diff = start - circle.position;
+			// calculate the length here and normalize d separately since we will need it to get the fraction if we have a hit
+			var lineLength = Vector2.Distance( start, end );
+			var d = ( end - start ) / lineLength;
+			var m = start - s.position;
+			var b = Vector2.Dot( m, d );
+			var c = Vector2.Dot( m, m ) - s.radius * s.radius;
 
-			a = lineDir.X * lineDir.X + lineDir.Y * lineDir.Y;
-			b = 2f * ( lineDir.X * diff.X + lineDir.Y * diff.Y );
-			c = diff.X * diff.X + diff.Y * diff.Y - circle.radius * circle.radius;
-
-			det = b * b - 4 * a * c;
-			if( ( a <= 0.0000001 ) || ( det < 0 ) )
-			{
-				// No solutions
+			// exit if r's origin outside of s (c > 0) and r pointing away from s (b > 0)
+			if( c > 0f && b > 0f )
 				return false;
-			}
-			else if( det == 0 )
-			{
-				// one solution.
-				var t = -b / ( 2 * a );
-				var intersection = new Vector2( start.X + t * lineDir.X, start.Y + t * lineDir.Y );
-				var normal = Vector2.Normalize( intersection - circle.position );
-				var fraction = ( intersection.X - start.X ) / ( end.X - start.X );
-				float distance;
-				Vector2.Distance( ref start, ref intersection, out distance );
 
-				hit.setValues( fraction, distance, intersection, normal );
-				return true;
-			}
-			else
-			{
-				// possibly two solutions but we only care about the closest one. to get the other one just add the Sqrt instead of subtract it
-				var t = (float)( ( -b - Math.Sqrt( det ) ) / ( 2 * a ) );
-				if( t <= 1f )
-				{
-					var intersection = new Vector2( start.X + t * lineDir.X, start.Y + t * lineDir.Y );
-					var normal = Vector2.Normalize( intersection - circle.position );
-					var fraction = ( intersection.X - start.X ) / ( end.X - start.X );
-					float distance;
-					Vector2.Distance( ref start, ref intersection, out distance );
+			var discr = b * b - c;
 
-					hit.setValues( fraction, distance, intersection, normal );
-					return true;
-				}
-			}
+			// a negative descriminant means the line misses the circle
+			if( discr < 0 )
+				return false;
 
-			return false;
+			// ray intersects circle. calculate details now.
+			hit.fraction = -b - Mathf.sqrt( discr );
+
+			// if fraction is negative, ray started inside circle so clamp fraction to 0
+			if( hit.fraction < 0 )
+				hit.fraction = 0;
+
+			hit.point = start + hit.fraction * d;
+			Vector2.Distance( ref start, ref hit.point, out hit.distance );
+			hit.normal = Vector2.Normalize( hit.point - s.position );
+			hit.fraction = hit.distance / lineLength;
+
+			return true;
 		}
 
 

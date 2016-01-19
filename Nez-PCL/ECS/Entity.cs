@@ -251,6 +251,17 @@ namespace Nez
 
 
 		/// <summary>
+		/// Adds a Component to the components list returning it
+		/// </summary>
+		public T addComponent<T>( T component ) where T : Component
+		{
+			component.entity = this;
+			components.add( component );
+			return component;
+		}
+
+
+		/// <summary>
 		/// Gets the first component of type T and returns it. If no components are found returns null
 		/// </summary>
 		/// <returns>The component.</returns>
@@ -315,7 +326,9 @@ namespace Nez
 			// fetch anything that we might collide with along the way
 			var neighbors = Physics.boxcastBroadphaseExcludingSelf( collider, motion.X, motion.Y );
 
-			// if we have more than once possible collision we have to break this up into separate x/y movement
+			// if we have more than one possible collision we have to break this up into separate x/y movement. Note that this is only necessary
+			// for certain types of movement such as gravity based systems due to the SAT collision response being shortest distance
+			// and not necessarily in the path of movement. Ex. a platformer on a slope will have an unwanted horizontal response.
 			if( stepXYSeparatelyForMultiCollisions && neighbors.Count() > 1 )
 			{
 				if( motion.X != 0f )

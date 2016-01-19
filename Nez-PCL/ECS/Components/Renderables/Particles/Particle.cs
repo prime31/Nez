@@ -130,7 +130,7 @@ namespace Nez.Particles
 				if( emitterConfig.emitterType == ParticleEmitterType.Radial )
 				{
 					// FIX 2
-					// update the angle of the particle from the radius. This is only done of the particles are rotating
+					// update the angle of the particle from the radius. This is only done if the particles are rotating
 					angle += degreesPerSecond * Time.deltaTime;
 					radius += radiusDelta * Time.deltaTime;
 

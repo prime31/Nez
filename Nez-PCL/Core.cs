@@ -85,6 +85,7 @@ namespace Nez
 			graphicsManager.IsFullScreen = isFullScreen;
 			graphicsManager.SynchronizeWithVerticalRetrace = true;
 			graphicsManager.DeviceReset += onGraphicsDeviceReset;
+			graphicsManager.PreferredDepthStencilFormat = DepthFormat.Depth24Stencil8;
 			Screen.initialize( graphicsManager );
 
 			Content.RootDirectory = "Content";

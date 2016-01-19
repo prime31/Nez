@@ -16,12 +16,16 @@ namespace Nez.PhysicsShapes
 		}
 
 
+		/// <summary>
+		/// creates a symmetrical polygon based on the radius and vertCount passed in
+		/// </summary>
+		/// <param name="vertCount">Vert count.</param>
+		/// <param name="radius">Radius.</param>
 		public Polygon( int vertCount, float radius ) : this( buildSymmetricalPolygon( vertCount, radius ) )
-		{
-		}
+		{}
 
 
-		static Vector2[] buildSymmetricalPolygon( int vertCount, float radius )
+		public static Vector2[] buildSymmetricalPolygon( int vertCount, float radius )
 		{
 			var verts = new Vector2[vertCount];
 
@@ -43,8 +47,8 @@ namespace Nez.PhysicsShapes
 		}
 
 
-		//Don t know  adjancent vertices  so take each vertex
-		//If you know adjancent vertices, perfrom hill climbing algorithm
+		// Dont know  adjancent vertices so take each vertex
+		// If you know adjancent vertices, perform hill climbing algorithm
 		public Vector2 getFarthestPointInDirection( Vector2 direction )
 		{
 			var index = 0;
@@ -52,7 +56,7 @@ namespace Nez.PhysicsShapes
 			float maxDot;
 			Vector2.Dot( ref points[index], ref direction, out maxDot );
 
-			for( int i = 1; i < points.Length; i++ )
+			for( var i = 1; i < points.Length; i++ )
 			{
 				Vector2.Dot( ref points[i], ref direction, out dot );
 

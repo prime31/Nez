@@ -5,11 +5,23 @@ using Nez.PhysicsShapes;
 
 namespace Nez
 {
-	// TODO: should colliders have a scale property as well or is it enough to set width/height?
 	public abstract class Collider
 	{
+		/// <summary>
+		/// the entity that owns this Collider
+		/// </summary>
 		public Entity entity;
+
+		/// <summary>
+		/// the underlying Shape of the Collider
+		/// </summary>
 		public Shape shape;
+
+		/// <summary>
+		/// if true, this Collider will never be added to the Physics system. This is useful if you want to use the Collider for collision queries
+		/// but you dont need it to be queried against by other Colliders.
+		/// </summary>
+		public bool collisionQueryCollider;
 
 		/// <summary>
 		/// position is added to entity.position to get the final position for the collider
@@ -167,7 +179,7 @@ namespace Nez
 		public virtual void registerColliderWithPhysicsSystem()
 		{
 			// entity could be null if proper such as origin are changed before we are added to an Entity
-			if( _isParentEntityAddedToScene )
+			if( _isParentEntityAddedToScene && !collisionQueryCollider )
 				Physics.addCollider( this );
 		}
 
@@ -177,7 +189,7 @@ namespace Nez
 		/// </summary>
 		public virtual void unregisterColliderWithPhysicsSystem()
 		{
-			if( _isParentEntityAddedToScene )
+			if( _isParentEntityAddedToScene && !collisionQueryCollider )
 				Physics.removeCollider( this, true );
 		}
 

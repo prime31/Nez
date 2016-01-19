@@ -326,13 +326,13 @@ namespace Nez
 
 
 		/// <summary>
-		/// returns true if the boxes are colliding (velocities are not used).
+		/// returns true if the boxes are colliding
 		/// moveX and moveY will return the movement that b1 must move to avoid the collision
 		/// </summary>
 		/// <param name="other">Other.</param>
 		/// <param name="moveX">Move x.</param>
 		/// <param name="moveY">Move y.</param>
-		public static bool collisionCheck( this Rectangle rect, Rectangle other, out float moveX, out float moveY )
+		public static bool collisionCheck( ref Rectangle rect, ref Rectangle other, out float moveX, out float moveY )
 		{
 			moveX = moveY = 0.0f;
 
@@ -425,6 +425,59 @@ namespace Nez
 			}
 
 			return boundsPoint;
+		}
+
+
+		/// <summary>
+		/// returns the closest point that is in or on the Rectangle to the given point
+		/// </summary>
+		/// <returns>The closest point on rectangle to point.</returns>
+		/// <param name="rect">Rect.</param>
+		/// <param name="point">Point.</param>
+		public static Vector2 getClosestPointOnRectangleToPoint( ref Rectangle rect, Vector2 point )
+		{
+			// for each axis, if the point is outside the box clamp it to the box else leave it alone
+			var res = new Vector2();
+			res.X = MathHelper.Clamp( point.X, rect.Left, rect.Right );
+			res.Y = MathHelper.Clamp( point.Y, rect.Top, rect.Bottom );
+
+			return res;
+		}
+
+
+		/// <summary>
+		/// gets the closest point that is on the rectangle border to the given point
+		/// </summary>
+		/// <returns>The closest point on rectangle border to point.</returns>
+		/// <param name="rect">Rect.</param>
+		/// <param name="point">Point.</param>
+		public static Vector2 getClosestPointOnRectangleBorderToPoint( ref Rectangle rect, Vector2 point )
+		{
+			// for each axis, if the point is outside the box clamp it to the box else leave it alone
+			var res = new Vector2();
+			res.X = MathHelper.Clamp( point.X, rect.Left, rect.Right );
+			res.Y = MathHelper.Clamp( point.Y, rect.Top, rect.Bottom );
+
+			// if point is inside the rectangle we need to push res to the border since it will be inside the rect
+			if( rect.Contains( res ) )
+			{
+				var dl = res.X - rect.Left;
+				var dr = rect.Right - res.X;
+				var dt = res.Y - rect.Top;
+				var db = rect.Bottom - res.Y;
+
+				var min = Mathf.minOf( dl, dr, dt, db );
+				if( min == dt )
+					res.Y = rect.Top;
+				else if( min == db )
+					res.Y = rect.Bottom;
+				else if( min == dl )
+					res.X = rect.Left;
+				else
+					res.X = rect.Right;
+			}
+
+			return res;
 		}
 
 

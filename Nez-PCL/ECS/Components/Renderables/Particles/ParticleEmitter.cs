@@ -8,7 +8,7 @@ using System.IO;
 
 namespace Nez.Particles
 {
-	public class ParticleEmitter : Nez.RenderableComponent
+	public class ParticleEmitter : RenderableComponent
 	{
 		public override float width { get { return 5f; } }
 		public override float height { get { return 5f; } }
@@ -42,8 +42,6 @@ namespace Nez.Particles
 		/// </summary>
 		bool _emitting;
 		List<Particle> _particles;
-		BlendState _blendState;
-		SpriteBatch _spriteBatch;
 		bool _playOnAwake;
 		ParticleEmitterConfig _emitterConfig;
 
@@ -73,10 +71,12 @@ namespace Nez.Particles
 		/// </summary>
 		void initialize()
 		{
-			_spriteBatch = new SpriteBatch( Core.graphicsDevice );
-			_blendState = new BlendState();
-			_blendState.ColorSourceBlend = _blendState.AlphaSourceBlend = _emitterConfig.blendFuncSource;
-			_blendState.ColorDestinationBlend = _blendState.AlphaDestinationBlend = _emitterConfig.blendFuncDestination;
+			// prep our custom BlendState and set the RenderState with it
+			var blendState = new BlendState();
+			blendState.ColorSourceBlend = blendState.AlphaSourceBlend = _emitterConfig.blendFuncSource;
+			blendState.ColorDestinationBlend = blendState.AlphaDestinationBlend = _emitterConfig.blendFuncDestination;
+
+			renderState = new RenderState( blendState );
 		}
 
 
@@ -86,15 +86,6 @@ namespace Nez.Particles
 		{
 			if( _playOnAwake )
 				play();
-		}
-
-
-		public override void onRemovedFromEntity()
-		{
-			_spriteBatch.Dispose();
-			_spriteBatch = null;
-			_blendState.Dispose();
-			_blendState = null;
 		}
 
 
@@ -156,7 +147,6 @@ namespace Nez.Particles
 				return;
 
 			var rootPosition = renderPosition;
-			_spriteBatch.Begin( blendState:_blendState, samplerState:SamplerState.LinearClamp, transformMatrix:entity.scene.camera.transformMatrix );
 
 			// loop through all the particles updating their location and color
 			for( var i = 0; i < _particles.Count; i++ )
@@ -164,12 +154,10 @@ namespace Nez.Particles
 				var currentParticle = _particles[i];
 
 				if( _emitterConfig.subtexture == null )
-					_spriteBatch.Draw( graphics.pixelTexture, rootPosition + currentParticle.position, graphics.pixelTexture.sourceRect, currentParticle.color, currentParticle.rotation, Vector2.One, currentParticle.particleSize * 0.5f, SpriteEffects.None, layerDepth );
+					graphics.spriteBatch.Draw( graphics.pixelTexture, rootPosition + currentParticle.position, graphics.pixelTexture.sourceRect, currentParticle.color, currentParticle.rotation, Vector2.One, currentParticle.particleSize * 0.5f, SpriteEffects.None, layerDepth );
 				else
-					_spriteBatch.Draw( _emitterConfig.subtexture, rootPosition + currentParticle.position, _emitterConfig.subtexture.sourceRect, currentParticle.color, currentParticle.rotation, _emitterConfig.subtexture.center, currentParticle.particleSize / _emitterConfig.subtexture.sourceRect.Width, SpriteEffects.None, layerDepth );
+					graphics.spriteBatch.Draw( _emitterConfig.subtexture, rootPosition + currentParticle.position, _emitterConfig.subtexture.sourceRect, currentParticle.color, currentParticle.rotation, _emitterConfig.subtexture.center, currentParticle.particleSize / _emitterConfig.subtexture.sourceRect.Width, SpriteEffects.None, layerDepth );
 			}
-
-			_spriteBatch.End();
 		}
 
 

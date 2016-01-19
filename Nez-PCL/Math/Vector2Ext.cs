@@ -24,6 +24,17 @@ namespace Nez
 		{
 			return new Vector2( 0.5f, 0.5f );
 		}
+
+
+		/// <summary>
+		/// compute the 2d pseudo cross product Dot( Perp( u ), v )
+		/// </summary>
+		/// <param name="u">U.</param>
+		/// <param name="v">V.</param>
+		public static float cross( Vector2 u, Vector2 v )
+		{
+			return u.Y * v.X - u.X * v.Y;
+		}
 	}
 }
 

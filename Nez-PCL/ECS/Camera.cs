@@ -161,23 +161,6 @@ namespace Nez
 			}
 		}
 
-		ViewportAdapter _viewportAdapter;
-		/// <summary>
-		/// used for automatic scaling/boxing of the viewport and translation to/from world/screen positions
-		/// </summary>
-		public ViewportAdapter viewportAdapter
-		{
-			get { return _viewportAdapter; }
-			set
-			{
-				if( _viewportAdapter != value )
-				{
-					_viewportAdapter = value;
-					_areMatrixesDirty = true;
-					_areBoundsDirty = true;
-				}
-			}
-		}
 
 		float _near = -100f;
 		float _far = 100f;
@@ -202,15 +185,14 @@ namespace Nez
 		void onGraphicsDeviceReset()
 		{
 			_areBoundsDirty = true;
-
-			// if we have a viewport adapter we also dirty the matrixes since it will be modifying itself
-			if( viewportAdapter != null )
-				_areMatrixesDirty = true;
 		}
 
 
 		void updateMatrixes()
 		{
+			if( !_areMatrixesDirty )
+				return;
+			
 			Matrix tempMat;
 
 			_transformMatrix = Matrix.CreateTranslation( -position.X, -position.Y, 0f ); // position
@@ -220,10 +202,6 @@ namespace Nez
 			Matrix.Multiply( ref _transformMatrix, ref tempMat, out _transformMatrix );
 			Matrix.CreateTranslation( (int)origin.X, (int)origin.Y, 0f, out tempMat ); // translate -origin
 			Matrix.Multiply( ref _transformMatrix, ref tempMat, out _transformMatrix );
-
-			// if we have a ViewportAdapter take it into account
-			if( _viewportAdapter != null )
-				Matrix.Multiply( ref _transformMatrix, ref _viewportAdapter.scaleMatrix, out _transformMatrix );
 
 			// calculate our inverse as well
 			Matrix.Invert( ref _transformMatrix, out _inverseTransformMatrix );
@@ -246,11 +224,6 @@ namespace Nez
 		public void unload()
 		{
 			Core.emitter.removeObserver( CoreEvents.GraphicsDeviceReset, onGraphicsDeviceReset );
-			if( viewportAdapter != null )
-			{
-				viewportAdapter.unload();
-				viewportAdapter = null;
-			}
 		}
 
 
@@ -263,10 +236,7 @@ namespace Nez
 
 		public void centerOrigin()
 		{
-			if( viewportAdapter != null )
-				origin = new Vector2( viewportAdapter.virtualWidth / 2f, viewportAdapter.virtualHeight / 2f );
-			else
-				origin = new Vector2( Core.graphicsDevice.Viewport.Width / 2f, Core.graphicsDevice.Viewport.Height / 2f );
+			origin = new Vector2( Core.graphicsDevice.Viewport.Width / 2f, Core.graphicsDevice.Viewport.Height / 2f );
 
 			// offset our position to match the new center
 			position += origin;
@@ -304,11 +274,9 @@ namespace Nez
 		/// <param name="worldPosition">World position.</param>
 		public Vector2 worldToScreenPoint( Vector2 worldPosition )
 		{
-			var pos = Vector2.Transform( worldPosition, transformMatrix );
-
-			if( _viewportAdapter != null )
-				pos = _viewportAdapter.screenToVirtualViewport( pos );
-			return pos;
+			updateMatrixes();
+			Vector2.Transform( ref worldPosition, ref _transformMatrix, out worldPosition );
+			return worldPosition;
 		}
 
 
@@ -319,9 +287,9 @@ namespace Nez
 		/// <param name="screenPosition">Screen position.</param>
 		public Vector2 screenToWorldPoint( Vector2 screenPosition )
 		{
-			if( _viewportAdapter != null )
-				screenPosition = _viewportAdapter.pointToVirtualViewport( screenPosition );
-			return Vector2.Transform( screenPosition, inverseTransformMatrix );
+			updateMatrixes();
+			Vector2.Transform( ref screenPosition, ref _inverseTransformMatrix, out screenPosition );
+			return screenPosition;
 		}
 
 

@@ -82,7 +82,6 @@ namespace Nez
 			{
 				_entities[i].onRemovedFromScene();
 				_entities[i].scene = null;
-				Scene._entityCache.push( _entities[i] );
 			}
 
 			_entities.Clear();
@@ -127,7 +126,6 @@ namespace Nez
 					_entities.Remove( entity );
 					entity.onRemovedFromScene();
 					entity.scene = null;
-					Scene._entityCache.push( entity );
 					scene.entityProcessors.onEntityRemoved( entity );
 				}
 				_entitiesToRemove.Clear();

@@ -20,7 +20,7 @@ namespace Nez.Textures
 		/// <param name="height">Height.</param>
 		public RenderTexture( int width, int height )
 		{
-			renderTarget2D = new RenderTarget2D( Core.graphicsDevice, width, height );
+			renderTarget2D = new RenderTarget2D( Core.graphicsDevice, width, height, false, SurfaceFormat.Color, Screen.preferredDepthStencilFormat );
 		}
 
 
@@ -71,6 +71,10 @@ namespace Nez.Textures
 		/// <param name="height">Height.</param>
 		public void resize( int width, int height )
 		{
+			// no need to resize if we are already the right size
+			if( renderTarget2D.Width == width && renderTarget2D.Height == height )
+				return;
+			
 			// unload if necessary
 			if( renderTarget2D != null )
 				unload();

@@ -155,6 +155,14 @@ namespace Nez
 
 
 		[Conditional( "DEBUG" )]
+		public static void drawHollowBox( Vector2 center, int size, Color color, float duration = 0f )
+		{
+			var halfSize = size * 0.5f;
+			_debugDrawItems.Add( new DebugDrawItem( new Rectangle( (int)( center.X - halfSize ), (int)( center.Y - halfSize ), size, size ), color, duration ) );
+		}
+
+
+		[Conditional( "DEBUG" )]
 		public static void drawText( BitmapFont font, string text, Vector2 position, Color color, float duration = 0f, float scale = 1f )
 		{
 			_debugDrawItems.Add( new DebugDrawItem( font, text, position, color, duration, scale ) );

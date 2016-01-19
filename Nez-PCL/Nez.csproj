@@ -89,9 +89,6 @@
     <Compile Include="Graphics\Renderers\RenderLayerExcludeRenderer.cs" />
     <Compile Include="Graphics\Renderers\RenderLayerRenderer.cs" />
     <Compile Include="Graphics\Renderers\Renderer.cs" />
-    <Compile Include="Graphics\ViewportAdapters\BoxingViewportAdapter.cs" />
-    <Compile Include="Graphics\ViewportAdapters\ScalingViewportAdapter.cs" />
-    <Compile Include="Graphics\ViewportAdapters\ViewportAdapter.cs" />
     <Compile Include="Input\GamePadData.cs" />
     <Compile Include="Input\Input.cs" />
     <Compile Include="Input\VirtualAxis.cs" />
@@ -106,7 +103,6 @@
     <Compile Include="Physics\SpatialHash.cs" />
     <Compile Include="Stuff\IMGUI\IMGUI.cs" />
     <Compile Include="Utils\Emitter.cs" />
-    <Compile Include="Utils\EntityCache.cs" />
     <Compile Include="Utils\Time.cs" />
     <Compile Include="Core.cs" />
     <Compile Include="CoreEvents.cs" />
@@ -149,8 +145,6 @@
     <Compile Include="Utils\Timers\ITimer.cs" />
     <Compile Include="Utils\Timers\Timer.cs" />
     <Compile Include="ECS\Components\Renderables\Sprites\SpriteAnimation.cs" />
-    <Compile Include="Physics\ICollisionCallback.cs" />
-    <Compile Include="Physics\ITriggerCallback.cs" />
     <Compile Include="Physics\RaycastHit.cs" />
     <Compile Include="Math\Flags.cs" />
     <Compile Include="Debug\DebugDrawItem.cs" />
@@ -209,5 +203,8 @@
     <Compile Include="Physics\Shapes\Box.cs" />
     <Compile Include="Graphics\SpriteBatchExt.cs" />
     <Compile Include="Debug\Assert.cs" />
+    <Compile Include="Physics\Shapes\RealtimeCollisions.cs" />
+    <Compile Include="ECS\Components\Renderables\RenderState.cs" />
+    <Compile Include="Utils\Triangulator.cs" />
   </ItemGroup>
 </Project>

@@ -14,6 +14,14 @@ namespace Nez
 		public static GamePadData[] gamePads = new GamePadData[MAX_SUPPORTED_GAMEPADS];
 		public const float DEFAULT_DEADZONE = 0.1f;
 
+		/// <summary>
+		/// set by the Scene and used to scale mouse input
+		/// </summary>
+		internal static Vector2 _resolutionScale;
+		/// <summary>
+		/// set by the Scene and used to scale mouse input
+		/// </summary>
+		internal static Point _resolutionOffset;
 		static KeyboardState _previousKbState;
 		static KeyboardState _currentKbState;
 		static MouseState _previousMouseState;
@@ -241,15 +249,44 @@ namespace Nez
 		}
 
 
-		public static Point mousePosition
+		/// <summary>
+		/// unscaled mouse position. This is the actual screen space value
+		/// </summary>
+		/// <value>The raw mouse position.</value>
+		public static Point rawMousePosition
 		{
 			get { return _currentMouseState.Position; }
+		}
+
+
+		/// <summary>
+		/// this takes into account the SceneResolutionPolicy and returns the value scaled to the RenderTextures coordinates
+		/// </summary>
+		/// <value>The scaled mouse position.</value>
+		public static Vector2 scaledMousePosition
+		{
+			get
+			{
+				var mousePosition = _currentMouseState.Position - _resolutionOffset;
+				return mousePosition.ToVector2() * _resolutionScale;
+			}
 		}
 
 
 		public static Point mousePositionDelta
 		{
 			get { return _currentMouseState.Position - _previousMouseState.Position; }
+		}
+
+
+		public static Vector2 scaledMousePositionDelta
+		{
+			get
+			{
+				var pastPos = ( _previousMouseState.Position - _resolutionOffset ).ToVector2();
+				pastPos *= _resolutionScale;
+				return scaledMousePosition - pastPos;
+			}
 		}
 
 		#endregion

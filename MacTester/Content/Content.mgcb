@@ -140,3 +140,123 @@
 /processorParam:CompressTexture=False
 /build:Fonts/pixelfont.fnt
 
+#begin ParticleDesigner/Plasma Glow.pex
+/importer:ParticleDesignerImporter
+/processor:ParticleDesignerProcessor
+/build:ParticleDesigner/Plasma Glow.pex
+
+#begin ParticleDesigner/Atomic Bubble.pex
+/importer:ParticleDesignerImporter
+/processor:ParticleDesignerProcessor
+/build:ParticleDesigner/Atomic Bubble.pex
+
+#begin ParticleDesigner/Blue Flame.pex
+/importer:ParticleDesignerImporter
+/processor:ParticleDesignerProcessor
+/build:ParticleDesigner/Blue Flame.pex
+
+#begin ParticleDesigner/Blue Galaxy.pex
+/importer:ParticleDesignerImporter
+/processor:ParticleDesignerProcessor
+/build:ParticleDesigner/Blue Galaxy.pex
+
+#begin ParticleDesigner/Comet.pex
+/importer:ParticleDesignerImporter
+/processor:ParticleDesignerProcessor
+/build:ParticleDesigner/Comet.pex
+
+#begin ParticleDesigner/Crazy Blue.pex
+/importer:ParticleDesignerImporter
+/processor:ParticleDesignerProcessor
+/build:ParticleDesigner/Crazy Blue.pex
+
+#begin ParticleDesigner/Electrons.pex
+/importer:ParticleDesignerImporter
+/processor:ParticleDesignerProcessor
+/build:ParticleDesigner/Electrons.pex
+
+#begin ParticleDesigner/Giros Gratis.pex
+/importer:ParticleDesignerImporter
+/processor:ParticleDesignerProcessor
+/build:ParticleDesigner/Giros Gratis.pex
+
+#begin ParticleDesigner/Into The Blue.pex
+/importer:ParticleDesignerImporter
+/processor:ParticleDesignerProcessor
+/build:ParticleDesigner/Into The Blue.pex
+
+#begin ParticleDesigner/JasonChoi_Flash.pex
+/importer:ParticleDesignerImporter
+/processor:ParticleDesignerProcessor
+/build:ParticleDesigner/JasonChoi_Flash.pex
+
+#begin ParticleDesigner/JasonChoi_Swirl01.pex
+/importer:ParticleDesignerImporter
+/processor:ParticleDesignerProcessor
+/build:ParticleDesigner/JasonChoi_Swirl01.pex
+
+#begin ParticleDesigner/JasonChoi_rising up.pex
+/importer:ParticleDesignerImporter
+/processor:ParticleDesignerProcessor
+/build:ParticleDesigner/JasonChoi_rising up.pex
+
+#begin ParticleDesigner/Meks Blood Spill.pex
+/importer:ParticleDesignerImporter
+/processor:ParticleDesignerProcessor
+/build:ParticleDesigner/Meks Blood Spill.pex
+
+#begin ParticleDesigner/Real Popcorn.pex
+/importer:ParticleDesignerImporter
+/processor:ParticleDesignerProcessor
+/build:ParticleDesigner/Real Popcorn.pex
+
+#begin ParticleDesigner/Shooting Fireball.pex
+/importer:ParticleDesignerImporter
+/processor:ParticleDesignerProcessor
+/build:ParticleDesigner/Shooting Fireball.pex
+
+#begin ParticleDesigner/The Sun.pex
+/importer:ParticleDesignerImporter
+/processor:ParticleDesignerProcessor
+/build:ParticleDesigner/The Sun.pex
+
+#begin ParticleDesigner/Touch Up.pex
+/importer:ParticleDesignerImporter
+/processor:ParticleDesignerProcessor
+/build:ParticleDesigner/Touch Up.pex
+
+#begin ParticleDesigner/Trippy.pex
+/importer:ParticleDesignerImporter
+/processor:ParticleDesignerProcessor
+/build:ParticleDesigner/Trippy.pex
+
+#begin ParticleDesigner/Winner Stars.pex
+/importer:ParticleDesignerImporter
+/processor:ParticleDesignerProcessor
+/build:ParticleDesigner/Winner Stars.pex
+
+#begin ParticleDesigner/huo1.pex
+/importer:ParticleDesignerImporter
+/processor:ParticleDesignerProcessor
+/build:ParticleDesigner/huo1.pex
+
+#begin ParticleDesigner/wu1.pex
+/importer:ParticleDesignerImporter
+/processor:ParticleDesignerProcessor
+/build:ParticleDesigner/wu1.pex
+
+#begin ParticleDesigner/Fire.pex
+/importer:ParticleDesignerImporter
+/processor:ParticleDesignerProcessor
+/build:ParticleDesigner/Fire.pex
+
+#begin ParticleDesigner/Leaves.pex
+/importer:ParticleDesignerImporter
+/processor:ParticleDesignerProcessor
+/build:ParticleDesigner/Leaves.pex
+
+#begin ParticleDesigner/Snow.pex
+/importer:ParticleDesignerImporter
+/processor:ParticleDesignerProcessor
+/build:ParticleDesigner/Snow.pex
+
