@@ -25,7 +25,8 @@ namespace Nez
 
 		/// <summary>
 		/// when in CameraWindow mode the width/height is used as a bounding box to allow movement within it without moving the camera.
-		/// when in LockOn mode only the deadzone x/y values are used
+		/// when in LockOn mode only the deadzone x/y values are used. This is set to sensible defaults when you call follow but you are
+		/// free to override it to get a custom deadzone directly or via the helper setCenteredDeadzone.
 		/// </summary>
 		public Rectangle deadzone;
 
@@ -77,12 +78,19 @@ namespace Nez
 			_worldSpaceDeadzone.Width = deadzone.Width;
 			_worldSpaceDeadzone.Height = deadzone.Height;
 
-			Debug.drawHollowRect( _worldSpaceDeadzone, Color.DarkRed );
-
 			if( _targetEntity != null )
 				updateFollow();
 
 			camera.position = Vector2.Lerp( camera.position, camera.position + _desiredPositionDelta, followLerp );
+		}
+
+
+		public override void debugRender( Graphics graphics )
+		{
+			if( _cameraStyle == CameraStyle.LockOn )
+				graphics.spriteBatch.drawHollowRect( _worldSpaceDeadzone.X - 5, _worldSpaceDeadzone.Y - 5, _worldSpaceDeadzone.Width, _worldSpaceDeadzone.Height, Color.DarkRed );
+			else
+				graphics.spriteBatch.drawHollowRect( _worldSpaceDeadzone, Color.DarkRed );
 		}
 
 
@@ -94,6 +102,8 @@ namespace Nez
 
 		void updateFollow()
 		{
+			_desiredPositionDelta.X = _desiredPositionDelta.Y = 0;
+
 			if( _cameraStyle == CameraStyle.LockOn )
 			{
 				var targetX = _targetEntity.position.X;
@@ -128,10 +138,6 @@ namespace Nez
 					else if( _worldSpaceDeadzone.Top > targetBounds.Top )
 						_desiredPositionDelta.Y = targetBounds.Top - _worldSpaceDeadzone.Top;
 				}
-				else
-				{
-					_desiredPositionDelta.X = _desiredPositionDelta.Y = 0;
-				}
 			}
 		}
 
@@ -149,11 +155,22 @@ namespace Nez
 					var h = ( cameraBounds.Height / 3 );
 					deadzone = new Rectangle( ( cameraBounds.Width - w ) / 2, ( cameraBounds.Height - h ) / 2, w, h );
 					break;
-					
 				case CameraStyle.LockOn:
 					deadzone = new Rectangle( cameraBounds.Width / 2, cameraBounds.Height / 2, 10, 10 );
 					break;
 			}
+		}
+
+
+		/// <summary>
+		/// sets up the deadzone centered in the current cameras bounds with the given size
+		/// </summary>
+		/// <param name="width">Width.</param>
+		/// <param name="height">Height.</param>
+		public void setCenteredDeadzone( int width, int height )
+		{
+			var cameraBounds = camera.bounds;
+			deadzone = new Rectangle( ( cameraBounds.Width - width ) / 2, ( cameraBounds.Height - height ) / 2, width, height );
 		}
 
 	}

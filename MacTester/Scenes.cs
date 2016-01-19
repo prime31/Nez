@@ -151,7 +151,6 @@ namespace MacTester
 			var scene = Scene.createWithDefaultRenderer( useBoxColliders ? Color.BlanchedAlmond : Color.Azure );
 			var moonTexture = scene.contentManager.Load<Texture2D>( "Images/moon" );
 
-
 			// create some moons
 			Action<Vector2,string,bool> moonMaker = ( Vector2 pos, string name, bool isTrigger ) =>
 			{

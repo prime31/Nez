@@ -107,6 +107,15 @@ namespace Nez
 		public readonly RenderableComponentList renderableComponents;
 
 		/// <summary>
+		/// gets the size of the sceneRenderTexture
+		/// </summary>
+		/// <value>The size of the scene render texture.</value>
+		public Vector2 sceneRenderTextureSize
+		{
+			get { return new Vector2( _sceneRenderTexture.renderTarget2D.Width, _sceneRenderTexture.renderTarget2D.Height ); }
+		}
+
+		/// <summary>
 		/// default resolution size used for all scenes
 		/// </summary>
 		static Point defaultDesignResolutionSize;
@@ -217,6 +226,10 @@ namespace Nez
 
 		internal void update()
 		{
+			// we set the RenderTarget here so that the Viewport will match the RenderTarget properly
+			Core.graphicsDevice.SetRenderTarget( _sceneRenderTexture );
+
+			// update our lists in case they have any changes
 			entities.updateLists();
 			renderableComponents.updateLists();
 			entityProcessors.update();
@@ -233,7 +246,7 @@ namespace Nez
 		internal void preRender()
 		{
 			// Renderers should always have those that require RenderTextures first. They clear themselves and set themselves as
-			// the current RenderTarget
+			// the current RenderTarget when they render
 			if( _renderers[0].renderTexture == null )
 			{
 				Core.graphicsDevice.SetRenderTarget( _sceneRenderTexture );
