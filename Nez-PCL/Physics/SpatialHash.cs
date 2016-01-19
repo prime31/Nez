@@ -298,16 +298,16 @@ namespace Nez.Spatial
 			var tDeltaY = stepY / ray.direction.Y;
 
 			// start walking and returning the intersecting cells.
-			while( true )
+			var cell = cellAtPosition( intX, intY );
+			//debugDrawCellDetails( intX, intY, cell != null ? cell.Count : 0 );
+			if( _raycastParser.checkRayIntersection( intX, intY, cell ) )
 			{
-				var cell = cellAtPosition( intX, intY );
-				//debugDrawCellDetails( intX, intY, cell != null ? cell.Count : 0 );
-				if( _raycastParser.checkRayIntersection( intX, intY, cell ) )
-				{
-					_raycastParser.reset();
-					return _raycastParser.hitCounter;
-				}
-				
+				_raycastParser.reset();
+				return _raycastParser.hitCounter;
+			}
+
+			while( intX != endCell.X || intY != endCell.Y )
+			{
 				if( tMaxX < tMaxY )
 				{
 					intX += stepX;
@@ -318,9 +318,14 @@ namespace Nez.Spatial
 					intY += stepY;
 					tMaxY += tDeltaY;
 				}
-				
-				if( intX == endCell.X && intY == endCell.Y )
-				    break;
+
+				cell = cellAtPosition( intX, intY );
+				//debugDrawCellDetails( intX, intY, cell != null ? cell.Count : 0 );
+				if( _raycastParser.checkRayIntersection( intX, intY, cell ) )
+				{
+					_raycastParser.reset();
+					return _raycastParser.hitCounter;
+				}
 			}
 
 			// make sure we are reset
