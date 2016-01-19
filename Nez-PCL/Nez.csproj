@@ -206,5 +206,6 @@
     <Compile Include="Physics\Shapes\RealtimeCollisions.cs" />
     <Compile Include="ECS\Components\Renderables\RenderState.cs" />
     <Compile Include="Utils\Triangulator.cs" />
+    <Compile Include="ECS\Systems\PassiveSystem.cs" />
   </ItemGroup>
 </Project>
