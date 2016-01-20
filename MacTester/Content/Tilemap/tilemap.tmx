@@ -16,7 +16,12 @@
  </layer>
  <layer name="visualbgalt" width="16" height="9">
   <data encoding="base64" compression="gzip">
-   H4sIAAAAAAAAA9NjYEgwA2IGEoAIA4MClD6gC9RrCtUPZDPoIakDijOY4TGHB6gfmY+u3haI7ZD4wmjq0QG6elxAmEj/AtU9IEYdvQATA0MDITVCQDdz4XC3BlA/EDNoAeWBYa8Ai0dsQItIvwMA0G8dlUACAAA=
+   H4sIAAAAAAAAA2NgIB2IMDAoQOkDZGiHAx4S9QtTaB+SOQlEqntADfuoBZgYGBoIqRECupkLh7s1gPqBmEELKA8MewVYPGIDWkT6HQAbeLy+QAIAAA==
+  </data>
+ </layer>
+ <layer name="bloomy" width="16" height="9">
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAAA9NjYEgwA2IGHEAPlwQU6AL1mkL166KpB4ozmBHQjwzQ1dsCsR0J+klVPwooBwCy2HiwQAIAAA==
   </data>
  </layer>
  <layer name="collision" width="16" height="9" visible="0" opacity="0.34">
@@ -24,7 +29,7 @@
    H4sIAAAAAAAAA2NggABGBsoArfQzEqGGVPuxmcmIxQxSzUQ3g5B+bPLYzMEmh08dsfqogQFVK5qPQAIAAA==
   </data>
  </layer>
- <objectgroup name="portals">
+ <objectgroup name="portals" visible="0">
   <properties>
    <property name="id" value="1"/>
   </properties>
@@ -47,7 +52,7 @@
    H4sIAAAAAAAAA2NgGAVDGSgAsTyUJgdoALE6lCYHAADs3qsyQAIAAA==
   </data>
  </layer>
- <objectgroup name="markers">
+ <objectgroup name="markers" visible="0">
   <object id="5" name="spawn" type="spawn" x="56" y="118" width="5" height="5">
    <ellipse/>
   </object>
