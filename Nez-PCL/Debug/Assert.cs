@@ -11,7 +11,10 @@ namespace Nez
 		public static void isTrue( bool condition, string message, params object[] args )
 		{
 			if( !condition )
+			{
 				System.Diagnostics.Debug.Assert( false, string.Format( message, args ) );
+				Debugger.Break();
+			}
 		}
 
 
@@ -53,7 +56,10 @@ namespace Nez
 		public static void areNotEqual( object first, object second, string message, params object[] args )
 		{
 			if( first == second )
+			{
 				System.Diagnostics.Debug.Assert( false, string.Format( message, args ) );
+				Debugger.Break();
+			}
 		}
 
 	}

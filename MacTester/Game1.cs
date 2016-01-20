@@ -122,7 +122,7 @@ namespace MacTester
 		{
 			base.Draw( gameTime );
 
-			IMGUI.beginWindow( GraphicsDevice.Viewport.Width - 150, 0, 150, 300 );
+			IMGUI.beginWindow( GraphicsDevice.Viewport.Width - 150, 0, 150, 350 );
 
 			debugRenderEnabled = IMGUI.toggle( "Debug Render", debugRenderEnabled );
 
@@ -131,6 +131,9 @@ namespace MacTester
 
 			if( IMGUI.button( "Scene 1 NoBorder" ) )
 				scene = Scenes.sceneOne( false );
+
+			if( IMGUI.button( "Scene 1 Pixel Bloom" ) )
+				scene = Scenes.sceneOneBloom();
 
 			if( IMGUI.button( "Scene 2" ) )
 				scene = Scenes.sceneTwo();

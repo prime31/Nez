@@ -38,7 +38,7 @@ namespace MacTester
 
 			var tiledEntityTwo = scene.createAndAddEntity<Entity>( "tiled-map-entity-two" );
 			tiledEntityTwo.position = new Vector2( 256, 0 );
-			tiledEntityTwo.addComponent<TiledMapComponent>( new TiledMapComponent( tiledmap, "collision" ) );
+			tiledEntityTwo.addComponent( new TiledMapComponent( tiledmap, "collision" ) );
 			tiledEntityTwo.updateOrder += 5;
 
 			// create a sprite animation from an atlas
@@ -58,11 +58,34 @@ namespace MacTester
 			spriteEntity.position = new Vector2( 40, 40 );
 			spriteEntity.addComponent( sprite );
 
-			if( showAll )
-			{
-				scene.addPostProcessor( new SimpleBloomPostProcessor( scene.contentManager ) );
-				scene.enablePostProcessing = true;
-			}
+			return scene;
+		}
+
+
+		public static Scene sceneOneBloom()
+		{
+			var scene = new Scene();
+			var bloomLayerRenderer = scene.addRenderer( new RenderLayerRenderer( 1, null, -1 ) );
+			bloomLayerRenderer.renderTexture = new RenderTexture( 256, 144 );
+			bloomLayerRenderer.renderTextureClearColor = Color.Transparent;
+
+			scene.addRenderer( new RenderLayerExcludeRenderer( 1 ) );
+			scene.letterboxColor = Color.MonoGameOrange;
+			scene.setDesignResolution( 256, 144, Scene.SceneResolutionPolicy.ShowAllPixelPerfect );
+
+			// load a TiledMap and move it back so is drawn before other entities
+			var tiledEntity = scene.createAndAddEntity<Entity>( "tiled-map-entity" );
+			var tiledmap = scene.contentManager.Load<TiledMap>( "bin/MacOSX/Tilemap/tilemap" );
+			var tc1 = tiledEntity.addComponent( new TiledMapComponent( tiledmap, "collision" ) );
+			tc1.layerIndicesToRender = new List<int>() { 0, 1, 2 };
+
+			var tc2 = tiledEntity.addComponent( new TiledMapComponent( tiledmap ) );
+			tc2.renderLayer = 1;
+			tc2.layerIndicesToRender = new List<int>() { 3 };
+
+
+			scene.addPostProcessor( new PixelBloomPostProcessor( scene.contentManager, bloomLayerRenderer.renderTexture ) );
+			scene.enablePostProcessing = true;
 
 			return scene;
 		}
