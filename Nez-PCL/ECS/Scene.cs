@@ -142,6 +142,7 @@ namespace Nez
 
 		RenderTexture _sceneRenderTexture;
 		RenderTexture _destinationRenderTexture;
+		Action<Texture2D> _screenshotRequestCallback;
 
 		List<Renderer> _renderers = new List<Renderer>();
 		Dictionary<int,double> _actualEntityOrderLookup = new Dictionary<int,double>();
@@ -287,6 +288,18 @@ namespace Nez
 						_postProcessors[i].process( isEven ? _sceneRenderTexture : _destinationRenderTexture, isEven ? _destinationRenderTexture : _sceneRenderTexture );
 					}
 				}
+			}
+
+			// if we have a screenshot request deal with it before the final render to the backbuffer
+			if( _screenshotRequestCallback != null )
+			{
+				var tex = new Texture2D( Core.graphicsDevice, _sceneRenderTexture.renderTarget2D.Width, _sceneRenderTexture.renderTarget2D.Height );
+				var data = new Color[tex.Bounds.Width * tex.Bounds.Height];
+				( Mathf.isEven( enabledCounter ) ? _sceneRenderTexture : _destinationRenderTexture ).renderTarget2D.GetData<Color>( data );
+				tex.SetData<Color>( data );
+				_screenshotRequestCallback( tex );
+
+				_screenshotRequestCallback = null;
 			}
 
 			// render our final result to the backbuffer
@@ -492,6 +505,17 @@ namespace Nez
 
 
 		#region Utils
+
+		/// <summary>
+		/// after the next draw completes this will clone the backbuffer and call callback with the clone. Note that you must dispose of the 
+		/// Texture2D when done with it!
+		/// </summary>
+		/// <param name="callback">Callback.</param>
+		public void requestScreenshot( Action<Texture2D> callback )
+		{
+			_screenshotRequestCallback = callback;
+		}
+	
 
 		/// <summary>
 		/// Returns whether the timeSinceSceneLoad has passed the given time interval since the last frame. Ex: given 2.0f, this will return true once every 2 seconds
