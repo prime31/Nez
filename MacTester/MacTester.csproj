@@ -74,8 +74,9 @@
     <Compile Include="SceneEntityProcessor\TextEntityProcessor.cs" />
     <Compile Include="SceneEntityProcessor\ImageEntityProcessor.cs" />
     <Compile Include="SceneThree\SimpleMoonOutlineRenderer.cs" />
-    <Compile Include="SceneOne\SimpleBloomPostProcessor.cs" />
     <Compile Include="SceneOne\BloomSettings.cs" />
+    <Compile Include="SceneOne\PixelBloomPostProcessor.cs" />
+    <Compile Include="SceneOne\BloomPostProcessor.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Info.plist" />

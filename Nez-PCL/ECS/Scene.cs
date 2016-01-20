@@ -138,7 +138,7 @@ namespace Nez
 		/// <summary>
 		/// this gets setup based on the resolution policy and is used for the final blit of the RenderTexture
 		/// </summary>
-		Rectangle finalRenderDestinationRect;
+		Rectangle _finalRenderDestinationRect;
 
 		RenderTexture _sceneRenderTexture;
 		RenderTexture _destinationRenderTexture;
@@ -194,7 +194,7 @@ namespace Nez
 
 		internal void begin()
 		{
-			Debug.warnIf( _renderers.Count == 0, "Scene has begun with no renderer. Are you sure you want to run a Scene without a renderer?" );
+			Assert.isFalse( _renderers.Count == 0, "Scene has begun with no renderer. At least one renderer must be present before beginning a scene." );
 			Physics.reset();
 			updateResolutionScaler();
 			Core.emitter.addObserver( CoreEvents.GraphicsDeviceReset, onGraphicsDeviceReset );
@@ -299,7 +299,7 @@ namespace Nez
 			Core.graphicsDevice.SetRenderTarget( null );
 			Core.graphicsDevice.Clear( letterboxColor );
 			Graphics.instance.spriteBatch.Begin( SpriteSortMode.Deferred, BlendState.Opaque, samplerState );
-			Graphics.instance.spriteBatch.Draw( Mathf.isEven( enabledCounter ) ? _sceneRenderTexture : _destinationRenderTexture, finalRenderDestinationRect, Color.White );
+			Graphics.instance.spriteBatch.Draw( Mathf.isEven( enabledCounter ) ? _sceneRenderTexture : _destinationRenderTexture, _finalRenderDestinationRect, Color.White );
 			Graphics.instance.spriteBatch.End();
 		}
 
@@ -356,9 +356,9 @@ namespace Nez
 			switch( _resolutionPolicy )
 			{
 				case SceneResolutionPolicy.None:
-					finalRenderDestinationRect.X = finalRenderDestinationRect.Y = 0;
-					finalRenderDestinationRect.Width = screenSize.X;
-					finalRenderDestinationRect.Height = screenSize.Y;
+					_finalRenderDestinationRect.X = _finalRenderDestinationRect.Y = 0;
+					_finalRenderDestinationRect.Width = screenSize.X;
+					_finalRenderDestinationRect.Height = screenSize.Y;
 					rectCalculated = true;
 					break;
 				case SceneResolutionPolicy.ExactFit:
@@ -394,10 +394,10 @@ namespace Nez
 					if( scale == 0 )
 						scale = 1;
 
-					finalRenderDestinationRect.Width = Mathf.ceilToInt( designSize.X * scale );
-					finalRenderDestinationRect.Height = Mathf.ceilToInt( designSize.Y * scale );
-					finalRenderDestinationRect.X = ( screenSize.X - finalRenderDestinationRect.Width ) / 2;
-					finalRenderDestinationRect.Y = ( screenSize.Y - finalRenderDestinationRect.Height ) / 2;
+					_finalRenderDestinationRect.Width = Mathf.ceilToInt( designSize.X * scale );
+					_finalRenderDestinationRect.Height = Mathf.ceilToInt( designSize.Y * scale );
+					_finalRenderDestinationRect.X = ( screenSize.X - _finalRenderDestinationRect.Width ) / 2;
+					_finalRenderDestinationRect.Y = ( screenSize.Y - _finalRenderDestinationRect.Height ) / 2;
 					rectCalculated = true;
 
 					break;
@@ -412,10 +412,10 @@ namespace Nez
 					renderTextureWidth = designSize.X;
 					renderTextureHeight = designSize.Y;
 
-					finalRenderDestinationRect.Width = Mathf.ceilToInt( designSize.X * scale );
-					finalRenderDestinationRect.Height = Mathf.ceilToInt( designSize.Y * scale );
-					finalRenderDestinationRect.X = ( screenSize.X - finalRenderDestinationRect.Width ) / 2;
-					finalRenderDestinationRect.Y = ( screenSize.Y - finalRenderDestinationRect.Height ) / 2;
+					_finalRenderDestinationRect.Width = Mathf.ceilToInt( designSize.X * scale );
+					_finalRenderDestinationRect.Height = Mathf.ceilToInt( designSize.Y * scale );
+					_finalRenderDestinationRect.X = ( screenSize.X - _finalRenderDestinationRect.Width ) / 2;
+					_finalRenderDestinationRect.Y = ( screenSize.Y - _finalRenderDestinationRect.Height ) / 2;
 					rectCalculated = true;
 
 					break;
@@ -431,10 +431,10 @@ namespace Nez
 					// start with exact design size render texture height. the width may change
 					renderTextureHeight = designSize.Y;
 
-					finalRenderDestinationRect.Width = Mathf.ceilToInt( designSize.X * resolutionScaleX );
-					finalRenderDestinationRect.Height = Mathf.ceilToInt( designSize.Y * scale );
-					finalRenderDestinationRect.X = ( screenSize.X - finalRenderDestinationRect.Width ) / 2;
-					finalRenderDestinationRect.Y = ( screenSize.Y - finalRenderDestinationRect.Height ) / 2;
+					_finalRenderDestinationRect.Width = Mathf.ceilToInt( designSize.X * resolutionScaleX );
+					_finalRenderDestinationRect.Height = Mathf.ceilToInt( designSize.Y * scale );
+					_finalRenderDestinationRect.X = ( screenSize.X - _finalRenderDestinationRect.Width ) / 2;
+					_finalRenderDestinationRect.Y = ( screenSize.Y - _finalRenderDestinationRect.Height ) / 2;
 					rectCalculated = true;
 
 					renderTextureWidth = (int)( designSize.X * resolutionScaleX / scale );
@@ -451,10 +451,10 @@ namespace Nez
 					// start with exact design size render texture width. the height may change
 					renderTextureWidth = designSize.X;
 
-					finalRenderDestinationRect.Width = Mathf.ceilToInt( designSize.X * scale );
-					finalRenderDestinationRect.Height = Mathf.ceilToInt( designSize.Y * resolutionScaleY );
-					finalRenderDestinationRect.X = ( screenSize.X - finalRenderDestinationRect.Width ) / 2;
-					finalRenderDestinationRect.Y = ( screenSize.Y - finalRenderDestinationRect.Height ) / 2;
+					_finalRenderDestinationRect.Width = Mathf.ceilToInt( designSize.X * scale );
+					_finalRenderDestinationRect.Height = Mathf.ceilToInt( designSize.Y * resolutionScaleY );
+					_finalRenderDestinationRect.X = ( screenSize.X - _finalRenderDestinationRect.Width ) / 2;
+					_finalRenderDestinationRect.Y = ( screenSize.Y - _finalRenderDestinationRect.Height ) / 2;
 					rectCalculated = true;
 
 					renderTextureHeight = (int)( designSize.Y * resolutionScaleY / scale );
@@ -469,16 +469,16 @@ namespace Nez
 				var renderWidth = designSize.X * resolutionScaleX;
 				var renderHeight = designSize.Y * resolutionScaleY;
 
-				finalRenderDestinationRect = RectangleExt.fromFloats( ( screenSize.X - renderWidth ) / 2, ( screenSize.Y - renderHeight ) / 2, renderWidth, renderHeight );
+				_finalRenderDestinationRect = RectangleExt.fromFloats( ( screenSize.X - renderWidth ) / 2, ( screenSize.Y - renderHeight ) / 2, renderWidth, renderHeight );
 			}
 
 
 			// set some values in the Input class to translate mouse position to our scaled resolution
-			var scaleX = renderTextureWidth / (float)finalRenderDestinationRect.Width;
-			var scaleY = renderTextureHeight / (float)finalRenderDestinationRect.Height;
+			var scaleX = renderTextureWidth / (float)_finalRenderDestinationRect.Width;
+			var scaleY = renderTextureHeight / (float)_finalRenderDestinationRect.Height;
 
 			Input._resolutionScale = new Vector2( scaleX, scaleY );
-			Input._resolutionOffset = finalRenderDestinationRect.Location;
+			Input._resolutionOffset = _finalRenderDestinationRect.Location;
 
 			// resize our RenderTextures
 			_sceneRenderTexture.resize( renderTextureWidth, renderTextureHeight );
@@ -538,10 +538,11 @@ namespace Nez
 
 		#region Renderer/PostProcessor Management
 
-		public void addRenderer( Renderer renderer )
+		public Renderer addRenderer( Renderer renderer )
 		{
 			_renderers.Add( renderer );
 			_renderers.Sort( Renderer.compareRenderOrder );
+			return renderer;
 		}
 
 
@@ -581,9 +582,7 @@ namespace Nez
 		{
 			var entity = new T();
 			entity.name = name;
-			addEntity( entity );
-
-			return entity;
+			return addEntity( entity );
 		}
 
 
@@ -597,6 +596,20 @@ namespace Nez
 			entities.add( entity );
 			return entity;
 		}
+
+
+
+		/// <summary>
+		/// adds an Entity to the Scene's Entities list
+		/// </summary>
+		/// <param name="entity">The Entity to add</param>
+		public T addEntity<T>( T entity ) where T : Entity 
+		{
+			Assert.isFalse( entities.contains( entity ), "You are attempting to add the same entity to a scene twice: {0}", entity );
+			entities.add( entity );
+			return entity;
+		}
+
 
 
 		/// <summary>

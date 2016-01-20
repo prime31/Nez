@@ -8,7 +8,7 @@ using Microsoft.Xna.Framework;
 
 namespace MacTester
 {
-	public class SimpleBloomPostProcessor : PostProcessor
+	public class BloomPostProcessor : PostProcessor
 	{
 		public BloomSettings settings;
 
@@ -20,9 +20,9 @@ namespace MacTester
 		RenderTarget2D _renderTarget2;
 
 		
-		public SimpleBloomPostProcessor( NezContentManager contentManager ) : base( 0 )
+		public BloomPostProcessor( NezContentManager contentManager ) : base( 0 )
 		{
-			settings = BloomSettings.presetSettings[0];
+			settings = BloomSettings.presetSettings[3];
 
 			_bloomExtractEffect = contentManager.LoadEffect( "Content/Effects/BloomExtract.ogl.mgfxo" );
 			_bloomCombineEffect = contentManager.LoadEffect( "Content/Effects/BloomCombine.ogl.mgfxo" );

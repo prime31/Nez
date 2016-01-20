@@ -114,6 +114,13 @@ namespace Nez.Tiled
 		}
 
 
+		/// <summary>
+		/// calls draw on each visible layer
+		/// </summary>
+		/// <param name="spriteBatch">Sprite batch.</param>
+		/// <param name="position">Position.</param>
+		/// <param name="layerDepth">Layer depth.</param>
+		/// <param name="cameraClipBounds">Camera clip bounds.</param>
 		public void draw( SpriteBatch spriteBatch, Vector2 position, float layerDepth, Rectangle cameraClipBounds )
 		{
 			// render any visible image or tile layer
