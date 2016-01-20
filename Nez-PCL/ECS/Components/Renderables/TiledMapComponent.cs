@@ -11,6 +11,11 @@ namespace Nez
 	{
 		public TiledMap tiledmap;
 
+		/// <summary>
+		/// if null, all layers will be rendered
+		/// </summary>
+		public List<int> layerIndicesToRender;
+
 		public override float width
 		{
 			get { return tiledmap.width; }
@@ -85,7 +90,18 @@ namespace Nez
 
 		public override void render( Graphics graphics, Camera camera )
 		{
-			tiledmap.draw( graphics.spriteBatch, renderPosition, layerDepth, camera.bounds );
+			if( layerIndicesToRender == null )
+			{
+				tiledmap.draw( graphics.spriteBatch, renderPosition, layerDepth, camera.bounds );
+			}
+			else
+			{
+				for( var i = 0; i < tiledmap.layers.Count; i++ )
+				{
+					if( layerIndicesToRender.Contains( i ) && tiledmap.layers[i].visible )
+						tiledmap.layers[i].draw( graphics.spriteBatch, renderPosition, layerDepth, camera.bounds );
+				}
+			}
 		}
 
 
