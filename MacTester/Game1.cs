@@ -170,9 +170,18 @@ namespace MacTester
 			if( IMGUI.button( "Overlap2D Scene" ) )
 				scene = Scenes.sceneOverlap2D();
 
+			if( IMGUI.button( "Grab Screenshot" ) )
+				scene.requestScreenshot( tex =>
+				{
+					var path = System.IO.Path.Combine( Environment.GetFolderPath( Environment.SpecialFolder.Desktop ), "screenshot.png" );
+					using( var stream = new System.IO.FileStream( path, System.IO.FileMode.OpenOrCreate ) )
+						tex.SaveAsPng( stream, tex.Width, tex.Height );
+					tex.Dispose();
+				} );
+
 			if( IMGUI.button( "Processor Scene" ) )
 				scene = Scenes.processorScene();
-			
+
 			IMGUI.endWindow();
 		}
 	}

@@ -33,7 +33,6 @@ namespace Nez
 
 			// start at vert 0
             var index = 0;
-            var computeIndex = 0;
 			// keep removing verts until just a triangle is left
             while( count > 3 )
 			{

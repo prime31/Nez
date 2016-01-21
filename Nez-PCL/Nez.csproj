@@ -207,5 +207,6 @@
     <Compile Include="ECS\Components\Renderables\RenderState.cs" />
     <Compile Include="Utils\Triangulator.cs" />
     <Compile Include="ECS\Systems\PassiveSystem.cs" />
+    <Compile Include="ECS\InternalUtils\ColliderList.cs" />
   </ItemGroup>
 </Project>

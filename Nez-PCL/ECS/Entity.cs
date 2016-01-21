@@ -27,14 +27,8 @@ namespace Nez
 				_position = value;
 
 				// notify our children of our changed position
-				if( collider != null )
-					collider.onEntityPositionChanged();
-
-				for( var i = 0; i < components.Count; i++ )
-				{
-					if( components[i].enabled )
-						components[i].onEntityPositionChanged();
-				}
+				components.onEntityPositionChanged();
+				colliders.onEntityPositionChanged();
 			}
 		}
 
@@ -42,6 +36,8 @@ namespace Nez
 		/// list of all the components currently attached to this entity
 		/// </summary>
 		public ComponentList components;
+
+		public ColliderList colliders;
 
 		int _tag = 0;
 		/// <summary>
@@ -71,6 +67,10 @@ namespace Nez
 		public uint updateInterval = 1;
 
 		bool _enabled = true;
+		/// <summary>
+		/// enables/disables the Entity. When disabled colliders are removed from the Physics system and components methods will not be called
+		/// </summary>
+		/// <value><c>true</c> if enabled; otherwise, <c>false</c>.</value>
 		public bool enabled
 		{
 			get
@@ -83,22 +83,15 @@ namespace Nez
 				{
 					_enabled = value;
 
-					for( var i = 0; i < components.Count; i++ )
+					if( _enabled )
 					{
-						var component = components[i];
-
-						if( _enabled )
-							component.onEnabled();
-						else
-							component.onDisabled();
+						components.onEntityEnabled();
+						colliders.onEntityEnabled();
 					}
-
-					if( _collider != null )
+					else
 					{
-						if( enabled )
-							_collider.registerColliderWithPhysicsSystem();
-						else
-							_collider.unregisterColliderWithPhysicsSystem();
+						components.onEntityDisabled();
+						colliders.onEntityDisabled();
 					}
 				}
 			}
@@ -166,6 +159,7 @@ namespace Nez
 		public Entity()
 		{
 			components = new ComponentList( this );
+			colliders = new ColliderList( this );
 		}
 
 
@@ -181,8 +175,7 @@ namespace Nez
 		public virtual void onAddedToScene()
 		{
 			// if we have a collider, we need to let it register with the Physics system when we are added to a scene
-			if( collider != null )
-				collider.onEntityAddedToScene();
+			colliders.onEntityAddedToScene();
 		}
 
 
@@ -191,8 +184,7 @@ namespace Nez
 		/// </summary>
 		public virtual void onRemovedFromScene()
 		{
-			if( collider != null )
-				collider.onEntityRemovedFromScene();
+			colliders.onEntityRemovedFromScene();
 
 			// detach all our components when removed from a scene
 			components.removeAllComponents();
@@ -212,12 +204,7 @@ namespace Nez
 		public virtual void update()
 		{
 			components.updateLists();
-
-			for( var i = 0; i < components.Count; i++ )
-			{
-				if( components[i].enabled )
-					components[i].update();
-			}
+			components.update();
 		}
 
 
@@ -227,14 +214,8 @@ namespace Nez
 		/// <param name="graphics">Graphics.</param>
 		public virtual void debugRender( Graphics graphics )
 		{
-			for( var i = 0; i < components.Count; i++ )
-			{
-				if( components[i].enabled )
-					components[i].debugRender( graphics );
-			}
-
-			if( _collider != null )
-				_collider.debugRender( graphics );
+			components.debugRender( graphics );
+			colliders.debugRender( graphics );
 		}
 
 
@@ -314,17 +295,17 @@ namespace Nez
 		public void moveActor( Vector2 motion, bool stepXYSeparatelyForMultiCollisions = true )
 		{
 			// no collider? just move and forget about it
-			if( collider == null )
+			if( colliders.Count == 0 )
 			{
 				position += motion;
 				return;
 			}
 				
 			// remove ourself from the physics system until after we are done moving
-			Physics.removeCollider( collider, true );
+			Physics.removeCollider( colliders.mainCollider, true );
 
 			// fetch anything that we might collide with along the way
-			var neighbors = Physics.boxcastBroadphaseExcludingSelf( collider, motion.X, motion.Y );
+			var neighbors = Physics.boxcastBroadphaseExcludingSelf( colliders.mainCollider, motion.X, motion.Y );
 
 			// if we have more than one possible collision we have to break this up into separate x/y movement. Note that this is only necessary
 			// for certain types of movement such as gravity based systems due to the SAT collision response being shortest distance
@@ -354,7 +335,7 @@ namespace Nez
 			position += motion;
 
 			// let Physics know about our new position
-			Physics.addCollider( collider );
+			Physics.addCollider( colliders.mainCollider );
 		}
 
 
@@ -363,7 +344,7 @@ namespace Nez
 			foreach( var neighbor in neighbors )
 			{
 				ShapeCollisionResult result;
-				if( collider.collidesWith( neighbor, motion, out result ) )
+				if( colliders.mainCollider.collidesWith( neighbor, motion, out result ) )
 				{
 					// if we have a trigger notify the listener but we dont alter movement
 					if( neighbor.isTrigger )
