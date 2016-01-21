@@ -118,38 +118,6 @@ namespace Nez
 			}
 		}
 
-		Collider _collider;
-		/// <summary>
-		/// the Collider managed by this Entity. Setting this property automatically registers the Collider with the Physics system.
-		/// </summary>
-		/// <value>The collider.</value>
-		public Collider collider
-		{
-			get { return _collider; }
-			set
-			{
-				if( value == _collider )
-					return;
-				
-				if( _collider != null )
-				{
-					_collider.unregisterColliderWithPhysicsSystem();
-					_collider.entity = null;
-				}
-
-				_collider = value;
-
-				if( _collider != null )
-				{
-					_collider.entity = this;
-
-					// if we dont have a scene yet onAddedToEntity will be called when this Entity is added to the scene
-					if( scene != null )
-						_collider.registerColliderWithPhysicsSystem();
-				}
-			}
-		}
-
 		private BitSet _componentBits = new BitSet();
 		public BitSet componentBits
 		{
