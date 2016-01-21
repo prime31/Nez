@@ -44,7 +44,7 @@ namespace Nez
 
 
 		/// <summary>
-		/// removes all components from the component list
+		/// removes all components from the component list immediately
 		/// </summary>
 		public void removeAllComponents()
 		{
@@ -171,6 +171,49 @@ namespace Nez
 			return comps;
 		}
 
+
+		internal void update()
+		{
+			for( var i = 0; i < _components.Count; i++ )
+			{
+				if( _components[i].enabled )
+					_components[i].update();
+			}
+		}
+
+
+		internal void onEntityPositionChanged()
+		{
+			for( var i = 0; i < _components.Count; i++ )
+			{
+				if( _components[i].enabled )
+					_components[i].onEntityPositionChanged();
+			}
+		}
+
+
+		internal void onEntityEnabled()
+		{
+			for( var i = 0; i < _components.Count; i++ )
+				_components[i].onEnabled();
+		}
+
+
+		internal void onEntityDisabled()
+		{
+			for( var i = 0; i < _components.Count; i++ )
+				_components[i].onDisabled();
+		}
+
+
+		internal void debugRender( Graphics graphics )
+		{
+			for( var i = 0; i < _components.Count; i++ )
+			{
+				if( _components[i].enabled )
+					_components[i].debugRender( graphics );
+			}
+		}
 
 		#region IEnumerable and array access
 

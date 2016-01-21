@@ -207,7 +207,7 @@ namespace Nez
 		public override void debugRender( Graphics graphics )
 		{
 			// if we have no collider draw our bounds
-			if( entity.collider == null )
+			if( entity.colliders.Count == 0 )
 				graphics.spriteBatch.drawHollowRect( bounds, Color.Yellow );
 
 			// draw a square for our pivot/origin

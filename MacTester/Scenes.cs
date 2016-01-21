@@ -115,8 +115,7 @@ namespace MacTester
 			entity.addComponent( image );
 			entity.addComponent( new FramesPerSecondCounter( Graphics.instance.bitmapFont, Color.White, FramesPerSecondCounter.FPSDockPosition.TopLeft ) );
 			entity.position = new Vector2( 120f, 0f );
-			entity.collider = new CircleCollider( moonTexture.Width * 1.5f );
-
+			entity.colliders.add( new CircleCollider( moonTexture.Width * 1.5f ) );
 
 			entity = scene.createAndAddEntity<Entity>( "new-moon" );
 			image = new Sprite( moonTexture );
@@ -181,11 +180,11 @@ namespace MacTester
 				ent.position = pos;
 				ent.addComponent( new Sprite( moonTexture ) );
 				if( useBoxColliders )
-					ent.collider = new BoxCollider();
+					ent.colliders.add( new BoxCollider() );
 				else
-					ent.collider = new CircleCollider();
+					ent.colliders.add( new CircleCollider() );
 
-				ent.collider.isTrigger = isTrigger;
+				ent.colliders[0].isTrigger = isTrigger;
 			};
 
 			moonMaker( new Vector2( 400, 10 ), "moon1", false );
@@ -206,9 +205,9 @@ namespace MacTester
 			entity.addComponent( new SimpleMoonOutlineRenderer( sprite ) );
 
 			if( useBoxColliders )
-				entity.collider = new BoxCollider();
+				entity.colliders.add( new BoxCollider() );
 			else
-				entity.collider = new CircleCollider();
+				entity.colliders.add( new CircleCollider() );
 
 
 			// add a follow camera
@@ -255,8 +254,8 @@ namespace MacTester
 			var image = new Sprite( moonTexture );
 			entity.addComponent( image );
 			entity.position = new Vector2( 200, 200 );
-			//entity.collider = new PolygonCollider( 5, 100 );
-			entity.collider = new BoxCollider();
+			//entity.colliders.add( new PolygonCollider( 5, 100 ) );
+			entity.colliders.add( new BoxCollider() );
 
 
 			entity = scene.createAndAddEntity<Entity>( "moon2" );
@@ -264,9 +263,9 @@ namespace MacTester
 			entity.addComponent( image );
 			entity.addComponent( new SimpleMoonMover() );
 			entity.position = new Vector2( 500, 500 );
-			//entity.collider = new PolygonCollider( 7, 60 );
-			//entity.collider = new BoxCollider();
-			entity.collider = new CircleCollider();
+			//entity.colliders.add( new PolygonCollider( 7, 60 ) );
+			//entity.colliders.add( new BoxCollider() );
+			entity.colliders.add( new CircleCollider() );
 
 
 			return scene;
@@ -329,12 +328,12 @@ namespace MacTester
 			entity = scene.createAndAddEntity<Entity>( "moon1" );
 			entity.position = new Vector2( Screen.backBufferWidth / 2, Screen.backBufferHeight / 2 + 100 );
 			entity.addComponent( new Sprite( moonTexture ) );
-			entity.collider = new CircleCollider();
+			entity.colliders.add( new CircleCollider() );
 
 			entity = scene.createAndAddEntity<Entity>( "moon2" );
 			entity.position = new Vector2( Screen.backBufferWidth / 2 - 100, Screen.backBufferHeight / 2 + 100 );
 			entity.addComponent( new Sprite( moonTexture ) );
-			entity.collider = new CircleCollider();
+			entity.colliders.add( new CircleCollider() );
 
 			return scene;
 		}

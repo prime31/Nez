@@ -123,7 +123,7 @@ namespace Nez
 			}
 			else
 			{
-				var targetBounds = _targetEntity.collider.bounds;
+				var targetBounds = _targetEntity.colliders.mainCollider.bounds;
 				if( !_worldSpaceDeadzone.Contains( targetBounds ) )
 				{
 					// x-axis
