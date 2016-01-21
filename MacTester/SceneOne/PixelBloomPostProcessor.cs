@@ -17,6 +17,7 @@ namespace MacTester
 		public PixelBloomPostProcessor( NezContentManager contentManager, RenderTexture layerRenderTexture ) : base( contentManager )
 		{
 			_layerRT = layerRenderTexture;
+			_tempRT = new RenderTexture( newHeight, newWidth );
 		}
 
 
@@ -24,7 +25,7 @@ namespace MacTester
 		{
 			base.onSceneBackBufferSizeChanged( newWidth, newHeight );
 
-			_tempRT = new RenderTexture( newHeight, newWidth );
+			_tempRT.resize( newHeight, newWidth );
 		}
 
 
