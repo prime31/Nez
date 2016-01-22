@@ -61,6 +61,7 @@
     <Folder Include="ECS\Components\Renderables\Particles\" />
     <Folder Include="PipelineRuntime\ParticleDesigner\" />
     <Folder Include="Utils\Analysis\" />
+    <Folder Include="ECS\Systems\" />
     <Folder Include="Physics\Shapes\" />
   </ItemGroup>
   <ItemGroup>
@@ -187,6 +188,13 @@
     <Compile Include="ECS\Components\Renderables\Sprites\SpriteTrail.cs" />
     <Compile Include="ECS\Components\Renderables\Sprites\SpriteT.cs" />
     <Compile Include="ECS\Components\Renderables\Sprites\Sprite.cs" />
+    <Compile Include="ECS\InternalUtils\Matcher.cs" />
+    <Compile Include="Utils\BitSet.cs" />
+    <Compile Include="ECS\InternalUtils\ComponentTypeManager.cs" />
+    <Compile Include="ECS\InternalUtils\EntityProcessorList.cs" />
+    <Compile Include="ECS\EntitySystem.cs" />
+    <Compile Include="ECS\Systems\EntityProcessingSystem.cs" />
+    <Compile Include="ECS\Systems\ProcessingSystem.cs" />
     <Compile Include="Physics\Shapes\Shape.cs" />
     <Compile Include="Physics\Shapes\Polygon.cs" />
     <Compile Include="Physics\Shapes\ShapeCollisionResult.cs" />
@@ -198,6 +206,7 @@
     <Compile Include="Physics\Shapes\RealtimeCollisions.cs" />
     <Compile Include="ECS\Components\Renderables\RenderState.cs" />
     <Compile Include="Utils\Triangulator.cs" />
+    <Compile Include="ECS\Systems\PassiveSystem.cs" />
     <Compile Include="ECS\InternalUtils\ColliderList.cs" />
   </ItemGroup>
 </Project>

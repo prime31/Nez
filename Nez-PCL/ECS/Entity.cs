@@ -118,6 +118,11 @@ namespace Nez
 			}
 		}
 
+		private BitSet _componentBits = new BitSet();
+		public BitSet componentBits
+		{
+			get { return _componentBits; }
+		}
 
 		public Entity()
 		{

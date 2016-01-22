@@ -71,6 +71,8 @@
     <Compile Include="SceneTwo\SimplePostProcessor.cs" />
     <Compile Include="SceneThree\SimpleMovingPlatform.cs" />
     <Compile Include="Scenes.cs" />
+    <Compile Include="SceneEntityProcessor\TextEntityProcessor.cs" />
+    <Compile Include="SceneEntityProcessor\ImageEntityProcessor.cs" />
     <Compile Include="SceneThree\SimpleMoonOutlineRenderer.cs" />
     <Compile Include="SceneOne\BloomSettings.cs" />
     <Compile Include="SceneOne\PixelBloomPostProcessor.cs" />
@@ -160,6 +162,7 @@
     <Folder Include="Content\Fonts\" />
     <Folder Include="Content\Images\TextureAtlas\" />
     <Folder Include="Content\Images\AnotherAtlas\" />
+    <Folder Include="SceneEntityProcessor\" />
     <Folder Include="SceneOne\" />
   </ItemGroup>
   <ItemGroup>

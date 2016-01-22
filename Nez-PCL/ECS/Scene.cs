@@ -148,6 +148,7 @@ namespace Nez
 		Dictionary<int,double> _actualEntityOrderLookup = new Dictionary<int,double>();
 		readonly List<PostProcessor> _postProcessors = new List<PostProcessor>();
 
+		public readonly EntityProcessorList entityProcessors;
 
 		/// <summary>
 		/// sets the default design size and resolution policy that new scenes will use
@@ -184,6 +185,7 @@ namespace Nez
 			renderableComponents = new RenderableComponentList();
 			contentManager = new NezContentManager();
 			_sceneRenderTexture = new RenderTexture();
+			entityProcessors = new EntityProcessorList();
 
 			// setup our resolution policy. we'll commit it in begin
 			_resolutionPolicy = defaultSceneResolutionPolicy;
@@ -197,6 +199,7 @@ namespace Nez
 			Physics.reset();
 			updateResolutionScaler();
 			Core.emitter.addObserver( CoreEvents.GraphicsDeviceReset, onGraphicsDeviceReset );
+			entityProcessors.begin();
 		}
 
 
@@ -217,6 +220,8 @@ namespace Nez
 
 			if( _destinationRenderTexture != null )
 				_destinationRenderTexture.unload();
+
+			entityProcessors.end();
 		}
 
 
@@ -228,6 +233,7 @@ namespace Nez
 			// update our lists in case they have any changes
 			entities.updateLists();
 			renderableComponents.updateLists();
+			entityProcessors.update();
 
 			for( var i = 0; i < entities.Count; i++ )
 			{
@@ -668,6 +674,20 @@ namespace Nez
 
 		#endregion
 
+		#region Processors
+
+		public void addProcessor(EntitySystem processor)
+		{
+			processor.scene = this;
+			entityProcessors.add (processor);
+		}
+
+		public T getProcessor<T>() where T : EntitySystem
+		{
+			return entityProcessors.getProcessor<T>();
+		}
+
+		#endregion
 	}
 }
 

@@ -338,6 +338,41 @@ namespace MacTester
 			return scene;
 		}
 
+		public static Scene processorScene()
+		{
+			var scene = Scene.createWithDefaultRenderer( Color.Black );
+			scene.camera.centerOrigin();
+
+			var entity = scene.createAndAddEntity<Entity>( "text" );
+			var textComp = new Text( Graphics.instance.bitmapFont, "text only", new Vector2( 0, 0 ), Color.White );
+			textComp.scale = new Vector2( 2, 2 );
+			textComp.origin = Vector2.Zero;
+			entity.addComponent( textComp );
+
+			entity = scene.createAndAddEntity<Entity>( "text-image" );
+			textComp = new Text( Graphics.instance.bitmapFont, "text and image", new Vector2( 0, 20 ), Color.White );
+			textComp.scale = new Vector2( 2, 2 );
+			textComp.origin = Vector2.Zero;
+			entity.addComponent( textComp );
+			var moonTexture = scene.contentManager.Load<Texture2D>( "Images/moon" );
+			var image = new Image( moonTexture );
+			image.localPosition = new Vector2( 20, 50 );
+			entity.addComponent( image );
+			entity.collider = new CircleCollider();
+
+			Matcher m = new Matcher().all(typeof(Text));
+			TextEntityProcessor tp = new TextEntityProcessor(m);
+			scene.entityProcessors.add( tp );
+
+			m = new Matcher().all(typeof(Image));
+			ImageEntityProcessor ip = new ImageEntityProcessor(m);
+			scene.entityProcessors.add( ip );
+
+			Debug.log( tp.matcher.ToString() );
+			Debug.log( ip.matcher.ToString() );
+			return scene;
+		}
+
 	}
 }
 

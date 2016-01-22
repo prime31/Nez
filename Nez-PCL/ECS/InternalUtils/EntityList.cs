@@ -126,6 +126,7 @@ namespace Nez
 					_entities.Remove( entity );
 					entity.onRemovedFromScene();
 					entity.scene = null;
+					scene.entityProcessors.onEntityRemoved( entity );
 				}
 				_entitiesToRemove.Clear();
 			}
@@ -144,6 +145,7 @@ namespace Nez
 
 					// handle the tagList
 					addToTagList( entity );
+					scene.entityProcessors.onEntityAdded( entity );
 				}
 
 				// now that all entities are added to the scene, we loop through again and call onAwake

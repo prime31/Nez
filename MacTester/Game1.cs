@@ -115,6 +115,23 @@ namespace MacTester
 			{
 				scene.camera.zoomIn( Input.mouseWheelDelta * 0.0001f );
 			}
+
+			if( Input.rightMouseButtonPressed )
+			{
+				var entity = scene.findEntity( "text" );
+				if( entity != null )
+				{
+					scene.removeEntity( entity );
+				}
+				else
+				{
+					entity = scene.createAndAddEntity<Entity>( "text" );
+					var textComp = new Text( Graphics.instance.bitmapFont, "text only", new Vector2( 0, 0 ), Color.White );
+					textComp.scale = new Vector2( 2, 2 );
+					textComp.origin = Vector2.Zero;
+					entity.addComponent( textComp );
+				}
+			}
 		}
 
 
@@ -161,6 +178,9 @@ namespace MacTester
 						tex.SaveAsPng( stream, tex.Width, tex.Height );
 					tex.Dispose();
 				} );
+
+			if( IMGUI.button( "Processor Scene" ) )
+				scene = Scenes.processorScene();
 
 			IMGUI.endWindow();
 		}

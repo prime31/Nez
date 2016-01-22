@@ -92,6 +92,7 @@ namespace Nez
 			contentManager = new NezContentManager( Services, Content.RootDirectory );
 			IsMouseVisible = true;
 			IsFixedTimeStep = false;
+			ComponentTypeManager.initialize();
 		}
 
 
