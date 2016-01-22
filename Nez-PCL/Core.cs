@@ -46,6 +46,11 @@ namespace Nez
 		public static NezContentManager contentManager;
 
 		/// <summary>
+		/// internal flag used to determine if EntitySystems should be used or not
+		/// </summary>
+		internal static bool entitySystemsEnabled;
+
+		/// <summary>
 		/// facilitates easy access to the global Content instance for internal classes
 		/// </summary>
 		internal static Core _instance;
@@ -74,7 +79,7 @@ namespace Nez
 		}
 
 
-		public Core( int width = 1280, int height = 720, bool isFullScreen = false )
+		public Core( int width = 1280, int height = 720, bool isFullScreen = false, bool enableEntitySystems = true )
 		{
 			_instance = this;
 			emitter = new Emitter<CoreEvents>( new CoreEventsComparer() );
@@ -92,7 +97,10 @@ namespace Nez
 			contentManager = new NezContentManager( Services, Content.RootDirectory );
 			IsMouseVisible = true;
 			IsFixedTimeStep = false;
-			ComponentTypeManager.initialize();
+
+			entitySystemsEnabled = enableEntitySystems;
+			if( enableEntitySystems )
+				ComponentTypeManager.initialize();
 		}
 
 

@@ -72,8 +72,11 @@ namespace Nez
 					if( component is RenderableComponent )
 						_entity.scene.renderableComponents.remove( component as RenderableComponent );
 
-					_entity.componentBits.Set(ComponentTypeManager.getIndexFor( component.GetType() ), false);
-					_entity.scene.entityProcessors.onComponentRemoved( _entity );
+					if( Core.entitySystemsEnabled )
+					{
+						_entity.componentBits.set( ComponentTypeManager.getIndexFor( component.GetType() ), false );
+						_entity.scene.entityProcessors.onComponentRemoved( _entity );
+					}
 
 					_components.Remove( component );
 					component.onRemovedFromEntity();
@@ -92,8 +95,11 @@ namespace Nez
 					if( component is RenderableComponent )
 						_entity.scene.renderableComponents.add( component as RenderableComponent );
 
-					_entity.componentBits.Set(ComponentTypeManager.getIndexFor( component.GetType() ));
-					_entity.scene.entityProcessors.onComponentAdded( _entity );
+					if( Core.entitySystemsEnabled )
+					{
+						_entity.componentBits.set( ComponentTypeManager.getIndexFor( component.GetType() ) );
+						_entity.scene.entityProcessors.onComponentAdded( _entity );
+					}
 
 					_components.Add( component );
 					component.onAddedToEntity();

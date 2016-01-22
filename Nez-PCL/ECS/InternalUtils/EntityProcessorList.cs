@@ -8,71 +8,70 @@ namespace Nez
 	{
 		protected List<EntitySystem> _processors = new List<EntitySystem>();
 
-		public EntityProcessorList()
-		{
-		}
 
-		public void add(EntitySystem processor)
+		public void add( EntitySystem processor )
 		{
 			_processors.Add( processor );
 		}
 
-		public void remove(EntitySystem processor)
+
+		public void remove( EntitySystem processor )
 		{
 			_processors.Remove( processor );
 		}
 
-		public virtual void onComponentAdded(Entity entity)
+
+		public virtual void onComponentAdded( Entity entity )
 		{
 			notifyEntityChanged( entity );
 		}
 
-		public virtual void onComponentRemoved(Entity entity)
+
+		public virtual void onComponentRemoved( Entity entity )
 		{
 			notifyEntityChanged( entity );
 		}
 
-		public virtual void onEntityAdded(Entity entity)
+
+		public virtual void onEntityAdded( Entity entity )
 		{
 			notifyEntityChanged( entity );
 		}
 
-		public virtual void onEntityRemoved(Entity entity)
+
+		public virtual void onEntityRemoved( Entity entity )
 		{
 			removeFromProcessors( entity );
 		}
 
-		protected virtual void notifyEntityChanged(Entity entity)
+
+		protected virtual void notifyEntityChanged( Entity entity )
 		{
-			foreach( var processor in _processors )
-			{
-				processor.onChange( entity );
-			}
+			for( var i = 0; i < _processors.Count; i++ )
+				_processors[i].onChange( entity );
 		}
 
-		protected virtual void removeFromProcessors(Entity entity)
+		protected virtual void removeFromProcessors( Entity entity )
 		{
-			foreach( var processor in _processors )
-			{
-				processor.Remove( entity );
-			}
+			for( var i = 0; i < _processors.Count; i++ )
+				_processors[i].remove( entity );
 		}
+
 
 		public void begin()
-		{
-		}
+		{}
+
 
 		public void update()
 		{
-			foreach( var processor in _processors )
-			{
-				processor.update();
-			}
+			for( var i = 0; i < _processors.Count; i++ )
+				_processors[i].update();
 		}
-	
+
+
 		public void end()
-		{
-		}
+		{}
+
 
 		public T getProcessor<T>() where T : EntitySystem
 		{

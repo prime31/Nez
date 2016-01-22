@@ -107,6 +107,11 @@ namespace Nez
 		public readonly RenderableComponentList renderableComponents;
 
 		/// <summary>
+		/// Stoes and manages all entity processors
+		/// </summary>
+		public readonly EntityProcessorList entityProcessors;
+
+		/// <summary>
 		/// gets the size of the sceneRenderTexture
 		/// </summary>
 		/// <value>The size of the scene render texture.</value>
@@ -148,7 +153,6 @@ namespace Nez
 		Dictionary<int,double> _actualEntityOrderLookup = new Dictionary<int,double>();
 		readonly List<PostProcessor> _postProcessors = new List<PostProcessor>();
 
-		public readonly EntityProcessorList entityProcessors;
 
 		/// <summary>
 		/// sets the default design size and resolution policy that new scenes will use
@@ -185,7 +189,9 @@ namespace Nez
 			renderableComponents = new RenderableComponentList();
 			contentManager = new NezContentManager();
 			_sceneRenderTexture = new RenderTexture();
-			entityProcessors = new EntityProcessorList();
+
+			if( Core.entitySystemsEnabled )
+				entityProcessors = new EntityProcessorList();
 
 			// setup our resolution policy. we'll commit it in begin
 			_resolutionPolicy = defaultSceneResolutionPolicy;
@@ -197,9 +203,15 @@ namespace Nez
 		{
 			Assert.isFalse( _renderers.Count == 0, "Scene has begun with no renderer. At least one renderer must be present before beginning a scene." );
 			Physics.reset();
+
+			// prep our render textures and take care of centering the camera origin. we have to set the RenderTarget
 			updateResolutionScaler();
+			Core.graphicsDevice.SetRenderTarget( _sceneRenderTexture );
+			camera.centerOrigin();
+
+			if( entityProcessors != null )
+				entityProcessors.begin();
 			Core.emitter.addObserver( CoreEvents.GraphicsDeviceReset, onGraphicsDeviceReset );
-			entityProcessors.begin();
 		}
 
 
@@ -221,7 +233,8 @@ namespace Nez
 			if( _destinationRenderTexture != null )
 				_destinationRenderTexture.unload();
 
-			entityProcessors.end();
+			if( entityProcessors != null )
+				entityProcessors.end();
 		}
 
 
@@ -233,7 +246,9 @@ namespace Nez
 			// update our lists in case they have any changes
 			entities.updateLists();
 			renderableComponents.updateLists();
-			entityProcessors.update();
+
+			if( entityProcessors != null )
+				entityProcessors.update();
 
 			for( var i = 0; i < entities.Count; i++ )
 			{
@@ -674,13 +689,22 @@ namespace Nez
 
 		#endregion
 
-		#region Processors
 
-		public void addProcessor(EntitySystem processor)
+		#region Entity System Processors
+
+		public EntitySystem addProcessor( EntitySystem processor )
 		{
 			processor.scene = this;
-			entityProcessors.add (processor);
+			entityProcessors.add( processor );
+			return processor;
 		}
+
+
+		public void removeProcessor( EntitySystem processor )
+		{
+			entityProcessors.remove( processor );
+		}
+
 
 		public T getProcessor<T>() where T : EntitySystem
 		{
@@ -688,6 +712,7 @@ namespace Nez
 		}
 
 		#endregion
+	
 	}
 }
 

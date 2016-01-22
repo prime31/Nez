@@ -44,8 +44,7 @@ namespace MacTester
 			// create a sprite animation from an atlas
 			var plumeTexture = scene.contentManager.Load<Texture2D>( "Images/plume" );
 			var subtextures = Subtexture.subtexturesFromAtlas( plumeTexture, 16, 16 );
-			var spriteAnimation = new SpriteAnimation( subtextures )
-			{
+			var spriteAnimation = new SpriteAnimation( subtextures ) {
 				loop = true,
 				fps = 10
 			};
@@ -136,8 +135,7 @@ namespace MacTester
 			entity.position = new Vector2( 30f, 330f );
 
 			// create a sprite animation from an atlas
-			var spriteAnimation = new SpriteAnimation()
-			{
+			var spriteAnimation = new SpriteAnimation() {
 				loop = true,
 				fps = 10
 			};
@@ -273,12 +271,12 @@ namespace MacTester
 
 
 		static int lastEmitter = 0;
+
 		public static Scene sceneFive()
 		{
 			var scene = Scene.createWithDefaultRenderer( Color.Black );
 
-			var particles = new string[]
-			{
+			var particles = new string[] {
 				"bin/MacOSX/ParticleDesigner/Fire",
 				"bin/MacOSX/ParticleDesigner/Snow",
 				"bin/MacOSX/ParticleDesigner/Leaves",
@@ -338,15 +336,17 @@ namespace MacTester
 			return scene;
 		}
 
+
 		public static Scene processorScene()
 		{
 			var scene = Scene.createWithDefaultRenderer( Color.Black );
-			scene.camera.centerOrigin();
+			scene.camera.position += new Vector2( -Screen.backBufferWidth / 2, -Screen.backBufferHeight / 2 );
 
 			var entity = scene.createAndAddEntity<Entity>( "text" );
 			var textComp = new Text( Graphics.instance.bitmapFont, "text only", new Vector2( 0, 0 ), Color.White );
 			textComp.scale = new Vector2( 2, 2 );
 			textComp.origin = Vector2.Zero;
+			textComp.localPosition = new Vector2( 120, -150 );
 			entity.addComponent( textComp );
 
 			entity = scene.createAndAddEntity<Entity>( "text-image" );
@@ -354,22 +354,25 @@ namespace MacTester
 			textComp.scale = new Vector2( 2, 2 );
 			textComp.origin = Vector2.Zero;
 			entity.addComponent( textComp );
-			var moonTexture = scene.contentManager.Load<Texture2D>( "Images/moon" );
-			var image = new Image( moonTexture );
-			image.localPosition = new Vector2( 20, 50 );
-			entity.addComponent( image );
-			entity.collider = new CircleCollider();
 
-			Matcher m = new Matcher().all(typeof(Text));
-			TextEntityProcessor tp = new TextEntityProcessor(m);
+			var moonTexture = scene.contentManager.Load<Texture2D>( "Images/moon" );
+			var image = new Sprite( moonTexture );
+			image.localPosition = new Vector2( -80, 50 );
+			entity.addComponent( image );
+			entity.colliders.add( new CircleCollider() );
+
+
+			var m = new Matcher().all( typeof( Text ) );
+			var tp = new TextEntityProcessor( m );
 			scene.entityProcessors.add( tp );
 
-			m = new Matcher().all(typeof(Image));
-			ImageEntityProcessor ip = new ImageEntityProcessor(m);
+			m = new Matcher().all( typeof( Sprite ) );
+			var ip = new ImageEntityProcessor( m );
 			scene.entityProcessors.add( ip );
 
 			Debug.log( tp.matcher.ToString() );
 			Debug.log( ip.matcher.ToString() );
+
 			return scene;
 		}
 
