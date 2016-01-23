@@ -153,6 +153,9 @@ namespace MacTester
 			if( IMGUI.button( "Overlap2D Scene" ) )
 				scene = Scenes.sceneOverlap2D();
 
+			if( IMGUI.button( "Processor Scene" ) )
+				scene = Scenes.processorScene();
+			
 			if( IMGUI.button( "Grab Screenshot" ) )
 				scene.requestScreenshot( tex =>
 				{
@@ -161,9 +164,6 @@ namespace MacTester
 						tex.SaveAsPng( stream, tex.Width, tex.Height );
 					tex.Dispose();
 				} );
-
-			if( IMGUI.button( "Processor Scene" ) )
-				scene = Scenes.processorScene();
 
 			IMGUI.endWindow();
 		}

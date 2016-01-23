@@ -30,6 +30,10 @@ namespace Nez
 
 		#region Static common states
 
+		// BlendStates can be made to work with transparency by adding the following:
+		// - AlphaSourceBlend = Blend.SourceAlpha, 
+		// - AlphaDestinationBlend = Blend.InverseSourceAlpha 
+
 		public static RenderState stencilWrite( int stencilRef = 1 )
 		{
 			return new RenderState {
@@ -80,13 +84,37 @@ namespace Nez
 		}
 
 
+		public static RenderState blendScreen()
+		{
+			return new RenderState {
+				blendState = new BlendState {
+					ColorSourceBlend = Blend.InverseDestinationColor,
+					ColorDestinationBlend = Blend.One,
+					ColorBlendFunction = BlendFunction.Add
+				}
+			};
+		}
+
+
 		public static RenderState blendMultiply()
 		{
 			return new RenderState {
 				blendState = new BlendState {
 					ColorSourceBlend = Blend.DestinationColor,
 					ColorDestinationBlend = Blend.Zero,
-					ColorBlendFunction = BlendFunction.Add,
+					ColorBlendFunction = BlendFunction.Add
+				}
+			};
+		}
+
+
+		public static RenderState blendMultiply2x()
+		{
+			return new RenderState {
+				blendState = new BlendState {
+					ColorSourceBlend = Blend.DestinationColor,
+					ColorDestinationBlend = Blend.SourceColor,
+					ColorBlendFunction = BlendFunction.Add
 				}
 			};
 		}
@@ -98,6 +126,30 @@ namespace Nez
 				blendState = new BlendState {
 					ColorSourceBlend = Blend.One,
 					ColorDestinationBlend = Blend.One,
+					ColorBlendFunction = BlendFunction.Add
+				}
+			};
+		}
+
+
+		public static RenderState blendLinearBurn()
+		{
+			return new RenderState {
+				blendState = new BlendState {
+					ColorSourceBlend = Blend.One,
+					ColorDestinationBlend = Blend.One,
+					ColorBlendFunction = BlendFunction.ReverseSubtract
+				}
+			};
+		}
+
+
+		public static RenderState blendDifference()
+		{
+			return new RenderState {
+				blendState = new BlendState {
+					ColorSourceBlend = Blend.InverseDestinationColor,
+					ColorDestinationBlend = Blend.InverseSourceColor,
 					ColorBlendFunction = BlendFunction.Add
 				}
 			};

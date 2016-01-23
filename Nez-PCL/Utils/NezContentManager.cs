@@ -29,12 +29,17 @@ namespace Nez.Systems
 
 
 		/// <summary>
-		/// loads an ogl effect directly from file and handles disposing of it when the ContentManager is disposed
+		/// loads an ogl effect directly from file and handles disposing of it when the ContentManager is disposed. Name should the the path
+		/// relative to the Content folder.
 		/// </summary>
 		/// <returns>The effect.</returns>
 		/// <param name="name">Name.</param>
 		public Effect LoadEffect( string name )
 		{
+			// make sure the effect 
+			if( !name.StartsWith( RootDirectory ) )
+				name = RootDirectory + "/" + name;
+
 			// check the cache first
 			if( _loadedEffects.ContainsKey( name ) )
 				return _loadedEffects[name];

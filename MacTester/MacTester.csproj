@@ -77,6 +77,7 @@
     <Compile Include="SceneOne\BloomSettings.cs" />
     <Compile Include="SceneOne\PixelBloomPostProcessor.cs" />
     <Compile Include="SceneOne\BloomPostProcessor.cs" />
+    <Compile Include="SceneOne\PixelMosaicPostProcessor.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Info.plist" />
@@ -127,6 +128,7 @@
     <None Include="Content\Images\AnotherAtlas\airSlash\Ninja_Air Slash_5.png" />
     <None Include="Content\Images\AnotherAtlas\airSlash\Ninja_Air Slash_6.png" />
     <None Include="Content\Images\AnotherAtlas\airSlash\Ninja_Air Slash_7.png" />
+    <None Include="Content\Effects\MultiTextureOverlay.fx" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bin\**\*.*">
@@ -150,6 +152,7 @@
     <Content Include="Content\Effects\GaussianBlur.ogl.mgfxo" />
     <Content Include="Content\Images\mask.jpg" />
     <Content Include="Content\Images\tile.png" />
+    <Content Include="Content\Effects\MultiTextureOverlay.mgfxo" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
