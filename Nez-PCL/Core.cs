@@ -208,6 +208,12 @@ namespace Nez
 			{
 				_scene.preRender();
 				_scene.render( debugRenderEnabled );
+
+				#if DEBUG
+				if( debugRenderEnabled )
+					Debug.render();
+				#endif
+				
 				_scene.postRender();
 			}
 
@@ -218,9 +224,6 @@ namespace Nez
 				DebugConsole.instance.render();
 			else
 				TimeRuler.instance.render();
-			
-			if( debugRenderEnabled )
-				Debug.render();
 			#endif
 		}
 

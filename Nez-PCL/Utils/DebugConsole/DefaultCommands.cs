@@ -129,8 +129,22 @@ namespace Nez.Console
 		[Command( "physics", "Logs the total Collider count in the spatial hash" )]
 		static private void physics( float secondsToDisplay = 5f )
 		{
+			// store off the current state so we can reset it when we are done
+			var debugRenderState = Core.debugRenderEnabled;
 			Core.debugRenderEnabled = true;
-			Physics.debugDraw( secondsToDisplay );
+
+			var ticker = 0f;
+			Core.schedule( 0f, true, null, timer =>
+			{
+				Physics.debugDraw( 0f );
+				ticker += Time.deltaTime;
+				if( ticker >= secondsToDisplay )
+				{
+					timer.stop();
+					Core.debugRenderEnabled = debugRenderState;
+				}
+			});
+
 			DebugConsole.instance.log( "Physics system collider count: " + Physics.getAllColliders().Count );
 		}
 
