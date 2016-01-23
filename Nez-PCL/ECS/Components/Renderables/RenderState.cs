@@ -18,6 +18,11 @@ namespace Nez
 		public DepthStencilState depthStencilState = DepthStencilState.None;
 
 		/// <summary>
+		/// SamplerState used by the SpriteBatch for the current RenderableComponent
+		/// </summary>
+		public SamplerState samplerState = SamplerState.PointClamp;
+
+		/// <summary>
 		/// Effect used by the SpriteBatch for the current RenderableComponent
 		/// </summary>
 		public Effect effect;

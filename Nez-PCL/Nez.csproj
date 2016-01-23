@@ -208,5 +208,6 @@
     <Compile Include="Utils\Triangulator.cs" />
     <Compile Include="ECS\Systems\PassiveSystem.cs" />
     <Compile Include="ECS\InternalUtils\ColliderList.cs" />
+    <Compile Include="ECS\Components\Renderables\Sprites\ScrollingSprite.cs" />
   </ItemGroup>
 </Project>

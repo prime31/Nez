@@ -29,11 +29,6 @@ namespace Nez
 		public SpriteSortMode spriteSortMode = SpriteSortMode.Deferred;
 
 		/// <summary>
-		/// SamplerState used by the SpriteBatch
-		/// </summary>
-		public SamplerState samplerState = SamplerState.PointClamp;
-
-		/// <summary>
 		/// RasterizerState used by the SpriteBatch
 		/// </summary>
 		public RasterizerState rasterizerState = RasterizerState.CullNone;
@@ -105,7 +100,7 @@ namespace Nez
 			}
 
 			_currentRenderState = renderState;
-			Graphics.instance.spriteBatch.Begin( spriteSortMode, _currentRenderState.blendState, samplerState, _currentRenderState.depthStencilState, rasterizerState, _currentRenderState.effect, cam.transformMatrix );
+			Graphics.instance.spriteBatch.Begin( spriteSortMode, _currentRenderState.blendState, _currentRenderState.samplerState, _currentRenderState.depthStencilState, rasterizerState, _currentRenderState.effect, cam.transformMatrix );
 		}
 
 
@@ -143,7 +138,7 @@ namespace Nez
 		void flushSpriteBatch( Camera cam )
 		{
 			Graphics.instance.spriteBatch.End();
-			Graphics.instance.spriteBatch.Begin( spriteSortMode, _currentRenderState.blendState, samplerState, _currentRenderState.depthStencilState, rasterizerState, _currentRenderState.effect, cam.transformMatrix );
+			Graphics.instance.spriteBatch.Begin( spriteSortMode, _currentRenderState.blendState, _currentRenderState.samplerState, _currentRenderState.depthStencilState, rasterizerState, _currentRenderState.effect, cam.transformMatrix );
 		}
 
 
