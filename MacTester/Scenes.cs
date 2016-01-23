@@ -249,15 +249,14 @@ namespace MacTester
 			var moonTexture = scene.contentManager.Load<Texture2D>( "Images/moon" );
 
 			var entity = scene.createAndAddEntity<Entity>( "moon" );
-			var image = new Sprite( moonTexture );
-			entity.addComponent( image );
+			entity.addComponent( new ScrollingSprite( moonTexture ) );
 			entity.position = new Vector2( 200, 200 );
 			//entity.colliders.add( new PolygonCollider( 5, 100 ) );
 			entity.colliders.add( new BoxCollider() );
 
 
 			entity = scene.createAndAddEntity<Entity>( "moon2" );
-			image = new Sprite( moonTexture );
+			var image = new Sprite( moonTexture );
 			entity.addComponent( image );
 			entity.addComponent( new SimpleMoonMover() );
 			entity.position = new Vector2( 500, 500 );

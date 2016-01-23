@@ -122,7 +122,7 @@ namespace MacTester
 		{
 			base.Draw( gameTime );
 
-			IMGUI.beginWindow( GraphicsDevice.Viewport.Width - 150, 0, 150, 350 );
+			IMGUI.beginWindow( GraphicsDevice.Viewport.Width - 150, 0, 150, 390 );
 
 			debugRenderEnabled = IMGUI.toggle( "Debug Render", debugRenderEnabled );
 
