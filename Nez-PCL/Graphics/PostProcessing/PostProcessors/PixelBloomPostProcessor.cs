@@ -20,7 +20,7 @@ namespace Nez
 		public PixelBloomPostProcessor( RenderTexture layerRenderTexture, int executionOrder ) : base( executionOrder )
 		{
 			_layerRT = layerRenderTexture;
-			_tempRT = new RenderTexture( layerRenderTexture.renderTarget2D.Width, layerRenderTexture.renderTarget2D.Height );
+			_tempRT = new RenderTexture( layerRenderTexture.renderTarget2D.Width, layerRenderTexture.renderTarget2D.Height, DepthFormat.None );
 		}
 
 
@@ -48,6 +48,16 @@ namespace Nez
 
 			Graphics.instance.spriteBatch.End();
 		}
+
+
+		public override void unload()
+		{
+			base.unload();
+
+			_tempRT.unload();
+			_layerRT.unload();
+		}
+
 	}
 }
 

@@ -71,7 +71,7 @@ namespace Nez
 			if( _mosaicRenderTex != null && _mosaicRenderTex.renderTarget2D.IsDisposed )
 				_mosaicRenderTex.resize( newWidth * scene.pixelPerfectScale, newHeight * scene.pixelPerfectScale );
 			else
-				_mosaicRenderTex = new RenderTexture( newWidth * scene.pixelPerfectScale, newHeight * scene.pixelPerfectScale );
+				_mosaicRenderTex = new RenderTexture( newWidth * scene.pixelPerfectScale, newHeight * scene.pixelPerfectScale, DepthFormat.None );
 
 			// based on the look of games by: http://deepnight.net/games/strike-of-rage/
 			// use the mosaic to render to a full sized RenderTexture repeating the mosaic
