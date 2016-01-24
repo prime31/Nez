@@ -6,15 +6,18 @@ using Microsoft.Xna.Framework.Graphics;
 using Nez;
 
 
-namespace MacTester
+namespace Nez
 {
+	/// <summary>
+	/// this PostProcessor expects that the layerRenderTexture is the top-most layer and that it contains 
+	/// </summary>
 	public class PixelBloomPostProcessor : BloomPostProcessor
 	{
 		RenderTexture _layerRT;
 		RenderTexture _tempRT;
 
 
-		public PixelBloomPostProcessor( NezContentManager contentManager, RenderTexture layerRenderTexture ) : base( contentManager )
+		public PixelBloomPostProcessor( RenderTexture layerRenderTexture, int executionOrder ) : base( executionOrder )
 		{
 			_layerRT = layerRenderTexture;
 			_tempRT = new RenderTexture( layerRenderTexture.renderTarget2D.Width, layerRenderTexture.renderTarget2D.Height );

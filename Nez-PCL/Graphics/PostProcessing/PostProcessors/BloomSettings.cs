@@ -1,4 +1,4 @@
-namespace MacTester
+namespace Nez
 {
 	/// <summary>
 	/// Class holds all the settings used to tweak the bloom effect.
@@ -10,11 +10,9 @@ namespace MacTester
 		// only brighter colors. Somewhere between 0.25 and 0.5 is good.
 		public readonly float threshold;
 
-
 		// Controls how much blurring is applied to the bloom image.
 		// The typical range is from 1 up to 10 or so.
 		public readonly float blurAmount;
-
 
 		// Controls the amount of the bloom and base images that
 		// will be mixed into the final scene. Range 0 to 1.

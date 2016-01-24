@@ -63,6 +63,7 @@
     <Folder Include="Utils\Analysis\" />
     <Folder Include="ECS\Systems\" />
     <Folder Include="Physics\Shapes\" />
+    <Folder Include="Graphics\PostProcessing\PostProcessors\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Debug\Debug.cs" />
@@ -209,5 +210,10 @@
     <Compile Include="ECS\Systems\PassiveSystem.cs" />
     <Compile Include="ECS\InternalUtils\ColliderList.cs" />
     <Compile Include="ECS\Components\Renderables\Sprites\ScrollingSprite.cs" />
+    <Compile Include="Graphics\PostProcessing\IFinalRenderDelegate.cs" />
+    <Compile Include="Graphics\PostProcessing\PostProcessors\PixelMosaicRenderDelegate.cs" />
+    <Compile Include="Graphics\PostProcessing\PostProcessors\BloomPostProcessor.cs" />
+    <Compile Include="Graphics\PostProcessing\PostProcessors\BloomSettings.cs" />
+    <Compile Include="Graphics\PostProcessing\PostProcessors\PixelBloomPostProcessor.cs" />
   </ItemGroup>
 </Project>

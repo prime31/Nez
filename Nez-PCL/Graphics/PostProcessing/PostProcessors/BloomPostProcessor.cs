@@ -6,11 +6,19 @@ using Nez.Systems;
 using Microsoft.Xna.Framework;
 
 
-namespace MacTester
+namespace Nez
 {
 	public class BloomPostProcessor : PostProcessor
 	{
+		/// <summary>
+		/// the settings used by the bloom and blur shaders
+		/// </summary>
 		public BloomSettings settings;
+
+		/// <summary>
+		/// scale of the internal RenderTextures. For high resolution renders a half sized RT is usually more than enough.
+		/// </summary>
+		public int renderTextureScale = 1;
 
 		Effect _bloomExtractEffect;
 		Effect _bloomCombineEffect;
@@ -20,13 +28,17 @@ namespace MacTester
 		RenderTarget2D _renderTarget2;
 
 		
-		public BloomPostProcessor( NezContentManager contentManager ) : base( 0 )
+		public BloomPostProcessor( int executionOrder ) : base( executionOrder )
 		{
 			settings = BloomSettings.presetSettings[3];
+		}
 
-			_bloomExtractEffect = contentManager.LoadEffect( "Content/Effects/BloomExtract.ogl.mgfxo" );
-			_bloomCombineEffect = contentManager.LoadEffect( "Content/Effects/BloomCombine.ogl.mgfxo" );
-			_gaussianBlurEffect = contentManager.LoadEffect( "Content/Effects/GaussianBlur.ogl.mgfxo" );
+
+		public override void onAddedToScene()
+		{
+			_bloomExtractEffect = scene.contentManager.LoadEffect( "nez/effects/BloomExtract.ogl.mgfxo" );
+			_bloomCombineEffect = scene.contentManager.LoadEffect( "nez/effects/BloomCombine.ogl.mgfxo" );
+			_gaussianBlurEffect = scene.contentManager.LoadEffect( "nez/effects/GaussianBlur.ogl.mgfxo" );
 		}
 
 
@@ -35,8 +47,8 @@ namespace MacTester
 			// Create two rendertargets for the bloom processing. These are half the size of the backbuffer, in order to minimize fillrate costs. Reducing
 			// the resolution in this way doesn't hurt quality, because we are going to be blurring the bloom images in any case.
 			// the demo uses a tiny backbuffer so no need to reduce size any further
-			//newWidth /= 2;
-			//newHeight /= 2;
+			newWidth *= renderTextureScale;
+			newHeight *= renderTextureScale;
 
 			_renderTarget1 = new RenderTarget2D( Core.graphicsDevice, newWidth, newHeight, false, Screen.backBufferFormat, DepthFormat.None );
 			_renderTarget2 = new RenderTarget2D( Core.graphicsDevice, newWidth, newHeight, false, Screen.backBufferFormat, DepthFormat.None );
