@@ -58,9 +58,7 @@ namespace MacTester
 			spriteEntity.addComponent( sprite );
 
 
-			scene.addPostProcessor( new PixelMosaicPostProcessor( scene.contentManager ) );
-			scene.enablePostProcessing = true;
-
+			scene.finalRenderDelegate = new PixelMosaicRenderDelegate();
 
 			return scene;
 		}
@@ -88,8 +86,7 @@ namespace MacTester
 			tc2.layerIndicesToRender = new List<int>() { 3 };
 
 
-			scene.addPostProcessor( new PixelBloomPostProcessor( scene.contentManager, bloomLayerRenderer.renderTexture ) );
-			scene.enablePostProcessing = true;
+			scene.addPostProcessor( new PixelBloomPostProcessor( bloomLayerRenderer.renderTexture, -1 ) );
 
 			return scene;
 		}
@@ -165,7 +162,6 @@ namespace MacTester
 			var effect = scene.contentManager.LoadEffect( "Content/Effects/Invert.ogl.mgfxo" );
 			var postProcessor = new SimplePostProcessor( renderer.renderTexture, effect );
 			scene.addPostProcessor( postProcessor );
-			scene.enablePostProcessing = true;
 
 			return scene;
 		}

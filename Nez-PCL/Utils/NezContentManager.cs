@@ -36,6 +36,18 @@ namespace Nez.Systems
 		/// <param name="name">Name.</param>
 		public Effect LoadEffect( string name )
 		{
+			return LoadEffect<Effect>( name );
+		}
+
+
+		/// <summary>
+		/// loads an ogl effect directly from file and handles disposing of it when the ContentManager is disposed. Name should the the path
+		/// relative to the Content folder.
+		/// </summary>
+		/// <returns>The effect.</returns>
+		/// <param name="name">Name.</param>
+		public Effect LoadEffect<T>( string name ) where T : Effect
+		{
 			// make sure the effect 
 			if( !name.StartsWith( RootDirectory ) )
 				name = RootDirectory + "/" + name;
@@ -54,7 +66,7 @@ namespace Nez.Systems
 				stream.Read( bytes, 0, bytes.Length );
 			}
 
-			var effect = new Effect( graphicsDevice, bytes );
+			var effect = Activator.CreateInstance( typeof( T ), graphicsDevice, bytes ) as T;
 			_loadedEffects[name] = effect;
 
 			return effect;

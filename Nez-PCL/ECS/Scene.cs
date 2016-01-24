@@ -94,7 +94,7 @@ namespace Nez
 		/// <summary>
 		/// global toggle for PostProcessors
 		/// </summary>
-		public bool enablePostProcessing;
+		public bool enablePostProcessing = true;
 
 		/// <summary>
 		/// The list of entities within this Scene
@@ -119,6 +119,34 @@ namespace Nez
 		{
 			get { return new Vector2( _sceneRenderTexture.renderTarget2D.Width, _sceneRenderTexture.renderTarget2D.Height ); }
 		}
+
+		/// <summary>
+		/// if the ResolutionPolicy is pixel perfect this will be set to the scale calculated for it
+		/// </summary>
+		public int pixelPerfectScale = 1;
+
+		/// <summary>
+		/// the final render to the screen can be deferred to this delegate if set. This is really only useful for cases where the final render
+		/// might need a full screen size effect even though a small back buffer is used.
+		/// </summary>
+		/// <value>The final render delegate.</value>
+		public IFinalRenderDelegate finalRenderDelegate
+		{
+			set
+			{
+				if( _finalRenderDelegate != null )
+					_finalRenderDelegate.unload();
+
+				_finalRenderDelegate = value;
+				_finalRenderDelegate.scene = this;
+				_finalRenderDelegate.onAddedToScene();
+			}
+			get
+			{
+				return _finalRenderDelegate;
+			}
+		}
+		IFinalRenderDelegate _finalRenderDelegate;
 
 		/// <summary>
 		/// default resolution size used for all scenes
@@ -323,12 +351,19 @@ namespace Nez
 				_screenshotRequestCallback = null;
 			}
 
-			// render our final result to the backbuffer
-			Core.graphicsDevice.SetRenderTarget( null );
-			Core.graphicsDevice.Clear( letterboxColor );
-			Graphics.instance.spriteBatch.Begin( SpriteSortMode.Deferred, BlendState.Opaque, samplerState );
-			Graphics.instance.spriteBatch.Draw( Mathf.isEven( enabledCounter ) ? _sceneRenderTexture : _destinationRenderTexture, _finalRenderDestinationRect, Color.White );
-			Graphics.instance.spriteBatch.End();
+			// render our final result to the backbuffer or let our delegate to so
+			if( _finalRenderDelegate != null )
+			{
+				_finalRenderDelegate.handleFinalRender( letterboxColor, Mathf.isEven( enabledCounter ) ? _sceneRenderTexture : _destinationRenderTexture, _finalRenderDestinationRect, samplerState );
+			}
+			else
+			{
+				Core.graphicsDevice.SetRenderTarget( null );
+				Core.graphicsDevice.Clear( letterboxColor );
+				Graphics.instance.spriteBatch.Begin( SpriteSortMode.Deferred, BlendState.Opaque, samplerState );
+				Graphics.instance.spriteBatch.Draw( Mathf.isEven( enabledCounter ) ? _sceneRenderTexture : _destinationRenderTexture, _finalRenderDestinationRect, Color.White );
+				Graphics.instance.spriteBatch.End();
+			}
 		}
 
 
@@ -369,16 +404,16 @@ namespace Nez
 			var rectCalculated = false;
 
 			// calculate the scale used by the PixelPerfect variants
-			var scale = 1;
+			pixelPerfectScale = 1;
 			if( _resolutionPolicy != SceneResolutionPolicy.None )
 			{
 				if( (float)designSize.X / (float)designSize.Y > screenAspectRatio )
-					scale = screenSize.X / designSize.X;
+					pixelPerfectScale = screenSize.X / designSize.X;
 				else
-					scale = screenSize.Y / designSize.Y;
+					pixelPerfectScale = screenSize.Y / designSize.Y;
 
-				if( scale == 0 )
-					scale = 1;
+				if( pixelPerfectScale == 0 )
+					pixelPerfectScale = 1;
 			}
 
 			switch( _resolutionPolicy )
@@ -407,23 +442,23 @@ namespace Nez
 					renderTextureHeight = designSize.Y;
 
 					// we are going to do some cropping so we need to use floats for the scale then round up
-					scale = 1;
+					pixelPerfectScale = 1;
 					if( (float)designSize.X / (float)designSize.Y < screenAspectRatio )
 					{
 						var floatScale = (float)screenSize.X / (float)designSize.X;
-						scale = Mathf.ceilToInt( floatScale );
+						pixelPerfectScale = Mathf.ceilToInt( floatScale );
 					}
 					else
 					{
 						var floatScale = (float)screenSize.Y / (float)designSize.Y;
-						scale = Mathf.ceilToInt( floatScale );
+						pixelPerfectScale = Mathf.ceilToInt( floatScale );
 					}
 
-					if( scale == 0 )
-						scale = 1;
+					if( pixelPerfectScale == 0 )
+						pixelPerfectScale = 1;
 
-					_finalRenderDestinationRect.Width = Mathf.ceilToInt( designSize.X * scale );
-					_finalRenderDestinationRect.Height = Mathf.ceilToInt( designSize.Y * scale );
+					_finalRenderDestinationRect.Width = Mathf.ceilToInt( designSize.X * pixelPerfectScale );
+					_finalRenderDestinationRect.Height = Mathf.ceilToInt( designSize.Y * pixelPerfectScale );
 					_finalRenderDestinationRect.X = ( screenSize.X - _finalRenderDestinationRect.Width ) / 2;
 					_finalRenderDestinationRect.Y = ( screenSize.Y - _finalRenderDestinationRect.Height ) / 2;
 					rectCalculated = true;
@@ -440,8 +475,8 @@ namespace Nez
 					renderTextureWidth = designSize.X;
 					renderTextureHeight = designSize.Y;
 
-					_finalRenderDestinationRect.Width = Mathf.ceilToInt( designSize.X * scale );
-					_finalRenderDestinationRect.Height = Mathf.ceilToInt( designSize.Y * scale );
+					_finalRenderDestinationRect.Width = Mathf.ceilToInt( designSize.X * pixelPerfectScale );
+					_finalRenderDestinationRect.Height = Mathf.ceilToInt( designSize.Y * pixelPerfectScale );
 					_finalRenderDestinationRect.X = ( screenSize.X - _finalRenderDestinationRect.Width ) / 2;
 					_finalRenderDestinationRect.Y = ( screenSize.Y - _finalRenderDestinationRect.Height ) / 2;
 					rectCalculated = true;
@@ -460,12 +495,12 @@ namespace Nez
 					renderTextureHeight = designSize.Y;
 
 					_finalRenderDestinationRect.Width = Mathf.ceilToInt( designSize.X * resolutionScaleX );
-					_finalRenderDestinationRect.Height = Mathf.ceilToInt( designSize.Y * scale );
+					_finalRenderDestinationRect.Height = Mathf.ceilToInt( designSize.Y * pixelPerfectScale );
 					_finalRenderDestinationRect.X = ( screenSize.X - _finalRenderDestinationRect.Width ) / 2;
 					_finalRenderDestinationRect.Y = ( screenSize.Y - _finalRenderDestinationRect.Height ) / 2;
 					rectCalculated = true;
 
-					renderTextureWidth = (int)( designSize.X * resolutionScaleX / scale );
+					renderTextureWidth = (int)( designSize.X * resolutionScaleX / pixelPerfectScale );
 					break;
 				case SceneResolutionPolicy.FixedWidth:
 					resolutionScaleY = resolutionScaleX;
@@ -479,13 +514,13 @@ namespace Nez
 					// start with exact design size render texture width. the height may change
 					renderTextureWidth = designSize.X;
 
-					_finalRenderDestinationRect.Width = Mathf.ceilToInt( designSize.X * scale );
+					_finalRenderDestinationRect.Width = Mathf.ceilToInt( designSize.X * pixelPerfectScale );
 					_finalRenderDestinationRect.Height = Mathf.ceilToInt( designSize.Y * resolutionScaleY );
 					_finalRenderDestinationRect.X = ( screenSize.X - _finalRenderDestinationRect.Width ) / 2;
 					_finalRenderDestinationRect.Y = ( screenSize.Y - _finalRenderDestinationRect.Height ) / 2;
 					rectCalculated = true;
 
-					renderTextureHeight = (int)( designSize.Y * resolutionScaleY / scale );
+					renderTextureHeight = (int)( designSize.Y * resolutionScaleY / pixelPerfectScale );
 
 					break;
 			}
@@ -514,12 +549,15 @@ namespace Nez
 			if( _destinationRenderTexture != null )
 				_destinationRenderTexture.resize( renderTextureWidth, renderTextureHeight );
 
-			// notify the PostProcessors and Renderers of the change in render texture size
+			// notify the PostProcessors, Renderers and FinalRenderDelegate of the change in render texture size
 			for( var i = 0; i < _postProcessors.Count; i++ )
 				_postProcessors[i].onSceneBackBufferSizeChanged( renderTextureWidth, renderTextureHeight );
 
 			for( var i = 0; i < _renderers.Count; i++ )
 				_renderers[i].onSceneBackBufferSizeChanged( renderTextureWidth, renderTextureHeight );
+
+			if( _finalRenderDelegate != null )
+				_finalRenderDelegate.onSceneBackBufferSizeChanged( renderTextureWidth, renderTextureHeight );
 		}
 
 		#endregion
@@ -591,10 +629,12 @@ namespace Nez
 		}
 
 
-		public void addPostProcessor( PostProcessor step )
+		public void addPostProcessor( PostProcessor postProcessor )
 		{
-			_postProcessors.Add( step );
+			_postProcessors.Add( postProcessor );
 			_postProcessors.Sort( PostProcessor.comparePostProcessorOrder );
+			postProcessor.scene = this;
+			postProcessor.onAddedToScene();
 
 			// lazily create the 2nd RenderTexture for post processing only when a PostProcessor is added
 			if( _destinationRenderTexture == null )

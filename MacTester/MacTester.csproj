@@ -74,10 +74,6 @@
     <Compile Include="SceneEntityProcessor\TextEntityProcessor.cs" />
     <Compile Include="SceneEntityProcessor\ImageEntityProcessor.cs" />
     <Compile Include="SceneThree\SimpleMoonOutlineRenderer.cs" />
-    <Compile Include="SceneOne\BloomSettings.cs" />
-    <Compile Include="SceneOne\PixelBloomPostProcessor.cs" />
-    <Compile Include="SceneOne\BloomPostProcessor.cs" />
-    <Compile Include="SceneOne\PixelMosaicPostProcessor.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Info.plist" />
@@ -128,7 +124,6 @@
     <None Include="Content\Images\AnotherAtlas\airSlash\Ninja_Air Slash_5.png" />
     <None Include="Content\Images\AnotherAtlas\airSlash\Ninja_Air Slash_6.png" />
     <None Include="Content\Images\AnotherAtlas\airSlash\Ninja_Air Slash_7.png" />
-    <None Include="Content\Effects\MultiTextureOverlay.fx" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bin\**\*.*">
@@ -146,13 +141,13 @@
     <Content Include="Content\Effects\RainbowH.ogl.mgfxo" />
     <Content Include="Content\Effects\SpriteEffect.ogl.mgfxo" />
     <Content Include="Content\Effects\SpriteEffectEffect.xnb" />
-    <Content Include="Content\NezDefaultBMFont.xnb" />
-    <Content Include="Content\Effects\BloomCombine.ogl.mgfxo" />
-    <Content Include="Content\Effects\BloomExtract.ogl.mgfxo" />
-    <Content Include="Content\Effects\GaussianBlur.ogl.mgfxo" />
     <Content Include="Content\Images\mask.jpg" />
     <Content Include="Content\Images\tile.png" />
-    <Content Include="Content\Effects\MultiTextureOverlay.mgfxo" />
+    <Content Include="Content\nez\NezDefaultBMFont.xnb" />
+    <Content Include="Content\nez\effects\MultiTextureOverlay.mgfxo" />
+    <Content Include="Content\nez\effects\BloomCombine.ogl.mgfxo" />
+    <Content Include="Content\nez\effects\BloomExtract.ogl.mgfxo" />
+    <Content Include="Content\nez\effects\GaussianBlur.ogl.mgfxo" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
@@ -167,6 +162,8 @@
     <Folder Include="Content\Images\AnotherAtlas\" />
     <Folder Include="SceneEntityProcessor\" />
     <Folder Include="SceneOne\" />
+    <Folder Include="Content\nez\" />
+    <Folder Include="Content\nez\effects\" />
   </ItemGroup>
   <ItemGroup>
     <InterfaceDefinition Include="MainMenu.xib" />
