@@ -148,6 +148,10 @@
     <Content Include="Content\nez\effects\BloomCombine.ogl.mgfxo" />
     <Content Include="Content\nez\effects\BloomExtract.ogl.mgfxo" />
     <Content Include="Content\nez\effects\GaussianBlur.ogl.mgfxo" />
+    <Content Include="Content\Effects\Crosshatch.mgfxo" />
+    <Content Include="Content\Effects\Dots.mgfxo" />
+    <Content Include="Content\Effects\Noise.mgfxo" />
+    <Content Include="Content\Effects\Twist.mgfxo" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

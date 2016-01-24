@@ -227,17 +227,11 @@ namespace MacTester
 			var sceneTexture = scene.contentManager.Load<LibGdxAtlas>( "bin/MacOSX/Overlap2D/packatlas" );
 			foreach( var si in o2ds.sImages )
 			{
-				try
-				{
-					var i = new Sprite( sceneTexture.getSubtexture( si.imageName ) );
-					i.localPosition = new Vector2( si.x, -si.y );
-					i.origin = new Vector2( si.originX, si.originY );
-					i.scale = new Vector2( si.scaleX, si.scaleY );
-					sceneEntity.addComponent( i );
-				}
-				catch( Exception )
-				{
-				}
+				var i = new Sprite( sceneTexture.getSubtexture( si.imageName ) );
+				i.localPosition = new Vector2( si.x, -si.y );
+				i.origin = new Vector2( si.originX, si.originY );
+				i.scale = new Vector2( si.scaleX, si.scaleY );
+				sceneEntity.addComponent( i );
 			}
 
 			return scene;
