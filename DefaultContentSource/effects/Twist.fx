@@ -1,12 +1,12 @@
 sampler s0;
 
+float radius; // 0.5
+float angle; // 5.0
+float2 offset; // 0.5, 0.5
+
 
 float4 PixelShaderFunction( float2 coords:TEXCOORD0, in float2 screenPos:VPOS ) : COLOR0
 {
-    float radius = 0.5;
-    float angle = 5.0;
-    float2 offset = float2( 0.5, 0.5 );
-
     float2 coord = coords - offset;
     float dist = length( coord );
 

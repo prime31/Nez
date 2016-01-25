@@ -1,5 +1,8 @@
 sampler s0;
 
+float angle; // 0.5
+float scale; // 0.5
+
 
 float pattern( float angle, float2 uv, float scale, float2 screenPos )
 {
@@ -13,9 +16,6 @@ float pattern( float angle, float2 uv, float scale, float2 screenPos )
 
 float4 PixelShaderFunction( float2 coords:TEXCOORD0, in float2 screenPos:VPOS ) : COLOR0
 {
-    float angle = 0.5;
-    float scale = 0.5;
-
     float4 color = tex2D( s0, coords );
     float average = ( color.r + color.g + color.b ) / 3.0;
     float val = average * 10.0 - 5.0 + pattern( angle, coords, scale, screenPos );

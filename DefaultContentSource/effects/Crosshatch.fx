@@ -1,8 +1,10 @@
 sampler s0;
 
+int crossHatchSize; // 16
+
+
 float4 PixelShaderFunction( float2 coords:TEXCOORD0, in float2 screenPos:VPOS ) : COLOR0
 {
-    float crossHatchSize = 16.0;
     float halfCrossHatchSize = crossHatchSize * 0.5;
     float lum = length( tex2D( s0, coords ).rgb );
     float4 color = float4( 1.0, 1.0, 1.0, 1.0 );

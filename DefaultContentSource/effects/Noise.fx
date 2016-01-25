@@ -1,5 +1,6 @@
 sampler s0;
 
+float noise; // 1.0
 
 float rand( float2 co )
 {
@@ -9,8 +10,6 @@ float rand( float2 co )
 
 float4 PixelShaderFunction( float2 coords:TEXCOORD0, in float2 screenPos:VPOS ) : COLOR0
 {
-    float noise = 1.0;
-
     float4 color = tex2D( s0, coords );
 
     float diff = ( rand( coords ) - 0.5 ) * noise;
