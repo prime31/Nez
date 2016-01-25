@@ -144,9 +144,6 @@
     <Content Include="Content\Images\mask.jpg" />
     <Content Include="Content\Images\tile.png" />
     <Content Include="Content\Effects\Crosshatch.mgfxo" />
-    <Content Include="Content\Effects\Dots.mgfxo" />
-    <Content Include="Content\Effects\Noise.mgfxo" />
-    <Content Include="Content\Effects\Twist.mgfxo" />
     <Content Include="Content\nez\NezDefaultBMFont.xnb" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

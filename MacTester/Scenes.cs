@@ -234,6 +234,15 @@ namespace MacTester
 				sceneEntity.addComponent( i );
 			}
 
+
+			//var effect = scene.contentManager.LoadNezEffect<CrosshatchEffect>();
+			//var effect = scene.contentManager.LoadNezEffect<NoiseEffect>();
+			//var effect = scene.contentManager.LoadNezEffect<TwistEffect>();
+			var effect = scene.contentManager.LoadNezEffect<SpriteBlinkEffect>();
+			effect.blinkColor = new Color( 255, 0, 0, 128 );
+
+			scene.addPostProcessor( new PostProcessor( 1, effect ) );
+
 			return scene;
 		}
 

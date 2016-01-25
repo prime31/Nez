@@ -10,6 +10,7 @@ namespace Nez
 {
 	static internal class EffectResource
 	{
+		public static byte[] spriteBlinkEffectBytes { get { return getEmbeddedResourceBytes( "Nez.Content.Effects.SpriteBlinkEffect.mgfxo" ); } }
 		public static byte[] crosshatchBytes { get { return getEmbeddedResourceBytes( "Nez.Content.Effects.Crosshatch.mgfxo" ); } }
 		public static byte[] noiseBytes { get { return getEmbeddedResourceBytes( "Nez.Content.Effects.Noise.mgfxo" ); } }
 		public static byte[] twistBytes { get { return getEmbeddedResourceBytes( "Nez.Content.Effects.Twist.mgfxo" ); } }
