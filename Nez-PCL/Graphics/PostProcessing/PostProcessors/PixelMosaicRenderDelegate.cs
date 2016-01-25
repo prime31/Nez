@@ -23,7 +23,7 @@ namespace Nez
 
 		public void onAddedToScene()
 		{
-			effect = scene.contentManager.LoadEffect( "nez/effects/MultiTextureOverlay.mgfxo" );
+			effect = scene.contentManager.LoadEffect<Effect>( "multiTextureOverlay", EffectResource.multiTextureOverlayBytes );
 		}
 
 

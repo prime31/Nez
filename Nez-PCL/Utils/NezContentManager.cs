@@ -41,24 +41,41 @@ namespace Nez.Systems
 
 
 		/// <summary>
+		/// loads an embedded Nez effect. These are any of the Effect subclasses in the Nez/Graphics/Effects folder.
+		/// </summary>
+		/// <returns>The nez effect.</returns>
+		/// <typeparam name="T">The 1st type parameter.</typeparam>
+		public T LoadNezEffect<T>() where T : Effect
+		{
+			var name = typeof( T ).FullName;
+
+			// check the cache first
+			if( _loadedEffects.ContainsKey( name ) )
+				return _loadedEffects[name] as T;
+
+			var effect = Activator.CreateInstance( typeof( T ) ) as T;
+			_loadedEffects[name] = effect;
+
+			return effect;
+		}
+
+
+		/// <summary>
 		/// loads an ogl effect directly from file and handles disposing of it when the ContentManager is disposed. Name should the the path
-		/// relative to the Content folder.
+		/// relative to the Content folder. Effects must have a constructor that accepts GraphicsDevice and byte[].
 		/// </summary>
 		/// <returns>The effect.</returns>
 		/// <param name="name">Name.</param>
-		public Effect LoadEffect<T>( string name ) where T : Effect
+		public T LoadEffect<T>( string name ) where T : Effect
 		{
-			// make sure the effect 
+			// make sure the effect has the proper root directory
 			if( !name.StartsWith( RootDirectory ) )
 				name = RootDirectory + "/" + name;
 
 			// check the cache first
 			if( _loadedEffects.ContainsKey( name ) )
-				return _loadedEffects[name];
+				return _loadedEffects[name] as T;
 			
-			var graphicsDeviceService = (IGraphicsDeviceService)ServiceProvider.GetService( typeof( IGraphicsDeviceService ) );
-			var graphicsDevice = graphicsDeviceService.GraphicsDevice;
-
 			byte[] bytes;
 			using( var stream = TitleContainer.OpenStream( name ) )
 			{
@@ -66,7 +83,32 @@ namespace Nez.Systems
 				stream.Read( bytes, 0, bytes.Length );
 			}
 
+			var graphicsDeviceService = (IGraphicsDeviceService)ServiceProvider.GetService( typeof( IGraphicsDeviceService ) );
+			var graphicsDevice = graphicsDeviceService.GraphicsDevice;
+
 			var effect = Activator.CreateInstance( typeof( T ), graphicsDevice, bytes ) as T;
+			_loadedEffects[name] = effect;
+
+			return LoadEffect<T>( name, bytes );
+		}
+
+
+		/// <summary>
+		/// loads an ogl effect directly from its bytes and handles disposing of it when the ContentManager is disposed. Name should the the path
+		/// relative to the Content folder. Effects must have a constructor that accepts GraphicsDevice and byte[].
+		/// </summary>
+		/// <returns>The effect.</returns>
+		/// <param name="name">Name.</param>
+		internal T LoadEffect<T>( string name, byte[] effectCode ) where T : Effect
+		{
+			// check the cache first
+			if( _loadedEffects.ContainsKey( name ) )
+				return _loadedEffects[name] as T;
+
+			var graphicsDeviceService = (IGraphicsDeviceService)ServiceProvider.GetService( typeof( IGraphicsDeviceService ) );
+			var graphicsDevice = graphicsDeviceService.GraphicsDevice;
+
+			var effect = Activator.CreateInstance( typeof( T ), graphicsDevice, effectCode ) as T;
 			_loadedEffects[name] = effect;
 
 			return effect;
