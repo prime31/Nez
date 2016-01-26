@@ -1,6 +1,6 @@
 Nez Core
 ==========
-The root class in the Nez world is the Core class which is a subclass of the Game class. Your root Game class should subclass Core. Core provides access to all the importnt subsystems via static fields and methods for easy access.
+The root class in the Nez world is the Core class which is a subclass of the Game class. Your Game class should subclass Core. Core provides access to all the importnt subsystems via static fields and methods for easy access.
 
 
 Graphics
@@ -15,12 +15,11 @@ When you set Core.scene to a new Scene, Nez will finish rendering the current Sc
 
 Physics
 ==========
-Be careful not to confuse the Nez Physics system with realistic physics simulations (such as Box2D, Chipmunk, etc)! That is not at all its purpose. The Physics system is here only to provide spatial and collision information. It does not attempt to handle a full, real-world physics simulation. At the core of the Physics system is a SpatialHash that gets populated and udpated automatically as you add/remove/move Colliders. You can access the various Physics-related methods via the **Physics** class which provides methods (boxcast, raycast, etc) to handle broadphase collision detection in a performant way. Internally, Nez uses the Physics systems for collision detection with various shapes such as rectangles, circles and lines. The Entity class provides move methods that handle all this for you or you could opt to just query the Physics system and handle the narrow phase collision detection yourself.
+Be careful not to confuse the Nez Physics system with realistic physics simulations (such as Box2D, Chipmunk, etc)! That is not at all its purpose. The Physics system is here only to provide spatial and collision information. It does not attempt to handle a full, real-world physics simulation. At the core of the Physics system is a SpatialHash that gets populated and updated automatically as you add/remove/move Colliders. You can access the various Physics-related methods via the **Physics** class which provides methods (boxcast, raycast, etc) to handle broadphase collision detection in a performant way. Internally, Nez uses the Physics systems for collision detection with various shapes such as rectangles, circles and polygons. The Entity class provides move methods that handle all this for you or you could opt to just query the Physics system and handle the narrow phase collision detection yourself.
 
 
 TimerManager
 ==========
-
 The TimerManager is a simple helper that lets you pass in an Action that can be called once or repeately with or without a delay. The **Core.schedule** method provides easy access to the TimerManager. When you call **schedule** you get back an ITimer object that has a **stop** method that can be used to stop the timer from firing again. Timers are automatically cached and reused so fire up as many as you need.
 
 
@@ -38,9 +37,9 @@ The **Emitter<T>** class is available for use in your own classes as well. You c
 
 Debug Console
 ==========
-If you are buliding with DEBUG enabled, Nez includes a simple console that provides some useful information. Press the tilde (~) key to show/hide the console. Once it is open you can type 'help' to view all the available commands which include helper to log all loaded assets, total entity count, physics colliders managed by the SpatialHash, etc.
+If you are buliding with the DEBUG compilation symbol, Nez includes a simple console that provides some useful information. Press the tilde (~) key to show/hide the console. Once it is open you can type 'help' to view all the available commands which include helper to log all loaded assets, total entity count, physics colliders managed by the SpatialHash, etc. Type 'help COMMAND' to get help information for a specific command.
 
-You can also easily add your own command to the debug console. Just add the **CommandAttribute** to any static class and specify the command name and help string. Commands can have a single parameter. Here is an example of one of the built-in commands:
+You can also easily add your own command to the debug console. Just add the **CommandAttribute** to any static method and specify the command name and help string. Commands can have a single parameter. Here is an example of one of the built-in commands:
 
 ```
 [Command( "assets", "Logs all loaded assets. Pass 's' for scene assets or 'g' for global assets" )]
@@ -69,7 +68,7 @@ Several virtual input classes are also provided which let you combine multiple i
 
 Debug
 ==========
-The Debug class provides logging, asserts and a few drawing methods. These methods are only compiled into DEBUG builds so you can use them freely throughout your code and when you do a non-DEBUG build none of them will be compiled into your game.
+The Debug class provides logging and a few drawing methods. The Assert class provides an assortment of assert conditions. These classes are only compiled into DEBUG builds so you can use them freely throughout your code and when you do a non-DEBUG build none of them will be compiled into your game.
 
 
 Flags

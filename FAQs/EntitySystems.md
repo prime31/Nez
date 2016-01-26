@@ -1,6 +1,5 @@
 Entity Systems
 ============
-
 Nez supports entity systems much like you have probably already seen in other entity-component systems. Entity Systems are an easy way to encapsulate game logic that spans across different entities and components. Nez systems are heavily inspired by [Artmeis-odb](https://github.com/junkdog/artemis-odb)
 
 Systems are executed in the order you add them to the scene. You might want to add your physics system after your input logic. You might want to do all bullet collision checks after the physics system has calculated the new positions. Adding the systems in the proper order allows you to do this.
@@ -8,13 +7,11 @@ Systems are executed in the order you add them to the scene. You might want to a
 
 Basic systems
 =============
-
 Nez provides a set of basic systems that you can directly use or that you can extend to fit your needs.
 
 
 EntitySystem
 ------------
-
 The base of all systems. It provied an unsorted list of entities matching the components required.
 
 Here's an example of sorting the entities before consuming them for whathever use you might need.
@@ -33,7 +30,6 @@ protected override void process( List<Entity> entities )
 
 EntityProcessingSystem
 ----------------------
-
 A basic entity processing system. Use this as the base for processing many entities with specific components. All you need to do is override `process( Entity entity )`. Here's an example of a bullet collision system using EntityProcessingSystem.
 
 ```
@@ -57,19 +53,16 @@ public override void process( Entity entity )
 
 ProcessingSystem
 ----------------
-
 A basic processing system that doesn't rely on entities. It's got no entities associated but it's still being called each frame. Use this as a base class for generic systems that need to coordinate other systems
 
 
 PassiveSystem
 -------------
-
 A basic container that doesn't rely on entities and that doesn't get called each frame. Handy for storing passive actions that might be called by other systems.
 
 
 Example system
 ==============
-
 Here's an example of a system in charge of spawning new enemies. That's the component that holds information about each spawner.
 
 ```
@@ -143,13 +136,11 @@ public class SpawnerSystem : EntityProcessingSystem
 
 Matchers
 ========
-
 Matchers are the equivalent of Artemis-odb's Aspects. They match entities based on a pattern of components. Matchers are used to define what components a system is interested in.
 
 
 Using matchers
 --------------
-
 Matchers are passed during creation of an EntitySystem and define what components the system is interested in.
 
 ```
@@ -167,7 +158,6 @@ A matcher can either match all entities that have a list of components, or it ca
 
 Match all
 ---------
-
 Match all the entities that have both the BuffComponent AND the Damagecomponent.
 
 ```
@@ -177,7 +167,6 @@ new Matcher().all ( typeof( BuffComponent ), typeof( DamageComponent ) );
 
 Match one
 ---------
-
 Match all the entities that have at least a BuffComponent or a Damagecomponent.
 
 ```
@@ -187,7 +176,6 @@ new Matcher().one( typeof( BuffComponent ), typeof( DamageComponent ) );
 
 Match exclude
 -------------
-
 Match all the entities that do not have the BuffComponent.
 
 ```

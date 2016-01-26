@@ -8,6 +8,9 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Nez.Sprites
 {
+	/// <summary>
+	/// renders and fades a copy of the Sprite on the same Entity. minDistanceBetweenInstances determines how often a trail sprite is added.
+	/// </summary>
 	public class SpriteTrail : RenderableComponent
 	{
 		class SpriteTrailInstance

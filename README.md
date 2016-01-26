@@ -2,15 +2,15 @@
 
 Nez aims to be a lightweight 2D game engine that sits on top of MonoGame/FNA. It provides a solid base for you to build a 2D game on. Some of the many features it includes are:
 
-- Scene/Entity/Component system with automatic Entity tag tracking and Component render layer tracking
-- SpatialHash for super fast broadphase physics lookups (note that Nez does not provide any physics engine. It provides collision data that you can do whatever you want to with it.)
+- Scene/Entity/Component system with Component render layer tracking and optional entity systems (an implementation that operates on a group of entities that share a specific set of components)
+- SpatialHash for super fast broadphase physics lookups (note that Nez does not provide any physics engine. It provides collision data that you can do whatever you want to with.)
 - AABB, polygon and circle collision/trigger detection along with raycasts against the SpatialHash
 - efficient coroutines for breaking up large tasks across multiple frames or animation timing
 - in-game debug console extendable by adding an attribute to any static method
 - extensible rendering system. Add/remove renderers and post processors as needed.
-- tweening system. Tween any int/float/Vector/quaternion/color/rectangle field or property
-- sprites with sprite animations
-- kick-ass particle system with added support for importing Particle Designer files
+- tween system. Tween any int/float/Vector/quaternion/color/rectangle field or property
+- sprites with sprite animations, scrolling sprites and repeating sprites
+- kick-ass particle system with added support for importing [Particle Designer](https://71squared.com/particledesigner) files
 - optimized event emitter for core events that you can also add to any class of your own
 - scheduler for delayed and repeating tasks
 - synchronous or asynchronous asset loading
@@ -20,7 +20,8 @@ Nez aims to be a lightweight 2D game engine that sits on top of MonoGame/FNA. It
 
 ### Setup
 
-Nez needs to have the DefaultContent/Fonts/NezDefaultBMFont.xnb file placed in your projects Content folder. It sets up the font as the default for all text in it's debug console and for your own use.
+Nez needs to have the DefaultContent/NezDefaultBMFont.xnb file placed in your projects Content/nez folder. It sets up the font as the default for all text in it's debug console and for your own use. If you intend to use any of the built in Effects or PostProcessors you should also copy the DefaultContent/effects folder contents into your projects Content/nez/effects folder. Be sure to set the Build Action to Content so they get copied into your compiled game.
+
 
 
 ### Systems
@@ -31,7 +32,7 @@ There are various systems documented separately in the FAQs folder. They go into
 - [Scene-Entity-Component](FAQs/Scene-Entity-Component.md)
 - [Rendering](FAQs/Rendering.md)
 - [Physics/Collisions](FAQs/Physics.md)
-- [Entity System](FAQs/Systems.md)
+- [Entity System](FAQs/EntitySystems.md)
 - [Samples](FAQs/Samples.md)
 
 
@@ -39,14 +40,14 @@ There are various systems documented separately in the FAQs folder. They go into
 
 Nez comes stock with a decent bunch of Pipeline tool importers including:
 
-- **Texture Atlas Generator**: give it a directory or a list of files and it will combine them all into a single atlas and provide easy access to the source UVs of each image. Also includes a per-folder sprite animation generation.
+- **Texture Atlas Generator**: give it a directory or a list of files and it will combine them all into a single atlas and provide easy access to the source UVs of each image. Also includes a per-folder sprite animation generation. The atlas generator uses an XML file as input with an Asset Type of System.String[]. The string array should specify the folder or folders where the source images are located.
 - **Tiled**: import [Tiled](http://www.mapeditor.org/) maps. Covers tile, image and object layers and rendering with full culling support built-in along with optimized collider generation.
 - **Bitmap Fonts**: imports BMFont files (from programs like [Glyph Designer](https://71squared.com/glyphdesigner), [Littera](http://kvazars.com/littera/), etc). Outputs a single xnb file and includes SpriteBatch extension methods to display text the directly match the SpriteFont methods.
-- **LibGdxAtlases**: imports libGDX texture atlases
-- **Overlap2D**: imports [Overlap2D](http://overlap2d.com/) projects. Imports almost all of the data but currently only offers renderers for the basics (no fancy stuff like Spriter animations, lights, etc).
 - **Texture Packer**: imports a [TexturePacker](https://www.codeandweb.com/texturepacker) atlas and JSON file
 - **Particle Designer Importer**: imports [Particle Designer](https://71squared.com/particledesigner) particle systems for use with the Nez particle system
 - **XMLTemplateMaker**: this isn't so much an imoporter as a helper to make your own importer. Pass it a class and it spits out an XML template that you can use for your own custom XML-to-object importers.
+- **LibGdxAtlases**: imports libGDX texture atlases
+- **Overlap2D**: imports [Overlap2D](http://overlap2d.com/) projects. Imports almost all of the data but currently only offers renderers for the basics (no fancy stuff like Spriter animations, lights, etc).
 
 
 
