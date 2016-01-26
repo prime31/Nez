@@ -55,7 +55,6 @@ namespace Nez
 			base.unload();
 
 			_tempRT.unload();
-			_layerRT.unload();
 		}
 
 	}

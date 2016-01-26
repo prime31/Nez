@@ -65,8 +65,6 @@
     <Folder Include="Physics\Shapes\" />
     <Folder Include="Graphics\PostProcessing\PostProcessors\" />
     <Folder Include="Graphics\Effects\" />
-    <Folder Include="Content\" />
-    <Folder Include="Content\Effects\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Debug\Debug.cs" />
@@ -224,16 +222,5 @@
     <Compile Include="Graphics\Effects\TwistEffect.cs" />
     <Compile Include="Graphics\Effects\DotsEffect.cs" />
     <Compile Include="Graphics\Effects\SpriteBlinkEffect.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Content\Effects\Crosshatch.mgfxo" />
-    <EmbeddedResource Include="Content\Effects\BloomCombine.mgfxo" />
-    <EmbeddedResource Include="Content\Effects\BloomExtract.mgfxo" />
-    <EmbeddedResource Include="Content\Effects\GaussianBlur.mgfxo" />
-    <EmbeddedResource Include="Content\Effects\MultiTextureOverlay.mgfxo" />
-    <EmbeddedResource Include="Content\Effects\Noise.mgfxo" />
-    <EmbeddedResource Include="Content\Effects\Twist.mgfxo" />
-    <EmbeddedResource Include="Content\Effects\Dots.mgfxo" />
-    <EmbeddedResource Include="Content\Effects\SpriteBlinkEffect.mgfxo" />
   </ItemGroup>
 </Project>

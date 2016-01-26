@@ -145,6 +145,15 @@
     <Content Include="Content\Images\tile.png" />
     <Content Include="Content\Effects\Crosshatch.mgfxo" />
     <Content Include="Content\nez\NezDefaultBMFont.xnb" />
+    <Content Include="Content\nez\effects\BloomCombine.mgfxo" />
+    <Content Include="Content\nez\effects\BloomExtract.mgfxo" />
+    <Content Include="Content\nez\effects\Crosshatch.mgfxo" />
+    <Content Include="Content\nez\effects\Dots.mgfxo" />
+    <Content Include="Content\nez\effects\GaussianBlur.mgfxo" />
+    <Content Include="Content\nez\effects\MultiTextureOverlay.mgfxo" />
+    <Content Include="Content\nez\effects\Noise.mgfxo" />
+    <Content Include="Content\nez\effects\SpriteBlinkEffect.mgfxo" />
+    <Content Include="Content\nez\effects\Twist.mgfxo" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
@@ -160,6 +169,7 @@
     <Folder Include="SceneEntityProcessor\" />
     <Folder Include="SceneOne\" />
     <Folder Include="Content\nez\" />
+    <Folder Include="Content\nez\effects\" />
   </ItemGroup>
   <ItemGroup>
     <InterfaceDefinition Include="MainMenu.xib" />
