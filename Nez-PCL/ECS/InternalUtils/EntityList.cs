@@ -7,15 +7,13 @@ namespace Nez
 {
 	public class EntityList : IEnumerable<Entity>, IEnumerable
 	{
-		// global updateOrder sort for Entity lists
-		internal static Comparison<Entity> compareEntityOrder = ( a, b ) => { return Math.Sign( b._actualUpdateOrder - a._actualUpdateOrder ); };
-
 		public Scene scene;
 
 		/// <summary>
 		/// list of entities added to the scene
 		/// </summary>
 		List<Entity> _entities = new List<Entity>();
+
 		/// <summary>
 		/// The list of entities that were added this frame. Used to group the entities so we can process them simultaneously
 		/// </summary>
@@ -25,6 +23,7 @@ namespace Nez
 		/// The list of entities that were marked for removal this frame. Used to group the entities so we can process them simultaneously
 		/// </summary>
 		List<Entity> _entitiesToRemove = new List<Entity>();
+
 		/// <summary>
 		/// flag used to determine if we need to sort our entities this frame
 		/// </summary>
@@ -46,7 +45,7 @@ namespace Nez
 		}
 
 
-		public void markTagUnsorted()
+		public void markEntityListUnsorted()
 		{
 			_isEntityListUnsorted = true;
 		}
@@ -143,7 +142,6 @@ namespace Nez
 					_entities.Add( entity );
 					entity.scene = scene;
 					entity.onAddedToScene();
-					scene.setActualOrder( entity );
 
 					// handle the tagList
 					addToTagList( entity );
@@ -162,7 +160,7 @@ namespace Nez
 
 			if( _isEntityListUnsorted )
 			{
-				_entities.Sort( compareEntityOrder );
+				_entities.Sort();
 				_isEntityListUnsorted = false;
 			}
 
@@ -172,7 +170,7 @@ namespace Nez
 				for( var i = 0; i < _unsortedTags.Count; i++ )
 				{
 					var tag = _unsortedTags[i];
-					_entityDict[tag].Sort( EntityList.compareEntityOrder );
+					_entityDict[tag].Sort();
 				}
 
 				_unsortedTags.Clear();

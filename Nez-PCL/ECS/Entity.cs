@@ -6,7 +6,7 @@ using System.Linq;
 
 namespace Nez
 {
-	public class Entity
+	public class Entity : IComparable<Entity>
 	{
 		/// <summary>
 		/// the scene this entity belongs to
@@ -113,7 +113,10 @@ namespace Nez
 				{
 					_updateOrder = value;
 					if( scene != null )
-						scene.setActualOrder( this );
+					{
+						scene.entities.markEntityListUnsorted();
+						scene.entities.markTagUnsorted( tag );
+					}
 				}
 			}
 		}
@@ -329,6 +332,12 @@ namespace Nez
 		}
 
 		#endregion
+
+
+		public int CompareTo( Entity other )
+		{
+			return _actualUpdateOrder.CompareTo( other._actualUpdateOrder );
+		}
 
 
 		public override string ToString()

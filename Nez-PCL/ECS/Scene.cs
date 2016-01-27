@@ -178,7 +178,6 @@ namespace Nez
 		Action<Texture2D> _screenshotRequestCallback;
 
 		List<Renderer> _renderers = new List<Renderer>();
-		Dictionary<int,double> _actualEntityOrderLookup = new Dictionary<int,double>();
 		readonly List<PostProcessor> _postProcessors = new List<PostProcessor>();
 
 
@@ -584,30 +583,6 @@ namespace Nez
 		public bool onInterval( float interval )
 		{
 			return (int)( ( Time.timeSinceSceneLoad - Time.deltaTime ) / interval ) < (int)( Time.timeSinceSceneLoad / interval );
-		}
-
-
-		/// <summary>
-		/// handles fine grained ordering of entities. When an entity sets it's order this method will be called which will
-		/// set the actualOrder of the entity.
-		/// </summary>
-		/// <param name="entity">Entity.</param>
-		internal void setActualOrder( Entity entity )
-		{
-			const double theta = .000001f;
-
-			// if an entity is already at the requested depth we increment the depth by theta and set the entities actual depth based on
-			// the already present depth value from the previous entity
-			double add = 0;
-			if( _actualEntityOrderLookup.TryGetValue( entity._updateOrder, out add ) )
-				_actualEntityOrderLookup[entity._updateOrder] += theta;
-			else
-				_actualEntityOrderLookup.Add( entity._updateOrder, theta );
-			entity._actualUpdateOrder = entity._updateOrder - add;
-
-			// mark lists unsorted
-			entities.markTagUnsorted();
-			entities.markTagUnsorted( entity.tag );
 		}
 
 		#endregion
