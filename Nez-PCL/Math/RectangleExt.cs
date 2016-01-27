@@ -300,9 +300,9 @@ namespace Nez
 		/// <returns>The swept broadphase box.</returns>
 		/// <param name="velocityX">Velocity x.</param>
 		/// <param name="velocityY">Velocity y.</param>
-		public static Rectangle getSweptBroadphaseBounds( this Rectangle rect, float deltaX, float deltaY )
+		public static Rectangle getSweptBroadphaseBounds( ref Rectangle rect, float deltaX, float deltaY )
 		{
-			return rect.getSweptBroadphaseBounds( (int)deltaX, (int)deltaY );
+			return getSweptBroadphaseBounds( ref rect, (int)deltaX, (int)deltaY );
 		}
 
 
@@ -312,7 +312,7 @@ namespace Nez
 		/// <returns>The swept broadphase box.</returns>
 		/// <param name="velocityX">Velocity x.</param>
 		/// <param name="velocityY">Velocity y.</param>
-		public static Rectangle getSweptBroadphaseBounds( this Rectangle rect, int deltaX, int deltaY )
+		public static Rectangle getSweptBroadphaseBounds( ref Rectangle rect, int deltaX, int deltaY )
 		{
 			var broadphasebox = Rectangle.Empty;
 

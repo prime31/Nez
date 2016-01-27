@@ -55,7 +55,7 @@ namespace Nez.Particles
 
 			// set some sensible defaults
 			collisionConfig.bounce = 0f;
-			collisionConfig.collidesWithLayers = Physics.AllLayers;
+			collisionConfig.collidesWithLayers = Physics.allLayers;
 			collisionConfig.dampen = 0f;
 			collisionConfig.gravity = _emitterConfig.gravity;
 			collisionConfig.lifetimeLoss = 0f;

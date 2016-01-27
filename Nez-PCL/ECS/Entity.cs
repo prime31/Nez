@@ -275,8 +275,11 @@ namespace Nez
 			// remove ourself from the physics system until after we are done moving
 			Physics.removeCollider( colliders.mainCollider, true );
 
-			// fetch anything that we might collide with along the way
-			var neighbors = Physics.boxcastBroadphaseExcludingSelf( colliders.mainCollider, motion.X, motion.Y );
+			// fetch anything that we might collide with at our new position
+			var bounds = colliders.mainCollider.bounds;
+			bounds.X += (int)motion.X;
+			bounds.Y += (int)motion.Y;
+			var neighbors = Physics.boxcastBroadphase( ref bounds );
 
 			// if we have more than one possible collision we have to break this up into separate x/y movement. Note that this is only necessary
 			// for certain types of movement such as gravity based systems due to the SAT collision response being shortest distance
