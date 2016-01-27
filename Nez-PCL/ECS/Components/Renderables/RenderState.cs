@@ -5,7 +5,7 @@ using Microsoft.Xna.Framework;
 
 namespace Nez
 {
-	public class RenderState
+	public class RenderState : IComparable<RenderState>
 	{
 		/// <summary>
 		/// BlendState used by the SpriteBatch for the current RenderableComponent
@@ -204,6 +204,25 @@ namespace Nez
 		/// <param name="camera">Camera.</param>
 		public virtual void onPreRender( Camera camera )
 		{}
+
+
+		/// <Docs>To be added.</Docs>
+		/// <para>Returns the sort order of the current instance compared to the specified object.</para>
+		/// <summary>
+		/// very basic here. We only check if the pointers are the same
+		/// </summary>
+		/// <returns>The to.</returns>
+		/// <param name="other">Other.</param>
+		public int CompareTo( RenderState other )
+		{
+			if( object.ReferenceEquals( other, null ) )
+				return 1;
+
+			if( object.ReferenceEquals( this, other ) )
+				return 0;
+
+			return -1;
+		}
 
 	}
 }

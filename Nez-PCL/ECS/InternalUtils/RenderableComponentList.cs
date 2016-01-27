@@ -7,36 +7,6 @@ namespace Nez
 {
 	public class RenderableComponentList : IEnumerable<RenderableComponent>, IEnumerable
 	{
-		// global sorts for RenderableComponent lists. The main list is sorted by renderLayer first then layerDepth. Each renderLayerList is sorted by layerDepth.
-
-		/// <summary>
-		/// sorts the renderLayer lists. The sort is first by layerDepth and then by renderState so that all common renderStates are together
-		/// to avoid state switches.
-		/// </summary>
-		internal static Comparison<RenderableComponent> compareComponentsRenderLayer = ( a, b ) =>
-		{
-			var res = Math.Sign( b.layerDepth - a.layerDepth );
-			if( res == 0 && b.renderState != null )
-				return b.renderState.CompareTo( a.renderState );
-			return res;
-		};
-
-		/// <summary>
-		/// sorts the main components list. The sort is first by renderLayer, then layerDepth and finally by renderState
-		/// </summary>
-		internal static Comparison<RenderableComponent> compareComponents = ( a, b ) =>
-		{
-			var res = b.renderLayer.CompareTo( a.renderLayer );
-			if( res == 0 )
-			{
-				var layerDepthRes = b.layerDepth.CompareTo( a.layerDepth );
-				if( layerDepthRes == 0 && b.renderState != null )
-					return b.renderState.CompareTo( a.renderState );
-			}
-
-			return res;
-		};
-
 		/// <summary>
 		/// list of components added to the entity
 		/// </summary>
@@ -113,14 +83,14 @@ namespace Nez
 		{
 			if( _componentsNeedSort )
 			{
-				_components.Sort( compareComponents );
+				_components.Sort();
 				_componentsNeedSort = false;
 			}
 			
 			if( _unsortedRenderLayers.Count > 0 )
 			{
 				foreach( var renderLayer in _unsortedRenderLayers )
-					_componentsByRenderLayer[renderLayer].Sort( compareComponentsRenderLayer );
+					_componentsByRenderLayer[renderLayer].Sort();
 
 				_unsortedRenderLayers.Clear();
 			}

@@ -24,6 +24,7 @@ namespace Nez
 		/// </summary>
 		List<Component> _componentsToRemove = new List<Component>();
 
+
 		public ComponentList( Entity entity )
 		{
 			this._entity = entity;
@@ -225,6 +226,7 @@ namespace Nez
 					_components[i].debugRender( graphics );
 			}
 		}
+
 
 		#region IEnumerable and array access
 

@@ -95,7 +95,6 @@ namespace Nez.Tiled
 
 					var tileRegion = tilemap.getTileRegion( tile.id );
 
-					// not exactly sure why we need to compensate 1 pixel here. Could be a bug in MonoGame?
 					var tx = tile.x * tilemap.tileWidth + (int)position.X;
 					var ty = tile.y * tilemap.tileHeight + (int)position.Y;
 					var rotation = 0f;

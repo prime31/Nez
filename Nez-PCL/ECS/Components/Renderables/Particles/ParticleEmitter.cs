@@ -57,7 +57,7 @@ namespace Nez.Particles
 			collisionConfig.bounce = 0f;
 			collisionConfig.collidesWithLayers = Physics.AllLayers;
 			collisionConfig.dampen = 0f;
-			collisionConfig.gravity = new Vector2( 0f, 100f );
+			collisionConfig.gravity = _emitterConfig.gravity;
 			collisionConfig.lifetimeLoss = 0f;
 			collisionConfig.minKillSpeed = float.MaxValue;
 			collisionConfig.radiusScale = 0.5f;

@@ -8,8 +8,10 @@ namespace Nez
 	/// <summary>
 	/// by default, a RenderableComponent faces up/right. You can use the flipX/Y or face* method to adjust that to suit your needs.
 	/// </summary>
-	public abstract class RenderableComponent : Component
+	public abstract class RenderableComponent : Component, IComparable<RenderableComponent>
 	{
+		#region properties and fields
+
 		/// <summary>
 		/// used by Renderers to specify how this sprite should be rendered.
 		/// </summary>
@@ -178,13 +180,36 @@ namespace Nez
 			get { return new Vector2( _origin.X / width, _origin.Y / height ); }
 			set { origin = new Vector2( value.X * width, value.Y * height ); }
 		}
+			
+		protected bool _isVisible;
+		public bool isVisible
+		{
+			get { return _isVisible; }
+			protected set
+			{
+				if( _isVisible != value )
+				{
+					_isVisible = value;
+
+					if( _isVisible )
+						onBecameVisible();
+					else
+						onBecameInvisible();
+				}
+			}
+		}
 
 		protected bool _areBoundsDirty = true;
+
+
+		#endregion
 
 
 		public RenderableComponent()
 		{}
 
+
+		#region Component overrides and RenderableComponent
 
 		public override void onEntityPositionChanged()
 		{
@@ -214,6 +239,47 @@ namespace Nez
 			graphics.spriteBatch.drawPixel( renderPosition, Color.DarkOrchid, 4 );
 		}
 
+
+		/// <summary>
+		/// called when the Renderable enters the camera frame. Note that these methods will not be called if your render method does not use
+		/// isVisibleFromCamera for its culling check.
+		/// </summary>
+		protected virtual void onBecameVisible()
+		{}
+
+
+		/// <summary>
+		/// called when the renderable exits the camera frame. Note that these methods will not be called if your render method does not use
+		/// isVisibleFromCamera for its culling check.
+		/// </summary>
+		protected virtual void onBecameInvisible()
+		{}
+
+
+		/// <summary>
+		/// returns true if the Renderables bounds intersects the Camera.bounds. Handles state switches for the isVisible flag. Use this method
+		/// in your render method to see decide if you should render or not.
+		/// </summary>
+		/// <returns><c>true</c>, if visible from camera was ised, <c>false</c> otherwise.</returns>
+		/// <param name="camera">Camera.</param>
+		protected bool isVisibleFromCamera( Camera camera )
+		{
+			if( camera.bounds.Intersects( bounds ) )
+			{
+				isVisible = true;
+				return true;
+			}
+			else
+			{
+				isVisible = false;
+				return false;
+			}
+		}
+
+		#endregion
+
+
+		#region public API
 
 		public void faceLeft()
 		{
@@ -279,6 +345,29 @@ namespace Nez
 			_localPosition = originalPosition;
 			color = originalColor;
 			_layerDepth = originalLayerDepth;
+		}
+
+		#endregion
+
+
+		/// <Docs>To be added.</Docs>
+		/// <para>Returns the sort order of the current instance compared to the specified object.</para>
+		/// <summary>
+		/// sorted first by renderLayer, then layerDepth and finally renderState
+		/// </summary>
+		/// <returns>The to.</returns>
+		/// <param name="other">Other.</param>
+		public int CompareTo( RenderableComponent other )
+		{
+			var res = other.renderLayer.CompareTo( renderLayer );
+			if( res == 0 )
+			{
+				var layerDepthRes = other.layerDepth.CompareTo( layerDepth );
+				if( layerDepthRes == 0 && other.renderState != null )
+					return other.renderState.CompareTo( renderState );
+			}
+
+			return res;
 		}
 
 	}

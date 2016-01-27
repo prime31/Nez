@@ -138,7 +138,7 @@ namespace Nez
 
 		public override void render( Graphics graphics, Camera camera )
 		{
-			if( camera.bounds.Intersects( bounds ) )
+			if( isVisibleFromCamera( camera ) )
 			{
 				_basicEffect.Projection = camera.getProjectionMatrix();
 				_basicEffect.View = camera.transformMatrix;
