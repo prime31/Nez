@@ -154,6 +154,8 @@
     <Content Include="Content\nez\effects\Noise.mgfxo" />
     <Content Include="Content\nez\effects\SpriteBlinkEffect.mgfxo" />
     <Content Include="Content\nez\effects\Twist.mgfxo" />
+    <Content Include="Content\nez\effects\Vignette.mgfxo" />
+    <Content Include="Content\nez\effects\Scanlines.mgfxo" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

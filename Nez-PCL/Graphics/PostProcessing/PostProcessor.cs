@@ -46,12 +46,6 @@ namespace Nez
 		/// </summary>
 		public BlendState blendState = BlendState.Opaque;
 
-		/// <summary>
-		/// each scene can have only one final render delegate. If this is true, the handleFinalRender method will be called on
-		/// this PostProcessor and the scene will not render anything to the screen at all.
-		/// </summary>
-		public bool isFinalRenderDelegate;
-
 
 		public PostProcessor( int executionOrder, Effect effect = null )
 		{

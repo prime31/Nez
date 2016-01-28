@@ -269,6 +269,9 @@ namespace MacTester
 			entity.colliders.add( new CircleCollider() );
 
 
+			scene.addPostProcessor( new ScanlinesPostProcessor( 0 ) );
+			scene.addPostProcessor( new VignettePostProcessor( 1 ) );
+
 			return scene;
 		}
 

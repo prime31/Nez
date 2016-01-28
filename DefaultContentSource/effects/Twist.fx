@@ -5,14 +5,14 @@ float angle; // 5.0
 float2 offset; // 0.5, 0.5
 
 
-float4 PixelShaderFunction( float2 coords:TEXCOORD0, in float2 screenPos:VPOS ) : COLOR0
+float4 PixelShaderFunction( float2 texCoord:TEXCOORD0 ) : COLOR0
 {
-    float2 coord = coords - offset;
+    float2 coord = texCoord - offset;
     float dist = length( coord );
 
     if( dist < radius )
     {
-        float ratio = (radius - dist) / radius;
+        float ratio = ( radius - dist ) / radius;
         float angleMod = ratio * ratio * angle;
         float s = sin( angleMod );
         float c = cos( angleMod );

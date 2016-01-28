@@ -223,5 +223,9 @@
     <Compile Include="Graphics\Effects\DotsEffect.cs" />
     <Compile Include="Graphics\Effects\SpriteBlinkEffect.cs" />
     <Compile Include="ECS\Components\Renderables\Sprites\TiledSprite.cs" />
+    <Compile Include="Graphics\PostProcessing\PostProcessors\VignettePostProcessor.cs" />
+    <Compile Include="Graphics\PostProcessing\PostProcessors\ScanlinesPostProcessor.cs" />
+    <Compile Include="Graphics\PostProcessing\PostProcessorT.cs" />
+    <Compile Include="Graphics\Effects\ScanlinesEffect.cs" />
   </ItemGroup>
 </Project>

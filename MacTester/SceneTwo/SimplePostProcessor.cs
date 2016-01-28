@@ -8,7 +8,7 @@ using System.IO;
 
 namespace MacTester
 {
-	public class SimplePostProcessor : PostProcessor
+	public class SimplePostProcessor : PostProcessor<Effect>
 	{
 		public Rectangle sourceRect;
 

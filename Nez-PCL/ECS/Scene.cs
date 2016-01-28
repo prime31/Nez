@@ -342,9 +342,9 @@ namespace Nez
 			if( _screenshotRequestCallback != null )
 			{
 				var tex = new Texture2D( Core.graphicsDevice, _sceneRenderTexture.renderTarget2D.Width, _sceneRenderTexture.renderTarget2D.Height );
-				var data = new Color[tex.Bounds.Width * tex.Bounds.Height];
-				( Mathf.isEven( enabledCounter ) ? _sceneRenderTexture : _destinationRenderTexture ).renderTarget2D.GetData<Color>( data );
-				tex.SetData<Color>( data );
+				var data = new int[tex.Bounds.Width * tex.Bounds.Height];
+				( Mathf.isEven( enabledCounter ) ? _sceneRenderTexture : _destinationRenderTexture ).renderTarget2D.GetData<int>( data );
+				tex.SetData<int>( data );
 				_screenshotRequestCallback( tex );
 
 				_screenshotRequestCallback = null;
@@ -604,6 +604,11 @@ namespace Nez
 		}
 
 
+		/// <summary>
+		/// adds a PostProcessor to the scene. Sets the scene field and calls PostProcessor.onAddedToScene so that PostProcessors can load
+		/// resources using the scenes ContentManager.
+		/// </summary>
+		/// <param name="postProcessor">Post processor.</param>
 		public void addPostProcessor( PostProcessor postProcessor )
 		{
 			_postProcessors.Add( postProcessor );
@@ -617,6 +622,11 @@ namespace Nez
 		}
 
 
+		/// <summary>
+		/// removes a PostProcessor. Note that unload is not called when removing so if you no longer need the PostProcessor be sure to call
+		/// unload to free resources.
+		/// </summary>
+		/// <param name="step">Step.</param>
 		public void removePostProcessor( PostProcessor step )
 		{
 			_postProcessors.Remove( step );
@@ -707,7 +717,12 @@ namespace Nez
 
 		#region Entity System Processors
 
-		public EntitySystem addProcessor( EntitySystem processor )
+		/// <summary>
+		/// adds an EntitySystem processor to the scene
+		/// </summary>
+		/// <returns>The processor.</returns>
+		/// <param name="processor">Processor.</param>
+		public EntitySystem addEntityProcessor( EntitySystem processor )
 		{
 			processor.scene = this;
 			entityProcessors.add( processor );
@@ -715,13 +730,22 @@ namespace Nez
 		}
 
 
-		public void removeProcessor( EntitySystem processor )
+		/// <summary>
+		/// Removes an EntitySystem processor from the scene
+		/// </summary>
+		/// <param name="processor">Processor.</param>
+		public void removeEntityProcessor( EntitySystem processor )
 		{
 			entityProcessors.remove( processor );
 		}
 
 
-		public T getProcessor<T>() where T : EntitySystem
+		/// <summary>
+		/// Gets an EntitySystem processor
+		/// </summary>
+		/// <returns>The processor.</returns>
+		/// <typeparam name="T">The 1st type parameter.</typeparam>
+		public T getEntityProcessor<T>() where T : EntitySystem
 		{
 			return entityProcessors.getProcessor<T>();
 		}

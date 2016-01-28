@@ -37,7 +37,7 @@ public override void process( Entity entity )
 {
 	var damage = entity.getComponent<DamageComponent>();
 	var colliders = Physics.boxcastBroadphase( entity.colliders.mainCollider.bounds, damage.layerMask );
-	
+
 	foreach( var coll in colliders )
 	{
 		if( entity.colliders.mainCollider.collidesWith( coll, out collResult ) )
@@ -144,13 +144,13 @@ Using matchers
 Matchers are passed during creation of an EntitySystem and define what components the system is interested in.
 
 ```
-myScene.addProcessor( new PlayerControlSystem( new Matcher().all( typeof( PlayerControlComponent ) ) ) );
+myScene.addEntityProcessor( new PlayerControlSystem( new Matcher().all( typeof( PlayerControlComponent ) ) ) );
 ```
 
 You can pass an arbitrary number of matchers to the constructor of EntitySystem.
 
 ```
-myScene.addProcessor( new BulletCollisionSystem( new Matcher().all( typeof( DamageComponent ), typeof( BulletComponent ) ) ) );
+myScene.addEntityProcessor( new BulletCollisionSystem( new Matcher().all( typeof( DamageComponent ), typeof( BulletComponent ) ) ) );
 ```
 
 A matcher can either match all entities that have a list of components, or it can match against entities that have at least one of a list of components, or it can match against entites that do not have a certain component.
