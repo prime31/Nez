@@ -9,7 +9,7 @@ float4 mainPS( float2 texCoord:TEXCOORD0 ) : COLOR0
 	float4 color = tex2D( s0, texCoord );
 	float2 dist = ( texCoord - 0.5f ) * _radius;
 	dist.x = 1 - dot( dist, dist ) * _power;
-	color *= dist.x;
+	color.rgb *= dist.x;
 
 	return color;
 }
