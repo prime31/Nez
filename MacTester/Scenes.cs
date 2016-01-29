@@ -78,10 +78,14 @@ namespace MacTester
 			// load a TiledMap and move it back so is drawn before other entities
 			var tiledEntity = scene.createAndAddEntity<Entity>( "tiled-map-entity" );
 			var tiledmap = scene.contentManager.Load<TiledMap>( "bin/MacOSX/Tilemap/tilemap" );
-			var tc1 = tiledEntity.addComponent( new TiledMapComponent( tiledmap, "collision" ) );
-			tc1.layerIndicesToRender = new List<int>() { 0, 1, 2 };
 
-			var tc2 = tiledEntity.addComponent( new TiledMapComponent( tiledmap ) );
+			var tc1 = new TiledMapComponent( tiledmap, "collision" );
+			tc1.layerIndicesToRender = new List<int>() { 0, 1, 2 };
+			tiledEntity.addComponent( tc1 );
+
+
+			var tc2 = new TiledMapComponent( tiledmap );
+			tiledEntity.addComponent( tc2 );
 			tc2.renderLayer = 1;
 			tc2.layerIndicesToRender = new List<int>() { 3 };
 
@@ -153,9 +157,10 @@ namespace MacTester
 			var sprite = new Sprite<int>( 1, anotherAtlas.getSpriteAnimation( "hardLanding" ) );
 			sprite.addAnimation( 0, spriteAnimation );
 			sprite.play( 1 );
-			entity.addComponent( sprite );
-			entity.addComponent( new SimpleMoonMover() );
-			entity.addComponent( new SpriteTrail( sprite ) ).enableSpriteTrail();
+			entity.addComponent( sprite )
+				.addComponent( new SimpleMoonMover() )
+				.addComponent( new SpriteTrail( sprite ) );
+			entity.getComponent<SpriteTrail>().enableSpriteTrail();
 
 
 			// add a post processor to display the RenderTexture
@@ -197,11 +202,11 @@ namespace MacTester
 
 			// create a player moon
 			var entity = scene.createAndAddEntity<Entity>( "player-moon" );
-			entity.addComponent( new SimpleMoonMover() );
 			entity.position = new Vector2( 220, 220 );
 			var sprite = new Sprite( moonTexture );
-			entity.addComponent( sprite );
-			entity.addComponent( new SimpleMoonOutlineRenderer( sprite ) );
+			entity.addComponent( sprite )
+				.addComponent( new SimpleMoonOutlineRenderer( sprite ) )
+				.addComponent( new SimpleMoonMover() );
 
 			if( useBoxColliders )
 				entity.colliders.add( new BoxCollider() );
@@ -211,8 +216,8 @@ namespace MacTester
 
 			// add a follow camera
 			var camFollow = scene.createAndAddEntity<Entity>( "camera-follow" );
-			camFollow.addComponent( new FollowCamera( entity ) );
-			camFollow.addComponent( new CameraShake() );
+			camFollow.addComponent( new FollowCamera( entity ) )
+				.addComponent( new CameraShake() );
 
 			return scene;
 		}

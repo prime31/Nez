@@ -8,6 +8,8 @@ namespace Nez
 {
 	public class Entity : IComparable<Entity>
 	{
+		#region properties and fields
+
 		/// <summary>
 		/// the scene this entity belongs to
 		/// </summary>
@@ -127,6 +129,9 @@ namespace Nez
 			get { return _componentBits; }
 		}
 
+		#endregion
+
+
 		public Entity()
 		{
 			components = new ComponentList( this );
@@ -139,6 +144,8 @@ namespace Nez
 			this.name = name;
 		}
 
+
+		#region Entity lifecycle methods
 
 		/// <summary>
 		/// Called when this entity is added to a scene
@@ -189,27 +196,22 @@ namespace Nez
 			colliders.debugRender( graphics );
 		}
 
+		#endregion
+
 
 		#region Component Management
 
 		/// <summary>
-		/// Adds a Component to the components list
+		/// Adds a Component to the components list. Returns this for chaining.
 		/// </summary>
-		public void addComponent( Component component )
+		/// <returns>The component.</returns>
+		/// <param name="component">Component.</param>
+		/// <typeparam name="T">The 1st type parameter.</typeparam>
+		public Entity addComponent<T>( T component ) where T : Component
 		{
 			component.entity = this;
 			components.add( component );
-		}
-
-
-		/// <summary>
-		/// Adds a Component to the components list returning it
-		/// </summary>
-		public T addComponent<T>( T component ) where T : Component
-		{
-			component.entity = this;
-			components.add( component );
-			return component;
+			return this;
 		}
 
 
