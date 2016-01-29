@@ -260,7 +260,7 @@ namespace Nez
 
 
 		/// <summary>
-		/// this takes into account the SceneResolutionPolicy and returns the value scaled to the RenderTextures coordinates
+		/// this takes into account the SceneResolutionPolicy and returns the value scaled to the RenderTargets coordinates
 		/// </summary>
 		/// <value>The scaled mouse position.</value>
 		public static Vector2 scaledMousePosition

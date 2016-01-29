@@ -17,7 +17,7 @@ namespace Nez
 
 		Effect effect;
 		Texture2D _mosaicTexture;
-		RenderTexture _mosaicRenderTex;
+		RenderTarget2D _mosaicRenderTex;
 		int _lastMosaicScale = -1;
 
 
@@ -68,16 +68,21 @@ namespace Nez
 				_lastMosaicScale = scene.pixelPerfectScale;
 			}
 
-			if( _mosaicRenderTex != null && _mosaicRenderTex.renderTarget2D.IsDisposed )
-				_mosaicRenderTex.resize( newWidth * scene.pixelPerfectScale, newHeight * scene.pixelPerfectScale );
+			if( _mosaicRenderTex != null )
+			{
+				_mosaicRenderTex.Dispose();
+				_mosaicRenderTex = new RenderTarget2D( Core.graphicsDevice, newWidth * scene.pixelPerfectScale, newHeight * scene.pixelPerfectScale, false, SurfaceFormat.Color, DepthFormat.None );
+			}
 			else
-				_mosaicRenderTex = new RenderTexture( newWidth * scene.pixelPerfectScale, newHeight * scene.pixelPerfectScale, DepthFormat.None );
+			{
+				_mosaicRenderTex = new RenderTarget2D( Core.graphicsDevice, newWidth * scene.pixelPerfectScale, newHeight * scene.pixelPerfectScale, false, SurfaceFormat.Color, DepthFormat.None );
+			}
 
 			// based on the look of games by: http://deepnight.net/games/strike-of-rage/
-			// use the mosaic to render to a full sized RenderTexture repeating the mosaic
+			// use the mosaic to render to a full sized RenderTarget repeating the mosaic
 			Core.graphicsDevice.SetRenderTarget( _mosaicRenderTex );
 			Graphics.instance.spriteBatch.Begin( 0, BlendState.Opaque, SamplerState.PointWrap, DepthStencilState.None, RasterizerState.CullNone, effect );
-			Graphics.instance.spriteBatch.Draw( _mosaicTexture, Vector2.Zero, new Rectangle( 0, 0, _mosaicRenderTex.renderTarget2D.Width, _mosaicRenderTex.renderTarget2D.Height ), Color.White );
+			Graphics.instance.spriteBatch.Draw( _mosaicTexture, Vector2.Zero, new Rectangle( 0, 0, _mosaicRenderTex.Width, _mosaicRenderTex.Height ), Color.White );
 			Graphics.instance.spriteBatch.End();
 
 			// let our Effect know about our rendered, full screen mosaic
@@ -85,7 +90,7 @@ namespace Nez
 		}
 
 
-		public void handleFinalRender( Color letterboxColor, RenderTexture source, Rectangle finalRenderDestinationRect, SamplerState samplerState )
+		public void handleFinalRender( Color letterboxColor, RenderTarget2D source, Rectangle finalRenderDestinationRect, SamplerState samplerState )
 		{
 			// we can just draw directly to the screen here with our effect
 			Core.graphicsDevice.SetRenderTarget( null );
@@ -99,7 +104,7 @@ namespace Nez
 		public void unload()
 		{
 			_mosaicTexture.Dispose();
-			_mosaicRenderTex.unload();
+			_mosaicRenderTex.Dispose();
 		}
 
 	}

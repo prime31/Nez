@@ -16,9 +16,9 @@ namespace Nez
 		public BloomSettings settings;
 
 		/// <summary>
-		/// scale of the internal RenderTextures. For high resolution renders a half sized RT is usually more than enough.
+		/// scale of the internal RenderTargets. For high resolution renders a half sized RT is usually more than enough.
 		/// </summary>
-		public int renderTextureScale = 1;
+		public int renderTargetScale = 1;
 
 		Effect _bloomExtractEffect;
 		Effect _bloomCombineEffect;
@@ -47,8 +47,8 @@ namespace Nez
 			// Create two rendertargets for the bloom processing. These are half the size of the backbuffer, in order to minimize fillrate costs. Reducing
 			// the resolution in this way doesn't hurt quality, because we are going to be blurring the bloom images in any case.
 			// the demo uses a tiny backbuffer so no need to reduce size any further
-			newWidth *= renderTextureScale;
-			newHeight *= renderTextureScale;
+			newWidth *= renderTargetScale;
+			newHeight *= renderTargetScale;
 
 			_renderTarget1 = new RenderTarget2D( Core.graphicsDevice, newWidth, newHeight, false, Screen.backBufferFormat, DepthFormat.None );
 			_renderTarget2 = new RenderTarget2D( Core.graphicsDevice, newWidth, newHeight, false, Screen.backBufferFormat, DepthFormat.None );
@@ -129,7 +129,7 @@ namespace Nez
 		}
 
 
-		public override void process( RenderTexture source, RenderTexture destination )
+		public override void process( RenderTarget2D source, RenderTarget2D destination )
 		{
 			Core.graphicsDevice.SamplerStates[1] = SamplerState.LinearClamp;
 

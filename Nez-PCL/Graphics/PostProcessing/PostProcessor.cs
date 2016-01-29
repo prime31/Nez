@@ -9,13 +9,8 @@ namespace Nez
 	/// <summary>
 	/// Post Processing step for rendering actions after everthing done.
 	/// </summary>
-	public class PostProcessor
+	public class PostProcessor : IComparable<PostProcessor>
 	{
-		internal static Comparison<PostProcessor> comparePostProcessorOrder = ( a, b ) =>
-		{
-			return Math.Sign( b.executionOrder - a.executionOrder );
-		};
-
 		/// <summary>
 		/// Step is Enabled or not.
 		/// </summary>
@@ -64,7 +59,7 @@ namespace Nez
 
 
 		/// <summary>
-		/// called when the default scene RenderTexture is resized
+		/// called when the default scene RenderTarget is resized
 		/// </summary>
 		/// <param name="newWidth">New width.</param>
 		/// <param name="newHeight">New height.</param>
@@ -74,12 +69,12 @@ namespace Nez
 
 		/// <summary>
 		/// this is the meat method here. The source passed in contains the full scene with any previous PostProcessors
-		/// rendering. Render it into the destination RenderTexture. The drawFullScreenQuad methods are there to make
+		/// rendering. Render it into the destination RenderTarget. The drawFullScreenQuad methods are there to make
 		/// the process even easier
 		/// </summary>
 		/// <param name="source">Source.</param>
 		/// <param name="destination">Destination.</param>
-		public virtual void process( RenderTexture source, RenderTexture destination )
+		public virtual void process( RenderTarget2D source, RenderTarget2D destination )
 		{
 			drawFullscreenQuad( source, destination, effect );
 		}
@@ -95,10 +90,10 @@ namespace Nez
 		/// <summary>
 		/// helper for drawing a texture into a rendertarget, optionally using a custom shader to apply postprocessing effects.
 		/// </summary>
-		protected void drawFullscreenQuad( Texture2D texture, RenderTarget2D renderTexture, Effect effect = null )
+		protected void drawFullscreenQuad( Texture2D texture, RenderTarget2D renderTarget, Effect effect = null )
 		{
-			Core.graphicsDevice.SetRenderTarget( renderTexture );
-			drawFullscreenQuad( texture, renderTexture.Width, renderTexture.Height, effect );
+			Core.graphicsDevice.SetRenderTarget( renderTarget );
+			drawFullscreenQuad( texture, renderTarget.Width, renderTarget.Height, effect );
 		}
 
 
@@ -110,6 +105,12 @@ namespace Nez
 			Graphics.instance.spriteBatch.Begin( 0, blendState, samplerState, DepthStencilState.None, RasterizerState.CullNone, effect );
 			Graphics.instance.spriteBatch.Draw( texture, new Rectangle( 0, 0, width, height ), Color.White );
 			Graphics.instance.spriteBatch.End();
+		}
+
+
+		public int CompareTo( PostProcessor other )
+		{
+			return other.executionOrder.CompareTo( executionOrder );
 		}
 
 	}

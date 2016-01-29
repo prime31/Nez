@@ -12,24 +12,24 @@ namespace MacTester
 	{
 		public Rectangle sourceRect;
 
-		RenderTexture _renderTexture;
+		RenderTarget2D _renderTarget;
 
 
-		public SimplePostProcessor( RenderTexture renderTexture, Effect effect ) : base( 0 )
+		public SimplePostProcessor( RenderTarget2D renderTarget, Effect effect ) : base( 0 )
 		{
-			_renderTexture = renderTexture;
+			_renderTarget = renderTarget;
 			this.effect = effect;
-			sourceRect = new Rectangle( 250, 10, _renderTexture.renderTarget2D.Bounds.Width * 2, _renderTexture.renderTarget2D.Bounds.Height * 2 );
+			sourceRect = new Rectangle( 250, 10, _renderTarget.Bounds.Width * 2, _renderTarget.Bounds.Height * 2 );
 		}
 
 
-		public override void process( RenderTexture source, RenderTexture destination  )
+		public override void process( RenderTarget2D source, RenderTarget2D destination  )
 		{
 			Core.graphicsDevice.SetRenderTarget( destination );
 
 			Graphics.instance.spriteBatch.Begin( effect: effect );
 			Graphics.instance.spriteBatch.Draw( source, Vector2.Zero, Color.White );
-			Graphics.instance.spriteBatch.Draw( _renderTexture, null, sourceRect );
+			Graphics.instance.spriteBatch.Draw( _renderTarget, null, sourceRect );
 			Graphics.instance.spriteBatch.End();
 		}
 	}

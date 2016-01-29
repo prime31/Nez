@@ -9,8 +9,20 @@ namespace Nez.Sprites
 {
 	public class ScrollingSprite : Sprite
 	{
-		public float scrollSpeedX = 100f;
-		public float scrollSpeedY = 100f;
+		public float scrollSpeedX = 0;
+		public float scrollSpeedY = 0;
+
+		public int scrollX
+		{
+			get { return _sourceRect.X; }
+			set { _sourceRect.X = value; }
+		}
+
+		public int scrollY
+		{
+			get { return _sourceRect.Y; }
+			set { _sourceRect.Y = value; }
+		}
 
 		/// <summary>
 		/// we keep a copy of the sourceRect so that we dont change the Subtexture in case it is used elsewhere

@@ -27,7 +27,7 @@ namespace Nez
 		/// </summary>
 		/// <param name="source">Source.</param>
 		/// <param name="destination">Destination.</param>
-		public override void process( RenderTexture source, RenderTexture destination )
+		public override void process( RenderTarget2D source, RenderTarget2D destination )
 		{
 			drawFullscreenQuad( source, destination, effect );
 		}

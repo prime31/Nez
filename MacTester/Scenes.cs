@@ -68,8 +68,8 @@ namespace MacTester
 		{
 			var scene = new Scene();
 			var bloomLayerRenderer = scene.addRenderer( new RenderLayerRenderer( 1, null, -1 ) );
-			bloomLayerRenderer.renderTexture = new RenderTexture( 256, 144 );
-			bloomLayerRenderer.renderTextureClearColor = Color.Transparent;
+			bloomLayerRenderer.renderTarget = new RenderTarget2D( Core.graphicsDevice, 256, 144, false, SurfaceFormat.Color, Screen.preferredDepthStencilFormat );
+			bloomLayerRenderer.renderTargetClearColor = Color.Transparent;
 
 			scene.addRenderer( new RenderLayerExcludeRenderer( 1 ) );
 			scene.letterboxColor = Color.MonoGameOrange;
@@ -90,7 +90,7 @@ namespace MacTester
 			tc2.layerIndicesToRender = new List<int>() { 3 };
 
 
-			scene.addPostProcessor( new PixelBloomPostProcessor( bloomLayerRenderer.renderTexture, -1 ) );
+			scene.addPostProcessor( new PixelBloomPostProcessor( bloomLayerRenderer.renderTarget, -1 ) );
 
 			return scene;
 		}
@@ -104,10 +104,10 @@ namespace MacTester
 			var bmFont = scene.contentManager.Load<BitmapFont>( "bin/MacOSX/Fonts/pixelfont" );
 			bmFont.spacing = 2f;
 
-			// setup a renderer that renders everything to a RenderTexture making sure its order is before standard renderers!
+			// setup a renderer that renders everything to a RenderTarget making sure its order is before standard renderers!
 			var renderer = new DefaultRenderer( scene.camera, -1 );
-			renderer.renderTexture = new RenderTexture( 320, 240 );
-			renderer.renderTextureClearColor = Color.CornflowerBlue;
+			renderer.renderTarget = new RenderTarget2D( Core.graphicsDevice, 320, 240, false, SurfaceFormat.Color, Screen.preferredDepthStencilFormat );
+			renderer.renderTargetClearColor = Color.CornflowerBlue;
 			scene.addRenderer( renderer );
 
 			// add a standard renderer that renders to the screen
@@ -163,9 +163,9 @@ namespace MacTester
 			entity.getComponent<SpriteTrail>().enableSpriteTrail();
 
 
-			// add a post processor to display the RenderTexture
+			// add a post processor to display the RenderTarget
 			var effect = scene.contentManager.LoadEffect( "Content/Effects/Invert.ogl.mgfxo" );
-			var postProcessor = new SimplePostProcessor( renderer.renderTexture, effect );
+			var postProcessor = new SimplePostProcessor( renderer.renderTarget, effect );
 			scene.addPostProcessor( postProcessor );
 
 			return scene;
@@ -258,7 +258,11 @@ namespace MacTester
 			var moonTexture = scene.contentManager.Load<Texture2D>( "Images/moon" );
 
 			var entity = scene.createAndAddEntity<Entity>( "moon" );
-			entity.addComponent( new ScrollingSprite( moonTexture ) );
+			entity.addComponent( new ScrollingSprite( moonTexture )
+			{
+				scrollSpeedX = 75f,
+				scrollSpeedY = 75f
+			});
 			entity.position = new Vector2( 200, 200 );
 			//entity.colliders.add( new PolygonCollider( 5, 100 ) );
 			entity.colliders.add( new BoxCollider() );

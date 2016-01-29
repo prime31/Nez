@@ -9,18 +9,18 @@ using Nez;
 namespace Nez
 {
 	/// <summary>
-	/// this PostProcessor expects that the layerRenderTexture is the top-most layer and that it contains 
+	/// this PostProcessor expects that the layerRenderTarget is the top-most layer and that it contains 
 	/// </summary>
 	public class PixelBloomPostProcessor : BloomPostProcessor
 	{
-		RenderTexture _layerRT;
-		RenderTexture _tempRT;
+		RenderTarget2D _layerRT;
+		RenderTarget2D _tempRT;
 
 
-		public PixelBloomPostProcessor( RenderTexture layerRenderTexture, int executionOrder ) : base( executionOrder )
+		public PixelBloomPostProcessor( RenderTarget2D layerRenderTarget, int executionOrder ) : base( executionOrder )
 		{
-			_layerRT = layerRenderTexture;
-			_tempRT = new RenderTexture( layerRenderTexture.renderTarget2D.Width, layerRenderTexture.renderTarget2D.Height, DepthFormat.None );
+			_layerRT = layerRenderTarget;
+			_tempRT = new RenderTarget2D( Core.graphicsDevice, layerRenderTarget.Width, layerRenderTarget.Height, false, SurfaceFormat.Color, DepthFormat.None );
 		}
 
 
@@ -28,11 +28,12 @@ namespace Nez
 		{
 			base.onSceneBackBufferSizeChanged( newWidth, newHeight );
 
-			_tempRT.resize( newHeight, newWidth );
+			_tempRT.Dispose();
+			_tempRT = new RenderTarget2D( Core.graphicsDevice, newHeight, newWidth, false, SurfaceFormat.Color, DepthFormat.None );
 		}
 
 
-		public override void process( RenderTexture source, RenderTexture destination )
+		public override void process( RenderTarget2D source, RenderTarget2D destination )
 		{
 			// first we process the rendered layer with the bloom effect
 			base.process( _layerRT, _tempRT );
@@ -42,9 +43,9 @@ namespace Nez
 			Graphics.instance.spriteBatch.Begin( 0, BlendState.AlphaBlend, samplerState, DepthStencilState.None, RasterizerState.CullNone );
 
 			// now we first draw the full scene (source), then draw our bloomed layer (tempRT) then draw the un-bloomed layer (layerRT)
-			Graphics.instance.spriteBatch.Draw( source, new Rectangle( 0, 0, destination.renderTarget2D.Width, destination.renderTarget2D.Height ), Color.White );
-			Graphics.instance.spriteBatch.Draw( _tempRT, new Rectangle( 0, 0, destination.renderTarget2D.Width, destination.renderTarget2D.Height ), Color.White );
-			Graphics.instance.spriteBatch.Draw( _layerRT, new Rectangle( 0, 0, destination.renderTarget2D.Width, destination.renderTarget2D.Height ), Color.White );
+			Graphics.instance.spriteBatch.Draw( source, new Rectangle( 0, 0, destination.Width, destination.Height ), Color.White );
+			Graphics.instance.spriteBatch.Draw( _tempRT, new Rectangle( 0, 0, destination.Width, destination.Height ), Color.White );
+			Graphics.instance.spriteBatch.Draw( _layerRT, new Rectangle( 0, 0, destination.Width, destination.Height ), Color.White );
 
 			Graphics.instance.spriteBatch.End();
 		}
@@ -54,7 +55,7 @@ namespace Nez
 		{
 			base.unload();
 
-			_tempRT.unload();
+			_tempRT.Dispose();
 		}
 
 	}

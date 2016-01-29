@@ -11,17 +11,12 @@ namespace Nez
 	/// A simple Renderer could just start the Graphics.instanceGraphics spriteBatch or it could create its own local Graphics instance
 	/// if it needs it for some kind of custom rendering.
 	/// 
-	/// Note that it is a best practice to ensure all Renderers that render to a RenderTexture have lower renderOrders to avoid issues
+	/// Note that it is a best practice to ensure all Renderers that render to a RenderTarget have lower renderOrders to avoid issues
 	/// with clearing the back buffer (http://gamedev.stackexchange.com/questions/90396/monogame-setrendertarget-is-wiping-the-backbuffer).
 	/// Giving them a negative renderOrder is a good strategy to deal with this.
 	/// </summary>
-	public abstract class Renderer
+	public abstract class Renderer : IComparable<Renderer>
 	{
-		/// <summary>
-		/// Comparison used to sort renderers
-		/// </summary>
-		static internal Comparison<Renderer> compareRenderOrder = ( a, b ) => { return Math.Sign( a.renderOrder - b.renderOrder ); };
-
 		/// <summary>
 		/// SpriteSortMode used by the SpriteBatch. Use BackToFront when drawing transparent sprites and FrontToBack when drawing opaque sprites
 		/// if you want the depth value to be taken into account.
@@ -50,17 +45,17 @@ namespace Nez
 		public readonly int renderOrder = 0;
 
 		/// <summary>
-		/// if renderTexture is not null this renderer will render into the RenderTexture instead of to the screen
+		/// if renderTarget is not null this renderer will render into the RenderTarget instead of to the screen
 		/// </summary>
-		public RenderTexture renderTexture;
+		public RenderTarget2D renderTarget;
 
 		/// <summary>
-		/// if renderTexture is not null this Color will be used to clear the screen
+		/// if renderTarget is not null this Color will be used to clear the screen
 		/// </summary>
-		public Color renderTextureClearColor = Color.Transparent;
+		public Color renderTargetClearColor = Color.Transparent;
 
 		/// <summary>
-		/// if true and a renderTexture is present the RenderTarget will be reset to null. This is useful when you have multiple
+		/// if true and a renderTarget is present the RenderTarget will be reset to null. This is useful when you have multiple
 		/// renderers that should all be rendering into the same RenderTarget.
 		/// </summary>
 		public bool clearRenderTargetAfterRender = true;
@@ -86,17 +81,17 @@ namespace Nez
 
 
 		/// <summary>
-		/// if a RenderTexture is used this will set it up. The SpriteBatch is also started. The passed in Camera will be used to set the ViewPort
+		/// if a RenderTarget is used this will set it up. The SpriteBatch is also started. The passed in Camera will be used to set the ViewPort
 		/// (if a ViewportAdapter is present) and for the SpriteBatch transform Matrix.
 		/// </summary>
 		/// <param name="cam">Cam.</param>
 		protected virtual void beginRender( Camera cam )
 		{
-			// if we have a renderTexture render into it
-			if( renderTexture != null )
+			// if we have a renderTarget render into it
+			if( renderTarget != null )
 			{
-				Core.graphicsDevice.SetRenderTarget( renderTexture );
-				Core.graphicsDevice.Clear( renderTextureClearColor );
+				Core.graphicsDevice.SetRenderTarget( renderTarget );
+				Core.graphicsDevice.Clear( renderTargetClearColor );
 			}
 
 			_currentRenderState = renderState;
@@ -143,14 +138,14 @@ namespace Nez
 
 
 		/// <summary>
-		/// ends the SpriteBatch and clears the RenderTarget if it had a RenderTexture
+		/// ends the SpriteBatch and clears the RenderTarget if it had a RenderTarget
 		/// </summary>
 		protected virtual void endRender()
 		{
 			Graphics.instance.spriteBatch.End();
 
-			// clear the RenderTarget so that we render to the screen if we were using a RenderTexture
-			if( renderTexture != null && clearRenderTargetAfterRender )
+			// clear the RenderTarget so that we render to the screen if we were using a RenderTarget
+			if( renderTarget != null && clearRenderTargetAfterRender )
 				Core.graphicsDevice.SetRenderTarget( null );
 		}
 
@@ -174,7 +169,7 @@ namespace Nez
 
 
 		/// <summary>
-		/// called when the default scene RenderTexture is resized
+		/// called when the default scene RenderTarget is resized
 		/// </summary>
 		/// <param name="newWidth">New width.</param>
 		/// <param name="newHeight">New height.</param>
@@ -187,13 +182,18 @@ namespace Nez
 		/// </summary>
 		public virtual void unload()
 		{
-			if( renderTexture != null )
+			if( renderTarget != null )
 			{
-				renderTexture.unload();
-				renderTexture = null;
+				renderTarget.Dispose();
+				renderTarget = null;
 			}
 		}
-	
+
+
+		public int CompareTo( Renderer other )
+		{
+			return other.renderOrder.CompareTo( renderOrder );
+		}
 	}
 }
 
