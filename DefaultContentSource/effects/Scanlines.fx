@@ -7,7 +7,7 @@ float _linesFactor; // 0.04
 float4 mainPS( float2 texCoord:TEXCOORD0, in float2 screenPos:VPOS ) : COLOR0
 {
 	float4 color = tex2D( s0, texCoord );
-	float scanline = sin( screenPos.y * _linesFactor ) * _attenuation;
+	float scanline = sin( texCoord.y * _linesFactor ) * _attenuation;
 	color.rgb -= scanline;
 
 	return color;

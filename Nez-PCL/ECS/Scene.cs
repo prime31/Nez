@@ -243,7 +243,7 @@ namespace Nez
 
 
 		internal void end()
-		{
+		{			
 			for( var i = 0; i < _renderers.Count; i++ )
 				_renderers[i].unload();
 
@@ -256,6 +256,7 @@ namespace Nez
 			camera = null;
 			contentManager.Dispose();
 			_sceneRenderTexture.unload();
+			Physics.clear();
 
 			if( _destinationRenderTexture != null )
 				_destinationRenderTexture.unload();

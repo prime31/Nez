@@ -145,17 +145,39 @@
     <Content Include="Content\Images\tile.png" />
     <Content Include="Content\Effects\Crosshatch.mgfxo" />
     <Content Include="Content\nez\NezDefaultBMFont.xnb" />
-    <Content Include="Content\nez\effects\BloomCombine.mgfxo" />
-    <Content Include="Content\nez\effects\BloomExtract.mgfxo" />
-    <Content Include="Content\nez\effects\Crosshatch.mgfxo" />
-    <Content Include="Content\nez\effects\Dots.mgfxo" />
-    <Content Include="Content\nez\effects\GaussianBlur.mgfxo" />
-    <Content Include="Content\nez\effects\MultiTextureOverlay.mgfxo" />
-    <Content Include="Content\nez\effects\Noise.mgfxo" />
-    <Content Include="Content\nez\effects\SpriteBlinkEffect.mgfxo" />
-    <Content Include="Content\nez\effects\Twist.mgfxo" />
-    <Content Include="Content\nez\effects\Vignette.mgfxo" />
-    <Content Include="Content\nez\effects\Scanlines.mgfxo" />
+    <Content Include="..\DefaultContent\effects\BloomCombine.mgfxo">
+      <Link>Content\nez\effects\BloomCombine.mgfxo</Link>
+    </Content>
+    <Content Include="..\DefaultContent\effects\BloomExtract.mgfxo">
+      <Link>Content\nez\effects\BloomExtract.mgfxo</Link>
+    </Content>
+    <Content Include="..\DefaultContent\effects\Crosshatch.mgfxo">
+      <Link>Content\nez\effects\Crosshatch.mgfxo</Link>
+    </Content>
+    <Content Include="..\DefaultContent\effects\Dots.mgfxo">
+      <Link>Content\nez\effects\Dots.mgfxo</Link>
+    </Content>
+    <Content Include="..\DefaultContent\effects\GaussianBlur.mgfxo">
+      <Link>Content\nez\effects\GaussianBlur.mgfxo</Link>
+    </Content>
+    <Content Include="..\DefaultContent\effects\MultiTextureOverlay.mgfxo">
+      <Link>Content\nez\effects\MultiTextureOverlay.mgfxo</Link>
+    </Content>
+    <Content Include="..\DefaultContent\effects\Noise.mgfxo">
+      <Link>Content\nez\effects\Noise.mgfxo</Link>
+    </Content>
+    <Content Include="..\DefaultContent\effects\Scanlines.mgfxo">
+      <Link>Content\nez\effects\Scanlines.mgfxo</Link>
+    </Content>
+    <Content Include="..\DefaultContent\effects\SpriteBlinkEffect.mgfxo">
+      <Link>Content\nez\effects\SpriteBlinkEffect.mgfxo</Link>
+    </Content>
+    <Content Include="..\DefaultContent\effects\Twist.mgfxo">
+      <Link>Content\nez\effects\Twist.mgfxo</Link>
+    </Content>
+    <Content Include="..\DefaultContent\effects\Vignette.mgfxo">
+      <Link>Content\nez\effects\Vignette.mgfxo</Link>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

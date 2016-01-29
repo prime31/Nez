@@ -52,6 +52,15 @@ namespace Nez
 
 
 		/// <summary>
+		/// removes all colliders from the SpatialHash
+		/// </summary>
+		public static void clear()
+		{
+			_spatialHash.clear();
+		}
+
+
+		/// <summary>
 		/// debug draws the contents of the spatial hash. Note that Core.debugRenderEnabled must be true or nothing will be displayed.
 		/// </summary>
 		/// <param name="secondsToDisplay">Seconds to display.</param>
