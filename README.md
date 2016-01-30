@@ -1,6 +1,6 @@
 ## Nez
 
-Nez aims to be a lightweight 2D game engine that sits on top of MonoGame/FNA. It provides a solid base for you to build a 2D game on. Some of the many features it includes are:
+Nez aims to be a lightweight 2D framework that sits on top of MonoGame/FNA. It provides a solid base for you to build a 2D game on. Some of the many features it includes are:
 
 - Scene/Entity/Component system with Component render layer tracking and optional entity systems (an implementation that operates on a group of entities that share a specific set of components)
 - SpatialHash for super fast broadphase physics lookups (note that Nez does not provide any physics engine. It provides collision data that you can do whatever you want to with.)
@@ -18,13 +18,15 @@ Nez aims to be a lightweight 2D game engine that sits on top of MonoGame/FNA. It
 
 
 
-### Setup
+Setup
+==========
 
 Nez needs to have the DefaultContent/NezDefaultBMFont.xnb file placed in your projects Content/nez folder. It sets up the font as the default for all text in it's debug console and for your own use. If you intend to use any of the built in Effects or PostProcessors you should also copy the DefaultContent/effects folder contents into your projects Content/nez/effects folder. Be sure to set the Build Action to Content so they get copied into your compiled game.
 
 
 
-### Systems
+Nez Systems
+==========
 
 There are various systems documented separately in the FAQs folder. They go into a bit more detail on the different sub-systems that make up Nez.
 
@@ -32,11 +34,12 @@ There are various systems documented separately in the FAQs folder. They go into
 - [Scene-Entity-Component](FAQs/Scene-Entity-Component.md)
 - [Rendering](FAQs/Rendering.md)
 - [Physics/Collisions](FAQs/Physics.md)
-- [Entity System](FAQs/EntitySystems.md)
+- [Entity Processing Systems](FAQs/EntitySystems.md)
 - [Samples](FAQs/Samples.md)
 
 
-### Pipeline Importers
+Pipeline Importers
+==========
 
 Nez comes stock with a decent bunch of Pipeline tool importers including:
 
