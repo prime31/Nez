@@ -29,9 +29,8 @@ Entities are added/removed to/from the Scene and managed by it. You can either s
 
 Entity Lifecycle methods:
 
-- **onAddedToScene**: Called when the entity is added to a scene
+- **onAddedToScene**: Called when the entity is added to a scene after all pending entity changes are committed
 - **onRemovedFromScene**: Called when the entity is removed from a scene
-- **onAwake**: called in the same frame as onAddedToScene but after all pending entity changes are committed
 - **update**: called each frame as long as the Entity is enabled
 - **debugRender**: called if Core.debugRenderEnabled is true by the default renderers. Custom renderers can choose to call it or not. The default implementation calls debugRender on all Components and the attached Colliders if there are any
 
@@ -49,10 +48,9 @@ Components are added to and managed by an Entity. They make up the meat of your 
 
 Component Lifecycle methods:
 
-- **onAddedToEntity**: Called when the Component is added to an entity
+- **onAddedToEntity**: Called when the Component is added to an entity after all pending component changes are committed
 - **onRemovedFromEntity**:  Called when the component is removed from its entity. Do all cleanup here.
 - **onEntityPositionChanged**: called when the entity's position changes. This allows components to be aware that they have moved due to the parent entity moving.
-- **onAwake**: called in the same frame as onAddedToEntity but after all pending component changes are committed
 - **update**: called each frame as long as the Entity and Component are enabled
 - **debugRender**: conditionally called. See Entity section for details.
 - **onEnabled**: called when the parent Entity or the Component is enabled

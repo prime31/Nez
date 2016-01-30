@@ -103,14 +103,13 @@ namespace Nez
 					}
 
 					_components.Add( component );
-					component.onAddedToEntity();
 				}
 
 				// now that all components are added to the scene, we loop through again and call onAwake/onEnabled
 				for( var i = 0; i < _componentsToAdd.Count; i++ )
 				{
 					var component = _componentsToAdd[i];
-					component.onAwake();
+					component.onAddedToEntity();
 
 					if( _entity.enabled && component.enabled )
 						component.onEnabled();

@@ -41,7 +41,7 @@ namespace Nez
 
 
 		/// <summary>
-		/// Called when this entity is added to a scene
+		/// Called when this entity is added to a scene after all pending component changes are committed
 		/// </summary>
 		/// <param name="entity">Entity.</param>
 		public virtual void onAddedToEntity()
@@ -60,13 +60,6 @@ namespace Nez
 		/// entity moving.
 		/// </summary>
 		public virtual void onEntityPositionChanged()
-		{}
-
-
-		/// <summary>
-		/// called in the same frame as onAddedToEntity but after all pending component changes are committed
-		/// </summary>
-		public virtual void onAwake()
 		{}
 
 

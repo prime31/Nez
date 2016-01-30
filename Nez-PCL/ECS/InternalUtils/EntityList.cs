@@ -141,7 +141,6 @@ namespace Nez
 
 					_entities.Add( entity );
 					entity.scene = scene;
-					entity.onAddedToScene();
 
 					// handle the tagList
 					addToTagList( entity );
@@ -152,7 +151,7 @@ namespace Nez
 
 				// now that all entities are added to the scene, we loop through again and call onAwake
 				for( var i = 0; i < _entitiesToAdd.Count; i++ )
-					_entitiesToAdd[i].onAwake();
+					_entitiesToAdd[i].onAddedToScene();
 
 				_entitiesToAdd.Clear();
 				_isEntityListUnsorted = true;
@@ -207,6 +206,26 @@ namespace Nez
 			}
 
 			return _entityDict[tag];
+		}
+
+
+		public List<Entity> entitiesOfType<T>() where T : Entity
+		{
+			var list = new List<Entity>();
+			for( var i = 0; i < _entities.Count; i++ )
+			{
+				if( _entities[i] is T )
+					list.Add( _entities[i] );
+			}
+
+			// in case an entity is added and searched for in the same frame we check the toAdd list
+			for( var i = 0; i < _entitiesToAdd.Count; i++ )
+			{
+				if( _entitiesToAdd[i] is T )
+					list.Add( _entitiesToAdd[i] );
+			}
+
+			return list;
 		}
 
 

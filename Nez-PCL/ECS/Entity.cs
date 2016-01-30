@@ -148,7 +148,7 @@ namespace Nez
 		#region Entity lifecycle methods
 
 		/// <summary>
-		/// Called when this entity is added to a scene
+		/// Called when this entity is added to a scene after all pending entity changes are committed
 		/// </summary>
 		public virtual void onAddedToScene()
 		{
@@ -167,13 +167,6 @@ namespace Nez
 			// detach all our components when removed from a scene
 			components.removeAllComponents();
 		}
-
-
-		/// <summary>
-		/// called in the same frame as onAddedToScene but after all pending entity changes are committed
-		/// </summary>
-		public virtual void onAwake()
-		{}
 
 
 		/// <summary>

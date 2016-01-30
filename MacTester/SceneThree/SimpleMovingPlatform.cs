@@ -23,7 +23,7 @@ namespace MacTester
 		}
 
 
-		public override void onAwake()
+		public override void onAddedToEntity()
 		{
 			_minX = entity.position.X;
 			_maxX = _minX + 100;

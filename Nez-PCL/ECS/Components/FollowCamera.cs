@@ -52,7 +52,7 @@ namespace Nez
 		{}
 
 
-		public override void onAwake()
+		public override void onAddedToEntity()
 		{
 			if( camera == null )
 				camera = entity.scene.camera;

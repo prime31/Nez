@@ -82,7 +82,7 @@ namespace Nez.Particles
 
 		#region Component/RenderableComponent
 
-		public override void onAwake()
+		public override void onAddedToEntity()
 		{
 			if( _playOnAwake )
 				play();
