@@ -1,6 +1,6 @@
 Entity Systems
 ============
-Nez supports entity systems much like you have probably already seen in other entity-component systems. Entity Systems are an easy way to encapsulate game logic that spans across different entities and components. Nez systems are heavily inspired by [Artmeis-odb](https://github.com/junkdog/artemis-odb)
+Nez supports entity systems much like you have probably already seen in other entity-component systems. Entity Systems are an easy way to encapsulate game logic that spans across different entities and components. Nez systems are heavily inspired by [Artemis-odb](https://github.com/junkdog/artemis-odb)
 
 Systems are executed in the order you add them to the scene. You might want to add your physics system after your input logic. You might want to do all bullet collision checks after the physics system has calculated the new positions. Adding the systems in the proper order allows you to do this.
 
