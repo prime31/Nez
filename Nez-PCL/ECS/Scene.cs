@@ -715,6 +715,11 @@ namespace Nez
 		}
 
 
+		/// <summary>
+		/// searches for and returns the first Entity with name
+		/// </summary>
+		/// <returns>The entity.</returns>
+		/// <param name="name">Name.</param>
 		public Entity findEntity( string name )
 		{
 			return entities.findEntity( name );
@@ -729,6 +734,17 @@ namespace Nez
 		public List<Entity> findEntitiesByTag( int tag )
 		{
 			return entities.entitiesWithTag( tag );
+		}
+
+
+		/// <summary>
+		/// returns all entities of Type T
+		/// </summary>
+		/// <returns>The of type.</returns>
+		/// <typeparam name="T">The 1st type parameter.</typeparam>
+		public List<Entity> entitiesOfType<T>() where T : Entity
+		{
+			return entities.entitiesOfType<T>();
 		}
 
 		#endregion

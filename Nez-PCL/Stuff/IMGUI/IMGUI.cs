@@ -150,6 +150,11 @@ namespace Nez
 		}
 
 
+		/// <summary>
+		/// creates a checkbox/toggle
+		/// </summary>
+		/// <param name="text">Text.</param>
+		/// <param name="isChecked">If set to <c>true</c> is checked.</param>
 		public static bool toggle( string text, bool isChecked )
 		{
 			var toggleX = _elementX + _elementWidth - ELEMENT_HEIGHT;
@@ -182,6 +187,10 @@ namespace Nez
 		}
 
 
+		/// <summary>
+		/// value should be between 0 and 1
+		/// </summary>
+		/// <param name="value">Value.</param>
 		public static float slider( float value )
 		{
 			var workingWidth = _elementWidth - SHORT_ELEMENT_HEIGHT;
@@ -212,7 +221,12 @@ namespace Nez
 		}
 
 
-		public static float bar( float value )
+		/// <summary>
+		/// value should be between 0 and 1
+		/// </summary>
+		/// <returns>The bar.</returns>
+		/// <param name="value">Value.</param>
+		public static float progressBar( float value )
 		{
 			var thumbPos = _elementWidth * value;
 			var color = SLIDER_THUMB_BG;
@@ -241,12 +255,26 @@ namespace Nez
 		}
 
 
+		/// <summary>
+		/// creates a full width header with text
+		/// </summary>
+		/// <param name="text">Text.</param>
 		public static void header( string text )
 		{
 			// expand the header to full width and use a shorter element height
 			_spriteBatch.drawRect( _elementX - ELEMENT_PADDING, _lastY + ELEMENT_PADDING, _elementWidth + ELEMENT_PADDING * 2, SHORT_ELEMENT_HEIGHT, HEADER_BG );
 			drawString( text, FONT_COLOR, TextAlign.Center, SHORT_ELEMENT_HEIGHT );
 			endElement( SHORT_ELEMENT_HEIGHT );
+		}
+
+
+		/// <summary>
+		/// adds some vertical space
+		/// </summary>
+		/// <param name="verticalSpace">Vertical space.</param>
+		public static void space( float verticalSpace )
+		{
+			_lastY += verticalSpace;
 		}
 	
 	}

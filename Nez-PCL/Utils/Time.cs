@@ -34,6 +34,17 @@ namespace Nez
 			timeSinceSceneLoad = 0f;
 		}
 
+
+		/// <summary>
+		/// Allows to check in intervals. Should only be used with interval values above deltaTime,
+		/// otherwise it will always return true.
+		/// </summary>
+		public static bool checkEvery( float interval )
+		{
+			// we subtract deltaTime since timeSinceSceneLoad already includes this update ticks deltaTime
+			return (int)( timeSinceSceneLoad / interval ) > (int)( ( timeSinceSceneLoad - deltaTime ) / interval );
+		}
+
 	}
 }
 
