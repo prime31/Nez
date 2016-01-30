@@ -68,11 +68,11 @@ namespace MacTester
 		public static Scene sceneOneBloom()
 		{
 			var scene = new Scene();
-			var bloomLayerRenderer = scene.addRenderer( new RenderLayerRenderer( 1, null, -1 ) );
+			var bloomLayerRenderer = scene.addRenderer( new RenderLayerRenderer( -1, 1 ) );
 			bloomLayerRenderer.renderTarget = RenderTarget.create( 256, 144 );
 			bloomLayerRenderer.renderTargetClearColor = Color.Transparent;
 
-			scene.addRenderer( new RenderLayerExcludeRenderer( 1 ) );
+			scene.addRenderer( new RenderLayerExcludeRenderer( 0, 1 ) );
 			scene.letterboxColor = Color.MonoGameOrange;
 			scene.setDesignResolution( 256, 144, Scene.SceneResolutionPolicy.ShowAllPixelPerfect );
 

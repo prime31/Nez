@@ -11,12 +11,12 @@ namespace Nez
 	/// </summary>
 	public class RenderLayerExcludeRenderer : Renderer
 	{
-		public int excludeRenderLayer;
+		public int[] excludedRenderLayers;
 
 
-		public RenderLayerExcludeRenderer( int excludeRenderLayer, int renderOrder = 0, Camera camera = null ) : base( renderOrder, camera )
+		public RenderLayerExcludeRenderer( int renderOrder, params int[] excludedRenderLayers ) : base( renderOrder, null )
 		{
-			this.excludeRenderLayer = excludeRenderLayer;
+			this.excludedRenderLayers = excludedRenderLayers;
 		}
 
 
@@ -28,7 +28,7 @@ namespace Nez
 			for( var i = 0; i < scene.renderableComponents.Count; i++ )
 			{
 				var renderable = scene.renderableComponents[i];
-				if( renderable.renderLayer != excludeRenderLayer && renderable.enabled )
+				if( !excludedRenderLayers.contains( renderable.renderLayer ) && renderable.enabled )
 					renderAfterStateCheck( renderable, cam );
 			}
 

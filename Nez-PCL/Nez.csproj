@@ -228,5 +228,6 @@
     <Compile Include="Graphics\Effects\ScanlinesEffect.cs" />
     <Compile Include="Graphics\Textures\RenderTarget.cs" />
     <Compile Include="ECS\Transform.cs" />
+    <Compile Include="Utils\ArrayExt.cs" />
   </ItemGroup>
 </Project>

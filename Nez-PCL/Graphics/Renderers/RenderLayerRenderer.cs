@@ -10,12 +10,12 @@ namespace Nez
 	/// </summary>
 	public class RenderLayerRenderer : Renderer
 	{
-		public int renderLayer;
+		public int[] renderLayers;
 
 
-		public RenderLayerRenderer( int renderLayer, Camera camera = null, int renderOrder = 0 ) : base( renderOrder, camera )
+		public RenderLayerRenderer( int renderOrder, params int[] renderLayers ) : base( renderOrder, null )
 		{
-			this.renderLayer = renderLayer;
+			this.renderLayers = renderLayers;
 		}
 
 
@@ -24,12 +24,15 @@ namespace Nez
 			var cam = camera ?? scene.camera;
 			beginRender( cam );
 
-			var renderables = scene.renderableComponents.componentsWithRenderLayer( renderLayer );
-			for( var i = 0; i < renderables.Count; i++ )
+			for( var i = 0; i < renderLayers.Length; i++ )
 			{
-				var renderable = renderables[i];
-				if( renderable.enabled )
-					renderAfterStateCheck( renderable, cam );
+				var renderables = scene.renderableComponents.componentsWithRenderLayer( renderLayers[i] );
+				for( var j = 0; j < renderables.Count; j++ )
+				{
+					var renderable = renderables[j];
+					if( renderable.enabled )
+						renderAfterStateCheck( renderable, cam );
+				}
 			}
 
 			if( shouldDebugRender && debugRenderEnabled )
