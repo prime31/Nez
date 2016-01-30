@@ -152,7 +152,6 @@
     <Compile Include="Debug\DebugDrawItem.cs" />
     <Compile Include="Math\Random.cs" />
     <Compile Include="ECS\Components\FollowCamera.cs" />
-    <Compile Include="Graphics\Textures\RenderTexture.cs" />
     <Compile Include="Graphics\Textures\Subtexture.cs" />
     <Compile Include="PipelineRuntime\TexturePacker\TexturePackerAtlas.cs" />
     <Compile Include="PipelineRuntime\TexturePacker\TexturePackerAtlasReader.cs" />
@@ -227,5 +226,6 @@
     <Compile Include="Graphics\PostProcessing\PostProcessors\ScanlinesPostProcessor.cs" />
     <Compile Include="Graphics\PostProcessing\PostProcessorT.cs" />
     <Compile Include="Graphics\Effects\ScanlinesEffect.cs" />
+    <Compile Include="Graphics\Textures\RenderTarget.cs" />
   </ItemGroup>
 </Project>

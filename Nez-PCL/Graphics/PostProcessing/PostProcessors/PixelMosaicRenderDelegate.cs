@@ -71,17 +71,17 @@ namespace Nez
 			if( _mosaicRenderTex != null )
 			{
 				_mosaicRenderTex.Dispose();
-				_mosaicRenderTex = new RenderTarget2D( Core.graphicsDevice, newWidth * scene.pixelPerfectScale, newHeight * scene.pixelPerfectScale, false, SurfaceFormat.Color, DepthFormat.None );
+				_mosaicRenderTex = RenderTarget.create( newWidth * scene.pixelPerfectScale, newHeight * scene.pixelPerfectScale, DepthFormat.None );
 			}
 			else
 			{
-				_mosaicRenderTex = new RenderTarget2D( Core.graphicsDevice, newWidth * scene.pixelPerfectScale, newHeight * scene.pixelPerfectScale, false, SurfaceFormat.Color, DepthFormat.None );
+				_mosaicRenderTex = RenderTarget.create( newWidth * scene.pixelPerfectScale, newHeight * scene.pixelPerfectScale, DepthFormat.None );
 			}
 
 			// based on the look of games by: http://deepnight.net/games/strike-of-rage/
 			// use the mosaic to render to a full sized RenderTarget repeating the mosaic
 			Core.graphicsDevice.SetRenderTarget( _mosaicRenderTex );
-			Graphics.instance.spriteBatch.Begin( 0, BlendState.Opaque, SamplerState.PointWrap, DepthStencilState.None, RasterizerState.CullNone, effect );
+			Graphics.instance.spriteBatch.Begin( SpriteSortMode.Immediate, BlendState.Opaque, SamplerState.PointWrap, DepthStencilState.None, RasterizerState.CullNone );
 			Graphics.instance.spriteBatch.Draw( _mosaicTexture, Vector2.Zero, new Rectangle( 0, 0, _mosaicRenderTex.Width, _mosaicRenderTex.Height ), Color.White );
 			Graphics.instance.spriteBatch.End();
 

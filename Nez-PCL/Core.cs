@@ -9,6 +9,7 @@ using Nez.Tweens;
 using Nez.Timers;
 using Nez.BitmapFonts;
 using Nez.Analysis;
+using Nez.Textures;
 
 
 namespace Nez
@@ -120,7 +121,7 @@ namespace Nez
 			{
 				_graphicsDeviceChangeTimer = schedule( 0.05f, false, this, t =>
 				{
-					( this as Core )._graphicsDeviceChangeTimer = null;
+					( t.context as Core )._graphicsDeviceChangeTimer = null;
 					emitter.emit( CoreEvents.GraphicsDeviceReset );
 				} );
 			}
@@ -147,6 +148,7 @@ namespace Nez
 			graphicsDevice = GraphicsDevice;
 			var font = Content.Load<BitmapFont>( "nez/NezDefaultBMFont" );
 			Graphics.instance = new Graphics( font );
+			RenderTarget.instance = new RenderTarget();
 		}
 
 
@@ -163,6 +165,7 @@ namespace Nez
 			// update all our systems
 			Time.update( (float)gameTime.ElapsedGameTime.TotalSeconds );
 			Input.update();
+			RenderTarget.instance.update();
 			_coroutineManager.update();
 			_tweenManager.update();
 			_timerManager.update();

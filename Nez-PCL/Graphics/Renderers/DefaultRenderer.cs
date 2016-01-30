@@ -7,7 +7,7 @@ namespace Nez
 {
 	public class DefaultRenderer : Renderer
 	{
-		public DefaultRenderer( Camera camera = null, int renderOrder = 0 ) : base( camera, renderOrder )
+		public DefaultRenderer( int renderOrder = 0, Camera camera = null ) : base( renderOrder, camera )
 		{}
 
 

@@ -68,7 +68,7 @@ namespace MacTester
 		{
 			var scene = new Scene();
 			var bloomLayerRenderer = scene.addRenderer( new RenderLayerRenderer( 1, null, -1 ) );
-			bloomLayerRenderer.renderTarget = new RenderTarget2D( Core.graphicsDevice, 256, 144, false, SurfaceFormat.Color, Screen.preferredDepthStencilFormat );
+			bloomLayerRenderer.renderTarget = RenderTarget.create( 256, 144 );
 			bloomLayerRenderer.renderTargetClearColor = Color.Transparent;
 
 			scene.addRenderer( new RenderLayerExcludeRenderer( 1 ) );
@@ -105,8 +105,8 @@ namespace MacTester
 			bmFont.spacing = 2f;
 
 			// setup a renderer that renders everything to a RenderTarget making sure its order is before standard renderers!
-			var renderer = new DefaultRenderer( scene.camera, -1 );
-			renderer.renderTarget = new RenderTarget2D( Core.graphicsDevice, 320, 240, false, SurfaceFormat.Color, Screen.preferredDepthStencilFormat );
+			var renderer = new DefaultRenderer( -1 );
+			renderer.renderTarget = RenderTarget.create( 320, 240 );
 			renderer.renderTargetClearColor = Color.CornflowerBlue;
 			scene.addRenderer( renderer );
 

@@ -14,7 +14,7 @@ namespace Nez
 		public int excludeRenderLayer;
 
 
-		public RenderLayerExcludeRenderer( int excludeRenderLayer, Camera camera = null, int renderOrder = 0 ) : base( camera, renderOrder )
+		public RenderLayerExcludeRenderer( int excludeRenderLayer, int renderOrder = 0, Camera camera = null ) : base( renderOrder, camera )
 		{
 			this.excludeRenderLayer = excludeRenderLayer;
 		}

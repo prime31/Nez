@@ -73,7 +73,7 @@ namespace Nez
 		RenderState _currentRenderState;
 
 
-		public Renderer( Camera camera, int renderOrder )
+		public Renderer( int renderOrder, Camera camera )
 		{
 			this.camera = camera;
 			this.renderOrder = renderOrder;
@@ -192,7 +192,7 @@ namespace Nez
 
 		public int CompareTo( Renderer other )
 		{
-			return other.renderOrder.CompareTo( renderOrder );
+			return renderOrder.CompareTo( other.renderOrder );
 		}
 	}
 }

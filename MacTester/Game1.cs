@@ -66,11 +66,11 @@ namespace MacTester
 						})
 						.start();
 
-					PropertyTweens.vector2PropertyTo( spriteDude.getComponent<RenderableComponent>(), "scale", new Vector2( 1.5f, 2.5f ), 2f )
+					PropertyTweens.vector2PropertyTo( spriteDude.getComponent<RenderableComponent>(), "scale", new Vector2( 1.5f, 2.5f ), 1f )
 						.setLoops( LoopType.PingPong, 1 )
 						.start();
 
-					PropertyTweens.floatPropertyTo( spriteDude.getComponent<RenderableComponent>(), "rotation", MathHelper.PiOver2, 2f )
+					PropertyTweens.floatPropertyTo( spriteDude.getComponent<RenderableComponent>(), "rotation", MathHelper.PiOver2, 1f )
 						.setLoops( LoopType.PingPong, 1 )
 						.start();
 				}
@@ -79,7 +79,7 @@ namespace MacTester
 				if( playerDude != null )
 				{
 					var start = playerDude.position + new Vector2( 64f, 0f );
-					var end = playerDude.position + new Vector2( 128f, 0f );
+					var end = playerDude.position + new Vector2( 256f, 0f );
 					Debug.drawLine( start, end, Color.Black, 2f );
 					var hit = Physics.linecast( start, end );
 					if( hit.collider != null )
@@ -107,7 +107,7 @@ namespace MacTester
 			// allow click-drag to move the camera
 			if( Input.leftMouseButtonDown )
 			{
-				var deltaPos = Input.mousePositionDelta.ToVector2();
+				var deltaPos = Input.scaledMousePositionDelta;
 				scene.camera.position -= deltaPos;
 			}
 

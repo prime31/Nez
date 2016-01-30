@@ -9,15 +9,30 @@ namespace Nez.Sprites
 {
 	public class ScrollingSprite : Sprite
 	{
+		/// <summary>
+		/// x speed of automatic scrolling
+		/// </summary>
 		public float scrollSpeedX = 0;
+
+		/// <summary>
+		/// y speed of automatic scrolling
+		/// </summary>
 		public float scrollSpeedY = 0;
 
+		/// <summary>
+		/// x value of the texture scroll
+		/// </summary>
+		/// <value>The scroll x.</value>
 		public int scrollX
 		{
 			get { return _sourceRect.X; }
 			set { _sourceRect.X = value; }
 		}
 
+		/// <summary>
+		/// y value of the texture scroll
+		/// </summary>
+		/// <value>The scroll y.</value>
 		public int scrollY
 		{
 			get { return _sourceRect.Y; }

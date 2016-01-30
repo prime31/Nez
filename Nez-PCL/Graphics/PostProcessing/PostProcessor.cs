@@ -59,7 +59,8 @@ namespace Nez
 
 
 		/// <summary>
-		/// called when the default scene RenderTarget is resized
+		/// called when the default scene RenderTarget is resized. If a PostProcessor is added to a scene before it begins this method will be
+		/// called before the scene first renders making it an ideal place to create any RenderTextures a PostProcessor might require.
 		/// </summary>
 		/// <param name="newWidth">New width.</param>
 		/// <param name="newHeight">New height.</param>
@@ -110,7 +111,7 @@ namespace Nez
 
 		public int CompareTo( PostProcessor other )
 		{
-			return other.executionOrder.CompareTo( executionOrder );
+			return executionOrder.CompareTo( other.executionOrder );
 		}
 
 	}

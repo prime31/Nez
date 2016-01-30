@@ -184,7 +184,7 @@ namespace Nez.Particles
 					if( _collided )
 					{
 						// TODO: handle after collision movement. we need to track velocity for this
-						position += new Vector2( 0f, -5f ) + collisionConfig.gravity * Time.deltaTime;
+						position += new Vector2( 0f, -15f ) + collisionConfig.gravity * Time.deltaTime;
 					}
 					
 					var collider = Physics.overlapCircle( rootPosition + position, particleSize * 0.5f * collisionConfig.radiusScale, collisionConfig.collidesWithLayers );

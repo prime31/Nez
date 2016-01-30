@@ -115,9 +115,9 @@ namespace Nez
 		/// gets the size of the sceneRenderTarget
 		/// </summary>
 		/// <value>The size of the scene render texture.</value>
-		public Vector2 sceneRenderTargetSize
+		public Point sceneRenderTargetSize
 		{
-			get { return new Vector2( _sceneRenderTarget.Width, _sceneRenderTarget.Height ); }
+			get { return new Point( _sceneRenderTarget.Width, _sceneRenderTarget.Height ); }
 		}
 
 		/// <summary>
@@ -204,7 +204,7 @@ namespace Nez
 
 			if( clearColor.HasValue )
 				scene.clearColor = clearColor.Value;
-			scene.addRenderer( new DefaultRenderer( scene.camera ) );
+			scene.addRenderer( new DefaultRenderer() );
 			return scene;
 		}
 
@@ -215,7 +215,6 @@ namespace Nez
 			entities = new EntityList( this );
 			renderableComponents = new RenderableComponentList();
 			contentManager = new NezContentManager();
-			_sceneRenderTarget = new RenderTarget2D( Core.graphicsDevice, Screen.backBufferWidth, Screen.backBufferHeight, false, SurfaceFormat.Color, Screen.preferredDepthStencilFormat );
 
 			if( Core.entitySystemsEnabled )
 				entityProcessors = new EntityProcessorList();
@@ -544,13 +543,15 @@ namespace Nez
 			Input._resolutionOffset = _finalRenderDestinationRect.Location;
 
 			// resize our RenderTargets
-			_sceneRenderTarget.Dispose();
-			_sceneRenderTarget = new RenderTarget2D( Core.graphicsDevice, renderTargetWidth, renderTargetHeight, false, SurfaceFormat.Color, Screen.preferredDepthStencilFormat );
+			if( _sceneRenderTarget != null )
+				_sceneRenderTarget.Dispose();
+			_sceneRenderTarget = RenderTarget.create( renderTargetWidth, renderTargetHeight );
 
+			// only create the destinationRenderTarget if it already exists, which would indicate we have PostProcessors
 			if( _destinationRenderTarget != null )
 			{
 				_destinationRenderTarget.Dispose();
-				_destinationRenderTarget = new RenderTarget2D( Core.graphicsDevice, renderTargetWidth, renderTargetHeight, false, SurfaceFormat.Color, Screen.preferredDepthStencilFormat );
+				_destinationRenderTarget = RenderTarget.create( renderTargetWidth, renderTargetHeight );
 			}
 
 			// notify the PostProcessors, Renderers and FinalRenderDelegate of the change in render texture size
@@ -632,7 +633,12 @@ namespace Nez
 
 			// lazily create the 2nd RenderTarget for post processing only when a PostProcessor is added
 			if( _destinationRenderTarget == null )
-				_destinationRenderTarget = new RenderTarget2D( Core.graphicsDevice, _sceneRenderTarget.Width, _sceneRenderTarget.Height, false, SurfaceFormat.Color, Screen.preferredDepthStencilFormat );
+			{
+				if( _sceneRenderTarget != null )
+					_destinationRenderTarget = RenderTarget.create( _sceneRenderTarget.Width, _sceneRenderTarget.Height );
+				else
+					_destinationRenderTarget = RenderTarget.create();
+			}
 		}
 
 

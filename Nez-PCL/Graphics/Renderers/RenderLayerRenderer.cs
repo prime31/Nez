@@ -13,7 +13,7 @@ namespace Nez
 		public int renderLayer;
 
 
-		public RenderLayerRenderer( int renderLayer, Camera camera = null, int renderOrder = 0 ) : base( camera, renderOrder )
+		public RenderLayerRenderer( int renderLayer, Camera camera = null, int renderOrder = 0 ) : base( renderOrder, camera )
 		{
 			this.renderLayer = renderLayer;
 		}
