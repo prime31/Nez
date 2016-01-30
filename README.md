@@ -34,7 +34,7 @@ There are various systems documented separately in the FAQs folder. They go into
 - [Scene-Entity-Component](FAQs/Scene-Entity-Component.md)
 - [Rendering](FAQs/Rendering.md)
 - [Physics/Collisions](FAQs/Physics.md)
-- [Entity System](FAQs/EntitySystems.md)
+- [Entity Processing Systems](FAQs/EntitySystems.md)
 - [Samples](FAQs/Samples.md)
 
 
