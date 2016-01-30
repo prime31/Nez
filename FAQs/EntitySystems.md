@@ -158,16 +158,16 @@ A matcher can either match all entities that have a list of components, or it ca
 
 Match all
 ---------
-Match all the entities that have both the BuffComponent AND the Damagecomponent.
+Match all the entities that have both the BuffComponent AND the DamageComponent.
 
 ```
-new Matcher().all ( typeof( BuffComponent ), typeof( DamageComponent ) );
+new Matcher().all( typeof( BuffComponent ), typeof( DamageComponent ) );
 ```
 
 
 Match one
 ---------
-Match all the entities that have at least a BuffComponent or a Damagecomponent.
+Match all the entities that have at least a BuffComponent or a DamageComponent.
 
 ```
 new Matcher().one( typeof( BuffComponent ), typeof( DamageComponent ) );
