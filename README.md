@@ -18,13 +18,15 @@ Nez aims to be a lightweight 2D framework that sits on top of MonoGame/FNA. It p
 
 
 
-### Setup
+Setup
+==========
 
 Nez needs to have the DefaultContent/NezDefaultBMFont.xnb file placed in your projects Content/nez folder. It sets up the font as the default for all text in it's debug console and for your own use. If you intend to use any of the built in Effects or PostProcessors you should also copy the DefaultContent/effects folder contents into your projects Content/nez/effects folder. Be sure to set the Build Action to Content so they get copied into your compiled game.
 
 
 
-### Systems
+Nez Systems
+==========
 
 There are various systems documented separately in the FAQs folder. They go into a bit more detail on the different sub-systems that make up Nez.
 
@@ -36,7 +38,8 @@ There are various systems documented separately in the FAQs folder. They go into
 - [Samples](FAQs/Samples.md)
 
 
-### Pipeline Importers
+Pipeline Importers
+==========
 
 Nez comes stock with a decent bunch of Pipeline tool importers including:
 
