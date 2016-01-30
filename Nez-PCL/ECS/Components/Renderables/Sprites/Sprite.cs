@@ -34,8 +34,8 @@ namespace Nez.Sprites
 
 		public override void render( Graphics graphics, Camera camera )
 		{
-			if( subtexture != null && isVisibleFromCamera( camera ) )
-				graphics.spriteBatch.Draw( subtexture, renderPosition, subtexture.sourceRect, color, rotation, origin, scale, spriteEffects, _layerDepth );
+			if( isVisibleFromCamera( camera ) )
+				graphics.spriteBatch.Draw( subtexture, entity.transform.position, subtexture.sourceRect, color, entity.transform.rotation, origin, entity.transform.scale, spriteEffects, _layerDepth );
 		}
 
 	}

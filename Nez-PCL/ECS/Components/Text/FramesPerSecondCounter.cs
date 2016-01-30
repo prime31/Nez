@@ -101,9 +101,9 @@ namespace Nez
 		{
 			// we override render and use position instead of entityPosition. this keeps the text in place even if the entity moves
 			if( _bitmapFont != null )
-				graphics.spriteBatch.DrawString( _bitmapFont, _text, localPosition, color, rotation, origin, scale, spriteEffects, layerDepth );
+				graphics.spriteBatch.DrawString( _bitmapFont, _text, localPosition, color, entity.transform.rotation, origin, entity.transform.scale, spriteEffects, layerDepth );
 			else
-				graphics.spriteBatch.DrawString( _spriteFont, _text, localPosition, color, rotation, origin, scale, spriteEffects, layerDepth );
+				graphics.spriteBatch.DrawString( _spriteFont, _text, localPosition, color, entity.transform.rotation, origin, entity.transform.scale, spriteEffects, layerDepth );
 		}
 
 

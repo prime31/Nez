@@ -157,9 +157,9 @@ namespace Nez
 		public override void render( Graphics graphics, Camera camera )
 		{
 			if( _bitmapFont != null )
-				graphics.spriteBatch.DrawString( _bitmapFont, text, renderPosition, color, rotation, origin, scale, spriteEffects, layerDepth );
+				graphics.spriteBatch.DrawString( _bitmapFont, text, entity.transform.position + _localPosition, color, entity.transform.rotation, origin, entity.transform.scale, spriteEffects, layerDepth );
 			else
-				graphics.spriteBatch.DrawString( _spriteFont, text, renderPosition, color, rotation, origin, scale, spriteEffects, layerDepth );
+				graphics.spriteBatch.DrawString( _spriteFont, text, entity.transform.position + _localPosition, color, entity.transform.rotation, origin, entity.transform.scale, spriteEffects, layerDepth );
 		}
 
 	}

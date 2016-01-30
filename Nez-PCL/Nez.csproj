@@ -227,5 +227,6 @@
     <Compile Include="Graphics\PostProcessing\PostProcessorT.cs" />
     <Compile Include="Graphics\Effects\ScanlinesEffect.cs" />
     <Compile Include="Graphics\Textures\RenderTarget.cs" />
+    <Compile Include="ECS\Transform.cs" />
   </ItemGroup>
 </Project>

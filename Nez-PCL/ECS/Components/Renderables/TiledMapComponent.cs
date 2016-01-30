@@ -92,14 +92,14 @@ namespace Nez
 		{
 			if( layerIndicesToRender == null )
 			{
-				tiledmap.draw( graphics.spriteBatch, renderPosition, layerDepth, camera.bounds );
+				tiledmap.draw( graphics.spriteBatch, entity.transform.position + _localPosition, layerDepth, camera.bounds );
 			}
 			else
 			{
 				for( var i = 0; i < tiledmap.layers.Count; i++ )
 				{
 					if( layerIndicesToRender.Contains( i ) && tiledmap.layers[i].visible )
-						tiledmap.layers[i].draw( graphics.spriteBatch, renderPosition, layerDepth, camera.bounds );
+						tiledmap.layers[i].draw( graphics.spriteBatch, entity.transform.position + _localPosition, layerDepth, camera.bounds );
 				}
 			}
 		}
@@ -129,6 +129,7 @@ namespace Nez
 
 			// fetch the collision layer and its rects for collision
 			var collisionRects = _collisionLayer.getCollisionRectangles();
+			var renderPosition = entity.transform.position + _localPosition;
 
 			// create colliders for the rects we received
 			_colliders = new Collider[collisionRects.Count];
@@ -160,6 +161,8 @@ namespace Nez
 
 		void renderObjectGroup( TiledObjectGroup group, Graphics graphics )
 		{
+			var renderPosition = entity.transform.position + _localPosition;
+
 			foreach( var obj in group.objects )
 			{
 				if( !obj.visible )

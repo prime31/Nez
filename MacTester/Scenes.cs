@@ -14,6 +14,7 @@ using System.IO;
 using Nez.Particles;
 using Nez.PhysicsShapes;
 using System.Linq;
+using Nez.Tweens;
 
 
 namespace MacTester
@@ -31,13 +32,13 @@ namespace MacTester
 				scene.setDesignResolution( 256, 144, Scene.SceneResolutionPolicy.NoBorderPixelPerfect );
 
 			// load a TiledMap and move it back so is drawn before other entities
-			var tiledEntity = scene.createAndAddEntity<Entity>( "tiled-map-entity" );
+			var tiledEntity = scene.createEntity( "tiled-map-entity" );
 			var tiledmap = scene.contentManager.Load<TiledMap>( "bin/MacOSX/Tilemap/tilemap" );
 			tiledEntity.addComponent( new TiledMapComponent( tiledmap, "collision" ) );
 			tiledEntity.updateOrder += 5;
 
-			var tiledEntityTwo = scene.createAndAddEntity<Entity>( "tiled-map-entity-two" );
-			tiledEntityTwo.position = new Vector2( 256, 0 );
+			var tiledEntityTwo = scene.createEntity( "tiled-map-entity-two" );
+			tiledEntityTwo.transform.position = new Vector2( 256, 0 );
 			tiledEntityTwo.addComponent( new TiledMapComponent( tiledmap, "collision" ) );
 			tiledEntityTwo.updateOrder += 5;
 
@@ -53,8 +54,8 @@ namespace MacTester
 			sprite.addAnimation( 0, spriteAnimation );
 			sprite.play( 0 );
 
-			var spriteEntity = scene.createAndAddEntity<Entity>( "sprite-dude" );
-			spriteEntity.position = new Vector2( 40, 40 );
+			var spriteEntity = scene.createEntity( "sprite-dude" );
+			spriteEntity.transform.position = new Vector2( 40, 40 );
 			spriteEntity.addComponent( sprite );
 
 
@@ -76,7 +77,7 @@ namespace MacTester
 			scene.setDesignResolution( 256, 144, Scene.SceneResolutionPolicy.ShowAllPixelPerfect );
 
 			// load a TiledMap and move it back so is drawn before other entities
-			var tiledEntity = scene.createAndAddEntity<Entity>( "tiled-map-entity" );
+			var tiledEntity = scene.createEntity( "tiled-map-entity" );
 			var tiledmap = scene.contentManager.Load<TiledMap>( "bin/MacOSX/Tilemap/tilemap" );
 
 			var tc1 = new TiledMapComponent( tiledmap, "collision" );
@@ -114,21 +115,21 @@ namespace MacTester
 			scene.addRenderer( new DefaultRenderer() );
 
 			// stick a couple moons on screen
-			var entity = scene.createAndAddEntity<Entity>( "moon" );
+			var entity = scene.createEntity( "moon" );
 			var image = new Sprite( moonTexture );
-			image.zoom = 2f;
+			entity.transform.scale = new Vector2( 2 );
 			entity.addComponent( image );
 			entity.addComponent( new FramesPerSecondCounter( Graphics.instance.bitmapFont, Color.White, FramesPerSecondCounter.FPSDockPosition.TopLeft ) );
-			entity.position = new Vector2( 120f, 0f );
+			entity.transform.position = new Vector2( 120f, 0f );
 			entity.colliders.add( new CircleCollider( moonTexture.Width * 1.5f ) );
 
-			entity = scene.createAndAddEntity<Entity>( "new-moon" );
+			entity = scene.createEntity( "new-moon" );
 			image = new Sprite( moonTexture );
-			entity.position = new Vector2( 130f, 230f );
+			entity.transform.position = new Vector2( 130f, 230f );
 			entity.addComponent( image );
 
 
-			entity = scene.createAndAddEntity<Entity>( "bmfont" );
+			entity = scene.createEntity( "bmfont" );
 			entity.addComponent( new Text( Graphics.instance.bitmapFont, "This text is a BMFont\nPOOOP", new Vector2( 0, 30 ), Color.Red ) );
 			entity.addComponent( new Text( bmFont, "This text is a BMFont\nPOOOP", new Vector2( 0, 70 ), Color.Cornsilk ) );
 
@@ -137,8 +138,8 @@ namespace MacTester
 			var anotherAtlas = scene.contentManager.Load<TextureAtlas>( "bin/MacOSX/TextureAtlasTest/AnotherAtlas" );
 			var textureAtlas = scene.contentManager.Load<TextureAtlas>( "bin/MacOSX/TextureAtlasTest/AtlasImages" );
 
-			entity = scene.createAndAddEntity<Entity>( "texture-atlas-sprite" );
-			entity.position = new Vector2( 30f, 330f );
+			entity = scene.createEntity( "texture-atlas-sprite" );
+			entity.transform.position = new Vector2( 30f, 330f );
 
 			// create a sprite animation from an atlas
 			var spriteAnimation = new SpriteAnimation() {
@@ -180,8 +181,8 @@ namespace MacTester
 			// create some moons
 			Action<Vector2,string,bool> moonMaker = ( Vector2 pos, string name, bool isTrigger ) =>
 			{
-				var ent = scene.createAndAddEntity<Entity>( name );
-				ent.position = pos;
+				var ent = scene.createEntity( name );
+				ent.transform.position = pos;
 				ent.addComponent( new Sprite( moonTexture ) );
 				if( useBoxColliders )
 					ent.colliders.add( new BoxCollider() );
@@ -201,8 +202,8 @@ namespace MacTester
 			scene.findEntity( "moon4" ).addComponent( new SimpleMovingPlatform( 250, 400 ) );
 
 			// create a player moon
-			var entity = scene.createAndAddEntity<Entity>( "player-moon" );
-			entity.position = new Vector2( 220, 220 );
+			var entity = scene.createEntity( "player-moon" );
+			entity.transform.position = new Vector2( 220, 220 );
 			var sprite = new Sprite( moonTexture );
 			entity.addComponent( sprite )
 				.addComponent( new SimpleMoonOutlineRenderer( sprite ) )
@@ -215,7 +216,7 @@ namespace MacTester
 
 
 			// add a follow camera
-			var camFollow = scene.createAndAddEntity<Entity>( "camera-follow" );
+			var camFollow = scene.createEntity( "camera-follow" );
 			camFollow.addComponent( new FollowCamera( entity ) )
 				.addComponent( new CameraShake() );
 
@@ -227,7 +228,7 @@ namespace MacTester
 		{
 			var scene = Scene.createWithDefaultRenderer( Color.Aquamarine );
 
-			var sceneEntity = scene.createAndAddEntity<Entity>( "overlap2d-scene-entity" );
+			var sceneEntity = scene.createEntity( "overlap2d-scene-entity" );
 			var o2ds = scene.contentManager.Load<O2DScene>( "bin/MacOSX/Overlap2D/MainScene" );
 			var sceneTexture = scene.contentManager.Load<LibGdxAtlas>( "bin/MacOSX/Overlap2D/packatlas" );
 			foreach( var si in o2ds.sImages )
@@ -235,7 +236,7 @@ namespace MacTester
 				var i = new Sprite( sceneTexture.getSubtexture( si.imageName ) );
 				i.localPosition = new Vector2( si.x, -si.y );
 				i.origin = new Vector2( si.originX, si.originY );
-				i.scale = new Vector2( si.scaleX, si.scaleY );
+				sceneEntity.transform.scale = new Vector2( si.scaleX, si.scaleY );
 				sceneEntity.addComponent( i );
 			}
 
@@ -257,22 +258,22 @@ namespace MacTester
 			var scene = Scene.createWithDefaultRenderer( Color.Aquamarine );
 			var moonTexture = scene.contentManager.Load<Texture2D>( "Images/moon" );
 
-			var entity = scene.createAndAddEntity<Entity>( "moon" );
+			var entity = scene.createEntity( "moon" );
 			entity.addComponent( new ScrollingSprite( moonTexture )
 			{
 				scrollSpeedX = 75f,
 				scrollSpeedY = 75f
 			});
-			entity.position = new Vector2( 200, 200 );
+			entity.transform.position = new Vector2( 200, 200 );
 			//entity.colliders.add( new PolygonCollider( 5, 100 ) );
 			entity.colliders.add( new BoxCollider() );
 
 
-			entity = scene.createAndAddEntity<Entity>( "moon2" );
+			entity = scene.createEntity( "moon2" );
 			var image = new Sprite( moonTexture );
 			entity.addComponent( image );
 			entity.addComponent( new SimpleMoonMover() );
-			entity.position = new Vector2( 500, 500 );
+			entity.transform.position = new Vector2( 500, 500 );
 			//entity.colliders.add( new PolygonCollider( 7, 60 ) );
 			//entity.colliders.add( new BoxCollider() );
 			entity.colliders.add( new CircleCollider() );
@@ -286,7 +287,6 @@ namespace MacTester
 
 
 		static int lastEmitter = 0;
-
 		public static Scene sceneFive()
 		{
 			var scene = Scene.createWithDefaultRenderer( Color.Black );
@@ -323,28 +323,28 @@ namespace MacTester
 			var whichEmitter = particles[lastEmitter++];
 
 
-			var entity = scene.createAndAddEntity<Entity>( "particles" );
-			entity.position = new Vector2( Screen.backBufferWidth / 2, Screen.backBufferHeight / 2 );
+			var entity = scene.createEntity( "particles" );
+			entity.transform.position = new Vector2( Screen.backBufferWidth / 2, Screen.backBufferHeight / 2 );
 			var particleEmitterConfig = scene.contentManager.Load<ParticleEmitterConfig>( whichEmitter );
 			entity.addComponent( new ParticleEmitter( particleEmitterConfig ) );
 			entity.getComponent<ParticleEmitter>().collisionConfig.enabled = true;
 
 
-			entity = scene.createAndAddEntity<Entity>( "text" );
+			entity = scene.createEntity( "text" );
 			var textComp = new Text( Graphics.instance.bitmapFont, whichEmitter, new Vector2( 0, 0 ), Color.White );
-			textComp.scale = new Vector2( 2, 2 );
+			entity.transform.scale = new Vector2( 2, 2 );
 			textComp.origin = Vector2.Zero;
 			entity.addComponent( textComp );
 
 
 			var moonTexture = scene.contentManager.Load<Texture2D>( "Images/moon" );
-			entity = scene.createAndAddEntity<Entity>( "moon1" );
-			entity.position = new Vector2( Screen.backBufferWidth / 2, Screen.backBufferHeight / 2 + 100 );
+			entity = scene.createEntity( "moon1" );
+			entity.transform.position = new Vector2( Screen.backBufferWidth / 2, Screen.backBufferHeight / 2 + 100 );
 			entity.addComponent( new Sprite( moonTexture ) );
 			entity.colliders.add( new CircleCollider() );
 
-			entity = scene.createAndAddEntity<Entity>( "moon2" );
-			entity.position = new Vector2( Screen.backBufferWidth / 2 - 100, Screen.backBufferHeight / 2 + 100 );
+			entity = scene.createEntity( "moon2" );
+			entity.transform.position = new Vector2( Screen.backBufferWidth / 2 - 100, Screen.backBufferHeight / 2 + 100 );
 			entity.addComponent( new Sprite( moonTexture ) );
 			entity.colliders.add( new CircleCollider() );
 
@@ -357,16 +357,16 @@ namespace MacTester
 			var scene = Scene.createWithDefaultRenderer( Color.Black );
 			scene.camera.position += new Vector2( -Screen.backBufferWidth / 2, -Screen.backBufferHeight / 2 );
 
-			var entity = scene.createAndAddEntity<Entity>( "text" );
+			var entity = scene.createEntity( "text" );
 			var textComp = new Text( Graphics.instance.bitmapFont, "text only", new Vector2( 0, 0 ), Color.White );
-			textComp.scale = new Vector2( 2, 2 );
+			entity.transform.scale = new Vector2( 2, 2 );
 			textComp.origin = Vector2.Zero;
 			textComp.localPosition = new Vector2( 120, -150 );
 			entity.addComponent( textComp );
 
-			entity = scene.createAndAddEntity<Entity>( "text-image" );
+			entity = scene.createEntity( "text-image" );
 			textComp = new Text( Graphics.instance.bitmapFont, "text and image", new Vector2( 0, 20 ), Color.White );
-			textComp.scale = new Vector2( 2, 2 );
+			entity.transform.scale = new Vector2( 2, 2 );
 			textComp.origin = Vector2.Zero;
 			entity.addComponent( textComp );
 
@@ -387,6 +387,39 @@ namespace MacTester
 
 			Debug.log( tp.matcher.ToString() );
 			Debug.log( ip.matcher.ToString() );
+
+			return scene;
+		}
+
+
+		public static Scene transformScene()
+		{
+			var scene = Scene.createWithDefaultRenderer();
+			var textureAtlas = scene.contentManager.Load<TextureAtlas>( "bin/MacOSX/TextureAtlasTest/AtlasImages" );
+
+			var parentEntity = scene.createEntity( "parent" );
+			parentEntity.transform.position = new Vector2( 300, 300 );
+			parentEntity.transform.rotation = MathHelper.PiOver4;
+			parentEntity.addComponent( new Sprite( textureAtlas.getSubtexture( "Ninja_Idle_0" ) ) );
+
+
+			var childEntity = scene.createEntity( "child" );
+			childEntity.transform.parent = parentEntity.transform;
+			childEntity.transform.localPosition = new Vector2( 50, 0 );
+			childEntity.transform.scale = new Vector2( 2, 2 );
+			childEntity.transform.rotation = 0.5f;
+			childEntity.addComponent( new Sprite( textureAtlas.getSubtexture( "Ninja_Idle_1" ) ) );
+
+
+			var childTwoEntity = scene.createEntity( "childTwo" );
+			childTwoEntity.transform.parent = childEntity.transform;
+			childTwoEntity.addComponent( new Sprite( textureAtlas.getSubtexture( "Ninja_Idle_2" ) ) );
+			childTwoEntity.transform.localPosition = new Vector2( 50, 0 );
+			childTwoEntity.transform.rotation = 0.5f;
+
+
+			PropertyTweens.floatPropertyTo( parentEntity.transform, "rotation", MathHelper.TwoPi, 1 ).start();
+			//PropertyTweens.floatPropertyTo( childTwoEntity.transform, "rotation", MathHelper.TwoPi, 1 ).start();
 
 			return scene;
 		}

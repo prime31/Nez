@@ -53,7 +53,7 @@ namespace MacTester
 				{
 					spriteDude.getComponent<Sprite<int>>().pause();
 					var worldPos = scene.camera.screenToWorldPoint( Input.scaledMousePosition );
-					PropertyTweens.vector2PropertyTo( spriteDude, "position", worldPos, 0.5f )
+					PropertyTweens.vector2PropertyTo( spriteDude.transform, "position", worldPos, 0.5f )
 						.setLoops( LoopType.PingPong, 1 )
 						.setContext( spriteDude )
 						.setCompletionHandler( tween =>
@@ -66,11 +66,11 @@ namespace MacTester
 						})
 						.start();
 
-					PropertyTweens.vector2PropertyTo( spriteDude.getComponent<RenderableComponent>(), "scale", new Vector2( 1.5f, 2.5f ), 1f )
+					PropertyTweens.vector2PropertyTo( spriteDude.transform, "scale", new Vector2( 1.5f, 2.5f ), 1f )
 						.setLoops( LoopType.PingPong, 1 )
 						.start();
 
-					PropertyTweens.floatPropertyTo( spriteDude.getComponent<RenderableComponent>(), "rotation", MathHelper.PiOver2, 1f )
+					PropertyTweens.floatPropertyTo( spriteDude.transform, "rotation", MathHelper.PiOver2, 1f )
 						.setLoops( LoopType.PingPong, 1 )
 						.start();
 				}
@@ -78,8 +78,8 @@ namespace MacTester
 				var playerDude = scene.findEntity( "player-moon" );
 				if( playerDude != null )
 				{
-					var start = playerDude.position + new Vector2( 64f, 0f );
-					var end = playerDude.position + new Vector2( 256f, 0f );
+					var start = playerDude.transform.position + new Vector2( 64f, 0f );
+					var end = playerDude.transform.position + new Vector2( 256f, 0f );
 					Debug.drawLine( start, end, Color.Black, 2f );
 					var hit = Physics.linecast( start, end );
 					if( hit.collider != null )
@@ -122,7 +122,7 @@ namespace MacTester
 		{
 			base.Draw( gameTime );
 
-			IMGUI.beginWindow( GraphicsDevice.Viewport.Width - 150, 0, 150, 390 );
+			IMGUI.beginWindow( GraphicsDevice.Viewport.Width - 150, 0, 150, 420 );
 
 			debugRenderEnabled = IMGUI.toggle( "Debug Render", debugRenderEnabled );
 
@@ -155,6 +155,11 @@ namespace MacTester
 
 			if( IMGUI.button( "Processor Scene" ) )
 				scene = Scenes.processorScene();
+
+			if( IMGUI.button( "Transform Scene" ) )
+				scene = Scenes.transformScene();
+
+			IMGUI.space( 15 );
 			
 			if( IMGUI.button( "Grab Screenshot" ) )
 				scene.requestScreenshot( tex =>
@@ -167,6 +172,7 @@ namespace MacTester
 
 			IMGUI.endWindow();
 		}
+	
 	}
 }
 

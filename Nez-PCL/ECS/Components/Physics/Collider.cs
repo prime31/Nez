@@ -74,7 +74,7 @@ namespace Nez
 		/// <value>The absolute position.</value>
 		public Vector2 absolutePosition
 		{
-			get { return entity.position + _localPosition - _origin; }
+			get { return entity.transform.position + _localPosition - _origin; }
 		}
 
 		/// <summary>
@@ -137,7 +137,7 @@ namespace Nez
 
 						// fetch the Renderable's center, transfer it to local coordinates and use that as the origin of our collider
 						var center = renderableBounds.Center;
-						var localCenter = center.ToVector2() - entity.position;
+						var localCenter = center.ToVector2() - entity.transform.position;
 						origin = localCenter;
 					}
 					else
@@ -149,7 +149,7 @@ namespace Nez
 						originNormalized = renderable.originNormalized;
 					}
 
-					shape.position = entity.position;
+					shape.position = entity.transform.position;
 				}
 			}
 			_isParentEntityAddedToScene = true;

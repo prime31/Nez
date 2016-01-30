@@ -106,8 +106,8 @@ namespace Nez
 
 			if( _cameraStyle == CameraStyle.LockOn )
 			{
-				var targetX = _targetEntity.position.X;
-				var targetY = _targetEntity.position.Y;
+				var targetX = _targetEntity.transform.position.X;
+				var targetY = _targetEntity.transform.position.Y;
 
 				// x-axis
 				if( _worldSpaceDeadzone.X > targetX )

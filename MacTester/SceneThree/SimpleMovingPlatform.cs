@@ -25,7 +25,7 @@ namespace MacTester
 
 		public override void onAddedToEntity()
 		{
-			_minX = entity.position.X;
+			_minX = entity.transform.position.X;
 			_maxX = _minX + 100;
 		}
 
@@ -36,8 +36,8 @@ namespace MacTester
 			var xToTheSpeedFactor = Mathf.pow( x, _speedFactor );
 			var alpha = 1f - xToTheSpeedFactor / xToTheSpeedFactor + Mathf.pow( 1 - x, _speedFactor );
 
-			var deltaY = Nez.Tweens.Lerps.unclampedLerp( _minY, _maxY, alpha ) - entity.position.Y;
-			var deltaX = Nez.Tweens.Lerps.unclampedLerp( _minX, _maxX, alpha ) - entity.position.X;
+			var deltaY = Nez.Tweens.Lerps.unclampedLerp( _minY, _maxY, alpha ) - entity.transform.position.Y;
+			var deltaX = Nez.Tweens.Lerps.unclampedLerp( _minX, _maxX, alpha ) - entity.transform.position.X;
 
 			// TODO: probably query Physics to fetch the actors that we will intersect instead of blindly grabbing them all
 			//var allActors = getAllActors();

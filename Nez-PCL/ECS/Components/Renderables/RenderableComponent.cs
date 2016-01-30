@@ -49,42 +49,6 @@ namespace Nez
 			}
 		}
 
-		protected float _rotation;
-		public float rotation
-		{
-			get { return _rotation; }
-			set
-			{
-				if( _rotation != value )
-				{
-					_rotation = value;
-					_areBoundsDirty = true;
-				}
-			}
-		}
-
-		protected Vector2 _scale = Vector2.One;
-		public Vector2 scale
-		{
-			get { return _scale; }
-			set
-			{
-				if( _scale != value )
-				{
-					_scale = value;
-					_areBoundsDirty = true;
-				}
-			}
-		}
-
-		/// <summary>
-		/// shortcut for setting uniform scale
-		/// </summary>
-		public float zoom
-		{
-			set { scale = new Vector2( value, value ); }
-		}
-			
 		/// <summary>
 		/// standard SpriteBatch layerdepth. 0 is in front and 1 is in back. Changing this value will trigger a sort of the renderableComponents
 		/// list on the scene.
@@ -105,7 +69,6 @@ namespace Nez
 		public Color color = Color.White;
 		public SpriteEffects spriteEffects = SpriteEffects.None;
 
-		protected int _renderLayer;
 		/// <summary>
 		/// lower renderLayers are in the front and higher are in the back, just like layerDepth but not clamped to 0-1
 		/// </summary>
@@ -126,6 +89,7 @@ namespace Nez
 				}
 			}
 		}
+		protected int _renderLayer;
 
 		public bool flipX
 		{
@@ -151,11 +115,6 @@ namespace Nez
 			}
 		}
 
-		public Vector2 renderPosition
-		{
-			get { return entity.position + _localPosition; }
-		}
-			
 		protected Rectangle _bounds;
 		public virtual Rectangle bounds
 		{
@@ -163,7 +122,7 @@ namespace Nez
 			{
 				if( _areBoundsDirty )
 				{
-					RectangleExt.calculateBounds( ref _bounds, entity.position, _localPosition, _origin, _scale, _rotation, width, height );
+					RectangleExt.calculateBounds( ref _bounds, entity.transform.position, _localPosition, _origin, entity.transform.scale, entity.transform.rotation, width, height );
 					_areBoundsDirty = false;
 				}
 
@@ -236,7 +195,7 @@ namespace Nez
 				graphics.spriteBatch.drawHollowRect( bounds, Color.Yellow );
 
 			// draw a square for our pivot/origin
-			graphics.spriteBatch.drawPixel( renderPosition, Color.DarkOrchid, 4 );
+			graphics.spriteBatch.drawPixel( entity.transform.position + _localPosition, Color.DarkOrchid, 4 );
 		}
 
 

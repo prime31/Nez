@@ -18,21 +18,12 @@ namespace Nez
 		/// <summary>
 		/// entity name. useful for doing scene-wide searches for an entity
 		/// </summary>
-		public string name;
+		public readonly string name;
 
-		protected Vector2 _position;
-		public Vector2 position
-		{
-			get { return _position; }
-			set
-			{
-				_position = value;
-
-				// notify our children of our changed position
-				components.onEntityPositionChanged();
-				colliders.onEntityPositionChanged();
-			}
-		}
+		/// <summary>
+		/// encapsulates the Entity's position/rotation/scale and allows setting up a hieararchy
+		/// </summary>
+		public readonly Transform transform;
 
 		/// <summary>
 		/// list of all the components currently attached to this entity
@@ -41,7 +32,6 @@ namespace Nez
 
 		public ColliderList colliders;
 
-		int _tag = 0;
 		/// <summary>
 		/// use this however you want to. It can later be used to query the scene for all Entities with a specific tag
 		/// </summary>
@@ -62,13 +52,13 @@ namespace Nez
 				}
 			}
 		}
+		int _tag = 0;
 
 		/// <summary>
 		/// specifies how often this entitys update method should be called. 1 means every frame, 2 is every other, etc
 		/// </summary>
 		public uint updateInterval = 1;
 
-		bool _enabled = true;
 		/// <summary>
 		/// enables/disables the Entity. When disabled colliders are removed from the Physics system and components methods will not be called
 		/// </summary>
@@ -98,9 +88,10 @@ namespace Nez
 				}
 			}
 		}
+		bool _enabled = true;
 
 		internal double _actualUpdateOrder = 0;
-		internal int _updateOrder = 0;
+
 
 		/// <summary>
 		/// update order of this Entity. Also used to sort tag lists on scene.entities
@@ -122,12 +113,9 @@ namespace Nez
 				}
 			}
 		}
+		internal int _updateOrder = 0;
 
-		private BitSet _componentBits = new BitSet();
-		public BitSet componentBits
-		{
-			get { return _componentBits; }
-		}
+		internal BitSet componentBits;
 
 		#endregion
 
@@ -136,12 +124,24 @@ namespace Nez
 		{
 			components = new ComponentList( this );
 			colliders = new ColliderList( this );
+			transform = new Transform( this );
+
+			if( Core.entitySystemsEnabled )
+				componentBits = new BitSet();
 		}
 
 
 		public Entity( string name ) : this()
 		{
 			this.name = name;
+		}
+
+
+		internal void onTransformChanged()
+		{
+			// notify our children of our changed position
+			components.onEntityPositionChanged();
+			colliders.onEntityPositionChanged();
 		}
 
 
@@ -263,7 +263,7 @@ namespace Nez
 			// no collider? just move and forget about it
 			if( colliders.Count == 0 )
 			{
-				position += motion;
+				transform.position += motion;
 				return;
 			}
 				
@@ -301,7 +301,7 @@ namespace Nez
 			}
 
 			// set our new position which will trigger child component/collider bounds updates
-			position += motion;
+			transform.position += motion;
 
 			// let Physics know about our new position
 			Physics.addCollider( colliders.mainCollider );

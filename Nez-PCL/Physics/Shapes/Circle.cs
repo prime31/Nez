@@ -18,7 +18,7 @@ namespace Nez.PhysicsShapes
 		internal override void recalculateBounds( Collider collider )
 		{
 			position = collider.absolutePosition;
-			bounds = RectangleExt.fromFloats( collider.entity.position.X + collider.localPosition.X + collider.origin.X - radius, collider.entity.position.Y + collider.localPosition.Y + collider.origin.Y - radius, radius * 2f, radius * 2f );
+			bounds = RectangleExt.fromFloats( collider.entity.transform.position.X + collider.localPosition.X + collider.origin.X - radius, collider.entity.transform.position.Y + collider.localPosition.Y + collider.origin.Y - radius, radius * 2f, radius * 2f );
 		}
 
 

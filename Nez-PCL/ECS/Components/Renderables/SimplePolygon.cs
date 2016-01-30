@@ -44,11 +44,11 @@ namespace Nez
 			{
 				if( _areBoundsDirty )
 				{
-					if( _rotation == 0f )
+					if( entity.transform.rotation == 0f )
 					{
 					    var positionAddition = _localPosition - _origin;
 					    if( entity != null )
-					        positionAddition += entity.position;
+							positionAddition += entity.transform.position;
 
 						for( var i = 0; i < _points.Length; i++ )
 							_worldSpacePoints[i] = _points[i] + positionAddition;
@@ -85,15 +85,15 @@ namespace Nez
 				
 				if( entity != null )
 				{
-				    worldPosX += entity.position.X;
-				    worldPosY += entity.position.Y;
+					worldPosX += entity.transform.position.X;
+					worldPosY += entity.transform.position.Y;
 				}
 				
 				var tempMat = Matrix.Identity;
 
 				// set the reference point taking origin into account
 				_transformMatrix = Matrix.CreateTranslation( -_origin.X, -_origin.Y, 0f ); // origin
-				Matrix.CreateRotationZ( _rotation, out tempMat ); // rotation
+				Matrix.CreateRotationZ( entity.transform.rotation, out tempMat ); // rotation
 				Matrix.Multiply( ref _transformMatrix, ref tempMat, out _transformMatrix );
 				Matrix.CreateTranslation( _origin.X, _origin.Y, 0f, out tempMat ); // translate back from our origin
 				Matrix.Multiply( ref _transformMatrix, ref tempMat, out _transformMatrix );
