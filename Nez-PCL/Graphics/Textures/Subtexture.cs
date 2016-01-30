@@ -56,6 +56,13 @@ namespace Nez.Textures
 		{}
 
 
+		/// <summary>
+		/// provides a List of subtextures given an atlas with equally spaced rows/columns of sprites
+		/// </summary>
+		/// <returns>The from atlas.</returns>
+		/// <param name="texture">Texture.</param>
+		/// <param name="cellWidth">Cell width.</param>
+		/// <param name="cellHeight">Cell height.</param>
 		public static List<Subtexture> subtexturesFromAtlas( Texture2D texture, int cellWidth, int cellHeight )
 		{
 			var subtextures = new List<Subtexture>();
@@ -72,13 +79,6 @@ namespace Nez.Textures
 			}
 
 			return subtextures;
-		}
-
-
-		public virtual void unload()
-		{
-			texture2D.Dispose();
-			texture2D = null;
 		}
 
 

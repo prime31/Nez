@@ -81,14 +81,14 @@ namespace MacTester
 			var tiledmap = scene.contentManager.Load<TiledMap>( "bin/MacOSX/Tilemap/tilemap" );
 
 			var tc1 = new TiledMapComponent( tiledmap, "collision" );
-			tc1.layerIndicesToRender = new List<int>() { 0, 1, 2 };
+			tc1.layerIndicesToRender = new int[] { 0, 1, 2 };
 			tiledEntity.addComponent( tc1 );
 
 
 			var tc2 = new TiledMapComponent( tiledmap );
 			tiledEntity.addComponent( tc2 );
 			tc2.renderLayer = 1;
-			tc2.layerIndicesToRender = new List<int>() { 3 };
+			tc2.layerIndicesToRender = new int[] { 3 };
 
 
 			scene.addPostProcessor( new PixelBloomPostProcessor( bloomLayerRenderer.renderTarget, -1 ) );

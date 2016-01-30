@@ -67,7 +67,8 @@ namespace Nez
 		public void unload()
 		{
 			if( pixelTexture != null )
-				pixelTexture.unload();
+				pixelTexture.texture2D.Dispose();
+			pixelTexture = null;
 
 			spriteBatch.Dispose();
 			spriteBatch = null;

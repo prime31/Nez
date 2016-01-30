@@ -14,7 +14,7 @@ namespace Nez
 		/// <summary>
 		/// if null, all layers will be rendered
 		/// </summary>
-		public List<int> layerIndicesToRender;
+		public int[] layerIndicesToRender;
 
 		public override float width
 		{
@@ -98,7 +98,7 @@ namespace Nez
 			{
 				for( var i = 0; i < tiledmap.layers.Count; i++ )
 				{
-					if( layerIndicesToRender.Contains( i ) && tiledmap.layers[i].visible )
+					if( layerIndicesToRender.contains( i ) && tiledmap.layers[i].visible )
 						tiledmap.layers[i].draw( graphics.spriteBatch, entity.transform.position + _localPosition, layerDepth, camera.bounds );
 				}
 			}
