@@ -662,10 +662,9 @@ namespace Nez
 		/// </summary>
 		/// <typeparam name="T">entity type</typeparam>
 		/// <returns></returns>
-		public T createAndAddEntity<T>( string name ) where T : Entity, new()
+		public Entity createEntity( string name )
 		{
-			var entity = new T();
-			entity.name = name;
+			var entity = new Entity( name );
 			return addEntity( entity );
 		}
 
