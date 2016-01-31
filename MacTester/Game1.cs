@@ -157,7 +157,7 @@ namespace MacTester
 				scene = Scenes.processorScene();
 
 			if( IMGUI.button( "Transform Scene" ) )
-				scene = Scenes.transformScene();
+				scene = Scene.createWithDefaultRenderer<TransformScene>();
 
 			IMGUI.space( 15 );
 			

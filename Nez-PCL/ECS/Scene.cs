@@ -194,6 +194,8 @@ namespace Nez
 		}
 
 
+		#region Scene creation helpers
+
 		/// <summary>
 		/// helper that creates a scene with the DefaultRenderer attached and ready for use
 		/// </summary>
@@ -209,6 +211,53 @@ namespace Nez
 		}
 
 
+		/// <summary>
+		/// helper that creates a scene of type T with the DefaultRenderer attached and ready for use
+		/// </summary>
+		/// <returns>The with default renderer.</returns>
+		public static T createWithDefaultRenderer<T>( Color? clearColor = null ) where T : Scene, new()
+		{
+			var scene = new T();
+
+			if( clearColor.HasValue )
+				scene.clearColor = clearColor.Value;
+			scene.addRenderer( new DefaultRenderer() );
+			return scene;
+		}
+
+
+		/// <summary>
+		/// helper that creates a scene with no Renderer
+		/// </summary>
+		/// <returns>The with default renderer.</returns>
+		public static Scene create( Color? clearColor = null )
+		{
+			var scene = new Scene();
+
+			if( clearColor.HasValue )
+				scene.clearColor = clearColor.Value;
+
+			return scene;
+		}
+
+
+		/// <summary>
+		/// helper that creates a scene of type T with no Renderer
+		/// </summary>
+		/// <returns>The with default renderer.</returns>
+		public static T create<T>( Color? clearColor = null ) where T : Scene, new()
+		{
+			var scene = new T();
+
+			if( clearColor.HasValue )
+				scene.clearColor = clearColor.Value;
+
+			return scene;
+		}
+
+		#endregion
+
+
 		public Scene()
 		{
 			camera = new Camera();
@@ -222,7 +271,19 @@ namespace Nez
 			// setup our resolution policy. we'll commit it in begin
 			_resolutionPolicy = defaultSceneResolutionPolicy;
 			_designResolutionSize = defaultDesignResolutionSize;
+
+			initialize();
 		}
+
+
+		#region Scene lifecycle
+
+		/// <summary>
+		/// override this in Scene subclasses and do your loading here. This is called from the contructor after the scene sets itself up but
+		/// before begin is ever called.
+		/// </summary>
+		public virtual void initialize()
+		{}
 
 
 		internal void begin()
@@ -370,6 +431,8 @@ namespace Nez
 		{
 			updateResolutionScaler();
 		}
+
+		#endregion
 
 
 		#region Resolution Policy

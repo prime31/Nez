@@ -390,20 +390,22 @@ namespace MacTester
 
 			return scene;
 		}
+	}
 
 
-		public static Scene transformScene()
+	public class TransformScene : Scene
+	{
+		public override void initialize()
 		{
-			var scene = Scene.createWithDefaultRenderer();
-			var textureAtlas = scene.contentManager.Load<TextureAtlas>( "bin/MacOSX/TextureAtlasTest/AtlasImages" );
+			var textureAtlas = contentManager.Load<TextureAtlas>( "bin/MacOSX/TextureAtlasTest/AtlasImages" );
 
-			var parentEntity = scene.createEntity( "parent" );
+			var parentEntity = createEntity( "parent" );
 			parentEntity.transform.position = new Vector2( 300, 300 );
 			parentEntity.transform.rotation = MathHelper.PiOver4;
 			parentEntity.addComponent( new Sprite( textureAtlas.getSubtexture( "Ninja_Idle_0" ) ) );
 
 
-			var childEntity = scene.createEntity( "child" );
+			var childEntity = createEntity( "child" );
 			childEntity.transform.parent = parentEntity.transform;
 			childEntity.transform.localPosition = new Vector2( 50, 0 );
 			childEntity.transform.scale = new Vector2( 2, 2 );
@@ -411,7 +413,7 @@ namespace MacTester
 			childEntity.addComponent( new Sprite( textureAtlas.getSubtexture( "Ninja_Idle_1" ) ) );
 
 
-			var childTwoEntity = scene.createEntity( "childTwo" );
+			var childTwoEntity = createEntity( "childTwo" );
 			childTwoEntity.transform.parent = childEntity.transform;
 			childTwoEntity.addComponent( new Sprite( textureAtlas.getSubtexture( "Ninja_Idle_2" ) ) );
 			childTwoEntity.transform.localPosition = new Vector2( 50, 0 );
@@ -420,10 +422,8 @@ namespace MacTester
 
 			PropertyTweens.floatPropertyTo( parentEntity.transform, "rotation", MathHelper.TwoPi, 1 ).start();
 			//PropertyTweens.floatPropertyTo( childTwoEntity.transform, "rotation", MathHelper.TwoPi, 1 ).start();
-
-			return scene;
 		}
-
 	}
+
 }
 
