@@ -178,6 +178,12 @@
     <Content Include="..\DefaultContent\effects\Vignette.mgfxo">
       <Link>Content\nez\effects\Vignette.mgfxo</Link>
     </Content>
+    <Content Include="..\DefaultContent\effects\HeatDistortion.mgfxo">
+      <Link>Content\nez\effects\HeatDistortion.mgfxo</Link>
+    </Content>
+    <Content Include="..\DefaultContent\textures\heatDistortionNoise.xnb">
+      <Link>Content\nez\textures\heatDistortionNoise.xnb</Link>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
@@ -194,6 +200,7 @@
     <Folder Include="SceneOne\" />
     <Folder Include="Content\nez\" />
     <Folder Include="Content\nez\effects\" />
+    <Folder Include="Content\nez\textures\" />
   </ItemGroup>
   <ItemGroup>
     <InterfaceDefinition Include="MainMenu.xib" />

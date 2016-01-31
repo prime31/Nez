@@ -165,9 +165,25 @@ namespace Nez
 		}
 
 
+		/// <summary>
+		/// returns true if value is even
+		/// </summary>
+		/// <returns><c>true</c>, if even was ised, <c>false</c> otherwise.</returns>
+		/// <param name="value">Value.</param>
 		public static bool isEven( int value )
 		{
 			return value % 2 == 0;
+		}
+
+
+		/// <summary>
+		/// returns true if value is odd
+		/// </summary>
+		/// <returns><c>true</c>, if odd was ised, <c>false</c> otherwise.</returns>
+		/// <param name="value">Value.</param>
+		public static bool isOdd( int value )
+		{
+			return value % 2 != 0;
 		}
 
 

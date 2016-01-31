@@ -6,13 +6,13 @@ sampler TextureSampler : register(s0);
 float BloomThreshold;
 
 
-float4 PixelShaderFunction(float2 texCoord : TEXCOORD0) : COLOR0
+float4 PixelShaderFunction( float2 texCoord : TEXCOORD0 ) : COLOR0
 {
     // Look up the original image color.
-    float4 c = tex2D(TextureSampler, texCoord);
+    float4 c = tex2D( TextureSampler, texCoord );
 
     // Adjust it to keep only values brighter than the specified threshold.
-    return saturate((c - BloomThreshold) / (1 - BloomThreshold));
+    return saturate( ( c - BloomThreshold ) / ( 1 - BloomThreshold ) );
 }
 
 

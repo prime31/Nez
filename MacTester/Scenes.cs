@@ -281,6 +281,7 @@ namespace MacTester
 
 			scene.addPostProcessor( new ScanlinesPostProcessor( 0 ) );
 			scene.addPostProcessor( new VignettePostProcessor( 1 ) );
+			scene.addPostProcessor( new HeatDistortionPostProcessor( 2 ) );
 
 			return scene;
 		}
