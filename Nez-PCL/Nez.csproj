@@ -198,7 +198,6 @@
     <Compile Include="ECS\Systems\ProcessingSystem.cs" />
     <Compile Include="Physics\Shapes\Shape.cs" />
     <Compile Include="Physics\Shapes\Polygon.cs" />
-    <Compile Include="Physics\Shapes\ShapeCollisionResult.cs" />
     <Compile Include="Physics\Shapes\ShapeCollisions.cs" />
     <Compile Include="Physics\Shapes\Circle.cs" />
     <Compile Include="Physics\Shapes\Box.cs" />
@@ -230,5 +229,6 @@
     <Compile Include="ECS\Transform.cs" />
     <Compile Include="Utils\ArrayExt.cs" />
     <Compile Include="Graphics\PostProcessing\PostProcessors\HeatDistortionPostProcessor.cs" />
+    <Compile Include="Physics\Shapes\CollisionResult.cs" />
   </ItemGroup>
 </Project>

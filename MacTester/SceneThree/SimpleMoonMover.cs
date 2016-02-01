@@ -31,7 +31,7 @@ namespace MacTester
 				var movement = moveDir * _speed;
 				//entity.moveActor( movement );
 
-				ShapeCollisionResult res;
+				CollisionResult res;
 				entity.newMoveActor( movement, out res );
 			}
 		}

@@ -75,7 +75,7 @@ namespace Nez.PhysicsShapes
 
 		public override bool overlaps( Shape other )
 		{
-			ShapeCollisionResult result;
+			CollisionResult result;
 			if( other is Polygon )
 				return ShapeCollisions.polygonToPolygon( this, other as Polygon, out result );
 
@@ -86,7 +86,7 @@ namespace Nez.PhysicsShapes
 		}
 
 
-		public override bool collidesWithShape( Shape other, out ShapeCollisionResult result )
+		public override bool collidesWithShape( Shape other, out CollisionResult result )
 		{
 			if( other is Polygon )
 				return ShapeCollisions.polygonToPolygon( this, other as Polygon, out result );

@@ -78,9 +78,9 @@ namespace Nez.PhysicsShapes
 		}
 
 
-		public static bool boxToBox( Box first, Box second, out ShapeCollisionResult result )
+		public static bool boxToBox( Box first, Box second, out CollisionResult result )
 		{
-			result = new ShapeCollisionResult();
+			result = new CollisionResult();
 
 			var minkowskiDiff = minkowskiDifference( first, second );
 			if( minkowskiDiff.Contains( 0f, 0f ) )
@@ -154,9 +154,9 @@ namespace Nez.PhysicsShapes
 		/// <param name="first">First.</param>
 		/// <param name="second">Second.</param>
 		/// <param name="result">Result.</param>
-		public static bool polygonToPolygon( Polygon first, Polygon second, out ShapeCollisionResult result )
+		public static bool polygonToPolygon( Polygon first, Polygon second, out CollisionResult result )
 		{
-			result = new ShapeCollisionResult();
+			result = new CollisionResult();
 			float timeOfCollision;
 
 			if( polygonToPolygon( first, second, null, out result.normal, out timeOfCollision ) )
@@ -417,9 +417,9 @@ namespace Nez.PhysicsShapes
 		}
 
 
-		public static bool circleToCircle( Circle first, Circle second, out ShapeCollisionResult result )
+		public static bool circleToCircle( Circle first, Circle second, out CollisionResult result )
 		{
-			result = new ShapeCollisionResult();
+			result = new CollisionResult();
 
 			// avoid the square root until we actually need it
 			var distanceSquared = Vector2.DistanceSquared( first.position, second.position );
@@ -451,9 +451,9 @@ namespace Nez.PhysicsShapes
 		/// <param name="first">First.</param>
 		/// <param name="second">Second.</param>
 		/// <param name="result">Result.</param>
-		public static bool circleToBox( Circle first, Box second, out ShapeCollisionResult result )
+		public static bool circleToBox( Circle first, Box second, out CollisionResult result )
 		{
-			result = new ShapeCollisionResult();
+			result = new CollisionResult();
 
 			var closestPointOnBounds = RectangleExt.getClosestPointOnRectangleBorderToPoint( ref second.bounds, first.position );
 
@@ -477,9 +477,9 @@ namespace Nez.PhysicsShapes
 		}
 
 
-		public static bool circleToPolygon( Circle circle, Polygon polygon, out ShapeCollisionResult result )
+		public static bool circleToPolygon( Circle circle, Polygon polygon, out CollisionResult result )
 		{
-			result = new ShapeCollisionResult();
+			result = new CollisionResult();
 
 			var closestPointIndex = -1;
 			var poly2Circle = circle.position - polygon.position;

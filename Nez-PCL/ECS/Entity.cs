@@ -257,9 +257,9 @@ namespace Nez
 
 		#region Movement helpers
 
-		public bool newMoveActor( Vector2 motion, out ShapeCollisionResult collisionResult )
+		public bool newMoveActor( Vector2 motion, out CollisionResult collisionResult )
 		{
-			collisionResult = new ShapeCollisionResult();
+			collisionResult = new CollisionResult();
 
 			// no collider? just move and forget about it
 			if( colliders.Count == 0 )
@@ -292,7 +292,7 @@ namespace Nez
 					if( neighbor.isTrigger )
 						continue;
 					
-					ShapeCollisionResult tempCollisionResult;
+					CollisionResult tempCollisionResult;
 					if( collider.collidesWith( neighbor, motion, out tempCollisionResult ) )
 					{
 						// hit. compare with the previous hit if we have one and choose the one that is closest (smallest MTV)
@@ -327,6 +327,7 @@ namespace Nez
 					
 					if( collider.overlaps( neighbor ) )
 					{
+						// trigger event perhaps?
 						Debug.log( "trigger between {0} and {1}", collider, neighbor );
 					}
 				}
@@ -397,7 +398,7 @@ namespace Nez
 		{
 			foreach( var neighbor in neighbors )
 			{
-				ShapeCollisionResult result;
+				CollisionResult result;
 				if( colliders.mainCollider.collidesWith( neighbor, motion, out result ) )
 				{
 					// if we have a trigger notify the listener but we dont alter movement

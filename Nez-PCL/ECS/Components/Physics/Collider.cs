@@ -205,7 +205,7 @@ namespace Nez
 		/// <returns><c>true</c>, if with was collidesed, <c>false</c> otherwise.</returns>
 		/// <param name="collider">Collider.</param>
 		/// <param name="result">Result.</param>
-		public bool collidesWith( Collider collider, out ShapeCollisionResult result )
+		public bool collidesWith( Collider collider, out CollisionResult result )
 		{
 			return shape.collidesWithShape( collider.shape, out result );
 		}
@@ -220,7 +220,7 @@ namespace Nez
 		/// <param name="collider">Collider.</param>
 		/// <param name="motion">Motion.</param>
 		/// <param name="result">Result.</param>
-		public bool collidesWith( Collider collider, Vector2 motion, out ShapeCollisionResult result )
+		public bool collidesWith( Collider collider, Vector2 motion, out CollisionResult result )
 		{
 			// alter the shapes position so that it is in the place it would be after movement so we can check for overlaps
 			var oldPosition = shape.position;

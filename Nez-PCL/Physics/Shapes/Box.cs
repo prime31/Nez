@@ -65,7 +65,7 @@ namespace Nez.PhysicsShapes
 		}
 
 
-		public override bool collidesWithShape( Shape other, out ShapeCollisionResult result )
+		public override bool collidesWithShape( Shape other, out CollisionResult result )
 		{
 			// special, high-performance cases. otherwise we fall back to Polygon.
 			if( other is Box )

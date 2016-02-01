@@ -4,7 +4,7 @@ using Microsoft.Xna.Framework;
 
 namespace Nez
 {
-	public struct ShapeCollisionResult
+	public struct CollisionResult
 	{
 		/// <summary>
 		/// the collider that was collided with

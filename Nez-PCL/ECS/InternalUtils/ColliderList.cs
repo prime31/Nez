@@ -92,15 +92,13 @@ namespace Nez
 
 		internal void onEntityEnabled()
 		{
-			for( var i = 0; i < _colliders.Count; i++ )
-				_colliders[i].registerColliderWithPhysicsSystem();
+			registerAllCollidersWithPhysicsSystem();
 		}
 
 
 		internal void onEntityDisabled()
 		{
-			for( var i = 0; i < _colliders.Count; i++ )
-				_colliders[i].unregisterColliderWithPhysicsSystem();
+			unregisterAllCollidersWithPhysicsSystem();
 		}
 
 
@@ -111,14 +109,14 @@ namespace Nez
 		}
 
 
-		internal void registerAllCollidersWithPhysicsSystem()
+		public void registerAllCollidersWithPhysicsSystem()
 		{
 			for( var i = 0; i < _colliders.Count; i++ )
 				_colliders[i].registerColliderWithPhysicsSystem();
 		}
 
 
-		internal void unregisterAllCollidersWithPhysicsSystem()
+		public void unregisterAllCollidersWithPhysicsSystem()
 		{
 			for( var i = 0; i < _colliders.Count; i++ )
 				_colliders[i].unregisterColliderWithPhysicsSystem();

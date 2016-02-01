@@ -64,7 +64,7 @@ namespace Nez
 		/// debug draws the contents of the spatial hash. Note that Core.debugRenderEnabled must be true or nothing will be displayed.
 		/// </summary>
 		/// <param name="secondsToDisplay">Seconds to display.</param>
-		public static void debugDraw( float secondsToDisplay )
+		internal static void debugDraw( float secondsToDisplay )
 		{
 			_spatialHash.debugDraw( secondsToDisplay, 2f );
 		}
@@ -139,7 +139,7 @@ namespace Nez
 
 
 		/// <summary>
-		/// casts a ray from start to end and returns the first hit of a collider that matches layerMask
+		/// casts a line from start to end and returns the first hit of a collider that matches layerMask
 		/// </summary>
 		/// <param name="start">Start.</param>
 		/// <param name="end">End.</param>
@@ -169,7 +169,7 @@ namespace Nez
 
 
 		/// <summary>
-		/// check if a collider falls within a rectangular area
+		/// check if any collider falls within a rectangular area
 		/// </summary>
 		/// <returns>The rectangle.</returns>
 		/// <param name="rect">Rect.</param>
@@ -181,7 +181,7 @@ namespace Nez
 
 
 		/// <summary>
-		/// check if a collider falls within a rectangular area
+		/// check if any collider falls within a rectangular area
 		/// </summary>
 		/// <returns>The rectangle.</returns>
 		/// <param name="rect">Rect.</param>
@@ -209,7 +209,7 @@ namespace Nez
 
 
 		/// <summary>
-		/// check if a collider falls within a circular area
+		/// check if aany collider falls within a circular area
 		/// </summary>
 		/// <returns>The circle.</returns>
 		/// <param name="center">Center.</param>

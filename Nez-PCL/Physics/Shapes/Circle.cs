@@ -24,7 +24,7 @@ namespace Nez.PhysicsShapes
 
 		public override bool overlaps( Shape other )
 		{
-			ShapeCollisionResult result;
+			CollisionResult result;
 			if( other is Box )
 				return Collisions.rectToCircle( ref other.bounds, position, radius );
 
@@ -38,7 +38,7 @@ namespace Nez.PhysicsShapes
 		}
 
 
-		public override bool collidesWithShape( Shape other, out ShapeCollisionResult result )
+		public override bool collidesWithShape( Shape other, out CollisionResult result )
 		{
 			if( other is Box )
 				return ShapeCollisions.circleToBox( this, other as Box, out result );
