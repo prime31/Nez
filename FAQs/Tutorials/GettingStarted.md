@@ -75,7 +75,7 @@ protected override void Initialize()
 	// create our Scene with the DefaultRenderer and a clear color of CornflowerBlue
 	var myScene = Scenes.createWithDefaultRenderer( Color.CornflowerBlue );
 
-    // load a Texure. Note that the Texture is loaded via the scene.contentManager class. This works just like the standard MonoGame Content class
+    // load a Texture. Note that the Texture is loaded via the scene.contentManager class. This works just like the standard MonoGame Content class
     // with the big difference being that it is tied to a Scene. When the Scene is unloaded so too is all the content loaded via scene.contentManager.
     var texture = scene.contentManager.Load<Texture2D>( "images/someTexture" );
 
