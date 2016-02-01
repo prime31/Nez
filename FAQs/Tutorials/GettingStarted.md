@@ -6,7 +6,7 @@ Nez needs to have the DefaultContent/NezDefaultBMFont.xnb file placed in your pr
 
 Your standard Game class (which is created for you by the MonoGame templates) needs to subclass Nez.Core. All parameters passed to the Core constructor are optional.
 
-```
+```cs
 public class Game1 : Core
 {
     public Game1() : base( width: 1280, height: 768, isFullScreen: false, enableEntitySystems: false )
@@ -20,7 +20,7 @@ public class Game1 : Core
 
 Scenes are the root object that you add your Entities to. They can be thought of as levels in your game, menus, etc. All further examples in this guide will just add to the Initialize method in the Game1 class. Lets add to the code above and create our first Scene.
 
-```
+```cs
 public class Game1 : Core
 {
     public Game1() : base( width: 1280, height: 768, isFullScreen: false, enableEntitySystems: false )
@@ -46,7 +46,7 @@ public class Game1 : Core
 
 Now that we have our Scene up and running we need to add Some Entities to it. Entities house your Components which is where most of your game logic lives.
 
-```
+```cs
 protected override void Initialize()
 {
 	base.Initialize();
@@ -66,7 +66,7 @@ protected override void Initialize()
 
 Now we have two Entities in our Scene but nothing has really changed. An Entity by itself doesn't really do anything. Our Entities need Components added to them so they can become alive. Lets load up a Texture and add it to each Entity so that we have something to look at.
 
-```
+```cs
 protected override void Initialize()
 {
 	base.Initialize();
