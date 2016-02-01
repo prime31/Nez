@@ -7,4 +7,4 @@ The Nez-Samples repository consists of a bunch of bite-sized samples detailing h
 - open Nez/Nez.sln and build that first. This is required so that the NuGet packages are downloaded
 - now you can open the Samples/Samples.sln and run any of the projects in there
 
-As of this writing all the samples are Mac projects. In the future we will include builds for the other platforms as well.
+As of this writing the Samples repository has not been made public. See the Tutorials linked from the README for sample code until it goes live.

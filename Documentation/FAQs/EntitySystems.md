@@ -16,7 +16,7 @@ The base of all systems. It provied an unsorted list of entities matching the co
 
 Here's an example of sorting the entities before consuming them for whathever use you might need.
 
-```
+```cs
 protected override void process( List<Entity> entities )
 {
 	entities.Sort( cooldownSort );
@@ -32,7 +32,7 @@ EntityProcessingSystem
 ----------------------
 A basic entity processing system. Use this as the base for processing many entities with specific components. All you need to do is override `process( Entity entity )`. Here's an example of a bullet collision system using EntityProcessingSystem.
 
-```
+```cs
 public override void process( Entity entity )
 {
 	var damage = entity.getComponent<DamageComponent>();
@@ -65,28 +65,28 @@ Example system
 ==============
 Here's an example of a system in charge of spawning new enemies. That's the component that holds information about each spawner.
 
-```
-	public class SpawnerComponent : Component
-	{
-		public float cooldown = -1;
-		public float minInterval = 2;
-		public float maxInterval = 60;
-		public int minCount = 1;
-		public int maxCount = 1;
-		public EnemyType enemyType = EnemyType.Worm;
-		public int numSpawned = 0;
-		public int numAlive = 0;
+```cs
+public class SpawnerComponent : Component
+{
+	public float cooldown = -1;
+	public float minInterval = 2;
+	public float maxInterval = 60;
+	public int minCount = 1;
+	public int maxCount = 1;
+	public EnemyType enemyType = EnemyType.Worm;
+	public int numSpawned = 0;
+	public int numAlive = 0;
 
-		public SpawnerComponent( EnemyType enemyType )
-		{
-			this.enemyType = enemyType;
-		}
+	public SpawnerComponent( EnemyType enemyType )
+	{
+		this.enemyType = enemyType;
 	}
+}
 ```
 
 And this is the system that does the actual logic of spawning new enemies based on some simple rules.
 
-```
+```cs
 public class SpawnerSystem : EntityProcessingSystem
 {
 	public SpawnerSystem( Matcher matcher ) : base( matcher )
@@ -143,13 +143,13 @@ Using matchers
 --------------
 Matchers are passed during creation of an EntitySystem and define what components the system is interested in.
 
-```
+```cs
 myScene.addEntityProcessor( new PlayerControlSystem( new Matcher().all( typeof( PlayerControlComponent ) ) ) );
 ```
 
 You can pass an arbitrary number of matchers to the constructor of EntitySystem.
 
-```
+```cs
 myScene.addEntityProcessor( new BulletCollisionSystem( new Matcher().all( typeof( DamageComponent ), typeof( BulletComponent ) ) ) );
 ```
 
@@ -160,7 +160,7 @@ Match all
 ---------
 Match all the entities that have both the BuffComponent AND the DamageComponent.
 
-```
+```cs
 new Matcher().all( typeof( BuffComponent ), typeof( DamageComponent ) );
 ```
 
@@ -169,7 +169,7 @@ Match one
 ---------
 Match all the entities that have at least a BuffComponent or a DamageComponent.
 
-```
+```cs
 new Matcher().one( typeof( BuffComponent ), typeof( DamageComponent ) );
 ```
 
@@ -178,6 +178,6 @@ Match exclude
 -------------
 Match all the entities that do not have the BuffComponent.
 
-```
+```cs
 new Matcher().exclude( typeof( BuffComponent ) );
 ```

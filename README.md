@@ -18,24 +18,32 @@ Nez aims to be a lightweight 2D framework that sits on top of MonoGame/FNA. It p
 
 
 
+Nez Systems
+==========
+
+There are various systems documented separately in the FAQs folder. They go into a bit more detail on the different sub-systems that make up Nez.
+
+- [Nez-Core](Documentation/FAQs/Nez-Core.md)
+- [Scene-Entity-Component](Documentation/FAQs/Scene-Entity-Component.md)
+- [Rendering](Documentation/FAQs/Rendering.md)
+- [Physics/Collisions](Documentation/FAQs/Physics.md)
+- [Entity Processing Systems](Documentation/FAQs/EntitySystems.md)
+- [Samples](Documentation/FAQs/Samples.md)
+
+
+
 Setup
 ==========
 
 Nez needs to have the DefaultContent/NezDefaultBMFont.xnb file placed in your projects Content/nez folder. It sets up the font as the default for all text in it's debug console and for your own use. If you intend to use any of the built in Effects or PostProcessors you should also copy the DefaultContent/effects folder contents into your projects Content/nez/effects folder. Be sure to set the Build Action to Content so they get copied into your compiled game.
 
 
-
-Nez Systems
+Tutorials
 ==========
 
-There are various systems documented separately in the FAQs folder. They go into a bit more detail on the different sub-systems that make up Nez.
+Below are a few tutorials littered with code snippets that should be enough to get your rolling your own games. If you have a suggestion for a new tutorial feel free to open an Issue with the details.
 
-- [Nez-Core](FAQs/Nez-Core.md)
-- [Scene-Entity-Component](FAQs/Scene-Entity-Component.md)
-- [Rendering](FAQs/Rendering.md)
-- [Physics/Collisions](FAQs/Physics.md)
-- [Entity Processing Systems](FAQs/EntitySystems.md)
-- [Samples](FAQs/Samples.md)
+- [Getting Started](Documentation/Tutorials/GettingStarted.md)
 
 
 Pipeline Importers

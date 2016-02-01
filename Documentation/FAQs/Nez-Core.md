@@ -41,7 +41,7 @@ If you are buliding with the DEBUG compilation symbol, Nez includes a simple con
 
 You can also easily add your own command to the debug console. Just add the **CommandAttribute** to any static method and specify the command name and help string. Commands can have a single parameter. Here is an example of one of the built-in commands:
 
-```
+```cs
 [Command( "assets", "Logs all loaded assets. Pass 's' for scene assets or 'g' for global assets" )]
 static void logLoadedAssets( string whichAssets = "s" )
 ```

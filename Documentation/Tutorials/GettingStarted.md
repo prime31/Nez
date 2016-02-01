@@ -1,4 +1,5 @@
-## Getting Started: The Basics
+Getting Started: The Basics
+==========
 
 From this point on it is assumed that you have a standard MonoGame project setup and that you have at least skimmed over the Nez Systems from the README. Nez is a [PCL](http://www.hanselman.com/blog/CrossPlatformPortableClassLibrariesWithNETAreHappening.aspx) so the platform of your project doesnt matter. You can either add the Nez project to your solution or just add the Nez DLL as a reference.
 
@@ -16,7 +17,8 @@ public class Game1 : Core
 
 
 
-## Creating Your First Scene
+Creating Your First Scene
+==========
 
 Scenes are the root object that you add your Entities to. They can be thought of as levels in your game, menus, etc. All further examples in this guide will just add to the Initialize method in the Game1 class. Lets add to the code above and create our first Scene.
 
@@ -42,7 +44,8 @@ public class Game1 : Core
 ```
 
 
-## Adding Some Entities
+Adding Some Entities
+==========
 
 Now that we have our Scene up and running we need to add Some Entities to it. Entities house your Components which is where most of your game logic lives.
 
