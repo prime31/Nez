@@ -326,6 +326,18 @@ namespace Nez
 
 
 		/// <summary>
+		/// returns true if rect1 intersects rect2
+		/// </summary>
+		/// <param name="value1">Value1.</param>
+		/// <param name="value2">Value2.</param>
+		public static bool intersect( ref Rectangle rect1, ref Rectangle rect2 )
+		{
+			bool result;
+			rect1.Intersects( ref rect2, out result );
+			return result;
+		}
+
+		/// <summary>
 		/// returns true if the boxes are colliding
 		/// moveX and moveY will return the movement that b1 must move to avoid the collision
 		/// </summary>

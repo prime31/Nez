@@ -29,7 +29,10 @@ namespace MacTester
 			if( moveDir != Vector2.Zero )
 			{
 				var movement = moveDir * _speed;
-				entity.moveActor( movement );
+				//entity.moveActor( movement );
+
+				ShapeCollisionResult res;
+				entity.newMoveActor( movement, out res );
 			}
 		}
 	}

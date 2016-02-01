@@ -16,6 +16,8 @@ namespace Nez.PhysicsShapes
 
 		internal abstract void recalculateBounds( Collider collider );
 
+		public abstract bool overlaps( Shape other );
+
 		public abstract bool collidesWithShape( Shape other, out ShapeCollisionResult result );
 
 		public abstract bool collidesWithLine( Vector2 start, Vector2 end, out RaycastHit hit );

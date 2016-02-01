@@ -22,6 +22,22 @@ namespace Nez.PhysicsShapes
 		}
 
 
+		public override bool overlaps( Shape other )
+		{
+			ShapeCollisionResult result;
+			if( other is Box )
+				return Collisions.rectToCircle( ref other.bounds, position, radius );
+
+			if( other is Circle )
+				return Collisions.circleToCircle( position, radius, other.position, ( other as Circle ).radius );
+
+			if( other is Polygon )
+				return ShapeCollisions.circleToPolygon( this, other as Polygon, out result );
+
+			throw new NotImplementedException( string.Format( "overlaps of Circle to {0} are not supported", other ) );
+		}
+
+
 		public override bool collidesWithShape( Shape other, out ShapeCollisionResult result )
 		{
 			if( other is Box )

@@ -30,6 +30,9 @@ namespace Nez
 		/// </summary>
 		public ComponentList components;
 
+		/// <summary>
+		/// list of all the Colliders currently attached to this entity
+		/// </summary>
 		public ColliderList colliders;
 
 		/// <summary>
@@ -253,6 +256,88 @@ namespace Nez
 
 
 		#region Movement helpers
+
+		public bool newMoveActor( Vector2 motion, out ShapeCollisionResult collisionResult )
+		{
+			collisionResult = new ShapeCollisionResult();
+
+			// no collider? just move and forget about it
+			if( colliders.Count == 0 )
+			{
+				transform.position += motion;
+				return false;
+			}
+
+			// remove ourself from the physics system until after we are done moving
+			colliders.unregisterAllCollidersWithPhysicsSystem();
+
+			// 1. move all non-trigger entity.colliders and get closest collision
+			for( var i = 0; i < colliders.Count; i++ )
+			{
+				var collider = colliders[i];
+
+				// skip triggers for now. we will revisit them after we move.
+				if( collider.isTrigger )
+					continue;
+
+				// fetch anything that we might collide with at our new position
+				var bounds = collider.bounds;
+				bounds.X += (int)motion.X;
+				bounds.Y += (int)motion.Y;
+				var neighbors = Physics.boxcastBroadphase( ref bounds );
+
+				foreach( var neighbor in neighbors )
+				{
+					// skip triggers for now. we will revisit them after we move.
+					if( neighbor.isTrigger )
+						continue;
+					
+					ShapeCollisionResult tempCollisionResult;
+					if( collider.collidesWith( neighbor, motion, out tempCollisionResult ) )
+					{
+						// hit. compare with the previous hit if we have one and choose the one that is closest (smallest MTV)
+						if( collisionResult.collider == null ||
+							( collisionResult.collider != null && collisionResult.minimumTranslationVector.LengthSquared() > tempCollisionResult.minimumTranslationVector.LengthSquared() ) )
+						{
+							collisionResult = tempCollisionResult;
+						}
+					}
+				}
+			}
+
+			// 2. move entity to its new position
+			if( collisionResult.collider != null )
+				transform.position += motion - collisionResult.minimumTranslationVector;
+			else
+				transform.position += motion;
+
+			// 3. do an overlap check of all entity.colliders that are triggers with all broadphase colliders, triggers or not.
+			//    Any overlaps result in trigger events.
+			for( var i = 0; i < colliders.Count; i++ )
+			{
+				var collider = colliders[i];
+
+				// fetch anything that we might collide with at our new position
+				var neighbors = Physics.boxcastBroadphase( collider.bounds );
+				foreach( var neighbor in neighbors )
+				{
+					// we need at least one of the colliders to be a trigger
+					if( !collider.isTrigger && !neighbor.isTrigger )
+						continue;
+					
+					if( collider.overlaps( neighbor ) )
+					{
+						Debug.log( "trigger between {0} and {1}", collider, neighbor );
+					}
+				}
+			}
+
+			// let Physics know about our new position
+			colliders.registerAllCollidersWithPhysicsSystem();
+
+			return collisionResult.collider != null;
+		}
+
 
 		/// <summary>
 		/// moves the entity taking collision into account

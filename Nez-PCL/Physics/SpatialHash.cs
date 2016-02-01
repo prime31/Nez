@@ -365,8 +365,7 @@ namespace Nez.Spatial
 				}
 				else if( collider is PolygonCollider )
 				{
-					ShapeCollisionResult res;
-					if( collider.shape.collidesWithShape( _overlapTestBox, out res ) )
+					if( collider.shape.overlaps( _overlapTestBox ) )
 					{
 						results[resultCounter] = collider;
 						resultCounter++;
@@ -401,7 +400,6 @@ namespace Nez.Spatial
 			_overlapTestCirce.radius = radius;
 			_overlapTestCirce.position = circleCenter;
 
-			ShapeCollisionResult res;
 			var resultCounter = 0;
 			var potentials = aabbBroadphase( ref bounds, null, layerMask );
 			foreach( var collider in potentials )
@@ -413,7 +411,7 @@ namespace Nez.Spatial
 				}
 				else if( collider is CircleCollider )
 				{
-					if( collider.shape.collidesWithShape( _overlapTestCirce, out res ) )
+					if( collider.shape.overlaps( _overlapTestCirce ) )
 					{
 						results[resultCounter] = collider;
 						resultCounter++;
@@ -421,7 +419,7 @@ namespace Nez.Spatial
 				}
 				else if( collider is PolygonCollider )
 				{
-					if( collider.shape.collidesWithShape( _overlapTestCirce, out res ) )
+					if( collider.shape.overlaps( _overlapTestCirce ) )
 					{
 						results[resultCounter] = collider;
 						resultCounter++;

@@ -51,12 +51,27 @@ namespace Nez.PhysicsShapes
 		}
 
 
+		public override bool overlaps( Shape other )
+		{
+			// special, high-performance cases. otherwise we fall back to Polygon.
+			if( other is Box )
+				return RectangleExt.intersect( ref bounds, ref ( other as Box ).bounds );
+
+			if( other is Circle )
+				return Collisions.rectToCircle( ref bounds, other.position, ( other as Circle ).radius );
+
+			// fallthrough to standard cases
+			return base.overlaps( other );
+		}
+
+
 		public override bool collidesWithShape( Shape other, out ShapeCollisionResult result )
 		{
-			// special, high-performance cases
+			// special, high-performance cases. otherwise we fall back to Polygon.
 			if( other is Box )
 				return ShapeCollisions.boxToBox( this, other as Box, out result );
 
+			// TODO: get Minkowski working for circle to box
 			//if( other is Circle )
 
 			// fallthrough to standard cases

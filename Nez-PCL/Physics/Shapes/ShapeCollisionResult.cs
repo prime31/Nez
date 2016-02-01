@@ -28,7 +28,7 @@ namespace Nez
 		/// alters the minimumTranslationVector so that it removes the x-component of the translation if there was no movement in
 		/// the same direction.
 		/// </summary>
-		/// <param name="deltaMovement">Delta movement.</param>
+		/// <param name="deltaMovement">the original movement that caused the collision</param>
 		public void removeHorizontalTranslation( Vector2 deltaMovement )
 		{
 			// http://dev.yuanworks.com/2013/03/19/little-ninja-physics-and-collision-detection/

@@ -71,20 +71,34 @@ namespace Nez.PhysicsShapes
 		}
 
 
+		#region Shape abstract methods
+
+		public override bool overlaps( Shape other )
+		{
+			ShapeCollisionResult result;
+			if( other is Polygon )
+				return ShapeCollisions.polygonToPolygon( this, other as Polygon, out result );
+
+			if( other is Circle )
+				ShapeCollisions.circleToPolygon( other as Circle, this, out result );
+
+			throw new NotImplementedException( string.Format( "overlaps of Polygon to {0} are not supported", other ) );
+		}
+
+
 		public override bool collidesWithShape( Shape other, out ShapeCollisionResult result )
 		{
-			result = new ShapeCollisionResult();
-
 			if( other is Polygon )
 				return ShapeCollisions.polygonToPolygon( this, other as Polygon, out result );
 
 			if( other is Circle && ShapeCollisions.circleToPolygon( other as Circle, this, out result ) )
 			{
 				// TODO: flip the result since the colliding objects are reversed
-				return true;
+				throw new NotImplementedException( "ShapeCollisionResult will probably be wrong due to the result needing to be flipped. TODO" );
+				//return true;
 			}
 
-			return false;
+			throw new NotImplementedException( string.Format( "overlaps of Polygon to {0} are not supported", other ) );
 		}
 
 
@@ -93,6 +107,8 @@ namespace Nez.PhysicsShapes
 			hit = new RaycastHit();
 			return ShapeCollisions.lineToPoly( start, end, this, out hit );
 		}
+
+		#endregion
 
 	}
 }

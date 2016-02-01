@@ -31,6 +31,11 @@ namespace Nez
 		}
 
 
+		/// <summary>
+		/// adds a Collider to the list and registers it with the Physics system
+		/// </summary>
+		/// <param name="collider">Collider.</param>
+		/// <typeparam name="T">The 1st type parameter.</typeparam>
 		public T add<T>( T collider ) where T : Collider
 		{
 			collider.entity = _entity;
@@ -40,6 +45,10 @@ namespace Nez
 		}
 
 
+		/// <summary>
+		/// removes the Collider and unregisters it from the Pysics system
+		/// </summary>
+		/// <param name="collider">Collider.</param>
 		public void remove( Collider collider )
 		{
 			Assert.isTrue( _colliders.Contains( collider ), "Collider {0} is not in the ColliderList", collider );
@@ -47,6 +56,10 @@ namespace Nez
 		}
 
 
+		/// <summary>
+		/// removes the Collider and unregisters it from the Pysics system
+		/// </summary>
+		/// <param name="index">Index.</param>
 		public void removeAt( int index )
 		{
 			var collider = _colliders[index];
@@ -95,6 +108,20 @@ namespace Nez
 		{
 			for( var i = 0; i < _colliders.Count; i++ )
 				_colliders[i].debugRender( graphics );
+		}
+
+
+		internal void registerAllCollidersWithPhysicsSystem()
+		{
+			for( var i = 0; i < _colliders.Count; i++ )
+				_colliders[i].registerColliderWithPhysicsSystem();
+		}
+
+
+		internal void unregisterAllCollidersWithPhysicsSystem()
+		{
+			for( var i = 0; i < _colliders.Count; i++ )
+				_colliders[i].unregisterColliderWithPhysicsSystem();
 		}
 
 

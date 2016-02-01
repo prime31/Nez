@@ -18,12 +18,6 @@ namespace Nez
 		public Shape shape;
 
 		/// <summary>
-		/// if true, this Collider will never be added to the Physics system. This is useful if you want to use the Collider for collision queries
-		/// but you dont need it to be queried against by other Colliders.
-		/// </summary>
-		public bool collisionQueryCollider;
-
-		/// <summary>
 		/// position is added to entity.position to get the final position for the collider
 		/// </summary>
 		protected Vector2 _localPosition;
@@ -179,7 +173,7 @@ namespace Nez
 		public virtual void registerColliderWithPhysicsSystem()
 		{
 			// entity could be null if proper such as origin are changed before we are added to an Entity
-			if( _isParentEntityAddedToScene && !collisionQueryCollider )
+			if( _isParentEntityAddedToScene )
 				Physics.addCollider( this );
 		}
 
@@ -189,8 +183,18 @@ namespace Nez
 		/// </summary>
 		public virtual void unregisterColliderWithPhysicsSystem()
 		{
-			if( _isParentEntityAddedToScene && !collisionQueryCollider )
+			if( _isParentEntityAddedToScene )
 				Physics.removeCollider( this, true );
+		}
+
+
+		/// <summary>
+		/// checks to see if this shape overlaps any other Colliders in the Physics system
+		/// </summary>
+		/// <param name="collider">Collider.</param>
+		public bool overlaps( Collider other )
+		{
+			return shape.overlaps( other.shape );
 		}
 
 
@@ -223,6 +227,8 @@ namespace Nez
 			shape.position = absolutePosition + motion;
 
 			var didCollide = shape.collidesWithShape( collider.shape, out result );
+			if( didCollide )
+				result.collider = collider;
 			
 			// return the shapes position to where it was before the check
 			shape.position = oldPosition;
