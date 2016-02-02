@@ -34,9 +34,9 @@ namespace Nez.Systems
 		/// </summary>
 		/// <returns>The effect.</returns>
 		/// <param name="name">Name.</param>
-		public Effect LoadEffect( string name )
+		public Effect loadEffect( string name )
 		{
-			return LoadEffect<Effect>( name );
+			return loadEffect<Effect>( name );
 		}
 
 
@@ -45,7 +45,7 @@ namespace Nez.Systems
 		/// </summary>
 		/// <returns>The nez effect.</returns>
 		/// <typeparam name="T">The 1st type parameter.</typeparam>
-		public T LoadNezEffect<T>() where T : Effect
+		public T loadNezEffect<T>() where T : Effect
 		{
 			var name = typeof( T ).FullName;
 
@@ -66,7 +66,7 @@ namespace Nez.Systems
 		/// </summary>
 		/// <returns>The effect.</returns>
 		/// <param name="name">Name.</param>
-		public T LoadEffect<T>( string name ) where T : Effect
+		public T loadEffect<T>( string name ) where T : Effect
 		{
 			// make sure the effect has the proper root directory
 			if( !name.StartsWith( RootDirectory ) )
@@ -89,7 +89,7 @@ namespace Nez.Systems
 			var effect = Activator.CreateInstance( typeof( T ), graphicsDevice, bytes ) as T;
 			_loadedEffects[name] = effect;
 
-			return LoadEffect<T>( name, bytes );
+			return loadEffect<T>( name, bytes );
 		}
 
 
@@ -99,7 +99,7 @@ namespace Nez.Systems
 		/// </summary>
 		/// <returns>The effect.</returns>
 		/// <param name="name">Name.</param>
-		internal T LoadEffect<T>( string name, byte[] effectCode ) where T : Effect
+		internal T loadEffect<T>( string name, byte[] effectCode ) where T : Effect
 		{
 			// check the cache first
 			if( _loadedEffects.ContainsKey( name ) )
@@ -116,12 +116,24 @@ namespace Nez.Systems
 
 
 		/// <summary>
+		/// manages an Effect instance. When the NezContentManager is disposed it will dispose of the Effect. Useful when using
+		/// built-in MonoGame Effects such as BasicEffect.
+		/// </summary>
+		/// <param name="name">Name.</param>
+		/// <param name="effect">Effect.</param>
+		public void manageEffectInstance( string name, Effect effect )
+		{
+			_loadedEffects.Add( name, effect );
+		}
+
+
+		/// <summary>
 		/// loads an asset on a background thread with optional callback for when it is loaded
 		/// </summary>
 		/// <param name="assetName">Asset name.</param>
 		/// <param name="onLoaded">On loaded.</param>
 		/// <typeparam name="T">The 1st type parameter.</typeparam>
-		public void LoadAsync<T>( string assetName, Action<T> onLoaded = null )
+		public void loadAsync<T>( string assetName, Action<T> onLoaded = null )
 		{
 			ThreadPool.QueueUserWorkItem( s =>
 			{
@@ -140,7 +152,7 @@ namespace Nez.Systems
 		/// <param name="onLoaded">On loaded.</param>
 		/// <param name="context">Context.</param>
 		/// <typeparam name="T">The 1st type parameter.</typeparam>
-		public void LoadAsync<T>( string assetName, Action<object,T> onLoaded = null, object context = null )
+		public void loadAsync<T>( string assetName, Action<object,T> onLoaded = null, object context = null )
 		{
 			ThreadPool.QueueUserWorkItem( state =>
 			{
@@ -158,7 +170,7 @@ namespace Nez.Systems
 		/// <param name="assetName">Asset name.</param>
 		/// <param name="onLoaded">On loaded.</param>
 		/// <typeparam name="T">The 1st type parameter.</typeparam>
-		public void LoadAsync<T>( string[] assetNames, Action onLoaded = null )
+		public void loadAsync<T>( string[] assetNames, Action onLoaded = null )
 		{
 			ThreadPool.QueueUserWorkItem( s =>
 			{
@@ -176,7 +188,7 @@ namespace Nez.Systems
 		/// </summary>
 		/// <returns><c>true</c> if this instance is asset loaded the specified assetName; otherwise, <c>false</c>.</returns>
 		/// <param name="assetName">Asset name.</param>
-		public bool IsAssetLoaded( string assetName )
+		public bool isAssetLoaded( string assetName )
 		{
 			return LoadedAssets.ContainsKey( assetName );
 		}

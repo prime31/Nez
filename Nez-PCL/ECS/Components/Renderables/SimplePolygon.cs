@@ -119,20 +119,15 @@ namespace Nez
 
 			for( var i = 0; i < _verts.Length; i++ )
 				_verts[i].Color = color;
+		}
 
+		public override void onAddedToEntity()
+		{
 			_basicEffect = new BasicEffect( Core.graphicsDevice );
 			_basicEffect.World = Matrix.Identity;
 			_basicEffect.VertexColorEnabled = true;
-		}
 
-
-		public override void onRemovedFromEntity()
-		{
-			if( _basicEffect != null )
-			{
-				_basicEffect.Dispose();
-				_basicEffect = null;
-			}
+			entity.scene.contentManager.manageEffectInstance( Utils.randomString( 10 ), _basicEffect );
 		}
 
 
@@ -143,6 +138,8 @@ namespace Nez
 				_basicEffect.Projection = camera.getProjectionMatrix();
 				_basicEffect.View = camera.transformMatrix;
 				_basicEffect.CurrentTechnique.Passes[0].Apply();
+
+				// TODO: set the _basicEffect.World = entity.transform.localToWorldTransform instead of manually mucking with verts and a local matrix
 
 				Core.graphicsDevice.SamplerStates[0] = SamplerState.AnisotropicClamp;
 				Core.graphicsDevice.DrawUserPrimitives( PrimitiveType.TriangleList, _verts, 0, _points.Length - 2, VertexPositionColor.VertexDeclaration );

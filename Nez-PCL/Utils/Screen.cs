@@ -16,6 +16,28 @@ namespace Nez
 		}
 
 
+		/// <summary>
+		/// alias for backBufferWidth
+		/// </summary>
+		/// <value>The width.</value>
+		public static int width
+		{
+			get { return _graphicsManager.GraphicsDevice.PresentationParameters.BackBufferWidth; }
+			set { _graphicsManager.GraphicsDevice.PresentationParameters.BackBufferWidth = value; }
+		}
+
+
+		/// <summary>
+		/// alias for backBufferHeight
+		/// </summary>
+		/// <value>The height.</value>
+		public static int height
+		{
+			get { return _graphicsManager.GraphicsDevice.PresentationParameters.BackBufferHeight; }
+			set { _graphicsManager.GraphicsDevice.PresentationParameters.BackBufferHeight = value; }
+		}
+
+
 		public static int backBufferWidth
 		{
 			get { return _graphicsManager.GraphicsDevice.PresentationParameters.BackBufferWidth; }
@@ -76,7 +98,7 @@ namespace Nez
 		}
 
 
-		// defaults to Depth24
+		// defaults to Depth24Stencil8
 		public static DepthFormat preferredDepthStencilFormat
 		{
 			get { return _graphicsManager.PreferredDepthStencilFormat; }

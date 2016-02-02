@@ -138,7 +138,10 @@ namespace Nez
 			}
 		}
 
-		protected Rectangle _bounds;
+		/// <summary>
+		/// the AABB that wraps this object
+		/// </summary>
+		/// <value>The bounds.</value>
 		public virtual Rectangle bounds
 		{
 			get
@@ -152,6 +155,7 @@ namespace Nez
 				return _bounds;
 			}
 		}
+		protected Rectangle _bounds;
 
 		/// <summary>
 		/// helper property for setting the origin in normalized fashion (0-1 for x and y)

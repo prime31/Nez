@@ -41,10 +41,11 @@ Nez needs to have the DefaultContent/NezDefaultBMFont.xnb file placed in your pr
 Tutorials
 ==========
 
-Below are a few tutorials littered with code snippets that should be enough to get your rolling your own games. If you have a suggestion for a new tutorial feel free to open an Issue with the details.
+Below are a few basic tutorials littered with code snippets that should be enough to get you rolling your own games. If you have a suggestion for a new tutorial feel free to open an Issue with the details.
 
 - [Getting Started](Documentation/Tutorials/GettingStarted.md)
 - [Custom Components](Documentation/Tutorials/CustomComponents.md)
+- [Controlling Rendering](Documentation/Tutorials/ControllingRendering.md)
 
 
 Pipeline Importers

@@ -49,7 +49,8 @@ namespace Nez
 
 
 		/// <summary>
-		/// Called when this entity is added to a scene after all pending component changes are committed
+		/// Called when this component is added to a scene after all pending component changes are committed. At this point, the entity field
+		/// is set and the entity.scene is also set.
 		/// </summary>
 		/// <param name="entity">Entity.</param>
 		public virtual void onAddedToEntity()

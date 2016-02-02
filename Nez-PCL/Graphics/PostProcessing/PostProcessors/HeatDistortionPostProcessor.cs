@@ -55,7 +55,7 @@ namespace Nez
 
 		public override void onAddedToScene()
 		{
-			effect = scene.contentManager.LoadEffect<Effect>( "heatDistortion", EffectResource.heatDistortionBytes );
+			effect = scene.contentManager.loadEffect<Effect>( "heatDistortion", EffectResource.heatDistortionBytes );
 
 			_timeParam = effect.Parameters["_time"];
 			_distortionFactorParam = effect.Parameters["_distortionFactor"];

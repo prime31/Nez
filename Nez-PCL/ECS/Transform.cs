@@ -212,6 +212,16 @@ namespace Nez
 		}
 
 
+		public Matrix localToWorldTransform
+		{
+			get
+			{
+				updateTransform();
+				return _worldTransform;
+			}
+		}
+
+
 		public Matrix worldToLocalTransform
 		{
 			get
