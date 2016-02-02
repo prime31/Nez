@@ -67,6 +67,10 @@ protected override void Initialize()
 }
 ```
 
+
+Adding Components to our Entity
+==========
+
 Now we have two Entities in our Scene but nothing has really changed. An Entity by itself doesn't really do anything. Our Entities need Components added to them so they can become alive. Lets load up a Texture and add it to each Entity so that we have something to look at.
 
 ```cs
