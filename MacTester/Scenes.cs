@@ -271,14 +271,14 @@ namespace MacTester
 
 			entity = scene.createEntity( "moon2" );
 			var image = new Sprite( moonTexture );
-			//entity.addComponent( image );
+			entity.addComponent( image );
 			entity.addComponent( new SimpleMoonMover() );
 			entity.transform.position = new Vector2( 500, 500 );
 			//entity.colliders.add( new PolygonCollider( 7, 60 ) );
-			//entity.colliders.add( new BoxCollider() );
-			entity.colliders.add( new CircleCollider() );
+			entity.colliders.add( new BoxCollider() );
+			//entity.colliders.add( new CircleCollider() );
 
-
+			entity.addComponent( new TrailRibbon() );
 			entity.addComponent( new Mesh() );
 
 

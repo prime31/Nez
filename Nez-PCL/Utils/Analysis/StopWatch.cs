@@ -23,7 +23,7 @@ namespace Nez.Analysis
 		public static Stopwatch StartNew()
 		{
 			Stopwatch sw = new Stopwatch();
-			sw.Start();
+			sw.start();
 			return sw;
 		}
 
@@ -38,7 +38,7 @@ namespace Nez.Analysis
 		/// <summary>
 		/// Completely resets and deactivates the timer.
 		/// </summary>
-		public void Reset()
+		public void reset()
 		{
 			_elapsed = 0;
 			_isRunning = false;
@@ -49,11 +49,11 @@ namespace Nez.Analysis
 		/// <summary>
 		/// Begins the timer.
 		/// </summary>
-		public void Start()
+		public void start()
 		{
 			if( !_isRunning )
 			{
-				_startTick = GetCurrentTicks();
+				_startTick = getCurrentTicks();
 				_isRunning = true;
 			}
 		}
@@ -62,11 +62,11 @@ namespace Nez.Analysis
 		/// <summary>
 		/// Stops the current timer.
 		/// </summary>
-		public void Stop()
+		public void stop()
 		{
 			if( _isRunning )
 			{
-				_elapsed += GetCurrentTicks() - _startTick;
+				_elapsed += getCurrentTicks() - _startTick;
 				_isRunning = false;
 			}
 		}
@@ -75,7 +75,7 @@ namespace Nez.Analysis
 		/// <summary>
 		/// Gets a value indicating whether the instance is currently recording.
 		/// </summary>
-		public bool IsRunning
+		public bool isRunning
 		{
 			get { return _isRunning; }
 		}
@@ -84,18 +84,18 @@ namespace Nez.Analysis
 		/// <summary>
 		/// Gets the Elapsed time as a Timespan.
 		/// </summary>
-		public TimeSpan Elapsed
+		public TimeSpan elapsed
 		{
-			get { return TimeSpan.FromMilliseconds( ElapsedMilliseconds ); }
+			get { return TimeSpan.FromMilliseconds( elapsedMilliseconds ); }
 		}
 
 
 		/// <summary>
 		/// Gets the Elapsed time as the total number of milliseconds.
 		/// </summary>
-		public long ElapsedMilliseconds
+		public long elapsedMilliseconds
 		{
-			get { return GetCurrentElapsedTicks() / TimeSpan.TicksPerMillisecond; }
+			get { return getCurrentElapsedTicks() / TimeSpan.TicksPerMillisecond; }
 		}
 
 
@@ -103,19 +103,19 @@ namespace Nez.Analysis
 		/// Gets the Elapsed time as the total number of ticks (which is faked
 		/// as Silverlight doesn't have a way to get at the actual "Ticks")
 		/// </summary>
-		public long ElapsedTicks
+		public long elapsedTicks
 		{
-			get { return GetCurrentElapsedTicks(); }
+			get { return getCurrentElapsedTicks(); }
 		}
 
 
-		private long GetCurrentElapsedTicks()
+		long getCurrentElapsedTicks()
 		{
-			return (long)( this._elapsed + ( IsRunning ? ( GetCurrentTicks() - _startTick ) : 0 ) );
+			return (long)( this._elapsed + ( isRunning ? ( getCurrentTicks() - _startTick ) : 0 ) );
 		}
 
 
-		private long GetCurrentTicks()
+		long getCurrentTicks()
 		{
 			// TickCount: Gets the number of milliseconds elapsed since the system started.
 			return Environment.TickCount * TimeSpan.TicksPerMillisecond;

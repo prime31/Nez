@@ -42,19 +42,15 @@ namespace Nez.Systems
 
 		/// <summary>
 		/// loads an embedded Nez effect. These are any of the Effect subclasses in the Nez/Graphics/Effects folder.
+		/// Note that this will return a unique instance if you attempt to load the same Effect twice to avoid Effect duplication.
 		/// </summary>
 		/// <returns>The nez effect.</returns>
 		/// <typeparam name="T">The 1st type parameter.</typeparam>
 		public T loadNezEffect<T>() where T : Effect
 		{
-			var name = typeof( T ).FullName;
-
-			// check the cache first
-			if( _loadedEffects.ContainsKey( name ) )
-				return _loadedEffects[name] as T;
-
+			var cacheKey = typeof( T ).Name + "-" + Utils.randomString( 5 );
 			var effect = Activator.CreateInstance( typeof( T ) ) as T;
-			_loadedEffects[name] = effect;
+			_loadedEffects[cacheKey] = effect;
 
 			return effect;
 		}
@@ -63,6 +59,7 @@ namespace Nez.Systems
 		/// <summary>
 		/// loads an ogl effect directly from file and handles disposing of it when the ContentManager is disposed. Name should the the path
 		/// relative to the Content folder. Effects must have a constructor that accepts GraphicsDevice and byte[].
+		/// Note that this will return a unique instance if you attempt to load the same Effect twice to avoid Effect duplication.
 		/// </summary>
 		/// <returns>The effect.</returns>
 		/// <param name="name">Name.</param>
@@ -72,22 +69,12 @@ namespace Nez.Systems
 			if( !name.StartsWith( RootDirectory ) )
 				name = RootDirectory + "/" + name;
 
-			// check the cache first
-			if( _loadedEffects.ContainsKey( name ) )
-				return _loadedEffects[name] as T;
-			
 			byte[] bytes;
 			using( var stream = TitleContainer.OpenStream( name ) )
 			{
 				bytes = new byte[stream.Length];
 				stream.Read( bytes, 0, bytes.Length );
 			}
-
-			var graphicsDeviceService = (IGraphicsDeviceService)ServiceProvider.GetService( typeof( IGraphicsDeviceService ) );
-			var graphicsDevice = graphicsDeviceService.GraphicsDevice;
-
-			var effect = Activator.CreateInstance( typeof( T ), graphicsDevice, bytes ) as T;
-			_loadedEffects[name] = effect;
 
 			return loadEffect<T>( name, bytes );
 		}
@@ -96,34 +83,40 @@ namespace Nez.Systems
 		/// <summary>
 		/// loads an ogl effect directly from its bytes and handles disposing of it when the ContentManager is disposed. Name should the the path
 		/// relative to the Content folder. Effects must have a constructor that accepts GraphicsDevice and byte[].
+		/// Note that this will return a unique instance if you attempt to load the same Effect twice to avoid Effect duplication.
 		/// </summary>
 		/// <returns>The effect.</returns>
 		/// <param name="name">Name.</param>
 		internal T loadEffect<T>( string name, byte[] effectCode ) where T : Effect
 		{
-			// check the cache first
-			if( _loadedEffects.ContainsKey( name ) )
-				return _loadedEffects[name] as T;
-
+			var cacheKey = typeof( T ).Name + "-" + Utils.randomString( 5 );
 			var graphicsDeviceService = (IGraphicsDeviceService)ServiceProvider.GetService( typeof( IGraphicsDeviceService ) );
 			var graphicsDevice = graphicsDeviceService.GraphicsDevice;
 
 			var effect = Activator.CreateInstance( typeof( T ), graphicsDevice, effectCode ) as T;
-			_loadedEffects[name] = effect;
+			_loadedEffects[cacheKey] = effect;
 
 			return effect;
 		}
 
 
 		/// <summary>
-		/// manages an Effect instance. When the NezContentManager is disposed it will dispose of the Effect. Useful when using
-		/// built-in MonoGame Effects such as BasicEffect.
+		/// loads and manages any Effect that is built-in to MonoGame such as BasicEffect, AlphaTestEffect, etc. Note that this will
+		/// return a unique instance if you attempt to load the same Effect twice to avoid Effect duplication. If you intend to use
+		/// the same Effect in multiple locations keep a reference to it and use it directly.
 		/// </summary>
-		/// <param name="name">Name.</param>
-		/// <param name="effect">Effect.</param>
-		public void manageEffectInstance( string name, Effect effect )
+		/// <returns>The mono game effect.</returns>
+		/// <typeparam name="T">The 1st type parameter.</typeparam>
+		public T loadMonoGameEffect<T>() where T : Effect
 		{
-			_loadedEffects.Add( name, effect );
+			var cacheKey = typeof( T ).Name + "-" + Utils.randomString( 5 );
+			var graphicsDeviceService = (IGraphicsDeviceService)ServiceProvider.GetService( typeof( IGraphicsDeviceService ) );
+			var graphicsDevice = graphicsDeviceService.GraphicsDevice;
+
+			var effect = Activator.CreateInstance( typeof( T ), graphicsDevice ) as T;
+			_loadedEffects[cacheKey] = effect;
+
+			return effect;
 		}
 
 
