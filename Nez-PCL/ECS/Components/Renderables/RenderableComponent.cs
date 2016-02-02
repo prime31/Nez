@@ -16,9 +16,17 @@ namespace Nez
 		/// used by Renderers to specify how this sprite should be rendered.
 		/// </summary>
 		public RenderState renderState;
-		
-		// TODO: should width/height be multiplied by scale when they are returned?
+
+		/// <summary>
+		/// width of the RenderableComponent
+		/// </summary>
+		/// <value>The width.</value>
 		public abstract float width { get; }
+
+		/// <summary>
+		/// height of the RenderableComponent
+		/// </summary>
+		/// <value>The height.</value>
 		public abstract float height { get; }
 
 		protected Vector2 _localPosition;
@@ -66,7 +74,14 @@ namespace Nez
 		}
 		protected float _layerDepth;
 
+		/// <summary>
+		/// color passed along to the SpriteBatch when rendering
+		/// </summary>
 		public Color color = Color.White;
+
+		/// <summary>
+		/// SpriteEffects passed along to the SpriteBatch when rendering. flipX/flipY are helpers for setting this.
+		/// </summary>
 		public SpriteEffects spriteEffects = SpriteEffects.None;
 
 		/// <summary>
@@ -91,6 +106,10 @@ namespace Nez
 		}
 		protected int _renderLayer;
 
+		/// <summary>
+		/// determines if the sprite should be rendered normally or flipped horizontally
+		/// </summary>
+		/// <value><c>true</c> if flip x; otherwise, <c>false</c>.</value>
 		public bool flipX
 		{
 			get
@@ -103,6 +122,10 @@ namespace Nez
 			}
 		}
 
+		/// <summary>
+		/// determines if the sprite should be rendered normally or flipped vertically
+		/// </summary>
+		/// <value><c>true</c> if flip y; otherwise, <c>false</c>.</value>
 		public bool flipY
 		{
 			get
@@ -140,7 +163,10 @@ namespace Nez
 			set { origin = new Vector2( value.X * width, value.Y * height ); }
 		}
 			
-		protected bool _isVisible;
+		/// <summary>
+		/// the visibility of this Renderable. Changes in state end up calling the onBecameVisible/onBecameInvisible methods.
+		/// </summary>
+		/// <value><c>true</c> if is visible; otherwise, <c>false</c>.</value>
 		public bool isVisible
 		{
 			get { return _isVisible; }
@@ -157,9 +183,9 @@ namespace Nez
 				}
 			}
 		}
+		protected bool _isVisible;
 
 		protected bool _areBoundsDirty = true;
-
 
 		#endregion
 
@@ -239,30 +265,6 @@ namespace Nez
 
 
 		#region public API
-
-		public void faceLeft()
-		{
-			spriteEffects = spriteEffects | SpriteEffects.FlipHorizontally;
-		}
-
-
-		public void faceRight()
-		{
-			spriteEffects = spriteEffects & ~SpriteEffects.FlipHorizontally;
-		}
-
-
-		public void faceUp()
-		{
-			spriteEffects = spriteEffects & ~SpriteEffects.FlipVertically;
-		}
-
-
-		public void faceDown()
-		{
-			spriteEffects = spriteEffects | SpriteEffects.FlipVertically;
-		}
-
 
 		/// <summary>
 		/// Draws the Renderable with an outline. Note that this should be called on disabled Renderables since they shouldnt take part in default

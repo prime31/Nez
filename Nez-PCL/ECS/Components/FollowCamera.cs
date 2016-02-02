@@ -8,7 +8,7 @@ namespace Nez
 	/// basic follow camera. LockOn mode uses no deadzone and just centers the camera on the target. CameraWindow mode wraps a deadzone
 	/// around the target allowing it to move within the deadzone without moving the camera.
 	/// </summary>
-	public class FollowCamera : Component
+	public class FollowCamera : Component, IUpdatable
 	{
 		public enum CameraStyle
 		{
@@ -70,7 +70,7 @@ namespace Nez
 		}
 
 
-		public override void update()
+		public void update()
 		{
 			// translate the deadzone to be in world space
 			_worldSpaceDeadzone.X = (int)( camera.position.X - camera.origin.X + deadzone.X + focusOffset.X );

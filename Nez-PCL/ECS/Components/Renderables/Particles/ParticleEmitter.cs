@@ -8,7 +8,7 @@ using System.IO;
 
 namespace Nez.Particles
 {
-	public class ParticleEmitter : RenderableComponent
+	public class ParticleEmitter : RenderableComponent, IUpdatable
 	{
 		public override float width { get { return 5f; } }
 		public override float height { get { return 5f; } }
@@ -89,7 +89,7 @@ namespace Nez.Particles
 		}
 
 
-		public override void update()
+		public void update()
 		{
 			if( _isPaused )
 				return;

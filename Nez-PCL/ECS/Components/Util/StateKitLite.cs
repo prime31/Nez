@@ -12,7 +12,7 @@ namespace Nez
 	/// Note: if you use an enum as the contraint you can avoid allocations/boxing in Mono by doing what the Core
 	/// Emitter does for its enum
 	/// </summary>
-	public class StateKitLite<TEnum> : Component where TEnum : struct, IConvertible, IComparable, IFormattable
+	public class StateKitLite<TEnum> : Component, IUpdatable where TEnum : struct, IConvertible, IComparable, IFormattable
 	{
 		class StateMethodCache
 		{
@@ -77,7 +77,7 @@ namespace Nez
 		}
 
 
-		public override void update()
+		public void update()
 		{
 			elapsedTimeInState += Time.deltaTime;
 

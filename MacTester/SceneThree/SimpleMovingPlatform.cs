@@ -6,7 +6,7 @@ using Microsoft.Xna.Framework;
 
 namespace MacTester
 {
-	public class SimpleMovingPlatform : Component
+	public class SimpleMovingPlatform : Component, IUpdatable
 	{
 		float _minX;
 		float _maxX;
@@ -30,7 +30,7 @@ namespace MacTester
 		}
 
 
-		public override void update()
+		public void update()
 		{
 			var x = Mathf.pingPong( Time.time, 1f );
 			var xToTheSpeedFactor = Mathf.pow( x, _speedFactor );

@@ -10,7 +10,7 @@ namespace Nez.Sprites
 	/// Sprite class handles the display and animation of a sprite. It uses a suggested Enum as a key (you can use an int as well if you
 	/// prefer). If you do use an Enum it is recommended to pass in a IEqualityComparer when using an enum like CoreEvents does.
 	/// </summary>
-	public class Sprite<TEnum> : Sprite where TEnum : struct, IConvertible, IComparable, IFormattable
+	public class Sprite<TEnum> : Sprite, IUpdatable where TEnum : struct, IConvertible, IComparable, IFormattable
 	{
 		public System.Action<TEnum> onAnimationCompletedEvent;
 		public bool isPlaying { get; private set; }
@@ -55,7 +55,7 @@ namespace Nez.Sprites
 
 		#region Component overrides
 
-		public override void update()
+		public void update()
 		{
 			if( _currentAnimation == null || !isPlaying )
 				return;

@@ -11,7 +11,7 @@ namespace Nez.Sprites
 	/// <summary>
 	/// renders and fades a copy of the Sprite on the same Entity. minDistanceBetweenInstances determines how often a trail sprite is added.
 	/// </summary>
-	public class SpriteTrail : RenderableComponent
+	public class SpriteTrail : RenderableComponent, IUpdatable
 	{
 		class SpriteTrailInstance
 		{
@@ -149,7 +149,7 @@ namespace Nez.Sprites
 		}
 
 
-		public override void update()
+		public void update()
 		{
 			if( _isFirstInstance )
 			{

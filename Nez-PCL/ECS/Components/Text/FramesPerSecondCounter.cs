@@ -9,7 +9,7 @@ using Nez.BitmapFonts;
 namespace Nez
 {
 	// TODO: currently, docking doesnt take into account ViewportAdapters. it also doesn't update position when screen size changes
-	public class FramesPerSecondCounter : Text
+	public class FramesPerSecondCounter : Text, IUpdatable
 	{
 		public enum FPSDockPosition
 		{
@@ -76,7 +76,7 @@ namespace Nez
 		}
 
 
-		public override void update()
+		public void update()
 		{
 			currentFramesPerSecond = 1.0f / Time.unscaledDeltaTime;
 			_sampleBuffer.Enqueue( currentFramesPerSecond );

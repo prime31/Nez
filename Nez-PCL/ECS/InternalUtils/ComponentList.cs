@@ -15,6 +15,11 @@ namespace Nez
 		List<Component> _components = new List<Component>();
 
 		/// <summary>
+		/// list of all Components that want update called
+		/// </summary>
+		List<IUpdatable> _updatableComponents = new List<IUpdatable>();
+
+		/// <summary>
 		/// The list of components that were added this frame. Used to group the components so we can process them simultaneously
 		/// </summary>
 		List<Component> _componentsToAdd = new List<Component>();
@@ -57,6 +62,11 @@ namespace Nez
 				_components[i].onRemovedFromEntity();
 				_components[i].entity = null;
 			}
+
+			_components.Clear();
+			_updatableComponents.Clear();
+			_componentsToAdd.Clear();
+			_componentsToRemove.Clear();
 		}
 
 
@@ -72,6 +82,10 @@ namespace Nez
 					// deal with renderLayer list if necessary
 					if( component is RenderableComponent )
 						_entity.scene.renderableComponents.remove( component as RenderableComponent );
+
+					// deal with IUpdatable
+					if( component is IUpdatable )
+						_updatableComponents.Remove( component as IUpdatable );
 
 					if( Core.entitySystemsEnabled )
 					{
@@ -96,6 +110,9 @@ namespace Nez
 					if( component is RenderableComponent )
 						_entity.scene.renderableComponents.add( component as RenderableComponent );
 
+					if( component is IUpdatable )
+						_updatableComponents.Add( component as IUpdatable );
+
 					if( Core.entitySystemsEnabled )
 					{
 						_entity.componentBits.set( ComponentTypeManager.getIndexFor( component.GetType() ) );
@@ -105,7 +122,7 @@ namespace Nez
 					_components.Add( component );
 				}
 
-				// now that all components are added to the scene, we loop through again and call onAwake/onEnabled
+				// now that all components are added to the scene, we loop through again and call onAddedToEntity/onEnabled
 				for( var i = 0; i < _componentsToAdd.Count; i++ )
 				{
 					var component = _componentsToAdd[i];
@@ -185,10 +202,10 @@ namespace Nez
 
 		internal void update()
 		{
-			for( var i = 0; i < _components.Count; i++ )
+			for( var i = 0; i < _updatableComponents.Count; i++ )
 			{
-				if( _components[i].enabled )
-					_components[i].update();
+				if( _updatableComponents[i].enabled )
+					_updatableComponents[i].update();
 			}
 		}
 

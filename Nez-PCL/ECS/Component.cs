@@ -15,9 +15,16 @@ namespace Nez
 	/// </summary>
 	public class Component
 	{
+		/// <summary>
+		/// the Entity this Component is attached to
+		/// </summary>
 		public Entity entity;
 
-		bool _enabled = true;
+		/// <summary>
+		/// true if the Component is enabled and the Entity is enabled. When enabled this Components lifecycle methods will be called.
+		/// Changes in state result in onEnabled/onDisable being called.
+		/// </summary>
+		/// <value><c>true</c> if enabled; otherwise, <c>false</c>.</value>
 		public bool enabled
 		{
 			get { return entity != null ? entity.enabled && _enabled : _enabled; }
@@ -34,6 +41,7 @@ namespace Nez
 				}
 			}
 		}
+		bool _enabled = true;
 
 
 		public Component()
@@ -60,13 +68,6 @@ namespace Nez
 		/// entity moving.
 		/// </summary>
 		public virtual void onEntityPositionChanged()
-		{}
-
-
-		/// <summary>
-		/// called each frame as long as the Entity and Component are enabled
-		/// </summary>
-		public virtual void update()
 		{}
 
 

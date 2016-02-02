@@ -7,7 +7,7 @@ using Microsoft.Xna.Framework;
 
 namespace Nez.Sprites
 {
-	public class ScrollingSprite : Sprite
+	public class ScrollingSprite : Sprite, IUpdatable
 	{
 		/// <summary>
 		/// x speed of automatic scrolling
@@ -57,7 +57,7 @@ namespace Nez.Sprites
 		{}
 
 
-		public override void update()
+		public void update()
 		{
 			_sourceRect.X += (int)( scrollSpeedX * Time.deltaTime );
 			_sourceRect.Y += (int)( scrollSpeedY * Time.deltaTime );

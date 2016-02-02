@@ -6,12 +6,12 @@ using Microsoft.Xna.Framework;
 
 namespace MacTester
 {
-	public class SimpleMoonMover : Component
+	public class SimpleMoonMover : Component, IUpdatable
 	{
 		float _speed = 10f;
 
 		
-		public override void update()
+		public void update()
 		{
 			var moveDir = Vector2.Zero;
 

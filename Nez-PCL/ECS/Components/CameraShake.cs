@@ -4,7 +4,7 @@ using Microsoft.Xna.Framework;
 
 namespace Nez
 {
-	public class CameraShake : Component
+	public class CameraShake : Component, IUpdatable
 	{
 		Vector2 _shakeDirection;
 		Vector2 _shakeOffset;
@@ -35,7 +35,7 @@ namespace Nez
 		}
 
 
-		public override void update()
+		public void update()
 		{
 			if( Math.Abs( _shakeIntensity ) > 0f )
 			{
