@@ -231,5 +231,6 @@
     <Compile Include="Graphics\PostProcessing\PostProcessors\HeatDistortionPostProcessor.cs" />
     <Compile Include="Physics\Shapes\CollisionResult.cs" />
     <Compile Include="ECS\Components\IUpdatable.cs" />
+    <Compile Include="Utils\Utils.cs" />
   </ItemGroup>
 </Project>
