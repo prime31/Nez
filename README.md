@@ -44,6 +44,7 @@ Tutorials
 Below are a few tutorials littered with code snippets that should be enough to get your rolling your own games. If you have a suggestion for a new tutorial feel free to open an Issue with the details.
 
 - [Getting Started](Documentation/Tutorials/GettingStarted.md)
+- [Custom Components](Documentation/Tutorials/CustomComponents.md)
 
 
 Pipeline Importers

@@ -1,10 +1,12 @@
 Scene/Entity/Component System
 ==========
+
 Most of Nez revolves around an Entity-Component system (ECS). The Nez ECS is not unlike any other ECS you may have worked with so it should be instantly familiar.
 
 
 Scene
 ==========
+
 The root of the ECS. Scenes can be thought of as the different parts of your game such as the menu, levels, credits, etc. Scenes manage a list of Entities, Renderers and PostProcessors (via add/remove methods) and call their methods at the appropriate times. You can also use the Scene to locate Entities via the **findEntity** and **findEntitiesByTag** methods. Scenes are also created with a Camera that you can choose to use or not.
 
 Scene's provide a NezContentManager (Scene.contentManager) that you can use to load up scene-specific content. When the scene is finished the content will be unloaded automatically for you. If you need to load global content (anything that would be used by several scenes) you can use the Core.contentManager which is not ever explicitly unloaded.
@@ -25,6 +27,7 @@ Nez provides several different ways to get your final scene rendered flexibly an
 
 Entity
 ==========
+
 Entities are added/removed to/from the Scene and managed by it. You can either subclass Entity or just create an Entity instance and add any required Components to it (via **addComponent** and later retrieved via **getComponent**). On their most basic level Entities can be thought of as a container for Components. Entities have a series of methods that are called by the Scene at various times throughout their lifetime.
 
 Entity Lifecycle methods:
@@ -44,6 +47,7 @@ Some of the key/important properties on an Entity are the following:
 
 Component
 ==========
+
 Components are added to and managed by an Entity. They make up the meat of your game and are basically reuseable chunks of code that decide how your Entities will behave. Several Component subclasses are included with Nez including text display, image display, animated sprites, Tiled maps and more.
 
 Component Lifecycle methods:
@@ -51,7 +55,7 @@ Component Lifecycle methods:
 - **onAddedToEntity**: Called when the Component is added to an entity after all pending component changes are committed
 - **onRemovedFromEntity**:  Called when the component is removed from its entity. Do all cleanup here.
 - **onEntityPositionChanged**: called when the entity's position changes. This allows components to be aware that they have moved due to the parent entity moving.
-- **update**: called each frame as long as the Entity and Component are enabled
+- **update**: called each frame as long as the Entity and Component are enabled and the Component implements IUpdatable
 - **debugRender**: conditionally called. See Entity section for details.
 - **onEnabled**: called when the parent Entity or the Component is enabled
 - **onDisabled**: called when the parent Entity or the Component is disabled

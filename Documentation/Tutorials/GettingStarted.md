@@ -101,7 +101,7 @@ protected override void Initialize()
 }
 ```
 
-Assuming you have added a png/xnb file to your project in the Content/images folder when you run your game you should now see the two Entities. We used the built in Sprite class to display the Texture.
+Assuming you have added a someTexture.png/xnb file to your project in the Content/images folder when you run your game you should now see the two Entities. We used the built-in Sprite class to display the Texture.
 
 It should be noted that the Scene class can also be subclassed so that you can keep your code organized. When subclassing, Scene creation can be done via `Scene.create<T>`, `Scene.createWithDefaultRenderer<T>` or simplying newing an instance of your Scene subclass. The `initialize` method will be called on your Scene so that you can set things up.
 

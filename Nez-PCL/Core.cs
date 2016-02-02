@@ -270,6 +270,41 @@ namespace Nez
 			return _instance._timerManager.schedule( timeInSeconds, repeats, context, onTime );
 		}
 
+
+		/// <summary>
+		/// schedules a one-time timer that will call the passed in Action after timeInSeconds
+		/// </summary>
+		/// <param name="timeInSeconds">Time in seconds.</param>
+		/// <param name="context">Context.</param>
+		/// <param name="onTime">On time.</param>
+		public static ITimer schedule( float timeInSeconds, object context, Action<ITimer> onTime )
+		{
+			return _instance._timerManager.schedule( timeInSeconds, false, context, onTime );
+		}
+
+
+		/// <summary>
+		/// schedules a one-time or repeating timer that will call the passed in Action
+		/// </summary>
+		/// <param name="timeInSeconds">Time in seconds.</param>
+		/// <param name="repeats">If set to <c>true</c> repeats.</param>
+		/// <param name="onTime">On time.</param>
+		public static ITimer schedule( float timeInSeconds, bool repeats, Action<ITimer> onTime )
+		{
+			return _instance._timerManager.schedule( timeInSeconds, repeats, null, onTime );
+		}
+
+
+		/// <summary>
+		/// schedules a one-time timer that will call the passed in Action after timeInSeconds
+		/// </summary>
+		/// <param name="timeInSeconds">Time in seconds.</param>
+		/// <param name="onTime">On time.</param>
+		public static ITimer schedule( float timeInSeconds, Action<ITimer> onTime )
+		{
+			return _instance._timerManager.schedule( timeInSeconds, false, null, onTime );
+		}
+
 		#endregion
 
 	}
