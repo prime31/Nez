@@ -16,9 +16,15 @@ namespace MacTester
 			var moveDir = Vector2.Zero;
 
 			if( Input.isKeyDown( Keys.Left ) )
+			{
 				moveDir.X = -1f;
+				entity.getComponent<RenderableComponent>().flipX = true;
+			}
 			else if( Input.isKeyDown( Keys.Right ) )
+			{
 				moveDir.X = 1f;
+				entity.getComponent<RenderableComponent>().flipX = false;
+			}
 
 			if( Input.isKeyDown( Keys.Up ) )
 				moveDir.Y = -1f;

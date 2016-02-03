@@ -58,7 +58,8 @@ namespace Nez.TextureAtlasGenerator
 				// first, the easy one. if it isnt a directory its an image so just add it
 				if( !Directory.Exists( inputPath ) )
 				{
-					imagePaths.Add( inputPath );
+					if( isValidImageFile( inputPath ) )
+						imagePaths.Add( inputPath );
 					continue;
 				}
 
@@ -104,7 +105,8 @@ namespace Nez.TextureAtlasGenerator
 			var allFiles = Directory.GetFiles( directory, "*.*", SearchOption.TopDirectoryOnly );
 			foreach( var file in allFiles )
 			{
-				imagePaths.Add( file );
+				if( isValidImageFile( file ) )
+					imagePaths.Add( file );
 				didFindImages = true;
 			}
 			var animationEndIndex = imagePaths.Count - 1;
@@ -114,6 +116,16 @@ namespace Nez.TextureAtlasGenerator
 				logger.LogMessage( "----- adding animation: {0}, frames: [{1} - {2}]", Path.GetFileName( directory ), animationStartIndex, animationEndIndex );
 				textureAtlas.spriteAnimationDetails.Add( Path.GetFileName( directory ), new Point( animationStartIndex, animationEndIndex ) );
 			}
+		}
+
+
+		bool isValidImageFile( string file )
+		{
+			var ext = Path.GetExtension( file );
+			if( ext == ".DS_Store" )
+				return false;
+
+			return true;
 		}
 
 	}
