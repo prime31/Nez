@@ -44,8 +44,8 @@ namespace MacDumpster
 			//var ridingActors = getAllRidingActors();
 
 			// TODO: recreate moveSolid
-			entity.moveActor( new Vector2( deltaX, deltaY ) );
-			//entity.moveSolid( deltaX, deltaY, allActors, ridingActors );
+			CollisionResult collisionResult;
+			entity.moveActor( new Vector2( deltaX, deltaY ), out collisionResult );
 		}
 
 

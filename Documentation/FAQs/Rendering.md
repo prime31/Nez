@@ -1,5 +1,6 @@
 Rendering
 ==========
+
 The Nez rendering setup was designed to be really easy to get up and running but at the same time flexible so that advanced users can do whatever they need to out of the box. The basic gist of how the rendering system works revolves around the **Renderer** class. You add one or more Renderers to your Scene (**addRenderer** and **removeRenderer** methods) and each of your Renderers will be called after all Entities/Components have had their update method called. All rendering is done into a RenderTexture which is then displayed (with optional post processing) after all Renders have finished rendering. Several default Renderers are provided to get you started and cover the most common setups. If you create your scene with the **Scene.createWithDefaultRenderer** method as the name suggests it will create a DefaultRenderer for you. The included renderers are described below:
 
 - **DefaultRenderer**: renders every RenderableComponent that is enabled in your scene
@@ -11,6 +12,7 @@ You are free to subclass Renderer and render things in any way that you want. Th
 
 Post Processors
 ==========
+
 Much like Renderers, you can add one or more PostProcessors to the Scene via the **addPostProcessor** and **removePostProcessor** methods. PostProcessors are called after all Renderers have been called. One common use case for a PostProcessor is to display a RenderTexture that a Renderer rendered into most often with some Effects applied. Applying effects to the fully rendered scene is also a very common use case. You can globally enable/disable PostProcessors via the **Scene.enablePostProcessing** bool. Additionally, each PostProcessor can be enabled/disable for fine-grained control.
 
 A basic example of a PostProcessor is below. It takes a RenderTexture that a Renderer rendered into and composites that with the rest of the scene with an Effect.
@@ -42,4 +44,5 @@ public class SimplePostProcessor : PostProcessor
 
 IFinalRenderDelegate
 ==========
+
 By default, Nez will take your fully rendered scene and render it to the screen. In some rare circumstances this may not be the way you want the final render to occur. By setting **Scene.finalRenderDelegate** you can take over that final render to the screen and do it however you want.

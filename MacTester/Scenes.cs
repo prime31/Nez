@@ -205,8 +205,8 @@ namespace MacDumpster
 			var entity = scene.createEntity( "player-moon" );
 			entity.transform.position = new Vector2( 220, 220 );
 			var sprite = new Sprite( moonTexture );
-			entity.addComponent( sprite )
-				.addComponent( new SimpleMoonOutlineRenderer( sprite ) )
+			entity.addComponent( new SpriteOutlineRenderer( sprite ) )
+				.addComponent( sprite )
 				.addComponent( new SimpleMoonMover() );
 
 			if( useBoxColliders )

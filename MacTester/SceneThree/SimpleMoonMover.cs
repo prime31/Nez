@@ -38,7 +38,7 @@ namespace MacDumpster
 				//entity.moveActor( movement );
 
 				CollisionResult res;
-				entity.newMoveActor( movement, out res );
+				entity.moveActor( movement, out res );
 			}
 		}
 	}

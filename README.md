@@ -17,6 +17,12 @@ Nez aims to be a lightweight 2D framework that sits on top of MonoGame/FNA. It p
 - tons more stuff
 
 
+IMPORTANT: READ THIS FIRST
+==========
+
+Nez is a very young beast and should be considered pre-alpha. There will without a doubt be some bugs present. Some things might not be implemented. Some things might be incomplete. The samples repository is not yet online. For the time being, the main Nez repository will contain a project that has various poorly written examples in the MacTester project. Please do not consider the code in them as best practices. The project was used as a scratchpad when developing some features along the way so it does contain an odd variety of very simple examples along with a bunch of Pipeline Tool examples.
+
+
 
 Nez Systems
 ==========

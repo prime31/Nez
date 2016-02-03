@@ -73,7 +73,6 @@
     <Compile Include="Scenes.cs" />
     <Compile Include="SceneEntityProcessor\TextEntityProcessor.cs" />
     <Compile Include="SceneEntityProcessor\ImageEntityProcessor.cs" />
-    <Compile Include="SceneThree\SimpleMoonOutlineRenderer.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Info.plist" />
@@ -200,7 +199,6 @@
     <Folder Include="Content\Images\TextureAtlas\" />
     <Folder Include="Content\Images\AnotherAtlas\" />
     <Folder Include="SceneEntityProcessor\" />
-    <Folder Include="SceneOne\" />
     <Folder Include="Content\nez\" />
     <Folder Include="Content\nez\effects\" />
     <Folder Include="Content\nez\textures\" />

@@ -234,5 +234,6 @@
     <Compile Include="Utils\Utils.cs" />
     <Compile Include="ECS\Components\Renderables\TrailRibbon.cs" />
     <Compile Include="ECS\Components\Renderables\GooCursor.cs" />
+    <Compile Include="ECS\Components\Renderables\Sprites\SpriteOutlineRenderer.cs" />
   </ItemGroup>
 </Project>
