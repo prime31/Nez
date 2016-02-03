@@ -17,10 +17,6 @@ namespace MacTester
 	/// </summary>
 	public class Game1 : Core
 	{
-		public Game1() : base( 256 * 4, 144 * 4 )
-		{}
-
-
 		protected override void Initialize()
 		{
 			base.Initialize();

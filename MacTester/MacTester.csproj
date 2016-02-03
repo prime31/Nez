@@ -184,6 +184,9 @@
     <Content Include="..\DefaultContent\textures\heatDistortionNoise.xnb">
       <Link>Content\nez\textures\heatDistortionNoise.xnb</Link>
     </Content>
+    <Content Include="..\DefaultContent\textures\gooCursor.xnb">
+      <Link>Content\nez\textures\gooCursor.xnb</Link>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

@@ -280,6 +280,7 @@ namespace MacTester
 
 			entity.addComponent( new TrailRibbon() );
 			entity.addComponent( new Mesh() );
+			entity.addComponent( new GooCursor() );
 
 
 			scene.addPostProcessor( new ScanlinesPostProcessor( 0 ) );
