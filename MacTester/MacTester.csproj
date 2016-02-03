@@ -80,17 +80,6 @@
     <None Include="Content\Fonts\DefaultFont.spritefont" />
     <None Include="Content\Fonts\graphicpixel.ttf" />
     <None Include="packages.config" />
-    <None Include="Content\Effects\Bevels.fx" />
-    <None Include="Content\Effects\BlackOut.fx" />
-    <None Include="Content\Effects\ColorFlip.fx" />
-    <None Include="Content\Effects\GeometryEffect.fx" />
-    <None Include="Content\Effects\Grayscale.fx" />
-    <None Include="Content\Effects\HighContrast.fx" />
-    <None Include="Content\Effects\Invert.fx" />
-    <None Include="Content\Effects\MultiTexture.fx" />
-    <None Include="Content\Effects\NoEffect.fx" />
-    <None Include="Content\Effects\RainbowH.fx" />
-    <None Include="Content\Effects\SpriteEffect.fx" />
     <None Include="Content\Images\TextureAtlas\background.png" />
     <None Include="Content\Images\TextureAtlas\tree.png" />
     <None Include="Content\Images\TextureAtlas\Ninja_Idle_0.png" />
@@ -123,26 +112,16 @@
     <None Include="Content\Images\AnotherAtlas\airSlash\Ninja_Air Slash_5.png" />
     <None Include="Content\Images\AnotherAtlas\airSlash\Ninja_Air Slash_6.png" />
     <None Include="Content\Images\AnotherAtlas\airSlash\Ninja_Air Slash_7.png" />
+    <None Include="..\DefaultContent\effects\Invert.mgfxo">
+      <Link>Content\Effects\Invert.mgfxo</Link>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bin\**\*.*">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\Effects\Bevels.ogl.mgfxo" />
-    <Content Include="Content\Effects\BlackOut.ogl.mgfxo" />
-    <Content Include="Content\Effects\ColorFlip.ogl.mgfxo" />
-    <Content Include="Content\Effects\GeometryEffect.ogl.mgfxo" />
-    <Content Include="Content\Effects\Grayscale.ogl.mgfxo" />
-    <Content Include="Content\Effects\HighContrast.ogl.mgfxo" />
-    <Content Include="Content\Effects\Invert.ogl.mgfxo" />
-    <Content Include="Content\Effects\MultiTexture.ogl.mgfxo" />
-    <Content Include="Content\Effects\NoEffect.ogl.mgfxo" />
-    <Content Include="Content\Effects\RainbowH.ogl.mgfxo" />
-    <Content Include="Content\Effects\SpriteEffect.ogl.mgfxo" />
-    <Content Include="Content\Effects\SpriteEffectEffect.xnb" />
     <Content Include="Content\Images\mask.jpg" />
     <Content Include="Content\Images\tile.png" />
-    <Content Include="Content\Effects\Crosshatch.mgfxo" />
     <Content Include="Content\nez\NezDefaultBMFont.xnb" />
     <Content Include="..\DefaultContent\effects\BloomCombine.mgfxo">
       <Link>Content\nez\effects\BloomCombine.mgfxo</Link>
@@ -202,6 +181,7 @@
     <Folder Include="Content\nez\" />
     <Folder Include="Content\nez\effects\" />
     <Folder Include="Content\nez\textures\" />
+    <Folder Include="Content\Effects\" />
   </ItemGroup>
   <ItemGroup>
     <InterfaceDefinition Include="MainMenu.xib" />

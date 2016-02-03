@@ -165,7 +165,7 @@ namespace MacDumpster
 
 
 			// add a post processor to display the RenderTarget
-			var effect = scene.contentManager.loadEffect( "Content/Effects/Invert.ogl.mgfxo" );
+			var effect = scene.contentManager.loadEffect( "Content/Effects/Invert.mgfxo" );
 			var postProcessor = new SimplePostProcessor( renderer.renderTarget, effect );
 			scene.addPostProcessor( postProcessor );
 
