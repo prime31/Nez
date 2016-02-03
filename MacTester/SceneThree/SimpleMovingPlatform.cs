@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 
 
-namespace MacTester
+namespace MacDumpster
 {
 	public class SimpleMovingPlatform : Component, IUpdatable
 	{

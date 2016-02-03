@@ -3,7 +3,7 @@ using Nez;
 using Nez.Sprites;
 
 
-namespace MacTester
+namespace MacDumpster
 {
 	public class SimpleMoonOutlineRenderer : RenderableComponent
 	{

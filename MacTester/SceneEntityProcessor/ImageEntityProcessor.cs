@@ -3,7 +3,7 @@ using Nez;
 using System.Collections.Generic;
 
 
-namespace MacTester
+namespace MacDumpster
 {
 	public class ImageEntityProcessor : EntityProcessingSystem
 	{

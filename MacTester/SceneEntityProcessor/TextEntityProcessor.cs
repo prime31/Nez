@@ -2,7 +2,7 @@
 using Nez;
 
 
-namespace MacTester
+namespace MacDumpster
 {
 	public class TextEntityProcessor : EntityProcessingSystem
 	{

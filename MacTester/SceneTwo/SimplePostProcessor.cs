@@ -6,7 +6,7 @@ using Microsoft.Xna.Framework.Graphics;
 using System.IO;
 
 
-namespace MacTester
+namespace MacDumpster
 {
 	public class SimplePostProcessor : PostProcessor<Effect>
 	{

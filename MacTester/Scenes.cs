@@ -17,7 +17,7 @@ using System.Linq;
 using Nez.Tweens;
 
 
-namespace MacTester
+namespace MacDumpster
 {
 	public static class Scenes
 	{
@@ -226,26 +226,24 @@ namespace MacTester
 
 		public static Scene sceneOverlap2D()
 		{
-			var scene = Scene.createWithDefaultRenderer( Color.Aquamarine );
+			var scene = Scene.createWithDefaultRenderer( Color.Yellow );
+			scene.camera.position = new Vector2( -300, -550 );
 
 			var sceneEntity = scene.createEntity( "overlap2d-scene-entity" );
 			var o2ds = scene.contentManager.Load<O2DScene>( "bin/MacOSX/Overlap2D/MainScene" );
 			var sceneTexture = scene.contentManager.Load<LibGdxAtlas>( "bin/MacOSX/Overlap2D/packatlas" );
 			foreach( var si in o2ds.sImages )
 			{
-				var i = new Sprite( sceneTexture.getSubtexture( si.imageName ) );
-				i.localPosition = new Vector2( si.x, -si.y );
-				i.origin = new Vector2( si.originX, si.originY );
+				var sprite = new Sprite( sceneTexture.getSubtexture( si.imageName ) );
+				sprite.localPosition = new Vector2( si.x, -si.y );
+				sprite.origin = new Vector2( si.originX, si.originY );
 				sceneEntity.transform.scale = new Vector2( si.scaleX, si.scaleY );
-				sceneEntity.addComponent( i );
+				sceneEntity.addComponent( sprite );
 			}
 
-
 			var effect = scene.contentManager.loadNezEffect<CrosshatchEffect>();
-			//var effect = scene.contentManager.LoadNezEffect<NoiseEffect>();
-			//var effect = scene.contentManager.LoadNezEffect<TwistEffect>();
-			//var effect = scene.contentManager.LoadNezEffect<SpriteBlinkEffect>();
-			//effect.blinkColor = new Color( 255, 0, 0, 128 );
+			//var effect = scene.contentManager.loadNezEffect<NoiseEffect>();
+			//var effect = scene.contentManager.loadNezEffect<TwistEffect>();
 
 			scene.addPostProcessor( new PostProcessor( 1, effect ) );
 

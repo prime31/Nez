@@ -4,7 +4,7 @@ using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework;
 
 
-namespace MacTester
+namespace MacDumpster
 {
 	public class SimpleMoonMover : Component, IUpdatable
 	{

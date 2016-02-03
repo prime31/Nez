@@ -9,7 +9,7 @@ using MonoMac.Foundation;
 
 #endregion
 
-namespace MacTester
+namespace MacDumpster
 {
 	static class Program
 	{
