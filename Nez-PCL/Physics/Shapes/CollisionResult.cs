@@ -21,7 +21,7 @@ namespace Nez
 		/// </summary>
 		public Vector2 minimumTranslationVector;
 
-		public Vector2 point;
+		internal Vector2 point;
 
 
 		/// <summary>

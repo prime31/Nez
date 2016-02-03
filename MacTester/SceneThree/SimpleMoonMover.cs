@@ -35,10 +35,10 @@ namespace MacDumpster
 			if( moveDir != Vector2.Zero )
 			{
 				var movement = moveDir * _speed;
-				//entity.moveActor( movement );
 
 				CollisionResult res;
-				entity.moveActor( movement, out res );
+				if( entity.moveActor( movement, out res ) )
+					Debug.drawLine( entity.transform.position, entity.transform.position + res.normal * 100, Color.Black, 0.3f );
 			}
 		}
 	}
