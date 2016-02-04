@@ -237,5 +237,6 @@
     <Compile Include="ECS\Components\Renderables\Sprites\SpriteOutlineRenderer.cs" />
     <Compile Include="ECS\Components\Interfaces\ITriggerListener.cs" />
     <Compile Include="ECS\Components\Interfaces\IUpdatable.cs" />
+    <Compile Include="ECS\Components\Physics\ArcadeRigidbody.cs" />
   </ItemGroup>
 </Project>

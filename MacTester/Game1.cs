@@ -118,7 +118,7 @@ namespace MacDumpster
 		{
 			base.Draw( gameTime );
 
-			IMGUI.beginWindow( GraphicsDevice.Viewport.Width - 150, 0, 150, 420 );
+			IMGUI.beginWindow( GraphicsDevice.Viewport.Width - 150, 0, 150, 450 );
 
 			debugRenderEnabled = IMGUI.toggle( "Debug Render", debugRenderEnabled );
 
@@ -154,6 +154,9 @@ namespace MacDumpster
 
 			if( IMGUI.button( "Transform Scene" ) )
 				scene = Scene.createWithDefaultRenderer<TransformScene>();
+
+			if( IMGUI.button( "Rigidbody Scene" ) )
+				scene = Scene.createWithDefaultRenderer<RigidbodyScene>();
 
 			IMGUI.space( 15 );
 			
