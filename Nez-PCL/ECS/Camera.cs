@@ -51,18 +51,37 @@ namespace Nez
 			}
 		}
 
-		float _zoom;
+		/// <summary>
+		/// the zoom value should be between -1 and 1. This value is then translated to be from minimumZoom to maximumZoom. This lets you set
+		/// appropriate minimum/maximum values then use a more intuitive -1 to 1 mapping to change the zoom.
+		/// </summary>
+		/// <value>The zoom.</value>
 		public float zoom
 		{
-			get { return _zoom; }
+			get
+			{
+				if( _zoom == 0 )
+					return 1f;
+				else if( _zoom < 1 )
+					return Mathf.map( _zoom, _minimumZoom, 1, -1, 0 );
+				else
+					return Mathf.map( _zoom, 1, _maximumZoom, 0, 1 );
+			}
 			set
 			{
-				_zoom = MathHelper.Clamp( value, _minimumZoom, _maximumZoom );
+				var newZoom = Mathf.clamp( value, -1, 1 );
+				if( newZoom == 0 )
+					_zoom = 1f;
+				else if( newZoom < 0 )
+					_zoom = Mathf.map( newZoom, -1, 0, _minimumZoom, 1 );
+				else
+					_zoom = Mathf.map( newZoom, 0, 1, 1, _maximumZoom );
+				
 				_areMatrixesDirty = true;
 			}
 		}
+		float _zoom;
 
-		float _minimumZoom = 0.1f;
 		public float minimumZoom
 		{
 			get { return _minimumZoom; }
@@ -76,8 +95,8 @@ namespace Nez
 				_minimumZoom = value;
 			}
 		}
+		float _minimumZoom = 0.1f;
 
-		float _maximumZoom = 5f;
 		public float maximumZoom
 		{
 			get { return _maximumZoom; }
@@ -91,8 +110,8 @@ namespace Nez
 				_maximumZoom = value;
 			}
 		}
+		float _maximumZoom = 5f;
 
-		Rectangle _bounds;
 		/// <summary>
 		/// world-space bounds of the camera. useful for culling.
 		/// </summary>
@@ -138,8 +157,8 @@ namespace Nez
 				return _bounds;
 			}
 		}
+		Rectangle _bounds;
 
-		Matrix _transformMatrix = Matrix.Identity;
 		public Matrix transformMatrix
 		{
 			get
@@ -149,8 +168,8 @@ namespace Nez
 				return _transformMatrix;
 			}
 		}
+		Matrix _transformMatrix = Matrix.Identity;
 
-		Matrix _inverseTransformMatrix = Matrix.Identity;
 		public Matrix inverseTransformMatrix
 		{
 			get
@@ -160,6 +179,7 @@ namespace Nez
 				return _inverseTransformMatrix;
 			}
 		}
+		Matrix _inverseTransformMatrix = Matrix.Identity;
 
 
 		float _near = -100f;
@@ -173,7 +193,7 @@ namespace Nez
 		public Camera( float near = -100, float far = 100 )
 		{
 			rotation = 0;
-			zoom = 1;
+			zoom = 0;
 			_near = near;
 			_far = far;
 
@@ -195,12 +215,12 @@ namespace Nez
 			
 			Matrix tempMat;
 
-			_transformMatrix = Matrix.CreateTranslation( -position.X, -position.Y, 0f ); // position
-			Matrix.CreateScale( zoom, zoom, 1f, out tempMat ); // scale ->
+			_transformMatrix = Matrix.CreateTranslation( -_position.X, -_position.Y, 0f ); // position
+			Matrix.CreateScale( _zoom, _zoom, 1f, out tempMat ); // scale ->
 			Matrix.Multiply( ref _transformMatrix, ref tempMat, out _transformMatrix );
-			Matrix.CreateRotationZ( rotation, out tempMat ); // rotation
+			Matrix.CreateRotationZ( _rotation, out tempMat ); // rotation
 			Matrix.Multiply( ref _transformMatrix, ref tempMat, out _transformMatrix );
-			Matrix.CreateTranslation( (int)origin.X, (int)origin.Y, 0f, out tempMat ); // translate -origin
+			Matrix.CreateTranslation( (int)_origin.X, (int)_origin.Y, 0f, out tempMat ); // translate -origin
 			Matrix.Multiply( ref _transformMatrix, ref tempMat, out _transformMatrix );
 
 			// calculate our inverse as well
