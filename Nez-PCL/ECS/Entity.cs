@@ -290,7 +290,7 @@ namespace Nez
 				var bounds = collider.bounds;
 				bounds.X += (int)motion.X;
 				bounds.Y += (int)motion.Y;
-				var neighbors = Physics.boxcastBroadphase( ref bounds );
+				var neighbors = Physics.boxcastBroadphase( ref bounds, collider.collidesWithLayers );
 
 				foreach( var neighbor in neighbors )
 				{
@@ -323,8 +323,8 @@ namespace Nez
 			{
 				var collider = colliders[i];
 
-				// fetch anything that we might collide with at our new position
-				var neighbors = Physics.boxcastBroadphase( collider.bounds );
+				// fetch anything that we might collide with us at our new position
+				var neighbors = Physics.boxcastBroadphase( collider.bounds, collider.collidesWithLayers );
 				foreach( var neighbor in neighbors )
 				{
 					// we need at least one of the colliders to be a trigger

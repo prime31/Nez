@@ -54,7 +54,7 @@ namespace Nez.Particles
 			QuickCache<Particle>.warmCache( (int)_emitterConfig.maxParticles );
 
 			// set some sensible defaults
-			collisionConfig.bounce = 0f;
+			collisionConfig.elasticity = 0f;
 			collisionConfig.collidesWithLayers = Physics.allLayers;
 			collisionConfig.dampen = 0f;
 			collisionConfig.gravity = _emitterConfig.gravity;

@@ -12,9 +12,9 @@ namespace Nez
 		public bool enabled;
 
 		/// <summary>
-		/// how much force is applied to each particle after a collision.
+		/// 0 - 1 range where 0 is no bounce and 1 is perfect reflection
 		/// </summary>
-		public float bounce;
+		public float elasticity;
 
 		/// <summary>
 		/// control which layers this particle system collides with

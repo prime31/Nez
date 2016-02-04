@@ -17,6 +17,11 @@ namespace Nez
 		public const int allLayers = -1;
 
 		/// <summary>
+		/// convenience field for storing a gravity value globally 
+		/// </summary>
+		public static Vector2 gravity = new Vector2( 0, 300f );
+
+		/// <summary>
 		/// cell size used when reset is called and a new SpatialHash is created
 		/// </summary>
 		public static int spatialHashCellSize = 100;

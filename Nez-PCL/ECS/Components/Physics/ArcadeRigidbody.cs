@@ -5,10 +5,16 @@ using Microsoft.Xna.Framework;
 namespace Nez
 {
 	/// <summary>
-	/// Note that this is not a full, multi-iteration physics object! This can be used for simple, arcade style physics.
+	/// Note that this is not a full, multi-iteration physics system! This can be used for simple, arcade style physics.
+	/// Based on http://elancev.name/oliver/2D%20polygon.htm#tut5
 	/// </summary>
 	public class ArcadeRigidbody : Component, IUpdatable
 	{
+		/// <summary>
+		/// layer mask of all the layers this rigidbody should collide with. defauls to all layers.
+		/// </summary>
+		public int collidesWithLayers = Physics.allLayers;
+
 		/// <summary>
 		/// mass of this rigidbody. A 0 mass will make this an immovable object.
 		/// </summary>
@@ -49,14 +55,20 @@ namespace Nez
 		float _friction = 0.5f;
 
 		/// <summary>
-		/// 0 - 3 range.
+		/// 0 - 9 range. When a collision occurs and it has risidual motion along the surface of collision if its square magnitude is less
+		/// than glue friction will be set to the maximum for the collision resolution.
 		/// </summary>
 		public float glue
 		{
 			get { return _glue; }
-			set { _glue = Mathf.clamp( value, 0, 3 ); }
+			set { _glue = Mathf.clamp( value, 0, 10 ); }
 		}
 		float _glue = 0.01f;
+
+		/// <summary>
+		/// if true, Physics.gravity will be taken into account each frame
+		/// </summary>
+		public bool shouldUseGravity = true;
 
 		/// <summary>
 		/// velocity of this rigidbody
@@ -78,10 +90,15 @@ namespace Nez
 		}
 
 
+		/// <summary>
+		/// add an instant force impulse to the rigidbody using its mass. force is an acceleration in pixels per second per second. The
+		/// force is multiplied by 100000 to make the values more reasonable to use.
+		/// </summary>
+		/// <param name="force">Force.</param>
 		public void addImpulse( Vector2 force )
 		{
 			if( !isImmovable )
-				velocity += force * ( _inverseMass * Time.deltaTime * Time.deltaTime );
+				velocity += force * 100000 * ( _inverseMass * Time.deltaTime * Time.deltaTime );
 		}
 
 
@@ -92,32 +109,36 @@ namespace Nez
 				velocity = Vector2.Zero;
 				return;
 			}
+
+			if( shouldUseGravity )
+				velocity += Physics.gravity * Time.deltaTime;
 			
 			entity.colliders.unregisterAllCollidersWithPhysicsSystem();
 			entity.transform.position += velocity * Time.deltaTime;
 
 			CollisionResult collisionResult;
 			// fetch anything that we might collide with at our new position
-			var neighbors = Physics.boxcastBroadphase( entity.colliders.mainCollider.bounds );
+			var neighbors = Physics.boxcastBroadphase( entity.colliders.mainCollider.bounds, collidesWithLayers );
 			foreach( var neighbor in neighbors )
 			{
 				if( entity.colliders.mainCollider.collidesWith( neighbor, out collisionResult ) )
 				{
-					processOverlap( neighbor.entity.getComponent<ArcadeRigidbody>(), collisionResult );
-
-//					var otherRigidbody = neighbor.entity.getComponent<Rigidbody>();
-//					var newVel = ( velocity * ( mass - otherRigidbody.mass ) + ( 2 * otherRigidbody.mass * otherRigidbody.velocity ) ) / ( mass + otherRigidbody.mass );
-//					var newVel2 = ( otherRigidbody.velocity * ( otherRigidbody.mass - mass ) + ( 2 * mass * velocity ) ) / ( mass + otherRigidbody.mass );
-//
-//					velocity = newVel;
-//					entity.transform.position += velocity * Time.deltaTime;
-//
-//					otherRigidbody.entity.colliders.unregisterAllCollidersWithPhysicsSystem();
-//					otherRigidbody.velocity = newVel2;
-//					otherRigidbody.entity.transform.position += otherRigidbody.velocity * Time.deltaTime;
-//					otherRigidbody.entity.colliders.registerAllCollidersWithPhysicsSystem();
-
-					break;
+					// if the neighbor has an ArcadeRigidbody we handle full collision response. If not, we calculate things based on the
+					// neighbor being immovable.
+					var neighborRigidbody = neighbor.entity.getComponent<ArcadeRigidbody>();
+					if( neighborRigidbody != null )
+					{
+						processOverlap( neighborRigidbody, ref collisionResult.minimumTranslationVector );
+						processCollision( neighborRigidbody, ref collisionResult.minimumTranslationVector );
+					}
+					else
+					{
+						// neighbor has no ArcadeRigidbody so we assume its immovable and only move ourself
+						entity.transform.position -= collisionResult.minimumTranslationVector;
+						var relativeVelocity = velocity;
+						calculateResponseVelocity( ref relativeVelocity, ref collisionResult.minimumTranslationVector, out relativeVelocity );
+						velocity += relativeVelocity;
+					}
 				}
 			}
 
@@ -125,66 +146,91 @@ namespace Nez
 		}
 
 
-		void processOverlap( ArcadeRigidbody other, CollisionResult collisionResult )
+		/// <summary>
+		/// separates two overlapping rigidbodies. Handles the case of either being immovable as well.
+		/// </summary>
+		/// <param name="other">Other.</param>
+		/// <param name="minimumTranslationVector"></param>
+		void processOverlap( ArcadeRigidbody other, ref Vector2 minimumTranslationVector )
 		{
 			if( isImmovable )
 			{
 				other.entity.colliders.unregisterAllCollidersWithPhysicsSystem();
-				other.entity.transform.position += collisionResult.minimumTranslationVector;
+				other.entity.transform.position += minimumTranslationVector;
 				other.entity.colliders.registerAllCollidersWithPhysicsSystem();
 			}
 			else if( other.isImmovable )
 			{
-				entity.transform.position -= collisionResult.minimumTranslationVector;
+				entity.transform.position -= minimumTranslationVector;
 			}
 			else
 			{
-				entity.transform.position -= collisionResult.minimumTranslationVector * 0.5f;
+				entity.transform.position -= minimumTranslationVector * 0.5f;
 
 				other.entity.colliders.unregisterAllCollidersWithPhysicsSystem();
-				other.entity.transform.position += collisionResult.minimumTranslationVector * 0.5f;
+				other.entity.transform.position += minimumTranslationVector * 0.5f;
 				other.entity.colliders.registerAllCollidersWithPhysicsSystem();
 			}
-
-			processCollision( other, collisionResult.minimumTranslationVector * -1f );
 		}
 
 
-		void processCollision( ArcadeRigidbody other, Vector2 inverstMTV )
+		/// <summary>
+		/// handles the collision of two non-overlapping rigidbodies. New velocities will be assigned to each rigidbody as appropriate.
+		/// </summary>
+		/// <param name="other">Other.</param>
+		/// <param name="inverseMTV">Inverse MT.</param>
+		void processCollision( ArcadeRigidbody other, ref Vector2 minimumTranslationVector )
 		{
-			Vector2 N;
-			Vector2.Normalize( ref inverstMTV, out N );
-
+			// we compute a response for the two colliding objects. The calculations are based on the relative velocity of the objects
+			// which gets reflected along the collided surface normal. Then a part of the response gets added to each object based on mass.
 			var relativeVelocity = velocity - other.velocity;
-			float n;
-			Vector2.Dot( ref relativeVelocity, ref N, out n );
 
-			var Dn = N * n;
-			var Dt = relativeVelocity - Dn;
+			calculateResponseVelocity( ref relativeVelocity, ref minimumTranslationVector, out relativeVelocity );
+
+			// now we use the masses to linearly scale the response on both rigidbodies
+			var totalInverseMass = _inverseMass + other._inverseMass;
+			var ourResponseFraction = _inverseMass / totalInverseMass;
+			var otherResponseFraction = other._inverseMass / totalInverseMass;
+
+			velocity += relativeVelocity * ourResponseFraction;
+			other.velocity -= relativeVelocity * otherResponseFraction;
+		}
+
+
+		/// <summary>
+		/// given the relative velocity between the two objects and the MTV this method modifies the relativeVelocity to make it a collision
+		/// response.
+		/// </summary>
+		/// <param name="relativeVelocity">Relative velocity.</param>
+		/// <param name="minimumTranslationVector">Minimum translation vector.</param>
+		void calculateResponseVelocity( ref Vector2 relativeVelocity, ref Vector2 minimumTranslationVector, out Vector2 responseVelocity )
+		{
+			// first, we get the normalized MTV in the opposite direction: the surface normal
+			var inverseMTV = minimumTranslationVector * -1f;
+			Vector2 normal;
+			Vector2.Normalize( ref inverseMTV, out normal );
+
+			// the velocity is decomposed along the normal of the collision and the plane of collision.
+			// The elasticity will affect the response along the normal (normalVelocityComponent) and the friction will affect
+			// the tangential component of the velocity (tangentialVelocityComponent)
+			float n;
+			Vector2.Dot( ref relativeVelocity, ref normal, out n );
+
+			var normalVelocityComponent = normal * n;
+			var tangentialVelocityComponent = relativeVelocity - normalVelocityComponent;
 
 			if( n > 0.0f )
-				Dn = Vector2.Zero;
+				normalVelocityComponent = Vector2.Zero;
 
-			float dt;
-			Vector2.Dot( ref Dt, ref Dt, out dt );
-			var CoF = _friction;
+			// if the squared magnitude of the tangential component is less than glue then we bump up the friction to the max
+			var coefficientOfFriction = _friction;
+			if( tangentialVelocityComponent.LengthSquared() < _glue )
+				coefficientOfFriction = 1.01f;
 
-			if( dt < _glue * _glue )
-				CoF = 1.01f;
-
-			relativeVelocity = -( 1.0f + _elasticity ) * Dn - CoF * Dt;
-
-			var m0 = _inverseMass;
-			var m1 = other._inverseMass;
-			var m  = m0 + m1;
-			var r0 = m0 / m;
-			var r1 = m1 / m;
-
-			Debug.log( "D {0}, r0: {1}, r1: {2} --- Dn: {3}, Dt: {4}", relativeVelocity, r0, r1, Dn, Dt );
-
-			velocity += relativeVelocity * r0;
-			other.velocity -= relativeVelocity * r1;
+			// elasticity affects the normal component of the velocity and friction affects the tangential component
+			responseVelocity = -( 1.0f + _elasticity ) * normalVelocityComponent - coefficientOfFriction * tangentialVelocityComponent;
 		}
+
 	}
 }
 

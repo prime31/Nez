@@ -81,6 +81,11 @@ namespace Nez
 		/// </summary>
 		public int physicsLayer = 1 << 0;
 
+		/// <summary>
+		/// layer mask of all the layers this Collider should collide with when Entity.move methods are used. defaults to all layers.
+		/// </summary>
+		public int collidesWithLayers = Physics.allLayers;
+
 		public virtual Rectangle bounds
 		{
 			get
