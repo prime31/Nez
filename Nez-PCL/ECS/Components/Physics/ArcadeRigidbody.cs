@@ -4,45 +4,84 @@ using Microsoft.Xna.Framework;
 
 namespace Nez
 {
+	/// <summary>
+	/// Note that this is not a full, multi-iteration physics object! This can be used for simple, arcade style physics.
+	/// </summary>
 	public class ArcadeRigidbody : Component, IUpdatable
 	{
-		public float mass = 10f;
+		/// <summary>
+		/// mass of this rigidbody. A 0 mass will make this an immovable object.
+		/// </summary>
+		/// <value>The mass.</value>
+		public float mass
+		{
+			get { return _mass; }
+			set
+			{
+				_mass = Mathf.clamp( value, 0, float.MaxValue );
+
+				if( _mass > 0.0001f )
+					_inverseMass = 1 / _mass;
+				else
+					_inverseMass = 0f;
+			}
+		}
+		float _mass = 10f;
 
 		/// <summary>
 		/// 0 - 1 range where 0 is no bounce and 1 is perfect reflection
 		/// </summary>
-		public float elasticity = 0.5f;
+		public float elasticity
+		{
+			get { return _elasticity; }
+			set { _elasticity = Mathf.clamp01( value ); }
+		}
+		float _elasticity = 0.5f;
 
 		/// <summary>
-		/// 0 means no friction, 1 means the object will stop dead on
+		/// 0 - 1 range. 0 means no friction, 1 means the object will stop dead on
 		/// </summary>
-		public float friction = 0.5f;
+		public float friction
+		{
+			get { return _friction; }
+			set { _friction = Mathf.clamp01( value ); }
+		}
+		float _friction = 0.5f;
 
-		public float glue = 0.01f;
+		/// <summary>
+		/// 0 - 3 range.
+		/// </summary>
+		public float glue
+		{
+			get { return _glue; }
+			set { _glue = Mathf.clamp( value, 0, 3 ); }
+		}
+		float _glue = 0.01f;
 
+		/// <summary>
+		/// velocity of this rigidbody
+		/// </summary>
 		public Vector2 velocity;
 
-		public bool isImmovable { get { return mass < 0.0001f; } }
+		/// <summary>
+		/// rigidbodies with a mass of 0 are considered immovable. Changing velocity and collisions will have no effect on them.
+		/// </summary>
+		/// <value><c>true</c> if is immovable; otherwise, <c>false</c>.</value>
+		public bool isImmovable { get { return _mass < 0.0001f; } }
 
-		float inverseMass
-		{
-			get
-			{ 
-				if( mass > 0.0001f )
-					return 1 / mass;
-				return 0f;
-			}
-		}
+		float _inverseMass;
 
 
 		public ArcadeRigidbody()
-		{}
+		{
+			_inverseMass = 1 / _mass;
+		}
 
 
 		public void addImpulse( Vector2 force )
 		{
 			if( !isImmovable )
-				velocity += force * ( inverseMass * Time.deltaTime * Time.deltaTime );
+				velocity += force * ( _inverseMass * Time.deltaTime * Time.deltaTime );
 		}
 
 
@@ -128,15 +167,15 @@ namespace Nez
 
 			float dt;
 			Vector2.Dot( ref Dt, ref Dt, out dt );
-			var CoF = friction;
+			var CoF = _friction;
 
-			if( dt < glue * glue )
+			if( dt < _glue * _glue )
 				CoF = 1.01f;
 
-			relativeVelocity = -( 1.0f + elasticity ) * Dn - CoF * Dt;
+			relativeVelocity = -( 1.0f + _elasticity ) * Dn - CoF * Dt;
 
-			var m0 = inverseMass;
-			var m1 = other.inverseMass;
+			var m0 = _inverseMass;
+			var m1 = other._inverseMass;
 			var m  = m0 + m1;
 			var r0 = m0 / m;
 			var r1 = m1 / m;
