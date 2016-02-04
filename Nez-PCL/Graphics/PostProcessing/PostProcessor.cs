@@ -39,7 +39,7 @@ namespace Nez
 		/// <summary>
 		/// SamplerState used for the drawFullscreenQuad method
 		/// </summary>
-		public SamplerState samplerState = SamplerState.PointClamp;
+		public SamplerState samplerState = Core.defaultSamplerState;
 
 		/// <summary>
 		/// BlendState used by the drawFullsceenQuad method

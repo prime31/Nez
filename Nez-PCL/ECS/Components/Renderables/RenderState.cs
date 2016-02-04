@@ -20,7 +20,7 @@ namespace Nez
 		/// <summary>
 		/// SamplerState used by the SpriteBatch for the current RenderableComponent
 		/// </summary>
-		public SamplerState samplerState = SamplerState.PointClamp;
+		public SamplerState samplerState = Core.defaultSamplerState;
 
 		/// <summary>
 		/// Effect used by the SpriteBatch for the current RenderableComponent

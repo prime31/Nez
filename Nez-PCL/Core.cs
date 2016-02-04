@@ -47,6 +47,11 @@ namespace Nez
 		public static NezContentManager contentManager;
 
 		/// <summary>
+		/// default SamplerState used by Scene, RenderState and PostProcessors
+		/// </summary>
+		public static SamplerState defaultSamplerState = SamplerState.PointClamp;
+
+		/// <summary>
 		/// internal flag used to determine if EntitySystems should be used or not
 		/// </summary>
 		internal static bool entitySystemsEnabled;

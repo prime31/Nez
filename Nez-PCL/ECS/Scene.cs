@@ -83,7 +83,7 @@ namespace Nez
 		/// <summary>
 		/// SamplerState used for the final draw of the RenderTarget to the framebuffer
 		/// </summary>
-		public SamplerState samplerState = SamplerState.PointClamp;
+		public SamplerState samplerState = Core.defaultSamplerState;
 
 		/// <summary>
 		/// Scene-specific ContentManager. Use it to load up any resources that are needed only by this scene. If you have global/multi-scene
