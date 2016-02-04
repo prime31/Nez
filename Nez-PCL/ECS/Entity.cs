@@ -311,7 +311,7 @@ namespace Nez
 				}
 			}
 
-			// 2. move entity to its new position
+			// 2. move entity to its new position if we have a collision else move the full amount
 			if( collisionResult.collider != null )
 				transform.position += motion - collisionResult.minimumTranslationVector;
 			else
