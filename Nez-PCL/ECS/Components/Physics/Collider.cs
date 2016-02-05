@@ -1,6 +1,7 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
 using Nez.PhysicsShapes;
+using System.Collections.Generic;
 
 
 namespace Nez
@@ -20,7 +21,6 @@ namespace Nez
 		/// <summary>
 		/// position is added to entity.position to get the final position for the collider
 		/// </summary>
-		protected Vector2 _localPosition;
 		public Vector2 localPosition
 		{
 			get { return _localPosition; }
@@ -35,8 +35,8 @@ namespace Nez
 				}
 			}
 		}
+		protected Vector2 _localPosition;
 
-		protected Vector2 _origin;
 		public Vector2 origin
 		{
 			get { return _origin; }
@@ -51,6 +51,7 @@ namespace Nez
 				}
 			}
 		}
+		protected Vector2 _origin;
 
 		/// <summary>
 		/// helper property for setting the origin in normalized fashion (0-1 for x and y)

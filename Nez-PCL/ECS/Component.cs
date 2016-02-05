@@ -13,7 +13,7 @@ namespace Nez
 	/// - onRemovedFromEntity
 	/// 
 	/// </summary>
-	public class Component
+	public class Component : IComparable<Component>
 	{
 		/// <summary>
 		/// the Entity this Component is attached to
@@ -42,6 +42,25 @@ namespace Nez
 			}
 		}
 		bool _enabled = true;
+
+		/// <summary>
+		/// update order of the Components on this Entity
+		/// </summary>
+		/// <value>The order.</value>
+		public int updateOrder
+		{
+			get { return _updateOrder; }
+			set
+			{
+				if( _updateOrder != value )
+				{
+					_updateOrder = value;
+					if( entity != null )
+						entity.components.markEntityListUnsorted();
+				}
+			}
+		}
+		internal int _updateOrder = 0;
 
 
 		public Component()
@@ -88,6 +107,18 @@ namespace Nez
 		/// </summary>
 		public virtual void onDisabled()
 		{}
+
+
+		public int CompareTo( Component other )
+		{
+			return _updateOrder.CompareTo( other._updateOrder );
+		}
+
+
+		public override string ToString()
+		{
+			return string.Format( "[Component: type: {0}, updateOrder: {1}]", this.GetType(), updateOrder );
+		}
 
 	}
 }

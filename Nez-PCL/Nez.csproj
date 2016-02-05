@@ -65,7 +65,6 @@
     <Folder Include="Physics\Shapes\" />
     <Folder Include="Graphics\PostProcessing\PostProcessors\" />
     <Folder Include="Graphics\Effects\" />
-    <Folder Include="ECS\Components\Interfaces\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Debug\Debug.cs" />
@@ -231,12 +230,14 @@
     <Compile Include="Utils\ArrayExt.cs" />
     <Compile Include="Graphics\PostProcessing\PostProcessors\HeatDistortionPostProcessor.cs" />
     <Compile Include="Physics\Shapes\CollisionResult.cs" />
+    <Compile Include="ECS\Components\Renderables\Mesh.cs" />
     <Compile Include="Utils\Utils.cs" />
     <Compile Include="ECS\Components\Renderables\TrailRibbon.cs" />
     <Compile Include="ECS\Components\Renderables\GooCursor.cs" />
     <Compile Include="ECS\Components\Renderables\Sprites\SpriteOutlineRenderer.cs" />
-    <Compile Include="ECS\Components\Interfaces\ITriggerListener.cs" />
-    <Compile Include="ECS\Components\Interfaces\IUpdatable.cs" />
     <Compile Include="ECS\Components\Physics\ArcadeRigidbody.cs" />
+    <Compile Include="ECS\Components\Physics\Mover.cs" />
+    <Compile Include="ECS\Components\IUpdatable.cs" />
+    <Compile Include="Utils\Pair.cs" />
   </ItemGroup>
 </Project>

@@ -19,6 +19,22 @@ using Nez.Tweens;
 
 namespace MacDumpster
 {
+	public class TriggerListener : Component, Mover.ITriggerListener
+	{
+		public void onTriggerEnter( Collider other )
+		{
+			Debug.log( "onTriggerEnter: {0}", other );
+		}
+
+
+		public void onTriggerExit( Collider other )
+		{
+			Debug.log( "onTriggerExiting: {0}", other );
+		}
+
+	}
+
+
 	public static class Scenes
 	{
 		public static Scene sceneOne( bool showAll = true )
@@ -189,7 +205,11 @@ namespace MacDumpster
 				else
 					ent.colliders.add( new CircleCollider() );
 
-				ent.colliders[0].isTrigger = isTrigger;
+				if( isTrigger )
+				{
+					ent.colliders[0].isTrigger = true;
+					ent.addComponent( new TriggerListener() );
+				}
 			};
 
 			moonMaker( new Vector2( 400, 10 ), "moon1", false );

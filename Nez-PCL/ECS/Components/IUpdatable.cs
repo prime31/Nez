@@ -10,6 +10,8 @@ namespace Nez
 	public interface IUpdatable
 	{
 		bool enabled { get; set; }
+		int updateOrder { get; set; }
+
 		void update();
 	}
 }
