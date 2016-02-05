@@ -7,9 +7,10 @@ namespace Nez
 {
 	/// <summary>
 	/// helper class illustrating one way to handle movement taking into account all Collisions including triggers. The ITriggerListener
-	/// interface is used to manage callbacks to any triggers that are breached while moving.
+	/// interface is used to manage callbacks to any triggers that are breached while moving. An object must move only via the Mover.move
+	/// method for triggers to be properly reported.
 	/// </summary>
-	public class Mover : Component, IUpdatable
+	public class Mover : Component
 	{
 		/// <summary>
 		/// when added to a Component, whenever a Collider on the Entity overlaps/exits another Component these methods will be called.
@@ -34,43 +35,15 @@ namespace Nez
 			void onTriggerExit( Collider other );
 		}
 
-
+		/// <summary>
+		/// stores all the active intersection pairs that occured in the current frame
+		/// </summary>
 		HashSet<Pair<Collider>> _activeTriggerIntersections = new HashSet<Pair<Collider>>();
+
+		/// <summary>
+		/// stores the previous frames intersection pairs so that we can detect exits after moving this frame
+		/// </summary>
 		HashSet<Pair<Collider>> _previousTriggerIntersections = new HashSet<Pair<Collider>>();
-
-
-		public Mover()
-		{
-			// we want to update last, after any other Components on this Entity so we can manage trigger exit calls
-			updateOrder = int.MaxValue;
-		}
-
-
-		public void update()
-		{
-			// add in all the currently active triggers
-			_previousTriggerIntersections.UnionWith( _activeTriggerIntersections );
-
-			// remove all the triggers that we did interact with this frame leaving us with the ones we exited
-			_activeTriggerIntersections.ExceptWith( _previousTriggerIntersections );
-
-			if( _activeTriggerIntersections.Count > 0 )
-			{
-				Debug.log( "HI" );
-			}
-
-			foreach( var collider in _activeTriggerIntersections )
-			{
-				Debug.log( "Exit: {0}", collider );
-			}
-
-			_activeTriggerIntersections.Clear();
-
-			// TODO: FIGURE THIS SHIT OUT!
-//			_previousTriggerIntersections.Clear();
-//			_previousTriggerIntersections.UnionWith( _activeTriggerIntersections );
-//			_activeTriggerIntersections.Clear();
-		}
 
 
 		/// <summary>
@@ -152,24 +125,23 @@ namespace Nez
 						var pair = QuickCache<Pair<Collider>>.pop();
 						pair.set( collider, neighbor );
 
-						// call the onTriggerEnter method for any relevant components if we are the trigger
-						if( collider.isTrigger )
+						// if we already have this pair in one of our sets (the previous or current trigger intersections) dont call the enter event
+						var shouldReportTriggerEvent = !_activeTriggerIntersections.Contains( pair ) && !_previousTriggerIntersections.Contains( pair );
+						if( shouldReportTriggerEvent )
 						{
-							var triggerListeners = entity.components.getComponents<ITriggerListener>();
-							for( var j = 0; j < triggerListeners.Count; j++ )
+							// call the onTriggerEnter method for any relevant components if we are the trigger
+							if( collider.isTrigger )
 							{
-								if( !_previousTriggerIntersections.Contains( pair ) )
+								var triggerListeners = entity.components.getComponents<ITriggerListener>();
+								for( var j = 0; j < triggerListeners.Count; j++ )
 									triggerListeners[i].onTriggerEnter( neighbor );
 							}
-						}
 
-						// also call it for the collider we moved onto if it is a trigger
-						if( neighbor.isTrigger )
-						{
-							var triggerListeners = neighbor.entity.components.getComponents<ITriggerListener>();
-							for( var j = 0; j < triggerListeners.Count; j++ )
+							// also call it for the collider we moved onto if it is a trigger
+							if( neighbor.isTrigger )
 							{
-								if( !_previousTriggerIntersections.Contains( pair ) )
+								var triggerListeners = neighbor.entity.components.getComponents<ITriggerListener>();
+								for( var j = 0; j < triggerListeners.Count; j++ )
 									triggerListeners[j].onTriggerEnter( collider );
 							}
 						}
@@ -182,7 +154,30 @@ namespace Nez
 			// let Physics know about our new position
 			entity.colliders.registerAllCollidersWithPhysicsSystem();
 
+			checkForExitedColliders();
+
 			return collisionResult.collider != null;
+		}
+
+
+		void checkForExitedColliders()
+		{
+			// remove all the triggers that we did interact with this frame leaving us with the ones we exited
+			_previousTriggerIntersections.ExceptWith( _activeTriggerIntersections );
+
+			foreach( var collider in _previousTriggerIntersections )
+			{
+				Debug.log( "Exit: {0}", collider );
+			}
+
+			// clear out the previous set cause we are done with it for now
+			_previousTriggerIntersections.Clear();
+
+			// add in all the currently active triggers
+			_previousTriggerIntersections.UnionWith( _activeTriggerIntersections );
+
+			// clear out the active set in preparation for the next frame
+			_activeTriggerIntersections.Clear();
 		}
 	}
 }
