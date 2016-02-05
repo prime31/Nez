@@ -7,6 +7,10 @@ namespace Nez
 {
 	public class ComponentList : IEnumerable<Component>, IEnumerable
 	{
+		// global updateOrder sort for the IUpdatable list
+		static Comparison<IUpdatable> compareUpdatableOrder = ( a, b ) => { return a.updateOrder.CompareTo( b.updateOrder ); };
+
+
 		Entity _entity;
 
 		/// <summary>
@@ -29,10 +33,23 @@ namespace Nez
 		/// </summary>
 		List<Component> _componentsToRemove = new List<Component>();
 
+		List<Component> _tempBufferList = new List<Component>();
+
+		/// <summary>
+		/// flag used to determine if we need to sort our Components this frame
+		/// </summary>
+		bool _isComponentListUnsorted;
+
 
 		public ComponentList( Entity entity )
 		{
 			this._entity = entity;
+		}
+
+
+		public void markEntityListUnsorted()
+		{
+			_isComponentListUnsorted = true;
 		}
 
 
@@ -120,19 +137,30 @@ namespace Nez
 					}
 
 					_components.Add( component );
+					_tempBufferList.Add( component );
 				}
 
+				// clear before calling onAddedToEntity in case more Components are added then
+				_componentsToAdd.Clear();
+				_isComponentListUnsorted = true;
+
 				// now that all components are added to the scene, we loop through again and call onAddedToEntity/onEnabled
-				for( var i = 0; i < _componentsToAdd.Count; i++ )
+				for( var i = 0; i < _tempBufferList.Count; i++ )
 				{
-					var component = _componentsToAdd[i];
+					var component = _tempBufferList[i];
 					component.onAddedToEntity();
 
 					if( _entity.enabled && component.enabled )
 						component.onEnabled();
 				}
 
-				_componentsToAdd.Clear();
+				_tempBufferList.Clear();
+			}
+
+			if( _isComponentListUnsorted )
+			{
+				_updatableComponents.Sort( compareUpdatableOrder );
+				_isComponentListUnsorted = false;
 			}
 		}
 
@@ -177,7 +205,7 @@ namespace Nez
 		/// </summary>
 		/// <returns>The components.</returns>
 		/// <typeparam name="T">The 1st type parameter.</typeparam>
-		public List<T> getComponents<T>() where T : Component
+		public List<T> getComponents<T>() where T : class
 		{
 			var comps = new List<T>();
 

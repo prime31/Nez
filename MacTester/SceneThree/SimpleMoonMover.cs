@@ -9,6 +9,14 @@ namespace MacDumpster
 	public class SimpleMoonMover : Component, IUpdatable
 	{
 		float _speed = 10f;
+		Mover _mover;
+
+
+		public override void onAddedToEntity()
+		{
+			_mover = new Mover();
+			entity.addComponent( _mover );
+		}
 
 		
 		public void update()
@@ -37,7 +45,7 @@ namespace MacDumpster
 				var movement = moveDir * _speed;
 
 				CollisionResult res;
-				if( entity.moveActor( movement, out res ) )
+				if( _mover.move( movement, out res ) )
 					Debug.drawLine( entity.transform.position, entity.transform.position + res.normal * 100, Color.Black, 0.3f );
 			}
 		}
