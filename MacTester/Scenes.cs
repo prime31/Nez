@@ -29,7 +29,7 @@ namespace MacDumpster
 
 		public void onTriggerExit( Collider other )
 		{
-			Debug.log( "onTriggerExiting: {0}", other );
+			Debug.log( "onTriggerExit: {0}", other );
 		}
 
 	}

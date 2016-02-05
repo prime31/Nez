@@ -8,7 +8,8 @@ namespace Nez
 	/// <summary>
 	/// helper class illustrating one way to handle movement taking into account all Collisions including triggers. The ITriggerListener
 	/// interface is used to manage callbacks to any triggers that are breached while moving. An object must move only via the Mover.move
-	/// method for triggers to be properly reported.
+	/// method for triggers to be properly reported. Note that multiple Movers interacting with each other will end up calling ITriggerListener
+	/// multiple times.
 	/// </summary>
 	public class Mover : Component
 	{
@@ -34,6 +35,7 @@ namespace Nez
 			/// <param name="local">Local.</param>
 			void onTriggerExit( Collider other );
 		}
+
 
 		/// <summary>
 		/// stores all the active intersection pairs that occured in the current frame
@@ -128,23 +130,7 @@ namespace Nez
 						// if we already have this pair in one of our sets (the previous or current trigger intersections) dont call the enter event
 						var shouldReportTriggerEvent = !_activeTriggerIntersections.Contains( pair ) && !_previousTriggerIntersections.Contains( pair );
 						if( shouldReportTriggerEvent )
-						{
-							// call the onTriggerEnter method for any relevant components if we are the trigger
-							if( collider.isTrigger )
-							{
-								var triggerListeners = entity.components.getComponents<ITriggerListener>();
-								for( var j = 0; j < triggerListeners.Count; j++ )
-									triggerListeners[i].onTriggerEnter( neighbor );
-							}
-
-							// also call it for the collider we moved onto if it is a trigger
-							if( neighbor.isTrigger )
-							{
-								var triggerListeners = neighbor.entity.components.getComponents<ITriggerListener>();
-								for( var j = 0; j < triggerListeners.Count; j++ )
-									triggerListeners[j].onTriggerEnter( collider );
-							}
-						}
+							notifityTriggerListeners( pair, true );
 
 						_activeTriggerIntersections.Add( pair );
 					} // overlaps
@@ -165,12 +151,14 @@ namespace Nez
 			// remove all the triggers that we did interact with this frame leaving us with the ones we exited
 			_previousTriggerIntersections.ExceptWith( _activeTriggerIntersections );
 
-			foreach( var collider in _previousTriggerIntersections )
+			foreach( var pair in _previousTriggerIntersections )
 			{
-				Debug.log( "Exit: {0}", collider );
+				notifityTriggerListeners( pair, false );
+				QuickCache<Pair<Collider>>.push( pair );
+				pair.clear();
 			}
 
-			// clear out the previous set cause we are done with it for now
+			// clear out the previous set cause we are done with it for now and we already pushed to the QuickCache all the pairs
 			_previousTriggerIntersections.Clear();
 
 			// add in all the currently active triggers
@@ -178,6 +166,36 @@ namespace Nez
 
 			// clear out the active set in preparation for the next frame
 			_activeTriggerIntersections.Clear();
+		}
+
+
+		void notifityTriggerListeners( Pair<Collider> collisionPair, bool isEntering )
+		{
+			// call the onTriggerEnter method for any relevant components if we are the trigger
+			if( collisionPair.first.isTrigger )
+			{
+				var triggerListeners = collisionPair.first.entity.components.getComponents<ITriggerListener>();
+				for( var i = 0; i < triggerListeners.Count; i++ )
+				{
+					if( isEntering )
+						triggerListeners[i].onTriggerEnter( collisionPair.second );
+					else
+						triggerListeners[i].onTriggerExit( collisionPair.second );
+				}
+			}
+
+			// also call it for the collider we moved onto if it is a trigger
+			if( collisionPair.second.isTrigger )
+			{
+				var triggerListeners = collisionPair.second.entity.components.getComponents<ITriggerListener>();
+				for( var i = 0; i < triggerListeners.Count; i++ )
+				{
+					if( isEntering )
+						triggerListeners[i].onTriggerEnter( collisionPair.first );
+					else
+						triggerListeners[i].onTriggerExit( collisionPair.first );
+				}
+			}
 		}
 	}
 }
