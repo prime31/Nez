@@ -93,8 +93,6 @@ namespace Nez
 		}
 		bool _enabled = true;
 
-		internal double _actualUpdateOrder = 0;
-
 
 		/// <summary>
 		/// update order of this Entity. Also used to sort tag lists on scene.entities
@@ -258,91 +256,15 @@ namespace Nez
 		#region Movement helpers
 
 		/// <summary>
-		/// moves the entity taking collision into account
+		/// simple movement helper that should be used if you have Colliders attached to this Entity. It handles keeping the Colliders
+		/// in sync in the Physics system.
 		/// </summary>
-		/// <returns><c>true</c>, if move actor was newed, <c>false</c> otherwise.</returns>
 		/// <param name="motion">Motion.</param>
-		/// <param name="collisionResult">Collision result.</param>
-		public bool moveActor( Vector2 motion, out CollisionResult collisionResult )
+		public void move( Vector2 motion )
 		{
-			collisionResult = new CollisionResult();
-
-			// no collider? just move and forget about it
-			if( colliders.Count == 0 )
-			{
-				transform.position += motion;
-				return false;
-			}
-
-			// remove ourself from the physics system until after we are done moving
 			colliders.unregisterAllCollidersWithPhysicsSystem();
-
-			// 1. move all non-trigger entity.colliders and get closest collision
-			for( var i = 0; i < colliders.Count; i++ )
-			{
-				var collider = colliders[i];
-
-				// skip triggers for now. we will revisit them after we move.
-				if( collider.isTrigger )
-					continue;
-
-				// fetch anything that we might collide with at our new position
-				var bounds = collider.bounds;
-				bounds.X += (int)motion.X;
-				bounds.Y += (int)motion.Y;
-				var neighbors = Physics.boxcastBroadphase( ref bounds, collider.collidesWithLayers );
-
-				foreach( var neighbor in neighbors )
-				{
-					// skip triggers for now. we will revisit them after we move.
-					if( neighbor.isTrigger )
-						continue;
-					
-					CollisionResult tempCollisionResult;
-					if( collider.collidesWith( neighbor, motion, out tempCollisionResult ) )
-					{
-						// hit. compare with the previous hit if we have one and choose the one that is closest (smallest MTV)
-						if( collisionResult.collider == null ||
-							( collisionResult.collider != null && collisionResult.minimumTranslationVector.LengthSquared() > tempCollisionResult.minimumTranslationVector.LengthSquared() ) )
-						{
-							collisionResult = tempCollisionResult;
-						}
-					}
-				}
-			}
-
-			// 2. move entity to its new position if we have a collision else move the full amount
-			if( collisionResult.collider != null )
-				transform.position += motion - collisionResult.minimumTranslationVector;
-			else
-				transform.position += motion;
-
-			// 3. do an overlap check of all entity.colliders that are triggers with all broadphase colliders, triggers or not.
-			//    Any overlaps result in trigger events.
-			for( var i = 0; i < colliders.Count; i++ )
-			{
-				var collider = colliders[i];
-
-				// fetch anything that we might collide with us at our new position
-				var neighbors = Physics.boxcastBroadphase( collider.bounds, collider.collidesWithLayers );
-				foreach( var neighbor in neighbors )
-				{
-					// we need at least one of the colliders to be a trigger
-					if( !collider.isTrigger && !neighbor.isTrigger )
-						continue;
-					
-					if( collider.overlaps( neighbor ) )
-					{
-						// trigger event perhaps?
-						Debug.log( "trigger between {0} and {1}", collider, neighbor );
-					}
-				}
-			}
-
-			// let Physics know about our new position
+			transform.position += motion;
 			colliders.registerAllCollidersWithPhysicsSystem();
-
-			return collisionResult.collider != null;
 		}
 
 		#endregion
@@ -350,13 +272,13 @@ namespace Nez
 
 		public int CompareTo( Entity other )
 		{
-			return _actualUpdateOrder.CompareTo( other._actualUpdateOrder );
+			return _updateOrder.CompareTo( other._updateOrder );
 		}
 
 
 		public override string ToString()
 		{
-			return string.Format(" [Entity: name: {0}, tag: {1}, enabled: {2}, depth: {3}]", name, tag, enabled, updateOrder );
+			return string.Format( "[Entity: name: {0}, tag: {1}, enabled: {2}, depth: {3}]", name, tag, enabled, updateOrder );
 		}
 
 	}
