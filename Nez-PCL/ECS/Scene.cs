@@ -687,7 +687,7 @@ namespace Nez
 		/// resources using the scenes ContentManager.
 		/// </summary>
 		/// <param name="postProcessor">Post processor.</param>
-		public void addPostProcessor( PostProcessor postProcessor )
+		public PostProcessor addPostProcessor( PostProcessor postProcessor )
 		{
 			_postProcessors.Add( postProcessor );
 			_postProcessors.Sort();
@@ -702,6 +702,8 @@ namespace Nez
 				else
 					_destinationRenderTarget = RenderTarget.create();
 			}
+
+			return postProcessor;
 		}
 
 
