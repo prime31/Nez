@@ -9,7 +9,10 @@ namespace Nez
 	{
 		#region Fields and Properties
 
-		protected Vector2 _position;
+		/// <summary>
+		/// position in world space of the camera
+		/// </summary>
+		/// <value>The position.</value>
 		public Vector2 position
 		{
 			get { return _position; }
@@ -22,8 +25,12 @@ namespace Nez
 				}
 			}
 		}
+		protected Vector2 _position;
 
-		protected Vector2 _origin;
+		/// <summary>
+		/// origin of the camera. Defaults to the center of the camera
+		/// </summary>
+		/// <value>The origin.</value>
 		public Vector2 origin
 		{
 			get { return _origin; }
@@ -36,8 +43,12 @@ namespace Nez
 				}
 			}
 		}
-
-		protected float _rotation;
+		protected Vector2 _origin;
+			
+		/// <summary>
+		/// rotation of the camera
+		/// </summary>
+		/// <value>The rotation.</value>
 		public float rotation
 		{
 			get { return _rotation; }
@@ -50,6 +61,7 @@ namespace Nez
 				}
 			}
 		}
+		protected float _rotation;
 
 		/// <summary>
 		/// the zoom value should be between -1 and 1. This value is then translated to be from minimumZoom to maximumZoom. This lets you set
@@ -82,21 +94,29 @@ namespace Nez
 		}
 		float _zoom;
 
+		/// <summary>
+		/// minimum non-scaled value (0 - float.Max) that the camera zoom can be. Defaults to 0.3
+		/// </summary>
+		/// <value>The minimum zoom.</value>
 		public float minimumZoom
 		{
 			get { return _minimumZoom; }
 			set
 			{
-				Assert.isTrue( value > 0, "MinimumZoom must be greater than zero" );
+				Assert.isTrue( value > 0, "minimumZoom must be greater than zero" );
 
-				if( zoom < value )
-					zoom = minimumZoom;
+				if( _zoom < value )
+					_zoom = minimumZoom;
 
 				_minimumZoom = value;
 			}
 		}
-		float _minimumZoom = 0.1f;
+		float _minimumZoom = 0.3f;
 
+		/// <summary>
+		/// maximum non-scaled value (0 - float.Max) that the camera zoom can be. Defaults to 3
+		/// </summary>
+		/// <value>The maximum zoom.</value>
 		public float maximumZoom
 		{
 			get { return _maximumZoom; }
@@ -104,13 +124,13 @@ namespace Nez
 			{
 				Assert.isTrue( value > 0, "MaximumZoom must be greater than zero" );
 
-				if( zoom > value )
-					zoom = value;
+				if( _zoom > value )
+					_zoom = value;
 
 				_maximumZoom = value;
 			}
 		}
-		float _maximumZoom = 5f;
+		float _maximumZoom = 3f;
 
 		/// <summary>
 		/// world-space bounds of the camera. useful for culling.
@@ -159,6 +179,10 @@ namespace Nez
 		}
 		Rectangle _bounds;
 
+		/// <summary>
+		/// used to convert from world coordinates to screen
+		/// </summary>
+		/// <value>The transform matrix.</value>
 		public Matrix transformMatrix
 		{
 			get
@@ -170,6 +194,10 @@ namespace Nez
 		}
 		Matrix _transformMatrix = Matrix.Identity;
 
+		/// <summary>
+		/// used to convert from screen coordinates to world
+		/// </summary>
+		/// <value>The inverse transform matrix.</value>
 		public Matrix inverseTransformMatrix
 		{
 			get
