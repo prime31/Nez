@@ -230,7 +230,6 @@
     <Compile Include="Utils\ArrayExt.cs" />
     <Compile Include="Graphics\PostProcessing\PostProcessors\HeatDistortionPostProcessor.cs" />
     <Compile Include="Physics\Shapes\CollisionResult.cs" />
-    <Compile Include="ECS\Components\Renderables\Mesh.cs" />
     <Compile Include="Utils\Utils.cs" />
     <Compile Include="ECS\Components\Renderables\TrailRibbon.cs" />
     <Compile Include="ECS\Components\Renderables\GooCursor.cs" />
