@@ -15,7 +15,8 @@ namespace Nez
 	{
 		/// <summary>
 		/// when added to a Component, whenever a Collider on the Entity overlaps/exits another Component these methods will be called.
-		/// Note that this interface works in conjunction with the Mover class
+		/// The ITriggerListener method will be called on any Component on the Entity that is a trigger that implement the interface.
+		/// Note that this interface works only in conjunction with the Mover class
 		/// </summary>
 		public interface ITriggerListener
 		{
@@ -92,9 +93,9 @@ namespace Nez
 					CollisionResult tempCollisionResult;
 					if( collider.collidesWith( neighbor, motion, out tempCollisionResult ) )
 					{
-						// hit. compare with the previous hit if we have one and choose the one that is closest (smallest MTV)
+						// hit. compare with the previous hit (if we have one) and choose the one that is closest (smallest MTV)
 						if( collisionResult.collider == null ||
-							( collisionResult.collider != null && collisionResult.minimumTranslationVector.LengthSquared() > tempCollisionResult.minimumTranslationVector.LengthSquared() ) )
+							collisionResult.minimumTranslationVector.LengthSquared() > tempCollisionResult.minimumTranslationVector.LengthSquared() )
 						{
 							collisionResult = tempCollisionResult;
 						}
@@ -124,8 +125,7 @@ namespace Nez
 
 					if( collider.overlaps( neighbor ) )
 					{
-						var pair = QuickCache<Pair<Collider>>.pop();
-						pair.set( collider, neighbor );
+						var pair = new Pair<Collider>( collider, neighbor );
 
 						// if we already have this pair in one of our sets (the previous or current trigger intersections) dont call the enter event
 						var shouldReportTriggerEvent = !_activeTriggerIntersections.Contains( pair ) && !_previousTriggerIntersections.Contains( pair );
@@ -152,13 +152,9 @@ namespace Nez
 			_previousTriggerIntersections.ExceptWith( _activeTriggerIntersections );
 
 			foreach( var pair in _previousTriggerIntersections )
-			{
 				notifityTriggerListeners( pair, false );
-				QuickCache<Pair<Collider>>.push( pair );
-				pair.clear();
-			}
 
-			// clear out the previous set cause we are done with it for now and we already pushed to the QuickCache all the pairs
+			// clear out the previous set cause we are done with it for now
 			_previousTriggerIntersections.Clear();
 
 			// add in all the currently active triggers
@@ -197,6 +193,7 @@ namespace Nez
 				}
 			}
 		}
+	
 	}
 }
 

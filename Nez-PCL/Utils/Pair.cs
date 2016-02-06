@@ -7,25 +7,13 @@ namespace Nez
 	/// <summary>
 	/// simple DTO for managing a pair of objects
 	/// </summary>
-	public class Pair<T> : IEquatable<Pair<T>> where T : class
+	public struct Pair<T> : IEquatable<Pair<T>> where T : class
 	{
 		public T first;
 		public T second;
 
 
-		public Pair()
-		{
-		}
-
-
 		public Pair( T first, T second )
-		{
-			this.first = first;
-			this.second = second;
-		}
-
-
-		public void set( T first, T second )
 		{
 			this.first = first;
 			this.second = second;
@@ -40,11 +28,11 @@ namespace Nez
 
 		public bool Equals( Pair<T> other )
 		{
-			if( other == null )
-				return false;
-			
-			return EqualityComparer<T>.Default.Equals( first, other.first ) &&
-				EqualityComparer<T>.Default.Equals( second, other.second );
+			// these two ways should be functionaly equivalent
+			return first == other.first && second == other.second;
+
+			//return EqualityComparer<T>.Default.Equals( first, other.first ) &&
+			//	EqualityComparer<T>.Default.Equals( second, other.second );
 		}
 
 

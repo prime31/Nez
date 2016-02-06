@@ -6,7 +6,7 @@
     <ProjectTypeGuids>{948B3504-5B70-4649-8FE4-BDE1FB46EC69};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <ProjectGuid>{673882A8-9246-4246-865F-48CFE00B115E}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <RootNamespace>MacDumpster</RootNamespace>
+    <RootNamespace>MacTester</RootNamespace>
     <MonoMacResourcePrefix>Resources</MonoMacResourcePrefix>
     <AssemblyName>MacTester</AssemblyName>
     <SuppressXamMacUpsell>True</SuppressXamMacUpsell>

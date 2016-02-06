@@ -13,7 +13,6 @@ namespace MacDumpster
 		float _minY;
 		float _maxY;
 		float _speedFactor;
-		Mover _mover;
 
 
 		public SimpleMovingPlatform( float minY, float maxY, float speedFactor = 2f )
@@ -28,9 +27,6 @@ namespace MacDumpster
 		{
 			_minX = entity.transform.position.X;
 			_maxX = _minX + 100;
-
-			_mover = new Mover();
-			entity.addComponent( _mover );
 		}
 
 
@@ -48,8 +44,7 @@ namespace MacDumpster
 			//var ridingActors = getAllRidingActors();
 
 			// TODO: recreate moveSolid
-			CollisionResult collisionResult;
-			_mover.move( new Vector2( deltaX, deltaY ), out collisionResult );
+			entity.move( new Vector2( deltaX, deltaY ) );
 		}
 
 
