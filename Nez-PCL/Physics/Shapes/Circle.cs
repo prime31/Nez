@@ -1,5 +1,6 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
+using System.Diagnostics;
 
 
 namespace Nez.PhysicsShapes
@@ -57,6 +58,50 @@ namespace Nez.PhysicsShapes
 		{
 			hit = new RaycastHit();
 			return ShapeCollisions.lineToCircle( start, end, this, out hit );
+		}
+
+
+		/// <summary>
+		/// Gets the point at the edge of this <see cref="Circle"/> from the provided angle
+		/// </summary>
+		/// <param name="angle">an angle in radians</param>
+		/// <returns><see cref="Vector2"/> representing the point on this <see cref="Circle"/>'s surface at the specified angle</returns>
+		public Vector2 getPointAlongEdge( float angle )
+		{
+			return new Vector2( position.X + ( radius * Mathf.cos( angle ) ), position.Y + ( radius * Mathf.sin( angle ) ) );
+		}
+
+
+		/// <summary>
+		/// Gets whether or not the provided coordinates lie within the bounds of this <see cref="Circle"/>.
+		/// </summary>
+		/// <param name="x">The x coordinate of the point to check for containment.</param>
+		/// <param name="y">The y coordinate of the point to check for containment.</param>
+		/// <returns><c>true</c> if the provided coordinates lie inside this <see cref="Circle"/>; <c>false</c> otherwise.</returns>
+		public bool contains( float x, float y )
+		{
+			return contains( new Vector2( x, y ) );
+		}
+
+
+		/// <summary>
+		/// Gets whether or not the provided point lie within the bounds of this <see cref="Circle"/>.
+		/// </summary>
+		/// <param name="oint">the point</param>
+		/// <returns><c>true</c> if the provided coordinates lie inside this <see cref="Circle"/>; <c>false</c> otherwise.</returns>
+		public bool contains( Vector2 point )
+		{
+			return ( ( point - position ).LengthSquared() <= radius * radius );
+		}
+
+
+		/// <summary>
+		/// Gets whether or not the provided <see cref="Vector2"/> lies within the bounds of this <see cref="Circle"/>.
+		/// </summary>
+		/// <param name="point">Point.</param>
+		public bool contains( ref Vector2 point )
+		{
+			return ( point - position ).LengthSquared() <= radius * radius;
 		}
 
 	}
