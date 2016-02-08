@@ -43,10 +43,10 @@ namespace Nez.PhysicsShapes
 
 			// first we check for an overlap. if we have an overlap we dont do the sweep test
 			var minkowskiDiff = minkowskiDifference( first, second );
-			if( minkowskiDiff.Contains( 0f, 0f ) )
+			if( minkowskiDiff.contains( 0f, 0f ) )
 			{
 				// calculate the MTV. if it is zero then we can just call this a non-collision
-				var mtv = RectangleExt.getClosestPointOnBoundsToOrigin( ref minkowskiDiff );
+				var mtv = minkowskiDiff.getClosestPointOnBoundsToOrigin();
 				if( mtv == Vector2.Zero )
 					return false;
 						
@@ -62,13 +62,13 @@ namespace Nez.PhysicsShapes
 				// ray-cast the movement vector against the Minkowski AABB
 				var ray = new Ray2D( Vector2.Zero, -movement );
 				float fraction;
-				if( RectangleExt.rayIntersects( ref minkowskiDiff, ref ray, out fraction ) && fraction <= 1.0f )
+				if( minkowskiDiff.rayIntersects( ref ray, out fraction ) && fraction <= 1.0f )
 				{
 					hit.fraction = fraction;
 					hit.distance = movement.Length() * fraction;
 					hit.normal = -movement;
 					hit.normal.Normalize();
-					hit.centroid = first.bounds.getCenter() + movement * fraction;
+					hit.centroid = first.bounds.center + movement * fraction;
 
 					return true;
 				}
@@ -83,10 +83,10 @@ namespace Nez.PhysicsShapes
 			result = new CollisionResult();
 
 			var minkowskiDiff = minkowskiDifference( first, second );
-			if( minkowskiDiff.Contains( 0f, 0f ) )
+			if( minkowskiDiff.contains( 0f, 0f ) )
 			{
 				// calculate the MTV. if it is zero then we can just call this a non-collision
-				result.minimumTranslationVector = RectangleExt.getClosestPointOnBoundsToOrigin( ref minkowskiDiff );
+				result.minimumTranslationVector = minkowskiDiff.getClosestPointOnBoundsToOrigin();
 
 				if( result.minimumTranslationVector == Vector2.Zero )
 					return false;
@@ -101,12 +101,12 @@ namespace Nez.PhysicsShapes
 		}
 
 
-		static Rectangle minkowskiDifference( Box first, Box second )
+		static RectangleF minkowskiDifference( Box first, Box second )
 		{
-			var topLeft = first.position.ToPoint() - RectangleExt.getMax( ref second.bounds );
-			var fullSize = first.bounds.Size + second.bounds.Size;
+			var topLeft = first.position - second.bounds.max;
+			var fullSize = first.bounds.size + second.bounds.size;
 
-			return new Rectangle( topLeft.X, topLeft.Y, fullSize.X, fullSize.Y );
+			return new RectangleF( topLeft.X, topLeft.Y, fullSize.X, fullSize.Y );
 		}
 
 		#endregion
@@ -455,7 +455,7 @@ namespace Nez.PhysicsShapes
 		{
 			result = new CollisionResult();
 
-			var closestPointOnBounds = RectangleExt.getClosestPointOnRectangleBorderToPoint( ref second.bounds, first.position );
+			var closestPointOnBounds = second.bounds.getClosestPointOnRectangleBorderToPoint( first.position );
 
 			float sqrDistance;
 			Vector2.DistanceSquared( ref closestPointOnBounds, ref first.position, out sqrDistance );

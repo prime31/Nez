@@ -10,23 +10,13 @@ namespace Nez
 	/// </summary>
 	public class SimplePolygon : RenderableComponent
 	{
-		public override float width
-		{
-			get { return bounds.Width; }
-		}
-
-		public override float height
-		{
-			get { return bounds.Height; }
-		}
-
-		public override Rectangle bounds
+		public override RectangleF bounds
 		{
 			get
 			{
 				if( _areBoundsDirty )
 				{
-					_bounds = RectangleExt.boundsFromPolygonPoints( worldSpacePoints );
+					_bounds = RectangleF.rectEncompassingPoints( worldSpacePoints );
 					_areBoundsDirty = false;
 				}
 

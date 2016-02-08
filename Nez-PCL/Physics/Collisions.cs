@@ -110,15 +110,15 @@ namespace Nez
 
 		#region Bounds/Rect
 
-		static public bool rectToCircle( Rectangle rect, Vector2 cPosition, float cRadius )
+		static public bool rectToCircle( RectangleF rect, Vector2 cPosition, float cRadius )
 		{
-			return rectToCircle( rect.X, rect.Y, rect.Width, rect.Height, cPosition, cRadius );
+			return rectToCircle( rect.x, rect.y, rect.width, rect.height, cPosition, cRadius );
 		}
 
 
-		static public bool rectToCircle( ref Rectangle rect, Vector2 cPosition, float cRadius )
+		static public bool rectToCircle( ref RectangleF rect, Vector2 cPosition, float cRadius )
 		{
-			return rectToCircle( rect.X, rect.Y, rect.Width, rect.Height, cPosition, cRadius );
+			return rectToCircle( rect.x, rect.y, rect.width, rect.height, cPosition, cRadius );
 		}
 
 
@@ -169,15 +169,15 @@ namespace Nez
 		}
 
 
-		static public bool rectToLine( ref Rectangle rect, Vector2 lineFrom, Vector2 lineTo )
+		static public bool rectToLine( ref RectangleF rect, Vector2 lineFrom, Vector2 lineTo )
 		{
-			return rectToLine( rect.X, rect.Y, rect.Width, rect.Height, lineFrom, lineTo );
+			return rectToLine( rect.x, rect.y, rect.width, rect.height, lineFrom, lineTo );
 		}
 
 
-		static public bool rectToLine( Rectangle rect, Vector2 lineFrom, Vector2 lineTo )
+		static public bool rectToLine( RectangleF rect, Vector2 lineFrom, Vector2 lineTo )
 		{
-			return rectToLine( rect.X, rect.Y, rect.Width, rect.Height, lineFrom, lineTo );
+			return rectToLine( rect.x, rect.y, rect.width, rect.height, lineFrom, lineTo );
 		}
 
 
@@ -241,9 +241,9 @@ namespace Nez
 		}
 
 
-		static public bool rectToPoint( Rectangle rect, Vector2 point )
+		static public bool rectToPoint( RectangleF rect, Vector2 point )
 		{
-			return rectToPoint( rect.X, rect.Y, rect.Width, rect.Height, point );
+			return rectToPoint( rect.x, rect.y, rect.width, rect.height, point );
 		}
 
 		#endregion
@@ -261,18 +261,18 @@ namespace Nez
          *      0101  0100  0110
          */
 
-		static public PointSectors getSector( Rectangle rect, Vector2 point )
+		static public PointSectors getSector( RectangleF rect, Vector2 point )
 		{
 			PointSectors sector = PointSectors.Center;
 
-			if( point.X < rect.Left )
+			if( point.X < rect.left )
 				sector |= PointSectors.Left;
-			else if( point.X >= rect.Right )
+			else if( point.X >= rect.right )
 				sector |= PointSectors.Right;
 
-			if( point.Y < rect.Top )
+			if( point.Y < rect.top )
 				sector |= PointSectors.Top;
-			else if( point.Y >= rect.Bottom )
+			else if( point.Y >= rect.bottom )
 				sector |= PointSectors.Bottom;
 
 			return sector;

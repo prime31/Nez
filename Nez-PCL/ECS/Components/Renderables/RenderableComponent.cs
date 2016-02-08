@@ -18,18 +18,21 @@ namespace Nez
 		public RenderState renderState;
 
 		/// <summary>
-		/// width of the RenderableComponent
+		/// width of the RenderableComponent. subclasses that do not override the bounds property must implement this!
 		/// </summary>
 		/// <value>The width.</value>
-		public abstract float width { get; }
+		public virtual float width { get { return bounds.width; } }
 
 		/// <summary>
-		/// height of the RenderableComponent
+		/// height of the RenderableComponent. subclasses that do not override the bounds property must implement this!
 		/// </summary>
 		/// <value>The height.</value>
-		public abstract float height { get; }
+		public virtual float height { get { return bounds.height; } }
 
-		protected Vector2 _localPosition;
+		/// <summary>
+		/// offset from the parent entity
+		/// </summary>
+		/// <value>The local position.</value>
 		public Vector2 localPosition
 		{
 			get { return _localPosition; }
@@ -42,8 +45,8 @@ namespace Nez
 				}
 			}
 		}
+		protected Vector2 _localPosition;
 
-		protected Vector2 _origin;
 		public Vector2 origin
 		{
 			get { return _origin; }
@@ -56,6 +59,7 @@ namespace Nez
 				}
 			}
 		}
+		protected Vector2 _origin;
 
 		/// <summary>
 		/// standard SpriteBatch layerdepth. 0 is in front and 1 is in back. Changing this value will trigger a sort of the renderableComponents
@@ -142,20 +146,20 @@ namespace Nez
 		/// the AABB that wraps this object
 		/// </summary>
 		/// <value>The bounds.</value>
-		public virtual Rectangle bounds
+		public virtual RectangleF bounds
 		{
 			get
 			{
 				if( _areBoundsDirty )
 				{
-					RectangleExt.calculateBounds( ref _bounds, entity.transform.position, _localPosition, _origin, entity.transform.scale, entity.transform.rotation, width, height );
+					_bounds.calculateBounds( entity.transform.position, _localPosition, _origin, entity.transform.scale, entity.transform.rotation, width, height );
 					_areBoundsDirty = false;
 				}
 
 				return _bounds;
 			}
 		}
-		protected Rectangle _bounds;
+		protected RectangleF _bounds;
 
 		/// <summary>
 		/// helper property for setting the origin in normalized fashion (0-1 for x and y)
@@ -253,7 +257,7 @@ namespace Nez
 		/// <param name="camera">Camera.</param>
 		protected bool isVisibleFromCamera( Camera camera )
 		{
-			if( camera.bounds.Intersects( bounds ) )
+			if( camera.bounds.intersects( bounds ) )
 			{
 				isVisible = true;
 				return true;

@@ -11,7 +11,7 @@ namespace Nez.PhysicsShapes
 		/// Entity.position which triggers collider/bounds/hash updates.
 		/// </summary>
 		public Vector2 position;
-		public Rectangle bounds;
+		public RectangleF bounds;
 
 
 		internal abstract void recalculateBounds( Collider collider );

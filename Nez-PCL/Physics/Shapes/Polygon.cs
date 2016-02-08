@@ -42,8 +42,8 @@ namespace Nez.PhysicsShapes
 		internal override void recalculateBounds( Collider collider )
 		{
 			position = collider.absolutePosition;
-			bounds = RectangleExt.boundsFromPolygonPoints( points );
-			bounds.Location += position.ToPoint();
+			bounds = RectangleF.rectEncompassingPoints( points );
+			bounds.location += position;
 		}
 
 

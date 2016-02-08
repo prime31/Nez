@@ -11,25 +11,6 @@ namespace Nez
 	/// </summary>
 	public class GooCursor : RenderableComponent, IUpdatable
 	{
-		public override float width
-		{
-			get { return bounds.Width; }
-		}
-
-		public override float height
-		{
-			get { return bounds.Height; }
-		}
-
-
-		// this is the sprite that is drawn at the current cursor position.
-		// textureCenter is used to center the sprite when drawing.
-		Texture2D _cursorTexture;
-		Vector2 _textureCenter;
-
-		int _trailNodeCount;
-		TrailNode[] _trailNodes;
-
 		/// <summary>
 		/// Gets of Sets the stiffness of the trail A lower number means the trail will be longer
 		/// </summary>
@@ -74,6 +55,15 @@ namespace Nez
 		/// Size of the border (in pixels)
 		/// </summary>
 		public float borderSize = 10;
+
+
+		// this is the sprite that is drawn at the current cursor position.
+		// textureCenter is used to center the sprite when drawing.
+		Texture2D _cursorTexture;
+		Vector2 _textureCenter;
+
+		int _trailNodeCount;
+		TrailNode[] _trailNodes;
 
 
 		public GooCursor( int trailNodeCount = 50 )

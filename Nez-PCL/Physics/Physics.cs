@@ -122,7 +122,7 @@ namespace Nez
 		/// </summary>
 		/// <param name="collider">Collider.</param>
 		/// <param name="bounds">Bounds.</param>
-		public static void removeCollider( Collider collider, ref Rectangle bounds )
+		public static void removeCollider( Collider collider, ref RectangleF bounds )
 		{
 			_spatialHash.remove( collider, ref bounds );
 		}
@@ -134,7 +134,7 @@ namespace Nez
 		/// </summary>
 		/// <param name="collider">Collider.</param>
 		/// <param name="colliderBounds">Collider bounds.</param>
-		public static void updateCollider( Collider collider, ref Rectangle preUpdateColliderBounds )
+		public static void updateCollider( Collider collider, ref RectangleF preUpdateColliderBounds )
 		{
 			_spatialHash.remove( collider, ref preUpdateColliderBounds );
 			_spatialHash.register( collider );
@@ -179,7 +179,7 @@ namespace Nez
 		/// <returns>The rectangle.</returns>
 		/// <param name="rect">Rect.</param>
 		/// <param name="layerMask">Layer mask.</param>
-		public static Collider overlapRectangle( Rectangle rect, int layerMask = allLayers )
+		public static Collider overlapRectangle( RectangleF rect, int layerMask = allLayers )
 		{
 			return overlapRectangle( ref rect, layerMask );
 		}
@@ -191,7 +191,7 @@ namespace Nez
 		/// <returns>The rectangle.</returns>
 		/// <param name="rect">Rect.</param>
 		/// <param name="layerMask">Layer mask.</param>
-		public static Collider overlapRectangle( ref Rectangle rect, int layerMask = allLayers )
+		public static Collider overlapRectangle( ref RectangleF rect, int layerMask = allLayers )
 		{
 			_colliderArray[0] = null;
 			_spatialHash.overlapRectangle( ref rect, _colliderArray, layerMask );
@@ -206,7 +206,7 @@ namespace Nez
 		/// <param name="rect">Rect.</param>
 		/// <param name="results">Results.</param>
 		/// <param name="layerMask">Layer mask.</param>
-		public static int overlapRectangleAll( ref Rectangle rect, Collider[] results, int layerMask = allLayers )
+		public static int overlapRectangleAll( ref RectangleF rect, Collider[] results, int layerMask = allLayers )
 		{
 			Assert.isFalse( results.Length == 0, "An empty results array was passed in. No results will ever be returned." );
 			return _spatialHash.overlapRectangle( ref rect, results, layerMask );
@@ -251,7 +251,7 @@ namespace Nez
 		/// </summary>
 		/// <param name="bounds">Bounds.</param>
 		/// <param name="layerMask">Layer mask.</param>
-		public static IEnumerable<Collider> boxcastBroadphase( Rectangle rect, int layerMask = allLayers )
+		public static IEnumerable<Collider> boxcastBroadphase( RectangleF rect, int layerMask = allLayers )
 		{
 			return _spatialHash.aabbBroadphase( ref rect, null, layerMask );
 		}
@@ -263,7 +263,7 @@ namespace Nez
 		/// </summary>
 		/// <param name="bounds">Bounds.</param>
 		/// <param name="layerMask">Layer mask.</param>
-		public static IEnumerable<Collider> boxcastBroadphase( ref Rectangle rect, int layerMask = allLayers )
+		public static IEnumerable<Collider> boxcastBroadphase( ref RectangleF rect, int layerMask = allLayers )
 		{
 			return _spatialHash.aabbBroadphase( ref rect, null, layerMask );
 		}
@@ -288,7 +288,7 @@ namespace Nez
 		/// <returns>The excluding self.</returns>
 		/// <param name="collider">Collider.</param>
 		/// <param name="bounds">Bounds.</param>
-		public static IEnumerable<Collider> boxcastBroadphaseExcludingSelf( Collider collider, ref Rectangle rect, int layerMask = allLayers )
+		public static IEnumerable<Collider> boxcastBroadphaseExcludingSelf( Collider collider, ref RectangleF rect, int layerMask = allLayers )
 		{
 			return _spatialHash.aabbBroadphase( ref rect, collider, layerMask );
 		}
@@ -303,7 +303,7 @@ namespace Nez
 		public static IEnumerable<Collider> boxcastBroadphaseExcludingSelf( Collider collider, float deltaX, float deltaY, int layerMask = allLayers )
 		{
 			var colliderBounds = collider.bounds;
-			var sweptBounds = RectangleExt.getSweptBroadphaseBounds( ref colliderBounds, deltaX, deltaY );
+			var sweptBounds = colliderBounds.getSweptBroadphaseBounds( deltaX, deltaY );
 			return _spatialHash.aabbBroadphase( ref sweptBounds, collider, layerMask );
 		}
 

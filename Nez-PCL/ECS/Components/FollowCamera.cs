@@ -28,7 +28,7 @@ namespace Nez
 		/// when in LockOn mode only the deadzone x/y values are used. This is set to sensible defaults when you call follow but you are
 		/// free to override it to get a custom deadzone directly or via the helper setCenteredDeadzone.
 		/// </summary>
-		public Rectangle deadzone;
+		public RectangleF deadzone;
 
 		/// <summary>
 		/// offset from the screen center that the camera will focus on
@@ -38,7 +38,7 @@ namespace Nez
 		Entity _targetEntity;
 		Vector2 _desiredPositionDelta;
 		CameraStyle _cameraStyle;
-		Rectangle _worldSpaceDeadzone;
+		RectangleF _worldSpaceDeadzone;
 
 		
 		public FollowCamera( Entity targetEntity, Camera camera )
@@ -73,10 +73,10 @@ namespace Nez
 		public void update()
 		{
 			// translate the deadzone to be in world space
-			_worldSpaceDeadzone.X = (int)( camera.position.X - camera.origin.X + deadzone.X + focusOffset.X );
-			_worldSpaceDeadzone.Y = (int)( camera.position.Y - camera.origin.Y + deadzone.Y + focusOffset.Y );
-			_worldSpaceDeadzone.Width = deadzone.Width;
-			_worldSpaceDeadzone.Height = deadzone.Height;
+			_worldSpaceDeadzone.x = camera.position.X - camera.origin.X + deadzone.x + focusOffset.X;
+			_worldSpaceDeadzone.y = camera.position.Y - camera.origin.Y + deadzone.y + focusOffset.Y;
+			_worldSpaceDeadzone.width = deadzone.width;
+			_worldSpaceDeadzone.height = deadzone.height;
 
 			if( _targetEntity != null )
 				updateFollow();
@@ -88,7 +88,7 @@ namespace Nez
 		public override void debugRender( Graphics graphics )
 		{
 			if( _cameraStyle == CameraStyle.LockOn )
-				graphics.spriteBatch.drawHollowRect( _worldSpaceDeadzone.X - 5, _worldSpaceDeadzone.Y - 5, _worldSpaceDeadzone.Width, _worldSpaceDeadzone.Height, Color.DarkRed );
+				graphics.spriteBatch.drawHollowRect( _worldSpaceDeadzone.x - 5, _worldSpaceDeadzone.y - 5, _worldSpaceDeadzone.width, _worldSpaceDeadzone.height, Color.DarkRed );
 			else
 				graphics.spriteBatch.drawHollowRect( _worldSpaceDeadzone, Color.DarkRed );
 		}
@@ -110,33 +110,33 @@ namespace Nez
 				var targetY = _targetEntity.transform.position.Y;
 
 				// x-axis
-				if( _worldSpaceDeadzone.X > targetX )
-					_desiredPositionDelta.X = targetX - _worldSpaceDeadzone.X;
-				else if( _worldSpaceDeadzone.X < targetX )
-					_desiredPositionDelta.X = targetX - _worldSpaceDeadzone.X;
+				if( _worldSpaceDeadzone.x > targetX )
+					_desiredPositionDelta.X = targetX - _worldSpaceDeadzone.x;
+				else if( _worldSpaceDeadzone.x < targetX )
+					_desiredPositionDelta.X = targetX - _worldSpaceDeadzone.x;
 
 				// y-axis
-				if( _worldSpaceDeadzone.Y < targetY )
-					_desiredPositionDelta.Y = targetY - _worldSpaceDeadzone.Y;
-				else if( _worldSpaceDeadzone.Y > targetY )
-					_desiredPositionDelta.Y = targetY - _worldSpaceDeadzone.Y;
+				if( _worldSpaceDeadzone.y < targetY )
+					_desiredPositionDelta.Y = targetY - _worldSpaceDeadzone.y;
+				else if( _worldSpaceDeadzone.y > targetY )
+					_desiredPositionDelta.Y = targetY - _worldSpaceDeadzone.y;
 			}
 			else
 			{
 				var targetBounds = _targetEntity.colliders.mainCollider.bounds;
-				if( !_worldSpaceDeadzone.Contains( targetBounds ) )
+				if( !_worldSpaceDeadzone.contains( targetBounds ) )
 				{
 					// x-axis
-					if( _worldSpaceDeadzone.Left > targetBounds.Left )
-						_desiredPositionDelta.X = targetBounds.Left - _worldSpaceDeadzone.Left;
-					else if( _worldSpaceDeadzone.Right < targetBounds.Right )
-						_desiredPositionDelta.X = targetBounds.Right - _worldSpaceDeadzone.Right;
+					if( _worldSpaceDeadzone.left > targetBounds.left )
+						_desiredPositionDelta.X = targetBounds.left - _worldSpaceDeadzone.left;
+					else if( _worldSpaceDeadzone.right < targetBounds.right )
+						_desiredPositionDelta.X = targetBounds.right - _worldSpaceDeadzone.right;
 
 					// y-axis
-					if( _worldSpaceDeadzone.Bottom < targetBounds.Bottom )
-						_desiredPositionDelta.Y = targetBounds.Bottom - _worldSpaceDeadzone.Bottom;
-					else if( _worldSpaceDeadzone.Top > targetBounds.Top )
-						_desiredPositionDelta.Y = targetBounds.Top - _worldSpaceDeadzone.Top;
+					if( _worldSpaceDeadzone.bottom < targetBounds.bottom )
+						_desiredPositionDelta.Y = targetBounds.bottom - _worldSpaceDeadzone.bottom;
+					else if( _worldSpaceDeadzone.top > targetBounds.top )
+						_desiredPositionDelta.Y = targetBounds.top - _worldSpaceDeadzone.top;
 				}
 			}
 		}
@@ -151,12 +151,12 @@ namespace Nez
 			switch( _cameraStyle )
 			{
 				case CameraStyle.CameraWindow:
-					var w = ( cameraBounds.Width / 6 );
-					var h = ( cameraBounds.Height / 3 );
-					deadzone = new Rectangle( ( cameraBounds.Width - w ) / 2, ( cameraBounds.Height - h ) / 2, w, h );
+					var w = ( cameraBounds.width / 6 );
+					var h = ( cameraBounds.height / 3 );
+					deadzone = new RectangleF( ( cameraBounds.width - w ) / 2, ( cameraBounds.height - h ) / 2, w, h );
 					break;
 				case CameraStyle.LockOn:
-					deadzone = new Rectangle( cameraBounds.Width / 2, cameraBounds.Height / 2, 10, 10 );
+					deadzone = new RectangleF( cameraBounds.width / 2, cameraBounds.height / 2, 10, 10 );
 					break;
 			}
 		}
@@ -170,7 +170,7 @@ namespace Nez
 		public void setCenteredDeadzone( int width, int height )
 		{
 			var cameraBounds = camera.bounds;
-			deadzone = new Rectangle( ( cameraBounds.Width - width ) / 2, ( cameraBounds.Height - height ) / 2, width, height );
+			deadzone = new RectangleF( ( cameraBounds.width - width ) / 2, ( cameraBounds.height - height ) / 2, width, height );
 		}
 
 	}

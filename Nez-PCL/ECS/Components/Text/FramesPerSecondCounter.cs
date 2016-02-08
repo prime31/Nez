@@ -111,7 +111,7 @@ namespace Nez
 		{
 			// due to the override of position in render we have to do the same here
 			var rect = bounds;
-			rect.Location = localPosition.ToPoint();
+			rect.location = localPosition;
 			graphics.spriteBatch.drawHollowRect( rect, Color.Yellow );
 		}
 

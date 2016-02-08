@@ -73,15 +73,15 @@ namespace Nez.Tiled
 		}
 
 
-		public override void draw( SpriteBatch spriteBatch, Vector2 position, float layerDepth, Rectangle cameraClipBounds )
+		public override void draw( SpriteBatch spriteBatch, Vector2 position, float layerDepth, RectangleF cameraClipBounds )
 		{
 			// offset it by the entity position since the tilemap will always expect positions in its own coordinate space
-			cameraClipBounds.Location -= position.ToPoint();
+			cameraClipBounds.location -= position;
 
-			var minX = tilemap.worldPositionToTilePositionX( cameraClipBounds.Left );
-			var minY = tilemap.worldPositionToTilePositionY( cameraClipBounds.Top );
-			var maxX = tilemap.worldPositionToTilePositionX( cameraClipBounds.Right );
-			var maxY = tilemap.worldPositionToTilePositionY( cameraClipBounds.Bottom );
+			var minX = tilemap.worldPositionToTilePositionX( cameraClipBounds.left );
+			var minY = tilemap.worldPositionToTilePositionY( cameraClipBounds.top );
+			var maxX = tilemap.worldPositionToTilePositionX( cameraClipBounds.right );
+			var maxY = tilemap.worldPositionToTilePositionY( cameraClipBounds.bottom );
 
 			// loop through and draw all the non-culled tiles
 			for( var y = minY; y <= maxY; y++ )

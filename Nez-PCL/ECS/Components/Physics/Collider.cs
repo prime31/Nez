@@ -59,8 +59,8 @@ namespace Nez
 		/// <value>The origin normalized.</value>
 		public Vector2 originNormalized
 		{
-			get { return new Vector2( _origin.X / bounds.Width, _origin.Y / bounds.Height ); }
-			set { origin = new Vector2( value.X * bounds.Width, value.Y * bounds.Height ); }
+			get { return new Vector2( _origin.X / bounds.width, _origin.Y / bounds.height ); }
+			set { origin = new Vector2( value.X * bounds.width, value.Y * bounds.height ); }
 		}
 
 		/// <summary>
@@ -87,7 +87,7 @@ namespace Nez
 		/// </summary>
 		public int collidesWithLayers = Physics.allLayers;
 
-		public virtual Rectangle bounds
+		public virtual RectangleF bounds
 		{
 			get
 			{
@@ -125,8 +125,8 @@ namespace Nez
 				{
 					var renderableBounds = renderable.bounds;
 
-					var width = renderableBounds.Width;
-					var height = renderableBounds.Height;
+					var width = renderableBounds.width;
+					var height = renderableBounds.height;
 
 					// circle colliders need special care with the origin
 					if( this is CircleCollider )
@@ -136,8 +136,7 @@ namespace Nez
 						circle.radius = width * 0.5f;
 
 						// fetch the Renderable's center, transfer it to local coordinates and use that as the origin of our collider
-						var center = renderableBounds.Center;
-						var localCenter = center.ToVector2() - entity.transform.position;
+						var localCenter = renderableBounds.center - entity.transform.position;
 						origin = localCenter;
 					}
 					else

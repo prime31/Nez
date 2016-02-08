@@ -12,17 +12,7 @@ namespace Nez
 	/// </summary>
 	public class TrailRibbon : RenderableComponent, IUpdatable
 	{
-		public override float width
-		{
-			get { return bounds.Width; }
-		}
-
-		public override float height
-		{
-			get { return bounds.Height; }
-		}
-
-		public override Rectangle bounds
+		public override RectangleF bounds
 		{
 			// we calculate bounds in update so no need to mess with anything here
 			get { return _bounds; }
@@ -124,10 +114,10 @@ namespace Nez
 				segCount++;
 			}
 
-			_bounds.X = (int)minX;
-			_bounds.Y = (int)minY;
-			_bounds.Width = (int)( maxX - minX );
-			_bounds.Height = (int)( maxY - minY );
+			_bounds.x = (int)minX;
+			_bounds.y = (int)minY;
+			_bounds.width = (int)( maxX - minX );
+			_bounds.height = (int)( maxY - minY );
 		}
 
 

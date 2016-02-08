@@ -11,12 +11,12 @@ namespace Nez.PhysicsShapes.BETA
 		{
 			// compute the AABB resulting from expanding b by sphere radius r
 			var e = b.bounds;
-			e.Inflate( s.radius, s.radius );
+			e.inflate( s.radius, s.radius );
 
 			// Intersect ray against expanded expanded Rectangle e. Exit with no intersection if ray
 			// misses e, else get intersection point p and time t as result
 			var ray = new Ray2D( s.position - movement, s.position );
-			if( !RectangleExt.rayIntersects( ref e, ref ray, out time ) && time > 1.0f )
+			if( !e.rayIntersects( ref ray, out time ) && time > 1.0f )
 				return false;
 
 			// get the intersection point
@@ -25,13 +25,13 @@ namespace Nez.PhysicsShapes.BETA
 			// compute which min and max faces of b the intersection point p lies outside of. Note, u and v cannot have the
 			// same bits set and they must have at least one bit set among them.
 			int u = 0, v = 0;
-			if( point.X < b.bounds.Left )
+			if( point.X < b.bounds.left )
 				u |= 1;
-			if( point.X > b.bounds.Right )
+			if( point.X > b.bounds.right )
 				v |= 1;
-			if( point.Y < b.bounds.Top )
+			if( point.Y < b.bounds.top )
 				u |= 2;
-			if( point.Y > b.bounds.Bottom )
+			if( point.Y > b.bounds.bottom )
 				v |= 2;
 
 			// 'or' all set bits together into a bitmask (note u + v == u | v)
@@ -138,7 +138,7 @@ namespace Nez.PhysicsShapes.BETA
 		public static bool testCircleBox( Circle circle, Box box, out Vector2 point )
 		{
 			// find the point closest to the sphere center
-			point = RectangleExt.getClosestPointOnRectangleToPoint( ref box.bounds, circle.position );
+			point = box.bounds.getClosestPointOnRectangleFToPoint( circle.position );
 
 			// circle and box intersect if sqr distance from circle center to point is less than the circle sqr radius
 			var v = point - circle.position;

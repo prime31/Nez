@@ -62,8 +62,8 @@ namespace Nez
 
 		public override void debugRender( Graphics graphics )
 		{
-			graphics.spriteBatch.drawCircle( bounds.getCenter(), ((Circle)shape).radius, Color.IndianRed );
-			graphics.spriteBatch.drawPixel( bounds.getCenter(), Color.IndianRed, 4 );
+			graphics.spriteBatch.drawCircle( bounds.center, ((Circle)shape).radius, Color.IndianRed );
+			graphics.spriteBatch.drawPixel( bounds.center, Color.IndianRed, 4 );
 		}
 
 

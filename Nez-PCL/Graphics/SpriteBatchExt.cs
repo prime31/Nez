@@ -216,6 +216,12 @@ namespace Nez
 			drawHollowRect( spriteBatch, rect.X, rect.Y, rect.Width, rect.Height, color );
 		}
 
+
+		public static void drawHollowRect( this SpriteBatch spriteBatch, RectangleF rect, Color color )
+		{
+			drawHollowRect( spriteBatch, rect.x, rect.y, rect.width, rect.height, color );
+		}
+
 		#endregion
 
 

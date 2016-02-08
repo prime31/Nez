@@ -136,7 +136,7 @@ namespace Nez
 		/// world-space bounds of the camera. useful for culling.
 		/// </summary>
 		/// <value>The bounds.</value>
-		public Rectangle bounds
+		public RectangleF bounds
 		{
 			get
 			{
@@ -155,20 +155,20 @@ namespace Nez
 						var topRight = screenToWorldPoint( new Vector2( Core.graphicsDevice.Viewport.X + Core.graphicsDevice.Viewport.Width, Core.graphicsDevice.Viewport.Y ) );
 						var bottomLeft = screenToWorldPoint( new Vector2( Core.graphicsDevice.Viewport.X, Core.graphicsDevice.Viewport.Y + Core.graphicsDevice.Viewport.Height ) );	
 
-						var minX = (int)Mathf.minOf( topLeft.X, bottomRight.X, topRight.X, bottomLeft.X );
-						var maxX = (int)Mathf.maxOf( topLeft.X, bottomRight.X, topRight.X, bottomLeft.X );
-						var minY = (int)Mathf.minOf( topLeft.Y, bottomRight.Y, topRight.Y, bottomLeft.Y );
-						var maxY = (int)Mathf.maxOf( topLeft.Y, bottomRight.Y, topRight.Y, bottomLeft.Y );
+						var minX = Mathf.minOf( topLeft.X, bottomRight.X, topRight.X, bottomLeft.X );
+						var maxX = Mathf.maxOf( topLeft.X, bottomRight.X, topRight.X, bottomLeft.X );
+						var minY = Mathf.minOf( topLeft.Y, bottomRight.Y, topRight.Y, bottomLeft.Y );
+						var maxY = Mathf.maxOf( topLeft.Y, bottomRight.Y, topRight.Y, bottomLeft.Y );
 
-						_bounds.Location = new Point( minX, minY );
-						_bounds.Width = (int)( maxX - minX );
-						_bounds.Height = (int)( maxY - minY );
+						_bounds.location = new Vector2( minX, minY );
+						_bounds.width = maxX - minX;
+						_bounds.height = maxY - minY;
 					}
 					else
 					{
-						_bounds.Location = topLeft.ToPoint();
-						_bounds.Width = (int)( bottomRight.X - topLeft.X );
-						_bounds.Height = (int)( bottomRight.Y - topLeft.Y );
+						_bounds.location = topLeft;
+						_bounds.width = bottomRight.X - topLeft.X;
+						_bounds.height = bottomRight.Y - topLeft.Y;
 					}
 
 					_areBoundsDirty = false;
@@ -177,7 +177,7 @@ namespace Nez
 				return _bounds;
 			}
 		}
-		Rectangle _bounds;
+		RectangleF _bounds;
 
 		/// <summary>
 		/// used to convert from world coordinates to screen

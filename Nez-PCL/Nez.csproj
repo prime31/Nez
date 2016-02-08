@@ -238,5 +238,6 @@
     <Compile Include="ECS\Components\Physics\Mover.cs" />
     <Compile Include="ECS\Components\IUpdatable.cs" />
     <Compile Include="Utils\Pair.cs" />
+    <Compile Include="Math\RectangleF.cs" />
   </ItemGroup>
 </Project>

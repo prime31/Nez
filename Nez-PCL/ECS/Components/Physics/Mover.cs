@@ -80,8 +80,8 @@ namespace Nez
 
 				// fetch anything that we might collide with at our new position
 				var bounds = collider.bounds;
-				bounds.X += (int)motion.X;
-				bounds.Y += (int)motion.Y;
+				bounds.x += motion.X;
+				bounds.y += motion.Y;
 				var neighbors = Physics.boxcastBroadphase( ref bounds, collider.collidesWithLayers );
 
 				foreach( var neighbor in neighbors )

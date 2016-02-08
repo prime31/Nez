@@ -43,11 +43,11 @@ namespace Nez.PhysicsShapes
 		}
 
 
-		public Rectangle minkowskiDifference( Box other )
+		public RectangleF minkowskiDifference( Box other )
 		{
-			var topLeft = position.ToPoint() - RectangleExt.getMax( ref other.bounds );
-			var fullSize = bounds.Size + other.bounds.Size;
-			return new Rectangle( topLeft.X, topLeft.Y, fullSize.X, fullSize.Y );
+			var topLeft = position - other.bounds.max;
+			var fullSize = bounds.size + other.bounds.size;
+			return new RectangleF( topLeft.X, topLeft.Y, fullSize.X, fullSize.Y );
 		}
 
 
@@ -55,7 +55,7 @@ namespace Nez.PhysicsShapes
 		{
 			// special, high-performance cases. otherwise we fall back to Polygon.
 			if( other is Box )
-				return RectangleExt.intersect( ref bounds, ref ( other as Box ).bounds );
+				return bounds.intersects( ref ( other as Box ).bounds );
 
 			if( other is Circle )
 				return Collisions.rectToCircle( ref bounds, other.position, ( other as Circle ).radius );

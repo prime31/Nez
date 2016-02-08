@@ -9,11 +9,15 @@ namespace Nez.Tiled
 		public Vector2 position;
 		public readonly Texture2D texture;
 
+		RectangleF _bounds;
+
 
 		public TiledImageLayer( string name, Texture2D texture, Vector2 position ) : base( name )
 		{
 			this.position = position;
 			this.texture = texture;
+			_bounds.width = texture.Width;
+			_bounds.height = texture.Height;
 		}
 
 
@@ -23,10 +27,9 @@ namespace Nez.Tiled
 		}
 
 
-		public override void draw( SpriteBatch spriteBatch, Vector2 parentPosition, float layerDepth, Rectangle cameraClipBounds )
+		public override void draw( SpriteBatch spriteBatch, Vector2 parentPosition, float layerDepth, RectangleF cameraClipBounds )
 		{
-			var bounds = new Rectangle( (int)( parentPosition.X + position.X ), (int)( parentPosition.Y + position.Y ), (int)texture.Width, (int)texture.Height );
-			if( cameraClipBounds.Intersects( bounds ) )
+			if( cameraClipBounds.intersects( _bounds ) )
 				spriteBatch.Draw( texture, parentPosition + position, null, Color.White, 0, Vector2.Zero, 1, SpriteEffects.None, layerDepth );
 		}
 

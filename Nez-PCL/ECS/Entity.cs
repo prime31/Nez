@@ -232,6 +232,23 @@ namespace Nez
 
 
 		/// <summary>
+		/// removes the first Component of type T from the components list
+		/// </summary>
+		/// <param name="component">The Component to remove</param>
+		public bool removeComponent<T>() where T : Component
+		{
+			var comp = getComponent<T>();
+			if( comp != null )
+			{
+				removeComponent( comp );
+				return true;
+			}
+
+			return false;
+		}
+
+
+		/// <summary>
 		/// removes a Component from the components list
 		/// </summary>
 		/// <param name="component">The Component to remove</param>

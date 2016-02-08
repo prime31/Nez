@@ -106,8 +106,8 @@ namespace Nez.Spatial
 		public void register( Collider obj )
 		{
 			var bounds = obj.bounds;
-			var p1 = cellCoords( bounds.X, bounds.Y );
-			var p2 = cellCoords( bounds.Right, bounds.Bottom );
+			var p1 = cellCoords( bounds.x, bounds.y );
+			var p2 = cellCoords( bounds.right, bounds.bottom );
 
 			// update our bounds to keep track of our grid size
 			if( !gridBounds.Contains( p1 ) )
@@ -132,10 +132,10 @@ namespace Nez.Spatial
 		/// removes the object from the SpatialHash using the passed-in bounds to locate it
 		/// </summary>
 		/// <param name="obj">Object.</param>
-		public void remove( Collider obj, ref Rectangle bounds )
+		public void remove( Collider obj, ref RectangleF bounds )
 		{
-			var p1 = cellCoords( bounds.X, bounds.Y );
-			var p2 = cellCoords( bounds.Right, bounds.Bottom );
+			var p1 = cellCoords( bounds.x, bounds.y );
+			var p2 = cellCoords( bounds.right, bounds.bottom );
 
 			for( var x = p1.X; x <= p2.X; x++ )
 			{
@@ -216,12 +216,12 @@ namespace Nez.Spatial
 		/// <returns>The neighbors.</returns>
 		/// <param name="bounds">Bounds.</param>
 		/// <param name="layerMask">Layer mask.</param>
-		public HashSet<Collider> aabbBroadphase( ref Rectangle bounds, Collider excludeCollider, int layerMask )
+		public HashSet<Collider> aabbBroadphase( ref RectangleF bounds, Collider excludeCollider, int layerMask )
 		{
 			_tempHashset.Clear();
 
-			var p1 = cellCoords( bounds.X, bounds.Y );
-			var p2 = cellCoords( bounds.Right, bounds.Bottom );
+			var p1 = cellCoords( bounds.x, bounds.y );
+			var p2 = cellCoords( bounds.right, bounds.bottom );
 
 			for( var x = p1.X; x <= p2.X; x++ )
 			{
@@ -240,7 +240,7 @@ namespace Nez.Spatial
 						if( collider == excludeCollider || !Flags.isFlagSet( layerMask, collider.physicsLayer ) )
 							continue;
 
-						if( bounds.Intersects( collider.bounds ) )
+						if( bounds.intersects( collider.bounds ) )
 							_tempHashset.Add( collider );
 					}
 				}
@@ -341,10 +341,10 @@ namespace Nez.Spatial
 		/// <param name="rect">Rect.</param>
 		/// <param name="results">Results.</param>
 		/// <param name="layerMask">Layer mask.</param>
-		public int overlapRectangle( ref Rectangle rect, Collider[] results, int layerMask )
+		public int overlapRectangle( ref RectangleF rect, Collider[] results, int layerMask )
 		{
-			_overlapTestBox.updateBox( rect.Width, rect.Height );
-			_overlapTestBox.position = rect.Location.ToVector2();
+			_overlapTestBox.updateBox( rect.width, rect.height );
+			_overlapTestBox.position = rect.location;
 
 			var resultCounter = 0;
 			var potentials = aabbBroadphase( ref rect, null, layerMask );
@@ -357,7 +357,7 @@ namespace Nez.Spatial
 				}
 				else if( collider is CircleCollider )
 				{
-					if( Collisions.rectToCircle( ref rect, collider.bounds.getCenter(), collider.bounds.Width * 0.5f ) )
+					if( Collisions.rectToCircle( ref rect, collider.bounds.center, collider.bounds.width * 0.5f ) )
 					{
 						results[resultCounter] = collider;
 						resultCounter++;
@@ -395,7 +395,7 @@ namespace Nez.Spatial
 		/// <param name="layerMask">Layer mask.</param>
 		public int overlapCircle( Vector2 circleCenter, float radius, Collider[] results, int layerMask )
 		{
-			var bounds = RectangleExt.fromFloats( circleCenter.X - radius, circleCenter.Y - radius, radius * 2f, radius * 2f );
+			var bounds = new RectangleF( circleCenter.X - radius, circleCenter.Y - radius, radius * 2f, radius * 2f );
 
 			_overlapTestCirce.radius = radius;
 			_overlapTestCirce.position = circleCenter;
@@ -585,7 +585,7 @@ namespace Nez.Spatial
 				// TODO: if the bounds check returned more data we wouldnt have to do any more for a BoxCollider check
 				// first a bounds check before doing a shape test
 				var colliderBounds = potential.bounds;
-				if( RectangleExt.rayIntersects( ref colliderBounds, ref _ray, out fraction ) && fraction <= 1.0f )
+				if( colliderBounds.rayIntersects( ref _ray, out fraction ) && fraction <= 1.0f )
 				{
 					// check to see if the raycast hit at a 0 fraction which would indicate that it started inside the collider
 					if( !Physics.raycastsStartInColliders && fraction == 0f )
