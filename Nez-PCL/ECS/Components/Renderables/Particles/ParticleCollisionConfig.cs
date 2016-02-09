@@ -12,9 +12,19 @@ namespace Nez
 		public bool enabled;
 
 		/// <summary>
+		/// A multiplier applied to the size of each particle before collisions are processed.
+		/// </summary>
+		public float radiusScale;
+
+		/// <summary>
 		/// 0 - 1 range where 0 is no bounce and 1 is perfect reflection
 		/// </summary>
 		public float elasticity;
+
+		/// <summary>
+		/// 0 - 1 range. 0 means no friction, 1 means the object will stop dead on
+		/// </summary>
+		public float friction;
 
 		/// <summary>
 		/// control which layers this particle system collides with
@@ -27,24 +37,14 @@ namespace Nez
 		public Vector2 gravity;
 
 		/// <summary>
-		/// how much speed is lost from each particle after a collision
-		/// </summary>
-		public float dampen;
-
-		/// <summary>
 		/// how much a particle's lifetime is reduced after a collision. 0 is none and 1 is all of it.
 		/// </summary>
 		public float lifetimeLoss;
 
 		/// <summary>
-		/// kill particles whose speed falls below this threshold, after a collision
+		/// kill particles whose squared speed falls below this threshold, after a collision
 		/// </summary>
-		public float minKillSpeed;
-
-		/// <summary>
-		/// A multiplier applied to the size of each particle before collisions are processed.
-		/// </summary>
-		public float radiusScale;
+		public float minKillSpeedSquared;
 	}
 }
 

@@ -54,13 +54,13 @@ namespace Nez.Particles
 			QuickCache<Particle>.warmCache( (int)_emitterConfig.maxParticles );
 
 			// set some sensible defaults
-			collisionConfig.elasticity = 0f;
+			collisionConfig.elasticity = 0.5f;
+			collisionConfig.friction = 0.5f;
 			collisionConfig.collidesWithLayers = Physics.allLayers;
-			collisionConfig.dampen = 0f;
 			collisionConfig.gravity = _emitterConfig.gravity;
 			collisionConfig.lifetimeLoss = 0f;
-			collisionConfig.minKillSpeed = float.MaxValue;
-			collisionConfig.radiusScale = 0.5f;
+			collisionConfig.minKillSpeedSquared = float.MinValue;
+			collisionConfig.radiusScale = 0.8f;
 
 			initialize();
 		}

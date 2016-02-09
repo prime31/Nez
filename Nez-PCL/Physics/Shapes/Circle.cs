@@ -23,6 +23,14 @@ namespace Nez.PhysicsShapes
 		}
 
 
+		internal void recalculateBounds( float radius, Vector2 position )
+		{
+			this.radius = radius;
+			this.position = position;
+			bounds = new RectangleF( position.X - radius, position.Y - radius, radius * 2f, radius * 2f );
+		}
+
+
 		public override bool overlaps( Shape other )
 		{
 			CollisionResult result;

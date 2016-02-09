@@ -283,7 +283,6 @@ namespace MacDumpster
 				scrollSpeedY = 75f
 			});
 			entity.transform.position = new Vector2( 200, 200 );
-			//entity.colliders.add( new PolygonCollider( 5, 100 ) );
 			entity.colliders.add( new BoxCollider() );
 
 
@@ -347,6 +346,7 @@ namespace MacDumpster
 			entity.transform.position = new Vector2( Screen.backBufferWidth / 2, Screen.backBufferHeight / 2 );
 			var particleEmitterConfig = scene.contentManager.Load<ParticleEmitterConfig>( whichEmitter );
 			entity.addComponent( new ParticleEmitter( particleEmitterConfig ) );
+			entity.addComponent( new SimpleMoonMover() );
 			entity.getComponent<ParticleEmitter>().collisionConfig.enabled = true;
 
 

@@ -1,40 +1,46 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
+using Nez.PhysicsShapes;
 
 
 namespace Nez.Particles
 {
 	/// <summary>
-	/// the internal fields are calculated at particle creation time based on the random variance. We store them because we need
-	/// them later for calculating values during the particles lifetime.
+	/// the internal fields are required for the ParticleEmitter to be able to render the Particle
 	/// </summary>
 	public class Particle
 	{
-		public Vector2 position;
-		public Vector2 direction;
-		public Color color;
+		/// <summary>
+		/// shared Circle used for collisions checks
+		/// </summary>
+		static Circle _circleCollisionShape = new Circle( 0 );
+
+		internal Vector2 position;
+		Vector2 _direction;
+		internal Color color;
 		// stored at particle creation time and used for lerping the color
-		Color startColor;
+		Color _startColor;
 		// stored at particle creation time and used for lerping the color
-		Color finishColor;
-		public float rotation;
-		float rotationDelta;
-		float radialAcceleration;
-		float tangentialAcceleration;
-		float radius;
-		float radiusDelta;
-		float angle;
-		float degreesPerSecond;
-		public float particleSize;
-		float particleSizeDelta;
-		public float timeToLive;
+		Color _finishColor;
+		internal float rotation;
+		float _rotationDelta;
+		float _radialAcceleration;
+		float _tangentialAcceleration;
+		float _radius;
+		float _radiusDelta;
+		float _angle;
+		float _degreesPerSecond;
+		internal float particleSize;
+		float _particleSizeDelta;
+		float _timeToLive;
 		// stored at particle creation time and used for lerping the color
-		float particleLifetime;
+		float _particleLifetime;
 
 		/// <summary>
 		/// flag indicating if this particle has already collided so that we know not to move it in the normal fashion
 		/// </summary>
 		bool _collided;
+		Vector2 _velocity;
 
 
 		public void initialize( ParticleEmitterConfig emitterConfig )
@@ -59,45 +65,45 @@ namespace Nez.Particles
 
 			// the particles direction vector is calculated by taking the vector calculated above and
 			// multiplying that by the speed
-			direction = vector * vectorSpeed;
+			_direction = vector * vectorSpeed;
 
 			// calculate the particles life span using the life span and variance passed in
-			timeToLive = MathHelper.Max( 0, emitterConfig.particleLifespan + emitterConfig.particleLifespanVariance * Random.minusOneToOne() );
-			particleLifetime = timeToLive;
+			_timeToLive = MathHelper.Max( 0, emitterConfig.particleLifespan + emitterConfig.particleLifespanVariance * Random.minusOneToOne() );
+			_particleLifetime = _timeToLive;
 
 			var startRadius = emitterConfig.maxRadius + emitterConfig.maxRadiusVariance * Random.minusOneToOne();
 			var endRadius = emitterConfig.minRadius + emitterConfig.minRadiusVariance * Random.minusOneToOne();
 
 			// set the default diameter of the particle from the source position
-			radius = startRadius;
-			radiusDelta = (endRadius - startRadius) / timeToLive;
-			angle = MathHelper.ToRadians( emitterConfig.angle + emitterConfig.angleVariance * Random.minusOneToOne() );
-			degreesPerSecond = MathHelper.ToRadians( emitterConfig.rotatePerSecond + emitterConfig.rotatePerSecondVariance * Random.minusOneToOne() );
+			_radius = startRadius;
+			_radiusDelta = (endRadius - startRadius) / _timeToLive;
+			_angle = MathHelper.ToRadians( emitterConfig.angle + emitterConfig.angleVariance * Random.minusOneToOne() );
+			_degreesPerSecond = MathHelper.ToRadians( emitterConfig.rotatePerSecond + emitterConfig.rotatePerSecondVariance * Random.minusOneToOne() );
 
-			radialAcceleration = emitterConfig.radialAcceleration + emitterConfig.radialAccelVariance * Random.minusOneToOne();
-			tangentialAcceleration = emitterConfig.tangentialAcceleration + emitterConfig.tangentialAccelVariance * Random.minusOneToOne();
+			_radialAcceleration = emitterConfig.radialAcceleration + emitterConfig.radialAccelVariance * Random.minusOneToOne();
+			_tangentialAcceleration = emitterConfig.tangentialAcceleration + emitterConfig.tangentialAccelVariance * Random.minusOneToOne();
 
 			// calculate the particle size using the start and finish particle sizes
 			var particleStartSize = emitterConfig.startParticleSize + emitterConfig.startParticleSizeVariance * Random.minusOneToOne();
 			var particleFinishSize = emitterConfig.finishParticleSize + emitterConfig.finishParticleSizeVariance * Random.minusOneToOne();
-			particleSizeDelta = ( particleFinishSize - particleStartSize ) / timeToLive;
+			_particleSizeDelta = ( particleFinishSize - particleStartSize ) / _timeToLive;
 			particleSize = MathHelper.Max( 0, particleStartSize );
 
 
 			// calculate the color the particle should have when it starts its life. All the elements
 			// of the start color passed in along with the variance are used to calculate the start color
-			startColor = new Color
+			_startColor = new Color
 			(
 				(int)( emitterConfig.startColor.R + emitterConfig.startColorVariance.R * Random.minusOneToOne() ),
 				(int)( emitterConfig.startColor.G + emitterConfig.startColorVariance.G * Random.minusOneToOne() ),
 				(int)( emitterConfig.startColor.B + emitterConfig.startColorVariance.B * Random.minusOneToOne() ),
 				(int)( emitterConfig.startColor.A + emitterConfig.startColorVariance.A * Random.minusOneToOne() )
 			);
-			color = startColor;
+			color = _startColor;
 
 			// calculate the color the particle should be when its life is over. This is done the same
 			// way as the start color above
-			finishColor = new Color
+			_finishColor = new Color
 			(
 				(int)( emitterConfig.finishColor.R + emitterConfig.finishColorVariance.R * Random.minusOneToOne() ),
 				(int)( emitterConfig.finishColor.G + emitterConfig.finishColorVariance.G * Random.minusOneToOne() ),
@@ -109,7 +115,7 @@ namespace Nez.Particles
 			var startA = MathHelper.ToRadians( emitterConfig.rotationStart + emitterConfig.rotationStartVariance * Random.minusOneToOne() );
 			var endA = MathHelper.ToRadians( emitterConfig.rotationEnd + emitterConfig.rotationEndVariance * Random.minusOneToOne() );
 			rotation = startA;
-			rotationDelta = ( endA - startA ) / timeToLive;
+			_rotationDelta = ( endA - startA ) / _timeToLive;
 		}
 
 
@@ -119,27 +125,30 @@ namespace Nez.Particles
 		/// <param name="emitterConfig">Emitter config.</param>
 		public bool update( ParticleEmitterConfig emitterConfig, ref ParticleCollisionConfig collisionConfig, Vector2 rootPosition )
 		{
-			// FIX 1
+			// PART 1
 			// reduce the life span of the particle
-			timeToLive -= Time.deltaTime;
+			_timeToLive -= Time.deltaTime;
 
 			// if the current particle is alive then update it
-			if( timeToLive > 0 )
+			if( _timeToLive > 0 )
 			{
 				// if maxRadius is greater than 0 then the particles are going to spin otherwise they are effected by speed and gravity
 				if( emitterConfig.emitterType == ParticleEmitterType.Radial )
 				{
-					// FIX 2
+					// PART 2
 					// update the angle of the particle from the radius. This is only done if the particles are rotating
-					angle += degreesPerSecond * Time.deltaTime;
-					radius += radiusDelta * Time.deltaTime;
+					_angle += _degreesPerSecond * Time.deltaTime;
+					_radius += _radiusDelta * Time.deltaTime;
 
 					Vector2 tmp;
-					tmp.X = -Mathf.cos( angle ) * radius;
-					tmp.Y = -Mathf.sin( angle ) * radius;
+					tmp.X = -Mathf.cos( _angle ) * _radius;
+					tmp.Y = -Mathf.sin( _angle ) * _radius;
 
 					if( !_collided )
+					{
+						_velocity = tmp - position;
 						position = tmp;
+					}
 				}
 				else
 				{
@@ -150,32 +159,35 @@ namespace Nez.Particles
 						Vector2.Normalize( ref position, out radial );
 
 					tangential = radial;
-					radial = radial * radialAcceleration;
+					radial = radial * _radialAcceleration;
 
 					var newy = tangential.X;
 					tangential.X = -tangential.Y;
 					tangential.Y = newy;
-					tangential = tangential * tangentialAcceleration;
+					tangential = tangential * _tangentialAcceleration;
 
 					tmp = radial + tangential + emitterConfig.gravity;
 					tmp = tmp * Time.deltaTime;
-					direction = direction + tmp;
-					tmp = direction * Time.deltaTime;
+					_direction = _direction + tmp;
+					tmp = _direction * Time.deltaTime;
 
 					if( !_collided )
+					{
+						_velocity = tmp;
 						position = position + tmp;
+					}
 				}
 
 				// update the particles color. we do the lerp from finish-to-start because timeToLive counts from particleLifespan to 0
-				var t = ( particleLifetime - timeToLive ) / particleLifetime;
-				ColorExt.lerp( ref startColor, ref finishColor, out color, t );
+				var t = ( _particleLifetime - _timeToLive ) / _particleLifetime;
+				ColorExt.lerp( ref _startColor, ref _finishColor, out color, t );
 
 				// update the particle size
-				particleSize += particleSizeDelta * Time.deltaTime;
+				particleSize += _particleSizeDelta * Time.deltaTime;
 				particleSize = MathHelper.Max( 0, particleSize );
 
 				// update the rotation of the particle
-				rotation += rotationDelta * Time.deltaTime;
+				rotation += _rotationDelta * Time.deltaTime;
 
 
 				if( collisionConfig.enabled )
@@ -184,13 +196,29 @@ namespace Nez.Particles
 					if( _collided )
 					{
 						// TODO: handle after collision movement. we need to track velocity for this
-						position += new Vector2( 0f, -15f ) + collisionConfig.gravity * Time.deltaTime;
+						_velocity += collisionConfig.gravity * Time.deltaTime;
+						position += _velocity * Time.deltaTime;
+
+						// if we move too slow we die
+						if( _velocity.LengthSquared() < collisionConfig.minKillSpeedSquared )
+							return true;
 					}
-					
-					var collider = Physics.overlapCircle( rootPosition + position, particleSize * 0.5f * collisionConfig.radiusScale, collisionConfig.collidesWithLayers );
-					if( collider != null )
+
+					_circleCollisionShape.recalculateBounds( particleSize * 0.5f * collisionConfig.radiusScale, rootPosition + position );
+					var neighbors = Physics.boxcastBroadphase( ref _circleCollisionShape.bounds, collisionConfig.collidesWithLayers );
+					foreach( var neighbor in neighbors )
 					{
-						_collided = true;
+						CollisionResult result;
+						if( _circleCollisionShape.collidesWithShape( neighbor.shape, out result ) )
+						{
+							// handle the overlap
+							position -= result.minimumTranslationVector;
+							calculateCollisionResponseVelocity( collisionConfig.friction, collisionConfig.elasticity, ref result.minimumTranslationVector );
+
+							// handle collision config props
+							_timeToLive -= _timeToLive * collisionConfig.lifetimeLoss;
+							_collided = true;
+						}
 					}
 				}
 			}
@@ -201,6 +229,37 @@ namespace Nez.Particles
 			}
 
 			return false;
+		}
+
+
+		/// <summary>
+		/// given the relative velocity between the two objects and the MTV this method modifies the relativeVelocity to make it a collision
+		/// response.
+		/// </summary>
+		/// <param name="relativeVelocity">Relative velocity.</param>
+		/// <param name="minimumTranslationVector">Minimum translation vector.</param>
+		void calculateCollisionResponseVelocity( float friction, float elasticity, ref Vector2 minimumTranslationVector )
+		{
+			// first, we get the normalized MTV in the opposite direction: the surface normal
+			var inverseMTV = minimumTranslationVector * -1f;
+			Vector2 normal;
+			Vector2.Normalize( ref inverseMTV, out normal );
+
+			// the velocity is decomposed along the normal of the collision and the plane of collision.
+			// The elasticity will affect the response along the normal (normalVelocityComponent) and the friction will affect
+			// the tangential component of the velocity (tangentialVelocityComponent)
+			float n;
+			Vector2.Dot( ref _velocity, ref normal, out n );
+
+			var normalVelocityComponent = normal * n;
+			var tangentialVelocityComponent = _velocity - normalVelocityComponent;
+
+			if( n > 0.0f )
+				normalVelocityComponent = Vector2.Zero;
+
+			// elasticity affects the normal component of the velocity and friction affects the tangential component
+			var responseVelocity = -( 1.0f + elasticity ) * normalVelocityComponent - friction * tangentialVelocityComponent;
+			_velocity += responseVelocity;
 		}
 
 	}
