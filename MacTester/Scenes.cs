@@ -17,7 +17,7 @@ using System.Linq;
 using Nez.Tweens;
 
 
-namespace MacDumpster
+namespace MacTester
 {
 	public class TriggerListener : Component, Mover.ITriggerListener
 	{

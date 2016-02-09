@@ -10,7 +10,7 @@ using Nez.Analysis;
 using Nez.Particles;
 
 
-namespace MacDumpster
+namespace MacTester
 {
 	/// <summary>
 	/// This is the main type for your game.

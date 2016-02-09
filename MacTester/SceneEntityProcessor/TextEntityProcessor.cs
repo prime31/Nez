@@ -2,17 +2,17 @@
 using Nez;
 
 
-namespace MacDumpster
+namespace MacTester
 {
 	public class TextEntityProcessor : EntityProcessingSystem
 	{
-		public TextEntityProcessor( Matcher matcher ) : base( matcher )
-		{}
+		public TextEntityProcessor (Matcher matcher) : base (matcher)
+		{ }
 
 
-		public override void process( Entity entity )
+		public override void process (Entity entity)
 		{
-			Debug.log( "TextEntityProcessor -> " + entity.name );
+			Debug.log ("TextEntityProcessor -> " + entity.name);
 		}
 	}
 }
