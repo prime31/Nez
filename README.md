@@ -3,16 +3,17 @@
 Nez aims to be a lightweight 2D framework that sits on top of MonoGame/FNA. It provides a solid base for you to build a 2D game on. Some of the many features it includes are:
 
 - Scene/Entity/Component system with Component render layer tracking and optional entity systems (an implementation that operates on a group of entities that share a specific set of components)
-- SpatialHash for super fast broadphase physics lookups (note that Nez does not provide any physics engine. It provides collision data that you can do whatever you want to with.)
-- AABB, polygon and circle collision/trigger detection along with raycasts against the SpatialHash
-- efficient coroutines for breaking up large tasks across multiple frames or animation timing
-- in-game debug console extendable by adding an attribute to any static method
+- SpatialHash for super fast broadphase physics lookups. You won't ever see it since it works behind the scenes but you'll love it nonetheless since it makes finding everything in your proximity crazy fast. (note that Nez does not provide any physics engine. It provides collision data that you can do whatever you want to with and some example Components showing how to implement things: Mover and ArcadeRigidBody).
+- AABB, circle and polygon collision/trigger detection along with linecasts against the SpatialHash
+- efficient coroutines for breaking up large tasks across multiple frames or animation timing (Core.startCoroutine)
+- in-game debug console extendable by adding an attribute to any static method. Just press the tilde key like in the old days with Quake. Out of the box, it includes a visual physics debugging system, asset tracker, basic profiler and more. Just type 'help' to see all the commands or type 'help COMMAND' to see specific hints.
 - extensible rendering system. Add/remove renderers and post processors as needed.
-- tween system. Tween any int/float/Vector/quaternion/color/rectangle field or property
+- tween system. Tween any int/float/Vector/quaternion/color/rectangle field or property.
 - sprites with sprite animations, scrolling sprites and repeating sprites
 - kick-ass particle system with added support for importing [Particle Designer](https://71squared.com/particledesigner) files
 - optimized event emitter for core events that you can also add to any class of your own
-- scheduler for delayed and repeating tasks
+- scheduler for delayed and repeating tasks (Core.schedule method)
+- per-scene content managers. Load your scene-specific content then forget about it. Nez will unload it for you when you change scenes.
 - synchronous or asynchronous asset loading
 - tons more stuff
 
@@ -21,6 +22,8 @@ IMPORTANT: READ THIS FIRST
 ==========
 
 Nez is a very young beast and should be considered pre-alpha. There will without a doubt be bugs present. Some things might not be implemented. Some things might be incomplete. The samples repository is not yet online. For the time being, the main Nez repository will contain a project that has various poorly written examples in the MacTester project. Please do not consider the code in them as best practices. The project was used as a scratchpad when developing some features along the way so it does contain an odd variety of very simple examples along with a bunch of Pipeline Tool examples.
+
+The assets in the MacTester project are not MIT licensed. They should not be used in any project. Most are of unknown copyright/origin so assume they are all off limits and use them only for your own personal amusement. The Tiled map example is directly from [here](https://github.com/underscorediscovery/luxe/tree/master/samples/examples/platformer/assets). The entire MacTester project will be purged when the Nez Samples repository goes online.
 
 
 
@@ -48,6 +51,7 @@ Tutorials
 ==========
 
 [The wiki](https://github.com/prime31/Nez/wiki) contains a few basic tutorials littered with code snippets that should be enough to get you rolling your own games. If you have a suggestion for a new tutorial feel free to open an Issue with the details. More quickie tutorials will be added in the future and a full repository of sample code will be uploaded also if all goes well.
+
 
 
 Pipeline Importers
