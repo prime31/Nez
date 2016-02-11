@@ -44,7 +44,8 @@ There are various systems documented separately in the FAQs folder. They go into
 Setup
 ==========
 
-Nez needs to have the DefaultContent/NezDefaultBMFont.xnb file placed in your projects Content/nez folder. It sets up the font as the default for all text in it's debug console and for your own use. If you intend to use any of the built in Effects or PostProcessors you should also copy the DefaultContent/effects folder contents into your projects Content/nez/effects folder. Be sure to set the Build Action to Content so they get copied into your compiled game.
+All Nez shaders are compiled for OpenGL! If you are on Windows make sure you start from an OpenGL template, not DirectX! Nez only supports OpenGL out of the box to keep things compatible accross Android/iOS/Mac/Linux/Windows. Nez needs to have the DefaultContent/NezDefaultBMFont.xnb file placed in your project's Content/nez folder. It sets up the font as the default for all text in it's debug console and for your own use. If you intend to use any of the built in Effects or PostProcessors you should also copy the DefaultContent/effects folder contents into your projects Content/nez/effects folder. Be sure to set the Build Action to Content so they get copied into your compiled game.
+
 
 
 Tutorials
