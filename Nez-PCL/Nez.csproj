@@ -239,5 +239,6 @@
     <Compile Include="ECS\Components\IUpdatable.cs" />
     <Compile Include="Utils\Pair.cs" />
     <Compile Include="Math\RectangleF.cs" />
+    <Compile Include="ECS\Components\Renderables\Sprites\NineSliceSprite.cs" />
   </ItemGroup>
 </Project>

@@ -286,6 +286,12 @@ namespace MacTester
 			entity.colliders.add( new BoxCollider() );
 
 
+			entity = scene.createEntity( "nine-slice" );
+			var nineSlice = new NineSliceSprite( scene.contentManager.Load<Texture2D>( "Images/nineSlice" ) );
+			entity.addComponent( nineSlice );
+			entity.transform.position = new Vector2( 800, 200 );
+
+
 			entity = scene.createEntity( "moon2" );
 			var image = new Sprite( moonTexture );
 			entity.addComponent( image );
