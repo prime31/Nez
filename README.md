@@ -32,12 +32,12 @@ Nez Systems
 
 There are various systems documented separately in the FAQs folder. They go into a bit more detail on the different sub-systems that make up Nez.
 
-- [Nez-Core](Documentation/FAQs/Nez-Core.md)
-- [Scene-Entity-Component](Documentation/FAQs/Scene-Entity-Component.md)
-- [Rendering](Documentation/FAQs/Rendering.md)
-- [Physics/Collisions](Documentation/FAQs/Physics.md)
-- [Entity Processing Systems](Documentation/FAQs/EntitySystems.md)
-- [Samples](Documentation/FAQs/Samples.md)
+- [Nez-Core](FAQs/Nez-Core.md)
+- [Scene-Entity-Component](FAQs/Scene-Entity-Component.md)
+- [Rendering](FAQs/Rendering.md)
+- [Physics/Collisions](FAQs/Physics.md)
+- [Entity Processing Systems](FAQs/EntitySystems.md)
+- [Samples](FAQs/Samples.md)
 
 
 
