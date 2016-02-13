@@ -387,7 +387,7 @@ namespace Nez
 		/// any PostProcessors present get to do their processing then we do the final render of the RenderTarget to the screen
 		/// </summary>
 		/// <returns>The render.</returns>
-		internal void postRender()
+		internal void postRender( RenderTarget2D finalRenderTarget )
 		{
 			var enabledCounter = 0;
 			if( enablePostProcessing )
@@ -415,14 +415,14 @@ namespace Nez
 				_screenshotRequestCallback = null;
 			}
 
-			// render our final result to the backbuffer or let our delegate to so
+			// render our final result to the backbuffer or let our delegate do so
 			if( _finalRenderDelegate != null )
 			{
 				_finalRenderDelegate.handleFinalRender( letterboxColor, Mathf.isEven( enabledCounter ) ? _sceneRenderTarget : _destinationRenderTarget, _finalRenderDestinationRect, samplerState );
 			}
 			else
 			{
-				Core.graphicsDevice.SetRenderTarget( null );
+				Core.graphicsDevice.SetRenderTarget( finalRenderTarget );
 				Core.graphicsDevice.Clear( letterboxColor );
 				Graphics.instance.spriteBatch.Begin( SpriteSortMode.Deferred, BlendState.Opaque, samplerState );
 				Graphics.instance.spriteBatch.Draw( Mathf.isEven( enabledCounter ) ? _sceneRenderTarget : _destinationRenderTarget, _finalRenderDestinationRect, Color.White );
