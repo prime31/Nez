@@ -51,12 +51,10 @@ namespace MacTester
 			var tiledEntity = scene.createEntity( "tiled-map-entity" );
 			var tiledmap = scene.contentManager.Load<TiledMap>( "bin/MacOSX/Tilemap/tilemap" );
 			tiledEntity.addComponent( new TiledMapComponent( tiledmap, "collision" ) );
-			tiledEntity.updateOrder += 5;
 
 			var tiledEntityTwo = scene.createEntity( "tiled-map-entity-two" );
 			tiledEntityTwo.transform.position = new Vector2( 256, 0 );
 			tiledEntityTwo.addComponent( new TiledMapComponent( tiledmap, "collision" ) );
-			tiledEntityTwo.updateOrder += 5;
 
 			// create a sprite animation from an atlas
 			var plumeTexture = scene.contentManager.Load<Texture2D>( "Images/plume" );
@@ -67,6 +65,7 @@ namespace MacTester
 			};
 
 			var sprite = new Sprite<int>( subtextures[0] );
+			sprite.renderLayer = -1;
 			sprite.addAnimation( 0, spriteAnimation );
 			sprite.play( 0 );
 
