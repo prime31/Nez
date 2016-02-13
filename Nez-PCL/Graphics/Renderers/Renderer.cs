@@ -99,7 +99,7 @@ namespace Nez
 		}
 
 
-		abstract public void render( Scene scene, bool debugRenderEnabled );
+		abstract public void render( Scene scene );
 
 
 		/// <summary>

@@ -359,7 +359,7 @@ namespace Nez
 		}
 
 
-		internal void render( bool debugRenderEnabled )
+		internal void render()
 		{
 			var lastRendererHadRenderTarget = false;
 			for( var i = 0; i < _renderers.Count; i++ )
@@ -377,12 +377,16 @@ namespace Nez
 					camera.forceMatrixUpdate();
 				}
 
-				_renderers[i].render( this, debugRenderEnabled );
+				_renderers[i].render( this );
 				lastRendererHadRenderTarget = _renderers[i].renderTarget != null;
 			}
 		}
 
 
+		/// <summary>
+		/// any PostProcessors present get to do their processing then we do the final render of the RenderTarget to the screen
+		/// </summary>
+		/// <returns>The render.</returns>
 		internal void postRender()
 		{
 			var enabledCounter = 0;

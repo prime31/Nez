@@ -20,7 +20,7 @@ namespace Nez
 		}
 
 
-		public override void render( Scene scene, bool debugRenderEnabled )
+		public override void render( Scene scene )
 		{
 			var cam = camera ?? scene.camera;
 			beginRender( cam );
@@ -32,7 +32,7 @@ namespace Nez
 					renderAfterStateCheck( renderable, cam );
 			}
 
-			if( shouldDebugRender && debugRenderEnabled )
+			if( shouldDebugRender && Core.debugRenderEnabled )
 				debugRender( scene, cam );
 
 			endRender();

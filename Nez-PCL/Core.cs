@@ -215,7 +215,7 @@ namespace Nez
 			if( _scene != null )
 			{
 				_scene.preRender();
-				_scene.render( debugRenderEnabled );
+				_scene.render();
 
 				#if DEBUG
 				if( debugRenderEnabled )
