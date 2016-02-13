@@ -63,6 +63,7 @@ namespace Nez
 
 		Scene _scene;
 		Scene _nextScene;
+		internal SceneTransition _sceneTransition;
 
 		/// <summary>
 		/// used to coalesce GraphicsDeviceReset events
@@ -190,7 +191,7 @@ namespace Nez
 					_scene.end();
 
 				_scene = _nextScene;
-				onSceneTransition();
+				onSceneChanged();
 
 				if( _scene != null )
 					_scene.begin();
@@ -220,9 +221,29 @@ namespace Nez
 				#if DEBUG
 				if( debugRenderEnabled )
 					Debug.render();
-				#endif
-				
-				_scene.postRender();
+#endif
+
+				// render as usual if we dont have an active SceneTransition
+				if( _sceneTransition == null )
+					_scene.postRender();
+			}
+
+			// special handling of SceneTransition if we have one
+			if( _sceneTransition != null )
+			{
+				if( _scene != null && _sceneTransition.wantsPreviousSceneRender && !_sceneTransition.hasPreviousSceneRender )
+				{
+					_scene.postRender( _sceneTransition.previousSceneRender );
+					scene = null;
+					startCoroutine( _sceneTransition.onBeginTransition() );
+				}
+				else
+				{
+					if( _scene != null )
+						_scene.postRender();
+				}
+
+				_sceneTransition.render();
 			}
 
 			#if DEBUG
@@ -241,11 +262,21 @@ namespace Nez
 		/// <summary>
 		/// Called after a Scene ends, before the next Scene begins
 		/// </summary>
-		protected virtual void onSceneTransition()
+		void onSceneChanged()
 		{
 			emitter.emit( CoreEvents.SceneChanged );
 			Time.sceneChanged();
 			GC.Collect();
+		}
+
+
+		/// <summary>
+		/// temporarily runs SceneTransition allowing one Scene to transition to another smoothly with custom effects.
+		/// </summary>
+		/// <param name="sceneTransition">Scene transition.</param>
+		public static void startSceneTransition( SceneTransition sceneTransition )
+		{
+			_instance._sceneTransition = sceneTransition;
 		}
 
 

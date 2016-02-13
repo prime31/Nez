@@ -65,6 +65,7 @@
     <Folder Include="Physics\Shapes\" />
     <Folder Include="Graphics\PostProcessing\PostProcessors\" />
     <Folder Include="Graphics\Effects\" />
+    <Folder Include="Graphics\Transitions\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Debug\Debug.cs" />
@@ -240,5 +241,7 @@
     <Compile Include="Utils\Pair.cs" />
     <Compile Include="Math\RectangleF.cs" />
     <Compile Include="ECS\Components\Renderables\Sprites\NineSliceSprite.cs" />
+    <Compile Include="Graphics\SceneTransition.cs" />
+    <Compile Include="Graphics\Transitions\FadeTransition.cs" />
   </ItemGroup>
 </Project>

@@ -85,6 +85,13 @@ namespace Nez.Tweens
 		}
 
 
+		public static Color unclampedLerp( ref Color from, ref Color to, float t )
+		{
+			var t256 = (int)( t * 256 );
+			return new Color( from.R + ( to.R - from.R ) * t256 / 256, from.G + ( to.G - from.G ) * t256 / 256, from.B + ( to.B - from.B ) * t256 / 256, from.A + ( to.A - from.A ) * t256 / 256 );
+		}
+
+
 		public static Rectangle unclampedLerp( Rectangle from, Rectangle to, float t )
 		{
 			return new Rectangle
@@ -140,6 +147,12 @@ namespace Nez.Tweens
 		public static Color ease( EaseType easeType, Color from, Color to, float t, float duration )
 		{
 			return unclampedLerp( from, to, EaseHelper.ease( easeType, t, duration ) );
+		}
+
+
+		public static Color ease( EaseType easeType, ref Color from, ref Color to, float t, float duration )
+		{
+			return unclampedLerp( ref from, ref to, EaseHelper.ease( easeType, t, duration ) );
 		}
 
 

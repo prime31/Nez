@@ -132,7 +132,7 @@ namespace MacTester
 				scene = Scenes.sceneOneBloom();
 
 			if( IMGUI.button( "Scene 2" ) )
-				scene = Scenes.sceneTwo();
+				Core.startSceneTransition( new FadeTransition( () => Scenes.sceneTwo() ) );
 
 			if( IMGUI.button( "Scene 3 Box" ) )
 				scene = Scenes.sceneThree( true );

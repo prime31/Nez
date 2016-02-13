@@ -52,7 +52,7 @@ namespace Nez
 		/// <param name="width">Width.</param>
 		/// <param name="height">Height.</param>
 		/// <param name="color">Color.</param>
-		Texture2D createSingleColorTexture( int width, int height, Color color )
+		public static Texture2D createSingleColorTexture( int width, int height, Color color )
 		{
 			var texture = new Texture2D( Core.graphicsDevice, width, height );
 			var data = new Color[width * height];
