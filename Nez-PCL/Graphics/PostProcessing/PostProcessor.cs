@@ -108,7 +108,7 @@ namespace Nez
 		/// </summary>
 		protected void drawFullscreenQuad( Texture2D texture, int width, int height, Effect effect )
 		{
-			Graphics.instance.spriteBatch.Begin( 0, blendState, samplerState, DepthStencilState.None, rasterizerState, effect );
+			Graphics.instance.spriteBatch.Begin( SpriteSortMode.Deferred, blendState, samplerState, DepthStencilState.None, rasterizerState, effect );
 			Graphics.instance.spriteBatch.Draw( texture, new Rectangle( 0, 0, width, height ), Color.White );
 			Graphics.instance.spriteBatch.End();
 		}

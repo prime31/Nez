@@ -387,7 +387,7 @@ namespace Nez
 		/// any PostProcessors present get to do their processing then we do the final render of the RenderTarget to the screen
 		/// </summary>
 		/// <returns>The render.</returns>
-		internal void postRender( RenderTarget2D finalRenderTarget )
+		internal void postRender( RenderTarget2D finalRenderTarget = null )
 		{
 			var enabledCounter = 0;
 			if( enablePostProcessing )
