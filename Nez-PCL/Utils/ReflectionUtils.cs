@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Reflection;
 
 
 namespace Nez
@@ -18,7 +19,7 @@ namespace Nez
 			#if NETFX_CORE
 			var propInfo = targetObject.GetType().GetRuntimeProperty( propertyName );
 			#else
-			var propInfo = targetObject.GetType().GetProperty( propertyName );
+			var propInfo = targetObject.GetType().GetProperty( propertyName, BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public );
 			#endif
 
 			Assert.isNotNull( propInfo, "could not find property with name: " + propertyName );
@@ -27,7 +28,7 @@ namespace Nez
 			// Windows Phone/Store new API
 			return (T)(object)propInfo.SetMethod.CreateDelegate( typeof( T ), targetObject );
 			#else
-			return (T)(object)Delegate.CreateDelegate( typeof( T ), targetObject, propInfo.GetSetMethod() );
+			return (T)(object)Delegate.CreateDelegate( typeof( T ), targetObject, propInfo.GetSetMethod( true ) );
 			#endif
 		}
 
@@ -42,7 +43,7 @@ namespace Nez
 			#if NETFX_CORE
 			var propInfo = targetObject.GetType().GetRuntimeProperty( propertyName );
 			#else
-			var propInfo = targetObject.GetType().GetProperty( propertyName );
+			var propInfo = targetObject.GetType().GetProperty( propertyName, BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public );
 			#endif
 
 			Assert.isNotNull( propInfo, "could not find property with name: " + propertyName );
@@ -51,7 +52,7 @@ namespace Nez
 			// Windows Phone/Store new API
 			return (T)(object)propInfo.GetMethod.CreateDelegate( typeof( T ), targetObject );
 			#else
-			return (T)(object)Delegate.CreateDelegate( typeof( T ), targetObject, propInfo.GetGetMethod() );
+			return (T)(object)Delegate.CreateDelegate( typeof( T ), targetObject, propInfo.GetGetMethod( true ) );
 			#endif
 		}
 
