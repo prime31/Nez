@@ -121,25 +121,33 @@ namespace Nez.Systems
 
 
 		/// <summary>
-		/// loads an asset on a background thread with optional callback for when it is loaded
+		/// loads an asset on a background thread with optional callback for when it is loaded. The callback will occur on the main thread.
 		/// </summary>
 		/// <param name="assetName">Asset name.</param>
 		/// <param name="onLoaded">On loaded.</param>
 		/// <typeparam name="T">The 1st type parameter.</typeparam>
 		public void loadAsync<T>( string assetName, Action<T> onLoaded = null )
 		{
-			ThreadPool.QueueUserWorkItem( s =>
+			ThreadPool.QueueUserWorkItem( context =>
 			{
 				var asset = Load<T>( assetName );
 
+				// if we have a callback do it on the main thread
 				if( onLoaded != null )
-					onLoaded( asset );
-			} );
+				{
+					var syncContext = context as SynchronizationContext;
+					syncContext.Post( d =>
+					{
+						onLoaded( asset );
+					}, null );
+				}
+			}, SynchronizationContext.Current );
 		}
 
 
 		/// <summary>
-		/// loads an asset on a background thread with optional callback that includes a context parameter for when it is loaded
+		/// loads an asset on a background thread with optional callback that includes a context parameter for when it is loaded.
+		/// The callback will occur on the main thread.
 		/// </summary>
 		/// <param name="assetName">Asset name.</param>
 		/// <param name="onLoaded">On loaded.</param>
@@ -147,12 +155,18 @@ namespace Nez.Systems
 		/// <typeparam name="T">The 1st type parameter.</typeparam>
 		public void loadAsync<T>( string assetName, Action<object,T> onLoaded = null, object context = null )
 		{
+			var syncContext = context as SynchronizationContext;
 			ThreadPool.QueueUserWorkItem( state =>
 			{
 				var asset = Load<T>( assetName );
 
 				if( onLoaded != null )
-					onLoaded( state, asset );
+				{
+					syncContext.Post( d =>
+					{
+						onLoaded( state, asset );
+					}, null );
+				}
 			}, context );
 		}
 
@@ -165,14 +179,21 @@ namespace Nez.Systems
 		/// <typeparam name="T">The 1st type parameter.</typeparam>
 		public void loadAsync<T>( string[] assetNames, Action onLoaded = null )
 		{
-			ThreadPool.QueueUserWorkItem( s =>
+			ThreadPool.QueueUserWorkItem( context =>
 			{
 				for( var i = 0; i < assetNames.Length; i++ )
 					Load<T>( assetNames[i] );
 
+				// if we have a callback do it on the main thread
 				if( onLoaded != null )
-					onLoaded();
-			} );
+				{
+					var syncContext = context as SynchronizationContext;
+					syncContext.Post( d =>
+					{
+						onLoaded();
+					}, null );
+				}
+			}, SynchronizationContext.Current );
 		}
 
 
