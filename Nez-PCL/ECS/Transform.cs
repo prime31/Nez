@@ -86,7 +86,7 @@ namespace Nez
 
 
 		/// <summary>
-		/// rotation of the transform in world space
+		/// rotation of the transform in world space in radians
 		/// </summary>
 		/// <value>The rotation.</value>
 		public float rotation
@@ -108,6 +108,17 @@ namespace Nez
 					localRotation = value;
 				}
 			}
+		}
+
+
+		/// <summary>
+		/// rotation of the transform in world space in degrees
+		/// </summary>
+		/// <value>The rotation degrees.</value>
+		public float rotationDegrees
+		{
+			get { return MathHelper.ToDegrees( _rotation ); }
+			set { rotation = MathHelper.ToRadians( value ); }
 		}
 
 
@@ -174,6 +185,17 @@ namespace Nez
 				_localDirty = _positionDirty = _localPositionDirty = _localRotationDirty = _localScaleDirty = true;
 				setDirty( DirtyFlagType.RotationDirty );
 			}
+		}
+
+
+		/// <summary>
+		/// rotation of the transform relative to the parent transform's rotation in degrees
+		/// </summary>
+		/// <value>The rotation degrees.</value>
+		public float localRotationDegrees
+		{
+			get { return MathHelper.ToDegrees( _localRotation ); }
+			set { localRotation = MathHelper.ToRadians( value ); }
 		}
 
 
