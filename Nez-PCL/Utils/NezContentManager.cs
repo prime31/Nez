@@ -4,6 +4,7 @@ using System.Text;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
 using System.Collections.Generic;
+using Microsoft.Xna.Framework.Content;
 
 
 namespace Nez.Systems
@@ -11,7 +12,7 @@ namespace Nez.Systems
 	/// <summary>
 	/// ContentManager subclass that also manages Effects from ogl files. Adds asynchronous loading of assets as well.
 	/// </summary>
-	public class NezContentManager : Microsoft.Xna.Framework.Content.ContentManager
+	public class NezContentManager : ContentManager
 	{
 		Dictionary<string,Effect> _loadedEffects = new Dictionary<string,Effect>();
 
@@ -194,6 +195,42 @@ namespace Nez.Systems
 					}, null );
 				}
 			}, SynchronizationContext.Current );
+		}
+
+
+		/// <summary>
+		/// removes assetName from LoadedAssets and Disposes of it. Note that this method uses reflection to get at the private ContentManager
+		/// disposeableAssets List.
+		/// </summary>
+		/// <param name="assetName">Asset name.</param>
+		/// <typeparam name="T">The 1st type parameter.</typeparam>
+		public void unloadAsset<T>( string assetName ) where T : class, IDisposable
+		{
+			if( isAssetLoaded( assetName ) )
+			{
+				try
+				{
+					var fieldInfo = typeof( ContentManager ).GetField( "disposableAssets", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic );
+					var assets = fieldInfo.GetValue( this ) as List<IDisposable>;
+
+					for( var i = 0; i < assets.Count; i++ )
+					{
+						var typedAsset = assets[i] as T;
+						if( typedAsset != null )
+						{
+							typedAsset.Dispose();
+							assets.RemoveAt( i );
+
+							LoadedAssets.Remove( assetName );
+							break;
+						}
+					}
+				}
+				catch( Exception e )
+				{
+					Debug.error( "Could not unload asset {0}. {1}", assetName, e );
+				}
+			}
 		}
 
 
