@@ -241,7 +241,7 @@
     <Compile Include="Utils\Pair.cs" />
     <Compile Include="Math\RectangleF.cs" />
     <Compile Include="ECS\Components\Renderables\Sprites\NineSliceSprite.cs" />
-    <Compile Include="Graphics\SceneTransition.cs" />
     <Compile Include="Graphics\Transitions\FadeTransition.cs" />
+    <Compile Include="Graphics\Transitions\SceneTransition.cs" />
   </ItemGroup>
 </Project>

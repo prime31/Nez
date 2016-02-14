@@ -57,6 +57,97 @@ namespace Nez.Tweens
 	/// </summary>
 	public static class EaseHelper
 	{
+		/// <summary>
+		/// returns the opposite EaseType of easeType
+		/// </summary>
+		/// <returns>The ease type.</returns>
+		/// <param name="easeType">Ease type.</param>
+		public static EaseType oppositeEaseType( EaseType easeType )
+		{
+			switch( easeType )
+			{
+				case EaseType.Linear:
+					return easeType;
+
+				case EaseType.BackIn:
+					return EaseType.BackOut;
+				case EaseType.BackOut:
+					return EaseType.BackIn;
+				case EaseType.BackInOut:
+					return easeType;
+
+				case EaseType.BounceIn:
+					return EaseType.BounceOut;
+				case EaseType.BounceOut:
+					return EaseType.BounceIn;
+				case EaseType.BounceInOut:
+					return easeType;
+
+				case EaseType.CircIn:
+					return EaseType.CircOut;
+				case EaseType.CircOut:
+					return EaseType.CircIn;
+				case EaseType.CircInOut:
+					return easeType;
+
+				case EaseType.CubicIn:
+					return EaseType.CubicOut;
+				case EaseType.CubicOut:
+					return EaseType.CubicIn;
+				case EaseType.CubicInOut:
+					return easeType;
+
+				case EaseType.ElasticIn:
+					return EaseType.ElasticOut;
+				case EaseType.ElasticOut:
+					return EaseType.ElasticIn;
+				case EaseType.ElasticInOut:
+					return easeType;
+					
+				case EaseType.Punch:
+					return easeType;
+
+				case EaseType.ExpoIn:
+					return EaseType.ExpoOut;
+				case EaseType.ExpoOut:
+					return EaseType.ExpoIn;
+				case EaseType.ExpoInOut:
+					return easeType;
+
+				case EaseType.QuadIn:
+					return EaseType.QuadOut;
+				case EaseType.QuadOut:
+					return EaseType.QuadIn;
+				case EaseType.QuadInOut:
+					return easeType;
+
+				case EaseType.QuartIn:
+					return EaseType.QuartOut;
+				case EaseType.QuartOut:
+					return EaseType.QuartIn;
+				case EaseType.QuartInOut:
+					return easeType;
+
+				case EaseType.QuintIn:
+					return EaseType.QuintOut;
+				case EaseType.QuintOut:
+					return EaseType.QuintIn;
+				case EaseType.QuintInOut:
+					return easeType;
+
+				case EaseType.SineIn:
+					return EaseType.SineOut;
+				case EaseType.SineOut:
+					return EaseType.SineIn;
+				case EaseType.SineInOut:
+					return easeType;
+
+				default:
+					return easeType;
+			}
+		}
+
+		
 		public static float ease( EaseType easeType, float t, float duration )
 		{
 			switch( easeType )

@@ -95,12 +95,24 @@ namespace Nez.Tweens
 		public static Rectangle unclampedLerp( Rectangle from, Rectangle to, float t )
 		{
 			return new Rectangle
-			(
-				(int)( from.X + ( to.X - from.X ) * t ),
-				(int)( from.Y + ( to.Y - from.Y ) * t ),
-				(int)( from.Width + ( to.Width - from.Width ) * t ),
-				(int)( from.Height + ( to.Height - from.Height ) * t )
-			);
+				(
+					(int)( from.X + ( to.X - from.X ) * t ),
+					(int)( from.Y + ( to.Y - from.Y ) * t ),
+					(int)( from.Width + ( to.Width - from.Width ) * t ),
+					(int)( from.Height + ( to.Height - from.Height ) * t )
+				);
+		}
+
+
+		public static Rectangle unclampedLerp( ref Rectangle from, ref Rectangle to, float t )
+		{
+			return new Rectangle
+				(
+					(int)( from.X + ( to.X - from.X ) * t ),
+					(int)( from.Y + ( to.Y - from.Y ) * t ),
+					(int)( from.Width + ( to.Width - from.Width ) * t ),
+					(int)( from.Height + ( to.Height - from.Height ) * t )
+				);
 		}
 
 		#endregion
@@ -159,6 +171,12 @@ namespace Nez.Tweens
 		public static Rectangle ease( EaseType easeType, Rectangle from, Rectangle to, float t, float duration )
 		{
 			return unclampedLerp( from, to, EaseHelper.ease( easeType, t, duration ) );
+		}
+
+
+		public static Rectangle ease( EaseType easeType, ref Rectangle from, ref Rectangle to, float t, float duration )
+		{
+			return unclampedLerp( ref from, ref to, EaseHelper.ease( easeType, t, duration ) );
 		}
 
 		#endregion

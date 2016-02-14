@@ -163,6 +163,7 @@
       <Link>Content\nez\textures\gooCursor.xnb</Link>
     </Content>
     <Content Include="Content\Images\NineSlice.png" />
+    <Content Include="Content\Images\bowser-mask.png" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

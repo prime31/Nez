@@ -73,12 +73,25 @@ namespace Nez
 		}
 
 
-		public virtual void render()
+		/// <summary>
+		/// called before the Scene is rendered. This allows a transition to render to a RenderTarget if needed and avoids issues with MonoGame
+		/// clearing the framebuffer when a RenderTarget is used.
+		/// </summary>
+		/// <param name="graphics">Graphics.</param>
+		public virtual void preRender( Graphics graphics )
+		{}
+
+
+		/// <summary>
+		/// do all of your rendering here
+		/// </summary>
+		/// <param name="graphics">Graphics.</param>
+		public virtual void render( Graphics graphics )
 		{
 			Core.graphicsDevice.SetRenderTarget( null );
-			Graphics.instance.spriteBatch.Begin( SpriteSortMode.Deferred, BlendState.Opaque, Core.defaultSamplerState );
-			Graphics.instance.spriteBatch.Draw( previousSceneRender, Vector2.Zero, Color.White );
-			Graphics.instance.spriteBatch.End();
+			graphics.spriteBatch.Begin( SpriteSortMode.Deferred, BlendState.Opaque, Core.defaultSamplerState );
+			graphics.spriteBatch.Draw( previousSceneRender, Vector2.Zero, Color.White );
+			graphics.spriteBatch.End();
 		}
 
 
