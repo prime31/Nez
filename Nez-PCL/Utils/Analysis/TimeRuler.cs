@@ -11,6 +11,8 @@ using Nez.Console;
 
 namespace Nez.Analysis
 {
+	#if DEBUG
+
 	/// <summary>
 	/// Realtime CPU measuring tool
 	/// </summary>
@@ -114,8 +116,6 @@ namespace Nez.Analysis
 		public bool enabled = true;
 
 		public static TimeRuler instance;
-
-		#if DEBUG
 		
 		/// <summary>
 		/// Marker structure.
@@ -234,8 +234,6 @@ namespace Nez.Analysis
 		int updateCount;
 
 
-		#endif
-
 		// TimerRuler draw position.
 		Vector2 _position;
 
@@ -273,14 +271,12 @@ namespace Nez.Analysis
 		}
 
 
-		#if DEBUG
 		[Command( "timeruler", "Toggles the display of the TimerRuler on/off" )]
 		static void toggleTimeRuler()
 		{
 			instance.showLog = !instance.showLog;
 			DebugConsole.instance.log( "TimeRuler enabled: " + ( instance.showLog ? "yes" : "no" ) );
 		}
-		#endif
 	
 		#endregion
 
@@ -508,7 +504,6 @@ namespace Nez.Analysis
 		/// <returns>average spending time in ms.</returns>
 		public float getAverageTime( int barIndex, string markerName )
 		{
-#if DEBUG
 			if( barIndex < 0 || barIndex >= maxBars )
 				throw new ArgumentOutOfRangeException( "barIndex" );
 
@@ -518,9 +513,6 @@ namespace Nez.Analysis
 				result = markers[markerId].logs[barIndex].avg;
 
 			return result;
-#else
-			return 0f;
-#endif
 		}
 
 
@@ -724,4 +716,6 @@ namespace Nez.Analysis
 		#endregion
 
 	}
+
+	#endif
 }

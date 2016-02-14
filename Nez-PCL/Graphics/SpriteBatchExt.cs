@@ -102,13 +102,13 @@ namespace Nez
 
 		public static void drawLineAngle( this SpriteBatch spriteBatch, Vector2 start, float angle, float length, Color color )
 		{
-			spriteBatch.Draw( Graphics.instance.pixelTexture, start, null, Graphics.instance.pixelTexture.sourceRect, Vector2.Zero, angle, new Vector2( length, 1 ), color, SpriteEffects.None, 0 );
+			spriteBatch.Draw( Graphics.instance.pixelTexture, start, Graphics.instance.pixelTexture.sourceRect, color, angle, Vector2.Zero, new Vector2( length, 1 ), SpriteEffects.None, 0 );
 		}
 
 
 		public static void drawLineAngle( this SpriteBatch spriteBatch, Vector2 start, float angle, float length, Color color, float thickness )
 		{
-			spriteBatch.Draw( Graphics.instance.pixelTexture, start, null, Graphics.instance.pixelTexture.sourceRect, new Vector2( 0f, 0.5f ), angle, new Vector2( length, thickness ), color, SpriteEffects.None, 0 );
+			spriteBatch.Draw( Graphics.instance.pixelTexture, start, Graphics.instance.pixelTexture.sourceRect, color, angle, new Vector2( 0f, 0.5f ), new Vector2( length, thickness ), SpriteEffects.None, 0 );
 		}
 
 

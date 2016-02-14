@@ -132,7 +132,7 @@ namespace Nez.Tiled
 						}
 					}
 
-					spriteBatch.Draw( tileRegion.texture2D, new Vector2( tx, ty ), null, tileRegion.sourceRect, Vector2.Zero, rotation, Vector2.One, Color.White, spriteEffects, layerDepth );
+					spriteBatch.Draw( tileRegion.texture2D, new Vector2( tx, ty ), tileRegion.sourceRect, Color.White, rotation, Vector2.Zero, 1, spriteEffects, layerDepth );
 				}
 			}
 		}

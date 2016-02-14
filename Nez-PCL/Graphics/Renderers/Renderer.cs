@@ -157,7 +157,7 @@ namespace Nez
 		protected virtual void debugRender( Scene scene, Camera cam )
 		{
 			Graphics.instance.spriteBatch.End();
-			Graphics.instance.spriteBatch.Begin( transformMatrix: cam.transformMatrix );
+			Graphics.instance.spriteBatch.Begin( SpriteSortMode.Deferred, null, null, null, null, null, Core.scene.camera.transformMatrix );
 
 			for( var i = 0; i < scene.entities.Count; i++ )
 			{

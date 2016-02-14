@@ -458,12 +458,12 @@ namespace Nez
 		/// <returns>The closest point on rectangle border to point.</returns>
 		/// <param name="rect">Rect.</param>
 		/// <param name="point">Point.</param>
-		public static Vector2 getClosestPointOnRectangleBorderToPoint( ref Rectangle rect, Vector2 point )
+		public static Point getClosestPointOnRectangleBorderToPoint( ref Rectangle rect, Vector2 point )
 		{
 			// for each axis, if the point is outside the box clamp it to the box else leave it alone
-			var res = new Vector2();
-			res.X = MathHelper.Clamp( point.X, rect.Left, rect.Right );
-			res.Y = MathHelper.Clamp( point.Y, rect.Top, rect.Bottom );
+			var res = new Point();
+			res.X = Mathf.clamp( (int)point.X, rect.Left, rect.Right );
+			res.Y = Mathf.clamp( (int)point.Y, rect.Top, rect.Bottom );
 
 			// if point is inside the rectangle we need to push res to the border since it will be inside the rect
 			if( rect.Contains( res ) )

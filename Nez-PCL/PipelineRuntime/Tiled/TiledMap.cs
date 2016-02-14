@@ -162,14 +162,14 @@ namespace Nez.Tiled
 		public int worldPositionToTilePositionX( float x )
 		{
 			var tileX = (int)Math.Floor( x / tileWidth );
-			return MathHelper.Clamp( tileX, 0, width - 1 );
+			return Mathf.clamp( tileX, 0, width - 1 );
 		}
 
 
 		public int worldPositionToTilePositionY( float y )
 		{
 			var tileY = (int)Math.Floor( y / tileHeight );
-			return MathHelper.Clamp( tileY, 0, height - 1 );
+			return Mathf.clamp( tileY, 0, height - 1 );
 		}
 	
 	}

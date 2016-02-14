@@ -39,6 +39,7 @@ namespace Nez
 
 		public static void add( ref Color first, ref Color second, out Color result )
 		{
+			result = new Color();
 			result.R = (byte)( first.R + second.R );
 			result.G = (byte)( first.G + second.G );
 			result.B = (byte)( first.B + second.B );
@@ -65,6 +66,7 @@ namespace Nez
 		/// <param name="result">Result.</param>
 		public static void subtract( ref Color first, ref Color second, out Color result )
 		{
+			result = new Color();
 			result.R = (byte)( first.R - second.R );
 			result.G = (byte)( first.G - second.G );
 			result.B = (byte)( first.B - second.B );
@@ -93,6 +95,7 @@ namespace Nez
 		/// <param name="t">T.</param>
 		public static void lerp( ref Color from, ref Color to, out Color result, float t )
 		{
+			result = new Color();
 			var t256 = (int)( t * 256 );
 			result.R = (byte)( from.R + ( to.R - from.R ) * t256 / 256 );
 			result.G = (byte)( from.G + ( to.G - from.G ) * t256 / 256 );

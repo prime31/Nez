@@ -32,7 +32,7 @@ namespace Nez.Textures
 		{
 			this.texture2D = texture;
 			this.sourceRect = sourceRect;
-			center = sourceRect.Size.ToVector2() * 0.5f;;
+			center = new Vector2( sourceRect.Width * 0.5f, sourceRect.Height * 0.5f );
 		}
 
 

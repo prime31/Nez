@@ -117,7 +117,7 @@ namespace Nez.Sprites
 		/// <summary>
 		/// final color that will be lerped to over the course of fadeDuration
 		/// </summary>
-		public Color fadeToColor = Color.TransparentBlack;
+		public Color fadeToColor = Color.Transparent;
 
 		Stack<SpriteTrailInstance> _availableSpriteTrailInstances;
 		List<SpriteTrailInstance> _liveSpriteTrailInstances;

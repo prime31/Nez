@@ -20,7 +20,7 @@ namespace Nez
 		/// <summary>
 		/// duration to fade to fadeToColor
 		/// </summary>
-		public float fadeOutDuration = 0.8f;
+		public float fadeOutDuration = 0.6f;
 
 		/// <summary>
 		/// delay to start fading out
@@ -38,7 +38,7 @@ namespace Nez
 		public EaseType fadeEaseType = EaseType.QuartOut;
 
 		Color _fromColor = Color.White;
-		Color _toColor = Color.TransparentBlack;
+		Color _toColor = Color.Transparent;
 
 		Texture2D _overlayTexture;
 		Color _color = Color.White;
@@ -92,7 +92,7 @@ namespace Nez
 		public override void render( Graphics graphics )
 		{
 			Core.graphicsDevice.SetRenderTarget( null );
-			graphics.spriteBatch.Begin( SpriteSortMode.Deferred, BlendState.NonPremultiplied, Core.defaultSamplerState );
+			graphics.spriteBatch.Begin( SpriteSortMode.Deferred, BlendState.NonPremultiplied, Core.defaultSamplerState, DepthStencilState.None, null );
 
 			// we only render the previousSceneRender while fading to _color. It will be null after that.
 			if( !_isNewSceneLoaded )

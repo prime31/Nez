@@ -221,6 +221,11 @@ namespace Nez.Systems
 							typedAsset.Dispose();
 							assets.RemoveAt( i );
 
+							#if FNA
+							fieldInfo = typeof( ContentManager ).GetField( "loadedAssets", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic );
+							var LoadedAssets = fieldInfo.GetValue( this ) as Dictionary<string, object>;
+							#endif
+
 							LoadedAssets.Remove( assetName );
 							break;
 						}
@@ -241,6 +246,11 @@ namespace Nez.Systems
 		/// <param name="assetName">Asset name.</param>
 		public bool isAssetLoaded( string assetName )
 		{
+			#if FNA
+			var fieldInfo = typeof( ContentManager ).GetField( "loadedAssets", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic );
+			var LoadedAssets = fieldInfo.GetValue( this ) as Dictionary<string, object>;
+			#endif
+
 			return LoadedAssets.ContainsKey( assetName );
 		}
 
@@ -251,6 +261,11 @@ namespace Nez.Systems
 		/// <returns>The loaded assets.</returns>
 		internal string logLoadedAssets()
 		{
+			#if FNA
+			var fieldInfo = typeof( ContentManager ).GetField( "loadedAssets", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic );
+			var LoadedAssets = fieldInfo.GetValue( this ) as Dictionary<string, object>;
+			#endif
+
 			var builder = new StringBuilder();
 			foreach( var asset in LoadedAssets.Keys )
 			{

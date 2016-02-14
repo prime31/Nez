@@ -1,8 +1,10 @@
 ﻿using System;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Input.Touch;
 using System.Collections.Generic;
+#if !FNA
+using Microsoft.Xna.Framework.Input.Touch;
+#endif
 
 
 namespace Nez
@@ -27,10 +29,13 @@ namespace Nez
 		static MouseState _previousMouseState;
 		static MouseState _currentMouseState;
 		static internal List<VirtualInput> _virtualInputs = new List<VirtualInput>();
+
+		#if !FNA
 		static TouchCollection _previousTouches;
 		static TouchCollection _currentTouches;
 		static List<GestureSample> _previousGestures = new List<GestureSample>();
 		static List<GestureSample> _currentGestures = new List<GestureSample>();
+		#endif
 
 
 		static Input()
@@ -79,6 +84,7 @@ namespace Nez
 			for( var i = 0; i < _virtualInputs.Count; i++ )
 				_virtualInputs[i].update();
 
+			#if !FNA
 			_previousTouches = _currentTouches;
 			_currentTouches = TouchPanel.GetState();
 
@@ -89,6 +95,7 @@ namespace Nez
 				var gesture = TouchPanel.ReadGesture();
 				_currentGestures.Add( gesture );
 			}
+			#endif
 		}
 	
 
@@ -99,9 +106,11 @@ namespace Nez
 			// Game class like this: 			
 			// Window.OrientationChanged += OnOrientationChanged;
 
+			#if !FNA
 			TouchPanel.DisplayWidth = Core.graphicsDevice.Viewport.Width;
 			TouchPanel.DisplayHeight = Core.graphicsDevice.Viewport.Height;
 			TouchPanel.DisplayOrientation = Core.graphicsDevice.PresentationParameters.DisplayOrientation;
+			#endif
 		}
 
 
@@ -255,7 +264,7 @@ namespace Nez
 		/// <value>The raw mouse position.</value>
 		public static Point rawMousePosition
 		{
-			get { return _currentMouseState.Position; }
+			get { return new Point( _currentMouseState.X, _currentMouseState.Y ); }
 		}
 
 
@@ -267,15 +276,15 @@ namespace Nez
 		{
 			get
 			{
-				var mousePosition = _currentMouseState.Position - _resolutionOffset;
-				return mousePosition.ToVector2() * _resolutionScale;
+				var mousePosition = new Vector2( _currentMouseState.X - _resolutionOffset.X, _currentMouseState.Y - _resolutionOffset.Y );
+				return mousePosition * _resolutionScale;
 			}
 		}
 
 
 		public static Point mousePositionDelta
 		{
-			get { return _currentMouseState.Position - _previousMouseState.Position; }
+			get { return new Point( _currentMouseState.X, _currentMouseState.Y ) - new Point( _previousMouseState.X, _previousMouseState.Y ); }
 		}
 
 
@@ -283,7 +292,7 @@ namespace Nez
 		{
 			get
 			{
-				var pastPos = ( _previousMouseState.Position - _resolutionOffset ).ToVector2();
+				var pastPos = new Vector2( _previousMouseState.X - _resolutionOffset.X, _previousMouseState.Y - _resolutionOffset.Y );
 				pastPos *= _resolutionScale;
 				return scaledMousePosition - pastPos;
 			}
@@ -294,6 +303,7 @@ namespace Nez
 
 		#region Touches
 
+		#if !FNA
 		public static TouchCollection currentTouches
 		{
 			get { return _currentTouches; }
@@ -313,6 +323,7 @@ namespace Nez
 		{
 			get { return _currentGestures; }
 		}
+		#endif
 
 		#endregion
 	

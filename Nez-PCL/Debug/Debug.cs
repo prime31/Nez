@@ -133,7 +133,7 @@ namespace Nez
 				return;
 
 			if( Core.scene != null && Core.scene.camera != null )
-				Graphics.instance.spriteBatch.Begin( transformMatrix: Core.scene.camera.transformMatrix );
+				Graphics.instance.spriteBatch.Begin( SpriteSortMode.Deferred, null, null, null, null, null, Core.scene.camera.transformMatrix );
 			else
 				Graphics.instance.spriteBatch.Begin();
 

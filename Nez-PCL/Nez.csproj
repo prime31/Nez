@@ -177,6 +177,7 @@
     <Compile Include="ECS\Components\Renderables\Particles\ParticleEmitter.cs" />
     <Compile Include="ECS\Components\Renderables\Particles\Particle.cs" />
     <Compile Include="Math\ColorExt.cs" />
+    <Compile Include="Math\PointExt.cs" />
     <Compile Include="Math\RectangleExt.cs" />
     <Compile Include="Math\Vector2Ext.cs" />
     <Compile Include="ECS\Components\Renderables\Particles\ParticleEmitterType.cs" />

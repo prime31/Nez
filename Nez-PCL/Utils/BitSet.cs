@@ -66,12 +66,8 @@ namespace Nez
 	/// author Eric Blake (ebb9@email.byu.edu)
 	/// status updated to 1.4
 	/// </summary>
-	[DataContract]
 	public class BitSet
 	{
-		[DataMember]
-		const long serialVersionUID = 7997698588986878753L;
-
 		/// <summary>
 		/// A common mask.
 		/// </summary>
@@ -82,7 +78,6 @@ namespace Nez
 		/// @serial the i'th bit is in bits[i/64] at position i%64 (where position
 		/// 0 is the least significant).
 		/// </summary>
-		[DataMember]
 		long[] bits;
 
 

@@ -23,7 +23,7 @@ namespace Nez
 		public EaseType fadeEaseType = EaseType.QuartIn;
 
 		Color _fromColor = Color.White;
-		Color _toColor = Color.TransparentBlack;
+		Color _toColor = Color.Transparent;
 		Color _color = Color.White;
 
 
@@ -54,7 +54,7 @@ namespace Nez
 		public override void render( Graphics graphics )
 		{
 			Core.graphicsDevice.SetRenderTarget( null );
-			graphics.spriteBatch.Begin( SpriteSortMode.Deferred, BlendState.NonPremultiplied, Core.defaultSamplerState );
+			graphics.spriteBatch.Begin( SpriteSortMode.Deferred, BlendState.NonPremultiplied, Core.defaultSamplerState, DepthStencilState.None, null );
 			graphics.spriteBatch.Draw( previousSceneRender, Vector2.Zero, _color );
 			graphics.spriteBatch.End();
 		}

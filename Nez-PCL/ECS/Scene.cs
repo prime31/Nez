@@ -424,7 +424,7 @@ namespace Nez
 			{
 				Core.graphicsDevice.SetRenderTarget( finalRenderTarget );
 				Core.graphicsDevice.Clear( letterboxColor );
-				Graphics.instance.spriteBatch.Begin( SpriteSortMode.Deferred, BlendState.Opaque, samplerState );
+				Graphics.instance.spriteBatch.Begin( SpriteSortMode.Deferred, BlendState.Opaque, samplerState, null, null );
 				Graphics.instance.spriteBatch.Draw( Mathf.isEven( enabledCounter ) ? _sceneRenderTarget : _destinationRenderTarget, _finalRenderDestinationRect, Color.White );
 				Graphics.instance.spriteBatch.End();
 			}

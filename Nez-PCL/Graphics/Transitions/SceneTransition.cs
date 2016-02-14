@@ -126,7 +126,7 @@ namespace Nez
 		public virtual void render( Graphics graphics )
 		{
 			Core.graphicsDevice.SetRenderTarget( null );
-			graphics.spriteBatch.Begin( SpriteSortMode.Deferred, BlendState.Opaque, Core.defaultSamplerState );
+			graphics.spriteBatch.Begin( SpriteSortMode.Deferred, BlendState.Opaque, Core.defaultSamplerState, DepthStencilState.None, null );
 			graphics.spriteBatch.Draw( previousSceneRender, Vector2.Zero, Color.White );
 			graphics.spriteBatch.End();
 		}
