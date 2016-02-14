@@ -213,6 +213,9 @@ namespace Nez
 			TimeRuler.instance.beginMark( "draw", Color.Gold );
 			#endif
 
+			if( _sceneTransition != null )
+				_sceneTransition.preRender( Graphics.instance );
+
 			if( _scene != null )
 			{
 				_scene.preRender();
@@ -221,7 +224,7 @@ namespace Nez
 				#if DEBUG
 				if( debugRenderEnabled )
 					Debug.render();
-#endif
+				#endif
 
 				// render as usual if we dont have an active SceneTransition
 				if( _sceneTransition == null )
@@ -243,7 +246,7 @@ namespace Nez
 						_scene.postRender();
 				}
 
-				_sceneTransition.render();
+				_sceneTransition.render( Graphics.instance );
 			}
 
 			#if DEBUG
@@ -276,6 +279,7 @@ namespace Nez
 		/// <param name="sceneTransition">Scene transition.</param>
 		public static void startSceneTransition( SceneTransition sceneTransition )
 		{
+			Assert.isNull( _instance._sceneTransition, "You cannot start a new SceneTransition until the previous one has completed" );
 			_instance._sceneTransition = sceneTransition;
 		}
 

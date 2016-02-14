@@ -132,19 +132,22 @@ namespace MacTester
 				scene = Scenes.sceneOneBloom();
 
 			if( IMGUI.button( "Scene 2" ) )
-				Core.startSceneTransition( new FadeTransition( () => Scenes.sceneTwo() ) );
+			{
+				var maskTexture = Core.contentManager.Load<Texture2D>( "Images/bowser-mask" );
+				Core.startSceneTransition( new ImageMaskTransition( () => Scenes.sceneTwo(), maskTexture ) );
+			}
 
 			if( IMGUI.button( "Scene 3 Box" ) )
-				scene = Scenes.sceneThree( true );
+				Core.startSceneTransition( new TransformTransition( () => Scenes.sceneThree( true ), TransformTransition.TransformTransitionType.SlideDown ) );
 
 			if( IMGUI.button( "Scene 3 Circle" ) )
-				scene = Scenes.sceneThree( false );
+				Core.startSceneTransition( new TransformTransition( () => Scenes.sceneThree( false ) ) );
 
 			if( IMGUI.button( "Scene 4" ) )
-				scene = Scenes.sceneFour();
+				Core.startSceneTransition( new FadeTransition( () => Scenes.sceneFour() ) );
 
 			if( IMGUI.button( "Scene 5" ) )
-				scene = Scenes.sceneFive();
+				Core.startSceneTransition( new CrossFadeTransition( () => Scenes.sceneFive() ) );
 
 			if( IMGUI.button( "Overlap2D Scene" ) )
 				scene = Scenes.sceneOverlap2D();

@@ -242,6 +242,9 @@
     <Compile Include="Math\RectangleF.cs" />
     <Compile Include="ECS\Components\Renderables\Sprites\NineSliceSprite.cs" />
     <Compile Include="Graphics\Transitions\FadeTransition.cs" />
+    <Compile Include="Graphics\Transitions\TransformTransition.cs" />
     <Compile Include="Graphics\Transitions\SceneTransition.cs" />
+    <Compile Include="Graphics\Transitions\ImageMaskTransition.cs" />
+    <Compile Include="Graphics\Transitions\CrossFadeTransition.cs" />
   </ItemGroup>
 </Project>
