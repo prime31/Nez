@@ -156,7 +156,7 @@ namespace Nez.Systems
 		/// <typeparam name="T">The 1st type parameter.</typeparam>
 		public void loadAsync<T>( string assetName, Action<object,T> onLoaded = null, object context = null )
 		{
-			var syncContext = context as SynchronizationContext;
+			var syncContext = SynchronizationContext.Current;
 			ThreadPool.QueueUserWorkItem( state =>
 			{
 				var asset = Load<T>( assetName );

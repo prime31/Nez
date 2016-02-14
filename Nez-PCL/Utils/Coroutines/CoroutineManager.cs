@@ -34,11 +34,18 @@ namespace Nez.Systems
 			}
 
 
-			internal void reset()
+			internal void prepareForReuse()
 			{
-				waitTimer = 0;
 				isDone = false;
+			}
+
+
+			internal void recycle()
+			{
+				isDone = true;
+				waitTimer = 0;
 				waitForCoroutine = null;
+				enumerator = null;
 			}
 		}
 
@@ -61,15 +68,19 @@ namespace Nez.Systems
 		{
 			// find or create a CoroutineImpl
 			var coroutine = QuickCache<CoroutineImpl>.pop();
+			coroutine.prepareForReuse();
 
 			// setup the coroutine and add it
 			coroutine.enumerator = enumerator;
-			coroutine.reset();
-			tickCoroutine( coroutine );
+			var shouldContinueCoroutine = tickCoroutine( coroutine );
 
 			// guard against empty coroutines
-			if( coroutine.isDone )
+			if( !shouldContinueCoroutine || coroutine.isDone )
+			{
+				coroutine.recycle();
+				QuickCache<CoroutineImpl>.push( coroutine );
 				return null;
+			}
 
 			if( _isInUpdate )
 				_shouldRunNextFrame.Add( coroutine );
@@ -90,8 +101,7 @@ namespace Nez.Systems
 				// check for stopped coroutines
 				if( coroutine.isDone )
 				{
-					coroutine.isDone = true;
-					coroutine.enumerator = null;
+					coroutine.recycle();
 					QuickCache<CoroutineImpl>.push( coroutine );
 					continue;
 				}
@@ -119,7 +129,8 @@ namespace Nez.Systems
 					continue;
 				}
 
-				tickCoroutine( coroutine );
+				if( tickCoroutine( coroutine ) )
+					_shouldRunNextFrame.Add( coroutine );
 			}
 
 			_unblockedCoroutines.Clear();
@@ -130,38 +141,47 @@ namespace Nez.Systems
 		}
 
 
-		void tickCoroutine( CoroutineImpl coroutine )
+		/// <summary>
+		/// ticks a coroutine. returns true if the coroutine should continue to run next frame.
+		/// </summary>
+		/// <returns><c>true</c>, if coroutine was ticked, <c>false</c> otherwise.</returns>
+		/// <param name="coroutine">Coroutine.</param>
+		bool tickCoroutine( CoroutineImpl coroutine )
 		{
 			// This coroutine has finished
 			if( !coroutine.enumerator.MoveNext() )
 			{
-				coroutine.isDone = true;
-				coroutine.enumerator = null;
+				coroutine.recycle();
 				QuickCache<CoroutineImpl>.push( coroutine );
-				return;
+				return false;
 			}
 
-			if( coroutine.enumerator.Current is int )
+			if( coroutine.enumerator.Current == null )
+			{
+				// yielded null. run again next frame
+				return true;
+			}
+			else if( coroutine.enumerator.Current is int )
 			{
 				var wait = (int)coroutine.enumerator.Current;
 				coroutine.waitTimer = wait;
-				_shouldRunNextFrame.Add( coroutine );
+				return true;
 			}
 			else if( coroutine.enumerator.Current is float )
 			{
 				var wait = (float)coroutine.enumerator.Current;
 				coroutine.waitTimer = wait;
-				_shouldRunNextFrame.Add( coroutine );
+				return true;
 			}
 			else if( coroutine.enumerator.Current is CoroutineImpl )
 			{
 				coroutine.waitForCoroutine = coroutine.enumerator.Current as CoroutineImpl;
-				_shouldRunNextFrame.Add( coroutine );
+				return true;
 			}
 			else
 			{
 				// This coroutine yielded null, or some other value we don't understand. run it next frame.
-				_shouldRunNextFrame.Add( coroutine );
+				return true;
 			}
 		}
 	
