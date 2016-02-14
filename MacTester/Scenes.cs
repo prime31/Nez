@@ -116,7 +116,7 @@ namespace MacTester
 		{
 			var scene = new Scene();
 			scene.clearColor = Color.Coral;
-			var moonTexture = scene.contentManager.Load<Texture2D>( "Images/moon" );
+			var moonTexture = scene.contentManager.Load<Texture2D>( "bin/MacOSX/Images/moon" );
 			var bmFont = scene.contentManager.Load<BitmapFont>( "bin/MacOSX/Fonts/pixelfont" );
 			bmFont.spacing = 2f;
 

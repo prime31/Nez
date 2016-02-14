@@ -20,12 +20,12 @@ namespace Nez
 		/// <summary>
 		/// duration to fade to fadeToColor
 		/// </summary>
-		public float fadeOutDuration = 1f;
+		public float fadeOutDuration = 0.8f;
 
 		/// <summary>
 		/// delay to start fading out
 		/// </summary>
-		public float delayBeforeFadeInDuration = 0.4f;
+		public float delayBeforeFadeInDuration = 0.2f;
 
 		/// <summary>
 		/// duration to fade from fadeToColor to the new Scene
@@ -66,7 +66,7 @@ namespace Nez
 			}
 
 			// load up the new Scene
-			Core.scene = sceneLoadAction();
+			yield return Core.startCoroutine( loadNextScene() );
 
 			// dispose of our previousSceneRender. We dont need it anymore.
 			previousSceneRender.Dispose();
@@ -95,7 +95,7 @@ namespace Nez
 			graphics.spriteBatch.Begin( SpriteSortMode.Deferred, BlendState.NonPremultiplied, Core.defaultSamplerState );
 
 			// we only render the previousSceneRender while fading to _color. It will be null after that.
-			if( previousSceneRender != null )
+			if( !_isNewSceneLoaded )
 				graphics.spriteBatch.Draw( previousSceneRender, _destinationRect, Color.White );
 			
 			graphics.spriteBatch.Draw( _overlayTexture, _destinationRect, _color );

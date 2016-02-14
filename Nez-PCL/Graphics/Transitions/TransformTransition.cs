@@ -84,7 +84,7 @@ namespace Nez
 			yield return null;
 
 			// load up the new Scene
-			Core.scene = sceneLoadAction();
+			yield return Core.startCoroutine( loadNextScene() );
 
 			var elapsed = 0f;
 			while( elapsed < duration )

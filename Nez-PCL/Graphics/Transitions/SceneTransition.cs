@@ -24,6 +24,12 @@ namespace Nez
 		public bool wantsPreviousSceneRender;
 
 		/// <summary>
+		/// if true, the next Scene will be loaded on a background thread. Note that if raw PNG files are used they cannot be loaded
+		/// on a background thread.
+		/// </summary>
+		public bool loadSceneOnBackgroundThread = false;
+
+		/// <summary>
 		/// function that should return the newly loaded scene
 		/// </summary>
 		protected Func<Scene> sceneLoadAction;
@@ -48,6 +54,7 @@ namespace Nez
 		}
 		bool _hasPreviousSceneRender;
 
+		protected bool _isNewSceneLoaded;
 
 
 		public SceneTransition( Func<Scene> sceneLoadAction, bool wantsPreviousSceneRender = true )
@@ -58,6 +65,36 @@ namespace Nez
 			// create a RenderTarget if we need to for later
 			if( wantsPreviousSceneRender )
 				previousSceneRender = new RenderTarget2D( Core.graphicsDevice, Screen.width, Screen.height, false, Screen.backBufferFormat, DepthFormat.None, 0, RenderTargetUsage.PreserveContents );
+		}
+
+
+		protected IEnumerator loadNextScene()
+		{
+			if( loadSceneOnBackgroundThread )
+			{
+				// load the Scene on a background thread
+				ThreadPool.QueueUserWorkItem( context =>
+				{
+					var scene = sceneLoadAction();
+
+					// get back to the main thread before setting the new Scene active
+					var syncContext = context as SynchronizationContext;
+					syncContext.Post( d =>
+					{
+						Core.scene = scene;
+						_isNewSceneLoaded = true;
+					}, null );
+				}, SynchronizationContext.Current );
+			}
+			else
+			{
+				Core.scene = sceneLoadAction();
+				_isNewSceneLoaded = true;
+			}
+
+			// wait for the scene to load if it was loaded on a background thread
+			while( !_isNewSceneLoaded )
+				yield return null;
 		}
 
 

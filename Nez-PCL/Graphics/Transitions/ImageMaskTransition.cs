@@ -60,11 +60,6 @@ namespace Nez
 		float _renderRotation;
 
 		/// <summary>
-		/// true if we are on the 2nd part of the transition
-		/// </summary>
-		bool _isScalingOut;
-
-		/// <summary>
 		/// the Texture used as a mask. It should be white where the mask shows the underlying Scene and transparent elsewhere
 		/// </summary>
 		Texture2D _maskTexture;
@@ -119,13 +114,12 @@ namespace Nez
 				yield return null;
 			}
 
+			// load up the new Scene
+			yield return Core.startCoroutine( loadNextScene() );
+
 			// dispose of our previousSceneRender. We dont need it anymore.
 			previousSceneRender.Dispose();
 			previousSceneRender = null;
-
-			// load up the new Scene
-			Core.scene = sceneLoadAction();
-			_isScalingOut = true;
 
 			yield return delayBeforeMaskOut;
 
@@ -158,7 +152,7 @@ namespace Nez
 			Core.graphicsDevice.SetRenderTarget( null );
 
 			// if we are scaling out we dont need to render the previous scene anymore since we want the new scene to be visible
-			if( !_isScalingOut )
+			if( !_isNewSceneLoaded )
 			{
 				graphics.spriteBatch.Begin( SpriteSortMode.Deferred, BlendState.Opaque, Core.defaultSamplerState );
 				graphics.spriteBatch.Draw( previousSceneRender, Vector2.Zero, Color.White );
