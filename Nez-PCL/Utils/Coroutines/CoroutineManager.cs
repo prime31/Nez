@@ -43,6 +43,11 @@ namespace Nez.Systems
 		}
 
 
+		/// <summary>
+		/// flag to keep track of when we are in our update loop. If a new coroutine is started during the update loop we have to stick
+		/// it in the shouldRunNextFrame List to avoid modifying a List while we iterate.
+		/// </summary>
+		bool _isInUpdate;
 		List<CoroutineImpl> _unblockedCoroutines = new List<CoroutineImpl>();
 		List<CoroutineImpl> _shouldRunNextFrame = new List<CoroutineImpl>();
 
@@ -60,8 +65,16 @@ namespace Nez.Systems
 			// setup the coroutine and add it
 			coroutine.enumerator = enumerator;
 			coroutine.reset();
+			tickCoroutine( coroutine );
 
-			_shouldRunNextFrame.Add( coroutine );
+			// guard against empty coroutines
+			if( coroutine.isDone )
+				return null;
+
+			if( _isInUpdate )
+				_shouldRunNextFrame.Add( coroutine );
+			else
+				_unblockedCoroutines.Add( coroutine );
 
 			return coroutine;
 		}
@@ -69,6 +82,7 @@ namespace Nez.Systems
 
 		public void update()
 		{
+			_isInUpdate = true;
 			for( var i = 0; i < _unblockedCoroutines.Count; i++ )
 			{
 				var coroutine = _unblockedCoroutines[i];
@@ -77,6 +91,7 @@ namespace Nez.Systems
 				if( coroutine.isDone )
 				{
 					coroutine.isDone = true;
+					coroutine.enumerator = null;
 					QuickCache<CoroutineImpl>.push( coroutine );
 					continue;
 				}
@@ -104,42 +119,50 @@ namespace Nez.Systems
 					continue;
 				}
 
-
-				// This coroutine has finished
-				if( !coroutine.enumerator.MoveNext() )
-				{
-					coroutine.isDone = true;
-					QuickCache<CoroutineImpl>.push( coroutine );
-					continue;
-				}
-
-				if( coroutine.enumerator.Current is int )
-				{
-					var wait = (int)coroutine.enumerator.Current;
-					coroutine.waitTimer = wait;
-					_shouldRunNextFrame.Add( coroutine );
-				}
-				else if( coroutine.enumerator.Current is float )
-				{
-					var wait = (float)coroutine.enumerator.Current;
-					coroutine.waitTimer = wait;
-					_shouldRunNextFrame.Add( coroutine );
-				}
-				else if( coroutine.enumerator.Current is CoroutineImpl )
-				{
-					coroutine.waitForCoroutine = coroutine.enumerator.Current as CoroutineImpl;
-					_shouldRunNextFrame.Add( coroutine );
-				}
-				else
-				{
-					// This coroutine yielded null, or some other value we don't understand; run it next frame.
-					_shouldRunNextFrame.Add( coroutine );
-				}
+				tickCoroutine( coroutine );
 			}
 
 			_unblockedCoroutines.Clear();
 			_unblockedCoroutines.AddRange( _shouldRunNextFrame );
 			_shouldRunNextFrame.Clear();
+
+			_isInUpdate = false;
+		}
+
+
+		void tickCoroutine( CoroutineImpl coroutine )
+		{
+			// This coroutine has finished
+			if( !coroutine.enumerator.MoveNext() )
+			{
+				coroutine.isDone = true;
+				coroutine.enumerator = null;
+				QuickCache<CoroutineImpl>.push( coroutine );
+				return;
+			}
+
+			if( coroutine.enumerator.Current is int )
+			{
+				var wait = (int)coroutine.enumerator.Current;
+				coroutine.waitTimer = wait;
+				_shouldRunNextFrame.Add( coroutine );
+			}
+			else if( coroutine.enumerator.Current is float )
+			{
+				var wait = (float)coroutine.enumerator.Current;
+				coroutine.waitTimer = wait;
+				_shouldRunNextFrame.Add( coroutine );
+			}
+			else if( coroutine.enumerator.Current is CoroutineImpl )
+			{
+				coroutine.waitForCoroutine = coroutine.enumerator.Current as CoroutineImpl;
+				_shouldRunNextFrame.Add( coroutine );
+			}
+			else
+			{
+				// This coroutine yielded null, or some other value we don't understand. run it next frame.
+				_shouldRunNextFrame.Add( coroutine );
+			}
 		}
 	
 	}
