@@ -20,7 +20,7 @@ namespace Nez
 		/// <summary>
 		/// duration to fade to fadeToColor
 		/// </summary>
-		public float fadeOutDuration = 0.8f;
+		public float fadeOutDuration = 1f;
 
 		/// <summary>
 		/// delay to start fading out

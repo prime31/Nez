@@ -15,7 +15,7 @@ namespace Nez
 		/// <summary>
 		/// duration for the fade
 		/// </summary>
-		public float fadeDuration = 0.6f;
+		public float fadeDuration = 1f;
 
 		/// <summary>
 		/// ease equation to use for the cross fade
