@@ -153,17 +153,18 @@ namespace Nez
 		/// </summary>
 		/// <param name="duration">duration</param>
 		/// <param name="reverseDirection">if true, _progress will go from 1 to 0. If false, it goes form 0 to 1</param>
-		public IEnumerator tickEffectProgressProperty( Effect effect, float duration, bool reverseDirection = false )
+		public IEnumerator tickEffectProgressProperty( Effect effect, float duration, EaseType easeType = EaseType.ExpoOut, bool reverseDirection = false )
 		{
 			var start = reverseDirection ? 1f : 0f;
 			var end = reverseDirection ? 0f : 1f;
+			var progressParam = effect.Parameters["_progress"];
 
 			var elapsed = 0f;
 			while( elapsed < duration )
 			{
 				elapsed += Time.deltaTime;
-				var step = MathHelper.Lerp( start, end, Mathf.pow( elapsed / duration, 2f ) );
-				effect.Parameters["_progress"].SetValue( step );
+				var step = Lerps.ease( easeType, start, end, elapsed, duration );
+				progressParam.SetValue( step );
 
 				yield return null;
 			}

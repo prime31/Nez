@@ -70,12 +70,7 @@ namespace Nez.Systems
 			if( !name.StartsWith( RootDirectory ) )
 				name = RootDirectory + "/" + name;
 
-			byte[] bytes;
-			using( var stream = TitleContainer.OpenStream( name ) )
-			{
-				bytes = new byte[stream.Length];
-				stream.Read( bytes, 0, bytes.Length );
-			}
+			var bytes = EffectResource.getFileResourceBytes( name );
 
 			return loadEffect<T>( name, bytes );
 		}
@@ -90,12 +85,12 @@ namespace Nez.Systems
 		/// <param name="name">Name.</param>
 		internal T loadEffect<T>( string name, byte[] effectCode ) where T : Effect
 		{
-			var cacheKey = typeof( T ).Name + "-" + Utils.randomString( 5 );
 			var graphicsDeviceService = (IGraphicsDeviceService)ServiceProvider.GetService( typeof( IGraphicsDeviceService ) );
 			var graphicsDevice = graphicsDeviceService.GraphicsDevice;
 
 			var effect = Activator.CreateInstance( typeof( T ), graphicsDevice, effectCode ) as T;
-			_loadedEffects[cacheKey] = effect;
+			effect.Name = typeof( T ).Name + "-" + Utils.randomString( 5 );
+			_loadedEffects[effect.Name] = effect;
 
 			return effect;
 		}
@@ -110,12 +105,12 @@ namespace Nez.Systems
 		/// <typeparam name="T">The 1st type parameter.</typeparam>
 		public T loadMonoGameEffect<T>() where T : Effect
 		{
-			var cacheKey = typeof( T ).Name + "-" + Utils.randomString( 5 );
 			var graphicsDeviceService = (IGraphicsDeviceService)ServiceProvider.GetService( typeof( IGraphicsDeviceService ) );
 			var graphicsDevice = graphicsDeviceService.GraphicsDevice;
 
 			var effect = Activator.CreateInstance( typeof( T ), graphicsDevice ) as T;
-			_loadedEffects[cacheKey] = effect;
+			effect.Name = typeof( T ).Name + "-" + Utils.randomString( 5 );
+			_loadedEffects[effect.Name] = effect;
 
 			return effect;
 		}
@@ -235,6 +230,20 @@ namespace Nez.Systems
 				{
 					Debug.error( "Could not unload asset {0}. {1}", assetName, e );
 				}
+			}
+		}
+
+
+		/// <summary>
+		/// unloads an Effect that was loaded via loadEffect or loadMonoGameEffect
+		/// </summary>
+		/// <param name="effectName">Effect.name</param>
+		public void unloadEffect( string effectName )
+		{
+			if( _loadedEffects.ContainsKey( effectName ) )
+			{
+				_loadedEffects[effectName].Dispose();
+				_loadedEffects.Remove( effectName );
 			}
 		}
 

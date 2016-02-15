@@ -9,24 +9,27 @@ using System.Reflection;
 
 namespace Nez
 {
-	static internal class EffectResource
+	public static class EffectResource
 	{
 		// sprite effects
-		public static byte[] spriteBlinkEffectBytes { get { return getFileResourceBytes( "Content/nez/effects/SpriteBlinkEffect.mgfxo" ); } }
-		public static byte[] crosshatchBytes { get { return getFileResourceBytes( "Content/nez/effects/Crosshatch.mgfxo" ); } }
-		public static byte[] noiseBytes { get { return getFileResourceBytes( "Content/nez/effects/Noise.mgfxo" ); } }
-		public static byte[] twistBytes { get { return getFileResourceBytes( "Content/nez/effects/Twist.mgfxo" ); } }
-		public static byte[] dotsBytes { get { return getFileResourceBytes( "Content/nez/effects/Dots.mgfxo" ); } }
+		internal static byte[] spriteBlinkEffectBytes { get { return getFileResourceBytes( "Content/nez/effects/SpriteBlinkEffect.mgfxo" ); } }
+		internal static byte[] crosshatchBytes { get { return getFileResourceBytes( "Content/nez/effects/Crosshatch.mgfxo" ); } }
+		internal static byte[] noiseBytes { get { return getFileResourceBytes( "Content/nez/effects/Noise.mgfxo" ); } }
+		internal static byte[] twistBytes { get { return getFileResourceBytes( "Content/nez/effects/Twist.mgfxo" ); } }
+		internal static byte[] dotsBytes { get { return getFileResourceBytes( "Content/nez/effects/Dots.mgfxo" ); } }
 
 		// post processor effects
-		public static byte[] bloomCombineBytes { get { return getFileResourceBytes( "Content/nez/effects/BloomCombine.mgfxo" ); } }
-		public static byte[] bloomExtractBytes { get { return getFileResourceBytes( "Content/nez/effects/BloomExtract.mgfxo" ); } }
-		public static byte[] gaussianBlurBytes { get { return getFileResourceBytes( "Content/nez/effects/GaussianBlur.mgfxo" ); } }
-		public static byte[] vignetteBytes { get { return getFileResourceBytes( "Content/nez/effects/Vignette.mgfxo" ); } }
-		public static byte[] heatDistortionBytes { get { return getFileResourceBytes( "Content/nez/effects/HeatDistortion.mgfxo" ); } }
+		internal static byte[] bloomCombineBytes { get { return getFileResourceBytes( "Content/nez/effects/BloomCombine.mgfxo" ); } }
+		internal static byte[] bloomExtractBytes { get { return getFileResourceBytes( "Content/nez/effects/BloomExtract.mgfxo" ); } }
+		internal static byte[] gaussianBlurBytes { get { return getFileResourceBytes( "Content/nez/effects/GaussianBlur.mgfxo" ); } }
+		internal static byte[] vignetteBytes { get { return getFileResourceBytes( "Content/nez/effects/Vignette.mgfxo" ); } }
+		internal static byte[] heatDistortionBytes { get { return getFileResourceBytes( "Content/nez/effects/HeatDistortion.mgfxo" ); } }
 
-		public static byte[] multiTextureOverlayBytes { get { return getFileResourceBytes( "Content/nez/effects/MultiTextureOverlay.mgfxo" ); } }
-		public static byte[] scanlinesBytes { get { return getFileResourceBytes( "Content/nez/effects/Scanlines.mgfxo" ); } }
+		// scene transitions
+		internal static byte[] squaresTransitionBytes { get { return getFileResourceBytes( "Content/nez/effects/transitions/Squares.mgfxo" ); } }
+
+		internal static byte[] multiTextureOverlayBytes { get { return getFileResourceBytes( "Content/nez/effects/MultiTextureOverlay.mgfxo" ); } }
+		internal static byte[] scanlinesBytes { get { return getFileResourceBytes( "Content/nez/effects/Scanlines.mgfxo" ); } }
 
 
 		/// <summary>
@@ -59,7 +62,7 @@ namespace Nez
 		/// </summary>
 		/// <returns>The file resource bytes.</returns>
 		/// <param name="path">Path.</param>
-		static byte[] getFileResourceBytes( string path )
+		public static byte[] getFileResourceBytes( string path )
 		{
 			byte[] bytes;
 			using( var stream = TitleContainer.OpenStream( path ) )

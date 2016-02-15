@@ -129,7 +129,7 @@ namespace MacTester
 				scene = Scenes.sceneOne( false );
 
 			if( IMGUI.button( "Scene 1 Pixel Bloom" ) )
-				scene = Scenes.sceneOneBloom();
+				Core.startSceneTransition( new SquaresTransition( () => Scenes.sceneOneBloom() ) );
 
 			if( IMGUI.button( "Scene 2" ) )
 			{
@@ -150,7 +150,7 @@ namespace MacTester
 				Core.startSceneTransition( new CrossFadeTransition( () => Scenes.sceneFive() ) );
 
 			if( IMGUI.button( "Overlap2D Scene" ) )
-				scene = Scenes.sceneOverlap2D();
+				Core.startSceneTransition( new WindTransition( () => Scenes.sceneOverlap2D() ) );
 
 			if( IMGUI.button( "Processor Scene" ) )
 				scene = Scenes.processorScene();

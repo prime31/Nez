@@ -53,7 +53,7 @@ namespace Nez
 
 		public override IEnumerator onBeginTransition()
 		{
-			// create a single pixel black texture
+			// create a single pixel texture of our fadeToColor
 			_overlayTexture = Graphics.createSingleColorTexture( 1, 1, fadeToColor );
 
 			var elapsed = 0f;

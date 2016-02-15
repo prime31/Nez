@@ -247,5 +247,7 @@
     <Compile Include="Graphics\Transitions\SceneTransition.cs" />
     <Compile Include="Graphics\Transitions\ImageMaskTransition.cs" />
     <Compile Include="Graphics\Transitions\CrossFadeTransition.cs" />
+    <Compile Include="Graphics\Transitions\SquaresTransition.cs" />
+    <Compile Include="Graphics\Transitions\WindTransition.cs" />
   </ItemGroup>
 </Project>

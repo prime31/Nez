@@ -164,6 +164,12 @@
     </Content>
     <Content Include="Content\Images\NineSlice.png" />
     <Content Include="Content\Images\bowser-mask.png" />
+    <Content Include="..\DefaultContent\effects\transitions\Squares.mgfxo">
+      <Link>Content\nez\effects\transitions\Squares.mgfxo</Link>
+    </Content>
+    <Content Include="..\DefaultContent\effects\transitions\Wind.mgfxo">
+      <Link>Content\nez\effects\transitions\Wind.mgfxo</Link>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
@@ -181,6 +187,7 @@
     <Folder Include="Content\nez\effects\" />
     <Folder Include="Content\nez\textures\" />
     <Folder Include="Content\Effects\" />
+    <Folder Include="Content\nez\effects\transitions\" />
   </ItemGroup>
   <ItemGroup>
     <InterfaceDefinition Include="MainMenu.xib" />
