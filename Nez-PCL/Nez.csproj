@@ -249,5 +249,8 @@
     <Compile Include="Graphics\Transitions\CrossFadeTransition.cs" />
     <Compile Include="Graphics\Transitions\SquaresTransition.cs" />
     <Compile Include="Graphics\Transitions\WindTransition.cs" />
+    <Compile Include="Utils\Tweens\TransformSpringTween.cs" />
+    <Compile Include="Utils\Tweens\TransformVector2Tween.cs" />
+    <Compile Include="Utils\Tweens\TweenExt.cs" />
   </ItemGroup>
 </Project>

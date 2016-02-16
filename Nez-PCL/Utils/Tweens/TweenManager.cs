@@ -8,13 +8,6 @@ namespace Nez.Tweens
 		public static EaseType defaultEaseType = EaseType.QuartIn;
 
 		/// <summary>
-		/// if enabled, does a null check on the object being tweened. If null, the tweened value will not be set.
-		/// Only AbstractTweenTarget subclasses and Transform tweens will do validation (that includes all the built in tweens).
-		/// It is up to any ITweenTarget custom implementations to add validation themselves if they want to take part in the babysitter.
-		/// </summary>
-		public static bool enableBabysitter = false;
-
-		/// <summary>
 		/// if true, the active tween list will be cleared when a new level loads
 		/// </summary>
 		public static bool removeAllTweensOnLevelLoad = false;

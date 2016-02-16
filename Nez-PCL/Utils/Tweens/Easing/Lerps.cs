@@ -64,11 +64,11 @@ namespace Nez.Tweens
 	    }
 
 
-		public static Vector3 unclampedAngledLerp( Vector3 from, Vector3 to, float t )
+		public static Vector2 unclampedAngledLerp( Vector2 from, Vector2 to, float t )
 		{
 			// we calculate the shortest difference between the angles for this lerp
-			var toMinusFrom = new Vector3( Mathf.deltaAngle( from.X, to.X ), Mathf.deltaAngle( from.Y, to.Y ), Mathf.deltaAngle( from.Z, to.Z ) );
-			return new Vector3( from.X + toMinusFrom.X * t, from.Y + toMinusFrom.Y * t, from.Z + toMinusFrom.Z * t );
+			var toMinusFrom = new Vector2( Mathf.deltaAngle( from.X, to.X ), Mathf.deltaAngle( from.Y, to.Y ) );
+			return new Vector2( from.X + toMinusFrom.X * t, from.Y + toMinusFrom.Y * t );
 		}
 
 
@@ -138,7 +138,7 @@ namespace Nez.Tweens
 		}
 
 
-		public static Vector3 easeAngle( EaseType easeType, Vector3 from, Vector3 to, float t, float duration )
+		public static Vector2 easeAngle( EaseType easeType, Vector2 from, Vector2 to, float t, float duration )
 		{
 			return unclampedAngledLerp( from, to, EaseHelper.ease( easeType, t, duration ) );
 		}
@@ -246,7 +246,7 @@ namespace Nez.Tweens
 		/// should be between 0.01f, 1f to avoid unstable systems.</param>
 		/// <param name="angularFrequency">An angular frequency of 2pi (radians per second) means the oscillation completes one
 		/// full period over one second, i.e. 1Hz. should be less than 35 or so to remain stable</param>
-		public static Vector3 fastSpring( Vector3 currentValue, Vector3 targetValue, ref Vector3 velocity, float dampingRatio, float angularFrequency )
+		public static Vector2 fastSpring( Vector2 currentValue, Vector2 targetValue, ref Vector2 velocity, float dampingRatio, float angularFrequency )
 		{
 			velocity += -2.0f * Time.deltaTime * dampingRatio * angularFrequency * velocity + Time.deltaTime * angularFrequency * angularFrequency * ( targetValue - currentValue );
 			currentValue += Time.deltaTime * velocity;
@@ -267,7 +267,7 @@ namespace Nez.Tweens
 		/// should be between 0.01f, 1f to avoid unstable systems.</param>
 		/// <param name="angularFrequency">An angular frequency of 2pi (radians per second) means the oscillation completes one
 		/// full period over one second, i.e. 1Hz. should be less than 35 or so to remain stable</param>
-		public static Vector3 stableSpring( Vector3 currentValue, Vector3 targetValue, ref Vector3 velocity, float dampingRatio, float angularFrequency )
+		public static Vector2 stableSpring( Vector2 currentValue, Vector2 targetValue, ref Vector2 velocity, float dampingRatio, float angularFrequency )
 		{
 			var f = 1f + 2f * Time.deltaTime * dampingRatio * angularFrequency;
 			var oo = angularFrequency * angularFrequency;

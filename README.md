@@ -15,6 +15,7 @@ Nez aims to be a lightweight 2D framework that sits on top of MonoGame/FNA. It p
 - scheduler for delayed and repeating tasks (Core.schedule method)
 - per-scene content managers. Load your scene-specific content then forget about it. Nez will unload it for you when you change scenes.
 - synchronous or asynchronous asset loading
+- customizeable Scene transition system with several built in transitions
 - tons more stuff
 
 
@@ -45,6 +46,17 @@ Setup
 ==========
 
 All Nez shaders are compiled for OpenGL! If you are on Windows make sure you start from an OpenGL template, not DirectX! Nez only supports OpenGL out of the box to keep things compatible accross Android/iOS/Mac/Linux/Windows. Nez needs to have the DefaultContent/NezDefaultBMFont.xnb file placed in your project's Content/nez folder. It sets up the font as the default for all text in it's debug console and for your own use. If you intend to use any of the built in Effects or PostProcessors you should also copy the DefaultContent/effects folder contents into your projects Content/nez/effects folder. Be sure to set the Build Action to Content so they get copied into your compiled game.
+
+
+
+Using Nez with FNA
+==========
+
+Getting up and running with Nez and FNA requires some minor changes to be made to work with the default FNA install. Once you have your FNA project working the following steps should be taken:
+
+- define the symbol "FNA" for both Debug and Release configurations
+- create a new folder named "Nez" in your project and add all the files from the Nez-PCL folder to it
+- (optional) if you use the included Nez Pipeline Tool FNA needs to be able to link up the correct assembly so in your projects configuration change the assembly name to "Nez"
 
 
 

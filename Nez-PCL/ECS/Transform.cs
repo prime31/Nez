@@ -8,13 +8,12 @@ namespace Nez
 	public class Transform
 	{
 		[Flags]
-		enum DirtyFlagType
+		enum DirtyType
 		{
 			Clean,
 			PositionDirty,
 			ScaleDirty,
-			RotationDirty = 4,
-			All = 7
+			RotationDirty
 		}
 
 
@@ -163,7 +162,7 @@ namespace Nez
 			{
 				_localPosition = value;
 				_localDirty = _positionDirty = _localPositionDirty = _localRotationDirty = _localScaleDirty = true;
-				setDirty( DirtyFlagType.PositionDirty );
+				setDirty( DirtyType.PositionDirty );
 			}
 		}
 
@@ -183,7 +182,7 @@ namespace Nez
 			{
 				_localRotation = value;
 				_localDirty = _positionDirty = _localPositionDirty = _localRotationDirty = _localScaleDirty = true;
-				setDirty( DirtyFlagType.RotationDirty );
+				setDirty( DirtyType.RotationDirty );
 			}
 		}
 
@@ -214,7 +213,7 @@ namespace Nez
 			{
 				_localScale = value;
 				_localDirty = _positionDirty = _localScaleDirty = true;
-				setDirty( DirtyFlagType.ScaleDirty );
+				setDirty( DirtyType.ScaleDirty );
 			}
 		}
 
@@ -265,7 +264,7 @@ namespace Nez
 		}
 
 
-		DirtyFlagType hierarchyDirty;
+		DirtyType hierarchyDirty;
 
 		bool _localDirty;
 		bool _localPositionDirty;
@@ -309,9 +308,9 @@ namespace Nez
 
 		void updateTransform()
 		{
-			if( hierarchyDirty != DirtyFlagType.Clean )
+			if( hierarchyDirty != DirtyType.Clean )
 			{
-				if( parent != null && hierarchyDirty != DirtyFlagType.Clean )
+				if( parent != null && hierarchyDirty != DirtyType.Clean )
 				{
 					parent.updateTransform();
 				}
@@ -363,7 +362,7 @@ namespace Nez
 
 				_worldToLocalDirty = true;
 				_positionDirty = true;
-				hierarchyDirty = DirtyFlagType.Clean;
+				hierarchyDirty = DirtyType.Clean;
 			}
 		}
 
@@ -372,7 +371,7 @@ namespace Nez
 		/// sets the dirty flag on the enum and passes it down to our children
 		/// </summary>
 		/// <param name="dirtyFlagType">Dirty flag type.</param>
-		void setDirty( DirtyFlagType dirtyFlagType )
+		void setDirty( DirtyType dirtyFlagType )
 		{
 			if( ( hierarchyDirty & dirtyFlagType ) == 0 )
 			{
