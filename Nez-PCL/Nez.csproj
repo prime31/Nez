@@ -252,5 +252,6 @@
     <Compile Include="Utils\Tweens\TransformSpringTween.cs" />
     <Compile Include="Utils\Tweens\TransformVector2Tween.cs" />
     <Compile Include="Utils\Tweens\TweenExt.cs" />
+    <Compile Include="ECS\Components\Renderables\SpringGrid.cs" />
   </ItemGroup>
 </Project>

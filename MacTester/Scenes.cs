@@ -507,5 +507,54 @@ namespace MacTester
 		}
 	}
 
+
+	public class SpringGridScene : Scene
+	{
+		class GridModifier : Component, IUpdatable
+		{
+			SpringGrid _grid;
+			Vector2 _lastPosition;
+
+			public override void onAddedToEntity()
+			{
+				_grid = entity.scene.findEntity( "grid" ).getComponent<SpringGrid>();
+			}
+
+			public void update()
+			{
+				var velocity = entity.transform.position - _lastPosition;
+				_grid.applyExplosiveForce( 0.5f * velocity.Length(), entity.transform.position, 80 );
+
+				_lastPosition = entity.transform.position;
+
+
+				if( Input.isKeyPressed( Microsoft.Xna.Framework.Input.Keys.Space ) )
+					_grid.applyDirectedForce( new Vector3( 0, 0, 1000 ), new Vector3( entity.transform.position.X, entity.transform.position.Y, 0 ), 50 );
+			}
+		}
+
+
+		public override void initialize()
+		{
+			clearColor = Color.Black;
+			var moonTex = contentManager.Load<Texture2D>( "Images/moon" );
+
+			var gridEntity = createEntity( "grid" );
+			gridEntity.addComponent( new SpringGrid( new Rectangle( -10, -10, Screen.width, Screen.height ), new Vector2( 20 ) ) );
+
+
+			var playerEntity = createEntity( "player" );
+			playerEntity.transform.position = new Vector2( 50, 50 );
+			playerEntity.transform.scale *= 0.5f;
+			playerEntity.addComponent( new SimpleMoonMover() )
+				.addComponent<GridModifier>()
+				.addComponent( new Sprite( moonTex ) );
+
+			addPostProcessor( new VignettePostProcessor( 1 ) );
+			//addPostProcessor( new HeatDistortionPostProcessor( 2 ) );
+			addPostProcessor( new BloomPostProcessor( 3 ) ).settings = BloomSettings.presetSettings[0];
+		}
+	}
+
 }
 

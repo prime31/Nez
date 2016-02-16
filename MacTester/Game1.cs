@@ -118,7 +118,7 @@ namespace MacTester
 		{
 			base.Draw( gameTime );
 
-			IMGUI.beginWindow( GraphicsDevice.Viewport.Width - 150, 0, 150, 450 );
+			IMGUI.beginWindow( GraphicsDevice.Viewport.Width - 150, 0, 150, 500 );
 
 			debugRenderEnabled = IMGUI.toggle( "Debug Render", debugRenderEnabled );
 
@@ -160,6 +160,9 @@ namespace MacTester
 
 			if( IMGUI.button( "Rigidbody Scene" ) )
 				scene = Scene.createWithDefaultRenderer<RigidbodyScene>();
+
+			if( IMGUI.button( "SpringGrid Scene" ) )
+				scene = Scene.createWithDefaultRenderer<SpringGridScene>();
 
 			IMGUI.space( 15 );
 			

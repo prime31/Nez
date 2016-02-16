@@ -196,13 +196,27 @@ namespace Nez
 		#region Component Management
 
 		/// <summary>
-		/// Adds a Component to the components list. Returns this for chaining.
+		/// Adds a Component to the components list. Returns Scene for chaining.
 		/// </summary>
-		/// <returns>The component.</returns>
+		/// <returns>Scene.</returns>
 		/// <param name="component">Component.</param>
 		/// <typeparam name="T">The 1st type parameter.</typeparam>
 		public Entity addComponent<T>( T component ) where T : Component
 		{
+			component.entity = this;
+			components.add( component );
+			return this;
+		}
+
+
+		/// <summary>
+		/// Adds a Component to the components list. Returns Scene for chaining.
+		/// </summary>
+		/// <returns>Scene.</returns>
+		/// <typeparam name="T">The 1st type parameter.</typeparam>
+		public Entity addComponent<T>() where T : Component, new()
+		{
+			var component = new T();
 			component.entity = this;
 			components.add( component );
 			return this;

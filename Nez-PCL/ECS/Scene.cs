@@ -691,7 +691,7 @@ namespace Nez
 		/// resources using the scenes ContentManager.
 		/// </summary>
 		/// <param name="postProcessor">Post processor.</param>
-		public PostProcessor addPostProcessor( PostProcessor postProcessor )
+		public T addPostProcessor<T>( T postProcessor ) where T : PostProcessor
 		{
 			_postProcessors.Add( postProcessor );
 			_postProcessors.Sort();
