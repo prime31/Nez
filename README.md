@@ -47,7 +47,7 @@ Setup
 
 All Nez shaders are compiled for OpenGL! If you are on Windows make sure you start from an OpenGL template, not DirectX! Nez only supports OpenGL out of the box to keep things compatible accross Android/iOS/Mac/Linux/Windows. Nez needs to have the DefaultContent/NezDefaultBMFont.xnb file placed in your project's Content/nez folder. It sets up the font as the default for all text in it's debug console and for your own use. If you intend to use any of the built in Effects or PostProcessors you should also copy the DefaultContent/effects folder contents into your projects Content/nez/effects folder. Be sure to set the Build Action to Content so they get copied into your compiled game. Your Game class should then subclsas
 
-If you are on Windows, there is one more thing you have to do. In your Game class constructor add the following line: `Window.ClientSizeChanged += Core.onClientSizeChanged;` This will wire up the window resize listner that Nez requires.
+If you are on Windows, there is one more thing you have to do. In your Game class constructor add the following line: `Window.ClientSizeChanged += Core.onClientSizeChanged;` This will wire up the window resize listner that Nez requires. Note also that the precompiled shaders are all OpenGL so if you plan to use them be sure to choose a WindowsGL project when creating yours.
 
 
 
