@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework.Content.Pipeline;
 using Microsoft.Xna.Framework.Content.Pipeline.Graphics;
 using System.ComponentModel;
 using Microsoft.Xna.Framework;
+using System;
 
 
 namespace Nez.TextureAtlasGenerator
@@ -71,7 +72,7 @@ namespace Nez.TextureAtlasGenerator
 			foreach( var inputFilename in imagePaths )
 			{
 				// Store the name of this sprite.
-				var spriteName = Path.GetFileNameWithoutExtension( inputFilename );
+				var spriteName = getSpriteNameFromFilename( inputFilename, input );
 				textureAtlas.spriteNames.Add( spriteName, sourceSprites.Count );
 				context.Logger.LogMessage( "Adding texture: {0}", spriteName );
 
@@ -93,6 +94,27 @@ namespace Nez.TextureAtlasGenerator
 		}
 
 
+		string getSpriteNameFromFilename( string filepath, string[] input )
+		{
+			try
+			{
+				if( new List<string>( input ).Contains( filepath ) )
+					return Path.GetFileNameWithoutExtension( filepath );
+				
+				// return the folder-filename as our first option
+				var name = Path.GetFileNameWithoutExtension( filepath );
+				var folder = filepath.Remove( filepath.LastIndexOf( Path.DirectorySeparatorChar ) );
+				folder = folder.Substring( folder.LastIndexOf( Path.DirectorySeparatorChar ) + 1 );
+
+				return string.Format( "{0}-{1}", folder, name );
+			}
+			catch( Exception )
+			{
+				return Path.GetFileNameWithoutExtension( filepath );
+			}
+		}
+
+
 		void processDirectory( string directory, List<string> imagePaths, TextureAtlasContent textureAtlas )
 		{
 			var allFolders = Directory.GetDirectories( directory, "*", SearchOption.TopDirectoryOnly );
@@ -106,8 +128,10 @@ namespace Nez.TextureAtlasGenerator
 			foreach( var file in allFiles )
 			{
 				if( isValidImageFile( file ) )
+				{
+					didFindImages = true;
 					imagePaths.Add( file );
-				didFindImages = true;
+				}
 			}
 			var animationEndIndex = imagePaths.Count - 1;
 
