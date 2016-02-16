@@ -26,7 +26,7 @@ namespace Nez
 		/// <summary>
 		/// RasterizerState used by the SpriteBatch
 		/// </summary>
-		public RasterizerState rasterizerState = RasterizerState.CullNone;
+		public RasterizerState rasterizerState;
 
 		/// <summary>
 		/// RenderState used by the SpriteBatch. Any RenderableComponent can override this.

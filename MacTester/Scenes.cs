@@ -165,10 +165,10 @@ namespace MacTester
 			spriteAnimation.addFrame( textureAtlas.getSubtexture( "Ninja_Idle_1" ) );
 			spriteAnimation.addFrame( textureAtlas.getSubtexture( "Ninja_Idle_2" ) );
 			spriteAnimation.addFrame( textureAtlas.getSubtexture( "Ninja_Idle_3" ) );
-			spriteAnimation.addFrame( anotherAtlas.getSubtexture( "Ninja_Air Dash_0" ) );
-			spriteAnimation.addFrame( anotherAtlas.getSubtexture( "Ninja_Air Dash_1" ) );
-			spriteAnimation.addFrame( anotherAtlas.getSubtexture( "Ninja_Air Dash_2" ) );
-			spriteAnimation.addFrame( anotherAtlas.getSubtexture( "Ninja_Air Dash_3" ) );
+			spriteAnimation.addFrame( anotherAtlas.getSubtexture( "airDash-Ninja_Air Dash_0" ) );
+			spriteAnimation.addFrame( anotherAtlas.getSubtexture( "airDash-Ninja_Air Dash_1" ) );
+			spriteAnimation.addFrame( anotherAtlas.getSubtexture( "airDash-Ninja_Air Dash_2" ) );
+			spriteAnimation.addFrame( anotherAtlas.getSubtexture( "airDash-Ninja_Air Dash_3" ) );
 
 			var sprite = new Sprite<int>( 1, anotherAtlas.getSpriteAnimation( "hardLanding" ) );
 			sprite.addAnimation( 0, spriteAnimation );
@@ -276,11 +276,10 @@ namespace MacTester
 			var moonTexture = scene.contentManager.Load<Texture2D>( "Images/moon" );
 
 			var entity = scene.createEntity( "moon" );
-			entity.addComponent( new ScrollingSprite( moonTexture )
-			{
+			entity.addComponent( new ScrollingSprite( moonTexture ) {
 				scrollSpeedX = 75f,
 				scrollSpeedY = 75f
-			});
+			} );
 			entity.transform.position = new Vector2( 200, 200 );
 			entity.colliders.add( new BoxCollider() );
 
@@ -311,6 +310,7 @@ namespace MacTester
 
 
 		static int lastEmitter = 0;
+
 		public static Scene sceneFive()
 		{
 			var scene = Scene.createWithDefaultRenderer( Color.Black );
@@ -485,7 +485,7 @@ namespace MacTester
 			createEntity( new Vector2( 800, 460 ), 5f, friction, elasticity, new Vector2( -180, -40 ), moonTexture );
 
 
-			createEntity( new Vector2( 400, 0 ), 60f, friction,elasticity, new Vector2( 10, 90 ), moonTexture );
+			createEntity( new Vector2( 400, 0 ), 60f, friction, elasticity, new Vector2( 10, 90 ), moonTexture );
 			createEntity( new Vector2( 500, 400 ), 4f, friction, elasticity, new Vector2( 0, -270 ), moonTexture );
 
 
@@ -551,10 +551,52 @@ namespace MacTester
 				.addComponent( new Sprite( moonTex ) );
 
 			addPostProcessor( new VignettePostProcessor( 1 ) );
-			//addPostProcessor( new HeatDistortionPostProcessor( 2 ) );
 			addPostProcessor( new BloomPostProcessor( 3 ) ).settings = BloomSettings.presetSettings[0];
 		}
 	}
 
-}
 
+	public class StencilTestScene : Scene
+	{
+		AlphaTestEffect createAlphaTestEffect()
+		{
+			var alphaEffect = new AlphaTestEffect( Core.graphicsDevice );
+			alphaEffect.AlphaFunction = CompareFunction.Equal;
+			alphaEffect.ReferenceAlpha = 127;
+			alphaEffect.Projection = Matrix.CreateOrthographicOffCenter( 0, Screen.width, Screen.height, 0, 0, 1 );
+
+			return alphaEffect;
+		}
+
+
+		public override void initialize()
+		{
+			clearColor = Color.LightGoldenrodYellow;
+			var tile = contentManager.Load<Texture2D>( "Images/tile" );
+			var mask = contentManager.Load<Texture2D>( "Images/mask" );
+
+			var renderState = RenderState.stencilWrite();
+			renderState.effect = createAlphaTestEffect();
+
+			for( var i = 0; i < 5; i++ )
+			{
+				for( var j = 0; j < 3; j++ )
+				{
+					var entity = createEntity( "tile" );
+					entity.transform.position = new Vector2( 100 + i * 10 + i * 250, 150 + j * 10 + j * 200 );
+					entity.addComponent( new Sprite( tile ) );
+					entity.getComponent<Sprite>().renderState = renderState;
+				}
+			}
+
+			var maskEntity = createEntity( "mask" );
+			maskEntity.addComponent( new Sprite( mask ) );
+			maskEntity.getComponent<Sprite>().renderState = RenderState.stencilRead();
+			maskEntity.getComponent<Sprite>().renderLayer = -5; // render on top of the other entities so we have stencil values to read
+			maskEntity.transform.tweenPositionTo( new Vector2( 1100, 800 ), 1f )
+				.setLoops( LoopType.PingPong, 666 )
+				.start();
+		}
+	}
+
+}

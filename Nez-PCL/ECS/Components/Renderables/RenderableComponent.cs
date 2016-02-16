@@ -89,7 +89,8 @@ namespace Nez
 		public SpriteEffects spriteEffects = SpriteEffects.None;
 
 		/// <summary>
-		/// lower renderLayers are in the front and higher are in the back, just like layerDepth but not clamped to 0-1
+		/// lower renderLayers are in the front and higher are in the back, just like layerDepth but not clamped to 0-1. Note that this means
+		/// higher renderLayers are sent to the SpriteBatch first. An important fact when using the stencil buffer.
 		/// </summary>
 		/// <value>The render layer.</value>
 		public int renderLayer

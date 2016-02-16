@@ -50,13 +50,16 @@ namespace Nez
 
 		public static RenderState stencilRead( int stencilRef = 1 )
 		{
-			return new RenderState( new DepthStencilState {
-				StencilEnable = true,
-				StencilFunction = CompareFunction.Equal,
-				StencilPass = StencilOperation.Keep,
-				ReferenceStencil = stencilRef,
-				DepthBufferEnable = false
-			});
+			return new RenderState
+			{
+				depthStencilState = new DepthStencilState {
+					StencilEnable = true,
+					StencilFunction = CompareFunction.Equal,
+					StencilPass = StencilOperation.Keep,
+					ReferenceStencil = stencilRef,
+					DepthBufferEnable = false
+				}
+			};
 		}
 
 

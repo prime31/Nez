@@ -164,6 +164,9 @@ namespace MacTester
 			if( IMGUI.button( "SpringGrid Scene" ) )
 				scene = Scene.createWithDefaultRenderer<SpringGridScene>();
 
+			if( IMGUI.button( "Stencil Test Scene" ) )
+				scene = Scene.createWithDefaultRenderer<StencilTestScene>();
+
 			IMGUI.space( 15 );
 			
 			if( IMGUI.button( "Grab Screenshot" ) )
