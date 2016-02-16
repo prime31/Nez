@@ -111,12 +111,18 @@ namespace Nez
 		}
 
 
+		protected static void onClientSizeChanged( object sender, EventArgs e )
+		{
+			_instance.onGraphicsDeviceReset( sender, e );
+		}
+
+
 		/// <summary>
 		/// this gets called whenever the screen size changes
 		/// </summary>
 		/// <param name="sender">Sender.</param>
 		/// <param name="e">E.</param>
-		void onGraphicsDeviceReset( object sender, EventArgs e )
+		protected void onGraphicsDeviceReset( object sender, EventArgs e )
 		{
 			// we coalese these to avoid spamming events
 			if( _graphicsDeviceChangeTimer != null )
