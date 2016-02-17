@@ -18,7 +18,7 @@ namespace Nez
 		/// <summary>
 		/// scale of the internal RenderTargets. For high resolution renders a half sized RT is usually more than enough.
 		/// </summary>
-		public int renderTargetScale = 1;
+		public float renderTargetScale = 1f;
 
 		Effect _bloomExtractEffect;
 		Effect _bloomCombineEffect;
@@ -127,8 +127,8 @@ namespace Nez
 			// aquire two rendertargets for the bloom processing. These are half the size of the backbuffer, in order to minimize fillrate costs. Reducing
 			// the resolution in this way doesn't hurt quality, because we are going to be blurring the bloom images in any case.
 			// the demo uses a tiny backbuffer so no need to reduce size any further
-			var renderTarget1 = RenderTarget.getTemporary( scene.sceneRenderTargetSize.X * renderTargetScale, scene.sceneRenderTargetSize.Y * renderTargetScale, DepthFormat.None );
-			var renderTarget2 = RenderTarget.getTemporary( scene.sceneRenderTargetSize.X * renderTargetScale, scene.sceneRenderTargetSize.Y * renderTargetScale, DepthFormat.None );
+			var renderTarget1 = RenderTarget.getTemporary( (int)( scene.sceneRenderTargetSize.X * renderTargetScale ), (int)( scene.sceneRenderTargetSize.Y * renderTargetScale ), DepthFormat.None );
+			var renderTarget2 = RenderTarget.getTemporary( (int)( scene.sceneRenderTargetSize.X * renderTargetScale ), (int)( scene.sceneRenderTargetSize.Y * renderTargetScale ), DepthFormat.None );
 
 			Core.graphicsDevice.SamplerStates[1] = SamplerState.LinearClamp;
 
