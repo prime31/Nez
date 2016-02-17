@@ -286,6 +286,13 @@ namespace Nez
 		{}
 
 
+		/// <summary>
+		/// override this in Scene subclasses and do any unloading necessary here
+		/// </summary>
+		public virtual void unload()
+		{}
+
+
 		internal void begin()
 		{
 			Assert.isFalse( _renderers.Count == 0, "Scene has begun with no renderer. At least one renderer must be present before beginning a scene." );
@@ -323,6 +330,8 @@ namespace Nez
 
 			if( entityProcessors != null )
 				entityProcessors.end();
+
+			unload();
 		}
 
 
