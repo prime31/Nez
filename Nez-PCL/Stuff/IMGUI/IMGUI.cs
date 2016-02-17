@@ -110,7 +110,16 @@ namespace Nez
 		#endregion
 
 
-		public static void beginWindow( float x, float y, float width, float height )
+		/// <summary>
+		/// begins an IMGUI window specifying where and how large it should be. If you are not using IMGUI in world space (for example, inside
+		/// a Scene with a scaled resolution policy) passing false for useRawMousePosition will use the Input.scaledMousePosition.
+		/// </summary>
+		/// <param name="x">The x coordinate.</param>
+		/// <param name="y">The y coordinate.</param>
+		/// <param name="width">Width.</param>
+		/// <param name="height">Height.</param>
+		/// <param name="useRawMousePosition">If set to <c>true</c> use raw mouse position.</param>
+		public static void beginWindow( float x, float y, float width, float height, bool useRawMousePosition = true )
 		{
 			_spriteBatch.Begin();
 
@@ -121,7 +130,9 @@ namespace Nez
 			_windowWidth = width;
 			_windowHeight = height;
 			_elementWidth = _windowWidth - 2f * ELEMENT_PADDING;
-			_mouseInWorldCoords = Input.rawMousePosition - new Point( Core.graphicsDevice.Viewport.X, Core.graphicsDevice.Viewport.Y );
+
+			var mousePos = useRawMousePosition ? Input.rawMousePosition : Input.scaledMousePosition.ToPoint();
+			_mouseInWorldCoords = mousePos - new Point( Core.graphicsDevice.Viewport.X, Core.graphicsDevice.Viewport.Y );
 		}
 
 
