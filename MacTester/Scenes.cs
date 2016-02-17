@@ -540,15 +540,15 @@ namespace MacTester
 			var moonTex = contentManager.Load<Texture2D>( "Images/moon" );
 
 			var gridEntity = createEntity( "grid" );
-			gridEntity.addComponent( new SpringGrid( new Rectangle( -10, -10, Screen.width, Screen.height ), new Vector2( 20 ) ) );
+			gridEntity.addComponent( new SpringGrid( new Rectangle( 0, 0, Screen.width, Screen.height ), new Vector2( 30 ) ) );
 
 
-			var playerEntity = createEntity( "player" );
-			playerEntity.transform.position = new Vector2( 50, 50 );
+			var playerEntity = createEntity( "player", new Vector2( Screen.width / 2, Screen.height / 2 ) );
 			playerEntity.transform.scale *= 0.5f;
 			playerEntity.addComponent( new SimpleMoonMover() )
 				.addComponent<GridModifier>()
 				.addComponent( new Sprite( moonTex ) );
+
 
 			addPostProcessor( new VignettePostProcessor( 1 ) );
 			addPostProcessor( new BloomPostProcessor( 3 ) ).settings = BloomSettings.presetSettings[0];
