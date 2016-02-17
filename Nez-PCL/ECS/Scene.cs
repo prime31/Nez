@@ -739,6 +739,20 @@ namespace Nez
 
 
 		/// <summary>
+		/// add the Entity to this Scene at position, and return it
+		/// </summary>
+		/// <returns>The entity.</returns>
+		/// <param name="name">Name.</param>
+		/// <param name="position">Position.</param>
+		public Entity createEntity( string name, Vector2 position )
+		{
+			var entity = new Entity( name );
+			entity.transform.position = position;
+			return addEntity( entity );
+		}
+
+
+		/// <summary>
 		/// adds an Entity to the Scene's Entities list
 		/// </summary>
 		/// <param name="entity">The Entity to add</param>
