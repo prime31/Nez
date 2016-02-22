@@ -22,30 +22,30 @@ namespace Nez.TiledMaps
 			{
 				var data = layer.data;
 
-				if( data.Encoding == "csv" )
+				if( data.encoding == "csv" )
 				{
-					data.Tiles = data.Value
+					data.tiles = data.value
                         .Split( new[] { ',' }, StringSplitOptions.RemoveEmptyEntries )
                         .Select( int.Parse )
                         .Select( gid => new TmxDataTile( (uint)gid ) )
                         .ToList();
 				}
-				else if( data.Encoding == "base64" )
+				else if( data.encoding == "base64" )
 				{
-					var encodedData = data.Value.Trim();
+					var encodedData = data.value.Trim();
 					var decodedData = Convert.FromBase64String( encodedData );
 
-					using( var stream = OpenStream( decodedData, data.Compression ) )
+					using( var stream = OpenStream( decodedData, data.compression ) )
 						using( var reader = new BinaryReader( stream ) )
 						{
-							data.Tiles = new List<TmxDataTile>();
+							data.tiles = new List<TmxDataTile>();
 
 							for( var y = 0; y < layer.width; y++ )
 							{
 								for( var x = 0; x < layer.height; x++ )
 								{
 									var gid = reader.ReadUInt32();
-									data.Tiles.Add( new TmxDataTile( gid ) );
+									data.tiles.Add( new TmxDataTile( gid ) );
 								}
 							}
 						}

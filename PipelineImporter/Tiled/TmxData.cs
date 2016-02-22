@@ -7,25 +7,25 @@ namespace Nez.TiledMaps
 	public class TmxData
 	{
 		public TmxData()
-		{
-			Tiles = new List<TmxDataTile>();
-		}
+		{}
+
+
+		[XmlAttribute( AttributeName = "encoding" )]
+		public string encoding;
+
+		[XmlAttribute( AttributeName = "compression" )]
+		public string compression;
+
+		[XmlElement( ElementName = "tile" )]
+		public List<TmxDataTile> tiles = new List<TmxDataTile>();
+
+		[XmlText]
+		public string value;
+
 
 		public override string ToString()
 		{
-			return string.Format( "{0} {1}", Encoding, Compression );
+			return string.Format( "{0} {1}", encoding, compression );
 		}
-
-		[XmlAttribute( AttributeName = "encoding" )]
-		public string Encoding;
-
-		[XmlAttribute( AttributeName = "compression" )]
-		public string Compression;
-
-		[XmlElement( ElementName = "tile" )]
-		public List<TmxDataTile> Tiles;
-
-		[XmlText]
-		public string Value;
 	}
 }

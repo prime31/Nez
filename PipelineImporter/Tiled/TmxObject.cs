@@ -75,7 +75,6 @@ namespace Nez.TiledMaps
 				}
 			}
 		}
-
 		public List<Vector2> points = new List<Vector2>();
 
 

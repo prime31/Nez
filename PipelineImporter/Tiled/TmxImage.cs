@@ -7,14 +7,6 @@ namespace Nez.TiledMaps
 	{
 		public TmxImage()
 		{}
-
-
-		public override string ToString()
-		{
-			return source;
-		}
-
-
 		[XmlAttribute( AttributeName = "source" )]
 		public string source;
 
@@ -33,5 +25,10 @@ namespace Nez.TiledMaps
 		[XmlElement( ElementName = "data" )]
 		public TmxData data;
 
+
+		public override string ToString()
+		{
+			return source;
+		}
 	}
 }

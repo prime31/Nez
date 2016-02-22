@@ -57,24 +57,24 @@ namespace Nez.TiledMaps
 				if( tileLayer != null )
 				{
 					writer.Write( "TileLayer" );
-					writer.Write( tileLayer.data.Tiles.Count );
+					writer.Write( tileLayer.data.tiles.Count );
 
-					foreach( var tile in tileLayer.data.Tiles )
+					foreach( var tile in tileLayer.data.tiles )
 					{
 						// Read out the flags
-						var flippedHorizontally = ( tile.Gid & FLIPPED_HORIZONTALLY_FLAG ) != 0;
-						var flippedVertically = ( tile.Gid & FLIPPED_VERTICALLY_FLAG ) != 0;
-						var flippedDiagonally = ( tile.Gid & FLIPPED_DIAGONALLY_FLAG ) != 0;
+						var flippedHorizontally = ( tile.gid & FLIPPED_HORIZONTALLY_FLAG ) != 0;
+						var flippedVertically = ( tile.gid & FLIPPED_VERTICALLY_FLAG ) != 0;
+						var flippedDiagonally = ( tile.gid & FLIPPED_DIAGONALLY_FLAG ) != 0;
 
 						if( flippedHorizontally || flippedVertically || flippedDiagonally )
 						{
 							// Clear the flags
-							tile.Gid &= ~( FLIPPED_HORIZONTALLY_FLAG | FLIPPED_VERTICALLY_FLAG | FLIPPED_DIAGONALLY_FLAG );
+							tile.gid &= ~( FLIPPED_HORIZONTALLY_FLAG | FLIPPED_VERTICALLY_FLAG | FLIPPED_DIAGONALLY_FLAG );
 							tile.flippedHorizontally = flippedHorizontally;
 							tile.flippedVertically = flippedVertically;
 							tile.flippedDiagonally = flippedDiagonally;
 						}
-						writer.Write( tile.Gid );
+						writer.Write( tile.gid );
 						writer.Write( tile.flippedHorizontally );
 						writer.Write( tile.flippedVertically );
 						writer.Write( tile.flippedDiagonally );

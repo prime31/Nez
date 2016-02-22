@@ -8,30 +8,23 @@ namespace Nez.TiledMaps
 	[XmlInclude( typeof( TmxImageLayer ) )]
 	public abstract class TmxLayer
 	{
-		protected TmxLayer()
-		{
-			opacity = 1.0f;
-			visible = true;
-			properties = new List<TmxProperty>();
-		}
+		[XmlAttribute( AttributeName = "name" )]
+		public string name;
+
+		[XmlAttribute( AttributeName = "opacity" )]
+		public float opacity = 1f;
+
+		[XmlAttribute( AttributeName = "visible" )]
+		public bool visible = true;
+
+		[XmlArray( "properties" )]
+		[XmlArrayItem( "property" )]
+		public List<TmxProperty> properties = new List<TmxProperty>();
+
 
 		public override string ToString()
 		{
 			return name;
 		}
-
-		[XmlAttribute( AttributeName = "name" )]
-		public string name;
-
-		[XmlAttribute( AttributeName = "opacity" )]
-		public float opacity;
-
-		[XmlAttribute( AttributeName = "visible" )]
-		public bool visible;
-
-		[XmlArray( "properties" )]
-		[XmlArrayItem( "property" )]
-		public List<TmxProperty> properties;
-
 	}
 }

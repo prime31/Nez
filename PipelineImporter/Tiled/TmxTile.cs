@@ -7,33 +7,32 @@ namespace Nez.TiledMaps
 	public class TmxTile
 	{
 		public TmxTile()
-		{
-			Probability = 1.0f;
-			Properties = new List<TmxProperty>();
-		}
-
-		public override string ToString()
-		{
-			return Id;
-		}
+		{}
+			
 
 		[XmlAttribute( AttributeName = "id" )]
-		public string Id;
+		public int id;
 
 		[XmlElement( ElementName = "terrain" )]
-		public TmxTerrain Terrain;
+		public TmxTerrain terrain;
 
 		[XmlAttribute( AttributeName = "probability" )]
-		public float Probability;
+		public float probability = 1f;
 
 		[XmlElement( ElementName = "image" )]
-		public TmxImage Image;
+		public TmxImage image;
 
 		[XmlElement( ElementName = "objectgroup" )]
-		public List<TmxObjectGroup> ObjectGroups;
+		public List<TmxObjectGroup> objectGroups;
 
 		[XmlArray( "properties" )]
 		[XmlArrayItem( "property" )]
-		public List<TmxProperty> Properties;
+		public List<TmxProperty> properties = new List<TmxProperty>();
+
+
+		public override string ToString()
+		{
+			return id.ToString();
+		}
 	}
 }

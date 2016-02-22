@@ -16,10 +16,6 @@ namespace Nez.TiledMaps
 
 		}
 
-		public override string ToString()
-		{
-			return string.Format( "{0}: {1}", name, image );
-		}
 
 		[XmlAttribute( AttributeName = "firstgid" )]
 		public int firstGid;
@@ -59,5 +55,10 @@ namespace Nez.TiledMaps
 		[XmlArrayItem( "terrain" )]
 		public List<TmxTerrain> terrainTypes;
 
+
+		public override string ToString()
+		{
+			return string.Format( "{0}: {1}", name, image );
+		}
 	}
 }

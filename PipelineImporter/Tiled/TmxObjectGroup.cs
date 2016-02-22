@@ -6,6 +6,10 @@ namespace Nez.TiledMaps
 {
 	public class TmxObjectGroup
 	{
+		public TmxObjectGroup()
+		{}
+			
+
 		[XmlAttribute( AttributeName = "name" )]
 		public string name;
 
@@ -13,26 +17,18 @@ namespace Nez.TiledMaps
 		public string color;
 
 		[XmlAttribute( AttributeName = "opacity" )]
-		public float opacity;
+		public float opacity = 1f;
 
 		[XmlAttribute( AttributeName = "visible" )]
-		public bool visible;
+		public bool visible = true;
 
 		[XmlArray( "properties" )]
 		[XmlArrayItem( "property" )]
-		public List<TmxProperty> properties;
+		public List<TmxProperty> properties = new List<TmxProperty>();
 
 		[XmlElement( ElementName = "object" )]
-		public List<TmxObject> objects;
+		public List<TmxObject> objects = new List<TmxObject>();
 
-
-		public TmxObjectGroup()
-		{
-			opacity = 1.0f;
-			visible = true;
-			properties = new List<TmxProperty>();
-			objects = new List<TmxObject>();
-		}
 
 		public override string ToString()
 		{

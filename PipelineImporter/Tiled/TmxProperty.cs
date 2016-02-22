@@ -5,15 +5,15 @@ namespace Nez.TiledMaps
 {
     public class TmxProperty
     {
+		public TmxProperty()
+		{}
+			
+
 		[XmlAttribute(AttributeName = "name")]
 		public string name;
 
 		[XmlAttribute(AttributeName = "value")]
 		public string value;
-
-
-        public TmxProperty()
-        {}
 
 
         public override string ToString()
