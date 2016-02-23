@@ -22,7 +22,7 @@ namespace Nez.TiledMaps
 
 		public override string ToString()
 		{
-			return string.Format( "{0}: {1}", name, image );
+			return string.Format( "[TmxImageLayer] name: {0}, image: {1}, visible: {2}", name, image, visible );
 		}
 	}
 }

@@ -75,7 +75,6 @@
     <Compile Include="Tiled\TmxProperty.cs" />
     <Compile Include="Tiled\TmxRenderOrder.cs" />
     <Compile Include="Tiled\TmxTerrain.cs" />
-    <Compile Include="Tiled\TmxTile.cs" />
     <Compile Include="Tiled\TmxTileLayer.cs" />
     <Compile Include="Tiled\TmxTileOffset.cs" />
     <Compile Include="Tiled\TmxTileset.cs" />
@@ -155,6 +154,8 @@
     <Compile Include="ParticleDesigner\ParticleDesignerProcessorResult.cs" />
     <Compile Include="ParticleDesigner\ParticleDesignerWriter.cs" />
     <Compile Include="ParticleDesigner\ParticleDesignerEmitterConfig.cs" />
+    <Compile Include="Tiled\TmxTilesetTile.cs" />
+    <Compile Include="Tiled\TmxTilesetTileAnimationFrame.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Nez-PCL\Nez.csproj">

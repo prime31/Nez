@@ -7,7 +7,7 @@ using System.Collections.Generic;
 
 namespace Nez
 {
-	public class TiledMapComponent : RenderableComponent
+	public class TiledMapComponent : RenderableComponent, IUpdatable
 	{
 		public TiledMap tiledmap;
 
@@ -85,6 +85,12 @@ namespace Nez
 		public override void onRemovedFromEntity()
 		{
 			removeColliders();
+		}
+
+
+		public void update()
+		{
+			tiledmap.update();
 		}
 
 

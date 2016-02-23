@@ -24,7 +24,7 @@ namespace Nez.TiledMaps
 
 		public override string ToString()
 		{
-			return name;
+			return string.Format( "[TmxLayer] name: {0}, visible: {1}", name, visible );
 		}
 	}
 }

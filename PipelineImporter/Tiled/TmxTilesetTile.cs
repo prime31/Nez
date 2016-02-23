@@ -4,11 +4,11 @@ using System.Xml.Serialization;
 
 namespace Nez.TiledMaps
 {
-	public class TmxTile
+	public class TmxTilesetTile
 	{
-		public TmxTile()
+		public TmxTilesetTile()
 		{}
-			
+
 
 		[XmlAttribute( AttributeName = "id" )]
 		public int id;
@@ -29,10 +29,14 @@ namespace Nez.TiledMaps
 		[XmlArrayItem( "property" )]
 		public List<TmxProperty> properties = new List<TmxProperty>();
 
+		[XmlArray( "animation" )]
+		[XmlArrayItem( "frame" )]
+		public List<TmxTilesetTileAnimationFrame> animationFrames;
+
 
 		public override string ToString()
 		{
-			return id.ToString();
+			return string.Format( "[TmxTilesetTile] id: {0}, animationFrames: {1}", id, animationFrames.Count );
 		}
 	}
 }

@@ -10,7 +10,7 @@ namespace Nez.TiledMaps
 		public TmxTileset()
 		{
 			tileOffset = new TmxTileOffset();
-			tiles = new List<TmxTile>();
+			tiles = new List<TmxTilesetTile>();
 			properties = new List<TmxProperty>();
 			terrainTypes = new List<TmxTerrain>();
 
@@ -42,7 +42,7 @@ namespace Nez.TiledMaps
 		public TmxTileOffset tileOffset;
 
 		[XmlElement( ElementName = "tile" )]
-		public List<TmxTile> tiles;
+		public List<TmxTilesetTile> tiles;
 
 		[XmlArray( "properties" )]
 		[XmlArrayItem( "property" )]

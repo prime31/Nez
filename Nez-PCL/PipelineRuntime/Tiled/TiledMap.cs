@@ -19,17 +19,15 @@ namespace Nez.Tiled
 		public int tileHeight;
 		public Color? backgroundColor;
 		public TiledRenderOrder renderOrder;
-		public Dictionary<string,string> properties;
 		public TiledMapOrientation orientation;
-		public List<TiledLayer> layers;
+		public Dictionary<string,string> properties = new Dictionary<string,string>();
+		public List<TiledLayer> layers = new List<TiledLayer>();
 		public List<TiledImageLayer> imageLayers = new List<TiledImageLayer>();
 		public List<TiledTileLayer> tileLayers = new List<TiledTileLayer>();
-		public List<TiledObjectGroup> objectGroups;
-
+		public List<TiledObjectGroup> objectGroups = new List<TiledObjectGroup>();
 
 		public int widthInPixels
 		{
-            // annoyingly we have to compensate 1 pixel per tile, seems to be a bug in MonoGame?
 			get { return width * tileWidth - width; }       
 		}
 
@@ -38,7 +36,8 @@ namespace Nez.Tiled
 			get { return height * tileHeight - height; }
 		}
 
-		readonly List<TiledTileset> _tilesets;
+		readonly List<TiledTileset> _tilesets = new List<TiledTileset>();
+		internal List<TiledAnimatedTile> _animatedTiles = new List<TiledAnimatedTile>();
 
 		#endregion
 
@@ -56,11 +55,6 @@ namespace Nez.Tiled
 			this.height = height;
 			this.tileWidth = tileWidth;
 			this.tileHeight = tileHeight;
-			properties = new Dictionary<string,string>();
-
-			layers = new List<TiledLayer>();
-			_tilesets = new List<TiledTileset>();
-			objectGroups = new List<TiledObjectGroup>();
 			this.orientation = orientation;
 		}
 
@@ -73,9 +67,9 @@ namespace Nez.Tiled
 		}
 
 
-		public TiledTileLayer createTileLayer( string name, int width, int height, TiledTile[] data )
+		public TiledTileLayer createTileLayer( string name, int width, int height, TiledTile[] tiles )
 		{
-			var layer = new TiledTileLayer( this, name, width, height, data );
+			var layer = new TiledTileLayer( this, name, width, height, tiles );
 			layers.Add( layer );
 			return layer;
 		}
@@ -99,10 +93,10 @@ namespace Nez.Tiled
 
 		public TiledLayer getLayer( string name )
 		{
-			foreach( var layer in layers )
+			for( var i = 0; i < layers.Count; i++ )
 			{
-				if( layer.name == name )
-					return layer;
+				if( layers[i].name == name )
+					return layers[i];
 			}
 			return null;
 		}
@@ -111,6 +105,16 @@ namespace Nez.Tiled
 		public T getLayer<T>( string name ) where T : TiledLayer
 		{
 			return (T)getLayer( name );
+		}
+
+
+		/// <summary>
+		/// handles calling update on all animated tiles
+		/// </summary>
+		public void update()
+		{
+			for( var i = 0; i < _animatedTiles.Count; i++ )
+				_animatedTiles[i].update();
 		}
 
 
@@ -144,18 +148,44 @@ namespace Nez.Tiled
 		}
 
 
-		public Subtexture getTileRegion( int id )
+		/// <summary>
+		/// gets the TiledTileset for the given tileId
+		/// </summary>
+		/// <returns>The tileset for tile identifier.</returns>
+		/// <param name="id">Identifier.</param>
+		public TiledTileset getTilesetForTileId( int tileId )
 		{
-			if( id == 0 )
-				return null;
+			for( var i = _tilesets.Count - 1; i >= 0; i-- )
+			{
+				if( _tilesets[i].firstId <= tileId )
+					return _tilesets[i];
+			}
 
+			throw new Exception( string.Format( "tileId {0} was not foind in any tileset", tileId ) );
+		}
+
+
+		/// <summary>
+		/// returns the TiledTilesetTile for the given id or null if none exists. TiledTilesetTiles exist only for animated tiles.
+		/// </summary>
+		/// <returns>The tileset tile.</returns>
+		/// <param name="id">Identifier.</param>
+		public TiledTilesetTile getTilesetTile( int id )
+		{
 			for( var i = _tilesets.Count - 1; i >= 0; i-- )
 			{
 				if( _tilesets[i].firstId <= id )
-					return _tilesets[i].getTileRegion( id );
+				{
+					for( var j = 0; j < _tilesets[i].tiles.Count; j++ )
+					{
+						// id is a gid so we need to subtract the tileset.firstId to get a local id
+						if( _tilesets[i].tiles[j].id == id - _tilesets[i].firstId )
+							return _tilesets[i].tiles[j];
+					}
+				}
 			}
 
-			throw new InvalidOperationException( string.Format( "No tileset found for id {0}", id ) );
+			return null;
 		}
 
 

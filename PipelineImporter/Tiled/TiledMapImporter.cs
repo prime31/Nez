@@ -24,10 +24,10 @@ namespace Nez.TiledMaps
 				var xmlSerializer = new XmlSerializer( typeof( TmxTileset ) );
 
 				foreach( var l in map.layers )
-					context.Logger.LogMessage( "Serializing Layer: {0}", l.name );
+					context.Logger.LogMessage( "Deserialized Layer: {0}", l );
 
 				foreach( var o in map.objectGroups )
-					context.Logger.LogMessage( "Serializing ObjectGroup: {0}, object count: {1}", o.name, o.objects.Count );
+					context.Logger.LogMessage( "Deserialized ObjectGroup: {0}, object count: {1}", o.name, o.objects.Count );
 
 				context.Logger.LogMessage( "" );
 
@@ -42,9 +42,7 @@ namespace Nez.TiledMaps
 						var filePath = Path.Combine( directoryName, tilesetLocation );
 
 						using( var file = new FileStream( filePath, FileMode.Open ) )
-						{
 							map.tilesets[i] = (TmxTileset)xmlSerializer.Deserialize( file );
-						}
 					}
 				}
 

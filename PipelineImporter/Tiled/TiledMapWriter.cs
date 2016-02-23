@@ -6,6 +6,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content.Pipeline;
 using Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler;
 using System.Diagnostics;
+using Nez.Tiled;
 
 
 namespace Nez.TiledMaps
@@ -34,7 +35,7 @@ namespace Nez.TiledMaps
 			writer.Write( map.tilesets.Count );
 			foreach( var tileset in map.tilesets )
 			{
-				TiledMapProcessor.logger.LogMessage( "Expecting texture asset: {0}", tileset.image.source );
+				TiledMapProcessor.logger.LogMessage( "Expecting texture asset: {0}\n", tileset.image.source );
 				writer.Write( removeExtension( tileset.image.source ) );
 				writer.Write( tileset.firstGid );
 				writer.Write( tileset.tileWidth );
@@ -42,9 +43,25 @@ namespace Nez.TiledMaps
 				writer.Write( tileset.spacing );
 				writer.Write( tileset.margin );
 				writeCustomProperties( writer, tileset.properties );
+
+				writer.Write( tileset.tiles.Count );
+				foreach( var tile in tileset.tiles )
+				{
+					TiledMapProcessor.logger.LogMessage( "writing tile: {0}", tile );
+					writer.Write( tile.id );
+
+					// animation frames
+					writer.Write( tile.animationFrames.Count );
+					foreach( var anim in tile.animationFrames )
+					{
+						writer.Write( anim.tileId );
+						writer.Write( anim.duration );
+					}
+
+					writeCustomProperties( writer, tile.properties );
+				}
 			}
 
-			TiledMapProcessor.logger.LogMessage( "" );
 
 			writer.Write( map.layers.Count );
 			foreach( var layer in map.layers )
@@ -56,7 +73,7 @@ namespace Nez.TiledMaps
 				var tileLayer = layer as TmxTileLayer;
 				if( tileLayer != null )
 				{
-					writer.Write( "TileLayer" );
+					writer.Write( (int)TiledLayerType.Tile );
 					writer.Write( tileLayer.data.tiles.Count );
 
 					foreach( var tile in tileLayer.data.tiles )
@@ -87,7 +104,7 @@ namespace Nez.TiledMaps
 				var imageLayer = layer as TmxImageLayer;
 				if( imageLayer != null )
 				{
-					writer.Write( "ImageLayer" );
+					writer.Write( (int)TiledLayerType.Image );
 					writer.Write( removeExtension( imageLayer.image.source ) );
 					writer.Write( new Vector2( imageLayer.x, imageLayer.y ) );
 
@@ -95,7 +112,7 @@ namespace Nez.TiledMaps
 				}
 
 				writeCustomProperties( writer, layer.properties );
-				TiledMapProcessor.logger.LogMessage( "done writing Layer: {0}", layer.name );
+				TiledMapProcessor.logger.LogMessage( "done writing Layer: {0}", layer );
 			}
 
 			writer.Write( map.objectGroups.Count );

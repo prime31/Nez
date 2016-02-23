@@ -1,29 +1,29 @@
 ﻿using Microsoft.Xna.Framework;
+using Nez.Textures;
 
 
 namespace Nez.Tiled
 {
 	public class TiledTile
 	{
-		public int id { get; private set; }
+		/// <summary>
+		/// returns the Subtexture that maps to this particular tile
+		/// </summary>
+		/// <value>The texture region.</value>
+		public Subtexture textureRegion { get { return tileset.getTileTextureRegion( id ); } }
+
+		public int id;
 		public int x;
 		public int y;
 		public bool flippedHorizonally;
 		public bool flippedVertically;
 		public bool flippedDiagonally;
+		internal TiledTileset tileset;
 
 
 		public TiledTile( int id )
 		{
 			this.id = id;
-		}
-
-
-		public TiledTile( int id, int x, int y )
-		{
-			this.id = id;
-			this.x = x;
-			this.y = y;
 		}
 
 

@@ -7,15 +7,16 @@ namespace Nez.Tiled
 {
 	public class TiledTileset
 	{
-		private readonly Dictionary<int,Subtexture> _regions;
+		public Texture2D texture;
+		public readonly int firstId;
+		public readonly int tileWidth;
+		public readonly int tileHeight;
+		public int spacing;
+		public int margin;
+		public Dictionary<string,string> properties = new Dictionary<string,string>();
+		public List<TiledTilesetTile> tiles = new List<TiledTilesetTile>();
 
-		public Texture2D texture { get; private set; }
-		public int firstId { get; private set; }
-		public int tileWidth { get; private set; }
-		public int tileHeight { get; private set; }
-		public int spacing { get; private set; }
-		public int margin { get; private set; }
-		public Dictionary<string,string> properties { get; private set; }
+		private readonly Dictionary<int,Subtexture> _regions;
 
 
 		public TiledTileset( Texture2D texture, int firstId, int tileWidth, int tileHeight, int spacing = 2, int margin = 2 )
@@ -26,7 +27,6 @@ namespace Nez.Tiled
 			this.tileHeight = tileHeight;
 			this.spacing = spacing;
 			this.margin = margin;
-			properties = new Dictionary<string,string>();
 
 			var id = firstId;
 			_regions = new Dictionary<int,Subtexture>();
@@ -42,7 +42,7 @@ namespace Nez.Tiled
 		}
 			
 
-		public Subtexture getTileRegion( int id )
+		public Subtexture getTileTextureRegion( int id )
 		{
 			return _regions[id];
 		}

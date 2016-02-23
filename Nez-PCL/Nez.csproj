@@ -253,5 +253,9 @@
     <Compile Include="Utils\Tweens\TransformVector2Tween.cs" />
     <Compile Include="Utils\Tweens\TweenExt.cs" />
     <Compile Include="ECS\Components\Renderables\SpringGrid.cs" />
+    <Compile Include="PipelineRuntime\Tiled\TiledLayerType.cs" />
+    <Compile Include="PipelineRuntime\Tiled\TiledTilesetTile.cs" />
+    <Compile Include="PipelineRuntime\Tiled\TiledTileAnimationFrame.cs" />
+    <Compile Include="PipelineRuntime\Tiled\TiledAnimatedTile.cs" />
   </ItemGroup>
 </Project>

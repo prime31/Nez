@@ -25,11 +25,11 @@ namespace Nez.Tiled
 		}
 
 
-		public TiledTileLayer( TiledMap map, string name, int width, int height, TiledTile[] data ) : base( name )
+		public TiledTileLayer( TiledMap map, string name, int width, int height, TiledTile[] tiles ) : base( name )
 		{
 			this.width = width;
 			this.height = height;
-			tiles = data;
+			this.tiles = tiles;
 
 			tilemap = map;
 			tiles = populateTilePositions();
@@ -66,7 +66,7 @@ namespace Nez.Tiled
 				if( tile == null )
 					continue;
 				
-				var region = tilemap.getTileRegion( tile.id );
+				var region = tile.textureRegion;
 				if( region != null )
 					renderLayer( spriteBatch, tilemap, tile, region );
 			}
@@ -93,7 +93,7 @@ namespace Nez.Tiled
 					if( tile == null )
 						continue;
 
-					var tileRegion = tilemap.getTileRegion( tile.id );
+					var tileRegion = tile.textureRegion;
 
 					var tx = tile.x * tilemap.tileWidth + (int)position.X;
 					var ty = tile.y * tilemap.tileHeight + (int)position.Y;
@@ -161,7 +161,6 @@ namespace Nez.Tiled
 			var ty = tile.y * ( tilemap.tileHeight - 1 );
 
 			spriteBatch.Draw( region.texture2D, new Rectangle( tx, ty, region.sourceRect.Width, region.sourceRect.Height ), region.sourceRect, Color.White );
-			//spriteBatch.Draw( region, new Rectangle( tx, ty, region.bounds.Width, region.bounds.Height ), Color.White );
 		}
 
 
@@ -178,7 +177,6 @@ namespace Nez.Tiled
 			         - ( tilemap.tileWidth + tilemap.tileHeight );
 
 			spriteBatch.Draw( region.texture2D, new Rectangle( tx, ty, region.sourceRect.Width, region.sourceRect.Height ), region.sourceRect, Color.White );
-			//spriteBatch.Draw( region, new Rectangle( tx, ty, region.bounds.Width, region.bounds.Height ), Color.White );
 		}
 
 

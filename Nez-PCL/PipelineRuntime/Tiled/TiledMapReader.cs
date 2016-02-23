@@ -41,6 +41,23 @@ namespace Nez.Tiled
 					                          spacing: reader.ReadInt32(),
 					                          margin: reader.ReadInt32() );
 				readCustomProperties( reader, tileset.properties );
+
+				// tile array
+				var tileCount = reader.ReadInt32();
+				for( var j = 0; j < tileCount; j++ )
+				{
+					var tile = new TiledTilesetTile( reader.ReadInt32() );
+
+					var tileAnimationFrameCount = reader.ReadInt32();
+					if( tileAnimationFrameCount > 0 )
+						tile.animationFrames = new List<TiledTileAnimationFrame>( tileAnimationFrameCount );
+					
+					for( var k = 0; k < tileAnimationFrameCount; k++ )
+						tile.animationFrames.Add( new TiledTileAnimationFrame( reader.ReadInt32(), reader.ReadSingle() ) );
+
+					readCustomProperties( reader, tile.properties );
+					tileset.tiles.Add( tile );
+				}
 			}
 
 			var layerCount = reader.ReadInt32();
@@ -53,9 +70,7 @@ namespace Nez.Tiled
 
 			var objectGroupCount = reader.ReadInt32();
 			for( var i = 0; i < objectGroupCount; i++ )
-			{
 				readObjectGroup( reader, tiledMap );
-			}
 
 			return tiledMap;
 		}
@@ -74,16 +89,15 @@ namespace Nez.Tiled
 			var layerName = reader.ReadString();
 			var visible = reader.ReadBoolean();
 			var opacity = reader.ReadSingle();
-			var layerType = reader.ReadString();
+			var layerType = (TiledLayerType)reader.ReadInt32();
 
 			TiledLayer layer;
-			if( layerType == "TileLayer" )
+			if( layerType == TiledLayerType.Tile )
 				layer = readTileLayer( reader, tiledMap, layerName );
-			else if( layerType == "ImageLayer" )
+			else if( layerType == TiledLayerType.Image )
 				layer = readImageLayer( reader, tiledMap, layerName );
 			else
 				throw new NotSupportedException( string.Format( "Layer type {0} with name {1} is not supported", layerType, layerName ) );
-
 
 			layer.visible = visible;
 			layer.opacity = opacity;
@@ -94,10 +108,10 @@ namespace Nez.Tiled
 
 		private static TiledTileLayer readTileLayer( ContentReader reader, TiledMap tileMap, string layerName )
 		{
-			var tileDataCount = reader.ReadInt32();
-			var tileData = new TiledTile[tileDataCount];
+			var tileCount = reader.ReadInt32();
+			var tiles = new TiledTile[tileCount];
 
-			for( var d = 0; d < tileDataCount; d++ )
+			for( var i = 0; i < tileCount; i++ )
 			{
 				var tileId = reader.ReadInt32();
 				var flippedHorizonally = reader.ReadBoolean();
@@ -107,16 +121,32 @@ namespace Nez.Tiled
 				// dont add null tiles
 				if( tileId != 0 )
 				{
-					tileData[d] = new TiledTile( tileId )
+					var tilesetTile = tileMap.getTilesetTile( tileId );
+					if( tilesetTile != null )
 					{
-						flippedHorizonally = flippedHorizonally,
-						flippedVertically = flippedVertically,
-						flippedDiagonally = flippedDiagonally
-					};
+						tiles[i] = new TiledAnimatedTile( tileId, tilesetTile )
+						{
+							flippedHorizonally = flippedHorizonally,
+							flippedVertically = flippedVertically,
+							flippedDiagonally = flippedDiagonally
+						};
+						tileMap._animatedTiles.Add( tiles[i] as TiledAnimatedTile );
+					}
+					else
+					{
+						tiles[i] = new TiledTile( tileId )
+						{
+							flippedHorizonally = flippedHorizonally,
+							flippedVertically = flippedVertically,
+							flippedDiagonally = flippedDiagonally
+						};
+					}
+
+					tiles[i].tileset = tileMap.getTilesetForTileId( tileId );
 				}
 				else
 				{
-					tileData[d] = null;
+					tiles[i] = null;
 				}
 			}
 
@@ -124,7 +154,7 @@ namespace Nez.Tiled
 				name: layerName,
 				width: reader.ReadInt32(),
 				height: reader.ReadInt32(),
-				data: tileData );
+				tiles: tiles );
 		}
 
 

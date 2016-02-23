@@ -131,9 +131,28 @@ namespace Nez
 		}
 
 
+		/// <summary>
+		/// loops t so that it is never larger than length and never smaller than 0
+		/// </summary>
+		/// <param name="t">T.</param>
+		/// <param name="length">Length.</param>
 		public static float repeat( float t, float length )
 		{
 			return t - Mathf.floor( t / length ) * length;
+		}
+
+
+		/// <summary>
+		/// increments t an ensures it is always greater than 0 and less than length
+		/// </summary>
+		/// <param name="t">T.</param>
+		/// <param name="length">Length.</param>
+		public static int incrementWithWrap( int t, int length )
+		{
+			t++;
+			if( t == length )
+				return 0;
+			return t;
 		}
 
 
