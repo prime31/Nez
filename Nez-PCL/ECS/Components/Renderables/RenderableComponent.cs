@@ -13,7 +13,8 @@ namespace Nez
 		#region properties and fields
 
 		/// <summary>
-		/// used by Renderers to specify how this sprite should be rendered.
+		/// used by Renderers to specify how this sprite should be rendered. If non-null, it is automatically disposed of when the Component
+		/// is removed from the Entity.
 		/// </summary>
 		public RenderState renderState;
 
@@ -248,6 +249,16 @@ namespace Nez
 		/// </summary>
 		protected virtual void onBecameInvisible()
 		{}
+
+
+		public override void onRemovedFromEntity()
+		{
+			if( renderState != null )
+			{
+				renderState.unload();
+				renderState = null;
+			}
+		}
 
 
 		/// <summary>

@@ -209,6 +209,22 @@ namespace Nez
 		{}
 
 
+		/// <summary>
+		/// disposes of all graphic-related assets
+		/// </summary>
+		public void unload()
+		{
+			if( blendState != BlendState.AlphaBlend )
+				blendState.Dispose();
+
+			if( depthStencilState != DepthStencilState.None )
+				depthStencilState.Dispose();
+
+			if( samplerState != Core.defaultSamplerState )
+				samplerState.Dispose();
+		}
+
+
 		/// <Docs>To be added.</Docs>
 		/// <para>Returns the sort order of the current instance compared to the specified object.</para>
 		/// <summary>
