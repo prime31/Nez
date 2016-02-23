@@ -43,7 +43,7 @@ namespace Nez
 		/// <summary>
 		/// delay before removing squares
 		/// </summary>
-		public float delayBeforeSquaresInDuration = 0.2f;
+		public float delayBeforeSquaresInDuration = 0;
 
 		/// <summary>
 		/// duration for squares to unpopulate screen

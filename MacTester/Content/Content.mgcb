@@ -238,3 +238,32 @@
 /processor:ParticleDesignerProcessor
 /build:ParticleDesigner/Snow.pex
 
+#begin Tilemap/desert-palace.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Tilemap/desert-palace.tmx
+
+#begin Tilemap/desert-palace-lamp.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Tilemap/desert-palace-lamp.png
+
+#begin Tilemap/desert-palace-tiles.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Tilemap/desert-palace-tiles.png
+

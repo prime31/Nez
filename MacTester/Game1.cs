@@ -118,7 +118,7 @@ namespace MacTester
 		{
 			base.Draw( gameTime );
 
-			IMGUI.beginWindow( GraphicsDevice.Viewport.Width - 150, 0, 150, 500 );
+			IMGUI.beginWindow( GraphicsDevice.Viewport.Width - 150, 0, 150, Screen.height );
 
 			debugRenderEnabled = IMGUI.toggle( "Debug Render", debugRenderEnabled );
 
@@ -130,6 +130,9 @@ namespace MacTester
 
 			if( IMGUI.button( "Scene 1 Pixel Bloom" ) )
 				Core.startSceneTransition( new SquaresTransition( () => Scenes.sceneOneBloom() ) );
+
+			if( IMGUI.button( "Zelda Tilemap" ) )
+				Core.startSceneTransition( new WindTransition( () => Scenes.zeldaTilemap() ) );
 
 			if( IMGUI.button( "Scene 2" ) )
 			{

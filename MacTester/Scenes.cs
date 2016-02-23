@@ -112,6 +112,21 @@ namespace MacTester
 		}
 
 
+		public static Scene zeldaTilemap()
+		{
+			var scene = Scene.createWithDefaultRenderer( Color.White );
+			scene.letterboxColor = Color.MonoGameOrange;
+			scene.setDesignResolution( 32 * 8, 28 * 8, Scene.SceneResolutionPolicy.ShowAllPixelPerfect );
+
+			// load a TiledMap and move it back so is drawn before other entities
+			var tiledEntity = scene.createEntity( "tiled-map-entity" );
+			var tiledmap = scene.contentManager.Load<TiledMap>( "bin/MacOSX/Tilemap/desert-palace" );
+			tiledEntity.addComponent( new TiledMapComponent( tiledmap ) );
+
+			return scene;
+		}
+
+
 		public static Scene sceneTwo()
 		{
 			var scene = new Scene();

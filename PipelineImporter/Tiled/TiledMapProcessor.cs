@@ -26,7 +26,7 @@ namespace Nez.TiledMaps
 				{
 					data.tiles = data.value
                         .Split( new[] { ',' }, StringSplitOptions.RemoveEmptyEntries )
-                        .Select( int.Parse )
+                        .Select( uint.Parse )
                         .Select( gid => new TmxDataTile( (uint)gid ) )
                         .ToList();
 				}
