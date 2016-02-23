@@ -59,7 +59,24 @@ namespace Nez
 
 
 		/// <summary>
-		/// transform.eulers tween
+		/// transform.localScale tween
+		/// </summary>
+		/// <returns>The klocal scale to.</returns>
+		/// <param name="self">Self.</param>
+		/// <param name="to">To.</param>
+		/// <param name="duration">Duration.</param>
+		public static ITween<Vector2> tweenLocalScaleTo( this Transform self, Vector2 to, float duration = 0.3f )
+		{
+			var tween = QuickCache<TransformVector2Tween>.pop();
+			tween.setTargetAndType( self, TransformTargetType.LocalScale );
+			tween.initialize( tween, to, duration );
+
+			return tween;
+		}
+
+
+		/// <summary>
+		/// transform.rotation tween
 		/// </summary>
 		/// <returns>The rotation to.</returns>
 		/// <param name="self">Self.</param>

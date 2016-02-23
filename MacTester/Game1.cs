@@ -49,7 +49,7 @@ namespace MacTester
 				{
 					spriteDude.getComponent<Sprite<int>>().pause();
 					var worldPos = scene.camera.screenToWorldPoint( Input.scaledMousePosition );
-					PropertyTweens.vector2PropertyTo( spriteDude.transform, "position", worldPos, 0.5f )
+					spriteDude.transform.tweenPositionTo( worldPos, 0.5f )
 						.setLoops( LoopType.PingPong, 1 )
 						.setContext( spriteDude )
 						.setCompletionHandler( tween =>
@@ -62,11 +62,12 @@ namespace MacTester
 						})
 						.start();
 
-					PropertyTweens.vector2PropertyTo( spriteDude.transform, "scale", new Vector2( 1.5f, 2.5f ), 1f )
+					spriteDude.transform.tweenLocalScaleTo( new Vector2( 1.5f, 2.5f ), 2f )
 						.setLoops( LoopType.PingPong, 1 )
 						.start();
 
-					PropertyTweens.floatPropertyTo( spriteDude.transform, "rotation", MathHelper.PiOver2, 1f )
+					spriteDude.transform.tweenRotationDegreesTo( 360f, 2f )
+						.setIsRelative()
 						.setLoops( LoopType.PingPong, 1 )
 						.start();
 				}
