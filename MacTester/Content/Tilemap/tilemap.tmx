@@ -1,32 +1,50 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <map version="1.0" orientation="orthogonal" renderorder="right-down" width="16" height="9" tilewidth="16" tileheight="16" nextobjectid="10">
- <tileset firstgid="1" name="collisionTiles" tilewidth="16" tileheight="16" tilecount="1">
-  <image source="collisionTiles.png" width="16" height="16"/>
- </tileset>
- <tileset firstgid="2" name="visualtile" tilewidth="16" tileheight="16" tilecount="64">
+ <tileset firstgid="1" name="visualtile" tilewidth="16" tileheight="16" tilecount="64">
   <image source="tilesheet.png" width="128" height="128"/>
+  <tile id="31">
+   <properties>
+    <property name="pooper" value="45"/>
+   </properties>
+   <animation>
+    <frame tileid="31" duration="250"/>
+    <frame tileid="47" duration="250"/>
+    <frame tileid="55" duration="250"/>
+   </animation>
+  </tile>
+ </tileset>
+ <tileset firstgid="65" name="another-tileset" tilewidth="16" tileheight="16" tilecount="64">
+  <image source="tilesheet.png" width="128" height="128"/>
+  <tile id="58">
+   <animation>
+    <frame tileid="55" duration="1000"/>
+    <frame tileid="47" duration="1000"/>
+    <frame tileid="39" duration="1000"/>
+    <frame tileid="47" duration="1000"/>
+   </animation>
+  </tile>
  </tileset>
  <imagelayer name="sky">
   <image source="background.png"/>
  </imagelayer>
  <layer name="visualbg" width="16" height="9">
   <data encoding="base64" compression="gzip">
-   H4sIAAAAAAAAA42RSw7CMAxER0ApQu0m/DZ0x5IdHICj5Sg5So/SozBDXGGiVMKSNVYzzx8VyLEDIiox/NYfz4l5Zl7cW43fO/4KjDM/lMYFXnMOWeORvOpAfTBvFZ6eqexBb+RsdJkT/1Kfu72vTFv6WsfJZzpWeuKZ3xJnJvZOW/JMNN/dE+dMwe7qTMXMfZrKzT1zbXvpbnE2J/J73GSFtF/4Zz4cp/rvCLZHyfn9FW8+fD/zQAIAAA==
+   H4sIAAAAAAAAA42RSwrCQBBES40RSTbjb2MWghvBXU7g0eYoc5QcJUexymlJGyZgQ1FNpl9/CJBjB0QUovvNPzUn6kxd3FuJ3zv+CgxfvpsXLvCac8gej+SVB3pP3Qs8a8bSDZyNJnPiX+rztLeVeU2+dozqzAff60b1U03izMTeaUueQjXtnjhnDHZXY/5wvarCzS21tr10tzibE/k9brJD3i78Mx+OU/53BNtjzmkXX/cG8gsMskACAAA=
   </data>
  </layer>
  <layer name="visualbgalt" width="16" height="9">
   <data encoding="base64" compression="gzip">
-   H4sIAAAAAAAAA2NgIB2IMDAoQOkDZGiHAx4S9QtTaB+SOQlEqntADfuoBZgYGBoIqRECupkLh7s1gPqBmEELKA8MewVYPGIDWkT6HQAbeLy+QAIAAA==
+   H4sIAAAAAAAAA2NgIB0IMzAoQOkDZGiHA24S9QtRaB+SOQlEqntADfuoBRgZGBoIqREEupkTh7vVgfqBmEETKA8MewVYPGIDmkT6HQDyJNIPQAIAAA==
   </data>
  </layer>
  <layer name="bloomy" width="16" height="9">
   <data encoding="base64" compression="gzip">
-   H4sIAAAAAAAAA9NjYEgwA2IGHEAPlwQU6AL1mkL166KpB4ozmBHQjwzQ1dsCsR0J+klVPwooBwCy2HiwQAIAAA==
+   H4sIAAAAAAAAA9NlYEgwBWIGHEAXlwQU6AD1mkD166CpB4ozmBLQjwzQ1dsAsS0J+klVPwooBwA/A3MNQAIAAA==
   </data>
  </layer>
- <layer name="collision" width="16" height="9" visible="0" opacity="0.34">
+ <layer name="collision" width="16" height="9" visible="0">
   <data encoding="base64" compression="gzip">
-   H4sIAAAAAAAAA2NggABGBsoArfQzEqGGVPuxmcmIxQxSzUQ3g5B+bPLYzMEmh08dsfqogQFVK5qPQAIAAA==
+   H4sIAAAAAAAAA2NggABLBsoArfRbEqGGVPuxmWmJxQxSzUQ3g5wwwWYONjlkd5NiJjb95GIQAACdUCcSQAIAAA==
   </data>
  </layer>
  <objectgroup name="portals" visible="0">
@@ -49,7 +67,7 @@
  </objectgroup>
  <layer name="visualfg" width="16" height="9">
   <data encoding="base64" compression="gzip">
-   H4sIAAAAAAAAA2NgGAVDGSgAsTyUJgdoALE6lCYHAADs3qsyQAIAAA==
+   H4sIAAAAAAAAA2NgGAVDGcgDsRyUJgeoA7EalCYHAADV0PE0QAIAAA==
   </data>
  </layer>
  <objectgroup name="markers" visible="0">
