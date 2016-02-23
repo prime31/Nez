@@ -206,7 +206,6 @@
     <Compile Include="Graphics\SpriteBatchExt.cs" />
     <Compile Include="Debug\Assert.cs" />
     <Compile Include="Physics\Shapes\RealtimeCollisions.cs" />
-    <Compile Include="ECS\Components\Renderables\RenderState.cs" />
     <Compile Include="Utils\Triangulator.cs" />
     <Compile Include="ECS\Systems\PassiveSystem.cs" />
     <Compile Include="ECS\InternalUtils\ColliderList.cs" />
@@ -257,5 +256,7 @@
     <Compile Include="PipelineRuntime\Tiled\TiledTilesetTile.cs" />
     <Compile Include="PipelineRuntime\Tiled\TiledTileAnimationFrame.cs" />
     <Compile Include="PipelineRuntime\Tiled\TiledAnimatedTile.cs" />
+    <Compile Include="ECS\Components\Renderables\Mesh.cs" />
+    <Compile Include="Graphics\RenderState.cs" />
   </ItemGroup>
 </Project>

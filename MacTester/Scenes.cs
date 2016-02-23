@@ -460,8 +460,24 @@ namespace MacTester
 			childTwoEntity.transform.rotation = 0.5f;
 
 
-			PropertyTweens.floatPropertyTo( parentEntity.transform, "rotation", MathHelper.TwoPi, 1 ).start();
-			//PropertyTweens.floatPropertyTo( childTwoEntity.transform, "rotation", MathHelper.TwoPi, 1 ).start();
+			parentEntity.transform.tweenRotationDegreesTo( 360f, 1f )
+				.setIsRelative()
+				.setLoops( LoopType.PingPong )
+				.start();
+
+
+			var mesh = new Mesh( contentManager.Load<Texture2D>( "Images/bowser-mask.png" ) );
+			mesh.setVertPositions( new Vector3[] {
+				new Vector3( -250, -250, 0 ),
+				new Vector3( 250, -250, 0 ),
+				new Vector3( 250, 250, 0 )
+			});
+			mesh.setColorForAllVerts( Color.DarkOrange );
+			mesh.recalculateBounds( true );
+
+			var meshEntity = createEntity( "mesh" );
+			meshEntity.transform.position = new Vector2( 500, 200 );
+			meshEntity.addComponent( mesh );
 		}
 	}
 

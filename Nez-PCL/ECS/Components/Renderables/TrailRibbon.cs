@@ -170,7 +170,7 @@ namespace Nez
 		}
 
 
-		private class RibbonSegment
+		class RibbonSegment
 		{
 			public Vector2 position;
 			public Vector2 radiusDirection;
