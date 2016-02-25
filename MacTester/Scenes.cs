@@ -259,19 +259,21 @@ namespace MacTester
 
 		public static Scene lightsScene()
 		{
+			// render layer for all lights and any emissive Sprites
 			var LIGHT_RENDER_LAYER = 5;
+			var AMBIENT_LIGHT_INTENSITY = 1f; // any value other than 1 needs a blend shader or BlendMode.Additive for the PostProcessor
 			var scene = Scene.create( Color.MonoGameOrange );
 
 			// create a Renderer that renders all but the light layer
 			scene.addRenderer( new RenderLayerExcludeRenderer( 0, LIGHT_RENDER_LAYER ) );
 
+			// create a Renderer that renders only the light layer into a render target
 			var lightRenderer = scene.addRenderer( new RenderLayerRenderer( -1, LIGHT_RENDER_LAYER ) );
-			lightRenderer.renderTargetClearColor = Color.Black;
+			lightRenderer.renderTargetClearColor = Color.Black * AMBIENT_LIGHT_INTENSITY;
 			lightRenderer.renderTarget = RenderTarget.create();
 
+			// add a PostProcessor that renders the light render target
 			scene.addPostProcessor( new SimplePostProcessor( lightRenderer.renderTarget, null, new Rectangle( 0, 0, Screen.width, Screen.height ) ) );
-
-			//scene.addRenderer( new RenderLayerRenderer( 1, 10 ) );
 
 			var blockTexture = scene.contentManager.Load<Texture2D>( "Images/Block" );
 			var blockGlowTexture = scene.contentManager.Load<Texture2D>( "Images/BlockGlow" );
