@@ -248,12 +248,120 @@ namespace MacTester
 			else
 				entity.colliders.add( new CircleCollider() );
 
+			// add a follow camera
+			var camFollow = scene.createEntity( "camera-follow" );
+			camFollow.addComponent( new FollowCamera( entity ) )
+				.addComponent( new CameraShake() );
+
+			return scene;
+		}
+
+
+		public static Scene lightsScene()
+		{
+			var LIGHT_RENDER_LAYER = 5;
+			var scene = Scene.create( Color.MonoGameOrange );
+
+			// create a Renderer that renders all but the light layer
+			scene.addRenderer( new RenderLayerExcludeRenderer( 0, LIGHT_RENDER_LAYER ) );
+
+			var lightRenderer = scene.addRenderer( new RenderLayerRenderer( -1, LIGHT_RENDER_LAYER ) );
+			lightRenderer.renderTargetClearColor = Color.Black;
+			lightRenderer.renderTarget = RenderTarget.create();
+
+			scene.addPostProcessor( new SimplePostProcessor( lightRenderer.renderTarget, null, new Rectangle( 0, 0, Screen.width, Screen.height ) ) );
+
+			//scene.addRenderer( new RenderLayerRenderer( 1, 10 ) );
+
+			var blockTexture = scene.contentManager.Load<Texture2D>( "Images/Block" );
+			var blockGlowTexture = scene.contentManager.Load<Texture2D>( "Images/BlockGlow" );
+
+			// create some moons
+			Action<Vector2,string,bool> moonMaker = ( Vector2 pos, string name, bool isTrigger ) =>
+			{
+				var ent = scene.createEntity( name );
+				ent.transform.position = pos;
+				ent.addComponent( new Sprite( blockTexture ) );
+				ent.colliders.add( new BoxCollider() );
+
+				// add a glow sprite on the light render layer
+				var glowSprite = new Sprite( blockGlowTexture );
+				glowSprite.renderLayer = LIGHT_RENDER_LAYER;
+				ent.addComponent( glowSprite );
+
+				if( isTrigger )
+				{
+					ent.colliders[0].isTrigger = true;
+					ent.addComponent( new TriggerListener() );
+				}
+			};
+
+			moonMaker( new Vector2( 0, 100 ), "moon1", false );
+			moonMaker( new Vector2( 150, 100 ), "moon11", false );
+			moonMaker( new Vector2( 300, 100 ), "moon12", false );
+			moonMaker( new Vector2( 450, 100 ), "moon13", false );
+			moonMaker( new Vector2( 600, 100 ), "moon14", false );
+
+			moonMaker( new Vector2( 50, 500 ), "moon3", true );
+			moonMaker( new Vector2( 500, 250 ), "moon4", false );
+
+
+			// add an animation to "moon4" to test moving collisions
+			scene.findEntity( "moon4" ).addComponent( new SimpleMovingPlatform( 250, 400 ) );
+
+			// create a player moon
+			var entity = scene.createEntity( "player-moon" );
+			entity.transform.position = new Vector2( 220, 220 );
+			var sprite = new Sprite( blockTexture );
+			sprite.renderLayer = LIGHT_RENDER_LAYER;
+			entity.addComponent( sprite )
+				.addComponent( new SimpleMoonMover() );
+			entity.colliders.add( new BoxCollider() );
+
 
 			// add a follow camera
 			var camFollow = scene.createEntity( "camera-follow" );
 			camFollow.addComponent( new FollowCamera( entity ) )
 				.addComponent( new CameraShake() );
 
+
+			// setup some lights and animate the colors
+			var pointLight = new Nez.Shadows.PointLight( 300, Color.Orange );
+			pointLight.renderLayer = 5;
+			pointLight.power = 1f;
+			var light = scene.createEntity( "light" );
+			light.transform.position = new Vector2( 650f, 300f );
+			light.addComponent( pointLight );
+
+			PropertyTweens.colorPropertyTo( pointLight, "color", new Color( 0, 0, 255, 255 ), 1f )
+				.setEaseType( EaseType.Linear )
+				.setLoops( LoopType.PingPong, 100 )
+				.start();
+
+			PropertyTweens.floatPropertyTo( pointLight, "power", 0.1f, 1f )
+				.setEaseType( EaseType.Linear )
+				.setLoops( LoopType.PingPong, 100 )
+				.start();
+
+
+			pointLight = new Nez.Shadows.PointLight( 500, Color.Blue );
+			pointLight.renderLayer = 5;
+			light = scene.createEntity( "light-two" );
+			light.transform.position = new Vector2( -50f );
+			light.addComponent( pointLight );
+
+			PropertyTweens.colorPropertyTo( pointLight, "color", new Color( 0, 255, 0, 255 ), 1f )
+				.setEaseType( EaseType.Linear )
+				.setLoops( LoopType.PingPong, 100 )
+				.start();
+
+
+			pointLight = new Nez.Shadows.PointLight( 500, Color.Green );
+			pointLight.renderLayer = 5;
+			light = scene.createEntity( "light-three" );
+			light.transform.position = new Vector2( 100f );
+			light.addComponent( pointLight );
+			
 			return scene;
 		}
 

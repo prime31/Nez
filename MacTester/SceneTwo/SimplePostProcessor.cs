@@ -15,22 +15,30 @@ namespace MacTester
 		RenderTarget2D _renderTarget;
 
 
-		public SimplePostProcessor (RenderTarget2D renderTarget, Effect effect) : base (0)
+		public SimplePostProcessor( RenderTarget2D renderTarget, Effect effect ) : base( 0 )
 		{
 			_renderTarget = renderTarget;
 			this.effect = effect;
-			sourceRect = new Rectangle (250, 10, _renderTarget.Bounds.Width * 2, _renderTarget.Bounds.Height * 2);
+			sourceRect = new Rectangle( 250, 10, _renderTarget.Bounds.Width * 2, _renderTarget.Bounds.Height * 2 );
 		}
 
 
-		public override void process (RenderTarget2D source, RenderTarget2D destination)
+		public SimplePostProcessor( RenderTarget2D renderTarget, Effect effect, Rectangle sourceRect ) : base( 0 )
 		{
-			Core.graphicsDevice.SetRenderTarget (destination);
+			_renderTarget = renderTarget;
+			this.effect = effect;
+			this.sourceRect = sourceRect;
+		}
 
-			Graphics.instance.spriteBatch.Begin (effect: effect);
-			Graphics.instance.spriteBatch.Draw (source, Vector2.Zero, Color.White);
-			Graphics.instance.spriteBatch.Draw (_renderTarget, null, sourceRect);
-			Graphics.instance.spriteBatch.End ();
+
+		public override void process( RenderTarget2D source, RenderTarget2D destination )
+		{
+			Core.graphicsDevice.SetRenderTarget( destination );
+
+			Graphics.instance.spriteBatch.Begin( effect: effect );
+			Graphics.instance.spriteBatch.Draw( source, Vector2.Zero, Color.White );
+			Graphics.instance.spriteBatch.Draw( _renderTarget, null, sourceRect );
+			Graphics.instance.spriteBatch.End();
 		}
 	}
 }

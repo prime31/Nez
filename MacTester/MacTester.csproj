@@ -59,6 +59,7 @@
     <Reference Include="OpenTK">
       <HintPath>..\packages\MonoGame.Framework.MacOS.3.4.0.459\lib\net45\OpenTK.dll</HintPath>
     </Reference>
+    <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Game1.cs" />
@@ -70,6 +71,10 @@
     <Compile Include="Scenes.cs" />
     <Compile Include="SceneEntityProcessor\TextEntityProcessor.cs" />
     <Compile Include="SceneEntityProcessor\ImageEntityProcessor.cs" />
+    <Compile Include="Visibility\EndPoint.cs" />
+    <Compile Include="Visibility\Segment.cs" />
+    <Compile Include="Visibility\VisibilityComputer.cs" />
+    <Compile Include="Visibility\PointLight.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Info.plist" />
@@ -112,6 +117,7 @@
     <None Include="..\DefaultContent\effects\Invert.mgfxo">
       <Link>Content\Effects\Invert.mgfxo</Link>
     </None>
+    <None Include="Content\Effects\Light.fx" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bin\**\*.*">
@@ -170,6 +176,9 @@
     <Content Include="..\DefaultContent\effects\transitions\Wind.mgfxo">
       <Link>Content\nez\effects\transitions\Wind.mgfxo</Link>
     </Content>
+    <Content Include="Content\Effects\Light.mgfxo" />
+    <Content Include="Content\Images\Block.png" />
+    <Content Include="Content\Images\BlockGlow.png" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
@@ -188,6 +197,7 @@
     <Folder Include="Content\nez\textures\" />
     <Folder Include="Content\Effects\" />
     <Folder Include="Content\nez\effects\transitions\" />
+    <Folder Include="Visibility\" />
   </ItemGroup>
   <ItemGroup>
     <InterfaceDefinition Include="MainMenu.xib" />

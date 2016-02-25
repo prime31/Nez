@@ -147,6 +147,9 @@ namespace MacTester
 			if( IMGUI.button( "Scene 3 Circle" ) )
 				Core.startSceneTransition( new TransformTransition( () => Scenes.sceneThree( false ) ) );
 
+			if( IMGUI.button( "Lights" ) )
+				Core.startSceneTransition( new TransformTransition( () => Scenes.lightsScene() ) );
+
 			if( IMGUI.button( "Scene 4" ) )
 				Core.startSceneTransition( new FadeTransition( () => Scenes.sceneFour() ) );
 

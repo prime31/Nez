@@ -31,7 +31,7 @@ namespace Nez.Systems
 
 		/// <summary>
 		/// loads an ogl effect directly from file and handles disposing of it when the ContentManager is disposed. Name should the the path
-		/// relative to the Content folder.
+		/// relative to the Content folder or including the Content folder.
 		/// </summary>
 		/// <returns>The effect.</returns>
 		/// <param name="name">Name.</param>
@@ -59,8 +59,8 @@ namespace Nez.Systems
 
 		/// <summary>
 		/// loads an ogl effect directly from file and handles disposing of it when the ContentManager is disposed. Name should the the path
-		/// relative to the Content folder. Effects must have a constructor that accepts GraphicsDevice and byte[].
-		/// Note that this will return a unique instance if you attempt to load the same Effect twice to avoid Effect duplication.
+		/// relative to the Content folder or including the Content folder. Effects must have a constructor that accepts GraphicsDevice and
+		/// byte[]. Note that this will return a unique instance if you attempt to load the same Effect twice to avoid Effect duplication.
 		/// </summary>
 		/// <returns>The effect.</returns>
 		/// <param name="name">Name.</param>
@@ -78,8 +78,8 @@ namespace Nez.Systems
 
 		/// <summary>
 		/// loads an ogl effect directly from its bytes and handles disposing of it when the ContentManager is disposed. Name should the the path
-		/// relative to the Content folder. Effects must have a constructor that accepts GraphicsDevice and byte[].
-		/// Note that this will return a unique instance if you attempt to load the same Effect twice to avoid Effect duplication.
+		/// relative to the Content folder or including the Content folder. Effects must have a constructor that accepts GraphicsDevice and
+		/// byte[]. Note that this will return a unique instance if you attempt to load the same Effect twice to avoid Effect duplication.
 		/// </summary>
 		/// <returns>The effect.</returns>
 		/// <param name="name">Name.</param>
@@ -98,8 +98,8 @@ namespace Nez.Systems
 
 		/// <summary>
 		/// loads and manages any Effect that is built-in to MonoGame such as BasicEffect, AlphaTestEffect, etc. Note that this will
-		/// return a unique instance if you attempt to load the same Effect twice to avoid Effect duplication. If you intend to use
-		/// the same Effect in multiple locations keep a reference to it and use it directly.
+		/// return a unique instance if you attempt to load the same Effect twice. If you intend to use the same Effect in multiple locations
+		/// keep a reference to it and use it directly.
 		/// </summary>
 		/// <returns>The mono game effect.</returns>
 		/// <typeparam name="T">The 1st type parameter.</typeparam>
