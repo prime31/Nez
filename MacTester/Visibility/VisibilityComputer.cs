@@ -9,6 +9,8 @@ namespace Nez.Shadows
 {
 	/// <summary>
 	/// Class which computes a mesh that represents which regions are visibile from the origin point given a set of occluders
+	/// 
+	/// based on: http://www.redblobgames.com/articles/visibility/ and http://roy-t.nl/index.php/2014/02/27/2d-lighting-and-shadows-preview/
 	/// </summary>
 	public class VisibilityComputer
 	{

@@ -10,8 +10,7 @@ namespace MacTester
 {
 	public class SimplePostProcessor : PostProcessor<Effect>
 	{
-		public Rectangle sourceRect;
-
+		Rectangle _sourceRect;
 		RenderTarget2D _renderTarget;
 
 
@@ -19,15 +18,7 @@ namespace MacTester
 		{
 			_renderTarget = renderTarget;
 			this.effect = effect;
-			sourceRect = new Rectangle( 250, 10, _renderTarget.Bounds.Width * 2, _renderTarget.Bounds.Height * 2 );
-		}
-
-
-		public SimplePostProcessor( RenderTarget2D renderTarget, Effect effect, Rectangle sourceRect ) : base( 0 )
-		{
-			_renderTarget = renderTarget;
-			this.effect = effect;
-			this.sourceRect = sourceRect;
+			_sourceRect = new Rectangle( 250, 10, _renderTarget.Bounds.Width * 2, _renderTarget.Bounds.Height * 2 );
 		}
 
 
@@ -35,9 +26,9 @@ namespace MacTester
 		{
 			Core.graphicsDevice.SetRenderTarget( destination );
 
-			Graphics.instance.spriteBatch.Begin( effect: effect );
+			Graphics.instance.spriteBatch.Begin( effect: effect, blendState: blendState );
 			Graphics.instance.spriteBatch.Draw( source, Vector2.Zero, Color.White );
-			Graphics.instance.spriteBatch.Draw( _renderTarget, null, sourceRect );
+			Graphics.instance.spriteBatch.Draw( _renderTarget, null, _sourceRect );
 			Graphics.instance.spriteBatch.End();
 		}
 	}

@@ -261,7 +261,6 @@ namespace MacTester
 		{
 			// render layer for all lights and any emissive Sprites
 			var LIGHT_RENDER_LAYER = 5;
-			var AMBIENT_LIGHT_INTENSITY = 1f; // any value other than 1 needs a blend shader or BlendMode.Additive for the PostProcessor
 			var scene = Scene.create( Color.MonoGameOrange );
 
 			// create a Renderer that renders all but the light layer
@@ -269,17 +268,19 @@ namespace MacTester
 
 			// create a Renderer that renders only the light layer into a render target
 			var lightRenderer = scene.addRenderer( new RenderLayerRenderer( -1, LIGHT_RENDER_LAYER ) );
-			lightRenderer.renderTargetClearColor = Color.Black * AMBIENT_LIGHT_INTENSITY;
+			lightRenderer.renderTargetClearColor = new Color( 10, 10, 10, 255 );
 			lightRenderer.renderTarget = RenderTarget.create();
 
 			// add a PostProcessor that renders the light render target
-			scene.addPostProcessor( new SimplePostProcessor( lightRenderer.renderTarget, null, new Rectangle( 0, 0, Screen.width, Screen.height ) ) );
+			scene.addPostProcessor( new SpriteLightPostProcessor( 0, lightRenderer.renderTarget ) );
 
+			var lightTexture = scene.contentManager.Load<Texture2D>( "Images/sprite-light" );
+			var moonTexture = scene.contentManager.Load<Texture2D>( "Images/moon" );
 			var blockTexture = scene.contentManager.Load<Texture2D>( "Images/Block" );
 			var blockGlowTexture = scene.contentManager.Load<Texture2D>( "Images/BlockGlow" );
 
 			// create some moons
-			Action<Vector2,string,bool> moonMaker = ( Vector2 pos, string name, bool isTrigger ) =>
+			Action<Vector2,string,bool> boxMaker = ( Vector2 pos, string name, bool isTrigger ) =>
 			{
 				var ent = scene.createEntity( name );
 				ent.transform.position = pos;
@@ -298,21 +299,36 @@ namespace MacTester
 				}
 			};
 
-			moonMaker( new Vector2( 0, 100 ), "moon1", false );
-			moonMaker( new Vector2( 150, 100 ), "moon11", false );
-			moonMaker( new Vector2( 300, 100 ), "moon12", false );
-			moonMaker( new Vector2( 450, 100 ), "moon13", false );
-			moonMaker( new Vector2( 600, 100 ), "moon14", false );
+			boxMaker( new Vector2( 0, 100 ), "moon1", false );
+			boxMaker( new Vector2( 150, 100 ), "moon11", false );
+			boxMaker( new Vector2( 300, 100 ), "moon12", false );
+			boxMaker( new Vector2( 450, 100 ), "moon13", false );
+			boxMaker( new Vector2( 600, 100 ), "moon14", false );
 
-			moonMaker( new Vector2( 50, 500 ), "moon3", true );
-			moonMaker( new Vector2( 500, 250 ), "moon4", false );
+			boxMaker( new Vector2( 50, 500 ), "moon3", true );
+			boxMaker( new Vector2( 500, 250 ), "moon4", false );
+
+			var moonEnt = scene.createEntity( "moon" );
+			moonEnt.addComponent( new Sprite( moonTexture ) );
+			moonEnt.transform.position = new Vector2( 100, 0 );
+
+			moonEnt = scene.createEntity( "moon2" );
+			moonEnt.addComponent( new Sprite( moonTexture ) );
+			moonEnt.transform.position = new Vector2( -500, 0 );
 
 
-			// add an animation to "moon4" to test moving collisions
+			var lightEnt = scene.createEntity( "sprite-light" );
+			lightEnt.addComponent( new Sprite( lightTexture ) );
+			lightEnt.transform.position = new Vector2( -700, 0 );
+			lightEnt.transform.scale = new Vector2( 4 );
+			lightEnt.getComponent<Sprite>().renderLayer = LIGHT_RENDER_LAYER;
+
+
+			// add an animation to "moon4"
 			scene.findEntity( "moon4" ).addComponent( new SimpleMovingPlatform( 250, 400 ) );
 
 			// create a player moon
-			var entity = scene.createEntity( "player-moon" );
+			var entity = scene.createEntity( "player-block" );
 			entity.transform.position = new Vector2( 220, 220 );
 			var sprite = new Sprite( blockTexture );
 			sprite.renderLayer = LIGHT_RENDER_LAYER;
@@ -328,8 +344,8 @@ namespace MacTester
 
 
 			// setup some lights and animate the colors
-			var pointLight = new Nez.Shadows.PointLight( 300, Color.Orange );
-			pointLight.renderLayer = 5;
+			var pointLight = new Nez.Shadows.PointLight( 600, Color.Red );
+			pointLight.renderLayer = LIGHT_RENDER_LAYER;
 			pointLight.power = 1f;
 			var light = scene.createEntity( "light" );
 			light.transform.position = new Vector2( 650f, 300f );
@@ -346,8 +362,8 @@ namespace MacTester
 				.start();
 
 
-			pointLight = new Nez.Shadows.PointLight( 500, Color.Blue );
-			pointLight.renderLayer = 5;
+			pointLight = new Nez.Shadows.PointLight( 500, Color.Yellow );
+			pointLight.renderLayer = LIGHT_RENDER_LAYER;
 			light = scene.createEntity( "light-two" );
 			light.transform.position = new Vector2( -50f );
 			light.addComponent( pointLight );
@@ -358,8 +374,8 @@ namespace MacTester
 				.start();
 
 
-			pointLight = new Nez.Shadows.PointLight( 500, Color.Green );
-			pointLight.renderLayer = 5;
+			pointLight = new Nez.Shadows.PointLight( 500, Color.AliceBlue );
+			pointLight.renderLayer = LIGHT_RENDER_LAYER;
 			light = scene.createEntity( "light-three" );
 			light.transform.position = new Vector2( 100f );
 			light.addComponent( pointLight );

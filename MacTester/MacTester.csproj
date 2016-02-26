@@ -75,6 +75,7 @@
     <Compile Include="Visibility\Segment.cs" />
     <Compile Include="Visibility\VisibilityComputer.cs" />
     <Compile Include="Visibility\PointLight.cs" />
+    <Compile Include="Visibility\SpriteLightPostProcessor.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Info.plist" />
@@ -118,6 +119,7 @@
       <Link>Content\Effects\Invert.mgfxo</Link>
     </None>
     <None Include="Content\Effects\Light.fx" />
+    <None Include="Content\Effects\SpriteLightMultiply.fx" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bin\**\*.*">
@@ -179,6 +181,8 @@
     <Content Include="Content\Effects\Light.mgfxo" />
     <Content Include="Content\Images\Block.png" />
     <Content Include="Content\Images\BlockGlow.png" />
+    <Content Include="Content\Effects\SpriteLightMultiply.mgfxo" />
+    <Content Include="Content\Images\sprite-light.png" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
