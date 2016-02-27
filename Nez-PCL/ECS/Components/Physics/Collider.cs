@@ -64,7 +64,7 @@ namespace Nez
 		}
 
 		/// <summary>
-		/// represents the absolute position to this Collider. It is entity.position + localPosition - origin.
+		/// represents the absolute position to this Collider. It is entity.transform.position + localPosition - origin.
 		/// </summary>
 		/// <value>The absolute position.</value>
 		public Vector2 absolutePosition

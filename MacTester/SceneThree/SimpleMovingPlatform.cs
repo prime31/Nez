@@ -15,7 +15,7 @@ namespace MacTester
 		float _speedFactor;
 
 
-		public SimpleMovingPlatform (float minY, float maxY, float speedFactor = 2f)
+		public SimpleMovingPlatform( float minY, float maxY, float speedFactor = 2f )
 		{
 			_minY = minY;
 			_maxY = maxY;
@@ -23,39 +23,134 @@ namespace MacTester
 		}
 
 
-		public override void onAddedToEntity ()
+		public override void onAddedToEntity()
 		{
 			_minX = entity.transform.position.X;
 			_maxX = _minX + 100;
 		}
 
 
-		public void update ()
+		public void update()
 		{
-			var x = Mathf.pingPong (Time.time, 1f);
-			var xToTheSpeedFactor = Mathf.pow (x, _speedFactor);
-			var alpha = 1f - xToTheSpeedFactor / xToTheSpeedFactor + Mathf.pow (1 - x, _speedFactor);
+			var x = Mathf.pingPong( Time.time, 1f );
+			var xToTheSpeedFactor = Mathf.pow( x, _speedFactor );
+			var alpha = 1f - xToTheSpeedFactor / xToTheSpeedFactor + Mathf.pow( 1 - x, _speedFactor );
 
-			var deltaY = Nez.Tweens.Lerps.unclampedLerp (_minY, _maxY, alpha) - entity.transform.position.Y;
-			var deltaX = Nez.Tweens.Lerps.unclampedLerp (_minX, _maxX, alpha) - entity.transform.position.X;
+			var deltaY = Nez.Tweens.Lerps.unclampedLerp( _minY, _maxY, alpha ) - entity.transform.position.Y;
+			var deltaX = Nez.Tweens.Lerps.unclampedLerp( _minX, _maxX, alpha ) - entity.transform.position.X;
 
 			// TODO: probably query Physics to fetch the actors that we will intersect instead of blindly grabbing them all
 			//var allActors = getAllActors();
-			//var ridingActors = getAllRidingActors();
+			var ridingActors = getAllRidingActors();
 
-			// TODO: recreate moveSolid
-			entity.move (new Vector2 (deltaX, deltaY));
+			moveSolid( new Vector2( deltaX, deltaY ), ridingActors );
 		}
 
 
-		List<Entity> getAllActors ()
+		void moveSolid( Vector2 motion, List<Entity> ridingActors )
 		{
-			var list = new List<Entity> ();
+			if( motion.X == 0 && motion.Y == 0 )
+				return;
+			
+			entity.colliders.unregisterAllCollidersWithPhysicsSystem();
 
-			var entities = entity.scene.findEntitiesByTag (0);
-			for (var i = 0; i < entities.Count; i++) {
-				if (entities [i].colliders.mainCollider != entity.colliders.mainCollider && entities [i].colliders.mainCollider != null)
-					list.Add (entities [i]);
+			moveSolidX( motion.X, ridingActors );
+			moveSolidY( motion.Y, ridingActors );
+
+			entity.colliders.registerAllCollidersWithPhysicsSystem();
+		}
+
+
+		void moveSolidX( float amount, List<Entity> ridingActors )
+		{
+			var moved = false;
+			entity.transform.position += new Vector2( amount, 0 );
+
+			var colliders = new HashSet<Collider>( Physics.boxcastBroadphase( entity.colliders.mainCollider.bounds ) );
+			foreach( var collider in colliders )
+			{
+				float pushAmount;
+				if( amount > 0 )
+					pushAmount = entity.colliders.mainCollider.bounds.right - collider.bounds.left;
+				else
+					pushAmount = entity.colliders.mainCollider.bounds.left - collider.bounds.right;
+
+				var mover = collider.entity.getComponent<Mover>();
+				if( mover != null )
+				{
+					moved = true;
+					CollisionResult collisionResult;
+					if( mover.move( new Vector2( pushAmount, 0 ), out collisionResult ) )
+					{
+						collider.entity.destroy();
+						return;
+					}
+				}
+				else
+				{
+					collider.entity.move( new Vector2( pushAmount, 0 ) );
+				}
+			}
+
+
+			foreach( var entity in ridingActors )
+			{
+				if( !moved )
+					entity.move( new Vector2( amount, 0 ) );
+			}
+		}
+
+
+		void moveSolidY( float amount, List<Entity> ridingActors )
+		{
+			var moved = false;
+			entity.transform.position += new Vector2( 0, amount );
+
+			var colliders = new HashSet<Collider>( Physics.boxcastBroadphase( entity.colliders.mainCollider.bounds ) );
+			foreach( var collider in colliders )
+			{
+				float pushAmount;
+				if( amount > 0 )
+					pushAmount = entity.colliders.mainCollider.bounds.bottom - collider.bounds.top;
+				else
+					pushAmount = entity.colliders.mainCollider.bounds.top - collider.bounds.bottom;
+
+				var mover = collider.entity.getComponent<Mover>();
+				if( mover != null )
+				{
+					moved = true;
+					CollisionResult collisionResult;
+					if( mover.move( new Vector2( 0, pushAmount ), out collisionResult ) )
+					{
+						collider.entity.destroy();
+						return;
+					}
+				}
+				else
+				{
+					collider.entity.move( new Vector2( 0, pushAmount ) );
+				}
+			}
+
+
+			foreach( var entity in ridingActors )
+			{
+				Debug.log( "riding y" );
+				if( !moved )
+					entity.move( new Vector2( 0, amount ) );
+			}
+		}
+
+
+		List<Entity> getAllActors()
+		{
+			var list = new List<Entity>();
+
+			var entities = entity.scene.findEntitiesByTag( 0 );
+			for( var i = 0; i < entities.Count; i++ )
+			{
+				if( entities[i].colliders.mainCollider != entity.colliders.mainCollider && entities[i].colliders.mainCollider != null )
+					list.Add( entities[i] );
 			}
 
 			return list;
@@ -64,17 +159,19 @@ namespace MacTester
 
 		// this should probably be a method (isRidingCollider( Collider )) on the Entity so that it can decide if it is riding the collider or not.
 		// The entity could then be riding for other situations such as ledge hanging on a moving platform.
-		List<Entity> getAllRidingActors ()
+		List<Entity> getAllRidingActors()
 		{
-			var list = new List<Entity> ();
+			var list = new List<Entity>();
 
-			var entities = entity.scene.findEntitiesByTag (0);
-			for (var i = 0; i < entities.Count; i++) {
-				if (entities [i].colliders.mainCollider == entity.colliders.mainCollider || entities [i].colliders.mainCollider == null)
+			var entities = entity.scene.findEntitiesByTag( 0 );
+			for( var i = 0; i < entities.Count; i++ )
+			{
+				if( entities[i].colliders.mainCollider == entity.colliders.mainCollider || entities[i].colliders.mainCollider == null )
 					continue;
 
-				//if( entities[i].colliders.mainCollider.collidesWithAtPosition( entity.colliders.mainCollider, entities[i].position - new Vector2( 0f, -1f ) ) )
-				//	list.Add( entities[i] );
+				CollisionResult collisionResult;
+				if( entities[i].colliders.mainCollider.collidesWith( entity.colliders.mainCollider, new Vector2( 0f, 1f ), out collisionResult ) )
+					list.Add( entities[i] );
 			}
 
 			return list;

@@ -123,6 +123,9 @@ namespace Nez
 			}
 			else
 			{
+				if( _targetEntity == null || _targetEntity.colliders.mainCollider == null )
+					return;
+				
 				var targetBounds = _targetEntity.colliders.mainCollider.bounds;
 				if( !_worldSpaceDeadzone.contains( targetBounds ) )
 				{
