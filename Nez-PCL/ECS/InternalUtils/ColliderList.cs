@@ -57,6 +57,21 @@ namespace Nez
 
 
 		/// <summary>
+		/// removes all Colliders from the Entity
+		/// </summary>
+		public void removeAllColliders()
+		{
+			for( var i = 0; i < _colliders.Count; i++ )
+			{
+				_colliders[i].unregisterColliderWithPhysicsSystem();
+				_colliders[i].entity = null;
+			}
+
+			_colliders.Clear();
+		}
+
+
+		/// <summary>
 		/// removes the Collider and unregisters it from the Pysics system
 		/// </summary>
 		/// <param name="index">Index.</param>

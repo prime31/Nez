@@ -785,24 +785,13 @@ namespace Nez
 		}
 
 
-
-		/// <summary>
-		/// removes an Entity from the Scene's entities list
-		/// </summary>
-		/// <param name="entity">The Entity to remove</param>
-		public void removeEntity( Entity entity )
-		{
-			entities.remove( entity );
-		}
-
-
 		/// <summary>
 		/// removes all entities from the scene
 		/// </summary>
-		public void removeAllEntities()
+		public void destroyAllEntities()
 		{
 			for( var i = 0; i < entities.Count; i++ )
-				removeEntity( entities[i] );
+				entities[i].destroy();
 		}
 
 

@@ -36,7 +36,6 @@ namespace Nez
 		List<int> _unsortedTags;
 
 
-
 		public EntityList( Scene scene )
 		{
 			this.scene = scene;
