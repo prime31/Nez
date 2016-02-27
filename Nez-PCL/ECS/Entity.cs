@@ -141,8 +141,8 @@ namespace Nez
 		internal void onTransformChanged()
 		{
 			// notify our children of our changed position
-			components.onEntityPositionChanged();
-			colliders.onEntityPositionChanged();
+			components.onEntityTransformChanged();
+			colliders.onEntityTransformChanged();
 		}
 
 

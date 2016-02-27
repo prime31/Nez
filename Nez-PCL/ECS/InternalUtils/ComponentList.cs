@@ -238,12 +238,12 @@ namespace Nez
 		}
 
 
-		internal void onEntityPositionChanged()
+		internal void onEntityTransformChanged()
 		{
 			for( var i = 0; i < _components.Count; i++ )
 			{
 				if( _components[i].enabled )
-					_components[i].onEntityPositionChanged();
+					_components[i].onEntityTransformChanged();
 			}
 		}
 

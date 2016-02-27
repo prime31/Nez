@@ -206,7 +206,7 @@ namespace Nez
 
 		#region Component overrides and RenderableComponent
 
-		public override void onEntityPositionChanged()
+		public override void onEntityTransformChanged()
 		{
 			_areBoundsDirty = true;
 		}

@@ -83,10 +83,10 @@ namespace Nez
 		}
 
 
-		internal void onEntityPositionChanged()
+		internal void onEntityTransformChanged()
 		{
 			for( var i = 0; i < _colliders.Count; i++ )
-				_colliders[i].onEntityPositionChanged();
+				_colliders[i].onEntityTransformChanged();
 		}
 
 

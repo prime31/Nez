@@ -69,7 +69,7 @@ namespace Nez
 
 		#region Component overrides
 
-		public override void onEntityPositionChanged()
+		public override void onEntityTransformChanged()
 		{
 			removeColliders();
 			addColliders();

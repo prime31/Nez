@@ -773,7 +773,6 @@ namespace Nez
 		}
 
 
-
 		/// <summary>
 		/// adds an Entity to the Scene's Entities list
 		/// </summary>

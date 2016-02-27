@@ -166,7 +166,7 @@ namespace Nez
 		}
 
 
-		public virtual void onEntityPositionChanged()
+		public virtual void onEntityTransformChanged()
 		{
 			_areBoundsDirty = true;
 		}
