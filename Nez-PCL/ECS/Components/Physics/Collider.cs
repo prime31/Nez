@@ -109,6 +109,8 @@ namespace Nez
 		{}
 
 
+		#region Collider Lifecycle
+
 		/// <summary>
 		/// Called when the parent entity is added to a scene
 		/// </summary>
@@ -192,6 +194,10 @@ namespace Nez
 				Physics.removeCollider( this, true );
 		}
 
+		#endregion
+
+
+		#region collision checks
 
 		/// <summary>
 		/// checks to see if this shape overlaps any other Colliders in the Physics system
@@ -241,10 +247,22 @@ namespace Nez
 			return didCollide;
 		}
 
+		#endregion
+
 
 		public virtual void debugRender( Graphics graphics )
 		{
 			graphics.spriteBatch.drawHollowRect( bounds, Color.IndianRed );
+		}
+
+
+		public virtual Collider clone()
+		{
+			var collider = MemberwiseClone() as Collider;
+			collider.shape = shape.clone();
+			collider.entity = null;
+
+			return collider;
 		}
 
 	}

@@ -67,6 +67,8 @@ namespace Nez
 		{}
 
 
+		#region Component Lifecycle
+
 		/// <summary>
 		/// Called when this component is added to a scene after all pending component changes are committed. At this point, the entity field
 		/// is set and the entity.scene is also set.
@@ -107,6 +109,21 @@ namespace Nez
 		/// </summary>
 		public virtual void onDisabled()
 		{}
+
+		#endregion
+
+
+		/// <summary>
+		/// creates a clone of this Component. The default implementation is just a MemberwiseClone so if a Component has object references
+		/// that need to be cloned this method should be overriden.
+		/// </summary>
+		public virtual Component clone()
+		{
+			var component = MemberwiseClone() as Component;
+			component.entity = null;
+
+			return component;
+		}
 
 
 		public int CompareTo( Component other )

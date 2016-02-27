@@ -769,6 +769,10 @@ namespace Nez
 		{
 			Assert.isFalse( entities.contains( entity ), "You are attempting to add the same entity to a scene twice: {0}", entity );
 			entities.add( entity );
+
+			for( var i = 0; i < entity.transform.childCount; i++ )
+				addEntity( entity.transform.getChild( i ).entity );
+
 			return entity;
 		}
 

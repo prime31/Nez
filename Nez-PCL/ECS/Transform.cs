@@ -46,6 +46,13 @@ namespace Nez
 
 
 		/// <summary>
+		/// total children of this Transform
+		/// </summary>
+		/// <value>The child count.</value>
+		public int childCount { get { return _children.Count; } }
+
+
+		/// <summary>
 		/// position of the transform in world space
 		/// </summary>
 		/// <value>The position.</value>
@@ -306,6 +313,17 @@ namespace Nez
 		}
 
 
+		/// <summary>
+		/// returns the Transform child at index
+		/// </summary>
+		/// <returns>The child.</returns>
+		/// <param name="index">Index.</param>
+		public Transform getChild( int index )
+		{
+			return _children[index];
+		}
+	
+
 		void updateTransform()
 		{
 			if( hierarchyDirty != DirtyType.Clean )
@@ -385,6 +403,26 @@ namespace Nez
 			}
 		}
 
+
+		public void copyFrom( Transform transform )
+		{
+			_position = transform.position;
+			_localPosition = transform._localPosition;
+			_rotation = transform._rotation;
+			_localRotation = transform._localRotation;
+			_scale = transform._scale;
+			_localScale = transform._localScale;
+
+			Debug.log( "copy from: {0}, current: {1}", transform.position, _position );
+
+//			hierarchyDirty |= DirtyType.PositionDirty;
+//			hierarchyDirty |= DirtyType.RotationDirty;
+//			hierarchyDirty |= DirtyType.ScaleDirty;
+			setDirty( DirtyType.PositionDirty );
+			setDirty( DirtyType.RotationDirty );
+			setDirty( DirtyType.ScaleDirty );
+		}
+	
 
 		public override string ToString()
 		{

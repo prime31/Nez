@@ -18,7 +18,7 @@ namespace Nez
 		/// <summary>
 		/// entity name. useful for doing scene-wide searches for an entity
 		/// </summary>
-		public readonly string name;
+		public string name;
 
 		/// <summary>
 		/// encapsulates the Entity's position/rotation/scale and allows setting up a hieararchy
@@ -153,7 +153,16 @@ namespace Nez
 		{
 			scene.entities.remove( this );
 
-			// detach all our components when we are destroyed
+			// destroy any children we have
+			for( var i = 0; i < transform.childCount; i++ )
+			{
+				var child = transform.getChild( i );
+				child.entity.destroy();
+			}
+
+			transform.parent = null;
+
+			// remove all our components when we are destroyed
 			components.removeAllComponents();
 			colliders.removeAllColliders();
 		}
@@ -165,6 +174,58 @@ namespace Nez
 		public void detachFromScene()
 		{
 			scene.entities.remove( this );
+		}
+
+
+		/// <summary>
+		/// creates a deep clone of this Entity. Subclasses can override this method to copy any custom fields. When overriding,
+		/// the copyFrom method should be called which will clone all Components, Colliders and Transform children for you.
+		/// </summary>
+		public Entity clone( Vector2 position = default( Vector2 ) )
+		{
+			var entity = Activator.CreateInstance( GetType() ) as Entity;
+			entity.name = name + "(clone)";
+			entity.copyFrom( this );
+			entity.transform.position = position;
+
+			return entity;
+		}
+
+
+		/// <summary>
+		/// copies the properties, components and colliders of Entity to this instance
+		/// </summary>
+		/// <param name="entity">Entity.</param>
+		protected void copyFrom( Entity entity )
+		{
+			// Entity fields
+			tag = entity.tag;
+			updateInterval = entity.updateInterval;
+			updateOrder = entity.updateOrder;
+			enabled = entity.enabled;
+
+			transform.scale = entity.transform.scale;
+			transform.rotation = entity.transform.rotation;
+
+			// clone Components
+			for( var i = 0; i < entity.components.Count; i++ )
+				addComponent( entity.components[i].clone() );
+
+			// clone Colliders
+			for( var i = 0; i < entity.colliders.Count; i++ )
+				colliders.add( entity.colliders[i].clone() );
+
+			// clone any children of the Entity.transform
+			for( var i = 0; i < entity.transform.childCount; i++ )
+			{
+				var child = entity.transform.getChild( i ).entity;
+
+				var childClone = child.clone();
+				childClone.transform.copyFrom( child.transform );
+				childClone.transform.parent = transform;
+
+				Debug.log( "child: {0}\nLog: clone: {1}", child.transform, childClone.transform );
+			}
 		}
 
 

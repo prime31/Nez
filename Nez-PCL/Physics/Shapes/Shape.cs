@@ -22,6 +22,12 @@ namespace Nez.PhysicsShapes
 
 		public abstract bool collidesWithLine( Vector2 start, Vector2 end, out RaycastHit hit );
 
+
+		public virtual Shape clone()
+		{
+			return MemberwiseClone() as Shape;
+		}
+
 	}
 }
 
