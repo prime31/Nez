@@ -356,10 +356,10 @@ namespace Nez
 		/// <param name="verticalAmount">Value to adjust the top and bottom edges.</param>
 		public void inflate( float horizontalAmount, float verticalAmount )
 		{
-			x -= (int)horizontalAmount;
-			y -= (int)verticalAmount;
-			width += (int)horizontalAmount * 2;
-			height += (int)verticalAmount * 2;
+			x -= horizontalAmount;
+			y -= verticalAmount;
+			width += horizontalAmount * 2;
+			height += verticalAmount * 2;
 		}
 
 
@@ -657,8 +657,8 @@ namespace Nez
 		/// <param name="offsetY">The y coordinate to add to this <see cref="Rectangle"/>.</param>
 		public void offset( float offsetX, float offsetY )
 		{
-			x += (int)offsetX;
-			y += (int)offsetY;
+			x += offsetX;
+			y += offsetY;
 		}
 
 

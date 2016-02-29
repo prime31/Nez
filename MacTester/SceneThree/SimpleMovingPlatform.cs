@@ -75,9 +75,19 @@ namespace MacTester
 				else
 					pushAmount = entity.colliders.mainCollider.bounds.left - collider.bounds.right;
 
+				// grinding/shearing will have odd results so watch out for them and correct
+				if( Math.Abs( pushAmount ) > Math.Abs( amount ) )
+					pushAmount = amount;
+
 				var mover = collider.entity.getComponent<Mover>();
 				if( mover != null )
 				{
+					if( Math.Abs( pushAmount ) > 100 )
+					{
+						Debugger.Break();
+						entity.colliders.mainCollider.bounds.intersects( collider.bounds );
+					}
+					
 					moved = true;
 					CollisionResult collisionResult;
 					if( mover.move( new Vector2( pushAmount, 0 ), out collisionResult ) )
@@ -85,6 +95,8 @@ namespace MacTester
 						collider.entity.destroy();
 						return;
 					}
+
+					Nez.Debug.log( "Mover pushed x: {0}, entity: {1}, hit entity: {2}", pushAmount, entity.name, collisionResult );
 				}
 				else
 				{
@@ -115,6 +127,10 @@ namespace MacTester
 				else
 					pushAmount = entity.colliders.mainCollider.bounds.top - collider.bounds.bottom;
 
+				// grinding/shearing will have odd results so watch out for them and correct
+				if( Math.Abs( pushAmount ) > Math.Abs( amount ) )
+					pushAmount = amount;
+				
 				var mover = collider.entity.getComponent<Mover>();
 				if( mover != null )
 				{
@@ -135,7 +151,6 @@ namespace MacTester
 
 			foreach( var entity in ridingActors )
 			{
-				Debug.log( "riding y" );
 				if( !moved )
 					entity.move( new Vector2( 0, amount ) );
 			}
