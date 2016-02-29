@@ -82,12 +82,6 @@ namespace MacTester
 				var mover = collider.entity.getComponent<Mover>();
 				if( mover != null )
 				{
-					if( Math.Abs( pushAmount ) > 100 )
-					{
-						Debugger.Break();
-						entity.colliders.mainCollider.bounds.intersects( collider.bounds );
-					}
-					
 					moved = true;
 					CollisionResult collisionResult;
 					if( mover.move( new Vector2( pushAmount, 0 ), out collisionResult ) )
