@@ -17,6 +17,9 @@ namespace MacTester
 	/// </summary>
 	public class Game1 : Core
 	{
+		bool _renderIMGUI = true;
+
+
 		protected override void Initialize()
 		{
 			base.Initialize();
@@ -32,6 +35,9 @@ namespace MacTester
 		protected override void Update( GameTime gameTime )
 		{
 			base.Update( gameTime );
+
+			if( Input.isKeyPressed( Keys.I ) )
+				_renderIMGUI = !_renderIMGUI;
 
 			if( Input.rightMouseButtonPressed )
 			{
@@ -119,6 +125,9 @@ namespace MacTester
 		{
 			base.Draw( gameTime );
 
+			if( !_renderIMGUI )
+				return;
+			
 			IMGUI.beginWindow( GraphicsDevice.Viewport.Width - 150, 0, 150, Screen.height );
 
 			debugRenderEnabled = IMGUI.toggle( "Debug Render", debugRenderEnabled );

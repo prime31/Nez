@@ -89,8 +89,6 @@ namespace MacTester
 						collider.entity.destroy();
 						return;
 					}
-
-					Nez.Debug.log( "Mover pushed x: {0}, entity: {1}, hit entity: {2}", pushAmount, entity.name, collisionResult );
 				}
 				else
 				{
