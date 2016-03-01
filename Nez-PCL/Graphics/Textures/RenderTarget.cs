@@ -15,7 +15,7 @@ namespace Nez.Textures
 			public uint lastFrameUsed;
 
 
-			public TrackedRenderTarget2D( int width, int height, SurfaceFormat preferredFormat, DepthFormat preferredDepthFormat ) : base( Core.graphicsDevice, width, height, false, preferredFormat, preferredDepthFormat )
+			public TrackedRenderTarget2D( int width, int height, SurfaceFormat preferredFormat, DepthFormat preferredDepthFormat ) : base( Core.graphicsDevice, width, height, false, preferredFormat, preferredDepthFormat, 0, RenderTargetUsage.PreserveContents )
 			{}
 		}
 
@@ -142,7 +142,7 @@ namespace Nez.Textures
 		/// <param name="preferredDepthFormat">Preferred depth format.</param>
 		public static RenderTarget2D create( int width, int height, SurfaceFormat preferredFormat, DepthFormat preferredDepthFormat )
 		{
-			return new RenderTarget2D( Core.graphicsDevice, width, height, false, preferredFormat, preferredDepthFormat );
+			return new RenderTarget2D( Core.graphicsDevice, width, height, false, preferredFormat, preferredDepthFormat, 0, RenderTargetUsage.PreserveContents );
 		}
 
 		#endregion

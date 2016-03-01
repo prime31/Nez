@@ -167,7 +167,10 @@ namespace Nez
 		protected override void Update( GameTime gameTime )
 		{
 			if( pauseOnFocusLost && !IsActive )
+			{
+				SuppressDraw();
 				return;
+			}
 
 			#if DEBUG
 			TimeRuler.instance.startFrame();
