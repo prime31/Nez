@@ -26,7 +26,7 @@ namespace Nez
 			get { return tiledmap.height; }
 		}
 
-		TiledTileLayer _collisionLayer;
+		public TiledTileLayer collisionLayer;
 		Collider[] _colliders;
 
 
@@ -35,9 +35,7 @@ namespace Nez
 			this.tiledmap = tiledmap;
 
 			if( collisionLayerName != null )
-				_collisionLayer = tiledmap.getLayer<TiledTileLayer>( collisionLayerName );
-
-			Debug.warnIf( tiledmap.renderOrder != TiledRenderOrder.RightDown, "The TiledMap render order is not RightDown. Bad things might happen because of that." );
+				collisionLayer = tiledmap.getLayer<TiledTileLayer>( collisionLayerName );
 		}
 
 
@@ -128,13 +126,13 @@ namespace Nez
 
 		#region Colliders
 
-		void addColliders()
+		public void addColliders()
 		{
-			if( _collisionLayer == null )
+			if( collisionLayer == null )
 				return;
 
 			// fetch the collision layer and its rects for collision
-			var collisionRects = _collisionLayer.getCollisionRectangles();
+			var collisionRects = collisionLayer.getCollisionRectangles();
 			var renderPosition = entity.transform.position + _localPosition;
 
 			// create colliders for the rects we received
@@ -150,7 +148,7 @@ namespace Nez
 		}
 
 
-		void removeColliders()
+		public void removeColliders()
 		{
 			if( _colliders == null )
 				return;

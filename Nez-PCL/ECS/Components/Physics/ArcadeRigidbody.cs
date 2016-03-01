@@ -11,11 +11,6 @@ namespace Nez
 	public class ArcadeRigidbody : Component, IUpdatable
 	{
 		/// <summary>
-		/// layer mask of all the layers this rigidbody should collide with. defauls to all layers.
-		/// </summary>
-		public int collidesWithLayers = Physics.allLayers;
-
-		/// <summary>
 		/// mass of this rigidbody. A 0 mass will make this an immovable object.
 		/// </summary>
 		/// <value>The mass.</value>
@@ -118,7 +113,7 @@ namespace Nez
 
 			CollisionResult collisionResult;
 			// fetch anything that we might collide with at our new position
-			var neighbors = Physics.boxcastBroadphase( entity.colliders.mainCollider.bounds, collidesWithLayers );
+			var neighbors = Physics.boxcastBroadphase( entity.colliders.mainCollider.bounds, entity.colliders.mainCollider.collidesWithLayers );
 			foreach( var neighbor in neighbors )
 			{
 				if( entity.colliders.mainCollider.collidesWith( neighbor, out collisionResult ) )

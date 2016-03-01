@@ -52,6 +52,17 @@ namespace Nez
 		}
 
 
+		/// <summary>
+		/// inverts the normal and MTV
+		/// </summary>
+		public void invertResult()
+		{
+			var inverse = new Vector2( -1f );
+			minimumTranslationVector *= inverse;
+			normal *= inverse;
+		}
+
+
 		public override string ToString()
 		{
 			return string.Format( "[ShapeCollisionResult] normal: {0}, minimumTranslationVector: {1}", normal, minimumTranslationVector );

@@ -93,9 +93,8 @@ namespace Nez.PhysicsShapes
 
 			if( other is Circle && ShapeCollisions.circleToPolygon( other as Circle, this, out result ) )
 			{
-				// TODO: flip the result since the colliding objects are reversed
-				throw new NotImplementedException( "ShapeCollisionResult will probably be wrong due to the result needing to be flipped. TODO" );
-				//return true;
+				result.invertResult();
+				return true;
 			}
 
 			throw new NotImplementedException( string.Format( "overlaps of Polygon to {0} are not supported", other ) );
