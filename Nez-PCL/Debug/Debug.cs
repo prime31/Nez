@@ -185,6 +185,21 @@ namespace Nez
 
 		#endregion
 
+
+		[Conditional( "DEBUG" )]
+		public static void breakIf( bool condition )
+		{
+			if( condition )
+				System.Diagnostics.Debugger.Break();
+		}
+
+
+		[Conditional( "DEBUG" )]
+		public static void break_()
+		{
+			System.Diagnostics.Debugger.Break();
+		}
+
 	}
 }
 
