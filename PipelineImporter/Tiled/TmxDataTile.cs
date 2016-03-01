@@ -15,6 +15,7 @@ namespace Nez.TiledMaps
 		}
 
 
+		[XmlAttribute( AttributeName = "gid" )]
 		public uint gid;
 		public bool flippedHorizontally;
 		public bool flippedVertically;
