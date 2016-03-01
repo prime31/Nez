@@ -4,6 +4,9 @@ using System.Collections.Generic;
 
 namespace Nez.Tiled
 {
+	/// <summary>
+	/// these exist only for tiles with properties or animations
+	/// </summary>
 	public class TiledTilesetTile
 	{
 		public readonly int id;

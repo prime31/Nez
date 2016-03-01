@@ -91,6 +91,11 @@ namespace Nez.Tiled
 		}
 
 
+		/// <summary>
+		/// gets the TiledLayer by name
+		/// </summary>
+		/// <returns>The layer.</returns>
+		/// <param name="name">Name.</param>
 		public TiledLayer getLayer( string name )
 		{
 			for( var i = 0; i < layers.Count; i++ )
@@ -102,12 +107,23 @@ namespace Nez.Tiled
 		}
 
 
+		/// <summary>
+		/// gets the TiledLayer by name
+		/// </summary>
+		/// <returns>The layer.</returns>
+		/// <param name="name">Name.</param>
+		/// <typeparam name="T">The 1st type parameter.</typeparam>
 		public T getLayer<T>( string name ) where T : TiledLayer
 		{
 			return (T)getLayer( name );
 		}
 
 
+		/// <summary>
+		/// gets the TiledObjectGroup with the given name
+		/// </summary>
+		/// <returns>The object group.</returns>
+		/// <param name="name">Name.</param>
 		public TiledObjectGroup getObjectGroup( string name )
 		{
 			for( var i = 0; i < objectGroups.Count; i++ )

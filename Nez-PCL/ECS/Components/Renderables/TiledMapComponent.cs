@@ -49,8 +49,8 @@ namespace Nez
 		public TiledTile getTileAtWorldPosition( Vector2 worldPos )
 		{
 			// offset the passed in world position to compensate for the entity position
-			worldPos -= localPosition;
-			return _collisionLayer.getTileAtWorldPosition( worldPos );
+			worldPos -= entity.transform.position + _localPosition;
+			return collisionLayer.getTileAtWorldPosition( worldPos );
 		}
 
 
@@ -62,8 +62,8 @@ namespace Nez
 		public List<TiledTile> getTilesIntersectingBounds( Rectangle bounds )
 		{
 			// offset the passed in world position to compensate for the entity position
-			bounds.Location -= localPosition.ToPoint();
-			return _collisionLayer.getTilesIntersectingBounds( bounds );
+			bounds.Location -= ( entity.transform.position + _localPosition ).ToPoint();
+			return collisionLayer.getTilesIntersectingBounds( bounds );
 		}
 
 
@@ -177,18 +177,18 @@ namespace Nez
 				switch( obj.tiledObjectType )
 				{
 					case TiledObject.TiledObjectType.Ellipse:
-						graphics.spriteBatch.drawCircle( new Vector2( renderPosition.X + obj.x + obj.width * 0.5f, renderPosition.Y + obj.y + obj.height * 0.5f ), obj.width * 0.5f, Color.Black );
+						graphics.spriteBatch.drawCircle( new Vector2( renderPosition.X + obj.x + obj.width * 0.5f, renderPosition.Y + obj.y + obj.height * 0.5f ), obj.width * 0.5f, group.color );
 						break;
 					case TiledObject.TiledObjectType.Image:
 						throw new NotImplementedException( "Image layers are not yet supported" );
 					case TiledObject.TiledObjectType.Polygon:
-						graphics.spriteBatch.drawPoints( renderPosition, obj.polyPoints, Color.Black, true );
+						graphics.spriteBatch.drawPoints( renderPosition, obj.polyPoints, group.color, true );
 						break;
 					case TiledObject.TiledObjectType.Polyline:
-						graphics.spriteBatch.drawPoints( renderPosition, obj.polyPoints, Color.Black, false );
+						graphics.spriteBatch.drawPoints( renderPosition, obj.polyPoints, group.color, false );
 						break;
 					case TiledObject.TiledObjectType.None:
-						graphics.spriteBatch.drawHollowRect( renderPosition.X + obj.x, renderPosition.Y + obj.y, obj.width, obj.height, Color.Wheat );
+						graphics.spriteBatch.drawHollowRect( renderPosition.X + obj.x, renderPosition.Y + obj.y, obj.width, obj.height, group.color );
 						break;
 					default:
 						throw new ArgumentOutOfRangeException();

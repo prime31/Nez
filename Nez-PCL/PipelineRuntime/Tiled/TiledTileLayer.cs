@@ -13,6 +13,8 @@ namespace Nez.Tiled
 		public int width;
 		public int height;
 		public readonly TiledTile[] tiles;
+		public Color color = Color.White;
+
 
 		public int tileWidth
 		{
@@ -132,7 +134,7 @@ namespace Nez.Tiled
 						}
 					}
 
-					spriteBatch.Draw( tileRegion.texture2D, new Vector2( tx, ty ), tileRegion.sourceRect, Color.White, rotation, Vector2.Zero, 1, spriteEffects, layerDepth );
+					spriteBatch.Draw( tileRegion.texture2D, new Vector2( tx, ty ), tileRegion.sourceRect, color, rotation, Vector2.Zero, 1, spriteEffects, layerDepth );
 				}
 			}
 		}
@@ -160,7 +162,7 @@ namespace Nez.Tiled
 			var tx = tile.x * tilemap.tileWidth;
 			var ty = tile.y * ( tilemap.tileHeight - 1 );
 
-			spriteBatch.Draw( region.texture2D, new Rectangle( tx, ty, region.sourceRect.Width, region.sourceRect.Height ), region.sourceRect, Color.White );
+			spriteBatch.Draw( region.texture2D, new Rectangle( tx, ty, region.sourceRect.Width, region.sourceRect.Height ), region.sourceRect, color );
 		}
 
 
@@ -176,7 +178,7 @@ namespace Nez.Tiled
                 //Compensate Bug?
 			         - ( tilemap.tileWidth + tilemap.tileHeight );
 
-			spriteBatch.Draw( region.texture2D, new Rectangle( tx, ty, region.sourceRect.Width, region.sourceRect.Height ), region.sourceRect, Color.White );
+			spriteBatch.Draw( region.texture2D, new Rectangle( tx, ty, region.sourceRect.Width, region.sourceRect.Height ), region.sourceRect, color );
 		}
 
 

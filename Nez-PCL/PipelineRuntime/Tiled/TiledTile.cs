@@ -12,6 +12,26 @@ namespace Nez.Tiled
 		/// <value>The texture region.</value>
 		public Subtexture textureRegion { get { return tileset.getTileTextureRegion( id ); } }
 
+		/// <summary>
+		/// gets the TiledtilesetTile for this TiledTile if it exists. TiledtilesetTile only exist for animated tiles and tiles with attached
+		/// properties.
+		/// </summary>
+		/// <value>The tileset tile.</value>
+		public TiledTilesetTile tilesetTile
+		{
+			get
+			{
+				for( var i = 0; i < tileset.tiles.Count; i++ )
+				{
+					// id is a gid so we need to subtract the tileset.firstId to get a local id
+					if( tileset.tiles[i].id == id - tileset.firstId )
+						return tileset.tiles[i];
+				}
+
+				return null;
+			}
+		}
+
 		public int id;
 		public int x;
 		public int y;

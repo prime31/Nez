@@ -42,6 +42,11 @@ namespace Nez.Tiled
 		}
 			
 
+		/// <summary>
+		/// gets the Subtexture for the tile with id
+		/// </summary>
+		/// <returns>The tile texture region.</returns>
+		/// <param name="id">Identifier.</param>
 		public Subtexture getTileTextureRegion( int id )
 		{
 			return _regions[id];
