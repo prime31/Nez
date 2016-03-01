@@ -108,6 +108,17 @@ namespace Nez.Tiled
 		}
 
 
+		public TiledObjectGroup getObjectGroup( string name )
+		{
+			for( var i = 0; i < objectGroups.Count; i++ )
+			{
+				if( objectGroups[i].name == name )
+					return objectGroups[i];
+			}
+			return null;
+		}
+
+
 		/// <summary>
 		/// handles calling update on all animated tiles
 		/// </summary>
@@ -166,7 +177,8 @@ namespace Nez.Tiled
 
 
 		/// <summary>
-		/// returns the TiledTilesetTile for the given id or null if none exists. TiledTilesetTiles exist only for animated tiles.
+		/// returns the TiledTilesetTile for the given id or null if none exists. TiledTilesetTiles exist only for animated tiles and tiles with
+		/// properties set.
 		/// </summary>
 		/// <returns>The tileset tile.</returns>
 		/// <param name="id">Identifier.</param>

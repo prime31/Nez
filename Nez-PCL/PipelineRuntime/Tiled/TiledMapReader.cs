@@ -122,7 +122,7 @@ namespace Nez.Tiled
 				if( tileId != 0 )
 				{
 					var tilesetTile = tileMap.getTilesetTile( tileId );
-					if( tilesetTile != null )
+					if( tilesetTile != null && tilesetTile.animationFrames != null )
 					{
 						tiles[i] = new TiledAnimatedTile( tileId, tilesetTile )
 						{

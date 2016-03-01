@@ -186,6 +186,12 @@ namespace Nez.Tiled
 		}
 
 
+		public void removeTile( int x, int y )
+		{
+			tiles[x + y * width] = null;
+		}
+
+
 		/// <summary>
 		/// returns the bounds Rectangle of the passed in tile
 		/// </summary>
