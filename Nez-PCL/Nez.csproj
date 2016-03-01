@@ -31,14 +31,6 @@
   </PropertyGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <ItemGroup>
-    <Reference Include="MonoGame.Framework">
-      <HintPath>..\packages\MonoGame.Framework.Portable.3.2.99.1-Beta\lib\portable-net40+sl50+win+wpa81+wp80+MonoAndroid10+MonoTouch10\MonoGame.Framework.dll</HintPath>
-    </Reference>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
     <Folder Include="Debug\" />
     <Folder Include="ECS\" />
     <Folder Include="Graphics\" />
@@ -258,5 +250,10 @@
     <Compile Include="PipelineRuntime\Tiled\TiledAnimatedTile.cs" />
     <Compile Include="ECS\Components\Renderables\Mesh.cs" />
     <Compile Include="Graphics\RenderState.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="MonoGame.Framework">
+      <HintPath>MonoGamePCL\MonoGame.Framework.dll</HintPath>
+    </Reference>
   </ItemGroup>
 </Project>
