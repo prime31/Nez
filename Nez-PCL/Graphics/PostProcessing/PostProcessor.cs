@@ -76,7 +76,7 @@ namespace Nez
 		/// <summary>
 		/// this is the meat method here. The source passed in contains the full scene with any previous PostProcessors
 		/// rendering. Render it into the destination RenderTarget. The drawFullScreenQuad methods are there to make
-		/// the process even easier
+		/// the process even easier. The default implementation renders source into destination with effect.
 		/// </summary>
 		/// <param name="source">Source.</param>
 		/// <param name="destination">Destination.</param>

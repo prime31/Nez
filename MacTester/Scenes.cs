@@ -272,7 +272,7 @@ namespace MacTester
 			lightRenderer.renderTarget = RenderTarget.create();
 
 			// add a PostProcessor that renders the light render target
-			scene.addPostProcessor( new SpriteLightPostProcessor( 0, lightRenderer.renderTarget ) );
+			scene.addPostProcessor( new SpriteLightPostProcessor( 0, lightRenderer ) );
 
 			var lightTexture = scene.contentManager.Load<Texture2D>( "Images/sprite-light" );
 			var moonTexture = scene.contentManager.Load<Texture2D>( "Images/moon" );
