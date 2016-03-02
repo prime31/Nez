@@ -118,11 +118,10 @@ namespace Nez.Console
 		}
 
 
-		//[Command( "pooler", "Logs the pooled Entity counts" )]
-		static private void pooler()
+		[Command( "timescale", "Sets the timescale. Defaults to 1" )]
+		static private void tilescale( float timeScale = 1 )
 		{
-			//Engine.Pooler.Log();
-			Debug.log( "Pooler" );
+			Time.timeScale = timeScale;
 		}
 
 
