@@ -15,6 +15,11 @@ namespace Nez.Shadows
 	/// </summary>
 	public class PointLight : RenderableComponent
 	{
+		/// <summary>
+		/// layer mask of all the layers this light should interact with. defaults to all layers.
+		/// </summary>
+		public int collidesWithLayers = Physics.allLayers;
+
 		public override float width { get { return radius * 2f; } }
 		public override float height { get { return radius * 2f; } }
 
@@ -46,25 +51,16 @@ namespace Nez.Shadows
 		Effect _lightEffect;
 
 
-		public PointLight( float radius ) : this( null, radius )
+		public PointLight( float radius ) : this( radius, Color.White )
 		{}
 
 
-		public PointLight( float radius, Color color ) : this( null, radius, color )
+		public PointLight( float radius, Color color ) : this( radius, color, 1.0f )
 		{}
 
 
-		public PointLight( Effect lightEffect, float radius ) : this( lightEffect, radius, Color.White, 1.0f )
-		{}
-
-
-		public PointLight( Effect lightEffect, float radius, Color color ) : this( lightEffect, radius, color, 1.0f )
-		{}
-
-
-		public PointLight( Effect lightEffect, float radius, Color color, float power )
+		public PointLight( float radius, Color color, float power )
 		{
-			this._lightEffect = lightEffect;
 			this.radius = radius;
 			this.power = power;
 			this.color = color;
@@ -82,15 +78,12 @@ namespace Nez.Shadows
 			if( power > 0 && isVisibleFromCamera( camera ) )
 			{
 				var size = radius * 2f;
-				var obstacles = Physics.boxcastBroadphase( new RectangleF( entity.transform.position.X - radius, entity.transform.position.Y - radius, size, size ) );
+				var obstacles = Physics.boxcastBroadphase( new RectangleF( entity.transform.position.X - radius, entity.transform.position.Y - radius, size, size ), collidesWithLayers );
 
 				// Compute the visibility mesh
 				var visibility = new VisibilityComputer( entity.transform.position, radius );
 				foreach( var v in obstacles )
-				{
-					var width = v.bounds.width;
-					visibility.addSquareOccluder( v.entity.transform.position, width, v.entity.transform.rotation );
-				}                
+					visibility.addSquareOccluder( v.bounds );
 
 				// Generate a triangle list from the encounter points
 				VertexPositionTexture[] vertices;

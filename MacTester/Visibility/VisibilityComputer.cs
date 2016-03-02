@@ -75,6 +75,22 @@ namespace Nez.Shadows
 
 
 		/// <summary>
+		/// Add a square shaped occluder
+		/// </summary>        
+		public void addSquareOccluder( RectangleF bounds )
+		{
+			var tr = new Vector2( bounds.right, bounds.top );
+			var bl = new Vector2( bounds.left, bounds.bottom );
+			var br = new Vector2( bounds.right, bounds.bottom );
+
+			addSegment( bounds.location, tr );
+			addSegment( tr, br );
+			addSegment( br, bl );
+			addSegment( bl, bounds.location );
+		}
+
+
+		/// <summary>
 		/// Add a line shaped occluder
 		/// </summary>        
 		public void addLineOccluder( Vector2 p1, Vector2 p2 )
