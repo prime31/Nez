@@ -37,8 +37,8 @@ namespace Nez.TiledMaps
 			{
 				TiledMapProcessor.logger.LogMessage( "Expecting texture asset: {0}\n", tileset.image.source );
 				writer.Write( removeExtension( tileset.image.source ) );
-				writer.Write( tileset.firstGid );                
-                writer.Write( tileset.tileWidth );
+				writer.Write( tileset.firstGid );
+				writer.Write( tileset.tileWidth );
 				writer.Write( tileset.tileHeight );
 				writer.Write( tileset.spacing );
 				writer.Write( tileset.margin );
