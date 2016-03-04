@@ -44,7 +44,7 @@ namespace Nez.TiledMaps
                         using (var file = new FileStream(filePath, FileMode.Open))
                         {                            
                             map.tilesets[i] = (TmxTileset)xmlSerializer.Deserialize(file);
-                            map.tilesets[i].FixImagePath(Path.GetDirectoryName(filePath));
+                            map.tilesets[i].FixImagePath( Path.GetDirectoryName( filePath ) );
                         }                            
 					}
                     else

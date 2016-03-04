@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Xml.Serialization;
+using System.IO;
 
 
 namespace Nez.TiledMaps
@@ -59,6 +60,11 @@ namespace Nez.TiledMaps
 		public override string ToString()
 		{
 			return string.Format( "{0}: {1}", name, image );
+		}
+
+		public void FixImagePath(string rootDirectory)
+		{
+			this.image.source = Path.Combine(rootDirectory, this.image.source);
 		}
 	}
 }
