@@ -40,18 +40,13 @@ namespace Nez.TiledMaps
 						var directoryName = Path.GetDirectoryName( filename );
 						var tilesetLocation = tileset.source.Replace( '/', Path.DirectorySeparatorChar );
 						var filePath = Path.Combine( directoryName, tilesetLocation );
-<<<<<<< HEAD
+						
                         context.Logger.LogMessage("Reading External Tileset File: " + Path.GetFullPath(filePath));
                         using (var file = new FileStream(filePath, FileMode.Open))
                         {                            
                             map.tilesets[i] = (TmxTileset)xmlSerializer.Deserialize(file);
                             map.tilesets[i].FixImagePath( Path.GetDirectoryName( filePath ) );
                         }                            
-=======
-
-						using( var file = new FileStream( filePath, FileMode.Open ) )
-							map.tilesets[i] = (TmxTileset)xmlSerializer.Deserialize( file );
->>>>>>> parent of 0de5a30... Fix Image Path for external tilesets as this path will be stored relative to the tileset location.
 					}
 				}
 
