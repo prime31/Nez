@@ -41,12 +41,12 @@ namespace Nez.TiledMaps
 						var tilesetLocation = tileset.source.Replace( '/', Path.DirectorySeparatorChar );
 						var filePath = Path.Combine( directoryName, tilesetLocation );
 						
-                        context.Logger.LogMessage("Reading External Tileset File: " + Path.GetFullPath(filePath));
-                        using (var file = new FileStream(filePath, FileMode.Open))
-                        {                            
-                            map.tilesets[i] = (TmxTileset)xmlSerializer.Deserialize(file);
-                            map.tilesets[i].FixImagePath( Path.GetDirectoryName( filePath ) );
-                        }                            
+						context.Logger.LogMessage("Reading External Tileset File: " + Path.GetFullPath(filePath));
+						using (var file = new FileStream(filePath, FileMode.Open))
+						{
+							map.tilesets[i] = (TmxTileset)xmlSerializer.Deserialize(file);
+							map.tilesets[i].FixImagePath( Path.GetDirectoryName( filePath ) );
+						}
 					}
 				}
 
