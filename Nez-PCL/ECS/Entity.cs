@@ -281,11 +281,11 @@ namespace Nez
 		/// <returns>Scene.</returns>
 		/// <param name="component">Component.</param>
 		/// <typeparam name="T">The 1st type parameter.</typeparam>
-		public Entity addComponent<T>( T component ) where T : Component
+		public T addComponent<T>( T component ) where T : Component
 		{
 			component.entity = this;
 			components.add( component );
-			return this;
+			return component;
 		}
 
 
@@ -294,12 +294,12 @@ namespace Nez
 		/// </summary>
 		/// <returns>Scene.</returns>
 		/// <typeparam name="T">The 1st type parameter.</typeparam>
-		public Entity addComponent<T>() where T : Component, new()
+		public Component addComponent<T>() where T : Component, new()
 		{
 			var component = new T();
 			component.entity = this;
 			components.add( component );
-			return this;
+			return component;
 		}
 
 

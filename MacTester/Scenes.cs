@@ -188,9 +188,9 @@ namespace MacTester
 			var sprite = new Sprite<int>( 1, anotherAtlas.getSpriteAnimation( "hardLanding" ) );
 			sprite.addAnimation( 0, spriteAnimation );
 			sprite.play( 1 );
-			entity.addComponent( sprite )
-				.addComponent( new SimpleMoonMover() )
-				.addComponent( new SpriteTrail( sprite ) );
+			entity.addComponent( sprite );
+			entity.addComponent( new SimpleMoonMover() );
+			entity.addComponent( new SpriteTrail( sprite ) );
 			entity.getComponent<SpriteTrail>().enableSpriteTrail();
 
 
@@ -239,9 +239,9 @@ namespace MacTester
 			var entity = scene.createEntity( "player-moon" );
 			entity.transform.position = new Vector2( 220, 220 );
 			var sprite = new Sprite( moonTexture );
-			entity.addComponent( new SpriteOutlineRenderer( sprite ) )
-				.addComponent( sprite )
-				.addComponent( new SimpleMoonMover() );
+			entity.addComponent( new SpriteOutlineRenderer( sprite ) );
+			entity.addComponent( sprite );
+			entity.addComponent( new SimpleMoonMover() );
 
 			if( useBoxColliders )
 				entity.colliders.add( new BoxCollider() );
@@ -250,8 +250,8 @@ namespace MacTester
 
 			// add a follow camera
 			var camFollow = scene.createEntity( "camera-follow" );
-			camFollow.addComponent( new FollowCamera( entity ) )
-				.addComponent( new CameraShake() );
+			camFollow.addComponent( new FollowCamera( entity ) );
+			camFollow.addComponent( new CameraShake() );
 
 			return scene;
 		}
@@ -332,15 +332,15 @@ namespace MacTester
 			entity.transform.position = new Vector2( 220, 220 );
 			var sprite = new Sprite( blockTexture );
 			sprite.renderLayer = LIGHT_RENDER_LAYER;
-			entity.addComponent( sprite )
-				.addComponent( new SimpleMoonMover() );
+			entity.addComponent( sprite );
+			entity.addComponent( new SimpleMoonMover() );
 			entity.colliders.add( new BoxCollider() );
 
 
 			// add a follow camera
 			var camFollow = scene.createEntity( "camera-follow" );
-			camFollow.addComponent( new FollowCamera( entity ) )
-				.addComponent( new CameraShake() );
+			camFollow.addComponent( new FollowCamera( entity ) );
+			camFollow.addComponent( new CameraShake() );
 
 
 			// setup some lights and animate the colors
@@ -620,9 +620,9 @@ namespace MacTester
 
 			var entity = createEntity( Utils.randomString( 3 ) );
 			entity.transform.position = position;
-			entity.addComponent( new Sprite( texture ) )
-				.addComponent( rigidbody )
-				.colliders.add( new CircleCollider() );
+			entity.addComponent( new Sprite( texture ) );
+			entity.addComponent( rigidbody );
+			entity.colliders.add( new CircleCollider() );
 
 			return rigidbody;
 		}
@@ -702,9 +702,9 @@ namespace MacTester
 
 			var playerEntity = createEntity( "player", new Vector2( Screen.width / 2, Screen.height / 2 ) );
 			playerEntity.transform.scale *= 0.5f;
-			playerEntity.addComponent( new SimpleMoonMover() )
-				.addComponent<GridModifier>()
-				.addComponent( new Sprite( moonTex ) );
+			playerEntity.addComponent( new SimpleMoonMover() );
+			playerEntity.addComponent<GridModifier>();
+			playerEntity.addComponent( new Sprite( moonTex ) );
 
 
 			addPostProcessor( new VignettePostProcessor( 1 ) );

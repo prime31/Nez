@@ -64,6 +64,24 @@ namespace Nez
 		protected float _rotation;
 
 		/// <summary>
+		/// raw zoom value. This is the exact value used for the scale matrix. Default is 1.
+		/// </summary>
+		/// <value>The raw zoom.</value>
+		public float rawZoom
+		{
+			get { return _zoom; }
+			set
+			{
+				if( value != _zoom )
+				{
+					_zoom = value;
+					_areBoundsDirty = true;
+				}
+			}
+		}
+		float _zoom;
+
+		/// <summary>
 		/// the zoom value should be between -1 and 1. This value is then translated to be from minimumZoom to maximumZoom. This lets you set
 		/// appropriate minimum/maximum values then use a more intuitive -1 to 1 mapping to change the zoom.
 		/// </summary>
@@ -92,7 +110,6 @@ namespace Nez
 				_areMatrixesDirty = true;
 			}
 		}
-		float _zoom;
 
 		/// <summary>
 		/// minimum non-scaled value (0 - float.Max) that the camera zoom can be. Defaults to 0.3
