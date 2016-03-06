@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Text;
+using System.Collections.Generic;
 
 
 namespace Nez.Console
@@ -144,7 +145,7 @@ namespace Nez.Console
 				}
 			});
 
-			DebugConsole.instance.log( "Physics system collider count: " + Physics.getAllColliders().Count );
+			DebugConsole.instance.log( "Physics system collider count: " + ((HashSet<Collider>)Physics.getAllColliders()).Count );
 		}
 
 
