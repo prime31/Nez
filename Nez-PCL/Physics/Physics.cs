@@ -80,7 +80,7 @@ namespace Nez
 		/// gets all the Colliders managed by the SpatialHash
 		/// </summary>
 		/// <returns>The all colliders.</returns>
-		public static HashSet<Collider> getAllColliders()
+		public static IEnumerable<Collider> getAllColliders()
 		{
 			return _spatialHash.getAllObjects();
 		}
