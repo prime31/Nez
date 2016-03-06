@@ -36,7 +36,6 @@ namespace Nez
 		/// </summary>
 		public static bool raycastsStartInColliders = false;
 
-
 		/// <summary>
 		/// we keep this around to avoid allocating it every time a raycast happens
 		/// </summary>

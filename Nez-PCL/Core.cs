@@ -185,7 +185,7 @@ namespace Nez
 			_tweenManager.update();
 			_timerManager.update();
 
-			if( exitOnEscapeKeypress && Input.isKeyDown( Keys.Escape ) )
+			if( exitOnEscapeKeypress && Input.isKeyDown( Keys.Escape ) || Input.gamePads[0].isButtonReleased( Buttons.Back ) )
 			{
 				Exit();
 				return;
