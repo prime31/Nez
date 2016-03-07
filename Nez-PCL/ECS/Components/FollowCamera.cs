@@ -34,6 +34,14 @@ namespace Nez
 		/// offset from the screen center that the camera will focus on
 		/// </summary>
 		public Vector2 focusOffset;
+        /// <summary>
+        ///  If true, the camera position will not got out of the map rectangle (0,0, mapwidth, mapheight)
+        /// </summary>
+        public bool mapLock;
+        /// <summary>
+        /// Contains the width and height of the current map.
+        /// </summary>
+        public Vector2 mapSize;
 
 		Entity _targetEntity;
 		Vector2 _desiredPositionDelta;
@@ -82,10 +90,22 @@ namespace Nez
 				updateFollow();
 
 			camera.position = Vector2.Lerp( camera.position, camera.position + _desiredPositionDelta, followLerp );
+
+            if (mapLock)
+                camera.position = clampToMapSize(camera.position);
 		}
 
+        // Clamp the camera so it never leaves the visible area of the map.
+        private Vector2 clampToMapSize(Vector2 position)
+        {
+            var halfScreen = new Vector2(camera.bounds.width, camera.bounds.height) * 0.5f;
+            var cameraMax = new Vector2(mapSize.X - halfScreen.X, mapSize.Y - halfScreen.Y);
 
-		public override void debugRender( Graphics graphics )
+            return Vector2.Clamp(position, halfScreen, cameraMax);
+        }
+
+
+        public override void debugRender( Graphics graphics )
 		{
 			if( _cameraStyle == CameraStyle.LockOn )
 				graphics.spriteBatch.drawHollowRect( _worldSpaceDeadzone.x - 5, _worldSpaceDeadzone.y - 5, _worldSpaceDeadzone.width, _worldSpaceDeadzone.height, Color.DarkRed );
