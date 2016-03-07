@@ -15,6 +15,7 @@ namespace Nez
 
 		public RenderLayerRenderer( int renderOrder, params int[] renderLayers ) : base( renderOrder, null )
 		{
+			Array.Sort( renderLayers );
 			this.renderLayers = renderLayers;
 		}
 
