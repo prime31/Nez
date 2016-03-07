@@ -5,7 +5,7 @@ namespace Nez.Tiled
 {
 	public class TiledAnimatedTile : TiledTile
 	{
-		public TiledTilesetTile tilesetTile;
+		public new TiledTilesetTile tilesetTile;
 
 		float _elapsedTime;
 		int _currentFrame;
