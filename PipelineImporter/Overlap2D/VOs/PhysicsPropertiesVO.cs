@@ -23,6 +23,7 @@ SOFTWARE.
 */
 using System;
 
+
 namespace Nez.Overlap2D.Runtime
 {
 	public class PhysicsPropertiesVO
@@ -31,19 +32,6 @@ namespace Nez.Overlap2D.Runtime
 		public float gravityY;
 		public float sleepVelocity;
 		public bool enabled;
-
-		public PhysicsPropertiesVO() {
-			gravityX = 0;
-			gravityY = 0;
-			sleepVelocity = 0;
-			enabled = false;
-		}
-
-		public PhysicsPropertiesVO(PhysicsPropertiesVO physicsPropertiesVO) {
-			this.gravityX = physicsPropertiesVO.gravityX;
-			this.gravityY = physicsPropertiesVO.gravityY;
-			this.sleepVelocity = physicsPropertiesVO.sleepVelocity;
-			this.enabled = physicsPropertiesVO.enabled;
-		}	}
+	}
 }
 

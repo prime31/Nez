@@ -26,36 +26,27 @@ using System;
 
 namespace Nez.Overlap2D.Runtime
 {
-	public class LayerItemVO
+	public class ResolutionEntryVO
 	{
-		public String layerName = "";
-		public bool isLocked = false;
-		public bool isVisible = false;
+		public String name = "";
 
-		public LayerItemVO()
+		public int width;
+		public int height;
+		public int baseResolution;
+
+
+		public float getMultiplier( ResolutionEntryVO originalResolution )
 		{
-
-		}
-
-		public LayerItemVO( String name )
-		{
-			layerName = name;
-			isVisible = true;
-		}
-
-		public LayerItemVO( LayerItemVO vo )
-		{
-			layerName = vo.layerName;
-			isLocked = vo.isLocked;
-			isVisible = vo.isVisible;
-		}
-
-		public static LayerItemVO createDefault()
-		{
-			LayerItemVO layerItemVO = new LayerItemVO();
-			layerItemVO.layerName = "Default";
-			layerItemVO.isVisible = true;
-			return layerItemVO;
+			float mul;
+			if( baseResolution == 0 )
+			{
+				mul = (float)originalResolution.width / width;
+			}
+			else
+			{
+				mul = (float)originalResolution.height / height;
+			}
+			return mul;
 		}
 
 	}

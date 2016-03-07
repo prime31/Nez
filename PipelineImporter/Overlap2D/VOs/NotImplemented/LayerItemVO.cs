@@ -22,16 +22,15 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 using System;
-using System.Collections;
-using System.Collections.Generic;
 
 
 namespace Nez.Overlap2D.Runtime
 {
-	public class RuntimeProjectVO
+	public class LayerItemVO
 	{
-		public ResolutionEntryVO originalResolution = new ResolutionEntryVO();
-		public List<ResolutionEntryVO> resolutions = new List<ResolutionEntryVO>();	
+		public String layerName = string.Empty;
+		public bool isLocked = false;
+		public bool isVisible = false;
 	}
 }
 
