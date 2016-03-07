@@ -18,20 +18,6 @@ namespace Nez.Overlap2D
 			scene.ambientColor = reader.ReadColor();
 			scene.composite = readComposite( reader );
 
-			var maxIndex = int.MinValue;
-			for( var i = 0; i < scene.composite.compositeItems.Count; i++ )
-			{
-				maxIndex = MathHelper.Max( maxIndex, scene.composite.compositeItems[i].zIndex );
-
-				if( scene.composite.compositeItems[i].composite != null )
-				{
-					for( var j = 0; i < scene.composite.compositeItems[i].composite.compositeItems.Count; j++ )
-						maxIndex = MathHelper.Max( maxIndex, scene.composite.compositeItems[i].composite.compositeItems[j].zIndex );
-				}
-			}
-
-			scene.zIndexMax = maxIndex + 1;
-
 			return scene;
 		}
 
@@ -79,6 +65,7 @@ namespace Nez.Overlap2D
 			item.originY = reader.ReadSingle();
 			item.rotation = reader.ReadSingle();
 			item.zIndex = reader.ReadInt32();
+			item.layerDepth = reader.ReadSingle();
 			item.layerName = reader.ReadString();
 			item.tint = reader.ReadColor();
 		}

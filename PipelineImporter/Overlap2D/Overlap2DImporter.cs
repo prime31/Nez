@@ -28,17 +28,27 @@ namespace Nez.Overlap2D
 				projectfile = Path.Combine( Path.GetDirectoryName( filename ), "project.dt" );
 
 				if( !File.Exists( projectfile ) )
-					throw new Exception( "could not find project.dt file. Please make sure it is present." );
+				{
+					projectfile = null;
+					logger.LogMessage( "could not find project.dt file. Using a pixelToWorld of 1. If this is not the correct value make sure your project.dt file is present!" );
+				}
 			}
 
 			// we need the pixelToWorld from the project file so we have to load it up
 			ProjectInfoVO project;
-			using( var reader = new StreamReader( projectfile ) )
+			if( projectfile != null )
 			{
-				logger = context.Logger;
-				context.Logger.LogMessage( "deserializing project file: {0}", projectfile );
+				using( var reader = new StreamReader( projectfile ) )
+				{
+					logger = context.Logger;
+					context.Logger.LogMessage( "deserializing project file: {0}", projectfile );
 
-				project = JsonConvert.DeserializeObject<ProjectInfoVO>( reader.ReadToEnd() );
+					project = JsonConvert.DeserializeObject<ProjectInfoVO>( reader.ReadToEnd() );
+				}
+			}
+			else
+			{
+				project = new ProjectInfoVO();
 			}
 
 			using( var reader = new StreamReader( filename ) )

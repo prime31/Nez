@@ -9,11 +9,10 @@ using Microsoft.Xna.Framework;
 namespace Nez.Overlap2D
 {
 	[ContentTypeWriter]
-	public class Overlap2DWriter : ContentTypeWriter<Overlap2DProcessorResult>
+	public class Overlap2DWriter : ContentTypeWriter<SceneVO>
 	{
-		protected override void Write( ContentWriter writer, Overlap2DProcessorResult result )
+		protected override void Write( ContentWriter writer, SceneVO scene )
 		{
-			var scene = result.scene;
 			Overlap2DImporter.logger.LogMessage( "" );
 			Overlap2DImporter.logger.LogMessage( "--- writing {0}", scene.sceneName );
 
@@ -76,6 +75,7 @@ namespace Nez.Overlap2D
 			writer.Write( -item.originY * scene.pixelToWorld );
 			writer.Write( item.rotation );
 			writer.Write( item.zIndex );
+			writer.Write( item.layerDepth );
 			writer.Write( item.layerName );
 			writer.Write( new Color( item.tint[0], item.tint[1], item.tint[2], item.tint[3] ) );
 
@@ -85,7 +85,6 @@ namespace Nez.Overlap2D
 //			public ShapeVO shape;
 //			public PhysicsBodyDataVO physics;
 		}
-
 
 
 

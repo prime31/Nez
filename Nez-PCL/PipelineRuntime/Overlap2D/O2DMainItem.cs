@@ -19,6 +19,13 @@ namespace Nez.Overlap2D
 		public float originY;
 		public float rotation;
 		public int zIndex;
+
+		/// <summary>
+		/// layerDepth is calculated by the Pipeline processor. It is derrived by getting the max zIndex and converting it to the MonoGame
+		/// 0 - 1 range. If sorting issues arise the CompositeItemVO.calculateLayerDepthForChild method is where to look. The default value
+		/// probably just needs to be increased a bit.
+		/// </summary>
+		public float layerDepth;
 		public String layerName;
 		public Color tint;
 
@@ -43,7 +50,7 @@ namespace Nez.Overlap2D
 		/// </summary>
 		/// <returns>The depth.</returns>
 		/// <param name="zIndexMax">Z index max.</param>
-		public float layerDepth( float zIndexMax )
+		public float calculateLayerDepth( float zIndexMax )
 		{
 			return ( zIndexMax - (float)zIndex ) / zIndexMax;
 		}
