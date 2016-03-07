@@ -34,10 +34,12 @@ namespace Nez
 		/// offset from the screen center that the camera will focus on
 		/// </summary>
 		public Vector2 focusOffset;
+
 		/// <summary>
-		///  If true, the camera position will not got out of the map rectangle (0,0, mapwidth, mapheight)
+		/// If true, the camera position will not got out of the map rectangle (0,0, mapwidth, mapheight)
 		/// </summary>
-		public bool mapLock;
+		public bool mapLockEnabled;
+
 		/// <summary>
 		/// Contains the width and height of the current map.
 		/// </summary>
@@ -91,17 +93,22 @@ namespace Nez
 
 			camera.position = Vector2.Lerp( camera.position, camera.position + _desiredPositionDelta, followLerp );
 
-			if (mapLock)
-				camera.position = clampToMapSize(camera.position);
+			if( mapLockEnabled )
+				camera.position = clampToMapSize( camera.position );
 		}
 
-		// Clamp the camera so it never leaves the visible area of the map.
-		private Vector2 clampToMapSize(Vector2 position)
-		{
-			var halfScreen = new Vector2(camera.bounds.width, camera.bounds.height) * 0.5f;
-			var cameraMax = new Vector2(mapSize.X - halfScreen.X, mapSize.Y - halfScreen.Y);
 
-			return Vector2.Clamp(position, halfScreen, cameraMax);
+		/// <summary>
+		/// Clamps the camera so it never leaves the visible area of the map.
+		/// </summary>
+		/// <returns>The to map size.</returns>
+		/// <param name="position">Position.</param>
+		Vector2 clampToMapSize( Vector2 position )
+		{
+			var halfScreen = new Vector2( camera.bounds.width, camera.bounds.height ) * 0.5f;
+			var cameraMax = new Vector2( mapSize.X - halfScreen.X, mapSize.Y - halfScreen.Y );
+
+			return Vector2.Clamp( position, halfScreen, cameraMax );
 		}
 
 
