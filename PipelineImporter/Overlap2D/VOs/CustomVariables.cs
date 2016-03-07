@@ -34,8 +34,8 @@ namespace Nez.Overlap2D.Runtime
 
 
 		public CustomVariables()
-		{
-		}
+		{}
+
 
 		public void loadFromString( String varString )
 		{

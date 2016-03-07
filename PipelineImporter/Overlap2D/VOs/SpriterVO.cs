@@ -25,29 +25,14 @@ using System;
 
 namespace Nez.Overlap2D.Runtime
 {
-	public class SimpleImageVO : MainItemVO
+	public class SpriterVO : MainItemVO
 	{
-		public String imageName = "";
-		public bool isRepeat = false;
-		public bool isPolygon = false;
+		public int entity;
+		public int animation;
+		public String animationName = "";
 
-		public SimpleImageVO() : base() {
-		}
-
-		public SimpleImageVO(SimpleImageVO vo) : base(vo) {
-			imageName = vo.imageName;
-		}
-
-		/*
-		public void loadFromEntity(Entity entity) {
-			super.loadFromEntity(entity);
-
-			TextureRegionComponent textureRegionComponent = entity.getComponent(TextureRegionComponent.class);
-			imageName = textureRegionComponent.regionName;
-			isRepeat = textureRegionComponent.isRepeat;
-			isPolygon = textureRegionComponent.isPolygon;
-		}*/
-
+		//wtf is this?
+		public float scale = 1f;
 	}
 }
 

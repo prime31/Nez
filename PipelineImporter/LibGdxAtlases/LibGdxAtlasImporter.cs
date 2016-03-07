@@ -13,7 +13,8 @@ namespace Nez.LibGdxAtlases
 	[ContentImporter( ".atlas", DefaultProcessor = "LibGdxAtlasProcessor", DisplayName = "libGDX Atlas Importer" )]
 	public class LibGdxAtlasImporter : ContentImporter<LibGdxAtlasFile>
 	{
-		static String[] tuple = new String[4];
+		static string[] tuple = new string[4];
+
 
 		public override LibGdxAtlasFile Import( string filename, ContentImporterContext context )
 		{
@@ -26,26 +27,24 @@ namespace Nez.LibGdxAtlases
 			{
 				context.Logger.LogMessage( "Deserializing filename: {0}", filename );
 
-				//string content = reader.ReadToEnd();
-
 				LibGdxAtlasPage pageImage = null;
 				List<LibGdxAtlasPage> pages = new List<LibGdxAtlasPage>();
 				List<LibGdxAtlasRegion> regions = new List<LibGdxAtlasRegion>();
 
 				while( true )
 				{
-					string line = reader.ReadLine();
+					var line = reader.ReadLine();
 					if( line == null )
 						break;
 					if( line.Trim().Length == 0 )
 						pageImage = null;
 					else if( pageImage == null )
 					{
-						string imageName = line;
-						context.Logger.LogMessage( "Image name: {0}", imageName );
+						var imageName = line;
+						context.Logger.LogMessage( "---- expecting image name: {0}", imageName );
 
-						float width = 0;
-						float height = 0;
+						var width = 0f;
+						var height = 0f;
 
 						if( readTuple( reader ) == 2 )
 						{
@@ -59,12 +58,12 @@ namespace Nez.LibGdxAtlases
 						string format = tuple[0];
 
 						readTuple( reader );
-						string min = tuple[0];
-						string max = tuple[1];
+						var min = tuple[0];
+						var max = tuple[1];
 
-						String direction = readValue( reader );
-						bool repeatX = false;
-						bool repeatY = false;
+						var direction = readValue( reader );
+						var repeatX = false;
+						var repeatY = false;
 						if( direction.Equals( "x" ) )
 							repeatX = true;
 						else if( direction.Equals( "y" ) )
@@ -134,94 +133,6 @@ namespace Nez.LibGdxAtlases
 					}
 				}
 
-/*
-				string pack = content.Trim();
-				List<string> lines = pack.Split( '\n' ).ToList();
-				string imageName = lines[0];
-
-				// find the "repeat" option and skip unused data
-				int repeatLine = (lines[3].IndexOf("repeat:") > -1) ? 3 : 4;
-				lines.RemoveRange( 0, repeatLine + 1 );
-
-				int numElementsPerImage = 7;
-				int numImages = (int)(lines.Count / numElementsPerImage);
-
-				int curIndex;
-				int imageX;
-				int imageY;
-
-				int imageWidth;
-				int imageHeight;
-
-				List<int> size;
-				string tempString;
-
-				string name;
-				bool rotated;
-				float angle;
-				LibGdxAtlasRect rect;
-				LibGdxAtlasPoint sourceSize;
-				LibGdxAtlasPoint offset;
-
-				for (int i = 0 ; i < numImages ; i++)
-				{
-					curIndex = i * numElementsPerImage;
-
-					name = lines[curIndex++];
-					rotated = (lines[curIndex++].IndexOf("true") >= 0);
-					angle = 0;
-
-					tempString = lines[curIndex++];
-					size = GetDimensions(tempString, context.Logger);
-
-					imageX = size[0];
-					imageY = size[1];
-
-					tempString = lines[curIndex++];
-					size = GetDimensions(tempString, context.Logger);
-
-					imageWidth = size[0];
-					imageHeight = size[1];
-
-					rect = new LibGdxAtlasRect();
-					if (rotated)
-					{
-						rect.x = imageX;
-						rect.y = imageY;
-						rect.w = imageHeight;
-						rect.h = imageWidth;
-						angle = 90;
-					}
-					else
-					{
-						rect.x = imageX;
-						rect.y = imageY;
-						rect.w = imageWidth;
-						rect.h = imageHeight;
-					}
-
-					tempString = lines[curIndex++];
-					GetDimensions(tempString, context.Logger);
-
-					sourceSize = new LibGdxAtlasPoint(size[0], size[1]);
-
-					tempString = lines[curIndex++];
-					GetDimensions(tempString, context.Logger);
-
-					offset = new LibGdxAtlasPoint(size[0], size[1]);
-					LibGdxAtlasRegion region = new LibGdxAtlasRegion();
-					region.sourceRectangle = rect;
-					region.sourceSize = sourceSize;
-					region.offset = offset;
-					region.name = name;
-					region.angle = angle;
-					f.regions.Add( region );
-
-				}
-
-				f.imageName = imageName;
-*/
-
 				f.regions = regions;
 				f.pages = pages;
 				return f;
@@ -230,14 +141,14 @@ namespace Nez.LibGdxAtlases
 		}
 
 
-		private List<int> GetDimensions( string line, ContentBuildLogger logger )
+		private List<int> getDimensions( string line, ContentBuildLogger logger )
 		{
-			int colonPosition = line.IndexOf( ':' );
-			int comaPosition = line.IndexOf( ',' );
+			var colonPosition = line.IndexOf( ':' );
+			var comaPosition = line.IndexOf( ',' );
 
-			List<int> res = new List<int>();
-			string x = line.Substring( colonPosition + 1, comaPosition - colonPosition - 1 ).Trim();
-			string y = line.Substring( comaPosition + 1, line.Length - comaPosition - 1 ).Trim();
+			var res = new List<int>();
+			var x = line.Substring( colonPosition + 1, comaPosition - colonPosition - 1 ).Trim();
+			var y = line.Substring( comaPosition + 1, line.Length - comaPosition - 1 ).Trim();
 			logger.LogMessage( x );
 			logger.LogMessage( y );
 
@@ -251,10 +162,11 @@ namespace Nez.LibGdxAtlases
 		/** Returns the number of tuple values read (1, 2 or 4). */
 		static int readTuple( StreamReader reader )
 		{
-			String line = reader.ReadLine();
-			int colon = line.IndexOf( ':' );
+			var line = reader.ReadLine();
+			var colon = line.IndexOf( ':' );
 			if( colon == -1 )
 				throw new Exception( "Invalid line: " + line );
+			
 			int i = 0, lastMatch = colon + 1;
 			for( i = 0; i < 3; i++ )
 			{
@@ -265,16 +177,18 @@ namespace Nez.LibGdxAtlases
 				lastMatch = comma + 1;
 			}
 			tuple[i] = line.Substring( lastMatch ).Trim();
+
 			return i + 1;
 		}
 
 
-		static String readValue( StreamReader reader )
+		static string readValue( StreamReader reader )
 		{
-			String line = reader.ReadLine();
-			int colon = line.IndexOf( ':' );
+			var line = reader.ReadLine();
+			var colon = line.IndexOf( ':' );
 			if( colon == -1 )
 				throw new Exception( "Invalid line: " + line );
+			
 			return line.Substring( colon + 1 ).Trim();
 		}
 	}

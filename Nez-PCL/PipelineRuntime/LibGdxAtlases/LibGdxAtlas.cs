@@ -12,17 +12,14 @@ namespace Nez.LibGdxAtlases
 		public List<TextureAtlas> atlases = new List<TextureAtlas>();
 
 
-		public LibGdxAtlas()
-		{}
-
-
 		public Subtexture getSubtexture( string name )
 		{
-			foreach( var a in atlases )
+			for( var i = 0; i < atlases.Count; i++ )
 			{
-				if( a.containsSubtexture( name ) )
-					return a.getSubtexture( name );
+				if( atlases[i].containsSubtexture( name ) )
+					return atlases[i].getSubtexture( name );
 			}
+
 			return null;
 		}
 	}

@@ -22,25 +22,17 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 using System;
+using System.Collections;
+using System.Collections.Generic;
 
 namespace Nez.Overlap2D.Runtime
 {
-	public class TextBoxVO : MainItemVO
+	public class SelectBoxVO : MainItemVO
 	{
-		public String defaultText = "";
+		public List<String>	list;
+		public String style;
 		public float width = 0;
 		public float height = 0;
-		public String	style	=  "";
-
-		public TextBoxVO() : base() {
-		}
-
-		public TextBoxVO(TextBoxVO vo) : base(vo) {
-			defaultText = vo.defaultText;
-			width 		= vo.width;
-			height 		= vo.height;
-			style 		= vo.style;
-		}	
 	}
 }
 

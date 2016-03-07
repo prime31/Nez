@@ -11,7 +11,7 @@ namespace Nez.LibGdxAtlases
 	{
 		protected override void Write( ContentWriter writer, LibGdxAtlasProcessorResult result )
 		{
-			var data = result.Data;
+			var data = result.data;
 
 			LibGdxAtlasProcessor.logger.LogMessage( "Writing {0} pages", data.pages.Count );
 			writer.Write( data.pages.Count );
@@ -23,10 +23,9 @@ namespace Nez.LibGdxAtlases
 				foreach( var region in data.regions )
 				{
 					if( region.page == page.textureFile )
-					{
 						count++;
-					}
 				}
+
 				LibGdxAtlasProcessor.logger.LogMessage( "Writing {0} regions", count );
 				writer.Write( count );
 				foreach( var region in data.regions )
@@ -42,8 +41,6 @@ namespace Nez.LibGdxAtlases
 					}
 				}
 			}
-
-
 		}
 
 

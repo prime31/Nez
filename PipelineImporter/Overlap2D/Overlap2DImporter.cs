@@ -14,33 +14,31 @@ namespace Nez.Overlap2D
 	[ContentImporter( ".dt", DefaultProcessor = "Overlap2DProcessor", DisplayName = "Overlap2D Importer" )]
 	public class Overlap2DImporter : ContentImporter<SceneVO>
 	{
+		public static ContentBuildLogger logger;
+
+
 		public override SceneVO Import( string filename, ContentImporterContext context )
 		{
-			if( filename == null )
-				throw new ArgumentNullException( "filename" );
+			var projectFolder = Directory.GetParent( Path.GetDirectoryName( filename ) ).FullName;
+			var projectfile = Path.Combine( projectFolder, "project.dt" );
+
+			// we need the pixelToWorld from the project file so we have to load it up
+			ProjectInfoVO project;
+			using( var reader = new StreamReader( projectfile ) )
+			{
+				logger = context.Logger;
+				context.Logger.LogMessage( "deserializing project file: {0}", projectfile );
+
+				project = JsonConvert.DeserializeObject<ProjectInfoVO>( reader.ReadToEnd() );
+			}
 
 			using( var reader = new StreamReader( filename ) )
 			{
-				context.Logger.LogMessage( "Deserializing filename: {0}", filename );
+				logger = context.Logger;
+				context.Logger.LogMessage( "deserializing scene file: {0}", filename );
 
 				var scene = JsonConvert.DeserializeObject<SceneVO>( reader.ReadToEnd() );
-
-/*				var serializer = new JsonSerializer();
-				JObject all = JObject.Parse(reader.ReadToEnd());
-				var scene = new SceneVO();
-				scene.sceneName = all["sceneName"].ToString();
-				context.Logger.LogMessage( "Deserializing sceneName: {0}", scene.sceneName );
-				scene.composite = new CompositeVO();
-				context.Logger.LogMessage( "Deserializing sImages" );
-				var sImages = all["composite"]["sImages"].Children().ToList();
-				foreach( JToken result in sImages )
-				{
-					context.Logger.LogMessage( "Deserializing sImage: {0}", result.ToString() );
-					SimpleImageVO si = JsonConvert.DeserializeObject<SimpleImageVO>( result.ToString() );
-					scene.composite.sImages.Add( si );
-				}*/
-
-				//var scene = (SceneVO)serializer.Deserialize( reader, typeof( SceneVO ) );
+				scene.pixelToWorld = project.pixelToWorld;
 
 				return scene;
 			}

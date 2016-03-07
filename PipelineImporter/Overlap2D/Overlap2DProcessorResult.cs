@@ -7,5 +7,11 @@ namespace Nez.Overlap2D
 	public class Overlap2DProcessorResult
 	{
 		public SceneVO scene;
+
+
+		public Overlap2DProcessorResult( SceneVO scene )
+		{
+			this.scene = scene;
+		}
 	}
 }

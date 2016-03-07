@@ -5,6 +5,6 @@ namespace Nez.LibGdxAtlases
 {
 	public class LibGdxAtlasProcessorResult
 	{
-		public LibGdxAtlasFile Data;
+		public LibGdxAtlasFile data;
 	}
 }

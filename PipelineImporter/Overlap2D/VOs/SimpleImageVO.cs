@@ -26,22 +26,11 @@ using System;
 
 namespace Nez.Overlap2D.Runtime
 {
-	public class Circle
+	public class SimpleImageVO : MainItemVO
 	{
-		public float x;
-		public float y;
-		public float radius;
-
-		public Circle()
-		{
-		}
-
-		public Circle( float x, float y, float radius )
-		{
-			this.x = x;
-			this.y = y;
-			this.radius = radius;
-		}
-
+		public String imageName;
+		public bool isRepeat = false;
+		public bool isPolygon = false;
 	}
 }
+

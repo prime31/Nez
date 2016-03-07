@@ -152,11 +152,9 @@
     <Compile Include="PipelineRuntime\TextureAtlas\TextureAtlasReader.cs" />
     <Compile Include="PipelineRuntime\LibGdxAtlases\LibGdxAtlas.cs" />
     <Compile Include="PipelineRuntime\LibGdxAtlases\LibGdxAtlasReader.cs" />
-    <Compile Include="PipelineRuntime\Overlap2D\O2DLayer.cs" />
     <Compile Include="PipelineRuntime\Overlap2D\O2DMainItem.cs" />
     <Compile Include="PipelineRuntime\Overlap2D\O2DScene.cs" />
     <Compile Include="PipelineRuntime\Overlap2D\O2DSceneReader.cs" />
-    <Compile Include="PipelineRuntime\Overlap2D\O2DSimpleImage.cs" />
     <Compile Include="Utils\NezContentManager.cs" />
     <Compile Include="ECS\Components\Renderables\Sprites\SpriteAnimationFrame.cs" />
     <Compile Include="ECS\Components\Physics\PolygonCollider.cs" />
@@ -250,6 +248,9 @@
     <Compile Include="PipelineRuntime\Tiled\TiledAnimatedTile.cs" />
     <Compile Include="ECS\Components\Renderables\Mesh.cs" />
     <Compile Include="Graphics\RenderState.cs" />
+    <Compile Include="PipelineRuntime\Overlap2D\O2DComposite.cs" />
+    <Compile Include="PipelineRuntime\Overlap2D\O2DCompositeItem.cs" />
+    <Compile Include="PipelineRuntime\Overlap2D\O2DImage.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="MonoGame.Framework">

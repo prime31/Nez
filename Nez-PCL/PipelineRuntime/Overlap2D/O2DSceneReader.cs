@@ -13,29 +13,60 @@ namespace Nez.Overlap2D
 	{
 		protected override O2DScene Read( ContentReader reader, O2DScene existingInstance )
 		{
-			O2DScene scene = new O2DScene();
+			var scene = new O2DScene();
 			scene.sceneName = reader.ReadString();
+			scene.ambientColor = reader.ReadColor();
+			scene.composite = readComposite( reader );
 
-			var sImagesCount = reader.ReadInt32();
-			for( int i = 0; i < sImagesCount; i++ )
-			{
-				O2DSimpleImage si = new O2DSimpleImage();
-				si.uniqueId = reader.ReadInt32();
-				si.itemIdentifier = reader.ReadString();
-				si.itemName = reader.ReadString();
-				si.x = (float)reader.ReadSingle();
-				si.y = (float)reader.ReadSingle();
-				si.scaleX = (float)reader.ReadSingle();
-				si.scaleY = (float)reader.ReadSingle();
-				si.originX = (float)reader.ReadSingle();
-				si.originY = (float)reader.ReadSingle();
-				si.rotation = (float)reader.ReadSingle();
-				si.zIndex = reader.ReadInt32();
-				si.layerName = reader.ReadString();
-				si.imageName = reader.ReadString();
-				scene.sImages.Add( si );
-			}
 			return scene;
+		}
+
+
+		O2DComposite readComposite( ContentReader reader )
+		{
+			var composite = new O2DComposite();
+
+			var imageCount = reader.ReadInt32();
+			for( var i = 0; i < imageCount; i++ )
+			{
+				var image = new O2DImage();
+				readMainItem( reader, image );
+				image.imageName = reader.ReadString();
+
+				composite.images.Add( image );
+			}
+
+
+			var compositeItemCount = reader.ReadInt32();
+			for( var i = 0; i < compositeItemCount; i++ )
+			{
+				var compositeItem = new O2DCompositeItem();
+				readMainItem( reader, compositeItem );
+				compositeItem.composite = readComposite( reader );
+
+				composite.compositeItems.Add( compositeItem );
+			}
+
+			return composite;
+		}
+
+
+		void readMainItem( ContentReader reader, O2DMainItem item )
+		{
+			item.uniqueId = reader.ReadInt32();
+			item.itemIdentifier = reader.ReadString();
+			item.itemName = reader.ReadString();
+			item.customVars = reader.ReadString();
+			item.x = reader.ReadSingle();
+			item.y = reader.ReadSingle();
+			item.scaleX = reader.ReadSingle();
+			item.scaleY = reader.ReadSingle();
+			item.originX = reader.ReadSingle();
+			item.originY = reader.ReadSingle();
+			item.rotation = reader.ReadSingle();
+			item.zIndex = reader.ReadInt32();
+			item.layerName = reader.ReadString();
+			item.tint = reader.ReadColor();
 		}
 
 	}

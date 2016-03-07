@@ -23,31 +23,46 @@ SOFTWARE.
 */
 using System;
 
+
 namespace Nez.Overlap2D.Runtime
 {
-	public class SpineVO : MainItemVO
+	public class ShapeVO
 	{
-		public String animationName = "";
-		public String currentAnimationName = "";
+		public Vector2[][] polygons;
+		public Circle[] circles;
 
-		public SpineVO() : base() {
 
+		public ShapeVO clone()
+		{
+			ShapeVO newVo = new ShapeVO();
+			Vector2[][] target = new Vector2[polygons.Length][];
+
+			for( int i = 0; i < polygons.Length; i++ )
+			{
+				target[i] = new Vector2[polygons[i].Length];
+				for( int j = 0; j < polygons[i].Length; j++ )
+				{
+					target[i][j] = polygons[i][j];
+				}
+			}
+			newVo.polygons = target;
+
+			return newVo;
 		}
 
-		public SpineVO(SpineVO vo) : base(vo) {
-			animationName = vo.animationName;
-			currentAnimationName = vo.currentAnimationName;
+		public static ShapeVO createRect( float width, float height )
+		{
+			ShapeVO vo = new ShapeVO();
+			vo.polygons = new Vector2[1][];
+
+			vo.polygons[0] = new Vector2[4];
+			vo.polygons[0][0] = new Vector2( 0, 0 );
+			vo.polygons[0][1] = new Vector2( 0, height );
+			vo.polygons[0][2] = new Vector2( width, height );
+			vo.polygons[0][3] = new Vector2( width, 0 );
+
+			return vo;
 		}
-
-		/*
-		@Override
-		public void loadFromEntity(Entity entity) {
-			super.loadFromEntity(entity);
-
-			SpineDataComponent spineDataComponent = entity.getComponent(SpineDataComponent.class);
-			animationName = spineDataComponent.animationName;
-			currentAnimationName = spineDataComponent.currentAnimationName;
-		}*/
 	}
 }
 

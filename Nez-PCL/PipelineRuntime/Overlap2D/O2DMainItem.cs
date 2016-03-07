@@ -1,26 +1,25 @@
 ﻿using System;
+using Microsoft.Xna.Framework;
 
 
 namespace Nez.Overlap2D
 {
 	public class O2DMainItem
 	{
-		public int uniqueId = -1;
-		public String itemIdentifier = "";
-		public String itemName = "";
-		public String[] tags = null;
-		public String customVars = "";
+		public int uniqueId;
+		public string itemIdentifier;
+		public string itemName;
+		public string customVars;
 		public float x;
 		public float y;
-		public float scaleX	=	1f;
-		public float scaleY	=	1f;
-		public float originX	= 0;
-		public float originY	= 0;
+		public float scaleX;
+		public float scaleY;
+		public float originX;
+		public float originY;
 		public float rotation;
-		public int zIndex = 0;
-		public String layerName = "";
-		public float[] tint = { 1, 1, 1, 1 };
-		public String shaderName = "";
+		public int zIndex;
+		public String layerName;
+		public Color tint;
 
 
 		public O2DMainItem()

@@ -22,31 +22,31 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 using System;
+using System.Collections;
+using System.Collections.Generic;
+using Newtonsoft.Json;
+
 
 namespace Nez.Overlap2D.Runtime
 {
-	public class ParticleEffectVO : MainItemVO
+	public class SceneVO
 	{
-		public String particleName = "";
-		public float particleWidth = 100;
-		public float particleHeight = 100;
-		//TODO add other ParticleEffect properties 
+		// this is a project property
+		public int pixelToWorld = 1;
 
-		public ParticleEffectVO() : base() {
+		public String sceneName = string.Empty;
+		public CompositeVO composite;
+		public bool lightSystemEnabled = false;
+		public float[] ambientColor = { 1f, 1f, 1f, 1f };
+		public PhysicsPropertiesVO physicsPropertiesVO;
+		public List<float> verticalGuides;
+		public List<float> horizontalGuides;
+
+
+		public override string ToString()
+		{
+			return JsonConvert.SerializeObject( this, Formatting.Indented );
 		}
-
-		public ParticleEffectVO(ParticleEffectVO vo) : base(vo) {
-			particleName = vo.particleName;
-		}
-
-		/*
-		@Override
-		public void loadFromEntity(Entity entity) {
-			super.loadFromEntity(entity);
-
-			ParticleComponent particleComponent = entity.getComponent(ParticleComponent.class);
-			particleName = particleComponent.particleName;
-		}*/
 	}
 }
 

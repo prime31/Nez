@@ -26,15 +26,12 @@ using System;
 
 namespace Nez.Overlap2D.Runtime
 {
-	public class ColorPrimitiveVO : MainItemVO
+	public class TextBoxVO : MainItemVO
 	{
-		public ColorPrimitiveVO() : base()
-		{
-		}
-
-		public ColorPrimitiveVO( ColorPrimitiveVO vo ) : base( vo )
-		{
-		}
+		public String defaultText = string.Empty;
+		public float width = 0;
+		public float height = 0;
+		public String style	= string.Empty;
 	}
 }
 

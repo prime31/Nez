@@ -9,10 +9,6 @@ namespace Nez.LibGdxAtlases
 	{
 		public List<LibGdxAtlasPage> pages = new List<LibGdxAtlasPage>();
 		public List<LibGdxAtlasRegion> regions = new List<LibGdxAtlasRegion>();
-
-
-		public LibGdxAtlasFile()
-		{}
 	}
 }
 

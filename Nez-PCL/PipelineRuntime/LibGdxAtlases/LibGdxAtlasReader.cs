@@ -20,25 +20,24 @@ namespace Nez.LibGdxAtlases
 			{
 				var assetName = reader.getRelativeAssetPath( reader.ReadString() );
 				var texture = reader.ContentManager.Load<Texture2D>( assetName );
-				List<Rectangle> subtextures = new List<Rectangle>();
-				Dictionary<string, int> map = new Dictionary<string, int>();
+				var subtextures = new List<Rectangle>();
+				var map = new Dictionary<string,int>();
+
 				var regionCount = reader.ReadInt32();
 				for( var i = 0; i < regionCount; i++ )
 				{
-					Rectangle r = new Rectangle();
+					var rect = new Rectangle();
 					var name = reader.ReadString();
-					var x = reader.ReadInt32();
-					var y = reader.ReadInt32();
-					var width = reader.ReadInt32();
-					var height = reader.ReadInt32();
-					r.X = x;
-					r.Y = y;
-					r.Width = width;
-					r.Height = height;
-					subtextures.Add( r );
+					rect.X = reader.ReadInt32();
+					rect.Y = reader.ReadInt32();
+					rect.Width = reader.ReadInt32();
+					rect.Height = reader.ReadInt32();
+
+					subtextures.Add( rect );
 					map[name] = i;
 				}
-				var atlas = new TextureAtlas( texture, subtextures, map, new Dictionary<string, Point>(), 0 );
+
+				var atlas = new TextureAtlas( texture, subtextures, map, null, 0 );
 				atlasContainer.atlases.Add( atlas );
 			}
 

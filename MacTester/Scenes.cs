@@ -387,25 +387,50 @@ namespace MacTester
 		public static Scene sceneOverlap2D()
 		{
 			var scene = Scene.createWithDefaultRenderer( Color.Yellow );
-			scene.camera.position = new Vector2( -300, -550 );
 
-			var sceneEntity = scene.createEntity( "overlap2d-scene-entity" );
-			var o2ds = scene.contentManager.Load<O2DScene>( "bin/MacOSX/Overlap2D/MainScene" );
-			var sceneTexture = scene.contentManager.Load<LibGdxAtlas>( "bin/MacOSX/Overlap2D/packatlas" );
-			foreach( var si in o2ds.sImages )
+
+			var overlapScene = scene.contentManager.Load<O2DScene>( "bin/MacOSX/OverlapTest/scenes/MainScene" );
+			var sceneTexture = scene.contentManager.Load<LibGdxAtlas>( "bin/MacOSX/OverlapTest/orig/packatlas" );
+
+			foreach( var image in overlapScene.composite.images )
 			{
-				var sprite = new Sprite( sceneTexture.getSubtexture( si.imageName ) );
-				sprite.localPosition = new Vector2( si.x, -si.y );
-				sprite.origin = new Vector2( si.originX, si.originY );
-				sceneEntity.transform.scale = new Vector2( si.scaleX, si.scaleY );
-				sceneEntity.addComponent( sprite );
+				var entity = scene.createEntity( image.itemName );
+				entity.transform.position = new Vector2( image.x, image.y );
+				entity.transform.rotationDegrees = image.rotation;
+				entity.transform.scale = new Vector2( image.scaleX, image.scaleY );
+
+				var sprite = new Sprite( sceneTexture.getSubtexture( image.imageName ) );
+				sprite.origin = new Vector2( image.originX, image.originY );
+				entity.addComponent( sprite );
 			}
 
-			var effect = scene.contentManager.loadNezEffect<CrosshatchEffect>();
+			foreach( var compItem in overlapScene.composite.compositeItems )
+			{
+				var entity = scene.createEntity( compItem.itemName );
+				entity.transform.position = new Vector2( compItem.x, compItem.y );
+				entity.transform.rotationDegrees = compItem.rotation;
+				entity.transform.scale = new Vector2( compItem.scaleX, compItem.scaleY );
+
+				foreach( var image in compItem.composite.images )
+				{
+					var imageEntity = scene.createEntity( image.itemName );
+					imageEntity.transform.parent = entity.transform;
+					imageEntity.transform.localPosition = new Vector2( image.x, image.y );
+					imageEntity.transform.rotationDegrees = image.rotation;
+					imageEntity.transform.scale = new Vector2( image.scaleX, image.scaleY );
+
+					var sprite = new Sprite( sceneTexture.getSubtexture( image.imageName ) );
+					sprite.origin = new Vector2( image.originX, image.originY );
+					imageEntity.addComponent( sprite );
+				}
+			}
+
+
+			//var effect = scene.contentManager.loadNezEffect<CrosshatchEffect>();
 			//var effect = scene.contentManager.loadNezEffect<NoiseEffect>();
 			//var effect = scene.contentManager.loadNezEffect<TwistEffect>();
 
-			scene.addPostProcessor( new PostProcessor( 1, effect ) );
+			//scene.addPostProcessor( new PostProcessor( 1, effect ) );
 
 			return scene;
 		}
