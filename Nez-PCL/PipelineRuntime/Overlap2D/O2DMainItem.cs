@@ -38,6 +38,17 @@ namespace Nez.Overlap2D
 		}
 
 
+		/// <summary>
+		/// helper to translate zIndex to layerDepth. zIndexMax should be at least equal to the highest zIndex
+		/// </summary>
+		/// <returns>The depth.</returns>
+		/// <param name="zIndexMax">Z index max.</param>
+		public float layerDepth( float zIndexMax )
+		{
+			return ( zIndexMax - (float)zIndex ) / zIndexMax;
+		}
+
+
 		public Dictionary<String,String> getCustomVars()
 		{
 			if( _customVarsDict == null )

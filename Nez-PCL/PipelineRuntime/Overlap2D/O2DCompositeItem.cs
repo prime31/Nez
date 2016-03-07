@@ -8,8 +8,10 @@ namespace Nez.Overlap2D
 		public O2DComposite composite;
 
 
-		public O2DCompositeItem()
-		{}
+		public float layerDepthForChild( float zIndexMaxComp, O2DMainItem child, float zIndexMaxChild = 100 )
+		{
+			return layerDepth( zIndexMaxComp ) - ( 1 - child.layerDepth( zIndexMaxChild ) );
+		}
 	}
 }
 

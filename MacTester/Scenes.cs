@@ -389,21 +389,21 @@ namespace MacTester
 			var scene = Scene.createWithDefaultRenderer( Color.Yellow );
 
 
-			var overlapScene = scene.contentManager.Load<O2DScene>( "bin/MacOSX/OverlapTest/MainScene" );
-			var sceneTexture = scene.contentManager.Load<LibGdxAtlas>( "bin/MacOSX/OverlapTest/packatlas" );
-//			var overlapScene = scene.contentManager.Load<O2DScene>( "bin/MacOSX/Overlap2D/MainScene" );
-//			var sceneTexture = scene.contentManager.Load<LibGdxAtlas>( "bin/MacOSX/Overlap2D/packatlas" );
+//			var overlapScene = scene.contentManager.Load<O2DScene>( "bin/MacOSX/OverlapTest/MainScene" );
+//			var sceneTexture = scene.contentManager.Load<LibGdxAtlas>( "bin/MacOSX/OverlapTest/packatlas" );
+			var overlapScene = scene.contentManager.Load<O2DScene>( "bin/MacOSX/Overlap2D/MainScene" );
+			var sceneTexture = scene.contentManager.Load<LibGdxAtlas>( "bin/MacOSX/Overlap2D/packatlas" );
 
 			foreach( var image in overlapScene.composite.images )
 			{
-				var entity = scene.createEntity( image.imageName );
+				var entity = scene.createEntity( image.itemName );
 				entity.transform.position = new Vector2( image.x, image.y );
 				entity.transform.rotationDegrees = image.rotation;
 				entity.transform.scale = new Vector2( image.scaleX, image.scaleY );
 
 				var sprite = new Sprite( sceneTexture.getSubtexture( image.imageName ) );
 				sprite.origin = image.orginForImageSize( sprite.width, sprite.height );
-				sprite.layerDepth = ( 100f - (float)image.zIndex ) / 100f;
+				sprite.layerDepth = image.layerDepth( overlapScene.zIndexMax );
 				entity.addComponent( sprite );
 			}
 
@@ -416,7 +416,7 @@ namespace MacTester
 
 				foreach( var image in compItem.composite.images )
 				{
-					var imageEntity = scene.createEntity( image.imageName );
+					var imageEntity = scene.createEntity( image.itemName );
 					imageEntity.transform.parent = entity.transform;
 					imageEntity.transform.localPosition = new Vector2( image.x, image.y );
 					imageEntity.transform.rotationDegrees = image.rotation;
@@ -424,7 +424,7 @@ namespace MacTester
 
 					var sprite = new Sprite( sceneTexture.getSubtexture( image.imageName ) );
 					sprite.origin = image.orginForImageSize( sprite.width, sprite.height );
-					sprite.layerDepth = ( 100f - (float)image.zIndex - (float)compItem.zIndex ) / 100f;
+					sprite.layerDepth = compItem.layerDepthForChild( overlapScene.zIndexMax, image );
 					imageEntity.addComponent( sprite );
 				}
 			}
