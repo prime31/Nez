@@ -1,0 +1,41 @@
+
+pack.png
+size: 2048,512
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+clouds
+  rotate: false
+  xy: 932, 198
+  size: 544, 236
+  orig: 544, 236
+  offset: 0, 0
+  index: -1
+far-grounds
+  rotate: false
+  xy: 2, 2
+  size: 616, 110
+  orig: 616, 110
+  offset: 0, 0
+  index: -1
+sea
+  rotate: false
+  xy: 620, 16
+  size: 112, 96
+  orig: 112, 96
+  offset: 0, 0
+  index: -1
+sky
+  rotate: false
+  xy: 1478, 130
+  size: 112, 304
+  orig: 112, 304
+  offset: 0, 0
+  index: -1
+tileset
+  rotate: false
+  xy: 2, 114
+  size: 928, 320
+  orig: 928, 320
+  offset: 0, 0
+  index: -1

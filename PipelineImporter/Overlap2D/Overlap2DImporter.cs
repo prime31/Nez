@@ -22,6 +22,15 @@ namespace Nez.Overlap2D
 			var projectFolder = Directory.GetParent( Path.GetDirectoryName( filename ) ).FullName;
 			var projectfile = Path.Combine( projectFolder, "project.dt" );
 
+			// if the project file isnt a directly up check the same directory
+			if( !File.Exists( projectfile ) )
+			{
+				projectfile = Path.Combine( Path.GetDirectoryName( filename ), "project.dt" );
+
+				if( !File.Exists( projectfile ) )
+					throw new Exception( "could not find project.dt file. Please make sure it is present." );
+			}
+
 			// we need the pixelToWorld from the project file so we have to load it up
 			ProjectInfoVO project;
 			using( var reader = new StreamReader( projectfile ) )

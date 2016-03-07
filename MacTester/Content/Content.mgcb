@@ -95,18 +95,6 @@
 /processorParam:TextureFormat=Color
 /build:Overlap2D/pack.png
 
-#begin Overlap2D/pack2.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:Overlap2D/pack2.png
-
 #begin Overlap2D/packatlas.atlas
 /importer:LibGdxAtlasImporter
 /processor:LibGdxAtlasProcessor
@@ -267,12 +255,13 @@
 /processorParam:TextureFormat=Color
 /build:Tilemap/desert-palace-tiles.png
 
-#begin OverlapTest/scenes/MainScene.dt
+
+#begin OverlapTest/MainScene.dt
 /importer:Overlap2DImporter
 /processor:Overlap2DProcessor
-/build:OverlapTest/scenes/MainScene.dt
+/build:OverlapTest/MainScene.dt
 
-#begin OverlapTest/orig/pack.png
+#begin OverlapTest/pack.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -282,10 +271,10 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:OverlapTest/orig/pack.png
+/build:OverlapTest/pack.png
 
-#begin OverlapTest/orig/packatlas.atlas
+#begin OverlapTest/packatlas.atlas
 /importer:LibGdxAtlasImporter
 /processor:LibGdxAtlasProcessor
-/build:OverlapTest/orig/packatlas.atlas
+/build:OverlapTest/packatlas.atlas
 

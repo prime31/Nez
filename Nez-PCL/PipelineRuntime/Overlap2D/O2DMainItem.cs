@@ -25,6 +25,19 @@ namespace Nez.Overlap2D
 		Dictionary<String,String> _customVarsDict;
 
 
+		/// <summary>
+		/// translates the bottom-left based origin of Overlap2D to a top-left based origin
+		/// </summary>
+		/// <returns>The for image size.</returns>
+		/// <param name="width">Width.</param>
+		/// <param name="height">Height.</param>
+		public Vector2 orginForImageSize( float width, float height )
+		{
+			var origin = new Vector2( 0, height );
+			return origin; 
+		}
+
+
 		public Dictionary<String,String> getCustomVars()
 		{
 			if( _customVarsDict == null )
