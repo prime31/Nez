@@ -115,7 +115,6 @@
     <Compile Include="LibGdxAtlases\LibGdxAtlasWriter.cs" />
     <Compile Include="Overlap2D\Overlap2DImporter.cs" />
     <Compile Include="Overlap2D\Overlap2DProcessor.cs" />
-    <Compile Include="Overlap2D\Overlap2DProcessorResult.cs" />
     <Compile Include="Overlap2D\Overlap2DWriter.cs" />
     <Compile Include="ParticleDesigner\ParticleDesignerImporter.cs" />
     <Compile Include="ParticleDesigner\ConversionTypes\ParticleDesignerColor.cs" />

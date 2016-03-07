@@ -403,7 +403,7 @@ namespace MacTester
 
 				var sprite = new Sprite( sceneTexture.getSubtexture( image.imageName ) );
 				sprite.origin = image.orginForImageSize( sprite.width, sprite.height );
-				sprite.layerDepth = image.layerDepth( overlapScene.zIndexMax );
+				sprite.layerDepth = image.layerDepth;
 				entity.addComponent( sprite );
 			}
 
@@ -424,7 +424,7 @@ namespace MacTester
 
 					var sprite = new Sprite( sceneTexture.getSubtexture( image.imageName ) );
 					sprite.origin = image.orginForImageSize( sprite.width, sprite.height );
-					sprite.layerDepth = compItem.layerDepthForChild( overlapScene.zIndexMax, image );
+					sprite.layerDepth = image.layerDepth;
 					imageEntity.addComponent( sprite );
 				}
 			}
