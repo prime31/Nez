@@ -343,8 +343,8 @@ namespace Nez
 			var res = other.renderLayer.CompareTo( renderLayer );
 			if( res == 0 )
 			{
-				var layerDepthRes = other.layerDepth.CompareTo( layerDepth );
-				if( layerDepthRes == 0 && other.renderState != null )
+				res = other.layerDepth.CompareTo( layerDepth );
+				if( res == 0 && other.renderState != null )
 					return other.renderState.CompareTo( renderState );
 			}
 
