@@ -15,7 +15,7 @@ namespace Nez
 			set
 			{
 				_finalRenderRect.Width = (int)value;
-				_finalRenderRectDirty = true;
+				_destRectsDirty = true;
 			}
 		}
 
@@ -25,7 +25,7 @@ namespace Nez
 			set
 			{
 				_finalRenderRect.Height = (int)value;
-				_finalRenderRectDirty = true;
+				_destRectsDirty = true;
 			}
 		}
 
@@ -45,61 +45,45 @@ namespace Nez
 			}
 		}
 
-		public int marginLeft = 19;
-		public int marginRight = 19;
-		public int marginTop = 19;
-		public int marginBottom = 19;
+		int marginLeft = 19;
+		int marginRight = 19;
+		int marginTop = 19;
+		int marginBottom = 19;
 
+		/// <summary>
+		/// full area in which we will be rendering
+		/// </summary>
+		Rectangle _finalRenderRect;
 		Rectangle[] _sourceRects = new Rectangle[9];
 		Rectangle[] _destRects = new Rectangle[9];
-		Rectangle _finalRenderRect;
-		bool _finalRenderRectDirty = true;
+		bool _destRectsDirty = true;
 
 
-		public NineSliceSprite( Subtexture subtexture ) : base( subtexture )
+		public NineSliceSprite( Subtexture subtexture, int top, int bottom, int left, int right ) : base( subtexture )
 		{
-			generateRects( subtexture.sourceRect, _sourceRects );
+			marginLeft = left;
+			marginRight = right;
+			marginTop = top;
+			marginBottom = bottom;
+			subtexture.generateNinePatchRects( subtexture.sourceRect, _sourceRects, marginTop, marginBottom, marginLeft, marginRight );
 
 			width = subtexture.sourceRect.Width + 150;
 			height = subtexture.sourceRect.Height + 50;
 		}
 
 
-		public NineSliceSprite( Texture2D texture ) : this( new Subtexture( texture ) )
+		public NineSliceSprite( Texture2D texture, int top, int bottom, int left, int right ) : this( new Subtexture( texture ), top, bottom, left, right )
 		{}
-
-
-		void generateRects( Rectangle rect, Rectangle[] array )
-		{
-			var stretchedCenterWidth = rect.Width - marginLeft - marginRight;
-			var stretchedCenterHeight = rect.Height - marginTop - marginBottom;
-			var bottomY = rect.Y + rect.Height - marginBottom;
-			var rightX = rect.X + rect.Width - marginRight;
-			var leftX = rect.X + marginLeft;
-			var topY = rect.Y + marginTop;
-
-			array[0] = new Rectangle( rect.X, rect.Y, marginLeft, marginTop ); // top-left
-			array[1] = new Rectangle( leftX, rect.Y, stretchedCenterWidth, marginTop ); // top-center
-			array[2] = new Rectangle( rightX, rect.Y, marginRight, marginTop ); // top-right
-
-			array[3] = new Rectangle( rect.X, topY, marginLeft, stretchedCenterHeight ); // middle-left
-			array[4] = new Rectangle( leftX, topY, stretchedCenterWidth, stretchedCenterHeight ); // middle-center
-			array[5] = new Rectangle( rightX, topY, marginRight, stretchedCenterHeight); // middle-right
-
-			array[6] = new Rectangle( rect.X, bottomY, marginLeft, marginBottom ); // bottom-left
-			array[7] = new Rectangle( leftX, bottomY, stretchedCenterWidth, marginBottom ); // bottom-center
-			array[8] = new Rectangle( rightX, bottomY, marginRight, marginBottom ); // bottom-right
-		}
 
 
 		public override void render( Graphics graphics, Camera camera )
 		{
 			if( isVisibleFromCamera( camera ) )
 			{
-				if( _finalRenderRectDirty )
+				if( _destRectsDirty )
 				{
-					generateRects( _finalRenderRect, _destRects );
-					_finalRenderRectDirty = false;
+					subtexture.generateNinePatchRects( _finalRenderRect, _destRects, marginTop, marginBottom, marginRight, marginLeft );
+					_destRectsDirty = false;
 				}
 
 				var pos = ( entity.transform.position + _localPosition ).ToPoint();

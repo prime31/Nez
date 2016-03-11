@@ -57,6 +57,42 @@ namespace Nez.Textures
 
 
 		/// <summary>
+		/// generates nine patch Rectangles. destArray should have 9 elements. renderRect is the final area in which the nine patch will be rendered.
+		/// To just get the source rects for rendering pass in the Subtexture.sourceRect. Pass in a larger Rectangle to get final destination
+		/// rendering Rectangles.
+		/// </summary>
+		/// <param name="renderRect">Render rect.</param>
+		/// <param name="destArray">Destination array.</param>
+		/// <param name="marginTop">Margin top.</param>
+		/// <param name="marginBottom">Margin bottom.</param>
+		/// <param name="marginLeft">Margin left.</param>
+		/// <param name="marginRight">Margin right.</param>
+		public void generateNinePatchRects( Rectangle renderRect, Rectangle[] destArray, int marginTop, int marginBottom, int marginLeft, int marginRight )
+		{
+			Assert.isTrue( destArray.Length == 9, "destArray does not have a length of 9" );
+
+			var stretchedCenterWidth = renderRect.Width - marginLeft - marginRight;
+			var stretchedCenterHeight = renderRect.Height - marginTop - marginBottom;
+			var bottomY = renderRect.Y + renderRect.Height - marginBottom;
+			var rightX = renderRect.X + renderRect.Width - marginRight;
+			var leftX = renderRect.X + marginLeft;
+			var topY = renderRect.Y + marginTop;
+
+			destArray[0] = new Rectangle( renderRect.X, renderRect.Y, marginLeft, marginTop ); // top-left
+			destArray[1] = new Rectangle( leftX, renderRect.Y, stretchedCenterWidth, marginTop ); // top-center
+			destArray[2] = new Rectangle( rightX, renderRect.Y, marginRight, marginTop ); // top-right
+
+			destArray[3] = new Rectangle( renderRect.X, topY, marginLeft, stretchedCenterHeight ); // middle-left
+			destArray[4] = new Rectangle( leftX, topY, stretchedCenterWidth, stretchedCenterHeight ); // middle-center
+			destArray[5] = new Rectangle( rightX, topY, marginRight, stretchedCenterHeight); // middle-right
+
+			destArray[6] = new Rectangle( renderRect.X, bottomY, marginLeft, marginBottom ); // bottom-left
+			destArray[7] = new Rectangle( leftX, bottomY, stretchedCenterWidth, marginBottom ); // bottom-center
+			destArray[8] = new Rectangle( rightX, bottomY, marginRight, marginBottom ); // bottom-right
+		}
+
+
+		/// <summary>
 		/// provides a List of subtextures given an atlas with equally spaced rows/columns of sprites
 		/// </summary>
 		/// <returns>The from atlas.</returns>
