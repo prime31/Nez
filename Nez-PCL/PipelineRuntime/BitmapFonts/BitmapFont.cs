@@ -74,6 +74,46 @@ namespace Nez.BitmapFonts
 		}
 
 
+		public string wrapText( string text, float maxLineWidth )
+		{
+			var words = text.Split( ' ' );
+			var sb = new StringBuilder();
+			var lineWidth = 0f;
+			var spaceWidth = measureString( " " ).X;
+
+			if( maxLineWidth < spaceWidth )
+				return string.Empty;
+
+			foreach( var word in words )
+			{
+				var size = measureString( word );
+
+				if( lineWidth + size.X < maxLineWidth )
+				{
+					sb.Append( word + " " );
+					lineWidth += size.X + spaceWidth;
+				}
+				else
+				{
+					if( size.X > maxLineWidth )
+					{
+						if( sb.ToString() == "" )
+							sb.Append( wrapText( word.Insert( word.Length / 2, " " ) + " ", maxLineWidth ) );
+						else
+							sb.Append( "\n" + wrapText( word.Insert( word.Length / 2, " " ) + " ", maxLineWidth ) );
+					}
+					else
+					{
+						sb.Append( "\n" + word + " " );
+						lineWidth = size.X + spaceWidth;
+					}
+				}
+			}
+
+			return sb.ToString();
+		}
+
+
 		/// <summary>
 		/// Returns the size of the contents of a string when rendered in this font.
 		/// </summary>
@@ -235,10 +275,10 @@ namespace Nez.BitmapFonts
 
 				var destRect = RectangleExt.fromFloats
 				(
-					p.X, p.Y, 
-					currentFontRegion.width * scale.X,
-					currentFontRegion.height * scale.Y
-				);
+					               p.X, p.Y, 
+					               currentFontRegion.width * scale.X,
+					               currentFontRegion.height * scale.Y
+				               );
 
 				spriteBatch.Draw( currentFontRegion.subtexture, destRect, currentFontRegion.subtexture.sourceRect, color, rotation, Vector2.Zero, effect, depth );
 			}
