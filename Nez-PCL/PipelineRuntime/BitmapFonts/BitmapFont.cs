@@ -22,13 +22,20 @@ namespace Nez.BitmapFonts
 		public float spacing;
 
 		/// <summary>
+		/// The distance from the bottom of the glyph that extends the lowest to the baseline. This number is negative.
+		/// </summary>
+		public float descent;
+
+		public float padTop, padBottom, padLeft, padRight;
+
+		/// <summary>
 		/// Gets or sets the character that will be substituted when a given character is not included in the font.
 		/// </summary>
 		public char defaultCharacter
 		{
 			set
 			{
-				if( !_characterMap.TryGetValue( value, out _defaultCharacterRegion ) )
+				if( !_characterMap.TryGetValue( value, out defaultCharacterRegion ) )
 					Debug.error( "BitmapFont does not contain a region for the default character being set: {0}", value );
 			}
 		}
@@ -36,12 +43,17 @@ namespace Nez.BitmapFonts
 		/// <summary>
 		/// populated with ' ' by default and reset whenever defaultCharacter is set
 		/// </summary>
-		BitmapFontRegion _defaultCharacterRegion;
+		public BitmapFontRegion defaultCharacterRegion;
 
 		/// <summary>
 		/// this sucker gets used a lot so we cache it to avoid having to create it every frame
 		/// </summary>
 		Matrix _transformationMatrix = Matrix.Identity;
+
+		/// <summary>
+		/// width of a space
+		/// </summary>
+		public readonly int spaceWidth;
 
 
 		private readonly Dictionary<char,BitmapFontRegion> _characterMap;
@@ -71,6 +83,7 @@ namespace Nez.BitmapFonts
 
 			this.lineHeight = lineHeight;
 			defaultCharacter = ' ';
+			spaceWidth = defaultCharacterRegion.width + defaultCharacterRegion.xAdvance;
 		}
 
 
@@ -142,6 +155,55 @@ namespace Nez.BitmapFonts
 		}
 
 
+		/// <summary>
+		/// gets the BitmapFontRegion for the given char optionally substituting the default region if it isnt present.
+		/// </summary>
+		/// <returns><c>true</c>, if get font region for char was tryed, <c>false</c> otherwise.</returns>
+		/// <param name="c">C.</param>
+		/// <param name="fontRegion">Font region.</param>
+		/// <param name="useDefaultRegionIfNotPresent">If set to <c>true</c> use default region if not present.</param>
+		public bool tryGetFontRegionForChar( char c, out BitmapFontRegion fontRegion, bool useDefaultRegionIfNotPresent = false )
+		{
+			if( !_characterMap.TryGetValue( c, out fontRegion ) )
+			{
+				if( useDefaultRegionIfNotPresent )
+				{
+					fontRegion = defaultCharacterRegion;
+					return true;
+				}
+				return false;
+			}
+
+			return true;
+		}
+
+
+		/// <summary>
+		/// checks to see if a BitmapFontRegion exists for the char
+		/// </summary>
+		/// <returns><c>true</c>, if region exists for char was fonted, <c>false</c> otherwise.</returns>
+		/// <param name="c">C.</param>
+		public bool hasFontRegion( char c )
+		{
+			BitmapFontRegion fontRegion;
+			return tryGetFontRegionForChar( c, out fontRegion );
+		}
+
+
+		/// <summary>
+		/// gets the BitmapFontRegion for char. Returns null if it doesnt exist and useDefaultRegionIfNotPresent is false.
+		/// </summary>
+		/// <returns>The region for char.</returns>
+		/// <param name="c">C.</param>
+		/// <param name="useDefaultRegionIfNotPresent">If set to <c>true</c> use default region if not present.</param>
+		public BitmapFontRegion fontRegionForChar( char c, bool useDefaultRegionIfNotPresent = false )
+		{
+			BitmapFontRegion fontRegion;
+			tryGetFontRegionForChar( c, out fontRegion, useDefaultRegionIfNotPresent );
+			return fontRegion;
+		}
+
+
 		void measureString( ref CharacterSource text, out Vector2 size )
 		{
 			if( text.Length == 0 )
@@ -178,7 +240,7 @@ namespace Nez.BitmapFonts
 					offset.X += spacing + currentFontRegion.xAdvance;
 
 				if( !_characterMap.TryGetValue( c, out currentFontRegion ) )
-					currentFontRegion = _defaultCharacterRegion;
+					currentFontRegion = defaultCharacterRegion;
 
 				var proposedWidth = offset.X + currentFontRegion.xAdvance + spacing;
 				if( proposedWidth > width )
@@ -256,7 +318,7 @@ namespace Nez.BitmapFonts
 					offset.X += spacing + currentFontRegion.xAdvance;
 
 				if( !_characterMap.TryGetValue( c, out currentFontRegion ) )
-					currentFontRegion = _defaultCharacterRegion;
+					currentFontRegion = defaultCharacterRegion;
 
 
 				var p = offset;
@@ -275,10 +337,10 @@ namespace Nez.BitmapFonts
 
 				var destRect = RectangleExt.fromFloats
 				(
-					               p.X, p.Y, 
-					               currentFontRegion.width * scale.X,
-					               currentFontRegion.height * scale.Y
-				               );
+	               p.X, p.Y, 
+	               currentFontRegion.width * scale.X,
+	               currentFontRegion.height * scale.Y
+               );
 
 				spriteBatch.Draw( currentFontRegion.subtexture, destRect, currentFontRegion.subtexture.sourceRect, color, rotation, Vector2.Zero, effect, depth );
 			}

@@ -18,9 +18,14 @@ namespace Nez.BitmapFonts
 				textures[i] = reader.ReadObject<Texture2D>();
 
 			var lineHeight = reader.ReadInt32();
+			var padTop = reader.ReadInt32();
+			var padLeft = reader.ReadInt32();
+			var padBottom = reader.ReadInt32();
+			var padRight = reader.ReadInt32();
+			var descent = reader.ReadInt32();
+
 			var regionCount = reader.ReadInt32();
 			var regions = new BitmapFontRegion[regionCount];
-
 			for( var r = 0; r < regionCount; r++ )
 			{
 				var character = (char)reader.ReadInt32();
@@ -36,7 +41,14 @@ namespace Nez.BitmapFonts
 				regions[r] = new BitmapFontRegion( textureRegion, character, xOffset, yOffset, xAdvance );
 			}
             
-			return new BitmapFont( regions, lineHeight );
+			return new BitmapFont( regions, lineHeight )
+			{
+				padTop = padTop,
+				padBottom = padBottom,
+				padRight = padRight,
+				padLeft = padLeft,
+				descent = descent
+			};
 		}
 	}
 }

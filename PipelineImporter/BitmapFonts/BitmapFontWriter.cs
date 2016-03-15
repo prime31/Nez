@@ -2,6 +2,7 @@ using Microsoft.Xna.Framework.Content.Pipeline;
 using Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework.Content.Pipeline.Graphics;
+using System;
 
 
 namespace Nez.BitmapFontImporter
@@ -19,8 +20,19 @@ namespace Nez.BitmapFontImporter
 			// write the font data
 			var fontFile = result.fontFile;
 			writer.Write( fontFile.common.lineHeight );
-			writer.Write( fontFile.chars.Count );
 
+			var padding = fontFile.info.padding.Split( new char[] { ',' } );
+			if( padding.Length != 4 )
+				throw new PipelineException( "font padding is invalid! It should contain 4 values" );
+
+			writer.Write( int.Parse( padding[0] ) ); // top
+			writer.Write( int.Parse( padding[1] ) ); // left
+			writer.Write( int.Parse( padding[2] ) ); // bottom
+			writer.Write( int.Parse( padding[3] ) ); // right
+
+			writer.Write( getDescent( fontFile, int.Parse( padding[3] ) ) );
+
+			writer.Write( fontFile.chars.Count );
 			foreach( var c in fontFile.chars )
 			{
 				writer.Write( c.id );
@@ -33,6 +45,20 @@ namespace Nez.BitmapFontImporter
 				writer.Write( c.yOffset );
 				writer.Write( c.xAdvance );
 			}
+		}
+
+
+		int getDescent( BitmapFontFile fontFile, int padBottom )
+		{
+			var descent = 0;
+
+			foreach( var c in fontFile.chars )
+			{
+				if( c.width > 0 && c.height > 0 )
+					descent = Math.Min( fontFile.common.base_ + c.yOffset, descent );
+			}
+
+			return descent + padBottom;
 		}
 
 
