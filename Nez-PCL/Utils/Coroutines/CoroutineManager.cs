@@ -40,7 +40,7 @@ namespace Nez.Systems
 			}
 
 
-			internal void reset()
+			void IPoolable.reset()
 			{
 				isDone = true;
 				waitTimer = 0;
