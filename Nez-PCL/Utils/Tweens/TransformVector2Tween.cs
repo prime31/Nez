@@ -105,7 +105,7 @@ namespace Nez.Tweens
 				_target = null;
 				_nextTween = null;
 				_transform = null;
-				QuickCache<TransformVector2Tween>.push( this );
+				Pool<TransformVector2Tween>.free( this );
 			}
 		}
 	}

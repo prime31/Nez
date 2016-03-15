@@ -17,7 +17,7 @@ namespace Nez.Systems
 		/// <summary>
 		/// internal class used by the CoroutineManager to hide the data it requires for a Coroutine
 		/// </summary>
-		class CoroutineImpl : ICoroutine
+		class CoroutineImpl : ICoroutine, IPoolable
 		{
 			public IEnumerator enumerator;
 			/// <summary>
@@ -40,7 +40,7 @@ namespace Nez.Systems
 			}
 
 
-			internal void recycle()
+			internal void reset()
 			{
 				isDone = true;
 				waitTimer = 0;
@@ -67,7 +67,7 @@ namespace Nez.Systems
 		public ICoroutine startCoroutine( IEnumerator enumerator )
 		{
 			// find or create a CoroutineImpl
-			var coroutine = QuickCache<CoroutineImpl>.pop();
+			var coroutine = Pool<CoroutineImpl>.obtain();
 			coroutine.prepareForReuse();
 
 			// setup the coroutine and add it
@@ -77,8 +77,7 @@ namespace Nez.Systems
 			// guard against empty coroutines
 			if( !shouldContinueCoroutine || coroutine.isDone )
 			{
-				coroutine.recycle();
-				QuickCache<CoroutineImpl>.push( coroutine );
+				Pool<CoroutineImpl>.free( coroutine );
 				return null;
 			}
 
@@ -101,8 +100,7 @@ namespace Nez.Systems
 				// check for stopped coroutines
 				if( coroutine.isDone )
 				{
-					coroutine.recycle();
-					QuickCache<CoroutineImpl>.push( coroutine );
+					Pool<CoroutineImpl>.free( coroutine );
 					continue;
 				}
 
@@ -151,8 +149,7 @@ namespace Nez.Systems
 			// This coroutine has finished
 			if( !coroutine.enumerator.MoveNext() )
 			{
-				coroutine.recycle();
-				QuickCache<CoroutineImpl>.push( coroutine );
+				Pool<CoroutineImpl>.free( coroutine );
 				return false;
 			}
 

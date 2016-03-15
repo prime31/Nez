@@ -16,7 +16,7 @@ namespace Nez
 		/// <param name="duration">Duration.</param>
 		public static ITween<Vector2> tweenPositionTo( this Transform self, Vector2 to, float duration = 0.3f )
 		{
-			var tween = QuickCache<TransformVector2Tween>.pop();
+			var tween = Pool<TransformVector2Tween>.obtain();
 			tween.setTargetAndType( self, TransformTargetType.Position );
 			tween.initialize( tween, to, duration );
 
@@ -33,7 +33,7 @@ namespace Nez
 		/// <param name="duration">Duration.</param>
 		public static ITween<Vector2> tweenLocalPositionTo( this Transform self, Vector2 to, float duration = 0.3f )
 		{
-			var tween = QuickCache<TransformVector2Tween>.pop();
+			var tween = Pool<TransformVector2Tween>.obtain();
 			tween.setTargetAndType( self, TransformTargetType.LocalPosition );
 			tween.initialize( tween, to, duration );
 
@@ -50,7 +50,7 @@ namespace Nez
 		/// <param name="duration">Duration.</param>
 		public static ITween<Vector2> tweenLocalScaleTo( this Transform self, float to, float duration = 0.3f )
 		{
-			var tween = QuickCache<TransformVector2Tween>.pop();
+			var tween = Pool<TransformVector2Tween>.obtain();
 			tween.setTargetAndType( self, TransformTargetType.LocalScale );
 			tween.initialize( tween, new Vector2( to ), duration );
 
@@ -67,7 +67,7 @@ namespace Nez
 		/// <param name="duration">Duration.</param>
 		public static ITween<Vector2> tweenLocalScaleTo( this Transform self, Vector2 to, float duration = 0.3f )
 		{
-			var tween = QuickCache<TransformVector2Tween>.pop();
+			var tween = Pool<TransformVector2Tween>.obtain();
 			tween.setTargetAndType( self, TransformTargetType.LocalScale );
 			tween.initialize( tween, to, duration );
 
@@ -84,7 +84,7 @@ namespace Nez
 		/// <param name="duration">Duration.</param>
 		public static ITween<Vector2> tweenRotationDegreesTo( this Transform self, float to, float duration = 0.3f )
 		{
-			var tween = QuickCache<TransformVector2Tween>.pop();
+			var tween = Pool<TransformVector2Tween>.obtain();
 			tween.setTargetAndType( self, TransformTargetType.RotationDegrees );
 			tween.initialize( tween, new Vector2( to ), duration );
 
@@ -101,7 +101,7 @@ namespace Nez
 		/// <param name="duration">Duration.</param>
 		public static ITween<Vector2> tweenLocalRotationDegreesTo( this Transform self, float to, float duration = 0.3f )
 		{
-			var tween = QuickCache<TransformVector2Tween>.pop();
+			var tween = Pool<TransformVector2Tween>.obtain();
 			tween.setTargetAndType( self, TransformTargetType.LocalRotationDegrees );
 			tween.initialize( tween, new Vector2( to ), duration );
 

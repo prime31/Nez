@@ -61,7 +61,7 @@ namespace Nez.Tweens
 		public static ITween<int> intPropertyTo( object self, string propertyName, int to, float duration )
 		{
 			var tweenTarget = new PropertyTarget<int>( self, propertyName );
-			var tween = TweenManager.cacheIntTweens ? QuickCache<IntTween>.pop() : new IntTween();
+			var tween = TweenManager.cacheIntTweens ? Pool<IntTween>.obtain() : new IntTween();
 			tween.initialize( tweenTarget, to, duration );
 
 			return tween;
@@ -71,7 +71,7 @@ namespace Nez.Tweens
 		public static ITween<float> floatPropertyTo( object self, string propertyName, float to, float duration )
 		{
 			var tweenTarget = new PropertyTarget<float>( self, propertyName );
-			var tween = TweenManager.cacheFloatTweens ? QuickCache<FloatTween>.pop() : new FloatTween();
+			var tween = TweenManager.cacheFloatTweens ? Pool<FloatTween>.obtain() : new FloatTween();
 			tween.initialize( tweenTarget, to, duration );
 
 			return tween;
@@ -81,7 +81,7 @@ namespace Nez.Tweens
 		public static ITween<Vector2> vector2PropertyTo( object self, string propertyName, Vector2 to, float duration )
 		{
 			var tweenTarget = new PropertyTarget<Vector2>( self, propertyName );
-			var tween = TweenManager.cacheVector2Tweens ? QuickCache<Vector2Tween>.pop() : new Vector2Tween();
+			var tween = TweenManager.cacheVector2Tweens ? Pool<Vector2Tween>.obtain() : new Vector2Tween();
 			tween.initialize( tweenTarget, to, duration );
 
 			return tween;
@@ -91,7 +91,7 @@ namespace Nez.Tweens
 		public static ITween<Vector3> vector3PropertyTo( object self, string propertyName, Vector3 to, float duration )
 		{
 			var tweenTarget = new PropertyTarget<Vector3>( self, propertyName );
-			var tween = TweenManager.cacheVector3Tweens ? QuickCache<Vector3Tween>.pop() : new Vector3Tween();
+			var tween = TweenManager.cacheVector3Tweens ? Pool<Vector3Tween>.obtain() : new Vector3Tween();
 			tween.initialize( tweenTarget, to, duration );
 
 			return tween;
@@ -101,7 +101,7 @@ namespace Nez.Tweens
 		public static ITween<Vector4> vector4PropertyTo( object self, string propertyName, Vector4 to, float duration )
 		{
 			var tweenTarget = new PropertyTarget<Vector4>( self, propertyName );
-			var tween = TweenManager.cacheVector4Tweens ? QuickCache<Vector4Tween>.pop() : new Vector4Tween();
+			var tween = TweenManager.cacheVector4Tweens ? Pool<Vector4Tween>.obtain() : new Vector4Tween();
 			tween.initialize( tweenTarget, to, duration );
 
 			return tween;
@@ -111,7 +111,7 @@ namespace Nez.Tweens
 		public static ITween<Quaternion> quaternionPropertyTo( object self, string propertyName, Quaternion to, float duration )
 		{
 			var tweenTarget = new PropertyTarget<Quaternion>( self, propertyName );
-			var tween = TweenManager.cacheQuaternionTweens ? QuickCache<QuaternionTween>.pop() : new QuaternionTween();
+			var tween = TweenManager.cacheQuaternionTweens ? Pool<QuaternionTween>.obtain() : new QuaternionTween();
 			tween.initialize( tweenTarget, to, duration );
 
 			return tween;
@@ -121,7 +121,7 @@ namespace Nez.Tweens
 		public static ITween<Color> colorPropertyTo( object self, string propertyName, Color to, float duration )
 		{
 			var tweenTarget = new PropertyTarget<Color>( self, propertyName );
-			var tween = TweenManager.cacheColorTweens ? QuickCache<ColorTween>.pop() : new ColorTween();
+			var tween = TweenManager.cacheColorTweens ? Pool<ColorTween>.obtain() : new ColorTween();
 			tween.initialize( tweenTarget, to, duration );
 
 			return tween;

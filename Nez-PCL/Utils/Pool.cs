@@ -7,7 +7,7 @@ namespace Nez
 	/// <summary>
 	/// simple static class that can be used to pool any object. this is meant for use with non-Unity classes such as tweens.
 	/// </summary>
-	public static class QuickCache<T> where T : new()
+	public static class Pool<T> where T : new()
 	{
 		private static Stack<T> _objectStack = new Stack<T>( 10 );
 
@@ -50,7 +50,7 @@ namespace Nez
 		/// <summary>
 		/// pops an item off the stack if available creating a new item as necessary
 		/// </summary>
-		public static T pop()
+		public static T obtain()
 		{
 			if( _objectStack.Count > 0 )
 				return _objectStack.Pop();
@@ -63,9 +63,24 @@ namespace Nez
 		/// pushes an item back on the stack
 		/// </summary>
 		/// <param name="obj">Object.</param>
-		public static void push( T obj )
+		public static void free( T obj )
 		{
 			_objectStack.Push( obj );
+
+			if( obj is IPoolable )
+				( (IPoolable)obj ).reset();
 		}
+	}
+
+
+	/// <summary>
+	/// Objects implementing this interface will have {@link #reset()} called when passed to {@link #push(Object)}
+	/// </summary>
+	public interface IPoolable
+	{
+		/// <summary>
+		/// Resets the object for reuse. Object references should be nulled and fields may be set to default values
+		/// </summary>
+		void reset();
 	}
 }

@@ -32,7 +32,7 @@ namespace Nez.Timers
 		/// <param name="onTime">On time.</param>
 		internal ITimer schedule( float timeInSeconds, bool repeats, object context, Action<ITimer> onTime )
 		{
-			var timer = QuickCache<Timer>.pop();
+			var timer = Pool<Timer>.obtain();
 			timer.initialize( timeInSeconds, repeats, context, onTime );
 			_timers.Add( timer );
 

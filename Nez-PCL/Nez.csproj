@@ -130,7 +130,6 @@
     <Compile Include="Utils\Tweens\Interfaces\ITweenControl.cs" />
     <Compile Include="Utils\Tweens\Tween.cs" />
     <Compile Include="Utils\Tweens\Tweens.cs" />
-    <Compile Include="Utils\QuickCache.cs" />
     <Compile Include="Utils\Tweens\PropertyTweens.cs" />
     <Compile Include="Utils\Tweens\TweenManager.cs" />
     <Compile Include="Utils\ReflectionUtils.cs" />
@@ -252,6 +251,12 @@
     <Compile Include="PipelineRuntime\Overlap2D\O2DCompositeItem.cs" />
     <Compile Include="PipelineRuntime\Overlap2D\O2DImage.cs" />
     <Compile Include="Graphics\Renderers\ScreenSpaceRenderer.cs" />
+    <Compile Include="Input\KeysExt.cs" />
+    <Compile Include="Input\InputUtils.cs" />
+    <Compile Include="Graphics\Textures\SubtextureNinePatch.cs" />
+    <Compile Include="Input\Clipboard.cs" />
+    <Compile Include="Input\IClipboard.cs" />
+    <Compile Include="Utils\Pool.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="MonoGame.Framework">

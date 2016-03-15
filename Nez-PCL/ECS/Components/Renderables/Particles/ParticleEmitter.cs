@@ -51,7 +51,7 @@ namespace Nez.Particles
 			_emitterConfig = emitterConfig;
 			_playOnAwake = playOnAwake;
 			_particles = new List<Particle>( (int)_emitterConfig.maxParticles );
-			QuickCache<Particle>.warmCache( (int)_emitterConfig.maxParticles );
+			Pool<Particle>.warmCache( (int)_emitterConfig.maxParticles );
 
 			// set some sensible defaults
 			collisionConfig.elasticity = 0.5f;
@@ -133,7 +133,7 @@ namespace Nez.Particles
 				// if update returns true that means the particle is done
 				if( currentParticle.update( _emitterConfig, ref collisionConfig, rootPosition ) )
 				{
-					QuickCache<Particle>.push( currentParticle );
+					Pool<Particle>.free( currentParticle );
 					_particles.RemoveAt( i );
 				}
 			}
@@ -187,7 +187,7 @@ namespace Nez.Particles
 		public void clear()
 		{
 			for( var i = 0; i < _particles.Count; i++ )
-				QuickCache<Particle>.push( _particles[i] );
+				Pool<Particle>.free( _particles[i] );
 			_particles.Clear();
 		}
 
@@ -254,7 +254,7 @@ namespace Nez.Particles
 		void addParticle()
 		{
 			// take the next particle out of the particle pool we have created and initialize it
-			var particle = QuickCache<Particle>.pop();
+			var particle = Pool<Particle>.obtain();
 			particle.initialize( _emitterConfig );
 			_particles.Add( particle );
 		}

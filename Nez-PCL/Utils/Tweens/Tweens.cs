@@ -12,7 +12,7 @@ namespace Nez.Tweens
 	{
 		public static IntTween create()
 		{
-			return TweenManager.cacheIntTweens ? QuickCache<IntTween>.pop() : new IntTween();
+			return TweenManager.cacheIntTweens ? Pool<IntTween>.obtain() : new IntTween();
 		}
 
 
@@ -45,7 +45,7 @@ namespace Nez.Tweens
 			base.recycleSelf();
 
 			if( _shouldRecycleTween && TweenManager.cacheIntTweens )
-				QuickCache<IntTween>.push( this );
+				Pool<IntTween>.free( this );
 		}
 	}
 
@@ -54,7 +54,7 @@ namespace Nez.Tweens
 	{
 		public static FloatTween create()
 		{
-			return TweenManager.cacheFloatTweens ? QuickCache<FloatTween>.pop() : new FloatTween();
+			return TweenManager.cacheFloatTweens ? Pool<FloatTween>.obtain() : new FloatTween();
 		}
 
 
@@ -87,7 +87,7 @@ namespace Nez.Tweens
 			base.recycleSelf();
 
 			if( _shouldRecycleTween && TweenManager.cacheFloatTweens )
-				QuickCache<FloatTween>.push( this );
+				Pool<FloatTween>.free( this );
 		}
 	}
 
@@ -96,7 +96,7 @@ namespace Nez.Tweens
 	{
 		public static Vector2Tween create()
 		{
-			return TweenManager.cacheVector2Tweens ? QuickCache<Vector2Tween>.pop() : new Vector2Tween();
+			return TweenManager.cacheVector2Tweens ? Pool<Vector2Tween>.obtain() : new Vector2Tween();
 		}
 
 
@@ -129,7 +129,7 @@ namespace Nez.Tweens
 			base.recycleSelf();
 
 			if( _shouldRecycleTween && TweenManager.cacheVector2Tweens )
-				QuickCache<Vector2Tween>.push( this );
+				Pool<Vector2Tween>.free( this );
 		}
 	}
 
@@ -138,7 +138,7 @@ namespace Nez.Tweens
 	{
 		public static Vector3Tween create()
 		{
-			return TweenManager.cacheVector3Tweens ? QuickCache<Vector3Tween>.pop() : new Vector3Tween();
+			return TweenManager.cacheVector3Tweens ? Pool<Vector3Tween>.obtain() : new Vector3Tween();
 		}
 
 
@@ -171,7 +171,7 @@ namespace Nez.Tweens
 			base.recycleSelf();
 
 			if( _shouldRecycleTween && TweenManager.cacheVector3Tweens )
-				QuickCache<Vector3Tween>.push( this );
+				Pool<Vector3Tween>.free( this );
 		}
 	}
 
@@ -180,7 +180,7 @@ namespace Nez.Tweens
 	{
 		public static Vector4Tween create()
 		{
-			return TweenManager.cacheVector4Tweens ? QuickCache<Vector4Tween>.pop() : new Vector4Tween();
+			return TweenManager.cacheVector4Tweens ? Pool<Vector4Tween>.obtain() : new Vector4Tween();
 		}
 
 
@@ -213,7 +213,7 @@ namespace Nez.Tweens
 			base.recycleSelf();
 
 			if( _shouldRecycleTween && TweenManager.cacheVector4Tweens )
-				QuickCache<Vector4Tween>.push( this );
+				Pool<Vector4Tween>.free( this );
 		}
 	}
 
@@ -222,7 +222,7 @@ namespace Nez.Tweens
 	{
 		public static QuaternionTween create()
 		{
-			return TweenManager.cacheQuaternionTweens ? QuickCache<QuaternionTween>.pop() : new QuaternionTween();
+			return TweenManager.cacheQuaternionTweens ? Pool<QuaternionTween>.obtain() : new QuaternionTween();
 		}
 
 
@@ -255,7 +255,7 @@ namespace Nez.Tweens
 			base.recycleSelf();
 
 			if( _shouldRecycleTween && TweenManager.cacheQuaternionTweens )
-				QuickCache<QuaternionTween>.push( this );
+				Pool<QuaternionTween>.free( this );
 		}
 	}
 
@@ -264,7 +264,7 @@ namespace Nez.Tweens
 	{
 		public static ColorTween create()
 		{
-			return TweenManager.cacheColorTweens ? QuickCache<ColorTween>.pop() : new ColorTween();
+			return TweenManager.cacheColorTweens ? Pool<ColorTween>.obtain() : new ColorTween();
 		}
 
 
@@ -300,7 +300,7 @@ namespace Nez.Tweens
 			base.recycleSelf();
 
 			if( _shouldRecycleTween && TweenManager.cacheColorTweens )
-				QuickCache<ColorTween>.push( this );
+				Pool<ColorTween>.free( this );
 		}
 	}
 
@@ -309,7 +309,7 @@ namespace Nez.Tweens
 	{
 		public static RectangleTween create()
 		{
-			return TweenManager.cacheRectTweens ? QuickCache<RectangleTween>.pop() : new RectangleTween();
+			return TweenManager.cacheRectTweens ? Pool<RectangleTween>.obtain() : new RectangleTween();
 		}
 
 
@@ -349,7 +349,7 @@ namespace Nez.Tweens
 			base.recycleSelf();
 
 			if( _shouldRecycleTween && TweenManager.cacheRectTweens )
-				QuickCache<RectangleTween>.push( this );
+				Pool<RectangleTween>.free( this );
 		}
 	}
 

@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework.Graphics;
+using System.Reflection;
 
 
 namespace Nez
@@ -9,6 +10,19 @@ namespace Nez
 	public static class SpriteBatchExt
 	{
 		static Rectangle _tempRect;
+
+
+		public static Matrix getSpriteBatchMatrix( this SpriteBatch spriteBatch )
+		{
+			#if NETFX_CORE
+			var fieldInfo = targetObject.GetType().GetRuntimeField( "_matrix" );
+			#else
+			var fieldInfo = spriteBatch.GetType().GetField( "_matrix", BindingFlags.Instance | BindingFlags.NonPublic );
+			#endif
+
+			return (Matrix)fieldInfo.GetValue( spriteBatch );
+		}
+
 
 		#region Line
 

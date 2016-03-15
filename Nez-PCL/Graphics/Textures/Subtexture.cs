@@ -14,18 +14,18 @@ namespace Nez.Textures
 		/// <summary>
 		/// the actual Texture2D
 		/// </summary>
-		public Texture2D texture2D;
+		public readonly Texture2D texture2D;
 
 		/// <summary>
 		/// rectangle in the Texture2D for this element
 		/// </summary>
-		public Rectangle sourceRect;
+		public readonly Rectangle sourceRect;
 
 		/// <summary>
 		/// center of the sourceRect if it had a 0,0 origin. This is basically the center in sourceRect-space.
 		/// </summary>
 		/// <value>The center.</value>
-		public Vector2 center;
+		public readonly Vector2 center;
 		
 
 		public Subtexture( Texture2D texture, Rectangle sourceRect )
@@ -67,7 +67,7 @@ namespace Nez.Textures
 		/// <param name="marginBottom">Margin bottom.</param>
 		/// <param name="marginLeft">Margin left.</param>
 		/// <param name="marginRight">Margin right.</param>
-		public void generateNinePatchRects( Rectangle renderRect, Rectangle[] destArray, int marginTop, int marginBottom, int marginLeft, int marginRight )
+		public void generateNinePatchRects( Rectangle renderRect, Rectangle[] destArray, int marginLeft, int marginRight, int marginTop, int marginBottom )
 		{
 			Assert.isTrue( destArray.Length == 9, "destArray does not have a length of 9" );
 

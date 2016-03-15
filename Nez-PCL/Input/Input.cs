@@ -116,14 +116,10 @@ namespace Nez
 
 		#region Keyboard
 
-		/// <summary>
-		/// true the entire time the key is down
-		/// </summary>
-		/// <returns><c>true</c>, if key down was gotten, <c>false</c> otherwise.</returns>
-		public static bool isKeyDown( Keys key )
-		{
-			return _currentKbState.IsKeyDown( key );
-		}
+		public static KeyboardState previousKeyboardState { get { return _previousKbState; } }
+
+
+		public static KeyboardState currentKeyboardState { get { return _currentKbState; } }
 
 
 		/// <summary>
@@ -133,6 +129,16 @@ namespace Nez
 		public static bool isKeyPressed( Keys key )
 		{
 			return _currentKbState.IsKeyDown( key ) && !_previousKbState.IsKeyDown( key );
+		}
+
+
+		/// <summary>
+		/// true the entire time the key is down
+		/// </summary>
+		/// <returns><c>true</c>, if key down was gotten, <c>false</c> otherwise.</returns>
+		public static bool isKeyDown( Keys key )
+		{
+			return _currentKbState.IsKeyDown( key );
 		}
 
 
@@ -147,22 +153,22 @@ namespace Nez
 
 
 		/// <summary>
-		/// true while either of the keys are down
-		/// </summary>
-		/// <returns><c>true</c>, if key down was gotten, <c>false</c> otherwise.</returns>
-		public static bool isKeyDown( Keys keyA, Keys keyB )
-		{
-			return isKeyDown( keyA ) || isKeyDown( keyB );
-		}
-
-
-		/// <summary>
 		/// only true if one of the keys is down this frame
 		/// </summary>
 		/// <returns><c>true</c>, if key pressed was gotten, <c>false</c> otherwise.</returns>
 		public static bool isKeyPressed( Keys keyA, Keys keyB )
 		{
 			return isKeyPressed( keyA ) || isKeyPressed( keyB );
+		}
+
+
+		/// <summary>
+		/// true while either of the keys are down
+		/// </summary>
+		/// <returns><c>true</c>, if key down was gotten, <c>false</c> otherwise.</returns>
+		public static bool isKeyDown( Keys keyA, Keys keyB )
+		{
+			return isKeyDown( keyA ) || isKeyDown( keyB );
 		}
 
 
@@ -181,20 +187,20 @@ namespace Nez
 		#region Mouse
 
 		/// <summary>
-		/// true while the button is down
-		/// </summary>
-		public static bool leftMouseButtonDown
-		{
-			get { return _currentMouseState.LeftButton == ButtonState.Pressed; }
-		}
-
-
-		/// <summary>
 		/// only true if down this frame
 		/// </summary>
 		public static bool leftMouseButtonPressed
 		{
 			get { return _currentMouseState.LeftButton == ButtonState.Pressed && _previousMouseState.LeftButton == ButtonState.Released; }
+		}
+
+
+		/// <summary>
+		/// true while the button is down
+		/// </summary>
+		public static bool leftMouseButtonDown
+		{
+			get { return _currentMouseState.LeftButton == ButtonState.Pressed; }
 		}
 
 
@@ -211,18 +217,6 @@ namespace Nez
 
 
 		/// <summary>
-		/// true while the button is down
-		/// </summary>
-		public static bool rightMouseButtonDown
-		{
-			get
-			{
-				return _currentMouseState.RightButton == ButtonState.Pressed;
-			}
-		}
-
-
-		/// <summary>
 		/// only true if pressed this frame
 		/// </summary>
 		public static bool rightMouseButtonPressed
@@ -230,6 +224,18 @@ namespace Nez
 			get
 			{
 				return _currentMouseState.RightButton == ButtonState.Pressed && _previousMouseState.RightButton == ButtonState.Released;
+			}
+		}
+
+
+		/// <summary>
+		/// true while the button is down
+		/// </summary>
+		public static bool rightMouseButtonDown
+		{
+			get
+			{
+				return _currentMouseState.RightButton == ButtonState.Pressed;
 			}
 		}
 

@@ -38,6 +38,7 @@ There are various systems documented separately in the FAQs folder. They go into
 - [Rendering](FAQs/Rendering.md)
 - [Physics/Collisions](FAQs/Physics.md)
 - [Entity Processing Systems](FAQs/EntitySystems.md)
+- [Nez.UI](FAQs/UI.md)
 - [Samples](FAQs/Samples.md)
 
 
