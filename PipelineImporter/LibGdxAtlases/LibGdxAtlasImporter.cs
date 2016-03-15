@@ -55,7 +55,7 @@ namespace Nez.LibGdxAtlases
 							readTuple( reader );
 						}
 						context.Logger.LogMessage( "Width, Height: {0}, {1}", width, height );
-						string format = tuple[0];
+						var format = tuple[0];
 
 						readTuple( reader );
 						var min = tuple[0];
@@ -79,19 +79,19 @@ namespace Nez.LibGdxAtlases
 					}
 					else
 					{
-						bool rotate = Boolean.Parse( readValue( reader ) );
+						var rotate = Boolean.Parse( readValue( reader ) );
 
 						readTuple( reader );
-						int left = int.Parse( tuple[0] );
-						int top = int.Parse( tuple[1] );
+						var left = int.Parse( tuple[0] );
+						var top = int.Parse( tuple[1] );
 						context.Logger.LogMessage( "X, Y: {0}, {1}", top, left );
 
 						readTuple( reader );
-						int width = int.Parse( tuple[0] );
-						int height = int.Parse( tuple[1] );
+						var width = int.Parse( tuple[0] );
+						var height = int.Parse( tuple[1] );
 						context.Logger.LogMessage( "width, height: {0}, {1}", width, height );
 
-						LibGdxAtlasRegion region = new LibGdxAtlasRegion();
+						var region = new LibGdxAtlasRegion();
 						region.page = pageImage.textureFile;
 						region.sourceRectangle = new LibGdxAtlasRect();
 						region.sourceRectangle.x = left;
@@ -102,14 +102,24 @@ namespace Nez.LibGdxAtlases
 						region.rotate = rotate;
 
 						if( readTuple( reader ) == 4 )
-						{ // split is optional
-							//region.splits = new int[] {Integer.parseInt(tuple[0]), Integer.parseInt(tuple[1]),
-							//	Integer.parseInt(tuple[2]), Integer.parseInt(tuple[3])};
+						{
+							// split is optional
+							region.splits = new int[] {
+								int.Parse( tuple[0] ),
+								int.Parse( tuple[1] ),
+								int.Parse( tuple[2] ),
+								int.Parse( tuple[3] )
+							};
 
 							if( readTuple( reader ) == 4 )
-							{ // pad is optional, but only present with splits
-								//	region.pads = new int[] {Integer.parseInt(tuple[0]), Integer.parseInt(tuple[1]),
-								//		Integer.parseInt(tuple[2]), Integer.parseInt(tuple[3])};
+							{
+								// pad is optional, but only present with splits
+								region.pads = new int[] {
+									int.Parse( tuple[0] ),
+									int.Parse( tuple[1] ),
+									int.Parse( tuple[2] ),
+									int.Parse( tuple[3] )
+								};
 
 								readTuple( reader );
 							}

@@ -10,6 +10,8 @@ namespace Nez.LibGdxAtlases
 		public LibGdxAtlasRect sourceRectangle = new LibGdxAtlasRect();
 		public LibGdxAtlasPoint originalSize = new LibGdxAtlasPoint();
 		public LibGdxAtlasPoint offset = new LibGdxAtlasPoint();
+		public int[] splits;
+		public int[] pads;
 		public bool rotate = false;
 		public int index;
 		public bool flip = false;

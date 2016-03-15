@@ -12,7 +12,11 @@ namespace Nez.LibGdxAtlases
 		public List<TextureAtlas> atlases = new List<TextureAtlas>();
 
 
-		public Subtexture getSubtexture( string name )
+		/// <summary>
+		/// gets the Subtexture with name or returns null if it cant be found
+		/// </summary>
+		/// <param name="name">Name.</param>
+		public Subtexture get( string name )
 		{
 			for( var i = 0; i < atlases.Count; i++ )
 			{
@@ -21,6 +25,33 @@ namespace Nez.LibGdxAtlases
 			}
 
 			return null;
+		}
+
+
+		/// <summary>
+		/// gets the Subtexture with name or returns null if it cant be found
+		/// </summary>
+		/// <param name="name">Name.</param>
+		public SubtextureNinePatch getNinePatch( string name )
+		{
+			for( var i = 0; i < atlases.Count; i++ )
+			{
+				if( atlases[i].containsSubtexture( name ) )
+					return atlases[i].getSubtexture( name ) as SubtextureNinePatch;
+			}
+
+			return null;
+		}
+
+
+		/// <summary>
+		/// alias for LibGdxAtlas.get
+		/// </summary>
+		/// <returns>The subtexture.</returns>
+		/// <param name="name">Name.</param>
+		public Subtexture getSubtexture( string name )
+		{
+			return get( name );
 		}
 	}
 }

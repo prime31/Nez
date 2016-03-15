@@ -1,25 +1,10 @@
-#region File Description
-//-----------------------------------------------------------------------------
-// SpriteSheet.cs
-//
-// Microsoft Game Technology Group
-// Copyright (C) Microsoft Corporation. All rights reserved.
-//-----------------------------------------------------------------------------
 using Nez.Textures;
 using Nez.Sprites;
-
-
-#endregion
-
-#region Using Statements
 using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Content;
-
-
-#endregion
 
 
 namespace Nez.TextureAtlases
@@ -30,19 +15,14 @@ namespace Nez.TextureAtlases
 	public class TextureAtlas
 	{
 		/// <summary>
-		/// the single large texture used by this sprite sheet
+		/// array of all subtextures from the atlas
 		/// </summary>
-		public Texture2D texture;
+		public readonly Subtexture[] subtextures;
 
 		/// <summary>
-		/// list of all our subtextures. It can be indexed via the image name with the help of the subtextureMap
+		/// image names for the subtextures. maps directly to the subtextures array
 		/// </summary>
-		public readonly List<Subtexture> subtextures;
-
-		/// <summary>
-		/// maps actual image names to the index in the subtextures list
-		/// </summary>
-		readonly Dictionary<string,int> _subtextureMap;
+		public readonly string[] regionNames;
 
 		/// <summary>
 		/// stores a map of the name of the sprite animation (derived from the folder name) to a Point. The Point x/y values are the
@@ -50,30 +30,20 @@ namespace Nez.TextureAtlases
 		/// </summary>
 		readonly Dictionary<string,Point> _spriteAnimationDetails;
 
-		readonly int _animationFPS;
+		readonly int _animationFPS = 15;
 
 
-		public TextureAtlas( Texture2D texture, List<Rectangle> spriteRectangles, Dictionary<string,int> subtextureMap, Dictionary<string,Point> spriteAnimationDetails, int animationFPS )
+		public TextureAtlas( string[] regionNames, Subtexture[] subtextures, Dictionary<string,Point> spriteAnimationDetails, int animationFPS = 15 )
 		{
-			this.texture = texture;
-			subtextures = new List<Subtexture>();
-			_subtextureMap = subtextureMap;
+			this.regionNames = regionNames;
+			this.subtextures = subtextures;
 			_spriteAnimationDetails = spriteAnimationDetails;
 			_animationFPS = animationFPS;
-
-			// create subtextures for reach rect for easy access
-			for( var i = 0; i < spriteRectangles.Count; i++ )
-				subtextures.Add( new Subtexture( texture, spriteRectangles[i] ) );
 		}
 
 
-		public Subtexture getSubtexture( int index )
-		{
-			if( index < 0 || index >= subtextures.Count )
-				throw new IndexOutOfRangeException();
-
-			return subtextures[index];
-		}
+		public TextureAtlas( string[] regionNames, Subtexture[] subtextures ) : this( regionNames, subtextures, null )
+		{}
 
 
 		/// <summary>
@@ -83,11 +53,7 @@ namespace Nez.TextureAtlases
 		/// <param name="name">Name.</param>
 		public Subtexture getSubtexture( string name )
 		{
-			int index;
-			if( _subtextureMap.TryGetValue( name, out index ) )
-				return getSubtexture( index );
-
-			throw new KeyNotFoundException( name );
+			return subtextures[Array.IndexOf( regionNames, name )];
 		}
 
 		/// <summary>
@@ -95,10 +61,11 @@ namespace Nez.TextureAtlases
 		/// </summary>
 		/// <returns><c>true</c>, if subtexture is containsed, <c>false</c> otherwise.</returns>
 		/// <param name="name">the image name</param>
-		public bool containsSubtexture(string name) {
-			int index;
-			return (_subtextureMap.TryGetValue(name, out index));
+		public bool containsSubtexture( string name )
+		{
+			return Array.IndexOf( regionNames, name ) >= 0;
 		}
+
 
 		/// <summary>
 		/// returns a SpriteAnimation given an animationName where the animationName is the folder that contains the images
@@ -110,8 +77,7 @@ namespace Nez.TextureAtlases
 			Point point;
 			if( _spriteAnimationDetails.TryGetValue( animationName, out point ) )
 			{
-				var animation = new SpriteAnimation
-				{
+				var animation = new SpriteAnimation {
 					fps = _animationFPS
 				};
 
@@ -122,18 +88,6 @@ namespace Nez.TextureAtlases
 			}
 
 			throw new KeyNotFoundException( animationName );
-		}
-
-
-		public Subtexture this[string name]
-		{
-			get { return getSubtexture( name ); }
-		}
-
-
-		public Subtexture this[int index]
-		{
-			get { return getSubtexture( index ); }
 		}
 
 	}

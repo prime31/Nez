@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using System.Diagnostics;
 using Nez.TextureAtlases;
+using Nez.Textures;
 
 
 namespace Nez.LibGdxAtlases
@@ -20,10 +21,11 @@ namespace Nez.LibGdxAtlases
 			{
 				var assetName = reader.getRelativeAssetPath( reader.ReadString() );
 				var texture = reader.ContentManager.Load<Texture2D>( assetName );
-				var subtextures = new List<Rectangle>();
-				var map = new Dictionary<string,int>();
 
 				var regionCount = reader.ReadInt32();
+				var subtextures = new Subtexture[regionCount];
+				var regionNames = new string[regionCount];
+
 				for( var i = 0; i < regionCount; i++ )
 				{
 					var rect = new Rectangle();
@@ -33,11 +35,16 @@ namespace Nez.LibGdxAtlases
 					rect.Width = reader.ReadInt32();
 					rect.Height = reader.ReadInt32();
 
-					subtextures.Add( rect );
-					map[name] = i;
+					var hasSplits = reader.ReadBoolean();
+					if( hasSplits )
+						subtextures[i] = new SubtextureNinePatch( texture, rect, reader.ReadInt32(), reader.ReadInt32(), reader.ReadInt32(), reader.ReadInt32() );
+					else
+						subtextures[i] = new Subtexture( texture, rect );
+
+					regionNames[i] = name;
 				}
 
-				var atlas = new TextureAtlas( texture, subtextures, map, null, 0 );
+				var atlas = new TextureAtlas( regionNames, subtextures );
 				atlasContainer.atlases.Add( atlas );
 			}
 

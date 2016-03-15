@@ -14,7 +14,7 @@ namespace Nez.Textures
 		/// <summary>
 		/// the actual Texture2D
 		/// </summary>
-		public readonly Texture2D texture2D;
+		public Texture2D texture2D;
 
 		/// <summary>
 		/// rectangle in the Texture2D for this element

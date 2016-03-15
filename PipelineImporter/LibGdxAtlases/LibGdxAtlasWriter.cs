@@ -38,6 +38,20 @@ namespace Nez.LibGdxAtlases
 						writer.Write( region.sourceRectangle.y );
 						writer.Write( region.sourceRectangle.w );
 						writer.Write( region.sourceRectangle.h );
+
+						if( region.splits == null )
+						{
+							writer.Write( false );
+						}
+						else
+						{
+							writer.Write( true );
+							writer.Write( region.splits[0] );
+							writer.Write( region.splits[1] );
+							writer.Write( region.splits[2] );
+							writer.Write( region.splits[3] );
+							LibGdxAtlasProcessor.logger.LogMessage( "Writing splits for region: {0}", region.name );
+						}
 					}
 				}
 			}
