@@ -6,7 +6,7 @@ using Microsoft.Xna.Framework.Graphics;
 namespace Nez
 {
 	/// <summary>
-	/// cursor with trails
+	/// cursor with trails. Note that this should be rendered in screen space (ScreenSpaceRenderer) so it isnt transformed by the camera matrix
 	/// Adapted from: http://www.catalinzima.com/xna/samples/world-of-goo-cursor/
 	/// </summary>
 	public class GooCursor : RenderableComponent, IUpdatable
@@ -87,7 +87,7 @@ namespace Nez
 		public void update()
 		{
 			// set position of first trail node;
-			_trailNodes[0].position = Input.scaledMousePosition;
+			_trailNodes[0].position = Input.rawMousePosition.ToVector2();
 
 			// update the trails
 			for( var i = 1; i < _trailNodeCount; i++ )

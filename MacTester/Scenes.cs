@@ -442,7 +442,9 @@ namespace MacTester
 
 		public static Scene sceneFour()
 		{
-			var scene = Scene.createWithDefaultRenderer( Color.Aquamarine );
+			var scene = Scene.create( Color.Aquamarine );
+			scene.addRenderer( new RenderLayerExcludeRenderer( 0, 5 ) );
+			scene.addRenderer( new ScreenSpaceRenderer( 1, 5 ) );
 			var moonTexture = scene.contentManager.Load<Texture2D>( "Images/moon" );
 
 			var entity = scene.createEntity( "moon" );
@@ -455,7 +457,9 @@ namespace MacTester
 
 
 			entity = scene.createEntity( "nine-slice" );
-			var nineSlice = new NineSliceSprite( scene.contentManager.Load<Texture2D>( "Images/nineSlice" ) );
+			var nineSlice = new NineSliceSprite( scene.contentManager.Load<Texture2D>( "Images/nineSlice" ), 19, 19, 19, 19 );
+			nineSlice.width = 200;
+			nineSlice.height = 150;
 			entity.addComponent( nineSlice );
 			entity.transform.position = new Vector2( 800, 200 );
 
@@ -468,7 +472,7 @@ namespace MacTester
 			entity.colliders.add( new BoxCollider() );
 
 			entity.addComponent( new TrailRibbon() );
-			entity.addComponent( new GooCursor() );
+			entity.addComponent( new GooCursor() ).renderLayer = 5;
 
 
 			scene.addPostProcessor( new ScanlinesPostProcessor( 0 ) );
