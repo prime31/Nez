@@ -39,7 +39,7 @@ Skins
 ==========
 Nez UI supports a skin system similar to [libGDX skins](https://github.com/libgdx/libgdx/wiki/Skin). Skins are optional but highly recommended. They act as a container to hold all of your UI resources and offer a bunch of automatic conversions. You can create a skin programatically or via a JSON file that is run through the UI Skin Importer in the Pipeline tool. This gets the JSON parsed at build time so the data is ready to use at runtime. Below is example JSON with some comments added explaining the different elements.
 
-```json
+```javascript
 {
 	// defines colors accessible via skin.getColor. These can also be referenced in actual style definitions below
 	colors:
@@ -56,7 +56,7 @@ Nez UI supports a skin system similar to [libGDX skins](https://github.com/libgd
 	libGdxAtlases: [ 'bin/skin/uiskinatlas' ],
 
 	// array of any TextureAtlases. The path should be the same one you would use to load it via the content system.
-	textureAtlases: [ 'bin/skin/textureAtlas ],
+	textureAtlases: [ 'bin/skin/textureAtlas' ],
 	
 	// the rest of the file is specific style types. The key (ButtonStyle here) is the exact class name from the UI element.
 	ButtonStyle:
