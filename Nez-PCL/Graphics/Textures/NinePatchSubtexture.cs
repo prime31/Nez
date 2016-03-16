@@ -28,6 +28,10 @@ namespace Nez.Textures
 		public NinePatchSubtexture( Texture2D texture, int left, int right, int top, int bottom ) : this( texture, texture.Bounds, left, right, top, bottom )
 		{}
 
+
+		public NinePatchSubtexture( Subtexture subtexture, int left, int right, int top, int bottom ) : this( subtexture, subtexture.sourceRect, left, right, top, bottom )
+		{}
+
 	}
 }
 

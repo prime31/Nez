@@ -45,10 +45,8 @@ namespace Nez
 			}
 		}
 
-		int marginLeft = 19;
-		int marginRight = 19;
-		int marginTop = 19;
-		int marginBottom = 19;
+		public new NinePatchSubtexture subtexture;
+
 
 		/// <summary>
 		/// full area in which we will be rendering
@@ -59,20 +57,18 @@ namespace Nez
 		bool _destRectsDirty = true;
 
 
-		public NineSliceSprite( Subtexture subtexture, int top, int bottom, int left, int right ) : base( subtexture )
+		public NineSliceSprite( NinePatchSubtexture subtexture ) : base( subtexture )
 		{
-			marginLeft = left;
-			marginRight = right;
-			marginTop = top;
-			marginBottom = bottom;
-			subtexture.generateNinePatchRects( subtexture.sourceRect, _sourceRects, marginTop, marginBottom, marginLeft, marginRight );
-
-			width = subtexture.sourceRect.Width + 150;
-			height = subtexture.sourceRect.Height + 50;
+			this.subtexture = subtexture;
+			//subtexture.generateNinePatchRects( subtexture.sourceRect, _sourceRects, marginTop, marginBottom, marginLeft, marginRight );
 		}
 
 
-		public NineSliceSprite( Texture2D texture, int top, int bottom, int left, int right ) : this( new Subtexture( texture ), top, bottom, left, right )
+		public NineSliceSprite( Subtexture subtexture, int top, int bottom, int left, int right ) : this( new NinePatchSubtexture( subtexture, top, bottom, left, right ) )
+		{}
+
+
+		public NineSliceSprite( Texture2D texture, int top, int bottom, int left, int right ) : this( new NinePatchSubtexture( texture, top, bottom, left, right ) )
 		{}
 
 
@@ -82,7 +78,7 @@ namespace Nez
 			{
 				if( _destRectsDirty )
 				{
-					subtexture.generateNinePatchRects( _finalRenderRect, _destRects, marginTop, marginBottom, marginRight, marginLeft );
+					subtexture.generateNinePatchRects( _finalRenderRect, _destRects, subtexture.top, subtexture.bottom, subtexture.right, subtexture.left );
 					_destRectsDirty = false;
 				}
 
@@ -94,7 +90,7 @@ namespace Nez
 					var dest = _destRects[i];
 					dest.X += pos.X;
 					dest.Y += pos.Y;
-					graphics.spriteBatch.Draw( subtexture, dest, _sourceRects[i], color );
+					graphics.spriteBatch.Draw( subtexture, dest, subtexture.ninePatchRects[i], color );
 				}
 			}
 		}
