@@ -19,11 +19,34 @@ namespace Nez.Tweens
 		}
 		
 		
-		// remainingFactorPerSecond is the percentage of the distance it covers every second. should be between 0 and 1.
-		// if it's 0.25 it means it covers 75% of the remaining distance every second independent of the framerate
+		/// <summary>
+		/// remainingFactorPerSecond is the percentage of the distance it covers every second. should be between 0 and 1.
+		/// if it's 0.25 it means it covers 75% of the remaining distance every second independent of the framerate
+		/// </summary>
+		/// <returns>The towards.</returns>
+		/// <param name="from">From.</param>
+		/// <param name="to">To.</param>
+		/// <param name="remainingFactorPerSecond">Remaining factor per second.</param>
+		/// <param name="deltaTime">Delta time.</param>
 		public static float lerpTowards( float from, float to, float remainingFactorPerSecond, float deltaTime )
 		{
 			return unclampedLerp( from, to, 1f - Mathf.pow( remainingFactorPerSecond, deltaTime ) );
+		}
+
+
+		/// <summary>
+		/// A smoothing rate of zero will give you back the target value (i.e. no smoothing), and a rate of 1 is technically not allowed,
+		/// but will just give you back the source value (i.e. infinite smoothing). Note that this is the opposite of the way a lerp
+		/// parameter works, but if you so desire, you can just use additive inverse of the smoothing parameter inside the Pow.
+		/// Smoothing rate dictates the proportion of source remaining after one second
+		/// </summary>
+		/// <param name="source">Source.</param>
+		/// <param name="target">Target.</param>
+		/// <param name="smoothing">Smoothing.</param>
+		/// <param name="dt">Dt.</param>
+		public static float lerpDamp( float source, float target, float smoothing )
+		{
+			return MathHelper.Lerp( source, target, 1 - Mathf.pow( smoothing, Time.deltaTime ) );
 		}
 
 

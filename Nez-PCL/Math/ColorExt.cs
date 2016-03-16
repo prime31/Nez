@@ -74,6 +74,17 @@ namespace Nez
 		}
 
 
+		public static Color multiply( this Color self, Color second )
+		{
+			return new Color {
+				R = (byte)( self.R * second.R ),
+				G = (byte)( self.G * second.G ),
+				B = (byte)( self.B * second.B ),
+				A = (byte)( self.A * second.A )
+			};
+		}
+
+
 		/// <summary>
 		/// linearly interpolates Color from - to
 		/// </summary>

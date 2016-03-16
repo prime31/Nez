@@ -39,7 +39,7 @@ namespace Nez.Tweens
 			_target = target;
 
 			// try to fetch the field. if we dont find it this is a property
-			if( ( _fieldInfo = target.GetType().GetField( propertyName ) ) == null )
+			if( ( _fieldInfo = ReflectionUtils.getFieldInfo<T>( target, propertyName ) ) == null )
 			{
 				_setter = ReflectionUtils.setterForProperty<Action<T>>( target, propertyName );
 				_getter = ReflectionUtils.getterForProperty<Func<T>>( target, propertyName );

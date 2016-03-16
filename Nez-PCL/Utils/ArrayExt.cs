@@ -17,6 +17,17 @@ namespace Nez
 		}
 
 
+		public static bool contains( this string[] source, string value )
+		{
+			for( var i = 0; i < source.Length; i++ )
+			{
+				if( source[i] == value )
+					return true;
+			}
+			return false;
+		}
+
+
 		public static bool contains( this Keys[] source, Keys value )
 		{
 			for( var i = 0; i < source.Length; i++ )

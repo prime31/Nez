@@ -7,11 +7,10 @@ using Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler;
 namespace Nez.TexturePackerImporter
 {
 	[ContentTypeWriter]
-	public class TexturePackerWriter : ContentTypeWriter<TexturePackerProcessorResult>
+	public class TexturePackerWriter : ContentTypeWriter<TexturePackerFile>
 	{
-		protected override void Write( ContentWriter writer, TexturePackerProcessorResult result )
+		protected override void Write( ContentWriter writer, TexturePackerFile data )
 		{
-			var data = result.data;
 			var metadata = data.metadata;
 
 			var assetName = Path.GetFileNameWithoutExtension( metadata.image );

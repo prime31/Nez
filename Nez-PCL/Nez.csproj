@@ -58,6 +58,7 @@
     <Folder Include="Graphics\PostProcessing\PostProcessors\" />
     <Folder Include="Graphics\Effects\" />
     <Folder Include="Graphics\Transitions\" />
+    <Folder Include="PipelineRuntime\UISkin\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Debug\Debug.cs" />
@@ -253,10 +254,12 @@
     <Compile Include="Graphics\Renderers\ScreenSpaceRenderer.cs" />
     <Compile Include="Input\KeysExt.cs" />
     <Compile Include="Input\InputUtils.cs" />
-    <Compile Include="Graphics\Textures\SubtextureNinePatch.cs" />
     <Compile Include="Input\Clipboard.cs" />
     <Compile Include="Input\IClipboard.cs" />
     <Compile Include="Utils\Pool.cs" />
+    <Compile Include="Graphics\Textures\NinePatchSubtexture.cs" />
+    <Compile Include="PipelineRuntime\UISkin\UISkinConfig.cs" />
+    <Compile Include="PipelineRuntime\UISkin\UISkinConfigReader.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="MonoGame.Framework">

@@ -58,6 +58,7 @@
     <Folder Include="ParticleDesigner\" />
     <Folder Include="ParticleDesigner\ConversionTypes\" />
     <Folder Include="Overlap2D\VOs\NotImplemented\" />
+    <Folder Include="UISkin\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Tiled\TiledMapImporter.cs" />
@@ -94,7 +95,6 @@
     <Compile Include="TexturePacker\TexturePackerMeta.cs" />
     <Compile Include="TexturePacker\TexturePackerPoint.cs" />
     <Compile Include="TexturePacker\TexturePackerProcessor.cs" />
-    <Compile Include="TexturePacker\TexturePackerProcessorResult.cs" />
     <Compile Include="TexturePacker\TexturePackerRectangle.cs" />
     <Compile Include="TexturePacker\TexturePackerRegion.cs" />
     <Compile Include="TexturePacker\TexturePackerSize.cs" />
@@ -154,6 +154,9 @@
     <Compile Include="Overlap2D\VOs\NotImplemented\SpriterVO.cs" />
     <Compile Include="Overlap2D\VOs\NotImplemented\SpriteAnimationVO.cs" />
     <Compile Include="Overlap2D\VOs\NotImplemented\TextBoxVO.cs" />
+    <Compile Include="UISkin\UISkinProcessor.cs" />
+    <Compile Include="UISkin\UISkinWriter.cs" />
+    <Compile Include="UISkin\UISkinImporter.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Nez-PCL\Nez.csproj">

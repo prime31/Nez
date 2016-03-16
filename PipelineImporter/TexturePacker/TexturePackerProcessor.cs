@@ -5,20 +5,11 @@ using Microsoft.Xna.Framework.Content.Pipeline;
 namespace Nez.TexturePackerImporter
 {
 	[ContentProcessor( DisplayName = "TexturePacker Processor" )]
-	public class TexturePackerProcessor : ContentProcessor<TexturePackerFile, TexturePackerProcessorResult>
+	public class TexturePackerProcessor : ContentProcessor<TexturePackerFile, TexturePackerFile>
 	{
-		public override TexturePackerProcessorResult Process( TexturePackerFile input, ContentProcessorContext context )
+		public override TexturePackerFile Process( TexturePackerFile input, ContentProcessorContext context )
 		{
-			try
-			{
-				var output = new TexturePackerProcessorResult { data = input };
-				return output;
-			}
-			catch( Exception ex )
-			{
-				context.Logger.LogMessage( "Error {0}", ex );
-				throw;
-			}
+			return input;
 		}
 	}
 }

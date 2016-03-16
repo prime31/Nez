@@ -32,12 +32,12 @@ namespace Nez.LibGdxAtlases
 		/// gets the Subtexture with name or returns null if it cant be found
 		/// </summary>
 		/// <param name="name">Name.</param>
-		public SubtextureNinePatch getNinePatch( string name )
+		public NinePatchSubtexture getNinePatch( string name )
 		{
 			for( var i = 0; i < atlases.Count; i++ )
 			{
 				if( atlases[i].containsSubtexture( name ) )
-					return atlases[i].getSubtexture( name ) as SubtextureNinePatch;
+					return atlases[i].getSubtexture( name ) as NinePatchSubtexture;
 			}
 
 			return null;

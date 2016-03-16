@@ -21,7 +21,7 @@ namespace Nez.LibGdxAtlases
 			if( filename == null )
 				throw new ArgumentNullException( "filename" );
 
-			LibGdxAtlasFile f = new LibGdxAtlasFile();
+			var f = new LibGdxAtlasFile();
 
 			using( var reader = new StreamReader( filename ) )
 			{

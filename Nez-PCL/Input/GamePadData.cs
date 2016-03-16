@@ -28,6 +28,10 @@ namespace Nez
 			_previousState = _currentState;
 			_currentState = Microsoft.Xna.Framework.Input.GamePad.GetState( _playerIndex );
 
+			// check for controller connects/disconnects
+			if( _previousState.IsConnected != _currentState.IsConnected )
+				Core.emitter.emit( _currentState.IsConnected ? CoreEvents.GamePadConnected : CoreEvents.GamePadDisconnected );
+
 			if( _rumbleTime > 0f )
 			{
 				_rumbleTime -= Time.deltaTime;

@@ -28,8 +28,7 @@ namespace Nez
 
 		/// <summary>
 		/// A subtexture used to draw rectangles, lines, circles, etc. 
-		/// Will be generated at startup, but you can replace this with a subtexture from your Atlas to reduce texture swaps.
-		/// Use the top left pixel of your Particle Subtexture if you replace it!
+		/// Will be generated at startup, but you can replace this with a subtexture from your atlas to reduce texture swaps.
 		/// Should be a 1x1 white pixel
 		/// </summary>
 		public Subtexture pixelTexture;

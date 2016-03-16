@@ -37,7 +37,7 @@ namespace Nez.LibGdxAtlases
 
 					var hasSplits = reader.ReadBoolean();
 					if( hasSplits )
-						subtextures[i] = new SubtextureNinePatch( texture, rect, reader.ReadInt32(), reader.ReadInt32(), reader.ReadInt32(), reader.ReadInt32() );
+						subtextures[i] = new NinePatchSubtexture( texture, rect, reader.ReadInt32(), reader.ReadInt32(), reader.ReadInt32(), reader.ReadInt32() );
 					else
 						subtextures[i] = new Subtexture( texture, rect );
 
