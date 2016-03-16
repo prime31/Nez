@@ -114,10 +114,10 @@ namespace Nez
 				segCount++;
 			}
 
-			_bounds.x = (int)minX;
-			_bounds.y = (int)minY;
-			_bounds.width = (int)( maxX - minX );
-			_bounds.height = (int)( maxY - minY );
+			_bounds.x = minX;
+			_bounds.y = minY;
+			_bounds.width = maxX - minX;
+			_bounds.height = maxY - minY;
 		}
 
 
@@ -138,14 +138,15 @@ namespace Nez
 			_segments.RemoveLast();
 			var velocity = entity.transform.position - _segments.First.Value.position;
 
+			// if the distance between the last segment and the current position is too tiny then just copy over the current head value
 			if( velocity.LengthSquared() > float.Epsilon * float.Epsilon )
 			{
 				seg.position = entity.transform.position;
 				seg.radius = ribbonRadius;
-				seg.radiusDirection = new Vector2( velocity.Y, -velocity.X );
+				seg.radiusDirection = new Vector2( -velocity.Y, velocity.X );
 				seg.radiusDirection.Normalize();
 			}
-			else // if the distance between the last segment and the current position is too tiny then just copy over the current head value
+			else
 			{
 				seg.position = _segments.First.Value.position;
 				seg.radius = _segments.First.Value.radius;
