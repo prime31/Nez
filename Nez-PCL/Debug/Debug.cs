@@ -125,26 +125,46 @@ namespace Nez
 		#region Drawing
 
 		static List<DebugDrawItem> _debugDrawItems = new List<DebugDrawItem>();
+		static List<DebugDrawItem> _screenSpaceDebugDrawItems = new List<DebugDrawItem>();
 
 		[Conditional( "DEBUG" )]
 		internal static void render()
 		{
-			if( _debugDrawItems.Count == 0 )
-				return;
-
-			if( Core.scene != null && Core.scene.camera != null )
-				Graphics.instance.spriteBatch.Begin( SpriteSortMode.Deferred, null, null, null, null, null, Core.scene.camera.transformMatrix );
-			else
-				Graphics.instance.spriteBatch.Begin();
-
-			for( var i = _debugDrawItems.Count - 1; i >= 0; i-- )
+			if( _debugDrawItems.Count > 0 )
 			{
-				var item = _debugDrawItems[i];
-				if( item.draw( Graphics.instance ) )
-					_debugDrawItems.RemoveAt( i );
+				if( Core.scene != null && Core.scene.camera != null )
+					Graphics.instance.spriteBatch.Begin( SpriteSortMode.Deferred, null, null, null, null, null, Core.scene.camera.transformMatrix );
+				else
+					Graphics.instance.spriteBatch.Begin();
+
+				for( var i = _debugDrawItems.Count - 1; i >= 0; i-- )
+				{
+					var item = _debugDrawItems[i];
+					if( item.draw( Graphics.instance ) )
+						_debugDrawItems.RemoveAt( i );
+				}
+
+				Graphics.instance.spriteBatch.End();
 			}
 
-			Graphics.instance.spriteBatch.End();
+			if( _screenSpaceDebugDrawItems.Count > 0 )
+			{
+				var pos = Vector2.Zero;
+				Graphics.instance.spriteBatch.Begin();
+
+				for( var i = _screenSpaceDebugDrawItems.Count - 1; i >= 0; i-- )
+				{
+					var item = _screenSpaceDebugDrawItems[i];
+					item.position = pos;
+					var itemHeight = item.bitmapFont.lineHeight * item.scale;
+					if( item.draw( Graphics.instance ) )
+						_screenSpaceDebugDrawItems.RemoveAt( i );
+
+					pos.Y += itemHeight;
+				}
+
+				Graphics.instance.spriteBatch.End();
+			}
 		}
 
 
@@ -181,6 +201,28 @@ namespace Nez
 		public static void drawText( SpriteFont font, string text, Vector2 position, Color color, float duration = 0f, float scale = 1f )
 		{
 			_debugDrawItems.Add( new DebugDrawItem( font, text, position, color, duration, scale ) );
+		}
+
+
+		[Conditional( "DEBUG" )]
+		public static void drawText( string text )
+		{
+			drawText( text, Color.White );
+		}
+
+
+		[Conditional( "DEBUG" )]
+		public static void drawText( string format, params object[] args )
+		{
+			var text = string.Format( format, args );
+			drawText( text, Color.White );
+		}
+
+
+		[Conditional( "DEBUG" )]
+		public static void drawText( string text, Color color, float duration = 1f, float scale = 1f )
+		{
+			_screenSpaceDebugDrawItems.Add( new DebugDrawItem( text, color, duration, scale ) );
 		}
 
 		#endregion

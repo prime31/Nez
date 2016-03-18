@@ -8,12 +8,13 @@ namespace Nez
 {
 	internal class DebugDrawItem
 	{
-		enum DebugDrawType
+		internal enum DebugDrawType
 		{
 			Line,
 			HollowRectangle,
 			BitmapFontText,
-			SpriteFontText
+			SpriteFontText,
+			ConsoleText
 		}
 
 		// used for Line items
@@ -32,7 +33,7 @@ namespace Nez
 		public Color color;
 		public float duration;
 
-		DebugDrawType _drawType;
+		internal DebugDrawType drawType;
 
 
 		public DebugDrawItem( Vector2 start, Vector2 end, Color color, float duration )
@@ -41,7 +42,7 @@ namespace Nez
 			this.end = end;
 			this.color = color;
 			this.duration = duration;
-			_drawType = DebugDrawType.Line;
+			drawType = DebugDrawType.Line;
 		}
 
 
@@ -50,7 +51,7 @@ namespace Nez
 			this.rectangle = rectangle;
 			this.color = color;
 			this.duration = duration;
-			_drawType = DebugDrawType.HollowRectangle;
+			drawType = DebugDrawType.HollowRectangle;
 		}
 
 
@@ -62,7 +63,7 @@ namespace Nez
 			this.color = color;
 			this.scale = scale;
 			this.duration = duration;
-			_drawType = DebugDrawType.BitmapFontText;
+			drawType = DebugDrawType.BitmapFontText;
 		}
 
 
@@ -74,7 +75,18 @@ namespace Nez
 			this.color = color;
 			this.scale = scale;
 			this.duration = duration;
-			_drawType = DebugDrawType.SpriteFontText;
+			drawType = DebugDrawType.SpriteFontText;
+		}
+
+
+		public DebugDrawItem( String text, Color color, float duration, float scale )
+		{
+			bitmapFont = Graphics.instance.bitmapFont;
+			this.text = text;
+			this.color = color;
+			this.scale = scale;
+			this.duration = duration;
+			drawType = DebugDrawType.ConsoleText;
 		}
 
 
@@ -83,7 +95,7 @@ namespace Nez
 		/// </summary>
 		public bool draw( Graphics graphics )
 		{
-			switch( _drawType )
+			switch( drawType )
 			{
 				case DebugDrawType.Line:
 					graphics.spriteBatch.drawLine( start, end, color );
@@ -96,7 +108,10 @@ namespace Nez
 					break;
 				case DebugDrawType.SpriteFontText:
 					graphics.spriteBatch.DrawString( spriteFont, text, position, color, 0f, Vector2.Zero, scale, SpriteEffects.None, 0f );
-				break;
+					break;
+				case DebugDrawType.ConsoleText:
+					graphics.spriteBatch.DrawString( bitmapFont, text, position, color, 0f, Vector2.Zero, scale, SpriteEffects.None, 0f );
+					break;
 			}
 
 			duration -= Time.deltaTime;
