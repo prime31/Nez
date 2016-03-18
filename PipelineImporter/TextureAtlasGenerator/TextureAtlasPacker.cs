@@ -24,15 +24,13 @@ namespace Nez.TextureAtlasGenerator
 
 			// Build up a list of all the sprites needing to be arranged.
 			var sprites = new List<ArrangedSprite>();
-			for( int i = 0; i < sourceSprites.Count; i++ )
+			for( var i = 0; i < sourceSprites.Count; i++ )
 			{
 				var sprite = new ArrangedSprite();
 
-				// Include a single pixel padding around each sprite, to avoid
-				// filtering problems if the sprite is scaled or rotated.
+				// Include a single pixel padding around each sprite, to avoid filtering problems if the sprite is scaled or rotated.
 				sprite.width = sourceSprites[i].Width + 2;
 				sprite.height = sourceSprites[i].Height + 2;
-
 				sprite.index = i;
 
 				sprites.Add( sprite );
@@ -47,7 +45,7 @@ namespace Nez.TextureAtlasGenerator
 			var totalSpriteSize = 0;
 
 			// Choose positions for each sprite, one at a time.
-			for( int i = 0; i < sprites.Count; i++ )
+			for( var i = 0; i < sprites.Count; i++ )
 			{
 				positionSprite( sprites, i, outputWidth );
 
@@ -59,7 +57,7 @@ namespace Nez.TextureAtlasGenerator
 			if( isCompressed )
 				outputHeight = (outputHeight + 3) & ~3;
 
-			// Sort the sprites back into index order.
+			// sort the sprites back into index order.
 			sprites.Sort( compareSpriteIndices );
 
 			context.Logger.LogImportantMessage(
@@ -80,7 +78,7 @@ namespace Nez.TextureAtlasGenerator
 		{
 			var output = new PixelBitmapContent<Color>( width, height );
 
-			foreach( ArrangedSprite sprite in sprites )
+			foreach( var sprite in sprites )
 			{
 				var source = sourceSprites[sprite.index];
 
@@ -101,8 +99,7 @@ namespace Nez.TextureAtlasGenerator
 				BitmapContent.Copy( source, new Rectangle( 0, 0, w, 1 ), output, new Rectangle( x + 1, y, w, 1 ) );
 				BitmapContent.Copy( source, new Rectangle( 0, h - 1, w, 1 ), output, new Rectangle( x + 1, y + h + 1, w, 1 ) );
 
-				// Copy a single pixel from each corner of the sprite,
-				// filling in the corners of the one pixel padding area.
+				// Copy a single pixel from each corner of the sprite, filling in the corners of the one pixel padding area.
 				BitmapContent.Copy( source, new Rectangle( 0, 0, 1, 1 ), output, new Rectangle( x, y, 1, 1 ) );
 				BitmapContent.Copy( source, new Rectangle( w - 1, 0, 1, 1 ), output, new Rectangle( x + w + 1, y, 1, 1 ) );
 				BitmapContent.Copy( source, new Rectangle( 0, h - 1, 1, 1 ), output, new Rectangle( x, y + h + 1, 1, 1 ) );
@@ -143,7 +140,6 @@ namespace Nez.TextureAtlasGenerator
 			{
 				// Is this position free for us to use?
 				var intersects = findIntersectingSprite( sprites, index, x, y );
-
 				if( intersects < 0 )
 				{
 					sprites[index].x = x;
@@ -175,7 +171,7 @@ namespace Nez.TextureAtlasGenerator
 			var w = sprites[index].width;
 			var h = sprites[index].height;
 
-			for( int i = 0; i < index; i++ )
+			for( var i = 0; i < index; i++ )
 			{
 				if( sprites[i].x >= x + w )
 					continue;

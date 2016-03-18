@@ -23,6 +23,7 @@ namespace Nez.TextureAtlasGenerator
 			output.WriteObject( value.spriteRectangles );
 			output.WriteObject( spriteNames.ToArray() );
 			output.WriteObject( value.spriteAnimationDetails );
+			output.WriteObject( value.nineSliceSplits );
 			output.Write( value.animationFPS );
 		}
 

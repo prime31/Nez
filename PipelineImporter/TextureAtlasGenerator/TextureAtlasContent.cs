@@ -30,9 +30,14 @@ namespace Nez.TextureAtlasGenerator
 
 		/// <summary>
 		/// stores the folder name (ie animation name) and a point. The point.x represents the index of the first frame
-		/// and point.y is the last frame. The indexs are for the spriteRectangles array
+		/// and point.y is the last frame. The indexes are for the spriteRectangles array
 		/// </summary>
 		public Dictionary<string,Point> spriteAnimationDetails = new Dictionary<string,Point>();
+
+		/// <summary>
+		/// optional nine-slice padding for a sprite
+		/// </summary>
+		public Dictionary<string,int[]> nineSliceSplits = new Dictionary<string,int[]>();
 
 		public int animationFPS;
 	}
