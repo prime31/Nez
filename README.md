@@ -75,14 +75,14 @@ Pipeline Importers
 
 Nez comes stock with a decent bunch of Pipeline tool importers including:
 
-- **Texture Atlas Generator**: give it a directory or a list of files and it will combine them all into a single atlas and provide easy access to the source UVs of each image. Also includes a per-folder sprite animation generation. The atlas generator uses an XML file as input with an Asset Type of System.String[]. The string array should specify the folder or folders where the source images are located.
-- **LibGdxAtlases**: imports libGDX texture atlases including nine patch support
+- **Texture Atlas Generator**: give it a directory or a list of files and it will combine them all into a single atlas and provide easy access to the source images at runtime. Supports nine patch sprites as well in the [Android style](http://developer.android.com/tools/help/draw9patch.html) (single pixel border with black lines representing the patches). See also [this generator](https://romannurik.github.io/AndroidAssetStudio/nine-patches.html). Also includes a per-folder sprite animation generation. The atlas generator uses an XML file as input with an Asset Type of System.String[]. The string array should specify the folder or folders where the source images are located.
 - **Tiled**: import [Tiled](http://www.mapeditor.org/) maps. Covers tile, image and object layers and rendering with full culling support built-in along with optimized collider generation.
 - **Bitmap Fonts**: imports BMFont files (from programs like [Glyph Designer](https://71squared.com/glyphdesigner), [Littera](http://kvazars.com/littera/), etc). Outputs a single xnb file and includes SpriteBatch extension methods to display text the directly match the SpriteFont methods.
-- **Texture Packer**: imports a [TexturePacker](https://www.codeandweb.com/texturepacker) atlas and JSON file
 - **Particle Designer Importer**: imports [Particle Designer](https://71squared.com/particledesigner) particle systems for use with the Nez particle system
-- **XMLTemplateMaker**: this isn't so much an imoporter as a helper to make your own importer. Pass it a class and it spits out an XML template that you can use for your own custom XML-to-object importers.
+- **LibGdxAtlases**: imports libGDX texture atlases including nine patch support
+- **Texture Packer**: imports a [TexturePacker](https://www.codeandweb.com/texturepacker) atlas and JSON file
 - **Overlap2D**: imports [Overlap2D](http://overlap2d.com/) projects. Imports almost all of the data but currently only offers renderers for the basics (no fancy stuff like Spriter animations, lights, etc).
+- **XMLTemplateMaker**: this isn't so much an imoporter as a helper to make your own importer. Pass it a class and it spits out an XML template that you can use for your own custom XML-to-object importers.
 
 
 
