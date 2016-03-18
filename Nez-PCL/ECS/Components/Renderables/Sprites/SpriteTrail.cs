@@ -186,11 +186,12 @@ namespace Nez.Sprites
 		}
 
 
-		public void enableSpriteTrail()
+		public SpriteTrail enableSpriteTrail()
 		{
 			_awaitingDisable = false;
 			_isFirstInstance = true;
 			enabled = true;
+			return this;
 		}
 
 

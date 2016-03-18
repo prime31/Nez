@@ -180,10 +180,10 @@ namespace MacTester
 			spriteAnimation.addFrame( textureAtlas.getSubtexture( "Ninja_Idle_1" ) );
 			spriteAnimation.addFrame( textureAtlas.getSubtexture( "Ninja_Idle_2" ) );
 			spriteAnimation.addFrame( textureAtlas.getSubtexture( "Ninja_Idle_3" ) );
-			spriteAnimation.addFrame( anotherAtlas.getSubtexture( "airDash-Ninja_Air Dash_0" ) );
-			spriteAnimation.addFrame( anotherAtlas.getSubtexture( "airDash-Ninja_Air Dash_1" ) );
-			spriteAnimation.addFrame( anotherAtlas.getSubtexture( "airDash-Ninja_Air Dash_2" ) );
-			spriteAnimation.addFrame( anotherAtlas.getSubtexture( "airDash-Ninja_Air Dash_3" ) );
+			spriteAnimation.addFrame( anotherAtlas.getSubtexture( "Ninja_Air Dash_0" ) );
+			spriteAnimation.addFrame( anotherAtlas.getSubtexture( "Ninja_Air Dash_1" ) );
+			spriteAnimation.addFrame( anotherAtlas.getSubtexture( "Ninja_Air Dash_2" ) );
+			spriteAnimation.addFrame( anotherAtlas.getSubtexture( "Ninja_Air Dash_3" ) );
 
 			var sprite = new Sprite<int>( 1, anotherAtlas.getSpriteAnimation( "hardLanding" ) );
 			sprite.addAnimation( 0, spriteAnimation );
@@ -191,7 +191,7 @@ namespace MacTester
 			entity.addComponent( sprite );
 			entity.addComponent( new SimpleMoonMover() );
 			entity.addComponent( new SpriteTrail( sprite ) );
-			entity.getComponent<SpriteTrail>().enableSpriteTrail();
+			entity.getComponent<SpriteTrail>().enableSpriteTrail().fadeDuration = 0.3f;
 
 
 			// add a post processor to display the RenderTarget

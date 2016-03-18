@@ -115,9 +115,6 @@
     <None Include="Content\Images\AnotherAtlas\airSlash\Ninja_Air Slash_5.png" />
     <None Include="Content\Images\AnotherAtlas\airSlash\Ninja_Air Slash_6.png" />
     <None Include="Content\Images\AnotherAtlas\airSlash\Ninja_Air Slash_7.png" />
-    <None Include="..\DefaultContent\effects\Invert.mgfxo">
-      <Link>Content\Effects\Invert.mgfxo</Link>
-    </None>
     <None Include="Content\Effects\Light.fx" />
     <None Include="Content\Effects\SpriteLightMultiply.fx" />
   </ItemGroup>
@@ -127,7 +124,6 @@
     </Content>
     <Content Include="Content\Images\mask.jpg" />
     <Content Include="Content\Images\tile.png" />
-    <Content Include="Content\nez\NezDefaultBMFont.xnb" />
     <Content Include="..\DefaultContent\effects\BloomCombine.mgfxo">
       <Link>Content\nez\effects\BloomCombine.mgfxo</Link>
     </Content>
