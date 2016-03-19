@@ -589,6 +589,22 @@ namespace MacTester
 
 			return scene;
 		}
+	
+	
+		static void addScreenSpaceContent( Scene scene )
+		{
+			var moonTexture = scene.contentManager.Load<Texture2D>( "bin/MacOSX/Images/moon" );
+			scene.addRenderer( new ScreenSpaceRenderer( 5, 10 ) );
+
+			var ent = scene.createEntity( "screen-space" );
+			ent.transform.position = new Vector2( 0, 0 );
+			ent.addComponent( new Sprite( moonTexture ) ).renderLayer = 10;
+
+
+			ent = scene.createEntity( "screen-space" );
+			ent.transform.position = new Vector2( 100, 100 );
+			ent.addComponent( new Sprite( moonTexture ) ).renderLayer = 10;
+		}
 	}
 
 

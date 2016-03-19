@@ -132,6 +132,9 @@ namespace MacTester
 
 			debugRenderEnabled = IMGUI.toggle( "Debug Render", debugRenderEnabled );
 
+			if( IMGUI.button( "Destructable Map" ) )
+				scene = new DestructableMapScene();
+			
 			if( IMGUI.button( "Scene 1 ShowAll" ) )
 				scene = Scenes.sceneOne( true );
 

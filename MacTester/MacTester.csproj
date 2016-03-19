@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\MonoGame\v3.0\MonoGame.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\MonoGame\v3.0\MonoGame.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
@@ -11,6 +12,7 @@
     <AssemblyName>MacTester</AssemblyName>
     <SuppressXamMacUpsell>True</SuppressXamMacUpsell>
     <SuppressXamMacMigration>True</SuppressXamMacMigration>
+    <MonoGamePlatform>MacOSX</MonoGamePlatform>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -76,13 +78,13 @@
     <Compile Include="Visibility\VisibilityComputer.cs" />
     <Compile Include="Visibility\PointLight.cs" />
     <Compile Include="Visibility\SpriteLightPostProcessor.cs" />
+    <Compile Include="tiledMap\DestructableMapScene.cs" />
+    <Compile Include="tiledMap\PlayerDashMover.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Info.plist" />
-    <None Include="Content\Content.mgcb" />
     <None Include="Content\Fonts\DefaultFont.spritefont" />
     <None Include="Content\Fonts\graphicpixel.ttf" />
-    <None Include="packages.config" />
     <None Include="Content\Images\TextureAtlas\background.png" />
     <None Include="Content\Images\TextureAtlas\tree.png" />
     <None Include="Content\Images\TextureAtlas\Ninja_Idle_0.png" />
@@ -117,6 +119,8 @@
     <None Include="Content\Images\AnotherAtlas\airSlash\Ninja_Air Slash_7.png" />
     <None Include="Content\Effects\Light.fx" />
     <None Include="Content\Effects\SpriteLightMultiply.fx" />
+    <None Include="packages.config" />
+    <MonoGameContentReference Include="Content\Content.mgcb" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bin\**\*.*">
@@ -179,8 +183,16 @@
     <Content Include="Content\Images\BlockGlow.png" />
     <Content Include="Content\Effects\SpriteLightMultiply.mgfxo" />
     <Content Include="Content\Images\sprite-light.png" />
+    <Content Include="Content\bin\MacOSX\Tilemap\destructable-map.xnb" />
+    <Content Include="..\DefaultContent\effects\Invert.mgfxo">
+      <Link>Content\Effects\Invert.mgfxo</Link>
+    </Content>
+    <Content Include="..\DefaultContent\NezDefaultBMFont.xnb">
+      <Link>Content\nez\NezDefaultBMFont.xnb</Link>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(MSBuildExtensionsPath)\MonoGame\v3.0\MonoGame.Content.Builder.targets" />
   <ItemGroup>
     <ProjectReference Include="..\Nez-PCL\Nez.csproj">
       <Project>{60B7197D-D0D5-405C-90A2-A56903E9B039}</Project>
@@ -198,6 +210,7 @@
     <Folder Include="Content\Effects\" />
     <Folder Include="Content\nez\effects\transitions\" />
     <Folder Include="Visibility\" />
+    <Folder Include="tiledMap\" />
   </ItemGroup>
   <ItemGroup>
     <InterfaceDefinition Include="MainMenu.xib" />

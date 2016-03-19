@@ -12,8 +12,8 @@
 
 /reference:../../PipelineImporter/bin/Debug/Ionic.ZLib.dll
 /reference:../../PipelineImporter/bin/Debug/Newtonsoft.Json.dll
-/reference:../../PipelineImporter/bin/Debug/PipelineImporter.dll
 /reference:../../Nez-PCL/bin/Debug/Nez.dll
+/reference:../../PipelineImporter/bin/Debug/Nez.PipelineImporter.dll
 
 #---------------------------------- Content ---------------------------------#
 
@@ -251,6 +251,10 @@
 /processorParam:TextureFormat=Color
 /build:Tilemap/desert-palace-tiles.png
 
+#begin Tilemap/destructable-map.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Tilemap/destructable-map.tmx
 
 #begin OverlapTest/MainScene.dt
 /importer:Overlap2DImporter
@@ -291,4 +295,16 @@
 /processor:FontDescriptionProcessor
 /processorParam:TextureFormat=Color
 /build:Fonts/DefaultFont.spritefont
+
+#begin Tilemap/desert-palace-tiles2x.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Tilemap/desert-palace-tiles2x.png
 
