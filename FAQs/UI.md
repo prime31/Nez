@@ -6,7 +6,7 @@ Nez UI is based on TableLayout ([click for documentation](https://github.com/Eso
 - the Widget and WidgetGroup classes dont exist in Nez. Similar functionality is found in the Element and Group classes but this is really only relevant if you are making your own custom controls.
 
 
-Lets jump right in and see what its like to make a simple UI. We will make a UI with a ProgressBar, Slider (both horizontal) and Button centered in a vertical stack.
+Lets jump right in and see what its like to make a UI. We will make a UI with a ProgressBar and Slider (both horizontal) and Button centered in a vertical stack. Note that the `stage` referenced below is directly from the `UICanvas` component, which is a simple base component for managing a Stage.
 
 ```csharp
 // tables are very flexible and make good candidates to use at the root of your UI. They work much like HTML tables but with more flexibility.
@@ -57,7 +57,7 @@ Nez UI supports a skin system similar to [libGDX skins](https://github.com/libgd
 
 	// array of any TextureAtlases. The path should be the same one you would use to load it via the content system.
 	textureAtlases: [ 'bin/skin/textureAtlas' ],
-	
+
 	// the rest of the file is specific style types. The key (ButtonStyle here) is the exact class name from the UI element.
 	ButtonStyle:
 	{
@@ -104,10 +104,10 @@ var skin = new Skin( "skins/uiskinconfig", Core.contentManager );
 
 // notice that we can directly fetch the style for the button via the name we specified in the JSON
 var button = new Button( skin.get<TextButtonStyle>( "default" ) );
-	
+
 var bar = new ProgressBar( 0, 1, 0.1f, vertical, skin.get<ProgressBarStyle>( "default-vertical" ) );
 
-// this button uses the 'colored' style that we made using only colors. We have to remember to give it 
+// this button uses the 'colored' style that we made using only colors. We have to remember to give it
 var button = new Button( skin.get<ButtonStyle>( "colored" ) );
 table.add( button ).setMinWidth( 100 ).setMinHeight( 30 );
 ```
@@ -124,7 +124,7 @@ var skin = new Skin();
 
 // add a texture atlas so we have some images to work with
 skin.addSubtextures( Content.Load<LibGdxAtlas>( "skins/UIAtlas" ) );
-	
+
 // add a bunch of styles for our elements. Note that the getDrawable method is very flexible. The name passed to it can be any type of
 // IDrawable or it can be a Subtexture, NinePatchSubtexture or Color. In the latter case Skin will create and manage the IDrawable
 // for you automatically.

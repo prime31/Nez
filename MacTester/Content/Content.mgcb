@@ -13,7 +13,7 @@
 /reference:../../PipelineImporter/bin/Debug/Ionic.ZLib.dll
 /reference:../../PipelineImporter/bin/Debug/Newtonsoft.Json.dll
 /reference:../../Nez-PCL/bin/Debug/Nez.dll
-/reference:../../PipelineImporter/bin/Debug/Nez.PipelineImporter.dll
+/reference:../../Nez.PipelineImporter/bin/Debug/Nez.PipelineImporter.dll
 
 #---------------------------------- Content ---------------------------------#
 
@@ -307,4 +307,26 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Tilemap/desert-palace-tiles2x.png
+
+#begin UISkins/uiskin.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:UISkins/uiskin.png
+
+#begin UISkins/uiskinatlas.atlas
+/importer:
+/processor:
+/build:UISkins/uiskinatlas.atlas
+
+#begin UISkins/uiskinconfig.uiskin
+/importer:
+/processor:
+/build:UISkins/uiskinconfig.uiskin
 
