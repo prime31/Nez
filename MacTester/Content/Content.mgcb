@@ -17,12 +17,6 @@
 
 #---------------------------------- Content ---------------------------------#
 
-#begin Fonts/DefaultFont.spritefont
-/importer:FontDescriptionImporter
-/processor:FontDescriptionProcessor
-/processorParam:TextureFormat=Color
-/build:Fonts/DefaultFont.spritefont
-
 #begin Tilemap/background.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -67,15 +61,17 @@
 #begin TextureAtlasTest/AtlasImages.xml
 /importer:XmlImporter
 /processor:TextureAtlasProcessor
-/processorParam:CompressTexture=False
-/processorParam:AnimationFPS=10
+/processorParam:compressTexture=False
+/processorParam:animationFPS=10
+/processorParam:flattenPaths=True
 /build:TextureAtlasTest/AtlasImages.xml
 
 #begin TextureAtlasTest/AnotherAtlas.xml
 /importer:XmlImporter
 /processor:TextureAtlasProcessor
-/processorParam:CompressTexture=False
-/processorParam:AnimationFPS=15
+/processorParam:compressTexture=False
+/processorParam:animationFPS=10
+/processorParam:flattenPaths=True
 /build:TextureAtlasTest/AnotherAtlas.xml
 
 #begin Overlap2D/MainScene.dt
@@ -289,4 +285,10 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Overlap2D/pack2.png
+
+#begin Fonts/DefaultFont.spritefont
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/processorParam:TextureFormat=Color
+/build:Fonts/DefaultFont.spritefont
 
