@@ -726,7 +726,7 @@ namespace MacTester
 				_grid = entity.scene.findEntity( "grid" ).getComponent<SpringGrid>();
 			}
 
-			public void update()
+			void IUpdatable.update()
 			{
 				var velocity = entity.transform.position - _lastPosition;
 				_grid.applyExplosiveForce( 0.5f * velocity.Length(), entity.transform.position, 80 );

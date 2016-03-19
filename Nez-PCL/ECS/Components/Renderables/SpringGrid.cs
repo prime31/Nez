@@ -296,7 +296,7 @@ namespace Nez
 		}
 
 
-		public void update()
+		void IUpdatable.update()
 		{
 			_screenSize.X = Screen.width;
 			_screenSize.Y = Screen.height;

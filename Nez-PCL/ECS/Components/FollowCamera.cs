@@ -80,7 +80,7 @@ namespace Nez
 		}
 
 
-		public void update()
+		void IUpdatable.update()
 		{
 			// translate the deadzone to be in world space
 			_worldSpaceDeadzone.x = camera.position.X - camera.origin.X + deadzone.x + focusOffset.X;

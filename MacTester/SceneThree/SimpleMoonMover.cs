@@ -19,7 +19,7 @@ namespace MacTester
 		}
 
 
-		public void update()
+		void IUpdatable.update()
 		{
 			var moveDir = Vector2.Zero;
 

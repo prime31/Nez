@@ -89,7 +89,7 @@ namespace Nez.Particles
 		}
 
 
-		public void update()
+		void IUpdatable.update()
 		{
 			if( _isPaused )
 				return;

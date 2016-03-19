@@ -52,7 +52,6 @@ namespace Nez
 		/// full area in which we will be rendering
 		/// </summary>
 		Rectangle _finalRenderRect;
-		Rectangle[] _sourceRects = new Rectangle[9];
 		Rectangle[] _destRects = new Rectangle[9];
 		bool _destRectsDirty = true;
 
@@ -60,7 +59,6 @@ namespace Nez
 		public NineSliceSprite( NinePatchSubtexture subtexture ) : base( subtexture )
 		{
 			this.subtexture = subtexture;
-			//subtexture.generateNinePatchRects( subtexture.sourceRect, _sourceRects, marginTop, marginBottom, marginLeft, marginRight );
 		}
 
 

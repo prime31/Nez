@@ -30,7 +30,7 @@ namespace MacTester
 		}
 
 
-		public void update()
+		void IUpdatable.update()
 		{
 			var x = Mathf.pingPong( Time.time, 1f );
 			var xToTheSpeedFactor = Mathf.pow( x, _speedFactor );

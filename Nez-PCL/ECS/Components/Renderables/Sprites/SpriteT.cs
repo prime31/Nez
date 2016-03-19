@@ -55,7 +55,7 @@ namespace Nez.Sprites
 
 		#region Component overrides
 
-		public void update()
+		void IUpdatable.update()
 		{
 			if( _currentAnimation == null || !isPlaying )
 				return;

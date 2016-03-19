@@ -131,7 +131,7 @@ namespace Nez
 		}
 
 
-		public void update()
+		void IUpdatable.update()
 		{
 			// remove last node and put it at the front with new settings
 			var seg = _segments.Last.Value;

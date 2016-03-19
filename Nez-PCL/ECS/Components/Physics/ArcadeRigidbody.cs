@@ -97,7 +97,7 @@ namespace Nez
 		}
 
 
-		public void update()
+		void IUpdatable.update()
 		{
 			if( isImmovable )
 			{

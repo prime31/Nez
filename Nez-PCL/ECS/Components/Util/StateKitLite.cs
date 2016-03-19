@@ -77,7 +77,7 @@ namespace Nez
 		}
 
 
-		public void update()
+		void IUpdatable.update()
 		{
 			elapsedTimeInState += Time.deltaTime;
 

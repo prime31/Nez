@@ -84,7 +84,7 @@ namespace Nez
 		}
 
 
-		public void update()
+		void IUpdatable.update()
 		{
 			// set position of first trail node;
 			_trailNodes[0].position = Input.rawMousePosition.ToVector2();

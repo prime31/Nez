@@ -25,7 +25,7 @@ namespace MacTester
 		}
 
 
-		public void update()
+		void IUpdatable.update()
 		{
 			entity.scene.camera.position = new Vector2( entity.scene.sceneRenderTargetSize.X / 2, entity.scene.sceneRenderTargetSize.Y / 2 );
 			if( _isGrounded )

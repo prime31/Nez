@@ -86,7 +86,7 @@ namespace Nez
 		}
 
 
-		public void update()
+		void IUpdatable.update()
 		{
 			tiledmap.update();
 		}

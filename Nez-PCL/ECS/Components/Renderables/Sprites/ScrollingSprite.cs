@@ -62,7 +62,7 @@ namespace Nez.Sprites
 		{}
 
 
-		public void update()
+		void IUpdatable.update()
 		{
 			_sourceRect.X += (int)( scrollSpeedX * Time.deltaTime );
 			_sourceRect.Y += (int)( scrollSpeedY * Time.deltaTime );

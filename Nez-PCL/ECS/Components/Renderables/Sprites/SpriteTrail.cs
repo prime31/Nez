@@ -149,7 +149,7 @@ namespace Nez.Sprites
 		}
 
 
-		public void update()
+		void IUpdatable.update()
 		{
 			if( _isFirstInstance )
 			{

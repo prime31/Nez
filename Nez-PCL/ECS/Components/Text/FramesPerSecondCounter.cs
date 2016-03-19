@@ -76,7 +76,7 @@ namespace Nez
 		}
 
 
-		public void update()
+		void IUpdatable.update()
 		{
 			currentFramesPerSecond = 1.0f / Time.unscaledDeltaTime;
 			_sampleBuffer.Enqueue( currentFramesPerSecond );
