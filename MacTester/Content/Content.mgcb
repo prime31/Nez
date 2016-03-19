@@ -321,12 +321,34 @@
 /build:UISkins/uiskin.png
 
 #begin UISkins/uiskinatlas.atlas
-/importer:
-/processor:
+/importer:LibGdxAtlasImporter
+/processor:LibGdxAtlasProcessor
 /build:UISkins/uiskinatlas.atlas
 
 #begin UISkins/uiskinconfig.uiskin
-/importer:
-/processor:
+/importer:UISkinImporter
+/processor:UISkinProcessor
 /build:UISkins/uiskinconfig.uiskin
+
+#begin UISkins/orangeSkin.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:UISkins/orangeSkin.png
+
+#begin UISkins/orangeSkinConfig.uiskin
+/importer:UISkinImporter
+/processor:UISkinProcessor
+/build:UISkins/orangeSkinConfig.uiskin
+
+#begin UISkins/orangeSkinAtlas.atlas
+/importer:LibGdxAtlasImporter
+/processor:LibGdxAtlasProcessor
+/build:UISkins/orangeSkinAtlas.atlas
 

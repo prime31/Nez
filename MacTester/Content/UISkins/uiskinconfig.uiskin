@@ -10,7 +10,12 @@
 		dialogDim: [50, 50, 50, 50],
 		white: '#ffffff'
 	},
-	libGdxAtlases: [ 'bin/MacOSX/UISkins/uiskinatlas' ],
+	libGdxAtlases: [ 'bin/MacOSX/UISkins/orangeSkinAtlas' ],
+	ProgressBarStyle:
+	{
+		'default-horizontal': { background: 'default-slider', knob: 'default-slider-knob' },
+		'default-vertical': { background: 'default-slider', knob: 'default-round-large' }
+	},
 	ButtonStyle:
 	{
 		default: { down: 'default-round-down', up: 'default-round' },
@@ -34,11 +39,6 @@
 	{
 		default: { titleFont: 'nez/NezDefaultBMFont', background: 'default-window', titleFontColor: 'white' },
 		dialog: { titleFont: 'nez/NezDefaultBMFont', background: 'default-window', titleFontColor: 'white', stageBackground: 'dialogDim' }
-	},
-	ProgressBarStyle:
-	{
-		'default-horizontal': { background: 'default-slider', knob: 'default-slider-knob' },
-		'default-vertical': { background: 'default-slider', knob: 'default-round-large' }
 	},
 	SliderStyle:
 	{
