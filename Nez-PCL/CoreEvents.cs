@@ -10,9 +10,7 @@ namespace Nez
 		/// Called when the graphics device resets. When this happens, any RenderTargets or other contents of VRAM will be wiped and need to be regenerated
 		/// </summary>
 		GraphicsDeviceReset,
-		SceneChanged,
-		GamePadConnected,
-		GamePadDisconnected
+		SceneChanged
 	}
 
 

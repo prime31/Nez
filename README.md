@@ -48,7 +48,7 @@ Setup
 
 All Nez shaders are compiled for OpenGL! If you are on Windows make sure you start from an OpenGL template, not DirectX! Nez only supports OpenGL out of the box to keep things compatible accross Android/iOS/Mac/Linux/Windows. Nez needs to have the DefaultContent/NezDefaultBMFont.xnb file placed in your project's Content/nez folder. It sets up the font as the default for all text in it's debug console and for your own use. If you intend to use any of the built in Effects or PostProcessors you should also copy the DefaultContent/effects folder contents into your projects Content/nez/effects folder. Be sure to set the Build Action to Content so they get copied into your compiled game. Your Game class should then subclsas
 
-If you are on Windows, there is one more thing you have to do. In your Game class constructor add the following line: `Window.ClientSizeChanged += Core.onClientSizeChanged;` This will wire up the window resize listner that Nez requires. Note also that the precompiled shaders are all OpenGL so if you plan to use them be sure to choose a WindowsGL project when creating yours.
+If you are on Windows (or using MonoGame 3.5), there is one more thing you have to do. In your Game class constructor or Initialize method add the following line: `Window.ClientSizeChanged += Core.onClientSizeChanged;` This will wire up the window resize listner that Nez requires. Note also that the precompiled shaders are all OpenGL so if you plan to use them be sure to choose a DesktopGL project when creating yours.
 
 
 
@@ -81,7 +81,7 @@ Nez comes stock with a decent bunch of Pipeline tool importers including:
 - **Particle Designer Importer**: imports [Particle Designer](https://71squared.com/particledesigner) particle systems for use with the Nez particle system
 - **LibGdxAtlases**: imports libGDX texture atlases including nine patch support
 - **Texture Packer**: imports a [TexturePacker](https://www.codeandweb.com/texturepacker) atlas and JSON file
-- **Overlap2D**: imports [Overlap2D](http://overlap2d.com/) projects. Imports almost all of the data but currently only offers renderers for the basics (no fancy stuff like Spriter animations, lights, etc).
+- **Overlap2D**: imports [Overlap2D](http://overlap2d.com/) projects. Imports most of the data but currently only offers renderers for the basics (no fancy stuff like Spriter animations, lights, etc). To use the importer the .atlas and any of your scene files (*.dt) should be processed by the Pipeline tool. Your project.dt file must also be present (it can be in the same folder as your scene files or one folder up) but it should not be processed.
 - **XMLTemplateMaker**: this isn't so much an imoporter as a helper to make your own importer. Pass it a class and it spits out an XML template that you can use for your own custom XML-to-object importers.
 
 

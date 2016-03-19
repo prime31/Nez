@@ -115,8 +115,7 @@ namespace Nez
 
 		public static void applyChanges()
 		{
-			//_graphicsManager.ApplyChanges();
-			Debug.warn( "noop. applyChanges doesnt work properly on OS X. It causes a crash with no stack trace due to a MonoGame bug." );
+			_graphicsManager.ApplyChanges();
 		}
 
 
@@ -125,7 +124,7 @@ namespace Nez
 		/// </summary>
 		/// <param name="width">Width.</param>
 		/// <param name="height">Height.</param>
-		public static void updatePreferredBackBufferSize( int width, int height )
+		public static void setSize( int width, int height )
 		{
 			preferredBackBufferWidth = width;
 			preferredBackBufferHeight = height;

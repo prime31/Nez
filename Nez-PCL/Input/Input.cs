@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework;
 using System.Collections.Generic;
+using Nez.Systems;
 #if !FNA
 using Microsoft.Xna.Framework.Input.Touch;
 #endif
@@ -11,9 +12,9 @@ namespace Nez
 {
 	public static class Input
 	{
-		static readonly int MAX_SUPPORTED_GAMEPADS = 2;
+		public static Emitter<InputEventType,InputEvent> emitter;
 
-		public static GamePadData[] gamePads = new GamePadData[MAX_SUPPORTED_GAMEPADS];
+		public static GamePadData[] gamePads;
 		public const float DEFAULT_DEADZONE = 0.1f;
 
 		/// <summary>
@@ -37,33 +38,31 @@ namespace Nez
 		static List<GestureSample> _currentGestures = new List<GestureSample>();
 		#endif
 
+		public static int maxSupportedGamePads
+		{
+			get { return _maxSupportedGamePads; }
+			set
+			{
+				_maxSupportedGamePads = Mathf.clamp( value, 1, 4 );
+				gamePads = new GamePadData[_maxSupportedGamePads];
+				for( var i = 0; i < _maxSupportedGamePads; i++ )
+					gamePads[i] = new GamePadData( (PlayerIndex)i );
+			}
+		}
+		static int _maxSupportedGamePads;
+
 
 		static Input()
 		{
+			emitter = new Emitter<InputEventType,InputEvent>();
+
 			_previousKbState = new KeyboardState();
 			_currentKbState = Microsoft.Xna.Framework.Input.Keyboard.GetState();
 
 			_previousMouseState = new MouseState();
 			_currentMouseState = Microsoft.Xna.Framework.Input.Mouse.GetState();
 
-			int count = 0;
-			try
-			{
-				for( var i = 0; i < 2; i++ )
-				{
-					Microsoft.Xna.Framework.Input.GamePad.GetCapabilities( (PlayerIndex)i );
-					count++;
-				}
-			}
-			catch( Exception )
-			{}
-			finally
-			{
-				MAX_SUPPORTED_GAMEPADS = count;
-			}
-
-			for( var i = 0; i < MAX_SUPPORTED_GAMEPADS; i++ )
-				gamePads[i] = new GamePadData( (PlayerIndex)i );
+			maxSupportedGamePads = 1;
 
 			Core.emitter.addObserver( CoreEvents.GraphicsDeviceReset, onGraphicsDeviceReset );
 			onGraphicsDeviceReset();
@@ -78,7 +77,7 @@ namespace Nez
 			_previousMouseState = _currentMouseState;
 			_currentMouseState = Microsoft.Xna.Framework.Input.Mouse.GetState();
 
-			for( var i = 0; i < MAX_SUPPORTED_GAMEPADS; i++ )
+			for( var i = 0; i < _maxSupportedGamePads; i++ )
 				gamePads[i].update();
 
 			for( var i = 0; i < _virtualInputs.Count; i++ )
@@ -104,7 +103,7 @@ namespace Nez
 			// TODO: find a way to grab the GameWindow OnOrientationChange event inside the PCL
 			// For the time being you can just call this method hooking the event on your own
 			// Game class like this: 			
-			// Window.OrientationChanged += OnOrientationChanged;
+			// Window.OrientationChanged += onOrientationChanged;
 
 			#if !FNA
 			TouchPanel.DisplayWidth = Core.graphicsDevice.Viewport.Width;
@@ -233,10 +232,7 @@ namespace Nez
 		/// </summary>
 		public static bool rightMouseButtonDown
 		{
-			get
-			{
-				return _currentMouseState.RightButton == ButtonState.Pressed;
-			}
+			get { return _currentMouseState.RightButton == ButtonState.Pressed; }
 		}
 
 
@@ -333,6 +329,38 @@ namespace Nez
 
 		#endregion
 	
+	}
+
+
+	public enum InputEventType
+	{
+		GamePadConnected,
+		GamePadDisconnected
+	}
+
+
+	public struct InputEvent
+	{
+		public int gamePadIndex;
+	}
+
+
+	/// <summary>
+	/// comparer that should be passed to a dictionary constructor to avoid boxing/unboxing when using an enum as a key
+	/// on Mono
+	/// </summary>
+	public struct InputEventTypeComparer : IEqualityComparer<InputEventType>
+	{
+		public bool Equals( InputEventType x, InputEventType y )
+		{
+			return x == y;
+		}
+
+
+		public int GetHashCode( InputEventType obj )
+		{
+			return (int)obj;
+		}
 	}
 }
 

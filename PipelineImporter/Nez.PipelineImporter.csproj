@@ -5,8 +5,8 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{63E831F4-B847-4150-B5AF-CBE059EE27B8}</ProjectGuid>
     <OutputType>Library</OutputType>
-    <RootNamespace>PipelineImporter</RootNamespace>
-    <AssemblyName>PipelineImporter</AssemblyName>
+    <RootNamespace>Nez.PipelineImporter</RootNamespace>
+    <AssemblyName>Nez.PipelineImporter</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">

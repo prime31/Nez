@@ -30,7 +30,12 @@ namespace Nez
 
 			// check for controller connects/disconnects
 			if( _previousState.IsConnected != _currentState.IsConnected )
-				Core.emitter.emit( _currentState.IsConnected ? CoreEvents.GamePadConnected : CoreEvents.GamePadDisconnected );
+			{
+				var data = new InputEvent {
+					gamePadIndex = (int)_playerIndex
+				};
+				Input.emitter.emit( _currentState.IsConnected ? InputEventType.GamePadConnected : InputEventType.GamePadDisconnected, data );
+			}
 
 			if( _rumbleTime > 0f )
 			{

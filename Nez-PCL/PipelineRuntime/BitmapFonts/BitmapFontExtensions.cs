@@ -3,9 +3,10 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Nez.TextureAtlases;
 using System.Text;
+using Nez.BitmapFonts;
 
 
-namespace Nez.BitmapFonts
+namespace Nez
 {
 	/// <summary>
 	/// provides the full SpriteFont assortment of DrawString methods

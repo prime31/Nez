@@ -90,35 +90,6 @@ namespace Nez.Console
 		}
 
 
-		//[Command( "tracker", "Logs all tracked objects in the scene. Set mode to 'e' for just entities, or 'c' for just components" )]
-		static private void tracker( string mode )
-		{
-			if( Core.scene == null )
-			{
-				DebugConsole.instance.log( "Current Scene is null!" );
-				return;
-			}
-
-			switch( mode )
-			{
-				default:
-					DebugConsole.instance.log( "-- Entities --" );
-					//Engine.Scene.Tracker.LogEntities();
-					DebugConsole.instance.log( "-- Components --" );
-					//Engine.Scene.Tracker.LogComponents();
-				break;
-
-				case "e":
-					//Engine.Scene.Tracker.LogEntities();
-				break;
-
-				case "c":
-					//Engine.Scene.Tracker.LogComponents();
-				break;
-			}
-		}
-
-
 		[Command( "timescale", "Sets the timescale. Defaults to 1" )]
 		static private void tilescale( float timeScale = 1 )
 		{
