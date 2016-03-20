@@ -19,12 +19,16 @@ Nez aims to be a lightweight 2D framework that sits on top of MonoGame/FNA. It p
 - tons more stuff
 
 
+Samples Repository
+==========
+You can find the samples repo [here](https://github.com/prime31/Nez-Samples). It contains a variety of sample scenes that demonstrate the basics of getting stuff done with Nez.
+
+
+
 IMPORTANT: READ THIS FIRST
 ==========
 
-Nez is a very young beast and should be considered pre-alpha. There will without a doubt be bugs present. Some things might not be implemented. Some things might be incomplete. The samples repository is not yet online. For the time being, the main Nez repository will contain a project that has various poorly written examples in the MacTester project. Please do not consider the code in them as best practices. The project was used as a scratchpad when developing some features along the way so it does contain an odd variety of very simple examples along with a bunch of Pipeline Tool examples.
-
-The assets in the MacTester project are not MIT licensed. They should not be used in any project. Most are of unknown copyright/origin so assume they are all off limits and use them only for your own personal amusement. The Tiled map example is directly from [here](https://github.com/underscorediscovery/luxe/tree/master/samples/examples/platformer/assets). The entire MacTester project will be purged when the Nez Samples repository goes online.
+Nez is a very young beast and should be considered pre-alpha. There will without a doubt be bugs present. Some things might not be implemented. Some things might be incomplete.
 
 
 
