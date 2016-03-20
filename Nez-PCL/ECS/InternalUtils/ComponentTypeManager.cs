@@ -12,9 +12,9 @@ namespace Nez
 
 		public static void initialize()
 		{
-			var currentdomain = typeof( string ).Assembly.GetType( "System.AppDomain" ).GetProperty( "CurrentDomain" ).GetGetMethod().Invoke( null, new object[] { } );
-			var getassemblies = currentdomain.GetType().GetMethod( "GetAssemblies", new Type[]{ } );
-			var assemblies = getassemblies.Invoke( currentdomain, new object[]{ } ) as Assembly[];
+			var currentDomain = typeof( string ).Assembly.GetType( "System.AppDomain" ).GetProperty( "CurrentDomain" ).GetGetMethod().Invoke( null, new object[] { } );
+			var getAssemblies = currentDomain.GetType().GetMethod( "GetAssemblies", new Type[]{ } );
+			var assemblies = getAssemblies.Invoke( currentDomain, new object[]{ } ) as Assembly[];
 
 			foreach( var assembly in assemblies )
 			{

@@ -846,6 +846,16 @@ namespace Nez.UI
 		}
 
 
+		/// <summary>
+		/// returns all the Cells in the table
+		/// </summary>
+		/// <returns>The cells.</returns>
+		public List<Cell> getCells()
+		{
+			return _cells;
+		}
+
+
 		public Value getPadTopValue()
 		{
 			return _padTop;

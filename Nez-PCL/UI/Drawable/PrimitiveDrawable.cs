@@ -17,14 +17,19 @@ namespace Nez.UI
 
 		#endregion
 
-		bool _useFilledRect;
+		bool _useFilledRect = true;
 		Color? _color;
 
 
-		public PrimitiveDrawable( Color? color = null, bool useFilledRect = true )
+		public PrimitiveDrawable( Color? color = null )
 		{
-			_useFilledRect = useFilledRect;
 			_color = color;
+		}
+
+
+		public PrimitiveDrawable( Color color, float horizontalPadding ) : this( color )
+		{
+			leftWidth = rightWidth = horizontalPadding;
 		}
 
 

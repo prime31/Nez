@@ -136,6 +136,12 @@ namespace Nez.UI
 		}
 
 
+		public void setIsVisible( bool visible )
+		{
+			_visible = visible;
+		}
+
+
 		public bool isVisible()
 		{
 			return _visible;
