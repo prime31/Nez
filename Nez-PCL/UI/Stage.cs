@@ -134,7 +134,7 @@ namespace Nez.UI
 		{
 			updateKeyboardState();
 
-			var currentMousePosition = Input.scaledMousePosition;
+			var currentMousePosition = entity != null ? Input.scaledMousePosition : Input.rawMousePosition.ToVector2();
 			var didMouseMove = false;
 			if( _lastMousePosition != currentMousePosition )
 			{
@@ -316,7 +316,9 @@ namespace Nez.UI
 		/// <returns>The width.</returns>
 		public float getWidth()
 		{
-			return entity.scene.sceneRenderTargetSize.X;
+			if( entity != null )
+				return entity.scene.sceneRenderTargetSize.X;
+			return Screen.width;
 		}
 
 
@@ -326,8 +328,9 @@ namespace Nez.UI
 		/// <returns>The height.</returns>
 		public float getHeight()
 		{
-
-			return entity.scene.sceneRenderTargetSize.Y;
+			if( entity != null )
+				return entity.scene.sceneRenderTargetSize.Y;
+			return Screen.height;
 		}
 
 
