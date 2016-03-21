@@ -38,6 +38,17 @@ namespace Nez
 			endRender();
 		}
 
+
+		protected override void debugRender( Scene scene, Camera cam )
+		{
+			for( var i = 0; i < scene.renderableComponents.Count; i++ )
+			{
+				var renderable = scene.renderableComponents[i];
+				if( !excludedRenderLayers.contains( renderable.renderLayer ) && renderable.enabled )
+					renderable.debugRender( Graphics.instance );
+			}
+		}
+
 	}
 }
 
