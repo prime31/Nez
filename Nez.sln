@@ -1,8 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MacTester", "MacTester\MacTester.csproj", "{673882A8-9246-4246-865F-48CFE00B115E}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Nez", "Nez-PCL\Nez.csproj", "{60B7197D-D0D5-405C-90A2-A56903E9B039}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Nez.PipelineImporter", "Nez.PipelineImporter\Nez.PipelineImporter.csproj", "{63E831F4-B847-4150-B5AF-CBE059EE27B8}"
@@ -21,10 +19,6 @@ Global
 		{63E831F4-B847-4150-B5AF-CBE059EE27B8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{63E831F4-B847-4150-B5AF-CBE059EE27B8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{63E831F4-B847-4150-B5AF-CBE059EE27B8}.Release|Any CPU.Build.0 = Release|Any CPU
-		{673882A8-9246-4246-865F-48CFE00B115E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{673882A8-9246-4246-865F-48CFE00B115E}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{673882A8-9246-4246-865F-48CFE00B115E}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{673882A8-9246-4246-865F-48CFE00B115E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(MonoDevelopProperties) = preSolution
 		Policies = $0
