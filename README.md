@@ -94,8 +94,10 @@ Nez comes stock with a decent bunch of Pipeline tool importers including:
 
 Bits and pieces of Nez were cherry-picked from various places around the internet. If you see something in Nez that looks familiar open an issue with the details so that we can properly attribute the code.
 
-I want to extend a special thanks to the two people and their repos listed below. The Monocle Engine and MonoGame.Extended repo allowed me to get up and running with MonoGame nearly instantly when I was first evaluating if it would be a good alternative to use for making games. Nez uses a bunch of concepts and code from both of these repos.
+I want to extend a special thanks to the three people and their repos listed below. The Monocle Engine and MonoGame.Extended allowed me to get up and running with MonoGame nearly instantly when I was first evaluating if it would be a good alternative to use for making games. [libGDX](https://github.com/libgdx/libgdx) scene2D UI was ported over to Nez to get a jump start on a UI as well. Nez uses a bunch of concepts and code from all three of these repos.
 
 Matt Thorson's fantastic [Monocle Engine](https://bitbucket.org/MattThorson/monocle-engine)
 
 Dylan Wilson's excellent [MonoGame.Extended](https://github.com/craftworkgames/MonoGame.Extended)
+
+Nathan Sweet's libGDX Scene2D UI [libGDX](https://github.com/libgdx/libgdx)
