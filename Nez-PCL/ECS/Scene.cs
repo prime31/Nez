@@ -287,7 +287,14 @@ namespace Nez
 
 
 		/// <summary>
-		/// override this in Scene subclasses and do any unloading necessary here
+		/// override this in Scene subclasses. this will be called when Core sets this scene as the active scen.
+		/// </summary>
+		public virtual void onStart()
+		{}
+
+
+		/// <summary>
+		/// override this in Scene subclasses and do any unloading necessary here. this is called when Core removes this scene from the active slot.
 		/// </summary>
 		public virtual void unload()
 		{}
@@ -306,6 +313,8 @@ namespace Nez
 			if( entityProcessors != null )
 				entityProcessors.begin();
 			Core.emitter.addObserver( CoreEvents.GraphicsDeviceReset, onGraphicsDeviceReset );
+
+			onStart();
 		}
 
 

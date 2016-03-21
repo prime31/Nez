@@ -29,6 +29,17 @@ namespace Nez.Sprites
 		bool _isLoopingBackOnPingPong;
 
 
+		/// <summary>
+		/// beware the beast man! If you use this constructor you must set the subtexture or set animations so that this sprite has proper bounds
+		/// when the Scene is running.
+		/// </summary>
+		/// <param name="customComparer">Custom comparer.</param>
+		public Sprite( IEqualityComparer<TEnum> customComparer = null ) : base( new Subtexture( null, 0, 0, 0, 0 ) )
+		{
+			_animations = new Dictionary<TEnum,SpriteAnimation>( customComparer );
+		}
+
+
 		public Sprite( IEqualityComparer<TEnum> customComparer, Subtexture subtexture ) : base( subtexture )
 		{
 			_animations = new Dictionary<TEnum,SpriteAnimation>( customComparer );
@@ -175,6 +186,9 @@ namespace Nez.Sprites
 
 		public void addAnimation( TEnum key, SpriteAnimation animation )
 		{
+			// if we have no subtexture use the first frame we find
+			if( subtexture == null && animation.frames.Count > 0 )
+				subtexture = animation.frames[0].subtexture;
 			_animations[key] = animation;
 		}
 
