@@ -81,7 +81,7 @@ namespace Nez.TextureAtlases
 					fps = _animationFPS
 				};
 
-				for( var i = point.X; i < point.Y; i++ )
+				for( var i = point.X; i <= point.Y; i++ )
 					animation.addFrame( subtextures[i] );
 
 				return animation;
