@@ -294,7 +294,7 @@ namespace Nez
 		/// </summary>
 		/// <returns>Scene.</returns>
 		/// <typeparam name="T">The 1st type parameter.</typeparam>
-		public Component addComponent<T>() where T : Component, new()
+		public T addComponent<T>() where T : Component, new()
 		{
 			var component = new T();
 			component.entity = this;

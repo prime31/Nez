@@ -43,8 +43,13 @@ namespace Nez
 
 		public void updateRenderableRenderLayer( RenderableComponent component, int oldRenderLayer, int newRenderLayer )
 		{
-			_componentsByRenderLayer[oldRenderLayer].Remove( component );
-			addToRenderLayerList( component, newRenderLayer );
+			// a bit of care needs to be taken in case a renderLayer is changed before the component is "live". this can happen when a component
+			// changes its renderLayer immediately after being created
+			if( _componentsByRenderLayer.ContainsKey( oldRenderLayer ) && _componentsByRenderLayer[oldRenderLayer].Contains( component ) )
+			{
+				_componentsByRenderLayer[oldRenderLayer].Remove( component );
+				addToRenderLayerList( component, newRenderLayer );
+			}
 		}
 
 
