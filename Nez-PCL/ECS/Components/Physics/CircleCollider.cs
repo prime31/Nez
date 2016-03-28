@@ -43,7 +43,7 @@ namespace Nez
 		/// <param name="radius">Radius.</param>
 		public CircleCollider( float radius )
 		{
-			new Circle( radius );
+			shape = new Circle( radius );
 		}
 
 
@@ -55,7 +55,7 @@ namespace Nez
 		/// <param name="origin">Origin.</param>
 		public CircleCollider( float radius, Vector2 origin )
 		{
-			new Circle( radius );
+			shape = new Circle( radius );
 			_origin = origin;
 		}
 
