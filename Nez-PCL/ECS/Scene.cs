@@ -686,7 +686,7 @@ namespace Nez
 		/// </summary>
 		/// <returns>The renderer.</returns>
 		/// <param name="renderer">Renderer.</param>
-		public Renderer addRenderer( Renderer renderer )
+		public T addRenderer<T>( T renderer ) where T : Renderer
 		{
 			_renderers.Add( renderer );
 			_renderers.Sort();

@@ -98,6 +98,16 @@ namespace Nez
 			return nextFloat( 2f ) - 1f;
 		}
 
+
+		/// <summary>
+		/// returns true if the next random is < percent. Percent should be between 0 and 1
+		/// </summary>
+		/// <param name="percent">Percent.</param>
+		public static bool chance( float percent )
+		{
+			return nextFloat() < percent;
+		}
+
 	}
 }
 

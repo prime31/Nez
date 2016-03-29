@@ -19,7 +19,7 @@ namespace Nez
 
 		#region properties and fields
 
-		internal Entity entity;
+		public readonly Entity entity;
 
 		/// <summary>
 		/// the parent Transform of this Transform
