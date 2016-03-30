@@ -16,6 +16,77 @@ namespace Nez.UI
 		Dictionary<Type,Dictionary<string,object>> _resources = new Dictionary<Type,Dictionary<string,object>>();
 
 
+		/// <summary>
+		/// creates a default Skin that can be used for quick mockups. Includes button, textu button, checkbox, progress bar and slider styles.
+		/// </summary>
+		/// <returns>The default skin.</returns>
+		public static Skin createDefaultSkin()
+		{
+			var skin = new Skin();
+
+			// define our colors
+			var buttonColor = new Color( 78, 91, 98 );
+			var buttonOver = new Color( 168, 207, 115 );
+			var buttonDown = new Color( 244, 23, 135 );
+
+			var checkboxOn = new Color( 168, 207, 115 );
+			var checkboxOff = new Color( 63, 63, 63 );
+			var checkboxOver = new Color( 130, 130, 130 );
+
+			var barBg = new Color( 78, 91, 98 );
+			var barKnob = new Color( 25, 144, 188 );
+			var barKnobOver = new Color( 168, 207, 115 );
+			var barKnobDown = new Color( 244, 23, 135 );
+
+
+			// add all our styles
+			var buttonStyle = new ButtonStyle {
+				up = new PrimitiveDrawable( buttonColor, 10 ),
+				over = new PrimitiveDrawable( buttonOver ),
+				down = new PrimitiveDrawable( buttonDown )
+			};
+			skin.add( "default", buttonStyle );
+
+			var textButtonStyle = new TextButtonStyle {
+				up = new PrimitiveDrawable( buttonColor, 10, 5 ),
+				over = new PrimitiveDrawable( buttonOver ),
+				down = new PrimitiveDrawable( buttonDown )
+			};
+			skin.add( "default", textButtonStyle );
+
+			var toggleButtonStyle = new TextButtonStyle {
+				up = new PrimitiveDrawable( buttonColor, 10, 5 ),
+				over = new PrimitiveDrawable( buttonOver ),
+				down = new PrimitiveDrawable( buttonDown ),
+				checkked = new PrimitiveDrawable( new Color( 255, 0, 0, 255 ) )
+			};
+			skin.add( "toggle", toggleButtonStyle );
+
+			var checkboxStyle = new CheckBoxStyle {
+				checkboxOn = new PrimitiveDrawable( 30, checkboxOn ),
+				checkboxOff = new PrimitiveDrawable( 30, checkboxOff ),
+				checkboxOver = new PrimitiveDrawable( 30, checkboxOver )
+			};
+			skin.add( "default", checkboxStyle );
+
+			var progressBarStyle = new ProgressBarStyle {
+				background = new PrimitiveDrawable( 20, barBg ),
+				knobBefore = new PrimitiveDrawable( 20, barKnobOver )
+			};
+			skin.add( "default", progressBarStyle );
+
+			var sliderStyle = new SliderStyle {
+				background = new PrimitiveDrawable( 20, barBg ),
+				knob = new PrimitiveDrawable( 30, barKnob ),
+				knobOver = new PrimitiveDrawable( 30, barKnobOver ),
+				knobDown = new PrimitiveDrawable( 30, barKnobDown )
+			};
+			skin.add( "default", sliderStyle );
+
+			return skin;
+		}
+
+
 		public Skin()
 		{}
 
@@ -83,7 +154,7 @@ namespace Nez.UI
 									if( drawable != null )
 										type.GetField( name ).SetValue( style, drawable );
 									else
-										Debug.error( "could not find a drawable or color named {0} when setting {1} on {2}", identifier, name, styleNames[i] );
+										Debug.error( "could not find a drawable or color named {0} when setting {1} on {2}", identifier, name, styleNames[j] );
 								}
 							}
 
@@ -225,7 +296,7 @@ namespace Nez.UI
 
 			if( !typedResources.ContainsKey( name ) )
 				return default(T);
-			
+
 			return (T)typedResources[name];
 		}
 

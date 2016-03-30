@@ -33,6 +33,13 @@ namespace Nez.UI
 		}
 
 
+		public PrimitiveDrawable( Color color, float horizontalPadding, float verticalPadding ) : this( color )
+		{
+			leftWidth = rightWidth = horizontalPadding;
+			topHeight = bottomHeight = verticalPadding;
+		}
+
+
 		public PrimitiveDrawable( float minWidth, float minHeight, Color? color = null ) : this( color )
 		{
 			this.minWidth = minWidth;

@@ -53,6 +53,7 @@ namespace Nez.UI
 
 		bool IInputListener.onMousePressed( Vector2 mousePos )
 		{
+			calculatePositionAndValue( mousePos );
 			_mouseDown = true;
 			return true;
 		}

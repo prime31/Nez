@@ -272,7 +272,7 @@ namespace Nez.UI
 			var width = this.width;
 			var height = this.height;
 			_textPosition.X = 0;
-			_textPosition.Y = 0;
+			_textPosition.Y = _style.font.descent;
 			if( _style.background != null )
 			{
 				_textPosition.X = _style.background.leftWidth;
@@ -305,12 +305,12 @@ namespace Nez.UI
 			if( ( labelAlign & AlignInternal.bottom ) != 0 )
 			{
 				_textPosition.Y += height - textHeight;
-				//y += bitmapFont.descent;
+				y += _style.font.descent;
 			}
 			else if( ( labelAlign & AlignInternal.top ) != 0 )
 			{
 				_textPosition.Y += 0;
-				//y -= bitmapFont.descent;
+				y -= _style.font.descent;
 			}
 			else
 			{
