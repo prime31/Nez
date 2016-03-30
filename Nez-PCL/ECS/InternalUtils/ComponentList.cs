@@ -123,7 +123,6 @@ namespace Nez
 				for( var i = 0; i < _componentsToAdd.Count; i++ )
 				{
 					var component = _componentsToAdd[i];
-
 					if( component is RenderableComponent )
 						_entity.scene.renderableComponents.add( component as RenderableComponent );
 

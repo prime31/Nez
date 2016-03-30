@@ -23,6 +23,7 @@ namespace Nez
 
 		Entity _entity;
 		List<Collider> _colliders = new List<Collider>();
+		bool _isEntityAddedToScene;
 
 
 		public ColliderList( Entity entity )
@@ -41,6 +42,11 @@ namespace Nez
 			collider.entity = _entity;
 			collider.registerColliderWithPhysicsSystem();
 			_colliders.Add( collider );
+
+			// if we are already added to the scene make sure we let the component know
+			if( _isEntityAddedToScene )
+				collider.onEntityAddedToScene();
+			
 			return collider;
 		}
 
@@ -86,6 +92,7 @@ namespace Nez
 
 		internal void onEntityAddedToScene()
 		{
+			_isEntityAddedToScene = true;
 			for( var i = 0; i < _colliders.Count; i++ )
 				_colliders[i].onEntityAddedToScene();
 		}
@@ -93,6 +100,7 @@ namespace Nez
 
 		internal void onEntityRemovedFromScene()
 		{
+			_isEntityAddedToScene = false;
 			for( var i = 0; i < _colliders.Count; i++ )
 				_colliders[i].onEntityRemovedFromScene();
 		}

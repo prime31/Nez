@@ -247,7 +247,6 @@ namespace Nez.Sprites
 		public void stop()
 		{
 			isPlaying = false;
-			subtexture = null;
 			_currentAnimation = null;
 		}
 
