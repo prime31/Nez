@@ -298,6 +298,7 @@
     <Compile Include="UI\Widgets\TextField.cs" />
     <Compile Include="UI\Widgets\Window.cs" />
     <Compile Include="ECS\Components\Renderables\UICanvas.cs" />
+    <Compile Include="ECS\Components\Physics\ITriggerListener.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="MonoGame.Framework">
