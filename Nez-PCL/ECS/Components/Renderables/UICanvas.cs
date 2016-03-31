@@ -4,6 +4,9 @@ using Nez.UI;
 
 namespace Nez
 {
+	/// <summary>
+	/// simple component that houses a Stage and delegates update/render/debugRender calls
+	/// </summary>
 	public class UICanvas : RenderableComponent, IUpdatable
 	{
 		public override float width { get { return stage.getWidth(); } }
@@ -11,6 +14,16 @@ namespace Nez
 		public override float height { get { return stage.getHeight(); } }
 
 		public Stage stage;
+
+		/// <summary>
+		/// if true, the rawMousePosition will be used else the scaledMousePosition will be used. If your UI is in screen space (using a 
+		/// ScreenSpaceRenderer for example) then set this to true so input is not scaled.
+		/// </summary>
+		public bool isFullScreen
+		{
+			get { return stage.isFullScreen; }
+			set { stage.isFullScreen = value; }
+		}
 
 
 		public UICanvas()

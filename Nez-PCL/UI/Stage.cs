@@ -11,6 +11,12 @@ namespace Nez.UI
 		public static bool debug;
 		public Entity entity;
 
+		/// <summary>
+		/// if true, the rawMousePosition will be used else the scaledMousePosition will be used. If your UI is in screen space (using a 
+		/// ScreenSpaceRenderer for example) then set this to true so input is not scaled.
+		/// </summary>
+		public bool isFullScreen;
+
 		Group root;
 		Camera _camera;
 		bool debugAll, debugUnderMouse, debugParentUnderMouse;
@@ -134,7 +140,7 @@ namespace Nez.UI
 		{
 			updateKeyboardState();
 
-			var currentMousePosition = entity != null ? Input.scaledMousePosition : Input.rawMousePosition.ToVector2();
+			var currentMousePosition = entity != null && !isFullScreen ? Input.scaledMousePosition : Input.rawMousePosition.ToVector2();
 			var didMouseMove = false;
 			if( _lastMousePosition != currentMousePosition )
 			{
@@ -316,7 +322,7 @@ namespace Nez.UI
 		/// <returns>The width.</returns>
 		public float getWidth()
 		{
-			if( entity != null )
+			if( entity != null && !isFullScreen )
 				return entity.scene.sceneRenderTargetSize.X;
 			return Screen.width;
 		}
@@ -328,7 +334,7 @@ namespace Nez.UI
 		/// <returns>The height.</returns>
 		public float getHeight()
 		{
-			if( entity != null )
+			if( entity != null && !isFullScreen )
 				return entity.scene.sceneRenderTargetSize.Y;
 			return Screen.height;
 		}

@@ -90,6 +90,23 @@ namespace Nez.Console
 		}
 
 
+		[Command( "entity-list", "Logs all entities" )]
+		static void logEntities( string whichAssets = "s" )
+		{
+			if( Core.scene == null )
+			{
+				DebugConsole.instance.log( "Current Scene is null!" );
+				return;
+			}
+
+			var builder = new StringBuilder();
+			foreach( var entity in Core.scene.entities )
+				builder.AppendLine( entity.ToString() );
+
+			DebugConsole.instance.log( builder.ToString() );
+		}
+
+
 		[Command( "timescale", "Sets the timescale. Defaults to 1" )]
 		static private void tilescale( float timeScale = 1 )
 		{
