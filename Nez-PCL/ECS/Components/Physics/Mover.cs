@@ -105,7 +105,7 @@ namespace Nez
 						// if we already have this pair in one of our sets (the previous or current trigger intersections) dont call the enter event
 						var shouldReportTriggerEvent = !_activeTriggerIntersections.Contains( pair ) && !_previousTriggerIntersections.Contains( pair );
 						if( shouldReportTriggerEvent )
-							notifityTriggerListeners( pair, true );
+							notifyTriggerListeners( pair, true );
 
 						_activeTriggerIntersections.Add( pair );
 					} // overlaps
@@ -127,7 +127,7 @@ namespace Nez
 			_previousTriggerIntersections.ExceptWith( _activeTriggerIntersections );
 
 			foreach( var pair in _previousTriggerIntersections )
-				notifityTriggerListeners( pair, false );
+				notifyTriggerListeners( pair, false );
 
 			// clear out the previous set cause we are done with it for now
 			_previousTriggerIntersections.Clear();
@@ -140,7 +140,7 @@ namespace Nez
 		}
 
 
-		void notifityTriggerListeners( Pair<Collider> collisionPair, bool isEntering )
+		void notifyTriggerListeners( Pair<Collider> collisionPair, bool isEntering )
 		{
 			// call the onTriggerEnter method for any relevant components if we are the trigger
 			if( collisionPair.first.isTrigger )

@@ -200,19 +200,17 @@ namespace Nez
 
 
 		/// <summary>
-		/// Gets all the components of type T
+		/// Gets all the components of type T without a List allocation
 		/// </summary>
-		/// <returns>The components.</returns>
+		/// <param name="components">Components.</param>
 		/// <typeparam name="T">The 1st type parameter.</typeparam>
-		public List<T> getComponents<T>() where T : class
+		public void getComponents<T>( List<T> components ) where T : class
 		{
-			var comps = new List<T>();
-
 			for( var i = 0; i < _components.Count; i++ )
 			{
 				var component = _components[i];
 				if( component is T )
-					comps.Add( component as T );
+					components.Add( component as T );
 			}
 
 			// we also check the pending components just in case addComponent and getComponent are called in the same frame
@@ -220,10 +218,22 @@ namespace Nez
 			{
 				var component = _componentsToAdd[i];
 				if( component is T )
-					comps.Add( component as T );
+					components.Add( component as T );
 			}
+		}
 
-			return comps;
+
+		/// <summary>
+		/// Gets all the components of type T
+		/// </summary>
+		/// <returns>The components.</returns>
+		/// <typeparam name="T">The 1st type parameter.</typeparam>
+		public List<T> getComponents<T>() where T : class
+		{
+			var components = new List<T>();
+			getComponents( components );
+
+			return components;
 		}
 
 

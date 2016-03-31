@@ -101,7 +101,15 @@ namespace Nez
 			}
 		}
 
+		/// <summary>
+		/// flag to keep track of if our Entity was added to a Scene
+		/// </summary>
 		protected bool _isParentEntityAddedToScene;
+
+		/// <summary>
+		/// flag to keep track of if we registered ourself with the Physics system
+		/// </summary>
+		protected bool _isColliderRegistered;
 		internal bool _areBoundsDirty = true;
 
 
@@ -179,9 +187,12 @@ namespace Nez
 		/// </summary>
 		public virtual void registerColliderWithPhysicsSystem()
 		{
-			// entity could be null if proper such as origin are changed before we are added to an Entity
+			// entity could be null if properties such as origin are changed before we are added to an Entity
 			if( _isParentEntityAddedToScene )
+			{
 				Physics.addCollider( this );
+				_isColliderRegistered = true;
+			}
 		}
 
 
@@ -190,8 +201,9 @@ namespace Nez
 		/// </summary>
 		public virtual void unregisterColliderWithPhysicsSystem()
 		{
-			if( _isParentEntityAddedToScene )
+			if( _isParentEntityAddedToScene && _isColliderRegistered )
 				Physics.removeCollider( this, true );
+			_isColliderRegistered = false;
 		}
 
 		#endregion

@@ -148,7 +148,7 @@ namespace Nez
 						scene.entityProcessors.onEntityAdded( entity );
 				}
 
-				// now that all entities are added to the scene, we loop through again and call onAwake
+				// now that all entities are added to the scene, we loop through again and call onAddedToScene
 				for( var i = 0; i < _entitiesToAdd.Count; i++ )
 					_entitiesToAdd[i].onAddedToScene();
 

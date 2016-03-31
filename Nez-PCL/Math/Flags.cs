@@ -4,12 +4,13 @@
 namespace Nez
 {
 	/// <summary>
-	/// utility class to assist with dealing with bitmasks
+	/// utility class to assist with dealing with bitmasks. All methods except isFlagSet expect the flag parameter to be a non-shifted flag.
+	/// This lets you use plain old ints (0, 1, 2, 3, etc) to set/unset your flags.
 	/// </summary>
 	public static class Flags
 	{
 		/// <summary>
-		/// checks to see if the bit flag is set in the int
+		/// checks to see if the bit flag is set in the int. This check expects flag to be shifted already!
 		/// </summary>
 		/// <returns><c>true</c>, if flag set was ised, <c>false</c> otherwise.</returns>
 		/// <param name="self">Self.</param>
@@ -21,13 +22,37 @@ namespace Nez
 
 
 		/// <summary>
+		/// checks to see if the bit flag is set in the int
+		/// </summary>
+		/// <returns><c>true</c>, if flag set was ised, <c>false</c> otherwise.</returns>
+		/// <param name="self">Self.</param>
+		/// <param name="flag">Flag.</param>
+		public static bool isUnshiftedFlagSet( this int self, int flag )
+		{
+			flag = 1 << flag;
+			return ( self & flag ) != 0;
+		}
+
+
+		/// <summary>
+		/// sets the flag bit of the int removing any already set flags
+		/// </summary>
+		/// <param name="self">Self.</param>
+		/// <param name="flag">Flag.</param>
+		public static void setFlagExclusive( ref int self, int flag )
+		{
+			self = 1 << flag;
+		}
+
+
+		/// <summary>
 		/// sets the flag bit of the int
 		/// </summary>
 		/// <param name="self">Self.</param>
 		/// <param name="flag">Flag.</param>
 		public static void setFlag( ref int self, int flag )
 		{
-			self = ( self | flag );
+			self = ( self | 1 << flag );
 		}
 
 
@@ -38,8 +63,10 @@ namespace Nez
 		/// <param name="flag">Flag.</param>
 		public static void unsetFlag( ref int self, int flag )
 		{
+			flag = 1 << flag;
 			self = ( self & ( ~flag ) );
 		}
+
 
 
 		/// <summary>

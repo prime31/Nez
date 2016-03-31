@@ -16,6 +16,16 @@ namespace Nez.Sprites
 		public bool isPlaying { get; private set; }
 		public int currentFrame { get; private set; }
 
+		/// <summary>
+		/// gets/sets the currently playing animation
+		/// </summary>
+		/// <value>The current animation.</value>
+		public TEnum currentAnimation
+		{
+			get { return _currentAnimationKey; }
+			set { play( value ); }
+		}
+
 		Dictionary<TEnum,SpriteAnimation> _animations;
 
 		// playback state
@@ -205,7 +215,6 @@ namespace Nez.Sprites
 			Assert.isTrue( _animations.ContainsKey( animationKey ), "Attempted to play an animation that doesnt exist" );
 
 			var animation = _animations[animationKey];
-
 			animation.prepareForUse();
 
 			_currentAnimationKey = animationKey;

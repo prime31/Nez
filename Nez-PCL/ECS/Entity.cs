@@ -236,6 +236,7 @@ namespace Nez
 		/// </summary>
 		public virtual void onAddedToScene()
 		{
+			components.updateLists();
 			// if we have a collider, we need to let it register with the Physics system when we are added to a scene
 			colliders.onEntityAddedToScene();
 		}

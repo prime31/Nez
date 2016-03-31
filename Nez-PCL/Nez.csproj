@@ -299,6 +299,7 @@
     <Compile Include="UI\Widgets\Window.cs" />
     <Compile Include="ECS\Components\Renderables\UICanvas.cs" />
     <Compile Include="ECS\Components\Physics\ITriggerListener.cs" />
+    <Compile Include="ECS\Components\Physics\ProjectileMover.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="MonoGame.Framework">
