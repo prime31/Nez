@@ -28,7 +28,7 @@ namespace Nez
 		/// <summary>
 		/// The list of colliders that were added this frame. Used to group the colliders so we can process them simultaneously
 		/// </summary>
-		List<Collider> _collidersToAdd = new List<Collider>();
+		internal List<Collider> _collidersToAdd = new List<Collider>();
 
 
 		public ColliderList( Entity entity )

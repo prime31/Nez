@@ -26,7 +26,7 @@ namespace Nez
 		/// <summary>
 		/// The list of components that were added this frame. Used to group the components so we can process them simultaneously
 		/// </summary>
-		List<Component> _componentsToAdd = new List<Component>();
+		internal List<Component> _componentsToAdd = new List<Component>();
 
 		/// <summary>
 		/// The list of components that were marked for removal this frame. Used to group the components so we can process them simultaneously
@@ -166,10 +166,7 @@ namespace Nez
 
 		public int Count
 		{
-			get
-			{
-				return _components.Count;
-			}
+			get { return _components.Count; }
 		}
 
 
@@ -285,10 +282,7 @@ namespace Nez
 
 		public Component this[int index]
 		{
-			get
-			{
-				return _components[index];
-			}
+			get { return _components[index]; }
 		}
 
 

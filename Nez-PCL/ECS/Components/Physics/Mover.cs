@@ -65,24 +65,16 @@ namespace Nez
 					if( neighbor.isTrigger )
 						continue;
 
-					CollisionResult tempCollisionResult;
-					if( collider.collidesWith( neighbor, motion, out tempCollisionResult ) )
+					if( collider.collidesWith( neighbor, motion, out collisionResult ) )
 					{
-						// hit. compare with the previous hit (if we have one) and choose the one that is closest (smallest MTV)
-						if( collisionResult.collider == null ||
-							collisionResult.minimumTranslationVector.LengthSquared() > tempCollisionResult.minimumTranslationVector.LengthSquared() )
-						{
-							collisionResult = tempCollisionResult;
-						}
+						// hit. back off our motion
+						motion -= collisionResult.minimumTranslationVector;
 					}
 				}
 			}
 
-			// 2. move entity to its new position if we have a collision else move the full amount
-			if( collisionResult.collider != null )
-				entity.transform.position += motion - collisionResult.minimumTranslationVector;
-			else
-				entity.transform.position += motion;
+			// 2. move entity to its new position if we have a collision else move the full amount. motion is updated when a collision occurs
+			entity.transform.position += motion;
 
 			// 3. do an overlap check of all entity.colliders that are triggers with all broadphase colliders, triggers or not.
 			//    Any overlaps result in trigger events.

@@ -195,10 +195,14 @@ namespace Nez
 			// clone Components
 			for( var i = 0; i < entity.components.Count; i++ )
 				addComponent( entity.components[i].clone() );
+			for( var i = 0; i < entity.components._componentsToAdd.Count; i++ )
+				addComponent( entity.components._componentsToAdd[i].clone() );
 
 			// clone Colliders
 			for( var i = 0; i < entity.colliders.Count; i++ )
 				colliders.add( entity.colliders[i].clone() );
+			for( var i = 0; i < entity.colliders._collidersToAdd.Count; i++ )
+				colliders.add( entity.colliders._collidersToAdd[i].clone() );
 
 			// clone any children of the Entity.transform
 			for( var i = 0; i < entity.transform.childCount; i++ )

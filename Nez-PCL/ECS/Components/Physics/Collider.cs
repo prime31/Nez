@@ -271,8 +271,10 @@ namespace Nez
 		public virtual Collider clone()
 		{
 			var collider = MemberwiseClone() as Collider;
-			collider.shape = shape.clone();
 			collider.entity = null;
+
+			if( shape != null )
+				collider.shape = shape.clone();
 
 			return collider;
 		}
