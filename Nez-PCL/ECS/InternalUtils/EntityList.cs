@@ -124,6 +124,7 @@ namespace Nez
 					_entities.Remove( entity );
 					entity.onRemovedFromScene();
 					entity.scene = null;
+					entity.transform.parent = null;
 
 					if( Core.entitySystemsEnabled )
 						scene.entityProcessors.onEntityRemoved( entity );

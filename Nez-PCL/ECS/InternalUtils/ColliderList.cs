@@ -25,6 +25,11 @@ namespace Nez
 		List<Collider> _colliders = new List<Collider>();
 		bool _isEntityAddedToScene;
 
+		/// <summary>
+		/// The list of colliders that were added this frame. Used to group the colliders so we can process them simultaneously
+		/// </summary>
+		List<Collider> _collidersToAdd = new List<Collider>();
+
 
 		public ColliderList( Entity entity )
 		{
@@ -39,14 +44,7 @@ namespace Nez
 		/// <typeparam name="T">The 1st type parameter.</typeparam>
 		public T add<T>( T collider ) where T : Collider
 		{
-			collider.entity = _entity;
-			collider.registerColliderWithPhysicsSystem();
-			_colliders.Add( collider );
-
-			// if we are already added to the scene make sure we let the component know
-			if( _isEntityAddedToScene )
-				collider.onEntityAddedToScene();
-			
+			_collidersToAdd.Add( collider );
 			return collider;
 		}
 
@@ -143,6 +141,28 @@ namespace Nez
 		{
 			for( var i = 0; i < _colliders.Count; i++ )
 				_colliders[i].unregisterColliderWithPhysicsSystem();
+		}
+
+
+		internal void updateLists()
+		{
+			// handle additions
+			if( _collidersToAdd.Count > 0 )
+			{
+				for( var i = 0; i < _collidersToAdd.Count; i++ )
+				{
+					var collider = _collidersToAdd[i];
+					collider.entity = _entity;
+					collider.registerColliderWithPhysicsSystem();
+					_colliders.Add( collider );
+
+					// if we are already added to the scene make sure we let the component know
+					if( _isEntityAddedToScene )
+						collider.onEntityAddedToScene();
+				}
+
+				_collidersToAdd.Clear();
+			}
 		}
 
 

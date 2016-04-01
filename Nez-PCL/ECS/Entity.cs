@@ -159,8 +159,6 @@ namespace Nez
 				var child = transform.getChild( i );
 				child.entity.destroy();
 			}
-
-			transform.parent = null;
 		}
 
 
@@ -223,7 +221,6 @@ namespace Nez
 		/// </summary>
 		public virtual void onAddedToScene()
 		{
-			components.updateLists();
 			// if we have a collider, we need to let it register with the Physics system when we are added to a scene
 			colliders.onEntityAddedToScene();
 		}
@@ -245,6 +242,7 @@ namespace Nez
 		public virtual void update()
 		{
 			components.updateLists();
+			colliders.updateLists();
 			components.update();
 		}
 
