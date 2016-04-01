@@ -161,19 +161,6 @@ namespace Nez
 			}
 
 			transform.parent = null;
-
-			// remove all our components when we are destroyed
-			components.removeAllComponents();
-			colliders.removeAllColliders();
-		}
-
-
-		/// <summary>
-		/// detaches the Entity from the scene but does not remove the Components. Use this when pooling Entities.
-		/// </summary>
-		public void detachFromScene()
-		{
-			scene.entities.remove( this );
 		}
 
 
@@ -248,6 +235,7 @@ namespace Nez
 		public virtual void onRemovedFromScene()
 		{
 			colliders.onEntityRemovedFromScene();
+			components.removeAllComponents();
 		}
 
 
