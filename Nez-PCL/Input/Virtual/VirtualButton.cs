@@ -166,30 +166,30 @@ namespace Nez
 
 		public class KeyboardKey : Node
 		{
-			public Keys Key;
+			public Keys key;
 
 
 			public KeyboardKey( Keys key )
 			{
-				Key = key;
+				this.key = key;
 			}
 
 
 			public override bool isDown
 			{
-				get { return Input.isKeyDown( Key ); }
+				get { return Input.isKeyDown( key ); }
 			}
 
 
 			public override bool isPressed
 			{
-				get { return Input.isKeyPressed( Key ); }
+				get { return Input.isKeyPressed( key ); }
 			}
 
 
 			public override bool isReleased
 			{
-				get { return Input.isKeyReleased( Key ); }
+				get { return Input.isKeyReleased( key ); }
 			}
 		}
 

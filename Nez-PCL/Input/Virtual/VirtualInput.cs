@@ -8,7 +8,24 @@ namespace Nez
 	/// </summary>
 	public abstract class VirtualInput
 	{
-		public enum OverlapBehavior { CancelOut, TakeOlder, TakeNewer };
+		public enum OverlapBehavior
+		{
+			/// <summary>
+			/// duplicate input will result in canceling each other out and no input will be recorded. Example: press left arrow key and while
+			/// holding it down press right arrow. This will result in canceling each other out.
+			/// </summary>
+			CancelOut,
+
+			/// <summary>
+			/// the first input found will be used
+			/// </summary>
+			TakeOlder,
+
+			/// <summary>
+			/// the last input found will be used
+			/// </summary>
+			TakeNewer
+		};
 
 
 		public VirtualInput()
@@ -17,6 +34,9 @@ namespace Nez
 		}
 
 
+		/// <summary>
+		/// deregisters the VirtualInput from the Input system. Call this when you are done polling the VirtualInput
+		/// </summary>
 		public void deregister()
 		{
 			Input._virtualInputs.Remove( this );
@@ -33,7 +53,8 @@ namespace Nez
 	public abstract class VirtualInputNode
 	{
 		public virtual void update()
-		{}
+		{
+		}
 	}
 }
 

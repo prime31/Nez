@@ -59,6 +59,7 @@
     <Folder Include="Graphics\Effects\" />
     <Folder Include="Graphics\Transitions\" />
     <Folder Include="PipelineRuntime\UISkin\" />
+    <Folder Include="Input\Virtual\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Debug\Debug.cs" />
@@ -87,11 +88,6 @@
     <Compile Include="Graphics\Renderers\Renderer.cs" />
     <Compile Include="Input\GamePadData.cs" />
     <Compile Include="Input\Input.cs" />
-    <Compile Include="Input\VirtualAxis.cs" />
-    <Compile Include="Input\VirtualButton.cs" />
-    <Compile Include="Input\VirtualInput.cs" />
-    <Compile Include="Input\VirtualIntegerAxis.cs" />
-    <Compile Include="Input\VirtualJoystick.cs" />
     <Compile Include="Math\Mathf.cs" />
     <Compile Include="Physics\Collisions.cs" />
     <Compile Include="Physics\Physics.cs" />
@@ -301,6 +297,11 @@
     <Compile Include="ECS\Components\Physics\ITriggerListener.cs" />
     <Compile Include="ECS\Components\Physics\ProjectileMover.cs" />
     <Compile Include="PipelineRuntime\Overlap2D\O2DColorPrimitive.cs" />
+    <Compile Include="Input\Virtual\VirtualAxis.cs" />
+    <Compile Include="Input\Virtual\VirtualButton.cs" />
+    <Compile Include="Input\Virtual\VirtualInput.cs" />
+    <Compile Include="Input\Virtual\VirtualIntegerAxis.cs" />
+    <Compile Include="Input\Virtual\VirtualJoystick.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="MonoGame.Framework">

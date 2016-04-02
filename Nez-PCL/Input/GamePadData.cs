@@ -7,7 +7,15 @@ namespace Nez
 {
 	public class GamePadData
 	{
-		public bool isGamePadStickInverted = false;
+		/// <summary>
+		/// toggles inverting the left sticks vertical value
+		/// </summary>
+		public bool isLeftStickVertcialInverted = false;
+
+		/// <summary>
+		/// toggles inverting the right sticks vertical value
+		/// </summary>
+		public bool isRightStickVertcialInverted = false;
 
 		PlayerIndex _playerIndex;
 		GamePadState _previousState;
@@ -60,6 +68,10 @@ namespace Nez
 		}
 
 
+		/// <summary>
+		/// returns true if this game pad is connected
+		/// </summary>
+		/// <returns><c>true</c>, if connected was ised, <c>false</c> otherwise.</returns>
 		public bool isConnected()
 		{
 			return _currentState.IsConnected;
@@ -68,18 +80,33 @@ namespace Nez
 
 		#region Buttons
 
-		public bool isButtonDown( Buttons button )
+		/// <summary>
+		/// only true if down this frame
+		/// </summary>
+		/// <returns><c>true</c>, if button pressed was ised, <c>false</c> otherwise.</returns>
+		/// <param name="button">Button.</param>
+		public bool isButtonPressed( Buttons button )
 		{
 			return _currentState.IsButtonDown( button ) && !_previousState.IsButtonDown( button );
 		}
 
 
-		public bool isButtonPressed( Buttons button )
+		/// <summary>
+		/// true the entire time the button is down
+		/// </summary>
+		/// <returns><c>true</c>, if button down was ised, <c>false</c> otherwise.</returns>
+		/// <param name="button">Button.</param>
+		public bool isButtonDown( Buttons button )
 		{
 			return _currentState.IsButtonDown( button );
 		}
 
 
+		/// <summary>
+		/// true only the frame the button is released
+		/// </summary>
+		/// <returns><c>true</c>, if button released was ised, <c>false</c> otherwise.</returns>
+		/// <param name="button">Button.</param>
 		public bool isButtonReleased( Buttons button )
 		{
 			return !_currentState.IsButtonUp( button ) && _previousState.IsButtonUp( button );
@@ -94,7 +121,7 @@ namespace Nez
 		{
 			var res = _currentState.ThumbSticks.Left;
 
-			if( isGamePadStickInverted )
+			if( isLeftStickVertcialInverted )
 				res.Y = -res.Y;
 
 			return res;
@@ -107,7 +134,7 @@ namespace Nez
 
 			if( res.LengthSquared() < deadzone * deadzone )
 				res = Vector2.Zero;
-			else if( isGamePadStickInverted )
+			else if( isLeftStickVertcialInverted )
 				res.Y = -res.Y;
 
 			return res;
@@ -118,7 +145,7 @@ namespace Nez
 		{
 			var res = _currentState.ThumbSticks.Right;
 
-			if( isGamePadStickInverted )
+			if( isRightStickVertcialInverted )
 				res.Y = -res.Y;
 
 			return res;
@@ -131,7 +158,7 @@ namespace Nez
 
 			if( res.LengthSquared() < deadzone * deadzone )
 				res = Vector2.Zero;
-			else if( isGamePadStickInverted )
+			else if( isRightStickVertcialInverted )
 				res.Y = -res.Y;
 
 			return res;

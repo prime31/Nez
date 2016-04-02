@@ -83,6 +83,10 @@ namespace Nez
 
 		public class GamePadLeftStickY : Node
 		{
+			/// <summary>
+			/// if true, pressing up will return -1 and down will return 1 matching GamePadDpadUpDown
+			/// </summary>
+			public bool invertResult = true;
 			public int gamepadIndex;
 			public float deadzone;
 
@@ -97,7 +101,8 @@ namespace Nez
 			{
 				get
 				{
-					return Mathf.signThreshold( Input.gamePads[gamepadIndex].getLeftStick( deadzone ).Y, deadzone );
+					var multiplier = invertResult ? -1 : 1;
+					return multiplier * Mathf.signThreshold( Input.gamePads[gamepadIndex].getLeftStick( deadzone ).Y, deadzone );
 				}
 			}
 		}
@@ -205,8 +210,8 @@ namespace Nez
 			public Keys positive;
 			public Keys negative;
 
-			private float _value;
-			private bool turned;
+			float _value;
+			bool _turned;
 
 
 			public KeyboardKeys( OverlapBehavior overlapBehavior, Keys negative, Keys positive )
@@ -231,10 +236,10 @@ namespace Nez
 								break;
 
 							case OverlapBehavior.TakeNewer:
-								if( !turned )
+								if( !_turned )
 								{
 									_value *= -1;
-									turned = true;
+									_turned = true;
 								}
 								break;
 							case OverlapBehavior.TakeOlder:
@@ -244,18 +249,18 @@ namespace Nez
 					}
 					else
 					{
-						turned = false;
+						_turned = false;
 						_value = 1;
 					}
 				}
 				else if( Input.isKeyDown( negative ) )
 				{
-					turned = false;
+					_turned = false;
 					_value = -1;
 				}
 				else
 				{
-					turned = false;
+					_turned = false;
 					_value = 0;
 				}
 			}
