@@ -38,6 +38,8 @@ namespace Nez.UI
 			var barKnobOver = new Color( 168, 207, 115 );
 			var barKnobDown = new Color( 244, 23, 135 );
 
+			var windowColor = new Color( 17, 17, 17 );
+
 
 			// add all our styles
 			var buttonStyle = new ButtonStyle {
@@ -82,6 +84,11 @@ namespace Nez.UI
 				knobDown = new PrimitiveDrawable( 30, barKnobDown )
 			};
 			skin.add( "default", sliderStyle );
+
+			var windowStyle = new WindowStyle {
+				background = new PrimitiveDrawable( windowColor )
+			};
+			skin.add( "default", windowStyle );
 
 			return skin;
 		}

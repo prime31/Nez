@@ -1,5 +1,6 @@
 ﻿using System;
 using Nez.UI;
+using Microsoft.Xna.Framework;
 
 
 namespace Nez
@@ -60,6 +61,33 @@ namespace Nez
 		public override void debugRender( Graphics graphics )
 		{
 			stage.getRoot().debugRender( graphics );
+		}
+
+
+		/// <summary>
+		/// displays a simple dialog with a button to close it
+		/// </summary>
+		/// <returns>The dialog.</returns>
+		/// <param name="title">Title.</param>
+		/// <param name="messageText">Message text.</param>
+		/// <param name="closeButtonText">Close button text.</param>
+		public Dialog showDialog( string title, string messageText, string closeButtonText )
+		{
+			var skin = Skin.createDefaultSkin();
+
+			var style = new WindowStyle {
+				background = new PrimitiveDrawable( new Color( 50, 50, 50 ) ),
+				stageBackground = new PrimitiveDrawable( new Color( 0, 0, 0, 150 ) )
+			};
+
+			var dialog = new Dialog( title, style );
+			dialog.getTitleLabel().getStyle().background = new PrimitiveDrawable( new Color( 55, 100, 100 ) );
+			dialog.pad( 20, 5, 5, 5 );
+			dialog.addText( messageText );
+			dialog.addButton( new TextButton( closeButtonText, skin ) ).onClicked += butt => dialog.hide();
+			dialog.show( stage );
+
+			return dialog;
 		}
 	}
 }

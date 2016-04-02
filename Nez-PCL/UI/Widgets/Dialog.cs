@@ -27,13 +27,13 @@ namespace Nez.UI
 
 		private void initialize()
 		{
-			defaults().space( 6 );
+			defaults().space( 16 );
 			add( contentTable = new Table() ).expand().fill();
 			row();
 			add( buttonTable = new Table() );
 
-			contentTable.defaults().space( 6 );
-			buttonTable.defaults().space( 6 );
+			contentTable.defaults().space( 16 );
+			buttonTable.defaults().space( 16 );
 		}
 
 
@@ -54,7 +54,7 @@ namespace Nez.UI
 		/// </summary>
 		/// <returns>The text.</returns>
 		/// <param name="text">Text.</param>
-		public Dialog addText( String text )
+		public Dialog addText( string text )
 		{
 			return addText( new Label( text ) );
 		}
@@ -74,7 +74,7 @@ namespace Nez.UI
 
 		/** Adds a text button to the button table.
 	 * @param object The object that will be passed to {@link #result(Object)} if this button is clicked. May be null. */
-		public Button addButton( String text, TextButtonStyle buttonStyle )
+		public Button addButton( string text, TextButtonStyle buttonStyle )
 		{
 			return addButton( new TextButton( text, buttonStyle ) );
 		}

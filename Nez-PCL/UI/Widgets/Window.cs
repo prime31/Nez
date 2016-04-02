@@ -93,7 +93,7 @@ namespace Nez.UI
 
 			if( _isMovable && edge == 0 && mousePos.Y >= 0 && mousePos.Y <= getPadTop() && mousePos.X >= 0 && mousePos.X <= width )
 				edge = MOVE;
-
+			
 			_dragging = edge != 0;
 
 			startX = mousePos.X;
