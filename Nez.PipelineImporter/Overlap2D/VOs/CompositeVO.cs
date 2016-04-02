@@ -9,6 +9,7 @@ namespace Nez.Overlap2D.Runtime
 	{
 		public List<SimpleImageVO> sImages = new List<SimpleImageVO>();
 		public List<CompositeItemVO> sComposites = new List<CompositeItemVO>();
+		public List<ColorPrimitiveVO> sColorPrimitives = new List<ColorPrimitiveVO>();
 
 		public List<Image9patchVO> sImage9patchs;
 		public List<TextBoxVO> sTextBox;
@@ -19,7 +20,6 @@ namespace Nez.Overlap2D.Runtime
 		public List<SpriteAnimationVO> sSpriteAnimations;
 		public List<SpineVO> sSpineAnimations;
 		public List<SpriterVO> sSpriterAnimations;
-		public List<ColorPrimitiveVO> sColorPrimitives;
 		public List<LayerItemVO> layers;
 
 

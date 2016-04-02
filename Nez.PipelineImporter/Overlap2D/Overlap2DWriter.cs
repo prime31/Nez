@@ -36,9 +36,19 @@ namespace Nez.Overlap2D
 			writer.Write( composite.sImages.Count );
 			foreach( var image in composite.sImages )
 			{
-				Overlap2DImporter.logger.LogMessage( "\tprocessing image {0}", image.imageName );
+				Overlap2DImporter.logger.LogMessage( "\tprocessing image: {0}", image.imageName );
 				writeMainItem( writer, image, scene );
 				writer.Write( image.imageName );
+			}
+
+
+			Overlap2DImporter.logger.LogMessage( "processing {0} color primitives", composite.sColorPrimitives.Count );
+			writer.Write( composite.sColorPrimitives.Count );
+			foreach( var colorPrim in composite.sColorPrimitives )
+			{
+				Overlap2DImporter.logger.LogMessage( "\tprocessing color primitive item: {0}", colorPrim.itemIdentifier );
+				writeMainItem( writer, colorPrim, scene );
+				writeColorPrimitive( writer, colorPrim, scene );
 			}
 
 
@@ -46,7 +56,7 @@ namespace Nez.Overlap2D
 			writer.Write( composite.sComposites.Count );
 			foreach( var compositeItem in composite.sComposites )
 			{
-				Overlap2DImporter.logger.LogMessage( "\tprocessing composite item {0}", compositeItem.itemName );
+				Overlap2DImporter.logger.LogMessage( "\tprocessing composite item: {0}", compositeItem.itemName );
 				writeMainItem( writer, compositeItem, scene );
 				writeComposite( writer, compositeItem.composite, scene );
 
@@ -80,10 +90,30 @@ namespace Nez.Overlap2D
 			writer.Write( new Color( item.tint[0], item.tint[1], item.tint[2], item.tint[3] ) );
 
 			// not implemented for main item
-//			public String[] tags;
-//			public String shaderName;
-//			public ShapeVO shape;
+//			public string[] tags;
+//			public string shaderName;
+//			public ShapeVO shape; // implemented only for ColorPrimitiveVO
 //			public PhysicsBodyDataVO physics;
+		}
+
+
+		void writeColorPrimitive( ContentWriter writer, ColorPrimitiveVO colorPrim, SceneVO scene )
+		{
+			// we really only have the ShapeVO to write. nothing else is different from MainItemVO. Actually, MainItemVO really contains the
+			// ShapeVO class but it doesnt serve much purpose there so we dont write it out
+
+			// technically, we should write this out like this since the data format can contain multiple polygons but in reality the editor
+			// only lets us add one so no reason to write out extra crap for nothing
+			//writer.Write( colorPrim.shape.polygons.Length );
+			//foreach( var polygon in colorPrim.shape.polygons )
+			//write polygon
+
+			// we have to multiply by our scenes pixelToWorld and invert y
+			var vectorFix = new Vector2( scene.pixelToWorld, -scene.pixelToWorld );
+			var polygon = colorPrim.shape.polygons[0];
+			writer.Write( polygon.Length );
+			foreach( var vec in polygon )
+				writer.Write( vec * vectorFix );
 		}
 
 

@@ -300,6 +300,7 @@
     <Compile Include="ECS\Components\Renderables\UICanvas.cs" />
     <Compile Include="ECS\Components\Physics\ITriggerListener.cs" />
     <Compile Include="ECS\Components\Physics\ProjectileMover.cs" />
+    <Compile Include="PipelineRuntime\Overlap2D\O2DColorPrimitive.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="MonoGame.Framework">

@@ -90,6 +90,7 @@ namespace Nez
 		/// <param name="recalculateUVs">If set to <c>true</c> recalculate U vs.</param>
 		public void recalculateBounds( bool recalculateUVs )
 		{
+			// TODO: use Rectanglef.rectEncompassingPoints
 			_minVertPosition = new Vector2( float.MaxValue, float.MaxValue );
 			var max = new Vector2( float.MinValue, float.MinValue );
 

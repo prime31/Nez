@@ -1,4 +1,5 @@
 ﻿using System;
+using Newtonsoft.Json;
 
 
 namespace Nez.Overlap2D.Runtime
@@ -19,11 +20,12 @@ namespace Nez.Overlap2D.Runtime
 		public float rotation;
 		public int zIndex = 0;
 		public float layerDepth;
-		public String layerName = string.Empty;
+		public string layerName = string.Empty;
 		public float[] tint = { 1, 1, 1, 1 };
 
-		public String shaderName = string.Empty;
+		public string shaderName = string.Empty;
 
+		// this is written only for sColorPrimitives
 		public ShapeVO shape;
 		public PhysicsBodyDataVO physics;
 
@@ -41,6 +43,11 @@ namespace Nez.Overlap2D.Runtime
 			return ( zIndexMax - (float)zIndex ) / zIndexMax;
 		}
 
+
+		public override string ToString()
+		{
+			return JsonConvert.SerializeObject( this, Formatting.Indented );
+		}
 	}
 }
 

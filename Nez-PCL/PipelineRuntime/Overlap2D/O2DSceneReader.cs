@@ -37,6 +37,17 @@ namespace Nez.Overlap2D
 			}
 
 
+			var colorPrimitiveCount = reader.ReadInt32();
+			for( var i = 0; i < colorPrimitiveCount; i++ )
+			{
+				var colorPrim = new O2DColorPrimitive();
+				readMainItem( reader, colorPrim );
+				readColorPrimitive( reader, colorPrim );
+
+				composite.colorPrimitives.Add( colorPrim );
+			}
+
+
 			var compositeItemCount = reader.ReadInt32();
 			for( var i = 0; i < compositeItemCount; i++ )
 			{
@@ -68,6 +79,25 @@ namespace Nez.Overlap2D
 			item.layerDepth = reader.ReadSingle();
 			item.layerName = reader.ReadString();
 			item.tint = reader.ReadColor();
+		}
+
+
+		void readColorPrimitive( ContentReader reader, O2DColorPrimitive colorPrim )
+		{
+			var count = reader.ReadInt32();
+
+			// special care needs to be taken here. if we have 4 verts everything will be fine. If we have any other number we need to close
+			// the poly by duplicating the last vert then we need to reverse the array
+			colorPrim.polygon = new Vector2[count == 4 ? count : count + 1];
+
+			for( var i = 0; i < count; i++ )
+				colorPrim.polygon[i] = reader.ReadVector2();
+
+			if( count != 4 )
+			{
+				colorPrim.polygon[count] = colorPrim.polygon[0];
+				Array.Reverse( colorPrim.polygon );
+			}
 		}
 
 	}

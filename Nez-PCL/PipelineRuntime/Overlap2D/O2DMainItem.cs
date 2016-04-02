@@ -26,10 +26,10 @@ namespace Nez.Overlap2D
 		/// probably just needs to be increased a bit.
 		/// </summary>
 		public float layerDepth;
-		public String layerName;
+		public string layerName;
 		public Color tint;
 
-		Dictionary<String,String> _customVarsDict;
+		Dictionary<string,string> _customVarsDict;
 
 
 		/// <summary>
@@ -56,7 +56,7 @@ namespace Nez.Overlap2D
 		}
 
 
-		public Dictionary<String,String> getCustomVars()
+		public Dictionary<string,string> getCustomVars()
 		{
 			if( _customVarsDict == null )
 				parseCustomVars();
