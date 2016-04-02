@@ -18,12 +18,12 @@ namespace Nez
 
 		public override float width
 		{
-			get { return tiledmap.width; }
+			get { return tiledmap.width * tiledmap.tileWidth; }
 		}
 
 		public override float height
 		{
-			get { return tiledmap.height; }
+			get { return tiledmap.height * tiledmap.tileHeight; }
 		}
 
 		public TiledTileLayer collisionLayer;
