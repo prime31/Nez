@@ -92,6 +92,23 @@ namespace Nez.Tiled
 
 
 		/// <summary>
+		/// gets the index in the layers List of the layer with name
+		/// </summary>
+		/// <returns>The layer index.</returns>
+		/// <param name="name">Name.</param>
+		public int getLayerIndex( string name )
+		{
+			for( var i = 0; i < layers.Count; i++ )
+			{
+				if( layers[i].name == name )
+					return i;
+			}
+
+			throw new Exception( "could not find the layer: " + name );
+		}
+
+
+		/// <summary>
 		/// gets the TiledLayer by name
 		/// </summary>
 		/// <returns>The layer.</returns>

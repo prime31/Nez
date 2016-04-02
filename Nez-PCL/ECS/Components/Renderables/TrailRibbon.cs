@@ -34,11 +34,21 @@ namespace Nez
 		public float ribbonRadius = 20;
 
 		// number of max segments
-		const int ribbonLength = 50;
+		readonly int _ribbonLength = 50;
 
 		VertexPositionColor[] _vertices;
 		LinkedList<RibbonSegment> _segments = new LinkedList<RibbonSegment>();
 		BasicEffect _basicEffect;
+
+
+		public TrailRibbon() : this( 50 )
+		{}
+
+
+		public TrailRibbon( int ribbonLength )
+		{
+			_ribbonLength = ribbonLength;
+		}
 
 
 		/// <summary>
@@ -47,7 +57,7 @@ namespace Nez
 		void initializeVertices()
 		{
 			var radiusVec = new Vector3( 0, -ribbonRadius, 0 );
-			_vertices = new VertexPositionColor[ribbonLength * 2 + 3];
+			_vertices = new VertexPositionColor[_ribbonLength * 2 + 3];
 
 			// head of ribbon
 			_vertices[0].Position = new Vector3( entity.transform.position, 0f ) + radiusVec;
@@ -58,9 +68,9 @@ namespace Nez
 			_vertices[2].Color = Color.Green;
 
 			var pos = entity.transform.position;
-			for( var i = 0; i < ribbonLength; i++ )
+			for( var i = 0; i < _ribbonLength; i++ )
 			{
-				var distanceRatio = 1 - ( 1 / (float)ribbonLength * ( i + 1 ) );
+				var distanceRatio = 1 - ( 1 / (float)_ribbonLength * ( i + 1 ) );
 				var segRadius = distanceRatio * ribbonRadius; // the radius size of this current segment
 				var seg = new RibbonSegment( pos, segRadius );
 				_segments.AddLast( seg );
@@ -95,7 +105,7 @@ namespace Nez
 			var segCount = 1;
 			foreach( var seg in _segments )
 			{
-				var ratio = 1 - ( 1 / (float)ribbonLength * segCount );
+				var ratio = 1 - ( 1 / (float)_ribbonLength * segCount );
 				seg.radius = ratio * ribbonRadius;
 
 				ColorExt.lerp( ref startColor, ref endColor, out _vertices[index].Color, 1 - ratio );
@@ -166,7 +176,7 @@ namespace Nez
 				_basicEffect.View = camera.transformMatrix;
 				_basicEffect.CurrentTechnique.Passes[0].Apply();
 
-				Core.graphicsDevice.DrawUserPrimitives( PrimitiveType.TriangleStrip, _vertices, 0, ribbonLength * 2 + 1 );
+				Core.graphicsDevice.DrawUserPrimitives( PrimitiveType.TriangleStrip, _vertices, 0, _ribbonLength * 2 + 1 );
 			}
 		}
 

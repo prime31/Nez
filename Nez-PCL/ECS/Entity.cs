@@ -306,6 +306,17 @@ namespace Nez
 
 
 		/// <summary>
+		/// Gets all the components of type T without a List allocation
+		/// </summary>
+		/// <param name="componentList">Component list.</param>
+		/// <typeparam name="T">The 1st type parameter.</typeparam>
+		public void getComponents<T>( List<T> componentList ) where T : class
+		{
+			components.getComponents( componentList );
+		}
+
+
+		/// <summary>
 		/// Gets all the components of type T
 		/// </summary>
 		/// <returns>The component.</returns>

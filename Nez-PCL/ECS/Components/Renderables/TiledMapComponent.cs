@@ -40,6 +40,19 @@ namespace Nez
 
 
 		/// <summary>
+		/// sets which layers should be rendered by this component by name. If you know the indices you can set layerIndicesToRender directly.
+		/// </summary>
+		/// <param name="layerNames">Layer names.</param>
+		public void setLayersToRender( string[] layerNames )
+		{
+			layerIndicesToRender = new int[layerNames.Length];
+
+			for( var i = 0; i < layerNames.Length; i++ )
+				layerIndicesToRender[i] = tiledmap.getLayerIndex( layerNames[i] );
+		}
+
+
+		/// <summary>
 		/// this method requires that you are using a collision layer setup in the constructor.
 		/// </summary>
 		/// <returns>The tile at world position.</returns>
@@ -94,6 +107,10 @@ namespace Nez
 
 		public override void render( Graphics graphics, Camera camera )
 		{
+			// early out if we arent visible
+			if( !isVisibleFromCamera( camera ) )
+				return;
+			
 			if( layerIndicesToRender == null )
 			{
 				tiledmap.draw( graphics.spriteBatch, entity.transform.position + _localPosition, layerDepth, camera.bounds );
@@ -102,7 +119,7 @@ namespace Nez
 			{
 				for( var i = 0; i < tiledmap.layers.Count; i++ )
 				{
-					if( layerIndicesToRender.contains( i ) && tiledmap.layers[i].visible )
+					if( tiledmap.layers[i].visible && layerIndicesToRender.contains( i ) )
 						tiledmap.layers[i].draw( graphics.spriteBatch, entity.transform.position + _localPosition, layerDepth, camera.bounds );
 				}
 			}
