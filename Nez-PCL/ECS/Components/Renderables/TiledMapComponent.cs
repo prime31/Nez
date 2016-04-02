@@ -40,6 +40,17 @@ namespace Nez
 
 
 		/// <summary>
+		/// sets this component to only render a single layer
+		/// </summary>
+		/// <param name="layerName">Layer name.</param>
+		public void setLayerToRender( string layerName )
+		{
+			layerIndicesToRender = new int[1];
+			layerIndicesToRender[0] = tiledmap.getLayerIndex( layerName );
+		}
+
+
+		/// <summary>
 		/// sets which layers should be rendered by this component by name. If you know the indices you can set layerIndicesToRender directly.
 		/// </summary>
 		/// <param name="layerNames">Layer names.</param>

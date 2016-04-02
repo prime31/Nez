@@ -351,7 +351,6 @@ namespace Nez
 
 			// update our lists in case they have any changes
 			entities.updateLists();
-			renderableComponents.updateLists();
 
 			if( entityProcessors != null )
 				entityProcessors.update();
@@ -362,6 +361,9 @@ namespace Nez
 				if( entity.enabled && ( entity.updateInterval == 1 || Time.frameCount % entity.updateInterval == 0 ) )
 					entity.update();
 			}
+
+			// we update our renderables after entity.update in case any new Renderables were added
+			renderableComponents.updateLists();
 		}
 
 

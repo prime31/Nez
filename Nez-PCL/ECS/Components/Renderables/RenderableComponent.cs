@@ -200,10 +200,6 @@ namespace Nez
 		#endregion
 
 
-		public RenderableComponent()
-		{}
-
-
 		#region Component overrides and RenderableComponent
 
 		public override void onEntityTransformChanged()
