@@ -11,20 +11,19 @@ namespace Nez
 	public interface ITriggerListener
 	{
 		/// <summary>
-		/// called when another collider intersects a trigger collider attached to this Entity. Movement must be handled by the
-		/// Mover methods for this to function automatically.
+		/// called when a collider intersects a trigger collider. This is called on the trigger collider and the collider that touched
+		/// the trigger. Movement must be handled by the Mover/ProjectileMover methods for this to function automatically.
 		/// </summary>
 		/// <param name="remote">Remote.</param>
 		/// <param name="local">Local.</param>
-		void onTriggerEnter( Collider other );
+		void onTriggerEnter( Collider other, Collider self );
 
 		/// <summary>
-		/// called when another collider leaves a trigger collider attached to this Entity. Movement must be handled by the Entity.move
-		/// methods for this to function automatically.
+		/// called when another collider leaves a trigger collider.
 		/// </summary>
 		/// <param name="remote">Remote.</param>
 		/// <param name="local">Local.</param>
-		void onTriggerExit( Collider other );
+		void onTriggerExit( Collider other, Collider self );
 	}
 }
 

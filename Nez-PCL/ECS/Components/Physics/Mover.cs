@@ -23,6 +23,8 @@ namespace Nez
 		/// </summary>
 		HashSet<Pair<Collider>> _previousTriggerIntersections = new HashSet<Pair<Collider>>();
 
+		List<ITriggerListener> _tempTriggerList = new List<ITriggerListener>();
+
 
 		/// <summary>
 		/// moves the entity taking collisions into account
@@ -134,31 +136,29 @@ namespace Nez
 
 		void notifyTriggerListeners( Pair<Collider> collisionPair, bool isEntering )
 		{
-			// call the onTriggerEnter method for any relevant components if we are the trigger
-			if( collisionPair.first.isTrigger )
+			// call the onTriggerEnter method for any relevant components
+			collisionPair.first.entity.getComponents( _tempTriggerList );
+			for( var i = 0; i < _tempTriggerList.Count; i++ )
 			{
-				var triggerListeners = collisionPair.first.entity.components.getComponents<ITriggerListener>();
-				for( var i = 0; i < triggerListeners.Count; i++ )
-				{
-					if( isEntering )
-						triggerListeners[i].onTriggerEnter( collisionPair.second );
-					else
-						triggerListeners[i].onTriggerExit( collisionPair.second );
-				}
+				if( isEntering )
+					_tempTriggerList[i].onTriggerEnter( collisionPair.second, collisionPair.first );
+				else
+					_tempTriggerList[i].onTriggerExit( collisionPair.second, collisionPair.first );
 			}
 
-			// also call it for the collider we moved onto if it is a trigger
-			if( collisionPair.second.isTrigger )
+			_tempTriggerList.Clear();
+
+			// also call it for the collider we moved onto
+			collisionPair.second.entity.getComponents( _tempTriggerList );
+			for( var i = 0; i < _tempTriggerList.Count; i++ )
 			{
-				var triggerListeners = collisionPair.second.entity.components.getComponents<ITriggerListener>();
-				for( var i = 0; i < triggerListeners.Count; i++ )
-				{
-					if( isEntering )
-						triggerListeners[i].onTriggerEnter( collisionPair.first );
-					else
-						triggerListeners[i].onTriggerExit( collisionPair.first );
-				}
+				if( isEntering )
+					_tempTriggerList[i].onTriggerEnter( collisionPair.first, collisionPair.second );
+				else
+					_tempTriggerList[i].onTriggerExit( collisionPair.first, collisionPair.second );
 			}
+
+			_tempTriggerList.Clear();
 		}
 	
 	}

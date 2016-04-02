@@ -59,16 +59,16 @@ namespace Nez
 		void notifyTriggerListeners( Collider self, Collider other )
 		{
 			// notify any listeners on the Entity of the Collider that we overlapped
-			other.entity.components.getComponents( _tempTriggerList );
+			other.entity.getComponents( _tempTriggerList );
 			for( var i = 0; i < _tempTriggerList.Count; i++ )
-				_tempTriggerList[i].onTriggerEnter( self );
+				_tempTriggerList[i].onTriggerEnter( self, other );
 
 			_tempTriggerList.Clear();
 
 			// notify any listeners on this Entity
-			entity.components.getComponents( _tempTriggerList );
+			entity.getComponents( _tempTriggerList );
 			for( var i = 0; i < _tempTriggerList.Count; i++ )
-				_tempTriggerList[i].onTriggerEnter( other );
+				_tempTriggerList[i].onTriggerEnter( other, self );
 
 			_tempTriggerList.Clear();
 		}
