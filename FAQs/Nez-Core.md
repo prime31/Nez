@@ -63,7 +63,37 @@ As you can probably guess, Input gets you access to all input (mouse, keyboard, 
 - **Pressed**: true only the frame that a button/key is pressed
 - **Released**: true only the frame that a button/key is released
 
-Several virtual input classes are also provided which let you combine multiple input types into a single class that you can query. For example, you can setup a VirtualButton that can map to a variety of different input types that should result in some object moving to the right. You can create the VirtualButton with the D key, right arrow key and Dpad-right and just query it to know if any of those were pressed. The same applies to other common scenarios as well. Have a look in the Input folder for the different virtual inputs available.
+Several virtual input classes are also provided which let you combine multiple input types into a single class that you can query. For example, you can setup a VirtualButton that can map to a variety of different input types that should result in some object moving to the right. You can create the VirtualButton with the D key, right arrow key and Dpad-right and just query it to know if any of those were pressed. The same applies to other common scenarios as well. Have a look in the Input folder for the different virtual inputs available. Below is an example of mapping multiple inputs to a single action:
+
+```csharp
+	void setupVirtualInput()
+	{
+		// setup input for shooting a fireball. we will allow z on the keyboard or a on the gamepad
+		_fireInput = new VirtualButton();
+		_fireInput.nodes.Add( new Nez.VirtualButton.KeyboardKey( Keys.Z ) );
+		_fireInput.nodes.Add( new Nez.VirtualButton.GamePadButton( 0, Buttons.A ) );
+
+		// horizontal input from dpad, left stick or keyboard left/right
+		_xAxisInput = new VirtualIntegerAxis();
+		_xAxisInput.nodes.Add( new Nez.VirtualAxis.GamePadDpadLeftRight() );
+		_xAxisInput.nodes.Add( new Nez.VirtualAxis.GamePadLeftStickX() );
+		_xAxisInput.nodes.Add( new Nez.VirtualAxis.KeyboardKeys( VirtualInput.OverlapBehavior.TakeNewer, Keys.Left, Keys.Right ) );
+
+		// vertical input from dpad, left stick or keyboard up/down
+		_yAxisInput = new VirtualIntegerAxis();
+		_yAxisInput.nodes.Add( new Nez.VirtualAxis.GamePadDpadUpDown() );
+		_yAxisInput.nodes.Add( new Nez.VirtualAxis.GamePadLeftStickY() );
+		_yAxisInput.nodes.Add( new Nez.VirtualAxis.KeyboardKeys( VirtualInput.OverlapBehavior.TakeNewer, Keys.Up, Keys.Down ) );
+	}
+		
+			
+	void IUpdatable.update()
+	{
+		// gather input from the Virtual Inputs we setup above
+		var moveDir = new Vector2( _xAxisInput.value, _yAxisInput.value );
+		var isShooting = _fireInput.isPressed;
+	}
+```
 
 
 Debug
