@@ -37,7 +37,7 @@ table.add( button ).setMinWidth( 100 ).setMinHeight( 30 );
 
 Skins
 ==========
-Nez UI supports a skin system similar to [libGDX skins](https://github.com/libgdx/libgdx/wiki/Skin). Skins are optional but highly recommended. They act as a container to hold all of your UI resources and offer a bunch of automatic conversions. You can create a skin programatically or via a JSON file that is run through the UI Skin Importer in the Pipeline tool. This gets the JSON parsed at build time so the data is ready to use at runtime. Below is example JSON with some comments added explaining the different elements.
+Nez UI supports a skin system similar to [libGDX skins](https://github.com/libgdx/libgdx/wiki/Skin). Skins are optional but highly recommended. They act as a container to hold all of your UI resources and offer a bunch of automatic conversions. Nez includes a simple, default skin (accessible via `Skin.createDefaultSkin`) that you can use to mock up UIs quickly. You can create a skin programatically or via a JSON file that is run through the UI Skin Importer in the Pipeline tool. This gets the JSON parsed at build time so the data is ready to use at runtime. Below is example JSON with some comments added explaining the different elements.
 
 ```javascript
 {
@@ -104,10 +104,14 @@ var skin = new Skin( "skins/uiskinconfig", Core.contentManager );
 
 // notice that we can directly fetch the style for the button via the name we specified in the JSON
 var button = new Button( skin.get<TextButtonStyle>( "default" ) );
+// alternatively, we could create the button like this. Note that we are just giving it the skin so as long as there is
+// a style named "default" that is what will be used.
+var button = new Button( skin );
 
 var bar = new ProgressBar( 0, 1, 0.1f, vertical, skin.get<ProgressBarStyle>( "default-vertical" ) );
 
 // this button uses the 'colored' style that we made using only colors. We have to remember to give it
+// some girth since it isnt an image and has no height/width.
 var button = new Button( skin.get<ButtonStyle>( "colored" ) );
 table.add( button ).setMinWidth( 100 ).setMinHeight( 30 );
 ```
