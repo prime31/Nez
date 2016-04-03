@@ -137,10 +137,14 @@ namespace Nez.PhysicsShapes
 			if( other is Polygon )
 				return ShapeCollisions.polygonToPolygon( this, other as Polygon, out result );
 
-			if( other is Circle && ShapeCollisions.circleToPolygon( other as Circle, this, out result ) )
+			if( other is Circle )
 			{
-				result.invertResult();
-				return true;
+				if( ShapeCollisions.circleToPolygon( other as Circle, this, out result ) )
+				{
+					result.invertResult();
+					return true;
+				}
+				return false;
 			}
 
 			throw new NotImplementedException( string.Format( "overlaps of Polygon to {0} are not supported", other ) );
