@@ -11,6 +11,7 @@ namespace Nez.Tiled
 	{
 		public readonly int id;
 		public List<TiledTileAnimationFrame> animationFrames;
+		public string imageSource;
 		public Dictionary<string,string> properties = new Dictionary<string,string>();
 
 

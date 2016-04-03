@@ -8,16 +8,6 @@ namespace Nez.TiledMaps
 	[XmlRoot( ElementName = "tileset" )]
 	public class TmxTileset
 	{
-		public TmxTileset()
-		{
-			tileOffset = new TmxTileOffset();
-			tiles = new List<TmxTilesetTile>();
-			properties = new List<TmxProperty>();
-			terrainTypes = new List<TmxTerrain>();
-
-		}
-
-
 		[XmlAttribute( AttributeName = "firstgid" )]
 		public int firstGid;
 
@@ -57,9 +47,12 @@ namespace Nez.TiledMaps
 		public List<TmxTerrain> terrainTypes;
 
 
-		public override string ToString()
+		public TmxTileset()
 		{
-			return string.Format( "{0}: {1}", name, image );
+			tileOffset = new TmxTileOffset();
+			tiles = new List<TmxTilesetTile>();
+			properties = new List<TmxProperty>();
+			terrainTypes = new List<TmxTerrain>();
 		}
 
 
@@ -100,5 +93,12 @@ namespace Nez.TiledMaps
 			var newPath = Path.GetFullPath( Path.Combine( mapDirectory, tilesetDirectory, imageDirectory, imageFile ) );                        
 			image.source = Path.Combine( makeRelativePath( mapPath, newPath ) );
 		}
+			
+
+		public override string ToString()
+		{
+			return string.Format( "{0}: {1}", name, image );
+		}
+
 	}
 }

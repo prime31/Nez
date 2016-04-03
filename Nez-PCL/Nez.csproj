@@ -305,6 +305,8 @@
     <Compile Include="Utils\FSM\StateMachine.cs" />
     <Compile Include="ECS\Components\Util\SimpleStateMachine.cs" />
     <Compile Include="Utils\FSM\State.cs" />
+    <Compile Include="PipelineRuntime\Tiled\TiledImageTile.cs" />
+    <Compile Include="PipelineRuntime\Tiled\TiledImageCollectionTileset.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="MonoGame.Framework">

@@ -8,6 +8,12 @@ namespace Nez.TiledMaps
 	[XmlInclude( typeof( TmxImageLayer ) )]
 	public abstract class TmxLayer
 	{
+		[XmlAttribute( AttributeName = "offsetx" )]
+		public float offsetx;
+
+		[XmlAttribute( AttributeName = "offsety" )]
+		public float offsety;
+
 		[XmlAttribute( AttributeName = "name" )]
 		public string name;
 

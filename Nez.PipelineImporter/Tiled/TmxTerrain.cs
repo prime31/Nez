@@ -6,10 +6,6 @@ namespace Nez.TiledMaps
 {
 	public class TmxTerrain
 	{
-		public TmxTerrain()
-		{}
-
-
 		[XmlAttribute( AttributeName = "name" )]
 		public string name;
 

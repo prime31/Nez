@@ -5,10 +5,6 @@ namespace Nez.TiledMaps
 {
 	public class TmxTileLayer : TmxLayer
 	{
-		public TmxTileLayer()
-		{}
-
-
 		[XmlAttribute( AttributeName = "x" )]
 		public int x;
 

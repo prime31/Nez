@@ -5,8 +5,6 @@ namespace Nez.TiledMaps
 {
 	public class TmxImage
 	{
-		public TmxImage()
-		{}
 		[XmlAttribute( AttributeName = "source" )]
 		public string source;
 

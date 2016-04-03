@@ -61,8 +61,14 @@ namespace Nez.Tiled
 
 		public TiledTileset createTileset( Texture2D texture, int firstId, int tileWidth, int tileHeight, int spacing = 2, int margin = 2 )
 		{
-			var tileset = new TiledTileset( texture, firstId, tileWidth, tileHeight, spacing, margin );
+			TiledTileset tileset;
+			if( texture != null )
+				tileset = new TiledTileset( texture, firstId, tileWidth, tileHeight, spacing, margin );
+			else
+				tileset = new TiledImageCollectionTileset( firstId );
+
 			_tilesets.Add( tileset );
+
 			return tileset;
 		}
 
@@ -75,9 +81,9 @@ namespace Nez.Tiled
 		}
 
 
-		public TiledImageLayer createImageLayer( string name, Texture2D texture, Vector2 position )
+		public TiledImageLayer createImageLayer( string name, Texture2D texture )
 		{
-			var layer = new TiledImageLayer( name, texture, position );
+			var layer = new TiledImageLayer( name, texture );
 			layers.Add( layer );
 			return layer;
 		}

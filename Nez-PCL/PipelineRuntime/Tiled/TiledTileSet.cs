@@ -19,6 +19,12 @@ namespace Nez.Tiled
 		private readonly Dictionary<int,Subtexture> _regions;
 
 
+		public TiledTileset( int firstId )
+		{
+			this.firstId = firstId;
+		}
+
+
 		public TiledTileset( Texture2D texture, int firstId, int tileWidth, int tileHeight, int spacing = 2, int margin = 2 )
 		{
 			this.texture = texture;
@@ -47,7 +53,7 @@ namespace Nez.Tiled
 		/// </summary>
 		/// <returns>The tile texture region.</returns>
 		/// <param name="id">Identifier.</param>
-		public Subtexture getTileTextureRegion( int id )
+		public virtual Subtexture getTileTextureRegion( int id )
 		{
 			return _regions[id];
 		}

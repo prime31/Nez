@@ -35,8 +35,16 @@ namespace Nez.TiledMaps
 			writer.Write( map.tilesets.Count );
 			foreach( var tileset in map.tilesets )
 			{
-				TiledMapProcessor.logger.LogMessage( "Expecting texture asset: {0}\n", tileset.image.source );
-				writer.Write( removeExtension( tileset.image.source ) );
+				if( tileset.image != null )
+					TiledMapProcessor.logger.LogMessage( "\nExpecting texture asset: {0}\n", tileset.image.source );
+				else
+					TiledMapProcessor.logger.LogMessage( "\nNo texture asset found for tileset: {0}. This is normal if this is an image collection tilest.\n", tileset.name );
+
+				if( tileset.image != null )
+					writer.Write( removeExtension( tileset.image.source ) );
+				else
+					writer.Write( string.Empty );
+				
 				writer.Write( tileset.firstGid );
 				writer.Write( tileset.tileWidth );
 				writer.Write( tileset.tileHeight );
@@ -58,6 +66,17 @@ namespace Nez.TiledMaps
 						writer.Write( anim.duration );
 					}
 
+					// image is optional
+					if( tile.image != null )
+					{
+						writer.Write( true );
+						writer.Write( tile.image.source );
+					}
+					else
+					{
+						writer.Write( false );
+					}
+
 					writeCustomProperties( writer, tile.properties );
 				}
 			}
@@ -69,6 +88,7 @@ namespace Nez.TiledMaps
 				writer.Write( layer.name );
 				writer.Write( layer.visible );
 				writer.Write( layer.opacity );
+				writer.Write( new Vector2( layer.offsetx, layer.offsety ) );
 
 				var tileLayer = layer as TmxTileLayer;
 				if( tileLayer != null )
@@ -106,7 +126,6 @@ namespace Nez.TiledMaps
 				{
 					writer.Write( (int)TiledLayerType.Image );
 					writer.Write( removeExtension( imageLayer.image.source ) );
-					writer.Write( new Vector2( imageLayer.x, imageLayer.y ) );
 
 					TiledMapProcessor.logger.LogMessage( "Expecting texture asset: {0}\n", imageLayer.image.source );
 				}
@@ -166,7 +185,7 @@ namespace Nez.TiledMaps
 					writeCustomProperties( writer, obj.properties );
 				}
 				
-				TiledMapProcessor.logger.LogMessage( "done writing ObjectGroup: {0}", group.name );
+				TiledMapProcessor.logger.LogMessage( "done writing ObjectGroup: {0}", group );
 			}
 		}
 

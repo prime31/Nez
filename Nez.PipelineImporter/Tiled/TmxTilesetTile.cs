@@ -6,10 +6,6 @@ namespace Nez.TiledMaps
 {
 	public class TmxTilesetTile
 	{
-		public TmxTilesetTile()
-		{}
-
-
 		[XmlAttribute( AttributeName = "id" )]
 		public int id;
 
@@ -36,7 +32,7 @@ namespace Nez.TiledMaps
 
 		public override string ToString()
 		{
-			return string.Format( "[TmxTilesetTile] id: {0}, animationFrames: {1}", id, animationFrames.Count );
+			return string.Format( "[TmxTilesetTile] id: {0}, animationFrames: {1}, image: {2}", id, animationFrames.Count, image );
 		}
 	}
 }
