@@ -1,15 +1,12 @@
 using System.Collections.Generic;
 using System.Xml.Serialization;
+using Microsoft.Xna.Framework;
 
 
 namespace Nez.TiledMaps
 {
 	public class TmxTilesetTile
 	{
-		public TmxTilesetTile()
-		{}
-
-
 		[XmlAttribute( AttributeName = "id" )]
 		public int id;
 
@@ -33,10 +30,15 @@ namespace Nez.TiledMaps
 		[XmlArrayItem( "frame" )]
 		public List<TmxTilesetTileAnimationFrame> animationFrames;
 
+		/// <summary>
+		/// source Rectangle for tilesets that use the collection of images
+		/// </summary>
+		public Rectangle sourceRect;
+
 
 		public override string ToString()
 		{
-			return string.Format( "[TmxTilesetTile] id: {0}, animationFrames: {1}", id, animationFrames.Count );
+			return string.Format( "[TmxTilesetTile] id: {0}, animationFrames: {1}, image: {2}", id, animationFrames.Count, image );
 		}
 	}
 }

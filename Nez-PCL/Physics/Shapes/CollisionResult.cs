@@ -43,7 +43,7 @@ namespace Nez
 				var fix = responseDistance / normal.Y;
 
 				// check some edge cases. make sure we dont have normal.x == 1 and a super small y which will result in a huge
-				// fix value since we divice by normal
+				// fix value since we divide by normal
 				if( Math.Abs( normal.X ) != 1f && Math.Abs( fix ) < Math.Abs( deltaMovement.Y * 3f ) )
 				{
 					minimumTranslationVector = new Vector2( 0f, -fix );

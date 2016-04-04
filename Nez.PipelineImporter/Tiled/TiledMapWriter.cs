@@ -7,6 +7,7 @@ using Microsoft.Xna.Framework.Content.Pipeline;
 using Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler;
 using System.Diagnostics;
 using Nez.Tiled;
+using Microsoft.Xna.Framework.Content.Pipeline.Graphics;
 
 
 namespace Nez.TiledMaps
@@ -35,8 +36,16 @@ namespace Nez.TiledMaps
 			writer.Write( map.tilesets.Count );
 			foreach( var tileset in map.tilesets )
 			{
-				TiledMapProcessor.logger.LogMessage( "Expecting texture asset: {0}\n", tileset.image.source );
-				writer.Write( removeExtension( tileset.image.source ) );
+				if( tileset.image != null )
+					TiledMapProcessor.logger.LogMessage( "\nExpecting texture asset: {0}\n", tileset.image.source );
+				
+				writer.Write( tileset.isStandardTileset );
+
+				if( tileset.image != null )
+					writer.Write( removeExtension( tileset.image.source ) );
+				else
+					writer.Write( string.Empty );
+				
 				writer.Write( tileset.firstGid );
 				writer.Write( tileset.tileWidth );
 				writer.Write( tileset.tileHeight );
@@ -58,6 +67,20 @@ namespace Nez.TiledMaps
 						writer.Write( anim.duration );
 					}
 
+					// image is optional
+					if( tile.image != null )
+					{
+						writer.Write( true );
+						writer.Write( tile.sourceRect.X );
+						writer.Write( tile.sourceRect.Y );
+						writer.Write( tile.sourceRect.Width );
+						writer.Write( tile.sourceRect.Height );
+					}
+					else
+					{
+						writer.Write( false );
+					}
+
 					writeCustomProperties( writer, tile.properties );
 				}
 			}
@@ -69,6 +92,7 @@ namespace Nez.TiledMaps
 				writer.Write( layer.name );
 				writer.Write( layer.visible );
 				writer.Write( layer.opacity );
+				writer.Write( new Vector2( layer.offsetx, layer.offsety ) );
 
 				var tileLayer = layer as TmxTileLayer;
 				if( tileLayer != null )
@@ -106,7 +130,6 @@ namespace Nez.TiledMaps
 				{
 					writer.Write( (int)TiledLayerType.Image );
 					writer.Write( removeExtension( imageLayer.image.source ) );
-					writer.Write( new Vector2( imageLayer.x, imageLayer.y ) );
 
 					TiledMapProcessor.logger.LogMessage( "Expecting texture asset: {0}\n", imageLayer.image.source );
 				}
@@ -166,7 +189,7 @@ namespace Nez.TiledMaps
 					writeCustomProperties( writer, obj.properties );
 				}
 				
-				TiledMapProcessor.logger.LogMessage( "done writing ObjectGroup: {0}", group.name );
+				TiledMapProcessor.logger.LogMessage( "done writing ObjectGroup: {0}", group );
 			}
 		}
 
@@ -218,14 +241,12 @@ namespace Nez.TiledMaps
 
 		public override string GetRuntimeType( TargetPlatform targetPlatform )
 		{
-			//TiledMapProcessor.logger.LogMessage( "--- GetRuntimeType: {0}", typeof( Nez.Tiled.TiledMap ).AssemblyQualifiedName );
 			return typeof( Nez.Tiled.TiledMap ).AssemblyQualifiedName;
 		}
 
 
 		public override string GetRuntimeReader( TargetPlatform targetPlatform )
 		{
-			//TiledMapProcessor.logger.LogMessage( "--- GetRuntimeReader: {0}", typeof( Nez.Tiled.TiledMapReader ).AssemblyQualifiedName );
 			return typeof( Nez.Tiled.TiledMapReader ).AssemblyQualifiedName;
 		}
 

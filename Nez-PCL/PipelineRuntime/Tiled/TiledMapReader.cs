@@ -31,18 +31,28 @@ namespace Nez.Tiled
 			var tilesetCount = reader.ReadInt32();
 			for( var i = 0; i < tilesetCount; i++ )
 			{
-				var textureAssetName = reader.getRelativeAssetPath( reader.ReadString() );
-				var texture = reader.ContentManager.Load<Texture2D>( textureAssetName );
+				var isStandardTileset = reader.ReadBoolean();
+
+				// image collections will have not texture associated with them
+				var textureName = reader.ReadString();
+				Texture2D texture = null;
+				if( textureName != string.Empty )
+				{
+					var textureAssetName = reader.getRelativeAssetPath( textureName );
+					texture = reader.ContentManager.Load<Texture2D>( textureAssetName );
+				}
+
 				var tileset = tiledMap.createTileset(
 					                          texture: texture,
 					                          firstId: reader.ReadInt32(),
 					                          tileWidth: reader.ReadInt32(),
 					                          tileHeight: reader.ReadInt32(),
+											  isStandardTileset: isStandardTileset,
 					                          spacing: reader.ReadInt32(),
 					                          margin: reader.ReadInt32() );
 				readCustomProperties( reader, tileset.properties );
 
-				// tile array
+				// tiledset tile array
 				var tileCount = reader.ReadInt32();
 				for( var j = 0; j < tileCount; j++ )
 				{
@@ -54,6 +64,13 @@ namespace Nez.Tiled
 					
 					for( var k = 0; k < tileAnimationFrameCount; k++ )
 						tile.animationFrames.Add( new TiledTileAnimationFrame( reader.ReadInt32(), reader.ReadSingle() ) );
+
+					// image source is optional
+					if( reader.ReadBoolean() )
+					{
+						var rect = new Rectangle( reader.ReadInt32(), reader.ReadInt32(), reader.ReadInt32(), reader.ReadInt32() );
+						( (TiledImageCollectionTileset)tileset ).setTileTextureRegion( tileset.firstId + tile.id, rect );
+					}
 
 					readCustomProperties( reader, tile.properties );
 					tileset.tiles.Add( tile );
@@ -89,6 +106,7 @@ namespace Nez.Tiled
 			var layerName = reader.ReadString();
 			var visible = reader.ReadBoolean();
 			var opacity = reader.ReadSingle();
+			var offset = reader.ReadVector2();
 			var layerType = (TiledLayerType)reader.ReadInt32();
 
 			TiledLayer layer;
@@ -99,6 +117,7 @@ namespace Nez.Tiled
 			else
 				throw new NotSupportedException( string.Format( "Layer type {0} with name {1} is not supported", layerType, layerName ) );
 
+			layer.offset = offset;
 			layer.visible = visible;
 			layer.opacity = opacity;
 
@@ -124,13 +143,15 @@ namespace Nez.Tiled
 					var tilesetTile = tileMap.getTilesetTile( tileId );
 					if( tilesetTile != null && tilesetTile.animationFrames != null )
 					{
-						tiles[i] = new TiledAnimatedTile( tileId, tilesetTile )
+						if( tilesetTile.animationFrames.Count > 0 )
 						{
-							flippedHorizonally = flippedHorizonally,
-							flippedVertically = flippedVertically,
-							flippedDiagonally = flippedDiagonally
-						};
-						tileMap._animatedTiles.Add( tiles[i] as TiledAnimatedTile );
+							tiles[i] = new TiledAnimatedTile( tileId, tilesetTile ) {
+								flippedHorizonally = flippedHorizonally,
+								flippedVertically = flippedVertically,
+								flippedDiagonally = flippedDiagonally
+							};
+							tileMap._animatedTiles.Add( tiles[i] as TiledAnimatedTile );
+						}
 					}
 					else
 					{
@@ -162,9 +183,8 @@ namespace Nez.Tiled
 		{
 			var assetName = reader.getRelativeAssetPath( reader.ReadString() );
 			var texture = reader.ContentManager.Load<Texture2D>( assetName );
-			var position = reader.ReadVector2();
 
-			return tileMap.createImageLayer( layerName, texture, position );
+			return tileMap.createImageLayer( layerName, texture );
 		}
 
 

@@ -6,16 +6,6 @@ namespace Nez.TiledMaps
 {
 	public class TmxImageLayer : TmxLayer
 	{
-		public TmxImageLayer()
-		{}
-
-
-		[XmlAttribute( AttributeName = "x" )]
-		public int x;
-
-		[XmlAttribute( AttributeName = "y" )]
-		public int y;
-
 		[XmlElement( ElementName = "image" )]
 		public TmxImage image;
 

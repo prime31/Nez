@@ -7,6 +7,7 @@ namespace Nez.Tiled
 {
 	public abstract class TiledLayer
 	{
+		public Vector2 offset;
 		public string name;
 		public Dictionary<string,string> properties;
 		public bool visible;

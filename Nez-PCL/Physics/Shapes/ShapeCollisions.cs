@@ -8,7 +8,8 @@ namespace Nez.PhysicsShapes
 	public static class ShapeCollisions
 	{
 		// storage for polygon SAT checks
-		static Vector2[] _satAxisArray = new Vector2[64]; // a maximum of 32 vertices per poly is supported
+		static Vector2[] _satAxisArray = new Vector2[64];
+		// a maximum of 32 vertices per poly is supported
 		static float[] _satTimerPerAxis = new float[64];
 
 
@@ -167,7 +168,7 @@ namespace Nez.PhysicsShapes
 
 			return false;
 		}
-	
+
 
 		/// <summary>
 		/// checks for a collision between first and second. deltaMovement is applied to first to see if a collision occurs in the future.
@@ -481,6 +482,33 @@ namespace Nez.PhysicsShapes
 		{
 			result = new CollisionResult();
 
+			// circle position in the polygons coordinates
+			var poly2Circle = circle.position - polygon.position;
+
+			// first, we need to find the closest distance from the circle to the polygon
+			float distanceSquared;
+			var closestPoint = polygon.getClosestPointOnPolygonToPoint( poly2Circle, out distanceSquared, out result.normal );
+
+			// make sure the squared distance is less than our radius squared else we are not colliding
+			if( distanceSquared > circle.radius * circle.radius )
+				return false;
+
+			// figure out the mtd
+			var distance = Mathf.sqrt( distanceSquared );
+			var mtv = ( poly2Circle - closestPoint ) * ( ( circle.radius - distance ) / distance );
+
+			result.minimumTranslationVector = -mtv;
+			result.normal.Normalize();
+
+			return true;
+		}
+
+
+		// something isnt right here with this one
+		static bool circleToPolygon2( Circle circle, Polygon polygon, out CollisionResult result )
+		{
+			result = new CollisionResult();
+
 			var closestPointIndex = -1;
 			var poly2Circle = circle.position - polygon.position;
 			var poly2CircleNormalized = Vector2.Normalize( poly2Circle );
@@ -519,9 +547,15 @@ namespace Nez.PhysicsShapes
 			Vector2.DistanceSquared( ref circleCenter, ref closest1, out distance1 );
 			Vector2.DistanceSquared( ref circleCenter, ref closest2, out distance2 );
 
+			var radiusSquared = circle.radius * circle.radius;
+
 			float seperationDistance;
 			if( distance1 < distance2 )
 			{
+				// make sure the squared distance is less than our radius squared else we are not colliding
+				if( distance1 > radiusSquared )
+					return false;
+
 				seperationDistance = circle.radius - Mathf.sqrt( distance1 );
 				var edge = polygon.points[closestPointIndex] - polygon.points[prePointIndex];
 				result.normal = new Vector2( edge.Y, -edge.X );
@@ -529,6 +563,10 @@ namespace Nez.PhysicsShapes
 			}
 			else
 			{
+				// make sure the squared distance is less than our radius squared else we are not colliding
+				if( distance2 > radiusSquared )
+					return false;
+
 				seperationDistance = circle.radius - Mathf.sqrt( distance2 );
 				var edge = polygon.points[postPointIndex] - polygon.points[closestPointIndex];
 				result.normal = new Vector2( edge.Y, -edge.X );

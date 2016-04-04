@@ -83,7 +83,7 @@ namespace Nez.TextureAtlasGenerator
 			}
 
 			// Pack all the sprites into a single large texture.
-			var packedSprites = TextureAtlasPacker.PackSprites( sourceSprites, textureAtlas.spriteRectangles, compressTexture, context );
+			var packedSprites = TextureAtlasPacker.packSprites( sourceSprites, textureAtlas.spriteRectangles, compressTexture, context );
 			textureAtlas.texture.Mipmaps.Add( packedSprites );
 			
 			if( compressTexture )

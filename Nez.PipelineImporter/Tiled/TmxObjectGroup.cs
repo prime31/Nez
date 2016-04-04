@@ -6,9 +6,11 @@ namespace Nez.TiledMaps
 {
 	public class TmxObjectGroup
 	{
-		public TmxObjectGroup()
-		{}
-			
+		[XmlAttribute( AttributeName = "offsetx" )]
+		public float offsetx;
+
+		[XmlAttribute( AttributeName = "offsety" )]
+		public float offsety;
 
 		[XmlAttribute( AttributeName = "name" )]
 		public string name;
@@ -32,7 +34,7 @@ namespace Nez.TiledMaps
 
 		public override string ToString()
 		{
-			return name;
+			return string.Format( "[TmxObjectGroup] name: {0}, offsetx: {1}, offsety: {2}", name, offsetx, offsety );
 		}
 
 	}

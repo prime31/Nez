@@ -7,10 +7,6 @@ namespace Nez.TiledMaps
 	[XmlRoot( ElementName = "frame" )]
 	public class TmxTilesetTileAnimationFrame
 	{
-		public TmxTilesetTileAnimationFrame()
-		{}
-
-
 		[XmlAttribute( AttributeName = "tileid" )]
 		public int tileId;
 

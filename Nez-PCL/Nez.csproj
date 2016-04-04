@@ -60,6 +60,7 @@
     <Folder Include="Graphics\Transitions\" />
     <Folder Include="PipelineRuntime\UISkin\" />
     <Folder Include="Input\Virtual\" />
+    <Folder Include="Utils\FSM\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Debug\Debug.cs" />
@@ -74,7 +75,6 @@
     <Compile Include="ECS\Components\Renderables\TiledMapComponent.cs" />
     <Compile Include="ECS\Components\Text\FramesPerSecondCounter.cs" />
     <Compile Include="ECS\Components\Text\Text.cs" />
-    <Compile Include="ECS\Components\Util\StateKitLite.cs" />
     <Compile Include="ECS\InternalUtils\ComponentList.cs" />
     <Compile Include="ECS\InternalUtils\EntityList.cs" />
     <Compile Include="ECS\InternalUtils\EntityTagLists.cs" />
@@ -302,6 +302,11 @@
     <Compile Include="Input\Virtual\VirtualInput.cs" />
     <Compile Include="Input\Virtual\VirtualIntegerAxis.cs" />
     <Compile Include="Input\Virtual\VirtualJoystick.cs" />
+    <Compile Include="Utils\FSM\StateMachine.cs" />
+    <Compile Include="ECS\Components\Util\SimpleStateMachine.cs" />
+    <Compile Include="Utils\FSM\State.cs" />
+    <Compile Include="PipelineRuntime\Tiled\TiledImageTile.cs" />
+    <Compile Include="PipelineRuntime\Tiled\TiledImageCollectionTileset.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="MonoGame.Framework">

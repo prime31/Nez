@@ -2,17 +2,17 @@
 using System.Collections.Generic;
 
 
-namespace Nez
+namespace Nez.FSM
 {
 	/// <summary>
 	/// Simple state machine with an enum or int constraint. There are some rules you must follow when using this:
-	/// - before update is called initialState must be set (use the constructor, onAddedToEntity or onAwake)
+	/// - before update is called initialState must be set (use the constructor or onAddedToEntity)
 	/// - if you implement update in your subclass you must call base.update()
 	/// 
 	/// Note: if you use an enum as the contraint you can avoid allocations/boxing in Mono by doing what the Core
-	/// Emitter does for its enum
+	/// Emitter does for its enum: pass in a IEqualityComparer to the constructor.
 	/// </summary>
-	public class StateKitLite<TEnum> : Component, IUpdatable where TEnum : struct, IConvertible, IComparable, IFormattable
+	public class SimpleStateMachine<TEnum> : Component, IUpdatable where TEnum : struct, IConvertible, IComparable, IFormattable
 	{
 		class StateMethodCache
 		{
@@ -21,10 +21,10 @@ namespace Nez
 			public Action exitState;
 		}
 
-		StateMethodCache _stateMethods;
 		protected float elapsedTimeInState = 0f;
 		protected TEnum previousState;
-		Dictionary<TEnum,StateMethodCache> _stateCache = new Dictionary<TEnum,StateMethodCache>();
+		Dictionary<TEnum,StateMethodCache> _stateCache;
+		StateMethodCache _stateMethods;
 
 		TEnum _currentState;
 		protected TEnum currentState
@@ -35,9 +35,6 @@ namespace Nez
 			}
 			set
 			{
-				if( _currentState.Equals( value ) )
-					return;
-
 				// swap previous/current
 				previousState = _currentState;
 				_currentState = value;
@@ -46,6 +43,7 @@ namespace Nez
 				if( _stateMethods.exitState != null )
 					_stateMethods.exitState();
 
+				elapsedTimeInState = 0f;
 				_stateMethods = _stateCache[_currentState];
 
 				if( _stateMethods.enterState != null )
@@ -66,9 +64,9 @@ namespace Nez
 		}
 
 
-		public StateKitLite()
+		public SimpleStateMachine( IEqualityComparer<TEnum> customComparer = null )
 		{
-			Assert.isTrue( typeof( TEnum ).IsEnum, "[StateKitLite] TEnum generic constraint failed! You must use an enum when declaring your subclass!" );
+			_stateCache = new Dictionary<TEnum,StateMethodCache>( customComparer );
 
 			// cache all of our state methods
 			var enumValues = (TEnum[])Enum.GetValues( typeof( TEnum ) );
@@ -101,11 +99,9 @@ namespace Nez
 
 		Action getDelegateForMethod( string methodName )
 		{
-			var methodInfo = GetType().GetMethod( methodName,
-				System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.NonPublic );
-
+			var methodInfo = ReflectionUtils.getMethodInfo( this, methodName );
 			if( methodInfo != null )
-				return Delegate.CreateDelegate( typeof( Action ), this, methodInfo ) as Action;
+				return ReflectionUtils.createDelegate<Action>( this, methodInfo );
 
 			return null;
 		}
