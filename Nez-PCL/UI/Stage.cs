@@ -140,7 +140,7 @@ namespace Nez.UI
 		{
 			updateKeyboardState();
 
-			var currentMousePosition = entity != null && !isFullScreen ? Input.scaledMousePosition * 2 : Input.rawMousePosition.ToVector2() * 2;
+			var currentMousePosition = entity != null && !isFullScreen ? Input.scaledMousePosition : Input.rawMousePosition.ToVector2();
 			var didMouseMove = false;
 			if( _lastMousePosition != currentMousePosition )
 			{
