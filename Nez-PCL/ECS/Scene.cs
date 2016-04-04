@@ -179,6 +179,7 @@ namespace Nez
 
 		List<Renderer> _renderers = new List<Renderer>();
 		readonly List<PostProcessor> _postProcessors = new List<PostProcessor>();
+		bool _didSceneBegin;
 
 
 		/// <summary>
@@ -305,7 +306,7 @@ namespace Nez
 			Assert.isFalse( _renderers.Count == 0, "Scene has begun with no renderer. At least one renderer must be present before beginning a scene." );
 			Physics.reset();
 
-			// prep our render textures and take care of centering the camera origin. we have to set the RenderTarget
+			// prep our render textures and take care of centering the camera origin. we have to set the RenderTarget before doing that.
 			updateResolutionScaler();
 			Core.graphicsDevice.SetRenderTarget( _sceneRenderTarget );
 			camera.centerOrigin();
@@ -314,12 +315,15 @@ namespace Nez
 				entityProcessors.begin();
 			Core.emitter.addObserver( CoreEvents.GraphicsDeviceReset, onGraphicsDeviceReset );
 
+			_didSceneBegin = true;
 			onStart();
 		}
 
 
 		internal void end()
-		{			
+		{
+			_didSceneBegin = false;
+
 			for( var i = 0; i < _renderers.Count; i++ )
 				_renderers[i].unload();
 
@@ -371,7 +375,7 @@ namespace Nez
 		{
 			// Renderers should always have those that require RenderTarget first. They clear themselves and set themselves as
 			// the current RenderTarget when they render
-			if( _renderers[0].renderTarget == null )
+			if( _renderers[0].renderTexture == null )
 			{
 				Core.graphicsDevice.SetRenderTarget( _sceneRenderTarget );
 				Core.graphicsDevice.Clear( clearColor );
@@ -398,7 +402,7 @@ namespace Nez
 				}
 
 				_renderers[i].render( this );
-				lastRendererHadRenderTarget = _renderers[i].renderTarget != null;
+				lastRendererHadRenderTarget = _renderers[i].renderTexture != null;
 			}
 		}
 
@@ -641,12 +645,12 @@ namespace Nez
 				_destinationRenderTarget = RenderTarget.create( renderTargetWidth, renderTargetHeight );
 			}
 
-			// notify the PostProcessors, Renderers and FinalRenderDelegate of the change in render texture size
-			for( var i = 0; i < _postProcessors.Count; i++ )
-				_postProcessors[i].onSceneBackBufferSizeChanged( renderTargetWidth, renderTargetHeight );
-
+			// notify the Renderers, PostProcessors and FinalRenderDelegate of the change in render texture size
 			for( var i = 0; i < _renderers.Count; i++ )
 				_renderers[i].onSceneBackBufferSizeChanged( renderTargetWidth, renderTargetHeight );
+			
+			for( var i = 0; i < _postProcessors.Count; i++ )
+				_postProcessors[i].onSceneBackBufferSizeChanged( renderTargetWidth, renderTargetHeight );
 
 			if( _finalRenderDelegate != null )
 				_finalRenderDelegate.onSceneBackBufferSizeChanged( renderTargetWidth, renderTargetHeight );
@@ -692,6 +696,11 @@ namespace Nez
 		{
 			_renderers.Add( renderer );
 			_renderers.Sort();
+
+			// if we already began let the PostProcessor know what size our RenderTarget is
+			if( _didSceneBegin )
+				renderer.onSceneBackBufferSizeChanged( _sceneRenderTarget.Width, _sceneRenderTarget.Height );
+			
 			return renderer;
 		}
 
@@ -717,6 +726,10 @@ namespace Nez
 			_postProcessors.Sort();
 			postProcessor.scene = this;
 			postProcessor.onAddedToScene();
+
+			// if we already began let the PostProcessor know what size our RenderTarget is
+			if( _didSceneBegin )
+				postProcessor.onSceneBackBufferSizeChanged( _sceneRenderTarget.Width, _sceneRenderTarget.Height );
 
 			// lazily create the 2nd RenderTarget for post processing only when a PostProcessor is added
 			if( _destinationRenderTarget == null )

@@ -4,10 +4,10 @@ Rendering
 The Nez rendering setup was designed to be really easy to get up and running but at the same time flexible so that advanced users can do whatever they need to out of the box. The basic gist of how the rendering system works revolves around the **Renderer** class. You add one or more Renderers to your Scene (**addRenderer** and **removeRenderer** methods) and each of your Renderers will be called after all Entities/Components have had their update method called. All rendering is done into a RenderTexture which is then displayed (with optional post processing) after all Renders have finished rendering. Several default Renderers are provided to get you started and cover the most common setups. If you create your scene with the **Scene.createWithDefaultRenderer** method as the name suggests it will create a DefaultRenderer for you. The included renderers are described below:
 
 - **DefaultRenderer**: renders every RenderableComponent that is enabled in your scene
-- **RenderLayerRenderer**: renders only the RenderableComponents in your Scene that are on renderLayer
-- **RenderLayerExcludeRenderer**: renders all the RenderableComponents in your Scene that are not on renderLayer
+- **RenderLayerRenderer**: renders only the RenderableComponents in your Scene that are on the specified renderLayers
+- **RenderLayerExcludeRenderer**: renders all the RenderableComponents in your Scene that are not on the specified renderLayers
 
-You are free to subclass Renderer and render things in any way that you want. The Scene contains a renderableComponents field that contains all the RenderableComponents for easy access and filtering. The RenderableComponentList provides access to all the RenderableComponents in the scene or just those on a specific renderLayer. RenderableComponents are sorted by layerDepth in each of the renderLayer lists for fine-grained render order control. The Renderer class provides a solid, configurable base that lets you customize various attributes as well as render to a RenderTexture instead of directly to the framebuffer. If you do decide to render to a RenderTexture in most cases you will want to use a PostProcessor to draw it later.
+You are free to subclass Renderer and render things in any way that you want. The Scene contains a renderableComponents field that contains all the RenderableComponents for easy access and filtering. The `RenderableComponentList` provides access by specific renderLayer as well. RenderableComponents are sorted by layerDepth in each of the renderLayer lists for fine-grained render order control. The Renderer class provides a solid, configurable base that lets you customize various attributes as well as render to a `RenderTexture` instead of directly to the framebuffer. If you do decide to render to a RenderTexture in most cases you will want to use a PostProcessor to draw it later. It should also be noted that RenderTextures on a Renderer are automatically resized for you when the screen size changes. You can change this behavior via the RenderTexture.resizeBehavior enum.
 
 
 Post Processors
@@ -20,20 +20,23 @@ A basic example of a PostProcessor is below. It takes a RenderTexture that a Ren
 ```cs
 public class SimplePostProcessor : PostProcessor
 {
-	public SimplePostProcessor( RenderTarget2D renderTarget, Effect effect ) : base( 0 )
+	RenderTexture _renderTexture;
+	
+	public SimplePostProcessor( RenderTexture renderTexture, Effect effect ) : base( 0 )
 	{
-		_renderTarget = renderTarget;
+		_renderTexture = renderTexture;
 		this.effect = effect;
 	}
 
 
-	public override void process( RenderTexture source, RenderTexture destination )
+	public override void process( RenderTarget2D source, RenderTarget2D destination )
 	{
 			Core.graphicsDevice.SetRenderTarget( destination );
 
 			Graphics.instance.spriteBatch.Begin( effect: effect );
-			// render source which is all of the Scene that was not rendered into _renderTarget
+			// render source contains all of the Scene that was not rendered into _renderTexture
 			Graphics.instance.spriteBatch.Draw( source, Vector2.Zero, Color.White );
+			
 			// now we render the contents of our _renderTexture on top of it
 			Graphics.instance.spriteBatch.Draw( _renderTexture, Vector2.Zero );
 			Graphics.instance.spriteBatch.End();

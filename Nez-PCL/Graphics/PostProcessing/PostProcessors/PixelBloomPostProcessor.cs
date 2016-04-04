@@ -13,14 +13,14 @@ namespace Nez
 	/// </summary>
 	public class PixelBloomPostProcessor : BloomPostProcessor
 	{
-		RenderTarget2D _layerRT;
-		RenderTarget2D _tempRT;
+		RenderTexture _layerRT;
+		RenderTexture _tempRT;
 
 
-		public PixelBloomPostProcessor( RenderTarget2D layerRenderTarget, int executionOrder ) : base( executionOrder )
+		public PixelBloomPostProcessor( RenderTexture layerRenderTexture, int executionOrder ) : base( executionOrder )
 		{
-			_layerRT = layerRenderTarget;
-			_tempRT = new RenderTarget2D( Core.graphicsDevice, layerRenderTarget.Width, layerRenderTarget.Height, false, SurfaceFormat.Color, DepthFormat.None );
+			_layerRT = layerRenderTexture;
+			_tempRT = new RenderTexture( _layerRT.renderTarget.Width, _layerRT.renderTarget.Height, DepthFormat.None );
 		}
 
 
@@ -28,8 +28,7 @@ namespace Nez
 		{
 			base.onSceneBackBufferSizeChanged( newWidth, newHeight );
 
-			_tempRT.Dispose();
-			_tempRT = new RenderTarget2D( Core.graphicsDevice, newHeight, newWidth, false, SurfaceFormat.Color, DepthFormat.None );
+			_tempRT.resize( newWidth, newHeight );
 		}
 
 

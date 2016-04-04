@@ -47,7 +47,7 @@ namespace Nez
 		/// <summary>
 		/// if renderTarget is not null this renderer will render into the RenderTarget instead of to the screen
 		/// </summary>
-		public RenderTarget2D renderTarget;
+		public RenderTexture renderTexture;
 
 		/// <summary>
 		/// if renderTarget is not null this Color will be used to clear the screen
@@ -88,9 +88,9 @@ namespace Nez
 		protected virtual void beginRender( Camera cam )
 		{
 			// if we have a renderTarget render into it
-			if( renderTarget != null )
+			if( renderTexture != null )
 			{
-				Core.graphicsDevice.SetRenderTarget( renderTarget );
+				Core.graphicsDevice.SetRenderTarget( renderTexture );
 				Core.graphicsDevice.Clear( renderTargetClearColor );
 			}
 
@@ -145,7 +145,7 @@ namespace Nez
 			Graphics.instance.spriteBatch.End();
 
 			// clear the RenderTarget so that we render to the screen if we were using a RenderTarget
-			if( renderTarget != null && clearRenderTargetAfterRender )
+			if( renderTexture != null && clearRenderTargetAfterRender )
 				Core.graphicsDevice.SetRenderTarget( null );
 		}
 
@@ -169,12 +169,17 @@ namespace Nez
 
 
 		/// <summary>
-		/// called when the default scene RenderTarget is resized
+		/// called when the default scene RenderTarget is resized and when adding a Renderer if the scene has already began. default implementation
+		/// calls through to RenderTexture.onSceneBackBufferSizeChanged
+		/// so that it can size itself appropriately if necessary.
 		/// </summary>
 		/// <param name="newWidth">New width.</param>
 		/// <param name="newHeight">New height.</param>
 		public virtual void onSceneBackBufferSizeChanged( int newWidth, int newHeight )
-		{}
+		{
+			if( renderTexture != null )
+				renderTexture.onSceneBackBufferSizeChanged( newWidth, newHeight );
+		}
 
 
 		/// <summary>
@@ -182,10 +187,10 @@ namespace Nez
 		/// </summary>
 		public virtual void unload()
 		{
-			if( renderTarget != null )
+			if( renderTexture != null )
 			{
-				renderTarget.Dispose();
-				renderTarget = null;
+				renderTexture.Dispose();
+				renderTexture = null;
 			}
 		}
 

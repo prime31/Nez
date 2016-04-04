@@ -14,7 +14,7 @@ namespace Nez
 		/// <summary>
 		/// The effect used to render the scene with
 		/// </summary>
-		public T effect;
+		public new T effect;
 
 
 		public PostProcessor( int executionOrder ) : base( executionOrder )
