@@ -20,14 +20,14 @@ A basic example of a PostProcessor is below. It takes a RenderTexture that a Ren
 ```cs
 public class SimplePostProcessor : PostProcessor
 {
-	public SimplePostProcessor( RenderTarget2D renderTarget, Effect effect ) : base( 0 )
+	public SimplePostProcessor( RenderTexture renderTarget, Effect effect ) : base( 0 )
 	{
 		_renderTarget = renderTarget;
 		this.effect = effect;
 	}
 
 
-	public override void process( RenderTexture source, RenderTexture destination )
+	public override void process( RenderTarget2D source, RenderTarget2D destination )
 	{
 			Core.graphicsDevice.SetRenderTarget( destination );
 
