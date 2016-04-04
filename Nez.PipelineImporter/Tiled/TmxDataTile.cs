@@ -5,6 +5,11 @@ namespace Nez.TiledMaps
 {
 	public class TmxDataTile
 	{
+		public TmxDataTile()
+		{
+			
+		}
+		
 		public TmxDataTile( uint gid )
 		{
 			this.gid = gid;
