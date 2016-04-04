@@ -206,28 +206,7 @@ namespace Nez
 		/// </summary>
 		/// <param name="camera">Camera.</param>
 		public virtual void onPreRender( Camera camera )
-		{
-			if( effect is AlphaTestEffect )
-			{
-				var alphaEffect = effect as AlphaTestEffect;
-				alphaEffect.Projection = camera.getViewProjectionMatrix();
-			}
-		}
-
-
-		/// <summary>
-		/// sets the RenderState.effect as an AlphaTestEffect with the specified referenceAlpha. The projection matrix will be set each frame
-		/// automatically for you.
-		/// </summary>
-		/// <param name="referenceAlpha">Reference alpha.</param>
-		public void addAlphaTestEffect( int referenceAlpha = 127 )
-		{
-			var alphaEffect = new AlphaTestEffect( Core.graphicsDevice );
-			alphaEffect.AlphaFunction = CompareFunction.Greater;
-			alphaEffect.ReferenceAlpha = referenceAlpha;
-
-			effect = alphaEffect;
-		}
+		{}
 
 
 		/// <summary>
