@@ -308,6 +308,7 @@
     <Compile Include="PipelineRuntime\Tiled\TiledImageTile.cs" />
     <Compile Include="PipelineRuntime\Tiled\TiledImageCollectionTileset.cs" />
     <Compile Include="Graphics\Effects\SpriteAlphaTestEffect.cs" />
+    <Compile Include="ECS\Components\Renderables\Sprites\SpriteMime.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="MonoGame.Framework">
