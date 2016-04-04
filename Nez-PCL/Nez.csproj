@@ -310,6 +310,7 @@
     <Compile Include="Graphics\Effects\SpriteAlphaTestEffect.cs" />
     <Compile Include="ECS\Components\Renderables\Sprites\SpriteMime.cs" />
     <Compile Include="Graphics\Textures\RenderTexture.cs" />
+    <Compile Include="Graphics\PostProcessing\PostProcessors\SpriteLightPostProcessor.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="MonoGame.Framework">
