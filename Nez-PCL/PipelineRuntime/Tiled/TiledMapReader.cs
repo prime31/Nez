@@ -31,6 +31,8 @@ namespace Nez.Tiled
 			var tilesetCount = reader.ReadInt32();
 			for( var i = 0; i < tilesetCount; i++ )
 			{
+				var isStandardTileset = reader.ReadBoolean();
+
 				// image collections will have not texture associated with them
 				var textureName = reader.ReadString();
 				Texture2D texture = null;
@@ -45,11 +47,12 @@ namespace Nez.Tiled
 					                          firstId: reader.ReadInt32(),
 					                          tileWidth: reader.ReadInt32(),
 					                          tileHeight: reader.ReadInt32(),
+											  isStandardTileset: isStandardTileset,
 					                          spacing: reader.ReadInt32(),
 					                          margin: reader.ReadInt32() );
 				readCustomProperties( reader, tileset.properties );
 
-				// tile array
+				// tiledset tile array
 				var tileCount = reader.ReadInt32();
 				for( var j = 0; j < tileCount; j++ )
 				{
@@ -64,7 +67,10 @@ namespace Nez.Tiled
 
 					// image source is optional
 					if( reader.ReadBoolean() )
-						tile.imageSource = reader.ReadString();
+					{
+						var rect = new Rectangle( reader.ReadInt32(), reader.ReadInt32(), reader.ReadInt32(), reader.ReadInt32() );
+						( (TiledImageCollectionTileset)tileset ).setTileTextureRegion( tileset.firstId + tile.id, rect );
+					}
 
 					readCustomProperties( reader, tile.properties );
 					tileset.tiles.Add( tile );

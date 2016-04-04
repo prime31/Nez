@@ -59,13 +59,13 @@ namespace Nez.Tiled
 		}
 
 
-		public TiledTileset createTileset( Texture2D texture, int firstId, int tileWidth, int tileHeight, int spacing = 2, int margin = 2 )
+		public TiledTileset createTileset( Texture2D texture, int firstId, int tileWidth, int tileHeight, bool isStandardTileset, int spacing = 2, int margin = 2 )
 		{
 			TiledTileset tileset;
-			if( texture != null )
+			if( isStandardTileset )
 				tileset = new TiledTileset( texture, firstId, tileWidth, tileHeight, spacing, margin );
 			else
-				tileset = new TiledImageCollectionTileset( firstId );
+				tileset = new TiledImageCollectionTileset( texture, firstId );
 
 			_tilesets.Add( tileset );
 

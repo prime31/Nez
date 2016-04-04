@@ -7,6 +7,7 @@ using Microsoft.Xna.Framework.Content.Pipeline;
 using Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler;
 using System.Diagnostics;
 using Nez.Tiled;
+using Microsoft.Xna.Framework.Content.Pipeline.Graphics;
 
 
 namespace Nez.TiledMaps
@@ -37,8 +38,8 @@ namespace Nez.TiledMaps
 			{
 				if( tileset.image != null )
 					TiledMapProcessor.logger.LogMessage( "\nExpecting texture asset: {0}\n", tileset.image.source );
-				else
-					TiledMapProcessor.logger.LogMessage( "\nNo texture asset found for tileset: {0}. This is normal if this is an image collection tilest.\n", tileset.name );
+				
+				writer.Write( tileset.isStandardTileset );
 
 				if( tileset.image != null )
 					writer.Write( removeExtension( tileset.image.source ) );
@@ -70,7 +71,10 @@ namespace Nez.TiledMaps
 					if( tile.image != null )
 					{
 						writer.Write( true );
-						writer.Write( tile.image.source );
+						writer.Write( tile.sourceRect.X );
+						writer.Write( tile.sourceRect.Y );
+						writer.Write( tile.sourceRect.Width );
+						writer.Write( tile.sourceRect.Height );
 					}
 					else
 					{
@@ -237,14 +241,12 @@ namespace Nez.TiledMaps
 
 		public override string GetRuntimeType( TargetPlatform targetPlatform )
 		{
-			//TiledMapProcessor.logger.LogMessage( "--- GetRuntimeType: {0}", typeof( Nez.Tiled.TiledMap ).AssemblyQualifiedName );
 			return typeof( Nez.Tiled.TiledMap ).AssemblyQualifiedName;
 		}
 
 
 		public override string GetRuntimeReader( TargetPlatform targetPlatform )
 		{
-			//TiledMapProcessor.logger.LogMessage( "--- GetRuntimeReader: {0}", typeof( Nez.Tiled.TiledMapReader ).AssemblyQualifiedName );
 			return typeof( Nez.Tiled.TiledMapReader ).AssemblyQualifiedName;
 		}
 

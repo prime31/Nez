@@ -50,6 +50,10 @@ namespace Nez.TiledMaps
 							map.tilesets[i].firstGid = tileset.firstGid;
 						}
 					}
+					else
+					{
+						tileset.mapFolder = Path.GetDirectoryName( Path.GetFullPath( filename ) );
+					}
 				}
 
 				return map;

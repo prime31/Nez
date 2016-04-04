@@ -1,20 +1,23 @@
 ﻿using System;
 using Nez.Textures;
+using System.Collections.Generic;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 
 
 namespace Nez.Tiled
 {
 	public class TiledImageCollectionTileset : TiledTileset
 	{
-		public TiledImageCollectionTileset( int firstId ) : base( firstId )
+		public TiledImageCollectionTileset( Texture2D texture, int firstId ) : base( texture, firstId )
 		{}
 
 
-		public override Subtexture getTileTextureRegion( int id )
+		public void setTileTextureRegion( int tileId, Rectangle sourceRect )
 		{
-			// TODO: this is entirely wrong and just a placeholder to allow stuff to compile
-			return Graphics.instance.pixelTexture;
+			_regions[tileId] = new Subtexture( texture, sourceRect );
 		}
+
 	}
 }
 

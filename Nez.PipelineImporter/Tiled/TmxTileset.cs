@@ -3,11 +3,16 @@ using System.Xml.Serialization;
 using System.IO;
 using System;
 
+
 namespace Nez.TiledMaps
 {
 	[XmlRoot( ElementName = "tileset" )]
 	public class TmxTileset
 	{
+		// we need this for tilesets that have no image. they use image collections and we need the path to save the new atlas we generate.
+		public string mapFolder;
+		public bool isStandardTileset = true;
+
 		[XmlAttribute( AttributeName = "firstgid" )]
 		public int firstGid;
 
@@ -83,6 +88,29 @@ namespace Nez.TiledMaps
 		}
 
 
+		public static string getAbsolutePath( string relativePath, string basePath )
+		{
+			if( relativePath == null )
+				return null;
+			if( basePath == null )
+				basePath = Path.GetFullPath( "." ); // quick way of getting current working directory
+			else
+				basePath = getAbsolutePath( basePath, null ); // to be REALLY sure ;)
+			
+			// specific for windows paths starting on \ - they need the drive added to them.
+			// I constructed this piece like this for possible Mono support.
+			if( !Path.IsPathRooted( relativePath ) || "\\".Equals( Path.GetPathRoot( relativePath ) ) )
+			{
+				if( relativePath.StartsWith( Path.DirectorySeparatorChar.ToString() ) )
+					return Path.GetFullPath( Path.Combine( Path.GetPathRoot( basePath ), relativePath.TrimStart( Path.DirectorySeparatorChar ) ) );
+				else
+					return Path.GetFullPath( Path.Combine( basePath, relativePath ) );
+			}
+			else
+				return Path.GetFullPath( relativePath ); // resolves any internal "..\" to get the true full path.
+		}
+
+
 		public void fixImagePath( string mapPath, string tilesetSource )
 		{
 			var mapDirectory = Path.GetDirectoryName( mapPath );
@@ -93,7 +121,7 @@ namespace Nez.TiledMaps
 			var newPath = Path.GetFullPath( Path.Combine( mapDirectory, tilesetDirectory, imageDirectory, imageFile ) );                        
 			image.source = Path.Combine( makeRelativePath( mapPath, newPath ) );
 		}
-			
+
 
 		public override string ToString()
 		{

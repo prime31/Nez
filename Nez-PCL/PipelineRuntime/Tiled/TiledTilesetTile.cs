@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Microsoft.Xna.Framework;
 
 
 namespace Nez.Tiled
@@ -11,7 +12,6 @@ namespace Nez.Tiled
 	{
 		public readonly int id;
 		public List<TiledTileAnimationFrame> animationFrames;
-		public string imageSource;
 		public Dictionary<string,string> properties = new Dictionary<string,string>();
 
 

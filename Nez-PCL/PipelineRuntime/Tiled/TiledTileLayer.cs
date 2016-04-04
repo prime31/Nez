@@ -56,6 +56,23 @@ namespace Nez.Tiled
 				}
 			}
 
+			// now that all the tile positions are populated we loop back through and look for any tiles that are from a image collection tileset.
+			// these need special adjusting to fix the y-offset
+			for( var i = 0; i < tiles.Length; i++ )
+			{
+				if( tiles[i] == null || !( tiles[i].tileset is TiledImageCollectionTileset ) )
+					continue;
+				
+				var tilesetTile = tiles[i].tilesetTile;
+				if( tilesetTile != null && tiles[i].textureRegion != null )
+				{
+					// TODO: make this work for rotated/flipped tiles. Currently it only works if they are default aligned and with a height
+					// that is a multiple of the tilemap.tileHeight
+					var offset = ( tiles[i].textureRegion.sourceRect.Height - tilemap.tileHeight ) / tilemap.tileHeight;
+					tiles[i].y -= offset;
+				}
+			}
+
 			return tiles;
 		}
 

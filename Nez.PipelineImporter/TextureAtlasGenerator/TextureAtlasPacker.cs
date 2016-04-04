@@ -17,7 +17,7 @@ namespace Nez.TextureAtlasGenerator
 		/// Packs a list of sprites into a single big texture,
 		/// recording where each one was stored.
 		/// </summary>
-		public static BitmapContent PackSprites( IList<BitmapContent> sourceSprites, ICollection<Rectangle> outputSprites, bool isCompressed, ContentProcessorContext context )
+		public static PixelBitmapContent<Color> packSprites( IList<BitmapContent> sourceSprites, ICollection<Rectangle> outputSprites, bool isCompressed, ContentProcessorContext context )
 		{
 			if( sourceSprites.Count == 0 )
 				throw new InvalidContentException( "There are no sprites to pack" );
@@ -73,7 +73,7 @@ namespace Nez.TextureAtlasGenerator
 		/// Once the arranging is complete, copies the bitmap data for each
 		/// sprite to its chosen position in the single larger output bitmap.
 		/// </summary>
-		static BitmapContent copySpritesToOutput( List<ArrangedSprite> sprites, IList<BitmapContent> sourceSprites,
+		static PixelBitmapContent<Color> copySpritesToOutput( List<ArrangedSprite> sprites, IList<BitmapContent> sourceSprites,
 		                                               ICollection<Rectangle> outputSprites, int width, int height )
 		{
 			var output = new PixelBitmapContent<Color>( width, height );

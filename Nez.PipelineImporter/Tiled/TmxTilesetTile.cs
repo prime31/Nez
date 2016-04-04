@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Xml.Serialization;
+using Microsoft.Xna.Framework;
 
 
 namespace Nez.TiledMaps
@@ -28,6 +29,11 @@ namespace Nez.TiledMaps
 		[XmlArray( "animation" )]
 		[XmlArrayItem( "frame" )]
 		public List<TmxTilesetTileAnimationFrame> animationFrames;
+
+		/// <summary>
+		/// source Rectangle for tilesets that use the collection of images
+		/// </summary>
+		public Rectangle sourceRect;
 
 
 		public override string ToString()

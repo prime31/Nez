@@ -5,6 +5,10 @@ using System.Linq;
 using Ionic.Zlib;
 using Microsoft.Xna.Framework.Content.Pipeline;
 using System.ComponentModel;
+using Microsoft.Xna.Framework.Content.Pipeline.Graphics;
+using Microsoft.Xna.Framework;
+using Nez.TextureAtlasGenerator;
+using Microsoft.Xna.Framework.Graphics;
 
 
 namespace Nez.TiledMaps
@@ -52,7 +56,81 @@ namespace Nez.TiledMaps
 				}
 			}
 
+			// deal with tilesets that have image collections
+			foreach( var tileset in map.tilesets )
+				setTilesetTextureIfNecessary( tileset, context );
+
 			return new TiledMapProcessorResult( map );
+		}
+
+
+		static void setTilesetTextureIfNecessary( TmxTileset tileset, ContentProcessorContext context )
+		{
+			if( tileset.image != null )
+				return;
+
+			tileset.isStandardTileset = false;
+
+			var imagePaths = new List<string>();
+			foreach( var tile in tileset.tiles )
+			{
+				if( tile.image != null && !imagePaths.Contains( tile.image.source ) )
+					imagePaths.Add( tile.image.source );
+			}
+
+			context.Logger.LogMessage( "\n\t --- need to pack images: {0}\n", imagePaths.Count );
+			var sourceSprites = new List<BitmapContent>();
+
+			// Loop over each input sprite filename
+			foreach( var inputFilename in imagePaths )
+			{
+				// Store the name of this sprite.
+				var spriteName = Path.GetFileName( inputFilename );
+
+				var absolutePath = TmxTileset.getAbsolutePath( inputFilename, tileset.mapFolder );
+				context.Logger.LogMessage( "Adding texture: {0}", spriteName );
+
+				// Load the sprite texture into memory.
+				var textureReference = new ExternalReference<TextureContent>( absolutePath );
+				var texture = context.BuildAndLoadAsset<TextureContent,TextureContent>( textureReference, "TextureProcessor" );
+
+				sourceSprites.Add( texture.Faces[0][0] );
+			}
+
+			var spriteRectangles = new List<Rectangle>();
+
+			// pack all the sprites into a single large texture.
+			var packedSprites = TextureAtlasPacker.packSprites( sourceSprites, spriteRectangles, false, context );
+			context.Logger.LogMessage( "packed: {0}", packedSprites );
+
+			// save out a PNG with our atlas
+			var bm = new System.Drawing.Bitmap( packedSprites.Width, packedSprites.Height );
+			for( var x = 0; x < packedSprites.Width; x++ )
+			{
+				for( var y = 0; y < packedSprites.Height; y++ )
+				{
+					var col = packedSprites.GetPixel( x, y );
+					var color = System.Drawing.Color.FromArgb( col.A, col.R, col.B, col.B );
+					bm.SetPixel( x, y, color );
+				}
+			}
+
+			var atlasFilename = tileset.name + "-atlas.png";
+			bm.Save( Path.Combine( tileset.mapFolder, atlasFilename ), System.Drawing.Imaging.ImageFormat.Png );
+			context.Logger.LogImportantMessage( "\n-- generated atlas {0}. Make sure you add it to the Pipeline tool!", atlasFilename );
+
+			// set the new atlas as our tileset source image
+			tileset.image = new TmxImage();
+			tileset.image.source = atlasFilename;
+
+			// last step: set the new atlas info and source rectangle for each tile
+			foreach( var tile in tileset.tiles )
+			{
+				if( tile.image == null )
+					continue;
+
+				tile.sourceRect = spriteRectangles[imagePaths.IndexOf( tile.image.source )];
+			}
 		}
 
 
