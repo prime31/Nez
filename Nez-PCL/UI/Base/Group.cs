@@ -268,7 +268,10 @@ namespace Nez.UI
 		protected Matrix computeTransform()
 		{
 			var mat = Matrix.CreateTranslation( x + originX, y + originY, 0 );
-			mat = Matrix.Multiply( mat, Matrix.CreateRotationZ( MathHelper.ToRadians( rotation ) ) );
+
+			if( rotation != 0 )
+				mat = Matrix.Multiply( mat, Matrix.CreateRotationZ( MathHelper.ToRadians( rotation ) ) );
+			
 			if( originX != 0 || originY != 0 )
 				mat = Matrix.Multiply( mat, Matrix.CreateTranslation( -originX, -originY, 0 ) );
 

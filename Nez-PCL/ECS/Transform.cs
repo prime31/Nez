@@ -257,13 +257,10 @@ namespace Nez
 				if( _worldToLocalDirty )
 				{
 					if( parent == null )
-					{
 						_worldToLocalTransform = Matrix.Identity;
-					}
 					else
-					{
 						Matrix.Invert( ref parent._worldTransform, out _worldToLocalTransform );
-					}
+
 					_worldToLocalDirty = false;
 				}
 				return _worldToLocalTransform;
@@ -337,21 +334,18 @@ namespace Nez
 				{
 					if( _localPositionDirty )
 					{
-						//Matrix.CreateTranslation( ref localPosition, out TranslationMatrix );
 						Matrix.CreateTranslation( _localPosition.X, _localPosition.Y, 0, out _translationMatrix );
 						_localPositionDirty = false;
 					}
 
 					if( _localRotationDirty )
 					{
-						//Matrix.CreateFromQuaternion( ref localOrientation, out QuaternionMatrix );
 						Matrix.CreateRotationZ( _localRotation, out _rotationMatrix );
 						_localRotationDirty = false;
 					}
 
 					if( _localScaleDirty )
 					{
-						//Matrix.CreateScale( ref localScale, out ScaleMatrix );
 						Matrix.CreateScale( _localScale.X, _localScale.Y, 1f, out _scaleMatrix );
 						_localScaleDirty = false;
 					}
@@ -366,13 +360,13 @@ namespace Nez
 						_scale = _localScale;
 						_worldInverseDirty = true;
 					}
-					_localDirty = true;
+					_localDirty = false;
 				}
 
 				if( parent != null )
 				{
 					Matrix.Multiply( ref _localTransform, ref parent._worldTransform, out _worldTransform );
-					//Quaternion.Concatenate( ref localOrientation, ref ParentTransform.orientation, out orientation );
+
 					_rotation = _localRotation + parent._rotation;
 					_scale = parent._scale * _localScale;
 					_worldInverseDirty = true;
