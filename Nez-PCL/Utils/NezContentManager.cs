@@ -235,7 +235,7 @@ namespace Nez.Systems
 
 
 		/// <summary>
-		/// unloads an Effect that was loaded via loadEffect or loadMonoGameEffect
+		/// unloads an Effect that was loaded via loadEffect, loadNezEffect or loadMonoGameEffect
 		/// </summary>
 		/// <param name="effectName">Effect.name</param>
 		public void unloadEffect( string effectName )
