@@ -267,16 +267,18 @@ namespace Nez.UI
 		/// <returns>The transform.</returns>
 		protected Matrix computeTransform()
 		{
-			var mat = Matrix.CreateTranslation( x + originX, y + originY, 0 );
+			var mat = Matrix.Identity;
 
-			if( rotation != 0 )
-				mat = Matrix.Multiply( mat, Matrix.CreateRotationZ( MathHelper.ToRadians( rotation ) ) );
-			
 			if( originX != 0 || originY != 0 )
 				mat = Matrix.Multiply( mat, Matrix.CreateTranslation( -originX, -originY, 0 ) );
+			
+			if( rotation != 0 )
+				mat = Matrix.Multiply( mat, Matrix.CreateRotationZ( MathHelper.ToRadians( rotation ) ) );
 
 			if( scaleX != 1 || scaleY != 1 )
 				mat = Matrix.Multiply( mat, Matrix.CreateScale( scaleX, scaleY, 1 ) );
+
+			mat = Matrix.Multiply( mat, Matrix.CreateTranslation( x + originX, y + originY, 0 ) );
 
 			// Find the first parent that transforms
 			Group parentGroup = parent;
