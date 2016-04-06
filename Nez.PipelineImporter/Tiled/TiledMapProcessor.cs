@@ -110,7 +110,7 @@ namespace Nez.TiledMaps
 				for( var y = 0; y < packedSprites.Height; y++ )
 				{
 					var col = packedSprites.GetPixel( x, y );
-					var color = System.Drawing.Color.FromArgb( col.A, col.R, col.B, col.B );
+					var color = System.Drawing.Color.FromArgb( col.A, col.R, col.G, col.B );
 					bm.SetPixel( x, y, color );
 				}
 			}
