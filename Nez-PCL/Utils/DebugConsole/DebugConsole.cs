@@ -18,7 +18,7 @@ namespace Nez.Console
 		/// <summary>
 		/// bind any custom Actions you would like to function keys
 		/// </summary>
-		public Action[] functionKeyActions;
+		Action[] _functionKeyActions;
 
 		const float UNDERSCORE_TIME = 0.5f;
 		const float REPEAT_DELAY = 0.5f;
@@ -65,7 +65,7 @@ namespace Nez.Console
 			_drawCommands = new List<string>();
 			_commands = new Dictionary<string,CommandInfo>();
 			_sorted = new List<string>();
-			functionKeyActions = new Action[12];
+			_functionKeyActions = new Action[12];
 
 			var scale = FONT_LINE_HEIGHT / Graphics.instance.bitmapFont.lineHeight;
 			FONT_SCALE = new Vector2( scale, scale );
@@ -158,7 +158,7 @@ namespace Nez.Console
 				_currentState = Keyboard.GetState();
 			}
 
-			for( int i = 0; i < functionKeyActions.Length; i++ )
+			for( int i = 0; i < _functionKeyActions.Length; i++ )
 				if( Input.isKeyPressed( (Keys)( Keys.F1 + i ) ) )
 					executeFunctionKeyAction( i );
 		}
@@ -219,7 +219,7 @@ namespace Nez.Console
 				default:
 					if( key.ToString().Length == 1 )
 					{
-						if( _currentState[Keys.LeftShift] == KeyState.Down || _currentState[Keys.RightShift] == KeyState.Down )
+						if( InputUtils.isShiftDown() )
 							_currentText += key.ToString();
 						else
 							_currentText += key.ToString().ToLower();
@@ -227,121 +227,121 @@ namespace Nez.Console
 				break;
 
 				case( Keys.D1 ):
-					if( _currentState[Keys.LeftShift] == KeyState.Down || _currentState[Keys.RightShift] == KeyState.Down )
+					if( InputUtils.isShiftDown() )
 						_currentText += '!';
 					else
 						_currentText += '1';
 				break;
 				case( Keys.D2 ):
-					if( _currentState[Keys.LeftShift] == KeyState.Down || _currentState[Keys.RightShift] == KeyState.Down )
+					if( InputUtils.isShiftDown() )
 						_currentText += '@';
 					else
 						_currentText += '2';
 				break;
 				case( Keys.D3 ):
-					if( _currentState[Keys.LeftShift] == KeyState.Down || _currentState[Keys.RightShift] == KeyState.Down )
+					if( InputUtils.isShiftDown() )
 						_currentText += '#';
 					else
 						_currentText += '3';
 				break;
 				case( Keys.D4 ):
-					if( _currentState[Keys.LeftShift] == KeyState.Down || _currentState[Keys.RightShift] == KeyState.Down )
+					if( InputUtils.isShiftDown() )
 						_currentText += '$';
 					else
 						_currentText += '4';
 				break;
 				case( Keys.D5 ):
-					if( _currentState[Keys.LeftShift] == KeyState.Down || _currentState[Keys.RightShift] == KeyState.Down )
+					if( InputUtils.isShiftDown() )
 						_currentText += '%';
 					else
 						_currentText += '5';
 				break;
 				case( Keys.D6 ):
-					if( _currentState[Keys.LeftShift] == KeyState.Down || _currentState[Keys.RightShift] == KeyState.Down )
+					if( InputUtils.isShiftDown() )
 						_currentText += '^';
 					else
 						_currentText += '6';
 				break;
 				case( Keys.D7 ):
-					if( _currentState[Keys.LeftShift] == KeyState.Down || _currentState[Keys.RightShift] == KeyState.Down )
+					if( InputUtils.isShiftDown() )
 						_currentText += '&';
 					else
 						_currentText += '7';
 				break;
 				case( Keys.D8 ):
-					if( _currentState[Keys.LeftShift] == KeyState.Down || _currentState[Keys.RightShift] == KeyState.Down )
+					if( InputUtils.isShiftDown() )
 						_currentText += '*';
 					else
 						_currentText += '8';
 				break;
 				case( Keys.D9 ):
-					if( _currentState[Keys.LeftShift] == KeyState.Down || _currentState[Keys.RightShift] == KeyState.Down )
+					if( InputUtils.isShiftDown() )
 						_currentText += '(';
 					else
 						_currentText += '9';
 				break;
 				case( Keys.D0 ):
-					if( _currentState[Keys.LeftShift] == KeyState.Down || _currentState[Keys.RightShift] == KeyState.Down )
+					if( InputUtils.isShiftDown() )
 						_currentText += ')';
 					else
 						_currentText += '0';
 				break;
 				case( Keys.OemComma):
-					if( _currentState[Keys.LeftShift] == KeyState.Down || _currentState[Keys.RightShift] == KeyState.Down )
+					if( InputUtils.isShiftDown() )
 						_currentText += '<';
 					else
 						_currentText += ',';
 				break;
 				case Keys.OemPeriod:
-					if( _currentState[Keys.LeftShift] == KeyState.Down || _currentState[Keys.RightShift] == KeyState.Down )
+					if( InputUtils.isShiftDown() )
 						_currentText += '>';
 					else
 						_currentText += '.';
 				break;
 				case Keys.OemQuestion:
-					if( _currentState[Keys.LeftShift] == KeyState.Down || _currentState[Keys.RightShift] == KeyState.Down )
+					if( InputUtils.isShiftDown() )
 						_currentText += '?';
 					else
 						_currentText += '/';
 				break;
 				case Keys.OemSemicolon:
-					if( _currentState[Keys.LeftShift] == KeyState.Down || _currentState[Keys.RightShift] == KeyState.Down )
+					if( InputUtils.isShiftDown() )
 						_currentText += ':';
 					else
 						_currentText += ';';
 				break;
 				case Keys.OemQuotes:
-					if( _currentState[Keys.LeftShift] == KeyState.Down || _currentState[Keys.RightShift] == KeyState.Down )
+					if( InputUtils.isShiftDown() )
 						_currentText += '"';
 					else
 						_currentText += '\'';
 				break;
 				case Keys.OemBackslash:
-					if( _currentState[Keys.LeftShift] == KeyState.Down || _currentState[Keys.RightShift] == KeyState.Down )
+					if( InputUtils.isShiftDown() )
 						_currentText += '|';
 					else
 						_currentText += '\\';
 				break;
 				case Keys.OemOpenBrackets:
-					if( _currentState[Keys.LeftShift] == KeyState.Down || _currentState[Keys.RightShift] == KeyState.Down )
+					if( InputUtils.isShiftDown() )
 						_currentText += '{';
 					else
 						_currentText += '[';
 				break;
 				case Keys.OemCloseBrackets:
-					if( _currentState[Keys.LeftShift] == KeyState.Down || _currentState[Keys.RightShift] == KeyState.Down )
+					if( InputUtils.isShiftDown() )
 						_currentText += '}';
 					else
 						_currentText += ']';
 				break;
 				case Keys.OemMinus:
-					if( _currentState[Keys.LeftShift] == KeyState.Down || _currentState[Keys.RightShift] == KeyState.Down )
+					if( InputUtils.isShiftDown() )
 						_currentText += '_';
 					else
 						_currentText += '-';
 				break;
 				case Keys.OemPlus:
-					if( _currentState[Keys.LeftShift] == KeyState.Down || _currentState[Keys.RightShift] == KeyState.Down )
+					if( InputUtils.isShiftDown() )
 						_currentText += '+';
 					else
 						_currentText += '=';
@@ -377,7 +377,7 @@ namespace Nez.Console
 				break;
 
 				case Keys.Tab:
-					if( _currentState[Keys.LeftShift] == KeyState.Down || _currentState[Keys.RightShift] == KeyState.Down )
+					if( InputUtils.isShiftDown() )
 					{
 						if( _tabIndex == -1 )
 						{
@@ -524,8 +524,14 @@ namespace Nez.Console
 
 		public void executeFunctionKeyAction( int num )
 		{
-			if( functionKeyActions[num] != null )
-				functionKeyActions[num]();
+			if( _functionKeyActions[num] != null )
+				_functionKeyActions[num]();
+		}
+
+
+		public void bindActionToFunctionKey( Keys functionKey, Action action )
+		{
+			_functionKeyActions[(int)functionKey] = action;
 		}
 
 		#endregion

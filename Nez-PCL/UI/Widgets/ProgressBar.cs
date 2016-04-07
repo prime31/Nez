@@ -88,7 +88,7 @@ namespace Nez.UI
 		/// <param name="value">Value.</param>
 		public void setValue( float value )
 		{
-			if( !shiftIgnoresSnap || !InputUtils.shiftDown() )
+			if( !shiftIgnoresSnap || !InputUtils.isShiftDown() )
 			{
 				value = Mathf.clamp( Mathf.round( value / _stepSize ) * _stepSize, _min, _max );
 				value = snap( value );

@@ -225,7 +225,7 @@ namespace Nez.UI
 					_keyboardFocusElement.keyDown( key );
 
 					// if alt isnt pressed we will call keyPressed
-					if( !InputUtils.altDown() )
+					if( !InputUtils.isAltDown() )
 					{
 						var c = key.getChar();
 						if( c.HasValue )
@@ -234,7 +234,7 @@ namespace Nez.UI
 							_keyboardFocusElement.keyPressed( key, c.Value );
 
 							// if we dont have a control key pressed setup a repeat timer for the key
-							if( !InputUtils.controlDown() )
+							if( !InputUtils.isControlDown() )
 							{
 								_repeatKey = key;
 								_keyRepeatTimer = Core.schedule( _keyRepeatTime, true, this, t =>

@@ -347,6 +347,12 @@ namespace Nez
 			return res;
 		}
 
+
+		public override string ToString()
+		{
+			return string.Format( "[RenderableComponent] {0}, renderLayer: {1}]", this.GetType(), renderLayer );
+		}
+
 	}
 }
 

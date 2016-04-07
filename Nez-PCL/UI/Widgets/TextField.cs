@@ -169,7 +169,7 @@ namespace Nez.UI
 			lastBlink = 0;
 			cursorOn = false;
 
-			var isCtrlDown = InputUtils.controlDown();
+			var isCtrlDown = InputUtils.isControlDown();
 			var jump = isCtrlDown && !passwordMode;
 			var repeat = false;
 
@@ -196,7 +196,7 @@ namespace Nez.UI
 				}
 			}
 
-			if( InputUtils.shiftDown() )
+			if( InputUtils.isShiftDown() )
 			{
 				if( key == Keys.Insert )
 					paste( Clipboard.getContents(), true );
@@ -274,7 +274,7 @@ namespace Nez.UI
 
 		void IKeyboardListener.keyPressed( Keys key, char character )
 		{
-			if( InputUtils.controlDown() )
+			if( InputUtils.isControlDown() )
 				return;
 
 			// disallow typing most ASCII control characters, which would show up as a space
@@ -295,7 +295,7 @@ namespace Nez.UI
 
 			if( key == Keys.Tab && focusTraversal )
 			{
-				next( InputUtils.shiftDown() );
+				next( InputUtils.isShiftDown() );
 			}
 			else
 			{

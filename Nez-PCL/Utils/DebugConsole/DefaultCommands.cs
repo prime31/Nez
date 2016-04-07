@@ -67,7 +67,7 @@ namespace Nez.Console
 		}
 
 
-		[Command( "framerate", "Sets the target framerate" )]
+		[Command( "framerate", "Sets the target framerate. Defaults to 60." )]
 		static private void framerate( float target = 60f )
 		{
 			Core._instance.TargetElapsedTime = TimeSpan.FromSeconds( 1.0 / target );
@@ -75,7 +75,7 @@ namespace Nez.Console
 
 
 		[Command( "entity-count", "Logs amount of Entities in the Scene. Pass a tagIndex to count only Entities with that tag" )]
-		static private void count( int tagIndex = -1 )
+		static private void entityCount( int tagIndex = -1 )
 		{
 			if( Core.scene == null )
 			{
@@ -87,6 +87,44 @@ namespace Nez.Console
 				DebugConsole.instance.log( "Total entities: " + Core.scene.entities.Count.ToString() );
 			else
 				DebugConsole.instance.log( "Total entities with tag [" + tagIndex + "] " + Core.scene.findEntitiesByTag( tagIndex ).Count.ToString() );
+		}
+
+
+		[Command( "renderable-count", "Logs amount of Renderables in the Scene. Pass a renderLayer to count only Renderables in that layer" )]
+		static private void renderableCount( int renderLayer = int.MinValue )
+		{
+			if( Core.scene == null )
+			{
+				DebugConsole.instance.log( "Current Scene is null!" );
+				return;
+			}
+
+			if( renderLayer != int.MinValue )
+				DebugConsole.instance.log( "Total renderables with tag [" + renderLayer + "] " + Core.scene.renderableComponents.componentsWithRenderLayer( renderLayer ).Count.ToString() );
+			else
+				DebugConsole.instance.log( "Total renderables: " + Core.scene.renderableComponents.Count.ToString() );
+		}
+
+
+		[Command( "renderable-log", "Logs the Renderables in the Scene. Pass a renderLayer to log only Renderables in that layer" )]
+		static private void renderableLog( int renderLayer = int.MinValue )
+		{
+			if( Core.scene == null )
+			{
+				DebugConsole.instance.log( "Current Scene is null!" );
+				return;
+			}
+
+			var builder = new StringBuilder();
+			foreach( var renderable in Core.scene.renderableComponents )
+			{
+				if( renderLayer == int.MinValue || renderable.renderLayer == renderLayer )
+				{
+					builder.AppendFormat( "{0}\n", renderable );
+				}
+			}
+
+			DebugConsole.instance.log( builder.ToString() );
 		}
 
 

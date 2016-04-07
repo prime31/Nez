@@ -8,7 +8,7 @@ namespace Nez
 	{
 		public static char? getChar( this Keys key )
 		{
-			var isShiftDown = InputUtils.shiftDown();
+			var isShiftDown = InputUtils.isShiftDown();
 
 			if( key == Keys.A )
 				return isShiftDown ? 'A' : 'a';
