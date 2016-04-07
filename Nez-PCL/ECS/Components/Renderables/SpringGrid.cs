@@ -414,7 +414,7 @@ namespace Nez
 		{
 			var delta = end - start;
 			var angle = (float)Math.Atan2( delta.Y, delta.X );
-			spriteBatch.Draw( Nez.Graphics.instance.pixelTexture, start + entity.transform.position + localPosition, null, color, angle, new Vector2( 0, 0.5f ), new Vector2( delta.Length(), thickness ), SpriteEffects.None, layerDepth );
+			spriteBatch.Draw( Graphics.instance.pixelTexture, start + entity.transform.position + localPosition, Graphics.instance.pixelTexture.sourceRect, color, angle, new Vector2( 0, 0.5f ), new Vector2( delta.Length(), thickness ), SpriteEffects.None, layerDepth );
 		}
 	
 	}
