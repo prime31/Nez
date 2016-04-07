@@ -311,6 +311,7 @@
     <Compile Include="ECS\Components\Renderables\Sprites\SpriteMime.cs" />
     <Compile Include="Graphics\Textures\RenderTexture.cs" />
     <Compile Include="Graphics\PostProcessing\PostProcessors\SpriteLightPostProcessor.cs" />
+    <Compile Include="Graphics\PostProcessing\PostProcessors\PixelGlitchPostProcessor.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="MonoGame.Framework">
