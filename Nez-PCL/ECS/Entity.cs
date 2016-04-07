@@ -152,6 +152,7 @@ namespace Nez
 		public void destroy()
 		{
 			scene.entities.remove( this );
+			transform.parent = null;
 
 			// destroy any children we have
 			for( var i = 0; i < transform.childCount; i++ )
@@ -159,6 +160,38 @@ namespace Nez
 				var child = transform.getChild( i );
 				child.entity.destroy();
 			}
+		}
+
+
+		/// <summary>
+		/// detaches the Entity from the scene.
+		/// the following lifecycle method will be called on the Entity: onRemovedFromScene
+		/// the following lifecycle method will be called on the Components: onRemovedFromEntity
+		/// </summary>
+		public void detachFromScene()
+		{
+			scene.entities.remove( this );
+			components.deregisterAllComponents();
+
+			for( var i = 0; i < transform.childCount; i++ )
+				transform.getChild( i ).entity.detachFromScene();
+		}
+
+
+		/// <summary>
+		/// attaches an Entity that was previously detached to a new scene
+		/// </summary>
+		/// <param name="newScene">New scene.</param>
+		public void attachToScene( Scene newScene )
+		{
+			scene = newScene;
+			newScene.entities.add( this );
+			components.registerAllComponents();
+
+			for( var i = 0; i < transform.childCount; i++ )
+				transform.getChild( i ).entity.attachToScene( newScene );
+
+			Debug.log( "attaching {0}. total children: {1}", name, transform.childCount );
 		}
 
 
@@ -218,6 +251,27 @@ namespace Nez
 		}
 
 
+		/// <summary>
+		/// adds a Collider to the list and registers it with the Physics system
+		/// </summary>
+		/// <param name="collider">Collider.</param>
+		/// <typeparam name="T">The 1st type parameter.</typeparam>
+		public T addCollider<T>( T collider ) where T : Collider
+		{
+			return colliders.add( collider );
+		}
+
+
+		/// <summary>
+		/// removes the Collider and unregisters it from the Pysics system
+		/// </summary>
+		/// <param name="collider">Collider.</param>
+		public void remove( Collider collider )
+		{
+			colliders.remove( collider );
+		}
+
+
 		#region Entity lifecycle methods
 
 		/// <summary>
@@ -236,7 +290,6 @@ namespace Nez
 		public virtual void onRemovedFromScene()
 		{
 			colliders.onEntityRemovedFromScene();
-			components.removeAllComponents();
 		}
 
 

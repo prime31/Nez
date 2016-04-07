@@ -56,12 +56,20 @@ namespace Nez
 		}
 
 
+		/// <summary>
+		/// adds an Entity to the list. All lifecycle methods will be called in the next frame.
+		/// </summary>
+		/// <param name="entity">Entity.</param>
 		public void add( Entity entity )
 		{
 			_entitiesToAdd.Add( entity );
 		}
 
 
+		/// <summary>
+		/// removes an Entity from the list. All lifecycle methods will be called in the next frame.
+		/// </summary>
+		/// <param name="entity">Entity.</param>
 		public void remove( Entity entity )
 		{
 			Debug.warnIf( _entitiesToRemove.Contains( entity ), "You are trying to remove an entity ({0}) that you already removed", entity.name );
@@ -83,9 +91,17 @@ namespace Nez
 			}
 
 			_entities.Clear();
+			_entitiesToAdd.Clear();
+			_entitiesToRemove.Clear();
+			_entityDict.Clear();
+			_unsortedTags.Clear();
 		}
 
 
+		/// <summary>
+		/// checks to see if the Entity is presently managed by this EntityList
+		/// </summary>
+		/// <param name="entity">Entity.</param>
 		public bool contains( Entity entity )
 		{
 			return _entities.Contains( entity ) || _entitiesToAdd.Contains( entity );
@@ -124,7 +140,6 @@ namespace Nez
 					_entities.Remove( entity );
 					entity.onRemovedFromScene();
 					entity.scene = null;
-					entity.transform.parent = null;
 
 					if( Core.entitySystemsEnabled )
 						scene.entityProcessors.onEntityRemoved( entity );

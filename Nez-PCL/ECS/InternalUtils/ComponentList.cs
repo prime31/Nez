@@ -71,19 +71,55 @@ namespace Nez
 		public void removeAllComponents()
 		{
 			for( var i = 0; i < _components.Count; i++ )
-			{
-				// deal with renderLayer list if necessary
-				if( _components[i] is RenderableComponent )
-					_entity.scene.renderableComponents.remove( _components[i] as RenderableComponent );
-				
-				_components[i].onRemovedFromEntity();
-				_components[i].entity = null;
-			}
+				handleRemove( _components[i] );
 
 			_components.Clear();
 			_updatableComponents.Clear();
 			_componentsToAdd.Clear();
 			_componentsToRemove.Clear();
+		}
+
+
+		internal void deregisterAllComponents()
+		{
+			for( var i = 0; i < _components.Count; i++ )
+			{
+				var component = _components[i];
+
+				// deal with renderLayer list if necessary
+				if( component is RenderableComponent )
+					_entity.scene.renderableComponents.remove( component as RenderableComponent );
+
+				// deal with IUpdatable
+				if( component is IUpdatable )
+					_updatableComponents.Remove( component as IUpdatable );
+
+				if( Core.entitySystemsEnabled )
+				{
+					_entity.componentBits.set( ComponentTypeManager.getIndexFor( component.GetType() ), false );
+					_entity.scene.entityProcessors.onComponentRemoved( _entity );
+				}
+			}
+		}
+
+
+		internal void registerAllComponents()
+		{
+			for( var i = 0; i < _components.Count; i++ )
+			{
+				var component = _components[i];
+				if( component is RenderableComponent )
+					_entity.scene.renderableComponents.add( component as RenderableComponent );
+
+				if( component is IUpdatable )
+					_updatableComponents.Add( component as IUpdatable );
+
+				if( Core.entitySystemsEnabled )
+				{
+					_entity.componentBits.set( ComponentTypeManager.getIndexFor( component.GetType() ) );
+					_entity.scene.entityProcessors.onComponentAdded( _entity );
+				}
+			}
 		}
 
 
@@ -94,25 +130,8 @@ namespace Nez
 			{
 				for( var i = 0; i < _componentsToRemove.Count; i++ )
 				{
-					var component = _componentsToRemove[i];
-
-					// deal with renderLayer list if necessary
-					if( component is RenderableComponent )
-						_entity.scene.renderableComponents.remove( component as RenderableComponent );
-
-					// deal with IUpdatable
-					if( component is IUpdatable )
-						_updatableComponents.Remove( component as IUpdatable );
-
-					if( Core.entitySystemsEnabled )
-					{
-						_entity.componentBits.set( ComponentTypeManager.getIndexFor( component.GetType() ), false );
-						_entity.scene.entityProcessors.onComponentRemoved( _entity );
-					}
-
-					_components.Remove( component );
-					component.onRemovedFromEntity();
-					component.entity = null;
+					handleRemove( _componentsToRemove[i] );
+					_components.Remove( _componentsToRemove[i] );
 				}
 				_componentsToRemove.Clear();
 			}
@@ -161,6 +180,27 @@ namespace Nez
 				_updatableComponents.Sort( compareUpdatableOrder );
 				_isComponentListUnsorted = false;
 			}
+		}
+
+
+		void handleRemove( Component component )
+		{
+			// deal with renderLayer list if necessary
+			if( component is RenderableComponent )
+				_entity.scene.renderableComponents.remove( component as RenderableComponent );
+
+			// deal with IUpdatable
+			if( component is IUpdatable )
+				_updatableComponents.Remove( component as IUpdatable );
+
+			if( Core.entitySystemsEnabled )
+			{
+				_entity.componentBits.set( ComponentTypeManager.getIndexFor( component.GetType() ), false );
+				_entity.scene.entityProcessors.onComponentRemoved( _entity );
+			}
+
+			component.onRemovedFromEntity();
+			component.entity = null;
 		}
 
 

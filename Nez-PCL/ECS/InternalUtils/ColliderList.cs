@@ -45,6 +45,7 @@ namespace Nez
 		public T add<T>( T collider ) where T : Collider
 		{
 			_collidersToAdd.Add( collider );
+			collider.entity = _entity;
 			return collider;
 		}
 
