@@ -59,6 +59,7 @@
     <Folder Include="ParticleDesigner\ConversionTypes\" />
     <Folder Include="Overlap2D\VOs\NotImplemented\" />
     <Folder Include="UISkin\" />
+    <Folder Include="Common\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Tiled\TiledMapImporter.cs" />
@@ -157,6 +158,8 @@
     <Compile Include="UISkin\UISkinProcessor.cs" />
     <Compile Include="UISkin\UISkinWriter.cs" />
     <Compile Include="UISkin\UISkinImporter.cs" />
+    <Compile Include="Common\PathHelper.cs" />
+    <Compile Include="Common\ContentWriterExt.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Nez-PCL\Nez.csproj">

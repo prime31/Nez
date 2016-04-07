@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework.Content;
+using Microsoft.Xna.Framework;
 
 
 namespace Nez.Content
@@ -31,6 +32,12 @@ namespace Nez.Content
                 .ToArray();
 
 			return string.Join( "/", values );
+		}
+
+
+		public static Rectangle readRectangle( this ContentReader reader )
+		{
+			return new Rectangle( reader.ReadInt32(), reader.ReadInt32(), reader.ReadInt32(), reader.ReadInt32() );
 		}
 	}
 }

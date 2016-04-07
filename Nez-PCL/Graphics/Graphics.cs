@@ -39,8 +39,9 @@ namespace Nez
 			spriteBatch = new SpriteBatch( Core.graphicsDevice );
 			bitmapFont = font;
 
-			var tex = createSingleColorTexture( 1, 1, Color.White );
-			pixelTexture = new Subtexture( tex, 0, 0, 1, 1 );
+			// the bottom/right pixel is white on the default font so we'll use that for the pixelTexture
+			var fontTex = bitmapFont.defaultCharacterRegion.subtexture.texture2D;
+			pixelTexture = new Subtexture( fontTex, fontTex.Width - 1, fontTex.Height - 1, 1, 1 );
 		}
 
 

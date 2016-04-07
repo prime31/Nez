@@ -9,6 +9,7 @@ using Microsoft.Xna.Framework.Content.Pipeline.Graphics;
 using Microsoft.Xna.Framework;
 using Nez.TextureAtlasGenerator;
 using Microsoft.Xna.Framework.Graphics;
+using Nez.PipelineImporter;
 
 
 namespace Nez.TiledMaps
@@ -87,7 +88,7 @@ namespace Nez.TiledMaps
 				// Store the name of this sprite.
 				var spriteName = Path.GetFileName( inputFilename );
 
-				var absolutePath = TmxTileset.getAbsolutePath( inputFilename, tileset.mapFolder );
+				var absolutePath = PathHelper.getAbsolutePath( inputFilename, tileset.mapFolder );
 				context.Logger.LogMessage( "Adding texture: {0}", spriteName );
 
 				// Load the sprite texture into memory.

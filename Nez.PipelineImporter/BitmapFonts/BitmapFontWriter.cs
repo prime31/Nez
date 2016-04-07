@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework.Content.Pipeline.Graphics;
 using System;
+using Nez.PipelineImporter;
 
 
 namespace Nez.BitmapFontImporter
@@ -12,10 +13,24 @@ namespace Nez.BitmapFontImporter
 	{
 		protected override void Write( ContentWriter writer, BitmapFontProcessorResult result )
 		{
-			// write our textures
-			writer.Write( result.textures.Count );
-			foreach( var tex in result.textures )
-				writer.WriteObject( tex );
+			writer.Write( result.packTexturesIntoXnb );
+
+			// write our textures if we should else write the texture names
+			if( result.packTexturesIntoXnb )
+			{
+				writer.Write( result.textures.Count );
+				foreach( var tex in result.textures )
+					writer.WriteObject( tex );
+			}
+			else
+			{
+				writer.Write( result.textureNames.Count );
+				for( var i = 0; i < result.textureNames.Count; i++ )
+				{
+					writer.Write( result.textureNames[i] );
+					writer.Write( result.textureOrigins[i] );
+				}
+			}
 
 			// write the font data
 			var fontFile = result.fontFile;

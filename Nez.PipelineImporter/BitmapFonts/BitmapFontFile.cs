@@ -11,6 +11,11 @@ namespace Nez.BitmapFontImporter
 	[XmlRoot( "font" )]
 	public class BitmapFontFile
 	{
+		/// <summary>
+		/// the full path to the fnt font
+		/// </summary>
+		public string file;
+
 		[XmlElement( "info" )]
 		public BitmapFontInfo info;
 		

@@ -74,6 +74,25 @@ namespace Nez.Console
 		}
 
 
+		static ITimer _drawCallTimer;
+		[Command( "log-drawcalls", "Enables/disables logging of draw calls in the standard console. Call once to enable and again to disable. delay is how often they should be logged and defaults to 1s." )]
+		static private void logDrawCalls( float delay = 1f )
+		{
+			if( _drawCallTimer != null )
+			{
+				_drawCallTimer.stop();
+				_drawCallTimer = null;
+			}
+			else
+			{
+				_drawCallTimer = Core.schedule( delay, timer =>
+				{
+					Debug.log( "Draw Calls: {0}, Sprite Count: {1}", Core.graphicsDevice.Metrics.DrawCount, Core.graphicsDevice.Metrics.SpriteCount );
+				} );
+			}
+		}
+
+
 		[Command( "entity-count", "Logs amount of Entities in the Scene. Pass a tagIndex to count only Entities with that tag" )]
 		static private void entityCount( int tagIndex = -1 )
 		{
