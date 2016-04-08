@@ -155,7 +155,7 @@ namespace Nez
 
 
 		/// <summary>
-		/// position of the transform relative to the parent transform
+		/// position of the transform relative to the parent transform. If the transform has no parent, it is the same as Transform.position
 		/// </summary>
 		/// <value>The local position.</value>
 		public Vector2 localPosition
@@ -175,7 +175,7 @@ namespace Nez
 
 
 		/// <summary>
-		/// the rotation of the transform relative to the parent transform's rotation
+		/// the rotation of the transform relative to the parent transform's rotation. If the transform has no parent, it is the same as Transform.rotation
 		/// </summary>
 		/// <value>The local rotation.</value>
 		public float localRotation
@@ -206,7 +206,7 @@ namespace Nez
 
 
 		/// <summary>
-		/// the scale of the transform relative to the parent
+		/// the scale of the transform relative to the parent. If the transform has no parent, it is the same as Transform.scale
 		/// </summary>
 		/// <value>The local scale.</value>
 		public Vector2 localScale
@@ -321,6 +321,15 @@ namespace Nez
 		}
 	
 
+		/// <summary>
+		/// rounds the position of the Transform
+		/// </summary>
+		public void roundPosition()
+		{
+			position = _position.round();
+		}
+	
+
 		void updateTransform()
 		{
 			if( hierarchyDirty != DirtyType.Clean )
@@ -406,8 +415,6 @@ namespace Nez
 			_localRotation = transform._localRotation;
 			_scale = transform._scale;
 			_localScale = transform._localScale;
-
-			Debug.log( "copy from: {0}, current: {1}", transform.position, _position );
 
 //			hierarchyDirty |= DirtyType.PositionDirty;
 //			hierarchyDirty |= DirtyType.RotationDirty;

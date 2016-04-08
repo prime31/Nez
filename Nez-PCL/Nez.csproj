@@ -312,6 +312,7 @@
     <Compile Include="Graphics\Textures\RenderTexture.cs" />
     <Compile Include="Graphics\PostProcessing\PostProcessors\SpriteLightPostProcessor.cs" />
     <Compile Include="Graphics\PostProcessing\PostProcessors\PixelGlitchPostProcessor.cs" />
+    <Compile Include="ECS\ScreenSpaceCamera.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="MonoGame.Framework">

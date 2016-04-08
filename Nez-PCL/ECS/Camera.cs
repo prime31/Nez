@@ -5,63 +5,29 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Nez
 {
-	public class Camera
+	public class Camera : Component
 	{
 		#region Fields and Properties
 
 		/// <summary>
-		/// position in world space of the camera
+		/// shortcut to entity.transform.position
 		/// </summary>
 		/// <value>The position.</value>
 		public Vector2 position
 		{
-			get { return _position; }
-			set
-			{
-				if( _position != value )
-				{
-					_position = value;
-					forceMatrixUpdate();
-				}
-			}
+			get { return entity.transform.position; }
+			set { entity.transform.position = value; }
 		}
-		protected Vector2 _position;
 
 		/// <summary>
-		/// origin of the camera. Defaults to the center of the camera
-		/// </summary>
-		/// <value>The origin.</value>
-		public Vector2 origin
-		{
-			get { return _origin; }
-			set
-			{
-				if( _origin != value )
-				{
-					_origin = value;
-					forceMatrixUpdate();
-				}
-			}
-		}
-		protected Vector2 _origin;
-			
-		/// <summary>
-		/// rotation of the camera
+		/// shortcut to entity.transform.rotation
 		/// </summary>
 		/// <value>The rotation.</value>
 		public float rotation
 		{
-			get { return _rotation; }
-			set
-			{
-				if( _rotation != value )
-				{
-					_rotation = value;
-					forceMatrixUpdate();
-				}
-			}
+			get { return entity.transform.rotation; }
+			set { entity.transform.rotation = value; }
 		}
-		protected float _rotation;
 
 		/// <summary>
 		/// raw zoom value. This is the exact value used for the scale matrix. Default is 1.
@@ -166,7 +132,7 @@ namespace Nez
 					var topLeft = screenToWorldPoint( new Vector2( Core.graphicsDevice.Viewport.X, Core.graphicsDevice.Viewport.Y ) );
 					var bottomRight = screenToWorldPoint( new Vector2( Core.graphicsDevice.Viewport.X + Core.graphicsDevice.Viewport.Width, Core.graphicsDevice.Viewport.Y + Core.graphicsDevice.Viewport.Height ) );
 
-					if( rotation != 0 )
+					if( entity.transform.rotation != 0 )
 					{
 						// special care for rotated bounds. we need to find our absolute min/max values and create the bounds from that
 						var topRight = screenToWorldPoint( new Vector2( Core.graphicsDevice.Viewport.X + Core.graphicsDevice.Viewport.Width, Core.graphicsDevice.Viewport.Y ) );
@@ -226,6 +192,20 @@ namespace Nez
 		}
 		Matrix _inverseTransformMatrix = Matrix.Identity;
 
+		protected Vector2 _origin;
+		Vector2 origin
+		{
+			get { return _origin; }
+			set
+			{
+				if( _origin != value )
+				{
+					_origin = value;
+					forceMatrixUpdate();
+				}
+			}
+		}
+
 
 		float _near = -100f;
 		float _far = 100f;
@@ -237,34 +217,40 @@ namespace Nez
 
 		public Camera( float near = -100, float far = 100 )
 		{
-			rotation = 0;
 			zoom = 0;
 			_near = near;
 			_far = far;
-
-			// listen for screen resizes and graphics resets so we can dirty our bounds when it happens
-			Core.emitter.addObserver( CoreEvents.GraphicsDeviceReset, onGraphicsDeviceReset );
 		}
 
 
-		void onGraphicsDeviceReset()
+		public void onSceneRenderTargetSizeChanged()
 		{
+			centerOrigin();
 			_areBoundsDirty = true;
 		}
 
 
-		void updateMatrixes()
+		protected virtual void updateMatrixes()
 		{
 			if( !_areMatrixesDirty )
 				return;
-			
+
 			Matrix tempMat;
 
-			_transformMatrix = Matrix.CreateTranslation( -_position.X, -_position.Y, 0f ); // position
-			Matrix.CreateScale( _zoom, _zoom, 1f, out tempMat ); // scale ->
-			Matrix.Multiply( ref _transformMatrix, ref tempMat, out _transformMatrix );
-			Matrix.CreateRotationZ( _rotation, out tempMat ); // rotation
-			Matrix.Multiply( ref _transformMatrix, ref tempMat, out _transformMatrix );
+			_transformMatrix = Matrix.CreateTranslation( -entity.transform.position.X, -entity.transform.position.Y, 0f ); // position
+
+			if( _zoom != 1f )
+			{
+				Matrix.CreateScale( _zoom, _zoom, 1f, out tempMat ); // scale ->
+				Matrix.Multiply( ref _transformMatrix, ref tempMat, out _transformMatrix );
+			}
+
+			if( entity.transform.rotation != 0f )
+			{
+				Matrix.CreateRotationZ( entity.transform.rotation, out tempMat ); // rotation
+				Matrix.Multiply( ref _transformMatrix, ref tempMat, out _transformMatrix );
+			}
+
 			Matrix.CreateTranslation( (int)_origin.X, (int)_origin.Y, 0f, out tempMat ); // translate -origin
 			Matrix.Multiply( ref _transformMatrix, ref tempMat, out _transformMatrix );
 
@@ -286,37 +272,32 @@ namespace Nez
 		}
 
 
-		public void unload()
+		#region component overrides
+
+		public override void onAddedToEntity()
 		{
-			Core.emitter.removeObserver( CoreEvents.GraphicsDeviceReset, onGraphicsDeviceReset );
+			// center our origin straight away. it will also get centered when the screen size changes
+			centerOrigin();
 		}
 
 
-		public void roundPosition()
+		public override void onEntityTransformChanged()
 		{
-			Mathf.round( ref _position );
-			_areMatrixesDirty = true;
+			forceMatrixUpdate();
 		}
 
+		#endregion
 
-		public void centerOrigin()
+
+		#region zoom helpers
+
+		void centerOrigin()
 		{
+			var oldOrigin = _origin;
 			origin = new Vector2( Core.graphicsDevice.Viewport.Width / 2f, Core.graphicsDevice.Viewport.Height / 2f );
 
 			// offset our position to match the new center
-			position += origin;
-		}
-
-
-		public void move( Vector2 direction )
-		{
-			position += Vector2.Transform( direction, Matrix.CreateRotationZ( -rotation ) );
-		}
-
-
-		public void rotate( float deltaRadians )
-		{
-			rotation += deltaRadians;
+			entity.transform.position += ( _origin - oldOrigin );
 		}
 
 
@@ -331,6 +312,10 @@ namespace Nez
 			zoom -= deltaZoom;
 		}
 
+		#endregion
+
+
+		#region transforms and matrix
 
 		/// <summary>
 		/// converts a point from world coordinates to screen
@@ -389,6 +374,8 @@ namespace Nez
 			// not currently blocked with a dirty flag due to the core engine not using this
 			return transformMatrix * getProjectionMatrix();
 		}
+
+		#endregion
 
 	}
 }

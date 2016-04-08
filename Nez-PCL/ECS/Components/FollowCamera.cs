@@ -83,8 +83,9 @@ namespace Nez
 		void IUpdatable.update()
 		{
 			// translate the deadzone to be in world space
-			_worldSpaceDeadzone.x = camera.position.X - camera.origin.X + deadzone.x + focusOffset.X;
-			_worldSpaceDeadzone.y = camera.position.Y - camera.origin.Y + deadzone.y + focusOffset.Y;
+			var halfScreen = entity.scene.sceneRenderTargetSize.ToVector2() * 0.5f;
+			_worldSpaceDeadzone.x = camera.position.X - halfScreen.X + deadzone.x + focusOffset.X;
+			_worldSpaceDeadzone.y = camera.position.Y - halfScreen.Y + deadzone.y + focusOffset.Y;
 			_worldSpaceDeadzone.width = deadzone.width;
 			_worldSpaceDeadzone.height = deadzone.height;
 
@@ -126,7 +127,12 @@ namespace Nez
 
 		void onGraphicsDeviceReset()
 		{
-			follow( _targetEntity, _cameraStyle );
+			// we need this to occur on the next frame so the camera bounds are updated
+			Core.schedule( 0f, this, t =>
+			{
+				var self = t.context as FollowCamera;
+				self.follow( self._targetEntity, self._cameraStyle );
+			} );
 		}
 
 

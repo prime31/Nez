@@ -15,7 +15,7 @@ namespace Nez
 		{
 			Array.Sort( renderLayers );
 			this.renderLayers = renderLayers;
-			camera = new Camera();
+			camera = new ScreenSpaceCamera();
 		}
 
 

@@ -261,10 +261,13 @@ namespace Nez
 
 		public Scene()
 		{
-			camera = new Camera();
 			entities = new EntityList( this );
 			renderableComponents = new RenderableComponentList();
 			contentManager = new NezContentManager();
+
+			var cameraEntity = createEntity( "camera" );
+			camera = cameraEntity.addComponent( new Camera() );
+			//camera = new Camera();
 
 			if( Core.entitySystemsEnabled )
 				entityProcessors = new EntityProcessorList();
@@ -306,10 +309,9 @@ namespace Nez
 			Assert.isFalse( _renderers.Count == 0, "Scene has begun with no renderer. At least one renderer must be present before beginning a scene." );
 			Physics.reset();
 
-			// prep our render textures and take care of centering the camera origin. we have to set the RenderTarget before doing that.
+			// prep our render textures
 			updateResolutionScaler();
 			Core.graphicsDevice.SetRenderTarget( _sceneRenderTarget );
-			camera.centerOrigin();
 
 			if( entityProcessors != null )
 				entityProcessors.begin();
@@ -332,7 +334,7 @@ namespace Nez
 
 			Core.emitter.removeObserver( CoreEvents.GraphicsDeviceReset, onGraphicsDeviceReset );
 			entities.removeAllEntities();
-			camera.unload();
+
 			camera = null;
 			contentManager.Dispose();
 			_sceneRenderTarget.Dispose();
@@ -654,6 +656,8 @@ namespace Nez
 
 			if( _finalRenderDelegate != null )
 				_finalRenderDelegate.onSceneBackBufferSizeChanged( renderTargetWidth, renderTargetHeight );
+
+			camera.onSceneRenderTargetSizeChanged();
 		}
 
 		#endregion
