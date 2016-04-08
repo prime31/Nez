@@ -657,7 +657,7 @@ namespace Nez
 			if( _finalRenderDelegate != null )
 				_finalRenderDelegate.onSceneBackBufferSizeChanged( renderTargetWidth, renderTargetHeight );
 
-			camera.onSceneRenderTargetSizeChanged();
+			camera.onSceneRenderTargetSizeChanged( renderTargetWidth, renderTargetHeight );
 		}
 
 		#endregion

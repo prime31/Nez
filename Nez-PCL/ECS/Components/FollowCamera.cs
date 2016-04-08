@@ -93,12 +93,13 @@ namespace Nez
 				updateFollow();
 
 			camera.position = Vector2.Lerp( camera.position, camera.position + _desiredPositionDelta, followLerp );
-			camera.position = camera.position.round();
+			camera.entity.transform.roundPosition();
 
 			if( mapLockEnabled )
+			{
 				camera.position = clampToMapSize( camera.position );
-
-			camera.position = camera.position.round();
+				camera.entity.transform.roundPosition();   
+			}
 		}
 
 

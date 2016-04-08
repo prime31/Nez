@@ -223,10 +223,18 @@ namespace Nez
 		}
 
 
-		public void onSceneRenderTargetSizeChanged()
+		/// <summary>
+		/// when the scene render target size changes we update the cameras origin and adjust the position to keep it where it was
+		/// </summary>
+		/// <param name="newWidth">New width.</param>
+		/// <param name="newHeight">New height.</param>
+		public void onSceneRenderTargetSizeChanged( int newWidth, int newHeight )
 		{
-			centerOrigin();
-			_areBoundsDirty = true;
+			var oldOrigin = _origin;
+			origin = new Vector2( newWidth / 2f, newHeight / 2f );
+
+			// offset our position to match the new center
+			entity.transform.position += ( _origin - oldOrigin );
 		}
 
 
@@ -274,13 +282,6 @@ namespace Nez
 
 		#region component overrides
 
-		public override void onAddedToEntity()
-		{
-			// center our origin straight away. it will also get centered when the screen size changes
-			centerOrigin();
-		}
-
-
 		public override void onEntityTransformChanged()
 		{
 			forceMatrixUpdate();
@@ -290,16 +291,6 @@ namespace Nez
 
 
 		#region zoom helpers
-
-		void centerOrigin()
-		{
-			var oldOrigin = _origin;
-			origin = new Vector2( Core.graphicsDevice.Viewport.Width / 2f, Core.graphicsDevice.Viewport.Height / 2f );
-
-			// offset our position to match the new center
-			entity.transform.position += ( _origin - oldOrigin );
-		}
-
 
 		public void zoomIn( float deltaZoom )
 		{
