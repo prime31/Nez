@@ -112,7 +112,7 @@ namespace Nez
 			if( !_isNewSceneLoaded )
 				graphics.spriteBatch.Draw( previousSceneRender, _destinationRect, Color.White );
 			else
-				graphics.spriteBatch.Draw( _overlayTexture, _destinationRect, Color.Transparent );
+				graphics.spriteBatch.Draw( _overlayTexture, new Rectangle( 0, 0, Screen.width, Screen.height ), Color.Transparent );
 			
 			graphics.spriteBatch.End();
 		}
