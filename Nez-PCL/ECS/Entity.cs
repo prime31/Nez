@@ -121,7 +121,7 @@ namespace Nez
 		/// <summary>
 		/// flag indicating if destroy was called on this Entity
 		/// </summary>
-		protected bool _isDestroyed;
+		internal bool _isDestroyed;
 
 		#endregion
 
@@ -297,6 +297,7 @@ namespace Nez
 		{
 			colliders.onEntityRemovedFromScene();
 
+			// if we were destroyed, remove our components. If we were just detached we need to keep our components on the Entity.
 			if( _isDestroyed )
 				components.removeAllComponents();
 		}

@@ -86,6 +86,7 @@ namespace Nez
 		{
 			for( var i = 0; i < _entities.Count; i++ )
 			{
+				_entities[i]._isDestroyed = true;
 				_entities[i].onRemovedFromScene();
 				_entities[i].scene = null;
 			}
