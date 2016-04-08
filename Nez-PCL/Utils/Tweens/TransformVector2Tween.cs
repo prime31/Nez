@@ -11,6 +11,7 @@ namespace Nez.Tweens
 	{
 		Position,
 		LocalPosition,
+		Scale,
 		LocalScale,
 		RotationDegrees,
 		LocalRotationDegrees
@@ -36,6 +37,9 @@ namespace Nez.Tweens
 				case TransformTargetType.LocalPosition:
 					_transform.localPosition = value;
 					break;
+				case TransformTargetType.Scale:
+					_transform.scale = value;
+				break;
 				case TransformTargetType.LocalScale:
 					_transform.localScale = value;
 					break;
@@ -59,6 +63,8 @@ namespace Nez.Tweens
 					return _transform.position;
 				case TransformTargetType.LocalPosition:
 					return _transform.localPosition;
+				case TransformTargetType.Scale:
+				return _transform.scale;
 				case TransformTargetType.LocalScale:
 					return _transform.localScale;
 				case TransformTargetType.RotationDegrees:
@@ -108,5 +114,6 @@ namespace Nez.Tweens
 				Pool<TransformVector2Tween>.free( this );
 			}
 		}
+	
 	}
 }

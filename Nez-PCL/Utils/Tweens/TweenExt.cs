@@ -42,6 +42,36 @@ namespace Nez
 
 
 		/// <summary>
+		/// transform.scale tween
+		/// </summary>
+		/// <returns>The scale to.</returns>
+		/// <param name="self">Self.</param>
+		/// <param name="to">To.</param>
+		/// <param name="duration">Duration.</param>
+		public static ITween<Vector2> tweenScaleTo( this Transform self, float to, float duration = 0.3f )
+		{
+			return self.tweenScaleTo( new Vector2( to ), duration );
+		}
+
+
+		/// <summary>
+		/// transform.scale tween
+		/// </summary>
+		/// <returns>The scale to.</returns>
+		/// <param name="self">Self.</param>
+		/// <param name="to">To.</param>
+		/// <param name="duration">Duration.</param>
+		public static ITween<Vector2> tweenScaleTo( this Transform self, Vector2 to, float duration = 0.3f )
+		{
+			var tween = Pool<TransformVector2Tween>.obtain();
+			tween.setTargetAndType( self, TransformTargetType.Scale );
+			tween.initialize( tween, to, duration );
+
+			return tween;
+		}
+
+
+		/// <summary>
 		/// transform.localScale tween
 		/// </summary>
 		/// <returns>The klocal scale to.</returns>
@@ -50,11 +80,7 @@ namespace Nez
 		/// <param name="duration">Duration.</param>
 		public static ITween<Vector2> tweenLocalScaleTo( this Transform self, float to, float duration = 0.3f )
 		{
-			var tween = Pool<TransformVector2Tween>.obtain();
-			tween.setTargetAndType( self, TransformTargetType.LocalScale );
-			tween.initialize( tween, new Vector2( to ), duration );
-
-			return tween;
+			return self.tweenLocalScaleTo( new Vector2( to ), duration );
 		}
 
 
