@@ -118,6 +118,11 @@ namespace Nez
 
 		internal BitSet componentBits;
 
+		/// <summary>
+		/// flag indicating if destroy was called on this Entity
+		/// </summary>
+		protected bool _isDestroyed;
+
 		#endregion
 
 
@@ -151,6 +156,7 @@ namespace Nez
 		/// </summary>
 		public void destroy()
 		{
+			_isDestroyed = true;
 			scene.entities.remove( this );
 			transform.parent = null;
 
@@ -290,6 +296,9 @@ namespace Nez
 		public virtual void onRemovedFromScene()
 		{
 			colliders.onEntityRemovedFromScene();
+
+			if( _isDestroyed )
+				components.removeAllComponents();
 		}
 
 

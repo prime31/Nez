@@ -61,6 +61,10 @@ namespace Nez
 		/// </summary>
 		internal static Core _instance;
 
+		#if DEBUG
+		internal static ulong drawCalls, spriteCount;
+		#endif
+
 		Scene _scene;
 		Scene _nextScene;
 		internal SceneTransition _sceneTransition;
@@ -265,6 +269,9 @@ namespace Nez
 				DebugConsole.instance.render();
 			else
 				TimeRuler.instance.render();
+
+			drawCalls = graphicsDevice.Metrics.DrawCount;
+			spriteCount = graphicsDevice.Metrics.SpriteCount;
 			#endif
 		}
 

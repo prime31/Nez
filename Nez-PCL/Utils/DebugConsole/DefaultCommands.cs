@@ -82,12 +82,13 @@ namespace Nez.Console
 			{
 				_drawCallTimer.stop();
 				_drawCallTimer = null;
+				Debug.log( "Draw call logging stopped" );
 			}
 			else
 			{
-				_drawCallTimer = Core.schedule( delay, timer =>
+				_drawCallTimer = Core.schedule( delay, true, timer =>
 				{
-					Debug.log( "Draw Calls: {0}, Sprite Count: {1}", Core.graphicsDevice.Metrics.DrawCount, Core.graphicsDevice.Metrics.SpriteCount );
+					Debug.log( "Draw Calls: {0}, Sprite Count: {1}", Core.drawCalls, Core.spriteCount );
 				} );
 			}
 		}
