@@ -156,3 +156,33 @@ skin.add( "checkbox", new CheckBoxStyle( skin.getDrawable( "check-off" ), skin.g
 
 skin.add( "textfield", new TextFieldStyle( null, Color.White, skin.getDrawable( "cursor" ), skin.getDrawable( "selection" ), skin.getDrawable( "textfield" ) )
 ```
+
+
+Gamepad Input
+========
+Nez UI supports rudimentry gamepad input out of the box via the `IGamepadFocusable` interface. Buttons (and any subclasses such as TextButton, Checkbox, etc) will work out of the box. To enable gamepad input processing just set the first focusable element via the `stage.setGamepadFocusElement` method. That will trigger gamepad input on the stage. By default, the A button will be used for activating a UI Element. You can change this via the `stage.gamepadActionButton`. If you have custom controls that would like to take part in gamepad input just implement the IGamepadFocusable interface on the element. If you are subclassing Button it is even easier: just override any of the 4 focus handlers: `onFocused`, `onUnfocused`, `onActionButtonPressed` and `onActionButtonReleased`.
+
+If you want finer grained control over which Element gains focus when a particular direction is pressed on the gamepad you can manually set the `gamepadUp/Down/Left/RightElement` properties. Leaving any null will result in no focus change when that direction is pressed. Note that you must also set `IGamepadFocusable.shouldUseExplicitFocusableControl` when setting these directly. Below is a simple example of setting up 3 buttons horizontally:
+
+
+```csharp
+// create buttons...
+
+// be sure to enable explicit control on each Element!
+leftButton.shouldUseExplicitFocusableControl = true;
+// when pressing right change control to the middleButton
+leftButton.gamepadRightElement = middleButton;
+// optional. This would make pressing left wrap around to the rightButton
+leftButton.gamepadLeftElement = rightButton;
+
+middleButton.shouldUseExplicitFocusableControl = true;
+middleButton.gamepadLeftElement = leftButton;
+middleButton.gamepadRightElement = rightButton;
+
+rightButton.shouldUseExplicitFocusableControl = true;
+rightButton.gamepadLeftElement = middleButton;
+// optional. This would making pressing right wrap around to the leftButton
+rightButton.gamepadRightElement = leftButton;
+
+```csharp
+
