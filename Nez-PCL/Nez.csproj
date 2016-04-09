@@ -313,6 +313,8 @@
     <Compile Include="Graphics\PostProcessing\PostProcessors\SpriteLightPostProcessor.cs" />
     <Compile Include="Graphics\PostProcessing\PostProcessors\PixelGlitchPostProcessor.cs" />
     <Compile Include="ECS\ScreenSpaceCamera.cs" />
+    <Compile Include="UI\Base\Direction.cs" />
+    <Compile Include="UI\Base\IGamepadFocusable.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="MonoGame.Framework">

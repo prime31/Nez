@@ -150,27 +150,67 @@ namespace Nez.UI
 
 		#region IGamepadFocusable
 
+		public bool shouldUseExplicitFocusableControl { get; set; }
+		public IGamepadFocusable gamepadUpElement { get; set; }
+		public IGamepadFocusable gamepadDownElement { get; set; }
+		public IGamepadFocusable gamepadLeftElement { get; set; }
+		public IGamepadFocusable gamepadRightElement { get; set; }
+
+
 		void IGamepadFocusable.onFocused()
 		{
-			_mouseOver = true;
+			onFocused();
 		}
 
 
 		void IGamepadFocusable.onUnfocused()
 		{
-			_mouseOver = _mouseDown = false;
+			onUnfocused();
 		}
 
 
 		void IGamepadFocusable.onActionButtonPressed()
 		{
-			_mouseDown = true;
+			onActionButtonPressed();
 		}
 
 
 		void IGamepadFocusable.onActionButtonReleased()
 		{
+			onActionButtonReleased();
+		}
+
+		#endregion
+
+
+		#region overrideable focus handlers
+
+		protected virtual void onFocused()
+		{
+			_mouseOver = true;
+		}
+
+
+		protected virtual void onUnfocused()
+		{
+			_mouseOver = _mouseDown = false;
+		}
+
+
+		protected virtual void onActionButtonPressed()
+		{
+			_mouseDown = true;
+		}
+
+
+		protected virtual void onActionButtonReleased()
+		{
 			_mouseDown = false;
+
+			setChecked( !_isChecked, true );
+
+			if( onClicked != null )
+				onClicked( this );
 		}
 
 		#endregion

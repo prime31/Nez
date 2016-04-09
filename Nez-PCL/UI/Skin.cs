@@ -28,10 +28,14 @@ namespace Nez.UI
 			var buttonColor = new Color( 78, 91, 98 );
 			var buttonOver = new Color( 168, 207, 115 );
 			var buttonDown = new Color( 244, 23, 135 );
+			var overFontColor = new Color( 85, 127, 27 );
+			var downFontColor = new Color( 255, 255, 255 );
+			var checkedOverFontColor = new Color( 247, 217, 222 );
 
 			var checkboxOn = new Color( 168, 207, 115 );
 			var checkboxOff = new Color( 63, 63, 63 );
 			var checkboxOver = new Color( 130, 130, 130 );
+			var checkboxOverFontColor = new Color( 220, 220, 220 );
 
 			var barBg = new Color( 78, 91, 98 );
 			var barKnob = new Color( 25, 144, 188 );
@@ -52,7 +56,11 @@ namespace Nez.UI
 			var textButtonStyle = new TextButtonStyle {
 				up = new PrimitiveDrawable( buttonColor, 10, 5 ),
 				over = new PrimitiveDrawable( buttonOver ),
-				down = new PrimitiveDrawable( buttonDown )
+				down = new PrimitiveDrawable( buttonDown ),
+				overFontColor = overFontColor,
+				downFontColor = downFontColor,
+				pressedOffsetX = 1,
+				pressedOffsetY = 1
 			};
 			skin.add( "default", textButtonStyle );
 
@@ -60,14 +68,23 @@ namespace Nez.UI
 				up = new PrimitiveDrawable( buttonColor, 10, 5 ),
 				over = new PrimitiveDrawable( buttonOver ),
 				down = new PrimitiveDrawable( buttonDown ),
-				checkked = new PrimitiveDrawable( new Color( 255, 0, 0, 255 ) )
+				checkked = new PrimitiveDrawable( new Color( 255, 0, 0, 255 ) ),
+				checkedOverFontColor = checkedOverFontColor,
+				overFontColor = overFontColor,
+				downFontColor = downFontColor,
+				pressedOffsetX = 1,
+				pressedOffsetY = 1
 			};
 			skin.add( "toggle", toggleButtonStyle );
 
 			var checkboxStyle = new CheckBoxStyle {
 				checkboxOn = new PrimitiveDrawable( 30, checkboxOn ),
 				checkboxOff = new PrimitiveDrawable( 30, checkboxOff ),
-				checkboxOver = new PrimitiveDrawable( 30, checkboxOver )
+				checkboxOver = new PrimitiveDrawable( 30, checkboxOver ),
+				overFontColor = checkboxOverFontColor,
+				downFontColor = downFontColor,
+				pressedOffsetX = 1,
+				pressedOffsetY = 1
 			};
 			skin.add( "default", checkboxStyle );
 

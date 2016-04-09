@@ -17,6 +17,11 @@ namespace Nez.UI
 		/// </summary>
 		public bool isFullScreen;
 
+		/// <summary>
+		/// the button on the gamepad that activates the focused control
+		/// </summary>
+		public Buttons gamepadActionButton = Buttons.A;
+
 		Group root;
 		Camera _camera;
 		bool debugAll, debugUnderMouse, debugParentUnderMouse;
@@ -273,20 +278,20 @@ namespace Nez.UI
 		{
 			if( _gamepadFocusElement != null )
 			{
-				if( Input.gamePads[0].isButtonDown( Buttons.A ) )
+				if( Input.gamePads[0].isButtonPressed( gamepadActionButton ) )
 					_gamepadFocusElement.onActionButtonPressed();
-				else
+				else if( Input.gamePads[0].isButtonReleased( gamepadActionButton ) )
 					_gamepadFocusElement.onActionButtonReleased();
 			}
 			
 			IGamepadFocusable nextElement = null;
-			if( Input.gamePads[0].DpadLeftPressed )
+			if( Input.gamePads[0].DpadLeftPressed || Input.gamePads[0].isLeftStickLeftPressed() )
 				nextElement = findNextGamepadFocusable( _gamepadFocusElement, Direction.Left );
-			else if( Input.gamePads[0].DpadRightPressed )
+			else if( Input.gamePads[0].DpadRightPressed || Input.gamePads[0].isLeftStickRightPressed() )
 				nextElement = findNextGamepadFocusable( _gamepadFocusElement, Direction.Right );
-			else if( Input.gamePads[0].DpadUpPressed )
+			else if( Input.gamePads[0].DpadUpPressed || Input.gamePads[0].isLeftStickUpPressed() )
 				nextElement = findNextGamepadFocusable( _gamepadFocusElement, Direction.Up );
-			else if( Input.gamePads[0].DpadDownPressed )
+			else if( Input.gamePads[0].DpadDownPressed || Input.gamePads[0].isLeftStickDownPressed() )
 				nextElement = findNextGamepadFocusable( _gamepadFocusElement, Direction.Down );
 
 			if( nextElement != null )
@@ -491,6 +496,11 @@ namespace Nez.UI
 		}
 
 
+		/// <summary>
+		/// sets the gamepad focus element and also turns on gamepad focus for this Stage. For gamepad focus to work you must set an initially
+		/// focused element.
+		/// </summary>
+		/// <param name="focusable">Focusable.</param>
 		public void setGamepadFocusElement( IGamepadFocusable focusable )
 		{
 			_isGamepadFocusEnabled = true;
@@ -551,6 +561,22 @@ namespace Nez.UI
 
 		IGamepadFocusable findNextGamepadFocusable( IGamepadFocusable relativeToFocusable, Direction direction )
 		{
+			// first, we check to see if the IGamepadFocusable has hard-wired control. 
+			if( relativeToFocusable.shouldUseExplicitFocusableControl )
+			{
+				switch( direction )
+				{
+					case Direction.Up:
+						return relativeToFocusable.gamepadUpElement;
+					case Direction.Down:
+						return relativeToFocusable.gamepadDownElement;
+					case Direction.Left:
+						return relativeToFocusable.gamepadLeftElement;
+					case Direction.Right:
+						return relativeToFocusable.gamepadRightElement;
+				}
+			}
+
 			IGamepadFocusable nextFocusable = null;
 			var distanceToNextButton = float.MaxValue;
 
@@ -573,7 +599,7 @@ namespace Nez.UI
 							isDirectionMatch = true;
 						break;
 					case Direction.Down:
-						if( buttonCoords.Y < currentCoords.Y )
+						if( buttonCoords.Y > currentCoords.Y )
 							isDirectionMatch = true;
 						break;
 					case Direction.Left:

@@ -109,7 +109,7 @@ namespace Nez
 		/// <param name="button">Button.</param>
 		public bool isButtonReleased( Buttons button )
 		{
-			return !_currentState.IsButtonUp( button ) && _previousState.IsButtonUp( button );
+			return !_currentState.IsButtonDown( button ) && _previousState.IsButtonDown( button );
 		}
 
 		#endregion
@@ -175,9 +175,31 @@ namespace Nez
 		}
 
 
+		/// <summary>
+		/// true only the frame the stick passes the deadzone in the direction
+		/// </summary>
+		/// <returns><c>true</c>, if left stick left pressed was ised, <c>false</c> otherwise.</returns>
+		/// <param name="deadzone">Deadzone.</param>
+		public bool isLeftStickLeftPressed( float deadzone = Input.DEFAULT_DEADZONE )
+		{
+			return _currentState.ThumbSticks.Left.X < -deadzone && _previousState.ThumbSticks.Left.X > -deadzone;
+		}
+
+
 		public bool isLeftStickRight( float deadzone = Input.DEFAULT_DEADZONE )
 		{
 			return _currentState.ThumbSticks.Left.X < deadzone;
+		}
+
+
+		/// <summary>
+		/// true only the frame the stick passes the deadzone in the direction
+		/// </summary>
+		/// <returns><c>true</c>, if left stick right pressed was ised, <c>false</c> otherwise.</returns>
+		/// <param name="deadzone">Deadzone.</param>
+		public bool isLeftStickRightPressed( float deadzone = Input.DEFAULT_DEADZONE )
+		{
+			return _currentState.ThumbSticks.Left.X < deadzone && _previousState.ThumbSticks.Left.X > deadzone;
 		}
 
 
@@ -187,9 +209,31 @@ namespace Nez
 		}
 
 
+		/// <summary>
+		/// true only the frame the stick passes the deadzone in the direction
+		/// </summary>
+		/// <returns><c>true</c>, if left stick up pressed was ised, <c>false</c> otherwise.</returns>
+		/// <param name="deadzone">Deadzone.</param>
+		public bool isLeftStickUpPressed( float deadzone = Input.DEFAULT_DEADZONE )
+		{
+			return _currentState.ThumbSticks.Left.Y < deadzone && _previousState.ThumbSticks.Left.Y > deadzone;
+		}
+
+
 		public bool isLeftStickDown( float deadzone = Input.DEFAULT_DEADZONE )
 		{
 			return _currentState.ThumbSticks.Left.Y < -deadzone;
+		}
+
+
+		/// <summary>
+		/// true only the frame the stick passes the deadzone in the direction
+		/// </summary>
+		/// <returns><c>true</c>, if left stick down pressed was ised, <c>false</c> otherwise.</returns>
+		/// <param name="deadzone">Deadzone.</param>
+		public bool isLeftStickDownPressed( float deadzone = Input.DEFAULT_DEADZONE )
+		{
+			return _currentState.ThumbSticks.Left.Y < -deadzone && _previousState.ThumbSticks.Left.Y > -deadzone;
 		}
 
 

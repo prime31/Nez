@@ -57,7 +57,8 @@ namespace Nez.UI
 				fontColor = style.disabledFontColor;
 			else if( _mouseDown && style.downFontColor.HasValue )
 				fontColor = style.downFontColor;
-			else if( isChecked && style.checkedFontColor.HasValue )
+			else if( isChecked &&
+				( !_mouseOver && style.checkedFontColor.HasValue || _mouseOver && style.checkedOverFontColor.HasValue ) )
 				fontColor = ( _mouseOver && style.checkedOverFontColor.HasValue ) ? style.checkedOverFontColor : style.checkedFontColor;
 			else if( _mouseOver && style.overFontColor.HasValue )
 				fontColor = style.overFontColor;

@@ -668,7 +668,7 @@ namespace Nez.UI
 			Element element = this;
 			while( element != null )
 			{
-				element.localToParentCoordinates( localCoords );
+				localCoords = element.localToParentCoordinates( localCoords );
 				element = element.parent;
 				if( element == ascendant )
 					break;
