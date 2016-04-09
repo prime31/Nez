@@ -157,6 +157,10 @@ namespace Nez.UI
 		public IGamepadFocusable gamepadRightElement { get; set; }
 
 
+		void IGamepadFocusable.onUnhandledDirectionPressed( Direction direction )
+		{}
+
+
 		void IGamepadFocusable.onFocused()
 		{
 			onFocused();

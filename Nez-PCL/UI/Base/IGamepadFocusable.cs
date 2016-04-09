@@ -17,6 +17,16 @@ namespace Nez.UI
 		IGamepadFocusable gamepadLeftElement { get; set; }
 		IGamepadFocusable gamepadRightElement { get; set; }
 
+
+		/// <summary>
+		/// called only when the following conditions are met:
+		/// - shouldUseExplicitFocusableControl is true
+		/// - this Element is focused
+		/// - a gamepad direction was pressed with a null gamepadDIRECTIONElement
+		/// </summary>
+		/// <param name="direction">Direction.</param>
+		void onUnhandledDirectionPressed( Direction direction );
+
 		/// <summary>
 		/// called when gamepad focuses on the Element
 		/// </summary>

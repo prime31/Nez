@@ -4,7 +4,7 @@ using Microsoft.Xna.Framework;
 
 namespace Nez.UI
 {
-	public class Slider : ProgressBar, IInputListener
+	public class Slider : ProgressBar, IInputListener, IGamepadFocusable
 	{
 		/// <summary>
 		/// the maximum distance outside the slider the mouse can move when pressing it to cause it to be unfocused
@@ -33,7 +33,7 @@ namespace Nez.UI
 		}
 
 
-		public Slider( Skin skin, string styleName = null ) : this( 0, 1, 0.001f, false, skin.get<SliderStyle>( styleName ) )
+		public Slider( Skin skin, string styleName = null ) : this( 0, 1, 0.1f, false, skin.get<SliderStyle>( styleName ) )
 		{}
 
 
@@ -74,6 +74,84 @@ namespace Nez.UI
 
 
 		void IInputListener.onMouseUp( Vector2 mousePos )
+		{
+			_mouseDown = false;
+		}
+
+		#endregion
+
+
+		#region IGamepadFocusable
+
+		public bool shouldUseExplicitFocusableControl { get; set; }
+		public IGamepadFocusable gamepadUpElement { get; set; }
+		public IGamepadFocusable gamepadDownElement { get; set; }
+		public IGamepadFocusable gamepadLeftElement { get; set; }
+		public IGamepadFocusable gamepadRightElement { get; set; }
+
+
+		void IGamepadFocusable.onUnhandledDirectionPressed( Direction direction )
+		{
+			onUnhandledDirectionPressed( direction );
+		}
+
+
+		void IGamepadFocusable.onFocused()
+		{
+			onFocused();
+		}
+
+
+		void IGamepadFocusable.onUnfocused()
+		{
+			onUnfocused();
+		}
+
+
+		void IGamepadFocusable.onActionButtonPressed()
+		{
+			onActionButtonPressed();
+		}
+
+
+		void IGamepadFocusable.onActionButtonReleased()
+		{
+			onActionButtonReleased();
+		}
+
+		#endregion
+
+
+		#region overrideable focus handlers
+
+		protected virtual void onUnhandledDirectionPressed( Direction direction )
+		{
+			if( direction == Direction.Up || direction == Direction.Right )
+				setValue( _value + _stepSize );
+			else
+				setValue( _value - _stepSize );
+		}
+
+
+		protected virtual void onFocused()
+		{
+			_mouseOver = true;
+		}
+
+
+		protected virtual void onUnfocused()
+		{
+			_mouseOver = _mouseDown = false;
+		}
+
+
+		protected virtual void onActionButtonPressed()
+		{
+			_mouseDown = true;
+		}
+
+
+		protected virtual void onActionButtonReleased()
 		{
 			_mouseDown = false;
 		}
