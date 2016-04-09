@@ -94,6 +94,11 @@ namespace Nez.UI
 			return label.getText();
 		}
 
+
+		public override string ToString()
+		{
+			return string.Format( "[TextButton] text: {0}", getText() );
+		}
 	}
 
 

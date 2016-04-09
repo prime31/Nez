@@ -221,72 +221,120 @@ namespace Nez
 
 		#region Dpad
 
+		/// <summary>
+		/// true the entire time the dpad is down
+		/// </summary>
+		/// <value><c>true</c> if dpad left down; otherwise, <c>false</c>.</value>
 		public bool DpadLeftDown
 		{
 			get { return _currentState.DPad.Left == ButtonState.Pressed; }
 		}
 
 
+		/// <summary>
+		/// true only the first frame the dpad is down
+		/// </summary>
+		/// <value><c>true</c> if dpad left pressed; otherwise, <c>false</c>.</value>
 		public bool DpadLeftPressed
 		{
 			get { return _currentState.DPad.Left == ButtonState.Pressed && _previousState.DPad.Left == ButtonState.Released; }
 		}
 
 
+		/// <summary>
+		/// true only the frame the dpad is released
+		/// </summary>
+		/// <value><c>true</c> if dpad left released; otherwise, <c>false</c>.</value>
 		public bool DpadLeftReleased
 		{
 			get { return _currentState.DPad.Left == ButtonState.Released && _previousState.DPad.Left == ButtonState.Pressed; }
 		}
 
 
+		/// <summary>
+		/// true the entire time the dpad is down
+		/// </summary>
+		/// <value><c>true</c> if dpad left down; otherwise, <c>false</c>.</value>
 		public bool DpadRightDown
 		{
 			get { return _currentState.DPad.Right == ButtonState.Pressed; }
 		}
 
 
+		/// <summary>
+		/// true only the first frame the dpad is down
+		/// </summary>
+		/// <value><c>true</c> if dpad left pressed; otherwise, <c>false</c>.</value>
 		public bool DpadRightPressed
 		{
 			get { return _currentState.DPad.Right == ButtonState.Pressed && _previousState.DPad.Right == ButtonState.Released; }
 		}
 
 
+		/// <summary>
+		/// true only the frame the dpad is released
+		/// </summary>
+		/// <value><c>true</c> if dpad left released; otherwise, <c>false</c>.</value>
 		public bool DpadRightReleased
 		{
 			get { return _currentState.DPad.Right == ButtonState.Released && _previousState.DPad.Right == ButtonState.Pressed; }
 		}
 
 
+		/// <summary>
+		/// true the entire time the dpad is down
+		/// </summary>
+		/// <value><c>true</c> if dpad left down; otherwise, <c>false</c>.</value>
 		public bool DpadUpDown
 		{
 			get { return _currentState.DPad.Up == ButtonState.Pressed; }
 		}
 
 
+		/// <summary>
+		/// true only the first frame the dpad is down
+		/// </summary>
+		/// <value><c>true</c> if dpad left pressed; otherwise, <c>false</c>.</value>
 		public bool DpadUpPressed
 		{
 			get { return _currentState.DPad.Up == ButtonState.Pressed && _previousState.DPad.Up == ButtonState.Released; }
 		}
 
 
+		/// <summary>
+		/// true only the frame the dpad is released
+		/// </summary>
+		/// <value><c>true</c> if dpad left released; otherwise, <c>false</c>.</value>
 		public bool DpadUpReleased
 		{
 			get { return _currentState.DPad.Up == ButtonState.Released && _previousState.DPad.Up == ButtonState.Pressed; }
 		}
 
 
+		/// <summary>
+		/// true the entire time the dpad is down
+		/// </summary>
+		/// <value><c>true</c> if dpad left down; otherwise, <c>false</c>.</value>
 		public bool DpadDownDown
 		{
 			get { return _currentState.DPad.Down == ButtonState.Pressed; }
 		}
 
 
+		/// <summary>
+		/// true only the first frame the dpad is down
+		/// </summary>
+		/// <value><c>true</c> if dpad left pressed; otherwise, <c>false</c>.</value>
 		public bool DpadDownPressed
 		{
 			get { return _currentState.DPad.Down == ButtonState.Pressed && _previousState.DPad.Down == ButtonState.Released; }
 		}
 
 
+		/// <summary>
+		/// true only the frame the dpad is released
+		/// </summary>
+		/// <value><c>true</c> if dpad left released; otherwise, <c>false</c>.</value>
 		public bool DpadDownReleased
 		{
 			get { return _currentState.DPad.Down == ButtonState.Released && _previousState.DPad.Down == ButtonState.Pressed; }

@@ -126,6 +126,7 @@ namespace Nez.UI
 			{
 				applyTransform( graphics, computeTransform() );
 				drawBackground( graphics, parentAlpha, 0, 0 );
+				// TODO: clipping support
 //				if( clip )
 //				{
 //					graphics.flush();

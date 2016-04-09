@@ -841,7 +841,7 @@ namespace Nez.UI
 			if( stage == null )
 				return;
 
-			Vector2 tmp2 = Vector2.Zero;
+			var tmp2 = Vector2.Zero;
 			var tmp1 = getParent().localToStageCoordinates( new Vector2( getX(), getY() ) );
 			var textField = findNextTextField( stage.getElements(), null, tmp2, tmp1, up );
 			if( textField == null )

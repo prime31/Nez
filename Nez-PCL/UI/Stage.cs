@@ -33,6 +33,9 @@ namespace Nez.UI
 		float _keyRepeatTime = 0.2f;
 		Keys _repeatKey;
 
+		bool _isGamepadFocusEnabled;
+		IGamepadFocusable _gamepadFocusElement;
+
 
 		public Stage()
 		{
@@ -138,6 +141,8 @@ namespace Nez.UI
 
 		public void update()
 		{
+			if( _isGamepadFocusEnabled )
+				updateGamepadState();
 			updateKeyboardState();
 
 			var currentMousePosition = entity != null && !isFullScreen ? Input.scaledMousePosition : Input.rawMousePosition.ToVector2();
@@ -261,6 +266,31 @@ namespace Nez.UI
 			}
 
 			_lastPressedKeys = currentPressedKeys;
+		}
+
+
+		void updateGamepadState()
+		{
+			if( _gamepadFocusElement != null )
+			{
+				if( Input.gamePads[0].isButtonDown( Buttons.A ) )
+					_gamepadFocusElement.onActionButtonPressed();
+				else
+					_gamepadFocusElement.onActionButtonReleased();
+			}
+			
+			IGamepadFocusable nextElement = null;
+			if( Input.gamePads[0].DpadLeftPressed )
+				nextElement = findNextGamepadFocusable( _gamepadFocusElement, Direction.Left );
+			else if( Input.gamePads[0].DpadRightPressed )
+				nextElement = findNextGamepadFocusable( _gamepadFocusElement, Direction.Right );
+			else if( Input.gamePads[0].DpadUpPressed )
+				nextElement = findNextGamepadFocusable( _gamepadFocusElement, Direction.Up );
+			else if( Input.gamePads[0].DpadDownPressed )
+				nextElement = findNextGamepadFocusable( _gamepadFocusElement, Direction.Down );
+
+			if( nextElement != null )
+				setGamepadFocusElement( nextElement );
 		}
 
 
@@ -461,6 +491,19 @@ namespace Nez.UI
 		}
 
 
+		public void setGamepadFocusElement( IGamepadFocusable focusable )
+		{
+			_isGamepadFocusEnabled = true;
+
+			if( focusable != null )
+				focusable.onFocused();
+
+			if( _gamepadFocusElement != null )
+				_gamepadFocusElement.onUnfocused();
+			_gamepadFocusElement = focusable;
+		}
+
+
 		/// <summary>
 		/// Gets the element that will receive key events.
 		/// </summary>
@@ -503,6 +546,92 @@ namespace Nez.UI
 			if( _camera == null )
 				return stageCoords;
 			return _camera.worldToScreenPoint( stageCoords );
+		}
+
+
+		IGamepadFocusable findNextGamepadFocusable( IGamepadFocusable relativeToFocusable, Direction direction )
+		{
+			IGamepadFocusable nextFocusable = null;
+			var distanceToNextButton = float.MaxValue;
+
+			var focusableEle = relativeToFocusable as Element;
+			var currentCoords = focusableEle.getParent().localToStageCoordinates( new Vector2( focusableEle.getX(), focusableEle.getY() ) );
+			var buttons = findAllElementsOfType<IGamepadFocusable>();
+			for( var i = 0; i < buttons.Count; i++ )
+			{
+				if( buttons[i] == relativeToFocusable )
+					continue;
+				
+				// filter out buttons that are not in the disired direction
+				var element = buttons[i] as Element;
+				var buttonCoords = element.getParent().localToStageCoordinates( new Vector2( element.getX(), element.getY() ) );
+				var isDirectionMatch = false;
+				switch( direction )
+				{
+					case Direction.Up:
+						if( buttonCoords.Y < currentCoords.Y )
+							isDirectionMatch = true;
+						break;
+					case Direction.Down:
+						if( buttonCoords.Y < currentCoords.Y )
+							isDirectionMatch = true;
+						break;
+					case Direction.Left:
+						if( buttonCoords.X < currentCoords.X )
+							isDirectionMatch = true;
+						break;
+					case Direction.Right:
+						if( buttonCoords.X > currentCoords.X )
+							isDirectionMatch = true;
+						break;
+				}
+
+				// keep only the closest button if we have a match
+				if( isDirectionMatch )
+				{
+					if( nextFocusable == null )
+					{
+						nextFocusable = buttons[i];
+						distanceToNextButton = Vector2.DistanceSquared( currentCoords, buttonCoords );
+					}
+					else
+					{
+						var distance = Vector2.DistanceSquared( currentCoords, buttonCoords );
+						if( distance < distanceToNextButton )
+						{
+							nextFocusable = buttons[i];
+							distanceToNextButton = distance;
+						}
+					}
+				}
+			}
+
+			return nextFocusable;
+		}
+
+
+		/// <summary>
+		/// finds all the Elements of type T in the Stage
+		/// </summary>
+		/// <returns>The all elements of type.</returns>
+		/// <typeparam name="T">The 1st type parameter.</typeparam>
+		public List<T> findAllElementsOfType<T>() where T : class
+		{
+			var eles = new List<T>();
+			findAllElementsOfType<T>( root.children, eles );
+			return eles;
+		}
+
+
+		void findAllElementsOfType<T>( List<Element> elements, List<T> foundElements ) where T : class
+		{
+			for( var i = 0; i < elements.Count; i++ )
+			{
+				if( elements[i] is T )
+					foundElements.Add( elements[i] as T );
+				else if( elements[i] is Group )
+					findAllElementsOfType<T>( ((Group)elements[i]).children, foundElements );
+			}
 		}
 
 	}

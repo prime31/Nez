@@ -4,7 +4,7 @@ using Microsoft.Xna.Framework;
 
 namespace Nez.UI
 {
-	public class Button : Table, IInputListener
+	public class Button : Table, IInputListener, IGamepadFocusable
 	{
 		public event Action<bool> onChanged;
 		public event Action<Button> onClicked;
@@ -148,6 +148,34 @@ namespace Nez.UI
 		#endregion
 
 
+		#region IGamepadFocusable
+
+		void IGamepadFocusable.onFocused()
+		{
+			_mouseOver = true;
+		}
+
+
+		void IGamepadFocusable.onUnfocused()
+		{
+			_mouseOver = _mouseDown = false;
+		}
+
+
+		void IGamepadFocusable.onActionButtonPressed()
+		{
+			_mouseDown = true;
+		}
+
+
+		void IGamepadFocusable.onActionButtonReleased()
+		{
+			_mouseDown = false;
+		}
+
+		#endregion
+
+
 		public virtual void setStyle( ButtonStyle style )
 		{
 			this.style = style;
@@ -272,6 +300,12 @@ namespace Nez.UI
 				children[i].moveBy( -offsetX, -offsetY );
 		}
 
+
+		public override string ToString()
+		{
+			return string.Format( "[Button]" );
+		}
+
 	}
 
 
@@ -283,7 +317,7 @@ namespace Nez.UI
 		/** Optional. */
 		public IDrawable up, down, over, checkked, checkedOver, disabled;
 
-		/** Optional. */
+		/** Optional. offsets children (labels for example). */
 		public float pressedOffsetX, pressedOffsetY, unpressedOffsetX, unpressedOffsetY, checkedOffsetX, checkedOffsetY;
 
 
