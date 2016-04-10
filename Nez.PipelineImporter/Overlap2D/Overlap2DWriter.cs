@@ -87,6 +87,7 @@ namespace Nez.Overlap2D
 			writer.Write( item.zIndex );
 			writer.Write( item.layerDepth );
 			writer.Write( item.layerName );
+			writer.Write( item.renderLayer );
 			writer.Write( new Color( item.tint[0], item.tint[1], item.tint[2], item.tint[3] ) );
 
 			// not implemented for main item

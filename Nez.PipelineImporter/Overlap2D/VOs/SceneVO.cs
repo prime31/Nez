@@ -31,7 +31,7 @@ namespace Nez.Overlap2D.Runtime
 {
 	public class SceneVO
 	{
-		// this is a project property
+		// this is a project property, not part of the SceneVO overlap spec
 		public int pixelToWorld = 1;
 
 		public String sceneName = string.Empty;

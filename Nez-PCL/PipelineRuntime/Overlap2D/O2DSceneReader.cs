@@ -78,6 +78,7 @@ namespace Nez.Overlap2D
 			item.zIndex = reader.ReadInt32();
 			item.layerDepth = reader.ReadSingle();
 			item.layerName = reader.ReadString();
+			item.renderLayer = reader.ReadInt32();
 			item.tint = reader.ReadColor();
 		}
 

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using Newtonsoft.Json;
 
 
 namespace Nez.Overlap2D.Runtime
@@ -46,21 +47,96 @@ namespace Nez.Overlap2D.Runtime
 		}
 
 
-		public void setLayerDepthRecursively( float zIndexMax, CompositeItemVO parentCompositeVO )
+		public Tuple<Dictionary<int,int>,Dictionary<int,int>> findMinMaxZindexForRenderLayers()
+		{
+			var maxIndicies = new Dictionary<int,int>();
+			var minIndicies = new Dictionary<int,int>();
+
+			for( var i = 0; i < sImages.Count; i++ )
+			{
+				var renderLayer = sImages[i].renderLayer;
+				if( !maxIndicies.ContainsKey( renderLayer ) )
+					maxIndicies[renderLayer] = int.MinValue;
+				if( !minIndicies.ContainsKey( renderLayer ) )
+					minIndicies[renderLayer] = int.MaxValue;
+				
+				maxIndicies[renderLayer] = Math.Max( maxIndicies[renderLayer], sImages[i].zIndex );
+				minIndicies[renderLayer] = Math.Min( minIndicies[renderLayer], sImages[i].zIndex );
+			}
+
+			for( var i = 0; i < sComposites.Count; i++ )
+			{
+				var renderLayer = sComposites[i].renderLayer;
+				if( !maxIndicies.ContainsKey( renderLayer ) )
+					maxIndicies[renderLayer] = int.MinValue;
+				if( !minIndicies.ContainsKey( renderLayer ) )
+					minIndicies[renderLayer] = int.MaxValue;
+				
+				maxIndicies[renderLayer] = Math.Max( maxIndicies[renderLayer], sComposites[i].zIndex );
+				minIndicies[renderLayer] = Math.Min( minIndicies[renderLayer], sComposites[i].zIndex );
+
+				if( sComposites[i].composite != null )
+				{
+					var compositeIndices = sComposites[i].composite.findMinMaxZindexForRenderLayers();
+					var compositeMinIndices = compositeIndices.Item1;
+					var compositeMaxIndices = compositeIndices.Item2;
+					if( compositeMaxIndices.ContainsKey( renderLayer ) )
+					{
+						maxIndicies[renderLayer] = Math.Max( maxIndicies[renderLayer], compositeMaxIndices[renderLayer] );
+						minIndicies[renderLayer] = Math.Min( minIndicies[renderLayer], compositeMinIndices[renderLayer] );
+					}
+				}
+			}
+
+			Overlap2DImporter.logger.LogMessage( "{0}", JsonConvert.SerializeObject( maxIndicies ) );
+			Overlap2DImporter.logger.LogMessage( "{0}", JsonConvert.SerializeObject( minIndicies ) );
+
+			return new Tuple<Dictionary<int,int>,Dictionary<int,int>>( minIndicies, maxIndicies );
+		}
+
+
+		public void setLayerDepthRecursively( float zIndexMin, float zIndexMax, CompositeItemVO parentCompositeVO )
 		{
 			for( var i = 0; i < sImages.Count; i++ )
 			{
-				sImages[i].layerDepth = sImages[i].calculateLayerDepth( zIndexMax, parentCompositeVO );
-				//Overlap2DImporter.logger.LogMessage( "[image] zIndex: {0} -> {1}, parent: {2}", sImages[i].zIndex, sImages[i].layerDepth, parentCompositeVO );
+				sImages[i].layerDepth = sImages[i].calculateLayerDepth( zIndexMin, zIndexMax, parentCompositeVO );
+				Overlap2DImporter.logger.LogMessage( "[image] zIndex: {0} -> {1}, parent: {2}, renderLayer: {3}", sImages[i].zIndex, sImages[i].layerDepth, parentCompositeVO, sImages[i].renderLayer );
 			}
 
 			for( var i = 0; i < sComposites.Count; i++ )
 			{
 				// compositeItems are considered global so they have their own zIndex that isnt affected by parents up the chain
-				sComposites[i].layerDepth = sComposites[i].calculateLayerDepth( zIndexMax, null );
+				sComposites[i].layerDepth = sComposites[i].calculateLayerDepth( zIndexMin, zIndexMax, null );
 
 				if( sComposites[i].composite != null )
-					sComposites[i].composite.setLayerDepthRecursively( zIndexMax, sComposites[i] );
+					sComposites[i].composite.setLayerDepthRecursively( zIndexMin, zIndexMax, sComposites[i] );
+			}
+		}
+
+
+		public void setLayerDepthRecursively( Dictionary<int,int> minIndicies, Dictionary<int,int> maxIndicies, CompositeItemVO parentCompositeVO )
+		{
+			for( var i = 0; i < sImages.Count; i++ )
+			{
+				var renderLayer = sImages[i].renderLayer;
+				var minIndex = minIndicies[renderLayer];
+				var maxIndex = maxIndicies[renderLayer];
+
+				sImages[i].layerDepth = sImages[i].calculateLayerDepth( minIndex, maxIndex, parentCompositeVO );
+				Overlap2DImporter.logger.LogMessage( "[image] zIndex: {0} -> {1}, parent: {2}, renderLayer: {3}", sImages[i].zIndex, sImages[i].layerDepth, parentCompositeVO, sImages[i].renderLayer );
+			}
+
+			for( var i = 0; i < sComposites.Count; i++ )
+			{
+				var renderLayer = sComposites[i].renderLayer;
+				var minIndex = minIndicies[renderLayer];
+				var maxIndex = maxIndicies[renderLayer];
+
+				// compositeItems are considered global so they have their own zIndex that isnt affected by parents up the chain
+				sComposites[i].layerDepth = sComposites[i].calculateLayerDepth( minIndex, maxIndex, null );
+
+				if( sComposites[i].composite != null )
+					sComposites[i].composite.setLayerDepthRecursively( minIndex, maxIndex, sComposites[i] );
 			}
 		}
 	}
