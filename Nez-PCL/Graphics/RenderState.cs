@@ -111,6 +111,10 @@ namespace Nez
 		}
 
 
+		/// <summary>
+		/// blend equation is sourceColor * sourceBlend + destinationColor * destinationBlend so this works out to sourceColor * destinationColor * 2
+		/// and results in colors < 0.5 darkening and colors > 0.5 lightening the base
+		/// </summary>
 		public static RenderState blendMultiply2x()
 		{
 			return new RenderState {
