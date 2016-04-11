@@ -88,9 +88,6 @@ namespace Nez.Overlap2D.Runtime
 				}
 			}
 
-			Overlap2DImporter.logger.LogMessage( "{0}", JsonConvert.SerializeObject( maxIndicies ) );
-			Overlap2DImporter.logger.LogMessage( "{0}", JsonConvert.SerializeObject( minIndicies ) );
-
 			return new Tuple<Dictionary<int,int>,Dictionary<int,int>>( minIndicies, maxIndicies );
 		}
 
