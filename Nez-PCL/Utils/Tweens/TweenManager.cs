@@ -36,7 +36,12 @@ namespace Nez.Tweens
 		/// internal list of all the currently active tweens
 		/// </summary>
 		List<ITweenable> _activeTweens = new List<ITweenable>();
-
+		
+		/// <summary>
+		/// stores tweens marked for removal
+		/// </summary>
+		List<ITweenable> _tempTweens = new List<ITweenable>();
+		
 		static TweenManager _instance;
 
 
@@ -53,8 +58,13 @@ namespace Nez.Tweens
 			{
 				var tween = _activeTweens[i];
 				if( tween.tick() )
-					removeTween( tween, i );
+					_tempTweens.Add( tween );
 			}
+
+			// kill the dead Tweens
+			for( var i = 0; i < _tempTweens.Count; i++ )
+				removeTween( _tempTweens[i] );
+			_tempTweens.Clear();
 		}
 
 
