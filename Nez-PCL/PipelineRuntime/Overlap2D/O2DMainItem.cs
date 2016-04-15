@@ -26,6 +26,11 @@ namespace Nez.Overlap2D
 		/// probably just needs to be increased a bit.
 		/// </summary>
 		public float layerDepth;
+
+		/// <summary>
+		/// renderLayer is derived from the layer name set in Overlap2D. If the layer name contains an integer that value will be parsed and set.
+		/// </summary>
+		public int renderLayer;
 		public string layerName;
 		public Color tint;
 

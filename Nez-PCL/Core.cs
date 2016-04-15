@@ -47,7 +47,7 @@ namespace Nez
 		public static NezContentManager contentManager;
 
 		/// <summary>
-		/// default SamplerState used by Scene, RenderState and PostProcessors
+		/// default SamplerState used by Scene, Material and PostProcessors
 		/// </summary>
 		public static SamplerState defaultSamplerState = SamplerState.PointClamp;
 

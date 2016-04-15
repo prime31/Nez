@@ -8,7 +8,7 @@ namespace Nez.Sprites
 	/// <summary>
 	/// this component will draw the same frame of of spriteToMime every frame. The only difference in rendering is that SpriteMime uses its own
 	/// localPosition and color. This allows you to use it for the purpose of shadows (by offsetting via localPosition) or silhouettes (with a
-	/// RenderState that has a stencil read).
+	/// Material that has a stencil read).
 	/// </summary>
 	public class SpriteMime : RenderableComponent
 	{

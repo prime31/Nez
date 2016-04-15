@@ -29,9 +29,9 @@ namespace Nez
 		public RasterizerState rasterizerState;
 
 		/// <summary>
-		/// RenderState used by the SpriteBatch. Any RenderableComponent can override this.
+		/// Material used by the SpriteBatch. Any RenderableComponent can override this.
 		/// </summary>
-		public Material renderState = new Material();
+		public Material material = new Material();
 
 		/// <summary>
 		/// the Camera this renderer uses for rendering (really its transformMatrix and bounds for culling). This is a convenience field and isnt
@@ -68,9 +68,9 @@ namespace Nez
 		public bool shouldDebugRender = true;
 
 		/// <summary>
-		/// holds the current RenderState of the last rendered Renderable (or the Renderer.renderState if no changes were made)
+		/// holds the current Material of the last rendered Renderable (or the Renderer.material if no changes were made)
 		/// </summary>
-		Material _currentRenderState;
+		Material _currentMaterial;
 
 
 		public Renderer( int renderOrder, Camera camera )
@@ -94,8 +94,8 @@ namespace Nez
 				Core.graphicsDevice.Clear( renderTargetClearColor );
 			}
 
-			_currentRenderState = renderState;
-			Graphics.instance.spriteBatch.Begin( spriteSortMode, _currentRenderState.blendState, _currentRenderState.samplerState, _currentRenderState.depthStencilState, rasterizerState, _currentRenderState.effect, cam.transformMatrix );
+			_currentMaterial = material;
+			Graphics.instance.spriteBatch.Begin( spriteSortMode, _currentMaterial.blendState, _currentMaterial.samplerState, _currentMaterial.depthStencilState, rasterizerState, _currentMaterial.effect, cam.transformMatrix );
 		}
 
 
@@ -103,23 +103,23 @@ namespace Nez
 
 
 		/// <summary>
-		/// renders the RenderableComponent flushing the SpriteBatch and resetting RenderState if necessary
+		/// renders the RenderableComponent flushing the SpriteBatch and resetting current material if necessary
 		/// </summary>
 		/// <param name="renderable">Renderable.</param>
 		/// <param name="cam">Cam.</param>
 		protected void renderAfterStateCheck( RenderableComponent renderable, Camera cam )
 		{
-			// check for RenderState changes
-			if( renderable.material != null && renderable.material != _currentRenderState )
+			// check for Material changes
+			if( renderable.material != null && renderable.material != _currentMaterial )
 			{
-				_currentRenderState = renderable.material;
-				if( _currentRenderState.effect != null )
-					_currentRenderState.onPreRender( cam );
+				_currentMaterial = renderable.material;
+				if( _currentMaterial.effect != null )
+					_currentMaterial.onPreRender( cam );
 				flushSpriteBatch( cam );
 			}
-			else if( renderable.material == null && _currentRenderState != renderState )
+			else if( renderable.material == null && _currentMaterial != material )
 			{
-				_currentRenderState = renderState;
+				_currentMaterial = material;
 				flushSpriteBatch( cam );
 			}
 
@@ -133,7 +133,7 @@ namespace Nez
 		void flushSpriteBatch( Camera cam )
 		{
 			Graphics.instance.spriteBatch.End();
-			Graphics.instance.spriteBatch.Begin( spriteSortMode, _currentRenderState.blendState, _currentRenderState.samplerState, _currentRenderState.depthStencilState, rasterizerState, _currentRenderState.effect, cam.transformMatrix );
+			Graphics.instance.spriteBatch.Begin( spriteSortMode, _currentMaterial.blendState, _currentMaterial.samplerState, _currentMaterial.depthStencilState, rasterizerState, _currentMaterial.effect, cam.transformMatrix );
 		}
 
 

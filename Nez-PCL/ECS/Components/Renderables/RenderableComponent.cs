@@ -330,7 +330,7 @@ namespace Nez
 		/// <Docs>To be added.</Docs>
 		/// <para>Returns the sort order of the current instance compared to the specified object.</para>
 		/// <summary>
-		/// sorted first by renderLayer, then layerDepth and finally renderState
+		/// sorted first by renderLayer, then layerDepth and finally material
 		/// </summary>
 		/// <returns>The to.</returns>
 		/// <param name="other">Other.</param>

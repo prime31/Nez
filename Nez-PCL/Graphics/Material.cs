@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
 
@@ -111,6 +111,10 @@ namespace Nez
 		}
 
 
+		/// <summary>
+		/// blend equation is sourceColor * sourceBlend + destinationColor * destinationBlend so this works out to sourceColor * destinationColor * 2
+		/// and results in colors < 0.5 darkening and colors > 0.5 lightening the base
+		/// </summary>
 		public static Material blendMultiply2x()
 		{
 			return new Material {
@@ -201,7 +205,7 @@ namespace Nez
 
 
 		/// <summary>
-		/// called when the RenderState is initialy set right before SpriteBatch.Begin to allow any Effects that have parameters set if necessary
+		/// called when the Material is initialy set right before SpriteBatch.Begin to allow any Effects that have parameters set if necessary
 		/// based on the Camera Matrix. This will only be called if there is a non-null Effect.
 		/// </summary>
 		/// <param name="camera">Camera.</param>

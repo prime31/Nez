@@ -20,7 +20,7 @@ namespace Nez.Overlap2D.Runtime
 
 		/// <summary>
 		/// gets the layerDepth for a child composite. It calculates it by first getting the composite (parent) layerDepth the standard way
-		/// (via zIndexMaxComp) and then subtracting the inverse of the child (O2DMainItem) layerDepth which uses zIndexMaxChild. For this to
+		/// (via zIndexMin/Max) and then subtracting the inverse of the child (O2DMainItem) layerDepth which uses zIndexMaxChild. For this to
 		/// work intelligently zIndexMaxComp should be the standard scene.zIndexMax value and zIndexMaxChild should be a much higher number. The
 		/// reason for this is so that the parent component has a small offset to use for each child and so they dont overflow to the next zIndex.
 		/// 
@@ -30,12 +30,18 @@ namespace Nez.Overlap2D.Runtime
 		/// <param name="zIndexMaxComp">Z index max comp.</param>
 		/// <param name="child">Child.</param>
 		/// <param name="zIndexMaxChild">Z index max child.</param>
-		public float calculateLayerDepthForChild( float zIndexMax, MainItemVO child, float zIndexMaxChild = 100 )
+		public float calculateLayerDepthForChild( float zIndexMin, float zIndexMax, MainItemVO child, float zIndexMaxChild = 100 )
 		{
 			if( zIndexMaxChild < zIndexMax )
 				zIndexMaxChild = zIndexMax * 10;
-			
-			return calculateLayerDepth( zIndexMax, null ) - ( 1 - child.calculateLayerDepth( zIndexMaxChild, null ) );
+			if( child.zIndex < zIndex )
+				child.zIndex = zIndex + 1;
+
+			var ourLayerDepth = calculateLayerDepth( zIndexMin, zIndexMax, null );
+			var childLayerDepth = child.calculateLayerDepth( zIndexMin, zIndexMax, null );
+
+			return Mathf.clamp01( ourLayerDepth + childLayerDepth );
+			//return calculateLayerDepth( zIndexMin, zIndexMax, null ) - ( 1 - child.calculateLayerDepth( zIndexMin, zIndexMax, null ) );
 		}
 
 

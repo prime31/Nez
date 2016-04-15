@@ -19,6 +19,14 @@ namespace Nez
 
 		#region properties and fields
 
+		/// <summary>
+		/// if true, everytime position is set it will be rounded automatically
+		/// </summary>
+		public static bool shouldRoundPosition = true;
+
+		/// <summary>
+		/// the Entity associated with this transform
+		/// </summary>
 		public readonly Entity entity;
 
 		/// <summary>
@@ -77,6 +85,9 @@ namespace Nez
 			}
 			set
 			{
+				if( shouldRoundPosition )
+					Vector2Ext.round( ref value );
+				
 				_position = value;
 				if( parent != null )
 				{
@@ -167,6 +178,9 @@ namespace Nez
 			}
 			set
 			{
+				if( shouldRoundPosition )
+					Vector2Ext.round( ref value );
+				
 				_localPosition = value;
 				_localDirty = _positionDirty = _localPositionDirty = _localRotationDirty = _localScaleDirty = true;
 				setDirty( DirtyType.PositionDirty );

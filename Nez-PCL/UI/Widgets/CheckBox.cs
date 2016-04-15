@@ -85,6 +85,7 @@ namespace Nez.UI
 		{
 			return imageCell;
 		}
+	
 	}
 
 

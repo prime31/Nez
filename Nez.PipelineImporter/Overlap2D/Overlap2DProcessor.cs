@@ -4,6 +4,7 @@ using Nez.Overlap2D.Runtime;
 using System.IO;
 using Newtonsoft.Json;
 using Microsoft.Xna.Framework;
+using System.Collections.Generic;
 
 
 namespace Nez.Overlap2D
@@ -14,10 +15,16 @@ namespace Nez.Overlap2D
 		public override SceneVO Process( SceneVO scene, ContentProcessorContext context )
 		{
 			// deal with converting renderLayer into a layerDepth. first we need to find the max zIndex
-			var maxIndex = scene.composite.findMaxZindex() + 1;
-			scene.composite.setLayerDepthRecursively( (float)maxIndex, null );
+			var indicies = scene.composite.findMinMaxZindexForRenderLayers();
+			var minIndicies = indicies.Item1;
+			var maxIndicies = indicies.Item2;
 
-			context.Logger.LogMessage( "converting zIndex to layerDepth. Max zIndex: {0}", maxIndex );
+			// increment all values by 1 to avoid divide by zero issues
+			var keys = new List<int>( maxIndicies.Keys );
+			foreach( var renderLayer in keys )
+				maxIndicies[renderLayer] = maxIndicies[renderLayer] + 1;
+			
+			scene.composite.setLayerDepthRecursively( minIndicies, maxIndicies, null );
 
 			return scene;
 		}

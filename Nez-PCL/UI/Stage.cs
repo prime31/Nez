@@ -17,6 +17,21 @@ namespace Nez.UI
 		/// </summary>
 		public bool isFullScreen;
 
+		/// <summary>
+		/// the button on the gamepad that activates the focused control
+		/// </summary>
+		public Buttons gamepadActionButton = Buttons.A;
+
+		/// <summary>
+		/// if true (default) keyboard arrow keys and the keyboardActionKey will emulate a gamepad
+		/// </summary>
+		public bool keyboardEmulatesGamepad = true;
+
+		/// <summary>
+		/// the key that activates the focused control
+		/// </summary>
+		public Keys keyboardActionKey = Keys.Enter;
+
 		Group root;
 		Camera _camera;
 		bool debugAll, debugUnderMouse, debugParentUnderMouse;
@@ -32,6 +47,9 @@ namespace Nez.UI
 		ITimer _keyRepeatTimer;
 		float _keyRepeatTime = 0.2f;
 		Keys _repeatKey;
+
+		bool _isGamepadFocusEnabled;
+		IGamepadFocusable _gamepadFocusElement;
 
 
 		public Stage()
@@ -138,6 +156,8 @@ namespace Nez.UI
 
 		public void update()
 		{
+			if( _isGamepadFocusEnabled )
+				updateGamepadState();
 			updateKeyboardState();
 
 			var currentMousePosition = entity != null && !isFullScreen ? Input.scaledMousePosition : Input.rawMousePosition.ToVector2();
@@ -261,6 +281,45 @@ namespace Nez.UI
 			}
 
 			_lastPressedKeys = currentPressedKeys;
+		}
+
+
+		void updateGamepadState()
+		{
+			if( _gamepadFocusElement != null )
+			{
+				if( Input.gamePads[0].isButtonPressed( gamepadActionButton ) || ( keyboardEmulatesGamepad && Input.isKeyPressed( keyboardActionKey ) ) )
+					_gamepadFocusElement.onActionButtonPressed();
+				else if( Input.gamePads[0].isButtonReleased( gamepadActionButton ) || ( keyboardEmulatesGamepad && Input.isKeyReleased( keyboardActionKey ) ) )
+					_gamepadFocusElement.onActionButtonReleased();
+			}
+			
+			IGamepadFocusable nextElement = null;
+			var direction = Direction.None;
+			if( Input.gamePads[0].DpadLeftPressed || Input.gamePads[0].isLeftStickLeftPressed() || ( keyboardEmulatesGamepad && Input.isKeyPressed( Keys.Left ) ) )
+				direction = Direction.Left;
+			else if( Input.gamePads[0].DpadRightPressed || Input.gamePads[0].isLeftStickRightPressed() || ( keyboardEmulatesGamepad && Input.isKeyPressed( Keys.Right ) ) )
+				direction = Direction.Right;
+			else if( Input.gamePads[0].DpadUpPressed || Input.gamePads[0].isLeftStickUpPressed() || ( keyboardEmulatesGamepad && Input.isKeyPressed( Keys.Up ) ) )
+				direction = Direction.Up;
+			else if( Input.gamePads[0].DpadDownPressed || Input.gamePads[0].isLeftStickDownPressed() || ( keyboardEmulatesGamepad && Input.isKeyPressed( Keys.Down ) ) )
+				direction = Direction.Down;
+
+			// make sure we have a valid direction
+			if( direction != Direction.None )
+			{
+				nextElement = findNextGamepadFocusable( _gamepadFocusElement, direction );
+				if( nextElement == null )
+				{
+					// we have no next Element so if the current Element has explicit focuasable control send along the unhandled direction
+					if( _gamepadFocusElement.shouldUseExplicitFocusableControl )
+						_gamepadFocusElement.onUnhandledDirectionPressed( direction );
+				}
+				else
+				{
+					setGamepadFocusElement( nextElement );
+				}
+			}
 		}
 
 
@@ -462,6 +521,24 @@ namespace Nez.UI
 
 
 		/// <summary>
+		/// sets the gamepad focus element and also turns on gamepad focus for this Stage. For gamepad focus to work you must set an initially
+		/// focused element.
+		/// </summary>
+		/// <param name="focusable">Focusable.</param>
+		public void setGamepadFocusElement( IGamepadFocusable focusable )
+		{
+			_isGamepadFocusEnabled = true;
+
+			if( focusable != null )
+				focusable.onFocused();
+
+			if( _gamepadFocusElement != null )
+				_gamepadFocusElement.onUnfocused();
+			_gamepadFocusElement = focusable;
+		}
+
+
+		/// <summary>
 		/// Gets the element that will receive key events.
 		/// </summary>
 		/// <returns>The keyboard focus.</returns>
@@ -503,6 +580,108 @@ namespace Nez.UI
 			if( _camera == null )
 				return stageCoords;
 			return _camera.worldToScreenPoint( stageCoords );
+		}
+
+
+		IGamepadFocusable findNextGamepadFocusable( IGamepadFocusable relativeToFocusable, Direction direction )
+		{
+			// first, we check to see if the IGamepadFocusable has hard-wired control. 
+			if( relativeToFocusable.shouldUseExplicitFocusableControl )
+			{
+				switch( direction )
+				{
+					case Direction.Up:
+						return relativeToFocusable.gamepadUpElement;
+					case Direction.Down:
+						return relativeToFocusable.gamepadDownElement;
+					case Direction.Left:
+						return relativeToFocusable.gamepadLeftElement;
+					case Direction.Right:
+						return relativeToFocusable.gamepadRightElement;
+				}
+			}
+
+			IGamepadFocusable nextFocusable = null;
+			var distanceToNextButton = float.MaxValue;
+
+			var focusableEle = relativeToFocusable as Element;
+			var currentCoords = focusableEle.getParent().localToStageCoordinates( new Vector2( focusableEle.getX(), focusableEle.getY() ) );
+			var buttons = findAllElementsOfType<IGamepadFocusable>();
+			for( var i = 0; i < buttons.Count; i++ )
+			{
+				if( buttons[i] == relativeToFocusable )
+					continue;
+				
+				// filter out buttons that are not in the disired direction
+				var element = buttons[i] as Element;
+				var buttonCoords = element.getParent().localToStageCoordinates( new Vector2( element.getX(), element.getY() ) );
+				var isDirectionMatch = false;
+				switch( direction )
+				{
+					case Direction.Up:
+						if( buttonCoords.Y < currentCoords.Y )
+							isDirectionMatch = true;
+						break;
+					case Direction.Down:
+						if( buttonCoords.Y > currentCoords.Y )
+							isDirectionMatch = true;
+						break;
+					case Direction.Left:
+						if( buttonCoords.X < currentCoords.X )
+							isDirectionMatch = true;
+						break;
+					case Direction.Right:
+						if( buttonCoords.X > currentCoords.X )
+							isDirectionMatch = true;
+						break;
+				}
+
+				// keep only the closest button if we have a match
+				if( isDirectionMatch )
+				{
+					if( nextFocusable == null )
+					{
+						nextFocusable = buttons[i];
+						distanceToNextButton = Vector2.DistanceSquared( currentCoords, buttonCoords );
+					}
+					else
+					{
+						var distance = Vector2.DistanceSquared( currentCoords, buttonCoords );
+						if( distance < distanceToNextButton )
+						{
+							nextFocusable = buttons[i];
+							distanceToNextButton = distance;
+						}
+					}
+				}
+			}
+
+			return nextFocusable;
+		}
+
+
+		/// <summary>
+		/// finds all the Elements of type T in the Stage
+		/// </summary>
+		/// <returns>The all elements of type.</returns>
+		/// <typeparam name="T">The 1st type parameter.</typeparam>
+		public List<T> findAllElementsOfType<T>() where T : class
+		{
+			var eles = new List<T>();
+			findAllElementsOfType<T>( root.children, eles );
+			return eles;
+		}
+
+
+		void findAllElementsOfType<T>( List<Element> elements, List<T> foundElements ) where T : class
+		{
+			for( var i = 0; i < elements.Count; i++ )
+			{
+				if( elements[i] is T )
+					foundElements.Add( elements[i] as T );
+				else if( elements[i] is Group )
+					findAllElementsOfType<T>( ((Group)elements[i]).children, foundElements );
+			}
 		}
 
 	}

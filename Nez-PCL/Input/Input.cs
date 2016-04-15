@@ -147,7 +147,7 @@ namespace Nez
 		/// <returns><c>true</c>, if key up was gotten, <c>false</c> otherwise.</returns>
 		public static bool isKeyReleased( Keys key )
 		{
-			return !_currentKbState.IsKeyUp( key ) && _previousKbState.IsKeyUp( key );
+			return !_currentKbState.IsKeyDown( key ) && _previousKbState.IsKeyDown( key );
 		}
 
 

@@ -4,7 +4,7 @@ using Microsoft.Xna.Framework;
 
 namespace Nez.UI
 {
-	public class Button : Table, IInputListener
+	public class Button : Table, IInputListener, IGamepadFocusable
 	{
 		public event Action<bool> onChanged;
 		public event Action<Button> onClicked;
@@ -148,6 +148,78 @@ namespace Nez.UI
 		#endregion
 
 
+		#region IGamepadFocusable
+
+		public bool shouldUseExplicitFocusableControl { get; set; }
+		public IGamepadFocusable gamepadUpElement { get; set; }
+		public IGamepadFocusable gamepadDownElement { get; set; }
+		public IGamepadFocusable gamepadLeftElement { get; set; }
+		public IGamepadFocusable gamepadRightElement { get; set; }
+
+
+		void IGamepadFocusable.onUnhandledDirectionPressed( Direction direction )
+		{}
+
+
+		void IGamepadFocusable.onFocused()
+		{
+			onFocused();
+		}
+
+
+		void IGamepadFocusable.onUnfocused()
+		{
+			onUnfocused();
+		}
+
+
+		void IGamepadFocusable.onActionButtonPressed()
+		{
+			onActionButtonPressed();
+		}
+
+
+		void IGamepadFocusable.onActionButtonReleased()
+		{
+			onActionButtonReleased();
+		}
+
+		#endregion
+
+
+		#region overrideable focus handlers
+
+		protected virtual void onFocused()
+		{
+			_mouseOver = true;
+		}
+
+
+		protected virtual void onUnfocused()
+		{
+			_mouseOver = _mouseDown = false;
+		}
+
+
+		protected virtual void onActionButtonPressed()
+		{
+			_mouseDown = true;
+		}
+
+
+		protected virtual void onActionButtonReleased()
+		{
+			_mouseDown = false;
+
+			setChecked( !_isChecked, true );
+
+			if( onClicked != null )
+				onClicked( this );
+		}
+
+		#endregion
+
+
 		public virtual void setStyle( ButtonStyle style )
 		{
 			this.style = style;
@@ -272,6 +344,12 @@ namespace Nez.UI
 				children[i].moveBy( -offsetX, -offsetY );
 		}
 
+
+		public override string ToString()
+		{
+			return string.Format( "[Button]" );
+		}
+
 	}
 
 
@@ -283,7 +361,7 @@ namespace Nez.UI
 		/** Optional. */
 		public IDrawable up, down, over, checkked, checkedOver, disabled;
 
-		/** Optional. */
+		/** Optional. offsets children (labels for example). */
 		public float pressedOffsetX, pressedOffsetY, unpressedOffsetX, unpressedOffsetY, checkedOffsetX, checkedOffsetY;
 
 

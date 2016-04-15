@@ -71,7 +71,7 @@ namespace Nez.Particles
 		/// </summary>
 		void initialize()
 		{
-			// prep our custom BlendState and set the RenderState with it
+			// prep our custom BlendState and set the Material with it
 			var blendState = new BlendState();
 			blendState.ColorSourceBlend = blendState.AlphaSourceBlend = _emitterConfig.blendFuncSource;
 			blendState.ColorDestinationBlend = blendState.AlphaDestinationBlend = _emitterConfig.blendFuncDestination;
