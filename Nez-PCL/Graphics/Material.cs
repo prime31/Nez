@@ -5,7 +5,7 @@ using Microsoft.Xna.Framework;
 
 namespace Nez
 {
-	public class RenderState : IComparable<RenderState>
+	public class Material : IComparable<Material>
 	{
 		/// <summary>
 		/// BlendState used by the SpriteBatch for the current RenderableComponent
@@ -34,9 +34,9 @@ namespace Nez
 		// - AlphaSourceBlend = Blend.SourceAlpha, 
 		// - AlphaDestinationBlend = Blend.InverseSourceAlpha 
 
-		public static RenderState stencilWrite( int stencilRef = 1 )
+		public static Material stencilWrite( int stencilRef = 1 )
 		{
-			return new RenderState {
+			return new Material {
 				depthStencilState = new DepthStencilState {
 					StencilEnable = true,
 					StencilFunction = CompareFunction.Always,
@@ -48,9 +48,9 @@ namespace Nez
 		}
 
 
-		public static RenderState stencilRead( int stencilRef = 1 )
+		public static Material stencilRead( int stencilRef = 1 )
 		{
-			return new RenderState
+			return new Material
 			{
 				depthStencilState = new DepthStencilState {
 					StencilEnable = true,
@@ -63,9 +63,9 @@ namespace Nez
 		}
 
 
-		public static RenderState blendDarken()
+		public static Material blendDarken()
 		{
-			return new RenderState {
+			return new Material {
 				blendState = new BlendState {
 					ColorSourceBlend = Blend.One,
 					ColorDestinationBlend = Blend.One,
@@ -75,9 +75,9 @@ namespace Nez
 		}
 
 
-		public static RenderState blendLighten()
+		public static Material blendLighten()
 		{
-			return new RenderState {
+			return new Material {
 				blendState = new BlendState {
 					ColorSourceBlend = Blend.One,
 					ColorDestinationBlend = Blend.One,
@@ -87,9 +87,9 @@ namespace Nez
 		}
 
 
-		public static RenderState blendScreen()
+		public static Material blendScreen()
 		{
-			return new RenderState {
+			return new Material {
 				blendState = new BlendState {
 					ColorSourceBlend = Blend.InverseDestinationColor,
 					ColorDestinationBlend = Blend.One,
@@ -99,9 +99,9 @@ namespace Nez
 		}
 
 
-		public static RenderState blendMultiply()
+		public static Material blendMultiply()
 		{
-			return new RenderState {
+			return new Material {
 				blendState = new BlendState {
 					ColorSourceBlend = Blend.DestinationColor,
 					ColorDestinationBlend = Blend.Zero,
@@ -111,9 +111,9 @@ namespace Nez
 		}
 
 
-		public static RenderState blendMultiply2x()
+		public static Material blendMultiply2x()
 		{
-			return new RenderState {
+			return new Material {
 				blendState = new BlendState {
 					ColorSourceBlend = Blend.DestinationColor,
 					ColorDestinationBlend = Blend.SourceColor,
@@ -123,9 +123,9 @@ namespace Nez
 		}
 
 
-		public static RenderState blendLinearDodge()
+		public static Material blendLinearDodge()
 		{
-			return new RenderState {
+			return new Material {
 				blendState = new BlendState {
 					ColorSourceBlend = Blend.One,
 					ColorDestinationBlend = Blend.One,
@@ -135,9 +135,9 @@ namespace Nez
 		}
 
 
-		public static RenderState blendLinearBurn()
+		public static Material blendLinearBurn()
 		{
-			return new RenderState {
+			return new Material {
 				blendState = new BlendState {
 					ColorSourceBlend = Blend.One,
 					ColorDestinationBlend = Blend.One,
@@ -147,9 +147,9 @@ namespace Nez
 		}
 
 
-		public static RenderState blendDifference()
+		public static Material blendDifference()
 		{
-			return new RenderState {
+			return new Material {
 				blendState = new BlendState {
 					ColorSourceBlend = Blend.InverseDestinationColor,
 					ColorDestinationBlend = Blend.InverseSourceColor,
@@ -159,9 +159,9 @@ namespace Nez
 		}
 
 
-		public static RenderState blendSubtractive()
+		public static Material blendSubtractive()
 		{
-			return new RenderState {
+			return new Material {
 				blendState = new BlendState {
 					ColorSourceBlend = Blend.SourceAlpha,
 					ColorDestinationBlend = Blend.One,
@@ -176,24 +176,24 @@ namespace Nez
 		#endregion
 
 
-		public RenderState()
+		public Material()
 		{}
 
 
-		public RenderState( Effect effect )
+		public Material( Effect effect )
 		{
 			this.effect = effect;
 		}
 
 
-		public RenderState( BlendState blendState, Effect effect = null )
+		public Material( BlendState blendState, Effect effect = null )
 		{
 			this.blendState = blendState;
 			this.effect = effect;
 		}
 
 
-		public RenderState( DepthStencilState depthStencilState, Effect effect = null )
+		public Material( DepthStencilState depthStencilState, Effect effect = null )
 		{
 			this.depthStencilState = depthStencilState;
 			this.effect = effect;
@@ -232,7 +232,7 @@ namespace Nez
 		/// </summary>
 		/// <returns>The to.</returns>
 		/// <param name="other">Other.</param>
-		public int CompareTo( RenderState other )
+		public int CompareTo( Material other )
 		{
 			if( object.ReferenceEquals( other, null ) )
 				return 1;

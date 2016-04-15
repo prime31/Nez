@@ -76,7 +76,7 @@ namespace Nez.Particles
 			blendState.ColorSourceBlend = blendState.AlphaSourceBlend = _emitterConfig.blendFuncSource;
 			blendState.ColorDestinationBlend = blendState.AlphaDestinationBlend = _emitterConfig.blendFuncDestination;
 
-			renderState = new RenderState( blendState );
+			material = new Material( blendState );
 		}
 
 

@@ -47,13 +47,13 @@ namespace Nez.Sprites
 
 		public ScrollingSprite( Subtexture subtexture ) : base( subtexture )
 		{
-			renderState = new RenderState();
+			material = new Material();
 
 			// choose the best fit wrap type based on the defaultSamplerState
 			if( Core.defaultSamplerState.Filter == TextureFilter.Point )
-				renderState.samplerState = SamplerState.PointWrap;
+				material.samplerState = SamplerState.PointWrap;
 			else
-				renderState.samplerState = SamplerState.LinearWrap;
+				material.samplerState = SamplerState.LinearWrap;
 			_sourceRect = subtexture.sourceRect;
 		}
 

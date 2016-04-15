@@ -243,7 +243,6 @@
     <Compile Include="PipelineRuntime\Tiled\TiledTileAnimationFrame.cs" />
     <Compile Include="PipelineRuntime\Tiled\TiledAnimatedTile.cs" />
     <Compile Include="ECS\Components\Renderables\Mesh.cs" />
-    <Compile Include="Graphics\RenderState.cs" />
     <Compile Include="PipelineRuntime\Overlap2D\O2DComposite.cs" />
     <Compile Include="PipelineRuntime\Overlap2D\O2DCompositeItem.cs" />
     <Compile Include="PipelineRuntime\Overlap2D\O2DImage.cs" />
@@ -313,6 +312,7 @@
     <Compile Include="Graphics\PostProcessing\PostProcessors\SpriteLightPostProcessor.cs" />
     <Compile Include="Graphics\PostProcessing\PostProcessors\PixelGlitchPostProcessor.cs" />
     <Compile Include="ECS\ScreenSpaceCamera.cs" />
+    <Compile Include="Graphics\Material.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="MonoGame.Framework">

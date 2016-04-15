@@ -31,7 +31,7 @@ namespace Nez
 		/// <summary>
 		/// RenderState used by the SpriteBatch. Any RenderableComponent can override this.
 		/// </summary>
-		public RenderState renderState = new RenderState();
+		public Material renderState = new Material();
 
 		/// <summary>
 		/// the Camera this renderer uses for rendering (really its transformMatrix and bounds for culling). This is a convenience field and isnt
@@ -70,7 +70,7 @@ namespace Nez
 		/// <summary>
 		/// holds the current RenderState of the last rendered Renderable (or the Renderer.renderState if no changes were made)
 		/// </summary>
-		RenderState _currentRenderState;
+		Material _currentRenderState;
 
 
 		public Renderer( int renderOrder, Camera camera )
@@ -110,14 +110,14 @@ namespace Nez
 		protected void renderAfterStateCheck( RenderableComponent renderable, Camera cam )
 		{
 			// check for RenderState changes
-			if( renderable.renderState != null && renderable.renderState != _currentRenderState )
+			if( renderable.material != null && renderable.material != _currentRenderState )
 			{
-				_currentRenderState = renderable.renderState;
+				_currentRenderState = renderable.material;
 				if( _currentRenderState.effect != null )
 					_currentRenderState.onPreRender( cam );
 				flushSpriteBatch( cam );
 			}
-			else if( renderable.renderState == null && _currentRenderState != renderState )
+			else if( renderable.material == null && _currentRenderState != renderState )
 			{
 				_currentRenderState = renderState;
 				flushSpriteBatch( cam );

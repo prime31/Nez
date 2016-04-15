@@ -16,7 +16,7 @@ namespace Nez
 		/// used by Renderers to specify how this sprite should be rendered. If non-null, it is automatically disposed of when the Component
 		/// is removed from the Entity.
 		/// </summary>
-		public RenderState renderState;
+		public Material material;
 
 		/// <summary>
 		/// width of the RenderableComponent. subclasses that do not override the bounds property must implement this!
@@ -249,10 +249,10 @@ namespace Nez
 
 		public override void onRemovedFromEntity()
 		{
-			if( renderState != null )
+			if( material != null )
 			{
-				renderState.unload();
-				renderState = null;
+				material.unload();
+				material = null;
 			}
 		}
 
@@ -340,8 +340,8 @@ namespace Nez
 			if( res == 0 )
 			{
 				res = other.layerDepth.CompareTo( layerDepth );
-				if( res == 0 && other.renderState != null )
-					return other.renderState.CompareTo( renderState );
+				if( res == 0 && other.material != null )
+					return other.material.CompareTo( material );
 			}
 
 			return res;
