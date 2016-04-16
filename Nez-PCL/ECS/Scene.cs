@@ -843,7 +843,7 @@ namespace Nez
 		/// </summary>
 		/// <returns>The entities by tag.</returns>
 		/// <param name="tag">Tag.</param>
-		public List<Entity> findEntitiesByTag( int tag )
+		public List<Entity> findEntitiesWithTag( int tag )
 		{
 			return entities.entitiesWithTag( tag );
 		}
@@ -857,6 +857,28 @@ namespace Nez
 		public List<Entity> entitiesOfType<T>() where T : Entity
 		{
 			return entities.entitiesOfType<T>();
+		}
+
+
+		/// <summary>
+		/// Returns the first enabled loaded object of Type T
+		/// </summary>
+		/// <returns>The object of type.</returns>
+		/// <typeparam name="T">The 1st type parameter.</typeparam>
+		public T findObjectOfType<T>() where T : Component
+		{
+			return entities.findObjectOfType<T>();
+		}
+
+
+		/// <summary>
+		/// Returns a list of all enabled loaded objects of Type T
+		/// </summary>
+		/// <returns>The objects of type.</returns>
+		/// <typeparam name="T">The 1st type parameter.</typeparam>
+		public List<T> findObjectsOfType<T>() where T : Component
+		{
+			return entities.findObjectsOfType<T>();
 		}
 
 		#endregion

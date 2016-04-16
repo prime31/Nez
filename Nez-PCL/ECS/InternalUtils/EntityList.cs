@@ -193,6 +193,8 @@ namespace Nez
 		}
 
 
+		#region Entity search
+
 		public Entity findEntity( string name )
 		{
 			for( var i = 0; i < _entities.Count; i++ )
@@ -243,6 +245,55 @@ namespace Nez
 
 			return list;
 		}
+
+
+		public T findObjectOfType<T>() where T : Component
+		{
+			for( var i = 0; i < _entities.Count; i++ )
+			{
+				if( _entities[i].enabled )
+				{
+					var comp = _entities[i].getComponent<T>();
+					if( comp != null )
+						return comp;
+				}
+			}
+
+			// in case an entity is added and searched for in the same frame we check the toAdd list
+			for( var i = 0; i < _entitiesToAdd.Count; i++ )
+			{
+				if( _entitiesToAdd[i].enabled )
+				{
+					var comp = _entitiesToAdd[i].getComponent<T>();
+					if( comp != null )
+						return comp;
+				}
+			}
+
+			return null;
+		}
+
+
+		public List<T> findObjectsOfType<T>() where T : Component
+		{
+			var comps = new List<T>();
+			for( var i = 0; i < _entities.Count; i++ )
+			{
+				if( _entities[i].enabled )
+					_entities[i].getComponents<T>( comps );
+			}
+
+			// in case an entity is added and searched for in the same frame we check the toAdd list
+			for( var i = 0; i < _entitiesToAdd.Count; i++ )
+			{
+				if( _entitiesToAdd[i].enabled )
+					_entitiesToAdd[i].getComponents<T>( comps );
+			}
+
+			return comps;
+		}
+
+		#endregion
 
 
 		public int Count
