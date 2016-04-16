@@ -264,7 +264,7 @@ namespace Nez
 
 		public virtual void debugRender( Graphics graphics )
 		{
-			graphics.spriteBatch.drawHollowRect( bounds, Color.IndianRed );
+			graphics.batcher.drawHollowRect( bounds, Color.IndianRed );
 		}
 
 

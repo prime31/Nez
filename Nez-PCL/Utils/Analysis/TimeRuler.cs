@@ -564,8 +564,8 @@ namespace Nez.Analysis
 			if( !showLog )
 				return;
 
-			// Gets SpriteBatch, SpriteFont, and WhiteTexture from DebugManager.
-			var spriteBatch = Graphics.instance.spriteBatch;
+			// Gets Batcher, SpriteFont, and WhiteTexture from DebugManager.
+			var batcher = Graphics.instance.batcher;
 			var font = Graphics.instance.bitmapFont;
 			var texture = Graphics.instance.pixelTexture;
 
@@ -610,11 +610,11 @@ namespace Nez.Analysis
 			// Current y position.
 			var y = startY;
 
-			spriteBatch.Begin();
+			batcher.begin();
 
 			// Draw transparency background.
 			var rc = new Rectangle( (int)position.X, y, width, height );
-			spriteBatch.Draw( texture, rc, new Color( 0, 0, 0, 128 ) );
+			batcher.draw( texture, rc, new Color( 0, 0, 0, 128 ) );
 
 			// Draw markers for each bars.
 			rc.Height = barHeight;
@@ -632,7 +632,7 @@ namespace Nez.Analysis
 						rc.X = sx;
 						rc.Width = Math.Max( ex - sx, 1 );
 
-						spriteBatch.Draw( texture, rc, bar.markers[j].color );
+						batcher.draw( texture, rc, bar.markers[j].color );
 					}
 				}
 
@@ -645,14 +645,14 @@ namespace Nez.Analysis
 			for( float t = 1.0f; t < sampleSpan; t += 1.0f )
 			{
 				rc.X = (int)( position.X + t * msToPs );
-				spriteBatch.Draw( texture, rc, Color.Gray );
+				batcher.draw( texture, rc, Color.Gray );
 			}
 
 			// Draw frame grid.
 			for( int i = 0; i <= sampleFrames; ++i )
 			{
 				rc.X = (int)( position.X + frameSpan * (float)i * msToPs );
-				spriteBatch.Draw( texture, rc, Color.White );
+				batcher.draw( texture, rc, Color.White );
 			}
 				
 			// Generate log string.
@@ -684,10 +684,10 @@ namespace Nez.Analysis
 			// Compute background size and draw it.
 			var size = font.measureString( logString );
 			rc = new Rectangle( (int)position.X, (int)y, (int)size.X + 25, (int)size.Y + 5 );
-			spriteBatch.Draw( texture, rc, new Color( 0, 0, 0, 128 ) );
+			batcher.draw( texture, rc, new Color( 0, 0, 0, 128 ) );
 
 			// Draw log string.
-			spriteBatch.DrawString( font, logString, new Vector2( position.X + 22, y + 3 ), Color.White );
+			batcher.drawString( font, logString, new Vector2( position.X + 22, y + 3 ), Color.White );
 
 
 			// Draw log color boxes.
@@ -702,15 +702,15 @@ namespace Nez.Analysis
 					{
 						rc.Y = y;
 						rc2.Y = y + 1;
-						spriteBatch.Draw( texture, rc, Color.White );
-						spriteBatch.Draw( texture, rc2, markerInfo.logs[i].color );
+						batcher.draw( texture, rc, Color.White );
+						batcher.draw( texture, rc2, markerInfo.logs[i].color );
 
 						y += font.lineHeight;
 					}
 				}
 			}
 
-			spriteBatch.End();
+			batcher.end();
 		}
 
 		#endregion

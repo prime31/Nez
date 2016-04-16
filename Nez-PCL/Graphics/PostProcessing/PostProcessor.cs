@@ -32,11 +32,6 @@ namespace Nez
 		public Effect effect;
 
 		/// <summary>
-		/// RasterizerState used by the SpriteBatch
-		/// </summary>
-		public RasterizerState rasterizerState = RasterizerState.CullNone;
-
-		/// <summary>
 		/// SamplerState used for the drawFullscreenQuad method
 		/// </summary>
 		public SamplerState samplerState = Core.defaultSamplerState;
@@ -109,9 +104,9 @@ namespace Nez
 		/// </summary>
 		protected void drawFullscreenQuad( Texture2D texture, int width, int height, Effect effect )
 		{
-			Graphics.instance.spriteBatch.Begin( SpriteSortMode.Deferred, blendState, samplerState, DepthStencilState.None, rasterizerState, effect );
-			Graphics.instance.spriteBatch.Draw( texture, new Rectangle( 0, 0, width, height ), Color.White );
-			Graphics.instance.spriteBatch.End();
+			Graphics.instance.batcher.begin( blendState, samplerState, DepthStencilState.None, RasterizerState.CullNone, effect );
+			Graphics.instance.batcher.draw( texture, new Rectangle( 0, 0, width, height ), Color.White );
+			Graphics.instance.batcher.end();
 		}
 
 

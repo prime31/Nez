@@ -116,7 +116,7 @@ namespace Nez.UI
 				var dest = _destRects[i];
 				dest.X += (int)x;
 				dest.Y += (int)y;
-				graphics.spriteBatch.Draw( _subtexture, dest, _subtexture.ninePatchRects[i], color );
+				graphics.batcher.draw( _subtexture, dest, _subtexture.ninePatchRects[i], color );
 			}
 		}
 

@@ -79,7 +79,7 @@ namespace Nez.Sprites
 
 			public void render( Graphics graphics, Camera camera )
 			{
-				graphics.spriteBatch.Draw( _subtexture, _position, _subtexture.sourceRect, _renderColor, _rotation, _origin, _scale, _spriteEffects, _layerDepth );
+				graphics.batcher.draw( _subtexture, _position, _subtexture.sourceRect, _renderColor, _rotation, _origin, _scale, _spriteEffects, _layerDepth );
 			}
 		}
 

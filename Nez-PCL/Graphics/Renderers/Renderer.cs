@@ -8,7 +8,7 @@ namespace Nez
 {
 	/// <summary>
 	/// Renderers are added to a Scene and handle all of the actual calls to RenderableComponent.render and Entity.debugRender.
-	/// A simple Renderer could just start the Graphics.instanceGraphics spriteBatch or it could create its own local Graphics instance
+	/// A simple Renderer could just start the Graphics.instanceGraphics.batcher or it could create its own local Graphics instance
 	/// if it needs it for some kind of custom rendering.
 	/// 
 	/// Note that it is a best practice to ensure all Renderers that render to a RenderTarget have lower renderOrders to avoid issues
@@ -18,18 +18,7 @@ namespace Nez
 	public abstract class Renderer : IComparable<Renderer>
 	{
 		/// <summary>
-		/// SpriteSortMode used by the SpriteBatch. Use BackToFront when drawing transparent sprites and FrontToBack when drawing opaque sprites
-		/// if you want the depth value to be taken into account.
-		/// </summary>
-		public SpriteSortMode spriteSortMode = SpriteSortMode.Deferred;
-
-		/// <summary>
-		/// RasterizerState used by the SpriteBatch
-		/// </summary>
-		public RasterizerState rasterizerState;
-
-		/// <summary>
-		/// Material used by the SpriteBatch. Any RenderableComponent can override this.
+		/// Material used by the Batcher. Any RenderableComponent can override this.
 		/// </summary>
 		public Material material = new Material();
 
@@ -81,8 +70,8 @@ namespace Nez
 
 
 		/// <summary>
-		/// if a RenderTarget is used this will set it up. The SpriteBatch is also started. The passed in Camera will be used to set the ViewPort
-		/// (if a ViewportAdapter is present) and for the SpriteBatch transform Matrix.
+		/// if a RenderTarget is used this will set it up. The Batcher is also started. The passed in Camera will be used to set the ViewPort
+		/// (if a ViewportAdapter is present) and for the Batcher transform Matrix.
 		/// </summary>
 		/// <param name="cam">Cam.</param>
 		protected virtual void beginRender( Camera cam )
@@ -95,7 +84,7 @@ namespace Nez
 			}
 
 			_currentMaterial = material;
-			Graphics.instance.spriteBatch.Begin( spriteSortMode, _currentMaterial.blendState, _currentMaterial.samplerState, _currentMaterial.depthStencilState, rasterizerState, _currentMaterial.effect, cam.transformMatrix );
+			Graphics.instance.batcher.begin( _currentMaterial.blendState, _currentMaterial.samplerState, _currentMaterial.depthStencilState, RasterizerState.CullNone, _currentMaterial.effect, cam.transformMatrix );
 		}
 
 
@@ -103,7 +92,7 @@ namespace Nez
 
 
 		/// <summary>
-		/// renders the RenderableComponent flushing the SpriteBatch and resetting current material if necessary
+		/// renders the RenderableComponent flushing the Batcher and resetting current material if necessary
 		/// </summary>
 		/// <param name="renderable">Renderable.</param>
 		/// <param name="cam">Cam.</param>
@@ -115,12 +104,12 @@ namespace Nez
 				_currentMaterial = renderable.material;
 				if( _currentMaterial.effect != null )
 					_currentMaterial.onPreRender( cam );
-				flushSpriteBatch( cam );
+				flushBatch( cam );
 			}
 			else if( renderable.material == null && _currentMaterial != material )
 			{
 				_currentMaterial = material;
-				flushSpriteBatch( cam );
+				flushBatch( cam );
 			}
 
 			renderable.render( Graphics.instance, cam );
@@ -128,21 +117,21 @@ namespace Nez
 
 
 		/// <summary>
-		/// force flushes the SpriteBatch by calling End then Begin on it.
+		/// force flushes the Batcher by calling End then Begin on it.
 		/// </summary>
-		void flushSpriteBatch( Camera cam )
+		void flushBatch( Camera cam )
 		{
-			Graphics.instance.spriteBatch.End();
-			Graphics.instance.spriteBatch.Begin( spriteSortMode, _currentMaterial.blendState, _currentMaterial.samplerState, _currentMaterial.depthStencilState, rasterizerState, _currentMaterial.effect, cam.transformMatrix );
+			Graphics.instance.batcher.end();
+			Graphics.instance.batcher.begin( _currentMaterial.blendState, _currentMaterial.samplerState, _currentMaterial.depthStencilState, RasterizerState.CullNone, _currentMaterial.effect, cam.transformMatrix );
 		}
 
 
 		/// <summary>
-		/// ends the SpriteBatch and clears the RenderTarget if it had a RenderTarget
+		/// ends the Batcher and clears the RenderTarget if it had a RenderTarget
 		/// </summary>
 		protected virtual void endRender()
 		{
-			Graphics.instance.spriteBatch.End();
+			Graphics.instance.batcher.end();
 
 			// clear the RenderTarget so that we render to the screen if we were using a RenderTarget
 			if( renderTexture != null && clearRenderTargetAfterRender )
@@ -156,8 +145,8 @@ namespace Nez
 		/// <param name="scene">Scene.</param>
 		protected virtual void debugRender( Scene scene, Camera cam )
 		{
-			Graphics.instance.spriteBatch.End();
-			Graphics.instance.spriteBatch.Begin( SpriteSortMode.Deferred, null, null, null, null, null, Core.scene.camera.transformMatrix );
+			Graphics.instance.batcher.end();
+			Graphics.instance.batcher.begin( null, null, null, null, null, Core.scene.camera.transformMatrix );
 
 			for( var i = 0; i < scene.entities.Count; i++ )
 			{

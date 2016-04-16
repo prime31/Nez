@@ -7,7 +7,7 @@ namespace Nez
 	/// <summary>
 	/// Renderer that only renders all but one renderLayer. Useful to keep UI rendering separate from the rest of the game when used in conjunction
 	/// with a RenderLayerRenderer. Note that UI would most likely want to be rendered in screen space so the camera matrix shouldn't be passed to
-	/// spriteBatch.Begin.
+	/// Batcher.Begin.
 	/// </summary>
 	public class RenderLayerExcludeRenderer : Renderer
 	{

@@ -102,9 +102,9 @@ namespace Nez
 		public override void render( Graphics graphics )
 		{
 			Core.graphicsDevice.SetRenderTarget( null );
-			graphics.spriteBatch.Begin( SpriteSortMode.Deferred, BlendState.NonPremultiplied, Core.defaultSamplerState, DepthStencilState.None, null );
-			graphics.spriteBatch.Draw( previousSceneRender, _destinationRect, Color.White );
-			graphics.spriteBatch.End();
+			graphics.batcher.begin( BlendState.NonPremultiplied, Core.defaultSamplerState, DepthStencilState.None, null );
+			graphics.batcher.draw( previousSceneRender, _destinationRect, Color.White );
+			graphics.batcher.end();
 		}
 	}
 }

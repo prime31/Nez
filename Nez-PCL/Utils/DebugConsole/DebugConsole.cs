@@ -483,29 +483,29 @@ namespace Nez.Console
 			var screenHeight = Core.graphicsDevice.PresentationParameters.BackBufferHeight;
 			var workingWidth = screenWidth - 2 * HORIZONTAL_PADDING;
 
-			Graphics.instance.spriteBatch.Begin();
+			Graphics.instance.batcher.begin();
 
-			Graphics.instance.spriteBatch.drawRect( HORIZONTAL_PADDING, screenHeight - BOTTOM_MARGIN, workingWidth, BOTTOM_CONSOLE_HEIGHT, Color.Black * OPACITY );
+			Graphics.instance.batcher.drawRect( HORIZONTAL_PADDING, screenHeight - BOTTOM_MARGIN, workingWidth, BOTTOM_CONSOLE_HEIGHT, Color.Black * OPACITY );
 			var commandLineString = "> " + _currentText;
 			if( _underscore )
 				commandLineString += "_";
 			
-			Graphics.instance.spriteBatch.DrawString( Graphics.instance.bitmapFont, commandLineString, new Vector2( 20, screenHeight - BOTTOM_CONSOLE_HEIGHT - FONT_LINE_HEIGHT * 0.35f ), Color.White );
+			Graphics.instance.batcher.drawString( Graphics.instance.bitmapFont, commandLineString, new Vector2( 20, screenHeight - BOTTOM_CONSOLE_HEIGHT - FONT_LINE_HEIGHT * 0.35f ), Color.White );
 
 			if( _drawCommands.Count > 0 )
 			{
 				var height = LINE_HEIGHT * _drawCommands.Count + 15;
 				var topOfHistoryRect = screenHeight - height - BOTTOM_CONSOLE_HEIGHT - 20;
-				Graphics.instance.spriteBatch.drawRect( HORIZONTAL_PADDING, topOfHistoryRect, workingWidth, height, Color.Black * OPACITY );
+				Graphics.instance.batcher.drawRect( HORIZONTAL_PADDING, topOfHistoryRect, workingWidth, height, Color.Black * OPACITY );
 				for( int i = 0; i < _drawCommands.Count; i++ )
 				{
 					var position = new Vector2( 20, topOfHistoryRect + height - 20 - LINE_HEIGHT * i );
 					var color = _drawCommands[i].IndexOf( ">" ) == 0 ? Color.Yellow : Color.White;
-					Graphics.instance.spriteBatch.DrawString( Graphics.instance.bitmapFont, _drawCommands[i], position, color, 0, Vector2.Zero, FONT_SCALE, SpriteEffects.None, 0 );
+					Graphics.instance.batcher.drawString( Graphics.instance.bitmapFont, _drawCommands[i], position, color, 0, Vector2.Zero, FONT_SCALE, SpriteEffects.None, 0 );
 				}
 			}
 
-			Graphics.instance.spriteBatch.End();
+			Graphics.instance.batcher.end();
 		}
 
 		#endregion

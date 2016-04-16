@@ -350,12 +350,12 @@ namespace Nez
 						// If the grid is very straight here, draw a single straight line. Otherwise, draw lines to our new interpolated midpoint
 						if( Vector2.DistanceSquared( mid, ( left + p ) / 2 ) > 1 )
 						{
-							drawLine( graphics.spriteBatch, left, mid, gridColor, thickness );
-							drawLine( graphics.spriteBatch, mid, p, gridColor, thickness );
+							drawLine( graphics.batcher, left, mid, gridColor, thickness );
+							drawLine( graphics.batcher, mid, p, gridColor, thickness );
 						}
 						else
 						{
-							drawLine( graphics.spriteBatch, left, p, gridColor, thickness );
+							drawLine( graphics.batcher, left, p, gridColor, thickness );
 						}
 					}
 
@@ -380,12 +380,12 @@ namespace Nez
 
 						if( Vector2.DistanceSquared( mid, ( up + p ) / 2 ) > 1 )
 						{
-							drawLine( graphics.spriteBatch, up, mid, gridColor, thickness );
-							drawLine( graphics.spriteBatch, mid, p, gridColor, thickness );
+							drawLine( graphics.batcher, up, mid, gridColor, thickness );
+							drawLine( graphics.batcher, mid, p, gridColor, thickness );
 						}
 						else
 						{
-							drawLine( graphics.spriteBatch, up, p, gridColor, thickness );
+							drawLine( graphics.batcher, up, p, gridColor, thickness );
 						}
 					}
 
@@ -394,8 +394,8 @@ namespace Nez
 					if( x > 1 && y > 1 )
 					{
 						var upLeft = projectToVector2( _points[x - 1, y - 1].position );
-						drawLine( graphics.spriteBatch, 0.5f * ( upLeft + up ), 0.5f * ( left + p ), gridMinorColor, gridMinorThickness );	// vertical line
-						drawLine( graphics.spriteBatch, 0.5f * ( upLeft + left ), 0.5f * ( up + p ), gridMinorColor, gridMinorThickness );	// horizontal line
+						drawLine( graphics.batcher, 0.5f * ( upLeft + up ), 0.5f * ( left + p ), gridMinorColor, gridMinorThickness );	// vertical line
+						drawLine( graphics.batcher, 0.5f * ( upLeft + left ), 0.5f * ( up + p ), gridMinorColor, gridMinorThickness );	// horizontal line
 					}
 				}
 			}
@@ -410,11 +410,11 @@ namespace Nez
 		}
 
 
-		void drawLine( SpriteBatch spriteBatch, Vector2 start, Vector2 end, Color color, float thickness = 2f )
+		void drawLine( Batcher batcher, Vector2 start, Vector2 end, Color color, float thickness = 2f )
 		{
 			var delta = end - start;
 			var angle = (float)Math.Atan2( delta.Y, delta.X );
-			spriteBatch.Draw( Graphics.instance.pixelTexture, start + entity.transform.position + localPosition, Graphics.instance.pixelTexture.sourceRect, color, angle, new Vector2( 0, 0.5f ), new Vector2( delta.Length(), thickness ), SpriteEffects.None, layerDepth );
+			batcher.draw( Graphics.instance.pixelTexture, start + entity.transform.position + localPosition, Graphics.instance.pixelTexture.sourceRect, color, angle, new Vector2( 0, 0.5f ), new Vector2( delta.Length(), thickness ), SpriteEffects.None, layerDepth );
 		}
 	
 	}

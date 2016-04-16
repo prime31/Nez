@@ -25,7 +25,7 @@ namespace Nez
 		// used for Text items
 		public string text;
 		public BitmapFont bitmapFont;
-		public SpriteFont spriteFont;
+		public NezSpriteFont spriteFont;
 		public Vector2 position;
 		public float scale;
 
@@ -67,7 +67,7 @@ namespace Nez
 		}
 
 
-		public DebugDrawItem( SpriteFont spriteFont, String text, Vector2 position, Color color, float duration, float scale )
+		public DebugDrawItem( NezSpriteFont spriteFont, String text, Vector2 position, Color color, float duration, float scale )
 		{
 			this.spriteFont = spriteFont;
 			this.text = text;
@@ -79,7 +79,7 @@ namespace Nez
 		}
 
 
-		public DebugDrawItem( String text, Color color, float duration, float scale )
+		public DebugDrawItem( string text, Color color, float duration, float scale )
 		{
 			bitmapFont = Graphics.instance.bitmapFont;
 			this.text = text;
@@ -98,19 +98,19 @@ namespace Nez
 			switch( drawType )
 			{
 				case DebugDrawType.Line:
-					graphics.spriteBatch.drawLine( start, end, color );
+					graphics.batcher.drawLine( start, end, color );
 					break;
 				case DebugDrawType.HollowRectangle:
-					graphics.spriteBatch.drawHollowRect( rectangle, color );
+					graphics.batcher.drawHollowRect( rectangle, color );
 					break;
 				case DebugDrawType.BitmapFontText:
-					graphics.spriteBatch.DrawString( bitmapFont, text, position, color, 0f, Vector2.Zero, scale, SpriteEffects.None, 0f );
+					graphics.batcher.drawString( bitmapFont, text, position, color, 0f, Vector2.Zero, scale, SpriteEffects.None, 0f );
 					break;
 				case DebugDrawType.SpriteFontText:
-					graphics.spriteBatch.DrawString( spriteFont, text, position, color, 0f, Vector2.Zero, scale, SpriteEffects.None, 0f );
+					graphics.batcher.drawString( spriteFont, text, position, color, 0f, Vector2.Zero, new Vector2( scale ), SpriteEffects.None, 0f );
 					break;
 				case DebugDrawType.ConsoleText:
-					graphics.spriteBatch.DrawString( bitmapFont, text, position, color, 0f, Vector2.Zero, scale, SpriteEffects.None, 0f );
+					graphics.batcher.drawString( bitmapFont, text, position, color, 0f, Vector2.Zero, scale, SpriteEffects.None, 0f );
 					break;
 			}
 

@@ -59,6 +59,25 @@ namespace Nez
 		}
 
 
+		internal static byte[] getMonoGameEmbeddedResourceBytes( string name )
+		{
+			#if WINRT
+			var assembly = typeof( MathHelper ).GetTypeInfo().Assembly;
+			#else
+			var assembly = typeof( MathHelper ).Assembly;
+			#endif
+
+			using( var stream = assembly.GetManifestResourceStream( name ) )
+			{
+				using( var ms = new MemoryStream() )
+				{
+					stream.CopyTo( ms );
+					return ms.ToArray();
+				}
+			}
+		}
+
+
 		/// <summary>
 		/// fetches the raw byte data of a file from the Content folder. Used to keep the Effect subclass code simple and clean due to the Effect
 		/// constructor requiring the byte[].

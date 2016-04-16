@@ -61,6 +61,7 @@
     <Folder Include="PipelineRuntime\UISkin\" />
     <Folder Include="Input\Virtual\" />
     <Folder Include="Utils\FSM\" />
+    <Folder Include="Graphics\Batcher\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Debug\Debug.cs" />
@@ -99,7 +100,6 @@
     <Compile Include="Core.cs" />
     <Compile Include="CoreEvents.cs" />
     <Compile Include="PipelineRuntime\BitmapFonts\BitmapFont.cs" />
-    <Compile Include="PipelineRuntime\BitmapFonts\BitmapFontExtensions.cs" />
     <Compile Include="PipelineRuntime\BitmapFonts\BitmapFontReader.cs" />
     <Compile Include="PipelineRuntime\BitmapFonts\BitmapFontRegion.cs" />
     <Compile Include="PipelineRuntime\ContentExtensions\ContentManagerExtensions.cs" />
@@ -315,6 +315,13 @@
     <Compile Include="Graphics\Material.cs" />
     <Compile Include="UI\Base\Direction.cs" />
     <Compile Include="UI\Base\IGamepadFocusable.cs" />
+    <Compile Include="Graphics\GraphicsResource.cs" />
+    <Compile Include="Utils\NezSpriteFont.cs" />
+    <Compile Include="Graphics\Batcher\Batcher.cs" />
+    <Compile Include="Graphics\Batcher\BatcherDrawingExt.cs" />
+    <Compile Include="Graphics\Batcher\BatcherBitmapFontExt.cs" />
+    <Compile Include="Graphics\Batcher\BatcherSpriteFontExt.cs" />
+    <Compile Include="PipelineRuntime\BitmapFonts\BitmapFontExt.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="MonoGame.Framework">

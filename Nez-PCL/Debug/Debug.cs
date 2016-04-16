@@ -133,9 +133,9 @@ namespace Nez
 			if( _debugDrawItems.Count > 0 )
 			{
 				if( Core.scene != null && Core.scene.camera != null )
-					Graphics.instance.spriteBatch.Begin( SpriteSortMode.Deferred, null, null, null, null, null, Core.scene.camera.transformMatrix );
+					Graphics.instance.batcher.begin( Core.scene.camera.transformMatrix );
 				else
-					Graphics.instance.spriteBatch.Begin();
+					Graphics.instance.batcher.begin();
 
 				for( var i = _debugDrawItems.Count - 1; i >= 0; i-- )
 				{
@@ -144,13 +144,13 @@ namespace Nez
 						_debugDrawItems.RemoveAt( i );
 				}
 
-				Graphics.instance.spriteBatch.End();
+				Graphics.instance.batcher.end();
 			}
 
 			if( _screenSpaceDebugDrawItems.Count > 0 )
 			{
 				var pos = Vector2.Zero;
-				Graphics.instance.spriteBatch.Begin();
+				Graphics.instance.batcher.begin();
 
 				for( var i = _screenSpaceDebugDrawItems.Count - 1; i >= 0; i-- )
 				{
@@ -163,7 +163,7 @@ namespace Nez
 					pos.Y += itemHeight;
 				}
 
-				Graphics.instance.spriteBatch.End();
+				Graphics.instance.batcher.end();
 			}
 		}
 
@@ -198,7 +198,7 @@ namespace Nez
 
 
 		[Conditional( "DEBUG" )]
-		public static void drawText( SpriteFont font, string text, Vector2 position, Color color, float duration = 0f, float scale = 1f )
+		public static void drawText( NezSpriteFont font, string text, Vector2 position, Color color, float duration = 0f, float scale = 1f )
 		{
 			_debugDrawItems.Add( new DebugDrawItem( font, text, position, color, duration, scale ) );
 		}

@@ -9,7 +9,7 @@ namespace Nez.UI
 	{
 		internal List<Element> children = new List<Element>();
 		protected bool transform = false;
-		Matrix _previousSpriteBatchTransform;
+		Matrix _previousBatcherTransform;
 
 
 		public T addElement<T>( T element ) where T : Element
@@ -304,9 +304,9 @@ namespace Nez.UI
 		/// <param name="transform">Transform.</param>
 		protected void applyTransform( Graphics graphics, Matrix transform )
 		{
-			_previousSpriteBatchTransform = graphics.spriteBatch.getSpriteBatchMatrix();
-			graphics.spriteBatch.End();
-			graphics.spriteBatch.Begin( transformMatrix: transform );
+			_previousBatcherTransform = graphics.batcher.getBatcherMatrix();
+			graphics.batcher.end();
+			graphics.batcher.begin( transform );
 		}
 
 
@@ -317,8 +317,8 @@ namespace Nez.UI
 		/// <param name="batch">Batch.</param>
 		protected void resetTransform( Graphics graphics )
 		{
-			graphics.spriteBatch.End();
-			graphics.spriteBatch.Begin( transformMatrix: _previousSpriteBatchTransform );
+			graphics.batcher.end();
+			graphics.batcher.begin( _previousBatcherTransform );
 		}
 
 

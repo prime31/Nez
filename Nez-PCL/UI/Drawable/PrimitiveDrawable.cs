@@ -60,9 +60,9 @@ namespace Nez.UI
 			var col = _color.HasValue ? _color.Value : color;
 
 			if( _useFilledRect )
-				graphics.spriteBatch.drawRect( x, y, width, height, col );
+				graphics.batcher.drawRect( x, y, width, height, col );
 			else
-				graphics.spriteBatch.drawHollowRect( x, y, width, height, col );
+				graphics.batcher.drawHollowRect( x, y, width, height, col );
 		}
 	}
 }

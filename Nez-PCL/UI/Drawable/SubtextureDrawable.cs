@@ -52,7 +52,7 @@ namespace Nez.UI
 		{
 			if( tintColor.HasValue )
 				color = color.multiply( tintColor.Value );
-			graphics.spriteBatch.Draw( _subtexture, new Rectangle( (int)x, (int)y, (int)width, (int)height ), _subtexture.sourceRect, color );
+			graphics.batcher.draw( _subtexture, new Rectangle( (int)x, (int)y, (int)width, (int)height ), _subtexture.sourceRect, color );
 		}
 
 

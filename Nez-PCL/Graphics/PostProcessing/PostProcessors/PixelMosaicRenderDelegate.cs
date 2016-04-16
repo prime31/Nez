@@ -81,9 +81,9 @@ namespace Nez
 			// based on the look of games by: http://deepnight.net/games/strike-of-rage/
 			// use the mosaic to render to a full sized RenderTarget repeating the mosaic
 			Core.graphicsDevice.SetRenderTarget( _mosaicRenderTex );
-			Graphics.instance.spriteBatch.Begin( SpriteSortMode.Immediate, BlendState.Opaque, SamplerState.PointWrap, DepthStencilState.None, RasterizerState.CullNone );
-			Graphics.instance.spriteBatch.Draw( _mosaicTexture, Vector2.Zero, new Rectangle( 0, 0, _mosaicRenderTex.Width, _mosaicRenderTex.Height ), Color.White );
-			Graphics.instance.spriteBatch.End();
+			Graphics.instance.batcher.begin( BlendState.Opaque, SamplerState.PointWrap, DepthStencilState.None, RasterizerState.CullNone );
+			Graphics.instance.batcher.draw( _mosaicTexture, Vector2.Zero, new Rectangle( 0, 0, _mosaicRenderTex.Width, _mosaicRenderTex.Height ), Color.White );
+			Graphics.instance.batcher.end();
 
 			// let our Effect know about our rendered, full screen mosaic
 			effect.Parameters["secondTexture"].SetValue( _mosaicRenderTex );
@@ -95,9 +95,9 @@ namespace Nez
 			// we can just draw directly to the screen here with our effect
 			Core.graphicsDevice.SetRenderTarget( null );
 			Core.graphicsDevice.Clear( letterboxColor );
-			Graphics.instance.spriteBatch.Begin( 0, BlendState.Opaque, samplerState, DepthStencilState.None, RasterizerState.CullNone, effect );
-			Graphics.instance.spriteBatch.Draw( source, finalRenderDestinationRect, Color.White );
-			Graphics.instance.spriteBatch.End();
+			Graphics.instance.batcher.begin( BlendState.Opaque, samplerState, DepthStencilState.None, RasterizerState.CullNone, effect );
+			Graphics.instance.batcher.draw( source, finalRenderDestinationRect, Color.White );
+			Graphics.instance.batcher.end();
 		}
 
 

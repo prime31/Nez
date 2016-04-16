@@ -54,9 +54,9 @@ namespace Nez
 		public override void render( Graphics graphics )
 		{
 			Core.graphicsDevice.SetRenderTarget( null );
-			graphics.spriteBatch.Begin( SpriteSortMode.Deferred, BlendState.NonPremultiplied, Core.defaultSamplerState, DepthStencilState.None, null );
-			graphics.spriteBatch.Draw( previousSceneRender, Vector2.Zero, _color );
-			graphics.spriteBatch.End();
+			graphics.batcher.begin( BlendState.NonPremultiplied, Core.defaultSamplerState, DepthStencilState.None, null );
+			graphics.batcher.draw( previousSceneRender, Vector2.Zero, _color );
+			graphics.batcher.end();
 		}
 	}
 }

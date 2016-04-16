@@ -1478,7 +1478,7 @@ namespace Nez.UI
 			if( _debugRects != null )
 			{
 				foreach( var d in _debugRects )
-					graphics.spriteBatch.drawHollowRect( x + d.rect.x, y + d.rect.y, d.rect.width, d.rect.height, d.color );
+					graphics.batcher.drawHollowRect( x + d.rect.x, y + d.rect.y, d.rect.width, d.rect.height, d.color );
 			}
 
 			base.debugRender( graphics );

@@ -127,7 +127,7 @@ namespace Nez
 				var scale = MathHelper.Lerp( borderStartScale, borderEndScale, lerpFactor );
 
 				// draw using the border Color
-				graphics.spriteBatch.Draw( _cursorTexture, node.position, null, borderColor, 0.0f, _textureCenter, scale, SpriteEffects.None, 0.0f );
+				graphics.batcher.draw( _cursorTexture, node.position, null, borderColor, 0.0f, _textureCenter, scale, SpriteEffects.None, 0.0f );
 			}
 
 			// Next, we draw all the nodes normally, using the fill Color because before we drew them larger, after we draw them at
@@ -140,7 +140,7 @@ namespace Nez
 				var scale = MathHelper.Lerp( startScale, endScale, lerpFactor );
 
 				// draw using the fill color
-				graphics.spriteBatch.Draw( _cursorTexture, node.position, null, fillColor, 0.0f, _textureCenter, scale, SpriteEffects.None, 0.0f );
+				graphics.batcher.draw( _cursorTexture, node.position, null, fillColor, 0.0f, _textureCenter, scale, SpriteEffects.None, 0.0f );
 			}
 		}
 

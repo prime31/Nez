@@ -88,7 +88,7 @@ namespace Nez
 					var dest = _destRects[i];
 					dest.X += pos.X;
 					dest.Y += pos.Y;
-					graphics.spriteBatch.Draw( subtexture, dest, subtexture.ninePatchRects[i], color );
+					graphics.batcher.draw( subtexture, dest, subtexture.ninePatchRects[i], color );
 				}
 			}
 		}

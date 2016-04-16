@@ -36,7 +36,7 @@ namespace Nez
 		}
 
 
-		public FramesPerSecondCounter( SpriteFont font, Color color, FPSDockPosition dockPosition = FPSDockPosition.TopRight, int maximumSamples = 100 ) : base( font, string.Empty, Vector2.Zero, color )
+		public FramesPerSecondCounter( NezSpriteFont font, Color color, FPSDockPosition dockPosition = FPSDockPosition.TopRight, int maximumSamples = 100 ) : base( font, string.Empty, Vector2.Zero, color )
 		{
 			this.maximumSamples = maximumSamples;
 			this.dockPosition = dockPosition;
@@ -101,9 +101,9 @@ namespace Nez
 		{
 			// we override render and use position instead of entityPosition. this keeps the text in place even if the entity moves
 			if( _bitmapFont != null )
-				graphics.spriteBatch.DrawString( _bitmapFont, _text, localPosition, color, entity.transform.rotation, origin, entity.transform.scale, spriteEffects, layerDepth );
+				graphics.batcher.drawString( _bitmapFont, _text, localPosition, color, entity.transform.rotation, origin, entity.transform.scale, spriteEffects, layerDepth );
 			else
-				graphics.spriteBatch.DrawString( _spriteFont, _text, localPosition, color, entity.transform.rotation, origin, entity.transform.scale, spriteEffects, layerDepth );
+				graphics.batcher.drawString( _spriteFont, _text, localPosition, color, entity.transform.rotation, origin, entity.transform.scale, spriteEffects, layerDepth );
 		}
 
 
@@ -112,7 +112,7 @@ namespace Nez
 			// due to the override of position in render we have to do the same here
 			var rect = bounds;
 			rect.location = localPosition;
-			graphics.spriteBatch.drawHollowRect( rect, Color.Yellow );
+			graphics.batcher.drawHollowRect( rect, Color.Yellow );
 		}
 
 	}

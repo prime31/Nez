@@ -10,16 +10,16 @@ using Nez.BitmapFonts;
 namespace Nez
 {
 	/// <summary>
-	/// wrapper class that holds in instance of a SpriteBatch and helpers so that it can be passed around and draw anything.
+	/// wrapper class that holds in instance of a Batcher and helpers so that it can be passed around and draw anything.
 	/// </summary>
 	public class Graphics
 	{
 		public static Graphics instance;
 
 		/// <summary>
-		/// All 2D rendering is done through this SpriteBatch instance
+		/// All 2D rendering is done through this Batcher instance
 		/// </summary>
-		public SpriteBatch spriteBatch;
+		public Batcher batcher;
 
 		/// <summary>
 		/// default font is loaded up and stored here for easy access. Nez uses it for the DebugConsole
@@ -36,7 +36,7 @@ namespace Nez
 
 		public Graphics( BitmapFont font )
 		{
-			spriteBatch = new SpriteBatch( Core.graphicsDevice );
+			batcher = new Batcher( Core.graphicsDevice );
 			bitmapFont = font;
 
 			// the bottom/right pixel is white on the default font so we'll use that for the pixelTexture
@@ -70,8 +70,8 @@ namespace Nez
 				pixelTexture.texture2D.Dispose();
 			pixelTexture = null;
 
-			spriteBatch.Dispose();
-			spriteBatch = null;
+			batcher.Dispose();
+			batcher = null;
 		}
 
 	}

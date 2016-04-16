@@ -106,15 +106,15 @@ namespace Nez
 		public override void render( Graphics graphics )
 		{
 			Core.graphicsDevice.SetRenderTarget( null );
-			graphics.spriteBatch.Begin( SpriteSortMode.Deferred, BlendState.NonPremultiplied, Core.defaultSamplerState, DepthStencilState.None, null, _squaresEffect );
+			graphics.batcher.begin( BlendState.NonPremultiplied, Core.defaultSamplerState, DepthStencilState.None, null, _squaresEffect );
 
 			// we only render the previousSceneRender while populating the squares
 			if( !_isNewSceneLoaded )
-				graphics.spriteBatch.Draw( previousSceneRender, _destinationRect, Color.White );
+				graphics.batcher.draw( previousSceneRender, _destinationRect, Color.White );
 			else
-				graphics.spriteBatch.Draw( _overlayTexture, new Rectangle( 0, 0, Screen.width, Screen.height ), Color.Transparent );
+				graphics.batcher.draw( _overlayTexture, new Rectangle( 0, 0, Screen.width, Screen.height ), Color.Transparent );
 			
-			graphics.spriteBatch.End();
+			graphics.batcher.end();
 		}
 	}
 }

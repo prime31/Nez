@@ -8,22 +8,22 @@ namespace Nez
 	public class Material : IComparable<Material>
 	{
 		/// <summary>
-		/// BlendState used by the SpriteBatch for the current RenderableComponent
+		/// BlendState used by the Batcher for the current RenderableComponent
 		/// </summary>
 		public BlendState blendState = BlendState.AlphaBlend;
 
 		/// <summary>
-		/// DepthStencilState used by the SpriteBatch for the current RenderableComponent
+		/// DepthStencilState used by the Batcher for the current RenderableComponent
 		/// </summary>
 		public DepthStencilState depthStencilState = DepthStencilState.None;
 
 		/// <summary>
-		/// SamplerState used by the SpriteBatch for the current RenderableComponent
+		/// SamplerState used by the Batcher for the current RenderableComponent
 		/// </summary>
 		public SamplerState samplerState = Core.defaultSamplerState;
 
 		/// <summary>
-		/// Effect used by the SpriteBatch for the current RenderableComponent
+		/// Effect used by the Batcher for the current RenderableComponent
 		/// </summary>
 		public Effect effect;
 
@@ -205,7 +205,7 @@ namespace Nez
 
 
 		/// <summary>
-		/// called when the Material is initialy set right before SpriteBatch.Begin to allow any Effects that have parameters set if necessary
+		/// called when the Material is initialy set right before Batcher.begin to allow any Effects that have parameters set if necessary
 		/// based on the Camera Matrix. This will only be called if there is a non-null Effect.
 		/// </summary>
 		/// <param name="camera">Camera.</param>

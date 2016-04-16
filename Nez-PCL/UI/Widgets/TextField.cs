@@ -591,8 +591,8 @@ namespace Nez.UI
 				{
 					var messageFontColor = style.messageFontColor.HasValue ? style.messageFontColor.Value : new Color( 180, 180, 180, color.A * parentAlpha );
 					var messageFont = style.messageFont != null ? style.messageFont : font;
-					graphics.spriteBatch.DrawString( messageFont, messageText, new Vector2( x + bgLeftWidth, y + textY + yOffset ), messageFontColor );
-					//messageFont.draw( batch, messageText, x + bgLeftWidth, y + textY + yOffset, 0, messageText.length(),
+					graphics.batcher.drawString( messageFont, messageText, new Vector2( x + bgLeftWidth, y + textY + yOffset ), messageFontColor );
+					//messageFont.draw( graphics.batcher, messageText, x + bgLeftWidth, y + textY + yOffset, 0, messageText.length(),
 					//	width - bgLeftWidth - bgRightWidth, textHAlign, false, "..." );
 				}
 			}
@@ -600,7 +600,7 @@ namespace Nez.UI
 			{
 				var col = new Color( fontColor, fontColor.A * parentAlpha );
 				var t = displayText.Substring( visibleTextStart, visibleTextEnd - visibleTextStart );
-				graphics.spriteBatch.DrawString( font, t, new Vector2( x + bgLeftWidth + textOffset, y + textY + yOffset ), col );
+				graphics.batcher.drawString( font, t, new Vector2( x + bgLeftWidth + textOffset, y + textY + yOffset ), col );
 			}
 
 			if( focused && !disabled )

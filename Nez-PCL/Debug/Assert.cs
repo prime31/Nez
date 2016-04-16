@@ -8,6 +8,18 @@ namespace Nez
 	{
 		[Conditional( "DEBUG" )]
 		[DebuggerHidden]
+		public static void isTrue( bool condition )
+		{
+			if( !condition )
+			{
+				System.Diagnostics.Debug.Assert( false );
+				Debugger.Break();
+			}
+		}
+
+
+		[Conditional( "DEBUG" )]
+		[DebuggerHidden]
 		public static void isTrue( bool condition, string message, params object[] args )
 		{
 			if( !condition )
@@ -15,6 +27,14 @@ namespace Nez
 				System.Diagnostics.Debug.Assert( false, string.Format( message, args ) );
 				Debugger.Break();
 			}
+		}
+
+
+		[Conditional( "DEBUG" )]
+		[DebuggerHidden]
+		public static void isFalse( bool condition )
+		{
+			isTrue( !condition );
 		}
 
 

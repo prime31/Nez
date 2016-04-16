@@ -67,7 +67,7 @@ namespace Nez.Particles
 
 
 		/// <summary>
-		/// creates the SpriteBatch and loads the texture if it is available
+		/// creates the Batcher and loads the texture if it is available
 		/// </summary>
 		void initialize()
 		{
@@ -154,9 +154,9 @@ namespace Nez.Particles
 				var currentParticle = _particles[i];
 
 				if( _emitterConfig.subtexture == null )
-					graphics.spriteBatch.Draw( graphics.pixelTexture, rootPosition + currentParticle.position, graphics.pixelTexture.sourceRect, currentParticle.color, currentParticle.rotation, Vector2.One, currentParticle.particleSize * 0.5f, SpriteEffects.None, layerDepth );
+					graphics.batcher.draw( graphics.pixelTexture, rootPosition + currentParticle.position, graphics.pixelTexture.sourceRect, currentParticle.color, currentParticle.rotation, Vector2.One, currentParticle.particleSize * 0.5f, SpriteEffects.None, layerDepth );
 				else
-					graphics.spriteBatch.Draw( _emitterConfig.subtexture, rootPosition + currentParticle.position, _emitterConfig.subtexture.sourceRect, currentParticle.color, currentParticle.rotation, _emitterConfig.subtexture.center, currentParticle.particleSize / _emitterConfig.subtexture.sourceRect.Width, SpriteEffects.None, layerDepth );
+					graphics.batcher.draw( _emitterConfig.subtexture, rootPosition + currentParticle.position, _emitterConfig.subtexture.sourceRect, currentParticle.color, currentParticle.rotation, _emitterConfig.subtexture.center, currentParticle.particleSize / _emitterConfig.subtexture.sourceRect.Width, SpriteEffects.None, layerDepth );
 			}
 		}
 
@@ -173,8 +173,8 @@ namespace Nez.Particles
 			for( var i = 0; i < _particles.Count; i++ )
 			{
 				var currentParticle = _particles[i];
-				//graphics.spriteBatch.drawCircle( rootPosition + currentParticle.position, currentParticle.particleSize * 0.5f, Color.IndianRed );
-				graphics.spriteBatch.drawHollowRect( rootPosition + currentParticle.position - new Vector2( currentParticle.particleSize * 0.5f, currentParticle.particleSize * 0.5f ), currentParticle.particleSize, currentParticle.particleSize, Color.IndianRed );
+				//graphics.batcher.drawCircle( rootPosition + currentParticle.position, currentParticle.particleSize * 0.5f, Color.IndianRed );
+				graphics.batcher.drawHollowRect( rootPosition + currentParticle.position - new Vector2( currentParticle.particleSize * 0.5f, currentParticle.particleSize * 0.5f ), currentParticle.particleSize, currentParticle.particleSize, Color.IndianRed );
 			}
 		}
 

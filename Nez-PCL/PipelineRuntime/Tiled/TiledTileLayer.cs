@@ -77,7 +77,7 @@ namespace Nez.Tiled
 		}
 
 
-		public override void draw( SpriteBatch spriteBatch )
+		public override void draw( Batcher batcher )
 		{
 			var renderOrderFunction = getRenderOrderFunction();
 			foreach( var tile in renderOrderFunction() )
@@ -87,12 +87,12 @@ namespace Nez.Tiled
 				
 				var region = tile.textureRegion;
 				if( region != null )
-					renderLayer( spriteBatch, tilemap, tile, region );
+					renderLayer( batcher, tilemap, tile, region );
 			}
 		}
 
 
-		public override void draw( SpriteBatch spriteBatch, Vector2 position, float layerDepth, RectangleF cameraClipBounds )
+		public override void draw( Batcher batcher, Vector2 position, float layerDepth, RectangleF cameraClipBounds )
 		{
 			// offset it by the entity position since the tilemap will always expect positions in its own coordinate space
 			cameraClipBounds.location -= position;
@@ -151,21 +151,21 @@ namespace Nez.Tiled
 						}
 					}
 
-					spriteBatch.Draw( tileRegion.texture2D, new Vector2( tx, ty ), tileRegion.sourceRect, color, rotation, Vector2.Zero, 1, spriteEffects, layerDepth );
+					batcher.draw( tileRegion.texture2D, new Vector2( tx, ty ), tileRegion.sourceRect, color, rotation, Vector2.Zero, 1, spriteEffects, layerDepth );
 				}
 			}
 		}
 
 
-		void renderLayer( SpriteBatch spriteBatch, TiledMap map, TiledTile tile, Subtexture region )
+		void renderLayer( Batcher batcher, TiledMap map, TiledTile tile, Subtexture region )
 		{
 			switch( map.orientation )
 			{
 				case TiledMapOrientation.Orthogonal:
-					renderOrthogonal( spriteBatch, tile, region );
+					renderOrthogonal( batcher, tile, region );
 					break;
 				case TiledMapOrientation.Isometric:
-					renderIsometric( spriteBatch, tile, region );
+					renderIsometric( batcher, tile, region );
 					break;
 				case TiledMapOrientation.Staggered:
 					throw new NotImplementedException( "Staggered maps are currently not supported" );
@@ -173,17 +173,17 @@ namespace Nez.Tiled
 		}
 
 
-		void renderOrthogonal( SpriteBatch spriteBatch, TiledTile tile, Subtexture region )
+		void renderOrthogonal( Batcher batcher, TiledTile tile, Subtexture region )
 		{
 			// not exactly sure why we need to compensate 1 pixel here. Could be a bug in MonoGame?
 			var tx = tile.x * tilemap.tileWidth;
 			var ty = tile.y * ( tilemap.tileHeight - 1 );
 
-			spriteBatch.Draw( region.texture2D, new Rectangle( tx, ty, region.sourceRect.Width, region.sourceRect.Height ), region.sourceRect, color );
+			batcher.draw( region.texture2D, new Rectangle( tx, ty, region.sourceRect.Width, region.sourceRect.Height ), region.sourceRect, color );
 		}
 
 
-		void renderIsometric( SpriteBatch spriteBatch, TiledTile tile, Subtexture region )
+		void renderIsometric( Batcher batcher, TiledTile tile, Subtexture region )
 		{
 			var tx = ( tile.x * ( tilemap.tileWidth / 2 ) ) - ( tile.y * ( tilemap.tileWidth / 2 ) )
                 //Center
@@ -195,7 +195,7 @@ namespace Nez.Tiled
                 //Compensate Bug?
 			         - ( tilemap.tileWidth + tilemap.tileHeight );
 
-			spriteBatch.Draw( region.texture2D, new Rectangle( tx, ty, region.sourceRect.Width, region.sourceRect.Height ), region.sourceRect, color );
+			batcher.draw( region.texture2D, new Rectangle( tx, ty, region.sourceRect.Width, region.sourceRect.Height ), region.sourceRect, color );
 		}
 
 

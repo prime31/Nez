@@ -34,7 +34,7 @@ namespace Nez.UI
 				y = startY;
 				for( var j = 0; j < fullY; j++ )
 				{
-					graphics.spriteBatch.Draw( _subtexture, new Vector2( x, y ), _subtexture.sourceRect, color );
+					graphics.batcher.draw( _subtexture, new Vector2( x, y ), _subtexture.sourceRect, color );
 					y += regionHeight;
 				}
 				x += regionWidth;
@@ -48,14 +48,14 @@ namespace Nez.UI
 				y = startY;
 				for( var ii = 0; ii < fullY; ii++ )
 				{
-					graphics.spriteBatch.Draw( _subtexture, new Vector2( x, y ), tempSourceRect, color );
+					graphics.batcher.draw( _subtexture, new Vector2( x, y ), tempSourceRect, color );
 					y += regionHeight;
 				}
 					
 				// lower right corner.
 				tempSourceRect.Height = (int)remainingY;
 				if( remainingY > 0 )
-					graphics.spriteBatch.Draw( _subtexture, new Vector2( x, y ), tempSourceRect, color );
+					graphics.batcher.draw( _subtexture, new Vector2( x, y ), tempSourceRect, color );
 			}
 
 			tempSourceRect.Width = _subtexture.sourceRect.Width;
@@ -66,7 +66,7 @@ namespace Nez.UI
 				x = startX;
 				for( var i = 0; i < fullX; i++ )
 				{
-					graphics.spriteBatch.Draw( _subtexture, new Vector2( x, y ), tempSourceRect, color );
+					graphics.batcher.draw( _subtexture, new Vector2( x, y ), tempSourceRect, color );
 					x += regionWidth;
 				}
 			}

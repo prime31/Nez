@@ -36,9 +36,9 @@ namespace Nez
 
 		public override void debugRender( Graphics graphics )
 		{
-			graphics.spriteBatch.drawHollowRect( shape.bounds, Color.Black );
-			graphics.spriteBatch.drawPolygon( absolutePosition, ((shape as Polygon).points), Color.DarkRed, true );
-			graphics.spriteBatch.drawPixel( absolutePosition, Color.Yellow, 4 );
+			graphics.batcher.drawHollowRect( shape.bounds, Color.Black );
+			graphics.batcher.drawPolygon( absolutePosition, ((shape as Polygon).points), Color.DarkRed, true );
+			graphics.batcher.drawPixel( absolutePosition, Color.Yellow, 4 );
 		}
 
 	}

@@ -171,11 +171,11 @@ namespace Nez.Tiled
 		/// <summary>
 		/// calls draw on each visible layer
 		/// </summary>
-		/// <param name="spriteBatch">Sprite batch.</param>
+		/// <param name="batcher">Sprite batch.</param>
 		/// <param name="position">Position.</param>
 		/// <param name="layerDepth">Layer depth.</param>
 		/// <param name="cameraClipBounds">Camera clip bounds.</param>
-		public void draw( SpriteBatch spriteBatch, Vector2 position, float layerDepth, RectangleF cameraClipBounds )
+		public void draw( Batcher batcher, Vector2 position, float layerDepth, RectangleF cameraClipBounds )
 		{
 			// render any visible image or tile layer
 			foreach( var layer in layers )
@@ -183,18 +183,18 @@ namespace Nez.Tiled
 				if( !layer.visible )
 					continue;
 
-				layer.draw( spriteBatch, position, layerDepth, cameraClipBounds );
+				layer.draw( batcher, position, layerDepth, cameraClipBounds );
 			}
 		}
 
 
-		public void drawWithoutCullOrPositioning( SpriteBatch spriteBatch, bool useMapBackgroundColor = false )
+		public void drawWithoutCullOrPositioning( Batcher batcher, bool useMapBackgroundColor = false )
 		{
 			if( useMapBackgroundColor && backgroundColor.HasValue )
-				spriteBatch.GraphicsDevice.Clear( backgroundColor.Value );
+				batcher.graphicsDevice.Clear( backgroundColor.Value );
 
 			foreach( var layer in layers )
-				layer.draw( spriteBatch );
+				layer.draw( batcher );
 		}
 
 

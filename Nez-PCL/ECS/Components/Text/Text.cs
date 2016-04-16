@@ -25,7 +25,7 @@ namespace Nez
 
 		protected HorizontalAlign _horizontalAlign;
 		protected VerticalAlign _verticalAlign;
-		protected SpriteFont _spriteFont;
+		protected NezSpriteFont _spriteFont;
 		protected BitmapFont _bitmapFont;
 		protected string _text;
 		Vector2 _size;
@@ -54,7 +54,7 @@ namespace Nez
 		}
 
 
-		public Text( SpriteFont font, string text, Vector2 position, Color color )
+		public Text( NezSpriteFont font, string text, Vector2 position, Color color )
 		{
 			_spriteFont = font;
 			_text = text;
@@ -67,7 +67,7 @@ namespace Nez
 		}
 
 
-		public SpriteFont spriteFont
+		public NezSpriteFont spriteFont
 		{
 			get { return _spriteFont; }
 			set
@@ -126,7 +126,7 @@ namespace Nez
 			if( _bitmapFont != null )
 				_size = _bitmapFont.measureString( text );
 			else
-				_size = _spriteFont.MeasureString( text );
+				_size = _spriteFont.measureString( text );
 			
 			updateCentering();
 		}
@@ -157,9 +157,9 @@ namespace Nez
 		public override void render( Graphics graphics, Camera camera )
 		{
 			if( _bitmapFont != null )
-				graphics.spriteBatch.DrawString( _bitmapFont, text, entity.transform.position + _localPosition, color, entity.transform.rotation, origin, entity.transform.scale, spriteEffects, layerDepth );
+				graphics.batcher.drawString( _bitmapFont, text, entity.transform.position + _localPosition, color, entity.transform.rotation, origin, entity.transform.scale, spriteEffects, layerDepth );
 			else
-				graphics.spriteBatch.DrawString( _spriteFont, text, entity.transform.position + _localPosition, color, entity.transform.rotation, origin, entity.transform.scale, spriteEffects, layerDepth );
+				graphics.batcher.drawString( _spriteFont, text, entity.transform.position + _localPosition, color, entity.transform.rotation, origin, entity.transform.scale, spriteEffects, layerDepth );
 		}
 
 	}

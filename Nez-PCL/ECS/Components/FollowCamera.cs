@@ -120,9 +120,9 @@ namespace Nez
         public override void debugRender( Graphics graphics )
 		{
 			if( _cameraStyle == CameraStyle.LockOn )
-				graphics.spriteBatch.drawHollowRect( _worldSpaceDeadzone.x - 5, _worldSpaceDeadzone.y - 5, _worldSpaceDeadzone.width, _worldSpaceDeadzone.height, Color.DarkRed );
+				graphics.batcher.drawHollowRect( _worldSpaceDeadzone.x - 5, _worldSpaceDeadzone.y - 5, _worldSpaceDeadzone.width, _worldSpaceDeadzone.height, Color.DarkRed );
 			else
-				graphics.spriteBatch.drawHollowRect( _worldSpaceDeadzone, Color.DarkRed );
+				graphics.batcher.drawHollowRect( _worldSpaceDeadzone, Color.DarkRed );
 		}
 
 

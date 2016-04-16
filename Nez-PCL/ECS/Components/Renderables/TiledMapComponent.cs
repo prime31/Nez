@@ -124,14 +124,14 @@ namespace Nez
 			
 			if( layerIndicesToRender == null )
 			{
-				tiledmap.draw( graphics.spriteBatch, entity.transform.position + _localPosition, layerDepth, camera.bounds );
+				tiledmap.draw( graphics.batcher, entity.transform.position + _localPosition, layerDepth, camera.bounds );
 			}
 			else
 			{
 				for( var i = 0; i < tiledmap.layers.Count; i++ )
 				{
 					if( tiledmap.layers[i].visible && layerIndicesToRender.contains( i ) )
-						tiledmap.layers[i].draw( graphics.spriteBatch, entity.transform.position + _localPosition, layerDepth, camera.bounds );
+						tiledmap.layers[i].draw( graphics.batcher, entity.transform.position + _localPosition, layerDepth, camera.bounds );
 				}
 			}
 		}
@@ -203,18 +203,18 @@ namespace Nez
 				switch( obj.tiledObjectType )
 				{
 					case TiledObject.TiledObjectType.Ellipse:
-						graphics.spriteBatch.drawCircle( new Vector2( renderPosition.X + obj.x + obj.width * 0.5f, renderPosition.Y + obj.y + obj.height * 0.5f ), obj.width * 0.5f, group.color );
+						graphics.batcher.drawCircle( new Vector2( renderPosition.X + obj.x + obj.width * 0.5f, renderPosition.Y + obj.y + obj.height * 0.5f ), obj.width * 0.5f, group.color );
 						break;
 					case TiledObject.TiledObjectType.Image:
 						throw new NotImplementedException( "Image layers are not yet supported" );
 					case TiledObject.TiledObjectType.Polygon:
-						graphics.spriteBatch.drawPoints( renderPosition, obj.polyPoints, group.color, true );
+						graphics.batcher.drawPoints( renderPosition, obj.polyPoints, group.color, true );
 						break;
 					case TiledObject.TiledObjectType.Polyline:
-						graphics.spriteBatch.drawPoints( renderPosition, obj.polyPoints, group.color, false );
+						graphics.batcher.drawPoints( renderPosition, obj.polyPoints, group.color, false );
 						break;
 					case TiledObject.TiledObjectType.None:
-						graphics.spriteBatch.drawHollowRect( renderPosition.X + obj.x, renderPosition.Y + obj.y, obj.width, obj.height, group.color );
+						graphics.batcher.drawHollowRect( renderPosition.X + obj.x, renderPosition.Y + obj.y, obj.width, obj.height, group.color );
 						break;
 					default:
 						throw new ArgumentOutOfRangeException();

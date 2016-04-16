@@ -772,7 +772,7 @@ namespace Nez.UI
 		public virtual void debugRender( Graphics graphics )
 		{
 			if( _debug )
-				graphics.spriteBatch.drawHollowRect( x, y, width, height, Color.Red );
+				graphics.batcher.drawHollowRect( x, y, width, height, Color.Red );
 		}
 
 

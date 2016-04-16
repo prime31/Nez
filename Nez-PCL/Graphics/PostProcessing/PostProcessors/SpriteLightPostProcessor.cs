@@ -50,9 +50,9 @@ namespace Nez
 		public override void process( RenderTarget2D source, RenderTarget2D destination )
 		{
 			Core.graphicsDevice.SetRenderTarget( destination );
-			Graphics.instance.spriteBatch.Begin( effect: effect );
-			Graphics.instance.spriteBatch.Draw( source, new Rectangle( 0, 0, destination.Width, destination.Height ), Color.White );
-			Graphics.instance.spriteBatch.End();
+			Graphics.instance.batcher.begin( effect: effect );
+			Graphics.instance.batcher.draw( source, new Rectangle( 0, 0, destination.Width, destination.Height ), Color.White );
+			Graphics.instance.batcher.end();
 		}
 
 

@@ -63,7 +63,7 @@ namespace Nez
 		protected Vector2 _origin;
 
 		/// <summary>
-		/// standard SpriteBatch layerdepth. 0 is in front and 1 is in back. Changing this value will trigger a sort of the renderableComponents
+		/// standard Batcher layerdepth. 0 is in front and 1 is in back. Changing this value will trigger a sort of the renderableComponents
 		/// list on the scene.
 		/// </summary>
 		public float layerDepth
@@ -80,18 +80,18 @@ namespace Nez
 		protected float _layerDepth;
 
 		/// <summary>
-		/// color passed along to the SpriteBatch when rendering
+		/// color passed along to the Batcher when rendering
 		/// </summary>
 		public Color color = Color.White;
 
 		/// <summary>
-		/// SpriteEffects passed along to the SpriteBatch when rendering. flipX/flipY are helpers for setting this.
+		/// Batchers passed along to the Batcher when rendering. flipX/flipY are helpers for setting this.
 		/// </summary>
 		public SpriteEffects spriteEffects = SpriteEffects.None;
 
 		/// <summary>
 		/// lower renderLayers are in the front and higher are in the back, just like layerDepth but not clamped to 0-1. Note that this means
-		/// higher renderLayers are sent to the SpriteBatch first. An important fact when using the stencil buffer.
+		/// higher renderLayers are sent to the Batcher first. An important fact when using the stencil buffer.
 		/// </summary>
 		/// <value>The render layer.</value>
 		public int renderLayer
@@ -224,10 +224,10 @@ namespace Nez
 		{
 			// if we have no collider draw our bounds
 			if( entity.colliders.Count == 0 )
-				graphics.spriteBatch.drawHollowRect( bounds, Color.Yellow );
+				graphics.batcher.drawHollowRect( bounds, Color.Yellow );
 
 			// draw a square for our pivot/origin
-			graphics.spriteBatch.drawPixel( entity.transform.position + _localPosition, Color.DarkOrchid, 4 );
+			graphics.batcher.drawPixel( entity.transform.position + _localPosition, Color.DarkOrchid, 4 );
 		}
 
 

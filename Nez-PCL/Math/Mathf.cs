@@ -336,6 +336,12 @@ namespace Nez
 		}
 
 
+		public static bool withinEpsilon( float floatA, float floatB )
+		{
+			return Math.Abs( floatA - floatB ) < epsilon;
+		}
+
+
 		#region wrappers for Math doubles
 
 		public static float sqrt( float val )

@@ -239,9 +239,9 @@ namespace Nez.UI
 		}
 
 
-		protected override void drawBackground( Graphics batch, float parentAlpha, float x, float y )
+		protected override void drawBackground( Graphics graphics, float parentAlpha, float x, float y )
 		{
-			base.drawBackground( batch, parentAlpha, x, y );
+			base.drawBackground( graphics, parentAlpha, x, y );
 
 			// Manually draw the title table before clipping is done.
 			titleTable.color.A = color.A;

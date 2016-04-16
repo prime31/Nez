@@ -140,9 +140,9 @@ namespace Nez
 		public override void preRender( Graphics graphics )
 		{
 			Core.graphicsDevice.SetRenderTarget( _maskRenderTarget );
-			graphics.spriteBatch.Begin( SpriteSortMode.Deferred, BlendState.AlphaBlend, Core.defaultSamplerState, DepthStencilState.None, null );
-			graphics.spriteBatch.Draw( _maskTexture, _maskPosition, null, Color.White, _renderRotation, _maskOrigin, _renderScale, SpriteEffects.None, 0 );
-			graphics.spriteBatch.End();
+			graphics.batcher.begin( BlendState.AlphaBlend, Core.defaultSamplerState, DepthStencilState.None, null );
+			graphics.batcher.draw( _maskTexture, _maskPosition, null, Color.White, _renderRotation, _maskOrigin, _renderScale, SpriteEffects.None, 0 );
+			graphics.batcher.end();
 			Core.graphicsDevice.SetRenderTarget( null );
 		}
 
@@ -154,14 +154,14 @@ namespace Nez
 			// if we are scaling out we dont need to render the previous scene anymore since we want the new scene to be visible
 			if( !_isNewSceneLoaded )
 			{
-				graphics.spriteBatch.Begin( SpriteSortMode.Deferred, BlendState.Opaque, Core.defaultSamplerState, DepthStencilState.None, null );
-				graphics.spriteBatch.Draw( previousSceneRender, Vector2.Zero, Color.White );
-				graphics.spriteBatch.End();
+				graphics.batcher.begin( BlendState.Opaque, Core.defaultSamplerState, DepthStencilState.None, null );
+				graphics.batcher.draw( previousSceneRender, Vector2.Zero, Color.White );
+				graphics.batcher.end();
 			}
 
-			graphics.spriteBatch.Begin( SpriteSortMode.Deferred, _blendState, Core.defaultSamplerState, DepthStencilState.None, null );
-			graphics.spriteBatch.Draw( _maskRenderTarget, Vector2.Zero, Color.White );
-			graphics.spriteBatch.End();
+			graphics.batcher.begin( _blendState, Core.defaultSamplerState, DepthStencilState.None, null );
+			graphics.batcher.draw( _maskRenderTarget, Vector2.Zero, Color.White );
+			graphics.batcher.end();
 		}
 
 
