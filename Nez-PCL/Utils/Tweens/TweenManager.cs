@@ -89,8 +89,7 @@ namespace Nez.Tweens
 		/// <param name="tween">Tween.</param>
 		public static void removeTween( ITweenable tween )
 		{
-			_tempTweens.Add( tween );
-
+			_instance._tempTweens.Add( tween );
 		}
 
 
