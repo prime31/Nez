@@ -13,6 +13,8 @@ namespace Nez
 {
 	public class Batcher : GraphicsResource
 	{
+		public Matrix transformMatrix { get { return _transformMatrix; } }
+
 		#region variables
 
 		// Buffer objects used for actual drawing
@@ -592,6 +594,11 @@ namespace Nez
 				                    0.0f,
 				                    1.0f
 			                    );
+
+			// TODO: I fucking hate this shit!
+			projection.M41 += -0.5f * projection.M11;
+			projection.M42 += -0.5f * projection.M22;
+
 			Matrix.Multiply(
 				ref _transformMatrix,
 				ref projection,

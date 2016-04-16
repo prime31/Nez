@@ -16,18 +16,6 @@ namespace Nez
 		static Rectangle _tempRect;
 
 
-		public static Matrix getBatcherMatrix( this Batcher batcher )
-		{
-			#if NETFX_CORE
-			var fieldInfo = targetObject.GetType().GetRuntimeField( "_matrix" );
-			#else
-			var fieldInfo = batcher.GetType().GetField( "_matrix", BindingFlags.Instance | BindingFlags.NonPublic );
-			#endif
-
-			return (Matrix)fieldInfo.GetValue( batcher );
-		}
-
-
 		#region Line
 
 		public static void drawLine( this Batcher batcher, Vector2 start, Vector2 end, Color color )

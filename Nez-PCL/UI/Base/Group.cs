@@ -304,7 +304,7 @@ namespace Nez.UI
 		/// <param name="transform">Transform.</param>
 		protected void applyTransform( Graphics graphics, Matrix transform )
 		{
-			_previousBatcherTransform = graphics.batcher.getBatcherMatrix();
+			_previousBatcherTransform = graphics.batcher.transformMatrix;
 			graphics.batcher.end();
 			graphics.batcher.begin( transform );
 		}
