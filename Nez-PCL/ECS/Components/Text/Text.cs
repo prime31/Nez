@@ -45,7 +45,7 @@ namespace Nez
 		{
 			_bitmapFont = font;
 			_text = text;
-			_localPosition = position;
+			_localOffset = position;
 			this.color = color;
 			_horizontalAlign = HorizontalAlign.Left;
 			_verticalAlign = VerticalAlign.Top;
@@ -58,7 +58,7 @@ namespace Nez
 		{
 			_spriteFont = font;
 			_text = text;
-			_localPosition = position;
+			_localOffset = position;
 			this.color = color;
 			_horizontalAlign = HorizontalAlign.Left;
 			_verticalAlign = VerticalAlign.Top;
@@ -157,9 +157,9 @@ namespace Nez
 		public override void render( Graphics graphics, Camera camera )
 		{
 			if( _bitmapFont != null )
-				graphics.batcher.drawString( _bitmapFont, text, entity.transform.position + _localPosition, color, entity.transform.rotation, origin, entity.transform.scale, spriteEffects, layerDepth );
+				graphics.batcher.drawString( _bitmapFont, text, entity.transform.position + _localOffset, color, entity.transform.rotation, origin, entity.transform.scale, spriteEffects, layerDepth );
 			else
-				graphics.batcher.drawString( _spriteFont, text, entity.transform.position + _localPosition, color, entity.transform.rotation, origin, entity.transform.scale, spriteEffects, layerDepth );
+				graphics.batcher.drawString( _spriteFont, text, entity.transform.position + _localOffset, color, entity.transform.rotation, origin, entity.transform.scale, spriteEffects, layerDepth );
 		}
 
 	}

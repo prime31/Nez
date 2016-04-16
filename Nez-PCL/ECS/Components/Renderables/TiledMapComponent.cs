@@ -71,7 +71,7 @@ namespace Nez
 		public TiledTile getTileAtWorldPosition( Vector2 worldPos )
 		{
 			// offset the passed in world position to compensate for the entity position
-			worldPos -= entity.transform.position + _localPosition;
+			worldPos -= entity.transform.position + _localOffset;
 			return collisionLayer.getTileAtWorldPosition( worldPos );
 		}
 
@@ -84,7 +84,7 @@ namespace Nez
 		public List<TiledTile> getTilesIntersectingBounds( Rectangle bounds )
 		{
 			// offset the passed in world position to compensate for the entity position
-			bounds.Location -= ( entity.transform.position + _localPosition ).ToPoint();
+			bounds.Location -= ( entity.transform.position + _localOffset ).ToPoint();
 			return collisionLayer.getTilesIntersectingBounds( bounds );
 		}
 
@@ -124,14 +124,14 @@ namespace Nez
 			
 			if( layerIndicesToRender == null )
 			{
-				tiledmap.draw( graphics.batcher, entity.transform.position + _localPosition, layerDepth, camera.bounds );
+				tiledmap.draw( graphics.batcher, entity.transform.position + _localOffset, layerDepth, camera.bounds );
 			}
 			else
 			{
 				for( var i = 0; i < tiledmap.layers.Count; i++ )
 				{
 					if( tiledmap.layers[i].visible && layerIndicesToRender.contains( i ) )
-						tiledmap.layers[i].draw( graphics.batcher, entity.transform.position + _localPosition, layerDepth, camera.bounds );
+						tiledmap.layers[i].draw( graphics.batcher, entity.transform.position + _localOffset, layerDepth, camera.bounds );
 				}
 			}
 		}
@@ -161,7 +161,7 @@ namespace Nez
 
 			// fetch the collision layer and its rects for collision
 			var collisionRects = collisionLayer.getCollisionRectangles();
-			var renderPosition = entity.transform.position + _localPosition;
+			var renderPosition = entity.transform.position + _localOffset;
 
 			// create colliders for the rects we received
 			_colliders = new Collider[collisionRects.Count];
@@ -193,7 +193,7 @@ namespace Nez
 
 		void renderObjectGroup( TiledObjectGroup group, Graphics graphics )
 		{
-			var renderPosition = entity.transform.position + _localPosition;
+			var renderPosition = entity.transform.position + _localOffset;
 
 			foreach( var obj in group.objects )
 			{

@@ -31,36 +31,20 @@ namespace Nez
 		public virtual float height { get { return bounds.height; } }
 
 		/// <summary>
-		/// offset from the parent entity
+		/// offset from the parent entity. Useful for adding multiple Renderables to an Entity that need specific positioning.
 		/// </summary>
 		/// <value>The local position.</value>
-		public Vector2 localPosition
+		public Vector2 localOffset
 		{
-			get { return _localPosition; }
-			set
-			{
-				if( _localPosition != value )
-				{
-					_localPosition = value;
-					_areBoundsDirty = true;
-				}
-			}
+			get { return _localOffset; }
+			set { setLocalOffset( value ); }
 		}
-		protected Vector2 _localPosition;
 
 		public Vector2 origin
 		{
 			get { return _origin; }
-			set
-			{
-				if( _origin != value )
-				{
-					_origin = value;
-					_areBoundsDirty = true;
-				}
-			}
+			set { setOrigin( value ); }
 		}
-		protected Vector2 _origin;
 
 		/// <summary>
 		/// standard Batcher layerdepth. 0 is in front and 1 is in back. Changing this value will trigger a sort of the renderableComponents
@@ -69,15 +53,8 @@ namespace Nez
 		public float layerDepth
 		{
 			get { return _layerDepth; }
-			set
-			{
-				_layerDepth = value;
-
-				if( entity != null && entity.scene != null )
-					entity.scene.renderableComponents.setNeedsComponentSort();
-			}
+			set { setLayerDepth( value ); }
 		}
-		protected float _layerDepth;
 
 		/// <summary>
 		/// color passed along to the Batcher when rendering
@@ -97,20 +74,8 @@ namespace Nez
 		public int renderLayer
 		{
 			get { return _renderLayer; }
-			set
-			{
-				if( value != _renderLayer )
-				{
-					var oldRenderLayer = _renderLayer;
-					_renderLayer = value;
-
-					// if we have an entity then we are being managed by a ComponentList so we need to let it know that we changed renderLayers
-					if( entity != null && entity.scene != null )
-						entity.scene.renderableComponents.updateRenderableRenderLayer( this, oldRenderLayer, _renderLayer );
-				}
-			}
+			set { setRenderLayer( value ); }
 		}
-		protected int _renderLayer;
 
 		/// <summary>
 		/// determines if the sprite should be rendered normally or flipped horizontally
@@ -154,14 +119,13 @@ namespace Nez
 			{
 				if( _areBoundsDirty )
 				{
-					_bounds.calculateBounds( entity.transform.position, _localPosition, _origin, entity.transform.scale, entity.transform.rotation, width, height );
+					_bounds.calculateBounds( entity.transform.position, _localOffset, _origin, entity.transform.scale, entity.transform.rotation, width, height );
 					_areBoundsDirty = false;
 				}
 
 				return _bounds;
 			}
 		}
-		protected RectangleF _bounds;
 
 		/// <summary>
 		/// helper property for setting the origin in normalized fashion (0-1 for x and y)
@@ -170,9 +134,9 @@ namespace Nez
 		public Vector2 originNormalized
 		{
 			get { return new Vector2( _origin.X / width, _origin.Y / height ); }
-			set { origin = new Vector2( value.X * width, value.Y * height ); }
+			set { setOrigin( new Vector2( value.X * width, value.Y * height ) ); }
 		}
-			
+
 		/// <summary>
 		/// the visibility of this Renderable. Changes in state end up calling the onBecameVisible/onBecameInvisible methods.
 		/// </summary>
@@ -180,7 +144,7 @@ namespace Nez
 		public bool isVisible
 		{
 			get { return _isVisible; }
-			protected set
+			private set
 			{
 				if( _isVisible != value )
 				{
@@ -193,8 +157,13 @@ namespace Nez
 				}
 			}
 		}
-		protected bool _isVisible;
 
+		protected Vector2 _localOffset;
+		protected Vector2 _origin;
+		protected float _layerDepth;
+		protected int _renderLayer;
+		protected RectangleF _bounds;
+		protected bool _isVisible;
 		protected bool _areBoundsDirty = true;
 
 		#endregion
@@ -227,7 +196,7 @@ namespace Nez
 				graphics.batcher.drawHollowRect( bounds, Color.Yellow );
 
 			// draw a square for our pivot/origin
-			graphics.batcher.drawPixel( entity.transform.position + _localPosition, Color.DarkOrchid, 4 );
+			graphics.batcher.drawPixel( entity.transform.position + _localOffset, Color.DarkOrchid, 4 );
 		}
 
 
@@ -280,6 +249,90 @@ namespace Nez
 		#endregion
 
 
+		#region Fluent setters
+
+		/// <summary>
+		/// offset from the parent entity. Useful for adding multiple Renderables to an Entity that need specific positioning.
+		/// </summary>
+		/// <returns>The local offset.</returns>
+		/// <param name="offset">Offset.</param>
+		public RenderableComponent setLocalOffset( Vector2 offset )
+		{
+			if( _localOffset != offset )
+			{
+				_localOffset = offset;
+				_areBoundsDirty = true;
+			}
+			return this;
+		}
+
+
+		/// <summary>
+		/// sets the origin for the Renderable
+		/// </summary>
+		/// <returns>The origin.</returns>
+		/// <param name="origin">Origin.</param>
+		public RenderableComponent setOrigin( Vector2 origin )
+		{
+			if( _origin != origin )
+			{
+				_origin = origin;
+				_areBoundsDirty = true;
+			}
+			return this;
+		}
+
+
+		/// <summary>
+		/// helper for setting the origin in normalized fashion (0-1 for x and y)
+		/// </summary>
+		/// <returns>The origin normalized.</returns>
+		/// <param name="origin">Origin.</param>
+		public RenderableComponent setOriginNormalized( Vector2 value )
+		{
+			setOrigin( new Vector2( value.X * width, value.Y * height ) );
+			return this;
+		}
+
+
+		/// <summary>
+		/// standard Batcher layerdepth. 0 is in front and 1 is in back. Changing this value will trigger a sort of the renderableComponents
+		/// </summary>
+		/// <returns>The layer depth.</returns>
+		/// <param name="value">Value.</param>
+		public RenderableComponent setLayerDepth( float layerDepth )
+		{
+			_layerDepth = Mathf.clamp01( layerDepth );
+
+			if( entity != null && entity.scene != null )
+				entity.scene.renderableComponents.setNeedsComponentSort();
+			return this;
+		}
+
+
+		/// <summary>
+		/// lower renderLayers are in the front and higher are in the back, just like layerDepth but not clamped to 0-1. Note that this means
+		/// higher renderLayers are sent to the Batcher first. An important fact when using the stencil buffer.
+		/// </summary>
+		/// <returns>The render layer.</returns>
+		/// <param name="renderLayer">Render layer.</param>
+		public RenderableComponent setRenderLayer( int renderLayer )
+		{
+			if( renderLayer != _renderLayer )
+			{
+				var oldRenderLayer = _renderLayer;
+				_renderLayer = renderLayer;
+
+				// if we have an entity then we are being managed by a ComponentList so we need to let it know that we changed renderLayers
+				if( entity != null && entity.scene != null )
+					entity.scene.renderableComponents.updateRenderableRenderLayer( this, oldRenderLayer, _renderLayer );
+			}
+			return this;
+		}
+
+		#endregion
+
+
 		#region public API
 
 		/// <summary>
@@ -298,7 +351,7 @@ namespace Nez
 		public void drawOutline( Graphics graphics, Camera camera, Color outlineColor, int offset = 1 )
 		{
 			// save the stuff we are going to modify so we can restore it later
-			var originalPosition = _localPosition;
+			var originalPosition = _localOffset;
 			var originalColor = color;
 			var originalLayerDepth = _layerDepth;
 
@@ -312,14 +365,14 @@ namespace Nez
 				{
 					if( i != 0 || j != 0 )
 					{
-						_localPosition = originalPosition + new Vector2( i * offset, j * offset );
+						_localOffset = originalPosition + new Vector2( i * offset, j * offset );
 						render( graphics, camera );
 					}
 				}
 			}
 
 			// restore changed state
-			_localPosition = originalPosition;
+			_localOffset = originalPosition;
 			color = originalColor;
 			_layerDepth = originalLayerDepth;
 		}

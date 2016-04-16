@@ -35,7 +35,7 @@ namespace Nez
 			{
 				if( _areBoundsDirty )
 				{
-					_bounds.location = entity.transform.position + _localPosition;
+					_bounds.location = entity.transform.position + _localOffset;
 					_bounds.width = width;
 					_bounds.height = height;
 					_areBoundsDirty = false;
@@ -80,7 +80,7 @@ namespace Nez
 					_destRectsDirty = false;
 				}
 
-				var pos = ( entity.transform.position + _localPosition ).ToPoint();
+				var pos = ( entity.transform.position + _localOffset ).ToPoint();
 
 				for( var i = 0; i < 9; i++ )
 				{

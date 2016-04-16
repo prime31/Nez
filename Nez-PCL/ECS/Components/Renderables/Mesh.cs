@@ -20,7 +20,7 @@ namespace Nez
 			{
 				if( _areBoundsDirty )
 				{
-					_bounds.calculateBounds( entity.transform.position + _minVertPosition, _localPosition, _origin, entity.transform.scale, entity.transform.rotation, _width, _height );
+					_bounds.calculateBounds( entity.transform.position + _minVertPosition, _localOffset, _origin, entity.transform.scale, entity.transform.rotation, _width, _height );
 					_areBoundsDirty = false;
 				}
 
@@ -73,7 +73,7 @@ namespace Nez
 		{
 			if( isVisibleFromCamera( camera ) )
 			{
-				_basicEffect.Projection = camera.getProjectionMatrix();
+				_basicEffect.Projection = camera.projectionMatrix;
 				_basicEffect.View = camera.transformMatrix;
 				_basicEffect.World = entity.transform.localToWorldTransform;
 				_basicEffect.CurrentTechnique.Passes[0].Apply();

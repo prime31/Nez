@@ -10,38 +10,13 @@ namespace Nez
 		public float width
 		{
 			get { return ((Box)shape).width; }
-			set
-			{
-				if( value != ((Box)shape).width )
-				{
-					// store the old bounds so we can update ourself after modifying them
-					var oldBounds = bounds;
-					((Box)shape).width = value;
-					if( entity != null && _isParentEntityAddedToScene )
-						Physics.updateCollider( this, ref oldBounds );
-					_areBoundsDirty = true;
-				}
-			}
+			set { setWidth( value ); }
 		}
 
 		public float height
 		{
-			get
-			{
-				return ((Box)shape).height;
-			}
-			set
-			{
-				if( value != ((Box)shape).height )
-				{
-					// store the old bounds so we can update ourself after modifying them
-					var oldBounds = bounds;
-					((Box)shape).height = value;
-					if( entity != null && _isParentEntityAddedToScene )
-						Physics.updateCollider( this, ref oldBounds );
-					_areBoundsDirty = true;
-				}
-			}
+			get { return ((Box)shape).height; }
+			set { setHeight( value ); }
 		}
 
 
@@ -55,7 +30,7 @@ namespace Nez
 
 		public BoxCollider( float x, float y, float width, float height )
 		{
-			_localPosition = new Vector2( x, y );
+			_localOffset = new Vector2( x, y );
 			shape = new Box( width, height );
 		}
 
@@ -66,6 +41,42 @@ namespace Nez
 
 		public BoxCollider( Rectangle rect ) : this( rect.X, rect.Y, rect.Width, rect.Height )
 		{}
+
+
+		#region Fluent setters
+
+		public BoxCollider setWidth( float width )
+		{
+			if( width != ((Box)shape).width )
+			{
+				// store the old bounds so we can update ourself after modifying them
+				var oldBounds = bounds;
+				((Box)shape).width = width;
+				if( entity != null && _isParentEntityAddedToScene )
+					Physics.updateCollider( this, ref oldBounds );
+				_areBoundsDirty = true;
+			}
+
+			return this;
+		}
+
+
+		public BoxCollider setHeight( float height )
+		{
+			if( height != ((Box)shape).height )
+			{
+				// store the old bounds so we can update ourself after modifying them
+				var oldBounds = bounds;
+				((Box)shape).height = height;
+				if( entity != null && _isParentEntityAddedToScene )
+					Physics.updateCollider( this, ref oldBounds );
+				_areBoundsDirty = true;
+			}
+
+			return this;
+		}
+
+		#endregion
 
 
 		public override string ToString()

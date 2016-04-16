@@ -158,7 +158,7 @@ namespace Nez.Sprites
 			}
 			else
 			{
-				var distanceMoved = Math.Abs( Vector2.Distance( entity.transform.position + _localPosition, _lastPosition ) );
+				var distanceMoved = Math.Abs( Vector2.Distance( entity.transform.position + _localOffset, _lastPosition ) );
 				if( distanceMoved >= minDistanceBetweenInstances )
 					spawnInstance();
 			}
@@ -217,7 +217,7 @@ namespace Nez.Sprites
 		/// </summary>
 		void spawnInstance()
 		{
-			_lastPosition = _sprite.entity.transform.position + _sprite.localPosition;
+			_lastPosition = _sprite.entity.transform.position + _sprite.localOffset;
 
 			if( _awaitingDisable || _availableSpriteTrailInstances.Count == 0 )
 				return;

@@ -45,7 +45,6 @@ namespace Nez
 				}
 			}
 		}
-		float _zoom;
 
 		/// <summary>
 		/// the zoom value should be between -1 and 1. This value is then translated to be from minimumZoom to maximumZoom. This lets you set
@@ -63,18 +62,7 @@ namespace Nez
 				else
 					return Mathf.map( _zoom, 1, _maximumZoom, 0, 1 );
 			}
-			set
-			{
-				var newZoom = Mathf.clamp( value, -1, 1 );
-				if( newZoom == 0 )
-					_zoom = 1f;
-				else if( newZoom < 0 )
-					_zoom = Mathf.map( newZoom, -1, 0, _minimumZoom, 1 );
-				else
-					_zoom = Mathf.map( newZoom, 0, 1, 1, _maximumZoom );
-				
-				_areMatrixesDirty = true;
-			}
+			set { setZoom( value ); }
 		}
 
 		/// <summary>
@@ -84,17 +72,8 @@ namespace Nez
 		public float minimumZoom
 		{
 			get { return _minimumZoom; }
-			set
-			{
-				Assert.isTrue( value > 0, "minimumZoom must be greater than zero" );
-
-				if( _zoom < value )
-					_zoom = minimumZoom;
-
-				_minimumZoom = value;
-			}
+			set { setMinimumZoom( value ); }
 		}
-		float _minimumZoom = 0.3f;
 
 		/// <summary>
 		/// maximum non-scaled value (0 - float.Max) that the camera zoom can be. Defaults to 3
@@ -103,17 +82,8 @@ namespace Nez
 		public float maximumZoom
 		{
 			get { return _maximumZoom; }
-			set
-			{
-				Assert.isTrue( value > 0, "MaximumZoom must be greater than zero" );
-
-				if( _zoom > value )
-					_zoom = value;
-
-				_maximumZoom = value;
-			}
+			set { setMaximumZoom( value ); }
 		}
-		float _maximumZoom = 3f;
 
 		/// <summary>
 		/// world-space bounds of the camera. useful for culling.
@@ -160,7 +130,6 @@ namespace Nez
 				return _bounds;
 			}
 		}
-		RectangleF _bounds;
 
 		/// <summary>
 		/// used to convert from world coordinates to screen
@@ -175,7 +144,6 @@ namespace Nez
 				return _transformMatrix;
 			}
 		}
-		Matrix _transformMatrix = Matrix.Identity;
 
 		/// <summary>
 		/// used to convert from screen coordinates to world
@@ -190,9 +158,30 @@ namespace Nez
 				return _inverseTransformMatrix;
 			}
 		}
-		Matrix _inverseTransformMatrix = Matrix.Identity;
 
-		protected Vector2 _origin;
+		/// <summary>
+		/// the Cameras projection matrix
+		/// </summary>
+		/// <value>The projection matrix.</value>
+		public Matrix projectionMatrix
+		{
+			get
+			{
+				if( _isProjectionMatrixDirty )
+				{
+					Matrix.CreateOrthographicOffCenter( 0, Core.graphicsDevice.Viewport.Width, Core.graphicsDevice.Viewport.Height, 0, 0, -1, out _projectionMatrix );
+					_isProjectionMatrixDirty = false;
+				}
+				return _projectionMatrix;
+			}
+		}
+
+		/// <summary>
+		/// gets the view-projection matrix which is the transformMatrix * the projection matrix
+		/// </summary>
+		/// <value>The view projection matrix.</value>
+		public Matrix viewProjectionMatrix { get { return transformMatrix * projectionMatrix; } }
+
 		Vector2 origin
 		{
 			get { return _origin; }
@@ -207,19 +196,25 @@ namespace Nez
 		}
 
 
-		float _near = -100f;
-		float _far = 100f;
+		float _zoom;
+		float _minimumZoom = 0.3f;
+		float _maximumZoom = 3f;
+		RectangleF _bounds;
+		Matrix _transformMatrix = Matrix.Identity;
+		Matrix _inverseTransformMatrix = Matrix.Identity;
+		Matrix _projectionMatrix;
+		Vector2 _origin;
+
 		bool _areMatrixesDirty = true;
 		bool _areBoundsDirty = true;
+		bool _isProjectionMatrixDirty = true;
 
 		#endregion
 
 
-		public Camera( float near = -100, float far = 100 )
+		public Camera()
 		{
-			zoom = 0;
-			_near = near;
-			_far = far;
+			setZoom( 0 );
 		}
 
 
@@ -228,8 +223,9 @@ namespace Nez
 		/// </summary>
 		/// <param name="newWidth">New width.</param>
 		/// <param name="newHeight">New height.</param>
-		public void onSceneRenderTargetSizeChanged( int newWidth, int newHeight )
+		internal void onSceneRenderTargetSizeChanged( int newWidth, int newHeight )
 		{
+			_isProjectionMatrixDirty = true;
 			var oldOrigin = _origin;
 			origin = new Vector2( newWidth / 2f, newHeight / 2f );
 
@@ -271,6 +267,101 @@ namespace Nez
 		}
 
 
+		#region Fluent setters
+
+		/// <summary>
+		/// shortcut to entity.transform.setPosition
+		/// </summary>
+		/// <returns>The position.</returns>
+		/// <param name="value">Value.</param>
+		public Camera setPosition( Vector2 position )
+		{
+			entity.transform.setPosition( position );
+			return this;
+		}
+
+
+		/// <summary>
+		/// shortcut to entity.transform.setRotation
+		/// </summary>
+		/// <returns>The rotation.</returns>
+		/// <param name="radians">Radians.</param>
+		public Camera setRotation( float radians )
+		{
+			entity.transform.setRotation( radians );
+			return this;
+		}
+
+
+		/// <summary>
+		/// shortcut to entity.transform.setRotationDegrees
+		/// </summary>
+		/// <returns>The rotation degrees.</returns>
+		/// <param name="degrees">Degrees.</param>
+		public Camera setRotationDegrees( float degrees )
+		{
+			entity.transform.setRotationDegrees( degrees );
+			return this;
+		}
+
+		/// <summary>
+		/// sets the the zoom value which should be between -1 and 1. This value is then translated to be from minimumZoom to maximumZoom.
+		/// This lets you set appropriate minimum/maximum values then use a more intuitive -1 to 1 mapping to change the zoom.
+		/// </summary>
+		/// <returns>The zoom.</returns>
+		/// <param name="zoom">Zoom.</param>
+		public Camera setZoom( float zoom )
+		{
+			var newZoom = Mathf.clamp( zoom, -1, 1 );
+			if( newZoom == 0 )
+				_zoom = 1f;
+			else if( newZoom < 0 )
+				_zoom = Mathf.map( newZoom, -1, 0, _minimumZoom, 1 );
+			else
+				_zoom = Mathf.map( newZoom, 0, 1, 1, _maximumZoom );
+
+			_areMatrixesDirty = true;
+
+			return this;
+		}
+
+
+		/// <summary>
+		/// minimum non-scaled value (0 - float.Max) that the camera zoom can be. Defaults to 0.3
+		/// </summary>
+		/// <returns>The minimum zoom.</returns>
+		/// <param name="value">Value.</param>
+		public Camera setMinimumZoom( float minZoom )
+		{
+			Assert.isTrue( minZoom > 0, "minimumZoom must be greater than zero" );
+
+			if( _zoom < minZoom )
+				_zoom = minimumZoom;
+
+			_minimumZoom = minZoom;
+			return this;
+		}
+
+
+		/// <summary>
+		/// maximum non-scaled value (0 - float.Max) that the camera zoom can be. Defaults to 3
+		/// </summary>
+		/// <returns>The maximum zoom.</returns>
+		/// <param name="maxZoom">Max zoom.</param>
+		public Camera setMaximumZoom( float maxZoom )
+		{
+			Assert.isTrue( maxZoom > 0, "MaximumZoom must be greater than zero" );
+
+			if( _zoom > maxZoom )
+				_zoom = maxZoom;
+
+			_maximumZoom = maxZoom;
+			return this;
+		}
+
+		#endregion
+
+
 		/// <summary>
 		/// this forces the matrix and bounds dirty
 		/// </summary>
@@ -306,7 +397,7 @@ namespace Nez
 		#endregion
 
 
-		#region transforms and matrix
+		#region transformations
 
 		/// <summary>
 		/// converts a point from world coordinates to screen
@@ -342,28 +433,6 @@ namespace Nez
 		public Vector2 screenToWorldPoint( Point screenPosition )
 		{
 			return screenToWorldPoint( screenPosition.ToVector2() );
-		}
-
-
-		/// <summary>
-		/// gets this cameras project matrix
-		/// </summary>
-		/// <returns>The projection matrix.</returns>
-		public Matrix getProjectionMatrix()
-		{
-			// not currently blocked with a dirty flag due to the core engine not using this
-			return Matrix.CreateOrthographicOffCenter( 0, Core.graphicsDevice.Viewport.Width, Core.graphicsDevice.Viewport.Height, 0, _near, _far );
-		}
-
-
-		/// <summary>
-		/// gets the view-projection matrix which is the transformMatrix * the projection matrix
-		/// </summary>
-		/// <returns>The view projection matrix.</returns>
-		public Matrix getViewProjectionMatrix()
-		{
-			// not currently blocked with a dirty flag due to the core engine not using this
-			return transformMatrix * getProjectionMatrix();
 		}
 
 		#endregion

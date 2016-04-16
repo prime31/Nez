@@ -36,21 +36,8 @@ namespace Nez
 		public Transform parent
 		{
 			get { return _parent; }
-			set
-			{
-				if( _parent == value )
-					return;
-
-				if( _parent != null )
-					_parent._children.Remove( this );
-
-				if( value != null )
-					value._children.Add( this );
-
-				_parent = value;
-			}
+			set { setParent( value ); }
 		}
-		Transform _parent;
 
 
 		/// <summary>
@@ -83,85 +70,7 @@ namespace Nez
 				}
 				return _position;
 			}
-			set
-			{
-				if( shouldRoundPosition )
-					Vector2Ext.round( ref value );
-				
-				_position = value;
-				if( parent != null )
-				{
-					localPosition = Vector2.Transform( _position, worldToLocalTransform );
-				}
-				else
-				{
-					localPosition = value;
-				}
-				_positionDirty = false;
-			}
-		}
-
-
-		/// <summary>
-		/// rotation of the transform in world space in radians
-		/// </summary>
-		/// <value>The rotation.</value>
-		public float rotation
-		{
-			get
-			{
-				updateTransform();
-				return _rotation;
-			}
-			set
-			{
-				_rotation = value;
-				if( parent != null )
-				{
-					localRotation = parent.rotation + value;
-				}
-				else
-				{
-					localRotation = value;
-				}
-			}
-		}
-
-
-		/// <summary>
-		/// rotation of the transform in world space in degrees
-		/// </summary>
-		/// <value>The rotation degrees.</value>
-		public float rotationDegrees
-		{
-			get { return MathHelper.ToDegrees( _rotation ); }
-			set { rotation = MathHelper.ToRadians( value ); }
-		}
-
-
-		/// <summary>
-		/// global scale of the transform
-		/// </summary>
-		/// <value>The scale.</value>
-		public Vector2 scale
-		{
-			get
-			{
-				updateTransform();
-				return _scale;
-			}
-			set
-			{
-				_scale = value;
-				if( parent != null )
-				{
-					localScale = value / parent._scale;
-				}
-				else
-				{
-					localScale = value;
-				}
-			}
+			set { setPosition( value ); }
 		}
 
 
@@ -176,15 +85,33 @@ namespace Nez
 				updateTransform();
 				return _localPosition;
 			}
-			set
+			set { setLocalPosition( value ); }
+		}
+
+
+		/// <summary>
+		/// rotation of the transform in world space in radians
+		/// </summary>
+		/// <value>The rotation.</value>
+		public float rotation
+		{
+			get
 			{
-				if( shouldRoundPosition )
-					Vector2Ext.round( ref value );
-				
-				_localPosition = value;
-				_localDirty = _positionDirty = _localPositionDirty = _localRotationDirty = _localScaleDirty = true;
-				setDirty( DirtyType.PositionDirty );
+				updateTransform();
+				return _rotation;
 			}
+			set { setRotation( value ); }
+		}
+
+
+		/// <summary>
+		/// rotation of the transform in world space in degrees
+		/// </summary>
+		/// <value>The rotation degrees.</value>
+		public float rotationDegrees
+		{
+			get { return MathHelper.ToDegrees( _rotation ); }
+			set { setRotation( MathHelper.ToRadians( value ) ); }
 		}
 
 
@@ -199,12 +126,7 @@ namespace Nez
 				updateTransform();
 				return _localRotation;
 			}
-			set
-			{
-				_localRotation = value;
-				_localDirty = _positionDirty = _localPositionDirty = _localRotationDirty = _localScaleDirty = true;
-				setDirty( DirtyType.RotationDirty );
-			}
+			set { setLocalRotation( value); }
 		}
 
 
@@ -220,6 +142,21 @@ namespace Nez
 
 
 		/// <summary>
+		/// global scale of the transform
+		/// </summary>
+		/// <value>The scale.</value>
+		public Vector2 scale
+		{
+			get
+			{
+				updateTransform();
+				return _scale;
+			}
+			set { setScale( value ); }
+		}
+
+
+		/// <summary>
 		/// the scale of the transform relative to the parent. If the transform has no parent, it is the same as Transform.scale
 		/// </summary>
 		/// <value>The local scale.</value>
@@ -230,12 +167,7 @@ namespace Nez
 				updateTransform();
 				return _localScale;
 			}
-			set
-			{
-				_localScale = value;
-				_localDirty = _positionDirty = _localScaleDirty = true;
-				setDirty( DirtyType.ScaleDirty );
-			}
+			set { setLocalScale( value ); }
 		}
 
 
@@ -282,6 +214,7 @@ namespace Nez
 		}
 
 
+		Transform _parent;
 		DirtyType hierarchyDirty;
 
 		bool _localDirty;
@@ -334,6 +267,183 @@ namespace Nez
 			return _children[index];
 		}
 	
+
+		#region Fluent setters
+
+		/// <summary>
+		/// sets the parent Transform of this Transform
+		/// </summary>
+		/// <returns>The parent.</returns>
+		/// <param name="parent">Parent.</param>
+		public Transform setParent( Transform parent )
+		{
+			if( _parent == parent )
+				return this;
+
+			if( _parent != null )
+				_parent._children.Remove( this );
+
+			if( parent != null )
+				parent._children.Add( this );
+
+			_parent = parent;
+
+			return this;
+		}
+
+
+		/// <summary>
+		/// sets the position of the transform in world space
+		/// </summary>
+		/// <returns>The position.</returns>
+		/// <param name="position">Position.</param>
+		public Transform setPosition( Vector2 position )
+		{
+			if( shouldRoundPosition )
+				Vector2Ext.round( ref position );
+
+			_position = position;
+			if( parent != null )
+				localPosition = Vector2.Transform( _position, worldToLocalTransform );
+			else
+				localPosition = position;
+
+			_positionDirty = false;
+
+			return this;
+		}
+
+
+		/// <summary>
+		/// sets the position of the transform relative to the parent transform. If the transform has no parent, it is the same
+		/// as Transform.position
+		/// </summary>
+		/// <returns>The local position.</returns>
+		/// <param name="localPosition">Local position.</param>
+		public Transform setLocalPosition( Vector2 localPosition )
+		{
+			if( shouldRoundPosition )
+				Vector2Ext.round( ref localPosition );
+
+			_localPosition = localPosition;
+			_localDirty = _positionDirty = _localPositionDirty = _localRotationDirty = _localScaleDirty = true;
+			setDirty( DirtyType.PositionDirty );
+
+			return this;
+		}
+
+
+		/// <summary>
+		/// sets the rotation of the transform in world space in radians
+		/// </summary>
+		/// <returns>The rotation.</returns>
+		/// <param name="radians">Radians.</param>
+		public Transform setRotation( float radians )
+		{
+			_rotation = radians;
+			if( parent != null )
+				localRotation = parent.rotation + radians;
+			else
+				localRotation = radians;
+			
+			return this;
+		}
+
+
+		/// <summary>
+		/// sets the rotation of the transform in world space in degrees
+		/// </summary>
+		/// <returns>The rotation.</returns>
+		/// <param name="radians">Radians.</param>
+		public Transform setRotationDegrees( float degrees )
+		{
+			return setRotation( MathHelper.ToRadians( degrees ) );
+		}
+
+
+		/// <summary>
+		/// sets the the rotation of the transform relative to the parent transform's rotation. If the transform has no parent, it is the
+		/// same as Transform.rotation
+		/// </summary>
+		/// <returns>The local rotation.</returns>
+		/// <param name="radians">Radians.</param>
+		public Transform setLocalRotation( float radians )
+		{
+			_localRotation = radians;
+			_localDirty = _positionDirty = _localPositionDirty = _localRotationDirty = _localScaleDirty = true;
+			setDirty( DirtyType.RotationDirty );
+
+			return this;
+		}
+
+
+		/// <summary>
+		/// sets the the rotation of the transform relative to the parent transform's rotation. If the transform has no parent, it is the
+		/// same as Transform.rotation
+		/// </summary>
+		/// <returns>The local rotation.</returns>
+		/// <param name="radians">Radians.</param>
+		public Transform setLocalRotationDegrees( float degrees )
+		{
+			return setLocalRotation( MathHelper.ToRadians( degrees ) );
+		}
+
+
+		/// <summary>
+		/// sets the global scale of the transform
+		/// </summary>
+		/// <returns>The scale.</returns>
+		/// <param name="scale">Scale.</param>
+		public Transform setScale( Vector2 scale )
+		{
+			_scale = scale;
+			if( parent != null )
+				localScale = scale / parent._scale;
+			else
+				localScale = scale;
+			
+			return this;
+		}
+
+
+		/// <summary>
+		/// sets the global scale of the transform
+		/// </summary>
+		/// <returns>The scale.</returns>
+		/// <param name="scale">Scale.</param>
+		public Transform setScale( float scale )
+		{
+			return setScale( new Vector2( scale ) );
+		}
+
+
+		/// <summary>
+		/// sets the scale of the transform relative to the parent. If the transform has no parent, it is the same as Transform.scale
+		/// </summary>
+		/// <returns>The local scale.</returns>
+		/// <param name="scale">Scale.</param>
+		public Transform setLocalScale( Vector2 scale )
+		{
+			_localScale = scale;
+			_localDirty = _positionDirty = _localScaleDirty = true;
+			setDirty( DirtyType.ScaleDirty );
+
+			return this;
+		}
+
+
+		/// <summary>
+		/// sets the scale of the transform relative to the parent. If the transform has no parent, it is the same as Transform.scale
+		/// </summary>
+		/// <returns>The local scale.</returns>
+		/// <param name="scale">Scale.</param>
+		public Transform setLocalScale( float scale )
+		{
+			return setLocalScale( new Vector2( scale ) );
+		}
+
+		#endregion
+
 
 		/// <summary>
 		/// rounds the position of the Transform

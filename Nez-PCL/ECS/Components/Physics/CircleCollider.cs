@@ -10,16 +10,7 @@ namespace Nez
 		public float radius
 		{
 			get { return ((Circle)shape).radius; }
-			set
-			{
-				// store the old bounds so we can update ourself after modifying them
-				var oldBounds = bounds;
-				((Circle)shape).radius = value;
-				_areBoundsDirty = true;
-
-				if( entity != null && _isParentEntityAddedToScene )
-					Physics.updateCollider( this, ref oldBounds );
-			}
+			set { setRadius( value ); }
 		}
 
 
@@ -58,6 +49,26 @@ namespace Nez
 			shape = new Circle( radius );
 			_origin = origin;
 		}
+
+
+		#region Fluent setters
+
+		public CircleCollider setRadius( float radius )
+		{
+			if( radius != ( (Circle)shape ).radius )
+			{
+				// store the old bounds so we can update ourself after modifying them
+				var oldBounds = bounds;
+				( (Circle)shape ).radius = radius;
+				_areBoundsDirty = true;
+
+				if( entity != null && _isParentEntityAddedToScene )
+					Physics.updateCollider( this, ref oldBounds );
+			}
+			return this;
+		}
+
+		#endregion
 
 
 		public override void debugRender( Graphics graphics )

@@ -16,14 +16,14 @@ namespace Nez
 		/// </summary>
 		/// <param name="remote">Remote.</param>
 		/// <param name="local">Local.</param>
-		void onTriggerEnter( Collider other, Collider self );
+		void onTriggerEnter( Collider other, Collider local );
 
 		/// <summary>
 		/// called when another collider leaves a trigger collider.
 		/// </summary>
 		/// <param name="remote">Remote.</param>
 		/// <param name="local">Local.</param>
-		void onTriggerExit( Collider other, Collider self );
+		void onTriggerExit( Collider other, Collider local );
 	}
 }
 

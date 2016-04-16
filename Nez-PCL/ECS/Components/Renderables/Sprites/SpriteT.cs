@@ -194,12 +194,14 @@ namespace Nez.Sprites
 		#endregion
 
 
-		public void addAnimation( TEnum key, SpriteAnimation animation )
+		public Sprite<TEnum> addAnimation( TEnum key, SpriteAnimation animation )
 		{
 			// if we have no subtexture use the first frame we find
 			if( subtexture == null && animation.frames.Count > 0 )
 				subtexture = animation.frames[0].subtexture;
 			_animations[key] = animation;
+
+			return this;
 		}
 
 

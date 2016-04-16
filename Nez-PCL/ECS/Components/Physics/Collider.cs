@@ -19,39 +19,20 @@ namespace Nez
 		public Shape shape;
 
 		/// <summary>
-		/// position is added to entity.position to get the final position for the collider
+		/// localOffset is added to entity.position to get the final position for the collider. This allows you to add multiple Colliders
+		/// to an Entity and position them separately.
 		/// </summary>
-		public Vector2 localPosition
+		public Vector2 localOffset
 		{
-			get { return _localPosition; }
-			set
-			{
-				if( _localPosition != value )
-				{
-					unregisterColliderWithPhysicsSystem();
-					_localPosition = value;
-					_areBoundsDirty = true;
-					registerColliderWithPhysicsSystem();
-				}
-			}
+			get { return _localOffset; }
+			set { setLocalOffset( value ); }
 		}
-		protected Vector2 _localPosition;
 
 		public Vector2 origin
 		{
 			get { return _origin; }
-			set
-			{
-				if( _origin != value )
-				{
-					unregisterColliderWithPhysicsSystem();
-					_origin = value;
-					_areBoundsDirty = true;
-					registerColliderWithPhysicsSystem();
-				}
-			}
+			set { setOrigin( value ); }
 		}
-		protected Vector2 _origin;
 
 		/// <summary>
 		/// helper property for setting the origin in normalized fashion (0-1 for x and y)
@@ -69,7 +50,7 @@ namespace Nez
 		/// <value>The absolute position.</value>
 		public Vector2 absolutePosition
 		{
-			get { return entity.transform.position + _localPosition - _origin; }
+			get { return entity.transform.position + _localOffset - _origin; }
 		}
 
 		/// <summary>
@@ -101,6 +82,9 @@ namespace Nez
 			}
 		}
 
+		protected Vector2 _localOffset;
+		protected Vector2 _origin;
+
 		/// <summary>
 		/// flag to keep track of if our Entity was added to a Scene
 		/// </summary>
@@ -115,6 +99,47 @@ namespace Nez
 
 		public Collider()
 		{}
+
+
+		#region Fluent setters
+
+		/// <summary>
+		/// localOffset is added to entity.position to get the final position for the collider. This allows you to add multiple Colliders
+		/// to an Entity and position them separately.
+		/// </summary>
+		/// <returns>The local offset.</returns>
+		/// <param name="offset">Offset.</param>
+		public Collider setLocalOffset( Vector2 offset )
+		{
+			if( _localOffset != offset )
+			{
+				unregisterColliderWithPhysicsSystem();
+				_localOffset = offset;
+				_areBoundsDirty = true;
+				registerColliderWithPhysicsSystem();
+			}
+			return this;
+		}
+
+
+		/// <summary>
+		/// sets the origin for the Collider
+		/// </summary>
+		/// <returns>The origin.</returns>
+		/// <param name="origin">Origin.</param>
+		public Collider setOrigin( Vector2 origin )
+		{
+			if( _origin != origin )
+			{
+				unregisterColliderWithPhysicsSystem();
+				_origin = origin;
+				_areBoundsDirty = true;
+				registerColliderWithPhysicsSystem();
+			}
+			return this;
+		}
+
+		#endregion
 
 
 		#region Collider Lifecycle

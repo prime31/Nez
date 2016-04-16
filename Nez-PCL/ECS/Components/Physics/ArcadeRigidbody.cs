@@ -17,17 +17,8 @@ namespace Nez
 		public float mass
 		{
 			get { return _mass; }
-			set
-			{
-				_mass = Mathf.clamp( value, 0, float.MaxValue );
-
-				if( _mass > 0.0001f )
-					_inverseMass = 1 / _mass;
-				else
-					_inverseMass = 0f;
-			}
+			set { setMass( value ); }
 		}
-		float _mass = 10f;
 
 		/// <summary>
 		/// 0 - 1 range where 0 is no bounce and 1 is perfect reflection
@@ -35,9 +26,8 @@ namespace Nez
 		public float elasticity
 		{
 			get { return _elasticity; }
-			set { _elasticity = Mathf.clamp01( value ); }
+			set { setElasticity( value ); }
 		}
-		float _elasticity = 0.5f;
 
 		/// <summary>
 		/// 0 - 1 range. 0 means no friction, 1 means the object will stop dead on
@@ -45,9 +35,8 @@ namespace Nez
 		public float friction
 		{
 			get { return _friction; }
-			set { _friction = Mathf.clamp01( value ); }
+			set { setFriction( value ); }
 		}
-		float _friction = 0.5f;
 
 		/// <summary>
 		/// 0 - 9 range. When a collision occurs and it has risidual motion along the surface of collision if its square magnitude is less
@@ -56,9 +45,8 @@ namespace Nez
 		public float glue
 		{
 			get { return _glue; }
-			set { _glue = Mathf.clamp( value, 0, 10 ); }
+			set { setGlue( value );  }
 		}
-		float _glue = 0.01f;
 
 		/// <summary>
 		/// if true, Physics.gravity will be taken into account each frame
@@ -76,6 +64,10 @@ namespace Nez
 		/// <value><c>true</c> if is immovable; otherwise, <c>false</c>.</value>
 		public bool isImmovable { get { return _mass < 0.0001f; } }
 
+		float _mass = 10f;
+		float _elasticity = 0.5f;
+		float _friction = 0.5f;
+		float _glue = 0.01f;
 		float _inverseMass;
 
 
@@ -83,6 +75,76 @@ namespace Nez
 		{
 			_inverseMass = 1 / _mass;
 		}
+
+
+		#region Fluent setters
+
+		/// <summary>
+		/// mass of this rigidbody. A 0 mass will make this an immovable object.
+		/// </summary>
+		/// <returns>The mass.</returns>
+		/// <param name="mass">Mass.</param>
+		public ArcadeRigidbody setMass( float mass )
+		{
+			_mass = Mathf.clamp( mass, 0, float.MaxValue );
+
+			if( _mass > 0.0001f )
+				_inverseMass = 1 / _mass;
+			else
+				_inverseMass = 0f;
+			return this;
+		}
+
+
+		/// <summary>
+		/// 0 - 1 range where 0 is no bounce and 1 is perfect reflection
+		/// </summary>
+		/// <returns>The elasticity.</returns>
+		/// <param name="value">Value.</param>
+		public ArcadeRigidbody setElasticity( float value )
+		{
+			_elasticity = Mathf.clamp01( value );
+			return this;
+		}
+
+
+		/// <summary>
+		/// 0 - 1 range. 0 means no friction, 1 means the object will stop dead on
+		/// </summary>
+		/// <returns>The friction.</returns>
+		/// <param name="value">Value.</param>
+		public ArcadeRigidbody setFriction( float value )
+		{
+			_friction = Mathf.clamp01( value );
+			return this;
+		}
+
+
+		/// <summary>
+		/// 0 - 9 range. When a collision occurs and it has risidual motion along the surface of collision if its square magnitude is less
+		/// than glue friction will be set to the maximum for the collision resolution.
+		/// </summary>
+		/// <returns>The glue.</returns>
+		/// <param name="value">Value.</param>
+		public ArcadeRigidbody setGlue( float value )
+		{
+			_glue = Mathf.clamp( value, 0, 10 );
+			return this;
+		}
+
+
+		/// <summary>
+		/// velocity of this rigidbody
+		/// </summary>
+		/// <returns>The velocity.</returns>
+		/// <param name="velocity">Velocity.</param>
+		public ArcadeRigidbody setVelocity( Vector2 velocity )
+		{
+			this.velocity = velocity;
+			return this;
+		}
+
+		#endregion
 
 
 		/// <summary>

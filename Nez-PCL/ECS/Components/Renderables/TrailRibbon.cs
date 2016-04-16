@@ -172,7 +172,7 @@ namespace Nez
 			calculateVertices();
 			if( isVisibleFromCamera( camera ) )
 			{
-				_basicEffect.Projection = camera.getProjectionMatrix();
+				_basicEffect.Projection = camera.projectionMatrix;
 				_basicEffect.View = camera.transformMatrix;
 				_basicEffect.CurrentTechnique.Passes[0].Apply();
 

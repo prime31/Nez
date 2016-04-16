@@ -36,7 +36,7 @@ namespace Nez
 				{
 					if( entity.transform.rotation == 0f )
 					{
-					    var positionAddition = _localPosition - _origin;
+					    var positionAddition = _localOffset - _origin;
 					    if( entity != null )
 							positionAddition += entity.transform.position;
 
@@ -70,8 +70,8 @@ namespace Nez
 		{
 			get
 			{
-				var worldPosX = _localPosition.X;
-				var worldPosY = _localPosition.Y;
+				var worldPosX = _localOffset.X;
+				var worldPosY = _localOffset.Y;
 				
 				if( entity != null )
 				{
@@ -111,6 +111,7 @@ namespace Nez
 				_verts[i].Color = color;
 		}
 
+
 		public override void onAddedToEntity()
 		{
 			_basicEffect = entity.scene.contentManager.loadMonoGameEffect<BasicEffect>();
@@ -124,7 +125,7 @@ namespace Nez
 		{
 			if( isVisibleFromCamera( camera ) )
 			{
-				_basicEffect.Projection = camera.getProjectionMatrix();
+				_basicEffect.Projection = camera.projectionMatrix;
 				_basicEffect.View = camera.transformMatrix;
 				_basicEffect.CurrentTechnique.Passes[0].Apply();
 

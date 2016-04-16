@@ -53,17 +53,17 @@ namespace Nez
 				break;
 				case FPSDockPosition.TopRight:
 					_horizontalAlign = HorizontalAlign.Right;
-					localPosition = new Vector2( Core.graphicsDevice.Viewport.Width, 0f );
+					localOffset = new Vector2( Core.graphicsDevice.Viewport.Width, 0f );
 				break;
 				case FPSDockPosition.BottomLeft:
 					_horizontalAlign = HorizontalAlign.Left;
 					_verticalAlign = VerticalAlign.Bottom;
-					localPosition = new Vector2( 0, Core.graphicsDevice.Viewport.Height );
+					localOffset = new Vector2( 0, Core.graphicsDevice.Viewport.Height );
 				break;
 				case FPSDockPosition.BottomRight:
 					_horizontalAlign = HorizontalAlign.Right;
 					_verticalAlign = VerticalAlign.Bottom;
-					localPosition = new Vector2( Core.graphicsDevice.Viewport.Width, Core.graphicsDevice.Viewport.Height );
+					localOffset = new Vector2( Core.graphicsDevice.Viewport.Width, Core.graphicsDevice.Viewport.Height );
 				break;
 			}
 		}
@@ -101,9 +101,9 @@ namespace Nez
 		{
 			// we override render and use position instead of entityPosition. this keeps the text in place even if the entity moves
 			if( _bitmapFont != null )
-				graphics.batcher.drawString( _bitmapFont, _text, localPosition, color, entity.transform.rotation, origin, entity.transform.scale, spriteEffects, layerDepth );
+				graphics.batcher.drawString( _bitmapFont, _text, localOffset, color, entity.transform.rotation, origin, entity.transform.scale, spriteEffects, layerDepth );
 			else
-				graphics.batcher.drawString( _spriteFont, _text, localPosition, color, entity.transform.rotation, origin, entity.transform.scale, spriteEffects, layerDepth );
+				graphics.batcher.drawString( _spriteFont, _text, localOffset, color, entity.transform.rotation, origin, entity.transform.scale, spriteEffects, layerDepth );
 		}
 
 
@@ -111,7 +111,7 @@ namespace Nez
 		{
 			// due to the override of position in render we have to do the same here
 			var rect = bounds;
-			rect.location = localPosition;
+			rect.location = localOffset;
 			graphics.batcher.drawHollowRect( rect, Color.Yellow );
 		}
 

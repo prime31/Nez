@@ -19,7 +19,7 @@ namespace Nez.PhysicsShapes
 		internal override void recalculateBounds( Collider collider )
 		{
 			position = collider.absolutePosition;
-			bounds = new RectangleF( collider.entity.transform.position.X + collider.localPosition.X + collider.origin.X - radius, collider.entity.transform.position.Y + collider.localPosition.Y + collider.origin.Y - radius, radius * 2f, radius * 2f );
+			bounds = new RectangleF( collider.entity.transform.position.X + collider.localOffset.X + collider.origin.X - radius, collider.entity.transform.position.Y + collider.localOffset.Y + collider.origin.Y - radius, radius * 2f, radius * 2f );
 		}
 
 

@@ -29,7 +29,7 @@ namespace Nez.Sprites
 		public override void render( Graphics graphics, Camera camera )
 		{
 			if( isVisibleFromCamera( camera ) )
-				graphics.batcher.draw( _spriteToMime.subtexture, entity.transform.position + _localPosition, _spriteToMime.subtexture.sourceRect, color, entity.transform.rotation, _spriteToMime.origin, entity.transform.scale, _spriteToMime.spriteEffects, _layerDepth );
+				graphics.batcher.draw( _spriteToMime.subtexture, entity.transform.position + _localOffset, _spriteToMime.subtexture.sourceRect, color, entity.transform.rotation, _spriteToMime.origin, entity.transform.scale, _spriteToMime.spriteEffects, _layerDepth );
 		}
 	}
 }

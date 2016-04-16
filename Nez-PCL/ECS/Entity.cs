@@ -28,12 +28,12 @@ namespace Nez
 		/// <summary>
 		/// list of all the components currently attached to this entity
 		/// </summary>
-		public ComponentList components;
+		public readonly ComponentList components;
 
 		/// <summary>
 		/// list of all the Colliders currently attached to this entity
 		/// </summary>
-		public ColliderList colliders;
+		public readonly ColliderList colliders;
 
 		/// <summary>
 		/// use this however you want to. It can later be used to query the scene for all Entities with a specific tag
@@ -41,21 +41,8 @@ namespace Nez
 		public int tag
 		{
 			get { return _tag; }
-			set
-			{
-				if( _tag != value )
-				{
-					// we only call through to the entityTagList if we already have a scene. if we dont have a scene yet we will be
-					// added to the entityTagList when we do
-					if( scene != null )
-						scene.entities.removeFromTagList( this );
-					_tag = value;
-					if( scene != null )
-						scene.entities.addToTagList( this );
-				}
-			}
+			set { setTag( value ); }
 		}
-		int _tag = 0;
 
 		/// <summary>
 		/// specifies how often this entitys update method should be called. 1 means every frame, 2 is every other, etc
@@ -68,53 +55,19 @@ namespace Nez
 		/// <value><c>true</c> if enabled; otherwise, <c>false</c>.</value>
 		public bool enabled
 		{
-			get
-			{
-				return _enabled;
-			}
-			set
-			{
-				if( _enabled != value )
-				{
-					_enabled = value;
-
-					if( _enabled )
-					{
-						components.onEntityEnabled();
-						colliders.onEntityEnabled();
-					}
-					else
-					{
-						components.onEntityDisabled();
-						colliders.onEntityDisabled();
-					}
-				}
-			}
+			get { return _enabled; }
+			set { setEnabled( value ); }
 		}
-		bool _enabled = true;
-
 
 		/// <summary>
-		/// update order of this Entity. Also used to sort tag lists on scene.entities
+		/// update order of this Entity. updateOrder is also used to sort tag lists on scene.entities
 		/// </summary>
 		/// <value>The order.</value>
 		public int updateOrder
 		{
 			get { return _updateOrder; }
-			set
-			{
-				if( _updateOrder != value )
-				{
-					_updateOrder = value;
-					if( scene != null )
-					{
-						scene.entities.markEntityListUnsorted();
-						scene.entities.markTagUnsorted( tag );
-					}
-				}
-			}
+			set { setUpdateOrder( value ); }
 		}
-		internal int _updateOrder = 0;
 
 		internal BitSet componentBits;
 
@@ -122,6 +75,10 @@ namespace Nez
 		/// flag indicating if destroy was called on this Entity
 		/// </summary>
 		internal bool _isDestroyed;
+
+		int _tag = 0;
+		bool _enabled = true;
+		internal int _updateOrder = 0;
 
 		#endregion
 
@@ -149,6 +106,80 @@ namespace Nez
 			components.onEntityTransformChanged();
 			colliders.onEntityTransformChanged();
 		}
+
+
+		#region Fluent setters
+
+		/// <summary>
+		/// sets the tag for the Entity
+		/// </summary>
+		/// <returns>The tag.</returns>
+		/// <param name="tag">Tag.</param>
+		public Entity setTag( int tag )
+		{
+			if( _tag != tag )
+			{
+				// we only call through to the entityTagList if we already have a scene. if we dont have a scene yet we will be
+				// added to the entityTagList when we do
+				if( scene != null )
+					scene.entities.removeFromTagList( this );
+				_tag = tag;
+				if( scene != null )
+					scene.entities.addToTagList( this );
+			}
+
+			return this;
+		}
+
+
+		/// <summary>
+		/// sets the enabled state of the Entity. When disabled colliders are removed from the Physics system and components methods will not be called
+		/// </summary>
+		/// <returns>The enabled.</returns>
+		/// <param name="isEnabled">If set to <c>true</c> is enabled.</param>
+		public Entity setEnabled( bool isEnabled )
+		{
+			if( _enabled != isEnabled )
+			{
+				_enabled = isEnabled;
+
+				if( _enabled )
+				{
+					components.onEntityEnabled();
+					colliders.onEntityEnabled();
+				}
+				else
+				{
+					components.onEntityDisabled();
+					colliders.onEntityDisabled();
+				}
+			}
+
+			return this;
+		}
+
+
+		/// <summary>
+		/// sets the update order of this Entity. updateOrder is also used to sort tag lists on scene.entities
+		/// </summary>
+		/// <returns>The update order.</returns>
+		/// <param name="updateOrder">Update order.</param>
+		public Entity setUpdateOrder( int updateOrder )
+		{
+			if( _updateOrder != updateOrder )
+			{
+				_updateOrder = updateOrder;
+				if( scene != null )
+				{
+					scene.entities.markEntityListUnsorted();
+					scene.entities.markTagUnsorted( tag );
+				}
+			}
+
+			return this;
+		}
+
+		#endregion
 
 
 		/// <summary>

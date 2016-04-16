@@ -122,7 +122,7 @@ namespace Nez.Particles
 			}
 
 			// prep data for the particle.update method
-			var rootPosition = entity.transform.position + _localPosition;
+			var rootPosition = entity.transform.position + _localOffset;
 
 			// loop through all the particles updating their location and color
 			for( var i = _particles.Count - 1; i >= 0; i-- )
@@ -146,7 +146,7 @@ namespace Nez.Particles
 			if( !_active && !_isPaused )
 				return;
 
-			var rootPosition = entity.transform.position + _localPosition;
+			var rootPosition = entity.transform.position + _localOffset;
 
 			// loop through all the particles updating their location and color
 			for( var i = 0; i < _particles.Count; i++ )
@@ -167,7 +167,7 @@ namespace Nez.Particles
 			if( !_active && !_isPaused )
 				return;
 
-			var rootPosition = entity.transform.position + _localPosition;
+			var rootPosition = entity.transform.position + _localOffset;
 
 			// loop through all the particles updating their location and color
 			for( var i = 0; i < _particles.Count; i++ )
