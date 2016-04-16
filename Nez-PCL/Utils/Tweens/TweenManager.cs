@@ -63,7 +63,10 @@ namespace Nez.Tweens
 
 			// kill the dead Tweens
 			for( var i = 0; i < _tempTweens.Count; i++ )
-				removeTween( _tempTweens[i] );
+			{
+				_tempTweens[i].recycleSelf();
+				_activeTweens.Remove( _tempTweens[i] );
+			}
 			_tempTweens.Clear();
 		}
 
@@ -81,26 +84,13 @@ namespace Nez.Tweens
 
 
 		/// <summary>
-		/// removes the tween at index from the active tweens list.
-		/// </summary>
-		/// <param name="tween">Tween.</param>
-		/// <param name="index">Index.</param>
-		public static void removeTween( ITweenable tween, int index )
-		{
-			_instance._activeTweens.RemoveAt( index );
-			tween.recycleSelf();
-		}
-
-
-		/// <summary>
-		/// removes a tween from the active tweens list. List.Remove can be quite slow so it is preferable to sue the other
-		/// removeTween variant.
+		/// removes a tween from the active tweens list
 		/// </summary>
 		/// <param name="tween">Tween.</param>
 		public static void removeTween( ITweenable tween )
 		{
-			_instance._activeTweens.Remove( tween );
-			tween.recycleSelf();
+			_tempTweens.Add( tween );
+
 		}
 
 
