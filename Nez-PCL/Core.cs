@@ -62,7 +62,7 @@ namespace Nez
 		internal static Core _instance;
 
 		#if DEBUG
-		internal static ulong drawCalls, spriteCount;
+		internal static ulong drawCalls;
 		#endif
 
 		Scene _scene;
@@ -271,7 +271,6 @@ namespace Nez
 				TimeRuler.instance.render();
 
 			drawCalls = graphicsDevice.Metrics.DrawCount;
-			spriteCount = graphicsDevice.Metrics.SpriteCount;
 			#endif
 		}
 

@@ -88,7 +88,7 @@ namespace Nez.Console
 			{
 				_drawCallTimer = Core.schedule( delay, true, timer =>
 				{
-					Debug.log( "Draw Calls: {0}, Sprite Count: {1}", Core.drawCalls, Core.spriteCount );
+					Debug.log( "Draw Calls: {0}", Core.drawCalls );
 				} );
 			}
 		}
