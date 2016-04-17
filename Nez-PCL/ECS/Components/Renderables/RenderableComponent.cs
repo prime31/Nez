@@ -217,13 +217,7 @@ namespace Nez
 
 
 		public override void onRemovedFromEntity()
-		{
-			if( material != null )
-			{
-				material.unload();
-				material = null;
-			}
-		}
+		{}
 
 
 		/// <summary>

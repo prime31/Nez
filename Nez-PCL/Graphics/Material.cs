@@ -5,8 +5,19 @@ using Microsoft.Xna.Framework;
 
 namespace Nez
 {
-	public class Material : IComparable<Material>
+	public class Material : IComparable<Material>, IDisposable
 	{
+		/// <summary>
+		/// default Material instance
+		/// </summary>
+		public static Material defaultMaterial = new Material();
+
+		/// <summary>
+		/// default opaque Material used for PostProcessors
+		/// </summary>
+		public static Material defaultOpaqueMaterial = new Material( BlendState.Opaque );
+
+
 		/// <summary>
 		/// BlendState used by the Batcher for the current RenderableComponent
 		/// </summary>
@@ -201,6 +212,34 @@ namespace Nez
 		{
 			this.depthStencilState = depthStencilState;
 			this.effect = effect;
+		}
+
+
+		~Material()
+		{
+			Dispose();
+		}
+
+
+		public void Dispose()
+		{
+			if( blendState != null && blendState != BlendState.AlphaBlend )
+			{
+				blendState.Dispose();
+				blendState = null;
+			}
+
+			if( depthStencilState != null && depthStencilState != DepthStencilState.None )
+			{
+				depthStencilState.Dispose();
+				depthStencilState = null;
+			}
+
+			if( samplerState != null && samplerState != Core.defaultSamplerState )
+			{
+				samplerState.Dispose();
+				samplerState = null;
+			}
 		}
 
 

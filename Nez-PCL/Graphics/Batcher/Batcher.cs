@@ -107,25 +107,37 @@ namespace Nez
 
 		public void begin()
 		{
-			begin( BlendState.AlphaBlend, SamplerState.LinearClamp, DepthStencilState.None, RasterizerState.CullCounterClockwise, null, Matrix.Identity, false );
+			begin( BlendState.AlphaBlend, Core.defaultSamplerState, DepthStencilState.None, RasterizerState.CullCounterClockwise, null, Matrix.Identity, false );
 		}
 
 
 		public void begin( Effect effect )
 		{
-			begin( BlendState.AlphaBlend, SamplerState.LinearClamp, DepthStencilState.None, RasterizerState.CullCounterClockwise, effect, Matrix.Identity, false );
+			begin( BlendState.AlphaBlend, Core.defaultSamplerState, DepthStencilState.None, RasterizerState.CullCounterClockwise, effect, Matrix.Identity, false );
+		}
+
+
+		public void begin( Material material )
+		{
+			begin( material.blendState, material.samplerState, material.depthStencilState, RasterizerState.CullCounterClockwise, material.effect );
 		}
 
 
 		public void begin( Matrix transformationMatrix )
 		{
-			begin( BlendState.AlphaBlend, SamplerState.LinearClamp, DepthStencilState.None, RasterizerState.CullCounterClockwise, null, transformationMatrix, false );
+			begin( BlendState.AlphaBlend, Core.defaultSamplerState, DepthStencilState.None, RasterizerState.CullCounterClockwise, null, transformationMatrix, false );
 		}
 
 
 		public void begin( BlendState blendState )
 		{
-			begin( blendState, SamplerState.LinearClamp, DepthStencilState.None, RasterizerState.CullCounterClockwise, null, Matrix.Identity, false );
+			begin( blendState, Core.defaultSamplerState, DepthStencilState.None, RasterizerState.CullCounterClockwise, null, Matrix.Identity, false );
+		}
+
+
+		public void begin( Material material, Matrix transformationMatrix )
+		{
+			begin( material.blendState, material.samplerState, material.depthStencilState, RasterizerState.CullCounterClockwise, material.effect, transformationMatrix );
 		}
 
 
@@ -179,7 +191,7 @@ namespace Nez
 			_beginCalled = true;
 
 			_blendState = blendState ?? BlendState.AlphaBlend;
-			_samplerState = samplerState ?? SamplerState.LinearClamp;
+			_samplerState = samplerState ?? Core.defaultSamplerState;
 			_depthStencilState = depthStencilState ?? DepthStencilState.None;
 			_rasterizerState = rasterizerState ?? RasterizerState.CullCounterClockwise;
 
@@ -208,11 +220,27 @@ namespace Nez
 
 		#region Public draw methods
 
+		public void draw( Texture2D texture, Vector2 position )
+		{
+			checkBegin();
+			pushSprite( texture, null, new Vector4( position.X, position.Y, 1.0f, 1.0f ),
+				Color.White, Vector2.Zero, 0.0f, 0.0f, 0, false );
+		}
+
+
 		public void draw( Texture2D texture, Vector2 position, Color color )
 		{
 			checkBegin();
 			pushSprite( texture, null, new Vector4( position.X, position.Y, 1.0f, 1.0f ),
 				color, Vector2.Zero, 0.0f, 0.0f, 0, false );
+		}
+
+
+		public void draw( Texture2D texture, Rectangle destinationRectangle )
+		{
+			checkBegin();
+			pushSprite( texture, null, new Vector4( destinationRectangle.X, destinationRectangle.Y, destinationRectangle.Width, destinationRectangle.Height ),
+				Color.White, Vector2.Zero, 0.0f, 0.0f, 0, true );
 		}
 
 
@@ -227,22 +255,8 @@ namespace Nez
 		public void draw( Texture2D texture, Rectangle destinationRectangle, Rectangle? sourceRectangle, Color color )
 		{
 			checkBegin();
-			pushSprite(
-				texture,
-				sourceRectangle,
-				new Vector4(
-					destinationRectangle.X,
-					destinationRectangle.Y,
-					destinationRectangle.Width,
-					destinationRectangle.Height
-				),
-				color,
-				Vector2.Zero,
-				0.0f,
-				0.0f,
-				0,
-				true
-			);
+			pushSprite( texture, sourceRectangle, new Vector4( destinationRectangle.X, destinationRectangle.Y, destinationRectangle.Width, destinationRectangle.Height ),
+				color, Vector2.Zero, 0.0f, 0.0f, 0, true );
 		}
 
 
@@ -576,7 +590,7 @@ namespace Nez
 			var viewport = graphicsDevice.Viewport;
 
 			// Inlined CreateOrthographicOffCenter
-			Matrix projection = new Matrix(
+			var projection = new Matrix(
 				                    (float)( 2.0 / (double)viewport.Width ),
 				                    0.0f,
 				                    0.0f,
@@ -595,7 +609,7 @@ namespace Nez
 				                    1.0f
 			                    );
 
-			// TODO: I fucking hate this shit!
+			// TODO: I hate this shit!
 			projection.M41 += -0.5f * projection.M11;
 			projection.M42 += -0.5f * projection.M22;
 
@@ -606,7 +620,7 @@ namespace Nez
 			);
 			_spriteMatrixTransformParam.SetValue( projection );
 
-			// FIXME: When is this actually applied? -flibit
+			// FIXME: When is this actually applied?
 			_spriteEffectPass.Apply();
 		}
 

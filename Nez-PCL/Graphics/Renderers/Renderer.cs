@@ -20,7 +20,7 @@ namespace Nez
 		/// <summary>
 		/// Material used by the Batcher. Any RenderableComponent can override this.
 		/// </summary>
-		public Material material = new Material();
+		public Material material = Material.defaultMaterial;
 
 		/// <summary>
 		/// the Camera this renderer uses for rendering (really its transformMatrix and bounds for culling). This is a convenience field and isnt
@@ -84,7 +84,7 @@ namespace Nez
 			}
 
 			_currentMaterial = material;
-			Graphics.instance.batcher.begin( _currentMaterial.blendState, _currentMaterial.samplerState, _currentMaterial.depthStencilState, RasterizerState.CullNone, _currentMaterial.effect, cam.transformMatrix );
+			Graphics.instance.batcher.begin( _currentMaterial, cam.transformMatrix );
 		}
 
 
@@ -122,7 +122,7 @@ namespace Nez
 		void flushBatch( Camera cam )
 		{
 			Graphics.instance.batcher.end();
-			Graphics.instance.batcher.begin( _currentMaterial.blendState, _currentMaterial.samplerState, _currentMaterial.depthStencilState, RasterizerState.CullNone, _currentMaterial.effect, cam.transformMatrix );
+			Graphics.instance.batcher.begin( _currentMaterial, cam.transformMatrix );
 		}
 
 

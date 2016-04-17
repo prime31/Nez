@@ -47,7 +47,8 @@ namespace Nez
 		public static NezContentManager contentManager;
 
 		/// <summary>
-		/// default SamplerState used by Scene, Material and PostProcessors
+		/// default SamplerState used by Materials. Note that this must be set at launch! Changing it after that time will result in only
+		/// Materials created after it was set having the new SamplerState
 		/// </summary>
 		public static SamplerState defaultSamplerState = SamplerState.PointClamp;
 

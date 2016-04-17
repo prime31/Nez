@@ -34,6 +34,10 @@ namespace Nez
 		public Subtexture pixelTexture;
 
 
+		public Graphics()
+		{}
+
+
 		public Graphics( BitmapFont font )
 		{
 			batcher = new Batcher( Core.graphicsDevice );
