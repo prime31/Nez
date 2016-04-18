@@ -90,6 +90,16 @@ namespace Nez.UI
 		public IGamepadFocusable gamepadRightElement { get; set; }
 
 
+		public void enableExplicitFocusableControl( IGamepadFocusable upEle, IGamepadFocusable downEle, IGamepadFocusable leftEle, IGamepadFocusable rightEle )
+		{
+			shouldUseExplicitFocusableControl = true;
+			gamepadUpElement = upEle;
+			gamepadDownElement = downEle;
+			gamepadLeftElement = leftEle;
+			gamepadRightElement = rightEle;
+		}
+
+
 		void IGamepadFocusable.onUnhandledDirectionPressed( Direction direction )
 		{
 			onUnhandledDirectionPressed( direction );

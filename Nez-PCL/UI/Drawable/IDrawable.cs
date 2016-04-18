@@ -17,6 +17,9 @@ namespace Nez.UI
 		float minWidth { get; set; }
 		float minHeight { get; set; }
 
+
+		void setPadding( float top, float bottom, float left, float right );
+
 		void draw( Graphics graphics, float x, float y, float width, float height, Color color );
 	}
 }

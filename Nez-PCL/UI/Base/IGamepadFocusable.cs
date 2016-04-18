@@ -19,6 +19,15 @@ namespace Nez.UI
 
 
 		/// <summary>
+		/// enables shouldUseExplicitFocusableControl and sets the elements corresponding to each direction
+		/// </summary>
+		/// <param name="upEle">Up ele.</param>
+		/// <param name="downEle">Down ele.</param>
+		/// <param name="leftEle">Left ele.</param>
+		/// <param name="rightEle">Right ele.</param>
+		void enableExplicitFocusableControl( IGamepadFocusable upEle, IGamepadFocusable downEle, IGamepadFocusable leftEle, IGamepadFocusable rightEle );
+
+		/// <summary>
 		/// called only when the following conditions are met:
 		/// - shouldUseExplicitFocusableControl is true
 		/// - this Element is focused

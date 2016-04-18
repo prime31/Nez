@@ -25,6 +25,15 @@ namespace Nez.UI
 		public float minWidth { get; set; }
 		public float minHeight { get; set; }
 
+
+		public void setPadding( float top, float bottom, float left, float right )
+		{
+			topHeight = top;
+			bottomHeight = bottom;
+			leftWidth = left;
+			rightWidth = right;
+		}
+
 		#endregion
 
 		public Color? tintColor;
