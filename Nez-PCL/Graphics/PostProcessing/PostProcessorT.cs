@@ -35,7 +35,7 @@ namespace Nez
 
 		public override void unload()
 		{
-			if( effect != null && !effect.IsDisposed )
+			if( effect != null )
 			{
 				effect.Dispose();
 				effect = null;

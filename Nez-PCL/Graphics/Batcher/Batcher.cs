@@ -137,7 +137,7 @@ namespace Nez
 
 		public void begin( Material material, Matrix transformationMatrix )
 		{
-			begin( material.blendState, material.samplerState, material.depthStencilState, RasterizerState.CullCounterClockwise, material.effect, transformationMatrix );
+			begin( material.blendState, material.samplerState, material.depthStencilState, RasterizerState.CullCounterClockwise, material.effect, transformationMatrix, false );
 		}
 
 
@@ -551,13 +551,13 @@ namespace Nez
 
 		void flushBatch()
 		{
+			if( _numSprites == 0 )
+				return;
+
 			int offset = 0;
 			Texture2D curTexture = null;
 
 			prepRenderState();
-
-			if( _numSprites == 0 )
-				return;
 
 			_vertexBuffer.SetData( 0, _vertexInfo, 0, _numSprites, VertexPositionColorTexture4.realStride, SetDataOptions.None );
 

@@ -5,6 +5,15 @@ using Microsoft.Xna.Framework;
 
 namespace Nez
 {
+	/// <summary>
+	/// convenience subclass with a single property that casts the Effect for cleaner configuration
+	/// </summary>
+	public class Material<T> : Material where T : Effect
+	{
+		public T typedEffect { get { return (T)effect; } }
+	}
+
+
 	public class Material : IComparable<Material>, IDisposable
 	{
 		/// <summary>
@@ -221,7 +230,7 @@ namespace Nez
 		}
 
 
-		public void Dispose()
+		public virtual void Dispose()
 		{
 			if( blendState != null && blendState != BlendState.AlphaBlend )
 			{
@@ -239,6 +248,12 @@ namespace Nez
 			{
 				samplerState.Dispose();
 				samplerState = null;
+			}
+
+			if( effect != null )
+			{
+				effect.Dispose();
+				effect = null;
 			}
 		}
 
@@ -286,6 +301,19 @@ namespace Nez
 			return -1;
 		}
 
+
+		/// <summary>
+		/// clones the Material. Note that the Effect is not cloned. It is the same instance as the original Material.
+		/// </summary>
+		public Material clone()
+		{
+			return new Material {
+				blendState = blendState,
+				depthStencilState = depthStencilState,
+				samplerState = samplerState,
+				effect = effect
+			};
+		}
 	}
 }
 

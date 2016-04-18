@@ -106,21 +106,21 @@ namespace Nez
 
 		#region Line Angle
 
-		public static void drawLineAngle( this Batcher batcher, Vector2 start, float angle, float length, Color color )
+		public static void drawLineAngle( this Batcher batcher, Vector2 start, float radians, float length, Color color )
 		{
-			batcher.draw( Graphics.instance.pixelTexture, start, Graphics.instance.pixelTexture.sourceRect, color, angle, Vector2.Zero, new Vector2( length, 1 ), SpriteEffects.None, 0 );
+			batcher.draw( Graphics.instance.pixelTexture, start, Graphics.instance.pixelTexture.sourceRect, color, radians, Vector2.Zero, new Vector2( length, 1 ), SpriteEffects.None, 0 );
 		}
 
 
-		public static void drawLineAngle( this Batcher batcher, Vector2 start, float angle, float length, Color color, float thickness )
+		public static void drawLineAngle( this Batcher batcher, Vector2 start, float radians, float length, Color color, float thickness )
 		{
-			batcher.draw( Graphics.instance.pixelTexture, start, Graphics.instance.pixelTexture.sourceRect, color, angle, new Vector2( 0f, 0.5f ), new Vector2( length, thickness ), SpriteEffects.None, 0 );
+			batcher.draw( Graphics.instance.pixelTexture, start, Graphics.instance.pixelTexture.sourceRect, color, radians, new Vector2( 0f, 0.5f ), new Vector2( length, thickness ), SpriteEffects.None, 0 );
 		}
 
 
-		public static void drawLineAngle( this Batcher batcher, float startX, float startY, float angle, float length, Color color )
+		public static void drawLineAngle( this Batcher batcher, float startX, float startY, float radians, float length, Color color )
 		{
-			drawLineAngle( batcher, new Vector2( startX, startY ), angle, length, color );
+			drawLineAngle( batcher, new Vector2( startX, startY ), radians, length, color );
 		}
 
 		#endregion
