@@ -8,7 +8,7 @@ namespace Nez
 	/// <summary>
 	/// convenience subclass with a single property that casts the Effect for cleaner configuration
 	/// </summary>
-	public class Material<T> : Material where T : Effect
+	public class Material<T> : Material, IDisposable where T : Effect
 	{
 		public T typedEffect { get { return (T)effect; } }
 	}
@@ -265,22 +265,6 @@ namespace Nez
 		/// <param name="camera">Camera.</param>
 		public virtual void onPreRender( Camera camera )
 		{}
-
-
-		/// <summary>
-		/// disposes of all graphic-related assets
-		/// </summary>
-		public void unload()
-		{
-			if( blendState != BlendState.AlphaBlend )
-				blendState.Dispose();
-
-			if( depthStencilState != DepthStencilState.None )
-				depthStencilState.Dispose();
-
-			if( samplerState != Core.defaultSamplerState )
-				samplerState.Dispose();
-		}
 
 
 		/// <Docs>To be added.</Docs>

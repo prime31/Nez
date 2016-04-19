@@ -237,6 +237,13 @@ namespace Nez
 
 		#region Fluent setters
 
+		public RenderableComponent setMaterial( Material material )
+		{
+			this.material = material;
+			return this;
+		}
+
+
 		/// <summary>
 		/// offset from the parent entity. Useful for adding multiple Renderables to an Entity that need specific positioning.
 		/// </summary>

@@ -9,8 +9,8 @@ namespace Nez
 	/// </summary>
 	public interface IUpdatable
 	{
-		bool enabled { get; set; }
-		int updateOrder { get; set; }
+		bool enabled { get; }
+		int updateOrder { get; }
 
 		void update();
 	}

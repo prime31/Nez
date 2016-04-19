@@ -28,40 +28,17 @@ namespace Nez
 		public bool enabled
 		{
 			get { return entity != null ? entity.enabled && _enabled : _enabled; }
-			set
-			{
-				if( _enabled != value )
-				{
-					_enabled = value;
-
-					if( _enabled )
-						onEnabled();
-					else
-						onDisabled();
-				}
-			}
+			set { setEnabled( value ); }
 		}
-		bool _enabled = true;
 
 		/// <summary>
 		/// update order of the Components on this Entity
 		/// </summary>
 		/// <value>The order.</value>
-		public int updateOrder
-		{
-			get { return _updateOrder; }
-			set
-			{
-				if( _updateOrder != value )
-				{
-					_updateOrder = value;
-					if( entity != null )
-						entity.components.markEntityListUnsorted();
-				}
-			}
-		}
-		internal int _updateOrder = 0;
+		public int updateOrder { get { return _updateOrder; } }
 
+		bool _enabled = true;
+		internal int _updateOrder = 0;
 
 		public Component()
 		{}
@@ -109,6 +86,37 @@ namespace Nez
 		/// </summary>
 		public virtual void onDisabled()
 		{}
+
+		#endregion
+
+
+		#region Fluent setters
+
+		public Component setEnabled( bool isEnabled )
+		{
+			if( _enabled != isEnabled )
+			{
+				_enabled = isEnabled;
+
+				if( _enabled )
+					onEnabled();
+				else
+					onDisabled();
+			}
+			return this;
+		}
+
+
+		public Component setUpdateOrder( int updateOrder )
+		{
+			if( _updateOrder != updateOrder )
+			{
+				_updateOrder = updateOrder;
+				if( entity != null )
+					entity.components.markEntityListUnsorted();
+			}
+			return this;
+		}
 
 		#endregion
 

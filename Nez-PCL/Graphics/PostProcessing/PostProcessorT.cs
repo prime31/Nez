@@ -9,7 +9,7 @@ namespace Nez
 	/// helper subclass for strongly typed Effects loaded from EffectResource. The effect will automatically be unloaded when the scene
 	/// completes.
 	/// </summary>
-	public abstract class PostProcessor<T> : PostProcessor where T : Effect
+	public class PostProcessor<T> : PostProcessor where T : Effect
 	{
 		/// <summary>
 		/// The effect used to render the scene with

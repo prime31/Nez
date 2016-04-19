@@ -129,7 +129,7 @@ namespace Nez
 				_basicEffect.View = camera.transformMatrix;
 				_basicEffect.CurrentTechnique.Passes[0].Apply();
 
-				// TODO: set the _basicEffect.World = entity.transform.localToWorldTransform instead of manually mucking with verts and a local matrix
+				// TODO: set the _basicEffect.World = entity.transform.localToWorldTransform instead of manualy mucking with verts and a local matrix
 
 				Core.graphicsDevice.SamplerStates[0] = SamplerState.AnisotropicClamp;
 				Core.graphicsDevice.DrawUserPrimitives( PrimitiveType.TriangleList, _verts, 0, _points.Length - 2, VertexPositionColor.VertexDeclaration );
