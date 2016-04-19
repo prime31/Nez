@@ -635,13 +635,13 @@ namespace Nez
 
 					// Whatever happens in pass.Apply, make sure the texture being drawn ends up in Textures[0].
 					graphicsDevice.Textures[0] = texture;
-					graphicsDevice.DrawIndexedPrimitives( PrimitiveType.TriangleList, baseSprite * 4, 0, batchSize * 4, 0, batchSize * 2 );
+					graphicsDevice.DrawIndexedPrimitives( PrimitiveType.TriangleList, baseSprite * 4, 0, batchSize * 2 );
 				}
 			}
 			else
 			{
 				graphicsDevice.Textures[0] = texture;
-				graphicsDevice.DrawIndexedPrimitives( PrimitiveType.TriangleList, baseSprite * 4, 0, batchSize * 4, 0, batchSize * 2 );
+				graphicsDevice.DrawIndexedPrimitives( PrimitiveType.TriangleList, baseSprite * 4, 0, batchSize * 2 );
 			}
 		}
 
