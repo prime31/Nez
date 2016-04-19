@@ -267,7 +267,6 @@ namespace Nez
 
 			var cameraEntity = createEntity( "camera" );
 			camera = cameraEntity.addComponent( new Camera() );
-			//camera = new Camera();
 
 			if( Core.entitySystemsEnabled )
 				entityProcessors = new EntityProcessorList();
@@ -291,7 +290,7 @@ namespace Nez
 
 
 		/// <summary>
-		/// override this in Scene subclasses. this will be called when Core sets this scene as the active scen.
+		/// override this in Scene subclasses. this will be called when Core sets this scene as the active scene.
 		/// </summary>
 		public virtual void onStart()
 		{}
@@ -377,7 +376,7 @@ namespace Nez
 		{
 			// Renderers should always have those that require RenderTarget first. They clear themselves and set themselves as
 			// the current RenderTarget when they render
-			if( _renderers[0].renderTexture == null )
+			if( _renderers[0].wantsToRenderToSceneRenderTarget )
 			{
 				Core.graphicsDevice.SetRenderTarget( _sceneRenderTarget );
 				Core.graphicsDevice.Clear( clearColor );
@@ -392,7 +391,7 @@ namespace Nez
 			{
 				// MonoGame follows the XNA bullshit implementation so it will clear the entire buffer if we change the render target even if null.
 				// Because of that, we track when we are done with our RenderTargets and clear the scene at that time.
-				if( lastRendererHadRenderTarget )
+				if( lastRendererHadRenderTarget && _renderers[i].wantsToRenderToSceneRenderTarget )
 				{
 					Core.graphicsDevice.SetRenderTarget( _sceneRenderTarget );
 					Core.graphicsDevice.Clear( clearColor );

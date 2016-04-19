@@ -44,12 +44,6 @@ namespace Nez
 		public Color renderTargetClearColor = Color.Transparent;
 
 		/// <summary>
-		/// if true and a renderTarget is present the RenderTarget will be reset to null. This is useful when you have multiple
-		/// renderers that should all be rendering into the same RenderTarget.
-		/// </summary>
-		public bool clearRenderTargetAfterRender = true;
-
-		/// <summary>
 		/// flag for this renderer that decides if it should debug render or not. The render method receives a bool (debugRenderEnabled)
 		/// letting the renderer know if the global debug rendering is on/off. The renderer then uses the local bool to decide if it
 		/// should debug render or not.
@@ -57,9 +51,20 @@ namespace Nez
 		public bool shouldDebugRender = true;
 
 		/// <summary>
+		/// if true, the Scene will call SetRenderTarget with the scene RenderTarget. The default implementaiton returns true if the Renderer
+		/// has a renderTexture
+		/// </summary>
+		/// <value><c>true</c> if wants to render to scene render target; otherwise, <c>false</c>.</value>
+		public virtual bool wantsToRenderToSceneRenderTarget { get { return renderTexture == null; } }
+
+		/// <summary>
 		/// holds the current Material of the last rendered Renderable (or the Renderer.material if no changes were made)
 		/// </summary>
-		Material _currentMaterial;
+		protected Material _currentMaterial;
+
+
+		public Renderer( int renderOrder ) : this( renderOrder, null )
+		{}
 
 
 		public Renderer( int renderOrder, Camera camera )
@@ -132,10 +137,6 @@ namespace Nez
 		protected virtual void endRender()
 		{
 			Graphics.instance.batcher.end();
-
-			// clear the RenderTarget so that we render to the screen if we were using a RenderTarget
-			if( renderTexture != null && clearRenderTargetAfterRender )
-				Core.graphicsDevice.SetRenderTarget( null );
 		}
 
 
@@ -146,7 +147,7 @@ namespace Nez
 		protected virtual void debugRender( Scene scene, Camera cam )
 		{
 			Graphics.instance.batcher.end();
-			Graphics.instance.batcher.begin( null, null, null, null, null, Core.scene.camera.transformMatrix );
+			Graphics.instance.batcher.begin( Core.scene.camera.transformMatrix );
 
 			for( var i = 0; i < scene.entities.Count; i++ )
 			{
@@ -188,6 +189,7 @@ namespace Nez
 		{
 			return renderOrder.CompareTo( other.renderOrder );
 		}
+	
 	}
 }
 
