@@ -92,9 +92,6 @@ namespace Nez
 			_spriteMatrixTransformParam = _spriteEffect.Parameters["MatrixTransform"];
 			_spriteEffectPass = _spriteEffect.CurrentTechnique.Passes[0];
 
-			_beginCalled = false;
-			_numSprites = 0;
-
 			_projectionMatrix = new Matrix(
 				0f, //(float)( 2.0 / (double)viewport.Width ),
 				0.0f,
@@ -629,7 +626,7 @@ namespace Nez
 			);
 			_spriteMatrixTransformParam.SetValue( _matrixTransformMatrix );
 
-			// FIXME: When is this actually applied?
+			// we have to Apply here because custom effects often wont have a vertex shader and we need the default SpriteEffect's
 			_spriteEffectPass.Apply();
 		}
 
