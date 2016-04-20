@@ -8,6 +8,7 @@ Nez aims to be a lightweight 2D framework that sits on top of MonoGame/FNA. It p
 - efficient coroutines for breaking up large tasks across multiple frames or animation timing (Core.startCoroutine)
 - in-game debug console extendable by adding an attribute to any static method. Just press the tilde key like in the old days with Quake. Out of the box, it includes a visual physics debugging system, asset tracker, basic profiler and more. Just type 'help' to see all the commands or type 'help COMMAND' to see specific hints.
 - extensible rendering system. Add/remove renderers and post processors as needed.
+- deferred lighting engine with normal map support
 - tween system. Tween any int/float/Vector/quaternion/color/rectangle field or property.
 - sprites with sprite animations, scrolling sprites and repeating sprites
 - kick-ass particle system with added support for importing [Particle Designer](https://71squared.com/particledesigner) files
@@ -44,6 +45,7 @@ There are various systems documented separately in the FAQs folder. They go into
 - [Physics/Collisions](FAQs/Physics.md)
 - [Entity Processing Systems](FAQs/EntitySystems.md)
 - [Nez.UI](FAQs/UI.md)
+- [Deferred Lighting](FAQs/DeferredLighting.md)
 - [Pipeline Importers](FAQs/PipelineImporters.md)
 - [Samples](FAQs/Samples.md)
 
