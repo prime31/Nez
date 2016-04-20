@@ -1,6 +1,6 @@
 Deferred Lighting
 ==========
-The Deferred Lighting system lets you use real lights in your scene. Included light types are point, directional, spot and area lights.
+The Deferred Lighting system lets you use real lights in your scene. Included light types are point, directional, spot and area lights. MORE-INFO-ON-DEFERRED-LIGHTING-HERE
 
 
 Material Setup
@@ -22,6 +22,7 @@ var standardMaterial = new DeferredSpriteMaterial( normalMapTexture );
 var diffuseOnlylMaterial = new DeferredSpriteMaterial( deferredRenderer.nullNormalMapTexture );
 
 
+// lit, normal mapped and self illuminated Material.
 // first we create the Material with our normal map. Note that our normal map should have an alpha channel for the self illumination and it
 // needs to have premultiplied alpha disabled in the Pipeline Tool
 var selfLitMaterial = new DeferredSpriteMaterial( selfLitNormalMapTexture );
@@ -51,11 +52,14 @@ var deferredRenderer = scene.addRenderer( new DeferredLightingRenderer( 0, LIGHT
 deferredRenderer.setAmbientColor( Color.Black );
 ```
 
+
+Entity Setup
+==========
 Now we just have to make sure that we use the proper renderLayers (easy to do since we were smart and made them const int) and Materials when creating our Renderables:
 
 ```cs
 // create an Entity to house our sprite
-var entity = createEntity( "sprite" );
+var entity = scene.createEntity( "sprite" );
 
 // add a Sprite and here is the important part: be sure to set the renderLayer and material
 entity.addComponent( new Sprite( spriteTexture ) )
@@ -63,8 +67,14 @@ entity.addComponent( new Sprite( spriteTexture ) )
 	.setMaterial( standardMaterial );
 
 
+// create an entity with no Material set. It will use the DeferredLightingRenderer.material which is diffuse only be default
+scene.createEntity( "diffuse-only" )
+	.addComponent( new Sprite( spriteTexture ) )
+	.setRenderLayer( OBJECT_LAYER1 );
+
+
 // create an Entity to house our PointLight
-var lightEntity = createEntity( "point-light" );
+var lightEntity = scene.createEntity( "point-light" );
 
 // add a PointLight Component and be sure to set the renderLayer to the lights layer!
 lightEntity.addComponent( new PointLight( Color.Yellow ) )
