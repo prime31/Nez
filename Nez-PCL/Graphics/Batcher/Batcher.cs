@@ -46,6 +46,12 @@ namespace Nez
 		// Matrix to be used when creating the projection matrix
 		Matrix _transformMatrix;
 
+		// Matrix used internally to calculate the cameras projection
+		Matrix _projectionMatrix;
+
+		// this is the calculated MatrixTransform parameter in sprite shaders
+		Matrix _matrixTransformMatrix;
+
 		// User-provided Effect, if applicable
 		Effect _customEffect;
 
@@ -88,6 +94,25 @@ namespace Nez
 
 			_beginCalled = false;
 			_numSprites = 0;
+
+			_projectionMatrix = new Matrix(
+				0f, //(float)( 2.0 / (double)viewport.Width ),
+				0.0f,
+				0.0f,
+				0.0f,
+				0.0f,
+				0f, //(float)( -2.0 / (double)viewport.Height ),
+				0.0f,
+				0.0f,
+				0.0f,
+				0.0f,
+				1.0f,
+				0.0f,
+				-1.0f,
+				1.0f,
+				0.0f,
+				1.0f
+			);
 		}
 
 
@@ -590,35 +615,19 @@ namespace Nez
 			var viewport = graphicsDevice.Viewport;
 
 			// Inlined CreateOrthographicOffCenter
-			var projection = new Matrix(
-				                    (float)( 2.0 / (double)viewport.Width ),
-				                    0.0f,
-				                    0.0f,
-				                    0.0f,
-				                    0.0f,
-				                    (float)( -2.0 / (double)viewport.Height ),
-				                    0.0f,
-				                    0.0f,
-				                    0.0f,
-				                    0.0f,
-				                    1.0f,
-				                    0.0f,
-				                    -1.0f,
-				                    1.0f,
-				                    0.0f,
-				                    1.0f
-			                    );
+			_projectionMatrix.M11 = (float)( 2.0 / (double)viewport.Width );
+			_projectionMatrix.M22 = (float)( -2.0 / (double)viewport.Height );
 
 			// TODO: I hate this shit!
-			projection.M41 += -0.5f * projection.M11;
-			projection.M42 += -0.5f * projection.M22;
+			_projectionMatrix.M41 = -1 - 0.5f * _projectionMatrix.M11;
+			_projectionMatrix.M42 = 1 - 0.5f * _projectionMatrix.M22;
 
 			Matrix.Multiply(
 				ref _transformMatrix,
-				ref projection,
-				out projection
+				ref _projectionMatrix,
+				out _matrixTransformMatrix
 			);
-			_spriteMatrixTransformParam.SetValue( projection );
+			_spriteMatrixTransformParam.SetValue( _matrixTransformMatrix );
 
 			// FIXME: When is this actually applied?
 			_spriteEffectPass.Apply();
