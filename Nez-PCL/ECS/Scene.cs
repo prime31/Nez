@@ -178,6 +178,7 @@ namespace Nez
 		Action<Texture2D> _screenshotRequestCallback;
 
 		List<Renderer> _renderers = new List<Renderer>();
+		List<Renderer> _afterPostProcessorRenderers = new List<Renderer>();
 		readonly List<PostProcessor> _postProcessors = new List<PostProcessor>();
 		bool _didSceneBegin;
 
@@ -374,8 +375,8 @@ namespace Nez
 
 		internal void preRender()
 		{
-			// Renderers should always have those that require RenderTarget first. They clear themselves and set themselves as
-			// the current RenderTarget when they render
+			// Renderers should always have those that require a RenderTarget first. They clear themselves and set themselves as
+			// the current RenderTarget when they render. If the first Renderer wants the sceneRenderTarget we set and clear it now.
 			if( _renderers[0].wantsToRenderToSceneRenderTarget )
 			{
 				Core.graphicsDevice.SetRenderTarget( _sceneRenderTarget );
@@ -426,6 +427,21 @@ namespace Nez
 						_postProcessors[i].process( isEven ? _sceneRenderTarget : _destinationRenderTarget, isEven ? _destinationRenderTarget : _sceneRenderTarget );
 					}
 				}
+			}
+
+			// deal with our Renderers that want to render after PostProcessors if we have any
+			for( var i = 0; i < _afterPostProcessorRenderers.Count; i++ )
+			{
+				if( i == 0 )
+				{
+					// we need to set the proper RenderTarget here. We want the last one that was the destination of our PostProcessors
+					Core.graphicsDevice.SetRenderTarget( Mathf.isEven( enabledCounter ) ? _sceneRenderTarget : _destinationRenderTarget );
+				}
+
+				// force a Camera matrix update to account for the new Viewport size
+				if( _afterPostProcessorRenderers[i].camera != null )
+					_afterPostProcessorRenderers[i].camera.forceMatrixUpdate();
+				_afterPostProcessorRenderers[i].render( this );
 			}
 
 			// if we have a screenshot request deal with it before the final render to the backbuffer
@@ -697,8 +713,16 @@ namespace Nez
 		/// <param name="renderer">Renderer.</param>
 		public T addRenderer<T>( T renderer ) where T : Renderer
 		{
-			_renderers.Add( renderer );
-			_renderers.Sort();
+			if( renderer.wantsToRenderAfterPostProcessors )
+			{
+				_afterPostProcessorRenderers.Add( renderer );
+				_afterPostProcessorRenderers.Sort();
+			}
+			else
+			{
+				_renderers.Add( renderer );
+				_renderers.Sort();
+			}
 
 			// if we already began let the PostProcessor know what size our RenderTarget is
 			if( _didSceneBegin )
@@ -709,12 +733,38 @@ namespace Nez
 
 
 		/// <summary>
+		/// gets the first Renderer of Type T
+		/// </summary>
+		/// <returns>The renderer.</returns>
+		/// <param name="renderer">Renderer.</param>
+		/// <typeparam name="T">The 1st type parameter.</typeparam>
+		public T getRenderer<T>( T renderer ) where T : Renderer
+		{
+			for( var i = 0; i < _renderers.Count; i++ )
+			{
+				if( _renderers[i] is T )
+					return _renderers[i] as T;
+			}
+
+			for( var i = 0; i < _afterPostProcessorRenderers.Count; i++ )
+			{
+				if( _afterPostProcessorRenderers[i] is T )
+					return _afterPostProcessorRenderers[i] as T;
+			}
+			return null;
+		}
+
+
+		/// <summary>
 		/// removes the Renderer from the scene
 		/// </summary>
 		/// <param name="renderer">Renderer.</param>
 		public void removeRenderer( Renderer renderer )
 		{
-			_renderers.Remove( renderer );
+			if( renderer.wantsToRenderAfterPostProcessors )
+				_afterPostProcessorRenderers.Remove( renderer );
+			else
+				_renderers.Remove( renderer );
 		}
 
 

@@ -16,13 +16,13 @@ namespace Nez
 			Array.Sort( renderLayers );
 			this.renderLayers = renderLayers;
 			camera = new ScreenSpaceCamera();
+			wantsToRenderAfterPostProcessors = true;
 		}
 
 
 		public override void render( Scene scene )
 		{
-			var cam = camera ?? scene.camera;
-			beginRender( cam );
+			beginRender( camera );
 
 			for( var i = 0; i < renderLayers.Length; i++ )
 			{
@@ -31,12 +31,12 @@ namespace Nez
 				{
 					var renderable = renderables[j];
 					if( renderable.enabled )
-						renderAfterStateCheck( renderable, cam );
+						renderAfterStateCheck( renderable, camera );
 				}
 			}
 
 			if( shouldDebugRender && Core.debugRenderEnabled )
-				debugRender( scene, cam );
+				debugRender( scene, camera );
 
 			endRender();
 		}

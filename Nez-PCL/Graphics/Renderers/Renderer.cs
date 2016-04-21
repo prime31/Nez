@@ -58,6 +58,14 @@ namespace Nez
 		public virtual bool wantsToRenderToSceneRenderTarget { get { return renderTexture == null; } }
 
 		/// <summary>
+		/// if true, the Scene will call the render method AFTER all PostProcessors have finished. This must be set to true BEFORE calling
+		/// Scene.addRenderer to take effect and the Renderer should NOT have a renderTexture. The main reason for this type of Renderer
+		/// is so that you can render your UI without post processing on top of the rest of your Scene. The ScreenSpaceRenderer is an
+		/// example Renderer that sets this to true;
+		/// </summary>
+		public bool wantsToRenderAfterPostProcessors;
+
+		/// <summary>
 		/// holds the current Material of the last rendered Renderable (or the Renderer.material if no changes were made)
 		/// </summary>
 		protected Material _currentMaterial;
