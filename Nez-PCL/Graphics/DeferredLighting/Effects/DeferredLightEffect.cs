@@ -140,10 +140,10 @@ namespace Nez.DeferredLighting
 		{
 			setLightPosition( new Vector3( light.entity.transform.position + light.localOffset, light.zPosition ) );
 			setColor( light.color );
-			setLightRadius( light.radius );
+			setLightRadius( light.radius * light.entity.transform.scale.X );
 			setLightIntensity( light.intensity );
 
-			var objToWorld = Matrix.CreateScale( light.radius ) * Matrix.CreateTranslation( light.entity.transform.position.X + light.localOffset.X, light.entity.transform.position.Y + light.localOffset.Y, 0 );
+			var objToWorld = Matrix.CreateScale( light.radius * light.entity.transform.scale.X ) * Matrix.CreateTranslation( light.entity.transform.position.X + light.localOffset.X, light.entity.transform.position.Y + light.localOffset.Y, 0 );
 			setObjectToWorldMatrix( objToWorld );
 
 			pointLightPass.Apply();
@@ -174,7 +174,7 @@ namespace Nez.DeferredLighting
 			setAreaDirectionalLightDirection( light.direction );
 			setLightIntensity( light.intensity );
 
-			var objToWorld = Matrix.CreateScale( light.bounds.width, light.bounds.height, 1f ) * Matrix.CreateTranslation( light.bounds.x - light.bounds.width * 0.5f, light.bounds.y - light.bounds.height * 0.5f, 0 );
+			var objToWorld = Matrix.CreateScale( light.bounds.width * light.entity.transform.scale.X, light.bounds.height * light.entity.transform.scale.Y, 1f ) * Matrix.CreateTranslation( light.bounds.x - light.bounds.width * 0.5f, light.bounds.y - light.bounds.height * 0.5f, 0 );
 			setObjectToWorldMatrix( objToWorld );
 
 			areaLightPass.Apply();

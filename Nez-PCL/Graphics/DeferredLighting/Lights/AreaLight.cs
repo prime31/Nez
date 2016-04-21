@@ -4,6 +4,10 @@ using Microsoft.Xna.Framework;
 
 namespace Nez.DeferredLighting
 {
+	/// <summary>
+	/// AreaLights work like DirLights except they only affect a specific area specified by the width/height. Note that Transform.scale
+	/// will affect the size of an AreaLight.
+	/// </summary>
 	public class AreaLight : DeferredLight
 	{
 		public override float width { get { return _areaWidth; } }
