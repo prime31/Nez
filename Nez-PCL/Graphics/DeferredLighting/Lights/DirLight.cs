@@ -49,6 +49,7 @@ namespace Nez.DeferredLighting
 
 		public DirLight setDirection( Vector3 direction )
 		{
+			this.direction = direction;
 			return this;
 		}
 

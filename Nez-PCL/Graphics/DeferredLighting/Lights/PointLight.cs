@@ -26,7 +26,7 @@ namespace Nez.DeferredLighting
 		/// <summary>
 		/// brightness of the light
 		/// </summary>
-		public float intensity = 4f;
+		public float intensity = 3f;
 
 
 		protected float _radius;

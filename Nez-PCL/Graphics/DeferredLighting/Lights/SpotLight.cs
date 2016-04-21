@@ -82,7 +82,7 @@ namespace Nez.DeferredLighting
 		/// <param name="direction">Direction.</param>
 		public SpotLight setDirection( Vector2 direction )
 		{
-			entity.transform.rotation = MathHelper.ToDegrees( (float)Math.Atan2( direction.Y, direction.X ) );
+			entity.transform.rotation = (float)Math.Atan2( direction.Y, direction.X );
 			return this;
 		}
 	}
