@@ -62,6 +62,7 @@
     <Folder Include="Input\Virtual\" />
     <Folder Include="Utils\FSM\" />
     <Folder Include="Graphics\Batcher\" />
+    <Folder Include="Graphics\DeferredLighting\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Debug\Debug.cs" />
@@ -322,6 +323,17 @@
     <Compile Include="Graphics\Batcher\BatcherBitmapFontExt.cs" />
     <Compile Include="Graphics\Batcher\BatcherSpriteFontExt.cs" />
     <Compile Include="PipelineRuntime\BitmapFonts\BitmapFontExt.cs" />
+    <Compile Include="Graphics\DeferredLighting\DeferredLightingRenderer.cs" />
+    <Compile Include="Graphics\DeferredLighting\Effects\DeferredSpriteEffect.cs" />
+    <Compile Include="Graphics\DeferredLighting\Geometry\PolygonMesh.cs" />
+    <Compile Include="Graphics\DeferredLighting\Geometry\QuadMesh.cs" />
+    <Compile Include="Graphics\DeferredLighting\Lights\AreaLight.cs" />
+    <Compile Include="Graphics\DeferredLighting\Lights\DeferredLight.cs" />
+    <Compile Include="Graphics\DeferredLighting\Lights\PointLight.cs" />
+    <Compile Include="Graphics\DeferredLighting\Lights\SpotLight.cs" />
+    <Compile Include="Graphics\DeferredLighting\DeferredSpriteMaterial.cs" />
+    <Compile Include="Graphics\DeferredLighting\Effects\DeferredLightEffect.cs" />
+    <Compile Include="Graphics\DeferredLighting\Lights\DirLight.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="MonoGame.Framework">
