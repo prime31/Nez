@@ -117,8 +117,15 @@ namespace Nez
 		/// <value>The size of the scene render texture.</value>
 		public Point sceneRenderTargetSize
 		{
-			get { return new Point( _sceneRenderTarget.Width, _sceneRenderTarget.Height ); }
+			get { return _sceneRenderTarget.Bounds.Size; }
 		}
+
+		/// <summary>
+		/// accesses the main scene RenderTarget. Some Renderers that use multiple RenderTargets may need to render into them first and then
+		/// render the result into the sceneRenderTarget.
+		/// </summary>
+		/// <value>The scene render target.</value>
+		public RenderTarget2D sceneRenderTarget { get { return _sceneRenderTarget; } }
 
 		/// <summary>
 		/// if the ResolutionPolicy is pixel perfect this will be set to the scale calculated for it
