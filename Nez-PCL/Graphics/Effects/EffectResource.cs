@@ -28,6 +28,10 @@ namespace Nez
 		internal static byte[] spriteLightMultiplyBytes { get { return getFileResourceBytes( "Content/nez/effects/SpriteLightMultiply.mgfxo" ); } }
 		internal static byte[] pixelGlitchBytes { get { return getFileResourceBytes( "Content/nez/effects/PixelGlitch.mgfxo" ); } }
 
+		// deferred lighting
+		internal static byte[] deferredSpriteBytes { get { return getFileResourceBytes( "Content/nez/effects/DeferredSprite.mgfxo" ); } }
+		internal static byte[] deferredLightBytes { get { return getFileResourceBytes( "Content/nez/effects/DeferredLighting.mgfxo" ); } }
+
 		// scene transitions
 		internal static byte[] squaresTransitionBytes { get { return getFileResourceBytes( "Content/nez/effects/transitions/Squares.mgfxo" ); } }
 
@@ -87,10 +91,19 @@ namespace Nez
 		public static byte[] getFileResourceBytes( string path )
 		{
 			byte[] bytes;
-			using( var stream = TitleContainer.OpenStream( path ) )
+
+			try
 			{
-				bytes = new byte[stream.Length];
-				stream.Read( bytes, 0, bytes.Length );
+				using( var stream = TitleContainer.OpenStream( path ) )
+				{
+					bytes = new byte[stream.Length];
+					stream.Read( bytes, 0, bytes.Length );
+				}
+			}
+			catch( Exception e )
+			{
+				var txt = string.Format( "OpenStream failed to find file at path: {0}. Did you add it to the Content folder?", path );
+				throw new Exception( txt, e );
 			}
 
 			return bytes;
