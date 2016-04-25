@@ -25,8 +25,8 @@ namespace Nez
 				}
 			}
 		}
+
 		Vector4 _blinkColor = new Vector4( 1, 1, 1, 0 );
-		
 		EffectParameter _blinkColorParam;
 
 

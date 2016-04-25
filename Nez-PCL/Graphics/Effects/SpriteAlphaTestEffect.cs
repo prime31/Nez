@@ -15,7 +15,11 @@ namespace Nez
 			Never
 		}
 
-		public int referenceAlpha
+		/// <summary>
+		/// alpha value used for the comparison. Should be in the 0 - 1 range. Defaults to 0.5f.
+		/// </summary>
+		/// <value>The reference alpha.</value>
+		public float referenceAlpha
 		{
 			get { return _referenceAlpha; }
 			set
@@ -27,8 +31,6 @@ namespace Nez
 				}
 			}
 		}
-		int _referenceAlpha = 127;
-
 
 		public AlphaTestCompareFunction compareFunction
 		{
@@ -42,8 +44,9 @@ namespace Nez
 				}
 			}
 		}
-		AlphaTestCompareFunction _compareFunction = AlphaTestCompareFunction.Greater;
 
+		float _referenceAlpha = 0.5f;
+		AlphaTestCompareFunction _compareFunction = AlphaTestCompareFunction.Greater;
 
 		EffectParameter _alphaTestParam;
 
@@ -58,8 +61,9 @@ namespace Nez
 		void updateEffectParameter()
 		{
 			var value = new Vector3();
-			// convert to float so we are in the 0-1 range in the shader
-			value.X = (float)_referenceAlpha / 255f;
+
+			// reference alpha is packed in the x param
+			value.X = _referenceAlpha;
 
 			switch( _compareFunction )
 			{

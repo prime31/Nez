@@ -1,13 +1,9 @@
-﻿
+﻿SamplerState Texture; // from SpriteBatch
+
 float _verticalSize; // vertical size in pixels or each row. default 5.0
 float _horizontalOffset; // horizontal shift in pixels. default 10.0
 float2 _screenSize; // screen width/height
-	
-Texture2D SpriteTexture;
-sampler2D SpriteTextureSampler = sampler_state
-{
-	Texture = <SpriteTexture>;
-};
+
 
 struct VertexShaderOutput
 {
@@ -34,7 +30,7 @@ float4 MainPS( float2 coords:TEXCOORD0 ) : COLOR
 
     // get a number between -1 and 1 to offset the row of pixels by that is dependent on the y position
     float r = hash11( floor( coords.y * _pixels ) ) * 2.0 - 1.0;
-	return tex2D( SpriteTextureSampler, float2( coords.x + r * offset, coords.y ) );
+	return tex2D( Texture, float2( coords.x + r * offset, coords.y ) );
 }
 
 

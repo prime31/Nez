@@ -47,10 +47,10 @@ namespace Nez.Systems
 		/// </summary>
 		/// <returns>The nez effect.</returns>
 		/// <typeparam name="T">The 1st type parameter.</typeparam>
-		public T loadNezEffect<T>() where T : Effect
+		public T loadNezEffect<T>() where T : Effect, new()
 		{
 			var cacheKey = typeof( T ).Name + "-" + Utils.randomString( 5 );
-			var effect = Activator.CreateInstance( typeof( T ) ) as T;
+			var effect = new T();
 			_loadedEffects[cacheKey] = effect;
 
 			return effect;
