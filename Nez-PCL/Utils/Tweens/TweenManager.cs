@@ -41,7 +41,12 @@ namespace Nez.Tweens
 		/// stores tweens marked for removal
 		/// </summary>
 		List<ITweenable> _tempTweens = new List<ITweenable>();
-		
+
+		/// <summary>
+		/// flag indicating the tween update loop is running
+		/// </summary>
+		bool _isUpdating;
+
 		static TweenManager _instance;
 
 
@@ -53,6 +58,8 @@ namespace Nez.Tweens
 
 		internal void update()
 		{
+			_isUpdating = true;
+
 			// loop backwards so we can remove completed tweens
 			for( var i = _activeTweens.Count - 1; i >= 0; --i )
 			{
@@ -60,6 +67,8 @@ namespace Nez.Tweens
 				if( tween.tick() )
 					_tempTweens.Add( tween );
 			}
+
+			_isUpdating = false;
 
 			// kill the dead Tweens
 			for( var i = 0; i < _tempTweens.Count; i++ )
@@ -89,7 +98,15 @@ namespace Nez.Tweens
 		/// <param name="tween">Tween.</param>
 		public static void removeTween( ITweenable tween )
 		{
-			_instance._tempTweens.Add( tween );
+			if( _instance._isUpdating )
+			{
+				_instance._tempTweens.Add( tween );
+			}
+			else
+			{
+				tween.recycleSelf();
+				_instance._activeTweens.Remove( tween );
+			}
 		}
 
 
