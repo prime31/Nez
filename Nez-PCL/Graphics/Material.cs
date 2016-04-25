@@ -11,6 +11,14 @@ namespace Nez
 	public class Material<T> : Material, IDisposable where T : Effect
 	{
 		public T typedEffect { get { return (T)effect; } }
+
+
+		public Material()
+		{}
+
+
+		public Material( T effect ) : base( effect )
+		{}
 	}
 
 
