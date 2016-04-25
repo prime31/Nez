@@ -745,7 +745,7 @@ namespace Nez
 		/// <returns>The renderer.</returns>
 		/// <param name="renderer">Renderer.</param>
 		/// <typeparam name="T">The 1st type parameter.</typeparam>
-		public T getRenderer<T>( T renderer ) where T : Renderer
+		public T getRenderer<T>() where T : Renderer
 		{
 			for( var i = 0; i < _renderers.Count; i++ )
 			{

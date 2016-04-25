@@ -5,7 +5,8 @@ using Microsoft.Xna.Framework;
 namespace Nez.DeferredLighting
 {
 	/// <summary>
-	/// point light
+	/// PointLights radiate light in a circle. Note that PointLights are affected by Transform.scale. The Transform.scale.X value is multiplied
+	/// by the lights radius when sent to the GPU. It is expected that scale will be linear.
 	/// </summary>
 	public class PointLight : DeferredLight
 	{
@@ -74,6 +75,16 @@ namespace Nez.DeferredLighting
 		{
 			this.intensity = intensity;
 			return this;
+		}
+
+
+		/// <summary>
+		/// renders the bounds only if there is no collider. Always renders a square on the origin.
+		/// </summary>
+		/// <param name="graphics">Graphics.</param>
+		public override void debugRender( Graphics graphics )
+		{
+			graphics.batcher.drawCircle( entity.transform.position + _localOffset, radius * entity.transform.scale.X, Color.DarkOrchid, 2 );
 		}
 
 	}
