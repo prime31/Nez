@@ -336,6 +336,7 @@
     <Compile Include="Graphics\DeferredLighting\Lights\DirLight.cs" />
     <Compile Include="Graphics\Effects\SpriteLinesEffect.cs" />
     <Compile Include="Graphics\PostProcessing\PostProcessors\CinematicLetterboxPostProcessor.cs" />
+    <Compile Include="Utils\ListPool.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="MonoGame.Framework">

@@ -10,6 +10,11 @@ namespace Nez.Particles
 	{
 		public Subtexture subtexture;
 
+		/// <summary>
+		/// If true, particles will simulate in world space. ie when the parent Transform moves it will have no effect on any already active Particles.
+		/// </summary>
+		public bool simulateInWorldSpace = true;
+
 		public Blend blendFuncSource;
 		public Blend blendFuncDestination;
 
@@ -37,8 +42,8 @@ namespace Nez.Particles
 		public float emissionRate;
 
 
-		//////////////////// Particle ivars only used when a maxRadius value is provided.  These values are used for
-		//////////////////// the special purpose of creating the spinning portal emitter
+		/////// Particle ivars only used when a maxRadius value is provided.  These values are used for
+		/////// the special purpose of creating the spinning portal emitter
 		// Max radius at which particles are drawn when rotating
 		public float maxRadius;
 		// Variance of the maxRadius

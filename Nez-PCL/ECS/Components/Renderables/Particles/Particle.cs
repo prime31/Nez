@@ -16,6 +16,7 @@ namespace Nez.Particles
 		static Circle _circleCollisionShape = new Circle( 0 );
 
 		internal Vector2 position;
+		internal Vector2 spawnPosition;
 		Vector2 _direction;
 		internal Color color;
 		// stored at particle creation time and used for lerping the color
@@ -43,7 +44,7 @@ namespace Nez.Particles
 		Vector2 _velocity;
 
 
-		public void initialize( ParticleEmitterConfig emitterConfig )
+		public void initialize( ParticleEmitterConfig emitterConfig, Vector2 spawnPosition )
 		{
 			_collided = false;
 
@@ -52,6 +53,8 @@ namespace Nez.Particles
 			// and negative
 			position.X = emitterConfig.sourcePositionVariance.X * Random.minusOneToOne();
 			position.Y = emitterConfig.sourcePositionVariance.Y * Random.minusOneToOne();
+
+			this.spawnPosition = spawnPosition;
 
 			// init the direction of the   The newAngle is calculated using the angle passed in and the
 			// angle variance.
@@ -125,55 +128,51 @@ namespace Nez.Particles
 		/// <param name="emitterConfig">Emitter config.</param>
 		public bool update( ParticleEmitterConfig emitterConfig, ref ParticleCollisionConfig collisionConfig, Vector2 rootPosition )
 		{
-			// PART 1
-			// reduce the life span of the particle
+			// PART 1: reduce the life span of the particle
 			_timeToLive -= Time.deltaTime;
 
 			// if the current particle is alive then update it
 			if( _timeToLive > 0 )
 			{
-				// if maxRadius is greater than 0 then the particles are going to spin otherwise they are effected by speed and gravity
-				if( emitterConfig.emitterType == ParticleEmitterType.Radial )
+				// only update the particle position if it has not collided. If it has, physics takes over
+				if( !_collided )
 				{
-					// PART 2
-					// update the angle of the particle from the radius. This is only done if the particles are rotating
-					_angle += _degreesPerSecond * Time.deltaTime;
-					_radius += _radiusDelta * Time.deltaTime;
-
-					Vector2 tmp;
-					tmp.X = -Mathf.cos( _angle ) * _radius;
-					tmp.Y = -Mathf.sin( _angle ) * _radius;
-
-					if( !_collided )
+					// if maxRadius is greater than 0 then the particles are going to spin otherwise they are affected by speed and gravity
+					if( emitterConfig.emitterType == ParticleEmitterType.Radial )
 					{
+						// PART 2: update the angle of the particle from the radius. This is only done if the particles are rotating
+						_angle += _degreesPerSecond * Time.deltaTime;
+						_radius += _radiusDelta * Time.deltaTime;
+
+						Vector2 tmp;
+						tmp.X = -Mathf.cos( _angle ) * _radius;
+						tmp.Y = -Mathf.sin( _angle ) * _radius;
+
 						_velocity = tmp - position;
 						position = tmp;
 					}
-				}
-				else
-				{
-					Vector2 tmp, radial, tangential;
-					radial = Vector2.Zero;
-
-					if( position.X != 0 || position.Y != 0 )
-						Vector2.Normalize( ref position, out radial );
-
-					tangential = radial;
-					radial = radial * _radialAcceleration;
-
-					var newy = tangential.X;
-					tangential.X = -tangential.Y;
-					tangential.Y = newy;
-					tangential = tangential * _tangentialAcceleration;
-
-					tmp = radial + tangential + emitterConfig.gravity;
-					tmp = tmp * Time.deltaTime;
-					_direction = _direction + tmp;
-					tmp = _direction * Time.deltaTime;
-
-					if( !_collided )
+					else
 					{
-						_velocity = tmp;
+						Vector2 tmp, radial, tangential;
+						radial = Vector2.Zero;
+
+						if( position.X != 0 || position.Y != 0 )
+							Vector2.Normalize( ref position, out radial );
+
+						tangential = radial;
+						radial = radial * _radialAcceleration;
+
+						var newy = tangential.X;
+						tangential.X = -tangential.Y;
+						tangential.Y = newy;
+						tangential = tangential * _tangentialAcceleration;
+
+						tmp = radial + tangential + emitterConfig.gravity;
+						tmp = tmp * Time.deltaTime;
+						_direction = _direction + tmp;
+						tmp = _direction * Time.deltaTime;
+
+						_velocity = tmp / Time.deltaTime;
 						position = position + tmp;
 					}
 				}
@@ -195,7 +194,7 @@ namespace Nez.Particles
 					// if we already collided we have to handle the collision response
 					if( _collided )
 					{
-						// TODO: handle after collision movement. we need to track velocity for this
+						// handle after collision movement. we need to track velocity for this
 						_velocity += collisionConfig.gravity * Time.deltaTime;
 						position += _velocity * Time.deltaTime;
 
@@ -204,7 +203,10 @@ namespace Nez.Particles
 							return true;
 					}
 
-					_circleCollisionShape.recalculateBounds( particleSize * 0.5f * collisionConfig.radiusScale, rootPosition + position );
+					// should we use our spawnPosition as a reference or the parent Transforms position?
+					var pos = emitterConfig.simulateInWorldSpace ? spawnPosition : rootPosition;
+
+					_circleCollisionShape.recalculateBounds( particleSize * 0.5f * collisionConfig.radiusScale, pos + position );
 					var neighbors = Physics.boxcastBroadphase( ref _circleCollisionShape.bounds, collisionConfig.collidesWithLayers );
 					foreach( var neighbor in neighbors )
 					{
@@ -256,7 +258,7 @@ namespace Nez.Particles
 
 			if( n > 0.0f )
 				normalVelocityComponent = Vector2.Zero;
-
+			
 			// elasticity affects the normal component of the velocity and friction affects the tangential component
 			var responseVelocity = -( 1.0f + elasticity ) * normalVelocityComponent - friction * tangentialVelocityComponent;
 			_velocity += responseVelocity;

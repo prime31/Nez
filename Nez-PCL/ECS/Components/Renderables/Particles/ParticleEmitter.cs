@@ -19,6 +19,12 @@ namespace Nez.Particles
 		public float elapsedTime { get { return _elapsedTime; } }
 
 		/// <summary>
+		/// convenience method for setting ParticleEmitterConfig.simulateInWorldSpace. If true, particles will simulate in world space. ie when the
+		/// parent Transform moves it will have no effect on any already active Particles.
+		/// </summary>
+		public bool simulateInWorldSpace { set { _emitterConfig.simulateInWorldSpace = value; } }
+
+		/// <summary>
 		/// config object with various properties to deal with particle collisions
 		/// </summary>
 		public ParticleCollisionConfig collisionConfig;
@@ -93,6 +99,9 @@ namespace Nez.Particles
 		{
 			if( _isPaused )
 				return;
+
+			// prep data for the particle.update method
+			var rootPosition = entity.transform.position + _localOffset;
 			
 			// if the emitter is active and the emission rate is greater than zero then emit particles
 			if( _active && _emitterConfig.emissionRate > 0 )
@@ -104,7 +113,7 @@ namespace Nez.Particles
 
 				while( _emitting && _particles.Count < _emitterConfig.maxParticles && _emitCounter > rate )
 				{
-					addParticle();
+					addParticle( rootPosition );
 					_emitCounter -= rate;
 				}
 
@@ -120,9 +129,6 @@ namespace Nez.Particles
 						stop();
 				}
 			}
-
-			// prep data for the particle.update method
-			var rootPosition = entity.transform.position + _localOffset;
 
 			// loop through all the particles updating their location and color
 			for( var i = _particles.Count - 1; i >= 0; i-- )
@@ -152,11 +158,12 @@ namespace Nez.Particles
 			for( var i = 0; i < _particles.Count; i++ )
 			{
 				var currentParticle = _particles[i];
+				var pos = _emitterConfig.simulateInWorldSpace ? currentParticle.spawnPosition : rootPosition;
 
 				if( _emitterConfig.subtexture == null )
-					graphics.batcher.draw( graphics.pixelTexture, rootPosition + currentParticle.position, graphics.pixelTexture.sourceRect, currentParticle.color, currentParticle.rotation, Vector2.One, currentParticle.particleSize * 0.5f, SpriteEffects.None, layerDepth );
+					graphics.batcher.draw( graphics.pixelTexture, pos + currentParticle.position, graphics.pixelTexture.sourceRect, currentParticle.color, currentParticle.rotation, Vector2.One, currentParticle.particleSize * 0.5f, SpriteEffects.None, layerDepth );
 				else
-					graphics.batcher.draw( _emitterConfig.subtexture, rootPosition + currentParticle.position, _emitterConfig.subtexture.sourceRect, currentParticle.color, currentParticle.rotation, _emitterConfig.subtexture.center, currentParticle.particleSize / _emitterConfig.subtexture.sourceRect.Width, SpriteEffects.None, layerDepth );
+					graphics.batcher.draw( _emitterConfig.subtexture, pos + currentParticle.position, _emitterConfig.subtexture.sourceRect, currentParticle.color, currentParticle.rotation, _emitterConfig.subtexture.center, currentParticle.particleSize / _emitterConfig.subtexture.sourceRect.Width, SpriteEffects.None, layerDepth );
 			}
 		}
 
@@ -173,8 +180,9 @@ namespace Nez.Particles
 			for( var i = 0; i < _particles.Count; i++ )
 			{
 				var currentParticle = _particles[i];
-				//graphics.batcher.drawCircle( rootPosition + currentParticle.position, currentParticle.particleSize * 0.5f, Color.IndianRed );
-				graphics.batcher.drawHollowRect( rootPosition + currentParticle.position - new Vector2( currentParticle.particleSize * 0.5f, currentParticle.particleSize * 0.5f ), currentParticle.particleSize, currentParticle.particleSize, Color.IndianRed );
+				var pos = _emitterConfig.simulateInWorldSpace ? currentParticle.spawnPosition : rootPosition;
+
+				graphics.batcher.drawHollowRect( pos + currentParticle.position - new Vector2( currentParticle.particleSize * 0.5f, currentParticle.particleSize * 0.5f ), currentParticle.particleSize, currentParticle.particleSize, Color.IndianRed );
 			}
 		}
 
@@ -241,21 +249,23 @@ namespace Nez.Particles
 		/// <param name="count">Count.</param>
 		public void emit( int count )
 		{
+			var rootPosition = entity.transform.position + _localOffset;
+
 			initialize();
 			_active = true;
 			for( var i = 0; i < count; i++ )
-				addParticle();
+				addParticle( rootPosition );
 		}
 
 
 		/// <summary>
 		/// adds a Particle to the emitter
 		/// </summary>
-		void addParticle()
+		void addParticle( Vector2 position )
 		{
 			// take the next particle out of the particle pool we have created and initialize it
 			var particle = Pool<Particle>.obtain();
-			particle.initialize( _emitterConfig );
+			particle.initialize( _emitterConfig, position );
 			_particles.Add( particle );
 		}
 
