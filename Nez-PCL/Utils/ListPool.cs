@@ -5,11 +5,11 @@ using System.Collections.Generic;
 namespace Nez
 {
 	/// <summary>
-	/// simple static class that can be used to pool any object
+	/// simple static class that can be used to pool Lists
 	/// </summary>
-	public static class Pool<T> where T : new()
+	public static class ListPool<T> where T : new()
 	{
-		private static Stack<T> _objectStack = new Stack<T>( 10 );
+		static Stack<List<T>> _objectStack = new Stack<List<T>>();
 
 
 		/// <summary>
@@ -22,7 +22,7 @@ namespace Nez
 			if( cacheCount > 0 )
 			{
 				for( var i = 0; i < cacheCount; i++ )
-					_objectStack.Push( new T() );
+					_objectStack.Push( new List<T>() );
 			}
 		}
 
@@ -50,12 +50,12 @@ namespace Nez
 		/// <summary>
 		/// pops an item off the stack if available creating a new item as necessary
 		/// </summary>
-		public static T obtain()
+		public static List<T> obtain()
 		{
 			if( _objectStack.Count > 0 )
 				return _objectStack.Pop();
 
-			return new T();
+			return new List<T>();
 		}
 
 
@@ -63,24 +63,10 @@ namespace Nez
 		/// pushes an item back on the stack
 		/// </summary>
 		/// <param name="obj">Object.</param>
-		public static void free( T obj )
+		public static void free( List<T> obj )
 		{
 			_objectStack.Push( obj );
-
-			if( obj is IPoolable )
-				( (IPoolable)obj ).reset();
+			obj.Clear();
 		}
-	}
-
-
-	/// <summary>
-	/// Objects implementing this interface will have {@link #reset()} called when passed to {@link #push(Object)}
-	/// </summary>
-	public interface IPoolable
-	{
-		/// <summary>
-		/// Resets the object for reuse. Object references should be nulled and fields may be set to default values
-		/// </summary>
-		void reset();
 	}
 }
