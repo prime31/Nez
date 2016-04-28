@@ -123,17 +123,15 @@ namespace Nez
 
 		public override void render( Graphics graphics, Camera camera )
 		{
-			if( isVisibleFromCamera( camera ) )
-			{
-				_basicEffect.Projection = camera.projectionMatrix;
-				_basicEffect.View = camera.transformMatrix;
-				_basicEffect.CurrentTechnique.Passes[0].Apply();
+			_basicEffect.Projection = camera.projectionMatrix;
+			_basicEffect.View = camera.transformMatrix;
+			_basicEffect.CurrentTechnique.Passes[0].Apply();
 
-				// TODO: set the _basicEffect.World = entity.transform.localToWorldTransform instead of manualy mucking with verts and a local matrix
+			// TODO: set the _basicEffect.World = entity.transform.localToWorldTransform instead of manualy mucking with verts and a local matrix
+			// see the deferred lighting PolygonMesh class for details.
 
-				Core.graphicsDevice.SamplerStates[0] = SamplerState.AnisotropicClamp;
-				Core.graphicsDevice.DrawUserPrimitives( PrimitiveType.TriangleList, _verts, 0, _points.Length - 2, VertexPositionColor.VertexDeclaration );
-			}
+			Core.graphicsDevice.SamplerStates[0] = SamplerState.AnisotropicClamp;
+			Core.graphicsDevice.DrawUserPrimitives( PrimitiveType.TriangleList, _verts, 0, _points.Length - 2, VertexPositionColor.VertexDeclaration );
 		}
 	
 	}

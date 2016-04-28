@@ -119,19 +119,17 @@ namespace Nez.DeferredLighting
 				for( var j = 0; j < renderables.Count; j++ )
 				{
 					var renderable = renderables[j];
-					if( renderable.enabled )
+					if( renderable.enabled && renderable.isVisibleFromCamera( cam ) )
 						renderable.debugRender( Graphics.instance );
 				}
 			}
 
+			var lightRenderables = scene.renderableComponents.componentsWithRenderLayer( _lightLayer );
+			for( var j = 0; j < lightRenderables.Count; j++ )
 			{
-				var renderables = scene.renderableComponents.componentsWithRenderLayer( _lightLayer );
-				for( var j = 0; j < renderables.Count; j++ )
-				{
-					var renderable = renderables[j];
-					if( renderable.enabled )
-						renderable.debugRender( Graphics.instance );
-				}
+				var renderable = lightRenderables[j];
+				if( renderable.enabled && renderable.isVisibleFromCamera( cam ) )
+					renderable.debugRender( Graphics.instance );
 			}
 		}
 

@@ -672,6 +672,9 @@ namespace Nez
 			// notify the Renderers, PostProcessors and FinalRenderDelegate of the change in render texture size
 			for( var i = 0; i < _renderers.Count; i++ )
 				_renderers[i].onSceneBackBufferSizeChanged( renderTargetWidth, renderTargetHeight );
+
+			for( var i = 0; i < _afterPostProcessorRenderers.Count; i++ )
+				_afterPostProcessorRenderers[i].onSceneBackBufferSizeChanged( renderTargetWidth, renderTargetHeight );
 			
 			for( var i = 0; i < _postProcessors.Count; i++ )
 				_postProcessors[i].onSceneBackBufferSizeChanged( renderTargetWidth, renderTargetHeight );

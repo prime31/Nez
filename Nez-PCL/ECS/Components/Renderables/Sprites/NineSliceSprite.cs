@@ -72,24 +72,21 @@ namespace Nez
 
 		public override void render( Graphics graphics, Camera camera )
 		{
-			if( isVisibleFromCamera( camera ) )
+			if( _destRectsDirty )
 			{
-				if( _destRectsDirty )
-				{
-					subtexture.generateNinePatchRects( _finalRenderRect, _destRects, subtexture.top, subtexture.bottom, subtexture.right, subtexture.left );
-					_destRectsDirty = false;
-				}
+				subtexture.generateNinePatchRects( _finalRenderRect, _destRects, subtexture.top, subtexture.bottom, subtexture.right, subtexture.left );
+				_destRectsDirty = false;
+			}
 
-				var pos = ( entity.transform.position + _localOffset ).ToPoint();
+			var pos = ( entity.transform.position + _localOffset ).ToPoint();
 
-				for( var i = 0; i < 9; i++ )
-				{
-					// shift our destination rect over to our position
-					var dest = _destRects[i];
-					dest.X += pos.X;
-					dest.Y += pos.Y;
-					graphics.batcher.draw( subtexture, dest, subtexture.ninePatchRects[i], color );
-				}
+			for( var i = 0; i < 9; i++ )
+			{
+				// shift our destination rect over to our position
+				var dest = _destRects[i];
+				dest.X += pos.X;
+				dest.Y += pos.Y;
+				graphics.batcher.draw( subtexture, dest, subtexture.ninePatchRects[i], color );
 			}
 		}
 	}

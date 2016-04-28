@@ -15,7 +15,6 @@ namespace Nez
 		{
 			Array.Sort( renderLayers );
 			this.renderLayers = renderLayers;
-			camera = new ScreenSpaceCamera();
 			wantsToRenderAfterPostProcessors = true;
 		}
 
@@ -30,7 +29,7 @@ namespace Nez
 				for( var j = 0; j < renderables.Count; j++ )
 				{
 					var renderable = renderables[j];
-					if( renderable.enabled )
+					if( renderable.enabled && renderable.isVisibleFromCamera( camera ) )
 						renderAfterStateCheck( renderable, camera );
 				}
 			}
@@ -39,6 +38,16 @@ namespace Nez
 				debugRender( scene, camera );
 
 			endRender();
+		}
+
+
+		public override void onSceneBackBufferSizeChanged( int newWidth, int newHeight )
+		{
+			base.onSceneBackBufferSizeChanged( newWidth, newHeight );
+
+			// this is a bit of a hack. we maybe should take the Camera in the constructor
+			if( camera == null )
+				camera = Core.scene.createEntity( "screenspace camera" ).addComponent<Camera>();
 		}
 
 	}

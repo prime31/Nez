@@ -118,10 +118,6 @@ namespace Nez
 
 		public override void render( Graphics graphics, Camera camera )
 		{
-			// early out if we arent visible
-			if( !isVisibleFromCamera( camera ) )
-				return;
-			
 			if( layerIndicesToRender == null )
 			{
 				tiledmap.draw( graphics.batcher, entity.transform.position + _localOffset, layerDepth, camera.bounds );

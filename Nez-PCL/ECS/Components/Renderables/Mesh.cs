@@ -71,16 +71,13 @@ namespace Nez
 
 		public override void render( Graphics graphics, Camera camera )
 		{
-			if( isVisibleFromCamera( camera ) )
-			{
-				_basicEffect.Projection = camera.projectionMatrix;
-				_basicEffect.View = camera.transformMatrix;
-				_basicEffect.World = entity.transform.localToWorldTransform;
-				_basicEffect.CurrentTechnique.Passes[0].Apply();
+			_basicEffect.Projection = camera.projectionMatrix;
+			_basicEffect.View = camera.transformMatrix;
+			_basicEffect.World = entity.transform.localToWorldTransform;
+			_basicEffect.CurrentTechnique.Passes[0].Apply();
 
-				Core.graphicsDevice.SamplerStates[0] = Core.defaultSamplerState;
-				Core.graphicsDevice.DrawUserPrimitives( primitiveType, verts, 0, _primitiveCount, VertexPositionColorTexture.VertexDeclaration );
-			}
+			Core.graphicsDevice.SamplerStates[0] = Core.defaultSamplerState;
+			Core.graphicsDevice.DrawUserPrimitives( primitiveType, verts, 0, _primitiveCount, VertexPositionColorTexture.VertexDeclaration );
 		}
 	
 	

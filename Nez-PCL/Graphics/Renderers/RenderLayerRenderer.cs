@@ -34,7 +34,7 @@ namespace Nez
 				for( var j = 0; j < renderables.Count; j++ )
 				{
 					var renderable = renderables[j];
-					if( renderable.enabled )
+					if( renderable.enabled && renderable.isVisibleFromCamera( cam ) )
 						renderAfterStateCheck( renderable, cam );
 				}
 			}
@@ -54,7 +54,7 @@ namespace Nez
 				for( var j = 0; j < renderables.Count; j++ )
 				{
 					var renderable = renderables[j];
-					if( renderable.enabled )
+					if( renderable.enabled && renderable.isVisibleFromCamera( cam ) )
 						renderable.debugRender( Graphics.instance );
 				}
 			}

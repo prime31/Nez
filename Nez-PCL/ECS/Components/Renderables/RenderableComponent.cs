@@ -226,7 +226,7 @@ namespace Nez
 		/// </summary>
 		/// <returns><c>true</c>, if visible from camera was ised, <c>false</c> otherwise.</returns>
 		/// <param name="camera">Camera.</param>
-		public bool isVisibleFromCamera( Camera camera )
+		public virtual bool isVisibleFromCamera( Camera camera )
 		{
 			isVisible = camera.bounds.intersects( bounds );
 			return isVisible;

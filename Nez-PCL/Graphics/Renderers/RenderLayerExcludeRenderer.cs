@@ -28,7 +28,7 @@ namespace Nez
 			for( var i = 0; i < scene.renderableComponents.Count; i++ )
 			{
 				var renderable = scene.renderableComponents[i];
-				if( !excludedRenderLayers.contains( renderable.renderLayer ) && renderable.enabled )
+				if( !excludedRenderLayers.contains( renderable.renderLayer ) && renderable.enabled && renderable.isVisibleFromCamera( cam ) )
 					renderAfterStateCheck( renderable, cam );
 			}
 
@@ -44,7 +44,7 @@ namespace Nez
 			for( var i = 0; i < scene.renderableComponents.Count; i++ )
 			{
 				var renderable = scene.renderableComponents[i];
-				if( !excludedRenderLayers.contains( renderable.renderLayer ) && renderable.enabled )
+				if( !excludedRenderLayers.contains( renderable.renderLayer ) && renderable.enabled && renderable.isVisibleFromCamera( cam ) )
 					renderable.debugRender( Graphics.instance );
 			}
 		}

@@ -312,9 +312,6 @@ namespace Nez
 		public override void render( Graphics graphics, Camera camera )
 		{
 			// TODO: make culling smarter and only render the lines that are actually on the screen rather than all or nothing
-			if( !isVisibleFromCamera( camera ) )
-				return;
-
 			var width = _points.GetLength( 0 );
 			var height = _points.GetLength( 1 );
 

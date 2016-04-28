@@ -39,6 +39,7 @@ namespace Nez
 		VertexPositionColor[] _vertices;
 		LinkedList<RibbonSegment> _segments = new LinkedList<RibbonSegment>();
 		BasicEffect _basicEffect;
+		bool _areVertsDirty = true;
 
 
 		public TrailRibbon() : this( 50 )
@@ -85,6 +86,9 @@ namespace Nez
 		/// </summary>
 		void calculateVertices()
 		{
+			if( !_areVertsDirty )
+				return;
+			
 			var center = new Vector3( entity.transform.position, 0f );
 			var radVec = new Vector3( 0, -ribbonRadius, 0 );
 			
@@ -128,6 +132,8 @@ namespace Nez
 			_bounds.y = minY;
 			_bounds.width = maxX - minX;
 			_bounds.height = maxY - minY;
+
+			_areVertsDirty = false;
 		}
 
 
@@ -164,20 +170,25 @@ namespace Nez
 			}
 
 			_segments.AddFirst( seg );
+			_areVertsDirty = true;
+		}
+
+
+		public override bool isVisibleFromCamera( Camera camera )
+		{
+			calculateVertices();
+			return base.isVisibleFromCamera( camera );
 		}
 
 
 		public override void render( Graphics graphics, Camera camera )
 		{
 			calculateVertices();
-			if( isVisibleFromCamera( camera ) )
-			{
-				_basicEffect.Projection = camera.projectionMatrix;
-				_basicEffect.View = camera.transformMatrix;
-				_basicEffect.CurrentTechnique.Passes[0].Apply();
+			_basicEffect.Projection = camera.projectionMatrix;
+			_basicEffect.View = camera.transformMatrix;
+			_basicEffect.CurrentTechnique.Passes[0].Apply();
 
-				Core.graphicsDevice.DrawUserPrimitives( PrimitiveType.TriangleStrip, _vertices, 0, _ribbonLength * 2 + 1 );
-			}
+			Core.graphicsDevice.DrawUserPrimitives( PrimitiveType.TriangleStrip, _vertices, 0, _ribbonLength * 2 + 1 );
 		}
 
 

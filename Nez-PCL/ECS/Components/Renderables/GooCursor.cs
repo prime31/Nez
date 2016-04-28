@@ -11,6 +11,9 @@ namespace Nez
 	/// </summary>
 	public class GooCursor : RenderableComponent, IUpdatable
 	{
+		public override float width { get { return _cursorTexture.Width; } }
+		public override float height { get { return _cursorTexture.Height; } }
+
 		/// <summary>
 		/// Gets of Sets the stiffness of the trail A lower number means the trail will be longer
 		/// </summary>
