@@ -9,7 +9,7 @@ namespace Nez
 	/// </summary>
 	public static class ListPool<T> where T : new()
 	{
-		static Stack<List<T>> _objectStack = new Stack<List<T>>();
+		static Queue<List<T>> _objectQueue = new Queue<List<T>>();
 
 
 		/// <summary>
@@ -18,11 +18,11 @@ namespace Nez
 		/// <param name="cacheCount">new cache count</param>
 		public static void warmCache( int cacheCount )
 		{
-			cacheCount -= _objectStack.Count;
+			cacheCount -= _objectQueue.Count;
 			if( cacheCount > 0 )
 			{
 				for( var i = 0; i < cacheCount; i++ )
-					_objectStack.Push( new List<T>() );
+					_objectQueue.Enqueue( new List<T>() );
 			}
 		}
 
@@ -33,8 +33,8 @@ namespace Nez
 		/// <param name="cacheCount">Cache count.</param>
 		public static void trimCache( int cacheCount )
 		{
-			while( cacheCount > _objectStack.Count )
-				_objectStack.Pop();
+			while( cacheCount > _objectQueue.Count )
+				_objectQueue.Dequeue();
 		}
 
 
@@ -43,7 +43,7 @@ namespace Nez
 		/// </summary>
 		public static void clearCache()
 		{
-			_objectStack.Clear();
+			_objectQueue.Clear();
 		}
 
 
@@ -52,8 +52,8 @@ namespace Nez
 		/// </summary>
 		public static List<T> obtain()
 		{
-			if( _objectStack.Count > 0 )
-				return _objectStack.Pop();
+			if( _objectQueue.Count > 0 )
+				return _objectQueue.Dequeue();
 
 			return new List<T>();
 		}
@@ -65,7 +65,7 @@ namespace Nez
 		/// <param name="obj">Object.</param>
 		public static void free( List<T> obj )
 		{
-			_objectStack.Push( obj );
+			_objectQueue.Enqueue( obj );
 			obj.Clear();
 		}
 	}
