@@ -1,6 +1,8 @@
 Deferred Lighting
 ==========
-The Deferred Lighting system lets you use real lights in your scene. Included light types are point, directional, spot and area lights. MORE-INFO-ON-DEFERRED-LIGHTING-HERE
+The Deferred Lighting system lets you use real lights in your scene. Included light types are point, directional, spot and area lights.
+
+ADD-GENERAL-BACKGROUND-INFO-ON-DEFERRED-LIGHTING-HERE
 
 
 Material Setup

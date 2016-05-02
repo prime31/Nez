@@ -64,6 +64,11 @@
     <Folder Include="Graphics\DeferredLighting\" />
     <Folder Include="AI\" />
     <Folder Include="AI\FSM\" />
+    <Folder Include="AI\BehaviorTree\" />
+    <Folder Include="AI\BehaviorTree\Actions\" />
+    <Folder Include="AI\BehaviorTree\Composites\" />
+    <Folder Include="AI\BehaviorTree\Conditionals\" />
+    <Folder Include="AI\BehaviorTree\Decorators\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Debug\Debug.cs" />
@@ -335,9 +340,37 @@
     <Compile Include="Graphics\Effects\SpriteLinesEffect.cs" />
     <Compile Include="Graphics\PostProcessing\PostProcessors\CinematicLetterboxPostProcessor.cs" />
     <Compile Include="Utils\ListPool.cs" />
+    <Compile Include="Utils\ListExt.cs" />
+    <Compile Include="AI\BehaviorTree\Actions\BehaviorTreeReference.cs" />
+    <Compile Include="AI\BehaviorTree\Actions\ExecuteAction.cs" />
+    <Compile Include="AI\BehaviorTree\Composites\Composite.cs" />
+    <Compile Include="AI\BehaviorTree\Composites\Parallel.cs" />
+    <Compile Include="AI\BehaviorTree\Composites\ParallelSelector.cs" />
+    <Compile Include="AI\BehaviorTree\Composites\RandomSelector.cs" />
+    <Compile Include="AI\BehaviorTree\Composites\RandomSequence.cs" />
+    <Compile Include="AI\BehaviorTree\Composites\Selector.cs" />
+    <Compile Include="AI\BehaviorTree\Composites\Sequence.cs" />
+    <Compile Include="AI\BehaviorTree\Conditionals\RandomProbability.cs" />
+    <Compile Include="AI\BehaviorTree\Decorators\AlwaysFail.cs" />
+    <Compile Include="AI\BehaviorTree\Decorators\AlwaysSucceed.cs" />
+    <Compile Include="AI\BehaviorTree\Decorators\Decorator.cs" />
+    <Compile Include="AI\BehaviorTree\Decorators\Inverter.cs" />
+    <Compile Include="AI\BehaviorTree\Decorators\Repeater.cs" />
+    <Compile Include="AI\BehaviorTree\Decorators\UntilFail.cs" />
+    <Compile Include="AI\BehaviorTree\Decorators\UntilSuccess.cs" />
+    <Compile Include="AI\BehaviorTree\Behavior.cs" />
+    <Compile Include="AI\BehaviorTree\BehaviorTree.cs" />
+    <Compile Include="AI\BehaviorTree\BehaviorTreeBuilder.cs" />
+    <Compile Include="AI\BehaviorTree\TaskStatus.cs" />
     <Compile Include="AI\FSM\State.cs" />
     <Compile Include="AI\FSM\StateMachine.cs" />
     <Compile Include="AI\FSM\SimpleStateMachine.cs" />
+    <Compile Include="AI\BehaviorTree\Conditionals\IConditional.cs" />
+    <Compile Include="AI\BehaviorTree\Conditionals\ExecuteActionConditional.cs" />
+    <Compile Include="AI\BehaviorTree\Composites\AbortTypes.cs" />
+    <Compile Include="AI\BehaviorTree\Decorators\ConditionalDecorator.cs" />
+    <Compile Include="AI\BehaviorTree\Actions\LogAction.cs" />
+    <Compile Include="AI\BehaviorTree\Actions\WaitAction.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="MonoGame.Framework">
