@@ -3,6 +3,9 @@
 
 namespace Nez.AI.BehaviorTrees
 {
+	/// <summary>
+	/// root class used to control a BehaviorTree. Handles storing the context
+	/// </summary>
 	public class BehaviorTree<T>
 	{
 		/// <summary>

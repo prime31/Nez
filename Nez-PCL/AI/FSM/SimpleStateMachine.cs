@@ -5,7 +5,7 @@ using System.Collections.Generic;
 namespace Nez.AI.FSM
 {
 	/// <summary>
-	/// Simple state machine with an enum or int constraint. There are some rules you must follow when using this:
+	/// Simple state machine with an enum constraint. There are some rules you must follow when using this:
 	/// - before update is called initialState must be set (use the constructor or onAddedToEntity)
 	/// - if you implement update in your subclass you must call base.update()
 	/// 
