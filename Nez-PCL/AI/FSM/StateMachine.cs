@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 
 
-namespace Nez.FSM
+namespace Nez.AI.FSM
 {
 	public class StateMachine<T>
 	{

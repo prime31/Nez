@@ -1,7 +1,7 @@
 ﻿using System;
 
 
-namespace Nez.FSM
+namespace Nez.AI.FSM
 {
 	public abstract class State<T>
 	{

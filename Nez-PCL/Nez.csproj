@@ -60,9 +60,10 @@
     <Folder Include="Graphics\Transitions\" />
     <Folder Include="PipelineRuntime\UISkin\" />
     <Folder Include="Input\Virtual\" />
-    <Folder Include="Utils\FSM\" />
     <Folder Include="Graphics\Batcher\" />
     <Folder Include="Graphics\DeferredLighting\" />
+    <Folder Include="AI\" />
+    <Folder Include="AI\FSM\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Debug\Debug.cs" />
@@ -302,9 +303,6 @@
     <Compile Include="Input\Virtual\VirtualInput.cs" />
     <Compile Include="Input\Virtual\VirtualIntegerAxis.cs" />
     <Compile Include="Input\Virtual\VirtualJoystick.cs" />
-    <Compile Include="Utils\FSM\StateMachine.cs" />
-    <Compile Include="ECS\Components\Util\SimpleStateMachine.cs" />
-    <Compile Include="Utils\FSM\State.cs" />
     <Compile Include="PipelineRuntime\Tiled\TiledImageTile.cs" />
     <Compile Include="PipelineRuntime\Tiled\TiledImageCollectionTileset.cs" />
     <Compile Include="Graphics\Effects\SpriteAlphaTestEffect.cs" />
@@ -337,6 +335,9 @@
     <Compile Include="Graphics\Effects\SpriteLinesEffect.cs" />
     <Compile Include="Graphics\PostProcessing\PostProcessors\CinematicLetterboxPostProcessor.cs" />
     <Compile Include="Utils\ListPool.cs" />
+    <Compile Include="AI\FSM\State.cs" />
+    <Compile Include="AI\FSM\StateMachine.cs" />
+    <Compile Include="AI\FSM\SimpleStateMachine.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="MonoGame.Framework">

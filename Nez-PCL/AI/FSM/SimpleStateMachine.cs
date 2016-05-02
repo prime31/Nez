@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 
 
-namespace Nez.FSM
+namespace Nez.AI.FSM
 {
 	/// <summary>
 	/// Simple state machine with an enum or int constraint. There are some rules you must follow when using this:
