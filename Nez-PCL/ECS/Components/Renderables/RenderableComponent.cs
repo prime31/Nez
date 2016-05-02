@@ -7,6 +7,7 @@ namespace Nez
 {
 	/// <summary>
 	/// by default, a RenderableComponent faces up/right. You can use the flipX/Y or face* method to adjust that to suit your needs.
+	/// Subclasses MUST either override width/height or bounds!
 	/// </summary>
 	public abstract class RenderableComponent : Component, IComparable<RenderableComponent>
 	{
