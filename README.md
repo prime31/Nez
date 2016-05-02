@@ -45,6 +45,7 @@ There are various systems documented separately in the FAQs folder. They go into
 - [Physics/Collisions](FAQs/Physics.md)
 - [Entity Processing Systems](FAQs/EntitySystems.md)
 - [Nez.UI](FAQs/UI.md)
+- [AI (FSM, Behavior Tree)](FAQs/AI.md)
 - [Deferred Lighting](FAQs/DeferredLighting.md)
 - [Pipeline Importers](FAQs/PipelineImporters.md)
 - [Samples](FAQs/Samples.md)
