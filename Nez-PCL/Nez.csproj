@@ -69,6 +69,11 @@
     <Folder Include="AI\BehaviorTree\Composites\" />
     <Folder Include="AI\BehaviorTree\Conditionals\" />
     <Folder Include="AI\BehaviorTree\Decorators\" />
+    <Folder Include="AI\UtilityAI\" />
+    <Folder Include="AI\UtilityAI\Actions\" />
+    <Folder Include="AI\UtilityAI\Reasoners\" />
+    <Folder Include="AI\UtilityAI\Considerations\" />
+    <Folder Include="AI\UtilityAI\Considerations\Appraisals\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Debug\Debug.cs" />
@@ -365,12 +370,30 @@
     <Compile Include="AI\FSM\State.cs" />
     <Compile Include="AI\FSM\StateMachine.cs" />
     <Compile Include="AI\FSM\SimpleStateMachine.cs" />
+    <Compile Include="AI\UtilityAI\UtilityAI.cs" />
+    <Compile Include="AI\UtilityAI\Actions\ActionWithOptions.cs" />
+    <Compile Include="AI\UtilityAI\Actions\IAction.cs" />
     <Compile Include="AI\BehaviorTree\Conditionals\IConditional.cs" />
     <Compile Include="AI\BehaviorTree\Conditionals\ExecuteActionConditional.cs" />
     <Compile Include="AI\BehaviorTree\Composites\AbortTypes.cs" />
     <Compile Include="AI\BehaviorTree\Decorators\ConditionalDecorator.cs" />
+    <Compile Include="AI\UtilityAI\Actions\LogAction.cs" />
+    <Compile Include="AI\UtilityAI\Actions\ActionExecutor.cs" />
     <Compile Include="AI\BehaviorTree\Actions\LogAction.cs" />
     <Compile Include="AI\BehaviorTree\Actions\WaitAction.cs" />
+    <Compile Include="AI\UtilityAI\Reasoners\FirstScoreReasoner.cs" />
+    <Compile Include="AI\UtilityAI\Reasoners\HighestScoreReasoner.cs" />
+    <Compile Include="AI\UtilityAI\Reasoners\Reasoner.cs" />
+    <Compile Include="AI\UtilityAI\Considerations\AllOrNothingConsideration.cs" />
+    <Compile Include="AI\UtilityAI\Considerations\IConsideration.cs" />
+    <Compile Include="AI\UtilityAI\Considerations\FixedScoreConsideration.cs" />
+    <Compile Include="AI\UtilityAI\Considerations\SumOfChildrenConsideration.cs" />
+    <Compile Include="AI\UtilityAI\Considerations\ThresholdConsideration.cs" />
+    <Compile Include="AI\UtilityAI\Considerations\Appraisals\IAppraisal.cs" />
+    <Compile Include="AI\UtilityAI\Considerations\Appraisals\ExecuteActionAppraisal.cs" />
+    <Compile Include="AI\UtilityAI\Actions\IActionOptionAppraisal.cs" />
+    <Compile Include="AI\UtilityAI\Actions\ReasonerAction.cs" />
+    <Compile Include="AI\UtilityAI\Actions\CompositeAction.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="MonoGame.Framework">

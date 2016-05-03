@@ -57,12 +57,12 @@ machine.changeState<ChasingState>();
 
 
 
-Behavior Tree
+Behavior Trees
 ==========
-There
+The de facto standard for composing AI for the last decade. Behavior trees are composed of a tree of nodes. Nodes can make decisions and perform actions based on the state of the world. Nez includes a `BehaviorTreeBuilder` class that provides a fluent API for setting up a behavior tree. The `BehaviorTreeBuilder` is a great way to reduce the barrier of entry to using behavior trees and get up and running quickly.
 
 
-# Composites
+## Composites
 Composites are parent nodes in a behavior tree. They house 1 or more children and execute them in different ways.
 
 - **Sequence<T>:** returns failure as soon as one of its children returns failure. If a child returns success it will sequentially run the next child in the next tick of the tree.
@@ -73,14 +73,14 @@ Composites are parent nodes in a behavior tree. They house 1 or more children an
 - **RandomSelector<T>:** a `Selector` that shuffles its children before executing
 
 
-# Conditionals
+## Conditionals
 Conditionals are binary success/failure nodes. They are identified by the IConditional interface. They check some condition of your game world and either return success or failure. These are inherently game specific so Nez only provides a single generic Conditional out of the box and a helper Conditional that wraps an Action so you can avoid having to make a separate class for each Conditional.
 
 - **RandomProbability<T>:** return success when the random probability is above the specified success probability
 - **ExecuteActionConditional<T>:** wraps a Func and executes it as the Conditional. Useful for prototyping and to avoid creating separate classes for simple Conditionals.
 
 
-# Decorators
+## Decorators
 Decorators are wrapper tasks that have a single child. They can modify the behavior of the child task in various ways such as inverting the result, running it until failure, etc.
 
 - **AlwaysFail<T>:** always returns failure regardless of the child result
@@ -92,7 +92,7 @@ Decorators are wrapper tasks that have a single child. They can modify the behav
 - **UntilSuccess<T>:** keeps executing its child task until it returns success
 
 
-# Actions
+## Actions
 Actions are the leaf nodes of the behavior tree. This is where stuff happens such as playing an animation, triggering an event, etc.
 
 - **ExecuteAction<T>:** wraps a Func and executes it as its action. Useful for prototyping and to avoid creating separate classes for simple Actions.
@@ -104,21 +104,21 @@ Actions are the leaf nodes of the behavior tree. This is where stuff happens suc
 
 Utility AI
 ==========
-The most complex of the AI solutions. Best used in very dynamic environments
+Utility Theory for games. The most complex of the AI solutions. Best used in very dynamic environments where it's scoring system works best. Utility based AI are more appropriate in situations where there are a large number of potentially competing actions the AI can take such as in a RTS. A great overview of utility AI is [available here](http://www.gdcvault.com/play/1012410/Improving-AI-Decision-Modeling-Through).
 
 
-# Selector
-Selects the best Qualifier from the Qualifiers attached to the Selector
+## Reasoner
+Selects the best Consideration from a list of Considerations attached to the Reasoner. The root of a utility AI.
 
 
-# Qualifier
-Calculates a score that represents the utility/usefulness of its associated action.
+## Consideration
+Houses a list of Appraisals and an Action. Calculates a score that represents numerically the utility of it's Action
 
 
-# Scorer
-A method for calculating scores that can be reused across Qualifiers.
+## Appraisal
+One or more Appraisals can be added to a Consideration. They calculate and return a score which is used by the Consideration.
 
 
-# Action
-The action that the AI executes when a specific Qualifier is selected
+## Action
+The action that the AI executes when a specific Consideration is selected
 
