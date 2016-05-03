@@ -102,7 +102,7 @@ Actions are the leaf nodes of the behavior tree. This is where stuff happens suc
 
 
 
-Utility AI
+Utility Based AI
 ==========
 Utility Theory for games. The most complex of the AI solutions. Best used in very dynamic environments where it's scoring system works best. Utility based AI are more appropriate in situations where there are a large number of potentially competing actions the AI can take such as in a RTS. A great overview of utility AI is [available here](http://www.gdcvault.com/play/1012410/Improving-AI-Decision-Modeling-Through).
 
