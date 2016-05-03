@@ -390,10 +390,10 @@
     <Compile Include="AI\UtilityAI\Considerations\SumOfChildrenConsideration.cs" />
     <Compile Include="AI\UtilityAI\Considerations\ThresholdConsideration.cs" />
     <Compile Include="AI\UtilityAI\Considerations\Appraisals\IAppraisal.cs" />
-    <Compile Include="AI\UtilityAI\Considerations\Appraisals\ExecuteActionAppraisal.cs" />
     <Compile Include="AI\UtilityAI\Actions\IActionOptionAppraisal.cs" />
     <Compile Include="AI\UtilityAI\Actions\ReasonerAction.cs" />
     <Compile Include="AI\UtilityAI\Actions\CompositeAction.cs" />
+    <Compile Include="AI\UtilityAI\Considerations\Appraisals\ActionAppraisal.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="MonoGame.Framework">

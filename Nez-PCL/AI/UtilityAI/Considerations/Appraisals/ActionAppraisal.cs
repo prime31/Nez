@@ -6,12 +6,12 @@ namespace Nez.AI.UtilityAI
 	/// <summary>
 	/// wraps a Func for use as an Appraisal without having to create a subclass
 	/// </summary>
-	public class ExecuteActionAppraisal<T> : IAppraisal<T>
+	public class ActionAppraisal<T> : IAppraisal<T>
 	{
 		Func<T,float> _appraisalAction;
 
 
-		public ExecuteActionAppraisal( Func<T,float> appraisalAction )
+		public ActionAppraisal( Func<T,float> appraisalAction )
 		{
 			_appraisalAction = appraisalAction;
 		}
