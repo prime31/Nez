@@ -184,5 +184,4 @@ rightButton.gamepadLeftElement = middleSlider;
 // optional. This would making pressing right wrap around to the leftButton
 rightButton.gamepadRightElement = leftButton;
 
-```csharp
-
+```
