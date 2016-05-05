@@ -1,8 +1,5 @@
 sampler s0;
 
-// does this work also?
-//sampler TextureSampler : register( s0 );
-
 
 float4 PixelShaderFunction( float4 color:COLOR0, float2 texCoord:TEXCOORD0 ) : COLOR0
 {

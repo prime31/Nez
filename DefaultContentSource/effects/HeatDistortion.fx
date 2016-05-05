@@ -1,5 +1,5 @@
-sampler textureSampler : register( s0 );
-SamplerState _distortionTexture
+sampler s0;
+sampler _distortionTexture
 {
     AddressU = Wrap;
     AddressV = Wrap;
@@ -33,7 +33,7 @@ float4 PixelShaderFunction( float2 coords:TEXCOORD0 ) : COLOR0
     // We use the y texture coordinate of the original texture to tell us how "high up" we are and damp accordingly
     distortionMapValue *= ( coords.y ); // 1.0 - coords.y for actual OpenGL due to coords x at the bottom
     
-	return tex2D( textureSampler, distortionMapValue + coords );
+	return tex2D( s0, distortionMapValue + coords );
 }
 
 

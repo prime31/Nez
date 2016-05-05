@@ -314,6 +314,12 @@ namespace Nez
 		}
 
 
+		public Transform setPosition( float x, float y )
+		{
+			return setPosition( new Vector2( x, y ) );
+		}
+
+
 		/// <summary>
 		/// sets the position of the transform relative to the parent transform. If the transform has no parent, it is the same
 		/// as Transform.position
