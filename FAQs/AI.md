@@ -3,9 +3,9 @@ AI
 Nez includes several different options for setting up AI ranging from a super simple transitionless finite state machine (FSM) to extendable behavior trees to ultra-flexible Utility Based AI. You can mix and match them as you see fit.
 
 
-SimpleStateMachine
+Simple State Machine
 ==========
-The fastest and easiest way to get AI up and running. SimpleStateMachine is a Component subclass that lets you set an enum as it's generic contraint and it will use that enum to control the state machine. The enum values each map to a state and can have optional enter/tick/exit methods. The naming conventions for these methods are best shown with an example:
+The fastest and easiest way to get AI up and running. `SimpleStateMachine` is a Component subclass that lets you set an enum as it's generic contraint and it will use that enum to control the state machine. The enum values each map to a state and can have optional enter/tick/exit methods. The naming conventions for these methods are best shown with an example:
 
 ```csharp
 enum SomeEnum
@@ -32,11 +32,11 @@ public class YourClass : SimpleStateMachine<SomeEnum>()
 ```
 
 
-StateMachine
+State Machine
 ==========
-The next step up is StateMachine which implements the "states as objects" pattern. StateMachine uses separate classes for each state so it is a better choice for more complicated systems.
+The next step up is `StateMachine` which implements the "states as objects" pattern. `StateMachine` uses separate classes for each state so it is a better choice for more complex systems.
 
-We start to get into the concept of a **context** with StateMachine. In coding, the context is just the class used to satisfy a generic contraint. in a `List<string>` the *string* would be the context class, the class that the list operates on. With all of the rest of the AI solutions you get to specify the context class. It could be your Enemy class, Player class or a helper object that contains any information relevant to your AI (such as the Player, a list of Enemies, navigation information, etc).
+We start to get into the concept of a **context** with `StateMachine`. In coding, the context is just the class used to satisfy a generic contraint. in a `List<string>` the *string* would be the context class, the class that the list operates on. With all of the rest of the AI solutions you get to specify the context class. It could be your Enemy class, Player class or a helper object that contains any information relevant to your AI (such as the Player, a list of Enemies, navigation information, etc).
 
 Here is a simple example showing the usage (with the State subclasses omitted for brevity):
 
@@ -99,6 +99,27 @@ Actions are the leaf nodes of the behavior tree. This is where stuff happens suc
 - **WaitAction<T>:** waits a specified amount of time
 - **LogAction<T>:** logs a string to the console. Useful for debugging.
 - **BehaviorTreeReference<T>:** runs another BehaviorTree<T>
+
+
+
+Goal Oriented Action Planning (GOAP)
+==========
+GOAP differs quite a bit from the other AI solutions. With GOAP, you provide the planner with a list of the actions that the AI can perform, the current world state and the desired world state (goal state). GOAP will then attempt to find a series of actions that will get the AI to the goal state.
+
+GOAP was made popular by the old FPS F.E.A.R. The AI in F.E.A.R. consisted of a GOAP and a state machine with just 3 states: GoTo, Animate, UseSmartObject. Jeff Orkin's [web page](http://alumni.media.mit.edu/~jorkin/goap.html) is a treasure trove of great information.
+
+
+## ActionPlanner
+The brains of the operation. You give the ActionPlanner all of your Actions, the current world state and your goal state and it will give you back the best possible plan to achieve the goal state.
+
+
+## Action/ActionT
+Actions define a list of pre conditions that they require and a list of post conditions that will occur when the Action is performed. ActionT is just a subclass of Action with a handy context object of type T.
+
+
+## Agent
+Agent is a helper class that encapsulates an AI agent. It keeps a list of available Actions and a reference to the ActionPlanner. Agent is abstract and requires you to define the `getWorldState` and `getGoalState` methods. With those in place getting a plan is as simple as calling `agent.plan()`.
+
 
 
 
