@@ -48,7 +48,7 @@ var machine = new SKStateMachine<SomeClass>( someClass, new PatrollingState() );
 _machine.addState( new AttackState() );
 _machine.addState( new ChaseState() );
 
-// this method would typically be called in an Update/FixedUpdate of an object
+// this method would typically be called in an update of an object
 machine.update( Time.deltaTime );
 
 // change states. the state machine will automatically create and cache an instance of the class (in this case ChasingState)
@@ -66,7 +66,7 @@ The de facto standard for composing AI for the last decade. Behavior trees are c
 Composites are parent nodes in a behavior tree. They house 1 or more children and execute them in different ways.
 
 - **Sequence<T>:** returns failure as soon as one of its children returns failure. If a child returns success it will sequentially run the next child in the next tick of the tree.
-- **Selector<T>:** return success as soon as one of its child tasks return success. If a child task returns failure then it will sequentially run the next child in the next tick.
+- **Selector<T>:** returns success as soon as one of its child tasks return success. If a child task returns failure then it will sequentially run the next child in the next tick.
 - **Parallel<T>:** runs each child until a child returns failure. It differs from `Sequence` only in that it runs all children every tick
 - **ParallelSelector<T>:** like a `Selector` except it will run all children every tick
 - **RandomSequence<T>:** a `Sequence` that shuffles its children before executing

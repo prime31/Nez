@@ -69,7 +69,7 @@ entity.addComponent( new Sprite( spriteTexture ) )
 	.setMaterial( standardMaterial );
 
 
-// create an entity with no Material set. It will use the DeferredLightingRenderer.material which is diffuse only be default
+// create an entity with no Material set. It will use the DeferredLightingRenderer.material which is diffuse only by default
 scene.createEntity( "diffuse-only" )
 	.addComponent( new Sprite( spriteTexture ) )
 	.setRenderLayer( OBJECT_LAYER1 );
