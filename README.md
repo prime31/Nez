@@ -90,7 +90,8 @@ Nez comes stock with a decent bunch of Pipeline tool importers including:
 - **Particle Designer Importer**: imports [Particle Designer](https://71squared.com/particledesigner) particle systems for use with the Nez particle system
 - **LibGdxAtlases**: imports libGDX texture atlases including nine patch support
 - **Texture Packer**: imports a [TexturePacker](https://www.codeandweb.com/texturepacker) atlas and JSON file
-- **Overlap2D**: imports [Overlap2D](http://overlap2d.com/) projects. Imports most of the data but currently only offers renderers for the basics (no fancy stuff like Spriter animations, lights, etc). To use the importer the .atlas (atlas files should be renamed to packatlas.atlas to avoid xnb clashes with the pack.png file) and any of your scene files (*.dt) should be processed by the Pipeline tool. Your project.dt file must also be present (it can be in the same folder as your scene files or one folder up as it is in the default Overlap2D export) but it should not be processed.
+- **Overlap2D**: imports [Overlap2D](http://overlap2d.com/) projects. Imports most of the data but currently only offers renderers for the basics (no fancy stuff like Spriter animations, lights, etc).
+- **UISkin Importer**: imports uiskin files (JSON format) that are converted to UISkins. See the [UI page](FAQs/UI.md) for an example and details of the JSON format.
 - **XMLTemplateMaker**: this isn't so much an imoporter as a helper to make your own importer. Pass it a class and it spits out an XML template that you can use for your own custom XML-to-object importers.
 
 

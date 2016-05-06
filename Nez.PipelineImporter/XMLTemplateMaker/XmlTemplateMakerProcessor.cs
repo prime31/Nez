@@ -9,9 +9,9 @@ namespace Nez.XmlTemplateMaker
 {
 	/// <summary>
 	/// Simple little importer that's sole purpose is to print out a template XML file for any class. The template XML can then be used to
-	/// create custom XML-to-object importors in just a few lines of code. See the bottom of this file for an example.
+	/// create custom XML-to-object importers in just a few lines of code. See the bottom of this file for an example.
 	/// 
-	/// The XML file passed to this processor should just be a System.string with the namespace.class of the type that you want a tempalte for.
+	/// The XML file passed to this processor should just be a System.string with the namespace.class of the type that you want a tempalate for.
 	/// The template will be dumped to the Pipeline console but note that it will have utf-16 instead of utf-8 so you need to change that.
 	/// 
 	/// Lots of attributes are available for dealing with the XML parsing. You can find a great document on the attributes available
@@ -22,7 +22,6 @@ namespace Nez.XmlTemplateMaker
 	{
 		public override object Process( string inputClass, ContentProcessorContext context )
 		{
-			//var inputType = Type.GetType( inputClass );
 			var inputType = findTypeForClass( inputClass, context );
 
 			var xmlSettings = new XmlWriterSettings();
