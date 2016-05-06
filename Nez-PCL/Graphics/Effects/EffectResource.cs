@@ -39,6 +39,7 @@ namespace Nez
 
 		internal static byte[] multiTextureOverlayBytes { get { return getFileResourceBytes( "Content/nez/effects/MultiTextureOverlay.mgfxo" ); } }
 		internal static byte[] scanlinesBytes { get { return getFileResourceBytes( "Content/nez/effects/Scanlines.mgfxo" ); } }
+		internal static byte[] reflectionBytes { get { return getFileResourceBytes( "Content/nez/effects/Reflection.mgfxo" ); } }
 
 
 		/// <summary>

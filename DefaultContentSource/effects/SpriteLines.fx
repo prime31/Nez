@@ -1,6 +1,6 @@
 SamplerState s0; // from SpriteBatch
 
-float _lineSize; // width of the line in pixel
+float _lineSize; // width of the line in pixels
 float4 _lineColor;
 
 
@@ -9,7 +9,7 @@ float4 horizontalLinesPS( float2 texCoord:TEXCOORD0, in float2 screenPos:VPOS ) 
 	// we only need the alpha value of the original sprite
 	float4 alpha = tex2D( s0, texCoord ).a;
 	
-	// floor the screenPosition / lineSize. This gives us blocks with height lineSize. We mode that by 2 to take only the event blocks
+	// floor the screenPosition / lineSize. This gives us blocks with height lineSize. We mod that by 2 to take only the even blocks
 	float flooredAlternate = floor( screenPos.y / _lineSize ) % 2.0;
 	
 	// lerp transparent to lineColor. This will always be either transparent or lineColor since flooredAlternate will be 0 or 1.

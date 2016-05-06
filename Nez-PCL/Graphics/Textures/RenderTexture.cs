@@ -131,10 +131,9 @@ namespace Nez.Textures
 			var depthFormat = renderTarget.DepthStencilFormat;
 
 			// unload if necessary
-			if( renderTarget != null )
-				renderTarget.Dispose();
+			Dispose();
 
-			renderTarget =  RenderTarget.create( width, height, depthFormat );
+			renderTarget = RenderTarget.create( width, height, depthFormat );
 		}
 
 

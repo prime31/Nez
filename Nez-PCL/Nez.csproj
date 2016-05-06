@@ -394,6 +394,9 @@
     <Compile Include="AI\UtilityAI\Actions\ReasonerAction.cs" />
     <Compile Include="AI\UtilityAI\Actions\CompositeAction.cs" />
     <Compile Include="AI\UtilityAI\Considerations\Appraisals\ActionAppraisal.cs" />
+    <Compile Include="Graphics\Renderers\ReflectionRenderer.cs" />
+    <Compile Include="Graphics\Renderers\ReflectionMaterial.cs" />
+    <Compile Include="Graphics\Effects\ReflectionEffect.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="MonoGame.Framework">

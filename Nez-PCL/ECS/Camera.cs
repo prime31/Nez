@@ -182,7 +182,7 @@ namespace Nez
 		/// <value>The view projection matrix.</value>
 		public Matrix viewProjectionMatrix { get { return transformMatrix * projectionMatrix; } }
 
-		Vector2 origin
+		internal Vector2 origin
 		{
 			get { return _origin; }
 			set
@@ -303,6 +303,7 @@ namespace Nez
 			entity.transform.setRotationDegrees( degrees );
 			return this;
 		}
+
 
 		/// <summary>
 		/// sets the the zoom value which should be between -1 and 1. This value is then translated to be from minimumZoom to maximumZoom.

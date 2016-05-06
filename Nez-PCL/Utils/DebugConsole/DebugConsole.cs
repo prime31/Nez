@@ -158,7 +158,7 @@ namespace Nez.Console
 				_currentState = Keyboard.GetState();
 			}
 
-			for( int i = 0; i < _functionKeyActions.Length; i++ )
+			for( var i = 0; i < _functionKeyActions.Length; i++ )
 				if( Input.isKeyPressed( (Keys)( Keys.F1 + i ) ) )
 					executeFunctionKeyAction( i );
 		}
@@ -529,9 +529,9 @@ namespace Nez.Console
 		}
 
 
-		public void bindActionToFunctionKey( Keys functionKey, Action action )
+		public static void bindActionToFunctionKey( int functionKey, Action action )
 		{
-			_functionKeyActions[(int)functionKey] = action;
+			instance._functionKeyActions[functionKey - 1] = action;
 		}
 
 		#endregion

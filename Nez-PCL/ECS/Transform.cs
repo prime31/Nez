@@ -64,8 +64,10 @@ namespace Nez
 					}
 					else
 					{
+						parent.updateTransform();
 						Vector2.Transform( ref _localPosition, ref parent._worldTransform, out _position );
 					}
+
 					_positionDirty = false;
 				}
 				return _position;
@@ -203,9 +205,14 @@ namespace Nez
 				if( _worldToLocalDirty )
 				{
 					if( parent == null )
+					{
 						_worldToLocalTransform = Matrix.Identity;
+					}
 					else
+					{
+						parent.updateTransform();
 						Matrix.Invert( ref parent._worldTransform, out _worldToLocalTransform );
+					}
 
 					_worldToLocalDirty = false;
 				}
@@ -229,9 +236,9 @@ namespace Nez
 		Matrix _localTransform;
 
 		// value is automatically recomputed from the local and the parent matrices.
-		Matrix _worldTransform;
-		Matrix _worldToLocalTransform;
-		Matrix _worldInverseTransform;
+		Matrix _worldTransform = Matrix.Identity;
+		Matrix _worldToLocalTransform = Matrix.Identity;
+		Matrix _worldInverseTransform = Matrix.Identity;
 
 		Matrix _rotationMatrix;
 		Matrix _translationMatrix;
@@ -287,6 +294,7 @@ namespace Nez
 				parent._children.Add( this );
 
 			_parent = parent;
+			setDirty( DirtyType.PositionDirty );
 
 			return this;
 		}
@@ -302,6 +310,9 @@ namespace Nez
 			if( shouldRoundPosition )
 				Vector2Ext.round( ref position );
 
+			if( position == _position )
+				return this;
+			
 			_position = position;
 			if( parent != null )
 				localPosition = Vector2.Transform( _position, worldToLocalTransform );
@@ -330,6 +341,9 @@ namespace Nez
 		{
 			if( shouldRoundPosition )
 				Vector2Ext.round( ref localPosition );
+
+			if( localPosition == _localPosition )
+				return this;
 
 			_localPosition = localPosition;
 			_localDirty = _positionDirty = _localPositionDirty = _localRotationDirty = _localScaleDirty = true;
@@ -465,9 +479,7 @@ namespace Nez
 			if( hierarchyDirty != DirtyType.Clean )
 			{
 				if( parent != null && hierarchyDirty != DirtyType.Clean )
-				{
 					parent.updateTransform();
-				}
 
 				if( _localDirty )
 				{
@@ -531,7 +543,7 @@ namespace Nez
 				entity.onTransformChanged();
 
 				// dirty our children as well so they know of the changes
-				for( int i = 0; i < _children.Count; i++ )
+				for( var i = 0; i < _children.Count; i++ )
 					_children[i].setDirty( dirtyFlagType );
 			}
 		}
