@@ -74,6 +74,7 @@
     <Folder Include="AI\UtilityAI\Reasoners\" />
     <Folder Include="AI\UtilityAI\Considerations\" />
     <Folder Include="AI\UtilityAI\Considerations\Appraisals\" />
+    <Folder Include="AI\GOAP\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Debug\Debug.cs" />
@@ -394,6 +395,13 @@
     <Compile Include="AI\UtilityAI\Actions\ReasonerAction.cs" />
     <Compile Include="AI\UtilityAI\Actions\CompositeAction.cs" />
     <Compile Include="AI\UtilityAI\Considerations\Appraisals\ActionAppraisal.cs" />
+    <Compile Include="AI\GOAP\Action.cs" />
+    <Compile Include="AI\GOAP\ActionPlanner.cs" />
+    <Compile Include="AI\GOAP\ActionT.cs" />
+    <Compile Include="AI\GOAP\Agent.cs" />
+    <Compile Include="AI\GOAP\AStar.cs" />
+    <Compile Include="AI\GOAP\AStarStorage.cs" />
+    <Compile Include="AI\GOAP\WorldState.cs" />
     <Compile Include="Graphics\Renderers\ReflectionRenderer.cs" />
     <Compile Include="Graphics\Renderers\ReflectionMaterial.cs" />
     <Compile Include="Graphics\Effects\ReflectionEffect.cs" />
