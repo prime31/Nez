@@ -35,8 +35,7 @@ table.add( button ).setMinWidth( 100 ).setMinHeight( 30 );
 
 
 
-Skins
-==========
+## Skins
 Nez UI supports a skin system similar to [libGDX skins](https://github.com/libgdx/libgdx/wiki/Skin). Skins are optional but highly recommended. They act as a container to hold all of your UI resources and offer a bunch of automatic conversions. Nez includes a simple, default skin (accessible via `Skin.createDefaultSkin`) that you can use to mock up UIs quickly. You can create a skin programatically or via a JSON file that is run through the UI Skin Importer in the Pipeline tool. This gets the JSON parsed at build time so the data is ready to use at runtime. Below is example JSON with some comments added explaining the different elements.
 
 ```javascript
@@ -117,8 +116,7 @@ table.add( button ).setMinWidth( 100 ).setMinHeight( 30 );
 ```
 
 
-Programmatic Skin Creation
-========
+## Programmatic Skin Creation
 You do not have to use the JSON config file and pipeline importer to get the benefits of using a skin. Skins can also be created programmatically though it can be a bit tedious. Luckily, once you have code to make your skin using it is simple!
 
 
@@ -158,8 +156,7 @@ skin.add( "textfield", new TextFieldStyle( null, Color.White, skin.getDrawable( 
 ```
 
 
-Gamepad Input
-========
+## Gamepad Input
 Nez UI supports gamepad input out of the box via the `IGamepadFocusable` interface. Buttons (and any subclasses such as TextButton, Checkbox, etc) and Sliders will work out of the box (Note that Sliders require `shouldUseExplicitFocusableControl` to be true). To enable gamepad input processing just set the first focusable element via the `stage.setGamepadFocusElement` method. That will trigger the stage to use gamepad input. By default, the A button will be used for activating a UI Element. You can change this via the `stage.gamepadActionButton`. Also by default keyboard input (arrow keys and enter) will also work and is customizable via `keyboardEmulatesGamepad` and `keyboardActionKey`. If you have custom controls that would like to take part in gamepad input just implement the IGamepadFocusable interface on the element. If you are subclassing Button or Slider it is even easier: just override any of the 4 focus handlers: `onFocused`, `onUnfocused`, `onActionButtonPressed` and `onActionButtonReleased`.
 
 If you want finer grained control over which Element gains focus when a particular direction is pressed on the gamepad you can manually set the `gamepadUp/Down/Left/RightElement` properties. Leaving any null will result in no focus change when that direction is pressed and the `onUnhandledDirectionPressed` method will be called. Note that you must also set `IGamepadFocusable.shouldUseExplicitFocusableControl` when setting these directly. Below is a simple example of setting up 2 buttons and a slider horizontally. The slider's value will be changed when up/down is pressed on the gamepad.

@@ -2,11 +2,10 @@ Deferred Lighting
 ==========
 The Deferred Lighting system lets you use real lights in your scene. Included light types are point, directional, spot and area lights.
 
-ADD-GENERAL-BACKGROUND-INFO-ON-DEFERRED-LIGHTING-HERE
+Deferred lighting is a method of rendering that defers dealing with lights until after all objects are rendered. This makes having lots of lights more effiecient. The general gist of how it works is like this: first, we render all objects to a diffuse render texture and a render their normal maps to a normal render texture simultaneously (via multiple render targets). All of the lights are then rendered using the normal data into a 3rd render texture. Finally, the light render texture and the diffuse render texture are combined for the final output. You can see the output of all of the render textures by toggling the `DeferredRenderer.enableDebugBufferRender` property at runtime.
 
 
-Material Setup
-==========
+## Material Setup
 This is where using the deferred lighting system differs from your normal workflow when making a 2D game. In most games without realtime lighting you wont ever need to touch the Material system at all. Deferred lighting needs additional information (mainly normal maps) in order to calculate lighting so we have to dive into Nez's Material system. We won't get into actual asset creation process here so it is assumed that you know how to create (or auto-generate) your normal maps.
 
 One neat trick the Nez deferred lighting system has baked in is self illumination. Self illuminated portions of your texture dont need to have a light hit them for them to be visible. They are always lit. You can specify which portions of your texture should be self illuminated via the alpha channel of your normal map. A 0 value indicates no self illumination and a value of 1 indicates fully self illuminated. Don't forget to turn off premultiplied alpha in the Pipeline Tool when using self illumination! Nez needs that alpha channel intact to get the self illumination data. When using self illumination you have to let Nez know by setting `DeferredSpriteMaterial.setUseNormalAlphaChannelForSelfIllumination`. Additional control of self illumination at runtime is available by setting `DeferredSpriteMaterial.setSelfIlluminationPower`. Modulating the self illumination power lets you add some great atmosphere to a scene.
@@ -37,8 +36,7 @@ selfLitMaterial.typedEffect.setUseNormalAlphaChannelForSelfIllumination( true )
 
 
 
-Scene Setup
-==========
+## Scene Setup
 There isn't much that needs to be done for our Scene setup. All we have to do is add a `DeferredLightingRenderer`. The values you pass to the constructor of this Renderer are very important though! You have to specify which renderLayer it should use for lights and which renderLayers contain your normal sprites.
 
 ```cs
@@ -55,8 +53,7 @@ deferredRenderer.setAmbientColor( Color.Black );
 ```
 
 
-Entity Setup
-==========
+## Entity Setup
 Now we just have to make sure that we use the proper renderLayers (easy to do since we were smart and made them const int) and Materials when creating our Renderables:
 
 ```cs

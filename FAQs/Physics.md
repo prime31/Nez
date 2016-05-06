@@ -5,16 +5,12 @@ It serves to reiterate what has been stated before: Nez physics is *not* a reali
 
 
 
-Colliders: The Root of the Physics System
-==========
-
+## Colliders: The Root of the Physics System
 Nothing happens in the physics system without Colliders. Colliders live on the Entity class and come in several varieties: BoxCollider, CircleCollider and PolygonCollider. You can add a Collider like so: `entity.colliders.add( new BoxCollider() )`. When you have debugRender enabled Colliders will be displayed with red lines (to enable debugRender either set `Core.debugRenderEnabled = true` or open the console and type "debug-render"). Colliders are automatically added to the SpatialHash when you add them to an Entity, which brings us to our next topic.
 
 
 
-The SpatialHash: You'll never touch it but it's still important
-==========
-
+## The SpatialHash: You'll never touch it but it's still important
 Under the covers lies the SpatialHash class which manages Colliders globally for your game. The static **Physics** class is the public wrapper for the SpatialHash. The SpatialHash has no set size limits and is used to make collision/linecast/overlap checks really fast. As an example, if you have a hero moving around the world instead of having to check every Collider (which could be hundreds) for a collision you can just ask the SpatialHash for all the Colliders near your hero. That narrows down your collision checks drastically.
 
 There is one configurable aspect to the SpatialHash that can greatly affect how performant it is: the cell size. The SpatialHash splits up space into a grid and choosing a proper grid size can keep your possible collision queries to a minimum. By default the grid size is 100 pixels. You can change this by setting `Physics.spatialHashCellSize` *before* creating a Scene. Choosing a size that is slightly larger than your average player/enemy size usually works best.
@@ -23,9 +19,7 @@ One last thing about the SpatialHash: it includes a visual debugger. By pulling 
 
 
 
-The Physics Class
-==========
-
+## The Physics Class
 The **Physics** class is your gateway to all things Physics. There are some properties you can set such as the aforementioned spatialHashCellSize, raycastsHitTriggers and raycastsStartInColliders. See the intellisense docs for an explanation of each. Some of the more useful and commonly used methods are:
 
 - **linecast**: casts a line from start to end and returns the first hit of a collider that matches layerMask
@@ -37,9 +31,7 @@ Astute readers will have noticed the *layerMask* mentioned above. The layerMask 
 
 
 
-Putting the Physics System to Use
-==========
-
+## Putting the Physics System to Use
 Linecasts are extremely useful for various things like checking line-of-sight for enemies, detecting the spatial surroundings of an Entity, fast-moving bullets, etc. Here is an example of casting a line from start to end that just logs the data if it hits something:
 
 ```cs
