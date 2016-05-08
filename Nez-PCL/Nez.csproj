@@ -405,6 +405,8 @@
     <Compile Include="Graphics\Renderers\ReflectionRenderer.cs" />
     <Compile Include="Graphics\Renderers\ReflectionMaterial.cs" />
     <Compile Include="Graphics\Effects\ReflectionEffect.cs" />
+    <Compile Include="Graphics\Effects\SepiaEffect.cs" />
+    <Compile Include="Graphics\Effects\GrayscaleEffect.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="MonoGame.Framework">
