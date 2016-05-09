@@ -75,11 +75,8 @@ namespace Nez.Systems
 			var shouldContinueCoroutine = tickCoroutine( coroutine );
 
 			// guard against empty coroutines
-			if( !shouldContinueCoroutine || coroutine.isDone )
-			{
-				Pool<CoroutineImpl>.free( coroutine );
+			if( !shouldContinueCoroutine )
 				return null;
-			}
 
 			if( _isInUpdate )
 				_shouldRunNextFrame.Add( coroutine );
@@ -140,18 +137,22 @@ namespace Nez.Systems
 
 
 		/// <summary>
-		/// ticks a coroutine. returns true if the coroutine should continue to run next frame.
+		/// ticks a coroutine. returns true if the coroutine should continue to run next frame. This method will put finished coroutines
+		/// back in the Pool!
 		/// </summary>
 		/// <returns><c>true</c>, if coroutine was ticked, <c>false</c> otherwise.</returns>
 		/// <param name="coroutine">Coroutine.</param>
 		bool tickCoroutine( CoroutineImpl coroutine )
 		{
 			// This coroutine has finished
-			if( !coroutine.enumerator.MoveNext() )
+			if( !coroutine.enumerator.MoveNext() || coroutine.isDone )
 			{
 				Pool<CoroutineImpl>.free( coroutine );
 				return false;
 			}
+
+			if( coroutine.isDone )
+				Debug.break_();
 
 			if( coroutine.enumerator.Current == null )
 			{
