@@ -6,7 +6,7 @@ using Microsoft.Xna.Framework;
 namespace Nez
 {
 	/// <summary>
-	/// assist in creating a mirror effect. To use the ReflectionRenderer do the following:
+	/// assists in creating a mirror effect. To use the ReflectionRenderer do the following:
 	/// - call createAndSetupScene being sure to pass in a renderOrder BEFORE the renderer that contains your reflective surface.
 	/// - reflectableObjectRenderLayers should contain all the renderLayers that contain objects that you want reflected
 	/// - create a ReflectionMaterial which you will use to render your reflective surfaces. Note that your reflective

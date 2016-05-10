@@ -60,6 +60,7 @@ namespace Nez
 		EffectParameter _normalMapParam;
 		EffectParameter _matrixTransformParam;
 		EffectParameter _normalMagnitudeParam;
+		EffectParameter _timeParam;
 
 
 		public ReflectionEffect() : base( Core.graphicsDevice, EffectResource.reflectionBytes )
@@ -71,8 +72,17 @@ namespace Nez
 			_matrixTransformParam = Parameters["_matrixTransform"];
 			_normalMagnitudeParam = Parameters["_normalMagnitude"];
 			_normalMagnitudeParam.SetValue( _normalMagnitude );
+
+			// only for water
+			_timeParam = Parameters["_time"];
 		}
 
+
+		protected override bool OnApply()
+		{
+			_timeParam.SetValue( Time.time );
+			return base.OnApply();
+		}
 	}
 }
 
