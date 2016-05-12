@@ -122,6 +122,7 @@ namespace Nez
                 else if (t > from)
                     return 0.0f;
             }
+
             return (t - from) / (to - from);
         }
 
