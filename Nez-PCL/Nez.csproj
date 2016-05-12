@@ -75,7 +75,7 @@
     <Folder Include="AI\UtilityAI\Considerations\" />
     <Folder Include="AI\UtilityAI\Considerations\Appraisals\" />
     <Folder Include="AI\GOAP\" />
-    <Folder Include="Graphics\Renderers\Materials\" />
+    <Folder Include="Graphics\Renderers\Reflections\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Debug\Debug.cs" />
@@ -403,14 +403,14 @@
     <Compile Include="AI\GOAP\AStar.cs" />
     <Compile Include="AI\GOAP\AStarStorage.cs" />
     <Compile Include="AI\GOAP\WorldState.cs" />
-    <Compile Include="Graphics\Renderers\ReflectionRenderer.cs" />
     <Compile Include="Graphics\Effects\ReflectionEffect.cs" />
     <Compile Include="Graphics\Effects\SepiaEffect.cs" />
     <Compile Include="Graphics\Effects\GrayscaleEffect.cs" />
     <Compile Include="Graphics\Effects\WaterReflectionEffect.cs" />
-    <Compile Include="Graphics\Renderers\Materials\ReflectionMaterial.cs" />
-    <Compile Include="Graphics\Renderers\Materials\WaterReflectionMaterial.cs" />
     <Compile Include="ECS\Components\Renderables\WaterReflectionPlane.cs" />
+    <Compile Include="Graphics\Renderers\Reflections\ReflectionMaterial.cs" />
+    <Compile Include="Graphics\Renderers\Reflections\WaterReflectionMaterial.cs" />
+    <Compile Include="Graphics\Renderers\Reflections\ReflectionRenderer.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="MonoGame.Framework">

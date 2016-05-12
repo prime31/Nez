@@ -33,17 +33,38 @@ namespace Nez
 		public float perspectiveCorrectionIntensity { set { _perspectiveCorrectionIntensityParam.SetValue( value ); } }
 
 		/// <summary>
+		/// defaults to 2. speed that the first displacment/normal uv is scrolled
+		/// </summary>
+		/// <value>The first displacement speed.</value>
+		public float firstDisplacementSpeed { set { _firstDisplacementSpeedParam.SetValue( value / 100 ); } }
+
+		/// <summary>
+		/// defaults to 6. speed that the second displacment/normal uv is scrolled
+		/// </summary>
+		/// <value>The second displacement speed.</value>
+		public float secondDisplacementSpeed { set { _secondDisplacementSpeedParam.SetValue( value / 100 ); } }
+
+		/// <summary>
 		/// defaults to 3. the normal map is sampled twice then combined. The 2nd sampling is scaled by this value.
 		/// </summary>
 		/// <value>The second displacement scale.</value>
 		public float secondDisplacementScale { set { _secondDisplacementScaleParam.SetValue( value ); } }
 
+		const float _sparkleIntensity = 0.015f;
+		const float _perspectiveCorrectionIntensity = 0.3f;
+		const float _reflectionIntensity = 0.85f;
+		const float _normalMagnitude = 0.03f;
+		const float _firstDisplacementSpeed = 6f;
+		const float _secondDisplacementSpeed = 2f;
+		const float _secondDisplacementScale = 3f;
 
 		EffectParameter _timeParam;
 		EffectParameter _sparkleIntensityParam;
 		EffectParameter _sparkleColorParam;
 		EffectParameter _screenSpaceVerticalOffsetParam;
 		EffectParameter _perspectiveCorrectionIntensityParam;
+		EffectParameter _firstDisplacementSpeedParam;
+		EffectParameter _secondDisplacementSpeedParam;
 		EffectParameter _secondDisplacementScaleParam;
 
 
@@ -56,16 +77,20 @@ namespace Nez
 			_sparkleColorParam = Parameters["_sparkleColor"];
 			_screenSpaceVerticalOffsetParam = Parameters["_screenSpaceVerticalOffset"];
 			_perspectiveCorrectionIntensityParam = Parameters["_perspectiveCorrectionIntensity"];
+			_firstDisplacementSpeedParam = Parameters["_firstDisplacementSpeed"];
+			_secondDisplacementSpeedParam = Parameters["_secondDisplacementSpeed"];
 			_secondDisplacementScaleParam = Parameters["_secondDisplacementScale"];
 
-			_sparkleIntensityParam.SetValue( 0.015f );
+			_sparkleIntensityParam.SetValue( _sparkleIntensity );
 			_sparkleColorParam.SetValue( Vector3.One );
-			_perspectiveCorrectionIntensityParam.SetValue( 0.3f );
-			_secondDisplacementScaleParam.SetValue( 3f );
+			_perspectiveCorrectionIntensityParam.SetValue( _perspectiveCorrectionIntensity );
+			firstDisplacementSpeed = _firstDisplacementSpeed;
+			secondDisplacementSpeed = _secondDisplacementSpeed;
+			_secondDisplacementScaleParam.SetValue( _secondDisplacementScale );
 
 			// override some defaults from the ReflectionEffect
-			reflectionIntensity = 0.8f;
-			normalMagnitude = 0.03f;
+			reflectionIntensity = _reflectionIntensity;
+			normalMagnitude = _normalMagnitude;
 		}
 
 

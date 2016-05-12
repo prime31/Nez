@@ -21,7 +21,8 @@ float _sparkleIntensity; // 0.015;
 float3 _sparkleColor; // float3( 1, 1, 1 );
 float _perspectiveCorrectionIntensity;
 float _secondDisplacementScale;
-
+float _firstDisplacementSpeed; // 16
+float _secondDisplacementSpeed; // 50
 
 
 // ##### ##### ##### ##### ##### ##### ##### ##### ##### ##### ##### #####
@@ -111,12 +112,12 @@ float4 waterPixel( WaterVertexOut input ) : COLOR0
 	
 	// start with the main uv and sample our normal twice
 	float2 normTexCoord = input.texCoord.xy; // show we be doing this? input.uvgrab.xy - perspectiveCorrection
-	normTexCoord.x = frac( normTexCoord.x + _time / 16.0 );
+	normTexCoord.x = frac( normTexCoord.x + _time * _firstDisplacementSpeed );
 	float4 normal1 = tex2D( _normalMap, normTexCoord );
 	normal1.xy -= 0.5; // get red and green channels in -0.5 to 0.5 range
 	
 	float2 normTexCoord2 = input.texCoord.xy * _secondDisplacementScale;
-	normTexCoord2.x = frac( normTexCoord2.x + _time / 50.0 );
+	normTexCoord2.x = frac( normTexCoord2.x + _time * _secondDisplacementSpeed );
 	float4 normal2 = tex2D( _normalMap, normTexCoord2 );
 	normal2.xy -= 0.5; // get red and green channels in -0.5 to 0.5 range
 	
@@ -133,8 +134,7 @@ float4 waterPixel( WaterVertexOut input ) : COLOR0
 	// if our waves get higher than our original uv.y than add a white cap
 	if( reflectionTexCoord.y - input.uvgrab.y > _sparkleIntensity )
 		color.rgb = _sparkleColor;
-	
-	//color.rgb = color.rgb * 0.000000001 + float3( factor, 0, 0 );
+
 	return color;
 }
 

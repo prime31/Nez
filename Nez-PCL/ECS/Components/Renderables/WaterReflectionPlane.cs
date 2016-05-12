@@ -6,9 +6,10 @@ using Microsoft.Xna.Framework;
 namespace Nez
 {
 	/// <summary>
-	/// adds a water reflection effect designed to be placed on the bottom of the screen. Usage is as follows:
-	/// - create a Renderer that renders after all of your other renderers
-	/// - put the WaterReflectionPlane on a renderLayer that is only rendered by the Renderer created above
+	/// adds a water reflection effect designed to be placed on the bottom of the screen. Note that transform.position is the top-left point
+	/// in the water plane. Usage is as follows:
+	/// - create a Renderer that renders after all of your other renderers and renders only renderLayer WATER_LAYER (you choose the int value)
+	/// - put the WaterReflectionPlane on renderLayer WATER_LAYER and ensure no other Renderers are rendering WATER_LAYER
 	/// - configure the material (you can fetch it via component.getMaterial<WaterReflectionMaterial>()). Be sure to set the normalMap property.
 	/// </summary>
 	public class WaterReflectionPlane : RenderableComponent
