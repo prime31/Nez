@@ -101,7 +101,7 @@ namespace Nez
 
 		public override void render( Graphics graphics )
 		{
-			Core.graphicsDevice.SetRenderTarget( null );
+			Core.graphicsDevice.setRenderTarget( null );
 			graphics.batcher.begin( BlendState.NonPremultiplied, Core.defaultSamplerState, DepthStencilState.None, null );
 			graphics.batcher.draw( previousSceneRender, _destinationRect, Color.White );
 			graphics.batcher.end();

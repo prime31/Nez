@@ -326,7 +326,6 @@
     <Compile Include="Graphics\Material.cs" />
     <Compile Include="UI\Base\Direction.cs" />
     <Compile Include="UI\Base\IGamepadFocusable.cs" />
-    <Compile Include="Graphics\GraphicsResource.cs" />
     <Compile Include="Utils\NezSpriteFont.cs" />
     <Compile Include="Graphics\Batcher\Batcher.cs" />
     <Compile Include="Graphics\Batcher\BatcherDrawingExt.cs" />
@@ -411,6 +410,8 @@
     <Compile Include="Graphics\Renderers\Reflections\ReflectionMaterial.cs" />
     <Compile Include="Graphics\Renderers\Reflections\WaterReflectionMaterial.cs" />
     <Compile Include="Graphics\Renderers\Reflections\ReflectionRenderer.cs" />
+    <Compile Include="Graphics\Batcher\GraphicsResource.cs" />
+    <Compile Include="Graphics\GraphicsDeviceExt.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="MonoGame.Framework">

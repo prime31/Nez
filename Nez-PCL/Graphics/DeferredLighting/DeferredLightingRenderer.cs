@@ -208,7 +208,7 @@ namespace Nez.DeferredLighting
 			_lightEffect.setNormalMap( normalRT );
 			_lightEffect.updateForCamera( scene.camera );
 
-			Core.graphicsDevice.SetRenderTarget( lightRT );
+			Core.graphicsDevice.setRenderTarget( lightRT );
 			Core.graphicsDevice.Clear( Color.Transparent );
 			Core.graphicsDevice.BlendState = BlendState.Additive;
 			Core.graphicsDevice.DepthStencilState = DepthStencilState.None;
@@ -230,7 +230,7 @@ namespace Nez.DeferredLighting
 
 		void renderFinalCombine( Scene scene )
 		{
-			Core.graphicsDevice.SetRenderTarget( scene.sceneRenderTarget );
+			Core.graphicsDevice.setRenderTarget( scene.sceneRenderTarget );
 			Core.graphicsDevice.BlendState = BlendState.Opaque;
 			Core.graphicsDevice.DepthStencilState = DepthStencilState.None;
 
@@ -244,7 +244,7 @@ namespace Nez.DeferredLighting
 		{
 			var tempRT = RenderTarget.getTemporary( scene.sceneRenderTarget.Width, scene.sceneRenderTarget.Height );
 
-			Core.graphicsDevice.SetRenderTarget( tempRT );
+			Core.graphicsDevice.setRenderTarget( tempRT );
 
 			var halfWidth = tempRT.Width / 2;
 			var halfHeight = tempRT.Height / 2;
@@ -256,7 +256,7 @@ namespace Nez.DeferredLighting
 			Graphics.instance.batcher.draw( scene.sceneRenderTarget, new Rectangle( halfWidth, halfHeight, halfWidth, halfHeight ) );
 			Graphics.instance.batcher.end();
 
-			Core.graphicsDevice.SetRenderTarget( scene.sceneRenderTarget );
+			Core.graphicsDevice.setRenderTarget( scene.sceneRenderTarget );
 			Graphics.instance.batcher.begin( BlendState.Opaque );
 			Graphics.instance.batcher.draw( tempRT, Vector2.Zero );
 			Graphics.instance.batcher.end();

@@ -318,7 +318,7 @@ namespace Nez
 
 			// prep our render textures
 			updateResolutionScaler();
-			Core.graphicsDevice.SetRenderTarget( _sceneRenderTarget );
+			Core.graphicsDevice.setRenderTarget( _sceneRenderTarget );
 
 			if( entityProcessors != null )
 				entityProcessors.begin();
@@ -360,7 +360,7 @@ namespace Nez
 		internal void update()
 		{
 			// we set the RenderTarget here so that the Viewport will match the RenderTarget properly
-			Core.graphicsDevice.SetRenderTarget( _sceneRenderTarget );
+			Core.graphicsDevice.setRenderTarget( _sceneRenderTarget );
 
 			// update our lists in case they have any changes
 			entities.updateLists();
@@ -386,7 +386,7 @@ namespace Nez
 			// the current RenderTarget when they render. If the first Renderer wants the sceneRenderTarget we set and clear it now.
 			if( _renderers[0].wantsToRenderToSceneRenderTarget )
 			{
-				Core.graphicsDevice.SetRenderTarget( _sceneRenderTarget );
+				Core.graphicsDevice.setRenderTarget( _sceneRenderTarget );
 				Core.graphicsDevice.Clear( clearColor );
 			}
 		}
@@ -401,7 +401,7 @@ namespace Nez
 				// Because of that, we track when we are done with our RenderTargets and clear the scene at that time.
 				if( lastRendererHadRenderTarget && _renderers[i].wantsToRenderToSceneRenderTarget )
 				{
-					Core.graphicsDevice.SetRenderTarget( _sceneRenderTarget );
+					Core.graphicsDevice.setRenderTarget( _sceneRenderTarget );
 					Core.graphicsDevice.Clear( clearColor );
 
 					// force a Camera matrix update to account for the new Viewport size
@@ -442,7 +442,7 @@ namespace Nez
 				if( i == 0 )
 				{
 					// we need to set the proper RenderTarget here. We want the last one that was the destination of our PostProcessors
-					Core.graphicsDevice.SetRenderTarget( Mathf.isEven( enabledCounter ) ? _sceneRenderTarget : _destinationRenderTarget );
+					Core.graphicsDevice.setRenderTarget( Mathf.isEven( enabledCounter ) ? _sceneRenderTarget : _destinationRenderTarget );
 				}
 
 				// force a Camera matrix update to account for the new Viewport size
@@ -470,7 +470,7 @@ namespace Nez
 			}
 			else
 			{
-				Core.graphicsDevice.SetRenderTarget( finalRenderTarget );
+				Core.graphicsDevice.setRenderTarget( finalRenderTarget );
 				Core.graphicsDevice.Clear( letterboxColor );
 				Graphics.instance.batcher.begin( BlendState.Opaque, samplerState, null, null );
 				Graphics.instance.batcher.draw( Mathf.isEven( enabledCounter ) ? _sceneRenderTarget : _destinationRenderTarget, _finalRenderDestinationRect, Color.White );

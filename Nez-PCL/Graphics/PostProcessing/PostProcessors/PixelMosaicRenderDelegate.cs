@@ -80,7 +80,7 @@ namespace Nez
 
 			// based on the look of games by: http://deepnight.net/games/strike-of-rage/
 			// use the mosaic to render to a full sized RenderTarget repeating the mosaic
-			Core.graphicsDevice.SetRenderTarget( _mosaicRenderTex );
+			Core.graphicsDevice.setRenderTarget( _mosaicRenderTex );
 			Graphics.instance.batcher.begin( BlendState.Opaque, SamplerState.PointWrap, DepthStencilState.None, RasterizerState.CullNone );
 			Graphics.instance.batcher.draw( _mosaicTexture, Vector2.Zero, new Rectangle( 0, 0, _mosaicRenderTex.Width, _mosaicRenderTex.Height ), Color.White );
 			Graphics.instance.batcher.end();
@@ -93,7 +93,7 @@ namespace Nez
 		public void handleFinalRender( Color letterboxColor, RenderTarget2D source, Rectangle finalRenderDestinationRect, SamplerState samplerState )
 		{
 			// we can just draw directly to the screen here with our effect
-			Core.graphicsDevice.SetRenderTarget( null );
+			Core.graphicsDevice.setRenderTarget( null );
 			Core.graphicsDevice.Clear( letterboxColor );
 			Graphics.instance.batcher.begin( BlendState.Opaque, samplerState, DepthStencilState.None, RasterizerState.CullNone, effect );
 			Graphics.instance.batcher.draw( source, finalRenderDestinationRect, Color.White );
