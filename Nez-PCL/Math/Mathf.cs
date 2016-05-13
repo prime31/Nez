@@ -106,25 +106,27 @@ namespace Nez
 			return from + ( to - from ) * Mathf.clamp01( t );
 		}
 
-		public static float inverseLerp(float from, float to, float t)
+
+		public static float inverseLerp( float from, float to, float t )
 		{
-			if (from < to)
+			if( from < to )
 			{
-				if (t < from)
+				if( t < from )
 					return 0.0f;
-				else if (t > to)
+				else if( t > to )
 					return 1.0f;
 			}
 			else
 			{
-				if (t < to)
+				if( t < to )
 					return 1.0f;
-				else if (t > from)
+				else if( t > from )
 					return 0.0f;
 			}
 
-			return (t - from) / (to - from);
+			return ( t - from ) / ( to - from );
 		}
+
 
 		public static float unclampedLerp( float from, float to, float t )
 		{
@@ -347,8 +349,7 @@ namespace Nez
 		public static Vector2 pointOnCircle( Vector2 circleCenter, float radius, float angleInDegrees )
 		{
 			var radians = MathHelper.ToRadians( angleInDegrees );
-			return new Vector2
-			{
+			return new Vector2 {
 				X = Mathf.cos( radians ) * radius + circleCenter.X,
 				Y = Mathf.sin( radians ) * radius + circleCenter.Y
 			};
