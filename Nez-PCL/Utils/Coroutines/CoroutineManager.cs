@@ -129,6 +129,8 @@ namespace Nez.Systems
 
 				if( tickCoroutine( coroutine ) )
 					_shouldRunNextFrame.Add( coroutine );
+				else
+					Pool<CoroutineImpl>.free( coroutine );
 			}
 
 			_unblockedCoroutines.Clear();
@@ -148,10 +150,7 @@ namespace Nez.Systems
 		{
 			// This coroutine has finished
 			if( !coroutine.enumerator.MoveNext() )
-			{
-				Pool<CoroutineImpl>.free( coroutine );
 				return false;
-			}
 
 			if( coroutine.enumerator.Current == null )
 			{
