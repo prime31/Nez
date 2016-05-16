@@ -20,7 +20,7 @@ namespace Nez
 		public float normalMagnitude { set { _normalMagnitudeParam.SetValue( value ); } }
 
 		/// <summary>
-		/// optinal normal map used to displace/refract the UV of the sampled RenderTarget.
+		/// optional normal map used to displace/refract the UV of the sampled RenderTarget.
 		/// </summary>
 		/// <value>The normal map.</value>
 		public Texture2D normalMap { set { _normalMapParam.SetValue( value ); } }

@@ -34,7 +34,6 @@ namespace Nez
 		/// </summary>
 		public static Material defaultOpaqueMaterial = new Material( BlendState.Opaque );
 
-
 		/// <summary>
 		/// BlendState used by the Batcher for the current RenderableComponent
 		/// </summary>
