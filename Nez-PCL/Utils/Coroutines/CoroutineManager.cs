@@ -151,9 +151,6 @@ namespace Nez.Systems
 				return false;
 			}
 
-			if( coroutine.isDone )
-				Debug.break_();
-
 			if( coroutine.enumerator.Current == null )
 			{
 				// yielded null. run again next frame
