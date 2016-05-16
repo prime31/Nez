@@ -94,7 +94,7 @@ namespace Nez
 		/// </summary>
 		protected void drawFullscreenQuad( Texture2D texture, RenderTarget2D renderTarget, Effect effect = null )
 		{
-			Core.graphicsDevice.SetRenderTarget( renderTarget );
+			Core.graphicsDevice.setRenderTarget( renderTarget );
 			drawFullscreenQuad( texture, renderTarget.Width, renderTarget.Height, effect );
 		}
 

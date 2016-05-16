@@ -90,5 +90,11 @@ namespace Nez.TextureAtlases
 			throw new KeyNotFoundException( animationName );
 		}
 
+
+		public Subtexture this[string name]
+		{
+			get { return getSubtexture( name ); }
+		}
+
 	}
 }

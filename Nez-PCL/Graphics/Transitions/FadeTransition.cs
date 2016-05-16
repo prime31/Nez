@@ -91,7 +91,7 @@ namespace Nez
 
 		public override void render( Graphics graphics )
 		{
-			Core.graphicsDevice.SetRenderTarget( null );
+			Core.graphicsDevice.setRenderTarget( null );
 			graphics.batcher.begin( BlendState.NonPremultiplied, Core.defaultSamplerState, DepthStencilState.None, null );
 
 			// we only render the previousSceneRender while fading to _color. It will be null after that.

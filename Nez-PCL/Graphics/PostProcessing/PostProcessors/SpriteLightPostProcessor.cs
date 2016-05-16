@@ -49,7 +49,7 @@ namespace Nez
 
 		public override void process( RenderTarget2D source, RenderTarget2D destination )
 		{
-			Core.graphicsDevice.SetRenderTarget( destination );
+			Core.graphicsDevice.setRenderTarget( destination );
 			Graphics.instance.batcher.begin( effect: effect );
 			Graphics.instance.batcher.draw( source, new Rectangle( 0, 0, destination.Width, destination.Height ), Color.White );
 			Graphics.instance.batcher.end();

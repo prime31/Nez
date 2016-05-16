@@ -38,7 +38,7 @@ namespace Nez
 			base.process( _layerRT, _tempRT );
 
 			// we need to be careful here and ensure we use AlphaBlending since the layer we rendered is mostly transparent
-			Core.graphicsDevice.SetRenderTarget( destination );
+			Core.graphicsDevice.setRenderTarget( destination );
 			Graphics.instance.batcher.begin( BlendState.AlphaBlend, samplerState, DepthStencilState.None, RasterizerState.CullNone );
 
 			// now we first draw the full scene (source), then draw our bloomed layer (tempRT) then draw the un-bloomed layer (layerRT)

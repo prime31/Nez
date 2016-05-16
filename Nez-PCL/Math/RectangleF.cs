@@ -927,6 +927,12 @@ namespace Nez
 			return !( a == b );
 		}
 
+
+		public static implicit operator Rectangle( RectangleF self )
+		{
+			return RectangleExt.fromFloats( self.x, self.y, self.width, self.height );
+		}
+
 		#endregion
 	
 	}

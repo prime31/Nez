@@ -52,9 +52,10 @@ namespace Nez
 				// store the old bounds so we can update ourself after modifying them
 				var oldBounds = bounds;
 				((Box)shape).width = width;
+				_areBoundsDirty = true;
+
 				if( entity != null && _isParentEntityAddedToScene )
 					Physics.updateCollider( this, ref oldBounds );
-				_areBoundsDirty = true;
 			}
 
 			return this;
@@ -68,9 +69,10 @@ namespace Nez
 				// store the old bounds so we can update ourself after modifying them
 				var oldBounds = bounds;
 				((Box)shape).height = height;
+				_areBoundsDirty = true;
+
 				if( entity != null && _isParentEntityAddedToScene )
 					Physics.updateCollider( this, ref oldBounds );
-				_areBoundsDirty = true;
 			}
 
 			return this;

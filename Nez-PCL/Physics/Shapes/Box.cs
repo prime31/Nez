@@ -21,6 +21,13 @@ namespace Nez.PhysicsShapes
 		}
 
 
+		internal override void recalculateBounds( Collider collider )
+		{
+			updateBox( width, height );
+			base.recalculateBounds( collider );
+		}
+
+
 		public void updateBox( float width, float height )
 		{
 			points[0] = new Vector2( 0, 0 );

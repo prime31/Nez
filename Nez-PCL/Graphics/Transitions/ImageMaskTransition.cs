@@ -139,17 +139,17 @@ namespace Nez
 
 		public override void preRender( Graphics graphics )
 		{
-			Core.graphicsDevice.SetRenderTarget( _maskRenderTarget );
+			Core.graphicsDevice.setRenderTarget( _maskRenderTarget );
 			graphics.batcher.begin( BlendState.AlphaBlend, Core.defaultSamplerState, DepthStencilState.None, null );
 			graphics.batcher.draw( _maskTexture, _maskPosition, null, Color.White, _renderRotation, _maskOrigin, _renderScale, SpriteEffects.None, 0 );
 			graphics.batcher.end();
-			Core.graphicsDevice.SetRenderTarget( null );
+			Core.graphicsDevice.setRenderTarget( null );
 		}
 
 
 		public override void render( Graphics graphics )
 		{
-			Core.graphicsDevice.SetRenderTarget( null );
+			Core.graphicsDevice.setRenderTarget( null );
 
 			// if we are scaling out we dont need to render the previous scene anymore since we want the new scene to be visible
 			if( !_isNewSceneLoaded )

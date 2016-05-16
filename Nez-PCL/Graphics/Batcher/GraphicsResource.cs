@@ -6,6 +6,9 @@ using System.Reflection;
 
 namespace Nez
 {
+	/// <summary>
+	/// this class exists only so that we can sneak the Bather through and have it work just like SpriteBatch with regard to resource handling.
+	/// </summary>
 	public abstract class GraphicsResource : IDisposable
 	{
 		public GraphicsDevice graphicsDevice

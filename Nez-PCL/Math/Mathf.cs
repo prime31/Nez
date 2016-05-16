@@ -71,22 +71,22 @@ namespace Nez
 
 			return value;
 		}
-		
-		
-        /// <summary>
-        /// Restricts a value to be within a specified range.
-        /// </summary>
-        /// <param name="value">The value to clamp.</param>
-        /// <param name="min">The minimum value. If <c>value</c> is less than <c>min</c>, <c>min</c> will be returned.</param>
-        /// <param name="max">The maximum value. If <c>value</c> is greater than <c>max</c>, <c>max</c> will be returned.</param>
-        /// <returns>The clamped value.</returns>
-        public static int clamp( int value, int min, int max )
-        { 
-            value = ( value > max ) ? max : value;
-            value = ( value < min ) ? min : value;
-			
-            return value;
-        }
+
+
+		/// <summary>
+		/// Restricts a value to be within a specified range.
+		/// </summary>
+		/// <param name="value">The value to clamp.</param>
+		/// <param name="min">The minimum value. If <c>value</c> is less than <c>min</c>, <c>min</c> will be returned.</param>
+		/// <param name="max">The maximum value. If <c>value</c> is greater than <c>max</c>, <c>max</c> will be returned.</param>
+		/// <returns>The clamped value.</returns>
+		public static int clamp( int value, int min, int max )
+		{ 
+			value = ( value > max ) ? max : value;
+			value = ( value < min ) ? min : value;
+
+			return value;
+		}
 
 
 		static public float snap( float value, float increment )
@@ -104,6 +104,27 @@ namespace Nez
 		public static float lerp( float from, float to, float t )
 		{
 			return from + ( to - from ) * Mathf.clamp01( t );
+		}
+
+
+		public static float inverseLerp( float from, float to, float t )
+		{
+			if( from < to )
+			{
+				if( t < from )
+					return 0.0f;
+				else if( t > to )
+					return 1.0f;
+			}
+			else
+			{
+				if( t < to )
+					return 1.0f;
+				else if( t > from )
+					return 0.0f;
+			}
+
+			return ( t - from ) / ( to - from );
 		}
 
 
@@ -328,8 +349,7 @@ namespace Nez
 		public static Vector2 pointOnCircle( Vector2 circleCenter, float radius, float angleInDegrees )
 		{
 			var radians = MathHelper.ToRadians( angleInDegrees );
-			return new Vector2
-			{
+			return new Vector2 {
 				X = Mathf.cos( radians ) * radius + circleCenter.X,
 				Y = Mathf.sin( radians ) * radius + circleCenter.Y
 			};

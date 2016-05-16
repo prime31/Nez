@@ -125,7 +125,7 @@ namespace Nez
 		/// <param name="graphics">Graphics.</param>
 		public virtual void render( Graphics graphics )
 		{
-			Core.graphicsDevice.SetRenderTarget( null );
+			Core.graphicsDevice.setRenderTarget( null );
 			graphics.batcher.begin( BlendState.Opaque, Core.defaultSamplerState, DepthStencilState.None, null );
 			graphics.batcher.draw( previousSceneRender, Vector2.Zero, Color.White );
 			graphics.batcher.end();

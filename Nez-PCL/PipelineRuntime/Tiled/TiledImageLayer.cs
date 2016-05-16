@@ -27,8 +27,7 @@ namespace Nez.Tiled
 
 		public override void draw( Batcher batcher, Vector2 parentPosition, float layerDepth, RectangleF cameraClipBounds )
 		{
-			if( cameraClipBounds.intersects( _bounds ) )
-				batcher.draw( texture, parentPosition + offset, null, Color.White, 0, Vector2.Zero, 1, SpriteEffects.None, layerDepth );
+			batcher.draw( texture, parentPosition + offset, null, Color.White, 0, Vector2.Zero, 1, SpriteEffects.None, layerDepth );
 		}
 
 	}

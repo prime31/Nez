@@ -93,12 +93,12 @@ namespace Nez
 			_spriteEffectPass = _spriteEffect.CurrentTechnique.Passes[0];
 
 			_projectionMatrix = new Matrix(
-				0f, //(float)( 2.0 / (double)viewport.Width ),
+				0f, //(float)( 2.0 / (double)viewport.Width ) is the actual value we will use
 				0.0f,
 				0.0f,
 				0.0f,
 				0.0f,
-				0f, //(float)( -2.0 / (double)viewport.Height ),
+				0f, //(float)( -2.0 / (double)viewport.Height ) is the actual value we will use
 				0.0f,
 				0.0f,
 				0.0f,
@@ -611,11 +611,11 @@ namespace Nez
 
 			var viewport = graphicsDevice.Viewport;
 
-			// Inlined CreateOrthographicOffCenter
+			// inlined CreateOrthographicOffCenter
 			_projectionMatrix.M11 = (float)( 2.0 / (double)viewport.Width );
 			_projectionMatrix.M22 = (float)( -2.0 / (double)viewport.Height );
 
-			// TODO: I hate this shit!
+
 			_projectionMatrix.M41 = -1 - 0.5f * _projectionMatrix.M11;
 			_projectionMatrix.M42 = 1 - 0.5f * _projectionMatrix.M22;
 

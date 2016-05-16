@@ -17,7 +17,7 @@ namespace Nez
 		/// used by Renderers to specify how this sprite should be rendered. If non-null, it is automatically disposed of when the Component
 		/// is removed from the Entity.
 		/// </summary>
-		public Material material;
+		public virtual Material material { get; set; }
 
 		/// <summary>
 		/// width of the RenderableComponent. subclasses that do not override the bounds property must implement this!
@@ -328,6 +328,17 @@ namespace Nez
 
 
 		#region public API
+
+		/// <summary>
+		/// helper for retrieving a Material subclass already casted
+		/// </summary>
+		/// <returns>The material.</returns>
+		/// <typeparam name="T">The 1st type parameter.</typeparam>
+		public T getMaterial<T>() where T : Material
+		{
+			return material as T;
+		}
+
 
 		/// <summary>
 		/// Draws the Renderable with an outline. Note that this should be called on disabled Renderables since they shouldnt take part in default
