@@ -23,7 +23,7 @@ namespace Nez
 		static BitmapFont _font;
 
 		// constants
-		const float FONT_LINE_HEIGHT = 11;
+		const float FONT_LINE_HEIGHT = 10;
 		const float ELEMENT_HEIGHT = 20;
 		const float SHORT_ELEMENT_HEIGHT = 15;
 		const float ELEMENT_PADDING = 10;
@@ -82,7 +82,7 @@ namespace Nez
 					break;
 			}
 
-			var y = _lastY + ELEMENT_PADDING + ( elementHeight - FONT_LINE_HEIGHT ) * 0.7f;
+			var y = _lastY + ELEMENT_PADDING + ( elementHeight - FONT_LINE_HEIGHT ) * 0.5f;
 
 			_spriteBatch.DrawString( _font, text, new Vector2( x, y ), color, 0, Vector2.Zero, FONT_SCALE, SpriteEffects.None, 0 );
 		}

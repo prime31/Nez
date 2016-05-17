@@ -27,7 +27,7 @@ namespace Nez.Console
 
 		// render constants
 		Vector2 FONT_SCALE;
-		const float FONT_LINE_HEIGHT = 11;
+		const float FONT_LINE_HEIGHT = 10;
 		const int HORIZONTAL_PADDING = 10;
 		const int BOTTOM_MARGIN = 30;
 		const int BOTTOM_CONSOLE_HEIGHT = 20;
