@@ -86,10 +86,12 @@ namespace Nez.Console
 			}
 			else
 			{
+				#if DEBUG
 				_drawCallTimer = Core.schedule( delay, true, timer =>
 				{
 					Debug.log( "Draw Calls: {0}", Core.drawCalls );
 				} );
+				#endif
 			}
 		}
 
