@@ -128,6 +128,7 @@ namespace Nez
 
 		public static Material blendMultiply()
 		{
+			// works only for opaque textures
 			return new Material {
 				blendState = new BlendState {
 					ColorSourceBlend = Blend.DestinationColor,
