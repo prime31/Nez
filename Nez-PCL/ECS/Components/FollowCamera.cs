@@ -67,7 +67,7 @@ namespace Nez
 			if( camera == null )
 				camera = entity.scene.camera;
 
-			follow( _targetEntity );
+			follow( _targetEntity, _cameraStyle );
 
 			// listen for changes in screen size so we can keep our deadzone properly positioned
 			Core.emitter.addObserver( CoreEvents.GraphicsDeviceReset, onGraphicsDeviceReset );
