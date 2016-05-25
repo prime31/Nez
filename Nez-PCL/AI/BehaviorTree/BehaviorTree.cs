@@ -37,12 +37,24 @@ namespace Nez.AI.BehaviorTrees
 
 		public void tick()
 		{
-			_elapsedTime -= Time.deltaTime;
-			while( _elapsedTime <= 0 )
+			// updatePeriod less than or equal to 0 will tick every frame
+			if( updatePeriod > 0 )
 			{
-				_elapsedTime += updatePeriod;
+				_elapsedTime -= Time.deltaTime;
+				if( _elapsedTime <= 0 )
+				{
+					// ensure we only tick once for long frames
+					while( _elapsedTime <= 0 )
+						_elapsedTime += updatePeriod;
+					
+					_root.tick( _context );
+				}
+			}
+			else
+			{
 				_root.tick( _context );
 			}
 		}
+	
 	}
 }
