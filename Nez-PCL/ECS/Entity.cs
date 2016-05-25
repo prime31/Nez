@@ -388,13 +388,26 @@ namespace Nez
 
 
 		/// <summary>
-		/// Gets the first component of type T and returns it. If no components are found returns null
+		/// Gets the first component of type T and returns it. If no components are found returns null.
 		/// </summary>
 		/// <returns>The component.</returns>
 		/// <typeparam name="T">The 1st type parameter.</typeparam>
 		public T getComponent<T>() where T : Component
 		{
-			return components.getComponent<T>();
+			return components.getComponent<T>( false );
+		}
+
+
+		/// <summary>
+		/// Gets the first component of type T and returns it optionally skips checking un-initialized Components (Components who have not yet had their
+		/// onAddedToEntity method called). If no components are found returns null.
+		/// </summary>
+		/// <returns>The component.</returns>
+		/// <param name="onlyReturnInitializedComponents">If set to <c>true</c> only return initialized components.</param>
+		/// <typeparam name="T">The 1st type parameter.</typeparam>
+		public T getComponent<T>( bool onlyReturnInitializedComponents ) where T : Component
+		{
+			return components.getComponent<T>( onlyReturnInitializedComponents );
 		}
 
 

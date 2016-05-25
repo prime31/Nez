@@ -168,7 +168,8 @@ namespace Nez
 					var component = _tempBufferList[i];
 					component.onAddedToEntity();
 
-					if( _entity.enabled && component.enabled )
+					// component.enabled check both the Entity and the Component
+					if( component.enabled )
 						component.onEnabled();
 				}
 
@@ -211,11 +212,13 @@ namespace Nez
 
 
 		/// <summary>
-		/// Gets the first component of type T and returns it. If no components are found returns null
+		/// Gets the first component of type T and returns it optionally skips checking un-initialized Components (Components who have not yet had their
+		/// onAddedToEntity method called). If no components are found returns null.
 		/// </summary>
 		/// <returns>The component.</returns>
+		/// <param name="onlyReturnInitializedComponents">If set to <c>true</c> only return initialized components.</param>
 		/// <typeparam name="T">The 1st type parameter.</typeparam>
-		public T getComponent<T>() where T : Component
+		public T getComponent<T>( bool onlyReturnInitializedComponents ) where T : Component
 		{
 			for( var i = 0; i < _components.Count; i++ )
 			{
@@ -224,12 +227,15 @@ namespace Nez
 					return component as T;
 			}
 
-			// we also check the pending components just in case addComponent and getComponent are called in the same frame
-			for( var i = 0; i < _componentsToAdd.Count; i++ )
+			// we optionally check the pending components just in case addComponent and getComponent are called in the same frame
+			if( !onlyReturnInitializedComponents )
 			{
-				var component = _componentsToAdd[i];
-				if( component is T )
-					return component as T;
+				for( var i = 0; i < _componentsToAdd.Count; i++ )
+				{
+					var component = _componentsToAdd[i];
+					if( component is T )
+						return component as T;
+				}
 			}
 
 			return null;
@@ -261,13 +267,13 @@ namespace Nez
 
 
 		/// <summary>
-		/// Gets all the components of type T
+		/// Gets all the components of type T. The returned List can be put back in the pool via ListPool.free.
 		/// </summary>
 		/// <returns>The components.</returns>
 		/// <typeparam name="T">The 1st type parameter.</typeparam>
 		public List<T> getComponents<T>() where T : class
 		{
-			var components = new List<T>();
+			var components = ListPool<T>.obtain();
 			getComponents( components );
 
 			return components;
