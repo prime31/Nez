@@ -324,6 +324,18 @@ namespace Nez
 			return this;
 		}
 
+
+		/// <summary>
+		/// color passed along to the Batcher when rendering
+		/// </summary>
+		/// <returns>The color.</returns>
+		/// <param name="color">Color.</param>
+		public RenderableComponent setColor( Color color )
+		{
+			this.color = color;
+			return this;
+		}
+
 		#endregion
 
 
