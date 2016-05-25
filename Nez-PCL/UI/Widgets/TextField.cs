@@ -302,7 +302,7 @@ namespace Nez.UI
 				var enterPressed = key == Keys.Enter;
 				var backspacePressed = key == Keys.Back;
 				var deletePressed = key == Keys.Delete;
-				var add = enterPressed ? writeEnters : ( !onlyFontChars || style.font.hasFontRegion( character ) );
+				var add = enterPressed ? writeEnters : ( !onlyFontChars || style.font.hasCharacter( character ) );
 				var remove = backspacePressed || deletePressed;
 
 				if( add || remove )
@@ -662,11 +662,11 @@ namespace Nez.UI
 			for( var i = 0; i < textLength; i++ )
 			{
 				var c = text[i];
-				buffer.Append( style.font.hasFontRegion( c ) ? c : ' ' );
+				buffer.Append( style.font.hasCharacter( c ) ? c : ' ' );
 			}
 			var newDisplayText = buffer.ToString();
 
-			if( passwordMode && style.font.hasFontRegion( passwordCharacter ) )
+			if( passwordMode && style.font.hasCharacter( passwordCharacter ) )
 			{
 				if( passwordBuffer == null )
 					passwordBuffer = new StringBuilder( newDisplayText.Length );
@@ -781,7 +781,7 @@ namespace Nez.UI
 				var c = content[i];
 				if( !( writeEnters && c == '\r' ) )
 				{
-					if( onlyFontChars && !style.font.hasFontRegion( c ) )
+					if( onlyFontChars && !style.font.hasCharacter( c ) )
 						continue;
 					
 					if( filter != null && !filter.acceptChar( this, c ) )

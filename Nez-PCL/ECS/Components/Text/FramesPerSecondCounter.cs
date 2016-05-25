@@ -21,10 +21,17 @@ namespace Nez
 		public long totalFrames;
 		public float averageFramesPerSecond;
 		public float currentFramesPerSecond;
+
+		/// <summary>
+		/// total number of samples that should be stored and averaged for calculating the FPS
+		/// </summary>
 		public int maximumSamples;
 
-		private FPSDockPosition _dockPosition;
 
+		/// <summary>
+		/// position the FPS counter should be docked
+		/// </summary>
+		/// <value>The dock position.</value>
 		public FPSDockPosition dockPosition
 		{
 			get { return _dockPosition; }
@@ -35,8 +42,10 @@ namespace Nez
 			}
 		}
 
-		private Vector2 _dockOffset;
-
+		/// <summary>
+		/// offset from dockPosition the FPS counter should be drawn
+		/// </summary>
+		/// <value>The dock offset.</value>
 		public Vector2 dockOffset
 		{
 			get { return _dockOffset; }
@@ -47,6 +56,8 @@ namespace Nez
 			}
 		}
 
+		FPSDockPosition _dockPosition;
+		Vector2 _dockOffset;
 		readonly Queue<float> _sampleBuffer = new Queue<float>();
 
 
@@ -131,10 +142,7 @@ namespace Nez
 		public override void render( Graphics graphics, Camera camera )
 		{
 			// we override render and use position instead of entityPosition. this keeps the text in place even if the entity moves
-			if( _bitmapFont != null )
-				graphics.batcher.drawString( _bitmapFont, _text, localOffset, color, entity.transform.rotation, origin, entity.transform.scale, spriteEffects, layerDepth );
-			else
-				graphics.batcher.drawString( _spriteFont, _text, localOffset, color, entity.transform.rotation, origin, entity.transform.scale, spriteEffects, layerDepth );
+			graphics.batcher.drawString( _font, _text, localOffset, color, entity.transform.rotation, origin, entity.transform.scale, spriteEffects, layerDepth );
 		}
 
 
