@@ -23,7 +23,28 @@ namespace Nez
 		public float averageFramesPerSecond;
 		public float currentFramesPerSecond;
 		public int maximumSamples;
-		public FPSDockPosition dockPosition;
+
+        private FPSDockPosition _dockPosition;
+        public FPSDockPosition dockPosition
+        {
+            get { return _dockPosition; }
+            set
+            {
+                _dockPosition = value;
+                updateTextPosition();
+            }
+        }
+
+        private Vector2 _dockOffset;
+        public Vector2 dockOffset
+        {
+            get { return _dockOffset; }
+            set
+            {
+                _dockOffset = value;
+                updateTextPosition();
+            }
+        }
 
 		readonly Queue<float> _sampleBuffer = new Queue<float>();
 
@@ -46,27 +67,36 @@ namespace Nez
 
 		void initialize()
 		{
-			switch( dockPosition )
-			{
-				case FPSDockPosition.TopLeft:
-					_horizontalAlign = HorizontalAlign.Left;
-				break;
-				case FPSDockPosition.TopRight:
-					_horizontalAlign = HorizontalAlign.Right;
-					localOffset = new Vector2( Core.graphicsDevice.Viewport.Width, 0f );
-				break;
-				case FPSDockPosition.BottomLeft:
-					_horizontalAlign = HorizontalAlign.Left;
-					_verticalAlign = VerticalAlign.Bottom;
-					localOffset = new Vector2( 0, Core.graphicsDevice.Viewport.Height );
-				break;
-				case FPSDockPosition.BottomRight:
-					_horizontalAlign = HorizontalAlign.Right;
-					_verticalAlign = VerticalAlign.Bottom;
-					localOffset = new Vector2( Core.graphicsDevice.Viewport.Width, Core.graphicsDevice.Viewport.Height );
-				break;
-			}
-		}
+            updateTextPosition();
+        }
+
+
+        void updateTextPosition()
+        {
+            switch (dockPosition)
+            {
+                case FPSDockPosition.TopLeft:
+                    _horizontalAlign = HorizontalAlign.Left;
+                    _verticalAlign = VerticalAlign.Top;
+                    localOffset = dockOffset;
+                    break;
+                case FPSDockPosition.TopRight:
+                    _horizontalAlign = HorizontalAlign.Right;
+                    _verticalAlign = VerticalAlign.Top;
+                    localOffset = new Vector2(Core.graphicsDevice.Viewport.Width - dockOffset.X, dockOffset.Y);
+                    break;
+                case FPSDockPosition.BottomLeft:
+                    _horizontalAlign = HorizontalAlign.Left;
+                    _verticalAlign = VerticalAlign.Bottom;
+                    localOffset = new Vector2(dockOffset.X, Core.graphicsDevice.Viewport.Height - dockOffset.Y);
+                    break;
+                case FPSDockPosition.BottomRight:
+                    _horizontalAlign = HorizontalAlign.Right;
+                    _verticalAlign = VerticalAlign.Bottom;
+                    localOffset = new Vector2(Core.graphicsDevice.Viewport.Width - dockOffset.X, Core.graphicsDevice.Viewport.Height - dockOffset.Y);
+                    break;
+            }
+        }
 
 
 		public void reset()
@@ -115,5 +145,28 @@ namespace Nez
 			graphics.batcher.drawHollowRect( rect, Color.Yellow );
 		}
 
-	}
+        #region Fluent setters
+
+        /// <summary>
+        /// Sets how far the fps text will appear from the edges of the screen.
+        /// </summary>
+        /// <param name="dockOffset">Offset from screen edges</param>
+        public FramesPerSecondCounter setDockOffset(Vector2 dockOffset)
+        {
+            this.dockOffset = dockOffset;
+            return this;
+        }
+
+        /// <summary>
+        /// Sets which corner of the screen the fps text will show.
+        /// </summary>
+        /// <param name="dockPosition">Corner of the screen</param>
+        public FramesPerSecondCounter setDockPosition(FPSDockPosition dockPosition)
+        {
+            this.dockPosition = dockPosition;
+            return this;
+        }
+
+        #endregion
+    }
 }
