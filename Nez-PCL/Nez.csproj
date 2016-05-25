@@ -76,6 +76,7 @@
     <Folder Include="AI\UtilityAI\Considerations\Appraisals\" />
     <Folder Include="AI\GOAP\" />
     <Folder Include="Graphics\Renderers\Reflections\" />
+    <Folder Include="Utils\Fonts\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Debug\Debug.cs" />
@@ -326,11 +327,8 @@
     <Compile Include="Graphics\Material.cs" />
     <Compile Include="UI\Base\Direction.cs" />
     <Compile Include="UI\Base\IGamepadFocusable.cs" />
-    <Compile Include="Utils\NezSpriteFont.cs" />
     <Compile Include="Graphics\Batcher\Batcher.cs" />
     <Compile Include="Graphics\Batcher\BatcherDrawingExt.cs" />
-    <Compile Include="Graphics\Batcher\BatcherBitmapFontExt.cs" />
-    <Compile Include="Graphics\Batcher\BatcherSpriteFontExt.cs" />
     <Compile Include="PipelineRuntime\BitmapFonts\BitmapFontExt.cs" />
     <Compile Include="Graphics\DeferredLighting\DeferredLightingRenderer.cs" />
     <Compile Include="Graphics\DeferredLighting\Effects\DeferredSpriteEffect.cs" />
@@ -412,6 +410,12 @@
     <Compile Include="Graphics\Renderers\Reflections\ReflectionRenderer.cs" />
     <Compile Include="Graphics\Batcher\GraphicsResource.cs" />
     <Compile Include="Graphics\GraphicsDeviceExt.cs" />
+    <Compile Include="Utils\Fonts\NezSpriteFont.cs" />
+    <Compile Include="Utils\Fonts\IFont.cs" />
+    <Compile Include="Utils\Fonts\FontCharacterSource.cs" />
+    <Compile Include="Utils\Fonts\BatcherIFontExt.cs" />
+    <Compile Include="Utils\Fonts\BatcherBitmapFontExt.cs" />
+    <Compile Include="Utils\Fonts\BatcherSpriteFontExt.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="MonoGame.Framework">

@@ -272,7 +272,9 @@ namespace Nez.UI
 			var width = this.width;
 			var height = this.height;
 			_textPosition.X = 0;
-			_textPosition.Y = _style.font.descent;
+			_textPosition.Y = 0;
+			// TODO: explore why descent causes mis-alignment
+			//_textPosition.Y =_style.font.descent;
 			if( _style.background != null )
 			{
 				_textPosition.X = _style.background.leftWidth;

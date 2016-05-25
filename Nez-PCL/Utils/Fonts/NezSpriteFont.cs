@@ -3,12 +3,11 @@ using Microsoft.Xna.Framework.Graphics;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using System.Text;
-using Nez.BitmapFonts;
 
 
 namespace Nez
 {
-	public class NezSpriteFont
+	public class NezSpriteFont : IFont
 	{
 		SpriteFont _font;
 		private readonly Dictionary<char,SpriteFont.Glyph> _glyphs;
@@ -34,7 +33,7 @@ namespace Nez
 		/// this font.</returns>
 		public Vector2 measureString( string text )
 		{
-			var source = new BitmapFont.CharacterSource( text );
+			var source = new FontCharacterSource( text );
 			Vector2 size;
 			measureString( ref source, out size );
 			return size;
@@ -50,14 +49,14 @@ namespace Nez
 		/// this font.</returns>
 		public Vector2 measureString( StringBuilder text )
 		{
-			var source = new BitmapFont.CharacterSource( text );
+			var source = new FontCharacterSource( text );
 			Vector2 size;
 			measureString( ref source, out size );
 			return size;
 		}
 
 
-		private void measureString( ref BitmapFont.CharacterSource text, out Vector2 size )
+		void measureString( ref FontCharacterSource text, out Vector2 size )
 		{
 			if( text.Length == 0 )
 			{
@@ -132,7 +131,60 @@ namespace Nez
 		}
 
 
-		internal void drawInto( Batcher batcher, ref BitmapFont.CharacterSource text, Vector2 position, Color color,
+		/// <summary>
+		/// gets the BitmapFontRegion for the given char optionally substituting the default region if it isnt present.
+		/// </summary>
+		/// <returns><c>true</c>, if get font region for char was tryed, <c>false</c> otherwise.</returns>
+		/// <param name="c">C.</param>
+		/// <param name="fontRegion">Font region.</param>
+		/// <param name="useDefaultRegionIfNotPresent">If set to <c>true</c> use default region if not present.</param>
+		public bool tryGetFontRegionForChar( char c, out SpriteFont.Glyph fontGlyph, bool useDefaultRegionIfNotPresent = false )
+		{
+			if( !_glyphs.TryGetValue( c, out fontGlyph ) )
+			{
+				if( useDefaultRegionIfNotPresent )
+				{
+					fontGlyph = _glyphs[_font.DefaultCharacter.Value];
+					return true;
+				}
+				return false;
+			}
+
+			return true;
+		}
+
+
+		/// <summary>
+		/// checks to see if a BitmapFontRegion exists for the char
+		/// </summary>
+		/// <returns><c>true</c>, if region exists for char was fonted, <c>false</c> otherwise.</returns>
+		/// <param name="c">C.</param>
+		public bool hasCharacter( char c )
+		{
+			SpriteFont.Glyph fontGlyph;
+			return tryGetFontRegionForChar( c, out fontGlyph );
+		}
+
+
+		#region drawing
+
+		void IFont.drawInto( Batcher batcher, string text, Vector2 position, Color color,
+			float rotation, Vector2 origin, Vector2 scale, SpriteEffects effect, float depth )
+		{
+			var source = new FontCharacterSource( text );
+			drawInto( batcher, ref source, position, color, rotation, origin, scale, effect, depth );
+		}
+
+
+		void IFont.drawInto( Batcher batcher, StringBuilder text, Vector2 position, Color color,
+			float rotation, Vector2 origin, Vector2 scale, SpriteEffects effect, float depth )
+		{
+			var source = new FontCharacterSource( text );
+			drawInto( batcher, ref source, position, color, rotation, origin, scale, effect, depth );
+		}
+		
+
+		internal void drawInto( Batcher batcher, ref FontCharacterSource text, Vector2 position, Color color,
 		                        float rotation, Vector2 origin, Vector2 scale, SpriteEffects effect, float depth )
 		{
 			var flipAdjustment = Vector2.Zero;
@@ -158,8 +210,7 @@ namespace Nez
 				}
 			}
 
-			// TODO: This looks excessive... i suspect we could do most
-			// of this with simple vector math and avoid this much matrix work.
+			// TODO: This looks excessive... i suspect we could do most of this with simple vector math and avoid this much matrix work.
 			var requiresTransformation = flippedHorz || flippedVert || rotation != 0f || scale != Vector2.One;
 			if( requiresTransformation )
 			{
@@ -243,6 +294,8 @@ namespace Nez
 				offset.X += currentGlyph.Width + currentGlyph.RightSideBearing;
 			}
 		}
+
+		#endregion
 
 	}
 }

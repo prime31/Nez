@@ -23,9 +23,8 @@ namespace Nez
 		/// <param name="color">A color mask.</param>
 		public static void drawString( this Batcher batcher, BitmapFont bitmapFont, string text, Vector2 position, Color color )
 		{
-			var source = new BitmapFont.CharacterSource( text );
-			bitmapFont.drawInto(
-				batcher, ref source, position, color, 0, Vector2.Zero, Vector2.One, SpriteEffects.None, 0f );
+			var source = new FontCharacterSource( text );
+			bitmapFont.drawInto( batcher, ref source, position, color, 0, Vector2.Zero, Vector2.One, SpriteEffects.None, 0f );
 		}
 
 
@@ -45,7 +44,7 @@ namespace Nez
 			float rotation, Vector2 origin, float scale, SpriteEffects effects, float layerDepth )
 		{
 			var scaleVec = new Vector2( scale, scale );
-			var source = new BitmapFont.CharacterSource( text );
+			var source = new FontCharacterSource( text );
 			bitmapFont.drawInto( batcher, ref source, position, color, rotation, origin, scaleVec, effects, layerDepth );
 		}
 
@@ -65,7 +64,7 @@ namespace Nez
 		public static void drawString( this Batcher batcher, BitmapFont bitmapFont, string text, Vector2 position, Color color,
 			float rotation, Vector2 origin, Vector2 scale, SpriteEffects effects, float layerDepth )
 		{
-			var source = new BitmapFont.CharacterSource( text );
+			var source = new FontCharacterSource( text );
 			bitmapFont.drawInto( batcher, ref source, position, color, rotation, origin, scale, effects, layerDepth );
 		}
 
@@ -79,7 +78,7 @@ namespace Nez
 		/// <param name="color">A color mask.</param>
 		public static void drawString( this Batcher batcher, BitmapFont bitmapFont, StringBuilder text, Vector2 position, Color color )
 		{
-			var source = new BitmapFont.CharacterSource( text );
+			var source = new FontCharacterSource( text );
 			bitmapFont.drawInto( batcher, ref source, position, color, 0, Vector2.Zero, Vector2.One, SpriteEffects.None, 0f );
 		}
 
@@ -101,7 +100,7 @@ namespace Nez
 			float rotation, Vector2 origin, float scale, SpriteEffects effects, float layerDepth )
 		{
 			var scaleVec = new Vector2( scale, scale );
-			var source = new BitmapFont.CharacterSource( text );
+			var source = new FontCharacterSource( text );
 			bitmapFont.drawInto( batcher, ref source, position, color, rotation, origin, scaleVec, effects, layerDepth );
 		}
 
@@ -122,7 +121,7 @@ namespace Nez
 			this Batcher batcher, BitmapFont bitmapFont, StringBuilder text, Vector2 position, Color color,
 			float rotation, Vector2 origin, Vector2 scale, SpriteEffects effects, float layerDepth )
 		{
-			var source = new BitmapFont.CharacterSource( text );
+			var source = new FontCharacterSource( text );
 			bitmapFont.drawInto( batcher, ref source, position, color, rotation, origin, scale, effects, layerDepth );
 		}
 

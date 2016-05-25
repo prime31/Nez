@@ -8,7 +8,7 @@ using System;
 
 namespace Nez.BitmapFonts
 {
-	public class BitmapFont
+	public class BitmapFont : IFont
 	{
 		/// <summary>
 		/// Gets or sets the line spacing (the distance from baseline to baseline) of the font.
@@ -26,6 +26,9 @@ namespace Nez.BitmapFonts
 		/// </summary>
 		public float descent;
 
+		/// <summary>
+		/// these are currently read in from the .fnt file but not used
+		/// </summary>
 		public float padTop, padBottom, padLeft, padRight;
 
 		/// <summary>
@@ -56,7 +59,7 @@ namespace Nez.BitmapFonts
 		public readonly int spaceWidth;
 
 
-		private readonly Dictionary<char,BitmapFontRegion> _characterMap;
+		readonly Dictionary<char,BitmapFontRegion> _characterMap;
 
 
 		class CharComparer : IEqualityComparer<char>
@@ -134,7 +137,7 @@ namespace Nez.BitmapFonts
 		/// <param name="text">Text.</param>
 		public Vector2 measureString( string text )
 		{
-			var source = new BitmapFont.CharacterSource( text );
+			var source = new FontCharacterSource( text );
 			Vector2 size;
 			measureString( ref source, out size );
 			return size;
@@ -148,7 +151,7 @@ namespace Nez.BitmapFonts
 		/// <param name="text">Text.</param>
 		public Vector2 measureString( StringBuilder text )
 		{
-			var source = new BitmapFont.CharacterSource( text );
+			var source = new FontCharacterSource( text );
 			Vector2 size;
 			measureString( ref source, out size );
 			return size;
@@ -183,7 +186,7 @@ namespace Nez.BitmapFonts
 		/// </summary>
 		/// <returns><c>true</c>, if region exists for char was fonted, <c>false</c> otherwise.</returns>
 		/// <param name="c">C.</param>
-		public bool hasFontRegion( char c )
+		public bool hasCharacter( char c )
 		{
 			BitmapFontRegion fontRegion;
 			return tryGetFontRegionForChar( c, out fontRegion );
@@ -204,7 +207,7 @@ namespace Nez.BitmapFonts
 		}
 
 
-		void measureString( ref CharacterSource text, out Vector2 size )
+		void measureString( ref FontCharacterSource text, out Vector2 size )
 		{
 			if( text.Length == 0 )
 			{
@@ -255,7 +258,25 @@ namespace Nez.BitmapFonts
 		}
 
 
-		internal void drawInto( Batcher batcher, ref CharacterSource text, Vector2 position, Color color,
+		#region drawing
+
+		void IFont.drawInto( Batcher batcher, string text, Vector2 position, Color color,
+			float rotation, Vector2 origin, Vector2 scale, SpriteEffects effect, float depth )
+		{
+			var source = new FontCharacterSource( text );
+			drawInto( batcher, ref source, position, color, rotation, origin, scale, effect, depth );
+		}
+
+
+		void IFont.drawInto( Batcher batcher, StringBuilder text, Vector2 position, Color color,
+			float rotation, Vector2 origin, Vector2 scale, SpriteEffects effect, float depth )
+		{
+			var source = new FontCharacterSource( text );
+			drawInto( batcher, ref source, position, color, rotation, origin, scale, effect, depth );
+		}
+
+
+		internal void drawInto( Batcher batcher, ref FontCharacterSource text, Vector2 position, Color color,
 		                        float rotation, Vector2 origin, Vector2 scale, SpriteEffects effect, float depth )
 		{
 			var flipAdjustment = Vector2.Zero;
@@ -347,7 +368,19 @@ namespace Nez.BitmapFonts
 		}
 
 
-		internal void drawInto( SpriteBatch spriteBatch, ref CharacterSource text, Vector2 position, Color color,
+		/// <summary>
+		/// old SpriteBatch drawing method. This should probably be removed since SpriteBatch
+		/// </summary>
+		/// <param name="spriteBatch">Sprite batch.</param>
+		/// <param name="text">Text.</param>
+		/// <param name="position">Position.</param>
+		/// <param name="color">Color.</param>
+		/// <param name="rotation">Rotation.</param>
+		/// <param name="origin">Origin.</param>
+		/// <param name="scale">Scale.</param>
+		/// <param name="effect">Effect.</param>
+		/// <param name="depth">Depth.</param>
+		internal void drawInto( SpriteBatch spriteBatch, ref FontCharacterSource text, Vector2 position, Color color,
 			float rotation, Vector2 origin, Vector2 scale, SpriteEffects effect, float depth )
 		{
 			var flipAdjustment = Vector2.Zero;
@@ -438,43 +471,7 @@ namespace Nez.BitmapFonts
 			}
 		}
 
-
-		/// <summary>
-		/// helper that wraps either a string or StringBuilder and provides a common API to read them for measuring/drawing
-		/// </summary>
-		internal struct CharacterSource
-		{
-			private readonly string _string;
-			private readonly StringBuilder _builder;
-			public readonly int Length;
-
-
-			public CharacterSource( string s )
-			{
-				_string = s;
-				_builder = null;
-				Length = s.Length;
-			}
-
-
-			public CharacterSource( StringBuilder builder )
-			{
-				_builder = builder;
-				_string = null;
-				Length = _builder.Length;
-			}
-
-
-			public char this[int index]
-			{
-				get
-				{
-					if( _string != null )
-						return _string[index];
-					return _builder[index];
-				}
-			}
-		}
+		#endregion
 
 	}
 }
