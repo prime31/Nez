@@ -279,8 +279,45 @@ namespace Nez
 			return components;
 		}
 
+        /// <summary>
+		/// Gets all the components which are assignable from T without a List allocation
+		/// </summary>
+		/// <returns>The components.</returns>
+		/// <typeparam name="T">The 1st type parameter.</typeparam>
+        public void getComponentsImplementing<T>(List<Component> components)
+        {
+            for (var i = 0; i < _components.Count; i++)
+            {
+                var component = _components[i];
+                if (typeof(T).IsAssignableFrom(component.GetType()))
+                    components.Add(component);
+            }
 
-		internal void update()
+            // we also check the pending components just in case addComponent and getComponent are called in the same frame
+            for (var i = 0; i < _componentsToAdd.Count; i++)
+            {
+                var component = _componentsToAdd[i];
+                if (typeof(T).IsAssignableFrom(component.GetType()))
+                    components.Add(component);
+            }
+        }
+
+
+        /// <summary>
+		/// Gets all the components which are assignable from T. The returned List can be put back in the pool via ListPool.free.
+		/// </summary>
+		/// <returns>The components.</returns>
+		/// <typeparam name="T">The 1st type parameter.</typeparam>
+        public List<Component> getComponentsImplementing<T>()
+        {
+            var components = ListPool<Component>.obtain();
+            getComponentsImplementing<T>(components);
+
+            return components;
+        }
+
+
+        internal void update()
 		{
 			for( var i = 0; i < _updatableComponents.Count; i++ )
 			{
