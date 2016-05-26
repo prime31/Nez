@@ -249,6 +249,16 @@ namespace Nez.Systems
 
 
 		/// <summary>
+		/// unloads an Effect that was loaded via loadEffect, loadNezEffect or loadMonoGameEffect
+		/// </summary>
+		/// <param name="effectName">Effect.name</param>
+		public void unloadEffect( Effect effect )
+		{
+			unloadEffect( effect.Name );
+		}
+
+
+		/// <summary>
 		/// checks to see if an asset with assetName is loaded
 		/// </summary>
 		/// <returns><c>true</c> if this instance is asset loaded the specified assetName; otherwise, <c>false</c>.</returns>

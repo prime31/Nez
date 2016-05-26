@@ -21,9 +21,7 @@ namespace Nez
 				foreach( var type in assembly.GetTypes() )
 				{
 					if( typeof( Component ).IsAssignableFrom( type ) )
-					{
 						add( type );
-					}
 				}
 			}
 		}
@@ -40,7 +38,12 @@ namespace Nez
 		public static int getIndexFor( Type type )
 		{
 			var v = -1;
-			_componentTypesMask.TryGetValue( type, out v );
+			if( !_componentTypesMask.TryGetValue( type, out v ) )
+			{
+				add( type );
+				_componentTypesMask.TryGetValue( type, out v );
+			}
+
 			return v;
 		}
 

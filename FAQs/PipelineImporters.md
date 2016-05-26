@@ -44,7 +44,18 @@ Imports [Texture Packer](https://www.codeandweb.com/texturepacker) json files fo
 
 
 ## XMLTemplateMaker
-This isn't so much an imoporter as a helper to make your own importer. It does not create any xnb files. The XML file passed to this processor should just be a System.string with the namespace.class of the type that you want a tempalate for. The template will be dumped to the Pipeline console but note that it will have utf-16 instead of utf-8 so you need to change that. You can then create your own super simple `ContentProcessor` as shown below:
+This isn't so much an importer as a helper to make your own importer. It does not create any xnb files. The XML file passed to this processor should just be a System.string with the namespace.class of the type that you want a tempalate for, like below:
+
+```xml
+<?xml version="1.0" encoding="utf-8"?>
+<XnaContent xmlns:ns="Microsoft.Xna.Framework">
+  <Asset Type="System.string">MyNamespace.MyClass</Asset>
+</XnaContent>
+```
+
+The template will be dumped to the Pipeline console but note that it will have utf-16 instead of utf-8 so you need to change that. Copy/paste the template XML into a new XML file and change the values as required. This is the XML file that you will be adding to the Pipeline tool to actually create your xnb file.
+
+You will first need to create your own super simple `ContentProcessor` to handle converting the XML into an xnb:
 
 ```csharp
 [ContentProcessor( DisplayName = "XML File Processor" )]
@@ -56,6 +67,8 @@ public class MyClassProcessor : ContentProcessor<MyClass,MyClass>
 	}
 }
 ```
+
+With that all setup, add the XML file to the Pipeline tool and choose the XML File Processor that you just made in Settings -> Processor and you are all set.
 
 You can then access the data at runtime like so: `var data = contentManager.Load<MyClass>( "LocationOfXnbFile" );`
 
