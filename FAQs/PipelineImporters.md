@@ -44,7 +44,16 @@ Imports [Texture Packer](https://www.codeandweb.com/texturepacker) json files fo
 
 
 ## XMLTemplateMaker
-This isn't so much an importer as a helper to make your own importer. It does not create any xnb files. The XML file passed to this processor should just be a System.string with the namespace.class of the type that you want a tempalate for. The template will be dumped to the Pipeline console but note that it will have utf-16 instead of utf-8 so you need to change that. You can then create your own super simple `ContentProcessor` as shown below:
+This isn't so much an importer as a helper to make your own importer. It does not create any xnb files. The XML file passed to this processor should just be a System.string with the namespace.class of the type that you want a tempalate for, like below:
+
+```xml
+<?xml version="1.0" encoding="utf-8"?>
+<XnaContent xmlns:ns="Microsoft.Xna.Framework">
+  <Asset Type="System.string">MyNamespace.MyClass</Asset>
+</XnaContent>
+```
+
+The template will be dumped to the Pipeline console but note that it will have utf-16 instead of utf-8 so you need to change that. You can then create your own super simple `ContentProcessor` as shown below:
 
 ```csharp
 [ContentProcessor( DisplayName = "XML File Processor" )]
