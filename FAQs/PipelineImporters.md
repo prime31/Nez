@@ -53,7 +53,9 @@ This isn't so much an importer as a helper to make your own importer. It does no
 </XnaContent>
 ```
 
-The template will be dumped to the Pipeline console but note that it will have utf-16 instead of utf-8 so you need to change that. You can then create your own super simple `ContentProcessor` as shown below:
+The template will be dumped to the Pipeline console but note that it will have utf-16 instead of utf-8 so you need to change that. Copy/paste the template XML into a new XML file and change the values as required. This is the XML file that you will be adding to the Pipeline tool to actually create your xnb file.
+
+You will first need to create your own super simple `ContentProcessor` to handle converting the XML into an xnb:
 
 ```csharp
 [ContentProcessor( DisplayName = "XML File Processor" )]
@@ -65,6 +67,8 @@ public class MyClassProcessor : ContentProcessor<MyClass,MyClass>
 	}
 }
 ```
+
+With that all setup, add the XML file to the Pipeline tool and choose the XML File Processor that you just made in Settings -> Processor and you are all set.
 
 You can then access the data at runtime like so: `var data = contentManager.Load<MyClass>( "LocationOfXnbFile" );`
 
