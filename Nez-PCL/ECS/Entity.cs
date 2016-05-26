@@ -433,11 +433,22 @@ namespace Nez
 		}
 
 
-		/// <summary>
-		/// removes the first Component of type T from the components list
+        /// <summary>
+		/// Gets all the components assignable from type T
 		/// </summary>
-		/// <param name="component">The Component to remove</param>
-		public bool removeComponent<T>() where T : Component
+		/// <returns>The components.</returns>
+		/// <typeparam name="T">The 1st type parameter.</typeparam>
+        public List<Component> getComponentsImplementing<T>()
+        {
+            return components.getComponentsImplementing<T>();
+        }
+
+
+        /// <summary>
+        /// removes the first Component of type T from the components list
+        /// </summary>
+        /// <param name="component">The Component to remove</param>
+        public bool removeComponent<T>() where T : Component
 		{
 			var comp = getComponent<T>();
 			if( comp != null )
