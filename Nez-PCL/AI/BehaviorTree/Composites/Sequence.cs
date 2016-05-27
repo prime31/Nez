@@ -17,7 +17,7 @@ namespace Nez.AI.BehaviorTrees
 
 		public override TaskStatus update( T context )
 		{
-			// first, we handle conditinoal aborts if we are not already on the first child
+			// first, we handle conditional aborts if we are not already on the first child
 			if( _currentChildIndex != 0 )
 				handleConditionalAborts( context );
 			

@@ -116,16 +116,19 @@ namespace Nez.AI.BehaviorTrees
 
 
 		/// <summary>
-		/// checks any Conditional children to see if they have changed state
+		/// checks any IConditional children to see if they have changed state
 		/// </summary>
 		/// <param name="context">Context.</param>
 		/// <param name="statusCheck">Status check.</param>
 		protected void updateSelfAbortConditional( T context, TaskStatus statusCheck )
 		{
-			// check any child tasks to see if they changed status
+			// check any IConditional child tasks to see if they changed status
 			for( var i = 0; i < _currentChildIndex; i++ )
 			{
 				var child = _children[i];
+				if( !( child is IConditional<T> ) )
+					continue;
+				
 				var status = updateConditionalNode( context, child );
 				if( status != statusCheck )
 				{
