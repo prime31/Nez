@@ -13,7 +13,60 @@ namespace Nez.Textures
 		/// <returns>The blurred texture.</returns>
 		/// <param name="image">Image.</param>
 		/// <param name="deviation">Deviation.</param>
-		public static Texture2D createdBlurredTexture( Texture2D image, double deviation = 1 )
+		public static Texture2D createBlurredTexture( Texture2D image, double deviation = 1 )
+		{
+			var resultTex = new Texture2D( Core.graphicsDevice, image.Width, image.Height, false, SurfaceFormat.Color );
+			var matrixR = new double[image.Width, image.Height];
+			var matrixG = new double[image.Width, image.Height];
+			var matrixB = new double[image.Width, image.Height];
+			var matrixA = new double[image.Width, image.Height];
+
+			var destData = new Color[image.Width * image.Height];
+			var srcData = new Color[image.Width * image.Height];
+			image.GetData<Color>( srcData );
+
+			// first we calculate the grayscale and store it in matrix
+			for( var i = 0; i < image.Width; i++ )
+			{
+				for( var j = 0; j < image.Height; j++ )
+				{
+					matrixR[i, j] = srcData[i + j * image.Width].R;
+					matrixG[i, j] = srcData[i + j * image.Width].G;
+					matrixB[i, j] = srcData[i + j * image.Width].B;
+					matrixA[i, j] = srcData[i + j * image.Width].A;
+				}
+			}
+
+			matrixR = GaussianBlur.gaussianConvolution( matrixR, deviation );
+			matrixG = GaussianBlur.gaussianConvolution( matrixG, deviation );
+			matrixB = GaussianBlur.gaussianConvolution( matrixB, deviation );
+			matrixA = GaussianBlur.gaussianConvolution( matrixA, deviation );
+
+			for( var i = 0; i < image.Width; i++ )
+			{
+				for( var j = 0; j < image.Height; j++ )
+				{
+					var r = (int)Math.Min( 255, matrixR[i, j] );
+					var g = (int)Math.Min( 255, matrixG[i, j] );
+					var b = (int)Math.Min( 255, matrixB[i, j] );
+					var a = (int)Math.Min( 255, matrixA[i, j] );
+					destData[i + j * image.Width] = new Color( r, g, b, a );
+				}
+			}
+
+			resultTex.SetData( destData );
+
+			return resultTex;
+		}
+
+
+		/// <summary>
+		/// creates a new texture that is a gaussian blurred version of the original in grayscale
+		/// </summary>
+		/// <returns>The blurred texture.</returns>
+		/// <param name="image">Image.</param>
+		/// <param name="deviation">Deviation.</param>
+		public static Texture2D createBlurredGrayscaleTexture( Texture2D image, double deviation = 1 )
 		{
 			var resultTex = new Texture2D( Core.graphicsDevice, image.Width, image.Height, false, SurfaceFormat.Color );
 			var matrix = new double[image.Width, image.Height];

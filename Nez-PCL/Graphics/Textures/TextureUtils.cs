@@ -7,7 +7,15 @@ namespace Nez.Textures
 {
 	public static class TextureUtils
 	{
-		public static Texture2D createdFlatHeightmap( Texture2D image, Color opaqueColor, Color transparentColor )
+		/// <summary>
+		/// processes each pixel of the passed in Texture and in the output texture transparent pixels will be transparentColor and opaque pixels
+		/// will be opaqueColor. This is useful for creating normal maps for rim lighting by applying a grayscale blur then using createNormalMap*.
+		/// </summary>
+		/// <returns>The flat heightmap.</returns>
+		/// <param name="image">Image.</param>
+		/// <param name="opaqueColor">Opaque color.</param>
+		/// <param name="transparentColor">Transparent color.</param>
+		public static Texture2D createFlatHeightmap( Texture2D image, Color opaqueColor, Color transparentColor )
 		{
 			var resultTex = new Texture2D( Core.graphicsDevice, image.Width, image.Height, false, SurfaceFormat.Color );
 
@@ -35,14 +43,26 @@ namespace Nez.Textures
 
 		
 		/// <summary>
+		/// creates a new texture that is a gaussian blurred version of the original in grayscale
+		/// </summary>
+		/// <returns>The blurred texture.</returns>
+		/// <param name="image">Image.</param>
+		/// <param name="deviation">Deviation.</param>
+		public static Texture2D createBlurredGrayscaleTexture( Texture2D image, double deviation = 1 )
+		{
+			return GaussianBlur.createBlurredGrayscaleTexture( image, deviation );
+		}
+
+
+		/// <summary>
 		/// creates a new texture that is a gaussian blurred version of the original
 		/// </summary>
 		/// <returns>The blurred texture.</returns>
 		/// <param name="image">Image.</param>
 		/// <param name="deviation">Deviation.</param>
-		public static Texture2D createdBlurredTexture( Texture2D image, double deviation = 1 )
+		public static Texture2D createBlurredTexture( Texture2D image, double deviation = 1 )
 		{
-			return GaussianBlur.createdBlurredTexture( image, deviation );
+			return GaussianBlur.createBlurredTexture( image, deviation );
 		}
 
 
