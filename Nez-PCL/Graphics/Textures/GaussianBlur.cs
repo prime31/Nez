@@ -22,7 +22,7 @@ namespace Nez.Textures
 			var srcData = new Color[image.Width * image.Height];
 			image.GetData<Color>( srcData );
 
-
+			// first we calculate the grayscale and store it in matrix
 			for( var i = 0; i < image.Width; i++ )
 			{
 				for( var j = 0; j < image.Height; j++ )
@@ -35,7 +35,7 @@ namespace Nez.Textures
 				for( var j = 0; j < image.Height; j++ )
 				{
 					var val = (int)Math.Min( 255, matrix[i, j] );
-					destData[i + j * image.Width] = new Color( val, val, val, 255 );
+					destData[i + j * image.Width] = new Color( val, val, val, srcData[i + j * image.Width].A );
 				}
 			}
 
