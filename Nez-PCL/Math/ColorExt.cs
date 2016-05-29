@@ -31,30 +31,18 @@ namespace Nez
 		}
 
 
-		public static Color add( ref Color first, ref Color second )
+		static public Color grayscale( this Color color )
 		{
-			return new Color( first.R + second.R, first.G + second.G, first.B + second.B, first.A + second.A );
+			return new Color( (int)( color.R * 0.3 + color.G * 0.59 + color.B * 0.11 ),
+				(int)( color.R * 0.3 + color.G * 0.59 + color.B * 0.11 ),
+				(int)( color.R * 0.3 + color.G * 0.59 + color.B * 0.11 ),
+				color.A );
 		}
 
 
-		public static void add( ref Color first, ref Color second, out Color result )
+		public static Color add( this Color color, Color second )
 		{
-			result = new Color();
-			result.R = (byte)( first.R + second.R );
-			result.G = (byte)( first.G + second.G );
-			result.B = (byte)( first.B + second.B );
-			result.A = (byte)( first.A + second.A );
-		}
-
-
-		/// <summary>
-		/// first - second
-		/// </summary>
-		/// <param name="first">First.</param>
-		/// <param name="second">Second.</param>
-		public static Color subtract( ref Color first, ref Color second )
-		{
-			return new Color( first.R - second.R, first.G - second.G, first.B - second.B, first.A - second.A );
+			return new Color( color.R + second.R, color.G + second.G, color.B + second.B, color.A + second.A );
 		}
 
 
@@ -63,14 +51,9 @@ namespace Nez
 		/// </summary>
 		/// <param name="first">First.</param>
 		/// <param name="second">Second.</param>
-		/// <param name="result">Result.</param>
-		public static void subtract( ref Color first, ref Color second, out Color result )
+		public static Color subtract( this Color color, Color second )
 		{
-			result = new Color();
-			result.R = (byte)( first.R - second.R );
-			result.G = (byte)( first.G - second.G );
-			result.B = (byte)( first.B - second.B );
-			result.A = (byte)( first.A - second.A );
+			return new Color( color.R - second.R, color.G - second.G, color.B - second.B, color.A - second.A );
 		}
 
 
@@ -91,7 +74,7 @@ namespace Nez
 		/// <param name="from">From.</param>
 		/// <param name="to">To.</param>
 		/// <param name="t">T.</param>
-		public static Color lerp( ref Color from, ref Color to, float t )
+		public static Color lerp( Color from, Color to, float t )
 		{
 			var t256 = (int)( t * 256 );
 			return new Color( from.R + ( to.R - from.R ) * t256 / 256, from.G + ( to.G - from.G ) * t256 / 256, from.B + ( to.B - from.B ) * t256 / 256, from.A + ( to.A - from.A ) * t256 / 256 );
