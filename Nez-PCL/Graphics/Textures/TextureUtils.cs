@@ -9,7 +9,11 @@ namespace Nez.Textures
 	{
 		/// <summary>
 		/// processes each pixel of the passed in Texture and in the output texture transparent pixels will be transparentColor and opaque pixels
-		/// will be opaqueColor. This is useful for creating normal maps for rim lighting by applying a grayscale blur then using createNormalMap*.
+		/// will be opaqueColor. This is useful for creating normal maps for rim lighting by applying a grayscale blur then using createNormalMap*
+		/// by doing something like the following. The first step is used only for making rim lighting normal maps:
+		/// - var maskTex = createFlatHeightmap( tex, Color.White, Color.Black )
+		/// - var blurredTex = createBlurredGrayscaleTexture( maskTex, 1 )
+		/// - createNormalMap( blurredTex, 50f )
 		/// </summary>
 		/// <returns>The flat heightmap.</returns>
 		/// <param name="image">Image.</param>

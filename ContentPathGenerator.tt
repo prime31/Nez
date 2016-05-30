@@ -1,0 +1,67 @@
+﻿<#@ template language="C#" hostSpecific="true" #>
+<#@ assembly name="System.Core" #>
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="System.Text" #>
+<#@ import namespace="System.Collections.Generic" #>
+<#@ import namespace="System.IO" #>
+
+<# var sourceFolder = "Content/bin/MacOSX/"; #>
+<# var files = Directory.GetFiles( Host.ResolvePath( sourceFolder ), "*.xnb", SearchOption.AllDirectories ); #>
+
+
+namespace Nez
+{
+    class Content
+    {
+<#
+	var i = 0;
+	foreach( var filePath in files )
+	{
+		var finalPath = filePath.Substring( filePath.IndexOf( sourceFolder ) + sourceFolder.Length ).Replace( ".xnb", string.Empty );
+		var name = Path.GetFileNameWithoutExtension( filePath );
+		var varName = extractPath( filePath, sourceFolder );
+
+		Write( "\t\tpublic const string {0} = @\"{1}\";\n", toCamelCase( varName ), finalPath );
+	}
+#>
+
+    }
+}
+
+
+
+<#+
+	string extractPath( string input, string sourceFolder )
+	{
+		var name = Path.GetFileName( input );
+		return input.Substring( input.IndexOf( sourceFolder ) + sourceFolder.Length )
+			.Replace( "/", "_" )
+			.Replace( "\\", "_" )
+			.Replace( ".xnb", string.Empty );
+		return Path.GetDirectoryName( input.Substring( input.IndexOf( sourceFolder ) + sourceFolder.Length ) ).Replace( "/", "_" ).Replace( "\\", "_" );
+	}
+
+
+	string toCamelCase( string input )
+	{
+		input = input.Replace( " ", "" );
+
+		// uppercase letters before dash or underline
+		Func<char,int,string> func = ( x, i ) => {
+			if ( x == '-' || x == '_' )
+				return "_";
+
+			if( i > 0 && ( input[i - 1] == '-' || input[i - 1] == '_' ) )
+				return x.ToString().ToUpper();
+
+			return x.ToString();
+		};
+
+		input = string.Concat( input.Select( func ).ToArray() );
+
+		// digits are a no-no so stick prefix in front
+		if( char.IsDigit( input[0] ) )
+			return "k" + input;
+		return input;
+	}
+#>
