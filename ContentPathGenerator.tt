@@ -5,7 +5,7 @@
 <#@ import namespace="System.Collections.Generic" #>
 <#@ import namespace="System.IO" #>
 
-<# var sourceFolder = "Content/bin/MacOSX/"; #>
+<# var sourceFolder = "Content/bin/DesktopGL/"; #>
 <# var files = Directory.GetFiles( Host.ResolvePath( sourceFolder ), "*.xnb", SearchOption.AllDirectories ); #>
 
 
