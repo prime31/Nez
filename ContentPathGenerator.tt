@@ -18,7 +18,6 @@ namespace Nez
 	foreach( var filePath in files )
 	{
 		var finalPath = filePath.Substring( filePath.IndexOf( sourceFolder ) + sourceFolder.Length ).Replace( ".xnb", string.Empty );
-		var name = Path.GetFileNameWithoutExtension( filePath );
 		var varName = extractPath( filePath, sourceFolder );
 
 		Write( "\t\tpublic const string {0} = @\"{1}\";\n", toCamelCase( varName ), finalPath );
