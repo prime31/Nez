@@ -16,24 +16,34 @@ namespace Nez.Textures
 		public static Texture2D createBlurredTexture( Texture2D image, double deviation = 1 )
 		{
 			var resultTex = new Texture2D( Core.graphicsDevice, image.Width, image.Height, false, SurfaceFormat.Color );
-			var matrixR = new double[image.Width, image.Height];
-			var matrixG = new double[image.Width, image.Height];
-			var matrixB = new double[image.Width, image.Height];
-			var matrixA = new double[image.Width, image.Height];
-
-			var destData = new Color[image.Width * image.Height];
 			var srcData = new Color[image.Width * image.Height];
 			image.GetData<Color>( srcData );
 
+			var destData = createBlurredTexture( srcData, image.Width, image.Height, deviation );
+			resultTex.SetData( destData );
+
+			return resultTex;
+		}
+
+
+		public static Color[] createBlurredTexture( Color[] srcData, int width, int height, double deviation = 1 )
+		{
+			var matrixR = new double[width, height];
+			var matrixG = new double[width, height];
+			var matrixB = new double[width, height];
+			var matrixA = new double[width, height];
+
+			var destData = new Color[width * height];
+
 			// first we calculate the grayscale and store it in matrix
-			for( var i = 0; i < image.Width; i++ )
+			for( var i = 0; i < width; i++ )
 			{
-				for( var j = 0; j < image.Height; j++ )
+				for( var j = 0; j < height; j++ )
 				{
-					matrixR[i, j] = srcData[i + j * image.Width].R;
-					matrixG[i, j] = srcData[i + j * image.Width].G;
-					matrixB[i, j] = srcData[i + j * image.Width].B;
-					matrixA[i, j] = srcData[i + j * image.Width].A;
+					matrixR[i, j] = srcData[i + j * width].R;
+					matrixG[i, j] = srcData[i + j * width].G;
+					matrixB[i, j] = srcData[i + j * width].B;
+					matrixA[i, j] = srcData[i + j * width].A;
 				}
 			}
 
@@ -42,21 +52,19 @@ namespace Nez.Textures
 			matrixB = GaussianBlur.gaussianConvolution( matrixB, deviation );
 			matrixA = GaussianBlur.gaussianConvolution( matrixA, deviation );
 
-			for( var i = 0; i < image.Width; i++ )
+			for( var i = 0; i < width; i++ )
 			{
-				for( var j = 0; j < image.Height; j++ )
+				for( var j = 0; j < height; j++ )
 				{
 					var r = (int)Math.Min( 255, matrixR[i, j] );
 					var g = (int)Math.Min( 255, matrixG[i, j] );
 					var b = (int)Math.Min( 255, matrixB[i, j] );
 					var a = (int)Math.Min( 255, matrixA[i, j] );
-					destData[i + j * image.Width] = new Color( r, g, b, a );
+					destData[i + j * width] = new Color( r, g, b, a );
 				}
 			}
 
-			resultTex.SetData( destData );
-
-			return resultTex;
+			return destData;
 		}
 
 
@@ -69,32 +77,39 @@ namespace Nez.Textures
 		public static Texture2D createBlurredGrayscaleTexture( Texture2D image, double deviation = 1 )
 		{
 			var resultTex = new Texture2D( Core.graphicsDevice, image.Width, image.Height, false, SurfaceFormat.Color );
-			var matrix = new double[image.Width, image.Height];
-
-			var destData = new Color[image.Width * image.Height];
 			var srcData = new Color[image.Width * image.Height];
 			image.GetData<Color>( srcData );
 
-			// first we calculate the grayscale and store it in matrix
-			for( var i = 0; i < image.Width; i++ )
-			{
-				for( var j = 0; j < image.Height; j++ )
-					matrix[i, j] = srcData[i + j * image.Width].grayscale().R;
-			}
-
-			matrix = GaussianBlur.gaussianConvolution( matrix, deviation );
-			for( var i = 0; i < image.Width; i++ )
-			{
-				for( var j = 0; j < image.Height; j++ )
-				{
-					var val = (int)Math.Min( 255, matrix[i, j] );
-					destData[i + j * image.Width] = new Color( val, val, val, srcData[i + j * image.Width].A );
-				}
-			}
-
+			var destData = createBlurredGrayscaleTexture( srcData, image.Width, image.Height, deviation );
 			resultTex.SetData( destData );
 
 			return resultTex;
+		}
+
+
+		public static Color[] createBlurredGrayscaleTexture( Color[] srcData, int width, int height, double deviation = 1 )
+		{
+			var destData = new Color[width * height];
+			var matrix = new double[width, height];
+
+			// first we calculate the grayscale and store it in matrix
+			for( var i = 0; i < width; i++ )
+			{
+				for( var j = 0; j < height; j++ )
+					matrix[i, j] = srcData[i + j * width].grayscale().R;
+			}
+
+			matrix = GaussianBlur.gaussianConvolution( matrix, deviation );
+			for( var i = 0; i < width; i++ )
+			{
+				for( var j = 0; j < height; j++ )
+				{
+					var val = (int)Math.Min( 255, matrix[i, j] );
+					destData[i + j * width] = new Color( val, val, val, srcData[i + j * width].A );
+				}
+			}
+
+			return destData;
 		}
 
 
