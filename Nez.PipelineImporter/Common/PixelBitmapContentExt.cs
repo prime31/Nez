@@ -11,9 +11,9 @@ namespace Nez.PipelineImporter
 		{
 			var data = new Color[self.Width * self.Height];
 			var i = 0;
-			for( var x = 0; x < self.Width; x++ )
+			for( var y = 0; y < self.Height; y++ )
 			{
-				for( var y = 0; y < self.Height; y++ )
+				for( var x = 0; x < self.Width; x++ )
 					data[i++] = self.GetPixel( x, y );
 			}
 
@@ -24,9 +24,9 @@ namespace Nez.PipelineImporter
 		public static void setData( this PixelBitmapContent<Color> self, Color[] data )
 		{
 			var i = 0;
-			for( var x = 0; x < self.Width; x++ )
+			for( var y = 0; y < self.Height; y++ )
 			{
-				for( var y = 0; y < self.Height; y++ )
+				for( var x = 0; x < self.Width; x++ )
 					self.SetPixel( x, y, data[i++] );
 			}
 		}
