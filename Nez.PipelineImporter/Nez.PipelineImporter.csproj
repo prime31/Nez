@@ -60,6 +60,7 @@
     <Folder Include="Overlap2D\VOs\NotImplemented\" />
     <Folder Include="UISkin\" />
     <Folder Include="Common\" />
+    <Folder Include="NormalMapGenerator\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Tiled\TiledMapImporter.cs" />
@@ -160,6 +161,8 @@
     <Compile Include="UISkin\UISkinImporter.cs" />
     <Compile Include="Common\PathHelper.cs" />
     <Compile Include="Common\ContentWriterExt.cs" />
+    <Compile Include="NormalMapGenerator\NormalMapProcessor.cs" />
+    <Compile Include="Common\PixelBitmapContentExt.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Nez-PCL\Nez.csproj">

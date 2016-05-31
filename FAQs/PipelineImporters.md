@@ -43,6 +43,16 @@ Imports [Texture Packer](https://www.codeandweb.com/texturepacker) json files fo
 
 
 
+## Normal Map Generator
+The Normal Map Generator uses the TextureImporter in the Pipeline Tool. Select NormalMapProcessor as the Processor to generate a normal map. Several options are available that affect how the normal map is generated. The order of operations is the following:
+
+- (optional) flatten image to two colors (one for transparent and one for opaque: `opaqueColor` and `transparentColor` params. This is for generating rim lighting normal maps)
+- (optional) blur in color or grayscale (`blurType` and `blurDeviation` params)
+- generate normal map using sobel or 5 tap (both methods have invertX/invertY params. `useSobelFilter` uses the `sobelStrength` and the 5 tap method uses the `nonSobelBias` param)
+
+
+
+
 ## XMLTemplateMaker
 This isn't so much an importer as a helper to make your own importer. It does not create any xnb files. The XML file passed to this processor should just be a System.string with the namespace.class of the type that you want a tempalate for, like below:
 
