@@ -20,6 +20,7 @@ namespace Nez.NormalMapGenerator
 			Grayscale
 		}
 
+
 		#region Processor properties
 
 		[DefaultValueAttribute( false )]
@@ -36,8 +37,8 @@ namespace Nez.NormalMapGenerator
 
 		public float blurDeviation { get; set; } = 0.5f;
 
-		[DefaultValueAttribute( false )]
-		public bool useSobelFilter { get; set; }
+		[DefaultValueAttribute( typeof( TextureUtils.EdgeDetectionFilter ), "TextureUtils.EdgeDetectionFilter.Sobel" )]
+		public TextureUtils.EdgeDetectionFilter edgeDetectionFilter { get; set; }
 
 		public float normalStrength { get; set; } = 1f;
 
@@ -78,16 +79,8 @@ namespace Nez.NormalMapGenerator
 					destData = TextureUtils.createBlurredGrayscaleTexture( destData, bmp.Width, bmp.Height, (double)blurDeviation );
 			}
 
-			if( useSobelFilter )
-			{
-				logger.LogMessage( "generating normal map with sobel filter" );
-				destData = TextureUtils.createNormalMapWithSobelFilter( destData, bmp.Width, bmp.Height, normalStrength, invertX, invertY );
-			}
-			else
-			{
-				logger.LogMessage( "generating normal map" );
-				destData = TextureUtils.createNormalMap( destData, bmp.Width, bmp.Height, normalStrength, invertX, invertY );
-			}
+			logger.LogMessage( "generating normal map with {0}", edgeDetectionFilter );
+			destData = TextureUtils.createNormalMap( destData, edgeDetectionFilter, bmp.Width, bmp.Height, normalStrength, invertX, invertY );
 
 			bmp.setData( destData );
 
