@@ -34,7 +34,7 @@ namespace Nez.NormalMapGenerator
 		[DefaultValueAttribute( typeof( BlurType ), "BlurType.Grayscale" )]
 		public BlurType blurType { get; set; } = BlurType.Grayscale;
 
-		public double blurDeviation { get; set; } = 0.5;
+		public float blurDeviation { get; set; } = 0.5f;
 
 		[DefaultValueAttribute( false )]
 		public bool useSobelFilter { get; set; }
@@ -73,11 +73,11 @@ namespace Nez.NormalMapGenerator
 
 			if( blurType != BlurType.None )
 			{
-				logger.LogMessage( "blurring image" );
+				logger.LogMessage( "blurring image width blurDeviation: {0}", blurDeviation );
 				if( blurType == BlurType.Color )
-					destData = TextureUtils.createBlurredTexture( destData, bmp.Width, bmp.Height, blurDeviation );
+					destData = TextureUtils.createBlurredTexture( destData, bmp.Width, bmp.Height, (double)blurDeviation );
 				else
-					destData = TextureUtils.createBlurredGrayscaleTexture( destData, bmp.Width, bmp.Height, blurDeviation );
+					destData = TextureUtils.createBlurredGrayscaleTexture( destData, bmp.Width, bmp.Height, (double)blurDeviation );
 			}
 
 			if( useSobelFilter )
