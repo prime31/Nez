@@ -119,30 +119,36 @@ namespace Nez.Textures
 			{
 				for( var j = 1; j < height - 1; j++ )
 				{
-					var cr = srcData[i + 1 + j * width].grayscale().B / 255f;
-					var cl = srcData[i - 1 + j * width].grayscale().B / 255f;
-					var cu = srcData[i + ( j - 1 ) * width].grayscale().B / 255f;
-					var cd = srcData[i + ( j + 1 ) * width].grayscale().B / 255f;
-					var cld = srcData[i - 1 + ( j + 1 ) * width].grayscale().B / 255f;
-					var clu = srcData[i - 1 + ( j - 1 ) * width].grayscale().B / 255f;
-					var crd = srcData[i + 1 + ( j + 1 ) * width].grayscale().B / 255f;
-					var cru = srcData[i + 1 + ( j - 1 ) * width].grayscale().B / 255f;
+					var r = srcData[i + 1 + j * width].grayscale().B / 255f;
+					var l = srcData[i - 1 + j * width].grayscale().B / 255f;
+					var t = srcData[i + ( j - 1 ) * width].grayscale().B / 255f;
+					var b = srcData[i + ( j + 1 ) * width].grayscale().B / 255f;
+					var bl = srcData[i - 1 + ( j + 1 ) * width].grayscale().B / 255f;
+					var tl = srcData[i - 1 + ( j - 1 ) * width].grayscale().B / 255f;
+					var br = srcData[i + 1 + ( j + 1 ) * width].grayscale().B / 255f;
+					var tr = srcData[i + 1 + ( j - 1 ) * width].grayscale().B / 255f;
 
 					// Compute dx using Sobel:
 					//           -1 0 1 
 					//           -2 0 2
 					//           -1 0 1
-					var dX = cru + 2 * cr + crd - clu - 2 * cl - cld;
+					var dX = tr + 2 * r + br - tl - 2 * l - bl;
+
+					// sharr
+					//dX = tl * 3 + l * 10 + bl * 3 - tr * 3 - r * 10 - br * 3;
 
 					// Compute dy using Sobel:
 					//           -1 -2 -1 
 					//            0  0  0
 					//            1  2  1
-					var dY = cld + 2 * cd + crd - clu - 2 * cu - cru;
+					var dY = bl + 2 * b + br - tl - 2 * t - tr;
+
+					// sharr
+					//dY = tl * 3 + t * 10 + tr * 3 - bl * 3 - b * 10 - br * 3;
 
 					var normal = Vector3.Normalize( new Vector3( dX * invertR, dY * invertG, 1f / normalStrength ) );
 					normal = normal * 0.5f + new Vector3( 0.5f );
-					destData[i + j * width] = new Color( normal.X, normal.Y, normal.Z, 1f );
+					destData[i + j * width] = new Color( normal.X, normal.Y, normal.Z, srcData[i + j * width].A );
 				}
 			}
 
@@ -158,21 +164,21 @@ namespace Nez.Textures
 		/// <param name="bias">Bias.</param>
 		/// <param name="invertRed">If set to <c>true</c> invert red.</param>
 		/// <param name="invertGreen">If set to <c>true</c> invert green.</param>
-		public static Texture2D createNormalMap( Texture2D image, float bias = 50f, bool invertX = false, bool invertY = false )
+		public static Texture2D createNormalMap( Texture2D image, float normalStrength = 2f, bool invertX = false, bool invertY = false )
 		{
 			var resultTex = new Texture2D( Core.graphicsDevice, image.Width, image.Height, false, SurfaceFormat.Color );
 
 			var srcData = new Color[image.Width * image.Height];
 			image.GetData<Color>( srcData );
 
-			var destData = createNormalMap( srcData, image.Width, image.Height, bias, invertX, invertY );
+			var destData = createNormalMap( srcData, image.Width, image.Height, normalStrength, invertX, invertY );
 			resultTex.SetData( destData );
 
 			return resultTex;
 		}
 
 
-		public static Color[] createNormalMap( Color[] srcData, int width, int height, float bias = 50f, bool invertX = false, bool invertY = false )
+		public static Color[] createNormalMap( Color[] srcData, int width, int height, float normalStrength = 2f, bool invertX = false, bool invertY = false )
 		{
 			var invertR = invertX ? -1f : 1f;
 			var invertG = invertY ? -1f : 1f;
@@ -182,19 +188,19 @@ namespace Nez.Textures
 			{
 				for( var j = 1; j < height - 1; j++ )
 				{
-					var d0 = srcData[i + j * width].grayscale().B / 255f;
-					var d1 = srcData[i + 1 + j * width].grayscale().B / 255f;
-					var d2 = srcData[i - 1 + j * width].grayscale().B / 255f;
-					var d3 = srcData[i + ( j - 1 ) * width].grayscale().B / 255f;
-					var d4 = srcData[i + ( j + 1 ) * width].grayscale().B / 255f;
+					var c = srcData[i + j * width].grayscale().B / 255f;
+					var r = srcData[i + 1 + j * width].grayscale().B / 255f;
+					var l = srcData[i - 1 + j * width].grayscale().B / 255f;
+					var t = srcData[i + ( j - 1 ) * width].grayscale().B / 255f;
+					var b = srcData[i + ( j + 1 ) * width].grayscale().B / 255f;
 
-					var dx = ( ( d2 - d0 ) + ( d0 - d1 ) ) * 0.5f;
-					var dy = ( ( d4 - d0 ) + ( d0 - d3 ) ) * 0.5f;
+					var dx = ( ( l - c ) + ( c - r ) ) * 0.5f;
+					var dy = ( ( b - c ) + ( c - t ) ) * 0.5f;
 
-					var normal = new Vector3( dx * invertR, dy * invertG, 1.0f - ( ( bias - 0.1f ) / 100.0f ) );
+					var normal = new Vector3( dx * invertR, dy * invertG, 1f / normalStrength );
 					normal.Normalize();
 					normal = normal * 0.5f + new Vector3( 0.5f );
-					destData[i + j * width] = new Color( normal.X, normal.Y, normal.Z, 1f );
+					destData[i + j * width] = new Color( normal.X, normal.Y, normal.Z, srcData[i + j * width].A );
 				}
 			}
 

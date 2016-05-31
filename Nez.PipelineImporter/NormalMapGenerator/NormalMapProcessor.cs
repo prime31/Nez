@@ -39,9 +39,7 @@ namespace Nez.NormalMapGenerator
 		[DefaultValueAttribute( false )]
 		public bool useSobelFilter { get; set; }
 
-		public float sobelStrength { get; set; } = 1f;
-
-		public float nonSobelBias { get; set; } = 50f;
+		public float normalStrength { get; set; } = 1f;
 
 		[DefaultValueAttribute( false )]
 		public bool invertX { get; set; }
@@ -83,12 +81,12 @@ namespace Nez.NormalMapGenerator
 			if( useSobelFilter )
 			{
 				logger.LogMessage( "generating normal map with sobel filter" );
-				destData = TextureUtils.createNormalMapWithSobelFilter( destData, bmp.Width, bmp.Height, 1, invertX, invertY );
+				destData = TextureUtils.createNormalMapWithSobelFilter( destData, bmp.Width, bmp.Height, normalStrength, invertX, invertY );
 			}
 			else
 			{
 				logger.LogMessage( "generating normal map" );
-				destData = TextureUtils.createNormalMap( destData, bmp.Width, bmp.Height, nonSobelBias, invertX, invertY );
+				destData = TextureUtils.createNormalMap( destData, bmp.Width, bmp.Height, normalStrength, invertX, invertY );
 			}
 
 			bmp.setData( destData );
