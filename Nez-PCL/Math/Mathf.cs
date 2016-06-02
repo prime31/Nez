@@ -99,6 +99,12 @@ namespace Nez
 		{
 			return ( round( ( value - offset ) / increment ) * increment ) + offset;
 		}
+		
+		
+		static public int circularIncrement( int i, int n )
+		{
+			return i = ( i + 1 ) % n;
+		}
 
 
 		public static float lerp( float from, float to, float t )
