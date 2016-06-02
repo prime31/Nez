@@ -100,12 +100,6 @@ namespace Nez
 			return ( round( ( value - offset ) / increment ) * increment ) + offset;
 		}
 		
-		
-		static public int circularIncrement( int i, int n )
-		{
-			return i = ( i + 1 ) % n;
-		}
-
 
 		public static float lerp( float from, float to, float t )
 		{
@@ -170,7 +164,7 @@ namespace Nez
 
 
 		/// <summary>
-		/// increments t an ensures it is always greater than 0 and less than length
+		/// increments t and ensures it is always greater than or equal to 0 and less than length
 		/// </summary>
 		/// <param name="t">T.</param>
 		/// <param name="length">Length.</param>
@@ -179,6 +173,21 @@ namespace Nez
 			t++;
 			if( t == length )
 				return 0;
+			return t;
+		}
+
+
+		/// <summary>
+		/// decrements t and ensures it is always greater than or equal to 0 and less than length
+		/// </summary>
+		/// <returns>The with wrap.</returns>
+		/// <param name="t">T.</param>
+		/// <param name="length">Length.</param>
+		public static int decrementWithWrap( int t, int length )
+		{
+			t--;
+			if( t < 0 )
+				return length - 1;
 			return t;
 		}
 
