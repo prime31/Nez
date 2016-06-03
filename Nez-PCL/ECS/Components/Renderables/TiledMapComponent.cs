@@ -11,6 +11,8 @@ namespace Nez
 	{
 		public TiledMap tiledmap;
 
+		public int physicsLayer = 1 << 0;
+
 		/// <summary>
 		/// if null, all layers will be rendered
 		/// </summary>
@@ -77,12 +79,14 @@ namespace Nez
 
 
 		/// <summary>
-		/// gets all the non-empty tiles that intersect the passed in bounds
+		/// gets all the non-empty tiles that intersect the passed in bounds for the collision layer
 		/// </summary>
 		/// <returns>The tiles intersecting bounds.</returns>
 		/// <param name="bounds">Bounds.</param>
 		public List<TiledTile> getTilesIntersectingBounds( Rectangle bounds )
 		{
+			Assert.isNotNull( collisionLayer, "collisionLayer must not be null!" );
+
 			// offset the passed in world position to compensate for the entity position
 			bounds.Location -= ( entity.transform.position + _localOffset ).ToPoint();
 			return collisionLayer.getTilesIntersectingBounds( bounds );
@@ -164,6 +168,7 @@ namespace Nez
 			for( var i = 0; i < collisionRects.Count; i++ )
 			{
 				var collider = new BoxCollider( collisionRects[i].X + renderPosition.X, collisionRects[i].Y + renderPosition.Y, collisionRects[i].Width, collisionRects[i].Height );
+				collider.physicsLayer = physicsLayer;
 				collider.entity = entity;
 				_colliders[i] = collider;
 
