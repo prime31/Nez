@@ -16,6 +16,11 @@ namespace Nez.Console
 		internal static DebugConsole instance;
 
 		/// <summary>
+		/// controls the scale of the console
+		/// </summary>
+		public static float renderScale = 1f;
+
+		/// <summary>
 		/// bind any custom Actions you would like to function keys
 		/// </summary>
 		Action[] _functionKeyActions;
@@ -26,12 +31,19 @@ namespace Nez.Console
 		const float OPACITY = 0.65f;
 
 		// render constants
-		Vector2 FONT_SCALE;
-		const float FONT_LINE_HEIGHT = 10;
+		const int LINE_HEIGHT = 10;
+		const int TEXT_PADDING_X = 5;
+		const int TEXT_PADDING_Y = 4;
+
+		/// <summary>
+		/// separation of the command entry and history boxes
+		/// </summary>
+		const int COMMAND_HISTORY_PADDING = 10;
+
+		/// <summary>
+		/// global padding on the left/right of the console
+		/// </summary>
 		const int HORIZONTAL_PADDING = 10;
-		const int BOTTOM_MARGIN = 30;
-		const int BOTTOM_CONSOLE_HEIGHT = 20;
-		const int LINE_HEIGHT = 14;
 
 		bool enabled = true;
 		internal bool isOpen;
@@ -66,9 +78,6 @@ namespace Nez.Console
 			_commands = new Dictionary<string,CommandInfo>();
 			_sorted = new List<string>();
 			_functionKeyActions = new Action[12];
-
-			var scale = FONT_LINE_HEIGHT / Graphics.instance.bitmapFont.lineHeight;
-			FONT_SCALE = new Vector2( scale, scale );
 
 			buildCommandsList();
 		}
@@ -105,14 +114,14 @@ namespace Nez.Console
 			var maxWidth = Core.graphicsDevice.PresentationParameters.BackBufferWidth - 40;
 			var screenHeight = Core.graphicsDevice.PresentationParameters.BackBufferHeight;
 
-			while( Graphics.instance.bitmapFont.measureString( str ).X * FONT_SCALE.X > maxWidth )
+			while( Graphics.instance.bitmapFont.measureString( str ).X * renderScale > maxWidth )
 			{
 				var split = -1;
 				for( var i = 0; i < str.Length; i++ )
 				{
 					if( str[i] == ' ' )
 					{
-						if( Graphics.instance.bitmapFont.measureString( str.Substring( 0, i ) ).X * FONT_SCALE.X <= maxWidth )
+						if( Graphics.instance.bitmapFont.measureString( str.Substring( 0, i ) ).X * renderScale <= maxWidth )
 							split = i;
 						else
 							break;
@@ -478,30 +487,44 @@ namespace Nez.Console
 		{
 			if( !isOpen )
 				return;
-			
-			var screenWidth = Core.graphicsDevice.PresentationParameters.BackBufferWidth;
-			var screenHeight = Core.graphicsDevice.PresentationParameters.BackBufferHeight;
+
+			var screenWidth = Screen.width;
+			var screenHeight = Screen.height;
 			var workingWidth = screenWidth - 2 * HORIZONTAL_PADDING;
 
 			Graphics.instance.batcher.begin();
 
-			Graphics.instance.batcher.drawRect( HORIZONTAL_PADDING, screenHeight - BOTTOM_MARGIN, workingWidth, BOTTOM_CONSOLE_HEIGHT, Color.Black * OPACITY );
+			// setup the rect that encompases the command entry section
+			var commandEntryRect = RectangleExt.fromFloats( HORIZONTAL_PADDING, screenHeight - LINE_HEIGHT * renderScale, workingWidth, LINE_HEIGHT * renderScale );
+
+			// take into account text padding. move our location up a bit and expand the Rect to accommodate
+			commandEntryRect.Location -= new Point( 0, TEXT_PADDING_Y * 2 );
+			commandEntryRect.Size += new Point( 0, TEXT_PADDING_Y * 2 );
+
+			Graphics.instance.batcher.drawRect( commandEntryRect, Color.Black * OPACITY );
 			var commandLineString = "> " + _currentText;
 			if( _underscore )
 				commandLineString += "_";
-			
-			Graphics.instance.batcher.drawString( Graphics.instance.bitmapFont, commandLineString, new Vector2( 20, screenHeight - BOTTOM_CONSOLE_HEIGHT - FONT_LINE_HEIGHT * 0.35f ), Color.White );
+
+			var commandTextPosition = commandEntryRect.Location.ToVector2() + new Vector2( TEXT_PADDING_X, TEXT_PADDING_Y );
+			Graphics.instance.batcher.drawString( Graphics.instance.bitmapFont, commandLineString, commandTextPosition, Color.White, 0, Vector2.Zero, new Vector2( renderScale ), SpriteEffects.None, 0 );
 
 			if( _drawCommands.Count > 0 )
 			{
-				var height = LINE_HEIGHT * _drawCommands.Count + 15;
-				var topOfHistoryRect = screenHeight - height - BOTTOM_CONSOLE_HEIGHT - 20;
+				// start with the total height of the text then add in padding. We have an extra padding because we pad each line and the top/bottom
+				var height = LINE_HEIGHT * renderScale * _drawCommands.Count;
+				height += ( _drawCommands.Count + 1 ) * TEXT_PADDING_Y;
+
+				var topOfHistoryRect = commandEntryRect.Y - height - COMMAND_HISTORY_PADDING;
 				Graphics.instance.batcher.drawRect( HORIZONTAL_PADDING, topOfHistoryRect, workingWidth, height, Color.Black * OPACITY );
-				for( int i = 0; i < _drawCommands.Count; i++ )
+
+				var yPosFirstLine = topOfHistoryRect + height - TEXT_PADDING_Y - LINE_HEIGHT * renderScale;
+				for( var i = 0; i < _drawCommands.Count; i++ )
 				{
-					var position = new Vector2( 20, topOfHistoryRect + height - 20 - LINE_HEIGHT * i );
+					var yPosCurrentLineAddition = ( i * LINE_HEIGHT * renderScale ) + ( i * TEXT_PADDING_Y );
+					var position = new Vector2( HORIZONTAL_PADDING + TEXT_PADDING_X, yPosFirstLine - yPosCurrentLineAddition );
 					var color = _drawCommands[i].IndexOf( ">" ) == 0 ? Color.Yellow : Color.White;
-					Graphics.instance.batcher.drawString( Graphics.instance.bitmapFont, _drawCommands[i], position, color, 0, Vector2.Zero, FONT_SCALE, SpriteEffects.None, 0 );
+					Graphics.instance.batcher.drawString( Graphics.instance.bitmapFont, _drawCommands[i], position, color, 0, Vector2.Zero, new Vector2( renderScale ), SpriteEffects.None, 0 );
 				}
 			}
 

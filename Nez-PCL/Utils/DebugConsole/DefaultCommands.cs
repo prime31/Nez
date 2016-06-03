@@ -39,6 +39,13 @@ namespace Nez.Console
 		}
 
 
+		[Command( "console-scale", "Sets the scale that the console is rendered. Defaults to 1 and has a max of 5." )]
+		static void setScale( float scale = 1f )
+		{
+			DebugConsole.renderScale = Mathf.clamp( scale, 0.2f, 5f );
+		}
+
+
 		[Command( "assets", "Logs all loaded assets. Pass 's' for scene assets or 'g' for global assets" )]
 		static void logLoadedAssets( string whichAssets = "s" )
 		{
