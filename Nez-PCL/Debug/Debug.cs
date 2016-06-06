@@ -171,6 +171,8 @@ namespace Nez
 		[Conditional( "DEBUG" )]
 		public static void drawLine( Vector2 start, Vector2 end, Color color, float duration = 0f )
 		{
+			if( !Core.debugRenderEnabled )
+				return;
 			_debugDrawItems.Add( new DebugDrawItem( start, end, color, duration ) );
 		}
 
@@ -178,6 +180,8 @@ namespace Nez
 		[Conditional( "DEBUG" )]
 		public static void drawHollowRect( Rectangle rectangle, Color color, float duration = 0f )
 		{
+			if( !Core.debugRenderEnabled )
+				return;
 			_debugDrawItems.Add( new DebugDrawItem( rectangle, color, duration ) );
 		}
 
@@ -185,6 +189,8 @@ namespace Nez
 		[Conditional( "DEBUG" )]
 		public static void drawHollowBox( Vector2 center, int size, Color color, float duration = 0f )
 		{
+			if( !Core.debugRenderEnabled )
+				return;
 			var halfSize = size * 0.5f;
 			_debugDrawItems.Add( new DebugDrawItem( new Rectangle( (int)( center.X - halfSize ), (int)( center.Y - halfSize ), size, size ), color, duration ) );
 		}
@@ -193,6 +199,8 @@ namespace Nez
 		[Conditional( "DEBUG" )]
 		public static void drawText( BitmapFont font, string text, Vector2 position, Color color, float duration = 0f, float scale = 1f )
 		{
+			if( !Core.debugRenderEnabled )
+				return;
 			_debugDrawItems.Add( new DebugDrawItem( font, text, position, color, duration, scale ) );
 		}
 
@@ -200,6 +208,8 @@ namespace Nez
 		[Conditional( "DEBUG" )]
 		public static void drawText( NezSpriteFont font, string text, Vector2 position, Color color, float duration = 0f, float scale = 1f )
 		{
+			if( !Core.debugRenderEnabled )
+				return;
 			_debugDrawItems.Add( new DebugDrawItem( font, text, position, color, duration, scale ) );
 		}
 
@@ -222,6 +232,8 @@ namespace Nez
 		[Conditional( "DEBUG" )]
 		public static void drawText( string text, Color color, float duration = 1f, float scale = 1f )
 		{
+			if( !Core.debugRenderEnabled )
+				return;
 			_screenSpaceDebugDrawItems.Add( new DebugDrawItem( text, color, duration, scale ) );
 		}
 
