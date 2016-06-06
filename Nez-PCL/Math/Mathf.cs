@@ -99,7 +99,7 @@ namespace Nez
 		{
 			return ( round( ( value - offset ) / increment ) * increment ) + offset;
 		}
-		
+
 
 		public static float lerp( float from, float to, float t )
 		{

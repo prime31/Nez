@@ -160,7 +160,12 @@ namespace Nez.UI
 				updateGamepadState();
 			updateKeyboardState();
 
+			// consolidate input checks so that we can add touch input easily later
+			var leftMouseButtonDown = Input.leftMouseButtonDown;
+			var leftMouseButtonPressed = Input.leftMouseButtonPressed;
+			var leftMouseButtonReleased = Input.leftMouseButtonReleased;
 			var currentMousePosition = entity != null && !isFullScreen ? Input.scaledMousePosition : Input.rawMousePosition.ToVector2();
+
 			var didMouseMove = false;
 			if( _lastMousePosition != currentMousePosition )
 			{
@@ -171,14 +176,14 @@ namespace Nez.UI
 			var mousePos = screenToStageCoordinates( currentMousePosition );
 
 			// mouse moved and released events are only sent to inputFocusListeners
-			if( ( Input.leftMouseButtonDown && !Input.leftMouseButtonPressed ) || Input.leftMouseButtonReleased )
+			if( ( leftMouseButtonDown && !leftMouseButtonPressed ) || leftMouseButtonReleased )
 			{
-				if( Input.leftMouseButtonDown && didMouseMove )
+				if( leftMouseButtonDown && didMouseMove )
 				{
 					for( var i = _inputFocusListeners.Count - 1; i >= 0; i-- )
 						( (IInputListener)_inputFocusListeners[i] ).onMouseMoved( _inputFocusListeners[i].stageToLocalCoordinates( mousePos ) );
 				}
-				else if( Input.leftMouseButtonReleased )
+				else if( leftMouseButtonReleased )
 				{
 					for( var i = _inputFocusListeners.Count - 1; i >= 0; i-- )
 						( (IInputListener)_inputFocusListeners[i] ).onMouseUp( _inputFocusListeners[i].stageToLocalCoordinates( mousePos ) );
@@ -190,7 +195,7 @@ namespace Nez.UI
 				var over = hit( mousePos );
 
 				// lose keyboard focus if we click outside of the keyboardFocusElement
-				if( Input.leftMouseButtonPressed && _keyboardFocusElement != null && over != _keyboardFocusElement )
+				if( leftMouseButtonPressed && _keyboardFocusElement != null && over != _keyboardFocusElement )
 					setKeyboardFocus( null );
 
 				// if we are over the same element and the left button was pressed we notify our listener
@@ -198,7 +203,7 @@ namespace Nez.UI
 				{
 					var elementLocal = _mouseOverElement.stageToLocalCoordinates( mousePos );
 
-					if( Input.leftMouseButtonPressed && _mouseOverElement is IInputListener )
+					if( leftMouseButtonPressed && _mouseOverElement is IInputListener )
 					{
 						var listener = _mouseOverElement as IInputListener;
 						// add the listener to be notified for all onMouseDown and onMouseUp events for the specified pointer and button
