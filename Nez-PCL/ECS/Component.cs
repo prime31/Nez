@@ -21,6 +21,12 @@ namespace Nez
 		public Entity entity;
 
 		/// <summary>
+		/// shortcut to entity.transform
+		/// </summary>
+		/// <value>The transform.</value>
+		public Transform transform { get { return entity.transform; } }
+
+		/// <summary>
 		/// true if the Component is enabled and the Entity is enabled. When enabled this Components lifecycle methods will be called.
 		/// Changes in state result in onEnabled/onDisable being called.
 		/// </summary>
