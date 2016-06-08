@@ -19,7 +19,7 @@ Imports [Overlap2D](http://overlap2d.com/) projects. Imports most of the data bu
 
 
 ## LibGDX Atlases
-LibGDX atlases go hand-in-hand with Overlap2D or they can be used directly. You can even use Overlap2D to create your LibGDX atlas by just importing all your images and then using the File -> Export menu item. Note that Overlap2D (and the LibGDX atlas builder program) will export the files pack.atlas and pack.png. MonoGame requires that different types have different names since all imported files will have an .xnb extension. To avoid the name class just rename pack.atlas to packatlas.atlas.
+LibGDX atlases go hand-in-hand with Overlap2D or they can be used directly. You can even use Overlap2D to create your LibGDX atlas by just importing all your images and then using the File -> Export menu item. Note that Overlap2D (and the LibGDX atlas builder program) will export the files pack.atlas and pack.png. MonoGame requires that different types have different names since all imported files will have an .xnb extension. To avoid the name clash just rename pack.atlas to packatlas.atlas.
 
 
 
