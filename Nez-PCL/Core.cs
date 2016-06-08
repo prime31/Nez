@@ -64,6 +64,9 @@ namespace Nez
 
 		#if DEBUG
 		internal static ulong drawCalls;
+		TimeSpan _frameCounterElapsedTime = TimeSpan.Zero;
+		int _frameCounter = 0;
+		string _windowTitle;
 		#endif
 
 		Scene _scene;
@@ -91,8 +94,12 @@ namespace Nez
 		}
 
 
-		public Core( int width = 1280, int height = 720, bool isFullScreen = false, bool enableEntitySystems = true )
+		public Core( int width = 1280, int height = 720, bool isFullScreen = false, bool enableEntitySystems = true, string windowTitle = "Nez" )
 		{
+			#if DEBUG
+			_windowTitle = windowTitle;
+			#endif
+
 			_instance = this;
 			emitter = new Emitter<CoreEvents>( new CoreEventsComparer() );
 
@@ -225,6 +232,17 @@ namespace Nez
 
 			#if DEBUG
 			TimeRuler.instance.beginMark( "draw", Color.Gold );
+
+			// fps counter
+			_frameCounter++;
+			_frameCounterElapsedTime += gameTime.ElapsedGameTime;
+			if( _frameCounterElapsedTime >= TimeSpan.FromSeconds( 1 ) )
+			{
+				var totalMemory = ( GC.GetTotalMemory( false ) / 1048576f ).ToString( "F" );
+				Window.Title = string.Format( "{0} {1} fps - {2} MB", _windowTitle, _frameCounter, totalMemory );
+				_frameCounter = 0;
+				_frameCounterElapsedTime -= TimeSpan.FromSeconds( 1 );
+			}
 			#endif
 
 			if( _sceneTransition != null )
