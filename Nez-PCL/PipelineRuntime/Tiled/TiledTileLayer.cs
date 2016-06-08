@@ -199,12 +199,23 @@ namespace Nez.Tiled
 		}
 
 
+		/// <summary>
+		/// gets the TiledTile at the x/y coordinates. Note that these are tile coordinates not world coordinates!
+		/// </summary>
+		/// <returns>The tile.</returns>
+		/// <param name="x">The x coordinate.</param>
+		/// <param name="y">The y coordinate.</param>
 		public TiledTile getTile( int x, int y )
 		{
 			return tiles[x + y * width];
 		}
 
 
+		/// <summary>
+		/// nulls out the tile at the x/y coordinates
+		/// </summary>
+		/// <param name="x">The x coordinate.</param>
+		/// <param name="y">The y coordinate.</param>
 		public void removeTile( int x, int y )
 		{
 			tiles[x + y * width] = null;
@@ -324,7 +335,7 @@ namespace Nez.Tiled
 
 
 		/// <summary>
-		/// gets a List of all the TiledTiles that intersect the passed in Rectangle
+		/// gets a List of all the TiledTiles that intersect the passed in Rectangle. The returned List can be put back in the pool via ListPool.free.
 		/// </summary>
 		/// <returns>The tiles intersecting bounds.</returns>
 		/// <param name="layer">Layer.</param>
@@ -336,7 +347,7 @@ namespace Nez.Tiled
 			var maxX = tilemap.worldPositionToTilePositionX( bounds.Right );
 			var maxY = tilemap.worldPositionToTilePositionY( bounds.Bottom );
 
-			var tilelist = new List<TiledTile>();
+			var tilelist = ListPool<TiledTile>.obtain();
 
 			for( var x = minX; x <= maxX; x++ )
 			{

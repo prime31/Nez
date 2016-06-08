@@ -56,12 +56,28 @@ namespace Nez
 		/// sets which layers should be rendered by this component by name. If you know the indices you can set layerIndicesToRender directly.
 		/// </summary>
 		/// <param name="layerNames">Layer names.</param>
-		public void setLayersToRender( string[] layerNames )
+		public void setLayersToRender( params string[] layerNames )
 		{
 			layerIndicesToRender = new int[layerNames.Length];
 
 			for( var i = 0; i < layerNames.Length; i++ )
 				layerIndicesToRender[i] = tiledmap.getLayerIndex( layerNames[i] );
+		}
+
+
+		#region TiledMap queries
+
+		public int getRowAtWorldPosition( float yPos )
+		{
+			yPos -= entity.transform.position.Y + _localOffset.Y;
+			return tiledmap.worldPositionToTilePositionY( yPos );
+		}
+
+
+		public int getColumnAtWorldPosition( float xPos )
+		{
+			xPos -= entity.transform.position.X + _localOffset.X;
+			return tiledmap.worldPositionToTilePositionY( xPos );
 		}
 
 
@@ -72,6 +88,8 @@ namespace Nez
 		/// <param name="worldPos">World position.</param>
 		public TiledTile getTileAtWorldPosition( Vector2 worldPos )
 		{
+			Assert.isNotNull( collisionLayer, "collisionLayer must not be null!" );
+
 			// offset the passed in world position to compensate for the entity position
 			worldPos -= entity.transform.position + _localOffset;
 			return collisionLayer.getTileAtWorldPosition( worldPos );
@@ -79,7 +97,8 @@ namespace Nez
 
 
 		/// <summary>
-		/// gets all the non-empty tiles that intersect the passed in bounds for the collision layer
+		/// gets all the non-empty tiles that intersect the passed in bounds for the collision layer. The returned List can be put back in the
+		/// pool via ListPool.free.
 		/// </summary>
 		/// <returns>The tiles intersecting bounds.</returns>
 		/// <param name="bounds">Bounds.</param>
@@ -91,6 +110,8 @@ namespace Nez
 			bounds.Location -= ( entity.transform.position + _localOffset ).ToPoint();
 			return collisionLayer.getTilesIntersectingBounds( bounds );
 		}
+
+		#endregion
 
 
 		#region Component overrides

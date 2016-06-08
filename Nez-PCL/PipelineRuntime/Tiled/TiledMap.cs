@@ -12,14 +12,14 @@ namespace Nez.Tiled
 	{
 		#region Fields and Properties
 
-		public int firstGid;
-		public int width;
-		public int height;
-		public int tileWidth;
-		public int tileHeight;
+		public readonly int firstGid;
+		public readonly int width;
+		public readonly int height;
+		public readonly int tileWidth;
+		public readonly int tileHeight;
 		public Color? backgroundColor;
 		public TiledRenderOrder renderOrder;
-		public TiledMapOrientation orientation;
+		public readonly TiledMapOrientation orientation;
 		public Dictionary<string,string> properties = new Dictionary<string,string>();
 		public List<TiledLayer> layers = new List<TiledLayer>();
 		public List<TiledImageLayer> imageLayers = new List<TiledImageLayer>();
@@ -240,6 +240,14 @@ namespace Nez.Tiled
 		}
 
 
+		#region world/local conversion
+
+		public Point worldPositionToTilePosition( Vector2 pos )
+		{
+			return new Point( worldPositionToTilePositionX( pos.X ), worldPositionToTilePositionY( pos.Y ) );
+		}
+
+
 		public int worldPositionToTilePositionX( float x )
 		{
 			var tileX = (int)Math.Floor( x / tileWidth );
@@ -253,5 +261,7 @@ namespace Nez.Tiled
 			return Mathf.clamp( tileY, 0, height - 1 );
 		}
 	
+		#endregion
+
 	}
 }
