@@ -21,14 +21,20 @@ namespace Nez.Tiled
 		{
 			get
 			{
-				for( var i = 0; i < tileset.tiles.Count; i++ )
+				if( !_tilesetTileIndex.HasValue )
 				{
-					// id is a gid so we need to subtract the tileset.firstId to get a local id
-					if( tileset.tiles[i].id == id - tileset.firstId )
-						return tileset.tiles[i];
+					_tilesetTileIndex = -1;
+					for( var i = 0; i < tileset.tiles.Count; i++ )
+					{
+						// id is a gid so we need to subtract the tileset.firstId to get a local id
+						if( tileset.tiles[i].id == id - tileset.firstId )
+							_tilesetTileIndex = i;
+					}
 				}
 
-				return null;
+				if( _tilesetTileIndex.Value < 0 )
+					return null;
+				return tileset.tiles[_tilesetTileIndex.Value];
 			}
 		}
 
@@ -39,6 +45,12 @@ namespace Nez.Tiled
 		public bool flippedVertically;
 		public bool flippedDiagonally;
 		internal TiledTileset tileset;
+
+		/// <summary>
+		/// we use this for 3 states: HasValue is false means we havent yet checked for the TiledTilesetTile, less than 0 means there is no
+		/// TiledTilesetTile for this, and 0+ means we have a TiledTilesetTile.
+		/// </summary>
+		int? _tilesetTileIndex;
 
 
 		public TiledTile( int id )
