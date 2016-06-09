@@ -14,6 +14,7 @@ namespace Nez
 		public ScreenSpaceRenderer( int renderOrder, params int[] renderLayers ) : base( renderOrder, null )
 		{
 			Array.Sort( renderLayers );
+			Array.Reverse( renderLayers );
 			this.renderLayers = renderLayers;
 			wantsToRenderAfterPostProcessors = true;
 		}

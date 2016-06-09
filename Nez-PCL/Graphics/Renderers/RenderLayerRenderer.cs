@@ -5,8 +5,8 @@ using Microsoft.Xna.Framework.Graphics;
 namespace Nez
 {
 	/// <summary>
-	/// Renderer that only renders a single renderLayer. Useful to keep UI rendering separate from the rest of the game when used in conjunction
-	/// with a RenderLayerRenderer
+	/// Renderer that only renders the specified renderLayers. Useful to keep UI rendering separate from the rest of the game when used in conjunction
+	/// with other RenderLayerRenderers rendering different renderLayers.
 	/// </summary>
 	public class RenderLayerRenderer : Renderer
 	{
@@ -19,6 +19,7 @@ namespace Nez
 		public RenderLayerRenderer( int renderOrder, params int[] renderLayers ) : base( renderOrder, null )
 		{
 			Array.Sort( renderLayers );
+			Array.Reverse( renderLayers );
 			this.renderLayers = renderLayers;
 		}
 
