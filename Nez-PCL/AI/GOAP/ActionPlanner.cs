@@ -176,7 +176,7 @@ namespace Nez.AI.GOAP
 				bool met = ( ( pre.values & care ) == ( fr.values & care ) );
 				if( met )
 				{
-					var node = new AStarNode();
+					var node = Pool<AStarNode>.obtain();
 					node.action = _viableActions[i];
 					node.costSoFar = _viableActions[i].cost;
 					node.worldState = applyPostConditions( this, i, fr );
