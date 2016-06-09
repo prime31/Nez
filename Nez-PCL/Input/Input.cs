@@ -271,6 +271,13 @@ namespace Nez
 
 
 		/// <summary>
+		/// alias for scaledMousePosition
+		/// </summary>
+		/// <value>The mouse position.</value>
+		public static Vector2 mousePosition { get { return scaledMousePosition; } }
+
+
+		/// <summary>
 		/// this takes into account the SceneResolutionPolicy and returns the value scaled to the RenderTargets coordinates
 		/// </summary>
 		/// <value>The scaled mouse position.</value>
