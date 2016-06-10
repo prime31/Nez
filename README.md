@@ -8,6 +8,7 @@ Nez aims to be a lightweight 2D framework that sits on top of MonoGame/FNA. It p
 - efficient coroutines for breaking up large tasks across multiple frames or animation timing (Core.startCoroutine)
 - in-game debug console extendable by adding an attribute to any static method. Just press the tilde key like in the old days with Quake. Out of the box, it includes a visual physics debugging system, asset tracker, basic profiler and more. Just type 'help' to see all the commands or type 'help COMMAND' to see specific hints.
 - extensible rendering system. Add/remove renderers and post processors as needed.
+- pathfinding support via Astar and Breadth First Search
 - deferred lighting engine with normal map support
 - tween system. Tween any int/float/Vector/quaternion/color/rectangle field or property.
 - sprites with sprite animations, scrolling sprites and repeating sprites
@@ -26,13 +27,6 @@ You can find the samples repo [here](https://github.com/prime31/Nez-Samples). It
 
 
 
-IMPORTANT: READ THIS FIRST
-==========
-
-Nez is a very young beast and should be considered pre-alpha. There will without a doubt be bugs present. Some things might not be implemented. Some things might be incomplete.
-
-
-
 Nez Systems
 ==========
 
@@ -43,6 +37,7 @@ There are various systems documented separately in the FAQs folder. They go into
 - [Rendering](FAQs/Rendering.md)
 - [Content Management](FAQs/ContentManagement.md)
 - [Physics/Collisions](FAQs/Physics.md)
+- [Pathfinding](FAQs/Pathfinding.md)
 - [Entity Processing Systems](FAQs/EntitySystems.md)
 - [Nez.UI](FAQs/UI.md)
 - [AI (FSM, Behavior Tree, GOAP, Utility AI)](FAQs/AI.md)

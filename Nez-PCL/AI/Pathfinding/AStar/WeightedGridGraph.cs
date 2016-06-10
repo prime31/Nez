@@ -25,6 +25,7 @@ namespace Nez.AI.Pathfinding
 		public int weightedNodeWeight = 5;
 
 		int _width, _height;
+		List<Point> _neighbors = new List<Point>( 4 );
 
 
 		public WeightedGridGraph( int width, int height )
@@ -91,12 +92,16 @@ namespace Nez.AI.Pathfinding
 
 		IEnumerable<Point> IWeightedGraph<Point>.getNeighbors( Point node )
 		{
+			_neighbors.Clear();
+
 			foreach( var dir in DIRS )
 			{
 				var next = new Point( node.X + dir.X, node.Y + dir.Y );
 				if( isNodeInBounds( next ) && isNodePassable( next ) )
-					yield return next;
+					_neighbors.Add( next );
 			}
+
+			return _neighbors;
 		}
 
 
