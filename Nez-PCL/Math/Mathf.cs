@@ -224,24 +224,69 @@ namespace Nez
 		}
 
 
+		/// <summary>
+		/// moves start towards end by shift amount clamping the result. start can be less than or greater than end.
+		/// example: start is 2, end is 10, shift is 4 results in 6
+		/// </summary>
+		/// <param name="start">Start.</param>
+		/// <param name="end">End.</param>
+		/// <param name="shift">Shift.</param>
+		public static float approach( float start, float end, float shift )
+		{
+			if( start < end )
+				return Math.Min( start + shift, end );
+			return Math.Max( start - shift, end );
+		}
+
+
+		/// <summary>
+		/// returns the minimum of the passed in values
+		/// </summary>
+		/// <returns>The of.</returns>
+		/// <param name="a">The alpha component.</param>
+		/// <param name="b">The blue component.</param>
+		/// <param name="c">C.</param>
 		public static float minOf( float a, float b, float c )
 		{
 			return Math.Min( a, Math.Min( b, c ) );
 		}
 
 
+		/// <summary>
+		/// returns the maximum of the passed in values
+		/// </summary>
+		/// <returns>The of.</returns>
+		/// <param name="a">The alpha component.</param>
+		/// <param name="b">The blue component.</param>
+		/// <param name="c">C.</param>
 		public static float maxOf( float a, float b, float c )
 		{
 			return Math.Max( a, Math.Max( b, c ) );
 		}
 
 
+		/// <summary>
+		/// returns the minimum of the passed in values
+		/// </summary>
+		/// <returns>The of.</returns>
+		/// <param name="a">The alpha component.</param>
+		/// <param name="b">The blue component.</param>
+		/// <param name="c">C.</param>
+		/// <param name="d">D.</param>
 		public static float minOf( float a, float b, float c, float d )
 		{
 			return Math.Min( a, Math.Min( b, Math.Min( c, d ) ) );
 		}
 
 
+		/// <summary>
+		/// returns the maximum of the passed in values
+		/// </summary>
+		/// <returns>The of.</returns>
+		/// <param name="a">The alpha component.</param>
+		/// <param name="b">The blue component.</param>
+		/// <param name="c">C.</param>
+		/// <param name="d">D.</param>
 		public static float maxOf( float a, float b, float c, float d )
 		{
 			return Math.Max( a, Math.Max( b, Math.Max( c, d ) ) );
@@ -374,6 +419,19 @@ namespace Nez
 		public static bool withinEpsilon( float floatA, float floatB )
 		{
 			return Math.Abs( floatA - floatB ) < epsilon;
+		}
+
+
+		public static int closestPowerOfTwoGreaterThan( int x )
+		{
+			x--;
+			x |= ( x >> 1 );
+			x |= ( x >> 2 );
+			x |= ( x >> 4 );
+			x |= ( x >> 8 );
+			x |= ( x >> 16 );
+
+			return ( x + 1 );
 		}
 
 

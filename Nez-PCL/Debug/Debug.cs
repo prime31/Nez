@@ -254,6 +254,22 @@ namespace Nez
 			System.Diagnostics.Debugger.Break();
 		}
 
+
+		/// <summary>
+		/// times how long an Action takes to run and returns the TimeSpan
+		/// </summary>
+		/// <returns>The action.</returns>
+		/// <param name="action">Action.</param>
+		public static TimeSpan timeAction( Action action )
+		{
+			var stopwatch = new Stopwatch();
+			stopwatch.Start();
+			action();
+			stopwatch.Stop();
+
+			return stopwatch.Elapsed;
+		}
+
 	}
 }
 
