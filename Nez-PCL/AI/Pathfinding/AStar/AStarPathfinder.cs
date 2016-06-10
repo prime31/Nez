@@ -1,0 +1,81 @@
+﻿using System;
+using System.Collections.Generic;
+using Microsoft.Xna.Framework;
+
+
+namespace Nez.AI.Pathfinding
+{
+	/// <summary>
+	/// calculates paths given an IWeightedGraph and start/goal positions
+	/// </summary>
+	public static class AStarPathfinder
+	{
+		class AStarNode<T> : PriorityQueueNode
+		{
+			public T data;
+
+			public AStarNode( T data )
+			{
+				this.data = data;
+			}
+		}
+
+
+		public static List<T> search<T>( IWeightedGraph<T> graph, T start, T goal )
+		{
+			var foundPath = false;
+			var cameFrom = new Dictionary<T,T>();
+			cameFrom.Add( start, start );
+
+			Dictionary<T,int> costSoFar = new Dictionary<T,int>();
+			var frontier = new PriorityQueue<AStarNode<T>>( 1000 );
+			frontier.Enqueue( new AStarNode<T>( start ), 0 );
+
+			costSoFar[start] = 0;
+
+			while( frontier.Count > 0 )
+			{
+				var current = frontier.Dequeue();
+
+				if( current.data.Equals( goal ) )
+				{
+					foundPath = true;
+					break;
+				}
+
+				foreach( var next in graph.getNeighbors( current.data ) )
+				{
+					var newCost = costSoFar[current.data] + graph.cost( current.data, next );
+					if( !costSoFar.ContainsKey( next ) || newCost < costSoFar[next] )
+					{
+						costSoFar[next] = newCost;
+						var priority = newCost + graph.heuristic( next, goal );
+						frontier.Enqueue( new AStarNode<T>( next ), priority );
+						cameFrom[next] = current.data;
+					}
+				}
+			}
+
+			return foundPath ? recontructPath( cameFrom, start, goal ) : null;
+		}
+
+
+		public static List<T> recontructPath<T>( Dictionary<T,T> cameFrom, T start, T goal )
+		{
+			var path = new List<T>();
+			var current = goal;
+			path.Add( goal );
+
+			while( !current.Equals( start ) )
+			{
+				current = cameFrom[current];
+				path.Add( current );
+			}
+			path.Reverse();
+
+			return path;
+		}
+
+	}
+}
+

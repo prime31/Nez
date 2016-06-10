@@ -77,6 +77,10 @@
     <Folder Include="AI\GOAP\" />
     <Folder Include="Graphics\Renderers\Reflections\" />
     <Folder Include="Utils\Fonts\" />
+    <Folder Include="Utils\Collections\" />
+    <Folder Include="AI\Pathfinding\" />
+    <Folder Include="AI\Pathfinding\BreadthFirst\" />
+    <Folder Include="AI\Pathfinding\AStar\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Debug\Debug.cs" />
@@ -419,6 +423,18 @@
     <Compile Include="Graphics\Transitions\TextureWipeTransition.cs" />
     <Compile Include="Graphics\Textures\GaussianBlur.cs" />
     <Compile Include="Graphics\Textures\TextureUtils.cs" />
+    <Compile Include="Utils\Collections\IPriorityQueue.cs" />
+    <Compile Include="Utils\Collections\SimplePriorityQueue.cs" />
+    <Compile Include="Utils\Collections\Deque.cs" />
+    <Compile Include="Utils\Collections\PriorityQueueNode.cs" />
+    <Compile Include="Utils\Collections\PriorityQueue.cs" />
+    <Compile Include="AI\Pathfinding\AStar\IWeightedGraph.cs" />
+    <Compile Include="AI\Pathfinding\BreadthFirst\BreadthFirstPathfinder.cs" />
+    <Compile Include="AI\Pathfinding\AStar\WeightedGridGraph.cs" />
+    <Compile Include="AI\Pathfinding\BreadthFirst\IUnweightedGraph.cs" />
+    <Compile Include="AI\Pathfinding\AStar\AStarPathfinder.cs" />
+    <Compile Include="AI\Pathfinding\BreadthFirst\UnweightedGraph.cs" />
+    <Compile Include="AI\Pathfinding\BreadthFirst\UnweightedGridGraph.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="MonoGame.Framework">
