@@ -22,6 +22,7 @@ namespace Nez.AI.Pathfinding
 		public HashSet<Point> walls = new HashSet<Point>();
 
 		int _width, _height;
+		List<Point> _neighbors = new List<Point>( 4 );
 
 
 		public UnweightedGridGraph( int width, int height )
@@ -61,12 +62,16 @@ namespace Nez.AI.Pathfinding
 
 		IEnumerable<Point> IUnweightedGraph<Point>.getNeighbors( Point node )
 		{
+			_neighbors.Clear();
+
 			foreach( var dir in DIRS )
 			{
 				var next = new Point( node.X + dir.X, node.Y + dir.Y );
 				if( isNodeInBounds( next ) && isNodePassable( next ) )
-					yield return next;
+					_neighbors.Add( next );
 			}
+
+			return _neighbors;
 		}
 	
 

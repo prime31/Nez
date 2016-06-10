@@ -260,12 +260,17 @@ namespace Nez
 		/// </summary>
 		/// <returns>The action.</returns>
 		/// <param name="action">Action.</param>
-		public static TimeSpan timeAction( Action action )
+		public static TimeSpan timeAction( Action action, uint numberOfIterations = 1 )
 		{
 			var stopwatch = new Stopwatch();
 			stopwatch.Start();
-			action();
+
+			for( var i = 0; i < numberOfIterations; i++ )
+				action();
 			stopwatch.Stop();
+
+			if( numberOfIterations > 1 )
+				return TimeSpan.FromTicks( stopwatch.Elapsed.Ticks / numberOfIterations );
 
 			return stopwatch.Elapsed;
 		}
