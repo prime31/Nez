@@ -118,6 +118,26 @@ namespace Nez
 
 			return duration < 0f;
 		}
+
+
+		public float getHeight()
+		{
+			switch( drawType )
+			{
+				case DebugDrawType.Line:
+					return ( end - start ).Y;
+				case DebugDrawType.HollowRectangle:
+					return rectangle.Height;
+				case DebugDrawType.BitmapFontText:
+				case DebugDrawType.ConsoleText:
+					return bitmapFont.measureString( text ).Y * scale;
+				case DebugDrawType.SpriteFontText:
+					return spriteFont.measureString( text ).Y * scale;
+			}
+
+			return 0;
+		}
+
 	}
 }
 

@@ -124,6 +124,8 @@ namespace Nez
 
 		#region Drawing
 
+		public static bool drawTextFromBottom = false;
+
 		static List<DebugDrawItem> _debugDrawItems = new List<DebugDrawItem>();
 		static List<DebugDrawItem> _screenSpaceDebugDrawItems = new List<DebugDrawItem>();
 
@@ -149,18 +151,26 @@ namespace Nez
 
 			if( _screenSpaceDebugDrawItems.Count > 0 )
 			{
-				var pos = Vector2.Zero;
+				var pos = drawTextFromBottom ? new Vector2( 0, Core.scene.sceneRenderTargetSize.Y ) : Vector2.Zero;
 				Graphics.instance.batcher.begin();
 
 				for( var i = _screenSpaceDebugDrawItems.Count - 1; i >= 0; i-- )
 				{
 					var item = _screenSpaceDebugDrawItems[i];
-					item.position = pos;
-					var itemHeight = item.bitmapFont.lineHeight * item.scale;
+					var itemHeight = item.getHeight();
+
+					if( drawTextFromBottom )
+						item.position = pos - new Vector2( 0, itemHeight );
+					else
+						item.position = pos;
+					
 					if( item.draw( Graphics.instance ) )
 						_screenSpaceDebugDrawItems.RemoveAt( i );
 
-					pos.Y += itemHeight;
+					if( drawTextFromBottom )
+						pos.Y -= itemHeight;
+					else
+						pos.Y += itemHeight;
 				}
 
 				Graphics.instance.batcher.end();
