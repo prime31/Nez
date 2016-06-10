@@ -34,6 +34,10 @@ namespace Nez.AI.Pathfinding
 		}
 
 
+		/// <summary>
+		/// creates a WeightedGridGraph from a TiledTileLayer. Present tile are walls and empty tiles are passable.
+		/// </summary>
+		/// <param name="tiledLayer">Tiled layer.</param>
 		public WeightedGridGraph( TiledTileLayer tiledLayer )
 		{
 			_width = tiledLayer.width;
@@ -50,18 +54,33 @@ namespace Nez.AI.Pathfinding
 		}
 
 
+		/// <summary>
+		/// ensures the node is in the bounds of the grid graph
+		/// </summary>
+		/// <returns><c>true</c>, if node in bounds was ised, <c>false</c> otherwise.</returns>
+		/// <param name="node">Node.</param>
 		bool isNodeInBounds( Point node )
 		{
 			return 0 <= node.X && node.X < _width && 0 <= node.Y && node.Y < _height;
 		}
 
 
+		/// <summary>
+		/// checks if the node is passable. Walls are impassable.
+		/// </summary>
+		/// <returns><c>true</c>, if node passable was ised, <c>false</c> otherwise.</returns>
+		/// <param name="node">Node.</param>
 		bool isNodePassable( Point node )
 		{
 			return !walls.Contains( node );
 		}
 
 
+		/// <summary>
+		/// convenience shortcut for calling AStarPathfinder.search
+		/// </summary>
+		/// <param name="start">Start.</param>
+		/// <param name="goal">Goal.</param>
 		public List<Point> search( Point start, Point goal )
 		{
 			return AStarPathfinder.search( this, start, goal );

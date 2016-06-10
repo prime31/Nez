@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using Microsoft.Xna.Framework;
 
 
 namespace Nez.AI.Pathfinding
@@ -21,6 +20,13 @@ namespace Nez.AI.Pathfinding
 		}
 
 
+		/// <summary>
+		/// gets a path from start to goal if possible. If no path is found null is returned.
+		/// </summary>
+		/// <param name="graph">Graph.</param>
+		/// <param name="start">Start.</param>
+		/// <param name="goal">Goal.</param>
+		/// <typeparam name="T">The 1st type parameter.</typeparam>
 		public static List<T> search<T>( IWeightedGraph<T> graph, T start, T goal )
 		{
 			var foundPath = false;
@@ -60,6 +66,14 @@ namespace Nez.AI.Pathfinding
 		}
 
 
+		/// <summary>
+		/// reconstructs a path from the cameFrom Dictionary
+		/// </summary>
+		/// <returns>The path.</returns>
+		/// <param name="cameFrom">Came from.</param>
+		/// <param name="start">Start.</param>
+		/// <param name="goal">Goal.</param>
+		/// <typeparam name="T">The 1st type parameter.</typeparam>
 		public static List<T> recontructPath<T>( Dictionary<T,T> cameFrom, T start, T goal )
 		{
 			var path = new List<T>();
