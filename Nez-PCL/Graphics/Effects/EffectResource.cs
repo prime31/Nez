@@ -1,8 +1,10 @@
-﻿using System;
+﻿#define NETFX_CORE
+using System;
 using System.IO;
 using Microsoft.Xna.Framework;
 
-#if WINRT
+
+#if NETFX_CORE
 using System.Reflection;
 #endif
 
@@ -55,8 +57,8 @@ namespace Nez
 		/// <param name="name">Name.</param>
 		static byte[] getEmbeddedResourceBytes( string name )
 		{
-			#if WINRT
-			var assembly = typeof(EffectResource).GetTypeInfo().Assembly;
+			#if NETFX_CORE
+			var assembly = typeof( EffectResource ).GetTypeInfo().Assembly;
 			#else
 			var assembly = typeof( EffectResource ).Assembly;
 			#endif
@@ -74,7 +76,7 @@ namespace Nez
 
 		internal static byte[] getMonoGameEmbeddedResourceBytes( string name )
 		{
-			#if WINRT
+			#if NETFX_CORE
 			var assembly = typeof( MathHelper ).GetTypeInfo().Assembly;
 			#else
 			var assembly = typeof( MathHelper ).Assembly;

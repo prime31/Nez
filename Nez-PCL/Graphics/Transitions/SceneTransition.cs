@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework.Graphics;
 using System.Collections;
 using System.Threading;
 using Nez.Tweens;
+using System.Threading.Tasks;
 
 
 namespace Nez
@@ -73,18 +74,18 @@ namespace Nez
 			if( loadSceneOnBackgroundThread )
 			{
 				// load the Scene on a background thread
-				ThreadPool.QueueUserWorkItem( context =>
+				var syncContext = SynchronizationContext.Current;
+				Task.Run( () =>
 				{
 					var scene = sceneLoadAction();
 
 					// get back to the main thread before setting the new Scene active
-					var syncContext = context as SynchronizationContext;
 					syncContext.Post( d =>
 					{
 						Core.scene = scene;
 						_isNewSceneLoaded = true;
 					}, null );
-				}, SynchronizationContext.Current );
+				} );
 			}
 			else
 			{

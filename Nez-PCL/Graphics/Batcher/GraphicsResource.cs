@@ -96,12 +96,7 @@ namespace Nez
 		void updateResourceReference( bool shouldAdd )
 		{
 			var method = shouldAdd ? "AddResourceReference" : "RemoveResourceReference";
-			#if NETFX_CORE
-			var methodInfo = targetObject.GetType().GetRuntimeMethod( method );
-			#else
-			var methodInfo = graphicsDevice.GetType().GetMethod( method, BindingFlags.Instance | BindingFlags.NonPublic );
-			#endif
-
+			var methodInfo = ReflectionUtils.getMethodInfo( graphicsDevice, method );
 			methodInfo.Invoke( graphicsDevice, new object[] { _selfReference } );
 		}
 

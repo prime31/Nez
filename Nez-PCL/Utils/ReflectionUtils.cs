@@ -1,4 +1,5 @@
-﻿using System;
+﻿#define NETFX_CORE
+using System;
 using System.Reflection;
 
 
@@ -9,15 +10,27 @@ namespace Nez
 	/// </summary>
 	class ReflectionUtils
 	{
-		public static FieldInfo getFieldInfo<T>( System.Object targetObject, string fieldName )
+		public static FieldInfo getFieldInfo( System.Object targetObject, string fieldName )
 		{
 			FieldInfo fieldInfo = null;
 			var type = targetObject.GetType();
+
+			#if NETFX_CORE
+			foreach( var fi in type.GetRuntimeFields() )
+			{
+				if( fi.Name == fieldName )
+				{
+					fieldInfo = fi;
+					break;
+				}
+			}
+			#else
 			do
 			{
 				fieldInfo = type.GetField( fieldName, BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic );
 				type = type.BaseType;
 			} while ( fieldInfo == null && type != null );
+			#endif
 
 			return fieldInfo;
 		}
@@ -36,7 +49,10 @@ namespace Nez
 		public static MethodInfo getMethodInfo( System.Object targetObject, string methodName )
 		{
 			#if NETFX_CORE
-			return targetObject.GetType().GetRuntimeMethod( propertyName );
+			foreach( var method in targetObject.GetType().GetRuntimeMethods() )
+				if( method.Name == methodName )
+					return method;
+			return null;
 			#else
 			return targetObject.GetType().GetMethod( methodName, BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public );
 			#endif
@@ -46,8 +62,7 @@ namespace Nez
 		public static T createDelegate<T>( System.Object targetObject, MethodInfo methodInfo )
 		{
 			#if NETFX_CORE
-			// Windows Phone/Store new API
-			throw NotImplementedException();
+			return (T)(object)methodInfo.CreateDelegate( typeof( T ), targetObject );
 			#else
 			return (T)(object)Delegate.CreateDelegate( typeof( T ), targetObject, methodInfo );
 			#endif
@@ -65,7 +80,7 @@ namespace Nez
 			if( propInfo == null )
 				return default(T);
 
-			return createDelegate<T>( targetObject, propInfo.GetSetMethod( true ) );
+			return createDelegate<T>( targetObject, propInfo.SetMethod );
 		}
 
 
@@ -80,7 +95,7 @@ namespace Nez
 			if( propInfo == null )
 				return default(T);
 
-			return createDelegate<T>( targetObject, propInfo.GetGetMethod( true ) );
+			return createDelegate<T>( targetObject, propInfo.SetMethod );
 		}
 
 	}

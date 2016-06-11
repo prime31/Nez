@@ -7,6 +7,7 @@ using Microsoft.Xna.Framework;
 using System.Text.RegularExpressions;
 using Nez.BitmapFonts;
 using Microsoft.Xna.Framework.Graphics;
+using System.Linq;
 
 
 namespace Nez.Console
@@ -564,26 +565,31 @@ namespace Nez.Console
 
 		void buildCommandsList()
 		{
-			// Check executing assembly for Commands
-			foreach( var type in Assembly.GetExecutingAssembly().GetTypes() )
-				foreach( var method in type.GetMethods( BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic ) )
-					processMethod( method );
+			// this will get us the Nez assembly
+			processAssembly( typeof( DebugConsole ).GetTypeInfo().Assembly );
 
-			// Check the calling assembly for Commands
-			foreach( var type in Assembly.GetCallingAssembly().GetTypes() )
-				foreach( var method in type.GetMethods( BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic ) )
-					processMethod( method );
+			// this will get us the current executables assembly in 99.9% of cases
+			// for now we will let the next section handle loading this. If it doesnt work out we'll uncomment this
+			//processAssembly( Core._instance.GetType().GetTypeInfo().Assembly );
 
 			try
 			{
-				var currentdomain = typeof( string ).Assembly.GetType( "System.AppDomain" ).GetProperty( "CurrentDomain" ).GetGetMethod().Invoke( null, new object[] { } );
-				var getassemblies = currentdomain.GetType().GetMethod( "GetAssemblies", new Type[]{ } );
-				var assemblies = getassemblies.Invoke( currentdomain, new object[]{ } ) as Assembly[];
+				// this is a nasty hack that lets us get at all the assemblies. It is only allowed to exist because this will never get
+				// hit in a release build.
+				var appDomainType = typeof( string ).GetTypeInfo().Assembly.GetType( "System.AppDomain" );
+				var domain = appDomainType.GetRuntimeProperty( "CurrentDomain" ).GetMethod.Invoke( null, new object[]{} );
+				var assembliesMethod = ReflectionUtils.getMethodInfo( domain, "GetAssemblies" );
+				var assemblies = assembliesMethod.Invoke( domain, new object[]{ false } ) as Assembly[];
 
+				var ignoredAssemblies = new string[] { "mscorlib", "MonoMac", "MonoGame.Framework", "Mono.Security", "System", "OpenTK", "ObjCImplementations", "Nez" };
 				foreach( var assembly in assemblies )
-					foreach( var type in assembly.GetTypes() )
-						foreach( var method in type.GetMethods( BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic ) )
-							processMethod( method );
+				{
+					var name = assembly.GetName().Name;
+					if( name.StartsWith( "System." ) || ignoredAssemblies.contains( name ) )
+						continue;
+
+					processAssembly( assembly );
+				}
 			}
 			catch( Exception e )
 			{
@@ -598,97 +604,114 @@ namespace Nez.Console
 		}
 
 
-		void processMethod( MethodInfo method )
+		void processAssembly( Assembly assembly )
 		{
-			CommandAttribute attr = null;
+			foreach( var type in assembly.DefinedTypes )
 			{
-				var attrs = method.GetCustomAttributes( typeof( CommandAttribute ), false );
-				if( attrs.Length > 0 )
-					attr = attrs[0] as CommandAttribute;
-			}
-
-			if( attr != null )
-			{
-				if( !method.IsStatic )
-					throw new Exception( method.DeclaringType.Name + "." + method.Name + " is marked as a command, but is not static" );
-				else
+				foreach( var method in type.DeclaredMethods )
 				{
-					CommandInfo info = new CommandInfo();
-					info.help = attr.help;  
+					CommandAttribute attr = null;
+					var attrs = method.GetCustomAttributes( typeof( CommandAttribute ), false )
+						.Where( a => a is CommandAttribute );
+					if( attrs.count() > 0 )
+						attr = attrs.First() as CommandAttribute;
 
-					var parameters = method.GetParameters();
-					var defaults = new object[parameters.Length];                 
-					string[] usage = new string[parameters.Length];
-
-					for( int i = 0; i < parameters.Length; i++ )
-					{                       
-						var p = parameters[i];
-						usage[i] = p.Name + ":";
-
-						if( p.ParameterType == typeof( string ) )
-							usage[i] += "string";
-						else if( p.ParameterType == typeof( int ) )
-							usage[i] += "int";
-						else if( p.ParameterType == typeof( float ) )
-							usage[i] += "float";
-						else if( p.ParameterType == typeof( bool ) )
-							usage[i] += "bool";
-						else
-							throw new Exception( method.DeclaringType.Name + "." + method.Name + " is marked as a command, but has an invalid parameter type. Allowed types are: string, int, float, and bool" );
-
-						// no System.DBNull in PCL so we fake it
-						if( p.DefaultValue.GetType().FullName == "System.DBNull" )
-							defaults[i] = null;
-						else if( p.DefaultValue != null )
-						{
-							defaults[i] = p.DefaultValue;
-							if( p.ParameterType == typeof( string ) )
-								usage[i] += "=\"" + p.DefaultValue.ToString() + "\"";
-							else
-								usage[i] += "=" + p.DefaultValue.ToString();
-						}
-						else
-							defaults[i] = null;
-					}
-
-					if( usage.Length == 0 )
-						info.usage = "";
-					else
-						info.usage = "[" + string.Join( " ", usage ) + "]";
-
-					info.action = (args ) =>
-					{
-						if( parameters.Length == 0 )
-							method.Invoke( null, null );
-						else
-						{
-							object[] param = (object[])defaults.Clone();
-
-							for( int i = 0; i < param.Length && i < args.Length; i++ )
-							{
-								if( parameters[i].ParameterType == typeof( string ) )
-									param[i] = argString( args[i] );
-								else if( parameters[i].ParameterType == typeof( int ) )
-									param[i] = argInt( args[i] );
-								else if( parameters[i].ParameterType == typeof( float ) )
-									param[i] = argFloat( args[i] );
-								else if( parameters[i].ParameterType == typeof( bool ) )
-									param[i] = argBool( args[i] );
-							}
-
-							try
-							{
-								method.Invoke( null, param );
-							}
-							catch( Exception e )
-							{
-								log( e );
-							}
-						}
-					};
-
-					_commands[attr.name] = info;
+					if( attr != null )
+						processMethod( method, attr );
 				}
+			}
+		}
+
+
+		void processMethod( MethodInfo method, CommandAttribute attr )
+		{
+			if( !method.IsStatic )
+			{
+				throw new Exception( method.DeclaringType.Name + "." + method.Name + " is marked as a command, but is not static" );
+			}
+			else
+			{
+				var info = new CommandInfo();
+				info.help = attr.help;  
+
+				var parameters = method.GetParameters();
+				var defaults = new object[parameters.Length];                 
+				var usage = new string[parameters.Length];
+
+				for( var i = 0; i < parameters.Length; i++ )
+				{                       
+					var p = parameters[i];
+					usage[i] = p.Name + ":";
+
+					if( p.ParameterType == typeof( string ) )
+						usage[i] += "string";
+					else if( p.ParameterType == typeof( int ) )
+						usage[i] += "int";
+					else if( p.ParameterType == typeof( float ) )
+						usage[i] += "float";
+					else if( p.ParameterType == typeof( bool ) )
+						usage[i] += "bool";
+					else
+						throw new Exception( method.DeclaringType.Name + "." + method.Name + " is marked as a command, but has an invalid parameter type. Allowed types are: string, int, float, and bool" );
+
+					// no System.DBNull in PCL so we fake it
+					if( p.DefaultValue.GetType().FullName == "System.DBNull" )
+					{
+						defaults[i] = null;
+					}
+					else if( p.DefaultValue != null )
+					{
+						defaults[i] = p.DefaultValue;
+						if( p.ParameterType == typeof( string ) )
+							usage[i] += "=\"" + p.DefaultValue.ToString() + "\"";
+						else
+							usage[i] += "=" + p.DefaultValue.ToString();
+					}
+					else
+					{
+						defaults[i] = null;
+					}
+				}
+
+				if( usage.Length == 0 )
+					info.usage = "";
+				else
+					info.usage = "[" + string.Join( " ", usage ) + "]";
+
+				info.action = args =>
+				{
+					if( parameters.Length == 0 )
+					{
+						method.Invoke( null, null );
+					}
+					else
+					{
+						var param = (object[])defaults.Clone();
+
+						for( var i = 0; i < param.Length && i < args.Length; i++ )
+						{
+							if( parameters[i].ParameterType == typeof( string ) )
+								param[i] = argString( args[i] );
+							else if( parameters[i].ParameterType == typeof( int ) )
+								param[i] = argInt( args[i] );
+							else if( parameters[i].ParameterType == typeof( float ) )
+								param[i] = argFloat( args[i] );
+							else if( parameters[i].ParameterType == typeof( bool ) )
+								param[i] = argBool( args[i] );
+						}
+
+						try
+						{
+							method.Invoke( null, param );
+						}
+						catch( Exception e )
+						{
+							log( e );
+						}
+					}
+				};
+
+				_commands[attr.name] = info;
 			}
 		}
 

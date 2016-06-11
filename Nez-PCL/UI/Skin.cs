@@ -164,11 +164,11 @@ namespace Nez.UI
 								// fontColor so we'll check for font after color.
 								if( name.ToLower().Contains( "color" ) )
 								{
-									type.GetField( name ).SetValue( style, getColor( identifier ) );
+									ReflectionUtils.getFieldInfo( style, name ).SetValue( style, getColor( identifier ) );
 								}
 								else if( name.ToLower().Contains( "font" ) )
 								{
-									type.GetField( name ).SetValue( style, contentManager.Load<BitmapFont>( identifier ) );
+									ReflectionUtils.getFieldInfo( style, name ).SetValue( style, contentManager.Load<BitmapFont>( identifier ) );
 								}
 								else
 								{
@@ -176,7 +176,7 @@ namespace Nez.UI
 									// identifier is a color
 									var drawable = getDrawable( identifier );
 									if( drawable != null )
-										type.GetField( name ).SetValue( style, drawable );
+										ReflectionUtils.getFieldInfo( style, name ).SetValue( style, drawable );
 									else
 										Debug.error( "could not find a drawable or color named {0} when setting {1} on {2}", identifier, name, styleNames[j] );
 								}

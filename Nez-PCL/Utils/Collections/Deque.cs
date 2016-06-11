@@ -62,7 +62,7 @@ namespace System.Collections.Generic
 		/// from the specified collection.
 		/// </summary>
 		/// <param name="collection">The co</param>
-		public Deque( IEnumerable<T> collection ) : this( countCollection( collection ) )
+		public Deque( IEnumerable<T> collection ) : this( collection.count() )
 		{
 			InsertRange( 0, collection );
 		}
@@ -568,12 +568,10 @@ namespace System.Collections.Generic
 		public T RemoveBack()
 		{
 			if( this.IsEmpty )
-			{
 				throw new InvalidOperationException( "The Deque is empty" );
-			}
 
 			decrementCount( 1 );
-			int endIndex = toBufferIndex( this.Count );
+			var endIndex = toBufferIndex( this.Count );
 			T result = buffer[endIndex];
 			buffer[endIndex] = default(T);
 
@@ -595,7 +593,7 @@ namespace System.Collections.Generic
 		/// <param name="collection">The collection to add.</param>
 		public void AddFrontRange( IEnumerable<T> collection )
 		{
-			AddFrontRange( collection, 0, countCollection( collection ) );
+			AddFrontRange( collection, 0, collection.count() );
 		}
 
 		/// <summary>
@@ -609,10 +607,7 @@ namespace System.Collections.Generic
 		/// <param name="count">
 		/// The number of items in the collection to add.
 		/// </param>
-		public void AddFrontRange(
-			IEnumerable<T> collection,
-			int fromIndex,
-			int count )
+		public void AddFrontRange( IEnumerable<T> collection, int fromIndex, int count )
 		{
 			InsertRange( 0, collection, fromIndex, count );
 		}
@@ -623,7 +618,7 @@ namespace System.Collections.Generic
 		/// <param name="collection">The collection to add.</param>
 		public void AddBackRange( IEnumerable<T> collection )
 		{
-			AddBackRange( collection, 0, countCollection( collection ) );
+			AddBackRange( collection, 0, collection.count() );
 		}
 
 		/// <summary>
@@ -652,7 +647,7 @@ namespace System.Collections.Generic
 		/// <param name="collection">The collection to add.</param>
 		public void InsertRange( int index, IEnumerable<T> collection )
 		{
-			var count = countCollection( collection );
+			var count = collection.count();
 			this.InsertRange( index, collection, 0, count );
 		}
 
@@ -831,49 +826,6 @@ namespace System.Collections.Generic
 		{
 			checkIndexOutOfRange( index );
 			buffer[toBufferIndex( index )] = item;
-		}
-
-
-		/// <summary>
-		/// Jon Skeet's excellent reimplementation of LINQ Count.
-		/// </summary>
-		/// <typeparam name="TSource">The source type.</typeparam>
-		/// <param name="source">The source IEnumerable.</param>
-		/// <returns>The number of items in the source.</returns>
-		public static int countCollection<TSource>( IEnumerable<TSource> source )
-		{
-			if( source == null )
-			{
-				throw new ArgumentNullException( "source" );
-			}
-
-			// Optimization for ICollection<T> 
-			ICollection<TSource> genericCollection = source as ICollection<TSource>;
-			if( genericCollection != null )
-			{
-				return genericCollection.Count;
-			}
-
-			// Optimization for ICollection 
-			ICollection nonGenericCollection = source as ICollection;
-			if( nonGenericCollection != null )
-			{
-				return nonGenericCollection.Count;
-			}
-
-			// Do it the slow way - and make sure we overflow appropriately 
-			checked
-			{
-				int count = 0;
-				using( var iterator = source.GetEnumerator() )
-				{
-					while( iterator.MoveNext() )
-					{
-						count++;
-					}
-				}
-				return count;
-			}
 		}
 
 	}

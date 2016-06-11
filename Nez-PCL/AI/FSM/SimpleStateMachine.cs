@@ -12,7 +12,7 @@ namespace Nez.AI.FSM
 	/// Note: if you use an enum as the contraint you can avoid allocations/boxing in Mono by doing what the Core
 	/// Emitter does for its enum: pass in a IEqualityComparer to the constructor.
 	/// </summary>
-	public class SimpleStateMachine<TEnum> : Component, IUpdatable where TEnum : struct, IConvertible, IComparable, IFormattable
+	public class SimpleStateMachine<TEnum> : Component, IUpdatable where TEnum : struct, IComparable, IFormattable
 	{
 		class StateMethodCache
 		{

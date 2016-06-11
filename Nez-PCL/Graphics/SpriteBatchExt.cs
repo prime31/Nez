@@ -14,12 +14,7 @@ namespace Nez
 
 		public static Matrix getSpriteBatchMatrix( this SpriteBatch spriteBatch )
 		{
-			#if NETFX_CORE
-			var fieldInfo = targetObject.GetType().GetRuntimeField( "_matrix" );
-			#else
-			var fieldInfo = spriteBatch.GetType().GetField( "_matrix", BindingFlags.Instance | BindingFlags.NonPublic );
-			#endif
-
+			var fieldInfo = ReflectionUtils.getFieldInfo( spriteBatch, "_matrix" );
 			return (Matrix)fieldInfo.GetValue( spriteBatch );
 		}
 

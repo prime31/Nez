@@ -35,6 +35,7 @@ namespace System.Collections.Generic
 			_numNodesEverEnqueued = 0;
 		}
 
+
 		/// <summary>
 		/// Returns the number of nodes in the queue.
 		/// O(1)
@@ -46,6 +47,7 @@ namespace System.Collections.Generic
 				return _numNodes;
 			}
 		}
+
 
 		/// <summary>
 		/// Returns the maximum number of items that can be enqueued at once in this queue.  Once you hit this number (ie. once Count == MaxSize),
@@ -59,25 +61,23 @@ namespace System.Collections.Generic
 			}
 		}
 
+
 		/// <summary>
 		/// Removes every node from the queue.
 		/// O(n) (So, don't do this often!)
 		/// </summary>
-		#if NET_VERSION_4_5
 		[MethodImpl( MethodImplOptions.AggressiveInlining )]
-		#endif
 		public void Clear()
 		{
 			Array.Clear( _nodes, 1, _numNodes );
 			_numNodes = 0;
 		}
 
+
 		/// <summary>
 		/// Returns (in O(1)!) whether the given node is in the queue.  O(1)
 		/// </summary>
-		#if NET_VERSION_4_5
 		[MethodImpl( MethodImplOptions.AggressiveInlining )]
-		#endif
 		public bool Contains( T node )
 		{
 			#if DEBUG
@@ -94,15 +94,14 @@ namespace System.Collections.Generic
 			return ( _nodes[node.QueueIndex] == node );
 		}
 
+
 		/// <summary>
 		/// Enqueue a node to the priority queue.  Lower values are placed in front. Ties are broken by first-in-first-out.
 		/// If the queue is full, the result is undefined.
 		/// If the node is already enqueued, the result is undefined.
 		/// O(log n)
 		/// </summary>
-		#if NET_VERSION_4_5
 		[MethodImpl( MethodImplOptions.AggressiveInlining )]
-		#endif
 		public void Enqueue( T node, int priority )
 		{
 			#if DEBUG
@@ -127,10 +126,9 @@ namespace System.Collections.Generic
 			node.InsertionIndex = _numNodesEverEnqueued++;
 			CascadeUp( _nodes[_numNodes] );
 		}
+			
 
-		#if NET_VERSION_4_5
 		[MethodImpl( MethodImplOptions.AggressiveInlining )]
-		#endif
 		void Swap( T node1, T node2 )
 		{
 			//Swap the nodes
@@ -142,6 +140,7 @@ namespace System.Collections.Generic
 			node1.QueueIndex = node2.QueueIndex;
 			node2.QueueIndex = temp;
 		}
+
 
 		//Performance appears to be slightly better when this is NOT inlined o_O
 		void CascadeUp( T node )
@@ -161,9 +160,8 @@ namespace System.Collections.Generic
 			}
 		}
 
-		#if NET_VERSION_4_5
+
 		[MethodImpl( MethodImplOptions.AggressiveInlining )]
-		#endif
 		void CascadeDown( T node )
 		{
 			//aka Heapify-down
@@ -221,18 +219,18 @@ namespace System.Collections.Generic
 			}
 		}
 
+
 		/// <summary>
 		/// Returns true if 'higher' has higher priority than 'lower', false otherwise.
 		/// Note that calling HasHigherPriority(node, node) (ie. both arguments the same node) will return false
 		/// </summary>
-		#if NET_VERSION_4_5
 		[MethodImpl( MethodImplOptions.AggressiveInlining )]
-		#endif
 		bool HasHigherPriority( T higher, T lower )
 		{
 			return ( higher.Priority < lower.Priority ||
 			( higher.Priority == lower.Priority && higher.InsertionIndex < lower.InsertionIndex ) );
 		}
+
 
 		/// <summary>
 		/// Removes the head of the queue (node with minimum priority; ties are broken by order of insertion), and returns it.
@@ -258,6 +256,7 @@ namespace System.Collections.Generic
 			Remove( returnMe );
 			return returnMe;
 		}
+
 
 		/// <summary>
 		/// Resize the queue so it can accept more nodes.  All currently enqueued nodes are remain.
@@ -287,6 +286,7 @@ namespace System.Collections.Generic
 			_nodes = newArray;
 		}
 
+
 		/// <summary>
 		/// Returns the head of the queue, without removing it (use Dequeue() for that).
 		/// If the queue is empty, behavior is undefined.
@@ -307,15 +307,14 @@ namespace System.Collections.Generic
 			}
 		}
 
+
 		/// <summary>
 		/// This method must be called on a node every time its priority changes while it is in the queue.  
 		/// <b>Forgetting to call this method will result in a corrupted queue!</b>
 		/// Calling this method on a node not in the queue results in undefined behavior
 		/// O(log n)
 		/// </summary>
-		#if NET_VERSION_4_5
 		[MethodImpl( MethodImplOptions.AggressiveInlining )]
-		#endif
 		public void UpdatePriority( T node, int priority )
 		{
 			#if DEBUG
@@ -333,6 +332,7 @@ namespace System.Collections.Generic
 			OnNodeUpdated( node );
 		}
 
+
 		void OnNodeUpdated( T node )
 		{
 			//Bubble the updated node up or down as appropriate
@@ -349,6 +349,7 @@ namespace System.Collections.Generic
 				CascadeDown( node );
 			}
 		}
+
 
 		/// <summary>
 		/// Removes a node from the queue.  The node does not need to be the head of the queue.  
@@ -386,11 +387,13 @@ namespace System.Collections.Generic
 			OnNodeUpdated( formerLastNode );
 		}
 
+
 		public IEnumerator<T> GetEnumerator()
 		{
-			for( int i = 1; i <= _numNodes; i++ )
+			for( var i = 1; i <= _numNodes; i++ )
 				yield return _nodes[i];
 		}
+
 
 		IEnumerator IEnumerable.GetEnumerator()
 		{
@@ -418,5 +421,6 @@ namespace System.Collections.Generic
 			}
 			return true;
 		}
+	
 	}
 }

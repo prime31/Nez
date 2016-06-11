@@ -118,8 +118,6 @@ namespace Nez
 			IsFixedTimeStep = false;
 
 			entitySystemsEnabled = enableEntitySystems;
-			if( enableEntitySystems )
-				ComponentTypeManager.initialize();
 		}
 
 
