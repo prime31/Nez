@@ -2,7 +2,9 @@ Pathfinding
 ==========
 Nez provides two pathfinding algorithms out of the box: Breadth First Search and Astar. Both are well suited for not only grid based graphs but also graphs of any type. Which algorithm should you use? That depends on your specific graph and needs. The next sections will go into a bit more detail on each of the algorithms so that you can intelligently decide which to use.
 
-It should be noted that neither search algorithm requires the nodes search to be locations. Pathfinding doesn't care about what data it is finding a path for. All it needs to know is the node and that node's neighbors (edges). The nodes can be anything at all: paths in a dialog tree, actions for AI (Astar is used by the Goal Oriented Action Planner) or even strings (see below for an example). Edges can be traversable one way or both ways. 
+It should be noted that neither search algorithm requires the nodes searched to be locations. Pathfinding doesn't care about what data it is finding a path for. All it needs to know is the node and that node's neighbors (edges). The nodes can be anything at all: paths in a dialog tree, actions for AI (Astar is used by the Goal Oriented Action Planner) or even strings (see below for an example). Edges can be traversable one way or both ways.
+
+The Graph interfaces for Breadth First Search and Astar are both fully generic so you get to decide what data your nodes need. In the simplest case the nodes can be a `Point` (see `UnweightedGridGraph` and `WeightedGridGraph` for examples). If your nodes need a bunch of precomputed data you can use any class that you want for them. This allows you to precompute (offline or at map load time) any data that you might need for the actual path search.
 
 
 
