@@ -260,6 +260,25 @@ namespace Nez.Tiled
 			var tileY = (int)Math.Floor( y / tileHeight );
 			return Mathf.clamp( tileY, 0, height - 1 );
 		}
+
+
+		public Vector2 tilePositionToWorld( Point pos )
+		{
+			return new Vector2( tilePositionToWorldX( pos.X ), tilePositionToWorldY( pos.Y ) );
+		}
+
+
+		public int tilePositionToWorldX( int x )
+		{
+			return x * tileWidth;
+		}
+
+
+		public int tilePositionToWorldY( int y )
+		{
+			return y * tileHeight;
+		}
+
 	
 		#endregion
 

@@ -73,6 +73,9 @@ namespace Nez.Tiled
 					}
 
 					readCustomProperties( reader, tile.properties );
+
+					// give the TiledTilesetTile a change to process and cache any data required
+					tile.processProperties();
 					tileset.tiles.Add( tile );
 				}
 			}

@@ -8,7 +8,7 @@ using System.Text.RegularExpressions;
 using Nez.BitmapFonts;
 using Microsoft.Xna.Framework.Graphics;
 using System.Linq;
-
+using Nez.IEnumerableExtensions;
 
 namespace Nez.Console
 {

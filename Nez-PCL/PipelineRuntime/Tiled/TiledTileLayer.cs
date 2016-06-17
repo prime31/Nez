@@ -365,7 +365,7 @@ namespace Nez.Tiled
 
 		Func<IEnumerable<TiledTile>> getRenderOrderFunction()
 		{
-			switch ( tilemap.renderOrder )
+			switch( tilemap.renderOrder )
 			{
 				case TiledRenderOrder.LeftDown:
 					return getTilesLeftDown;
