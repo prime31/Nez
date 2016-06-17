@@ -436,6 +436,8 @@
     <Compile Include="AI\Pathfinding\BreadthFirst\UnweightedGraph.cs" />
     <Compile Include="AI\Pathfinding\BreadthFirst\UnweightedGridGraph.cs" />
     <Compile Include="Utils\IEnumerableExt.cs" />
+    <Compile Include="Math\Edge.cs" />
+    <Compile Include="Math\Axis.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="MonoGame.Framework">
