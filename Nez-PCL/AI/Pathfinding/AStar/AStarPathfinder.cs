@@ -20,20 +20,13 @@ namespace Nez.AI.Pathfinding
 		}
 
 
-		/// <summary>
-		/// gets a path from start to goal if possible. If no path is found null is returned.
-		/// </summary>
-		/// <param name="graph">Graph.</param>
-		/// <param name="start">Start.</param>
-		/// <param name="goal">Goal.</param>
-		/// <typeparam name="T">The 1st type parameter.</typeparam>
-		public static List<T> search<T>( IWeightedGraph<T> graph, T start, T goal )
+		public static bool search<T>( IWeightedGraph<T> graph, T start, T goal, out Dictionary<T,T> cameFrom )
 		{
 			var foundPath = false;
-			var cameFrom = new Dictionary<T,T>();
+			cameFrom = new Dictionary<T,T>();
 			cameFrom.Add( start, start );
 
-			Dictionary<T,int> costSoFar = new Dictionary<T,int>();
+			var costSoFar = new Dictionary<T, int>();
 			var frontier = new PriorityQueue<AStarNode<T>>( 1000 );
 			frontier.Enqueue( new AStarNode<T>( start ), 0 );
 
@@ -61,6 +54,22 @@ namespace Nez.AI.Pathfinding
 					}
 				}
 			}
+
+			return foundPath;
+		}
+
+
+		/// <summary>
+		/// gets a path from start to goal if possible. If no path is found null is returned.
+		/// </summary>
+		/// <param name="graph">Graph.</param>
+		/// <param name="start">Start.</param>
+		/// <param name="goal">Goal.</param>
+		/// <typeparam name="T">The 1st type parameter.</typeparam>
+		public static List<T> search<T>( IWeightedGraph<T> graph, T start, T goal )
+		{
+			Dictionary<T,T> cameFrom;
+			var foundPath = search( graph, start, goal, out cameFrom );
 
 			return foundPath ? recontructPath( cameFrom, start, goal ) : null;
 		}

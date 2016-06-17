@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Collections;
 
 
-namespace Nez
+namespace Nez.IEnumerableExtensions
 {
 	public static class IEnumerableExt
 	{

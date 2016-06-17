@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Text;
 using Nez;
-
+using Nez.IEnumerableExtensions;
 
 namespace System.Collections.Generic
 {

@@ -48,15 +48,15 @@ namespace Nez.AI.Pathfinding
 		}
 
 
-		public bool isNodeInBounds( Point id )
+		public bool isNodeInBounds( Point node )
 		{
-			return 0 <= id.X && id.X < _width && 0 <= id.Y && id.Y < _height;
+			return 0 <= node.X && node.X < _width && 0 <= node.Y && node.Y < _height;
 		}
 
 
-		public bool isNodePassable( Point id )
+		public bool isNodePassable( Point node )
 		{
-			return !walls.Contains( id );
+			return !walls.Contains( node );
 		}
 
 
