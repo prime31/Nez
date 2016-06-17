@@ -7,6 +7,83 @@ namespace Nez
 	public static class RectangleExt
 	{
 		/// <summary>
+		/// gets the position of the specified side
+		/// </summary>
+		/// <returns>The side.</returns>
+		/// <param name="edge">Side.</param>
+		public static int getSide( this Rectangle rect, Edge edge )
+		{
+			switch( edge )
+			{
+				case Edge.Top:
+					return rect.Top;
+				case Edge.Bottom:
+					return rect.Bottom;
+				case Edge.Left:
+					return rect.Left;
+				case Edge.Right:
+					return rect.Right;
+				default:
+					throw new ArgumentOutOfRangeException();
+			}
+		}
+
+
+		public static Rectangle getHalfRect( this Rectangle rect, Edge edge )
+		{
+			switch( edge )
+			{
+				case Edge.Top:
+					return new Rectangle( rect.X, rect.Y, rect.Width, rect.Height / 2 );
+				case Edge.Bottom:
+					return new Rectangle( rect.X, rect.Y + rect.Height / 2, rect.Width, rect.Height / 2 );
+				case Edge.Left:
+					return new Rectangle( rect.X, rect.Y, rect.Width / 2, rect.Height );
+				case Edge.Right:
+					return new Rectangle( rect.X + rect.Width / 2, rect.Y, rect.Width / 2, rect.Height );
+				default:
+					throw new ArgumentOutOfRangeException();
+			}
+		}
+
+
+		public static void expandSide( ref Rectangle rect, Edge edge, int amount )
+		{
+			// ensure we have a positive value
+			amount = Math.Abs( amount );
+
+			switch( edge )
+			{
+				case Edge.Top:
+					rect.Y -= amount;
+					rect.Height += amount;
+					break;
+				case Edge.Bottom:
+					rect.Height += amount;
+					break;
+				case Edge.Left:
+					rect.X -= amount;
+					rect.Width += amount;
+					break;
+				case Edge.Right:
+					rect.Width += amount;
+					break;
+				default:
+					throw new ArgumentOutOfRangeException();
+			}
+		}
+
+
+		public static void contract( ref Rectangle rect, int horizontalAmount, int verticalAmount )
+		{
+			rect.X += horizontalAmount;
+			rect.Y += verticalAmount;
+			rect.Width -= horizontalAmount * 2;
+			rect.Height -= verticalAmount * 2;
+		}
+
+
+		/// <summary>
 		/// returns a rectangle from the passed in floats
 		/// </summary>
 		/// <returns>The floats.</returns>
