@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Runtime.CompilerServices;
 using Microsoft.Xna.Framework;
 
 
@@ -6,7 +7,7 @@ namespace Nez
 {
 	public static class Mathf
 	{
-		public static float epsilon = 0.00001f;
+		public const float epsilon = 0.00001f;
 
 
 		public static float round( float f )
@@ -42,6 +43,12 @@ namespace Nez
 		public static int roundToInt( float f )
 		{
 			return (int)Math.Round( (double)f );
+		}
+
+
+		public static int truncateToInt( float f )
+		{
+			return (int)Math.Truncate( f );
 		}
 
 
@@ -236,6 +243,19 @@ namespace Nez
 			if( start < end )
 				return Math.Min( start + shift, end );
 			return Math.Max( start - shift, end );
+		}
+
+
+		/// <summary>
+		/// checks to see if two values are approximately the same using an acceptable tolerance for the check
+		/// </summary>
+		/// <param name="value1">Value1.</param>
+		/// <param name="value2">Value2.</param>
+		/// <param name="tolerance">Tolerance.</param>
+		[MethodImpl( MethodImplOptions.AggressiveInlining )]
+		public static bool approximately( float value1, float value2, float tolerance = epsilon )
+		{
+			return Math.Abs( value1 - value2 ) <= tolerance;
 		}
 
 
