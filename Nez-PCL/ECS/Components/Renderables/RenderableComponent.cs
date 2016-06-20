@@ -299,7 +299,7 @@ namespace Nez
 			_layerDepth = Mathf.clamp01( layerDepth );
 
 			if( entity != null && entity.scene != null )
-				entity.scene.renderableComponents.setNeedsComponentSort();
+				entity.scene.renderableComponents.setRenderLayerNeedsComponentSort( renderLayer );
 			return this;
 		}
 
