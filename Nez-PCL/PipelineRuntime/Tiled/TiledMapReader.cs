@@ -43,20 +43,20 @@ namespace Nez.Tiled
 				}
 
 				var tileset = tiledMap.createTileset(
-					                          texture: texture,
-					                          firstId: reader.ReadInt32(),
-					                          tileWidth: reader.ReadInt32(),
-					                          tileHeight: reader.ReadInt32(),
-											  isStandardTileset: isStandardTileset,
-					                          spacing: reader.ReadInt32(),
-					                          margin: reader.ReadInt32() );
+										texture: texture,
+										firstId: reader.ReadInt32(),
+										tileWidth: reader.ReadInt32(),
+										tileHeight: reader.ReadInt32(),
+										isStandardTileset: isStandardTileset,
+										spacing: reader.ReadInt32(),
+										margin: reader.ReadInt32() );
 				readCustomProperties( reader, tileset.properties );
 
 				// tiledset tile array
 				var tileCount = reader.ReadInt32();
 				for( var j = 0; j < tileCount; j++ )
 				{
-					var tile = new TiledTilesetTile( reader.ReadInt32() );
+					var tile = new TiledTilesetTile( reader.ReadInt32(), tiledMap );
 
 					var tileAnimationFrameCount = reader.ReadInt32();
 					if( tileAnimationFrameCount > 0 )
