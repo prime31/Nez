@@ -242,43 +242,72 @@ namespace Nez.Tiled
 
 		#region world/local conversion
 
-		public Point worldPositionToTilePosition( Vector2 pos )
+		/// <summary>
+		/// converts from world to tile position
+		/// </summary>
+		/// <returns>The to tile position.</returns>
+		/// <param name="pos">Position.</param>
+		public Point worldToTilePosition( Vector2 pos )
 		{
-			return new Point( worldPositionToTilePositionX( pos.X ), worldPositionToTilePositionY( pos.Y ) );
+			return new Point( worldToTilePositionX( pos.X ), worldToTilePositionY( pos.Y ) );
 		}
 
 
-		public int worldPositionToTilePositionX( float x )
+		/// <summary>
+		/// converts from world to tile position
+		/// </summary>
+		/// <returns>The to tile position x.</returns>
+		/// <param name="x">The x coordinate.</param>
+		public int worldToTilePositionX( float x )
 		{
-			var tileX = (int)Math.Floor( x / tileWidth );
+			var tileX = Mathf.fastFloorToInt( x / tileWidth );
 			return Mathf.clamp( tileX, 0, width - 1 );
 		}
 
 
-		public int worldPositionToTilePositionY( float y )
+		/// <summary>
+		/// converts from world to tile position
+		/// </summary>
+		/// <returns>The to tile position y.</returns>
+		/// <param name="y">The y coordinate.</param>
+		public int worldToTilePositionY( float y )
 		{
-			var tileY = (int)Math.Floor( y / tileHeight );
+			var tileY = Mathf.fastFloorToInt( y / tileHeight );
 			return Mathf.clamp( tileY, 0, height - 1 );
 		}
 
 
-		public Vector2 tilePositionToWorld( Point pos )
+		/// <summary>
+		/// converts from tile to world position
+		/// </summary>
+		/// <returns>The to world position.</returns>
+		/// <param name="pos">Position.</param>
+		public Vector2 tileToWorldPosition( Point pos )
 		{
-			return new Vector2( tilePositionToWorldX( pos.X ), tilePositionToWorldY( pos.Y ) );
+			return new Vector2( tileToWorldPositionX( pos.X ), tileToWorldPositionY( pos.Y ) );
 		}
 
 
-		public int tilePositionToWorldX( int x )
+		/// <summary>
+		/// converts from tile to world position
+		/// </summary>
+		/// <returns>The to world position x.</returns>
+		/// <param name="x">The x coordinate.</param>
+		public int tileToWorldPositionX( int x )
 		{
 			return x * tileWidth;
 		}
 
 
-		public int tilePositionToWorldY( int y )
+		/// <summary>
+		/// converts from tile to world position
+		/// </summary>
+		/// <returns>The to world position y.</returns>
+		/// <param name="y">The y coordinate.</param>
+		public int tileToWorldPositionY( int y )
 		{
 			return y * tileHeight;
 		}
-
 	
 		#endregion
 
