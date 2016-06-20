@@ -102,4 +102,4 @@ Matt Thorson's fantastic [Monocle Engine](https://bitbucket.org/MattThorson/mono
 
 Dylan Wilson's excellent [MonoGame.Extended](https://github.com/craftworkgames/MonoGame.Extended)
 
-Nathan Sweet's libGDX Scene2D UI [libGDX](https://github.com/libgdx/libgdx)
+Nathan Sweet's libGDX Scene2D UI [libGDX](https://github.com/libgdx/libgdx). Nez UI is based on libGDX Scene2D which is [Apache licensed](UI_LICENSE).
