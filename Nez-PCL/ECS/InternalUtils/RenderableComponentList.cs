@@ -53,6 +53,14 @@ namespace Nez
 		}
 
 
+        public void setRenderLayerNeedsComponentSort( int renderLayer )
+        {
+            if (!_unsortedRenderLayers.Contains(renderLayer))
+                _unsortedRenderLayers.Add(renderLayer);
+            _componentsNeedSort = true;
+        }
+
+
 		internal void setNeedsComponentSort()
 		{
 			_componentsNeedSort = true;
