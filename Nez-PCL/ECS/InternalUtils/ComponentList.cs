@@ -212,7 +212,7 @@ namespace Nez
 
 
 		/// <summary>
-		/// Gets the first component of type T and returns it optionally skips checking un-initialized Components (Components who have not yet had their
+		/// Gets the first component of type T and returns it. Optionally skips checking un-initialized Components (Components who have not yet had their
 		/// onAddedToEntity method called). If no components are found returns null.
 		/// </summary>
 		/// <returns>The component.</returns>
