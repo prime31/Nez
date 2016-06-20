@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Runtime.CompilerServices;
+
 
 namespace Nez
 {
@@ -13,6 +15,7 @@ namespace Nez
 
 	public static class EdgeExt
 	{
+		[MethodImpl( MethodImplOptions.AggressiveInlining )]
 		public static Edge oppositeEdge( this Edge self )
 		{
 			switch( self )
@@ -36,6 +39,7 @@ namespace Nez
 		/// </summary>
 		/// <returns>The max.</returns>
 		/// <param name="self">Self.</param>
+		[MethodImpl( MethodImplOptions.AggressiveInlining )]
 		public static bool isMax( this Edge self )
 		{
 			return self == Edge.Right || self == Edge.Bottom;
@@ -47,6 +51,7 @@ namespace Nez
 		/// </summary>
 		/// <returns>The minimum.</returns>
 		/// <param name="self">Self.</param>
+		[MethodImpl( MethodImplOptions.AggressiveInlining )]
 		public static bool isMin( this Edge self )
 		{
 			return self == Edge.Left || self == Edge.Top;
@@ -58,6 +63,7 @@ namespace Nez
 		/// </summary>
 		/// <returns>The horizontal.</returns>
 		/// <param name="self">Self.</param>
+		[MethodImpl( MethodImplOptions.AggressiveInlining )]
 		public static bool isHorizontal( this Edge self )
 		{
 			return self == Edge.Right || self == Edge.Left;
@@ -69,6 +75,7 @@ namespace Nez
 		/// </summary>
 		/// <returns>The vertical.</returns>
 		/// <param name="self">Self.</param>
+		[MethodImpl( MethodImplOptions.AggressiveInlining )]
 		public static bool isVertical( this Edge self )
 		{
 			return self == Edge.Top || self == Edge.Bottom;

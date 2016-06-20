@@ -134,7 +134,7 @@ namespace Nez.Tiled
 			// store off the bounds so we can move it around without affecting the actual Transform position
 			var colliderBounds = _collider.bounds;
 
-			// now we check movement in the horizontal dir
+			// first, check movement in the horizontal dir
 			{
 				var direction = motionX > 0 ? Edge.Right : Edge.Left;
 				var sweptBounds = collisionRectForSide( direction, motionX );
@@ -193,7 +193,7 @@ namespace Nez.Tiled
 						// if we collide here this is an overlap of a slope above us. this small bump down will prevent hitches when hitting
 						// our head on a slope that connects to a solid tile. It puts us below the slope when the normal response would put us
 						// above it
-						motion.Y += 1;
+						motion.Y += 2;
 						collisionState.above = true;
 					}
 				}
@@ -305,7 +305,7 @@ namespace Nez.Tiled
 			// when moving horizontally the only time a slope is considered for collision testing is when its closest side is the tallest side
 			// and we were not intesecting the tile before moving.
 			// this prevents clipping through a tile when hitting its edge: -> |\
-			if( edgeToTest.isHorizontal() && tile.isSlope() && tile.getNearestEdge( leadingPosition ) == tile.getBigestSlopeEdge() )
+			if( edgeToTest.isHorizontal() && tile.isSlope() && tile.getNearestEdge( leadingPosition ) == tile.getHighestSlopeEdge() )
 			{
 				var moveDir = edgeToTest.oppositeEdge();
 				var leadingPositionPreMovement = _collider.bounds.getSide( moveDir );
@@ -369,7 +369,13 @@ namespace Nez.Tiled
 		}
 
 
-
+		/// <summary>
+		/// gets a list of all the tiles intersecting bounds. The returned list is ordered for collision detection based on the
+		/// direction passed in so they can be processed in order.
+		/// </summary>
+		/// <returns>The colliding tiles.</returns>
+		/// <param name="bounds">Bounds.</param>
+		/// <param name="direction">Direction.</param>
 		void populateCollidingTiles( Rectangle bounds, Edge direction )
 		{
 			_collidingTiles.Clear();
@@ -406,6 +412,12 @@ namespace Nez.Tiled
 		}
 
 
+		/// <summary>
+		/// returns the tile position clamped to the tiled map
+		/// </summary>
+		/// <returns>The to tile position.</returns>
+		/// <param name="worldPosition">World position.</param>
+		/// <param name="axis">Axis.</param>
 		int worldToTilePosition( float worldPosition, Axis axis )
 		{
 			if( axis == Axis.Y )

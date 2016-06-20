@@ -108,7 +108,7 @@ namespace Nez.Tiled
 		/// <returns>The bigest slope edge.</returns>
 		/// <param name="self">Self.</param>
 		[MethodImpl( MethodImplOptions.AggressiveInlining )]
-		public static Edge getBigestSlopeEdge( this TiledTile self )
+		public static Edge getHighestSlopeEdge( this TiledTile self )
 		{
 			var left = self.getSlopeTopLeft();
 			var right = self.getSlopeTopRight();
