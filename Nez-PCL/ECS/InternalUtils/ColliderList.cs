@@ -8,7 +8,7 @@ namespace Nez
 	public class ColliderList : IEnumerable<Collider>, IEnumerable
 	{
 		/// <summary>
-		/// the first collider added is considered the main collider
+		/// the first collider added is considered the main collider. If there is a collider add pending it will be returned.
 		/// </summary>
 		/// <value>The main collider.</value>
 		public Collider mainCollider
@@ -16,7 +16,11 @@ namespace Nez
 			get
 			{
 				if( _colliders.Count == 0 )
+				{
+					if( _collidersToAdd.Count == 1 )
+						return _collidersToAdd[0];
 					return null;
+				}
 				return _colliders[0];
 			}
 		}
@@ -170,6 +174,30 @@ namespace Nez
 		public int Count
 		{
 			get { return _colliders.Count; }
+		}
+
+
+		public T getCollider<T>( bool onlyReturnInitializedColliders = false ) where T : Collider
+		{
+			for( var i = 0; i < _colliders.Count; i++ )
+			{
+				var component = _colliders[i];
+				if( component is T )
+					return component as T;
+			}
+
+			// we optionally check the pending components just in case addComponent and getComponent are called in the same frame
+			if( !onlyReturnInitializedColliders )
+			{
+				for( var i = 0; i < _collidersToAdd.Count; i++ )
+				{
+					var component = _collidersToAdd[i];
+					if( component is T )
+						return component as T;
+				}
+			}
+
+			return null;
 		}
 
 

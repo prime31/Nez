@@ -92,7 +92,7 @@ namespace Nez.Tiled
 
 		public override void onAddedToEntity()
 		{
-			_collider = entity.colliders.mainCollider as BoxCollider;
+			_collider = entity.colliders.getCollider<BoxCollider>();
 			Assert.isNotNull( _collider, "Entity must have a BoxCollider" );
 		}
 
@@ -114,9 +114,6 @@ namespace Nez.Tiled
 		/// <param name="deltaTime">Delta time.</param>
 		public void move( Vector2 motion, float deltaTime )
 		{
-			if( _collider == null )
-				return;
-
 			// save off our current grounded state which we will use for wasGroundedLastFrame and becameGroundedThisFrame
 			collisionState.wasGroundedLastFrame = collisionState.below;
 
