@@ -9,7 +9,7 @@ namespace Nez
 {
 	public class TiledMapComponent : RenderableComponent, IUpdatable
 	{
-		public TiledMap tiledmap;
+		public TiledMap tiledMap;
 
 		public int physicsLayer = 1 << 0;
 
@@ -20,12 +20,12 @@ namespace Nez
 
 		public override float width
 		{
-			get { return tiledmap.width * tiledmap.tileWidth; }
+			get { return tiledMap.width * tiledMap.tileWidth; }
 		}
 
 		public override float height
 		{
-			get { return tiledmap.height * tiledmap.tileHeight; }
+			get { return tiledMap.height * tiledMap.tileHeight; }
 		}
 
 		public TiledTileLayer collisionLayer;
@@ -34,7 +34,7 @@ namespace Nez
 
 		public TiledMapComponent( TiledMap tiledmap, string collisionLayerName = null )
 		{
-			this.tiledmap = tiledmap;
+			this.tiledMap = tiledmap;
 
 			if( collisionLayerName != null )
 				collisionLayer = tiledmap.getLayer<TiledTileLayer>( collisionLayerName );
@@ -48,7 +48,7 @@ namespace Nez
 		public void setLayerToRender( string layerName )
 		{
 			layerIndicesToRender = new int[1];
-			layerIndicesToRender[0] = tiledmap.getLayerIndex( layerName );
+			layerIndicesToRender[0] = tiledMap.getLayerIndex( layerName );
 		}
 
 
@@ -61,7 +61,7 @@ namespace Nez
 			layerIndicesToRender = new int[layerNames.Length];
 
 			for( var i = 0; i < layerNames.Length; i++ )
-				layerIndicesToRender[i] = tiledmap.getLayerIndex( layerNames[i] );
+				layerIndicesToRender[i] = tiledMap.getLayerIndex( layerNames[i] );
 		}
 
 
@@ -70,14 +70,14 @@ namespace Nez
 		public int getRowAtWorldPosition( float yPos )
 		{
 			yPos -= entity.transform.position.Y + _localOffset.Y;
-			return tiledmap.worldPositionToTilePositionY( yPos );
+			return tiledMap.worldToTilePositionY( yPos );
 		}
 
 
 		public int getColumnAtWorldPosition( float xPos )
 		{
 			xPos -= entity.transform.position.X + _localOffset.X;
-			return tiledmap.worldPositionToTilePositionY( xPos );
+			return tiledMap.worldToTilePositionY( xPos );
 		}
 
 
@@ -137,7 +137,7 @@ namespace Nez
 
 		void IUpdatable.update()
 		{
-			tiledmap.update();
+			tiledMap.update();
 		}
 
 
@@ -145,14 +145,14 @@ namespace Nez
 		{
 			if( layerIndicesToRender == null )
 			{
-				tiledmap.draw( graphics.batcher, entity.transform.position + _localOffset, layerDepth, camera.bounds );
+				tiledMap.draw( graphics.batcher, entity.transform.position + _localOffset, layerDepth, camera.bounds );
 			}
 			else
 			{
-				for( var i = 0; i < tiledmap.layers.Count; i++ )
+				for( var i = 0; i < tiledMap.layers.Count; i++ )
 				{
-					if( tiledmap.layers[i].visible && layerIndicesToRender.contains( i ) )
-						tiledmap.layers[i].draw( graphics.batcher, entity.transform.position + _localOffset, layerDepth, camera.bounds );
+					if( tiledMap.layers[i].visible && layerIndicesToRender.contains( i ) )
+						tiledMap.layers[i].draw( graphics.batcher, entity.transform.position + _localOffset, layerDepth, camera.bounds );
 				}
 			}
 		}
@@ -160,7 +160,7 @@ namespace Nez
 
 		public override void debugRender( Graphics graphics )
 		{
-			foreach( var group in tiledmap.objectGroups )
+			foreach( var group in tiledMap.objectGroups )
 				renderObjectGroup( group, graphics );
 
 			if( _colliders != null )

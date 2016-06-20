@@ -44,9 +44,9 @@ namespace Nez.AI.Pathfinding
 			_width = tiledLayer.width;
 			_height = tiledLayer.height;
 
-			for( var y = 0; y < tiledLayer.tilemap.height; y++ )
+			for( var y = 0; y < tiledLayer.tiledMap.height; y++ )
 			{
-				for( var x = 0; x < tiledLayer.tilemap.width; x++ )
+				for( var x = 0; x < tiledLayer.tiledMap.width; x++ )
 				{
 					if( tiledLayer.getTile( x, y ) != null )
 						walls.Add( new Point( x, y ) );
