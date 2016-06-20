@@ -7,7 +7,7 @@ using Microsoft.Xna.Framework.Graphics;
 namespace Nez.Tiled
 {
 	/// <summary>
-	/// WIP and currently a RenderableComponent only for debugging purposes
+	/// WIP
 	/// The TiledMapMover is a helper for moving objects around in a gravity-based Tiled map. It requires that the Entity it is on has a BoxCollider. The
 	/// BoxCollider will be used in conjuntion with colliderHorizontal/VerticalInset for all collision detection.
 	/// 
@@ -19,11 +19,11 @@ namespace Nez.Tiled
 	/// tile |\ would have a slopeTopLeft of 0 and slopeTopRight of 15
 	/// - nez:slopeTopRist (int): distance in pixels from the tiles top to the slope on the right side
 	/// </summary>
-	public class TiledMapMover : RenderableComponent
+	public class TiledMapMover : Component
 	{
-		public override float width { get { return 10000; } }
-		public override float height { get { return 10000; } }
-
+		/// <summary>
+		/// class used to house all the collision information from a call to move
+		/// </summary>
 		public class CollisionState
 		{
 			public bool right, left, above, below;
@@ -97,6 +97,10 @@ namespace Nez.Tiled
 		}
 
 
+		/// <summary>
+		/// moves the Entity taking into account the tiled map
+		/// </summary>
+		/// <param name="motion">Motion.</param>
 		public void move( Vector2 motion )
 		{
 			move( motion, Time.deltaTime );
@@ -112,9 +116,6 @@ namespace Nez.Tiled
 		{
 			if( _collider == null )
 				return;
-
-			_debugTiles.Clear();
-			_consideredTiles.Clear();
 
 			// save off our current grounded state which we will use for wasGroundedLastFrame and becameGroundedThisFrame
 			collisionState.wasGroundedLastFrame = collisionState.below;
@@ -253,8 +254,6 @@ namespace Nez.Tiled
 					// store off our last ground tile if we collided below
 					if( direction == Edge.Bottom )
 						_lastGroundTile = _collidingTiles[i];
-
-					_debugTiles.Add( new Point( _collidingTiles[i].x, _collidingTiles[i].y ) );
 					
 					return true;
 				}
@@ -267,8 +266,7 @@ namespace Nez.Tiled
 					if( ( _lastGroundTile.isSlope() && _collidingTiles[i].isSlope() ) || ( !_lastGroundTile.isSlope() && _collidingTiles[i].isSlope() /* should be tall slope check */ ) )
 					{
 						// store off our last ground tile if we collided below
-						_lastGroundTile = _collidingTiles[i];					
-						_debugTiles.Add( new Point( _collidingTiles[i].x, _collidingTiles[i].y ) );
+						_lastGroundTile = _collidingTiles[i];
 
 						return true;
 					}
@@ -406,8 +404,6 @@ namespace Nez.Tiled
 					var col = isHorizontal ? primary : secondary;
 					var row = !isHorizontal ? primary : secondary;
 					_collidingTiles.Add( _collisionLayer.getTile( col, row ) );
-					if( isHorizontal )
-						_consideredTiles.Add( new Point( col, row ) );
 				}
 			}
 		}
@@ -420,47 +416,6 @@ namespace Nez.Tiled
 			return _tiledMap.worldToTilePositionX( worldPosition );
 		}
 
-
-		List<Point> _debugTiles = new List<Point>();
-		List<Point> _consideredTiles = new List<Point>();
-		public override void render( Graphics graphics, Camera camera )
-		{
-			debugRenderCollisionRectangles( graphics );
-
-			var alpha = 0.5f;
-			if( _consideredTiles.Count > 0 )
-			{
-				for( var i = 0; i < _consideredTiles.Count; i++ )
-				{
-					var x = _tiledMap.tileToWorldPositionX( _consideredTiles[i].X );
-					var y = _tiledMap.tileToWorldPositionY( _consideredTiles[i].Y );
-
-					graphics.batcher.drawString( Graphics.instance.bitmapFont, i.ToString(), new Vector2( x + 2, y ), Color.White * alpha, 0, new Vector2( -3, -4 ), 1f, SpriteEffects.None, 0 );
-					graphics.batcher.drawHollowRect( x, y, _tiledMap.tileWidth, _tiledMap.tileHeight, Color.Yellow * alpha );
-				}
-			}
-
-			if( _debugTiles .Count > 0 )
-			{
-				foreach( var t in _debugTiles )
-				{
-					var x = _tiledMap.tileToWorldPositionX( t.X );
-					var y = _tiledMap.tileToWorldPositionY( t.Y );
-
-					graphics.batcher.drawHollowRect( x, y, _tiledMap.tileWidth, _tiledMap.tileHeight, Color.Red * alpha );
-				}
-			}
-
-			if( _lastGroundTile != null )
-			{
-				var x = _lastGroundTile.x * _tiledMap.tileWidth + _tiledMap.tileWidth * 0.5f;
-				var y = _lastGroundTile.y * _tiledMap.tileHeight + _tiledMap.tileHeight * 0.5f;
-				graphics.batcher.drawPixel( x, y, Color.Blue * alpha, 4 );
-			}
-		}
-
-
-		#region collision rectangles
 
 		/// <summary>
 		/// gets a collision rect for the given side expanded to take into account motion
@@ -484,17 +439,6 @@ namespace Nez.Tiled
 
 			return bounds;
 		}
-
-
-		public void debugRenderCollisionRectangles( Graphics graphics )
-		{
-			graphics.batcher.drawRect( collisionRectForSide( Edge.Top, 0 ), Color.Red * 0.5f );
-			graphics.batcher.drawRect( collisionRectForSide( Side.Bottom, 0 ), Color.Blue * 0.5f );
-			graphics.batcher.drawRect( collisionRectForSide( Side.Left, 0 ), Color.Green * 0.5f );
-			graphics.batcher.drawRect( collisionRectForSide( Side.Right, 0 ), Color.Orchid * 0.5f );
-		}
-
-		#endregion
 
 	}
 }
