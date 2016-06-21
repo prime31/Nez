@@ -199,6 +199,12 @@ namespace Nez
 		}
 
 
+		/// <summary>
+		/// ping-pongs t so that it is never larger than length and never smaller than 0
+		/// </summary>
+		/// <returns>The pong.</returns>
+		/// <param name="t">T.</param>
+		/// <param name="length">Length.</param>
 		public static float pingPong( float t, float length )
 		{
 			t = Mathf.repeat( t, length * 2f );
