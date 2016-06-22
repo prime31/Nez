@@ -200,7 +200,6 @@
     <Compile Include="Utils\BitSet.cs" />
     <Compile Include="ECS\InternalUtils\ComponentTypeManager.cs" />
     <Compile Include="ECS\InternalUtils\EntityProcessorList.cs" />
-    <Compile Include="ECS\EntitySystem.cs" />
     <Compile Include="ECS\Systems\EntityProcessingSystem.cs" />
     <Compile Include="ECS\Systems\ProcessingSystem.cs" />
     <Compile Include="Physics\Shapes\Shape.cs" />
@@ -440,6 +439,7 @@
     <Compile Include="Math\Axis.cs" />
     <Compile Include="PipelineRuntime\Tiled\TiledTileExt.cs" />
     <Compile Include="ECS\Components\Physics\TiledMapMover.cs" />
+    <Compile Include="ECS\Systems\EntitySystem.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="MonoGame.Framework">
