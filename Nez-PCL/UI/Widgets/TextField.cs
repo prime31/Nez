@@ -30,7 +30,6 @@ namespace Nez.UI
 		{
 			get { return _preferredWidth; }
 		}
-		float _preferredWidth = 150;
 
 		public override float preferredHeight
 		{
@@ -55,6 +54,7 @@ namespace Nez.UI
 		protected bool writeEnters;
 		List<float> glyphPositions = new List<float>( 15 );
 
+		float _preferredWidth = 150;
 		TextFieldStyle style;
 		string messageText;
 		protected string displayText = string.Empty;
@@ -69,10 +69,10 @@ namespace Nez.UI
 
 		protected float fontOffset, textHeight, textOffset;
 		float renderOffset;
-		private int visibleTextStart, visibleTextEnd;
-		private int maxLength = 0;
+		int visibleTextStart, visibleTextEnd;
+		int maxLength = 0;
 
-		private float blinkTime = 0.5f;
+		float blinkTime = 0.5f;
 		bool cursorOn = true;
 		float lastBlink;
 
@@ -1292,6 +1292,18 @@ namespace Nez.UI
 	{
 		public bool acceptChar( TextField textField, char c )
 		{
+			return Char.IsDigit( c );
+		}
+	}
+
+
+	public class FloatFilter : TextField.ITextFieldFilter
+	{
+		public bool acceptChar( TextField textField, char c )
+		{
+			// only allow one .
+			if( c == '.' )
+				return !textField.getText().Contains( "." );
 			return Char.IsDigit( c );
 		}
 	}

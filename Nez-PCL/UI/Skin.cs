@@ -95,10 +95,10 @@ namespace Nez.UI
 			skin.add( "default", progressBarStyle );
 
 			var sliderStyle = new SliderStyle {
-				background = new PrimitiveDrawable( 20, barBg ),
-				knob = new PrimitiveDrawable( 30, barKnob ),
-				knobOver = new PrimitiveDrawable( 30, barKnobOver ),
-				knobDown = new PrimitiveDrawable( 30, barKnobDown )
+				background = new PrimitiveDrawable( 10, barBg ),
+				knob = new PrimitiveDrawable( 20, barKnob ),
+				knobOver = new PrimitiveDrawable( 20, barKnobOver ),
+				knobDown = new PrimitiveDrawable( 20, barKnobDown )
 			};
 			skin.add( "default", sliderStyle );
 
@@ -106,6 +106,12 @@ namespace Nez.UI
 				background = new PrimitiveDrawable( windowColor )
 			};
 			skin.add( "default", windowStyle );
+
+			var textFieldStyle = TextFieldStyle.create( Color.Black, Color.Gray, Color.LightBlue, Color.LightGray );
+			skin.add( "default", textFieldStyle );
+
+			var labelStyle = new LabelStyle();
+			skin.add( "default", labelStyle );
 
 			return skin;
 		}
