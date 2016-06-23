@@ -19,7 +19,7 @@ namespace Nez
 				}
 			}
 		}
-		float _radius = 0.5f;
+
 
 		public float angle
 		{
@@ -33,7 +33,6 @@ namespace Nez
 				}
 			}
 		}
-		float _angle = 5f;
 
 		public Vector2 offset
 		{
@@ -47,6 +46,9 @@ namespace Nez
 				}
 			}
 		}
+
+		float _radius = 0.5f;
+		float _angle = 5f;
 		Vector2 _offset = Vector2Ext.halfVector();
 
 		EffectParameter _radiusParam;

@@ -97,7 +97,7 @@ namespace Nez
 		protected override bool OnApply()
 		{
 			_timeParam.SetValue( Time.time );
-			return base.OnApply();
+			return false;
 		}
 	}
 }

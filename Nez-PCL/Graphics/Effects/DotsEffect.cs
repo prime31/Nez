@@ -18,7 +18,6 @@ namespace Nez
 				}
 			}
 		}
-		float _scale = 0.5f;
 
 		public float angle
 		{
@@ -32,8 +31,9 @@ namespace Nez
 				}
 			}
 		}
-		float _angle = 0.5f;
 
+		float _scale = 0.5f;
+		float _angle = 0.5f;
 
 		EffectParameter _scaleParam;
 		EffectParameter _angleParam;

@@ -26,8 +26,8 @@ namespace Nez
 				}
 			}
 		}
+
 		int _crosshatchSize = 16;
-		
 		EffectParameter _crosshatchSizeParam;
 
 		

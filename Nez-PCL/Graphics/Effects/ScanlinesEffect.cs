@@ -35,6 +35,7 @@ namespace Nez
 
 		float _attenuation = 0.04f;
 		float _linesFactor = 800f;
+
 		EffectParameter _attenuationParam;
 		EffectParameter _linesFactorParam;
 

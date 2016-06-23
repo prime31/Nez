@@ -21,8 +21,8 @@ namespace Nez
 				}
 			}
 		}
-		float _noise = 1f;
 
+		float _noise = 1f;
 		EffectParameter _noiseParam;
 
 
