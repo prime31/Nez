@@ -26,8 +26,7 @@ namespace Nez
 		Texture2D[] _textureInfo;
 
 		// Default SpriteEffect
-		Effect _spriteEffect;
-		EffectParameter _spriteMatrixTransformParam;
+		SpriteEffect _spriteEffect;
 		EffectPass _spriteEffectPass;
 
 		// Tracks Begin/End calls
@@ -68,10 +67,7 @@ namespace Nez
 		// Used to calculate texture coordinates
 		static readonly float[] _cornerOffsetX = new float[] { 0.0f, 1.0f, 0.0f, 1.0f };
 		static readonly float[] _cornerOffsetY = new float[] { 0.0f, 0.0f, 1.0f, 1.0f };
-
-		const string _spriteEffectName = "Microsoft.Xna.Framework.Graphics.Effect.Resources.SpriteEffect.ogl.mgfxo";
 		static readonly short[] _indexData = generateIndexArray();
-		static readonly byte[] _spriteEffectCode = EffectResource.getMonoGameEmbeddedResourceBytes( _spriteEffectName );
 
 		#endregion
 
@@ -88,8 +84,7 @@ namespace Nez
 			_indexBuffer = new IndexBuffer( graphicsDevice, IndexElementSize.SixteenBits, MAX_INDICES, BufferUsage.WriteOnly );
 			_indexBuffer.SetData( _indexData );
 
-			_spriteEffect = new Effect( graphicsDevice, _spriteEffectCode );
-			_spriteMatrixTransformParam = _spriteEffect.Parameters["MatrixTransform"];
+			_spriteEffect = new SpriteEffect();
 			_spriteEffectPass = _spriteEffect.CurrentTechnique.Passes[0];
 
 			_projectionMatrix = new Matrix(
@@ -724,7 +719,7 @@ namespace Nez
 				ref _projectionMatrix,
 				out _matrixTransformMatrix
 			);
-			_spriteMatrixTransformParam.SetValue( _matrixTransformMatrix );
+			_spriteEffect.matrixTransform = _matrixTransformMatrix;
 
 			// we have to Apply here because custom effects often wont have a vertex shader and we need the default SpriteEffect's
 			_spriteEffectPass.Apply();

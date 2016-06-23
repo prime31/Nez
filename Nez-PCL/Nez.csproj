@@ -81,6 +81,7 @@
     <Folder Include="AI\Pathfinding\" />
     <Folder Include="AI\Pathfinding\BreadthFirst\" />
     <Folder Include="AI\Pathfinding\AStar\" />
+    <Folder Include="Utils\Extensions\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Debug\Debug.cs" />
@@ -181,10 +182,6 @@
     <Compile Include="Physics\QuadTree\IQuadTreeStorable.cs" />
     <Compile Include="ECS\Components\Renderables\Particles\ParticleEmitter.cs" />
     <Compile Include="ECS\Components\Renderables\Particles\Particle.cs" />
-    <Compile Include="Math\ColorExt.cs" />
-    <Compile Include="Math\PointExt.cs" />
-    <Compile Include="Math\RectangleExt.cs" />
-    <Compile Include="Math\Vector2Ext.cs" />
     <Compile Include="ECS\Components\Renderables\Particles\ParticleEmitterType.cs" />
     <Compile Include="ECS\Components\Renderables\Particles\ParticleEmitterConfig.cs" />
     <Compile Include="PipelineRuntime\ParticleDesigner\ParticleEmitterConfigReader.cs" />
@@ -207,7 +204,6 @@
     <Compile Include="Physics\Shapes\ShapeCollisions.cs" />
     <Compile Include="Physics\Shapes\Circle.cs" />
     <Compile Include="Physics\Shapes\Box.cs" />
-    <Compile Include="Graphics\SpriteBatchExt.cs" />
     <Compile Include="Debug\Assert.cs" />
     <Compile Include="Physics\Shapes\RealtimeCollisions.cs" />
     <Compile Include="Utils\Triangulator.cs" />
@@ -232,7 +228,6 @@
     <Compile Include="Graphics\Effects\ScanlinesEffect.cs" />
     <Compile Include="Graphics\Textures\RenderTarget.cs" />
     <Compile Include="ECS\Transform.cs" />
-    <Compile Include="Utils\ArrayExt.cs" />
     <Compile Include="Graphics\PostProcessing\PostProcessors\HeatDistortionPostProcessor.cs" />
     <Compile Include="Physics\Shapes\CollisionResult.cs" />
     <Compile Include="Utils\Utils.cs" />
@@ -265,7 +260,6 @@
     <Compile Include="PipelineRuntime\Overlap2D\O2DCompositeItem.cs" />
     <Compile Include="PipelineRuntime\Overlap2D\O2DImage.cs" />
     <Compile Include="Graphics\Renderers\ScreenSpaceRenderer.cs" />
-    <Compile Include="Input\KeysExt.cs" />
     <Compile Include="Input\InputUtils.cs" />
     <Compile Include="Input\Clipboard.cs" />
     <Compile Include="Input\IClipboard.cs" />
@@ -347,7 +341,6 @@
     <Compile Include="Graphics\Effects\SpriteLinesEffect.cs" />
     <Compile Include="Graphics\PostProcessing\PostProcessors\CinematicLetterboxPostProcessor.cs" />
     <Compile Include="Utils\ListPool.cs" />
-    <Compile Include="Utils\ListExt.cs" />
     <Compile Include="AI\BehaviorTree\Actions\BehaviorTreeReference.cs" />
     <Compile Include="AI\BehaviorTree\Actions\ExecuteAction.cs" />
     <Compile Include="AI\BehaviorTree\Composites\Composite.cs" />
@@ -434,12 +427,22 @@
     <Compile Include="AI\Pathfinding\AStar\AStarPathfinder.cs" />
     <Compile Include="AI\Pathfinding\BreadthFirst\UnweightedGraph.cs" />
     <Compile Include="AI\Pathfinding\BreadthFirst\UnweightedGridGraph.cs" />
-    <Compile Include="Utils\IEnumerableExt.cs" />
     <Compile Include="Math\Edge.cs" />
     <Compile Include="Math\Axis.cs" />
     <Compile Include="PipelineRuntime\Tiled\TiledTileExt.cs" />
     <Compile Include="ECS\Components\Physics\TiledMapMover.cs" />
     <Compile Include="ECS\Systems\EntitySystem.cs" />
+    <Compile Include="Graphics\Effects\SpriteEffect.cs" />
+    <Compile Include="Utils\Extensions\ArrayExt.cs" />
+    <Compile Include="Utils\Extensions\IEnumerableExt.cs" />
+    <Compile Include="Utils\Extensions\ListExt.cs" />
+    <Compile Include="Utils\Extensions\ColorExt.cs" />
+    <Compile Include="Utils\Extensions\PointExt.cs" />
+    <Compile Include="Utils\Extensions\RectangleExt.cs" />
+    <Compile Include="Utils\Extensions\Vector2Ext.cs" />
+    <Compile Include="Utils\Extensions\SpriteBatchExt.cs" />
+    <Compile Include="Utils\Extensions\KeysExt.cs" />
+    <Compile Include="Utils\Extensions\FloatExt.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="MonoGame.Framework">
