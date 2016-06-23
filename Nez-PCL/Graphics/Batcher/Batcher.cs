@@ -430,10 +430,19 @@ namespace Nez
 		}
 
 
-		public void drawRaw( Texture2D texture, Vector3[] verts, Vector2[] textureCoords, Color colorTL, Color colorTR, Color colorBL, Color colorBR )
+		/// <summary>
+		/// direct access to setting vert positions, UVs and colors. The order of elements is top-left, top-right, bottom-left, bottom-right
+		/// </summary>
+		/// <returns>The raw.</returns>
+		/// <param name="texture">Texture.</param>
+		/// <param name="verts">Verts.</param>
+		/// <param name="textureCoords">Texture coords.</param>
+		/// <param name="colors">Colors.</param>
+		public void drawRaw( Texture2D texture, Vector3[] verts, Vector2[] textureCoords, Color[] colors )
 		{
 			Assert.isTrue( verts.Length == 4, "there must be only 4 verts" );
 			Assert.isTrue( textureCoords.Length == 4, "there must be only 4 texture coordinates" );
+			Assert.isTrue( colors.Length == 4, "there must be only 4 colors" );
 
 			// we're out of space, flush
 			if( _numSprites >= MAX_SPRITES )
@@ -449,10 +458,10 @@ namespace Nez
 			_vertexInfo[_numSprites].textureCoordinate2 = textureCoords[2];
 			_vertexInfo[_numSprites].textureCoordinate3 = textureCoords[3];
 
-			_vertexInfo[_numSprites].color0 = colorTL;
-			_vertexInfo[_numSprites].color1 = colorTR;
-			_vertexInfo[_numSprites].color2 = colorBL;
-			_vertexInfo[_numSprites].color3 = colorBR;
+			_vertexInfo[_numSprites].color0 = colors[0];
+			_vertexInfo[_numSprites].color1 = colors[1];
+			_vertexInfo[_numSprites].color2 = colors[2];
+			_vertexInfo[_numSprites].color3 = colors[3];
 
 			if( _disableBatching )
 			{

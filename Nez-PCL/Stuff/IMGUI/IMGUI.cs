@@ -202,7 +202,7 @@ namespace Nez
 		/// value should be between 0 and 1
 		/// </summary>
 		/// <param name="value">Value.</param>
-		public static float slider( float value )
+		public static float slider( float value, string name = "" )
 		{
 			var workingWidth = _elementWidth - SHORT_ELEMENT_HEIGHT;
 			var thumbPos = workingWidth * value;
@@ -225,7 +225,7 @@ namespace Nez
 				
 			_spriteBatch.drawRect( _elementX, _lastY + ELEMENT_PADDING, _elementWidth, SHORT_ELEMENT_HEIGHT, SLIDER_BG );
 			_spriteBatch.drawRect( _elementX + thumbPos, _lastY + ELEMENT_PADDING, SHORT_ELEMENT_HEIGHT, SHORT_ELEMENT_HEIGHT, color );
-			drawString( value.ToString( "F" ), FONT_COLOR, TextAlign.Center, SHORT_ELEMENT_HEIGHT );
+			drawString( name + value.ToString( "F" ), FONT_COLOR, TextAlign.Center, SHORT_ELEMENT_HEIGHT );
 			endElement();
 
 			return value;
