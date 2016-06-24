@@ -136,7 +136,7 @@ namespace Nez
 			_areVertsDirty = false;
 		}
 
-		public override void onEnabled ()
+		public override void onEnabled()
 		{
 			base.onEnabled();
 
