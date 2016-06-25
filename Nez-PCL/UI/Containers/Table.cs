@@ -203,7 +203,7 @@ namespace Nez.UI
 		/// <param name="element">element.</param>
 		public Cell add( Element element )
 		{
-			var cell = Pool<Cell>.obtain();
+			var cell = obtainCell();
 			cell.element = element;
 
 			// the row was ended for layout, not by the user, so revert it.
@@ -1268,7 +1268,7 @@ namespace Nez.UI
 		}
 
 
-		private void computeSize()
+		void computeSize()
 		{
 			_sizeInvalid = false;
 

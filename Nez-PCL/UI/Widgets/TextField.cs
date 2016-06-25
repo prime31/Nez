@@ -48,6 +48,11 @@ namespace Nez.UI
 		/// </summary>
 		public float textFieldBoundaryThreshold = 100f;
 
+		/// <summary>
+		/// if true and setText is called it will be ignored
+		/// </summary>
+		public bool shouldIgnoreTextUpdatesWhileFocused = true;
+
 		protected String text;
 		protected int cursor, selectionStart;
 		protected bool hasSelection;
@@ -78,7 +83,7 @@ namespace Nez.UI
 
 		bool programmaticChangeEvents;
 
-		protected bool _isOver, _isPressed;
+		protected bool _isOver, _isPressed, _isFocused;
 		ITimer _keyRepeatTimer;
 		float _keyRepeatTime = 0.2f;
 
@@ -358,13 +363,13 @@ namespace Nez.UI
 
 		void IKeyboardListener.gainedFocus()
 		{
-			hasSelection = true;
+			hasSelection = _isFocused = true;
 		}
 
 
 		void IKeyboardListener.lostFocus()
 		{
-			hasSelection = false;
+			hasSelection = _isFocused = false;
 			if( _keyRepeatTimer != null )
 			{
 				_keyRepeatTimer.stop();
@@ -553,15 +558,12 @@ namespace Nez.UI
 
 		public override void draw( Graphics graphics, float parentAlpha )
 		{
-			var focused = stage != null && stage.getKeyboardFocus() == this;
-
 			var font = style.font;
 			var fontColor = ( disabled && style.disabledFontColor.HasValue ) ? style.disabledFontColor.Value
-				: ( ( focused && style.focusedFontColor.HasValue ) ? style.focusedFontColor.Value : style.fontColor );
+                : ( ( _isFocused && style.focusedFontColor.HasValue ) ? style.focusedFontColor.Value : style.fontColor );
 			IDrawable selection = style.selection;
-			IDrawable cursorPatch = style.cursor;
 			IDrawable background = ( disabled && style.disabledBackground != null ) ? style.disabledBackground
-				: ( ( focused && style.focusedBackground != null ) ? style.focusedBackground : style.background );
+				: ( ( _isFocused && style.focusedBackground != null ) ? style.focusedBackground : style.background );
 
 			var color = getColor();
 			var x = getX();
@@ -580,14 +582,14 @@ namespace Nez.UI
 			var textY = getTextY( font, background );
 			calculateOffsets();
 
-			if( focused && hasSelection && selection != null )
+			if( _isFocused && hasSelection && selection != null )
 				drawSelection( selection, graphics, font, x + bgLeftWidth, y + textY );
 
 			//float yOffset = font.isFlipped() ? -textHeight : 0;
 			float yOffset = 0;
 			if( displayText.Length == 0 )
 			{
-				if( !focused && messageText != null )
+				if( !_isFocused && messageText != null )
 				{
 					var messageFontColor = style.messageFontColor.HasValue ? style.messageFontColor.Value : new Color( 180, 180, 180, color.A * parentAlpha );
 					var messageFont = style.messageFont != null ? style.messageFont : font;
@@ -603,11 +605,11 @@ namespace Nez.UI
 				graphics.batcher.drawString( font, t, new Vector2( x + bgLeftWidth + textOffset, y + textY + yOffset ), col );
 			}
 
-			if( focused && !disabled )
+			if( _isFocused && !disabled )
 			{
 				blink();
-				if( cursorOn && cursorPatch != null )
-					drawCursor( cursorPatch, graphics, font, x + bgLeftWidth, y + textY );
+				if( cursorOn && style.cursor != null )
+					drawCursor( style.cursor, graphics, font, x + bgLeftWidth, y + textY );
 			}
 		}
 
@@ -640,15 +642,15 @@ namespace Nez.UI
 		/// <param name="y">The y coordinate.</param>
 		protected void drawSelection( IDrawable selection, Graphics graphics, BitmapFont font, float x, float y )
 		{
-			selection.draw( graphics, x + selectionX + renderOffset + fontOffset, y - font.descent, selectionWidth, textHeight, Color.White );
+			selection.draw( graphics, x + selectionX + renderOffset + fontOffset, y - font.descent / 2, selectionWidth, textHeight, Color.White );
 		}
 
 
 		protected void drawCursor( IDrawable cursorPatch, Graphics graphics, BitmapFont font, float x, float y )
 		{
 			cursorPatch.draw( graphics,
-				x + textOffset + glyphPositions[cursor] - glyphPositions[visibleTextStart] + fontOffset + -3/*font.getData().cursorX*/,
-				y - font.descent, cursorPatch.minWidth, textHeight, color );
+				x + textOffset + glyphPositions[cursor] - glyphPositions[visibleTextStart] + fontOffset - 1 /*font.getData().cursorX*/,
+				y - font.descent / 2, cursorPatch.minWidth, textHeight, color );
 		}
 
 		#endregion
@@ -919,6 +921,9 @@ namespace Nez.UI
 		/// <param name="str">String.</param>
 		public void setText( string str )
 		{
+			if( shouldIgnoreTextUpdatesWhileFocused && _isFocused )
+				return;
+			
 			if( str == null )
 				str = "";
 			if( str == text )
@@ -938,7 +943,7 @@ namespace Nez.UI
 		/// Never null, might be an empty string
 		/// </summary>
 		/// <returns>The text.</returns>
-		public String getText()
+		public string getText()
 		{
 			return text;
 		}
@@ -1292,7 +1297,7 @@ namespace Nez.UI
 	{
 		public bool acceptChar( TextField textField, char c )
 		{
-			return Char.IsDigit( c );
+			return Char.IsDigit( c ) || c == '-';
 		}
 	}
 
@@ -1304,7 +1309,7 @@ namespace Nez.UI
 			// only allow one .
 			if( c == '.' )
 				return !textField.getText().Contains( "." );
-			return Char.IsDigit( c );
+			return Char.IsDigit( c ) || c == '-';
 		}
 	}
 }

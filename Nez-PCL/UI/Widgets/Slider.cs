@@ -34,7 +34,7 @@ namespace Nez.UI
 
 
 		public Slider( Skin skin, string styleName = null ) : this( 0, 1, 0.1f, false, skin.get<SliderStyle>( styleName ) )
-		{ }
+		{}
 
 
 		public Slider( Skin skin, string styleName = null, float min = 0, float max = 1 ) : this( min, max, 0.1f, false, skin.get<SliderStyle>( styleName ) )

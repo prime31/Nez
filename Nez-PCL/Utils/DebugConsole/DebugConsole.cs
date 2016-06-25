@@ -2,13 +2,12 @@
 using System.Collections.Generic;
 using Microsoft.Xna.Framework.Input;
 using System.Reflection;
-using System.Text;
 using Microsoft.Xna.Framework;
 using System.Text.RegularExpressions;
-using Nez.BitmapFonts;
 using Microsoft.Xna.Framework.Graphics;
 using System.Linq;
 using Nez.IEnumerableExtensions;
+
 
 namespace Nez.Console
 {
@@ -64,7 +63,9 @@ namespace Nez.Console
 		float _repeatCounter = 0;
 		Keys? _repeatKey = null;
 		bool _canOpen;
-
+		#if DEBUG
+		RuntimeInspector _runtimeInspector;
+		#endif
 
 		static DebugConsole()
 		{
@@ -145,7 +146,7 @@ namespace Nez.Console
 		}
 
 
-		#region Updating and Rendering
+#region Updating and Rendering
 
 		internal void update()
 		{
@@ -486,6 +487,11 @@ namespace Nez.Console
 
 		internal void render()
 		{
+			#if DEBUG
+			if( _runtimeInspector != null )
+				_runtimeInspector.render();
+			#endif
+
 			if( !isOpen )
 				return;
 
@@ -532,10 +538,10 @@ namespace Nez.Console
 			Graphics.instance.batcher.end();
 		}
 
-		#endregion
+#endregion
 
 
-		#region Execute
+#region Execute
 
 		public void executeCommand( string command, string[] args )
 		{
@@ -558,10 +564,10 @@ namespace Nez.Console
 			instance._functionKeyActions[functionKey - 1] = action;
 		}
 
-		#endregion
+#endregion
 
 
-		#region Parse Commands
+#region Parse Commands
 
 		void buildCommandsList()
 		{
@@ -724,7 +730,7 @@ namespace Nez.Console
 		}
 
 
-		#region Parsing Arguments
+#region Parsing Arguments
 
 		static string argString( string arg )
 		{
@@ -769,9 +775,9 @@ namespace Nez.Console
 			}
 		}
 
-		#endregion
+#endregion
 
-		#endregion
+#endregion
 
 	}
 }

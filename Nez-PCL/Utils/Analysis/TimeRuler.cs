@@ -276,6 +276,7 @@ namespace Nez.Analysis
 		{
 			instance.showLog = !instance.showLog;
 			DebugConsole.instance.log( "TimeRuler enabled: " + ( instance.showLog ? "yes" : "no" ) );
+			DebugConsole.instance.isOpen = false;
 		}
 	
 		#endregion

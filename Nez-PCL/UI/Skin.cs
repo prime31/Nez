@@ -107,7 +107,7 @@ namespace Nez.UI
 			};
 			skin.add( "default", windowStyle );
 
-			var textFieldStyle = TextFieldStyle.create( Color.Black, Color.Gray, Color.LightBlue, Color.LightGray );
+			var textFieldStyle = TextFieldStyle.create( new Color( 166, 166, 166 ), new Color( 83, 170, 116 ), new Color( 180, 52, 166 ), new Color( 22, 22, 22 ) );
 			skin.add( "default", textFieldStyle );
 
 			var labelStyle = new LabelStyle();

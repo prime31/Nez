@@ -1,4 +1,6 @@
 ﻿#define NETFX_CORE
+using System;
+using System.Collections.Generic;
 using System.Reflection;
 
 
@@ -35,12 +37,52 @@ namespace Nez
 		}
 
 
+		public static IEnumerable<FieldInfo> getFields( Type type )
+		{
+			#if NETFX_CORE
+			return type.GetRuntimeFields();
+			#else
+			return type.GetFields( BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic );
+			#endif
+		}
+
+
 		public static PropertyInfo getPropertyInfo( System.Object targetObject, string propertyName )
 		{
 			#if NETFX_CORE
 			return targetObject.GetType().GetRuntimeProperty( propertyName );
 			#else
 			return targetObject.GetType().GetProperty( propertyName, BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public );
+			#endif
+		}
+
+
+		public static IEnumerable<PropertyInfo> getProperties( Type type )
+		{
+			#if NETFX_CORE
+			return type.GetRuntimeProperties();
+			#else
+			return type.GetProperties( BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic );
+			#endif
+		}
+
+
+		public static MethodInfo getPropertyGetter( PropertyInfo prop )
+		{
+			#if NETFX_CORE
+			return prop.GetMethod;
+			#else
+			return prop.GetGetMethod( true );
+			#endif
+		}
+
+
+		public static MethodInfo getPropertySetter( PropertyInfo prop )
+		{
+			#if NETFX_CORE
+			return prop.SetMethod;
+			#else
+			return prop.GetSetMethod( true );
 			#endif
 		}
 

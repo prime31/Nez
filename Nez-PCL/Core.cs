@@ -282,9 +282,10 @@ namespace Nez
 			#if DEBUG
 			TimeRuler.instance.endMark( "draw" );
 
-			if( DebugConsole.instance.isOpen )
-				DebugConsole.instance.render();
-			else
+			DebugConsole.instance.render();
+
+			// the TimeRuler only needs to render when the DebugConsole is not open
+			if( !DebugConsole.instance.isOpen )
 				TimeRuler.instance.render();
 
 			drawCalls = graphicsDevice.Metrics.DrawCount;

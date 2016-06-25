@@ -26,13 +26,13 @@ namespace Nez.UI
 
 		#endregion
 
-		bool _useFilledRect = true;
-		Color? _color;
+		public Color? color;
+		public bool useFilledRect = true;
 
 
 		public PrimitiveDrawable( Color? color = null )
 		{
-			_color = color;
+			this.color = color;
 		}
 
 
@@ -66,9 +66,9 @@ namespace Nez.UI
 
 		public virtual void draw( Graphics graphics, float x, float y, float width, float height, Color color )
 		{
-			var col = _color.HasValue ? _color.Value : color;
+			var col = this.color.HasValue ? this.color.Value : color;
 
-			if( _useFilledRect )
+			if( useFilledRect )
 				graphics.batcher.drawRect( x, y, width, height, col );
 			else
 				graphics.batcher.drawHollowRect( x, y, width, height, col );
