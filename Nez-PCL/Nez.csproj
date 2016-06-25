@@ -82,6 +82,9 @@
     <Folder Include="AI\Pathfinding\BreadthFirst\" />
     <Folder Include="AI\Pathfinding\AStar\" />
     <Folder Include="Utils\Extensions\" />
+    <Folder Include="Debug\Inspector\" />
+    <Folder Include="Debug\Inspector\Attributes\" />
+    <Folder Include="Debug\Inspector\Inspectors\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Debug\Debug.cs" />
@@ -443,6 +446,17 @@
     <Compile Include="Utils\Extensions\SpriteBatchExt.cs" />
     <Compile Include="Utils\Extensions\KeysExt.cs" />
     <Compile Include="Utils\Extensions\FloatExt.cs" />
+    <Compile Include="Debug\Inspector\RuntimeInspector.cs" />
+    <Compile Include="Debug\Inspector\Attributes\InspectableAttribute.cs" />
+    <Compile Include="Debug\Inspector\Attributes\RangeAttribute.cs" />
+    <Compile Include="Debug\Inspector\Inspectors\BoolInspector.cs" />
+    <Compile Include="Debug\Inspector\Inspectors\ComponentInspector.cs" />
+    <Compile Include="Debug\Inspector\Inspectors\FloatInspector.cs" />
+    <Compile Include="Debug\Inspector\Inspectors\Inspector.cs" />
+    <Compile Include="Debug\Inspector\Inspectors\IntInspector.cs" />
+    <Compile Include="Debug\Inspector\Inspectors\StringInspector.cs" />
+    <Compile Include="Debug\Inspector\Inspectors\Vector2Inspector.cs" />
+    <Compile Include="Debug\Inspector\Attributes\CustomInspectorAttribute.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="MonoGame.Framework">

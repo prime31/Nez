@@ -38,6 +38,7 @@ There are various systems documented separately in the FAQs folder. They go into
 - [Content Management](FAQs/ContentManagement.md)
 - [Physics/Collisions](FAQs/Physics.md)
 - [Pathfinding](FAQs/Pathfinding.md)
+- [Runtime Inspector](FAQs/RuntimeInspector.md)
 - [Entity Processing Systems](FAQs/EntitySystems.md)
 - [Nez.UI](FAQs/UI.md)
 - [AI (FSM, Behavior Tree, GOAP, Utility AI)](FAQs/AI.md)
