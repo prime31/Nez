@@ -6,7 +6,7 @@ namespace Nez
 {
 	public class FloatInspector : Inspector
 	{
-		TextField _textfield;
+		TextField _textField;
 		Slider _slider;
 
 
@@ -24,9 +24,9 @@ namespace Nez
 		void setupTextField( Table table, Skin skin )
 		{
 			var label = new Label( _name, skin );
-			_textfield = new TextField( getValue<float>().ToString(), skin );
-			_textfield.setTextFieldFilter( new FloatFilter() );
-			_textfield.onTextChanged += ( field, str ) =>
+			_textField = new TextField( getValue<float>().ToString(), skin );
+			_textField.setTextFieldFilter( new FloatFilter() );
+			_textField.onTextChanged += ( field, str ) =>
 			{
 				float newValue;
 				if( float.TryParse( str, out newValue ) )
@@ -34,7 +34,7 @@ namespace Nez
 			};
 
 			table.add( label );
-			table.add( _textfield ).setMaxWidth( 70 );
+			table.add( _textField ).setMaxWidth( 70 );
 		}
 
 
@@ -56,8 +56,8 @@ namespace Nez
 
 		public override void update()
 		{
-			if( _textfield != null )
-				_textfield.setText( getValue<float>().ToString() );
+			if( _textField != null )
+				_textField.setText( getValue<float>().ToString() );
 			if( _slider != null )
 				_slider.setValue( getValue<float>() );
 		}
