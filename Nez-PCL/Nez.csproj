@@ -457,10 +457,18 @@
     <Compile Include="Debug\Inspector\Inspectors\StringInspector.cs" />
     <Compile Include="Debug\Inspector\Inspectors\Vector2Inspector.cs" />
     <Compile Include="Debug\Inspector\Attributes\CustomInspectorAttribute.cs" />
+    <Compile Include="Debug\Inspector\Attributes\InspectorCallableAttribute.cs" />
+    <Compile Include="Debug\Inspector\Inspectors\MethodInspector.cs" />
+    <Compile Include="Debug\Inspector\Inspectors\ColorInspector.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="MonoGame.Framework">
       <HintPath>MonoGamePCL\MonoGame.Framework.dll</HintPath>
     </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="..\DefaultContent\effects\SpriteEffect.mgfxo">
+      <Link>Graphics\SpriteEffect.mgfxo</Link>
+    </EmbeddedResource>
   </ItemGroup>
 </Project>

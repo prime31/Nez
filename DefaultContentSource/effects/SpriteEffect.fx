@@ -1,23 +1,32 @@
-﻿
-Texture2D SpriteTexture;
+﻿SamplerState s0; // from SpriteBatch
+float4x4 MatrixTransform;
 
-
-sampler2D SpriteTextureSampler = sampler_state
-{
-	Texture = <SpriteTexture>;
-};
 
 struct VertexShaderOutput
 {
-	float4 Position : POSITION;
-	float4 Color : COLOR0;
-	float2 TextureCoordinates : TEXCOORD0;
+	float4 position : POSITION;
+	float4 color : COLOR0;
+	float2 texCoord : TEXCOORD0;
 };
 
 
-float4 MainPS( VertexShaderOutput input ) : COLOR
+VertexShaderOutput spriteVert( float4 position: POSITION0, float4 color: COLOR0, float2 texCoord: TEXCOORD0 )
 {
-	return tex2D( SpriteTextureSampler, input.TextureCoordinates );
+	VertexShaderOutput output;
+    output.position = mul( position, MatrixTransform );
+	output.color = color;
+	output.texCoord = texCoord;
+	
+	return output;
+}
+
+
+float4 spritePixel( VertexShaderOutput input ) : COLOR
+{
+	float4 color = tex2D( s0, input.texCoord ) * input.color;
+	color.rgb *= input.color.a;
+	
+	return color;
 }
 
 
@@ -25,6 +34,7 @@ technique SpriteDrawing
 {
 	pass P0
 	{
-		PixelShader = compile ps_3_0 MainPS();
+		VertexShader = compile vs_2_0 spriteVert();
+		PixelShader = compile ps_2_0 spritePixel();
 	}
 };
