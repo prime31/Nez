@@ -44,6 +44,11 @@ namespace Nez.UI
 
 			var windowColor = new Color( 17, 17, 17 );
 
+			var textFieldFontColor = new Color( 220, 220, 220 );
+			var textFieldCursorColor = new Color( 83, 170, 116 );
+			var textFieldSelectionColor = new Color( 180, 52, 166 );
+			var textFieldBackgroundColor = new Color( 22, 22, 22 );
+
 
 			// add all our styles
 			var buttonStyle = new ButtonStyle {
@@ -54,7 +59,7 @@ namespace Nez.UI
 			skin.add( "default", buttonStyle );
 
 			var textButtonStyle = new TextButtonStyle {
-				up = new PrimitiveDrawable( buttonColor, 10, 5 ),
+				up = new PrimitiveDrawable( buttonColor, 6, 2 ),
 				over = new PrimitiveDrawable( buttonOver ),
 				down = new PrimitiveDrawable( buttonDown ),
 				overFontColor = overFontColor,
@@ -107,7 +112,7 @@ namespace Nez.UI
 			};
 			skin.add( "default", windowStyle );
 
-			var textFieldStyle = TextFieldStyle.create( new Color( 166, 166, 166 ), new Color( 83, 170, 116 ), new Color( 180, 52, 166 ), new Color( 22, 22, 22 ) );
+			var textFieldStyle = TextFieldStyle.create( textFieldFontColor, textFieldCursorColor, textFieldSelectionColor, textFieldBackgroundColor );
 			skin.add( "default", textFieldStyle );
 
 			var labelStyle = new LabelStyle();

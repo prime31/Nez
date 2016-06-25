@@ -87,6 +87,16 @@ namespace Nez
 		}
 
 
+		public static IEnumerable<MethodInfo> getMethods( Type type )
+		{
+			#if NETFX_CORE
+			return type.GetRuntimeMethods();
+			#else
+			return type.GetMethods( BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic );
+			#endif
+		}
+
+
 		public static MethodInfo getMethodInfo( System.Object targetObject, string methodName )
 		{
 			#if NETFX_CORE
