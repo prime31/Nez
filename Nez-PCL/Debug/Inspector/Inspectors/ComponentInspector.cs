@@ -33,13 +33,6 @@ namespace Nez
 		}
 
 
-		public void update()
-		{
-			foreach( var i in _inspectors )
-				i.update();
-		}
-
-
 		public void initialize( Table table, Skin skin )
 		{
 			table.add( name ).getElement<Label>().setFontScale( 1.4f ).setFontColor( new Color( 241, 156, 0 ) );
@@ -70,6 +63,13 @@ namespace Nez
 				i.initialize( table, skin );
 				table.row();
 			}
+		}
+
+
+		public void update()
+		{
+			foreach( var i in _inspectors )
+				i.update();
 		}
 
 	}

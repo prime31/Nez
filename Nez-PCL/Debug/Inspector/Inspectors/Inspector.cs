@@ -33,7 +33,7 @@ namespace Nez
 				if( !field.IsPublic && field.GetCustomAttribute<InspectableAttribute>() == null )
 					continue;
 
-				var inspector = getInspectorForType( field.FieldType );
+				var inspector = getInspectorForType( field.FieldType, component );
 				if( inspector != null )
 				{
 					inspector.setTarget( component, field );
@@ -54,7 +54,7 @@ namespace Nez
 				if( prop.Name == "enabled" )
 					continue;
 
-				var inspector = getInspectorForType( prop.PropertyType );
+				var inspector = getInspectorForType( prop.PropertyType, component );
 				if( inspector != null )
 				{
 					inspector.setTarget( component, prop );
@@ -93,7 +93,7 @@ namespace Nez
 				if( !allowedProps.contains( prop.Name ) )
 					continue;
 
-				var inspector = getInspectorForType( prop.PropertyType );
+				var inspector = getInspectorForType( prop.PropertyType, transform );
 				inspector.setTarget( transform, prop );
 				props.Add( inspector );
 			}
@@ -109,8 +109,9 @@ namespace Nez
 		/// <returns>The inspector for type.</returns>
 		/// <param name="valueType">Value type.</param>
 		/// <param name="memberInfo">Member info.</param>
-		static Inspector getInspectorForType( Type valueType )
+		protected static Inspector getInspectorForType( Type valueType, object target )
 		{
+			// built-in types
 			if( valueType == typeof( int ) )
 				return new IntInspector();
 			if( valueType == typeof( float ) )
@@ -124,6 +125,7 @@ namespace Nez
 			if( valueType == typeof( Color ) )
 				return new ColorInspector();
 
+			// check for custom inspectors before checking Nez types in case a subclass implemented one
 			var customInspectorType = valueType.GetTypeInfo().GetCustomAttribute<CustomInspectorAttribute>();
 			if( customInspectorType != null )
 			{
@@ -132,9 +134,25 @@ namespace Nez
 				Debug.warn( $"found CustomInspector {customInspectorType.inspectorType} but it is not a subclass of Inspector" );
 			}
 
+			// Nez types
+			if( valueType == typeof( Material ) )
+				return getMaterialInspector( target );
+
 			Debug.log( $"no inspector for type {valueType}" );
 
 			return null;
+		}
+
+
+		static Inspector getMaterialInspector( object target )
+		{
+			var materialProp = ReflectionUtils.getPropertyInfo( target, "material" );
+			var materialMethod = ReflectionUtils.getPropertyGetter( materialProp );
+			var material = materialMethod.Invoke( target, new object[] { } ) as Material;
+			if( material == null || material.effect == null )
+				return null;
+
+			return new EffectInspector();
 		}
 
 

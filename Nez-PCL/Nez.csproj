@@ -460,6 +460,7 @@
     <Compile Include="Debug\Inspector\Attributes\InspectorCallableAttribute.cs" />
     <Compile Include="Debug\Inspector\Inspectors\MethodInspector.cs" />
     <Compile Include="Debug\Inspector\Inspectors\ColorInspector.cs" />
+    <Compile Include="Debug\Inspector\Inspectors\EffectInspector.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="MonoGame.Framework">
