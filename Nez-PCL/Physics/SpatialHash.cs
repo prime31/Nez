@@ -102,10 +102,11 @@ namespace Nez.Spatial
 		/// <summary>
 		/// adds the object to the SpatialHash
 		/// </summary>
-		/// <param name="obj">Object.</param>
-		public void register( Collider obj )
+		/// <param name="collider">Object.</param>
+		public void register( Collider collider )
 		{
-			var bounds = obj.bounds;
+			var bounds = collider.bounds;
+			collider.registeredPhysicsBounds = bounds;
 			var p1 = cellCoords( bounds.x, bounds.y );
 			var p2 = cellCoords( bounds.right, bounds.bottom );
 
@@ -122,18 +123,19 @@ namespace Nez.Spatial
 				{
 					// we need to create the cell if there is none
 					var c = cellAtPosition( x, y, true );
-					c.Add( obj );
+					c.Add( collider );
 				}
 			}
 		}
 
 
 		/// <summary>
-		/// removes the object from the SpatialHash using the passed-in bounds to locate it
+		/// removes the object from the SpatialHash
 		/// </summary>
-		/// <param name="obj">Object.</param>
-		public void remove( Collider obj, ref RectangleF bounds )
+		/// <param name="collider">Collider.</param>
+		public void remove( Collider collider )
 		{
+			var bounds = collider.registeredPhysicsBounds;
 			var p1 = cellCoords( bounds.x, bounds.y );
 			var p2 = cellCoords( bounds.right, bounds.bottom );
 
@@ -143,9 +145,9 @@ namespace Nez.Spatial
 				{
 					// the cell should always exist since this collider should be in all queryed cells
 					var cell = cellAtPosition( x, y );
-					Assert.isNotNull( cell, "removing Collider [{0}] from a cell that it is not present in", obj );
+					Assert.isNotNull( cell, "removing Collider [{0}] from a cell that it is not present in", collider );
 					if( cell != null )
-						cell.Remove( obj );
+						cell.Remove( collider );
 				}
 			}
 		}
@@ -155,7 +157,7 @@ namespace Nez.Spatial
 		/// removes the object from the SpatialHash using a brute force approach
 		/// </summary>
 		/// <param name="obj">Object.</param>
-		public void remove( Collider obj )
+		public void removeWithBruteForce( Collider obj )
 		{
 			_cellDict.remove( obj );
 		}

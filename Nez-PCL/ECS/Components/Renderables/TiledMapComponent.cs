@@ -204,7 +204,7 @@ namespace Nez
 				return;
 
 			foreach( var collider in _colliders )
-				Physics.removeCollider( collider, true );
+				Physics.removeCollider( collider );
 			_colliders = null;
 		}
 

@@ -97,45 +97,24 @@ namespace Nez
 
 
 		/// <summary>
-		/// removes the collider from the physics system. uses brute force if useColliderBoundsForRemovalLookup is false. Only resort
-		/// to the brute force method if you already moved the Entity/Collider before wanting to remove it.
+		/// removes the collider from the physics system
 		/// </summary>
+		/// <returns>The collider.</returns>
 		/// <param name="collider">Collider.</param>
-		/// <param name="useColliderBoundsForRemovalLookup">If set to <c>true</c> use collider bounds for removal lookup.</param>
-		public static void removeCollider( Collider collider, bool useColliderBoundsForRemovalLookup )
+		public static void removeCollider( Collider collider )
 		{
-			if( useColliderBoundsForRemovalLookup )
-			{
-				var bounds = collider.bounds;
-				_spatialHash.remove( collider, ref bounds );
-			}
-			else
-			{
-				_spatialHash.remove( collider );
-			}
+			_spatialHash.remove( collider );
 		}
 
 
 		/// <summary>
-		/// removes teh collider from the phyics system. bounds should be the last bounds value that the collider had in the physics system.
+		/// updates the colliders position in the physics system. This essentially just removes then re-adds the Collider with its
+		/// new bounds
 		/// </summary>
 		/// <param name="collider">Collider.</param>
-		/// <param name="bounds">Bounds.</param>
-		public static void removeCollider( Collider collider, ref RectangleF bounds )
+		public static void updateCollider( Collider collider )
 		{
-			_spatialHash.remove( collider, ref bounds );
-		}
-
-
-		/// <summary>
-		/// updates the colliders position in the physics system. preUpdateColliderBounds should be the bounds of the collider before it
-		/// was changed
-		/// </summary>
-		/// <param name="collider">Collider.</param>
-		/// <param name="colliderBounds">Collider bounds.</param>
-		public static void updateCollider( Collider collider, ref RectangleF preUpdateColliderBounds )
-		{
-			_spatialHash.remove( collider, ref preUpdateColliderBounds );
+			_spatialHash.remove( collider );
 			_spatialHash.register( collider );
 		}
 

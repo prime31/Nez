@@ -82,6 +82,12 @@ namespace Nez
 			}
 		}
 
+		/// <summary>
+		/// the bounds of this Collider when it was registered with the Physics system. Storing this allows us to always be able to
+		/// safely remove the Collider from the Physics system even if it was moved before attempting to remove it.
+		/// </summary>
+		internal RectangleF registeredPhysicsBounds;
+
 		protected Vector2 _localOffset;
 		protected Vector2 _origin;
 
@@ -227,7 +233,7 @@ namespace Nez
 		public virtual void unregisterColliderWithPhysicsSystem()
 		{
 			if( _isParentEntityAddedToScene && _isColliderRegistered )
-				Physics.removeCollider( this, true );
+				Physics.removeCollider( this );
 			_isColliderRegistered = false;
 		}
 

@@ -16,11 +16,7 @@ namespace Nez
 			get
 			{
 				if( _colliders.Count == 0 )
-				{
-					if( _collidersToAdd.Count == 1 )
-						return _collidersToAdd[0];
 					return null;
-				}
 				return _colliders[0];
 			}
 		}
