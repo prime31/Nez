@@ -19,7 +19,7 @@ namespace Nez
 		protected Type _valueType;
 		protected Func<object> _getter;
 		protected Action<object> _setter;
-		protected MemberInfo _fieldOrPropInfo;
+		protected MemberInfo _memberInfo;
 
 
 		public static List<Inspector> getInspectableProperties( object component )
@@ -50,12 +50,31 @@ namespace Nez
 				if( ( !prop.GetMethod.IsPublic || !prop.SetMethod.IsPublic ) && prop.GetCustomAttribute<InspectableAttribute>() == null )
 					continue;
 
+				// skip Component.enabled which is handled elsewhere
+				if( prop.Name == "enabled" )
+					continue;
+
 				var inspector = getInspectorForType( prop.PropertyType );
 				if( inspector != null )
 				{
 					inspector.setTarget( component, prop );
 					props.Add( inspector );
 				}
+			}
+
+			var methods = ReflectionUtils.getMethods( componentType );
+			foreach( var method in methods )
+			{
+				var attr = method.GetCustomAttribute<InspectorCallableAttribute>();
+				if( attr == null )
+					continue;
+
+				if( !MethodInspector.areParametersValid( method.GetParameters() ) )
+					continue;
+
+				var inspector = new MethodInspector();
+				inspector.setTarget( component, method );
+				props.Add( inspector );
 			}
 
 			return props;
@@ -102,13 +121,15 @@ namespace Nez
 				return new StringInspector();
 			if( valueType == typeof( Vector2 ) )
 				return new Vector2Inspector();
+			if( valueType == typeof( Color ) )
+				return new ColorInspector();
 
 			var customInspectorType = valueType.GetTypeInfo().GetCustomAttribute<CustomInspectorAttribute>();
 			if( customInspectorType != null )
 			{
 				if( customInspectorType.inspectorType.GetTypeInfo().IsSubclassOf( typeof( Inspector ) ) )
 					return (Inspector)Activator.CreateInstance( customInspectorType.inspectorType );
-				Debug.log( $"found CustomInspector {customInspectorType.inspectorType} but it is not a subclass of Inspector" );
+				Debug.warn( $"found CustomInspector {customInspectorType.inspectorType} but it is not a subclass of Inspector" );
 			}
 
 			Debug.log( $"no inspector for type {valueType}" );
@@ -119,7 +140,7 @@ namespace Nez
 
 		public void setTarget( object target, FieldInfo field )
 		{
-			_fieldOrPropInfo = field;
+			_memberInfo = field;
 			_target = target;
 			_name = field.Name;
 			_valueType = field.FieldType;
@@ -137,7 +158,7 @@ namespace Nez
 
 		public void setTarget( object target, PropertyInfo prop )
 		{
-			_fieldOrPropInfo = prop;
+			_memberInfo = prop;
 			_target = target;
 			_name = prop.Name;
 			_valueType = prop.PropertyType;
@@ -150,6 +171,14 @@ namespace Nez
 			{
 				ReflectionUtils.getPropertySetter( prop ).Invoke( target, new object[] { val } );
 			};
+		}
+
+
+		public void setTarget( object target, MethodInfo method )
+		{
+			_memberInfo = method;
+			_target = target;
+			_name = method.Name;
 		}
 
 
@@ -167,7 +196,7 @@ namespace Nez
 
 		protected T getFieldOrPropertyAttribute<T>() where T : Attribute
 		{
-			return _fieldOrPropInfo.GetCustomAttribute<T>();
+			return _memberInfo.GetCustomAttribute<T>();
 		}
 
 

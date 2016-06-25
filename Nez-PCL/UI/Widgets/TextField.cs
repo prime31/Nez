@@ -53,7 +53,7 @@ namespace Nez.UI
 		/// </summary>
 		public bool shouldIgnoreTextUpdatesWhileFocused = true;
 
-		protected String text;
+		protected string text;
 		protected int cursor, selectionStart;
 		protected bool hasSelection;
 		protected bool writeEnters;
@@ -805,7 +805,7 @@ namespace Nez.UI
 		}
 
 
-		string insert( int position, string text, String to )
+		string insert( int position, string text, string to )
 		{
 			if( to.Length == 0 )
 				return text;
@@ -906,6 +906,9 @@ namespace Nez.UI
 		/// <param name="str">String.</param>
 		public void appendText( string str )
 		{
+			if( shouldIgnoreTextUpdatesWhileFocused && _isFocused )
+				return;
+			
 			if( str == null )
 				str = "";
 
@@ -919,15 +922,15 @@ namespace Nez.UI
 		/// str If null, "" is used
 		/// </summary>
 		/// <param name="str">String.</param>
-		public void setText( string str )
+		public TextField setText( string str )
 		{
 			if( shouldIgnoreTextUpdatesWhileFocused && _isFocused )
-				return;
+				return this;
 			
 			if( str == null )
 				str = "";
 			if( str == text )
-				return;
+				return this;
 
 			clearSelection();
 			var oldText = text;
@@ -936,6 +939,21 @@ namespace Nez.UI
 			if( programmaticChangeEvents )
 				changeText( oldText, text );
 			cursor = 0;
+
+			return this;
+		}
+
+
+		/// <summary>
+		/// force sets the text without validating or firing change events. Use at your own risk.
+		/// </summary>
+		/// <returns>The text forced.</returns>
+		/// <param name="str">String.</param>
+		public TextField setTextForced( string str )
+		{
+			text = str;
+			updateDisplayText();
+			return this;
 		}
 
 
@@ -1312,5 +1330,21 @@ namespace Nez.UI
 			return Char.IsDigit( c ) || c == '-';
 		}
 	}
+
+
+	public class BoolFilter : TextField.ITextFieldFilter
+	{
+		public bool acceptChar( TextField textField, char c )
+		{
+			if( c == 't' )
+				textField.setTextForced( "true" );
+
+			if( c == 'f' )
+				textField.setTextForced( "false" );
+
+			return false;
+		}
+	}
+
 }
 
