@@ -7,11 +7,12 @@ Nez aims to be a lightweight 2D framework that sits on top of MonoGame/FNA. It p
 - AABB, circle and polygon collision/trigger detection along with linecasts against the SpatialHash
 - efficient coroutines for breaking up large tasks across multiple frames or animation timing (Core.startCoroutine)
 - in-game debug console extendable by adding an attribute to any static method. Just press the tilde key like in the old days with Quake. Out of the box, it includes a visual physics debugging system, asset tracker, basic profiler and more. Just type 'help' to see all the commands or type 'help COMMAND' to see specific hints.
-- extensible rendering system. Add/remove renderers and post processors as needed.
+- in-game Component inspector. Open the debug console and use the command `inspect entity_name` to display and edit fields/properties and call methods with a button click.
+- extensible rendering system. Add/remove renderers and post processors as needed. Renderables are sorted by render layer first then layer depth for maximum flexibility out of the box.
 - pathfinding support via Astar and Breadth First Search
-- deferred lighting engine with normal map support
+- deferred lighting engine with normal map support and both runtime and offline normal map generation
 - tween system. Tween any int/float/Vector/quaternion/color/rectangle field or property.
-- sprites with sprite animations, scrolling sprites and repeating sprites
+- sprites with sprite animations, scrolling sprites, repeating sprites and sprite trails
 - kick-ass particle system with added support for importing [Particle Designer](https://71squared.com/particledesigner) files
 - optimized event emitter for core events that you can also add to any class of your own
 - scheduler for delayed and repeating tasks (Core.schedule method)
