@@ -4,7 +4,7 @@ Nez includes some really handy runtime Entity inspection facilities. You can acc
 
 
 ## Exposing Properties and Fields in the Inspector
-By default, the inspector will display any public properties/fields that are of a supported type. The inspector can also display private fields/properties by just adding the `Inspectable` attribute:
+By default, the inspector will display any public properties/fields that are of a supported type. It will also check Materials for non-null Effects and it will display any valid properties from the Effect. The inspector can also display private fields/properties by just adding the `Inspectable` attribute:
 
 ```csharp
 [Inspectable]
@@ -21,6 +21,27 @@ float groundAccel;
 [Range( 0.1f, 100, 5 )]
 float airAccel;
 ```
+
+
+## Exposing Methods in the Inspector
+The inspector also has the ability to expose a button to call methods. Methods must have 0 to 1 parameters and if they have a parameter it must be of type int, float, bool or string. To expose a method in the inspector add the `InspectorCallable` attribute to the method. An example is below:
+
+```csharp
+[InspectorCallable]
+public void doSomething()
+{}
+
+
+[InspectorCallable]
+public void doSomethingWithParameter( bool isDone )
+{}
+
+
+[InspectorCallable]
+public void thisWontWordBecauseItHasTwoParameters( bool isDone, int stuff )
+{}
+```
+
 
 
 
