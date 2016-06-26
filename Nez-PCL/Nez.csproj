@@ -467,9 +467,4 @@
       <HintPath>MonoGamePCL\MonoGame.Framework.dll</HintPath>
     </Reference>
   </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="..\DefaultContent\effects\SpriteEffect.mgfxo">
-      <Link>Graphics\SpriteEffect.mgfxo</Link>
-    </EmbeddedResource>
-  </ItemGroup>
 </Project>
