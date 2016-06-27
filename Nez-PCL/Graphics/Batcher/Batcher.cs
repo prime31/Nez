@@ -666,7 +666,7 @@ namespace Nez
 		}
 
 
-		void flushBatch()
+		public void flushBatch()
 		{
 			if( _numSprites == 0 )
 				return;
@@ -691,6 +691,32 @@ namespace Nez
 			drawPrimitives( curTexture, offset, _numSprites - offset );
 
 			_numSprites = 0;
+		}
+
+
+		/// <summary>
+		/// enables/disables scissor testing. If the RasterizerState changes it will cause a batch flush.
+		/// </summary>
+		/// <returns>The scissor test.</returns>
+		/// <param name="shouldEnable">Should enable.</param>
+		public void enableScissorTest( bool shouldEnable )
+		{
+			var currentValue = _rasterizerState.ScissorTestEnable;
+			if( currentValue == shouldEnable )
+				return;
+
+			flushBatch();
+
+			_rasterizerState = new RasterizerState
+			{
+				CullMode = _rasterizerState.CullMode,
+				DepthBias = _rasterizerState.DepthBias,
+				FillMode = _rasterizerState.FillMode,
+				MultiSampleAntiAlias = _rasterizerState.MultiSampleAntiAlias,
+				SlopeScaleDepthBias = _rasterizerState.SlopeScaleDepthBias,
+				DepthClipEnable = _rasterizerState.DepthClipEnable,
+				ScissorTestEnable = shouldEnable
+			};
 		}
 
 

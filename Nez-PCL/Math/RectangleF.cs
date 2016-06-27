@@ -187,6 +187,7 @@ namespace Nez
 			this.height = size.Y;
 		}
 
+
 		/// <summary>
 		/// creates a RectangleF given min/max points (top-left, bottom-right points)
 		/// </summary>

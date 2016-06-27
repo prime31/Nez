@@ -461,6 +461,7 @@
     <Compile Include="Debug\Inspector\Inspectors\MethodInspector.cs" />
     <Compile Include="Debug\Inspector\Inspectors\ColorInspector.cs" />
     <Compile Include="Debug\Inspector\Inspectors\EffectInspector.cs" />
+    <Compile Include="Graphics\ScissorStack.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="MonoGame.Framework">
