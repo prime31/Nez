@@ -171,6 +171,12 @@ namespace Nez.UI
 			_dragging = false;
 		}
 
+
+		bool IInputListener.onMouseScrolled( int mouseWheelDelta )
+		{
+			return false;
+		}
+
 		#endregion
 
 

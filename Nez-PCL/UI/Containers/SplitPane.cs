@@ -128,6 +128,12 @@ namespace Nez.UI
 		{
 		}
 
+
+		bool IInputListener.onMouseScrolled( int mouseWheelDelta )
+		{
+			return false;
+		}
+
 		#endregion
 
 

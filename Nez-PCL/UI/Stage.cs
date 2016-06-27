@@ -193,6 +193,8 @@ namespace Nez.UI
 			else
 			{
 				var over = hit( mousePos );
+				if( over != null )
+					handleMouseWheel( over );
 
 				// lose keyboard focus if we click outside of the keyboardFocusElement
 				if( leftMouseButtonPressed && _keyboardFocusElement != null && over != _keyboardFocusElement )
@@ -206,7 +208,7 @@ namespace Nez.UI
 					if( leftMouseButtonPressed && _mouseOverElement is IInputListener )
 					{
 						var listener = _mouseOverElement as IInputListener;
-						// add the listener to be notified for all onMouseDown and onMouseUp events for the specified pointer and button
+						// add the listener to be notified for all onMouseDown and onMouseUp events
 						if( listener.onMousePressed( elementLocal ) )
 							_inputFocusListeners.Add( _mouseOverElement );
 					}
@@ -229,6 +231,32 @@ namespace Nez.UI
 				}
 
 				_mouseOverElement = over;
+			}
+		}
+
+
+		/// <summary>
+		/// bubbles the onMouseScrolled event from mouseOverElement to all parents until one of them handles it
+		/// </summary>
+		/// <returns>The mouse wheel.</returns>
+		/// <param name="mouseOverElement">Mouse over element.</param>
+		void handleMouseWheel( Element mouseOverElement )
+		{
+			// bail out if we have no mouse wheel motion
+			if( Input.mouseWheelDelta == 0 )
+				return;
+
+			// check the deepest Element first then check all of its parents that are IInputListeners
+			var listener = mouseOverElement as IInputListener;
+			if( listener.onMouseScrolled( Input.mouseWheelDelta ) )
+				return;
+			
+			while( mouseOverElement.parent != null )
+			{
+				mouseOverElement = mouseOverElement.parent;
+				listener = mouseOverElement as IInputListener;
+				if( listener != null && listener.onMouseScrolled( Input.mouseWheelDelta ) )
+					return;
 			}
 		}
 

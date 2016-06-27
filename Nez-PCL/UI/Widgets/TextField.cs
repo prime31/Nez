@@ -161,6 +161,12 @@ namespace Nez.UI
 			_isPressed = _isOver = false;
 		}
 
+
+		bool IInputListener.onMouseScrolled( int mouseWheelDelta )
+		{
+			return false;
+		}
+
 		#endregion
 
 
