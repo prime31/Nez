@@ -12,8 +12,8 @@ namespace Nez.UI
 		public Entity entity;
 
 		/// <summary>
-		/// if true, the rawMousePosition will be used else the scaledMousePosition will be used. If your UI is in screen space (using a 
-		/// ScreenSpaceRenderer for example) then set this to true so input is not scaled.
+		/// if true, the rawMousePosition will be used else the scaledMousePosition will be used. If your UI is in screen space
+		/// and non-scaled (using the Scene.IFinalRenderDelegate for example) then set this to true so input is not scaled.
 		/// </summary>
 		public bool isFullScreen;
 
@@ -154,6 +154,16 @@ namespace Nez.UI
 
 		#region Input
 
+		/// <summary>
+		/// gets the appropriate mouse position (scaled vs raw) based on if this isFullScreen and if we have an entity
+		/// </summary>
+		/// <returns>The mouse position.</returns>
+		public Vector2 getMousePosition()
+		{
+			return entity != null && !isFullScreen ? Input.scaledMousePosition : Input.rawMousePosition.ToVector2();
+		}
+
+
 		public void update()
 		{
 			if( _isGamepadFocusEnabled )
@@ -164,7 +174,7 @@ namespace Nez.UI
 			var leftMouseButtonDown = Input.leftMouseButtonDown;
 			var leftMouseButtonPressed = Input.leftMouseButtonPressed;
 			var leftMouseButtonReleased = Input.leftMouseButtonReleased;
-			var currentMousePosition = entity != null && !isFullScreen ? Input.scaledMousePosition : Input.rawMousePosition.ToVector2();
+			var currentMousePosition = getMousePosition();
 
 			var didMouseMove = false;
 			if( _lastMousePosition != currentMousePosition )

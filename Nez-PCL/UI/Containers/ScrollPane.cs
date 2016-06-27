@@ -42,7 +42,7 @@ namespace Nez.UI
 		float _flingTime = 1f;
 		float _overscrollDistance = 50, _overscrollSpeedMin = 30, _overscrollSpeedMax = 200;
 		bool _forceScrollX, _forceScrollY;
-		bool _disableX = true, _disableY;
+		protected bool _disableX = true, _disableY;
 		bool _clamp = true;
 		bool _scrollbarsOnTop;
 		bool _variableSizeKnobs = true;
@@ -1068,7 +1068,7 @@ namespace Nez.UI
 		#endregion
 
 
-		void update()
+		protected virtual void update()
 		{
 			if( _fadeAlpha > 0 && _fadeScrollBars && !_touchScrollH && !_touchScrollV )
 			{
@@ -1326,6 +1326,20 @@ namespace Nez.UI
 			hScrollKnob = style.hScrollKnob;
 			vScroll = style.vScroll;
 			vScrollKnob = style.vScrollKnob;
+		}
+
+
+		public ScrollPaneStyle clone()
+		{
+			return new ScrollPaneStyle
+			{
+				background = background,
+				corner = corner,
+				hScroll = hScroll,
+				hScrollKnob = hScrollKnob,
+				vScroll = vScroll,
+				vScrollKnob = vScrollKnob
+			};
 		}
 
 	}

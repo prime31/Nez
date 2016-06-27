@@ -94,7 +94,7 @@ namespace Nez
 			_table = new Table();
 			_table.top().left();
 			_table.defaults().setPadTop( 5 ).setPadLeft( 5 ).setPadRight( 5 ).setAlign( Align.left );
-			_table.setBackground( new PrimitiveDrawable( new Color( 40, 40, 40, 255 ) ) );
+			_table.setBackground( new PrimitiveDrawable( new Color( 40, 40, 40 ) ) );
 
 			// wrap up the table in a ScrollPane
 			_scrollPane = ui.stage.addElement( new ScrollPane( _table, _skin ) );

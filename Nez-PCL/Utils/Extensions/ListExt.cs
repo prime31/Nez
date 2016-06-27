@@ -18,6 +18,23 @@ namespace Nez
 				list[n] = value;
 			}  
 		}
+
+
+		/// <summary>
+		/// returns false if the item is already in the List and true if it was successfully added.
+		/// </summary>
+		/// <returns>The if not present.</returns>
+		/// <param name="list">List.</param>
+		/// <param name="item">Item.</param>
+		/// <typeparam name="T">The 1st type parameter.</typeparam>
+		public static bool addIfNotPresent<T>( this IList<T> list, T item )
+		{
+			if( list.Contains( item ) )
+				return false;
+
+			list.Add( item );
+			return true;
+		}
 	}
 }
 

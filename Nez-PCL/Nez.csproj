@@ -85,6 +85,7 @@
     <Folder Include="Debug\Inspector\" />
     <Folder Include="Debug\Inspector\Attributes\" />
     <Folder Include="Debug\Inspector\Inspectors\" />
+    <Folder Include="UI\Utils\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Debug\Debug.cs" />
@@ -463,6 +464,11 @@
     <Compile Include="Debug\Inspector\Inspectors\EffectInspector.cs" />
     <Compile Include="UI\Containers\ScrollPane.cs" />
     <Compile Include="Graphics\ScissorStack.cs" />
+    <Compile Include="UI\Widgets\ListBox.cs" />
+    <Compile Include="UI\Utils\Selection.cs" />
+    <Compile Include="UI\Utils\ArraySelection.cs" />
+    <Compile Include="UI\Widgets\SelectBox.cs" />
+    <Compile Include="UI\Widgets\SelectBoxList.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="MonoGame.Framework">
