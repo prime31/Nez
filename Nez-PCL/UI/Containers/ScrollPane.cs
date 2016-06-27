@@ -23,7 +23,7 @@ namespace Nez.UI
 		Rectangle _vKnobBounds;
 		Rectangle _widgetAreaBounds;
 
-		float _scrollSpeed = 0.001f;
+		float _scrollSpeed = 0.005f;
 		bool _useNaturalScrolling = true;
 		bool _scrollX, _scrollY = true;
 		bool _vScrollOnRight = true;
@@ -39,7 +39,7 @@ namespace Nez.UI
 		float _velocityX, _velocityY;
 		float _flingTimer;
 		bool _overscrollX = true, _overscrollY = true;
-		float flingTime = 1f;
+		float _flingTime = 1f;
 		float _overscrollDistance = 50, _overscrollSpeedMin = 30, _overscrollSpeedMax = 200;
 		bool _forceScrollX, _forceScrollY;
 		bool _disableX = true, _disableY;
@@ -68,7 +68,7 @@ namespace Nez.UI
 		{
 			Assert.isNotNull( style, "style cannot be null" );
 			transform = true;
-			this._style = style;
+			_style = style;
 			setWidget( widget );
 			setSize( 150, 150 );
 		}
@@ -273,11 +273,11 @@ namespace Nez.UI
 			{
 				if( hScrollKnob != null )
 				{
-					float hScrollHeight = _style.hScroll != null ? _style.hScroll.minHeight : hScrollKnob.minHeight;
+					var hScrollHeight = _style.hScroll != null ? _style.hScroll.minHeight : hScrollKnob.minHeight;
 					// The corner gap where the two scroll bars intersect might have to flip from right to left.
-					float boundsX = _vScrollOnRight ? bgLeftWidth : bgLeftWidth + scrollbarWidth;
+					var boundsX = _vScrollOnRight ? bgLeftWidth : bgLeftWidth + scrollbarWidth;
 					// Scrollbar on the top or bottom.
-					float boundsY = _hScrollOnBottom ? bgBottomHeight : height - bgTopHeight - hScrollHeight;
+					var boundsY = _hScrollOnBottom ? bgBottomHeight : height - bgTopHeight - hScrollHeight;
 					_hScrollBounds = RectangleExt.fromFloats( boundsX, boundsY, _areaWidth, hScrollHeight );
 					if( _variableSizeKnobs )
 						_hKnobBounds.Width = (int)Math.Max( hScrollKnob.minWidth, (int)( _hScrollBounds.Width * _areaWidth / widgetWidth ) );
@@ -300,7 +300,7 @@ namespace Nez.UI
 			{
 				if( vScrollKnob != null )
 				{
-					float vScrollWidth = _style.vScroll != null ? _style.vScroll.minWidth : vScrollKnob.minWidth;
+					var vScrollWidth = _style.vScroll != null ? _style.vScroll.minWidth : vScrollKnob.minWidth;
 					// the small gap where the two scroll bars intersect might have to flip from bottom to top
 					float boundsX, boundsY;
 					if( _hScrollOnBottom )
@@ -452,7 +452,7 @@ namespace Nez.UI
 		public ScrollPane setStyle( ScrollPaneStyle style )
 		{
 			Assert.isNotNull( style, "style cannot be null" );
-			this._style = style;
+			_style = style;
 			invalidateHierarchy();
 
 			return this;
@@ -476,8 +476,8 @@ namespace Nez.UI
 		/// <param name="widget">Widget.</param>
 		public ScrollPane setWidget( Element widget )
 		{
-			if( this._widget != null ) removeElement( this._widget );
-			this._widget = widget;
+			if( _widget != null ) removeElement( _widget );
+			_widget = widget;
 			if( widget != null ) addElement( widget );
 
 			return this;
@@ -568,7 +568,7 @@ namespace Nez.UI
 		/// <param name="useNaturalScrolling">Use natural scrolling.</param>
 		public ScrollPane setUseNaturalScrolling( bool useNaturalScrolling )
 		{
-			this._useNaturalScrolling = useNaturalScrolling;
+			_useNaturalScrolling = useNaturalScrolling;
 			return this;
 		}
 
@@ -779,7 +779,7 @@ namespace Nez.UI
 
 		public void setVelocityX( float velocityX )
 		{
-			this._velocityX = velocityX;
+			_velocityX = velocityX;
 		}
 
 
@@ -795,7 +795,7 @@ namespace Nez.UI
 
 		public ScrollPane setVelocityY( float velocityY )
 		{
-			this._velocityY = velocityY;
+			_velocityY = velocityY;
 			return this;
 		}
 
@@ -876,7 +876,7 @@ namespace Nez.UI
 		/// <param name="flingTime">Fling time.</param>
 		public ScrollPane setFlingTime( float flingTime )
 		{
-			this.flingTime = flingTime;
+			_flingTime = flingTime;
 			return this;
 		}
 
@@ -1081,7 +1081,7 @@ namespace Nez.UI
 			{
 				resetFade();
 
-				var alpha = _flingTimer / flingTime;
+				var alpha = _flingTimer / _flingTime;
 				_amountX -= _velocityX * alpha * Time.unscaledDeltaTime;
 				_amountY -= _velocityY * alpha * Time.unscaledDeltaTime;
 				clamp();
@@ -1102,25 +1102,25 @@ namespace Nez.UI
 
 			if( _smoothScrolling && _flingTimer <= 0 &&
 			   // Scroll smoothly when grabbing the scrollbar if one pixel of scrollbar movement is > 10% of the scroll area.
-			   ( ( !_touchScrollH || ( _scrollX && _maxX / ( _hScrollBounds.Width - _hKnobBounds.Width ) > _areaWidth * 0.1f ) ) //
-				&& ( !_touchScrollV || ( _scrollY && _maxY / ( _vScrollBounds.Height - _vKnobBounds.Height ) > _areaHeight * 0.1f ) ) ) //
+			   ( ( !_touchScrollH || ( _scrollX && _maxX / ( _hScrollBounds.Width - _hKnobBounds.Width ) > _areaWidth * 0.1f ) )
+				&& ( !_touchScrollV || ( _scrollY && _maxY / ( _vScrollBounds.Height - _vKnobBounds.Height ) > _areaHeight * 0.1f ) ) )
 			)
 			{
 				if( _visualAmountX != _amountX )
 				{
 					resetFade();
 					if( _visualAmountX < _amountX )
-						setVisualScrollX( Math.Min( _amountX, _visualAmountX + Math.Max( 200 * Time.unscaledDeltaTime, ( _amountX - _visualAmountX ) * 7 * Time.unscaledDeltaTime ) ) );
+						setVisualScrollX( Math.Min( _amountX, _visualAmountX + Math.Max( 2000 * Time.unscaledDeltaTime, ( _amountX - _visualAmountX ) * 7 * Time.unscaledDeltaTime ) ) );
 					else
-						setVisualScrollX( Math.Max( _amountX, _visualAmountX - Math.Max( 200 * Time.unscaledDeltaTime, ( _visualAmountX - _amountX ) * 7 * Time.unscaledDeltaTime ) ) );
+						setVisualScrollX( Math.Max( _amountX, _visualAmountX - Math.Max( 2000 * Time.unscaledDeltaTime, ( _visualAmountX - _amountX ) * 7 * Time.unscaledDeltaTime ) ) );
 				}
 				if( _visualAmountY != _amountY )
 				{
 					resetFade();
 					if( _visualAmountY < _amountY )
-						setVisualScrollY( Math.Min( _amountY, _visualAmountY + Math.Max( 200 * Time.unscaledDeltaTime, ( _amountY - _visualAmountY ) * 7 * Time.unscaledDeltaTime ) ) );
+						setVisualScrollY( Math.Min( _amountY, _visualAmountY + Math.Max( 2000 * Time.unscaledDeltaTime, ( _amountY - _visualAmountY ) * 7 * Time.unscaledDeltaTime ) ) );
 					else
-						setVisualScrollY( Math.Max( _amountY, _visualAmountY - Math.Max( 200 * Time.unscaledDeltaTime, ( _visualAmountY - _amountY ) * 7 * Time.unscaledDeltaTime ) ) );
+						setVisualScrollY( Math.Max( _amountY, _visualAmountY - Math.Max( 2000 * Time.unscaledDeltaTime, ( _visualAmountY - _amountY ) * 7 * Time.unscaledDeltaTime ) ) );
 				}
 			}
 			else
@@ -1288,8 +1288,8 @@ namespace Nez.UI
 		public void fling( float flingTime, float velocityX, float velocityY )
 		{
 			_flingTimer = flingTime;
-			this._velocityX = velocityX;
-			this._velocityY = velocityY;
+			_velocityX = velocityX;
+			_velocityY = velocityY;
 		}
 
 	}

@@ -126,23 +126,21 @@ namespace Nez.UI
 			{
 				applyTransform( graphics, computeTransform() );
 				drawBackground( graphics, parentAlpha, 0, 0 );
-				// TODO: clipping support
-//				if( clip )
-//				{
-//					graphics.flush();
-//					float padLeft = this.padLeft.get( this ), padBottom = this.padBottom.get( this );
-//					if( clipBegin( padLeft, padBottom, getWidth() - padLeft - padRight.get( this ),
-//						    getHeight() - padBottom - padTop.get( this ) ) )
-//					{
-//						drawChildren( graphics, parentAlpha );
-//						graphics.flush();
-//						clipEnd();
-//					}
-//				}
-//				else
-//				{
+
+				if( clip )
+				{
+					graphics.batcher.flushBatch();
+					float padLeft = _padLeft.get( this ), padBottom = _padBottom.get( this );
+					if( clipBegin( graphics.batcher, padLeft, padBottom, getWidth() - padLeft - _padRight.get( this ), getHeight() - padBottom - _padTop.get( this ) ) )
+					{
+						drawChildren( graphics, parentAlpha );
+						clipEnd( graphics.batcher );
+					}
+				}
+				else
+				{
 					drawChildren( graphics, parentAlpha );
-//				}
+				}
 				resetTransform( graphics );
 			}
 			else
@@ -1225,14 +1223,14 @@ namespace Nez.UI
 				if( fillX > 0 )
 				{
 					c.elementWidth = Math.Max( spannedCellWidth * fillX, c.minWidth.get( c.element ) );
-					float maxWidth = c.maxWidth.get( c.element );
+					var maxWidth = c.maxWidth.get( c.element );
 					if( maxWidth > 0 )
 						c.elementWidth = Math.Min( c.elementWidth, maxWidth );
 				}
 				if( fillY > 0 )
 				{
 					c.elementHeight = Math.Max( rowHeight[c.row] * fillY - c.computedPadTop - c.computedPadBottom, c.minHeight.get( c.element ) );
-					float maxHeight = c.maxHeight.get( c.element );
+					var maxHeight = c.maxHeight.get( c.element );
 					if( maxHeight > 0 )
 						c.elementHeight = Math.Min( c.elementHeight, maxHeight );
 				}

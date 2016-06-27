@@ -12,7 +12,10 @@ namespace Nez
 		UICanvas ui;
 		ScreenSpaceCamera _camera;
 		List<ComponentInspector> _components = new List<ComponentInspector>();
+
+		// ui fields
 		Skin _skin;
+		ScrollPane _scrollPane;
 		Table _table;
 		Entity entity;
 
@@ -70,6 +73,8 @@ namespace Nez
 		void prepCanvas()
 		{
 			_skin = Skin.createDefaultSkin();
+
+			// modify some of the default styles to better suit our needs
 			var tfs = _skin.get<TextFieldStyle>();
 			tfs.background.leftWidth = tfs.background.rightWidth = 4;
 			tfs.background.bottomHeight = 0;
@@ -86,12 +91,16 @@ namespace Nez
 			ui.onAddedToEntity();
 			ui.stage.isFullScreen = true;
 
-			_table = ui.stage.addElement( new Table() );
-			_table.setWidth( 300 );
-			_table.setHeight( Screen.height );
-			_table.top().right();
-			_table.defaults().setPadTop( 5 ).setPadRight( 5 ).setAlign( Align.left );
+			_table = new Table();
+			_table.top().left();
+			_table.defaults().setPadTop( 5 ).setPadLeft( 5 ).setPadRight( 5 ).setAlign( Align.left );
 			_table.setBackground( new PrimitiveDrawable( new Color( 40, 40, 40, 255 ) ) );
+
+			// wrap up the table in a ScrollPane
+			_scrollPane = ui.stage.addElement( new ScrollPane( _table, _skin ) );
+			// force a validate which will layout the ScrollPane and populate the proper scrollBarWidth
+			_scrollPane.validate();
+			_scrollPane.setSize( 295 + _scrollPane.getScrollBarWidth(), Screen.height );
 		}
 
 	}

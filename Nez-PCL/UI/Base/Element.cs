@@ -68,7 +68,7 @@ namespace Nez.UI
 			return stage;
 		}
 
-	
+
 		/// <summary>
 		/// Called by the framework when this element or any parent is added to a group that is in the stage.
 		/// stage May be null if the element or any parent is no longer in a stage
@@ -583,19 +583,62 @@ namespace Nez.UI
 			var parent = this.parent;
 			if( parent == null )
 				return;
-			
+
 			var children = parent.children;
 			if( children.Count == 1 )
 				return;
-			
+
 			index = Math.Min( index, children.Count - 1 );
 			if( index == children.IndexOf( this ) )
 				return;
-			
+
 			if( !children.Remove( this ) )
 				return;
 
 			children.Insert( index, this );
+		}
+
+
+		/// <summary>
+		/// Calls clipBegin(Batcher, float, float, float, float) to clip this actor's bounds
+		/// </summary>
+		/// <returns>The begin.</returns>
+		public bool clipBegin( Batcher batcher )
+		{
+			return clipBegin( batcher, x, y, width, height );
+		}
+
+
+		/// <summary>
+		/// Clips the specified screen aligned rectangle, specified relative to the transform matrix of the stage's Batch. The
+		/// transform matrix and the stage's camera must not have rotational components. Calling this method must be followed by a call
+		/// to clipEnd() if true is returned.
+		/// </summary>
+		public bool clipBegin( Batcher batcher, float x, float y, float width, float height )
+		{
+			if( width <= 0 || height <= 0 )
+				return false;
+
+			var tableBounds = RectangleExt.fromFloats( x, y, width, height );
+			var scissorBounds = ScissorStack.calculateScissors( stage?.entity?.scene?.camera, batcher.transformMatrix, tableBounds );
+			if( ScissorStack.pushScissors( scissorBounds ) )
+			{
+				batcher.enableScissorTest( true );
+				return true;
+			}
+
+			return false;
+		}
+
+
+		/// <summary>
+		/// Ends clipping begun by clipBegin(Batcher, float, float, float, float)
+		/// </summary>
+		/// <returns>The end.</returns>
+		public void clipEnd( Batcher batcher )
+		{
+			batcher.enableScissorTest( false );
+			ScissorStack.popScissors();
 		}
 
 
@@ -643,7 +686,7 @@ namespace Nez.UI
 		{
 			if( parent != null )
 				stageCoords = parent.stageToLocalCoordinates( stageCoords );
-			
+
 			stageCoords = parentToLocalCoordinates( stageCoords );
 			return stageCoords;
 		}
@@ -799,7 +842,7 @@ namespace Nez.UI
 				return parent.removeElement( this );
 			return false;
 		}
-			
+
 
 		#region ILayout
 
@@ -852,7 +895,7 @@ namespace Nez.UI
 
 
 		public virtual void layout()
-		{}
+		{ }
 
 
 		public virtual void invalidate()
