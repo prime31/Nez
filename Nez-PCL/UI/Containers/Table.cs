@@ -26,7 +26,7 @@ namespace Nez.UI
 		static public Color debugTableColor = new Color( 0, 0, 255, 255 );
 		static public Color debugCellColor = new Color( 255, 0, 0, 255 );
 		static public Color debugElementColor = new Color( 0, 255, 0, 255 );
-		static private float[] _columnWeightedWidth, _rowWeightedHeight;
+		static float[] _columnWeightedWidth, _rowWeightedHeight;
 
 		public override float minWidth
 		{

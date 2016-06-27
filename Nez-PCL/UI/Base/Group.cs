@@ -166,8 +166,6 @@ namespace Nez.UI
 
 		public void drawChildren( Graphics graphics, float parentAlpha )
 		{
-			// TODO: culling support? https://github.com/libgdx/libgdx/blob/master/gdx/src/com/badlogic/gdx/scenes/scene2d/Group.java#L70
-
 			parentAlpha *= color.A;
 			if( transform )
 			{

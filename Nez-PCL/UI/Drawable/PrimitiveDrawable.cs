@@ -67,6 +67,8 @@ namespace Nez.UI
 		public virtual void draw( Graphics graphics, float x, float y, float width, float height, Color color )
 		{
 			var col = this.color.HasValue ? this.color.Value : color;
+			if( color.A != 255 )
+				col *= ( color.A / 255f );
 
 			if( useFilledRect )
 				graphics.batcher.drawRect( x, y, width, height, col );

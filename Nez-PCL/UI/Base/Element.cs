@@ -184,13 +184,14 @@ namespace Nez.UI
 		}
 
 
-		public void setX( float x )
+		public Element setX( float x )
 		{
 			if( this.x != x )
 			{
 				this.x = x;
 				positionChanged();
 			}
+			return this;
 		}
 
 
@@ -220,13 +221,14 @@ namespace Nez.UI
 		}
 
 
-		public void setY( float y )
+		public Element setY( float y )
 		{
 			if( this.y != y )
 			{
 				this.y = y;
 				positionChanged();
 			}
+			return this;
 		}
 
 
@@ -235,7 +237,7 @@ namespace Nez.UI
 		/// </summary>
 		/// <param name="x">The x coordinate.</param>
 		/// <param name="y">The y coordinate.</param>
-		public void setPosition( float x, float y )
+		public Element setPosition( float x, float y )
 		{
 			if( this.x != x || this.y != y )
 			{
@@ -243,6 +245,7 @@ namespace Nez.UI
 				this.y = y;
 				positionChanged();
 			}
+			return this;
 		}
 
 
