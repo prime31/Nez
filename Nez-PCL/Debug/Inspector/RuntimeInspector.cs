@@ -18,7 +18,7 @@ namespace Nez
 		Skin _skin;
 		ScrollPane _scrollPane;
 		Table _table;
-		Entity entity;
+		Entity _entity;
 
 
 		/// <summary>
@@ -36,7 +36,7 @@ namespace Nez
 		/// <param name="entity">Entity.</param>
 		public RuntimeInspector( Entity entity )
 		{
-			this.entity = entity;
+			_entity = entity;
 			initialize();
 			cacheTransformInspector();
 		}
@@ -47,6 +47,7 @@ namespace Nez
 			prepCanvas();
 			_camera = new ScreenSpaceCamera();
 			Core.emitter.addObserver( CoreEvents.GraphicsDeviceReset, onGraphicsDeviceReset );
+			Core.emitter.addObserver( CoreEvents.SceneChanged, onSceneChanged );
 		}
 
 
@@ -56,15 +57,22 @@ namespace Nez
 		}
 
 
+		void onSceneChanged()
+		{
+			Console.DebugConsole.instance._runtimeInspector = null;
+			Dispose();
+		}
+
+
 		public void update()
 		{
 			// if we have an Entity this is an Entity inspector else it is a PostProcessor inspector
-			if( entity != null )
+			if( _entity != null )
 			{
 				// update transform, which has a null Component
 				getOrCreateInspectorList( (Component)null ).update();
 
-				foreach( var comp in entity.components )
+				foreach( var comp in _entity.components )
 					getOrCreateInspectorList( comp ).update();
 			}
 			else
@@ -107,7 +115,7 @@ namespace Nez
 		void cacheTransformInspector()
 		{
 			// add Transform separately
-			var transformInspector = new InspectorList( entity.transform );
+			var transformInspector = new InspectorList( _entity.transform );
 			transformInspector.initialize( _table, _skin );
 			_inspectors.Add( transformInspector );
 		}
@@ -130,7 +138,6 @@ namespace Nez
 
 			// since we arent using this as a Component on an Entity we'll fake it here
 			ui = new UICanvas();
-			ui.entity = entity;
 			ui.onAddedToEntity();
 			ui.stage.isFullScreen = true;
 
@@ -156,7 +163,8 @@ namespace Nez
 			if( !_disposedValue )
 			{
 				Core.emitter.removeObserver( CoreEvents.GraphicsDeviceReset, onGraphicsDeviceReset );
-				entity = null;
+				Core.emitter.removeObserver( CoreEvents.SceneChanged, onSceneChanged );
+				_entity = null;
 				_disposedValue = true;
 			}
 		}

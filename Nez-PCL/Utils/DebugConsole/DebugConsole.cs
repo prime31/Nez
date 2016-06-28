@@ -64,7 +64,7 @@ namespace Nez.Console
 		Keys? _repeatKey = null;
 		bool _canOpen;
 		#if DEBUG
-		RuntimeInspector _runtimeInspector;
+		internal RuntimeInspector _runtimeInspector;
 		#endif
 
 		static DebugConsole()

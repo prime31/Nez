@@ -20,6 +20,7 @@ namespace Nez
 		/// <value>The multiplicative factor.</value>
 		public float multiplicativeFactor
 		{
+			get { return _multiplicativeFactor; }
 			set
 			{
 				if( effect != null )
@@ -28,8 +29,8 @@ namespace Nez
 					_multiplicativeFactor = value;
 			}
 		}
-		float _multiplicativeFactor = 1f;
 
+		float _multiplicativeFactor = 1f;
 		RenderTexture _lightsRenderTexture;
 
 
