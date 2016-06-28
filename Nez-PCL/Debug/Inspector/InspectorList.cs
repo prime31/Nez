@@ -36,7 +36,7 @@ namespace Nez
 		public void initialize( Table table, Skin skin )
 		{
 			table.getRowDefaults().setPadTop( 10 );
-			table.add( name ).getElement<Label>().setFontScale( 1f ).setFontColor( new Color( 241, 156, 0 ) );
+			table.add( name.Replace( "PostProcessor", string.Empty ) ).getElement<Label>().setFontScale( 1f ).setFontColor( new Color( 241, 156, 0 ) );
 
 			// if we have a component, stick a bool for enabled here
 			if( target != null )
@@ -57,7 +57,7 @@ namespace Nez
 						( (PostProcessor)target ).enabled = newValue;
 				};
 
-				table.add( _enabledCheckbox ).right().setPadRight( _enabledCheckbox.width );
+				table.add( _enabledCheckbox ).right();
 			}
 			table.row();
 
