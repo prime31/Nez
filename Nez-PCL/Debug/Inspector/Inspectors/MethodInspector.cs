@@ -3,6 +3,7 @@ using System.Reflection;
 using Nez.UI;
 
 
+#if DEBUG
 namespace Nez
 {
 	public class MethodInspector : Inspector
@@ -102,4 +103,4 @@ namespace Nez
 
 	}
 }
-
+#endif
