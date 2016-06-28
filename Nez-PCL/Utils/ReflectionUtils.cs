@@ -47,6 +47,13 @@ namespace Nez
 		}
 
 
+		public static object getFieldValue( object targetObject, string fieldName )
+		{
+			var fieldInfo = getFieldInfo( targetObject, fieldName );
+			return fieldInfo.GetValue( targetObject );
+		}
+
+
 		public static PropertyInfo getPropertyInfo( System.Object targetObject, string propertyName )
 		{
 			#if NETFX_CORE
@@ -84,6 +91,14 @@ namespace Nez
 			#else
 			return prop.GetSetMethod( true );
 			#endif
+		}
+
+
+		public static object getPropertyValue( object targetObject, string propertyName )
+		{
+			var propInfo = getPropertyInfo( targetObject, propertyName );
+			var methodInfo = getPropertyGetter( propInfo );
+			return methodInfo.Invoke( targetObject, new object[] { } );
 		}
 
 

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Content;
 using Nez.Systems;
 using Nez.Textures;
 using Microsoft.Xna.Framework.Graphics;
@@ -99,7 +98,7 @@ namespace Nez
 		/// <summary>
 		/// The list of entities within this Scene
 		/// </summary>
-		public EntityList entities;
+		public readonly EntityList entities;
 
 		/// <summary>
 		/// Manages a list of all the RenderableComponents that are currently on scene Entitys
@@ -185,8 +184,8 @@ namespace Nez
 		Action<Texture2D> _screenshotRequestCallback;
 
 		List<Renderer> _renderers = new List<Renderer>();
-		List<Renderer> _afterPostProcessorRenderers = new List<Renderer>();
-		readonly List<PostProcessor> _postProcessors = new List<PostProcessor>();
+		readonly List<Renderer> _afterPostProcessorRenderers = new List<Renderer>();
+		internal readonly List<PostProcessor> _postProcessors = new List<PostProcessor>();
 		bool _didSceneBegin;
 
 

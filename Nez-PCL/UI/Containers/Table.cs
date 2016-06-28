@@ -829,6 +829,22 @@ namespace Nez.UI
 		#region Getters
 
 		/// <summary>
+		/// gets the current Cell defaults. This is the same value returned by a call to row()
+		/// </summary>
+		/// <returns>The row defaults.</returns>
+		public Cell getRowDefaults()
+		{
+			if( _rowDefaults == null )
+			{
+				_rowDefaults = Pool<Cell>.obtain();
+				_rowDefaults.clear();
+			}
+
+			return _rowDefaults;
+		}
+
+
+		/// <summary>
 		/// Returns the cell for the specified element in this table, or null.
 		/// </summary>
 		/// <returns>The cell.</returns>

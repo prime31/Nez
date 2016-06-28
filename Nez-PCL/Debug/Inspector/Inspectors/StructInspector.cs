@@ -27,7 +27,7 @@ namespace Nez
 				if( !field.IsPublic && IEnumerableExt.count( field.GetCustomAttributes<InspectableAttribute>() ) == 0 )
 					continue;
 
-				var inspector = getInspectorForType( field.FieldType, _target );
+				var inspector = getInspectorForType( field.FieldType, _target, field );
 				if( inspector != null )
 				{
 					inspector.setStructTarget( _target, this, field );
@@ -46,7 +46,7 @@ namespace Nez
 				if( ( !prop.GetMethod.IsPublic || !prop.SetMethod.IsPublic ) && IEnumerableExt.count( prop.GetCustomAttributes<InspectableAttribute>() ) == 0 )
 					continue;
 
-				var inspector = getInspectorForType( prop.PropertyType, _target );
+				var inspector = getInspectorForType( prop.PropertyType, _target, prop );
 				if( inspector != null )
 				{
 					inspector.setStructTarget( _target, this, prop );

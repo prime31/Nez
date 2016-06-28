@@ -451,7 +451,6 @@
     <Compile Include="Debug\Inspector\Attributes\InspectableAttribute.cs" />
     <Compile Include="Debug\Inspector\Attributes\RangeAttribute.cs" />
     <Compile Include="Debug\Inspector\Inspectors\BoolInspector.cs" />
-    <Compile Include="Debug\Inspector\Inspectors\ComponentInspector.cs" />
     <Compile Include="Debug\Inspector\Inspectors\FloatInspector.cs" />
     <Compile Include="Debug\Inspector\Inspectors\Inspector.cs" />
     <Compile Include="Debug\Inspector\Inspectors\IntInspector.cs" />
@@ -476,6 +475,7 @@
     <Compile Include="Debug\Inspector\Inspectors\EnumInspector.cs" />
     <Compile Include="Debug\Inspector\Inspectors\StructInspector.cs" />
     <Compile Include="Utils\Extensions\ComponentExt.cs" />
+    <Compile Include="Debug\Inspector\InspectorList.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="MonoGame.Framework">

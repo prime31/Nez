@@ -12,7 +12,7 @@ namespace Nez
 	{
 		UICanvas ui;
 		ScreenSpaceCamera _camera;
-		List<ComponentInspector> _components = new List<ComponentInspector>();
+		List<InspectorList> _inspectors = new List<InspectorList>();
 
 		// ui fields
 		Skin _skin;
@@ -21,11 +21,30 @@ namespace Nez
 		Entity entity;
 
 
+		/// <summary>
+		/// creates a PostProcessor inspector
+		/// </summary>
+		public RuntimeInspector()
+		{
+			initialize();
+		}
+
+
+		/// <summary>
+		/// creates an Entity inspector
+		/// </summary>
+		/// <param name="entity">Entity.</param>
 		public RuntimeInspector( Entity entity )
 		{
 			this.entity = entity;
-			prepCanvas();
+			initialize();
 			cacheTransformInspector();
+		}
+
+
+		void initialize()
+		{
+			prepCanvas();
 			_camera = new ScreenSpaceCamera();
 			Core.emitter.addObserver( CoreEvents.GraphicsDeviceReset, onGraphicsDeviceReset );
 		}
@@ -37,17 +56,28 @@ namespace Nez
 		}
 
 
+		public void update()
+		{
+			// if we have an Entity this is an Entity inspector else it is a PostProcessor inspector
+			if( entity != null )
+			{
+				// update transform, which has a null Component
+				getOrCreateInspectorList( (Component)null ).update();
+
+				foreach( var comp in entity.components )
+					getOrCreateInspectorList( comp ).update();
+			}
+			else
+			{
+				foreach( var pp in Core.scene._postProcessors )
+					getOrCreateInspectorList( pp ).update();
+			}
+		}
+
+
 		public void render()
 		{
-			// update transform
-			getOrCreateComponentInspector( null ).update();
-
-			foreach( var comp in entity.components )
-			{
-				var inspector = getOrCreateComponentInspector( comp );
-				inspector.update();
-			}
-
+			// manually start a fresh batch and call the UICanvas Component lifecycle methods since it isnt attached to the Scene
 			Graphics.instance.batcher.begin();
 			( ui as IUpdatable ).update();
 			ui.render( Graphics.instance, _camera );
@@ -55,14 +85,19 @@ namespace Nez
 		}
 
 
-		ComponentInspector getOrCreateComponentInspector( Component comp )
+		/// <summary>
+		/// attempts to find a cached version of the InspectorList and if it cant find one it will create a new one
+		/// </summary>
+		/// <returns>The or create inspector list.</returns>
+		/// <param name="comp">Comp.</param>
+		InspectorList getOrCreateInspectorList( object comp )
 		{
-			var inspector = _components.Where( i => i.component == comp ).FirstOrDefault();
+			var inspector = _inspectors.Where( i => i.target == comp ).FirstOrDefault();
 			if( inspector == null )
 			{
-				inspector = new ComponentInspector( comp );
+				inspector = new InspectorList( comp );
 				inspector.initialize( _table, _skin );
-				_components.Add( inspector );
+				_inspectors.Add( inspector );
 			}
 
 			return inspector;
@@ -72,9 +107,9 @@ namespace Nez
 		void cacheTransformInspector()
 		{
 			// add Transform separately
-			var transformInspector = new ComponentInspector( entity.transform );
+			var transformInspector = new InspectorList( entity.transform );
 			transformInspector.initialize( _table, _skin );
-			_components.Add( transformInspector );
+			_inspectors.Add( transformInspector );
 		}
 
 
@@ -101,7 +136,7 @@ namespace Nez
 
 			_table = new Table();
 			_table.top().left();
-			_table.defaults().setPadTop( 5 ).setPadLeft( 5 ).setPadRight( 5 ).setAlign( Align.left );
+			_table.defaults().setPadTop( 4 ).setPadLeft( 4 ).setPadRight( 0 ).setAlign( Align.left );
 			_table.setBackground( new PrimitiveDrawable( new Color( 40, 40, 40 ) ) );
 
 			// wrap up the table in a ScrollPane
@@ -121,6 +156,7 @@ namespace Nez
 			if( !_disposedValue )
 			{
 				Core.emitter.removeObserver( CoreEvents.GraphicsDeviceReset, onGraphicsDeviceReset );
+				entity = null;
 				_disposedValue = true;
 			}
 		}

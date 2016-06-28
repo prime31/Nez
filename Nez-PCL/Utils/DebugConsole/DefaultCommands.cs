@@ -44,7 +44,7 @@ namespace Nez.Console
 		}
 
 
-		[Command( "inspect", "Inspects the Entity with the passed in name. Pass in no name to stop inspecting the current Entity." )]
+		[Command( "inspect", "Inspects the Entity with the passed in name, or pass in 'pp' or 'postprocessors' to inspect all PostProccessors in the Scene. Pass in no name to clost the inspector." )]
 		static void inspectEntity( string entityName = "" )
 		{
 			// clean up no matter what
@@ -54,7 +54,11 @@ namespace Nez.Console
 				instance._runtimeInspector = null;
 			}
 
-			if( entityName != "" )
+			if( entityName == "pp" || entityName == "postprocessors" )
+			{
+				instance._runtimeInspector = new RuntimeInspector();
+			}
+			else if( entityName != "" )
 			{
 				var entity = Core.scene.findEntity( entityName );
 				if( entity == null )

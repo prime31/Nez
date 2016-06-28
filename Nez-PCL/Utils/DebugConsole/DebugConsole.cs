@@ -146,7 +146,7 @@ namespace Nez.Console
 		}
 
 
-#region Updating and Rendering
+		#region Updating and Rendering
 
 		internal void update()
 		{
@@ -489,7 +489,10 @@ namespace Nez.Console
 		{
 			#if DEBUG
 			if( _runtimeInspector != null )
+			{
+				_runtimeInspector.update();
 				_runtimeInspector.render();
+			}
 			#endif
 
 			if( !isOpen )

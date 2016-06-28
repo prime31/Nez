@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Reflection;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using Nez.IEnumerableExtensions;
 using Nez.UI;
 
@@ -23,26 +24,33 @@ namespace Nez
 		protected MemberInfo _memberInfo;
 
 
-		public static List<Inspector> getInspectableProperties( object component )
+		public static List<Inspector> getInspectableProperties( object target )
 		{
 			var props = new List<Inspector>();
-			var componentType = component.GetType();
+			var targetType = target.GetType();
 
-			var fields = ReflectionUtils.getFields( componentType );
+			var fields = ReflectionUtils.getFields( targetType );
 			foreach( var field in fields )
 			{
 				if( !field.IsPublic && IEnumerableExt.count( field.GetCustomAttributes<InspectableAttribute>() ) == 0 )
 					continue;
 
-				var inspector = getInspectorForType( field.FieldType, component );
+				if( field.IsInitOnly )
+					continue;
+
+				// skip enabled which is handled elsewhere
+				if( field.Name == "enabled" )
+					continue;
+
+				var inspector = getInspectorForType( field.FieldType, target, field );
 				if( inspector != null )
 				{
-					inspector.setTarget( component, field );
+					inspector.setTarget( target, field );
 					props.Add( inspector );
 				}
 			}
 
-			var properties = ReflectionUtils.getProperties( componentType );
+			var properties = ReflectionUtils.getProperties( targetType );
 			foreach( var prop in properties )
 			{
 				if( !prop.CanRead || !prop.CanWrite )
@@ -55,15 +63,15 @@ namespace Nez
 				if( prop.Name == "enabled" )
 					continue;
 
-				var inspector = getInspectorForType( prop.PropertyType, component );
+				var inspector = getInspectorForType( prop.PropertyType, target, prop );
 				if( inspector != null )
 				{
-					inspector.setTarget( component, prop );
+					inspector.setTarget( target, prop );
 					props.Add( inspector );
 				}
 			}
 
-			var methods = ReflectionUtils.getMethods( componentType );
+			var methods = ReflectionUtils.getMethods( targetType );
 			foreach( var method in methods )
 			{
 				var attr = method.GetCustomAttribute<InspectorCallableAttribute>();
@@ -74,7 +82,7 @@ namespace Nez
 					continue;
 
 				var inspector = new MethodInspector();
-				inspector.setTarget( component, method );
+				inspector.setTarget( target, method );
 				props.Add( inspector );
 			}
 
@@ -94,7 +102,7 @@ namespace Nez
 				if( !allowedProps.contains( prop.Name ) )
 					continue;
 
-				var inspector = getInspectorForType( prop.PropertyType, transform );
+				var inspector = getInspectorForType( prop.PropertyType, transform, prop );
 				inspector.setTarget( transform, prop );
 				props.Add( inspector );
 			}
@@ -110,7 +118,7 @@ namespace Nez
 		/// <returns>The inspector for type.</returns>
 		/// <param name="valueType">Value type.</param>
 		/// <param name="memberInfo">Member info.</param>
-		protected static Inspector getInspectorForType( Type valueType, object target )
+		protected static Inspector getInspectorForType( Type valueType, object target, MemberInfo memberInfo )
 		{
 			// built-in types
 			if( valueType == typeof( int ) )
@@ -142,13 +150,20 @@ namespace Nez
 			// Nez types
 			if( valueType == typeof( Material ) )
 				return getMaterialInspector( target );
+			if( valueType.GetTypeInfo().IsSubclassOf( typeof( Effect ) ) )
+				return getEffectInspector( target, memberInfo );
 
-			Debug.log( $"no inspector for type {valueType}" );
+			//Debug.log( $"no inspector for type {valueType}" );
 
 			return null;
 		}
 
 
+		/// <summary>
+		/// null checks the Material and Material.effect and ony returns an Inspector if we have data
+		/// </summary>
+		/// <returns>The material inspector.</returns>
+		/// <param name="target">Target.</param>
 		static Inspector getMaterialInspector( object target )
 		{
 			var materialProp = ReflectionUtils.getPropertyInfo( target, "material" );
@@ -157,7 +172,38 @@ namespace Nez
 			if( material == null || material.effect == null )
 				return null;
 
-			return new EffectInspector();
+			// we only want subclasses of Effect. Effect itself is not interesting
+			if( material.effect.GetType().GetTypeInfo().IsSubclassOf( typeof( Effect ) ) )
+				return new EffectInspector();
+
+			return null;
+		}
+
+
+		/// <summary>
+		/// null checks the Effect and creates an Inspector only if it is not null
+		/// </summary>
+		/// <returns>The effect inspector.</returns>
+		/// <param name="target">Target.</param>
+		/// <param name="memberInfo">Member info.</param>
+		static Inspector getEffectInspector( object target, MemberInfo memberInfo )
+		{
+			var fieldInfo = memberInfo as FieldInfo;
+			if( fieldInfo != null )
+			{
+				if( fieldInfo.GetValue( target ) != null )
+					return new EffectInspector();
+			}
+
+			var propInfo = memberInfo as PropertyInfo;
+			if( propInfo != null )
+			{
+				var getter = ReflectionUtils.getPropertyGetter( propInfo );
+				if( getter.Invoke( target, new object[] {} ) != null )
+					return new EffectInspector();
+			}
+
+			return null;
 		}
 
 
