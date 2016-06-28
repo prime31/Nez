@@ -178,20 +178,13 @@ namespace Nez.UI
 				var actionTime = _time > 0 ? 0.3f : 0.15f;
 				container.setTransform( true );
 				container.setScale( 0.5f );
-				container.setOrigin( AlignInternal.center );
-				PropertyTweens.floatPropertyTo( container, "scaleX", 1, actionTime ).setEaseType( EaseType.QuartIn ).start();
-				PropertyTweens.floatPropertyTo( container, "scaleY", 1, actionTime ).setEaseType( EaseType.QuartIn ).start();				
+				PropertyTweens.floatPropertyTo( container, "scaleX", 1, actionTime ).setEaseType( EaseType.QuintIn ).start();
+				PropertyTweens.floatPropertyTo( container, "scaleY", 1, actionTime ).setEaseType( EaseType.QuintIn ).start();				
 			}
 			else
 			{
 				container.setScale( 1 );
 			}
-
-
-			//tooltip.container.setTransform( true );
-			//tooltip.container.getColor().a = 0.2f;
-			//tooltip.container.setScale( 0.05f );
-			//tooltip.container.addAction( parallel( fadeIn( actionTime, fade ), scaleTo( 1, 1, actionTime, Interpolation.fade ) ) );
 		}
 
 
@@ -204,10 +197,17 @@ namespace Nez.UI
 		protected void hideAction( Tooltip tooltip )
 		{
 			var container = tooltip.getContainer();
-			PropertyTweens.floatPropertyTo( container, "scaleX", 0.2f, 0.2f ).setEaseType( EaseType.QuartIn ).start();
-			PropertyTweens.floatPropertyTo( container, "scaleY", 0.2f, 0.2f ).setEaseType( EaseType.QuartIn )
-			              .setCompletionHandler( t => container.remove() )
-			              .start();
+			if( animations )
+			{
+				PropertyTweens.floatPropertyTo( container, "scaleX", 0.2f, 0.2f ).setEaseType( EaseType.QuintOut ).start();
+				PropertyTweens.floatPropertyTo( container, "scaleY", 0.2f, 0.2f ).setEaseType( EaseType.QuintOut )
+							  .setCompletionHandler( t => container.remove() )
+							  .start();
+			}
+			else
+			{
+				container.remove();
+			}
 		}
 
 

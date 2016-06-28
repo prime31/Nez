@@ -102,16 +102,16 @@ namespace Nez.UI
 			skin.add( "default", checkboxStyle );
 
 			var progressBarStyle = new ProgressBarStyle {
-				background = new PrimitiveDrawable( 20, barBg ),
-				knobBefore = new PrimitiveDrawable( 20, barKnobOver )
+				background = new PrimitiveDrawable( 14, barBg ),
+				knobBefore = new PrimitiveDrawable( 14, barKnobOver )
 			};
 			skin.add( "default", progressBarStyle );
 
 			var sliderStyle = new SliderStyle {
-				background = new PrimitiveDrawable( 10, barBg ),
-				knob = new PrimitiveDrawable( 20, barKnob ),
-				knobOver = new PrimitiveDrawable( 20, barKnobOver ),
-				knobDown = new PrimitiveDrawable( 20, barKnobDown )
+				background = new PrimitiveDrawable( 6, barBg ),
+				knob = new PrimitiveDrawable( 14, barKnob ),
+				knobOver = new PrimitiveDrawable( 14, barKnobOver ),
+				knobDown = new PrimitiveDrawable( 14, barKnobDown )
 			};
 			skin.add( "default", sliderStyle );
 

@@ -21,6 +21,7 @@ namespace Nez.UI
 			_manager = TooltipManager.getInstance();
 
 			_container = new Container( contents );
+			_container.setOrigin( AlignInternal.center );
 			_targetElement = targetElement;
 			_container.setTouchable( Touchable.Disabled );
 		}
