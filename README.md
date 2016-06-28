@@ -1,5 +1,4 @@
 ## Nez
-
 Nez aims to be a lightweight 2D framework that sits on top of MonoGame/FNA. It provides a solid base for you to build a 2D game on. Some of the many features it includes are:
 
 - Scene/Entity/Component system with Component render layer tracking and optional entity systems (an implementation that operates on a group of entities that share a specific set of components)
@@ -30,7 +29,6 @@ You can find the samples repo [here](https://github.com/prime31/Nez-Samples). It
 
 Nez Systems
 ==========
-
 There are various systems documented separately in the FAQs folder. They go into a bit more detail on the different sub-systems that make up Nez.
 
 - [Nez-Core](FAQs/Nez-Core.md)
@@ -51,16 +49,12 @@ There are various systems documented separately in the FAQs folder. They go into
 
 Setup
 ==========
-
-All Nez shaders are compiled for OpenGL. If you are on Windows make sure you start from a DesktopGL template, not DirectX! Nez only supports OpenGL out of the box to keep things compatible accross Android/iOS/Mac/Linux/Windows. Nez needs to have the DefaultContent/NezDefaultBMFont.xnb file placed in your project's Content/nez folder. It sets up the font as the default for all text in it's debug console and for your own use. If you intend to use any of the built in Effects or PostProcessors you should also copy the DefaultContent/effects folder contents into your projects Content/nez/effects folder. Be sure to set the Build Action to Content so they get copied into your compiled game. Your Game class should then subclass Core and call it's constructor.
-
-If you are on Windows (or using MonoGame 3.5), there is one more thing you have to do. In your Game class constructor or Initialize method add the following line: `Window.ClientSizeChanged += Core.onClientSizeChanged;` This will wire up the window resize listener that Nez requires.
+All Nez shaders are compiled for OpenGL. If you are on Windows make sure you start from a DesktopGL template, not DirectX! Nez only supports OpenGL out of the box to keep things compatible accross Android/iOS/Mac/Linux/Windows. Nez needs to have the DefaultContent/NezDefaultBMFont.xnb file copied or linked in your project's Content/nez folder. It sets up the font as the default for all text in it's debug console and for your own use. If you intend to use any of the built in Effects or PostProcessors you should also copy or link the DefaultContent/effects folder contents into your projects Content/nez/effects folder. Be sure to set the Build Action to Content so they get copied into your compiled game. Your Game class should then subclass Core and call it's constructor.
 
 
 
 Using Nez with FNA
 ==========
-
 Getting up and running with Nez and FNA requires some minor changes to be made to work with the default FNA install. Once you have your FNA project working the following steps should be taken:
 
 - define the symbol "FNA" for both Debug and Release configurations
@@ -71,14 +65,12 @@ Getting up and running with Nez and FNA requires some minor changes to be made t
 
 Tutorials
 ==========
-
 [The wiki](https://github.com/prime31/Nez/wiki) contains a few basic tutorials littered with code snippets that should be enough to get you rolling your own games. If you have a suggestion for a new tutorial feel free to open an Issue with the details. More quickie tutorials will be added in the future and a full repository of sample code will be uploaded also if all goes well.
 
 
 
 Pipeline Importers
 ==========
-
 Nez comes stock with a decent bunch of Pipeline tool importers including:
 
 - **Texture Atlas Generator**: give it a directory or a list of files and it will combine them all into a single atlas and provide easy access to the source images at runtime. Supports nine patch sprites as well in the [Android style](http://developer.android.com/tools/help/draw9patch.html) (single pixel border with black lines representing the patches). See also [this generator](https://romannurik.github.io/AndroidAssetStudio/nine-patches.html). The Texture Atlas Generator also includes a per-folder sprite animation generation. The atlas generator uses an XML file as input with an Asset Type of System.String[]. The string array should specify the folder or folders where the source images are located.
@@ -95,7 +87,6 @@ Nez comes stock with a decent bunch of Pipeline tool importers including:
 
 
 ### Acknowledgements/Attributions
-
 Bits and pieces of Nez were cherry-picked from various places around the internet. If you see something in Nez that looks familiar open an issue with the details so that we can properly attribute the code.
 
 I want to extend a special thanks to the three people and their repos listed below. The Monocle Engine and MonoGame.Extended allowed me to get up and running with MonoGame nearly instantly when I was first evaluating if it would be a good alternative to use for making games. [libGDX](https://github.com/libgdx/libgdx) scene2D UI was ported over to Nez to get a jump start on a UI as well. Nez uses a bunch of concepts and code from all three of these repos.

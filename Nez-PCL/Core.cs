@@ -110,7 +110,9 @@ namespace Nez
 			graphicsManager.SynchronizeWithVerticalRetrace = true;
 			graphicsManager.DeviceReset += onGraphicsDeviceReset;
 			graphicsManager.PreferredDepthStencilFormat = DepthFormat.Depth24Stencil8;
+
 			Screen.initialize( graphicsManager );
+			Window.ClientSizeChanged += onClientSizeChanged;
 
 			Content.RootDirectory = "Content";
 			contentManager = new NezContentManager( Services, Content.RootDirectory );
