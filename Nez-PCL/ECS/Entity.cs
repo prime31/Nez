@@ -183,7 +183,7 @@ namespace Nez
 
 
 		/// <summary>
-		/// removes the Entity from the scene and removes all Components and Colliders
+		/// removes the Entity from the scene and destroys all children
 		/// </summary>
 		public void destroy()
 		{
@@ -302,7 +302,7 @@ namespace Nez
 		/// removes the Collider and unregisters it from the Pysics system
 		/// </summary>
 		/// <param name="collider">Collider.</param>
-		public void remove( Collider collider )
+		public void removeCollider( Collider collider )
 		{
 			colliders.remove( collider );
 		}
