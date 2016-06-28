@@ -23,7 +23,7 @@ namespace Nez
 
 		void setupTextField( Table table, Skin skin )
 		{
-			var label = new Label( _name, skin );
+			var label = createNameLabel( table, skin );
 			_textField = new TextField( getValue<float>().ToString(), skin );
 			_textField.setTextFieldFilter( new FloatFilter() );
 			_textField.onTextChanged += ( field, str ) =>
@@ -40,7 +40,7 @@ namespace Nez
 
 		void setupSlider( Table table, Skin skin, float minValue, float maxValue, float stepSize )
 		{
-			var label = new Label( _name, skin );
+			var label = createNameLabel( table, skin );
 			_slider = new Slider( skin, null, minValue, maxValue );
 			_slider.setStepSize( stepSize );
 			_slider.setValue( getValue<float>() );

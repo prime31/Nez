@@ -11,7 +11,7 @@ namespace Nez
 
 		public override void initialize( Table table, Skin skin )
 		{
-			var label = new Label( _name, skin );
+			var label = createNameLabel( table, skin );
 			_textField = new TextField( getValue<string>(), skin );
 			_textField.setTextFieldFilter( new FloatFilter() );
 			_textField.onTextChanged += ( field, str ) =>

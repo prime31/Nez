@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Reflection;
 using Microsoft.Xna.Framework;
+using Nez.IEnumerableExtensions;
 using Nez.UI;
 
 
@@ -30,7 +31,7 @@ namespace Nez
 			var fields = ReflectionUtils.getFields( componentType );
 			foreach( var field in fields )
 			{
-				if( !field.IsPublic && field.GetCustomAttribute<InspectableAttribute>() == null )
+				if( !field.IsPublic && IEnumerableExt.count( field.GetCustomAttributes<InspectableAttribute>() ) == 0 )
 					continue;
 
 				var inspector = getInspectorForType( field.FieldType, component );
@@ -47,7 +48,7 @@ namespace Nez
 				if( !prop.CanRead || !prop.CanWrite )
 					continue;
 
-				if( ( !prop.GetMethod.IsPublic || !prop.SetMethod.IsPublic ) && prop.GetCustomAttribute<InspectableAttribute>() == null )
+				if( ( !prop.GetMethod.IsPublic || !prop.SetMethod.IsPublic ) && IEnumerableExt.count( prop.GetCustomAttributes<InspectableAttribute>() ) == 0 )
 					continue;
 
 				// skip Component.enabled which is handled elsewhere
@@ -214,7 +215,35 @@ namespace Nez
 
 		protected T getFieldOrPropertyAttribute<T>() where T : Attribute
 		{
-			return _memberInfo.GetCustomAttribute<T>();
+			var attributes = _memberInfo.GetCustomAttributes<T>();
+			foreach( var attr in attributes )
+			{
+				if( attr is T )
+					return attr;
+			}
+			return null;
+		}
+
+
+		/// <summary>
+		/// creates the name label and adds a tooltip if present
+		/// </summary>
+		/// <returns>The name label.</returns>
+		/// <param name="table">Table.</param>
+		/// <param name="skin">Skin.</param>
+		protected Label createNameLabel( Table table, Skin skin )
+		{
+			var label = new Label( _name, skin );
+			label.setTouchable( Touchable.Enabled );
+
+			var tooltipAttribute = getFieldOrPropertyAttribute<TooltipAttribute>();
+			if( tooltipAttribute != null )
+			{
+				var tooltip = new TextTooltip( tooltipAttribute.tooltip, label, skin );
+				table.getStage().addElement( tooltip );
+			}
+
+			return label;
 		}
 
 

@@ -13,7 +13,7 @@ namespace Nez
 		public override void initialize( Table table, Skin skin )
 		{
 			var value = getValue<Color>();
-			var label = new Label( _name, skin );
+			var label = createNameLabel( table, skin );
 
 			var labelR = new Label( "r", skin );
 			_textFieldR = new TextField( value.R.ToString(), skin );

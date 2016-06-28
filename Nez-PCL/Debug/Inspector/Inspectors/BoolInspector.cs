@@ -11,7 +11,7 @@ namespace Nez
 
 		public override void initialize( Table table, Skin skin )
 		{
-			var label = new Label( _name, skin );
+			var label = createNameLabel( table, skin );
 			_checkbox = new CheckBox( string.Empty, skin );
 			_checkbox.programmaticChangeEvents = false;
 			_checkbox.isChecked = getValue<bool>();

@@ -116,7 +116,7 @@ namespace Nez.UI
 		{
 			if( _background == null )
 				return;
-
+			
 			_background.draw( graphics, x, y, getWidth(), getHeight(), new Color( color, color.A * parentAlpha ) );
 		}
 
@@ -142,10 +142,10 @@ namespace Nez.UI
 		/// <param name="adjustPadding">If set to <c>true</c> adjust padding.</param>
 		public Container setBackground( IDrawable background, bool adjustPadding )
 		{
-			if( this._background == background )
+			if( _background == background )
 				return this;
 
-			this._background = background;
+			_background = background;
 			if( adjustPadding )
 			{
 				if( background == null )
@@ -169,12 +169,12 @@ namespace Nez.UI
 			if( _element == null )
 				return;
 
-			float padLeft = this._padLeft.get( this ), padBottom = this._padBottom.get( this );
+			float padLeft = _padLeft.get( this ), padBottom = _padBottom.get( this );
 			float containerWidth = getWidth() - padLeft - _padRight.get( this );
 			float containerHeight = getHeight() - padBottom - _padTop.get( this );
-			float minWidth = this._minWidthValue.get( _element ), minHeight = this._minHeightValue.get( _element );
-			float prefWidth = this._prefWidthValue.get( _element ), prefHeight = this._prefHeightValue.get( _element );
-			float maxWidth = this._maxWidthValue.get( _element ), maxHeight = this._maxHeightValue.get( _element );
+			float minWidth = _minWidthValue.get( _element ), minHeight = _minHeightValue.get( _element );
+			float prefWidth = _prefWidthValue.get( _element ), prefHeight = _prefHeightValue.get( _element );
+			float maxWidth = _maxWidthValue.get( _element ), maxHeight = _maxHeightValue.get( _element );
 
 			float width;
 			if( _fillX > 0 )
@@ -203,7 +203,7 @@ namespace Nez.UI
 			else if( ( _align & AlignInternal.left ) == 0 ) // center
 				x += ( containerWidth - width ) / 2;
 
-			float y = padBottom;
+			var y = padBottom;
 			if( ( _align & AlignInternal.top ) != 0 )
 				y += containerHeight - height;
 			else if( ( _align & AlignInternal.bottom ) == 0 ) // center
@@ -232,14 +232,14 @@ namespace Nez.UI
 		{
 			if( element == this )
 				throw new Exception( "element cannot be the Container." );
-			if( element == this._element )
+			if( element == _element )
 				return element;
 
-			if( this._element != null )
-				base.removeElement( this._element );
-			this._element = element;
+			if( _element != null )
+				base.removeElement( _element );
+			_element = element;
 			if( element != null )
-				return base.addElement( element );
+				return addElement( element );
 			return null;
 		}
 
