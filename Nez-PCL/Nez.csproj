@@ -469,6 +469,10 @@
     <Compile Include="UI\Utils\ArraySelection.cs" />
     <Compile Include="UI\Widgets\SelectBox.cs" />
     <Compile Include="UI\Widgets\SelectBoxList.cs" />
+    <Compile Include="UI\Widgets\Tooltip.cs" />
+    <Compile Include="UI\Utils\TooltipManager.cs" />
+    <Compile Include="UI\Widgets\TextTooltip.cs" />
+    <Compile Include="Debug\Inspector\Attributes\TooltipAttribute.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="MonoGame.Framework">

@@ -75,7 +75,7 @@ namespace Nez.UI
 				return;
 
 			_camera = camera;
-			root.draw( graphics, 1 );
+			root.draw( graphics, 1f );
 
 			if( debug )
 			{
@@ -258,7 +258,7 @@ namespace Nez.UI
 
 			// check the deepest Element first then check all of its parents that are IInputListeners
 			var listener = mouseOverElement as IInputListener;
-			if( listener.onMouseScrolled( Input.mouseWheelDelta ) )
+			if( listener != null && listener.onMouseScrolled( Input.mouseWheelDelta ) )
 				return;
 			
 			while( mouseOverElement.parent != null )

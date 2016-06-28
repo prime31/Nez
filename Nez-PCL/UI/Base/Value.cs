@@ -26,7 +26,7 @@ namespace Nez.UI
 		/// </summary>
 		public class Fixed : Value
 		{
-			private float value;
+			float value;
 
 			public Fixed( float value )
 			{

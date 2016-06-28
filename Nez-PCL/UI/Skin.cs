@@ -150,6 +150,13 @@ namespace Nez.UI
 			};
 			skin.add( "default", selectBoxStyle );
 
+			var textTooltipStyle = new TextTooltipStyle
+			{
+				label = new LabelStyle( listBoxBackgroundColor ),
+				background = new PrimitiveDrawable( checkboxOn, 4, 2 )
+			};
+			skin.add( "default", textTooltipStyle );
+
 			return skin;
 		}
 
