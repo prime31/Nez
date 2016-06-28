@@ -82,10 +82,11 @@ namespace Nez.UI
 		{}
 
 
-		public virtual void setStyle( LabelStyle style )
+		public virtual Label setStyle( LabelStyle style )
 		{
 			_style = style;
 			invalidateHierarchy();
+			return this;
 		}
 
 

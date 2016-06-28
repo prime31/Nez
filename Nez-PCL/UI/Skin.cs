@@ -52,9 +52,11 @@ namespace Nez.UI
 			var scrollPaneScrollBarColor = new Color( 44, 44, 44 );
 			var scrollPaneKnobColor = new Color( 241, 156, 0 );
 
-			var listBoxBackgroundColor = new Color( 40, 40, 40 );
+			var listBoxBackgroundColor = new Color( 20, 20, 20 );
 			var listBoxSelectionColor = new Color( 241, 156, 0 );
 			var listBoxHoverSelectionColor = new Color( 120, 78, 0 );
+
+			var selectBoxBackgroundColor = new Color( 10, 10, 10 );
 
 			// add all our styles
 			var buttonStyle = new ButtonStyle {
@@ -126,10 +128,10 @@ namespace Nez.UI
 
 			var scrollPaneStyle = new ScrollPaneStyle
 			{
-				vScroll = new PrimitiveDrawable( 10, 0, scrollPaneScrollBarColor ),
-				vScrollKnob = new PrimitiveDrawable( 10, 50, scrollPaneKnobColor ),
-				hScroll = new PrimitiveDrawable( 0, 10, scrollPaneScrollBarColor ),
-				hScrollKnob = new PrimitiveDrawable( 50, 10, scrollPaneKnobColor )
+				vScroll = new PrimitiveDrawable( 6, 0, scrollPaneScrollBarColor ),
+				vScrollKnob = new PrimitiveDrawable( 6, 50, scrollPaneKnobColor ),
+				hScroll = new PrimitiveDrawable( 0, 6, scrollPaneScrollBarColor ),
+				hScrollKnob = new PrimitiveDrawable( 50, 6, scrollPaneKnobColor )
 			};
 			skin.add( "default", scrollPaneStyle );
 
@@ -146,7 +148,7 @@ namespace Nez.UI
 			{
 				listStyle = listBoxStyle,
 				scrollStyle = scrollPaneStyle,
-				background = new PrimitiveDrawable( listBoxBackgroundColor, 10, 5 )
+				background = new PrimitiveDrawable( selectBoxBackgroundColor, 4, 4 )
 			};
 			skin.add( "default", selectBoxStyle );
 

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Nez.UI;
@@ -7,7 +8,7 @@ using Nez.UI;
 #if DEBUG
 namespace Nez
 {
-	public class RuntimeInspector
+	public class RuntimeInspector : IDisposable
 	{
 		UICanvas ui;
 		ScreenSpaceCamera _camera;
@@ -26,6 +27,13 @@ namespace Nez
 			prepCanvas();
 			cacheTransformInspector();
 			_camera = new ScreenSpaceCamera();
+			Core.emitter.addObserver( CoreEvents.GraphicsDeviceReset, onGraphicsDeviceReset );
+		}
+
+
+		void onGraphicsDeviceReset()
+		{
+			_scrollPane.setHeight( Screen.height );
 		}
 
 
@@ -102,6 +110,28 @@ namespace Nez
 			_scrollPane.validate();
 			_scrollPane.setSize( 295 + _scrollPane.getScrollBarWidth(), Screen.height );
 		}
+
+
+		#region IDisposable Support
+
+		bool _disposedValue = false;
+
+		void Dispose( bool disposing )
+		{
+			if( !_disposedValue )
+			{
+				Core.emitter.removeObserver( CoreEvents.GraphicsDeviceReset, onGraphicsDeviceReset );
+				_disposedValue = true;
+			}
+		}
+
+
+		public void Dispose()
+		{
+			Dispose( true );
+		}
+
+		#endregion
 
 	}
 }

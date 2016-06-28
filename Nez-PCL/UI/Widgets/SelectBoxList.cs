@@ -31,6 +31,8 @@ namespace Nez.UI
 			listBox.onChanged += item =>
 			{
 				selectBox.getSelection().choose( item );
+				if( selectBox.onChanged != null )
+					selectBox.onChanged( item );
 				hide();
 			};
 		}

@@ -113,15 +113,15 @@ namespace Nez.UI
 		public override Element hit( Vector2 point )
 		{
 			// we do some rejiggering here by checking for hits on our target and using that
-			point = _targetElement.parentToLocalCoordinates( point );
-			if( _targetElement.hit( point ) != null )
+			var local = _targetElement.screenToLocalCoordinates( point );
+			if( _targetElement.hit( local ) != null )
 			{
 				if( !_isMouseOver )
 				{
 					_isMouseOver = true;
 					_manager.enter( this );
 				}
-				setContainerPosition( point.X, point.Y );
+				setContainerPosition( local.X, local.Y );
 			}
 			else if( _isMouseOver )
 			{

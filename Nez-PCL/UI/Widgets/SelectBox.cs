@@ -8,6 +8,8 @@ namespace Nez.UI
 {
 	public class SelectBox<T> : Element, IInputListener where T : class
 	{
+		public Action<T> onChanged;
+		
 		SelectBoxStyle style;
 		List<T> _items = new List<T>();
 		ArraySelection<T> _selection;

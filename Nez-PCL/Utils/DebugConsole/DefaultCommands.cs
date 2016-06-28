@@ -47,16 +47,19 @@ namespace Nez.Console
 		[Command( "inspect", "Inspects the Entity with the passed in name. Pass in no name to stop inspecting the current Entity." )]
 		static void inspectEntity( string entityName = "" )
 		{
-			if( entityName == "" )
+			// clean up no matter what
+			if( instance._runtimeInspector != null )
 			{
+				instance._runtimeInspector.Dispose();
 				instance._runtimeInspector = null;
 			}
-			else
+
+			if( entityName != "" )
 			{
 				var entity = Core.scene.findEntity( entityName );
 				if( entity == null )
 				{
-					DebugConsole.instance.log( "could not find entity named " + entityName );
+					instance.log( "could not find entity named " + entityName );
 					return;
 				}
 

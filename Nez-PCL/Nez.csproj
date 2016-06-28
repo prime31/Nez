@@ -473,6 +473,8 @@
     <Compile Include="UI\Utils\TooltipManager.cs" />
     <Compile Include="UI\Widgets\TextTooltip.cs" />
     <Compile Include="Debug\Inspector\Attributes\TooltipAttribute.cs" />
+    <Compile Include="Debug\Inspector\Inspectors\EnumInspector.cs" />
+    <Compile Include="Debug\Inspector\Inspectors\StructInspector.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="MonoGame.Framework">

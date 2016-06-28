@@ -125,6 +125,10 @@ namespace Nez
 				return new Vector2Inspector();
 			if( valueType == typeof( Color ) )
 				return new ColorInspector();
+			if( valueType.GetTypeInfo().IsEnum )
+				return new EnumInspector();
+			if( valueType.GetTypeInfo().IsValueType )
+				return new StructInspector();
 
 			// check for custom inspectors before checking Nez types in case a subclass implemented one
 			var customInspectorType = valueType.GetTypeInfo().GetCustomAttribute<CustomInspectorAttribute>();
@@ -159,8 +163,8 @@ namespace Nez
 
 		public void setTarget( object target, FieldInfo field )
 		{
-			_memberInfo = field;
 			_target = target;
+			_memberInfo = field;
 			_name = field.Name;
 			_valueType = field.FieldType;
 
@@ -171,6 +175,34 @@ namespace Nez
 			_setter = ( val ) =>
 			{
 				field.SetValue( target, val );
+			};
+		}
+
+
+		/// <summary>
+		/// this version will first fetch the struct before getting/setting values on it when invoking the getter/setter
+		/// </summary>
+		/// <returns>The struct target.</returns>
+		/// <param name="target">Target.</param>
+		/// <param name="structName">Struct name.</param>
+		/// <param name="field">Field.</param>
+		public void setStructTarget( object target, Inspector parentInspector, FieldInfo field )
+		{
+			_target = target;
+			_memberInfo = field;
+			_name = field.Name;
+			_valueType = field.FieldType;
+
+			_getter = () =>
+			{
+				var structValue = parentInspector.getValue();
+				return field.GetValue( structValue );
+			};
+			_setter = ( val ) =>
+			{
+				var structValue = parentInspector.getValue();
+				field.SetValue( structValue, val );
+				parentInspector.setValue( structValue );
 			};
 		}
 
@@ -193,6 +225,34 @@ namespace Nez
 		}
 
 
+		/// <summary>
+		/// this version will first fetch the struct before getting/setting values on it when invoking the getter/setter
+		/// </summary>
+		/// <returns>The struct target.</returns>
+		/// <param name="target">Target.</param>
+		/// <param name="structName">Struct name.</param>
+		/// <param name="field">Field.</param>
+		public void setStructTarget( object target, Inspector parentInspector, PropertyInfo prop )
+		{
+			_target = target;
+			_memberInfo = prop;
+			_name = prop.Name;
+			_valueType = prop.PropertyType;
+
+			_getter = () =>
+			{
+				var structValue = parentInspector.getValue();
+				return ReflectionUtils.getPropertyGetter( prop ).Invoke( structValue, null );
+			};
+			_setter = ( val ) =>
+			{
+				var structValue = parentInspector.getValue();
+				prop.SetValue( structValue, val );
+				parentInspector.setValue( structValue );
+			};
+		}
+
+
 		public void setTarget( object target, MethodInfo method )
 		{
 			_memberInfo = method;
@@ -204,6 +264,12 @@ namespace Nez
 		protected T getValue<T>()
 		{
 			return (T)_getter.Invoke();
+		}
+
+
+		protected object getValue()
+		{
+			return _getter.Invoke();
 		}
 
 
