@@ -44,7 +44,7 @@ namespace Nez.Console
 		}
 
 
-		[Command( "inspect", "Inspects the Entity with the passed in name, or pass in 'pp' or 'postprocessors' to inspect all PostProccessors in the Scene. Pass in no name to clost the inspector." )]
+		[Command( "inspect", "Inspects the Entity with the passed in name, or pass in 'pp' or 'postprocessors' to inspect all PostProccessors in the Scene. Pass in no name to close the inspector." )]
 		static void inspectEntity( string entityName = "" )
 		{
 			// clean up no matter what

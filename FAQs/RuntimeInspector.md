@@ -1,6 +1,6 @@
 Runtime Inspector
 ==========
-Nez includes some really handy runtime Entity inspection facilities. You can access the inspector by opening the debug console (via the tilde key) and then using the `inspect` command. Out of the box the inspector can inspect the following types: int, float, string, bool and Transform.
+Nez includes some really handy runtime Entity and PostProcessor inspection facilities. You can access the inspector by opening the debug console (via the tilde key) and then using the `inspect` command. Out of the box the inspector can inspect the following types: int, float, string, bool, enum, Color, some structs, Effect subclasses and Transform. When you use the `inspect` command you can either pass in an Entity name or `pp`, the latter will inspect all the PostProcessors in the Scene.
 
 
 ## Exposing Properties and Fields in the Inspector
@@ -43,6 +43,14 @@ public void thisWontWordBecauseItHasTwoParameters( bool isDone, int stuff )
 ```
 
 
+## Tooltips
+You can add tooltips to the inspector via the `TooltipAttribute`. Tooltips will appear when you hover over the label for an inspected field.
+
+
+```csharp
+[Tooltip( "Acceleration when on the ground" )]
+float groundAccel = 1.0f;
+```
 
 
 ## Extending the Inspector
@@ -67,7 +75,7 @@ public class YourClassInspector : Inspector
 	// this is where you setup your UI and add it to the table
 	public override void initialize( Table table, Skin skin )
 	{}
-	
+
 	// this is where you update the UI
 	public override void update()
 	{}
