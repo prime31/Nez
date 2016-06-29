@@ -30,13 +30,10 @@ namespace Nez
 		static MouseState _previousMouseState;
 		static MouseState _currentMouseState;
 		static internal List<VirtualInput> _virtualInputs = new List<VirtualInput>();
+		static int _maxSupportedGamePads;
 
-		#if !FNA
-		static TouchCollection _previousTouches;
-		static TouchCollection _currentTouches;
-		static List<GestureSample> _previousGestures = new List<GestureSample>();
-		static List<GestureSample> _currentGestures = new List<GestureSample>();
-		#endif
+		public static TouchInput touch;
+
 
 		public static int maxSupportedGamePads
 		{
@@ -49,74 +46,44 @@ namespace Nez
 					gamePads[i] = new GamePadData( (PlayerIndex)i );
 			}
 		}
-		static int _maxSupportedGamePads;
 
 
 		static Input()
 		{
 			emitter = new Emitter<InputEventType,InputEvent>();
+			touch = new TouchInput();
 
 			_previousKbState = new KeyboardState();
-			_currentKbState = Microsoft.Xna.Framework.Input.Keyboard.GetState();
+			_currentKbState = Keyboard.GetState();
 
 			_previousMouseState = new MouseState();
-			_currentMouseState = Microsoft.Xna.Framework.Input.Mouse.GetState();
+			_currentMouseState = Mouse.GetState();
 
 			maxSupportedGamePads = 1;
-
-			Core.emitter.addObserver( CoreEvents.GraphicsDeviceReset, onGraphicsDeviceReset );
-			onGraphicsDeviceReset();
 		}
 
 
 		public static void update()
 		{
+			touch.update();
+
 			_previousKbState = _currentKbState;
-			_currentKbState = Microsoft.Xna.Framework.Input.Keyboard.GetState();
+			_currentKbState = Keyboard.GetState();
 
 			_previousMouseState = _currentMouseState;
-			_currentMouseState = Microsoft.Xna.Framework.Input.Mouse.GetState();
+			_currentMouseState = Mouse.GetState();
 
 			for( var i = 0; i < _maxSupportedGamePads; i++ )
 				gamePads[i].update();
 
 			for( var i = 0; i < _virtualInputs.Count; i++ )
 				_virtualInputs[i].update();
-
-			#if !FNA
-			_previousTouches = _currentTouches;
-			_currentTouches = TouchPanel.GetState();
-
-			_previousGestures = _currentGestures;
-			_currentGestures.Clear();
-			while( TouchPanel.IsGestureAvailable )
-			{
-				var gesture = TouchPanel.ReadGesture();
-				_currentGestures.Add( gesture );
-			}
-			#endif
-		}
-	
-
-		public static void onGraphicsDeviceReset()
-		{
-			// TODO: find a way to grab the GameWindow OnOrientationChange event inside the PCL
-			// For the time being you can just call this method hooking the event on your own
-			// Game class like this: 			
-			// Window.OrientationChanged += onOrientationChanged;
-
-			#if !FNA
-			TouchPanel.DisplayWidth = Core.graphicsDevice.Viewport.Width;
-			TouchPanel.DisplayHeight = Core.graphicsDevice.Viewport.Height;
-			TouchPanel.DisplayOrientation = Core.graphicsDevice.PresentationParameters.DisplayOrientation;
-			#endif
 		}
 
 
 		#region Keyboard
 
 		public static KeyboardState previousKeyboardState { get { return _previousKbState; } }
-
 
 		public static KeyboardState currentKeyboardState { get { return _currentKbState; } }
 
@@ -193,7 +160,6 @@ namespace Nez
 			get { return _currentMouseState.LeftButton == ButtonState.Pressed && _previousMouseState.LeftButton == ButtonState.Released; }
 		}
 
-
 		/// <summary>
 		/// true while the button is down
 		/// </summary>
@@ -201,7 +167,6 @@ namespace Nez
 		{
 			get { return _currentMouseState.LeftButton == ButtonState.Pressed; }
 		}
-
 
 		/// <summary>
 		/// true only the frame the button is released
@@ -214,7 +179,6 @@ namespace Nez
 			}
 		}
 
-
 		/// <summary>
 		/// only true if pressed this frame
 		/// </summary>
@@ -226,7 +190,6 @@ namespace Nez
 			}
 		}
 
-
 		/// <summary>
 		/// true while the button is down
 		/// </summary>
@@ -234,7 +197,6 @@ namespace Nez
 		{
 			get { return _currentMouseState.RightButton == ButtonState.Pressed; }
 		}
-
 
 		/// <summary>
 		/// true only the frame the button is released
@@ -247,18 +209,23 @@ namespace Nez
 			}
 		}
 
-
+		/// <summary>
+		/// gets the raw ScrollWheelValue
+		/// </summary>
+		/// <value>The mouse wheel.</value>
 		public static int mouseWheel
 		{
 			get { return _currentMouseState.ScrollWheelValue; }
 		}
 
-
+		/// <summary>
+		/// gets the delta ScrollWheelValue
+		/// </summary>
+		/// <value>The mouse wheel delta.</value>
 		public static int mouseWheelDelta
 		{
 			get { return _currentMouseState.ScrollWheelValue - _previousMouseState.ScrollWheelValue; }
 		}
-
 
 		/// <summary>
 		/// unscaled mouse position. This is the actual screen space value
@@ -269,13 +236,11 @@ namespace Nez
 			get { return new Point( _currentMouseState.X, _currentMouseState.Y ); }
 		}
 
-
 		/// <summary>
 		/// alias for scaledMousePosition
 		/// </summary>
 		/// <value>The mouse position.</value>
 		public static Vector2 mousePosition { get { return scaledMousePosition; } }
-
 
 		/// <summary>
 		/// this takes into account the SceneResolutionPolicy and returns the value scaled to the RenderTargets coordinates
@@ -290,12 +255,10 @@ namespace Nez
 			}
 		}
 
-
 		public static Point mousePositionDelta
 		{
 			get { return new Point( _currentMouseState.X, _currentMouseState.Y ) - new Point( _previousMouseState.X, _previousMouseState.Y ); }
 		}
-
 
 		public static Vector2 scaledMousePositionDelta
 		{
@@ -306,33 +269,6 @@ namespace Nez
 				return scaledMousePosition - pastPos;
 			}
 		}
-
-		#endregion
-
-
-		#region Touches
-
-		#if !FNA
-		public static TouchCollection currentTouches
-		{
-			get { return _currentTouches; }
-		}
-
-		public static TouchCollection previousTouches
-		{
-			get { return _previousTouches; }
-		}
-
-		public static List<GestureSample> previousGestures
-		{
-			get { return _previousGestures; }
-		}
-
-		public static List<GestureSample> currentGestures
-		{
-			get { return _currentGestures; }
-		}
-		#endif
 
 		#endregion
 	

@@ -15,7 +15,12 @@ namespace Nez
 		/// <summary>
 		/// fired when the scene changes
 		/// </summary>
-		SceneChanged
+		SceneChanged,
+
+		/// <summary>
+		/// fired when the device orientation changes
+		/// </summary>
+		OrientationChanged
 	}
 
 

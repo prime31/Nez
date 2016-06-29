@@ -112,7 +112,8 @@ namespace Nez
 			graphicsManager.PreferredDepthStencilFormat = DepthFormat.Depth24Stencil8;
 
 			Screen.initialize( graphicsManager );
-			Window.ClientSizeChanged += onClientSizeChanged;
+			Window.ClientSizeChanged += onGraphicsDeviceReset;
+			Window.OrientationChanged += onOrientationChanged;
 
 			Content.RootDirectory = "Content";
 			contentManager = new NezContentManager( Services, Content.RootDirectory );
@@ -123,9 +124,14 @@ namespace Nez
 		}
 
 
+		[System.Obsolete( "It is no longer necessary to wire up the ClientSizeChanged event" )]
 		protected static void onClientSizeChanged( object sender, EventArgs e )
+		{}
+
+
+		void onOrientationChanged( object sender, EventArgs e )
 		{
-			_instance.onGraphicsDeviceReset( sender, e );
+			emitter.emit( CoreEvents.OrientationChanged );
 		}
 
 

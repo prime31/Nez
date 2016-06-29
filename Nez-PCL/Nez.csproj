@@ -476,6 +476,7 @@
     <Compile Include="Debug\Inspector\Inspectors\StructInspector.cs" />
     <Compile Include="Utils\Extensions\ComponentExt.cs" />
     <Compile Include="Debug\Inspector\InspectorList.cs" />
+    <Compile Include="Input\TouchInput.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="MonoGame.Framework">
