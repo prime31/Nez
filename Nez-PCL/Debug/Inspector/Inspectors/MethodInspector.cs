@@ -50,7 +50,7 @@ namespace Nez
 			var parameter = parameters[0];
 			_parameterType = parameter.ParameterType;
 
-			_textField = new TextField( string.Empty, skin );
+			_textField = new TextField( _parameterType.GetTypeInfo().IsValueType ? Activator.CreateInstance( _parameterType ).ToString() : "", skin );
 			_textField.shouldIgnoreTextUpdatesWhileFocused = false;
 
 			// add a filter for float/int

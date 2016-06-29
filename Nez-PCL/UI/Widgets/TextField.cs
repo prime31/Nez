@@ -67,6 +67,7 @@ namespace Nez.UI
 		bool focusTraversal = true, onlyFontChars = true, disabled;
 		int textHAlign = AlignInternal.left;
 		float selectionX, selectionWidth;
+		StringBuilder _textBuffer = new StringBuilder();
 
 		bool passwordMode;
 		StringBuilder passwordBuffer;
@@ -666,13 +667,13 @@ namespace Nez.UI
 		{
 			var textLength = text.Length;
 
-			var buffer = new StringBuilder();
+			_textBuffer.Clear();
 			for( var i = 0; i < textLength; i++ )
 			{
 				var c = text[i];
-				buffer.Append( style.font.hasCharacter( c ) ? c : ' ' );
+				_textBuffer.Append( style.font.hasCharacter( c ) ? c : ' ' );
 			}
-			var newDisplayText = buffer.ToString();
+			var newDisplayText = _textBuffer.ToString();
 
 			if( passwordMode && style.font.hasCharacter( passwordCharacter ) )
 			{
@@ -775,7 +776,7 @@ namespace Nez.UI
 			if( content == null )
 				return;
 
-			var buffer = new StringBuilder();
+			_textBuffer.Clear();
 			int textLength = text.Length;
 			if( hasSelection )
 				textLength -= Math.Abs( cursor - selectionStart );
@@ -783,7 +784,7 @@ namespace Nez.UI
 			//var data = style.font.getData();
 			for( int i = 0, n = content.Length; i < n; i++ )
 			{
-				if( !withinMaxLength( textLength + buffer.Length ) )
+				if( !withinMaxLength( textLength + _textBuffer.Length ) )
 					break;
 
 				var c = content[i];
@@ -796,9 +797,9 @@ namespace Nez.UI
 						continue;
 				}
 
-				buffer.Append( c );
+				_textBuffer.Append( c );
 			}
-			content = buffer.ToString();
+			content = _textBuffer.ToString();
 
 			if( hasSelection )
 				cursor = delete( fireChangeEvent );
@@ -959,6 +960,10 @@ namespace Nez.UI
 		{
 			text = str;
 			updateDisplayText();
+
+			// ensure our cursor is in bounds
+			cursor = text.Length;
+
 			return this;
 		}
 
@@ -1342,10 +1347,10 @@ namespace Nez.UI
 	{
 		public bool acceptChar( TextField textField, char c )
 		{
-			if( c == 't' )
+			if( c == 't' || c == 'T' )
 				textField.setTextForced( "true" );
 
-			if( c == 'f' )
+			if( c == 'f' || c == 'F' )
 				textField.setTextForced( "false" );
 
 			return false;
