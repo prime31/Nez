@@ -1,5 +1,4 @@
-﻿using System;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework.Input;
 
@@ -183,6 +182,22 @@ namespace Nez.UI
 				_lastMousePosition = currentMousePosition;
 			}
 
+			#if !FNA
+			// convert touch to mouse
+			if( Input.touch.isConnected && Input.touch.currentTouches.Count > 0 )
+			{
+				var touch = Input.touch.currentTouches[0];
+				leftMouseButtonDown = touch.State == Microsoft.Xna.Framework.Input.Touch.TouchLocationState.Pressed || touch.State == Microsoft.Xna.Framework.Input.Touch.TouchLocationState.Moved;
+				leftMouseButtonPressed = touch.State == Microsoft.Xna.Framework.Input.Touch.TouchLocationState.Pressed;
+				leftMouseButtonReleased = touch.State == Microsoft.Xna.Framework.Input.Touch.TouchLocationState.Released || touch.State == Microsoft.Xna.Framework.Input.Touch.TouchLocationState.Invalid;
+				currentMousePosition = touch.Position;
+
+				didMouseMove = touch.State == Microsoft.Xna.Framework.Input.Touch.TouchLocationState.Moved;
+				if( didMouseMove )
+					_lastMousePosition = currentMousePosition;
+			}
+			#endif
+
 			var mousePos = screenToStageCoordinates( currentMousePosition );
 
 			// mouse moved and released events are only sent to inputFocusListeners
@@ -205,6 +220,12 @@ namespace Nez.UI
 				var over = hit( mousePos );
 				if( over != null )
 					handleMouseWheel( over );
+
+				#if !FNA
+				// if we have a touch screen we short circuit enter/exit by setting the mouseOverElement as the hit element
+				if( Input.touch.isConnected && over != null )
+					_mouseOverElement = over;
+				#endif
 
 				// lose keyboard focus if we click outside of the keyboardFocusElement
 				if( leftMouseButtonPressed && _keyboardFocusElement != null && over != _keyboardFocusElement )
