@@ -4,6 +4,9 @@ using Microsoft.Xna.Framework.Input.Touch;
 
 namespace Nez
 {
+	/// <summary>
+	/// to enable touch input you must first call enableTouchSupport()
+	/// </summary>
 	public class TouchInput
 	{
 		#if !FNA
@@ -41,21 +44,6 @@ namespace Nez
 		bool _isConnected;
 
 
-		public TouchInput()
-		{
-			#if !FNA
-			_isConnected = TouchPanel.GetCapabilities().IsConnected;
-			#endif
-
-			if( _isConnected )
-			{
-				Core.emitter.addObserver( CoreEvents.GraphicsDeviceReset, onGraphicsDeviceReset );
-				Core.emitter.addObserver( CoreEvents.OrientationChanged, onGraphicsDeviceReset );
-				onGraphicsDeviceReset();
-			}
-		}
-
-
 		void onGraphicsDeviceReset()
 		{
 			#if !FNA
@@ -80,6 +68,21 @@ namespace Nez
 			while( TouchPanel.IsGestureAvailable )
 				_currentGestures.Add( TouchPanel.ReadGesture() );
 			#endif
+		}
+
+
+		public void enableTouchSupport()
+		{
+			#if !FNA
+            _isConnected = TouchPanel.GetCapabilities().IsConnected;
+			#endif
+
+			if( _isConnected )
+			{
+				Core.emitter.addObserver( CoreEvents.GraphicsDeviceReset, onGraphicsDeviceReset );
+				Core.emitter.addObserver( CoreEvents.OrientationChanged, onGraphicsDeviceReset );
+				onGraphicsDeviceReset();
+			}
 		}
 
 	}
