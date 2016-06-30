@@ -11,6 +11,16 @@ namespace Nez
 	/// </summary>
 	class ReflectionUtils
 	{
+		public static Assembly getAssembly( Type type )
+		{
+			#if NETFX_CORE
+			return type.GetTypeInfo().Assembly;
+			#else
+			return type.Assembly;
+			#endif
+		}
+
+		
 		public static FieldInfo getFieldInfo( System.Object targetObject, string fieldName )
 		{
 			FieldInfo fieldInfo = null;
@@ -114,13 +124,19 @@ namespace Nez
 
 		public static MethodInfo getMethodInfo( System.Object targetObject, string methodName )
 		{
+			return getMethodInfo( targetObject.GetType(), methodName );
+		}
+
+
+		public static MethodInfo getMethodInfo( Type type, string methodName )
+		{
 			#if NETFX_CORE
-			foreach( var method in targetObject.GetType().GetRuntimeMethods() )
+			foreach( var method in type.GetRuntimeMethods() )
 				if( method.Name == methodName )
 					return method;
 			return null;
 			#else
-			return targetObject.GetType().GetMethod( methodName, BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public );
+			return type.GetMethod( methodName, BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public );
 			#endif
 		}
 

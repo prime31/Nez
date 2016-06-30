@@ -1,12 +1,6 @@
-﻿#define NETFX_CORE
-using System;
+﻿using System;
 using System.IO;
 using Microsoft.Xna.Framework;
-
-
-#if NETFX_CORE
-using System.Reflection;
-#endif
 
 
 namespace Nez
@@ -58,12 +52,7 @@ namespace Nez
 		/// <param name="name">Name.</param>
 		static byte[] getEmbeddedResourceBytes( string name )
 		{
-			#if NETFX_CORE
-			var assembly = typeof( EffectResource ).GetTypeInfo().Assembly;
-			#else
-			var assembly = typeof( EffectResource ).Assembly;
-			#endif
-
+			var assembly = ReflectionUtils.getAssembly( typeof( EffectResource ) );
 			using( var stream = assembly.GetManifestResourceStream( name ) )
 			{
 				using( var ms = new MemoryStream() )
@@ -77,12 +66,7 @@ namespace Nez
 
 		internal static byte[] getMonoGameEmbeddedResourceBytes( string name )
 		{
-			#if NETFX_CORE
-			var assembly = typeof( MathHelper ).GetTypeInfo().Assembly;
-			#else
-			var assembly = typeof( MathHelper ).Assembly;
-			#endif
-
+			var assembly = ReflectionUtils.getAssembly( typeof( MathHelper ) );
 			using( var stream = assembly.GetManifestResourceStream( name ) )
 			{
 				using( var ms = new MemoryStream() )
