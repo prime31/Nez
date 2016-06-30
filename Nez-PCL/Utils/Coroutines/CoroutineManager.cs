@@ -12,7 +12,7 @@ namespace Nez.Systems
 	/// - yield return 5.5 (tick again after a 5.5 second delay)
 	/// - yield return startCoroutine( another() ) (wait for the other coroutine before getting ticked again)
 	/// </summary>
-	public class CoroutineManager
+	public class CoroutineManager : AbstractGlobalManager
 	{
 		/// <summary>
 		/// internal class used by the CoroutineManager to hide the data it requires for a Coroutine
@@ -87,7 +87,7 @@ namespace Nez.Systems
 		}
 
 
-		public void update()
+		public override void update()
 		{
 			_isInUpdate = true;
 			for( var i = 0; i < _unblockedCoroutines.Count; i++ )

@@ -79,8 +79,8 @@ namespace Nez
 		ITimer _graphicsDeviceChangeTimer;
 
 		// globally accessible systems
+		FastList<AbstractGlobalManager> _globalManagers = new FastList<AbstractGlobalManager>();
 		CoroutineManager _coroutineManager = new CoroutineManager();
-		TweenManager _tweenManager = new TweenManager();
 		TimerManager _timerManager = new TimerManager();
 
 
@@ -121,6 +121,12 @@ namespace Nez
 			IsFixedTimeStep = false;
 
 			entitySystemsEnabled = enableEntitySystems;
+
+			// setup systems
+			_globalManagers.add( _coroutineManager );
+			_globalManagers.add( new TweenManager() );
+			_globalManagers.add( _timerManager );
+			_globalManagers.add( new RenderTarget() );
 		}
 
 
@@ -178,7 +184,6 @@ namespace Nez
 			graphicsDevice = GraphicsDevice;
 			var font = Content.Load<BitmapFont>( "nez/NezDefaultBMFont" );
 			Graphics.instance = new Graphics( font );
-			RenderTarget.instance = new RenderTarget();
 		}
 
 
@@ -195,13 +200,12 @@ namespace Nez
 			TimeRuler.instance.beginMark( "update", Color.Green );
 			#endif
 
-			// update all our systems
+			// update all our systems and global managers
 			Time.update( (float)gameTime.ElapsedGameTime.TotalSeconds );
 			Input.update();
-			RenderTarget.instance.update();
-			_coroutineManager.update();
-			_tweenManager.update();
-			_timerManager.update();
+
+			for( var i = _globalManagers.length - 1; i >= 0; i-- )
+				_globalManagers.buffer[i].update();
 
 			if( exitOnEscapeKeypress && Input.isKeyDown( Keys.Escape ) || Input.gamePads[0].isButtonReleased( Buttons.Back ) )
 			{
@@ -289,7 +293,6 @@ namespace Nez
 
 			#if DEBUG
 			TimeRuler.instance.endMark( "draw" );
-
 			DebugConsole.instance.render();
 
 			// the TimeRuler only needs to render when the DebugConsole is not open
@@ -323,6 +326,32 @@ namespace Nez
 			Assert.isNull( _instance._sceneTransition, "You cannot start a new SceneTransition until the previous one has completed" );
 			_instance._sceneTransition = sceneTransition;
 		}
+
+
+		#region Global Managers
+
+		/// <summary>
+		/// adds a global manager object that will have its update method called each frame before Scene.update is called
+		/// </summary>
+		/// <returns>The global manager.</returns>
+		/// <param name="manager">Manager.</param>
+		public static void registerGlobalManager( AbstractGlobalManager manager )
+		{
+			_instance._globalManagers.add( manager );
+		}
+
+
+		/// <summary>
+		/// removes the global manager object
+		/// </summary>
+		/// <returns>The global manager.</returns>
+		/// <param name="manager">Manager.</param>
+		public static void unregisterGlobalManager( AbstractGlobalManager manager )
+		{
+			_instance._globalManagers.remove( manager );
+		}
+
+		#endregion
 
 
 		#region Systems access

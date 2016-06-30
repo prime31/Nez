@@ -3,7 +3,7 @@
 
 namespace Nez.Tweens
 {
-	public class TweenManager
+	public class TweenManager : AbstractGlobalManager
 	{
 		public static EaseType defaultEaseType = EaseType.QuartIn;
 
@@ -56,7 +56,7 @@ namespace Nez.Tweens
 		}
 
 
-		internal void update()
+		public override void update()
 		{
 			_isUpdating = true;
 
