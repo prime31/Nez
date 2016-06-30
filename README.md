@@ -69,6 +69,8 @@ All Nez shaders are compiled for OpenGL. If you are on Windows make sure you sta
 
 If you intend to use any of the built in Effects or PostProcessors you should also copy or link the DefaultContent/effects folder into your projects Content/nez/effects folder. Be sure to set the Build Action to Content and enable the "Copy to output directory" property so they get copied into your compiled game.
 
+If you are developing a mobile application you will need to enable touch input by calling `Input.touch.enableTouchSupport()`.
+
 
 
 Using Nez with FNA
