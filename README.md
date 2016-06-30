@@ -53,9 +53,8 @@ Setup
 
 - clone or download the Nez repository
 - add the Nez-PCL/Nez.csproj project to your solution and add a reference to it in your main project
-- copy or link the DefaultContent/NezDefaultBMFont.xnb file to your projects Content/nez folder. Make sure the "Copy to output directory" property is set so it ends up in your bin folder!
-- make your main Game class (Game1.cs in a default project) subclass Core and call it's constructor
- 
+- make your main Game class (Game1.cs in a default project) subclass Nez.Core
+
 
 ### (optional) Pipeline Tool setup for access to the Nez Pipeline importers
 
@@ -65,7 +64,7 @@ Setup
 - open the Pipeline Tool by double-clicking your Content.mgcb file and add references to PipelineImporter.dll, Ionic.ZLib.dll and Newtonsoft.Json.dll
 
 
-All Nez shaders are compiled for OpenGL. If you are on Windows make sure you start from a DesktopGL template, not DirectX! Nez only supports OpenGL out of the box to keep things compatible accross Android/iOS/Mac/Linux/Windows. The reason Nez needs the NezDefaultBMFont.xnb in your project is so that it has a font to use for the debug console and inspector.
+All Nez shaders are compiled for OpenGL so be sure to use the DesktopGL template, not DirectX! Nez only supports OpenGL out of the box to keep things compatible accross Android/iOS/Mac/Linux/Windows.
 
 If you intend to use any of the built in Effects or PostProcessors you should also copy or link the DefaultContent/effects folder into your projects Content/nez/effects folder. Be sure to set the Build Action to Content and enable the "Copy to output directory" property so they get copied into your compiled game.
 

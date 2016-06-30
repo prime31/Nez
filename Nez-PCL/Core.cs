@@ -116,7 +116,7 @@ namespace Nez
 			Window.OrientationChanged += onOrientationChanged;
 
 			Content.RootDirectory = "Content";
-			contentManager = new NezContentManager( Services, Content.RootDirectory );
+			contentManager = new NezGlobalContentManager( Services, Content.RootDirectory );
 			IsMouseVisible = true;
 			IsFixedTimeStep = false;
 
@@ -182,7 +182,7 @@ namespace Nez
 
 			// prep the default Graphics system
 			graphicsDevice = GraphicsDevice;
-			var font = Content.Load<BitmapFont>( "nez/NezDefaultBMFont" );
+			var font = contentManager.Load<BitmapFont>( "nez://Nez.Content.NezDefaultBMFont.xnb" );
 			Graphics.instance = new Graphics( font );
 		}
 

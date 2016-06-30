@@ -86,6 +86,7 @@
     <Folder Include="Debug\Inspector\Attributes\" />
     <Folder Include="Debug\Inspector\Inspectors\" />
     <Folder Include="UI\Utils\" />
+    <Folder Include="Content\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Debug\Debug.cs" />
@@ -484,5 +485,8 @@
     <Reference Include="MonoGame.Framework">
       <HintPath>MonoGamePCL\MonoGame.Framework.dll</HintPath>
     </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Content\NezDefaultBMFont.xnb" />
   </ItemGroup>
 </Project>
