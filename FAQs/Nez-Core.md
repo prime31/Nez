@@ -40,6 +40,12 @@ static void logLoadedAssets( string whichAssets = "s" )
 ```
 
 
+## Global Managers
+Nez lets you add a global manager object that will have an update method called every frame before Scene.update occurs. Any of your systems that should persist Scene changes can be put here. Nez has several of it's own systems setup as global managers as well including: scheduler, coroutine manager and tween manager. You can register/unregister your global managers via `Core.registerGlobalManager` and `Core.unregisterGlobalManager`.
+
+
+
+
 Other Important Static Classes
 ==
 
