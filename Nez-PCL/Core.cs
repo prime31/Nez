@@ -79,7 +79,7 @@ namespace Nez
 		ITimer _graphicsDeviceChangeTimer;
 
 		// globally accessible systems
-		FastList<AbstractGlobalManager> _globalManagers = new FastList<AbstractGlobalManager>();
+		FastList<IUpdatableManager> _globalManagers = new FastList<IUpdatableManager>();
 		CoroutineManager _coroutineManager = new CoroutineManager();
 		TimerManager _timerManager = new TimerManager();
 
@@ -335,7 +335,7 @@ namespace Nez
 		/// </summary>
 		/// <returns>The global manager.</returns>
 		/// <param name="manager">Manager.</param>
-		public static void registerGlobalManager( AbstractGlobalManager manager )
+		public static void registerGlobalManager( IUpdatableManager manager )
 		{
 			_instance._globalManagers.add( manager );
 		}
@@ -346,7 +346,7 @@ namespace Nez
 		/// </summary>
 		/// <returns>The global manager.</returns>
 		/// <param name="manager">Manager.</param>
-		public static void unregisterGlobalManager( AbstractGlobalManager manager )
+		public static void unregisterGlobalManager( IUpdatableManager manager )
 		{
 			_instance._globalManagers.remove( manager );
 		}

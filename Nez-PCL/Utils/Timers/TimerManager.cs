@@ -4,12 +4,12 @@ using System.Collections.Generic;
 
 namespace Nez.Timers
 {
-	public class TimerManager : AbstractGlobalManager
+	public class TimerManager : IUpdatableManager
 	{
 		List<Timer> _timers = new List<Timer>();
 
 		
-		public override void update()
+		void IUpdatableManager.update()
 		{
 			for( var i = _timers.Count - 1; i >= 0; i-- )
 			{

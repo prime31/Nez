@@ -478,7 +478,7 @@
     <Compile Include="Utils\Extensions\ComponentExt.cs" />
     <Compile Include="Debug\Inspector\InspectorList.cs" />
     <Compile Include="Input\TouchInput.cs" />
-    <Compile Include="Utils\AbstractGlobalManager.cs" />
+    <Compile Include="Utils\IUpdatableManager.cs" />
     <Compile Include="Utils\Collections\FastList.cs" />
   </ItemGroup>
   <ItemGroup>

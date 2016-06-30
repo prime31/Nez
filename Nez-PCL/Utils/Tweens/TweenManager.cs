@@ -1,9 +1,10 @@
 ﻿using System.Collections.Generic;
+using Nez;
 
 
 namespace Nez.Tweens
 {
-	public class TweenManager : AbstractGlobalManager
+	public class TweenManager : IUpdatableManager
 	{
 		public static EaseType defaultEaseType = EaseType.QuartIn;
 
@@ -56,7 +57,7 @@ namespace Nez.Tweens
 		}
 
 
-		public override void update()
+		void IUpdatableManager.update()
 		{
 			_isUpdating = true;
 
