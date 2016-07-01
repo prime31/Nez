@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
+#if !FNA
 using Microsoft.Xna.Framework.Input.Touch;
+#endif
 
 
 namespace Nez

@@ -480,6 +480,7 @@
     <Compile Include="Input\TouchInput.cs" />
     <Compile Include="Utils\IUpdatableManager.cs" />
     <Compile Include="Utils\Collections\FastList.cs" />
+    <Compile Include="Graphics\Batcher\VertexPosition.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="MonoGame.Framework">

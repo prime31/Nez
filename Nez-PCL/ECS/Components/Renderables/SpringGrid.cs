@@ -151,7 +151,8 @@ namespace Nez
 
 			// we offset the gridSize location by half-spacing so the padding is applied evenly all around
 			gridSize.Location -= spacing.ToPoint();
-			gridSize.Size += spacing.ToPoint();
+			gridSize.Width += (int)spacing.X;
+			gridSize.Height += (int)spacing.Y;
 			
 			var numColumns = (int)( gridSize.Width / spacing.X ) + 1;
 			var numRows = (int)( gridSize.Height / spacing.Y ) + 1;

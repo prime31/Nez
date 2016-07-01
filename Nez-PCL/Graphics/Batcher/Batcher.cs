@@ -714,7 +714,6 @@ namespace Nez
 				FillMode = _rasterizerState.FillMode,
 				MultiSampleAntiAlias = _rasterizerState.MultiSampleAntiAlias,
 				SlopeScaleDepthBias = _rasterizerState.SlopeScaleDepthBias,
-				DepthClipEnable = _rasterizerState.DepthClipEnable,
 				ScissorTestEnable = shouldEnable
 			};
 		}

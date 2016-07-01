@@ -66,6 +66,10 @@ namespace Nez
 
 		internal static byte[] getMonoGameEmbeddedResourceBytes( string name )
 		{
+			#if FNA
+			name = name.Replace( ".ogl.mgfxo", ".fxb" );
+			#endif
+
 			var assembly = ReflectionUtils.getAssembly( typeof( MathHelper ) );
 			using( var stream = assembly.GetManifestResourceStream( name ) )
 			{

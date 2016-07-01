@@ -7,10 +7,11 @@ using System.Text;
 
 namespace Nez
 {
+#if !FNA
 	public class NezSpriteFont : IFont
 	{
 		SpriteFont _font;
-		private readonly Dictionary<char,SpriteFont.Glyph> _glyphs;
+		readonly Dictionary<char,SpriteFont.Glyph> _glyphs;
 
 		/// <summary>
 		/// this sucker gets used a lot so we cache it to avoid having to create it every frame
@@ -184,7 +185,7 @@ namespace Nez
 		}
 		
 
-		internal void drawInto( Batcher batcher, ref FontCharacterSource text, Vector2 position, Color color,
+		public void drawInto( Batcher batcher, ref FontCharacterSource text, Vector2 position, Color color,
 		                        float rotation, Vector2 origin, Vector2 scale, SpriteEffects effect, float depth )
 		{
 			var flipAdjustment = Vector2.Zero;
@@ -298,5 +299,65 @@ namespace Nez
 		#endregion
 
 	}
+
+#else
+
+	public class NezSpriteFont : IFont
+	{
+		SpriteFont _font;
+
+		/// <summary>
+		/// this sucker gets used a lot so we cache it to avoid having to create it every frame
+		/// </summary>
+		Matrix _transformationMatrix = Matrix.Identity;
+
+
+		public NezSpriteFont( SpriteFont font )
+		{
+			_font = font;
+
+		}
+
+
+		public void drawInto( Batcher batcher, StringBuilder text, Vector2 position, Color color, float rotation, Vector2 origin, Vector2 scale, SpriteEffects effect, float depth )
+		{
+			var source = new FontCharacterSource( text );
+			drawInto( batcher, ref source, position, color, rotation, origin, scale, effect, depth );
+		}
+
+
+		public void drawInto( Batcher batcher, string text, Vector2 position, Color color, float rotation, Vector2 origin, Vector2 scale, SpriteEffects effect, float depth )
+		{
+			var source = new FontCharacterSource( text );
+			drawInto( batcher, ref source, position, color, rotation, origin, scale, effect, depth );
+		}
+
+
+		public void drawInto( Batcher batcher, ref FontCharacterSource text, Vector2 position, Color color, float rotation, Vector2 origin, Vector2 scale, SpriteEffects effect, float depth )
+		{
+			throw new NotImplementedException();
+		}
+
+
+		bool IFont.hasCharacter( char c )
+		{
+			throw new NotImplementedException();
+		}
+
+
+		public Vector2 measureString( StringBuilder text )
+		{
+			return _font.MeasureString( text );
+		}
+
+
+		public Vector2 measureString( string text )
+		{
+			return _font.MeasureString( text );
+		}
+
+	}
+
+#endif
 }
 

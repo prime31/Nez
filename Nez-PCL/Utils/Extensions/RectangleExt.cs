@@ -608,6 +608,14 @@ namespace Nez
 			return new Vector2( rect.X, rect.Y );
 		}
 
+
+		#if FNA
+		public static bool Contains( this Rectangle rect, Vector2 value )
+        {
+            return ((((rect.X <= value.X) && (value.X < (rect.X + rect.Width))) && (rect.Y <= value.Y)) && (value.Y < (rect.Y + rect.Height)));
+        }
+		#endif
+
 	}
 }
 

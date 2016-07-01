@@ -7,10 +7,10 @@ namespace Nez
 	/// <summary>
 	/// helper that wraps either a string or StringBuilder and provides a common API to read them for measuring/drawing
 	/// </summary>
-	internal struct FontCharacterSource
+	public struct FontCharacterSource
 	{
-		private readonly string _string;
-		private readonly StringBuilder _builder;
+		readonly string _string;
+		readonly StringBuilder _builder;
 		public readonly int Length;
 
 

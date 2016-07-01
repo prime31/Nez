@@ -26,6 +26,21 @@ namespace Nez
 				self.SetRenderTargets( _renderTargetBinding );
 			}
 		}
+
+
+		#if FNA
+		public static void DrawIndexedPrimitives( this GraphicsDevice self, PrimitiveType primitiveType, int baseVertex, int startIndex, int primitiveCount )
+		{
+			self.DrawIndexedPrimitives( primitiveType, baseVertex, 0, primitiveCount * 2, startIndex, primitiveCount );
+		}
+
+
+		public static void GetRenderTargets( this GraphicsDevice self, RenderTargetBinding[] outTargets )
+		{
+			outTargets = self.GetRenderTargets();
+		}
+		#endif
+
 	}
 }
 

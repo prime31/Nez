@@ -35,6 +35,19 @@ namespace Nez
 			list.Add( item );
 			return true;
 		}
+
+
+		/// <summary>
+		/// gets a random item from the list. Does not empty check the list!
+		/// </summary>
+		/// <returns>The item.</returns>
+		/// <param name="list">List.</param>
+		/// <typeparam name="T">The 1st type parameter.</typeparam>
+		public static T randomItem<T>( this IList<T> list )
+		{
+			return list[Nez.Random.range( 0, list.Count )];
+		}
+
 	}
 }
 

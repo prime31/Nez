@@ -116,7 +116,7 @@ namespace Nez
 		/// <value>The size of the scene render texture.</value>
 		public Point sceneRenderTargetSize
 		{
-			get { return _sceneRenderTarget.Bounds.Size; }
+			get { return new Point( _sceneRenderTarget.Bounds.Width, _sceneRenderTarget.Bounds.Height ); }
 		}
 
 		/// <summary>

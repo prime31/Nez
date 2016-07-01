@@ -509,7 +509,7 @@ namespace Nez.Console
 
 			// take into account text padding. move our location up a bit and expand the Rect to accommodate
 			commandEntryRect.Location -= new Point( 0, TEXT_PADDING_Y * 2 );
-			commandEntryRect.Size += new Point( 0, TEXT_PADDING_Y * 2 );
+			commandEntryRect.Height += TEXT_PADDING_Y * 2;
 
 			Graphics.instance.batcher.drawRect( commandEntryRect, Color.Black * OPACITY );
 			var commandLineString = "> " + _currentText;
