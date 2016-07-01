@@ -74,11 +74,7 @@ If you are developing a mobile application you will need to enable touch input b
 
 Using Nez with FNA
 ==========
-Getting up and running with Nez and FNA requires some minor changes to be made to work with the default FNA install. Once you have your FNA project working the following steps should be taken:
-
-- define the symbol "FNA" for both Debug and Release configurations
-- create a new folder named "Nez" in your project and add all the files from the Nez-PCL folder to it
-- (optional) if you use the included Nez Pipeline Tool FNA needs to be able to link up the correct assembly so in your projects configuration change the assembly name to "Nez"
+To make getting up and running with FNA easier there is a separate [Nez.FNA repo](https://github.com/prime31/Nez.FNA). If you are using FNA head over there and give it a look.
 
 
 
