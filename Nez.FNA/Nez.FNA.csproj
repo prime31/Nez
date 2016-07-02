@@ -29,9 +29,6 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
-    <Reference Include="FNA">
-      <HintPath>..\..\FNA\FNA\bin\Debug\FNA.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -1213,29 +1210,15 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\Nez-PCL\.DS_Store">
-      <Link>Nez-PCL\.DS_Store</Link>
-    </None>
-    <None Include="..\Nez-PCL\Debug\Inspector\.DS_Store">
-      <Link>Nez-PCL\Debug\Inspector\.DS_Store</Link>
-    </None>
-    <None Include="..\Nez-PCL\ECS\Components\.DS_Store">
-      <Link>Nez-PCL\ECS\Components\.DS_Store</Link>
-    </None>
-    <None Include="..\Nez-PCL\ECS\Components\Renderables\.DS_Store">
-      <Link>Nez-PCL\ECS\Components\Renderables\.DS_Store</Link>
-    </None>
-    <None Include="..\Nez-PCL\Graphics\PostProcessing\.DS_Store">
-      <Link>Nez-PCL\Graphics\PostProcessing\.DS_Store</Link>
-    </None>
-    <None Include="..\Nez-PCL\Utils\Tweens\.DS_Store">
-      <Link>Nez-PCL\Utils\Tweens\.DS_Store</Link>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
     <EmbeddedResource Include="..\Nez-PCL\Content\NezDefaultBMFont.xnb">
       <Link>Nez-PCL\Content\NezDefaultBMFont.xnb</Link>
     </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\FNA\FNA.csproj">
+      <Project>{35253CE1-C864-4CD3-8249-4D1319748E8F}</Project>
+      <Name>FNA</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>

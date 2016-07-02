@@ -6,8 +6,7 @@
 <#@ import namespace="System.Globalization" #>
 <#@ import namespace="System.Text.RegularExpressions" #>
 
-<# var sourceFolder = "Content/"; #>
-<# var directories = Directory.GetDirectories( Host.ResolvePath( sourceFolder ) ); #>
+<# var sourceFolders = new string[] { "Content/bin/DesktopGL", "Content" }; #>
 
 
 namespace Nez
@@ -16,19 +15,29 @@ namespace Nez
     {
 <#
 
-	// loop through all the directories in our sourceFolder
-	foreach( var dir in directories )
+	// loop through all of our sourceFolders
+	foreach( var sourceFolder in sourceFolders )
 	{
-		var dirName = new DirectoryInfo( dir ).Name.ToLower();
-		if( dirName == "bin" || dirName == "obj" ) 
-			continue;
+		var directories = Directory.GetDirectories( Host.ResolvePath( sourceFolder ) );
+		// loop through all the directories in our sourceFolder
+		foreach( var dir in directories )
+		{
+			var dirName = new DirectoryInfo( dir ).Name.ToLower();
+			if( dirName == "bin" || dirName == "obj" ) 
+				continue;
 
-		// start off the recursive directory printing
-		printDirectoryClass( dir, 2, sourceFolder );
+			// dont delve into directories that don't contan xnb files
+			var xnbFiles = Directory.GetFiles( dir, "*.xnb", SearchOption.AllDirectories );
+			if( xnbFiles.Length == 0 )
+				continue;
+
+			// start off the recursive directory printing
+			printDirectoryClass( dir, 2, sourceFolder );
+		}
+
+		// handle any files in the root sourceFolder
+		printContentFiles( Host.ResolvePath( sourceFolder ), 2, Host.ResolvePath( sourceFolder ) );
 	}
-
-	// handle any files in the root sourceFolder
-	printContentFiles( Host.ResolvePath( sourceFolder ), 2, Host.ResolvePath( sourceFolder ) );
 
 #>
 
@@ -70,6 +79,9 @@ namespace Nez
 			var fileInfo = new FileInfo( file );
 			var fileName = fileInfo.Name.Replace( ".xnb", string.Empty );
 			var className = generateClassName( fileName, false );
+
+			if( finalPath[0] == '/' || finalPath[0] == '\\' )
+				finalPath = finalPath.Substring( 1 );
 
 			WriteLine( "{0}public const string {1} = @\"{2}\";", firstIndent, className, finalPath );
 		}

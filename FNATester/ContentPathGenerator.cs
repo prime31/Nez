@@ -5,8 +5,16 @@ namespace Nez
 {
     class Content
     {
-		public const string atlasImages = @"AtlasImages";
-		public const string moon = @"moon";
+		public static class Images
+		{
+			public const string moon = @"Images/moon";
+		}
+
+		public static class TextureAtlasTest
+		{
+			public const string atlasImages = @"TextureAtlasTest/AtlasImages";
+		}
+
 
     }
 }
