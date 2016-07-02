@@ -23,6 +23,24 @@ There are several ways to load Effects with Nez that are not present in MonoGame
 - **loadNezEffect:** loads an embedded Nez effect. These are any of the Effect subclasses in the Nez/Graphics/Effects folder
 
 
+
+## Auto Generating Content Paths
+Nez includes a T4 template that will generate a static `Content` class for you that contains the names of all of the files in your Content folder. This lets you change code like the following:
+
+```csharp
+// before using the ContentPathGenerator you have strings to represent your content
+var tex = contentManager.Load<Texture2D>( "textures/blueBird" );
+
+// after using the ContentPathGenerator you will have compile-tile safety for your content
+var tex = contentManager.Load<Texture2D>( Content.textures_blueBird" );
+```
+
+The big advantage to using it is that you will never have a reference to content that doesnt actually exist in your project. Setup is as follows:
+
+- copy the ContentPathGenerator.tt file into the root of your project (you could place it elsewhere and then modify the `sourceFolder` in the file)
+- in the properites pane for the file set the "Custom Tool" to "TextTemplatingFileGenerator"
+- right click the file and choose Tools -> Process T4 Template to generate the Content class
+
+
 ## Async Loading
 `NezContentManager` provides asynchronous loading of assets as well. You can load a single asset or an array of assets via the `loadAsync<T>` method. It takes a callback Action that will be called once the assets are loaded.
-	
