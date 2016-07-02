@@ -37,7 +37,7 @@ var tex = contentManager.Load<Texture2D>( Content.Textures.Scene1.blueBird" );
 
 The big advantage to using it is that you will never have a reference to content that doesnt actually exist in your project. You get compile-time checking of all your content. Setup is as follows:
 
-- copy the ContentPathGenerator.tt file into the root of your project (you could place it elsewhere and then modify the `sourceFolder` variable in the file)
+- copy the ContentPathGenerator.tt file into the root of your project (you could place it elsewhere and then modify the `sourceFolder` variable in the file. For example, if using only precompiled xnb files in an FNA project you would set `sourceFolder = "Content/"`)
 - in the properites pane for the file set the "Custom Tool" to "TextTemplatingFileGenerator"
 - right click the file and choose Tools -> Process T4 Template to generate the Content class
 
