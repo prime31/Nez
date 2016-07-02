@@ -1,6 +1,6 @@
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
-using Nez.Content;
+using Nez.Pipeline.Content;
 
 
 namespace Nez.TextureAtlases

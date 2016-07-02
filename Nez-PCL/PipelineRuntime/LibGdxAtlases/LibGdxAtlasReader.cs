@@ -1,10 +1,7 @@
-﻿using System;
-using Microsoft.Xna.Framework.Content;
+﻿using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
-using Nez.Content;
-using System.Collections.Generic;
+using Nez.Pipeline.Content;
 using Microsoft.Xna.Framework;
-using System.Diagnostics;
 using Nez.TextureAtlases;
 using Nez.Textures;
 
