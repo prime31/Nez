@@ -87,6 +87,7 @@
     <Folder Include="Debug\Inspector\Inspectors\" />
     <Folder Include="UI\Utils\" />
     <Folder Include="Content\" />
+    <Folder Include="Utils\Audio\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Debug\Debug.cs" />
@@ -481,6 +482,7 @@
     <Compile Include="Utils\IUpdatableManager.cs" />
     <Compile Include="Utils\Collections\FastList.cs" />
     <Compile Include="Graphics\Batcher\VertexPosition.cs" />
+    <Compile Include="Utils\Audio\AudioSource.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="MonoGame.Framework">

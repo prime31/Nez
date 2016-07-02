@@ -315,7 +315,6 @@ namespace Nez
 		public NezSpriteFont( SpriteFont font )
 		{
 			_font = font;
-
 		}
 
 
