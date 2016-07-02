@@ -64,7 +64,7 @@ Setup
 - open the Pipeline Tool by double-clicking your Content.mgcb file and add references to PipelineImporter.dll, Ionic.ZLib.dll and Newtonsoft.Json.dll
 
 
-All Nez shaders are compiled for OpenGL so be sure to use the DesktopGL template, not DirectX! Nez only supports OpenGL out of the box to keep things compatible accross Android/iOS/Mac/Linux/Windows.
+All Nez shaders are compiled for OpenGL so be sure to use the DesktopGL template, not DirectX! Nez only supports OpenGL out of the box to keep things compatible across Android/iOS/Mac/Linux/Windows.
 
 If you intend to use any of the built in Effects or PostProcessors you should also copy or link the DefaultContent/effects folder into your projects Content/nez/effects folder. Be sure to set the Build Action to Content and enable the "Copy to output directory" property so they get copied into your compiled game.
 
@@ -89,7 +89,7 @@ This repo includes a barebones example project (FNATester) that illustrates how 
 
 Tutorials
 ==========
-[The wiki](https://github.com/prime31/Nez/wiki) contains a few basic tutorials littered with code snippets that should be enough to get you rolling your own games. If you have a suggestion for a new tutorial feel free to open an Issue with the details. More quickie tutorials will be added in the future and a full repository of sample code will be uploaded also if all goes well.
+[The wiki](https://github.com/prime31/Nez/wiki) contains a few basic tutorials littered with code snippets that should be enough to get you rolling your own games. If you have a suggestion for a new tutorial feel free to open an Issue with the details.
 
 
 
