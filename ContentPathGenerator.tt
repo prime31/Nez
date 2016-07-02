@@ -1,13 +1,13 @@
 ﻿<#@ template language="C#" hostSpecific="true" #>
-<# // for some reason, some systems complain about the System.Core include so remove it if you get an error #>
-<#@ assembly name="System.Core" #>
 <#@ import namespace="System.Linq" #>
 <#@ import namespace="System.Text" #>
 <#@ import namespace="System.Collections.Generic" #>
 <#@ import namespace="System.IO" #>
+<#@ import namespace="System.Globalization" #>
+<#@ import namespace="System.Text.RegularExpressions" #>
 
 <# var sourceFolder = "Content/bin/DesktopGL/"; #>
-<# var files = Directory.GetFiles( Host.ResolvePath( sourceFolder ), "*.xnb", SearchOption.AllDirectories ); #>
+<# var directories = Directory.GetDirectories( Host.ResolvePath( sourceFolder ) ); #>
 
 
 namespace Nez
@@ -15,14 +15,14 @@ namespace Nez
     class Content
     {
 <#
-	var i = 0;
-	foreach( var filePath in files )
-	{
-		var finalPath = filePath.Substring( filePath.IndexOf( sourceFolder ) + sourceFolder.Length ).Replace( ".xnb", string.Empty );
-		var varName = extractPath( filePath, sourceFolder );
 
-		Write( "\t\tpublic const string {0} = @\"{1}\";\n", toCamelCase( varName ), finalPath );
+	// loop through all the directories in our sourceFolder
+	foreach( var dir in directories )
+	{
+		// start off the recursive directory printing
+		printDirectoryClass( dir, 2, sourceFolder );
 	}
+
 #>
 
     }
@@ -31,37 +31,75 @@ namespace Nez
 
 
 <#+
-	string extractPath( string input, string sourceFolder )
+	// recursively creates a class for each directory
+	void printDirectoryClass( string dir, int depth, string sourceFolder )
 	{
-		var name = Path.GetFileName( input );
-		return input.Substring( input.IndexOf( sourceFolder ) + sourceFolder.Length )
-			.Replace( "/", "_" )
-			.Replace( "\\", "_" )
-			.Replace( ".xnb", string.Empty );
-		return Path.GetDirectoryName( input.Substring( input.IndexOf( sourceFolder ) + sourceFolder.Length ) ).Replace( "/", "_" ).Replace( "\\", "_" );
+		var dirInfo = new DirectoryInfo( dir );
+		var firstIndent = new string( '\t', depth );
+		var className = generateClassName( dirInfo.Name, true );
+		WriteLine( "{0}public static class {1}\n{2}{{", firstIndent, className, firstIndent );
+
+		// handle subdirectories
+		foreach( var subdir in Directory.GetDirectories( dir ) )
+			printDirectoryClass( subdir, depth + 1, sourceFolder );
+
+		// handle files
+		printContentFiles( dir, depth + 1, sourceFolder );
+
+		WriteLine( "{0}}}\n", firstIndent );
 	}
 
 
-	string toCamelCase( string input )
+	// prints a const string for each file in the directory
+	void printContentFiles( string dir, int depth, string sourceFolder )
 	{
-		input = input.Replace( " ", "" );
+		var firstIndent = new string( '\t', depth );
 
-		// uppercase letters before dash or underline
-		Func<char,int,string> func = ( x, i ) => {
-			if ( x == '-' || x == '_' )
-				return "_";
+		foreach( var file in Directory.GetFiles( dir, "*.xnb" ) )
+		{
+			// clear out all of the path up to the sourceFolder so we get just the relative path to the Content folder
+			var finalPath = file.Substring( file.IndexOf( sourceFolder ) + sourceFolder.Length )
+				.Replace( ".xnb", string.Empty );
+			var fileInfo = new FileInfo( file );
+			var fileName = fileInfo.Name.Replace( ".xnb", string.Empty );
+			var className = generateClassName( fileName, false );
 
-			if( i > 0 && ( input[i - 1] == '-' || input[i - 1] == '_' ) )
-				return x.ToString().ToUpper();
+			WriteLine( "{0}public const string {1} = @\"{2}\";", firstIndent, className, finalPath );
+		}
+	}
 
-			return x.ToString();
-		};
 
-		input = string.Concat( input.Select( func ).ToArray() );
+	string stripInvalidPathChars( string input )
+	{
+		var invalidChars = Path.GetInvalidPathChars();
+    	return new string( input.Where( m => !invalidChars.Contains( m ) ).ToArray<char>() );
+	}
 
-		// digits are a no-no so stick prefix in front
-		if( char.IsDigit( input[0] ) )
-			return "k" + input;
-		return input;
+
+	string stripInvalidFilenameChars( string input )
+	{
+		var invalidChars = Path.GetInvalidFileNameChars();
+    	return new string( input.Where( m => !invalidChars.Contains( m ) ).ToArray<char>() );
+	}
+
+
+	// attempts to generate a proper path name
+	string generateClassName( string className, bool uppercaseFirstChar )
+	{
+		// handle upper or lower casing the first char in the className
+	    if( uppercaseFirstChar && char.IsLower( className[0] ) )
+	    	className = char.ToUpper( className[0] ) + className.Substring( 1 );
+	    else if( !uppercaseFirstChar && char.IsUpper( className[0] ) )
+	    	className = char.ToLower( className[0] ) + className.Substring( 1 );
+
+        // remove invalid characters
+        var regex = new Regex( @"[^\p{Ll}\p{Lu}\p{Lt}\p{Lo}\p{Nd}\p{Nl}\p{Mn}\p{Mc}\p{Cf}\p{Pc}\p{Lm}]" );
+        className = regex.Replace( className, "" );
+
+        // class name doesn't begin with a letter, insert an underscore
+        if( !char.IsLetter( className, 0 ) )
+            className = className.Insert( 0, "_" );
+
+	    return className.Replace( " ", string.Empty );
 	}
 #>
