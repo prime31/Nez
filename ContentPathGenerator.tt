@@ -19,9 +19,16 @@ namespace Nez
 	// loop through all the directories in our sourceFolder
 	foreach( var dir in directories )
 	{
+		var dirName = new DirectoryInfo( dir ).Name.ToLower();
+		if( dirName == "bin" || dirName == "obj" ) 
+			continue;
+
 		// start off the recursive directory printing
 		printDirectoryClass( dir, 2, sourceFolder );
 	}
+	
+	// handle any files in the root sourceFolder
+	printContentFiles( Host.ResolvePath( sourceFolder ), 2, Host.ResolvePath( sourceFolder ) );
 
 #>
 
