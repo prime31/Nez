@@ -12,13 +12,6 @@ namespace Nez
 		static Rectangle _tempRect;
 
 
-		public static Matrix getSpriteBatchMatrix( this SpriteBatch spriteBatch )
-		{
-			var fieldInfo = ReflectionUtils.getFieldInfo( spriteBatch, "_matrix" );
-			return (Matrix)fieldInfo.GetValue( spriteBatch );
-		}
-
-
 		#region Line
 
 		public static void drawLine( this SpriteBatch spriteBatch, Vector2 start, Vector2 end, Color color )
