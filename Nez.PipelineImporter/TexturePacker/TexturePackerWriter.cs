@@ -20,7 +20,8 @@ namespace Nez.TexturePackerImporter
 
 			foreach( var region in data.regions )
 			{
-				var regionName = Path.GetFileNameWithoutExtension( region.filename );
+				var regionName = region.filename.Replace( Path.GetExtension( region.filename ), string.Empty );
+				TexturePackerProcessor.logger.LogMessage( "writing region: {0}", regionName );
 
 				writer.Write( regionName );
 				writer.Write( region.frame.x );
