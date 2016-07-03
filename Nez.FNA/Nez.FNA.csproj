@@ -479,9 +479,6 @@
     <Compile Include="..\Nez-PCL\Graphics\Batcher\GraphicsResource.cs">
       <Link>Nez-PCL\Graphics\Batcher\GraphicsResource.cs</Link>
     </Compile>
-    <Compile Include="..\Nez-PCL\Graphics\Batcher\VertexPosition.cs">
-      <Link>Nez-PCL\Graphics\Batcher\VertexPosition.cs</Link>
-    </Compile>
     <Compile Include="..\Nez-PCL\Graphics\DeferredLighting\DeferredLightingRenderer.cs">
       <Link>Nez-PCL\Graphics\DeferredLighting\DeferredLightingRenderer.cs</Link>
     </Compile>
@@ -1124,9 +1121,6 @@
     <Compile Include="..\Nez-PCL\Utils\Extensions\ListExt.cs">
       <Link>Nez-PCL\Utils\Extensions\ListExt.cs</Link>
     </Compile>
-    <Compile Include="..\Nez-PCL\Utils\Extensions\PointExt.cs">
-      <Link>Nez-PCL\Utils\Extensions\PointExt.cs</Link>
-    </Compile>
     <Compile Include="..\Nez-PCL\Utils\Extensions\RectangleExt.cs">
       <Link>Nez-PCL\Utils\Extensions\RectangleExt.cs</Link>
     </Compile>
@@ -1207,6 +1201,9 @@
     </Compile>
     <Compile Include="..\Nez-PCL\Utils\Tweens\Interfaces\ITweenable.cs">
       <Link>Nez-PCL\Utils\Tweens\Interfaces\ITweenable.cs</Link>
+    </Compile>
+    <Compile Include="..\Nez-PCL\Utils\MonoGameCompat.cs">
+      <Link>Nez-PCL\Utils\MonoGameCompat.cs</Link>
     </Compile>
   </ItemGroup>
   <ItemGroup>
