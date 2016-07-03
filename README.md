@@ -75,15 +75,7 @@ If you are developing a mobile application you will need to enable touch input b
 
 Using Nez with FNA
 ==========
-To make getting up and running with FNA easier there is a separate branch with a simple demo project.
-
-- clone this repo recursively
-- switch to the Nez.FNA branch (you may need to update the FNA submodules via `git submodule update`)
-- open the Nez solution and build it
-- open your project add a reference to the Nez.FNA project
-
-
-This repo includes a barebones example project (FNATester) that illustrates how to get up and running with FNA and Nez. Note that you still have to install the required FNA native libs per the [FNA documentation](https://github.com/FNA-XNA/FNA/wiki/1:-Download-and-Update-FNA).
+See [this page](FAQs/FNACompat.md) for details.
 
 
 
