@@ -12,3 +12,9 @@ Here is what you need to do to get up and running with Nez + FNA:
 
 ### (optional) Pipeline Tool setup for access to the Nez content importers
 If you want to use the Nez content importers follow the steps outlined [here](https://github.com/prime31/Nez/blob/master/README.md#optional-pipeline-tool-setup-for-access-to-the-nez-pipeline-importers)
+
+
+
+### (optional) MonoGame Content Builder (MGCB) setup for your FNA project
+
+stub. content in progress...
