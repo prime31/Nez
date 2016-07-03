@@ -6,18 +6,6 @@ namespace Nez
 {
 	public static class Vector2Ext
 	{
-		#if FNA
-		/// <summary>
-		/// Gets a <see cref="Point"/> representation for this object.
-		/// </summary>
-		/// <returns>A <see cref="Point"/> representation for this object.</returns>
-		public static Point ToPoint( this Vector2 self )
-		{
-			return new Point( (int)self.X, (int)self.Y );
-		}
-		#endif
-		
-	
 		/// <summary>
 		/// rounds the x and y values
 		/// </summary>

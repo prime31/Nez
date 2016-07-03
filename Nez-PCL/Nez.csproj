@@ -443,7 +443,6 @@
     <Compile Include="Utils\Extensions\IEnumerableExt.cs" />
     <Compile Include="Utils\Extensions\ListExt.cs" />
     <Compile Include="Utils\Extensions\ColorExt.cs" />
-    <Compile Include="Utils\Extensions\PointExt.cs" />
     <Compile Include="Utils\Extensions\RectangleExt.cs" />
     <Compile Include="Utils\Extensions\Vector2Ext.cs" />
     <Compile Include="Utils\Extensions\SpriteBatchExt.cs" />
@@ -481,8 +480,8 @@
     <Compile Include="Input\TouchInput.cs" />
     <Compile Include="Utils\IUpdatableManager.cs" />
     <Compile Include="Utils\Collections\FastList.cs" />
-    <Compile Include="Graphics\Batcher\VertexPosition.cs" />
     <Compile Include="Utils\Audio\AudioSource.cs" />
+    <Compile Include="Utils\MonoGameCompat.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="MonoGame.Framework">
