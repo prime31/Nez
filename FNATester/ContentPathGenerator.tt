@@ -1,0 +1,124 @@
+﻿<#@ template language="C#" hostSpecific="true" #>
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="System.Text" #>
+<#@ import namespace="System.Collections.Generic" #>
+<#@ import namespace="System.IO" #>
+<#@ import namespace="System.Globalization" #>
+<#@ import namespace="System.Text.RegularExpressions" #>
+
+<# var sourceFolders = new string[] { "Content/bin/DesktopGL", "Content" }; #>
+
+
+namespace Nez
+{
+    class Content
+    {
+<#
+
+	// loop through all of our sourceFolders
+	foreach( var sourceFolder in sourceFolders )
+	{
+		var directories = Directory.GetDirectories( Host.ResolvePath( sourceFolder ) );
+		// loop through all the directories in our sourceFolder
+		foreach( var dir in directories )
+		{
+			var dirName = new DirectoryInfo( dir ).Name.ToLower();
+			if( dirName == "bin" || dirName == "obj" ) 
+				continue;
+
+			// dont delve into directories that don't contan xnb files
+			var xnbFiles = Directory.GetFiles( dir, "*.xnb", SearchOption.AllDirectories );
+			if( xnbFiles.Length == 0 )
+				continue;
+
+			// start off the recursive directory printing
+			printDirectoryClass( dir, 2, sourceFolder );
+		}
+
+		// handle any files in the root sourceFolder
+		printContentFiles( Host.ResolvePath( sourceFolder ), 2, Host.ResolvePath( sourceFolder ) );
+	}
+
+#>
+
+    }
+}
+
+
+
+<#+
+	// recursively creates a class for each directory
+	void printDirectoryClass( string dir, int depth, string sourceFolder )
+	{
+		var dirInfo = new DirectoryInfo( dir );
+		var firstIndent = new string( '\t', depth );
+		var className = generateClassName( dirInfo.Name, true );
+		WriteLine( "{0}public static class {1}\n{2}{{", firstIndent, className, firstIndent );
+
+		// handle subdirectories
+		foreach( var subdir in Directory.GetDirectories( dir ) )
+			printDirectoryClass( subdir, depth + 1, sourceFolder );
+
+		// handle files
+		printContentFiles( dir, depth + 1, sourceFolder );
+
+		WriteLine( "{0}}}\n", firstIndent );
+	}
+
+
+	// prints a const string for each file in the directory
+	void printContentFiles( string dir, int depth, string sourceFolder )
+	{
+		var firstIndent = new string( '\t', depth );
+
+		foreach( var file in Directory.GetFiles( dir, "*.xnb" ) )
+		{
+			// clear out all of the path up to the sourceFolder so we get just the relative path to the Content folder
+			var finalPath = file.Substring( file.IndexOf( sourceFolder ) + sourceFolder.Length )
+				.Replace( ".xnb", string.Empty );
+			var fileInfo = new FileInfo( file );
+			var fileName = fileInfo.Name.Replace( ".xnb", string.Empty );
+			var className = generateClassName( fileName, false );
+
+			if( finalPath[0] == '/' || finalPath[0] == '\\' )
+				finalPath = finalPath.Substring( 1 );
+
+			WriteLine( "{0}public const string {1} = @\"{2}\";", firstIndent, className, finalPath );
+		}
+	}
+
+
+	string stripInvalidPathChars( string input )
+	{
+		var invalidChars = Path.GetInvalidPathChars();
+    	return new string( input.Where( m => !invalidChars.Contains( m ) ).ToArray<char>() );
+	}
+
+
+	string stripInvalidFilenameChars( string input )
+	{
+		var invalidChars = Path.GetInvalidFileNameChars();
+    	return new string( input.Where( m => !invalidChars.Contains( m ) ).ToArray<char>() );
+	}
+
+
+	// attempts to generate a proper path name
+	string generateClassName( string className, bool uppercaseFirstChar )
+	{
+		// handle upper or lower casing the first char in the className
+	    if( uppercaseFirstChar && char.IsLower( className[0] ) )
+	    	className = char.ToUpper( className[0] ) + className.Substring( 1 );
+	    else if( !uppercaseFirstChar && char.IsUpper( className[0] ) )
+	    	className = char.ToLower( className[0] ) + className.Substring( 1 );
+
+        // remove invalid characters
+        var regex = new Regex( @"[^\p{Ll}\p{Lu}\p{Lt}\p{Lo}\p{Nd}\p{Nl}\p{Mn}\p{Mc}\p{Cf}\p{Pc}\p{Lm}]" );
+        className = regex.Replace( className, "" );
+
+        // class name doesn't begin with a letter, insert an underscore
+        if( !char.IsLetter( className, 0 ) )
+            className = className.Insert( 0, "_" );
+
+	    return className.Replace( " ", string.Empty );
+	}
+#>

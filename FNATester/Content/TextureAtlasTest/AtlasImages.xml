@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<XnaContent xmlns:ns="Microsoft.Xna.Framework">
+  <Asset Type="System.String[]">
+      <Item>Images/TextureAtlas/background.png</Item>
+      <Item>Images/TextureAtlas/tree.png</Item>
+	  <Item>Images/TextureAtlas/Ninja_Idle_0.png</Item>
+	  <Item>Images/TextureAtlas/Ninja_Idle_1.png</Item>
+	  <Item>Images/TextureAtlas/Ninja_Idle_2.png</Item>
+	  <Item>Images/TextureAtlas/Ninja_Idle_3.png</Item>
+  </Asset>
+</XnaContent>
