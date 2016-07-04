@@ -13,7 +13,7 @@ namespace Nez.TiledMaps
 		public override TmxMap Import( string filename, ContentImporterContext context )
 		{
 			if( filename == null )
-				throw new ArgumentNullException( "filename" );
+				throw new ArgumentNullException( nameof( filename ) );
 
 			using( var reader = new StreamReader( filename ) )
 			{
@@ -34,7 +34,6 @@ namespace Nez.TiledMaps
 				for( var i = 0; i < map.tilesets.Count; i++ )
 				{
 					var tileset = map.tilesets[i];
-
 					if( !string.IsNullOrWhiteSpace( tileset.source ) )
 					{
 						var directoryName = Path.GetDirectoryName( filename );
