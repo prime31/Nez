@@ -15,12 +15,12 @@ using Nez.PipelineImporter;
 namespace Nez.TiledMaps
 {
 	[ContentProcessor( DisplayName = "Tiled Map Processor" )]
-	public class TiledMapProcessor : ContentProcessor<TmxMap,TiledMapProcessorResult>
+	public class TiledMapProcessor : ContentProcessor<TmxMap,TmxMap>
 	{
 		public static ContentBuildLogger logger;
 
 
-		public override TiledMapProcessorResult Process( TmxMap map, ContentProcessorContext context )
+		public override TmxMap Process( TmxMap map, ContentProcessorContext context )
 		{
 			logger = context.Logger;
 			foreach( var layer in map.layers.OfType<TmxTileLayer>() )
@@ -61,7 +61,7 @@ namespace Nez.TiledMaps
 			foreach( var tileset in map.tilesets )
 				setTilesetTextureIfNecessary( tileset, context );
 
-			return new TiledMapProcessorResult( map );
+			return map;
 		}
 
 

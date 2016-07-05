@@ -56,39 +56,7 @@ namespace Nez.Tiled
 				}
 			}
 
-			// now that all the tile positions are populated we loop back through and look for any tiles that are from a image collection tileset.
-			// these need special adjusting to fix the y-offset
-			for( var i = 0; i < tiles.Length; i++ )
-			{
-				if( tiles[i] == null || !( tiles[i].tileset is TiledImageCollectionTileset ) )
-					continue;
-				
-				var tilesetTile = tiles[i].tilesetTile;
-				if( tilesetTile != null && tiles[i].textureRegion != null )
-				{
-					// TODO: make this work for rotated/flipped tiles. Currently it only works if they are default aligned and with a height
-					// that is a multiple of the tilemap.tileHeight
-					var offset = ( tiles[i].textureRegion.sourceRect.Height - tiledMap.tileHeight ) / tiledMap.tileHeight;
-					tiles[i].y -= offset;
-				}
-			}
-
 			return tiles;
-		}
-
-
-		public override void draw( Batcher batcher )
-		{
-			var renderOrderFunction = getRenderOrderFunction();
-			foreach( var tile in renderOrderFunction() )
-			{
-				if( tile == null )
-					continue;
-				
-				var region = tile.textureRegion;
-				if( region != null )
-					renderLayer( batcher, tiledMap, tile, region );
-			}
 		}
 
 
@@ -108,12 +76,13 @@ namespace Nez.Tiled
 				for( var x = minX; x <= maxX; x++ )
 				{
 					var tile = getTile( x, y );
-
 					if( tile == null )
 						continue;
 
 					var tileRegion = tile.textureRegion;
 
+					// for the y position, we need to take into account if the tile is larger than the tiledHeight and shift. Tiled uses
+					// a bottom-left coordinate system and MonoGame a top-left
 					var tx = tile.x * tiledMap.tileWidth + (int)position.X;
 					var ty = tile.y * tiledMap.tileHeight + (int)position.Y;
 					var rotation = 0f;
@@ -129,7 +98,8 @@ namespace Nez.Tiled
 						{
 							spriteEffects ^= SpriteEffects.FlipVertically;
 							rotation = MathHelper.PiOver2;
-							tx += tiledMap.tileWidth;
+							tx += tiledMap.tileHeight + ( tileRegion.sourceRect.Height - tiledMap.tileHeight );
+							ty -= ( tileRegion.sourceRect.Width - tiledMap.tileWidth );
 						}
 						else if( tile.flippedHorizonally )
 						{
@@ -141,7 +111,8 @@ namespace Nez.Tiled
 						{
 							spriteEffects ^= SpriteEffects.FlipHorizontally;
 							rotation = MathHelper.PiOver2;
-							tx += tiledMap.tileWidth;
+							tx += tiledMap.tileWidth + ( tileRegion.sourceRect.Height - tiledMap.tileHeight );
+							ty += ( tiledMap.tileWidth - tileRegion.sourceRect.Width );
 						}
 						else
 						{
@@ -151,51 +122,14 @@ namespace Nez.Tiled
 						}
 					}
 
+					// if we had no rotations (diagonal flipping) shift our y-coord to account for any non-tileSized tiles to account for
+					// Tiled being bottom-left origin
+					if( rotation == 0 )
+						ty += ( tiledMap.tileHeight - tileRegion.sourceRect.Height );
+
 					batcher.draw( tileRegion.texture2D, new Vector2( tx, ty ), tileRegion.sourceRect, color, rotation, Vector2.Zero, 1, spriteEffects, layerDepth );
 				}
 			}
-		}
-
-
-		void renderLayer( Batcher batcher, TiledMap map, TiledTile tile, Subtexture region )
-		{
-			switch( map.orientation )
-			{
-				case TiledMapOrientation.Orthogonal:
-					renderOrthogonal( batcher, tile, region );
-					break;
-				case TiledMapOrientation.Isometric:
-					renderIsometric( batcher, tile, region );
-					break;
-				case TiledMapOrientation.Staggered:
-					throw new NotImplementedException( "Staggered maps are currently not supported" );
-			}
-		}
-
-
-		void renderOrthogonal( Batcher batcher, TiledTile tile, Subtexture region )
-		{
-			// not exactly sure why we need to compensate 1 pixel here. Could be a bug in MonoGame?
-			var tx = tile.x * tiledMap.tileWidth;
-			var ty = tile.y * ( tiledMap.tileHeight - 1 );
-
-			batcher.draw( region.texture2D, new Rectangle( tx, ty, region.sourceRect.Width, region.sourceRect.Height ), region.sourceRect, color );
-		}
-
-
-		void renderIsometric( Batcher batcher, TiledTile tile, Subtexture region )
-		{
-			var tx = ( tile.x * ( tiledMap.tileWidth / 2 ) ) - ( tile.y * ( tiledMap.tileWidth / 2 ) )
-                //Center
-			         + ( tiledMap.width * ( tiledMap.tileWidth / 2 ) )
-                //Compensate Bug?
-			         - ( tiledMap.tileWidth / 2 );
-                
-			var ty = ( tile.y * ( tiledMap.tileHeight / 2 ) ) + ( tile.x * ( tiledMap.tileHeight / 2 ) )
-                //Compensate Bug?
-			         - ( tiledMap.tileWidth + tiledMap.tileHeight );
-
-			batcher.draw( region.texture2D, new Rectangle( tx, ty, region.sourceRect.Width, region.sourceRect.Height ), region.sourceRect, color );
 		}
 
 
@@ -362,63 +296,5 @@ namespace Nez.Tiled
 			return tilelist;
 		}
 
-
-		Func<IEnumerable<TiledTile>> getRenderOrderFunction()
-		{
-			switch( tiledMap.renderOrder )
-			{
-				case TiledRenderOrder.LeftDown:
-					return getTilesLeftDown;
-				case TiledRenderOrder.LeftUp:
-					return getTilesLeftUp;
-				case TiledRenderOrder.RightDown:
-					return getTilesRightDown;
-				case TiledRenderOrder.RightUp:
-					return getTilesRightUp;
-			}
-
-			throw new NotSupportedException( string.Format( "{0} is not supported", tiledMap.renderOrder ) );
-		}
-
-
-		IEnumerable<TiledTile> getTilesRightDown()
-		{
-			for( var y = 0; y < height; y++ )
-			{
-				for( var x = 0; x < width; x++ )
-					yield return getTile( x, y );
-			}
-		}
-
-
-		IEnumerable<TiledTile> getTilesRightUp()
-		{
-			for( var y = height - 1; y >= 0; y-- )
-			{
-				for( var x = 0; x < width; x++ )
-					yield return getTile( x, y );
-			}
-		}
-
-
-		IEnumerable<TiledTile> getTilesLeftDown()
-		{
-			for( var y = 0; y < height; y++ )
-			{
-				for( var x = width - 1; x >= 0; x-- )
-					yield return getTile( x, y );
-			}
-		}
-
-
-		IEnumerable<TiledTile> getTilesLeftUp()
-		{
-			for( var y = height - 1; y >= 0; y-- )
-			{
-				for( var x = width - 1; x >= 0; x-- )
-					yield return getTile( x, y );
-			}
-		}
-	
 	}
 }

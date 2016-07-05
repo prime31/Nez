@@ -188,16 +188,6 @@ namespace Nez.Tiled
 		}
 
 
-		public void drawWithoutCullOrPositioning( Batcher batcher, bool useMapBackgroundColor = false )
-		{
-			if( useMapBackgroundColor && backgroundColor.HasValue )
-				batcher.graphicsDevice.Clear( backgroundColor.Value );
-
-			foreach( var layer in layers )
-				layer.draw( batcher );
-		}
-
-
 		/// <summary>
 		/// gets the TiledTileset for the given tileId
 		/// </summary>

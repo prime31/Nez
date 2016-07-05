@@ -13,16 +13,15 @@ using Microsoft.Xna.Framework.Content.Pipeline.Graphics;
 namespace Nez.TiledMaps
 {
 	[ContentTypeWriter]
-	public class TiledMapWriter : ContentTypeWriter<TiledMapProcessorResult>
+	public class TiledMapWriter : ContentTypeWriter<TmxMap>
 	{
 		const uint FLIPPED_VERTICALLY_FLAG = 0x40000000;
 		const uint FLIPPED_HORIZONTALLY_FLAG = 0x80000000;
 		const uint FLIPPED_DIAGONALLY_FLAG = 0x20000000;
 
 
-		protected override void Write( ContentWriter writer, TiledMapProcessorResult value )
+		protected override void Write( ContentWriter writer, TmxMap map )
 		{
-			var map = value.map;
 			writer.Write( hexToColor( map.backgroundColor ) );
 			writer.Write( map.renderOrder.ToString() );
 			writer.Write( map.firstGid );
@@ -99,7 +98,6 @@ namespace Nez.TiledMaps
 				{
 					writer.Write( (int)TiledLayerType.Tile );
 					writer.Write( tileLayer.data.tiles.Count );
-
 					foreach( var tile in tileLayer.data.tiles )
 					{
 						// Read out the flags

@@ -21,7 +21,6 @@ namespace Nez.Tiled
 		}
 
 
-		public abstract void draw( Batcher batcher );
 		public abstract void draw( Batcher batcher, Vector2 position, float layerDepth, RectangleF cameraClipBounds );
 
 	}

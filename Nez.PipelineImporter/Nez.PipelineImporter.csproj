@@ -65,7 +65,6 @@
   <ItemGroup>
     <Compile Include="Tiled\TiledMapImporter.cs" />
     <Compile Include="Tiled\TiledMapProcessor.cs" />
-    <Compile Include="Tiled\TiledMapProcessorResult.cs" />
     <Compile Include="Tiled\TiledMapWriter.cs" />
     <Compile Include="Tiled\TmxData.cs" />
     <Compile Include="Tiled\TmxDataTile.cs" />
