@@ -90,8 +90,11 @@ namespace Nez
 		/// <param name="path">Path.</param>
 		public static byte[] getFileResourceBytes( string path )
 		{
-			byte[] bytes;
+			#if FNA
+			path = path.Replace( ".mgfxo", ".fxb" );
+			#endif
 
+			byte[] bytes;
 			try
 			{
 				using( var stream = TitleContainer.OpenStream( path ) )
