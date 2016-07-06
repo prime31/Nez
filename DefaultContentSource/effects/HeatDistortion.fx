@@ -1,6 +1,9 @@
 sampler s0;
-sampler _distortionTexture
+
+texture _distortionTexture;
+sampler2D _distortionTextureSampler = sampler_state
 {
+    Texture = _distortionTexture;
     AddressU = Wrap;
     AddressV = Wrap;
 };
@@ -17,7 +20,7 @@ float4 PixelShaderFunction( float2 coords:TEXCOORD0 ) : COLOR0
     distortionUV.y -= _time * -_riseFactor;
     
     // Compute the distortion by reading the distortion map
-    float2 distortionMapValue = tex2D( _distortionTexture, distortionUV ).xy;
+    float2 distortionMapValue = tex2D( _distortionTextureSampler, distortionUV ).xy;
 
 	// bring it into the -1 to 1 range
     float2 distortionPositionOffset = distortionMapValue;
