@@ -56,13 +56,177 @@
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>ContentPathGenerator.cs</LastGenOutput>
     </None>
-    <None Include="Content\effects\Grayscale.xnb">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
     <None Include="Content\audio\CromaticMinor.ogg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="Content\audio\airlock.wav">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Content\effects\Grayscale.fxb">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\DefaultContent\FNAEffects\Bevels.fxb">
+      <Link>Content\nez\effects\Bevels.fxb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\DefaultContent\FNAEffects\BloomCombine.fxb">
+      <Link>Content\nez\effects\BloomCombine.fxb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\DefaultContent\FNAEffects\BloomExtract.fxb">
+      <Link>Content\nez\effects\BloomExtract.fxb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\DefaultContent\FNAEffects\Crosshatch.fxb">
+      <Link>Content\nez\effects\Crosshatch.fxb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\DefaultContent\FNAEffects\DeferredLighting.fxb">
+      <Link>Content\nez\effects\DeferredLighting.fxb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\DefaultContent\FNAEffects\DeferredSprite.fxb">
+      <Link>Content\nez\effects\DeferredSprite.fxb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\DefaultContent\FNAEffects\Dots.fxb">
+      <Link>Content\nez\effects\Dots.fxb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\DefaultContent\FNAEffects\ForwardLighting.fxb">
+      <Link>Content\nez\effects\ForwardLighting.fxb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\DefaultContent\FNAEffects\GaussianBlur.fxb">
+      <Link>Content\nez\effects\GaussianBlur.fxb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\DefaultContent\FNAEffects\Grayscale.fxb">
+      <Link>Content\nez\effects\Grayscale.fxb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\DefaultContent\FNAEffects\HeatDistortion.fxb">
+      <Link>Content\nez\effects\HeatDistortion.fxb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\DefaultContent\FNAEffects\Invert.fxb">
+      <Link>Content\nez\effects\Invert.fxb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\DefaultContent\FNAEffects\Letterbox.fxb">
+      <Link>Content\nez\effects\Letterbox.fxb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\DefaultContent\FNAEffects\MultiTexture.fxb">
+      <Link>Content\nez\effects\MultiTexture.fxb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\DefaultContent\FNAEffects\MultiTextureOverlay.fxb">
+      <Link>Content\nez\effects\MultiTextureOverlay.fxb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\DefaultContent\FNAEffects\Noise.fxb">
+      <Link>Content\nez\effects\Noise.fxb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\DefaultContent\FNAEffects\PixelGlitch.fxb">
+      <Link>Content\nez\effects\PixelGlitch.fxb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\DefaultContent\FNAEffects\Reflection.fxb">
+      <Link>Content\nez\effects\Reflection.fxb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\DefaultContent\FNAEffects\Scanlines.fxb">
+      <Link>Content\nez\effects\Scanlines.fxb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\DefaultContent\FNAEffects\Sepia.fxb">
+      <Link>Content\nez\effects\Sepia.fxb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\DefaultContent\FNAEffects\SpriteAlphaTest.fxb">
+      <Link>Content\nez\effects\SpriteAlphaTest.fxb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\DefaultContent\FNAEffects\SpriteBlinkEffect.fxb">
+      <Link>Content\nez\effects\SpriteBlinkEffect.fxb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\DefaultContent\FNAEffects\SpriteEffect.fxb">
+      <Link>Content\nez\effects\SpriteEffect.fxb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\DefaultContent\FNAEffects\SpriteLightMultiply.fxb">
+      <Link>Content\nez\effects\SpriteLightMultiply.fxb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\DefaultContent\FNAEffects\SpriteLines.fxb">
+      <Link>Content\nez\effects\SpriteLines.fxb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\DefaultContent\FNAEffects\Twist.fxb">
+      <Link>Content\nez\effects\Twist.fxb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\DefaultContent\FNAEffects\Vignette.fxb">
+      <Link>Content\nez\effects\Vignette.fxb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\DefaultContent\FNAEffects\transitions\Squares.fxb">
+      <Link>Content\nez\effects\transitions\Squares.fxb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\DefaultContent\FNAEffects\transitions\TextureWipe.fxb">
+      <Link>Content\nez\effects\transitions\TextureWipe.fxb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\DefaultContent\FNAEffects\transitions\Wind.fxb">
+      <Link>Content\nez\effects\transitions\Wind.fxb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\DefaultContent\textures\gooCursor.xnb">
+      <Link>Content\nez\textures\gooCursor.xnb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\DefaultContent\textures\heatDistortionNoise.xnb">
+      <Link>Content\nez\textures\heatDistortionNoise.xnb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\DefaultContent\textures\textureWipeTransition\angular.xnb">
+      <Link>Content\nez\textures\textureWipeTransition\angular.xnb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\DefaultContent\textures\textureWipeTransition\crissCross.xnb">
+      <Link>Content\nez\textures\textureWipeTransition\crissCross.xnb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\DefaultContent\textures\textureWipeTransition\diagonalDistort.xnb">
+      <Link>Content\nez\textures\textureWipeTransition\diagonalDistort.xnb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\DefaultContent\textures\textureWipeTransition\horizontal.xnb">
+      <Link>Content\nez\textures\textureWipeTransition\horizontal.xnb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\DefaultContent\textures\textureWipeTransition\noise.xnb">
+      <Link>Content\nez\textures\textureWipeTransition\noise.xnb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\DefaultContent\textures\textureWipeTransition\pokemon.xnb">
+      <Link>Content\nez\textures\textureWipeTransition\pokemon.xnb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\DefaultContent\textures\textureWipeTransition\sawTooth.xnb">
+      <Link>Content\nez\textures\textureWipeTransition\sawTooth.xnb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\DefaultContent\textures\textureWipeTransition\spiral.xnb">
+      <Link>Content\nez\textures\textureWipeTransition\spiral.xnb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\DefaultContent\textures\textureWipeTransition\wink.xnb">
+      <Link>Content\nez\textures\textureWipeTransition\wink.xnb</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
@@ -86,6 +250,11 @@
     <Folder Include="Scenes\" />
     <Folder Include="Content\effects\" />
     <Folder Include="Content\audio\" />
+    <Folder Include="Content\nez\" />
+    <Folder Include="Content\nez\effects\" />
+    <Folder Include="Content\nez\effects\transitions\" />
+    <Folder Include="Content\nez\textures\" />
+    <Folder Include="Content\nez\textures\textureWipeTransition\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath)\MonoGame\v3.0\MonoGame.Content.Builder.targets" />

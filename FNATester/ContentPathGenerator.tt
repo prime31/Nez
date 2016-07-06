@@ -26,9 +26,10 @@ namespace Nez
 			if( dirName == "bin" || dirName == "obj" ) 
 				continue;
 
-			// dont delve into directories that don't contan xnb files
-			var xnbFiles = Directory.GetFiles( dir, "*.xnb", SearchOption.AllDirectories );
-			if( xnbFiles.Length == 0 )
+			// dont delve into directories that don't contain valid content files
+			var contentFiles = Directory.EnumerateFiles( dir, "*.*", SearchOption.AllDirectories )
+            	.Where( s => s.EndsWith( ".xnb" ) || s.EndsWith( ".ogg" ) || s.EndsWith( ".wav" ) || s.EndsWith( ".fxb" ) );
+			if( contentFiles.Count() == 0 )
 				continue;
 
 			// start off the recursive directory printing
@@ -71,13 +72,18 @@ namespace Nez
 	{
 		var firstIndent = new string( '\t', depth );
 
-		foreach( var file in Directory.GetFiles( dir, "*.xnb" ) )
+		var files = Directory.EnumerateFiles( dir )
+            	.Where( s => s.EndsWith( ".xnb" ) || s.EndsWith( ".ogg" ) || s.EndsWith( ".wav" ) || s.EndsWith( ".fxb" ) );
+		foreach( var file in files )
 		{
 			// clear out all of the path up to the sourceFolder so we get just the relative path to the Content folder
 			var finalPath = file.Substring( file.IndexOf( sourceFolder ) + sourceFolder.Length )
 				.Replace( ".xnb", string.Empty );
 			var fileInfo = new FileInfo( file );
-			var fileName = fileInfo.Name.Replace( ".xnb", string.Empty );
+			var fileName = fileInfo.Name.Replace( ".xnb", string.Empty )
+				.Replace( ".ogg", string.Empty )
+				.Replace( ".wav", string.Empty )
+				.Replace( ".fxb", string.Empty );
 			var className = generateClassName( fileName, false );
 
 			if( finalPath[0] == '/' || finalPath[0] == '\\' )

@@ -37,16 +37,20 @@ namespace FNATester
 			    .start();
 
 			// test an effect
-			var effect = contentManager.Load<Effect>( "effects/Grayscale" );
+			var effect = contentManager.loadEffect( Content.Effects.grayscale );
 			tree.getComponent<Sprite>().setMaterial( new Material( effect ) );
 
 			// test a Song
-			var song = contentManager.Load<Song>( "audio/CromaticMinor.ogg" );
+			var song = contentManager.Load<Song>( Content.Audio.cromaticMinor );
 			MediaPlayer.Play( song );
 
 			// test a SoundEffect
-			var sound = contentManager.Load<Microsoft.Xna.Framework.Audio.SoundEffect>( "audio/airlock.wav" );
+			var sound = contentManager.Load<SoundEffect>( Content.Audio.airlock );
 			sound.Play();
+
+			addPostProcessor( new VignettePostProcessor( 0 ) );
+			addPostProcessor( new ScanlinesPostProcessor( 1 ) );
+			addPostProcessor( new HeatDistortionPostProcessor( 2 ) );
 		}
 	}
 }
