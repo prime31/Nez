@@ -1,7 +1,7 @@
 sampler s0;
 
 texture _normalMap;
-sampler _normalMapSampler = sampler_state { Texture = _normalMap; };
+sampler _normalMapSampler = sampler_state { Texture = <_normalMap>; };
 
 float _alphaCutoff;
 float _alphaAsSelfIllumination;

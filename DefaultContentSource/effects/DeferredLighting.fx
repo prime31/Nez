@@ -32,7 +32,7 @@ float _lightIntensity;
 
 // normal map
 texture _normalMap;
-sampler _normalMapSampler = sampler_state { Texture = _normalMap; };
+sampler _normalMapSampler = sampler_state { Texture = <_normalMap>; };
 
 
 // ##### ##### ##### ##### ##### ##### #####
@@ -65,10 +65,10 @@ float _specularPower;
 // ##### Final combine uniforms        #####
 // ##### ##### ##### ##### ##### ##### #####
 texture _colorMap;
-sampler _colorMapSampler = sampler_state { Texture = _colorMap; };
+sampler _colorMapSampler = sampler_state { Texture = <_colorMap>; };
 
 texture _lightMap;
-sampler _lightMapSampler = sampler_state { Texture = _lightMap; };
+sampler _lightMapSampler = sampler_state { Texture = <_lightMap>; };
 
 float3 _ambientColor;
 

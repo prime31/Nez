@@ -1,7 +1,7 @@
 sampler s0;
 
 texture _transitionTex;
-sampler _transitionTexSampler = sampler_state { Texture = _transitionTex; };
+sampler _transitionTexSampler = sampler_state { Texture = <_transitionTex>; };
 
 
 float _progress;

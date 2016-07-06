@@ -3,7 +3,7 @@
 // ##### ##### ##### ##### ##### ##### #####
 SamplerState s0; // from SpriteBatch
 texture _normalMap;
-sampler _normalMapSampler = sampler_state { Texture = _normalMap; };
+sampler _normalMapSampler = sampler_state { Texture = <_normalMap>; };
 float4x4 _matrixTransform;
 
 static const float3 _ambientColor = float3( 0.1, 0.1, 0.1 );

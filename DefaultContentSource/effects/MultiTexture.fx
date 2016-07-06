@@ -3,7 +3,7 @@ sampler s0;
 texture _secondTexture;
 sampler2D _secondTextureSampler = sampler_state
 {
-	Texture = _secondTexture;
+	Texture = <_secondTexture>;
     AddressU = Clamp;
     AddressV = Clamp;
     MagFilter = Point;

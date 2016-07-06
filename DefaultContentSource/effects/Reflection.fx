@@ -1,12 +1,12 @@
 sampler s0;
 
 texture _normalMap;
-sampler _normalMapSampler = sampler_state { Texture = _normalMap; };
+sampler _normalMapSampler = sampler_state { Texture = <_normalMap>; };
 
 texture _renderTexture;
 sampler2D _renderTextureSampler = sampler_state
 {
-    Texture = _renderTexture;
+    Texture = <_renderTexture>;
     AddressU = Clamp;
     AddressV = Clamp;
     MagFilter = Point;

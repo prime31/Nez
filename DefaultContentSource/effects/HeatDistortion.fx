@@ -3,7 +3,7 @@ sampler s0;
 texture _distortionTexture;
 sampler2D _distortionTextureSampler = sampler_state
 {
-    Texture = _distortionTexture;
+    Texture = <_distortionTexture>;
     AddressU = Wrap;
     AddressV = Wrap;
 };

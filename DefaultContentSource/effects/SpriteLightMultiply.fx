@@ -1,7 +1,7 @@
 sampler s0;
 
 texture _lightTexture;
-sampler _lightTextureSampler = sampler_state { Texture = _lightTexture; };
+sampler _lightTextureSampler = sampler_state { Texture = <_lightTexture>; };
 
 float _multiplicativeFactor; // 1
 
