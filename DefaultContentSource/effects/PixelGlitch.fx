@@ -1,4 +1,4 @@
-﻿SamplerState Texture; // from SpriteBatch
+SamplerState Texture; // from SpriteBatch
 
 float _verticalSize; // vertical size in pixels or each row. default 5.0
 float _horizontalOffset; // horizontal shift in pixels. default 10.0

@@ -1,4 +1,4 @@
-﻿
+
 Texture2D SpriteTexture;
 float4 blinkColor; // 1,1,1,1
 
