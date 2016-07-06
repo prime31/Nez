@@ -75,7 +75,7 @@ If you are developing a mobile application you will need to enable touch input b
 
 Using Nez with FNA
 ==========
-See [this page](FAQs/FNACompat.md) for details.
+See the [Nez.FNA repo](https://github.com/prime31/Nez.FNA) for details.
 
 
 
