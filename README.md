@@ -61,7 +61,7 @@ Setup
 - add the Nez.PipelineImporter/Nez.PipelineImporter.csproj project to your solution
 - open the Nez.PipelineImporter references dialog and add a reference to the Nez project
 - build the Nez.PipelineImporter project to generate the DLLs
-- open the Pipeline Tool by double-clicking your Content.mgcb file and add references to PipelineImporter.dll, Ionic.ZLib.dll and Newtonsoft.Json.dll
+- open the Pipeline Tool by double-clicking your Content.mgcb file and add references to PipelineImporter.dll, Ionic.ZLib.dll, Newtonsoft.Json.dll and Nez.dll.
 
 
 All Nez shaders are compiled for OpenGL so be sure to use the DesktopGL template, not DirectX! Nez only supports OpenGL out of the box to keep things compatible across Android/iOS/Mac/Linux/Windows.
