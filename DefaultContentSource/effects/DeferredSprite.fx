@@ -1,4 +1,4 @@
-﻿SamplerState Texture; // from SpriteBatch
+SamplerState Texture;
 SamplerState _normalMap;
 
 float _alphaCutoff;

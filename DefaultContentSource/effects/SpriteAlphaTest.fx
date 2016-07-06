@@ -1,4 +1,4 @@
-﻿
+
 Texture2D SpriteTexture;
 float3 _alphaTest; // alphaCutoff, less than result, greater than result. defaults: 127, -1, 1
 
