@@ -1,4 +1,4 @@
-SamplerState s0; // from SpriteBatch
+sampler s0;
 float4x4 MatrixTransform;
 
 

@@ -1,5 +1,8 @@
 sampler s0;
-SamplerState _transitionTex;
+
+texture _transitionTex;
+sampler _transitionTexSampler = sampler_state { Texture = _transitionTex; };
+
 
 float _progress;
 float4 _color; // Color.Black
@@ -9,7 +12,7 @@ float _opacity; // 0 - 1
 
 float4 mainPixel( float2 texCoord:TEXCOORD0 ) : COLOR0
 {
-	float4 transit = tex2D( _transitionTex, texCoord );
+	float4 transit = tex2D( _transitionTexSampler, texCoord );
 	float4 color = tex2D( s0, texCoord );
 
 	// when our transition texture.b is less than progress we just return the color blended based on the opacity
@@ -23,7 +26,7 @@ float4 mainPixel( float2 texCoord:TEXCOORD0 ) : COLOR0
 
 float4 wipeWithDistortPixel( float2 texCoord:TEXCOORD0 ) : COLOR0
 {
-	float4 transit = tex2D( _transitionTex, texCoord );
+	float4 transit = tex2D( _transitionTexSampler, texCoord );
 	
 	// get an offset from the rg channels of the transitionTex. we need it in the -1 - 1 range
 	float2 direction = normalize( ( transit.rg - 0.5 ) * 2 );

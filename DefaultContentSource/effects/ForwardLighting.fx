@@ -2,7 +2,8 @@
 // ##### ##### Common Uniforms   ##### #####
 // ##### ##### ##### ##### ##### ##### #####
 SamplerState s0; // from SpriteBatch
-SamplerState _normalMap;
+texture _normalMap;
+sampler _normalMapSampler = sampler_state { Texture = _normalMap; };
 float4x4 _matrixTransform;
 
 static const float3 _ambientColor = float3( 0.1, 0.1, 0.1 );
@@ -35,7 +36,7 @@ VSOutput MainVS( float4 position : POSITION0, float4 color : COLOR0, float2 texC
 float4 MainPS( VSOutput input ) : COLOR
 {
     // get normal data from the normalMap
-    float4 normalData = tex2D( _normalMap, input.texCoord );
+    float4 normalData = tex2D( _normalMapSampler, input.texCoord );
 
     // tranform normal back into [-1,1] range
     float3 normal = 2.0f * normalData.xyz - 1.0;

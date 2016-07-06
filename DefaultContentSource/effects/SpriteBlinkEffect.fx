@@ -1,12 +1,6 @@
-
-Texture2D SpriteTexture;
+sampler s0;
 float4 blinkColor; // 1,1,1,1
 
-
-sampler2D SpriteTextureSampler = sampler_state
-{
-	Texture = <SpriteTexture>;
-};
 
 struct VertexShaderOutput
 {
@@ -18,7 +12,7 @@ struct VertexShaderOutput
 
 float4 MainPS( VertexShaderOutput input ) : COLOR
 {
-	float4 color = tex2D( SpriteTextureSampler, input.TextureCoordinates ) * input.Color;
+	float4 color = tex2D( s0, input.TextureCoordinates ) * input.Color;
 	color.rgb = lerp( color.rgb, blinkColor.rgb, blinkColor.a );
 	
 	return color;
