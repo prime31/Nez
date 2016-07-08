@@ -2,6 +2,8 @@ Runtime Inspector
 ==========
 Nez includes some really handy runtime Entity and PostProcessor inspection facilities. You can access the inspector by opening the debug console (via the tilde key) and then using the `inspect` command. Out of the box the inspector can inspect the following types: int, float, string, bool, enum, Color, some structs, Effect subclasses and Transform. When you use the `inspect` command you can either pass in an Entity name or `pp`, the latter will inspect all the PostProcessors in the Scene.
 
+![Inspector inspecting the player object from the Nez.Samples repo](images/inspector.png)
+
 
 ## Exposing Properties and Fields in the Inspector
 By default, the inspector will display any public properties/fields that are of a supported type. It will also check Materials for non-null Effects and it will display any valid properties from the Effect. The inspector can also display private fields/properties by just adding the `Inspectable` attribute:
