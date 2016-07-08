@@ -1,5 +1,5 @@
 sampler s0;
-float4 blinkColor; // 1,1,1,1
+float4 _blinkColor; // 1,1,1,1
 
 
 struct VertexShaderOutput
@@ -10,19 +10,19 @@ struct VertexShaderOutput
 };
 
 
-float4 MainPS( VertexShaderOutput input ) : COLOR
+float4 mainPixel( VertexShaderOutput input ) : COLOR
 {
 	float4 color = tex2D( s0, input.TextureCoordinates ) * input.Color;
-	color.rgb = lerp( color.rgb, blinkColor.rgb, blinkColor.a );
+	color.rgb = lerp( color.rgb, _blinkColor.rgb, _blinkColor.a );
 	
 	return color;
 }
 
 
-technique SpriteDrawing
+technique SpriteBlink
 {
 	pass P0
 	{
-		PixelShader = compile ps_3_0 MainPS();
+		PixelShader = compile ps_3_0 mainPixel();
 	}
 };
