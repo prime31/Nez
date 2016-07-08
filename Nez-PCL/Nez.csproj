@@ -88,6 +88,7 @@
     <Folder Include="UI\Utils\" />
     <Folder Include="Content\" />
     <Folder Include="Utils\Audio\" />
+    <Folder Include="Graphics\Materials\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Debug\Debug.cs" />
@@ -482,6 +483,8 @@
     <Compile Include="Utils\Collections\FastList.cs" />
     <Compile Include="Utils\Audio\AudioSource.cs" />
     <Compile Include="Utils\MonoGameCompat.cs" />
+    <Compile Include="Graphics\Effects\PaletteCyclerEffect.cs" />
+    <Compile Include="Graphics\Materials\PaletteCyclerMaterial.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="MonoGame.Framework">
