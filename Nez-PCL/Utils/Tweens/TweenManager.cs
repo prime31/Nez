@@ -24,11 +24,11 @@ namespace Nez.Tweens
 		public static bool cacheIntTweens = true;
 		public static bool cacheFloatTweens = true;
 		public static bool cacheVector2Tweens = true;
-		public static bool cacheVector3Tweens = false;
-		public static bool cacheVector4Tweens = false;
-		public static bool cacheQuaternionTweens = false;
+		public static bool cacheVector3Tweens;
+		public static bool cacheVector4Tweens;
+		public static bool cacheQuaternionTweens;
 		public static bool cacheColorTweens = true;
-		public static bool cacheRectTweens = false;
+		public static bool cacheRectTweens;
 
 		#endregion
 

@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Runtime.CompilerServices;
+﻿using System.Runtime.CompilerServices;
+using Nez;
 
 
 // sourced from: https://github.com/BlueRaja/High-Speed-Priority-Queue-for-C-Sharp
@@ -25,41 +23,24 @@ namespace System.Collections.Generic
 		/// <param name="maxNodes">The max nodes ever allowed to be enqueued (going over this will cause undefined behavior)</param>
 		public PriorityQueue( int maxNodes )
 		{
-			#if DEBUG
-			if( maxNodes <= 0 )
-				throw new InvalidOperationException( "New queue size cannot be smaller than 1" );
-			#endif
+			Assert.isTrue( maxNodes > 0, "New queue size cannot be smaller than 1" );
 
 			_numNodes = 0;
 			_nodes = new T[maxNodes + 1];
 			_numNodesEverEnqueued = 0;
 		}
 
-
 		/// <summary>
 		/// Returns the number of nodes in the queue.
 		/// O(1)
 		/// </summary>
-		public int Count
-		{
-			get
-			{
-				return _numNodes;
-			}
-		}
-
+		public int Count { get { return _numNodes; } }
 
 		/// <summary>
 		/// Returns the maximum number of items that can be enqueued at once in this queue.  Once you hit this number (ie. once Count == MaxSize),
 		/// attempting to enqueue another item will cause undefined behavior.  O(1)
 		/// </summary>
-		public int MaxSize
-		{
-			get
-			{
-				return _nodes.Length - 1;
-			}
-		}
+		public int MaxSize { get { return _nodes.Length - 1; } }
 
 
 		/// <summary>
@@ -80,16 +61,8 @@ namespace System.Collections.Generic
 		[MethodImpl( MethodImplOptions.AggressiveInlining )]
 		public bool Contains( T node )
 		{
-			#if DEBUG
-			if( node == null )
-			{
-				throw new ArgumentNullException( "node" );
-			}
-			if( node.QueueIndex < 0 || node.QueueIndex >= _nodes.Length )
-			{
-				throw new InvalidOperationException( "node.QueueIndex has been corrupted. Did you change it manually? Or add this node to another queue?" );
-			}
-			#endif
+			Assert.isNotNull( node, "node cannot be null" );
+			Assert.isFalse( node.QueueIndex < 0 || node.QueueIndex >= _nodes.Length, "node.QueueIndex has been corrupted. Did you change it manually? Or add this node to another queue?" );
 
 			return ( _nodes[node.QueueIndex] == node );
 		}
@@ -104,20 +77,9 @@ namespace System.Collections.Generic
 		[MethodImpl( MethodImplOptions.AggressiveInlining )]
 		public void Enqueue( T node, int priority )
 		{
-			#if DEBUG
-			if( node == null )
-			{
-				throw new ArgumentNullException( "node" );
-			}
-			if( _numNodes >= _nodes.Length - 1 )
-			{
-				throw new InvalidOperationException( "Queue is full - node cannot be added: " + node );
-			}
-			if( Contains( node ) )
-			{
-				throw new InvalidOperationException( "Node is already enqueued: " + node );
-			}
-			#endif
+			Assert.isNotNull( node, "node cannot be null" );
+			Assert.isFalse( _numNodes >= _nodes.Length - 1, "Queue is full - node cannot be added: " + node );
+			Assert.isFalse( Contains( node ), "Node is already enqueued: " + node );
 
 			node.Priority = priority;
 			_numNodes++;
@@ -239,18 +201,9 @@ namespace System.Collections.Generic
 		/// </summary>
 		public T Dequeue()
 		{
-			#if DEBUG
-			if( _numNodes <= 0 )
-			{
-				throw new InvalidOperationException( "Cannot call Dequeue() on an empty queue" );
-			}
-
-			if( !IsValidQueue() )
-			{
-				throw new InvalidOperationException( "Queue has been corrupted (Did you update a node priority manually instead of calling UpdatePriority()?" +
+			Assert.isFalse( _numNodes <= 0, "Cannot call Dequeue() on an empty queue" );
+			Assert.isTrue( IsValidQueue(), "Queue has been corrupted (Did you update a node priority manually instead of calling UpdatePriority()?" +
 				"Or add the same node to two different queues?)" );
-			}
-			#endif
 
 			T returnMe = _nodes[1];
 			Remove( returnMe );
@@ -265,17 +218,8 @@ namespace System.Collections.Generic
 		/// </summary>
 		public void Resize( int maxNodes )
 		{
-			#if DEBUG
-			if( maxNodes <= 0 )
-			{
-				throw new InvalidOperationException( "Queue size cannot be smaller than 1" );
-			}
-
-			if( maxNodes < _numNodes )
-			{
-				throw new InvalidOperationException( "Called Resize(" + maxNodes + "), but current queue contains " + _numNodes + " nodes" );
-			}
-			#endif
+			Assert.isFalse( maxNodes <= 0, "Queue size cannot be smaller than 1" );
+			Assert.isFalse( maxNodes < _numNodes, "Called Resize(" + maxNodes + "), but current queue contains " + _numNodes + " nodes" );
 
 			T[] newArray = new T[maxNodes + 1];
 			int highestIndexToCopy = Math.Min( maxNodes, _numNodes );
@@ -296,13 +240,7 @@ namespace System.Collections.Generic
 		{
 			get
 			{
-				#if DEBUG
-				if( _numNodes <= 0 )
-				{
-					throw new InvalidOperationException( "Cannot call .First on an empty queue" );
-				}
-				#endif
-
+				Assert.isFalse( _numNodes <= 0, "Cannot call .First on an empty queue" );
 				return _nodes[1];
 			}
 		}
@@ -317,16 +255,8 @@ namespace System.Collections.Generic
 		[MethodImpl( MethodImplOptions.AggressiveInlining )]
 		public void UpdatePriority( T node, int priority )
 		{
-			#if DEBUG
-			if( node == null )
-			{
-				throw new ArgumentNullException( "node" );
-			}
-			if( !Contains( node ) )
-			{
-				throw new InvalidOperationException( "Cannot call UpdatePriority() on a node which is not enqueued: " + node );
-			}
-			#endif
+			Assert.isNotNull( node, "node cannot be null" );
+			Assert.isFalse( Contains( node ), "Cannot call UpdatePriority() on a node which is not enqueued: " + node );
 
 			node.Priority = priority;
 			OnNodeUpdated( node );
@@ -358,16 +288,8 @@ namespace System.Collections.Generic
 		/// </summary>
 		public void Remove( T node )
 		{
-			#if DEBUG
-			if( node == null )
-			{
-				throw new ArgumentNullException( "node" );
-			}
-			if( !Contains( node ) )
-			{
-				throw new InvalidOperationException( "Cannot call Remove() on a node which is not enqueued: " + node );
-			}
-			#endif
+			Assert.isNotNull( node, "node cannot be null" );
+			Assert.isFalse( Contains( node ), "Cannot call Remove() on a node which is not enqueued: " + node );
 
 			//If the node is already the last node, we can remove it immediately
 			if( node.QueueIndex == _numNodes )
