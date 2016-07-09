@@ -6,10 +6,7 @@ using Nez.BitmapFonts;
 
 namespace Nez
 {
-	/// <summary>
-	/// Simple GUI tools for prototyping. init must be called before it will work. In your Draw method, call beginWindow followed
-	/// by any other controls then call endWindow to complete the drawing.
-	/// </summary>
+	[Obsolete( "IMGUI will be finding its way to the trash soon. Use Nez.UI instead." )]
 	public class IMGUI
 	{
 		enum TextAlign
