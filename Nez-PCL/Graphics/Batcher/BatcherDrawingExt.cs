@@ -177,7 +177,6 @@ namespace Nez
 
 		public static void drawRect( this Batcher batcher, Rectangle rect, Color color )
 		{
-			_tempRect = rect;
 			batcher.draw( Graphics.instance.pixelTexture, rect, Graphics.instance.pixelTexture.sourceRect, color );
 		}
 

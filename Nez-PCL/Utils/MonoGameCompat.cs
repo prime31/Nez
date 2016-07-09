@@ -17,6 +17,7 @@ namespace Nez
 
 		public static void DrawIndexedPrimitives( this GraphicsDevice self, PrimitiveType primitiveType, int baseVertex, int startIndex, int primitiveCount )
 		{
+			Core.drawCalls++;
 			self.DrawIndexedPrimitives( primitiveType, baseVertex, 0, primitiveCount * 2, startIndex, primitiveCount );
 		}
 
