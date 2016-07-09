@@ -35,10 +35,10 @@ namespace Nez
 			if( _renderTarget == null || _renderTarget != boundRenderTarget )
 			{
 				_renderTarget = boundRenderTarget;
-				typedEffect.renderTexture = boundRenderTarget;
+				effect.renderTexture = boundRenderTarget;
 			}
 
-			typedEffect.matrixTransform = camera.viewProjectionMatrix;
+			effect.matrixTransform = camera.viewProjectionMatrix;
 		}
 	}
 }

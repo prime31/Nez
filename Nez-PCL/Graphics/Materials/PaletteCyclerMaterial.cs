@@ -10,7 +10,7 @@
 
 		public override void onPreRender( Camera camera )
 		{
-			typedEffect.updateTime();
+			effect.updateTime();
 		}
 
 	}
