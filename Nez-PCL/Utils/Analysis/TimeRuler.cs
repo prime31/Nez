@@ -4,8 +4,6 @@ using System.Diagnostics;
 using System.Threading;
 using System.Text;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using Nez.BitmapFonts;
 using Nez.Console;
 
 
@@ -565,10 +563,9 @@ namespace Nez.Analysis
 			if( !showLog )
 				return;
 
-			// Gets Batcher, SpriteFont, and WhiteTexture from DebugManager.
+			// Gets Batcher, SpriteFont, and WhiteTexture from Graphics.
 			var batcher = Graphics.instance.batcher;
 			var font = Graphics.instance.bitmapFont;
-			var texture = Graphics.instance.pixelTexture;
 
 			// Adjust size and position based of number of bars we should draw.
 			var height = 0;
@@ -578,14 +575,13 @@ namespace Nez.Analysis
 				if( bar.markCount > 0 )
 				{
 					height += barHeight + barPadding * 2;
-					maxTime = Math.Max( maxTime,
-						bar.markers[bar.markCount - 1].endTime );
+					maxTime = Math.Max( maxTime, bar.markers[bar.markCount - 1].endTime );
 				}
 			}
 
 			// Auto display frame adjustment.
 			// For example, if the entire process of frame doesn't finish in less than 16.6ms
-			// thin it will adjust display frame duration as 33.3ms.
+			// then it will adjust display frame duration as 33.3ms.
 			const float frameSpan = 1.0f / 60.0f * 1000f;
 			var sampleSpan = (float)sampleFrames * frameSpan;
 
@@ -602,7 +598,7 @@ namespace Nez.Analysis
 				frameAdjust = 0;
 			}
 
-			// Compute factor that converts from ms to pixel.
+			// compute factor that converts from ms to pixel.
 			var msToPs = (float)width / sampleSpan;
 
 			// Draw start position.
@@ -615,7 +611,7 @@ namespace Nez.Analysis
 
 			// Draw transparency background.
 			var rc = new Rectangle( (int)position.X, y, width, height );
-			batcher.draw( texture, rc, new Color( 0, 0, 0, 128 ) );
+			batcher.drawRect( rc, new Color( 0, 0, 0, 128 ) );
 
 			// Draw markers for each bars.
 			rc.Height = barHeight;
@@ -624,16 +620,16 @@ namespace Nez.Analysis
 				rc.Y = y + barPadding;
 				if( bar.markCount > 0 )
 				{
-					for( int j = 0; j < bar.markCount; ++j )
+					for( var j = 0; j < bar.markCount; ++j )
 					{
-						float bt = bar.markers[j].beginTime;
-						float et = bar.markers[j].endTime;
-						int sx = (int)( position.X + bt * msToPs );
-						int ex = (int)( position.X + et * msToPs );
+						var bt = bar.markers[j].beginTime;
+						var et = bar.markers[j].endTime;
+						var sx = (int)( position.X + bt * msToPs );
+						var ex = (int)( position.X + et * msToPs );
 						rc.X = sx;
 						rc.Width = Math.Max( ex - sx, 1 );
 
-						batcher.draw( texture, rc, bar.markers[j].color );
+						batcher.drawRect( rc, bar.markers[j].color );
 					}
 				}
 
@@ -646,14 +642,14 @@ namespace Nez.Analysis
 			for( float t = 1.0f; t < sampleSpan; t += 1.0f )
 			{
 				rc.X = (int)( position.X + t * msToPs );
-				batcher.draw( texture, rc, Color.Gray );
+				batcher.drawRect( rc, Color.Gray );
 			}
 
 			// Draw frame grid.
-			for( int i = 0; i <= sampleFrames; ++i )
+			for( var i = 0; i <= sampleFrames; ++i )
 			{
 				rc.X = (int)( position.X + frameSpan * (float)i * msToPs );
-				batcher.draw( texture, rc, Color.White );
+				batcher.drawRect( rc, Color.White );
 			}
 				
 			// Generate log string.
@@ -661,7 +657,7 @@ namespace Nez.Analysis
 			logString.Length = 0;
 			foreach( var markerInfo in markers )
 			{
-				for( int i = 0; i < maxBars; ++i )
+				for( var i = 0; i < maxBars; ++i )
 				{
 					if( markerInfo.logs[i].initialized )
 					{
@@ -685,7 +681,7 @@ namespace Nez.Analysis
 			// Compute background size and draw it.
 			var size = font.measureString( logString );
 			rc = new Rectangle( (int)position.X, (int)y, (int)size.X + 25, (int)size.Y + 5 );
-			batcher.draw( texture, rc, new Color( 0, 0, 0, 128 ) );
+			batcher.drawRect( rc, new Color( 0, 0, 0, 128 ) );
 
 			// Draw log string.
 			batcher.drawString( font, logString, new Vector2( position.X + 22, y + 3 ), Color.White );
@@ -697,14 +693,14 @@ namespace Nez.Analysis
 			var rc2 = new Rectangle( (int)position.X + 5, y + 1, 8, 8 );
 			foreach( var markerInfo in markers )
 			{
-				for( int i = 0; i < maxBars; ++i )
+				for( var i = 0; i < maxBars; ++i )
 				{
 					if( markerInfo.logs[i].initialized )
 					{
 						rc.Y = y;
 						rc2.Y = y + 1;
-						batcher.draw( texture, rc, Color.White );
-						batcher.draw( texture, rc2, markerInfo.logs[i].color );
+						batcher.drawRect( rc, Color.White );
+						batcher.drawRect( rc2, markerInfo.logs[i].color );
 
 						y += font.lineHeight;
 					}
