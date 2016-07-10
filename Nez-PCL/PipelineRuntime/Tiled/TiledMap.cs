@@ -36,7 +36,10 @@ namespace Nez.Tiled
 			get { return height * tileHeight - height; }
 		}
 
-		readonly List<TiledTileset> _tilesets = new List<TiledTileset>();
+        public int largestTileWidth { get; set; }
+        public int largestTileHeight { get; set; }
+
+        readonly List<TiledTileset> _tilesets = new List<TiledTileset>();
 		internal List<TiledAnimatedTile> _animatedTiles = new List<TiledAnimatedTile>();
 
 		#endregion
@@ -67,7 +70,13 @@ namespace Nez.Tiled
 			else
 				tileset = new TiledImageCollectionTileset( texture, firstId );
 
-			_tilesets.Add( tileset );
+            if (tileset.tileWidth > largestTileWidth)
+                largestTileWidth = tileset.tileWidth;
+
+            if (tileset.tileHeight > largestTileHeight)
+                largestTileHeight = tileset.tileHeight;
+
+            _tilesets.Add( tileset );
 
 			return tileset;
 		}

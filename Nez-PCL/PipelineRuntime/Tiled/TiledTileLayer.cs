@@ -65,13 +65,13 @@ namespace Nez.Tiled
 			// offset it by the entity position since the tilemap will always expect positions in its own coordinate space
 			cameraClipBounds.location -= position;
 
-			var minX = tiledMap.worldToTilePositionX( cameraClipBounds.left );
-			var minY = tiledMap.worldToTilePositionY( cameraClipBounds.top );
-			var maxX = tiledMap.worldToTilePositionX( cameraClipBounds.right );
-			var maxY = tiledMap.worldToTilePositionY( cameraClipBounds.bottom );
+            var minX = tiledMap.worldToTilePositionX(cameraClipBounds.left - (tiledMap.largestTileWidth - tiledMap.tileWidth));
+            var minY = tiledMap.worldToTilePositionY(cameraClipBounds.top);
+            var maxX = tiledMap.worldToTilePositionX(cameraClipBounds.right);
+            var maxY = tiledMap.worldToTilePositionY(cameraClipBounds.bottom + (tiledMap.largestTileHeight - tiledMap.tileHeight));
 
-			// loop through and draw all the non-culled tiles
-			for( var y = minY; y <= maxY; y++ )
+            // loop through and draw all the non-culled tiles
+            for ( var y = minY; y <= maxY; y++ )
 			{
 				for( var x = minX; x <= maxX; x++ )
 				{
@@ -81,9 +81,14 @@ namespace Nez.Tiled
 
 					var tileRegion = tile.textureRegion;
 
-					// for the y position, we need to take into account if the tile is larger than the tiledHeight and shift. Tiled uses
-					// a bottom-left coordinate system and MonoGame a top-left
-					var tx = tile.x * tiledMap.tileWidth + (int)position.X;
+                    // culling for arbitrary size tiles
+                    var tileworldpos = tiledMap.tileToWorldPosition(new Point(x, y));
+                    if (tileworldpos.X + tileRegion.sourceRect.Width < cameraClipBounds.left || tileworldpos.Y - tileRegion.sourceRect.Height > cameraClipBounds.bottom)
+                        continue;
+
+                    // for the y position, we need to take into account if the tile is larger than the tiledHeight and shift. Tiled uses
+                    // a bottom-left coordinate system and MonoGame a top-left
+                    var tx = tile.x * tiledMap.tileWidth + (int)position.X;
 					var ty = tile.y * tiledMap.tileHeight + (int)position.Y;
 					var rotation = 0f;
 

@@ -70,7 +70,13 @@ namespace Nez.Tiled
 					{
 						var rect = new Rectangle( reader.ReadInt32(), reader.ReadInt32(), reader.ReadInt32(), reader.ReadInt32() );
 						( (TiledImageCollectionTileset)tileset ).setTileTextureRegion( tileset.firstId + tile.id, rect );
-					}
+
+                        if (rect.Width > tiledMap.largestTileWidth)
+                            tiledMap.largestTileWidth = rect.Width;
+
+                        if (rect.Height > tiledMap.largestTileHeight)
+                            tiledMap.largestTileHeight = rect.Height;
+                    }
 
 					readCustomProperties( reader, tile.properties );
 
