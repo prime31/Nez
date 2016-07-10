@@ -36,6 +36,14 @@ namespace Nez
 		public override void onAddedToEntity()
 		{
 			stage.entity = entity;
+
+			foreach (var child in stage.getRoot().children)
+			{
+				if (child is Window)
+				{
+					(child as Window).keepWithinStage();
+				}
+			}
 		}
 
 
