@@ -32,7 +32,7 @@ namespace Nez.UI
 		public Keys keyboardActionKey = Keys.Enter;
 
 		Group root;
-		Camera _camera;
+		public Camera camera;
 		bool debugAll, debugUnderMouse, debugParentUnderMouse;
 		Table.TableDebug debugTableUnderMouse = Table.TableDebug.None;
 
@@ -73,7 +73,7 @@ namespace Nez.UI
 			if( !root.isVisible() )
 				return;
 
-			_camera = camera;
+			this.camera = camera;
 			root.draw( graphics, 1f );
 
 			if( debug )
@@ -628,9 +628,9 @@ namespace Nez.UI
 		/// <param name="screenCoords">Screen coords.</param>
 		public Vector2 screenToStageCoordinates( Vector2 screenCoords )
 		{
-			if( _camera == null )
+			if( camera == null )
 				return screenCoords;
-			return _camera.screenToWorldPoint( screenCoords );
+			return camera.screenToWorldPoint( screenCoords );
 		}
 
 
@@ -641,9 +641,9 @@ namespace Nez.UI
 		/// <param name="stageCoords">Stage coords.</param>
 		public Vector2 stageToScreenCoordinates( Vector2 stageCoords )
 		{
-			if( _camera == null )
+			if( camera == null )
 				return stageCoords;
-			return _camera.worldToScreenPoint( stageCoords );
+			return camera.worldToScreenPoint( stageCoords );
 		}
 
 
