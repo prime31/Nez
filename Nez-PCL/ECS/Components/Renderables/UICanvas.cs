@@ -37,12 +37,10 @@ namespace Nez
 		{
 			stage.entity = entity;
 
-			foreach (var child in stage.getRoot().children)
+			foreach( var child in stage.getRoot().children )
 			{
-				if (child is Window)
-				{
-					(child as Window).keepWithinStage();
-				}
+				if( child is Window )
+					( child as Window ).keepWithinStage();
 			}
 		}
 
@@ -83,7 +81,8 @@ namespace Nez
 		{
 			var skin = Skin.createDefaultSkin();
 
-			var style = new WindowStyle {
+			var style = new WindowStyle
+			{
 				background = new PrimitiveDrawable( new Color( 50, 50, 50 ) ),
 				stageBackground = new PrimitiveDrawable( new Color( 0, 0, 0, 150 ) )
 			};
