@@ -1,13 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
-using System.IO;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content.Pipeline;
 using Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler;
-using System.Diagnostics;
 using Nez.Tiled;
-using Microsoft.Xna.Framework.Content.Pipeline.Graphics;
 
 
 namespace Nez.TiledMaps
@@ -22,6 +19,13 @@ namespace Nez.TiledMaps
 
 		protected override void Write( ContentWriter writer, TmxMap map )
 		{
+			float largestTileWidth = 0, largestTileHeight = 0;
+			foreach( var tileset in map.tilesets )
+			{
+				largestTileWidth = Math.Max( largestTileWidth, tileset.tileWidth );
+				largestTileHeight = Math.Max( largestTileHeight, tileset.tileHeight );
+			}
+
 			writer.Write( hexToColor( map.backgroundColor ) );
 			writer.Write( map.renderOrder.ToString() );
 			writer.Write( map.firstGid );
@@ -30,6 +34,8 @@ namespace Nez.TiledMaps
 			writer.Write( map.tileWidth );
 			writer.Write( map.tileHeight );
 			writer.Write( Convert.ToInt32( map.orientation ) );
+			writer.Write( largestTileWidth );
+			writer.Write( largestTileHeight );
 			writeCustomProperties( writer, map.properties );
 
 			writer.Write( map.tilesets.Count );

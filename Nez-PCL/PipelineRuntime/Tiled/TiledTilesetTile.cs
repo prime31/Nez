@@ -22,24 +22,24 @@ namespace Nez.Tiled
 		public bool isDestructable;
 
 		/// <summary>
-		/// returns the value of an "nez:isSlope" property if present in the properties dictionary
+		/// returns the value of a "nez:isSlope" property if present in the properties dictionary
 		/// </summary>
 		/// <value>The is slope.</value>
 		public bool isSlope;
 
 		/// <summary>
-		/// returns the value of an "nez:isOneWayPlatform" property if present in the properties dictionary
+		/// returns the value of a "nez:isOneWayPlatform" property if present in the properties dictionary
 		/// </summary>
 		public bool isOneWayPlatform;
 
 		/// <summary>
-		/// returns the value of an "nez:slopeTopLeft" property if present in the properties dictionary
+		/// returns the value of a "nez:slopeTopLeft" property if present in the properties dictionary
 		/// </summary>
 		/// <value>The slope top left.</value>
 		public int slopeTopLeft;
 
 		/// <summary>
-		/// returns the value of an "nez:slopeTopRight" property if present in the properties dictionary
+		/// returns the value of a "nez:slopeTopRight" property if present in the properties dictionary
 		/// </summary>
 		/// <value>The slope top right.</value>
 		public int slopeTopRight;

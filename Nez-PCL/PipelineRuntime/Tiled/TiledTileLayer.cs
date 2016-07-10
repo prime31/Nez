@@ -16,15 +16,9 @@ namespace Nez.Tiled
 		public Color color = Color.White;
 
 
-		public int tileWidth
-		{
-			get { return tiledMap.tileWidth; }
-		}
+		public int tileWidth { get { return tiledMap.tileWidth; } }
 
-		public int tileHeight
-		{
-			get { return tiledMap.tileHeight; }
-		}
+		public int tileHeight { get { return tiledMap.tileHeight; } }
 
 
 		public TiledTileLayer( TiledMap map, string name, int width, int height, TiledTile[] tiles ) : base( name )
@@ -65,10 +59,23 @@ namespace Nez.Tiled
 			// offset it by the entity position since the tilemap will always expect positions in its own coordinate space
 			cameraClipBounds.location -= position;
 
-			var minX = tiledMap.worldToTilePositionX( cameraClipBounds.left );
-			var minY = tiledMap.worldToTilePositionY( cameraClipBounds.top );
-			var maxX = tiledMap.worldToTilePositionX( cameraClipBounds.right );
-			var maxY = tiledMap.worldToTilePositionY( cameraClipBounds.bottom );
+			int minX, minY, maxX, maxY;
+			if( tiledMap.requiresLargeTileCulling )
+			{
+				// we expand our cameraClipBounds by the excess tile width/height of the largest tiles to ensure we include tiles whose
+				// origin might be outside of the cameraClipBounds
+				minX = tiledMap.worldToTilePositionX( cameraClipBounds.left - ( tiledMap.largestTileWidth - tiledMap.tileWidth ) );
+				minY = tiledMap.worldToTilePositionY( cameraClipBounds.top - ( tiledMap.largestTileHeight - tiledMap.tileHeight ) );
+				maxX = tiledMap.worldToTilePositionX( cameraClipBounds.right + ( tiledMap.largestTileWidth - tiledMap.tileWidth ) );
+				maxY = tiledMap.worldToTilePositionY( cameraClipBounds.bottom + ( tiledMap.largestTileHeight - tiledMap.tileHeight ) );
+			}
+			else
+			{
+				minX = tiledMap.worldToTilePositionX( cameraClipBounds.left );
+				minY = tiledMap.worldToTilePositionY( cameraClipBounds.top );
+				maxX = tiledMap.worldToTilePositionX( cameraClipBounds.right );
+				maxY = tiledMap.worldToTilePositionY( cameraClipBounds.bottom );
+			}
 
 			// loop through and draw all the non-culled tiles
 			for( var y = minY; y <= maxY; y++ )
@@ -81,7 +88,16 @@ namespace Nez.Tiled
 
 					var tileRegion = tile.textureRegion;
 
-					// for the y position, we need to take into account if the tile is larger than the tiledHeight and shift. Tiled uses
+					// culling for arbitrary size tiles if necessary
+					if( tiledMap.requiresLargeTileCulling )
+					{
+						// TODO: this only checks left and bottom. we should check top and right as well to deal with rotated, odd-sized tiles
+						var tileworldpos = tiledMap.tileToWorldPosition( new Point( x, y ) );
+						if( tileworldpos.X + tileRegion.sourceRect.Width < cameraClipBounds.left || tileworldpos.Y - tileRegion.sourceRect.Height > cameraClipBounds.bottom )
+							continue;
+					}
+
+					// for the y position, we need to take into account if the tile is larger than the tileHeight and shift. Tiled uses
 					// a bottom-left coordinate system and MonoGame a top-left
 					var tx = tile.x * tiledMap.tileWidth + (int)position.X;
 					var ty = tile.y * tiledMap.tileHeight + (int)position.Y;

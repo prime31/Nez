@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Nez.Textures;
 
 
 namespace Nez.Tiled
@@ -36,7 +34,11 @@ namespace Nez.Tiled
 			get { return height * tileHeight - height; }
 		}
 
-		readonly List<TiledTileset> _tilesets = new List<TiledTileset>();
+		internal int largestTileWidth;
+		internal int largestTileHeight;
+		internal bool requiresLargeTileCulling;
+
+        readonly List<TiledTileset> _tilesets = new List<TiledTileset>();
 		internal List<TiledAnimatedTile> _animatedTiles = new List<TiledAnimatedTile>();
 
 		#endregion
@@ -67,7 +69,13 @@ namespace Nez.Tiled
 			else
 				tileset = new TiledImageCollectionTileset( texture, firstId );
 
-			_tilesets.Add( tileset );
+            if (tileset.tileWidth > largestTileWidth)
+                largestTileWidth = tileset.tileWidth;
+
+            if (tileset.tileHeight > largestTileHeight)
+                largestTileHeight = tileset.tileHeight;
+
+            _tilesets.Add( tileset );
 
 			return tileset;
 		}

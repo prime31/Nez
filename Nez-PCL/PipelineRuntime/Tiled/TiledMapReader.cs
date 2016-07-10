@@ -16,14 +16,20 @@ namespace Nez.Tiled
 			var renderOrder = (TiledRenderOrder)Enum.Parse( typeof( TiledRenderOrder ), reader.ReadString(), true );
 			var tiledMap = new TiledMap( firstGid: reader.ReadInt32(),
 										 width: reader.ReadInt32(),
-				                         height: reader.ReadInt32(),
-				                         tileWidth: reader.ReadInt32(),
-				                         tileHeight: reader.ReadInt32(),
-				                         orientation: (TiledMapOrientation)reader.ReadInt32() )
+										 height: reader.ReadInt32(),
+										 tileWidth: reader.ReadInt32(),
+										 tileHeight: reader.ReadInt32(),
+										 orientation: (TiledMapOrientation)reader.ReadInt32() )
 			{
 				backgroundColor = backgroundColor,
 				renderOrder = renderOrder
 			};
+			tiledMap.largestTileWidth = reader.ReadInt32();
+			tiledMap.largestTileHeight = reader.ReadInt32();
+
+			// determine if we have some tiles that are larger than our standard tile size and if so mark this map for requiring culling
+			if( tiledMap.largestTileWidth > tiledMap.tileWidth || tiledMap.largestTileHeight > tiledMap.tileHeight )
+				tiledMap.requiresLargeTileCulling = true;
 
 			readCustomProperties( reader, tiledMap.properties );
 
@@ -60,7 +66,7 @@ namespace Nez.Tiled
 					var tileAnimationFrameCount = reader.ReadInt32();
 					if( tileAnimationFrameCount > 0 )
 						tile.animationFrames = new List<TiledTileAnimationFrame>( tileAnimationFrameCount );
-					
+
 					for( var k = 0; k < tileAnimationFrameCount; k++ )
 						tile.animationFrames.Add( new TiledTileAnimationFrame( reader.ReadInt32(), reader.ReadSingle() ) );
 
@@ -267,6 +273,6 @@ namespace Nez.Tiled
 
 			return points;
 		}
-	
+
 	}
 }
