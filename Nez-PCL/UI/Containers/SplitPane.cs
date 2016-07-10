@@ -172,7 +172,7 @@ namespace Nez.UI
 				applyTransform( graphics, computeTransform() );
 			if( _firstWidget != null && _firstWidget.isVisible() )
 			{
-				var scissor = ScissorStack.calculateScissors( stage?.entity?.scene?.camera, graphics.batcher.transformMatrix, _firstWidgetBounds );
+				var scissor = ScissorStack.calculateScissors( stage?.camera, graphics.batcher.transformMatrix, _firstWidgetBounds );
 				if( ScissorStack.pushScissors( scissor ) )
 				{
 					graphics.batcher.enableScissorTest( true );
@@ -184,7 +184,7 @@ namespace Nez.UI
 
 			if( _secondWidget != null && _secondWidget.isVisible() )
 			{
-				var scissor = ScissorStack.calculateScissors( stage?.entity?.scene?.camera, graphics.batcher.transformMatrix, _secondWidgetBounds );
+				var scissor = ScissorStack.calculateScissors( stage?.camera, graphics.batcher.transformMatrix, _secondWidgetBounds );
 				if( ScissorStack.pushScissors( scissor ) )
 				{
 					graphics.batcher.enableScissorTest( true );
