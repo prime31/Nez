@@ -309,7 +309,9 @@ namespace Nez
 		/// <summary>
 		/// this sucker gets used a lot so we cache it to avoid having to create it every frame
 		/// </summary>
+		#pragma warning disable 0414
 		Matrix _transformationMatrix = Matrix.Identity;
+		#pragma warning restore 0414
 
 
 		public NezSpriteFont( SpriteFont font )
