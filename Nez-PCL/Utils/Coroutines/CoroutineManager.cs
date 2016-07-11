@@ -156,26 +156,38 @@ namespace Nez.Systems
 				// yielded null. run again next frame
 				return true;
 			}
-			else if( coroutine.enumerator.Current is int )
+
+			if( coroutine.enumerator.Current is WaitForSeconds )
 			{
-				var wait = (int)coroutine.enumerator.Current;
-				coroutine.waitTimer = wait;
+				coroutine.waitTimer = ( coroutine.enumerator.Current as WaitForSeconds ).waitTime;
 				return true;
 			}
-			else if( coroutine.enumerator.Current is float )
+
+			#if DEBUG
+			// deprecation warning for yielding an int/float
+			if( coroutine.enumerator.Current is int )
 			{
-				var wait = (float)coroutine.enumerator.Current;
-				coroutine.waitTimer = wait;
+				Debug.error( "yield Coroutine.waitForSeconds instead of an int. Yielding an int will not work in a release build." );
+				coroutine.waitTimer = (int)coroutine.enumerator.Current;
 				return true;
 			}
-			else if( coroutine.enumerator.Current is CoroutineImpl )
+
+			if( coroutine.enumerator.Current is float )
+			{
+				Debug.error( "yield Coroutine.waitForSeconds instead of a float. Yielding a float will not work in a release build." );
+				coroutine.waitTimer = (float)coroutine.enumerator.Current;
+				return true;
+			}
+			#endif
+
+			if( coroutine.enumerator.Current is CoroutineImpl )
 			{
 				coroutine.waitForCoroutine = coroutine.enumerator.Current as CoroutineImpl;
 				return true;
 			}
 			else
 			{
-				// This coroutine yielded null, or some other value we don't understand. run it next frame.
+				// This coroutine yielded some value we don't understand. run it next frame.
 				return true;
 			}
 		}
