@@ -600,8 +600,13 @@ namespace Nez.PhysicsShapes
 				if( lineToLine( edge1, edge2, start, end, out intersection ) )
 				{
 					hasIntersection = true;
-					// TODO: is this the correct way to get the fraction?
+
+					// TODO: is this the correct and most efficient way to get the fraction?
+					// check x fraction first. if it is NaN use y instead
 					var distanceFraction = ( intersection.X - start.X ) / ( end.X - start.X );
+					if( float.IsNaN( distanceFraction ) )
+						distanceFraction = ( intersection.Y - start.Y ) / ( end.Y - start.Y );
+					
 					if( distanceFraction < fraction )
 					{
 						var edge = edge2 - edge1;
@@ -662,7 +667,7 @@ namespace Nez.PhysicsShapes
 		}
 
 
-		static public bool lineToLine( Vector2 a1, Vector2 a2, Vector2 b1, Vector2 b2, out Vector2 intersection )
+		public static bool lineToLine( Vector2 a1, Vector2 a2, Vector2 b1, Vector2 b2, out Vector2 intersection )
 		{
 			intersection = Vector2.Zero;
 

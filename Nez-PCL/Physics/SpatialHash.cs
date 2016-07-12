@@ -280,7 +280,7 @@ namespace Nez.Spatial
 			var stepX = Math.Sign( ray.direction.X );
 			var stepY = Math.Sign( ray.direction.Y );
 
-			// Calculate cell boundaries. when the step is positive, the next cell is after this one meening we add 1.
+			// Calculate cell boundaries. when the step is positive, the next cell is after this one meaning we add 1.
 			// If negative, cell is before this one in which case dont add to boundary
 			var boundaryX = intX + ( stepX > 0 ? 1 : 0 );
 			var boundaryY = intY + ( stepY > 0 ? 1 : 0 );
@@ -302,7 +302,7 @@ namespace Nez.Spatial
 			// start walking and returning the intersecting cells.
 			var cell = cellAtPosition( intX, intY );
 			//debugDrawCellDetails( intX, intY, cell != null ? cell.Count : 0 );
-			if( _raycastParser.checkRayIntersection( intX, intY, cell ) )
+			if( cell != null && _raycastParser.checkRayIntersection( intX, intY, cell ) )
 			{
 				_raycastParser.reset();
 				return _raycastParser.hitCounter;
@@ -323,7 +323,7 @@ namespace Nez.Spatial
 
 				cell = cellAtPosition( intX, intY );
 				//debugDrawCellDetails( intX, intY, cell != null ? cell.Count : 0 );
-				if( _raycastParser.checkRayIntersection( intX, intY, cell ) )
+				if( cell != null && _raycastParser.checkRayIntersection( intX, intY, cell ) )
 				{
 					_raycastParser.reset();
 					return _raycastParser.hitCounter;
@@ -550,7 +550,7 @@ namespace Nez.Spatial
 
 
 		/// <summary>
-		/// returns true if the hits array gets filled
+		/// returns true if the hits array gets filled. cell must not be null!
 		/// </summary>
 		/// <returns><c>true</c>, if ray intersection was checked, <c>false</c> otherwise.</returns>
 		/// <param name="ray">Ray.</param>
@@ -561,9 +561,6 @@ namespace Nez.Spatial
 		/// <param name="hitCounter">Hit counter.</param>
 		public bool checkRayIntersection( int cellX, int cellY, List<Collider> cell )
 		{
-			if( cell == null )
-				return false;
-			
 			float fraction;
 			for( var i = 0; i < cell.Count; i++ )
 			{
@@ -593,10 +590,10 @@ namespace Nez.Spatial
 					if( !Physics.raycastsStartInColliders && fraction == 0f )
 						continue;
 
-					// TODO: if this is a BoxCollider we are all done. if it isnt we need to check for a more detailed collision
 					if( potential.shape.collidesWithLine( _ray.start, _ray.end, out _tempHit ) )
 					{
 						// TODO: make sure the collision point is in the current cell and if it isnt store it off for later evaluation
+						// this would be for giant objects with odd shapes that bleed into adjacent cells
 						//_hitTesterRect.X = cellX * _cellSize;
 						//_hitTesterRect.Y = cellY * _cellSize;
 						//if( !_hitTesterRect.Contains( _tempHit.point ) )
