@@ -8,8 +8,8 @@ namespace Nez.Systems
 	/// <summary>
 	/// basic CoroutineManager. Coroutines can do the following:
 	/// - yield return null (tick again the next frame)
-	/// - yield return 3 (tick again after a 3 second delay)
-	/// - yield return 5.5 (tick again after a 5.5 second delay)
+	/// - yield return Coroutine.waitForSeconds( 3 ) (tick again after a 3 second delay)
+	/// - yield return Coroutine.waitForSeconds( 5.5f ) (tick again after a 5.5 second delay)
 	/// - yield return startCoroutine( another() ) (wait for the other coroutine before getting ticked again)
 	/// </summary>
 	public class CoroutineManager : IUpdatableManager
