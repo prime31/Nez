@@ -80,5 +80,5 @@ public class MyClassProcessor : ContentProcessor<MyClass,MyClass>
 
 With that all setup, add the XML file to the Pipeline tool and choose the XML File Processor that you just made in Settings -> Processor and you are all set.
 
-You can then access the data at runtime like so: `var data = contentManager.Load<MyClass>( "LocationOfXnbFile" );`
+You can then access the data at runtime like so: `var data = content.Load<MyClass>( "LocationOfXnbFile" );`
 

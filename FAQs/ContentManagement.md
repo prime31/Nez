@@ -6,7 +6,7 @@ Nez provides containers for global and per-scene content. You can also create yo
 
 
 ## Global Content
-There is a global NezContentManager available via `Core.contentManager`. You can use this to load up assets that will survive the life of your application. Things like your fonts, shared atlases, shared sound effects, etc.
+There is a global NezContentManager available via `Core.content`. You can use this to load up assets that will survive the life of your application. Things like your fonts, shared atlases, shared sound effects, etc.
 
 
 ## Scene Content
@@ -29,10 +29,10 @@ Nez includes a T4 template that will generate a static `Content` class for you t
 
 ```csharp
 // before using the ContentPathGenerator you have strings to represent your content
-var tex = contentManager.Load<Texture2D>( "Textures/Scene1/blueBird" );
+var tex = content.Load<Texture2D>( "Textures/Scene1/blueBird" );
 
 // after using the ContentPathGenerator you will have compile-tile safety for your content
-var tex = contentManager.Load<Texture2D>( Content.Textures.Scene1.blueBird" );
+var tex = content.Load<Texture2D>( Content.Textures.Scene1.blueBird" );
 ```
 
 The big advantage to using it is that you will never have a reference to content that doesnt actually exist in your project. You get compile-time checking of all your content. Setup is as follows:
