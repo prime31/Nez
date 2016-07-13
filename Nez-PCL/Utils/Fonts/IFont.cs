@@ -9,6 +9,12 @@ namespace Nez
 	public interface IFont
 	{
 		/// <summary>
+		/// line height of the font
+		/// </summary>
+		/// <value>The height of the line.</value>
+		float lineSpacing { get; }
+
+		/// <summary>
 		/// returns the size in pixels of text when rendered in this font
 		/// </summary>
 		/// <returns>The string.</returns>

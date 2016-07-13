@@ -473,7 +473,7 @@ namespace Nez
 		#endregion
 
 
-		[System.Obsolete()]
+		[System.Obsolete( "SpriteFont is too locked down to use directly. Wrap it in a NezSpriteFont" )]
 		public void DrawString( SpriteFont spriteFont, string text, Vector2 position, Color color, float rotation,
 			Vector2 origin, Vector2 scale, SpriteEffects effects, float layerDepth )
 		{

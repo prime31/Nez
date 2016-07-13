@@ -10,6 +10,8 @@ namespace Nez.BitmapFonts
 {
 	public class BitmapFont : IFont
 	{
+		float IFont.lineSpacing { get { return lineHeight; } }
+
 		/// <summary>
 		/// Gets or sets the line spacing (the distance from baseline to baseline) of the font.
 		/// </summary>
