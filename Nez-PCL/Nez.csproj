@@ -486,6 +486,7 @@
     <Compile Include="Graphics\Effects\PaletteCyclerEffect.cs" />
     <Compile Include="Graphics\Materials\PaletteCyclerMaterial.cs" />
     <Compile Include="Utils\Extensions\ObjectExt.cs" />
+    <Compile Include="ECS\Components\Text\MarkupText.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="MonoGame.Framework">
