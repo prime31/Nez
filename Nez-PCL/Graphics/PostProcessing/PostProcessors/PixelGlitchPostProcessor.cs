@@ -63,7 +63,7 @@ namespace Nez
 
 		public override void onAddedToScene()
 		{
-			effect = scene.contentManager.loadEffect<Effect>( "pixelGlitch", EffectResource.pixelGlitchBytes );
+			effect = scene.content.loadEffect<Effect>( "pixelGlitch", EffectResource.pixelGlitchBytes );
 
 			_verticalSizeParam = effect.Parameters["_verticalSize"];
 			_horizontalOffsetParam = effect.Parameters["_horizontalOffset"];

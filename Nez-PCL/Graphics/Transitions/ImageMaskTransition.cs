@@ -169,7 +169,7 @@ namespace Nez
 		{
 			base.transitionComplete();
 
-			Core.contentManager.unloadAsset<Texture2D>( _maskTexture.Name );
+			Core.content.unloadAsset<Texture2D>( _maskTexture.Name );
 			_maskRenderTarget.Dispose();
 			_blendState.Dispose();
 		}

@@ -62,7 +62,7 @@ namespace Nez
 
 		public override void onAddedToEntity()
 		{
-			_basicEffect = entity.scene.contentManager.loadMonoGameEffect<BasicEffect>();
+			_basicEffect = entity.scene.content.loadMonoGameEffect<BasicEffect>();
 			_basicEffect.VertexColorEnabled = true;
 			_basicEffect.TextureEnabled = true;
 			_basicEffect.Texture = _texture;

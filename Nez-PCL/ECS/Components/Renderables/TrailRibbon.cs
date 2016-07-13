@@ -148,7 +148,7 @@ namespace Nez
 		{
 			initializeVertices();
 
-			_basicEffect = entity.scene.contentManager.loadMonoGameEffect<BasicEffect>();
+			_basicEffect = entity.scene.content.loadMonoGameEffect<BasicEffect>();
 			_basicEffect.World = Matrix.Identity;
 			_basicEffect.VertexColorEnabled = true;
 		}

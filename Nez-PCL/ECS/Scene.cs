@@ -88,7 +88,10 @@ namespace Nez
 		/// Scene-specific ContentManager. Use it to load up any resources that are needed only by this scene. If you have global/multi-scene
 		/// resources you can use Core.contentManager to load them since Nez will not ever unload them.
 		/// </summary>
-		public readonly NezContentManager contentManager;
+		public readonly NezContentManager content;
+
+		[Obsolete( "use Scene.content instead of Scene.contentManager" )]
+		public NezContentManager contentManager { get { return content; } }
 
 		/// <summary>
 		/// global toggle for PostProcessors
@@ -270,7 +273,7 @@ namespace Nez
 		{
 			entities = new EntityList( this );
 			renderableComponents = new RenderableComponentList();
-			contentManager = new NezContentManager();
+			content = new NezContentManager();
 
 			var cameraEntity = createEntity( "camera" );
 			camera = cameraEntity.addComponent( new Camera() );
@@ -342,7 +345,7 @@ namespace Nez
 			entities.removeAllEntities();
 
 			camera = null;
-			contentManager.Dispose();
+			content.Dispose();
 			_sceneRenderTarget.Dispose();
 			Physics.clear();
 

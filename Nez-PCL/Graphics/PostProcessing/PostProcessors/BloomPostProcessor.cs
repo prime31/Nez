@@ -37,9 +37,9 @@ namespace Nez
 
 		public override void onAddedToScene()
 		{
-			_bloomExtractEffect = scene.contentManager.loadEffect<Effect>( "bloomExtract", EffectResource.bloomExtractBytes );
-			_bloomCombineEffect = scene.contentManager.loadEffect<Effect>( "bloomCombine", EffectResource.bloomCombineBytes );
-			_gaussianBlurEffect = scene.contentManager.loadEffect<Effect>( "gaussianBlur", EffectResource.gaussianBlurBytes );
+			_bloomExtractEffect = scene.content.loadEffect<Effect>( "bloomExtract", EffectResource.bloomExtractBytes );
+			_bloomCombineEffect = scene.content.loadEffect<Effect>( "bloomCombine", EffectResource.bloomCombineBytes );
+			_gaussianBlurEffect = scene.content.loadEffect<Effect>( "gaussianBlur", EffectResource.gaussianBlurBytes );
 
 			_bloomExtractThresholdParam = _bloomExtractEffect.Parameters["BloomThreshold"];
 

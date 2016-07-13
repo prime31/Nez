@@ -65,7 +65,7 @@ namespace Nez
 			_destinationRect = previousSceneRender.Bounds;
 
 			// load Effect and set defaults
-			_squaresEffect = Core.contentManager.loadEffect( "Content/nez/effects/transitions/Squares.mgfxo" );
+			_squaresEffect = Core.content.loadEffect( "Content/nez/effects/transitions/Squares.mgfxo" );
 			squareColor = Color.Black;
 			smoothness = 0.5f;
 
@@ -99,7 +99,7 @@ namespace Nez
 
 			// cleanup
 			_overlayTexture.Dispose();
-			Core.contentManager.unloadEffect( _squaresEffect.Name );
+			Core.content.unloadEffect( _squaresEffect.Name );
 		}
 
 

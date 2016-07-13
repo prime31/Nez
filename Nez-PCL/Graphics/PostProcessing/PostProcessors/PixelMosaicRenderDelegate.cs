@@ -23,7 +23,7 @@ namespace Nez
 
 		public void onAddedToScene()
 		{
-			effect = scene.contentManager.loadEffect<Effect>( "multiTextureOverlay", EffectResource.multiTextureOverlayBytes );
+			effect = scene.content.loadEffect<Effect>( "multiTextureOverlay", EffectResource.multiTextureOverlayBytes );
 		}
 
 

@@ -44,7 +44,10 @@ namespace Nez
 		/// <summary>
 		/// global content manager for loading any assets that should stick around between scenes
 		/// </summary>
-		public static NezContentManager contentManager;
+		public static NezContentManager content;
+
+		[Obsolete( "use Scene.content instead of Scene.contentManager" )]
+		public static NezContentManager contentManager { get { return content; } }
 
 		/// <summary>
 		/// default SamplerState used by Materials. Note that this must be set at launch! Changing it after that time will result in only
@@ -116,7 +119,7 @@ namespace Nez
 			Window.OrientationChanged += onOrientationChanged;
 
 			Content.RootDirectory = "Content";
-			contentManager = new NezGlobalContentManager( Services, Content.RootDirectory );
+			content = new NezGlobalContentManager( Services, Content.RootDirectory );
 			IsMouseVisible = true;
 			IsFixedTimeStep = false;
 
@@ -182,7 +185,7 @@ namespace Nez
 
 			// prep the default Graphics system
 			graphicsDevice = GraphicsDevice;
-			var font = contentManager.Load<BitmapFont>( "nez://Nez.Content.NezDefaultBMFont.xnb" );
+			var font = content.Load<BitmapFont>( "nez://Nez.Content.NezDefaultBMFont.xnb" );
 			Graphics.instance = new Graphics( font );
 		}
 

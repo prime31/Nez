@@ -85,9 +85,9 @@ namespace Nez.Console
 		static void logLoadedAssets( string whichAssets = "s" )
 		{
 			if( whichAssets == "s" )
-				DebugConsole.instance.log( Core.scene.contentManager.logLoadedAssets() );
+				DebugConsole.instance.log( Core.scene.content.logLoadedAssets() );
 			else if( whichAssets == "g" )
-				DebugConsole.instance.log( Core.contentManager.logLoadedAssets() );
+				DebugConsole.instance.log( Core.content.logLoadedAssets() );
 			else
 				DebugConsole.instance.log( "Invalid parameter" );
 		}
