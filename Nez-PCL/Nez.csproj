@@ -488,6 +488,8 @@
     <Compile Include="ECS\Components\Text\MarkupText.cs" />
     <Compile Include="Utils\Enums.cs" />
     <Compile Include="Utils\Extensions\EdgeExt.cs" />
+    <Compile Include="ECS\Components\Text\TextRunComponent.cs" />
+    <Compile Include="ECS\Components\Text\TextRun.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="MonoGame.Framework">
