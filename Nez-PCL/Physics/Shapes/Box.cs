@@ -85,6 +85,12 @@ namespace Nez.PhysicsShapes
 			return base.collidesWithShape( other, out result );
 		}
 
+
+		public override bool containsPoint( Vector2 point )
+		{
+			return bounds.contains( point );
+		}
+
 	}
 }
 

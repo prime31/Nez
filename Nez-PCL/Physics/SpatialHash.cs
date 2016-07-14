@@ -48,7 +48,7 @@ namespace Nez.Spatial
 		{
 			_cellSize = cellSize;
 			_inverseCellSize = 1f / _cellSize;
-			_raycastParser = new RaycastResultParser( cellSize );
+			_raycastParser = new RaycastResultParser();
 		}
 
 
@@ -533,13 +533,6 @@ namespace Nez.Spatial
 		int _layerMask;
 
 
-		public RaycastResultParser( int cellSize )
-		{
-			//_cellSize = cellSize;
-			//_hitTesterRect = new Rectangle( 0, 0, _cellSize, _cellSize );
-		}
-
-
 		public void start( ref Ray2D ray, RaycastHit[] hits, int layerMask )
 		{
 			_ray = ray;
@@ -586,12 +579,12 @@ namespace Nez.Spatial
 				var colliderBounds = potential.bounds;
 				if( colliderBounds.rayIntersects( ref _ray, out fraction ) && fraction <= 1.0f )
 				{
-					// check to see if the raycast hit at a 0 fraction which would indicate that it started inside the collider
-					if( !Physics.raycastsStartInColliders && fraction == 0f )
-						continue;
-
 					if( potential.shape.collidesWithLine( _ray.start, _ray.end, out _tempHit ) )
 					{
+						// check to see if the raycast started inside the collider if we should excluded those rays
+						if( !Physics.raycastsStartInColliders && potential.shape.containsPoint( _ray.start ) )
+							continue;
+						
 						// TODO: make sure the collision point is in the current cell and if it isnt store it off for later evaluation
 						// this would be for giant objects with odd shapes that bleed into adjacent cells
 						//_hitTesterRect.X = cellX * _cellSize;

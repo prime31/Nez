@@ -157,6 +157,31 @@ namespace Nez.PhysicsShapes
 			return ShapeCollisions.lineToPoly( start, end, this, out hit );
 		}
 
+
+		/// <summary>
+		/// essentially what the algorithm is doing is shooting a ray from point out. If it intersects an odd number of polygon sides
+		/// we know it is inside the polygon.
+		/// </summary>
+		/// <returns>The point.</returns>
+		/// <param name="point">Point.</param>
+		public override bool containsPoint( Vector2 point )
+		{
+			// normalize the point to be in our Polygon coordinate space
+			point -= position;
+
+			var isInside = false;
+			for( int i = 0, j = points.Length - 1; i < points.Length; j = i++ )
+			{
+				if( ( ( points[i].Y > point.Y ) != ( points[j].Y > point.Y ) ) &&
+				( point.X < ( points[j].X - points[i].X ) * ( point.Y - points[i].Y ) / ( points[j].Y - points[i].Y ) + points[i].X ) )
+				{
+					isInside = !isInside;
+				}
+			}
+
+			return isInside;
+		}
+
 		#endregion
 
 	}
