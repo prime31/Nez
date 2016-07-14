@@ -4,15 +4,6 @@ using System.Runtime.CompilerServices;
 
 namespace Nez
 {
-	public enum Edge
-	{
-		Top,
-		Bottom,
-		Left,
-		Right
-	}
-
-
 	public static class EdgeExt
 	{
 		[MethodImpl( MethodImplOptions.AggressiveInlining )]

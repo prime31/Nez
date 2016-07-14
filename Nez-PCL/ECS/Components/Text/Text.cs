@@ -8,31 +8,9 @@ namespace Nez
 {
 	public class Text : RenderableComponent
 	{
-		public enum HorizontalAlign
-		{
-			Left,
-			Center,
-			Right
-		};
+		public override float width { get { return _size.X; } }
 
-
-		public enum VerticalAlign
-		{
-			Top,
-			Center,
-			Bottom
-		};
-
-
-		public override float width
-		{
-			get { return _size.X; }
-		}
-
-		public override float height
-		{
-			get { return _size.Y; }
-		}
+		public override float height { get { return _size.Y; } }
 
 		/// <summary>
 		/// text to draw
@@ -41,12 +19,7 @@ namespace Nez
 		public string text
 		{
 			get { return _text; }
-			set
-			{
-				_text = value;
-				updateSize();
-				updateCentering();
-			}
+			set { setText( value ); }
 		}
 
 		/// <summary>
@@ -56,11 +29,7 @@ namespace Nez
 		public HorizontalAlign horizontalOrigin
 		{
 			get { return _horizontalAlign; }
-			set
-			{
-				_horizontalAlign = value;
-				updateCentering();
-			}
+			set { setHorizontalAlign( value ); }
 		}
 
 		/// <summary>
@@ -70,11 +39,7 @@ namespace Nez
 		public VerticalAlign verticalOrigin
 		{
 			get { return _verticalAlign; }
-			set
-			{
-				_verticalAlign = value;
-				updateCentering();
-			}
+			set { setVerticalAlign( value ); }
 		}
 
 
@@ -85,11 +50,11 @@ namespace Nez
 		Vector2 _size;
 
 
-		public Text( IFont font, string text, Vector2 position, Color color )
+		public Text( IFont font, string text, Vector2 localOffset, Color color )
 		{
 			_font = font;
 			_text = text;
-			_localOffset = position;
+			_localOffset = localOffset;
 			this.color = color;
 			_horizontalAlign = HorizontalAlign.Left;
 			_verticalAlign = VerticalAlign.Top;

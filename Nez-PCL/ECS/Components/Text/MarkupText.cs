@@ -147,7 +147,7 @@ namespace Nez
 			var position = Vector2.Zero;
 			var formatingStack = new Stack<FormatInstruction>();
 			var conditionalsStack = new Stack<bool>();
-			var alignStack = new Stack<Alignment>();
+			var alignStack = new Stack<HorizontalAlign>();
 			var lineBuffer = new List<ICompiledElement>();
 			var currentLineHeight = 0f;
 			var currentTotalHeight = 0f;
@@ -186,7 +186,7 @@ namespace Nez
 							if( reader.Name == "markuptext" )
 							{
 								var value = reader.GetAttribute( "align" );
-								var align = Alignment.Left;
+								var align = HorizontalAlign.Left;
 								Enum.TryParse( value, out align );
 								alignStack.Push( align );
 							}
@@ -237,7 +237,7 @@ namespace Nez
 									value = "Left";
 								value = char.ToUpper( value[0] ) + value.Substring( 1 );
 
-								Alignment align;
+								HorizontalAlign align;
 								if( Enum.TryParse( value, out align ) )
 									alignStack.Push( align );
 								else
@@ -401,7 +401,7 @@ namespace Nez
 		}
 
 
-		Vector2 wrapLine( Vector2 position, List<ICompiledElement> lineBuffer, Alignment alignment, out float currentLineHeight )
+		Vector2 wrapLine( Vector2 position, List<ICompiledElement> lineBuffer, HorizontalAlign alignment, out float currentLineHeight )
 		{
 			currentLineHeight = 0;
 			var lineWidth = 0f;
@@ -417,15 +417,15 @@ namespace Nez
 			var xOffset = 0f;
 			switch( alignment )
 			{
-				case Alignment.Right:
+				case HorizontalAlign.Right:
 					xOffset = _textWidth - lineWidth;
 					break;
-				case Alignment.Center:
+				case HorizontalAlign.Center:
 					xOffset = ( _textWidth - lineWidth ) / 2f;
 					break;
 			}
 
-			// run back through and rset the y position of all the items to match the currentLineHeight
+			// run back through and reset the y position of all the items to match the currentLineHeight and apply the xOffset
 			for( var i = 0; i < lineBuffer.Count; i++ )
 				lineBuffer[i].position = new Vector2( lineBuffer[i].position.X + xOffset, position.Y + currentLineHeight / 2f );
 
@@ -476,13 +476,6 @@ namespace Nez
 
 
 	#region Internal helpers
-
-	enum Alignment
-	{
-		Left,
-		Right,
-		Center
-	}
 
 	struct FormatInstruction
 	{
