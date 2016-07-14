@@ -470,6 +470,51 @@ namespace Nez
 			}
 		}
 
+
+		/// <summary>
+		/// direct access to setting vert positions, UVs and colors. The order of elements is top-left, top-right, bottom-left, bottom-right
+		/// </summary>
+		/// <returns>The raw.</returns>
+		/// <param name="texture">Texture.</param>
+		/// <param name="verts">Verts.</param>
+		/// <param name="textureCoords">Texture coords.</param>
+		/// <param name="color">Color.</param>
+		public void drawRaw( Texture2D texture, Vector3[] verts, Vector2[] textureCoords, Color color )
+		{
+			Assert.isTrue( verts.Length == 4, "there must be only 4 verts" );
+			Assert.isTrue( textureCoords.Length == 4, "there must be only 4 texture coordinates" );
+
+			// we're out of space, flush
+			if( _numSprites >= MAX_SPRITES )
+				flushBatch();
+
+			_vertexInfo[_numSprites].position0 = verts[0];
+			_vertexInfo[_numSprites].position1 = verts[1];
+			_vertexInfo[_numSprites].position2 = verts[2];
+			_vertexInfo[_numSprites].position3 = verts[3];
+
+			_vertexInfo[_numSprites].textureCoordinate0 = textureCoords[0];
+			_vertexInfo[_numSprites].textureCoordinate1 = textureCoords[1];
+			_vertexInfo[_numSprites].textureCoordinate2 = textureCoords[2];
+			_vertexInfo[_numSprites].textureCoordinate3 = textureCoords[3];
+
+			_vertexInfo[_numSprites].color0 = color;
+			_vertexInfo[_numSprites].color1 = color;
+			_vertexInfo[_numSprites].color2 = color;
+			_vertexInfo[_numSprites].color3 = color;
+
+			if( _disableBatching )
+			{
+				_vertexBuffer.SetData( 0, _vertexInfo, 0, 1, VertexPositionColorTexture4.realStride, SetDataOptions.None );
+				drawPrimitives( texture, 0, 1 );
+			}
+			else
+			{
+				_textureInfo[_numSprites] = texture;
+				_numSprites += 1;
+			}
+		}
+
 		#endregion
 
 

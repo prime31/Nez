@@ -5,7 +5,11 @@ using System.Collections.Generic;
 namespace Nez
 {
 	/// <summary>
-	/// very basic wrapper around an array that auto-expands it when it reaches capacity
+	/// very basic wrapper around an array that auto-expands it when it reaches capacity. Note that when iterating it should be done
+	/// like this accessing the buffer directly but using the FastList.length field:
+	/// 
+	/// for( var i = 0; i &lt;= list.length; i++ )
+	/// 	var item = list.buffer[i];
 	/// </summary>
 	public class FastList<T>
 	{

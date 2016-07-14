@@ -97,7 +97,6 @@ namespace Nez.BitmapFonts
 			var words = text.Split( ' ' );
 			var sb = new StringBuilder();
 			var lineWidth = 0f;
-			var spaceWidth = measureString( " " ).X;
 
 			if( maxLineWidth < spaceWidth )
 				return string.Empty;
@@ -371,7 +370,7 @@ namespace Nez.BitmapFonts
 
 
 		/// <summary>
-		/// old SpriteBatch drawing method. This should probably be removed since SpriteBatch
+		/// old SpriteBatch drawing method. This should probably be removed since SpriteBatch was replaced by Batcher
 		/// </summary>
 		/// <param name="spriteBatch">Sprite batch.</param>
 		/// <param name="text">Text.</param>
