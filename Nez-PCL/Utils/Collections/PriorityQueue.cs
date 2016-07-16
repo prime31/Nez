@@ -289,7 +289,7 @@ namespace System.Collections.Generic
 		public void Remove( T node )
 		{
 			Assert.isNotNull( node, "node cannot be null" );
-			Assert.isFalse( Contains( node ), "Cannot call Remove() on a node which is not enqueued: " + node );
+			Assert.isTrue( Contains( node ), "Cannot call Remove() on a node which is not enqueued: " + node );
 
 			//If the node is already the last node, we can remove it immediately
 			if( node.QueueIndex == _numNodes )

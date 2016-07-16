@@ -121,7 +121,7 @@ namespace Nez
 			previousSceneRender.Dispose();
 			previousSceneRender = null;
 
-			yield return delayBeforeMaskOut;
+			yield return Coroutine.waitForSeconds( delayBeforeMaskOut );
 
 			elapsed = 0f;
 			while( elapsed < duration )

@@ -72,8 +72,7 @@ namespace Nez
 			previousSceneRender.Dispose();
 			previousSceneRender = null;
 
-			//_color = _fromColor;
-			yield return delayBeforeFadeInDuration;
+			yield return Coroutine.waitForSeconds( delayBeforeFadeInDuration );
 
 			elapsed = 0f;
 			while( elapsed < fadeInDuration )
