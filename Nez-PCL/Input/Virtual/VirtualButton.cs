@@ -6,7 +6,9 @@ using Microsoft.Xna.Framework.Input;
 namespace Nez
 {
 	/// <summary>
-	/// A virtual input that is represented as a boolean. As well as simply checking the current button state, you can ask whether it was just pressed or released this frame. You can also keep the button press stored in a buffer for a limited time, or until it is consumed by calling ConsumeBuffer()
+	/// A virtual input that is represented as a boolean. As well as simply checking the current button state, you can ask whether
+	/// it was just pressed or released this frame. You can also keep the button press stored in a buffer for a limited time, or
+	/// until it is consumed by calling ConsumeBuffer()
 	/// </summary>
 	public class VirtualButton : VirtualInput
 	{
