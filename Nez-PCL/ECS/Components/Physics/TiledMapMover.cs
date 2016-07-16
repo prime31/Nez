@@ -355,7 +355,7 @@ namespace Nez.Tiled
 				// this code ensures that we dont consider collisions on a slope while jumping up that dont intersect our collider. It isn't totally
 				// perfect but it does the job
 				var diff = Math.Abs( leadingPosition - collisionResponse );
-				if( diff > _tiledMap.tileHeight )
+				if( diff >= _tiledMap.tileHeight )
 					isColliding = false;
 
 				// if we are grounded on a slope store off the slopeAngle. Remember, edgeToTest is the opposite edge of our movement direction.

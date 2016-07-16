@@ -90,7 +90,7 @@ namespace Nez
 			previousSceneRender = null;
 
 			// delay
-			yield return delayBeforeSquaresInDuration;
+			yield return Coroutine.waitForSeconds( delayBeforeSquaresInDuration );
 
 			// unpopulate squares
 			yield return Core.startCoroutine( tickEffectProgressProperty( _squaresEffect, squaresInDuration, EaseHelper.oppositeEaseType( easeType ), true ) );
