@@ -162,6 +162,18 @@ namespace Nez.Tiled
 
 
 		/// <summary>
+		/// sets the TiledTile at the x/y coordinates. Note that these are tile coordinates not world coordinates!
+		/// </summary>
+		/// <returns>The tile.</returns>
+		/// <param name="x">The x coordinate.</param>
+		/// <param name="y">The y coordinate.</param>
+		public void setTile( int x, int y, TiledTile tile )
+		{
+			tiles[x + y * width] = tile;
+		}
+
+
+		/// <summary>
 		/// nulls out the tile at the x/y coordinates
 		/// </summary>
 		/// <param name="x">The x coordinate.</param>
