@@ -3,6 +3,12 @@
 
 doc_base_url: /documentation
 folders:
+    - title: Setup
+      path: /setup
+      items:
+        - title: Getting Started
+          path: /getting-started
+
     - title: Systems
       path: /systems
       items:
@@ -40,7 +46,7 @@ folders:
       <div class="content-wrapper-wide">
         <div class="docs-tree">
           {% for folder in layout.folders %}
-            <a href="{{site.baseurl}}{{ layout.doc_base_url }}{{ folder.path }}" class="folder">
+            <a href="#" class="folder">
               {{ folder.title }} 
             </a>
             {% for item in folder.items %}
