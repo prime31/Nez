@@ -40,11 +40,11 @@ folders:
       <div class="content-wrapper-wide">
         <div class="docs-tree">
           {% for folder in layout.folders %}
-            <a href="#" class="folder">
+            <a href="{{site.baseurl}}{{ layout.doc_base_url }}{{ folder.path }}" class="folder">
               {{ folder.title }} 
             </a>
             {% for item in folder.items %}
-              <a href="{{ layout.doc_base_url }}{{ folder.path }}{{ item.path }}" 
+              <a href="{{site.baseurl}}{{ layout.doc_base_url }}{{ folder.path }}{{ item.path }}" 
               class="item" {% if page.url == layout.doc_base_url + folder.path + item.path %}current{%endif%}>
                 {{ item.title }}
               </a>
