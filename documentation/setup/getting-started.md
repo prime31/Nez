@@ -1,6 +1,7 @@
 ---
 layout: docs
 permalink: documentation/setup/getting-started
+title: Docs
 ---
 
 Setup
