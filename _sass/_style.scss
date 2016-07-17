@@ -1,7 +1,11 @@
+h1,h2,h3,h4,h5,h6{
+    color: white;
+    line-height: 1.7;
+}
+
 .page-content{
     background-color: $light-background-color;
 }
-
 .page-content p, 
 .page-content ul,
 .page-content ol,
@@ -12,15 +16,23 @@
 .page-content h5, 
 .page-content h6 {
     color: $text-color-light;
+    font-family: $base-font-family
 }
 
-.page-content h1, 
-.page-content h2, 
-.page-content h3, 
-.page-content h4, 
-.page-content h5, 
-.page-content h6{
-    font-family: 'Roboto';
+a{
+    font-family: $base-font-family
+}
+
+p, ul, ol, a{
+    line-height: 1.7;
+    text-align: justify;
+}
+
+
+.page-content a{
+    &:hover{
+        color: $brand-color-dark;
+    }
 }
 
 .page-content h1{
