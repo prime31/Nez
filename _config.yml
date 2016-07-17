@@ -1,0 +1,23 @@
+# Welcome to Jekyll!
+#
+# This config file is meant for settings that affect your whole blog, values
+# which you are expected to set up once and rarely need to edit after that.
+# For technical reasons, this file is *NOT* reloaded automatically when you use
+# 'jekyll serve'. If you change this file, please restart the server process.
+
+# Site settings
+title: Nez
+email: mike@prime31.com
+description: > # this means to ignore newlines until "baseurl:"
+  Nez is a free 2D focused framework that works with MonoGame and FNA.
+baseurl: "" # the subpath of your site, e.g. /blog
+url: "http://nez.github.io" # the base hostname & protocol for your site
+twitter_username: prime_31
+github_username:  prime31/Nez
+
+# current build links
+dll_link: "https://github.com/prime31/Nez/releases/download/0.8.0/Nez.zip"
+github_link: "https://github.com/prime31/Nez"
+
+# Build settings
+markdown: kramdown
