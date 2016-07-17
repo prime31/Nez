@@ -16,7 +16,7 @@ twitter_username: prime_31
 github_username:  prime31/Nez
 
 # current build links
-dll_link: "https://github.com/prime31/Nez/releases/download/0.8.0/Nez.zip"
+dll_link: "https://github.com/prime31/Nez/zipball/master"
 github_link: "https://github.com/prime31/Nez"
 
 # Build settings
