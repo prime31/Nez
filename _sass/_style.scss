@@ -6,6 +6,11 @@ h1,h2,h3,h4,h5,h6{
 .page-content{
     background-color: $light-background-color;
 }
+
+.site-footer{
+    font-family: $base-font-family
+}
+
 .page-content p, 
 .page-content ul,
 .page-content ol,
