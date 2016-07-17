@@ -36,7 +36,9 @@ Nez Systems
 ==========
 There are various systems documented separately in the FAQs folder. They go into a bit more detail on the different sub-systems that make up Nez.
 
-- [Nez-Core](FAQs/Nez-Core.md)
+- [Nez-Core](systems/nez-core)
+
+<!--
 - [Scene-Entity-Component](FAQs/Scene-Entity-Component.md)
 - [Rendering](FAQs/Rendering.md)
 - [Content Management](FAQs/ContentManagement.md)
@@ -49,7 +51,7 @@ There are various systems documented separately in the FAQs folder. They go into
 - [Deferred Lighting](FAQs/DeferredLighting.md)
 - [Pipeline Importers](FAQs/PipelineImporters.md)
 - [Samples](FAQs/Samples.md)
-
+-->
 
 
 Setup
