@@ -35,7 +35,11 @@ folders:
         var docscontent = document.querySelector('.docs-content');
         var maxwidth = parseInt(window.getComputedStyle(document.querySelector('.content-wrapper-wide'), null).getPropertyValue("width"));
         
-        docscontent.style.width = (maxwidth - docswidth) + "px";
+        if (window.innerWidth >= 750){
+          docscontent.style.width = (maxwidth - docswidth) + "px";
+        }else{
+          docscontent.style.width = "100%";
+        }
       }
 
       window.onload = init;
