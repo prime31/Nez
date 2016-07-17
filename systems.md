@@ -9,9 +9,9 @@ Nez Systems
 There are various systems documented separately in the FAQs folder. They go into a bit more detail on the different sub-systems that make up Nez.
 
 - [Nez-Core](nez-core)
+- [Scene-Entity-Component](scene-entity-component)
 
 <!--
-- [Scene-Entity-Component](FAQs/Scene-Entity-Component.md)
 - [Rendering](FAQs/Rendering.md)
 - [Content Management](FAQs/ContentManagement.md)
 - [Physics/Collisions](FAQs/Physics.md)

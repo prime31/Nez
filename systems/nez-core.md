@@ -13,7 +13,7 @@ Nez will create an instance of the Graphics class (available via Graphics.instan
 
 
 ## Scene
-When you set Core.scene to a new Scene, Nez will finish rendering the current Scene, fire off the CoreEvents.SceneChanged event and then start rendering the new Scene. For more information on Scenes see the [Scene-Entity-Component](Scene-Entity-Component.md) FAQ.
+When you set Core.scene to a new Scene, Nez will finish rendering the current Scene, fire off the CoreEvents.SceneChanged event and then start rendering the new Scene. For more information on Scenes see the [Scene-Entity-Component](scene-entity-component) FAQ.
 
 
 ## Physics
