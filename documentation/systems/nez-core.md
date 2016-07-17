@@ -37,7 +37,7 @@ The **Emitter<T>** class is available for use in your own classes as well. You c
 ## Debug Console
 If you are buliding with the DEBUG compilation symbol, Nez includes a simple console that provides some useful information. Press the tilde (~) key to show/hide the console. Once it is open you can type 'help' to view all the available commands which include helper to log all loaded assets, total entity count, physics colliders managed by the SpatialHash, etc. Type 'help COMMAND' to get help information for a specific command.
 
-![in-game debug console](console.png)
+![in-game debug console](images/console.png)
 
 You can also easily add your own command to the debug console. Just add the **CommandAttribute** to any static method and specify the command name and help string. Commands can have a single parameter. Here is an example of one of the built-in commands:
 
