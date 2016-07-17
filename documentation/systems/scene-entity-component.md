@@ -1,6 +1,6 @@
 ---
-layout: default
-permalink: /systems/scene-entity-component
+layout: docs
+permalink: documentation/systems/scene-entity-component
 ---
 
 Scene/Entity/Component System

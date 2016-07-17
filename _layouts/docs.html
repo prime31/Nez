@@ -1,0 +1,64 @@
+---
+# folder tree for docs go here.
+
+doc_base_url: /documentation
+folders:
+    - title: Systems
+      path: /systems
+      items:
+        - title: Nez Core
+          path: /nez-core
+        - title: Scene Entity Component
+          path: /scene-entity-component
+---
+
+
+<!DOCTYPE html>
+<html>
+
+  {% include head.html %}
+
+  <body>
+    <script>
+      // position our columns
+      function init(){
+        var docstree = document.querySelector('.docs-tree');
+        var docswidth = parseInt(window.getComputedStyle(docstree, null).getPropertyValue("width"));
+        var docscontent = document.querySelector('.docs-content');
+        var maxwidth = parseInt(window.getComputedStyle(document.querySelector('.content-wrapper-wide'), null).getPropertyValue("width"));
+        
+        docscontent.style.width = (maxwidth - docswidth) + "px";
+      }
+
+      window.onload = init;
+      window.onresize = init;
+    </script>
+
+    {% include header.html %}
+
+    <div class="page-content">
+      <div class="content-wrapper-wide">
+        <div class="docs-tree">
+          {% for folder in layout.folders %}
+            <a href="#" class="folder">
+              {{ folder.title }} 
+            </a>
+            {% for item in folder.items %}
+              <a href="{{ layout.doc_base_url }}{{ folder.path }}{{ item.path }}" 
+              class="item" {% if page.url == layout.doc_base_url + folder.path + item.path %}current{%endif%}>
+                {{ item.title }}
+              </a>
+            {% endfor %}
+          {% endfor %}
+        </div>
+        <div class="docs-content">
+          {{ content }}
+        </div>
+      </div>
+    </div>
+
+    {% include footer.html %}
+
+  </body>
+
+</html>

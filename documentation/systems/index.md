@@ -1,7 +1,6 @@
 ---
-layout: default
-title: Systems
-permalink: /systems/
+layout: docs
+permalink: documentation/systems/
 ---
 
 Nez Systems

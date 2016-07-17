@@ -5,10 +5,29 @@ h1,h2,h3,h4,h5,h6{
 
 .page-content{
     background-color: $light-background-color;
+    overflow: hidden;
 }
 
 .site-footer{
     font-family: $base-font-family
+}
+
+.docs-tree{
+    float: left;
+    width: 250px;
+}
+
+.docs-content{
+    float: left;
+}
+
+.docs-tree .folder{
+    display: block;
+}
+
+.docs-tree .item{
+    display: block;
+    margin-left: 14px;
 }
 
 .page-content p, 
@@ -46,6 +65,12 @@ p, ul, ol, a{
 
 .content-wrapper{
     max-width: $body-width;
+    padding: 0 16px;
+    margin: 0 auto;
+}
+
+.content-wrapper-wide{
+    max-width: $body-width + 300;
     padding: 0 16px;
     margin: 0 auto;
 }

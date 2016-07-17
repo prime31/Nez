@@ -1,6 +1,6 @@
 ---
-layout: default
-permalink: /systems/nez-core
+layout: docs
+permalink: /documentation/systems/nez-core
 ---
 
 Nez Core
