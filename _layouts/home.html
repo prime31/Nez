@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+
+  {% include head.html %}
+
+  <body>
+
+    {% include header.html %}
+
+    <div class="content-wrapper" style="text-align: center; padding: 64px 24px 128px 24px;">
+  	  <h2 style="margin-bottom: 48px;" >A lightweight 2D framework for MonoGame and FNA</h2>
+      <div class="download-buttons">
+        <a href="{{ site.dll_link }}" class="button"/>
+            Download
+        </a>
+        <a href="{{ site.github_link }}" class="button"/>
+            Github
+        </a>
+      </div>
+    </div>
+
+    <div class="page-content">
+      <div class="content-wrapper">
+        {{ content }}
+      </div>
+    </div>
+
+    {% include footer.html %}
+
+  </body>
+
+</html>

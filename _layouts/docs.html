@@ -1,0 +1,104 @@
+---
+# folder tree for docs go here.
+
+doc_base_url: /documentation
+folders:
+    - title: Setup
+      path: /setup
+      items:
+        - title: Installation
+          path: /installation
+        - title: Getting Started
+          path: /getting-started
+
+    - title: Systems
+      path: /systems
+      items:
+        - title: Nez Core
+          path: /nez-core
+        - title: Scene Entity Component
+          path: /scene-entity-component
+        - title: Rendering
+          path: /rendering
+        - title: Content Management
+          path: /content-management
+        - title: Physics / Collisions
+          path: /physics-collisions
+        - title: Pathfinding
+          path: /pathfinding
+        - title: Runtime Inspector
+          path: /runtime-inspector
+        - title: Entity Processing Systems
+          path: /entity-processing-systems
+        - title: Nez UI
+          path: /nez-ui
+        - title: AI
+          path: /ai
+        - title: Deferred Lighting
+          path: /deferred-lighting
+        - title: Pipeline Importers
+          path: /pipeline-importers
+
+    - title: Tutorials
+      path: /tutorials
+      items:
+        - title: Custom Components
+          path: /custom-components
+        - title: Controlling Rendering
+          path: /controlling-rendering
+---
+
+
+<!DOCTYPE html>
+<html>
+
+  {% include head.html %}
+
+  <body>
+    <script>
+      // position our columns
+      function init(){
+        var docstree = document.querySelector('.docs-tree');
+        var docswidth = parseInt(window.getComputedStyle(docstree, null).getPropertyValue("width"));
+        var docscontent = document.querySelector('.docs-content');
+        var maxwidth = parseInt(window.getComputedStyle(document.querySelector('.content-wrapper-wide'), null).getPropertyValue("width"));
+        
+        if (window.innerWidth >= 750){
+          docscontent.style.width = (maxwidth - docswidth) + "px";
+        }else{
+          docscontent.style.width = "100%";
+        }
+      }
+
+      window.onload = init;
+      window.onresize = init;
+    </script>
+
+    {% include header.html %}
+
+    <div class="page-content">
+      <div class="content-wrapper-wide">
+        <div class="docs-tree">
+          {% for folder in layout.folders %}
+            <a href="#" class="folder">
+              {{ folder.title }} 
+            </a>
+            {% for item in folder.items %}
+              <a href="{{site.baseurl}}{{ layout.doc_base_url }}{{ folder.path }}{{ item.path }}" 
+              class="item" {% if page.url == layout.doc_base_url + folder.path + item.path %}current{%endif%}>
+                {{ item.title }}
+              </a>
+            {% endfor %}
+          {% endfor %}
+        </div>
+        <div class="docs-content">
+          {{ content }}
+        </div>
+      </div>
+    </div>
+
+    {% include footer.html %}
+
+  </body>
+
+</html>

@@ -1,0 +1,119 @@
+h1,h2,h3,h4,h5,h6{
+    color: white;
+    line-height: 1.7;
+}
+
+.page-content{
+    background-color: $light-background-color;
+    overflow: hidden;
+}
+
+.site-footer{
+    font-family: $base-font-family
+}
+
+.docs-tree{
+    float: left;
+    width: 250px;
+}
+
+.docs-content{
+    float: left;
+}
+
+.docs-tree .folder{
+    display: block;
+}
+
+.docs-tree .item{
+    display: block;
+    margin-left: 14px;
+}
+
+.page-content p, 
+.page-content ul,
+.page-content ol,
+.page-content h1, 
+.page-content h2, 
+.page-content h3, 
+.page-content h4, 
+.page-content h5, 
+.page-content h6 {
+    color: $text-color-light;
+    font-family: $base-font-family
+}
+
+a{
+    font-family: $base-font-family
+}
+
+p, ul, ol, a{
+    line-height: 1.7;
+    text-align: justify;
+}
+
+
+.page-content a{
+    &:hover{
+        color: $brand-color-dark;
+    }
+}
+
+.page-content h1{
+    margin-top: 24px;
+}
+
+.content-wrapper{
+    max-width: $body-width;
+    padding: 0 16px;
+    margin: 0 auto;
+}
+
+.content-wrapper-wide{
+    max-width: $body-width + 300;
+    padding: 0 16px;
+    margin: 0 auto;
+}
+
+.download-buttons{
+    display: inline-block;
+}
+
+.button{
+    display: inline-block;
+    color: $text-color;
+    padding: 8px 32px;
+    margin: 10px;
+    background: $brand-color;
+    border-radius: 2px;
+    text-transform: uppercase;
+
+
+    &:visited{
+        color: $text-color;
+    }
+    &:hover{
+        text-decoration: none;
+    }
+}
+
+.page-link{
+    display: inline-block;
+    border: 1px $brand-color solid;
+    color: $brand-color;
+    padding: 6px 24px;
+    border-radius: 4px;
+    -webkit-transition: all 0.2s, -webkit-transform 0.2s;
+    transition: all 0.2s, transform 0.2s;
+    text-transform: uppercase;
+    margin: 24px 0;
+
+    &:visited{
+        color: $brand-color;
+    }
+    &:hover{
+        text-decoration: none;
+        color: $text-color;
+        background-color: $brand-color;
+    }
+}
