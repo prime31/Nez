@@ -6,7 +6,7 @@ namespace Nez
 {
 	public class SpriteEffect : Effect
 	{
-		public Matrix matrixTransform { set { _matrixTransformParam.SetValue( value ); } }
+		public Matrix2D matrixTransform { set { _matrixTransformParam.SetValue( value ); } }
 
 		EffectParameter _matrixTransformParam;
 

@@ -490,6 +490,7 @@
     <Compile Include="Utils\Extensions\EdgeExt.cs" />
     <Compile Include="ECS\Components\Text\TextRunComponent.cs" />
     <Compile Include="ECS\Components\Text\TextRun.cs" />
+    <Compile Include="Math\Matrix2D.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="MonoGame.Framework">

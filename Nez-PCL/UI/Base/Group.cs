@@ -9,7 +9,7 @@ namespace Nez.UI
 	{
 		internal List<Element> children = new List<Element>();
 		protected bool transform = false;
-		Matrix _previousBatcherTransform;
+		Matrix2D _previousBatcherTransform;
 
 
 		public T addElement<T>( T element ) where T : Element
@@ -263,20 +263,20 @@ namespace Nez.UI
 		/// Returns the transform for this group's coordinate system
 		/// </summary>
 		/// <returns>The transform.</returns>
-		protected Matrix computeTransform()
+		protected Matrix2D computeTransform()
 		{
-			var mat = Matrix.Identity;
+			var mat = Matrix2D.Identity;
 
 			if( originX != 0 || originY != 0 )
-				mat = Matrix.Multiply( mat, Matrix.CreateTranslation( -originX, -originY, 0 ) );
+				mat = Matrix2D.Multiply( mat, Matrix2D.CreateTranslation( -originX, -originY, 0 ) );
 			
 			if( rotation != 0 )
-				mat = Matrix.Multiply( mat, Matrix.CreateRotationZ( MathHelper.ToRadians( rotation ) ) );
+				mat = Matrix2D.Multiply( mat, Matrix2D.CreateRotationZ( MathHelper.ToRadians( rotation ) ) );
 
 			if( scaleX != 1 || scaleY != 1 )
-				mat = Matrix.Multiply( mat, Matrix.CreateScale( scaleX, scaleY, 1 ) );
+				mat = Matrix2D.Multiply( mat, Matrix2D.CreateScale( scaleX, scaleY, 1 ) );
 
-			mat = Matrix.Multiply( mat, Matrix.CreateTranslation( x + originX, y + originY, 0 ) );
+			mat = Matrix2D.Multiply( mat, Matrix2D.CreateTranslation( x + originX, y + originY, 0 ) );
 
 			// Find the first parent that transforms
 			Group parentGroup = parent;
@@ -288,7 +288,7 @@ namespace Nez.UI
 			}
 
 			if( parentGroup != null )
-				mat = Matrix.Multiply( mat, parentGroup.computeTransform() );
+				mat = Matrix2D.Multiply( mat, parentGroup.computeTransform() );
 
 			return mat;
 		}
@@ -300,7 +300,7 @@ namespace Nez.UI
 		/// </summary>
 		/// <param name="graphics">Graphics.</param>
 		/// <param name="transform">Transform.</param>
-		protected void applyTransform( Graphics graphics, Matrix transform )
+		protected void applyTransform( Graphics graphics, Matrix2D transform )
 		{
 			_previousBatcherTransform = graphics.batcher.transformMatrix;
 			graphics.batcher.end();
