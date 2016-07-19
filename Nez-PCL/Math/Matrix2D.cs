@@ -14,15 +14,14 @@ namespace Nez
 	{
 		#region Public Fields
 
-		public float M11;
+		public float M11; // x scale
 		public float M12;
 
 		public float M21;
-		public float M22;
+		public float M22; // y scale
 
-		public float M31;
-		public float M32;
-		public float M33; // 1
+		public float M31; // x translation
+		public float M32; // y translation
 
 		#endregion
 
@@ -44,12 +43,12 @@ namespace Nez
 		{
 			get
 			{
-				return new Vector2( this.M31, this.M32 );
+				return new Vector2( M31, M32 );
 			}
 			set
 			{
-				this.M31 = value.X;
-				this.M32 = value.Y;
+				M31 = value.X;
+				M32 = value.Y;
 			}
 		}
 
@@ -89,35 +88,34 @@ namespace Nez
 		{
 			get
 			{
-				return new Vector2( this.M11, this.M22 );
+				return new Vector2( M11, M22 );
 			}
 			set
 			{
-				this.M11 = value.X;
-				this.M22 = value.Y;
+				M11 = value.X;
+				M22 = value.Y;
 			}
 		}
 
 		#endregion
 
 
-		static Matrix2D identity = new Matrix2D( 1f, 0f, 0f, 0f, 1f, 0f, 0f, 0f, 1f );
+		static Matrix2D identity = new Matrix2D( 1f, 0f, 0f, 0f, 1f, 0f, 0f, 0f );
 
 
 		/// <summary>
 		/// Constructs a matrix.
 		/// </summary>
-		public Matrix2D( float m11, float m12, float m13, float m21, float m22, float m23, float m31, float m32, float m33 )
+		public Matrix2D( float m11, float m12, float m13, float m21, float m22, float m23, float m31, float m32 )
 		{
-			this.M11 = m11;
-			this.M12 = m12;
+			M11 = m11;
+			M12 = m12;
 
-			this.M21 = m21;
-			this.M22 = m22;
+			M21 = m21;
+			M22 = m22;
 
-			this.M31 = m31;
-			this.M32 = m32;
-			this.M33 = m33;
+			M31 = m31;
+			M32 = m32;
 		}
 
 
@@ -139,7 +137,6 @@ namespace Nez
 
 			matrix1.M31 += matrix2.M31;
 			matrix1.M32 += matrix2.M32;
-			matrix1.M33 += matrix2.M33;
 
 			return matrix1;
 		}
@@ -161,7 +158,6 @@ namespace Nez
 		
 			result.M31 = matrix1.M31 + matrix2.M31;
 			result.M32 = matrix1.M32 + matrix2.M32;
-			result.M33 = matrix1.M33 + matrix2.M33;
 		}
 
 
@@ -253,7 +249,6 @@ namespace Nez
 
 			result.M31 = 0;
 			result.M32 = 0;
-			result.M33 = 1;
 		}
 
 
@@ -285,7 +280,6 @@ namespace Nez
 
 			result.M31 = 0;
 			result.M32 = 0;
-			result.M33 = 1;
 		}
 
 
@@ -319,7 +313,6 @@ namespace Nez
 
 			result.M31 = position.X;
 			result.M32 = position.Y;
-			result.M33 = 1;
 		}
 
 
@@ -341,7 +334,6 @@ namespace Nez
 		/// </summary>
 		/// <param name="xPosition">X coordinate of translation.</param>
 		/// <param name="yPosition">Y coordinate of translation.</param>
-		/// <param name="zPosition">Z coordinate of translation.</param>
 		/// <param name="result">The translation <see cref="Matrix2D"/> as an output parameter.</param>
 		public static void CreateTranslation( float xPosition, float yPosition, out Matrix2D result )
 		{
@@ -353,7 +345,6 @@ namespace Nez
 
 			result.M31 = xPosition;
 			result.M32 = yPosition;
-			result.M33 = 1;
 		}
 
 
@@ -367,15 +358,14 @@ namespace Nez
 		{
 			var det = 1 / matrix.Determinant();
 
-			result.M11 = matrix.M22 * matrix.M33 * det;
-			result.M12 = -matrix.M33 * matrix.M12 * det;
+			result.M11 = matrix.M22 * det;
+			result.M12 = -matrix.M12 * det;
 
-			result.M21 = -matrix.M33 * matrix.M21 * det;
-			result.M22 = matrix.M33 * matrix.M11 * det;
+			result.M21 = -matrix.M21 * det;
+			result.M22 = matrix.M11 * det;
 
 			result.M31 = ( matrix.M32 * matrix.M21 - matrix.M31 * matrix.M22 ) * det;
 			result.M32 = -( matrix.M32 * matrix.M11 - matrix.M31 * matrix.M12 ) * det;
-			result.M33 = 1;
 		}
 
 
@@ -395,7 +385,6 @@ namespace Nez
 
 			matrix1.M31 = matrix1.M31 / matrix2.M31;
 			matrix1.M32 = matrix1.M32 / matrix2.M32;
-			matrix1.M33 = matrix1.M33 / matrix2.M33;
 			return matrix1;
 		}
 
@@ -416,7 +405,6 @@ namespace Nez
 
 			result.M31 = matrix1.M31 / matrix2.M31;
 			result.M32 = matrix1.M32 / matrix2.M32;
-			result.M33 = matrix1.M33 / matrix2.M33;
 		}
 
 
@@ -437,7 +425,6 @@ namespace Nez
 
 			matrix1.M31 = matrix1.M31 * num;
 			matrix1.M32 = matrix1.M32 * num;
-			matrix1.M33 = matrix1.M33 * num;
 
 			return matrix1;
 		}
@@ -460,7 +447,6 @@ namespace Nez
 
 			result.M31 = matrix1.M31 * num;
 			result.M32 = matrix1.M32 * num;
-			result.M33 = matrix1.M33 * num;
 		}
 
 
@@ -481,7 +467,6 @@ namespace Nez
 
 			matrix1.M31 = matrix1.M31 + ( ( matrix2.M31 - matrix1.M31 ) * amount );
 			matrix1.M32 = matrix1.M32 + ( ( matrix2.M32 - matrix1.M32 ) * amount );
-			matrix1.M33 = matrix1.M33 + ( ( matrix2.M33 - matrix1.M33 ) * amount );
 			return matrix1;
 		}
 
@@ -503,7 +488,6 @@ namespace Nez
 
 			result.M31 = matrix1.M31 + ( ( matrix2.M31 - matrix1.M31 ) * amount );
 			result.M32 = matrix1.M32 + ( ( matrix2.M32 - matrix1.M32 ) * amount );
-			result.M33 = matrix1.M33 + ( ( matrix2.M33 - matrix1.M33 ) * amount );
 		}
 
 
@@ -515,15 +499,14 @@ namespace Nez
 		/// <returns>Result of the matrix multiplication.</returns>
 		public static Matrix2D Multiply( Matrix2D matrix1, Matrix2D matrix2 )
 		{
-			var m11 = ( ( ( matrix1.M11 * matrix2.M11 ) + ( matrix1.M12 * matrix2.M21 ) ) );
-			var m12 = ( ( ( matrix1.M11 * matrix2.M12 ) + ( matrix1.M12 * matrix2.M22 ) ) );
+			var m11 = ( matrix1.M11 * matrix2.M11 ) + ( matrix1.M12 * matrix2.M21 );
+			var m12 = ( matrix1.M11 * matrix2.M12 ) + ( matrix1.M12 * matrix2.M22 );
 
-			var m21 = ( ( ( matrix1.M21 * matrix2.M11 ) + ( matrix1.M22 * matrix2.M21 ) ) );
-			var m22 = ( ( ( matrix1.M21 * matrix2.M12 ) + ( matrix1.M22 * matrix2.M22 ) ) );
+			var m21 = ( matrix1.M21 * matrix2.M11 ) + ( matrix1.M22 * matrix2.M21 );
+			var m22 = ( matrix1.M21 * matrix2.M12 ) + ( matrix1.M22 * matrix2.M22 );
 
-			var m31 = ( ( ( matrix1.M31 * matrix2.M11 ) + ( matrix1.M32 * matrix2.M21 ) ) + ( matrix1.M33 * matrix2.M31 ) );
-			var m32 = ( ( ( matrix1.M31 * matrix2.M12 ) + ( matrix1.M32 * matrix2.M22 ) ) + ( matrix1.M33 * matrix2.M32 ) );
-			var m33 = matrix1.M33 * matrix2.M33;
+			var m31 = ( matrix1.M31 * matrix2.M11 ) + ( matrix1.M32 * matrix2.M21 ) + matrix2.M31;
+			var m32 = ( matrix1.M31 * matrix2.M12 ) + ( matrix1.M32 * matrix2.M22 ) + matrix2.M32;
 
 			matrix1.M11 = m11;
 			matrix1.M12 = m12;
@@ -533,7 +516,6 @@ namespace Nez
 
 			matrix1.M31 = m31;
 			matrix1.M32 = m32;
-			matrix1.M33 = m33;
 			return matrix1;
 		}
 
@@ -546,15 +528,14 @@ namespace Nez
 		/// <param name="result">Result of the matrix multiplication as an output parameter.</param>
 		public static void Multiply( ref Matrix2D matrix1, ref Matrix2D matrix2, out Matrix2D result )
 		{
-			var m11 = ( ( ( matrix1.M11 * matrix2.M11 ) + ( matrix1.M12 * matrix2.M21 ) ) );
-			var m12 = ( ( ( matrix1.M11 * matrix2.M12 ) + ( matrix1.M12 * matrix2.M22 ) ) );
+			var m11 = ( matrix1.M11 * matrix2.M11 ) + ( matrix1.M12 * matrix2.M21 );
+			var m12 = ( matrix1.M11 * matrix2.M12 ) + ( matrix1.M12 * matrix2.M22 );
 
-			var m21 = ( ( ( matrix1.M21 * matrix2.M11 ) + ( matrix1.M22 * matrix2.M21 ) ) );
-			var m22 = ( ( ( matrix1.M21 * matrix2.M12 ) + ( matrix1.M22 * matrix2.M22 ) ) );
+			var m21 = ( matrix1.M21 * matrix2.M11 ) + ( matrix1.M22 * matrix2.M21 );
+			var m22 = ( matrix1.M21 * matrix2.M12 ) + ( matrix1.M22 * matrix2.M22 );
 
-			var m31 = ( ( ( matrix1.M31 * matrix2.M11 ) + ( matrix1.M32 * matrix2.M21 ) ) + ( matrix1.M33 * matrix2.M31 ) );
-			var m32 = ( ( ( matrix1.M31 * matrix2.M12 ) + ( matrix1.M32 * matrix2.M22 ) ) + ( matrix1.M33 * matrix2.M32 ) );
-			var m33 = matrix1.M33 * matrix2.M33;
+			var m31 = ( matrix1.M31 * matrix2.M11 ) + ( matrix1.M32 * matrix2.M21 ) + matrix2.M31;
+			var m32 = ( matrix1.M31 * matrix2.M12 ) + ( matrix1.M32 * matrix2.M22 ) + matrix2.M32;
 
 			result.M11 = m11;
 			result.M12 = m12;
@@ -564,7 +545,6 @@ namespace Nez
 
 			result.M31 = m31;
 			result.M32 = m32;
-			result.M33 = m33;
 		}
 
 
@@ -584,7 +564,6 @@ namespace Nez
 
 			matrix1.M31 *= scaleFactor;
 			matrix1.M32 *= scaleFactor;
-			matrix1.M33 *= scaleFactor;
 			return matrix1;
 		}
 
@@ -605,7 +584,6 @@ namespace Nez
 
 			result.M31 = matrix1.M31 * scaleFactor;
 			result.M32 = matrix1.M32 * scaleFactor;
-			result.M33 = matrix1.M33 * scaleFactor;
 		}
 
 
@@ -625,7 +603,6 @@ namespace Nez
 
 			matrix1.M31 = matrix1.M31 + matrix2.M31;
 			matrix1.M32 = matrix1.M32 + matrix2.M32;
-			matrix1.M33 = matrix1.M33 + matrix2.M33;
 			return matrix1;
 		}
 
@@ -646,7 +623,6 @@ namespace Nez
 
 			matrix1.M31 = matrix1.M31 / matrix2.M31;
 			matrix1.M32 = matrix1.M32 / matrix2.M32;
-			matrix1.M33 = matrix1.M33 / matrix2.M33;
 			return matrix1;
 		}
 
@@ -668,7 +644,6 @@ namespace Nez
 
 			matrix.M31 = matrix.M31 * num;
 			matrix.M32 = matrix.M32 * num;
-			matrix.M33 = matrix.M33 * num;
 			return matrix;
 		}
 
@@ -689,8 +664,7 @@ namespace Nez
 				matrix1.M22 == matrix2.M22 &&
 
 				matrix1.M31 == matrix2.M31 &&
-				matrix1.M32 == matrix2.M32 &&
-				matrix1.M33 == matrix2.M33
+				matrix1.M32 == matrix2.M32
 				);
 		}
 
@@ -711,8 +685,7 @@ namespace Nez
 				matrix1.M22 != matrix2.M22 ||
 
 				matrix1.M31 != matrix2.M31 ||
-				matrix1.M32 != matrix2.M32 ||
-				matrix1.M33 != matrix2.M33
+				matrix1.M32 != matrix2.M32
 				);
 		}
 
@@ -728,15 +701,14 @@ namespace Nez
 		/// </remarks>
 		public static Matrix2D operator *( Matrix2D matrix1, Matrix2D matrix2 )
 		{
-			var m11 = ( ( ( matrix1.M11 * matrix2.M11 ) + ( matrix1.M12 * matrix2.M21 ) ) );
-			var m12 = ( ( ( matrix1.M11 * matrix2.M12 ) + ( matrix1.M12 * matrix2.M22 ) ) );
+			var m11 = ( matrix1.M11 * matrix2.M11 ) + ( matrix1.M12 * matrix2.M21 );
+			var m12 = ( matrix1.M11 * matrix2.M12 ) + ( matrix1.M12 * matrix2.M22 );
 
-			var m21 = ( ( ( matrix1.M21 * matrix2.M11 ) + ( matrix1.M22 * matrix2.M21 ) ) );
-			var m22 = ( ( ( matrix1.M21 * matrix2.M12 ) + ( matrix1.M22 * matrix2.M22 ) ) );
+			var m21 = ( matrix1.M21 * matrix2.M11 ) + ( matrix1.M22 * matrix2.M21 );
+			var m22 = ( matrix1.M21 * matrix2.M12 ) + ( matrix1.M22 * matrix2.M22 );
 
-			var m31 = ( ( ( matrix1.M31 * matrix2.M11 ) + ( matrix1.M32 * matrix2.M21 ) ) + ( matrix1.M33 * matrix2.M31 ) );
-			var m32 = ( ( ( matrix1.M31 * matrix2.M12 ) + ( matrix1.M32 * matrix2.M22 ) ) + ( matrix1.M33 * matrix2.M32 ) );
-			var m33 = matrix1.M33 * matrix2.M33;
+			var m31 = ( matrix1.M31 * matrix2.M11 ) + ( matrix1.M32 * matrix2.M21 ) + matrix2.M31;
+			var m32 = ( matrix1.M31 * matrix2.M12 ) + ( matrix1.M32 * matrix2.M22 ) + matrix2.M32;
 
 			matrix1.M11 = m11;
 			matrix1.M12 = m12;
@@ -746,7 +718,6 @@ namespace Nez
 
 			matrix1.M31 = m31;
 			matrix1.M32 = m32;
-			matrix1.M33 = m33;
 
 			return matrix1;
 		}
@@ -768,7 +739,6 @@ namespace Nez
 
 			matrix.M31 = matrix.M31 * scaleFactor;
 			matrix.M32 = matrix.M32 * scaleFactor;
-			matrix.M33 = matrix.M33 * scaleFactor;
 			return matrix;
 		}
 
@@ -789,7 +759,6 @@ namespace Nez
 
 			matrix1.M31 = matrix1.M31 - matrix2.M31;
 			matrix1.M32 = matrix1.M32 - matrix2.M32;
-			matrix1.M33 = matrix1.M33 - matrix2.M33;
 			return matrix1;
 		}
 
@@ -809,7 +778,6 @@ namespace Nez
 
 			matrix.M31 = -matrix.M31;
 			matrix.M32 = -matrix.M32;
-			matrix.M33 = -matrix.M33;
 			return matrix;
 		}
 
@@ -830,7 +798,6 @@ namespace Nez
 
 			matrix1.M31 = matrix1.M31 - matrix2.M31;
 			matrix1.M32 = matrix1.M32 - matrix2.M32;
-			matrix1.M33 = matrix1.M33 - matrix2.M33;
 			return matrix1;
 		}
 
@@ -851,7 +818,6 @@ namespace Nez
 
 			result.M31 = matrix1.M31 - matrix2.M31;
 			result.M32 = matrix1.M32 - matrix2.M32;
-			result.M33 = matrix1.M33 - matrix2.M33;
 		}
 
 
@@ -884,10 +850,8 @@ namespace Nez
 
 			ret.M31 = 0;
 			ret.M32 = 0;
-			ret.M33 = matrix.M33;
 			result = ret;
 		}
-
 
 		#endregion
 
@@ -912,10 +876,9 @@ namespace Nez
 		/// <returns><c>true</c> if the instances are equal; <c>false</c> otherwise.</returns>
 		public override bool Equals( object obj )
 		{
-			var isEqual = false;
 			if( obj is Matrix2D )
-				isEqual = this.Equals( (Matrix2D)obj );
-			return isEqual;
+				return Equals( (Matrix2D)obj );
+			return false;
 		}
 
 
@@ -925,7 +888,7 @@ namespace Nez
 		/// <returns>Hash code of this <see cref="Matrix2D"/>.</returns>
 		public override int GetHashCode()
 		{
-			return this.M11.GetHashCode() + this.M12.GetHashCode() + this.M21.GetHashCode() + this.M22.GetHashCode() + this.M31.GetHashCode() + this.M32.GetHashCode() + this.M33.GetHashCode();
+			return M11.GetHashCode() + M12.GetHashCode() + M21.GetHashCode() + M22.GetHashCode() + M31.GetHashCode() + M32.GetHashCode();
 		}
 
 
@@ -935,7 +898,7 @@ namespace Nez
 			(
 				mat.M11, mat.M12, 0, 0,
 				mat.M21, mat.M22, 0, 0,
-				0, 0, mat.M33, 0,
+				0, 0, 1, 0,
 				mat.M31, mat.M32, 0, 1
 			);
 		}
@@ -957,7 +920,7 @@ namespace Nez
 		{
 			return "{M11:" + M11 + " M12:" + M12 + "}"
 				+ " {M21:" + M21 + " M22:" + M22 + "}"
-				+ " {M31:" + M31 + " M32:" + M32 + " M33:" + M33 + "}";
+				+ " {M31:" + M31 + " M32:" + M32 + "}";
 		}
 
 		#endregion
