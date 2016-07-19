@@ -9,7 +9,7 @@ namespace Nez.UI
 	{
 		internal List<Element> children = new List<Element>();
 		protected bool transform = false;
-		Matrix2D _previousBatcherTransform;
+		Matrix _previousBatcherTransform;
 
 
 		public T addElement<T>( T element ) where T : Element
@@ -274,7 +274,7 @@ namespace Nez.UI
 				mat = Matrix2D.Multiply( mat, Matrix2D.CreateRotationZ( MathHelper.ToRadians( rotation ) ) );
 
 			if( scaleX != 1 || scaleY != 1 )
-				mat = Matrix2D.Multiply( mat, Matrix2D.CreateScale( scaleX, scaleY, 1 ) );
+				mat = Matrix2D.Multiply( mat, Matrix2D.CreateScale( scaleX, scaleY ) );
 
 			mat = Matrix2D.Multiply( mat, Matrix2D.CreateTranslation( x + originX, y + originY, 0 ) );
 
@@ -300,7 +300,7 @@ namespace Nez.UI
 		/// </summary>
 		/// <param name="graphics">Graphics.</param>
 		/// <param name="transform">Transform.</param>
-		protected void applyTransform( Graphics graphics, Matrix2D transform )
+		protected void applyTransform( Graphics graphics, Matrix transform )
 		{
 			_previousBatcherTransform = graphics.batcher.transformMatrix;
 			graphics.batcher.end();

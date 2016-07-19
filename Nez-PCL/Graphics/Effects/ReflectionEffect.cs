@@ -31,7 +31,7 @@ namespace Nez
 		/// <value>The render texture.</value>
 		internal RenderTarget2D renderTexture { set { _renderTextureParam.SetValue( value ); } }
 
-		internal Matrix2D matrixTransform { set { _matrixTransformParam.SetValue( value ); } }
+		internal Matrix matrixTransform { set { _matrixTransformParam.SetValue( value ); } }
 
 
 		const float _reflectionIntensity = 0.4f;

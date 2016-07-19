@@ -56,7 +56,7 @@ namespace Nez
 		/// <returns>Transformed <see cref="Vector2"/>.</returns>
 		public static Vector2 Transform( Vector2 position, Matrix2D matrix )
 		{
-			return new Vector2( ( position.X * matrix.M11 ) + ( position.Y * matrix.M21 ) + matrix.M41, ( position.X * matrix.M12 ) + ( position.Y * matrix.M22 ) + matrix.M42 );
+			return new Vector2( ( position.X * matrix.M11 ) + ( position.Y * matrix.M21 ) + matrix.M31, ( position.X * matrix.M12 ) + ( position.Y * matrix.M22 ) + matrix.M32 );
 		}
 
 
@@ -68,8 +68,8 @@ namespace Nez
 		/// <param name="result">Transformed <see cref="Vector2"/> as an output parameter.</param>
 		public static void Transform( ref Vector2 position, ref Matrix2D matrix, out Vector2 result )
 		{
-			var x = ( position.X * matrix.M11 ) + ( position.Y * matrix.M21 ) + matrix.M41;
-			var y = ( position.X * matrix.M12 ) + ( position.Y * matrix.M22 ) + matrix.M42;
+			var x = ( position.X * matrix.M11 ) + ( position.Y * matrix.M21 ) + matrix.M31;
+			var y = ( position.X * matrix.M12 ) + ( position.Y * matrix.M22 ) + matrix.M32;
 			result.X = x;
 			result.Y = y;
 		}
@@ -86,22 +86,13 @@ namespace Nez
 		/// <param name="length">The number of vectors to be transformed.</param>
 		public static void Transform( Vector2[] sourceArray, int sourceIndex, ref Matrix2D matrix, Vector2[] destinationArray, int destinationIndex, int length )
 		{
-			if( sourceArray == null )
-				throw new ArgumentNullException( "sourceArray" );
-			if( destinationArray == null )
-				throw new ArgumentNullException( "destinationArray" );
-			if( sourceArray.Length < sourceIndex + length )
-				throw new ArgumentException( "Source array length is lesser than sourceIndex + length" );
-			if( destinationArray.Length < destinationIndex + length )
-				throw new ArgumentException( "Destination array length is lesser than destinationIndex + length" );
-
-			for( int x = 0; x < length; x++ )
+			for( var i = 0; i < length; i++ )
 			{
-				var position = sourceArray[sourceIndex + x];
-				var destination = destinationArray[destinationIndex + x];
-				destination.X = ( position.X * matrix.M11 ) + ( position.Y * matrix.M21 ) + matrix.M41;
-				destination.Y = ( position.X * matrix.M12 ) + ( position.Y * matrix.M22 ) + matrix.M42;
-				destinationArray[destinationIndex + x] = destination;
+				var position = sourceArray[sourceIndex + i];
+				var destination = destinationArray[destinationIndex + i];
+				destination.X = ( position.X * matrix.M11 ) + ( position.Y * matrix.M21 ) + matrix.M31;
+				destination.Y = ( position.X * matrix.M12 ) + ( position.Y * matrix.M22 ) + matrix.M32;
+				destinationArray[destinationIndex + i] = destination;
 			}
 		}
 

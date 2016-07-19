@@ -218,14 +218,14 @@ namespace Nez
 			if( requiresTransformation )
 			{
 				Matrix2D temp;
-				Matrix2D.CreateTranslation( -origin.X, -origin.Y, 0f, out _transformationMatrix );
-				Matrix2D.CreateScale( ( flippedHorz ? -scale.X : scale.X ), ( flippedVert ? -scale.Y : scale.Y ), 1f, out temp );
+				Matrix2D.CreateTranslation( -origin.X, -origin.Y, out _transformationMatrix );
+				Matrix2D.CreateScale( ( flippedHorz ? -scale.X : scale.X ), ( flippedVert ? -scale.Y : scale.Y ), out temp );
 				Matrix2D.Multiply( ref _transformationMatrix, ref temp, out _transformationMatrix );
-				Matrix2D.CreateTranslation( flipAdjustment.X, flipAdjustment.Y, 0, out temp );
+				Matrix2D.CreateTranslation( flipAdjustment.X, flipAdjustment.Y, out temp );
 				Matrix2D.Multiply( ref temp, ref _transformationMatrix, out _transformationMatrix );
 				Matrix2D.CreateRotationZ( rotation, out temp );
 				Matrix2D.Multiply( ref _transformationMatrix, ref temp, out _transformationMatrix );
-				Matrix2D.CreateTranslation( position.X, position.Y, 0f, out temp );
+				Matrix2D.CreateTranslation( position.X, position.Y, out temp );
 				Matrix2D.Multiply( ref _transformationMatrix, ref temp, out _transformationMatrix );
 			}
 

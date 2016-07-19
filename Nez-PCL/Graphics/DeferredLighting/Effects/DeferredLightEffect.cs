@@ -110,7 +110,7 @@ namespace Nez.DeferredLighting
 		{
 			setWorldToViewMatrix( camera.transformMatrix );
 			setProjectionMatrix( camera.projectionMatrix );
-			setScreenToWorld( Matrix2D.Invert( camera.viewProjectionMatrix ) );
+			setScreenToWorld( Matrix.Invert( camera.viewProjectionMatrix ) );
 		}
 
 
@@ -143,7 +143,7 @@ namespace Nez.DeferredLighting
 			setLightRadius( light.radius * light.entity.transform.scale.X );
 			setLightIntensity( light.intensity );
 
-			var objToWorld = Matrix2D.CreateScale( light.radius * light.entity.transform.scale.X ) * Matrix2D.CreateTranslation( light.entity.transform.position.X + light.localOffset.X, light.entity.transform.position.Y + light.localOffset.Y, 0 );
+			var objToWorld = Matrix.CreateScale( light.radius * light.entity.transform.scale.X ) * Matrix.CreateTranslation( light.entity.transform.position.X + light.localOffset.X, light.entity.transform.position.Y + light.localOffset.Y, 0 );
 			setObjectToWorldMatrix( objToWorld );
 
 			pointLightPass.Apply();
@@ -174,7 +174,7 @@ namespace Nez.DeferredLighting
 			setAreaDirectionalLightDirection( light.direction );
 			setLightIntensity( light.intensity );
 
-			var objToWorld = Matrix2D.CreateScale( light.bounds.width * light.entity.transform.scale.X, light.bounds.height * light.entity.transform.scale.Y, 1f ) * Matrix2D.CreateTranslation( light.bounds.x - light.bounds.width * 0.5f, light.bounds.y - light.bounds.height * 0.5f, 0 );
+			var objToWorld = Matrix.CreateScale( light.bounds.width * light.entity.transform.scale.X, light.bounds.height * light.entity.transform.scale.Y, 1f ) * Matrix.CreateTranslation( light.bounds.x - light.bounds.width * 0.5f, light.bounds.y - light.bounds.height * 0.5f, 0 );
 			setObjectToWorldMatrix( objToWorld );
 
 			areaLightPass.Apply();
@@ -204,19 +204,19 @@ namespace Nez.DeferredLighting
 		}
 
 
-		public void setObjectToWorldMatrix( Matrix2D objToWorld )
+		public void setObjectToWorldMatrix( Matrix objToWorld )
 		{
 			_objectToWorldParam.SetValue( objToWorld );
 		}
 
 
-		public void setWorldToViewMatrix( Matrix2D worldToView )
+		public void setWorldToViewMatrix( Matrix worldToView )
 		{
 			_worldToViewParam.SetValue( worldToView );
 		}
 
 
-		public void setProjectionMatrix( Matrix2D projection )
+		public void setProjectionMatrix( Matrix projection )
 		{
 			_projectionParam.SetValue( projection );
 		}
@@ -226,7 +226,7 @@ namespace Nez.DeferredLighting
 		/// inverse of Camera.getViewProjectionMatrix
 		/// </summary>
 		/// <param name="obj2world">Obj2world.</param>
-		public void setScreenToWorld( Matrix2D screenToWorld )
+		public void setScreenToWorld( Matrix screenToWorld )
 		{
 			_screenToWorldParam.SetValue( screenToWorld );
 		}

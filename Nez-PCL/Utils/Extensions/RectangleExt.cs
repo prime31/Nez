@@ -187,11 +187,11 @@ namespace Nez
 				Matrix2D tempMat;
 				// set the reference point to world reference taking origin into account
 				var transformMatrix = Matrix2D.CreateTranslation( -worldPosX - origin.X, -worldPosY - origin.Y, 0f );
-				Matrix2D.CreateScale( scale.X, scale.Y, 1f, out tempMat ); // scale ->
+				Matrix2D.CreateScale( scale.X, scale.Y, out tempMat ); // scale ->
 				Matrix2D.Multiply( ref transformMatrix, ref tempMat, out transformMatrix );
 				Matrix2D.CreateRotationZ( rotation, out tempMat ); // rotate ->
 				Matrix2D.Multiply( ref transformMatrix, ref tempMat, out transformMatrix );
-				Matrix2D.CreateTranslation( worldPosX, worldPosY, 0f, out tempMat ); // translate back
+				Matrix2D.CreateTranslation( worldPosX, worldPosY, out tempMat ); // translate back
 				Matrix2D.Multiply( ref transformMatrix, ref tempMat, out transformMatrix );
 
 				// TODO: this is a bit silly. we can just leave the worldPos translation in the Matrix and avoid this

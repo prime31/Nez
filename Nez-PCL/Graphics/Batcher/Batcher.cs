@@ -13,7 +13,7 @@ namespace Nez
 {
 	public class Batcher : GraphicsResource
 	{
-		public Matrix2D transformMatrix { get { return _transformMatrix; } }
+		public Matrix transformMatrix { get { return _transformMatrix; } }
 
 		#region variables
 
@@ -43,13 +43,13 @@ namespace Nez
 		int _numSprites;
 
 		// Matrix to be used when creating the projection matrix
-		Matrix2D _transformMatrix;
+		Matrix _transformMatrix;
 
 		// Matrix used internally to calculate the cameras projection
-		Matrix2D _projectionMatrix;
+		Matrix _projectionMatrix;
 
 		// this is the calculated MatrixTransform parameter in sprite shaders
-		Matrix2D _matrixTransformMatrix;
+		Matrix _matrixTransformMatrix;
 
 		// User-provided Effect, if applicable
 		Effect _customEffect;
@@ -87,7 +87,7 @@ namespace Nez
 			_spriteEffect = new SpriteEffect();
 			_spriteEffectPass = _spriteEffect.CurrentTechnique.Passes[0];
 
-			_projectionMatrix = new Matrix2D(
+			_projectionMatrix = new Matrix(
 				0f, //(float)( 2.0 / (double)viewport.Width ) is the actual value we will use
 				0.0f,
 				0.0f,
@@ -124,13 +124,13 @@ namespace Nez
 
 		public void begin()
 		{
-			begin( BlendState.AlphaBlend, Core.defaultSamplerState, DepthStencilState.None, RasterizerState.CullCounterClockwise, null, Matrix2D.Identity, false );
+			begin( BlendState.AlphaBlend, Core.defaultSamplerState, DepthStencilState.None, RasterizerState.CullCounterClockwise, null, Matrix.Identity, false );
 		}
 
 
 		public void begin( Effect effect )
 		{
-			begin( BlendState.AlphaBlend, Core.defaultSamplerState, DepthStencilState.None, RasterizerState.CullCounterClockwise, effect, Matrix2D.Identity, false );
+			begin( BlendState.AlphaBlend, Core.defaultSamplerState, DepthStencilState.None, RasterizerState.CullCounterClockwise, effect, Matrix.Identity, false );
 		}
 
 
@@ -140,7 +140,7 @@ namespace Nez
 		}
 
 
-		public void begin( Matrix2D transformationMatrix )
+		public void begin( Matrix transformationMatrix )
 		{
 			begin( BlendState.AlphaBlend, Core.defaultSamplerState, DepthStencilState.None, RasterizerState.CullCounterClockwise, null, transformationMatrix, false );
 		}
@@ -148,11 +148,11 @@ namespace Nez
 
 		public void begin( BlendState blendState )
 		{
-			begin( blendState, Core.defaultSamplerState, DepthStencilState.None, RasterizerState.CullCounterClockwise, null, Matrix2D.Identity, false );
+			begin( blendState, Core.defaultSamplerState, DepthStencilState.None, RasterizerState.CullCounterClockwise, null, Matrix.Identity, false );
 		}
 
 
-		public void begin( Material material, Matrix2D transformationMatrix )
+		public void begin( Material material, Matrix transformationMatrix )
 		{
 			begin( material.blendState, material.samplerState, material.depthStencilState, RasterizerState.CullCounterClockwise, material.effect, transformationMatrix, false );
 		}
@@ -166,7 +166,7 @@ namespace Nez
 				depthStencilState,
 				rasterizerState,
 				null,
-				Matrix2D.Identity,
+				Matrix.Identity,
 				false
 			);
 		}
@@ -180,14 +180,14 @@ namespace Nez
 				depthStencilState,
 				rasterizerState,
 				effect,
-				Matrix2D.Identity,
+				Matrix.Identity,
 				false
 			);
 		}
 
 
 		public void begin( BlendState blendState, SamplerState samplerState, DepthStencilState depthStencilState, RasterizerState rasterizerState,
-			Effect effect, Matrix2D transformationMatrix )
+			Effect effect, Matrix transformationMatrix )
 		{
 			begin(
 				blendState,
@@ -202,7 +202,7 @@ namespace Nez
 
 
 		public void begin( BlendState blendState, SamplerState samplerState, DepthStencilState depthStencilState, RasterizerState rasterizerState,
-			Effect effect, Matrix2D transformationMatrix, bool disableBatching )
+			Effect effect, Matrix transformationMatrix, bool disableBatching )
 		{
 			Assert.isFalse( _beginCalled, "Begin has been called before calling End after the last call to Begin. Begin cannot be called again until End has been successfully called." );
 			_beginCalled = true;
@@ -784,7 +784,7 @@ namespace Nez
 			_projectionMatrix.M41 = -1 - 0.5f * _projectionMatrix.M11;
 			_projectionMatrix.M42 = 1 - 0.5f * _projectionMatrix.M22;
 
-			Matrix2D.Multiply(
+			Matrix.Multiply(
 				ref _transformMatrix,
 				ref _projectionMatrix,
 				out _matrixTransformMatrix

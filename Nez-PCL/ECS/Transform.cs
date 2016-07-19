@@ -485,7 +485,7 @@ namespace Nez
 				{
 					if( _localPositionDirty )
 					{
-						Matrix2D.CreateTranslation( _localPosition.X, _localPosition.Y, 0, out _translationMatrix );
+						Matrix2D.CreateTranslation( _localPosition.X, _localPosition.Y, out _translationMatrix );
 						_localPositionDirty = false;
 					}
 
@@ -497,7 +497,7 @@ namespace Nez
 
 					if( _localScaleDirty )
 					{
-						Matrix2D.CreateScale( _localScale.X, _localScale.Y, 1f, out _scaleMatrix );
+						Matrix2D.CreateScale( _localScale.X, _localScale.Y, out _scaleMatrix );
 						_localScaleDirty = false;
 					}
 
