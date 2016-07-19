@@ -383,14 +383,14 @@ namespace Nez
 		{
 			var det = 1 / matrix.Determinant();
 
-			result.M11 = 0;
-			result.M12 = 0;
+			result.M11 = matrix.M22 * matrix.M33 * det;
+			result.M12 = -matrix.M33 * matrix.M12 * det;
 
-			result.M21 = 0;
-			result.M22 = 0;
+			result.M21 = -matrix.M33 * matrix.M21 * det;
+			result.M22 = matrix.M33 * matrix.M11 * det;
 
-			result.M31 = 0;
-			result.M32 = 0;
+			result.M31 = matrix.M31 * matrix.M21 - matrix.M31 * matrix.M22 * det;
+			result.M32 = -( matrix.M32 * matrix.M11 - matrix.M31 * matrix.M12 ) * det;
 			result.M33 = 1;
 		}
 
@@ -952,7 +952,7 @@ namespace Nez
 				mat.M11, mat.M12, 0, 0,
 				mat.M21, mat.M22, 0, 0,
 				0, 0, mat.M33, 0,
-				mat.M31, mat.M32, 1, 1
+				mat.M31, mat.M32, 0, 1
 			);
 		}
 
