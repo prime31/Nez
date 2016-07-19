@@ -85,9 +85,9 @@ namespace Nez
 				_transformMatrix = Matrix2D.CreateTranslation( -_origin.X, -_origin.Y, 0f ); // origin
 				Matrix2D.CreateRotationZ( entity.transform.rotation, out tempMat ); // rotation
 				Matrix2D.Multiply( ref _transformMatrix, ref tempMat, out _transformMatrix );
-				Matrix2D.CreateTranslation( _origin.X, _origin.Y, 0f, out tempMat ); // translate back from our origin
+				Matrix2D.CreateTranslation( _origin.X, _origin.Y, out tempMat ); // translate back from our origin
 				Matrix2D.Multiply( ref _transformMatrix, ref tempMat, out _transformMatrix );
-				Matrix2D.CreateTranslation( worldPosX, worldPosY, 0f, out tempMat ); // translate to our world space position
+				Matrix2D.CreateTranslation( worldPosX, worldPosY, out tempMat ); // translate to our world space position
 				Matrix2D.Multiply( ref _transformMatrix, ref tempMat, out _transformMatrix );
 
 				return _transformMatrix;
