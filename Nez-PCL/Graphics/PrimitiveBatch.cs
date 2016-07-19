@@ -64,8 +64,8 @@ namespace Nez
 
 
 		/// <summary>
-		/// Begin is called to tell the PrimitiveBatch what kind of primitives will be
-		/// drawn, and to prepare the graphics card to render those primitives.
+		/// Begin is called to tell the PrimitiveBatch what kind of primitives will be drawn, and to prepare the graphics card to render those primitives.
+		/// Use camera.projectionMatrix and camera.transformMatrix if the batch should be in camera space.
 		/// </summary>
 		/// <param name="projection">The projection.</param>
 		/// <param name="view">The view.</param>
