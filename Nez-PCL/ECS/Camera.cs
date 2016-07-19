@@ -135,7 +135,7 @@ namespace Nez
 		/// used to convert from world coordinates to screen
 		/// </summary>
 		/// <value>The transform matrix.</value>
-		public Matrix2D transformMatrix
+		public Matrix transformMatrix
 		{
 			get
 			{
@@ -149,7 +149,7 @@ namespace Nez
 		/// used to convert from screen coordinates to world
 		/// </summary>
 		/// <value>The inverse transform matrix.</value>
-		public Matrix2D inverseTransformMatrix
+		public Matrix inverseTransformMatrix
 		{
 			get
 			{
@@ -163,13 +163,13 @@ namespace Nez
 		/// the Cameras projection matrix
 		/// </summary>
 		/// <value>The projection matrix.</value>
-		public Matrix2D projectionMatrix
+		public Matrix projectionMatrix
 		{
 			get
 			{
 				if( _isProjectionMatrixDirty )
 				{
-					Matrix2D.CreateOrthographicOffCenter( 0, Core.graphicsDevice.Viewport.Width, Core.graphicsDevice.Viewport.Height, 0, 0, -1, out _projectionMatrix );
+					Matrix.CreateOrthographicOffCenter( 0, Core.graphicsDevice.Viewport.Width, Core.graphicsDevice.Viewport.Height, 0, 0, -1, out _projectionMatrix );
 					_isProjectionMatrixDirty = false;
 				}
 				return _projectionMatrix;
@@ -180,7 +180,7 @@ namespace Nez
 		/// gets the view-projection matrix which is the transformMatrix * the projection matrix
 		/// </summary>
 		/// <value>The view projection matrix.</value>
-		public Matrix2D viewProjectionMatrix { get { return transformMatrix * projectionMatrix; } }
+		public Matrix viewProjectionMatrix { get { return transformMatrix * projectionMatrix; } }
 
 		internal Vector2 origin
 		{
@@ -200,9 +200,9 @@ namespace Nez
 		float _minimumZoom = 0.3f;
 		float _maximumZoom = 3f;
 		RectangleF _bounds;
-		Matrix2D _transformMatrix = Matrix2D.Identity;
-		Matrix2D _inverseTransformMatrix = Matrix2D.Identity;
-		Matrix2D _projectionMatrix;
+		Matrix _transformMatrix = Matrix.Identity;
+		Matrix _inverseTransformMatrix = Matrix.Identity;
+		Matrix _projectionMatrix;
 		Vector2 _origin;
 
 		bool _areMatrixesDirty = true;
@@ -239,27 +239,26 @@ namespace Nez
 			if( !_areMatrixesDirty )
 				return;
 
-			Matrix2D tempMat;
-
-			_transformMatrix = Matrix2D.CreateTranslation( -entity.transform.position.X, -entity.transform.position.Y, 0f ); // position
+			Matrix tempMat;
+			_transformMatrix = Matrix.CreateTranslation( -entity.transform.position.X, -entity.transform.position.Y, 0f ); // position
 
 			if( _zoom != 1f )
 			{
-				Matrix2D.CreateScale( _zoom, _zoom, 1f, out tempMat ); // scale ->
-				Matrix2D.Multiply( ref _transformMatrix, ref tempMat, out _transformMatrix );
+				Matrix.CreateScale( _zoom, _zoom, 1f, out tempMat ); // scale ->
+				Matrix.Multiply( ref _transformMatrix, ref tempMat, out _transformMatrix );
 			}
 
 			if( entity.transform.rotation != 0f )
 			{
-				Matrix2D.CreateRotationZ( entity.transform.rotation, out tempMat ); // rotation
-				Matrix2D.Multiply( ref _transformMatrix, ref tempMat, out _transformMatrix );
+				Matrix.CreateRotationZ( entity.transform.rotation, out tempMat ); // rotation
+				Matrix.Multiply( ref _transformMatrix, ref tempMat, out _transformMatrix );
 			}
 
-			Matrix2D.CreateTranslation( (int)_origin.X, (int)_origin.Y, 0f, out tempMat ); // translate -origin
-			Matrix2D.Multiply( ref _transformMatrix, ref tempMat, out _transformMatrix );
+			Matrix.CreateTranslation( (int)_origin.X, (int)_origin.Y, 0f, out tempMat ); // translate -origin
+			Matrix.Multiply( ref _transformMatrix, ref tempMat, out _transformMatrix );
 
 			// calculate our inverse as well
-			Matrix2D.Invert( ref _transformMatrix, out _inverseTransformMatrix );
+			Matrix.Invert( ref _transformMatrix, out _inverseTransformMatrix );
 
 			// whenever the matrix changes the bounds are then invalid
 			_areBoundsDirty = true;
@@ -408,7 +407,7 @@ namespace Nez
 		public Vector2 worldToScreenPoint( Vector2 worldPosition )
 		{
 			updateMatrixes();
-			Vector2Ext.Transform( ref worldPosition, ref _transformMatrix, out worldPosition );
+			Vector2.Transform( ref worldPosition, ref _transformMatrix, out worldPosition );
 			return worldPosition;
 		}
 
@@ -421,13 +420,13 @@ namespace Nez
 		public Vector2 screenToWorldPoint( Vector2 screenPosition )
 		{
 			updateMatrixes();
-			Vector2Ext.Transform( ref screenPosition, ref _inverseTransformMatrix, out screenPosition );
+			Vector2.Transform( ref screenPosition, ref _inverseTransformMatrix, out screenPosition );
 			return screenPosition;
 		}
 
 
 		/// <summary>
-		/// converts a oint from screen coordinates to world
+		/// converts a point from screen coordinates to world
 		/// </summary>
 		/// <returns>The to world point.</returns>
 		/// <param name="screenPosition">Screen position.</param>
