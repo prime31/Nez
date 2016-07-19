@@ -135,7 +135,7 @@ namespace Nez
 		/// used to convert from world coordinates to screen
 		/// </summary>
 		/// <value>The transform matrix.</value>
-		public Matrix transformMatrix
+		public Matrix2D transformMatrix
 		{
 			get
 			{
@@ -149,7 +149,7 @@ namespace Nez
 		/// used to convert from screen coordinates to world
 		/// </summary>
 		/// <value>The inverse transform matrix.</value>
-		public Matrix inverseTransformMatrix
+		public Matrix2D inverseTransformMatrix
 		{
 			get
 			{
@@ -200,8 +200,8 @@ namespace Nez
 		float _minimumZoom = 0.3f;
 		float _maximumZoom = 3f;
 		RectangleF _bounds;
-		Matrix _transformMatrix = Matrix.Identity;
-		Matrix _inverseTransformMatrix = Matrix.Identity;
+		Matrix2D _transformMatrix = Matrix2D.Identity;
+		Matrix2D _inverseTransformMatrix = Matrix2D.Identity;
 		Matrix _projectionMatrix;
 		Vector2 _origin;
 
@@ -239,26 +239,26 @@ namespace Nez
 			if( !_areMatrixesDirty )
 				return;
 
-			Matrix tempMat;
-			_transformMatrix = Matrix.CreateTranslation( -entity.transform.position.X, -entity.transform.position.Y, 0f ); // position
+			Matrix2D tempMat;
+			_transformMatrix = Matrix2D.CreateTranslation( -entity.transform.position.X, -entity.transform.position.Y, 0f ); // position
 
 			if( _zoom != 1f )
 			{
-				Matrix.CreateScale( _zoom, _zoom, 1f, out tempMat ); // scale ->
-				Matrix.Multiply( ref _transformMatrix, ref tempMat, out _transformMatrix );
+				Matrix2D.CreateScale( _zoom, _zoom, out tempMat ); // scale ->
+				Matrix2D.Multiply( ref _transformMatrix, ref tempMat, out _transformMatrix );
 			}
 
 			if( entity.transform.rotation != 0f )
 			{
-				Matrix.CreateRotationZ( entity.transform.rotation, out tempMat ); // rotation
-				Matrix.Multiply( ref _transformMatrix, ref tempMat, out _transformMatrix );
+				Matrix2D.CreateRotationZ( entity.transform.rotation, out tempMat ); // rotation
+				Matrix2D.Multiply( ref _transformMatrix, ref tempMat, out _transformMatrix );
 			}
 
-			Matrix.CreateTranslation( (int)_origin.X, (int)_origin.Y, 0f, out tempMat ); // translate -origin
-			Matrix.Multiply( ref _transformMatrix, ref tempMat, out _transformMatrix );
+			Matrix2D.CreateTranslation( (int)_origin.X, (int)_origin.Y, out tempMat ); // translate -origin
+			Matrix2D.Multiply( ref _transformMatrix, ref tempMat, out _transformMatrix );
 
 			// calculate our inverse as well
-			Matrix.Invert( ref _transformMatrix, out _inverseTransformMatrix );
+			Matrix2D.Invert( ref _transformMatrix, out _inverseTransformMatrix );
 
 			// whenever the matrix changes the bounds are then invalid
 			_areBoundsDirty = true;
@@ -407,7 +407,7 @@ namespace Nez
 		public Vector2 worldToScreenPoint( Vector2 worldPosition )
 		{
 			updateMatrixes();
-			Vector2.Transform( ref worldPosition, ref _transformMatrix, out worldPosition );
+			Vector2Ext.Transform( ref worldPosition, ref _transformMatrix, out worldPosition );
 			return worldPosition;
 		}
 
@@ -420,7 +420,7 @@ namespace Nez
 		public Vector2 screenToWorldPoint( Vector2 screenPosition )
 		{
 			updateMatrixes();
-			Vector2.Transform( ref screenPosition, ref _inverseTransformMatrix, out screenPosition );
+			Vector2Ext.Transform( ref screenPosition, ref _inverseTransformMatrix, out screenPosition );
 			return screenPosition;
 		}
 

@@ -40,7 +40,7 @@ namespace Nez
 		/// <summary>
 		/// Position stored in this matrix.
 		/// </summary>
-		public Vector2 Translation
+		public Vector2 translation
 		{
 			get
 			{
@@ -85,7 +85,7 @@ namespace Nez
 		/// <summary>
 		/// Scale stored in this matrix.
 		/// </summary>
-		public Vector2 Scale
+		public Vector2 scale
 		{
 			get
 			{
@@ -94,22 +94,6 @@ namespace Nez
 			set
 			{
 				this.M11 = value.X;
-				this.M22 = value.Y;
-			}
-		}
-
-		/// <summary>
-		/// The upper vector formed from the second row M21, M22, M23 elements.
-		/// </summary>
-		public Vector2 Up
-		{
-			get
-			{
-				return new Vector2( this.M21, this.M22 );
-			}
-			set
-			{
-				this.M21 = value.X;
 				this.M22 = value.Y;
 			}
 		}
@@ -389,7 +373,7 @@ namespace Nez
 			result.M21 = -matrix.M33 * matrix.M21 * det;
 			result.M22 = matrix.M33 * matrix.M11 * det;
 
-			result.M31 = matrix.M31 * matrix.M21 - matrix.M31 * matrix.M22 * det;
+			result.M31 = ( matrix.M32 * matrix.M21 - matrix.M31 * matrix.M22 ) * det;
 			result.M32 = -( matrix.M32 * matrix.M11 - matrix.M31 * matrix.M12 ) * det;
 			result.M33 = 1;
 		}
@@ -964,7 +948,7 @@ namespace Nez
 				if( this == Identity )
 					return "Identity";
 
-				return string.Format( "T:({0:0.##},{1:0.##}), R:{2:0.##}, S:({3:0.##},{4:0.##})", Translation.X, Translation.Y, rotationDegrees, Scale.X, Scale.Y );
+				return string.Format( "T:({0:0.##},{1:0.##}), R:{2:0.##}, S:({3:0.##},{4:0.##})", translation.X, translation.Y, rotationDegrees, scale.X, scale.Y );
 			}
 		}
 
