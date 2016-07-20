@@ -1,4 +1,4 @@
-## Nez
+![Nez](FAQs/images/nez-logo-black.png)
 Nez aims to be a lightweight 2D framework that sits on top of MonoGame/FNA. It provides a solid base for you to build a 2D game on. Some of the many features it includes are:
 
 - Scene/Entity/Component system with Component render layer tracking and optional entity systems (an implementation that operates on a group of entities that share a specific set of components)
