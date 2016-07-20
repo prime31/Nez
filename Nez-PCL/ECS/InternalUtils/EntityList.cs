@@ -296,24 +296,12 @@ namespace Nez
 		#endregion
 
 
-		public int Count
-		{
-			get
-			{
-				return _entities.Count;
-			}
-		}
+		public int Count { get { return _entities.Count; } }
 
 
 		#region IEnumerable and array access
 
-		public Entity this[int index]
-		{
-			get
-			{
-				return _entities[index];
-			}
-		}
+		public Entity this[int index] { get { return _entities[index]; } }
 
 
 		public IEnumerator<Entity> GetEnumerator()

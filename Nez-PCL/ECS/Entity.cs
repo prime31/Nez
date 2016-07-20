@@ -227,8 +227,6 @@ namespace Nez
 
 			for( var i = 0; i < transform.childCount; i++ )
 				transform.getChild( i ).entity.attachToScene( newScene );
-
-			Debug.log( "attaching {0}. total children: {1}", name, transform.childCount );
 		}
 
 

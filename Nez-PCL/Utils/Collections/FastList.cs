@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 
 
@@ -32,6 +33,13 @@ namespace Nez
 
 		public FastList() : this( 10 )
 		{}
+
+
+		/// <summary>
+		/// provided for ease of access though it is recommended to just access the buffer directly.
+		/// </summary>
+		/// <param name="index">Index.</param>
+		public T this[int index] { get { return buffer[index]; } }
 
 
 		/// <summary>
@@ -86,6 +94,24 @@ namespace Nez
 				for( var b = index; b < length; ++b )
 					buffer[b] = buffer[b + 1];
 			}
+		}
+
+
+		/// <summary>
+		/// sorts all items in the buffer up to length
+		/// </summary>
+		public void sort()
+		{
+			Array.Sort( buffer, 0, length );
+		}
+
+
+		/// <summary>
+		/// sorts all items in the buffer up to length
+		/// </summary>
+		public void sort( IComparer comparer )
+		{
+			Array.Sort( buffer, 0, length, comparer );
 		}
 
 	}
