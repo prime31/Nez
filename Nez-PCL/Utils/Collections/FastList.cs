@@ -98,6 +98,21 @@ namespace Nez
 
 
 		/// <summary>
+		/// checks to see if item is in the FastList
+		/// </summary>
+		/// <param name="item">Item.</param>
+		public bool contains( T item )
+		{
+			for( var i = 0; i < length; i++ )
+			{
+				if( buffer[i].Equals( item ) )
+					return true;
+			}
+			return false;
+		}
+
+
+		/// <summary>
 		/// sorts all items in the buffer up to length
 		/// </summary>
 		public void sort()
@@ -110,6 +125,15 @@ namespace Nez
 		/// sorts all items in the buffer up to length
 		/// </summary>
 		public void sort( IComparer comparer )
+		{
+			Array.Sort( buffer, 0, length, comparer );
+		}
+
+
+		/// <summary>
+		/// sorts all items in the buffer up to length
+		/// </summary>
+		public void sort( IComparer<T> comparer )
 		{
 			Array.Sort( buffer, 0, length, comparer );
 		}

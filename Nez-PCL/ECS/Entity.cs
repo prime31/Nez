@@ -262,7 +262,7 @@ namespace Nez
 			transform.rotation = entity.transform.rotation;
 
 			// clone Components
-			for( var i = 0; i < entity.components.Count; i++ )
+			for( var i = 0; i < entity.components.count; i++ )
 				addComponent( entity.components[i].clone() );
 			for( var i = 0; i < entity.components._componentsToAdd.Count; i++ )
 				addComponent( entity.components._componentsToAdd[i].clone() );
@@ -463,7 +463,7 @@ namespace Nez
 		/// </summary>
 		public void removeAllComponents()
 		{
-			for( var i = 0; i < components.Count; i++ )
+			for( var i = 0; i < components.count; i++ )
 				removeComponent( components[i] );
 		}
 

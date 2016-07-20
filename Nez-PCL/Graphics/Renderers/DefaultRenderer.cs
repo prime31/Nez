@@ -16,7 +16,7 @@ namespace Nez
 			var cam = camera ?? scene.camera;
 			beginRender( cam );
 
-			for( var i = 0; i < scene.renderableComponents.Count; i++ )
+			for( var i = 0; i < scene.renderableComponents.count; i++ )
 			{
 				var renderable = scene.renderableComponents[i];
 				if( renderable.enabled && renderable.isVisibleFromCamera( cam ) )

@@ -25,7 +25,7 @@ namespace Nez
 			var cam = camera ?? scene.camera;
 			beginRender( cam );
 
-			for( var i = 0; i < scene.renderableComponents.Count; i++ )
+			for( var i = 0; i < scene.renderableComponents.count; i++ )
 			{
 				var renderable = scene.renderableComponents[i];
 				if( !excludedRenderLayers.contains( renderable.renderLayer ) && renderable.enabled && renderable.isVisibleFromCamera( cam ) )
@@ -41,7 +41,7 @@ namespace Nez
 
 		protected override void debugRender( Scene scene, Camera cam )
 		{
-			for( var i = 0; i < scene.renderableComponents.Count; i++ )
+			for( var i = 0; i < scene.renderableComponents.count; i++ )
 			{
 				var renderable = scene.renderableComponents[i];
 				if( !excludedRenderLayers.contains( renderable.renderLayer ) && renderable.enabled && renderable.isVisibleFromCamera( cam ) )

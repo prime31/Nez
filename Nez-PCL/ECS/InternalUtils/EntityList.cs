@@ -5,14 +5,14 @@ using System.Collections;
 
 namespace Nez
 {
-	public class EntityList : IEnumerable<Entity>, IEnumerable
+	public class EntityList
 	{
 		public Scene scene;
 
 		/// <summary>
 		/// list of entities added to the scene
 		/// </summary>
-		List<Entity> _entities = new List<Entity>();
+		FastList<Entity> _entities = new FastList<Entity>();
 
 		/// <summary>
 		/// The list of entities that were added this frame. Used to group the entities so we can process them simultaneously
@@ -32,16 +32,23 @@ namespace Nez
 		/// <summary>
 		/// tracks entities by tag for easy retrieval
 		/// </summary>
-		Dictionary<int,List<Entity>> _entityDict;
-		List<int> _unsortedTags;
+		Dictionary<int,List<Entity>> _entityDict = new Dictionary<int, List<Entity>>();
+		List<int> _unsortedTags = new List<int>();
 
 
 		public EntityList( Scene scene )
 		{
 			this.scene = scene;
-			_entityDict = new Dictionary<int,List<Entity>>();
-			_unsortedTags = new List<int>();
 		}
+
+
+		#region array access
+
+		public int count { get { return _entities.length; } }
+
+		public Entity this[int index] { get { return _entities.buffer[index]; } }
+
+		#endregion
 
 
 		public void markEntityListUnsorted()
@@ -84,14 +91,14 @@ namespace Nez
 		/// </summary>
 		public void removeAllEntities()
 		{
-			for( var i = 0; i < _entities.Count; i++ )
+			for( var i = 0; i < _entities.length; i++ )
 			{
-				_entities[i]._isDestroyed = true;
-				_entities[i].onRemovedFromScene();
-				_entities[i].scene = null;
+				_entities.buffer[i]._isDestroyed = true;
+				_entities.buffer[i].onRemovedFromScene();
+				_entities.buffer[i].scene = null;
 			}
 
-			_entities.Clear();
+			_entities.clear();
 			_entitiesToAdd.Clear();
 			_entitiesToRemove.Clear();
 			_entityDict.Clear();
@@ -105,7 +112,7 @@ namespace Nez
 		/// <param name="entity">Entity.</param>
 		public bool contains( Entity entity )
 		{
-			return _entities.Contains( entity ) || _entitiesToAdd.Contains( entity );
+			return _entities.contains( entity ) || _entitiesToAdd.Contains( entity );
 		}
 
 
@@ -138,7 +145,7 @@ namespace Nez
 					removeFromTagList( entity );
 
 					// handle the regular entity list
-					_entities.Remove( entity );
+					_entities.remove( entity );
 					entity.onRemovedFromScene();
 					entity.scene = null;
 
@@ -155,7 +162,7 @@ namespace Nez
 				{
 					var entity = _entitiesToAdd[i];
 
-					_entities.Add( entity );
+					_entities.add( entity );
 					entity.scene = scene;
 
 					// handle the tagList
@@ -175,19 +182,18 @@ namespace Nez
 
 			if( _isEntityListUnsorted )
 			{
-				_entities.Sort();
+				_entities.sort();
 				_isEntityListUnsorted = false;
 			}
 
 			// sort our tagList if needed
 			if( _unsortedTags.Count > 0 )
 			{
-				for( var i = 0; i < _unsortedTags.Count; i++ )
+				for( int i = 0, count = _unsortedTags.Count; i < count; i++ )
 				{
 					var tag = _unsortedTags[i];
 					_entityDict[tag].Sort();
 				}
-
 				_unsortedTags.Clear();
 			}
 		}
@@ -195,12 +201,17 @@ namespace Nez
 
 		#region Entity search
 
+		/// <summary>
+		/// returns the first Entity found with a name of name. If none are found returns null.
+		/// </summary>
+		/// <returns>The entity.</returns>
+		/// <param name="name">Name.</param>
 		public Entity findEntity( string name )
 		{
-			for( var i = 0; i < _entities.Count; i++ )
+			for( var i = 0; i < _entities.length; i++ )
 			{
-				if( _entities[i].name == name )
-					return _entities[i];
+				if( _entities.buffer[i].name == name )
+					return _entities.buffer[i];
 			}
 
 			// in case an entity is added and searched for in the same frame we check the toAdd list
@@ -214,6 +225,11 @@ namespace Nez
 		}
 
 
+		/// <summary>
+		/// returns a list of all entities with tag. If no entities have the tag an empty list is returned.
+		/// </summary>
+		/// <returns>The with tag.</returns>
+		/// <param name="tag">Tag.</param>
 		public List<Entity> entitiesWithTag( int tag )
 		{
 			List<Entity> list = null;
@@ -227,13 +243,18 @@ namespace Nez
 		}
 
 
+		/// <summary>
+		/// returns a List of all Entities of type T. The returned List can be put back in the pool via ListPool.free.
+		/// </summary>
+		/// <returns>The of type.</returns>
+		/// <typeparam name="T">The 1st type parameter.</typeparam>
 		public List<Entity> entitiesOfType<T>() where T : Entity
 		{
-			var list = new List<Entity>();
-			for( var i = 0; i < _entities.Count; i++ )
+			var list = ListPool<Entity>.obtain();
+			for( var i = 0; i < _entities.length; i++ )
 			{
-				if( _entities[i] is T )
-					list.Add( _entities[i] );
+				if( _entities.buffer[i] is T )
+					list.Add( _entities.buffer[i] );
 			}
 
 			// in case an entity is added and searched for in the same frame we check the toAdd list
@@ -247,13 +268,18 @@ namespace Nez
 		}
 
 
+		/// <summary>
+		/// returns the first Component found in the Scene of type T
+		/// </summary>
+		/// <returns>The object of type.</returns>
+		/// <typeparam name="T">The 1st type parameter.</typeparam>
 		public T findObjectOfType<T>() where T : Component
 		{
-			for( var i = 0; i < _entities.Count; i++ )
+			for( var i = 0; i < _entities.length; i++ )
 			{
-				if( _entities[i].enabled )
+				if( _entities.buffer[i].enabled )
 				{
-					var comp = _entities[i].getComponent<T>();
+					var comp = _entities.buffer[i].getComponent<T>();
 					if( comp != null )
 						return comp;
 				}
@@ -274,13 +300,18 @@ namespace Nez
 		}
 
 
+		/// <summary>
+		/// returns all Components found in the Scene of type T. The returned List can be put back in the pool via ListPool.free.
+		/// </summary>
+		/// <returns>The objects of type.</returns>
+		/// <typeparam name="T">The 1st type parameter.</typeparam>
 		public List<T> findObjectsOfType<T>() where T : Component
 		{
-			var comps = new List<T>();
-			for( var i = 0; i < _entities.Count; i++ )
+			var comps = ListPool<T>.obtain();
+			for( var i = 0; i < _entities.length; i++ )
 			{
-				if( _entities[i].enabled )
-					_entities[i].getComponents<T>( comps );
+				if( _entities.buffer[i].enabled )
+					_entities.buffer[i].getComponents<T>( comps );
 			}
 
 			// in case an entity is added and searched for in the same frame we check the toAdd list
@@ -295,28 +326,6 @@ namespace Nez
 
 		#endregion
 
-
-		public int Count { get { return _entities.Count; } }
-
-
-		#region IEnumerable and array access
-
-		public Entity this[int index] { get { return _entities[index]; } }
-
-
-		public IEnumerator<Entity> GetEnumerator()
-		{
-			return _entities.GetEnumerator();
-		}
-
-
-		System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
-		{
-			return _entities.GetEnumerator();
-		}
-
-		#endregion
-	
 	}
 }
 

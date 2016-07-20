@@ -105,7 +105,6 @@
     <Compile Include="ECS\Components\Text\Text.cs" />
     <Compile Include="ECS\InternalUtils\ComponentList.cs" />
     <Compile Include="ECS\InternalUtils\EntityList.cs" />
-    <Compile Include="ECS\InternalUtils\EntityTagLists.cs" />
     <Compile Include="ECS\InternalUtils\RenderableComponentList.cs" />
     <Compile Include="Graphics\Graphics.cs" />
     <Compile Include="Graphics\PrimitiveBatch.cs" />
