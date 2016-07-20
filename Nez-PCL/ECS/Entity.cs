@@ -192,7 +192,7 @@ namespace Nez
 			transform.parent = null;
 
 			// destroy any children we have
-			for( var i = 0; i < transform.childCount; i++ )
+			for( var i = transform.childCount - 1; i >= 0; i-- )
 			{
 				var child = transform.getChild( i );
 				child.entity.destroy();
