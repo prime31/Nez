@@ -91,6 +91,15 @@ namespace Nez
 		/// </summary>
 		public void removeAllEntities()
 		{
+			// clear lists we dont need anymore
+			_unsortedTags.Clear();
+			_entitiesToAdd.Clear();
+			_isEntityListUnsorted = false;
+
+			// why do we update lists here? Mainly to deal with Entities that were detached before a Scene switch. They will still
+			// be in the _entitiesToRemove list which will get handled by updateLists.
+			updateLists();
+
 			for( var i = 0; i < _entities.length; i++ )
 			{
 				_entities.buffer[i]._isDestroyed = true;
@@ -99,10 +108,7 @@ namespace Nez
 			}
 
 			_entities.clear();
-			_entitiesToAdd.Clear();
-			_entitiesToRemove.Clear();
 			_entityDict.Clear();
-			_unsortedTags.Clear();
 		}
 
 
