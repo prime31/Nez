@@ -383,17 +383,14 @@ namespace Nez.Tiled
 			var primaryAxis = isHorizontal ? Axis.X : Axis.Y;
 			var oppositeAxis = primaryAxis == Axis.X ? Axis.Y : Axis.X;
 
-			// if we are going up or left we subtract 1 from our opposite edge so that it doesnt get the column/row of tiles when we are against them
 			var oppositeDirection = direction.oppositeEdge();
-			var minSidePad = direction.isMin() ? -1 : 0;
-			var firstPrimary = worldToTilePosition( bounds.getSide( oppositeDirection ) + minSidePad, primaryAxis );
+			var firstPrimary = worldToTilePosition( bounds.getSide( oppositeDirection ), primaryAxis );
 			var lastPrimary = worldToTilePosition( bounds.getSide( direction ), primaryAxis );
 			var primaryIncr = direction.isMax() ? 1 : -1;
 
 			var min = worldToTilePosition( isHorizontal ? bounds.Top : bounds.Left, oppositeAxis );
 			var mid = worldToTilePosition( isHorizontal ? bounds.getCenter().Y : bounds.getCenter().X, oppositeAxis );
-			// same as above here. we subtract 1 to not grab an extra column/row of tiles which will mess up collisions
-			var max = worldToTilePosition( isHorizontal ? bounds.Bottom - 1 : bounds.Right - 1, oppositeAxis );
+			var max = worldToTilePosition( isHorizontal ? bounds.Bottom : bounds.Right, oppositeAxis );
 
 			var isPositive = mid - min < max - mid;
 			var secondaryIncr = isPositive ? 1 : -1;
