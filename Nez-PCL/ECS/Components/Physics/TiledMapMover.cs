@@ -36,14 +36,14 @@ namespace Nez.Tiled
 
 			public void reset()
 			{
-				right = left = above = below = becameGroundedThisFrame = false;
+				right = left = becameGroundedThisFrame = above = below = false;
 				slopeAngle = 0f;
 			}
 
 
 			public override string ToString()
 			{
-				return string.Format( "[CharacterCollisionState2D] r: {0}, l: {1}, a: {2}, b: {3}, angle: {4}, wasGroundedLastFrame: {5}, becameGroundedThisFrame: {6}",
+				return string.Format( "[CollisionState] r: {0}, l: {1}, a: {2}, b: {3}, angle: {4}, wasGroundedLastFrame: {5}, becameGroundedThisFrame: {6}",
 					right, left, above, below, slopeAngle, wasGroundedLastFrame, becameGroundedThisFrame );
 			}
 
@@ -114,12 +114,6 @@ namespace Nez.Tiled
 		/// <param name="deltaTime">Delta time.</param>
 		public void move( Vector2 motion, float deltaTime )
 		{
-			// save off our current grounded state which we will use for wasGroundedLastFrame and becameGroundedThisFrame
-			collisionState.wasGroundedLastFrame = collisionState.below;
-
-			// reset our collisions state
-			collisionState.reset();
-
 			// deal with subpixel movement, storing off any non-integar remainder for the next frame
 			_movementRemainderX += motion.X;
 			var motionX = Mathf.truncateToInt( _movementRemainderX );
@@ -130,6 +124,12 @@ namespace Nez.Tiled
 			var motionY = Mathf.truncateToInt( _movementRemainderY );
 			_movementRemainderY -= motionY;
 			motion.Y = motionY;
+
+			// save off our current grounded state which we will use for wasGroundedLastFrame and becameGroundedThisFrame
+			collisionState.wasGroundedLastFrame = collisionState.below;
+
+			// reset our collisions state
+			collisionState.reset();
 
 			// store off the bounds so we can move it around without affecting the actual Transform position
 			var colliderBounds = _collider.bounds;
@@ -156,10 +156,7 @@ namespace Nez.Tiled
 
 			// next, check movement in the vertical dir
 			{
-				// HACK: when motionY is 0 we shouldnt check anything and we should retain collision state
-				if( motionY == 0 )
-					motionY = 1;
-				var direction = motionY > 0 ? Edge.Bottom : Edge.Top;
+				var direction = motionY >= 0 ? Edge.Bottom : Edge.Top;
 				var sweptBounds = collisionRectForSide( direction, motionY );
 				sweptBounds.X += (int)motion.X;
 
@@ -178,7 +175,7 @@ namespace Nez.Tiled
 					_lastGroundTile = null;
 				}
 
-				// when moving down we also check for collisions in the opposite direction
+				// when moving down we also check for collisions in the opposite direction. this needs to be done
 				if( direction == Edge.Bottom )
 				{
 					direction = direction.oppositeEdge();
