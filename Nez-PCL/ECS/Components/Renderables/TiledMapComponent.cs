@@ -182,13 +182,12 @@ namespace Nez
 
 			// fetch the collision layer and its rects for collision
 			var collisionRects = collisionLayer.getCollisionRectangles();
-			var renderPosition = entity.transform.position + _localOffset;
 
 			// create colliders for the rects we received
 			_colliders = new Collider[collisionRects.Count];
 			for( var i = 0; i < collisionRects.Count; i++ )
 			{
-				var collider = new BoxCollider( collisionRects[i].X + renderPosition.X, collisionRects[i].Y + renderPosition.Y, collisionRects[i].Width, collisionRects[i].Height );
+				var collider = new BoxCollider( collisionRects[i].X + _localOffset.X, collisionRects[i].Y + _localOffset.Y, collisionRects[i].Width, collisionRects[i].Height );
 				collider.physicsLayer = physicsLayer;
 				collider.entity = entity;
 				_colliders[i] = collider;
