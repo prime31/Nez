@@ -306,6 +306,8 @@ namespace Nez
 
 	public class NezSpriteFont : IFont
 	{
+		public float lineSpacing { get { return _font.LineSpacing; } }
+
 		SpriteFont _font;
 
 		/// <summary>
