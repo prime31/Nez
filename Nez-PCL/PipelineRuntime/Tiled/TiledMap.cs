@@ -26,12 +26,12 @@ namespace Nez.Tiled
 
 		public int widthInPixels
 		{
-			get { return width * tileWidth - width; }       
+			get { return width * tileWidth; }
 		}
 
 		public int heightInPixels
 		{
-			get { return height * tileHeight - height; }
+			get { return height * tileHeight; }
 		}
 
 		internal int largestTileWidth;
