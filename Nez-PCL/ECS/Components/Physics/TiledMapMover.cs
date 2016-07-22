@@ -36,14 +36,14 @@ namespace Nez.Tiled
 
 			public void reset()
 			{
-				right = left = above = below = becameGroundedThisFrame = false;
+				right = left = becameGroundedThisFrame = above = below = false;
 				slopeAngle = 0f;
 			}
 
 
 			public override string ToString()
 			{
-				return string.Format( "[CharacterCollisionState2D] r: {0}, l: {1}, a: {2}, b: {3}, angle: {4}, wasGroundedLastFrame: {5}, becameGroundedThisFrame: {6}",
+				return string.Format( "[CollisionState] r: {0}, l: {1}, a: {2}, b: {3}, angle: {4}, wasGroundedLastFrame: {5}, becameGroundedThisFrame: {6}",
 					right, left, above, below, slopeAngle, wasGroundedLastFrame, becameGroundedThisFrame );
 			}
 
@@ -114,12 +114,6 @@ namespace Nez.Tiled
 		/// <param name="deltaTime">Delta time.</param>
 		public void move( Vector2 motion, float deltaTime )
 		{
-			// save off our current grounded state which we will use for wasGroundedLastFrame and becameGroundedThisFrame
-			collisionState.wasGroundedLastFrame = collisionState.below;
-
-			// reset our collisions state
-			collisionState.reset();
-
 			// deal with subpixel movement, storing off any non-integar remainder for the next frame
 			_movementRemainderX += motion.X;
 			var motionX = Mathf.truncateToInt( _movementRemainderX );
@@ -130,6 +124,12 @@ namespace Nez.Tiled
 			var motionY = Mathf.truncateToInt( _movementRemainderY );
 			_movementRemainderY -= motionY;
 			motion.Y = motionY;
+
+			// save off our current grounded state which we will use for wasGroundedLastFrame and becameGroundedThisFrame
+			collisionState.wasGroundedLastFrame = collisionState.below;
+
+			// reset our collisions state
+			collisionState.reset();
 
 			// store off the bounds so we can move it around without affecting the actual Transform position
 			var colliderBounds = _collider.bounds;
@@ -156,10 +156,7 @@ namespace Nez.Tiled
 
 			// next, check movement in the vertical dir
 			{
-				// HACK: when motionY is 0 we shouldnt check anything and we should retain collision state
-				if( motionY == 0 )
-					motionY = 1;
-				var direction = motionY > 0 ? Edge.Bottom : Edge.Top;
+				var direction = motionY >= 0 ? Edge.Bottom : Edge.Top;
 				var sweptBounds = collisionRectForSide( direction, motionY );
 				sweptBounds.X += (int)motion.X;
 
@@ -178,7 +175,7 @@ namespace Nez.Tiled
 					_lastGroundTile = null;
 				}
 
-				// when moving down we also check for collisions in the opposite direction
+				// when moving down we also check for collisions in the opposite direction. this needs to be done
 				if( direction == Edge.Bottom )
 				{
 					direction = direction.oppositeEdge();
@@ -355,7 +352,7 @@ namespace Nez.Tiled
 				// this code ensures that we dont consider collisions on a slope while jumping up that dont intersect our collider. It isn't totally
 				// perfect but it does the job
 				var diff = Math.Abs( leadingPosition - collisionResponse );
-				if( diff > _tiledMap.tileHeight )
+				if( diff >= _tiledMap.tileHeight )
 					isColliding = false;
 
 				// if we are grounded on a slope store off the slopeAngle. Remember, edgeToTest is the opposite edge of our movement direction.
@@ -383,17 +380,14 @@ namespace Nez.Tiled
 			var primaryAxis = isHorizontal ? Axis.X : Axis.Y;
 			var oppositeAxis = primaryAxis == Axis.X ? Axis.Y : Axis.X;
 
-			// if we are going up or left we subtract 1 from our opposite edge so that it doesnt get the column/row of tiles when we are against them
 			var oppositeDirection = direction.oppositeEdge();
-			var minSidePad = direction.isMin() ? -1 : 0;
-			var firstPrimary = worldToTilePosition( bounds.getSide( oppositeDirection ) + minSidePad, primaryAxis );
+			var firstPrimary = worldToTilePosition( bounds.getSide( oppositeDirection ), primaryAxis );
 			var lastPrimary = worldToTilePosition( bounds.getSide( direction ), primaryAxis );
 			var primaryIncr = direction.isMax() ? 1 : -1;
 
 			var min = worldToTilePosition( isHorizontal ? bounds.Top : bounds.Left, oppositeAxis );
 			var mid = worldToTilePosition( isHorizontal ? bounds.getCenter().Y : bounds.getCenter().X, oppositeAxis );
-			// same as above here. we subtract 1 to not grab an extra column/row of tiles which will mess up collisions
-			var max = worldToTilePosition( isHorizontal ? bounds.Bottom - 1 : bounds.Right - 1, oppositeAxis );
+			var max = worldToTilePosition( isHorizontal ? bounds.Bottom : bounds.Right, oppositeAxis );
 
 			var isPositive = mid - min < max - mid;
 			var secondaryIncr = isPositive ? 1 : -1;

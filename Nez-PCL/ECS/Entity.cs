@@ -192,7 +192,7 @@ namespace Nez
 			transform.parent = null;
 
 			// destroy any children we have
-			for( var i = 0; i < transform.childCount; i++ )
+			for( var i = transform.childCount - 1; i >= 0; i-- )
 			{
 				var child = transform.getChild( i );
 				child.entity.destroy();
@@ -227,8 +227,6 @@ namespace Nez
 
 			for( var i = 0; i < transform.childCount; i++ )
 				transform.getChild( i ).entity.attachToScene( newScene );
-
-			Debug.log( "attaching {0}. total children: {1}", name, transform.childCount );
 		}
 
 
@@ -264,7 +262,7 @@ namespace Nez
 			transform.rotation = entity.transform.rotation;
 
 			// clone Components
-			for( var i = 0; i < entity.components.Count; i++ )
+			for( var i = 0; i < entity.components.count; i++ )
 				addComponent( entity.components[i].clone() );
 			for( var i = 0; i < entity.components._componentsToAdd.Count; i++ )
 				addComponent( entity.components._componentsToAdd[i].clone() );
@@ -465,7 +463,7 @@ namespace Nez
 		/// </summary>
 		public void removeAllComponents()
 		{
-			for( var i = 0; i < components.Count; i++ )
+			for( var i = 0; i < components.count; i++ )
 				removeComponent( components[i] );
 		}
 

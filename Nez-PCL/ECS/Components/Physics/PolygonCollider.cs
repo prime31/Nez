@@ -17,7 +17,7 @@ namespace Nez
 			// first and last point must not be the same. we want an open polygon
 			var isPolygonClosed = points[0] == points[points.Length - 1];
 
-			// create the array with an extra element if we need to close the poly
+			// create the array with one less element if the poly is closed (has a duplicate vert)
 			var tempPoints = new Vector2[ isPolygonClosed ? points.Length - 1 : points.Length];
 
 			// copy our points over

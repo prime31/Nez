@@ -39,6 +39,25 @@ namespace Nez.PhysicsShapes
 		}
 
 
+		/// <summary>
+		/// finds the center of the Polygon. Note that this will be accurate for regular polygons. Irregular polygons have no center.
+		/// </summary>
+		/// <returns>The polygon center.</returns>
+		/// <param name="points">Points.</param>
+		public static Vector2 findPolygonCenter( Vector2[] points )
+		{
+			float x = 0, y = 0;
+
+			for( var i = 0; i < points.Length; i++ )
+			{
+				x += points[i].X;
+				y += points[i].Y;
+			}
+
+			return new Vector2( x / points.Length, y / points.Length );
+		}
+
+
 		internal override void recalculateBounds( Collider collider )
 		{
 			position = collider.absolutePosition;

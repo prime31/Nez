@@ -263,20 +263,20 @@ namespace Nez.UI
 		/// Returns the transform for this group's coordinate system
 		/// </summary>
 		/// <returns>The transform.</returns>
-		protected Matrix computeTransform()
+		protected Matrix2D computeTransform()
 		{
-			var mat = Matrix.Identity;
+			var mat = Matrix2D.Identity;
 
 			if( originX != 0 || originY != 0 )
-				mat = Matrix.Multiply( mat, Matrix.CreateTranslation( -originX, -originY, 0 ) );
+				mat = Matrix2D.Multiply( mat, Matrix2D.CreateTranslation( -originX, -originY, 0 ) );
 			
 			if( rotation != 0 )
-				mat = Matrix.Multiply( mat, Matrix.CreateRotationZ( MathHelper.ToRadians( rotation ) ) );
+				mat = Matrix2D.Multiply( mat, Matrix2D.CreateRotationZ( MathHelper.ToRadians( rotation ) ) );
 
 			if( scaleX != 1 || scaleY != 1 )
-				mat = Matrix.Multiply( mat, Matrix.CreateScale( scaleX, scaleY, 1 ) );
+				mat = Matrix2D.Multiply( mat, Matrix2D.CreateScale( scaleX, scaleY ) );
 
-			mat = Matrix.Multiply( mat, Matrix.CreateTranslation( x + originX, y + originY, 0 ) );
+			mat = Matrix2D.Multiply( mat, Matrix2D.CreateTranslation( x + originX, y + originY, 0 ) );
 
 			// Find the first parent that transforms
 			Group parentGroup = parent;
@@ -288,7 +288,7 @@ namespace Nez.UI
 			}
 
 			if( parentGroup != null )
-				mat = Matrix.Multiply( mat, parentGroup.computeTransform() );
+				mat = Matrix2D.Multiply( mat, parentGroup.computeTransform() );
 
 			return mat;
 		}

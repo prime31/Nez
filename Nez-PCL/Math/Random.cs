@@ -10,7 +10,7 @@ namespace Nez
 
 
 		/// <summary>
-		/// returns a random float between 0 and 1
+		/// returns a random float between 0 (inclusive) and 1 (exclusive)
 		/// </summary>
 		/// <returns>The float.</returns>
 		static public float nextFloat()
@@ -20,13 +20,34 @@ namespace Nez
 
 
 		/// <summary>
-		/// returns a random float between 0 and max
+		/// returns a random float between 0 (inclusive) and max (exclusive)
 		/// </summary>
 		/// <returns>The float.</returns>
 		/// <param name="max">Max.</param>
 		static public float nextFloat( float max )
 		{
-			return nextFloat() * max;
+			return (float)random.NextDouble() * max;
+		}
+
+
+		/// <summary>
+		/// returns a random int between 0 (inclusive) and 1 (exclusive)
+		/// </summary>
+		/// <returns>The float.</returns>
+		static public int nextInt()
+		{
+			return random.Next();
+		}
+
+
+		/// <summary>
+		/// returns a random int between 0 (inclusive) and max (exclusive)
+		/// </summary>
+		/// <returns>The float.</returns>
+		/// <param name="max">Max.</param>
+		static public int nextInt( int max )
+		{
+			return random.Next( max );
 		}
 
 
@@ -36,7 +57,7 @@ namespace Nez
 		/// <returns>The angle.</returns>
 		static public float nextAngle()
 		{
-			return nextFloat() * MathHelper.TwoPi;
+			return (float)random.NextDouble() * MathHelper.TwoPi;
 		}
 
 
@@ -53,13 +74,12 @@ namespace Nez
 		/// <summary>
 		/// Returns a random integer between min (inclusive) and max (exclusive)
 		/// </summary>
-		/// <param name="random"></param>
 		/// <param name="min"></param>
 		/// <param name="max"></param>
 		/// <returns></returns>
 		static public int range( int min, int max )
 		{
-			return min + random.Next( max - min );
+			return random.Next( min, max );
 		}
 
 

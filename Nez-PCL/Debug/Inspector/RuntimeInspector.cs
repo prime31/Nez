@@ -72,8 +72,8 @@ namespace Nez
 				// update transform, which has a null Component
 				getOrCreateInspectorList( (Component)null ).update();
 
-				foreach( var comp in _entity.components )
-					getOrCreateInspectorList( comp ).update();
+				for( var i = 0; i < _entity.components.count; i++ )
+					getOrCreateInspectorList( _entity.components[i] ).update();
 			}
 			else
 			{
