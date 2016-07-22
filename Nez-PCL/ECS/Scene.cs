@@ -377,8 +377,11 @@ namespace Nez
 					entity.update();
 			}
 
-			// we update our renderables after entity.update in case any new Renderables were added
-			renderableComponents.updateLists();
+            if ( entityProcessors != null )
+                entityProcessors.lateUpdate();
+
+            // we update our renderables after entity.update in case any new Renderables were added
+            renderableComponents.updateLists();
 		}
 
 

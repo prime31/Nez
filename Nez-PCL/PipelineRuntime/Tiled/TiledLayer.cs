@@ -1,7 +1,7 @@
 using Microsoft.Xna.Framework.Graphics;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
-
+using System;
 
 namespace Nez.Tiled
 {
@@ -10,7 +10,7 @@ namespace Nez.Tiled
 		public Vector2 offset;
 		public string name;
 		public Dictionary<string,string> properties;
-		public bool visible;
+        public bool visible = true;
 		public float opacity;
 
 
@@ -22,6 +22,5 @@ namespace Nez.Tiled
 
 
 		public abstract void draw( Batcher batcher, Vector2 position, float layerDepth, RectangleF cameraClipBounds );
-
-	}
+    }
 }

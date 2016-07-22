@@ -15,7 +15,7 @@ namespace Nez.AI.FSM
 
 
 		private Dictionary<System.Type,State<T>> _states = new Dictionary<System.Type,State<T>>();
-		private State<T> _currentState;
+		protected State<T> _currentState;
 
 
 		public StateMachine( T context, State<T> initialState )
@@ -42,7 +42,7 @@ namespace Nez.AI.FSM
 		/// <summary>
 		/// ticks the state machine with the provided delta time
 		/// </summary>
-		public void update( float deltaTime )
+		public virtual void update( float deltaTime )
 		{
 			elapsedTimeInState += deltaTime;
 			_currentState.reason();
@@ -78,6 +78,13 @@ namespace Nez.AI.FSM
 
 			return _currentState as R;
 		}
+
+        protected void InvokeStateChanged()
+        {
+            if ( onStateChanged != null )
+                onStateChanged();
+        }
+
 	}
 }
 

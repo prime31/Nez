@@ -188,7 +188,7 @@ namespace Nez
 
 		public bool isLeftStickRight( float deadzone = Input.DEFAULT_DEADZONE )
 		{
-			return _currentState.ThumbSticks.Left.X < deadzone;
+			return _currentState.ThumbSticks.Left.X > deadzone;
 		}
 
 
@@ -245,13 +245,13 @@ namespace Nez
 
 		public bool isRightStickRight( float deadzone = Input.DEFAULT_DEADZONE )
 		{
-			return _currentState.ThumbSticks.Right.X < deadzone;
+			return _currentState.ThumbSticks.Right.X > deadzone;
 		}
 
 
 		public bool isRightStickUp( float deadzone = Input.DEFAULT_DEADZONE )
 		{
-			return _currentState.ThumbSticks.Right.Y < deadzone;
+			return _currentState.ThumbSticks.Right.Y > deadzone;
 		}
 
 

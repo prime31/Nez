@@ -13,7 +13,7 @@ namespace Nez.AI.FSM
 		{}
 
 
-		internal void setMachineAndContext( StateMachine<T> machine, T context )
+		public void setMachineAndContext( StateMachine<T> machine, T context )
 		{
 			_machine = machine;
 			_context = context;

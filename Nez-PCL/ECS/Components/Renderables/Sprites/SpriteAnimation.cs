@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Nez.Textures;
-
+using Microsoft.Xna.Framework;
 
 namespace Nez.Sprites
 {
@@ -62,6 +62,18 @@ namespace Nez.Sprites
 
 			_hasBeenPreparedForUse = true;
 		}
+
+        /// <summary>
+        /// sets the origin for all frames in this animation
+        /// </summary>
+        /// <param name="origin"></param>
+        public void setOrigin( Vector2 origin )
+        {
+            for ( int i = 0; i < frames.Count; i++ )
+            {
+                frames[ i ].origin = origin;
+            }
+        }
 
 
 		/// <summary>

@@ -31,12 +31,22 @@ namespace Nez.Tiled
 			tiles = populateTilePositions();
 		}
 
+        public TiledTileLayer( TiledMap map, string name, int width, int height) : base( name )
+        {
+            this.width = width;
+            this.height = height;
+            this.tiles = new TiledTile[ width * height ];
 
-		/// <summary>
-		/// loops through the tiles and sets each tiles x/y value
-		/// </summary>
-		/// <returns>The tile positions.</returns>
-		TiledTile[] populateTilePositions()
+            tiledMap = map;
+            tiles = populateTilePositions();
+        }
+
+
+        /// <summary>
+        /// loops through the tiles and sets each tiles x/y value
+        /// </summary>
+        /// <returns>The tile positions.</returns>
+        TiledTile[] populateTilePositions()
 		{
 			for( var y = 0; y < height; y++ )
 			{
@@ -160,13 +170,74 @@ namespace Nez.Tiled
 			return tiles[x + y * width];
 		}
 
+        public T getTile<T>( int x, int y ) where T : TiledTile
+        {
+            return (T)tiles[ x + y * width ];
+        }
 
-		/// <summary>
-		/// nulls out the tile at the x/y coordinates
-		/// </summary>
-		/// <param name="x">The x coordinate.</param>
-		/// <param name="y">The y coordinate.</param>
-		public void removeTile( int x, int y )
+        
+        /// <summary>
+        /// sets the TiledTile at the x/y coordinates. Note that these are tile coordinates not world coordinates!
+        /// TODO add animated tile support
+        /// </summary>
+        /// <param name="x">The x coordinate.</param>
+        /// <param name="y">The y coordinate.</param>
+        /// <param name="tileId">the id to set the tile to.</param>
+        /// <returns>The tile.</returns>
+        public TiledTile setTile( int x, int y, int tileId )
+        {
+            TiledTile tile = getTile( x, y );
+            if ( tile == null )
+                tiles[ x + y * width ] = new TiledTile( tileId );
+            else if ( tile.id == tileId )
+                return tile;
+
+            tiles[ x + y * width ].id = tileId;
+            tiles[ x + y * width ].tileset = tiledMap.getTilesetForTileId( tileId );
+            tiles[ x + y * width ].x = x;
+            tiles[ x + y * width ].y = y;
+            return tiles[ x + y * width ];
+        }
+
+        public T setTile<T>( int x, int y, int tileId ) where T : TiledTile
+        {
+            T tile = getTile<T>( x, y );
+            if ( tile == null )
+                tiles[ x + y * width ] = CreateTile( tileId);
+            else if ( tile.id == tileId )
+                return tile;
+
+            tiles[ x + y * width ].id = tileId;
+            tiles[ x + y * width ].tileset = tiledMap.getTilesetForTileId( tileId );
+            tiles[ x + y * width ].x = x;
+            tiles[ x + y * width ].y = y;
+            return (T)tiles[ x + y * width ];
+        }
+
+        protected virtual internal TiledTile CreateTile( int Id)
+        {
+            return new TiledTile( Id );
+        }
+
+        /// <summary>
+        /// note that world position assumes that the Vector2 was normalized to be in the tilemaps coordinates. i.e. if the tilemap
+        /// is not at 0,0 then the world position should be moved so that it takes into consideration the tilemap offset from 0,0.
+        /// Example: if the tilemap is at 300,300 then the passed in value should be worldPos - (300,300)
+        /// </summary>
+        /// <returns>The tile at world position.</returns>
+        /// <param name="pos">Position.</param>
+        /// <param name="tileId">the id to set the tile to.</param>
+        public TiledTile setTileAtWorldPosition( Vector2 pos, int tileID )
+        {
+            return setTile( tiledMap.worldToTilePositionX( pos.X ), tiledMap.worldToTilePositionY( pos.Y ), tileID );
+        }
+
+        /// <summary>
+        /// nulls out the tile at the x/y coordinates
+        /// </summary>
+        /// <param name="x">The x coordinate.</param>
+        /// <param name="y">The y coordinate.</param>
+        public void removeTile( int x, int y )
 		{
 			tiles[x + y * width] = null;
 		}

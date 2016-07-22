@@ -68,8 +68,14 @@ namespace Nez
 				_processors[i].update();
 		}
 
+        public void lateUpdate()
+        {
+            for ( var i = 0; i < _processors.Count; i++ )
+                _processors[ i ].lateUpdate();
+        }
 
-		public void end()
+
+        public void end()
 		{}
 
 

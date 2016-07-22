@@ -204,6 +204,11 @@ namespace Nez.Sprites
 			return this;
 		}
 
+        public SpriteAnimation getAnimation( TEnum key )
+        {
+            return _animations[ key ];
+        }
+
 
 		#region Playback
 

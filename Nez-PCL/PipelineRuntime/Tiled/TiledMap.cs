@@ -38,7 +38,7 @@ namespace Nez.Tiled
 		internal int largestTileHeight;
 		internal bool requiresLargeTileCulling;
 
-        readonly List<TiledTileset> _tilesets = new List<TiledTileset>();
+        public List<TiledTileset> _tilesets = new List<TiledTileset>();
 		internal List<TiledAnimatedTile> _animatedTiles = new List<TiledAnimatedTile>();
 
 		#endregion
@@ -80,8 +80,14 @@ namespace Nez.Tiled
 			return tileset;
 		}
 
+        public TiledTileLayer createTileLayer( string name, int width, int height )
+        {
+            var layer = new TiledTileLayer( this, name, width, height );
+            layers.Add( layer );
+            return layer;
+        }
 
-		public TiledTileLayer createTileLayer( string name, int width, int height, TiledTile[] tiles )
+        public TiledTileLayer createTileLayer( string name, int width, int height, TiledTile[] tiles )
 		{
 			var layer = new TiledTileLayer( this, name, width, height, tiles );
 			layers.Add( layer );
@@ -137,14 +143,34 @@ namespace Nez.Tiled
 			return null;
 		}
 
+        /// <summary>
+        /// gets the TiledLayer at the specified index
+        /// </summary>
+        /// <param name="index"></param>
+        /// <returns>The Layer.</returns>
+        public TiledLayer getLayer( int index )
+        {
+            return layers[ index ];
+        }
 
-		/// <summary>
-		/// gets the TiledLayer by name
+        /// <summary>
+		/// gets the TiledLayer by index
 		/// </summary>
 		/// <returns>The layer.</returns>
-		/// <param name="name">Name.</param>
+		/// <param name="index">Index.</param>
 		/// <typeparam name="T">The 1st type parameter.</typeparam>
-		public T getLayer<T>( string name ) where T : TiledLayer
+		public T getLayer<T>( int index ) where T : TiledLayer
+        {
+            return (T)getLayer( index );
+        }
+
+        /// <summary>
+        /// gets the TiledLayer by name
+        /// </summary>
+        /// <returns>The layer.</returns>
+        /// <param name="name">Name.</param>
+        /// <typeparam name="T">The 1st type parameter.</typeparam>
+        public T getLayer<T>( string name ) where T : TiledLayer
 		{
 			return (T)getLayer( name );
 		}

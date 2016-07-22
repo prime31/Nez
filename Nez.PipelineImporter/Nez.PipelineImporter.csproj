@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -38,6 +38,7 @@
     <Reference Include="System.Xml.Serialization" />
     <Reference Include="Ionic.ZLib">
       <HintPath>..\packages\MarkerMetro.Unity.Ionic.Zlib.2.0.0.14\lib\net35\Ionic.ZLib.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Xml" />
@@ -49,19 +50,7 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Tiled\" />
-    <Folder Include="BitmapFonts\" />
-    <Folder Include="TexturePacker\" />
-    <Folder Include="TextureAtlasGenerator\" />
-    <Folder Include="XMLTemplateMaker\" />
-    <Folder Include="ParticleDesigner\" />
-    <Folder Include="ParticleDesigner\ConversionTypes\" />
-    <Folder Include="Overlap2D\VOs\NotImplemented\" />
-    <Folder Include="UISkin\" />
-    <Folder Include="Common\" />
-    <Folder Include="NormalMapGenerator\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Compile Include="Tiled\TiledMapImporter.cs" />
     <Compile Include="Tiled\TiledMapProcessor.cs" />

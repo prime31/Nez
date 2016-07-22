@@ -74,8 +74,11 @@ namespace Nez
 		protected virtual void process( List<Entity> entities )
 		{}
 
+        protected virtual void lateProcess( List<Entity> entities )
+        {}
 
-		protected virtual void begin()
+
+        protected virtual void begin()
 		{}
 
 
@@ -86,8 +89,15 @@ namespace Nez
 			end();
 		}
 
+        public void lateUpdate()
+        {
+            begin();
+            lateProcess( _entities );
+            end();
+        }
 
-		protected virtual void end()
+
+        protected virtual void end()
 		{}
 	}
 }
