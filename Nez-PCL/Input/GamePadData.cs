@@ -1,5 +1,4 @@
-﻿using System;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 
 
@@ -27,14 +26,14 @@ namespace Nez
 		{
 			_playerIndex = playerIndex;
 			_previousState = new GamePadState();
-			_currentState = Microsoft.Xna.Framework.Input.GamePad.GetState( _playerIndex );
+			_currentState = GamePad.GetState( _playerIndex );
 		}
 
 
 		public void update()
 		{
 			_previousState = _currentState;
-			_currentState = Microsoft.Xna.Framework.Input.GamePad.GetState( _playerIndex );
+			_currentState = GamePad.GetState( _playerIndex );
 
 			// check for controller connects/disconnects
 			if( _previousState.IsConnected != _currentState.IsConnected )
@@ -188,7 +187,7 @@ namespace Nez
 
 		public bool isLeftStickRight( float deadzone = Input.DEFAULT_DEADZONE )
 		{
-			return _currentState.ThumbSticks.Left.X < deadzone;
+			return _currentState.ThumbSticks.Left.X > deadzone;
 		}
 
 
@@ -205,7 +204,7 @@ namespace Nez
 
 		public bool isLeftStickUp( float deadzone = Input.DEFAULT_DEADZONE )
 		{
-			return _currentState.ThumbSticks.Left.Y < deadzone;
+			return _currentState.ThumbSticks.Left.Y > deadzone;
 		}
 
 
@@ -245,13 +244,13 @@ namespace Nez
 
 		public bool isRightStickRight( float deadzone = Input.DEFAULT_DEADZONE )
 		{
-			return _currentState.ThumbSticks.Right.X < deadzone;
+			return _currentState.ThumbSticks.Right.X > deadzone;
 		}
 
 
 		public bool isRightStickUp( float deadzone = Input.DEFAULT_DEADZONE )
 		{
-			return _currentState.ThumbSticks.Right.Y < deadzone;
+			return _currentState.ThumbSticks.Right.Y > deadzone;
 		}
 
 

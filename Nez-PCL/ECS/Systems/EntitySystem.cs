@@ -6,14 +6,11 @@ namespace Nez
 {
 	public class EntitySystem
 	{
-		protected Matcher _matcher;
 		public Matcher matcher
 		{
 			get { return _matcher; }
 		}
 
-		protected List<Entity> _entities = new List<Entity>();
-		protected Scene _scene;
 		public Scene scene
 		{
 			get { return _scene; }
@@ -23,6 +20,10 @@ namespace Nez
 				_entities = new List<Entity>();
 			}
 		}
+
+		protected Matcher _matcher;
+		protected List<Entity> _entities = new List<Entity>();
+		protected Scene _scene;
 
 
 		public EntitySystem()
@@ -75,7 +76,11 @@ namespace Nez
 		{}
 
 
-		protected virtual void begin()
+        protected virtual void lateProcess( List<Entity> entities )
+        {}
+
+
+        protected virtual void begin()
 		{}
 
 
@@ -83,12 +88,19 @@ namespace Nez
 		{
 			begin();
 			process( _entities );
-			end();
 		}
 
 
-		protected virtual void end()
+        public void lateUpdate()
+        {
+            lateProcess( _entities );
+            end();
+        }
+
+
+        protected virtual void end()
 		{}
+
 	}
 }
 

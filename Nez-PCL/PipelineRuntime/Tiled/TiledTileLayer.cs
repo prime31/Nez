@@ -32,6 +32,10 @@ namespace Nez.Tiled
 		}
 
 
+		public TiledTileLayer( TiledMap map, string name, int width, int height ) : this( map, name, width, height, new TiledTile[width * height] )
+		{ }
+
+
 		/// <summary>
 		/// loops through the tiles and sets each tiles x/y value
 		/// </summary>
@@ -161,15 +165,60 @@ namespace Nez.Tiled
 		}
 
 
+		public T getTile<T>( int x, int y ) where T : TiledTile
+		{
+			return (T)tiles[x + y * width];
+		}
+
+
 		/// <summary>
 		/// sets the TiledTile at the x/y coordinates. Note that these are tile coordinates not world coordinates!
+		/// TODO: add animated tile support
 		/// </summary>
-		/// <returns>The tile.</returns>
 		/// <param name="x">The x coordinate.</param>
 		/// <param name="y">The y coordinate.</param>
-		public void setTile( int x, int y, TiledTile tile )
+		/// <param name="tileId">the id to set the tile to.</param>
+		/// <returns>The tile.</returns>
+		public TiledTile setTile( int x, int y, int tileId )
 		{
-			tiles[x + y * width] = tile;
+			var tile = getTile( x, y );
+			if( tile == null )
+			{
+				tile = new TiledTile( tileId )
+				{
+					x = x,
+					y = y
+				};
+				tiles[x + y * width] = tile;
+			}
+			else
+			{
+				tile.setTileId( tileId );
+			}
+
+			tile.tileset = tiledMap.getTilesetForTileId( tileId );
+
+			return tile;
+		}
+
+
+		public T setTile<T>( int x, int y, int tileId ) where T : TiledTile
+		{
+			return setTile( x, y, tileId ) as T;
+		}
+
+
+		/// <summary>
+		/// note that world position assumes that the Vector2 was normalized to be in the tilemaps coordinates. i.e. if the tilemap
+		/// is not at 0,0 then the world position should be moved so that it takes into consideration the tilemap offset from 0,0.
+		/// Example: if the tilemap is at 300,300 then the passed in value should be worldPos - (300,300)
+		/// </summary>
+		/// <returns>The tile at world position.</returns>
+		/// <param name="pos">Position.</param>
+		/// <param name="tileId">the id to set the tile to.</param>
+		public TiledTile setTileAtWorldPosition( Vector2 pos, int tileId )
+		{
+			return setTile( tiledMap.worldToTilePositionX( pos.X ), tiledMap.worldToTilePositionY( pos.Y ), tileId );
 		}
 
 
