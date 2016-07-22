@@ -6,21 +6,20 @@ namespace Nez.AI.FSM
 {
 	public class StateMachine<T>
 	{
-		protected T _context;
 		public event Action onStateChanged;
 
 		public State<T> currentState { get { return _currentState; } }
 		public State<T> previousState;
 		public float elapsedTimeInState = 0f;
 
-
-		private Dictionary<System.Type,State<T>> _states = new Dictionary<System.Type,State<T>>();
 		protected State<T> _currentState;
+		protected T _context;
+		Dictionary<Type, State<T>> _states = new Dictionary<Type, State<T>>();
 
 
 		public StateMachine( T context, State<T> initialState )
 		{
-			this._context = context;
+			_context = context;
 
 			// setup our initial state
 			addState( initialState );
@@ -78,12 +77,6 @@ namespace Nez.AI.FSM
 
 			return _currentState as R;
 		}
-
-        protected void InvokeStateChanged()
-        {
-            if ( onStateChanged != null )
-                onStateChanged();
-        }
 
 	}
 }

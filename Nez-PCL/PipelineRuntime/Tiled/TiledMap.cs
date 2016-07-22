@@ -18,11 +18,12 @@ namespace Nez.Tiled
 		public Color? backgroundColor;
 		public TiledRenderOrder renderOrder;
 		public readonly TiledMapOrientation orientation;
-		public Dictionary<string,string> properties = new Dictionary<string,string>();
+		public Dictionary<string, string> properties = new Dictionary<string, string>();
 		public List<TiledLayer> layers = new List<TiledLayer>();
 		public List<TiledImageLayer> imageLayers = new List<TiledImageLayer>();
 		public List<TiledTileLayer> tileLayers = new List<TiledTileLayer>();
 		public List<TiledObjectGroup> objectGroups = new List<TiledObjectGroup>();
+		public readonly List<TiledTileset> tilesets = new List<TiledTileset>();
 
 		public int widthInPixels
 		{
@@ -38,7 +39,6 @@ namespace Nez.Tiled
 		internal int largestTileHeight;
 		internal bool requiresLargeTileCulling;
 
-        public List<TiledTileset> _tilesets = new List<TiledTileset>();
 		internal List<TiledAnimatedTile> _animatedTiles = new List<TiledAnimatedTile>();
 
 		#endregion
@@ -46,10 +46,10 @@ namespace Nez.Tiled
 
 		public TiledMap(
 			int firstGid,
-			int width, 
-			int height, 
-			int tileWidth, 
-			int tileHeight, 
+			int width,
+			int height,
+			int tileWidth,
+			int tileHeight,
 			TiledMapOrientation orientation = TiledMapOrientation.Orthogonal )
 		{
 			this.firstGid = firstGid;
@@ -69,25 +69,27 @@ namespace Nez.Tiled
 			else
 				tileset = new TiledImageCollectionTileset( texture, firstId );
 
-            if (tileset.tileWidth > largestTileWidth)
-                largestTileWidth = tileset.tileWidth;
+			if( tileset.tileWidth > largestTileWidth )
+				largestTileWidth = tileset.tileWidth;
 
-            if (tileset.tileHeight > largestTileHeight)
-                largestTileHeight = tileset.tileHeight;
+			if( tileset.tileHeight > largestTileHeight )
+				largestTileHeight = tileset.tileHeight;
 
-            _tilesets.Add( tileset );
+			tilesets.Add( tileset );
 
 			return tileset;
 		}
 
-        public TiledTileLayer createTileLayer( string name, int width, int height )
-        {
-            var layer = new TiledTileLayer( this, name, width, height );
-            layers.Add( layer );
-            return layer;
-        }
 
-        public TiledTileLayer createTileLayer( string name, int width, int height, TiledTile[] tiles )
+		public TiledTileLayer createTileLayer( string name, int width, int height )
+		{
+			var layer = new TiledTileLayer( this, name, width, height );
+			layers.Add( layer );
+			return layer;
+		}
+
+
+		public TiledTileLayer createTileLayer( string name, int width, int height, TiledTile[] tiles )
 		{
 			var layer = new TiledTileLayer( this, name, width, height, tiles );
 			layers.Add( layer );
@@ -143,34 +145,37 @@ namespace Nez.Tiled
 			return null;
 		}
 
-        /// <summary>
-        /// gets the TiledLayer at the specified index
-        /// </summary>
-        /// <param name="index"></param>
-        /// <returns>The Layer.</returns>
-        public TiledLayer getLayer( int index )
-        {
-            return layers[ index ];
-        }
 
-        /// <summary>
+		/// <summary>
+		/// gets the TiledLayer at the specified index
+		/// </summary>
+		/// <param name="index"></param>
+		/// <returns>The Layer.</returns>
+		public TiledLayer getLayer( int index )
+		{
+			return layers[index];
+		}
+
+
+		/// <summary>
 		/// gets the TiledLayer by index
 		/// </summary>
 		/// <returns>The layer.</returns>
 		/// <param name="index">Index.</param>
 		/// <typeparam name="T">The 1st type parameter.</typeparam>
 		public T getLayer<T>( int index ) where T : TiledLayer
-        {
-            return (T)getLayer( index );
-        }
+		{
+			return (T)getLayer( index );
+		}
 
-        /// <summary>
-        /// gets the TiledLayer by name
-        /// </summary>
-        /// <returns>The layer.</returns>
-        /// <param name="name">Name.</param>
-        /// <typeparam name="T">The 1st type parameter.</typeparam>
-        public T getLayer<T>( string name ) where T : TiledLayer
+
+		/// <summary>
+		/// gets the TiledLayer by name
+		/// </summary>
+		/// <returns>The layer.</returns>
+		/// <param name="name">Name.</param>
+		/// <typeparam name="T">The 1st type parameter.</typeparam>
+		public T getLayer<T>( string name ) where T : TiledLayer
 		{
 			return (T)getLayer( name );
 		}
@@ -229,10 +234,10 @@ namespace Nez.Tiled
 		/// <param name="id">Identifier.</param>
 		public TiledTileset getTilesetForTileId( int tileId )
 		{
-			for( var i = _tilesets.Count - 1; i >= 0; i-- )
+			for( var i = tilesets.Count - 1; i >= 0; i-- )
 			{
-				if( _tilesets[i].firstId <= tileId )
-					return _tilesets[i];
+				if( tilesets[i].firstId <= tileId )
+					return tilesets[i];
 			}
 
 			throw new Exception( string.Format( "tileId {0} was not foind in any tileset", tileId ) );
@@ -247,15 +252,15 @@ namespace Nez.Tiled
 		/// <param name="id">Identifier.</param>
 		public TiledTilesetTile getTilesetTile( int id )
 		{
-			for( var i = _tilesets.Count - 1; i >= 0; i-- )
+			for( var i = tilesets.Count - 1; i >= 0; i-- )
 			{
-				if( _tilesets[i].firstId <= id )
+				if( tilesets[i].firstId <= id )
 				{
-					for( var j = 0; j < _tilesets[i].tiles.Count; j++ )
+					for( var j = 0; j < tilesets[i].tiles.Count; j++ )
 					{
 						// id is a gid so we need to subtract the tileset.firstId to get a local id
-						if( _tilesets[i].tiles[j].id == id - _tilesets[i].firstId )
-							return _tilesets[i].tiles[j];
+						if( tilesets[i].tiles[j].id == id - tilesets[i].firstId )
+							return tilesets[i].tiles[j];
 					}
 				}
 			}
@@ -332,7 +337,7 @@ namespace Nez.Tiled
 		{
 			return y * tileHeight;
 		}
-	
+
 		#endregion
 
 	}

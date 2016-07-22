@@ -210,7 +210,7 @@ namespace Nez
 			for( var i = _globalManagers.length - 1; i >= 0; i-- )
 				_globalManagers.buffer[i].update();
 
-			if( exitOnEscapeKeypress && (Input.isKeyDown( Keys.Escape ) || Input.gamePads[0].isButtonReleased( Buttons.Back ) ) )
+			if( exitOnEscapeKeypress && ( Input.isKeyDown( Keys.Escape ) || Input.gamePads[0].isButtonReleased( Buttons.Back ) ) )
 			{
 				Exit();
 				return;

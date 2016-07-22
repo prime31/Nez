@@ -19,7 +19,10 @@ namespace Nez
 		/// <param name="entity">Entity.</param>
 		public abstract void process( Entity entity );
 
-        public virtual void lateProcess( Entity entity ) { }
+
+        public virtual void lateProcess( Entity entity )
+		{}
+
 
         /// <summary>
         /// Goes through all the entities of this system and processes them one by one
@@ -31,10 +34,11 @@ namespace Nez
 				process( entities[i] );
 		}
 
+
         protected override void lateProcess( List<Entity> entities )
         {
-            for ( var i = 0; i < entities.Count; i++ )
-                lateProcess( entities[ i ] );
+            for( var i = 0; i < entities.Count; i++ )
+                lateProcess( entities[i] );
         }
     }
 }

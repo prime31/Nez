@@ -9,10 +9,6 @@ namespace Nez.AI.FSM
 		protected T _context;
 
 
-		public State()
-		{}
-
-
 		public void setMachineAndContext( StateMachine<T> machine, T context )
 		{
 			_machine = machine;

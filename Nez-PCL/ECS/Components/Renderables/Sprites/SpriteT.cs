@@ -204,9 +204,11 @@ namespace Nez.Sprites
 			return this;
 		}
 
+
         public SpriteAnimation getAnimation( TEnum key )
         {
-            return _animations[ key ];
+			Assert.isTrue( _animations.ContainsKey( key ), "{0} is not present in animations", key );
+            return _animations[key];
         }
 
 

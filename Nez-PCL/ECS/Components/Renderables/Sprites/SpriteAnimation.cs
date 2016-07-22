@@ -1,7 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Nez.Textures;
 using Microsoft.Xna.Framework;
+
 
 namespace Nez.Sprites
 {
@@ -19,12 +19,12 @@ namespace Nez.Sprites
 		public bool loop = true;
 		public bool pingPong;
 		public float delay = 0f;
+		public float totalDuration;
 		public AnimationCompletionBehavior completionBehavior;
-
 		public List<SpriteAnimationFrame> frames = new List<SpriteAnimationFrame>();
+
 		internal float secondsPerFrame;
 		internal float iterationDuration;
-		public float totalDuration;
 
 		bool _hasBeenPreparedForUse;
 
@@ -63,17 +63,16 @@ namespace Nez.Sprites
 			_hasBeenPreparedForUse = true;
 		}
 
-        /// <summary>
-        /// sets the origin for all frames in this animation
-        /// </summary>
-        /// <param name="origin"></param>
-        public void setOrigin( Vector2 origin )
-        {
-            for ( int i = 0; i < frames.Count; i++ )
-            {
-                frames[ i ].origin = origin;
-            }
-        }
+
+		/// <summary>
+		/// sets the origin for all frames in this animation
+		/// </summary>
+		/// <param name="origin"></param>
+		public void setOrigin( Vector2 origin )
+		{
+			for( var i = 0; i < frames.Count; i++ )
+				frames[i].origin = origin;
+		}
 
 
 		/// <summary>
