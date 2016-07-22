@@ -105,7 +105,6 @@
     <Compile Include="ECS\Components\Text\Text.cs" />
     <Compile Include="ECS\InternalUtils\ComponentList.cs" />
     <Compile Include="ECS\InternalUtils\EntityList.cs" />
-    <Compile Include="ECS\InternalUtils\EntityTagLists.cs" />
     <Compile Include="ECS\InternalUtils\RenderableComponentList.cs" />
     <Compile Include="Graphics\Graphics.cs" />
     <Compile Include="Graphics\PrimitiveBatch.cs" />
@@ -490,6 +489,7 @@
     <Compile Include="Utils\Extensions\EdgeExt.cs" />
     <Compile Include="ECS\Components\Text\TextRunComponent.cs" />
     <Compile Include="ECS\Components\Text\TextRun.cs" />
+    <Compile Include="Math\Matrix2D.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="MonoGame.Framework">

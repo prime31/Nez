@@ -370,7 +370,7 @@ namespace Nez
 			if( entityProcessors != null )
 				entityProcessors.update();
 
-			for( var i = 0; i < entities.Count; i++ )
+			for( int i = 0, count = entities.count; i < count; i++ )
 			{
 				var entity = entities[i];
 				if( entity.enabled && ( entity.updateInterval == 1 || Time.frameCount % entity.updateInterval == 0 ) )
@@ -886,7 +886,7 @@ namespace Nez
 		/// </summary>
 		public void destroyAllEntities()
 		{
-			for( var i = 0; i < entities.Count; i++ )
+			for( var i = 0; i < entities.count; i++ )
 				entities[i].destroy();
 		}
 

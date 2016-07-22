@@ -160,19 +160,20 @@ namespace Nez
 			BitmapFontRegion currentFontRegion = null;
 			var effects = (byte)SpriteEffects.None;
 
-			var _transformationMatrix = Matrix.Identity;
+			var _transformationMatrix = Matrix2D.Identity;
 			var requiresTransformation = rotation != 0f || _scale != Vector2.One;
 			if( requiresTransformation )
 			{
-				Matrix temp;
-				Matrix.CreateTranslation( -_origin.X, -_origin.Y, 0f, out _transformationMatrix );
-				Matrix.CreateScale( _scale.X, _scale.Y, 1f, out temp );
-				Matrix.Multiply( ref _transformationMatrix, ref temp, out _transformationMatrix );
-				Matrix.CreateRotationZ( rotation, out temp );
-				Matrix.Multiply( ref _transformationMatrix, ref temp, out _transformationMatrix );
-				Matrix.CreateTranslation( position.X, position.Y, 0f, out temp );
-				Matrix.Multiply( ref _transformationMatrix, ref temp, out _transformationMatrix );
+				Matrix2D temp;
+				Matrix2D.CreateTranslation( -_origin.X, -_origin.Y, out _transformationMatrix );
+				Matrix2D.CreateScale( _scale.X, _scale.Y, out temp );
+				Matrix2D.Multiply( ref _transformationMatrix, ref temp, out _transformationMatrix );
+				Matrix2D.CreateRotationZ( rotation, out temp );
+				Matrix2D.Multiply( ref _transformationMatrix, ref temp, out _transformationMatrix );
+				Matrix2D.CreateTranslation( position.X, position.Y, out temp );
+				Matrix2D.Multiply( ref _transformationMatrix, ref temp, out _transformationMatrix );
 			}
+
 			var offset = requiresTransformation ? Vector2.Zero : position - _origin;
 
 			for( var i = 0; i < _text.Length; ++i )
@@ -199,7 +200,7 @@ namespace Nez
 
 				// transform our point if we need to
 				if( requiresTransformation )
-					Vector2.Transform( ref p, ref _transformationMatrix, out p );
+					Vector2Ext.Transform( ref p, ref _transformationMatrix, out p );
 
 				var destination = new Vector4( p.X, p.Y, currentFontRegion.width * _scale.X, currentFontRegion.height * _scale.Y );
 				_charDetails[i].texture = currentFontRegion.subtexture.texture2D;
@@ -244,8 +245,8 @@ namespace Nez
 
 				// Calculate vertices, finally.
 				// top-left
-				_charDetails[i].verts[0].X = rotationMatrix2X + rotationMatrix1X + destination.X;
-				_charDetails[i].verts[0].Y = rotationMatrix2Y + rotationMatrix1Y + destination.Y;
+				_charDetails[i].verts[0].X = rotationMatrix2X + rotationMatrix1X + destination.X - 1;
+				_charDetails[i].verts[0].Y = rotationMatrix2Y + rotationMatrix1Y + destination.Y - 1;
 
 				// top-right
 				var cornerX = _cornerOffsetX[1] * destW;

@@ -8,7 +8,7 @@ namespace Nez
 	public class ColliderList : IEnumerable<Collider>, IEnumerable
 	{
 		/// <summary>
-		/// the first collider added is considered the main collider. If there is a collider add pending it will be returned.
+		/// the first collider added is considered the main collider
 		/// </summary>
 		/// <value>The main collider.</value>
 		public Collider mainCollider
@@ -33,8 +33,17 @@ namespace Nez
 
 		public ColliderList( Entity entity )
 		{
-			this._entity = entity;
+			_entity = entity;
 		}
+
+
+		#region array access
+
+		public int Count { get { return _colliders.Count; } }
+
+		public Collider this[int index] { get { return _colliders[index]; } }
+
+		#endregion
 
 
 		/// <summary>
@@ -167,12 +176,12 @@ namespace Nez
 		}
 
 
-		public int Count
-		{
-			get { return _colliders.Count; }
-		}
-
-
+		/// <summary>
+		/// returns the first Collider of type T found
+		/// </summary>
+		/// <returns>The collider.</returns>
+		/// <param name="onlyReturnInitializedColliders">Only return initialized colliders.</param>
+		/// <typeparam name="T">The 1st type parameter.</typeparam>
 		public T getCollider<T>( bool onlyReturnInitializedColliders = false ) where T : Collider
 		{
 			for( var i = 0; i < _colliders.Count; i++ )
@@ -197,16 +206,7 @@ namespace Nez
 		}
 
 
-		#region IEnumerable and array access
-
-		public Collider this[int index]
-		{
-			get
-			{
-				return _colliders[index];
-			}
-		}
-
+		#region IEnumerable
 
 		public IEnumerator<Collider> GetEnumerator()
 		{

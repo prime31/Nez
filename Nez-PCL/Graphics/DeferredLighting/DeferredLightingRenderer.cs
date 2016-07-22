@@ -98,7 +98,7 @@ namespace Nez.DeferredLighting
 		/// <summary>
 		/// we override render completely here so we can do our thing with multiple render targets
 		/// </summary>
-		/// <param name="cam">Cam.</param>
+		/// <param name="scene">scene.</param>
 		public override void render( Scene scene )
 		{
 			clearRenderTargets();
@@ -116,18 +116,18 @@ namespace Nez.DeferredLighting
 			for( var i = 0; i < renderLayers.Length; i++ )
 			{
 				var renderables = scene.renderableComponents.componentsWithRenderLayer( renderLayers[i] );
-				for( var j = 0; j < renderables.Count; j++ )
+				for( var j = 0; j < renderables.length; j++ )
 				{
-					var renderable = renderables[j];
+					var renderable = renderables.buffer[j];
 					if( renderable.enabled && renderable.isVisibleFromCamera( cam ) )
 						renderable.debugRender( Graphics.instance );
 				}
 			}
 
 			var lightRenderables = scene.renderableComponents.componentsWithRenderLayer( _lightLayer );
-			for( var j = 0; j < lightRenderables.Count; j++ )
+			for( var j = 0; j < lightRenderables.length; j++ )
 			{
-				var renderable = lightRenderables[j];
+				var renderable = lightRenderables.buffer[j];
 				if( renderable.enabled && renderable.isVisibleFromCamera( cam ) )
 					renderable.debugRender( Graphics.instance );
 			}
@@ -187,9 +187,9 @@ namespace Nez.DeferredLighting
 			for( var i = 0; i < renderLayers.Length; i++ )
 			{
 				var renderables = scene.renderableComponents.componentsWithRenderLayer( renderLayers[i] );
-				for( var j = 0; j < renderables.Count; j++ )
+				for( var j = 0; j < renderables.length; j++ )
 				{
-					var renderable = renderables[j];
+					var renderable = renderables.buffer[j];
 					if( renderable.enabled && renderable.isVisibleFromCamera( scene.camera ) )
 						renderAfterStateCheck( renderable, scene.camera );
 				}
@@ -214,10 +214,10 @@ namespace Nez.DeferredLighting
 			Core.graphicsDevice.DepthStencilState = DepthStencilState.None;
 
 			var renderables = scene.renderableComponents.componentsWithRenderLayer( _lightLayer );
-			for( var i = 0; i < renderables.Count; i++ )
+			for( var i = 0; i < renderables.length; i++ )
 			{
-				Assert.isTrue( renderables[i] is DeferredLight, "Found a Renderable in the lightLayer that is not a DeferredLight!" );
-				var renderable = renderables[i];
+				Assert.isTrue( renderables.buffer[i] is DeferredLight, "Found a Renderable in the lightLayer that is not a DeferredLight!" );
+				var renderable = renderables.buffer[i];
 				if( renderable.enabled )
 				{
 					var light = renderable as DeferredLight;

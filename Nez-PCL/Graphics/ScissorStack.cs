@@ -97,6 +97,41 @@ namespace Nez
 			return newScissor;
 		}
 
+
+		/// <summary>
+		/// Calculates a screen space scissor rectangle using the given Camera. If the Camera is null than the scissor will
+		/// be calculated only with the batchTransform
+		/// </summary>
+		/// <returns>The scissors.</returns>
+		/// <param name="camera">Camera.</param>
+		/// <param name="batchTransform">Batch transform.</param>
+		/// <param name="scissor">Area.</param>
+		public static Rectangle calculateScissors( Camera camera, Matrix2D batchTransform, Rectangle scissor )
+		{
+			// convert the top-left point to screen space
+			var tmp = new Vector2( scissor.X, scissor.Y );
+			tmp = Vector2.Transform( tmp, batchTransform );
+
+			if( camera != null )
+				tmp = camera.worldToScreenPoint( tmp );
+
+			var newScissor = new Rectangle();
+			newScissor.X = (int)tmp.X;
+			newScissor.Y = (int)tmp.Y;
+
+			// convert the bottom-right point to screen space
+			tmp.X = scissor.X + scissor.Width;
+			tmp.Y = scissor.Y + scissor.Height;
+			tmp = Vector2.Transform( tmp, batchTransform );
+
+			if( camera != null )
+				tmp = camera.worldToScreenPoint( tmp );
+			newScissor.Width = (int)tmp.X - newScissor.X;
+			newScissor.Height = (int)tmp.Y - newScissor.Y;
+
+			return newScissor;
+		}
+
 	}
 }
 

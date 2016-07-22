@@ -60,6 +60,18 @@ namespace Nez.Tiled
 
 
 		/// <summary>
+		/// sets a new Tile id for this tile and invalidates the previous tilesetTileIndex
+		/// </summary>
+		/// <returns>The tile identifier.</returns>
+		/// <param name="id">Identifier.</param>
+		public void setTileId( int id )
+		{
+			this.id = id;
+			_tilesetTileIndex = null;
+		}
+
+
+		/// <summary>
 		/// Rectangle that encompases this tile with origin on the top left
 		/// </summary>
 		/// <returns>The tile rectangle.</returns>

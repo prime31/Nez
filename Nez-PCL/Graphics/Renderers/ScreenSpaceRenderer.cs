@@ -27,9 +27,9 @@ namespace Nez
 			for( var i = 0; i < renderLayers.Length; i++ )
 			{
 				var renderables = scene.renderableComponents.componentsWithRenderLayer( renderLayers[i] );
-				for( var j = 0; j < renderables.Count; j++ )
+				for( var j = 0; j < renderables.length; j++ )
 				{
-					var renderable = renderables[j];
+					var renderable = renderables.buffer[j];
 					if( renderable.enabled && renderable.isVisibleFromCamera( camera ) )
 						renderAfterStateCheck( renderable, camera );
 				}
