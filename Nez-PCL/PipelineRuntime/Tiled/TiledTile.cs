@@ -53,6 +53,8 @@ namespace Nez.Tiled
 		int? _tilesetTileIndex;
 
 
+        public TiledTile() { }
+
 		public TiledTile( int id )
 		{
 			this.id = id;
