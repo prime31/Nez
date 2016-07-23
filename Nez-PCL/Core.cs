@@ -235,6 +235,12 @@ namespace Nez
 			TimeRuler.instance.endMark( "update" );
 			DebugConsole.instance.update();
 			#endif
+
+			#if FNA
+			// MonoGame only updates old-school XNA Components in Update which we dont care about. FNA's core FrameworkDispatcher needs
+			// Update called though so we do so here.
+			FrameworkDispatcher.Update();
+			#endif
 		}
 
 
