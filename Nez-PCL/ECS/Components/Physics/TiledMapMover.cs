@@ -238,7 +238,7 @@ namespace Nez.Tiled
 					continue;
 
 				// TODO: is this necessary? seems to work without it
-				// disregard horizontal collisions  if the last tile we were grounded on was a slope
+				// disregard horizontal collisions if the last tile we were grounded on was a slope
 				// this is not a fantastic solution
 				if( direction.isHorizontal() && _lastGroundTile != null && _lastGroundTile.isSlope() )
 					continue;
