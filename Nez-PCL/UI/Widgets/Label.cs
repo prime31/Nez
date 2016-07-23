@@ -117,7 +117,7 @@ namespace Nez.UI
 				if( _style.background != null )
 					widthCalc -= _style.background.leftWidth + _style.background.rightWidth;
 
-				_wrappedString = _style.font.wrapText( _text, widthCalc );
+				_wrappedString = _style.font.wrapText( _text, widthCalc / _fontScaleX );
 			}
 			else
 			{

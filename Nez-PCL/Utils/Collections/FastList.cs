@@ -47,8 +47,7 @@ namespace Nez
 		/// </summary>
 		public void clear()
 		{
-			for( var i = 0; i < buffer.Length; i++ )
-				buffer[i] = default(T);
+			Array.Clear( buffer, 0, length );
 			length = 0;
 		}
 
