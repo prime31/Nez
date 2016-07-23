@@ -51,6 +51,7 @@ namespace Nez
 				_processors[i].onChange( entity );
 		}
 
+
 		protected virtual void removeFromProcessors( Entity entity )
 		{
 			for( var i = 0; i < _processors.Count; i++ )
@@ -69,7 +70,14 @@ namespace Nez
 		}
 
 
-		public void end()
+        public void lateUpdate()
+        {
+            for( var i = 0; i < _processors.Count; i++ )
+                _processors[ i ].lateUpdate();
+        }
+
+
+        public void end()
 		{}
 
 

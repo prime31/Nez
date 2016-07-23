@@ -32,6 +32,10 @@ namespace Nez.Tiled
 		}
 
 
+		public TiledTileLayer( TiledMap map, string name, int width, int height ) : this( map, name, width, height, new TiledTile[width * height] )
+		{ }
+
+
 		/// <summary>
 		/// loops through the tiles and sets each tiles x/y value
 		/// </summary>
@@ -149,6 +153,8 @@ namespace Nez.Tiled
 		}
 
 
+		#region Tile management
+
 		/// <summary>
 		/// gets the TiledTile at the x/y coordinates. Note that these are tile coordinates not world coordinates!
 		/// </summary>
@@ -162,14 +168,29 @@ namespace Nez.Tiled
 
 
 		/// <summary>
-		/// sets the TiledTile at the x/y coordinates. Note that these are tile coordinates not world coordinates!
+		/// gets the TiledTile at the x/y coordinates. Note that these are tile coordinates not world coordinates!
 		/// </summary>
 		/// <returns>The tile.</returns>
 		/// <param name="x">The x coordinate.</param>
 		/// <param name="y">The y coordinate.</param>
-		public void setTile( int x, int y, TiledTile tile )
+		/// <typeparam name="T">The 1st type parameter.</typeparam>
+		public T getTile<T>( int x, int y ) where T : TiledTile
 		{
-			tiles[x + y * width] = tile;
+			return tiles[x + y * width] as T;
+		}
+
+
+		/// <summary>
+		/// sets the tile and updates its tileset
+		/// </summary>
+		/// <returns>The tile.</returns>
+		/// <param name="tile">Tile.</param>
+		public TiledTile setTile( TiledTile tile )
+		{
+			tiles[tile.x + tile.y * width] = tile;
+			tile.tileset = tiledMap.getTilesetForTileId( tile.id );
+
+			return tile;
 		}
 
 
@@ -182,6 +203,8 @@ namespace Nez.Tiled
 		{
 			tiles[x + y * width] = null;
 		}
+
+		#endregion
 
 
 		/// <summary>

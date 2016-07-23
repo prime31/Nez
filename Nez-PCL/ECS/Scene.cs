@@ -377,6 +377,9 @@ namespace Nez
 					entity.update();
 			}
 
+			if( entityProcessors != null )
+				entityProcessors.lateUpdate();
+
 			// we update our renderables after entity.update in case any new Renderables were added
 			renderableComponents.updateLists();
 		}
@@ -677,7 +680,7 @@ namespace Nez
 
 			for( var i = 0; i < _afterPostProcessorRenderers.Count; i++ )
 				_afterPostProcessorRenderers[i].onSceneBackBufferSizeChanged( renderTargetWidth, renderTargetHeight );
-			
+
 			for( var i = 0; i < _postProcessors.Count; i++ )
 				_postProcessors[i].onSceneBackBufferSizeChanged( renderTargetWidth, renderTargetHeight );
 
@@ -701,7 +704,7 @@ namespace Nez
 		{
 			_screenshotRequestCallback = callback;
 		}
-	
+
 
 		/// <summary>
 		/// Returns whether the timeSinceSceneLoad has passed the given time interval since the last frame. Ex: given 2.0f, this will return true once every 2 seconds
@@ -739,7 +742,7 @@ namespace Nez
 			// if we already began let the PostProcessor know what size our RenderTarget is
 			if( _didSceneBegin )
 				renderer.onSceneBackBufferSizeChanged( _sceneRenderTarget.Width, _sceneRenderTarget.Height );
-			
+
 			return renderer;
 		}
 
@@ -870,7 +873,7 @@ namespace Nez
 		/// adds an Entity to the Scene's Entities list
 		/// </summary>
 		/// <param name="entity">The Entity to add</param>
-		public T addEntity<T>( T entity ) where T : Entity 
+		public T addEntity<T>( T entity ) where T : Entity
 		{
 			Assert.isFalse( entities.contains( entity ), "You are attempting to add the same entity to a scene twice: {0}", entity );
 			entities.add( entity );
@@ -981,7 +984,7 @@ namespace Nez
 		}
 
 		#endregion
-	
+
 	}
 }
 
