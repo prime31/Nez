@@ -181,31 +181,39 @@ namespace Nez.Tiled
 		/// <returns>The tile.</returns>
 		public TiledTile setTile( int x, int y, int tileId )
 		{
-			var tile = getTile( x, y );
-			if( tile == null )
-			{
-				tile = new TiledTile( tileId )
-				{
-					x = x,
-					y = y
-				};
-				tiles[x + y * width] = tile;
-			}
-			else
-			{
-				tile.setTileId( tileId );
-			}
-
-			tile.tileset = tiledMap.getTilesetForTileId( tileId );
-
-			return tile;
+            return setTile<TiledTile>( x, y, tileId );
 		}
 
-
-		public T setTile<T>( int x, int y, int tileId ) where T : TiledTile
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <typeparam name="T">The type of tile to set(create).</typeparam>
+        /// <param name="x">The x coordinate.</param>
+        /// <param name="y">The y coordinate.</param>
+        /// <param name="tileId">the id to set the tile to.</param>
+        /// <returns>The tile.</returns>
+        public T setTile<T>( int x, int y, int tileId ) where T : TiledTile, new()
 		{
-			return setTile( x, y, tileId ) as T;
-		}
+            var tile = getTile<T>( x, y );
+            if ( tile == null || tile.GetType() != typeof( T ) )
+            {
+                tile = new T()
+                {
+                    id = tileId,
+                    x = x,
+                    y = y
+                };
+                tiles[ x + y * width ] = tile;
+            }
+            else
+            {
+                tile.setTileId( tileId );
+            }
+
+            tile.tileset = tiledMap.getTilesetForTileId( tileId );
+
+            return tile;
+        }
 
 
 		/// <summary>
