@@ -29,14 +29,15 @@ namespace Nez.Tiled
 		public string objectType;
 		public Vector2[] polyPoints;
 		public Dictionary<string,string> properties = new Dictionary<string,string>();
+		
+		/// <summary>
+		/// wraps the x/y fields in a Vector
+		/// </summary>
 	        public Vector2 position
 	        {
-	            get { return new Vector2(x, y); }
+	            get { return new Vector2( x, y ); }
 	            set { x = (int)value.X; y = (int)value.Y; }
 	        }
-
-        	public TiledObject()
-		{}
 	}
 }
 
