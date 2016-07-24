@@ -241,10 +241,11 @@ namespace Nez.Spatial
 		///<filterpriority>2</filterpriority>
 		IEnumerator IEnumerable.GetEnumerator()
 		{
-			return this.GetEnumerator();
+			return GetEnumerator();
 		}
 
 		#endregion
+	
 	}
 
 }

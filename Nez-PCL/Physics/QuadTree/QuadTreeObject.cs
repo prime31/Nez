@@ -1,13 +1,10 @@
-﻿using System;
-
-
-namespace Nez.Spatial
+﻿namespace Nez.Spatial
 {
 	/// <summary>
 	/// Used internally to attach an Owner to each object stored in the QuadTree
 	/// </summary>
 	/// <typeparam name="T"></typeparam>
-	internal class QuadTreeObject<T> where T : IQuadTreeStorable
+	class QuadTreeObject<T> where T : IQuadTreeStorable
 	{
 		/// <summary>
 		/// The wrapped data value
