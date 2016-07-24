@@ -123,6 +123,14 @@ namespace Nez.Tiled
 			_movementRemainderY += motion.Y;
 			var motionY = Mathf.truncateToInt( _movementRemainderY );
 			_movementRemainderY -= motionY;
+
+			// due to subpixel movement we might end up with 0 gravity when we really want there to be at least 1 pixel so slopes can work
+			if( collisionState.below && motionY == 0 && _movementRemainderY > 0 )
+			{
+				motionY = 1;
+				_movementRemainderY = 0;
+			}
+
 			motion.Y = motionY;
 
 			// save off our current grounded state which we will use for wasGroundedLastFrame and becameGroundedThisFrame
