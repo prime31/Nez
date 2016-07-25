@@ -43,7 +43,7 @@ namespace Nez
 			entity.colliders.unregisterAllCollidersWithPhysicsSystem();
 
 			// 1. move all non-trigger Colliders and get closest collision
-			var colliders = entity.colliders.getColliders();
+			var colliders = entity.getColliders();
 			for( var i = 0; i < colliders.Count; i++ )
 			{
 				var collider = colliders[i];
@@ -76,7 +76,7 @@ namespace Nez
 			// 2. move entity to its new position if we have a collision else move the full amount. motion is updated when a collision occurs
 			entity.transform.position += motion;
 
-			// 3. do an overlap check of all entity.colliders that are triggers with all broadphase colliders, triggers or not.
+			// 3. do an overlap check of all Colliders that are triggers with all broadphase colliders, triggers or not.
 			//    Any overlaps result in trigger events.
 			_triggerHelper.update();
 
