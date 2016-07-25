@@ -33,7 +33,7 @@ namespace Nez
 			collisionResult = new CollisionResult();
 
 			// no collider? just move and forget about it
-			if( entity.colliders.Count == 0 )
+			if( entity.colliders.Count == 0 || _triggerHelper == null )
 			{
 				entity.transform.position += motion;
 				return false;
@@ -42,10 +42,11 @@ namespace Nez
 			// remove ourself from the physics system until after we are done moving
 			entity.colliders.unregisterAllCollidersWithPhysicsSystem();
 
-			// 1. move all non-trigger entity.colliders and get closest collision
-			for( var i = 0; i < entity.colliders.Count; i++ )
+			// 1. move all non-trigger Colliders and get closest collision
+			var colliders = entity.colliders.getColliders();
+			for( var i = 0; i < colliders.Count; i++ )
 			{
-				var collider = entity.colliders[i];
+				var collider = colliders[i];
 
 				// skip triggers for now. we will revisit them after we move.
 				if( collider.isTrigger )
@@ -70,6 +71,7 @@ namespace Nez
 					}
 				}
 			}
+			ListPool<Collider>.free( colliders );
 
 			// 2. move entity to its new position if we have a collision else move the full amount. motion is updated when a collision occurs
 			entity.transform.position += motion;

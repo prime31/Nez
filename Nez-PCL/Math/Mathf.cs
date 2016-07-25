@@ -16,9 +16,9 @@ namespace Nez
 		}
 
 
-		public static float floor( float f )
+		public static float ceil( float f )
 		{
-			return (float)Math.Floor( (double)f );
+			return (float)Math.Ceiling( (double)f );
 		}
 
 
@@ -36,6 +36,12 @@ namespace Nez
 		public static int fastCeilToInt( float y )
 		{
 			return 32768 - (int)( 32768f - y );
+		}
+
+
+		public static float floor( float f )
+		{
+			return (float)Math.Floor( (double)f );
 		}
 
 

@@ -33,9 +33,10 @@ namespace Nez
 		{
 			// 3. do an overlap check of all entity.colliders that are triggers with all broadphase colliders, triggers or not.
 			//    Any overlaps result in trigger events.
-			for( var i = 0; i < _entity.colliders.Count; i++ )
+			var colliders = _entity.colliders.getColliders();
+			for( var i = 0; i < colliders.Count; i++ )
 			{
-				var collider = _entity.colliders[i];
+				var collider = colliders[i];
 
 				// fetch anything that we might collide with us at our new position
 				var neighbors = Physics.boxcastBroadphase( collider.bounds, collider.collidesWithLayers );
@@ -58,6 +59,7 @@ namespace Nez
 					} // overlaps
 				} // end foreach
 			}
+			ListPool<Collider>.free( colliders );
 
 			checkForExitedColliders();
 		}
