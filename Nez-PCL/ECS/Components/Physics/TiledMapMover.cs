@@ -29,6 +29,7 @@ namespace Nez.Tiled
 			public bool right, left, above, below;
 			public bool becameGroundedThisFrame;
 			public bool wasGroundedLastFrame;
+			public bool isGroundedOnOneWayPlatform;
 			public float slopeAngle;
 
 			public bool hasCollision { get { return below || right || left || above; } }
@@ -36,7 +37,7 @@ namespace Nez.Tiled
 
 			public void reset()
 			{
-				right = left = becameGroundedThisFrame = above = below = false;
+				becameGroundedThisFrame = isGroundedOnOneWayPlatform = right = left = above = below = false;
 				slopeAngle = 0f;
 			}
 
@@ -230,7 +231,10 @@ namespace Nez.Tiled
 				{
 					// store off our last ground tile if we collided below
 					if( direction == Edge.Bottom )
+					{
 						_lastGroundTile = _collidingTiles[i];
+						collisionState.isGroundedOnOneWayPlatform = _lastGroundTile.isOneWayPlatform();
+					}
 					
 					return true;
 				}
