@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections;
+using System.Runtime.CompilerServices;
 
 
 namespace Nez
@@ -104,6 +105,7 @@ namespace Nez
 		/// <returns>The collider.</returns>
 		/// <param name="onlyReturnInitializedColliders">Only return initialized colliders.</param>
 		/// <typeparam name="T">The 1st type parameter.</typeparam>
+		[MethodImpl( MethodImplOptions.AggressiveInlining )]
 		public T getCollider<T>( bool onlyReturnInitializedColliders = false ) where T : Collider
 		{
 			for( var i = 0; i < _colliders.Count; i++ )
@@ -133,6 +135,7 @@ namespace Nez
 		/// </summary>
 		/// <returns>The colliders.</returns>
 		/// <param name="colliders">Colliders.</param>
+		[MethodImpl( MethodImplOptions.AggressiveInlining )]
 		public void getColliders( List<Collider> colliders )
 		{
 			for( var i = 0; i < _colliders.Count; i++ )
@@ -147,6 +150,7 @@ namespace Nez
 		/// Gets all the Colliders. The returned List can be put back in the pool via ListPool.free.
 		/// </summary>
 		/// <returns>The colliders.</returns>
+		[MethodImpl( MethodImplOptions.AggressiveInlining )]
 		public List<Collider> getColliders()
 		{
 			var list = ListPool<Collider>.obtain();

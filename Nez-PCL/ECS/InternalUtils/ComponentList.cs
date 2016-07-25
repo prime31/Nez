@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections;
+using System.Runtime.CompilerServices;
 
 
 namespace Nez
@@ -220,6 +221,7 @@ namespace Nez
 		/// <returns>The component.</returns>
 		/// <param name="onlyReturnInitializedComponents">If set to <c>true</c> only return initialized components.</param>
 		/// <typeparam name="T">The 1st type parameter.</typeparam>
+		[MethodImpl( MethodImplOptions.AggressiveInlining )]
 		public T getComponent<T>( bool onlyReturnInitializedComponents ) where T : Component
 		{
 			for( var i = 0; i < _components.length; i++ )
@@ -249,6 +251,7 @@ namespace Nez
 		/// </summary>
 		/// <param name="components">Components.</param>
 		/// <typeparam name="T">The 1st type parameter.</typeparam>
+		[MethodImpl( MethodImplOptions.AggressiveInlining )]
 		public void getComponents<T>( List<T> components ) where T : class
 		{
 			for( var i = 0; i < _components.length; i++ )
@@ -273,6 +276,7 @@ namespace Nez
 		/// </summary>
 		/// <returns>The components.</returns>
 		/// <typeparam name="T">The 1st type parameter.</typeparam>
+		[MethodImpl( MethodImplOptions.AggressiveInlining )]
 		public List<T> getComponents<T>() where T : class
 		{
 			var components = ListPool<T>.obtain();
@@ -282,6 +286,7 @@ namespace Nez
 		}
 
 
+		[MethodImpl( MethodImplOptions.AggressiveInlining )]
 		internal void update()
 		{
 			for( var i = 0; i < _updatableComponents.length; i++ )
@@ -292,6 +297,7 @@ namespace Nez
 		}
 
 
+		[MethodImpl( MethodImplOptions.AggressiveInlining )]
 		internal void onEntityTransformChanged()
 		{
 			for( var i = 0; i < _components.length; i++ )
