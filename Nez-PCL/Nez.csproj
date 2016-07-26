@@ -491,6 +491,7 @@
     <Compile Include="ECS\Components\Text\TextRun.cs" />
     <Compile Include="Math\Matrix2D.cs" />
     <Compile Include="Utils\Extensions\SoundEffectInstanceExt.cs" />
+    <Compile Include="Physics\ColliderTriggerHelper.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="MonoGame.Framework">

@@ -29,6 +29,7 @@ namespace Nez.Tiled
 			public bool right, left, above, below;
 			public bool becameGroundedThisFrame;
 			public bool wasGroundedLastFrame;
+			public bool isGroundedOnOneWayPlatform;
 			public float slopeAngle;
 
 			public bool hasCollision { get { return below || right || left || above; } }
@@ -36,7 +37,7 @@ namespace Nez.Tiled
 
 			public void reset()
 			{
-				right = left = becameGroundedThisFrame = above = below = false;
+				becameGroundedThisFrame = isGroundedOnOneWayPlatform = right = left = above = below = false;
 				slopeAngle = 0f;
 			}
 
@@ -54,11 +55,6 @@ namespace Nez.Tiled
 		/// current collision state of the Entity
 		/// </summary>
 		public CollisionState collisionState = new CollisionState();
-
-		/// <summary>
-		/// calculated velocity based on the last frames movement
-		/// </summary>
-		public Vector2 velocity;
 
 		/// <summary>
 		/// the inset on the horizontal plane that the BoxCollider will be shrunk by when moving vertically
@@ -92,7 +88,7 @@ namespace Nez.Tiled
 
 		public override void onAddedToEntity()
 		{
-			_collider = entity.colliders.getCollider<BoxCollider>();
+			_collider = entity.getCollider<BoxCollider>();
 			Assert.isNotNull( _collider, "Entity must have a BoxCollider" );
 		}
 
@@ -103,17 +99,6 @@ namespace Nez.Tiled
 		/// <param name="motion">Motion.</param>
 		public void move( Vector2 motion )
 		{
-			move( motion, Time.deltaTime );
-		}
-
-
-		/// <summary>
-		/// moves the Entity taking into account the tiled map
-		/// </summary>
-		/// <param name="motion">Motion.</param>
-		/// <param name="deltaTime">Delta time.</param>
-		public void move( Vector2 motion, float deltaTime )
-		{
 			// deal with subpixel movement, storing off any non-integar remainder for the next frame
 			_movementRemainderX += motion.X;
 			var motionX = Mathf.truncateToInt( _movementRemainderX );
@@ -123,6 +108,14 @@ namespace Nez.Tiled
 			_movementRemainderY += motion.Y;
 			var motionY = Mathf.truncateToInt( _movementRemainderY );
 			_movementRemainderY -= motionY;
+
+			// due to subpixel movement we might end up with 0 gravity when we really want there to be at least 1 pixel so slopes can work
+			if( collisionState.below && motionY == 0 && _movementRemainderY > 0 )
+			{
+				motionY = 1;
+				_movementRemainderY = 0;
+			}
+
 			motion.Y = motionY;
 
 			// save off our current grounded state which we will use for wasGroundedLastFrame and becameGroundedThisFrame
@@ -201,21 +194,12 @@ namespace Nez.Tiled
 			transform.position += motion;
 			_collider.registerColliderWithPhysicsSystem();
 
-			// only calculate velocity if we have a non-zero deltaTime
-			if( deltaTime > 0f )
-				velocity = motion / deltaTime;
-
+			// update state for any collisions that occured
 			if( collisionState.below || collisionState.above )
-			{
 				_movementRemainderY = 0;
-				velocity.Y = 0;
-			}
 
 			if( collisionState.right || collisionState.left )
-			{
 				_movementRemainderX = 0;
-				velocity.X = 0;
-			}
 
 			// set our becameGrounded state based on the previous and current collision state
 			if( !collisionState.wasGroundedLastFrame && collisionState.below )
@@ -247,7 +231,10 @@ namespace Nez.Tiled
 				{
 					// store off our last ground tile if we collided below
 					if( direction == Edge.Bottom )
+					{
 						_lastGroundTile = _collidingTiles[i];
+						collisionState.isGroundedOnOneWayPlatform = _lastGroundTile.isOneWayPlatform();
+					}
 					
 					return true;
 				}
