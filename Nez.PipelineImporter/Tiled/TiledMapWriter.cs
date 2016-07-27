@@ -19,7 +19,7 @@ namespace Nez.TiledMaps
 
 		protected override void Write( ContentWriter writer, TmxMap map )
 		{
-			float largestTileWidth = 0, largestTileHeight = 0;
+			int largestTileWidth = 0, largestTileHeight = 0;
 			foreach( var tileset in map.tilesets )
 			{
 				largestTileWidth = Math.Max( largestTileWidth, tileset.tileWidth );
