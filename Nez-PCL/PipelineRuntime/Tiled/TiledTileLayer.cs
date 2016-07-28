@@ -347,5 +347,80 @@ namespace Nez.Tiled
 			return tilelist;
 		}
 
+
+		/// <summary>
+		/// casts a line from start to end returning the first solid tile it intersects. Note that start and end and clamped to the tilemap
+		/// bounds so make sure you pass in valid positions else you may get odd results!
+		/// </summary>
+		/// <param name="start">Start.</param>
+		/// <param name="end">End.</param>
+		public TiledTile linecast( Vector2 start, Vector2 end )
+		{
+			var direction = end - start;
+
+			// worldToTilePosition clamps to the tilemaps bounds so no need to worry about overlow
+			var startCell = tiledMap.worldToTilePosition( start );
+			var endCell = tiledMap.worldToTilePosition( end );
+
+			start.X /= tiledMap.tileWidth;
+			start.Y /= tiledMap.tileHeight;
+
+			// what tile are we on
+			var intX = startCell.X;
+			var intY = startCell.Y;
+
+			// ensure our start cell exists
+			if( intX < 0 || intX >= tiledMap.width || intY < 0 || intY >= tiledMap.height )
+				return null;
+
+			// which way we go
+			var stepX = Math.Sign( direction.X );
+			var stepY = Math.Sign( direction.Y );
+
+			// Calculate cell boundaries. when the step is positive, the next cell is after this one meaning we add 1.
+			// If negative, cell is before this one in which case dont add to boundary
+			var boundaryX = intX + ( stepX > 0 ? 1 : 0 );
+			var boundaryY = intY + ( stepY > 0 ? 1 : 0 );
+
+			// determine the value of t at which the ray crosses the first vertical tile boundary. same for y/horizontal.
+			// The minimum of these two values will indicate how much we can travel along the ray and still remain in the current tile
+			// may be infinite for near vertical/horizontal rays
+			var tMaxX = ( boundaryX - start.X ) / direction.X;
+			var tMaxY = ( boundaryY - start.Y ) / direction.Y;
+			if( direction.X == 0f )
+				tMaxX = float.PositiveInfinity;
+			if( direction.Y == 0f )
+				tMaxY = float.PositiveInfinity;
+
+			// how far do we have to walk before crossing a cell from a cell boundary. may be infinite for near vertical/horizontal rays
+			var tDeltaX = stepX / direction.X;
+			var tDeltaY = stepY / direction.Y;
+
+			// start walking and returning the intersecting tiles
+			var tile = tiles[intX + intY * width];
+			if( tile != null )
+				return tile;
+
+			while( intX != endCell.X || intY != endCell.Y )
+			{
+				if( tMaxX < tMaxY )
+				{
+					intX += stepX;
+					tMaxX += tDeltaX;
+				}
+				else
+				{
+					intY += stepY;
+					tMaxY += tDeltaY;
+				}
+
+				tile = tiles[intX + intY * width];
+				if( tile != null )
+					return tile;
+			}
+
+			return null;
+		}
+
 	}
 }

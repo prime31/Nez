@@ -17,7 +17,7 @@ namespace Nez.Tiled
 	/// - nez:isSlope (bool): signifies if the tile is a slope. Requires the next two properties if it is
 	/// - nez:slopeTopLeft (int): distance in pixels from the tiles top to the slope on the left side. For example, a 45 top-left to bottom-right
 	/// tile |\ would have a slopeTopLeft of 0 and slopeTopRight of 15
-	/// - nez:slopeTopRist (int): distance in pixels from the tiles top to the slope on the right side
+	/// - nez:slopeTopRight (int): distance in pixels from the tiles top to the slope on the right side
 	/// </summary>
 	public class TiledMapMover : Component
 	{
@@ -66,7 +66,11 @@ namespace Nez.Tiled
 		/// </summary>
 		public int colliderVerticalInset = 6;
 
-		TiledTileLayer _collisionLayer;
+		/// <summary>
+		/// the TiledTileLayer used for collision checks
+		/// </summary>
+		public TiledTileLayer collisionLayer;
+
 		TiledMap _tiledMap;
 		BoxCollider _collider;
 		float _movementRemainderX, _movementRemainderY;
@@ -80,9 +84,9 @@ namespace Nez.Tiled
 
 		public TiledMapMover( TiledTileLayer collisionLayer )
 		{
-			_collisionLayer = collisionLayer;
-			_tiledMap = _collisionLayer.tiledMap;
-			Assert.isNotNull( _collisionLayer, nameof( collisionLayer ) + " is required" );
+			this.collisionLayer = collisionLayer;
+			_tiledMap = collisionLayer.tiledMap;
+			Assert.isNotNull( collisionLayer, nameof( collisionLayer ) + " is required" );
 		}
 
 
@@ -387,7 +391,7 @@ namespace Nez.Tiled
 				{
 					var col = isHorizontal ? primary : secondary;
 					var row = !isHorizontal ? primary : secondary;
-					_collidingTiles.Add( _collisionLayer.getTile( col, row ) );
+					_collidingTiles.Add( collisionLayer.getTile( col, row ) );
 				}
 			}
 		}

@@ -322,7 +322,6 @@ namespace Nez.Spatial
 				}
 
 				cell = cellAtPosition( intX, intY );
-				//debugDrawCellDetails( intX, intY, cell != null ? cell.Count : 0 );
 				if( cell != null && _raycastParser.checkRayIntersection( intX, intY, cell ) )
 				{
 					_raycastParser.reset();
