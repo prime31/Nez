@@ -71,7 +71,7 @@ namespace Nez.TiledMaps
 				foreach( var p in parts )
 				{
 					var pair = p.Split( new char[]{ ',' } );
-					points.Add( new Vector2( float.Parse( pair[0] ), float.Parse( pair[1] ) ));
+					points.Add( new Vector2( float.Parse( pair[0], System.Globalization.CultureInfo.InvariantCulture), float.Parse( pair[1], System.Globalization.CultureInfo.InvariantCulture) ));
 				}
 			}
 		}
