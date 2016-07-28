@@ -35,8 +35,8 @@ namespace Nez.Tiled
 			get { return height * tileHeight; }
 		}
 
-		internal int largestTileWidth;
-		internal int largestTileHeight;
+		public int largestTileWidth;
+		public int largestTileHeight;
 		internal bool requiresLargeTileCulling;
 
 		internal List<TiledAnimatedTile> _animatedTiles = new List<TiledAnimatedTile>();
