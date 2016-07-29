@@ -1,6 +1,6 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
-
+using System.Collections.Generic;
 
 namespace Nez
 {
@@ -45,6 +45,13 @@ namespace Nez
 		/// </summary>
 		public Vector2 mapSize;
 
+        private Vector2 _lastPosition;
+
+        /// <summary>
+        /// Contains a number of layers used for a parallax effect
+        /// </summary>
+        public List<ParallaxLayer> parallaxLayers = new List<ParallaxLayer>();
+
 		Entity _targetEntity;
 		Vector2 _desiredPositionDelta;
 		CameraStyle _cameraStyle;
@@ -82,6 +89,9 @@ namespace Nez
 
 		void IUpdatable.update()
 		{
+            // store our current position
+            _lastPosition = transform.position;
+
 			// translate the deadzone to be in world space
 			var halfScreen = entity.scene.sceneRenderTargetSize.ToVector2() * 0.5f;
 			_worldSpaceDeadzone.x = camera.position.X - halfScreen.X + deadzone.x + focusOffset.X;
@@ -100,6 +110,12 @@ namespace Nez
 				camera.position = clampToMapSize( camera.position );
 				camera.entity.transform.roundPosition();   
 			}
+
+            // loop through parallax layers and apply desired movement
+            foreach (var parallaxLayer in parallaxLayers)
+                foreach (var entity in parallaxLayer.entities)
+                    entity.transform.position += ((transform.position - _lastPosition) * parallaxLayer.parallaxFactor);
+                    
 		}
 
 
