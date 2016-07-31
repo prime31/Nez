@@ -45,6 +45,10 @@ namespace Nez.Sprites
 		}
 
 
+		/// <summary>
+		/// called by SpriteT to calculate the secondsPerFrame and totalDuration based on the loop details and frame count
+		/// </summary>
+		/// <returns>The for use.</returns>
 		public void prepareForUse()
 		{
 			if( _hasBeenPreparedForUse )
@@ -68,10 +72,11 @@ namespace Nez.Sprites
 		/// sets the origin for all frames in this animation
 		/// </summary>
 		/// <param name="origin"></param>
-		public void setOrigin( Vector2 origin )
+		public SpriteAnimation setOrigin( Vector2 origin )
 		{
 			for( var i = 0; i < frames.Count; i++ )
 				frames[i].origin = origin;
+			return this;
 		}
 
 
@@ -79,26 +84,42 @@ namespace Nez.Sprites
 		/// adds a frame to this animation
 		/// </summary>
 		/// <param name="frame">Frame.</param>
-		public void addFrame( SpriteAnimationFrame frame )
+		public SpriteAnimation addFrame( SpriteAnimationFrame frame )
 		{
 			frames.Add( frame );
+			return this;
 		}
 
 
 		/// <summary>
-		/// adds a frame to this animation with a 0,0 origin
+		/// adds a frame to this animation with an origin at subtexture.center
 		/// </summary>
 		/// <param name="subtexture">Subtexture.</param>
-		public void addFrame( Subtexture subtexture )
+		public SpriteAnimation addFrame( Subtexture subtexture )
 		{
 			addFrame( new SpriteAnimationFrame( subtexture ) );
+			return this;
 		}
 
 
-		public void addFrames( List<Subtexture> subtextures )
+		/// <summary>
+		/// adds a frame to this animation with the specified subtexture and origin
+		/// </summary>
+		/// <returns>The frame.</returns>
+		/// <param name="subtexture">Subtexture.</param>
+		/// <param name="origin">Origin.</param>
+		public SpriteAnimation addFrame( Subtexture subtexture, Vector2 origin )
+		{
+			addFrame( new SpriteAnimationFrame( subtexture, origin ) );
+			return this;
+		}
+
+
+		public SpriteAnimation addFrames( List<Subtexture> subtextures )
 		{
 			for( var i = 0; i < subtextures.Count; i++ )
 				addFrame( subtextures[i] );
+			return this;
 		}
 
 	}

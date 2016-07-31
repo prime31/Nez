@@ -1,52 +1,21 @@
 ﻿using System;
-using Microsoft.Xna.Framework.Input;
+using System.Runtime.CompilerServices;
 
 
 namespace Nez
 {
 	public static class ArrayExt
 	{
-		public static bool contains( this int[] source, int value )
-		{
-			for( var i = 0; i < source.Length; i++ )
-			{
-				if( source[i] == value )
-					return true;
-			}
-			return false;
-		}
-
-
-		public static bool contains( this string[] source, string value )
-		{
-			for( var i = 0; i < source.Length; i++ )
-			{
-				if( source[i] == value )
-					return true;
-			}
-			return false;
-		}
-
-
-		public static bool contains( this Keys[] source, Keys value )
-		{
-			for( var i = 0; i < source.Length; i++ )
-			{
-				if( source[i] == value )
-					return true;
-			}
-			return false;
-		}
-
-
+		/// <summary>
+		/// checks to see if value exists in source
+		/// </summary>
+		/// <param name="source">Source.</param>
+		/// <param name="value">Value.</param>
+		/// <typeparam name="T">The 1st type parameter.</typeparam>
+		[MethodImpl( MethodImplOptions.AggressiveInlining )]
 		public static bool contains<T>( this T[] source, T value )
 		{
-			for( var i = 0; i < source.Length; i++ )
-			{
-				if( source[i].Equals( value ) )
-					return true;
-			}
-			return false;
+			return Array.IndexOf( source, value ) >= 0;
 		}
 	}
 }
