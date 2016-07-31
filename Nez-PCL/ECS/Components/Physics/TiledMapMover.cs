@@ -42,6 +42,19 @@ namespace Nez.Tiled
 			}
 
 
+			public void reset( Vector2 motion )
+			{
+				if( motion.X == 0 )
+					right = left = false;
+
+				if( motion.Y == 0 )
+					above = below = false;
+				
+				becameGroundedThisFrame = isGroundedOnOneWayPlatform = false;
+				slopeAngle = 0f;
+			}
+
+
 			public override string ToString()
 			{
 				return string.Format( "[CollisionState] r: {0}, l: {1}, a: {2}, b: {3}, angle: {4}, wasGroundedLastFrame: {5}, becameGroundedThisFrame: {6}",
@@ -103,6 +116,12 @@ namespace Nez.Tiled
 		/// <param name="motion">Motion.</param>
 		public void move( Vector2 motion )
 		{
+			// save off our current grounded state which we will use for wasGroundedLastFrame and becameGroundedThisFrame
+			collisionState.wasGroundedLastFrame = collisionState.below;
+
+			// reset our collisions state
+			collisionState.reset( motion );
+
 			// deal with subpixel movement, storing off any non-integar remainder for the next frame
 			_movementRemainderX += motion.X;
 			var motionX = Mathf.truncateToInt( _movementRemainderX );
@@ -122,16 +141,11 @@ namespace Nez.Tiled
 
 			motion.Y = motionY;
 
-			// save off our current grounded state which we will use for wasGroundedLastFrame and becameGroundedThisFrame
-			collisionState.wasGroundedLastFrame = collisionState.below;
-
-			// reset our collisions state
-			collisionState.reset();
-
 			// store off the bounds so we can move it around without affecting the actual Transform position
 			var colliderBounds = _collider.bounds;
 
 			// first, check movement in the horizontal dir
+			if( motionX != 0 )
 			{
 				var direction = motionX > 0 ? Edge.Right : Edge.Left;
 				var sweptBounds = collisionRectForSide( direction, motionX );
@@ -143,6 +157,7 @@ namespace Nez.Tiled
 					motion.X = collisionResponse - colliderBounds.getSide( direction );
 					collisionState.left = direction == Edge.Left;
 					collisionState.right = direction == Edge.Right;
+					_movementRemainderX = 0;
 				}
 				else
 				{
@@ -164,6 +179,7 @@ namespace Nez.Tiled
 					motion.Y = collisionResponse - colliderBounds.getSide( direction );
 					collisionState.above = direction == Edge.Top;
 					collisionState.below = direction == Edge.Bottom;
+					_movementRemainderY = 0;
 				}
 				else
 				{
@@ -172,7 +188,8 @@ namespace Nez.Tiled
 					_lastGroundTile = null;
 				}
 
-				// when moving down we also check for collisions in the opposite direction. this needs to be done
+				// when moving down we also check for collisions in the opposite direction. this needs to be done so that ledge bumps work when
+				// a jump is made but misses by the colliderVerticalInset
 				if( direction == Edge.Bottom )
 				{
 					direction = direction.oppositeEdge();
@@ -197,13 +214,6 @@ namespace Nez.Tiled
 			_collider.unregisterColliderWithPhysicsSystem();
 			transform.position += motion;
 			_collider.registerColliderWithPhysicsSystem();
-
-			// update state for any collisions that occured
-			if( collisionState.below || collisionState.above )
-				_movementRemainderY = 0;
-
-			if( collisionState.right || collisionState.left )
-				_movementRemainderX = 0;
 
 			// set our becameGrounded state based on the previous and current collision state
 			if( !collisionState.wasGroundedLastFrame && collisionState.below )
