@@ -1,7 +1,7 @@
-﻿using System;
+﻿//#define DEBUG_MOVER
+using System;
 using Microsoft.Xna.Framework;
 using System.Collections.Generic;
-using Microsoft.Xna.Framework.Graphics;
 
 
 namespace Nez.Tiled
@@ -19,7 +19,12 @@ namespace Nez.Tiled
 	/// tile |\ would have a slopeTopLeft of 0 and slopeTopRight of 15
 	/// - nez:slopeTopRight (int): distance in pixels from the tiles top to the slope on the right side
 	/// </summary>
-	public class TiledMapMover : Component
+	public class TiledMapMover :
+	#if DEBUG_MOVER
+	RenderableComponent
+	#else
+	Component
+	#endif
 	{
 		/// <summary>
 		/// class used to house all the collision information from a call to move
@@ -105,6 +110,7 @@ namespace Nez.Tiled
 
 		public override void onAddedToEntity()
 		{
+			//setRenderLayer( -1 );
 			_collider = entity.getCollider<BoxCollider>();
 			Assert.isNotNull( _collider, "Entity must have a BoxCollider" );
 		}
@@ -116,6 +122,7 @@ namespace Nez.Tiled
 		/// <param name="motion">Motion.</param>
 		public void move( Vector2 motion )
 		{
+			//_debugTiles.Clear();
 			// save off our current grounded state which we will use for wasGroundedLastFrame and becameGroundedThisFrame
 			collisionState.wasGroundedLastFrame = collisionState.below;
 
@@ -188,6 +195,7 @@ namespace Nez.Tiled
 					_lastGroundTile = null;
 				}
 
+
 				// when moving down we also check for collisions in the opposite direction. this needs to be done so that ledge bumps work when
 				// a jump is made but misses by the colliderVerticalInset
 				if( direction == Edge.Bottom )
@@ -235,11 +243,10 @@ namespace Nez.Tiled
 				if( _collidingTiles[i] == null )
 					continue;
 
-				// TODO: is this necessary? seems to work without it
-				// disregard horizontal collisions if the last tile we were grounded on was a slope
+				// disregard horizontal collisions if the last tile we were grounded on was a slope. Our y movement will push us up on the slope.
 				// this is not a fantastic solution
-				if( direction.isHorizontal() && _lastGroundTile != null && _lastGroundTile.isSlope() )
-					continue;
+				if( direction.isHorizontal() && _lastGroundTile != null && _lastGroundTile.isSlope() && _collidingTiles[i].isSlope() )
+					return false;
 				
 				if( testTileCollision( _collidingTiles[i], side, perpindicularPosition, leadingPosition, shouldTestSlopes, out collisionResponse ) )
 				{
@@ -256,13 +263,12 @@ namespace Nez.Tiled
 				// special case for sloped ground tiles
 				if( _lastGroundTile != null && direction == Edge.Bottom )
 				{
-					// if grounded on a slope and intersecting a slope or if grounded on a wall and intersecting a tall slope we go sticky
+					// if grounded on a slope and intersecting a slope or if grounded on a wall and intersecting a tall slope we go sticky.
 					// tall slope here means one where the the slopeTopLeft/Right is 0, i.e. it connects to a wall
 					if( ( _lastGroundTile.isSlope() && _collidingTiles[i].isSlope() ) || ( !_lastGroundTile.isSlope() && _collidingTiles[i].isSlope() /* should be tall slope check */ ) )
 					{
 						// store off our last ground tile if we collided below
 						_lastGroundTile = _collidingTiles[i];
-
 						return true;
 					}
 				}
@@ -350,10 +356,10 @@ namespace Nez.Tiled
 				collisionResponse = (int)( edgeToTest.isVertical() ? slope * ( perpindicularPosition - tileWorldX ) + offset + tileWorldY : ( perpindicularPosition - tileWorldY - offset ) / slope + tileWorldX );
 				var isColliding = edgeToTest.isMax() ? leadingPosition <= collisionResponse : leadingPosition >= collisionResponse;
 
-				// this code ensures that we dont consider collisions on a slope while jumping up that dont intersect our collider. It isn't totally
-				// perfect but it does the job
-				var diff = Math.Abs( leadingPosition - collisionResponse );
-				if( diff >= _tiledMap.tileHeight )
+				// this code ensures that we dont consider collisions on a slope while jumping up that dont intersect our collider.
+				// It also makes sure when testing the bottom edge that the leadingPosition is actually above the collisionResponse.
+				// It isn't totally perfect but it does the job
+				if( isColliding && edgeToTest == Edge.Bottom && leadingPosition <= collisionResponse )
 					isColliding = false;
 
 				// if we are grounded on a slope store off the slopeAngle. Remember, edgeToTest is the opposite edge of our movement direction.
@@ -430,7 +436,13 @@ namespace Nez.Tiled
 		Rectangle collisionRectForSide( Edge side, int motion )
 		{
 			var bounds = (Rectangle)_collider.bounds;
-			bounds = bounds.getHalfRect( side );
+
+			// for horizontal collision checks we use just a sliver for our bounds. Vertical gets the half rect so that it can properly push
+			// up when intersecting a slope which is ignored when moving horizontally.
+			if( side.isHorizontal() )
+				bounds = bounds.getRectEdgePortion( side );
+			else
+				bounds = bounds.getHalfRect( side );
 
 			// we contract horizontally for vertical movement and vertically for horizontal movement
 			if( side.isVertical() )
@@ -443,6 +455,47 @@ namespace Nez.Tiled
 
 			return bounds;
 		}
+
+
+		#if DEBUG_MOVER
+
+		public override float width { get { return 10000; } }
+		public override float height { get { return 10000; } }
+		List<TiledTile> _debugTiles = new List<TiledTile>();
+
+		public override void render( Graphics graphics, Camera camera )
+		{
+			for( var i = 0; i < _debugTiles.Count; i++ )
+			{
+				var t = _debugTiles[i];
+				if( t == null )
+					continue;
+				var pos = t.getWorldPosition( _tiledMap );
+				graphics.batcher.drawHollowRect( pos, _tiledMap.tileWidth, _tiledMap.tileHeight, Color.Yellow );
+
+				Debug.drawText( Graphics.instance.bitmapFont, i.ToString(), pos, Color.White );
+			}
+
+			if( _lastGroundTile != null )
+			{
+				var pos = _lastGroundTile.getWorldPosition( _tiledMap );
+				graphics.batcher.drawHollowRect( pos, _tiledMap.tileWidth, _tiledMap.tileHeight, Color.Magenta );
+			}
+
+			var bounds = collisionRectForSide( Edge.Top, 0 );
+			graphics.batcher.drawHollowRect( bounds, Color.Orchid );
+
+			bounds = collisionRectForSide( Edge.Bottom, 0 );
+			graphics.batcher.drawHollowRect( bounds, Color.Orange );
+
+			bounds = collisionRectForSide( Edge.Right, 0 );
+			graphics.batcher.drawHollowRect( bounds, Color.Blue );
+
+			bounds = collisionRectForSide( Edge.Left, 0 );
+			graphics.batcher.drawHollowRect( bounds, Color.Green );
+		}
+
+		#endif
 
 	}
 }
