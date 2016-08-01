@@ -12,7 +12,7 @@ namespace Nez.Sprites
 	/// </summary>
 	public class Sprite<TEnum> : Sprite, IUpdatable where TEnum : struct, IComparable, IFormattable
 	{
-		public System.Action<TEnum> onAnimationCompletedEvent;
+		public event Action<TEnum> onAnimationCompletedEvent;
 		public bool isPlaying { get; private set; }
 		public int currentFrame { get; private set; }
 
@@ -219,7 +219,7 @@ namespace Nez.Sprites
 		/// </summary>
 		/// <param name="animationKey">Animation key.</param>
 		/// <param name="startFrame">Start frame.</param>
-		public void play( TEnum animationKey, int startFrame = 0 )
+		public SpriteAnimation play( TEnum animationKey, int startFrame = 0 )
 		{
 			Assert.isTrue( _animations.ContainsKey( animationKey ), "Attempted to play an animation that doesnt exist" );
 
@@ -235,6 +235,7 @@ namespace Nez.Sprites
 			origin = _currentAnimation.frames[currentFrame].origin;
 
 			_totalElapsedTime = (float)startFrame * _currentAnimation.secondsPerFrame;
+			return animation;
 		}
 
 

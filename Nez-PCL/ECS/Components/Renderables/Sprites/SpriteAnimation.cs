@@ -15,18 +15,49 @@ namespace Nez.Sprites
 
 	public class SpriteAnimation
 	{
-		public float fps = 10;
-		public bool loop = true;
-		public bool pingPong;
+		/// <summary>
+		/// frames per second for the animations
+		/// </summary>
+		/// <value>The fps.</value>
+		public float fps
+		{
+			get { return _fps; }
+			set { setFps( value ); }
+		}
+
+		/// <summary>
+		/// controls whether the animation should loop
+		/// </summary>
+		/// <value>The loop.</value>
+		public bool loop
+		{
+			get { return _loop; }
+			set { setLoop( value ); }
+		}
+
+		/// <summary>
+		/// if loop is true, this controls if an animation loops sequentially or back and forth
+		/// </summary>
+		/// <value>The ping pong.</value>
+		public bool pingPong
+		{
+			get { return _pingPong; }
+			set { setPingPong( value ); }
+		}
+
 		public float delay = 0f;
 		public float totalDuration;
 		public AnimationCompletionBehavior completionBehavior;
 		public List<SpriteAnimationFrame> frames = new List<SpriteAnimationFrame>();
 
+		// calculated values used by SpriteT
 		internal float secondsPerFrame;
 		internal float iterationDuration;
 
-		bool _hasBeenPreparedForUse;
+		float _fps = 10;
+		bool _loop = true;
+		bool _pingPong = false;
+		bool _isDirty;
 
 
 		public SpriteAnimation()
@@ -51,7 +82,7 @@ namespace Nez.Sprites
 		/// <returns>The for use.</returns>
 		public void prepareForUse()
 		{
-			if( _hasBeenPreparedForUse )
+			if( !_isDirty )
 				return;
 
 			secondsPerFrame = 1f / fps;
@@ -64,7 +95,7 @@ namespace Nez.Sprites
 			else
 				totalDuration = iterationDuration;
 
-			_hasBeenPreparedForUse = true;
+			_isDirty = false;
 		}
 
 
@@ -76,6 +107,30 @@ namespace Nez.Sprites
 		{
 			for( var i = 0; i < frames.Count; i++ )
 				frames[i].origin = origin;
+			return this;
+		}
+
+
+		public SpriteAnimation setFps( float fps )
+		{
+			_fps = fps;
+			_isDirty = true;
+			return this;
+		}
+
+
+		public SpriteAnimation setLoop( bool loop )
+		{
+			_loop = loop;
+			_isDirty = true;
+			return this;
+		}
+
+
+		public SpriteAnimation setPingPong( bool pingPong )
+		{
+			_pingPong = pingPong;
+			_isDirty = true;
 			return this;
 		}
 
