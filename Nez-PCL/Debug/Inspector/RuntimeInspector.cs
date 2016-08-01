@@ -77,8 +77,8 @@ namespace Nez
 			}
 			else
 			{
-				foreach( var pp in Core.scene._postProcessors )
-					getOrCreateInspectorList( pp ).update();
+				for( var i = 0; i < Core.scene._postProcessors.length; i++ )
+					getOrCreateInspectorList( Core.scene._postProcessors.buffer[i] ).update();
 			}
 		}
 
