@@ -46,7 +46,7 @@ namespace Nez
 		/// </summary>
 		public static NezContentManager content;
 
-		[Obsolete( "use Scene.content instead of Scene.contentManager" )]
+		[Obsolete( "use Core.content instead of Core.contentManager" )]
 		public static NezContentManager contentManager { get { return content; } }
 
 		/// <summary>
