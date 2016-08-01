@@ -47,6 +47,31 @@ namespace Nez
 		}
 
 
+		/// <summary>
+		/// gets a portion of the Rectangle with a width/height of size that is on the Edge of the Rectangle but still contained within it.
+		/// </summary>
+		/// <returns>The rect edge portion.</returns>
+		/// <param name="rect">Rect.</param>
+		/// <param name="edge">Edge.</param>
+		/// <param name="size">Size.</param>
+		public static Rectangle getRectEdgePortion( this Rectangle rect, Edge edge, int size = 1 )
+		{
+			switch( edge )
+			{
+				case Edge.Top:
+					return new Rectangle( rect.X, rect.Y, rect.Width, size );
+				case Edge.Bottom:
+					return new Rectangle( rect.X, rect.Y + rect.Height - size, rect.Width, size );
+				case Edge.Left:
+					return new Rectangle( rect.X, rect.Y, size, rect.Height );
+				case Edge.Right:
+					return new Rectangle( rect.X + rect.Width - size, rect.Y, size, rect.Height );
+				default:
+					throw new ArgumentOutOfRangeException();
+			}
+		}
+
+
 		public static void expandSide( ref Rectangle rect, Edge edge, int amount )
 		{
 			// ensure we have a positive value

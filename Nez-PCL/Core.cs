@@ -234,6 +234,7 @@ namespace Nez
 			#if DEBUG
 			TimeRuler.instance.endMark( "update" );
 			DebugConsole.instance.update();
+			drawCalls = 0;
 			#endif
 
 			#if FNA
