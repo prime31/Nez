@@ -110,7 +110,6 @@ namespace Nez.Tiled
 
 		public override void onAddedToEntity()
 		{
-			//setRenderLayer( -1 );
 			_collider = entity.getCollider<BoxCollider>();
 			Assert.isNotNull( _collider, "Entity must have a BoxCollider" );
 		}
@@ -122,7 +121,6 @@ namespace Nez.Tiled
 		/// <param name="motion">Motion.</param>
 		public void move( Vector2 motion )
 		{
-			//_debugTiles.Clear();
 			// save off our current grounded state which we will use for wasGroundedLastFrame and becameGroundedThisFrame
 			collisionState.wasGroundedLastFrame = collisionState.below;
 
@@ -324,6 +322,7 @@ namespace Nez.Tiled
 				forceSlopedTileCheckAsWall = !wasCollidingBeforeMove;
 			}
 
+
 			if( forceSlopedTileCheckAsWall || !tile.isSlope() )
 			{				
 				switch( edgeToTest )
@@ -358,7 +357,7 @@ namespace Nez.Tiled
 
 				// this code ensures that we dont consider collisions on a slope while jumping up that dont intersect our collider.
 				// It also makes sure when testing the bottom edge that the leadingPosition is actually above the collisionResponse.
-				// It isn't totally perfect but it does the job
+				// HACK: It isn't totally perfect but it does the job
 				if( isColliding && edgeToTest == Edge.Bottom && leadingPosition <= collisionResponse )
 					isColliding = false;
 
@@ -408,6 +407,14 @@ namespace Nez.Tiled
 					var col = isHorizontal ? primary : secondary;
 					var row = !isHorizontal ? primary : secondary;
 					_collidingTiles.Add( collisionLayer.getTile( col, row ) );
+
+					#if DEBUG_MOVER
+					if( direction.isHorizontal() )
+					{
+						var pos = _tiledMap.tileToWorldPosition( new Point( col, row ) );
+						_debugTiles.Add( new Rectangle( (int)pos.X, (int)pos.Y, 16, 16 ) );
+					}
+					#endif
 				}
 			}
 		}
@@ -461,20 +468,18 @@ namespace Nez.Tiled
 
 		public override float width { get { return 10000; } }
 		public override float height { get { return 10000; } }
-		List<TiledTile> _debugTiles = new List<TiledTile>();
+		List<Rectangle> _debugTiles = new List<Rectangle>();
 
 		public override void render( Graphics graphics, Camera camera )
 		{
 			for( var i = 0; i < _debugTiles.Count; i++ )
 			{
 				var t = _debugTiles[i];
-				if( t == null )
-					continue;
-				var pos = t.getWorldPosition( _tiledMap );
-				graphics.batcher.drawHollowRect( pos, _tiledMap.tileWidth, _tiledMap.tileHeight, Color.Yellow );
+				graphics.batcher.drawHollowRect( t, Color.Yellow );
 
-				Debug.drawText( Graphics.instance.bitmapFont, i.ToString(), pos, Color.White );
+				Debug.drawText( Graphics.instance.bitmapFont, i.ToString(), t.Center.ToVector2(), Color.White );
 			}
+			_debugTiles.Clear();
 
 			if( _lastGroundTile != null )
 			{
