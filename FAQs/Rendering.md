@@ -14,6 +14,7 @@ You are free to subclass Renderer and render things in any way that you want. Th
 Sometimes you will want to do some rendering after all PostProcessors have run. For example, in most cases your UI will be rendered without any post process effects. To deal with cases like these a `Renderer` can set the `Renderer.wantsToRenderAfterPostProcessors` field. This must be set *before* calling `addRenderer` for it to take effect.
 
 
+
 ## Post Processors
 Much like Renderers, you can add one or more PostProcessors to the Scene via the **addPostProcessor** and **removePostProcessor** methods. PostProcessors are called after all Renderers have been called. One common use case for a PostProcessor is to display a RenderTexture that a Renderer rendered into most often with some Effects applied. Applying effects to the fully rendered scene is also a very common use case. You can globally enable/disable PostProcessors via the **Scene.enablePostProcessing** bool. Additionally, each PostProcessor can be enabled/disable for fine-grained control.
 
@@ -45,6 +46,7 @@ public class SimplePostProcessor : PostProcessor
 	}
 }
 ```
+
 
 
 ## IFinalRenderDelegate
