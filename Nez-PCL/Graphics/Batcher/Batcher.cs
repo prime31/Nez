@@ -7,7 +7,7 @@ using System.Text;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
 using Nez.BitmapFonts;
-
+using System.Runtime.CompilerServices;
 
 namespace Nez
 {
@@ -240,7 +240,7 @@ namespace Nez
 		public void draw( Texture2D texture, Vector2 position )
 		{
 			checkBegin();
-			pushSprite( texture, null, new Vector4( position.X, position.Y, 1.0f, 1.0f ),
+			pushSprite( texture, null, position.X, position.Y, 1.0f, 1.0f,
 				Color.White, Vector2.Zero, 0.0f, 0.0f, 0, false, 0, 0, 0, 0 );
 		}
 
@@ -248,7 +248,7 @@ namespace Nez
 		public void draw( Texture2D texture, Vector2 position, Color color )
 		{
 			checkBegin();
-			pushSprite( texture, null, new Vector4( position.X, position.Y, 1.0f, 1.0f ),
+			pushSprite( texture, null, position.X, position.Y, 1.0f, 1.0f,
 				color, Vector2.Zero, 0.0f, 0.0f, 0, false, 0, 0, 0, 0 );
 		}
 
@@ -256,7 +256,7 @@ namespace Nez
 		public void draw( Texture2D texture, Rectangle destinationRectangle )
 		{
 			checkBegin();
-			pushSprite( texture, null, new Vector4( destinationRectangle.X, destinationRectangle.Y, destinationRectangle.Width, destinationRectangle.Height ),
+			pushSprite( texture, null, destinationRectangle.X, destinationRectangle.Y, destinationRectangle.Width, destinationRectangle.Height,
 				Color.White, Vector2.Zero, 0.0f, 0.0f, 0, true, 0, 0, 0, 0 );
 		}
 
@@ -264,7 +264,7 @@ namespace Nez
 		public void draw( Texture2D texture, Rectangle destinationRectangle, Color color )
 		{
 			checkBegin();
-			pushSprite( texture, null, new Vector4( destinationRectangle.X, destinationRectangle.Y, destinationRectangle.Width, destinationRectangle.Height ),
+			pushSprite( texture, null, destinationRectangle.X, destinationRectangle.Y, destinationRectangle.Width, destinationRectangle.Height,
 				color, Vector2.Zero, 0.0f, 0.0f, 0, true, 0, 0, 0, 0 );
 		}
 
@@ -272,7 +272,7 @@ namespace Nez
 		public void draw( Texture2D texture, Rectangle destinationRectangle, Rectangle? sourceRectangle, Color color )
 		{
 			checkBegin();
-			pushSprite( texture, sourceRectangle, new Vector4( destinationRectangle.X, destinationRectangle.Y, destinationRectangle.Width, destinationRectangle.Height ),
+			pushSprite( texture, sourceRectangle, destinationRectangle.X, destinationRectangle.Y, destinationRectangle.Width, destinationRectangle.Height,
 				color, Vector2.Zero, 0.0f, 0.0f, 0, true, 0, 0, 0, 0 );
 		}
 
@@ -283,12 +283,10 @@ namespace Nez
 			pushSprite(
 				texture,
 				sourceRectangle,
-				new Vector4(
-					position.X,
-					position.Y,
-					1.0f,
-					1.0f
-				),
+				position.X,
+				position.Y,
+				1.0f,
+				1.0f,
 				color,
 				Vector2.Zero,
 				0.0f,
@@ -316,17 +314,15 @@ namespace Nez
 			pushSprite(
 				texture,
 				sourceRectangle,
-				new Vector4(
-					position.X,
-					position.Y,
-					scale,
-					scale
-				),
+				position.X,
+				position.Y,
+				scale,
+				scale,
 				color,
 				origin,
 				rotation,
 				layerDepth,
-				(byte)effects,
+				(byte)( effects & (SpriteEffects)0x03 ),
 				false,
 				0, 0, 0, 0
 			);
@@ -349,21 +345,20 @@ namespace Nez
 			pushSprite(
 				texture,
 				sourceRectangle,
-				new Vector4(
-					position.X,
-					position.Y,
-					scale.X,
-					scale.Y
-				),
+				position.X,
+				position.Y,
+				scale.X,
+				scale.Y,
 				color,
 				origin,
 				rotation,
 				layerDepth,
-				(byte)effects,
+				(byte)( effects & (SpriteEffects)0x03 ),
 				false,
 				0, 0, 0, 0
 			);
 		}
+
 
 		public void draw(
 			Texture2D texture,
@@ -382,21 +377,20 @@ namespace Nez
 			pushSprite(
 				texture,
 				sourceRectangle,
-				new Vector4(
-					position.X,
-					position.Y,
-					scale.X,
-					scale.Y
-				),
+				position.X,
+				position.Y,
+				scale.X,
+				scale.Y,
 				color,
 				origin,
 				rotation,
 				layerDepth,
-				(byte)effects,
+				(byte)( effects & (SpriteEffects)0x03 ),
 				false,
 				skewTopX, skewBottomX, skewLeftY, skewRightY
 			);
 		}
+
 
 		public void draw(
 			Texture2D texture,
@@ -413,12 +407,15 @@ namespace Nez
 			pushSprite(
 				texture,
 				sourceRectangle,
-				new Vector4( destinationRectangle.X, destinationRectangle.Y, destinationRectangle.Width, destinationRectangle.Height ),
+				destinationRectangle.X,
+				destinationRectangle.Y,
+				destinationRectangle.Width,
+				destinationRectangle.Height,
 				color,
 				origin,
 				rotation,
 				layerDepth,
-				(byte)effects,
+				(byte)( effects & (SpriteEffects)0x03 ),
 				true,
 				0, 0, 0, 0
 			);
@@ -544,17 +541,19 @@ namespace Nez
 
 		#region Methods
 
-		void pushSprite( Texture2D texture, Rectangle? sourceRectangle, Vector4 destination, Color color, Vector2 origin,
+		/// <summary>
+		/// the meat of the Batcher. This is where it all goes down
+		/// </summary>
+		[MethodImpl( MethodImplOptions.AggressiveInlining )]
+		void pushSprite( Texture2D texture, Rectangle? sourceRectangle, float destinationX, float destinationY, float destinationW, float destinationH, Color color, Vector2 origin,
 						float rotation, float depth, byte effects, bool destSizeInPixels, float skewTopX, float skewBottomX, float skewLeftY, float skewRightY )
 		{
-			// we're out of space, flush
+			// out of space, flush
 			if( _numSprites >= MAX_SPRITES )
 				flushBatch();
 
 			// Source/Destination/Origin Calculations
 			float sourceX, sourceY, sourceW, sourceH;
-			var destW = destination.Z;
-			var destH = destination.W;
 			float originX, originY;
 			if( sourceRectangle.HasValue )
 			{
@@ -571,8 +570,8 @@ namespace Nez
 
 				if( !destSizeInPixels )
 				{
-					destW *= sourceRectangle.Value.Width;
-					destH *= sourceRectangle.Value.Height;
+					destinationW *= sourceRectangle.Value.Width;
+					destinationH *= sourceRectangle.Value.Height;
 				}
 			}
 			else
@@ -587,8 +586,8 @@ namespace Nez
 
 				if( !destSizeInPixels )
 				{
-					destW *= texture.Width;
-					destH *= texture.Height;
+					destinationW *= texture.Width;
+					destinationH *= texture.Height;
 				}
 			}
 
@@ -624,61 +623,61 @@ namespace Nez
 				skewRightY *= -1;
 			}
 
-			// Calculate vertices, finally.
+			// calculate vertices
 			// top-left
-			var cornerX = ( _cornerOffsetX[0] - originX ) * destW + skewTopX * destination.Z;
-			var cornerY = ( _cornerOffsetY[0] - originY ) * destH - skewLeftY * destination.W;
+			var cornerX = ( _cornerOffsetX[0] - originX ) * destinationW + skewTopX * destinationW;
+			var cornerY = ( _cornerOffsetY[0] - originY ) * destinationH - skewLeftY * destinationH;
 			_vertexInfo[_numSprites].position0.X = (
 				( rotationMatrix2X * cornerY ) +
 				( rotationMatrix1X * cornerX ) +
-				destination.X
+				destinationX
 			);
 			_vertexInfo[_numSprites].position0.Y = (
 				( rotationMatrix2Y * cornerY ) +
 				( rotationMatrix1Y * cornerX ) +
-				destination.Y
+				destinationY
 			);
 
 			// top-right
-			cornerX = ( _cornerOffsetX[1] - originX ) * destW + skewTopX * destination.Z;
-			cornerY = ( _cornerOffsetY[1] - originY ) * destH - skewRightY * destination.W;
+			cornerX = ( _cornerOffsetX[1] - originX ) * destinationW + skewTopX * destinationW;
+			cornerY = ( _cornerOffsetY[1] - originY ) * destinationH - skewRightY * destinationH;
 			_vertexInfo[_numSprites].position1.X = (
 				( rotationMatrix2X * cornerY ) +
 				( rotationMatrix1X * cornerX ) +
-				destination.X
+				destinationX
 			);
 			_vertexInfo[_numSprites].position1.Y = (
 				( rotationMatrix2Y * cornerY ) +
 				( rotationMatrix1Y * cornerX ) +
-				destination.Y
+				destinationY
 			);
 
 			// bottom-left
-			cornerX = ( _cornerOffsetX[2] - originX ) * destW + skewBottomX * destination.Z;
-			cornerY = ( _cornerOffsetY[2] - originY ) * destH - skewLeftY * destination.W;
+			cornerX = ( _cornerOffsetX[2] - originX ) * destinationW + skewBottomX * destinationW;
+			cornerY = ( _cornerOffsetY[2] - originY ) * destinationH - skewLeftY * destinationH;
 			_vertexInfo[_numSprites].position2.X = (
 				( rotationMatrix2X * cornerY ) +
 				( rotationMatrix1X * cornerX ) +
-				destination.X
+				destinationX
 			);
 			_vertexInfo[_numSprites].position2.Y = (
 				( rotationMatrix2Y * cornerY ) +
 				( rotationMatrix1Y * cornerX ) +
-				destination.Y
+				destinationY
 			);
 
 			// bottom-right
-			cornerX = ( _cornerOffsetX[3] - originX ) * destW + skewBottomX * destination.Z;
-			cornerY = ( _cornerOffsetY[3] - originY ) * destH - skewRightY * destination.W;
+			cornerX = ( _cornerOffsetX[3] - originX ) * destinationW + skewBottomX * destinationW;
+			cornerY = ( _cornerOffsetY[3] - originY ) * destinationH - skewRightY * destinationH;
 			_vertexInfo[_numSprites].position3.X = (
 				( rotationMatrix2X * cornerY ) +
 				( rotationMatrix1X * cornerX ) +
-				destination.X
+				destinationX
 			);
 			_vertexInfo[_numSprites].position3.Y = (
 				( rotationMatrix2Y * cornerY ) +
 				( rotationMatrix1Y * cornerX ) +
-				destination.Y
+				destinationY
 			);
 
 			_vertexInfo[_numSprites].textureCoordinate0.X = ( _cornerOffsetX[0 ^ effects] * sourceW ) + sourceX;
@@ -724,7 +723,7 @@ namespace Nez
 			_vertexBuffer.SetData( 0, _vertexInfo, 0, _numSprites, VertexPositionColorTexture4.realStride, SetDataOptions.None );
 
 			curTexture = _textureInfo[0];
-			for( var i = 0; i < _numSprites; i += 1 )
+			for( var i = 1; i < _numSprites; i += 1 )
 			{
 				if( _textureInfo[i] != curTexture )
 				{
@@ -783,12 +782,8 @@ namespace Nez
 			_projectionMatrix.M41 = -1 - 0.5f * _projectionMatrix.M11;
 			_projectionMatrix.M42 = 1 - 0.5f * _projectionMatrix.M22;
 
-			Matrix.Multiply(
-				ref _transformMatrix,
-				ref _projectionMatrix,
-				out _matrixTransformMatrix
-			);
-			_spriteEffect.matrixTransform = _matrixTransformMatrix;
+			Matrix.Multiply( ref _transformMatrix, ref _projectionMatrix, out _matrixTransformMatrix );
+			_spriteEffect.setMatrixTransform( ref _matrixTransformMatrix );
 
 			// we have to Apply here because custom effects often wont have a vertex shader and we need the default SpriteEffect's
 			_spriteEffectPass.Apply();
