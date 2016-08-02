@@ -57,7 +57,7 @@ namespace Nez.Sprites
 		float _fps = 10;
 		bool _loop = true;
 		bool _pingPong = false;
-		bool _isDirty;
+		bool _isDirty = true;
 
 
 		public SpriteAnimation()
