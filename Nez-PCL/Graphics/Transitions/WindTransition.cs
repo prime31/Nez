@@ -55,6 +55,10 @@ namespace Nez
 		}
 
 
+		public WindTransition() : this( null )
+		{}
+
+
 		public override IEnumerator onBeginTransition()
 		{
 			// load up the new Scene

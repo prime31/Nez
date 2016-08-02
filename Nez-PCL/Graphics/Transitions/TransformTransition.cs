@@ -79,6 +79,10 @@ namespace Nez
 		}
 
 
+		public TransformTransition( TransformTransitionType transitionType = TransformTransitionType.ZoomOut ) : this( null, transitionType )
+		{}
+
+
 		public override IEnumerator onBeginTransition()
 		{
 			yield return null;

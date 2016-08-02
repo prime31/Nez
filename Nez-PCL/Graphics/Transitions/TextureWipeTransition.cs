@@ -82,6 +82,14 @@ namespace Nez
 		{}
 
 
+		public TextureWipeTransition() : this( null, Core.content.Load<Texture2D>( "nez/textures/textureWipeTransition/angular" ) )
+		{}
+
+
+		public TextureWipeTransition( Texture2D transitionTexture ) : this( null, transitionTexture )
+		{}
+
+
 		public override IEnumerator onBeginTransition()
 		{
 			// create a single pixel transparent texture so we can do our squares out to the next scene

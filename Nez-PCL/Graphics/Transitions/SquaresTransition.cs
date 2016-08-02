@@ -74,6 +74,10 @@ namespace Nez
 		}
 
 
+		public SquaresTransition() : this( null )
+		{}
+
+
 		public override IEnumerator onBeginTransition()
 		{
 			// create a single pixel transparent texture so we can do our squares out to the next scene

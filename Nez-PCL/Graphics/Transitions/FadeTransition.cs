@@ -51,6 +51,10 @@ namespace Nez
 		}
 
 
+		public FadeTransition() : this( null )
+		{}
+
+
 		public override IEnumerator onBeginTransition()
 		{
 			// create a single pixel texture of our fadeToColor
