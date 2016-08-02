@@ -5,7 +5,7 @@ Every game needs transition effects to have a polished look and feel. With Nez, 
 
 
 ## Using Included Transitions
-All of the included transitions can be used inter-Scene and between Scenes. Some of them have configuration options that control how the transition occurs. Below are a couple examples:
+All of the included transitions can be used intra-Scene (within the same Scene) and between two different Scenes. Some of them have configuration options that control how the transition occurs. Below are a couple examples:
 
 ```cs
 // loads up a new Scene with a WindTransition. Note that you provide a `Func<Scene>` to provide the Scene to transition to.
@@ -15,7 +15,7 @@ Core.startSceneTransition( new WindTransition( () => new YourNextScene() ) );
 // transitions within the current Scene with a SquaresTransition
 var transition = new SquaresTransition();
 
-// for inter-Scene transitions we will probably be interested in knowing then the screen is obscured so we can take action
+// for intra-Scene transitions we will probably be interested in knowing then the screen is obscured so we can take action
 transition.onScreenObscured = myOnScreenObscuredMethod;
 Core.startSceneTransition( transition );
 
@@ -39,7 +39,7 @@ Transitions generally come in two flavors: one part and two part. A one part tra
 - `render` is called every frame so that you can control the final render output. You can use the `_isNewSceneLoaded` flag for two part transitions to determine if you are on part one or two.
 - override `onBeginTransition`. This method will compose the bulk of the transition code. It is called in a coroutine so you can yield to control flow.
 	- (optional) for two part transitions, you will want to perform your first part (example, fade to black)
-	- yield a call to load up the next Scene: `yield return Core.startCoroutine( loadNextScene() )`. Note that you should do this even for inter-Scene transitions. Nez will take care of properly setting the `_isNewSceneLoaded` flag even for inter-Scene transitions to make the code for two part transitions the same for both cases.
+	- yield a call to load up the next Scene: `yield return Core.startCoroutine( loadNextScene() )`. Note that you should do this even for intra-Scene transitions. Nez will take care of properly setting the `_isNewSceneLoaded` flag even for intra-Scene transitions to make the code for two part transitions the same for both cases.
 	- perform your transition (example, fade out the previous Scene render to show the new Scene)
 	- call `transitionComplete` which will end the transition and cleanup the RenderTarget
 	- unload any Effects/Textures that you used. Alternatively, you can override `transitionComplete` and do cleanup there. Just be sure to call base!
@@ -66,7 +66,7 @@ public class SuperTransition : SceneTransition
 
 
 	/// <summary>
-	/// constructor. Note that sceneLoadAction can be null for inter-Scene transitions and everything will still work as expected.
+	/// constructor. Note that sceneLoadAction can be null for intra-Scene transitions and everything will still work as expected.
 	/// </summary>
 	public SuperTransition( Func<Scene> sceneLoadAction ) : base( sceneLoadAction, true )
 	{
