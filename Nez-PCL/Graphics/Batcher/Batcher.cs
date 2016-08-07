@@ -562,8 +562,8 @@ namespace Nez
 
 				sourceX = sourceRectangle.Value.X * inverseTexW;
 				sourceY = sourceRectangle.Value.Y * inverseTexH;
-				sourceW = Math.Max( sourceRectangle.Value.Width, float.Epsilon ) * inverseTexW;
-				sourceH = Math.Max( sourceRectangle.Value.Height, float.Epsilon ) * inverseTexH;
+				sourceW = sourceRectangle.Value.Width * inverseTexW;
+				sourceH = sourceRectangle.Value.Height * inverseTexH;
 
 				originX = ( origin.X / sourceW ) * inverseTexW;
 				originY = ( origin.Y / sourceH ) * inverseTexH;
