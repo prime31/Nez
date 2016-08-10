@@ -9,6 +9,7 @@ Scene/Entity/Component System
 Most of Nez revolves around an Entity-Component system (ECS). The Nez ECS is not unlike any other ECS you may have worked with so it should be instantly familiar.
 
 
+
 ## Scene
 The root of the ECS. Scenes can be thought of as the different parts of your game such as the menu, levels, credits, etc. Scenes manage a list of Entities, Renderers and PostProcessors (via add/remove methods) and call their methods at the appropriate times. You can also use the Scene to locate Entities via the **findEntity** and **findEntitiesByTag** methods. Scenes are also created with a Camera that you can choose to use or not.
 
@@ -26,6 +27,7 @@ Nez provides several different ways to get your final scene rendered flexibly an
 - **FixedHeightPixelPerfect**: Pixel perfect version of FixedHeight. Scaling is limited to integer values.
 - **FixedWidth**: The application takes the width of the design resolution size and modifies the height of the internal canvas so that it fits the aspect ratio of the device. no distortion will occur however you must make sure your application works on different aspect ratios
 - **FixedWidthPixelPerfect**: Pixel perfect version of FixedWidth. Scaling is limited to integer values.
+
 
 
 ## Entity
@@ -46,6 +48,7 @@ Some of the key/important properties on an Entity are the following:
 - **updateInterval**: specifies how often this Entities update method should be called. 1 means every frame, 2 is every other, etc
 
 
+
 ## Component
 Components are added to and managed by an Entity. They make up the meat of your game and are basically reuseable chunks of code that decide how your Entities will behave. Several Component subclasses are included with Nez including text display, image display, animated sprites, Tiled maps and more.
 
@@ -59,4 +62,10 @@ Component Lifecycle methods:
 - **onEnabled**: called when the parent Entity or the Component is enabled
 - **onDisabled**: called when the parent Entity or the Component is disabled
 
-It is worth mentioning the **RenderableComponent** abstract Component subclass here. RenderableComponent is a special kind of component that has a **render** method that is called by a Renderer. RenderableComponent handles a lot of dirtywork automatically (such as managing the bounds for culling) and includes a bunch of handy methods and properties pertaining to display. Have a look at the included RenderableComponent subclasses for examples of how they work.
+It is worth mentioning the `RenderableComponent` abstract Component subclass here. `RenderableComponent` is a special kind of component that has a `render` method that is called by a Renderer. RenderableComponent handles a lot of dirtywork automatically (such as managing the bounds for culling) and includes a bunch of handy methods and properties pertaining to display. Have a look at the included RenderableComponent subclasses for examples of how they work.
+
+
+
+## Materials
+
+Each `RenderableComponent` has an optional `Material`. The material lets you set per-renderable details such as the BlendState (Alpha by default), DepthStencilState (None by default), SamplerState (PointClamp by default) and Effect (null by default).
