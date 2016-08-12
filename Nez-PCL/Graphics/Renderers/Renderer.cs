@@ -157,7 +157,7 @@ namespace Nez
 			Graphics.instance.batcher.end();
 			Graphics.instance.batcher.begin( Core.scene.camera.transformMatrix );
 
-			for( var i = 0; i < scene.entities.Count; i++ )
+			for( var i = 0; i < scene.entities.count; i++ )
 			{
 				var entity = scene.entities[i];
 				if( entity.enabled )

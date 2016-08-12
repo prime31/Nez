@@ -31,6 +31,10 @@ namespace Nez
 		{}
 
 
+		public CrossFadeTransition() : this( null )
+		{}
+
+
 		public override IEnumerator onBeginTransition()
 		{
 			yield return null;

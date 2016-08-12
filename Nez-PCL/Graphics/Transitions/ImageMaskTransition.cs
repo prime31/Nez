@@ -100,6 +100,10 @@ namespace Nez
 		}
 
 
+		public ImageMaskTransition( Texture2D maskTexture ) : this( null, maskTexture )
+		{}
+
+
 		public override IEnumerator onBeginTransition()
 		{
 			yield return null;
@@ -121,7 +125,7 @@ namespace Nez
 			previousSceneRender.Dispose();
 			previousSceneRender = null;
 
-			yield return delayBeforeMaskOut;
+			yield return Coroutine.waitForSeconds( delayBeforeMaskOut );
 
 			elapsed = 0f;
 			while( elapsed < duration )
@@ -147,6 +151,16 @@ namespace Nez
 		}
 
 
+		protected override void transitionComplete()
+		{
+			base.transitionComplete();
+
+			Core.content.unloadAsset<Texture2D>( _maskTexture.Name );
+			_maskRenderTarget.Dispose();
+			_blendState.Dispose();
+		}
+
+
 		public override void render( Graphics graphics )
 		{
 			Core.graphicsDevice.setRenderTarget( null );
@@ -164,15 +178,6 @@ namespace Nez
 			graphics.batcher.end();
 		}
 
-
-		protected override void transitionComplete()
-		{
-			base.transitionComplete();
-
-			Core.contentManager.unloadAsset<Texture2D>( _maskTexture.Name );
-			_maskRenderTarget.Dispose();
-			_blendState.Dispose();
-		}
 	}
 }
 

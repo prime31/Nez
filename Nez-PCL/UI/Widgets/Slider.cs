@@ -33,7 +33,7 @@ namespace Nez.UI
 		}
 
 
-		public Slider( Skin skin, string styleName = null ) : this( 0, 1, 0.1f, false, skin.get<SliderStyle>( styleName ) )
+		public Slider( Skin skin, string styleName = null, float min = 0, float max = 1, float step = 0.1f ) : this( min, max, step, false, skin.get<SliderStyle>( styleName ) )
 		{}
 
 
@@ -76,6 +76,12 @@ namespace Nez.UI
 		void IInputListener.onMouseUp( Vector2 mousePos )
 		{
 			_mouseDown = false;
+		}
+
+
+		bool IInputListener.onMouseScrolled( int mouseWheelDelta )
+		{
+			return false;
 		}
 
 		#endregion

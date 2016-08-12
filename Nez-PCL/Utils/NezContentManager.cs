@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Threading;
+using System.Reflection;
 using System.Text;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework.Content;
+using System.Threading.Tasks;
+using System.IO;
 
 
 namespace Nez.Systems
@@ -124,20 +126,20 @@ namespace Nez.Systems
 		/// <typeparam name="T">The 1st type parameter.</typeparam>
 		public void loadAsync<T>( string assetName, Action<T> onLoaded = null )
 		{
-			ThreadPool.QueueUserWorkItem( context =>
+			var syncContext = SynchronizationContext.Current;
+			Task.Run( () =>
 			{
 				var asset = Load<T>( assetName );
 
 				// if we have a callback do it on the main thread
 				if( onLoaded != null )
 				{
-					var syncContext = context as SynchronizationContext;
 					syncContext.Post( d =>
 					{
 						onLoaded( asset );
 					}, null );
 				}
-			}, SynchronizationContext.Current );
+			} );
 		}
 
 
@@ -152,7 +154,7 @@ namespace Nez.Systems
 		public void loadAsync<T>( string assetName, Action<object,T> onLoaded = null, object context = null )
 		{
 			var syncContext = SynchronizationContext.Current;
-			ThreadPool.QueueUserWorkItem( state =>
+			Task.Run( () =>
 			{
 				var asset = Load<T>( assetName );
 
@@ -160,10 +162,10 @@ namespace Nez.Systems
 				{
 					syncContext.Post( d =>
 					{
-						onLoaded( state, asset );
+						onLoaded( context, asset );
 					}, null );
 				}
-			}, context );
+			} );
 		}
 
 
@@ -175,7 +177,8 @@ namespace Nez.Systems
 		/// <typeparam name="T">The 1st type parameter.</typeparam>
 		public void loadAsync<T>( string[] assetNames, Action onLoaded = null )
 		{
-			ThreadPool.QueueUserWorkItem( context =>
+			var syncContext = SynchronizationContext.Current;
+			Task.Run( () =>
 			{
 				for( var i = 0; i < assetNames.Length; i++ )
 					Load<T>( assetNames[i] );
@@ -183,13 +186,12 @@ namespace Nez.Systems
 				// if we have a callback do it on the main thread
 				if( onLoaded != null )
 				{
-					var syncContext = context as SynchronizationContext;
 					syncContext.Post( d =>
 					{
 						onLoaded();
 					}, null );
 				}
-			}, SynchronizationContext.Current );
+			} );
 		}
 
 
@@ -205,7 +207,7 @@ namespace Nez.Systems
 			{
 				try
 				{
-					var fieldInfo = typeof( ContentManager ).GetField( "disposableAssets", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic );
+					var fieldInfo = typeof( ContentManager ).GetRuntimeField( "disposableAssets" );
 					var assets = fieldInfo.GetValue( this ) as List<IDisposable>;
 
 					for( var i = 0; i < assets.Count; i++ )
@@ -217,7 +219,7 @@ namespace Nez.Systems
 							assets.RemoveAt( i );
 
 							#if FNA
-							fieldInfo = typeof( ContentManager ).GetField( "loadedAssets", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic );
+							fieldInfo = typeof( ContentManager ).GetRuntimeField( "loadedAssets" );
 							var LoadedAssets = fieldInfo.GetValue( this ) as Dictionary<string, object>;
 							#endif
 
@@ -249,6 +251,16 @@ namespace Nez.Systems
 
 
 		/// <summary>
+		/// unloads an Effect that was loaded via loadEffect, loadNezEffect or loadMonoGameEffect
+		/// </summary>
+		/// <param name="effectName">Effect.name</param>
+		public void unloadEffect( Effect effect )
+		{
+			unloadEffect( effect.Name );
+		}
+
+
+		/// <summary>
 		/// checks to see if an asset with assetName is loaded
 		/// </summary>
 		/// <returns><c>true</c> if this instance is asset loaded the specified assetName; otherwise, <c>false</c>.</returns>
@@ -256,7 +268,7 @@ namespace Nez.Systems
 		public bool isAssetLoaded( string assetName )
 		{
 			#if FNA
-			var fieldInfo = typeof( ContentManager ).GetField( "loadedAssets", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic );
+			var fieldInfo = ReflectionUtils.getFieldInfo( this, "loadedAssets" );
 			var LoadedAssets = fieldInfo.GetValue( this ) as Dictionary<string, object>;
 			#endif
 
@@ -271,7 +283,7 @@ namespace Nez.Systems
 		internal string logLoadedAssets()
 		{
 			#if FNA
-			var fieldInfo = typeof( ContentManager ).GetField( "loadedAssets", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic );
+			var fieldInfo = ReflectionUtils.getFieldInfo( this, "loadedAssets" );
 			var LoadedAssets = fieldInfo.GetValue( this ) as Dictionary<string, object>;
 			#endif
 
@@ -304,5 +316,46 @@ namespace Nez.Systems
 		}
 
 	}
+
+
+	/// <summary>
+	/// the only difference between this class and NezContentManager is that this one can load embedded resources from the Nez.dll
+	/// </summary>
+	sealed class NezGlobalContentManager : NezContentManager
+	{
+		public NezGlobalContentManager( IServiceProvider serviceProvider, string rootDirectory ) : base( serviceProvider, rootDirectory )
+		{}
+
+
+		/// <summary>
+		/// override that will load embedded resources if they have the "nez://" prefix
+		/// </summary>
+		/// <returns>The stream.</returns>
+		/// <param name="assetName">Asset name.</param>
+		protected override Stream OpenStream( string assetName )
+		{
+			if( assetName.StartsWith( "nez://" ) )
+			{
+				var assembly = ReflectionUtils.getAssembly( this.GetType() );
+
+				#if FNA
+				// for FNA, we will just search for the file by name since the assembly name will not be known at runtime
+				foreach( var item in assembly.GetManifestResourceNames() )
+				{
+					if( item.EndsWith( assetName.Substring( assetName.Length - 20 ) ) )
+					{
+						assetName = "nez://" + item;
+						break;
+					}
+				}
+				#endif
+				return assembly.GetManifestResourceStream( assetName.Substring( 6 ) );
+			}
+
+			return base.OpenStream( assetName );
+		}
+
+	}
+
 }
 

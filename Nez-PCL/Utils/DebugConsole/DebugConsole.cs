@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using Microsoft.Xna.Framework.Input;
 using System.Reflection;
-using System.Text;
 using Microsoft.Xna.Framework;
 using System.Text.RegularExpressions;
-using Nez.BitmapFonts;
 using Microsoft.Xna.Framework.Graphics;
+using System.Linq;
+using Nez.IEnumerableExtensions;
 
 
 namespace Nez.Console
@@ -14,6 +14,11 @@ namespace Nez.Console
 	public partial class DebugConsole
 	{
 		internal static DebugConsole instance;
+
+		/// <summary>
+		/// controls the scale of the console
+		/// </summary>
+		public static float renderScale = 1f;
 
 		/// <summary>
 		/// bind any custom Actions you would like to function keys
@@ -26,12 +31,19 @@ namespace Nez.Console
 		const float OPACITY = 0.65f;
 
 		// render constants
-		Vector2 FONT_SCALE;
-		const float FONT_LINE_HEIGHT = 11;
+		const int LINE_HEIGHT = 10;
+		const int TEXT_PADDING_X = 5;
+		const int TEXT_PADDING_Y = 4;
+
+		/// <summary>
+		/// separation of the command entry and history boxes
+		/// </summary>
+		const int COMMAND_HISTORY_PADDING = 10;
+
+		/// <summary>
+		/// global padding on the left/right of the console
+		/// </summary>
 		const int HORIZONTAL_PADDING = 10;
-		const int BOTTOM_MARGIN = 30;
-		const int BOTTOM_CONSOLE_HEIGHT = 20;
-		const int LINE_HEIGHT = 14;
 
 		bool enabled = true;
 		internal bool isOpen;
@@ -51,7 +63,9 @@ namespace Nez.Console
 		float _repeatCounter = 0;
 		Keys? _repeatKey = null;
 		bool _canOpen;
-
+		#if DEBUG
+		internal RuntimeInspector _runtimeInspector;
+		#endif
 
 		static DebugConsole()
 		{
@@ -66,9 +80,6 @@ namespace Nez.Console
 			_commands = new Dictionary<string,CommandInfo>();
 			_sorted = new List<string>();
 			_functionKeyActions = new Action[12];
-
-			var scale = FONT_LINE_HEIGHT / Graphics.instance.bitmapFont.lineHeight;
-			FONT_SCALE = new Vector2( scale, scale );
 
 			buildCommandsList();
 		}
@@ -105,14 +116,14 @@ namespace Nez.Console
 			var maxWidth = Core.graphicsDevice.PresentationParameters.BackBufferWidth - 40;
 			var screenHeight = Core.graphicsDevice.PresentationParameters.BackBufferHeight;
 
-			while( Graphics.instance.bitmapFont.measureString( str ).X * FONT_SCALE.X > maxWidth )
+			while( Graphics.instance.bitmapFont.measureString( str ).X * renderScale > maxWidth )
 			{
 				var split = -1;
 				for( var i = 0; i < str.Length; i++ )
 				{
 					if( str[i] == ' ' )
 					{
-						if( Graphics.instance.bitmapFont.measureString( str.Substring( 0, i ) ).X * FONT_SCALE.X <= maxWidth )
+						if( Graphics.instance.bitmapFont.measureString( str.Substring( 0, i ) ).X * renderScale <= maxWidth )
 							split = i;
 						else
 							break;
@@ -476,42 +487,64 @@ namespace Nez.Console
 
 		internal void render()
 		{
+			#if DEBUG
+			if( _runtimeInspector != null )
+			{
+				_runtimeInspector.update();
+				_runtimeInspector.render();
+			}
+			#endif
+
 			if( !isOpen )
 				return;
-			
-			var screenWidth = Core.graphicsDevice.PresentationParameters.BackBufferWidth;
-			var screenHeight = Core.graphicsDevice.PresentationParameters.BackBufferHeight;
+
+			var screenWidth = Screen.width;
+			var screenHeight = Screen.height;
 			var workingWidth = screenWidth - 2 * HORIZONTAL_PADDING;
 
 			Graphics.instance.batcher.begin();
 
-			Graphics.instance.batcher.drawRect( HORIZONTAL_PADDING, screenHeight - BOTTOM_MARGIN, workingWidth, BOTTOM_CONSOLE_HEIGHT, Color.Black * OPACITY );
+			// setup the rect that encompases the command entry section
+			var commandEntryRect = RectangleExt.fromFloats( HORIZONTAL_PADDING, screenHeight - LINE_HEIGHT * renderScale, workingWidth, LINE_HEIGHT * renderScale );
+
+			// take into account text padding. move our location up a bit and expand the Rect to accommodate
+			commandEntryRect.Location -= new Point( 0, TEXT_PADDING_Y * 2 );
+			commandEntryRect.Height += TEXT_PADDING_Y * 2;
+
+			Graphics.instance.batcher.drawRect( commandEntryRect, Color.Black * OPACITY );
 			var commandLineString = "> " + _currentText;
 			if( _underscore )
 				commandLineString += "_";
-			
-			Graphics.instance.batcher.drawString( Graphics.instance.bitmapFont, commandLineString, new Vector2( 20, screenHeight - BOTTOM_CONSOLE_HEIGHT - FONT_LINE_HEIGHT * 0.35f ), Color.White );
+
+			var commandTextPosition = commandEntryRect.Location.ToVector2() + new Vector2( TEXT_PADDING_X, TEXT_PADDING_Y );
+			Graphics.instance.batcher.drawString( Graphics.instance.bitmapFont, commandLineString, commandTextPosition, Color.White, 0, Vector2.Zero, new Vector2( renderScale ), SpriteEffects.None, 0 );
 
 			if( _drawCommands.Count > 0 )
 			{
-				var height = LINE_HEIGHT * _drawCommands.Count + 15;
-				var topOfHistoryRect = screenHeight - height - BOTTOM_CONSOLE_HEIGHT - 20;
+				// start with the total height of the text then add in padding. We have an extra padding because we pad each line and the top/bottom
+				var height = LINE_HEIGHT * renderScale * _drawCommands.Count;
+				height += ( _drawCommands.Count + 1 ) * TEXT_PADDING_Y;
+
+				var topOfHistoryRect = commandEntryRect.Y - height - COMMAND_HISTORY_PADDING;
 				Graphics.instance.batcher.drawRect( HORIZONTAL_PADDING, topOfHistoryRect, workingWidth, height, Color.Black * OPACITY );
-				for( int i = 0; i < _drawCommands.Count; i++ )
+
+				var yPosFirstLine = topOfHistoryRect + height - TEXT_PADDING_Y - LINE_HEIGHT * renderScale;
+				for( var i = 0; i < _drawCommands.Count; i++ )
 				{
-					var position = new Vector2( 20, topOfHistoryRect + height - 20 - LINE_HEIGHT * i );
+					var yPosCurrentLineAddition = ( i * LINE_HEIGHT * renderScale ) + ( i * TEXT_PADDING_Y );
+					var position = new Vector2( HORIZONTAL_PADDING + TEXT_PADDING_X, yPosFirstLine - yPosCurrentLineAddition );
 					var color = _drawCommands[i].IndexOf( ">" ) == 0 ? Color.Yellow : Color.White;
-					Graphics.instance.batcher.drawString( Graphics.instance.bitmapFont, _drawCommands[i], position, color, 0, Vector2.Zero, FONT_SCALE, SpriteEffects.None, 0 );
+					Graphics.instance.batcher.drawString( Graphics.instance.bitmapFont, _drawCommands[i], position, color, 0, Vector2.Zero, new Vector2( renderScale ), SpriteEffects.None, 0 );
 				}
 			}
 
 			Graphics.instance.batcher.end();
 		}
 
-		#endregion
+#endregion
 
 
-		#region Execute
+#region Execute
 
 		public void executeCommand( string command, string[] args )
 		{
@@ -534,33 +567,38 @@ namespace Nez.Console
 			instance._functionKeyActions[functionKey - 1] = action;
 		}
 
-		#endregion
+#endregion
 
 
-		#region Parse Commands
+#region Parse Commands
 
 		void buildCommandsList()
 		{
-			// Check executing assembly for Commands
-			foreach( var type in Assembly.GetExecutingAssembly().GetTypes() )
-				foreach( var method in type.GetMethods( BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic ) )
-					processMethod( method );
+			// this will get us the Nez assembly
+			processAssembly( typeof( DebugConsole ).GetTypeInfo().Assembly );
 
-			// Check the calling assembly for Commands
-			foreach( var type in Assembly.GetCallingAssembly().GetTypes() )
-				foreach( var method in type.GetMethods( BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic ) )
-					processMethod( method );
+			// this will get us the current executables assembly in 99.9% of cases
+			// for now we will let the next section handle loading this. If it doesnt work out we'll uncomment this
+			//processAssembly( Core._instance.GetType().GetTypeInfo().Assembly );
 
 			try
 			{
-				var currentdomain = typeof( string ).Assembly.GetType( "System.AppDomain" ).GetProperty( "CurrentDomain" ).GetGetMethod().Invoke( null, new object[] { } );
-				var getassemblies = currentdomain.GetType().GetMethod( "GetAssemblies", new Type[]{ } );
-				var assemblies = getassemblies.Invoke( currentdomain, new object[]{ } ) as Assembly[];
+				// this is a nasty hack that lets us get at all the assemblies. It is only allowed to exist because this will never get
+				// hit in a release build.
+				var appDomainType = typeof( string ).GetTypeInfo().Assembly.GetType( "System.AppDomain" );
+				var domain = appDomainType.GetRuntimeProperty( "CurrentDomain" ).GetMethod.Invoke( null, new object[]{} );
+				var assembliesMethod = ReflectionUtils.getMethodInfo( domain, "GetAssemblies" );
+				var assemblies = assembliesMethod.Invoke( domain, new object[]{ false } ) as Assembly[];
 
+				var ignoredAssemblies = new string[] { "mscorlib", "MonoMac", "MonoGame.Framework", "Mono.Security", "System", "OpenTK", "ObjCImplementations", "Nez" };
 				foreach( var assembly in assemblies )
-					foreach( var type in assembly.GetTypes() )
-						foreach( var method in type.GetMethods( BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic ) )
-							processMethod( method );
+				{
+					var name = assembly.GetName().Name;
+					if( name.StartsWith( "System." ) || ignoredAssemblies.contains( name ) )
+						continue;
+
+					processAssembly( assembly );
+				}
 			}
 			catch( Exception e )
 			{
@@ -575,97 +613,114 @@ namespace Nez.Console
 		}
 
 
-		void processMethod( MethodInfo method )
+		void processAssembly( Assembly assembly )
 		{
-			CommandAttribute attr = null;
+			foreach( var type in assembly.DefinedTypes )
 			{
-				var attrs = method.GetCustomAttributes( typeof( CommandAttribute ), false );
-				if( attrs.Length > 0 )
-					attr = attrs[0] as CommandAttribute;
-			}
-
-			if( attr != null )
-			{
-				if( !method.IsStatic )
-					throw new Exception( method.DeclaringType.Name + "." + method.Name + " is marked as a command, but is not static" );
-				else
+				foreach( var method in type.DeclaredMethods )
 				{
-					CommandInfo info = new CommandInfo();
-					info.help = attr.help;  
+					CommandAttribute attr = null;
+					var attrs = method.GetCustomAttributes( typeof( CommandAttribute ), false )
+						.Where( a => a is CommandAttribute );
+					if( attrs.count() > 0 )
+						attr = attrs.First() as CommandAttribute;
 
-					var parameters = method.GetParameters();
-					var defaults = new object[parameters.Length];                 
-					string[] usage = new string[parameters.Length];
-
-					for( int i = 0; i < parameters.Length; i++ )
-					{                       
-						var p = parameters[i];
-						usage[i] = p.Name + ":";
-
-						if( p.ParameterType == typeof( string ) )
-							usage[i] += "string";
-						else if( p.ParameterType == typeof( int ) )
-							usage[i] += "int";
-						else if( p.ParameterType == typeof( float ) )
-							usage[i] += "float";
-						else if( p.ParameterType == typeof( bool ) )
-							usage[i] += "bool";
-						else
-							throw new Exception( method.DeclaringType.Name + "." + method.Name + " is marked as a command, but has an invalid parameter type. Allowed types are: string, int, float, and bool" );
-
-						// no System.DBNull in PCL so we fake it
-						if( p.DefaultValue.GetType().FullName == "System.DBNull" )
-							defaults[i] = null;
-						else if( p.DefaultValue != null )
-						{
-							defaults[i] = p.DefaultValue;
-							if( p.ParameterType == typeof( string ) )
-								usage[i] += "=\"" + p.DefaultValue.ToString() + "\"";
-							else
-								usage[i] += "=" + p.DefaultValue.ToString();
-						}
-						else
-							defaults[i] = null;
-					}
-
-					if( usage.Length == 0 )
-						info.usage = "";
-					else
-						info.usage = "[" + string.Join( " ", usage ) + "]";
-
-					info.action = (args ) =>
-					{
-						if( parameters.Length == 0 )
-							method.Invoke( null, null );
-						else
-						{
-							object[] param = (object[])defaults.Clone();
-
-							for( int i = 0; i < param.Length && i < args.Length; i++ )
-							{
-								if( parameters[i].ParameterType == typeof( string ) )
-									param[i] = argString( args[i] );
-								else if( parameters[i].ParameterType == typeof( int ) )
-									param[i] = argInt( args[i] );
-								else if( parameters[i].ParameterType == typeof( float ) )
-									param[i] = argFloat( args[i] );
-								else if( parameters[i].ParameterType == typeof( bool ) )
-									param[i] = argBool( args[i] );
-							}
-
-							try
-							{
-								method.Invoke( null, param );
-							}
-							catch( Exception e )
-							{
-								log( e );
-							}
-						}
-					};
-
-					_commands[attr.name] = info;
+					if( attr != null )
+						processMethod( method, attr );
 				}
+			}
+		}
+
+
+		void processMethod( MethodInfo method, CommandAttribute attr )
+		{
+			if( !method.IsStatic )
+			{
+				throw new Exception( method.DeclaringType.Name + "." + method.Name + " is marked as a command, but is not static" );
+			}
+			else
+			{
+				var info = new CommandInfo();
+				info.help = attr.help;  
+
+				var parameters = method.GetParameters();
+				var defaults = new object[parameters.Length];                 
+				var usage = new string[parameters.Length];
+
+				for( var i = 0; i < parameters.Length; i++ )
+				{                       
+					var p = parameters[i];
+					usage[i] = p.Name + ":";
+
+					if( p.ParameterType == typeof( string ) )
+						usage[i] += "string";
+					else if( p.ParameterType == typeof( int ) )
+						usage[i] += "int";
+					else if( p.ParameterType == typeof( float ) )
+						usage[i] += "float";
+					else if( p.ParameterType == typeof( bool ) )
+						usage[i] += "bool";
+					else
+						throw new Exception( method.DeclaringType.Name + "." + method.Name + " is marked as a command, but has an invalid parameter type. Allowed types are: string, int, float, and bool" );
+
+					// no System.DBNull in PCL so we fake it
+					if( p.DefaultValue.GetType().FullName == "System.DBNull" )
+					{
+						defaults[i] = null;
+					}
+					else if( p.DefaultValue != null )
+					{
+						defaults[i] = p.DefaultValue;
+						if( p.ParameterType == typeof( string ) )
+							usage[i] += "=\"" + p.DefaultValue.ToString() + "\"";
+						else
+							usage[i] += "=" + p.DefaultValue.ToString();
+					}
+					else
+					{
+						defaults[i] = null;
+					}
+				}
+
+				if( usage.Length == 0 )
+					info.usage = "";
+				else
+					info.usage = "[" + string.Join( " ", usage ) + "]";
+
+				info.action = args =>
+				{
+					if( parameters.Length == 0 )
+					{
+						method.Invoke( null, null );
+					}
+					else
+					{
+						var param = (object[])defaults.Clone();
+
+						for( var i = 0; i < param.Length && i < args.Length; i++ )
+						{
+							if( parameters[i].ParameterType == typeof( string ) )
+								param[i] = argString( args[i] );
+							else if( parameters[i].ParameterType == typeof( int ) )
+								param[i] = argInt( args[i] );
+							else if( parameters[i].ParameterType == typeof( float ) )
+								param[i] = argFloat( args[i] );
+							else if( parameters[i].ParameterType == typeof( bool ) )
+								param[i] = argBool( args[i] );
+						}
+
+						try
+						{
+							method.Invoke( null, param );
+						}
+						catch( Exception e )
+						{
+							log( e );
+						}
+					}
+				};
+
+				_commands[attr.name] = info;
 			}
 		}
 
@@ -678,7 +733,7 @@ namespace Nez.Console
 		}
 
 
-		#region Parsing Arguments
+#region Parsing Arguments
 
 		static string argString( string arg )
 		{
@@ -723,9 +778,9 @@ namespace Nez.Console
 			}
 		}
 
-		#endregion
+#endregion
 
-		#endregion
+#endregion
 
 	}
 }

@@ -65,7 +65,7 @@ namespace Nez
 					else
 					{
 						parent.updateTransform();
-						Vector2.Transform( ref _localPosition, ref parent._worldTransform, out _position );
+						Vector2Ext.Transform( ref _localPosition, ref parent._worldTransform, out _position );
 					}
 
 					_positionDirty = false;
@@ -173,14 +173,14 @@ namespace Nez
 		}
 
 
-		public Matrix worldInverseTransform
+		public Matrix2D worldInverseTransform
 		{
 			get
 			{
 				updateTransform();
 				if( _worldInverseDirty )
 				{
-					Matrix.Invert( ref _worldTransform, out _worldInverseTransform );
+					Matrix2D.Invert( ref _worldTransform, out _worldInverseTransform );
 					_worldInverseDirty = false;
 				}
 				return _worldInverseTransform;
@@ -188,7 +188,7 @@ namespace Nez
 		}
 
 
-		public Matrix localToWorldTransform
+		public Matrix2D localToWorldTransform
 		{
 			get
 			{
@@ -198,7 +198,7 @@ namespace Nez
 		}
 
 
-		public Matrix worldToLocalTransform
+		public Matrix2D worldToLocalTransform
 		{
 			get
 			{
@@ -206,12 +206,12 @@ namespace Nez
 				{
 					if( parent == null )
 					{
-						_worldToLocalTransform = Matrix.Identity;
+						_worldToLocalTransform = Matrix2D.Identity;
 					}
 					else
 					{
 						parent.updateTransform();
-						Matrix.Invert( ref parent._worldTransform, out _worldToLocalTransform );
+						Matrix2D.Invert( ref parent._worldTransform, out _worldToLocalTransform );
 					}
 
 					_worldToLocalDirty = false;
@@ -233,16 +233,16 @@ namespace Nez
 		bool _worldInverseDirty;
 
 		// value is automatically recomputed from the position, rotation and scale
-		Matrix _localTransform;
+		Matrix2D _localTransform;
 
 		// value is automatically recomputed from the local and the parent matrices.
-		Matrix _worldTransform = Matrix.Identity;
-		Matrix _worldToLocalTransform = Matrix.Identity;
-		Matrix _worldInverseTransform = Matrix.Identity;
+		Matrix2D _worldTransform = Matrix2D.Identity;
+		Matrix2D _worldToLocalTransform = Matrix2D.Identity;
+		Matrix2D _worldInverseTransform = Matrix2D.Identity;
 
-		Matrix _rotationMatrix;
-		Matrix _translationMatrix;
-		Matrix _scaleMatrix;
+		Matrix2D _rotationMatrix;
+		Matrix2D _translationMatrix;
+		Matrix2D _scaleMatrix;
 
 		Vector2 _position;
 		Vector2 _scale;
@@ -485,24 +485,24 @@ namespace Nez
 				{
 					if( _localPositionDirty )
 					{
-						Matrix.CreateTranslation( _localPosition.X, _localPosition.Y, 0, out _translationMatrix );
+						Matrix2D.CreateTranslation( _localPosition.X, _localPosition.Y, out _translationMatrix );
 						_localPositionDirty = false;
 					}
 
 					if( _localRotationDirty )
 					{
-						Matrix.CreateRotationZ( _localRotation, out _rotationMatrix );
+						Matrix2D.CreateRotationZ( _localRotation, out _rotationMatrix );
 						_localRotationDirty = false;
 					}
 
 					if( _localScaleDirty )
 					{
-						Matrix.CreateScale( _localScale.X, _localScale.Y, 1f, out _scaleMatrix );
+						Matrix2D.CreateScale( _localScale.X, _localScale.Y, out _scaleMatrix );
 						_localScaleDirty = false;
 					}
 
-					Matrix.Multiply( ref _scaleMatrix, ref _rotationMatrix, out _localTransform );
-					Matrix.Multiply( ref _localTransform, ref _translationMatrix, out _localTransform );
+					Matrix2D.Multiply( ref _scaleMatrix, ref _rotationMatrix, out _localTransform );
+					Matrix2D.Multiply( ref _localTransform, ref _translationMatrix, out _localTransform );
 
 					if( parent == null )
 					{
@@ -516,7 +516,7 @@ namespace Nez
 
 				if( parent != null )
 				{
-					Matrix.Multiply( ref _localTransform, ref parent._worldTransform, out _worldTransform );
+					Matrix2D.Multiply( ref _localTransform, ref parent._worldTransform, out _worldTransform );
 
 					_rotation = _localRotation + parent._rotation;
 					_scale = parent._scale * _localScale;

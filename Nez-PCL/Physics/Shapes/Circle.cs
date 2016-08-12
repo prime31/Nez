@@ -23,6 +23,8 @@ namespace Nez.PhysicsShapes
 		}
 
 
+		#region Shape abstract methods
+
 		internal void recalculateBounds( float radius, Vector2 position )
 		{
 			this.radius = radius;
@@ -70,6 +72,19 @@ namespace Nez.PhysicsShapes
 
 
 		/// <summary>
+		/// Gets whether or not the provided point lie within the bounds of this <see cref="Circle"/>.
+		/// </summary>
+		/// <param name="point">the point</param>
+		/// <returns><c>true</c> if the provided coordinates lie inside this <see cref="Circle"/>; <c>false</c> otherwise.</returns>
+		public override bool containsPoint( Vector2 point )
+		{
+			return ( ( point - position ).LengthSquared() <= radius * radius );
+		}
+
+		#endregion
+
+
+		/// <summary>
 		/// Gets the point at the edge of this <see cref="Circle"/> from the provided angle
 		/// </summary>
 		/// <param name="angle">an angle in radians</param>
@@ -86,20 +101,9 @@ namespace Nez.PhysicsShapes
 		/// <param name="x">The x coordinate of the point to check for containment.</param>
 		/// <param name="y">The y coordinate of the point to check for containment.</param>
 		/// <returns><c>true</c> if the provided coordinates lie inside this <see cref="Circle"/>; <c>false</c> otherwise.</returns>
-		public bool contains( float x, float y )
+		public bool containsPoint( float x, float y )
 		{
-			return contains( new Vector2( x, y ) );
-		}
-
-
-		/// <summary>
-		/// Gets whether or not the provided point lie within the bounds of this <see cref="Circle"/>.
-		/// </summary>
-		/// <param name="oint">the point</param>
-		/// <returns><c>true</c> if the provided coordinates lie inside this <see cref="Circle"/>; <c>false</c> otherwise.</returns>
-		public bool contains( Vector2 point )
-		{
-			return ( ( point - position ).LengthSquared() <= radius * radius );
+			return containsPoint( new Vector2( x, y ) );
 		}
 
 
@@ -107,7 +111,7 @@ namespace Nez.PhysicsShapes
 		/// Gets whether or not the provided <see cref="Vector2"/> lies within the bounds of this <see cref="Circle"/>.
 		/// </summary>
 		/// <param name="point">Point.</param>
-		public bool contains( ref Vector2 point )
+		public bool containsPoint( ref Vector2 point )
 		{
 			return ( point - position ).LengthSquared() <= radius * radius;
 		}

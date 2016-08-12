@@ -1,5 +1,4 @@
-﻿using System;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework.Input;
 
@@ -12,8 +11,8 @@ namespace Nez.UI
 		public Entity entity;
 
 		/// <summary>
-		/// if true, the rawMousePosition will be used else the scaledMousePosition will be used. If your UI is in screen space (using a 
-		/// ScreenSpaceRenderer for example) then set this to true so input is not scaled.
+		/// if true, the rawMousePosition will be used else the scaledMousePosition will be used. If your UI is in screen space
+		/// and non-scaled (using the Scene.IFinalRenderDelegate for example) then set this to true so input is not scaled.
 		/// </summary>
 		public bool isFullScreen;
 
@@ -33,7 +32,7 @@ namespace Nez.UI
 		public Keys keyboardActionKey = Keys.Enter;
 
 		Group root;
-		Camera _camera;
+		public Camera camera;
 		bool debugAll, debugUnderMouse, debugParentUnderMouse;
 		Table.TableDebug debugTableUnderMouse = Table.TableDebug.None;
 
@@ -74,8 +73,8 @@ namespace Nez.UI
 			if( !root.isVisible() )
 				return;
 
-			_camera = camera;
-			root.draw( graphics, 1 );
+			this.camera = camera;
+			root.draw( graphics, 1f );
 
 			if( debug )
 			{
@@ -154,13 +153,28 @@ namespace Nez.UI
 
 		#region Input
 
+		/// <summary>
+		/// gets the appropriate mouse position (scaled vs raw) based on if this isFullScreen and if we have an entity
+		/// </summary>
+		/// <returns>The mouse position.</returns>
+		public Vector2 getMousePosition()
+		{
+			return entity != null && !isFullScreen ? Input.scaledMousePosition : Input.rawMousePosition.ToVector2();
+		}
+
+
 		public void update()
 		{
 			if( _isGamepadFocusEnabled )
 				updateGamepadState();
 			updateKeyboardState();
 
-			var currentMousePosition = entity != null && !isFullScreen ? Input.scaledMousePosition : Input.rawMousePosition.ToVector2();
+			// consolidate input checks so that we can add touch input easily later
+			var leftMouseButtonDown = Input.leftMouseButtonDown;
+			var leftMouseButtonPressed = Input.leftMouseButtonPressed;
+			var leftMouseButtonReleased = Input.leftMouseButtonReleased;
+			var currentMousePosition = getMousePosition();
+
 			var didMouseMove = false;
 			if( _lastMousePosition != currentMousePosition )
 			{
@@ -168,17 +182,33 @@ namespace Nez.UI
 				_lastMousePosition = currentMousePosition;
 			}
 
+			#if !FNA
+			// convert touch to mouse
+			if( Input.touch.isConnected && Input.touch.currentTouches.Count > 0 )
+			{
+				var touch = Input.touch.currentTouches[0];
+				leftMouseButtonDown = touch.State == Microsoft.Xna.Framework.Input.Touch.TouchLocationState.Pressed || touch.State == Microsoft.Xna.Framework.Input.Touch.TouchLocationState.Moved;
+				leftMouseButtonPressed = touch.State == Microsoft.Xna.Framework.Input.Touch.TouchLocationState.Pressed;
+				leftMouseButtonReleased = touch.State == Microsoft.Xna.Framework.Input.Touch.TouchLocationState.Released || touch.State == Microsoft.Xna.Framework.Input.Touch.TouchLocationState.Invalid;
+				currentMousePosition = touch.Position;
+
+				didMouseMove = touch.State == Microsoft.Xna.Framework.Input.Touch.TouchLocationState.Moved;
+				if( didMouseMove )
+					_lastMousePosition = currentMousePosition;
+			}
+			#endif
+
 			var mousePos = screenToStageCoordinates( currentMousePosition );
 
 			// mouse moved and released events are only sent to inputFocusListeners
-			if( ( Input.leftMouseButtonDown && !Input.leftMouseButtonPressed ) || Input.leftMouseButtonReleased )
+			if( ( leftMouseButtonDown && !leftMouseButtonPressed ) || leftMouseButtonReleased )
 			{
-				if( Input.leftMouseButtonDown && didMouseMove )
+				if( leftMouseButtonDown && didMouseMove )
 				{
 					for( var i = _inputFocusListeners.Count - 1; i >= 0; i-- )
 						( (IInputListener)_inputFocusListeners[i] ).onMouseMoved( _inputFocusListeners[i].stageToLocalCoordinates( mousePos ) );
 				}
-				else if( Input.leftMouseButtonReleased )
+				else if( leftMouseButtonReleased )
 				{
 					for( var i = _inputFocusListeners.Count - 1; i >= 0; i-- )
 						( (IInputListener)_inputFocusListeners[i] ).onMouseUp( _inputFocusListeners[i].stageToLocalCoordinates( mousePos ) );
@@ -188,9 +218,17 @@ namespace Nez.UI
 			else
 			{
 				var over = hit( mousePos );
+				if( over != null )
+					handleMouseWheel( over );
+
+				#if !FNA
+				// if we have a touch screen we short circuit enter/exit by setting the mouseOverElement as the hit element
+				if( Input.touch.isConnected && over != null )
+					_mouseOverElement = over;
+				#endif
 
 				// lose keyboard focus if we click outside of the keyboardFocusElement
-				if( Input.leftMouseButtonPressed && _keyboardFocusElement != null && over != _keyboardFocusElement )
+				if( leftMouseButtonPressed && _keyboardFocusElement != null && over != _keyboardFocusElement )
 					setKeyboardFocus( null );
 
 				// if we are over the same element and the left button was pressed we notify our listener
@@ -198,10 +236,10 @@ namespace Nez.UI
 				{
 					var elementLocal = _mouseOverElement.stageToLocalCoordinates( mousePos );
 
-					if( Input.leftMouseButtonPressed && _mouseOverElement is IInputListener )
+					if( leftMouseButtonPressed && _mouseOverElement is IInputListener )
 					{
 						var listener = _mouseOverElement as IInputListener;
-						// add the listener to be notified for all onMouseDown and onMouseUp events for the specified pointer and button
+						// add the listener to be notified for all onMouseDown and onMouseUp events
 						if( listener.onMousePressed( elementLocal ) )
 							_inputFocusListeners.Add( _mouseOverElement );
 					}
@@ -224,6 +262,32 @@ namespace Nez.UI
 				}
 
 				_mouseOverElement = over;
+			}
+		}
+
+
+		/// <summary>
+		/// bubbles the onMouseScrolled event from mouseOverElement to all parents until one of them handles it
+		/// </summary>
+		/// <returns>The mouse wheel.</returns>
+		/// <param name="mouseOverElement">Mouse over element.</param>
+		void handleMouseWheel( Element mouseOverElement )
+		{
+			// bail out if we have no mouse wheel motion
+			if( Input.mouseWheelDelta == 0 )
+				return;
+
+			// check the deepest Element first then check all of its parents that are IInputListeners
+			var listener = mouseOverElement as IInputListener;
+			if( listener != null && listener.onMouseScrolled( Input.mouseWheelDelta ) )
+				return;
+			
+			while( mouseOverElement.parent != null )
+			{
+				mouseOverElement = mouseOverElement.parent;
+				listener = mouseOverElement as IInputListener;
+				if( listener != null && listener.onMouseScrolled( Input.mouseWheelDelta ) )
+					return;
 			}
 		}
 
@@ -564,9 +628,9 @@ namespace Nez.UI
 		/// <param name="screenCoords">Screen coords.</param>
 		public Vector2 screenToStageCoordinates( Vector2 screenCoords )
 		{
-			if( _camera == null )
+			if( camera == null )
 				return screenCoords;
-			return _camera.screenToWorldPoint( screenCoords );
+			return camera.screenToWorldPoint( screenCoords );
 		}
 
 
@@ -577,9 +641,9 @@ namespace Nez.UI
 		/// <param name="stageCoords">Stage coords.</param>
 		public Vector2 stageToScreenCoordinates( Vector2 stageCoords )
 		{
-			if( _camera == null )
+			if( camera == null )
 				return stageCoords;
-			return _camera.worldToScreenPoint( stageCoords );
+			return camera.worldToScreenPoint( stageCoords );
 		}
 
 

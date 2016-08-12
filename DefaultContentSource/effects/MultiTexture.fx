@@ -1,6 +1,9 @@
 sampler s0;
-SamplerState secondTexture
+
+texture _secondTexture;
+sampler2D _secondTextureSampler = sampler_state
 {
+	Texture = <_secondTexture>;
     AddressU = Clamp;
     AddressV = Clamp;
     MagFilter = Point;
@@ -11,7 +14,7 @@ SamplerState secondTexture
 float4 PixelShaderFunction( float2 coords:TEXCOORD0 ) : COLOR0
 {
     float4 color = tex2D( s0, coords );
-	float4 color2 = tex2D( secondTexture, coords );
+	float4 color2 = tex2D( _secondTextureSampler, coords );
 	
     return color * color2;
 }

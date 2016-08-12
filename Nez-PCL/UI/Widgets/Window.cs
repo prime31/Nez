@@ -113,7 +113,11 @@ namespace Nez.UI
 			float width = getWidth(), height = getHeight();
 			float windowX = getX(), windowY = getY();
 
-			var clampPosition = _keepWithinStage && getParent() == null;
+			var stage = getStage();
+			var parentWidth = stage.getWidth();
+			var parentHeight = stage.getHeight();
+
+			var clampPosition = _keepWithinStage && getParent() == stage.getRoot();
 
 			if( ( edge & MOVE ) != 0 )
 			{
@@ -146,8 +150,8 @@ namespace Nez.UI
 				float amountX = mousePos.X - lastX;
 				if( width + amountX < minWidth )
 					amountX = minWidth - width;
-				if( clampPosition && windowX + width + amountX > Screen.width )
-					amountX = Screen.width - windowX - width;
+				if( clampPosition && windowX + width + amountX > parentWidth )
+					amountX = parentWidth - windowX - width;
 				width += amountX;
 			}
 			if( ( edge & (int)AlignInternal.bottom ) != 0 )
@@ -155,8 +159,8 @@ namespace Nez.UI
 				float amountY = mousePos.Y - lastY;
 				if( height + amountY < minHeight )
 					amountY = minHeight - height;
-				if( clampPosition && windowY + height + amountY > Screen.height )
-					amountY = Screen.height - windowY - height;
+				if( clampPosition && windowY + height + amountY > parentHeight )
+					amountY = parentHeight - windowY - height;
 				height += amountY;
 			}
 
@@ -169,6 +173,12 @@ namespace Nez.UI
 		void IInputListener.onMouseUp( Vector2 mousePos )
 		{
 			_dragging = false;
+		}
+
+
+		bool IInputListener.onMouseScrolled( int mouseWheelDelta )
+		{
+			return false;
 		}
 
 		#endregion
@@ -198,7 +208,7 @@ namespace Nez.UI
 		}
 
 
-		void keepWithinStage()
+		public void keepWithinStage()
 		{
 			if( !_keepWithinStage )
 				return;
@@ -217,11 +227,8 @@ namespace Nez.UI
 				x = parentWidth - width;
 		}
 
-
 		public override void draw( Graphics graphics, float parentAlpha )
 		{
-			keepWithinStage();
-
 			if( style.stageBackground != null )
 			{
 				var stagePos = stageToLocalCoordinates( Vector2.Zero );
@@ -275,6 +282,19 @@ namespace Nez.UI
 			return hit;
 		}
 
+		protected override void positionChanged()
+		{
+			base.positionChanged();
+
+			keepWithinStage();
+		}
+
+		protected override void sizeChanged()
+		{
+			base.sizeChanged();
+
+			keepWithinStage();
+		}
 
 		public bool isMovable()
 		{

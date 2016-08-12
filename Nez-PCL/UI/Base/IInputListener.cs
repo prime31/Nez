@@ -29,6 +29,11 @@ namespace Nez.UI
 		/// <param name="mousePos">Mouse position.</param>
 		void onMouseUp( Vector2 mousePos );
 
+		/// <summary>
+		/// if true is returned the scroll event will be consumed by the Element
+		/// </summary>
+		/// <returns>The mouse scrolled.</returns>
+		bool onMouseScrolled( int mouseWheelDelta );
 	}
 }
 

@@ -9,7 +9,9 @@ namespace Nez
 {
 	public class TiledMapComponent : RenderableComponent, IUpdatable
 	{
-		public TiledMap tiledmap;
+		public TiledMap tiledMap;
+
+		public int physicsLayer = 1 << 0;
 
 		/// <summary>
 		/// if null, all layers will be rendered
@@ -18,12 +20,12 @@ namespace Nez
 
 		public override float width
 		{
-			get { return tiledmap.width * tiledmap.tileWidth; }
+			get { return tiledMap.width * tiledMap.tileWidth; }
 		}
 
 		public override float height
 		{
-			get { return tiledmap.height * tiledmap.tileHeight; }
+			get { return tiledMap.height * tiledMap.tileHeight; }
 		}
 
 		public TiledTileLayer collisionLayer;
@@ -32,7 +34,7 @@ namespace Nez
 
 		public TiledMapComponent( TiledMap tiledmap, string collisionLayerName = null )
 		{
-			this.tiledmap = tiledmap;
+			this.tiledMap = tiledmap;
 
 			if( collisionLayerName != null )
 				collisionLayer = tiledmap.getLayer<TiledTileLayer>( collisionLayerName );
@@ -46,7 +48,7 @@ namespace Nez
 		public void setLayerToRender( string layerName )
 		{
 			layerIndicesToRender = new int[1];
-			layerIndicesToRender[0] = tiledmap.getLayerIndex( layerName );
+			layerIndicesToRender[0] = tiledMap.getLayerIndex( layerName );
 		}
 
 
@@ -54,12 +56,28 @@ namespace Nez
 		/// sets which layers should be rendered by this component by name. If you know the indices you can set layerIndicesToRender directly.
 		/// </summary>
 		/// <param name="layerNames">Layer names.</param>
-		public void setLayersToRender( string[] layerNames )
+		public void setLayersToRender( params string[] layerNames )
 		{
 			layerIndicesToRender = new int[layerNames.Length];
 
 			for( var i = 0; i < layerNames.Length; i++ )
-				layerIndicesToRender[i] = tiledmap.getLayerIndex( layerNames[i] );
+				layerIndicesToRender[i] = tiledMap.getLayerIndex( layerNames[i] );
+		}
+
+
+		#region TiledMap queries
+
+		public int getRowAtWorldPosition( float yPos )
+		{
+			yPos -= entity.transform.position.Y + _localOffset.Y;
+			return tiledMap.worldToTilePositionY( yPos );
+		}
+
+
+		public int getColumnAtWorldPosition( float xPos )
+		{
+			xPos -= entity.transform.position.X + _localOffset.X;
+			return tiledMap.worldToTilePositionY( xPos );
 		}
 
 
@@ -70,6 +88,8 @@ namespace Nez
 		/// <param name="worldPos">World position.</param>
 		public TiledTile getTileAtWorldPosition( Vector2 worldPos )
 		{
+			Assert.isNotNull( collisionLayer, "collisionLayer must not be null!" );
+
 			// offset the passed in world position to compensate for the entity position
 			worldPos -= entity.transform.position + _localOffset;
 			return collisionLayer.getTileAtWorldPosition( worldPos );
@@ -77,16 +97,21 @@ namespace Nez
 
 
 		/// <summary>
-		/// gets all the non-empty tiles that intersect the passed in bounds
+		/// gets all the non-empty tiles that intersect the passed in bounds for the collision layer. The returned List can be put back in the
+		/// pool via ListPool.free.
 		/// </summary>
 		/// <returns>The tiles intersecting bounds.</returns>
 		/// <param name="bounds">Bounds.</param>
 		public List<TiledTile> getTilesIntersectingBounds( Rectangle bounds )
 		{
+			Assert.isNotNull( collisionLayer, "collisionLayer must not be null!" );
+
 			// offset the passed in world position to compensate for the entity position
 			bounds.Location -= ( entity.transform.position + _localOffset ).ToPoint();
 			return collisionLayer.getTilesIntersectingBounds( bounds );
 		}
+
+		#endregion
 
 
 		#region Component overrides
@@ -112,7 +137,7 @@ namespace Nez
 
 		void IUpdatable.update()
 		{
-			tiledmap.update();
+			tiledMap.update();
 		}
 
 
@@ -120,14 +145,14 @@ namespace Nez
 		{
 			if( layerIndicesToRender == null )
 			{
-				tiledmap.draw( graphics.batcher, entity.transform.position + _localOffset, layerDepth, camera.bounds );
+				tiledMap.draw( graphics.batcher, entity.transform.position + _localOffset, layerDepth, camera.bounds );
 			}
 			else
 			{
-				for( var i = 0; i < tiledmap.layers.Count; i++ )
+				for( var i = 0; i < tiledMap.layers.Count; i++ )
 				{
-					if( tiledmap.layers[i].visible && layerIndicesToRender.contains( i ) )
-						tiledmap.layers[i].draw( graphics.batcher, entity.transform.position + _localOffset, layerDepth, camera.bounds );
+					if( tiledMap.layers[i].visible && layerIndicesToRender.contains( i ) )
+						tiledMap.layers[i].draw( graphics.batcher, entity.transform.position + _localOffset, layerDepth, camera.bounds );
 				}
 			}
 		}
@@ -135,7 +160,7 @@ namespace Nez
 
 		public override void debugRender( Graphics graphics )
 		{
-			foreach( var group in tiledmap.objectGroups )
+			foreach( var group in tiledMap.objectGroups )
 				renderObjectGroup( group, graphics );
 
 			if( _colliders != null )
@@ -157,13 +182,13 @@ namespace Nez
 
 			// fetch the collision layer and its rects for collision
 			var collisionRects = collisionLayer.getCollisionRectangles();
-			var renderPosition = entity.transform.position + _localOffset;
 
 			// create colliders for the rects we received
 			_colliders = new Collider[collisionRects.Count];
 			for( var i = 0; i < collisionRects.Count; i++ )
 			{
-				var collider = new BoxCollider( collisionRects[i].X + renderPosition.X, collisionRects[i].Y + renderPosition.Y, collisionRects[i].Width, collisionRects[i].Height );
+				var collider = new BoxCollider( collisionRects[i].X + _localOffset.X, collisionRects[i].Y + _localOffset.Y, collisionRects[i].Width, collisionRects[i].Height );
+				collider.physicsLayer = physicsLayer;
 				collider.entity = entity;
 				_colliders[i] = collider;
 
@@ -178,7 +203,7 @@ namespace Nez
 				return;
 
 			foreach( var collider in _colliders )
-				Physics.removeCollider( collider, true );
+				Physics.removeCollider( collider );
 			_colliders = null;
 		}
 

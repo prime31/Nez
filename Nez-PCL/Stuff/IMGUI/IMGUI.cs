@@ -6,10 +6,7 @@ using Nez.BitmapFonts;
 
 namespace Nez
 {
-	/// <summary>
-	/// Simple GUI tools for prototyping. init must be called before it will work. In your Draw method, call beginWindow followed
-	/// by any other controls then call endWindow to complete the drawing.
-	/// </summary>
+	[Obsolete( "IMGUI will be finding its way to the trash soon. Use Nez.UI instead." )]
 	public class IMGUI
 	{
 		enum TextAlign
@@ -23,7 +20,7 @@ namespace Nez
 		static BitmapFont _font;
 
 		// constants
-		const float FONT_LINE_HEIGHT = 11;
+		const float FONT_LINE_HEIGHT = 10;
 		const float ELEMENT_HEIGHT = 20;
 		const float SHORT_ELEMENT_HEIGHT = 15;
 		const float ELEMENT_PADDING = 10;
@@ -82,7 +79,7 @@ namespace Nez
 					break;
 			}
 
-			var y = _lastY + ELEMENT_PADDING + ( elementHeight - FONT_LINE_HEIGHT ) * 0.7f;
+			var y = _lastY + ELEMENT_PADDING + ( elementHeight - FONT_LINE_HEIGHT ) * 0.5f;
 
 			_spriteBatch.DrawString( _font, text, new Vector2( x, y ), color, 0, Vector2.Zero, FONT_SCALE, SpriteEffects.None, 0 );
 		}
@@ -202,7 +199,7 @@ namespace Nez
 		/// value should be between 0 and 1
 		/// </summary>
 		/// <param name="value">Value.</param>
-		public static float slider( float value )
+		public static float slider( float value, string name = "" )
 		{
 			var workingWidth = _elementWidth - SHORT_ELEMENT_HEIGHT;
 			var thumbPos = workingWidth * value;
@@ -225,7 +222,7 @@ namespace Nez
 				
 			_spriteBatch.drawRect( _elementX, _lastY + ELEMENT_PADDING, _elementWidth, SHORT_ELEMENT_HEIGHT, SLIDER_BG );
 			_spriteBatch.drawRect( _elementX + thumbPos, _lastY + ELEMENT_PADDING, SHORT_ELEMENT_HEIGHT, SHORT_ELEMENT_HEIGHT, color );
-			drawString( value.ToString( "F" ), FONT_COLOR, TextAlign.Center, SHORT_ELEMENT_HEIGHT );
+			drawString( name + value.ToString( "F" ), FONT_COLOR, TextAlign.Center, SHORT_ELEMENT_HEIGHT );
 			endElement();
 
 			return value;

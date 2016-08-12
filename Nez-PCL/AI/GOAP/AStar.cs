@@ -140,11 +140,10 @@ namespace Nez.AI.GOAP
 					return plan;
 				}
 
-				var neighbours = ap.getPossibleTransitions( currentNode.worldState );
-
-				for( var i = 0; i < neighbours.Count; i++ )
+				var neighbors = ap.getPossibleTransitions( currentNode.worldState );
+				for( var i = 0; i < neighbors.Count; i++ )
 				{
-					var cur = neighbours[i];
+					var cur = neighbors[i];
 					var opened = storage.findOpened( cur );
 					var closed = storage.findClosed( cur );
 					var cost = currentNode.costSoFar + cur.costSoFar;
@@ -179,6 +178,9 @@ namespace Nez.AI.GOAP
 						storage.addToOpenList( nb );
 					}
 				}
+
+				// done with neighbors so release it back to the pool
+				ListPool<AStarNode>.free( neighbors );
 			}
 		}
 

@@ -8,126 +8,105 @@ namespace Nez
 {
 	public class Text : RenderableComponent
 	{
-		public enum HorizontalAlign
-		{
-			Left,
-			Center,
-			Right
-		};
+		public override float width { get { return _size.X; } }
 
+		public override float height { get { return _size.Y; } }
 
-		public enum VerticalAlign
-		{
-			Top,
-			Center,
-			Bottom
-		};
-
-		protected HorizontalAlign _horizontalAlign;
-		protected VerticalAlign _verticalAlign;
-		protected NezSpriteFont _spriteFont;
-		protected BitmapFont _bitmapFont;
-		protected string _text;
-		Vector2 _size;
-
-		public override float width
-		{
-			get { return _size.X; }
-		}
-
-		public override float height
-		{
-			get { return _size.Y; }
-		}
-
-
-		public Text( BitmapFont font, string text, Vector2 position, Color color )
-		{
-			_bitmapFont = font;
-			_text = text;
-			_localOffset = position;
-			this.color = color;
-			_horizontalAlign = HorizontalAlign.Left;
-			_verticalAlign = VerticalAlign.Top;
-
-			updateSize();
-		}
-
-
-		public Text( NezSpriteFont font, string text, Vector2 position, Color color )
-		{
-			_spriteFont = font;
-			_text = text;
-			_localOffset = position;
-			this.color = color;
-			_horizontalAlign = HorizontalAlign.Left;
-			_verticalAlign = VerticalAlign.Top;
-
-			updateSize();
-		}
-
-
-		public NezSpriteFont spriteFont
-		{
-			get { return _spriteFont; }
-			set
-			{
-				_spriteFont = value;
-				_bitmapFont = null;
-				updateSize();
-			}
-		}
-
-		public BitmapFont bitmapFont
-		{
-			get { return _bitmapFont; }
-			set
-			{
-				_bitmapFont = value;
-				_spriteFont = null;
-				updateSize();
-			}
-		}
-
+		/// <summary>
+		/// text to draw
+		/// </summary>
+		/// <value>The text.</value>
 		public string text
 		{
 			get { return _text; }
-			set
-			{
-				_text = value;
-				updateSize();
-				updateCentering();
-			}
+			set { setText( value ); }
 		}
 
+		/// <summary>
+		/// horizontal alignment of the text
+		/// </summary>
+		/// <value>The horizontal origin.</value>
 		public HorizontalAlign horizontalOrigin
 		{
 			get { return _horizontalAlign; }
-			set
-			{
-				_horizontalAlign = value;
-				updateCentering();
-			}
+			set { setHorizontalAlign( value ); }
 		}
 
+		/// <summary>
+		/// vertical alignment of the text
+		/// </summary>
+		/// <value>The vertical origin.</value>
 		public VerticalAlign verticalOrigin
 		{
 			get { return _verticalAlign; }
-			set
-			{
-				_verticalAlign = value;
-				updateCentering();
-			}
+			set { setVerticalAlign( value ); }
 		}
+
+
+		protected HorizontalAlign _horizontalAlign;
+		protected VerticalAlign _verticalAlign;
+		protected IFont _font;
+		protected string _text;
+		Vector2 _size;
+
+
+		public Text( IFont font, string text, Vector2 localOffset, Color color )
+		{
+			_font = font;
+			_text = text;
+			_localOffset = localOffset;
+			this.color = color;
+			_horizontalAlign = HorizontalAlign.Left;
+			_verticalAlign = VerticalAlign.Top;
+
+			updateSize();
+		}
+
+
+		#region Fluent setters
+
+		public Text setFont( IFont font )
+		{
+			_font = font;
+			updateSize();
+
+			return this;
+		}
+
+
+		public Text setText( string text )
+		{
+			_text = text;
+			updateSize();
+			updateCentering();
+
+			return this;
+		}
+
+
+		public Text setHorizontalAlign( HorizontalAlign hAlign )
+		{
+			_horizontalAlign = hAlign;
+			updateCentering();
+
+			return this;
+		}
+
+
+		public Text setVerticalAlign( VerticalAlign vAlign )
+		{
+			_verticalAlign = vAlign;
+			updateCentering();
+
+			return this;
+		}
+
+		#endregion
 
 
 		void updateSize()
 		{
-			if( _bitmapFont != null )
-				_size = _bitmapFont.measureString( text );
-			else
-				_size = _spriteFont.measureString( text );
-			
+			_size = _font.measureString( _text );
 			updateCentering();
 		}
 
@@ -156,10 +135,7 @@ namespace Nez
 
 		public override void render( Graphics graphics, Camera camera )
 		{
-			if( _bitmapFont != null )
-				graphics.batcher.drawString( _bitmapFont, text, entity.transform.position + _localOffset, color, entity.transform.rotation, origin, entity.transform.scale, spriteEffects, layerDepth );
-			else
-				graphics.batcher.drawString( _spriteFont, text, entity.transform.position + _localOffset, color, entity.transform.rotation, origin, entity.transform.scale, spriteEffects, layerDepth );
+			graphics.batcher.drawString( _font, _text, entity.transform.position + _localOffset, color, entity.transform.rotation, origin, entity.transform.scale, spriteEffects, layerDepth );
 		}
 
 	}

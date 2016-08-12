@@ -8,8 +8,8 @@
     <OutputType>Library</OutputType>
     <RootNamespace>Nez</RootNamespace>
     <AssemblyName>Nez</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
-    <TargetFrameworkProfile>Profile5</TargetFrameworkProfile>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkProfile>Profile111</TargetFrameworkProfile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -76,6 +76,19 @@
     <Folder Include="AI\UtilityAI\Considerations\Appraisals\" />
     <Folder Include="AI\GOAP\" />
     <Folder Include="Graphics\Renderers\Reflections\" />
+    <Folder Include="Utils\Fonts\" />
+    <Folder Include="Utils\Collections\" />
+    <Folder Include="AI\Pathfinding\" />
+    <Folder Include="AI\Pathfinding\BreadthFirst\" />
+    <Folder Include="AI\Pathfinding\AStar\" />
+    <Folder Include="Utils\Extensions\" />
+    <Folder Include="Debug\Inspector\" />
+    <Folder Include="Debug\Inspector\Attributes\" />
+    <Folder Include="Debug\Inspector\Inspectors\" />
+    <Folder Include="UI\Utils\" />
+    <Folder Include="Content\" />
+    <Folder Include="Utils\Audio\" />
+    <Folder Include="Graphics\Materials\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Debug\Debug.cs" />
@@ -92,7 +105,6 @@
     <Compile Include="ECS\Components\Text\Text.cs" />
     <Compile Include="ECS\InternalUtils\ComponentList.cs" />
     <Compile Include="ECS\InternalUtils\EntityList.cs" />
-    <Compile Include="ECS\InternalUtils\EntityTagLists.cs" />
     <Compile Include="ECS\InternalUtils\RenderableComponentList.cs" />
     <Compile Include="Graphics\Graphics.cs" />
     <Compile Include="Graphics\PrimitiveBatch.cs" />
@@ -176,10 +188,6 @@
     <Compile Include="Physics\QuadTree\IQuadTreeStorable.cs" />
     <Compile Include="ECS\Components\Renderables\Particles\ParticleEmitter.cs" />
     <Compile Include="ECS\Components\Renderables\Particles\Particle.cs" />
-    <Compile Include="Math\ColorExt.cs" />
-    <Compile Include="Math\PointExt.cs" />
-    <Compile Include="Math\RectangleExt.cs" />
-    <Compile Include="Math\Vector2Ext.cs" />
     <Compile Include="ECS\Components\Renderables\Particles\ParticleEmitterType.cs" />
     <Compile Include="ECS\Components\Renderables\Particles\ParticleEmitterConfig.cs" />
     <Compile Include="PipelineRuntime\ParticleDesigner\ParticleEmitterConfigReader.cs" />
@@ -195,7 +203,6 @@
     <Compile Include="Utils\BitSet.cs" />
     <Compile Include="ECS\InternalUtils\ComponentTypeManager.cs" />
     <Compile Include="ECS\InternalUtils\EntityProcessorList.cs" />
-    <Compile Include="ECS\EntitySystem.cs" />
     <Compile Include="ECS\Systems\EntityProcessingSystem.cs" />
     <Compile Include="ECS\Systems\ProcessingSystem.cs" />
     <Compile Include="Physics\Shapes\Shape.cs" />
@@ -203,7 +210,6 @@
     <Compile Include="Physics\Shapes\ShapeCollisions.cs" />
     <Compile Include="Physics\Shapes\Circle.cs" />
     <Compile Include="Physics\Shapes\Box.cs" />
-    <Compile Include="Graphics\SpriteBatchExt.cs" />
     <Compile Include="Debug\Assert.cs" />
     <Compile Include="Physics\Shapes\RealtimeCollisions.cs" />
     <Compile Include="Utils\Triangulator.cs" />
@@ -228,7 +234,6 @@
     <Compile Include="Graphics\Effects\ScanlinesEffect.cs" />
     <Compile Include="Graphics\Textures\RenderTarget.cs" />
     <Compile Include="ECS\Transform.cs" />
-    <Compile Include="Utils\ArrayExt.cs" />
     <Compile Include="Graphics\PostProcessing\PostProcessors\HeatDistortionPostProcessor.cs" />
     <Compile Include="Physics\Shapes\CollisionResult.cs" />
     <Compile Include="Utils\Utils.cs" />
@@ -261,7 +266,6 @@
     <Compile Include="PipelineRuntime\Overlap2D\O2DCompositeItem.cs" />
     <Compile Include="PipelineRuntime\Overlap2D\O2DImage.cs" />
     <Compile Include="Graphics\Renderers\ScreenSpaceRenderer.cs" />
-    <Compile Include="Input\KeysExt.cs" />
     <Compile Include="Input\InputUtils.cs" />
     <Compile Include="Input\Clipboard.cs" />
     <Compile Include="Input\IClipboard.cs" />
@@ -326,11 +330,8 @@
     <Compile Include="Graphics\Material.cs" />
     <Compile Include="UI\Base\Direction.cs" />
     <Compile Include="UI\Base\IGamepadFocusable.cs" />
-    <Compile Include="Utils\NezSpriteFont.cs" />
     <Compile Include="Graphics\Batcher\Batcher.cs" />
     <Compile Include="Graphics\Batcher\BatcherDrawingExt.cs" />
-    <Compile Include="Graphics\Batcher\BatcherBitmapFontExt.cs" />
-    <Compile Include="Graphics\Batcher\BatcherSpriteFontExt.cs" />
     <Compile Include="PipelineRuntime\BitmapFonts\BitmapFontExt.cs" />
     <Compile Include="Graphics\DeferredLighting\DeferredLightingRenderer.cs" />
     <Compile Include="Graphics\DeferredLighting\Effects\DeferredSpriteEffect.cs" />
@@ -346,7 +347,6 @@
     <Compile Include="Graphics\Effects\SpriteLinesEffect.cs" />
     <Compile Include="Graphics\PostProcessing\PostProcessors\CinematicLetterboxPostProcessor.cs" />
     <Compile Include="Utils\ListPool.cs" />
-    <Compile Include="Utils\ListExt.cs" />
     <Compile Include="AI\BehaviorTree\Actions\BehaviorTreeReference.cs" />
     <Compile Include="AI\BehaviorTree\Actions\ExecuteAction.cs" />
     <Compile Include="AI\BehaviorTree\Composites\Composite.cs" />
@@ -412,10 +412,94 @@
     <Compile Include="Graphics\Renderers\Reflections\ReflectionRenderer.cs" />
     <Compile Include="Graphics\Batcher\GraphicsResource.cs" />
     <Compile Include="Graphics\GraphicsDeviceExt.cs" />
+    <Compile Include="Utils\Fonts\NezSpriteFont.cs" />
+    <Compile Include="Utils\Fonts\IFont.cs" />
+    <Compile Include="Utils\Fonts\FontCharacterSource.cs" />
+    <Compile Include="Utils\Fonts\BatcherIFontExt.cs" />
+    <Compile Include="Utils\Fonts\BatcherBitmapFontExt.cs" />
+    <Compile Include="Utils\Fonts\BatcherSpriteFontExt.cs" />
+    <Compile Include="Graphics\Transitions\TextureWipeTransition.cs" />
+    <Compile Include="Graphics\Textures\GaussianBlur.cs" />
+    <Compile Include="Graphics\Textures\TextureUtils.cs" />
+    <Compile Include="Utils\Collections\IPriorityQueue.cs" />
+    <Compile Include="Utils\Collections\SimplePriorityQueue.cs" />
+    <Compile Include="Utils\Collections\Deque.cs" />
+    <Compile Include="Utils\Collections\PriorityQueueNode.cs" />
+    <Compile Include="Utils\Collections\PriorityQueue.cs" />
+    <Compile Include="AI\Pathfinding\AStar\IWeightedGraph.cs" />
+    <Compile Include="AI\Pathfinding\BreadthFirst\BreadthFirstPathfinder.cs" />
+    <Compile Include="AI\Pathfinding\AStar\WeightedGridGraph.cs" />
+    <Compile Include="AI\Pathfinding\BreadthFirst\IUnweightedGraph.cs" />
+    <Compile Include="AI\Pathfinding\AStar\AStarPathfinder.cs" />
+    <Compile Include="AI\Pathfinding\BreadthFirst\UnweightedGraph.cs" />
+    <Compile Include="AI\Pathfinding\BreadthFirst\UnweightedGridGraph.cs" />
+    <Compile Include="Math\Axis.cs" />
+    <Compile Include="PipelineRuntime\Tiled\TiledTileExt.cs" />
+    <Compile Include="ECS\Components\Physics\TiledMapMover.cs" />
+    <Compile Include="ECS\Systems\EntitySystem.cs" />
+    <Compile Include="Graphics\Effects\SpriteEffect.cs" />
+    <Compile Include="Utils\Extensions\ArrayExt.cs" />
+    <Compile Include="Utils\Extensions\IEnumerableExt.cs" />
+    <Compile Include="Utils\Extensions\ListExt.cs" />
+    <Compile Include="Utils\Extensions\ColorExt.cs" />
+    <Compile Include="Utils\Extensions\RectangleExt.cs" />
+    <Compile Include="Utils\Extensions\Vector2Ext.cs" />
+    <Compile Include="Utils\Extensions\SpriteBatchExt.cs" />
+    <Compile Include="Utils\Extensions\KeysExt.cs" />
+    <Compile Include="Utils\Extensions\FloatExt.cs" />
+    <Compile Include="Debug\Inspector\RuntimeInspector.cs" />
+    <Compile Include="Debug\Inspector\Attributes\InspectableAttribute.cs" />
+    <Compile Include="Debug\Inspector\Attributes\RangeAttribute.cs" />
+    <Compile Include="Debug\Inspector\Inspectors\BoolInspector.cs" />
+    <Compile Include="Debug\Inspector\Inspectors\FloatInspector.cs" />
+    <Compile Include="Debug\Inspector\Inspectors\Inspector.cs" />
+    <Compile Include="Debug\Inspector\Inspectors\IntInspector.cs" />
+    <Compile Include="Debug\Inspector\Inspectors\StringInspector.cs" />
+    <Compile Include="Debug\Inspector\Inspectors\Vector2Inspector.cs" />
+    <Compile Include="Debug\Inspector\Attributes\CustomInspectorAttribute.cs" />
+    <Compile Include="Debug\Inspector\Attributes\InspectorCallableAttribute.cs" />
+    <Compile Include="Debug\Inspector\Inspectors\MethodInspector.cs" />
+    <Compile Include="Debug\Inspector\Inspectors\ColorInspector.cs" />
+    <Compile Include="Debug\Inspector\Inspectors\EffectInspector.cs" />
+    <Compile Include="UI\Containers\ScrollPane.cs" />
+    <Compile Include="Graphics\ScissorStack.cs" />
+    <Compile Include="UI\Widgets\ListBox.cs" />
+    <Compile Include="UI\Utils\Selection.cs" />
+    <Compile Include="UI\Utils\ArraySelection.cs" />
+    <Compile Include="UI\Widgets\SelectBox.cs" />
+    <Compile Include="UI\Widgets\SelectBoxList.cs" />
+    <Compile Include="UI\Widgets\Tooltip.cs" />
+    <Compile Include="UI\Utils\TooltipManager.cs" />
+    <Compile Include="UI\Widgets\TextTooltip.cs" />
+    <Compile Include="Debug\Inspector\Attributes\TooltipAttribute.cs" />
+    <Compile Include="Debug\Inspector\Inspectors\EnumInspector.cs" />
+    <Compile Include="Debug\Inspector\Inspectors\StructInspector.cs" />
+    <Compile Include="Utils\Extensions\ComponentExt.cs" />
+    <Compile Include="Debug\Inspector\InspectorList.cs" />
+    <Compile Include="Input\TouchInput.cs" />
+    <Compile Include="Utils\IUpdatableManager.cs" />
+    <Compile Include="Utils\Collections\FastList.cs" />
+    <Compile Include="Utils\Audio\AudioSource.cs" />
+    <Compile Include="Utils\MonoGameCompat.cs" />
+    <Compile Include="Graphics\Effects\PaletteCyclerEffect.cs" />
+    <Compile Include="Graphics\Materials\PaletteCyclerMaterial.cs" />
+    <Compile Include="Utils\Extensions\ObjectExt.cs" />
+    <Compile Include="ECS\Components\Text\MarkupText.cs" />
+    <Compile Include="Utils\Enums.cs" />
+    <Compile Include="Utils\Extensions\EdgeExt.cs" />
+    <Compile Include="ECS\Components\Text\TextRunComponent.cs" />
+    <Compile Include="ECS\Components\Text\TextRun.cs" />
+    <Compile Include="Math\Matrix2D.cs" />
+    <Compile Include="Utils\Extensions\SoundEffectInstanceExt.cs" />
+    <Compile Include="Physics\ColliderTriggerHelper.cs" />
+    <Compile Include="ECS\Components\ColorCycler.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="MonoGame.Framework">
       <HintPath>MonoGamePCL\MonoGame.Framework.dll</HintPath>
     </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Content\NezDefaultBMFont.xnb" />
   </ItemGroup>
 </Project>

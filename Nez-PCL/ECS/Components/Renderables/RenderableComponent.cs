@@ -299,7 +299,7 @@ namespace Nez
 			_layerDepth = Mathf.clamp01( layerDepth );
 
 			if( entity != null && entity.scene != null )
-				entity.scene.renderableComponents.setNeedsComponentSort();
+				entity.scene.renderableComponents.setRenderLayerNeedsComponentSort( renderLayer );
 			return this;
 		}
 
@@ -321,6 +321,18 @@ namespace Nez
 				if( entity != null && entity.scene != null )
 					entity.scene.renderableComponents.updateRenderableRenderLayer( this, oldRenderLayer, _renderLayer );
 			}
+			return this;
+		}
+
+
+		/// <summary>
+		/// color passed along to the Batcher when rendering
+		/// </summary>
+		/// <returns>The color.</returns>
+		/// <param name="color">Color.</param>
+		public RenderableComponent setColor( Color color )
+		{
+			this.color = color;
 			return this;
 		}
 

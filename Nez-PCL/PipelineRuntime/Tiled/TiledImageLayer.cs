@@ -19,7 +19,7 @@ namespace Nez.Tiled
 		}
 
 
-		public override void draw( Batcher batcher )
+		public void draw( Batcher batcher )
 		{
 			batcher.draw( texture, offset, Color.White );
 		}

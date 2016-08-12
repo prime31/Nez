@@ -48,7 +48,7 @@ namespace Nez.Spatial
 		{
 			_cellSize = cellSize;
 			_inverseCellSize = 1f / _cellSize;
-			_raycastParser = new RaycastResultParser( cellSize );
+			_raycastParser = new RaycastResultParser();
 		}
 
 
@@ -102,10 +102,11 @@ namespace Nez.Spatial
 		/// <summary>
 		/// adds the object to the SpatialHash
 		/// </summary>
-		/// <param name="obj">Object.</param>
-		public void register( Collider obj )
+		/// <param name="collider">Object.</param>
+		public void register( Collider collider )
 		{
-			var bounds = obj.bounds;
+			var bounds = collider.bounds;
+			collider.registeredPhysicsBounds = bounds;
 			var p1 = cellCoords( bounds.x, bounds.y );
 			var p2 = cellCoords( bounds.right, bounds.bottom );
 
@@ -122,18 +123,19 @@ namespace Nez.Spatial
 				{
 					// we need to create the cell if there is none
 					var c = cellAtPosition( x, y, true );
-					c.Add( obj );
+					c.Add( collider );
 				}
 			}
 		}
 
 
 		/// <summary>
-		/// removes the object from the SpatialHash using the passed-in bounds to locate it
+		/// removes the object from the SpatialHash
 		/// </summary>
-		/// <param name="obj">Object.</param>
-		public void remove( Collider obj, ref RectangleF bounds )
+		/// <param name="collider">Collider.</param>
+		public void remove( Collider collider )
 		{
+			var bounds = collider.registeredPhysicsBounds;
 			var p1 = cellCoords( bounds.x, bounds.y );
 			var p2 = cellCoords( bounds.right, bounds.bottom );
 
@@ -143,9 +145,9 @@ namespace Nez.Spatial
 				{
 					// the cell should always exist since this collider should be in all queryed cells
 					var cell = cellAtPosition( x, y );
-					Assert.isNotNull( cell, "removing Collider [{0}] from a cell that it is not present in", obj );
+					Assert.isNotNull( cell, "removing Collider [{0}] from a cell that it is not present in", collider );
 					if( cell != null )
-						cell.Remove( obj );
+						cell.Remove( collider );
 				}
 			}
 		}
@@ -155,7 +157,7 @@ namespace Nez.Spatial
 		/// removes the object from the SpatialHash using a brute force approach
 		/// </summary>
 		/// <param name="obj">Object.</param>
-		public void remove( Collider obj )
+		public void removeWithBruteForce( Collider obj )
 		{
 			_cellDict.remove( obj );
 		}
@@ -278,7 +280,7 @@ namespace Nez.Spatial
 			var stepX = Math.Sign( ray.direction.X );
 			var stepY = Math.Sign( ray.direction.Y );
 
-			// Calculate cell boundaries. when the step is positive, the next cell is after this one meening we add 1.
+			// Calculate cell boundaries. when the step is positive, the next cell is after this one meaning we add 1.
 			// If negative, cell is before this one in which case dont add to boundary
 			var boundaryX = intX + ( stepX > 0 ? 1 : 0 );
 			var boundaryY = intY + ( stepY > 0 ? 1 : 0 );
@@ -300,7 +302,7 @@ namespace Nez.Spatial
 			// start walking and returning the intersecting cells.
 			var cell = cellAtPosition( intX, intY );
 			//debugDrawCellDetails( intX, intY, cell != null ? cell.Count : 0 );
-			if( _raycastParser.checkRayIntersection( intX, intY, cell ) )
+			if( cell != null && _raycastParser.checkRayIntersection( intX, intY, cell ) )
 			{
 				_raycastParser.reset();
 				return _raycastParser.hitCounter;
@@ -320,8 +322,7 @@ namespace Nez.Spatial
 				}
 
 				cell = cellAtPosition( intX, intY );
-				//debugDrawCellDetails( intX, intY, cell != null ? cell.Count : 0 );
-				if( _raycastParser.checkRayIntersection( intX, intY, cell ) )
+				if( cell != null && _raycastParser.checkRayIntersection( intX, intY, cell ) )
 				{
 					_raycastParser.reset();
 					return _raycastParser.hitCounter;
@@ -531,13 +532,6 @@ namespace Nez.Spatial
 		int _layerMask;
 
 
-		public RaycastResultParser( int cellSize )
-		{
-			//_cellSize = cellSize;
-			//_hitTesterRect = new Rectangle( 0, 0, _cellSize, _cellSize );
-		}
-
-
 		public void start( ref Ray2D ray, RaycastHit[] hits, int layerMask )
 		{
 			_ray = ray;
@@ -548,7 +542,7 @@ namespace Nez.Spatial
 
 
 		/// <summary>
-		/// returns true if the hits array gets filled
+		/// returns true if the hits array gets filled. cell must not be null!
 		/// </summary>
 		/// <returns><c>true</c>, if ray intersection was checked, <c>false</c> otherwise.</returns>
 		/// <param name="ray">Ray.</param>
@@ -559,9 +553,6 @@ namespace Nez.Spatial
 		/// <param name="hitCounter">Hit counter.</param>
 		public bool checkRayIntersection( int cellX, int cellY, List<Collider> cell )
 		{
-			if( cell == null )
-				return false;
-			
 			float fraction;
 			for( var i = 0; i < cell.Count; i++ )
 			{
@@ -587,14 +578,14 @@ namespace Nez.Spatial
 				var colliderBounds = potential.bounds;
 				if( colliderBounds.rayIntersects( ref _ray, out fraction ) && fraction <= 1.0f )
 				{
-					// check to see if the raycast hit at a 0 fraction which would indicate that it started inside the collider
-					if( !Physics.raycastsStartInColliders && fraction == 0f )
-						continue;
-
-					// TODO: if this is a BoxCollider we are all done. if it isnt we need to check for a more detailed collision
 					if( potential.shape.collidesWithLine( _ray.start, _ray.end, out _tempHit ) )
 					{
+						// check to see if the raycast started inside the collider if we should excluded those rays
+						if( !Physics.raycastsStartInColliders && potential.shape.containsPoint( _ray.start ) )
+							continue;
+						
 						// TODO: make sure the collision point is in the current cell and if it isnt store it off for later evaluation
+						// this would be for giant objects with odd shapes that bleed into adjacent cells
 						//_hitTesterRect.X = cellX * _cellSize;
 						//_hitTesterRect.Y = cellY * _cellSize;
 						//if( !_hitTesterRect.Contains( _tempHit.point ) )

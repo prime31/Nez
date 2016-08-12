@@ -65,13 +65,17 @@ namespace Nez
 			_destinationRect = previousSceneRender.Bounds;
 
 			// load Effect and set defaults
-			_squaresEffect = Core.contentManager.loadEffect( "Content/nez/effects/transitions/Squares.mgfxo" );
+			_squaresEffect = Core.content.loadEffect( "Content/nez/effects/transitions/Squares.mgfxo" );
 			squareColor = Color.Black;
 			smoothness = 0.5f;
 
 			var aspectRatio = (float)Screen.width / (float)Screen.height;
 			size = new Vector2( 30, 30 / aspectRatio );
 		}
+
+
+		public SquaresTransition() : this( null )
+		{}
 
 
 		public override IEnumerator onBeginTransition()
@@ -90,7 +94,7 @@ namespace Nez
 			previousSceneRender = null;
 
 			// delay
-			yield return delayBeforeSquaresInDuration;
+			yield return Coroutine.waitForSeconds( delayBeforeSquaresInDuration );
 
 			// unpopulate squares
 			yield return Core.startCoroutine( tickEffectProgressProperty( _squaresEffect, squaresInDuration, EaseHelper.oppositeEaseType( easeType ), true ) );
@@ -99,7 +103,7 @@ namespace Nez
 
 			// cleanup
 			_overlayTexture.Dispose();
-			Core.contentManager.unloadEffect( _squaresEffect.Name );
+			Core.content.unloadEffect( _squaresEffect.Name );
 		}
 
 

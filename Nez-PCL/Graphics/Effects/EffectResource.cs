@@ -2,10 +2,6 @@
 using System.IO;
 using Microsoft.Xna.Framework;
 
-#if WINRT
-using System.Reflection;
-#endif
-
 
 namespace Nez
 {
@@ -34,15 +30,20 @@ namespace Nez
 		internal static byte[] deferredSpriteBytes { get { return getFileResourceBytes( "Content/nez/effects/DeferredSprite.mgfxo" ); } }
 		internal static byte[] deferredLightBytes { get { return getFileResourceBytes( "Content/nez/effects/DeferredLighting.mgfxo" ); } }
 
+		// forward lighting
+		internal static byte[] forwardLightingBytes { get { return getFileResourceBytes( "Content/nez/effects/ForwardLighting.mgfxo" ); } }
+
 		// scene transitions
 		internal static byte[] squaresTransitionBytes { get { return getFileResourceBytes( "Content/nez/effects/transitions/Squares.mgfxo" ); } }
 
 		// sprite or post processor effects
+		internal static byte[] spriteEffectBytes { get { return getMonoGameEmbeddedResourceBytes( "Microsoft.Xna.Framework.Graphics.Effect.Resources.SpriteEffect.ogl.mgfxo" ); } }
 		internal static byte[] multiTextureOverlayBytes { get { return getFileResourceBytes( "Content/nez/effects/MultiTextureOverlay.mgfxo" ); } }
 		internal static byte[] scanlinesBytes { get { return getFileResourceBytes( "Content/nez/effects/Scanlines.mgfxo" ); } }
 		internal static byte[] reflectionBytes { get { return getFileResourceBytes( "Content/nez/effects/Reflection.mgfxo" ); } }
 		internal static byte[] grayscaleBytes { get { return getFileResourceBytes( "Content/nez/effects/Grayscale.mgfxo" ); } }
 		internal static byte[] sepiaBytes { get { return getFileResourceBytes( "Content/nez/effects/Sepia.mgfxo" ); } }
+		internal static byte[] paletteCyclerBytes { get { return getFileResourceBytes( "Content/nez/effects/PaletteCycler.mgfxo" ); } }
 
 
 		/// <summary>
@@ -52,12 +53,7 @@ namespace Nez
 		/// <param name="name">Name.</param>
 		static byte[] getEmbeddedResourceBytes( string name )
 		{
-			#if WINRT
-			var assembly = typeof(EffectResource).GetTypeInfo().Assembly;
-			#else
-			var assembly = typeof( EffectResource ).Assembly;
-			#endif
-
+			var assembly = ReflectionUtils.getAssembly( typeof( EffectResource ) );
 			using( var stream = assembly.GetManifestResourceStream( name ) )
 			{
 				using( var ms = new MemoryStream() )
@@ -71,12 +67,11 @@ namespace Nez
 
 		internal static byte[] getMonoGameEmbeddedResourceBytes( string name )
 		{
-			#if WINRT
-			var assembly = typeof( MathHelper ).GetTypeInfo().Assembly;
-			#else
-			var assembly = typeof( MathHelper ).Assembly;
+			#if FNA
+			name = name.Replace( ".ogl.mgfxo", ".fxb" );
 			#endif
 
+			var assembly = ReflectionUtils.getAssembly( typeof( MathHelper ) );
 			using( var stream = assembly.GetManifestResourceStream( name ) )
 			{
 				using( var ms = new MemoryStream() )
@@ -96,8 +91,11 @@ namespace Nez
 		/// <param name="path">Path.</param>
 		public static byte[] getFileResourceBytes( string path )
 		{
-			byte[] bytes;
+			#if FNA
+			path = path.Replace( ".mgfxo", ".fxb" );
+			#endif
 
+			byte[] bytes;
 			try
 			{
 				using( var stream = TitleContainer.OpenStream( path ) )

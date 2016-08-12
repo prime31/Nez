@@ -49,10 +49,14 @@ namespace Nez
 			_destinationRect = previousSceneRender.Bounds;
 
 			// load Effect and set defaults
-			_windEffect = Core.contentManager.loadEffect( "Content/nez/effects/transitions/Wind.mgfxo" );
+			_windEffect = Core.content.loadEffect( "Content/nez/effects/transitions/Wind.mgfxo" );
 			size = 0.3f;
 			windSegments = 100;
 		}
+
+
+		public WindTransition() : this( null )
+		{}
 
 
 		public override IEnumerator onBeginTransition()
@@ -66,7 +70,7 @@ namespace Nez
 			transitionComplete();
 
 			// cleanup
-			Core.contentManager.unloadEffect( _windEffect.Name );
+			Core.content.unloadEffect( _windEffect.Name );
 		}
 
 

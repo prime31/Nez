@@ -7,7 +7,7 @@ namespace Nez
 	/// <summary>
 	/// simple static class that can be used to pool Lists
 	/// </summary>
-	public static class ListPool<T> where T : new()
+	public static class ListPool<T>
 	{
 		static Queue<List<T>> _objectQueue = new Queue<List<T>>();
 

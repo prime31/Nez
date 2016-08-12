@@ -44,7 +44,10 @@ namespace Nez
 		/// <summary>
 		/// global content manager for loading any assets that should stick around between scenes
 		/// </summary>
-		public static NezContentManager contentManager;
+		public static NezContentManager content;
+
+		[Obsolete( "use Core.content instead of Core.contentManager" )]
+		public static NezContentManager contentManager { get { return content; } }
 
 		/// <summary>
 		/// default SamplerState used by Materials. Note that this must be set at launch! Changing it after that time will result in only
@@ -64,6 +67,9 @@ namespace Nez
 
 		#if DEBUG
 		internal static ulong drawCalls;
+		TimeSpan _frameCounterElapsedTime = TimeSpan.Zero;
+		int _frameCounter = 0;
+		string _windowTitle;
 		#endif
 
 		Scene _scene;
@@ -76,8 +82,8 @@ namespace Nez
 		ITimer _graphicsDeviceChangeTimer;
 
 		// globally accessible systems
+		FastList<IUpdatableManager> _globalManagers = new FastList<IUpdatableManager>();
 		CoroutineManager _coroutineManager = new CoroutineManager();
-		TweenManager _tweenManager = new TweenManager();
 		TimerManager _timerManager = new TimerManager();
 
 
@@ -91,8 +97,12 @@ namespace Nez
 		}
 
 
-		public Core( int width = 1280, int height = 720, bool isFullScreen = false, bool enableEntitySystems = true )
+		public Core( int width = 1280, int height = 720, bool isFullScreen = false, bool enableEntitySystems = true, string windowTitle = "Nez" )
 		{
+			#if DEBUG
+			_windowTitle = windowTitle;
+			#endif
+
 			_instance = this;
 			emitter = new Emitter<CoreEvents>( new CoreEventsComparer() );
 
@@ -103,22 +113,34 @@ namespace Nez
 			graphicsManager.SynchronizeWithVerticalRetrace = true;
 			graphicsManager.DeviceReset += onGraphicsDeviceReset;
 			graphicsManager.PreferredDepthStencilFormat = DepthFormat.Depth24Stencil8;
+
 			Screen.initialize( graphicsManager );
+			Window.ClientSizeChanged += onGraphicsDeviceReset;
+			Window.OrientationChanged += onOrientationChanged;
 
 			Content.RootDirectory = "Content";
-			contentManager = new NezContentManager( Services, Content.RootDirectory );
+			content = new NezGlobalContentManager( Services, Content.RootDirectory );
 			IsMouseVisible = true;
 			IsFixedTimeStep = false;
 
 			entitySystemsEnabled = enableEntitySystems;
-			if( enableEntitySystems )
-				ComponentTypeManager.initialize();
+
+			// setup systems
+			_globalManagers.add( _coroutineManager );
+			_globalManagers.add( new TweenManager() );
+			_globalManagers.add( _timerManager );
+			_globalManagers.add( new RenderTarget() );
 		}
 
 
+		[System.Obsolete( "It is no longer necessary to wire up the ClientSizeChanged event" )]
 		protected static void onClientSizeChanged( object sender, EventArgs e )
+		{}
+
+
+		void onOrientationChanged( object sender, EventArgs e )
 		{
-			_instance.onGraphicsDeviceReset( sender, e );
+			emitter.emit( CoreEvents.OrientationChanged );
 		}
 
 
@@ -163,9 +185,8 @@ namespace Nez
 
 			// prep the default Graphics system
 			graphicsDevice = GraphicsDevice;
-			var font = Content.Load<BitmapFont>( "nez/NezDefaultBMFont" );
+			var font = content.Load<BitmapFont>( "nez://Nez.Content.NezDefaultBMFont.xnb" );
 			Graphics.instance = new Graphics( font );
-			RenderTarget.instance = new RenderTarget();
 		}
 
 
@@ -182,15 +203,14 @@ namespace Nez
 			TimeRuler.instance.beginMark( "update", Color.Green );
 			#endif
 
-			// update all our systems
+			// update all our systems and global managers
 			Time.update( (float)gameTime.ElapsedGameTime.TotalSeconds );
 			Input.update();
-			RenderTarget.instance.update();
-			_coroutineManager.update();
-			_tweenManager.update();
-			_timerManager.update();
 
-			if( exitOnEscapeKeypress && Input.isKeyDown( Keys.Escape ) || Input.gamePads[0].isButtonReleased( Buttons.Back ) )
+			for( var i = _globalManagers.length - 1; i >= 0; i-- )
+				_globalManagers.buffer[i].update();
+
+			if( exitOnEscapeKeypress && ( Input.isKeyDown( Keys.Escape ) || Input.gamePads[0].isButtonReleased( Buttons.Back ) ) )
 			{
 				Exit();
 				return;
@@ -214,6 +234,13 @@ namespace Nez
 			#if DEBUG
 			TimeRuler.instance.endMark( "update" );
 			DebugConsole.instance.update();
+			drawCalls = 0;
+			#endif
+
+			#if FNA
+			// MonoGame only updates old-school XNA Components in Update which we dont care about. FNA's core FrameworkDispatcher needs
+			// Update called though so we do so here.
+			FrameworkDispatcher.Update();
 			#endif
 		}
 
@@ -225,6 +252,17 @@ namespace Nez
 
 			#if DEBUG
 			TimeRuler.instance.beginMark( "draw", Color.Gold );
+
+			// fps counter
+			_frameCounter++;
+			_frameCounterElapsedTime += gameTime.ElapsedGameTime;
+			if( _frameCounterElapsedTime >= TimeSpan.FromSeconds( 1 ) )
+			{
+				var totalMemory = ( GC.GetTotalMemory( false ) / 1048576f ).ToString( "F" );
+				Window.Title = string.Format( "{0} {1} fps - {2} MB", _windowTitle, _frameCounter, totalMemory );
+				_frameCounter = 0;
+				_frameCounterElapsedTime -= TimeSpan.FromSeconds( 1 );
+			}
 			#endif
 
 			if( _sceneTransition != null )
@@ -251,13 +289,13 @@ namespace Nez
 				if( _scene != null && _sceneTransition.wantsPreviousSceneRender && !_sceneTransition.hasPreviousSceneRender )
 				{
 					_scene.postRender( _sceneTransition.previousSceneRender );
-					scene = null;
+					if( _sceneTransition._loadsNewScene )
+						scene = null;
 					startCoroutine( _sceneTransition.onBeginTransition() );
 				}
-				else
+				else if( _scene != null )
 				{
-					if( _scene != null )
-						_scene.postRender();
+					_scene.postRender();
 				}
 
 				_sceneTransition.render( Graphics.instance );
@@ -265,13 +303,15 @@ namespace Nez
 
 			#if DEBUG
 			TimeRuler.instance.endMark( "draw" );
+			DebugConsole.instance.render();
 
-			if( DebugConsole.instance.isOpen )
-				DebugConsole.instance.render();
-			else
+			// the TimeRuler only needs to render when the DebugConsole is not open
+			if( !DebugConsole.instance.isOpen )
 				TimeRuler.instance.render();
 
+			#if !FNA
 			drawCalls = graphicsDevice.Metrics.DrawCount;
+			#endif
 			#endif
 		}
 
@@ -293,11 +333,38 @@ namespace Nez
 		/// temporarily runs SceneTransition allowing one Scene to transition to another smoothly with custom effects.
 		/// </summary>
 		/// <param name="sceneTransition">Scene transition.</param>
-		public static void startSceneTransition( SceneTransition sceneTransition )
+		public static SceneTransition startSceneTransition( SceneTransition sceneTransition )
 		{
 			Assert.isNull( _instance._sceneTransition, "You cannot start a new SceneTransition until the previous one has completed" );
 			_instance._sceneTransition = sceneTransition;
+			return sceneTransition;
 		}
+
+
+		#region Global Managers
+
+		/// <summary>
+		/// adds a global manager object that will have its update method called each frame before Scene.update is called
+		/// </summary>
+		/// <returns>The global manager.</returns>
+		/// <param name="manager">Manager.</param>
+		public static void registerGlobalManager( IUpdatableManager manager )
+		{
+			_instance._globalManagers.add( manager );
+		}
+
+
+		/// <summary>
+		/// removes the global manager object
+		/// </summary>
+		/// <returns>The global manager.</returns>
+		/// <param name="manager">Manager.</param>
+		public static void unregisterGlobalManager( IUpdatableManager manager )
+		{
+			_instance._globalManagers.remove( manager );
+		}
+
+		#endregion
 
 
 		#region Systems access

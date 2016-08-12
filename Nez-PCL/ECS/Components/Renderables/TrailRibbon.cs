@@ -136,12 +136,19 @@ namespace Nez
 			_areVertsDirty = false;
 		}
 
+		public override void onEnabled()
+		{
+			base.onEnabled();
+
+			_segments.Clear();
+			initializeVertices();
+		}
 
 		public override void onAddedToEntity()
 		{
 			initializeVertices();
 
-			_basicEffect = entity.scene.contentManager.loadMonoGameEffect<BasicEffect>();
+			_basicEffect = entity.scene.content.loadMonoGameEffect<BasicEffect>();
 			_basicEffect.World = Matrix.Identity;
 			_basicEffect.VertexColorEnabled = true;
 		}

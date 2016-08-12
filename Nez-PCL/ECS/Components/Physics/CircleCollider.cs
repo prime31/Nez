@@ -63,7 +63,7 @@ namespace Nez
 				_areBoundsDirty = true;
 
 				if( entity != null && _isParentEntityAddedToScene )
-					Physics.updateCollider( this, ref oldBounds );
+					Physics.updateCollider( this );
 			}
 			return this;
 		}

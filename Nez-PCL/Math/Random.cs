@@ -10,7 +10,7 @@ namespace Nez
 
 
 		/// <summary>
-		/// returns a random float between 0 and 1
+		/// returns a random float between 0 (inclusive) and 1 (exclusive)
 		/// </summary>
 		/// <returns>The float.</returns>
 		static public float nextFloat()
@@ -20,13 +20,24 @@ namespace Nez
 
 
 		/// <summary>
-		/// returns a random float between 0 and max
+		/// returns a random float between 0 (inclusive) and max (exclusive)
 		/// </summary>
 		/// <returns>The float.</returns>
 		/// <param name="max">Max.</param>
 		static public float nextFloat( float max )
 		{
-			return nextFloat() * max;
+			return (float)random.NextDouble() * max;
+		}
+
+
+		/// <summary>
+		/// returns a random int between 0 (inclusive) and max (exclusive)
+		/// </summary>
+		/// <returns>The float.</returns>
+		/// <param name="max">Max.</param>
+		static public int nextInt( int max )
+		{
+			return random.Next( max );
 		}
 
 
@@ -36,7 +47,7 @@ namespace Nez
 		/// <returns>The angle.</returns>
 		static public float nextAngle()
 		{
-			return nextFloat() * MathHelper.TwoPi;
+			return (float)random.NextDouble() * MathHelper.TwoPi;
 		}
 
 
@@ -53,13 +64,12 @@ namespace Nez
 		/// <summary>
 		/// Returns a random integer between min (inclusive) and max (exclusive)
 		/// </summary>
-		/// <param name="random"></param>
 		/// <param name="min"></param>
 		/// <param name="max"></param>
 		/// <returns></returns>
 		static public int range( int min, int max )
 		{
-			return min + random.Next( max - min );
+			return random.Next( min, max );
 		}
 
 
@@ -100,12 +110,81 @@ namespace Nez
 
 
 		/// <summary>
-		/// returns true if the next random is < percent. Percent should be between 0 and 1
+		/// returns true if the next random is less than percent. Percent should be between 0 and 1
 		/// </summary>
 		/// <param name="percent">Percent.</param>
 		public static bool chance( float percent )
 		{
 			return nextFloat() < percent;
+		}
+
+
+		/// <summary>
+		/// returns true if the next random is less than value. Value should be between 0 and 100.
+		/// </summary>
+		/// <param name="value">Value.</param>
+		public static bool chance( int value )
+		{
+			return nextInt( 100 ) < value;
+		}
+
+
+		/// <summary>
+		/// randomly returns one of the given values
+		/// </summary>
+		/// <param name="first">First.</param>
+		/// <param name="second">Second.</param>
+		/// <typeparam name="T">The 1st type parameter.</typeparam>
+		public static T choose<T>( T first, T second )
+		{
+			if( nextInt( 2 ) == 0 )
+				return first;
+			return second;
+		}
+
+
+		/// <summary>
+		/// randomly returns one of the given values
+		/// </summary>
+		/// <param name="first">First.</param>
+		/// <param name="second">Second.</param>
+		/// <param name="third">Third.</param>
+		/// <typeparam name="T">The 1st type parameter.</typeparam>
+		public static T choose<T>( T first, T second, T third )
+		{
+			switch( nextInt( 3 ) )
+			{
+				case 0:
+					return first;
+				case 1:
+					return second;
+				default:
+					return third;
+			}
+		}
+
+
+		/// <summary>
+		/// randomly returns one of the given values
+		/// </summary>
+		/// <param name="first">First.</param>
+		/// <param name="second">Second.</param>
+		/// <param name="third">Third.</param>
+		/// <param name="fourth">Fourth.</param>
+		/// <typeparam name="T">The 1st type parameter.</typeparam>
+		public static T choose<T>( T first, T second, T third, T fourth )
+		{
+			switch( nextInt( 4 ) )
+			{
+				case 0:
+					return first;
+				case 1:
+					return second;
+				case 2:
+					return third;
+				default:
+					return fourth;
+			}
 		}
 
 	}

@@ -82,10 +82,11 @@ namespace Nez.UI
 		{}
 
 
-		public virtual void setStyle( LabelStyle style )
+		public virtual Label setStyle( LabelStyle style )
 		{
 			_style = style;
 			invalidateHierarchy();
+			return this;
 		}
 
 
@@ -116,7 +117,7 @@ namespace Nez.UI
 				if( _style.background != null )
 					widthCalc -= _style.background.leftWidth + _style.background.rightWidth;
 
-				_wrappedString = _style.font.wrapText( _text, widthCalc );
+				_wrappedString = _style.font.wrapText( _text, widthCalc / _fontScaleX );
 			}
 			else
 			{
@@ -272,7 +273,9 @@ namespace Nez.UI
 			var width = this.width;
 			var height = this.height;
 			_textPosition.X = 0;
-			_textPosition.Y = _style.font.descent;
+			_textPosition.Y = 0;
+			// TODO: explore why descent causes mis-alignment
+			//_textPosition.Y =_style.font.descent;
 			if( _style.background != null )
 			{
 				_textPosition.X = _style.background.leftWidth;

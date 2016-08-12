@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Runtime.CompilerServices;
 using Microsoft.Xna.Framework;
 
 
@@ -6,7 +7,7 @@ namespace Nez
 {
 	public static class Mathf
 	{
-		public static float epsilon = 0.00001f;
+		public const float epsilon = 0.00001f;
 
 
 		public static float round( float f )
@@ -15,9 +16,9 @@ namespace Nez
 		}
 
 
-		public static float floor( float f )
+		public static float ceil( float f )
 		{
-			return (float)Math.Floor( (double)f );
+			return (float)Math.Ceiling( (double)f );
 		}
 
 
@@ -27,21 +28,50 @@ namespace Nez
 		}
 
 
+		/// <summary>
+		/// ceils the float to the nearest int value above y. note that this only works for values in the range of short
+		/// </summary>
+		/// <returns>The ceil to int.</returns>
+		/// <param name="y">F.</param>
+		public static int fastCeilToInt( float y )
+		{
+			return 32768 - (int)( 32768f - y );
+		}
+
+
+		public static float floor( float f )
+		{
+			return (float)Math.Floor( (double)f );
+		}
+
+
 		public static int floorToInt( float f )
 		{
 			return (int)Math.Floor( (double)f );
 		}
 
 
+		/// <summary>
+		/// floors the float to the nearest int value below x. note that this only works for values in the range of short
+		/// </summary>
+		/// <returns>The floor to int.</returns>
+		/// <param name="x">The x coordinate.</param>
 		public static int fastFloorToInt( float x )
 		{
-			return x > 0 ? (int)x : (int)x - 1;
+			// we shift to guaranteed positive before casting then shift back after
+			return (int)( x + 32768f ) - 32768;
 		}
 
 
 		public static int roundToInt( float f )
 		{
 			return (int)Math.Round( (double)f );
+		}
+
+
+		public static int truncateToInt( float f )
+		{
+			return (int)Math.Truncate( f );
 		}
 
 
@@ -164,7 +194,7 @@ namespace Nez
 
 
 		/// <summary>
-		/// increments t an ensures it is always greater than 0 and less than length
+		/// increments t and ensures it is always greater than or equal to 0 and less than length
 		/// </summary>
 		/// <param name="t">T.</param>
 		/// <param name="length">Length.</param>
@@ -177,6 +207,27 @@ namespace Nez
 		}
 
 
+		/// <summary>
+		/// decrements t and ensures it is always greater than or equal to 0 and less than length
+		/// </summary>
+		/// <returns>The with wrap.</returns>
+		/// <param name="t">T.</param>
+		/// <param name="length">Length.</param>
+		public static int decrementWithWrap( int t, int length )
+		{
+			t--;
+			if( t < 0 )
+				return length - 1;
+			return t;
+		}
+
+
+		/// <summary>
+		/// ping-pongs t so that it is never larger than length and never smaller than 0
+		/// </summary>
+		/// <returns>The pong.</returns>
+		/// <param name="t">T.</param>
+		/// <param name="length">Length.</param>
 		public static float pingPong( float t, float length )
 		{
 			t = Mathf.repeat( t, length * 2f );
@@ -209,24 +260,82 @@ namespace Nez
 		}
 
 
+		/// <summary>
+		/// moves start towards end by shift amount clamping the result. start can be less than or greater than end.
+		/// example: start is 2, end is 10, shift is 4 results in 6
+		/// </summary>
+		/// <param name="start">Start.</param>
+		/// <param name="end">End.</param>
+		/// <param name="shift">Shift.</param>
+		public static float approach( float start, float end, float shift )
+		{
+			if( start < end )
+				return Math.Min( start + shift, end );
+			return Math.Max( start - shift, end );
+		}
+
+
+		/// <summary>
+		/// checks to see if two values are approximately the same using an acceptable tolerance for the check
+		/// </summary>
+		/// <param name="value1">Value1.</param>
+		/// <param name="value2">Value2.</param>
+		/// <param name="tolerance">Tolerance.</param>
+		[MethodImpl( MethodImplOptions.AggressiveInlining )]
+		public static bool approximately( float value1, float value2, float tolerance = epsilon )
+		{
+			return Math.Abs( value1 - value2 ) <= tolerance;
+		}
+
+
+		/// <summary>
+		/// returns the minimum of the passed in values
+		/// </summary>
+		/// <returns>The of.</returns>
+		/// <param name="a">The alpha component.</param>
+		/// <param name="b">The blue component.</param>
+		/// <param name="c">C.</param>
 		public static float minOf( float a, float b, float c )
 		{
 			return Math.Min( a, Math.Min( b, c ) );
 		}
 
 
+		/// <summary>
+		/// returns the maximum of the passed in values
+		/// </summary>
+		/// <returns>The of.</returns>
+		/// <param name="a">The alpha component.</param>
+		/// <param name="b">The blue component.</param>
+		/// <param name="c">C.</param>
 		public static float maxOf( float a, float b, float c )
 		{
 			return Math.Max( a, Math.Max( b, c ) );
 		}
 
 
+		/// <summary>
+		/// returns the minimum of the passed in values
+		/// </summary>
+		/// <returns>The of.</returns>
+		/// <param name="a">The alpha component.</param>
+		/// <param name="b">The blue component.</param>
+		/// <param name="c">C.</param>
+		/// <param name="d">D.</param>
 		public static float minOf( float a, float b, float c, float d )
 		{
 			return Math.Min( a, Math.Min( b, Math.Min( c, d ) ) );
 		}
 
 
+		/// <summary>
+		/// returns the maximum of the passed in values
+		/// </summary>
+		/// <returns>The of.</returns>
+		/// <param name="a">The alpha component.</param>
+		/// <param name="b">The blue component.</param>
+		/// <param name="c">C.</param>
+		/// <param name="d">D.</param>
 		public static float maxOf( float a, float b, float c, float d )
 		{
 			return Math.Max( a, Math.Max( b, Math.Max( c, d ) ) );
@@ -359,6 +468,19 @@ namespace Nez
 		public static bool withinEpsilon( float floatA, float floatB )
 		{
 			return Math.Abs( floatA - floatB ) < epsilon;
+		}
+
+
+		public static int closestPowerOfTwoGreaterThan( int x )
+		{
+			x--;
+			x |= ( x >> 1 );
+			x |= ( x >> 2 );
+			x |= ( x >> 4 );
+			x |= ( x >> 8 );
+			x |= ( x >> 16 );
+
+			return ( x + 1 );
 		}
 
 

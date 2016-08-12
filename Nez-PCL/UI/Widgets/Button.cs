@@ -55,7 +55,7 @@ namespace Nez.UI
 			set { setChecked( value, programmaticChangeEvents ); }
 		}
 
-		public bool programmaticChangeEvents = true;
+		public bool programmaticChangeEvents;
 
 		/// <summary>
 		/// the maximum distance outside the button the mouse can move when pressing it to cause it to be unfocused
@@ -143,6 +143,12 @@ namespace Nez.UI
 
 			if( onClicked != null )
 				onClicked( this );
+		}
+
+
+		bool IInputListener.onMouseScrolled( int mouseWheelDelta )
+		{
+			return false;
 		}
 
 		#endregion

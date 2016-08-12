@@ -15,22 +15,22 @@ namespace Nez
 		private static RectangleF emptyRectangle = new RectangleF();
 
 		/// <summary>
-		/// The x coordinate of the top-left corner of this <see cref="Rectangle"/>.
+		/// The x coordinate of the top-left corner of this <see cref="RectangleF"/>.
 		/// </summary>
 		public float x;
 
 		/// <summary>
-		/// The y coordinate of the top-left corner of this <see cref="Rectangle"/>.
+		/// The y coordinate of the top-left corner of this <see cref="RectangleF"/>.
 		/// </summary>
 		public float y;
 
 		/// <summary>
-		/// The width of this <see cref="Rectangle"/>.
+		/// The width of this <see cref="RectangleF"/>.
 		/// </summary>
 		public float width;
 
 		/// <summary>
-		/// The height of this <see cref="Rectangle"/>.
+		/// The height of this <see cref="RectangleF"/>.
 		/// </summary>
 		public float height;
 
@@ -38,7 +38,7 @@ namespace Nez
 		#region Public Properties
 
 		/// <summary>
-		/// Returns a <see cref="Rectangle"/> with X=0, Y=0, Width=0, Height=0.
+		/// Returns a <see cref="RectangleF"/> with X=0, Y=0, Width=0, Height=0.
 		/// </summary>
 		public static RectangleF empty
 		{
@@ -46,7 +46,7 @@ namespace Nez
 		}
 
 		/// <summary>
-		/// Returns the x coordinate of the left edge of this <see cref="Rectangle"/>.
+		/// Returns the x coordinate of the left edge of this <see cref="RectangleF"/>.
 		/// </summary>
 		public float left
 		{
@@ -54,7 +54,7 @@ namespace Nez
 		}
 
 		/// <summary>
-		/// Returns the x coordinate of the right edge of this <see cref="Rectangle"/>.
+		/// Returns the x coordinate of the right edge of this <see cref="RectangleF"/>.
 		/// </summary>
 		public float right
 		{
@@ -62,7 +62,7 @@ namespace Nez
 		}
 
 		/// <summary>
-		/// Returns the y coordinate of the top edge of this <see cref="Rectangle"/>.
+		/// Returns the y coordinate of the top edge of this <see cref="RectangleF"/>.
 		/// </summary>
 		public float top
 		{
@@ -70,7 +70,7 @@ namespace Nez
 		}
 
 		/// <summary>
-		/// Returns the y coordinate of the bottom edge of this <see cref="Rectangle"/>.
+		/// Returns the y coordinate of the bottom edge of this <see cref="RectangleF"/>.
 		/// </summary>
 		public float bottom
 		{
@@ -84,7 +84,7 @@ namespace Nez
 		public Vector2 max { get { return new Vector2( right, bottom ); } }
 
 		/// <summary>
-		/// Whether or not this <see cref="Rectangle"/> has a <see cref="Width"/> and
+		/// Whether or not this <see cref="RectangleF"/> has a <see cref="Width"/> and
 		/// <see cref="Height"/> of 0, and a <see cref="Location"/> of (0, 0).
 		/// </summary>
 		public bool isEmpty
@@ -96,7 +96,7 @@ namespace Nez
 		}
 
 		/// <summary>
-		/// The top-left coordinates of this <see cref="Rectangle"/>.
+		/// The top-left coordinates of this <see cref="RectangleF"/>.
 		/// </summary>
 		public Vector2 location
 		{
@@ -112,7 +112,7 @@ namespace Nez
 		}
 
 		/// <summary>
-		/// The width-height coordinates of this <see cref="Rectangle"/>.
+		/// The width-height coordinates of this <see cref="RectangleF"/>.
 		/// </summary>
 		public Vector2 size
 		{
@@ -128,7 +128,7 @@ namespace Nez
 		}
 
 		/// <summary>
-		/// A <see cref="Point"/> located in the center of this <see cref="Rectangle"/>.
+		/// A <see cref="Point"/> located in the center of this <see cref="RectangleF"/>.
 		/// </summary>
 		/// <remarks>
 		/// If <see cref="Width"/> or <see cref="Height"/> is an odd number,
@@ -157,13 +157,13 @@ namespace Nez
 
 
 		/// <summary>
-		/// Creates a new instance of <see cref="Rectangle"/> struct, with the specified
+		/// Creates a new instance of <see cref="RectangleF"/> struct, with the specified
 		/// position, width, and height.
 		/// </summary>
-		/// <param name="x">The x coordinate of the top-left corner of the created <see cref="Rectangle"/>.</param>
-		/// <param name="y">The y coordinate of the top-left corner of the created <see cref="Rectangle"/>.</param>
-		/// <param name="width">The width of the created <see cref="Rectangle"/>.</param>
-		/// <param name="height">The height of the created <see cref="Rectangle"/>.</param>
+		/// <param name="x">The x coordinate of the top-left corner of the created <see cref="RectangleF"/>.</param>
+		/// <param name="y">The y coordinate of the top-left corner of the created <see cref="RectangleF"/>.</param>
+		/// <param name="width">The width of the created <see cref="RectangleF"/>.</param>
+		/// <param name="height">The height of the created <see cref="RectangleF"/>.</param>
 		public RectangleF( float x, float y, float width, float height )
 		{
 			this.x = x;
@@ -174,11 +174,11 @@ namespace Nez
 
 
 		/// <summary>
-		/// Creates a new instance of <see cref="Rectangle"/> struct, with the specified
+		/// Creates a new instance of <see cref="RectangleF"/> struct, with the specified
 		/// location and size.
 		/// </summary>
-		/// <param name="location">The x and y coordinates of the top-left corner of the created <see cref="Rectangle"/>.</param>
-		/// <param name="size">The width and height of the created <see cref="Rectangle"/>.</param>
+		/// <param name="location">The x and y coordinates of the top-left corner of the created <see cref="RectangleF"/>.</param>
+		/// <param name="size">The width and height of the created <see cref="RectangleF"/>.</param>
 		public RectangleF( Vector2 location, Vector2 size )
 		{
 			this.x = location.X;
@@ -186,6 +186,7 @@ namespace Nez
 			this.width = size.X;
 			this.height = size.Y;
 		}
+
 
 		/// <summary>
 		/// creates a RectangleF given min/max points (top-left, bottom-right points)
@@ -246,11 +247,34 @@ namespace Nez
 		#region Public Methods
 
 		/// <summary>
-		/// Gets whether or not the provided coordinates lie within the bounds of this <see cref="Rectangle"/>.
+		/// gets the position of the specified edge
+		/// </summary>
+		/// <returns>The side.</returns>
+		/// <param name="edge">Side.</param>
+		public float getSide( Edge edge )
+		{
+			switch( edge )
+			{
+				case Edge.Top:
+					return top;
+				case Edge.Bottom:
+					return bottom;
+				case Edge.Left:
+					return left;
+				case Edge.Right:
+					return right;
+				default:
+					throw new ArgumentOutOfRangeException();
+			}
+		}
+
+
+		/// <summary>
+		/// Gets whether or not the provided coordinates lie within the bounds of this <see cref="RectangleF"/>.
 		/// </summary>
 		/// <param name="x">The x coordinate of the point to check for containment.</param>
 		/// <param name="y">The y coordinate of the point to check for containment.</param>
-		/// <returns><c>true</c> if the provided coordinates lie inside this <see cref="Rectangle"/>; <c>false</c> otherwise.</returns>
+		/// <returns><c>true</c> if the provided coordinates lie inside this <see cref="RectangleF"/>; <c>false</c> otherwise.</returns>
 		public bool contains( int x, int y )
 		{
 			return ( ( ( ( this.x <= x ) && ( x < ( this.x + this.width ) ) ) && ( this.y <= y ) ) && ( y < ( this.y + this.height ) ) );
@@ -258,11 +282,11 @@ namespace Nez
 
 
 		/// <summary>
-		/// Gets whether or not the provided coordinates lie within the bounds of this <see cref="Rectangle"/>.
+		/// Gets whether or not the provided coordinates lie within the bounds of this <see cref="RectangleF"/>.
 		/// </summary>
 		/// <param name="x">The x coordinate of the point to check for containment.</param>
 		/// <param name="y">The y coordinate of the point to check for containment.</param>
-		/// <returns><c>true</c> if the provided coordinates lie inside this <see cref="Rectangle"/>; <c>false</c> otherwise.</returns>
+		/// <returns><c>true</c> if the provided coordinates lie inside this <see cref="RectangleF"/>; <c>false</c> otherwise.</returns>
 		public bool contains( float x, float y )
 		{
 			return ( ( ( ( this.x <= x ) && ( x < ( this.x + this.width ) ) ) && ( this.y <= y ) ) && ( y < ( this.y + this.height ) ) );
@@ -270,10 +294,10 @@ namespace Nez
 
 
 		/// <summary>
-		/// Gets whether or not the provided <see cref="Point"/> lies within the bounds of this <see cref="Rectangle"/>.
+		/// Gets whether or not the provided <see cref="Point"/> lies within the bounds of this <see cref="RectangleF"/>.
 		/// </summary>
-		/// <param name="value">The coordinates to check for inclusion in this <see cref="Rectangle"/>.</param>
-		/// <returns><c>true</c> if the provided <see cref="Point"/> lies inside this <see cref="Rectangle"/>; <c>false</c> otherwise.</returns>
+		/// <param name="value">The coordinates to check for inclusion in this <see cref="RectangleF"/>.</param>
+		/// <returns><c>true</c> if the provided <see cref="Point"/> lies inside this <see cref="RectangleF"/>; <c>false</c> otherwise.</returns>
 		public bool contains( Point value )
 		{
 			return ( ( ( ( this.x <= value.X ) && ( value.X < ( this.x + this.width ) ) ) && ( this.y <= value.Y ) ) && ( value.Y < ( this.y + this.height ) ) );
@@ -281,10 +305,10 @@ namespace Nez
 
 
 		/// <summary>
-		/// Gets whether or not the provided <see cref="Point"/> lies within the bounds of this <see cref="Rectangle"/>.
+		/// Gets whether or not the provided <see cref="Point"/> lies within the bounds of this <see cref="RectangleF"/>.
 		/// </summary>
-		/// <param name="value">The coordinates to check for inclusion in this <see cref="Rectangle"/>.</param>
-		/// <param name="result"><c>true</c> if the provided <see cref="Point"/> lies inside this <see cref="Rectangle"/>; <c>false</c> otherwise. As an output parameter.</param>
+		/// <param name="value">The coordinates to check for inclusion in this <see cref="RectangleF"/>.</param>
+		/// <param name="result"><c>true</c> if the provided <see cref="Point"/> lies inside this <see cref="RectangleF"/>; <c>false</c> otherwise. As an output parameter.</param>
 		public void contains( ref Point value, out bool result )
 		{
 			result = ( ( ( ( this.x <= value.X ) && ( value.X < ( this.x + this.width ) ) ) && ( this.y <= value.Y ) ) && ( value.Y < ( this.y + this.height ) ) );
@@ -292,10 +316,10 @@ namespace Nez
 
 
 		/// <summary>
-		/// Gets whether or not the provided <see cref="Vector2"/> lies within the bounds of this <see cref="Rectangle"/>.
+		/// Gets whether or not the provided <see cref="Vector2"/> lies within the bounds of this <see cref="RectangleF"/>.
 		/// </summary>
-		/// <param name="value">The coordinates to check for inclusion in this <see cref="Rectangle"/>.</param>
-		/// <returns><c>true</c> if the provided <see cref="Vector2"/> lies inside this <see cref="Rectangle"/>; <c>false</c> otherwise.</returns>
+		/// <param name="value">The coordinates to check for inclusion in this <see cref="RectangleF"/>.</param>
+		/// <returns><c>true</c> if the provided <see cref="Vector2"/> lies inside this <see cref="RectangleF"/>; <c>false</c> otherwise.</returns>
 		public bool contains( Vector2 value )
 		{
 			return ( ( ( ( this.x <= value.X ) && ( value.X < ( this.x + this.width ) ) ) && ( this.y <= value.Y ) ) && ( value.Y < ( this.y + this.height ) ) );
@@ -303,10 +327,10 @@ namespace Nez
 
 
 		/// <summary>
-		/// Gets whether or not the provided <see cref="Vector2"/> lies within the bounds of this <see cref="Rectangle"/>.
+		/// Gets whether or not the provided <see cref="Vector2"/> lies within the bounds of this <see cref="RectangleF"/>.
 		/// </summary>
-		/// <param name="value">The coordinates to check for inclusion in this <see cref="Rectangle"/>.</param>
-		/// <param name="result"><c>true</c> if the provided <see cref="Vector2"/> lies inside this <see cref="Rectangle"/>; <c>false</c> otherwise. As an output parameter.</param>
+		/// <param name="value">The coordinates to check for inclusion in this <see cref="RectangleF"/>.</param>
+		/// <param name="result"><c>true</c> if the provided <see cref="Vector2"/> lies inside this <see cref="RectangleF"/>; <c>false</c> otherwise. As an output parameter.</param>
 		public void contains( ref Vector2 value, out bool result )
 		{
 			result = ( ( ( ( this.x <= value.X ) && ( value.X < ( this.x + this.width ) ) ) && ( this.y <= value.Y ) ) && ( value.Y < ( this.y + this.height ) ) );
@@ -314,10 +338,10 @@ namespace Nez
 
 
 		/// <summary>
-		/// Gets whether or not the provided <see cref="Rectangle"/> lies within the bounds of this <see cref="Rectangle"/>.
+		/// Gets whether or not the provided <see cref="RectangleF"/> lies within the bounds of this <see cref="RectangleF"/>.
 		/// </summary>
-		/// <param name="value">The <see cref="Rectangle"/> to check for inclusion in this <see cref="Rectangle"/>.</param>
-		/// <returns><c>true</c> if the provided <see cref="Rectangle"/>'s bounds lie entirely inside this <see cref="Rectangle"/>; <c>false</c> otherwise.</returns>
+		/// <param name="value">The <see cref="RectangleF"/> to check for inclusion in this <see cref="RectangleF"/>.</param>
+		/// <returns><c>true</c> if the provided <see cref="RectangleF"/>'s bounds lie entirely inside this <see cref="RectangleF"/>; <c>false</c> otherwise.</returns>
 		public bool contains( RectangleF value )
 		{
 			return ( ( ( ( this.x <= value.x ) && ( ( value.x + value.width ) <= ( this.x + this.width ) ) ) && ( this.y <= value.y ) ) && ( ( value.y + value.height ) <= ( this.y + this.height ) ) );
@@ -325,10 +349,10 @@ namespace Nez
 
 
 		/// <summary>
-		/// Gets whether or not the provided <see cref="Rectangle"/> lies within the bounds of this <see cref="Rectangle"/>.
+		/// Gets whether or not the provided <see cref="RectangleF"/> lies within the bounds of this <see cref="RectangleF"/>.
 		/// </summary>
-		/// <param name="value">The <see cref="Rectangle"/> to check for inclusion in this <see cref="Rectangle"/>.</param>
-		/// <param name="result"><c>true</c> if the provided <see cref="Rectangle"/>'s bounds lie entirely inside this <see cref="Rectangle"/>; <c>false</c> otherwise. As an output parameter.</param>
+		/// <param name="value">The <see cref="RectangleF"/> to check for inclusion in this <see cref="RectangleF"/>.</param>
+		/// <param name="result"><c>true</c> if the provided <see cref="RectangleF"/>'s bounds lie entirely inside this <see cref="RectangleF"/>; <c>false</c> otherwise. As an output parameter.</param>
 		public void contains( ref RectangleF value, out bool result )
 		{
 			result = ( ( ( ( this.x <= value.x ) && ( ( value.x + value.width ) <= ( this.x + this.width ) ) ) && ( this.y <= value.y ) ) && ( ( value.y + value.height ) <= ( this.y + this.height ) ) );
@@ -336,7 +360,7 @@ namespace Nez
 
 
 		/// <summary>
-		/// Adjusts the edges of this <see cref="Rectangle"/> by specified horizontal and vertical amounts. 
+		/// Adjusts the edges of this <see cref="RectangleF"/> by specified horizontal and vertical amounts. 
 		/// </summary>
 		/// <param name="horizontalAmount">Value to adjust the left and right edges.</param>
 		/// <param name="verticalAmount">Value to adjust the top and bottom edges.</param>
@@ -350,7 +374,7 @@ namespace Nez
 
 
 		/// <summary>
-		/// Adjusts the edges of this <see cref="Rectangle"/> by specified horizontal and vertical amounts. 
+		/// Adjusts the edges of this <see cref="RectangleF"/> by specified horizontal and vertical amounts. 
 		/// </summary>
 		/// <param name="horizontalAmount">Value to adjust the left and right edges.</param>
 		/// <param name="verticalAmount">Value to adjust the top and bottom edges.</param>
@@ -364,10 +388,10 @@ namespace Nez
 
 
 		/// <summary>
-		/// Gets whether or not the other <see cref="Rectangle"/> intersects with this rectangle.
+		/// Gets whether or not the other <see cref="RectangleF"/> intersects with this rectangle.
 		/// </summary>
 		/// <param name="value">The other rectangle for testing.</param>
-		/// <returns><c>true</c> if other <see cref="Rectangle"/> intersects with this rectangle; <c>false</c> otherwise.</returns>
+		/// <returns><c>true</c> if other <see cref="RectangleF"/> intersects with this rectangle; <c>false</c> otherwise.</returns>
 		public bool intersects( RectangleF value )
 		{
 			return value.left < right &&
@@ -378,10 +402,10 @@ namespace Nez
 
 
 		/// <summary>
-		/// Gets whether or not the other <see cref="Rectangle"/> intersects with this rectangle.
+		/// Gets whether or not the other <see cref="RectangleF"/> intersects with this rectangle.
 		/// </summary>
 		/// <param name="value">The other rectangle for testing.</param>
-		/// <param name="result"><c>true</c> if other <see cref="Rectangle"/> intersects with this rectangle; <c>false</c> otherwise. As an output parameter.</param>
+		/// <param name="result"><c>true</c> if other <see cref="RectangleF"/> intersects with this rectangle; <c>false</c> otherwise. As an output parameter.</param>
 		public void intersects( ref RectangleF value, out bool result )
 		{
 			result = value.left < right &&
@@ -602,10 +626,10 @@ namespace Nez
 
 
 		/// <summary>
-		/// Creates a new <see cref="Rectangle"/> that contains overlapping region of two other rectangles.
+		/// Creates a new <see cref="RectangleF"/> that contains overlapping region of two other rectangles.
 		/// </summary>
-		/// <param name="value1">The first <see cref="Rectangle"/>.</param>
-		/// <param name="value2">The second <see cref="Rectangle"/>.</param>
+		/// <param name="value1">The first <see cref="RectangleF"/>.</param>
+		/// <param name="value2">The second <see cref="RectangleF"/>.</param>
 		/// <returns>Overlapping region of the two rectangles.</returns>
 		public static RectangleF intersect( RectangleF value1, RectangleF value2 )
 		{
@@ -616,10 +640,10 @@ namespace Nez
 
 
 		/// <summary>
-		/// Creates a new <see cref="Rectangle"/> that contains overlapping region of two other rectangles.
+		/// Creates a new <see cref="RectangleF"/> that contains overlapping region of two other rectangles.
 		/// </summary>
-		/// <param name="value1">The first <see cref="Rectangle"/>.</param>
-		/// <param name="value2">The second <see cref="Rectangle"/>.</param>
+		/// <param name="value1">The first <see cref="RectangleF"/>.</param>
+		/// <param name="value2">The second <see cref="RectangleF"/>.</param>
 		/// <param name="result">Overlapping region of the two rectangles as an output parameter.</param>
 		public static void intersect( ref RectangleF value1, ref RectangleF value2, out RectangleF result )
 		{
@@ -639,10 +663,10 @@ namespace Nez
 
 
 		/// <summary>
-		/// Changes the <see cref="Location"/> of this <see cref="Rectangle"/>.
+		/// Changes the <see cref="Location"/> of this <see cref="RectangleF"/>.
 		/// </summary>
-		/// <param name="offsetX">The x coordinate to add to this <see cref="Rectangle"/>.</param>
-		/// <param name="offsetY">The y coordinate to add to this <see cref="Rectangle"/>.</param>
+		/// <param name="offsetX">The x coordinate to add to this <see cref="RectangleF"/>.</param>
+		/// <param name="offsetY">The y coordinate to add to this <see cref="RectangleF"/>.</param>
 		public void offset( int offsetX, int offsetY )
 		{
 			x += offsetX;
@@ -651,10 +675,10 @@ namespace Nez
 
 
 		/// <summary>
-		/// Changes the <see cref="Location"/> of this <see cref="Rectangle"/>.
+		/// Changes the <see cref="Location"/> of this <see cref="RectangleF"/>.
 		/// </summary>
-		/// <param name="offsetX">The x coordinate to add to this <see cref="Rectangle"/>.</param>
-		/// <param name="offsetY">The y coordinate to add to this <see cref="Rectangle"/>.</param>
+		/// <param name="offsetX">The x coordinate to add to this <see cref="RectangleF"/>.</param>
+		/// <param name="offsetY">The y coordinate to add to this <see cref="RectangleF"/>.</param>
 		public void offset( float offsetX, float offsetY )
 		{
 			x += offsetX;
@@ -663,9 +687,9 @@ namespace Nez
 
 
 		/// <summary>
-		/// Changes the <see cref="Location"/> of this <see cref="Rectangle"/>.
+		/// Changes the <see cref="Location"/> of this <see cref="RectangleF"/>.
 		/// </summary>
-		/// <param name="amount">The x and y components to add to this <see cref="Rectangle"/>.</param>
+		/// <param name="amount">The x and y components to add to this <see cref="RectangleF"/>.</param>
 		public void offset( Point amount )
 		{
 			x += amount.X;
@@ -674,9 +698,9 @@ namespace Nez
 
 
 		/// <summary>
-		/// Changes the <see cref="Location"/> of this <see cref="Rectangle"/>.
+		/// Changes the <see cref="Location"/> of this <see cref="RectangleF"/>.
 		/// </summary>
-		/// <param name="amount">The x and y components to add to this <see cref="Rectangle"/>.</param>
+		/// <param name="amount">The x and y components to add to this <see cref="RectangleF"/>.</param>
 		public void offset( Vector2 amount )
 		{
 			x += amount.X;
@@ -685,10 +709,10 @@ namespace Nez
 
 
 		/// <summary>
-		/// Creates a new <see cref="Rectangle"/> that completely contains two other rectangles.
+		/// Creates a new <see cref="RectangleF"/> that completely contains two other rectangles.
 		/// </summary>
-		/// <param name="value1">The first <see cref="Rectangle"/>.</param>
-		/// <param name="value2">The second <see cref="Rectangle"/>.</param>
+		/// <param name="value1">The first <see cref="RectangleF"/>.</param>
+		/// <param name="value2">The second <see cref="RectangleF"/>.</param>
 		/// <returns>The union of the two rectangles.</returns>
 		public static RectangleF union( RectangleF value1, RectangleF value2 )
 		{
@@ -701,10 +725,10 @@ namespace Nez
 
 
 		/// <summary>
-		/// Creates a new <see cref="Rectangle"/> that completely contains two other rectangles.
+		/// Creates a new <see cref="RectangleF"/> that completely contains two other rectangles.
 		/// </summary>
-		/// <param name="value1">The first <see cref="Rectangle"/>.</param>
-		/// <param name="value2">The second <see cref="Rectangle"/>.</param>
+		/// <param name="value1">The first <see cref="RectangleF"/>.</param>
+		/// <param name="value2">The second <see cref="RectangleF"/>.</param>
 		/// <param name="result">The union of the two rectangles as an output parameter.</param>
 		public static void union( ref RectangleF value1, ref RectangleF value2, out RectangleF result )
 		{
@@ -730,15 +754,15 @@ namespace Nez
 				var worldPosX = parentPosition.X + position.X;
 				var worldPosY = parentPosition.Y + position.Y;
 
-				Matrix tempMat;
+				Matrix2D tempMat;
 				// set the reference point to world reference taking origin into account
-				var transformMatrix = Matrix.CreateTranslation( -worldPosX - origin.X, -worldPosY - origin.Y, 0f );
-				Matrix.CreateScale( scale.X, scale.Y, 1f, out tempMat ); // scale ->
-				Matrix.Multiply( ref transformMatrix, ref tempMat, out transformMatrix );
-				Matrix.CreateRotationZ( rotation, out tempMat ); // rotate ->
-				Matrix.Multiply( ref transformMatrix, ref tempMat, out transformMatrix );
-				Matrix.CreateTranslation( worldPosX, worldPosY, 0f, out tempMat ); // translate back
-				Matrix.Multiply( ref transformMatrix, ref tempMat, out transformMatrix );
+				var transformMatrix = Matrix2D.CreateTranslation( -worldPosX - origin.X, -worldPosY - origin.Y, 0f );
+				Matrix2D.CreateScale( scale.X, scale.Y, out tempMat ); // scale ->
+				Matrix2D.Multiply( ref transformMatrix, ref tempMat, out transformMatrix );
+				Matrix2D.CreateRotationZ( rotation, out tempMat ); // rotate ->
+				Matrix2D.Multiply( ref transformMatrix, ref tempMat, out transformMatrix );
+				Matrix2D.CreateTranslation( worldPosX, worldPosY, out tempMat ); // translate back
+				Matrix2D.Multiply( ref transformMatrix, ref tempMat, out transformMatrix );
 
 				// TODO: this is a bit silly. we can just leave the worldPos translation in the Matrix and avoid this
 				// get all four corners in world space
@@ -748,10 +772,10 @@ namespace Nez
 				var bottomRight = new Vector2( worldPosX + width, worldPosY + height );
 
 				// transform the corners into our work space
-				Vector2.Transform( ref topLeft, ref transformMatrix, out topLeft );
-				Vector2.Transform( ref topRight, ref transformMatrix, out topRight );
-				Vector2.Transform( ref bottomLeft, ref transformMatrix, out bottomLeft );
-				Vector2.Transform( ref bottomRight, ref transformMatrix, out bottomRight );
+				Vector2Ext.Transform( ref topLeft, ref transformMatrix, out topLeft );
+				Vector2Ext.Transform( ref topRight, ref transformMatrix, out topRight );
+				Vector2Ext.Transform( ref bottomLeft, ref transformMatrix, out bottomLeft );
+				Vector2Ext.Transform( ref bottomRight, ref transformMatrix, out bottomRight );
 
 				// find the min and max values so we can concoct our bounding box
 				var minX = Mathf.minOf( topLeft.X, bottomRight.X, topRight.X, bottomLeft.X );
@@ -869,9 +893,9 @@ namespace Nez
 
 
 		/// <summary>
-		/// Compares whether current instance is equal to specified <see cref="Rectangle"/>.
+		/// Compares whether current instance is equal to specified <see cref="RectangleF"/>.
 		/// </summary>
-		/// <param name="other">The <see cref="Rectangle"/> to compare.</param>
+		/// <param name="other">The <see cref="RectangleF"/> to compare.</param>
 		/// <returns><c>true</c> if the instances are equal; <c>false</c> otherwise.</returns>
 		public bool Equals( RectangleF other )
 		{
@@ -880,9 +904,9 @@ namespace Nez
 
 
 		/// <summary>
-		/// Gets the hash code of this <see cref="Rectangle"/>.
+		/// Gets the hash code of this <see cref="RectangleF"/>.
 		/// </summary>
-		/// <returns>Hash code of this <see cref="Rectangle"/>.</returns>
+		/// <returns>Hash code of this <see cref="RectangleF"/>.</returns>
 		public override int GetHashCode()
 		{
 			return ( (int)x ^ (int)y ^ (int)width ^ (int)height );
@@ -890,13 +914,13 @@ namespace Nez
 
 
 		/// <summary>
-		/// Returns a <see cref="String"/> representation of this <see cref="Rectangle"/> in the format:
+		/// Returns a <see cref="String"/> representation of this <see cref="RectangleF"/> in the format:
 		/// {X:[<see cref="X"/>] Y:[<see cref="Y"/>] Width:[<see cref="Width"/>] Height:[<see cref="Height"/>]}
 		/// </summary>
-		/// <returns><see cref="String"/> representation of this <see cref="Rectangle"/>.</returns>
+		/// <returns><see cref="String"/> representation of this <see cref="RectangleF"/>.</returns>
 		public override string ToString()
 		{
-			return "{X:" + x + " Y:" + y + " Width:" + width + " Height:" + height + "}";
+			return string.Format( "X:{0}, Y:{1}, Width: {2}, Height: {3}", x, y, width, height );
 		}
 
 		#endregion
@@ -905,10 +929,10 @@ namespace Nez
 		#region Operators
 
 		/// <summary>
-		/// Compares whether two <see cref="Rectangle"/> instances are equal.
+		/// Compares whether two <see cref="RectangleF"/> instances are equal.
 		/// </summary>
-		/// <param name="a"><see cref="Rectangle"/> instance on the left of the equal sign.</param>
-		/// <param name="b"><see cref="Rectangle"/> instance on the right of the equal sign.</param>
+		/// <param name="a"><see cref="RectangleF"/> instance on the left of the equal sign.</param>
+		/// <param name="b"><see cref="RectangleF"/> instance on the right of the equal sign.</param>
 		/// <returns><c>true</c> if the instances are equal; <c>false</c> otherwise.</returns>
 		public static bool operator ==( RectangleF a, RectangleF b )
 		{
@@ -917,10 +941,10 @@ namespace Nez
 
 
 		/// <summary>
-		/// Compares whether two <see cref="Rectangle"/> instances are not equal.
+		/// Compares whether two <see cref="RectangleF"/> instances are not equal.
 		/// </summary>
-		/// <param name="a"><see cref="Rectangle"/> instance on the left of the not equal sign.</param>
-		/// <param name="b"><see cref="Rectangle"/> instance on the right of the not equal sign.</param>
+		/// <param name="a"><see cref="RectangleF"/> instance on the left of the not equal sign.</param>
+		/// <param name="b"><see cref="RectangleF"/> instance on the right of the not equal sign.</param>
 		/// <returns><c>true</c> if the instances are not equal; <c>false</c> otherwise.</returns>
 		public static bool operator !=( RectangleF a, RectangleF b )
 		{

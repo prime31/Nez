@@ -183,7 +183,7 @@ namespace Nez
 
 
 		/// <summary>
-		/// removes the Entity from the scene and removes all Components and Colliders
+		/// removes the Entity from the scene and destroys all children
 		/// </summary>
 		public void destroy()
 		{
@@ -192,7 +192,7 @@ namespace Nez
 			transform.parent = null;
 
 			// destroy any children we have
-			for( var i = 0; i < transform.childCount; i++ )
+			for( var i = transform.childCount - 1; i >= 0; i-- )
 			{
 				var child = transform.getChild( i );
 				child.entity.destroy();
@@ -227,8 +227,6 @@ namespace Nez
 
 			for( var i = 0; i < transform.childCount; i++ )
 				transform.getChild( i ).entity.attachToScene( newScene );
-
-			Debug.log( "attaching {0}. total children: {1}", name, transform.childCount );
 		}
 
 
@@ -264,7 +262,7 @@ namespace Nez
 			transform.rotation = entity.transform.rotation;
 
 			// clone Components
-			for( var i = 0; i < entity.components.Count; i++ )
+			for( var i = 0; i < entity.components.count; i++ )
 				addComponent( entity.components[i].clone() );
 			for( var i = 0; i < entity.components._componentsToAdd.Count; i++ )
 				addComponent( entity.components._componentsToAdd[i].clone() );
@@ -284,27 +282,6 @@ namespace Nez
 				childClone.transform.copyFrom( child.transform );
 				childClone.transform.parent = transform;
 			}
-		}
-
-
-		/// <summary>
-		/// adds a Collider to the list and registers it with the Physics system
-		/// </summary>
-		/// <param name="collider">Collider.</param>
-		/// <typeparam name="T">The 1st type parameter.</typeparam>
-		public T addCollider<T>( T collider ) where T : Collider
-		{
-			return colliders.add( collider );
-		}
-
-
-		/// <summary>
-		/// removes the Collider and unregisters it from the Pysics system
-		/// </summary>
-		/// <param name="collider">Collider.</param>
-		public void remove( Collider collider )
-		{
-			colliders.remove( collider );
 		}
 
 
@@ -388,13 +365,26 @@ namespace Nez
 
 
 		/// <summary>
-		/// Gets the first component of type T and returns it. If no components are found returns null
+		/// Gets the first component of type T and returns it. If no components are found returns null.
 		/// </summary>
 		/// <returns>The component.</returns>
 		/// <typeparam name="T">The 1st type parameter.</typeparam>
 		public T getComponent<T>() where T : Component
 		{
-			return components.getComponent<T>();
+			return components.getComponent<T>( false );
+		}
+
+
+		/// <summary>
+		/// Gets the first component of type T and returns it optionally skips checking un-initialized Components (Components who have not yet had their
+		/// onAddedToEntity method called). If no components are found returns null.
+		/// </summary>
+		/// <returns>The component.</returns>
+		/// <param name="onlyReturnInitializedComponents">If set to <c>true</c> only return initialized components.</param>
+		/// <typeparam name="T">The 1st type parameter.</typeparam>
+		public T getComponent<T>( bool onlyReturnInitializedComponents ) where T : Component
+		{
+			return components.getComponent<T>( onlyReturnInitializedComponents );
 		}
 
 
@@ -452,8 +442,75 @@ namespace Nez
 		/// </summary>
 		public void removeAllComponents()
 		{
-			for( var i = 0; i < components.Count; i++ )
+			for( var i = 0; i < components.count; i++ )
 				removeComponent( components[i] );
+		}
+
+		#endregion
+
+
+		#region Collider management
+
+		/// <summary>
+		/// adds a Collider to the list and registers it with the Physics system
+		/// </summary>
+		/// <param name="collider">Collider.</param>
+		/// <typeparam name="T">The 1st type parameter.</typeparam>
+		public T addCollider<T>( T collider ) where T : Collider
+		{
+			return colliders.add( collider );
+		}
+
+
+		/// <summary>
+		/// removes the Collider and unregisters it from the Pysics system
+		/// </summary>
+		/// <param name="collider">Collider.</param>
+		public void removeCollider( Collider collider )
+		{
+			colliders.remove( collider );
+		}
+
+
+		/// <summary>
+		/// removes all Colliders from the Entity
+		/// </summary>
+		public void removeAllColliders()
+		{
+			colliders.removeAllColliders();
+		}
+
+
+		/// <summary>
+		/// returns the first Collider of type T found
+		/// </summary>
+		/// <returns>The collider.</returns>
+		/// <param name="onlyReturnInitializedColliders">Only return initialized colliders.</param>
+		/// <typeparam name="T">The 1st type parameter.</typeparam>
+		public T getCollider<T>( bool onlyReturnInitializedColliders = false ) where T : Collider
+		{
+			return colliders.getCollider<T>( onlyReturnInitializedColliders );
+		}
+
+
+		/// <summary>
+		/// returns all the Colliders whether they have been initialized or not without a list allocation
+		/// </summary>
+		/// <returns>The colliders.</returns>
+		/// <param name="colliders">Colliders.</param>
+		public void getColliders( List<Collider> colliders )
+		{
+			this.colliders.getColliders( colliders );
+		}
+
+
+		/// <summary>
+		/// Gets all the Colliders. The returned List can be put back in the pool via ListPool.free.
+		/// </summary>
+		/// <returns>The colliders.</returns>
+		public List<Collider> getColliders()
+		{
+			return colliders.getColliders();
 		}
 
 		#endregion

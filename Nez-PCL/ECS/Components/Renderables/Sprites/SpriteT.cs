@@ -10,9 +10,9 @@ namespace Nez.Sprites
 	/// Sprite class handles the display and animation of a sprite. It uses a suggested Enum as a key (you can use an int as well if you
 	/// prefer). If you do use an Enum it is recommended to pass in a IEqualityComparer when using an enum like CoreEvents does.
 	/// </summary>
-	public class Sprite<TEnum> : Sprite, IUpdatable where TEnum : struct, IConvertible, IComparable, IFormattable
+	public class Sprite<TEnum> : Sprite, IUpdatable where TEnum : struct, IComparable, IFormattable
 	{
-		public System.Action<TEnum> onAnimationCompletedEvent;
+		public event Action<TEnum> onAnimationCompletedEvent;
 		public bool isPlaying { get; private set; }
 		public int currentFrame { get; private set; }
 
@@ -205,6 +205,13 @@ namespace Nez.Sprites
 		}
 
 
+        public SpriteAnimation getAnimation( TEnum key )
+        {
+			Assert.isTrue( _animations.ContainsKey( key ), "{0} is not present in animations", key );
+            return _animations[key];
+        }
+
+
 		#region Playback
 
 		/// <summary>
@@ -212,7 +219,7 @@ namespace Nez.Sprites
 		/// </summary>
 		/// <param name="animationKey">Animation key.</param>
 		/// <param name="startFrame">Start frame.</param>
-		public void play( TEnum animationKey, int startFrame = 0 )
+		public SpriteAnimation play( TEnum animationKey, int startFrame = 0 )
 		{
 			Assert.isTrue( _animations.ContainsKey( animationKey ), "Attempted to play an animation that doesnt exist" );
 
@@ -228,6 +235,7 @@ namespace Nez.Sprites
 			origin = _currentAnimation.frames[currentFrame].origin;
 
 			_totalElapsedTime = (float)startFrame * _currentAnimation.secondsPerFrame;
+			return animation;
 		}
 
 

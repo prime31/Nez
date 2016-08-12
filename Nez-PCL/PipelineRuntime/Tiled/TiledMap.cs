@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Nez.Textures;
 
 
 namespace Nez.Tiled
@@ -12,31 +10,35 @@ namespace Nez.Tiled
 	{
 		#region Fields and Properties
 
-		public int firstGid;
-		public int width;
-		public int height;
-		public int tileWidth;
-		public int tileHeight;
+		public readonly int firstGid;
+		public readonly int width;
+		public readonly int height;
+		public readonly int tileWidth;
+		public readonly int tileHeight;
 		public Color? backgroundColor;
 		public TiledRenderOrder renderOrder;
-		public TiledMapOrientation orientation;
-		public Dictionary<string,string> properties = new Dictionary<string,string>();
-		public List<TiledLayer> layers = new List<TiledLayer>();
-		public List<TiledImageLayer> imageLayers = new List<TiledImageLayer>();
-		public List<TiledTileLayer> tileLayers = new List<TiledTileLayer>();
-		public List<TiledObjectGroup> objectGroups = new List<TiledObjectGroup>();
+		public readonly TiledMapOrientation orientation;
+		public readonly Dictionary<string, string> properties = new Dictionary<string, string>();
+		public readonly List<TiledLayer> layers = new List<TiledLayer>();
+		public readonly List<TiledImageLayer> imageLayers = new List<TiledImageLayer>();
+		public readonly List<TiledTileLayer> tileLayers = new List<TiledTileLayer>();
+		public readonly List<TiledObjectGroup> objectGroups = new List<TiledObjectGroup>();
+		public readonly List<TiledTileset> tilesets = new List<TiledTileset>();
 
 		public int widthInPixels
 		{
-			get { return width * tileWidth - width; }       
+			get { return width * tileWidth; }
 		}
 
 		public int heightInPixels
 		{
-			get { return height * tileHeight - height; }
+			get { return height * tileHeight; }
 		}
 
-		readonly List<TiledTileset> _tilesets = new List<TiledTileset>();
+		public int largestTileWidth;
+		public int largestTileHeight;
+		internal bool requiresLargeTileCulling;
+
 		internal List<TiledAnimatedTile> _animatedTiles = new List<TiledAnimatedTile>();
 
 		#endregion
@@ -44,10 +46,10 @@ namespace Nez.Tiled
 
 		public TiledMap(
 			int firstGid,
-			int width, 
-			int height, 
-			int tileWidth, 
-			int tileHeight, 
+			int width,
+			int height,
+			int tileWidth,
+			int tileHeight,
 			TiledMapOrientation orientation = TiledMapOrientation.Orthogonal )
 		{
 			this.firstGid = firstGid;
@@ -59,6 +61,8 @@ namespace Nez.Tiled
 		}
 
 
+		#region Tileset and Layer creation
+
 		public TiledTileset createTileset( Texture2D texture, int firstId, int tileWidth, int tileHeight, bool isStandardTileset, int spacing = 2, int margin = 2 )
 		{
 			TiledTileset tileset;
@@ -67,9 +71,23 @@ namespace Nez.Tiled
 			else
 				tileset = new TiledImageCollectionTileset( texture, firstId );
 
-			_tilesets.Add( tileset );
+			if( tileset.tileWidth > largestTileWidth )
+				largestTileWidth = tileset.tileWidth;
+
+			if( tileset.tileHeight > largestTileHeight )
+				largestTileHeight = tileset.tileHeight;
+
+			tilesets.Add( tileset );
 
 			return tileset;
+		}
+
+
+		public TiledTileLayer createTileLayer( string name, int width, int height )
+		{
+			var layer = new TiledTileLayer( this, name, width, height );
+			layers.Add( layer );
+			return layer;
 		}
 
 
@@ -94,6 +112,52 @@ namespace Nez.Tiled
 			var group = new TiledObjectGroup( name, color, visible, opacity );
 			objectGroups.Add( group );
 			return group;
+		}
+
+		#endregion
+
+
+		#region Tileset and Layer getters
+
+		/// <summary>
+		/// gets the TiledTileset for the given tileId
+		/// </summary>
+		/// <returns>The tileset for tile identifier.</returns>
+		/// <param name="tileId">Identifier.</param>
+		public TiledTileset getTilesetForTileId( int tileId )
+		{
+			for( var i = tilesets.Count - 1; i >= 0; i-- )
+			{
+				if( tilesets[i].firstId <= tileId )
+					return tilesets[i];
+			}
+
+			throw new Exception( string.Format( "tileId {0} was not foind in any tileset", tileId ) );
+		}
+
+
+		/// <summary>
+		/// returns the TiledTilesetTile for the given id or null if none exists. TiledTilesetTiles exist only for animated tiles and tiles with
+		/// properties set.
+		/// </summary>
+		/// <returns>The tileset tile.</returns>
+		/// <param name="id">Identifier.</param>
+		public TiledTilesetTile getTilesetTile( int id )
+		{
+			for( var i = tilesets.Count - 1; i >= 0; i-- )
+			{
+				if( tilesets[i].firstId <= id )
+				{
+					for( var j = 0; j < tilesets[i].tiles.Count; j++ )
+					{
+						// id is a gid so we need to subtract the tileset.firstId to get a local id
+						if( tilesets[i].tiles[j].id == id - tilesets[i].firstId )
+							return tilesets[i].tiles[j];
+					}
+				}
+			}
+
+			return null;
 		}
 
 
@@ -131,6 +195,29 @@ namespace Nez.Tiled
 
 
 		/// <summary>
+		/// gets the TiledLayer at the specified index
+		/// </summary>
+		/// <param name="index"></param>
+		/// <returns>The Layer.</returns>
+		public TiledLayer getLayer( int index )
+		{
+			return layers[index];
+		}
+
+
+		/// <summary>
+		/// gets the TiledLayer by index
+		/// </summary>
+		/// <returns>The layer.</returns>
+		/// <param name="index">Index.</param>
+		/// <typeparam name="T">The 1st type parameter.</typeparam>
+		public T getLayer<T>( int index ) where T : TiledLayer
+		{
+			return (T)getLayer( index );
+		}
+
+
+		/// <summary>
 		/// gets the TiledLayer by name
 		/// </summary>
 		/// <returns>The layer.</returns>
@@ -156,6 +243,8 @@ namespace Nez.Tiled
 			}
 			return null;
 		}
+
+		#endregion
 
 
 		/// <summary>
@@ -188,70 +277,76 @@ namespace Nez.Tiled
 		}
 
 
-		public void drawWithoutCullOrPositioning( Batcher batcher, bool useMapBackgroundColor = false )
-		{
-			if( useMapBackgroundColor && backgroundColor.HasValue )
-				batcher.graphicsDevice.Clear( backgroundColor.Value );
+		#region world/local conversion
 
-			foreach( var layer in layers )
-				layer.draw( batcher );
+		/// <summary>
+		/// converts from world to tile position clamping to the tilemap bounds
+		/// </summary>
+		/// <returns>The to tile position.</returns>
+		/// <param name="pos">Position.</param>
+		public Point worldToTilePosition( Vector2 pos )
+		{
+			return new Point( worldToTilePositionX( pos.X ), worldToTilePositionY( pos.Y ) );
 		}
 
 
 		/// <summary>
-		/// gets the TiledTileset for the given tileId
+		/// converts from world to tile position clamping to the tilemap bounds
 		/// </summary>
-		/// <returns>The tileset for tile identifier.</returns>
-		/// <param name="id">Identifier.</param>
-		public TiledTileset getTilesetForTileId( int tileId )
+		/// <returns>The to tile position x.</returns>
+		/// <param name="x">The x coordinate.</param>
+		public int worldToTilePositionX( float x )
 		{
-			for( var i = _tilesets.Count - 1; i >= 0; i-- )
-			{
-				if( _tilesets[i].firstId <= tileId )
-					return _tilesets[i];
-			}
-
-			throw new Exception( string.Format( "tileId {0} was not foind in any tileset", tileId ) );
-		}
-
-
-		/// <summary>
-		/// returns the TiledTilesetTile for the given id or null if none exists. TiledTilesetTiles exist only for animated tiles and tiles with
-		/// properties set.
-		/// </summary>
-		/// <returns>The tileset tile.</returns>
-		/// <param name="id">Identifier.</param>
-		public TiledTilesetTile getTilesetTile( int id )
-		{
-			for( var i = _tilesets.Count - 1; i >= 0; i-- )
-			{
-				if( _tilesets[i].firstId <= id )
-				{
-					for( var j = 0; j < _tilesets[i].tiles.Count; j++ )
-					{
-						// id is a gid so we need to subtract the tileset.firstId to get a local id
-						if( _tilesets[i].tiles[j].id == id - _tilesets[i].firstId )
-							return _tilesets[i].tiles[j];
-					}
-				}
-			}
-
-			return null;
-		}
-
-
-		public int worldPositionToTilePositionX( float x )
-		{
-			var tileX = (int)Math.Floor( x / tileWidth );
+			var tileX = Mathf.fastFloorToInt( x / tileWidth );
 			return Mathf.clamp( tileX, 0, width - 1 );
 		}
 
 
-		public int worldPositionToTilePositionY( float y )
+		/// <summary>
+		/// converts from world to tile position clamping to the tilemap bounds
+		/// </summary>
+		/// <returns>The to tile position y.</returns>
+		/// <param name="y">The y coordinate.</param>
+		public int worldToTilePositionY( float y )
 		{
-			var tileY = (int)Math.Floor( y / tileHeight );
+			var tileY = Mathf.fastFloorToInt( y / tileHeight );
 			return Mathf.clamp( tileY, 0, height - 1 );
 		}
-	
+
+
+		/// <summary>
+		/// converts from tile to world position
+		/// </summary>
+		/// <returns>The to world position.</returns>
+		/// <param name="pos">Position.</param>
+		public Vector2 tileToWorldPosition( Point pos )
+		{
+			return new Vector2( tileToWorldPositionX( pos.X ), tileToWorldPositionY( pos.Y ) );
+		}
+
+
+		/// <summary>
+		/// converts from tile to world position
+		/// </summary>
+		/// <returns>The to world position x.</returns>
+		/// <param name="x">The x coordinate.</param>
+		public int tileToWorldPositionX( int x )
+		{
+			return x * tileWidth;
+		}
+
+
+		/// <summary>
+		/// converts from tile to world position
+		/// </summary>
+		/// <returns>The to world position y.</returns>
+		/// <param name="y">The y coordinate.</param>
+		public int tileToWorldPositionY( int y )
+		{
+			return y * tileHeight;
+		}
+
+		#endregion
+
 	}
 }

@@ -167,8 +167,7 @@ namespace Nez.AI.GOAP
 
 		internal List<AStarNode> getPossibleTransitions( WorldState fr )
 		{
-			// TODO: use the ListPool
-			var result = new List<AStarNode>( 10 );
+			var result = ListPool<AStarNode>.obtain();
 			for( var i = 0; i < _viableActions.Count; ++i )
 			{
 				// see if precondition is met
@@ -177,7 +176,7 @@ namespace Nez.AI.GOAP
 				bool met = ( ( pre.values & care ) == ( fr.values & care ) );
 				if( met )
 				{
-					var node = new AStarNode();
+					var node = Pool<AStarNode>.obtain();
 					node.action = _viableActions[i];
 					node.costSoFar = _viableActions[i].cost;
 					node.worldState = applyPostConditions( this, i, fr );

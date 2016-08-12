@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -43,28 +43,16 @@
     <Reference Include="System.Xml" />
     <Reference Include="System.Drawing" />
     <Reference Include="Newtonsoft.Json">
-      <HintPath>..\packages\Newtonsoft.Json.8.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <HintPath>..\packages\Newtonsoft.Json.9.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Tiled\" />
-    <Folder Include="BitmapFonts\" />
-    <Folder Include="TexturePacker\" />
-    <Folder Include="TextureAtlasGenerator\" />
-    <Folder Include="XMLTemplateMaker\" />
-    <Folder Include="ParticleDesigner\" />
-    <Folder Include="ParticleDesigner\ConversionTypes\" />
-    <Folder Include="Overlap2D\VOs\NotImplemented\" />
-    <Folder Include="UISkin\" />
-    <Folder Include="Common\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Compile Include="Tiled\TiledMapImporter.cs" />
     <Compile Include="Tiled\TiledMapProcessor.cs" />
-    <Compile Include="Tiled\TiledMapProcessorResult.cs" />
     <Compile Include="Tiled\TiledMapWriter.cs" />
     <Compile Include="Tiled\TmxData.cs" />
     <Compile Include="Tiled\TmxDataTile.cs" />
@@ -160,6 +148,8 @@
     <Compile Include="UISkin\UISkinImporter.cs" />
     <Compile Include="Common\PathHelper.cs" />
     <Compile Include="Common\ContentWriterExt.cs" />
+    <Compile Include="NormalMapGenerator\NormalMapProcessor.cs" />
+    <Compile Include="Common\PixelBitmapContentExt.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Nez-PCL\Nez.csproj">

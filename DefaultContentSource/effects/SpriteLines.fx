@@ -1,4 +1,4 @@
-SamplerState s0; // from SpriteBatch
+sampler s0; // from SpriteBatch
 
 float _lineSize; // width of the line in pixels
 float4 _lineColor;
@@ -32,7 +32,7 @@ float4 verticalLinesPS( float2 texCoord:TEXCOORD0, in float2 screenPos:VPOS ) : 
 
 technique VerticalLines
 {
-	pass P0
+	pass Pass1
 	{
 		PixelShader = compile ps_3_0 verticalLinesPS();
 	}
@@ -40,7 +40,7 @@ technique VerticalLines
 
 technique HorizontalLines
 {
-	pass P0
+	pass Pass1
 	{
 		PixelShader = compile ps_3_0 horizontalLinesPS();
 	}

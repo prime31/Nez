@@ -10,7 +10,11 @@ namespace Nez
 	/// </summary>
 	public class Material<T> : Material, IDisposable where T : Effect
 	{
-		public T typedEffect { get { return (T)effect; } }
+		public new T effect
+		{
+			get { return (T)base.effect; }
+			set { base.effect = value; }
+		}
 
 
 		public Material()
@@ -33,7 +37,6 @@ namespace Nez
 		/// default opaque Material used for PostProcessors
 		/// </summary>
 		public static Material defaultOpaqueMaterial = new Material( BlendState.Opaque );
-
 
 		/// <summary>
 		/// BlendState used by the Batcher for the current RenderableComponent
@@ -129,6 +132,7 @@ namespace Nez
 
 		public static Material blendMultiply()
 		{
+			// works only for opaque textures
 			return new Material {
 				blendState = new BlendState {
 					ColorSourceBlend = Blend.DestinationColor,

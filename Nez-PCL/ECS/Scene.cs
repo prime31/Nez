@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Content;
 using Nez.Systems;
 using Nez.Textures;
 using Microsoft.Xna.Framework.Graphics;
@@ -89,7 +88,10 @@ namespace Nez
 		/// Scene-specific ContentManager. Use it to load up any resources that are needed only by this scene. If you have global/multi-scene
 		/// resources you can use Core.contentManager to load them since Nez will not ever unload them.
 		/// </summary>
-		public readonly NezContentManager contentManager;
+		public readonly NezContentManager content;
+
+		[Obsolete( "use Scene.content instead of Scene.contentManager" )]
+		public NezContentManager contentManager { get { return content; } }
 
 		/// <summary>
 		/// global toggle for PostProcessors
@@ -99,7 +101,7 @@ namespace Nez
 		/// <summary>
 		/// The list of entities within this Scene
 		/// </summary>
-		public EntityList entities;
+		public readonly EntityList entities;
 
 		/// <summary>
 		/// Manages a list of all the RenderableComponents that are currently on scene Entitys
@@ -117,7 +119,7 @@ namespace Nez
 		/// <value>The size of the scene render texture.</value>
 		public Point sceneRenderTargetSize
 		{
-			get { return _sceneRenderTarget.Bounds.Size; }
+			get { return new Point( _sceneRenderTarget.Bounds.Width, _sceneRenderTarget.Bounds.Height ); }
 		}
 
 		/// <summary>
@@ -184,9 +186,9 @@ namespace Nez
 		RenderTarget2D _destinationRenderTarget;
 		Action<Texture2D> _screenshotRequestCallback;
 
-		List<Renderer> _renderers = new List<Renderer>();
-		List<Renderer> _afterPostProcessorRenderers = new List<Renderer>();
-		readonly List<PostProcessor> _postProcessors = new List<PostProcessor>();
+		FastList<Renderer> _renderers = new FastList<Renderer>();
+		readonly FastList<Renderer> _afterPostProcessorRenderers = new FastList<Renderer>();
+		internal readonly FastList<PostProcessor> _postProcessors = new FastList<PostProcessor>();
 		bool _didSceneBegin;
 
 
@@ -271,7 +273,7 @@ namespace Nez
 		{
 			entities = new EntityList( this );
 			renderableComponents = new RenderableComponentList();
-			contentManager = new NezContentManager();
+			content = new NezContentManager();
 
 			var cameraEntity = createEntity( "camera" );
 			camera = cameraEntity.addComponent( new Camera() );
@@ -313,7 +315,7 @@ namespace Nez
 
 		internal void begin()
 		{
-			Assert.isFalse( _renderers.Count == 0, "Scene has begun with no renderer. At least one renderer must be present before beginning a scene." );
+			Assert.isFalse( _renderers.length == 0, "Scene has begun with no renderer. At least one renderer must be present before beginning a scene." );
 			Physics.reset();
 
 			// prep our render textures
@@ -333,17 +335,17 @@ namespace Nez
 		{
 			_didSceneBegin = false;
 
-			for( var i = 0; i < _renderers.Count; i++ )
-				_renderers[i].unload();
+			for( var i = 0; i < _renderers.length; i++ )
+				_renderers.buffer[i].unload();
 
-			for( var i = 0; i < _postProcessors.Count; i++ )
-				_postProcessors[i].unload();
+			for( var i = 0; i < _postProcessors.length; i++ )
+				_postProcessors.buffer[i].unload();
 
 			Core.emitter.removeObserver( CoreEvents.GraphicsDeviceReset, onGraphicsDeviceReset );
 			entities.removeAllEntities();
 
 			camera = null;
-			contentManager.Dispose();
+			content.Dispose();
 			_sceneRenderTarget.Dispose();
 			Physics.clear();
 
@@ -368,12 +370,15 @@ namespace Nez
 			if( entityProcessors != null )
 				entityProcessors.update();
 
-			for( var i = 0; i < entities.Count; i++ )
+			for( int i = 0, count = entities.count; i < count; i++ )
 			{
 				var entity = entities[i];
 				if( entity.enabled && ( entity.updateInterval == 1 || Time.frameCount % entity.updateInterval == 0 ) )
 					entity.update();
 			}
+
+			if( entityProcessors != null )
+				entityProcessors.lateUpdate();
 
 			// we update our renderables after entity.update in case any new Renderables were added
 			renderableComponents.updateLists();
@@ -395,23 +400,23 @@ namespace Nez
 		internal void render()
 		{
 			var lastRendererHadRenderTarget = false;
-			for( var i = 0; i < _renderers.Count; i++ )
+			for( var i = 0; i < _renderers.length; i++ )
 			{
 				// MonoGame follows the XNA bullshit implementation so it will clear the entire buffer if we change the render target even if null.
 				// Because of that, we track when we are done with our RenderTargets and clear the scene at that time.
-				if( lastRendererHadRenderTarget && _renderers[i].wantsToRenderToSceneRenderTarget )
+				if( lastRendererHadRenderTarget && _renderers.buffer[i].wantsToRenderToSceneRenderTarget )
 				{
 					Core.graphicsDevice.setRenderTarget( _sceneRenderTarget );
 					Core.graphicsDevice.Clear( clearColor );
 
 					// force a Camera matrix update to account for the new Viewport size
-					if( _renderers[i].camera != null )
-						_renderers[i].camera.forceMatrixUpdate();
+					if( _renderers.buffer[i].camera != null )
+						_renderers.buffer[i].camera.forceMatrixUpdate();
 					camera.forceMatrixUpdate();
 				}
 
-				_renderers[i].render( this );
-				lastRendererHadRenderTarget = _renderers[i].renderTexture != null;
+				_renderers.buffer[i].render( this );
+				lastRendererHadRenderTarget = _renderers.buffer[i].renderTexture != null;
 			}
 		}
 
@@ -425,19 +430,19 @@ namespace Nez
 			var enabledCounter = 0;
 			if( enablePostProcessing )
 			{
-				for( var i = 0; i < _postProcessors.Count; i++ )
+				for( var i = 0; i < _postProcessors.length; i++ )
 				{
-					if( _postProcessors[i].enabled )
+					if( _postProcessors.buffer[i].enabled )
 					{
 						var isEven = Mathf.isEven( enabledCounter );
 						enabledCounter++;
-						_postProcessors[i].process( isEven ? _sceneRenderTarget : _destinationRenderTarget, isEven ? _destinationRenderTarget : _sceneRenderTarget );
+						_postProcessors.buffer[i].process( isEven ? _sceneRenderTarget : _destinationRenderTarget, isEven ? _destinationRenderTarget : _sceneRenderTarget );
 					}
 				}
 			}
 
 			// deal with our Renderers that want to render after PostProcessors if we have any
-			for( var i = 0; i < _afterPostProcessorRenderers.Count; i++ )
+			for( var i = 0; i < _afterPostProcessorRenderers.length; i++ )
 			{
 				if( i == 0 )
 				{
@@ -446,9 +451,9 @@ namespace Nez
 				}
 
 				// force a Camera matrix update to account for the new Viewport size
-				if( _afterPostProcessorRenderers[i].camera != null )
-					_afterPostProcessorRenderers[i].camera.forceMatrixUpdate();
-				_afterPostProcessorRenderers[i].render( this );
+				if( _afterPostProcessorRenderers.buffer[i].camera != null )
+					_afterPostProcessorRenderers.buffer[i].camera.forceMatrixUpdate();
+				_afterPostProcessorRenderers.buffer[i].render( this );
 			}
 
 			// if we have a screenshot request deal with it before the final render to the backbuffer
@@ -670,14 +675,14 @@ namespace Nez
 			}
 
 			// notify the Renderers, PostProcessors and FinalRenderDelegate of the change in render texture size
-			for( var i = 0; i < _renderers.Count; i++ )
-				_renderers[i].onSceneBackBufferSizeChanged( renderTargetWidth, renderTargetHeight );
+			for( var i = 0; i < _renderers.length; i++ )
+				_renderers.buffer[i].onSceneBackBufferSizeChanged( renderTargetWidth, renderTargetHeight );
 
-			for( var i = 0; i < _afterPostProcessorRenderers.Count; i++ )
-				_afterPostProcessorRenderers[i].onSceneBackBufferSizeChanged( renderTargetWidth, renderTargetHeight );
-			
-			for( var i = 0; i < _postProcessors.Count; i++ )
-				_postProcessors[i].onSceneBackBufferSizeChanged( renderTargetWidth, renderTargetHeight );
+			for( var i = 0; i < _afterPostProcessorRenderers.length; i++ )
+				_afterPostProcessorRenderers.buffer[i].onSceneBackBufferSizeChanged( renderTargetWidth, renderTargetHeight );
+
+			for( var i = 0; i < _postProcessors.length; i++ )
+				_postProcessors.buffer[i].onSceneBackBufferSizeChanged( renderTargetWidth, renderTargetHeight );
 
 			if( _finalRenderDelegate != null )
 				_finalRenderDelegate.onSceneBackBufferSizeChanged( renderTargetWidth, renderTargetHeight );
@@ -699,7 +704,7 @@ namespace Nez
 		{
 			_screenshotRequestCallback = callback;
 		}
-	
+
 
 		/// <summary>
 		/// Returns whether the timeSinceSceneLoad has passed the given time interval since the last frame. Ex: given 2.0f, this will return true once every 2 seconds
@@ -725,19 +730,19 @@ namespace Nez
 		{
 			if( renderer.wantsToRenderAfterPostProcessors )
 			{
-				_afterPostProcessorRenderers.Add( renderer );
-				_afterPostProcessorRenderers.Sort();
+				_afterPostProcessorRenderers.add( renderer );
+				_afterPostProcessorRenderers.sort();
 			}
 			else
 			{
-				_renderers.Add( renderer );
-				_renderers.Sort();
+				_renderers.add( renderer );
+				_renderers.sort();
 			}
 
 			// if we already began let the PostProcessor know what size our RenderTarget is
 			if( _didSceneBegin )
 				renderer.onSceneBackBufferSizeChanged( _sceneRenderTarget.Width, _sceneRenderTarget.Height );
-			
+
 			return renderer;
 		}
 
@@ -750,16 +755,16 @@ namespace Nez
 		/// <typeparam name="T">The 1st type parameter.</typeparam>
 		public T getRenderer<T>() where T : Renderer
 		{
-			for( var i = 0; i < _renderers.Count; i++ )
+			for( var i = 0; i < _renderers.length; i++ )
 			{
-				if( _renderers[i] is T )
+				if( _renderers.buffer[i] is T )
 					return _renderers[i] as T;
 			}
 
-			for( var i = 0; i < _afterPostProcessorRenderers.Count; i++ )
+			for( var i = 0; i < _afterPostProcessorRenderers.length; i++ )
 			{
-				if( _afterPostProcessorRenderers[i] is T )
-					return _afterPostProcessorRenderers[i] as T;
+				if( _afterPostProcessorRenderers.buffer[i] is T )
+					return _afterPostProcessorRenderers.buffer[i] as T;
 			}
 			return null;
 		}
@@ -772,9 +777,9 @@ namespace Nez
 		public void removeRenderer( Renderer renderer )
 		{
 			if( renderer.wantsToRenderAfterPostProcessors )
-				_afterPostProcessorRenderers.Remove( renderer );
+				_afterPostProcessorRenderers.remove( renderer );
 			else
-				_renderers.Remove( renderer );
+				_renderers.remove( renderer );
 		}
 
 
@@ -785,8 +790,8 @@ namespace Nez
 		/// <param name="postProcessor">Post processor.</param>
 		public T addPostProcessor<T>( T postProcessor ) where T : PostProcessor
 		{
-			_postProcessors.Add( postProcessor );
-			_postProcessors.Sort();
+			_postProcessors.add( postProcessor );
+			_postProcessors.sort();
 			postProcessor.scene = this;
 			postProcessor.onAddedToScene();
 
@@ -814,7 +819,7 @@ namespace Nez
 		/// <param name="step">Step.</param>
 		public void removePostProcessor( PostProcessor step )
 		{
-			_postProcessors.Remove( step );
+			_postProcessors.remove( step );
 		}
 
 		#endregion
@@ -868,7 +873,7 @@ namespace Nez
 		/// adds an Entity to the Scene's Entities list
 		/// </summary>
 		/// <param name="entity">The Entity to add</param>
-		public T addEntity<T>( T entity ) where T : Entity 
+		public T addEntity<T>( T entity ) where T : Entity
 		{
 			Assert.isFalse( entities.contains( entity ), "You are attempting to add the same entity to a scene twice: {0}", entity );
 			entities.add( entity );
@@ -881,7 +886,7 @@ namespace Nez
 		/// </summary>
 		public void destroyAllEntities()
 		{
-			for( var i = 0; i < entities.Count; i++ )
+			for( var i = 0; i < entities.count; i++ )
 				entities[i].destroy();
 		}
 
@@ -979,7 +984,7 @@ namespace Nez
 		}
 
 		#endregion
-	
+
 	}
 }
 

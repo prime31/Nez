@@ -62,7 +62,7 @@ namespace Nez.AI.BehaviorTrees
 		internal TaskStatus executeConditional( T context, bool forceUpdate = false )
 		{
 			if( forceUpdate || _shouldReevaluate || _conditionalStatus == TaskStatus.Invalid )
-				return _conditional.update( context );
+				_conditionalStatus = _conditional.update( context );
 			return _conditionalStatus;
 		}
 

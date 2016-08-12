@@ -7,7 +7,7 @@ namespace Nez.AI.GOAP
 	public class Action
 	{
 		/// <summary>
-		/// optinoal name for the Action. Used for debugging purposes
+		/// optional name for the Action. Used for debugging purposes
 		/// </summary>
 		public string name;
 

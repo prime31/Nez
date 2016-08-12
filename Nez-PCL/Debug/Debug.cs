@@ -124,6 +124,8 @@ namespace Nez
 
 		#region Drawing
 
+		public static bool drawTextFromBottom = false;
+
 		static List<DebugDrawItem> _debugDrawItems = new List<DebugDrawItem>();
 		static List<DebugDrawItem> _screenSpaceDebugDrawItems = new List<DebugDrawItem>();
 
@@ -149,18 +151,26 @@ namespace Nez
 
 			if( _screenSpaceDebugDrawItems.Count > 0 )
 			{
-				var pos = Vector2.Zero;
+				var pos = drawTextFromBottom ? new Vector2( 0, Core.scene.sceneRenderTargetSize.Y ) : Vector2.Zero;
 				Graphics.instance.batcher.begin();
 
 				for( var i = _screenSpaceDebugDrawItems.Count - 1; i >= 0; i-- )
 				{
 					var item = _screenSpaceDebugDrawItems[i];
-					item.position = pos;
-					var itemHeight = item.bitmapFont.lineHeight * item.scale;
+					var itemHeight = item.getHeight();
+
+					if( drawTextFromBottom )
+						item.position = pos - new Vector2( 0, itemHeight );
+					else
+						item.position = pos;
+					
 					if( item.draw( Graphics.instance ) )
 						_screenSpaceDebugDrawItems.RemoveAt( i );
 
-					pos.Y += itemHeight;
+					if( drawTextFromBottom )
+						pos.Y -= itemHeight;
+					else
+						pos.Y += itemHeight;
 				}
 
 				Graphics.instance.batcher.end();
@@ -171,6 +181,8 @@ namespace Nez
 		[Conditional( "DEBUG" )]
 		public static void drawLine( Vector2 start, Vector2 end, Color color, float duration = 0f )
 		{
+			if( !Core.debugRenderEnabled )
+				return;
 			_debugDrawItems.Add( new DebugDrawItem( start, end, color, duration ) );
 		}
 
@@ -178,6 +190,8 @@ namespace Nez
 		[Conditional( "DEBUG" )]
 		public static void drawHollowRect( Rectangle rectangle, Color color, float duration = 0f )
 		{
+			if( !Core.debugRenderEnabled )
+				return;
 			_debugDrawItems.Add( new DebugDrawItem( rectangle, color, duration ) );
 		}
 
@@ -185,6 +199,8 @@ namespace Nez
 		[Conditional( "DEBUG" )]
 		public static void drawHollowBox( Vector2 center, int size, Color color, float duration = 0f )
 		{
+			if( !Core.debugRenderEnabled )
+				return;
 			var halfSize = size * 0.5f;
 			_debugDrawItems.Add( new DebugDrawItem( new Rectangle( (int)( center.X - halfSize ), (int)( center.Y - halfSize ), size, size ), color, duration ) );
 		}
@@ -193,6 +209,8 @@ namespace Nez
 		[Conditional( "DEBUG" )]
 		public static void drawText( BitmapFont font, string text, Vector2 position, Color color, float duration = 0f, float scale = 1f )
 		{
+			if( !Core.debugRenderEnabled )
+				return;
 			_debugDrawItems.Add( new DebugDrawItem( font, text, position, color, duration, scale ) );
 		}
 
@@ -200,6 +218,8 @@ namespace Nez
 		[Conditional( "DEBUG" )]
 		public static void drawText( NezSpriteFont font, string text, Vector2 position, Color color, float duration = 0f, float scale = 1f )
 		{
+			if( !Core.debugRenderEnabled )
+				return;
 			_debugDrawItems.Add( new DebugDrawItem( font, text, position, color, duration, scale ) );
 		}
 
@@ -222,6 +242,8 @@ namespace Nez
 		[Conditional( "DEBUG" )]
 		public static void drawText( string text, Color color, float duration = 1f, float scale = 1f )
 		{
+			if( !Core.debugRenderEnabled )
+				return;
 			_screenSpaceDebugDrawItems.Add( new DebugDrawItem( text, color, duration, scale ) );
 		}
 
@@ -240,6 +262,27 @@ namespace Nez
 		public static void break_()
 		{
 			System.Diagnostics.Debugger.Break();
+		}
+
+
+		/// <summary>
+		/// times how long an Action takes to run and returns the TimeSpan
+		/// </summary>
+		/// <returns>The action.</returns>
+		/// <param name="action">Action.</param>
+		public static TimeSpan timeAction( Action action, uint numberOfIterations = 1 )
+		{
+			var stopwatch = new Stopwatch();
+			stopwatch.Start();
+
+			for( var i = 0; i < numberOfIterations; i++ )
+				action();
+			stopwatch.Stop();
+
+			if( numberOfIterations > 1 )
+				return TimeSpan.FromTicks( stopwatch.Elapsed.Ticks / numberOfIterations );
+
+			return stopwatch.Elapsed;
 		}
 
 	}

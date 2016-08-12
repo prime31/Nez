@@ -3,6 +3,7 @@ using System.Text;
 using System.Collections.Generic;
 
 
+
 namespace Nez.Console
 {
 	/// <summary>
@@ -21,14 +22,18 @@ namespace Nez.Console
 			this.help = help;
 		}
 	}
+}
 
 
+#if DEBUG
+namespace Nez.Console
+{
 	public partial class DebugConsole
 	{
 		[Command( "clear", "Clears the terminal" )]
 		static void clear()
 		{
-			DebugConsole.instance._drawCommands.Clear();
+			instance._drawCommands.Clear();
 		}
 
 
@@ -39,20 +44,57 @@ namespace Nez.Console
 		}
 
 
+		[Command( "inspect", "Inspects the Entity with the passed in name, or pass in 'pp' or 'postprocessors' to inspect all PostProccessors in the Scene. Pass in no name to close the inspector." )]
+		static void inspectEntity( string entityName = "" )
+		{
+			// clean up no matter what
+			if( instance._runtimeInspector != null )
+			{
+				instance._runtimeInspector.Dispose();
+				instance._runtimeInspector = null;
+			}
+
+			if( entityName == "pp" || entityName == "postprocessors" )
+			{
+				instance._runtimeInspector = new RuntimeInspector();
+				instance.isOpen = false;
+			}
+			else if( entityName != "" )
+			{
+				var entity = Core.scene.findEntity( entityName );
+				if( entity == null )
+				{
+					instance.log( "could not find entity named " + entityName );
+					return;
+				}
+
+				instance._runtimeInspector = new RuntimeInspector( entity );
+				instance.isOpen = false;
+			}
+		}
+
+
+		[Command( "console-scale", "Sets the scale that the console is rendered. Defaults to 1 and has a max of 5." )]
+		static void setScale( float scale = 1f )
+		{
+			renderScale = Mathf.clamp( scale, 0.2f, 5f );
+		}
+
+
 		[Command( "assets", "Logs all loaded assets. Pass 's' for scene assets or 'g' for global assets" )]
 		static void logLoadedAssets( string whichAssets = "s" )
 		{
 			if( whichAssets == "s" )
-				DebugConsole.instance.log( Core.scene.contentManager.logLoadedAssets() );
+				DebugConsole.instance.log( Core.scene.content.logLoadedAssets() );
 			else if( whichAssets == "g" )
-				DebugConsole.instance.log( Core.contentManager.logLoadedAssets() );
+				DebugConsole.instance.log( Core.content.logLoadedAssets() );
 			else
 				DebugConsole.instance.log( "Invalid parameter" );
 		}
 
 
 		[Command( "vsync", "Enables or disables vertical sync" )]
-		static private void vsync( bool enabled = true )
+		static void vsync( bool enabled = true )
 		{
 			Screen.synchronizeWithVerticalRetrace = enabled;
 			DebugConsole.instance.log( "Vertical Sync " + ( enabled ? "Enabled" : "Disabled" ) );
@@ -60,7 +102,7 @@ namespace Nez.Console
 
 
 		[Command( "fixed", "Enables or disables fixed time step" )]
-		static private void fixedTimestep( bool enabled = true )
+		static void fixedTimestep( bool enabled = true )
 		{
 			Core._instance.IsFixedTimeStep = enabled;
 			DebugConsole.instance.log( "Fixed Time Step " + ( enabled ? "Enabled" : "Disabled" ) );
@@ -68,7 +110,7 @@ namespace Nez.Console
 
 
 		[Command( "framerate", "Sets the target framerate. Defaults to 60." )]
-		static private void framerate( float target = 60f )
+		static void framerate( float target = 60f )
 		{
 			Core._instance.TargetElapsedTime = TimeSpan.FromSeconds( 1.0 / target );
 		}
@@ -76,7 +118,7 @@ namespace Nez.Console
 
 		static ITimer _drawCallTimer;
 		[Command( "log-drawcalls", "Enables/disables logging of draw calls in the standard console. Call once to enable and again to disable. delay is how often they should be logged and defaults to 1s." )]
-		static private void logDrawCalls( float delay = 1f )
+		static void logDrawCalls( float delay = 1f )
 		{
 			if( _drawCallTimer != null )
 			{
@@ -95,7 +137,7 @@ namespace Nez.Console
 
 
 		[Command( "entity-count", "Logs amount of Entities in the Scene. Pass a tagIndex to count only Entities with that tag" )]
-		static private void entityCount( int tagIndex = -1 )
+		static void entityCount( int tagIndex = -1 )
 		{
 			if( Core.scene == null )
 			{
@@ -104,14 +146,14 @@ namespace Nez.Console
 			}
 
 			if( tagIndex < 0 )
-				DebugConsole.instance.log( "Total entities: " + Core.scene.entities.Count.ToString() );
+				DebugConsole.instance.log( "Total entities: " + Core.scene.entities.count.ToString() );
 			else
 				DebugConsole.instance.log( "Total entities with tag [" + tagIndex + "] " + Core.scene.findEntitiesWithTag( tagIndex ).Count.ToString() );
 		}
 
 
 		[Command( "renderable-count", "Logs amount of Renderables in the Scene. Pass a renderLayer to count only Renderables in that layer" )]
-		static private void renderableCount( int renderLayer = int.MinValue )
+		static void renderableCount( int renderLayer = int.MinValue )
 		{
 			if( Core.scene == null )
 			{
@@ -120,14 +162,14 @@ namespace Nez.Console
 			}
 
 			if( renderLayer != int.MinValue )
-				DebugConsole.instance.log( "Total renderables with tag [" + renderLayer + "] " + Core.scene.renderableComponents.componentsWithRenderLayer( renderLayer ).Count.ToString() );
+				DebugConsole.instance.log( "Total renderables with tag [" + renderLayer + "] " + Core.scene.renderableComponents.componentsWithRenderLayer( renderLayer ).length.ToString() );
 			else
-				DebugConsole.instance.log( "Total renderables: " + Core.scene.renderableComponents.Count.ToString() );
+				DebugConsole.instance.log( "Total renderables: " + Core.scene.renderableComponents.count.ToString() );
 		}
 
 
 		[Command( "renderable-log", "Logs the Renderables in the Scene. Pass a renderLayer to log only Renderables in that layer" )]
-		static private void renderableLog( int renderLayer = int.MinValue )
+		static void renderableLog( int renderLayer = int.MinValue )
 		{
 			if( Core.scene == null )
 			{
@@ -136,12 +178,11 @@ namespace Nez.Console
 			}
 
 			var builder = new StringBuilder();
-			foreach( var renderable in Core.scene.renderableComponents )
+			for( var i = 0; i < Core.scene.renderableComponents.count; i++ )
 			{
+				var renderable = Core.scene.renderableComponents[i];
 				if( renderLayer == int.MinValue || renderable.renderLayer == renderLayer )
-				{
 					builder.AppendFormat( "{0}\n", renderable );
-				}
 			}
 
 			DebugConsole.instance.log( builder.ToString() );
@@ -158,22 +199,22 @@ namespace Nez.Console
 			}
 
 			var builder = new StringBuilder();
-			foreach( var entity in Core.scene.entities )
-				builder.AppendLine( entity.ToString() );
+			for( var i = 0; i < Core.scene.entities.count; i++ )
+				builder.AppendLine( Core.scene.entities[i].ToString() );
 
 			DebugConsole.instance.log( builder.ToString() );
 		}
 
 
 		[Command( "timescale", "Sets the timescale. Defaults to 1" )]
-		static private void tilescale( float timeScale = 1 )
+		static void tilescale( float timeScale = 1 )
 		{
 			Time.timeScale = timeScale;
 		}
 
 
 		[Command( "physics", "Logs the total Collider count in the spatial hash" )]
-		static private void physics( float secondsToDisplay = 5f )
+		static void physics( float secondsToDisplay = 5f )
 		{
 			// store off the current state so we can reset it when we are done
 			var debugRenderState = Core.debugRenderEnabled;
@@ -196,7 +237,7 @@ namespace Nez.Console
 
 
 		[Command( "debug-render", "enables/disables debug rendering" )]
-		static private void debugRender()
+		static void debugRender()
 		{
 			Core.debugRenderEnabled = !Core.debugRenderEnabled;
 			DebugConsole.instance.log( string.Format( "Debug rendering {0}", Core.debugRenderEnabled ? "enabled" : "disabled" ) );
@@ -204,11 +245,11 @@ namespace Nez.Console
 
 
 		[Command( "help", "Shows usage help for a given command" )]
-		static private void help( string command )
+		static void help( string command )
 		{
-			if( DebugConsole.instance._sorted.Contains( command ) )
+			if( instance._sorted.Contains( command ) )
 			{
-				var c = DebugConsole.instance._commands[command];
+				var c = instance._commands[command];
 				StringBuilder str = new StringBuilder();
 
 				//Title
@@ -233,7 +274,7 @@ namespace Nez.Console
 			{
 				StringBuilder str = new StringBuilder();
 				str.Append( "Commands list: " );
-				str.Append( string.Join( ", ", DebugConsole.instance._sorted ) );
+				str.Append( string.Join( ", ", instance._sorted ) );
 				DebugConsole.instance.log( str.ToString() );
 				DebugConsole.instance.log( "Type 'help command' for more info on that command!" );
 			}
@@ -241,4 +282,4 @@ namespace Nez.Console
 
 	}
 }
-
+#endif

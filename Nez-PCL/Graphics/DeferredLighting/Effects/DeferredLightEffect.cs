@@ -225,7 +225,7 @@ namespace Nez.DeferredLighting
 		/// <summary>
 		/// inverse of Camera.getViewProjectionMatrix
 		/// </summary>
-		/// <param name="obj2world">Obj2world.</param>
+		/// <param name="screenToWorld">screenToWorld.</param>
 		public void setScreenToWorld( Matrix screenToWorld )
 		{
 			_screenToWorldParam.SetValue( screenToWorld );

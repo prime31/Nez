@@ -177,7 +177,6 @@ namespace Nez
 
 		public static void drawRect( this Batcher batcher, Rectangle rect, Color color )
 		{
-			_tempRect = rect;
 			batcher.draw( Graphics.instance.pixelTexture, rect, Graphics.instance.pixelTexture.sourceRect, color );
 		}
 
@@ -233,9 +232,9 @@ namespace Nez
 
 		#region Pixel
 
-		public static void drawPixel( this Batcher batcher, float x, float y, Color color )
+		public static void drawPixel( this Batcher batcher, float x, float y, Color color, int size = 1 )
 		{
-			drawPixel( batcher, new Vector2( x, y ), color );
+			drawPixel( batcher, new Vector2( x, y ), color, size );
 		}
 
 

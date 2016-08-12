@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections;
+using System.Runtime.CompilerServices;
 
 
 namespace Nez
@@ -33,8 +34,17 @@ namespace Nez
 
 		public ColliderList( Entity entity )
 		{
-			this._entity = entity;
+			_entity = entity;
 		}
+
+
+		#region array access
+
+		public int Count { get { return _colliders.Count; } }
+
+		public Collider this[int index] { get { return _colliders[index]; } }
+
+		#endregion
 
 
 		/// <summary>
@@ -89,6 +99,68 @@ namespace Nez
 		}
 
 
+		/// <summary>
+		/// returns the first Collider of type T found
+		/// </summary>
+		/// <returns>The collider.</returns>
+		/// <param name="onlyReturnInitializedColliders">Only return initialized colliders.</param>
+		/// <typeparam name="T">The 1st type parameter.</typeparam>
+		[MethodImpl( MethodImplOptions.AggressiveInlining )]
+		public T getCollider<T>( bool onlyReturnInitializedColliders = false ) where T : Collider
+		{
+			for( var i = 0; i < _colliders.Count; i++ )
+			{
+				var component = _colliders[i];
+				if( component is T )
+					return component as T;
+			}
+
+			// we optionally check the pending components just in case addComponent and getComponent are called in the same frame
+			if( !onlyReturnInitializedColliders )
+			{
+				for( var i = 0; i < _collidersToAdd.Count; i++ )
+				{
+					var component = _collidersToAdd[i];
+					if( component is T )
+						return component as T;
+				}
+			}
+
+			return null;
+		}
+
+
+		/// <summary>
+		/// returns all the Colliders whether they have been initialized or not without a list allocation
+		/// </summary>
+		/// <returns>The colliders.</returns>
+		/// <param name="colliders">Colliders.</param>
+		[MethodImpl( MethodImplOptions.AggressiveInlining )]
+		public void getColliders( List<Collider> colliders )
+		{
+			for( var i = 0; i < _colliders.Count; i++ )
+				colliders.Add( _colliders[i] );
+
+			for( var i = 0; i < _collidersToAdd.Count; i++ )
+				colliders.Add( _collidersToAdd[i] );
+		}
+
+
+		/// <summary>
+		/// Gets all the Colliders. The returned List can be put back in the pool via ListPool.free.
+		/// </summary>
+		/// <returns>The colliders.</returns>
+		[MethodImpl( MethodImplOptions.AggressiveInlining )]
+		public List<Collider> getColliders()
+		{
+			var list = ListPool<Collider>.obtain();
+			getColliders( list );
+			return list;
+		}
+
+
+		#region Collider lifecycle
+
 		internal void onEntityAddedToScene()
 		{
 			_isEntityAddedToScene = true;
@@ -130,6 +202,8 @@ namespace Nez
 				_colliders[i].debugRender( graphics );
 		}
 
+		#endregion
+
 
 		public void registerAllCollidersWithPhysicsSystem()
 		{
@@ -167,22 +241,7 @@ namespace Nez
 		}
 
 
-		public int Count
-		{
-			get { return _colliders.Count; }
-		}
-
-
-		#region IEnumerable and array access
-
-		public Collider this[int index]
-		{
-			get
-			{
-				return _colliders[index];
-			}
-		}
-
+		#region IEnumerable
 
 		public IEnumerator<Collider> GetEnumerator()
 		{

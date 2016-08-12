@@ -7,26 +7,7 @@ namespace Nez
 {
 	public static class ComponentTypeManager
 	{
-		private static Dictionary<Type,int> _componentTypesMask = new Dictionary<Type, int>();
-
-
-		public static void initialize()
-		{
-			var currentDomain = typeof( string ).Assembly.GetType( "System.AppDomain" ).GetProperty( "CurrentDomain" ).GetGetMethod().Invoke( null, new object[] { } );
-			var getAssemblies = currentDomain.GetType().GetMethod( "GetAssemblies", new Type[]{ } );
-			var assemblies = getAssemblies.Invoke( currentDomain, new object[]{ } ) as Assembly[];
-
-			foreach( var assembly in assemblies )
-			{
-				foreach( var type in assembly.GetTypes() )
-				{
-					if( typeof( Component ).IsAssignableFrom( type ) )
-					{
-						add( type );
-					}
-				}
-			}
-		}
+		static Dictionary<Type,int> _componentTypesMask = new Dictionary<Type,int>();
 
 
 		public static void add( Type type )
@@ -40,7 +21,12 @@ namespace Nez
 		public static int getIndexFor( Type type )
 		{
 			var v = -1;
-			_componentTypesMask.TryGetValue( type, out v );
+			if( !_componentTypesMask.TryGetValue( type, out v ) )
+			{
+				add( type );
+				_componentTypesMask.TryGetValue( type, out v );
+			}
+
 			return v;
 		}
 

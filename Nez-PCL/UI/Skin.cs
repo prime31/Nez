@@ -44,6 +44,19 @@ namespace Nez.UI
 
 			var windowColor = new Color( 17, 17, 17 );
 
+			var textFieldFontColor = new Color( 220, 220, 220 );
+			var textFieldCursorColor = new Color( 83, 170, 116 );
+			var textFieldSelectionColor = new Color( 180, 52, 166 );
+			var textFieldBackgroundColor = new Color( 22, 22, 22 );
+
+			var scrollPaneScrollBarColor = new Color( 44, 44, 44 );
+			var scrollPaneKnobColor = new Color( 241, 156, 0 );
+
+			var listBoxBackgroundColor = new Color( 20, 20, 20 );
+			var listBoxSelectionColor = new Color( 241, 156, 0 );
+			var listBoxHoverSelectionColor = new Color( 120, 78, 0 );
+
+			var selectBoxBackgroundColor = new Color( 10, 10, 10 );
 
 			// add all our styles
 			var buttonStyle = new ButtonStyle {
@@ -54,7 +67,7 @@ namespace Nez.UI
 			skin.add( "default", buttonStyle );
 
 			var textButtonStyle = new TextButtonStyle {
-				up = new PrimitiveDrawable( buttonColor, 10, 5 ),
+				up = new PrimitiveDrawable( buttonColor, 6, 2 ),
 				over = new PrimitiveDrawable( buttonOver ),
 				down = new PrimitiveDrawable( buttonDown ),
 				overFontColor = overFontColor,
@@ -89,16 +102,16 @@ namespace Nez.UI
 			skin.add( "default", checkboxStyle );
 
 			var progressBarStyle = new ProgressBarStyle {
-				background = new PrimitiveDrawable( 20, barBg ),
-				knobBefore = new PrimitiveDrawable( 20, barKnobOver )
+				background = new PrimitiveDrawable( 14, barBg ),
+				knobBefore = new PrimitiveDrawable( 14, barKnobOver )
 			};
 			skin.add( "default", progressBarStyle );
 
 			var sliderStyle = new SliderStyle {
-				background = new PrimitiveDrawable( 20, barBg ),
-				knob = new PrimitiveDrawable( 30, barKnob ),
-				knobOver = new PrimitiveDrawable( 30, barKnobOver ),
-				knobDown = new PrimitiveDrawable( 30, barKnobDown )
+				background = new PrimitiveDrawable( 6, barBg ),
+				knob = new PrimitiveDrawable( 14, barKnob ),
+				knobOver = new PrimitiveDrawable( 14, barKnobOver ),
+				knobDown = new PrimitiveDrawable( 14, barKnobDown )
 			};
 			skin.add( "default", sliderStyle );
 
@@ -106,6 +119,45 @@ namespace Nez.UI
 				background = new PrimitiveDrawable( windowColor )
 			};
 			skin.add( "default", windowStyle );
+
+			var textFieldStyle = TextFieldStyle.create( textFieldFontColor, textFieldCursorColor, textFieldSelectionColor, textFieldBackgroundColor );
+			skin.add( "default", textFieldStyle );
+
+			var labelStyle = new LabelStyle();
+			skin.add( "default", labelStyle );
+
+			var scrollPaneStyle = new ScrollPaneStyle
+			{
+				vScroll = new PrimitiveDrawable( 6, 0, scrollPaneScrollBarColor ),
+				vScrollKnob = new PrimitiveDrawable( 6, 50, scrollPaneKnobColor ),
+				hScroll = new PrimitiveDrawable( 0, 6, scrollPaneScrollBarColor ),
+				hScrollKnob = new PrimitiveDrawable( 50, 6, scrollPaneKnobColor )
+			};
+			skin.add( "default", scrollPaneStyle );
+
+			var listBoxStyle = new ListBoxStyle
+			{
+				fontColorHovered = new Color( 255, 255, 255),
+				selection = new PrimitiveDrawable( listBoxSelectionColor, 5, 5 ),
+				hoverSelection = new PrimitiveDrawable( listBoxHoverSelectionColor, 5, 5 ),
+				background = new PrimitiveDrawable( listBoxBackgroundColor )
+			};
+			skin.add( "default", listBoxStyle );
+
+			var selectBoxStyle = new SelectBoxStyle
+			{
+				listStyle = listBoxStyle,
+				scrollStyle = scrollPaneStyle,
+				background = new PrimitiveDrawable( selectBoxBackgroundColor, 4, 4 )
+			};
+			skin.add( "default", selectBoxStyle );
+
+			var textTooltipStyle = new TextTooltipStyle
+			{
+				label = new LabelStyle( listBoxBackgroundColor ),
+				background = new PrimitiveDrawable( checkboxOn, 4, 2 )
+			};
+			skin.add( "default", textTooltipStyle );
 
 			return skin;
 		}
@@ -164,11 +216,11 @@ namespace Nez.UI
 								// fontColor so we'll check for font after color.
 								if( name.ToLower().Contains( "color" ) )
 								{
-									type.GetField( name ).SetValue( style, getColor( identifier ) );
+									ReflectionUtils.getFieldInfo( style, name ).SetValue( style, getColor( identifier ) );
 								}
 								else if( name.ToLower().Contains( "font" ) )
 								{
-									type.GetField( name ).SetValue( style, contentManager.Load<BitmapFont>( identifier ) );
+									ReflectionUtils.getFieldInfo( style, name ).SetValue( style, contentManager.Load<BitmapFont>( identifier ) );
 								}
 								else
 								{
@@ -176,7 +228,7 @@ namespace Nez.UI
 									// identifier is a color
 									var drawable = getDrawable( identifier );
 									if( drawable != null )
-										type.GetField( name ).SetValue( style, drawable );
+										ReflectionUtils.getFieldInfo( style, name ).SetValue( style, drawable );
 									else
 										Debug.error( "could not find a drawable or color named {0} when setting {1} on {2}", identifier, name, styleNames[j] );
 								}

@@ -128,6 +128,12 @@ namespace Nez.UI
 		{
 		}
 
+
+		bool IInputListener.onMouseScrolled( int mouseWheelDelta )
+		{
+			return false;
+		}
+
 		#endregion
 
 
@@ -164,29 +170,27 @@ namespace Nez.UI
 
 			if( transform )
 				applyTransform( graphics, computeTransform() );
-			if( _firstWidget != null )
+			if( _firstWidget != null && _firstWidget.isVisible() )
 			{
-				//batch.flush();
-				//getStage().calculateScissors(firstWidgetBounds, firstScissors);
-				//if (ScissorStack.pushScissors(firstScissors))
+				var scissor = ScissorStack.calculateScissors( stage?.camera, graphics.batcher.transformMatrix, _firstWidgetBounds );
+				if( ScissorStack.pushScissors( scissor ) )
 				{
-					if( _firstWidget.isVisible() )
-						_firstWidget.draw( graphics, parentAlpha * color.A );
-					//batch.flush();
-					//ScissorStack.popScissors();
+					graphics.batcher.enableScissorTest( true );
+					_firstWidget.draw( graphics, parentAlpha * color.A );
+					graphics.batcher.enableScissorTest( false );
+					ScissorStack.popScissors();
 				}
 			}
 
-			if( _secondWidget != null )
+			if( _secondWidget != null && _secondWidget.isVisible() )
 			{
-				//batch.flush();
-				//getStage().calculateScissors( secondWidgetBounds, secondScissors );
-				//if( ScissorStack.pushScissors( secondScissors ) )
+				var scissor = ScissorStack.calculateScissors( stage?.camera, graphics.batcher.transformMatrix, _secondWidgetBounds );
+				if( ScissorStack.pushScissors( scissor ) )
 				{
-					if( _secondWidget.isVisible() )
-						_secondWidget.draw( graphics, parentAlpha * color.A );
-					//batch.flush();
-					//ScissorStack.popScissors();
+					graphics.batcher.enableScissorTest( true );
+					_secondWidget.draw( graphics, parentAlpha * color.A );
+					graphics.batcher.enableScissorTest( false );
+					ScissorStack.popScissors();
 				}
 			}
 				

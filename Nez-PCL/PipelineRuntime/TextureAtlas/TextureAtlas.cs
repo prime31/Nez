@@ -56,6 +56,7 @@ namespace Nez.TextureAtlases
 			return subtextures[Array.IndexOf( regionNames, name )];
 		}
 
+
 		/// <summary>
 		/// checks whether the subtexture is contained in this atlas.
 		/// </summary>
@@ -63,7 +64,7 @@ namespace Nez.TextureAtlases
 		/// <param name="name">the image name</param>
 		public bool containsSubtexture( string name )
 		{
-			return Array.IndexOf( regionNames, name ) >= 0;
+			return regionNames.contains( name );
 		}
 
 

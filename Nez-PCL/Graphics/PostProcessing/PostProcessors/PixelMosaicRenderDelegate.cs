@@ -23,7 +23,7 @@ namespace Nez
 
 		public void onAddedToScene()
 		{
-			effect = scene.contentManager.loadEffect<Effect>( "multiTextureOverlay", EffectResource.multiTextureOverlayBytes );
+			effect = scene.content.loadEffect<Effect>( "multiTextureOverlay", EffectResource.multiTextureOverlayBytes );
 		}
 
 
@@ -55,7 +55,7 @@ namespace Nez
 			}
 
 			_mosaicTexture.SetData<uint>( colors );
-			effect.Parameters["secondTexture"].SetValue( _mosaicTexture );
+			effect.Parameters["_secondTexture"].SetValue( _mosaicTexture );
 		}
 
 
@@ -86,7 +86,7 @@ namespace Nez
 			Graphics.instance.batcher.end();
 
 			// let our Effect know about our rendered, full screen mosaic
-			effect.Parameters["secondTexture"].SetValue( _mosaicRenderTex );
+			effect.Parameters["_secondTexture"].SetValue( _mosaicRenderTex );
 		}
 
 

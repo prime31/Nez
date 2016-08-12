@@ -5,8 +5,8 @@ using Microsoft.Xna.Framework.Graphics;
 namespace Nez
 {
 	/// <summary>
-	/// Renderer that only renders a single renderLayer. Useful to keep UI rendering separate from the rest of the game when used in conjunction
-	/// with a RenderLayerRenderer
+	/// Renderer that only renders the specified renderLayers. Useful to keep UI rendering separate from the rest of the game when used in conjunction
+	/// with other RenderLayerRenderers rendering different renderLayers.
 	/// </summary>
 	public class RenderLayerRenderer : Renderer
 	{
@@ -19,6 +19,7 @@ namespace Nez
 		public RenderLayerRenderer( int renderOrder, params int[] renderLayers ) : base( renderOrder, null )
 		{
 			Array.Sort( renderLayers );
+			Array.Reverse( renderLayers );
 			this.renderLayers = renderLayers;
 		}
 
@@ -31,9 +32,9 @@ namespace Nez
 			for( var i = 0; i < renderLayers.Length; i++ )
 			{
 				var renderables = scene.renderableComponents.componentsWithRenderLayer( renderLayers[i] );
-				for( var j = 0; j < renderables.Count; j++ )
+				for( var j = 0; j < renderables.length; j++ )
 				{
-					var renderable = renderables[j];
+					var renderable = renderables.buffer[j];
 					if( renderable.enabled && renderable.isVisibleFromCamera( cam ) )
 						renderAfterStateCheck( renderable, cam );
 				}
@@ -51,9 +52,9 @@ namespace Nez
 			for( var i = 0; i < renderLayers.Length; i++ )
 			{
 				var renderables = scene.renderableComponents.componentsWithRenderLayer( renderLayers[i] );
-				for( var j = 0; j < renderables.Count; j++ )
+				for( var j = 0; j < renderables.length; j++ )
 				{
-					var renderable = renderables[j];
+					var renderable = renderables.buffer[j];
 					if( renderable.enabled && renderable.isVisibleFromCamera( cam ) )
 						renderable.debugRender( Graphics.instance );
 				}

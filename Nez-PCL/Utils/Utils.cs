@@ -50,6 +50,7 @@ namespace Nez
 			first = second;
 			second = temp;
 		}
+
 	}
 }
 

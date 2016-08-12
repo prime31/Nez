@@ -32,7 +32,7 @@ namespace Nez
 
 		public SpriteBlinkEffect() : base( Core.graphicsDevice, EffectResource.spriteBlinkEffectBytes )
 		{
-			_blinkColorParam = Parameters["blinkColor"];
+			_blinkColorParam = Parameters["_blinkColor"];
 			_blinkColorParam.SetValue( _blinkColor );
 		}
 	}

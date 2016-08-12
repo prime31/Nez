@@ -31,7 +31,8 @@ float _lightRadius;
 float _lightIntensity;
 
 // normal map
-SamplerState _normalMap;
+texture _normalMap;
+sampler _normalMapSampler = sampler_state { Texture = <_normalMap>; };
 
 
 // ##### ##### ##### ##### ##### ##### #####
@@ -63,8 +64,12 @@ float _specularPower;
 // ##### ##### ##### ##### ##### ##### #####
 // ##### Final combine uniforms        #####
 // ##### ##### ##### ##### ##### ##### #####
-SamplerState _colorMap;
-SamplerState _lightMap;
+texture _colorMap;
+sampler _colorMapSampler = sampler_state { Texture = <_colorMap>; };
+
+texture _lightMap;
+sampler _lightMapSampler = sampler_state { Texture = <_lightMap>; };
+
 float3 _ambientColor;
 
 
@@ -96,7 +101,7 @@ inline float3 calcDiffuseContribution( float4 world, float4 screenPosition, out 
     screenPosition.xy /= screenPosition.w;
 
     // get normal data from the normalMap
-    float4 normalData = tex2D( _normalMap, screenSpaceTexCoord );
+    float4 normalData = tex2D( _normalMapSampler, screenSpaceTexCoord );
 
     // tranform normal back into [-1,1] range
     float3 normal = 2.0f * normalData.xyz - 1.0;
@@ -260,7 +265,7 @@ float4 areaLightPixel( VertexPointSpotOut input ) : COLOR0
     input.screenPosition.xy /= input.screenPosition.w;
 
     // get normal data from the normalMap
-    float4 normalData = tex2D( _normalMap, screenSpaceTexCoord );
+    float4 normalData = tex2D( _normalMapSampler, screenSpaceTexCoord );
 
     // tranform normal back into [-1,1] range
     float3 normal = 2.0f * normalData.xyz - 1.0;
@@ -309,7 +314,7 @@ VertexPosTexCoordsOutput directionalLightVert( float4 position:POSITION0, float2
 float4 directionalLightPixel( VertexPosTexCoordsOutput input ) : COLOR0
 {
     // get normal data from the normalMap
-    float4 normalData = tex2D( _normalMap, input.texCoord );
+    float4 normalData = tex2D( _normalMapSampler, input.texCoord );
 
     // tranform normal back into [-1,1] range
     float3 normal = 2.0f * normalData.xyz - 1.0f;
@@ -354,9 +359,9 @@ VertexPosTexCoordsOutput finalCombineVert( float4 position:POSITION0, float2 tex
 
 float4 finalCombinePixel( VertexPosTexCoordsOutput input ) : COLOR0
 {
-    float3 diffuseColor = tex2D( _colorMap, input.texCoord ).rgb;
-    float selfIllumination = tex2D( _normalMap, input.texCoord ).a;
-    float4 light = tex2D( _lightMap, input.texCoord );
+    float3 diffuseColor = tex2D( _colorMapSampler, input.texCoord ).rgb;
+    float selfIllumination = tex2D( _normalMapSampler, input.texCoord ).a;
+    float4 light = tex2D( _lightMapSampler, input.texCoord );
 
     // when we are self illuminated we disregard the lighting accumulation
     float3 diffuseLight = lerp( light.rgb, 1, selfIllumination );

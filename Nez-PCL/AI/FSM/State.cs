@@ -1,7 +1,4 @@
-﻿using System;
-
-
-namespace Nez.AI.FSM
+﻿namespace Nez.AI.FSM
 {
 	public abstract class State<T>
 	{
@@ -9,11 +6,7 @@ namespace Nez.AI.FSM
 		protected T _context;
 
 
-		public State()
-		{}
-
-
-		internal void setMachineAndContext( StateMachine<T> machine, T context )
+		public void setMachineAndContext( StateMachine<T> machine, T context )
 		{
 			_machine = machine;
 			_context = context;

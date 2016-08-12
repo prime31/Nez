@@ -8,7 +8,6 @@ using Nez.BitmapFonts;
 
 namespace Nez
 {
-	// TODO: currently, docking doesnt take into account ViewportAdapters. it also doesn't update position when screen size changes
 	public class FramesPerSecondCounter : Text, IUpdatable
 	{
 		public enum FPSDockPosition
@@ -22,9 +21,43 @@ namespace Nez
 		public long totalFrames;
 		public float averageFramesPerSecond;
 		public float currentFramesPerSecond;
-		public int maximumSamples;
-		public FPSDockPosition dockPosition;
 
+		/// <summary>
+		/// total number of samples that should be stored and averaged for calculating the FPS
+		/// </summary>
+		public int maximumSamples;
+
+
+		/// <summary>
+		/// position the FPS counter should be docked
+		/// </summary>
+		/// <value>The dock position.</value>
+		public FPSDockPosition dockPosition
+		{
+			get { return _dockPosition; }
+			set
+			{
+				_dockPosition = value;
+				updateTextPosition();
+			}
+		}
+
+		/// <summary>
+		/// offset from dockPosition the FPS counter should be drawn
+		/// </summary>
+		/// <value>The dock offset.</value>
+		public Vector2 dockOffset
+		{
+			get { return _dockOffset; }
+			set
+			{
+				_dockOffset = value;
+				updateTextPosition();
+			}
+		}
+
+		FPSDockPosition _dockPosition;
+		Vector2 _dockOffset;
 		readonly Queue<float> _sampleBuffer = new Queue<float>();
 
 
@@ -46,24 +79,33 @@ namespace Nez
 
 		void initialize()
 		{
+			updateTextPosition();
+		}
+
+
+		void updateTextPosition()
+		{
 			switch( dockPosition )
 			{
 				case FPSDockPosition.TopLeft:
 					_horizontalAlign = HorizontalAlign.Left;
+					_verticalAlign = VerticalAlign.Top;
+					localOffset = dockOffset;
 				break;
 				case FPSDockPosition.TopRight:
 					_horizontalAlign = HorizontalAlign.Right;
-					localOffset = new Vector2( Core.graphicsDevice.Viewport.Width, 0f );
+					_verticalAlign = VerticalAlign.Top;
+					localOffset = new Vector2( Core.graphicsDevice.Viewport.Width - dockOffset.X, dockOffset.Y );
 				break;
 				case FPSDockPosition.BottomLeft:
 					_horizontalAlign = HorizontalAlign.Left;
 					_verticalAlign = VerticalAlign.Bottom;
-					localOffset = new Vector2( 0, Core.graphicsDevice.Viewport.Height );
+					localOffset = new Vector2( dockOffset.X, Core.graphicsDevice.Viewport.Height - dockOffset.Y );
 				break;
 				case FPSDockPosition.BottomRight:
 					_horizontalAlign = HorizontalAlign.Right;
 					_verticalAlign = VerticalAlign.Bottom;
-					localOffset = new Vector2( Core.graphicsDevice.Viewport.Width, Core.graphicsDevice.Viewport.Height );
+					localOffset = new Vector2( Core.graphicsDevice.Viewport.Width - dockOffset.X, Core.graphicsDevice.Viewport.Height - dockOffset.Y );
 				break;
 			}
 		}
@@ -100,10 +142,7 @@ namespace Nez
 		public override void render( Graphics graphics, Camera camera )
 		{
 			// we override render and use position instead of entityPosition. this keeps the text in place even if the entity moves
-			if( _bitmapFont != null )
-				graphics.batcher.drawString( _bitmapFont, _text, localOffset, color, entity.transform.rotation, origin, entity.transform.scale, spriteEffects, layerDepth );
-			else
-				graphics.batcher.drawString( _spriteFont, _text, localOffset, color, entity.transform.rotation, origin, entity.transform.scale, spriteEffects, layerDepth );
+			graphics.batcher.drawString( _font, _text, localOffset, color, entity.transform.rotation, origin, entity.transform.scale, spriteEffects, layerDepth );
 		}
 
 
@@ -115,5 +154,31 @@ namespace Nez
 			graphics.batcher.drawHollowRect( rect, Color.Yellow );
 		}
 
+
+		#region Fluent setters
+
+		/// <summary>
+		/// Sets how far the fps text will appear from the edges of the screen.
+		/// </summary>
+		/// <param name="dockOffset">Offset from screen edges</param>
+		public FramesPerSecondCounter setDockOffset( Vector2 dockOffset )
+		{
+			this.dockOffset = dockOffset;
+			return this;
+		}
+
+
+		/// <summary>
+		/// Sets which corner of the screen the fps text will show.
+		/// </summary>
+		/// <param name="dockPosition">Corner of the screen</param>
+		public FramesPerSecondCounter setDockPosition( FPSDockPosition dockPosition )
+		{
+			this.dockPosition = dockPosition;
+			return this;
+		}
+
+		#endregion
+	
 	}
 }

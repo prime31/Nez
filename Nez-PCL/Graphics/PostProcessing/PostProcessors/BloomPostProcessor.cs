@@ -37,9 +37,9 @@ namespace Nez
 
 		public override void onAddedToScene()
 		{
-			_bloomExtractEffect = scene.contentManager.loadEffect<Effect>( "bloomExtract", EffectResource.bloomExtractBytes );
-			_bloomCombineEffect = scene.contentManager.loadEffect<Effect>( "bloomCombine", EffectResource.bloomCombineBytes );
-			_gaussianBlurEffect = scene.contentManager.loadEffect<Effect>( "gaussianBlur", EffectResource.gaussianBlurBytes );
+			_bloomExtractEffect = scene.content.loadEffect<Effect>( "bloomExtract", EffectResource.bloomExtractBytes );
+			_bloomCombineEffect = scene.content.loadEffect<Effect>( "bloomCombine", EffectResource.bloomCombineBytes );
+			_gaussianBlurEffect = scene.content.loadEffect<Effect>( "gaussianBlur", EffectResource.gaussianBlurBytes );
 
 			_bloomExtractThresholdParam = _bloomExtractEffect.Parameters["BloomThreshold"];
 
@@ -124,11 +124,12 @@ namespace Nez
 
 		public override void process( RenderTarget2D source, RenderTarget2D destination )
 		{
-			// aquire two rendertargets for the bloom processing. These are half the size of the backbuffer, in order to minimize fillrate costs. Reducing
+			// aquire two rendertargets for the bloom processing. These can be scaled via renderTargetScale in order to minimize fillrate costs. Reducing
 			// the resolution in this way doesn't hurt quality, because we are going to be blurring the bloom images in any case.
 			// the demo uses a tiny backbuffer so no need to reduce size any further
-			var renderTarget1 = RenderTarget.getTemporary( (int)( scene.sceneRenderTargetSize.X * renderTargetScale ), (int)( scene.sceneRenderTargetSize.Y * renderTargetScale ), DepthFormat.None );
-			var renderTarget2 = RenderTarget.getTemporary( (int)( scene.sceneRenderTargetSize.X * renderTargetScale ), (int)( scene.sceneRenderTargetSize.Y * renderTargetScale ), DepthFormat.None );
+			var sceneRenderTargetSize = scene.sceneRenderTargetSize;
+			var renderTarget1 = RenderTarget.getTemporary( (int)( sceneRenderTargetSize.X * renderTargetScale ), (int)( sceneRenderTargetSize.Y * renderTargetScale ), DepthFormat.None );
+			var renderTarget2 = RenderTarget.getTemporary( (int)( sceneRenderTargetSize.X * renderTargetScale ), (int)( sceneRenderTargetSize.Y * renderTargetScale ), DepthFormat.None );
 
 			Core.graphicsDevice.SamplerStates[1] = SamplerState.LinearClamp;
 

@@ -1,14 +1,18 @@
 sampler s0;
-//sampler _renderTexture;
-sampler _normalMap;
 
-SamplerState _renderTexture
+texture _normalMap;
+sampler _normalMapSampler = sampler_state { Texture = <_normalMap>; };
+
+texture _renderTexture;
+sampler2D _renderTextureSampler = sampler_state
 {
+    Texture = <_renderTexture>;
     AddressU = Clamp;
     AddressV = Clamp;
     MagFilter = Point;
     MinFilter = Point;
 };
+
 
 float4x4 _matrixTransform;
 float _reflectionIntensity; // 0.4
@@ -56,13 +60,13 @@ float4 mirrorPixel( VSOutput input ) : COLOR0
     float2 screenSpaceTexCoord = 0.5f * float2( screenPos.x, -screenPos.y ) + 0.5f;
 
 	// fetch and transform our normal data before we sample the renderTarget for our reflection
-	float4 normalData = tex2D( _normalMap, input.texCoord );
+	float4 normalData = tex2D( _normalMapSampler, input.texCoord );
 	
     // transform normal back into [-1,1] range
     float2 normal = 2.0f * normalData.xy - 1.0;
 
     float4 color = tex2D( s0, input.texCoord ) * input.color;
-	float4 reflection = tex2D( _renderTexture, screenSpaceTexCoord + normal * _normalMagnitude );
+	float4 reflection = tex2D( _renderTextureSampler, screenSpaceTexCoord + normal * _normalMagnitude );
 	
 	color.rgb = color.rgb * ( 1.0 - reflection.a * _reflectionIntensity ) + reflection.rgb * reflection.a * color.a * _reflectionIntensity;
 	return color;
@@ -113,12 +117,12 @@ float4 waterPixel( WaterVertexOut input ) : COLOR0
 	// start with the main uv and sample our normal twice
 	float2 normTexCoord = input.texCoord.xy; // show we be doing this? input.uvgrab.xy - perspectiveCorrection
 	normTexCoord.x = frac( normTexCoord.x + _time * _firstDisplacementSpeed );
-	float4 normal1 = tex2D( _normalMap, normTexCoord );
+	float4 normal1 = tex2D( _normalMapSampler, normTexCoord );
 	normal1.xy -= 0.5; // get red and green channels in -0.5 to 0.5 range
 	
 	float2 normTexCoord2 = input.texCoord.xy * _secondDisplacementScale;
 	normTexCoord2.x = frac( normTexCoord2.x + _time * _secondDisplacementSpeed );
-	float4 normal2 = tex2D( _normalMap, normTexCoord2 );
+	float4 normal2 = tex2D( _normalMapSampler, normTexCoord2 );
 	normal2.xy -= 0.5; // get red and green channels in -0.5 to 0.5 range
 	
 	// use the _normalMagnitude to get a uv offset
@@ -127,7 +131,7 @@ float4 waterPixel( WaterVertexOut input ) : COLOR0
 
     float4 color = tex2D( s0, input.texCoord );
 	float2 reflectionTexCoord = input.uvgrab.xy + normalOffset + perspectiveCorrection;
-	float4 reflection = tex2D( _renderTexture, reflectionTexCoord );
+	float4 reflection = tex2D( _renderTextureSampler, reflectionTexCoord );
 	
 	color.rgb = ( 1.0 - reflection.a * _reflectionIntensity ) + reflection.rgb * reflection.a * color.a * _reflectionIntensity;
 	

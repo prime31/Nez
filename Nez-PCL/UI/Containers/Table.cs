@@ -26,7 +26,7 @@ namespace Nez.UI
 		static public Color debugTableColor = new Color( 0, 0, 255, 255 );
 		static public Color debugCellColor = new Color( 255, 0, 0, 255 );
 		static public Color debugElementColor = new Color( 0, 255, 0, 255 );
-		static private float[] _columnWeightedWidth, _rowWeightedHeight;
+		static float[] _columnWeightedWidth, _rowWeightedHeight;
 
 		public override float minWidth
 		{
@@ -126,23 +126,21 @@ namespace Nez.UI
 			{
 				applyTransform( graphics, computeTransform() );
 				drawBackground( graphics, parentAlpha, 0, 0 );
-				// TODO: clipping support
-//				if( clip )
-//				{
-//					graphics.flush();
-//					float padLeft = this.padLeft.get( this ), padBottom = this.padBottom.get( this );
-//					if( clipBegin( padLeft, padBottom, getWidth() - padLeft - padRight.get( this ),
-//						    getHeight() - padBottom - padTop.get( this ) ) )
-//					{
-//						drawChildren( graphics, parentAlpha );
-//						graphics.flush();
-//						clipEnd();
-//					}
-//				}
-//				else
-//				{
+
+				if( clip )
+				{
+					graphics.batcher.flushBatch();
+					float padLeft = _padLeft.get( this ), padBottom = _padBottom.get( this );
+					if( clipBegin( graphics.batcher, padLeft, padBottom, getWidth() - padLeft - _padRight.get( this ), getHeight() - padBottom - _padTop.get( this ) ) )
+					{
+						drawChildren( graphics, parentAlpha );
+						clipEnd( graphics.batcher );
+					}
+				}
+				else
+				{
 					drawChildren( graphics, parentAlpha );
-//				}
+				}
 				resetTransform( graphics );
 			}
 			else
@@ -203,7 +201,7 @@ namespace Nez.UI
 		/// <param name="element">element.</param>
 		public Cell add( Element element )
 		{
-			var cell = Pool<Cell>.obtain();
+			var cell = obtainCell();
 			cell.element = element;
 
 			// the row was ended for layout, not by the user, so revert it.
@@ -831,6 +829,22 @@ namespace Nez.UI
 		#region Getters
 
 		/// <summary>
+		/// gets the current Cell defaults. This is the same value returned by a call to row()
+		/// </summary>
+		/// <returns>The row defaults.</returns>
+		public Cell getRowDefaults()
+		{
+			if( _rowDefaults == null )
+			{
+				_rowDefaults = Pool<Cell>.obtain();
+				_rowDefaults.clear();
+			}
+
+			return _rowDefaults;
+		}
+
+
+		/// <summary>
 		/// Returns the cell for the specified element in this table, or null.
 		/// </summary>
 		/// <returns>The cell.</returns>
@@ -1225,14 +1239,14 @@ namespace Nez.UI
 				if( fillX > 0 )
 				{
 					c.elementWidth = Math.Max( spannedCellWidth * fillX, c.minWidth.get( c.element ) );
-					float maxWidth = c.maxWidth.get( c.element );
+					var maxWidth = c.maxWidth.get( c.element );
 					if( maxWidth > 0 )
 						c.elementWidth = Math.Min( c.elementWidth, maxWidth );
 				}
 				if( fillY > 0 )
 				{
 					c.elementHeight = Math.Max( rowHeight[c.row] * fillY - c.computedPadTop - c.computedPadBottom, c.minHeight.get( c.element ) );
-					float maxHeight = c.maxHeight.get( c.element );
+					var maxHeight = c.maxHeight.get( c.element );
 					if( maxHeight > 0 )
 						c.elementHeight = Math.Min( c.elementHeight, maxHeight );
 				}
@@ -1268,7 +1282,7 @@ namespace Nez.UI
 		}
 
 
-		private void computeSize()
+		void computeSize()
 		{
 			_sizeInvalid = false;
 

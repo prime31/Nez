@@ -48,7 +48,7 @@ namespace Nez
 
 		public override void onAddedToScene()
 		{
-			effect = scene.contentManager.loadEffect<Effect>( "vignette", EffectResource.vignetteBytes );
+			effect = scene.content.loadEffect<Effect>( "vignette", EffectResource.vignetteBytes );
 
 			_powerParam = effect.Parameters["_power"];
 			_radiusParam = effect.Parameters["_radius"];

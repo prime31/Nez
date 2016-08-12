@@ -109,6 +109,13 @@ namespace Nez.UI
 		}
 
 
+		public ProgressBar setStepSize( float stepSize )
+		{
+			_stepSize = stepSize;
+			return this;
+		}
+
+
 		protected virtual IDrawable getKnobDrawable()
 		{
 			return ( disabled && style.disabledKnob != null ) ? style.disabledKnob : style.knob;

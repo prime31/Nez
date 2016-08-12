@@ -28,10 +28,10 @@ namespace Nez
 			if( _renderTarget == null || _renderTarget != renderTexture.renderTarget )
 			{
 				_renderTarget = renderTexture.renderTarget;
-				typedEffect.renderTexture = renderTexture.renderTarget;
+				effect.renderTexture = renderTexture.renderTarget;
 			}
 
-			typedEffect.matrixTransform = camera.viewProjectionMatrix;
+			effect.matrixTransform = camera.viewProjectionMatrix;
 		}
 	}
 }

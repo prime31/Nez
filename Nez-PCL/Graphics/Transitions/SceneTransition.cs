@@ -4,12 +4,20 @@ using Microsoft.Xna.Framework.Graphics;
 using System.Collections;
 using System.Threading;
 using Nez.Tweens;
+using System.Threading.Tasks;
 
 
 namespace Nez
 {
 	/// <summary>
-	/// SceneTransition is used to transition from one Scene to another with an effect
+	/// SceneTransition is used to transition from one Scene to another or within a scene with an effect. If sceneLoadAction is null Nez
+	/// will perform an in-Scene transition as opposed to loading a new Scene mid transition.
+	/// 
+	/// The general gist of a transition is the following:
+	/// - onBeginTransition will be called allowing you to yield for multipart transitions
+	/// - for two part transitions with Effects you can yield on a call to tickEffectProgressProperty for part one to obscure the screen
+	/// - next, yield a call to loadNextScene to load up the new Scene
+	/// - finally, yield again on tickEffectProgressProperty to un-obscure the screen and show the new Scene
 	/// </summary>
 	public abstract class SceneTransition
 	{
@@ -27,7 +35,7 @@ namespace Nez
 		/// if true, the next Scene will be loaded on a background thread. Note that if raw PNG files are used they cannot be loaded
 		/// on a background thread.
 		/// </summary>
-		public bool loadSceneOnBackgroundThread = false;
+		public bool loadSceneOnBackgroundThread;
 
 		/// <summary>
 		/// function that should return the newly loaded scene
@@ -52,15 +60,36 @@ namespace Nez
 				return true;
 			}
 		}
+
+		/// <summary>
+		/// called when loadNextScene is executing. This is useful when doing inter-Scene transitions so that you know when you can more the
+		/// Camera or reset any Entities
+		/// </summary>
+		public Action onScreenObscured;
+
+		/// <summary>
+		/// flag indicating if this transition will load a new scene or not
+		/// </summary>
+		internal bool _loadsNewScene;
+
 		bool _hasPreviousSceneRender;
 
+		/// <summary>
+		/// use this for two part transitions. For example, a fade would fade to black first then when _isNewSceneLoaded becomes true it would
+		/// fade in. For in-Scene transitions _isNewSceneLoaded will be set to true at the midpoint just as if a new Scene was loaded.
+		/// </summary>
 		protected bool _isNewSceneLoaded;
 
 
-		public SceneTransition( Func<Scene> sceneLoadAction, bool wantsPreviousSceneRender = true )
+		protected SceneTransition( bool wantsPreviousSceneRender = true ) : this( null, wantsPreviousSceneRender )
+		{}
+
+
+		protected SceneTransition( Func<Scene> sceneLoadAction, bool wantsPreviousSceneRender = true )
 		{
 			this.sceneLoadAction = sceneLoadAction;
 			this.wantsPreviousSceneRender = wantsPreviousSceneRender;
+			_loadsNewScene = sceneLoadAction != null;
 
 			// create a RenderTarget if we need to for later
 			if( wantsPreviousSceneRender )
@@ -70,21 +99,32 @@ namespace Nez
 
 		protected IEnumerator loadNextScene()
 		{
+			// let the listener know the screen is obscured if we have one
+			if( onScreenObscured != null )
+				onScreenObscured();
+			
+			// if we arent loading a new scene we just set the flag as if we did so that 2 phase transitions complete
+			if( !_loadsNewScene )
+			{
+				_isNewSceneLoaded = true;
+				yield break;
+			}
+			
 			if( loadSceneOnBackgroundThread )
 			{
 				// load the Scene on a background thread
-				ThreadPool.QueueUserWorkItem( context =>
+				var syncContext = SynchronizationContext.Current;
+				Task.Run( () =>
 				{
 					var scene = sceneLoadAction();
 
 					// get back to the main thread before setting the new Scene active
-					var syncContext = context as SynchronizationContext;
 					syncContext.Post( d =>
 					{
 						Core.scene = scene;
 						_isNewSceneLoaded = true;
 					}, null );
-				}, SynchronizationContext.Current );
+				} );
 			}
 			else
 			{
