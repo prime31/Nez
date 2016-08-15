@@ -11,27 +11,36 @@ namespace Nez
 	public class BloomPostProcessor : PostProcessor
 	{
 		/// <summary>
-		/// the settings used by the bloom and blur shaders
+		/// the settings used by the bloom and blur shaders. If changed, you must call setBloomSettings for the changes to take effect.
 		/// </summary>
-		public BloomSettings settings;
+		public BloomSettings settings
+		{
+			get { return _settings; }
+			set { setBloomSettings( value ); }
+		}
 
 		/// <summary>
 		/// scale of the internal RenderTargets. For high resolution renders a half sized RT is usually more than enough.
 		/// </summary>
 		public float renderTargetScale = 1f;
 
+		BloomSettings _settings;
+
 		Effect _bloomExtractEffect;
 		Effect _bloomCombineEffect;
 		Effect _gaussianBlurEffect;
 
+		// extract params
 		EffectParameter _bloomExtractThresholdParam;
-		EffectParameter _bloomIntensityParam, _bloomBaseIntensityParam, _bloomSaturationParam, _bloomBaseSaturationParam;
+		// combine params
+		EffectParameter _bloomIntensityParam, _bloomBaseIntensityParam, _bloomSaturationParam, _bloomBaseSaturationParam, _bloomBaseMapParm;
+		// blur params
 		EffectParameter _blurWeightsParam, _blurOffsetsParam;
 
 		
 		public BloomPostProcessor( int executionOrder ) : base( executionOrder )
 		{
-			settings = BloomSettings.presetSettings[3];
+			_settings = BloomSettings.presetSettings[3];
 		}
 
 
@@ -41,21 +50,40 @@ namespace Nez
 			_bloomCombineEffect = scene.content.loadEffect<Effect>( "bloomCombine", EffectResource.bloomCombineBytes );
 			_gaussianBlurEffect = scene.content.loadEffect<Effect>( "gaussianBlur", EffectResource.gaussianBlurBytes );
 
-			_bloomExtractThresholdParam = _bloomExtractEffect.Parameters["BloomThreshold"];
+			_bloomExtractThresholdParam = _bloomExtractEffect.Parameters["_bloomThreshold"];
 
-			_bloomIntensityParam = _bloomCombineEffect.Parameters["BloomIntensity"];
-			_bloomBaseIntensityParam = _bloomCombineEffect.Parameters["BaseIntensity"];
-			_bloomSaturationParam = _bloomCombineEffect.Parameters["BloomSaturation"];
-			_bloomBaseSaturationParam = _bloomCombineEffect.Parameters["BaseSaturation"];
+			_bloomIntensityParam = _bloomCombineEffect.Parameters["_bloomIntensity"];
+			_bloomBaseIntensityParam = _bloomCombineEffect.Parameters["_baseIntensity"];
+			_bloomSaturationParam = _bloomCombineEffect.Parameters["_bloomSaturation"];
+			_bloomBaseSaturationParam = _bloomCombineEffect.Parameters["_baseSaturation"];
+			_bloomBaseMapParm = _bloomCombineEffect.Parameters["_baseMap"];
 
-			_blurWeightsParam = _gaussianBlurEffect.Parameters["SampleWeights"];
-			_blurOffsetsParam = _gaussianBlurEffect.Parameters["SampleOffsets"];
+			_blurWeightsParam = _gaussianBlurEffect.Parameters["_sampleWeights"];
+			_blurOffsetsParam = _gaussianBlurEffect.Parameters["_sampleOffsets"];
+
+			setBloomSettings( _settings );
 		}
 
 
 		/// <summary>
-		/// Computes sample weightings and texture coordinate offsets
-		/// for one pass of a separable gaussian blur filter.
+		/// sets the settings used by the bloom and blur shaders
+		/// </summary>
+		/// <param name="settings">Settings.</param>
+		public void setBloomSettings( BloomSettings settings )
+		{
+			_settings = settings;
+
+			_bloomExtractThresholdParam.SetValue( _settings.threshold );
+
+			_bloomIntensityParam.SetValue( _settings.intensity );
+			_bloomBaseIntensityParam.SetValue( _settings.baseIntensity );
+			_bloomSaturationParam.SetValue( _settings.saturation );
+			_bloomBaseSaturationParam.SetValue( _settings.baseSaturation );
+		}
+
+
+		/// <summary>
+		/// computes sample weightings and texture coordinate offsets for one pass of a separable gaussian blur filter.
 		/// </summary>
 		void setBlurEffectParameters( float dx, float dy )
 		{
@@ -68,7 +96,7 @@ namespace Nez
 
 			// The first sample always has a zero offset.
 			sampleWeights[0] = computeGaussian( 0 );
-			sampleOffsets[0] = new Vector2( 0 );
+			sampleOffsets[0] = Vector2.Zero;
 
 			// Maintain a sum of all the weighting values.
 			var totalWeights = sampleWeights[0];
@@ -98,10 +126,8 @@ namespace Nez
 			}
 
 			// Normalize the list of sample weightings, so they will always sum to one.
-			for( int i = 0; i < sampleWeights.Length; i++ )
-			{
+			for( var i = 0; i < sampleWeights.Length; i++ )
 				sampleWeights[i] /= totalWeights;
-			}
 
 			// Tell the effect about our new filter settings.
 			_blurWeightsParam.SetValue( sampleWeights );
@@ -115,10 +141,8 @@ namespace Nez
 		/// </summary>
 		float computeGaussian( float n )
 		{
-			var theta = settings.blurAmount;
-
-			return (float)( ( 1.0 / Math.Sqrt( 2 * Math.PI * theta ) ) *
-			Math.Exp( -( n * n ) / ( 2 * theta * theta ) ) );
+			var theta = _settings.blurAmount;
+			return (float)( ( 1.0 / Math.Sqrt( 2 * Math.PI * theta ) ) * Math.Exp( -( n * n ) / ( 2 * theta * theta ) ) );
 		}
 
 
@@ -131,10 +155,7 @@ namespace Nez
 			var renderTarget1 = RenderTarget.getTemporary( (int)( sceneRenderTargetSize.X * renderTargetScale ), (int)( sceneRenderTargetSize.Y * renderTargetScale ), DepthFormat.None );
 			var renderTarget2 = RenderTarget.getTemporary( (int)( sceneRenderTargetSize.X * renderTargetScale ), (int)( sceneRenderTargetSize.Y * renderTargetScale ), DepthFormat.None );
 
-			Core.graphicsDevice.SamplerStates[1] = SamplerState.LinearClamp;
-
 			// Pass 1: draw the scene into rendertarget 1, using a shader that extracts only the brightest parts of the image.
-			_bloomExtractThresholdParam.SetValue( settings.threshold );
 			drawFullscreenQuad( source, renderTarget1, _bloomExtractEffect );
 
 			// Pass 2: draw from rendertarget 1 into rendertarget 2, using a shader to apply a horizontal gaussian blur filter.
@@ -147,12 +168,8 @@ namespace Nez
 
 			// Pass 4: draw both rendertarget 1 and the original scene image back into the main backbuffer, using a shader that
 			// combines them to produce the final bloomed result.
-			_bloomIntensityParam.SetValue( settings.intensity );
-			_bloomBaseIntensityParam.SetValue( settings.baseIntensity );
-			_bloomSaturationParam.SetValue( settings.saturation );
-			_bloomBaseSaturationParam.SetValue( settings.baseSaturation );
-
-			Core.graphicsDevice.Textures[1] = source;
+			Core.graphicsDevice.SamplerStates[1] = SamplerState.LinearClamp;
+			_bloomBaseMapParm.SetValue( source );
 
 			drawFullscreenQuad( renderTarget1, destination, _bloomCombineEffect );
 
