@@ -1,4 +1,5 @@
 ![Nez](FAQs/images/nez-logo-black.png)
+
 Nez aims to be a lightweight 2D framework that sits on top of MonoGame/FNA. It provides a solid base for you to build a 2D game on. Some of the many features it includes are:
 
 - Scene/Entity/Component system with Component render layer tracking and optional entity systems (an implementation that operates on a group of entities that share a specific set of components)
@@ -14,10 +15,10 @@ Nez aims to be a lightweight 2D framework that sits on top of MonoGame/FNA. It p
 - sprites with sprite animations, scrolling sprites, repeating sprites and sprite trails
 - kick-ass particle system with added support for importing [Particle Designer](https://71squared.com/particledesigner) files
 - optimized event emitter for core events that you can also add to any class of your own
-- scheduler for delayed and repeating tasks (Core.schedule method)
+- scheduler for delayed and repeating tasks (`Core.schedule` method)
 - per-scene content managers. Load your scene-specific content then forget about it. Nez will unload it for you when you change scenes.
 - synchronous or asynchronous asset loading
-- customizeable Scene transition system with several built in transitions
+- customizable Scene transition system with several built in transitions
 - tons more stuff
 
 
@@ -29,23 +30,7 @@ You can find the samples repo [here](https://github.com/prime31/Nez-Samples). It
 
 Nez Systems
 ==========
-There are various systems documented separately in the FAQs folder. They go into a bit more detail on the different sub-systems that make up Nez.
-
-- [Nez-Core](FAQs/Nez-Core.md)
-- [Scene-Entity-Component](FAQs/Scene-Entity-Component.md)
-- [Rendering](FAQs/Rendering.md)
-- [Content Management](FAQs/ContentManagement.md)
-- [Physics/Collisions](FAQs/Physics.md)
-- [Scene Transitions](FAQs/SceneTransitions.md)
-- [Pathfinding](FAQs/Pathfinding.md)
-- [Runtime Inspector](FAQs/RuntimeInspector.md)
-- [Entity Processing Systems](FAQs/EntitySystems.md)
-- [Nez.UI](FAQs/UI.md)
-- [AI (FSM, Behavior Tree, GOAP, Utility AI)](FAQs/AI.md)
-- [Deferred Lighting](FAQs/DeferredLighting.md)
-- [Pipeline Importers](FAQs/PipelineImporters.md)
-- [Samples](FAQs/Samples.md)
-
+There are various systems documented separately on the [Nez website docs.](http://prime31.github.io/Nez/documentation/setup/installation)
 
 
 Setup
@@ -53,16 +38,16 @@ Setup
 ### Quick version:
 
 - clone or download the Nez repository
-- add the Nez-PCL/Nez.csproj project to your solution and add a reference to it in your main project
-- make your main Game class (Game1.cs in a default project) subclass Nez.Core
+- add the `Nez-PCL/Nez.csproj` project to your solution and add a reference to it in your main project
+- make your main Game class (`Game1.cs` in a default project) subclass `Nez.Core`
 
 
 ### (optional) Pipeline Tool setup for access to the Nez Pipeline importers
 
-- add the Nez.PipelineImporter/Nez.PipelineImporter.csproj project to your solution
-- open the Nez.PipelineImporter references dialog and add a reference to the Nez project
-- build the Nez.PipelineImporter project to generate the DLLs
-- open the Pipeline Tool by double-clicking your Content.mgcb file and add references to PipelineImporter.dll, Ionic.ZLib.dll, Newtonsoft.Json.dll and Nez.dll.
+- add the `Nez.PipelineImporter/Nez.PipelineImporter.csproj` project to your solution
+- open the `Nez.PipelineImporter` references dialog and add a reference to the Nez project
+- build the `Nez.PipelineImporter` project to generate the DLLs
+- open the Pipeline Tool by double-clicking your `Content.mgcb` file and add references to `PipelineImporter.dll`, `Ionic.ZLib.dll`, `Newtonsoft.Json.dll` and `Nez.dll`.
 
 
 All Nez shaders are compiled for OpenGL so be sure to use the DesktopGL template, not DirectX! Nez only supports OpenGL out of the box to keep things compatible across Android/iOS/Mac/Linux/Windows.
@@ -82,7 +67,7 @@ See the [Nez.FNA repo](https://github.com/prime31/Nez.FNA) for details.
 
 Tutorials
 ==========
-[The wiki](https://github.com/prime31/Nez/wiki) contains a few basic tutorials littered with code snippets that should be enough to get you rolling your own games. If you have a suggestion for a new tutorial feel free to open an Issue with the details.
+[The wiki](https://github.com/prime31/Nez/wiki) contains a few basic tutorials littered with code snippets that should be enough to get you rolling your own games. If you have a suggestion for a new tutorial feel free to open an issue with the details.
 
 
 
@@ -113,3 +98,4 @@ Matt Thorson's fantastic [Monocle Engine](https://bitbucket.org/MattThorson/mono
 Dylan Wilson's excellent [MonoGame.Extended](https://github.com/craftworkgames/MonoGame.Extended)
 
 Nathan Sweet's libGDX Scene2D UI [libGDX](https://github.com/libgdx/libgdx). Nez UI is based on libGDX Scene2D which is [Apache licensed](UI_LICENSE).
+
