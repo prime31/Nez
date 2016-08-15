@@ -95,7 +95,7 @@ namespace Nez.UI
 			for( var i = 0; i < children.Count; i++ )
 			{
 				var child = children[i];
-				float width, height;
+				//float width, height;
 				ILayout layout = null;
 
 				if( child is ILayout )
