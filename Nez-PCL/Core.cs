@@ -97,7 +97,7 @@ namespace Nez
 		}
 
 
-		public Core( int width = 1280, int height = 720, bool isFullScreen = false, bool enableEntitySystems = true, string windowTitle = "Nez" )
+		public Core( int width = 1280, int height = 720, bool isFullScreen = false, bool enableEntitySystems = true, string windowTitle = "Nez", string contentDirectory = "Content" )
 		{
 			#if DEBUG
 			_windowTitle = windowTitle;
@@ -118,7 +118,7 @@ namespace Nez
 			Window.ClientSizeChanged += onGraphicsDeviceReset;
 			Window.OrientationChanged += onOrientationChanged;
 
-			Content.RootDirectory = "Content";
+			Content.RootDirectory = contentDirectory;
 			content = new NezGlobalContentManager( Services, Content.RootDirectory );
 			IsMouseVisible = true;
 			IsFixedTimeStep = false;
