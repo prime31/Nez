@@ -493,6 +493,7 @@
     <Compile Include="Utils\Extensions\SoundEffectInstanceExt.cs" />
     <Compile Include="Physics\ColliderTriggerHelper.cs" />
     <Compile Include="ECS\Components\ColorCycler.cs" />
+    <Compile Include="ECS\Components\Renderables\Sprites\PrototypeSprite.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="MonoGame.Framework">

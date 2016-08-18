@@ -277,6 +277,36 @@ namespace Nez
 		}
 
 
+		public void draw(
+			Texture2D texture,
+			Rectangle destinationRectangle,
+			Rectangle? sourceRectangle,
+			Color color,
+			float rotation,
+			SpriteEffects effects,
+			float layerDepth,
+			float skewTopX, float skewBottomX, float skewLeftY, float skewRightY
+		)
+		{
+			checkBegin();
+			pushSprite(
+				texture,
+				sourceRectangle,
+				destinationRectangle.X,
+				destinationRectangle.Y,
+				destinationRectangle.Width,
+				destinationRectangle.Height,
+				color,
+				Vector2.Zero,
+				rotation,
+				layerDepth,
+				(byte)( effects & (SpriteEffects)0x03 ),
+				true,
+				skewTopX, skewBottomX, skewLeftY, skewRightY
+			);
+		}
+
+
 		public void draw( Texture2D texture, Vector2 position, Rectangle? sourceRectangle, Color color )
 		{
 			checkBegin();
@@ -625,8 +655,8 @@ namespace Nez
 
 			// calculate vertices
 			// top-left
-			var cornerX = ( _cornerOffsetX[0] - originX ) * destinationW + skewTopX * destinationW;
-			var cornerY = ( _cornerOffsetY[0] - originY ) * destinationH - skewLeftY * destinationH;
+			var cornerX = ( _cornerOffsetX[0] - originX ) * destinationW + skewTopX;
+			var cornerY = ( _cornerOffsetY[0] - originY ) * destinationH - skewLeftY;
 			_vertexInfo[_numSprites].position0.X = (
 				( rotationMatrix2X * cornerY ) +
 				( rotationMatrix1X * cornerX ) +
@@ -639,8 +669,8 @@ namespace Nez
 			);
 
 			// top-right
-			cornerX = ( _cornerOffsetX[1] - originX ) * destinationW + skewTopX * destinationW;
-			cornerY = ( _cornerOffsetY[1] - originY ) * destinationH - skewRightY * destinationH;
+			cornerX = ( _cornerOffsetX[1] - originX ) * destinationW + skewTopX;
+			cornerY = ( _cornerOffsetY[1] - originY ) * destinationH - skewRightY;
 			_vertexInfo[_numSprites].position1.X = (
 				( rotationMatrix2X * cornerY ) +
 				( rotationMatrix1X * cornerX ) +
@@ -653,8 +683,8 @@ namespace Nez
 			);
 
 			// bottom-left
-			cornerX = ( _cornerOffsetX[2] - originX ) * destinationW + skewBottomX * destinationW;
-			cornerY = ( _cornerOffsetY[2] - originY ) * destinationH - skewLeftY * destinationH;
+			cornerX = ( _cornerOffsetX[2] - originX ) * destinationW + skewBottomX;
+			cornerY = ( _cornerOffsetY[2] - originY ) * destinationH - skewLeftY;
 			_vertexInfo[_numSprites].position2.X = (
 				( rotationMatrix2X * cornerY ) +
 				( rotationMatrix1X * cornerX ) +
@@ -667,8 +697,8 @@ namespace Nez
 			);
 
 			// bottom-right
-			cornerX = ( _cornerOffsetX[3] - originX ) * destinationW + skewBottomX * destinationW;
-			cornerY = ( _cornerOffsetY[3] - originY ) * destinationH - skewRightY * destinationH;
+			cornerX = ( _cornerOffsetX[3] - originX ) * destinationW + skewBottomX;
+			cornerY = ( _cornerOffsetY[3] - originY ) * destinationH - skewRightY;
 			_vertexInfo[_numSprites].position3.X = (
 				( rotationMatrix2X * cornerY ) +
 				( rotationMatrix1X * cornerX ) +
