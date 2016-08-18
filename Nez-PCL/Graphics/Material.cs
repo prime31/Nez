@@ -100,7 +100,10 @@ namespace Nez
 				blendState = new BlendState {
 					ColorSourceBlend = Blend.One,
 					ColorDestinationBlend = Blend.One,
-					ColorBlendFunction = BlendFunction.Min
+					ColorBlendFunction = BlendFunction.Min,
+					AlphaSourceBlend = Blend.One,
+					AlphaDestinationBlend = Blend.One,
+					AlphaBlendFunction = BlendFunction.Min
 				}
 			};
 		}
@@ -112,7 +115,10 @@ namespace Nez
 				blendState = new BlendState {
 					ColorSourceBlend = Blend.One,
 					ColorDestinationBlend = Blend.One,
-					ColorBlendFunction = BlendFunction.Max
+					ColorBlendFunction = BlendFunction.Max,
+					AlphaSourceBlend = Blend.One,
+					AlphaDestinationBlend = Blend.One,
+					AlphaBlendFunction = BlendFunction.Max
 				}
 			};
 		}
@@ -132,12 +138,15 @@ namespace Nez
 
 		public static Material blendMultiply()
 		{
-			// works only for opaque textures
 			return new Material {
 				blendState = new BlendState {
 					ColorSourceBlend = Blend.DestinationColor,
 					ColorDestinationBlend = Blend.Zero,
-					ColorBlendFunction = BlendFunction.Add
+					ColorBlendFunction = BlendFunction.Add,
+					AlphaSourceBlend = Blend.DestinationAlpha,
+					AlphaDestinationBlend = Blend.Zero,
+					AlphaBlendFunction = BlendFunction.Add
+
 				}
 			};
 		}
@@ -197,14 +206,31 @@ namespace Nez
 
 		public static Material blendSubtractive()
 		{
-			return new Material {
-				blendState = new BlendState {
+			return new Material
+			{
+				blendState = new BlendState
+				{
 					ColorSourceBlend = Blend.SourceAlpha,
 					ColorDestinationBlend = Blend.One,
 					ColorBlendFunction = BlendFunction.ReverseSubtract,
 					AlphaSourceBlend = Blend.SourceAlpha,
 					AlphaDestinationBlend = Blend.One,
 					AlphaBlendFunction = BlendFunction.ReverseSubtract
+				}
+			};
+		}
+
+
+		public static Material blendAdditive()
+		{
+			return new Material
+			{
+				blendState = new BlendState
+				{
+					ColorSourceBlend = Blend.SourceAlpha,
+					ColorDestinationBlend = Blend.One,
+					AlphaSourceBlend = Blend.SourceAlpha,
+					AlphaDestinationBlend = Blend.One
 				}
 			};
 		}
