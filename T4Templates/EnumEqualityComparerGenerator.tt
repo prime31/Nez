@@ -1,0 +1,39 @@
+﻿<#@ template language="C#" hostSpecific="true" #>
+<#@ import namespace="System.Collections.Generic" #>
+<# var enumTypes = new string[] { "char", "MacTester.AgentState" }; #>
+using System.Collections.Generic;
+
+
+namespace Nez
+{
+<#
+	// loop through all of our enumTypes and generate a comparer
+	foreach( var enumType in enumTypes )
+	{
+		var classPrefix = char.ToUpper( enumType[0] ) + enumType.Substring( 1 ).Replace( ".", string.Empty );
+		if( enumType.IndexOf( "." ) > 0 )
+		{
+			var enumTypeSansNS = enumType.Substring( enumType.IndexOf( "." ) + 1 );
+			classPrefix = char.ToUpper( enumTypeSansNS[0] ) + enumTypeSansNS.Substring( 1 ).Replace( ".", string.Empty );
+		}
+
+		WriteLine( "\tpublic class {0}Comparer : IEqualityComparer<{1}>", classPrefix, enumType );
+		WriteLine( "\t{" );
+
+		WriteLine( "\t\tstatic public readonly {0}Comparer default{0}Comparer = new {0}Comparer();\n", classPrefix );
+
+		WriteLine( "\t\tpublic bool Equals( {0} x, {0} y )", enumType );
+		WriteLine( "\t\t{" );
+		WriteLine( "\t\t\treturn x == y;" );
+		WriteLine( "\t\t}\n\n" );
+
+		WriteLine( "\t\tpublic int GetHashCode( {0} b )", enumType );
+		WriteLine( "\t\t{" );
+		WriteLine( "\t\t\treturn (int)b;" );
+		WriteLine( "\t\t}" );
+
+		WriteLine( "\t}\n\n" );
+	}
+
+#>
+}
