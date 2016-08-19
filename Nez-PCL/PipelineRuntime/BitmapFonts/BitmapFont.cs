@@ -66,6 +66,8 @@ namespace Nez.BitmapFonts
 
 		class CharComparer : IEqualityComparer<char>
 		{
+			static public readonly CharComparer defaultCharComparer = new CharComparer();
+
 			public bool Equals( char x, char y )
 			{
 				return x == y;
@@ -75,8 +77,6 @@ namespace Nez.BitmapFonts
 			{
 				return ( b | ( b << 16 ) );
 			}
-
-			static public readonly CharComparer defaultCharComparer = new CharComparer();
 		}
 
 

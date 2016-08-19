@@ -1,6 +1,6 @@
 ﻿<#@ template language="C#" hostSpecific="true" #>
 <#@ import namespace="System.Collections.Generic" #>
-<# var enumTypes = new string[] { "char", "MacTester.AgentState" }; #>
+<# var enumTypes = new string[] { "OtherNamespace.OtherEnum", "Namespace.Enum" }; #>
 using System.Collections.Generic;
 
 

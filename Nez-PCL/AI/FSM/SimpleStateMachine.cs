@@ -35,6 +35,10 @@ namespace Nez.AI.FSM
 			}
 			set
 			{
+				// dont change to the current state
+				if( _stateCache.Comparer.Equals( _currentState, value ) )
+					return;
+				
 				// swap previous/current
 				previousState = _currentState;
 				_currentState = value;
@@ -75,7 +79,7 @@ namespace Nez.AI.FSM
 		}
 
 
-		void IUpdatable.update()
+		public void update()
 		{
 			elapsedTimeInState += Time.deltaTime;
 
