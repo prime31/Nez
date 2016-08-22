@@ -87,9 +87,13 @@ namespace Nez.Tiled
 		/// <summary>
 		/// the TiledTileLayer used for collision checks
 		/// </summary>
-		public TiledTileLayer collisionLayer;
+		public readonly TiledTileLayer collisionLayer;
 
-		TiledMap _tiledMap;
+		/// <summary>
+		/// the TiledMap that contains collisionLayer
+		/// </summary>
+		public readonly TiledMap tiledMap;
+
 		BoxCollider _collider;
 		float _movementRemainderX, _movementRemainderY;
 		TiledTile _lastGroundTile;
@@ -103,7 +107,7 @@ namespace Nez.Tiled
 		public TiledMapMover( TiledTileLayer collisionLayer )
 		{
 			this.collisionLayer = collisionLayer;
-			_tiledMap = collisionLayer.tiledMap;
+			tiledMap = collisionLayer.tiledMap;
 			Assert.isNotNull( collisionLayer, nameof( collisionLayer ) + " is required" );
 		}
 
@@ -298,7 +302,7 @@ namespace Nez.Tiled
 					return false;
 
 				// our response should be the top of the platform
-				collisionResponse = _tiledMap.tileToWorldPositionX( tile.y );
+				collisionResponse = tiledMap.tileToWorldPositionX( tile.y );
 				return _collider.bounds.bottom <= collisionResponse;
 			}
 
@@ -313,7 +317,7 @@ namespace Nez.Tiled
 				var leadingPositionPreMovement = _collider.bounds.getSide( moveDir );
 
 				// we need the tile x position that is on the opposite side of our move direction. Moving right we want the left edge
-				var tileX = moveDir == Edge.Right ? _tiledMap.tileToWorldPositionX( tile.x ) : _tiledMap.tileToWorldPositionX( tile.x + 1 );
+				var tileX = moveDir == Edge.Right ? tiledMap.tileToWorldPositionX( tile.x ) : tiledMap.tileToWorldPositionX( tile.x + 1 );
 
 				// using the edge before movement, we see if we were colliding before moving.
 				var wasCollidingBeforeMove = moveDir == Edge.Right ? leadingPositionPreMovement > tileX : leadingPositionPreMovement < tileX;
@@ -328,16 +332,16 @@ namespace Nez.Tiled
 				switch( edgeToTest )
 				{
 					case Edge.Top:
-						collisionResponse = _tiledMap.tileToWorldPositionY( tile.y );
+						collisionResponse = tiledMap.tileToWorldPositionY( tile.y );
 						break;
 					case Edge.Bottom:
-						collisionResponse = _tiledMap.tileToWorldPositionY( tile.y + 1 );
+						collisionResponse = tiledMap.tileToWorldPositionY( tile.y + 1 );
 						break;
 					case Edge.Left:
-						collisionResponse = _tiledMap.tileToWorldPositionX( tile.x );
+						collisionResponse = tiledMap.tileToWorldPositionX( tile.x );
 						break;
 					case Edge.Right:
-						collisionResponse = _tiledMap.tileToWorldPositionX( tile.x + 1 );
+						collisionResponse = tiledMap.tileToWorldPositionX( tile.x + 1 );
 						break;
 				}
 
@@ -346,8 +350,8 @@ namespace Nez.Tiled
 
 			if( shouldTestSlopes )
 			{
-				var tileWorldX = _tiledMap.tileToWorldPositionX( tile.x );
-				var tileWorldY = _tiledMap.tileToWorldPositionX( tile.y );
+				var tileWorldX = tiledMap.tileToWorldPositionX( tile.x );
+				var tileWorldY = tiledMap.tileToWorldPositionX( tile.y );
 				var slope = tile.getSlope();
 				var offset = tile.getSlopeOffset();
 
@@ -429,8 +433,8 @@ namespace Nez.Tiled
 		int worldToTilePosition( float worldPosition, Axis axis )
 		{
 			if( axis == Axis.Y )
-				return _tiledMap.worldToTilePositionY( worldPosition );
-			return _tiledMap.worldToTilePositionX( worldPosition );
+				return tiledMap.worldToTilePositionY( worldPosition );
+			return tiledMap.worldToTilePositionX( worldPosition );
 		}
 
 
