@@ -38,6 +38,17 @@ namespace Nez
 
 
 		/// <summary>
+		/// returns the last item in the list. List should have at least one item.
+		/// </summary>
+		/// <param name="list">List.</param>
+		/// <typeparam name="T">The 1st type parameter.</typeparam>
+		public static T lastItem<T>( this IList<T> list )
+		{
+			return list[list.Count - 1];
+		}
+
+
+		/// <summary>
 		/// gets a random item from the list. Does not empty check the list!
 		/// </summary>
 		/// <returns>The item.</returns>

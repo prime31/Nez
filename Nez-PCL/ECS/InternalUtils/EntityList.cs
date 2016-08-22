@@ -35,6 +35,9 @@ namespace Nez
 		Dictionary<int,List<Entity>> _entityDict = new Dictionary<int, List<Entity>>();
 		List<int> _unsortedTags = new List<int>();
 
+		// used in updateLists to double buffer so that the original lists can be modified elsewhere
+		List<Entity> _tempEntityList = new List<Entity>();
+
 
 		public EntityList( Scene scene )
 		{
@@ -143,9 +146,10 @@ namespace Nez
 			// handle removals
 			if( _entitiesToRemove.Count > 0 )
 			{
-				for( var i = 0; i < _entitiesToRemove.Count; i++ )
+				Utils.swap( ref _entitiesToRemove, ref _tempEntityList );
+				for( var i = 0; i < _tempEntityList.Count; i++ )
 				{
-					var entity = _entitiesToRemove[i];
+					var entity = _tempEntityList[i];
 
 					// handle the tagList
 					removeFromTagList( entity );
@@ -158,15 +162,17 @@ namespace Nez
 					if( Core.entitySystemsEnabled )
 						scene.entityProcessors.onEntityRemoved( entity );
 				}
-				_entitiesToRemove.Clear();
+
+				_tempEntityList.Clear();
 			}
 
 			// handle additions
 			if( _entitiesToAdd.Count > 0 )
 			{
-				for( var i = 0; i < _entitiesToAdd.Count; i++ )
+				Utils.swap( ref _entitiesToAdd, ref _tempEntityList );
+				for( var i = 0; i < _tempEntityList.Count; i++ )
 				{
-					var entity = _entitiesToAdd[i];
+					var entity = _tempEntityList[i];
 
 					_entities.add( entity );
 					entity.scene = scene;
@@ -179,10 +185,10 @@ namespace Nez
 				}
 
 				// now that all entities are added to the scene, we loop through again and call onAddedToScene
-				for( var i = 0; i < _entitiesToAdd.Count; i++ )
-					_entitiesToAdd[i].onAddedToScene();
+				for( var i = 0; i < _tempEntityList.Count; i++ )
+					_tempEntityList[i].onAddedToScene();
 
-				_entitiesToAdd.Clear();
+				_tempEntityList.Clear();
 				_isEntityListUnsorted = true;
 			}
 

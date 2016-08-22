@@ -25,21 +25,7 @@ namespace Nez
 
 
 		/// <summary>
-		/// swaps the two objects
-		/// </summary>
-		/// <param name="first">First.</param>
-		/// <param name="second">Second.</param>
-		/// <typeparam name="T">The 1st type parameter.</typeparam>
-		public static void swap<T>( T first, T second )
-		{
-			T temp = first;
-			first = second;
-			second = temp;
-		}
-
-
-		/// <summary>
-		/// swaps the two value types
+		/// swaps the two object types
 		/// </summary>
 		/// <param name="first">First.</param>
 		/// <param name="second">Second.</param>
