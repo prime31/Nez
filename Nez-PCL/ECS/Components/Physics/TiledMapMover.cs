@@ -39,6 +39,10 @@ namespace Nez.Tiled
 
 			public bool hasCollision { get { return below || right || left || above; } }
 
+			// state used by the TiledMapMover
+			internal float _movementRemainderX, _movementRemainderY;
+			internal TiledTile _lastGroundTile;
+
 
 			public void reset()
 			{
@@ -47,7 +51,11 @@ namespace Nez.Tiled
 			}
 
 
-			public void reset( Vector2 motion )
+			/// <summary>
+			/// resets collision state and does sub-pixel movement calculations
+			/// </summary>
+			/// <param name="motion">Motion.</param>
+			public void reset( ref Vector2 motion )
 			{
 				if( motion.X == 0 )
 					right = left = false;
@@ -57,6 +65,25 @@ namespace Nez.Tiled
 				
 				becameGroundedThisFrame = isGroundedOnOneWayPlatform = false;
 				slopeAngle = 0f;
+
+				// deal with subpixel movement, storing off any non-integar remainder for the next frame
+				_movementRemainderX += motion.X;
+				var motionX = Mathf.truncateToInt( _movementRemainderX );
+				_movementRemainderX -= motionX;
+				motion.X = motionX;
+
+				_movementRemainderY += motion.Y;
+				var motionY = Mathf.truncateToInt( _movementRemainderY );
+				_movementRemainderY -= motionY;
+
+				// due to subpixel movement we might end up with 0 gravity when we really want there to be at least 1 pixel so slopes can work
+				if( below && motionY == 0 && _movementRemainderY > 0 )
+				{
+					motionY = 1;
+					_movementRemainderY = 0;
+				}
+
+				motion.Y = motionY;
 			}
 
 
@@ -67,12 +94,6 @@ namespace Nez.Tiled
 			}
 
 		}
-
-
-		/// <summary>
-		/// current collision state of the Entity
-		/// </summary>
-		public CollisionState collisionState = new CollisionState();
 
 		/// <summary>
 		/// the inset on the horizontal plane that the BoxCollider will be shrunk by when moving vertically
@@ -94,14 +115,15 @@ namespace Nez.Tiled
 		/// </summary>
 		public readonly TiledMap tiledMap;
 
-		BoxCollider _collider;
-		float _movementRemainderX, _movementRemainderY;
-		TiledTile _lastGroundTile;
-
 		/// <summary>
 		/// temporary storage for all the tiles that intersect the bounds being checked
 		/// </summary>
 		List<TiledTile> _collidingTiles = new List<TiledTile>();
+
+		/// <summary>
+		/// temporary storage to avoid having to pass it around
+		/// </summary>
+		Rectangle _boxColliderBounds;
 
 
 		public TiledMapMover( TiledTileLayer collisionLayer )
@@ -112,46 +134,35 @@ namespace Nez.Tiled
 		}
 
 
-		public override void onAddedToEntity()
-		{
-			_collider = entity.getCollider<BoxCollider>();
-			Assert.isNotNull( _collider, "Entity must have a BoxCollider" );
-		}
-
-
 		/// <summary>
 		/// moves the Entity taking into account the tiled map
 		/// </summary>
 		/// <param name="motion">Motion.</param>
-		public void move( Vector2 motion )
+		/// <param name="boxCollider">Box collider.</param>
+		public void move( Vector2 motion, BoxCollider boxCollider, CollisionState collisionState )
 		{
+			// test for collisions then move the Entity
+			testCollisions( ref motion, boxCollider.bounds, collisionState );
+
+			boxCollider.unregisterColliderWithPhysicsSystem();
+			boxCollider.entity.transform.position += motion;
+			boxCollider.registerColliderWithPhysicsSystem();
+		}
+
+
+		public void testCollisions( ref Vector2 motion, Rectangle boxColliderBounds, CollisionState collisionState )
+		{
+			_boxColliderBounds = boxColliderBounds;
+
 			// save off our current grounded state which we will use for wasGroundedLastFrame and becameGroundedThisFrame
 			collisionState.wasGroundedLastFrame = collisionState.below;
 
 			// reset our collisions state
-			collisionState.reset( motion );
+			collisionState.reset( ref motion );
 
-			// deal with subpixel movement, storing off any non-integar remainder for the next frame
-			_movementRemainderX += motion.X;
-			var motionX = Mathf.truncateToInt( _movementRemainderX );
-			_movementRemainderX -= motionX;
-			motion.X = motionX;
-
-			_movementRemainderY += motion.Y;
-			var motionY = Mathf.truncateToInt( _movementRemainderY );
-			_movementRemainderY -= motionY;
-
-			// due to subpixel movement we might end up with 0 gravity when we really want there to be at least 1 pixel so slopes can work
-			if( collisionState.below && motionY == 0 && _movementRemainderY > 0 )
-			{
-				motionY = 1;
-				_movementRemainderY = 0;
-			}
-
-			motion.Y = motionY;
-
-			// store off the bounds so we can move it around without affecting the actual Transform position
-			var colliderBounds = _collider.bounds;
+			// reset rounded motion for us while dealing with subpixel movement so fetch the rounded values to use for our actual detection
+			var motionX = (int)motion.X;
+			var motionY = (int)motion.Y;
 
 			// first, check movement in the horizontal dir
 			if( motionX != 0 )
@@ -160,13 +171,13 @@ namespace Nez.Tiled
 				var sweptBounds = collisionRectForSide( direction, motionX );
 
 				int collisionResponse;
-				if( testMapCollision( sweptBounds, direction, out collisionResponse ) )
+				if( testMapCollision( sweptBounds, direction, collisionState, out collisionResponse ) )
 				{
 					// react to collision. get the distance between our leading edge and what we collided with
-					motion.X = collisionResponse - colliderBounds.getSide( direction );
+					motion.X = collisionResponse - boxColliderBounds.getSide( direction );
 					collisionState.left = direction == Edge.Left;
 					collisionState.right = direction == Edge.Right;
-					_movementRemainderX = 0;
+					collisionState._movementRemainderX = 0;
 				}
 				else
 				{
@@ -182,19 +193,22 @@ namespace Nez.Tiled
 				sweptBounds.X += (int)motion.X;
 
 				int collisionResponse;
-				if( testMapCollision( sweptBounds, direction, out collisionResponse ) )
+				if( testMapCollision( sweptBounds, direction, collisionState, out collisionResponse ) )
 				{
 					// react to collision. get the distance between our leading edge and what we collided with
-					motion.Y = collisionResponse - colliderBounds.getSide( direction );
+					motion.Y = collisionResponse - boxColliderBounds.getSide( direction );
 					collisionState.above = direction == Edge.Top;
 					collisionState.below = direction == Edge.Bottom;
-					_movementRemainderY = 0;
+					collisionState._movementRemainderY = 0;
+
+					if( collisionState.below && collisionState._lastGroundTile != null && collisionState._lastGroundTile.isSlope() )
+						collisionState.slopeAngle = MathHelper.ToDegrees( (float)Math.Atan( collisionState._lastGroundTile.getSlope() ) );
 				}
 				else
 				{
 					collisionState.above = false;
 					collisionState.below = false;
-					_lastGroundTile = null;
+					collisionState._lastGroundTile = null;
 				}
 
 
@@ -207,10 +221,10 @@ namespace Nez.Tiled
 					sweptBounds.X += (int)motion.X;
 					sweptBounds.Y += (int)motion.Y;
 
-					if( testMapCollision( sweptBounds, direction, out collisionResponse ) )
+					if( testMapCollision( sweptBounds, direction, collisionState, out collisionResponse ) )
 					{
 						// react to collision. get the distance between our leading edge and what we collided with
-						motion.Y = collisionResponse - colliderBounds.getSide( direction );
+						motion.Y = collisionResponse - boxColliderBounds.getSide( direction );
 						// if we collide here this is an overlap of a slope above us. this small bump down will prevent hitches when hitting
 						// our head on a slope that connects to a solid tile. It puts us below the slope when the normal response would put us
 						// above it
@@ -220,18 +234,13 @@ namespace Nez.Tiled
 				}
 			}
 
-			// move then update our state
-			_collider.unregisterColliderWithPhysicsSystem();
-			transform.position += motion;
-			_collider.registerColliderWithPhysicsSystem();
-
 			// set our becameGrounded state based on the previous and current collision state
 			if( !collisionState.wasGroundedLastFrame && collisionState.below )
 				collisionState.becameGroundedThisFrame = true;
 		}
 
 
-		bool testMapCollision( Rectangle collisionRect, Edge direction, out int collisionResponse )
+		bool testMapCollision( Rectangle collisionRect, Edge direction, CollisionState collisionState, out int collisionResponse )
 		{
 			collisionResponse = 0;
 			var side = direction.oppositeEdge();
@@ -247,7 +256,7 @@ namespace Nez.Tiled
 
 				// disregard horizontal collisions if the last tile we were grounded on was a slope. Our y movement will push us up on the slope.
 				// this is not a fantastic solution
-				if( direction.isHorizontal() && _lastGroundTile != null && _lastGroundTile.isSlope() && _collidingTiles[i].isSlope() )
+				if( direction.isHorizontal() && collisionState._lastGroundTile != null && collisionState._lastGroundTile.isSlope() && _collidingTiles[i].isSlope() )
 					return false;
 				
 				if( testTileCollision( _collidingTiles[i], side, perpindicularPosition, leadingPosition, shouldTestSlopes, out collisionResponse ) )
@@ -255,22 +264,22 @@ namespace Nez.Tiled
 					// store off our last ground tile if we collided below
 					if( direction == Edge.Bottom )
 					{
-						_lastGroundTile = _collidingTiles[i];
-						collisionState.isGroundedOnOneWayPlatform = _lastGroundTile.isOneWayPlatform();
+						collisionState._lastGroundTile = _collidingTiles[i];
+						collisionState.isGroundedOnOneWayPlatform = collisionState._lastGroundTile.isOneWayPlatform();
 					}
 					
 					return true;
 				}
 
 				// special case for sloped ground tiles
-				if( _lastGroundTile != null && direction == Edge.Bottom )
+				if( collisionState._lastGroundTile != null && direction == Edge.Bottom )
 				{
 					// if grounded on a slope and intersecting a slope or if grounded on a wall and intersecting a tall slope we go sticky.
 					// tall slope here means one where the the slopeTopLeft/Right is 0, i.e. it connects to a wall
-					if( ( _lastGroundTile.isSlope() && _collidingTiles[i].isSlope() ) || ( !_lastGroundTile.isSlope() && _collidingTiles[i].isSlope() /* should be tall slope check */ ) )
+					if( ( collisionState._lastGroundTile.isSlope() && _collidingTiles[i].isSlope() ) || ( !collisionState._lastGroundTile.isSlope() && _collidingTiles[i].isSlope() /* should be tall slope check */ ) )
 					{
 						// store off our last ground tile if we collided below
-						_lastGroundTile = _collidingTiles[i];
+						collisionState._lastGroundTile = _collidingTiles[i];
 						return true;
 					}
 				}
@@ -303,7 +312,7 @@ namespace Nez.Tiled
 
 				// our response should be the top of the platform
 				collisionResponse = tiledMap.tileToWorldPositionX( tile.y );
-				return _collider.bounds.bottom <= collisionResponse;
+				return _boxColliderBounds.Bottom <= collisionResponse;
 			}
 
 			var forceSlopedTileCheckAsWall = false;
@@ -314,7 +323,7 @@ namespace Nez.Tiled
 			if( edgeToTest.isHorizontal() && tile.isSlope() && tile.getNearestEdge( leadingPosition ) == tile.getHighestSlopeEdge() )
 			{
 				var moveDir = edgeToTest.oppositeEdge();
-				var leadingPositionPreMovement = _collider.bounds.getSide( moveDir );
+				var leadingPositionPreMovement = _boxColliderBounds.getSide( moveDir );
 
 				// we need the tile x position that is on the opposite side of our move direction. Moving right we want the left edge
 				var tileX = moveDir == Edge.Right ? tiledMap.tileToWorldPositionX( tile.x ) : tiledMap.tileToWorldPositionX( tile.x + 1 );
@@ -364,11 +373,7 @@ namespace Nez.Tiled
 				// HACK: It isn't totally perfect but it does the job
 				if( isColliding && edgeToTest == Edge.Bottom && leadingPosition <= collisionResponse )
 					isColliding = false;
-
-				// if we are grounded on a slope store off the slopeAngle. Remember, edgeToTest is the opposite edge of our movement direction.
-				if( isColliding && edgeToTest == Edge.Top )
-					collisionState.slopeAngle = MathHelper.ToDegrees( (float)Math.Atan( slope ) );
-
+				
 				return isColliding;
 			}
 
@@ -446,14 +451,14 @@ namespace Nez.Tiled
 		/// <param name="motion">Motion.</param>
 		Rectangle collisionRectForSide( Edge side, int motion )
 		{
-			var bounds = (Rectangle)_collider.bounds;
+			Rectangle bounds;
 
 			// for horizontal collision checks we use just a sliver for our bounds. Vertical gets the half rect so that it can properly push
 			// up when intersecting a slope which is ignored when moving horizontally.
 			if( side.isHorizontal() )
-				bounds = bounds.getRectEdgePortion( side );
+				bounds = _boxColliderBounds.getRectEdgePortion( side );
 			else
-				bounds = bounds.getHalfRect( side );
+				bounds = _boxColliderBounds.getHalfRect( side );
 
 			// we contract horizontally for vertical movement and vertically for horizontal movement
 			if( side.isVertical() )
