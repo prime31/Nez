@@ -84,7 +84,7 @@ namespace Nez.AI.Pathfinding
 		/// <param name="goal">Goal.</param>
 		public List<Point> search( Point start, Point goal )
 		{
-			return AStarPathfinder.search( this, start, goal );
+			return WeightedPathfinder.search( this, start, goal );
 		}
 
 
@@ -108,12 +108,6 @@ namespace Nez.AI.Pathfinding
 		int IWeightedGraph<Point>.cost( Point from, Point to )
 		{
 			return weightedNodes.Contains( to ) ? weightedNodeWeight : defaultWeight;
-		}
-
-
-		int IWeightedGraph<Point>.heuristic( Point node, Point goal )
-		{
-			return Math.Abs( node.X - goal.X ) + Math.Abs( node.Y - goal.Y );
 		}
 
 		#endregion

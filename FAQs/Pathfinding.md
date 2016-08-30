@@ -1,10 +1,10 @@
 Pathfinding
 ==========
-Nez provides two pathfinding algorithms out of the box: Breadth First Search and Astar. Both are well suited for not only grid based graphs but also graphs of any type. Which algorithm should you use? That depends on your specific graph and needs. The next sections will go into a bit more detail on each of the algorithms so that you can intelligently decide which to use.
+Nez provides three pathfinding algorithms out of the box: Breadth First Search, Dijkstra (weighted) and Astar (weighted with heuristic). All three are well suited for not only grid based graphs but also graphs of any type. Which algorithm should you use? That depends on your specific graph and needs. The next sections will go into a bit more detail on each of the algorithms so that you can intelligently decide which to use.
 
-It should be noted that neither search algorithm requires the nodes searched to be locations. Pathfinding doesn't care about what data it is finding a path for. All it needs to know is the node and that node's neighbors (edges). The nodes can be anything at all: paths in a dialog tree, actions for AI (Astar is used by the Goal Oriented Action Planner) or even strings (see below for an example). Edges can be traversable one way or both ways.
+It should be noted that none of the search algorithm require the nodes searched to be locations. Pathfinding doesn't care about what data it is finding a path for. All it needs to know is the node and that node's neighbors (edges). The nodes can be anything at all: paths in a dialog tree, actions for AI (Astar is used by the Goal Oriented Action Planner) or even strings (see below for an example). Edges can be traversable one way or both ways.
 
-The Graph interfaces for Breadth First Search and Astar are both fully generic so you get to decide what data your nodes need. In the simplest case the nodes can be a `Point` (see `UnweightedGridGraph` and `WeightedGridGraph` for examples). If your nodes need a bunch of precomputed data you can use any class that you want for them. This allows you to precompute (offline or at map load time) any data that you might need for the actual path search.
+The Graph interfaces for Breadth First Search, Dijkstra and Astar are all fully generic so you get to decide what data your nodes need. In the simplest case the nodes can be a `Point` (see `UnweightedGridGraph`, `WeightedGridGraph` and `AstarGridGraph` for examples). If your nodes need a bunch of precomputed data you can use any class that you want for them. This allows you to precompute (offline or at map load time) any data that you might need for the actual path search.
 
 
 
@@ -32,18 +32,42 @@ var path = BreadthFirstPathfinder.search( graph, "c", "e" );
 ```
 
 
+## Dijkstra (aka Weighted)
+Dijkstra expands on Breadth First Search by introducing a cost for each edge that the algorithm takes into account when pathfinding. This lends you more control over the pathfinding process. You can add edges with higher costs (moving along a road vs moving through a mud bog for example) to provide a hint that the algorithm should choose the lowest cost path. The algorithm will ask you for a cost to get from one node to another and you can choose to return any value that makes sense. It will then use the information to find not a only a path to the goal but the lowest cost path.
 
-## Astar
-Astar is probably the most well known of all pathfinding algorithms. It differs from Breadth First Search in that it introduces a cost and heuristic for each edge that the algorithm takes into account when pathfinding. This lets you add some interesting elements such as edges with higher costs (moving along a road vs moving through a mud bog for example.) The algorithm will ask you for a cost to get from one node to another and you can choose to return any value that makes sense. It will then use the information to find not a only a path to the goal but the lowest cost path.
+To implement Dijkstra you have to provide a graph that implements the interface `IWeightedGraph<T>`. The `WeightedGridGraph` is a concrete implementation that can be used directly or as a starting point for grid based graphs. It works out of the box for TiledMaps.
 
-To implement Astar you have to provide a graph that implements the interface `IWeightedGraph<T>`. The `WeightedGridGraph` is a concrete implementation that can be used directly or as a starting point for grid based graphs. It works out of the box for TiledMaps.
-
-Below is an example of using the `WeightedGridGraph` with a TiledMap layer. A graph will be generated that uses empty space in the TiledMap as traversable nodes and any space with a tile is considered a wall. Some weighted nodes are added to take advantage of Astar's specialty in dealing with nodes of non-uniform weight.
+Below is an example of using the `WeightedGridGraph` with a TiledMap layer. A graph will be generated that uses empty space in the TiledMap as traversable nodes and any space with a tile is considered a wall. Some weighted nodes are added to take advantage of Dijkstra's specialty in dealing with nodes of non-uniform weight.
 
 
 ```csharp
 
 var graph = new WeightedGridGraph( tiledMapCollisionLayer );
+
+// add some weighted nodes
+graph.weightedNodes.Add( new Point( 3, 3 ) );
+graph.weightedNodes.Add( new Point( 3, 4 ) );
+graph.weightedNodes.Add( new Point( 4, 3 ) );
+graph.weightedNodes.Add( new Point( 4, 4 ) );
+
+// calculate the path
+var path = graph.search( new Point( 3, 4 ), new Point( 15, 17 ) );
+```
+
+
+
+
+## Astar
+Astar is probably the most well known of all pathfinding algorithms. It differs from Dijkstra in that it introduces a heuristic for each edge that the algorithm takes into account when pathfinding. This lets you add some interesting elements such as edges with higher costs (moving along a road vs moving through a mud bog for example.) The algorithm will ask you for a cost to get from one node to another and you can choose to return any value that makes sense. It will then use the information to find not a only a path to the goal but the lowest cost path.
+
+To implement Astar you have to provide a graph that implements the interface `IAstarGraph<T>`. The `AstarGridGraph` is a concrete implementation that can be used directly or as a starting point for grid based graphs. It works out of the box for TiledMaps.
+
+Below is an example of using the `AstarGridGraph` with a TiledMap layer. A graph will be generated that uses empty space in the TiledMap as traversable nodes and any space with a tile is considered a wall. Some weighted nodes are added to take advantage of Astar's specialty in dealing with nodes of non-uniform weight.
+
+
+```csharp
+
+var graph = new AstarGridGraph( tiledMapCollisionLayer );
 
 // add some weighted nodes
 graph.weightedNodes.Add( new Point( 3, 3 ) );

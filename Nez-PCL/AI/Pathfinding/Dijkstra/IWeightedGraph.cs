@@ -1,11 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 
 namespace Nez.AI.Pathfinding
 {
 	/// <summary>
-	/// interface for a graph that can be fed to the AstarPathfinder.search method
+	/// interface for a graph that can be fed to the DijkstraPathfinder.search method
 	/// </summary>
 	public interface IWeightedGraph<T>
 	{
@@ -22,13 +21,6 @@ namespace Nez.AI.Pathfinding
 		/// <param name="from">From.</param>
 		/// <param name="to">To.</param>
 		int cost( T from, T to );
-
-		/// <summary>
-		/// calculates the heuristic (estimate) to get from 'node' to 'goal'. See WeightedGridGraph for the common Manhatten method.
-		/// </summary>
-		/// <param name="node">Node.</param>
-		/// <param name="goal">Goal.</param>
-		int heuristic( T node, T goal );
 	}
 }
 

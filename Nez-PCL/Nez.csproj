@@ -89,6 +89,7 @@
     <Folder Include="Content\" />
     <Folder Include="Utils\Audio\" />
     <Folder Include="Graphics\Materials\" />
+    <Folder Include="AI\Pathfinding\Dijkstra\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Debug\Debug.cs" />
@@ -426,9 +427,9 @@
     <Compile Include="Utils\Collections\Deque.cs" />
     <Compile Include="Utils\Collections\PriorityQueueNode.cs" />
     <Compile Include="Utils\Collections\PriorityQueue.cs" />
-    <Compile Include="AI\Pathfinding\AStar\IWeightedGraph.cs" />
+    <Compile Include="AI\Pathfinding\AStar\IAstarGraph.cs" />
     <Compile Include="AI\Pathfinding\BreadthFirst\BreadthFirstPathfinder.cs" />
-    <Compile Include="AI\Pathfinding\AStar\WeightedGridGraph.cs" />
+    <Compile Include="AI\Pathfinding\AStar\AstarGridGraph.cs" />
     <Compile Include="AI\Pathfinding\BreadthFirst\IUnweightedGraph.cs" />
     <Compile Include="AI\Pathfinding\AStar\AStarPathfinder.cs" />
     <Compile Include="AI\Pathfinding\BreadthFirst\UnweightedGraph.cs" />
@@ -494,6 +495,9 @@
     <Compile Include="Physics\ColliderTriggerHelper.cs" />
     <Compile Include="ECS\Components\ColorCycler.cs" />
     <Compile Include="ECS\Components\Renderables\Sprites\PrototypeSprite.cs" />
+    <Compile Include="AI\Pathfinding\Dijkstra\WeightedPathfinder.cs" />
+    <Compile Include="AI\Pathfinding\Dijkstra\IWeightedGraph.cs" />
+    <Compile Include="AI\Pathfinding\Dijkstra\WeightedGridGraph.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="MonoGame.Framework">

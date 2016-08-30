@@ -6,6 +6,11 @@ namespace Nez
 {
 	public static class ListExt
 	{
+		/// <summary>
+		/// shuffles the list in place
+		/// </summary>
+		/// <param name="list">List.</param>
+		/// <typeparam name="T">The 1st type parameter.</typeparam>
 		public static void shuffle<T>( this IList<T> list )
 		{
 			var n = list.Count;
