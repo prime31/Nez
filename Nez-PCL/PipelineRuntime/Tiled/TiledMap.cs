@@ -284,9 +284,9 @@ namespace Nez.Tiled
 		/// </summary>
 		/// <returns>The to tile position.</returns>
 		/// <param name="pos">Position.</param>
-		public Point worldToTilePosition( Vector2 pos )
+		public Point worldToTilePosition( Vector2 pos, bool clampToTilemapBounds = true )
 		{
-			return new Point( worldToTilePositionX( pos.X ), worldToTilePositionY( pos.Y ) );
+			return new Point( worldToTilePositionX( pos.X, clampToTilemapBounds ), worldToTilePositionY( pos.Y, clampToTilemapBounds ) );
 		}
 
 
@@ -295,9 +295,11 @@ namespace Nez.Tiled
 		/// </summary>
 		/// <returns>The to tile position x.</returns>
 		/// <param name="x">The x coordinate.</param>
-		public int worldToTilePositionX( float x )
+		public int worldToTilePositionX( float x, bool clampToTilemapBounds = true )
 		{
 			var tileX = Mathf.fastFloorToInt( x / tileWidth );
+			if( !clampToTilemapBounds )
+				return tileX;
 			return Mathf.clamp( tileX, 0, width - 1 );
 		}
 
@@ -307,9 +309,11 @@ namespace Nez.Tiled
 		/// </summary>
 		/// <returns>The to tile position y.</returns>
 		/// <param name="y">The y coordinate.</param>
-		public int worldToTilePositionY( float y )
+		public int worldToTilePositionY( float y, bool clampToTilemapBounds = true )
 		{
 			var tileY = Mathf.fastFloorToInt( y / tileHeight );
+			if( !clampToTilemapBounds )
+				return tileY;
 			return Mathf.clamp( tileY, 0, height - 1 );
 		}
 
