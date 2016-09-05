@@ -1,12 +1,12 @@
-﻿using System;
-using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework;
-
-
-namespace Nez
+﻿namespace Nez
 {
 	public class DefaultRenderer : Renderer
 	{
+		/// <summary>
+		/// renders all renderLayers
+		/// </summary>
+		/// <param name="renderOrder">Render order.</param>
+		/// <param name="camera">Camera.</param>
 		public DefaultRenderer( int renderOrder = 0, Camera camera = null ) : base( renderOrder, camera )
 		{}
 

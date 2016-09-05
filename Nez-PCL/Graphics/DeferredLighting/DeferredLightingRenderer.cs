@@ -80,6 +80,7 @@ namespace Nez.DeferredLighting
 
 			_lightLayer = lightLayer;
 			Array.Sort( renderLayers );
+			Array.Reverse( renderLayers );
 			this.renderLayers = renderLayers;
 
 			_lightEffect = new DeferredLightEffect();
@@ -338,6 +339,9 @@ namespace Nez.DeferredLighting
 			diffuseRT.Dispose();
 			normalRT.Dispose();
 			lightRT.Dispose();
+
+			if( _nullNormalMapTexture != null )
+				_nullNormalMapTexture.Dispose();
 		}
 
 	}
