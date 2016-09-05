@@ -91,7 +91,13 @@ Nez UI supports a skin system similar to [libGDX skins](https://github.com/libgd
 	LabelStyle:
 	{
 		// fonts should be the same path you would use to load it via the content system
-		default: { font: 'nez/NezDefaultBMFont', fontColor: 'white' }
+		default: { font: 'nez/NezDefaultBMFont', fontColor: 'white' },
+		tooltip: { font: 'nez/NezDefaultBMFont', fontColor: 'blue' },
+	},
+	TextTooltipStyle:
+	{
+		// note that labelStyle referes the the 'tooltip' LabelStyle defined above
+		default: { labelStyle: 'tooltip', background: 'gray' }
 	}
 }
 ```

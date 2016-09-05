@@ -154,7 +154,7 @@ namespace Nez.UI
 
 			var textTooltipStyle = new TextTooltipStyle
 			{
-				label = new LabelStyle( listBoxBackgroundColor ),
+				labelStyle = new LabelStyle( listBoxBackgroundColor ),
 				background = new PrimitiveDrawable( checkboxOn, 4, 2 )
 			};
 			skin.add( "default", textTooltipStyle );
@@ -170,7 +170,7 @@ namespace Nez.UI
 		/// <summary>
 		/// creates a UISkin from a UISkinConfig
 		/// </summary>
-		/// <param name="config">Config.</param>
+		/// <param name="configName">the path of the UISkinConfig xnb</param>
 		/// <param name="contentManager">Content manager.</param>
 		public Skin( string configName, NezContentManager contentManager )
 		{
@@ -221,6 +221,18 @@ namespace Nez.UI
 								else if( name.ToLower().Contains( "font" ) )
 								{
 									ReflectionUtils.getFieldInfo( style, name ).SetValue( style, contentManager.Load<BitmapFont>( identifier ) );
+								}
+								else if( name.ToLower().EndsWith( "style" ) )
+								{
+									// we have a style reference. first we need to find out what type of style name refers to from the field.
+									// then we need to fetch the "get" method and properly type it.
+									var styleField = ReflectionUtils.getFieldInfo( style, name );
+									var getStyleMethod = ReflectionUtils.getMethodInfo( this, "get", new Type[] { typeof( string ) } );
+									getStyleMethod = getStyleMethod.MakeGenericMethod( styleField.FieldType );
+
+									// now we look up the style and finally set it
+									var theStyle = getStyleMethod.Invoke( this, new object[] { identifier } );
+									styleField.SetValue( style, theStyle );
 								}
 								else
 								{
@@ -538,7 +550,7 @@ namespace Nez.UI
 
 
 		/// <summary>
-		/// Returns a tinted copy of a drawable found in the skin via {@link #getDrawable(String)}. Note that the new drawable is NOT
+		/// Returns a tinted copy of a drawable found in the skin via getDrawable. Note that the new drawable is NOT
 		/// added to the skin! Tinting is only supported on SubtextureDrawables and NinePatchDrawables.
 		/// </summary>
 		/// <returns>The tinted drawable.</returns>

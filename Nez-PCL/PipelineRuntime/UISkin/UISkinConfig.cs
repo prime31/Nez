@@ -25,13 +25,17 @@ namespace Nez.UI
 		/// gets all the style class names included in the config object
 		/// </summary>
 		/// <returns>The styles.</returns>
-		/// <param name="styleType">Style type.</param>
 		public List<string> getStyleClasses()
 		{
 			return new List<string>( Keys );
 		}
 
 
+		/// <summary>
+		/// gets all the style names in the config object for the given styleType
+		/// </summary>
+		/// <returns>The style names.</returns>
+		/// <param name="styleType">Style type.</param>
 		public List<string> getStyleNames( string styleType )
 		{
 			return new List<string>( this[styleType].Keys );

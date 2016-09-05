@@ -8,7 +8,7 @@
 
 		public TextTooltip( string text, Element targetElement, TextTooltipStyle style ) : base( null, targetElement )
 		{
-			var label = new Label( text, style.label );
+			var label = new Label( text, style.labelStyle );
 			_container.setElement( label );
 			setStyle( style );
 		}
@@ -16,7 +16,7 @@
 
 		public void setStyle( TextTooltipStyle style )
 		{
-			_container.getElement<Label>().setStyle( style.label );
+			_container.getElement<Label>().setStyle( style.labelStyle );
 			_container.setBackground( style.background );
 		}
 	}
@@ -24,7 +24,7 @@
 
 	public class TextTooltipStyle
 	{
-		public LabelStyle label;
+		public LabelStyle labelStyle;
 		/** Optional. */
 		public IDrawable background;
 
@@ -35,7 +35,7 @@
 
 		public TextTooltipStyle( LabelStyle label, IDrawable background )
 		{
-			this.label = label;
+			this.labelStyle = label;
 			this.background = background;
 		}
 	}

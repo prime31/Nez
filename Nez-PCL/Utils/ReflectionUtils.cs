@@ -128,15 +128,26 @@ namespace Nez
 		}
 
 
-		public static MethodInfo getMethodInfo( Type type, string methodName )
+		public static MethodInfo getMethodInfo( System.Object targetObject, string methodName, Type[] parameters )
+		{
+			return getMethodInfo( targetObject.GetType(), methodName, parameters );
+		}
+
+
+		public static MethodInfo getMethodInfo( Type type, string methodName, Type[] parameters = null )
 		{
 			#if NETFX_CORE
+			if( parameters != null )
+				return type.GetRuntimeMethod( methodName, parameters );
+
 			foreach( var method in type.GetRuntimeMethods() )
 				if( method.Name == methodName )
 					return method;
 			return null;
 			#else
-			return type.GetMethod( methodName, BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public );
+			if( parameters == null )
+				return type.GetMethod( methodName, BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public );
+			return type.GetMethod( methodName, BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public, Type.DefaultBinder, parameters, null );
 			#endif
 		}
 
