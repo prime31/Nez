@@ -146,7 +146,7 @@ namespace Nez.UI
 			{
 				var point = stage.getMousePosition();
 				point = screenToLocalCoordinates( point );
-				if( point.X < 0 || point.X > width || point.Y < -20 || point.Y > height + 20 )
+				if( point.X < 0 || point.X > width || point.Y < -height || point.Y > 0 )
 				{
 					// we are in draw here so we cant modify the hierarchy until the draw is complete
 					Core.schedule( 0f, t => hide() );
