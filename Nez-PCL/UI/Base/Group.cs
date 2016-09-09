@@ -188,12 +188,11 @@ namespace Nez.UI
 					if( !children[i].isVisible() )
 						continue;
 					
-					float cx = children[i].x, cy = children[i].y;
-					children[i].x = cx + offsetX;
-					children[i].y = cy + offsetY;
+		                        children[i].x += offsetX;
+		                        children[i].y += offsetY;
 					children[i].draw( graphics, parentAlpha );
-					children[i].x = cx;
-					children[i].y = cy;
+					children[i].x -= offsetX;
+					children[i].y -= offsetY;
 				}
 				x = offsetX;
 				y = offsetY;
@@ -246,12 +245,11 @@ namespace Nez.UI
 					if( !children[i].getDebug() && !( children[i] is Group ) )
 						continue;
 
-					float cx = children[i].x, cy = children[i].y;
-					children[i].x = cx + offsetX;
-					children[i].y = cy + offsetY;
+					children[i].x += offsetX;
+					children[i].y += offsetY;
 					children[i].debugRender( graphics );
-					children[i].x = cx;
-					children[i].y = cy;
+					children[i].x -= offsetX;
+					children[i].y -= offsetY;
 				}
 				x = offsetX;
 				y = offsetY;
