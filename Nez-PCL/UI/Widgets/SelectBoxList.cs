@@ -43,8 +43,6 @@ namespace Nez.UI
 			if( listBox.isTouchable() )
 				return;
 
-			//stage.removeCaptureListener( hideListener );
-			//stage.addCaptureListener( hideListener );
 			stage.addElement( this );
 
 			_screenPosition = _selectBox.localToStageCoordinates( Vector2.Zero );
@@ -93,14 +91,9 @@ namespace Nez.UI
 			updateVisualScroll();
 
 			_previousScrollFocus = null;
-			//var element = stage.getScrollFocus();
-			//if( element != null && !element.isDescendantOf( this ) )
-			//	previousScrollFocus = element;
-			//stage.setScrollFocus( this );
 
 			listBox.getSelection().set( _selectBox.getSelected() );
 			listBox.setTouchable( Touchable.Enabled );
-			//clearActions();
 			_selectBox.onShow( this, below );
 		}
 
@@ -109,20 +102,15 @@ namespace Nez.UI
 		{
 			if( !listBox.isTouchable() || !hasParent() )
 				return;
+			
 			listBox.setTouchable( Touchable.Disabled );
 
 			if( stage != null )
 			{
-				//stage.removeCaptureListener( hideListener );
 				if( _previousScrollFocus != null && _previousScrollFocus.getStage() == null )
 					_previousScrollFocus = null;
-				
-				//var element = stage.getScrollFocus();
-				//if( element == null || isAscendantOf( element ) )
-				//	stage.setScrollFocus( previousScrollFocus );
 			}
 
-			//clearActions();
 			_selectBox.onHide( this );
 		}
 
@@ -131,7 +119,7 @@ namespace Nez.UI
 		{
 			var temp = _selectBox.localToStageCoordinates( Vector2.Zero );
 			if( temp != _screenPosition )
-				hide();
+				Core.schedule( 0f, t => hide() );
 			
 			base.draw( graphics, parentAlpha );
 		}
@@ -147,10 +135,7 @@ namespace Nez.UI
 				var point = stage.getMousePosition();
 				point = screenToLocalCoordinates( point );
 				if( point.X < 0 || point.X > width || point.Y < -height || point.Y > 0 )
-				{
-					// we are in draw here so we cant modify the hierarchy until the draw is complete
 					Core.schedule( 0f, t => hide() );
-				}
 			}
 			
 			base.update();
