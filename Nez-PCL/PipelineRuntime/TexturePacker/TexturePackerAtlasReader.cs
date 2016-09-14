@@ -1,7 +1,7 @@
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Nez.Pipeline.Content;
-
+using System.Collections.Generic;
 
 namespace Nez.TextureAtlases
 {
@@ -22,11 +22,16 @@ namespace Nez.TextureAtlases
 					x: reader.ReadInt32(),
 					y: reader.ReadInt32(),
 					width: reader.ReadInt32(),
-					height: reader.ReadInt32()
+					height: reader.ReadInt32(),
+                    pivotX: reader.ReadSingle(),
+                    pivotY: reader.ReadSingle()
 				);
-			}
 
-			return atlas;
+            }
+            
+            atlas.spriteAnimationDetails = reader.ReadObject< Dictionary<string,List<int>> >();
+
+            return atlas;
 		}
 	}
 }

@@ -28,8 +28,14 @@ namespace Nez.TexturePackerImporter
 				writer.Write( region.frame.y );
 				writer.Write( region.frame.width );
 				writer.Write( region.frame.height );
+
+                //no use to write as double, since SubTexture.center holds floats
+                writer.Write( (float)region.pivotPoint.x );
+                writer.Write( (float)region.pivotPoint.y );
 			}
-		}
+
+            writer.WriteObject( data.spriteAnimationDetails );
+        }
 
 
 		public override string GetRuntimeType( TargetPlatform targetPlatform )

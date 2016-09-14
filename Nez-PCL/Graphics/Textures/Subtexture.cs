@@ -35,24 +35,36 @@ namespace Nez.Textures
 			center = new Vector2( sourceRect.Width * 0.5f, sourceRect.Height * 0.5f );
 		}
 
+        public Subtexture( Texture2D texture, Rectangle sourceRect, Vector2 pivot )
+        {
+            this.texture2D = texture;
+            this.sourceRect = sourceRect;
+            center = new Vector2( sourceRect.Width * pivot.X, sourceRect.Height * pivot.Y );
+        }
 
-		public Subtexture( Texture2D texture ) : this( texture, new Rectangle( 0, 0, texture.Width, texture.Height ) )
+
+
+        public Subtexture( Texture2D texture ) : this( texture, new Rectangle( 0, 0, texture.Width, texture.Height ) )
 		{}
 
 
 		public Subtexture( Texture2D texture, int x, int y, int width, int height ) : this( texture, new Rectangle( x, y, width, height ) )
 		{}
 
+        public Subtexture( Texture2D texture, int x, int y, int width, int height, float pivotX, float pivotY ) : this( texture, new Rectangle( x, y, width, height ), new Vector2(pivotX, pivotY) )
+        {
+        }
 
-		/// <summary>
-		/// convenience constructor that casts floats to ints for the sourceRect
-		/// </summary>
-		/// <param name="texture">Texture.</param>
-		/// <param name="x">The x coordinate.</param>
-		/// <param name="y">The y coordinate.</param>
-		/// <param name="width">Width.</param>
-		/// <param name="height">Height.</param>
-		public Subtexture( Texture2D texture, float x, float y, float width, float height ) : this( texture, (int)x, (int)y, (int)width, (int)height )
+
+        /// <summary>
+        /// convenience constructor that casts floats to ints for the sourceRect
+        /// </summary>
+        /// <param name="texture">Texture.</param>
+        /// <param name="x">The x coordinate.</param>
+        /// <param name="y">The y coordinate.</param>
+        /// <param name="width">Width.</param>
+        /// <param name="height">Height.</param>
+        public Subtexture( Texture2D texture, float x, float y, float width, float height ) : this( texture, (int)x, (int)y, (int)width, (int)height )
 		{}
 
 
