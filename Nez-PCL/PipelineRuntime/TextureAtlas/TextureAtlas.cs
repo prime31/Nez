@@ -3,8 +3,6 @@ using Nez.Sprites;
 using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Content;
 
 
 namespace Nez.TextureAtlases
@@ -31,6 +29,7 @@ namespace Nez.TextureAtlases
 		readonly Dictionary<string,Point> _spriteAnimationDetails;
 
 		readonly int _animationFPS = 15;
+		Dictionary<string,SpriteAnimation> _spriteAnimations;
 
 
 		public TextureAtlas( string[] regionNames, Subtexture[] subtextures, Dictionary<string,Point> spriteAnimationDetails, int animationFPS = 15 )
@@ -75,6 +74,12 @@ namespace Nez.TextureAtlases
 		/// <param name="animationName">Animation name.</param>
 		public SpriteAnimation getSpriteAnimation( string animationName )
 		{
+			// create the cache Dictionary if necessary. Return the animation direction if already cached.
+			if( _spriteAnimations == null )
+				_spriteAnimations = new Dictionary<string,SpriteAnimation>();
+			else if( _spriteAnimations.ContainsKey( animationName ) )
+				return _spriteAnimations[animationName];
+			
 			Point point;
 			if( _spriteAnimationDetails.TryGetValue( animationName, out point ) )
 			{
@@ -84,6 +89,8 @@ namespace Nez.TextureAtlases
 
 				for( var i = point.X; i <= point.Y; i++ )
 					animation.addFrame( subtextures[i] );
+
+				_spriteAnimations[animationName] = animation;
 
 				return animation;
 			}

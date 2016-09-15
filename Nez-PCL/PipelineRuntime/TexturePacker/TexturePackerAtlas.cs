@@ -15,13 +15,16 @@ namespace Nez.TextureAtlases
 		/// <summary>
 		/// maps actual image names to the index in the subtextures list
 		/// </summary>
-		readonly Dictionary<string, int> _subtextureMap;
+		readonly Dictionary<string,int> _subtextureMap;
 
 		/// <summary>
 		/// stores a map of the name of the sprite animation (derived from texturepacker filename metadata) to an array. 
 		/// each entry in the list refers to index of the corresponding subtexture
 		/// </summary>
-		public Dictionary<string, List<int>> spriteAnimationDetails;
+		public Dictionary<string,List<int>> spriteAnimationDetails;
+
+		readonly int _animationFPS = 15;
+		Dictionary<string,SpriteAnimation> _spriteAnimations;
 
 
 		public TexturePackerAtlas( Texture2D texture )
@@ -79,16 +82,24 @@ namespace Nez.TextureAtlases
 		/// <param name="animationName">Animation name.</param>
 		public SpriteAnimation getSpriteAnimation( string animationName )
 		{
+			// create the cache Dictionary if necessary. Return the animation direction if already cached.
+			if( _spriteAnimations == null )
+				_spriteAnimations = new Dictionary<string,SpriteAnimation>();
+			else if( _spriteAnimations.ContainsKey( animationName ) )
+				return _spriteAnimations[animationName];
+
 			if( spriteAnimationDetails.ContainsKey( animationName ) )
 			{
 				var frames = spriteAnimationDetails[animationName];
 				var animation = new SpriteAnimation
 				{
-					fps = 10
+					fps = _animationFPS
 				};
 
 				for( var i = 0; i < frames.Count; i++ )
 					animation.addFrame( subtextures[frames[i]] );
+
+				_spriteAnimations[animationName] = animation;
 
 				return animation;
 
