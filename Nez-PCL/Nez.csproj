@@ -497,6 +497,7 @@
     <Compile Include="AI\Pathfinding\Dijkstra\WeightedPathfinder.cs" />
     <Compile Include="AI\Pathfinding\Dijkstra\IWeightedGraph.cs" />
     <Compile Include="AI\Pathfinding\Dijkstra\WeightedGridGraph.cs" />
+    <Compile Include="ECS\Components\Renderables\Model3D.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="MonoGame.Framework">

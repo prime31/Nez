@@ -8,6 +8,26 @@ namespace Nez
 	public class Camera : Component
 	{
 		#region Fields and Properties
+		
+		#region 3D Camera Fields
+		
+		/// <summary>
+		/// z-position of the 3D camera projections. Affects the fov greatly. Lower values make the objects appear very long in the z-direction.
+		/// </summary>
+		public float positionZ3D = 2000f;
+
+		/// <summary>
+		/// near clip plane of the 3D camera projection
+		/// </summary>
+		public float nearClipPlane3D = 0.0001f;
+
+		/// <summary>
+		/// far clip plane of the 3D camera projection
+		/// </summary>
+		public float farClipPlane3D = 5000f;
+		
+		#endregion
+
 
 		/// <summary>
 		/// shortcut to entity.transform.position
@@ -160,7 +180,7 @@ namespace Nez
 		}
 
 		/// <summary>
-		/// the Cameras projection matrix
+		/// the 2D Cameras projection matrix
 		/// </summary>
 		/// <value>The projection matrix.</value>
 		public Matrix projectionMatrix
@@ -181,6 +201,38 @@ namespace Nez
 		/// </summary>
 		/// <value>The view projection matrix.</value>
 		public Matrix viewProjectionMatrix { get { return transformMatrix * projectionMatrix; } }
+
+		#region 3D Camera Matrixes
+		
+		/// <summary>
+		/// returns a perspective projection for this camera for use when rendering 3D objects
+		/// </summary>
+		/// <value>The projection matrix3 d.</value>
+		public Matrix projectionMatrix3D
+		{
+			get
+			{
+				var targetHeight = ( Core.graphicsDevice.Viewport.Height / _zoom );
+				var fov = (float)Math.Atan( targetHeight / ( 2f * positionZ3D ) ) * 2f;
+				return Matrix.CreatePerspectiveFieldOfView( fov, Core.graphicsDevice.Viewport.AspectRatio, nearClipPlane3D, farClipPlane3D );
+			}
+		}
+
+		/// <summary>
+		/// returns a view Matrix via CreateLookAt for this camera for use when rendering 3D objects
+		/// </summary>
+		/// <value>The view matrix3 d.</value>
+		public Matrix viewMatrix3D
+		{
+			get
+			{
+				// we need to always invert the y-values to match the way Batcher/SpriteBatch does things
+				var position3D = new Vector3( position.X, -position.Y, positionZ3D );
+				return Matrix.CreateLookAt( position3D, position3D + Vector3.Forward, Vector3.Up );
+			}
+		}
+		
+		#endregion
 
 		internal Vector2 origin
 		{
