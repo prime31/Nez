@@ -44,14 +44,6 @@ namespace Nez.Textures
 		public Subtexture( Texture2D texture, Rectangle sourceRect ) : this( texture, sourceRect, sourceRect.getHalfSize() )
 		{}
 
-        public Subtexture( Texture2D texture, Rectangle sourceRect, Vector2 pivot )
-        {
-            this.texture2D = texture;
-            this.sourceRect = sourceRect;
-            center = new Vector2( sourceRect.Width * pivot.X, sourceRect.Height * pivot.Y );
-        }
-
-
 
         public Subtexture( Texture2D texture ) : this( texture, new Rectangle( 0, 0, texture.Width, texture.Height ) )
 		{}
@@ -59,10 +51,6 @@ namespace Nez.Textures
 
 		public Subtexture( Texture2D texture, int x, int y, int width, int height ) : this( texture, new Rectangle( x, y, width, height ) )
 		{}
-
-        public Subtexture( Texture2D texture, int x, int y, int width, int height, float pivotX, float pivotY ) : this( texture, new Rectangle( x, y, width, height ), new Vector2(pivotX, pivotY) )
-        {
-        }
 
 
         /// <summary>
