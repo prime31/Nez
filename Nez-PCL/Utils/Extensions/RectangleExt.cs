@@ -434,6 +434,7 @@ namespace Nez
 			return result;
 		}
 
+
 		/// <summary>
 		/// returns true if the boxes are colliding
 		/// moveX and moveY will return the movement that b1 must move to avoid the collision
@@ -611,6 +612,16 @@ namespace Nez
 			return new Vector2( rect.X + rect.Width / 2, rect.Y + rect.Height / 2 );
 		}
 
+
+		/// <summary>
+		/// gets the half size of the rect
+		/// </summary>
+		/// <returns>The half size.</returns>
+		/// <param name="rect">Rect.</param>
+		public static Vector2 getHalfSize( this Rectangle rect )
+		{
+			return new Vector2( rect.Width * 0.5f, rect.Height * 0.5f );
+		}
 
 		/// <summary>
 		/// gets the max point of the rectangle, the bottom-right corner

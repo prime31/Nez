@@ -1,5 +1,4 @@
 // based on the FNA SpriteBatch implementation by Ethan Lee: https://github.com/FNA-XNA/FNA
-
 using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
@@ -8,6 +7,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
 using Nez.BitmapFonts;
 using System.Runtime.CompilerServices;
+
 
 namespace Nez
 {
@@ -59,7 +59,6 @@ namespace Nez
 
 		#region static variables and constants
 
-		// As defined by the HiDef profile spec
 		const int MAX_SPRITES = 2048;
 		const int MAX_VERTICES = MAX_SPRITES * 4;
 		const int MAX_INDICES = MAX_SPRITES * 6;

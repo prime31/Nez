@@ -68,7 +68,7 @@ namespace Nez.Sprites
 		/// Sprite needs a Subtexture at constructor time so the first frame of the passed in animation will be used for this constructor
 		/// </summary>
 		/// <param name="subtexture">Subtexture.</param>
-		public Sprite( TEnum animationKey, SpriteAnimation animation ) : this( null, animation.frames[0].subtexture )
+		public Sprite( TEnum animationKey, SpriteAnimation animation ) : this( null, animation.frames[0] )
 		{
 			addAnimation( animationKey, animation );
 		}
@@ -134,11 +134,10 @@ namespace Nez.Sprites
 						case AnimationCompletionBehavior.RemainOnFinalFrame:
 							return;
 						case AnimationCompletionBehavior.RevertToFirstFrame:
-							subtexture = _currentAnimation.frames[0].subtexture;
-							origin = _currentAnimation.frames[0].origin;
+							setSubtexture( _currentAnimation.frames[0] );
 							return;
 						case AnimationCompletionBehavior.HideSprite:
-							subtexture = null;
+							_subtexture = null;
 							_currentAnimation = null;
 							return;
 					}
@@ -176,8 +175,7 @@ namespace Nez.Sprites
 			if( desiredFrame != currentFrame )
 			{
 				currentFrame = desiredFrame;
-				subtexture = _currentAnimation.frames[currentFrame].subtexture;
-				origin = _currentAnimation.frames[currentFrame].origin;
+				setSubtexture( _currentAnimation.frames[currentFrame] );
 				handleFrameChanged();
 
 				// ping-pong needs special care. we don't want to double the frame time when wrapping so we man-handle the totalElapsedTime
@@ -197,8 +195,8 @@ namespace Nez.Sprites
 		public Sprite<TEnum> addAnimation( TEnum key, SpriteAnimation animation )
 		{
 			// if we have no subtexture use the first frame we find
-			if( subtexture == null && animation.frames.Count > 0 )
-				subtexture = animation.frames[0].subtexture;
+			if( _subtexture == null && animation.frames.Count > 0 )
+				setSubtexture( animation.frames[0] );
 			_animations[key] = animation;
 
 			return this;
@@ -231,8 +229,7 @@ namespace Nez.Sprites
 			isPlaying = true;
 			_isReversed = false;
 			currentFrame = startFrame;
-			subtexture = _currentAnimation.frames[currentFrame].subtexture;
-			origin = _currentAnimation.frames[currentFrame].origin;
+			setSubtexture( _currentAnimation.frames[currentFrame] );
 
 			_totalElapsedTime = (float)startFrame * _currentAnimation.secondsPerFrame;
 			return animation;

@@ -1,5 +1,4 @@
-﻿using System;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System.Collections.Generic;
 
@@ -26,14 +25,24 @@ namespace Nez.Textures
 		/// </summary>
 		/// <value>The center.</value>
 		public readonly Vector2 center;
-		
 
-		public Subtexture( Texture2D texture, Rectangle sourceRect )
+		/// <summary>
+		/// the origin that a RenderableComponent should use when using this Subtexture. Defaults to the center.
+		/// </summary>
+		public Vector2 origin;
+
+
+		public Subtexture( Texture2D texture, Rectangle sourceRect, Vector2 origin )
 		{
-			this.texture2D = texture;
+			texture2D = texture;
 			this.sourceRect = sourceRect;
 			center = new Vector2( sourceRect.Width * 0.5f, sourceRect.Height * 0.5f );
+			this.origin = origin;
 		}
+		
+
+		public Subtexture( Texture2D texture, Rectangle sourceRect ) : this( texture, sourceRect, sourceRect.getHalfSize() )
+		{}
 
         public Subtexture( Texture2D texture, Rectangle sourceRect, Vector2 pivot )
         {
@@ -101,6 +110,18 @@ namespace Nez.Textures
 			destArray[6] = new Rectangle( renderRect.X, bottomY, marginLeft, marginBottom ); // bottom-left
 			destArray[7] = new Rectangle( leftX, bottomY, stretchedCenterWidth, marginBottom ); // bottom-center
 			destArray[8] = new Rectangle( rightX, bottomY, marginRight, marginBottom ); // bottom-right
+		}
+
+
+		/// <summary>
+		/// clones the Subtexture
+		/// </summary>
+		public Subtexture clone()
+		{
+			return new Subtexture( texture2D, sourceRect )
+			{
+				origin = origin
+			};
 		}
 
 

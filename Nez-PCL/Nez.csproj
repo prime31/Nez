@@ -179,7 +179,6 @@
     <Compile Include="PipelineRuntime\Overlap2D\O2DScene.cs" />
     <Compile Include="PipelineRuntime\Overlap2D\O2DSceneReader.cs" />
     <Compile Include="Utils\NezContentManager.cs" />
-    <Compile Include="ECS\Components\Renderables\Sprites\SpriteAnimationFrame.cs" />
     <Compile Include="ECS\Components\Physics\PolygonCollider.cs" />
     <Compile Include="ECS\Components\CameraShake.cs" />
     <Compile Include="Utils\Screen.cs" />
@@ -498,6 +497,7 @@
     <Compile Include="AI\Pathfinding\Dijkstra\WeightedPathfinder.cs" />
     <Compile Include="AI\Pathfinding\Dijkstra\IWeightedGraph.cs" />
     <Compile Include="AI\Pathfinding\Dijkstra\WeightedGridGraph.cs" />
+    <Compile Include="ECS\Components\Renderables\Model3D.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="MonoGame.Framework">

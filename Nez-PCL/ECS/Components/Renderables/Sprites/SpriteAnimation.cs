@@ -48,7 +48,7 @@ namespace Nez.Sprites
 		public float delay = 0f;
 		public float totalDuration;
 		public AnimationCompletionBehavior completionBehavior;
-		public List<SpriteAnimationFrame> frames = new List<SpriteAnimationFrame>();
+		public List<Subtexture> frames = new List<Subtexture>();
 
 		// calculated values used by SpriteT
 		internal float secondsPerFrame;
@@ -138,34 +138,18 @@ namespace Nez.Sprites
 		/// <summary>
 		/// adds a frame to this animation
 		/// </summary>
-		/// <param name="frame">Frame.</param>
-		public SpriteAnimation addFrame( SpriteAnimationFrame frame )
-		{
-			frames.Add( frame );
-			return this;
-		}
-
-
-		/// <summary>
-		/// adds a frame to this animation with an origin at subtexture.center
-		/// </summary>
 		/// <param name="subtexture">Subtexture.</param>
 		public SpriteAnimation addFrame( Subtexture subtexture )
 		{
-			addFrame( new SpriteAnimationFrame( subtexture ) );
+			frames.Add( subtexture );
 			return this;
 		}
 
 
-		/// <summary>
-		/// adds a frame to this animation with the specified subtexture and origin
-		/// </summary>
-		/// <returns>The frame.</returns>
-		/// <param name="subtexture">Subtexture.</param>
-		/// <param name="origin">Origin.</param>
+		[System.Obsolete( "Deprecated. origin is now a property of Subtexture so use the other variant of addFrame." )]
 		public SpriteAnimation addFrame( Subtexture subtexture, Vector2 origin )
 		{
-			addFrame( new SpriteAnimationFrame( subtexture, origin ) );
+			addFrame( subtexture );
 			return this;
 		}
 
