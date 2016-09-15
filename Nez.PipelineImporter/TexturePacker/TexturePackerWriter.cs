@@ -1,5 +1,4 @@
-﻿using System.Diagnostics;
-using System.IO;
+﻿using System.IO;
 using Microsoft.Xna.Framework.Content.Pipeline;
 using Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler;
 
@@ -11,9 +10,7 @@ namespace Nez.TexturePackerImporter
 	{
 		protected override void Write( ContentWriter writer, TexturePackerFile data )
 		{
-			var metadata = data.metadata;
-
-			var assetName = Path.GetFileNameWithoutExtension( metadata.image );
+			var assetName = Path.GetFileNameWithoutExtension( data.metadata.image );
 
 			writer.Write( assetName );
 			writer.Write( data.regions.Count );
@@ -28,7 +25,13 @@ namespace Nez.TexturePackerImporter
 				writer.Write( region.frame.y );
 				writer.Write( region.frame.width );
 				writer.Write( region.frame.height );
+
+				// no use to write as double, since Subtexture.center holds floats
+				writer.Write( (float)region.pivotPoint.x );
+				writer.Write( (float)region.pivotPoint.y );
 			}
+
+			writer.WriteObject( data.spriteAnimationDetails );
 		}
 
 
