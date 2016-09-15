@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Nez.Pipeline.Content;
 using System.Collections.Generic;
 
+
 namespace Nez.TextureAtlases
 {
 	public class TexturePackerAtlasReader : ContentTypeReader<TexturePackerAtlas>
@@ -23,15 +24,15 @@ namespace Nez.TextureAtlases
 					y: reader.ReadInt32(),
 					width: reader.ReadInt32(),
 					height: reader.ReadInt32(),
-                    pivotX: reader.ReadSingle(),
-                    pivotY: reader.ReadSingle()
+					pivotX: reader.ReadSingle(),
+					pivotY: reader.ReadSingle()
 				);
 
-            }
-            
-            atlas.spriteAnimationDetails = reader.ReadObject< Dictionary<string,List<int>> >();
+			}
 
-            return atlas;
+			atlas.spriteAnimationDetails = reader.ReadObject<Dictionary<string,List<int>>>();
+
+			return atlas;
 		}
 	}
 }
