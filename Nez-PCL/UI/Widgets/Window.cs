@@ -227,6 +227,7 @@ namespace Nez.UI
 				x = parentWidth - width;
 		}
 
+
 		public override void draw( Graphics graphics, float parentAlpha )
 		{
 			if( style.stageBackground != null )
@@ -282,6 +283,7 @@ namespace Nez.UI
 			return hit;
 		}
 
+
 		protected override void positionChanged()
 		{
 			base.positionChanged();
@@ -289,12 +291,14 @@ namespace Nez.UI
 			keepWithinStage();
 		}
 
+
 		protected override void sizeChanged()
 		{
 			base.sizeChanged();
 
 			keepWithinStage();
 		}
+
 
 		public bool isMovable()
 		{

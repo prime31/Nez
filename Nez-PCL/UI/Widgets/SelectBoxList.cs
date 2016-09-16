@@ -1,8 +1,7 @@
-﻿
-using System;
-using System.Collections.Generic;
+﻿using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
+
 
 namespace Nez.UI
 {
@@ -14,6 +13,7 @@ namespace Nez.UI
 		SelectBox<T> _selectBox;
 		Element _previousScrollFocus;
 		Vector2 _screenPosition;
+		bool _isListBelowSelectBox;
 
 
 		public SelectBoxList( SelectBox<T> selectBox ) : base( null, selectBox.getStyle().scrollStyle )
@@ -59,12 +59,12 @@ namespace Nez.UI
 
 			float heightAbove = _screenPosition.Y;
 			float heightBelow = Screen.height /*camera.viewportHeight */ - _screenPosition.Y - _selectBox.getHeight();
-			var below = true;
+			_isListBelowSelectBox = true;
 			if( height > heightBelow )
 			{
 				if( heightAbove > heightBelow )
 				{
-					below = false;
+					_isListBelowSelectBox = false;
 					height = Math.Min( height, heightAbove );
 				}
 				else
@@ -73,7 +73,7 @@ namespace Nez.UI
 				}
 			}
 
-			if( !below )
+			if( !_isListBelowSelectBox )
 				setY( _screenPosition.Y - height );
 			else
 				setY( _screenPosition.Y + _selectBox.getHeight() );
@@ -94,7 +94,7 @@ namespace Nez.UI
 
 			listBox.getSelection().set( _selectBox.getSelected() );
 			listBox.setTouchable( Touchable.Enabled );
-			_selectBox.onShow( this, below );
+			_selectBox.onShow( this, _isListBelowSelectBox );
 		}
 
 
@@ -119,7 +119,7 @@ namespace Nez.UI
 		{
 			var temp = _selectBox.localToStageCoordinates( Vector2.Zero );
 			if( temp != _screenPosition )
-				Core.schedule( 0f, t => hide() );
+				Core.schedule( 0f, false, this, t => ((SelectBoxList<T>)t.context).hide() );
 			
 			base.draw( graphics, parentAlpha );
 		}
@@ -128,14 +128,27 @@ namespace Nez.UI
 		protected override void update()
 		{
 			if( Input.isKeyPressed( Keys.Escape ) )
-				Core.schedule( 0f, t => hide() );
+			{
+				Core.schedule( 0f, false, this, t => ( (SelectBoxList<T>)t.context ).hide() );
+				return;
+			}
 
 			if( Input.leftMouseButtonPressed )
 			{
 				var point = stage.getMousePosition();
 				point = screenToLocalCoordinates( point );
-				if( point.X < 0 || point.X > width || point.Y < -height || point.Y > 0 )
-					Core.schedule( 0f, t => hide() );
+
+				float yMin = 0, yMax = height;
+
+				// we need to include the list and the select box for our click checker. if the list is above the select box we expand the
+				// height to include it. If the list is below we check for positions up to -_selectBox.height
+				if( _isListBelowSelectBox )
+					yMin -= _selectBox.height;
+				else
+					yMax += _selectBox.height;
+				
+				if( point.X < 0 || point.X > width || point.Y > yMax || point.Y < yMin )
+					Core.schedule( 0f, false, this, t => ( (SelectBoxList<T>)t.context ).hide() );
 			}
 			
 			base.update();
