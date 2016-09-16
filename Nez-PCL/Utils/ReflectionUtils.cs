@@ -188,7 +188,7 @@ namespace Nez
 			if( propInfo == null )
 				return default(T);
 
-			return createDelegate<T>( targetObject, propInfo.SetMethod );
+			return createDelegate<T>( targetObject, propInfo.GetMethod );
 		}
 
 	}
