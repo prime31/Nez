@@ -1,6 +1,4 @@
-﻿using System;
-using Microsoft.Xna.Framework.Graphics;
-using Nez.Textures;
+﻿using Microsoft.Xna.Framework.Graphics;
 
 
 namespace Nez
@@ -17,8 +15,10 @@ namespace Nez
 		public new T effect;
 
 
-		public PostProcessor( int executionOrder ) : base( executionOrder )
-		{}
+		public PostProcessor( int executionOrder, T effect = null ) : base( executionOrder, effect )
+		{
+			this.effect = effect;
+		}
 
 
 		/// <summary>

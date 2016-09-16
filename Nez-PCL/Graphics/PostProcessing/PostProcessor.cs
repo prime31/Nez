@@ -1,7 +1,6 @@
 ﻿using System;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
-using Nez.Textures;
 
 
 namespace Nez
@@ -73,6 +72,9 @@ namespace Nez
 		/// this is the meat method here. The source passed in contains the full scene with any previous PostProcessors
 		/// rendering. Render it into the destination RenderTarget. The drawFullScreenQuad methods are there to make
 		/// the process even easier. The default implementation renders source into destination with effect.
+		/// 
+		/// Note that destination might have a previous render! If your PostProcessor Effect is discarding you should clear
+		/// the destination before writing to it!
 		/// </summary>
 		/// <param name="source">Source.</param>
 		/// <param name="destination">Destination.</param>
