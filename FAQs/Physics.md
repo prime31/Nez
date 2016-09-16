@@ -59,7 +59,7 @@ if( entity.collider.collidesWith( someOtherCollider, deltaMovement, out collisio
 We can take the above example a step further using the previously mentioned `Physics.boxcastBroadphase` method, or more specifically a version of it that excludes ourself from the query. That method will give us all the colliders in the Scene that are in our vicinity which we can then use to do our actual collision checks on.
 
 ```cs
-// fetch anything that we might overlap with at our position excluding ourself. We don't care out ourself here obviously.
+// fetch anything that we might overlap with at our position excluding ourself. We don't care about ourself here obviously.
 var neighborColliders = Physics.boxcastBroadphaseExcludingSelf( entity.collider.bounds );
 
 // loop through and check each Collider for an overlap
