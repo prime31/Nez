@@ -90,6 +90,7 @@
     <Folder Include="Utils\Audio\" />
     <Folder Include="Graphics\Materials\" />
     <Folder Include="AI\Pathfinding\Dijkstra\" />
+    <Folder Include="ECS\Components\Renderables\3D\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Debug\Debug.cs" />
@@ -497,8 +498,14 @@
     <Compile Include="AI\Pathfinding\Dijkstra\WeightedPathfinder.cs" />
     <Compile Include="AI\Pathfinding\Dijkstra\IWeightedGraph.cs" />
     <Compile Include="AI\Pathfinding\Dijkstra\WeightedGridGraph.cs" />
-    <Compile Include="ECS\Components\Renderables\Model3D.cs" />
     <Compile Include="Graphics\Effects\DissolveEffect.cs" />
+    <Compile Include="ECS\Components\Renderables\3D\Model3D.cs" />
+    <Compile Include="ECS\Components\Renderables\3D\Renderable3D.cs" />
+    <Compile Include="ECS\Components\Renderables\3D\Cube3D.cs" />
+    <Compile Include="ECS\Components\Renderables\3D\GeometricPrimitive3D.cs" />
+    <Compile Include="ECS\Components\Renderables\3D\Sphere3D.cs" />
+    <Compile Include="ECS\Components\Renderables\3D\Torus3D.cs" />
+    <Compile Include="ECS\Components\Renderables\3D\VertexPositionColorNormal.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="MonoGame.Framework">
