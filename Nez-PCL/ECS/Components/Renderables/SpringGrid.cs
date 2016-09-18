@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
@@ -153,7 +152,7 @@ namespace Nez
 			gridSize.Location -= spacing.ToPoint();
 			gridSize.Width += (int)spacing.X;
 			gridSize.Height += (int)spacing.Y;
-			
+
 			var numColumns = (int)( gridSize.Width / spacing.X ) + 1;
 			var numRows = (int)( gridSize.Height / spacing.Y ) + 1;
 			_points = new PointMass[numColumns, numRows];
@@ -339,7 +338,7 @@ namespace Nez
 							gridColor = gridMinorColor;
 						}
 
-						
+
 						// use Catmull-Rom interpolation to help smooth bends in the grid
 						left = projectToVector2( _points[x - 1, y].position );
 						var clampedX = Math.Min( x + 1, width - 1 );
@@ -392,8 +391,8 @@ namespace Nez
 					if( x > 1 && y > 1 )
 					{
 						var upLeft = projectToVector2( _points[x - 1, y - 1].position );
-						drawLine( graphics.batcher, 0.5f * ( upLeft + up ), 0.5f * ( left + p ), gridMinorColor, gridMinorThickness );	// vertical line
-						drawLine( graphics.batcher, 0.5f * ( upLeft + left ), 0.5f * ( up + p ), gridMinorColor, gridMinorThickness );	// horizontal line
+						drawLine( graphics.batcher, 0.5f * ( upLeft + up ), 0.5f * ( left + p ), gridMinorColor, gridMinorThickness );  // vertical line
+						drawLine( graphics.batcher, 0.5f * ( upLeft + left ), 0.5f * ( up + p ), gridMinorColor, gridMinorThickness );  // horizontal line
 					}
 				}
 			}
@@ -414,6 +413,6 @@ namespace Nez
 			var angle = (float)Math.Atan2( delta.Y, delta.X );
 			batcher.draw( Graphics.instance.pixelTexture, start + entity.transform.position + localOffset, Graphics.instance.pixelTexture.sourceRect, color, angle, new Vector2( 0, 0.5f ), new Vector2( delta.Length(), thickness ), SpriteEffects.None, layerDepth );
 		}
-	
+
 	}
 }
