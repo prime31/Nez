@@ -26,11 +26,19 @@ namespace Nez.Systems
 			public float waitTimer;
 			public bool isDone;
 			public CoroutineImpl waitForCoroutine;
+			public bool useUnscaledDeltaTime = false;
 
 
 			public void stop()
 			{
 				isDone = true;
+			}
+
+
+			public ICoroutine setUseUnscaledDeltaTime( bool useUnscaledDeltaTime )
+			{
+				this.useUnscaledDeltaTime = useUnscaledDeltaTime;
+				return this;
 			}
 
 
@@ -46,6 +54,7 @@ namespace Nez.Systems
 				waitTimer = 0;
 				waitForCoroutine = null;
 				enumerator = null;
+				useUnscaledDeltaTime = false;
 			}
 		}
 
@@ -118,8 +127,8 @@ namespace Nez.Systems
 				// deal with timers if we have them
 				if( coroutine.waitTimer > 0 )
 				{
-					// still has time left. decrement and run again next frame
-					coroutine.waitTimer -= Time.deltaTime;
+					// still has time left. decrement and run again next frame being sure to decrement with the appropriate deltaTime.
+					coroutine.waitTimer -= coroutine.useUnscaledDeltaTime ? Time.unscaledDeltaTime : Time.deltaTime;
 					_shouldRunNextFrame.Add( coroutine );
 					continue;
 				}

@@ -5,7 +5,17 @@
 	/// </summary>
 	public interface ICoroutine
 	{
+		/// <summary>
+		/// stops the Coroutine
+		/// </summary>
 		void stop();
+
+		/// <summary>
+		/// sets whether the Coroutine should use deltaTime or unscaledDeltaTime for timing
+		/// </summary>
+		/// <returns>The use unscaled delta time.</returns>
+		/// <param name="useUnscaledDeltaTime">If set to <c>true</c> use unscaled delta time.</param>
+		ICoroutine setUseUnscaledDeltaTime( bool useUnscaledDeltaTime );
 	}
 
 
