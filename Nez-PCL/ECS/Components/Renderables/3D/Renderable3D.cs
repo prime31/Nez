@@ -5,24 +5,32 @@ namespace Nez
 {
 	/// <summary>
 	/// convenience base class for 3D objects. It reuses and wraps the Transform in Vector3s for easy access and provides a world
-	/// transform for rendering. Note that bounds is very dumb and you should override it with something more intelligible.
+	/// transform for rendering.
 	/// </summary>
 	public abstract class Renderable3D : RenderableComponent
 	{
+		/// <summary>
+		/// by default, uses a magic number of 1.5 * the scale of the object. This will work fine for objects ~1 unit in width/height.
+		/// Any other odd sizes should override this appropriately.
+		/// </summary>
+		/// <value>The bounds.</value>
 		public override RectangleF bounds
 		{
 			get
 			{
-				var sphere = new BoundingSphere( Vector3.Zero, 999999 );
-				var sizeX = sphere.Radius * 2 * scale.X;
-				var sizeY = sphere.Radius * 2 * scale.Y;
-				var x = ( position.X + sphere.Center.X - sizeX / 2 );
-				var y = ( position.Y + sphere.Center.Y - sizeY / 2 );
+				var sizeX = 1.5f * scale.X;
+				var sizeY = 1.5f * scale.Y;
+				var x = ( position.X - sizeX / 2 );
+				var y = ( position.Y - sizeY / 2 );
 
 				return new RectangleF( x, y, sizeX, sizeY );
 			}
 		}
 
+		/// <summary>
+		/// wraps Transform.position along with a private Z position
+		/// </summary>
+		/// <value>The position.</value>
 		public Vector3 position
 		{
 			get { return new Vector3( transform.position, _positionZ ); }
@@ -33,16 +41,15 @@ namespace Nez
 			}
 		}
 
-		public Vector3 scale
-		{
-			get { return new Vector3( transform.scale, _scaleZ ); }
-			set
-			{
-				_scaleZ = value.Z;
-				transform.setScale( new Vector2( value.X, value.Y ) );
-			}
-		}
+		/// <summary>
+		/// the scale of the object. 80 by default. You will need to adjust this depending on your Scene's backbuffer size.
+		/// </summary>
+		public Vector3 scale = new Vector3( 80f );
 
+		/// <summary>
+		/// wraps Transform.rotation for the Z rotation along with a private X and Y rotation.
+		/// </summary>
+		/// <value>The rotation.</value>
 		public Vector3 rotation
 		{
 			get { return new Vector3( _rotationXY, transform.rotation ); }
@@ -54,12 +61,20 @@ namespace Nez
 			}
 		}
 
+		/// <summary>
+		/// rotation in degrees
+		/// </summary>
+		/// <value>The rotation degrees.</value>
 		public Vector3 rotationDegrees
 		{
 			get { return new Vector3( _rotationXY, transform.rotation ) * 57.295779513082320876798154814105f; }
 			set { rotation = value *= 0.017453292519943295769236907684886f; }
 		}
 
+		/// <summary>
+		/// Matrix that represents the world transform. Useful for rendering.
+		/// </summary>
+		/// <value>The world matrix.</value>
 		public Matrix worldMatrix
 		{
 			get
@@ -78,14 +93,6 @@ namespace Nez
 
 
 		float _positionZ;
-		float _scaleZ;
 		Vector2 _rotationXY;
-
-
-		public override void onAddedToEntity()
-		{
-			scale = Vector3.One * 80;
-		}
-
 	}
 }

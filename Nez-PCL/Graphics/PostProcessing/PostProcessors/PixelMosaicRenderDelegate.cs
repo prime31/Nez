@@ -1,7 +1,4 @@
-﻿using System;
-using Nez;
-using Nez.Systems;
-using Nez.Textures;
+﻿using Nez.Textures;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
 

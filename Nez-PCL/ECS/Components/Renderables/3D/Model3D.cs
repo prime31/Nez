@@ -1,5 +1,4 @@
-﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
+﻿using Microsoft.Xna.Framework.Graphics;
 using Nez;
 
 
@@ -61,6 +60,9 @@ namespace Nez3D
 		{
 			// flush the 2D batch so we render appropriately depth-wise
 			graphics.batcher.flushBatch();
+
+			Core.graphicsDevice.BlendState = BlendState.Opaque;
+			Core.graphicsDevice.DepthStencilState = DepthStencilState.Default;
 
 			for( var i = 0; i < _model.Meshes.Count; i++ )
 			{

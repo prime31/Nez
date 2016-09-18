@@ -101,6 +101,9 @@ namespace Nez
 			// flush the 2D batch so we render appropriately depth-wise
 			graphics.batcher.flushBatch();
 
+			Core.graphicsDevice.BlendState = BlendState.Opaque;
+			Core.graphicsDevice.DepthStencilState = DepthStencilState.Default;
+
 			// Set BasicEffect parameters.
 			_basicEffect.World = worldMatrix;
 			_basicEffect.View = camera.viewMatrix3D;

@@ -48,6 +48,15 @@ public class SimplePostProcessor : PostProcessor
 ```
 
 
+## Mixing 2D and 3D Content
+Nez is technically a 2D framework. That being said, there may be times when you want to stick some 3D content into your 2D game. Nez attempts to make it very simple to add 3D content. The Nez Camera class is a 5D system (2D + 3D). What it is doing under the hood is really quite simple: it provides a `viewMatrix3D` and `projectionMatrix3D` that you can use to render 3D content. The matrices returned will end up with a frustum that at a z-position of 0 exactly matches the 2D orthographic matrices. The grand result of all this is that you can position your 3D objects x and y values and it will match exactly your 2D content.
+
+There are a few 3D specific fields that you can tweak on the Camera as well (all 3D fields/properties have a suffix of **3D** for clarity): `positionZ3D`, `nearClipPlane3D`, `farClipPlane3D`. When dealing with 3D content it is important to note that your distances and scales will be very large. The reason for this is because the 2D orthographic view is huge compared to a standard 3D camera. You may need to play with your scales depending on which modeling software you use.
+
+Nez provides some built in Components to make it as simple as possible to get some 3D content on screen. The `Cube3D`, `Sphere3D` and `Torus3D` classes can be added to an Entity straight away. These classes procedurally create their meshes. The `Model3D` class can be used when you want to display a 3D model that was processed by the MonoGame content builder. It will display a standard `Model`.
+
+All of the *3D classes subclass `Renderable3D`. `Renderable3D` is a thin wrapper that provides Vector3s for position, rotation and scale. These wrap the 2D values from the standard `Transform` class where possible so that you can use `Transform` parenting with 2D and 3D objects seamlessly.
+
 
 ## IFinalRenderDelegate
-By default, Nez will take your fully rendered scene and render it to the screen. In some rare circumstances this may not be the way you want the final render to occur. By setting **Scene.finalRenderDelegate** you can take over that final render to the screen and do it however you want.
+By default, Nez will take your fully rendered scene and render it to the screen. In some rare circumstances this may not be the way you want the final render to occur. By setting **Scene.finalRenderDelegate** you can take over that final render to the screen and do it however you want. For an example of using the *IFinalRenderDelegate* see the `PixelMosaicRenderDelegate` class.
