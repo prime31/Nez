@@ -1,5 +1,4 @@
-﻿using System;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 
 
 namespace Nez
@@ -45,6 +44,18 @@ namespace Nez
 		public static float cross( Vector2 u, Vector2 v )
 		{
 			return u.Y * v.X - u.X * v.Y;
+		}
+
+
+		public static Vector2 perpendicular( Vector2 first, Vector2 second )
+		{
+			return new Vector2( second.Y - first.Y, -second.X - first.X );
+		}
+
+
+		public static Vector2 perpendicular( Vector2 original )
+		{
+			return new Vector2( -original.Y, original.X );
 		}
 
 

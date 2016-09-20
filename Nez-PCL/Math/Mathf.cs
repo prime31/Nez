@@ -329,6 +329,20 @@ namespace Nez
 
 
 		/// <summary>
+		/// returns the minimum of the passed in values
+		/// </summary>
+		/// <returns>The of.</returns>
+		/// <param name="a">The alpha component.</param>
+		/// <param name="b">The blue component.</param>
+		/// <param name="c">C.</param>
+		/// <param name="d">D.</param>
+		public static float minOf( float a, float b, float c, float d, float e )
+		{
+			return Math.Min( a, Math.Min( b, Math.Min( c, Math.Min( d, e ) ) ) );
+		}
+
+
+		/// <summary>
 		/// returns the maximum of the passed in values
 		/// </summary>
 		/// <returns>The of.</returns>
@@ -339,6 +353,20 @@ namespace Nez
 		public static float maxOf( float a, float b, float c, float d )
 		{
 			return Math.Max( a, Math.Max( b, Math.Max( c, d ) ) );
+		}
+
+
+		/// <summary>
+		/// returns the maximum of the passed in values
+		/// </summary>
+		/// <returns>The of.</returns>
+		/// <param name="a">The alpha component.</param>
+		/// <param name="b">The blue component.</param>
+		/// <param name="c">C.</param>
+		/// <param name="d">D.</param>
+		public static float maxOf( float a, float b, float c, float d, float e )
+		{
+			return Math.Max( a, Math.Max( b, Math.Max( c, Math.Max( d, e ) ) ) );
 		}
 
 

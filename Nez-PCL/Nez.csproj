@@ -506,6 +506,8 @@
     <Compile Include="ECS\Components\Renderables\3D\Sphere3D.cs" />
     <Compile Include="ECS\Components\Renderables\3D\Torus3D.cs" />
     <Compile Include="ECS\Components\Renderables\3D\VertexPositionColorNormal.cs" />
+    <Compile Include="ECS\Components\Renderables\LineRenderer.cs" />
+    <Compile Include="Utils\Extensions\Vector3Ext.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="MonoGame.Framework">
