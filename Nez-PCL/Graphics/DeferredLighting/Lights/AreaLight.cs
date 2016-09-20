@@ -1,5 +1,4 @@
-﻿using System;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 
 
 namespace Nez.DeferredLighting
@@ -53,6 +52,13 @@ namespace Nez.DeferredLighting
 		public AreaLight setDirection( Vector3 direction )
 		{
 			this.direction = direction;
+			return this;
+		}
+
+
+		public AreaLight setIntensity( float intensity )
+		{
+			this.intensity = intensity;
 			return this;
 		}
 	}

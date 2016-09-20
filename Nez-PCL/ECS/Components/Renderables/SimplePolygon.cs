@@ -115,7 +115,6 @@ namespace Nez
 		public override void onAddedToEntity()
 		{
 			_basicEffect = entity.scene.content.loadMonoGameEffect<BasicEffect>();
-			_basicEffect = new BasicEffect( Core.graphicsDevice );
 			_basicEffect.World = Matrix.Identity;
 			_basicEffect.VertexColorEnabled = true;
 		}

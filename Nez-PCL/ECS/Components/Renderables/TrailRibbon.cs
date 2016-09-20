@@ -136,6 +136,7 @@ namespace Nez
 			_areVertsDirty = false;
 		}
 
+
 		public override void onEnabled()
 		{
 			base.onEnabled();
@@ -143,6 +144,7 @@ namespace Nez
 			_segments.Clear();
 			initializeVertices();
 		}
+
 
 		public override void onAddedToEntity()
 		{
