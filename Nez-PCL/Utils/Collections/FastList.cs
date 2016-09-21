@@ -53,6 +53,15 @@ namespace Nez
 
 
 		/// <summary>
+		/// works just like clear except it does not null our all the items in the buffer. Useful when dealing with structs.
+		/// </summary>
+		public void reset()
+		{
+			length = 0;
+		}
+
+
+		/// <summary>
 		/// adds the item to the list
 		/// </summary>
 		public void add( T item )
@@ -108,6 +117,27 @@ namespace Nez
 					return true;
 			}
 			return false;
+		}
+
+
+		/// <summary>
+		/// if the buffer is at its max more space will be allocated
+		/// </summary>
+		public void ensureCapacity( int itemCount = 0 )
+		{
+			if( length + itemCount >= buffer.Length )
+				Array.Resize( ref buffer, Math.Max( buffer.Length << 1, 10 ) );
+		}
+
+
+		/// <summary>
+		/// adds all items from array
+		/// </summary>
+		/// <param name="array">Array.</param>
+		public void addRange( IEnumerable<T> array )
+		{
+			foreach( var item in array )
+				add( item );
 		}
 
 

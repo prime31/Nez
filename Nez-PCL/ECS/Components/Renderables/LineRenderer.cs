@@ -40,13 +40,8 @@ namespace Nez
 		float _startWidth = 10;
 		float _endWidth = 10;
 
-		/// <summary>
-		/// number of points in the line
-		/// </summary>
-		int _pointCount = 0;
-
-		Vector2[] _points;
-		FastList<VertexPositionColorTexture> _vertices = new FastList<VertexPositionColorTexture>();
+		FastList<Vector2> _points = new FastList<Vector2>();
+		FastList<VertexPositionColorTexture> _vertices = new FastList<VertexPositionColorTexture>( 50 );
 		BasicEffect _basicEffect;
 		bool _areVertsDirty = true;
 
@@ -61,28 +56,6 @@ namespace Nez
 		public LineRenderer setUseWorldSpace( bool useWorldSpace )
 		{
 			this.useWorldSpace = useWorldSpace;
-			return this;
-		}
-
-
-		public LineRenderer setPointCount( int pointCount )
-		{
-			Assert.isTrue( pointCount > 1, "A line must have at least two points" );
-			_pointCount = pointCount;
-
-			// ensure we have room for all the positions
-			if( _points == null || _points.Length != pointCount )
-			{
-				_points = new Vector2[pointCount];
-				_vertices = null;
-			}
-
-			// we need 5 verts for each point except the last point which needs no verts
-			var mid = ( _pointCount - 2 ) * 6;
-			var caps = 2 * 5;
-			_vertices = new VertexPositionColorTexture[mid + caps];
-			_areVertsDirty = true;
-
 			return this;
 		}
 
@@ -107,24 +80,45 @@ namespace Nez
 		}
 
 
-		public LineRenderer setPoint( int index, Vector2 point )
+		public LineRenderer setPoints( Vector2[] points )
 		{
-			Assert.isNotNull( _points, "points array is null. Did you call setPositionCount first?" );
+			_points.reset();
+			_points.addRange( points );
+			_areVertsDirty = true;
 
-			_points[index] = point;
+			return this;
+		}
+
+
+		public LineRenderer addPoint( Vector2 point )
+		{
+			_points.add( point );
 			_areVertsDirty = true;
 			return this;
 		}
 
 
-		public LineRenderer setPoints( Vector2[] points )
+		public LineRenderer addPoints( Vector2[] points )
 		{
-			if( points.Length > _pointCount )
-				setPointCount( points.Length );
-			
-			_points = points;
+			_points.addRange( points );
 			_areVertsDirty = true;
 
+			return this;
+		}
+
+
+		public LineRenderer updatePoint( int index, Vector2 point )
+		{
+			_points.buffer[index] = point;
+			_areVertsDirty = true;
+			return this;
+		}
+
+
+		public LineRenderer clearPoints()
+		{
+			_points.reset();
+			_bounds = RectangleF.empty;
 			return this;
 		}
 
@@ -133,11 +127,12 @@ namespace Nez
 
 		void calculateVertices()
 		{
-			if( !_areVertsDirty || _pointCount == 0 )
+			if( !_areVertsDirty || _points.length < 2 )
 				return;
 
 			_areVertsDirty = false;
-			_indices.clear();
+			_indices.reset();
+			_vertices.reset();
 
 			var maxX = float.MinValue;
 			var minX = float.MaxValue;
@@ -147,7 +142,7 @@ namespace Nez
 			// calculate line length first and simulataneously get our min/max points for the bounds
 			var lineLength = 0f;
 			var maxWidth = System.Math.Max( _startWidth, _endWidth ) * 0.5f;
-			for( var i = 0; i < _pointCount - 1; i++ )
+			for( var i = 0; i < _points.length - 1; i++ )
 			{
 				lineLength += Vector2.Distance( _points[i], _points[i + 1] );
 				maxX = Mathf.maxOf( maxX, _points[i].X + maxWidth, _points[i + 1].X + maxWidth );
@@ -166,7 +161,7 @@ namespace Nez
 			var vertIndex = 0;
 
 			// special case: single segment
-			if( _pointCount == 2 )
+			if( _points.length == 2 )
 			{
 				_firstSegment.setPoints( _points[0], _points[1], _startWidth, _endWidth );
 				addSingleSegmentLine( _firstSegment );
@@ -174,12 +169,12 @@ namespace Nez
 			}
 
 
-			for( var i = 0; i < _pointCount - 1; i++ )
+			for( var i = 0; i < _points.length - 1; i++ )
 			{
 				var firstPoint = _points[i];
 				var secondPoint = _points[i + 1];
 				Vector2? thirdPoint = null;
-				if( _pointCount > i + 2 )
+				if( _points.length > i + 2 )
 					thirdPoint = _points[i + 2];
 
 				// we need the distance along the line of both the first and second points. distanceSoFar will always be for the furthest point
@@ -334,12 +329,11 @@ namespace Nez
 		[MethodImpl( MethodImplOptions.AggressiveInlining )]
 		void addVert( int index, Vector2 position, Vector2 texCoord, Color col )
 		{
-			if( position == Vector2.Zero )
-				Debug.log( "fuck you" );
-			
-			_vertices[index].Position = position.toVector3();
-			_vertices[index].TextureCoordinate = texCoord;
-			_vertices[index].Color = col;
+			_vertices.ensureCapacity();
+			_vertices.buffer[index].Position = position.toVector3();
+			_vertices.buffer[index].TextureCoordinate = texCoord;
+			_vertices.buffer[index].Color = col;
+			_vertices.length++;
 		}
 
 
@@ -375,7 +369,7 @@ namespace Nez
 
 		public override void render( Graphics graphics, Camera camera )
 		{
-			if( _pointCount == 0 )
+			if( _points.length < 2 )
 				return;
 			
 			_basicEffect.Projection = camera.projectionMatrix;
@@ -386,7 +380,7 @@ namespace Nez
 				_basicEffect.World = transform.localToWorldTransform;
 
 			var primitiveCount = _indices.length / 3;
-			Core.graphicsDevice.DrawUserIndexedPrimitives( PrimitiveType.TriangleList, _vertices, 0, _vertices.Length, _indices.buffer, 0, primitiveCount );
+			Core.graphicsDevice.DrawUserIndexedPrimitives( PrimitiveType.TriangleList, _vertices.buffer, 0, _vertices.length, _indices.buffer, 0, primitiveCount );
 		}
 
 		#endregion
