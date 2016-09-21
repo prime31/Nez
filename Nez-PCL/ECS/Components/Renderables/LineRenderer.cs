@@ -1,6 +1,5 @@
 ﻿using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
-using System.Collections.Generic;
 using Nez.PhysicsShapes;
 using System.Runtime.CompilerServices;
 
@@ -24,6 +23,11 @@ namespace Nez
 		}
 
 		/// <summary>
+		/// controls whether the lines are defined in world space or local
+		/// </summary>
+		public bool useWorldSpace { get; protected set; } = true;
+
+		/// <summary>
 		/// starting color of the ribbon
 		/// </summary>
 		Color _startColor = Color.White;
@@ -42,18 +46,24 @@ namespace Nez
 		int _pointCount = 0;
 
 		Vector2[] _points;
-		VertexPositionColorTexture[] _vertices;
-		short[] _triangleIndices;
+		FastList<VertexPositionColorTexture> _vertices = new FastList<VertexPositionColorTexture>();
 		BasicEffect _basicEffect;
 		bool _areVertsDirty = true;
 
 		// state
 		Segment _firstSegment = new Segment();
 		Segment _secondSegment = new Segment();
-		List<short> _indices = new List<short>();
+		FastList<short> _indices = new FastList<short>();
 
 
 		#region configuration
+
+		public LineRenderer setUseWorldSpace( bool useWorldSpace )
+		{
+			this.useWorldSpace = useWorldSpace;
+			return this;
+		}
+
 
 		public LineRenderer setPointCount( int pointCount )
 		{
@@ -68,7 +78,9 @@ namespace Nez
 			}
 
 			// we need 5 verts for each point except the last point which needs no verts
-			_vertices = new VertexPositionColorTexture[calculateTotalVerts()];
+			var mid = ( _pointCount - 2 ) * 6;
+			var caps = 2 * 5;
+			_vertices = new VertexPositionColorTexture[mid + caps];
 			_areVertsDirty = true;
 
 			return this;
@@ -119,47 +131,35 @@ namespace Nez
 		#endregion
 
 
-		/// <summary>
-		/// Calculates the total verts
-		/// </summary>
-		/// <returns>The total verts.</returns>
-		int calculateTotalVerts()
-		{
-			var mid = ( _pointCount - 2 ) * 6;
-			var caps = 2 * 5;
-
-			return mid + caps;
-		}
-
-
-		public static float angle( Vector2 from, Vector2 to )
-		{
-			Vector2Ext.normalize( ref from );
-			Vector2Ext.normalize( ref to );
-			return Mathf.acos( Mathf.clamp( Vector2.Dot( from, to ), -1f, 1f ) ) * Mathf.rad2Deg;
-		}
-
-
 		void calculateVertices()
 		{
 			if( !_areVertsDirty || _pointCount == 0 )
 				return;
 
 			_areVertsDirty = false;
-			_indices.Clear();
+			_indices.clear();
 
 			var maxX = float.MinValue;
 			var minX = float.MaxValue;
 			var maxY = float.MinValue;
 			var minY = float.MaxValue;
 
-			// calculate line length first
+			// calculate line length first and simulataneously get our min/max points for the bounds
 			var lineLength = 0f;
+			var maxWidth = System.Math.Max( _startWidth, _endWidth ) * 0.5f;
 			for( var i = 0; i < _pointCount - 1; i++ )
 			{
-				var ang = angle( _points[i], _points[i + 1] );
 				lineLength += Vector2.Distance( _points[i], _points[i + 1] );
+				maxX = Mathf.maxOf( maxX, _points[i].X + maxWidth, _points[i + 1].X + maxWidth );
+				minX = Mathf.minOf( minX, _points[i].X - maxWidth, _points[i + 1].X - maxWidth );
+				maxY = Mathf.maxOf( maxY, _points[i].Y + maxWidth, _points[i + 1].Y + maxWidth );
+				minY = Mathf.minOf( minY, _points[i].Y - maxWidth, _points[i + 1].Y - maxWidth );
 			}
+
+			_bounds.x = minX;
+			_bounds.y = minY;
+			_bounds.width = maxX - minX;
+			_bounds.height = maxY - minY;
 
 			var distanceSoFar = 0f;
 			var fusedPoint = Vector2.Zero;
@@ -170,18 +170,6 @@ namespace Nez
 			{
 				_firstSegment.setPoints( _points[0], _points[1], _startWidth, _endWidth );
 				addSingleSegmentLine( _firstSegment );
-				_triangleIndices = _indices.ToArray();
-
-				// update min/max for any visible verts
-				maxX = Mathf.maxOf( maxX, _firstSegment.tl.X, _firstSegment.tr.X, _firstSegment.br.X, _firstSegment.bl.X );
-				minX = Mathf.minOf( minX, _firstSegment.tl.X, _firstSegment.tr.X, _firstSegment.br.X, _firstSegment.bl.X );
-				maxY = Mathf.maxOf( maxY, _firstSegment.tl.Y, _firstSegment.tr.Y, _firstSegment.br.Y, _firstSegment.bl.Y );
-				minY = Mathf.minOf( minY, _firstSegment.tl.Y, _firstSegment.tr.Y, _firstSegment.br.Y, _firstSegment.bl.Y );
-
-				_bounds.x = minX;
-				_bounds.y = minY;
-				_bounds.width = maxX - minX;
-				_bounds.height = maxY - minY;
 				return;
 			}
 
@@ -234,33 +222,20 @@ namespace Nez
 					addFirstSegment( _firstSegment, _secondSegment, ref vertIndex );
 				else
 					addSegment( _firstSegment, ref vertIndex );
-
-				// update min/max for any visible verts
-				maxX = Mathf.maxOf( maxX, _firstSegment.tl.X, _firstSegment.tr.X, _firstSegment.br.X, _firstSegment.bl.X );
-				minX = Mathf.minOf( minX, _firstSegment.tl.X, _firstSegment.tr.X, _firstSegment.br.X, _firstSegment.bl.X );
-				maxY = Mathf.maxOf( maxY, _firstSegment.tl.Y, _firstSegment.tr.Y, _firstSegment.br.Y, _firstSegment.bl.Y );
-				minY = Mathf.minOf( minY, _firstSegment.tl.Y, _firstSegment.tr.Y, _firstSegment.br.Y, _firstSegment.bl.Y );
 			}
-
-			_triangleIndices = _indices.ToArray();
-
-			_bounds.x = minX;
-			_bounds.y = minY;
-			_bounds.width = maxX - minX;
-			_bounds.height = maxY - minY;
 		}
 
 
 		[MethodImpl( MethodImplOptions.AggressiveInlining )]
 		void addSingleSegmentLine( Segment segment )
 		{
-			_indices.Add( 0 );
-			_indices.Add( 1 );
-			_indices.Add( 2 );
+			_indices.add( 0 );
+			_indices.add( 1 );
+			_indices.add( 2 );
 
-			_indices.Add( 0 );
-			_indices.Add( 2 );
-			_indices.Add( 3 );
+			_indices.add( 0 );
+			_indices.add( 2 );
+			_indices.add( 3 );
 
 			addVert( 0, segment.tl, new Vector2( 0, 1 ), _startColor );
 			addVert( 1, segment.tr, new Vector2( 1, 1 ), _endColor );
@@ -272,17 +247,17 @@ namespace Nez
 		[MethodImpl( MethodImplOptions.AggressiveInlining )]
 		void addFirstSegment( Segment segment, Segment nextSegment, ref int vertIndex )
 		{
-			_indices.Add( 0 );
-			_indices.Add( 1 );
-			_indices.Add( 4 );
+			_indices.add( 0 );
+			_indices.add( 1 );
+			_indices.add( 4 );
 
-			_indices.Add( 1 );
-			_indices.Add( 2 );
-			_indices.Add( 4 );
+			_indices.add( 1 );
+			_indices.add( 2 );
+			_indices.add( 4 );
 
-			_indices.Add( 2 );
-			_indices.Add( 3 );
-			_indices.Add( 4 );
+			_indices.add( 2 );
+			_indices.add( 3 );
+			_indices.add( 4 );
 
 			addVert( vertIndex++, segment.tl, new Vector2( 0, 1 ), _startColor );
 
@@ -312,30 +287,30 @@ namespace Nez
 			{
 				if( segment.shouldFuseBottom )
 				{
-					_indices.Add( (short)vertIndex );
-					_indices.Add( (short)( vertIndex + 4 ) );
-					_indices.Add( (short)( vertIndex - 4 ) );
+					_indices.add( (short)vertIndex );
+					_indices.add( (short)( vertIndex + 4 ) );
+					_indices.add( (short)( vertIndex - 4 ) );
 				}
 				else
 				{
 					var firstSegmentOffset = vertIndex == 5 ? 1 : 0;
-					_indices.Add( (short)( vertIndex - 3 + firstSegmentOffset ) );
-					_indices.Add( (short)( vertIndex + 4 ) );
-					_indices.Add( (short)( vertIndex + 3 ) );
+					_indices.add( (short)( vertIndex - 3 + firstSegmentOffset ) );
+					_indices.add( (short)( vertIndex + 4 ) );
+					_indices.add( (short)( vertIndex + 3 ) );
 				}
 			}
 			
-			_indices.Add( (short)vertIndex );
-			_indices.Add( (short)( vertIndex + 1 ) );
-			_indices.Add( (short)( vertIndex + 2 ) );
+			_indices.add( (short)vertIndex );
+			_indices.add( (short)( vertIndex + 1 ) );
+			_indices.add( (short)( vertIndex + 2 ) );
 
-			_indices.Add( (short)( vertIndex + 4 ) );
-			_indices.Add( (short)vertIndex );
-			_indices.Add( (short)( vertIndex + 2 ) );
+			_indices.add( (short)( vertIndex + 4 ) );
+			_indices.add( (short)vertIndex );
+			_indices.add( (short)( vertIndex + 2 ) );
 
-			_indices.Add( (short)( vertIndex + 3 ) );
-			_indices.Add( (short)( vertIndex + 4 ) );
-			_indices.Add( (short)( vertIndex + 2 ) );
+			_indices.add( (short)( vertIndex + 3 ) );
+			_indices.add( (short)( vertIndex + 4 ) );
+			_indices.add( (short)( vertIndex + 2 ) );
 
 			if( segment.shouldFuseBottom )
 			{
@@ -381,6 +356,16 @@ namespace Nez
 		}
 
 
+		public override void onEntityTransformChanged()
+		{
+			// we dont care if the transform changed if we are in world space
+			if( useWorldSpace )
+				return;
+
+			_bounds.calculateBounds( entity.transform.position, _localOffset, _origin, entity.transform.scale, entity.transform.rotation, width, height );
+		}
+
+
 		public override bool isVisibleFromCamera( Camera camera )
 		{
 			calculateVertices();
@@ -397,17 +382,19 @@ namespace Nez
 			_basicEffect.View = camera.transformMatrix;
 			_basicEffect.CurrentTechnique.Passes[0].Apply();
 
-			//Core.graphicsDevice.RasterizerState = RasterizerState.CullNone;
-			//Core.graphicsDevice.DrawUserPrimitives( PrimitiveType.TriangleList, _vertices, 0, ( _pointCount - 1 ) * 2 );
+			if( !useWorldSpace )
+				_basicEffect.World = transform.localToWorldTransform;
 
-			var numVerts = _vertices.Length;
-			var primitiveCount = _triangleIndices.Length / 3;
-			Core.graphicsDevice.DrawUserIndexedPrimitives( PrimitiveType.TriangleList, _vertices, 0, numVerts, _triangleIndices, 0, primitiveCount );
+			var primitiveCount = _indices.length / 3;
+			Core.graphicsDevice.DrawUserIndexedPrimitives( PrimitiveType.TriangleList, _vertices, 0, _vertices.Length, _indices.buffer, 0, primitiveCount );
 		}
 
 		#endregion
 
 
+		/// <summary>
+		/// helper class used to store some data when calculating verts
+		/// </summary>
 		class Segment
 		{
 			public Vector2 tl, tr, br, bl;
