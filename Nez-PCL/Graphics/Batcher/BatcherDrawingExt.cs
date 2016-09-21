@@ -131,12 +131,12 @@ namespace Nez
 		public static void drawCircle( this Batcher batcher, Vector2 position, float radius, Color color, float thickness = 1f, int resolution = 12 )
 		{
 			var last = Vector2.UnitX * radius;
-			var lastP = Mathf.perpendicularVector( last );
+			var lastP = Vector2Ext.perpendicular( last );
 
 			for( int i = 1; i <= resolution; i++ )
 			{
 				var at = Mathf.angleToVector( i * MathHelper.PiOver2 / resolution, radius );
-				var atP = Mathf.perpendicularVector( at );
+				var atP = Vector2Ext.perpendicular( at );
 
 				drawLine( batcher, position + last, position + at, color, thickness );
 				drawLine( batcher, position - last, position - at, color, thickness );

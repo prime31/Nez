@@ -44,7 +44,7 @@ namespace Nez
                 var c = points[_triNext[index]];
 				
 				// an ear must be convex (here counterclockwise)
-                if( isTriangleCCW( a, b, c ) )
+				if( Vector2Ext.isTriangleCCW( a, b, c ) )
 				{
 					// loop over all verts not part of the tentative ear
                     var k = _triNext[_triNext[index]];
@@ -135,17 +135,5 @@ namespace Nez
 			return true;
 		}
 
-
-		/// <summary>
-		/// checks if a triangle is CCW
-		/// </summary>
-		/// <returns><c>true</c>, if triangle ccw was ised, <c>false</c> otherwise.</returns>
-		/// <param name="a">The alpha component.</param>
-		/// <param name="b">The blue component.</param>
-		/// <param name="c">C.</param>
-		public static bool isTriangleCCW( Vector2 a, Vector2 center, Vector2 c )
-		{
-			return Vector2Ext.cross( center - a, c - center ) < 0;
-		}
     }
 }
