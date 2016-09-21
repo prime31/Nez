@@ -410,10 +410,18 @@ namespace Nez
 			if( res == 0 )
 			{
 				res = other.layerDepth.CompareTo( layerDepth );
-				if( res == 0 && other.material != null )
-					return other.material.CompareTo( material );
-			}
+				if( res == 0 )
+				{
+					// both null or equal
+					if( ReferenceEquals( material, other.material ) )
+						return 0;
 
+					if( other.material == null )
+						return -1;
+					
+					return 1;
+				}
+			}
 			return res;
 		}
 
