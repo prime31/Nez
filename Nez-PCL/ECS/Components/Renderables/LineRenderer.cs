@@ -16,6 +16,29 @@ namespace Nez
 	/// </summary>
 	public class LineRenderer : RenderableComponent
 	{
+		public enum EndCapType
+		{
+			/// <summary>
+			/// will not attempt to add any extra verts at joints
+			/// </summary>
+			Standard,
+
+			/// <summary>
+			/// all joints will be extruded out with an extra vert resulting in jagged, pointy joints
+			/// </summary>
+			Jagged,
+
+			/// <summary>
+			/// the same as jagged but uses cutoffAngleForEndCapSubdivision to decide if a joint should be Jagged or Standard
+			/// </summary>
+			JaggedWithCutoff,
+
+			/// <summary>
+			/// joints are smoothed with some extra geometry
+			/// </summary>
+			Smooth
+		}
+
 		public override RectangleF bounds
 		{
 			// we calculate bounds in update so no need to mess with anything here
@@ -26,6 +49,16 @@ namespace Nez
 		/// controls whether the lines are defined in world space or local
 		/// </summary>
 		public bool useWorldSpace { get; protected set; } = true;
+
+		public EndCapType endCapType = EndCapType.Standard;
+
+		/// <summary>
+		/// used by EndCapType.JaggedWithCutoff to decide what angle to stop creating jagged joints
+		/// </summary>
+		/// <value>The cutoff angle for end cap subdivision.</value>
+		public float cutoffAngleForEndCapSubdivision { get; private set; } = 90;
+
+		Texture2D _texture;
 
 		/// <summary>
 		/// starting color of the ribbon
@@ -41,14 +74,15 @@ namespace Nez
 		float _endWidth = 10;
 
 		FastList<Vector2> _points = new FastList<Vector2>();
-		FastList<VertexPositionColorTexture> _vertices = new FastList<VertexPositionColorTexture>( 50 );
 		BasicEffect _basicEffect;
 		bool _areVertsDirty = true;
 
-		// state
+		// state required for calculating verts and rendering
 		Segment _firstSegment = new Segment();
 		Segment _secondSegment = new Segment();
-		FastList<short> _indices = new FastList<short>();
+		Segment _lastSegment = new Segment();
+		FastList<short> _indices = new FastList<short>( 50 );
+		FastList<VertexPositionColorTexture> _vertices = new FastList<VertexPositionColorTexture>( 50 );
 
 
 		#region configuration
@@ -56,6 +90,23 @@ namespace Nez
 		public LineRenderer setUseWorldSpace( bool useWorldSpace )
 		{
 			this.useWorldSpace = useWorldSpace;
+			return this;
+		}
+
+
+		public LineRenderer setTexture( Texture2D texture )
+		{
+			if( _basicEffect != null )
+			{
+				_basicEffect.Texture = texture;
+				_basicEffect.TextureEnabled = true;
+			}
+			else
+			{
+				// store this away until the BasicEffect is created
+				_texture = texture;
+			}
+
 			return this;
 		}
 
@@ -76,6 +127,13 @@ namespace Nez
 			_endColor = endColor;
 			_areVertsDirty = true;
 
+			return this;
+		}
+
+
+		public LineRenderer setCutoffAngleForEndCapSubdivision( float cutoffAngleForEndCapSubdivision )
+		{
+			cutoffAngleForEndCapSubdivision = cutoffAngleForEndCapSubdivision;
 			return this;
 		}
 
@@ -168,7 +226,7 @@ namespace Nez
 				return;
 			}
 
-
+			Debug.log( "----" );
 			for( var i = 0; i < _points.length - 1; i++ )
 			{
 				var firstPoint = _points[i];
@@ -208,6 +266,7 @@ namespace Nez
 				// dont recalculate the fusedPoint for the last segment since there will be no third point to work with
 				if( thirdPoint.HasValue )
 				{
+					Debug.log( "3rd pt has value fucker" );
 					var shouldFuseBottom = Vector2Ext.isTriangleCCW( firstPoint, secondPoint, thirdPoint.Value );
 					_secondSegment.setFusedData( shouldFuseBottom, _firstSegment );
 				}
@@ -217,10 +276,16 @@ namespace Nez
 					addFirstSegment( _firstSegment, _secondSegment, ref vertIndex );
 				else
 					addSegment( _firstSegment, ref vertIndex );
+
+				_lastSegment.cloneFrom( _firstSegment );
 			}
 		}
 
 
+		/// <summary>
+		/// special case for just 2 points, one line segment
+		/// </summary>
+		/// <param name="segment">Segment.</param>
 		[MethodImpl( MethodImplOptions.AggressiveInlining )]
 		void addSingleSegmentLine( Segment segment )
 		{
@@ -239,6 +304,12 @@ namespace Nez
 		}
 
 
+		/// <summary>
+		/// the first segment is special since it has no previous verts to connect to so we handle it separately.
+		/// </summary>
+		/// <param name="segment">Segment.</param>
+		/// <param name="nextSegment">Next segment.</param>
+		/// <param name="vertIndex">Vert index.</param>
 		[MethodImpl( MethodImplOptions.AggressiveInlining )]
 		void addFirstSegment( Segment segment, Segment nextSegment, ref int vertIndex )
 		{
@@ -273,27 +344,16 @@ namespace Nez
 		}
 
 
+		/// <summary>
+		/// adds a segment and takes care of patching the previous elbow
+		/// </summary>
+		/// <param name="segment">Segment.</param>
+		/// <param name="vertIndex">Vert index.</param>
 		[MethodImpl( MethodImplOptions.AggressiveInlining )]
 		void addSegment( Segment segment, ref int vertIndex )
 		{
-			// first, we need to patch the previous elbow gap. If this is the second segment we need a different vert from the first segment
-			// since the first segment has 1 less vert than all mid segments.
-			//if( segment.hasFusedPoint )
-			{
-				if( segment.shouldFuseBottom )
-				{
-					_indices.add( (short)vertIndex );
-					_indices.add( (short)( vertIndex + 4 ) );
-					_indices.add( (short)( vertIndex - 4 ) );
-				}
-				else
-				{
-					var firstSegmentOffset = vertIndex == 5 ? 1 : 0;
-					_indices.add( (short)( vertIndex - 3 + firstSegmentOffset ) );
-					_indices.add( (short)( vertIndex + 4 ) );
-					_indices.add( (short)( vertIndex + 3 ) );
-				}
-			}
+			// first, we need to patch the previous elbow gap
+			patchJoint( segment, ref vertIndex );
 			
 			_indices.add( (short)vertIndex );
 			_indices.add( (short)( vertIndex + 1 ) );
@@ -327,6 +387,97 @@ namespace Nez
 
 
 		[MethodImpl( MethodImplOptions.AggressiveInlining )]
+		void patchJoint( Segment segment, ref int vertIndex )
+		{
+			switch( endCapType )
+			{
+				case EndCapType.Standard:
+					patchStandardJoint( segment, ref vertIndex );
+					break;
+				case EndCapType.Jagged:
+					patchJaggedJoint( segment, ref vertIndex );
+					break;
+				case EndCapType.JaggedWithCutoff:
+					if( segment.angle < cutoffAngleForEndCapSubdivision )
+						patchJaggedJoint( segment, ref vertIndex );
+					else
+						patchStandardJoint( segment, ref vertIndex );
+					break;
+				case EndCapType.Smooth:
+					break;
+			}
+		}
+
+
+		[MethodImpl( MethodImplOptions.AggressiveInlining )]
+		void patchStandardJoint( Segment segment, ref int vertIndex )
+		{
+			if( segment.shouldFuseBottom )
+			{
+				_indices.add( (short)vertIndex );
+				_indices.add( (short)( vertIndex + 4 ) );
+				_indices.add( (short)( vertIndex - 4 ) );
+			}
+			else
+			{
+				// If this is the second segment we need a different vert from the first segment since the first segment has 1 less vert than
+				// all mid segments.
+				var firstSegmentOffset = vertIndex == 5 ? 1 : 0;
+				_indices.add( (short)( vertIndex - 3 + firstSegmentOffset ) );
+				_indices.add( (short)( vertIndex + 4 ) );
+				_indices.add( (short)( vertIndex + 3 ) );
+			}
+		}
+
+
+		[MethodImpl( MethodImplOptions.AggressiveInlining )]
+		void patchJaggedJoint( Segment segment, ref int vertIndex )
+		{
+			Vector2 intersection;
+			if( segment.shouldFuseBottom )
+			{
+				if( Vector2Ext.getRayIntersection( segment.tl, segment.tr, _lastSegment.tl, _lastSegment.tr, out intersection ) )
+				{
+					addVert( vertIndex++, intersection, new Vector2( 1, 1 ), _endColor );
+
+					_indices.add( (short)vertIndex );
+					_indices.add( (short)( vertIndex + 4 ) );
+					_indices.add( (short)( vertIndex - 1 ) );
+
+					_indices.add( (short)( vertIndex - 1 ) );
+					_indices.add( (short)( vertIndex + 4 ) );
+					_indices.add( (short)( vertIndex - 6 ) );
+				}
+			}
+			else
+			{
+				if( Vector2Ext.getRayIntersection( segment.bl, segment.br, _lastSegment.bl, _lastSegment.br, out intersection ) )
+				{
+					var firstSegmentOffset = vertIndex == 5 ? 1 : 0;
+					addVert( vertIndex++, intersection, new Vector2( 1, 0 ), _endColor );
+
+					_indices.add( (short)( vertIndex + 4 ) );
+					_indices.add( (short)( vertIndex + 3 ) );
+					_indices.add( (short)( vertIndex - 1 ) );
+
+					_indices.add( (short)( vertIndex - 3 + firstSegmentOffset ) );
+					_indices.add( (short)( vertIndex + 4 ) );
+					_indices.add( (short)( vertIndex - 1 ) );
+
+					Core.graphicsDevice.RasterizerState = RasterizerState.CullNone;
+				}
+			}
+		}
+
+
+		/// <summary>
+		/// adds a vert to the list
+		/// </summary>
+		/// <param name="index">Index.</param>
+		/// <param name="position">Position.</param>
+		/// <param name="texCoord">Tex coordinate.</param>
+		/// <param name="col">Col.</param>
+		[MethodImpl( MethodImplOptions.AggressiveInlining )]
 		void addVert( int index, Vector2 position, Vector2 texCoord, Color col )
 		{
 			_vertices.ensureCapacity();
@@ -344,9 +495,13 @@ namespace Nez
 			_basicEffect = entity.scene.content.loadMonoGameEffect<BasicEffect>();
 			_basicEffect.World = Matrix.Identity;
 			_basicEffect.VertexColorEnabled = true;
-			_basicEffect.TextureEnabled = true;
 
-			_basicEffect.Texture = entity.scene.content.Load<Texture2D>( "Images/rainbow" );
+			if( _texture != null )
+			{
+				_basicEffect.Texture = _texture;
+				_basicEffect.TextureEnabled = true;
+				_texture = null;
+			}
 		}
 
 
@@ -397,10 +552,12 @@ namespace Nez
 			public Vector2 fusedPoint;
 			public bool hasFusedPoint;
 			public bool shouldFuseBottom;
+			public float angle;
 
 
 			public void setPoints( Vector2 point, Vector2 nextPoint, float firstPointWidth, float secondPointWidth )
 			{
+				angle = 0;
 				this.point = point;
 				this.nextPoint = nextPoint;
 
@@ -419,12 +576,28 @@ namespace Nez
 
 			public void setFusedData( bool shouldFuseBottom, Segment segment )
 			{
+				// store the angle off for later. For extreme angles we add extra verts to smooth the joint
+				angle = Vector2Ext.angle( segment.point - point, nextPoint - point );
 				this.shouldFuseBottom = shouldFuseBottom;
 
 				if( shouldFuseBottom )
 					hasFusedPoint = ShapeCollisions.lineToLine( segment.bl, segment.br, bl, br, out fusedPoint );
 				else
 					hasFusedPoint = ShapeCollisions.lineToLine( segment.tl, segment.tr, tl, tr, out fusedPoint );
+			}
+
+
+			public void cloneFrom( Segment segment )
+			{
+				tl = segment.tl;
+				tr = segment.tr;
+				br = segment.br;
+				bl = segment.bl;
+				point = segment.point;
+				nextPoint = segment.nextPoint;
+				hasFusedPoint = segment.hasFusedPoint;
+				shouldFuseBottom = segment.shouldFuseBottom;
+				angle = segment.angle;
 			}
 
 		}

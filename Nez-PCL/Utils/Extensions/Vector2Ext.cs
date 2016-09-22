@@ -106,6 +106,50 @@ namespace Nez
 
 
 		/// <summary>
+		/// returns the angle between the two vectors
+		/// </summary>
+		/// <param name="from">From.</param>
+		/// <param name="to">To.</param>
+		[MethodImpl( MethodImplOptions.AggressiveInlining )]
+		public static float angle( Vector2 from, Vector2 to )
+		{
+			normalize( ref from );
+			normalize( ref to );
+			return Mathf.acos( Mathf.clamp( Vector2.Dot( from, to ), -1f, 1f ) ) * Mathf.rad2Deg;
+		}
+
+
+		/// <summary>
+		/// given two lines (ab and cd) finds the intersection point
+		/// </summary>
+		/// <returns>The ray intersection.</returns>
+		/// <param name="a">The alpha component.</param>
+		/// <param name="b">The blue component.</param>
+		/// <param name="c">C.</param>
+		/// <param name="d">D.</param>
+		[MethodImpl( MethodImplOptions.AggressiveInlining )]
+		public static bool getRayIntersection( Vector2 a, Vector2 b, Vector2 c, Vector2 d, out Vector2 intersection )
+		{
+			var dy1 = b.Y - a.Y;
+			var dx1 = b.X - a.X;
+			var dy2 = d.Y - c.Y;
+			var dx2 = d.X - c.X;
+
+			if( dy1 * dx2 == dy2 * dx1 )
+			{
+				intersection = new Vector2( float.NaN, float.NaN );
+				return false;
+			}
+
+			var x = ( ( c.Y - a.Y ) * dx1 * dx2 + dy1 * dx2 * a.X - dy2 * dx1 * c.X ) / ( dy1 * dx2 - dy2 * dx1 );
+			var y = a.Y + ( dy1 / dx1 ) * ( x - a.X );
+
+			intersection = new Vector2( x, y );
+			return true;
+		}
+
+
+		/// <summary>
 		/// converts a Vector2 to a Vector3 with a 0 z-position
 		/// </summary>
 		/// <returns>The vector3.</returns>
