@@ -50,30 +50,30 @@ namespace Nez
 		/// </summary>
 		public bool useWorldSpace { get; protected set; } = true;
 
-		public EndCapType endCapType = EndCapType.Standard;
+		/// <summary>
+		/// the type of end cap for all joints
+		/// </summary>
+		/// <value>The end type of the cap.</value>
+		public EndCapType endCapType { get; protected set; } = EndCapType.Standard;
 
 		/// <summary>
 		/// used by EndCapType.JaggedWithCutoff to decide what angle to stop creating jagged joints
 		/// </summary>
 		/// <value>The cutoff angle for end cap subdivision.</value>
-		public float cutoffAngleForEndCapSubdivision { get; private set; } = 90;
+		public float cutoffAngleForEndCapSubdivision { get; protected set; } = 90;
 
+		// temporary storage for the texture if it is set before the BasicEffect is created
 		Texture2D _texture;
 
-		/// <summary>
-		/// starting color of the ribbon
-		/// </summary>
+		bool _useStartEndColors = true;
 		Color _startColor = Color.White;
-
-		/// <summary>
-		/// end (tail) color of the ribbon
-		/// </summary>
 		Color _endColor = Color.White;
 
+		bool _useStartEndWidths = true;
 		float _startWidth = 10;
 		float _endWidth = 10;
 
-		FastList<Vector2> _points = new FastList<Vector2>();
+		FastList<SegmentPoint> _points = new FastList<SegmentPoint>();
 		BasicEffect _basicEffect;
 		bool _areVertsDirty = true;
 
@@ -87,6 +87,12 @@ namespace Nez
 
 		#region configuration
 
+		/// <summary>
+		/// sets whether local or world space will be used for rendering. Defaults to world space. Using local space will take into account
+		/// all the Transform properties including scale/rotation/position.
+		/// </summary>
+		/// <returns>The use world space.</returns>
+		/// <param name="useWorldSpace">If set to <c>true</c> use world space.</param>
 		public LineRenderer setUseWorldSpace( bool useWorldSpace )
 		{
 			this.useWorldSpace = useWorldSpace;
@@ -94,6 +100,11 @@ namespace Nez
 		}
 
 
+		/// <summary>
+		/// sets the texture. Textures should be horizontally tileable. Pass in null to unset the texture.
+		/// </summary>
+		/// <returns>The texture.</returns>
+		/// <param name="texture">Texture.</param>
 		public LineRenderer setTexture( Texture2D texture )
 		{
 			if( _basicEffect != null )
@@ -111,7 +122,40 @@ namespace Nez
 		}
 
 
-		public LineRenderer setWidth( float startWidth, float endWidth )
+		/// <summary>
+		/// sets the EndCapType used for rendering the line
+		/// </summary>
+		/// <returns>The end cap type.</returns>
+		/// <param name="endCapType">End cap type.</param>
+		public LineRenderer setEndCapType( EndCapType endCapType )
+		{
+			this.endCapType = endCapType;
+			_areVertsDirty = true;
+			return this;
+		}
+
+
+		/// <summary>
+		/// sets the cutoff angle for use with EndCapType.JaggedWithCutoff. Any angles less than the cutoff angle will have jagged
+		/// joints and all others will have standard.
+		/// </summary>
+		/// <returns>The cutoff angle for end cap subdivision.</returns>
+		/// <param name="cutoffAngleForEndCapSubdivision">Cutoff angle for end cap subdivision.</param>
+		public LineRenderer setCutoffAngleForEndCapSubdivision( float cutoffAngleForEndCapSubdivision )
+		{
+			this.cutoffAngleForEndCapSubdivision = cutoffAngleForEndCapSubdivision;
+			_areVertsDirty = true;
+			return this;
+		}
+
+
+		/// <summary>
+		/// sets the start and end width. If these are set, the individual point widths will be ignored.
+		/// </summary>
+		/// <returns>The start end widths.</returns>
+		/// <param name="startWidth">Start width.</param>
+		/// <param name="endWidth">End width.</param>
+		public LineRenderer setStartEndWidths( float startWidth, float endWidth )
 		{
 			_startWidth = startWidth;
 			_endWidth = endWidth;
@@ -121,19 +165,41 @@ namespace Nez
 		}
 
 
-		public LineRenderer setColors( Color startColor, Color endColor )
+		/// <summary>
+		/// clears the global start/end widths and goes back to using the individual point widths
+		/// </summary>
+		/// <returns>The start end widths.</returns>
+		public LineRenderer clearStartEndWidths()
+		{
+			_useStartEndWidths = false;
+			return this;
+		}
+
+
+		/// <summary>
+		/// sets the start and end color. If these are set, the individual point colors will be ignored.
+		/// </summary>
+		/// <returns>The start end colors.</returns>
+		/// <param name="startColor">Start color.</param>
+		/// <param name="endColor">End color.</param>
+		public LineRenderer setStartEndColors( Color startColor, Color endColor )
 		{
 			_startColor = startColor;
 			_endColor = endColor;
+			_useStartEndColors = true;
 			_areVertsDirty = true;
 
 			return this;
 		}
 
 
-		public LineRenderer setCutoffAngleForEndCapSubdivision( float cutoffAngleForEndCapSubdivision )
+		/// <summary>
+		/// clears the global start/end colors and goes back to using the individual point colors
+		/// </summary>
+		/// <returns>The start end colors.</returns>
+		public LineRenderer clearStartEndColors()
 		{
-			cutoffAngleForEndCapSubdivision = cutoffAngleForEndCapSubdivision;
+			_useStartEndColors = false;
 			return this;
 		}
 
@@ -141,24 +207,51 @@ namespace Nez
 		public LineRenderer setPoints( Vector2[] points )
 		{
 			_points.reset();
-			_points.addRange( points );
+			_points.ensureCapacity( points.Length );
+			for( var i = 0; i < points.Length; i++ )
+			{
+				_points.buffer[i].position = points[i];
+				_points.length++;
+			}
 			_areVertsDirty = true;
 
 			return this;
 		}
 
 
-		public LineRenderer addPoint( Vector2 point )
+		public LineRenderer addPoint( Vector2 point, float width = 0 )
 		{
-			_points.add( point );
+			_points.ensureCapacity();
+			_points.buffer[_points.length].position = point;
+			_points.buffer[_points.length].width = width;
+			_points.length++;
 			_areVertsDirty = true;
+
+			return this;
+		}
+
+
+		public LineRenderer addPoint( Vector2 point, float width, Color color )
+		{
+			_points.ensureCapacity();
+			_points.buffer[_points.length].position = point;
+			_points.buffer[_points.length].width = width;
+			_points.buffer[_points.length].color = color;
+			_points.length++;
+			_areVertsDirty = true;
+
 			return this;
 		}
 
 
 		public LineRenderer addPoints( Vector2[] points )
 		{
-			_points.addRange( points );
+			_points.ensureCapacity( points.Length );
+			for( var i = 0; i < points.Length; i++ )
+			{
+				_points.buffer[_points.length].position = points[i];
+				_points.length++;
+			}
 			_areVertsDirty = true;
 
 			return this;
@@ -167,8 +260,30 @@ namespace Nez
 
 		public LineRenderer updatePoint( int index, Vector2 point )
 		{
-			_points.buffer[index] = point;
+			_points.buffer[index].position = point;
 			_areVertsDirty = true;
+
+			return this;
+		}
+
+
+		public LineRenderer updatePoint( int index, Vector2 point, float width )
+		{
+			_points.buffer[index].position = point;
+			_points.buffer[index].width = width;
+			_areVertsDirty = true;
+
+			return this;
+		}
+
+
+		public LineRenderer updatePoint( int index, Vector2 point, float width, Color color )
+		{
+			_points.buffer[index].position = point;
+			_points.buffer[index].width = width;
+			_points.buffer[index].color = color;
+			_areVertsDirty = true;
+
 			return this;
 		}
 
@@ -200,13 +315,16 @@ namespace Nez
 			// calculate line length first and simulataneously get our min/max points for the bounds
 			var lineLength = 0f;
 			var maxWidth = System.Math.Max( _startWidth, _endWidth ) * 0.5f;
+			_points.buffer[0].lengthFromPreviousPoint = 0;
 			for( var i = 0; i < _points.length - 1; i++ )
 			{
-				lineLength += Vector2.Distance( _points[i], _points[i + 1] );
-				maxX = Mathf.maxOf( maxX, _points[i].X + maxWidth, _points[i + 1].X + maxWidth );
-				minX = Mathf.minOf( minX, _points[i].X - maxWidth, _points[i + 1].X - maxWidth );
-				maxY = Mathf.maxOf( maxY, _points[i].Y + maxWidth, _points[i + 1].Y + maxWidth );
-				minY = Mathf.minOf( minY, _points[i].Y - maxWidth, _points[i + 1].Y - maxWidth );
+				var distance = Vector2.Distance( _points.buffer[i].position, _points.buffer[i + 1].position );
+				_points.buffer[i + 1].lengthFromPreviousPoint = distance;
+				lineLength += distance;
+				maxX = Mathf.maxOf( maxX, _points.buffer[i].position.X + maxWidth, _points.buffer[i + 1].position.X + maxWidth );
+				minX = Mathf.minOf( minX, _points.buffer[i].position.X - maxWidth, _points.buffer[i + 1].position.X - maxWidth );
+				maxY = Mathf.maxOf( maxY, _points.buffer[i].position.Y + maxWidth, _points.buffer[i + 1].position.Y + maxWidth );
+				minY = Mathf.minOf( minY, _points.buffer[i].position.Y - maxWidth, _points.buffer[i + 1].position.Y - maxWidth );
 			}
 
 			_bounds.x = minX;
@@ -221,24 +339,24 @@ namespace Nez
 			// special case: single segment
 			if( _points.length == 2 )
 			{
-				_firstSegment.setPoints( _points[0], _points[1], _startWidth, _endWidth );
+				_firstSegment.setPoints( _points.buffer[0], _points.buffer[1], _startWidth, _endWidth );
 				addSingleSegmentLine( _firstSegment );
 				return;
 			}
 
-			Debug.log( "----" );
+
 			for( var i = 0; i < _points.length - 1; i++ )
 			{
-				var firstPoint = _points[i];
-				var secondPoint = _points[i + 1];
-				Vector2? thirdPoint = null;
+				var firstPoint = _points.buffer[i];
+				var secondPoint = _points.buffer[i + 1];
+				SegmentPoint? thirdPoint = null;
 				if( _points.length > i + 2 )
-					thirdPoint = _points[i + 2];
+					thirdPoint = _points.buffer[i + 2];
 
 				// we need the distance along the line of both the first and second points. distanceSoFar will always be for the furthest point
 				// which is the previous point before adding the current segment distance.
 				var firstPointDistance = distanceSoFar;
-				distanceSoFar += Vector2.Distance( firstPoint, secondPoint );
+				distanceSoFar += secondPoint.lengthFromPreviousPoint;
 
 				var firstPointRatio = firstPointDistance / lineLength;
 				var secondPointRatio = distanceSoFar / lineLength;
@@ -266,8 +384,7 @@ namespace Nez
 				// dont recalculate the fusedPoint for the last segment since there will be no third point to work with
 				if( thirdPoint.HasValue )
 				{
-					Debug.log( "3rd pt has value fucker" );
-					var shouldFuseBottom = Vector2Ext.isTriangleCCW( firstPoint, secondPoint, thirdPoint.Value );
+					var shouldFuseBottom = Vector2Ext.isTriangleCCW( firstPoint.position, secondPoint.position, thirdPoint.Value.position );
 					_secondSegment.setFusedData( shouldFuseBottom, _firstSegment );
 				}
 
@@ -330,13 +447,13 @@ namespace Nez
 			if( nextSegment.shouldFuseBottom )
 			{
 				addVert( vertIndex++, segment.tr, new Vector2( 1, 1 ), _endColor );
-				addVert( vertIndex++, nextSegment.point, new Vector2( 1, 0.5f ), _endColor );
+				addVert( vertIndex++, nextSegment.point.position, new Vector2( 1, 0.5f ), _endColor );
 				addVert( vertIndex++, nextSegment.fusedPoint, new Vector2( 1, 0 ), _endColor );
 			}
 			else
 			{
 				addVert( vertIndex++, nextSegment.fusedPoint, new Vector2( 1, 1 ), _endColor );
-				addVert( vertIndex++, nextSegment.point, new Vector2( 1, 0.5f ), _endColor );
+				addVert( vertIndex++, nextSegment.point.position, new Vector2( 1, 0.5f ), _endColor );
 				addVert( vertIndex++, segment.br, new Vector2( 1, 0 ), _startColor );
 			}
 
@@ -382,7 +499,7 @@ namespace Nez
 				addVert( vertIndex++, segment.bl, new Vector2( 0, 0 ), _startColor );
 			}
 
-			addVert( vertIndex++, segment.point, new Vector2( 1, 0.5f ), _startColor );
+			addVert( vertIndex++, segment.point.position, new Vector2( 1, 0.5f ), _startColor );
 		}
 
 
@@ -404,6 +521,7 @@ namespace Nez
 						patchStandardJoint( segment, ref vertIndex );
 					break;
 				case EndCapType.Smooth:
+					patchSmoothJoint( segment, ref vertIndex );
 					break;
 			}
 		}
@@ -446,7 +564,7 @@ namespace Nez
 
 					_indices.add( (short)( vertIndex - 1 ) );
 					_indices.add( (short)( vertIndex + 4 ) );
-					_indices.add( (short)( vertIndex - 6 ) );
+					_indices.add( (short)( vertIndex - 5 ) );
 				}
 			}
 			else
@@ -463,9 +581,70 @@ namespace Nez
 					_indices.add( (short)( vertIndex - 3 + firstSegmentOffset ) );
 					_indices.add( (short)( vertIndex + 4 ) );
 					_indices.add( (short)( vertIndex - 1 ) );
-
-					Core.graphicsDevice.RasterizerState = RasterizerState.CullNone;
 				}
+			}
+		}
+
+
+		[MethodImpl( MethodImplOptions.AggressiveInlining )]
+		void patchSmoothJoint( Segment segment, ref int vertIndex )
+		{
+			if( segment.shouldFuseBottom )
+			{
+				var a = _lastSegment.tr;
+				var b = segment.tl;
+				var center = segment.point.position;
+
+				var angle1 = Mathf.atan2( a.Y - center.Y, a.X - center.X ) * Mathf.rad2Deg;
+				var angle2 = Mathf.atan2( b.Y - center.Y, b.X - center.X ) * Mathf.rad2Deg;
+
+				// trying to fix zig-zag, right-to-left, top-to-bottom which has negative angles
+				if( angle1 < 0 ) angle1 += 360;
+				if( angle2 < 0 ) angle2 += 360;
+
+				var midAngle = ( angle2 - angle1 ) / 2 + angle1;
+
+				Debug.log( $"angle1: {angle1}, angle2: {angle2}, mid: {midAngle}" );
+				var midPoint = Mathf.pointOnCircle( center, _startWidth / 2, midAngle );
+
+				addVert( vertIndex++, midPoint, new Vector2( 1, 1 ), Color.White );
+
+				_indices.add( (short)vertIndex );
+				_indices.add( (short)( vertIndex + 4 ) );
+				_indices.add( (short)( vertIndex - 1 ) );
+
+				_indices.add( (short)( vertIndex - 1 ) );
+				_indices.add( (short)( vertIndex + 4 ) );
+				_indices.add( (short)( vertIndex - 5 ) );
+			}
+			else
+			{
+				var a = _lastSegment.br;
+				var b = segment.bl;
+				var center = segment.point.position;
+
+				var angle1 = Mathf.atan2( a.Y - center.Y, a.X - center.X ) * Mathf.rad2Deg;
+				var angle2 = Mathf.atan2( b.Y - center.Y, b.X - center.X ) * Mathf.rad2Deg;
+
+				// trying to fix zig-zag, left-to-right which has negative angles
+				if( angle1 < 0 ) angle1 += 360;
+				if( angle2 < 0 ) angle2 += 360;
+
+				var midAngle = ( angle2 - angle1 ) / 2 + angle1;
+				var midPoint = Mathf.pointOnCircle( center, _startWidth / 2, midAngle );
+
+				addVert( vertIndex++, midPoint, new Vector2( 1, 0 ), Color.Black );
+
+				var firstSegmentOffset = vertIndex == 6 ? 1 : 0;
+				Debug.log( $"angle1: {angle1}, angle2: {angle2}, mid: {midAngle}, firstSegmentOffset: {firstSegmentOffset}" );
+
+				_indices.add( (short)( vertIndex + 4 ) );
+				_indices.add( (short)( vertIndex + 3 ) );
+				_indices.add( (short)( vertIndex - 1 ) );
+
+				_indices.add( (short)( vertIndex - 4 + firstSegmentOffset ) );
+				_indices.add( (short)( vertIndex + 4 ) );
+				_indices.add( (short)( vertIndex - 1 ) );
 			}
 		}
 
@@ -541,43 +720,54 @@ namespace Nez
 		#endregion
 
 
+		#region Helper classes
+
+		struct SegmentPoint
+		{
+			public Vector2 position;
+			public Color color;
+			public float width;
+			public float lengthFromPreviousPoint;
+		}
+
+
 		/// <summary>
 		/// helper class used to store some data when calculating verts
 		/// </summary>
 		class Segment
 		{
 			public Vector2 tl, tr, br, bl;
-			public Vector2 point;
-			public Vector2 nextPoint;
+			public SegmentPoint point;
+			public SegmentPoint nextPoint;
 			public Vector2 fusedPoint;
 			public bool hasFusedPoint;
 			public bool shouldFuseBottom;
 			public float angle;
 
 
-			public void setPoints( Vector2 point, Vector2 nextPoint, float firstPointWidth, float secondPointWidth )
+			public void setPoints( SegmentPoint point, SegmentPoint nextPoint, float firstPointWidth, float secondPointWidth )
 			{
 				angle = 0;
 				this.point = point;
 				this.nextPoint = nextPoint;
 
 				// rotate 90 degrees before calculating and cache cos/sin
-				var radians = Mathf.atan2( nextPoint.Y - point.Y, nextPoint.X - point.X );
+				var radians = Mathf.atan2( nextPoint.position.Y - point.position.Y, nextPoint.position.X - point.position.X );
 				radians += MathHelper.PiOver2;
 				var halfCos = Mathf.cos( radians ) * 0.5f;
 				var halfSin = Mathf.sin( radians ) * 0.5f;
 
-				tl = point - new Vector2( firstPointWidth * halfCos, firstPointWidth * halfSin );
-				tr = nextPoint - new Vector2( secondPointWidth * halfCos, secondPointWidth * halfSin );
-				br = nextPoint + new Vector2( secondPointWidth * halfCos, secondPointWidth * halfSin );
-				bl = point + new Vector2( firstPointWidth * halfCos, firstPointWidth * halfSin );
+				tl = point.position - new Vector2( firstPointWidth * halfCos, firstPointWidth * halfSin );
+				tr = nextPoint.position - new Vector2( secondPointWidth * halfCos, secondPointWidth * halfSin );
+				br = nextPoint.position + new Vector2( secondPointWidth * halfCos, secondPointWidth * halfSin );
+				bl = point.position + new Vector2( firstPointWidth * halfCos, firstPointWidth * halfSin );
 			}
 
 
 			public void setFusedData( bool shouldFuseBottom, Segment segment )
 			{
 				// store the angle off for later. For extreme angles we add extra verts to smooth the joint
-				angle = Vector2Ext.angle( segment.point - point, nextPoint - point );
+				angle = Vector2Ext.angle( segment.point.position - point.position, nextPoint.position - point.position );
 				this.shouldFuseBottom = shouldFuseBottom;
 
 				if( shouldFuseBottom )
@@ -601,6 +791,8 @@ namespace Nez
 			}
 
 		}
+
+		#endregion
 
 	}
 }

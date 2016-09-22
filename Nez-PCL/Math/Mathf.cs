@@ -517,7 +517,7 @@ namespace Nez
 
 
 		/// <summary>
-		/// gets a point on the circumference of the circle given its center, radius and angle
+		/// gets a point on the circumference of the circle given its center, radius and angle. 0 degrees is 3 o'clock.
 		/// </summary>
 		/// <returns>The on circle.</returns>
 		/// <param name="circleCenter">Circle center.</param>

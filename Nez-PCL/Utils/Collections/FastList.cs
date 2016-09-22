@@ -121,12 +121,12 @@ namespace Nez
 
 
 		/// <summary>
-		/// if the buffer is at its max more space will be allocated
+		/// if the buffer is at its max more space will be allocated to fit additionalItemCount
 		/// </summary>
-		public void ensureCapacity( int itemCount = 0 )
+		public void ensureCapacity( int additionalItemCount = 1 )
 		{
-			if( length + itemCount >= buffer.Length )
-				Array.Resize( ref buffer, Math.Max( buffer.Length << 1, 10 ) );
+			if( length + additionalItemCount >= buffer.Length )
+				Array.Resize( ref buffer, Math.Max( buffer.Length << 1, length + additionalItemCount ) );
 		}
 
 
