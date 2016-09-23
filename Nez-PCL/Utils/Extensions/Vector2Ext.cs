@@ -106,7 +106,7 @@ namespace Nez
 
 
 		/// <summary>
-		/// returns the angle between the two vectors
+		/// returns the angle between the two vectors in degrees
 		/// </summary>
 		/// <param name="from">From.</param>
 		/// <param name="to">To.</param>

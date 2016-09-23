@@ -48,7 +48,7 @@ namespace Nez
 		[MethodImpl( MethodImplOptions.AggressiveInlining )]
 		public static float floor( float f )
 		{
-			return (float)Math.Floor( (double)f );
+			return (float)Math.Floor( f );
 		}
 
 
@@ -274,12 +274,35 @@ namespace Nez
 		}
 
 
+		/// <summary>
+		/// Calculates the shortest difference between two given angles in degrees
+		/// </summary>
+		/// <returns>The angle.</returns>
+		/// <param name="current">Current.</param>
+		/// <param name="target">Target.</param>
 		[MethodImpl( MethodImplOptions.AggressiveInlining )]
 		public static float deltaAngle( float current, float target )
 		{
 			var num = Mathf.repeat( target - current, 360f );
 			if( num > 180f )
 				num -= 360f;
+
+			return num;
+		}
+
+
+		/// <summary>
+		/// Calculates the shortest difference between two given angles given in radians
+		/// </summary>
+		/// <returns>The angle.</returns>
+		/// <param name="current">Current.</param>
+		/// <param name="target">Target.</param>
+		[MethodImpl( MethodImplOptions.AggressiveInlining )]
+		public static float deltaAngleRadians( float current, float target )
+		{
+			var num = repeat( target - current, 2 * MathHelper.Pi );
+			if( num > MathHelper.Pi )
+				num -= 2 * MathHelper.Pi;
 
 			return num;
 		}
@@ -557,6 +580,10 @@ namespace Nez
 
 		#region wrappers for Math doubles
 
+		/// <summary>
+		/// Returns the square root
+		/// </summary>
+		/// <param name="val">Value.</param>
 		[MethodImpl( MethodImplOptions.AggressiveInlining )]
 		public static float sqrt( float val )
 		{
@@ -571,6 +598,10 @@ namespace Nez
 		}
 
 
+		/// <summary>
+		/// Returns the sine of angle in radians
+		/// </summary>
+		/// <param name="f">F.</param>
 		[MethodImpl( MethodImplOptions.AggressiveInlining )]
 		public static float sin( float f )
 		{
@@ -578,6 +609,10 @@ namespace Nez
 		}
 
 
+		/// <summary>
+		/// Returns the cosine of angle in radians
+		/// </summary>
+		/// <param name="f">F.</param>
 		[MethodImpl( MethodImplOptions.AggressiveInlining )]
 		public static float cos( float f )
 		{
@@ -585,6 +620,10 @@ namespace Nez
 		}
 
 
+		/// <summary>
+		/// Returns the arc-cosine of f: the angle in radians whose cosine is f
+		/// </summary>
+		/// <param name="f">F.</param>
 		[MethodImpl( MethodImplOptions.AggressiveInlining )]
 		public static float acos( float f )
 		{
@@ -600,7 +639,7 @@ namespace Nez
 
 
 		/// <summary>
-		/// returns the angle whose tangent is the quotient of two specified numbers
+		/// returns the angle whose tangent is the quotient (y/x) of two specified numbers
 		/// </summary>
 		/// <param name="y">The y coordinate.</param>
 		/// <param name="x">The x coordinate.</param>
