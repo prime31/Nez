@@ -1,4 +1,5 @@
 ﻿<#@ template language="C#" hostSpecific="true" #>
+<#@ assembly name="System.Core" #>
 <#@ import namespace="System.Collections.Generic" #>
 <# var enumTypes = new string[] { "OtherNamespace.OtherEnum", "Namespace.Enum" }; #>
 using System.Collections.Generic;
