@@ -196,7 +196,6 @@
     <Compile Include="Utils\Analysis\Layout.cs" />
     <Compile Include="Utils\Analysis\StopWatch.cs" />
     <Compile Include="ECS\Components\Renderables\Particles\ParticleCollisionConfig.cs" />
-    <Compile Include="ECS\Components\Renderables\SimplePolygon.cs" />
     <Compile Include="ECS\Components\Renderables\Sprites\SpriteTrail.cs" />
     <Compile Include="ECS\Components\Renderables\Sprites\SpriteT.cs" />
     <Compile Include="ECS\Components\Renderables\Sprites\Sprite.cs" />
@@ -508,6 +507,7 @@
     <Compile Include="ECS\Components\Renderables\3D\VertexPositionColorNormal.cs" />
     <Compile Include="ECS\Components\Renderables\LineRenderer.cs" />
     <Compile Include="Utils\Extensions\Vector3Ext.cs" />
+    <Compile Include="ECS\Components\Renderables\PolygonMesh.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="MonoGame.Framework">

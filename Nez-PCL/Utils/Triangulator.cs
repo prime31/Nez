@@ -11,7 +11,7 @@ namespace Nez
     public class Triangulator
     {
 		/// <summary>
-		/// The indexes of triangle list entries for the list of points used in the last <see cref="Triangulate"/> call.
+		/// The indexes of triangle list entries for the list of points used in the last triangulate call.
 		/// </summary>
 		public List<int> triangleIndices = new List<int>();
 
