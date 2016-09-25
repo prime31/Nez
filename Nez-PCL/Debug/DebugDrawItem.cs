@@ -12,6 +12,7 @@ namespace Nez
 		{
 			Line,
 			HollowRectangle,
+			Pixel,
 			BitmapFontText,
 			SpriteFontText,
 			ConsoleText
@@ -28,6 +29,10 @@ namespace Nez
 		public NezSpriteFont spriteFont;
 		public Vector2 position;
 		public float scale;
+
+		// used for Pixel items
+		public float x, y;
+		public int size;
 
 		// shared by multiple items
 		public Color color;
@@ -52,6 +57,17 @@ namespace Nez
 			this.color = color;
 			this.duration = duration;
 			drawType = DebugDrawType.HollowRectangle;
+		}
+
+
+		public DebugDrawItem( float x, float y, int size, Color color, float duration )
+		{
+			this.x = x;
+			this.y = y;
+			this.size = size;
+			this.color = color;
+			this.duration = duration;
+			drawType = DebugDrawType.Pixel;
 		}
 
 
@@ -103,6 +119,9 @@ namespace Nez
 				case DebugDrawType.HollowRectangle:
 					graphics.batcher.drawHollowRect( rectangle, color );
 					break;
+				case DebugDrawType.Pixel:
+					graphics.batcher.drawPixel( x, y, color, size );
+					break;
 				case DebugDrawType.BitmapFontText:
 					graphics.batcher.drawString( bitmapFont, text, position, color, 0f, Vector2.Zero, scale, SpriteEffects.None, 0f );
 					break;
@@ -128,6 +147,8 @@ namespace Nez
 					return ( end - start ).Y;
 				case DebugDrawType.HollowRectangle:
 					return rectangle.Height;
+				case DebugDrawType.Pixel:
+					return size;
 				case DebugDrawType.BitmapFontText:
 				case DebugDrawType.ConsoleText:
 					return bitmapFont.measureString( text ).Y * scale;

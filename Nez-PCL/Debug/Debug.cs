@@ -188,6 +188,15 @@ namespace Nez
 
 
 		[Conditional( "DEBUG" )]
+		public static void drawPixel( float x, float y, int size, Color color, float duration = 0f )
+		{
+			if( !Core.debugRenderEnabled )
+				return;
+			_debugDrawItems.Add( new DebugDrawItem( x, y, size, color, duration ) );
+		}
+
+
+		[Conditional( "DEBUG" )]
 		public static void drawHollowRect( Rectangle rectangle, Color color, float duration = 0f )
 		{
 			if( !Core.debugRenderEnabled )
