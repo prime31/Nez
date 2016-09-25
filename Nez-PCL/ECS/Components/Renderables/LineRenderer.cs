@@ -4,10 +4,6 @@ using Nez.PhysicsShapes;
 using System.Runtime.CompilerServices;
 
 
-// TODO:
-//			cache distances
-//			?? allow width/Color per point ??
-
 namespace Nez
 {
 	/// <summary>
@@ -117,7 +113,7 @@ namespace Nez
 			if( _basicEffect != null )
 			{
 				_basicEffect.Texture = texture;
-				_basicEffect.TextureEnabled = true;
+				_basicEffect.TextureEnabled = texture != null;
 			}
 			else
 			{
@@ -833,9 +829,19 @@ namespace Nez
 
 			if( !useWorldSpace )
 				_basicEffect.World = transform.localToWorldTransform;
-			
+
 			var primitiveCount = _indices.length / 3;
 			Core.graphicsDevice.DrawUserIndexedPrimitives( PrimitiveType.TriangleList, _vertices.buffer, 0, _vertices.length, _indices.buffer, 0, primitiveCount );
+		}
+
+
+		public override void debugRender( Graphics graphics )
+		{
+			for( var i = 0; i < _vertices.length; i++ )
+			{
+				var v = _vertices[i];
+				Debug.drawPixel( v.Position.X, v.Position.Y, 4, Color.GhostWhite );
+			}
 		}
 
 		#endregion
