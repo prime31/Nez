@@ -15,6 +15,7 @@ namespace Nez
 
 			setVertPositions( points );
 			setTriangles( triangulator.triangleIndices.ToArray() );
+			recalculateBounds( true );
 		}
 	}
 }

@@ -1,10 +1,8 @@
-﻿using System.Diagnostics;
-using System.IO;
-using Microsoft.Xna.Framework.Content.Pipeline;
+﻿using Microsoft.Xna.Framework.Content.Pipeline;
 using Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler;
 using Nez.Overlap2D.Runtime;
 using Microsoft.Xna.Framework;
-
+using System.Linq;
 
 namespace Nez.Overlap2D
 {
@@ -112,6 +110,7 @@ namespace Nez.Overlap2D
 			// we have to multiply by our scenes pixelToWorld and invert y
 			var vectorFix = new Vector2( scene.pixelToWorld, -scene.pixelToWorld );
 			var polygon = colorPrim.shape.polygons[0];
+
 			writer.Write( polygon.Length );
 			foreach( var vec in polygon )
 				writer.Write( vec * vectorFix );
