@@ -95,10 +95,10 @@ namespace Nez.UI
 		/// <param name="stage">Stage.</param>
 		public Dialog show( Stage stage )
 		{
+			stage.addElement( this );
 			setPosition( Mathf.round( ( stage.getWidth() - getWidth() ) / 2 ), Mathf.round( ( stage.getHeight() - getHeight() ) / 2 ) );
 
 			pack();
-			stage.addElement( this );
 
 			return this;
 		}
