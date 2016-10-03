@@ -120,6 +120,21 @@ namespace Nez
 
 
 		/// <summary>
+		/// returns the angle between left and right with self being the center point in degrees
+		/// </summary>
+		/// <param name="self">Self.</param>
+		/// <param name="left">V left.</param>
+		/// <param name="right">V right.</param>
+		[MethodImpl( MethodImplOptions.AggressiveInlining )]
+		public static float angleBetween( this Vector2 self, Vector2 left, Vector2 right )
+		{
+			var one = left - self;
+			var two = right - self;
+			return angle( one, two );
+		}
+
+
+		/// <summary>
 		/// given two lines (ab and cd) finds the intersection point
 		/// </summary>
 		/// <returns>The ray intersection.</returns>

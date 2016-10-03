@@ -514,46 +514,7 @@ namespace Nez
 		[MethodImpl( MethodImplOptions.AggressiveInlining )]
 		public static float roundToNearest( float value, float roundToNearest )
 		{
-			return Mathf.round( value / roundToNearest ) * roundToNearest;
-		}
-
-
-		/// <summary>
-		/// the rotation is relative to the current position not the total rotation.  For example, if you are currently at 90 degrees and
-		/// want to rotate to 135 degrees, you would use an angle of 45, not 135.
-		/// </summary>
-		/// <returns>The around.</returns>
-		/// <param name="point">Point.</param>
-		/// <param name="center">Center.</param>
-		/// <param name="angleInDegrees">Angle in degrees.</param>
-		[MethodImpl( MethodImplOptions.AggressiveInlining )]
-		public static Vector2 rotateAround( Vector2 point, Vector2 center, float angleInDegrees )
-		{
-			angleInDegrees = MathHelper.ToRadians( angleInDegrees );
-			var cos = Mathf.cos( angleInDegrees );
-			var sin = Mathf.sin( angleInDegrees );
-			var rotatedX = cos * ( point.X - center.X ) - sin * ( point.Y - center.Y ) + center.X;
-			var rotatedY = sin * ( point.X - center.X ) + cos * ( point.Y - center.Y ) + center.Y;
-
-			return new Vector2( rotatedX, rotatedY );
-		}
-
-
-		/// <summary>
-		/// gets a point on the circumference of the circle given its center, radius and angle. 0 degrees is 3 o'clock.
-		/// </summary>
-		/// <returns>The on circle.</returns>
-		/// <param name="circleCenter">Circle center.</param>
-		/// <param name="radius">Radius.</param>
-		/// <param name="angleInDegrees">Angle in degrees.</param>
-		[MethodImpl( MethodImplOptions.AggressiveInlining )]
-		public static Vector2 pointOnCircle( Vector2 circleCenter, float radius, float angleInDegrees )
-		{
-			var radians = MathHelper.ToRadians( angleInDegrees );
-			return new Vector2 {
-				X = cos( radians ) * radius + circleCenter.X,
-				Y = sin( radians ) * radius + circleCenter.Y
-			};
+			return round( value / roundToNearest ) * roundToNearest;
 		}
 
 
@@ -561,6 +522,18 @@ namespace Nez
 		public static bool withinEpsilon( float floatA, float floatB )
 		{
 			return Math.Abs( floatA - floatB ) < epsilon;
+		}
+
+
+		/// <summary>
+		/// returns sqrt( x * x + y * y )
+		/// </summary>
+		/// <param name="x">The x coordinate.</param>
+		/// <param name="y">The y coordinate.</param>
+		[MethodImpl( MethodImplOptions.AggressiveInlining )]
+		public static float hypotenuse( float x, float y )
+		{
+			return sqrt( x * x + y * y );
 		}
 
 
@@ -676,10 +649,50 @@ namespace Nez
 		{
 			var time = Time.time * speed;
 
-			var x = (float)Math.Cos( time );
-			var y = (float)Math.Sin( time );
+			var x = cos( time );
+			var y = sin( time );
 
 			return new Vector2( position.X + x, position.Y + y );
+		}
+
+
+		/// <summary>
+		/// the rotation is relative to the current position not the total rotation. For example, if you are currently at 90 degrees and
+		/// want to rotate to 135 degrees, you would use an angle of 45, not 135.
+		/// </summary>
+		/// <returns>The around.</returns>
+		/// <param name="point">Point.</param>
+		/// <param name="center">Center.</param>
+		/// <param name="angleInDegrees">Angle in degrees.</param>
+		[MethodImpl( MethodImplOptions.AggressiveInlining )]
+		public static Vector2 rotateAround( Vector2 point, Vector2 center, float angleInDegrees )
+		{
+			angleInDegrees = MathHelper.ToRadians( angleInDegrees );
+			var cos = Mathf.cos( angleInDegrees );
+			var sin = Mathf.sin( angleInDegrees );
+			var rotatedX = cos * ( point.X - center.X ) - sin * ( point.Y - center.Y ) + center.X;
+			var rotatedY = sin * ( point.X - center.X ) + cos * ( point.Y - center.Y ) + center.Y;
+
+			return new Vector2( rotatedX, rotatedY );
+		}
+
+
+		/// <summary>
+		/// gets a point on the circumference of the circle given its center, radius and angle. 0 degrees is 3 o'clock.
+		/// </summary>
+		/// <returns>The on circle.</returns>
+		/// <param name="circleCenter">Circle center.</param>
+		/// <param name="radius">Radius.</param>
+		/// <param name="angleInDegrees">Angle in degrees.</param>
+		[MethodImpl( MethodImplOptions.AggressiveInlining )]
+		public static Vector2 pointOnCircle( Vector2 circleCenter, float radius, float angleInDegrees )
+		{
+			var radians = MathHelper.ToRadians( angleInDegrees );
+			return new Vector2
+			{
+				X = cos( radians ) * radius + circleCenter.X,
+				Y = sin( radians ) * radius + circleCenter.Y
+			};
 		}
 
 		#endregion

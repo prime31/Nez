@@ -31,6 +31,16 @@ namespace Nez
 		}
 
 
+		public static Color hexToColor( int hex )
+		{
+			var r = (byte)( hex >> 16 );
+			var g = (byte)( hex >> 8 );
+			var b = (byte)( hex >> 0 );
+
+			return new Color( r, g, b );
+		}
+
+
 		static public Color grayscale( this Color color )
 		{
 			return new Color( (int)( color.R * 0.3 + color.G * 0.59 + color.B * 0.11 ),
