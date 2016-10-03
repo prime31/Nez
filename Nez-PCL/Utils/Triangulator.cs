@@ -31,11 +31,14 @@ namespace Nez
 			// set up previous and next links to effectively from a double-linked vert list
             initialize( count );
 
+			// loop breaker for polys that are not triangulatable
+			var iterations = 0;
 			// start at vert 0
             var index = 0;
 			// keep removing verts until just a triangle is left
-            while( count > 3 )
+            while( count > 3 && iterations < 500 )
 			{
+				iterations++;
 				// test if current vert is an ear
                 var isEar = true;
 

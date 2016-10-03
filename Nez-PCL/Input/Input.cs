@@ -153,6 +153,13 @@ namespace Nez
 		#region Mouse
 
 		/// <summary>
+		/// returns the previous mouse state. Use with caution as it only contains raw data and does not take camera scaling into affect like
+		/// Input.mousePosition does.
+		/// </summary>
+		/// <value>The state of the previous mouse.</value>
+		public static MouseState previousMouseState { get { return _previousMouseState; } }
+
+		/// <summary>
 		/// only true if down this frame
 		/// </summary>
 		public static bool leftMouseButtonPressed

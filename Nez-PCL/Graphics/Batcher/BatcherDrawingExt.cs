@@ -149,9 +149,9 @@ namespace Nez
 		}
 
 
-		public static void drawCircle( this Batcher batcher, float x, float y, float radius, Color color, int resolution )
+		public static void drawCircle( this Batcher batcher, float x, float y, float radius, Color color, int thickness = 1, int resolution = 12 )
 		{
-			drawCircle( batcher, new Vector2( x, y ), radius, color, resolution );
+			drawCircle( batcher, new Vector2( x, y ), radius, color, thickness, resolution );
 		}
 
 		#endregion

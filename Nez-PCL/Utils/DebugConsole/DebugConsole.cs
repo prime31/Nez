@@ -544,7 +544,7 @@ namespace Nez.Console
 #endregion
 
 
-#region Execute
+		#region Execute
 
 		public void executeCommand( string command, string[] args )
 		{
@@ -567,10 +567,10 @@ namespace Nez.Console
 			instance._functionKeyActions[functionKey - 1] = action;
 		}
 
-#endregion
+		#endregion
 
 
-#region Parse Commands
+		#region Parse Commands
 
 		void buildCommandsList()
 		{
