@@ -54,12 +54,7 @@ namespace Nez
 		{
 			_sourceRect = subtexture.sourceRect;
 			material = new Material();
-
-			// choose the best fit wrap type based on the defaultSamplerState
-			if( Core.defaultSamplerState.Filter == TextureFilter.Point )
-				material.samplerState = SamplerState.PointWrap;
-			else
-				material.samplerState = SamplerState.LinearWrap;
+			material.samplerState = Core.defaultWrapedSamplerState;
 		}
 
 
