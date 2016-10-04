@@ -1,10 +1,13 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
-using System.Collections.Generic;
 
 
 namespace Nez.PhysicsShapes
 {
+	/// <summary>
+	/// various collision routines for Shapes. Most of these expect the first Shape to be in the space of the second (i.e. shape1.pos should
+	/// be set to shape1.pos - shape2.pos).
+	/// </summary>
 	public static class ShapeCollisions
 	{
 		// storage for polygon SAT checks
@@ -446,29 +449,42 @@ namespace Nez.PhysicsShapes
 
 
 		/// <summary>
-		/// note: if circle center lies in the box the collision result will be incorrect!
+		/// works for circles whos center is in the box as well as just overlapping with the center out of the box.
 		/// </summary>
 		/// <returns><c>true</c>, if to box was circled, <c>false</c> otherwise.</returns>
-		/// <param name="first">First.</param>
-		/// <param name="second">Second.</param>
+		/// <param name="circle">First.</param>
+		/// <param name="box">Second.</param>
 		/// <param name="result">Result.</param>
-		public static bool circleToBox( Circle first, Box second, out CollisionResult result )
+		public static bool circleToBox( Circle circle, Box box, out CollisionResult result )
 		{
 			result = new CollisionResult();
 
-			var closestPointOnBounds = second.bounds.getClosestPointOnRectangleBorderToPoint( first.position );
+			var closestPointOnBounds = box.bounds.getClosestPointOnRectangleBorderToPoint( circle.position );
+
+			// deal with circles whos center is in the box first since its cheaper to see if we are contained
+			if( box.containsPoint( circle.position ) )
+			{
+				result.point = closestPointOnBounds;
+				result.normal = Vector2.Normalize( closestPointOnBounds - circle.position );
+
+				// calculate mtv. Find the safe, non-collided position and get the mtv from that.
+				var safePlace = closestPointOnBounds + result.normal * circle.radius;
+				result.minimumTranslationVector = circle.position - safePlace;
+
+				return true;
+			}
 
 			float sqrDistance;
-			Vector2.DistanceSquared( ref closestPointOnBounds, ref first.position, out sqrDistance );
+			Vector2.DistanceSquared( ref closestPointOnBounds, ref circle.position, out sqrDistance );
 
-			// see if the point on the box is less than radius from the circle
-			if( sqrDistance <= first.radius * first.radius )
+			// see if the point on the box is less than radius from the circle making sure the circle center is not in the box
+			if( sqrDistance <= circle.radius * circle.radius )
 			{
-				var distanceToCircle = first.position - closestPointOnBounds;
-				var depth = distanceToCircle.Length() - first.radius;
+				var directionToCircle = circle.position - closestPointOnBounds;
+				var depth = directionToCircle.Length() - circle.radius;
 
 				result.point = closestPointOnBounds;
-				result.normal = Vector2.Normalize( distanceToCircle );
+				result.normal = Vector2.Normalize( directionToCircle );
 				result.minimumTranslationVector = depth * result.normal;
 
 				return true;
@@ -489,16 +505,27 @@ namespace Nez.PhysicsShapes
 			float distanceSquared;
 			var closestPoint = polygon.getClosestPointOnPolygonToPoint( poly2Circle, out distanceSquared, out result.normal );
 
-			// make sure the squared distance is less than our radius squared else we are not colliding
-			if( distanceSquared > circle.radius * circle.radius )
+			// make sure the squared distance is less than our radius squared else we are not colliding. Note that if the Circle is fully
+			// contained in the Polygon the distance could be larger than the radius. Because of that we also  make sure the circle position
+			// is not inside the poly.
+			var circleCenterInsidePoly = polygon.containsPoint( circle.position );
+			if( distanceSquared > circle.radius * circle.radius && !circleCenterInsidePoly )
 				return false;
 
-			// figure out the mtd
-			var distance = Mathf.sqrt( distanceSquared );
-			var mtv = ( poly2Circle - closestPoint ) * ( ( circle.radius - distance ) / distance );
+			// figure out the mtv. We have to be careful to deal with circles fully contained in the polygon or with their center contained.
+			Vector2 mtv;
+			if( circleCenterInsidePoly )
+			{
+				mtv = result.normal * ( Mathf.sqrt( distanceSquared ) + circle.radius );
+			}
+			else
+			{
+				var distance = Mathf.sqrt( distanceSquared );
+				mtv = ( poly2Circle - closestPoint ) * ( ( circle.radius - distance ) / distance );
+			}
 
 			result.minimumTranslationVector = -mtv;
-			result.normal.Normalize();
+			result.point = closestPoint + polygon.position;
 
 			return true;
 		}
@@ -691,6 +718,69 @@ namespace Nez.PhysicsShapes
 			intersection = a1 + t * b;
 
 			return true;
+		}
+
+		#endregion
+
+
+		#region Points
+
+		public static bool pointToCircle( Vector2 point, Circle circle, out CollisionResult result )
+		{
+			result = new CollisionResult();
+
+			// avoid the square root until we actually need it
+			var distanceSquared = Vector2.DistanceSquared( point, circle.position );
+			var sumOfRadii = 1 + circle.radius;
+			var collided = distanceSquared < sumOfRadii * sumOfRadii;
+			if( collided )
+			{
+				result.normal = Vector2.Normalize( point - circle.position );
+				var depth = sumOfRadii - Mathf.sqrt( distanceSquared );
+				result.minimumTranslationVector = -depth * result.normal;
+				result.point = circle.position + result.normal * circle.radius;
+
+				return true;
+			}
+
+			return false;
+		}
+
+
+		public static bool pointToBox( Vector2 point, Box box, out CollisionResult result )
+		{
+			result = new CollisionResult();
+
+			if( box.containsPoint( point ) )
+			{
+				// get the point in the space of the Box
+				result.point = box.bounds.getClosestPointOnRectangleBorderToPoint( point );
+				result.normal = Vector2.Normalize( result.point - point );
+				result.minimumTranslationVector = point - result.point;
+
+				return true;
+			}
+
+			return false;
+		}
+
+
+		public static bool pointToPoly( Vector2 point, Polygon poly, out CollisionResult result )
+		{
+			result = new CollisionResult();
+
+			if( poly.containsPoint( point ) )
+			{
+				float distanceSquared;
+				var closestPoint = poly.getClosestPointOnPolygonToPoint( point - poly.position, out distanceSquared, out result.normal );
+
+				result.minimumTranslationVector = -result.normal * Mathf.sqrt( distanceSquared );
+				result.point = closestPoint + poly.position;
+
+				return true;
+			}
+
+			return false;
 		}
 
 		#endregion

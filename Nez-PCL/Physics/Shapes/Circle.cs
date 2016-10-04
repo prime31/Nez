@@ -1,6 +1,5 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
-using System.Diagnostics;
 
 
 namespace Nez.PhysicsShapes
@@ -114,6 +113,12 @@ namespace Nez.PhysicsShapes
 		public bool containsPoint( ref Vector2 point )
 		{
 			return ( point - position ).LengthSquared() <= radius * radius;
+		}
+
+
+		public override bool pointCollidesWithShape( Vector2 point, out CollisionResult result )
+		{
+			return ShapeCollisions.pointToCircle( point, this, out result );
 		}
 
 	}

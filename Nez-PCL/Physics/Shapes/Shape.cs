@@ -24,6 +24,8 @@ namespace Nez.PhysicsShapes
 
 		public abstract bool containsPoint( Vector2 point );
 
+		public abstract bool pointCollidesWithShape( Vector2 point, out CollisionResult result );
+
 
 		public virtual Shape clone()
 		{

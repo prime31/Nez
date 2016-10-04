@@ -66,7 +66,7 @@ namespace Nez.PhysicsShapes
 		}
 
 
-		// Dont know  adjancent vertices so take each vertex
+		// Dont know adjancent vertices so take each vertex
 		// If you know adjancent vertices, perform hill climbing algorithm
 		public Vector2 getFarthestPointInDirection( Vector2 direction )
 		{
@@ -92,7 +92,7 @@ namespace Nez.PhysicsShapes
 
 		/// <summary>
 		/// iterates all the edges of the polygon and gets the closest point on any edge to point. Returns via out the squared distance
-		/// to the closest point and the normal of the edge it is on.
+		/// to the closest point and the normal of the edge it is on. point should be in the space of the Polygon (point - poly.position)
 		/// </summary>
 		/// <returns>The closest point on polygon to point.</returns>
 		/// <param name="point">Point.</param>
@@ -103,6 +103,7 @@ namespace Nez.PhysicsShapes
 			distanceSquared = float.MaxValue;
 			edgeNormal = Vector2.Zero;
 			var closestPoint = Vector2.Zero;
+
 			float tempDistanceSquared;
 			for( var i = 0; i < points.Length; i++ )
 			{
@@ -124,6 +125,8 @@ namespace Nez.PhysicsShapes
 					edgeNormal.Y = -line.X;
 				}
 			}
+
+			Vector2Ext.normalize( ref edgeNormal );
 
 			return closestPoint;
 		}
@@ -199,6 +202,12 @@ namespace Nez.PhysicsShapes
 			}
 
 			return isInside;
+		}
+
+
+		public override bool pointCollidesWithShape( Vector2 point, out CollisionResult result )
+		{
+			return ShapeCollisions.pointToPoly( point, this, out result );
 		}
 
 		#endregion

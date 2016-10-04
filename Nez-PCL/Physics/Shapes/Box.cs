@@ -1,5 +1,4 @@
-﻿using System;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 
 
 namespace Nez.PhysicsShapes
@@ -89,6 +88,12 @@ namespace Nez.PhysicsShapes
 		public override bool containsPoint( Vector2 point )
 		{
 			return bounds.contains( point );
+		}
+
+
+		public override bool pointCollidesWithShape( Vector2 point, out CollisionResult result )
+		{
+			return ShapeCollisions.pointToBox( point, this, out result );
 		}
 
 	}
