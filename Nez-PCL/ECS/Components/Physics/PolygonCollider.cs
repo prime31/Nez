@@ -1,7 +1,4 @@
-﻿using System;
-using Microsoft.Xna.Framework;
-using System.Collections.Generic;
-using System.Text;
+﻿using Microsoft.Xna.Framework;
 using Nez.PhysicsShapes;
 
 
@@ -18,7 +15,7 @@ namespace Nez
 			var isPolygonClosed = points[0] == points[points.Length - 1];
 
 			// create the array with one less element if the poly is closed (has a duplicate vert)
-			var tempPoints = new Vector2[ isPolygonClosed ? points.Length - 1 : points.Length];
+			var tempPoints = new Vector2[isPolygonClosed ? points.Length - 1 : points.Length];
 
 			// copy our points over
 			for( var i = 0; i < tempPoints.Length; i++ )
@@ -36,8 +33,8 @@ namespace Nez
 
 		public override void debugRender( Graphics graphics )
 		{
-			graphics.batcher.drawHollowRect( shape.bounds, Color.Black );
-			graphics.batcher.drawPolygon( absolutePosition, ((shape as Polygon).points), Color.DarkRed, true );
+			graphics.batcher.drawHollowRect( shape.bounds, Color.White * 0.5f );
+			graphics.batcher.drawPolygon( absolutePosition, ( ( shape as Polygon ).points ), Color.DarkRed, true );
 			graphics.batcher.drawPixel( absolutePosition, Color.Yellow, 4 );
 		}
 

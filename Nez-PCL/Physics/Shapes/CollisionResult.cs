@@ -21,7 +21,10 @@ namespace Nez
 		/// </summary>
 		public Vector2 minimumTranslationVector;
 
-		internal Vector2 point;
+		/// <summary>
+		/// not used for all collisions types! Check the ShapeCollisions class before relying on this field!
+		/// </summary>
+		public Vector2 point;
 
 
 		/// <summary>
@@ -57,9 +60,8 @@ namespace Nez
 		/// </summary>
 		public void invertResult()
 		{
-			var inverse = new Vector2( -1f );
-			minimumTranslationVector *= inverse;
-			normal *= inverse;
+			minimumTranslationVector *= -1;
+			normal *= -1;
 		}
 
 

@@ -79,6 +79,11 @@ namespace Nez
 		}
 
 
+		/// <summary>
+		/// Calculates the integral part of a number cast to an int
+		/// </summary>
+		/// <returns>The to int.</returns>
+		/// <param name="f">F.</param>
 		[MethodImpl( MethodImplOptions.AggressiveInlining )]
 		public static int truncateToInt( float f )
 		{
