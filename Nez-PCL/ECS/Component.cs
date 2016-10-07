@@ -73,7 +73,7 @@ namespace Nez
 		/// called when the entity's position changes. This allows components to be aware that they have moved due to the parent
 		/// entity moving.
 		/// </summary>
-		public virtual void onEntityTransformChanged()
+		public virtual void onEntityTransformChanged( Transform.Component comp )
 		{}
 
 

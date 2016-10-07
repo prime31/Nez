@@ -47,12 +47,12 @@ namespace Nez
 		}
 
 
-		public override void onEntityTransformChanged()
+		public override void onEntityTransformChanged( Transform.Component comp )
 		{
-			base.onEntityTransformChanged();
+			base.onEntityTransformChanged( comp );
 
 			// our sprite is disabled so we need to forward the call over to it so it can update its bounds for rendering
-			_sprite.onEntityTransformChanged();
+			_sprite.onEntityTransformChanged( comp );
 		}
 
 

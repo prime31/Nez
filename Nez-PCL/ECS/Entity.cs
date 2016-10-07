@@ -99,11 +99,11 @@ namespace Nez
 		}
 
 
-		internal void onTransformChanged()
+		internal void onTransformChanged( Transform.Component comp )
 		{
 			// notify our children of our changed position
-			components.onEntityTransformChanged();
-			colliders.onEntityTransformChanged();
+			components.onEntityTransformChanged( comp );
+			colliders.onEntityTransformChanged( comp );
 		}
 
 

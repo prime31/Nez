@@ -424,7 +424,7 @@ namespace Nez
 
 		#region component overrides
 
-		public override void onEntityTransformChanged()
+		public override void onEntityTransformChanged( Transform.Component comp )
 		{
 			forceMatrixUpdate();
 		}

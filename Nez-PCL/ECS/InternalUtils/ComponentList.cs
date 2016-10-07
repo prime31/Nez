@@ -296,12 +296,12 @@ namespace Nez
 
 
 		[MethodImpl( MethodImplOptions.AggressiveInlining )]
-		internal void onEntityTransformChanged()
+		internal void onEntityTransformChanged( Transform.Component comp )
 		{
 			for( var i = 0; i < _components.length; i++ )
 			{
 				if( _components.buffer[i].enabled )
-					_components.buffer[i].onEntityTransformChanged();
+					_components.buffer[i].onEntityTransformChanged( comp );
 			}
 		}
 

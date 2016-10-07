@@ -116,10 +116,14 @@ namespace Nez
 
 		#region Component overrides
 
-		public override void onEntityTransformChanged()
+		public override void onEntityTransformChanged( Transform.Component comp )
 		{
-			removeColliders();
-			addColliders();
+			// we only deal with positional changes here. TiledMaps cant be scaled.
+			if( comp == Transform.Component.Position )
+			{
+				removeColliders();
+				addColliders();
+			}
 		}
 
 

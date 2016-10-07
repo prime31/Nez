@@ -16,6 +16,13 @@ namespace Nez
 			RotationDirty
 		}
 
+		public enum Component
+		{
+			Position,
+			Scale,
+			Rotation
+		}
+
 
 		#region properties and fields
 
@@ -128,7 +135,7 @@ namespace Nez
 				updateTransform();
 				return _localRotation;
 			}
-			set { setLocalRotation( value); }
+			set { setLocalRotation( value ); }
 		}
 
 
@@ -478,7 +485,7 @@ namespace Nez
 		{
 			if( hierarchyDirty != DirtyType.Clean )
 			{
-				if( parent != null && hierarchyDirty != DirtyType.Clean )
+				if( parent != null )
 					parent.updateTransform();
 
 				if( _localDirty )
@@ -540,7 +547,18 @@ namespace Nez
 			{
 				hierarchyDirty |= dirtyFlagType;
 
-				entity.onTransformChanged();
+				switch( dirtyFlagType )
+				{
+					case DirtyType.PositionDirty:
+						entity.onTransformChanged( Component.Position );
+						break;
+					case DirtyType.RotationDirty:
+						entity.onTransformChanged( Component.Rotation );
+						break;
+					case DirtyType.ScaleDirty:
+						entity.onTransformChanged( Component.Scale );
+						break;
+				}
 
 				// dirty our children as well so they know of the changes
 				for( var i = 0; i < _children.Count; i++ )
@@ -558,9 +576,6 @@ namespace Nez
 			_scale = transform._scale;
 			_localScale = transform._localScale;
 
-//			hierarchyDirty |= DirtyType.PositionDirty;
-//			hierarchyDirty |= DirtyType.RotationDirty;
-//			hierarchyDirty |= DirtyType.ScaleDirty;
 			setDirty( DirtyType.PositionDirty );
 			setDirty( DirtyType.RotationDirty );
 			setDirty( DirtyType.ScaleDirty );

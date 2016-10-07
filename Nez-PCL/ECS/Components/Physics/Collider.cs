@@ -1,7 +1,5 @@
-﻿using System;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Nez.PhysicsShapes;
-using System.Collections.Generic;
 
 
 namespace Nez
@@ -104,7 +102,7 @@ namespace Nez
 
 
 		public Collider()
-		{}
+		{ }
 
 
 		#region Fluent setters
@@ -207,7 +205,7 @@ namespace Nez
 		}
 
 
-		public virtual void onEntityTransformChanged()
+		public virtual void onEntityTransformChanged( Transform.Component comp )
 		{
 			_areBoundsDirty = true;
 		}
@@ -283,7 +281,7 @@ namespace Nez
 			var didCollide = shape.collidesWithShape( collider.shape, out result );
 			if( didCollide )
 				result.collider = collider;
-			
+
 			// return the shapes position to where it was before the check
 			shape.position = oldPosition;
 

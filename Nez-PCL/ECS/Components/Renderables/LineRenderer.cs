@@ -801,7 +801,7 @@ namespace Nez
 		}
 
 
-		public override void onEntityTransformChanged()
+		public override void onEntityTransformChanged( Transform.Component comp )
 		{
 			// we dont care if the transform changed if we are in world space
 			if( useWorldSpace )

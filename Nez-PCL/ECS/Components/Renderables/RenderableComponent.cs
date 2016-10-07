@@ -172,7 +172,7 @@ namespace Nez
 
 		#region Component overrides and RenderableComponent
 
-		public override void onEntityTransformChanged()
+		public override void onEntityTransformChanged( Transform.Component comp )
 		{
 			_areBoundsDirty = true;
 		}
