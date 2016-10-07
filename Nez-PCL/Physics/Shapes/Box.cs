@@ -12,7 +12,7 @@ namespace Nez.PhysicsShapes
 		public float height;
 
 
-		public Box( float width, float height ) : base( buildBox( width, height ) )
+		public Box( float width, float height ) : base( buildBox( width, height ), true )
 		{
 			isBox = true;
 			this.width = width;

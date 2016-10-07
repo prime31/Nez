@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System;
+using Microsoft.Xna.Framework;
 using Nez.PhysicsShapes;
 
 
@@ -14,14 +15,10 @@ namespace Nez
 			// first and last point must not be the same. we want an open polygon
 			var isPolygonClosed = points[0] == points[points.Length - 1];
 
-			// create the array with one less element if the poly is closed (has a duplicate vert)
-			var tempPoints = new Vector2[isPolygonClosed ? points.Length - 1 : points.Length];
+			if( isPolygonClosed )
+				Array.Resize( ref points, points.Length - 1 );
 
-			// copy our points over
-			for( var i = 0; i < tempPoints.Length; i++ )
-				tempPoints[i] = points[i];
-
-			shape = new Polygon( tempPoints );
+			shape = new Polygon( points );
 		}
 
 
@@ -36,6 +33,7 @@ namespace Nez
 			graphics.batcher.drawHollowRect( shape.bounds, Color.White * 0.3f );
 			graphics.batcher.drawPolygon( absolutePosition, ( ( shape as Polygon ).points ), Color.DarkRed, true );
 			graphics.batcher.drawPixel( absolutePosition, Color.Yellow, 4 );
+			graphics.batcher.drawPixel( ( shape as Polygon ).center + absolutePosition, Color.Red, 4 );
 		}
 
 	}

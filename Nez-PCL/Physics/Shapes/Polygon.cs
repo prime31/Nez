@@ -6,7 +6,20 @@ namespace Nez.PhysicsShapes
 {
 	public class Polygon : Shape
 	{
+		/// <summary>
+		/// the points that make up the Polygon. They should be CCW and convex.
+		/// </summary>
 		public Vector2[] points;
+
+		/// <summary>
+		/// edge normals are used for SAT collision detection. We cache them to avoid the squareroots. Note that Boxes will only have
+		/// 2 edgeNormals since the other two sides are parallel.
+		/// </summary>
+		public Vector2[] edgeNormals;
+
+		/// <summary>
+		/// the Polygon center
+		/// </summary>
 		public Vector2 center;
 
 		internal bool isBox;
@@ -19,7 +32,15 @@ namespace Nez.PhysicsShapes
 		public Polygon( Vector2[] points )
 		{
 			this.points = points;
-			recalculateCenter();
+			recalculateCenterAndEdgeNormals();
+		}
+
+
+		internal Polygon( Vector2[] points, bool isBox )
+		{
+			this.points = points;
+			this.isBox = isBox;
+			recalculateCenterAndEdgeNormals();
 		}
 
 
@@ -35,44 +56,50 @@ namespace Nez.PhysicsShapes
 		/// <summary>
 		/// recalculates the Polygon centers. This must be called if the points are changed!
 		/// </summary>
-		public void recalculateCenter()
+		public void recalculateCenterAndEdgeNormals()
 		{
 			center = findPolygonCenter( points );
+			buildEdgeNormals();
 		}
 
 
 		/// <summary>
 		/// builds the Polygon edges
 		/// </summary>
-		public Vector2[] buildEdges()
+		void buildEdgeNormals()
 		{
-			Vector2[] edges = null;
-
+			// special case for 2 points. we just have a single edge
 			if( points.Length == 2 )
 			{
-				if( edges == null || edges.Length != 1 )
-					edges = new Vector2[1];
-				edges[0] = points[1] - points[0];
-				return edges;
+				if( edgeNormals == null || edgeNormals.Length != 1 )
+					edgeNormals = new Vector2[1];
+
+				var perp = Vector2Ext.perpendicular( ref points[0], ref points[1] );
+				Vector2Ext.normalize( ref perp );
+				edgeNormals[0] = perp;
+				return;
 			}
 
-			if( edges == null || edges.Length != points.Length )
-				edges = new Vector2[points.Length];
+			// for boxes we only require 2 edges since the other 2 are parallel
+			var totalEdges = isBox ? 2 : points.Length;
+			if( edgeNormals == null || edgeNormals.Length != totalEdges )
+				edgeNormals = new Vector2[totalEdges];
 			
-			Vector2 p1;
 			Vector2 p2;
-			for( int i = 0; i < points.Length; i++ )
+			for( var i = 0; i < totalEdges; i++ )
 			{
-				p1 = points[i];
+				var p1 = points[i];
 				if( i + 1 >= points.Length )
 					p2 = points[0];
 				else
 					p2 = points[i + 1];
 
-				edges[i] = p2 - p1;
+				var perp = Vector2Ext.perpendicular( ref p1, ref p2 );
+				Vector2Ext.normalize( ref perp );
+				edgeNormals[i] = perp;
 			}
 
-			return edges;
+			return;
 		}
 
 

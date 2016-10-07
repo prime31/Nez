@@ -91,6 +91,7 @@
     <Folder Include="Graphics\Materials\" />
     <Folder Include="AI\Pathfinding\Dijkstra\" />
     <Folder Include="ECS\Components\Renderables\3D\" />
+    <Folder Include="Physics\Shapes\ShapeCollisions\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Debug\Debug.cs" />
@@ -207,7 +208,6 @@
     <Compile Include="ECS\Systems\ProcessingSystem.cs" />
     <Compile Include="Physics\Shapes\Shape.cs" />
     <Compile Include="Physics\Shapes\Polygon.cs" />
-    <Compile Include="Physics\Shapes\ShapeCollisions.cs" />
     <Compile Include="Physics\Shapes\Circle.cs" />
     <Compile Include="Physics\Shapes\Box.cs" />
     <Compile Include="Debug\Assert.cs" />
@@ -508,6 +508,11 @@
     <Compile Include="ECS\Components\Renderables\LineRenderer.cs" />
     <Compile Include="Utils\Extensions\Vector3Ext.cs" />
     <Compile Include="ECS\Components\Renderables\PolygonMesh.cs" />
+    <Compile Include="Physics\Shapes\ShapeCollisions\ShapeCollisionsPolygon.cs" />
+    <Compile Include="Physics\Shapes\ShapeCollisions\ShapeCollisionsBox.cs" />
+    <Compile Include="Physics\Shapes\ShapeCollisions\ShapeCollisionsCircle.cs" />
+    <Compile Include="Physics\Shapes\ShapeCollisions\ShapeCollisionsLine.cs" />
+    <Compile Include="Physics\Shapes\ShapeCollisions\ShapeCollisionsPoint.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="MonoGame.Framework">

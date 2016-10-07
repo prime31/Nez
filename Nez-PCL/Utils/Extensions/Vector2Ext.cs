@@ -88,9 +88,9 @@ namespace Nez
 		/// <param name="first">First.</param>
 		/// <param name="second">Second.</param>
 		[MethodImpl( MethodImplOptions.AggressiveInlining )]
-		public static Vector2 perpendicular( Vector2 first, Vector2 second )
+		public static Vector2 perpendicular( ref Vector2 first, ref Vector2 second )
 		{
-			return new Vector2( second.Y - first.Y, -second.X - first.X );
+			return new Vector2( -1f * ( second.Y - first.Y ), second.X - first.X );
 		}
 
 
