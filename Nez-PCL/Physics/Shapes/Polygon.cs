@@ -7,12 +7,19 @@ namespace Nez.PhysicsShapes
 	public class Polygon : Shape
 	{
 		public Vector2[] points;
+		public Vector2 center;
+
 		internal bool isBox;
 
 
+		/// <summary>
+		/// constructs a Polygon from points. points should be specified in clockwise fashion without duplicating the first/last point.
+		/// </summary>
+		/// <param name="points">Points.</param>
 		public Polygon( Vector2[] points )
 		{
 			this.points = points;
+			recalculateCenter();
 		}
 
 
@@ -25,6 +32,56 @@ namespace Nez.PhysicsShapes
 		{}
 
 
+		/// <summary>
+		/// recalculates the Polygon centers. This must be called if the points are changed!
+		/// </summary>
+		public void recalculateCenter()
+		{
+			center = findPolygonCenter( points );
+		}
+
+
+		/// <summary>
+		/// builds the Polygon edges
+		/// </summary>
+		public Vector2[] buildEdges()
+		{
+			Vector2[] edges = null;
+
+			if( points.Length == 2 )
+			{
+				if( edges == null || edges.Length != 1 )
+					edges = new Vector2[1];
+				edges[0] = points[1] - points[0];
+				return edges;
+			}
+
+			if( edges == null || edges.Length != points.Length )
+				edges = new Vector2[points.Length];
+			
+			Vector2 p1;
+			Vector2 p2;
+			for( int i = 0; i < points.Length; i++ )
+			{
+				p1 = points[i];
+				if( i + 1 >= points.Length )
+					p2 = points[0];
+				else
+					p2 = points[i + 1];
+
+				edges[i] = p2 - p1;
+			}
+
+			return edges;
+		}
+
+
+		/// <summary>
+		/// builds a symmetrical polygon (hexagon, octogon, n-gon) and returns the points
+		/// </summary>
+		/// <returns>The symmetrical polygon.</returns>
+		/// <param name="vertCount">Vert count.</param>
+		/// <param name="radius">Radius.</param>
 		public static Vector2[] buildSymmetricalPolygon( int vertCount, float radius )
 		{
 			var verts = new Vector2[vertCount];

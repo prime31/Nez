@@ -165,7 +165,7 @@ namespace Nez.PhysicsShapes
 
 			if( polygonToPolygon( first, second, null, out result.normal, out timeOfCollision ) )
 			{
-				result.minimumTranslationVector = result.normal * ( timeOfCollision );
+				result.minimumTranslationVector = result.normal * timeOfCollision;
 				return true;
 			}
 

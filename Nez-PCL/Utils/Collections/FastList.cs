@@ -95,13 +95,26 @@ namespace Nez
 		/// </summary>
 		public void removeAt( int index )
 		{
+			Assert.isTrue( index < length, "Index out of range!" );
+
+			length--;
 			if( index < length )
-			{
-				--length;
-				buffer[index] = default( T );
-				for( var b = index; b < length; ++b )
-					buffer[b] = buffer[b + 1];
-			}
+				Array.Copy( buffer, index + 1, buffer, index, length - index );
+			buffer[length] = default( T );
+		}
+
+
+		/// <summary>
+		/// removes the item at the given index from the list but does NOT maintain list order
+		/// </summary>
+		/// <param name="index">Index.</param>
+		public void removeAtWithSwap( int index )
+		{
+			Assert.isTrue( index < length, "Index out of range!" );
+
+			buffer[index] = buffer[length - 1];
+			buffer[length - 1] = default( T );
+			--length;
 		}
 
 
@@ -111,11 +124,13 @@ namespace Nez
 		/// <param name="item">Item.</param>
 		public bool contains( T item )
 		{
-			for( var i = 0; i < length; i++ )
+			var comp = EqualityComparer<T>.Default;
+			for( var i = 0; i < length; ++i )
 			{
-				if( buffer[i].Equals( item ) )
+				if( comp.Equals( buffer[i], item ) )
 					return true;
 			}
+
 			return false;
 		}
 

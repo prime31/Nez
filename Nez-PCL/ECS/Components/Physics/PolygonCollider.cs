@@ -33,7 +33,7 @@ namespace Nez
 
 		public override void debugRender( Graphics graphics )
 		{
-			graphics.batcher.drawHollowRect( shape.bounds, Color.White * 0.5f );
+			graphics.batcher.drawHollowRect( shape.bounds, Color.White * 0.3f );
 			graphics.batcher.drawPolygon( absolutePosition, ( ( shape as Polygon ).points ), Color.DarkRed, true );
 			graphics.batcher.drawPixel( absolutePosition, Color.Yellow, 4 );
 		}

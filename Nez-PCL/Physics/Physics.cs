@@ -1,8 +1,6 @@
-﻿using System;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using System.Collections.Generic;
 using Nez.Spatial;
-using Nez.PhysicsShapes;
 
 
 namespace Nez
