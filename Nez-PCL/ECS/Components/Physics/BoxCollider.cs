@@ -51,7 +51,7 @@ namespace Nez
 				// store the old bounds so we can update ourself after modifying them
 				var oldBounds = bounds;
 				((Box)shape).width = width;
-				_areBoundsDirty = true;
+				_isPositionDirty = true;
 
 				if( entity != null && _isParentEntityAddedToScene )
 					Physics.updateCollider( this );
@@ -68,7 +68,7 @@ namespace Nez
 				// store the old bounds so we can update ourself after modifying them
 				var oldBounds = bounds;
 				((Box)shape).height = height;
-				_areBoundsDirty = true;
+				_isPositionDirty = true;
 
 				if( entity != null && _isParentEntityAddedToScene )
 					Physics.updateCollider( this );
@@ -78,6 +78,15 @@ namespace Nez
 		}
 
 		#endregion
+
+
+		public override void debugRender( Graphics graphics )
+		{
+			graphics.batcher.drawHollowRect( shape.bounds, Color.White * 0.3f );
+			graphics.batcher.drawPolygon( absolutePosition, ( ( shape as Polygon ).points ), Color.DarkRed, true );
+			graphics.batcher.drawPixel( absolutePosition, Color.Yellow, 4 );
+			graphics.batcher.drawPixel( ( shape as Polygon ).center + absolutePosition, Color.Red, 4 );
+		}
 
 
 		public override string ToString()

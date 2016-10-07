@@ -1,5 +1,4 @@
-﻿using System;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 
 
 namespace Nez.PhysicsShapes
@@ -7,7 +6,7 @@ namespace Nez.PhysicsShapes
 	public abstract class Shape
 	{
 		/// <summary>
-		/// having a separate position field lets use alter the position of the shape for collisions checks as opposed to having to change the
+		/// having a separate position field lets us alter the position of the shape for collisions checks as opposed to having to change the
 		/// Entity.position which triggers collider/bounds/hash updates.
 		/// </summary>
 		public Vector2 position;

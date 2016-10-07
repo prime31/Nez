@@ -66,14 +66,19 @@ namespace Nez
 		/// </summary>
 		public int collidesWithLayers = Physics.allLayers;
 
+		/// <summary>
+		/// if true, the Collider will scale and rotate following the Transform it is attached to
+		/// </summary>
+		public bool shouldColliderScaleAndRotateWithTransform;
+
 		public virtual RectangleF bounds
 		{
 			get
 			{
-				if( _areBoundsDirty )
+				if( _isPositionDirty || _isRotationDirty || _isScaleDirty )
 				{
 					shape.recalculateBounds( this );
-					_areBoundsDirty = false;
+					_isPositionDirty = _isRotationDirty = _isScaleDirty = false;
 				}
 
 				return shape.bounds;
@@ -98,11 +103,9 @@ namespace Nez
 		/// flag to keep track of if we registered ourself with the Physics system
 		/// </summary>
 		protected bool _isColliderRegistered;
-		internal bool _areBoundsDirty = true;
-
-
-		public Collider()
-		{ }
+		internal bool _isPositionDirty = true;
+		internal bool _isRotationDirty = true;
+		internal bool _isScaleDirty = true;
 
 
 		#region Fluent setters
@@ -119,7 +122,7 @@ namespace Nez
 			{
 				unregisterColliderWithPhysicsSystem();
 				_localOffset = offset;
-				_areBoundsDirty = true;
+				_isPositionDirty = true;
 				registerColliderWithPhysicsSystem();
 			}
 			return this;
@@ -137,7 +140,7 @@ namespace Nez
 			{
 				unregisterColliderWithPhysicsSystem();
 				_origin = origin;
-				_areBoundsDirty = true;
+				_isPositionDirty = true;
 				registerColliderWithPhysicsSystem();
 			}
 			return this;
@@ -207,7 +210,22 @@ namespace Nez
 
 		public virtual void onEntityTransformChanged( Transform.Component comp )
 		{
-			_areBoundsDirty = true;
+			// set the appropriate dirty flags
+			switch( comp )
+			{
+				case Transform.Component.Position:
+					_isPositionDirty = true;
+					break;
+				case Transform.Component.Scale:
+					_isScaleDirty = true;
+					break;
+				case Transform.Component.Rotation:
+					_isRotationDirty = true;
+					break;
+			}
+
+			if( _isColliderRegistered )
+				Physics.updateCollider( this );
 		}
 
 

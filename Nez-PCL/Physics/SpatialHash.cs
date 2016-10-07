@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using Microsoft.Xna.Framework;
 using Nez.PhysicsShapes;
 
@@ -58,6 +59,7 @@ namespace Nez.Spatial
 		/// <returns>The coords.</returns>
 		/// <param name="x">The x coordinate.</param>
 		/// <param name="y">The y coordinate.</param>
+		[MethodImpl( MethodImplOptions.AggressiveInlining )]
 		Point cellCoords( int x, int y )
 		{
 			return new Point( Mathf.floorToInt( x * _inverseCellSize ), Mathf.floorToInt( y * _inverseCellSize ) );
@@ -70,6 +72,7 @@ namespace Nez.Spatial
 		/// <returns>The coords.</returns>
 		/// <param name="x">The x coordinate.</param>
 		/// <param name="y">The y coordinate.</param>
+		[MethodImpl( MethodImplOptions.AggressiveInlining )]
 		Point cellCoords( float x, float y )
 		{
 			return new Point( Mathf.floorToInt( x * _inverseCellSize ), Mathf.floorToInt( y * _inverseCellSize ) );
@@ -83,6 +86,7 @@ namespace Nez.Spatial
 		/// <param name="x">The x coordinate.</param>
 		/// <param name="y">The y coordinate.</param>
 		/// <param name="createCellIfEmpty">If set to <c>true</c> create cell if empty.</param>
+		[MethodImpl( MethodImplOptions.AggressiveInlining )]
 		List<Collider> cellAtPosition( int x, int y, bool createCellIfEmpty = false )
 		{
 			List<Collider> cell = null;
@@ -458,12 +462,14 @@ namespace Nez.Spatial
 		/// <returns>The key.</returns>
 		/// <param name="x">The x coordinate.</param>
 		/// <param name="y">The y coordinate.</param>
+		[MethodImpl( MethodImplOptions.AggressiveInlining )]
 		long getKey( int x, int y )
 		{
 			return (long)x << 32 | (long)(uint)y;
 		}
 
 
+		[MethodImpl( MethodImplOptions.AggressiveInlining )]
 		public void add( int x, int y, List<Collider> list )
 		{
 			_store.Add( getKey( x, y ), list );
@@ -474,6 +480,7 @@ namespace Nez.Spatial
 		/// removes the collider from the Lists the Dictionary stores using a brute force approach
 		/// </summary>
 		/// <param name="obj">Object.</param>
+		[MethodImpl( MethodImplOptions.AggressiveInlining )]
 		public void remove( Collider obj )
 		{
 			foreach( var list in _store.Values )
@@ -484,6 +491,7 @@ namespace Nez.Spatial
 		}
 
 
+		[MethodImpl( MethodImplOptions.AggressiveInlining )]
 		public bool tryGetValue( int x, int y, out List<Collider> list )
 		{
 			return _store.TryGetValue( getKey( x, y ), out list );
@@ -494,6 +502,7 @@ namespace Nez.Spatial
 		/// gets all the Colliders currently in the dictionary
 		/// </summary>
 		/// <returns>The all objects.</returns>
+		[MethodImpl( MethodImplOptions.AggressiveInlining )]
 		public HashSet<Collider> getAllObjects()
 		{
 			var set = new HashSet<Collider>();
@@ -551,6 +560,7 @@ namespace Nez.Spatial
 		/// <param name="cell">Cell.</param>
 		/// <param name="hits">Hits.</param>
 		/// <param name="hitCounter">Hit counter.</param>
+		[MethodImpl( MethodImplOptions.AggressiveInlining )]
 		public bool checkRayIntersection( int cellX, int cellY, List<Collider> cell )
 		{
 			float fraction;
@@ -615,6 +625,7 @@ namespace Nez.Spatial
 		}
 
 
+		[MethodImpl( MethodImplOptions.AggressiveInlining )]
 		public void reset()
 		{
 			_hits = null;

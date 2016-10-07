@@ -7,16 +7,26 @@ namespace Nez.PhysicsShapes
 	public class Circle : Shape
 	{
 		public float radius;
+		float _originalRadius;
 
 
 		public Circle( float radius )
 		{
 			this.radius = radius;
+			_originalRadius = radius;
 		}
 
 
 		internal override void recalculateBounds( Collider collider )
 		{
+			if( collider.shouldColliderScaleAndRotateWithTransform )
+			{
+				// we only scale lineraly being a circle so we'll average the x/y scale values
+				var scale = collider.entity.transform.scale;
+				var avgScale = ( scale.X + scale.Y ) / 2f;
+				radius = _originalRadius * avgScale;
+			}
+
 			position = collider.absolutePosition;
 			bounds = new RectangleF( collider.entity.transform.position.X + collider.localOffset.X + collider.origin.X - radius, collider.entity.transform.position.Y + collider.localOffset.Y + collider.origin.Y - radius, radius * 2f, radius * 2f );
 		}
@@ -26,6 +36,7 @@ namespace Nez.PhysicsShapes
 
 		internal void recalculateBounds( float radius, Vector2 position )
 		{
+			_originalRadius = radius;
 			this.radius = radius;
 			this.position = position;
 			bounds = new RectangleF( position.X - radius, position.Y - radius, radius * 2f, radius * 2f );

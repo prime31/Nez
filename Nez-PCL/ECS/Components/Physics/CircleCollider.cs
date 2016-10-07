@@ -1,5 +1,4 @@
-﻿using System;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Nez.PhysicsShapes;
 
 
@@ -9,7 +8,7 @@ namespace Nez
 	{
 		public float radius
 		{
-			get { return ((Circle)shape).radius; }
+			get { return ( (Circle)shape ).radius; }
 			set { setRadius( value ); }
 		}
 
@@ -19,7 +18,7 @@ namespace Nez
 		/// entity is added to the scene.
 		/// </summary>
 		public CircleCollider()
-		{}
+		{ }
 
 
 		/// <summary>
@@ -57,10 +56,8 @@ namespace Nez
 		{
 			if( radius != ( (Circle)shape ).radius )
 			{
-				// store the old bounds so we can update ourself after modifying them
-				var oldBounds = bounds;
 				( (Circle)shape ).radius = radius;
-				_areBoundsDirty = true;
+				_isPositionDirty = true;
 
 				if( entity != null && _isParentEntityAddedToScene )
 					Physics.updateCollider( this );
@@ -73,14 +70,15 @@ namespace Nez
 
 		public override void debugRender( Graphics graphics )
 		{
-			graphics.batcher.drawCircle( bounds.center, ((Circle)shape).radius, Color.IndianRed );
+			graphics.batcher.drawHollowRect( bounds, Color.White * 0.3f );
+			graphics.batcher.drawCircle( bounds.center, ( (Circle)shape ).radius, Color.IndianRed );
 			graphics.batcher.drawPixel( bounds.center, Color.IndianRed, 4 );
 		}
 
 
 		public override string ToString()
 		{
-			return string.Format( "[CircleCollider: bounds: {0}, radius: {1}", bounds, ((Circle)shape).radius );
+			return string.Format( "[CircleCollider: bounds: {0}, radius: {1}", bounds, ( (Circle)shape ).radius );
 		}
 
 	}

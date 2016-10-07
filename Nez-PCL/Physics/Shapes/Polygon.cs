@@ -15,12 +15,24 @@ namespace Nez.PhysicsShapes
 		/// edge normals are used for SAT collision detection. We cache them to avoid the squareroots. Note that Boxes will only have
 		/// 2 edgeNormals since the other two sides are parallel.
 		/// </summary>
-		public Vector2[] edgeNormals;
+		public Vector2[] edgeNormals
+		{
+			get
+			{
+				if( _areEdgeNormalsDirty )
+					buildEdgeNormals();
+				return _edgeNormals;
+			}
+		}
 
 		/// <summary>
 		/// the Polygon center
 		/// </summary>
 		public Vector2 center;
+
+		bool _areEdgeNormalsDirty = true;
+		public Vector2[] _edgeNormals;
+		Vector2[] _originalPoints;
 
 		internal bool isBox;
 
@@ -33,6 +45,9 @@ namespace Nez.PhysicsShapes
 		{
 			this.points = points;
 			recalculateCenterAndEdgeNormals();
+
+			_originalPoints = new Vector2[points.Length];
+			Array.Copy( points, _originalPoints, points.Length );
 		}
 
 
@@ -41,6 +56,9 @@ namespace Nez.PhysicsShapes
 			this.points = points;
 			this.isBox = isBox;
 			recalculateCenterAndEdgeNormals();
+
+			_originalPoints = new Vector2[points.Length];
+			Array.Copy( points, _originalPoints, points.Length );
 		}
 
 
@@ -71,19 +89,19 @@ namespace Nez.PhysicsShapes
 			// special case for 2 points. we just have a single edge
 			if( points.Length == 2 )
 			{
-				if( edgeNormals == null || edgeNormals.Length != 1 )
-					edgeNormals = new Vector2[1];
+				if( _edgeNormals == null || _edgeNormals.Length != 1 )
+					_edgeNormals = new Vector2[1];
 
 				var perp = Vector2Ext.perpendicular( ref points[0], ref points[1] );
 				Vector2Ext.normalize( ref perp );
-				edgeNormals[0] = perp;
+				_edgeNormals[0] = perp;
 				return;
 			}
 
 			// for boxes we only require 2 edges since the other 2 are parallel
 			var totalEdges = isBox ? 2 : points.Length;
-			if( edgeNormals == null || edgeNormals.Length != totalEdges )
-				edgeNormals = new Vector2[totalEdges];
+			if( _edgeNormals == null || _edgeNormals.Length != totalEdges )
+				_edgeNormals = new Vector2[totalEdges];
 			
 			Vector2 p2;
 			for( var i = 0; i < totalEdges; i++ )
@@ -96,7 +114,7 @@ namespace Nez.PhysicsShapes
 
 				var perp = Vector2Ext.perpendicular( ref p1, ref p2 );
 				Vector2Ext.normalize( ref perp );
-				edgeNormals[i] = perp;
+				_edgeNormals[i] = perp;
 			}
 
 			return;
@@ -144,6 +162,33 @@ namespace Nez.PhysicsShapes
 
 		internal override void recalculateBounds( Collider collider )
 		{
+			if( collider.shouldColliderScaleAndRotateWithTransform )
+			{
+				Matrix2D tempMat;
+				var combinedMatrix = Matrix2D.CreateTranslation( -center );
+
+				if( collider.entity.transform.scale != Vector2.One )
+				{
+					Matrix2D.CreateScale( collider.entity.transform.scale.X, collider.entity.transform.scale.Y, out tempMat ); // scale
+					Matrix2D.Multiply( ref combinedMatrix, ref tempMat, out combinedMatrix );
+				}
+
+				if( collider.entity.transform.rotation != 0 )
+				{
+					Matrix2D.CreateRotationZ( collider.entity.transform.rotation, out tempMat ); // rotation
+					Matrix2D.Multiply( ref combinedMatrix, ref tempMat, out combinedMatrix );
+				}
+
+				Matrix2D.CreateTranslation( ref center, out tempMat ); // translate back center
+				Matrix2D.Multiply( ref combinedMatrix, ref tempMat, out combinedMatrix );
+
+				Vector2Ext.Transform( _originalPoints, ref combinedMatrix, points );
+
+				// we only need to rebuild our edge normals if we rotated
+				if( collider._isRotationDirty )
+					_areEdgeNormalsDirty = true;
+			}
+			
 			position = collider.absolutePosition;
 			bounds = RectangleF.rectEncompassingPoints( points );
 			bounds.location += position;
