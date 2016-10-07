@@ -5,6 +5,7 @@ Nez aims to be a lightweight 2D framework that sits on top of MonoGame/FNA. It p
 - Scene/Entity/Component system with Component render layer tracking and optional entity systems (an implementation that operates on a group of entities that share a specific set of components)
 - SpatialHash for super fast broadphase physics lookups. You won't ever see it since it works behind the scenes but you'll love it nonetheless since it makes finding everything in your proximity crazy fast. (note that Nez does not provide any physics engine. It provides collision data that you can do whatever you want to with and some example Components showing how to implement things: Mover and ArcadeRigidBody).
 - AABB, circle and polygon collision/trigger detection along with linecasts against the SpatialHash
+- Verlet physics bodies for super fun, constraint-to-particle squishy physics
 - efficient coroutines for breaking up large tasks across multiple frames or animation timing (Core.startCoroutine)
 - in-game debug console extendable by adding an attribute to any static method. Just press the tilde key like in the old days with Quake. Out of the box, it includes a visual physics debugging system, asset tracker, basic profiler and more. Just type 'help' to see all the commands or type 'help COMMAND' to see specific hints.
 - in-game Component inspector. Open the debug console and use the command `inspect entity_name` to display and edit fields/properties and call methods with a button click.
@@ -40,6 +41,7 @@ There are various systems documented separately on the [Nez website docs.](http:
 - [Scene Transitions](FAQs/SceneTransitions.md)
 - [Pathfinding](FAQs/Pathfinding.md)
 - [Runtime Inspector](FAQs/RuntimeInspector.md)
+- [Verlet Physics](FAQs/Verlet.md)
 - [Entity Processing Systems](FAQs/EntitySystems.md)
 - [Nez.UI](FAQs/UI.md)
 - [AI (FSM, Behavior Tree, GOAP, Utility AI)](FAQs/AI.md)
