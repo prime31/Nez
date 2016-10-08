@@ -822,9 +822,26 @@ namespace Nez.UI
 		}
 
 
+		/// <summary>
+		/// returns true if this Element and all parent Elements are visible
+		/// </summary>
+		/// <returns><c>true</c>, if parents visible was ared, <c>false</c> otherwise.</returns>
+		bool areParentsVisible()
+		{
+			if( !_visible )
+				return false;
+			
+			if( parent != null )
+				return parent.areParentsVisible();
+			
+			return _visible;
+		}
+
+
 		public virtual Element hit( Vector2 point )
 		{
-			if( touchable != Touchable.Enabled )
+			// if we are not Touchable or us or any parent is not visible bail out
+			if( touchable != Touchable.Enabled || !areParentsVisible() )
 				return null;
 
 			if( point.X >= 0 && point.X < width && point.Y >= 0 && point.Y < height )
