@@ -153,8 +153,13 @@ namespace Nez.UI
 
 		public void hide( Tooltip tooltip )
 		{
-			_shownTooltip = null;
-			stopShowTask();
+			// dont go messing with the current tooltip unless it is actually us
+			if( _shownTooltip == tooltip )
+			{
+				_shownTooltip = null;
+				stopShowTask();
+			}
+
 			if( tooltip.getContainer().hasParent() )
 			{
 				_shownTooltips.Remove( tooltip );
