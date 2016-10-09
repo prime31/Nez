@@ -63,7 +63,7 @@ namespace Nez.Sprites
 		{
 			_sourceRect = subtexture.sourceRect;
 			material = new Material();
-			material.samplerState = Core.defaultWrapedSamplerState;
+			material.samplerState = Core.defaultWrappedSamplerState;
 		}
 
 

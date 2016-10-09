@@ -831,7 +831,7 @@ namespace Nez
 				_basicEffect.World = transform.localToWorldTransform;
 
 			var primitiveCount = _indices.length / 3;
-			Core.graphicsDevice.SamplerStates[0] = Core.defaultWrapedSamplerState;
+			Core.graphicsDevice.SamplerStates[0] = Core.defaultWrappedSamplerState;
 			Core.graphicsDevice.DrawUserIndexedPrimitives( PrimitiveType.TriangleList, _vertices.buffer, 0, _vertices.length, _indices.buffer, 0, primitiveCount );
 		}
 

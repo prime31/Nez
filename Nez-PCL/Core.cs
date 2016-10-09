@@ -59,7 +59,7 @@ namespace Nez
 		/// default wrapped SamplerState. Determined by the Filter of the defaultSamplerState.
 		/// </summary>
 		/// <value>The default state of the wraped sampler.</value>
-		public static SamplerState defaultWrapedSamplerState { get { return defaultSamplerState.Filter == TextureFilter.Point ? SamplerState.PointWrap : SamplerState.LinearWrap; } }
+		public static SamplerState defaultWrappedSamplerState { get { return defaultSamplerState.Filter == TextureFilter.Point ? SamplerState.PointWrap : SamplerState.LinearWrap; } }
 
 		/// <summary>
 		/// internal flag used to determine if EntitySystems should be used or not
