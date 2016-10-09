@@ -209,6 +209,7 @@ namespace Nez
 		/// <param name="height">Height.</param>
 		public void setCenteredDeadzone( int width, int height )
 		{
+			Assert.isFalse( camera == null, "camera is null. We cant get its bounds if its null. Either set it or wait until after this Component is added to the Entity." );
 			var cameraBounds = camera.bounds;
 			deadzone = new RectangleF( ( cameraBounds.width - width ) / 2, ( cameraBounds.height - height ) / 2, width, height );
 		}
