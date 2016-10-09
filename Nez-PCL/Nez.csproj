@@ -513,6 +513,7 @@
     <Compile Include="Physics\Shapes\ShapeCollisions\ShapeCollisionsCircle.cs" />
     <Compile Include="Physics\Shapes\ShapeCollisions\ShapeCollisionsLine.cs" />
     <Compile Include="Physics\Shapes\ShapeCollisions\ShapeCollisionsPoint.cs" />
+    <Compile Include="Debug\DefaultColors.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="MonoGame.Framework">

@@ -3,7 +3,6 @@ using System.Diagnostics;
 using Microsoft.Xna.Framework;
 using System.Collections.Generic;
 using Nez.BitmapFonts;
-using Microsoft.Xna.Framework.Graphics;
 
 
 namespace Nez
@@ -163,7 +162,7 @@ namespace Nez
 						item.position = pos - new Vector2( 0, itemHeight );
 					else
 						item.position = pos;
-					
+
 					if( item.draw( Graphics.instance ) )
 						_screenSpaceDebugDrawItems.RemoveAt( i );
 
@@ -245,7 +244,7 @@ namespace Nez
 		[Conditional( "DEBUG" )]
 		public static void drawText( string text )
 		{
-			drawText( text, Color.White );
+			drawText( text, DefaultColors.debugText );
 		}
 
 
@@ -253,7 +252,7 @@ namespace Nez
 		public static void drawText( string format, params object[] args )
 		{
 			var text = string.Format( format, args );
-			drawText( text, Color.White );
+			drawText( text, DefaultColors.debugText );
 		}
 
 
