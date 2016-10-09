@@ -37,7 +37,6 @@
     <Folder Include="Input\" />
     <Folder Include="Math\" />
     <Folder Include="Physics\" />
-    <Folder Include="Stuff\" />
     <Folder Include="Utils\" />
     <Folder Include="PipelineRuntime\" />
     <Folder Include="Utils\DebugConsole\" />
@@ -91,6 +90,7 @@
     <Folder Include="Graphics\Materials\" />
     <Folder Include="AI\Pathfinding\Dijkstra\" />
     <Folder Include="ECS\Components\Renderables\3D\" />
+    <Folder Include="Physics\Verlet\" />
     <Folder Include="Physics\Shapes\ShapeCollisions\" />
   </ItemGroup>
   <ItemGroup>
@@ -123,7 +123,6 @@
     <Compile Include="Physics\Physics.cs" />
     <Compile Include="Physics\Ray2D.cs" />
     <Compile Include="Physics\SpatialHash.cs" />
-    <Compile Include="Stuff\IMGUI\IMGUI.cs" />
     <Compile Include="Utils\Emitter.cs" />
     <Compile Include="Utils\Time.cs" />
     <Compile Include="Core.cs" />
@@ -508,12 +507,24 @@
     <Compile Include="ECS\Components\Renderables\LineRenderer.cs" />
     <Compile Include="Utils\Extensions\Vector3Ext.cs" />
     <Compile Include="ECS\Components\Renderables\PolygonMesh.cs" />
+    <Compile Include="Physics\Verlet\Composites\Ball.cs" />
+    <Compile Include="Physics\Verlet\Composites\Cloth.cs" />
+    <Compile Include="Physics\Verlet\Composites\Composite.cs" />
+    <Compile Include="Physics\Verlet\Composites\LineSegments.cs" />
+    <Compile Include="Physics\Verlet\Composites\Tire.cs" />
+    <Compile Include="Physics\Verlet\Composites\Tree.cs" />
+    <Compile Include="Physics\Verlet\Constraints\AngleConstraint.cs" />
+    <Compile Include="Physics\Verlet\Constraints\Constraint.cs" />
+    <Compile Include="Physics\Verlet\Constraints\DistanceConstraint.cs" />
+    <Compile Include="Physics\Verlet\Particle.cs" />
+    <Compile Include="Physics\Verlet\World.cs" />
     <Compile Include="Physics\Shapes\ShapeCollisions\ShapeCollisionsPolygon.cs" />
     <Compile Include="Physics\Shapes\ShapeCollisions\ShapeCollisionsBox.cs" />
     <Compile Include="Physics\Shapes\ShapeCollisions\ShapeCollisionsCircle.cs" />
     <Compile Include="Physics\Shapes\ShapeCollisions\ShapeCollisionsLine.cs" />
     <Compile Include="Physics\Shapes\ShapeCollisions\ShapeCollisionsPoint.cs" />
     <Compile Include="Debug\DefaultColors.cs" />
+    <Compile Include="UI\IMGUI.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="MonoGame.Framework">
