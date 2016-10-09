@@ -339,7 +339,7 @@ namespace Nez
 		/// temporarily runs SceneTransition allowing one Scene to transition to another smoothly with custom effects.
 		/// </summary>
 		/// <param name="sceneTransition">Scene transition.</param>
-		public static SceneTransition startSceneTransition( SceneTransition sceneTransition )
+		public static T startSceneTransition<T>( T sceneTransition ) where T : SceneTransition
 		{
 			Assert.isNull( _instance._sceneTransition, "You cannot start a new SceneTransition until the previous one has completed" );
 			_instance._sceneTransition = sceneTransition;
