@@ -25,16 +25,16 @@ namespace Nez.PhysicsShapes
 			}
 		}
 
-		/// <summary>
-		/// the Polygon center
-		/// </summary>
-		public Vector2 center;
-
 		bool _areEdgeNormalsDirty = true;
 		public Vector2[] _edgeNormals;
-		Vector2[] _originalPoints;
 
+		// we cache the original details of our polygon
+		Vector2[] _originalPoints;
+		Vector2 _polygonCenter;
+
+		// used as an optimization for unrotated Box collisions
 		internal bool isBox;
+		public bool isUnrotated = true;
 
 
 		/// <summary>
@@ -76,13 +76,13 @@ namespace Nez.PhysicsShapes
 		/// </summary>
 		public void recalculateCenterAndEdgeNormals()
 		{
-			center = findPolygonCenter( points );
-			buildEdgeNormals();
+			_polygonCenter = findPolygonCenter( points );
+			_areEdgeNormalsDirty = true;
 		}
 
 
 		/// <summary>
-		/// builds the Polygon edges
+		/// builds the Polygon edge normals. These are lazily created and updated only by the edgeNormals getter
 		/// </summary>
 		void buildEdgeNormals()
 		{
@@ -160,41 +160,6 @@ namespace Nez.PhysicsShapes
 		}
 
 
-		internal override void recalculateBounds( Collider collider )
-		{
-			if( collider.shouldColliderScaleAndRotateWithTransform )
-			{
-				Matrix2D tempMat;
-				var combinedMatrix = Matrix2D.CreateTranslation( -center );
-
-				if( collider.entity.transform.scale != Vector2.One )
-				{
-					Matrix2D.CreateScale( collider.entity.transform.scale.X, collider.entity.transform.scale.Y, out tempMat ); // scale
-					Matrix2D.Multiply( ref combinedMatrix, ref tempMat, out combinedMatrix );
-				}
-
-				if( collider.entity.transform.rotation != 0 )
-				{
-					Matrix2D.CreateRotationZ( collider.entity.transform.rotation, out tempMat ); // rotation
-					Matrix2D.Multiply( ref combinedMatrix, ref tempMat, out combinedMatrix );
-				}
-
-				Matrix2D.CreateTranslation( ref center, out tempMat ); // translate back center
-				Matrix2D.Multiply( ref combinedMatrix, ref tempMat, out combinedMatrix );
-
-				Vector2Ext.Transform( _originalPoints, ref combinedMatrix, points );
-
-				// we only need to rebuild our edge normals if we rotated
-				if( collider._isRotationDirty )
-					_areEdgeNormalsDirty = true;
-			}
-			
-			position = collider.absolutePosition;
-			bounds = RectangleF.rectEncompassingPoints( points );
-			bounds.location += position;
-		}
-
-
 		// Dont know adjancent vertices so take each vertex
 		// If you know adjancent vertices, perform hill climbing algorithm
 		public Vector2 getFarthestPointInDirection( Vector2 direction )
@@ -207,7 +172,6 @@ namespace Nez.PhysicsShapes
 			for( var i = 1; i < points.Length; i++ )
 			{
 				Vector2.Dot( ref points[i], ref direction, out dot );
-
 				if( dot > maxDot )
 				{
 					maxDot = dot;
@@ -262,6 +226,59 @@ namespace Nez.PhysicsShapes
 
 
 		#region Shape abstract methods
+
+		internal override void recalculateBounds( Collider collider )
+		{
+			// if we dont have rotation or dont care about TRS we use localOffset as the center so we'll start with that
+			center = collider.localOffset;
+
+			if( collider.shouldColliderScaleAndRotateWithTransform )
+			{
+				var hasUnitScale = true;
+				Matrix2D tempMat;
+				var combinedMatrix = Matrix2D.CreateTranslation( -_polygonCenter );
+
+				if( collider.entity.transform.scale != Vector2.One )
+				{
+					Matrix2D.CreateScale( collider.entity.transform.scale.X, collider.entity.transform.scale.Y, out tempMat );
+					Matrix2D.Multiply( ref combinedMatrix, ref tempMat, out combinedMatrix );
+
+					hasUnitScale = false;
+					// scale our offset and set it as center. If we have rotation also it will be reset below
+					var scaledOffset = collider.localOffset * collider.entity.transform.scale;
+					center = scaledOffset;
+				}
+
+				if( collider.entity.transform.rotation != 0 )
+				{
+					Matrix2D.CreateRotationZ( collider.entity.transform.rotation, out tempMat );
+					Matrix2D.Multiply( ref combinedMatrix, ref tempMat, out combinedMatrix );
+
+					// to deal with rotation with an offset origin we just move our center in a circle around 0,0 with our offset making the 0 angle
+					// we have to deal with scale here as well so we scale our offset to get the proper length first.
+					var offsetAngle = Mathf.atan2( collider.localOffset.Y, collider.localOffset.X ) * Mathf.rad2Deg;
+					var offsetLength = hasUnitScale ? collider._localOffsetLength : ( collider.localOffset * collider.entity.transform.scale ).Length();
+					center = Mathf.pointOnCircle( Vector2.Zero, offsetLength, collider.entity.transform.rotationDegrees + offsetAngle );
+				}
+
+				Matrix2D.CreateTranslation( ref _polygonCenter, out tempMat ); // translate back center
+				Matrix2D.Multiply( ref combinedMatrix, ref tempMat, out combinedMatrix );
+
+				// finaly transform our original points
+				Vector2Ext.Transform( _originalPoints, ref combinedMatrix, points );
+
+				isUnrotated = collider.entity.transform.rotation == 0;
+
+				// we only need to rebuild our edge normals if we rotated
+				if( collider._isRotationDirty )
+					_areEdgeNormalsDirty = true;
+			}
+
+			position = collider.entity.transform.position + center;
+			bounds = RectangleF.rectEncompassingPoints( points );
+			bounds.location += position;
+		}
+
 
 		public override bool overlaps( Shape other )
 		{

@@ -20,51 +20,62 @@ namespace Nez.PhysicsShapes
 		}
 
 
-		internal override void recalculateBounds( Collider collider )
-		{
-			updateBox( width, height );
-			base.recalculateBounds( collider );
-		}
-
-
-		public void updateBox( float width, float height )
-		{
-			points[0] = new Vector2( 0, 0 );
-			points[1] = new Vector2( width, 0 );
-			points[2] = new Vector2( width, height );
-			points[3] = new Vector2( 0, height );
-		}
-
-
+		/// <summary>
+		/// helper that builds the points a Polygon needs in the shape of a box
+		/// </summary>
+		/// <returns>The box.</returns>
+		/// <param name="width">Width.</param>
+		/// <param name="height">Height.</param>
 		static Vector2[] buildBox( float width, float height )
 		{
+			// we create our points around a center of 0,0
+			var halfWidth = width / 2;
+			var halfHeight = height / 2;
 			var verts = new Vector2[4];
 
-			verts[0] = new Vector2( 0, 0 );
-			verts[1] = new Vector2( width, 0 );
-			verts[2] = new Vector2( width, height );
-			verts[3] = new Vector2( 0, height );
+			verts[0] = new Vector2( -halfWidth, -halfHeight );
+			verts[1] = new Vector2( halfWidth, -halfHeight );
+			verts[2] = new Vector2( halfWidth, halfHeight );
+			verts[3] = new Vector2( -halfWidth, halfHeight );
 
 			return verts;
 		}
 
 
-		public RectangleF minkowskiDifference( Box other )
+		/// <summary>
+		/// updates the Box points, recalculates the center and sets the width/height
+		/// </summary>
+		/// <param name="width">Width.</param>
+		/// <param name="height">Height.</param>
+		public void updateBox( float width, float height )
 		{
-			var topLeft = position - other.bounds.max;
-			var fullSize = bounds.size + other.bounds.size;
-			return new RectangleF( topLeft.X, topLeft.Y, fullSize.X, fullSize.Y );
+			this.width = width;
+			this.height = height;
+
+			// we create our points around a center of 0,0
+			var halfWidth = width / 2;
+			var halfHeight = height / 2;
+
+			points[0] = new Vector2( -halfWidth, -halfHeight );
+			points[1] = new Vector2( halfWidth, -halfHeight );
+			points[2] = new Vector2( halfWidth, halfHeight );
+			points[3] = new Vector2( -halfWidth, halfHeight );
 		}
 
+
+		#region Shape abstract methods
 
 		public override bool overlaps( Shape other )
 		{
 			// special, high-performance cases. otherwise we fall back to Polygon.
-			if( other is Box )
-				return bounds.intersects( ref ( other as Box ).bounds );
+			if( isUnrotated )
+			{
+				if( other is Box && ( other as Box ).isUnrotated )
+					return bounds.intersects( ref ( other as Box ).bounds );
 
-			if( other is Circle )
-				return Collisions.rectToCircle( ref bounds, other.position, ( other as Circle ).radius );
+				if( other is Circle )
+					return Collisions.rectToCircle( ref bounds, other.position, ( other as Circle ).radius );
+			}
 
 			// fallthrough to standard cases
 			return base.overlaps( other );
@@ -74,7 +85,7 @@ namespace Nez.PhysicsShapes
 		public override bool collidesWithShape( Shape other, out CollisionResult result )
 		{
 			// special, high-performance cases. otherwise we fall back to Polygon.
-			if( other is Box )
+			if( isUnrotated && other is Box && ( other as Box ).isUnrotated )
 				return ShapeCollisions.boxToBox( this, other as Box, out result );
 
 			// TODO: get Minkowski working for circle to box
@@ -87,14 +98,22 @@ namespace Nez.PhysicsShapes
 
 		public override bool containsPoint( Vector2 point )
 		{
-			return bounds.contains( point );
+			if( isUnrotated )
+				return bounds.contains( point );
+			
+			return base.containsPoint( point );
 		}
 
 
 		public override bool pointCollidesWithShape( Vector2 point, out CollisionResult result )
 		{
-			return ShapeCollisions.pointToBox( point, this, out result );
+			if( isUnrotated )
+				return ShapeCollisions.pointToBox( point, this, out result );
+
+			return base.pointCollidesWithShape( point, out result );
 		}
+
+		#endregion
 
 	}
 }

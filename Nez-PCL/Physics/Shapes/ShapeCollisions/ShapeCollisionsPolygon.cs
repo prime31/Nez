@@ -18,20 +18,22 @@ namespace Nez.PhysicsShapes
 			result = new CollisionResult();
 			var isIntersecting = true;
 
+			var firstEdges = first.edgeNormals;
+			var secondEdges = second.edgeNormals;
 			var minIntervalDistance = float.PositiveInfinity;
 			var translationAxis = new Vector2();
 			var polygonOffset = first.position - second.position;
 			Vector2 axis;
 
 			// Loop through all the edges of both polygons
-			for( var edgeIndex = 0; edgeIndex < first.edgeNormals.Length + second.edgeNormals.Length; edgeIndex++ )
+			for( var edgeIndex = 0; edgeIndex < firstEdges.Length + secondEdges.Length; edgeIndex++ )
 			{
 				// 1. Find if the polygons are currently intersecting
 				// Polygons have the normalized axis perpendicular to the current edge cached for us
-				if( edgeIndex < first.edgeNormals.Length )
-					axis = first.edgeNormals[edgeIndex];
+				if( edgeIndex < firstEdges.Length )
+					axis = firstEdges[edgeIndex];
 				else
-					axis = second.edgeNormals[edgeIndex - first.edgeNormals.Length];
+					axis = secondEdges[edgeIndex - firstEdges.Length];
 
 				// Find the projection of the polygon on the current axis
 				float minA = 0; float minB = 0; float maxA = 0; float maxB = 0;

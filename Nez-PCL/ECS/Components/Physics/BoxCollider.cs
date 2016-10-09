@@ -27,9 +27,18 @@ namespace Nez
 		{}
 
 
+		/// <summary>
+		/// creates a BoxCollider and uses the x/y components as the localOffset
+		/// </summary>
+		/// <param name="x">The x coordinate.</param>
+		/// <param name="y">The y coordinate.</param>
+		/// <param name="width">Width.</param>
+		/// <param name="height">Height.</param>
 		public BoxCollider( float x, float y, float width, float height )
 		{
-			_localOffset = new Vector2( x, y );
+			if( x != 0 || y != 0 )
+				_localOffset = new Vector2( x + width / 2, y + height / 2 );
+
 			shape = new Box( width, height );
 		}
 
@@ -38,6 +47,10 @@ namespace Nez
 		{}
 
 
+		/// <summary>
+		/// creates a BoxCollider and uses the x/y components of the Rect as the localOffset
+		/// </summary>
+		/// <param name="rect">Rect.</param>
 		public BoxCollider( Rectangle rect ) : this( rect.X, rect.Y, rect.Width, rect.Height )
 		{}
 
@@ -46,13 +59,11 @@ namespace Nez
 
 		public BoxCollider setWidth( float width )
 		{
-			if( width != ((Box)shape).width )
+			var box = shape as Box;
+			if( width != box.width )
 			{
-				// store the old bounds so we can update ourself after modifying them
-				var oldBounds = bounds;
-				((Box)shape).width = width;
-				_isPositionDirty = true;
-
+				// update the box and if we need to update our bounds in the Physics system
+				box.updateBox( width, box.height );
 				if( entity != null && _isParentEntityAddedToScene )
 					Physics.updateCollider( this );
 			}
@@ -63,13 +74,11 @@ namespace Nez
 
 		public BoxCollider setHeight( float height )
 		{
-			if( height != ((Box)shape).height )
+			var box = shape as Box;
+			if( height != box.height )
 			{
-				// store the old bounds so we can update ourself after modifying them
-				var oldBounds = bounds;
-				((Box)shape).height = height;
-				_isPositionDirty = true;
-
+				// update the box and if we need to update our bounds in the Physics system
+				box.updateBox( box.width, height );
 				if( entity != null && _isParentEntityAddedToScene )
 					Physics.updateCollider( this );
 			}
@@ -82,10 +91,11 @@ namespace Nez
 
 		public override void debugRender( Graphics graphics )
 		{
-			graphics.batcher.drawHollowRect( shape.bounds, Color.White * 0.3f );
-			graphics.batcher.drawPolygon( absolutePosition, ( ( shape as Polygon ).points ), Color.DarkRed, true );
-			graphics.batcher.drawPixel( absolutePosition, Color.Yellow, 4 );
-			graphics.batcher.drawPixel( ( shape as Polygon ).center + absolutePosition, Color.Red, 4 );
+			var poly = shape as Polygon;
+			graphics.batcher.drawHollowRect( bounds, DefaultColors.colliderBounds );
+			graphics.batcher.drawPolygon( shape.position, poly.points, DefaultColors.colliderEdge, true );
+			graphics.batcher.drawPixel( entity.transform.position, DefaultColors.colliderPosition, 4 );
+			graphics.batcher.drawPixel( entity.transform.position + shape.center, DefaultColors.colliderCenter, 2 );
 		}
 
 

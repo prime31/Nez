@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Runtime.CompilerServices;
 using Microsoft.Xna.Framework;
 
 
@@ -10,12 +11,6 @@ namespace Nez.PhysicsShapes
 	/// </summary>
 	public static partial class ShapeCollisions
 	{
-		// storage for polygon SAT checks
-		static Vector2[] _satAxisArray = new Vector2[64];
-		// a maximum of 32 vertices per poly is supported
-		static float[] _satTimerPerAxis = new float[64];
-
-
 		/// <summary>
 		/// swept collision check
 		/// </summary>
@@ -103,9 +98,13 @@ namespace Nez.PhysicsShapes
 		}
 
 
+		[MethodImpl( MethodImplOptions.AggressiveInlining )]
 		static RectangleF minkowskiDifference( Box first, Box second )
 		{
-			var topLeft = first.position - second.bounds.max;
+			// we need the top-left of our first box but it must include our motion. Collider only modifies position with the motion so we
+			// need to figure out what the motion was using just the position.
+			var positionOffset = first.position - ( first.bounds.location + first.bounds.size / 2f );
+			var topLeft = first.bounds.location + positionOffset - second.bounds.max;
 			var fullSize = first.bounds.size + second.bounds.size;
 
 			return new RectangleF( topLeft.X, topLeft.Y, fullSize.X, fullSize.Y );
@@ -114,13 +113,10 @@ namespace Nez.PhysicsShapes
 		
 		#region Retired Polygon to Polygon
 
-		/// <summary>
-		/// casts first at second
-		/// </summary>
-		/// <returns><c>true</c>, if to polygon was polygoned, <c>false</c> otherwise.</returns>
-		/// <param name="first">First.</param>
-		/// <param name="second">Second.</param>
-		/// <param name="deltaMovement">Delta movement.</param>
+		static Vector2[] _satAxisArray = new Vector2[0];
+		static float[] _satTimerPerAxis = new float[0];
+
+		[Obsolete]
 		public static bool polygonToPolygonCast( Polygon first, Polygon second, Vector2 deltaMovement, out RaycastHit hit )
 		{
 			hit = new RaycastHit();
@@ -147,13 +143,7 @@ namespace Nez.PhysicsShapes
 		}
 
 
-		/// <summary>
-		/// does an overlap check of first vs second. ShapeCollisionResult retuns the data for moving first so it isn't colliding with second.
-		/// </summary>
-		/// <returns><c>true</c>, if to polygon was polygoned, <c>false</c> otherwise.</returns>
-		/// <param name="first">First.</param>
-		/// <param name="second">Second.</param>
-		/// <param name="result">Result.</param>
+		[Obsolete]
 		public static bool polygonToPolygonOLD( Polygon first, Polygon second, out CollisionResult result )
 		{
 			result = new CollisionResult();
@@ -169,18 +159,7 @@ namespace Nez.PhysicsShapes
 		}
 
 
-		/// <summary>
-		/// checks for a collision between first and second. deltaMovement is applied to first to see if a collision occurs in the future.
-		/// - a negative timeOfCollision means we have an overlap
-		/// - a positive timeOfCollision means we have a future collision
-		/// based on http://elancev.name/oliver/2D%20polygon.htm
-		/// </summary>
-		/// <returns><c>true</c>, if to polygon was polygoned, <c>false</c> otherwise.</returns>
-		/// <param name="first">First.</param>
-		/// <param name="second">Second.</param>
-		/// <param name="deltaMovement">Delta movement.</param>
-		/// <param name="responseNormal">Response normal.</param>
-		/// <param name="timeOfCollision">Time of collision.</param>
+		[Obsolete]
 		static bool polygonToPolygon( Polygon first, Polygon second, Vector2? deltaMovement, out Vector2 responseNormal, out float timeOfCollision )
 		{
 			timeOfCollision = float.MinValue;
@@ -304,14 +283,7 @@ namespace Nez.PhysicsShapes
 		}
 
 
-		/// <summary>
-		/// calculates the projection range of a polygon along an axis
-		/// </summary>
-		/// <param name="A">A.</param>
-		/// <param name="iNumVertices">I number vertices.</param>
-		/// <param name="xAxis">X axis.</param>
-		/// <param name="min">Minimum.</param>
-		/// <param name="max">Max.</param>
+		[Obsolete]
 		static void getInterval( Polygon polygon, int numVertices, Vector2 axis, out float min, out float max )
 		{
 			min = max = Vector2.Dot( polygon.points[0], axis );
@@ -327,6 +299,7 @@ namespace Nez.PhysicsShapes
 		}
 
 
+		[Obsolete]
 		static bool findMinimumTranslationDistance( int iNumAxes, out Vector2 normal, out float timeOfIntersection )
 		{
 			// find collision first

@@ -37,19 +37,6 @@ namespace Nez
 		}
 
 
-		/// <summary>
-		/// creates a <see cref="Nez.CircleCollider"/> with radius. Note that when specifying a radius if using a RenderableComponent on the Entity as well you
-		/// will need to set the appropriate origin to align the <see cref="Nez.CircleCollider"/>
-		/// </summary>
-		/// <param name="radius">Radius.</param>
-		/// <param name="origin">Origin.</param>
-		public CircleCollider( float radius, Vector2 origin )
-		{
-			shape = new Circle( radius );
-			_origin = origin;
-		}
-
-
 		#region Fluent setters
 
 		public CircleCollider setRadius( float radius )
@@ -71,8 +58,9 @@ namespace Nez
 		public override void debugRender( Graphics graphics )
 		{
 			graphics.batcher.drawHollowRect( bounds, Color.White * 0.3f );
-			graphics.batcher.drawCircle( bounds.center, ( (Circle)shape ).radius, Color.IndianRed );
-			graphics.batcher.drawPixel( bounds.center, Color.IndianRed, 4 );
+			graphics.batcher.drawCircle( shape.position, ( (Circle)shape ).radius, DefaultColors.colliderEdge );
+			graphics.batcher.drawPixel( entity.transform.position, DefaultColors.colliderPosition, 4 );
+			graphics.batcher.drawPixel( shape.position, DefaultColors.colliderCenter, 2 );
 		}
 
 

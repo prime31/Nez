@@ -17,23 +17,13 @@ namespace Nez.PhysicsShapes
 		}
 
 
-		internal override void recalculateBounds( Collider collider )
-		{
-			if( collider.shouldColliderScaleAndRotateWithTransform )
-			{
-				// we only scale lineraly being a circle so we'll average the x/y scale values
-				var scale = collider.entity.transform.scale;
-				var avgScale = ( scale.X + scale.Y ) / 2f;
-				radius = _originalRadius * avgScale;
-			}
-
-			position = collider.absolutePosition;
-			bounds = new RectangleF( collider.entity.transform.position.X + collider.localOffset.X + collider.origin.X - radius, collider.entity.transform.position.Y + collider.localOffset.Y + collider.origin.Y - radius, radius * 2f, radius * 2f );
-		}
-
-
 		#region Shape abstract methods
 
+		/// <summary>
+		/// internal hack used by Particles so they can reuse a Circle for all collision checks
+		/// </summary>
+		/// <param name="radius">Radius.</param>
+		/// <param name="position">Position.</param>
 		internal void recalculateBounds( float radius, Vector2 position )
 		{
 			_originalRadius = radius;
@@ -43,10 +33,39 @@ namespace Nez.PhysicsShapes
 		}
 
 
+		internal override void recalculateBounds( Collider collider )
+		{
+			// if we dont have rotation or dont care about TRS we use localOffset as the center so we'll start with that
+			center = collider.localOffset;
+
+			if( collider.shouldColliderScaleAndRotateWithTransform )
+			{
+				// we only scale lineraly being a circle so we'll use the max value
+				var scale = collider.entity.transform.scale;
+				var hasUnitScale = scale.X == 1 && scale.Y == 1;
+				var maxScale = Math.Max( scale.X, scale.Y );
+				radius = _originalRadius * maxScale;
+
+				if( collider.entity.transform.rotation != 0 )
+				{
+					// to deal with rotation with an offset origin we just move our center in a circle around 0,0 with our offset making the 0 angle
+					var offsetAngle = Mathf.atan2( collider.localOffset.Y, collider.localOffset.X ) * Mathf.rad2Deg;
+					var offsetLength = hasUnitScale ? collider._localOffsetLength : ( collider.localOffset * collider.entity.transform.scale ).Length();
+					center = Mathf.pointOnCircle( Vector2.Zero, offsetLength, collider.entity.transform.rotationDegrees + offsetAngle );
+				}
+			}
+
+			position = collider.entity.transform.position + center;
+			bounds = new RectangleF( position.X - radius, position.Y - radius, radius * 2f, radius * 2f );
+		}
+
+
 		public override bool overlaps( Shape other )
 		{
 			CollisionResult result;
-			if( other is Box )
+
+			// Box is only optimized for unrotated
+			if( other is Box && ( other as Box ).isUnrotated )
 				return Collisions.rectToCircle( ref other.bounds, position, radius );
 
 			if( other is Circle )
@@ -61,7 +80,7 @@ namespace Nez.PhysicsShapes
 
 		public override bool collidesWithShape( Shape other, out CollisionResult result )
 		{
-			if( other is Box )
+			if( other is Box && ( other as Box ).isUnrotated )
 				return ShapeCollisions.circleToBox( this, other as Box, out result );
 
 			if( other is Circle )

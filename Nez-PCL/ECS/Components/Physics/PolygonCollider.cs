@@ -30,10 +30,11 @@ namespace Nez
 
 		public override void debugRender( Graphics graphics )
 		{
-			graphics.batcher.drawHollowRect( bounds, Color.White * 0.3f );
-			graphics.batcher.drawPolygon( absolutePosition, ( ( shape as Polygon ).points ), Color.DarkRed, true );
-			graphics.batcher.drawPixel( absolutePosition, Color.Yellow, 4 );
-			graphics.batcher.drawPixel( ( shape as Polygon ).center + absolutePosition, Color.Red, 4 );
+			var poly = shape as Polygon;
+			graphics.batcher.drawHollowRect( bounds, DefaultColors.colliderBounds );
+			graphics.batcher.drawPolygon( shape.position, poly.points, DefaultColors.colliderEdge, true );
+			graphics.batcher.drawPixel( entity.transform.position, DefaultColors.colliderPosition, 4 );
+			graphics.batcher.drawPixel( shape.position, DefaultColors.colliderCenter, 2 );
 		}
 
 	}
