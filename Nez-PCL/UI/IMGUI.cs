@@ -1,12 +1,14 @@
-﻿using System;
-using Microsoft.Xna.Framework.Graphics;
+﻿using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
 using Nez.BitmapFonts;
 
 
 namespace Nez
 {
-	[Obsolete( "IMGUI will be finding its way to the trash soon. Use Nez.UI instead." )]
+	/// <summary>
+	/// IMGUI is a very simple class with only static methods designed to make sticking buttons, checkboxes, sliders and progress bars on screen
+	/// in quick and dirty fashion. It is not designed to be a full and proper UI system.
+	/// </summary>
 	public class IMGUI
 	{
 		enum TextAlign
@@ -52,10 +54,10 @@ namespace Nez
 		static Point _mouseInWorldCoords;
 
 
-		public static void init( BitmapFont font )
+		static IMGUI()
 		{
 			_spriteBatch = new SpriteBatch( Core.graphicsDevice );
-			_font = font;
+			_font = Graphics.instance.bitmapFont;
 
 			var scale = FONT_LINE_HEIGHT / _font.lineHeight;
 			FONT_SCALE = new Vector2( scale, scale );

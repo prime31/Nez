@@ -161,12 +161,16 @@ namespace Nez
 				{
 					var renderableBounds = renderable.bounds;
 
+					// we need the size * inverse scale here because when we autosize the Collider it needs to be without a scaled Renderable
+					var width = renderableBounds.width / entity.transform.scale.X;
+					var height = renderableBounds.height / entity.transform.scale.Y;
+
 					// circle colliders need special care with the origin
 					if( this is CircleCollider )
 					{
 						var circle = this as CircleCollider;
-						circle.shape = new Circle( renderableBounds.width * 0.5f );
-						circle.radius = Math.Max( renderableBounds.width, renderableBounds.height ) * 0.5f;
+						circle.shape = new Circle( width * 0.5f );
+						circle.radius = Math.Max( width, height ) * 0.5f;
 
 						// fetch the Renderable's center, transfer it to local coordinates and use that as the localOffset of our collider
 						var localCenter = renderableBounds.center - entity.transform.position;
@@ -174,10 +178,8 @@ namespace Nez
 					}
 					else
 					{
-						shape = new Box( renderableBounds.width, renderableBounds.height );
+						shape = new Box( width, height );
 					}
-
-					shape.position = entity.transform.position;
 				}
 			}
 			_isParentEntityAddedToScene = true;
