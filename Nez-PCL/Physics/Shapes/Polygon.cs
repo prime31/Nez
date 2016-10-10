@@ -30,7 +30,7 @@ namespace Nez.PhysicsShapes
 
 		// we cache the original details of our polygon
 		Vector2[] _originalPoints;
-		Vector2 _polygonCenter;
+		internal Vector2 _polygonCenter;
 
 		// used as an optimization for unrotated Box collisions
 		internal bool isBox;
@@ -38,7 +38,8 @@ namespace Nez.PhysicsShapes
 
 
 		/// <summary>
-		/// constructs a Polygon from points. points should be specified in clockwise fashion without duplicating the first/last point.
+		/// constructs a Polygon from points. points should be specified in clockwise fashion without duplicating the first/last point and
+		/// they should be centered around 0,0.
 		/// </summary>
 		/// <param name="points">Points.</param>
 		public Polygon( Vector2[] points )
@@ -86,18 +87,6 @@ namespace Nez.PhysicsShapes
 		/// </summary>
 		void buildEdgeNormals()
 		{
-			// special case for 2 points. we just have a single edge
-			if( points.Length == 2 )
-			{
-				if( _edgeNormals == null || _edgeNormals.Length != 1 )
-					_edgeNormals = new Vector2[1];
-
-				var perp = Vector2Ext.perpendicular( ref points[0], ref points[1] );
-				Vector2Ext.normalize( ref perp );
-				_edgeNormals[0] = perp;
-				return;
-			}
-
 			// for boxes we only require 2 edges since the other 2 are parallel
 			var totalEdges = isBox ? 2 : points.Length;
 			if( _edgeNormals == null || _edgeNormals.Length != totalEdges )

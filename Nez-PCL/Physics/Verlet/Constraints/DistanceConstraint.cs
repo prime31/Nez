@@ -209,14 +209,16 @@ namespace Nez.Verlet
 		[MethodImpl( MethodImplOptions.AggressiveInlining )]
 		void preparePolygonForCollisionChecks()
 		{
+			// LEAVING THIS HERE FOR A BIT! It seems this is pretty stable with the new centered polygon changes.
 			// we need to setup a Polygon with one edge. It needs the center to be in the opposite direction of it's normal.
 			// this is necessary so that SAT knows which way to calculate the MTV, which uses Shape positions.
-			var perp = Vector2Ext.perpendicular( _particleTwo.position - _particleOne.position );
-			perp.Normalize();
+			//var perp = Vector2Ext.perpendicular( _particleTwo.position - _particleOne.position );
+			//perp.Normalize();
 
 			// set our Polygon points
 			var midPoint = Vector2.Lerp( _particleOne.position, _particleTwo.position, 0.5f );
-			_polygon.position = midPoint + perp * 50;
+			//_polygon.position = midPoint + perp * 50;
+			_polygon.position = midPoint;
 			_polygon.points[0] = _particleOne.position - _polygon.position;
 			_polygon.points[1] = _particleTwo.position - _polygon.position;
 			_polygon.recalculateCenterAndEdgeNormals();

@@ -10,6 +10,10 @@ namespace Nez
 	/// </summary>
 	public class PolygonCollider : Collider
 	{
+		/// <summary>
+		/// If the points are not centered they will be centered with the difference being applied to the localOffset.
+		/// </summary>
+		/// <param name="points">Points.</param>
 		public PolygonCollider( Vector2[] points )
 		{
 			// first and last point must not be the same. we want an open polygon
@@ -18,6 +22,9 @@ namespace Nez
 			if( isPolygonClosed )
 				Array.Resize( ref points, points.Length - 1 );
 
+			var center = Polygon.findPolygonCenter( points );
+			setLocalOffset( center );
+			Polygon.recenterPolygonVerts( points );
 			shape = new Polygon( points );
 		}
 
