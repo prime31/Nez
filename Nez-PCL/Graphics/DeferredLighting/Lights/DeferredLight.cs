@@ -1,8 +1,4 @@
-﻿using System;
-using Microsoft.Xna.Framework;
-
-
-namespace Nez.DeferredLighting
+﻿namespace Nez.DeferredLighting
 {
 	public abstract class DeferredLight : RenderableComponent
 	{
@@ -13,7 +9,7 @@ namespace Nez.DeferredLighting
 		/// <param name="graphics">Graphics.</param>
 		/// <param name="camera">Camera.</param>
 		public override void render( Graphics graphics, Camera camera )
-		{}
+		{ }
 	}
 }
 

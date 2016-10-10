@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
 using Nez.BitmapFonts;
 
@@ -91,22 +89,22 @@ namespace Nez
 					_horizontalAlign = HorizontalAlign.Left;
 					_verticalAlign = VerticalAlign.Top;
 					localOffset = dockOffset;
-				break;
+					break;
 				case FPSDockPosition.TopRight:
 					_horizontalAlign = HorizontalAlign.Right;
 					_verticalAlign = VerticalAlign.Top;
 					localOffset = new Vector2( Core.graphicsDevice.Viewport.Width - dockOffset.X, dockOffset.Y );
-				break;
+					break;
 				case FPSDockPosition.BottomLeft:
 					_horizontalAlign = HorizontalAlign.Left;
 					_verticalAlign = VerticalAlign.Bottom;
 					localOffset = new Vector2( dockOffset.X, Core.graphicsDevice.Viewport.Height - dockOffset.Y );
-				break;
+					break;
 				case FPSDockPosition.BottomRight:
 					_horizontalAlign = HorizontalAlign.Right;
 					_verticalAlign = VerticalAlign.Bottom;
 					localOffset = new Vector2( Core.graphicsDevice.Viewport.Width - dockOffset.X, Core.graphicsDevice.Viewport.Height - dockOffset.Y );
-				break;
+					break;
 			}
 		}
 
@@ -179,6 +177,6 @@ namespace Nez
 		}
 
 		#endregion
-	
+
 	}
 }

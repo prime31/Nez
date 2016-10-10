@@ -1,6 +1,4 @@
-﻿using System;
-using Nez;
-using Nez.Sprites;
+﻿using Nez.Sprites;
 using Microsoft.Xna.Framework;
 
 
@@ -21,6 +19,8 @@ namespace Nez
 		/// the color the sprite will be tinted when it is rendered
 		/// </summary>
 		public Color outlineColor = Color.Black;
+
+		public override RectangleF bounds { get { return _sprite.bounds; } }
 
 		public override float width
 		{
@@ -43,7 +43,6 @@ namespace Nez
 		{
 			_sprite = sprite;
 			_sprite.enabled = false;
-			originNormalized = new Vector2( 0.5f, 0.5f );
 		}
 
 

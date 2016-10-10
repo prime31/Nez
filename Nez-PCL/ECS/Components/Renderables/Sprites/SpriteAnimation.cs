@@ -13,6 +13,9 @@ namespace Nez.Sprites
 	}
 
 
+	/// <summary>
+	/// houses the information that a SpriteT requires for animation
+	/// </summary>
 	public class SpriteAnimation
 	{
 		/// <summary>
@@ -146,14 +149,11 @@ namespace Nez.Sprites
 		}
 
 
-		[System.Obsolete( "Deprecated. origin is now a property of Subtexture so use the other variant of addFrame." )]
-		public SpriteAnimation addFrame( Subtexture subtexture, Vector2 origin )
-		{
-			addFrame( subtexture );
-			return this;
-		}
-
-
+		/// <summary>
+		/// adds multiple frames to this animation
+		/// </summary>
+		/// <returns>The frames.</returns>
+		/// <param name="subtextures">Subtextures.</param>
 		public SpriteAnimation addFrames( List<Subtexture> subtextures )
 		{
 			for( var i = 0; i < subtextures.Count; i++ )

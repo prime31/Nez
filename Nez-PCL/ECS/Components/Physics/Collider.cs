@@ -173,12 +173,14 @@ namespace Nez
 						circle.radius = Math.Max( width, height ) * 0.5f;
 
 						// fetch the Renderable's center, transfer it to local coordinates and use that as the localOffset of our collider
-						var localCenter = renderableBounds.center - entity.transform.position;
-						localOffset = localCenter;
+						localOffset = renderableBounds.center - entity.transform.position;
 					}
 					else
 					{
 						shape = new Box( width, height );
+
+						// fetch the Renderable's center, transfer it to local coordinates and use that as the localOffset of our collider
+						localOffset = renderableBounds.center - entity.transform.position;
 					}
 				}
 			}

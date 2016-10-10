@@ -60,7 +60,6 @@ namespace Nez.DeferredLighting
 		public PointLight setRadius( float radius )
 		{
 			_radius = radius;
-			originNormalized = Vector2Ext.halfVector();
 			_areBoundsDirty = true;
 			return this;
 		}

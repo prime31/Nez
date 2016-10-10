@@ -53,8 +53,10 @@ namespace Nez
 		public TiledSprite( Subtexture subtexture ) : base( subtexture )
 		{
 			_sourceRect = subtexture.sourceRect;
-			material = new Material();
-			material.samplerState = Core.defaultWrappedSamplerState;
+			material = new Material
+			{
+				samplerState = Core.defaultWrappedSamplerState
+			};
 		}
 
 

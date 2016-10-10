@@ -2,17 +2,21 @@
 using Microsoft.Xna.Framework;
 using Nez.Textures;
 using System.Collections.Generic;
-using Nez.Sprites;
 using Microsoft.Xna.Framework.Graphics;
+using System.Runtime.CompilerServices;
 
 
 namespace Nez.Sprites
 {
 	/// <summary>
-	/// renders and fades a copy of the Sprite on the same Entity. minDistanceBetweenInstances determines how often a trail sprite is added.
+	/// renders and fades a series of copies of the Sprite on the same Entity. minDistanceBetweenInstances determines how often a trail
+	/// sprite is added.
 	/// </summary>
 	public class SpriteTrail : RenderableComponent, IUpdatable
 	{
+		/// <summary>
+		/// helper class that houses the data required for the individual trail instances
+		/// </summary>
 		class SpriteTrailInstance
 		{
 			Vector2 _position;
@@ -59,6 +63,7 @@ namespace Nez.Sprites
 			/// <summary>
 			/// returns true when the fade out is complete
 			/// </summary>
+			[MethodImpl( MethodImplOptions.AggressiveInlining )]
 			public bool update()
 			{
 				_elapsedTime += Time.deltaTime;
@@ -77,6 +82,7 @@ namespace Nez.Sprites
 			}
 
 
+			[MethodImpl( MethodImplOptions.AggressiveInlining )]
 			public void render( Graphics graphics, Camera camera )
 			{
 				graphics.batcher.draw( _subtexture, _position, _subtexture.sourceRect, _renderColor, _rotation, _origin, _scale, _spriteEffects, _layerDepth );
@@ -84,15 +90,11 @@ namespace Nez.Sprites
 		}
 
 
-		public override float width
-		{
-			get { return _sprite.width; }
-		}
+		public override float width { get { return _sprite.width; } }
 
-		public override float height
-		{
-			get { return _sprite.height; }
-		}
+		public override float height { get { return _sprite.height; } }
+
+		public override RectangleF bounds { get { return _sprite.bounds; } }
 
 		/// <summary>
 		/// how far does the Sprite have to move before a new instance is spawned
@@ -139,7 +141,6 @@ namespace Nez.Sprites
 		{
 			// we want to store the sprite and move ourself before the Sprite in render order
 			_sprite = sprite;
-			origin = _sprite.origin;
 			layerDepth = _sprite.layerDepth + 0.001f;
 
 			_liveSpriteTrailInstances = new List<SpriteTrailInstance>( 5 );
@@ -179,13 +180,10 @@ namespace Nez.Sprites
 		}
 
 
-		public override void render( Graphics graphics, Camera camera )
-		{
-			for( var i = 0; i < _liveSpriteTrailInstances.Count; i++ )
-				_liveSpriteTrailInstances[i].render( graphics, camera );
-		}
-
-
+		/// <summary>
+		/// enables the SpriteTrail
+		/// </summary>
+		/// <returns>The sprite trail.</returns>
 		public SpriteTrail enableSpriteTrail()
 		{
 			_awaitingDisable = false;
@@ -195,6 +193,10 @@ namespace Nez.Sprites
 		}
 
 
+		/// <summary>
+		/// disables the SpriteTrail optionally waiting for the current trail to fade out first
+		/// </summary>
+		/// <param name="completeCurrentTrail">If set to <c>true</c> complete current trail.</param>
 		public void disableSpriteTrail( bool completeCurrentTrail = true )
 		{
 			if( completeCurrentTrail )
@@ -226,6 +228,13 @@ namespace Nez.Sprites
 			instance.spawn( _lastPosition, _sprite.subtexture, fadeDuration, fadeDelay, initialColor, fadeToColor );
 			instance.setSpriteRenderOptions( _sprite.entity.transform.rotation, _sprite.origin, _sprite.entity.transform.scale, _sprite.spriteEffects, layerDepth );
 			_liveSpriteTrailInstances.Add( instance );
+		}
+
+
+		public override void render( Graphics graphics, Camera camera )
+		{
+			for( var i = 0; i < _liveSpriteTrailInstances.Count; i++ )
+				_liveSpriteTrailInstances[i].render( graphics, camera );
 		}
 
 	}

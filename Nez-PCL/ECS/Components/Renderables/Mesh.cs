@@ -23,7 +23,7 @@ namespace Nez
 			{
 				if( _areBoundsDirty )
 				{
-					_bounds.calculateBounds( entity.transform.position + _topLeftVertPosition, _localOffset, _origin, entity.transform.scale, entity.transform.rotation, _width, _height );
+					_bounds.calculateBounds( entity.transform.position + _topLeftVertPosition, Vector2.Zero, Vector2.Zero, entity.transform.scale, entity.transform.rotation, _width, _height );
 					_areBoundsDirty = false;
 				}
 

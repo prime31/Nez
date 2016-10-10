@@ -84,6 +84,18 @@ namespace Nez
 
 
 		/// <summary>
+		/// Begin is called to tell the PrimitiveBatch what kind of primitives will be drawn, and to prepare the graphics card to render those primitives.
+		/// Use camera.projectionMatrix and camera.transformMatrix if the batch should be in camera space.
+		/// </summary>
+		/// <param name="projection">The projection.</param>
+		/// <param name="view">The view.</param>
+		public void begin( Matrix projection, Matrix view )
+		{
+			begin( ref projection, ref view );
+		}
+
+
+		/// <summary>
 		/// End is called once all the primitives have been drawn using AddVertex.
 		/// it will call Flush to actually submit the draw call to the graphics card, and
 		/// then tell the basic effect to end.

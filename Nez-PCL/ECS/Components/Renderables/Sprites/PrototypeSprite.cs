@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Nez.Sprites;
 
 
 namespace Nez
@@ -7,7 +8,7 @@ namespace Nez
 	/// <summary>
 	/// skewable rectangle sprite for prototyping
 	/// </summary>
-	public class PrototypeSprite : RenderableComponent
+	public class PrototypeSprite : Sprite
 	{
 		public override float width { get { return _width; } }
 		public override float height { get { return _height; } }
@@ -22,7 +23,7 @@ namespace Nez
 		float _skewTopX, _skewBottomX, _skewLeftY, _skewRightY;
 
 
-		public PrototypeSprite( float width, float height )
+		public PrototypeSprite( float width, float height ) : base( Graphics.instance.pixelTexture )
 		{
 			_width = width;
 			_height = height;
@@ -77,8 +78,9 @@ namespace Nez
 			var pos = ( entity.transform.position - ( origin * entity.transform.localScale ) + localOffset );
 			var size = new Point( (int)( _width * entity.transform.localScale.X ), (int)( _height * entity.transform.localScale.Y ) );
 			var destRect = new Rectangle( (int)pos.X, (int)pos.Y, size.X, size.Y );
-			graphics.batcher.draw( graphics.pixelTexture, destRect, graphics.pixelTexture.sourceRect, color, entity.transform.rotation, SpriteEffects.None, layerDepth, _skewTopX, _skewBottomX, _skewLeftY, _skewRightY );
+			graphics.batcher.draw( subtexture, destRect, subtexture.sourceRect, color, entity.transform.rotation, SpriteEffects.None, layerDepth, _skewTopX, _skewBottomX, _skewLeftY, _skewRightY );
 		}
+
 	}
 }
 

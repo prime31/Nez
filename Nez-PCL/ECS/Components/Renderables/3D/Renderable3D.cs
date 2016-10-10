@@ -67,8 +67,8 @@ namespace Nez
 		/// <value>The rotation degrees.</value>
 		public Vector3 rotationDegrees
 		{
-			get { return new Vector3( _rotationXY, transform.rotation ) * 57.295779513082320876798154814105f; }
-			set { rotation = value *= 0.017453292519943295769236907684886f; }
+			get { return new Vector3( _rotationXY, transform.rotation ) * Mathf.rad2Deg; }
+			set { rotation = value *= Mathf.deg2Rad; }
 		}
 
 		/// <summary>

@@ -25,7 +25,6 @@
 			textRun.position = transform.position;
 			textRun.rotation = transform.rotation;
 			textRun.compile();
-			origin = textRun.origin;
 		}
 
 

@@ -1,13 +1,8 @@
-﻿using System;
-using Nez.Sprites;
-using Microsoft.Xna.Framework;
-
-
-namespace Nez.Sprites
+﻿namespace Nez.Sprites
 {
 	/// <summary>
 	/// this component will draw the same frame of of spriteToMime every frame. The only difference in rendering is that SpriteMime uses its own
-	/// localPosition and color. This allows you to use it for the purpose of shadows (by offsetting via localPosition) or silhouettes (with a
+	/// localOffset and color. This allows you to use it for the purpose of shadows (by offsetting via localPosition) or silhouettes (with a
 	/// Material that has a stencil read).
 	/// </summary>
 	public class SpriteMime : RenderableComponent
@@ -15,6 +10,8 @@ namespace Nez.Sprites
 		public override float width { get { return _spriteToMime.width; } }
 
 		public override float height { get { return _spriteToMime.height; } }
+
+		public override RectangleF bounds { get { return _spriteToMime.bounds; } }
 
 
 		Sprite _spriteToMime;

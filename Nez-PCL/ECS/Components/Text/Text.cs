@@ -1,16 +1,24 @@
-﻿using System;
-using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework;
-using Nez.BitmapFonts;
+﻿using Microsoft.Xna.Framework;
+using Nez.Sprites;
 
 
 namespace Nez
 {
-	public class Text : RenderableComponent
+	public class Text : Sprite
 	{
-		public override float width { get { return _size.X; } }
+		public override RectangleF bounds
+		{
+			get
+			{
+				if( _areBoundsDirty )
+				{
+					_bounds.calculateBounds( entity.transform.position, _localOffset, _origin, entity.transform.scale, entity.transform.rotation, _size.X, _size.Y );
+					_areBoundsDirty = false;
+				}
 
-		public override float height { get { return _size.Y; } }
+				return _bounds;
+			}
+		}
 
 		/// <summary>
 		/// text to draw

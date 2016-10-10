@@ -807,7 +807,7 @@ namespace Nez
 			if( useWorldSpace )
 				return;
 
-			_bounds.calculateBounds( entity.transform.position, _localOffset, _origin, entity.transform.scale, entity.transform.rotation, width, height );
+			_bounds.calculateBounds( entity.transform.position, _localOffset, Vector2.Zero, entity.transform.scale, entity.transform.rotation, width, height );
 		}
 
 
@@ -841,8 +841,10 @@ namespace Nez
 			for( var i = 0; i < _vertices.length; i++ )
 			{
 				var v = _vertices[i];
-				Debug.drawPixel( v.Position.X, v.Position.Y, 4, Color.GhostWhite );
+				graphics.batcher.drawPixel( v.Position.X, v.Position.Y, Color.GhostWhite, 4 );
 			}
+
+			graphics.batcher.drawHollowRect( _bounds, DefaultColors.colliderBounds );
 		}
 
 		#endregion
