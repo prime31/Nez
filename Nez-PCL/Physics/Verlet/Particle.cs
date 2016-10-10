@@ -42,6 +42,10 @@ namespace Nez.Verlet
 		}
 
 
+		public Particle( float x, float y ) : this( new Vector2( x, y ) )
+		{}
+
+
 		/// <summary>
 		/// applies a force taking mass into account to the Particle
 		/// </summary>
@@ -73,6 +77,16 @@ namespace Nez.Verlet
 			isPinned = true;
 			pinnedPosition = position;
 			this.position = pinnedPosition;
+			return this;
+		}
+
+
+		/// <summary>
+		/// unpins the particle setting it free like the wind
+		/// </summary>
+		public Particle unpin()
+		{
+			isPinned = false;
 			return this;
 		}
 

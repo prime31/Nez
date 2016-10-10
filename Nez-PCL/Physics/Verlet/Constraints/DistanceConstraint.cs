@@ -31,13 +31,13 @@ namespace Nez.Verlet
 		/// sets whether collisions should be approximated by points. This should be used for Constraints that need to collided on both
 		/// sides. SAT only works with single sided collisions.
 		/// </summary>
-		public bool shouldApproximateCollisionsWithPoints = false;
+		public bool shouldApproximateCollisionsWithPoints;
 
 		/// <summary>
 		/// if shouldApproximateCollisionsWithPoints is true, this controls how accurate the collisions check will be. Higher numbers mean
 		/// more collisions checks.
 		/// </summary>
-		public int totalPointsToApproximateCollisionsWith = 10;
+		public int totalPointsToApproximateCollisionsWith = 5;
 
 		/// <summary>
 		/// the first Particle in the Constraint
@@ -92,7 +92,7 @@ namespace Nez.Verlet
 		/// </summary>
 		/// <returns>The tear sensitvity.</returns>
 		/// <param name="tearSensitivity">Tear sensitivity.</param>
-		public DistanceConstraint setTearSensitvity( float tearSensitivity )
+		public DistanceConstraint setTearSensitivity( float tearSensitivity )
 		{
 			this.tearSensitivity = tearSensitivity;
 			return this;

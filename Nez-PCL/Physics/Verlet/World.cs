@@ -52,13 +52,13 @@ namespace Nez.Verlet
 		float _leftOverTime;
 		float _fixedDeltaTime = 1f / 60;
 		int _iterationSteps;
-		float _fixedDeltaTimeSecondsSq;
+		float _fixedDeltaTimeSq;
 
 
 		public World( Rectangle? simulationBounds = null )
 		{
 			this.simulationBounds = simulationBounds;
-			_fixedDeltaTimeSecondsSq = Mathf.pow( _fixedDeltaTime, 2 );
+			_fixedDeltaTimeSq = Mathf.pow( _fixedDeltaTime, 2 );
 		}
 
 
@@ -73,16 +73,16 @@ namespace Nez.Verlet
 
 			for( var iteration = 1; iteration <= _iterationSteps; iteration++ )
 			{
-				for( var i = 0; i < _composites.length; i++ )
+				for( var i = _composites.length - 1; i >= 0; i-- )
 				{
 					var composite = _composites.buffer[i];
 
-					// solve constraints. we loop backwards in case any rupture
+					// solve constraints
 					for( var s = 0; s < constraintIterations; s++ )
 						composite.solveConstraints();
 
 					// do the verlet integration
-					composite.updateParticles( _fixedDeltaTimeSecondsSq, gravity );
+					composite.updateParticles( _fixedDeltaTimeSq, gravity );
 
 					// handle collisions with Nez Colliders
 					composite.handleConstraintCollisions();

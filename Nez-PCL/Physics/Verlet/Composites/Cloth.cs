@@ -31,12 +31,12 @@ namespace Nez.Verlet
 					// remove this constraint to make only vertical constaints for a hair-like cloth
 					if( connectHorizontalParticles && x > 0 )
 						addConstraint( new DistanceConstraint( particles[y * segments + x], particles[y * segments + x - 1], stiffness ) )
-							.setTearSensitvity( tearSensitivity )
+							.setTearSensitivity( tearSensitivity )
 							.setCollidesWithColliders( false );
 
 					if( y > 0 )
 						addConstraint( new DistanceConstraint( particles[y * segments + x], particles[( y - 1 ) * segments + x], stiffness ) )
-							.setTearSensitvity( tearSensitivity )
+							.setTearSensitivity( tearSensitivity )
 							.setCollidesWithColliders( false );
 
 					if( y == 0 )
