@@ -207,26 +207,39 @@ namespace Nez.Systems
 			{
 				try
 				{
-					var fieldInfo = typeof( ContentManager ).GetRuntimeField( "disposableAssets" );
-					var assets = fieldInfo.GetValue( this ) as List<IDisposable>;
-
-					for( var i = 0; i < assets.Count; i++ )
+					FieldInfo fieldInfo = null;
+					var fields = typeof( ContentManager ).GetRuntimeFields();
+					foreach( var field in fields )
 					{
-						var typedAsset = assets[i] as T;
-						if( typedAsset != null )
+						if( field.Name == "disposableAssets" )
 						{
-							typedAsset.Dispose();
-							assets.RemoveAt( i );
-
-							#if FNA
-							fieldInfo = typeof( ContentManager ).GetRuntimeField( "loadedAssets" );
-							var LoadedAssets = fieldInfo.GetValue( this ) as Dictionary<string, object>;
-							#endif
-
-							LoadedAssets.Remove( assetName );
+							fieldInfo = field;
 							break;
 						}
 					}
+
+					// first fetch the actual asset. we already know its loaded so we'll grab it directly
+					#if FNA
+					fieldInfo = typeof( ContentManager ).GetRuntimeField( "loadedAssets" );
+					var LoadedAssets = fieldInfo.GetValue( this ) as Dictionary<string, object>;
+					#endif
+
+					var assetToRemove = LoadedAssets[assetName];
+
+					var assets = fieldInfo.GetValue( this ) as List<IDisposable>;
+					for( var i = 0; i < assets.Count; i++ )
+					{
+						// see if the asset is disposeable. If so, find and dispose of it.
+						var typedAsset = assets[i] as T;
+						if( typedAsset != null && typedAsset == assetToRemove )
+						{
+							typedAsset.Dispose();
+							assets.RemoveAt( i );
+							break;
+						}
+					}
+
+					LoadedAssets.Remove( assetName );
 				}
 				catch( Exception e )
 				{
