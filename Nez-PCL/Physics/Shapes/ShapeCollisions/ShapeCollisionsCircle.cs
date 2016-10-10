@@ -129,7 +129,7 @@ namespace Nez.PhysicsShapes
 
 			// first, we need to find the closest distance from the circle to the polygon
 			float distanceSquared;
-			var closestPoint = polygon.getClosestPointOnPolygonToPoint( poly2Circle, out distanceSquared, out result.normal );
+			var closestPoint = Polygon.getClosestPointOnPolygonToPoint( polygon.points, poly2Circle, out distanceSquared, out result.normal );
 
 			// make sure the squared distance is less than our radius squared else we are not colliding. Note that if the Circle is fully
 			// contained in the Polygon the distance could be larger than the radius. Because of that we also  make sure the circle position

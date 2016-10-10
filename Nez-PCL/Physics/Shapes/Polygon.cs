@@ -121,6 +121,8 @@ namespace Nez.PhysicsShapes
 		}
 
 
+		#region static Polygon helpers
+
 		/// <summary>
 		/// builds a symmetrical polygon (hexagon, octogon, n-gon) and returns the points
 		/// </summary>
@@ -138,6 +140,18 @@ namespace Nez.PhysicsShapes
 			}
 
 			return verts;
+		}
+
+
+		/// <summary>
+		/// recenters the points of the polygon
+		/// </summary>
+		/// <param name="points">Points.</param>
+		public static void recenterPolygonVerts( Vector2[] points )
+		{
+			var center = findPolygonCenter( points );
+			for( var i = 0; i < points.Length; i++ )
+				points[i] -= center;
 		}
 
 
@@ -162,7 +176,7 @@ namespace Nez.PhysicsShapes
 
 		// Dont know adjancent vertices so take each vertex
 		// If you know adjancent vertices, perform hill climbing algorithm
-		public Vector2 getFarthestPointInDirection( Vector2 direction )
+		public static Vector2 getFarthestPointInDirection( Vector2[] points, Vector2 direction )
 		{
 			var index = 0;
 			float dot;
@@ -191,7 +205,7 @@ namespace Nez.PhysicsShapes
 		/// <param name="point">Point.</param>
 		/// <param name="distanceSquared">Distance squared.</param>
 		/// <param name="edgeNormal">Edge normal.</param>
-		public Vector2 getClosestPointOnPolygonToPoint( Vector2 point, out float distanceSquared, out Vector2 edgeNormal )
+		public static Vector2 getClosestPointOnPolygonToPoint( Vector2[] points, Vector2 point, out float distanceSquared, out Vector2 edgeNormal )
 		{
 			distanceSquared = float.MaxValue;
 			edgeNormal = Vector2.Zero;
@@ -223,6 +237,8 @@ namespace Nez.PhysicsShapes
 
 			return closestPoint;
 		}
+
+		#endregion
 
 
 		#region Shape abstract methods

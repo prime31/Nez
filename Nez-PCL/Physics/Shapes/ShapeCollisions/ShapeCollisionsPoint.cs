@@ -52,7 +52,7 @@ namespace Nez.PhysicsShapes
 			if( poly.containsPoint( point ) )
 			{
 				float distanceSquared;
-				var closestPoint = poly.getClosestPointOnPolygonToPoint( point - poly.position, out distanceSquared, out result.normal );
+				var closestPoint = Polygon.getClosestPointOnPolygonToPoint( poly.points, point - poly.position, out distanceSquared, out result.normal );
 
 				result.minimumTranslationVector = -result.normal * Mathf.sqrt( distanceSquared );
 				result.point = closestPoint + poly.position;
