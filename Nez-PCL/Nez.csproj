@@ -525,6 +525,8 @@
     <Compile Include="Physics\Shapes\ShapeCollisions\ShapeCollisionsPoint.cs" />
     <Compile Include="Debug\DefaultColors.cs" />
     <Compile Include="UI\IMGUI.cs" />
+    <Compile Include="Physics\Verlet\Composites\Box.cs" />
+    <Compile Include="Physics\Verlet\Composites\Ragdoll.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="MonoGame.Framework">
