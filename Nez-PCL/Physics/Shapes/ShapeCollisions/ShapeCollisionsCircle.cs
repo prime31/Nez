@@ -85,13 +85,12 @@ namespace Nez.PhysicsShapes
 		{
 			result = new CollisionResult();
 
-			var closestPointOnBounds = box.bounds.getClosestPointOnRectangleBorderToPoint( circle.position );
+			var closestPointOnBounds = box.bounds.getClosestPointOnRectangleBorderToPoint( circle.position, out result.normal );
 
 			// deal with circles whos center is in the box first since its cheaper to see if we are contained
 			if( box.containsPoint( circle.position ) )
 			{
 				result.point = closestPointOnBounds;
-				result.normal = Vector2.Normalize( closestPointOnBounds - circle.position );
 
 				// calculate mtv. Find the safe, non-collided position and get the mtv from that.
 				var safePlace = closestPointOnBounds + result.normal * circle.radius;
@@ -103,14 +102,18 @@ namespace Nez.PhysicsShapes
 			float sqrDistance;
 			Vector2.DistanceSquared( ref closestPointOnBounds, ref circle.position, out sqrDistance );
 
-			// see if the point on the box is less than radius from the circle making sure the circle center is not in the box
-			if( sqrDistance <= circle.radius * circle.radius )
+			// see if the point on the box is less than radius from the circle
+			if( sqrDistance == 0 )
 			{
-				var directionToCircle = circle.position - closestPointOnBounds;
-				var depth = directionToCircle.Length() - circle.radius;
+				result.minimumTranslationVector = result.normal * circle.radius;
+			}
+			else if( sqrDistance <= circle.radius * circle.radius )
+			{
+				result.normal = circle.position - closestPointOnBounds;
+				var depth = result.normal.Length() - circle.radius;
 
 				result.point = closestPointOnBounds;
-				result.normal = Vector2.Normalize( directionToCircle );
+				Vector2Ext.normalize( ref result.normal );
 				result.minimumTranslationVector = depth * result.normal;
 
 				return true;
@@ -142,15 +145,21 @@ namespace Nez.PhysicsShapes
 			Vector2 mtv;
 			if( circleCenterInsidePoly )
 			{
-				mtv = result.normal * ( Mathf.sqrt( distanceSquared ) + circle.radius );
+				mtv = result.normal * ( Mathf.sqrt( distanceSquared ) - circle.radius );
 			}
 			else
 			{
-				var distance = Mathf.sqrt( distanceSquared );
-				mtv = ( poly2Circle - closestPoint ) * ( ( circle.radius - distance ) / distance );
+				// if we have no distance that means the circle center is on the polygon edge. Move it only by its radius
+				if( distanceSquared == 0 )
+					mtv = result.normal * circle.radius;
+				else
+				{
+					var distance = Mathf.sqrt( distanceSquared );
+					mtv = -( poly2Circle - closestPoint ) * ( ( circle.radius - distance ) / distance );
+				}
 			}
 
-			result.minimumTranslationVector = -mtv;
+			result.minimumTranslationVector = mtv;
 			result.point = closestPoint + polygon.position;
 
 			return true;

@@ -217,8 +217,8 @@ namespace Nez.PhysicsShapes
 
 					// get the normal of the line
 					var line = points[j] - points[i];
-					edgeNormal.X = line.Y;
-					edgeNormal.Y = -line.X;
+					edgeNormal.X = -line.Y;
+					edgeNormal.Y = line.X;
 				}
 			}
 

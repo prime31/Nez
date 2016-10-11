@@ -169,7 +169,8 @@ namespace Nez.Verlet
 			var maxY = Math.Max( _particleOne.position.Y, _particleTwo.position.Y );
 			_polygon.bounds = RectangleF.fromMinMax( minX, minY, maxX, maxY );
 
-			preparePolygonForCollisionChecks();
+			Vector2 midPoint;
+			preparePolygonForCollisionChecks( out midPoint );
 
 			var colliders = Physics.boxcastBroadphase( ref _polygon.bounds, collidesWithLayers );
 			foreach( var collider in colliders )
@@ -177,6 +178,17 @@ namespace Nez.Verlet
 				CollisionResult result;
 				if( _polygon.collidesWithShape( collider.shape, out result ) )
 				{
+					// TODO: do we need this?
+					// special care needs to be taken for a Circle. Since our Polygon is only a single segment with a normal off both edges
+					// we could end up with a backwards result. We fix that by seeing if the normal is in the direction of the Circle
+					// center. If it is, we flip the result.
+					//if( collider.shape is Circle )
+					//{
+					//	var dot = Vector2.Dot( midPoint - collider.shape.position, result.normal );
+					//	if( dot < 0 )
+					//		result.invertResult();
+					//}
+
 					_particleOne.position -= result.minimumTranslationVector;
 					_particleTwo.position -= result.minimumTranslationVector;
 				}
@@ -207,17 +219,10 @@ namespace Nez.Verlet
 
 
 		[MethodImpl( MethodImplOptions.AggressiveInlining )]
-		void preparePolygonForCollisionChecks()
+		void preparePolygonForCollisionChecks( out Vector2 midPoint )
 		{
-			// LEAVING THIS HERE FOR A BIT! It seems this is pretty stable with the new centered polygon changes.
-			// we need to setup a Polygon with one edge. It needs the center to be in the opposite direction of it's normal.
-			// this is necessary so that SAT knows which way to calculate the MTV, which uses Shape positions.
-			//var perp = Vector2Ext.perpendicular( _particleTwo.position - _particleOne.position );
-			//perp.Normalize();
-
 			// set our Polygon points
-			var midPoint = Vector2.Lerp( _particleOne.position, _particleTwo.position, 0.5f );
-			//_polygon.position = midPoint + perp * 50;
+			midPoint = Vector2.Lerp( _particleOne.position, _particleTwo.position, 0.5f );
 			_polygon.position = midPoint;
 			_polygon.points[0] = _particleOne.position - _polygon.position;
 			_polygon.points[1] = _particleTwo.position - _polygon.position;

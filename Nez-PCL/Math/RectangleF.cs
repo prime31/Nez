@@ -595,8 +595,10 @@ namespace Nez
 		/// </summary>
 		/// <returns>The closest point on rectangle border to point.</returns>
 		/// <param name="point">Point.</param>
-		public Vector2 getClosestPointOnRectangleBorderToPoint( Vector2 point )
+		public Vector2 getClosestPointOnRectangleBorderToPoint( Vector2 point, out Vector2 edgeNormal )
 		{
+			edgeNormal = Vector2.Zero;
+
 			// for each axis, if the point is outside the box clamp it to the box else leave it alone
 			var res = new Vector2();
 			res.X = MathHelper.Clamp( point.X, left, right );
@@ -612,13 +614,36 @@ namespace Nez
 
 				var min = Mathf.minOf( dl, dr, dt, db );
 				if( min == dt )
+				{
 					res.Y = top;
+					edgeNormal.Y = -1;
+				}
 				else if( min == db )
+				{
 					res.Y = bottom;
+					edgeNormal.Y = 1;
+				}
 				else if( min == dl )
+				{
 					res.X = left;
+					edgeNormal.X = -1;
+				}
 				else
+				{
 					res.X = right;
+					edgeNormal.X = 1;
+				}
+			}
+			else
+			{
+				if( res.X == left )
+					edgeNormal.X = -1;
+				if( res.X == right )
+					edgeNormal.X = 1;
+				if( res.Y == top )
+					edgeNormal.Y = -1;
+				if( res.Y == bottom )
+					edgeNormal.Y = 1;
 			}
 
 			return res;

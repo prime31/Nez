@@ -34,8 +34,7 @@ namespace Nez.PhysicsShapes
 			if( box.containsPoint( point ) )
 			{
 				// get the point in the space of the Box
-				result.point = box.bounds.getClosestPointOnRectangleBorderToPoint( point );
-				result.normal = Vector2.Normalize( result.point - point );
+				result.point = box.bounds.getClosestPointOnRectangleBorderToPoint( point, out result.normal );
 				result.minimumTranslationVector = point - result.point;
 
 				return true;
@@ -54,7 +53,7 @@ namespace Nez.PhysicsShapes
 				float distanceSquared;
 				var closestPoint = Polygon.getClosestPointOnPolygonToPoint( poly.points, point - poly.position, out distanceSquared, out result.normal );
 
-				result.minimumTranslationVector = -result.normal * Mathf.sqrt( distanceSquared );
+				result.minimumTranslationVector = result.normal * Mathf.sqrt( distanceSquared );
 				result.point = closestPoint + poly.position;
 
 				return true;

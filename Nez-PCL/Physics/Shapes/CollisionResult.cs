@@ -60,8 +60,8 @@ namespace Nez
 		/// </summary>
 		public void invertResult()
 		{
-			minimumTranslationVector *= -1;
-			normal *= -1;
+			Vector2.Negate( ref minimumTranslationVector, out minimumTranslationVector );
+			Vector2.Negate( ref normal, out normal );
 		}
 
 
