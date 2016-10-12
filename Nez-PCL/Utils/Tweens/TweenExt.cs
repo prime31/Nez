@@ -1,5 +1,4 @@
-﻿using System;
-using Nez.Tweens;
+﻿using Nez.Tweens;
 using Microsoft.Xna.Framework;
 
 
@@ -7,6 +6,8 @@ namespace Nez
 {
 	public static class TweenExt
 	{
+		#region Transform tweens
+
 		/// <summary>
 		/// transform.position tween
 		/// </summary>
@@ -133,6 +134,28 @@ namespace Nez
 
 			return tween;
 		}
+
+		#endregion
+
+
+		#region RenderableComponent tweens
+
+		/// <summary>
+		/// RenderableComponent.color tween
+		/// </summary>
+		/// <returns>The color to.</returns>
+		/// <param name="self">Self.</param>
+		/// <param name="to">To.</param>
+		/// <param name="duration">Duration.</param>
+		public static ITween<Color> tweenColorTo( this RenderableComponent self, Color to, float duration = 0.3f )
+		{
+			var tween = Pool<RenderableColorTween>.obtain();
+			tween.setTarget( self );
+			tween.initialize( tween, to, duration );
+			return tween;
+		}
+
+		#endregion
 
 	}
 }

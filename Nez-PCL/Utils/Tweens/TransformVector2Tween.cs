@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 
 
 namespace Nez.Tweens
@@ -39,7 +38,7 @@ namespace Nez.Tweens
 					break;
 				case TransformTargetType.Scale:
 					_transform.scale = value;
-				break;
+					break;
 				case TransformTargetType.LocalScale:
 					_transform.localScale = value;
 					break;
@@ -64,7 +63,7 @@ namespace Nez.Tweens
 				case TransformTargetType.LocalPosition:
 					return _transform.localPosition;
 				case TransformTargetType.Scale:
-				return _transform.scale;
+					return _transform.scale;
 				case TransformTargetType.LocalScale:
 					return _transform.localScale;
 				case TransformTargetType.RotationDegrees:
@@ -94,13 +93,9 @@ namespace Nez.Tweens
 		{
 			// special case for non-relative angle lerps so that they take the shortest possible rotation
 			if( ( _targetType == TransformTargetType.RotationDegrees || _targetType == TransformTargetType.LocalRotationDegrees ) && !_isRelative )
-			{
 				setTweenedValue( Lerps.easeAngle( _easeType, _fromValue, _toValue, _elapsedTime, _duration ) );
-			}
 			else
-			{
 				setTweenedValue( Lerps.ease( _easeType, _fromValue, _toValue, _elapsedTime, _duration ) );
-			}
 		}
 
 
@@ -114,6 +109,6 @@ namespace Nez.Tweens
 				Pool<TransformVector2Tween>.free( this );
 			}
 		}
-	
+
 	}
 }

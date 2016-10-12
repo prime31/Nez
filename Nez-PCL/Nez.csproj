@@ -527,6 +527,7 @@
     <Compile Include="UI\IMGUI.cs" />
     <Compile Include="Physics\Verlet\Composites\Box.cs" />
     <Compile Include="Physics\Verlet\Composites\Ragdoll.cs" />
+    <Compile Include="Utils\Tweens\RenderableColorTween.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="MonoGame.Framework">
