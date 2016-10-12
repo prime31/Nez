@@ -268,14 +268,18 @@ namespace Nez
 		/// <param name="result">Result.</param>
 		public bool collidesWith( Collider collider, out CollisionResult result )
 		{
-			return shape.collidesWithShape( collider.shape, out result );
+			if( shape.collidesWithShape( collider.shape, out result ) )
+			{
+				result.collider = collider;
+				return true;
+			}
+			return false;
 		}
 
 
 		/// <summary>
 		/// checks to see if this Collider with motion applied (delta movement vector) collides with collider. If it does, true will be
-		/// returned and result will be populated.
-		/// with collision data
+		/// returned and result will be populated with collision data.
 		/// </summary>
 		/// <returns><c>true</c>, if with was collidesed, <c>false</c> otherwise.</returns>
 		/// <param name="collider">Collider.</param>
@@ -290,6 +294,78 @@ namespace Nez
 			var didCollide = shape.collidesWithShape( collider.shape, out result );
 			if( didCollide )
 				result.collider = collider;
+
+			// return the shapes position to where it was before the check
+			shape.position = oldPosition;
+
+			return didCollide;
+		}
+
+
+		/// <summary>
+		/// checks to see if this Collider collides with any other Colliders in the Scene. The first Collider it intersects will have its collision
+		/// data returned in the CollisionResult.
+		/// </summary>
+		/// <returns><c>true</c>, if with was collidesed, <c>false</c> otherwise.</returns>
+		/// <param name="result">Result.</param>
+		public bool collidesWithAny( out CollisionResult result )
+		{
+			result = new CollisionResult();
+
+			// fetch anything that we might collide with at our new position
+			var neighbors = Physics.boxcastBroadphaseExcludingSelf( this, collidesWithLayers );
+
+			foreach( var neighbor in neighbors )
+			{
+				// skip triggers
+				if( neighbor.isTrigger )
+					continue;
+
+				if( collidesWith( neighbor, out result ) )
+					return true;
+			}
+
+			return false;
+		}
+
+
+		/// <summary>
+		/// checks to see if this Collider with motion applied (delta movement vector) collides with any collider. If it does, true will be
+		/// returned and result will be populated with collision data. Motion will be set to the maximum distance the Collider can travel
+		/// before colliding.
+		/// </summary>
+		/// <returns><c>true</c>, if with was collidesed, <c>false</c> otherwise.</returns>
+		/// <param name="motion">Motion.</param>
+		/// <param name="result">Result.</param>
+		public bool collidesWithAny( ref Vector2 motion, out CollisionResult result )
+		{
+			result = new CollisionResult();
+
+			// fetch anything that we might collide with at our new position
+			var colliderBounds = bounds;
+			colliderBounds.x += motion.X;
+			colliderBounds.y += motion.Y;
+			var neighbors = Physics.boxcastBroadphaseExcludingSelf( this, ref colliderBounds, collidesWithLayers );
+
+			// alter the shapes position so that it is in the place it would be after movement so we can check for overlaps
+			var oldPosition = shape.position;
+			shape.position += motion;
+
+			var didCollide = false;
+			foreach( var neighbor in neighbors )
+			{
+				// skip triggers
+				if( neighbor.isTrigger )
+					continue;
+
+				if( collidesWith( neighbor, out result ) )
+				{
+					// hit. back off our motion and our Shape.position
+					motion -= result.minimumTranslationVector;
+					shape.position -= result.minimumTranslationVector;
+					didCollide = true;
+				}
+			}
 
 			// return the shapes position to where it was before the check
 			shape.position = oldPosition;
