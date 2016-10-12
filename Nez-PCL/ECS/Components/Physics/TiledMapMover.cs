@@ -276,7 +276,8 @@ namespace Nez.Tiled
 				{
 					// if grounded on a slope and intersecting a slope or if grounded on a wall and intersecting a tall slope we go sticky.
 					// tall slope here means one where the the slopeTopLeft/Right is 0, i.e. it connects to a wall
-					if( ( collisionState._lastGroundTile.isSlope() && _collidingTiles[i].isSlope() ) || ( !collisionState._lastGroundTile.isSlope() && _collidingTiles[i].isSlope() /* should be tall slope check */ ) )
+					var isHighSlopeNearest = _collidingTiles[i].getNearestEdge( perpindicularPosition ) == _collidingTiles[i].getHighestSlopeEdge();
+					if( ( collisionState._lastGroundTile.isSlope() && _collidingTiles[i].isSlope() ) || ( !collisionState._lastGroundTile.isSlope() && isHighSlopeNearest ) )
 					{
 						// store off our last ground tile if we collided below
 						collisionState._lastGroundTile = _collidingTiles[i];
@@ -420,7 +421,7 @@ namespace Nez.Tiled
 					#if DEBUG_MOVER
 					if( direction.isHorizontal() )
 					{
-						var pos = _tiledMap.tileToWorldPosition( new Point( col, row ) );
+						var pos = tiledMap.tileToWorldPosition( new Point( col, row ) );
 						_debugTiles.Add( new Rectangle( (int)pos.X, (int)pos.Y, 16, 16 ) );
 					}
 					#endif
@@ -489,12 +490,6 @@ namespace Nez.Tiled
 				Debug.drawText( Graphics.instance.bitmapFont, i.ToString(), t.Center.ToVector2(), Color.White );
 			}
 			_debugTiles.Clear();
-
-			if( _lastGroundTile != null )
-			{
-				var pos = _lastGroundTile.getWorldPosition( _tiledMap );
-				graphics.batcher.drawHollowRect( pos, _tiledMap.tileWidth, _tiledMap.tileHeight, Color.Magenta );
-			}
 
 			var bounds = collisionRectForSide( Edge.Top, 0 );
 			graphics.batcher.drawHollowRect( bounds, Color.Orchid );

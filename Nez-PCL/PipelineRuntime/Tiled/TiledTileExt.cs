@@ -110,11 +110,10 @@ namespace Nez.Tiled
 		[MethodImpl( MethodImplOptions.AggressiveInlining )]
 		public static Edge getHighestSlopeEdge( this TiledTile self )
 		{
+			// left and right already have flipping taken into account. Also remember a lower value means a taller slope since the slope values
+			// are in pixels from the top!
 			var left = self.getSlopeTopLeft();
 			var right = self.getSlopeTopRight();
-
-			if( self.flippedVertically )
-				return right > left ? Edge.Right : Edge.Left;
 			return right > left ? Edge.Left : Edge.Right;
 		}
 
@@ -125,7 +124,6 @@ namespace Nez.Tiled
 		/// <returns>The nearest edge.</returns>
 		/// <param name="self">Self.</param>
 		/// <param name="worldPosition">World position.</param>
-		/// <param name="tileWidth">Tile width.</param>
 		[MethodImpl( MethodImplOptions.AggressiveInlining )]
 		public static Edge getNearestEdge( this TiledTile self, int worldPosition )
 		{
