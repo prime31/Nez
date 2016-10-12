@@ -8,10 +8,10 @@ namespace Nez
 	/// </summary>
 	public class PolygonMesh : Mesh
 	{
-		public PolygonMesh( Vector2[] points )
+		public PolygonMesh( Vector2[] points, bool arePointsCCW = true )
 		{
 			var triangulator = new Triangulator();
-			triangulator.triangulate( points );
+			triangulator.triangulate( points, arePointsCCW );
 
 			setVertPositions( points );
 			setTriangles( triangulator.triangleIndices.ToArray() );

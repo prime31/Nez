@@ -20,11 +20,12 @@ namespace Nez
 
 
         /// <summary>
-        /// Computes a triangle list that fully covers the area enclosed by the given set of points.
+        /// Computes a triangle list that fully covers the area enclosed by the given set of points. If points are not CCW, pass false for
+		/// the arePointsCCW parameter
         /// </summary>
         /// <param name="points">A list of points that defines an enclosing path.</param>
         /// <param name="count">The number of points in the path.</param>
-        public void triangulate( Vector2[] points )
+        public void triangulate( Vector2[] points, bool arePointsCCW = true )
         {
 			var count = points.Length;
 
@@ -33,8 +34,10 @@ namespace Nez
 
 			// loop breaker for polys that are not triangulatable
 			var iterations = 0;
+
 			// start at vert 0
             var index = 0;
+
 			// keep removing verts until just a triangle is left
             while( count > 3 && iterations < 500 )
 			{
@@ -97,6 +100,9 @@ namespace Nez
 			triangleIndices.Add( _triPrev[index] );
 			triangleIndices.Add( index );
 			triangleIndices.Add( _triNext[index] );
+
+			if( !arePointsCCW )
+				triangleIndices.Reverse();
         }
 
 
