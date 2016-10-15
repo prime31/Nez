@@ -103,8 +103,8 @@ namespace Nez.Tiled
 
 					// for the y position, we need to take into account if the tile is larger than the tileHeight and shift. Tiled uses
 					// a bottom-left coordinate system and MonoGame a top-left
-					var tx = tile.x * tiledMap.tileWidth + (int)position.X;
-					var ty = tile.y * tiledMap.tileHeight + (int)position.Y;
+					var tx = tile.x * tiledMap.tileWidth + (int)offset.X + (int)position.X;
+					var ty = tile.y * tiledMap.tileHeight + (int)offset.Y + (int)position.Y;
 					var rotation = 0f;
 
 					var spriteEffects = SpriteEffects.None;
