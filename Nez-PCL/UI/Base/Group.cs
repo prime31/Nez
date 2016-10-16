@@ -262,13 +262,13 @@ namespace Nez.UI
 		/// <returns>The transform.</returns>
 		protected Matrix2D computeTransform()
 		{
-			var mat = Matrix2D.Identity;
+			var mat = Matrix2D.identity;
 
 			if( originX != 0 || originY != 0 )
 				mat = Matrix2D.multiply( mat, Matrix2D.createTranslation( -originX, -originY ) );
 			
 			if( rotation != 0 )
-				mat = Matrix2D.multiply( mat, Matrix2D.createRotationZ( MathHelper.ToRadians( rotation ) ) );
+				mat = Matrix2D.multiply( mat, Matrix2D.createRotation( MathHelper.ToRadians( rotation ) ) );
 
 			if( scaleX != 1 || scaleY != 1 )
 				mat = Matrix2D.multiply( mat, Matrix2D.createScale( scaleX, scaleY ) );

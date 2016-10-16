@@ -18,7 +18,7 @@ namespace Nez
 		/// <summary>
 		/// this sucker gets used a lot so we cache it to avoid having to create it every frame
 		/// </summary>
-		Matrix2D _transformationMatrix = Matrix2D.Identity;
+		Matrix2D _transformationMatrix = Matrix2D.identity;
 
 
 		public NezSpriteFont( SpriteFont font )

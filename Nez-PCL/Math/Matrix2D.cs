@@ -30,9 +30,9 @@ namespace Nez
 		/// <summary>
 		/// Returns the identity matrix.
 		/// </summary>
-		public static Matrix2D Identity
+		public static Matrix2D identity
 		{
-			get { return identity; }
+			get { return _identity; }
 		}
 
 		/// <summary>
@@ -99,7 +99,7 @@ namespace Nez
 		#endregion
 
 
-		static Matrix2D identity = new Matrix2D( 1f, 0f, 0f, 1f, 0f, 0f );
+		static Matrix2D _identity = new Matrix2D( 1f, 0f, 0f, 1f, 0f, 0f );
 
 
 		/// <summary>
@@ -165,7 +165,7 @@ namespace Nez
 		/// </summary>
 		/// <param name="radians">Angle in radians.</param>
 		/// <returns>The rotation <see cref="Matrix2D"/> around Z axis.</returns>
-		public static Matrix2D createRotationZ( float radians )
+		public static Matrix2D createRotation( float radians )
 		{
 			Matrix2D result;
 			createRotation( radians, out result );
@@ -180,7 +180,7 @@ namespace Nez
 		/// <param name="result">The rotation <see cref="Matrix2D"/> around Z axis as an output parameter.</param>
 		public static void createRotation( float radians, out Matrix2D result )
 		{
-			result = Matrix2D.Identity;
+			result = Matrix2D.identity;
 
 			var val1 = (float)Math.Cos( radians );
 			var val2 = (float)Math.Sin( radians );
@@ -863,7 +863,7 @@ namespace Nez
 
 		public void multiplyRotation( float radians )
 		{
-			var rot = createRotationZ( radians );
+			var rot = createRotation( radians );
 			multiply( ref this, ref rot, out this );
 		}
 
@@ -922,7 +922,7 @@ namespace Nez
 		{
 			get
 			{
-				if( this == Identity )
+				if( this == identity )
 					return "Identity";
 
 				return string.Format( "T:({0:0.##},{1:0.##}), R:{2:0.##}, S:({3:0.##},{4:0.##})", translation.X, translation.Y, rotationDegrees, scale.X, scale.Y );

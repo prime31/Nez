@@ -237,7 +237,7 @@ namespace Nez
 			// Calculate angle of directional vector
 			float angle = (float)Math.Atan2( rotation.X, -rotation.Y );
 			// Create matrix for rotation
-			Matrix2D rotMatrix = Matrix2D.createRotationZ( angle );
+			Matrix2D rotMatrix = Matrix2D.createRotation( angle );
 			// Create translation matrix for end-point
 			Matrix2D endMatrix = Matrix2D.createTranslation( end.X, end.Y );
 

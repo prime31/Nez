@@ -213,7 +213,7 @@ namespace Nez
 				{
 					if( parent == null )
 					{
-						_worldToLocalTransform = Matrix2D.Identity;
+						_worldToLocalTransform = Matrix2D.identity;
 					}
 					else
 					{
@@ -243,9 +243,9 @@ namespace Nez
 		Matrix2D _localTransform;
 
 		// value is automatically recomputed from the local and the parent matrices.
-		Matrix2D _worldTransform = Matrix2D.Identity;
-		Matrix2D _worldToLocalTransform = Matrix2D.Identity;
-		Matrix2D _worldInverseTransform = Matrix2D.Identity;
+		Matrix2D _worldTransform = Matrix2D.identity;
+		Matrix2D _worldToLocalTransform = Matrix2D.identity;
+		Matrix2D _worldInverseTransform = Matrix2D.identity;
 
 		Matrix2D _rotationMatrix;
 		Matrix2D _translationMatrix;

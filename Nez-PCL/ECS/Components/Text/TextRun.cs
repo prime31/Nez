@@ -160,7 +160,7 @@ namespace Nez
 			BitmapFontRegion currentFontRegion = null;
 			var effects = (byte)SpriteEffects.None;
 
-			var _transformationMatrix = Matrix2D.Identity;
+			var _transformationMatrix = Matrix2D.identity;
 			var requiresTransformation = rotation != 0f || _scale != Vector2.One;
 			if( requiresTransformation )
 			{

@@ -251,8 +251,8 @@ namespace Nez
 		float _minimumZoom = 0.3f;
 		float _maximumZoom = 3f;
 		RectangleF _bounds;
-		Matrix2D _transformMatrix = Matrix2D.Identity;
-		Matrix2D _inverseTransformMatrix = Matrix2D.Identity;
+		Matrix2D _transformMatrix = Matrix2D.identity;
+		Matrix2D _inverseTransformMatrix = Matrix2D.identity;
 		Matrix _projectionMatrix;
 		Vector2 _origin;
 
