@@ -237,9 +237,9 @@ namespace Nez
 			// Calculate angle of directional vector
 			float angle = (float)Math.Atan2( rotation.X, -rotation.Y );
 			// Create matrix for rotation
-			Matrix2D rotMatrix = Matrix2D.CreateRotationZ( angle );
+			Matrix2D rotMatrix = Matrix2D.createRotationZ( angle );
 			// Create translation matrix for end-point
-			Matrix2D endMatrix = Matrix2D.CreateTranslation( end.X, end.Y, 0 );
+			Matrix2D endMatrix = Matrix2D.createTranslation( end.X, end.Y );
 
 			// Setup arrow end shape
 			Vector2[] verts = new Vector2[3];
@@ -248,9 +248,9 @@ namespace Nez
 			verts[2] = new Vector2( halfWidth, -length );
 
 			// Rotate end shape
-			Vector2Ext.Transform( verts, ref rotMatrix, verts );
+			Vector2Ext.transform( verts, ref rotMatrix, verts );
 			// Translate end shape
-			Vector2Ext.Transform( verts, ref endMatrix, verts );
+			Vector2Ext.transform( verts, ref endMatrix, verts );
 
 			// Draw arrow end shape
 			drawPolygon( verts, 3, color );
@@ -258,7 +258,7 @@ namespace Nez
 			if( drawStartIndicator )
 			{
 				// Create translation matrix for start
-				Matrix2D startMatrix = Matrix2D.CreateTranslation( start.X, start.Y, 0 );
+				Matrix2D startMatrix = Matrix2D.createTranslation( start.X, start.Y );
 				// Setup arrow start shape
 				Vector2[] baseVerts = new Vector2[4];
 				baseVerts[0] = new Vector2( -halfWidth, length / 4 );
@@ -267,9 +267,9 @@ namespace Nez
 				baseVerts[3] = new Vector2( -halfWidth, 0 );
 
 				// Rotate start shape
-				Vector2Ext.Transform( baseVerts, ref rotMatrix, baseVerts );
+				Vector2Ext.transform( baseVerts, ref rotMatrix, baseVerts );
 				// Translate start shape
-				Vector2Ext.Transform( baseVerts, ref startMatrix, baseVerts );
+				Vector2Ext.transform( baseVerts, ref startMatrix, baseVerts );
 				// Draw start shape
 				drawPolygon( baseVerts, 4, color );
 			}

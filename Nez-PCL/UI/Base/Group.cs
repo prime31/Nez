@@ -265,15 +265,15 @@ namespace Nez.UI
 			var mat = Matrix2D.Identity;
 
 			if( originX != 0 || originY != 0 )
-				mat = Matrix2D.Multiply( mat, Matrix2D.CreateTranslation( -originX, -originY, 0 ) );
+				mat = Matrix2D.multiply( mat, Matrix2D.createTranslation( -originX, -originY ) );
 			
 			if( rotation != 0 )
-				mat = Matrix2D.Multiply( mat, Matrix2D.CreateRotationZ( MathHelper.ToRadians( rotation ) ) );
+				mat = Matrix2D.multiply( mat, Matrix2D.createRotationZ( MathHelper.ToRadians( rotation ) ) );
 
 			if( scaleX != 1 || scaleY != 1 )
-				mat = Matrix2D.Multiply( mat, Matrix2D.CreateScale( scaleX, scaleY ) );
+				mat = Matrix2D.multiply( mat, Matrix2D.createScale( scaleX, scaleY ) );
 
-			mat = Matrix2D.Multiply( mat, Matrix2D.CreateTranslation( x + originX, y + originY, 0 ) );
+			mat = Matrix2D.multiply( mat, Matrix2D.createTranslation( x + originX, y + originY ) );
 
 			// Find the first parent that transforms
 			Group parentGroup = parent;
@@ -285,7 +285,7 @@ namespace Nez.UI
 			}
 
 			if( parentGroup != null )
-				mat = Matrix2D.Multiply( mat, parentGroup.computeTransform() );
+				mat = Matrix2D.multiply( mat, parentGroup.computeTransform() );
 
 			return mat;
 		}

@@ -13,6 +13,20 @@ namespace Nez
 		public override float width { get { return _width; } }
 		public override float height { get { return _height; } }
 
+		public override RectangleF bounds
+		{
+			get
+			{
+				if( _areBoundsDirty )
+				{
+					_bounds.calculateBounds( entity.transform.position, _localOffset, _origin, entity.transform.scale, entity.transform.rotation, _width, _height );
+					_areBoundsDirty = false;
+				}
+
+				return _bounds;
+			}
+		}
+
 		public float skewTopX { get { return _skewTopX; } }
 		public float skewBottomX { get { return _skewBottomX; } }
 		public float skewLeftY { get { return _skewLeftY; } }
