@@ -528,6 +528,8 @@
     <Compile Include="Physics\Verlet\Composites\Box.cs" />
     <Compile Include="Physics\Verlet\Composites\Ragdoll.cs" />
     <Compile Include="Utils\Tweens\RenderableColorTween.cs" />
+    <Compile Include="Math\Bezier.cs" />
+    <Compile Include="Math\BezierSpline.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="MonoGame.Framework">

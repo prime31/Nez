@@ -242,9 +242,9 @@ namespace Nez
 
 
 		[Conditional( "DEBUG" )]
-		public static void drawText( string text )
+		public static void drawText( string text, float duration = 0 )
 		{
-			drawText( text, DefaultColors.debugText );
+			drawText( text, DefaultColors.debugText, duration );
 		}
 
 
