@@ -336,7 +336,7 @@ namespace Nez.Spatial
 			// If this quad doesn't contain the items rectangle, do nothing, unless we are the root
 			if( !_rect.Contains( item.data.bounds ) )
 			{
-				Assert.isNotNull( _parent, "We are not the root, and this object doesn't fit here. How did we get here?" );
+				Assert.isNull( _parent, "We are not the root, and this object doesn't fit here. How did we get here?" );
 				if( _parent == null )
 				{
 					// This object is outside of the QuadTree bounds, we should add it at the root level
@@ -404,9 +404,7 @@ namespace Nez.Spatial
 						for( int i = 0; i < _objects.Count; i++ )
 						{
 							if( searchRect.Intersects( _objects[i].data.bounds ) )
-							{
 								results.Add( _objects[i].data );
-							}
 						}
 					}
 
