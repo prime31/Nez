@@ -11,6 +11,9 @@ namespace Nez.Svg
 		[XmlElement( "title" )]
 		public string title;
 
+		[XmlElement( "g" )]
+		public SvgGroup[] groups;
+
 		[XmlElement( "path" )]
 		public SvgPath[] paths;
 

@@ -1,13 +1,17 @@
 ﻿using System;
 using System.IO;
-using System.Net;
 using System.Xml.Serialization;
+using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Nez.Systems;
 
 
 namespace Nez.Svg
 {
+	/// <summary>
+	/// represents the image tag in an SVG document. This class will do its best to load the image from the href attribute. It will check for
+	/// embedded images, web-based images and then fall back to using the href to load from a ContentManager.
+	/// </summary>
 	public class SvgImage : SvgElement
 	{
 		[XmlAttribute( "x" )]
@@ -31,6 +35,16 @@ namespace Nez.Svg
 		[XmlAttribute( "href", Namespace = "http://www.w3.org/1999/xlink" )]
 		public string href;
 
+		/// <summary>
+		/// flag that determines if we tried to load the texture. We only attempt to load it once.
+		/// </summary>
+		bool _didAttemptTextureLoad;
+
+		/// <summary>
+		/// cached texture if loaded successfully
+		/// </summary>
+		Texture2D _texture;
+
 
 		/// <summary>
 		/// attempts to get a texture for the image
@@ -42,7 +56,7 @@ namespace Nez.Svg
 		/// <param name="content">Content.</param>
 		public Texture2D getTexture( NezContentManager content )
 		{
-			if( _texture != null )
+			if( _didAttemptTextureLoad || _texture != null )
 				return _texture;
 
 			// check for a url
@@ -57,7 +71,16 @@ namespace Nez.Svg
 			// see if we have a path to a png files in the href
 			else if( href.EndsWith( "png" ) )
 			{
-				_texture = content.Load<Texture2D>( href );
+				// check for existance before attempting to load! We are a PCL so we cant so we'll catch the Exception instead
+				try
+				{
+					if( content != null )
+						_texture = content.Load<Texture2D>( href );
+				}
+				catch( ContentLoadException )
+				{
+					Debug.error( "Could not load SvgImage from href: {0}", href );
+				}
 			}
 			// attempt to parse the base64 string if it is embedded in the href
 			else if( href.StartsWith( "data:" ) )
@@ -73,12 +96,11 @@ namespace Nez.Svg
 
 					_texture = Texture2D.FromStream( Core.graphicsDevice, m );
 				}
-
 			}
 
+			_didAttemptTextureLoad = true;
 			return _texture;
 		}
-		Texture2D _texture;
 
 	}
 }

@@ -10,7 +10,7 @@ namespace Nez.Svg
 	/// spec! Only the basics are parsed out since this is not designed to be an image viewer.
 	/// </summary>
 	[XmlRoot( ElementName = "svg", Namespace = "http://www.w3.org/2000/svg" )]
-	public class SvgDocument
+	public class SvgDocument : SvgGroup
 	{
 		[XmlAttribute( "width" )]
 		public string widthAttribute
@@ -28,32 +28,6 @@ namespace Nez.Svg
 		}
 		public int height;
 
-		[XmlElement( "g" )]
-		public SvgGroup[] groups;
-
-		[XmlElement( "path" )]
-		public SvgPath[] paths;
-
-		[XmlElement( "rect" )]
-		public SvgRectangle[] rectangles;
-
-		[XmlElement( "line" )]
-		public SvgLine[] lines;
-
-		[XmlElement( "circle" )]
-		public SvgCircle[] circles;
-
-		[XmlElement( "ellipse" )]
-		public SvgEllipse[] ellipses;
-
-		[XmlElement( "polygon" )]
-		public SvgPolygon[] polygons;
-
-		[XmlElement( "polyline" )]
-		public SvgPolyline[] polylines;
-
-		[XmlElement( "image" )]
-		public SvgImage[] images;
 
 
 		public static SvgDocument open( Stream stream )
