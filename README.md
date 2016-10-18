@@ -44,6 +44,7 @@ There are various systems documented separately on the [Nez website docs.](http:
 - [Verlet Physics](FAQs/Verlet.md)
 - [Entity Processing Systems](FAQs/EntitySystems.md)
 - [Nez.UI](FAQs/UI.md)
+- [SVG Support](FAQs/SVG.md)
 - [AI (FSM, Behavior Tree, GOAP, Utility AI)](FAQs/AI.md)
 - [Deferred Lighting](FAQs/DeferredLighting.md)
 - [Pipeline Importers](FAQs/PipelineImporters.md)
