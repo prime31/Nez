@@ -11,9 +11,8 @@ namespace Nez.Svg
 	{
 		public override float width { get { return 1000; } }
 		public override float height { get { return 1000; } }
+		public SvgDocument svgDoc;
 
-		string _pathToSvgFile;
-		SvgDocument _doc;
 		ISvgPathBuilder _pathBuilder;
 
 
@@ -24,7 +23,7 @@ namespace Nez.Svg
 		/// <param name="pathBuilder">Path builder.</param>
 		public SvgDebugComponent( string pathToSvgFile, ISvgPathBuilder pathBuilder = null )
 		{
-			_pathToSvgFile = "Content/" + pathToSvgFile;
+			svgDoc = SvgDocument.open( TitleContainer.OpenStream( "Content/" + pathToSvgFile ) );
 			_pathBuilder = pathBuilder;
 
 			if( _pathBuilder == null )
@@ -32,26 +31,20 @@ namespace Nez.Svg
 		}
 
 
-		public override void onAddedToEntity()
-		{
-			_doc = SvgDocument.open( TitleContainer.OpenStream( _pathToSvgFile ) );
-		}
-
-
 		public override void render( Graphics graphics, Camera camera )
 		{
 			// in some rare cases, there are SVG elements outside of a group so we'll render those cases first
-			renderRects( graphics.batcher, _doc.rectangles );
-			renderPaths( graphics.batcher, _doc.paths );
-			renderLines( graphics.batcher, _doc.lines );
-			renderCircles( graphics.batcher, _doc.circles );
-			renderPolygons( graphics.batcher, _doc.polygons );
-			renderPolylines( graphics.batcher, _doc.polylines );
-			renderImages( graphics.batcher, _doc.images );
+			renderRects( graphics.batcher, svgDoc.rectangles );
+			renderPaths( graphics.batcher, svgDoc.paths );
+			renderLines( graphics.batcher, svgDoc.lines );
+			renderCircles( graphics.batcher, svgDoc.circles );
+			renderPolygons( graphics.batcher, svgDoc.polygons );
+			renderPolylines( graphics.batcher, svgDoc.polylines );
+			renderImages( graphics.batcher, svgDoc.images );
 
-			if( _doc.groups != null )
+			if( svgDoc.groups != null )
 			{
-				foreach( var g in _doc.groups )
+				foreach( var g in svgDoc.groups )
 				{
 					renderRects( graphics.batcher, g.rectangles );
 					renderPaths( graphics.batcher, g.paths );
