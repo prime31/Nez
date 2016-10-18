@@ -1,5 +1,4 @@
 using System;
-using System.Runtime.Serialization;
 using System.Diagnostics;
 using Microsoft.Xna.Framework;
 
@@ -12,7 +11,7 @@ namespace Nez
 	[DebuggerDisplay( "{DebugDisplayString,nq}" )]
 	public struct RectangleF : IEquatable<RectangleF>
 	{
-		private static RectangleF emptyRectangle = new RectangleF();
+		static RectangleF emptyRectangle = new RectangleF();
 
 		/// <summary>
 		/// The x coordinate of the top-left corner of this <see cref="RectangleF"/>.
@@ -509,17 +508,13 @@ namespace Nez
 				num = MathHelper.Max( num8, num );
 				maxValue = MathHelper.Min( num7, maxValue );
 				if( num > maxValue )
-				{
-					return null;  
-				}  
+					return null;
 			}
 
 			if( Math.Abs( ray.Direction.Y ) < 1E-06f )
 			{
 				if( ( ray.Position.Y < top ) || ( ray.Position.Y > bottom ) )
-				{
 					return null;
-				}
 			}
 			else
 			{
@@ -983,6 +978,6 @@ namespace Nez
 		}
 
 		#endregion
-	
+
 	}
 }
