@@ -92,6 +92,7 @@
     <Folder Include="ECS\Components\Renderables\3D\" />
     <Folder Include="Physics\Verlet\" />
     <Folder Include="Physics\Shapes\ShapeCollisions\" />
+    <Folder Include="Graphics\SVG\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Debug\Debug.cs" />
@@ -530,6 +531,31 @@
     <Compile Include="Utils\Tweens\RenderableColorTween.cs" />
     <Compile Include="Math\Bezier.cs" />
     <Compile Include="Math\BezierSpline.cs" />
+    <Compile Include="Graphics\SVG\Shapes\Paths\FakeGraphicsPath.cs" />
+    <Compile Include="Graphics\SVG\Shapes\Paths\ISvgPathBuilder.cs" />
+    <Compile Include="Graphics\SVG\Shapes\Paths\SvgPath.cs" />
+    <Compile Include="Graphics\SVG\Shapes\Paths\SvgPathParser.cs" />
+    <Compile Include="Graphics\SVG\Shapes\Paths\SvgPathSegments.cs" />
+    <Compile Include="Graphics\SVG\Shapes\Paths\SvgReflectionPathBuilder.cs" />
+    <Compile Include="Graphics\SVG\Shapes\SvgCircle.cs" />
+    <Compile Include="Graphics\SVG\Shapes\SvgEllipse.cs" />
+    <Compile Include="Graphics\SVG\Shapes\SvgImage.cs" />
+    <Compile Include="Graphics\SVG\Shapes\SvgLine.cs" />
+    <Compile Include="Graphics\SVG\Shapes\SvgPolygon.cs" />
+    <Compile Include="Graphics\SVG\Shapes\SvgPolyline.cs" />
+    <Compile Include="Graphics\SVG\Shapes\SvgRectangle.cs" />
+    <Compile Include="Graphics\SVG\SvgDebugComponent.cs" />
+    <Compile Include="Graphics\SVG\SvgDocument.cs" />
+    <Compile Include="Graphics\SVG\SvgElement.cs" />
+    <Compile Include="Graphics\SVG\SvgGroup.cs" />
+    <Compile Include="Graphics\SVG\Transforms\SvgMatrix.cs" />
+    <Compile Include="Graphics\SVG\Transforms\SvgRotate.cs" />
+    <Compile Include="Graphics\SVG\Transforms\SvgScale.cs" />
+    <Compile Include="Graphics\SVG\Transforms\SvgShear.cs" />
+    <Compile Include="Graphics\SVG\Transforms\SvgSkew.cs" />
+    <Compile Include="Graphics\SVG\Transforms\SvgTransform.cs" />
+    <Compile Include="Graphics\SVG\Transforms\SvgTransformConverter.cs" />
+    <Compile Include="Graphics\SVG\Transforms\SvgTranslate.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="MonoGame.Framework">
@@ -538,5 +564,8 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Content\NezDefaultBMFont.xnb" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Graphics\SVG\Shapes\Paths\SvgPathBuilder.cs" />
   </ItemGroup>
 </Project>
