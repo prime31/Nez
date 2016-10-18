@@ -30,7 +30,7 @@ namespace Nez.Svg
 		/// <param name="segments">Segments.</param>
 		public Vector2[] getDrawingPoints( List<SvgPathSegment> segments, float flatness = 3 )
 		{
-			var path = new FakeGraphicsPath();
+			var path = new FauxGraphicsPath();
 			for( var j = 0; j < segments.Count; j++ )
 			{
 				var segment = segments[j];

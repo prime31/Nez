@@ -3,7 +3,12 @@
 
 namespace Nez.Svg
 {
-	public class FakeGraphicsPath
+	/// <summary>
+	/// THIS IS A HORRIBLE ABOMINATION! PCLs dont have access to System.Drawing so this class is a wrapper for accessing the GraphicsPath class.
+	/// It has the full public API that Nez needs for SVG files but the whole mess is all accessed via reflection. It is slow as all hell and not
+	/// recommended for production use. It's only purpose is so that Nez works with SVG files out of the box to get up and running fast.
+	/// </summary>
+	public class FauxGraphicsPath
 	{
 		public int PointCount
 		{
@@ -36,7 +41,7 @@ namespace Nez.Svg
 		object _graphicsPath;
 
 
-		public FakeGraphicsPath()
+		public FauxGraphicsPath()
 		{
 			_graphicsPath = System.Activator.CreateInstance( System.Type.GetType( "System.Drawing.Drawing2D.GraphicsPath, System.Drawing" ) );
 		}

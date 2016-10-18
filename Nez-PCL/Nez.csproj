@@ -531,7 +531,7 @@
     <Compile Include="Utils\Tweens\RenderableColorTween.cs" />
     <Compile Include="Math\Bezier.cs" />
     <Compile Include="Math\BezierSpline.cs" />
-    <Compile Include="Graphics\SVG\Shapes\Paths\FakeGraphicsPath.cs" />
+    <Compile Include="Graphics\SVG\Shapes\Paths\FauxGraphicsPath.cs" />
     <Compile Include="Graphics\SVG\Shapes\Paths\ISvgPathBuilder.cs" />
     <Compile Include="Graphics\SVG\Shapes\Paths\SvgPath.cs" />
     <Compile Include="Graphics\SVG\Shapes\Paths\SvgPathParser.cs" />
