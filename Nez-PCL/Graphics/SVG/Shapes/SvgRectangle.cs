@@ -18,6 +18,8 @@ namespace Nez.Svg
 		[XmlAttribute( "height" )]
 		public float height;
 
+		public Vector2 center { get { return new Vector2( x + width / 2, y + height / 2 ); } }
+
 
 		/// <summary>
 		/// gets the points for the rectangle with all transforms applied
