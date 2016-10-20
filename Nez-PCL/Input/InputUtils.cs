@@ -1,5 +1,4 @@
-﻿using System;
-using Microsoft.Xna.Framework.Input;
+﻿using Microsoft.Xna.Framework.Input;
 
 
 namespace Nez
@@ -33,7 +32,7 @@ namespace Nez
 		{
 			if( isMac )
 				return Input.isKeyDown( Keys.LeftWindows ) || Input.isKeyDown( Keys.RightWindows );
-			
+
 			return Input.isKeyDown( Keys.LeftControl ) || Input.isKeyDown( Keys.RightControl );
 		}
 	}
