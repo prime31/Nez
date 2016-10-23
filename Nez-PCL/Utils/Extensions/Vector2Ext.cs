@@ -22,6 +22,23 @@ namespace Nez
 
 
 		/// <summary>
+		/// temporary workaround to Vector2.Normalize screwing up the 0,0 vector
+		/// </summary>
+		/// <param name="vec">Vec.</param>
+		[MethodImpl( MethodImplOptions.AggressiveInlining )]
+		public static Vector2 normalize( Vector2 vec )
+		{
+			var magnitude = Mathf.sqrt( ( vec.X * vec.X ) + ( vec.Y * vec.Y ) );
+			if( magnitude > Mathf.epsilon )
+				vec /= magnitude;
+			else
+				vec.X = vec.Y = 0;
+
+			return vec;
+		}
+
+
+		/// <summary>
 		/// rounds the x and y values
 		/// </summary>
 		/// <param name="vec">Vec.</param>
@@ -89,6 +106,18 @@ namespace Nez
 		/// <param name="second">Second.</param>
 		[MethodImpl( MethodImplOptions.AggressiveInlining )]
 		public static Vector2 perpendicular( ref Vector2 first, ref Vector2 second )
+		{
+			return new Vector2( -1f * ( second.Y - first.Y ), second.X - first.X );
+		}
+
+
+		/// <summary>
+		/// returns the vector perpendicular to the passed in vectors
+		/// </summary>
+		/// <param name="first">First.</param>
+		/// <param name="second">Second.</param>
+		[MethodImpl( MethodImplOptions.AggressiveInlining )]
+		public static Vector2 perpendicular( Vector2 first, Vector2 second )
 		{
 			return new Vector2( -1f * ( second.Y - first.Y ), second.X - first.X );
 		}
@@ -197,7 +226,7 @@ namespace Nez
 		/// <param name="matrix">The transformation <see cref="Matrix"/>.</param>
 		/// <returns>Transformed <see cref="Vector2"/>.</returns>
 		[MethodImpl( MethodImplOptions.AggressiveInlining )]
-		public static Vector2 Transform( Vector2 position, Matrix2D matrix )
+		public static Vector2 transform( Vector2 position, Matrix2D matrix )
 		{
 			return new Vector2( ( position.X * matrix.M11 ) + ( position.Y * matrix.M21 ) + matrix.M31, ( position.X * matrix.M12 ) + ( position.Y * matrix.M22 ) + matrix.M32 );
 		}
@@ -210,7 +239,7 @@ namespace Nez
 		/// <param name="matrix">The transformation <see cref="Matrix"/>.</param>
 		/// <param name="result">Transformed <see cref="Vector2"/> as an output parameter.</param>
 		[MethodImpl( MethodImplOptions.AggressiveInlining )]
-		public static void Transform( ref Vector2 position, ref Matrix2D matrix, out Vector2 result )
+		public static void transform( ref Vector2 position, ref Matrix2D matrix, out Vector2 result )
 		{
 			var x = ( position.X * matrix.M11 ) + ( position.Y * matrix.M21 ) + matrix.M31;
 			var y = ( position.X * matrix.M12 ) + ( position.Y * matrix.M22 ) + matrix.M32;
@@ -229,7 +258,7 @@ namespace Nez
 		/// <param name="destinationIndex">The starting index in the destination array, where the first <see cref="Vector2"/> should be written.</param>
 		/// <param name="length">The number of vectors to be transformed.</param>
 		[MethodImpl( MethodImplOptions.AggressiveInlining )]
-		public static void Transform( Vector2[] sourceArray, int sourceIndex, ref Matrix2D matrix, Vector2[] destinationArray, int destinationIndex, int length )
+		public static void transform( Vector2[] sourceArray, int sourceIndex, ref Matrix2D matrix, Vector2[] destinationArray, int destinationIndex, int length )
 		{
 			for( var i = 0; i < length; i++ )
 			{
@@ -249,9 +278,9 @@ namespace Nez
 		/// <param name="matrix">The transformation <see cref="Matrix"/>.</param>
 		/// <param name="destinationArray">Destination array.</param>
 		[MethodImpl( MethodImplOptions.AggressiveInlining )]
-		public static void Transform( Vector2[] sourceArray, ref Matrix2D matrix, Vector2[] destinationArray )
+		public static void transform( Vector2[] sourceArray, ref Matrix2D matrix, Vector2[] destinationArray )
 		{
-			Transform( sourceArray, 0, ref matrix, destinationArray, 0, sourceArray.Length );
+			transform( sourceArray, 0, ref matrix, destinationArray, 0, sourceArray.Length );
 		}
 
 	}

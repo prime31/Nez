@@ -1,6 +1,4 @@
-﻿using EaseFunction = System.Func<float, float, float>;
-using Microsoft.Xna.Framework;
-using System;
+﻿using Microsoft.Xna.Framework;
 
 
 namespace Nez.Tweens
@@ -13,12 +11,12 @@ namespace Nez.Tweens
 	{
 		#region Lerps
 
-		public static float unclampedLerp( float from, float to, float t )
+		public static float lerp( float from, float to, float t )
 		{
 			return from + ( to - from ) * t;
 		}
-		
-		
+
+
 		/// <summary>
 		/// remainingFactorPerSecond is the percentage of the distance it covers every second. should be between 0 and 1.
 		/// if it's 0.25 it means it covers 75% of the remaining distance every second independent of the framerate
@@ -30,7 +28,7 @@ namespace Nez.Tweens
 		/// <param name="deltaTime">Delta time.</param>
 		public static float lerpTowards( float from, float to, float remainingFactorPerSecond, float deltaTime )
 		{
-			return unclampedLerp( from, to, 1f - Mathf.pow( remainingFactorPerSecond, deltaTime ) );
+			return lerp( from, to, 1f - Mathf.pow( remainingFactorPerSecond, deltaTime ) );
 		}
 
 
@@ -50,44 +48,44 @@ namespace Nez.Tweens
 		}
 
 
-		public static Vector2 unclampedLerp( Vector2 from, Vector2 to, float t )
+		public static Vector2 lerp( Vector2 from, Vector2 to, float t )
 		{
 			return new Vector2( from.X + ( to.X - from.X ) * t, from.Y + ( to.Y - from.Y ) * t );
 		}
-		
-		
+
+
 		// remainingFactorPerSecond is the percentage of the distance it covers every second. should be between 0 and 1.
 		// if it's 0.25 it means it covers 75% of the remaining distance every second independent of the framerate
 		public static Vector2 lerpTowards( Vector2 from, Vector2 to, float remainingFactorPerSecond, float deltaTime )
 		{
-			return unclampedLerp( from, to, 1f - Mathf.pow( remainingFactorPerSecond, deltaTime ) );
+			return lerp( from, to, 1f - Mathf.pow( remainingFactorPerSecond, deltaTime ) );
 		}
 
 
-		public static Vector3 unclampedLerp( Vector3 from, Vector3 to, float t )
+		public static Vector3 lerp( Vector3 from, Vector3 to, float t )
 		{
 			return new Vector3( from.X + ( to.X - from.X ) * t, from.Y + ( to.Y - from.Y ) * t, from.Z + ( to.Z - from.Z ) * t );
 		}
-		
-		
+
+
 		// remainingFactorPerSecond is the percentage of the distance it covers every second. should be between 0 and 1.
 		// if it's 0.25 it means it covers 75% of the remaining distance every second independent of the framerate
 		public static Vector3 lerpTowards( Vector3 from, Vector3 to, float remainingFactorPerSecond, float deltaTime )
 		{
-			return unclampedLerp( from, to, 1f - Mathf.pow( remainingFactorPerSecond, deltaTime ) );
+			return lerp( from, to, 1f - Mathf.pow( remainingFactorPerSecond, deltaTime ) );
 		}
-		
-		
+
+
 		// a different variant that requires the target details to calculate the lerp
 		public static Vector3 lerpTowards( Vector3 followerCurrentPosition, Vector3 targetPreviousPosition, Vector3 targetCurrentPosition, float smoothFactor, float deltaTime )
-	    {
+		{
 			var targetDiff = targetCurrentPosition - targetPreviousPosition;
-	        var temp = followerCurrentPosition - targetPreviousPosition + targetDiff / ( smoothFactor * deltaTime );
-	        return targetCurrentPosition - targetDiff / ( smoothFactor * deltaTime ) + temp * Mathf.exp( -smoothFactor * deltaTime );
-	    }
+			var temp = followerCurrentPosition - targetPreviousPosition + targetDiff / ( smoothFactor * deltaTime );
+			return targetCurrentPosition - targetDiff / ( smoothFactor * deltaTime ) + temp * Mathf.exp( -smoothFactor * deltaTime );
+		}
 
 
-		public static Vector2 unclampedAngledLerp( Vector2 from, Vector2 to, float t )
+		public static Vector2 angleLerp( Vector2 from, Vector2 to, float t )
 		{
 			// we calculate the shortest difference between the angles for this lerp
 			var toMinusFrom = new Vector2( Mathf.deltaAngle( from.X, to.X ), Mathf.deltaAngle( from.Y, to.Y ) );
@@ -95,27 +93,27 @@ namespace Nez.Tweens
 		}
 
 
-		public static Vector4 unclampedLerp( Vector4 from, Vector4 to, float t )
+		public static Vector4 lerp( Vector4 from, Vector4 to, float t )
 		{
 			return new Vector4( from.X + ( to.X - from.X ) * t, from.Y + ( to.Y - from.Y ) * t, from.Z + ( to.Z - from.Z ) * t, from.W + ( to.W - from.W ) * t );
 		}
 
 
-		public static Color unclampedLerp( Color from, Color to, float t )
+		public static Color lerp( Color from, Color to, float t )
 		{
 			var t256 = (int)( t * 256 );
 			return new Color( from.R + ( to.R - from.R ) * t256 / 256, from.G + ( to.G - from.G ) * t256 / 256, from.B + ( to.B - from.B ) * t256 / 256, from.A + ( to.A - from.A ) * t256 / 256 );
 		}
 
 
-		public static Color unclampedLerp( ref Color from, ref Color to, float t )
+		public static Color lerp( ref Color from, ref Color to, float t )
 		{
 			var t256 = (int)( t * 256 );
 			return new Color( from.R + ( to.R - from.R ) * t256 / 256, from.G + ( to.G - from.G ) * t256 / 256, from.B + ( to.B - from.B ) * t256 / 256, from.A + ( to.A - from.A ) * t256 / 256 );
 		}
 
 
-		public static Rectangle unclampedLerp( Rectangle from, Rectangle to, float t )
+		public static Rectangle lerp( Rectangle from, Rectangle to, float t )
 		{
 			return new Rectangle
 				(
@@ -127,7 +125,7 @@ namespace Nez.Tweens
 		}
 
 
-		public static Rectangle unclampedLerp( ref Rectangle from, ref Rectangle to, float t )
+		public static Rectangle lerp( ref Rectangle from, ref Rectangle to, float t )
 		{
 			return new Rectangle
 				(
@@ -145,31 +143,31 @@ namespace Nez.Tweens
 
 		public static float ease( EaseType easeType, float from, float to, float t, float duration )
 		{
-			return unclampedLerp( from, to, EaseHelper.ease( easeType, t, duration ) );
+			return lerp( from, to, EaseHelper.ease( easeType, t, duration ) );
 		}
 
 
 		public static Vector2 ease( EaseType easeType, Vector2 from, Vector2 to, float t, float duration )
 		{
-			return unclampedLerp( from, to, EaseHelper.ease( easeType, t, duration ) );
+			return lerp( from, to, EaseHelper.ease( easeType, t, duration ) );
 		}
 
 
 		public static Vector3 ease( EaseType easeType, Vector3 from, Vector3 to, float t, float duration )
 		{
-			return unclampedLerp( from, to, EaseHelper.ease( easeType, t, duration ) );
+			return lerp( from, to, EaseHelper.ease( easeType, t, duration ) );
 		}
 
 
 		public static Vector2 easeAngle( EaseType easeType, Vector2 from, Vector2 to, float t, float duration )
 		{
-			return unclampedAngledLerp( from, to, EaseHelper.ease( easeType, t, duration ) );
+			return angleLerp( from, to, EaseHelper.ease( easeType, t, duration ) );
 		}
 
 
 		public static Vector4 ease( EaseType easeType, Vector4 from, Vector4 to, float t, float duration )
 		{
-			return unclampedLerp( from, to, EaseHelper.ease( easeType, t, duration ) );
+			return lerp( from, to, EaseHelper.ease( easeType, t, duration ) );
 		}
 
 
@@ -181,25 +179,25 @@ namespace Nez.Tweens
 
 		public static Color ease( EaseType easeType, Color from, Color to, float t, float duration )
 		{
-			return unclampedLerp( from, to, EaseHelper.ease( easeType, t, duration ) );
+			return lerp( from, to, EaseHelper.ease( easeType, t, duration ) );
 		}
 
 
 		public static Color ease( EaseType easeType, ref Color from, ref Color to, float t, float duration )
 		{
-			return unclampedLerp( ref from, ref to, EaseHelper.ease( easeType, t, duration ) );
+			return lerp( ref from, ref to, EaseHelper.ease( easeType, t, duration ) );
 		}
 
 
 		public static Rectangle ease( EaseType easeType, Rectangle from, Rectangle to, float t, float duration )
 		{
-			return unclampedLerp( from, to, EaseHelper.ease( easeType, t, duration ) );
+			return lerp( from, to, EaseHelper.ease( easeType, t, duration ) );
 		}
 
 
 		public static Rectangle ease( EaseType easeType, ref Rectangle from, ref Rectangle to, float t, float duration )
 		{
-			return unclampedLerp( ref from, ref to, EaseHelper.ease( easeType, t, duration ) );
+			return lerp( ref from, ref to, EaseHelper.ease( easeType, t, duration ) );
 		}
 
 		#endregion

@@ -90,9 +90,6 @@ namespace Nez
 		/// </summary>
 		public readonly NezContentManager content;
 
-		[Obsolete( "use Scene.content instead of Scene.contentManager" )]
-		public NezContentManager contentManager { get { return content; } }
-
 		/// <summary>
 		/// global toggle for PostProcessors
 		/// </summary>

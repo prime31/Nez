@@ -160,18 +160,18 @@ namespace Nez
 			BitmapFontRegion currentFontRegion = null;
 			var effects = (byte)SpriteEffects.None;
 
-			var _transformationMatrix = Matrix2D.Identity;
+			var _transformationMatrix = Matrix2D.identity;
 			var requiresTransformation = rotation != 0f || _scale != Vector2.One;
 			if( requiresTransformation )
 			{
 				Matrix2D temp;
-				Matrix2D.CreateTranslation( -_origin.X, -_origin.Y, out _transformationMatrix );
-				Matrix2D.CreateScale( _scale.X, _scale.Y, out temp );
-				Matrix2D.Multiply( ref _transformationMatrix, ref temp, out _transformationMatrix );
-				Matrix2D.CreateRotationZ( rotation, out temp );
-				Matrix2D.Multiply( ref _transformationMatrix, ref temp, out _transformationMatrix );
-				Matrix2D.CreateTranslation( position.X, position.Y, out temp );
-				Matrix2D.Multiply( ref _transformationMatrix, ref temp, out _transformationMatrix );
+				Matrix2D.createTranslation( -_origin.X, -_origin.Y, out _transformationMatrix );
+				Matrix2D.createScale( _scale.X, _scale.Y, out temp );
+				Matrix2D.multiply( ref _transformationMatrix, ref temp, out _transformationMatrix );
+				Matrix2D.createRotation( rotation, out temp );
+				Matrix2D.multiply( ref _transformationMatrix, ref temp, out _transformationMatrix );
+				Matrix2D.createTranslation( position.X, position.Y, out temp );
+				Matrix2D.multiply( ref _transformationMatrix, ref temp, out _transformationMatrix );
 			}
 
 			var offset = requiresTransformation ? Vector2.Zero : position - _origin;
@@ -200,7 +200,7 @@ namespace Nez
 
 				// transform our point if we need to
 				if( requiresTransformation )
-					Vector2Ext.Transform( ref p, ref _transformationMatrix, out p );
+					Vector2Ext.transform( ref p, ref _transformationMatrix, out p );
 
 				var destination = new Vector4( p.X, p.Y, currentFontRegion.width * _scale.X, currentFontRegion.height * _scale.Y );
 				_charDetails[i].texture = currentFontRegion.subtexture.texture2D;

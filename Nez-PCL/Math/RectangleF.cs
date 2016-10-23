@@ -1,5 +1,4 @@
 using System;
-using System.Runtime.Serialization;
 using System.Diagnostics;
 using Microsoft.Xna.Framework;
 
@@ -12,7 +11,7 @@ namespace Nez
 	[DebuggerDisplay( "{DebugDisplayString,nq}" )]
 	public struct RectangleF : IEquatable<RectangleF>
 	{
-		private static RectangleF emptyRectangle = new RectangleF();
+		static RectangleF emptyRectangle = new RectangleF();
 
 		/// <summary>
 		/// The x coordinate of the top-left corner of this <see cref="RectangleF"/>.
@@ -509,17 +508,13 @@ namespace Nez
 				num = MathHelper.Max( num8, num );
 				maxValue = MathHelper.Min( num7, maxValue );
 				if( num > maxValue )
-				{
-					return null;  
-				}  
+					return null;
 			}
 
 			if( Math.Abs( ray.Direction.Y ) < 1E-06f )
 			{
 				if( ( ray.Position.Y < top ) || ( ray.Position.Y > bottom ) )
-				{
 					return null;
-				}
 			}
 			else
 			{
@@ -781,13 +776,13 @@ namespace Nez
 
 				Matrix2D tempMat;
 				// set the reference point to world reference taking origin into account
-				var transformMatrix = Matrix2D.CreateTranslation( -worldPosX - origin.X, -worldPosY - origin.Y, 0f );
-				Matrix2D.CreateScale( scale.X, scale.Y, out tempMat ); // scale ->
-				Matrix2D.Multiply( ref transformMatrix, ref tempMat, out transformMatrix );
-				Matrix2D.CreateRotationZ( rotation, out tempMat ); // rotate ->
-				Matrix2D.Multiply( ref transformMatrix, ref tempMat, out transformMatrix );
-				Matrix2D.CreateTranslation( worldPosX, worldPosY, out tempMat ); // translate back
-				Matrix2D.Multiply( ref transformMatrix, ref tempMat, out transformMatrix );
+				var transformMatrix = Matrix2D.createTranslation( -worldPosX - origin.X, -worldPosY - origin.Y );
+				Matrix2D.createScale( scale.X, scale.Y, out tempMat ); // scale ->
+				Matrix2D.multiply( ref transformMatrix, ref tempMat, out transformMatrix );
+				Matrix2D.createRotation( rotation, out tempMat ); // rotate ->
+				Matrix2D.multiply( ref transformMatrix, ref tempMat, out transformMatrix );
+				Matrix2D.createTranslation( worldPosX, worldPosY, out tempMat ); // translate back
+				Matrix2D.multiply( ref transformMatrix, ref tempMat, out transformMatrix );
 
 				// TODO: this is a bit silly. we can just leave the worldPos translation in the Matrix and avoid this
 				// get all four corners in world space
@@ -797,10 +792,10 @@ namespace Nez
 				var bottomRight = new Vector2( worldPosX + width, worldPosY + height );
 
 				// transform the corners into our work space
-				Vector2Ext.Transform( ref topLeft, ref transformMatrix, out topLeft );
-				Vector2Ext.Transform( ref topRight, ref transformMatrix, out topRight );
-				Vector2Ext.Transform( ref bottomLeft, ref transformMatrix, out bottomLeft );
-				Vector2Ext.Transform( ref bottomRight, ref transformMatrix, out bottomRight );
+				Vector2Ext.transform( ref topLeft, ref transformMatrix, out topLeft );
+				Vector2Ext.transform( ref topRight, ref transformMatrix, out topRight );
+				Vector2Ext.transform( ref bottomLeft, ref transformMatrix, out bottomLeft );
+				Vector2Ext.transform( ref bottomRight, ref transformMatrix, out bottomRight );
 
 				// find the min and max values so we can concoct our bounding box
 				var minX = Mathf.minOf( topLeft.X, bottomRight.X, topRight.X, bottomLeft.X );
@@ -983,6 +978,6 @@ namespace Nez
 		}
 
 		#endregion
-	
+
 	}
 }

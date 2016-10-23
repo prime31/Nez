@@ -241,12 +241,12 @@ namespace Nez.PhysicsShapes
 			{
 				var hasUnitScale = true;
 				Matrix2D tempMat;
-				var combinedMatrix = Matrix2D.CreateTranslation( -_polygonCenter );
+				var combinedMatrix = Matrix2D.createTranslation( -_polygonCenter );
 
 				if( collider.entity.transform.scale != Vector2.One )
 				{
-					Matrix2D.CreateScale( collider.entity.transform.scale.X, collider.entity.transform.scale.Y, out tempMat );
-					Matrix2D.Multiply( ref combinedMatrix, ref tempMat, out combinedMatrix );
+					Matrix2D.createScale( collider.entity.transform.scale.X, collider.entity.transform.scale.Y, out tempMat );
+					Matrix2D.multiply( ref combinedMatrix, ref tempMat, out combinedMatrix );
 
 					hasUnitScale = false;
 					// scale our offset and set it as center. If we have rotation also it will be reset below
@@ -256,8 +256,8 @@ namespace Nez.PhysicsShapes
 
 				if( collider.entity.transform.rotation != 0 )
 				{
-					Matrix2D.CreateRotationZ( collider.entity.transform.rotation, out tempMat );
-					Matrix2D.Multiply( ref combinedMatrix, ref tempMat, out combinedMatrix );
+					Matrix2D.createRotation( collider.entity.transform.rotation, out tempMat );
+					Matrix2D.multiply( ref combinedMatrix, ref tempMat, out combinedMatrix );
 
 					// to deal with rotation with an offset origin we just move our center in a circle around 0,0 with our offset making the 0 angle
 					// we have to deal with scale here as well so we scale our offset to get the proper length first.
@@ -266,11 +266,11 @@ namespace Nez.PhysicsShapes
 					center = Mathf.pointOnCircle( Vector2.Zero, offsetLength, collider.entity.transform.rotationDegrees + offsetAngle );
 				}
 
-				Matrix2D.CreateTranslation( ref _polygonCenter, out tempMat ); // translate back center
-				Matrix2D.Multiply( ref combinedMatrix, ref tempMat, out combinedMatrix );
+				Matrix2D.createTranslation( ref _polygonCenter, out tempMat ); // translate back center
+				Matrix2D.multiply( ref combinedMatrix, ref tempMat, out combinedMatrix );
 
 				// finaly transform our original points
-				Vector2Ext.Transform( _originalPoints, ref combinedMatrix, points );
+				Vector2Ext.transform( _originalPoints, ref combinedMatrix, points );
 
 				isUnrotated = collider.entity.transform.rotation == 0;
 

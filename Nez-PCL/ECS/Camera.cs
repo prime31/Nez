@@ -251,8 +251,8 @@ namespace Nez
 		float _minimumZoom = 0.3f;
 		float _maximumZoom = 3f;
 		RectangleF _bounds;
-		Matrix2D _transformMatrix = Matrix2D.Identity;
-		Matrix2D _inverseTransformMatrix = Matrix2D.Identity;
+		Matrix2D _transformMatrix = Matrix2D.identity;
+		Matrix2D _inverseTransformMatrix = Matrix2D.identity;
 		Matrix _projectionMatrix;
 		Vector2 _origin;
 
@@ -291,25 +291,25 @@ namespace Nez
 				return;
 
 			Matrix2D tempMat;
-			_transformMatrix = Matrix2D.CreateTranslation( -entity.transform.position.X, -entity.transform.position.Y, 0f ); // position
+			_transformMatrix = Matrix2D.createTranslation( -entity.transform.position.X, -entity.transform.position.Y ); // position
 
 			if( _zoom != 1f )
 			{
-				Matrix2D.CreateScale( _zoom, _zoom, out tempMat ); // scale ->
-				Matrix2D.Multiply( ref _transformMatrix, ref tempMat, out _transformMatrix );
+				Matrix2D.createScale( _zoom, _zoom, out tempMat ); // scale ->
+				Matrix2D.multiply( ref _transformMatrix, ref tempMat, out _transformMatrix );
 			}
 
 			if( entity.transform.rotation != 0f )
 			{
-				Matrix2D.CreateRotationZ( entity.transform.rotation, out tempMat ); // rotation
-				Matrix2D.Multiply( ref _transformMatrix, ref tempMat, out _transformMatrix );
+				Matrix2D.createRotation( entity.transform.rotation, out tempMat ); // rotation
+				Matrix2D.multiply( ref _transformMatrix, ref tempMat, out _transformMatrix );
 			}
 
-			Matrix2D.CreateTranslation( (int)_origin.X, (int)_origin.Y, out tempMat ); // translate -origin
-			Matrix2D.Multiply( ref _transformMatrix, ref tempMat, out _transformMatrix );
+			Matrix2D.createTranslation( (int)_origin.X, (int)_origin.Y, out tempMat ); // translate -origin
+			Matrix2D.multiply( ref _transformMatrix, ref tempMat, out _transformMatrix );
 
 			// calculate our inverse as well
-			Matrix2D.Invert( ref _transformMatrix, out _inverseTransformMatrix );
+			Matrix2D.invert( ref _transformMatrix, out _inverseTransformMatrix );
 
 			// whenever the matrix changes the bounds are then invalid
 			_areBoundsDirty = true;
@@ -458,7 +458,7 @@ namespace Nez
 		public Vector2 worldToScreenPoint( Vector2 worldPosition )
 		{
 			updateMatrixes();
-			Vector2Ext.Transform( ref worldPosition, ref _transformMatrix, out worldPosition );
+			Vector2Ext.transform( ref worldPosition, ref _transformMatrix, out worldPosition );
 			return worldPosition;
 		}
 
@@ -471,7 +471,7 @@ namespace Nez
 		public Vector2 screenToWorldPoint( Vector2 screenPosition )
 		{
 			updateMatrixes();
-			Vector2Ext.Transform( ref screenPosition, ref _inverseTransformMatrix, out screenPosition );
+			Vector2Ext.transform( ref screenPosition, ref _inverseTransformMatrix, out screenPosition );
 			return screenPosition;
 		}
 

@@ -53,7 +53,7 @@ namespace Nez.BitmapFonts
 		/// <summary>
 		/// this sucker gets used a lot so we cache it to avoid having to create it every frame
 		/// </summary>
-		Matrix2D _transformationMatrix = Matrix2D.Identity;
+		Matrix2D _transformationMatrix = Matrix2D.identity;
 
 		/// <summary>
 		/// width of a space
@@ -308,15 +308,15 @@ namespace Nez.BitmapFonts
 			if( requiresTransformation )
 			{
 				Matrix2D temp;
-				Matrix2D.CreateTranslation( -origin.X, -origin.Y, out _transformationMatrix );
-				Matrix2D.CreateScale( ( flippedHorz ? -scale.X : scale.X ), ( flippedVert ? -scale.Y : scale.Y ), out temp );
-				Matrix2D.Multiply( ref _transformationMatrix, ref temp, out _transformationMatrix );
-				Matrix2D.CreateTranslation( flipAdjustment.X, flipAdjustment.Y, out temp );
-				Matrix2D.Multiply( ref temp, ref _transformationMatrix, out _transformationMatrix );
-				Matrix2D.CreateRotationZ( rotation, out temp );
-				Matrix2D.Multiply( ref _transformationMatrix, ref temp, out _transformationMatrix );
-				Matrix2D.CreateTranslation( position.X, position.Y, out temp );
-				Matrix2D.Multiply( ref _transformationMatrix, ref temp, out _transformationMatrix );
+				Matrix2D.createTranslation( -origin.X, -origin.Y, out _transformationMatrix );
+				Matrix2D.createScale( ( flippedHorz ? -scale.X : scale.X ), ( flippedVert ? -scale.Y : scale.Y ), out temp );
+				Matrix2D.multiply( ref _transformationMatrix, ref temp, out _transformationMatrix );
+				Matrix2D.createTranslation( flipAdjustment.X, flipAdjustment.Y, out temp );
+				Matrix2D.multiply( ref temp, ref _transformationMatrix, out _transformationMatrix );
+				Matrix2D.createRotation( rotation, out temp );
+				Matrix2D.multiply( ref _transformationMatrix, ref temp, out _transformationMatrix );
+				Matrix2D.createTranslation( position.X, position.Y, out temp );
+				Matrix2D.multiply( ref _transformationMatrix, ref temp, out _transformationMatrix );
 			}
 
 			BitmapFontRegion currentFontRegion = null;
@@ -355,7 +355,7 @@ namespace Nez.BitmapFonts
 
 				// transform our point if we need to
 				if( requiresTransformation )
-					Vector2Ext.Transform( ref p, ref _transformationMatrix, out p );
+					Vector2Ext.transform( ref p, ref _transformationMatrix, out p );
 
 				var destRect = RectangleExt.fromFloats
 				(
@@ -412,15 +412,15 @@ namespace Nez.BitmapFonts
 			if( requiresTransformation )
 			{
 				Matrix2D temp;
-				Matrix2D.CreateTranslation( -origin.X, -origin.Y, out _transformationMatrix );
-				Matrix2D.CreateScale( ( flippedHorz ? -scale.X : scale.X ), ( flippedVert ? -scale.Y : scale.Y ), out temp );
-				Matrix2D.Multiply( ref _transformationMatrix, ref temp, out _transformationMatrix );
-				Matrix2D.CreateTranslation( flipAdjustment.X, flipAdjustment.Y, out temp );
-				Matrix2D.Multiply( ref temp, ref _transformationMatrix, out _transformationMatrix );
-				Matrix2D.CreateRotationZ( rotation, out temp );
-				Matrix2D.Multiply( ref _transformationMatrix, ref temp, out _transformationMatrix );
-				Matrix2D.CreateTranslation( position.X, position.Y, out temp );
-				Matrix2D.Multiply( ref _transformationMatrix, ref temp, out _transformationMatrix );
+				Matrix2D.createTranslation( -origin.X, -origin.Y, out _transformationMatrix );
+				Matrix2D.createScale( ( flippedHorz ? -scale.X : scale.X ), ( flippedVert ? -scale.Y : scale.Y ), out temp );
+				Matrix2D.multiply( ref _transformationMatrix, ref temp, out _transformationMatrix );
+				Matrix2D.createTranslation( flipAdjustment.X, flipAdjustment.Y, out temp );
+				Matrix2D.multiply( ref temp, ref _transformationMatrix, out _transformationMatrix );
+				Matrix2D.createRotation( rotation, out temp );
+				Matrix2D.multiply( ref _transformationMatrix, ref temp, out _transformationMatrix );
+				Matrix2D.createTranslation( position.X, position.Y, out temp );
+				Matrix2D.multiply( ref _transformationMatrix, ref temp, out _transformationMatrix );
 			}
 
 			BitmapFontRegion currentFontRegion = null;
@@ -459,7 +459,7 @@ namespace Nez.BitmapFonts
 
 				// transform our point if we need to
 				if( requiresTransformation )
-					Vector2Ext.Transform( ref p, ref _transformationMatrix, out p );
+					Vector2Ext.transform( ref p, ref _transformationMatrix, out p );
 
 				var destRect = RectangleExt.fromFloats
 				(

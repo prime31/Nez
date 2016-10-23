@@ -91,10 +91,37 @@ namespace Nez.Spatial
 				_quadTreeRoot.move( _wrappedDictionary[item] );
 				return true;
 			}
-			else
+			return false;
+		}
+
+
+		public void debugRender( Graphics graphics )
+		{
+			debugRenderNode( graphics, _quadTreeRoot );
+
+			foreach( var ele in this )
 			{
-				return false;
+				graphics.batcher.drawHollowRect( ele.bounds, Color.Yellow );
 			}
+		}
+
+
+		public void debugRenderNode( Graphics graphics, QuadTreeNode<T> node )
+		{
+			if( node.isEmptyLeaf )
+				graphics.batcher.drawHollowRect( node.quadRect, Color.Red * 0.5f );
+			
+			if( node.topLeftChild != null )
+				debugRenderNode( graphics, node.topLeftChild );
+
+			if( node.topRightChild != null )
+				debugRenderNode( graphics, node.topRightChild );
+
+			if( node.bottomLeftChild != null )
+				debugRenderNode( graphics, node.bottomLeftChild );
+
+			if( node.bottomRightChild != null )
+				debugRenderNode( graphics, node.bottomRightChild );
 		}
 
 
@@ -110,14 +137,14 @@ namespace Nez.Spatial
 		#region ICollection<T> Members
 
 		///<summary>
-		///Adds an item to the <see cref="T:System.Collections.Generic.ICollection`1" />.
+		/// Adds an item to the QuadTree
 		///</summary>
 		///
 		///<param name="item">The object to add to the <see cref="T:System.Collections.Generic.ICollection`1" />.</param>
 		///<exception cref="T:System.NotSupportedException">The <see cref="T:System.Collections.Generic.ICollection`1" /> is read-only.</exception>
 		public void Add( T item )
 		{
-			QuadTreeObject<T> wrappedObject = new QuadTreeObject<T>( item );
+			var wrappedObject = new QuadTreeObject<T>( item );
 			_wrappedDictionary.Add( item, wrappedObject );
 			_quadTreeRoot.insert( wrappedObject );
 		}
@@ -136,7 +163,7 @@ namespace Nez.Spatial
 
 
 		///<summary>
-		///Determines whether the <see cref="T:System.Collections.Generic.ICollection`1" /> contains a specific value.
+		///Determines whether the QuadTree contains a specific value.
 		///</summary>
 		///
 		///<returns>
@@ -191,10 +218,10 @@ namespace Nez.Spatial
 
 
 		///<summary>
-		/// Removes the first occurrence of a specific object from the <see cref="T:System.Collections.Generic.ICollection`1" />.
+		/// Removes the first occurrence of a specific object from the QuadTree
 		///</summary>
 		///<returns>
-		///true if <paramref name="item" /> was successfully removed from the <see cref="T:System.Collections.Generic.ICollection`1" />; otherwise, false. This method also returns false if <paramref name="item" /> is not found in the original <see cref="T:System.Collections.Generic.ICollection`1" />.
+		/// true if <paramref name="item" /> was successfully removed from the <see cref="T:System.Collections.Generic.ICollection`1" />; otherwise, false. This method also returns false if <paramref name="item" /> is not found in the original <see cref="T:System.Collections.Generic.ICollection`1" />.
 		///</returns>
 		///<param name="item">The object to remove from the <see cref="T:System.Collections.Generic.ICollection`1" />.</param>
 		///<exception cref="T:System.NotSupportedException">The <see cref="T:System.Collections.Generic.ICollection`1" /> is read-only.</exception>

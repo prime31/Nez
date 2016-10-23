@@ -3,6 +3,9 @@
 
 namespace Nez
 {
+	/// <summary>
+	/// helper class used by the Movers to manage trigger colliders interactions and calling ITriggerListeners.
+	/// </summary>
 	public class ColliderTriggerHelper
 	{
 		Entity _entity;

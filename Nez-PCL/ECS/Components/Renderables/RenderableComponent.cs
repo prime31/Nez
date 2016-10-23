@@ -147,8 +147,8 @@ namespace Nez
 
 
 		/// <summary>
-		/// called when the Renderable enters the camera frame. Note that these methods will not be called if your render method does not use
-		/// isVisibleFromCamera for its culling check.
+		/// called when the Renderable enters the camera frame. Note that these methods will not be called if your Renderer does not use
+		/// isVisibleFromCamera for its culling check. All default Renderers do.
 		/// </summary>
 		protected virtual void onBecameVisible()
 		{ }
