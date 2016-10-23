@@ -328,16 +328,12 @@ namespace Nez.Tiled
 		/// <returns>The to tile position.</returns>
 		/// <param name="x">The x coordinate.</param>
 		/// <param name="y">The y coordinate.</param>
-		public Point isometricWorldToTilePosition(float x, float y, bool clampToTilemapBounds = true)
+		public Point isometricWorldToTilePosition( float x, float y, bool clampToTilemapBounds = true)
 		{
 			var tileX = Mathf.fastFloorToInt((y / tileHeight) + (x / tileWidth));
 			var tileY = Mathf.fastFloorToInt((-x / tileWidth) + (y / tileHeight));
-
 			if (!clampToTilemapBounds)
 				return new Point(tileX, tileY);
-
-	 
-
 			return new Point(Mathf.clamp(tileX, 0, width - 1), Mathf.clamp(tileY, 0, height - 1));
 		}
 
