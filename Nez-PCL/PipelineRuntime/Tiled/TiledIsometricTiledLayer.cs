@@ -56,6 +56,9 @@ namespace Nez.Tiled
 
 		public override void draw(Batcher batcher, Vector2 position, float layerDepth, RectangleF cameraClipBounds)
 		{
+			// offset render position by the layer offset, used for isometric layer depth
+			position += offset;
+
 			// offset it by the entity position since the tilemap will always expect positions in its own coordinate space
 			cameraClipBounds.location -= position;
 			if (tiledMap.requiresLargeTileCulling)
