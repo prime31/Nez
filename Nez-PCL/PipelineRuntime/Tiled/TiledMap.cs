@@ -21,7 +21,6 @@ namespace Nez.Tiled
 		public readonly Dictionary<string, string> properties = new Dictionary<string, string>();
 		public readonly List<TiledLayer> layers = new List<TiledLayer>();
 		public readonly List<TiledImageLayer> imageLayers = new List<TiledImageLayer>();
-		public readonly List<TiledTileLayer> tileLayers = new List<TiledTileLayer>();
 		public readonly List<TiledObjectGroup> objectGroups = new List<TiledObjectGroup>();
 		public readonly List<TiledTileset> tilesets = new List<TiledTileset>();
 
@@ -83,19 +82,43 @@ namespace Nez.Tiled
 		}
 
 
-		public TiledTileLayer createTileLayer( string name, int width, int height )
+		public TiledLayer createTileLayer( string name, int width, int height )
 		{
-			var layer = new TiledTileLayer( this, name, width, height );
-			layers.Add( layer );
-			return layer;
+			if (orientation == TiledMapOrientation.Orthogonal)
+			{
+				var layer = new TiledTileLayer(this, name, width, height);
+				layers.Add(layer);
+				return layer;
+			} else if (orientation == TiledMapOrientation.Isometric)
+			{
+				var layer = new TiledIsometricTiledLayer(this, name, width, height);
+				layers.Add(layer);
+				return layer;
+			} else
+			{
+				throw new NotImplementedException();
+			}
 		}
 
 
-		public TiledTileLayer createTileLayer( string name, int width, int height, TiledTile[] tiles )
+		public TiledLayer createTileLayer( string name, int width, int height, TiledTile[] tiles )
 		{
-			var layer = new TiledTileLayer( this, name, width, height, tiles );
-			layers.Add( layer );
-			return layer;
+			if (orientation == TiledMapOrientation.Orthogonal)
+			{
+				var layer = new TiledTileLayer(this, name, width, height, tiles);
+				layers.Add(layer);
+				return layer;
+			}
+			else if (orientation == TiledMapOrientation.Isometric)
+			{
+				var layer = new TiledIsometricTiledLayer(this, name, width, height, tiles);
+				layers.Add(layer);
+				return layer;
+			}
+			else
+			{
+				throw new NotImplementedException();
+			}
 		}
 
 
@@ -289,6 +312,34 @@ namespace Nez.Tiled
 			return new Point( worldToTilePositionX( pos.X, clampToTilemapBounds ), worldToTilePositionY( pos.Y, clampToTilemapBounds ) );
 		}
 
+		/// <summary>
+		/// converts from world to tile position for isometric map clamping to the tilemap bounds
+		/// </summary>
+		/// <returns>The to tile position.</returns>
+		/// <param name="pos">Position.</param>
+		public Point isometricWorldToTilePosition( Vector2 pos, bool clampToTilemapBounds = true )
+		{
+			return isometricWorldToTilePosition(pos.X, pos.Y, clampToTilemapBounds);
+		}
+
+		/// <summary>
+		/// converts from world to tile position for isometric map clamping to the tilemap bounds
+		/// </summary>
+		/// <returns>The to tile position.</returns>
+		/// <param name="x">The x coordinate.</param>
+		/// <param name="y">The y coordinate.</param>
+		public Point isometricWorldToTilePosition(float x, float y, bool clampToTilemapBounds = true)
+		{
+			var tileX = Mathf.fastFloorToInt((y / tileHeight) + (x / tileWidth));
+			var tileY = Mathf.fastFloorToInt((-x / tileWidth) + (y / tileHeight));
+
+			if (!clampToTilemapBounds)
+				return new Point(tileX, tileY);
+
+	 
+
+			return new Point(Mathf.clamp(tileX, 0, width - 1), Mathf.clamp(tileY, 0, height - 1));
+		}
 
 		/// <summary>
 		/// converts from world to tile position clamping to the tilemap bounds
@@ -317,7 +368,6 @@ namespace Nez.Tiled
 			return Mathf.clamp( tileY, 0, height - 1 );
 		}
 
-
 		/// <summary>
 		/// converts from tile to world position
 		/// </summary>
@@ -327,7 +377,6 @@ namespace Nez.Tiled
 		{
 			return new Vector2( tileToWorldPositionX( pos.X ), tileToWorldPositionY( pos.Y ) );
 		}
-
 
 		/// <summary>
 		/// converts from tile to world position
