@@ -58,22 +58,17 @@ namespace Nez.Tiled
 		{
 			// offset it by the entity position since the tilemap will always expect positions in its own coordinate space
 			cameraClipBounds.location -= position;
+			if (tiledMap.requiresLargeTileCulling)
+			{
+				// we expand our cameraClipBounds by the excess tile width/height of the largest tiles to ensure we include tiles whose
+				// origin might be outside of the cameraClipBounds
+				cameraClipBounds.location -= new Vector2(tiledMap.largestTileWidth, tiledMap.largestTileHeight - tiledMap.tileHeight);
+				cameraClipBounds.size += new Vector2(tiledMap.largestTileWidth, tiledMap.largestTileHeight - tiledMap.tileHeight);
+			}
 
 			Point min, max;
 			min = new Point(0, 0);
 			max = new Point(tiledMap.width - 1, tiledMap.height - 1);
-			/*if (tiledMap.requiresLargeTileCulling)
-			{
-				// we expand our cameraClipBounds by the excess tile width/height of the largest tiles to ensure we include tiles whose
-				// origin might be outside of the cameraClipBounds
-				min = tiledMap.isometricWorldToTilePosition(new Vector2(cameraClipBounds.left - (tiledMap.largestTileWidth - tiledMap.tileWidth), cameraClipBounds.top - (tiledMap.largestTileHeight - tiledMap.tileHeight)));
-				max = tiledMap.isometricWorldToTilePosition(new Vector2(cameraClipBounds.right + (tiledMap.largestTileWidth - tiledMap.tileWidth), cameraClipBounds.bottom + (tiledMap.largestTileHeight - tiledMap.tileHeight)));
-			}
-			else
-			{
-				min = tiledMap.isometricWorldToTilePosition(new Vector2(cameraClipBounds.left, cameraClipBounds.top));
-				max = tiledMap.isometricWorldToTilePosition(new Vector2(cameraClipBounds.right, cameraClipBounds.bottom));
-			}*/
 
 			// loop through and draw all the non-culled tiles
 			for (var y = min.Y; y <= max.Y; y++)
@@ -84,21 +79,26 @@ namespace Nez.Tiled
 					if (tile == null)
 						continue;
 
+					var tileworldpos = tiledMap.isometricTileToWorldPosition(x, y);
+					if (tileworldpos.X < cameraClipBounds.left || tileworldpos.Y < cameraClipBounds.top || tileworldpos.X > cameraClipBounds.right || tileworldpos.Y > cameraClipBounds.bottom)
+					{
+						continue;
+					}
+
 					var tileRegion = tile.textureRegion;
 
 					// culling for arbitrary size tiles if necessary
-					/*if (tiledMap.requiresLargeTileCulling)
+					if (tiledMap.requiresLargeTileCulling)
 					{
 						// TODO: this only checks left and bottom. we should check top and right as well to deal with rotated, odd-sized tiles
-						var tileworldpos = tiledMap.tileToWorldPosition(new Point(x, y));
 						if (tileworldpos.X + tileRegion.sourceRect.Width < cameraClipBounds.left || tileworldpos.Y - tileRegion.sourceRect.Height > cameraClipBounds.bottom)
 							continue;
-					}*/
+					}
 
 					// for the y position, we need to take into account if the tile is larger than the tileHeight and shift. Tiled uses
 					// a bottom-left coordinate system and MonoGame a top-left
-					var tx = tile.x * tiledMap.tileWidth / 2 - tile.y * tiledMap.tileWidth / 2 + (tiledMap.height - 1) * tiledMap.tileWidth / 2 + (int)position.X;
-					var ty = tile.y * tiledMap.tileHeight / 2 + tile.x * tiledMap.tileHeight / 2 + (int)position.Y;
+					var tx = tileworldpos.X + position.X;
+					var ty = tileworldpos.Y + position.Y;
 					var rotation = 0f;
 
 					var spriteEffects = SpriteEffects.None;
