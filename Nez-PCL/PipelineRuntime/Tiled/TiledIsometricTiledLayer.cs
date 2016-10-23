@@ -316,26 +316,27 @@ namespace Nez.Tiled
 
 		/// <summary>
 		/// gets a List of all the TiledTiles that intersect the passed in Rectangle. The returned List can be put back in the pool via ListPool.free.
-		/// Assumes rectangle is isometric
 		/// </summary>
 		/// <returns>The tiles intersecting bounds.</returns>
 		/// <param name="layer">Layer.</param>
 		/// <param name="bounds">Bounds.</param>
 		public List<TiledTile> getTilesIntersectingBounds(Rectangle bounds)
 		{
-			var minX = tiledMap.isometricWorldToTilePosition(bounds.X, bounds.Y);
-			var minY = tiledMap.isometricWorldToTilePosition(bounds.X, bounds.Bottom);
-			var maxX = tiledMap.isometricWorldToTilePosition(bounds.Right, bounds.Y);
-			var maxY = tiledMap.isometricWorldToTilePosition(bounds.Right, bounds.Bottom);
+			// Note that after transforming the bounds to isometric, top left is the left most tile, bottom right is the right most, top right is top most, bottom left is bottom most
+			var topLeft = tiledMap.isometricWorldToTilePosition(bounds.X, bounds.Y);
+			var bottomLeft = tiledMap.isometricWorldToTilePosition(bounds.X, bounds.Bottom);
+			var topRight = tiledMap.isometricWorldToTilePosition(bounds.Right, bounds.Y);
+			var bottomRight = tiledMap.isometricWorldToTilePosition(bounds.Right, bounds.Bottom);
 
 			var tilelist = ListPool<TiledTile>.obtain();
-
-			for (var x = minX.X; x <= maxX.X; x++)
+			// Iterate in larger isometric rectangle that definitely includes our smaller bounding rectangle
+			for (var x = topLeft.X; x <= bottomRight.X; x++)
 			{
-				for (var y = minY.Y; y <= maxY.Y; y++)
+				for (var y = topRight.Y; y <= bottomLeft.Y; y++)
 				{
 					var tile = getTile(x, y);
-					if (tile != null)
+					// Check if tile collides with our bounds
+					if (tile != null && bounds.Contains(tiledMap.isometricTileToWorldPosition(x, y)))
 						tilelist.Add(tile);
 				}
 			}
