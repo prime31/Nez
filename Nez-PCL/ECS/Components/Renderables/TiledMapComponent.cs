@@ -33,7 +33,7 @@ namespace Nez
 		Collider[] _colliders;
 
 
-		public TiledMapComponent( TiledMap tiledMap, string collisionLayerName = null, bool shouldCreateColliders = false )
+		public TiledMapComponent( TiledMap tiledMap, string collisionLayerName = null, bool shouldCreateColliders = true )
 		{
 			this.tiledMap = tiledMap;
 			_shouldCreateColliders = shouldCreateColliders;
