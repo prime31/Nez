@@ -42,13 +42,35 @@ if( hit.collider != null )
 
 Nez has some more advanced collision/overlap checks using methods such as Minkowski Sums, Separating Axis Theorem and good old trigonometry. These are all wrapped up in simple to use methods on the Collider class for you. Lets take a look at some examples.
 
+This first example is the easiest way to deal with collisions. `deltaMovement` is the amount that you would like to move the Entity, typically `velocity * Time.deltaTime`. The `collidesWithAny` method will check all collisons and adjust deltaMovement to resolve any collisions.
+
 ```cs
-// CollisionResult will contain some really useful information such as the Collider that was hit, the normal of the surface it and the 
-// minimum translation vector (MTV). The MTV can be used to move the colliding Entity directly adjacent to the hit Collider.
+// CollisionResult will contain some really useful information such as the Collider that was hit,
+// the normal of the surface it and the minimum translation vector (MTV). The MTV can be used to
+// move the colliding Entity directly adjacent to the hit Collider.
 CollisionResult collisionResult;
 
-// do a check to see if entity.collider collides with someOtherCollider 
-if( entity.collider.collidesWith( someOtherCollider, deltaMovement, out collisionResult ) )
+// do a check to see if entity.colliders[0] (the first Collider on the Entity) collides with any other Colliders in the Scene
+// Note that if you have multiple Colliders you could just loop through them instead of only checking the first one.
+if( entity.colliders[0].collidesWithAny( ref deltaMovement, out collisionResult ) )
+{
+	// log the CollisionResult. You may want to use it to add some particle effects or anything else relevant to your game.
+	Debug.log( "collision result: {0}", collisionResult );
+}
+
+// move the Entity to the new position. deltaMovement is already adjusted to resolve collisions for us.
+entity.transform.position += deltaMovement;
+```
+
+
+If you need a bit more control over what happens when a collision occurs you can manually check for collisions with other Colliders as well. This next snippet checks for a collision with a specific Collider. Note that when doing this deltaMovement is not adjust for you. It is up to you to take into account the `minimumTranslationVector` when resolving the collision.
+
+```cs
+// declare the CollisionResult
+CollisionResult collisionResult;
+
+// do a check to see if entity.colliders[0] collides with someOtherCollider
+if( entity.colliders[0].collidesWith( someOtherCollider, deltaMovement, out collisionResult ) )
 {
 	// move entity to the position directly adjacent to the hit Collider then log the CollisionResult
 	entity.transform.position += deltaMovement - collisionResult.minimumTranslationVector;
@@ -59,13 +81,13 @@ if( entity.collider.collidesWith( someOtherCollider, deltaMovement, out collisio
 We can take the above example a step further using the previously mentioned `Physics.boxcastBroadphase` method, or more specifically a version of it that excludes ourself from the query. That method will give us all the colliders in the Scene that are in our vicinity which we can then use to do our actual collision checks on.
 
 ```cs
-// fetch anything that we might overlap with at our position excluding ourself. We don't care about ourself here obviously.
-var neighborColliders = Physics.boxcastBroadphaseExcludingSelf( entity.collider.bounds );
+// fetch anything that we might overlap with at our position excluding ourself. We don't care about ourself here.
+var neighborColliders = Physics.boxcastBroadphaseExcludingSelf( entity.colliders[0] );
 
 // loop through and check each Collider for an overlap
 foreach( var collider in neighborColliders )
 {
-	if( entity.collider.overlaps( collider )
+	if( entity.colliders[0].overlaps( collider )
 		Debug.log( "We are overlapping a Collider: {0}", collider );
 }
 ```
