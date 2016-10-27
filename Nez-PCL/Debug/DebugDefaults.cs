@@ -30,7 +30,7 @@ namespace Nez
 			{
 				get
 				{
-					return (int)System.Math.Max( (float)Core.scene.sceneRenderTargetSize.X / Screen.width, 1f );
+					return System.Math.Max( Mathf.ceilToInt( (float)Core.scene.sceneRenderTargetSize.X / Screen.width ), 1 );
 				}
 			}
 		}
