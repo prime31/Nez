@@ -844,7 +844,7 @@ namespace Nez
 				graphics.batcher.drawPixel( v.Position.X, v.Position.Y, Color.GhostWhite, 4 );
 			}
 
-			graphics.batcher.drawHollowRect( _bounds, DefaultColors.colliderBounds );
+			graphics.batcher.drawHollowRect( _bounds, Debug.Colors.colliderBounds );
 		}
 
 		#endregion

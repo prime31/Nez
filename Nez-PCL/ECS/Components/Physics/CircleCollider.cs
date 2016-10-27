@@ -57,10 +57,10 @@ namespace Nez
 
 		public override void debugRender( Graphics graphics )
 		{
-			graphics.batcher.drawHollowRect( bounds, Color.White * 0.3f );
-			graphics.batcher.drawCircle( shape.position, ( (Circle)shape ).radius, DefaultColors.colliderEdge );
-			graphics.batcher.drawPixel( entity.transform.position, DefaultColors.colliderPosition, 4 );
-			graphics.batcher.drawPixel( shape.position, DefaultColors.colliderCenter, 2 );
+			graphics.batcher.drawHollowRect( bounds, Debug.Colors.colliderBounds, Debug.Size.lineSizeMultiplier );
+			graphics.batcher.drawCircle( shape.position, ( (Circle)shape ).radius, Debug.Colors.colliderEdge, Debug.Size.lineSizeMultiplier );
+			graphics.batcher.drawPixel( entity.transform.position, Debug.Colors.colliderPosition, 4 * Debug.Size.lineSizeMultiplier );
+			graphics.batcher.drawPixel( shape.position, Debug.Colors.colliderCenter, 2 * Debug.Size.lineSizeMultiplier );
 		}
 
 

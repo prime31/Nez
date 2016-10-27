@@ -38,10 +38,10 @@ namespace Nez
 		public override void debugRender( Graphics graphics )
 		{
 			var poly = shape as Polygon;
-			graphics.batcher.drawHollowRect( bounds, DefaultColors.colliderBounds );
-			graphics.batcher.drawPolygon( shape.position, poly.points, DefaultColors.colliderEdge, true );
-			graphics.batcher.drawPixel( entity.transform.position, DefaultColors.colliderPosition, 4 );
-			graphics.batcher.drawPixel( shape.position, DefaultColors.colliderCenter, 2 );
+			graphics.batcher.drawHollowRect( bounds, Debug.Colors.colliderBounds, Debug.Size.lineSizeMultiplier );
+			graphics.batcher.drawPolygon( shape.position, poly.points, Debug.Colors.colliderEdge, true, Debug.Size.lineSizeMultiplier );
+			graphics.batcher.drawPixel( entity.transform.position, Debug.Colors.colliderPosition, 4 * Debug.Size.lineSizeMultiplier );
+			graphics.batcher.drawPixel( shape.position, Debug.Colors.colliderCenter, 2 * Debug.Size.lineSizeMultiplier );
 
 			// Normal debug code
 			//for( var i = 0; i < poly.points.Length; i++ )
@@ -52,10 +52,8 @@ namespace Nez
 			//		p2 = poly.points[0];
 			//	else
 			//		p2 = poly.points[i + 1];
-
 			//	var perp = Vector2Ext.perpendicular( ref p1, ref p2 );
 			//	Vector2Ext.normalize( ref perp );
-
 			//	var mp = Vector2.Lerp( p1, p2, 0.5f ) + poly.position;
 			//	graphics.batcher.drawLine( mp, mp + perp * 10, Color.White );
 			//}

@@ -8,7 +8,7 @@ using Nez.BitmapFonts;
 namespace Nez
 {
 	// TODO: add Conditionals for all log levels
-	public static class Debug
+	public static partial class Debug
 	{
 		enum LogType
 		{
@@ -244,7 +244,7 @@ namespace Nez
 		[Conditional( "DEBUG" )]
 		public static void drawText( string text, float duration = 0 )
 		{
-			drawText( text, DefaultColors.debugText, duration );
+			drawText( text, Colors.debugText, duration );
 		}
 
 
@@ -252,7 +252,7 @@ namespace Nez
 		public static void drawText( string format, params object[] args )
 		{
 			var text = string.Format( format, args );
-			drawText( text, DefaultColors.debugText );
+			drawText( text, Colors.debugText );
 		}
 
 

@@ -101,7 +101,7 @@ namespace Nez.Spatial
 
 			foreach( var ele in this )
 			{
-				graphics.batcher.drawHollowRect( ele.bounds, Color.Yellow );
+				graphics.batcher.drawHollowRect( ele.bounds, Debug.Colors.colliderBounds, Debug.Size.lineSizeMultiplier );
 			}
 		}
 
@@ -109,7 +109,7 @@ namespace Nez.Spatial
 		public void debugRenderNode( Graphics graphics, QuadTreeNode<T> node )
 		{
 			if( node.isEmptyLeaf )
-				graphics.batcher.drawHollowRect( node.quadRect, Color.Red * 0.5f );
+				graphics.batcher.drawHollowRect( node.quadRect, Color.Red * 0.5f, Debug.Size.lineSizeMultiplier );
 			
 			if( node.topLeftChild != null )
 				debugRenderNode( graphics, node.topLeftChild );

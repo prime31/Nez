@@ -232,7 +232,7 @@ namespace Nez.Verlet
 
 		public override void debugRender( Batcher batcher )
 		{
-			batcher.drawLine( _particleOne.position, _particleTwo.position, DefaultColors.verletConstraintEdge );
+			batcher.drawLine( _particleOne.position, _particleTwo.position, Debug.Colors.verletConstraintEdge );
 		}
 
 	}

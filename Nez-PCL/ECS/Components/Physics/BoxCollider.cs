@@ -90,10 +90,10 @@ namespace Nez
 		public override void debugRender( Graphics graphics )
 		{
 			var poly = shape as Polygon;
-			graphics.batcher.drawHollowRect( bounds, DefaultColors.colliderBounds );
-			graphics.batcher.drawPolygon( shape.position, poly.points, DefaultColors.colliderEdge, true );
-			graphics.batcher.drawPixel( entity.transform.position, DefaultColors.colliderPosition, 4 );
-			graphics.batcher.drawPixel( entity.transform.position + shape.center, DefaultColors.colliderCenter, 2 );
+			graphics.batcher.drawHollowRect( bounds, Debug.Colors.colliderBounds, Debug.Size.lineSizeMultiplier );
+			graphics.batcher.drawPolygon( shape.position, poly.points, Debug.Colors.colliderEdge, true, Debug.Size.lineSizeMultiplier );
+			graphics.batcher.drawPixel( entity.transform.position, Debug.Colors.colliderPosition, 4 * Debug.Size.lineSizeMultiplier );
+			graphics.batcher.drawPixel( entity.transform.position + shape.center, Debug.Colors.colliderCenter, 2 * Debug.Size.lineSizeMultiplier );
 		}
 
 

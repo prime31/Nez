@@ -524,7 +524,7 @@
     <Compile Include="Physics\Shapes\ShapeCollisions\ShapeCollisionsCircle.cs" />
     <Compile Include="Physics\Shapes\ShapeCollisions\ShapeCollisionsLine.cs" />
     <Compile Include="Physics\Shapes\ShapeCollisions\ShapeCollisionsPoint.cs" />
-    <Compile Include="Debug\DefaultColors.cs" />
+    <Compile Include="Debug\DebugDefaults.cs" />
     <Compile Include="UI\IMGUI.cs" />
     <Compile Include="Physics\Verlet\Composites\Box.cs" />
     <Compile Include="Physics\Verlet\Composites\Ragdoll.cs" />

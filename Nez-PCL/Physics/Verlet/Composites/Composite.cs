@@ -174,9 +174,9 @@ namespace Nez.Verlet
 				for( var i = 0; i < particles.length; i++ )
 				{
 					if( particles.buffer[i].radius == 0 )
-						batcher.drawPixel( particles.buffer[i].position, DefaultColors.verletParticle, 4 );
+						batcher.drawPixel( particles.buffer[i].position, Debug.Colors.verletParticle, 4 );
 					else
-						batcher.drawCircle( particles.buffer[i].position, (int)particles.buffer[i].radius, DefaultColors.verletParticle, 1, 4 );
+						batcher.drawCircle( particles.buffer[i].position, (int)particles.buffer[i].radius, Debug.Colors.verletParticle, 1, 4 );
 				}
 			}
 		}
