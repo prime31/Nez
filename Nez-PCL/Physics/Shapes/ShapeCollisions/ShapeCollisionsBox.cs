@@ -283,7 +283,6 @@ namespace Nez.PhysicsShapes
 		}
 
 
-		[Obsolete]
 		static void getInterval( Polygon polygon, int numVertices, Vector2 axis, out float min, out float max )
 		{
 			min = max = Vector2.Dot( polygon.points[0], axis );
