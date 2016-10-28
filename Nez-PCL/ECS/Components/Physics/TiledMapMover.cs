@@ -11,6 +11,8 @@ namespace Nez.Tiled
 	/// The TiledMapMover is a helper for moving objects around in a gravity-based Tiled map. It requires that the Entity it is on has a BoxCollider. The
 	/// BoxCollider will be used in conjuntion with colliderHorizontal/VerticalInset for all collision detection.
 	/// 
+	/// One way platforms can be jumped down through by moving your Transform down 1 pixel and calling CollisionState.clearLastGroundTile.
+	/// 
 	/// If you plan to use slopes/one way platforms with the TiledMapMover some extra properties need to be added to your tiles in Tiled.
 	/// They are listed below:
 	/// - nez:isOneWayPlatform (bool): one way platforms will ignore all collisions except from above
@@ -42,6 +44,12 @@ namespace Nez.Tiled
 			// state used by the TiledMapMover
 			internal float _movementRemainderX, _movementRemainderY;
 			internal TiledTile _lastGroundTile;
+
+
+			public void clearLastGroundTile()
+			{
+				_lastGroundTile = null;
+			}
 
 
 			public void reset()
