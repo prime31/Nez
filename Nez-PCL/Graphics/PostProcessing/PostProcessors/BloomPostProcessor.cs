@@ -2,7 +2,6 @@
 using Nez;
 using Nez.Textures;
 using Microsoft.Xna.Framework.Graphics;
-using Nez.Systems;
 using Microsoft.Xna.Framework;
 
 
@@ -20,22 +19,32 @@ namespace Nez
 		}
 
 		/// <summary>
-		/// scale of the internal RenderTargets. For high resolution renders a half sized RT is usually more than enough.
+		/// scale of the internal RenderTargets. For high resolution renders a half sized RT is usually more than enough. Defaults to 1.
 		/// </summary>
-		public float renderTargetScale = 1f;
+		public float renderTargetScale
+		{
+			get { return _renderTargetScale; }
+			set
+			{
+				if( _renderTargetScale != value )
+				{
+					_renderTargetScale = value;
+					updateBlurEffectDeltas();
+				}
+			}
+		}
 
+		float _renderTargetScale = 1f;
 		BloomSettings _settings;
 
 		Effect _bloomExtractEffect;
 		Effect _bloomCombineEffect;
-		Effect _gaussianBlurEffect;
+		GaussianBlurEffect _gaussianBlurEffect;
 
 		// extract params
 		EffectParameter _bloomExtractThresholdParam;
 		// combine params
 		EffectParameter _bloomIntensityParam, _bloomBaseIntensityParam, _bloomSaturationParam, _bloomBaseSaturationParam, _bloomBaseMapParm;
-		// blur params
-		EffectParameter _blurWeightsParam, _blurOffsetsParam;
 
 		
 		public BloomPostProcessor( int executionOrder ) : base( executionOrder )
@@ -48,7 +57,7 @@ namespace Nez
 		{
 			_bloomExtractEffect = scene.content.loadEffect<Effect>( "bloomExtract", EffectResource.bloomExtractBytes );
 			_bloomCombineEffect = scene.content.loadEffect<Effect>( "bloomCombine", EffectResource.bloomCombineBytes );
-			_gaussianBlurEffect = scene.content.loadEffect<Effect>( "gaussianBlur", EffectResource.gaussianBlurBytes );
+			_gaussianBlurEffect = scene.content.loadNezEffect<GaussianBlurEffect>();
 
 			_bloomExtractThresholdParam = _bloomExtractEffect.Parameters["_bloomThreshold"];
 
@@ -57,9 +66,6 @@ namespace Nez
 			_bloomSaturationParam = _bloomCombineEffect.Parameters["_bloomSaturation"];
 			_bloomBaseSaturationParam = _bloomCombineEffect.Parameters["_baseSaturation"];
 			_bloomBaseMapParm = _bloomCombineEffect.Parameters["_baseMap"];
-
-			_blurWeightsParam = _gaussianBlurEffect.Parameters["_sampleWeights"];
-			_blurOffsetsParam = _gaussianBlurEffect.Parameters["_sampleOffsets"];
 
 			setBloomSettings( _settings );
 		}
@@ -79,70 +85,25 @@ namespace Nez
 			_bloomBaseIntensityParam.SetValue( _settings.baseIntensity );
 			_bloomSaturationParam.SetValue( _settings.saturation );
 			_bloomBaseSaturationParam.SetValue( _settings.baseSaturation );
+
+			_gaussianBlurEffect.blurAmount = _settings.blurAmount;
+		}
+
+
+		public override void onSceneBackBufferSizeChanged( int newWidth, int newHeight )
+		{
+			updateBlurEffectDeltas();
 		}
 
 
 		/// <summary>
-		/// computes sample weightings and texture coordinate offsets for one pass of a separable gaussian blur filter.
+		/// updates the Effect with the new vertical and horizontal deltas
 		/// </summary>
-		void setBlurEffectParameters( float dx, float dy )
+		void updateBlurEffectDeltas()
 		{
-			// Look up how many samples our gaussian blur effect supports.
-			var sampleCount = _blurWeightsParam.Elements.Count;
-
-			// Create temporary arrays for computing our filter settings.
-			var sampleWeights = new float[sampleCount];
-			var sampleOffsets = new Vector2[sampleCount];
-
-			// The first sample always has a zero offset.
-			sampleWeights[0] = computeGaussian( 0 );
-			sampleOffsets[0] = Vector2.Zero;
-
-			// Maintain a sum of all the weighting values.
-			var totalWeights = sampleWeights[0];
-
-			// Add pairs of additional sample taps, positioned along a line in both directions from the center.
-			for( var i = 0; i < sampleCount / 2; i++ )
-			{
-				// Store weights for the positive and negative taps.
-				var weight = computeGaussian( i + 1 );
-
-				sampleWeights[i * 2 + 1] = weight;
-				sampleWeights[i * 2 + 2] = weight;
-
-				totalWeights += weight * 2;
-
-				// To get the maximum amount of blurring from a limited number of pixel shader samples, we take advantage of the bilinear filtering
-				// hardware inside the texture fetch unit. If we position our texture coordinates exactly halfway between two texels, the filtering unit
-				// will average them for us, giving two samples for the price of one. This allows us to step in units of two texels per sample, rather
-				// than just one at a time. The 1.5 offset kicks things off by positioning us nicely in between two texels.
-				var sampleOffset = i * 2 + 1.5f;
-
-				var delta = new Vector2( dx, dy ) * sampleOffset;
-
-				// Store texture coordinate offsets for the positive and negative taps.
-				sampleOffsets[i * 2 + 1] = delta;
-				sampleOffsets[i * 2 + 2] = -delta;
-			}
-
-			// Normalize the list of sample weightings, so they will always sum to one.
-			for( var i = 0; i < sampleWeights.Length; i++ )
-				sampleWeights[i] /= totalWeights;
-
-			// Tell the effect about our new filter settings.
-			_blurWeightsParam.SetValue( sampleWeights );
-			_blurOffsetsParam.SetValue( sampleOffsets );
-		}
-
-
-		/// <summary>
-		/// Evaluates a single point on the gaussian falloff curve.
-		/// Used for setting up the blur filter weightings.
-		/// </summary>
-		float computeGaussian( float n )
-		{
-			var theta = _settings.blurAmount;
-			return (float)( ( 1.0 / Math.Sqrt( 2 * Math.PI * theta ) ) * Math.Exp( -( n * n ) / ( 2 * theta * theta ) ) );
+			var sceneRenderTargetSize = scene.sceneRenderTargetSize;
+			_gaussianBlurEffect.horizontalBlurDelta = 1f / ( sceneRenderTargetSize.X * _renderTargetScale );
+			_gaussianBlurEffect.verticalBlurDelta = 1f / ( sceneRenderTargetSize.Y * _renderTargetScale );
 		}
 
 
@@ -150,7 +111,6 @@ namespace Nez
 		{
 			// aquire two rendertargets for the bloom processing. These can be scaled via renderTargetScale in order to minimize fillrate costs. Reducing
 			// the resolution in this way doesn't hurt quality, because we are going to be blurring the bloom images in any case.
-			// the demo uses a tiny backbuffer so no need to reduce size any further
 			var sceneRenderTargetSize = scene.sceneRenderTargetSize;
 			var renderTarget1 = RenderTarget.getTemporary( (int)( sceneRenderTargetSize.X * renderTargetScale ), (int)( sceneRenderTargetSize.Y * renderTargetScale ), DepthFormat.None );
 			var renderTarget2 = RenderTarget.getTemporary( (int)( sceneRenderTargetSize.X * renderTargetScale ), (int)( sceneRenderTargetSize.Y * renderTargetScale ), DepthFormat.None );
@@ -159,11 +119,11 @@ namespace Nez
 			drawFullscreenQuad( source, renderTarget1, _bloomExtractEffect );
 
 			// Pass 2: draw from rendertarget 1 into rendertarget 2, using a shader to apply a horizontal gaussian blur filter.
-			setBlurEffectParameters( 1.0f / (float)renderTarget1.Width, 0 );
+			_gaussianBlurEffect.prepareForHorizontalBlur();
 			drawFullscreenQuad( renderTarget1, renderTarget2, _gaussianBlurEffect );
 
 			// Pass 3: draw from rendertarget 2 back into rendertarget 1, using a shader to apply a vertical gaussian blur filter.
-			setBlurEffectParameters( 0, 1.0f / (float)renderTarget1.Height );
+			_gaussianBlurEffect.prepareForVerticalBlur();
 			drawFullscreenQuad( renderTarget2, renderTarget1, _gaussianBlurEffect );
 
 			// Pass 4: draw both rendertarget 1 and the original scene image back into the main backbuffer, using a shader that
