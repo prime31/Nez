@@ -7,7 +7,7 @@ using Microsoft.Xna.Framework;
 namespace Nez
 {
 	/// <summary>
-	/// Tiled sprite. Note that TiledSprite overrides the Material so that it can wrap the UVs. This will class requires the texture
+	/// Tiled sprite. Note that TiledSprite overrides the Material so that it can wrap the UVs. This class requires the texture
 	/// to not be part of an atlas so that wrapping can work.
 	/// </summary>
 	public class TiledSprite : Sprite
@@ -32,12 +32,38 @@ namespace Nez
 			set { _sourceRect.Y = value; }
 		}
 
+		/// <summary>
+		/// scale of the texture
+		/// </summary>
+		/// <value>The texture scale.</value>
+		public Vector2 textureScale
+		{
+			get { return _textureScale; }
+			set
+			{
+				_textureScale = value;
+
+				// recalulcate our inverseTextureScale and the source rect size
+				_inverseTexScale = new Vector2( 1f / _textureScale.X, 1f / _textureScale.Y );
+				_sourceRect.Width = (int)( subtexture.sourceRect.Width * _inverseTexScale.X );
+				_sourceRect.Height = (int)( subtexture.sourceRect.Height * _inverseTexScale.Y );
+			}
+		}
+
+		/// <summary>
+		/// overridden width value so that the TiledSprite can have an independent width than its texture
+		/// </summary>
+		/// <value>The width.</value>
 		public new int width
 		{
 			get { return _sourceRect.Width; }
 			set { _sourceRect.Width = value; }
 		}
 
+		/// <summary>
+		/// overridden height value so that the TiledSprite can have an independent height than its texture
+		/// </summary>
+		/// <value>The height.</value>
 		public new int height
 		{
 			get { return _sourceRect.Height; }
@@ -47,7 +73,9 @@ namespace Nez
 		/// <summary>
 		/// we keep a copy of the sourceRect so that we dont change the Subtexture in case it is used elsewhere
 		/// </summary>
-		Rectangle _sourceRect;
+		protected Rectangle _sourceRect;
+		Vector2 _textureScale = Vector2.One;
+		Vector2 _inverseTexScale = Vector2.One;
 
 
 		public TiledSprite( Subtexture subtexture ) : base( subtexture )
@@ -66,7 +94,10 @@ namespace Nez
 
 		public override void render( Graphics graphics, Camera camera )
 		{
-			graphics.batcher.draw( subtexture, entity.transform.position + _localOffset, _sourceRect, color, entity.transform.rotation, origin, entity.transform.scale, spriteEffects, _layerDepth );
+			var topLeft = entity.transform.position + _localOffset;
+			var destinationRect = RectangleExt.fromFloats( topLeft.X, topLeft.Y, _sourceRect.Width * entity.transform.scale.X * textureScale.X, _sourceRect.Height * entity.transform.scale.Y * textureScale.Y );
+
+			graphics.batcher.draw( subtexture, destinationRect, _sourceRect, color, entity.transform.rotation, origin * _inverseTexScale, spriteEffects, _layerDepth );
 		}
 
 	}
