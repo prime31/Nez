@@ -30,7 +30,7 @@ var selfLitMaterial = new DeferredSpriteMaterial( selfLitNormalMapTexture );
 
 // we can access the Effect on a Material<T> via the typedEffect property. We need to tell the Effect that we want self illumination and
 // optionally set the self illumination power.
-selfLitMaterial.typedEffect.setUseNormalAlphaChannelForSelfIllumination( true )
+selfLitMaterial.effect.setUseNormalAlphaChannelForSelfIllumination( true )
 	.setSelfIlluminationPower( 0.5f );
 ```
 
