@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Microsoft.Xna.Framework.Input;
 
 
@@ -18,9 +17,9 @@ namespace Nez
 			{
 				for( var i = 0; i < nodes.Count; i++ )
 				{
-					var value = nodes[i].value;
-					if( value != 0 )
-						return value;
+					var val = nodes[i].value;
+					if( val != 0 )
+						return val;
 				}
 
 				return 0;
@@ -28,8 +27,7 @@ namespace Nez
 		}
 
 
-		public VirtualAxis() : base()
-		{}
+		public VirtualAxis() { }
 
 
 		public VirtualAxis( params Node[] nodes )

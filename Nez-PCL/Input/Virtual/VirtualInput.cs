@@ -1,6 +1,4 @@
-﻿using System;
-
-
+﻿
 namespace Nez
 {
 	/// <summary>
@@ -28,7 +26,7 @@ namespace Nez
 		};
 
 
-		public VirtualInput()
+		protected VirtualInput()
 		{
 			Input._virtualInputs.Add( this );
 		}

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Microsoft.Xna.Framework.Input;
 
 
@@ -23,7 +22,7 @@ namespace Nez
 		bool _willRepeat;
 
 
-		public VirtualButton( float bufferTime ) : base()
+		public VirtualButton( float bufferTime )
 		{
 			nodes = new List<Node>();
 			this.bufferTime = bufferTime;
@@ -31,10 +30,10 @@ namespace Nez
 
 
 		public VirtualButton() : this( 0 )
-		{}
+		{ }
 
 
-		public VirtualButton( float bufferTime, params Node[] nodes ) : base()
+		public VirtualButton( float bufferTime, params Node[] nodes )
 		{
 			this.nodes = new List<Node>( nodes );
 			this.bufferTime = bufferTime;
@@ -42,7 +41,7 @@ namespace Nez
 
 
 		public VirtualButton( params Node[] nodes ) : this( 0, nodes )
-		{}
+		{ }
 
 
 		public void setRepeat( float repeatTime )
@@ -150,6 +149,124 @@ namespace Nez
 		}
 
 
+		#region Node management
+
+		/// <summary>
+		/// adds a keyboard key to this VirtualButton
+		/// </summary>
+		/// <returns>The keyboard key.</returns>
+		/// <param name="key">Key.</param>
+		public VirtualButton addKeyboardKey( Keys key )
+		{
+			nodes.Add( new KeyboardKey( key ) );
+			return this;
+		}
+
+
+		/// <summary>
+		/// adds a keyboard key with modifier to this VirtualButton. modifier must be in the down state for isPressed/isDown to be true.
+		/// </summary>
+		/// <returns>The keyboard key.</returns>
+		/// <param name="key">Key.</param>
+		/// <param name="modifier">Modifier.</param>
+		public VirtualButton addKeyboardKey( Keys key, Keys modifier )
+		{
+			nodes.Add( new KeyboardModifiedKey( key, modifier ) );
+			return this;
+		}
+
+
+		/// <summary>
+		/// adds a GamePad buttons press to this VirtualButton
+		/// </summary>
+		/// <returns>The game pad button.</returns>
+		/// <param name="gamepadIndex">Gamepad index.</param>
+		/// <param name="button">Button.</param>
+		public VirtualButton addGamePadButton( int gamepadIndex, Buttons button )
+		{
+			nodes.Add( new GamePadButton( gamepadIndex, button ) );
+			return this;
+		}
+
+
+		/// <summary>
+		/// adds a GamePad left trigger press to this VirtualButton
+		/// </summary>
+		/// <returns>The game pad left trigger.</returns>
+		/// <param name="gamepadIndex">Gamepad index.</param>
+		/// <param name="threshold">Threshold.</param>
+		public VirtualButton addGamePadLeftTrigger( int gamepadIndex, float threshold )
+		{
+			nodes.Add( new GamePadLeftTrigger( gamepadIndex, threshold ) );
+			return this;
+		}
+
+
+		/// <summary>
+		/// adds a GamePad right trigger press to this VirtualButton
+		/// </summary>
+		/// <returns>The game pad right trigger.</returns>
+		/// <param name="gamepadIndex">Gamepad index.</param>
+		/// <param name="threshold">Threshold.</param>
+		public VirtualButton addGamePadRightTrigger( int gamepadIndex, float threshold )
+		{
+			nodes.Add( new GamePadRightTrigger( gamepadIndex, threshold ) );
+			return this;
+		}
+
+
+		/// <summary>
+		/// adds a GamePad DPad press to this VirtualButton
+		/// </summary>
+		/// <returns>The game pad DP ad.</returns>
+		/// <param name="gamepadIndex">Gamepad index.</param>
+		/// <param name="direction">Direction.</param>
+		public VirtualButton addGamePadDPad( int gamepadIndex, Direction direction )
+		{
+			switch( direction )
+			{
+				case Direction.Up:
+					nodes.Add( new GamePadDPadUp( gamepadIndex ) );
+					break;
+				case Direction.Down:
+					nodes.Add( new GamePadDPadDown( gamepadIndex ) );
+					break;
+				case Direction.Left:
+					nodes.Add( new GamePadDPadLeft( gamepadIndex ) );
+					break;
+				case Direction.Right:
+					nodes.Add( new GamePadDPadRight( gamepadIndex ) );
+					break;
+			}
+
+			return this;
+		}
+
+
+		/// <summary>
+		/// adds a left mouse click to this VirtualButton
+		/// </summary>
+		/// <returns>The mouse left button.</returns>
+		public VirtualButton addMouseLeftButton()
+		{
+			nodes.Add( new MouseLeftButton() );
+			return this;
+		}
+
+
+		/// <summary>
+		/// adds a right mouse click to this VirtualButton
+		/// </summary>
+		/// <returns>The mouse right button.</returns>
+		public VirtualButton addMouseRightButton()
+		{
+			nodes.Add( new MouseRightButton() );
+			return this;
+		}
+
+		#endregion
+
+
 		static public implicit operator bool( VirtualButton button )
 		{
 			return button.isDown;
@@ -165,6 +282,8 @@ namespace Nez
 			public abstract bool isReleased { get; }
 		}
 
+
+		#region Keyboard
 
 		public class KeyboardKey : Node
 		{
@@ -194,6 +313,43 @@ namespace Nez
 				get { return Input.isKeyReleased( key ); }
 			}
 		}
+
+
+		/// <summary>
+		/// works like KeyboardKey except the modifier key must also be down for isDown/isPressed to be true. isReleased checks only key.
+		/// </summary>
+		public class KeyboardModifiedKey : Node
+		{
+			public Keys key;
+			public Keys modifier;
+
+
+			public KeyboardModifiedKey( Keys key, Keys modifier )
+			{
+				this.key = key;
+				this.modifier = modifier;
+			}
+
+
+			public override bool isDown
+			{
+				get { return Input.isKeyDown( modifier ) && Input.isKeyDown( key ); }
+			}
+
+
+			public override bool isPressed
+			{
+				get { return Input.isKeyDown( modifier ) && Input.isKeyPressed( key ); }
+			}
+
+
+			public override bool isReleased
+			{
+				get { return Input.isKeyReleased( key ); }
+			}
+		}
+
+		#endregion
 
 
 		#region GamePad Buttons and Triggers
