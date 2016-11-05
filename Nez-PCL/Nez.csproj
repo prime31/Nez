@@ -556,6 +556,8 @@
     <Compile Include="Graphics\SVG\Transforms\SvgTransform.cs" />
     <Compile Include="Graphics\SVG\Transforms\SvgTransformConverter.cs" />
     <Compile Include="Graphics\SVG\Transforms\SvgTranslate.cs" />
+    <Compile Include="Graphics\PostProcessing\PostProcessors\GaussianBlurPostProcessor.cs" />
+    <Compile Include="Graphics\Effects\GaussianBlurEffect.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="MonoGame.Framework">

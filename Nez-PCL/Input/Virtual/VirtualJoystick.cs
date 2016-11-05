@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 
@@ -20,12 +19,12 @@ namespace Nez
 			{
 				for( int i = 0; i < nodes.Count; i++ )
 				{
-					var value = nodes[i].value;
-					if( value != Vector2.Zero )
+					var val = nodes[i].value;
+					if( val != Vector2.Zero )
 					{
 						if( normalized )
-							value.Normalize();
-						return value;
+							val.Normalize();
+						return val;
 					}
 				}
 
@@ -54,6 +53,65 @@ namespace Nez
 		}
 
 
+		#region Node management
+
+		/// <summary>
+		/// adds GamePad left stick input to this VirtualJoystick
+		/// </summary>
+		/// <returns>The game pad left stick.</returns>
+		/// <param name="gamepadIndex">Gamepad index.</param>
+		/// <param name="deadzone">Deadzone.</param>
+		public VirtualJoystick addGamePadLeftStick( int gamepadIndex = 0, float deadzone = Input.DEFAULT_DEADZONE )
+		{
+			nodes.Add( new GamePadLeftStick( gamepadIndex, deadzone ) );
+			return this;
+		}
+
+
+		/// <summary>
+		/// adds GamePad right stick input to this VirtualJoystick
+		/// </summary>
+		/// <returns>The game pad right stick.</returns>
+		/// <param name="gamepadIndex">Gamepad index.</param>
+		/// <param name="deadzone">Deadzone.</param>
+		public VirtualJoystick addGamePadRightStick( int gamepadIndex = 0, float deadzone = Input.DEFAULT_DEADZONE )
+		{
+			nodes.Add( new GamePadRightStick( gamepadIndex, deadzone ) );
+			return this;
+		}
+
+
+		/// <summary>
+		/// adds GamePad DPad input to this VirtualJoystick
+		/// </summary>
+		/// <returns>The game pad DP ad.</returns>
+		/// <param name="gamepadIndex">Gamepad index.</param>
+		public VirtualJoystick addGamePadDPad( int gamepadIndex = 0 )
+		{
+			nodes.Add( new GamePadDpad( gamepadIndex ) );
+			return this;
+		}
+
+
+		/// <summary>
+		/// adds keyboard keys input to this VirtualJoystick. Four keyboard keys will emulate left/right/up/down. For example WASD or the arrow
+		/// keys.
+		/// </summary>
+		/// <returns>The keyboard keys.</returns>
+		/// <param name="overlapBehavior">Overlap behavior.</param>
+		/// <param name="left">Left.</param>
+		/// <param name="right">Right.</param>
+		/// <param name="up">Up.</param>
+		/// <param name="down">Down.</param>
+		public VirtualJoystick addKeyboardKeys( OverlapBehavior overlapBehavior, Keys left, Keys right, Keys up, Keys down )
+		{
+			nodes.Add( new KeyboardKeys( overlapBehavior, left, right, up, down ) );
+			return this;
+		}
+
+		#endregion
+
+
 		static public implicit operator Vector2( VirtualJoystick joystick )
 		{
 			return joystick.value;
@@ -68,13 +126,13 @@ namespace Nez
 		}
 
 
-		public class PadLeftStick : Node
+		public class GamePadLeftStick : Node
 		{
 			public int gamepadIndex;
 			public float deadzone;
 
 
-			public PadLeftStick( int gamepadIndex = 0, float deadzone = Input.DEFAULT_DEADZONE )
+			public GamePadLeftStick( int gamepadIndex = 0, float deadzone = Input.DEFAULT_DEADZONE )
 			{
 				this.gamepadIndex = gamepadIndex;
 				this.deadzone = deadzone;
@@ -91,13 +149,13 @@ namespace Nez
 		}
 
 
-		public class PadRightStick : Node
+		public class GamePadRightStick : Node
 		{
 			public int gamepadIndex;
 			public float deadzone;
 
 
-			public PadRightStick( int gamepadIndex = 0, float deadzone = Input.DEFAULT_DEADZONE )
+			public GamePadRightStick( int gamepadIndex = 0, float deadzone = Input.DEFAULT_DEADZONE )
 			{
 				this.gamepadIndex = gamepadIndex;
 				this.deadzone = deadzone;
