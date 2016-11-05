@@ -444,6 +444,19 @@ namespace Nez
 
 
 		/// <summary>
+		/// checks to see if value is between min/max inclusive of min/max
+		/// </summary>
+		/// <param name="value">Value.</param>
+		/// <param name="min">Minimum.</param>
+		/// <param name="max">Max.</param>
+		[MethodImpl( MethodImplOptions.AggressiveInlining )]
+		public static bool between( int value, int min, int max )
+		{
+			return value >= min && value <= max;
+		}
+
+
+		/// <summary>
 		/// returns true if value is even
 		/// </summary>
 		/// <returns><c>true</c>, if even was ised, <c>false</c> otherwise.</returns>

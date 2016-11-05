@@ -85,7 +85,7 @@ namespace Nez.Tiled
 			if( self.flippedVertically )
 				tileSize *= -1;
 
-			// rise of run
+			// rise over run
 			return ( (float)self.tilesetTile.slopeTopRight - (float)self.tilesetTile.slopeTopLeft ) / (float)tileSize;
 		}
 
