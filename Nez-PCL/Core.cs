@@ -46,9 +46,6 @@ namespace Nez
 		/// </summary>
 		public static NezContentManager content;
 
-		[Obsolete( "use Core.content instead of Core.contentManager" )]
-		public static NezContentManager contentManager { get { return content; } }
-
 		/// <summary>
 		/// default SamplerState used by Materials. Note that this must be set at launch! Changing it after that time will result in only
 		/// Materials created after it was set having the new SamplerState

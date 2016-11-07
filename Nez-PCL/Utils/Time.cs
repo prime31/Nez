@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System.Runtime.CompilerServices;
 
 
 namespace Nez
@@ -39,6 +39,7 @@ namespace Nez
 		/// Allows to check in intervals. Should only be used with interval values above deltaTime,
 		/// otherwise it will always return true.
 		/// </summary>
+		[MethodImpl( MethodImplOptions.AggressiveInlining )]
 		public static bool checkEvery( float interval )
 		{
 			// we subtract deltaTime since timeSinceSceneLoad already includes this update ticks deltaTime

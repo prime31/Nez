@@ -233,10 +233,10 @@ namespace Nez
 		
 		#endregion
 
-		internal Vector2 origin
+		public Vector2 origin
 		{
 			get { return _origin; }
-			set
+			internal set
 			{
 				if( _origin != value )
 				{

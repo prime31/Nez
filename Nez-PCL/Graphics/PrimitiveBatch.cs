@@ -1,7 +1,6 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System.IO;
 
 
 namespace Nez
@@ -18,6 +17,8 @@ namespace Nez
 		bool _hasBegun;
 
 		bool _isDisposed;
+		VertexPositionColor[] _lineVertices;
+		int _lineVertsCount;
 		VertexPositionColor[] _triangleVertices;
 		int _triangleVertsCount;
 
@@ -25,6 +26,7 @@ namespace Nez
 		public PrimitiveBatch( int bufferSize = 500 )
 		{
 			_triangleVertices = new VertexPositionColor[bufferSize - bufferSize % 3];
+			_lineVertices = new VertexPositionColor[bufferSize - bufferSize % 2];
 
 			// set up a new basic effect, and enable vertex colors.
 			_basicEffect = new BasicEffect( Core.graphicsDevice );
@@ -56,7 +58,7 @@ namespace Nez
 		/// </summary>
 		public void begin()
 		{
-			var projection = Matrix.CreateOrthographicOffCenter( 0, Core.graphicsDevice.Viewport.Width, Core.graphicsDevice.Viewport.Height, 0, 0, 1 );
+			var projection = Matrix.CreateOrthographicOffCenter( 0, Core.graphicsDevice.Viewport.Width, Core.graphicsDevice.Viewport.Height, 0, 0, -1 );
 			var view = Matrix.CreateLookAt( Vector3.Zero, Vector3.Forward, Vector3.Up );
 
 			begin( ref projection, ref view );
@@ -107,6 +109,7 @@ namespace Nez
 
 			// Draw whatever the user wanted us to draw
 			flushTriangles();
+			flushLines();
 			_hasBegun = false;
 		}
 
@@ -114,14 +117,27 @@ namespace Nez
 		public void addVertex( Vector2 vertex, Color color, PrimitiveType primitiveType )
 		{
 			Assert.isTrue( _hasBegun, "Invalid state. Begin must be called before AddVertex can be called." );
-			Assert.isFalse( primitiveType == PrimitiveType.LineStrip || primitiveType == PrimitiveType.TriangleStrip || primitiveType == PrimitiveType.LineList, "The specified primitiveType is not supported by PrimitiveBatch" );
+			Assert.isFalse( primitiveType == PrimitiveType.LineStrip || primitiveType == PrimitiveType.TriangleStrip, "The specified primitiveType is not supported by PrimitiveBatch" );
 
-			if( _triangleVertsCount >= _triangleVertices.Length )
-				flushTriangles();
+			if( primitiveType == PrimitiveType.TriangleList )
+			{
+				if( _triangleVertsCount >= _triangleVertices.Length )
+					flushTriangles();
 
-			_triangleVertices[_triangleVertsCount].Position = new Vector3( vertex, -0.1f );
-			_triangleVertices[_triangleVertsCount].Color = color;
-			_triangleVertsCount++;
+				_triangleVertices[_triangleVertsCount].Position = new Vector3( vertex, 0 );
+				_triangleVertices[_triangleVertsCount].Color = color;
+				_triangleVertsCount++;
+			}
+
+			if( primitiveType == PrimitiveType.LineList )
+			{
+				if( _lineVertsCount >= _lineVertices.Length )
+					flushLines();
+
+				_lineVertices[_lineVertsCount].Position = new Vector3( vertex, 0 );
+				_lineVertices[_lineVertsCount].Color = color;
+				_lineVertsCount++;
+			}
 		}
 
 
@@ -137,6 +153,22 @@ namespace Nez
 				Core.graphicsDevice.SamplerStates[0] = SamplerState.AnisotropicClamp;
 				Core.graphicsDevice.DrawUserPrimitives( PrimitiveType.TriangleList, _triangleVertices, 0, primitiveCount );
 				_triangleVertsCount -= primitiveCount * 3;
+			}
+		}
+
+
+		void flushLines()
+		{
+			if( !_hasBegun )
+				throw new InvalidOperationException( "Begin must be called before Flush can be called." );
+			
+			if( _lineVertsCount >= 2 )
+			{
+				int primitiveCount = _lineVertsCount / 2;
+				// submit the draw call to the graphics card
+				Core.graphicsDevice.SamplerStates[0] = SamplerState.AnisotropicClamp;
+				Core.graphicsDevice.DrawUserPrimitives( PrimitiveType.LineList, _lineVertices, 0, primitiveCount );
+				_lineVertsCount -= primitiveCount * 2;
 			}
 		}
 
