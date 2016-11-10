@@ -59,6 +59,12 @@ namespace Nez
 		public static SamplerState defaultWrappedSamplerState { get { return defaultSamplerState.Filter == TextureFilter.Point ? SamplerState.PointWrap : SamplerState.LinearWrap; } }
 
 		/// <summary>
+		/// default GameServiceContainer access
+		/// </summary>
+		/// <value>The services.</value>
+		public static GameServiceContainer services { get { return _instance.Services; } }
+
+		/// <summary>
 		/// internal flag used to determine if EntitySystems should be used or not
 		/// </summary>
 		internal static bool entitySystemsEnabled;
@@ -134,11 +140,6 @@ namespace Nez
 			_globalManagers.add( _timerManager );
 			_globalManagers.add( new RenderTarget() );
 		}
-
-
-		[System.Obsolete( "It is no longer necessary to wire up the ClientSizeChanged event" )]
-		protected static void onClientSizeChanged( object sender, EventArgs e )
-		{}
 
 
 		void onOrientationChanged( object sender, EventArgs e )
@@ -365,6 +366,22 @@ namespace Nez
 		public static void unregisterGlobalManager( IUpdatableManager manager )
 		{
 			_instance._globalManagers.remove( manager );
+		}
+
+
+		/// <summary>
+		/// gets the global manager of type T
+		/// </summary>
+		/// <returns>The global manager.</returns>
+		/// <typeparam name="T">The 1st type parameter.</typeparam>
+		public static T getGlobalManager<T>() where T : class, IUpdatableManager
+		{
+			for( var i = 0; i < _instance._globalManagers.length; i++ )
+			{
+				if( _instance._globalManagers.buffer[i] is T )
+					return _instance._globalManagers.buffer[i] as T;
+			}
+			return null;
 		}
 
 		#endregion

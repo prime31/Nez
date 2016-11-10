@@ -1,10 +1,12 @@
-﻿using System;
-using Microsoft.Xna.Framework.Graphics;
+﻿using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
 
 
 namespace Nez.Textures
 {
+	/// <summary>
+	/// various utilties for creating textures on the fly. These can be pretty heavy on the CPU so it's best to not try to use them every frame.
+	/// </summary>
 	public static class TextureUtils
 	{
 		public enum EdgeDetectionFilter
