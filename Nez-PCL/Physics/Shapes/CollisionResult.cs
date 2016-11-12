@@ -67,7 +67,7 @@ namespace Nez
 
 		public override string ToString()
 		{
-			return string.Format( "[ShapeCollisionResult] normal: {0}, minimumTranslationVector: {1}", normal, minimumTranslationVector );
+			return string.Format( "[CollisionResult] normal: {0}, minimumTranslationVector: {1}", normal, minimumTranslationVector );
 		}
 
 	}

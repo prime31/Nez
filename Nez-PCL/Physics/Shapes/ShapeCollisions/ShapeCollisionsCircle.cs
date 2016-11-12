@@ -151,7 +151,9 @@ namespace Nez.PhysicsShapes
 			{
 				// if we have no distance that means the circle center is on the polygon edge. Move it only by its radius
 				if( distanceSquared == 0 )
+				{
 					mtv = result.normal * circle.radius;
+				}
 				else
 				{
 					var distance = Mathf.sqrt( distanceSquared );

@@ -274,7 +274,6 @@ namespace Nez
 
 			if( _scene != null )
 			{
-				_scene.preRender();
 				_scene.render();
 
 				#if DEBUG
