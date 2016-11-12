@@ -382,7 +382,7 @@ namespace Nez
 		}
 
 
-		internal void preRender()
+		internal void render()
 		{
 			// Renderers should always have those that require a RenderTarget first. They clear themselves and set themselves as
 			// the current RenderTarget when they render. If the first Renderer wants the sceneRenderTarget we set and clear it now.
@@ -391,11 +391,8 @@ namespace Nez
 				Core.graphicsDevice.setRenderTarget( _sceneRenderTarget );
 				Core.graphicsDevice.Clear( clearColor );
 			}
-		}
 
 
-		internal void render()
-		{
 			var lastRendererHadRenderTarget = false;
 			for( var i = 0; i < _renderers.length; i++ )
 			{
@@ -700,17 +697,6 @@ namespace Nez
 		public void requestScreenshot( Action<Texture2D> callback )
 		{
 			_screenshotRequestCallback = callback;
-		}
-
-
-		/// <summary>
-		/// Returns whether the timeSinceSceneLoad has passed the given time interval since the last frame. Ex: given 2.0f, this will return true once every 2 seconds
-		/// </summary>
-		/// <param name="interval">The time interval to check for</param>
-		/// <returns></returns>
-		public bool onInterval( float interval )
-		{
-			return (int)( ( Time.timeSinceSceneLoad - Time.deltaTime ) / interval ) < (int)( Time.timeSinceSceneLoad / interval );
 		}
 
 		#endregion
