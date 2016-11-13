@@ -203,10 +203,10 @@ namespace Nez.Verlet
 			for( var j = 0; j < totalPointsToApproximateCollisionsWith - 1; j++ )
 			{
 				pt = Vector2.Lerp( _particleOne.position, _particleTwo.position, ( j + 1 ) / (float)totalPointsToApproximateCollisionsWith );
-				var collidedCount = Physics.overlapCircleAll( pt, 3, World._colliders, collidesWithLayers );
+				var collidedCount = Physics.overlapCircleAll( pt, 3, VerletWorld._colliders, collidesWithLayers );
 				for( var i = 0; i < collidedCount; i++ )
 				{
-					var collider = World._colliders[i];
+					var collider = VerletWorld._colliders[i];
 					CollisionResult collisionResult;
 					if( collider.shape.pointCollidesWithShape( pt, out collisionResult ) )
 					{

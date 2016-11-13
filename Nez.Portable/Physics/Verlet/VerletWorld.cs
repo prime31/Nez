@@ -8,7 +8,7 @@ namespace Nez.Verlet
 	/// <summary>
 	/// the root of the Verlet simulation. Create a World and call its update method each frame.
 	/// </summary>
-	public class World
+	public class VerletWorld
 	{
 		/// <summary>
 		/// gravity for the simulation
@@ -55,7 +55,7 @@ namespace Nez.Verlet
 		float _fixedDeltaTimeSq;
 
 
-		public World( Rectangle? simulationBounds = null )
+		public VerletWorld( Rectangle? simulationBounds = null )
 		{
 			this.simulationBounds = simulationBounds;
 			_fixedDeltaTimeSq = Mathf.pow( _fixedDeltaTime, 2 );

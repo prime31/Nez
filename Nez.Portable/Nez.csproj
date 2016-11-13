@@ -518,7 +518,7 @@
     <Compile Include="Physics\Verlet\Constraints\Constraint.cs" />
     <Compile Include="Physics\Verlet\Constraints\DistanceConstraint.cs" />
     <Compile Include="Physics\Verlet\Particle.cs" />
-    <Compile Include="Physics\Verlet\World.cs" />
+    <Compile Include="Physics\Verlet\VerletWorld.cs" />
     <Compile Include="Physics\Shapes\ShapeCollisions\ShapeCollisionsPolygon.cs" />
     <Compile Include="Physics\Shapes\ShapeCollisions\ShapeCollisionsBox.cs" />
     <Compile Include="Physics\Shapes\ShapeCollisions\ShapeCollisionsCircle.cs" />
