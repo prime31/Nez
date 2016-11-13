@@ -1,7 +1,7 @@
-Physics/Collisions
+Nez Physics/Collisions
 ==========
 
-It serves to reiterate what has been stated before: Nez physics is *not* a realistic physics simulation. It provides what I call *game* physics. You can do things like linecasts to detect colliders, overlap checks, collision checks, sweep tests and more. What you don't get is a full rigid body simulation. *You* get to control your games feel from top to bottom.
+It serves to reiterate what has been stated before: Nez physics is *not* a realistic physics simulation. It provides what I call *game* physics. You can do things like linecasts to detect colliders, overlap checks, collision checks, sweep tests and more. What you don't get is a full rigid body simulation. *You* get to control your games feel from top to bottom. If you are looking for a full phsics simulation see the optional [Farseer Physics implementation](FarseerPhysics.md).
 
 
 
