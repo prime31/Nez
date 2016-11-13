@@ -5,7 +5,7 @@ For situations where you need a full-fledged physics simulation Nez provides the
 
 
 ## Background and Goals
-[Farseer Physics Engine]() is a C# port of the superb Box2D physics engine. The Farseer project was abandoned way back in 2013 but it still remains one of the most popular choices for MonoGame/FNA. Farseer covered almost all of the Box2D API and extended it providing a bunch of super useful tools, many not even physics specific (texture and polygon tools, for example).
+[Farseer Physics Engine](https://farseerphysics.codeplex.com/) is a C# port of the superb Box2D physics engine. The Farseer project was abandoned way back in 2013 but it still remains one of the most popular choices for MonoGame/FNA. Farseer covered almost all of the Box2D API and extended it providing a bunch of super useful tools, many not even physics specific (texture and polygon tools, for example).
 
 Farseer (like most physics engines) operates in metric (kilo/meter/second) as opposed to pixel coordinates. This makes working directly with Farseer error prone. Every time you get or set data you have to convert to/from display/simulation units. The Nez high level API will hide all of this and handle converting between display and simulation for you. When accessing the Farseer API directly it will not be converted for you.
 
