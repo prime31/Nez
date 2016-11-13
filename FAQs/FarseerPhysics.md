@@ -1,6 +1,6 @@
 Farseer Physics/Collisions
 ==========
-For situations where you need a full-fledged physics simulation Nez provides the Farseer Physics Engine. Farseer physics is entirely optional and currently experimental/in development. The public API will change so beware. If you want to use Farseer you will need to add the Nez.Farseer project to your main solution and add a reference to it from your game project.
+For situations where you need a full-fledged physics simulation Nez provides the Farseer Physics Engine. Farseer physics is entirely optional and currently experimental/in development. The public API will change so beware. If you want to use Farseer you will need to add the Nez.FarseerPhysics project to your main solution and add a reference to it from your game project.
 
 
 
