@@ -29,13 +29,6 @@ namespace Nez.Analysis
 
 
 		/// <summary>
-		/// Creates an instance of the Stopwatch class.
-		/// </summary>
-		public Stopwatch()
-		{}
-
-
-		/// <summary>
 		/// Completely resets and deactivates the timer.
 		/// </summary>
 		public void reset()
