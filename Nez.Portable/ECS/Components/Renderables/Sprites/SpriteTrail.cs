@@ -179,9 +179,10 @@ namespace Nez.Sprites
 				}
 			}
 
-			_bounds.location = min + entity.transform.position;
+			_bounds.location = min;
 			_bounds.width = max.X - min.X;
 			_bounds.height = max.Y - min.Y;
+			_bounds.inflate( _sprite.width, _sprite.height );
 
 			// nothing left to render. disable ourself
 			if( _awaitingDisable && _liveSpriteTrailInstances.Count == 0 )
