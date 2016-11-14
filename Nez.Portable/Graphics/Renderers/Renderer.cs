@@ -109,7 +109,8 @@ namespace Nez
 		/// </summary>
 		/// <param name="renderable">Renderable.</param>
 		/// <param name="cam">Cam.</param>
-		protected void renderAfterStateCheck( RenderableComponent renderable, Camera cam )
+		[MethodImpl( MethodImplOptions.AggressiveInlining )]
+		protected void renderAfterStateCheck( IRenderable renderable, Camera cam )
 		{
 			// check for Material changes
 			if( renderable.material != null && renderable.material != _currentMaterial )

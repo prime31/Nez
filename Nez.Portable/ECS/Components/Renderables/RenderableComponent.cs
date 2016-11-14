@@ -5,10 +5,11 @@ using Microsoft.Xna.Framework;
 namespace Nez
 {
 	/// <summary>
-	/// by default, a RenderableComponent faces up/right. You can use the flipX/Y or face* method to adjust that to suit your needs.
+	/// concrete implementation of IRenderable. Contains convenience 
+	/// 
 	/// Subclasses MUST either override width/height or bounds!
 	/// </summary>
-	public abstract class RenderableComponent : Component, IComparable<RenderableComponent>
+	public abstract class RenderableComponent : Component, IRenderable, IComparable<RenderableComponent>
 	{
 		#region properties and fields
 
@@ -115,7 +116,7 @@ namespace Nez
 		#endregion
 
 
-		#region Component overrides and RenderableComponent
+		#region Component overrides and IRenderable
 
 		public override void onEntityTransformChanged( Transform.Component comp )
 		{
@@ -186,6 +187,8 @@ namespace Nez
 		public RenderableComponent setMaterial( Material material )
 		{
 			this.material = material;
+			if( entity != null && entity.scene != null )
+				entity.scene.renderableComponents.setRenderLayerNeedsComponentSort( renderLayer );
 			return this;
 		}
 
@@ -194,7 +197,7 @@ namespace Nez
 		/// standard Batcher layerdepth. 0 is in front and 1 is in back. Changing this value will trigger a sort of the renderableComponents
 		/// </summary>
 		/// <returns>The layer depth.</returns>
-		/// <param name="value">Value.</param>
+		/// <param name="layerDepth">Value.</param>
 		public RenderableComponent setLayerDepth( float layerDepth )
 		{
 			_layerDepth = Mathf.clamp01( layerDepth );
