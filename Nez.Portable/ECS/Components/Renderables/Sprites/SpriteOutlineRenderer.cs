@@ -13,6 +13,8 @@ namespace Nez
 		public override float width { get { return _sprite.width + outlineWidth * 2; } }
 		public override float height { get { return _sprite.height + outlineWidth * 2; } }
 
+		public override RectangleF bounds { get { return _sprite.bounds; } }
+
 		/// <summary>
 		/// the width of the outline
 		/// </summary>
@@ -33,6 +35,8 @@ namespace Nez
 		public SpriteOutlineRenderer( Sprite sprite )
 		{
 			_sprite = sprite;
+			// RenderableComponent doesnt have an origin so we copy over the Sprite.origin to our localOffset
+			_localOffset = sprite.origin;
 			_sprite.enabled = false;
 		}
 
