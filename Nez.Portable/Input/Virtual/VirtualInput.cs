@@ -28,7 +28,7 @@ namespace Nez
 
 		protected VirtualInput()
 		{
-			Input._virtualInputs.Add( this );
+			Input._virtualInputs.add( this );
 		}
 
 
@@ -37,7 +37,7 @@ namespace Nez
 		/// </summary>
 		public void deregister()
 		{
-			Input._virtualInputs.Remove( this );
+			Input._virtualInputs.remove( this );
 		}
 
 		public abstract void update();

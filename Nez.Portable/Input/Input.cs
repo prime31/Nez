@@ -29,7 +29,7 @@ namespace Nez
 		static KeyboardState _currentKbState;
 		static MouseState _previousMouseState;
 		static MouseState _currentMouseState;
-		static internal List<VirtualInput> _virtualInputs = new List<VirtualInput>();
+		static internal FastList<VirtualInput> _virtualInputs = new FastList<VirtualInput>();
 		static int _maxSupportedGamePads;
 
 		public static TouchInput touch;
@@ -76,8 +76,8 @@ namespace Nez
 			for( var i = 0; i < _maxSupportedGamePads; i++ )
 				gamePads[i].update();
 
-			for( var i = 0; i < _virtualInputs.Count; i++ )
-				_virtualInputs[i].update();
+			for( var i = 0; i < _virtualInputs.length; i++ )
+				_virtualInputs.buffer[i].update();
 		}
 
 
