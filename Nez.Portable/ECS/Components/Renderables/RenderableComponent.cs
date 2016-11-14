@@ -25,7 +25,7 @@ namespace Nez
 		public virtual float height { get { return bounds.height; } }
 
 		/// <summary>
-		/// the AABB that wraps this object
+		/// the AABB that wraps this object. Used for camera culling.
 		/// </summary>
 		/// <value>The bounds.</value>
 		public virtual RectangleF bounds
@@ -155,8 +155,8 @@ namespace Nez
 
 
 		/// <summary>
-		/// called when the renderable exits the camera frame. Note that these methods will not be called if your render method does not use
-		/// isVisibleFromCamera for its culling check.
+		/// called when the renderable exits the camera frame. Note that these methods will not be called if your Renderer does not use
+		/// isVisibleFromCamera for its culling check. All default Renderers do.
 		/// </summary>
 		protected virtual void onBecameInvisible()
 		{ }

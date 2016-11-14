@@ -2,7 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 using Nez.Textures;
 using Microsoft.Xna.Framework;
-
+using System.Runtime.CompilerServices;
 
 namespace Nez
 {
@@ -71,11 +71,11 @@ namespace Nez
 		protected Material _currentMaterial;
 
 
-		public Renderer( int renderOrder ) : this( renderOrder, null )
+		protected Renderer( int renderOrder ) : this( renderOrder, null )
 		{}
 
 
-		public Renderer( int renderOrder, Camera camera )
+		protected Renderer( int renderOrder, Camera camera )
 		{
 			this.camera = camera;
 			this.renderOrder = renderOrder;

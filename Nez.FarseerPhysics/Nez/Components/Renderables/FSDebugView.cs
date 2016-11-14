@@ -22,8 +22,7 @@ namespace Nez.Farseer
 	/// </summary>
 	public class FSDebugView : RenderableComponent, IDisposable
 	{
-		public override float width { get { return float.MaxValue; } }
-		public override float height { get { return float.MaxValue; } }
+		public override RectangleF bounds { get { return _bounds; } }
 
 		/// <summary>
 		/// Gets or sets the debug view flags
@@ -78,6 +77,7 @@ namespace Nez.Farseer
 
 		public FSDebugView( World world )
 		{
+			_bounds = RectangleF.maxRect;
 			this.world = world;
 			world.ContactManager.PreSolve += preSolve;
 

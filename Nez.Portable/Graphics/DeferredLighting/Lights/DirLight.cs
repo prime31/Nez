@@ -1,5 +1,4 @@
-﻿using System;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 
 
 namespace Nez.DeferredLighting
@@ -10,10 +9,8 @@ namespace Nez.DeferredLighting
 	/// </summary>
 	public class DirLight : DeferredLight
 	{
-		// dir lights are infinite
-		public override float width { get { return float.MaxValue; } }
-
-		public override float height { get { return float.MinValue; } }
+		// dir lights are infinite so bounds should be as well
+		public override RectangleF bounds { get { return _bounds; } }
 
 		/// <summary>
 		/// direction of the light
@@ -32,10 +29,12 @@ namespace Nez.DeferredLighting
 
 
 		public DirLight()
-		{}
+		{
+			_bounds = RectangleF.maxRect;
+		}
 
 
-		public DirLight( Color color )
+		public DirLight( Color color ) : this()
 		{
 			this.color = color;
 		}

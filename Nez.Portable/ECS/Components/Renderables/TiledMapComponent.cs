@@ -17,15 +17,8 @@ namespace Nez
 		/// </summary>
 		public int[] layerIndicesToRender;
 
-		public override float width
-		{
-			get { return tiledMap.width * tiledMap.tileWidth; }
-		}
-
-		public override float height
-		{
-			get { return tiledMap.height * tiledMap.tileHeight; }
-		}
+		public override float width { get { return tiledMap.width * tiledMap.tileWidth; } }
+		public override float height { get { return tiledMap.height * tiledMap.tileHeight; } }
 
 		public TiledTileLayer collisionLayer;
 

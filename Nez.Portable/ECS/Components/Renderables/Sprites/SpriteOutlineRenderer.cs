@@ -10,6 +10,9 @@ namespace Nez
 	/// </summary>
 	public class SpriteOutlineRenderer : RenderableComponent
 	{
+		public override float width { get { return _sprite.width + outlineWidth * 2; } }
+		public override float height { get { return _sprite.height + outlineWidth * 2; } }
+
 		/// <summary>
 		/// the width of the outline
 		/// </summary>
@@ -19,18 +22,6 @@ namespace Nez
 		/// the color the sprite will be tinted when it is rendered
 		/// </summary>
 		public Color outlineColor = Color.Black;
-
-		public override RectangleF bounds { get { return _sprite.bounds; } }
-
-		public override float width
-		{
-			get { return _sprite.width + outlineWidth * 2; }
-		}
-
-		public override float height
-		{
-			get { return _sprite.height + outlineWidth * 2; }
-		}
 
 		Sprite _sprite;
 

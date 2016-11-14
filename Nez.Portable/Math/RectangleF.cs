@@ -45,6 +45,12 @@ namespace Nez
 		}
 
 		/// <summary>
+		/// returns a RectangleF of float.Min/Max values
+		/// </summary>
+		/// <value>The max rect.</value>
+		public static RectangleF maxRect { get { return new RectangleF( float.MinValue / 2, float.MinValue / 2, float.MaxValue, float.MaxValue ); } }
+
+		/// <summary>
 		/// Returns the x coordinate of the left edge of this <see cref="RectangleF"/>.
 		/// </summary>
 		public float left
@@ -139,6 +145,9 @@ namespace Nez
 		}
 
 		#endregion
+
+		// temp Matrixes used for bounds calculation
+		static Matrix2D _tempMat, _transformMat;
 
 
 		internal string DebugDisplayString
@@ -774,15 +783,14 @@ namespace Nez
 				var worldPosX = parentPosition.X + position.X;
 				var worldPosY = parentPosition.Y + position.Y;
 
-				Matrix2D tempMat;
 				// set the reference point to world reference taking origin into account
-				var transformMatrix = Matrix2D.createTranslation( -worldPosX - origin.X, -worldPosY - origin.Y );
-				Matrix2D.createScale( scale.X, scale.Y, out tempMat ); // scale ->
-				Matrix2D.multiply( ref transformMatrix, ref tempMat, out transformMatrix );
-				Matrix2D.createRotation( rotation, out tempMat ); // rotate ->
-				Matrix2D.multiply( ref transformMatrix, ref tempMat, out transformMatrix );
-				Matrix2D.createTranslation( worldPosX, worldPosY, out tempMat ); // translate back
-				Matrix2D.multiply( ref transformMatrix, ref tempMat, out transformMatrix );
+				Matrix2D.createTranslation( -worldPosX - origin.X, -worldPosY - origin.Y, out _transformMat );
+				Matrix2D.createScale( scale.X, scale.Y, out _tempMat ); // scale ->
+				Matrix2D.multiply( ref _transformMat, ref _tempMat, out _transformMat );
+				Matrix2D.createRotation( rotation, out _tempMat ); // rotate ->
+				Matrix2D.multiply( ref _transformMat, ref _tempMat, out _transformMat );
+				Matrix2D.createTranslation( worldPosX, worldPosY, out _tempMat ); // translate back
+				Matrix2D.multiply( ref _transformMat, ref _tempMat, out _transformMat );
 
 				// TODO: this is a bit silly. we can just leave the worldPos translation in the Matrix and avoid this
 				// get all four corners in world space
@@ -792,10 +800,10 @@ namespace Nez
 				var bottomRight = new Vector2( worldPosX + width, worldPosY + height );
 
 				// transform the corners into our work space
-				Vector2Ext.transform( ref topLeft, ref transformMatrix, out topLeft );
-				Vector2Ext.transform( ref topRight, ref transformMatrix, out topRight );
-				Vector2Ext.transform( ref bottomLeft, ref transformMatrix, out bottomLeft );
-				Vector2Ext.transform( ref bottomRight, ref transformMatrix, out bottomRight );
+				Vector2Ext.transform( ref topLeft, ref _transformMat, out topLeft );
+				Vector2Ext.transform( ref topRight, ref _transformMat, out topRight );
+				Vector2Ext.transform( ref bottomLeft, ref _transformMat, out bottomLeft );
+				Vector2Ext.transform( ref bottomRight, ref _transformMat, out bottomRight );
 
 				// find the min and max values so we can concoct our bounding box
 				var minX = Mathf.minOf( topLeft.X, bottomRight.X, topRight.X, bottomLeft.X );

@@ -19,7 +19,7 @@ namespace Nez.Sprites
 		/// </summary>
 		class SpriteTrailInstance
 		{
-			Vector2 _position;
+			public Vector2 position;
 			Subtexture _subtexture;
 			float _fadeDuration;
 			float _fadeDelay;
@@ -37,8 +37,8 @@ namespace Nez.Sprites
 
 			public void spawn( Vector2 position, Subtexture subtexture, float fadeDuration, float fadeDelay, Color initialColor, Color targetColor )
 			{
-				_position = position;
-				this._subtexture = subtexture;
+				this.position = position;
+				_subtexture = subtexture;
 
 				_initialColor = initialColor;
 				_elapsedTime = 0f;
@@ -85,16 +85,12 @@ namespace Nez.Sprites
 			[MethodImpl( MethodImplOptions.AggressiveInlining )]
 			public void render( Graphics graphics, Camera camera )
 			{
-				graphics.batcher.draw( _subtexture, _position, _subtexture.sourceRect, _renderColor, _rotation, _origin, _scale, _spriteEffects, _layerDepth );
+				graphics.batcher.draw( _subtexture, position, _subtexture.sourceRect, _renderColor, _rotation, _origin, _scale, _spriteEffects, _layerDepth );
 			}
 		}
 
 
-		public override float width { get { return _sprite.width; } }
-
-		public override float height { get { return _sprite.height; } }
-
-		public override RectangleF bounds { get { return _sprite.bounds; } }
+		public override RectangleF bounds { get { return _bounds; } }
 
 		/// <summary>
 		/// how far does the Sprite have to move before a new instance is spawned
@@ -164,6 +160,9 @@ namespace Nez.Sprites
 					spawnInstance();
 			}
 
+			var min = new Vector2( float.MaxValue, float.MaxValue );
+			var max = new Vector2( float.MinValue, float.MinValue );
+
 			// update any live instances
 			for( var i = _liveSpriteTrailInstances.Count - 1; i >= 0; i-- )
 			{
@@ -172,7 +171,17 @@ namespace Nez.Sprites
 					_availableSpriteTrailInstances.Push( _liveSpriteTrailInstances[i] );
 					_liveSpriteTrailInstances.RemoveAt( i );
 				}
+				else
+				{
+					// calculate our min/max for the bounds
+					Vector2.Min( ref min, ref _liveSpriteTrailInstances[i].position, out min );
+					Vector2.Max( ref max, ref _liveSpriteTrailInstances[i].position, out max );
+				}
 			}
+
+			_bounds.location = min + entity.transform.position;
+			_bounds.width = max.X - min.X;
+			_bounds.height = max.Y - min.Y;
 
 			// nothing left to render. disable ourself
 			if( _awaitingDisable && _liveSpriteTrailInstances.Count == 0 )

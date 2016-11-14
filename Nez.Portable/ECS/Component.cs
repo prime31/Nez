@@ -47,10 +47,6 @@ namespace Nez
 		internal int _updateOrder = 0;
 
 
-		public Component()
-		{}
-
-
 		#region Component Lifecycle
 
 		/// <summary>

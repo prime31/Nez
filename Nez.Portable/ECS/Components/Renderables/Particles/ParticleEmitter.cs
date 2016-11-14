@@ -1,17 +1,13 @@
-﻿using System;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework.Graphics;
-using Nez.Textures;
-using System.IO;
 
 
 namespace Nez.Particles
 {
 	public class ParticleEmitter : RenderableComponent, IUpdatable
 	{
-		public override float width { get { return 5f; } }
-		public override float height { get { return 5f; } }
+		public override RectangleF bounds { get { return _bounds; } }
 
 		public bool isPaused { get { return _isPaused; } }
 		public bool isPlaying { get { return _active && !_isPaused; } }
@@ -130,6 +126,9 @@ namespace Nez.Particles
 				}
 			}
 
+			var min = new Vector2( float.MaxValue, float.MaxValue );
+			var max = new Vector2( float.MinValue, float.MinValue );
+
 			// loop through all the particles updating their location and color
 			for( var i = _particles.Count - 1; i >= 0; i-- )
 			{
@@ -142,7 +141,23 @@ namespace Nez.Particles
 					Pool<Particle>.free( currentParticle );
 					_particles.RemoveAt( i );
 				}
+				else
+				{
+					// particle is good. collect min/max positions for the bounds
+					var pos = _emitterConfig.simulateInWorldSpace ? currentParticle.spawnPosition : rootPosition;
+					Vector2.Min( ref min, ref pos, out min );
+					Vector2.Max( ref max, ref pos, out max );
+				}
 			}
+
+			_bounds.location = min + entity.transform.position + _localOffset;
+			_bounds.width = max.X - min.X;
+			_bounds.height = max.Y - min.Y;
+
+			if( _emitterConfig.subtexture == null )
+				_bounds.inflate( 1, 1 );
+			else
+				_bounds.inflate( _emitterConfig.subtexture.sourceRect.Width, _emitterConfig.subtexture.sourceRect.Height );
 		}
 
 

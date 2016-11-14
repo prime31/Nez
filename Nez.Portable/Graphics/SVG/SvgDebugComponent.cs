@@ -9,8 +9,19 @@ namespace Nez.Svg
 	/// </summary>
 	public class SvgDebugComponent : RenderableComponent
 	{
-		public override float width { get { return 1000; } }
-		public override float height { get { return 1000; } }
+		public override RectangleF bounds
+		{
+			get
+			{
+				if( _areBoundsDirty )
+				{
+					_bounds.location = entity.transform.position;
+					_areBoundsDirty = false;
+				}
+				return _bounds;
+			}
+		}
+
 		public SvgDocument svgDoc;
 
 		ISvgPathBuilder _pathBuilder;
@@ -25,6 +36,7 @@ namespace Nez.Svg
 		{
 			svgDoc = SvgDocument.open( TitleContainer.OpenStream( "Content/" + pathToSvgFile ) );
 			_pathBuilder = pathBuilder;
+			_bounds = new RectangleF( 0, 0, svgDoc.width, svgDoc.height );
 
 			if( _pathBuilder == null )
 				_pathBuilder = new SvgReflectionPathBuilder();
