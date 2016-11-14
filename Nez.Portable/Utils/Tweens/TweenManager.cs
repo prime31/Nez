@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using Nez;
 
 
 namespace Nez.Tweens
@@ -36,12 +35,12 @@ namespace Nez.Tweens
 		/// <summary>
 		/// internal list of all the currently active tweens
 		/// </summary>
-		List<ITweenable> _activeTweens = new List<ITweenable>();
+		FastList<ITweenable> _activeTweens = new FastList<ITweenable>();
 		
 		/// <summary>
 		/// stores tweens marked for removal
 		/// </summary>
-		List<ITweenable> _tempTweens = new List<ITweenable>();
+		FastList<ITweenable> _tempTweens = new FastList<ITweenable>();
 
 		/// <summary>
 		/// flag indicating the tween update loop is running
@@ -62,22 +61,22 @@ namespace Nez.Tweens
 			_isUpdating = true;
 
 			// loop backwards so we can remove completed tweens
-			for( var i = _activeTweens.Count - 1; i >= 0; --i )
+			for( var i = _activeTweens.length - 1; i >= 0; --i )
 			{
-				var tween = _activeTweens[i];
+				var tween = _activeTweens.buffer[i];
 				if( tween.tick() )
-					_tempTweens.Add( tween );
+					_tempTweens.add( tween );
 			}
 
 			_isUpdating = false;
 
 			// kill the dead Tweens
-			for( var i = 0; i < _tempTweens.Count; i++ )
+			for( var i = 0; i < _tempTweens.length; i++ )
 			{
-				_tempTweens[i].recycleSelf();
-				_activeTweens.Remove( _tempTweens[i] );
+				_tempTweens.buffer[i].recycleSelf();
+				_activeTweens.remove( _tempTweens[i] );
 			}
-			_tempTweens.Clear();
+			_tempTweens.clear();
 		}
 
 
@@ -89,7 +88,7 @@ namespace Nez.Tweens
 		/// <param name="tween">Tween.</param>
 		public static void addTween( ITweenable tween )
 		{
-			_instance._activeTweens.Add( tween );
+			_instance._activeTweens.add( tween );
 		}
 
 
@@ -101,12 +100,12 @@ namespace Nez.Tweens
 		{
 			if( _instance._isUpdating )
 			{
-				_instance._tempTweens.Add( tween );
+				_instance._tempTweens.add( tween );
 			}
 			else
 			{
 				tween.recycleSelf();
-				_instance._activeTweens.Remove( tween );
+				_instance._activeTweens.remove( tween );
 			}
 		}
 
@@ -117,8 +116,8 @@ namespace Nez.Tweens
 		/// <param name="bringToCompletion">If set to <c>true</c> bring to completion.</param>
 		public static void stopAllTweens( bool bringToCompletion = false )
 		{
-			for( var i = _instance._activeTweens.Count - 1; i >= 0; --i )
-				_instance._activeTweens[i].stop( bringToCompletion );
+			for( var i = _instance._activeTweens.length - 1; i >= 0; --i )
+				_instance._activeTweens.buffer[i].stop( bringToCompletion );
 		}
 
 
@@ -132,10 +131,10 @@ namespace Nez.Tweens
 		{
 			var foundTweens = new List<ITweenable>();
 
-			for( var i = 0; i < _instance._activeTweens.Count; i++ )
+			for( var i = 0; i < _instance._activeTweens.length; i++ )
 			{
-				if( _instance._activeTweens[i] is ITweenable && ( _instance._activeTweens[i] as ITweenControl ).context == context )
-					foundTweens.Add( _instance._activeTweens[i] );
+				if( _instance._activeTweens.buffer[i] is ITweenable && ( _instance._activeTweens.buffer[i] as ITweenControl ).context == context )
+					foundTweens.Add( _instance._activeTweens.buffer[i] );
 			}
 
 			return foundTweens;
@@ -149,10 +148,10 @@ namespace Nez.Tweens
 		/// <param name="context">Context.</param>
 		public static void stopAllTweensWithContext( object context, bool bringToCompletion = false )
 		{
-			for( var i = _instance._activeTweens.Count - 1; i >= 0; --i )
+			for( var i = _instance._activeTweens.length - 1; i >= 0; --i )
 			{
-				if( _instance._activeTweens[i] is ITweenable && ( _instance._activeTweens[i] as ITweenControl ).context == context )
-					_instance._activeTweens[i].stop( bringToCompletion );
+				if( _instance._activeTweens.buffer[i] is ITweenable && ( _instance._activeTweens.buffer[i] as ITweenControl ).context == context )
+					_instance._activeTweens.buffer[i].stop( bringToCompletion );
 			}
 		}
 
@@ -167,11 +166,11 @@ namespace Nez.Tweens
 		{
 			var foundTweens = new List<ITweenable>();
 
-			for( var i = 0; i < _instance._activeTweens.Count; i++ )
+			for( var i = 0; i < _instance._activeTweens.length; i++ )
 			{
 				if( _instance._activeTweens[i] is ITweenControl )
 				{
-					var tweenControl = _instance._activeTweens[i] as ITweenControl;
+					var tweenControl = _instance._activeTweens.buffer[i] as ITweenControl;
 					if( tweenControl.getTargetObject() == target )
 						foundTweens.Add( _instance._activeTweens[i] as ITweenable );
 				}
@@ -188,11 +187,11 @@ namespace Nez.Tweens
 		/// <param name="target">target.</param>
 		public static void stopAllTweensWithTarget( object target, bool bringToCompletion = false )
 		{
-			for( var i = _instance._activeTweens.Count - 1; i >= 0; --i )
+			for( var i = _instance._activeTweens.length - 1; i >= 0; --i )
 			{
 				if( _instance._activeTweens[i] is ITweenControl )
 				{
-					var tweenControl = _instance._activeTweens[i] as ITweenControl;
+					var tweenControl = _instance._activeTweens.buffer[i] as ITweenControl;
 					if( tweenControl.getTargetObject() == target )
 						tweenControl.stop( bringToCompletion );
 				}

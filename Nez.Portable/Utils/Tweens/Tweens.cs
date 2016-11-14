@@ -1,11 +1,7 @@
-using System.Collections;
-using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 
 
-/// <summary>
-/// concrete implementations of all tweenable types
-/// </summary>
+// concrete implementations of all tweenable types
 namespace Nez.Tweens
 {
 	public class IntTween : Tween<int>
@@ -17,7 +13,7 @@ namespace Nez.Tweens
 
 
 		public IntTween()
-		{}
+		{ }
 
 
 		public IntTween( ITweenTarget<int> target, int to, float duration )
@@ -59,10 +55,10 @@ namespace Nez.Tweens
 
 
 		public FloatTween()
-		{}
+		{ }
 
 
-		public FloatTween( ITweenTarget<float> target, float from, float to, float duration )
+		public FloatTween( ITweenTarget<float> target, float to, float duration )
 		{
 			initialize( target, to, duration );
 		}
@@ -101,10 +97,10 @@ namespace Nez.Tweens
 
 
 		public Vector2Tween()
-		{}
+		{ }
 
 
-		public Vector2Tween( ITweenTarget<Vector2> target, Vector2 from, Vector2 to, float duration )
+		public Vector2Tween( ITweenTarget<Vector2> target, Vector2 to, float duration )
 		{
 			initialize( target, to, duration );
 		}
@@ -143,10 +139,10 @@ namespace Nez.Tweens
 
 
 		public Vector3Tween()
-		{}
+		{ }
 
 
-		public Vector3Tween( ITweenTarget<Vector3> target, Vector3 from, Vector3 to, float duration )
+		public Vector3Tween( ITweenTarget<Vector3> target, Vector3 to, float duration )
 		{
 			initialize( target, to, duration );
 		}
@@ -185,10 +181,10 @@ namespace Nez.Tweens
 
 
 		public Vector4Tween()
-		{}
+		{ }
 
 
-		public Vector4Tween( ITweenTarget<Vector4> target, Vector4 from, Vector4 to, float duration )
+		public Vector4Tween( ITweenTarget<Vector4> target, Vector4 to, float duration )
 		{
 			initialize( target, to, duration );
 		}
@@ -227,10 +223,10 @@ namespace Nez.Tweens
 
 
 		public QuaternionTween()
-		{}
+		{ }
 
 
-		public QuaternionTween( ITweenTarget<Quaternion> target, Quaternion from, Quaternion to, float duration )
+		public QuaternionTween( ITweenTarget<Quaternion> target, Quaternion to, float duration )
 		{
 			initialize( target, to, duration );
 		}
@@ -269,10 +265,10 @@ namespace Nez.Tweens
 
 
 		public ColorTween()
-		{}
+		{ }
 
 
-		public ColorTween( ITweenTarget<Color> target, Color from, Color to, float duration )
+		public ColorTween( ITweenTarget<Color> target, Color to, float duration )
 		{
 			initialize( target, to, duration );
 		}
@@ -314,10 +310,10 @@ namespace Nez.Tweens
 
 
 		public RectangleTween()
-		{}
+		{ }
 
 
-		public RectangleTween( ITweenTarget<Rectangle> target, Rectangle from, Rectangle to, float duration )
+		public RectangleTween( ITweenTarget<Rectangle> target, Rectangle to, float duration )
 		{
 			initialize( target, to, duration );
 		}

@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System;
-
+﻿
 
 namespace Nez.Tweens
 {

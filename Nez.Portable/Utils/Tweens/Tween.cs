@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections;
 
 
@@ -41,7 +40,7 @@ namespace Nez.Tweens
 		protected float _duration;
 		protected float _timeScale = 1f;
 		protected float _elapsedTime;
-		
+
 		// loop state
 		protected LoopType _loopType;
 		protected int _loops;
@@ -89,14 +88,14 @@ namespace Nez.Tweens
 			_isTimeScaleIndependent = true;
 			return this;
 		}
-		
+
 
 		public ITween<T> setCompletionHandler( Action<ITween<T>> completionHandler )
 		{
 			_completionHandler = completionHandler;
 			return this;
 		}
-		
+
 
 		public ITween<T> setLoops( LoopType loopType, int loops = 1, float delayBetweenLoops = 0f )
 		{
@@ -110,7 +109,7 @@ namespace Nez.Tweens
 
 			return this;
 		}
-		
+
 
 		public ITween<T> setLoopCompletionHandler( Action<ITween<T>> loopCompleteHandler )
 		{
@@ -240,9 +239,9 @@ namespace Nez.Tweens
 		{
 			if( !_isFromValueOverridden )
 				_fromValue = _target.getTweenedValue();
-			
+
 			if( _tweenState == TweenState.Complete )
-			{				
+			{
 				_tweenState = TweenState.Running;
 				TweenManager.addTween( this );
 			}
@@ -279,7 +278,7 @@ namespace Nez.Tweens
 				TweenManager.removeTween( this );
 			}
 		}
-			
+
 		#endregion
 
 
@@ -291,7 +290,7 @@ namespace Nez.Tweens
 			updateValue();
 		}
 
-		
+
 		/// <summary>
 		/// reverses the current tween. if it was going forward it will be going backwards and vice versa.
 		/// </summary>
@@ -337,7 +336,7 @@ namespace Nez.Tweens
 				_nextTween.recycleSelf();
 				_nextTween = null;
 			}
-			
+
 			_delay = 0f;
 			_duration = 0f;
 			_timeScale = 1f;
@@ -355,7 +354,6 @@ namespace Nez.Tweens
 		/// the constructor will not be called again so this method encapsulates what the constructor would be doing.
 		/// </summary>
 		/// <param name="target">Target.</param>
-		/// <param name="from">From.</param>
 		/// <param name="to">To.</param>
 		/// <param name="duration">Duration.</param>
 		public void initialize( ITweenTarget<T> target, T to, float duration )
@@ -368,7 +366,7 @@ namespace Nez.Tweens
 			_duration = duration;
 		}
 
-		
+
 		/// <summary>
 		/// handles loop logic
 		/// </summary>
@@ -403,7 +401,7 @@ namespace Nez.Tweens
 					else
 						_elapsedTime = elapsedTimeExcess - _delayBetweenLoops;
 				}
-					
+
 				// if we had an elapsedTimeExcess and no delayBetweenLoops update the value
 				if( _delayBetweenLoops == 0f && elapsedTimeExcess > 0f )
 					updateValue();
@@ -411,9 +409,10 @@ namespace Nez.Tweens
 
 
 		}
-			
+
 
 		abstract protected void updateValue();
 
 	}
+
 }
