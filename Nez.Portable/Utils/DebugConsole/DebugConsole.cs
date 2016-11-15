@@ -13,7 +13,7 @@ namespace Nez.Console
 {
 	public partial class DebugConsole
 	{
-		internal static DebugConsole instance;
+		public static DebugConsole instance;
 
 		/// <summary>
 		/// controls the scale of the console
@@ -67,6 +67,7 @@ namespace Nez.Console
 		internal RuntimeInspector _runtimeInspector;
 		#endif
 
+
 		static DebugConsole()
 		{
 			instance = new DebugConsole();
@@ -99,10 +100,20 @@ namespace Nez.Console
 		}
 
 
+		public void log( string format, params object[] args )
+		{
+			log( string.Format( format, args ) );
+		}
+
+
 		public void log( object obj )
 		{
-			var str = obj.ToString();
+			log( obj.ToString() );
+		}
 
+
+		public void log( string str )
+		{
 			// split up multi-line logs and log each line seperately
 			var parts = str.Split( new string[] { "\n" }, StringSplitOptions.RemoveEmptyEntries );
 			if( parts.Length > 1 )
@@ -546,7 +557,7 @@ namespace Nez.Console
 
 		#region Execute
 
-		public void executeCommand( string command, string[] args )
+		void executeCommand( string command, string[] args )
 		{
 			if( _commands.ContainsKey( command ) )
 				_commands[command].action( args );
@@ -555,7 +566,7 @@ namespace Nez.Console
 		}
 
 
-		public void executeFunctionKeyAction( int num )
+		void executeFunctionKeyAction( int num )
 		{
 			if( _functionKeyActions[num] != null )
 				_functionKeyActions[num]();
@@ -733,7 +744,7 @@ namespace Nez.Console
 		}
 
 
-#region Parsing Arguments
+		#region Parsing Arguments
 
 		static string argString( string arg )
 		{
@@ -778,9 +789,9 @@ namespace Nez.Console
 			}
 		}
 
-#endregion
+		#endregion
 
-#endregion
+		#endregion
 
 	}
 }
