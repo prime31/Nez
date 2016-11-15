@@ -50,10 +50,17 @@ namespace Nez
 		#region Component Lifecycle
 
 		/// <summary>
+		/// called when this Component has had its Entity assigned but it is NOT yet added to the live Components list of the Entity yet. Useful
+		/// for things like physics Components that need to access the Transform to modify collision body properties.
+		/// </summary>
+		public virtual void initialize()
+		{}
+
+
+		/// <summary>
 		/// Called when this component is added to a scene after all pending component changes are committed. At this point, the entity field
 		/// is set and the entity.scene is also set.
 		/// </summary>
-		/// <param name="entity">Entity.</param>
 		public virtual void onAddedToEntity()
 		{}
 

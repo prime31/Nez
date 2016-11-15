@@ -223,6 +223,7 @@ namespace Nez
 		/// helper that creates a scene of type T with the DefaultRenderer attached and ready for use
 		/// </summary>
 		/// <returns>The with default renderer.</returns>
+		[Obsolete( "use new Scene() instead" )]
 		public static T createWithDefaultRenderer<T>( Color? clearColor = null ) where T : Scene, new()
 		{
 			var scene = new T();
@@ -238,6 +239,7 @@ namespace Nez
 		/// helper that creates a scene with no Renderer
 		/// </summary>
 		/// <returns>The with default renderer.</returns>
+		[Obsolete( "use new Scene() instead" )]
 		public static Scene create( Color? clearColor = null )
 		{
 			var scene = new Scene();
@@ -253,6 +255,7 @@ namespace Nez
 		/// helper that creates a scene of type T with no Renderer
 		/// </summary>
 		/// <returns>The with default renderer.</returns>
+		[Obsolete( "use new Scene() instead" )]
 		public static T create<T>( Color? clearColor = null ) where T : Scene, new()
 		{
 			var scene = new T();
@@ -356,7 +359,7 @@ namespace Nez
 		}
 
 
-		internal void update()
+		public virtual void update()
 		{
 			// we set the RenderTarget here so that the Viewport will match the RenderTarget properly
 			Core.graphicsDevice.setRenderTarget( _sceneRenderTarget );

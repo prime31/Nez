@@ -345,6 +345,7 @@ namespace Nez
 		{
 			component.entity = this;
 			components.add( component );
+			component.initialize();
 			return component;
 		}
 
@@ -359,6 +360,7 @@ namespace Nez
 			var component = new T();
 			component.entity = this;
 			components.add( component );
+			component.initialize();
 			return component;
 		}
 

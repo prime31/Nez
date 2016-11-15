@@ -49,6 +49,7 @@ Components are added to and managed by an Entity. They make up the meat of your 
 
 Component Lifecycle methods:
 
+- **initialize**: Called when the Component is created and the Entity field is assigned but before onAddedToEntity
 - **onAddedToEntity**: Called when the Component is added to an entity after all pending component changes are committed
 - **onRemovedFromEntity**:  Called when the component is removed from its entity. Do all cleanup here.
 - **onEntityPositionChanged**: called when the entity's position changes. This allows components to be aware that they have moved due to the parent entity moving.

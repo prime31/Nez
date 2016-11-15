@@ -175,7 +175,7 @@ namespace Nez
 					var component = _tempBufferList[i];
 					component.onAddedToEntity();
 
-					// component.enabled check both the Entity and the Component
+					// component.enabled checks both the Entity and the Component
 					if( component.enabled )
 						component.onEnabled();
 				}
@@ -302,6 +302,12 @@ namespace Nez
 			{
 				if( _components.buffer[i].enabled )
 					_components.buffer[i].onEntityTransformChanged( comp );
+			}
+
+			for( var i = 0; i < _componentsToAdd.Count; i++ )
+			{
+				if( _componentsToAdd[i].enabled )
+					_componentsToAdd[i].onEntityTransformChanged( comp );
 			}
 		}
 
