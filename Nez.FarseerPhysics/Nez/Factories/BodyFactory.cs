@@ -116,7 +116,7 @@ namespace Nez.Farseer
 			public static Body createLineArc( World world, float radians, int sides, float radius, bool closed = false, Vector2 position = new Vector2(), float rotation = 0, BodyType bodyType = BodyType.Static, object userData = null )
 			{
 				var body = FarseerPhysics.Factories.BodyFactory.CreateLineArc( world, radians, sides, FSConvert.toSimUnits( radius ), closed, FSConvert.toSimUnits( position ), rotation, bodyType );
-				body.UserData = userData;
+				body.userData = userData;
 				return body;
 			}
 

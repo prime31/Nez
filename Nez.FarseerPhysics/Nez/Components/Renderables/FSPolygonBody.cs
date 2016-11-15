@@ -12,19 +12,19 @@ namespace Nez.Farseer
 		/// <summary>
 		/// verts are stored in display units. We convert to sim units if the Transform.scale changes.
 		/// </summary>
-		protected List<Vector2> _verts;
+		protected Vertices _verts;
 
 
 		public FSPolygonBody( Subtexture subtexture, List<Vector2> verts ) : base( subtexture )
 		{			
-			_verts = verts;
+			_verts = new Vertices( verts );
 		}
 
 
 		public override void initialize()
 		{
 			base.initialize();
-			body.attachPolygon( new Vertices( _verts ), 1 );
+			body.attachPolygon( _verts, 1 );
 		}
 
 
@@ -38,12 +38,16 @@ namespace Nez.Farseer
 			if( comp == Transform.Component.Scale )
 			{
 				// fetch the Vertices, clear them, add our originals and scale them
-				var poly = body.FixtureList[0].Shape as PolygonShape;
-				var verts = poly.Vertices;
+				var poly = body.fixtureList[0].shape as PolygonShape;
+				var verts = poly.vertices;
 				verts.Clear();
 				verts.AddRange( _verts );
-				verts.Scale( transform.scale * FSConvert.displayToSim );
-				poly.Vertices = verts;
+				verts.Scale( transform.scale );
+				poly.setVerticesNoCopy( verts );
+
+				// wake the body if it is asleep to update collisions
+				if( !body.awake )
+					body.awake = true;
 			}
 		}
 

@@ -24,7 +24,7 @@ namespace Nez.Farseer
 
 			// we only care about scale. base handles pos/rot
 			if( comp == Transform.Component.Scale )
-				body.FixtureList[0].Shape.Radius = _subtexture.sourceRect.Width * transform.scale.X * 0.5f * FSConvert.displayToSim;
+				body.fixtureList[0].shape.radius = _subtexture.sourceRect.Width * transform.scale.X * 0.5f * FSConvert.displayToSim;
 		}
 
 	}

@@ -43,7 +43,7 @@ namespace Nez.Farseer
 
 			// fetch all the Vertices and save a copy in case we need to scale them later
 			foreach( var fixture in fixtures )
-				_verts.Add( new Vertices( ( fixture.Shape as PolygonShape ).Vertices ) );
+				_verts.Add( new Vertices( ( fixture.shape as PolygonShape ).vertices ) );
 		}
 
 
@@ -57,14 +57,14 @@ namespace Nez.Farseer
 			if( comp == Transform.Component.Scale )
 			{
 				// fetch the Vertices, clear them, add our originals and scale them
-				for( var i = 0; i < body.FixtureList.Count; i++ )
+				for( var i = 0; i < body.fixtureList.Count; i++ )
 				{
-					var poly = body.FixtureList[i].Shape as PolygonShape;
-					var verts = poly.Vertices;
+					var poly = body.fixtureList[i].shape as PolygonShape;
+					var verts = poly.vertices;
 					verts.Clear();
 					verts.AddRange( _verts[i] );
 					verts.Scale( transform.scale );
-					poly.Vertices = verts;
+					poly.vertices = verts;
 				}
 			}
 		}

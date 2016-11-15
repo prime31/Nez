@@ -23,14 +23,14 @@ namespace Nez.Farseer
 			{
 				var pos = entity.scene.camera.screenToWorldPoint( Input.mousePosition );
 				var fixture = _world.TestPoint( FSConvert.displayToSim * pos );
-				if( fixture != null && !fixture.Body.IsStatic && !fixture.Body.IsKinematic )
-					_mouseJoint = fixture.Body.createFixedMouseJoint( pos );
+				if( fixture != null && !fixture.body.isStatic && !fixture.body.isKinematic )
+					_mouseJoint = fixture.body.createFixedMouseJoint( pos );
 			}
 
 			if( Input.leftMouseButtonDown && _mouseJoint != null )
 			{
 				var pos = entity.scene.camera.screenToWorldPoint( Input.mousePosition );
-				_mouseJoint.WorldAnchorB = FSConvert.toSimUnits( pos );
+				_mouseJoint.worldAnchorB = FSConvert.toSimUnits( pos );
 			}
 
 			if( Input.leftMouseButtonReleased && _mouseJoint != null )

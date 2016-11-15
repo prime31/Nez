@@ -56,9 +56,9 @@ namespace Nez.Farseer
 				return;
 
 			if( comp == Transform.Component.Position )
-				body.Position = transform.position * FSConvert.displayToSim;
+				body.position = transform.position * FSConvert.displayToSim;
 			else if( comp == Transform.Component.Rotation )
-				body.Rotation = transform.rotation;
+				body.rotation = transform.rotation;
 		}
 
 
@@ -66,7 +66,7 @@ namespace Nez.Farseer
 		{
 			if( body != null )
 			{
-				body.World.RemoveBody( body );
+				body.world.RemoveBody( body );
 				body = null;
 			}
 		}
@@ -74,12 +74,12 @@ namespace Nez.Farseer
 
 		void IUpdatable.update()
 		{
-			if( !body.Awake )
+			if( !body.awake )
 				return;
 
 			_ignoreTransformChanges = true;
-			transform.position = FSConvert.simToDisplay * body.Position;
-			transform.rotation = body.Rotation;
+			transform.position = FSConvert.simToDisplay * body.position;
+			transform.rotation = body.rotation;
 			_ignoreTransformChanges = false;
 		}
 
@@ -94,7 +94,7 @@ namespace Nez.Farseer
 
 		public FSRenderableBody setBodyType( BodyType bodyType )
 		{
-			body.BodyType = bodyType;
+			body.bodyType = bodyType;
 			return this;
 		}
 

@@ -72,11 +72,11 @@ namespace FarseerPhysics.Controllers
 			_uniqueBodies.Clear();
 			World.QueryAABB( fixture =>
 								 {
-									 if( fixture.Body.IsStatic || !fixture.Body.Awake )
+									 if( fixture.body.isStatic || !fixture.body.awake )
 										 return true;
 
-									 if( !_uniqueBodies.ContainsKey( fixture.Body.BodyId ) )
-										 _uniqueBodies.Add( fixture.Body.BodyId, fixture.Body );
+									 if( !_uniqueBodies.ContainsKey( fixture.body.bodyId ) )
+										 _uniqueBodies.Add( fixture.body.bodyId, fixture.body );
 
 									 return true;
 								 }, ref _container );
@@ -90,14 +90,14 @@ namespace FarseerPhysics.Controllers
 				float area = 0;
 				float mass = 0;
 
-				for( int j = 0; j < body.FixtureList.Count; j++ )
+				for( int j = 0; j < body.fixtureList.Count; j++ )
 				{
-					Fixture fixture = body.FixtureList[j];
+					Fixture fixture = body.fixtureList[j];
 
-					if( fixture.Shape.ShapeType != ShapeType.Polygon && fixture.Shape.ShapeType != ShapeType.Circle )
+					if( fixture.shape.shapeType != ShapeType.Polygon && fixture.shape.shapeType != ShapeType.Circle )
 						continue;
 
-					Shape shape = fixture.Shape;
+					Shape shape = fixture.shape;
 
 					Vector2 sc;
 					float sarea = shape.ComputeSubmergedArea( ref _normal, _offset, ref body._xf, out sc );
@@ -105,9 +105,9 @@ namespace FarseerPhysics.Controllers
 					areac.X += sarea * sc.X;
 					areac.Y += sarea * sc.Y;
 
-					mass += sarea * shape.Density;
-					massc.X += sarea * sc.X * shape.Density;
-					massc.Y += sarea * sc.Y * shape.Density;
+					mass += sarea * shape.density;
+					massc.X += sarea * sc.X * shape.density;
+					massc.Y += sarea * sc.Y * shape.density;
 				}
 
 				areac.X /= area;
@@ -128,7 +128,7 @@ namespace FarseerPhysics.Controllers
 				body.ApplyForce( dragForce, areac );
 
 				//Angular drag
-				body.ApplyTorque( -body.Inertia / body.Mass * area * body.AngularVelocity * AngularDragCoefficient );
+				body.ApplyTorque( -body.inertia / body.mass * area * body.angularVelocity * AngularDragCoefficient );
 			}
 		}
 	}

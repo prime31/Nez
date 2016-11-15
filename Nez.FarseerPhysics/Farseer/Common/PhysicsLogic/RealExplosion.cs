@@ -160,36 +160,36 @@ namespace FarseerPhysics.Common.PhysicsLogic
             for (int i = 0; i < shapeCount; ++i)
             {
                 PolygonShape ps;
-                CircleShape cs = shapes[i].Shape as CircleShape;
+                CircleShape cs = shapes[i].shape as CircleShape;
                 if (cs != null)
                 {
                     // We create a "diamond" approximation of the circle
                     Vertices v = new Vertices();
-                    Vector2 vec = Vector2.Zero + new Vector2(cs.Radius, 0);
+                    Vector2 vec = Vector2.Zero + new Vector2(cs.radius, 0);
                     v.Add(vec);
-                    vec = Vector2.Zero + new Vector2(0, cs.Radius);
+                    vec = Vector2.Zero + new Vector2(0, cs.radius);
                     v.Add(vec);
-                    vec = Vector2.Zero + new Vector2(-cs.Radius, cs.Radius);
+                    vec = Vector2.Zero + new Vector2(-cs.radius, cs.radius);
                     v.Add(vec);
-                    vec = Vector2.Zero + new Vector2(0, -cs.Radius);
+                    vec = Vector2.Zero + new Vector2(0, -cs.radius);
                     v.Add(vec);
                     ps = new PolygonShape(v, 0);
                 }
                 else
-                    ps = shapes[i].Shape as PolygonShape;
+                    ps = shapes[i].shape as PolygonShape;
 
-                if ((shapes[i].Body.BodyType == BodyType.Dynamic) && ps != null)
+                if ((shapes[i].body.bodyType == BodyType.Dynamic) && ps != null)
                 {
-                    Vector2 toCentroid = shapes[i].Body.GetWorldPoint(ps.MassData.Centroid) - pos;
+                    Vector2 toCentroid = shapes[i].body.GetWorldPoint(ps.massData.centroid) - pos;
                     float angleToCentroid = (float)Math.Atan2(toCentroid.Y, toCentroid.X);
                     float min = float.MaxValue;
                     float max = float.MinValue;
                     float minAbsolute = 0.0f;
                     float maxAbsolute = 0.0f;
 
-                    for (int j = 0; j < ps.Vertices.Count; ++j)
+                    for (int j = 0; j < ps.vertices.Count; ++j)
                     {
-                        Vector2 toVertex = (shapes[i].Body.GetWorldPoint(ps.Vertices[j]) - pos);
+                        Vector2 toVertex = (shapes[i].body.GetWorldPoint(ps.vertices[j]) - pos);
                         float newAngle = (float)Math.Atan2(toVertex.Y, toVertex.X);
                         float diff = (newAngle - angleToCentroid);
 
@@ -255,7 +255,7 @@ namespace FarseerPhysics.Common.PhysicsLogic
                 bool hitClosest = false;
                 World.RayCast((f, p, n, fr) =>
                                   {
-                                      Body body = f.Body;
+                                      Body body = f.body;
 
                                       if (!IsActiveOn(body))
                                           return 0;
@@ -266,9 +266,9 @@ namespace FarseerPhysics.Common.PhysicsLogic
                                   }, p1, p2);
 
                 //draws radius points
-                if ((hitClosest) && (fixture.Body.BodyType == BodyType.Dynamic))
+                if ((hitClosest) && (fixture.body.bodyType == BodyType.Dynamic))
                 {
-                    if ((_data.Any()) && (_data.Last().Body == fixture.Body) && (!rayMissed))
+                    if ((_data.Any()) && (_data.Last().Body == fixture.body) && (!rayMissed))
                     {
                         int laPos = _data.Count - 1;
                         ShapeData la = _data[laPos];
@@ -279,7 +279,7 @@ namespace FarseerPhysics.Common.PhysicsLogic
                     {
                         // make new
                         ShapeData d;
-                        d.Body = fixture.Body;
+                        d.Body = fixture.body;
                         d.Min = vals[i];
                         d.Max = vals[iplus];
                         _data.Add(d);
@@ -343,7 +343,7 @@ namespace FarseerPhysics.Common.PhysicsLogic
                     Vector2 hitpoint = Vector2.Zero;
                     float minlambda = float.MaxValue;
 
-                    List<Fixture> fl = _data[i].Body.FixtureList;
+                    List<Fixture> fl = _data[i].Body.fixtureList;
                     for (int x = 0; x < fl.Count; x++)
                     {
                         Fixture f = fl[x];
@@ -387,26 +387,26 @@ namespace FarseerPhysics.Common.PhysicsLogic
             {
                 Fixture fix = containedShapes[i];
 
-                if (!IsActiveOn(fix.Body))
+                if (!IsActiveOn(fix.body))
                     continue;
 
                 float impulse = MinRays * maxForce * 180.0f / MathHelper.Pi;
                 Vector2 hitPoint;
 
-                CircleShape circShape = fix.Shape as CircleShape;
+                CircleShape circShape = fix.shape as CircleShape;
                 if (circShape != null)
                 {
-                    hitPoint = fix.Body.GetWorldPoint(circShape.Position);
+                    hitPoint = fix.body.GetWorldPoint(circShape.position);
                 }
                 else
                 {
-                    PolygonShape shape = fix.Shape as PolygonShape;
-                    hitPoint = fix.Body.GetWorldPoint(shape.MassData.Centroid);
+                    PolygonShape shape = fix.shape as PolygonShape;
+                    hitPoint = fix.body.GetWorldPoint(shape.massData.centroid);
                 }
 
                 Vector2 vectImp = impulse * (hitPoint - pos);
 
-                fix.Body.ApplyLinearImpulse(ref vectImp, ref hitPoint);
+                fix.body.ApplyLinearImpulse(ref vectImp, ref hitPoint);
 
                 if (!exploded.ContainsKey(fix))
                     exploded.Add(fix, vectImp);

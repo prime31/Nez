@@ -50,15 +50,15 @@ namespace FarseerPhysics.Dynamics.Joints
 		/// <summary>
 		/// The local anchor point on BodyA
 		/// </summary>
-		public Vector2 LocalAnchorA { get; set; }
+		public Vector2 localAnchorA;
 
-		public override Vector2 WorldAnchorA
+		public override Vector2 worldAnchorA
 		{
-			get { return BodyA.GetWorldPoint( LocalAnchorA ); }
-			set { LocalAnchorA = BodyA.GetLocalPoint( value ); }
+			get { return bodyA.GetWorldPoint( localAnchorA ); }
+			set { localAnchorA = bodyA.GetLocalPoint( value ); }
 		}
 
-		public override Vector2 WorldAnchorB
+		public override Vector2 worldAnchorB
 		{
 			get { return _worldAnchor; }
 			set
@@ -73,7 +73,7 @@ namespace FarseerPhysics.Dynamics.Joints
 		/// to move the candidate body. Usually you will express
 		/// as some multiple of the weight (multiplier * mass * gravity).
 		/// </summary>
-		public float MaxForce
+		public float maxForce
 		{
 			get { return _maxForce; }
 			set
@@ -86,7 +86,7 @@ namespace FarseerPhysics.Dynamics.Joints
 		/// <summary>
 		/// The response speed.
 		/// </summary>
-		public float Frequency
+		public float frequency
 		{
 			get { return _frequency; }
 			set
@@ -99,7 +99,7 @@ namespace FarseerPhysics.Dynamics.Joints
 		/// <summary>
 		/// The damping ratio. 0 = no damping, 1 = critical damping.
 		/// </summary>
-		public float DampingRatio
+		public float dampingRatio
 		{
 			get { return _dampingRatio; }
 			set
@@ -139,15 +139,15 @@ namespace FarseerPhysics.Dynamics.Joints
 		/// <param name="worldAnchor">The target.</param>
 		public FixedMouseJoint( Body body, Vector2 worldAnchor ) : base( body )
 		{
-			JointType = JointType.FixedMouse;
-			Frequency = 5.0f;
-			DampingRatio = 0.7f;
-			MaxForce = 1000 * body.Mass;
+			jointType = JointType.FixedMouse;
+			frequency = 5.0f;
+			dampingRatio = 0.7f;
+			maxForce = 1000 * body.mass;
 
 			Debug.Assert( worldAnchor.IsValid() );
 
 			_worldAnchor = worldAnchor;
-			LocalAnchorA = MathUtils.MulT( BodyA._xf, worldAnchor );
+			localAnchorA = MathUtils.MulT( bodyA._xf, worldAnchor );
 		}
 
 		public override Vector2 GetReactionForce( float invDt )
@@ -162,10 +162,10 @@ namespace FarseerPhysics.Dynamics.Joints
 
 		internal override void InitVelocityConstraints( ref SolverData data )
 		{
-			_indexA = BodyA.IslandIndex;
-			_localCenterA = BodyA._sweep.LocalCenter;
-			_invMassA = BodyA._invMass;
-			_invIA = BodyA._invI;
+			_indexA = bodyA.islandIndex;
+			_localCenterA = bodyA._sweep.LocalCenter;
+			_invMassA = bodyA._invMass;
+			_invIA = bodyA._invI;
 
 			var cA = data.positions[_indexA].c;
 			var aA = data.positions[_indexA].a;
@@ -174,13 +174,13 @@ namespace FarseerPhysics.Dynamics.Joints
 
 			var qA = new Rot( aA );
 
-			float mass = BodyA.Mass;
+			float mass = bodyA.mass;
 
 			// Frequency
-			float omega = 2.0f * Settings.Pi * Frequency;
+			float omega = 2.0f * Settings.Pi * frequency;
 
 			// Damping coefficient
-			float d = 2.0f * mass * DampingRatio * omega;
+			float d = 2.0f * mass * dampingRatio * omega;
 
 			// Spring stiffness
 			float k = mass * ( omega * omega );
@@ -199,7 +199,7 @@ namespace FarseerPhysics.Dynamics.Joints
 			_beta = h * k * _gamma;
 
 			// Compute the effective mass matrix.
-			_rA = MathUtils.Mul( qA, LocalAnchorA - _localCenterA );
+			_rA = MathUtils.Mul( qA, localAnchorA - _localCenterA );
 			// K    = [(1/m1 + 1/m2) * eye(2) - skew(r1) * invI1 * skew(r1) - skew(r2) * invI2 * skew(r2)]
 			//      = [1/m1+1/m2     0    ] + invI1 * [r1.Y*r1.Y -r1.X*r1.Y] + invI2 * [r1.Y*r1.Y -r1.X*r1.Y]
 			//        [    0     1/m1+1/m2]           [-r1.X*r1.Y r1.X*r1.X]           [-r1.X*r1.Y r1.X*r1.X]
@@ -243,7 +243,7 @@ namespace FarseerPhysics.Dynamics.Joints
 
 			var oldImpulse = _impulse;
 			_impulse += impulse;
-			float maxImpulse = data.step.dt * MaxForce;
+			float maxImpulse = data.step.dt * maxForce;
 			if( _impulse.LengthSquared() > maxImpulse * maxImpulse )
 			{
 				_impulse *= maxImpulse / _impulse.Length();

@@ -38,19 +38,19 @@ namespace FarseerPhysics.Collision.Shapes
 		/// <summary>
 		/// The vertices. These are not owned/freed by the chain Shape.
 		/// </summary>
-		public Vertices Vertices;
+		public Vertices vertices;
 
-		public override int ChildCount
+		public override int childCount
 		{
 			// edge count = vertex count - 1
-			get { return Vertices.Count - 1; }
+			get { return vertices.Count - 1; }
 		}
 
 		/// <summary>
 		/// Establish connectivity to a vertex that precedes the first vertex.
 		/// Don't call this for loops.
 		/// </summary>
-		public Vector2 PrevVertex
+		public Vector2 prevVertex
 		{
 			get { return _prevVertex; }
 			set
@@ -64,7 +64,7 @@ namespace FarseerPhysics.Collision.Shapes
 		/// Establish connectivity to a vertex that follows the last vertex.
 		/// Don't call this for loops.
 		/// </summary>
-		public Vector2 NextVertex
+		public Vector2 nextVertex
 		{
 			get { return _nextVertex; }
 			set
@@ -84,7 +84,7 @@ namespace FarseerPhysics.Collision.Shapes
 		/// </summary>
 		public ChainShape() : base( 0 )
 		{
-			ShapeType = ShapeType.Chain;
+			shapeType = ShapeType.Chain;
 			_radius = Settings.PolygonRadius;
 		}
 
@@ -95,7 +95,7 @@ namespace FarseerPhysics.Collision.Shapes
 		/// <param name="createLoop">Set to true to create a closed loop. It connects the first vertice to the last, and automatically adjusts connectivity to create smooth collisions along the chain.</param>
 		public ChainShape( Vertices vertices, bool createLoop = false ) : base( 0 )
 		{
-			ShapeType = ShapeType.Chain;
+			shapeType = ShapeType.Chain;
 			_radius = Settings.PolygonRadius;
 
 			Debug.Assert( vertices != null && vertices.Count >= 3 );
@@ -110,13 +110,13 @@ namespace FarseerPhysics.Collision.Shapes
 				Debug.Assert( Vector2.DistanceSquared( v1, v2 ) > Settings.LinearSlop * Settings.LinearSlop );
 			}
 
-			Vertices = new Vertices( vertices );
+			this.vertices = new Vertices( vertices );
 
 			if( createLoop )
 			{
-				Vertices.Add( vertices[0] );
-				PrevVertex = Vertices[Vertices.Count - 2]; //FPE: We use the properties instead of the private fields here.
-				NextVertex = Vertices[1]; //FPE: We use the properties instead of the private fields here.
+				this.vertices.Add( vertices[0] );
+				prevVertex = this.vertices[this.vertices.Count - 2]; //FPE: We use the properties instead of the private fields here.
+				nextVertex = this.vertices[1]; //FPE: We use the properties instead of the private fields here.
 			}
 		}
 
@@ -127,35 +127,35 @@ namespace FarseerPhysics.Collision.Shapes
 		/// <param name="index">The index.</param>
 		internal void GetChildEdge( EdgeShape edge, int index )
 		{
-			Debug.Assert( 0 <= index && index < Vertices.Count - 1 );
+			Debug.Assert( 0 <= index && index < vertices.Count - 1 );
 			Debug.Assert( edge != null );
 
-			edge.ShapeType = ShapeType.Edge;
+			edge.shapeType = ShapeType.Edge;
 			edge._radius = _radius;
 
-			edge.Vertex1 = Vertices[index + 0];
-			edge.Vertex2 = Vertices[index + 1];
+			edge.vertex1 = vertices[index + 0];
+			edge.vertex2 = vertices[index + 1];
 
 			if( index > 0 )
 			{
-				edge.Vertex0 = Vertices[index - 1];
-				edge.HasVertex0 = true;
+				edge.vertex0 = vertices[index - 1];
+				edge.hasVertex0 = true;
 			}
 			else
 			{
-				edge.Vertex0 = _prevVertex;
-				edge.HasVertex0 = _hasPrevVertex;
+				edge.vertex0 = _prevVertex;
+				edge.hasVertex0 = _hasPrevVertex;
 			}
 
-			if( index < Vertices.Count - 2 )
+			if( index < vertices.Count - 2 )
 			{
-				edge.Vertex3 = Vertices[index + 2];
-				edge.HasVertex3 = true;
+				edge.vertex3 = vertices[index + 2];
+				edge.hasVertex3 = true;
 			}
 			else
 			{
-				edge.Vertex3 = _nextVertex;
-				edge.HasVertex3 = _hasNextVertex;
+				edge.vertex3 = _nextVertex;
+				edge.hasVertex3 = _hasNextVertex;
 			}
 		}
 
@@ -177,30 +177,30 @@ namespace FarseerPhysics.Collision.Shapes
 
 		public override bool RayCast( out RayCastOutput output, ref RayCastInput input, ref Transform transform, int childIndex )
 		{
-			Debug.Assert( childIndex < Vertices.Count );
+			Debug.Assert( childIndex < vertices.Count );
 
 			int i1 = childIndex;
 			int i2 = childIndex + 1;
-			if( i2 == Vertices.Count )
+			if( i2 == vertices.Count )
 				i2 = 0;
 
-			_edgeShape.Vertex1 = Vertices[i1];
-			_edgeShape.Vertex2 = Vertices[i2];
+			_edgeShape.vertex1 = vertices[i1];
+			_edgeShape.vertex2 = vertices[i2];
 
 			return _edgeShape.RayCast( out output, ref input, ref transform, 0 );
 		}
 
 		public override void ComputeAABB( out AABB aabb, ref Transform transform, int childIndex )
 		{
-			Debug.Assert( childIndex < Vertices.Count );
+			Debug.Assert( childIndex < vertices.Count );
 
 			int i1 = childIndex;
 			int i2 = childIndex + 1;
-			if( i2 == Vertices.Count )
+			if( i2 == vertices.Count )
 				i2 = 0;
 
-			var v1 = MathUtils.Mul( ref transform, Vertices[i1] );
-			var v2 = MathUtils.Mul( ref transform, Vertices[i2] );
+			var v1 = MathUtils.Mul( ref transform, vertices[i1] );
+			var v2 = MathUtils.Mul( ref transform, vertices[i2] );
 
 			aabb.LowerBound = Vector2.Min( v1, v2 );
 			aabb.UpperBound = Vector2.Max( v1, v2 );
@@ -224,30 +224,30 @@ namespace FarseerPhysics.Collision.Shapes
 		/// <returns>True if the two chain shapes are the same</returns>
 		public bool CompareTo( ChainShape shape )
 		{
-			if( Vertices.Count != shape.Vertices.Count )
+			if( vertices.Count != shape.vertices.Count )
 				return false;
 
-			for( int i = 0; i < Vertices.Count; i++ )
+			for( int i = 0; i < vertices.Count; i++ )
 			{
-				if( Vertices[i] != shape.Vertices[i] )
+				if( vertices[i] != shape.vertices[i] )
 					return false;
 			}
 
-			return PrevVertex == shape.PrevVertex && NextVertex == shape.NextVertex;
+			return prevVertex == shape.prevVertex && nextVertex == shape.nextVertex;
 		}
 
 		public override Shape Clone()
 		{
 			ChainShape clone = new ChainShape();
-			clone.ShapeType = ShapeType;
+			clone.shapeType = shapeType;
 			clone._density = _density;
 			clone._radius = _radius;
-			clone.PrevVertex = _prevVertex;
-			clone.NextVertex = _nextVertex;
+			clone.prevVertex = _prevVertex;
+			clone.nextVertex = _nextVertex;
 			clone._hasNextVertex = _hasNextVertex;
 			clone._hasPrevVertex = _hasPrevVertex;
-			clone.Vertices = new Vertices( Vertices );
-			clone.MassData = MassData;
+			clone.vertices = new Vertices( vertices );
+			clone.massData = massData;
 			return clone;
 		}
 	

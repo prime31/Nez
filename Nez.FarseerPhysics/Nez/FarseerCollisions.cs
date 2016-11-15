@@ -26,21 +26,21 @@ namespace Nez.Farseer
 		/// <param name="transformB">Transform b.</param>
 		public static bool testOverlap( Shape shapeA, Shape shapeB, ref FSTransform transformA, ref FSTransform transformB )
 		{
-			if( shapeA.ChildCount == 1 && shapeB.ChildCount == 1 )
+			if( shapeA.childCount == 1 && shapeB.childCount == 1 )
 				return Collision.TestOverlap( shapeA, 0, shapeB, 0, ref transformA, ref transformB );
 
-			if( shapeA.ChildCount > 1 )
+			if( shapeA.childCount > 1 )
 			{
-				for( var i = 0; i < shapeA.ChildCount; i++ )
+				for( var i = 0; i < shapeA.childCount; i++ )
 				{
 					if( Collision.TestOverlap( shapeA, i, shapeB, 0, ref transformA, ref transformB ) )
 						return true;
 				}
 			}
 
-			if( shapeB.ChildCount > 1 )
+			if( shapeB.childCount > 1 )
 			{
-				for( var i = 0; i < shapeB.ChildCount; i++ )
+				for( var i = 0; i < shapeB.childCount; i++ )
 				{
 					if( Collision.TestOverlap( shapeA, 0, shapeB, i, ref transformA, ref transformB ) )
 						return true;
@@ -64,11 +64,11 @@ namespace Nez.Farseer
 			result = new CollisionResult();
 
 			// we need at least one static fixture
-			if( !fixtureA.Body.IsStatic && !fixtureB.Body.IsStatic )
+			if( !fixtureA.body.isStatic && !fixtureB.body.isStatic )
 			{
 				// if the body is dyanmic and asleep wake it up
-				if( fixtureB.Body.IsDynamic && !fixtureB.Body.Awake )
-					fixtureB.Body.Awake = true;
+				if( fixtureB.body.isDynamic && !fixtureB.body.awake )
+					fixtureB.body.awake = true;
 				return false;
 			}
 
@@ -77,62 +77,62 @@ namespace Nez.Farseer
 				return false;
 
 			// check user filtering
-			if( fixtureA.Body.World.ContactManager.ContactFilter != null && !fixtureA.Body.World.ContactManager.ContactFilter( fixtureA, fixtureB ) )
+			if( fixtureA.body.world.contactManager.ContactFilter != null && !fixtureA.body.world.contactManager.ContactFilter( fixtureA, fixtureB ) )
 				return false;
 
 			// gather our transforms
 			FSTransform transformA;
-			fixtureA.Body.GetTransform( out transformA );
+			fixtureA.body.GetTransform( out transformA );
 
 			FSTransform transformB;
-			fixtureB.Body.GetTransform( out transformB );
+			fixtureB.body.GetTransform( out transformB );
 
 			// we only handle Circle or Polygon collisions
-			if( fixtureA.Shape is CircleShape )
+			if( fixtureA.shape is CircleShape )
 			{
-				if( fixtureB.Shape is CircleShape )
-					return collideCircles( fixtureA.Shape as CircleShape, ref transformA, fixtureB.Shape as CircleShape, ref transformB, out result );
+				if( fixtureB.shape is CircleShape )
+					return collideCircles( fixtureA.shape as CircleShape, ref transformA, fixtureB.shape as CircleShape, ref transformB, out result );
 
-				if( fixtureB.Shape is PolygonShape )
-					return collidePolygonCircle( fixtureB.Shape as PolygonShape, ref transformB, fixtureA.Shape as CircleShape, ref transformA, out result );
+				if( fixtureB.shape is PolygonShape )
+					return collidePolygonCircle( fixtureB.shape as PolygonShape, ref transformB, fixtureA.shape as CircleShape, ref transformA, out result );
 
-				if( fixtureB.Shape is EdgeShape )
-					return collideEdgeAndCircle( fixtureB.Shape as EdgeShape, ref transformB, fixtureA.Shape as CircleShape, ref transformA, out result );
+				if( fixtureB.shape is EdgeShape )
+					return collideEdgeAndCircle( fixtureB.shape as EdgeShape, ref transformB, fixtureA.shape as CircleShape, ref transformA, out result );
 
-				if( fixtureB.Shape is ChainShape )
+				if( fixtureB.shape is ChainShape )
 				{
-					var chain = fixtureB.Shape as ChainShape;
-					for( var i = 0; i < chain.ChildCount; i++ )
+					var chain = fixtureB.shape as ChainShape;
+					for( var i = 0; i < chain.childCount; i++ )
 					{
 						var edge = chain.GetChildEdge( i );
-						if( collideEdgeAndCircle( edge, ref transformB, fixtureA.Shape as CircleShape, ref transformA, out result ) )
+						if( collideEdgeAndCircle( edge, ref transformB, fixtureA.shape as CircleShape, ref transformA, out result ) )
 							return true;
 					}
 				}
 			}
 
-			if( fixtureA.Shape is PolygonShape )
+			if( fixtureA.shape is PolygonShape )
 			{
-				if( fixtureB.Shape is CircleShape )
+				if( fixtureB.shape is CircleShape )
 				{
-					var res = collidePolygonCircle( fixtureA.Shape as PolygonShape, ref transformA, fixtureB.Shape as CircleShape, ref transformB, out result );
+					var res = collidePolygonCircle( fixtureA.shape as PolygonShape, ref transformA, fixtureB.shape as CircleShape, ref transformB, out result );
 					result.invertResult();
 					return res;
 				}
 
-				if( fixtureB.Shape is PolygonShape )
-					return collidePolygons( fixtureA.Shape as PolygonShape, ref transformA, fixtureB.Shape as PolygonShape, ref transformB, out result );
+				if( fixtureB.shape is PolygonShape )
+					return collidePolygons( fixtureA.shape as PolygonShape, ref transformA, fixtureB.shape as PolygonShape, ref transformB, out result );
 
-				if( fixtureB.Shape is EdgeShape )
-					return collideEdgeAndPolygon( fixtureB.Shape as EdgeShape, ref transformB, fixtureA.Shape as PolygonShape, ref transformA, out result );
+				if( fixtureB.shape is EdgeShape )
+					return collideEdgeAndPolygon( fixtureB.shape as EdgeShape, ref transformB, fixtureA.shape as PolygonShape, ref transformA, out result );
 
-				if( fixtureB.Shape is ChainShape )
+				if( fixtureB.shape is ChainShape )
 				{
-					var chain = fixtureB.Shape as ChainShape;
-					for( var i = 0; i < chain.ChildCount; i++ )
+					var chain = fixtureB.shape as ChainShape;
+					for( var i = 0; i < chain.childCount; i++ )
 					{
 						var edge = chain.GetChildEdge( i );
-						if( collideEdgeAndPolygon( edge, ref transformB, fixtureA.Shape as PolygonShape, ref transformA, out result ) )
+						if( collideEdgeAndPolygon( edge, ref transformB, fixtureA.shape as PolygonShape, ref transformA, out result ) )
 							return true;
 					}
 				}
@@ -150,7 +150,7 @@ namespace Nez.Farseer
 			if( _manifold.PointCount > 0 )
 			{
 				FixedArray2<Vector2> points;
-				ContactSolver.WorldManifold.Initialize( ref _manifold, ref transformA, polygonA.Radius, ref transformB, polygonB.Radius, out result.normal, out points );
+				ContactSolver.WorldManifold.Initialize( ref _manifold, ref transformA, polygonA.radius, ref transformB, polygonB.radius, out result.normal, out points );
 
 				// code adapted from PositionSolverManifold.Initialize
 				if( _manifold.Type == ManifoldType.FaceA )
@@ -159,7 +159,7 @@ namespace Nez.Farseer
 					var planePoint = MathUtils.Mul( ref transformA, _manifold.LocalPoint );
 
 					var clipPoint = MathUtils.Mul( ref transformB, _manifold.Points[0].LocalPoint );
-					var separation = Vector2.Dot( clipPoint - planePoint, result.normal ) - polygonA.Radius - polygonB.Radius;
+					var separation = Vector2.Dot( clipPoint - planePoint, result.normal ) - polygonA.radius - polygonB.radius;
 					result.point = clipPoint * FSConvert.simToDisplay;
 
 					// Ensure normal points from A to B
@@ -173,7 +173,7 @@ namespace Nez.Farseer
 					var planePoint = MathUtils.Mul( ref transformB, _manifold.LocalPoint );
 
 					var clipPoint = MathUtils.Mul( ref transformA, _manifold.Points[0].LocalPoint );
-					var separation = Vector2.Dot( clipPoint - planePoint, result.normal ) - polygonA.Radius - polygonB.Radius;
+					var separation = Vector2.Dot( clipPoint - planePoint, result.normal ) - polygonA.radius - polygonB.radius;
 					result.point = clipPoint * FSConvert.simToDisplay;
 
 					result.minimumTranslationVector = result.normal * -separation;
@@ -197,13 +197,13 @@ namespace Nez.Farseer
 			if( _manifold.PointCount > 0 )
 			{
 				FixedArray2<Vector2> points;
-				ContactSolver.WorldManifold.Initialize( ref _manifold, ref polyTransform, polygon.Radius, ref circleTransform, circle.Radius, out result.normal, out points );
+				ContactSolver.WorldManifold.Initialize( ref _manifold, ref polyTransform, polygon.radius, ref circleTransform, circle.radius, out result.normal, out points );
 
 				//var circleInPolySpace = polygonFixture.Body.GetLocalPoint( circleFixture.Body.Position );
 				var circleInPolySpace = MathUtils.MulT( ref polyTransform, circleTransform.p );
 				var value1 = circleInPolySpace - _manifold.LocalPoint;
 				var value2 = _manifold.LocalNormal;
-				var separation = circle.Radius - ( value1.X * value2.X + value1.Y * value2.Y );
+				var separation = circle.radius - ( value1.X * value2.X + value1.Y * value2.Y );
 
 				if( separation <= 0 )
 					return false;
@@ -235,12 +235,12 @@ namespace Nez.Farseer
 				result.normal = pointA - pointB;
 				result.normal.Normalize();
 
-				var cA = pointA - circleA.Radius * result.normal;
-				var cB = pointB + circleB.Radius * result.normal;
+				var cA = pointA - circleA.radius * result.normal;
+				var cB = pointB + circleB.radius * result.normal;
 				result.point = 0.5f * ( cA + cB );
 				result.point *= FSConvert.simToDisplay;
 
-				var separation = Vector2.Dot( pointA - pointB, result.normal ) - circleA.Radius - circleB.Radius;
+				var separation = Vector2.Dot( pointA - pointB, result.normal ) - circleA.radius - circleB.radius;
 				result.minimumTranslationVector = result.normal * Math.Abs( separation );
 
 				Debug.drawPixel( result.point, 5, Color.Red, 0.2f );
@@ -270,12 +270,12 @@ namespace Nez.Farseer
 					result.normal = pointA - pointB;
 					result.normal.Normalize();
 
-					var cA = pointA - edge.Radius * result.normal;
-					var cB = pointB + circle.Radius * result.normal;
+					var cA = pointA - edge.radius * result.normal;
+					var cB = pointB + circle.radius * result.normal;
 					result.point = 0.5f * ( cA + cB );
 					result.point *= FSConvert.simToDisplay;
 
-					var separation = Vector2.Dot( pointA - pointB, result.normal ) - edge.Radius - circle.Radius;
+					var separation = Vector2.Dot( pointA - pointB, result.normal ) - edge.radius - circle.radius;
 
 					// Ensure normal points from A to B
 					Vector2.Negate( ref result.normal, out result.normal );
@@ -287,8 +287,8 @@ namespace Nez.Farseer
 					var planePoint = MathUtils.Mul( ref edgeTransform, _manifold.LocalPoint );
 
 					var clipPoint = MathUtils.Mul( ref circleTransform, _manifold.Points[0].LocalPoint );
-					var separation = Vector2.Dot( clipPoint - planePoint, result.normal ) - edge.Radius - circle.Radius;
-					result.point = ( clipPoint - result.normal * circle.Radius ) * FSConvert.simToDisplay;
+					var separation = Vector2.Dot( clipPoint - planePoint, result.normal ) - edge.radius - circle.radius;
+					result.point = ( clipPoint - result.normal * circle.radius ) * FSConvert.simToDisplay;
 
 					result.minimumTranslationVector = result.normal * -separation;
 				}
@@ -311,7 +311,7 @@ namespace Nez.Farseer
 			if( _manifold.PointCount > 0 )
 			{
 				FixedArray2<Vector2> points;
-				ContactSolver.WorldManifold.Initialize( ref _manifold, ref edgeTransform, edge.Radius, ref polygonTransform, polygon.Radius, out result.normal, out points );
+				ContactSolver.WorldManifold.Initialize( ref _manifold, ref edgeTransform, edge.radius, ref polygonTransform, polygon.radius, out result.normal, out points );
 
 				// code adapted from PositionSolverManifold.Initialize
 				if( _manifold.Type == ManifoldType.FaceA )
@@ -320,7 +320,7 @@ namespace Nez.Farseer
 					var planePoint = MathUtils.Mul( ref edgeTransform, _manifold.LocalPoint );
 
 					var clipPoint = MathUtils.Mul( ref polygonTransform, _manifold.Points[0].LocalPoint );
-					var separation = Vector2.Dot( clipPoint - planePoint, result.normal ) - edge.Radius - polygon.Radius;
+					var separation = Vector2.Dot( clipPoint - planePoint, result.normal ) - edge.radius - polygon.radius;
 					result.point = clipPoint * FSConvert.simToDisplay;
 
 					result.minimumTranslationVector = result.normal * -separation;
@@ -331,7 +331,7 @@ namespace Nez.Farseer
 					var planePoint = MathUtils.Mul( ref polygonTransform, _manifold.LocalPoint );
 
 					var clipPoint = MathUtils.Mul( ref edgeTransform, _manifold.Points[0].LocalPoint );
-					var separation = Vector2.Dot( clipPoint - planePoint, result.normal ) - edge.Radius - polygon.Radius;
+					var separation = Vector2.Dot( clipPoint - planePoint, result.normal ) - edge.radius - polygon.radius;
 					result.point = clipPoint * FSConvert.simToDisplay;
 
 					// Ensure normal points from A to B

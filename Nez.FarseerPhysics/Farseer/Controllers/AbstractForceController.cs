@@ -211,7 +211,7 @@ namespace FarseerPhysics.Controllers
 		protected float GetDecayMultiplier( Body body )
 		{
 			//TODO: Consider ForceType in distance calculation!
-			float distance = ( body.Position - Position ).Length();
+			float distance = ( body.position - Position ).Length();
 			switch( DecayMode )
 			{
 				case DecayModes.None:

@@ -36,28 +36,28 @@ namespace FarseerPhysics.Common.PhysicsLogic
         /// <returns></returns>
         public virtual bool IsActiveOn(Body body)
         {
-            if (body == null || !body.Enabled || body.IsStatic)
+            if (body == null || !body.enabled || body.isStatic)
                 return false;
 
-            if (body.FixtureList == null)
+            if (body.fixtureList == null)
                 return false;
 
-            foreach (Fixture fixture in body.FixtureList)
+            foreach (Fixture fixture in body.fixtureList)
             {
                 //Disable
-                if ((fixture.CollisionGroup == DisabledOnGroup) && fixture.CollisionGroup != 0 && DisabledOnGroup != 0)
+                if ((fixture.collisionGroup == DisabledOnGroup) && fixture.collisionGroup != 0 && DisabledOnGroup != 0)
                     return false;
 
-                if ((fixture.CollisionCategories & DisabledOnCategories) != Category.None)
+                if ((fixture.collisionCategories & DisabledOnCategories) != Category.None)
                     return false;
 
                 if (EnabledOnGroup != 0 || EnabledOnCategories != Category.All)
                 {
                     //Enable
-                    if ((fixture.CollisionGroup == EnabledOnGroup) && fixture.CollisionGroup != 0 && EnabledOnGroup != 0)
+                    if ((fixture.collisionGroup == EnabledOnGroup) && fixture.collisionGroup != 0 && EnabledOnGroup != 0)
                         return true;
 
-                    if ((fixture.CollisionCategories & EnabledOnCategories) != Category.None &&
+                    if ((fixture.collisionCategories & EnabledOnCategories) != Category.None &&
                         EnabledOnCategories != Category.All)
                         return true;
                 }

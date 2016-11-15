@@ -112,15 +112,15 @@ namespace FarseerPhysics.Dynamics
 				b._sweep.C0 = b._sweep.C;
 				b._sweep.A0 = b._sweep.A;
 
-				if( b.BodyType == BodyType.Dynamic )
+				if( b.bodyType == BodyType.Dynamic )
 				{
 					// Integrate velocities.
 
 					// FPE: Only apply gravity if the body wants it.
-					if( b.IgnoreGravity )
+					if( b.ignoreGravity )
 						v += h * ( b._invMass * b._force );
 					else
-						v += h * ( b.GravityScale * gravity + b._invMass * b._force );
+						v += h * ( b.gravityScale * gravity + b._invMass * b._force );
 
 					w += h * b._invI * b._torque;
 
@@ -131,8 +131,8 @@ namespace FarseerPhysics.Dynamics
 					// v2 = exp(-c * dt) * v1
 					// Taylor expansion:
 					// v2 = (1.0f - c * dt) * v1
-					v *= MathUtils.Clamp( 1.0f - h * b.LinearDamping, 0.0f, 1.0f );
-					w *= MathUtils.Clamp( 1.0f - h * b.AngularDamping, 0.0f, 1.0f );
+					v *= MathUtils.Clamp( 1.0f - h * b.linearDamping, 0.0f, 1.0f );
+					w *= MathUtils.Clamp( 1.0f - h * b.angularDamping, 0.0f, 1.0f );
 				}
 
 				_positions[i].c = c;
@@ -160,7 +160,7 @@ namespace FarseerPhysics.Dynamics
 
 			for( int i = 0; i < JointCount; ++i )
 			{
-				if( _joints[i].Enabled )
+				if( _joints[i].enabled )
 					_joints[i].InitVelocityConstraints( ref solverData );
 			}
 
@@ -174,7 +174,7 @@ namespace FarseerPhysics.Dynamics
 				{
 					Joint joint = _joints[j];
 
-					if( !joint.Enabled )
+					if( !joint.enabled )
 						continue;
 
 					if( Settings.EnableDiagnostics )
@@ -238,7 +238,7 @@ namespace FarseerPhysics.Dynamics
 				{
 					Joint joint = _joints[j];
 
-					if( !joint.Enabled )
+					if( !joint.enabled )
 						continue;
 
 					if( Settings.EnableDiagnostics )
@@ -287,10 +287,10 @@ namespace FarseerPhysics.Dynamics
 				{
 					Body b = Bodies[i];
 
-					if( b.BodyType == BodyType.Static )
+					if( b.bodyType == BodyType.Static )
 						continue;
 
-					if( !b.SleepingAllowed || b._angularVelocity * b._angularVelocity > AngTolSqr || Vector2.Dot( b._linearVelocity, b._linearVelocity ) > LinTolSqr )
+					if( !b.sleepingAllowed || b._angularVelocity * b._angularVelocity > AngTolSqr || Vector2.Dot( b._linearVelocity, b._linearVelocity ) > LinTolSqr )
 					{
 						b._sleepTime = 0.0f;
 						minSleepTime = 0.0f;
@@ -307,7 +307,7 @@ namespace FarseerPhysics.Dynamics
 					for( int i = 0; i < BodyCount; ++i )
 					{
 						Body b = Bodies[i];
-						b.Awake = false;
+						b.awake = false;
 					}
 				}
 			}
@@ -408,7 +408,7 @@ namespace FarseerPhysics.Dynamics
 		public void Add( Body body )
 		{
 			Debug.Assert( BodyCount < BodyCapacity );
-			body.IslandIndex = BodyCount;
+			body.islandIndex = BodyCount;
 			Bodies[BodyCount++] = body;
 		}
 
@@ -435,11 +435,11 @@ namespace FarseerPhysics.Dynamics
 
 				//FPE optimization: We don't store the impulses and send it to the delegate. We just send the whole contact.
 				//FPE feature: added after collision
-				if( c.FixtureA.AfterCollision != null )
-					c.FixtureA.AfterCollision( c.FixtureA, c.FixtureB, c, constraints[i] );
+				if( c.FixtureA.afterCollision != null )
+					c.FixtureA.afterCollision( c.FixtureA, c.FixtureB, c, constraints[i] );
 
-				if( c.FixtureB.AfterCollision != null )
-					c.FixtureB.AfterCollision( c.FixtureB, c.FixtureA, c, constraints[i] );
+				if( c.FixtureB.afterCollision != null )
+					c.FixtureB.afterCollision( c.FixtureB, c.FixtureA, c, constraints[i] );
 
 				if( _contactManager.PostSolve != null )
 				{

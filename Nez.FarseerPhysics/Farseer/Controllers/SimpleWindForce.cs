@@ -31,7 +31,7 @@ namespace FarseerPhysics.Controllers
 
 		public override void ApplyForce( float dt, float strength )
 		{
-			foreach( var body in World.BodyList )
+			foreach( var body in World.bodyList )
 			{
 				//TODO: Consider Force Type
 				float decayMultiplier = GetDecayMultiplier( body );
@@ -40,7 +40,7 @@ namespace FarseerPhysics.Controllers
 					Vector2 forceVector;
 					if( ForceType == ForceTypes.Point )
 					{
-						forceVector = body.Position - Position;
+						forceVector = body.position - Position;
 					}
 					else
 					{

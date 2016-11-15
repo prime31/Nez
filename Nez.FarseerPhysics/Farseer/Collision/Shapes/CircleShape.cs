@@ -33,7 +33,7 @@ namespace FarseerPhysics.Collision.Shapes
 	/// </summary>
 	public class CircleShape : Shape
 	{
-		public override int ChildCount
+		public override int childCount
 		{
 			get { return 1; }
 		}
@@ -41,7 +41,7 @@ namespace FarseerPhysics.Collision.Shapes
 		/// <summary>
 		/// Get or set the position of the circle
 		/// </summary>
-		public Vector2 Position
+		public Vector2 position
 		{
 			get { return _position; }
 			set
@@ -53,6 +53,7 @@ namespace FarseerPhysics.Collision.Shapes
 
 		internal Vector2 _position;
 
+
 		/// <summary>
 		/// Create a new circle with the desired radius and density.
 		/// </summary>
@@ -63,21 +64,21 @@ namespace FarseerPhysics.Collision.Shapes
 			Debug.Assert( radius >= 0 );
 			Debug.Assert( density >= 0 );
 
-			ShapeType = ShapeType.Circle;
+			shapeType = ShapeType.Circle;
 			_position = Vector2.Zero;
-			Radius = radius; // The Radius property cache 2radius and calls ComputeProperties(). So no need to call ComputeProperties() here.
+			base.radius = radius; // The Radius property cache 2radius and calls ComputeProperties(). So no need to call ComputeProperties() here.
 		}
 
 		internal CircleShape() : base( 0 )
 		{
-			ShapeType = ShapeType.Circle;
+			shapeType = ShapeType.Circle;
 			_radius = 0.0f;
 			_position = Vector2.Zero;
 		}
 
 		public override bool TestPoint( ref Transform transform, ref Vector2 point )
 		{
-			var center = transform.p + MathUtils.Mul( transform.q, Position );
+			var center = transform.p + MathUtils.Mul( transform.q, position );
 			var d = point - center;
 			return Vector2.Dot( d, d ) <= _2radius;
 		}
@@ -91,21 +92,19 @@ namespace FarseerPhysics.Collision.Shapes
 
 			output = new RayCastOutput();
 
-			Vector2 position = transform.p + MathUtils.Mul( transform.q, Position );
-			Vector2 s = input.Point1 - position;
-			float b = Vector2.Dot( s, s ) - _2radius;
+			var pos = transform.p + MathUtils.Mul( transform.q, this.position );
+			var s = input.Point1 - pos;
+			var b = Vector2.Dot( s, s ) - _2radius;
 
 			// Solve quadratic equation.
-			Vector2 r = input.Point2 - input.Point1;
-			float c = Vector2.Dot( s, r );
-			float rr = Vector2.Dot( r, r );
-			float sigma = c * c - rr * b;
+			var r = input.Point2 - input.Point1;
+			var c = Vector2.Dot( s, r );
+			var rr = Vector2.Dot( r, r );
+			var sigma = c * c - rr * b;
 
 			// Check for negative discriminant and short segment.
 			if( sigma < 0.0f || rr < Settings.Epsilon )
-			{
 				return false;
-			}
 
 			// Find the point of intersection of the line with the circle.
 			float a = -( c + (float)Math.Sqrt( sigma ) );
@@ -127,34 +126,34 @@ namespace FarseerPhysics.Collision.Shapes
 
 		public override void ComputeAABB( out AABB aabb, ref Transform transform, int childIndex )
 		{
-			var p = transform.p + MathUtils.Mul( transform.q, Position );
-			aabb.LowerBound = new Vector2( p.X - Radius, p.Y - Radius );
-			aabb.UpperBound = new Vector2( p.X + Radius, p.Y + Radius );
+			var p = transform.p + MathUtils.Mul( transform.q, position );
+			aabb.LowerBound = new Vector2( p.X - radius, p.Y - radius );
+			aabb.UpperBound = new Vector2( p.X + radius, p.Y + radius );
 		}
 
 		protected override sealed void ComputeProperties()
 		{
 			var area = Settings.Pi * _2radius;
-			MassData.Area = area;
-			MassData.Mass = Density * area;
-			MassData.Centroid = Position;
+			massData.area = area;
+			massData.mass = density * area;
+			massData.centroid = position;
 
 			// inertia about the local origin
-			MassData.Inertia = MassData.Mass * ( 0.5f * _2radius + Vector2.Dot( Position, Position ) );
+			massData.inertia = massData.mass * ( 0.5f * _2radius + Vector2.Dot( position, position ) );
 		}
 
 		public override float ComputeSubmergedArea( ref Vector2 normal, float offset, ref Transform xf, out Vector2 sc )
 		{
 			sc = Vector2.Zero;
 
-			var p = MathUtils.Mul( ref xf, Position );
+			var p = MathUtils.Mul( ref xf, position );
 			float l = -( Vector2.Dot( normal, p ) - offset );
-			if( l < -Radius + Settings.Epsilon )
+			if( l < -radius + Settings.Epsilon )
 			{
 				//Completely dry
 				return 0;
 			}
-			if( l > Radius )
+			if( l > radius )
 			{
 				//Completely wet
 				sc = p;
@@ -163,7 +162,7 @@ namespace FarseerPhysics.Collision.Shapes
 
 			//Magic
 			float l2 = l * l;
-			float area = _2radius * (float)( ( Math.Asin( l / Radius ) + Settings.Pi / 2 ) + l * Math.Sqrt( _2radius - l2 ) );
+			float area = _2radius * (float)( ( Math.Asin( l / radius ) + Settings.Pi / 2 ) + l * Math.Sqrt( _2radius - l2 ) );
 			float com = -2.0f / 3.0f * (float)Math.Pow( _2radius - l2, 1.5f ) / area;
 
 			sc.X = p.X + normal.X * com;
@@ -179,18 +178,18 @@ namespace FarseerPhysics.Collision.Shapes
 		/// <returns>True if the two circles are the same size and have the same position</returns>
 		public bool CompareTo( CircleShape shape )
 		{
-			return ( Radius == shape.Radius && Position == shape.Position );
+			return ( radius == shape.radius && position == shape.position );
 		}
 
 		public override Shape Clone()
 		{
 			CircleShape clone = new CircleShape();
-			clone.ShapeType = ShapeType;
-			clone._radius = Radius;
+			clone.shapeType = shapeType;
+			clone._radius = radius;
 			clone._2radius = _2radius; //FPE note: We also copy the cache
 			clone._density = _density;
 			clone._position = _position;
-			clone.MassData = MassData;
+			clone.massData = massData;
 			return clone;
 		}
 

@@ -93,10 +93,10 @@ namespace FarseerPhysics.Common
                 Body b = new Body(world);
 
                 // copy the type from original body
-                b.BodyType = type;
-                b.Position = new Vector2(centers[i].X, centers[i].Y);
-                b.Rotation = centers[i].Z;
-                b.UserData = userData;
+                b.bodyType = type;
+                b.position = new Vector2(centers[i].X, centers[i].Y);
+                b.rotation = centers[i].Z;
+                b.userData = userData;
 
                 foreach (Shape shape in shapes)
                 {
@@ -145,10 +145,10 @@ namespace FarseerPhysics.Common
         public static void MoveBodyOnPath(Path path, Body body, float time, float strength, float timeStep)
         {
             Vector2 destination = path.GetPosition(time);
-            Vector2 positionDelta = body.Position - destination;
+            Vector2 positionDelta = body.position - destination;
             Vector2 velocity = (positionDelta / timeStep) * strength;
 
-            body.LinearVelocity = -velocity;
+            body.linearVelocity = -velocity;
         }
 
         /// <summary>
@@ -167,7 +167,7 @@ namespace FarseerPhysics.Common
             for (int i = 1; i < bodies.Count; i++)
             {
                 RevoluteJoint joint = new RevoluteJoint(bodies[i], bodies[i - 1], localAnchorA, localAnchorB);
-                joint.CollideConnected = collideConnected;
+                joint.collideConnected = collideConnected;
                 world.AddJoint(joint);
                 joints.Add(joint);
             }
@@ -175,7 +175,7 @@ namespace FarseerPhysics.Common
             if (connectFirstAndLast)
             {
                 RevoluteJoint lastjoint = new RevoluteJoint(bodies[0], bodies[bodies.Count - 1], localAnchorA, localAnchorB);
-                lastjoint.CollideConnected = collideConnected;
+                lastjoint.collideConnected = collideConnected;
                 world.AddJoint(lastjoint);
                 joints.Add(lastjoint);
             }

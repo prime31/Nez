@@ -122,12 +122,12 @@ namespace FarseerPhysics.Dynamics.Contacts
 
 				var fixtureA = contact.FixtureA;
 				var fixtureB = contact.FixtureB;
-				var shapeA = fixtureA.Shape;
-				var shapeB = fixtureB.Shape;
-				var radiusA = shapeA.Radius;
-				var radiusB = shapeB.Radius;
-				var bodyA = fixtureA.Body;
-				var bodyB = fixtureB.Body;
+				var shapeA = fixtureA.shape;
+				var shapeB = fixtureB.shape;
+				var radiusA = shapeA.radius;
+				var radiusB = shapeB.radius;
+				var bodyA = fixtureA.body;
+				var bodyB = fixtureB.body;
 				var manifold = contact.Manifold;
 
 				var pointCount = manifold.PointCount;
@@ -137,8 +137,8 @@ namespace FarseerPhysics.Dynamics.Contacts
 				vc.friction = contact.Friction;
 				vc.restitution = contact.Restitution;
 				vc.tangentSpeed = contact.TangentSpeed;
-				vc.indexA = bodyA.IslandIndex;
-				vc.indexB = bodyB.IslandIndex;
+				vc.indexA = bodyA.islandIndex;
+				vc.indexB = bodyB.islandIndex;
 				vc.invMassA = bodyA._invMass;
 				vc.invMassB = bodyB._invMass;
 				vc.invIA = bodyA._invI;
@@ -149,8 +149,8 @@ namespace FarseerPhysics.Dynamics.Contacts
 				vc.normalMass.SetZero();
 
 				var pc = _positionConstraints[i];
-				pc.indexA = bodyA.IslandIndex;
-				pc.indexB = bodyB.IslandIndex;
+				pc.indexA = bodyA.islandIndex;
+				pc.indexB = bodyB.islandIndex;
 				pc.invMassA = bodyA._invMass;
 				pc.invMassB = bodyB._invMass;
 				pc.localCenterA = bodyA._sweep.LocalCenter;

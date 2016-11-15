@@ -24,268 +24,275 @@ using System;
 using FarseerPhysics.Common;
 using Microsoft.Xna.Framework;
 
+
 namespace FarseerPhysics.Dynamics.Joints
 {
-    // Limit:
-    // C = norm(pB - pA) - L
-    // u = (pB - pA) / norm(pB - pA)
-    // Cdot = dot(u, vB + cross(wB, rB) - vA - cross(wA, rA))
-    // J = [-u -cross(rA, u) u cross(rB, u)]
-    // K = J * invM * JT
-    //   = invMassA + invIA * cross(rA, u)^2 + invMassB + invIB * cross(rB, u)^2
+	// Limit:
+	// C = norm(pB - pA) - L
+	// u = (pB - pA) / norm(pB - pA)
+	// Cdot = dot(u, vB + cross(wB, rB) - vA - cross(wA, rA))
+	// J = [-u -cross(rA, u) u cross(rB, u)]
+	// K = J * invM * JT
+	//   = invMassA + invIA * cross(rA, u)^2 + invMassB + invIB * cross(rB, u)^2
 
-    /// <summary>
-    /// A rope joint enforces a maximum distance between two points on two bodies. It has no other effect.
-    /// It can be used on ropes that are made up of several connected bodies, and if there is a need to support a heavy body.
-    /// This joint is used for stabiliation of heavy objects on soft constraint joints.
-    /// 
-    /// Warning: if you attempt to change the maximum length during the simulation you will get some non-physical behavior.
-    /// Use the DistanceJoint instead if you want to dynamically control the length.
-    /// </summary>
-    public class RopeJoint : Joint
-    {
-        // Solver shared
-        private float _impulse;
-        private float _length;
+	/// <summary>
+	/// A rope joint enforces a maximum distance between two points on two bodies. It has no other effect.
+	/// It can be used on ropes that are made up of several connected bodies, and if there is a need to support a heavy body.
+	/// This joint is used for stabiliation of heavy objects on soft constraint joints.
+	/// 
+	/// Warning: if you attempt to change the maximum length during the simulation you will get some non-physical behavior.
+	/// Use the DistanceJoint instead if you want to dynamically control the length.
+	/// </summary>
+	public class RopeJoint : Joint
+	{
+		#region Properties/Fields
 
-        // Solver temp
-        private int _indexA;
-        private int _indexB;
-        private Vector2 _localCenterA;
-        private Vector2 _localCenterB;
-        private float _invMassA;
-        private float _invMassB;
-        private float _invIA;
-        private float _invIB;
-        private float _mass;
-        private Vector2 _rA, _rB;
-        private Vector2 _u;
+		/// <summary>
+		/// The local anchor point on BodyA
+		/// </summary>
+		public Vector2 localAnchorA;
 
-        internal RopeJoint()
-        {
-            JointType = JointType.Rope;
-        }
+		/// <summary>
+		/// The local anchor point on BodyB
+		/// </summary>
+		public Vector2 localAnchorB;
 
-        /// <summary>
-        /// Constructor for RopeJoint.
-        /// </summary>
-        /// <param name="bodyA">The first body</param>
-        /// <param name="bodyB">The second body</param>
-        /// <param name="anchorA">The anchor on the first body</param>
-        /// <param name="anchorB">The anchor on the second body</param>
-        /// <param name="useWorldCoordinates">Set to true if you are using world coordinates as anchors.</param>
-        public RopeJoint(Body bodyA, Body bodyB, Vector2 anchorA, Vector2 anchorB, bool useWorldCoordinates = false)
-            : base(bodyA, bodyB)
-        {
-            JointType = JointType.Rope;
+		public override sealed Vector2 worldAnchorA
+		{
+			get { return bodyA.GetWorldPoint( localAnchorA ); }
+			set { localAnchorA = bodyA.GetLocalPoint( value ); }
+		}
 
-            if (useWorldCoordinates)
-            {
-                LocalAnchorA = bodyA.GetLocalPoint(anchorA);
-                LocalAnchorB = bodyB.GetLocalPoint(anchorB);
-            }
-            else
-            {
-                LocalAnchorA = anchorA;
-                LocalAnchorB = anchorB;
-            }
+		public override sealed Vector2 worldAnchorB
+		{
+			get { return bodyB.GetWorldPoint( localAnchorB ); }
+			set { localAnchorB = bodyB.GetLocalPoint( value ); }
+		}
 
-            //FPE feature: Setting default MaxLength
-            Vector2 d = WorldAnchorB - WorldAnchorA;
-            MaxLength = d.Length();
-        }
+		/// <summary>
+		/// Get or set the maximum length of the rope.
+		/// By default, it is the distance between the two anchor points.
+		/// </summary>
+		public float maxLength;
 
-        /// <summary>
-        /// The local anchor point on BodyA
-        /// </summary>
-        public Vector2 LocalAnchorA { get; set; }
+		/// <summary>
+		/// Gets the state of the joint.
+		/// </summary>
+		public LimitState state { get; private set; }
 
-        /// <summary>
-        /// The local anchor point on BodyB
-        /// </summary>
-        public Vector2 LocalAnchorB { get; set; }
+		// Solver shared
+		float _impulse;
+		float _length;
 
-        public override sealed Vector2 WorldAnchorA
-        {
-            get { return BodyA.GetWorldPoint(LocalAnchorA); }
-            set { LocalAnchorA = BodyA.GetLocalPoint(value); }
-        }
+		// Solver temp
+		int _indexA;
+		int _indexB;
+		Vector2 _localCenterA;
+		Vector2 _localCenterB;
+		float _invMassA;
+		private float _invMassB;
+		float _invIA;
+		float _invIB;
+		float _mass;
+		private Vector2 _rA, _rB;
+		Vector2 _u;
 
-        public override sealed Vector2 WorldAnchorB
-        {
-            get { return BodyB.GetWorldPoint(LocalAnchorB); }
-            set { LocalAnchorB = BodyB.GetLocalPoint(value); }
-        }
+		#endregion
 
-        /// <summary>
-        /// Get or set the maximum length of the rope.
-        /// By default, it is the distance between the two anchor points.
-        /// </summary>
-        public float MaxLength { get; set; }
 
-        /// <summary>
-        /// Gets the state of the joint.
-        /// </summary>
-        public LimitState State { get; private set; }
+		internal RopeJoint()
+		{
+			jointType = JointType.Rope;
+		}
 
-        public override Vector2 GetReactionForce(float invDt)
-        {
-            return (invDt * _impulse) * _u;
-        }
+		/// <summary>
+		/// Constructor for RopeJoint.
+		/// </summary>
+		/// <param name="bodyA">The first body</param>
+		/// <param name="bodyB">The second body</param>
+		/// <param name="anchorA">The anchor on the first body</param>
+		/// <param name="anchorB">The anchor on the second body</param>
+		/// <param name="useWorldCoordinates">Set to true if you are using world coordinates as anchors.</param>
+		public RopeJoint( Body bodyA, Body bodyB, Vector2 anchorA, Vector2 anchorB, bool useWorldCoordinates = false )
+			: base( bodyA, bodyB )
+		{
+			jointType = JointType.Rope;
 
-        public override float GetReactionTorque(float invDt)
-        {
-            return 0;
-        }
+			if( useWorldCoordinates )
+			{
+				localAnchorA = bodyA.GetLocalPoint( anchorA );
+				localAnchorB = bodyB.GetLocalPoint( anchorB );
+			}
+			else
+			{
+				localAnchorA = anchorA;
+				localAnchorB = anchorB;
+			}
 
-        internal override void InitVelocityConstraints(ref SolverData data)
-        {
-            _indexA = BodyA.IslandIndex;
-            _indexB = BodyB.IslandIndex;
-            _localCenterA = BodyA._sweep.LocalCenter;
-            _localCenterB = BodyB._sweep.LocalCenter;
-            _invMassA = BodyA._invMass;
-            _invMassB = BodyB._invMass;
-            _invIA = BodyA._invI;
-            _invIB = BodyB._invI;
+			//FPE feature: Setting default MaxLength
+			Vector2 d = worldAnchorB - worldAnchorA;
+			maxLength = d.Length();
+		}
 
-            Vector2 cA = data.positions[_indexA].c;
-            float aA = data.positions[_indexA].a;
-            Vector2 vA = data.velocities[_indexA].v;
-            float wA = data.velocities[_indexA].w;
+		public override Vector2 GetReactionForce( float invDt )
+		{
+			return ( invDt * _impulse ) * _u;
+		}
 
-            Vector2 cB = data.positions[_indexB].c;
-            float aB = data.positions[_indexB].a;
-            Vector2 vB = data.velocities[_indexB].v;
-            float wB = data.velocities[_indexB].w;
+		public override float GetReactionTorque( float invDt )
+		{
+			return 0;
+		}
 
-            Rot qA = new Rot(aA), qB = new Rot(aB);
+		internal override void InitVelocityConstraints( ref SolverData data )
+		{
+			_indexA = bodyA.islandIndex;
+			_indexB = bodyB.islandIndex;
+			_localCenterA = bodyA._sweep.LocalCenter;
+			_localCenterB = bodyB._sweep.LocalCenter;
+			_invMassA = bodyA._invMass;
+			_invMassB = bodyB._invMass;
+			_invIA = bodyA._invI;
+			_invIB = bodyB._invI;
 
-            _rA = MathUtils.Mul(qA, LocalAnchorA - _localCenterA);
-            _rB = MathUtils.Mul(qB, LocalAnchorB - _localCenterB);
-            _u = cB + _rB - cA - _rA;
+			Vector2 cA = data.positions[_indexA].c;
+			float aA = data.positions[_indexA].a;
+			Vector2 vA = data.velocities[_indexA].v;
+			float wA = data.velocities[_indexA].w;
 
-            _length = _u.Length();
+			Vector2 cB = data.positions[_indexB].c;
+			float aB = data.positions[_indexB].a;
+			Vector2 vB = data.velocities[_indexB].v;
+			float wB = data.velocities[_indexB].w;
 
-            float C = _length - MaxLength;
-            if (C > 0.0f)
-            {
-                State = LimitState.AtUpper;
-            }
-            else
-            {
-                State = LimitState.Inactive;
-            }
+			Rot qA = new Rot( aA ), qB = new Rot( aB );
 
-            if (_length > Settings.LinearSlop)
-            {
-                _u *= 1.0f / _length;
-            }
-            else
-            {
-                _u = Vector2.Zero;
-                _mass = 0.0f;
-                _impulse = 0.0f;
-                return;
-            }
+			_rA = MathUtils.Mul( qA, localAnchorA - _localCenterA );
+			_rB = MathUtils.Mul( qB, localAnchorB - _localCenterB );
+			_u = cB + _rB - cA - _rA;
 
-            // Compute effective mass.
-            float crA = MathUtils.Cross(_rA, _u);
-            float crB = MathUtils.Cross(_rB, _u);
-            float invMass = _invMassA + _invIA * crA * crA + _invMassB + _invIB * crB * crB;
+			_length = _u.Length();
 
-            _mass = invMass != 0.0f ? 1.0f / invMass : 0.0f;
+			float C = _length - maxLength;
+			if( C > 0.0f )
+			{
+				state = LimitState.AtUpper;
+			}
+			else
+			{
+				state = LimitState.Inactive;
+			}
 
-            if (Settings.EnableWarmstarting)
-            {
-                // Scale the impulse to support a variable time step.
-                _impulse *= data.step.dtRatio;
+			if( _length > Settings.LinearSlop )
+			{
+				_u *= 1.0f / _length;
+			}
+			else
+			{
+				_u = Vector2.Zero;
+				_mass = 0.0f;
+				_impulse = 0.0f;
+				return;
+			}
 
-                Vector2 P = _impulse * _u;
-                vA -= _invMassA * P;
-                wA -= _invIA * MathUtils.Cross(_rA, P);
-                vB += _invMassB * P;
-                wB += _invIB * MathUtils.Cross(_rB, P);
-            }
-            else
-            {
-                _impulse = 0.0f;
-            }
+			// Compute effective mass.
+			float crA = MathUtils.Cross( _rA, _u );
+			float crB = MathUtils.Cross( _rB, _u );
+			float invMass = _invMassA + _invIA * crA * crA + _invMassB + _invIB * crB * crB;
 
-            data.velocities[_indexA].v = vA;
-            data.velocities[_indexA].w = wA;
-            data.velocities[_indexB].v = vB;
-            data.velocities[_indexB].w = wB;
-        }
+			_mass = invMass != 0.0f ? 1.0f / invMass : 0.0f;
 
-        internal override void SolveVelocityConstraints(ref SolverData data)
-        {
-            Vector2 vA = data.velocities[_indexA].v;
-            float wA = data.velocities[_indexA].w;
-            Vector2 vB = data.velocities[_indexB].v;
-            float wB = data.velocities[_indexB].w;
+			if( Settings.EnableWarmstarting )
+			{
+				// Scale the impulse to support a variable time step.
+				_impulse *= data.step.dtRatio;
 
-            // Cdot = dot(u, v + cross(w, r))
-            Vector2 vpA = vA + MathUtils.Cross(wA, _rA);
-            Vector2 vpB = vB + MathUtils.Cross(wB, _rB);
-            float C = _length - MaxLength;
-            float Cdot = Vector2.Dot(_u, vpB - vpA);
+				Vector2 P = _impulse * _u;
+				vA -= _invMassA * P;
+				wA -= _invIA * MathUtils.Cross( _rA, P );
+				vB += _invMassB * P;
+				wB += _invIB * MathUtils.Cross( _rB, P );
+			}
+			else
+			{
+				_impulse = 0.0f;
+			}
 
-            // Predictive constraint.
-            if (C < 0.0f)
-            {
-                Cdot += data.step.inv_dt * C;
-            }
+			data.velocities[_indexA].v = vA;
+			data.velocities[_indexA].w = wA;
+			data.velocities[_indexB].v = vB;
+			data.velocities[_indexB].w = wB;
+		}
 
-            float impulse = -_mass * Cdot;
-            float oldImpulse = _impulse;
-            _impulse = Math.Min(0.0f, _impulse + impulse);
-            impulse = _impulse - oldImpulse;
+		internal override void SolveVelocityConstraints( ref SolverData data )
+		{
+			Vector2 vA = data.velocities[_indexA].v;
+			float wA = data.velocities[_indexA].w;
+			Vector2 vB = data.velocities[_indexB].v;
+			float wB = data.velocities[_indexB].w;
 
-            Vector2 P = impulse * _u;
-            vA -= _invMassA * P;
-            wA -= _invIA * MathUtils.Cross(_rA, P);
-            vB += _invMassB * P;
-            wB += _invIB * MathUtils.Cross(_rB, P);
+			// Cdot = dot(u, v + cross(w, r))
+			Vector2 vpA = vA + MathUtils.Cross( wA, _rA );
+			Vector2 vpB = vB + MathUtils.Cross( wB, _rB );
+			float C = _length - maxLength;
+			float Cdot = Vector2.Dot( _u, vpB - vpA );
 
-            data.velocities[_indexA].v = vA;
-            data.velocities[_indexA].w = wA;
-            data.velocities[_indexB].v = vB;
-            data.velocities[_indexB].w = wB;
-        }
+			// Predictive constraint.
+			if( C < 0.0f )
+			{
+				Cdot += data.step.inv_dt * C;
+			}
 
-        internal override bool SolvePositionConstraints(ref SolverData data)
-        {
-            Vector2 cA = data.positions[_indexA].c;
-            float aA = data.positions[_indexA].a;
-            Vector2 cB = data.positions[_indexB].c;
-            float aB = data.positions[_indexB].a;
+			float impulse = -_mass * Cdot;
+			float oldImpulse = _impulse;
+			_impulse = Math.Min( 0.0f, _impulse + impulse );
+			impulse = _impulse - oldImpulse;
 
-            Rot qA = new Rot(aA), qB = new Rot(aB);
+			Vector2 P = impulse * _u;
+			vA -= _invMassA * P;
+			wA -= _invIA * MathUtils.Cross( _rA, P );
+			vB += _invMassB * P;
+			wB += _invIB * MathUtils.Cross( _rB, P );
 
-            Vector2 rA = MathUtils.Mul(qA, LocalAnchorA - _localCenterA);
-            Vector2 rB = MathUtils.Mul(qB, LocalAnchorB - _localCenterB);
-            Vector2 u = cB + rB - cA - rA;
+			data.velocities[_indexA].v = vA;
+			data.velocities[_indexA].w = wA;
+			data.velocities[_indexB].v = vB;
+			data.velocities[_indexB].w = wB;
+		}
 
-            float length = u.Length(); u.Normalize();
-            float C = length - MaxLength;
+		internal override bool SolvePositionConstraints( ref SolverData data )
+		{
+			Vector2 cA = data.positions[_indexA].c;
+			float aA = data.positions[_indexA].a;
+			Vector2 cB = data.positions[_indexB].c;
+			float aB = data.positions[_indexB].a;
 
-            C = MathUtils.Clamp(C, 0.0f, Settings.MaxLinearCorrection);
+			Rot qA = new Rot( aA ), qB = new Rot( aB );
 
-            float impulse = -_mass * C;
-            Vector2 P = impulse * u;
+			Vector2 rA = MathUtils.Mul( qA, localAnchorA - _localCenterA );
+			Vector2 rB = MathUtils.Mul( qB, localAnchorB - _localCenterB );
+			Vector2 u = cB + rB - cA - rA;
 
-            cA -= _invMassA * P;
-            aA -= _invIA * MathUtils.Cross(rA, P);
-            cB += _invMassB * P;
-            aB += _invIB * MathUtils.Cross(rB, P);
+			float length = u.Length(); u.Normalize();
+			float C = length - maxLength;
 
-            data.positions[_indexA].c = cA;
-            data.positions[_indexA].a = aA;
-            data.positions[_indexB].c = cB;
-            data.positions[_indexB].a = aB;
+			C = MathUtils.Clamp( C, 0.0f, Settings.MaxLinearCorrection );
 
-            return length - MaxLength < Settings.LinearSlop;
-        }
-    }
+			float impulse = -_mass * C;
+			Vector2 P = impulse * u;
+
+			cA -= _invMassA * P;
+			aA -= _invIA * MathUtils.Cross( rA, P );
+			cB += _invMassB * P;
+			aB += _invIB * MathUtils.Cross( rB, P );
+
+			data.positions[_indexA].c = cA;
+			data.positions[_indexA].a = aA;
+			data.positions[_indexB].c = cB;
+			data.positions[_indexB].a = aB;
+
+			return length - maxLength < Settings.LinearSlop;
+		}
+	
+	}
 }

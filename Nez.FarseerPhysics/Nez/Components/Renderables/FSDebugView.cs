@@ -79,7 +79,7 @@ namespace Nez.Farseer
 		{
 			_bounds = RectangleF.maxRect;
 			this.world = world;
-			world.ContactManager.PreSolve += preSolve;
+			world.contactManager.PreSolve += preSolve;
 
 			//Default flags
 			appendFlags( DebugViewFlags.Shape );
@@ -112,7 +112,7 @@ namespace Nez.Farseer
 
 		public void Dispose()
 		{
-			world.ContactManager.PreSolve -= preSolve;
+			world.contactManager.PreSolve -= preSolve;
 		}
 
 		#endregion
@@ -169,19 +169,19 @@ namespace Nez.Farseer
 		{
 			if( ( flags & DebugViewFlags.Shape ) == DebugViewFlags.Shape )
 			{
-				foreach( Body b in world.BodyList )
+				foreach( Body b in world.bodyList )
 				{
 					FarseerPhysics.Common.Transform xf;
 					b.GetTransform( out xf );
-					foreach( Fixture f in b.FixtureList )
+					foreach( Fixture f in b.fixtureList )
 					{
-						if( b.Enabled == false )
+						if( b.enabled == false )
 							drawShape( f, xf, inactiveShapeColor );
-						else if( b.BodyType == BodyType.Static )
+						else if( b.bodyType == BodyType.Static )
 							drawShape( f, xf, staticShapeColor );
-						else if( b.BodyType == BodyType.Kinematic )
+						else if( b.bodyType == BodyType.Kinematic )
 							drawShape( f, xf, kinematicShapeColor );
-						else if( b.Awake == false )
+						else if( b.awake == false )
 							drawShape( f, xf, sleepingShapeColor );
 						else
 							drawShape( f, xf, defaultShapeColor );
@@ -215,19 +215,19 @@ namespace Nez.Farseer
 
 			if( ( flags & DebugViewFlags.PolygonPoints ) == DebugViewFlags.PolygonPoints )
 			{
-				foreach( Body body in world.BodyList )
+				foreach( Body body in world.bodyList )
 				{
-					foreach( Fixture f in body.FixtureList )
+					foreach( Fixture f in body.fixtureList )
 					{
-						PolygonShape polygon = f.Shape as PolygonShape;
+						PolygonShape polygon = f.shape as PolygonShape;
 						if( polygon != null )
 						{
 							FarseerPhysics.Common.Transform xf;
 							body.GetTransform( out xf );
 
-							for( int i = 0; i < polygon.Vertices.Count; i++ )
+							for( int i = 0; i < polygon.vertices.Count; i++ )
 							{
-								Vector2 tmp = MathUtils.Mul( ref xf, polygon.Vertices[i] );
+								Vector2 tmp = MathUtils.Mul( ref xf, polygon.vertices[i] );
 								drawPoint( tmp, 0.1f, Color.Red );
 							}
 						}
@@ -237,27 +237,27 @@ namespace Nez.Farseer
 
 			if( ( flags & DebugViewFlags.Joint ) == DebugViewFlags.Joint )
 			{
-				foreach( var j in world.JointList )
+				foreach( var j in world.jointList )
 					FSDebugView.drawJoint( this, j );
 			}
 
 			if( ( flags & DebugViewFlags.AABB ) == DebugViewFlags.AABB )
 			{
 				var color = new Color( 0.9f, 0.3f, 0.9f );
-				var bp = world.ContactManager.BroadPhase;
+				var bp = world.contactManager.BroadPhase;
 
-				foreach( var body in world.BodyList )
+				foreach( var body in world.bodyList )
 				{
-					if( body.Enabled == false )
+					if( body.enabled == false )
 						continue;
 
-					foreach( var f in body.FixtureList )
+					foreach( var f in body.fixtureList )
 					{
-						for( var t = 0; t < f.ProxyCount; ++t )
+						for( var t = 0; t < f.proxyCount; ++t )
 						{
-							var proxy = f.Proxies[t];
+							var proxy = f.proxies[t];
 							AABB aabb;
-							bp.GetFatAABB( proxy.ProxyId, out aabb );
+							bp.GetFatAABB( proxy.proxyId, out aabb );
 
 							drawAABB( ref aabb, color );
 						}
@@ -267,20 +267,20 @@ namespace Nez.Farseer
 
 			if( ( flags & DebugViewFlags.CenterOfMass ) == DebugViewFlags.CenterOfMass )
 			{
-				foreach( Body b in world.BodyList )
+				foreach( Body b in world.bodyList )
 				{
 					FarseerPhysics.Common.Transform xf;
 					b.GetTransform( out xf );
-					xf.p = b.WorldCenter;
+					xf.p = b.worldCenter;
 					drawTransform( ref xf );
 				}
 			}
 
 			if( ( flags & DebugViewFlags.Controllers ) == DebugViewFlags.Controllers )
 			{
-				for( int i = 0; i < world.ControllerList.Count; i++ )
+				for( int i = 0; i < world.controllerList.Count; i++ )
 				{
-					Controller controller = world.ControllerList[i];
+					Controller controller = world.controllerList[i];
 
 					BuoyancyController buoyancy = controller as BuoyancyController;
 					if( buoyancy != null )
@@ -298,7 +298,7 @@ namespace Nez.Farseer
 
 		void drawPerformanceGraph()
 		{
-			_graphValues.Add( world.UpdateTime / TimeSpan.TicksPerMillisecond );
+			_graphValues.Add( world.updateTime / TimeSpan.TicksPerMillisecond );
 
 			if( _graphValues.Count > valuesToGraph + 1 )
 				_graphValues.RemoveAt( 0 );
@@ -358,30 +358,30 @@ namespace Nez.Farseer
 		void drawDebugPanel()
 		{
 			int fixtureCount = 0;
-			for( int i = 0; i < world.BodyList.Count; i++ )
-				fixtureCount += world.BodyList[i].FixtureList.Count;
+			for( int i = 0; i < world.bodyList.Count; i++ )
+				fixtureCount += world.bodyList[i].fixtureList.Count;
 
 			int x = (int)debugPanelPosition.X;
 			int y = (int)debugPanelPosition.Y;
 
 			_debugPanelSb.Clear();
 			_debugPanelSb.AppendLine( "Objects:" );
-			_debugPanelSb.Append( "- Bodies: " ).AppendLine( world.BodyList.Count.ToString() );
+			_debugPanelSb.Append( "- Bodies: " ).AppendLine( world.bodyList.Count.ToString() );
 			_debugPanelSb.Append( "- Fixtures: " ).AppendLine( fixtureCount.ToString() );
-			_debugPanelSb.Append( "- Contacts: " ).AppendLine( world.ContactList.Count.ToString() );
-			_debugPanelSb.Append( "- Joints: " ).AppendLine( world.JointList.Count.ToString() );
-			_debugPanelSb.Append( "- Controllers: " ).AppendLine( world.ControllerList.Count.ToString() );
-			_debugPanelSb.Append( "- Proxies: " ).AppendLine( world.ProxyCount.ToString() );
+			_debugPanelSb.Append( "- Contacts: " ).AppendLine( world.contactList.Count.ToString() );
+			_debugPanelSb.Append( "- Joints: " ).AppendLine( world.jointList.Count.ToString() );
+			_debugPanelSb.Append( "- Controllers: " ).AppendLine( world.controllerList.Count.ToString() );
+			_debugPanelSb.Append( "- Proxies: " ).AppendLine( world.proxyCount.ToString() );
 			drawString( x, y, _debugPanelSb.ToString() );
 
 			_debugPanelSb.Clear();
 			_debugPanelSb.AppendLine( "Update time:" );
-			_debugPanelSb.Append( "- Body: " ).AppendLine( string.Format( "{0} ms", world.SolveUpdateTime / TimeSpan.TicksPerMillisecond ) );
-			_debugPanelSb.Append( "- Contact: " ).AppendLine( string.Format( "{0} ms", world.ContactsUpdateTime / TimeSpan.TicksPerMillisecond ) );
-			_debugPanelSb.Append( "- CCD: " ).AppendLine( string.Format( "{0} ms", world.ContinuousPhysicsTime / TimeSpan.TicksPerMillisecond ) );
-			_debugPanelSb.Append( "- Joint: " ).AppendLine( string.Format( "{0} ms", world.Island.JointUpdateTime / TimeSpan.TicksPerMillisecond ) );
-			_debugPanelSb.Append( "- Controller: " ).AppendLine( string.Format( "{0} ms", world.ControllersUpdateTime / TimeSpan.TicksPerMillisecond ) );
-			_debugPanelSb.Append( "- Total: " ).AppendLine( string.Format( "{0} ms", world.UpdateTime / TimeSpan.TicksPerMillisecond ) );
+			_debugPanelSb.Append( "- Body: " ).AppendLine( string.Format( "{0} ms", world.solveUpdateTime / TimeSpan.TicksPerMillisecond ) );
+			_debugPanelSb.Append( "- Contact: " ).AppendLine( string.Format( "{0} ms", world.contactsUpdateTime / TimeSpan.TicksPerMillisecond ) );
+			_debugPanelSb.Append( "- CCD: " ).AppendLine( string.Format( "{0} ms", world.continuousPhysicsTime / TimeSpan.TicksPerMillisecond ) );
+			_debugPanelSb.Append( "- Joint: " ).AppendLine( string.Format( "{0} ms", world.island.JointUpdateTime / TimeSpan.TicksPerMillisecond ) );
+			_debugPanelSb.Append( "- Controller: " ).AppendLine( string.Format( "{0} ms", world.controllersUpdateTime / TimeSpan.TicksPerMillisecond ) );
+			_debugPanelSb.Append( "- Total: " ).AppendLine( string.Format( "{0} ms", world.updateTime / TimeSpan.TicksPerMillisecond ) );
 			drawString( x + 110, y, _debugPanelSb.ToString() );
 		}
 
@@ -402,11 +402,11 @@ namespace Nez.Farseer
 
 		static void drawJoint( FSDebugView instance, Joint joint )
 		{
-			if( !joint.Enabled )
+			if( !joint.enabled )
 				return;
 
-			var b1 = joint.BodyA;
-			var b2 = joint.BodyB;
+			var b1 = joint.bodyA;
+			var b2 = joint.bodyB;
 			FarseerPhysics.Common.Transform xf1;
 			b1.GetTransform( out xf1 );
 
@@ -419,13 +419,13 @@ namespace Nez.Farseer
 				x2 = xf2.p;
 			}
 
-			var p1 = joint.WorldAnchorA;
-			var p2 = joint.WorldAnchorB;
+			var p1 = joint.worldAnchorA;
+			var p2 = joint.worldAnchorB;
 			var x1 = xf1.p;
 
 			var color = new Color( 0.5f, 0.8f, 0.8f );
 
-			switch( joint.JointType )
+			switch( joint.jointType )
 			{
 				case JointType.Distance:
 				{
@@ -435,8 +435,8 @@ namespace Nez.Farseer
 				case JointType.Pulley:
 				{
 					var pulley = (PulleyJoint)joint;
-					var s1 = b1.GetWorldPoint( pulley.LocalAnchorA );
-					var s2 = b2.GetWorldPoint( pulley.LocalAnchorB );
+					var s1 = b1.GetWorldPoint( pulley.localAnchorA );
+					var s2 = b2.GetWorldPoint( pulley.localAnchorB );
 					instance.drawSegment( p1, p2, color );
 					instance.drawSegment( p1, s1, color );
 					instance.drawSegment( p2, s2, color );
@@ -476,14 +476,14 @@ namespace Nez.Farseer
 
 		public void drawShape( Fixture fixture, FarseerPhysics.Common.Transform xf, Color color )
 		{
-			switch( fixture.Shape.ShapeType )
+			switch( fixture.shape.shapeType )
 			{
 				case ShapeType.Circle:
 				{
-					CircleShape circle = (CircleShape)fixture.Shape;
+					CircleShape circle = (CircleShape)fixture.shape;
 
-					Vector2 center = MathUtils.Mul( ref xf, circle.Position );
-					float radius = circle.Radius;
+					Vector2 center = MathUtils.Mul( ref xf, circle.position );
+					float radius = circle.radius;
 					Vector2 axis = MathUtils.Mul( xf.q, new Vector2( 1.0f, 0.0f ) );
 
 					drawSolidCircle( center, radius, axis, color );
@@ -492,13 +492,13 @@ namespace Nez.Farseer
 
 				case ShapeType.Polygon:
 				{
-					PolygonShape poly = (PolygonShape)fixture.Shape;
-					int vertexCount = poly.Vertices.Count;
+					PolygonShape poly = (PolygonShape)fixture.shape;
+					int vertexCount = poly.vertices.Count;
 					System.Diagnostics.Debug.Assert( vertexCount <= Settings.MaxPolygonVertices );
 
 					for( int i = 0; i < vertexCount; ++i )
 					{
-						_tempVertices[i] = MathUtils.Mul( ref xf, poly.Vertices[i] );
+						_tempVertices[i] = MathUtils.Mul( ref xf, poly.vertices[i] );
 					}
 
 					drawSolidPolygon( _tempVertices, vertexCount, color );
@@ -507,20 +507,20 @@ namespace Nez.Farseer
 
 				case ShapeType.Edge:
 				{
-					EdgeShape edge = (EdgeShape)fixture.Shape;
-					Vector2 v1 = MathUtils.Mul( ref xf, edge.Vertex1 );
-					Vector2 v2 = MathUtils.Mul( ref xf, edge.Vertex2 );
+					EdgeShape edge = (EdgeShape)fixture.shape;
+					Vector2 v1 = MathUtils.Mul( ref xf, edge.vertex1 );
+					Vector2 v2 = MathUtils.Mul( ref xf, edge.vertex2 );
 					drawSegment( v1, v2, color );
 				}
 				break;
 
 				case ShapeType.Chain:
 				{
-					var chain = (ChainShape)fixture.Shape;
-					for( int i = 0; i < chain.Vertices.Count - 1; ++i )
+					var chain = (ChainShape)fixture.shape;
+					for( int i = 0; i < chain.vertices.Count - 1; ++i )
 					{
-						Vector2 v1 = MathUtils.Mul( ref xf, chain.Vertices[i] );
-						Vector2 v2 = MathUtils.Mul( ref xf, chain.Vertices[i + 1] );
+						Vector2 v1 = MathUtils.Mul( ref xf, chain.vertices[i] );
+						Vector2 v2 = MathUtils.Mul( ref xf, chain.vertices[i + 1] );
 						drawSegment( v1, v2, color );
 					}
 				}

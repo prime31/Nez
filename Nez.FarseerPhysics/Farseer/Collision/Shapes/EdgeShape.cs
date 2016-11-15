@@ -33,32 +33,32 @@ namespace FarseerPhysics.Collision.Shapes
 	/// </summary>
 	public class EdgeShape : Shape
 	{
-		public override int ChildCount { get { return 1; } }
+		public override int childCount { get { return 1; } }
 
 		/// <summary>
 		/// Is true if the edge is connected to an adjacent vertex before vertex 1.
 		/// </summary>
-		public bool HasVertex0 { get; set; }
+		public bool hasVertex0;
 
 		/// <summary>
 		/// Is true if the edge is connected to an adjacent vertex after vertex2.
 		/// </summary>
-		public bool HasVertex3 { get; set; }
+		public bool hasVertex3;
 
 		/// <summary>
 		/// Optional adjacent vertices. These are used for smooth collision.
 		/// </summary>
-		public Vector2 Vertex0 { get; set; }
+		public Vector2 vertex0;
 
 		/// <summary>
 		/// Optional adjacent vertices. These are used for smooth collision.
 		/// </summary>
-		public Vector2 Vertex3 { get; set; }
+		public Vector2 vertex3;
 
 		/// <summary>
 		/// These are the edge vertices
 		/// </summary>
-		public Vector2 Vertex1
+		public Vector2 vertex1
 		{
 			get { return _vertex1; }
 			set
@@ -71,7 +71,7 @@ namespace FarseerPhysics.Collision.Shapes
 		/// <summary>
 		/// These are the edge vertices
 		/// </summary>
-		public Vector2 Vertex2
+		public Vector2 vertex2
 		{
 			get { return _vertex2; }
 			set
@@ -94,7 +94,7 @@ namespace FarseerPhysics.Collision.Shapes
 
 		internal EdgeShape() : base( 0 )
 		{
-			ShapeType = ShapeType.Edge;
+			shapeType = ShapeType.Edge;
 			_radius = Settings.PolygonRadius;
 		}
 
@@ -105,7 +105,7 @@ namespace FarseerPhysics.Collision.Shapes
 		/// <param name="end">The end of the edge.</param>
 		public EdgeShape( Vector2 start, Vector2 end ) : base( 0 )
 		{
-			ShapeType = ShapeType.Edge;
+			shapeType = ShapeType.Edge;
 			_radius = Settings.PolygonRadius;
 			Set( start, end );
 		}
@@ -119,8 +119,8 @@ namespace FarseerPhysics.Collision.Shapes
 		{
 			_vertex1 = start;
 			_vertex2 = end;
-			HasVertex0 = false;
-			HasVertex3 = false;
+			hasVertex0 = false;
+			hasVertex3 = false;
 
 			ComputeProperties();
 		}
@@ -193,14 +193,14 @@ namespace FarseerPhysics.Collision.Shapes
 			var lower = Vector2.Min( v1, v2 );
 			var upper = Vector2.Max( v1, v2 );
 
-			var r = new Vector2( Radius, Radius );
+			var r = new Vector2( radius, radius );
 			aabb.LowerBound = lower - r;
 			aabb.UpperBound = upper + r;
 		}
 
 		protected override void ComputeProperties()
 		{
-			MassData.Centroid = 0.5f * ( _vertex1 + _vertex2 );
+			massData.centroid = 0.5f * ( _vertex1 + _vertex2 );
 		}
 
 		public override float ComputeSubmergedArea( ref Vector2 normal, float offset, ref Transform xf, out Vector2 sc )
@@ -211,27 +211,27 @@ namespace FarseerPhysics.Collision.Shapes
 
 		public bool CompareTo( EdgeShape shape )
 		{
-			return ( HasVertex0 == shape.HasVertex0 &&
-					HasVertex3 == shape.HasVertex3 &&
-					Vertex0 == shape.Vertex0 &&
-					Vertex1 == shape.Vertex1 &&
-					Vertex2 == shape.Vertex2 &&
-					Vertex3 == shape.Vertex3 );
+			return ( hasVertex0 == shape.hasVertex0 &&
+					hasVertex3 == shape.hasVertex3 &&
+					vertex0 == shape.vertex0 &&
+					vertex1 == shape.vertex1 &&
+					vertex2 == shape.vertex2 &&
+					vertex3 == shape.vertex3 );
 		}
 
 		public override Shape Clone()
 		{
 			var clone = new EdgeShape();
-			clone.ShapeType = ShapeType;
+			clone.shapeType = shapeType;
 			clone._radius = _radius;
 			clone._density = _density;
-			clone.HasVertex0 = HasVertex0;
-			clone.HasVertex3 = HasVertex3;
-			clone.Vertex0 = Vertex0;
+			clone.hasVertex0 = hasVertex0;
+			clone.hasVertex3 = hasVertex3;
+			clone.vertex0 = vertex0;
 			clone._vertex1 = _vertex1;
 			clone._vertex2 = _vertex2;
-			clone.Vertex3 = Vertex3;
-			clone.MassData = MassData;
+			clone.vertex3 = vertex3;
+			clone.massData = massData;
 			return clone;
 		}
 	

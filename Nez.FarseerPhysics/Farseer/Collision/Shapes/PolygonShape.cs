@@ -40,47 +40,15 @@ namespace FarseerPhysics.Collision.Shapes
 		/// Warning: the points may be re-ordered, even if they form a convex polygon
 		/// Warning: collinear points are handled but not removed. Collinear points may lead to poor stacking behavior.
 		/// </summary>
-		public Vertices Vertices
+		public Vertices vertices
 		{
 			get { return _vertices; }
-			set
-			{
-				_vertices = new Vertices( value );
-				Debug.Assert( _vertices.Count >= 3 && _vertices.Count <= Settings.MaxPolygonVertices );
-
-				if( Settings.UseConvexHullPolygons )
-				{
-					//FPE note: This check is required as the GiftWrap algorithm early exits on triangles
-					//So instead of giftwrapping a triangle, we just force it to be clock wise.
-					if( _vertices.Count <= 3 )
-						_vertices.ForceCounterClockWise();
-					else
-						_vertices = GiftWrap.GetConvexHull( _vertices );
-				}
-
-				_normals = new Vertices( _vertices.Count );
-
-				// Compute normals. Ensure the edges have non-zero length.
-				for( int i = 0; i < _vertices.Count; ++i )
-				{
-					int next = i + 1 < _vertices.Count ? i + 1 : 0;
-					var edge = _vertices[next] - _vertices[i];
-					Debug.Assert( edge.LengthSquared() > Settings.Epsilon * Settings.Epsilon );
-
-					//FPE optimization: Normals.Add(MathHelper.Cross(edge, 1.0f));
-					var temp = new Vector2( edge.Y, -edge.X );
-					temp.Normalize();
-					_normals.Add( temp );
-				}
-
-				// Compute the polygon mass data
-				ComputeProperties();
-			}
+			set { setVerticesNoCopy( new Vertices( value ) ); }
 		}
 
-		public Vertices Normals { get { return _normals; } }
+		public Vertices normals { get { return _normals; } }
 
-		public override int ChildCount { get { return 1; } }
+		public override int childCount { get { return 1; } }
 
 		Vertices _vertices;
 		Vertices _normals;
@@ -93,10 +61,10 @@ namespace FarseerPhysics.Collision.Shapes
 		/// <param name="density">The density.</param>
 		public PolygonShape( Vertices vertices, float density ) : base( density )
 		{
-			ShapeType = ShapeType.Polygon;
+			shapeType = ShapeType.Polygon;
 			_radius = Settings.PolygonRadius;
 
-			Vertices = vertices;
+			this.vertices = vertices;
 		}
 
 		/// <summary>
@@ -107,7 +75,7 @@ namespace FarseerPhysics.Collision.Shapes
 		{
 			Debug.Assert( density >= 0f );
 
-			ShapeType = ShapeType.Polygon;
+			shapeType = ShapeType.Polygon;
 			_radius = Settings.PolygonRadius;
 			_vertices = new Vertices( Settings.MaxPolygonVertices );
 			_normals = new Vertices( Settings.MaxPolygonVertices );
@@ -115,10 +83,52 @@ namespace FarseerPhysics.Collision.Shapes
 
 		internal PolygonShape() : base( 0 )
 		{
-			ShapeType = ShapeType.Polygon;
+			shapeType = ShapeType.Polygon;
 			_radius = Settings.PolygonRadius;
 			_vertices = new Vertices( Settings.MaxPolygonVertices );
 			_normals = new Vertices( Settings.MaxPolygonVertices );
+		}
+
+
+		/// <summary>
+		/// sets the vertices without copying over the data from verts to the local List.
+		/// </summary>
+		/// <param name="verts">Verts.</param>
+		public void setVerticesNoCopy( Vertices verts )
+		{
+			Debug.Assert( verts.Count >= 3 && verts.Count <= Settings.MaxPolygonVertices );
+			_vertices = verts;
+
+			if( Settings.UseConvexHullPolygons )
+			{
+				// FPE note: This check is required as the GiftWrap algorithm early exits on triangles
+				// So instead of giftwrapping a triangle, we just force it to be clock wise.
+				if( _vertices.Count <= 3 )
+					_vertices.ForceCounterClockWise();
+				else
+					_vertices = GiftWrap.GetConvexHull( _vertices );
+			}
+
+			if( _normals == null )
+				_normals = new Vertices( _vertices.Count );
+			else
+				_normals.Clear();
+
+			// Compute normals. Ensure the edges have non-zero length.
+			for( var i = 0; i < _vertices.Count; ++i )
+			{
+				var next = i + 1 < _vertices.Count ? i + 1 : 0;
+				var edge = _vertices[next] - _vertices[i];
+				Debug.Assert( edge.LengthSquared() > Settings.Epsilon * Settings.Epsilon );
+
+				// FPE optimization: Normals.Add(MathHelper.Cross(edge, 1.0f));
+				var temp = new Vector2( edge.Y, -edge.X );
+				temp.Normalize();
+				_normals.Add( temp );
+			}
+
+			// Compute the polygon mass data
+			ComputeProperties();
 		}
 
 		protected override void ComputeProperties()
@@ -147,7 +157,7 @@ namespace FarseerPhysics.Collision.Shapes
 			//
 			// The rest of the derivation is handled by computer algebra.
 
-			Debug.Assert( Vertices.Count >= 3 );
+			Debug.Assert( vertices.Count >= 3 );
 
 			//FPE optimization: Early exit as polygons with 0 density does not have any properties.
 			if( _density <= 0 )
@@ -163,19 +173,19 @@ namespace FarseerPhysics.Collision.Shapes
 			var s = Vector2.Zero;
 
 			// This code would put the reference point inside the polygon.
-			for( int i = 0; i < Vertices.Count; ++i )
+			for( int i = 0; i < vertices.Count; ++i )
 			{
-				s += Vertices[i];
+				s += vertices[i];
 			}
-			s *= 1.0f / Vertices.Count;
+			s *= 1.0f / vertices.Count;
 
 			const float k_inv3 = 1.0f / 3.0f;
 
-			for( int i = 0; i < Vertices.Count; ++i )
+			for( int i = 0; i < vertices.Count; ++i )
 			{
 				// Triangle vertices.
-				Vector2 e1 = Vertices[i] - s;
-				Vector2 e2 = i + 1 < Vertices.Count ? Vertices[i + 1] - s : Vertices[0] - s;
+				Vector2 e1 = vertices[i] - s;
+				Vector2 e2 = i + 1 < vertices.Count ? vertices[i + 1] - s : vertices[0] - s;
 
 				float D = MathUtils.Cross( e1, e2 );
 
@@ -198,29 +208,29 @@ namespace FarseerPhysics.Collision.Shapes
 			Debug.Assert( area > Settings.Epsilon );
 
 			// We save the area
-			MassData.Area = area;
+			massData.area = area;
 
 			// Total mass
-			MassData.Mass = _density * area;
+			massData.mass = _density * area;
 
 			// Center of mass
 			center *= 1.0f / area;
-			MassData.Centroid = center + s;
+			massData.centroid = center + s;
 
 			// Inertia tensor relative to the local origin (point s).
-			MassData.Inertia = _density * I;
+			massData.inertia = _density * I;
 
 			// Shift to center of mass then to original body origin.
-			MassData.Inertia += MassData.Mass * ( Vector2.Dot( MassData.Centroid, MassData.Centroid ) - Vector2.Dot( center, center ) );
+			massData.inertia += massData.mass * ( Vector2.Dot( massData.centroid, massData.centroid ) - Vector2.Dot( center, center ) );
 		}
 
 		public override bool TestPoint( ref Transform transform, ref Vector2 point )
 		{
 			Vector2 pLocal = MathUtils.MulT( transform.q, point - transform.p );
 
-			for( int i = 0; i < Vertices.Count; ++i )
+			for( int i = 0; i < vertices.Count; ++i )
 			{
-				float dot = Vector2.Dot( Normals[i], pLocal - Vertices[i] );
+				float dot = Vector2.Dot( normals[i], pLocal - vertices[i] );
 				if( dot > 0.0f )
 				{
 					return false;
@@ -243,13 +253,13 @@ namespace FarseerPhysics.Collision.Shapes
 
 			int index = -1;
 
-			for( int i = 0; i < Vertices.Count; ++i )
+			for( int i = 0; i < vertices.Count; ++i )
 			{
 				// p = p1 + a * d
 				// dot(normal, p - v) = 0
 				// dot(normal, p1 - v) + a * dot(normal, d) = 0
-				float numerator = Vector2.Dot( Normals[i], Vertices[i] - p1 );
-				float denominator = Vector2.Dot( Normals[i], d );
+				float numerator = Vector2.Dot( normals[i], vertices[i] - p1 );
+				float denominator = Vector2.Dot( normals[i], d );
 
 				if( denominator == 0.0f )
 				{
@@ -294,7 +304,7 @@ namespace FarseerPhysics.Collision.Shapes
 			if( index >= 0 )
 			{
 				output.Fraction = lower;
-				output.Normal = MathUtils.Mul( transform.q, Normals[index] );
+				output.Normal = MathUtils.Mul( transform.q, normals[index] );
 				return true;
 			}
 
@@ -309,17 +319,17 @@ namespace FarseerPhysics.Collision.Shapes
 		/// <param name="childIndex">The child shape index.</param>
 		public override void ComputeAABB( out AABB aabb, ref Transform transform, int childIndex )
 		{
-			var lower = MathUtils.Mul( ref transform, Vertices[0] );
+			var lower = MathUtils.Mul( ref transform, vertices[0] );
 			var upper = lower;
 
-			for( int i = 1; i < Vertices.Count; ++i )
+			for( int i = 1; i < vertices.Count; ++i )
 			{
-				var v = MathUtils.Mul( ref transform, Vertices[i] );
+				var v = MathUtils.Mul( ref transform, vertices[i] );
 				lower = Vector2.Min( lower, v );
 				upper = Vector2.Max( upper, v );
 			}
 
-			var r = new Vector2( Radius, Radius );
+			var r = new Vector2( radius, radius );
 			aabb.LowerBound = lower - r;
 			aabb.UpperBound = upper + r;
 		}
@@ -339,9 +349,9 @@ namespace FarseerPhysics.Collision.Shapes
 
 			bool lastSubmerged = false;
 			int i;
-			for( i = 0; i < Vertices.Count; i++ )
+			for( i = 0; i < vertices.Count; i++ )
 			{
-				depths[i] = Vector2.Dot( normalL, Vertices[i] ) - offsetL;
+				depths[i] = Vector2.Dot( normalL, vertices[i] ) - offsetL;
 				bool isSubmerged = depths[i] < -Settings.Epsilon;
 				if( i > 0 )
 				{
@@ -370,8 +380,8 @@ namespace FarseerPhysics.Collision.Shapes
 					if( lastSubmerged )
 					{
 						//Completely submerged
-						sc = MathUtils.Mul( ref xf, MassData.Centroid );
-						return MassData.Mass / Density;
+						sc = MathUtils.Mul( ref xf, massData.centroid );
+						return massData.mass / density;
 					}
 
 					//Completely dry
@@ -379,28 +389,28 @@ namespace FarseerPhysics.Collision.Shapes
 				case 1:
 					if( intoIndex == -1 )
 					{
-						intoIndex = Vertices.Count - 1;
+						intoIndex = vertices.Count - 1;
 					}
 					else
 					{
-						outoIndex = Vertices.Count - 1;
+						outoIndex = vertices.Count - 1;
 					}
 					break;
 			}
 
-			int intoIndex2 = ( intoIndex + 1 ) % Vertices.Count;
-			int outoIndex2 = ( outoIndex + 1 ) % Vertices.Count;
+			int intoIndex2 = ( intoIndex + 1 ) % vertices.Count;
+			int outoIndex2 = ( outoIndex + 1 ) % vertices.Count;
 
 			float intoLambda = ( 0 - depths[intoIndex] ) / ( depths[intoIndex2] - depths[intoIndex] );
 			float outoLambda = ( 0 - depths[outoIndex] ) / ( depths[outoIndex2] - depths[outoIndex] );
 
-			Vector2 intoVec = new Vector2( Vertices[intoIndex].X * ( 1 - intoLambda ) + Vertices[intoIndex2].X * intoLambda, Vertices[intoIndex].Y * ( 1 - intoLambda ) + Vertices[intoIndex2].Y * intoLambda );
-			Vector2 outoVec = new Vector2( Vertices[outoIndex].X * ( 1 - outoLambda ) + Vertices[outoIndex2].X * outoLambda, Vertices[outoIndex].Y * ( 1 - outoLambda ) + Vertices[outoIndex2].Y * outoLambda );
+			Vector2 intoVec = new Vector2( vertices[intoIndex].X * ( 1 - intoLambda ) + vertices[intoIndex2].X * intoLambda, vertices[intoIndex].Y * ( 1 - intoLambda ) + vertices[intoIndex2].Y * intoLambda );
+			Vector2 outoVec = new Vector2( vertices[outoIndex].X * ( 1 - outoLambda ) + vertices[outoIndex2].X * outoLambda, vertices[outoIndex].Y * ( 1 - outoLambda ) + vertices[outoIndex2].Y * outoLambda );
 
 			//Initialize accumulator
 			float area = 0;
 			Vector2 center = new Vector2( 0, 0 );
-			Vector2 p2 = Vertices[intoIndex2];
+			Vector2 p2 = vertices[intoIndex2];
 
 			const float k_inv3 = 1.0f / 3.0f;
 
@@ -408,12 +418,12 @@ namespace FarseerPhysics.Collision.Shapes
 			i = intoIndex2;
 			while( i != outoIndex2 )
 			{
-				i = ( i + 1 ) % Vertices.Count;
+				i = ( i + 1 ) % vertices.Count;
 				Vector2 p3;
 				if( i == outoIndex2 )
 					p3 = outoVec;
 				else
-					p3 = Vertices[i];
+					p3 = vertices[i];
 				//Add the triangle formed by intoVec,p2,p3
 				{
 					Vector2 e1 = p2 - intoVec;
@@ -442,27 +452,27 @@ namespace FarseerPhysics.Collision.Shapes
 
 		public bool CompareTo( PolygonShape shape )
 		{
-			if( Vertices.Count != shape.Vertices.Count )
+			if( vertices.Count != shape.vertices.Count )
 				return false;
 
-			for( int i = 0; i < Vertices.Count; i++ )
+			for( int i = 0; i < vertices.Count; i++ )
 			{
-				if( Vertices[i] != shape.Vertices[i] )
+				if( vertices[i] != shape.vertices[i] )
 					return false;
 			}
 
-			return ( Radius == shape.Radius && MassData == shape.MassData );
+			return ( radius == shape.radius && massData == shape.massData );
 		}
 
 		public override Shape Clone()
 		{
 			var clone = new PolygonShape();
-			clone.ShapeType = ShapeType;
+			clone.shapeType = shapeType;
 			clone._radius = _radius;
 			clone._density = _density;
 			clone._vertices = new Vertices( _vertices );
 			clone._normals = new Vertices( _normals );
-			clone.MassData = MassData;
+			clone.massData = massData;
 			return clone;
 		}
 

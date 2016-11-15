@@ -61,7 +61,7 @@ namespace FarseerPhysics.Controllers
 
         public override bool IsActiveOn(Body body)
         {
-            if (body.ControllerFilter.IsControllerIgnored(_type))
+            if (body.controllerFilter.IsControllerIgnored(_type))
                 return false;
 
             return base.IsActiveOn(body);

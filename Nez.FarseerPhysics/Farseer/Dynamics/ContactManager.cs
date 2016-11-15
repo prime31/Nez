@@ -87,21 +87,21 @@ namespace FarseerPhysics.Dynamics
 		// Broad-phase callback.
 		void AddPair( ref FixtureProxy proxyA, ref FixtureProxy proxyB )
 		{
-			var fixtureA = proxyA.Fixture;
-			var fixtureB = proxyB.Fixture;
+			var fixtureA = proxyA.fixture;
+			var fixtureB = proxyB.fixture;
 
-			var indexA = proxyA.ChildIndex;
-			var indexB = proxyB.ChildIndex;
+			var indexA = proxyA.childIndex;
+			var indexB = proxyB.childIndex;
 
-			var bodyA = fixtureA.Body;
-			var bodyB = fixtureB.Body;
+			var bodyA = fixtureA.body;
+			var bodyB = fixtureB.body;
 
 			// Are the fixtures on the same body?
 			if( bodyA == bodyB )
 				return;
 
 			// Does a contact already exist?
-			var edge = bodyB.ContactList;
+			var edge = bodyB.contactList;
 			while( edge != null )
 			{
 				if( edge.Other == bodyA )
@@ -140,10 +140,10 @@ namespace FarseerPhysics.Dynamics
 				return;
 
 			// FPE feature: BeforeCollision delegate
-			if( fixtureA.BeforeCollision != null && fixtureA.BeforeCollision( fixtureA, fixtureB ) == false )
+			if( fixtureA.beforeCollision != null && fixtureA.beforeCollision( fixtureA, fixtureB ) == false )
 				return;
 
-			if( fixtureB.BeforeCollision != null && fixtureB.BeforeCollision( fixtureB, fixtureA ) == false )
+			if( fixtureB.beforeCollision != null && fixtureB.beforeCollision( fixtureB, fixtureA ) == false )
 				return;
 
 			// Call the factory.
@@ -155,8 +155,8 @@ namespace FarseerPhysics.Dynamics
 			// Contact creation may swap fixtures.
 			fixtureA = c.FixtureA;
 			fixtureB = c.FixtureB;
-			bodyA = fixtureA.Body;
-			bodyB = fixtureB.Body;
+			bodyA = fixtureA.body;
+			bodyB = fixtureB.body;
 
 			// Insert into the world.
 			ContactList.Add( c );
@@ -171,28 +171,28 @@ namespace FarseerPhysics.Dynamics
 			c._nodeA.Other = bodyB;
 
 			c._nodeA.Prev = null;
-			c._nodeA.Next = bodyA.ContactList;
-			if( bodyA.ContactList != null )
-				bodyA.ContactList.Prev = c._nodeA;
+			c._nodeA.Next = bodyA.contactList;
+			if( bodyA.contactList != null )
+				bodyA.contactList.Prev = c._nodeA;
 
-			bodyA.ContactList = c._nodeA;
+			bodyA.contactList = c._nodeA;
 
 			// Connect to body B
 			c._nodeB.Contact = c;
 			c._nodeB.Other = bodyA;
 
 			c._nodeB.Prev = null;
-			c._nodeB.Next = bodyB.ContactList;
-			if( bodyB.ContactList != null )
-				bodyB.ContactList.Prev = c._nodeB;
+			c._nodeB.Next = bodyB.contactList;
+			if( bodyB.contactList != null )
+				bodyB.contactList.Prev = c._nodeB;
 
-			bodyB.ContactList = c._nodeB;
+			bodyB.contactList = c._nodeB;
 
 			// Wake up the bodies
-			if( fixtureA.IsSensor == false && fixtureB.IsSensor == false )
+			if( fixtureA.isSensor == false && fixtureB.isSensor == false )
 			{
-				bodyA.Awake = true;
-				bodyB.Awake = true;
+				bodyA.awake = true;
+				bodyB.awake = true;
 			}
 		}
 
@@ -205,19 +205,19 @@ namespace FarseerPhysics.Dynamics
 		{
 			var fixtureA = contact.FixtureA;
 			var fixtureB = contact.FixtureB;
-			var bodyA = fixtureA.Body;
-			var bodyB = fixtureB.Body;
+			var bodyA = fixtureA.body;
+			var bodyB = fixtureB.body;
 
 			if( contact.IsTouching )
 			{
 				//Report the separation to both participants:
-				if( fixtureA != null && fixtureA.OnSeparation != null )
-					fixtureA.OnSeparation( fixtureA, fixtureB );
+				if( fixtureA != null && fixtureA.onSeparation != null )
+					fixtureA.onSeparation( fixtureA, fixtureB );
 
 				//Reverse the order of the reported fixtures. The first fixture is always the one that the
 				//user subscribed to.
-				if( fixtureB != null && fixtureB.OnSeparation != null )
-					fixtureB.OnSeparation( fixtureB, fixtureA );
+				if( fixtureB != null && fixtureB.onSeparation != null )
+					fixtureB.onSeparation( fixtureB, fixtureA );
 
 				if( EndContact != null )
 					EndContact( contact );
@@ -233,8 +233,8 @@ namespace FarseerPhysics.Dynamics
 			if( contact._nodeA.Next != null )
 				contact._nodeA.Next.Prev = contact._nodeA.Prev;
 
-			if( contact._nodeA == bodyA.ContactList )
-				bodyA.ContactList = contact._nodeA.Next;
+			if( contact._nodeA == bodyA.contactList )
+				bodyA.contactList = contact._nodeA.Next;
 
 			// Remove from body 2
 			if( contact._nodeB.Prev != null )
@@ -243,8 +243,8 @@ namespace FarseerPhysics.Dynamics
 			if( contact._nodeB.Next != null )
 				contact._nodeB.Next.Prev = contact._nodeB.Prev;
 
-			if( contact._nodeB == bodyB.ContactList )
-				bodyB.ContactList = contact._nodeB.Next;
+			if( contact._nodeB == bodyB.contactList )
+				bodyB.contactList = contact._nodeB.Next;
 
 #if USE_ACTIVE_CONTACT_SET
 			if (ActiveContacts.Contains(contact))
@@ -272,11 +272,11 @@ namespace FarseerPhysics.Dynamics
 				var fixtureB = c.FixtureB;
 				var indexA = c.ChildIndexA;
 				var indexB = c.ChildIndexB;
-				var bodyA = fixtureA.Body;
-				var bodyB = fixtureB.Body;
+				var bodyA = fixtureA.body;
+				var bodyB = fixtureB.body;
 
 				// Do no try to collide disabled bodies
-				if( !bodyA.Enabled || !bodyB.Enabled )
+				if( !bodyA.enabled || !bodyB.enabled )
 					continue;
 
 				// Is this contact flagged for filtering?
@@ -310,8 +310,8 @@ namespace FarseerPhysics.Dynamics
 					c.FilterFlag = false;
 				}
 
-				var activeA = bodyA.Awake && bodyA.BodyType != BodyType.Static;
-				var activeB = bodyB.Awake && bodyB.BodyType != BodyType.Static;
+				var activeA = bodyA.awake && bodyA.bodyType != BodyType.Static;
+				var activeB = bodyB.awake && bodyB.bodyType != BodyType.Static;
 
 				// At least one body must be awake and it must be dynamic or kinematic.
 				if( activeA == false && activeB == false )
@@ -322,8 +322,8 @@ namespace FarseerPhysics.Dynamics
 					continue;
 				}
 
-				var proxyIdA = fixtureA.Proxies[indexA].ProxyId;
-				var proxyIdB = fixtureB.Proxies[indexB].ProxyId;
+				var proxyIdA = fixtureA.proxies[indexA].proxyId;
+				var proxyIdB = fixtureB.proxies[indexB].proxyId;
 
 				var overlap = BroadPhase.TestOverlap( proxyIdA, proxyIdB );
 
@@ -348,11 +348,11 @@ namespace FarseerPhysics.Dynamics
 		{
 			if( Settings.UseFPECollisionCategories )
 			{
-				if( ( fixtureA.CollisionGroup == fixtureB.CollisionGroup ) && fixtureA.CollisionGroup != 0 && fixtureB.CollisionGroup != 0 )
+				if( ( fixtureA.collisionGroup == fixtureB.collisionGroup ) && fixtureA.collisionGroup != 0 && fixtureB.collisionGroup != 0 )
 					return false;
 
-				if( ( ( fixtureA.CollisionCategories & fixtureB.CollidesWith ) == Category.None ) &
-					( ( fixtureB.CollisionCategories & fixtureA.CollidesWith ) == Category.None ) )
+				if( ( ( fixtureA.collisionCategories & fixtureB.collidesWith ) == Category.None ) &
+					( ( fixtureB.collisionCategories & fixtureA.collidesWith ) == Category.None ) )
 					return false;
 
 				if( fixtureA.IsFixtureIgnored( fixtureB ) || fixtureB.IsFixtureIgnored( fixtureA ) )
@@ -361,11 +361,11 @@ namespace FarseerPhysics.Dynamics
 				return true;
 			}
 
-			if( fixtureA.CollisionGroup == fixtureB.CollisionGroup && fixtureA.CollisionGroup != 0 )
-				return fixtureA.CollisionGroup > 0;
+			if( fixtureA.collisionGroup == fixtureB.collisionGroup && fixtureA.collisionGroup != 0 )
+				return fixtureA.collisionGroup > 0;
 
-			bool collide = ( fixtureA.CollidesWith & fixtureB.CollisionCategories ) != 0 &&
-						   ( fixtureA.CollisionCategories & fixtureB.CollidesWith ) != 0;
+			bool collide = ( fixtureA.collidesWith & fixtureB.collisionCategories ) != 0 &&
+						   ( fixtureA.collisionCategories & fixtureB.collidesWith ) != 0;
 
 			if( collide )
 			{

@@ -45,7 +45,7 @@ namespace FarseerPhysics.Factories
                 throw new ArgumentOutOfRangeException("height", "Height must be more than 0 meters");
 
             Body newBody = CreateBody(world, position, rotation, bodyType);
-            newBody.UserData = userData;
+            newBody.userData = userData;
 
             Vertices rectangleVertices = PolygonTools.CreateRectangle(width / 2, height / 2);
             PolygonShape rectangleShape = new PolygonShape(rectangleVertices, density);
@@ -171,7 +171,7 @@ namespace FarseerPhysics.Factories
             List<Vertices> triangles = Triangulate.ConvexPartition(vertices, TriangulationAlgorithm.Earclip);
 
             BreakableBody breakableBody = new BreakableBody(world, triangles, density, position, rotation);
-            breakableBody.MainBody.Position = position;
+            breakableBody.mainBody.position = position;
             world.AddBreakableBody(breakableBody);
             return breakableBody;
         }
@@ -179,7 +179,7 @@ namespace FarseerPhysics.Factories
         public static BreakableBody CreateBreakableBody(World world, IEnumerable<Shape> shapes, Vector2 position = new Vector2(), float rotation = 0)
         {
             BreakableBody breakableBody = new BreakableBody(world, shapes, position, rotation);
-            breakableBody.MainBody.Position = position;
+            breakableBody.mainBody.position = position;
             world.AddBreakableBody(breakableBody);
             return breakableBody;
         }

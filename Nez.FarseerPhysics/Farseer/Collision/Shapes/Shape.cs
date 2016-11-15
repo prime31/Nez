@@ -36,22 +36,23 @@ namespace FarseerPhysics.Collision.Shapes
 		/// <summary>
 		/// The area of the shape
 		/// </summary>
-		public float Area { get; internal set; }
+		public float area { get; internal set; }
 
 		/// <summary>
 		/// The position of the shape's centroid relative to the shape's origin.
 		/// </summary>
-		public Vector2 Centroid { get; internal set; }
+		public Vector2 centroid { get; internal set; }
 
 		/// <summary>
 		/// The rotational inertia of the shape about the local origin.
 		/// </summary>
-		public float Inertia { get; internal set; }
+		public float inertia { get; internal set; }
 
 		/// <summary>
 		/// The mass of the shape, usually in kilograms.
 		/// </summary>
-		public float Mass { get; internal set; }
+		public float mass { get; internal set; }
+
 
 		/// <summary>
 		/// The equal operator
@@ -61,7 +62,7 @@ namespace FarseerPhysics.Collision.Shapes
 		/// <returns></returns>
 		public static bool operator ==( MassData left, MassData right )
 		{
-			return ( left.Area == right.Area && left.Mass == right.Mass && left.Centroid == right.Centroid && left.Inertia == right.Inertia );
+			return ( left.area == right.area && left.mass == right.mass && left.centroid == right.centroid && left.inertia == right.inertia );
 		}
 
 		/// <summary>
@@ -95,10 +96,10 @@ namespace FarseerPhysics.Collision.Shapes
 		{
 			unchecked
 			{
-				int result = Area.GetHashCode();
-				result = ( result * 397 ) ^ Centroid.GetHashCode();
-				result = ( result * 397 ) ^ Inertia.GetHashCode();
-				result = ( result * 397 ) ^ Mass.GetHashCode();
+				int result = area.GetHashCode();
+				result = ( result * 397 ) ^ centroid.GetHashCode();
+				result = ( result * 397 ) ^ inertia.GetHashCode();
+				result = ( result * 397 ) ^ mass.GetHashCode();
 				return result;
 			}
 		}
@@ -131,32 +132,31 @@ namespace FarseerPhysics.Collision.Shapes
 		/// - Inertia
 		/// - Mass
 		/// </summary>
-		public MassData MassData;
+		public MassData massData;
 
 		/// <summary>
 		/// Get the type of this shape.
 		/// </summary>
 		/// <value>The type of the shape.</value>
-		public ShapeType ShapeType { get; internal set; }
+		public ShapeType shapeType { get; internal set; }
 
 		/// <summary>
 		/// Get the number of child primitives.
 		/// </summary>
 		/// <value></value>
-		public abstract int ChildCount { get; }
+		public abstract int childCount { get; }
 
 		/// <summary>
 		/// Gets or sets the density.
 		/// Changing the density causes a recalculation of shape properties.
 		/// </summary>
 		/// <value>The density.</value>
-		public float Density
+		public float density
 		{
 			get { return _density; }
 			set
 			{
 				Debug.Assert( value >= 0 );
-
 				_density = value;
 				ComputeProperties();
 			}
@@ -166,7 +166,7 @@ namespace FarseerPhysics.Collision.Shapes
 		/// Radius of the Shape
 		/// Changing the radius causes a recalculation of shape properties.
 		/// </summary>
-		public float Radius
+		public float radius
 		{
 			get { return _radius; }
 			set
@@ -188,7 +188,7 @@ namespace FarseerPhysics.Collision.Shapes
 		protected Shape( float density )
 		{
 			_density = density;
-			ShapeType = ShapeType.Unknown;
+			shapeType = ShapeType.Unknown;
 		}
 
 		/// <summary>

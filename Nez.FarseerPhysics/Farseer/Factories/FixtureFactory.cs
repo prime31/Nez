@@ -54,7 +54,7 @@ namespace FarseerPhysics.Factories
 				throw new ArgumentOutOfRangeException( nameof( radius ), "Radius must be more than 0 meters" );
 
 			var circleShape = new CircleShape( radius, density );
-			circleShape.Position = offset;
+			circleShape.position = offset;
 			return body.CreateFixture( circleShape, userData );
 		}
 

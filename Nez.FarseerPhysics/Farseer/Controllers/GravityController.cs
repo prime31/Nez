@@ -45,17 +45,17 @@ namespace FarseerPhysics.Controllers
         {
             Vector2 f = Vector2.Zero;
 
-            foreach (Body worldBody in World.BodyList)
+            foreach (Body worldBody in World.bodyList)
             {
                 if (!IsActiveOn(worldBody))
                     continue;
 
                 foreach (Body controllerBody in Bodies)
                 {
-                    if (worldBody == controllerBody || (worldBody.IsStatic && controllerBody.IsStatic) || !controllerBody.Enabled)
+                    if (worldBody == controllerBody || (worldBody.isStatic && controllerBody.isStatic) || !controllerBody.enabled)
                         continue;
 
-                    Vector2 d = controllerBody.Position - worldBody.Position;
+                    Vector2 d = controllerBody.position - worldBody.position;
                     float r2 = d.LengthSquared();
 
                     if (r2 <= Settings.Epsilon || r2 > MaxRadius * MaxRadius || r2 < MinRadius * MinRadius)
@@ -64,10 +64,10 @@ namespace FarseerPhysics.Controllers
                     switch (GravityType)
                     {
                         case GravityType.DistanceSquared:
-                            f = Strength / r2 * worldBody.Mass * controllerBody.Mass * d;
+                            f = Strength / r2 * worldBody.mass * controllerBody.mass * d;
                             break;
                         case GravityType.Linear:
-                            f = Strength / (float)Math.Sqrt(r2) * worldBody.Mass * controllerBody.Mass * d;
+                            f = Strength / (float)Math.Sqrt(r2) * worldBody.mass * controllerBody.mass * d;
                             break;
                     }
 
@@ -76,7 +76,7 @@ namespace FarseerPhysics.Controllers
 
                 foreach (Vector2 point in Points)
                 {
-                    Vector2 d = point - worldBody.Position;
+                    Vector2 d = point - worldBody.position;
                     float r2 = d.LengthSquared();
 
                     if (r2 <= Settings.Epsilon || r2 > MaxRadius * MaxRadius || r2 < MinRadius * MinRadius)
@@ -85,10 +85,10 @@ namespace FarseerPhysics.Controllers
                     switch (GravityType)
                     {
                         case GravityType.DistanceSquared:
-                            f = Strength / r2 * worldBody.Mass * d;
+                            f = Strength / r2 * worldBody.mass * d;
                             break;
                         case GravityType.Linear:
-                            f = Strength / (float)Math.Sqrt(r2) * worldBody.Mass * d;
+                            f = Strength / (float)Math.Sqrt(r2) * worldBody.mass * d;
                             break;
                     }
 

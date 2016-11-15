@@ -41,7 +41,7 @@ namespace FarseerPhysics.Factories
 			if( fixStart )
 			{
 				// Fix the first chainlink to the world
-				var axle = BodyFactory.CreateCircle( world, 0.1f, 1, chainLinks[0].Position );
+				var axle = BodyFactory.CreateCircle( world, 0.1f, 1, chainLinks[0].position );
 				JointFactory.CreateRevoluteJoint( world, chainLinks[0], axle, new Vector2( 0, -( linkHeight / 2 ) ), Vector2.Zero );
 			}
 
@@ -49,7 +49,7 @@ namespace FarseerPhysics.Factories
 			{
 				// Fix the last chainlink to the world
 				var lastIndex = chainLinks.Count - 1;
-				var axle = BodyFactory.CreateCircle( world, 0.1f, 1, chainLinks[lastIndex].Position );
+				var axle = BodyFactory.CreateCircle( world, 0.1f, 1, chainLinks[lastIndex].position );
 				JointFactory.CreateRevoluteJoint( world, chainLinks[lastIndex], axle, new Vector2( 0, -( linkHeight / 2 ) ), Vector2.Zero );
 			}
 

@@ -157,12 +157,12 @@ namespace FarseerPhysics.Dynamics.Contacts
 
 		public void ResetRestitution()
 		{
-			Restitution = Settings.MixRestitution( FixtureA.Restitution, FixtureB.Restitution );
+			Restitution = Settings.MixRestitution( FixtureA.restitution, FixtureB.restitution );
 		}
 
 		public void ResetFriction()
 		{
-			Friction = Settings.MixFriction( FixtureA.Friction, FixtureB.Friction );
+			Friction = Settings.MixFriction( FixtureA.friction, FixtureB.friction );
 		}
 
 		Contact( Fixture fA, int indexA, Fixture fB, int indexB )
@@ -175,12 +175,12 @@ namespace FarseerPhysics.Dynamics.Contacts
 		/// </summary>
 		public void GetWorldManifold( out Vector2 normal, out FixedArray2<Vector2> points )
 		{
-			var bodyA = FixtureA.Body;
-			var bodyB = FixtureB.Body;
-			var shapeA = FixtureA.Shape;
-			var shapeB = FixtureB.Shape;
+			var bodyA = FixtureA.body;
+			var bodyB = FixtureB.body;
+			var shapeA = FixtureA.shape;
+			var shapeB = FixtureB.shape;
 
-			ContactSolver.WorldManifold.Initialize( ref Manifold, ref bodyA._xf, shapeA.Radius, ref bodyB._xf, shapeB.Radius, out normal, out points );
+			ContactSolver.WorldManifold.Initialize( ref Manifold, ref bodyA._xf, shapeA.radius, ref bodyB._xf, shapeB.radius, out normal, out points );
 		}
 
 		void Reset( Fixture fA, int indexA, Fixture fB, int indexB )
@@ -214,8 +214,8 @@ namespace FarseerPhysics.Dynamics.Contacts
 			//FPE: We only set the friction and restitution if we are not destroying the contact
 			if( FixtureA != null && FixtureB != null )
 			{
-				Friction = Settings.MixFriction( FixtureA.Friction, FixtureB.Friction );
-				Restitution = Settings.MixRestitution( FixtureA.Restitution, FixtureB.Restitution );
+				Friction = Settings.MixFriction( FixtureA.friction, FixtureB.friction );
+				Restitution = Settings.MixRestitution( FixtureA.restitution, FixtureB.restitution );
 			}
 
 			TangentSpeed = 0;
@@ -228,8 +228,8 @@ namespace FarseerPhysics.Dynamics.Contacts
 		/// <param name="contactManager">The contact manager.</param>
 		internal void Update( ContactManager contactManager )
 		{
-			var bodyA = FixtureA.Body;
-			var bodyB = FixtureB.Body;
+			var bodyA = FixtureA.body;
+			var bodyB = FixtureB.body;
 
 			if( FixtureA == null || FixtureB == null )
 				return;
@@ -241,13 +241,13 @@ namespace FarseerPhysics.Dynamics.Contacts
 
 			bool touching;
 			var wasTouching = IsTouching;
-			var sensor = FixtureA.IsSensor || FixtureB.IsSensor;
+			var sensor = FixtureA.isSensor || FixtureB.isSensor;
 
 			// Is this contact a sensor?
 			if( sensor )
 			{
-				var shapeA = FixtureA.Shape;
-				var shapeB = FixtureB.Shape;
+				var shapeA = FixtureA.shape;
+				var shapeB = FixtureB.shape;
 				touching = Collision.Collision.TestOverlap( shapeA, ChildIndexA, shapeB, ChildIndexB, ref bodyA._xf, ref bodyB._xf );
 
 				// Sensors don't generate manifolds.
@@ -284,8 +284,8 @@ namespace FarseerPhysics.Dynamics.Contacts
 
 				if( touching != wasTouching )
 				{
-					bodyA.Awake = true;
-					bodyB.Awake = true;
+					bodyA.awake = true;
+					bodyB.awake = true;
 				}
 			}
 
@@ -300,14 +300,14 @@ namespace FarseerPhysics.Dynamics.Contacts
 
 						// Report the collision to both participants. Track which ones returned true so we can
 						// later call OnSeparation if the contact is disabled for a different reason.
-						if( FixtureA.OnCollision != null )
-							foreach( OnCollisionEventHandler handler in FixtureA.OnCollision.GetInvocationList() )
+						if( FixtureA.onCollision != null )
+							foreach( OnCollisionEventHandler handler in FixtureA.onCollision.GetInvocationList() )
 								enabledA = handler( FixtureA, FixtureB, this ) && enabledA;
 
 						// Reverse the order of the reported fixtures. The first fixture is always the one that the
 						// user subscribed to.
-						if( FixtureB.OnCollision != null )
-							foreach( OnCollisionEventHandler handler in FixtureB.OnCollision.GetInvocationList() )
+						if( FixtureB.onCollision != null )
+							foreach( OnCollisionEventHandler handler in FixtureB.onCollision.GetInvocationList() )
 								enabledB = handler( FixtureB, FixtureA, this ) && enabledB;
 
 						Enabled = enabledA && enabledB;
@@ -319,14 +319,14 @@ namespace FarseerPhysics.Dynamics.Contacts
 					else
 					{
 						// Report the collision to both participants:
-						if( FixtureA.OnCollision != null )
-							foreach( OnCollisionEventHandler handler in FixtureA.OnCollision.GetInvocationList() )
+						if( FixtureA.onCollision != null )
+							foreach( OnCollisionEventHandler handler in FixtureA.onCollision.GetInvocationList() )
 								Enabled = handler( FixtureA, FixtureB, this );
 
 						//Reverse the order of the reported fixtures. The first fixture is always the one that the
 						//user subscribed to.
-						if( FixtureB.OnCollision != null )
-							foreach( OnCollisionEventHandler handler in FixtureB.OnCollision.GetInvocationList() )
+						if( FixtureB.onCollision != null )
+							foreach( OnCollisionEventHandler handler in FixtureB.onCollision.GetInvocationList() )
 								Enabled = handler( FixtureB, FixtureA, this );
 
 						//BeginContact can also return false and disable the contact
@@ -346,13 +346,13 @@ namespace FarseerPhysics.Dynamics.Contacts
 				if( touching == false )
 				{
 					// Report the separation to both participants:
-					if( FixtureA != null && FixtureA.OnSeparation != null )
-						FixtureA.OnSeparation( FixtureA, FixtureB );
+					if( FixtureA != null && FixtureA.onSeparation != null )
+						FixtureA.onSeparation( FixtureA, FixtureB );
 
 					//Reverse the order of the reported fixtures. The first fixture is always the one that the
 					//user subscribed to.
-					if( FixtureB != null && FixtureB.OnSeparation != null )
-						FixtureB.OnSeparation( FixtureB, FixtureA );
+					if( FixtureB != null && FixtureB.onSeparation != null )
+						FixtureB.onSeparation( FixtureB, FixtureA );
 
 					if( contactManager.EndContact != null )
 						contactManager.EndContact( this );
@@ -377,43 +377,43 @@ namespace FarseerPhysics.Dynamics.Contacts
 			switch( _type )
 			{
 				case ContactType.Polygon:
-					Collision.Collision.CollidePolygons( ref manifold, (PolygonShape)FixtureA.Shape, ref transformA, (PolygonShape)FixtureB.Shape, ref transformB );
+					Collision.Collision.CollidePolygons( ref manifold, (PolygonShape)FixtureA.shape, ref transformA, (PolygonShape)FixtureB.shape, ref transformB );
 					break;
 				case ContactType.PolygonAndCircle:
-					Collision.Collision.CollidePolygonAndCircle( ref manifold, (PolygonShape)FixtureA.Shape, ref transformA, (CircleShape)FixtureB.Shape, ref transformB );
+					Collision.Collision.CollidePolygonAndCircle( ref manifold, (PolygonShape)FixtureA.shape, ref transformA, (CircleShape)FixtureB.shape, ref transformB );
 					break;
 				case ContactType.EdgeAndCircle:
-					Collision.Collision.CollideEdgeAndCircle( ref manifold, (EdgeShape)FixtureA.Shape, ref transformA, (CircleShape)FixtureB.Shape, ref transformB );
+					Collision.Collision.CollideEdgeAndCircle( ref manifold, (EdgeShape)FixtureA.shape, ref transformA, (CircleShape)FixtureB.shape, ref transformB );
 					break;
 				case ContactType.EdgeAndPolygon:
-					Collision.Collision.CollideEdgeAndPolygon( ref manifold, (EdgeShape)FixtureA.Shape, ref transformA, (PolygonShape)FixtureB.Shape, ref transformB );
+					Collision.Collision.CollideEdgeAndPolygon( ref manifold, (EdgeShape)FixtureA.shape, ref transformA, (PolygonShape)FixtureB.shape, ref transformB );
 					break;
 				case ContactType.ChainAndCircle:
-					var chain = (ChainShape)FixtureA.Shape;
+					var chain = (ChainShape)FixtureA.shape;
 					chain.GetChildEdge( _edge, ChildIndexA );
-					Collision.Collision.CollideEdgeAndCircle( ref manifold, _edge, ref transformA, (CircleShape)FixtureB.Shape, ref transformB );
+					Collision.Collision.CollideEdgeAndCircle( ref manifold, _edge, ref transformA, (CircleShape)FixtureB.shape, ref transformB );
 					break;
 				case ContactType.ChainAndPolygon:
-					var loop2 = (ChainShape)FixtureA.Shape;
+					var loop2 = (ChainShape)FixtureA.shape;
 					loop2.GetChildEdge( _edge, ChildIndexA );
-					Collision.Collision.CollideEdgeAndPolygon( ref manifold, _edge, ref transformA, (PolygonShape)FixtureB.Shape, ref transformB );
+					Collision.Collision.CollideEdgeAndPolygon( ref manifold, _edge, ref transformA, (PolygonShape)FixtureB.shape, ref transformB );
 					break;
 				case ContactType.Circle:
-					Collision.Collision.CollideCircles( ref manifold, (CircleShape)FixtureA.Shape, ref transformA, (CircleShape)FixtureB.Shape, ref transformB );
+					Collision.Collision.CollideCircles( ref manifold, (CircleShape)FixtureA.shape, ref transformA, (CircleShape)FixtureB.shape, ref transformB );
 					break;
 			}
 		}
 
 		internal static Contact Create( Fixture fixtureA, int indexA, Fixture fixtureB, int indexB )
 		{
-			var type1 = fixtureA.Shape.ShapeType;
-			var type2 = fixtureB.Shape.ShapeType;
+			var type1 = fixtureA.shape.shapeType;
+			var type2 = fixtureB.shape.shapeType;
 
 			Debug.Assert( ShapeType.Unknown < type1 && type1 < ShapeType.TypeCount );
 			Debug.Assert( ShapeType.Unknown < type2 && type2 < ShapeType.TypeCount );
 
 			Contact c;
-			var pool = fixtureA.Body._world._contactPool;
+			var pool = fixtureA.body._world._contactPool;
 			if( pool.Count > 0 )
 			{
 				c = pool.Dequeue();
@@ -441,12 +441,12 @@ namespace FarseerPhysics.Dynamics.Contacts
 #if USE_ACTIVE_CONTACT_SET
             FixtureA.Body.World.ContactManager.RemoveActiveContact(this);
 #endif
-			FixtureA.Body._world._contactPool.Enqueue( this );
+			FixtureA.body._world._contactPool.Enqueue( this );
 
-			if( Manifold.PointCount > 0 && FixtureA.IsSensor == false && FixtureB.IsSensor == false )
+			if( Manifold.PointCount > 0 && FixtureA.isSensor == false && FixtureB.isSensor == false )
 			{
-				FixtureA.Body.Awake = true;
-				FixtureB.Body.Awake = true;
+				FixtureA.body.awake = true;
+				FixtureB.body.awake = true;
 			}
 
 			Reset( null, 0, null, 0 );

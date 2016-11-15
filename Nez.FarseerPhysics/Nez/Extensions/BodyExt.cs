@@ -39,7 +39,7 @@ namespace Nez.Farseer
 
 		public static Fixture attachCircle( this Body body, float radius, float density, Vector2 offset = default( Vector2 ) )
 		{
-			return FixtureFactory.AttachCircle( FSConvert.displayToSim * radius, density, body, offset, null );
+			return FixtureFactory.AttachCircle( FSConvert.displayToSim * radius, density, body, offset * FSConvert.displayToSim, null );
 		}
 
 
@@ -125,43 +125,43 @@ namespace Nez.Farseer
 
 		public static MotorJoint createMotorJoint( this Body body, Body bodyB, bool useWorldCoordinates = false )
 		{
-			return JointFactory.CreateMotorJoint( body.World, body, bodyB, useWorldCoordinates );
+			return JointFactory.CreateMotorJoint( body.world, body, bodyB, useWorldCoordinates );
 		}
 
 
 		public static RevoluteJoint createRevoluteJoint( this Body body, Body bodyB, Vector2 anchorA, Vector2 anchorB, bool useWorldCoordinates = false )
 		{
-			return JointFactory.CreateRevoluteJoint( body.World, body, bodyB, FSConvert.displayToSim * anchorA, FSConvert.displayToSim * anchorB, useWorldCoordinates );
+			return JointFactory.CreateRevoluteJoint( body.world, body, bodyB, FSConvert.displayToSim * anchorA, FSConvert.displayToSim * anchorB, useWorldCoordinates );
 		}
 
 
 		public static RevoluteJoint createRevoluteJoint( this Body body, Body bodyB, Vector2 anchor )
 		{
-			return JointFactory.CreateRevoluteJoint( body.World, body, bodyB, FSConvert.displayToSim * anchor );
+			return JointFactory.CreateRevoluteJoint( body.world, body, bodyB, FSConvert.displayToSim * anchor );
 		}
 
 
 		public static RopeJoint createRopeJoint( this Body body, Body bodyB, Vector2 anchorA, Vector2 anchorB, bool useWorldCoordinates = false )
 		{
-			return JointFactory.CreateRopeJoint( body.World, body, bodyB, FSConvert.displayToSim * anchorA, FSConvert.displayToSim * anchorB, useWorldCoordinates );
+			return JointFactory.CreateRopeJoint( body.world, body, bodyB, FSConvert.displayToSim * anchorA, FSConvert.displayToSim * anchorB, useWorldCoordinates );
 		}
 
 
 		public static WeldJoint createWeldJoint( this Body body, Body bodyB, Vector2 anchorA, Vector2 anchorB, bool useWorldCoordinates = false )
 		{
-			return JointFactory.CreateWeldJoint( body.World, body, bodyB, FSConvert.displayToSim * anchorA, FSConvert.displayToSim * anchorB, useWorldCoordinates );
+			return JointFactory.CreateWeldJoint( body.world, body, bodyB, FSConvert.displayToSim * anchorA, FSConvert.displayToSim * anchorB, useWorldCoordinates );
 		}
 
 
 		public static PrismaticJoint createPrismaticJoint( this Body body, Body bodyB, Vector2 anchor, Vector2 axis, bool useWorldCoordinates = false )
 		{
-			return JointFactory.CreatePrismaticJoint( body.World, body, bodyB, FSConvert.displayToSim * anchor, axis, useWorldCoordinates );
+			return JointFactory.CreatePrismaticJoint( body.world, body, bodyB, FSConvert.displayToSim * anchor, axis, useWorldCoordinates );
 		}
 
 
 		public static WheelJoint createWheelJoint( this Body body, Body bodyB, Vector2 anchor, Vector2 axis, bool useWorldCoordinates = false )
 		{
-			return JointFactory.CreateWheelJoint( body.World, body, bodyB, FSConvert.displayToSim * anchor, axis, useWorldCoordinates );
+			return JointFactory.CreateWheelJoint( body.world, body, bodyB, FSConvert.displayToSim * anchor, axis, useWorldCoordinates );
 		}
 
 
@@ -173,13 +173,13 @@ namespace Nez.Farseer
 
 		public static AngleJoint createAngleJoint( this Body body, Body bodyB )
 		{
-			return JointFactory.CreateAngleJoint( body.World, body, bodyB );
+			return JointFactory.CreateAngleJoint( body.world, body, bodyB );
 		}
 
 
 		public static DistanceJoint createDistanceJoint( this Body body, Body bodyB, Vector2 anchorA, Vector2 anchorB, bool useWorldCoordinates = false )
 		{
-			return JointFactory.CreateDistanceJoint( body.World, body, bodyB, FSConvert.displayToSim * anchorA, FSConvert.displayToSim * anchorB, useWorldCoordinates );
+			return JointFactory.CreateDistanceJoint( body.world, body, bodyB, FSConvert.displayToSim * anchorA, FSConvert.displayToSim * anchorB, useWorldCoordinates );
 		}
 
 
@@ -191,7 +191,7 @@ namespace Nez.Farseer
 
 		public static FrictionJoint createFrictionJoint( this Body body, Body bodyB, Vector2 anchor, bool useWorldCoordinates = false )
 		{
-			return JointFactory.CreateFrictionJoint( body.World, body, bodyB, FSConvert.displayToSim * anchor, useWorldCoordinates );
+			return JointFactory.CreateFrictionJoint( body.world, body, bodyB, FSConvert.displayToSim * anchor, useWorldCoordinates );
 		}
 
 
@@ -203,19 +203,19 @@ namespace Nez.Farseer
 
 		public static GearJoint createGearJoint( this Body body, Body bodyB, Joint jointA, Joint jointB, float ratio )
 		{
-			return JointFactory.CreateGearJoint( body.World, body, bodyB, jointA, jointB, ratio );
+			return JointFactory.CreateGearJoint( body.world, body, bodyB, jointA, jointB, ratio );
 		}
 
 
 		public static PulleyJoint createPulleyJoint( this Body body, Body bodyB, Vector2 anchorA, Vector2 anchorB, Vector2 worldAnchorA, Vector2 worldAnchorB, float ratio, bool useWorldCoordinates = false )
 		{
-			return JointFactory.CreatePulleyJoint( body.World, body, bodyB, FSConvert.displayToSim * anchorA, FSConvert.displayToSim * anchorB, FSConvert.displayToSim * worldAnchorA, FSConvert.displayToSim * worldAnchorB, ratio, useWorldCoordinates );
+			return JointFactory.CreatePulleyJoint( body.world, body, bodyB, FSConvert.displayToSim * anchorA, FSConvert.displayToSim * anchorB, FSConvert.displayToSim * worldAnchorA, FSConvert.displayToSim * worldAnchorB, ratio, useWorldCoordinates );
 		}
 
 
 		public static FixedMouseJoint createFixedMouseJoint( this Body body, Vector2 worldAnchor )
 		{
-			return JointFactory.CreateFixedMouseJoint( body.World, body, FSConvert.displayToSim * worldAnchor );
+			return JointFactory.CreateFixedMouseJoint( body.world, body, FSConvert.displayToSim * worldAnchor );
 		}
 
 		#endregion

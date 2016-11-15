@@ -48,14 +48,14 @@ namespace FarseerPhysics.Collision
 		/// <param name="index">The index.</param>
 		public void Set( Shape shape, int index )
 		{
-			switch( shape.ShapeType )
+			switch( shape.shapeType )
 			{
 				case ShapeType.Circle:
 					{
 						var circle = (CircleShape)shape;
 						Vertices.Clear();
-						Vertices.Add( circle.Position );
-						Radius = circle.Radius;
+						Vertices.Add( circle.position );
+						Radius = circle.radius;
 					}
 					break;
 
@@ -63,23 +63,23 @@ namespace FarseerPhysics.Collision
 					{
 						var polygon = (PolygonShape)shape;
 						Vertices.Clear();
-						for( int i = 0; i < polygon.Vertices.Count; i++ )
+						for( int i = 0; i < polygon.vertices.Count; i++ )
 						{
-							Vertices.Add( polygon.Vertices[i] );
+							Vertices.Add( polygon.vertices[i] );
 						}
-						Radius = polygon.Radius;
+						Radius = polygon.radius;
 					}
 					break;
 
 				case ShapeType.Chain:
 					{
 						var chain = (ChainShape)shape;
-						Debug.Assert( 0 <= index && index < chain.Vertices.Count );
+						Debug.Assert( 0 <= index && index < chain.vertices.Count );
 						Vertices.Clear();
-						Vertices.Add( chain.Vertices[index] );
-						Vertices.Add( index + 1 < chain.Vertices.Count ? chain.Vertices[index + 1] : chain.Vertices[0] );
+						Vertices.Add( chain.vertices[index] );
+						Vertices.Add( index + 1 < chain.vertices.Count ? chain.vertices[index + 1] : chain.vertices[0] );
 
-						Radius = chain.Radius;
+						Radius = chain.radius;
 					}
 					break;
 
@@ -87,9 +87,9 @@ namespace FarseerPhysics.Collision
 					{
 						var edge = (EdgeShape)shape;
 						Vertices.Clear();
-						Vertices.Add( edge.Vertex1 );
-						Vertices.Add( edge.Vertex2 );
-						Radius = edge.Radius;
+						Vertices.Add( edge.vertex1 );
+						Vertices.Add( edge.vertex2 );
+						Radius = edge.radius;
 					}
 					break;
 

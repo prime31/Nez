@@ -685,22 +685,22 @@ namespace FarseerPhysics.Collision
 		{
 			manifold.PointCount = 0;
 
-			var pA = MathUtils.Mul( ref xfA, circleA.Position );
-			var pB = MathUtils.Mul( ref xfB, circleB.Position );
+			var pA = MathUtils.Mul( ref xfA, circleA.position );
+			var pB = MathUtils.Mul( ref xfB, circleB.position );
 
 			var d = pB - pA;
 			var distSqr = Vector2.Dot( d, d );
-			var radius = circleA.Radius + circleB.Radius;
+			var radius = circleA.radius + circleB.radius;
 			if( distSqr > radius * radius )
 				return;
 
 			manifold.Type = ManifoldType.Circles;
-			manifold.LocalPoint = circleA.Position;
+			manifold.LocalPoint = circleA.position;
 			manifold.LocalNormal = Vector2.Zero;
 			manifold.PointCount = 1;
 
 			var p0 = manifold.Points[0];
-			p0.LocalPoint = circleB.Position;
+			p0.LocalPoint = circleB.position;
 			p0.Id.Key = 0;
 
 			manifold.Points[0] = p0;
@@ -719,19 +719,19 @@ namespace FarseerPhysics.Collision
 			manifold.PointCount = 0;
 
 			// Compute circle position in the frame of the polygon.
-			var c = MathUtils.Mul( ref xfB, circleB.Position );
+			var c = MathUtils.Mul( ref xfB, circleB.position );
 			var cLocal = MathUtils.MulT( ref xfA, c );
 
 			// Find the min separating edge.
 			var normalIndex = 0;
 			var separation = -Settings.MaxFloat;
-			var radius = polygonA.Radius + circleB.Radius;
-			var vertexCount = polygonA.Vertices.Count;
+			var radius = polygonA.radius + circleB.radius;
+			var vertexCount = polygonA.vertices.Count;
 
 			for( int i = 0; i < vertexCount; ++i )
 			{
-				var value1 = polygonA.Normals[i];
-				var value2 = cLocal - polygonA.Vertices[i];
+				var value1 = polygonA.normals[i];
+				var value2 = cLocal - polygonA.vertices[i];
 				var s = value1.X * value2.X + value1.Y * value2.Y;
 
 				if( s > radius )
@@ -750,19 +750,19 @@ namespace FarseerPhysics.Collision
 			// Vertices that subtend the incident face.
 			var vertIndex1 = normalIndex;
 			var vertIndex2 = vertIndex1 + 1 < vertexCount ? vertIndex1 + 1 : 0;
-			var v1 = polygonA.Vertices[vertIndex1];
-			var v2 = polygonA.Vertices[vertIndex2];
+			var v1 = polygonA.vertices[vertIndex1];
+			var v2 = polygonA.vertices[vertIndex2];
 
 			// If the center is inside the polygon ...
 			if( separation < Settings.Epsilon )
 			{
 				manifold.PointCount = 1;
 				manifold.Type = ManifoldType.FaceA;
-				manifold.LocalNormal = polygonA.Normals[normalIndex];
+				manifold.LocalNormal = polygonA.normals[normalIndex];
 				manifold.LocalPoint = 0.5f * ( v1 + v2 );
 
 				var p0 = manifold.Points[0];
-				p0.LocalPoint = circleB.Position;
+				p0.LocalPoint = circleB.position;
 				p0.Id.Key = 0;
 
 				manifold.Points[0] = p0;
@@ -792,7 +792,7 @@ namespace FarseerPhysics.Collision
 				manifold.LocalPoint = v1;
 
 				var p0b = manifold.Points[0];
-				p0b.LocalPoint = circleB.Position;
+				p0b.LocalPoint = circleB.position;
 				p0b.Id.Key = 0;
 
 				manifold.Points[0] = p0b;
@@ -815,7 +815,7 @@ namespace FarseerPhysics.Collision
 				manifold.LocalPoint = v2;
 
 				var p0c = manifold.Points[0];
-				p0c.LocalPoint = circleB.Position;
+				p0c.LocalPoint = circleB.position;
 				p0c.Id.Key = 0;
 
 				manifold.Points[0] = p0c;
@@ -824,18 +824,18 @@ namespace FarseerPhysics.Collision
 			{
 				var faceCenter = 0.5f * ( v1 + v2 );
 				var value1 = cLocal - faceCenter;
-				var value2 = polygonA.Normals[vertIndex1];
+				var value2 = polygonA.normals[vertIndex1];
 				var separation2 = value1.X * value2.X + value1.Y * value2.Y;
 				if( separation2 > radius )
 					return;
 
 				manifold.PointCount = 1;
 				manifold.Type = ManifoldType.FaceA;
-				manifold.LocalNormal = polygonA.Normals[vertIndex1];
+				manifold.LocalNormal = polygonA.normals[vertIndex1];
 				manifold.LocalPoint = faceCenter;
 
 				var p0d = manifold.Points[0];
-				p0d.LocalPoint = circleB.Position;
+				p0d.LocalPoint = circleB.position;
 				p0d.Id.Key = 0;
 
 				manifold.Points[0] = p0d;
@@ -853,7 +853,7 @@ namespace FarseerPhysics.Collision
 		public static void CollidePolygons( ref Manifold manifold, PolygonShape polyA, ref Transform transformA, PolygonShape polyB, ref Transform transformB )
 		{
 			manifold.PointCount = 0;
-			var totalRadius = polyA.Radius + polyB.Radius;
+			var totalRadius = polyA.radius + polyB.radius;
 
 			int edgeA = 0;
 			var separationA = FindMaxSeparation( out edgeA, polyA, ref transformA, polyB, ref transformB );
@@ -897,13 +897,13 @@ namespace FarseerPhysics.Collision
 			FixedArray2<ClipVertex> incidentEdge;
 			FindIncidentEdge( out incidentEdge, poly1, ref xf1, edge1, poly2, ref xf2 );
 
-			int count1 = poly1.Vertices.Count;
+			int count1 = poly1.vertices.Count;
 
 			int iv1 = edge1;
 			int iv2 = edge1 + 1 < count1 ? edge1 + 1 : 0;
 
-			var v11 = poly1.Vertices[iv1];
-			var v12 = poly1.Vertices[iv2];
+			var v11 = poly1.vertices[iv1];
+			var v12 = poly1.vertices[iv2];
 
 			var localTangent = v12 - v11;
 			localTangent.Normalize();
@@ -991,14 +991,14 @@ namespace FarseerPhysics.Collision
 			// Compute circle in frame of edge
 			var Q = MathUtils.MulT( ref transformA, MathUtils.Mul( ref transformB, ref circleB._position ) );
 
-			Vector2 A = edgeA.Vertex1, B = edgeA.Vertex2;
+			Vector2 A = edgeA.vertex1, B = edgeA.vertex2;
 			var e = B - A;
 
 			// Barycentric coordinates
 			var u = Vector2.Dot( e, B - Q );
 			var v = Vector2.Dot( e, Q - A );
 
-			var radius = edgeA.Radius + circleB.Radius;
+			var radius = edgeA.radius + circleB.radius;
 
 			ContactFeature cf;
 			cf.IndexB = 0;
@@ -1017,9 +1017,9 @@ namespace FarseerPhysics.Collision
 					return;
 
 				// Is there an edge connected to A?
-				if( edgeA.HasVertex0 )
+				if( edgeA.hasVertex0 )
 				{
-					var A1 = edgeA.Vertex0;
+					var A1 = edgeA.vertex0;
 					var B1 = A;
 					var e1 = B1 - A1;
 					var u1 = Vector2.Dot( e1, B1 - Q );
@@ -1039,7 +1039,7 @@ namespace FarseerPhysics.Collision
 				var mp = new ManifoldPoint();
 				mp.Id.Key = 0;
 				mp.Id.Features = cf;
-				mp.LocalPoint = circleB.Position;
+				mp.LocalPoint = circleB.position;
 				manifold.Points[0] = mp;
 				return;
 			}
@@ -1055,9 +1055,9 @@ namespace FarseerPhysics.Collision
 					return;
 
 				// Is there an edge connected to B?
-				if( edgeA.HasVertex3 )
+				if( edgeA.hasVertex3 )
 				{
-					var B2 = edgeA.Vertex3;
+					var B2 = edgeA.vertex3;
 					var A2 = B;
 					var e2 = B2 - A2;
 					var v2 = Vector2.Dot( e2, Q - A2 );
@@ -1077,7 +1077,7 @@ namespace FarseerPhysics.Collision
 				var mp = new ManifoldPoint();
 				mp.Id.Key = 0;
 				mp.Id.Features = cf;
-				mp.LocalPoint = circleB.Position;
+				mp.LocalPoint = circleB.position;
 				manifold.Points[0] = mp;
 				return;
 			}
@@ -1107,7 +1107,7 @@ namespace FarseerPhysics.Collision
 			ManifoldPoint mp2 = new ManifoldPoint();
 			mp2.Id.Key = 0;
 			mp2.Id.Features = cf;
-			mp2.LocalPoint = circleB.Position;
+			mp2.LocalPoint = circleB.position;
 			manifold.Points[0] = mp2;
 		}
 
@@ -1152,15 +1152,15 @@ namespace FarseerPhysics.Collision
 
 				_xf = MathUtils.MulT( xfA, xfB );
 
-				_centroidB = MathUtils.Mul( ref _xf, polygonB.MassData.Centroid );
+				_centroidB = MathUtils.Mul( ref _xf, polygonB.massData.centroid );
 
-				_v0 = edgeA.Vertex0;
+				_v0 = edgeA.vertex0;
 				_v1 = edgeA._vertex1;
 				_v2 = edgeA._vertex2;
-				_v3 = edgeA.Vertex3;
+				_v3 = edgeA.vertex3;
 
-				bool hasVertex0 = edgeA.HasVertex0;
-				bool hasVertex3 = edgeA.HasVertex3;
+				bool hasVertex0 = edgeA.hasVertex0;
+				bool hasVertex3 = edgeA.hasVertex3;
 
 				Vector2 edge1 = _v2 - _v1;
 				edge1.Normalize();
@@ -1345,11 +1345,11 @@ namespace FarseerPhysics.Collision
 				}
 
 				// Get polygonB in frameA
-				_polygonB.Count = polygonB.Vertices.Count;
-				for( int i = 0; i < polygonB.Vertices.Count; ++i )
+				_polygonB.Count = polygonB.vertices.Count;
+				for( int i = 0; i < polygonB.vertices.Count; ++i )
 				{
-					_polygonB.Vertices[i] = MathUtils.Mul( ref _xf, polygonB.Vertices[i] );
-					_polygonB.Normals[i] = MathUtils.Mul( _xf.q, polygonB.Normals[i] );
+					_polygonB.Vertices[i] = MathUtils.Mul( ref _xf, polygonB.vertices[i] );
+					_polygonB.Normals[i] = MathUtils.Mul( _xf.q, polygonB.normals[i] );
 				}
 
 				_radius = 2.0f * Settings.PolygonRadius;
@@ -1508,8 +1508,8 @@ namespace FarseerPhysics.Collision
 				}
 				else
 				{
-					manifold.LocalNormal = polygonB.Normals[rf.i1];
-					manifold.LocalPoint = polygonB.Vertices[rf.i1];
+					manifold.LocalNormal = polygonB.normals[rf.i1];
+					manifold.LocalPoint = polygonB.vertices[rf.i1];
 				}
 
 				int pointCount = 0;
@@ -1679,13 +1679,13 @@ namespace FarseerPhysics.Collision
 		/// <returns></returns>
 		static float EdgeSeparation( PolygonShape poly1, ref Transform xf1, int edge1, PolygonShape poly2, ref Transform xf2 )
 		{
-			List<Vector2> vertices1 = poly1.Vertices;
-			List<Vector2> normals1 = poly1.Normals;
+			List<Vector2> vertices1 = poly1.vertices;
+			List<Vector2> normals1 = poly1.normals;
 
-			int count2 = poly2.Vertices.Count;
-			List<Vector2> vertices2 = poly2.Vertices;
+			int count2 = poly2.vertices.Count;
+			List<Vector2> vertices2 = poly2.vertices;
 
-			Debug.Assert( 0 <= edge1 && edge1 < poly1.Vertices.Count );
+			Debug.Assert( 0 <= edge1 && edge1 < poly1.vertices.Count );
 
 			// Convert normal from poly1's frame into poly2's frame.
 			Vector2 normal1World = MathUtils.Mul( xf1.q, normals1[edge1] );
@@ -1722,11 +1722,11 @@ namespace FarseerPhysics.Collision
 		/// <returns></returns>
 		static float FindMaxSeparation( out int edgeIndex, PolygonShape poly1, ref Transform xf1, PolygonShape poly2, ref Transform xf2)
 		{
-			int count1 = poly1.Vertices.Count;
-			List<Vector2> normals1 = poly1.Normals;
+			int count1 = poly1.vertices.Count;
+			List<Vector2> normals1 = poly1.normals;
 
 			// Vector pointing from the centroid of poly1 to the centroid of poly2.
-			Vector2 d = MathUtils.Mul( ref xf2, poly2.MassData.Centroid ) - MathUtils.Mul( ref xf1, poly1.MassData.Centroid);
+			Vector2 d = MathUtils.Mul( ref xf2, poly2.massData.centroid ) - MathUtils.Mul( ref xf1, poly1.massData.centroid);
 			Vector2 dLocal1 = MathUtils.MulT( xf1.q, d);
 
 			// Find edge normal on poly1 that has the largest projection onto d.
@@ -1803,13 +1803,13 @@ namespace FarseerPhysics.Collision
 		static void FindIncidentEdge( out FixedArray2<ClipVertex> c, PolygonShape poly1, ref Transform xf1, int edge1, PolygonShape poly2, ref Transform xf2 )
 		{
 			c = new FixedArray2<ClipVertex>();
-			Vertices normals1 = poly1.Normals;
+			Vertices normals1 = poly1.normals;
 
-			int count2 = poly2.Vertices.Count;
-			Vertices vertices2 = poly2.Vertices;
-			Vertices normals2 = poly2.Normals;
+			int count2 = poly2.vertices.Count;
+			Vertices vertices2 = poly2.vertices;
+			Vertices normals2 = poly2.normals;
 
-			Debug.Assert( 0 <= edge1 && edge1 < poly1.Vertices.Count );
+			Debug.Assert( 0 <= edge1 && edge1 < poly1.vertices.Count );
 
 			// Get the normal of the reference edge in poly2's frame.
 			Vector2 normal1 = MathUtils.MulT( xf2.q, MathUtils.Mul( xf1.q, normals1[edge1] ) );
