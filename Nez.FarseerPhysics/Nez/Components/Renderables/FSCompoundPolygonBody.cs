@@ -3,7 +3,6 @@ using FarseerPhysics.Collision.Shapes;
 using FarseerPhysics.Common;
 using FarseerPhysics.Dynamics;
 using FarseerPhysics.Common.Decomposition;
-using Microsoft.Xna.Framework;
 using Nez.Textures;
 using FarseerPhysics.Common.PolygonManipulation;
 
@@ -18,24 +17,29 @@ namespace Nez.Farseer
 		protected List<Vertices> _verts = new List<Vertices>();
 
 
-		public FSCompoundPolygonBody( World world, Subtexture subtexture, float density, Vector2 position = default( Vector2 ), BodyType bodyType = BodyType.Static )
-			: base( world, subtexture, position, bodyType )
-		{
-			var data = new uint[subtexture.sourceRect.Width * subtexture.sourceRect.Height];
-			subtexture.texture2D.GetData( 0, subtexture.sourceRect, data, 0, data.Length );
+		public FSCompoundPolygonBody( Subtexture subtexture ) : base( subtexture )
+		{}
 
-			var verts = PolygonTools.CreatePolygon( data, subtexture.sourceRect.Width );
+
+		public override void initialize()
+		{
+			base.initialize();
+
+			var data = new uint[_subtexture.sourceRect.Width * _subtexture.sourceRect.Height];
+			_subtexture.texture2D.GetData( 0, _subtexture.sourceRect, data, 0, data.Length );
+
+			var verts = PolygonTools.CreatePolygon( data, _subtexture.sourceRect.Width );
 			verts = SimplifyTools.DouglasPeuckerSimplify( verts, 2 );
 
 			var decomposedVerts = Triangulate.ConvexPartition( verts, TriangulationAlgorithm.Bayazit );
 			for( var i = 0; i < decomposedVerts.Count; i++ )
 			{
 				var polygon = decomposedVerts[i];
-				polygon.Translate( -subtexture.center );
+				polygon.Translate( -_subtexture.center );
 			}
 
 			// add the fixtures
-			var fixtures = Farseer.FixtureFactory.attachCompoundPolygon( decomposedVerts, density, body );
+			var fixtures = body.attachCompoundPolygon( decomposedVerts, 1 );
 
 			// fetch all the Vertices and save a copy in case we need to scale them later
 			foreach( var fixture in fixtures )

@@ -28,7 +28,6 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Farseer\ConvertUnits.cs" />
     <Compile Include="Farseer\Settings.cs" />
     <Compile Include="Farseer\Collision\Collision.cs" />
     <Compile Include="Farseer\Collision\Distance.cs" />
@@ -138,7 +137,7 @@
     <Compile Include="Farseer\Factories\FixtureFactory.cs" />
     <Compile Include="Farseer\Factories\JointFactory.cs" />
     <Compile Include="Farseer\Factories\LinkFactory.cs" />
-    <Compile Include="Nez\Components\FSFarseerWorld.cs" />
+    <Compile Include="Nez\Components\FSWorld.cs" />
     <Compile Include="Nez\Components\FSGenericBody.cs" />
     <Compile Include="Nez\Components\Renderables\FSBoxBody.cs" />
     <Compile Include="Nez\Components\Renderables\FSCircleBody.cs" />
@@ -147,10 +146,12 @@
     <Compile Include="Nez\Components\Renderables\FSPolygonBody.cs" />
     <Compile Include="Nez\Components\Renderables\FSRenderableBody.cs" />
     <Compile Include="Nez\Factories\BodyFactory.cs" />
-    <Compile Include="Nez\Factories\FixtureFactory.cs" />
-    <Compile Include="Nez\Factories\JointFactory.cs" />
     <Compile Include="Nez\Factories\LinkFactory.cs" />
     <Compile Include="Nez\FarseerCollisions.cs" />
+    <Compile Include="Nez\FarseerScene.cs" />
+    <Compile Include="Nez\Components\FSMouseDragger.cs" />
+    <Compile Include="Nez\FSConvert.cs" />
+    <Compile Include="Nez\Extensions\BodyExt.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Nez.Portable\Nez.csproj">
@@ -167,6 +168,7 @@
     <Folder Include="Nez\" />
     <Folder Include="Nez\Components\" />
     <Folder Include="Nez\Factories\" />
+    <Folder Include="Nez\Extensions\" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
 </Project>

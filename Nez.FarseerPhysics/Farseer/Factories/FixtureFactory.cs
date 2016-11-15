@@ -42,7 +42,7 @@ namespace FarseerPhysics.Factories
 		public static Fixture AttachCircle( float radius, float density, Body body, object userData = null )
 		{
 			if( radius <= 0 )
-				throw new ArgumentOutOfRangeException( "radius", "Radius must be more than 0 meters" );
+				throw new ArgumentOutOfRangeException( nameof( radius ), "Radius must be more than 0 meters" );
 
 			var circleShape = new CircleShape( radius, density );
 			return body.CreateFixture( circleShape, userData );
@@ -51,7 +51,7 @@ namespace FarseerPhysics.Factories
 		public static Fixture AttachCircle( float radius, float density, Body body, Vector2 offset, object userData = null )
 		{
 			if( radius <= 0 )
-				throw new ArgumentOutOfRangeException( "radius", "Radius must be more than 0 meters" );
+				throw new ArgumentOutOfRangeException( nameof( radius ), "Radius must be more than 0 meters" );
 
 			var circleShape = new CircleShape( radius, density );
 			circleShape.Position = offset;
@@ -61,7 +61,7 @@ namespace FarseerPhysics.Factories
 		public static Fixture AttachPolygon( Vertices vertices, float density, Body body, object userData = null )
 		{
 			if( vertices.Count <= 1 )
-				throw new ArgumentOutOfRangeException( "vertices", "Too few points to be a polygon" );
+				throw new ArgumentOutOfRangeException( nameof( vertices ), "Too few points to be a polygon" );
 
 			var polygon = new PolygonShape( vertices, density );
 			return body.CreateFixture( polygon, userData );
@@ -70,10 +70,10 @@ namespace FarseerPhysics.Factories
 		public static Fixture AttachEllipse( float xRadius, float yRadius, int edges, float density, Body body, object userData = null )
 		{
 			if( xRadius <= 0 )
-				throw new ArgumentOutOfRangeException( "xRadius", "X-radius must be more than 0" );
+				throw new ArgumentOutOfRangeException( nameof( xRadius ), "X-radius must be more than 0" );
 
 			if( yRadius <= 0 )
-				throw new ArgumentOutOfRangeException( "yRadius", "Y-radius must be more than 0" );
+				throw new ArgumentOutOfRangeException( nameof( yRadius ), "Y-radius must be more than 0" );
 
 			var ellipseVertices = PolygonTools.CreateEllipse( xRadius, yRadius, edges );
 			var polygonShape = new PolygonShape( ellipseVertices, density );

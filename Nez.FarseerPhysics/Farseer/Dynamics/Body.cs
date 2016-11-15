@@ -32,7 +32,7 @@ using FarseerPhysics.Controllers;
 using FarseerPhysics.Dynamics.Contacts;
 using FarseerPhysics.Dynamics.Joints;
 using Microsoft.Xna.Framework;
-
+using Nez.Farseer;
 
 namespace FarseerPhysics.Dynamics
 {
@@ -389,7 +389,6 @@ namespace FarseerPhysics.Dynamics
 			set
 			{
 				Debug.Assert( !float.IsNaN( value.X ) && !float.IsNaN( value.Y ) );
-
 				SetTransform( ref value, Rotation );
 			}
 		}
@@ -400,8 +399,8 @@ namespace FarseerPhysics.Dynamics
 		/// <returns>Return the world position of the body's origin.</returns>
 		public Vector2 DisplayPosition
 		{
-			get { return _xf.p * ConvertUnits.simToDisplay; }
-			set { Position = value * ConvertUnits.displayToSim; }
+			get { return _xf.p * FSConvert.simToDisplay; }
+			set { Position = value * FSConvert.displayToSim; }
 		}
 
 		/// <summary>
@@ -414,7 +413,6 @@ namespace FarseerPhysics.Dynamics
 			set
 			{
 				Debug.Assert( !float.IsNaN( value ) );
-
 				SetTransform( ref _xf.p, value );
 			}
 		}

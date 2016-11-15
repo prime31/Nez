@@ -160,7 +160,7 @@ namespace Nez.Farseer
 
 					var clipPoint = MathUtils.Mul( ref transformB, _manifold.Points[0].LocalPoint );
 					var separation = Vector2.Dot( clipPoint - planePoint, result.normal ) - polygonA.Radius - polygonB.Radius;
-					result.point = clipPoint * ConvertUnits.simToDisplay;
+					result.point = clipPoint * FSConvert.simToDisplay;
 
 					// Ensure normal points from A to B
 					Vector2.Negate( ref result.normal, out result.normal );
@@ -174,7 +174,7 @@ namespace Nez.Farseer
 
 					var clipPoint = MathUtils.Mul( ref transformA, _manifold.Points[0].LocalPoint );
 					var separation = Vector2.Dot( clipPoint - planePoint, result.normal ) - polygonA.Radius - polygonB.Radius;
-					result.point = clipPoint * ConvertUnits.simToDisplay;
+					result.point = clipPoint * FSConvert.simToDisplay;
 
 					result.minimumTranslationVector = result.normal * -separation;
 				}
@@ -208,7 +208,7 @@ namespace Nez.Farseer
 				if( separation <= 0 )
 					return false;
 
-				result.point = points[0] * ConvertUnits.simToDisplay;
+				result.point = points[0] * FSConvert.simToDisplay;
 				result.minimumTranslationVector = result.normal * separation;
 
 				Debug.drawPixel( result.point, 2, Color.Red, 0.2f );
@@ -238,7 +238,7 @@ namespace Nez.Farseer
 				var cA = pointA - circleA.Radius * result.normal;
 				var cB = pointB + circleB.Radius * result.normal;
 				result.point = 0.5f * ( cA + cB );
-				result.point *= ConvertUnits.simToDisplay;
+				result.point *= FSConvert.simToDisplay;
 
 				var separation = Vector2.Dot( pointA - pointB, result.normal ) - circleA.Radius - circleB.Radius;
 				result.minimumTranslationVector = result.normal * Math.Abs( separation );
@@ -273,7 +273,7 @@ namespace Nez.Farseer
 					var cA = pointA - edge.Radius * result.normal;
 					var cB = pointB + circle.Radius * result.normal;
 					result.point = 0.5f * ( cA + cB );
-					result.point *= ConvertUnits.simToDisplay;
+					result.point *= FSConvert.simToDisplay;
 
 					var separation = Vector2.Dot( pointA - pointB, result.normal ) - edge.Radius - circle.Radius;
 
@@ -288,7 +288,7 @@ namespace Nez.Farseer
 
 					var clipPoint = MathUtils.Mul( ref circleTransform, _manifold.Points[0].LocalPoint );
 					var separation = Vector2.Dot( clipPoint - planePoint, result.normal ) - edge.Radius - circle.Radius;
-					result.point = ( clipPoint - result.normal * circle.Radius ) * ConvertUnits.simToDisplay;
+					result.point = ( clipPoint - result.normal * circle.Radius ) * FSConvert.simToDisplay;
 
 					result.minimumTranslationVector = result.normal * -separation;
 				}
@@ -321,7 +321,7 @@ namespace Nez.Farseer
 
 					var clipPoint = MathUtils.Mul( ref polygonTransform, _manifold.Points[0].LocalPoint );
 					var separation = Vector2.Dot( clipPoint - planePoint, result.normal ) - edge.Radius - polygon.Radius;
-					result.point = clipPoint * ConvertUnits.simToDisplay;
+					result.point = clipPoint * FSConvert.simToDisplay;
 
 					result.minimumTranslationVector = result.normal * -separation;
 				}
@@ -332,7 +332,7 @@ namespace Nez.Farseer
 
 					var clipPoint = MathUtils.Mul( ref edgeTransform, _manifold.Points[0].LocalPoint );
 					var separation = Vector2.Dot( clipPoint - planePoint, result.normal ) - edge.Radius - polygon.Radius;
-					result.point = clipPoint * ConvertUnits.simToDisplay;
+					result.point = clipPoint * FSConvert.simToDisplay;
 
 					// Ensure normal points from A to B
 					Vector2.Negate( ref result.normal, out result.normal );

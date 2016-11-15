@@ -330,7 +330,7 @@ namespace Nez.Farseer
 					Vector2 x1 = new Vector2( MathHelper.Clamp( x, performancePanelBounds.Left, performancePanelBounds.Right ), MathHelper.Clamp( y1, performancePanelBounds.Top, performancePanelBounds.Bottom ) );
 					Vector2 x2 = new Vector2( MathHelper.Clamp( x + deltaX, performancePanelBounds.Left, performancePanelBounds.Right ), MathHelper.Clamp( y2, performancePanelBounds.Top, performancePanelBounds.Bottom ) );
 
-					drawSegment( ConvertUnits.toSimUnits( x1 ), ConvertUnits.toSimUnits( x2 ), Color.LightGreen );
+					drawSegment( FSConvert.toSimUnits( x1 ), FSConvert.toSimUnits( x2 ), Color.LightGreen );
 
 					x += deltaX;
 				}
@@ -346,10 +346,10 @@ namespace Nez.Farseer
 			_background[2] = new Vector2( performancePanelBounds.X + performancePanelBounds.Width, performancePanelBounds.Y + performancePanelBounds.Height );
 			_background[3] = new Vector2( performancePanelBounds.X + performancePanelBounds.Width, performancePanelBounds.Y );
 
-			_background[0] = ConvertUnits.toSimUnits( _background[0] );
-			_background[1] = ConvertUnits.toSimUnits( _background[1] );
-			_background[2] = ConvertUnits.toSimUnits( _background[2] );
-			_background[3] = ConvertUnits.toSimUnits( _background[3] );
+			_background[0] = FSConvert.toSimUnits( _background[0] );
+			_background[1] = FSConvert.toSimUnits( _background[1] );
+			_background[2] = FSConvert.toSimUnits( _background[2] );
+			_background[3] = FSConvert.toSimUnits( _background[3] );
 
 			drawSolidPolygon( _background, 4, Color.DarkGray, true );
 		}
@@ -539,13 +539,13 @@ namespace Nez.Farseer
 		{
 			for( int i = 0; i < count - 1; i++ )
 			{
-				_primitiveBatch.addVertex( ConvertUnits.toDisplayUnits( vertices[i] ), color, PrimitiveType.LineList );
-				_primitiveBatch.addVertex( ConvertUnits.toDisplayUnits( vertices[i + 1] ), color, PrimitiveType.LineList );
+				_primitiveBatch.addVertex( FSConvert.toDisplayUnits( vertices[i] ), color, PrimitiveType.LineList );
+				_primitiveBatch.addVertex( FSConvert.toDisplayUnits( vertices[i + 1] ), color, PrimitiveType.LineList );
 			}
 			if( closed )
 			{
-				_primitiveBatch.addVertex( ConvertUnits.toDisplayUnits( vertices[count - 1] ), color, PrimitiveType.LineList );
-				_primitiveBatch.addVertex( ConvertUnits.toDisplayUnits( vertices[0] ), color, PrimitiveType.LineList );
+				_primitiveBatch.addVertex( FSConvert.toDisplayUnits( vertices[count - 1] ), color, PrimitiveType.LineList );
+				_primitiveBatch.addVertex( FSConvert.toDisplayUnits( vertices[0] ), color, PrimitiveType.LineList );
 			}
 		}
 
@@ -568,9 +568,9 @@ namespace Nez.Farseer
 
 			for( int i = 1; i < count - 1; i++ )
 			{
-				_primitiveBatch.addVertex( ConvertUnits.toDisplayUnits( vertices[0] ), colorFill, PrimitiveType.TriangleList );
-				_primitiveBatch.addVertex( ConvertUnits.toDisplayUnits( vertices[i] ), colorFill, PrimitiveType.TriangleList );
-				_primitiveBatch.addVertex( ConvertUnits.toDisplayUnits( vertices[i + 1] ), colorFill, PrimitiveType.TriangleList );
+				_primitiveBatch.addVertex( FSConvert.toDisplayUnits( vertices[0] ), colorFill, PrimitiveType.TriangleList );
+				_primitiveBatch.addVertex( FSConvert.toDisplayUnits( vertices[i] ), colorFill, PrimitiveType.TriangleList );
+				_primitiveBatch.addVertex( FSConvert.toDisplayUnits( vertices[i + 1] ), colorFill, PrimitiveType.TriangleList );
 			}
 
 			if( outline )
@@ -594,8 +594,8 @@ namespace Nez.Farseer
 				Vector2 v1 = center + radius * new Vector2( (float)Math.Cos( theta ), (float)Math.Sin( theta ) );
 				Vector2 v2 = center + radius * new Vector2( (float)Math.Cos( theta + increment ), (float)Math.Sin( theta + increment ) );
 
-				_primitiveBatch.addVertex( ConvertUnits.toDisplayUnits( v1 ), color, PrimitiveType.LineList );
-				_primitiveBatch.addVertex( ConvertUnits.toDisplayUnits( v2 ), color, PrimitiveType.LineList );
+				_primitiveBatch.addVertex( FSConvert.toDisplayUnits( v1 ), color, PrimitiveType.LineList );
+				_primitiveBatch.addVertex( FSConvert.toDisplayUnits( v2 ), color, PrimitiveType.LineList );
 
 				theta += increment;
 			}
@@ -616,7 +616,7 @@ namespace Nez.Farseer
 			Color colorFill = color * 0.5f;
 
 			Vector2 v0 = center + radius * new Vector2( (float)Math.Cos( theta ), (float)Math.Sin( theta ) );
-			ConvertUnits.toDisplayUnits( ref v0, out v0 );
+			FSConvert.toDisplayUnits( ref v0, out v0 );
 			theta += increment;
 
 			for( int i = 1; i < circleSegments - 1; i++ )
@@ -625,8 +625,8 @@ namespace Nez.Farseer
 				Vector2 v2 = center + radius * new Vector2( (float)Math.Cos( theta + increment ), (float)Math.Sin( theta + increment ) );
 
 				_primitiveBatch.addVertex( v0, colorFill, PrimitiveType.TriangleList );
-				_primitiveBatch.addVertex( ConvertUnits.toDisplayUnits( v1 ), colorFill, PrimitiveType.TriangleList );
-				_primitiveBatch.addVertex( ConvertUnits.toDisplayUnits( v2 ), colorFill, PrimitiveType.TriangleList );
+				_primitiveBatch.addVertex( FSConvert.toDisplayUnits( v1 ), colorFill, PrimitiveType.TriangleList );
+				_primitiveBatch.addVertex( FSConvert.toDisplayUnits( v2 ), colorFill, PrimitiveType.TriangleList );
 
 				theta += increment;
 			}
@@ -644,8 +644,8 @@ namespace Nez.Farseer
 
 		public void drawSegment( Vector2 start, Vector2 end, Color color )
 		{
-			start = ConvertUnits.toDisplayUnits( start );
-			end = ConvertUnits.toDisplayUnits( end );
+			start = FSConvert.toDisplayUnits( start );
+			end = FSConvert.toDisplayUnits( end );
 			_primitiveBatch.addVertex( start, color, PrimitiveType.LineList );
 			_primitiveBatch.addVertex( end, color, PrimitiveType.LineList );
 		}

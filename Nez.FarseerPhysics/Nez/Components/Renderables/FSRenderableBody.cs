@@ -1,6 +1,4 @@
-﻿using FarseerPhysics;
-using FarseerPhysics.Dynamics;
-using Microsoft.Xna.Framework;
+﻿using FarseerPhysics.Dynamics;
 using Microsoft.Xna.Framework.Graphics;
 using Nez.Textures;
 
@@ -29,20 +27,25 @@ namespace Nez.Farseer
 		protected Subtexture _subtexture;
 
 
-		protected FSRenderableBody( World world, Subtexture subtexture, Vector2 position = default( Vector2 ), BodyType bodyType = BodyType.Static )
+		protected FSRenderableBody( Subtexture subtexture )
 		{
 			_subtexture = subtexture;
-			body = new Body( world, position * ConvertUnits.displayToSim, 0, bodyType );
 		}
 
 
-		public override void onAddedToEntity()
+		#region Component overrides
+
+		public override void initialize()
 		{
-			// if scale is not 1 or rotation is not 0 then trigger a scale/rotation change for the Shape
-			if( transform.scale.X != 1 )
-				onEntityTransformChanged( Transform.Component.Scale );
-			if( transform.rotation != 0 )
-				onEntityTransformChanged( Transform.Component.Rotation );
+			World world;
+			if( entity.scene is FarseerScene )
+				world = entity.scene as FarseerScene;
+			else
+				world = entity.scene.findObjectOfType<FSWorld>();
+
+			Assert.isNotNull( world, "Scene must inherit from FarseerScene or Scene must contain an {0} to use {1}", nameof( FSWorld ), nameof( FSGenericBody ) );
+
+			body = new Body( world, transform.position * FSConvert.displayToSim, transform.rotation );
 		}
 
 
@@ -53,7 +56,7 @@ namespace Nez.Farseer
 				return;
 
 			if( comp == Transform.Component.Position )
-				body.Position = transform.position * ConvertUnits.displayToSim;
+				body.Position = transform.position * FSConvert.displayToSim;
 			else if( comp == Transform.Component.Rotation )
 				body.Rotation = transform.rotation;
 		}
@@ -73,9 +76,9 @@ namespace Nez.Farseer
 		{
 			if( !body.Awake )
 				return;
-			
+
 			_ignoreTransformChanges = true;
-			transform.position = ConvertUnits.simToDisplay * body.Position;
+			transform.position = FSConvert.simToDisplay * body.Position;
 			transform.rotation = body.Rotation;
 			_ignoreTransformChanges = false;
 		}
@@ -84,6 +87,15 @@ namespace Nez.Farseer
 		public override void render( Graphics graphics, Camera camera )
 		{
 			graphics.batcher.draw( _subtexture, transform.position, _subtexture.sourceRect, color, transform.rotation, _subtexture.center, transform.scale, SpriteEffects.None, _layerDepth );
+		}
+
+		#endregion
+
+
+		public FSRenderableBody setBodyType( BodyType bodyType )
+		{
+			body.BodyType = bodyType;
+			return this;
 		}
 
 

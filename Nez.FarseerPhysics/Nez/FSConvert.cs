@@ -1,12 +1,12 @@
 using Microsoft.Xna.Framework;
 
 
-namespace FarseerPhysics
+namespace Nez.Farseer
 {
 	/// <summary>
 	/// Convert units between display and simulation units
 	/// </summary>
-	public static class ConvertUnits
+	public static class FSConvert
 	{
 		/// <summary>
 		/// converts simulation (meters) to display (pixels)

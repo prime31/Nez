@@ -6,7 +6,7 @@ using Microsoft.Xna.Framework;
 
 namespace Nez.Farseer
 {
-	public class FSFarseerWorld : Component, IUpdatable
+	public class FSWorld : Component, IUpdatable
 	{
 		public World world;
 
@@ -23,11 +23,11 @@ namespace Nez.Farseer
 		FixedMouseJoint _mouseJoint;
 
 
-		public FSFarseerWorld() : this( new Vector2( 0, 9.82f ) )
+		public FSWorld() : this( new Vector2( 0, 9.82f ) )
 		{}
 
 
-		public FSFarseerWorld( Vector2 gravity )
+		public FSWorld( Vector2 gravity )
 		{
 			world = new World( gravity );
 		}
@@ -55,15 +55,15 @@ namespace Nez.Farseer
 				if( Input.leftMouseButtonPressed )
 				{
 					var pos = entity.scene.camera.screenToWorldPoint( Input.mousePosition );
-					var fixture = world.TestPoint( ConvertUnits.displayToSim * pos );
+					var fixture = world.TestPoint( FSConvert.displayToSim * pos );
 					if( fixture != null && !fixture.Body.IsStatic && !fixture.Body.IsKinematic )
-						_mouseJoint = Farseer.JointFactory.createFixedMouseJoint( world, fixture.Body, pos );
+						_mouseJoint = fixture.Body.createFixedMouseJoint( pos );
 				}
 
 				if( Input.leftMouseButtonDown && _mouseJoint != null )
 				{
 					var pos = entity.scene.camera.screenToWorldPoint( Input.mousePosition );
-					_mouseJoint.WorldAnchorB = ConvertUnits.toSimUnits( pos );
+					_mouseJoint.WorldAnchorB = FSConvert.toSimUnits( pos );
 				}
 
 				if( Input.leftMouseButtonReleased && _mouseJoint != null )
@@ -77,7 +77,7 @@ namespace Nez.Farseer
 		}
 
 
-		public static implicit operator World( FSFarseerWorld self )
+		public static implicit operator World( FSWorld self )
 		{
 			return self.world;
 		}

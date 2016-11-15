@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using FarseerPhysics.Collision.Shapes;
 using FarseerPhysics.Common;
-using FarseerPhysics.Dynamics;
 using Microsoft.Xna.Framework;
 using Nez.Textures;
 
@@ -10,22 +9,22 @@ namespace Nez.Farseer
 {
 	public class FSPolygonBody : FSRenderableBody
 	{
+		/// <summary>
+		/// verts are stored in display units. We convert to sim units if the Transform.scale changes.
+		/// </summary>
 		protected List<Vector2> _verts;
 
 
-		public FSPolygonBody( World world, Subtexture subtexture, List<Vector2> verts, float density, Vector2 position = default( Vector2 ), BodyType bodyType = BodyType.Static )
-			: base( world, subtexture, position, bodyType )
+		public FSPolygonBody( Subtexture subtexture, List<Vector2> verts ) : base( subtexture )
 		{			
 			_verts = verts;
-			Farseer.FixtureFactory.attachPolygon( new Vertices( verts ), density, body );
 		}
 
 
-		public FSPolygonBody( World world, Subtexture subtexture, Vertices verts, float density, Vector2 position = default( Vector2 ), BodyType bodyType = BodyType.Static )
-			: base( world, subtexture, position, bodyType )
+		public override void initialize()
 		{
-			_verts = verts;
-			Farseer.FixtureFactory.attachPolygon( verts, density, body );
+			base.initialize();
+			body.attachPolygon( new Vertices( _verts ), 1 );
 		}
 
 
@@ -43,7 +42,7 @@ namespace Nez.Farseer
 				var verts = poly.Vertices;
 				verts.Clear();
 				verts.AddRange( _verts );
-				verts.Scale( transform.scale );
+				verts.Scale( transform.scale * FSConvert.displayToSim );
 				poly.Vertices = verts;
 			}
 		}

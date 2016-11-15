@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using FarseerPhysics;
 using FarseerPhysics.Dynamics;
 using Microsoft.Xna.Framework;
 
@@ -24,7 +23,7 @@ namespace Nez.Farseer
 			/// <returns></returns>
 			public static List<Body> createChain( World world, Vector2 start, Vector2 end, float linkWidth, float linkHeight, int numberOfLinks, float linkDensity, bool attachRopeJoint, bool fixStart = false, bool fixEnd = false )
 			{
-				return FarseerPhysics.Factories.LinkFactory.CreateChain( world, ConvertUnits.displayToSim * start, ConvertUnits.toSimUnits( end ), ConvertUnits.toSimUnits( (double)linkWidth ), ConvertUnits.displayToSim * linkHeight, numberOfLinks, linkDensity, attachRopeJoint, fixStart, fixEnd );
+				return FarseerPhysics.Factories.LinkFactory.CreateChain( world, FSConvert.displayToSim * start, FSConvert.toSimUnits( end ), FSConvert.displayToSim * linkWidth, FSConvert.displayToSim * linkHeight, numberOfLinks, linkDensity, attachRopeJoint, fixStart, fixEnd );
 			}
 		}
 	}

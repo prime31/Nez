@@ -414,9 +414,7 @@ namespace FarseerPhysics.Dynamics
 
 			// Adjust mass properties if needed.
 			if( Shape._density > 0.0f )
-			{
 				Body.ResetMassData();
-			}
 
 			// Let the world know we have a new fixture. This will cause new contacts
 			// to be created at the beginning of the next time step.
