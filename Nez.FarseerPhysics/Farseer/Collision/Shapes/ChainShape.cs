@@ -24,6 +24,7 @@ using System.Diagnostics;
 using FarseerPhysics.Common;
 using Microsoft.Xna.Framework;
 
+
 namespace FarseerPhysics.Collision.Shapes
 {
 	/// <summary>
@@ -85,7 +86,7 @@ namespace FarseerPhysics.Collision.Shapes
 		public ChainShape() : base( 0 )
 		{
 			shapeType = ShapeType.Chain;
-			_radius = Settings.PolygonRadius;
+			_radius = Settings.polygonRadius;
 		}
 
 		/// <summary>
@@ -96,7 +97,7 @@ namespace FarseerPhysics.Collision.Shapes
 		public ChainShape( Vertices vertices, bool createLoop = false ) : base( 0 )
 		{
 			shapeType = ShapeType.Chain;
-			_radius = Settings.PolygonRadius;
+			_radius = Settings.polygonRadius;
 
 			Debug.Assert( vertices != null && vertices.Count >= 3 );
 			Debug.Assert( vertices[0] != vertices[vertices.Count - 1] ); // FPE. See http://www.box2d.org/forum/viewtopic.php?f=4&t=7973&p=35363
@@ -107,7 +108,7 @@ namespace FarseerPhysics.Collision.Shapes
 				var v2 = vertices[i];
 
 				// If the code crashes here, it means your vertices are too close together.
-				Debug.Assert( Vector2.DistanceSquared( v1, v2 ) > Settings.LinearSlop * Settings.LinearSlop );
+				Debug.Assert( Vector2.DistanceSquared( v1, v2 ) > Settings.linearSlop * Settings.linearSlop );
 			}
 
 			this.vertices = new Vertices( vertices );
@@ -199,11 +200,11 @@ namespace FarseerPhysics.Collision.Shapes
 			if( i2 == vertices.Count )
 				i2 = 0;
 
-			var v1 = MathUtils.Mul( ref transform, vertices[i1] );
-			var v2 = MathUtils.Mul( ref transform, vertices[i2] );
+			var v1 = MathUtils.mul( ref transform, vertices[i1] );
+			var v2 = MathUtils.mul( ref transform, vertices[i2] );
 
-			aabb.LowerBound = Vector2.Min( v1, v2 );
-			aabb.UpperBound = Vector2.Max( v1, v2 );
+			aabb.lowerBound = Vector2.Min( v1, v2 );
+			aabb.upperBound = Vector2.Max( v1, v2 );
 		}
 
 		protected override void ComputeProperties()

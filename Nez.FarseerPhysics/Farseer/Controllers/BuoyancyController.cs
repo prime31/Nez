@@ -63,14 +63,14 @@ namespace FarseerPhysics.Controllers
 			set
 			{
 				_container = value;
-				_offset = _container.UpperBound.Y;
+				_offset = _container.upperBound.Y;
 			}
 		}
 
 		public override void Update( float dt )
 		{
 			_uniqueBodies.Clear();
-			World.QueryAABB( fixture =>
+			World.queryAABB( fixture =>
 								 {
 									 if( fixture.body.isStatic || !fixture.body.awake )
 										 return true;
@@ -115,20 +115,20 @@ namespace FarseerPhysics.Controllers
 				massc.X /= mass;
 				massc.Y /= mass;
 
-				if( area < Settings.Epsilon )
+				if( area < Settings.epsilon )
 					continue;
 
 				//Buoyancy
 				var buoyancyForce = -Density * area * _gravity;
-				body.ApplyForce( buoyancyForce, massc );
+				body.applyForce( buoyancyForce, massc );
 
 				//Linear drag
-				var dragForce = body.GetLinearVelocityFromWorldPoint( areac ) - Velocity;
+				var dragForce = body.getLinearVelocityFromWorldPoint( areac ) - Velocity;
 				dragForce *= -LinearDragCoefficient * area;
-				body.ApplyForce( dragForce, areac );
+				body.applyForce( dragForce, areac );
 
 				//Angular drag
-				body.ApplyTorque( -body.inertia / body.mass * area * body.angularVelocity * AngularDragCoefficient );
+				body.applyTorque( -body.inertia / body.mass * area * body.angularVelocity * AngularDragCoefficient );
 			}
 		}
 	}

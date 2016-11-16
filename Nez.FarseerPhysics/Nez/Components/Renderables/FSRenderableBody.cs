@@ -66,7 +66,7 @@ namespace Nez.Farseer
 		{
 			if( body != null )
 			{
-				body.world.RemoveBody( body );
+				body.world.removeBody( body );
 				body = null;
 			}
 		}

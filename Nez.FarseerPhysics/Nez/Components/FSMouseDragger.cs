@@ -22,7 +22,7 @@ namespace Nez.Farseer
 			if( Input.leftMouseButtonPressed )
 			{
 				var pos = entity.scene.camera.screenToWorldPoint( Input.mousePosition );
-				var fixture = _world.TestPoint( FSConvert.displayToSim * pos );
+				var fixture = _world.testPoint( FSConvert.displayToSim * pos );
 				if( fixture != null && !fixture.body.isStatic && !fixture.body.isKinematic )
 					_mouseJoint = fixture.body.createFixedMouseJoint( pos );
 			}
@@ -35,7 +35,7 @@ namespace Nez.Farseer
 
 			if( Input.leftMouseButtonReleased && _mouseJoint != null )
 			{
-				_world.RemoveJoint( _mouseJoint );
+				_world.removeJoint( _mouseJoint );
 				_mouseJoint = null;
 			}
 		}

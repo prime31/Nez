@@ -2,32 +2,34 @@
 using FarseerPhysics.Dynamics;
 using Microsoft.Xna.Framework;
 
+
 namespace FarseerPhysics.Collision
 {
 	public interface IBroadPhase
 	{
-		int ProxyCount { get; }
+		int proxyCount { get; }
 
-		void UpdatePairs( BroadphaseDelegate callback );
+		void updatePairs( BroadphaseDelegate callback );
 
-		bool TestOverlap( int proxyIdA, int proxyIdB );
+		bool testOverlap( int proxyIdA, int proxyIdB );
 
-		int AddProxy( ref FixtureProxy proxy );
+		int addProxy( ref FixtureProxy proxy );
 
-		void RemoveProxy( int proxyId );
+		void removeProxy( int proxyId );
 
-		void MoveProxy( int proxyId, ref AABB aabb, Vector2 displacement );
+		void moveProxy( int proxyId, ref AABB aabb, Vector2 displacement );
 
-		FixtureProxy GetProxy( int proxyId );
+		FixtureProxy getProxy( int proxyId );
 
-		void TouchProxy( int proxyId );
+		void touchProxy( int proxyId );
 
-		void GetFatAABB( int proxyId, out AABB aabb );
+		void getFatAABB( int proxyId, out AABB aabb );
 
-		void Query( Func<int, bool> callback, ref AABB aabb );
+		void query( Func<int, bool> callback, ref AABB aabb );
 
-		void RayCast( Func<RayCastInput, int, float> callback, ref RayCastInput input );
+		void rayCast( Func<RayCastInput, int, float> callback, ref RayCastInput input );
 
-		void ShiftOrigin( Vector2 newOrigin );
+		void shiftOrigin( Vector2 newOrigin );
+
 	}
 }

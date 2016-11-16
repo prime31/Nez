@@ -63,13 +63,13 @@ namespace FarseerPhysics.Dynamics.Joints
 
 		public override Vector2 worldAnchorA
 		{
-			get { return _bodyA.GetWorldPoint( _localAnchorA ); }
+			get { return _bodyA.getWorldPoint( _localAnchorA ); }
 			set { Debug.Assert( false, "You can't set the world anchor on this joint type." ); }
 		}
 
 		public override Vector2 worldAnchorB
 		{
-			get { return _bodyB.GetWorldPoint( _localAnchorB ); }
+			get { return _bodyB.getWorldPoint( _localAnchorB ); }
 			set { Debug.Assert( false, "You can't set the world anchor on this joint type." ); }
 		}
 
@@ -81,7 +81,7 @@ namespace FarseerPhysics.Dynamics.Joints
 			get { return _ratio; }
 			set
 			{
-				Debug.Assert( MathUtils.IsValid( value ) );
+				Debug.Assert( MathUtils.isValid( value ) );
 				_ratio = value;
 			}
 		}
@@ -147,9 +147,9 @@ namespace FarseerPhysics.Dynamics.Joints
 			jointType = JointType.Gear;
 			base.bodyA = bodyA;
 			base.bodyB = bodyB;
-			jointA = jointA;
-			jointB = jointB;
-			ratio = ratio;
+			this.jointA = jointA;
+			this.jointB = jointB;
+			this.ratio = ratio;
 
 			_typeA = jointA.jointType;
 			_typeB = jointB.jointType;
@@ -189,7 +189,7 @@ namespace FarseerPhysics.Dynamics.Joints
 				_localAxisC = prismatic.localXAxis;
 
 				Vector2 pC = _localAnchorC;
-				Vector2 pA = MathUtils.MulT( xfC.q, MathUtils.Mul( xfA.q, _localAnchorA ) + ( xfA.p - xfC.p ) );
+				Vector2 pA = MathUtils.mulT( xfC.q, MathUtils.mul( xfA.q, _localAnchorA ) + ( xfA.p - xfC.p ) );
 				coordinateA = Vector2.Dot( pA - pC, _localAxisC );
 			}
 
@@ -221,7 +221,7 @@ namespace FarseerPhysics.Dynamics.Joints
 				_localAxisD = prismatic.localXAxis;
 
 				Vector2 pD = _localAnchorD;
-				Vector2 pB = MathUtils.MulT( xfD.q, MathUtils.Mul( xfB.q, _localAnchorB ) + ( xfB.p - xfD.p ) );
+				Vector2 pB = MathUtils.mulT( xfD.q, MathUtils.mul( xfB.q, _localAnchorB ) + ( xfB.p - xfD.p ) );
 				coordinateB = Vector2.Dot( pB - pD, _localAxisD );
 			}
 
@@ -230,19 +230,19 @@ namespace FarseerPhysics.Dynamics.Joints
 			_impulse = 0.0f;
 		}
 
-		public override Vector2 GetReactionForce( float invDt )
+		public override Vector2 getReactionForce( float invDt )
 		{
 			Vector2 P = _impulse * _JvAC;
 			return invDt * P;
 		}
 
-		public override float GetReactionTorque( float invDt )
+		public override float getReactionTorque( float invDt )
 		{
 			float L = _impulse * _JwA;
 			return invDt * L;
 		}
 
-		internal override void InitVelocityConstraints( ref SolverData data )
+		internal override void initVelocityConstraints( ref SolverData data )
 		{
 			_indexA = _bodyA.islandIndex;
 			_indexB = _bodyB.islandIndex;
@@ -290,12 +290,12 @@ namespace FarseerPhysics.Dynamics.Joints
 			}
 			else
 			{
-				Vector2 u = MathUtils.Mul( qC, _localAxisC );
-				Vector2 rC = MathUtils.Mul( qC, _localAnchorC - _lcC );
-				Vector2 rA = MathUtils.Mul( qA, _localAnchorA - _lcA );
+				Vector2 u = MathUtils.mul( qC, _localAxisC );
+				Vector2 rC = MathUtils.mul( qC, _localAnchorC - _lcC );
+				Vector2 rA = MathUtils.mul( qA, _localAnchorA - _lcA );
 				_JvAC = u;
-				_JwC = MathUtils.Cross( rC, u );
-				_JwA = MathUtils.Cross( rA, u );
+				_JwC = MathUtils.cross( rC, u );
+				_JwA = MathUtils.cross( rA, u );
 				_mass += _mC + _mA + _iC * _JwC * _JwC + _iA * _JwA * _JwA;
 			}
 
@@ -308,19 +308,19 @@ namespace FarseerPhysics.Dynamics.Joints
 			}
 			else
 			{
-				Vector2 u = MathUtils.Mul( qD, _localAxisD );
-				Vector2 rD = MathUtils.Mul( qD, _localAnchorD - _lcD );
-				Vector2 rB = MathUtils.Mul( qB, _localAnchorB - _lcB );
+				Vector2 u = MathUtils.mul( qD, _localAxisD );
+				Vector2 rD = MathUtils.mul( qD, _localAnchorD - _lcD );
+				Vector2 rB = MathUtils.mul( qB, _localAnchorB - _lcB );
 				_JvBD = _ratio * u;
-				_JwD = _ratio * MathUtils.Cross( rD, u );
-				_JwB = _ratio * MathUtils.Cross( rB, u );
+				_JwD = _ratio * MathUtils.cross( rD, u );
+				_JwB = _ratio * MathUtils.cross( rB, u );
 				_mass += _ratio * _ratio * ( _mD + _mB ) + _iD * _JwD * _JwD + _iB * _JwB * _JwB;
 			}
 
 			// Compute effective mass.
 			_mass = _mass > 0.0f ? 1.0f / _mass : 0.0f;
 
-			if( Settings.EnableWarmstarting )
+			if( Settings.enableWarmstarting )
 			{
 				vA += ( _mA * _impulse ) * _JvAC;
 				wA += _iA * _impulse * _JwA;
@@ -346,7 +346,7 @@ namespace FarseerPhysics.Dynamics.Joints
 			data.velocities[_indexD].w = wD;
 		}
 
-		internal override void SolveVelocityConstraints( ref SolverData data )
+		internal override void solveVelocityConstraints( ref SolverData data )
 		{
 			Vector2 vA = data.velocities[_indexA].v;
 			float wA = data.velocities[_indexA].w;
@@ -382,7 +382,7 @@ namespace FarseerPhysics.Dynamics.Joints
 			data.velocities[_indexD].w = wD;
 		}
 
-		internal override bool SolvePositionConstraints( ref SolverData data )
+		internal override bool solvePositionConstraints( ref SolverData data )
 		{
 			Vector2 cA = data.positions[_indexA].c;
 			float aA = data.positions[_indexA].a;
@@ -414,16 +414,16 @@ namespace FarseerPhysics.Dynamics.Joints
 			}
 			else
 			{
-				Vector2 u = MathUtils.Mul( qC, _localAxisC );
-				Vector2 rC = MathUtils.Mul( qC, _localAnchorC - _lcC );
-				Vector2 rA = MathUtils.Mul( qA, _localAnchorA - _lcA );
+				Vector2 u = MathUtils.mul( qC, _localAxisC );
+				Vector2 rC = MathUtils.mul( qC, _localAnchorC - _lcC );
+				Vector2 rA = MathUtils.mul( qA, _localAnchorA - _lcA );
 				JvAC = u;
-				JwC = MathUtils.Cross( rC, u );
-				JwA = MathUtils.Cross( rA, u );
+				JwC = MathUtils.cross( rC, u );
+				JwA = MathUtils.cross( rA, u );
 				mass += _mC + _mA + _iC * JwC * JwC + _iA * JwA * JwA;
 
 				Vector2 pC = _localAnchorC - _lcC;
-				Vector2 pA = MathUtils.MulT( qC, rA + ( cA - cC ) );
+				Vector2 pA = MathUtils.mulT( qC, rA + ( cA - cC ) );
 				coordinateA = Vector2.Dot( pA - pC, _localAxisC );
 			}
 
@@ -438,16 +438,16 @@ namespace FarseerPhysics.Dynamics.Joints
 			}
 			else
 			{
-				Vector2 u = MathUtils.Mul( qD, _localAxisD );
-				Vector2 rD = MathUtils.Mul( qD, _localAnchorD - _lcD );
-				Vector2 rB = MathUtils.Mul( qB, _localAnchorB - _lcB );
+				Vector2 u = MathUtils.mul( qD, _localAxisD );
+				Vector2 rD = MathUtils.mul( qD, _localAnchorD - _lcD );
+				Vector2 rB = MathUtils.mul( qB, _localAnchorB - _lcB );
 				JvBD = _ratio * u;
-				JwD = _ratio * MathUtils.Cross( rD, u );
-				JwB = _ratio * MathUtils.Cross( rB, u );
+				JwD = _ratio * MathUtils.cross( rD, u );
+				JwB = _ratio * MathUtils.cross( rB, u );
 				mass += _ratio * _ratio * ( _mD + _mB ) + _iD * JwD * JwD + _iB * JwB * JwB;
 
 				Vector2 pD = _localAnchorD - _lcD;
-				Vector2 pB = MathUtils.MulT( qD, rB + ( cB - cD ) );
+				Vector2 pB = MathUtils.mulT( qD, rB + ( cB - cD ) );
 				coordinateB = Vector2.Dot( pB - pD, _localAxisD );
 			}
 
@@ -478,7 +478,7 @@ namespace FarseerPhysics.Dynamics.Joints
 			data.positions[_indexD].a = aD;
 
 			// TODO_ERIN not implemented
-			return linearError < Settings.LinearSlop;
+			return linearError < Settings.linearSlop;
 		}
 	
 	}

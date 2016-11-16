@@ -60,7 +60,7 @@ namespace FarseerPhysics.Dynamics
 		/// Get the number of broad-phase proxies.
 		/// </summary>
 		/// <value>The proxy count.</value>
-		public int proxyCount { get { return contactManager.BroadPhase.ProxyCount; } }
+		public int proxyCount { get { return contactManager.broadPhase.proxyCount; } }
 
 		/// <summary>
 		/// Change the global gravity vector.
@@ -102,7 +102,7 @@ namespace FarseerPhysics.Dynamics
 		/// the next contact in the world list. A null contact indicates the end of the list.
 		/// </summary>
 		/// <value>The head of the world contact list.</value>
-		public List<Contact> contactList { get { return contactManager.ContactList; } }
+		public List<Contact> contactList { get { return contactManager.contactList; } }
 
 		/// <summary>
 		/// If false, the whole simulation stops. It still processes added and removed geometries.
@@ -159,6 +159,8 @@ namespace FarseerPhysics.Dynamics
 		#endregion
 
 
+		#region Internal Fields
+
 		float _invDt0;
 		Body[] _stack = new Body[64];
 		bool _stepComplete;
@@ -181,6 +183,8 @@ namespace FarseerPhysics.Dynamics
 
 		internal Queue<Contact> _contactPool = new Queue<Contact>( 256 );
 		internal bool _worldHasNewFixture;
+
+		#endregion
 
 
 		/// <summary>
@@ -206,14 +210,36 @@ namespace FarseerPhysics.Dynamics
             TOISet = new HashSet<Body>();
 #endif
 
-			_queryAABBCallbackWrapper = QueryAABBCallbackWrapper;
-			_rayCastCallbackWrapper = RayCastCallbackWrapper;
+			_queryAABBCallbackWrapper = queryAABBCallbackWrapper;
+			_rayCastCallbackWrapper = rayCastCallbackWrapper;
 
 			contactManager = new ContactManager( new DynamicTreeBroadPhase() );
 			this.gravity = gravity;
 		}
 
-		void ProcessRemovedJoints()
+
+		#region List Change Processing
+
+		/// <summary>
+		/// All adds and removes are cached by the World duing a World step.
+		/// To process the changes before the world updates again, call this method.
+		/// </summary>
+		public void processChanges()
+		{
+			processAddedBodies();
+			processAddedJoints();
+
+			processRemovedBodies();
+			processRemovedJoints();
+#if DEBUG && USE_AWAKE_BODY_SET
+            foreach (var b in AwakeBodySet)
+            {
+                Debug.Assert(BodyList.Contains(b));
+            }
+#endif
+		}
+
+		void processRemovedJoints()
 		{
 			if( _jointRemoveList.Count > 0 )
 			{
@@ -232,7 +258,7 @@ namespace FarseerPhysics.Dynamics
 					bodyA.awake = true;
 
 					// WIP David
-					if( !joint.IsFixedType() )
+					if( !joint.isFixedType() )
 					{
 						bodyB.awake = true;
 					}
@@ -257,7 +283,7 @@ namespace FarseerPhysics.Dynamics
 					joint.edgeA.next = null;
 
 					// WIP David
-					if( !joint.IsFixedType() )
+					if( !joint.isFixedType() )
 					{
 						// Remove from body 2
 						if( joint.edgeB.prev != null )
@@ -280,7 +306,7 @@ namespace FarseerPhysics.Dynamics
 					}
 
 					// WIP David
-					if( !joint.IsFixedType() )
+					if( !joint.isFixedType() )
 					{
 						// If the joint prevents collisions, then flag any contacts for filtering.
 						if( collideConnected == false )
@@ -288,14 +314,14 @@ namespace FarseerPhysics.Dynamics
 							ContactEdge edge = bodyB.contactList;
 							while( edge != null )
 							{
-								if( edge.Other == bodyA )
+								if( edge.other == bodyA )
 								{
 									// Flag the contact for filtering at the next time step (where either
 									// body is awake).
-									edge.Contact.FilterFlag = true;
+									edge.contact.filterFlag = true;
 								}
 
-								edge = edge.Next;
+								edge = edge.next;
 							}
 						}
 					}
@@ -310,7 +336,7 @@ namespace FarseerPhysics.Dynamics
 			}
 		}
 
-		void ProcessAddedJoints()
+		void processAddedJoints()
 		{
 			if( _jointAddList.Count > 0 )
 			{
@@ -331,7 +357,7 @@ namespace FarseerPhysics.Dynamics
 					joint.bodyA.jointList = joint.edgeA;
 
 					// WIP David
-					if( !joint.IsFixedType() )
+					if( !joint.isFixedType() )
 					{
 						joint.edgeB.joint = joint;
 						joint.edgeB.other = joint.bodyA;
@@ -352,14 +378,14 @@ namespace FarseerPhysics.Dynamics
 							ContactEdge edge = bodyB.contactList;
 							while( edge != null )
 							{
-								if( edge.Other == bodyA )
+								if( edge.other == bodyA )
 								{
 									// Flag the contact for filtering at the next time step (where either
 									// body is awake).
-									edge.Contact.FilterFlag = true;
+									edge.contact.filterFlag = true;
 								}
 
-								edge = edge.Next;
+								edge = edge.next;
 							}
 						}
 					}
@@ -374,7 +400,7 @@ namespace FarseerPhysics.Dynamics
 			}
 		}
 
-		void ProcessAddedBodies()
+		void processAddedBodies()
 		{
 			if( _bodyAddList.Count > 0 )
 			{
@@ -404,7 +430,7 @@ namespace FarseerPhysics.Dynamics
 			}
 		}
 
-		void ProcessRemovedBodies()
+		void processRemovedBodies()
 		{
 			if( _bodyRemoveList.Count > 0 )
 			{
@@ -426,7 +452,7 @@ namespace FarseerPhysics.Dynamics
 						JointEdge je0 = je;
 						je = je.next;
 
-						RemoveJoint( je0.joint, false );
+						removeJoint( je0.joint, false );
 					}
 					body.jointList = null;
 
@@ -435,16 +461,16 @@ namespace FarseerPhysics.Dynamics
 					while( ce != null )
 					{
 						ContactEdge ce0 = ce;
-						ce = ce.Next;
-						contactManager.Destroy( ce0.Contact );
+						ce = ce.next;
+						contactManager.destroy( ce0.contact );
 					}
 					body.contactList = null;
 
 					// Delete the attached fixtures. This destroys broad-phase proxies.
 					for( int i = 0; i < body.fixtureList.Count; i++ )
 					{
-						body.fixtureList[i].DestroyProxies( contactManager.BroadPhase );
-						body.fixtureList[i].Destroy();
+						body.fixtureList[i].destroyProxies( contactManager.broadPhase );
+						body.fixtureList[i].destroy();
 					}
 
 					body.fixtureList = null;
@@ -464,11 +490,14 @@ namespace FarseerPhysics.Dynamics
 			}
 		}
 
-		void Solve( ref TimeStep step )
+		#endregion
+
+
+		void solve( ref TimeStep timeStep )
 		{
 			// Size the island for the worst case.
-			island.Reset( bodyList.Count,
-						 contactManager.ContactList.Count,
+			island.reset( bodyList.Count,
+						 contactManager.contactList.Count,
 						 jointList.Count,
 						 contactManager );
 
@@ -488,9 +517,9 @@ namespace FarseerPhysics.Dynamics
                 c.Flags &= ~ContactFlags.Island;
             }
 #else
-			foreach( Contact c in contactManager.ContactList )
+			foreach( Contact c in contactManager.contactList )
 			{
-				c.IslandFlag = false;
+				c.islandFlag = false;
 			}
 #endif
 			foreach( Joint j in jointList )
@@ -530,7 +559,7 @@ namespace FarseerPhysics.Dynamics
 					continue;
 
 				// Reset island and stack.
-				island.Clear();
+				island.clear();
 				int stackCount = 0;
 				_stack[stackCount++] = seed;
 
@@ -546,7 +575,7 @@ namespace FarseerPhysics.Dynamics
 					// Grab the next body off the stack and add it to the island.
 					var b = _stack[--stackCount];
 					Debug.Assert( b.enabled );
-					island.Add( b );
+					island.add( b );
 
 					// Make sure the body is awake.
 					b.awake = true;
@@ -557,28 +586,28 @@ namespace FarseerPhysics.Dynamics
 						continue;
 
 					// Search all contacts connected to this body.
-					for( ContactEdge ce = b.contactList; ce != null; ce = ce.Next )
+					for( ContactEdge ce = b.contactList; ce != null; ce = ce.next )
 					{
-						Contact contact = ce.Contact;
+						Contact contact = ce.contact;
 
 						// Has this contact already been added to an island?
-						if( contact.IslandFlag )
+						if( contact.islandFlag )
 							continue;
 
 						// Is this contact solid and touching?
-						if( ce.Contact.Enabled == false || ce.Contact.IsTouching == false )
+						if( ce.contact.enabled == false || ce.contact.isTouching == false )
 							continue;
 
 						// Skip sensors.
-						var sensorA = contact.FixtureA.isSensor;
-						var sensorB = contact.FixtureB.isSensor;
+						var sensorA = contact.fixtureA.isSensor;
+						var sensorB = contact.fixtureB.isSensor;
 						if( sensorA || sensorB )
 							continue;
 
-						island.Add( contact );
-						contact.IslandFlag = true;
+						island.add( contact );
+						contact.islandFlag = true;
 
-						Body other = ce.Other;
+						Body other = ce.other;
 
 						// Was the other body already added to this island?
 						if( other._island )
@@ -610,7 +639,7 @@ namespace FarseerPhysics.Dynamics
 							if( other.enabled == false )
 								continue;
 
-							island.Add( je.joint );
+							island.add( je.joint );
 							je.joint.islandFlag = true;
 
 							if( other._island )
@@ -626,13 +655,13 @@ namespace FarseerPhysics.Dynamics
 						}
 						else
 						{
-							island.Add( je.joint );
+							island.add( je.joint );
 							je.joint.islandFlag = true;
 						}
 					}
 				}
 
-				island.Solve( ref step, ref gravity );
+				island.solve( ref timeStep, ref gravity );
 
 				// Post solve cleanup.
 				for( int i = 0; i < island.BodyCount; ++i )
@@ -662,7 +691,7 @@ namespace FarseerPhysics.Dynamics
 #endif
 
 				// Update fixtures (for broad-phase).
-				b.SynchronizeFixtures();
+				b.synchronizeFixtures();
 			}
 #if OPTIMIZE_TOI
             foreach (var b in IslandSet)
@@ -678,16 +707,16 @@ namespace FarseerPhysics.Dynamics
 #endif
 
 			// Look for new contacts.
-			contactManager.FindNewContacts();
+			contactManager.findNewContacts();
 
 #if USE_AWAKE_BODY_SET
             AwakeBodyList.Clear();
 #endif
 		}
 
-		void SolveTOI( ref TimeStep step )
+		void solveTOI( ref TimeStep timeStep )
 		{
-			island.Reset( 2 * Settings.MaxTOIContacts, Settings.MaxTOIContacts, 0, contactManager );
+			island.reset( 2 * Settings.maxTOIContacts, Settings.maxTOIContacts, 0, contactManager );
 
 #if OPTIMIZE_TOI
             bool wasStepComplete = _stepComplete;
@@ -711,13 +740,13 @@ namespace FarseerPhysics.Dynamics
                 foreach (var c in ContactManager.ActiveContacts)
                 {
 #else
-				for( int i = 0; i < contactManager.ContactList.Count; i++ )
+				for( int i = 0; i < contactManager.contactList.Count; i++ )
 				{
-					Contact c = contactManager.ContactList[i];
+					Contact c = contactManager.contactList[i];
 #endif
 					// Invalidate TOI
-					c.IslandFlag = false;
-					c.TOIFlag = false;
+					c.islandFlag = false;
+					c.toiFlag = false;
 					c._toiCount = 0;
 					c._toi = 1.0f;
 				}
@@ -734,29 +763,29 @@ namespace FarseerPhysics.Dynamics
                 foreach (var c in ContactManager.ActiveContacts)
                 {
 #else
-				for( int i = 0; i < contactManager.ContactList.Count; i++ )
+				for( int i = 0; i < contactManager.contactList.Count; i++ )
 				{
-					Contact c = contactManager.ContactList[i];
+					Contact c = contactManager.contactList[i];
 #endif
 
 					// Is this contact disabled?
-					if( c.Enabled == false )
+					if( c.enabled == false )
 						continue;
 
 					// Prevent excessive sub-stepping.
-					if( c._toiCount > Settings.MaxSubSteps )
+					if( c._toiCount > Settings.maxSubSteps )
 						continue;
 
 					float alpha;
-					if( c.TOIFlag )
+					if( c.toiFlag )
 					{
 						// This contact has a valid cached TOI.
 						alpha = c._toi;
 					}
 					else
 					{
-						Fixture fA = c.FixtureA;
-						Fixture fB = c.FixtureB;
+						Fixture fA = c.fixtureA;
+						Fixture fB = c.fixtureB;
 
 						// Is there a sensor?
 						if( fA.isSensor || fB.isSensor )
@@ -818,8 +847,8 @@ namespace FarseerPhysics.Dynamics
 						Debug.Assert( alpha0 < 1.0f );
 
 						// Compute the time of impact in interval [0, minTOI]
-						_input.ProxyA.Set( fA.shape, c.ChildIndexA );
-						_input.ProxyB.Set( fB.shape, c.ChildIndexB );
+						_input.ProxyA.set( fA.shape, c.childIndexA );
+						_input.ProxyB.set( fB.shape, c.childIndexB );
 						_input.SweepA = bA._sweep;
 						_input.SweepB = bB._sweep;
 						_input.TMax = 1.0f;
@@ -835,7 +864,7 @@ namespace FarseerPhysics.Dynamics
 							alpha = 1.0f;
 
 						c._toi = alpha;
-						c.TOIFlag = true;
+						c.toiFlag = true;
 					}
 
 					if( alpha < minAlpha )
@@ -846,7 +875,7 @@ namespace FarseerPhysics.Dynamics
 					}
 				}
 
-				if( minContact == null || 1.0f - 10.0f * Settings.Epsilon < minAlpha )
+				if( minContact == null || 1.0f - 10.0f * Settings.epsilon < minAlpha )
 				{
 					// No more TOI events. Done!
 					_stepComplete = true;
@@ -854,31 +883,31 @@ namespace FarseerPhysics.Dynamics
 				}
 
 				// Advance the bodies to the TOI.
-				Fixture fA1 = minContact.FixtureA;
-				Fixture fB1 = minContact.FixtureB;
+				Fixture fA1 = minContact.fixtureA;
+				Fixture fB1 = minContact.fixtureB;
 				Body bA0 = fA1.body;
 				Body bB0 = fB1.body;
 
 				Sweep backup1 = bA0._sweep;
 				Sweep backup2 = bB0._sweep;
 
-				bA0.Advance( minAlpha );
-				bB0.Advance( minAlpha );
+				bA0.advance( minAlpha );
+				bB0.advance( minAlpha );
 
 				// The TOI contact likely has some new contact points.
-				minContact.Update( contactManager );
-				minContact.TOIFlag = false;
+				minContact.update( contactManager );
+				minContact.toiFlag = false;
 				++minContact._toiCount;
 
 				// Is the contact solid?
-				if( minContact.Enabled == false || minContact.IsTouching == false )
+				if( minContact.enabled == false || minContact.isTouching == false )
 				{
 					// Restore the sweeps.
-					minContact.Enabled = false;
+					minContact.enabled = false;
 					bA0._sweep = backup1;
 					bB0._sweep = backup2;
-					bA0.SynchronizeTransform();
-					bB0.SynchronizeTransform();
+					bA0.synchronizeTransform();
+					bB0.synchronizeTransform();
 					continue;
 				}
 
@@ -886,14 +915,14 @@ namespace FarseerPhysics.Dynamics
 				bB0.awake = true;
 
 				// Build the island
-				island.Clear();
-				island.Add( bA0 );
-				island.Add( bB0 );
-				island.Add( minContact );
+				island.clear();
+				island.add( bA0 );
+				island.add( bB0 );
+				island.add( minContact );
 
 				bA0._island = true;
 				bB0._island = true;
-				minContact.IslandFlag = true;
+				minContact.islandFlag = true;
 
 				// Get contacts on bodyA and bodyB.
 				Body[] bodies = { bA0, bB0 };
@@ -902,9 +931,9 @@ namespace FarseerPhysics.Dynamics
 					var body = bodies[i];
 					if( body.bodyType == BodyType.Dynamic )
 					{
-						for( ContactEdge ce = body.contactList; ce != null; ce = ce.Next )
+						for( ContactEdge ce = body.contactList; ce != null; ce = ce.next )
 						{
-							Contact contact = ce.Contact;
+							Contact contact = ce.contact;
 
 							if( island.BodyCount == island.BodyCapacity )
 								break;
@@ -913,46 +942,46 @@ namespace FarseerPhysics.Dynamics
 								break;
 
 							// Has this contact already been added to the island?
-							if( contact.IslandFlag )
+							if( contact.islandFlag )
 								continue;
 
 							// Only add static, kinematic, or bullet bodies.
-							Body other = ce.Other;
+							Body other = ce.other;
 							if( other.bodyType == BodyType.Dynamic &&
 								body.IsBullet == false && other.IsBullet == false )
 								continue;
 
 							// Skip sensors.
-							if( contact.FixtureA.isSensor || contact.FixtureB.isSensor )
+							if( contact.fixtureA.isSensor || contact.fixtureB.isSensor )
 								continue;
 
 							// Tentatively advance the body to the TOI.
 							Sweep backup = other._sweep;
 							if( !other._island )
-								other.Advance( minAlpha );
+								other.advance( minAlpha );
 
 							// Update the contact points
-							contact.Update( contactManager );
+							contact.update( contactManager );
 
 							// Was the contact disabled by the user?
-							if( contact.Enabled == false )
+							if( contact.enabled == false )
 							{
 								other._sweep = backup;
-								other.SynchronizeTransform();
+								other.synchronizeTransform();
 								continue;
 							}
 
 							// Are there contact points?
-							if( contact.IsTouching == false )
+							if( contact.isTouching == false )
 							{
 								other._sweep = backup;
-								other.SynchronizeTransform();
+								other.synchronizeTransform();
 								continue;
 							}
 
 							// Add the contact to the island
-							contact.IslandFlag = true;
-							island.Add( contact );
+							contact.islandFlag = true;
+							island.add( contact );
 
 							// Has the other body already been added to the island?
 							if( other._island )
@@ -973,16 +1002,16 @@ namespace FarseerPhysics.Dynamics
                                 }
                             }
 #endif
-							island.Add( other );
+							island.add( other );
 						}
 					}
 				}
 
 				TimeStep subStep;
-				subStep.dt = ( 1.0f - minAlpha ) * step.dt;
+				subStep.dt = ( 1.0f - minAlpha ) * timeStep.dt;
 				subStep.inv_dt = 1.0f / subStep.dt;
 				subStep.dtRatio = 1.0f;
-				island.SolveTOI( ref subStep, bA0.islandIndex, bB0.islandIndex );
+				island.solveTOI( ref subStep, bA0.islandIndex, bB0.islandIndex );
 
 				// Reset island flags and synchronize broad-phase proxies.
 				for( int i = 0; i < island.BodyCount; ++i )
@@ -993,21 +1022,21 @@ namespace FarseerPhysics.Dynamics
 					if( body.bodyType != BodyType.Dynamic )
 						continue;
 
-					body.SynchronizeFixtures();
+					body.synchronizeFixtures();
 
 					// Invalidate all contact TOIs on this displaced body.
-					for( ContactEdge ce = body.contactList; ce != null; ce = ce.Next )
+					for( ContactEdge ce = body.contactList; ce != null; ce = ce.next )
 					{
-						ce.Contact.TOIFlag = false;
-						ce.Contact.IslandFlag = false;
+						ce.contact.toiFlag = false;
+						ce.contact.islandFlag = false;
 					}
 				}
 
 				// Commit fixture proxy movements to the broad-phase so that new contacts are created.
 				// Also, some contacts can be destroyed.
-				contactManager.FindNewContacts();
+				contactManager.findNewContacts();
 
-				if( Settings.EnableSubStepping )
+				if( Settings.enableSubStepping )
 				{
 					_stepComplete = false;
 					break;
@@ -1021,11 +1050,14 @@ namespace FarseerPhysics.Dynamics
 #endif
 		}
 
+
+		#region Add/Remove Body/Joint/Controller/BreakableBody
+
 		/// <summary>
 		/// Add a rigid body.
 		/// </summary>
 		/// <returns></returns>
-		internal void AddBody( Body body )
+		internal void addBody( Body body )
 		{
 			Debug.Assert( !_bodyAddList.Contains( body ), "You are adding the same body more than once." );
 
@@ -1038,7 +1070,7 @@ namespace FarseerPhysics.Dynamics
 		/// Warning: This automatically deletes all associated shapes and joints.
 		/// </summary>
 		/// <param name="body">The body.</param>
-		public void RemoveBody( Body body )
+		public void removeBody( Body body )
 		{
 			Debug.Assert( !_bodyRemoveList.Contains( body ), "The body is already marked for removal. You are removing the body more than once." );
 
@@ -1057,7 +1089,7 @@ namespace FarseerPhysics.Dynamics
 		/// Create a joint to constrain bodies together. This may cause the connected bodies to cease colliding.
 		/// </summary>
 		/// <param name="joint">The joint.</param>
-		public void AddJoint( Joint joint )
+		public void addJoint( Joint joint )
 		{
 			Debug.Assert( !_jointAddList.Contains( joint ), "You are adding the same joint more than once." );
 
@@ -1065,7 +1097,7 @@ namespace FarseerPhysics.Dynamics
 				_jointAddList.Add( joint );
 		}
 
-		void RemoveJoint( Joint joint, bool doCheck )
+		void removeJoint( Joint joint, bool doCheck )
 		{
 			if( doCheck )
 			{
@@ -1081,56 +1113,78 @@ namespace FarseerPhysics.Dynamics
 		/// Destroy a joint. This may cause the connected bodies to begin colliding.
 		/// </summary>
 		/// <param name="joint">The joint.</param>
-		public void RemoveJoint( Joint joint )
+		public void removeJoint( Joint joint )
 		{
-			RemoveJoint( joint, true );
+			removeJoint( joint, true );
 		}
 
-		/// <summary>
-		/// All adds and removes are cached by the World duing a World step.
-		/// To process the changes before the world updates again, call this method.
-		/// </summary>
-		public void ProcessChanges()
+		public void addController( Controller controller )
 		{
-			ProcessAddedBodies();
-			ProcessAddedJoints();
+			Debug.Assert( !controllerList.Contains( controller ), "You are adding the same controller more than once." );
 
-			ProcessRemovedBodies();
-			ProcessRemovedJoints();
-#if DEBUG && USE_AWAKE_BODY_SET
-            foreach (var b in AwakeBodySet)
-            {
-                Debug.Assert(BodyList.Contains(b));
-            }
-#endif
+			controller.World = this;
+			controllerList.Add( controller );
+
+			if( onControllerAdded != null )
+				onControllerAdded( controller );
 		}
+
+		public void removeController( Controller controller )
+		{
+			Debug.Assert( controllerList.Contains( controller ),
+						 "You are removing a controller that is not in the simulation." );
+
+			if( controllerList.Contains( controller ) )
+			{
+				controllerList.Remove( controller );
+
+				if( onControllerRemoved != null )
+					onControllerRemoved( controller );
+			}
+		}
+
+		public void addBreakableBody( BreakableBody breakableBody )
+		{
+			breakableBodyList.Add( breakableBody );
+		}
+
+		public void removeBreakableBody( BreakableBody breakableBody )
+		{
+			//The breakable body list does not contain the body you tried to remove.
+			Debug.Assert( breakableBodyList.Contains( breakableBody ) );
+
+			breakableBodyList.Remove( breakableBody );
+		}
+
+		#endregion
+
 
 		/// <summary>
 		/// Take a time step. This performs collision detection, integration,
 		/// and consraint solution.
 		/// </summary>
 		/// <param name="dt">The amount of time to simulate, this should not vary.</param>
-		public void Step( float dt )
+		public void step( float dt )
 		{
 			if( !enabled )
 				return;
 
-			if( Settings.EnableDiagnostics )
+			if( Settings.enableDiagnostics )
 				_watch.Start();
 
-			ProcessChanges();
+			processChanges();
 
-			if( Settings.EnableDiagnostics )
+			if( Settings.enableDiagnostics )
 				addRemoveTime = _watch.ElapsedTicks;
 
 			// If new fixtures were added, we need to find the new contacts.
 			if( _worldHasNewFixture )
 			{
-				contactManager.FindNewContacts();
+				contactManager.findNewContacts();
 				_worldHasNewFixture = false;
 			}
 
-			if( Settings.EnableDiagnostics )
+			if( Settings.enableDiagnostics )
 				newContactsTime = _watch.ElapsedTicks - addRemoveTime;
 
 			// FPE only: moved position and velocity iterations into Settings.cs
@@ -1143,39 +1197,39 @@ namespace FarseerPhysics.Dynamics
 			for( var i = 0; i < controllerList.Count; i++ )
 				controllerList[i].Update( dt );
 
-			if( Settings.EnableDiagnostics )
+			if( Settings.enableDiagnostics )
 				controllersUpdateTime = _watch.ElapsedTicks - ( addRemoveTime + newContactsTime );
 
 			// Update contacts. This is where some contacts are destroyed.
-			contactManager.Collide();
+			contactManager.collide();
 
-			if( Settings.EnableDiagnostics )
+			if( Settings.enableDiagnostics )
 				contactsUpdateTime = _watch.ElapsedTicks - ( addRemoveTime + newContactsTime + controllersUpdateTime );
 
 			// Integrate velocities, solve velocity raints, and integrate positions.
-			Solve( ref step );
+			solve( ref step );
 
-			if( Settings.EnableDiagnostics )
+			if( Settings.enableDiagnostics )
 				solveUpdateTime = _watch.ElapsedTicks - ( addRemoveTime + newContactsTime + controllersUpdateTime + contactsUpdateTime );
 
 			// Handle TOI events.
-			if( Settings.ContinuousPhysics )
+			if( Settings.continuousPhysics )
 			{
-				SolveTOI( ref step );
+				solveTOI( ref step );
 			}
 
-			if( Settings.EnableDiagnostics )
+			if( Settings.enableDiagnostics )
 				continuousPhysicsTime = _watch.ElapsedTicks - ( addRemoveTime + newContactsTime + controllersUpdateTime + contactsUpdateTime + solveUpdateTime );
 
-			if( Settings.AutoClearForces )
-				ClearForces();
+			if( Settings.autoClearForces )
+				clearForces();
 
 			for( var i = 0; i < breakableBodyList.Count; i++ )
-				breakableBodyList[i].Update();
+				breakableBodyList[i].update();
 
 			_invDt0 = step.inv_dt;
 
-			if( Settings.EnableDiagnostics )
+			if( Settings.enableDiagnostics )
 			{
 				_watch.Stop();
 				updateTime = _watch.ElapsedTicks;
@@ -1188,7 +1242,7 @@ namespace FarseerPhysics.Dynamics
 		/// call this after each call to Step, unless you are performing sub-steps. By default,
 		/// forces will be automatically cleared, so you don't need to call this function.
 		/// </summary>
-		public void ClearForces()
+		public void clearForces()
 		{
 			for( int i = 0; i < bodyList.Count; i++ )
 			{
@@ -1215,10 +1269,10 @@ namespace FarseerPhysics.Dynamics
 		/// </summary>
 		/// <param name="callback">A user implemented callback class.</param>
 		/// <param name="aabb">The aabb query box.</param>
-		public void QueryAABB( Func<Fixture, bool> callback, ref AABB aabb )
+		public void queryAABB( Func<Fixture, bool> callback, ref AABB aabb )
 		{
 			_queryAABBCallback = callback;
-			contactManager.BroadPhase.Query( _queryAABBCallbackWrapper, ref aabb );
+			contactManager.broadPhase.query( _queryAABBCallbackWrapper, ref aabb );
 			_queryAABBCallback = null;
 		}
 
@@ -1228,11 +1282,11 @@ namespace FarseerPhysics.Dynamics
 		/// </summary>
 		/// <param name="aabb">The aabb query box.</param>
 		/// <returns>A list of fixtures that were in the affected area.</returns>
-		public List<Fixture> QueryAABB( ref AABB aabb )
+		public List<Fixture> queryAABB( ref AABB aabb )
 		{
 			var affected = new List<Fixture>();
 
-			QueryAABB( fixture =>
+			queryAABB( fixture =>
 			{
 				affected.Add( fixture );
 				return true;
@@ -1241,9 +1295,9 @@ namespace FarseerPhysics.Dynamics
 			return affected;
 		}
 
-		bool QueryAABBCallbackWrapper( int proxyId )
+		bool queryAABBCallbackWrapper( int proxyId )
 		{
-			var proxy = contactManager.BroadPhase.GetProxy( proxyId );
+			var proxy = contactManager.broadPhase.getProxy( proxyId );
 			return _queryAABBCallback( proxy.fixture );
 		}
 
@@ -1261,7 +1315,7 @@ namespace FarseerPhysics.Dynamics
 		/// <param name="callback">A user implemented callback class.</param>
 		/// <param name="point1">The ray starting point.</param>
 		/// <param name="point2">The ray ending point.</param>
-		public void RayCast( Func<Fixture, Vector2, Vector2, float, float> callback, Vector2 point1, Vector2 point2 )
+		public void rayCast( Func<Fixture, Vector2, Vector2, float, float> callback, Vector2 point1, Vector2 point2 )
 		{
 			var input = new RayCastInput();
 			input.MaxFraction = 1.0f;
@@ -1269,15 +1323,15 @@ namespace FarseerPhysics.Dynamics
 			input.Point2 = point2;
 
 			_rayCastCallback = callback;
-			contactManager.BroadPhase.RayCast( _rayCastCallbackWrapper, ref input );
+			contactManager.broadPhase.rayCast( _rayCastCallbackWrapper, ref input );
 			_rayCastCallback = null;
 		}
 
-		public List<Fixture> RayCast( Vector2 point1, Vector2 point2 )
+		public List<Fixture> rayCast( Vector2 point1, Vector2 point2 )
 		{
 			var affected = new List<Fixture>();
 
-			RayCast( ( f, p, n, fr ) =>
+			rayCast( ( f, p, n, fr ) =>
 			 {
 				 affected.Add( f );
 				 return 1;
@@ -1286,43 +1340,43 @@ namespace FarseerPhysics.Dynamics
 			return affected;
 		}
 
-		float RayCastCallbackWrapper( RayCastInput rayCastInput, int proxyId )
+		float rayCastCallbackWrapper( RayCastInput rayCastInput, int proxyId )
 		{
-			FixtureProxy proxy = contactManager.BroadPhase.GetProxy( proxyId );
-			Fixture fixture = proxy.fixture;
+			var proxy = contactManager.broadPhase.getProxy( proxyId );
+			var fixture = proxy.fixture;
 			int index = proxy.childIndex;
 			RayCastOutput output;
-			bool hit = fixture.RayCast( out output, ref rayCastInput, index );
+			bool hit = fixture.rayCast( out output, ref rayCastInput, index );
 
 			if( hit )
 			{
-				float fraction = output.Fraction;
-				Vector2 point = ( 1.0f - fraction ) * rayCastInput.Point1 + fraction * rayCastInput.Point2;
+				var fraction = output.Fraction;
+				var point = ( 1.0f - fraction ) * rayCastInput.Point1 + fraction * rayCastInput.Point2;
 				return _rayCastCallback( fixture, point, output.Normal, fraction );
 			}
 
 			return rayCastInput.MaxFraction;
 		}
 
-		public Fixture TestPoint( Vector2 point )
+		public Fixture testPoint( Vector2 point )
 		{
 			AABB aabb;
-			var d = new Vector2( Settings.Epsilon, Settings.Epsilon );
-			aabb.LowerBound = point - d;
-			aabb.UpperBound = point + d;
+			var d = new Vector2( Settings.epsilon, Settings.epsilon );
+			aabb.lowerBound = point - d;
+			aabb.upperBound = point + d;
 
 			_myFixture = null;
 			_point1 = point;
 
 			// Query the world for overlapping shapes.
-			QueryAABB( TestPointCallback, ref aabb );
+			queryAABB( testPointCallback, ref aabb );
 
 			return _myFixture;
 		}
 
-		bool TestPointCallback( Fixture fixture )
+		bool testPointCallback( Fixture fixture )
 		{
-			var inside = fixture.TestPoint( ref _point1 );
+			var inside = fixture.testPoint( ref _point1 );
 			if( inside )
 			{
 				_myFixture = fixture;
@@ -1338,25 +1392,25 @@ namespace FarseerPhysics.Dynamics
 		/// </summary>
 		/// <param name="point">The point.</param>
 		/// <returns></returns>
-		public List<Fixture> TestPointAll( Vector2 point )
+		public List<Fixture> testPointAll( Vector2 point )
 		{
 			AABB aabb;
-			var d = new Vector2( Settings.Epsilon, Settings.Epsilon );
-			aabb.LowerBound = point - d;
-			aabb.UpperBound = point + d;
+			var d = new Vector2( Settings.epsilon, Settings.epsilon );
+			aabb.lowerBound = point - d;
+			aabb.upperBound = point + d;
 
 			_point2 = point;
 			_testPointAllFixtures = new List<Fixture>();
 
 			// Query the world for overlapping shapes.
-			QueryAABB( TestPointAllCallback, ref aabb );
+			queryAABB( testPointAllCallback, ref aabb );
 
 			return _testPointAllFixtures;
 		}
 
-		bool TestPointAllCallback( Fixture fixture )
+		bool testPointAllCallback( Fixture fixture )
 		{
-			var inside = fixture.TestPoint( ref _point2 );
+			var inside = fixture.testPoint( ref _point2 );
 			if( inside )
 				_testPointAllFixtures.Add( fixture );
 
@@ -1367,49 +1421,11 @@ namespace FarseerPhysics.Dynamics
 		#endregion
 
 
-		public void AddController( Controller controller )
-		{
-			Debug.Assert( !controllerList.Contains( controller ), "You are adding the same controller more than once." );
-
-			controller.World = this;
-			controllerList.Add( controller );
-
-			if( onControllerAdded != null )
-				onControllerAdded( controller );
-		}
-
-		public void RemoveController( Controller controller )
-		{
-			Debug.Assert( controllerList.Contains( controller ),
-						 "You are removing a controller that is not in the simulation." );
-
-			if( controllerList.Contains( controller ) )
-			{
-				controllerList.Remove( controller );
-
-				if( onControllerRemoved != null )
-					onControllerRemoved( controller );
-			}
-		}
-
-		public void AddBreakableBody( BreakableBody breakableBody )
-		{
-			breakableBodyList.Add( breakableBody );
-		}
-
-		public void RemoveBreakableBody( BreakableBody breakableBody )
-		{
-			//The breakable body list does not contain the body you tried to remove.
-			Debug.Assert( breakableBodyList.Contains( breakableBody ) );
-
-			breakableBodyList.Remove( breakableBody );
-		}
-
 		/// Shift the world origin. Useful for large worlds.
 		/// The body shift formula is: position -= newOrigin
 		/// @param newOrigin the new origin with respect to the old origin
 		/// Warning: Calling this method mid-update might cause a crash.
-		public void ShiftOrigin( Vector2 newOrigin )
+		public void shiftOrigin( Vector2 newOrigin )
 		{
 			foreach( Body b in bodyList )
 			{
@@ -1423,23 +1439,23 @@ namespace FarseerPhysics.Dynamics
 				//joint.ShiftOrigin(newOrigin); //TODO: uncomment
 			}
 
-			contactManager.BroadPhase.ShiftOrigin( newOrigin );
+			contactManager.broadPhase.shiftOrigin( newOrigin );
 		}
 
-		public void Clear()
+		public void clear()
 		{
-			ProcessChanges();
+			processChanges();
 
 			for( int i = bodyList.Count - 1; i >= 0; i-- )
-				RemoveBody( bodyList[i] );
+				removeBody( bodyList[i] );
 
 			for( int i = controllerList.Count - 1; i >= 0; i-- )
-				RemoveController( controllerList[i] );
+				removeController( controllerList[i] );
 
 			for( int i = breakableBodyList.Count - 1; i >= 0; i-- )
-				RemoveBreakableBody( breakableBodyList[i] );
+				removeBreakableBody( breakableBodyList[i] );
 
-			ProcessChanges();
+			processChanges();
 		}
 
 	}

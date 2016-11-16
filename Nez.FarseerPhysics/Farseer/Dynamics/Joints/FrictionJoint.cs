@@ -58,14 +58,14 @@ namespace FarseerPhysics.Dynamics.Joints
 
 		public override Vector2 worldAnchorA
 		{
-			get { return bodyA.GetWorldPoint( localAnchorA ); }
-			set { localAnchorA = bodyA.GetLocalPoint( value ); }
+			get { return bodyA.getWorldPoint( localAnchorA ); }
+			set { localAnchorA = bodyA.getLocalPoint( value ); }
 		}
 
 		public override Vector2 worldAnchorB
 		{
-			get { return bodyB.GetWorldPoint( localAnchorB ); }
-			set { localAnchorB = bodyB.GetLocalPoint( value ); }
+			get { return bodyB.getWorldPoint( localAnchorB ); }
+			set { localAnchorB = bodyB.getLocalPoint( value ); }
 		}
 
 		/// <summary>
@@ -118,8 +118,8 @@ namespace FarseerPhysics.Dynamics.Joints
 
 			if( useWorldCoordinates )
 			{
-				localAnchorA = base.bodyA.GetLocalPoint( anchor );
-				localAnchorB = base.bodyB.GetLocalPoint( anchor );
+				localAnchorA = base.bodyA.getLocalPoint( anchor );
+				localAnchorB = base.bodyB.getLocalPoint( anchor );
 			}
 			else
 			{
@@ -128,17 +128,17 @@ namespace FarseerPhysics.Dynamics.Joints
 			}
 		}
 
-		public override Vector2 GetReactionForce( float invDt )
+		public override Vector2 getReactionForce( float invDt )
 		{
 			return invDt * _linearImpulse;
 		}
 
-		public override float GetReactionTorque( float invDt )
+		public override float getReactionTorque( float invDt )
 		{
 			return invDt * _angularImpulse;
 		}
 
-		internal override void InitVelocityConstraints( ref SolverData data )
+		internal override void initVelocityConstraints( ref SolverData data )
 		{
 			_indexA = bodyA.islandIndex;
 			_indexB = bodyB.islandIndex;
@@ -160,8 +160,8 @@ namespace FarseerPhysics.Dynamics.Joints
 			Rot qA = new Rot( aA ), qB = new Rot( aB );
 
 			// Compute the effective mass matrix.
-			_rA = MathUtils.Mul( qA, localAnchorA - _localCenterA );
-			_rB = MathUtils.Mul( qB, localAnchorB - _localCenterB );
+			_rA = MathUtils.mul( qA, localAnchorA - _localCenterA );
+			_rB = MathUtils.mul( qB, localAnchorB - _localCenterB );
 
 			// J = [-I -r1_skew I r2_skew]
 			//     [ 0       -1 0       1]
@@ -189,7 +189,7 @@ namespace FarseerPhysics.Dynamics.Joints
 				_angularMass = 1.0f / _angularMass;
 			}
 
-			if( Settings.EnableWarmstarting )
+			if( Settings.enableWarmstarting )
 			{
 				// Scale impulses to support a variable time step.
 				_linearImpulse *= data.step.dtRatio;
@@ -197,9 +197,9 @@ namespace FarseerPhysics.Dynamics.Joints
 
 				Vector2 P = new Vector2( _linearImpulse.X, _linearImpulse.Y );
 				vA -= mA * P;
-				wA -= iA * ( MathUtils.Cross( _rA, P ) + _angularImpulse );
+				wA -= iA * ( MathUtils.cross( _rA, P ) + _angularImpulse );
 				vB += mB * P;
-				wB += iB * ( MathUtils.Cross( _rB, P ) + _angularImpulse );
+				wB += iB * ( MathUtils.cross( _rB, P ) + _angularImpulse );
 			}
 			else
 			{
@@ -213,7 +213,7 @@ namespace FarseerPhysics.Dynamics.Joints
 			data.velocities[_indexB].w = wB;
 		}
 
-		internal override void SolveVelocityConstraints( ref SolverData data )
+		internal override void solveVelocityConstraints( ref SolverData data )
 		{
 			Vector2 vA = data.velocities[_indexA].v;
 			float wA = data.velocities[_indexA].w;
@@ -232,7 +232,7 @@ namespace FarseerPhysics.Dynamics.Joints
 
 				float oldImpulse = _angularImpulse;
 				float maxImpulse = h * maxTorque;
-				_angularImpulse = MathUtils.Clamp( _angularImpulse + impulse, -maxImpulse, maxImpulse );
+				_angularImpulse = MathUtils.clamp( _angularImpulse + impulse, -maxImpulse, maxImpulse );
 				impulse = _angularImpulse - oldImpulse;
 
 				wA -= iA * impulse;
@@ -241,9 +241,9 @@ namespace FarseerPhysics.Dynamics.Joints
 
 			// Solve linear friction
 			{
-				Vector2 Cdot = vB + MathUtils.Cross( wB, _rB ) - vA - MathUtils.Cross( wA, _rA );
+				Vector2 Cdot = vB + MathUtils.cross( wB, _rB ) - vA - MathUtils.cross( wA, _rA );
 
-				Vector2 impulse = -MathUtils.Mul( ref _linearMass, Cdot );
+				Vector2 impulse = -MathUtils.mul( ref _linearMass, Cdot );
 				Vector2 oldImpulse = _linearImpulse;
 				_linearImpulse += impulse;
 
@@ -258,10 +258,10 @@ namespace FarseerPhysics.Dynamics.Joints
 				impulse = _linearImpulse - oldImpulse;
 
 				vA -= mA * impulse;
-				wA -= iA * MathUtils.Cross( _rA, impulse );
+				wA -= iA * MathUtils.cross( _rA, impulse );
 
 				vB += mB * impulse;
-				wB += iB * MathUtils.Cross( _rB, impulse );
+				wB += iB * MathUtils.cross( _rB, impulse );
 			}
 
 			data.velocities[_indexA].v = vA;
@@ -270,7 +270,7 @@ namespace FarseerPhysics.Dynamics.Joints
 			data.velocities[_indexB].w = wB;
 		}
 
-		internal override bool SolvePositionConstraints( ref SolverData data )
+		internal override bool solvePositionConstraints( ref SolverData data )
 		{
 			return true;
 		}

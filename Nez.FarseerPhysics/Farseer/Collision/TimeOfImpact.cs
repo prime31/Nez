@@ -96,10 +96,10 @@ namespace FarseerPhysics.Collision
 			if( count == 1 )
 			{
 				_type = SeparationFunctionType.Points;
-				Vector2 localPointA = _proxyA.Vertices[cache.IndexA[0]];
-				Vector2 localPointB = _proxyB.Vertices[cache.IndexB[0]];
-				Vector2 pointA = MathUtils.Mul( ref xfA, localPointA );
-				Vector2 pointB = MathUtils.Mul( ref xfB, localPointB );
+				Vector2 localPointA = _proxyA.vertices[cache.IndexA[0]];
+				Vector2 localPointB = _proxyB.vertices[cache.IndexB[0]];
+				Vector2 pointA = MathUtils.mul( ref xfA, localPointA );
+				Vector2 pointB = MathUtils.mul( ref xfB, localPointB );
 				_axis = pointB - pointA;
 				_axis.Normalize();
 			}
@@ -107,19 +107,19 @@ namespace FarseerPhysics.Collision
 			{
 				// Two points on B and one on A.
 				_type = SeparationFunctionType.FaceB;
-				Vector2 localPointB1 = proxyB.Vertices[cache.IndexB[0]];
-				Vector2 localPointB2 = proxyB.Vertices[cache.IndexB[1]];
+				Vector2 localPointB1 = proxyB.vertices[cache.IndexB[0]];
+				Vector2 localPointB2 = proxyB.vertices[cache.IndexB[1]];
 
 				Vector2 a = localPointB2 - localPointB1;
 				_axis = new Vector2( a.Y, -a.X );
 				_axis.Normalize();
-				Vector2 normal = MathUtils.Mul( ref xfB.q, _axis );
+				Vector2 normal = MathUtils.mul( ref xfB.q, _axis );
 
 				_localPoint = 0.5f * ( localPointB1 + localPointB2 );
-				Vector2 pointB = MathUtils.Mul( ref xfB, _localPoint );
+				Vector2 pointB = MathUtils.mul( ref xfB, _localPoint );
 
-				Vector2 localPointA = proxyA.Vertices[cache.IndexA[0]];
-				Vector2 pointA = MathUtils.Mul( ref xfA, localPointA );
+				Vector2 localPointA = proxyA.vertices[cache.IndexA[0]];
+				Vector2 pointA = MathUtils.mul( ref xfA, localPointA );
 
 				float s = Vector2.Dot( pointA - pointB, normal );
 				if( s < 0.0f )
@@ -131,19 +131,19 @@ namespace FarseerPhysics.Collision
 			{
 				// Two points on A and one or two points on B.
 				_type = SeparationFunctionType.FaceA;
-				Vector2 localPointA1 = _proxyA.Vertices[cache.IndexA[0]];
-				Vector2 localPointA2 = _proxyA.Vertices[cache.IndexA[1]];
+				Vector2 localPointA1 = _proxyA.vertices[cache.IndexA[0]];
+				Vector2 localPointA2 = _proxyA.vertices[cache.IndexA[1]];
 
 				Vector2 a = localPointA2 - localPointA1;
 				_axis = new Vector2( a.Y, -a.X );
 				_axis.Normalize();
-				Vector2 normal = MathUtils.Mul( ref xfA.q, _axis );
+				Vector2 normal = MathUtils.mul( ref xfA.q, _axis );
 
 				_localPoint = 0.5f * ( localPointA1 + localPointA2 );
-				Vector2 pointA = MathUtils.Mul( ref xfA, _localPoint );
+				Vector2 pointA = MathUtils.mul( ref xfA, _localPoint );
 
-				Vector2 localPointB = _proxyB.Vertices[cache.IndexB[0]];
-				Vector2 pointB = MathUtils.Mul( ref xfB, localPointB );
+				Vector2 localPointB = _proxyB.vertices[cache.IndexB[0]];
+				Vector2 pointB = MathUtils.mul( ref xfB, localPointB );
 
 				float s = Vector2.Dot( pointB - pointA, normal );
 				if( s < 0.0f )
@@ -165,17 +165,17 @@ namespace FarseerPhysics.Collision
 			{
 				case SeparationFunctionType.Points:
 					{
-						Vector2 axisA = MathUtils.MulT( ref xfA.q, _axis );
-						Vector2 axisB = MathUtils.MulT( ref xfB.q, -_axis );
+						Vector2 axisA = MathUtils.mulT( ref xfA.q, _axis );
+						Vector2 axisB = MathUtils.mulT( ref xfB.q, -_axis );
 
-						indexA = _proxyA.GetSupport( axisA );
-						indexB = _proxyB.GetSupport( axisB );
+						indexA = _proxyA.getSupport( axisA );
+						indexB = _proxyB.getSupport( axisB );
 
-						Vector2 localPointA = _proxyA.Vertices[indexA];
-						Vector2 localPointB = _proxyB.Vertices[indexB];
+						Vector2 localPointA = _proxyA.vertices[indexA];
+						Vector2 localPointB = _proxyB.vertices[indexB];
 
-						Vector2 pointA = MathUtils.Mul( ref xfA, localPointA );
-						Vector2 pointB = MathUtils.Mul( ref xfB, localPointB );
+						Vector2 pointA = MathUtils.mul( ref xfA, localPointA );
+						Vector2 pointB = MathUtils.mul( ref xfB, localPointB );
 
 						float separation = Vector2.Dot( pointB - pointA, _axis );
 						return separation;
@@ -183,16 +183,16 @@ namespace FarseerPhysics.Collision
 
 				case SeparationFunctionType.FaceA:
 					{
-						Vector2 normal = MathUtils.Mul( ref xfA.q, _axis );
-						Vector2 pointA = MathUtils.Mul( ref xfA, _localPoint );
+						Vector2 normal = MathUtils.mul( ref xfA.q, _axis );
+						Vector2 pointA = MathUtils.mul( ref xfA, _localPoint );
 
-						Vector2 axisB = MathUtils.MulT( ref xfB.q, -normal );
+						Vector2 axisB = MathUtils.mulT( ref xfB.q, -normal );
 
 						indexA = -1;
-						indexB = _proxyB.GetSupport( axisB );
+						indexB = _proxyB.getSupport( axisB );
 
-						Vector2 localPointB = _proxyB.Vertices[indexB];
-						Vector2 pointB = MathUtils.Mul( ref xfB, localPointB );
+						Vector2 localPointB = _proxyB.vertices[indexB];
+						Vector2 pointB = MathUtils.mul( ref xfB, localPointB );
 
 						float separation = Vector2.Dot( pointB - pointA, normal );
 						return separation;
@@ -200,16 +200,16 @@ namespace FarseerPhysics.Collision
 
 				case SeparationFunctionType.FaceB:
 					{
-						Vector2 normal = MathUtils.Mul( ref xfB.q, _axis );
-						Vector2 pointB = MathUtils.Mul( ref xfB, _localPoint );
+						Vector2 normal = MathUtils.mul( ref xfB.q, _axis );
+						Vector2 pointB = MathUtils.mul( ref xfB, _localPoint );
 
-						Vector2 axisA = MathUtils.MulT( ref xfA.q, -normal );
+						Vector2 axisA = MathUtils.mulT( ref xfA.q, -normal );
 
 						indexB = -1;
-						indexA = _proxyA.GetSupport( axisA );
+						indexA = _proxyA.getSupport( axisA );
 
-						Vector2 localPointA = _proxyA.Vertices[indexA];
-						Vector2 pointA = MathUtils.Mul( ref xfA, localPointA );
+						Vector2 localPointA = _proxyA.vertices[indexA];
+						Vector2 pointA = MathUtils.mul( ref xfA, localPointA );
 
 						float separation = Vector2.Dot( pointA - pointB, normal );
 						return separation;
@@ -233,33 +233,33 @@ namespace FarseerPhysics.Collision
 			{
 				case SeparationFunctionType.Points:
 					{
-						Vector2 localPointA = _proxyA.Vertices[indexA];
-						Vector2 localPointB = _proxyB.Vertices[indexB];
+						Vector2 localPointA = _proxyA.vertices[indexA];
+						Vector2 localPointB = _proxyB.vertices[indexB];
 
-						Vector2 pointA = MathUtils.Mul( ref xfA, localPointA );
-						Vector2 pointB = MathUtils.Mul( ref xfB, localPointB );
+						Vector2 pointA = MathUtils.mul( ref xfA, localPointA );
+						Vector2 pointB = MathUtils.mul( ref xfB, localPointB );
 						float separation = Vector2.Dot( pointB - pointA, _axis );
 
 						return separation;
 					}
 				case SeparationFunctionType.FaceA:
 					{
-						Vector2 normal = MathUtils.Mul( ref xfA.q, _axis );
-						Vector2 pointA = MathUtils.Mul( ref xfA, _localPoint );
+						Vector2 normal = MathUtils.mul( ref xfA.q, _axis );
+						Vector2 pointA = MathUtils.mul( ref xfA, _localPoint );
 
-						Vector2 localPointB = _proxyB.Vertices[indexB];
-						Vector2 pointB = MathUtils.Mul( ref xfB, localPointB );
+						Vector2 localPointB = _proxyB.vertices[indexB];
+						Vector2 pointB = MathUtils.mul( ref xfB, localPointB );
 
 						float separation = Vector2.Dot( pointB - pointA, normal );
 						return separation;
 					}
 				case SeparationFunctionType.FaceB:
 					{
-						Vector2 normal = MathUtils.Mul( ref xfB.q, _axis );
-						Vector2 pointB = MathUtils.Mul( ref xfB, _localPoint );
+						Vector2 normal = MathUtils.mul( ref xfB.q, _axis );
+						Vector2 pointB = MathUtils.mul( ref xfB, _localPoint );
 
-						Vector2 localPointA = _proxyA.Vertices[indexA];
-						Vector2 pointA = MathUtils.Mul( ref xfA, localPointA );
+						Vector2 localPointA = _proxyA.vertices[indexA];
+						Vector2 pointA = MathUtils.mul( ref xfA, localPointA );
 
 						float separation = Vector2.Dot( pointA - pointB, normal );
 						return separation;
@@ -296,7 +296,7 @@ namespace FarseerPhysics.Collision
 		/// <param name="input">The input.</param>
 		public static void CalculateTimeOfImpact( out TOIOutput output, TOIInput input )
 		{
-			if( Settings.EnableDiagnostics ) //FPE: We only gather diagnostics when enabled
+			if( Settings.enableDiagnostics ) //FPE: We only gather diagnostics when enabled
 				++TOICalls;
 
 			output = new TOIOutput();
@@ -313,9 +313,9 @@ namespace FarseerPhysics.Collision
 
 			float tMax = input.TMax;
 
-			float totalRadius = input.ProxyA.Radius + input.ProxyB.Radius;
-			float target = Math.Max( Settings.LinearSlop, totalRadius - 3.0f * Settings.LinearSlop );
-			const float tolerance = 0.25f * Settings.LinearSlop;
+			float totalRadius = input.ProxyA.radius + input.ProxyB.radius;
+			float target = Math.Max( Settings.linearSlop, totalRadius - 3.0f * Settings.linearSlop );
+			const float tolerance = 0.25f * Settings.linearSlop;
 			Debug.Assert( target > tolerance );
 
 			float t1 = 0.0f;
@@ -342,7 +342,7 @@ namespace FarseerPhysics.Collision
 				_distanceInput.TransformB = xfB;
 				DistanceOutput distanceOutput;
 				SimplexCache cache;
-				Distance.ComputeDistance( out distanceOutput, out cache, _distanceInput );
+				Distance.computeDistance( out distanceOutput, out cache, _distanceInput );
 
 				// If the shapes are overlapped, we give up on continuous collision.
 				if( distanceOutput.Distance <= 0.0f )
@@ -435,7 +435,7 @@ namespace FarseerPhysics.Collision
 
 						++rootIterCount;
 
-						if( Settings.EnableDiagnostics ) //FPE: We only gather diagnostics when enabled
+						if( Settings.enableDiagnostics ) //FPE: We only gather diagnostics when enabled
 							++TOIRootIters;
 
 						float s = SeparationFunction.Evaluate( indexA, indexB, t );
@@ -465,12 +465,12 @@ namespace FarseerPhysics.Collision
 						}
 					}
 
-					if( Settings.EnableDiagnostics ) //FPE: We only gather diagnostics when enabled
+					if( Settings.enableDiagnostics ) //FPE: We only gather diagnostics when enabled
 						TOIMaxRootIters = Math.Max( TOIMaxRootIters, rootIterCount );
 
 					++pushBackIter;
 
-					if( pushBackIter == Settings.MaxPolygonVertices )
+					if( pushBackIter == Settings.maxPolygonVertices )
 					{
 						break;
 					}
@@ -478,7 +478,7 @@ namespace FarseerPhysics.Collision
 
 				++iter;
 
-				if( Settings.EnableDiagnostics ) //FPE: We only gather diagnostics when enabled
+				if( Settings.enableDiagnostics ) //FPE: We only gather diagnostics when enabled
 					++TOIIters;
 
 				if( done )
@@ -495,7 +495,7 @@ namespace FarseerPhysics.Collision
 				}
 			}
 
-			if( Settings.EnableDiagnostics ) //FPE: We only gather diagnostics when enabled
+			if( Settings.enableDiagnostics ) //FPE: We only gather diagnostics when enabled
 				TOIMaxIters = Math.Max( TOIMaxIters, iter );
 		}
 	

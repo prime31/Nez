@@ -95,7 +95,7 @@ namespace FarseerPhysics.Collision.Shapes
 		internal EdgeShape() : base( 0 )
 		{
 			shapeType = ShapeType.Edge;
-			_radius = Settings.PolygonRadius;
+			_radius = Settings.polygonRadius;
 		}
 
 		/// <summary>
@@ -106,7 +106,7 @@ namespace FarseerPhysics.Collision.Shapes
 		public EdgeShape( Vector2 start, Vector2 end ) : base( 0 )
 		{
 			shapeType = ShapeType.Edge;
-			_radius = Settings.PolygonRadius;
+			_radius = Settings.polygonRadius;
 			Set( start, end );
 		}
 
@@ -140,8 +140,8 @@ namespace FarseerPhysics.Collision.Shapes
 			output = new RayCastOutput();
 
 			// Put the ray into the edge's frame of reference.
-			var p1 = MathUtils.MulT( transform.q, input.Point1 - transform.p );
-			var p2 = MathUtils.MulT( transform.q, input.Point2 - transform.p );
+			var p1 = MathUtils.mulT( transform.q, input.Point1 - transform.p );
+			var p2 = MathUtils.mulT( transform.q, input.Point2 - transform.p );
 			var d = p2 - p1;
 
 			var v1 = _vertex1;
@@ -187,15 +187,15 @@ namespace FarseerPhysics.Collision.Shapes
 
 		public override void ComputeAABB( out AABB aabb, ref Transform transform, int childIndex )
 		{
-			var v1 = MathUtils.Mul( ref transform, _vertex1 );
-			var v2 = MathUtils.Mul( ref transform, _vertex2 );
+			var v1 = MathUtils.mul( ref transform, _vertex1 );
+			var v2 = MathUtils.mul( ref transform, _vertex2 );
 
 			var lower = Vector2.Min( v1, v2 );
 			var upper = Vector2.Max( v1, v2 );
 
 			var r = new Vector2( radius, radius );
-			aabb.LowerBound = lower - r;
-			aabb.UpperBound = upper + r;
+			aabb.lowerBound = lower - r;
+			aabb.upperBound = upper + r;
 		}
 
 		protected override void ComputeProperties()

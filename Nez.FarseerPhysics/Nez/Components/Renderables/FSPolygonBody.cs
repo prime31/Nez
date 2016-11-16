@@ -42,7 +42,7 @@ namespace Nez.Farseer
 				var verts = poly.vertices;
 				verts.Clear();
 				verts.AddRange( _verts );
-				verts.Scale( transform.scale );
+				verts.scale( transform.scale );
 				poly.setVerticesNoCopy( verts );
 
 				// wake the body if it is asleep to update collisions

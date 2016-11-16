@@ -47,7 +47,7 @@ namespace FarseerPhysics.Controllers
 
             foreach (Body worldBody in World.bodyList)
             {
-                if (!IsActiveOn(worldBody))
+                if (!isActiveOn(worldBody))
                     continue;
 
                 foreach (Body controllerBody in Bodies)
@@ -58,7 +58,7 @@ namespace FarseerPhysics.Controllers
                     Vector2 d = controllerBody.position - worldBody.position;
                     float r2 = d.LengthSquared();
 
-                    if (r2 <= Settings.Epsilon || r2 > MaxRadius * MaxRadius || r2 < MinRadius * MinRadius)
+                    if (r2 <= Settings.epsilon || r2 > MaxRadius * MaxRadius || r2 < MinRadius * MinRadius)
                         continue;
 
                     switch (GravityType)
@@ -71,7 +71,7 @@ namespace FarseerPhysics.Controllers
                             break;
                     }
 
-                    worldBody.ApplyForce(ref f);
+                    worldBody.applyForce(ref f);
                 }
 
                 foreach (Vector2 point in Points)
@@ -79,7 +79,7 @@ namespace FarseerPhysics.Controllers
                     Vector2 d = point - worldBody.position;
                     float r2 = d.LengthSquared();
 
-                    if (r2 <= Settings.Epsilon || r2 > MaxRadius * MaxRadius || r2 < MinRadius * MinRadius)
+                    if (r2 <= Settings.epsilon || r2 > MaxRadius * MaxRadius || r2 < MinRadius * MinRadius)
                         continue;
 
                     switch (GravityType)
@@ -92,7 +92,7 @@ namespace FarseerPhysics.Controllers
                             break;
                     }
 
-                    worldBody.ApplyForce(ref f);
+                    worldBody.applyForce(ref f);
                 }
             }
         }

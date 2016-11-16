@@ -62,7 +62,7 @@ namespace FarseerPhysics.Collision.Shapes
 		public PolygonShape( Vertices vertices, float density ) : base( density )
 		{
 			shapeType = ShapeType.Polygon;
-			_radius = Settings.PolygonRadius;
+			_radius = Settings.polygonRadius;
 
 			this.vertices = vertices;
 		}
@@ -76,17 +76,17 @@ namespace FarseerPhysics.Collision.Shapes
 			Debug.Assert( density >= 0f );
 
 			shapeType = ShapeType.Polygon;
-			_radius = Settings.PolygonRadius;
-			_vertices = new Vertices( Settings.MaxPolygonVertices );
-			_normals = new Vertices( Settings.MaxPolygonVertices );
+			_radius = Settings.polygonRadius;
+			_vertices = new Vertices( Settings.maxPolygonVertices );
+			_normals = new Vertices( Settings.maxPolygonVertices );
 		}
 
 		internal PolygonShape() : base( 0 )
 		{
 			shapeType = ShapeType.Polygon;
-			_radius = Settings.PolygonRadius;
-			_vertices = new Vertices( Settings.MaxPolygonVertices );
-			_normals = new Vertices( Settings.MaxPolygonVertices );
+			_radius = Settings.polygonRadius;
+			_vertices = new Vertices( Settings.maxPolygonVertices );
+			_normals = new Vertices( Settings.maxPolygonVertices );
 		}
 
 
@@ -96,17 +96,17 @@ namespace FarseerPhysics.Collision.Shapes
 		/// <param name="verts">Verts.</param>
 		public void setVerticesNoCopy( Vertices verts )
 		{
-			Debug.Assert( verts.Count >= 3 && verts.Count <= Settings.MaxPolygonVertices );
+			Debug.Assert( verts.Count >= 3 && verts.Count <= Settings.maxPolygonVertices );
 			_vertices = verts;
 
-			if( Settings.UseConvexHullPolygons )
+			if( Settings.useConvexHullPolygons )
 			{
 				// FPE note: This check is required as the GiftWrap algorithm early exits on triangles
 				// So instead of giftwrapping a triangle, we just force it to be clock wise.
 				if( _vertices.Count <= 3 )
-					_vertices.ForceCounterClockWise();
+					_vertices.forceCounterClockWise();
 				else
-					_vertices = GiftWrap.GetConvexHull( _vertices );
+					_vertices = GiftWrap.getConvexHull( _vertices );
 			}
 
 			if( _normals == null )
@@ -119,7 +119,7 @@ namespace FarseerPhysics.Collision.Shapes
 			{
 				var next = i + 1 < _vertices.Count ? i + 1 : 0;
 				var edge = _vertices[next] - _vertices[i];
-				Debug.Assert( edge.LengthSquared() > Settings.Epsilon * Settings.Epsilon );
+				Debug.Assert( edge.LengthSquared() > Settings.epsilon * Settings.epsilon );
 
 				// FPE optimization: Normals.Add(MathHelper.Cross(edge, 1.0f));
 				var temp = new Vector2( edge.Y, -edge.X );
@@ -187,7 +187,7 @@ namespace FarseerPhysics.Collision.Shapes
 				Vector2 e1 = vertices[i] - s;
 				Vector2 e2 = i + 1 < vertices.Count ? vertices[i + 1] - s : vertices[0] - s;
 
-				float D = MathUtils.Cross( e1, e2 );
+				float D = MathUtils.cross( e1, e2 );
 
 				float triangleArea = 0.5f * D;
 				area += triangleArea;
@@ -205,7 +205,7 @@ namespace FarseerPhysics.Collision.Shapes
 			}
 
 			//The area is too small for the engine to handle.
-			Debug.Assert( area > Settings.Epsilon );
+			Debug.Assert( area > Settings.epsilon );
 
 			// We save the area
 			massData.area = area;
@@ -226,7 +226,7 @@ namespace FarseerPhysics.Collision.Shapes
 
 		public override bool TestPoint( ref Transform transform, ref Vector2 point )
 		{
-			Vector2 pLocal = MathUtils.MulT( transform.q, point - transform.p );
+			Vector2 pLocal = MathUtils.mulT( transform.q, point - transform.p );
 
 			for( int i = 0; i < vertices.Count; ++i )
 			{
@@ -245,8 +245,8 @@ namespace FarseerPhysics.Collision.Shapes
 			output = new RayCastOutput();
 
 			// Put the ray into the polygon's frame of reference.
-			Vector2 p1 = MathUtils.MulT( transform.q, input.Point1 - transform.p );
-			Vector2 p2 = MathUtils.MulT( transform.q, input.Point2 - transform.p );
+			Vector2 p1 = MathUtils.mulT( transform.q, input.Point1 - transform.p );
+			Vector2 p2 = MathUtils.mulT( transform.q, input.Point2 - transform.p );
 			Vector2 d = p2 - p1;
 
 			float lower = 0.0f, upper = input.MaxFraction;
@@ -304,7 +304,7 @@ namespace FarseerPhysics.Collision.Shapes
 			if( index >= 0 )
 			{
 				output.Fraction = lower;
-				output.Normal = MathUtils.Mul( transform.q, normals[index] );
+				output.Normal = MathUtils.mul( transform.q, normals[index] );
 				return true;
 			}
 
@@ -319,19 +319,19 @@ namespace FarseerPhysics.Collision.Shapes
 		/// <param name="childIndex">The child shape index.</param>
 		public override void ComputeAABB( out AABB aabb, ref Transform transform, int childIndex )
 		{
-			var lower = MathUtils.Mul( ref transform, vertices[0] );
+			var lower = MathUtils.mul( ref transform, vertices[0] );
 			var upper = lower;
 
 			for( int i = 1; i < vertices.Count; ++i )
 			{
-				var v = MathUtils.Mul( ref transform, vertices[i] );
+				var v = MathUtils.mul( ref transform, vertices[i] );
 				lower = Vector2.Min( lower, v );
 				upper = Vector2.Max( upper, v );
 			}
 
 			var r = new Vector2( radius, radius );
-			aabb.LowerBound = lower - r;
-			aabb.UpperBound = upper + r;
+			aabb.lowerBound = lower - r;
+			aabb.upperBound = upper + r;
 		}
 
 		public override float ComputeSubmergedArea( ref Vector2 normal, float offset, ref Transform xf, out Vector2 sc )
@@ -339,10 +339,10 @@ namespace FarseerPhysics.Collision.Shapes
 			sc = Vector2.Zero;
 
 			//Transform plane into shape co-ordinates
-			var normalL = MathUtils.MulT( xf.q, normal );
+			var normalL = MathUtils.mulT( xf.q, normal );
 			float offsetL = offset - Vector2.Dot( normal, xf.p );
 
-			float[] depths = new float[Settings.MaxPolygonVertices];
+			float[] depths = new float[Settings.maxPolygonVertices];
 			int diveCount = 0;
 			int intoIndex = -1;
 			int outoIndex = -1;
@@ -352,7 +352,7 @@ namespace FarseerPhysics.Collision.Shapes
 			for( i = 0; i < vertices.Count; i++ )
 			{
 				depths[i] = Vector2.Dot( normalL, vertices[i] ) - offsetL;
-				bool isSubmerged = depths[i] < -Settings.Epsilon;
+				bool isSubmerged = depths[i] < -Settings.epsilon;
 				if( i > 0 )
 				{
 					if( isSubmerged )
@@ -380,7 +380,7 @@ namespace FarseerPhysics.Collision.Shapes
 					if( lastSubmerged )
 					{
 						//Completely submerged
-						sc = MathUtils.Mul( ref xf, massData.centroid );
+						sc = MathUtils.mul( ref xf, massData.centroid );
 						return massData.mass / density;
 					}
 
@@ -429,7 +429,7 @@ namespace FarseerPhysics.Collision.Shapes
 					Vector2 e1 = p2 - intoVec;
 					Vector2 e2 = p3 - intoVec;
 
-					float D = MathUtils.Cross( e1, e2 );
+					float D = MathUtils.cross( e1, e2 );
 
 					float triangleArea = 0.5f * D;
 
@@ -445,7 +445,7 @@ namespace FarseerPhysics.Collision.Shapes
 			//Normalize and transform centroid
 			center *= 1.0f / area;
 
-			sc = MathUtils.Mul( ref xf, center );
+			sc = MathUtils.mul( ref xf, center );
 
 			return area;
 		}

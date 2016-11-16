@@ -6,7 +6,7 @@ namespace Nez.Farseer
 {
 	public class FSBoxBody : FSPolygonBody
 	{
-		public FSBoxBody( Subtexture subtexture ) : base( subtexture, PolygonTools.CreateRectangle( subtexture.sourceRect.Width / 2, subtexture.sourceRect.Height / 2 ) )
+		public FSBoxBody( Subtexture subtexture ) : base( subtexture, PolygonTools.createRectangle( subtexture.sourceRect.Width / 2, subtexture.sourceRect.Height / 2 ) )
 		{}
 	}
 }

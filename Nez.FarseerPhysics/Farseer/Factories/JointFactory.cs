@@ -4,165 +4,165 @@ using Microsoft.Xna.Framework;
 
 namespace FarseerPhysics.Factories
 {
-    /// <summary>
-    /// An easy to use factory for using joints.
-    /// </summary>
-    public static class JointFactory
-    {
-        #region Motor Joint
+	/// <summary>
+	/// An easy to use factory for using joints.
+	/// </summary>
+	public static class JointFactory
+	{
+		#region Motor Joint
 
-        public static MotorJoint CreateMotorJoint(World world, Body bodyA, Body bodyB, bool useWorldCoordinates = false)
-        {
-            MotorJoint joint = new MotorJoint(bodyA, bodyB, useWorldCoordinates);
-            world.AddJoint(joint);
-            return joint;
-        }
+		public static MotorJoint CreateMotorJoint( World world, Body bodyA, Body bodyB, bool useWorldCoordinates = false )
+		{
+			MotorJoint joint = new MotorJoint( bodyA, bodyB, useWorldCoordinates );
+			world.addJoint( joint );
+			return joint;
+		}
 
-        #endregion
+		#endregion
 
-        #region Revolute Joint
+		#region Revolute Joint
 
-        public static RevoluteJoint CreateRevoluteJoint(World world, Body bodyA, Body bodyB, Vector2 anchorA, Vector2 anchorB, bool useWorldCoordinates = false)
-        {
-            RevoluteJoint joint = new RevoluteJoint(bodyA, bodyB, anchorA, anchorB, useWorldCoordinates);
-            world.AddJoint(joint);
-            return joint;
-        }
+		public static RevoluteJoint CreateRevoluteJoint( World world, Body bodyA, Body bodyB, Vector2 anchorA, Vector2 anchorB, bool useWorldCoordinates = false )
+		{
+			var joint = new RevoluteJoint( bodyA, bodyB, anchorA, anchorB, useWorldCoordinates );
+			world.addJoint( joint );
+			return joint;
+		}
 
-        public static RevoluteJoint CreateRevoluteJoint(World world, Body bodyA, Body bodyB, Vector2 anchor)
-        {
-            Vector2 localanchorA = bodyA.GetLocalPoint(bodyB.GetWorldPoint(anchor));
-            RevoluteJoint joint = new RevoluteJoint(bodyA, bodyB, localanchorA, anchor);
-            world.AddJoint(joint);
-            return joint;
-        }
+		public static RevoluteJoint CreateRevoluteJoint( World world, Body bodyA, Body bodyB, Vector2 anchor )
+		{
+			var localanchorA = bodyA.getLocalPoint( bodyB.getWorldPoint( anchor ) );
+			var joint = new RevoluteJoint( bodyA, bodyB, localanchorA, anchor );
+			world.addJoint( joint );
+			return joint;
+		}
 
 
-        #endregion
+		#endregion
 
-        #region Rope Joint
+		#region Rope Joint
 
-        public static RopeJoint CreateRopeJoint(World world, Body bodyA, Body bodyB, Vector2 anchorA, Vector2 anchorB, bool useWorldCoordinates = false)
-        {
-            RopeJoint ropeJoint = new RopeJoint(bodyA, bodyB, anchorA, anchorB, useWorldCoordinates);
-            world.AddJoint(ropeJoint);
-            return ropeJoint;
-        }
+		public static RopeJoint CreateRopeJoint( World world, Body bodyA, Body bodyB, Vector2 anchorA, Vector2 anchorB, bool useWorldCoordinates = false )
+		{
+			RopeJoint ropeJoint = new RopeJoint( bodyA, bodyB, anchorA, anchorB, useWorldCoordinates );
+			world.addJoint( ropeJoint );
+			return ropeJoint;
+		}
 
-        #endregion
+		#endregion
 
-        #region Weld Joint
+		#region Weld Joint
 
-        public static WeldJoint CreateWeldJoint(World world, Body bodyA, Body bodyB, Vector2 anchorA, Vector2 anchorB, bool useWorldCoordinates = false)
-        {
-            WeldJoint weldJoint = new WeldJoint(bodyA, bodyB, anchorA, anchorB, useWorldCoordinates);
-            world.AddJoint(weldJoint);
-            return weldJoint;
-        }
+		public static WeldJoint CreateWeldJoint( World world, Body bodyA, Body bodyB, Vector2 anchorA, Vector2 anchorB, bool useWorldCoordinates = false )
+		{
+			WeldJoint weldJoint = new WeldJoint( bodyA, bodyB, anchorA, anchorB, useWorldCoordinates );
+			world.addJoint( weldJoint );
+			return weldJoint;
+		}
 
-        #endregion
+		#endregion
 
-        #region Prismatic Joint
+		#region Prismatic Joint
 
-        public static PrismaticJoint CreatePrismaticJoint(World world, Body bodyA, Body bodyB, Vector2 anchor, Vector2 axis, bool useWorldCoordinates = false)
-        {
-            PrismaticJoint joint = new PrismaticJoint(bodyA, bodyB, anchor, axis, useWorldCoordinates);
-            world.AddJoint(joint);
-            return joint;
-        }
+		public static PrismaticJoint CreatePrismaticJoint( World world, Body bodyA, Body bodyB, Vector2 anchor, Vector2 axis, bool useWorldCoordinates = false )
+		{
+			PrismaticJoint joint = new PrismaticJoint( bodyA, bodyB, anchor, axis, useWorldCoordinates );
+			world.addJoint( joint );
+			return joint;
+		}
 
-        #endregion
+		#endregion
 
-        #region Wheel Joint
+		#region Wheel Joint
 
-        public static WheelJoint CreateWheelJoint(World world, Body bodyA, Body bodyB, Vector2 anchor, Vector2 axis, bool useWorldCoordinates = false)
-        {
-            WheelJoint joint = new WheelJoint(bodyA, bodyB, anchor, axis, useWorldCoordinates);
-            world.AddJoint(joint);
-            return joint;
-        }
+		public static WheelJoint CreateWheelJoint( World world, Body bodyA, Body bodyB, Vector2 anchor, Vector2 axis, bool useWorldCoordinates = false )
+		{
+			WheelJoint joint = new WheelJoint( bodyA, bodyB, anchor, axis, useWorldCoordinates );
+			world.addJoint( joint );
+			return joint;
+		}
 
-        public static WheelJoint CreateWheelJoint(World world, Body bodyA, Body bodyB, Vector2 axis)
-        {
-            return CreateWheelJoint(world, bodyA, bodyB, Vector2.Zero, axis);
-        }
+		public static WheelJoint CreateWheelJoint( World world, Body bodyA, Body bodyB, Vector2 axis )
+		{
+			return CreateWheelJoint( world, bodyA, bodyB, Vector2.Zero, axis );
+		}
 
-        #endregion
+		#endregion
 
-        #region Angle Joint
+		#region Angle Joint
 
-        public static AngleJoint CreateAngleJoint(World world, Body bodyA, Body bodyB)
-        {
-            AngleJoint angleJoint = new AngleJoint(bodyA, bodyB);
-            world.AddJoint(angleJoint);
-            return angleJoint;
-        }
+		public static AngleJoint CreateAngleJoint( World world, Body bodyA, Body bodyB )
+		{
+			AngleJoint angleJoint = new AngleJoint( bodyA, bodyB );
+			world.addJoint( angleJoint );
+			return angleJoint;
+		}
 
-        #endregion
+		#endregion
 
-        #region Distance Joint
+		#region Distance Joint
 
-        public static DistanceJoint CreateDistanceJoint(World world, Body bodyA, Body bodyB, Vector2 anchorA, Vector2 anchorB, bool useWorldCoordinates = false)
-        {
-            DistanceJoint distanceJoint = new DistanceJoint(bodyA, bodyB, anchorA, anchorB, useWorldCoordinates);
-            world.AddJoint(distanceJoint);
-            return distanceJoint;
-        }
+		public static DistanceJoint CreateDistanceJoint( World world, Body bodyA, Body bodyB, Vector2 anchorA, Vector2 anchorB, bool useWorldCoordinates = false )
+		{
+			DistanceJoint distanceJoint = new DistanceJoint( bodyA, bodyB, anchorA, anchorB, useWorldCoordinates );
+			world.addJoint( distanceJoint );
+			return distanceJoint;
+		}
 
-        public static DistanceJoint CreateDistanceJoint(World world, Body bodyA, Body bodyB)
-        {
-            return CreateDistanceJoint(world, bodyA, bodyB, Vector2.Zero, Vector2.Zero);
-        }
+		public static DistanceJoint CreateDistanceJoint( World world, Body bodyA, Body bodyB )
+		{
+			return CreateDistanceJoint( world, bodyA, bodyB, Vector2.Zero, Vector2.Zero );
+		}
 
-        #endregion
+		#endregion
 
-        #region Friction Joint
+		#region Friction Joint
 
-        public static FrictionJoint CreateFrictionJoint(World world, Body bodyA, Body bodyB, Vector2 anchor, bool useWorldCoordinates = false)
-        {
-            FrictionJoint frictionJoint = new FrictionJoint(bodyA, bodyB, anchor, useWorldCoordinates);
-            world.AddJoint(frictionJoint);
-            return frictionJoint;
-        }
+		public static FrictionJoint CreateFrictionJoint( World world, Body bodyA, Body bodyB, Vector2 anchor, bool useWorldCoordinates = false )
+		{
+			FrictionJoint frictionJoint = new FrictionJoint( bodyA, bodyB, anchor, useWorldCoordinates );
+			world.addJoint( frictionJoint );
+			return frictionJoint;
+		}
 
-        public static FrictionJoint CreateFrictionJoint(World world, Body bodyA, Body bodyB)
-        {
-            return CreateFrictionJoint(world, bodyA, bodyB, Vector2.Zero);
-        }
+		public static FrictionJoint CreateFrictionJoint( World world, Body bodyA, Body bodyB )
+		{
+			return CreateFrictionJoint( world, bodyA, bodyB, Vector2.Zero );
+		}
 
-        #endregion
+		#endregion
 
-        #region Gear Joint
+		#region Gear Joint
 
-        public static GearJoint CreateGearJoint(World world, Body bodyA, Body bodyB, Joint jointA, Joint jointB, float ratio)
-        {
-            GearJoint gearJoint = new GearJoint(bodyA, bodyB, jointA, jointB, ratio);
-            world.AddJoint(gearJoint);
-            return gearJoint;
-        }
+		public static GearJoint CreateGearJoint( World world, Body bodyA, Body bodyB, Joint jointA, Joint jointB, float ratio )
+		{
+			GearJoint gearJoint = new GearJoint( bodyA, bodyB, jointA, jointB, ratio );
+			world.addJoint( gearJoint );
+			return gearJoint;
+		}
 
-        #endregion
+		#endregion
 
-        #region Pulley Joint
+		#region Pulley Joint
 
-        public static PulleyJoint CreatePulleyJoint(World world, Body bodyA, Body bodyB, Vector2 anchorA, Vector2 anchorB, Vector2 worldAnchorA, Vector2 worldAnchorB, float ratio, bool useWorldCoordinates = false)
-        {
-            PulleyJoint pulleyJoint = new PulleyJoint(bodyA, bodyB, anchorA, anchorB, worldAnchorA, worldAnchorB, ratio, useWorldCoordinates);
-            world.AddJoint(pulleyJoint);
-            return pulleyJoint;
-        }
+		public static PulleyJoint CreatePulleyJoint( World world, Body bodyA, Body bodyB, Vector2 anchorA, Vector2 anchorB, Vector2 worldAnchorA, Vector2 worldAnchorB, float ratio, bool useWorldCoordinates = false )
+		{
+			PulleyJoint pulleyJoint = new PulleyJoint( bodyA, bodyB, anchorA, anchorB, worldAnchorA, worldAnchorB, ratio, useWorldCoordinates );
+			world.addJoint( pulleyJoint );
+			return pulleyJoint;
+		}
 
-        #endregion
+		#endregion
 
-        #region MouseJoint
+		#region MouseJoint
 
-        public static FixedMouseJoint CreateFixedMouseJoint(World world, Body body, Vector2 worldAnchor)
-        {
-            FixedMouseJoint joint = new FixedMouseJoint(body, worldAnchor);
-            world.AddJoint(joint);
-            return joint;
-        }
+		public static FixedMouseJoint CreateFixedMouseJoint( World world, Body body, Vector2 worldAnchor )
+		{
+			FixedMouseJoint joint = new FixedMouseJoint( body, worldAnchor );
+			world.addJoint( joint );
+			return joint;
+		}
 
-        #endregion
-    }
+		#endregion
+	}
 }

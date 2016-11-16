@@ -193,15 +193,15 @@ namespace FarseerPhysics.Dynamics.Joints
 		/// Get the reaction force on body at the joint anchor in Newtons.
 		/// </summary>
 		/// <param name="invDt">The inverse delta time.</param>
-		public abstract Vector2 GetReactionForce( float invDt );
+		public abstract Vector2 getReactionForce( float invDt );
 
 		/// <summary>
 		/// Get the reaction torque on the body at the joint anchor in N*m.
 		/// </summary>
 		/// <param name="invDt">The inverse delta time.</param>
-		public abstract float GetReactionTorque( float invDt );
+		public abstract float getReactionTorque( float invDt );
 
-		protected void WakeBodies()
+		protected void wakeBodies()
 		{
 			if( bodyA != null )
 				bodyA.awake = true;
@@ -213,19 +213,19 @@ namespace FarseerPhysics.Dynamics.Joints
 		/// <summary>
 		/// Return true if the joint is a fixed type.
 		/// </summary>
-		public bool IsFixedType()
+		public bool isFixedType()
 		{
 			return jointType == JointType.FixedMouse || bodyA.isStatic || bodyB.isStatic;
 		}
 
-		internal abstract void InitVelocityConstraints( ref SolverData data );
+		internal abstract void initVelocityConstraints( ref SolverData data );
 
-		internal void Validate( float invDt )
+		internal void validate( float invDt )
 		{
 			if( !enabled )
 				return;
 
-			float jointErrorSquared = GetReactionForce( invDt ).LengthSquared();
+			float jointErrorSquared = getReactionForce( invDt ).LengthSquared();
 
 			if( Math.Abs( jointErrorSquared ) <= _breakpointSquared )
 				return;
@@ -236,14 +236,14 @@ namespace FarseerPhysics.Dynamics.Joints
 				onJointBroke( this, (float)Math.Sqrt( jointErrorSquared ) );
 		}
 
-		internal abstract void SolveVelocityConstraints( ref SolverData data );
+		internal abstract void solveVelocityConstraints( ref SolverData data );
 
 		/// <summary>
 		/// Solves the position constraints.
 		/// </summary>
 		/// <param name="data"></param>
 		/// <returns>returns true if the position errors are within tolerance.</returns>
-		internal abstract bool SolvePositionConstraints( ref SolverData data );
+		internal abstract bool solvePositionConstraints( ref SolverData data );
 	
 	}
 }

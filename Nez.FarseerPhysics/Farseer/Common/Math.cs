@@ -25,52 +25,53 @@ using System.Diagnostics;
 using System.Runtime.InteropServices;
 using Microsoft.Xna.Framework;
 
+
 namespace FarseerPhysics.Common
 {
 	public static class MathUtils
 	{
-		public static float Cross( ref Vector2 a, ref Vector2 b )
+		public static float cross( ref Vector2 a, ref Vector2 b )
 		{
 			return a.X * b.Y - a.Y * b.X;
 		}
 
-		public static float Cross( Vector2 a, Vector2 b )
+		public static float cross( Vector2 a, Vector2 b )
 		{
-			return Cross( ref a, ref b );
+			return cross( ref a, ref b );
 		}
 
 		/// Perform the cross product on two vectors.
-		public static Vector3 Cross( Vector3 a, Vector3 b )
+		public static Vector3 cross( Vector3 a, Vector3 b )
 		{
 			return new Vector3( a.Y * b.Z - a.Z * b.Y, a.Z * b.X - a.X * b.Z, a.X * b.Y - a.Y * b.X );
 		}
 
-		public static Vector2 Cross( Vector2 a, float s )
+		public static Vector2 cross( Vector2 a, float s )
 		{
 			return new Vector2( s * a.Y, -s * a.X );
 		}
 
-		public static Vector2 Cross( float s, Vector2 a )
+		public static Vector2 cross( float s, Vector2 a )
 		{
 			return new Vector2( -s * a.Y, s * a.X );
 		}
 
-		public static Vector2 Abs( Vector2 v )
+		public static Vector2 abs( Vector2 v )
 		{
 			return new Vector2( Math.Abs( v.X ), Math.Abs( v.Y ) );
 		}
 
-		public static Vector2 Mul( ref Mat22 A, Vector2 v )
+		public static Vector2 mul( ref Mat22 A, Vector2 v )
 		{
-			return Mul( ref A, ref v );
+			return mul( ref A, ref v );
 		}
 
-		public static Vector2 Mul( ref Mat22 A, ref Vector2 v )
+		public static Vector2 mul( ref Mat22 A, ref Vector2 v )
 		{
 			return new Vector2( A.ex.X * v.X + A.ey.X * v.Y, A.ex.Y * v.X + A.ey.Y * v.Y );
 		}
 
-		public static Vector2 Mul( ref Transform T, Vector2 v )
+		public static Vector2 mul( ref Transform T, Vector2 v )
 		{
 			return Mul( ref T, ref v );
 		}
@@ -83,22 +84,22 @@ namespace FarseerPhysics.Common
 			return new Vector2( x, y );
 		}
 
-		public static Vector2 MulT( ref Mat22 A, Vector2 v )
+		public static Vector2 mulT( ref Mat22 A, Vector2 v )
 		{
-			return MulT( ref A, ref v );
+			return mulT( ref A, ref v );
 		}
 
-		public static Vector2 MulT( ref Mat22 A, ref Vector2 v )
+		public static Vector2 mulT( ref Mat22 A, ref Vector2 v )
 		{
 			return new Vector2( v.X * A.ex.X + v.Y * A.ex.Y, v.X * A.ey.X + v.Y * A.ey.Y );
 		}
 
-		public static Vector2 MulT( ref Transform T, Vector2 v )
+		public static Vector2 mulT( ref Transform T, Vector2 v )
 		{
-			return MulT( ref T, ref v );
+			return mulT( ref T, ref v );
 		}
 
-		public static Vector2 MulT( ref Transform T, ref Vector2 v )
+		public static Vector2 mulT( ref Transform T, ref Vector2 v )
 		{
 			float px = v.X - T.p.X;
 			float py = v.Y - T.p.Y;
@@ -109,7 +110,7 @@ namespace FarseerPhysics.Common
 		}
 
 		// A^T * B
-		public static void MulT( ref Mat22 A, ref Mat22 B, out Mat22 C )
+		public static void mulT( ref Mat22 A, ref Mat22 B, out Mat22 C )
 		{
 			C = new Mat22();
 			C.ex.X = A.ex.X * B.ex.X + A.ex.Y * B.ex.Y;
@@ -119,28 +120,28 @@ namespace FarseerPhysics.Common
 		}
 
 		/// Multiply a matrix times a vector.
-		public static Vector3 Mul( Mat33 A, Vector3 v )
+		public static Vector3 mul( Mat33 A, Vector3 v )
 		{
 			return v.X * A.ex + v.Y * A.ey + v.Z * A.ez;
 		}
 
 		// v2 = A.q.Rot(B.q.Rot(v1) + B.p) + A.p
 		//    = (A.q * B.q).Rot(v1) + A.q.Rot(B.p) + A.p
-		public static Transform Mul( Transform A, Transform B )
+		public static Transform mul( Transform A, Transform B )
 		{
 			Transform C = new Transform();
-			C.q = Mul( A.q, B.q );
-			C.p = Mul( A.q, B.p ) + A.p;
+			C.q = mul( A.q, B.q );
+			C.p = mul( A.q, B.p ) + A.p;
 			return C;
 		}
 
 		// v2 = A.q' * (B.q * v1 + B.p - A.p)
 		//    = A.q' * B.q * v1 + A.q' * (B.p - A.p)
-		public static void MulT( ref Transform A, ref Transform B, out Transform C )
+		public static void mulT( ref Transform A, ref Transform B, out Transform C )
 		{
 			C = new Transform();
-			C.q = MulT( A.q, B.q );
-			C.p = MulT( A.q, B.p - A.p );
+			C.q = mulT( A.q, B.q );
+			C.p = mulT( A.q, B.p - A.p );
 		}
 
 		public static void Swap<T>( ref T a, ref T b )
@@ -151,13 +152,13 @@ namespace FarseerPhysics.Common
 		}
 
 		/// Multiply a matrix times a vector.
-		public static Vector2 Mul22( Mat33 A, Vector2 v )
+		public static Vector2 mul22( Mat33 A, Vector2 v )
 		{
 			return new Vector2( A.ex.X * v.X + A.ey.X * v.Y, A.ex.Y * v.X + A.ey.Y * v.Y );
 		}
 
 		/// Multiply two rotations: q * r
-		public static Rot Mul( Rot q, Rot r )
+		public static Rot mul( Rot q, Rot r )
 		{
 			// [qc -qs] * [rc -rs] = [qc*rc-qs*rs -qc*rs-qs*rc]
 			// [qs  qc]   [rs  rc]   [qs*rc+qc*rs -qs*rs+qc*rc]
@@ -169,7 +170,7 @@ namespace FarseerPhysics.Common
 			return qr;
 		}
 
-		public static Vector2 MulT( Transform T, Vector2 v )
+		public static Vector2 mulT( Transform T, Vector2 v )
 		{
 			float px = v.X - T.p.X;
 			float py = v.Y - T.p.Y;
@@ -180,7 +181,7 @@ namespace FarseerPhysics.Common
 		}
 
 		/// Transpose multiply two rotations: qT * r
-		public static Rot MulT( Rot q, Rot r )
+		public static Rot mulT( Rot q, Rot r )
 		{
 			// [ qc qs] * [rc -rs] = [qc*rc+qs*rs -qc*rs+qs*rc]
 			// [-qs qc]   [rs  rc]   [-qs*rc+qc*rs qs*rs+qc*rc]
@@ -194,28 +195,28 @@ namespace FarseerPhysics.Common
 
 		// v2 = A.q' * (B.q * v1 + B.p - A.p)
 		//    = A.q' * B.q * v1 + A.q' * (B.p - A.p)
-		public static Transform MulT( Transform A, Transform B )
+		public static Transform mulT( Transform A, Transform B )
 		{
-			Transform C = new Transform();
-			C.q = MulT( A.q, B.q );
-			C.p = MulT( A.q, B.p - A.p );
+			var C = new Transform();
+			C.q = mulT( A.q, B.q );
+			C.p = mulT( A.q, B.p - A.p );
 			return C;
 		}
 
 		/// Rotate a vector
-		public static Vector2 Mul( Rot q, Vector2 v )
+		public static Vector2 mul( Rot q, Vector2 v )
 		{
 			return new Vector2( q.c * v.X - q.s * v.Y, q.s * v.X + q.c * v.Y );
 		}
 
 		/// Inverse rotate a vector
-		public static Vector2 MulT( Rot q, Vector2 v )
+		public static Vector2 mulT( Rot q, Vector2 v )
 		{
 			return new Vector2( q.c * v.X + q.s * v.Y, -q.s * v.X + q.c * v.Y );
 		}
 
 		/// Get the skew vector such that dot(skew_vec, other) == cross(vec, other)
-		public static Vector2 Skew( Vector2 input )
+		public static Vector2 skew( Vector2 input )
 		{
 			return new Vector2( -input.Y, input.X );
 		}
@@ -228,7 +229,7 @@ namespace FarseerPhysics.Common
 		/// <returns>
 		/// 	<c>true</c> if the specified x is valid; otherwise, <c>false</c>.
 		/// </returns>
-		public static bool IsValid( float x )
+		public static bool isValid( float x )
 		{
 			if( float.IsNaN( x ) )
 			{
@@ -239,9 +240,9 @@ namespace FarseerPhysics.Common
 			return !float.IsInfinity( x );
 		}
 
-		public static bool IsValid( this Vector2 x )
+		public static bool isValid( this Vector2 x )
 		{
-			return IsValid( x.X ) && IsValid( x.Y );
+			return isValid( x.X ) && isValid( x.Y );
 		}
 
 		/// <summary>
@@ -249,7 +250,7 @@ namespace FarseerPhysics.Common
 		/// </summary>
 		/// <param name="x">The x.</param>
 		/// <returns></returns>
-		public static float InvSqrt( float x )
+		public static float invSqrt( float x )
 		{
 			FloatConverter convert = new FloatConverter();
 			convert.x = x;
@@ -260,22 +261,22 @@ namespace FarseerPhysics.Common
 			return x;
 		}
 
-		public static int Clamp( int a, int low, int high )
+		public static int clamp( int a, int low, int high )
 		{
 			return Math.Max( low, Math.Min( a, high ) );
 		}
 
-		public static float Clamp( float a, float low, float high )
+		public static float clamp( float a, float low, float high )
 		{
 			return Math.Max( low, Math.Min( a, high ) );
 		}
 
-		public static Vector2 Clamp( Vector2 a, Vector2 low, Vector2 high )
+		public static Vector2 clamp( Vector2 a, Vector2 low, Vector2 high )
 		{
 			return Vector2.Max( low, Vector2.Min( a, high ) );
 		}
 
-		public static void Cross( ref Vector2 a, ref Vector2 b, out float c )
+		public static void cross( ref Vector2 a, ref Vector2 b, out float c )
 		{
 			c = a.X * b.Y - a.Y * b.X;
 		}
@@ -285,7 +286,7 @@ namespace FarseerPhysics.Common
 		/// The angle is from vector 1 to vector 2, positive anticlockwise
 		/// The result is between -pi -> pi
 		/// </summary>
-		public static double VectorAngle( ref Vector2 p1, ref Vector2 p2 )
+		public static double vectorAngle( ref Vector2 p1, ref Vector2 p2 )
 		{
 			double theta1 = Math.Atan2( p1.Y, p1.X );
 			double theta2 = Math.Atan2( p2.Y, p2.X );
@@ -299,14 +300,14 @@ namespace FarseerPhysics.Common
 		}
 
 		/// Perform the dot product on two vectors.
-		public static float Dot( Vector3 a, Vector3 b )
+		public static float dot( Vector3 a, Vector3 b )
 		{
 			return a.X * b.X + a.Y * b.Y + a.Z * b.Z;
 		}
 
-		public static double VectorAngle( Vector2 p1, Vector2 p2 )
+		public static double vectorAngle( Vector2 p1, Vector2 p2 )
 		{
-			return VectorAngle( ref p1, ref p2 );
+			return vectorAngle( ref p1, ref p2 );
 		}
 
 		/// <summary>
@@ -314,9 +315,9 @@ namespace FarseerPhysics.Common
 		/// </summary>
 		/// <returns>Positive number if point is left, negative if point is right, 
 		/// and 0 if points are collinear.</returns>
-		public static float Area( Vector2 a, Vector2 b, Vector2 c )
+		public static float area( Vector2 a, Vector2 b, Vector2 c )
 		{
-			return Area( ref a, ref b, ref c );
+			return area( ref a, ref b, ref c );
 		}
 
 		/// <summary>
@@ -324,7 +325,7 @@ namespace FarseerPhysics.Common
 		/// </summary>
 		/// <returns>Positive number if point is left, negative if point is right, 
 		/// and 0 if points are collinear.</returns>
-		public static float Area( ref Vector2 a, ref Vector2 b, ref Vector2 c )
+		public static float area( ref Vector2 a, ref Vector2 b, ref Vector2 c )
 		{
 			return a.X * ( b.Y - c.Y ) + b.X * ( c.Y - a.Y ) + c.X * ( a.Y - b.Y );
 		}
@@ -337,19 +338,19 @@ namespace FarseerPhysics.Common
 		/// <param name="c">Third vertex</param>
 		/// <param name="tolerance">The tolerance</param>
 		/// <returns></returns>
-		public static bool IsCollinear( ref Vector2 a, ref Vector2 b, ref Vector2 c, float tolerance = 0 )
+		public static bool isCollinear( ref Vector2 a, ref Vector2 b, ref Vector2 c, float tolerance = 0 )
 		{
-			return FloatInRange( Area( ref a, ref b, ref c ), -tolerance, tolerance );
+			return floatInRange( area( ref a, ref b, ref c ), -tolerance, tolerance );
 		}
 
-		public static void Cross( float s, ref Vector2 a, out Vector2 b )
+		public static void cross( float s, ref Vector2 a, out Vector2 b )
 		{
 			b = new Vector2( -s * a.Y, s * a.X );
 		}
 
-		public static bool FloatEquals( float value1, float value2 )
+		public static bool floatEquals( float value1, float value2 )
 		{
-			return Math.Abs( value1 - value2 ) <= Settings.Epsilon;
+			return Math.Abs( value1 - value2 ) <= Settings.epsilon;
 		}
 
 		/// <summary>
@@ -360,9 +361,9 @@ namespace FarseerPhysics.Common
 		/// <param name="value2">The second floating point Value.</param>
 		/// <param name="delta">The floating point tolerance.</param>
 		/// <returns>True if the values are "equal", false otherwise.</returns>
-		public static bool FloatEquals( float value1, float value2, float delta )
+		public static bool floatEquals( float value1, float value2, float delta )
 		{
-			return FloatInRange( value1, value2 - delta, value2 + delta );
+			return floatInRange( value1, value2 - delta, value2 + delta );
 		}
 
 		/// <summary>
@@ -374,10 +375,11 @@ namespace FarseerPhysics.Common
 		/// <param name="max">The maximum Value.</param>
 		/// <returns>True if the Value is within the range specified,
 		/// false otherwise.</returns>
-		public static bool FloatInRange( float value, float min, float max )
+		public static bool floatInRange( float value, float min, float max )
 		{
 			return ( value >= min && value <= max );
 		}
+
 
 		#region Nested type: FloatConverter
 
@@ -392,16 +394,18 @@ namespace FarseerPhysics.Common
 
 		#endregion
 
-		public static Vector2 Mul( ref Rot rot, Vector2 axis )
+
+		public static Vector2 mul( ref Rot rot, Vector2 axis )
 		{
-			return Mul( rot, axis );
+			return mul( rot, axis );
 		}
 
-		public static Vector2 MulT( ref Rot rot, Vector2 axis )
+		public static Vector2 mulT( ref Rot rot, Vector2 axis )
 		{
-			return MulT( rot, axis );
+			return mulT( rot, axis );
 		}
 	}
+
 
 	/// <summary>
 	/// A 2-by-2 matrix. Stored in column-major order.
@@ -514,6 +518,7 @@ namespace FarseerPhysics.Common
 		}
 	}
 
+
 	/// <summary>
 	/// A 3-by-3 matrix. Stored in column-major order.
 	/// </summary>
@@ -601,7 +606,7 @@ namespace FarseerPhysics.Common
 		/// Returns the zero matrix if singular.
 		public void GetSymInverse33( ref Mat33 M )
 		{
-			float det = MathUtils.Dot( ex, MathUtils.Cross( ey, ez ) );
+			float det = MathUtils.dot( ex, MathUtils.cross( ey, ez ) );
 			if( det != 0.0f )
 			{
 				det = 1.0f / det;
@@ -624,6 +629,7 @@ namespace FarseerPhysics.Common
 			M.ez.Z = det * ( a11 * a22 - a12 * a12 );
 		}
 	}
+
 
 	/// <summary>
 	/// Rotation
@@ -698,6 +704,7 @@ namespace FarseerPhysics.Common
 		}
 	}
 
+
 	/// <summary>
 	/// A transform contains translation and rotation. It is used to represent
 	/// the position and orientation of rigid frames.
@@ -738,6 +745,7 @@ namespace FarseerPhysics.Common
 			q.Set( angle );
 		}
 	}
+
 
 	/// <summary>
 	/// This describes the motion of a body/shape for TOI computation.
@@ -786,7 +794,7 @@ namespace FarseerPhysics.Common
 			xfb.q.Set( angle );
 
 			// Shift to origin
-			xfb.p -= MathUtils.Mul( xfb.q, LocalCenter );
+			xfb.p -= MathUtils.mul( xfb.q, LocalCenter );
 		}
 
 		/// <summary>
@@ -812,4 +820,5 @@ namespace FarseerPhysics.Common
 			A -= d;
 		}
 	}
+
 }

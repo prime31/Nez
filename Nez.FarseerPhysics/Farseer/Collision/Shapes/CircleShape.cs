@@ -78,7 +78,7 @@ namespace FarseerPhysics.Collision.Shapes
 
 		public override bool TestPoint( ref Transform transform, ref Vector2 point )
 		{
-			var center = transform.p + MathUtils.Mul( transform.q, position );
+			var center = transform.p + MathUtils.mul( transform.q, position );
 			var d = point - center;
 			return Vector2.Dot( d, d ) <= _2radius;
 		}
@@ -92,7 +92,7 @@ namespace FarseerPhysics.Collision.Shapes
 
 			output = new RayCastOutput();
 
-			var pos = transform.p + MathUtils.Mul( transform.q, this.position );
+			var pos = transform.p + MathUtils.mul( transform.q, this.position );
 			var s = input.Point1 - pos;
 			var b = Vector2.Dot( s, s ) - _2radius;
 
@@ -103,7 +103,7 @@ namespace FarseerPhysics.Collision.Shapes
 			var sigma = c * c - rr * b;
 
 			// Check for negative discriminant and short segment.
-			if( sigma < 0.0f || rr < Settings.Epsilon )
+			if( sigma < 0.0f || rr < Settings.epsilon )
 				return false;
 
 			// Find the point of intersection of the line with the circle.
@@ -126,14 +126,14 @@ namespace FarseerPhysics.Collision.Shapes
 
 		public override void ComputeAABB( out AABB aabb, ref Transform transform, int childIndex )
 		{
-			var p = transform.p + MathUtils.Mul( transform.q, position );
-			aabb.LowerBound = new Vector2( p.X - radius, p.Y - radius );
-			aabb.UpperBound = new Vector2( p.X + radius, p.Y + radius );
+			var p = transform.p + MathUtils.mul( transform.q, position );
+			aabb.lowerBound = new Vector2( p.X - radius, p.Y - radius );
+			aabb.upperBound = new Vector2( p.X + radius, p.Y + radius );
 		}
 
 		protected override sealed void ComputeProperties()
 		{
-			var area = Settings.Pi * _2radius;
+			var area = Settings.pi * _2radius;
 			massData.area = area;
 			massData.mass = density * area;
 			massData.centroid = position;
@@ -146,9 +146,9 @@ namespace FarseerPhysics.Collision.Shapes
 		{
 			sc = Vector2.Zero;
 
-			var p = MathUtils.Mul( ref xf, position );
+			var p = MathUtils.mul( ref xf, position );
 			float l = -( Vector2.Dot( normal, p ) - offset );
-			if( l < -radius + Settings.Epsilon )
+			if( l < -radius + Settings.epsilon )
 			{
 				//Completely dry
 				return 0;
@@ -157,12 +157,12 @@ namespace FarseerPhysics.Collision.Shapes
 			{
 				//Completely wet
 				sc = p;
-				return Settings.Pi * _2radius;
+				return Settings.pi * _2radius;
 			}
 
 			//Magic
 			float l2 = l * l;
-			float area = _2radius * (float)( ( Math.Asin( l / radius ) + Settings.Pi / 2 ) + l * Math.Sqrt( _2radius - l2 ) );
+			float area = _2radius * (float)( ( Math.Asin( l / radius ) + Settings.pi / 2 ) + l * Math.Sqrt( _2radius - l2 ) );
 			float com = -2.0f / 3.0f * (float)Math.Pow( _2radius - l2, 1.5f ) / area;
 
 			sc.X = p.X + normal.X * com;

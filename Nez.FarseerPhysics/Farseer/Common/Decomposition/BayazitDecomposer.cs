@@ -26,7 +26,7 @@ namespace FarseerPhysics.Common.Decomposition
         public static List<Vertices> ConvexPartition(Vertices vertices)
         {
             Debug.Assert(vertices.Count > 3);
-            Debug.Assert(vertices.IsCounterClockWise());
+            Debug.Assert(vertices.isCounterClockWise());
 
             return TriangulatePolygon(vertices);
         }
@@ -53,7 +53,7 @@ namespace FarseerPhysics.Common.Decomposition
                         if (Left(At(i - 1, vertices), At(i, vertices), At(j, vertices)) && RightOn(At(i - 1, vertices), At(i, vertices), At(j - 1, vertices)))
                         {
                             // find the point of intersection
-                            p = LineTools.LineIntersect(At(i - 1, vertices), At(i, vertices), At(j, vertices), At(j - 1, vertices));
+                            p = LineTools.lineIntersect(At(i - 1, vertices), At(i, vertices), At(j, vertices), At(j - 1, vertices));
 
                             if (Right(At(i + 1, vertices), At(i, vertices), p))
                             {
@@ -71,7 +71,7 @@ namespace FarseerPhysics.Common.Decomposition
 
                         if (Left(At(i + 1, vertices), At(i, vertices), At(j + 1, vertices)) && RightOn(At(i + 1, vertices), At(i, vertices), At(j, vertices)))
                         {
-                            p = LineTools.LineIntersect(At(i + 1, vertices), At(i, vertices), At(j, vertices), At(j + 1, vertices));
+                            p = LineTools.lineIntersect(At(i + 1, vertices), At(i, vertices), At(j, vertices), At(j + 1, vertices));
 
                             if (Left(At(i - 1, vertices), At(i, vertices), p))
                             {
@@ -135,7 +135,7 @@ namespace FarseerPhysics.Common.Decomposition
             }
 
             // polygon is already convex
-            if (vertices.Count > Settings.MaxPolygonVertices)
+            if (vertices.Count > Settings.maxPolygonVertices)
             {
                 lowerPoly = Copy(0, vertices.Count / 2, vertices);
                 upperPoly = Copy(vertices.Count / 2, 0, vertices);
@@ -197,7 +197,7 @@ namespace FarseerPhysics.Common.Decomposition
 
                 Vector2 intersectionPoint;
 
-                if (LineTools.LineIntersect(At(i, vertices), At(j, vertices), At(k, vertices), At(k + 1, vertices), out intersectionPoint))
+                if (LineTools.lineIntersect(At(i, vertices), At(j, vertices), At(k, vertices), At(k + 1, vertices), out intersectionPoint))
                     return false;
             }
             return true;
@@ -215,22 +215,22 @@ namespace FarseerPhysics.Common.Decomposition
 
         private static bool Left(Vector2 a, Vector2 b, Vector2 c)
         {
-            return MathUtils.Area(ref a, ref b, ref c) > 0;
+            return MathUtils.area(ref a, ref b, ref c) > 0;
         }
 
         private static bool LeftOn(Vector2 a, Vector2 b, Vector2 c)
         {
-            return MathUtils.Area(ref a, ref b, ref c) >= 0;
+            return MathUtils.area(ref a, ref b, ref c) >= 0;
         }
 
         private static bool Right(Vector2 a, Vector2 b, Vector2 c)
         {
-            return MathUtils.Area(ref a, ref b, ref c) < 0;
+            return MathUtils.area(ref a, ref b, ref c) < 0;
         }
 
         private static bool RightOn(Vector2 a, Vector2 b, Vector2 c)
         {
-            return MathUtils.Area(ref a, ref b, ref c) <= 0;
+            return MathUtils.area(ref a, ref b, ref c) <= 0;
         }
 
         private static float SquareDist(Vector2 a, Vector2 b)

@@ -26,8 +26,8 @@ namespace FarseerPhysics.Controllers
         public VelocityLimitController()
             : base(ControllerType.VelocityLimitController)
         {
-            MaxLinearVelocity = Settings.MaxTranslation;
-            MaxAngularVelocity = Settings.MaxRotation;
+            MaxLinearVelocity = Settings.maxTranslation;
+            MaxAngularVelocity = Settings.maxRotation;
         }
 
         /// <summary>
@@ -82,7 +82,7 @@ namespace FarseerPhysics.Controllers
         {
             foreach (Body body in _bodies)
             {
-                if (!IsActiveOn(body))
+                if (!isActiveOn(body))
                     continue;
 
                 if (LimitLinearVelocity)

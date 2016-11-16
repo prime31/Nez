@@ -47,9 +47,9 @@ namespace FarseerPhysics.Factories
             Body newBody = CreateBody(world, position, rotation, bodyType);
             newBody.userData = userData;
 
-            Vertices rectangleVertices = PolygonTools.CreateRectangle(width / 2, height / 2);
+            Vertices rectangleVertices = PolygonTools.createRectangle(width / 2, height / 2);
             PolygonShape rectangleShape = new PolygonShape(rectangleVertices, density);
-            newBody.CreateFixture(rectangleShape);
+            newBody.createFixture(rectangleShape);
 
             return newBody;
         }
@@ -85,13 +85,13 @@ namespace FarseerPhysics.Factories
 
         public static Body CreateGear(World world, float radius, int numberOfTeeth, float tipPercentage, float toothHeight, float density, Vector2 position = new Vector2(), float rotation = 0, BodyType bodyType = BodyType.Static, object userData = null)
         {
-            Vertices gearPolygon = PolygonTools.CreateGear(radius, numberOfTeeth, tipPercentage, toothHeight);
+            Vertices gearPolygon = PolygonTools.createGear(radius, numberOfTeeth, tipPercentage, toothHeight);
 
             //Gears can in some cases be convex
-            if (!gearPolygon.IsConvex())
+            if (!gearPolygon.isConvex())
             {
                 //Decompose the gear:
-                List<Vertices> list = Triangulate.ConvexPartition(gearPolygon, TriangulationAlgorithm.Earclip);
+                List<Vertices> list = Triangulate.convexPartition(gearPolygon, TriangulationAlgorithm.Earclip);
 
                 return CreateCompoundPolygon(world, list, density, position, rotation, bodyType, userData);
             }
@@ -101,12 +101,12 @@ namespace FarseerPhysics.Factories
 
         public static Body CreateCapsule(World world, float height, float topRadius, int topEdges, float bottomRadius, int bottomEdges, float density, Vector2 position = new Vector2(), float rotation = 0, BodyType bodyType = BodyType.Static, object userData = null)
         {
-            Vertices verts = PolygonTools.CreateCapsule(height, topRadius, topEdges, bottomRadius, bottomEdges);
+            Vertices verts = PolygonTools.createCapsule(height, topRadius, topEdges, bottomRadius, bottomEdges);
 
             //There are too many vertices in the capsule. We decompose it.
-            if (verts.Count >= Settings.MaxPolygonVertices)
+            if (verts.Count >= Settings.maxPolygonVertices)
             {
-                List<Vertices> vertList = Triangulate.ConvexPartition(verts, TriangulationAlgorithm.Earclip);
+                List<Vertices> vertList = Triangulate.convexPartition(verts, TriangulationAlgorithm.Earclip);
                 return CreateCompoundPolygon(world, vertList, density, position, rotation, bodyType, userData);
             }
 
@@ -116,7 +116,7 @@ namespace FarseerPhysics.Factories
         public static Body CreateCapsule(World world, float height, float endRadius, float density, Vector2 position = new Vector2(), float rotation = 0, BodyType bodyType = BodyType.Static, object userData = null)
         {
             //Create the middle rectangle
-            Vertices rectangle = PolygonTools.CreateRectangle(endRadius, height / 2);
+            Vertices rectangle = PolygonTools.createRectangle(endRadius, height / 2);
 
             List<Vertices> list = new List<Vertices>();
             list.Add(rectangle);
@@ -138,12 +138,12 @@ namespace FarseerPhysics.Factories
 
         public static Body CreateRoundedRectangle(World world, float width, float height, float xRadius, float yRadius, int segments, float density, Vector2 position = new Vector2(), float rotation = 0, BodyType bodyType = BodyType.Static, object userData = null)
         {
-            Vertices verts = PolygonTools.CreateRoundedRectangle(width, height, xRadius, yRadius, segments);
+            Vertices verts = PolygonTools.createRoundedRectangle(width, height, xRadius, yRadius, segments);
 
             //There are too many vertices in the capsule. We decompose it.
-            if (verts.Count >= Settings.MaxPolygonVertices)
+            if (verts.Count >= Settings.maxPolygonVertices)
             {
-                List<Vertices> vertList = Triangulate.ConvexPartition(verts, TriangulationAlgorithm.Earclip);
+                List<Vertices> vertList = Triangulate.convexPartition(verts, TriangulationAlgorithm.Earclip);
                 return CreateCompoundPolygon(world, vertList, density, position, rotation, bodyType, userData);
             }
 
@@ -168,11 +168,11 @@ namespace FarseerPhysics.Factories
         public static BreakableBody CreateBreakableBody(World world, Vertices vertices, float density, Vector2 position = new Vector2(), float rotation = 0)
         {
             //TODO: Implement a Voronoi diagram algorithm to split up the vertices
-            List<Vertices> triangles = Triangulate.ConvexPartition(vertices, TriangulationAlgorithm.Earclip);
+            List<Vertices> triangles = Triangulate.convexPartition(vertices, TriangulationAlgorithm.Earclip);
 
             BreakableBody breakableBody = new BreakableBody(world, triangles, density, position, rotation);
             breakableBody.mainBody.position = position;
-            world.AddBreakableBody(breakableBody);
+            world.addBreakableBody(breakableBody);
             return breakableBody;
         }
 
@@ -180,7 +180,7 @@ namespace FarseerPhysics.Factories
         {
             BreakableBody breakableBody = new BreakableBody(world, shapes, position, rotation);
             breakableBody.mainBody.position = position;
-            world.AddBreakableBody(breakableBody);
+            world.addBreakableBody(breakableBody);
             return breakableBody;
         }
 

@@ -23,7 +23,7 @@ namespace FarseerPhysics.Common
 		/// </summary>
 		/// <param name="world"></param>
 		/// <param name="fileStream"></param>
-		public static void Serialize( World world, Stream fileStream )
+		public static void serialize( World world, Stream fileStream )
 		{
 			WorldXmlSerializer.Serialize( world, fileStream );
 		}
@@ -32,11 +32,13 @@ namespace FarseerPhysics.Common
 		/// Deserialize the world from an XML file
 		/// </summary>
 		/// <param name="fileStream"></param>
-		public static World Deserialize( Stream fileStream )
+		public static World deserialize( Stream fileStream )
 		{
 			return WorldXmlDeserializer.Deserialize( fileStream );
 		}
+	
 	}
+
 
 	internal static class WorldXmlSerializer
 	{
@@ -346,7 +348,7 @@ namespace FarseerPhysics.Common
 		static int FindIndex( List<Fixture> list, Fixture item )
 		{
 			for( int i = 0; i < list.Count; ++i )
-				if( list[i].CompareTo( item ) )
+				if( list[i].compareTo( item ) )
 					return i;
 
 			return -1;
@@ -433,7 +435,7 @@ namespace FarseerPhysics.Common
 				{
 					foreach( Fixture fixture in body.fixtureList )
 					{
-						if( !fixtures.Any( f2 => fixture.CompareTo( f2 ) ) )
+						if( !fixtures.Any( f2 => fixture.compareTo( f2 ) ) )
 						{
 							SerializeFixture( fixture );
 							fixtures.Add( fixture );
@@ -726,7 +728,7 @@ namespace FarseerPhysics.Common
 								case "angle":
 									{
 										Vector2 position = body.position;
-										body.SetTransformIgnoreContacts( ref position, float.Parse( sn.Value ) );
+										body.setTransformIgnoreContacts( ref position, float.Parse( sn.Value ) );
 									}
 									break;
 								case "angulardamping":
@@ -754,7 +756,7 @@ namespace FarseerPhysics.Common
 									{
 										float rotation = body.rotation;
 										Vector2 position = ReadVector( sn );
-										body.SetTransformIgnoreContacts( ref position, rotation );
+										body.setTransformIgnoreContacts( ref position, rotation );
 									}
 									break;
 								case "userdata":
@@ -766,7 +768,7 @@ namespace FarseerPhysics.Common
 										{
 											Fixture fix = fixtures[int.Parse( pair.Attributes[0].Value )];
 											fix.shape = shapes[int.Parse( pair.Attributes[1].Value )].Clone();
-											fix.CloneOnto( body );
+											fix.cloneOnto( body );
 										}
 										break;
 									}
@@ -861,7 +863,7 @@ namespace FarseerPhysics.Common
 						joint.bodyA = bodyA;
 						joint.bodyB = bodyB;
 						joints.Add( joint );
-						world.AddJoint( joint );
+						world.addJoint( joint );
 
 						foreach( XMLFragmentElement sn in n.Elements)
 						{
@@ -1118,7 +1120,7 @@ namespace FarseerPhysics.Common
 				}
 			}
 
-			world.ProcessChanges();
+			world.processChanges();
 		}
 
 		static Vector2 ReadVector( XMLFragmentElement node )

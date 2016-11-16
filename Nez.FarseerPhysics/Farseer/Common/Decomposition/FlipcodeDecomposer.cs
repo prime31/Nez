@@ -32,7 +32,7 @@ namespace FarseerPhysics.Common.Decomposition
         public static List<Vertices> ConvexPartition(Vertices vertices)
         {
             Debug.Assert(vertices.Count > 3);
-            Debug.Assert(vertices.IsCounterClockWise());
+            Debug.Assert(vertices.isCounterClockWise());
 
             int[] polygon = new int[vertices.Count];
 
@@ -132,7 +132,7 @@ namespace FarseerPhysics.Common.Decomposition
         /// <returns>True if a triangle was found</returns>
         private static bool Snip(Vertices contour, int u, int v, int w, int n, int[] V)
         {
-            if (Settings.Epsilon > MathUtils.Area(ref _tmpA, ref _tmpB, ref _tmpC))
+            if (Settings.epsilon > MathUtils.area(ref _tmpA, ref _tmpB, ref _tmpC))
                 return false;
 
             for (int p = 0; p < n; p++)

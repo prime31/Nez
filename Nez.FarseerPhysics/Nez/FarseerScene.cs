@@ -25,14 +25,14 @@ namespace Nez.Farseer
 
 		public override void update()
 		{
-			world.Step( MathHelper.Min( Time.deltaTime, minimumUpdateDeltaTime ) );
+			world.step( MathHelper.Min( Time.deltaTime, minimumUpdateDeltaTime ) );
 			base.update();
 		}
 
 
 		public override void unload()
 		{
-			world.Clear();
+			world.clear();
 		}
 
 

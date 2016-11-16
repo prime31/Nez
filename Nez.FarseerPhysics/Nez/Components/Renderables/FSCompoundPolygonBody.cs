@@ -28,14 +28,14 @@ namespace Nez.Farseer
 			var data = new uint[_subtexture.sourceRect.Width * _subtexture.sourceRect.Height];
 			_subtexture.texture2D.GetData( 0, _subtexture.sourceRect, data, 0, data.Length );
 
-			var verts = PolygonTools.CreatePolygon( data, _subtexture.sourceRect.Width );
-			verts = SimplifyTools.DouglasPeuckerSimplify( verts, 2 );
+			var verts = PolygonTools.createPolygon( data, _subtexture.sourceRect.Width );
+			verts = SimplifyTools.douglasPeuckerSimplify( verts, 2 );
 
-			var decomposedVerts = Triangulate.ConvexPartition( verts, TriangulationAlgorithm.Bayazit );
+			var decomposedVerts = Triangulate.convexPartition( verts, TriangulationAlgorithm.Bayazit );
 			for( var i = 0; i < decomposedVerts.Count; i++ )
 			{
 				var polygon = decomposedVerts[i];
-				polygon.Translate( -_subtexture.center );
+				polygon.translate( -_subtexture.center );
 			}
 
 			// add the fixtures
@@ -63,7 +63,7 @@ namespace Nez.Farseer
 					var verts = poly.vertices;
 					verts.Clear();
 					verts.AddRange( _verts[i] );
-					verts.Scale( transform.scale );
+					verts.scale( transform.scale );
 					poly.vertices = verts;
 				}
 			}

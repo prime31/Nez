@@ -44,7 +44,7 @@ namespace Nez.Farseer
 
 		//Drawing
 		PrimitiveBatch _primitiveBatch;
-		Vector2[] _tempVertices = new Vector2[Settings.MaxPolygonVertices];
+		Vector2[] _tempVertices = new Vector2[Settings.maxPolygonVertices];
 		List<StringData> _stringData = new List<StringData>();
 
 		Matrix _localProjection;
@@ -79,7 +79,7 @@ namespace Nez.Farseer
 		{
 			_bounds = RectangleF.maxRect;
 			this.world = world;
-			world.contactManager.PreSolve += preSolve;
+			world.contactManager.onPreSolve += preSolve;
 
 			//Default flags
 			appendFlags( DebugViewFlags.Shape );
@@ -112,7 +112,7 @@ namespace Nez.Farseer
 
 		public void Dispose()
 		{
-			world.contactManager.PreSolve -= preSolve;
+			world.contactManager.onPreSolve -= preSolve;
 		}
 
 		#endregion
@@ -132,21 +132,21 @@ namespace Nez.Farseer
 		{
 			if( ( flags & DebugViewFlags.ContactPoints ) == DebugViewFlags.ContactPoints )
 			{
-				Manifold manifold = contact.Manifold;
+				Manifold manifold = contact.manifold;
 
-				if( manifold.PointCount == 0 )
+				if( manifold.pointCount == 0 )
 					return;
 
-				Fixture fixtureA = contact.FixtureA;
+				Fixture fixtureA = contact.fixtureA;
 
 				FixedArray2<PointState> state1, state2;
-				FarseerPhysics.Collision.Collision.GetPointStates( out state1, out state2, ref oldManifold, ref manifold );
+				FarseerPhysics.Collision.Collision.getPointStates( out state1, out state2, ref oldManifold, ref manifold );
 
 				FixedArray2<Vector2> points;
 				Vector2 normal;
-				contact.GetWorldManifold( out normal, out points );
+				contact.getWorldManifold( out normal, out points );
 
-				for( int i = 0; i < manifold.PointCount && _pointCount < maxContactPoints; ++i )
+				for( int i = 0; i < manifold.pointCount && _pointCount < maxContactPoints; ++i )
 				{
 					if( fixtureA == null )
 						_points[i] = new ContactPoint();
@@ -172,7 +172,7 @@ namespace Nez.Farseer
 				foreach( Body b in world.bodyList )
 				{
 					FarseerPhysics.Common.Transform xf;
-					b.GetTransform( out xf );
+					b.getTransform( out xf );
 					foreach( Fixture f in b.fixtureList )
 					{
 						if( b.enabled == false )
@@ -223,11 +223,11 @@ namespace Nez.Farseer
 						if( polygon != null )
 						{
 							FarseerPhysics.Common.Transform xf;
-							body.GetTransform( out xf );
+							body.getTransform( out xf );
 
 							for( int i = 0; i < polygon.vertices.Count; i++ )
 							{
-								Vector2 tmp = MathUtils.Mul( ref xf, polygon.vertices[i] );
+								Vector2 tmp = MathUtils.mul( ref xf, polygon.vertices[i] );
 								drawPoint( tmp, 0.1f, Color.Red );
 							}
 						}
@@ -244,7 +244,7 @@ namespace Nez.Farseer
 			if( ( flags & DebugViewFlags.AABB ) == DebugViewFlags.AABB )
 			{
 				var color = new Color( 0.9f, 0.3f, 0.9f );
-				var bp = world.contactManager.BroadPhase;
+				var bp = world.contactManager.broadPhase;
 
 				foreach( var body in world.bodyList )
 				{
@@ -257,7 +257,7 @@ namespace Nez.Farseer
 						{
 							var proxy = f.proxies[t];
 							AABB aabb;
-							bp.GetFatAABB( proxy.proxyId, out aabb );
+							bp.getFatAABB( proxy.proxyId, out aabb );
 
 							drawAABB( ref aabb, color );
 						}
@@ -270,7 +270,7 @@ namespace Nez.Farseer
 				foreach( Body b in world.bodyList )
 				{
 					FarseerPhysics.Common.Transform xf;
-					b.GetTransform( out xf );
+					b.getTransform( out xf );
 					xf.p = b.worldCenter;
 					drawTransform( ref xf );
 				}
@@ -391,10 +391,10 @@ namespace Nez.Farseer
 		public void drawAABB( ref AABB aabb, Color color )
 		{
 			Vector2[] verts = new Vector2[4];
-			verts[0] = new Vector2( aabb.LowerBound.X, aabb.LowerBound.Y );
-			verts[1] = new Vector2( aabb.UpperBound.X, aabb.LowerBound.Y );
-			verts[2] = new Vector2( aabb.UpperBound.X, aabb.UpperBound.Y );
-			verts[3] = new Vector2( aabb.LowerBound.X, aabb.UpperBound.Y );
+			verts[0] = new Vector2( aabb.lowerBound.X, aabb.lowerBound.Y );
+			verts[1] = new Vector2( aabb.upperBound.X, aabb.lowerBound.Y );
+			verts[2] = new Vector2( aabb.upperBound.X, aabb.upperBound.Y );
+			verts[3] = new Vector2( aabb.lowerBound.X, aabb.upperBound.Y );
 
 			drawPolygon( verts, 4, color );
 		}
@@ -408,14 +408,14 @@ namespace Nez.Farseer
 			var b1 = joint.bodyA;
 			var b2 = joint.bodyB;
 			FarseerPhysics.Common.Transform xf1;
-			b1.GetTransform( out xf1 );
+			b1.getTransform( out xf1 );
 
 			var x2 = Vector2.Zero;
 
-			if( b2 != null || !joint.IsFixedType() )
+			if( b2 != null || !joint.isFixedType() )
 			{
 				FarseerPhysics.Common.Transform xf2;
-				b2.GetTransform( out xf2 );
+				b2.getTransform( out xf2 );
 				x2 = xf2.p;
 			}
 
@@ -435,8 +435,8 @@ namespace Nez.Farseer
 				case JointType.Pulley:
 				{
 					var pulley = (PulleyJoint)joint;
-					var s1 = b1.GetWorldPoint( pulley.localAnchorA );
-					var s2 = b2.GetWorldPoint( pulley.localAnchorB );
+					var s1 = b1.getWorldPoint( pulley.localAnchorA );
+					var s2 = b2.getWorldPoint( pulley.localAnchorB );
 					instance.drawSegment( p1, p2, color );
 					instance.drawSegment( p1, s1, color );
 					instance.drawSegment( p2, s2, color );
@@ -482,9 +482,9 @@ namespace Nez.Farseer
 				{
 					CircleShape circle = (CircleShape)fixture.shape;
 
-					Vector2 center = MathUtils.Mul( ref xf, circle.position );
+					Vector2 center = MathUtils.mul( ref xf, circle.position );
 					float radius = circle.radius;
-					Vector2 axis = MathUtils.Mul( xf.q, new Vector2( 1.0f, 0.0f ) );
+					Vector2 axis = MathUtils.mul( xf.q, new Vector2( 1.0f, 0.0f ) );
 
 					drawSolidCircle( center, radius, axis, color );
 				}
@@ -494,11 +494,11 @@ namespace Nez.Farseer
 				{
 					PolygonShape poly = (PolygonShape)fixture.shape;
 					int vertexCount = poly.vertices.Count;
-					System.Diagnostics.Debug.Assert( vertexCount <= Settings.MaxPolygonVertices );
+					System.Diagnostics.Debug.Assert( vertexCount <= Settings.maxPolygonVertices );
 
 					for( int i = 0; i < vertexCount; ++i )
 					{
-						_tempVertices[i] = MathUtils.Mul( ref xf, poly.vertices[i] );
+						_tempVertices[i] = MathUtils.mul( ref xf, poly.vertices[i] );
 					}
 
 					drawSolidPolygon( _tempVertices, vertexCount, color );
@@ -508,8 +508,8 @@ namespace Nez.Farseer
 				case ShapeType.Edge:
 				{
 					EdgeShape edge = (EdgeShape)fixture.shape;
-					Vector2 v1 = MathUtils.Mul( ref xf, edge.vertex1 );
-					Vector2 v2 = MathUtils.Mul( ref xf, edge.vertex2 );
+					Vector2 v1 = MathUtils.mul( ref xf, edge.vertex1 );
+					Vector2 v2 = MathUtils.mul( ref xf, edge.vertex2 );
 					drawSegment( v1, v2, color );
 				}
 				break;
@@ -519,8 +519,8 @@ namespace Nez.Farseer
 					var chain = (ChainShape)fixture.shape;
 					for( int i = 0; i < chain.vertices.Count - 1; ++i )
 					{
-						Vector2 v1 = MathUtils.Mul( ref xf, chain.vertices[i] );
-						Vector2 v2 = MathUtils.Mul( ref xf, chain.vertices[i + 1] );
+						Vector2 v1 = MathUtils.mul( ref xf, chain.vertices[i] );
+						Vector2 v2 = MathUtils.mul( ref xf, chain.vertices[i + 1] );
 						drawSegment( v1, v2, color );
 					}
 				}

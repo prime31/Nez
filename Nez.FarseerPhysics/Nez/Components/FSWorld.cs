@@ -42,7 +42,7 @@ namespace Nez.Farseer
 
 		public override void onRemovedFromEntity()
 		{
-			world.Clear();
+			world.clear();
 			world = null;
 		}
 
@@ -54,7 +54,7 @@ namespace Nez.Farseer
 				if( Input.leftMouseButtonPressed )
 				{
 					var pos = entity.scene.camera.screenToWorldPoint( Input.mousePosition );
-					var fixture = world.TestPoint( FSConvert.displayToSim * pos );
+					var fixture = world.testPoint( FSConvert.displayToSim * pos );
 					if( fixture != null && !fixture.body.isStatic && !fixture.body.isKinematic )
 						_mouseJoint = fixture.body.createFixedMouseJoint( pos );
 				}
@@ -67,12 +67,12 @@ namespace Nez.Farseer
 
 				if( Input.leftMouseButtonReleased && _mouseJoint != null )
 				{
-					world.RemoveJoint( _mouseJoint );
+					world.removeJoint( _mouseJoint );
 					_mouseJoint = null;
 				}
 			}
 
-			world.Step( MathHelper.Min( Time.deltaTime, minimumUpdateDeltaTime ) );
+			world.step( MathHelper.Min( Time.deltaTime, minimumUpdateDeltaTime ) );
 		}
 
 

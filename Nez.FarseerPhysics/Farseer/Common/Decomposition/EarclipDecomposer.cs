@@ -48,7 +48,7 @@ namespace FarseerPhysics.Common.Decomposition
         public static List<Vertices> ConvexPartition(Vertices vertices, float tolerance = 0.001f)
         {
             Debug.Assert(vertices.Count > 3);
-            Debug.Assert(!vertices.IsCounterClockWise());
+            Debug.Assert(!vertices.isCounterClockWise());
 
             return TriangulatePolygon(vertices, tolerance);
         }
@@ -133,15 +133,15 @@ namespace FarseerPhysics.Common.Decomposition
                         d2.Normalize();
                         d3.Normalize();
                         float cross12;
-                        MathUtils.Cross(ref d1, ref d2, out cross12);
+                        MathUtils.cross(ref d1, ref d2, out cross12);
                         cross12 = Math.Abs(cross12);
 
                         float cross23;
-                        MathUtils.Cross(ref d2, ref d3, out cross23);
+                        MathUtils.cross(ref d2, ref d3, out cross23);
                         cross23 = Math.Abs(cross23);
 
                         float cross31;
-                        MathUtils.Cross(ref d3, ref d1, out cross31);
+                        MathUtils.cross(ref d3, ref d1, out cross31);
                         cross31 = Math.Abs(cross31);
 
                         //Find the maximum minimum angle

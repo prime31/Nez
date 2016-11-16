@@ -60,12 +60,12 @@ namespace FarseerPhysics.Controllers
 					{
 						float strengthVariation = (float)Randomize.NextDouble() * MathHelper.Clamp( Variation, 0, 1 );
 						forceVector.Normalize();
-						body.ApplyForce( forceVector * strength * decayMultiplier * strengthVariation );
+						body.applyForce( forceVector * strength * decayMultiplier * strengthVariation );
 					}
 					else
 					{
 						forceVector.Normalize();
-						body.ApplyForce( forceVector * strength * decayMultiplier );
+						body.applyForce( forceVector * strength * decayMultiplier );
 					}
 				}
 			}

@@ -71,7 +71,7 @@ namespace FarseerPhysics.Common.Decomposition
 
 	public static class Triangulate
 	{
-		public static List<Vertices> ConvexPartition( Vertices vertices, TriangulationAlgorithm algorithm, bool discardAndFixInvalid = true, float tolerance = 0.001f )
+		public static List<Vertices> convexPartition( Vertices vertices, TriangulationAlgorithm algorithm, bool discardAndFixInvalid = true, float tolerance = 0.001f )
 		{
 			if( vertices.Count <= 3 )
 				return new List<Vertices> { vertices };
@@ -81,14 +81,14 @@ namespace FarseerPhysics.Common.Decomposition
 			switch( algorithm )
 			{
 				case TriangulationAlgorithm.Earclip:
-					if( Settings.SkipSanityChecks )
+					if( Settings.skipSanityChecks )
 					{
-						Debug.Assert( !vertices.IsCounterClockWise(), "The Earclip algorithm expects the polygon to be clockwise." );
+						Debug.Assert( !vertices.isCounterClockWise(), "The Earclip algorithm expects the polygon to be clockwise." );
 						results = EarclipDecomposer.ConvexPartition( vertices, tolerance );
 					}
 					else
 					{
-						if( vertices.IsCounterClockWise() )
+						if( vertices.isCounterClockWise() )
 						{
 							var temp = new Vertices( vertices );
 							temp.Reverse();
@@ -101,14 +101,14 @@ namespace FarseerPhysics.Common.Decomposition
 					}
 					break;
 				case TriangulationAlgorithm.Bayazit:
-					if( Settings.SkipSanityChecks )
+					if( Settings.skipSanityChecks )
 					{
-						Debug.Assert( vertices.IsCounterClockWise(), "The polygon is not counter clockwise. This is needed for Bayazit to work correctly." );
+						Debug.Assert( vertices.isCounterClockWise(), "The polygon is not counter clockwise. This is needed for Bayazit to work correctly." );
 						results = BayazitDecomposer.ConvexPartition( vertices );
 					}
 					else
 					{
-						if( !vertices.IsCounterClockWise() )
+						if( !vertices.isCounterClockWise() )
 						{
 							var temp = new Vertices( vertices );
 							temp.Reverse();
@@ -121,14 +121,14 @@ namespace FarseerPhysics.Common.Decomposition
 					}
 					break;
 				case TriangulationAlgorithm.Flipcode:
-					if( Settings.SkipSanityChecks )
+					if( Settings.skipSanityChecks )
 					{
-						Debug.Assert( vertices.IsCounterClockWise(), "The polygon is not counter clockwise. This is needed for Bayazit to work correctly." );
+						Debug.Assert( vertices.isCounterClockWise(), "The polygon is not counter clockwise. This is needed for Bayazit to work correctly." );
 						results = FlipcodeDecomposer.ConvexPartition( vertices );
 					}
 					else
 					{
-						if( !vertices.IsCounterClockWise() )
+						if( !vertices.isCounterClockWise() )
 						{
 							var temp = new Vertices( vertices );
 							temp.Reverse();
@@ -159,7 +159,7 @@ namespace FarseerPhysics.Common.Decomposition
 				{
 					var polygon = results[i];
 
-					if( !ValidatePolygon( polygon ) )
+					if( !validatePolygon( polygon ) )
 						results.RemoveAt( i );
 				}
 			}
@@ -168,9 +168,9 @@ namespace FarseerPhysics.Common.Decomposition
 		}
 
 
-		static bool ValidatePolygon( Vertices polygon )
+		static bool validatePolygon( Vertices polygon )
 		{
-			var errorCode = polygon.CheckPolygon();
+			var errorCode = polygon.checkPolygon();
 
 			if( errorCode == PolygonError.InvalidAmountOfVertices || errorCode == PolygonError.AreaTooSmall || errorCode == PolygonError.SideTooSmall || errorCode == PolygonError.NotSimple )
 				return false;
@@ -180,8 +180,8 @@ namespace FarseerPhysics.Common.Decomposition
 
 			if( errorCode == PolygonError.NotConvex )
 			{
-				polygon = GiftWrap.GetConvexHull( polygon );
-				return ValidatePolygon( polygon );
+				polygon = GiftWrap.getConvexHull( polygon );
+				return validatePolygon( polygon );
 			}
 
 			return true;
