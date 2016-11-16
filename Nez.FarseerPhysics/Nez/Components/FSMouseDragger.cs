@@ -1,5 +1,4 @@
-﻿using FarseerPhysics;
-using FarseerPhysics.Dynamics;
+﻿using FarseerPhysics.Dynamics;
 using FarseerPhysics.Dynamics.Joints;
 
 
@@ -13,7 +12,7 @@ namespace Nez.Farseer
 
 		public override void onAddedToEntity()
 		{
-			_world = ( entity.scene as FarseerScene ).world;
+			_world = entity.scene.getOrCreateSceneComponent<FSWorld>();
 		}
 
 

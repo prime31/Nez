@@ -183,6 +183,7 @@ namespace Nez
 		RenderTarget2D _destinationRenderTarget;
 		Action<Texture2D> _screenshotRequestCallback;
 
+		internal readonly FastList<SceneComponent> _sceneComponents = new FastList<SceneComponent>();
 		FastList<Renderer> _renderers = new FastList<Renderer>();
 		readonly FastList<Renderer> _afterPostProcessorRenderers = new FastList<Renderer>();
 		internal readonly FastList<PostProcessor> _postProcessors = new FastList<PostProcessor>();
@@ -335,6 +336,10 @@ namespace Nez
 		{
 			_didSceneBegin = false;
 
+			for( var i = 0; i < _sceneComponents.length; i++ )
+				_sceneComponents.buffer[i].onRemovedFromScene();
+			_sceneComponents.clear();
+
 			for( var i = 0; i < _renderers.length; i++ )
 				_renderers.buffer[i].unload();
 
@@ -367,9 +372,15 @@ namespace Nez
 			// update our lists in case they have any changes
 			entities.updateLists();
 
+			// update our SceneComponents
+			for( var i = _sceneComponents.length - 1; i >= 0; i-- )
+				_sceneComponents.buffer[i].update();
+				
+			// update our EntityProcessors
 			if( entityProcessors != null )
 				entityProcessors.update();
 
+			// update our Entities
 			for( int i = 0, count = entities.count; i < count; i++ )
 			{
 				var entity = entities[i];
@@ -700,6 +711,86 @@ namespace Nez
 		public void requestScreenshot( Action<Texture2D> callback )
 		{
 			_screenshotRequestCallback = callback;
+		}
+
+		#endregion
+
+
+		#region SceneComponent Management
+
+		/// <summary>
+		/// Adds and returns a SceneComponent to the components list
+		/// </summary>
+		/// <returns>Scene.</returns>
+		/// <typeparam name="T">The 1st type parameter.</typeparam>
+		public T addSceneComponent<T>() where T : SceneComponent, new()
+		{
+			var component = new T();
+			component.onEnabled();
+			_sceneComponents.add( component );
+			_sceneComponents.sort();
+			return component;
+		}
+
+
+		/// <summary>
+		/// Gets the first SceneComponent of type T and returns it. If no component is found returns null.
+		/// </summary>
+		/// <returns>The component.</returns>
+		/// <typeparam name="T">The 1st type parameter.</typeparam>
+		public T getSceneComponent<T>() where T : SceneComponent
+		{
+			for( var i = 0; i < _sceneComponents.length; i++ )
+			{
+				var component = _sceneComponents.buffer[i];
+				if( component is T )
+					return component as T;
+			}
+			return null;
+		}
+
+
+		/// <summary>
+		/// Gets the first SceneComponent of type T and returns it. If no SceneComponent is found the SceneComponent will be created.
+		/// </summary>
+		/// <returns>The component.</returns>
+		/// <typeparam name="T">The 1st type parameter.</typeparam>
+		public T getOrCreateSceneComponent<T>() where T : SceneComponent, new()
+		{
+			var comp = getSceneComponent<T>();
+			if( comp == null )
+				comp = addSceneComponent<T>();
+
+			return comp;
+		}
+
+
+		/// <summary>
+		/// removes the first SceneComponent of type T from the components list
+		/// </summary>
+		/// <returns><c>true</c>, if component was removed, <c>false</c> otherwise.</returns>
+		/// <typeparam name="T">The 1st type parameter.</typeparam>
+		public bool removeSceneComponent<T>() where T : SceneComponent
+		{
+			var comp = getSceneComponent<T>();
+			if( comp != null )
+			{
+				removeSceneComponent( comp );
+				return true;
+			}
+
+			return false;
+		}
+
+
+		/// <summary>
+		/// removes a SceneComponent from the SceneComponents list
+		/// </summary>
+		public void removeSceneComponent( SceneComponent component )
+		{
+			Assert.isTrue( _sceneComponents.contains( component ), "SceneComponent {0} is not in the SceneComponents list!", component );
+			_sceneComponents.remove( component );
+			component.onRemovedFromScene();
 		}
 
 		#endregion

@@ -37,14 +37,7 @@ namespace Nez.Farseer
 
 		public override void initialize()
 		{
-			World world;
-			if( entity.scene is FarseerScene )
-				world = entity.scene as FarseerScene;
-			else
-				world = entity.scene.findObjectOfType<FSWorld>();
-
-			Assert.isNotNull( world, "Scene must inherit from FarseerScene or Scene must contain an {0} to use {1}", nameof( FSWorld ), nameof( FSGenericBody ) );
-
+			var world = entity.scene.getOrCreateSceneComponent<FSWorld>();
 			body = new Body( world, transform.position * FSConvert.displayToSim, transform.rotation );
 		}
 

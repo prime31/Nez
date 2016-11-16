@@ -336,7 +336,7 @@ namespace Nez
 		#region Component Management
 
 		/// <summary>
-		/// Adds a Component to the components list. Returns Scene for chaining.
+		/// Adds a Component to the components list. Returns the Component.
 		/// </summary>
 		/// <returns>Scene.</returns>
 		/// <param name="component">Component.</param>
@@ -351,7 +351,7 @@ namespace Nez
 
 
 		/// <summary>
-		/// Adds a Component to the components list. Returns Scene for chaining.
+		/// Adds a Component to the components list. Returns the Component.
 		/// </summary>
 		/// <returns>Scene.</returns>
 		/// <typeparam name="T">The 1st type parameter.</typeparam>
@@ -373,6 +373,21 @@ namespace Nez
 		public T getComponent<T>() where T : Component
 		{
 			return components.getComponent<T>( false );
+		}
+
+
+		/// <summary>
+		/// Gets the first Component of type T and returns it. If no Component is found the Component will be created.
+		/// </summary>
+		/// <returns>The component.</returns>
+		/// <typeparam name="T">The 1st type parameter.</typeparam>
+		public T getOrCreateComponent<T>() where T : Component, new()
+		{
+			var comp = components.getComponent<T>( true );
+			if( comp == null )
+				comp = addComponent<T>();
+
+			return comp;
 		}
 
 

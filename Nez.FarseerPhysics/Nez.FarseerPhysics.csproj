@@ -148,7 +148,6 @@
     <Compile Include="Nez\Factories\BodyFactory.cs" />
     <Compile Include="Nez\Factories\LinkFactory.cs" />
     <Compile Include="Nez\FarseerCollisions.cs" />
-    <Compile Include="Nez\FarseerScene.cs" />
     <Compile Include="Nez\Components\FSMouseDragger.cs" />
     <Compile Include="Nez\FSConvert.cs" />
     <Compile Include="Nez\Extensions\BodyExt.cs" />

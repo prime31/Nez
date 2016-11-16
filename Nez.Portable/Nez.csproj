@@ -559,6 +559,7 @@
     <Compile Include="Graphics\PostProcessing\PostProcessors\GaussianBlurPostProcessor.cs" />
     <Compile Include="Graphics\Effects\GaussianBlurEffect.cs" />
     <Compile Include="ECS\Components\Renderables\IRenderable.cs" />
+    <Compile Include="ECS\SceneComponent.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="MonoGame.Framework">
