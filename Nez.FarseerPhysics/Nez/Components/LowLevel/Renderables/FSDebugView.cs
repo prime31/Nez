@@ -181,7 +181,7 @@ namespace Nez.Farseer
 							drawShape( f, xf, staticShapeColor );
 						else if( b.bodyType == BodyType.Kinematic )
 							drawShape( f, xf, kinematicShapeColor );
-						else if( b.awake == false )
+						else if( b.isAwake == false )
 							drawShape( f, xf, sleepingShapeColor );
 						else
 							drawShape( f, xf, defaultShapeColor );

@@ -128,10 +128,10 @@ namespace FarseerPhysics.Collision.Shapes
 			}
 
 			// Compute the polygon mass data
-			ComputeProperties();
+			computeProperties();
 		}
 
-		protected override void ComputeProperties()
+		protected override void computeProperties()
 		{
 			// Polygon mass, centroid, and inertia.
 			// Let rho be the polygon density in mass per unit area.
@@ -224,7 +224,7 @@ namespace FarseerPhysics.Collision.Shapes
 			massData.inertia += massData.mass * ( Vector2.Dot( massData.centroid, massData.centroid ) - Vector2.Dot( center, center ) );
 		}
 
-		public override bool TestPoint( ref Transform transform, ref Vector2 point )
+		public override bool testPoint( ref Transform transform, ref Vector2 point )
 		{
 			Vector2 pLocal = MathUtils.mulT( transform.q, point - transform.p );
 
@@ -240,7 +240,7 @@ namespace FarseerPhysics.Collision.Shapes
 			return true;
 		}
 
-		public override bool RayCast( out RayCastOutput output, ref RayCastInput input, ref Transform transform, int childIndex )
+		public override bool rayCast( out RayCastOutput output, ref RayCastInput input, ref Transform transform, int childIndex )
 		{
 			output = new RayCastOutput();
 
@@ -317,7 +317,7 @@ namespace FarseerPhysics.Collision.Shapes
 		/// <param name="aabb">The aabb results.</param>
 		/// <param name="transform">The world transform of the shape.</param>
 		/// <param name="childIndex">The child shape index.</param>
-		public override void ComputeAABB( out AABB aabb, ref Transform transform, int childIndex )
+		public override void computeAABB( out AABB aabb, ref Transform transform, int childIndex )
 		{
 			var lower = MathUtils.mul( ref transform, vertices[0] );
 			var upper = lower;
@@ -334,7 +334,7 @@ namespace FarseerPhysics.Collision.Shapes
 			aabb.upperBound = upper + r;
 		}
 
-		public override float ComputeSubmergedArea( ref Vector2 normal, float offset, ref Transform xf, out Vector2 sc )
+		public override float computeSubmergedArea( ref Vector2 normal, float offset, ref Transform xf, out Vector2 sc )
 		{
 			sc = Vector2.Zero;
 
@@ -464,7 +464,7 @@ namespace FarseerPhysics.Collision.Shapes
 			return ( radius == shape.radius && massData == shape.massData );
 		}
 
-		public override Shape Clone()
+		public override Shape clone()
 		{
 			var clone = new PolygonShape();
 			clone.shapeType = shapeType;

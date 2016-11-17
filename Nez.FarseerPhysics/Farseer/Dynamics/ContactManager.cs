@@ -192,8 +192,8 @@ namespace FarseerPhysics.Dynamics
 			// Wake up the bodies
 			if( fixtureA.isSensor == false && fixtureB.isSensor == false )
 			{
-				bodyA.awake = true;
-				bodyB.awake = true;
+				bodyA.isAwake = true;
+				bodyB.isAwake = true;
 			}
 		}
 
@@ -311,8 +311,8 @@ namespace FarseerPhysics.Dynamics
 					c.filterFlag = false;
 				}
 
-				var activeA = bodyA.awake && bodyA.bodyType != BodyType.Static;
-				var activeB = bodyB.awake && bodyB.bodyType != BodyType.Static;
+				var activeA = bodyA.isAwake && bodyA.bodyType != BodyType.Static;
+				var activeB = bodyB.isAwake && bodyB.bodyType != BodyType.Static;
 
 				// At least one body must be awake and it must be dynamic or kinematic.
 				if( activeA == false && activeB == false )

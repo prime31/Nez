@@ -16,7 +16,7 @@ namespace FarseerPhysics.Common
 		/// <param name="hy">the half-height.</param>
 		public static Vertices createRectangle( float hx, float hy )
 		{
-			Vertices vertices = new Vertices( 4 );
+			var vertices = new Vertices( 4 );
 			vertices.Add( new Vector2( -hx, -hy ) );
 			vertices.Add( new Vector2( hx, -hy ) );
 			vertices.Add( new Vector2( hx, hy ) );
@@ -34,9 +34,9 @@ namespace FarseerPhysics.Common
 		/// <param name="angle">the rotation of the box in local coordinates.</param>
 		public static Vertices createRectangle( float hx, float hy, Vector2 center, float angle )
 		{
-			Vertices vertices = createRectangle( hx, hy );
+			var vertices = createRectangle( hx, hy );
 
-			Transform xf = new Transform();
+			var xf = new Transform();
 			xf.p = center;
 			xf.q.Set( angle );
 

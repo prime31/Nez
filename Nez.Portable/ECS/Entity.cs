@@ -416,7 +416,7 @@ namespace Nez
 
 
 		/// <summary>
-		/// Gets all the components of type T
+		/// Gets all the components of type T. The returned List can be put back in the pool via ListPool.free.
 		/// </summary>
 		/// <returns>The component.</returns>
 		/// <typeparam name="T">The 1st type parameter.</typeparam>

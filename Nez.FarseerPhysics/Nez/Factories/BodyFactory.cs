@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using FarseerPhysics;
 using FarseerPhysics.Collision.Shapes;
 using FarseerPhysics.Common;
 using FarseerPhysics.Dynamics;

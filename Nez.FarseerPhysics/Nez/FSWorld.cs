@@ -32,6 +32,18 @@ namespace Nez.Farseer
 		}
 
 
+		public override void onEnabled()
+		{
+			world.enabled = true;
+		}
+
+
+		public override void onDisabled()
+		{
+			world.enabled = false;
+		}
+
+
 		public override void onRemovedFromScene()
 		{
 			world.clear();

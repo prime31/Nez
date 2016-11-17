@@ -67,8 +67,8 @@ namespace Nez.Farseer
 			if( !fixtureA.body.isStatic && !fixtureB.body.isStatic )
 			{
 				// if the body is dyanmic and asleep wake it up
-				if( fixtureB.body.isDynamic && !fixtureB.body.awake )
-					fixtureB.body.awake = true;
+				if( fixtureB.body.isDynamic && !fixtureB.body.isAwake )
+					fixtureB.body.isAwake = true;
 				return false;
 			}
 
@@ -104,7 +104,7 @@ namespace Nez.Farseer
 					var chain = fixtureB.shape as ChainShape;
 					for( var i = 0; i < chain.childCount; i++ )
 					{
-						var edge = chain.GetChildEdge( i );
+						var edge = chain.getChildEdge( i );
 						if( collideEdgeAndCircle( edge, ref transformB, fixtureA.shape as CircleShape, ref transformA, out result ) )
 							return true;
 					}
@@ -131,7 +131,7 @@ namespace Nez.Farseer
 					var chain = fixtureB.shape as ChainShape;
 					for( var i = 0; i < chain.childCount; i++ )
 					{
-						var edge = chain.GetChildEdge( i );
+						var edge = chain.getChildEdge( i );
 						if( collideEdgeAndPolygon( edge, ref transformB, fixtureA.shape as PolygonShape, ref transformA, out result ) )
 							return true;
 					}

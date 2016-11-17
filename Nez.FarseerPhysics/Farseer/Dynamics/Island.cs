@@ -290,7 +290,7 @@ namespace FarseerPhysics.Dynamics
 					if( b.bodyType == BodyType.Static )
 						continue;
 
-					if( !b.sleepingAllowed || b._angularVelocity * b._angularVelocity > AngTolSqr || Vector2.Dot( b._linearVelocity, b._linearVelocity ) > LinTolSqr )
+					if( !b.isSleepingAllowed || b._angularVelocity * b._angularVelocity > AngTolSqr || Vector2.Dot( b._linearVelocity, b._linearVelocity ) > LinTolSqr )
 					{
 						b._sleepTime = 0.0f;
 						minSleepTime = 0.0f;
@@ -307,7 +307,7 @@ namespace FarseerPhysics.Dynamics
 					for( int i = 0; i < BodyCount; ++i )
 					{
 						Body b = Bodies[i];
-						b.awake = false;
+						b.isAwake = false;
 					}
 				}
 			}

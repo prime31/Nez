@@ -64,7 +64,7 @@ namespace FarseerPhysics.Collision.Shapes
 			set
 			{
 				_vertex1 = value;
-				ComputeProperties();
+				computeProperties();
 			}
 		}
 
@@ -77,7 +77,7 @@ namespace FarseerPhysics.Collision.Shapes
 			set
 			{
 				_vertex2 = value;
-				ComputeProperties();
+				computeProperties();
 			}
 		}
 
@@ -122,15 +122,15 @@ namespace FarseerPhysics.Collision.Shapes
 			hasVertex0 = false;
 			hasVertex3 = false;
 
-			ComputeProperties();
+			computeProperties();
 		}
 
-		public override bool TestPoint( ref Transform transform, ref Vector2 point )
+		public override bool testPoint( ref Transform transform, ref Vector2 point )
 		{
 			return false;
 		}
 
-		public override bool RayCast( out RayCastOutput output, ref RayCastInput input, ref Transform transform, int childIndex )
+		public override bool rayCast( out RayCastOutput output, ref RayCastInput input, ref Transform transform, int childIndex )
 		{
 			// p = p1 + t * d
 			// v = v1 + s * e
@@ -185,7 +185,7 @@ namespace FarseerPhysics.Collision.Shapes
 			return true;
 		}
 
-		public override void ComputeAABB( out AABB aabb, ref Transform transform, int childIndex )
+		public override void computeAABB( out AABB aabb, ref Transform transform, int childIndex )
 		{
 			var v1 = MathUtils.mul( ref transform, _vertex1 );
 			var v2 = MathUtils.mul( ref transform, _vertex2 );
@@ -198,12 +198,12 @@ namespace FarseerPhysics.Collision.Shapes
 			aabb.upperBound = upper + r;
 		}
 
-		protected override void ComputeProperties()
+		protected override void computeProperties()
 		{
 			massData.centroid = 0.5f * ( _vertex1 + _vertex2 );
 		}
 
-		public override float ComputeSubmergedArea( ref Vector2 normal, float offset, ref Transform xf, out Vector2 sc )
+		public override float computeSubmergedArea( ref Vector2 normal, float offset, ref Transform xf, out Vector2 sc )
 		{
 			sc = Vector2.Zero;
 			return 0;
@@ -219,7 +219,7 @@ namespace FarseerPhysics.Collision.Shapes
 					vertex3 == shape.vertex3 );
 		}
 
-		public override Shape Clone()
+		public override Shape clone()
 		{
 			var clone = new EdgeShape();
 			clone.shapeType = shapeType;

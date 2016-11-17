@@ -52,7 +52,7 @@ namespace Nez.Farseer
 		public static Fixture attachPolygon( this Body body, List<Vector2> vertices, float density )
 		{
 			for( var i = 0; i < vertices.Count; i++ )
-				vertices[i] = FSConvert.displayToSim * ( vertices[i] );
+				vertices[i] = FSConvert.displayToSim * vertices[i];
 
 			return FixtureFactory.AttachPolygon( new Vertices( vertices ), density, body );
 		}

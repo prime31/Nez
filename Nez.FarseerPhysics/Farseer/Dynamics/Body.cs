@@ -121,7 +121,7 @@ namespace FarseerPhysics.Dynamics
 					synchronizeFixtures();
 				}
 
-				awake = true;
+				isAwake = true;
 
 				_force = Vector2.Zero;
 				_torque = 0.0f;
@@ -162,7 +162,7 @@ namespace FarseerPhysics.Dynamics
 					return;
 
 				if( Vector2.Dot( value, value ) > 0.0f )
-					awake = true;
+					isAwake = true;
 
 				_linearVelocity = value;
 			}
@@ -183,7 +183,7 @@ namespace FarseerPhysics.Dynamics
 					return;
 
 				if( value * value > 0.0f )
-					awake = true;
+					isAwake = true;
 
 				_angularVelocity = value;
 			}
@@ -222,19 +222,19 @@ namespace FarseerPhysics.Dynamics
 		/// Gets or sets a value indicating whether this body should be included in the CCD solver.
 		/// </summary>
 		/// <value><c>true</c> if this instance is included in CCD; otherwise, <c>false</c>.</value>
-		public bool IsBullet { get; set; }
+		public bool isBullet;
 
 		/// <summary>
 		/// You can disable sleeping on this body. If you disable sleeping, the
 		/// body will be woken.
 		/// </summary>
 		/// <value><c>true</c> if sleeping is allowed; otherwise, <c>false</c>.</value>
-		public bool sleepingAllowed
+		public bool isSleepingAllowed
 		{
 			set
 			{
 				if( !value )
-					awake = true;
+					isAwake = true;
 
 				_sleepingAllowed = value;
 			}
@@ -246,7 +246,7 @@ namespace FarseerPhysics.Dynamics
 		/// low CPU cost.
 		/// </summary>
 		/// <value><c>true</c> if awake; otherwise, <c>false</c>.</value>
-		public bool awake
+		public bool isAwake
 		{
 			set
 			{
@@ -903,7 +903,7 @@ namespace FarseerPhysics.Dynamics
 					continue;
 				}
 
-				MassData massData = f.shape.massData;
+				var massData = f.shape.massData;
 				_mass += massData.mass;
 				localCenter += massData.mass * massData.centroid;
 				_inertia += massData.inertia;
@@ -1002,8 +1002,8 @@ namespace FarseerPhysics.Dynamics
 
 			if( _bodyType == BodyType.Dynamic )
 			{
-				if( awake == false )
-					awake = true;
+				if( isAwake == false )
+					isAwake = true;
 
 				_force += force;
 				_torque += ( point.X - _sweep.C.X ) * force.Y - ( point.Y - _sweep.C.Y ) * force.X;
@@ -1022,8 +1022,8 @@ namespace FarseerPhysics.Dynamics
 
 			if( _bodyType == BodyType.Dynamic )
 			{
-				if( awake == false )
-					awake = true;
+				if( isAwake == false )
+					isAwake = true;
 
 				_torque += torque;
 			}
@@ -1063,9 +1063,9 @@ namespace FarseerPhysics.Dynamics
 			{
 				return;
 			}
-			if( awake == false )
+			if( isAwake == false )
 			{
-				awake = true;
+				isAwake = true;
 			}
 			_linearVelocity += _invMass * impulse;
 		}
@@ -1083,8 +1083,8 @@ namespace FarseerPhysics.Dynamics
 			if( _bodyType != BodyType.Dynamic )
 				return;
 
-			if( awake == false )
-				awake = true;
+			if( isAwake == false )
+				isAwake = true;
 
 			_linearVelocity += _invMass * impulse;
 			_angularVelocity += _invI * ( ( point.X - _sweep.C.X ) * impulse.Y - ( point.Y - _sweep.C.Y ) * impulse.X );
@@ -1101,9 +1101,9 @@ namespace FarseerPhysics.Dynamics
 				return;
 			}
 
-			if( awake == false )
+			if( isAwake == false )
 			{
-				awake = true;
+				isAwake = true;
 			}
 
 			_angularVelocity += _invI * impulse;
@@ -1357,7 +1357,7 @@ namespace FarseerPhysics.Dynamics
 			body._linearDamping = _linearDamping;
 			body._angularDamping = _angularDamping;
 			body._awake = _awake;
-			body.IsBullet = IsBullet;
+			body.isBullet = isBullet;
 			body.ignoreCCD = ignoreCCD;
 			body.ignoreGravity = ignoreGravity;
 			body._torque = _torque;

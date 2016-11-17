@@ -111,27 +111,27 @@ namespace FarseerPhysics
 		/// <summary>
 		/// Farseer Physics Engine has a different way of filtering fixtures than Box2d.
 		/// We have both FPE and Box2D filtering in the engine. If you are upgrading
-		/// from earlier versions of FPE, set this to true and DefaultFixtureCollisionCategories
+		/// from earlier versions of FPE, set this to true and defaultFixtureCollisionCategories
 		/// to Category.All.
 		/// </summary>
 		public static bool useFPECollisionCategories;
 
 		/// <summary>
 		/// This is used by the Fixture constructor as the default value 
-		/// for Fixture.CollisionCategories member. Note that you may need to change this depending
+		/// for Fixture.collisionCategories member. Note that you may need to change this depending
 		/// on the setting of UseFPECollisionCategories, above.
 		/// </summary>
 		public static Category defaultFixtureCollisionCategories = Category.Cat1;
 
 		/// <summary>
 		/// This is used by the Fixture constructor as the default value 
-		/// for Fixture.CollidesWith member.
+		/// for Fixture.collidesWith member.
 		/// </summary>
 		public static Category defaultFixtureCollidesWith = Category.All;
 
 		/// <summary>
 		/// This is used by the Fixture constructor as the default value 
-		/// for Fixture.IgnoreCCDWith member.
+		/// for Fixture.ignoreCCDWith member.
 		/// </summary>
 		public static Category defaultFixtureIgnoreCCDWith = Category.None;
 

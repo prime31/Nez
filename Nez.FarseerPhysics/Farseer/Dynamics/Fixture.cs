@@ -102,12 +102,12 @@ namespace FarseerPhysics.Dynamics
 		/// <summary>
 		/// Defaults to 0
 		/// 
-		/// If Settings.UseFPECollisionCategories is set to false:
+		/// If Settings.useFPECollisionCategories is set to false:
 		/// Collision groups allow a certain group of objects to never collide (negative)
 		/// or always collide (positive). Zero means no collision group. Non-zero group
 		/// filtering always wins against the mask bits.
 		/// 
-		/// If Settings.UseFPECollisionCategories is set to true:
+		/// If Settings.useFPECollisionCategories is set to true:
 		/// If 2 fixtures are in the same collision group, they will not collide.
 		/// </summary>
 		public short collisionGroup
@@ -184,7 +184,7 @@ namespace FarseerPhysics.Dynamics
 			set
 			{
 				if( body != null )
-					body.awake = true;
+					body.isAwake = true;
 
 				_isSensor = value;
 			}
@@ -301,7 +301,7 @@ namespace FarseerPhysics.Dynamics
 
 			this.body = body;
 			this.userData = userData;
-			this.shape = shape.Clone();
+			this.shape = shape.clone();
 
 			registerFixture();
 		}
@@ -431,7 +431,7 @@ namespace FarseerPhysics.Dynamics
 		/// <returns></returns>
 		public bool testPoint( ref Vector2 point )
 		{
-			return shape.TestPoint( ref body._xf, ref point );
+			return shape.testPoint( ref body._xf, ref point );
 		}
 
 		/// <summary>
@@ -443,7 +443,7 @@ namespace FarseerPhysics.Dynamics
 		/// <returns></returns>
 		public bool rayCast( out RayCastOutput output, ref RayCastInput input, int childIndex )
 		{
-			return shape.RayCast( out output, ref input, ref body._xf, childIndex );
+			return shape.rayCast( out output, ref input, ref body._xf, childIndex );
 		}
 
 		/// <summary>
@@ -502,7 +502,7 @@ namespace FarseerPhysics.Dynamics
 			for( int i = 0; i < proxyCount; ++i )
 			{
 				FixtureProxy proxy = new FixtureProxy();
-				shape.ComputeAABB( out proxy.AABB, ref xf, i );
+				shape.computeAABB( out proxy.AABB, ref xf, i );
 				proxy.fixture = this;
 				proxy.childIndex = i;
 
@@ -538,8 +538,8 @@ namespace FarseerPhysics.Dynamics
 
 				// Compute an AABB that covers the swept Shape (may miss some rotation effect).
 				AABB aabb1, aabb2;
-				shape.ComputeAABB( out aabb1, ref transform1, proxy.childIndex );
-				shape.ComputeAABB( out aabb2, ref transform2, proxy.childIndex );
+				shape.computeAABB( out aabb1, ref transform1, proxy.childIndex );
+				shape.computeAABB( out aabb2, ref transform2, proxy.childIndex );
 
 				proxy.AABB.combine( ref aabb1, ref aabb2 );
 
@@ -598,7 +598,7 @@ namespace FarseerPhysics.Dynamics
 		{
 			var fixture = new Fixture();
 			fixture.body = body;
-			fixture.shape = shape.Clone();
+			fixture.shape = shape.clone();
 			fixture.userData = userData;
 			fixture.restitution = restitution;
 			fixture.friction = friction;

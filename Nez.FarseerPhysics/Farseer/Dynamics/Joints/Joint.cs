@@ -204,10 +204,10 @@ namespace FarseerPhysics.Dynamics.Joints
 		protected void wakeBodies()
 		{
 			if( bodyA != null )
-				bodyA.awake = true;
+				bodyA.isAwake = true;
 
 			if( bodyB != null )
-				bodyB.awake = true;
+				bodyB.isAwake = true;
 		}
 
 		/// <summary>

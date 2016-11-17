@@ -47,7 +47,7 @@ namespace FarseerPhysics.Collision.Shapes
 			set
 			{
 				_position = value;
-				ComputeProperties(); //TODO: Optimize here
+				computeProperties(); //TODO: Optimize here
 			}
 		}
 
@@ -76,14 +76,14 @@ namespace FarseerPhysics.Collision.Shapes
 			_position = Vector2.Zero;
 		}
 
-		public override bool TestPoint( ref Transform transform, ref Vector2 point )
+		public override bool testPoint( ref Transform transform, ref Vector2 point )
 		{
 			var center = transform.p + MathUtils.mul( transform.q, position );
 			var d = point - center;
 			return Vector2.Dot( d, d ) <= _2radius;
 		}
 
-		public override bool RayCast( out RayCastOutput output, ref RayCastInput input, ref Transform transform, int childIndex )
+		public override bool rayCast( out RayCastOutput output, ref RayCastInput input, ref Transform transform, int childIndex )
 		{
 			// Collision Detection in Interactive 3D Environments by Gino van den Bergen
 			// From Section 3.1.2
@@ -124,14 +124,14 @@ namespace FarseerPhysics.Collision.Shapes
 			return false;
 		}
 
-		public override void ComputeAABB( out AABB aabb, ref Transform transform, int childIndex )
+		public override void computeAABB( out AABB aabb, ref Transform transform, int childIndex )
 		{
 			var p = transform.p + MathUtils.mul( transform.q, position );
 			aabb.lowerBound = new Vector2( p.X - radius, p.Y - radius );
 			aabb.upperBound = new Vector2( p.X + radius, p.Y + radius );
 		}
 
-		protected override sealed void ComputeProperties()
+		protected override sealed void computeProperties()
 		{
 			var area = Settings.pi * _2radius;
 			massData.area = area;
@@ -142,7 +142,7 @@ namespace FarseerPhysics.Collision.Shapes
 			massData.inertia = massData.mass * ( 0.5f * _2radius + Vector2.Dot( position, position ) );
 		}
 
-		public override float ComputeSubmergedArea( ref Vector2 normal, float offset, ref Transform xf, out Vector2 sc )
+		public override float computeSubmergedArea( ref Vector2 normal, float offset, ref Transform xf, out Vector2 sc )
 		{
 			sc = Vector2.Zero;
 
@@ -181,7 +181,7 @@ namespace FarseerPhysics.Collision.Shapes
 			return ( radius == shape.radius && position == shape.position );
 		}
 
-		public override Shape Clone()
+		public override Shape clone()
 		{
 			CircleShape clone = new CircleShape();
 			clone.shapeType = shapeType;

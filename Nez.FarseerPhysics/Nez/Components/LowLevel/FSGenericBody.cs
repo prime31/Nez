@@ -64,7 +64,7 @@ namespace Nez.Farseer
 
 		void IUpdatable.update()
 		{
-			if( !body.awake )
+			if( !body.isAwake )
 				return;
 
 			_ignoreTransformChanges = true;

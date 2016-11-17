@@ -255,12 +255,12 @@ namespace FarseerPhysics.Dynamics
 					Body bodyB = joint.bodyB;
 
 					// Wake up connected bodies.
-					bodyA.awake = true;
+					bodyA.isAwake = true;
 
 					// WIP David
 					if( !joint.isFixedType() )
 					{
-						bodyB.awake = true;
+						bodyB.isAwake = true;
 					}
 
 					// Remove from body 1.
@@ -551,7 +551,7 @@ namespace FarseerPhysics.Dynamics
 				if( seed._island )
 					continue;
 
-				if( seed.awake == false || seed.enabled == false )
+				if( seed.isAwake == false || seed.enabled == false )
 					continue;
 
 				// The seed can be dynamic or kinematic.
@@ -578,7 +578,7 @@ namespace FarseerPhysics.Dynamics
 					island.add( b );
 
 					// Make sure the body is awake.
-					b.awake = true;
+					b.isAwake = true;
 
 					// To keep islands as small as possible, we don't
 					// propagate islands across static bodies.
@@ -798,15 +798,15 @@ namespace FarseerPhysics.Dynamics
 						BodyType typeB = bB.bodyType;
 						Debug.Assert( typeA == BodyType.Dynamic || typeB == BodyType.Dynamic );
 
-						bool activeA = bA.awake && typeA != BodyType.Static;
-						bool activeB = bB.awake && typeB != BodyType.Static;
+						bool activeA = bA.isAwake && typeA != BodyType.Static;
+						bool activeB = bB.isAwake && typeB != BodyType.Static;
 
 						// Is at least one body active (awake and dynamic or kinematic)?
 						if( activeA == false && activeB == false )
 							continue;
 
-						bool collideA = ( bA.IsBullet || typeA != BodyType.Dynamic ) && ( ( fA.ignoreCCDWith & fB.collisionCategories ) == 0 ) && !bA.ignoreCCD;
-						bool collideB = ( bB.IsBullet || typeB != BodyType.Dynamic ) && ( ( fB.ignoreCCDWith & fA.collisionCategories ) == 0 ) && !bB.ignoreCCD;
+						bool collideA = ( bA.isBullet || typeA != BodyType.Dynamic ) && ( ( fA.ignoreCCDWith & fB.collisionCategories ) == 0 ) && !bA.ignoreCCD;
+						bool collideB = ( bB.isBullet || typeB != BodyType.Dynamic ) && ( ( fB.ignoreCCDWith & fA.collisionCategories ) == 0 ) && !bB.ignoreCCD;
 
 						// Are these two non-bullet dynamic bodies?
 						if( collideA == false && collideB == false )
@@ -911,8 +911,8 @@ namespace FarseerPhysics.Dynamics
 					continue;
 				}
 
-				bA0.awake = true;
-				bB0.awake = true;
+				bA0.isAwake = true;
+				bB0.isAwake = true;
 
 				// Build the island
 				island.clear();
@@ -948,7 +948,7 @@ namespace FarseerPhysics.Dynamics
 							// Only add static, kinematic, or bullet bodies.
 							Body other = ce.other;
 							if( other.bodyType == BodyType.Dynamic &&
-								body.IsBullet == false && other.IsBullet == false )
+								body.isBullet == false && other.isBullet == false )
 								continue;
 
 							// Skip sensors.
@@ -991,7 +991,7 @@ namespace FarseerPhysics.Dynamics
 							other._island = true;
 
 							if( other.bodyType != BodyType.Static )
-								other.awake = true;
+								other.isAwake = true;
 #if OPTIMIZE_TOI
                             if (_stepComplete)
                             {

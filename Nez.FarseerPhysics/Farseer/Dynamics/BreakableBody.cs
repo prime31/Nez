@@ -117,7 +117,7 @@ namespace FarseerPhysics.Dynamics
 			{
 				var oldFixture = parts[i];
 
-				var shape = oldFixture.shape.Clone();
+				var shape = oldFixture.shape.clone();
 				object userData = oldFixture.userData;
 
 				mainBody.destroyFixture( oldFixture );

@@ -129,12 +129,12 @@ namespace FarseerPhysics.Common
 			_writer.WriteStartElement( "Body" );
 			_writer.WriteAttributeString( "Type", body.bodyType.ToString() );
 			_writer.WriteElementString( "Active", body.enabled.ToString() );
-			_writer.WriteElementString( "AllowSleep", body.sleepingAllowed.ToString() );
+			_writer.WriteElementString( "AllowSleep", body.isSleepingAllowed.ToString() );
 			_writer.WriteElementString( "Angle", body.rotation.ToString() );
 			_writer.WriteElementString( "AngularDamping", body.angularDamping.ToString() );
 			_writer.WriteElementString( "AngularVelocity", body.angularVelocity.ToString() );
-			_writer.WriteElementString( "Awake", body.awake.ToString() );
-			_writer.WriteElementString( "Bullet", body.IsBullet.ToString() );
+			_writer.WriteElementString( "Awake", body.isAwake.ToString() );
+			_writer.WriteElementString( "Bullet", body.isBullet.ToString() );
 			_writer.WriteElementString( "FixedRotation", body.fixedRotation.ToString() );
 			_writer.WriteElementString( "LinearDamping", body.linearDamping.ToString() );
 			WriteElement( "LinearVelocity", body.linearVelocity );
@@ -723,7 +723,7 @@ namespace FarseerPhysics.Common
 									body._enabled = bool.Parse( sn.Value );
 									break;
 								case "allowsleep":
-									body.sleepingAllowed = bool.Parse( sn.Value );
+									body.isSleepingAllowed = bool.Parse( sn.Value );
 									break;
 								case "angle":
 									{
@@ -738,10 +738,10 @@ namespace FarseerPhysics.Common
 									body.angularVelocity = float.Parse( sn.Value );
 									break;
 								case "awake":
-									body.awake = bool.Parse( sn.Value );
+									body.isAwake = bool.Parse( sn.Value );
 									break;
 								case "bullet":
-									body.IsBullet = bool.Parse( sn.Value );
+									body.isBullet = bool.Parse( sn.Value );
 									break;
 								case "fixedrotation":
 									body.fixedRotation = bool.Parse( sn.Value );
@@ -767,7 +767,7 @@ namespace FarseerPhysics.Common
 										foreach( XMLFragmentElement pair in sn.Elements )
 										{
 											Fixture fix = fixtures[int.Parse( pair.Attributes[0].Value )];
-											fix.shape = shapes[int.Parse( pair.Attributes[1].Value )].Clone();
+											fix.shape = shapes[int.Parse( pair.Attributes[1].Value )].clone();
 											fix.cloneOnto( body );
 										}
 										break;

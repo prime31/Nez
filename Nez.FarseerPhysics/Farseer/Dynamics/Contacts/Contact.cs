@@ -288,8 +288,8 @@ namespace FarseerPhysics.Dynamics.Contacts
 
 				if( touching != wasTouching )
 				{
-					bodyA.awake = true;
-					bodyB.awake = true;
+					bodyA.isAwake = true;
+					bodyB.isAwake = true;
 				}
 			}
 
@@ -394,12 +394,12 @@ namespace FarseerPhysics.Dynamics.Contacts
 					break;
 				case ContactType.ChainAndCircle:
 					var chain = (ChainShape)fixtureA.shape;
-					chain.GetChildEdge( _edge, childIndexA );
+					chain.getChildEdge( _edge, childIndexA );
 					Collision.Collision.collideEdgeAndCircle( ref manifold, _edge, ref transformA, (CircleShape)fixtureB.shape, ref transformB );
 					break;
 				case ContactType.ChainAndPolygon:
 					var loop2 = (ChainShape)fixtureA.shape;
-					loop2.GetChildEdge( _edge, childIndexA );
+					loop2.getChildEdge( _edge, childIndexA );
 					Collision.Collision.collideEdgeAndPolygon( ref manifold, _edge, ref transformA, (PolygonShape)fixtureB.shape, ref transformB );
 					break;
 				case ContactType.Circle:
@@ -449,8 +449,8 @@ namespace FarseerPhysics.Dynamics.Contacts
 
 			if( manifold.pointCount > 0 && fixtureA.isSensor == false && fixtureB.isSensor == false )
 			{
-				fixtureA.body.awake = true;
-				fixtureB.body.awake = true;
+				fixtureA.body.isAwake = true;
+				fixtureB.body.isAwake = true;
 			}
 
 			reset( null, 0, null, 0 );

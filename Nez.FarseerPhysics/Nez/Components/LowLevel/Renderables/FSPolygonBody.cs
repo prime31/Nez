@@ -46,8 +46,8 @@ namespace Nez.Farseer
 				poly.setVerticesNoCopy( verts );
 
 				// wake the body if it is asleep to update collisions
-				if( !body.awake )
-					body.awake = true;
+				if( !body.isAwake )
+					body.isAwake = true;
 			}
 		}
 

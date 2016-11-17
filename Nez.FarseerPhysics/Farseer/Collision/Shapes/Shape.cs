@@ -158,7 +158,7 @@ namespace FarseerPhysics.Collision.Shapes
 			{
 				Debug.Assert( value >= 0 );
 				_density = value;
-				ComputeProperties();
+				computeProperties();
 			}
 		}
 
@@ -176,7 +176,7 @@ namespace FarseerPhysics.Collision.Shapes
 				_radius = value;
 				_2radius = _radius * _radius;
 
-				ComputeProperties();
+				computeProperties();
 			}
 		}
 
@@ -195,7 +195,7 @@ namespace FarseerPhysics.Collision.Shapes
 		/// Clone the concrete shape
 		/// </summary>
 		/// <returns>A clone of the shape</returns>
-		public abstract Shape Clone();
+		public abstract Shape clone();
 
 		/// <summary>
 		/// Test a point for containment in this shape.
@@ -204,7 +204,7 @@ namespace FarseerPhysics.Collision.Shapes
 		/// <param name="transform">The shape world transform.</param>
 		/// <param name="point">A point in world coordinates.</param>
 		/// <returns>True if the point is inside the shape</returns>
-		public abstract bool TestPoint( ref Transform transform, ref Vector2 point );
+		public abstract bool testPoint( ref Transform transform, ref Vector2 point );
 
 		/// <summary>
 		/// Cast a ray against a child shape.
@@ -214,7 +214,7 @@ namespace FarseerPhysics.Collision.Shapes
 		/// <param name="transform">The transform to be applied to the shape.</param>
 		/// <param name="childIndex">The child shape index.</param>
 		/// <returns>True if the ray-cast hits the shape</returns>
-		public abstract bool RayCast( out RayCastOutput output, ref RayCastInput input, ref Transform transform, int childIndex );
+		public abstract bool rayCast( out RayCastOutput output, ref RayCastInput input, ref Transform transform, int childIndex );
 
 		/// <summary>
 		/// Given a transform, compute the associated axis aligned bounding box for a child shape.
@@ -222,13 +222,13 @@ namespace FarseerPhysics.Collision.Shapes
 		/// <param name="aabb">The aabb results.</param>
 		/// <param name="transform">The world transform of the shape.</param>
 		/// <param name="childIndex">The child shape index.</param>
-		public abstract void ComputeAABB( out AABB aabb, ref Transform transform, int childIndex );
+		public abstract void computeAABB( out AABB aabb, ref Transform transform, int childIndex );
 
 		/// <summary>
 		/// Compute the mass properties of this shape using its dimensions and density.
 		/// The inertia tensor is computed about the local origin, not the centroid.
 		/// </summary>
-		protected abstract void ComputeProperties();
+		protected abstract void computeProperties();
 
 		/// <summary>
 		/// Compare this shape to another shape based on type and properties.
@@ -255,7 +255,7 @@ namespace FarseerPhysics.Collision.Shapes
 		/// <summary>
 		/// Used for the buoyancy controller
 		/// </summary>
-		public abstract float ComputeSubmergedArea( ref Vector2 normal, float offset, ref Transform xf, out Vector2 sc );
+		public abstract float computeSubmergedArea( ref Vector2 normal, float offset, ref Transform xf, out Vector2 sc );
 	
 	}
 }

@@ -72,7 +72,7 @@ namespace FarseerPhysics.Controllers
 			_uniqueBodies.Clear();
 			World.queryAABB( fixture =>
 								 {
-									 if( fixture.body.isStatic || !fixture.body.awake )
+									 if( fixture.body.isStatic || !fixture.body.isAwake )
 										 return true;
 
 									 if( !_uniqueBodies.ContainsKey( fixture.body.bodyId ) )
@@ -100,7 +100,7 @@ namespace FarseerPhysics.Controllers
 					Shape shape = fixture.shape;
 
 					Vector2 sc;
-					float sarea = shape.ComputeSubmergedArea( ref _normal, _offset, ref body._xf, out sc );
+					float sarea = shape.computeSubmergedArea( ref _normal, _offset, ref body._xf, out sc );
 					area += sarea;
 					areac.X += sarea * sc.X;
 					areac.Y += sarea * sc.Y;
