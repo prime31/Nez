@@ -67,7 +67,7 @@ namespace Nez.Farseer
 		#endregion
 
 
-		protected void initializeJointDef( FSJointDef jointDef )
+		internal void initializeJointDef( FSJointDef jointDef )
 		{
 			jointDef.bodyA = _ownerBody?.body;
 			jointDef.bodyB = _otherBody?.body;
@@ -75,7 +75,7 @@ namespace Nez.Farseer
 		}
 
 
-		protected abstract FSJointDef getJointDef();
+		internal abstract FSJointDef getJointDef();
 
 
 		protected void recreateJoint()

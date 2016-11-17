@@ -5,7 +5,7 @@ using Microsoft.Xna.Framework;
 
 namespace Nez.Farseer
 {
-	public abstract class FSJointDef
+	internal abstract class FSJointDef
 	{
 		public Body bodyA;
 		public Body bodyB;
@@ -15,7 +15,7 @@ namespace Nez.Farseer
 	}
 
 
-	public class FSDistanceJointDef : FSJointDef
+	internal class FSDistanceJointDef : FSJointDef
 	{
 		public Vector2 ownerBodyAnchor;
 		public Vector2 otherBodyAnchor;
@@ -33,7 +33,7 @@ namespace Nez.Farseer
 	}
 
 
-	public class FSFrictionJointDef : FSJointDef
+	internal class FSFrictionJointDef : FSJointDef
 	{
 		public Vector2 anchor;
 		public float maxForce;
@@ -50,7 +50,7 @@ namespace Nez.Farseer
 	}
 
 
-	public class FSWeldJointDef : FSJointDef
+	internal class FSWeldJointDef : FSJointDef
 	{
 		public Vector2 ownerBodyAnchor;
 		public Vector2 otherBodyAnchor;
@@ -68,7 +68,7 @@ namespace Nez.Farseer
 	}
 
 
-	public class FSAngleJointDef : FSJointDef
+	internal class FSAngleJointDef : FSJointDef
 	{
 		public float maxImpulse = float.MaxValue;
 		public float biasFactor = 0.2f;
@@ -86,7 +86,7 @@ namespace Nez.Farseer
 	}
 
 
-	public class FSRevoluteJointDef : FSJointDef
+	internal class FSRevoluteJointDef : FSJointDef
 	{
 		public Vector2 ownerBodyAnchor;
 		public Vector2 otherBodyAnchor;
@@ -114,7 +114,7 @@ namespace Nez.Farseer
 	}
 
 
-	public class FSPrismaticJointDef : FSJointDef
+	internal class FSPrismaticJointDef : FSJointDef
 	{
 		public Vector2 ownerBodyAnchor;
 		public Vector2 otherBodyAnchor;
@@ -144,7 +144,7 @@ namespace Nez.Farseer
 	}
 
 
-	public class FSRopeJointDef : FSJointDef
+	internal class FSRopeJointDef : FSJointDef
 	{
 		public Vector2 ownerBodyAnchor;
 		public Vector2 otherBodyAnchor;
@@ -160,7 +160,7 @@ namespace Nez.Farseer
 	}
 
 
-	public class FSMotorJointDef : FSJointDef
+	internal class FSMotorJointDef : FSJointDef
 	{
 		public Vector2 linearOffset;
 		public float maxForce = 1;
@@ -180,7 +180,7 @@ namespace Nez.Farseer
 	}
 
 
-	public class FSWheelJointDef : FSJointDef
+	internal class FSWheelJointDef : FSJointDef
 	{
 		public Vector2 anchor;
 		public Vector2 axis = Vector2.UnitY;
@@ -205,7 +205,7 @@ namespace Nez.Farseer
 	}
 
 
-	public class FSPulleyJointDef : FSJointDef
+	internal class FSPulleyJointDef : FSJointDef
 	{
 		public Vector2 ownerBodyAnchor;
 		public Vector2 otherBodyAnchor;
@@ -223,7 +223,7 @@ namespace Nez.Farseer
 	}
 
 
-	public class FSGearJointDef : FSJointDef
+	internal class FSGearJointDef : FSJointDef
 	{
 		public Joint ownerJoint;
 		public Joint otherJoint;
@@ -238,7 +238,7 @@ namespace Nez.Farseer
 	}
 
 
-	public class FSMouseJointDef : FSJointDef
+	internal class FSMouseJointDef : FSJointDef
 	{
 		public Vector2 worldAnchor;
 		public float maxForce;

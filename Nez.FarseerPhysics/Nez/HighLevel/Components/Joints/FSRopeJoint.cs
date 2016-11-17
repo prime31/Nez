@@ -36,7 +36,7 @@ namespace Nez.Farseer
 		#endregion
 
 
-		protected override FSJointDef getJointDef()
+		internal override FSJointDef getJointDef()
 		{
 			initializeJointDef( _jointDef );
 			if( _jointDef.bodyA == null || _jointDef.bodyB == null )

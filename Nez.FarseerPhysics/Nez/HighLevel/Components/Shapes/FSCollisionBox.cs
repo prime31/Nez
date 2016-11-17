@@ -17,7 +17,7 @@ namespace Nez.Farseer
 		{
 			_width = width;
 			_height = height;
-			_verts = PolygonTools.createRectangle( _width, _height );
+			_verts = PolygonTools.createRectangle( _width / 2, _height / 2 );
 		}
 
 

@@ -59,7 +59,7 @@ namespace Nez.Farseer
 		}
 
 
-		protected override FSJointDef getJointDef()
+		internal override FSJointDef getJointDef()
 		{
 			initializeJointDef( _jointDef );
 			if( _jointDef.bodyA == null )

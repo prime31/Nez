@@ -4,7 +4,7 @@ using Microsoft.Xna.Framework;
 
 namespace Nez.Farseer
 {
-	class FSBodyDef
+	internal class FSBodyDef
 	{
 		public BodyType bodyType = BodyType.Static;
 		public Vector2 linearVelocity;

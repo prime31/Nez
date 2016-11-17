@@ -262,9 +262,9 @@ namespace FarseerPhysics.Dynamics.Joints
 
 		internal override void solveVelocityConstraints( ref SolverData data )
 		{
-			Vector2 vA = data.velocities[_indexA].v;
+			var vA = data.velocities[_indexA].v;
 			float wA = data.velocities[_indexA].w;
-			Vector2 vB = data.velocities[_indexB].v;
+			var vB = data.velocities[_indexB].v;
 			float wB = data.velocities[_indexB].w;
 
 			float mA = _invMassA, mB = _invMassB;
@@ -280,13 +280,13 @@ namespace FarseerPhysics.Dynamics.Joints
 				wA -= iA * impulse2;
 				wB += iB * impulse2;
 
-				Vector2 Cdot1 = vB + MathUtils.cross( wB, _rB ) - vA - MathUtils.cross( wA, _rA );
+				var Cdot1 = vB + MathUtils.cross( wB, _rB ) - vA - MathUtils.cross( wA, _rA );
 
-				Vector2 impulse1 = -MathUtils.mul22( _mass, Cdot1 );
+				var impulse1 = -MathUtils.mul22( _mass, Cdot1 );
 				_impulse.X += impulse1.X;
 				_impulse.Y += impulse1.Y;
 
-				Vector2 P = impulse1;
+				var P = impulse1;
 
 				vA -= mA * P;
 				wA -= iA * MathUtils.cross( _rA, P );
@@ -296,14 +296,14 @@ namespace FarseerPhysics.Dynamics.Joints
 			}
 			else
 			{
-				Vector2 Cdot1 = vB + MathUtils.cross( wB, _rB ) - vA - MathUtils.cross( wA, _rA );
+				var Cdot1 = vB + MathUtils.cross( wB, _rB ) - vA - MathUtils.cross( wA, _rA );
 				float Cdot2 = wB - wA;
-				Vector3 Cdot = new Vector3( Cdot1.X, Cdot1.Y, Cdot2 );
+				var Cdot = new Vector3( Cdot1.X, Cdot1.Y, Cdot2 );
 
-				Vector3 impulse = -MathUtils.mul( _mass, Cdot );
+				var impulse = -MathUtils.mul( _mass, Cdot );
 				_impulse += impulse;
 
-				Vector2 P = new Vector2( impulse.X, impulse.Y );
+				var P = new Vector2( impulse.X, impulse.Y );
 
 				vA -= mA * P;
 				wA -= iA * ( MathUtils.cross( _rA, P ) + impulse.Z );
@@ -320,9 +320,9 @@ namespace FarseerPhysics.Dynamics.Joints
 
 		internal override bool solvePositionConstraints( ref SolverData data )
 		{
-			Vector2 cA = data.positions[_indexA].c;
+			var cA = data.positions[_indexA].c;
 			float aA = data.positions[_indexA].a;
-			Vector2 cB = data.positions[_indexB].c;
+			var cB = data.positions[_indexB].c;
 			float aB = data.positions[_indexB].a;
 
 			Rot qA = new Rot( aA ), qB = new Rot( aB );
@@ -330,12 +330,12 @@ namespace FarseerPhysics.Dynamics.Joints
 			float mA = _invMassA, mB = _invMassB;
 			float iA = _invIA, iB = _invIB;
 
-			Vector2 rA = MathUtils.mul( qA, localAnchorA - _localCenterA );
-			Vector2 rB = MathUtils.mul( qB, localAnchorB - _localCenterB );
+			var rA = MathUtils.mul( qA, localAnchorA - _localCenterA );
+			var rB = MathUtils.mul( qB, localAnchorB - _localCenterB );
 
 			float positionError, angularError;
 
-			Mat33 K = new Mat33();
+			var K = new Mat33();
 			K.ex.X = mA + mB + rA.Y * rA.Y * iA + rB.Y * rB.Y * iB;
 			K.ey.X = -rA.Y * rA.X * iA - rB.Y * rB.X * iB;
 			K.ez.X = -rA.Y * iA - rB.Y * iB;
