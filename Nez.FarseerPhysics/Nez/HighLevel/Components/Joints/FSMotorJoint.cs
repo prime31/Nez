@@ -3,23 +3,22 @@
 
 namespace Nez.Farseer
 {
-	public class FSFrictionJoint : FSJoint
+	public class FSMotorJoint : FSJoint
 	{
-		FSFrictionJointDef _jointDef = new FSFrictionJointDef();
-		Vector2 _anchor;
+		FSMotorJointDef _jointDef = new FSMotorJointDef();
 
 
 		#region Configuration
 
-		public FSFrictionJoint setAnchor( Vector2 anchor )
+		public FSMotorJoint setLinearOffset( Vector2 linearOffset )
 		{
-			_anchor = anchor;
+			_jointDef.linearOffset = linearOffset;
 			recreateJoint();
 			return this;
 		}
 
 
-		public FSFrictionJoint setMaxForce( float maxForce )
+		public FSMotorJoint setMaxForce( float maxForce )
 		{
 			_jointDef.maxForce = maxForce;
 			recreateJoint();
@@ -27,9 +26,17 @@ namespace Nez.Farseer
 		}
 
 
-		public FSFrictionJoint setMaxTorque( float maxTorque )
+		public FSMotorJoint setMaxTorque( float maxTorque )
 		{
 			_jointDef.maxTorque = maxTorque;
+			recreateJoint();
+			return this;
+		}
+
+
+		public FSMotorJoint setAngularOffset( float angularOffset )
+		{
+			_jointDef.angularOffset = angularOffset;
 			recreateJoint();
 			return this;
 		}
@@ -42,8 +49,6 @@ namespace Nez.Farseer
 			initializeJointDef( _jointDef );
 			if( _jointDef.bodyA == null || _jointDef.bodyB == null )
 				return null;
-
-			_jointDef.anchor = FSConvert.displayToSim * _anchor;
 
 			return _jointDef;
 		}

@@ -6,8 +6,6 @@ namespace Nez.Farseer
 	public class FSWeldJoint : FSJoint
 	{
 		FSWeldJointDef _jointDef = new FSWeldJointDef();
-		Vector2 _ownerBodyAnchor;
-		Vector2 _otherBodyAnchor;
 
 
 		#region Configuration
@@ -30,7 +28,7 @@ namespace Nez.Farseer
 
 		public FSWeldJoint setOwnerBodyAnchor( Vector2 ownerBodyAnchor )
 		{
-			_ownerBodyAnchor = ownerBodyAnchor;
+			_jointDef.ownerBodyAnchor = ownerBodyAnchor;
 			recreateJoint();
 			return this;
 		}
@@ -38,7 +36,7 @@ namespace Nez.Farseer
 
 		public FSWeldJoint setOtherBodyAnchor( Vector2 otherBodyAnchor )
 		{
-			_otherBodyAnchor = otherBodyAnchor;
+			_jointDef.otherBodyAnchor = otherBodyAnchor;
 			recreateJoint();
 			return this;
 		}
@@ -51,10 +49,7 @@ namespace Nez.Farseer
 			initializeJointDef( _jointDef );
 			if( _jointDef.bodyA == null || _jointDef.bodyB == null )
 				return null;
-
-			_jointDef.ownerBodyAnchor = FSConvert.displayToSim * _ownerBodyAnchor;
-			_jointDef.otherBodyAnchor = FSConvert.displayToSim * _otherBodyAnchor;
-
+			
 			return _jointDef;
 		}
 

@@ -175,9 +175,9 @@ namespace FarseerPhysics.Dynamics.Joints
 				localAnchorA = base.bodyA.getLocalPoint( anchorA );
 				localAnchorB = base.bodyB.getLocalPoint( anchorB );
 
-				Vector2 dA = anchorA - worldAnchorA;
+				var dA = anchorA - worldAnchorA;
 				lengthA = dA.Length();
-				Vector2 dB = anchorB - worldAnchorB;
+				var dB = anchorB - worldAnchorB;
 				lengthB = dB.Length();
 			}
 			else

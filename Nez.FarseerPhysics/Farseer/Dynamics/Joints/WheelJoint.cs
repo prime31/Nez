@@ -249,7 +249,7 @@ namespace FarseerPhysics.Dynamics.Joints
 		/// Gets the torque of the motor
 		/// </summary>
 		/// <param name="invDt">inverse delta time</param>
-		public float GetMotorTorque( float invDt )
+		public float getMotorTorque( float invDt )
 		{
 			return invDt * _motorImpulse;
 		}

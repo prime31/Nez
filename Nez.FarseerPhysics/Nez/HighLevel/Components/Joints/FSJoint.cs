@@ -1,14 +1,14 @@
-﻿using FarseerPhysics.Dynamics;
-using FarseerPhysics.Dynamics.Joints;
+﻿using FarseerPhysics.Dynamics.Joints;
 
 
 namespace Nez.Farseer
 {
 	public abstract class FSJoint : Component
 	{
-		protected Joint _joint;
+		internal Joint _joint;
 		FSRigidBody _ownerBody;
 		FSRigidBody _otherBody;
+		internal FSJoint _attachedJoint;
 		bool _collideConnected;
 
 
@@ -80,8 +80,14 @@ namespace Nez.Farseer
 
 		protected void recreateJoint()
 		{
+			if( _attachedJoint != null )
+				_attachedJoint.destroyJoint();
+			
 			destroyJoint();
 			createJoint();
+
+			if( _attachedJoint != null )
+				_attachedJoint.createJoint();
 		}
 
 

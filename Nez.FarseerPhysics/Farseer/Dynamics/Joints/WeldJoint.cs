@@ -42,11 +42,9 @@ namespace FarseerPhysics.Dynamics.Joints
 	// K = invI1 + invI2
 
 	/// <summary>
-	/// A weld joint essentially glues two bodies together. A weld joint may
-	/// distort somewhat because the island constraint solver is approximate.
+	/// A weld joint essentially glues two bodies together. A weld joint may distort somewhat because the island constraint solver is approximate.
 	/// 
-	/// The joint is soft constraint based, which means the two bodies will move
-	/// relative to each other, when a force is applied. To combine two bodies
+	/// The joint is soft constraint based, which means the two bodies will move relative to each other, when a force is applied. To combine two bodies
 	/// in a rigid fashion, combine the fixtures to a single body instead.
 	/// </summary>
 	public class WeldJoint : Joint

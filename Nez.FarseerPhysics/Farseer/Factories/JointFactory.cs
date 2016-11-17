@@ -14,7 +14,7 @@ namespace FarseerPhysics.Factories
 
 		public static MotorJoint CreateMotorJoint( World world, Body bodyA, Body bodyB, bool useWorldCoordinates = false )
 		{
-			MotorJoint joint = new MotorJoint( bodyA, bodyB, useWorldCoordinates );
+			var joint = new MotorJoint( bodyA, bodyB, useWorldCoordinates );
 			world.addJoint( joint );
 			return joint;
 		}
