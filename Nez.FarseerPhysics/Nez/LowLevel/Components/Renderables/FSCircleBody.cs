@@ -1,4 +1,5 @@
-﻿using Nez.Textures;
+﻿using Microsoft.Xna.Framework.Graphics;
+using Nez.Textures;
 
 
 namespace Nez.Farseer
@@ -6,7 +7,11 @@ namespace Nez.Farseer
 	public class FSCircleBody : FSRenderableBody
 	{
 		public FSCircleBody( Subtexture subtexture ) : base( subtexture )
-		{}
+		{ }
+
+
+		public FSCircleBody( Texture2D texture ) : this( new Subtexture( texture ) )
+		{ }
 
 
 		public override void initialize()

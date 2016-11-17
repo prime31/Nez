@@ -24,6 +24,7 @@ using System.Diagnostics;
 using FarseerPhysics.Common;
 using Microsoft.Xna.Framework;
 
+
 namespace FarseerPhysics.Dynamics.Joints
 {
 	// p = attached point, m = mouse point
@@ -69,8 +70,7 @@ namespace FarseerPhysics.Dynamics.Joints
 		}
 
 		/// <summary>
-		/// The maximum constraint force that can be exerted
-		/// to move the candidate body. Usually you will express
+		/// The maximum constraint force that can be exerted to move the candidate body. Usually you will express
 		/// as some multiple of the weight (multiplier * mass * gravity).
 		/// </summary>
 		public float maxForce
@@ -261,5 +261,6 @@ namespace FarseerPhysics.Dynamics.Joints
 		{
 			return true;
 		}
+	
 	}
 }

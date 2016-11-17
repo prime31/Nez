@@ -66,7 +66,7 @@ namespace Nez.Farseer
 				if( Input.leftMouseButtonDown && _mouseJoint != null )
 				{
 					var pos = Core.scene.camera.screenToWorldPoint( Input.mousePosition );
-					_mouseJoint.worldAnchorB = FSConvert.toSimUnits( pos );
+					_mouseJoint.worldAnchorB = FSConvert.displayToSim * pos;
 				}
 
 				if( Input.leftMouseButtonReleased && _mouseJoint != null )

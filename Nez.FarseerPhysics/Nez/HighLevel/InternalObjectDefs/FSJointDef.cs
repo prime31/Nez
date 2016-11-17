@@ -237,4 +237,27 @@ namespace Nez.Farseer
 		}
 	}
 
+
+	public class FSMouseJointDef : FSJointDef
+	{
+		public Vector2 worldAnchor;
+		public float maxForce;
+		public float frequency = 5;
+		public float dampingRatio = 0.7f;
+
+		public override Joint createJoint()
+		{
+			var joint = new FixedMouseJoint( bodyA, worldAnchor * FSConvert.displayToSim );
+			joint.collideConnected = collideConnected;
+
+			// conditionally set the maxForce
+			if( maxForce > 0 )
+				joint.maxForce = maxForce;
+			
+			joint.frequency = frequency;
+			joint.dampingRatio = dampingRatio;
+			return joint;
+		}
+	}
+
 }

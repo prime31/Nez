@@ -172,6 +172,7 @@
     <Compile Include="Nez\Common\FarseerCollisions.cs" />
     <Compile Include="Nez\Common\FSConvert.cs" />
     <Compile Include="Nez\Common\FSWorld.cs" />
+    <Compile Include="Nez\HighLevel\Components\Joints\FSMouseJoint.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Nez.Portable\Nez.csproj">
