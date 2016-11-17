@@ -123,8 +123,8 @@ namespace Nez.Farseer
 		public float lowerLimit;
 		public float upperLimit;
 		public bool motorEnabled;
-		public float motorSpeed;
-		public float maxMotorForce = 1;
+		public float motorSpeed = 0.7f;
+		public float maxMotorForce = 2;
 		public float motorImpulse;
 
 		public override Joint createJoint()
@@ -187,8 +187,8 @@ namespace Nez.Farseer
 		public bool motorEnabled;
 		public float motorSpeed;
 		public float maxMotorTorque;
-		public float frequency;
-		public float dampingRatio;
+		public float frequency = 2;
+		public float dampingRatio = 0.7f;
 
 		public override Joint createJoint()
 		{

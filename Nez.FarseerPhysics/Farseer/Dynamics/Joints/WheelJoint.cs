@@ -138,13 +138,13 @@ namespace FarseerPhysics.Dynamics.Joints
 		{
 			get
 			{
-				Body bA = bodyA;
-				Body bB = bodyB;
+				var bA = bodyA;
+				var bB = bodyB;
 
-				Vector2 pA = bA.getWorldPoint( localAnchorA );
-				Vector2 pB = bB.getWorldPoint( localAnchorB );
-				Vector2 d = pB - pA;
-				Vector2 axis = bA.getWorldVector( localXAxis );
+				var pA = bA.getWorldPoint( localAnchorA );
+				var pB = bB.getWorldPoint( localAnchorB );
+				var d = pB - pA;
+				var axis = bA.getWorldVector( localXAxis );
 
 				float translation = Vector2.Dot( d, axis );
 				return translation;
