@@ -25,14 +25,14 @@ namespace FarseerPhysics.Factories
 
 		public static Body CreateChainShape( World world, Vertices vertices, Vector2 position = new Vector2(), object userData = null )
 		{
-			Body body = CreateBody( world, position );
+			var body = CreateBody( world, position );
 			FixtureFactory.AttachChainShape( vertices, body, userData );
 			return body;
 		}
 
 		public static Body CreateLoopShape( World world, Vertices vertices, Vector2 position = new Vector2(), object userData = null )
 		{
-			Body body = CreateBody( world, position );
+			var body = CreateBody( world, position );
 			FixtureFactory.AttachLoopShape( vertices, body, userData );
 			return body;
 		}
@@ -45,11 +45,11 @@ namespace FarseerPhysics.Factories
 			if( height <= 0 )
 				throw new ArgumentOutOfRangeException( nameof( height ), "Height must be more than 0 meters" );
 
-			Body newBody = CreateBody( world, position, rotation, bodyType );
+			var newBody = CreateBody( world, position, rotation, bodyType );
 			newBody.userData = userData;
 
-			Vertices rectangleVertices = PolygonTools.createRectangle( width / 2, height / 2 );
-			PolygonShape rectangleShape = new PolygonShape( rectangleVertices, density );
+			var rectangleVertices = PolygonTools.createRectangle( width / 2, height / 2 );
+			var rectangleShape = new PolygonShape( rectangleVertices, density );
 			newBody.createFixture( rectangleShape );
 
 			return newBody;
@@ -57,14 +57,14 @@ namespace FarseerPhysics.Factories
 
 		public static Body CreateCircle( World world, float radius, float density, Vector2 position = new Vector2(), BodyType bodyType = BodyType.Static, object userData = null )
 		{
-			Body body = CreateBody( world, position, 0, bodyType );
+			var body = CreateBody( world, position, 0, bodyType );
 			FixtureFactory.AttachCircle( radius, density, body, userData );
 			return body;
 		}
 
 		public static Body CreateEllipse( World world, float xRadius, float yRadius, int edges, float density, Vector2 position = new Vector2(), float rotation = 0, BodyType bodyType = BodyType.Static, object userData = null )
 		{
-			Body body = CreateBody( world, position, rotation, bodyType );
+			var body = CreateBody( world, position, rotation, bodyType );
 			FixtureFactory.AttachEllipse( xRadius, yRadius, edges, density, body, userData );
 			return body;
 		}
@@ -119,7 +119,7 @@ namespace FarseerPhysics.Factories
 			//Create the middle rectangle
 			Vertices rectangle = PolygonTools.createRectangle( endRadius, height / 2 );
 
-			List<Vertices> list = new List<Vertices>();
+			var list = new List<Vertices>();
 			list.Add( rectangle );
 
 			Body body = CreateCompoundPolygon( world, list, density, position, rotation, bodyType, userData );
@@ -171,7 +171,7 @@ namespace FarseerPhysics.Factories
 			//TODO: Implement a Voronoi diagram algorithm to split up the vertices
 			List<Vertices> triangles = Triangulate.convexPartition( vertices, TriangulationAlgorithm.Earclip );
 
-			BreakableBody breakableBody = new BreakableBody( world, triangles, density, position, rotation );
+			var breakableBody = new BreakableBody( world, triangles, density, position, rotation );
 			breakableBody.mainBody.position = position;
 			world.addBreakableBody( breakableBody );
 			return breakableBody;
@@ -179,7 +179,7 @@ namespace FarseerPhysics.Factories
 
 		public static BreakableBody CreateBreakableBody( World world, IEnumerable<Shape> shapes, Vector2 position = new Vector2(), float rotation = 0 )
 		{
-			BreakableBody breakableBody = new BreakableBody( world, shapes, position, rotation );
+			var breakableBody = new BreakableBody( world, shapes, position, rotation );
 			breakableBody.mainBody.position = position;
 			world.addBreakableBody( breakableBody );
 			return breakableBody;

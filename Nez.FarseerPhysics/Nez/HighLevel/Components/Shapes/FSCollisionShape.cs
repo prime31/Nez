@@ -165,6 +165,7 @@ namespace Nez.Farseer
 				return;
 
 			var body = rigidBody.body;
+			_fixtureDef.shape.density = _fixtureDef.density;
 			_fixture = body.createFixture( _fixtureDef.shape, this );
 			_fixture.friction = _fixtureDef.friction;
 			_fixture.restitution = _fixtureDef.restitution;

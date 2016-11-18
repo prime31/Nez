@@ -116,6 +116,16 @@ namespace Nez.Farseer
 		}
 
 
+		public FSRigidBody setGravityScale( float gravityScale )
+		{
+			if( body != null )
+				body.gravityScale = gravityScale;
+			else
+				_bodyDef.gravityScale = gravityScale;
+			return this;
+		}
+
+
 		public FSRigidBody setMass( float mass )
 		{
 			if( body != null )

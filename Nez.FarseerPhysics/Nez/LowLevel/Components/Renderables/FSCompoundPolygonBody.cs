@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using FarseerPhysics.Collision.Shapes;
 using FarseerPhysics.Common;
-using FarseerPhysics.Dynamics;
 using FarseerPhysics.Common.Decomposition;
 using Nez.Textures;
 using FarseerPhysics.Common.PolygonManipulation;
@@ -18,7 +17,7 @@ namespace Nez.Farseer
 
 
 		public FSCompoundPolygonBody( Subtexture subtexture ) : base( subtexture )
-		{}
+		{ }
 
 
 		public override void initialize()
@@ -28,7 +27,7 @@ namespace Nez.Farseer
 			var data = new uint[_subtexture.sourceRect.Width * _subtexture.sourceRect.Height];
 			_subtexture.texture2D.GetData( 0, _subtexture.sourceRect, data, 0, data.Length );
 
-			var verts = PolygonTools.createPolygon( data, _subtexture.sourceRect.Width );
+			var verts = PolygonTools.createPolygonFromTextureData( data, _subtexture.sourceRect.Width );
 			verts = SimplifyTools.douglasPeuckerSimplify( verts, 2 );
 
 			var decomposedVerts = Triangulate.convexPartition( verts, TriangulationAlgorithm.Bayazit );

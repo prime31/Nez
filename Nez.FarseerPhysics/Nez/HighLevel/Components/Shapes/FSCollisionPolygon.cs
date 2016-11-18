@@ -10,7 +10,7 @@ namespace Nez.Farseer
 	{
 		/// <summary>
 		/// verts are stored in display units. We convert to sim units if the Transform.scale changes.
-		/// </summary>
+		/// </summary>updateVerts
 		protected Vertices _verts;
 		Vector2 _center;
 
@@ -91,7 +91,7 @@ namespace Nez.Farseer
 
 			defVerts.Clear();
 			defVerts.AddRange( _verts );
-			defVerts.scale( transform.scale * FSConvert.displayToSim );
+			defVerts.scale( transform.scale );
 			defVerts.translate( ref _center );
 
 			( _fixtureDef.shape as PolygonShape ).setVerticesNoCopy( defVerts );

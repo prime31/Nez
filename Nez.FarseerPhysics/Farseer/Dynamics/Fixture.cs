@@ -203,8 +203,7 @@ namespace FarseerPhysics.Dynamics
 		public object userData;
 
 		/// <summary>
-		/// Set the coefficient of friction. This will _not_ change the friction of
-		/// existing contacts.
+		/// Set the coefficient of friction. This will _not_ change the friction of existing contacts.
 		/// </summary>
 		/// <value>The friction.</value>
 		public float friction
@@ -218,8 +217,7 @@ namespace FarseerPhysics.Dynamics
 		}
 
 		/// <summary>
-		/// Set the coefficient of restitution. This will not change the restitution of
-		/// existing contacts.
+		/// Set the coefficient of restitution. This will not change the restitution of existing contacts.
 		/// </summary>
 		/// <value>The restitution.</value>
 		public float restitution

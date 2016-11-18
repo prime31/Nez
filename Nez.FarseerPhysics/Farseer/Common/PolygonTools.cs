@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using FarseerPhysics.Common.TextureTools;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 
 
 namespace FarseerPhysics.Common
@@ -71,7 +72,7 @@ namespace FarseerPhysics.Common
 			//We need at least 8 vertices to create a rounded rectangle
 			Debug.Assert( Settings.maxPolygonVertices >= 8 );
 
-			Vertices vertices = new Vertices();
+			var vertices = new Vertices();
 			if( segments == 0 )
 			{
 				vertices.Add( new Vector2( width * .5f - xRadius, -height * .5f ) );
@@ -93,7 +94,7 @@ namespace FarseerPhysics.Common
 				float stepSize = MathHelper.TwoPi / ( numberOfEdges - 4 );
 				int perPhase = numberOfEdges / 4;
 
-				Vector2 posOffset = new Vector2( width / 2 - xRadius, height / 2 - yRadius );
+				var posOffset = new Vector2( width / 2 - xRadius, height / 2 - yRadius );
 				vertices.Add( posOffset + new Vector2( xRadius, -yRadius + yRadius ) );
 				short phase = 0;
 				for( int i = 1; i < numberOfEdges; i++ )
@@ -124,7 +125,7 @@ namespace FarseerPhysics.Common
 		/// <param name="end">The second point.</param>
 		public static Vertices createLine( Vector2 start, Vector2 end )
 		{
-			Vertices vertices = new Vertices( 2 );
+			var vertices = new Vertices( 2 );
 			vertices.Add( start );
 			vertices.Add( end );
 
@@ -151,7 +152,7 @@ namespace FarseerPhysics.Common
 		/// <returns></returns>
 		public static Vertices createEllipse( float xRadius, float yRadius, int numberOfEdges )
 		{
-			Vertices vertices = new Vertices();
+			var vertices = new Vertices();
 
 			float stepSize = MathHelper.TwoPi / numberOfEdges;
 
@@ -169,7 +170,7 @@ namespace FarseerPhysics.Common
 			Debug.Assert( sides > 1, "The arc needs to have more than 1 sides" );
 			Debug.Assert( radius > 0, "The arc needs to have a radius larger than 0" );
 
-			Vertices vertices = new Vertices();
+			var vertices = new Vertices();
 
 			float stepSize = radians / sides;
 			for( int i = sides - 1; i > 0; i-- )
@@ -239,8 +240,7 @@ nameof( topRadius ) );
 					"The bottom radius must be lower than height / 2. Higher values of bottom radius would create a circle, and not a half circle.",
 nameof( bottomRadius ) );
 
-			Vertices vertices = new Vertices();
-
+			var vertices = new Vertices();
 			float newHeight = ( height - topRadius - bottomRadius ) * 0.5f;
 
 			// top
@@ -280,7 +280,7 @@ nameof( bottomRadius ) );
 		/// <returns></returns>
 		public static Vertices createGear( float radius, int numberOfTeeth, float tipPercentage, float toothHeight )
 		{
-			Vertices vertices = new Vertices();
+			var vertices = new Vertices();
 
 			float stepSize = MathHelper.TwoPi / numberOfTeeth;
 			tipPercentage /= 100f;
@@ -318,13 +318,29 @@ nameof( bottomRadius ) );
 			return vertices;
 		}
 
+
+		public static Vertices createPolygonFromTextureData( Texture2D texture )
+		{
+			var data = new uint[texture.Width * texture.Height];
+			texture.GetData( data, 0, data.Length );
+			return TextureConverter.detectVertices( data, texture.Width );
+		}
+
+
+		public static Vertices createPolygonFromTextureData( Nez.Textures.Subtexture subtexture )
+		{
+			var data = new uint[subtexture.sourceRect.Width * subtexture.sourceRect.Height];
+			subtexture.texture2D.GetData( 0, subtexture.sourceRect, data, 0, data.Length );
+			return TextureConverter.detectVertices( data, subtexture.texture2D.Width );
+		}
+
 		/// <summary>
 		/// Detects the vertices by analyzing the texture data.
 		/// </summary>
 		/// <param name="data">The texture data.</param>
 		/// <param name="width">The texture width.</param>
 		/// <returns></returns>
-		public static Vertices createPolygon( uint[] data, int width )
+		public static Vertices createPolygonFromTextureData( uint[] data, int width )
 		{
 			return TextureConverter.detectVertices( data, width );
 		}
@@ -336,7 +352,7 @@ nameof( bottomRadius ) );
 		/// <param name="width">The texture width.</param>
 		/// <param name="holeDetection">if set to <c>true</c> it will perform hole detection.</param>
 		/// <returns></returns>
-		public static Vertices createPolygon( uint[] data, int width, bool holeDetection )
+		public static Vertices createPolygonFromTextureData( uint[] data, int width, bool holeDetection )
 		{
 			return TextureConverter.detectVertices( data, width, holeDetection );
 		}
@@ -351,7 +367,7 @@ nameof( bottomRadius ) );
 		/// <param name="multiPartDetection">if set to <c>true</c> it will perform multi part detection.</param>
 		/// <param name="holeDetection">if set to <c>true</c> it will perform hole detection.</param>
 		/// <returns></returns>
-		public static List<Vertices> createPolygon( uint[] data, int width, float hullTolerance,
+		public static List<Vertices> createPolygonFromTextureData( uint[] data, int width, float hullTolerance,
 												   byte alphaTolerance, bool multiPartDetection, bool holeDetection )
 		{
 			return TextureConverter.detectVertices( data, width, hullTolerance, alphaTolerance,

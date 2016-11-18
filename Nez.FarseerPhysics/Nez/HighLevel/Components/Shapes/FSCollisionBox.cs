@@ -17,7 +17,7 @@ namespace Nez.Farseer
 		{
 			_width = width;
 			_height = height;
-			_verts = PolygonTools.createRectangle( _width / 2, _height / 2 );
+			_verts = PolygonTools.createRectangle( FSConvert.displayToSim * _width / 2, FSConvert.displayToSim * _height / 2 );
 		}
 
 
@@ -26,7 +26,7 @@ namespace Nez.Farseer
 		public FSCollisionBox setWidth( float width )
 		{
 			_width = width;
-			_verts = PolygonTools.createRectangle( _width, _height );
+			_verts = PolygonTools.createRectangle( FSConvert.displayToSim * _width / 2, FSConvert.displayToSim * _height / 2 );
 			recreateFixture();
 			return this;
 		}
@@ -35,7 +35,7 @@ namespace Nez.Farseer
 		public FSCollisionBox setHeight( float height )
 		{
 			_height = height;
-			_verts = PolygonTools.createRectangle( _width, _height );
+			_verts = PolygonTools.createRectangle( FSConvert.displayToSim * _width / 2, FSConvert.displayToSim * _height / 2 );
 			recreateFixture();
 			return this;
 		}

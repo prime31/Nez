@@ -75,16 +75,20 @@ namespace Nez.Farseer
 		public const int circleSegments = 24;
 
 
-		public FSDebugView( World world )
+		public FSDebugView()
 		{
 			_bounds = RectangleF.maxRect;
-			this.world = world;
-			world.contactManager.onPreSolve += preSolve;
 
 			//Default flags
 			appendFlags( DebugViewFlags.Shape );
 			appendFlags( DebugViewFlags.Controllers );
 			appendFlags( DebugViewFlags.Joint );
+		}
+
+
+		public FSDebugView( World world ) : this()
+		{
+			this.world = world;
 		}
 
 
@@ -120,6 +124,10 @@ namespace Nez.Farseer
 
 		public override void onAddedToEntity()
 		{
+			if( world == null )
+				world = entity.scene.getOrCreateSceneComponent<FSWorld>();
+			world.contactManager.onPreSolve += preSolve;
+
 			transform.setPosition( new Vector2( -float.MaxValue, -float.MaxValue ) * 0.5f );
 			_primitiveBatch = new PrimitiveBatch( 1000 );
 
@@ -219,7 +227,7 @@ namespace Nez.Farseer
 				{
 					foreach( Fixture f in body.fixtureList )
 					{
-						PolygonShape polygon = f.shape as PolygonShape;
+						var polygon = f.shape as PolygonShape;
 						if( polygon != null )
 						{
 							FarseerPhysics.Common.Transform xf;
@@ -282,7 +290,7 @@ namespace Nez.Farseer
 				{
 					Controller controller = world.controllerList[i];
 
-					BuoyancyController buoyancy = controller as BuoyancyController;
+					var buoyancy = controller as BuoyancyController;
 					if( buoyancy != null )
 					{
 						AABB container = buoyancy.Container;
@@ -327,8 +335,8 @@ namespace Nez.Farseer
 					float y1 = performancePanelBounds.Bottom - ( ( _graphValues[i] / ( maximumValue - minimumValue ) ) * yScale );
 					float y2 = performancePanelBounds.Bottom - ( ( _graphValues[i - 1] / ( maximumValue - minimumValue ) ) * yScale );
 
-					Vector2 x1 = new Vector2( MathHelper.Clamp( x, performancePanelBounds.Left, performancePanelBounds.Right ), MathHelper.Clamp( y1, performancePanelBounds.Top, performancePanelBounds.Bottom ) );
-					Vector2 x2 = new Vector2( MathHelper.Clamp( x + deltaX, performancePanelBounds.Left, performancePanelBounds.Right ), MathHelper.Clamp( y2, performancePanelBounds.Top, performancePanelBounds.Bottom ) );
+					var x1 = new Vector2( MathHelper.Clamp( x, performancePanelBounds.Left, performancePanelBounds.Right ), MathHelper.Clamp( y1, performancePanelBounds.Top, performancePanelBounds.Bottom ) );
+					var x2 = new Vector2( MathHelper.Clamp( x + deltaX, performancePanelBounds.Left, performancePanelBounds.Right ), MathHelper.Clamp( y2, performancePanelBounds.Top, performancePanelBounds.Bottom ) );
 
 					drawSegment( FSConvert.toSimUnits( x1 ), FSConvert.toSimUnits( x2 ), Color.LightGreen );
 
@@ -361,8 +369,8 @@ namespace Nez.Farseer
 			for( int i = 0; i < world.bodyList.Count; i++ )
 				fixtureCount += world.bodyList[i].fixtureList.Count;
 
-			int x = (int)debugPanelPosition.X;
-			int y = (int)debugPanelPosition.Y;
+			var x = (int)debugPanelPosition.X;
+			var y = (int)debugPanelPosition.Y;
 
 			_debugPanelSb.Clear();
 			_debugPanelSb.AppendLine( "Objects:" );
@@ -480,7 +488,7 @@ namespace Nez.Farseer
 			{
 				case ShapeType.Circle:
 				{
-					CircleShape circle = (CircleShape)fixture.shape;
+					var circle = (CircleShape)fixture.shape;
 
 					Vector2 center = MathUtils.mul( ref xf, circle.position );
 					float radius = circle.radius;
@@ -492,9 +500,12 @@ namespace Nez.Farseer
 
 				case ShapeType.Polygon:
 				{
-					PolygonShape poly = (PolygonShape)fixture.shape;
+					var poly = (PolygonShape)fixture.shape;
 					int vertexCount = poly.vertices.Count;
 					System.Diagnostics.Debug.Assert( vertexCount <= Settings.maxPolygonVertices );
+
+					if( vertexCount > _tempVertices.Length )
+						_tempVertices = new Vector2[vertexCount];
 
 					for( int i = 0; i < vertexCount; ++i )
 					{
@@ -507,9 +518,9 @@ namespace Nez.Farseer
 
 				case ShapeType.Edge:
 				{
-					EdgeShape edge = (EdgeShape)fixture.shape;
-					Vector2 v1 = MathUtils.mul( ref xf, edge.vertex1 );
-					Vector2 v2 = MathUtils.mul( ref xf, edge.vertex2 );
+					var edge = (EdgeShape)fixture.shape;
+					var v1 = MathUtils.mul( ref xf, edge.vertex1 );
+					var v2 = MathUtils.mul( ref xf, edge.vertex2 );
 					drawSegment( v1, v2, color );
 				}
 				break;
@@ -519,8 +530,8 @@ namespace Nez.Farseer
 					var chain = (ChainShape)fixture.shape;
 					for( int i = 0; i < chain.vertices.Count - 1; ++i )
 					{
-						Vector2 v1 = MathUtils.mul( ref xf, chain.vertices[i] );
-						Vector2 v2 = MathUtils.mul( ref xf, chain.vertices[i + 1] );
+						var v1 = MathUtils.mul( ref xf, chain.vertices[i] );
+						var v2 = MathUtils.mul( ref xf, chain.vertices[i + 1] );
 						drawSegment( v1, v2, color );
 					}
 				}
@@ -564,7 +575,7 @@ namespace Nez.Farseer
 				return;
 			}
 
-			Color colorFill = color * ( outline ? 0.5f : 1.0f );
+			var colorFill = color * ( outline ? 0.5f : 1.0f );
 
 			for( int i = 1; i < count - 1; i++ )
 			{
@@ -702,7 +713,7 @@ namespace Nez.Farseer
 			rotation.Normalize();
 
 			// Calculate angle of directional vector
-			float angle = (float)Math.Atan2( rotation.X, -rotation.Y );
+			var angle = (float)Math.Atan2( rotation.X, -rotation.Y );
 			// Create matrix for rotation
 			Matrix rotMatrix = Matrix.CreateRotationZ( angle );
 			// Create translation matrix for end-point
