@@ -161,7 +161,6 @@
     <Compile Include="Nez\LowLevel\Components\Renderables\FSBoxBody.cs" />
     <Compile Include="Nez\LowLevel\Components\Renderables\FSCircleBody.cs" />
     <Compile Include="Nez\LowLevel\Components\Renderables\FSCompoundPolygonBody.cs" />
-    <Compile Include="Nez\LowLevel\Components\Renderables\FSDebugView.cs" />
     <Compile Include="Nez\LowLevel\Components\Renderables\FSPolygonBody.cs" />
     <Compile Include="Nez\LowLevel\Components\Renderables\FSRenderableBody.cs" />
     <Compile Include="Nez\LowLevel\Components\FSGenericBody.cs" />
@@ -173,6 +172,7 @@
     <Compile Include="Nez\Common\FSConvert.cs" />
     <Compile Include="Nez\Common\FSWorld.cs" />
     <Compile Include="Nez\HighLevel\Components\Joints\FSMouseJoint.cs" />
+    <Compile Include="Nez\Common\FSDebugView.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Nez.Portable\Nez.csproj">

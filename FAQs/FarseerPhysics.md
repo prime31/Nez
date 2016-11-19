@@ -27,13 +27,108 @@ The `FSDebugView` Component can be added to your Scene to get a visual represent
 
 
 ## High Level API
+The high level API wraps up the Farseer API in standard Nez Components. Farseer Components come in 3 different flavors explained below each of them with a fluent API for configuring the objects for easy method chaining and API exploration.
 
+- **FSRigidBody**: wraps the Farseer Body. Handles keeping the Entity.transform in sync with the Farseer Body. FSRigidBody's can be any of the three body types: Dynamic, Static or Kinematic (see Understanding Farseer Objects for details on each). An FSRigidBody is required for any of the other Farseer Components to be of any use.
 
+- **FSCollisionShape**: wraps the Farseer Fixture and Shape objects. This is the physical shape of the collider. You can have 1 or more FSCollisionShapes on your Entity. Available FSCollisionShapes are circle, box, polygon, edge and chain.
 
+- **FSJoint**: wraps the Farseer Joint. Joints can be used to connect two FSRigidBodys in various different ways. Included joint types are: angle, distance, friction, gear, motor, mouse, prismatic, pulley, revolute (hinge), rope, weld and wheel.
+
+Lets take a look at some basic examples of using the API.
+
+Creates a Sprite and a dynamic Farseer rigid body with a circle collider
+```cs
+// create an Entity and set the position and scale
+createEntity( "circle-sprite" )
+	.setPosition( pos )
+  	.setScale( scale )
+	
+	// add an FSRigidBody and set the bodyType to dynamic
+	.addComponent<FSRigidBody>()
+	.setBodyType( BodyType.Dynamic )
+	
+	// add a circle shape for our collisions and set the radius to halve the texture width
+	.addComponent<FSCollisionCircle>()
+	.setRadius( texture.Width / 2 )
+	
+	// finally add a Sprite
+	.addComponent( new Sprite( texture ) );
+```
+
+Creates a static Farseer rigid body and an edge collider that goes from vert1 to vert2
+```cs
+createEntity( "edge" )
+	.setPosition( pos )
+	
+	// add the FSRigidBody. By default it will be static
+	.addComponent<FSRigidBody>()
+	
+	// add our edge collision shape with two verts
+	.addComponent<FSCollisionEdge>()
+  	.setVertices( vert1, vert2 );
+```
+
+Creates a static Farseer rigid body with a chain collider. Chains are essentially a free form sequence of line segments that can be collided with from either side.
+```cs
+// define the verts. The Vertices class has the sme API as List<Vector2>.
+var verts = new Vertices();
+verts.Add( new Vector2( 500, 10 ) );
+verts.Add( new Vector2( 550, 50 ) );
+verts.Add( new Vector2( 600, 70) );
+verts.Add( new Vector2( 700, 20 ) );
+
+createEntity( "chain" )
+	// add our static FSRigidBody
+	.addComponent<FSRigidBody>()
+		
+	// add the chain shape and set the verts
+	.addComponent<FSCollisionChain>()
+  	.setVertices( verts );
+```
+
+This example shows how to use a joint to connect two FSRigidBodies. It is assumed that rigidBody1 and rigidBody2 exist and are FSRigidBodies.
+```cs
+// add the weld joint to the first rigid body. Weld joints essentially glues two bodies together.
+rigidBody1.addComponent<FSWeldJoint>()
+		 // configure the anchors for the two bodies. Anchors are relative to the position of each body.
+	     .setOtherBodyAnchor( new Vector2( 50, 0 ) )
+	     .setOwnerBodyAnchor( new Vector2( -50, 50 ) )
+		 
+		 // configure the frequency and damping ratio
+	     .setFrequencyHz( 5 )
+	     .setDampingRatio( 0.1f )
+		 
+		 // set the second FSRigidBody for the joint
+	     .setOtherBody( rigidBody2 );
+```
+
+Finally lets take a look at creating a slightly more complex collision shape.
+```cs
+var vertList = new List<Vertices>();
+// fill vertList with some polygon vertices
+
+// create and configure our standard rigid body
+var rb = createEntity( "compound-polygon" )
+	.setPosition( pos )
+	.addComponent<FSRigidBody>()
+	.setBodyType( BodyType.Dynamic );
+
+// add an FSCollisionPolygon for each of the vert Lists
+foreach( var verts in vertList )
+{
+	rb.addComponent<FSCollisionPolygon>()
+	  .setVertices( verts );
+}
+```
 
 
 ## Low Level API
+The low level API provides a small number of Components that handle synching the Nez Transform with the Farseer Body. These can be used to get up and running quickly but they are more here to be used as a template so that you can create your own custom subclasses.
 
+- **FSGenericBody**: manages the Farseer Body (and provides public access to it) and syncs it with the Nez Transform. That's about all you get with it. To make adding collision shapes and joints easier there are a pile of extension methods on the Body class. They all take care of converting from pixel space to simulation space as well.
+
+- **FSRenderableBody**: manages the Farseer Body and syncs it with the Nez Transform. Where it differs from the `FSGenericBody` is that there are some subclasses that are instantly useable: `FSBoxBody`, `FSCircleBody`, `FSPolygonBody` and `FSCompoundPolygonBody`. These Components all take in a Texture2D/Subtexture and create the Farseer Body, Fixture and Shape for you. They also handle rendering as well. `FSCompoundPolygonBody` will generate the collision shape based on the texture which can be really handy.
 
 
 
