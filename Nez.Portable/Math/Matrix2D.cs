@@ -1,5 +1,6 @@
 using System;
 using System.Diagnostics;
+using System.Runtime.CompilerServices;
 using Microsoft.Xna.Framework;
 
 
@@ -126,6 +127,7 @@ namespace Nez
 		/// <param name="matrix1">The first matrix to add.</param>
 		/// <param name="matrix2">The second matrix to add.</param>
 		/// <returns>The result of the matrix addition.</returns>
+		[MethodImpl( MethodImplOptions.AggressiveInlining )]
 		public static Matrix2D add( Matrix2D matrix1, Matrix2D matrix2 )
 		{
 			matrix1.M11 += matrix2.M11;
@@ -147,6 +149,7 @@ namespace Nez
 		/// <param name="matrix1">The first matrix to add.</param>
 		/// <param name="matrix2">The second matrix to add.</param>
 		/// <param name="result">The result of the matrix addition as an output parameter.</param>
+		[MethodImpl( MethodImplOptions.AggressiveInlining )]
 		public static void add( ref Matrix2D matrix1, ref Matrix2D matrix2, out Matrix2D result )
 		{
 			result.M11 = matrix1.M11 + matrix2.M11;
@@ -165,6 +168,7 @@ namespace Nez
 		/// </summary>
 		/// <param name="radians">Angle in radians.</param>
 		/// <returns>The rotation <see cref="Matrix2D"/> around Z axis.</returns>
+		[MethodImpl( MethodImplOptions.AggressiveInlining )]
 		public static Matrix2D createRotation( float radians )
 		{
 			Matrix2D result;
@@ -178,6 +182,7 @@ namespace Nez
 		/// </summary>
 		/// <param name="radians">Angle in radians.</param>
 		/// <param name="result">The rotation <see cref="Matrix2D"/> around Z axis as an output parameter.</param>
+		[MethodImpl( MethodImplOptions.AggressiveInlining )]
 		public static void createRotation( float radians, out Matrix2D result )
 		{
 			result = Matrix2D.identity;
@@ -197,6 +202,7 @@ namespace Nez
 		/// </summary>
 		/// <param name="scale">Scale value for all three axises.</param>
 		/// <returns>The scaling <see cref="Matrix2D"/>.</returns>
+		[MethodImpl( MethodImplOptions.AggressiveInlining )]
 		public static Matrix2D createScale( float scale )
 		{
 			Matrix2D result;
@@ -210,6 +216,7 @@ namespace Nez
 		/// </summary>
 		/// <param name="scale">Scale value for all three axises.</param>
 		/// <param name="result">The scaling <see cref="Matrix2D"/> as an output parameter.</param>
+		[MethodImpl( MethodImplOptions.AggressiveInlining )]
 		public static void createScale( float scale, out Matrix2D result )
 		{
 			createScale( scale, scale, out result );
@@ -222,6 +229,7 @@ namespace Nez
 		/// <param name="xScale">Scale value for X axis.</param>
 		/// <param name="yScale">Scale value for Y axis.</param>
 		/// <returns>The scaling <see cref="Matrix2D"/>.</returns>
+		[MethodImpl( MethodImplOptions.AggressiveInlining )]
 		public static Matrix2D createScale( float xScale, float yScale )
 		{
 			Matrix2D result;
@@ -236,6 +244,7 @@ namespace Nez
 		/// <param name="xScale">Scale value for X axis.</param>
 		/// <param name="yScale">Scale value for Y axis.</param>
 		/// <param name="result">The scaling <see cref="Matrix2D"/> as an output parameter.</param>
+		[MethodImpl( MethodImplOptions.AggressiveInlining )]
 		public static void createScale( float xScale, float yScale, out Matrix2D result )
 		{
 			result.M11 = xScale;
@@ -254,6 +263,7 @@ namespace Nez
 		/// </summary>
 		/// <param name="scale"><see cref="Vector2"/> representing x and y scale values.</param>
 		/// <returns>The scaling <see cref="Matrix2D"/>.</returns>
+		[MethodImpl( MethodImplOptions.AggressiveInlining )]
 		public static Matrix2D createScale( Vector2 scale )
 		{
 			Matrix2D result;
@@ -267,6 +277,7 @@ namespace Nez
 		/// </summary>
 		/// <param name="scale"><see cref="Vector3"/> representing x,y and z scale values.</param>
 		/// <param name="result">The scaling <see cref="Matrix2D"/> as an output parameter.</param>
+		[MethodImpl( MethodImplOptions.AggressiveInlining )]
 		public static void createScale( ref Vector2 scale, out Matrix2D result )
 		{
 			result.M11 = scale.X;
@@ -286,6 +297,7 @@ namespace Nez
 		/// <param name="xPosition">X coordinate of translation.</param>
 		/// <param name="yPosition">Y coordinate of translation.</param>
 		/// <returns>The translation <see cref="Matrix2D"/>.</returns>
+		[MethodImpl( MethodImplOptions.AggressiveInlining )]
 		public static Matrix2D createTranslation( float xPosition, float yPosition )
 		{
 			Matrix2D result;
@@ -299,6 +311,7 @@ namespace Nez
 		/// </summary>
 		/// <param name="position">X,Y and Z coordinates of translation.</param>
 		/// <param name="result">The translation <see cref="Matrix2D"/> as an output parameter.</param>
+		[MethodImpl( MethodImplOptions.AggressiveInlining )]
 		public static void createTranslation( ref Vector2 position, out Matrix2D result )
 		{
 			result.M11 = 1;
@@ -317,6 +330,7 @@ namespace Nez
 		/// </summary>
 		/// <param name="position">X,Y and Z coordinates of translation.</param>
 		/// <returns>The translation <see cref="Matrix2D"/>.</returns>
+		[MethodImpl( MethodImplOptions.AggressiveInlining )]
 		public static Matrix2D createTranslation( Vector2 position )
 		{
 			Matrix2D result;
@@ -331,6 +345,7 @@ namespace Nez
 		/// <param name="xPosition">X coordinate of translation.</param>
 		/// <param name="yPosition">Y coordinate of translation.</param>
 		/// <param name="result">The translation <see cref="Matrix2D"/> as an output parameter.</param>
+		[MethodImpl( MethodImplOptions.AggressiveInlining )]
 		public static void createTranslation( float xPosition, float yPosition, out Matrix2D result )
 		{
 			result.M11 = 1;
@@ -344,12 +359,14 @@ namespace Nez
 		}
 
 
+		[MethodImpl( MethodImplOptions.AggressiveInlining )]
 		public float determinant()
 		{
 			return M11 * M22 - M12 * M21;
 		}
 
 
+		[MethodImpl( MethodImplOptions.AggressiveInlining )]
 		public static void invert( ref Matrix2D matrix, out Matrix2D result )
 		{
 			var det = 1 / matrix.determinant();
@@ -371,6 +388,7 @@ namespace Nez
 		/// <param name="matrix1">Source <see cref="Matrix2D"/>.</param>
 		/// <param name="matrix2">Divisor <see cref="Matrix2D"/>.</param>
 		/// <returns>The result of dividing the matrix.</returns>
+		[MethodImpl( MethodImplOptions.AggressiveInlining )]
 		public static Matrix2D divide( Matrix2D matrix1, Matrix2D matrix2 )
 		{
 			matrix1.M11 = matrix1.M11 / matrix2.M11;
@@ -391,6 +409,7 @@ namespace Nez
 		/// <param name="matrix1">Source <see cref="Matrix2D"/>.</param>
 		/// <param name="matrix2">Divisor <see cref="Matrix2D"/>.</param>
 		/// <param name="result">The result of dividing the matrix as an output parameter.</param>
+		[MethodImpl( MethodImplOptions.AggressiveInlining )]
 		public static void divide( ref Matrix2D matrix1, ref Matrix2D matrix2, out Matrix2D result )
 		{
 			result.M11 = matrix1.M11 / matrix2.M11;
@@ -410,6 +429,7 @@ namespace Nez
 		/// <param name="matrix1">Source <see cref="Matrix2D"/>.</param>
 		/// <param name="divider">Divisor scalar.</param>
 		/// <returns>The result of dividing a matrix by a scalar.</returns>
+		[MethodImpl( MethodImplOptions.AggressiveInlining )]
 		public static Matrix2D divide( Matrix2D matrix1, float divider )
 		{
 			float num = 1f / divider;
@@ -432,6 +452,7 @@ namespace Nez
 		/// <param name="matrix1">Source <see cref="Matrix2D"/>.</param>
 		/// <param name="divider">Divisor scalar.</param>
 		/// <param name="result">The result of dividing a matrix by a scalar as an output parameter.</param>
+		[MethodImpl( MethodImplOptions.AggressiveInlining )]
 		public static void divide( ref Matrix2D matrix1, float divider, out Matrix2D result )
 		{
 			float num = 1f / divider;
@@ -453,6 +474,7 @@ namespace Nez
 		/// <param name="matrix2">The second <see cref="Vector2"/>.</param>
 		/// <param name="amount">Weighting value(between 0.0 and 1.0).</param>
 		/// <returns>>The result of linear interpolation of the specified matrixes.</returns>
+		[MethodImpl( MethodImplOptions.AggressiveInlining )]
 		public static Matrix2D lerp( Matrix2D matrix1, Matrix2D matrix2, float amount )
 		{
 			matrix1.M11 = matrix1.M11 + ( ( matrix2.M11 - matrix1.M11 ) * amount );
@@ -474,6 +496,7 @@ namespace Nez
 		/// <param name="matrix2">The second <see cref="Vector2"/>.</param>
 		/// <param name="amount">Weighting value(between 0.0 and 1.0).</param>
 		/// <param name="result">The result of linear interpolation of the specified matrixes as an output parameter.</param>
+		[MethodImpl( MethodImplOptions.AggressiveInlining )]
 		public static void lerp( ref Matrix2D matrix1, ref Matrix2D matrix2, float amount, out Matrix2D result )
 		{
 			result.M11 = matrix1.M11 + ( ( matrix2.M11 - matrix1.M11 ) * amount );
@@ -493,6 +516,7 @@ namespace Nez
 		/// <param name="matrix1">Source <see cref="Matrix2D"/>.</param>
 		/// <param name="matrix2">Source <see cref="Matrix2D"/>.</param>
 		/// <returns>Result of the matrix multiplication.</returns>
+		[MethodImpl( MethodImplOptions.AggressiveInlining )]
 		public static Matrix2D multiply( Matrix2D matrix1, Matrix2D matrix2 )
 		{
 			var m11 = ( matrix1.M11 * matrix2.M11 ) + ( matrix1.M12 * matrix2.M21 );
@@ -522,6 +546,7 @@ namespace Nez
 		/// <param name="matrix1">Source <see cref="Matrix2D"/>.</param>
 		/// <param name="matrix2">Source <see cref="Matrix2D"/>.</param>
 		/// <param name="result">Result of the matrix multiplication as an output parameter.</param>
+		[MethodImpl( MethodImplOptions.AggressiveInlining )]
 		public static void multiply( ref Matrix2D matrix1, ref Matrix2D matrix2, out Matrix2D result )
 		{
 			var m11 = ( matrix1.M11 * matrix2.M11 ) + ( matrix1.M12 * matrix2.M21 );
@@ -550,6 +575,7 @@ namespace Nez
 		/// <param name="matrix1">Source <see cref="Matrix2D"/>.</param>
 		/// <param name="scaleFactor">Scalar value.</param>
 		/// <returns>Result of the matrix multiplication with a scalar.</returns>
+		[MethodImpl( MethodImplOptions.AggressiveInlining )]
 		public static Matrix2D multiply( Matrix2D matrix1, float scaleFactor )
 		{
 			matrix1.M11 *= scaleFactor;
@@ -570,6 +596,7 @@ namespace Nez
 		/// <param name="matrix1">Source <see cref="Matrix2D"/>.</param>
 		/// <param name="scaleFactor">Scalar value.</param>
 		/// <param name="result">Result of the matrix multiplication with a scalar as an output parameter.</param>
+		[MethodImpl( MethodImplOptions.AggressiveInlining )]
 		public static void multiply( ref Matrix2D matrix1, float scaleFactor, out Matrix2D result )
 		{
 			result.M11 = matrix1.M11 * scaleFactor;
@@ -589,6 +616,7 @@ namespace Nez
 		/// <param name="matrix1">Source <see cref="Matrix2D"/> on the left of the add sign.</param>
 		/// <param name="matrix2">Source <see cref="Matrix2D"/> on the right of the add sign.</param>
 		/// <returns>Sum of the matrixes.</returns>
+		[MethodImpl( MethodImplOptions.AggressiveInlining )]
 		public static Matrix2D operator +( Matrix2D matrix1, Matrix2D matrix2 )
 		{
 			matrix1.M11 = matrix1.M11 + matrix2.M11;
@@ -609,6 +637,7 @@ namespace Nez
 		/// <param name="matrix1">Source <see cref="Matrix2D"/> on the left of the div sign.</param>
 		/// <param name="matrix2">Divisor <see cref="Matrix2D"/> on the right of the div sign.</param>
 		/// <returns>The result of dividing the matrixes.</returns>
+		[MethodImpl( MethodImplOptions.AggressiveInlining )]
 		public static Matrix2D operator /( Matrix2D matrix1, Matrix2D matrix2 )
 		{
 			matrix1.M11 = matrix1.M11 / matrix2.M11;
@@ -629,6 +658,7 @@ namespace Nez
 		/// <param name="matrix">Source <see cref="Matrix2D"/> on the left of the div sign.</param>
 		/// <param name="divider">Divisor scalar on the right of the div sign.</param>
 		/// <returns>The result of dividing a matrix by a scalar.</returns>
+		[MethodImpl( MethodImplOptions.AggressiveInlining )]
 		public static Matrix2D operator /( Matrix2D matrix, float divider )
 		{
 			float num = 1f / divider;
@@ -650,6 +680,7 @@ namespace Nez
 		/// <param name="matrix1">Source <see cref="Matrix2D"/> on the left of the equal sign.</param>
 		/// <param name="matrix2">Source <see cref="Matrix2D"/> on the right of the equal sign.</param>
 		/// <returns><c>true</c> if the instances are equal; <c>false</c> otherwise.</returns>
+		[MethodImpl( MethodImplOptions.AggressiveInlining )]
 		public static bool operator ==( Matrix2D matrix1, Matrix2D matrix2 )
 		{
 			return (
@@ -671,6 +702,7 @@ namespace Nez
 		/// <param name="matrix1">Source <see cref="Matrix2D"/> on the left of the not equal sign.</param>
 		/// <param name="matrix2">Source <see cref="Matrix2D"/> on the right of the not equal sign.</param>
 		/// <returns><c>true</c> if the instances are not equal; <c>false</c> otherwise.</returns>
+		[MethodImpl( MethodImplOptions.AggressiveInlining )]
 		public static bool operator !=( Matrix2D matrix1, Matrix2D matrix2 )
 		{
 			return (
@@ -695,6 +727,7 @@ namespace Nez
 		/// <remarks>
 		/// Using matrix multiplication algorithm - see http://en.wikipedia.org/wiki/Matrix_multiplication.
 		/// </remarks>
+		[MethodImpl( MethodImplOptions.AggressiveInlining )]
 		public static Matrix2D operator *( Matrix2D matrix1, Matrix2D matrix2 )
 		{
 			var m11 = ( matrix1.M11 * matrix2.M11 ) + ( matrix1.M12 * matrix2.M21 );
@@ -725,6 +758,7 @@ namespace Nez
 		/// <param name="matrix">Source <see cref="Matrix2D"/> on the left of the mul sign.</param>
 		/// <param name="scaleFactor">Scalar value on the right of the mul sign.</param>
 		/// <returns>Result of the matrix multiplication with a scalar.</returns>
+		[MethodImpl( MethodImplOptions.AggressiveInlining )]
 		public static Matrix2D operator *( Matrix2D matrix, float scaleFactor )
 		{
 			matrix.M11 = matrix.M11 * scaleFactor;
@@ -745,6 +779,7 @@ namespace Nez
 		/// <param name="matrix1">Source <see cref="Matrix2D"/> on the left of the sub sign.</param>
 		/// <param name="matrix2">Source <see cref="Matrix2D"/> on the right of the sub sign.</param>
 		/// <returns>Result of the matrix subtraction.</returns>
+		[MethodImpl( MethodImplOptions.AggressiveInlining )]
 		public static Matrix2D operator -( Matrix2D matrix1, Matrix2D matrix2 )
 		{
 			matrix1.M11 = matrix1.M11 - matrix2.M11;
@@ -764,6 +799,7 @@ namespace Nez
 		/// </summary>
 		/// <param name="matrix">Source <see cref="Matrix2D"/> on the right of the sub sign.</param>
 		/// <returns>Result of the inversion.</returns>
+		[MethodImpl( MethodImplOptions.AggressiveInlining )]
 		public static Matrix2D operator -( Matrix2D matrix )
 		{
 			matrix.M11 = -matrix.M11;
@@ -784,6 +820,7 @@ namespace Nez
 		/// <param name="matrix1">The first <see cref="Matrix2D"/>.</param>
 		/// <param name="matrix2">The second <see cref="Matrix2D"/>.</param>
 		/// <returns>The result of the matrix subtraction.</returns>
+		[MethodImpl( MethodImplOptions.AggressiveInlining )]
 		public static Matrix2D subtract( Matrix2D matrix1, Matrix2D matrix2 )
 		{
 			matrix1.M11 = matrix1.M11 - matrix2.M11;
@@ -804,6 +841,7 @@ namespace Nez
 		/// <param name="matrix1">The first <see cref="Matrix2D"/>.</param>
 		/// <param name="matrix2">The second <see cref="Matrix2D"/>.</param>
 		/// <param name="result">The result of the matrix subtraction as an output parameter.</param>
+		[MethodImpl( MethodImplOptions.AggressiveInlining )]
 		public static void subtract( ref Matrix2D matrix1, ref Matrix2D matrix2, out Matrix2D result )
 		{
 			result.M11 = matrix1.M11 - matrix2.M11;
@@ -822,6 +860,7 @@ namespace Nez
 		/// </summary>
 		/// <param name="matrix">The matrix for transposing operation.</param>
 		/// <returns>The new <see cref="Matrix2D"/> which contains the transposing result.</returns>
+		[MethodImpl( MethodImplOptions.AggressiveInlining )]
 		public static Matrix2D transpose( Matrix2D matrix )
 		{
 			Matrix2D ret;
@@ -835,6 +874,7 @@ namespace Nez
 		/// </summary>
 		/// <param name="matrix">The matrix for transposing operation.</param>
 		/// <param name="result">The new <see cref="Matrix2D"/> which contains the transposing result as an output parameter.</param>
+		[MethodImpl( MethodImplOptions.AggressiveInlining )]
 		public static void transpose( ref Matrix2D matrix, out Matrix2D result )
 		{
 			Matrix2D ret;
@@ -854,6 +894,7 @@ namespace Nez
 
 		#region public methods
 
+		[MethodImpl( MethodImplOptions.AggressiveInlining )]
 		public void multiplyTranslation( float x, float y )
 		{
 			var trans = createTranslation( x, y );
@@ -861,6 +902,7 @@ namespace Nez
 		}
 
 
+		[MethodImpl( MethodImplOptions.AggressiveInlining )]
 		public void multiplyRotation( float radians )
 		{
 			var rot = createRotation( radians );
