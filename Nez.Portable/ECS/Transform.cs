@@ -1,7 +1,7 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
 using System.Collections.Generic;
-
+using System.Runtime.CompilerServices;
 
 namespace Nez
 {
@@ -312,6 +312,7 @@ namespace Nez
 		/// </summary>
 		/// <returns>The position.</returns>
 		/// <param name="position">Position.</param>
+		[MethodImpl( MethodImplOptions.AggressiveInlining )]
 		public Transform setPosition( Vector2 position )
 		{
 			if( shouldRoundPosition )
@@ -332,6 +333,7 @@ namespace Nez
 		}
 
 
+		[MethodImpl( MethodImplOptions.AggressiveInlining )]
 		public Transform setPosition( float x, float y )
 		{
 			return setPosition( new Vector2( x, y ) );
@@ -344,6 +346,7 @@ namespace Nez
 		/// </summary>
 		/// <returns>The local position.</returns>
 		/// <param name="localPosition">Local position.</param>
+		[MethodImpl( MethodImplOptions.AggressiveInlining )]
 		public Transform setLocalPosition( Vector2 localPosition )
 		{
 			if( shouldRoundPosition )
@@ -365,6 +368,7 @@ namespace Nez
 		/// </summary>
 		/// <returns>The rotation.</returns>
 		/// <param name="radians">Radians.</param>
+		[MethodImpl( MethodImplOptions.AggressiveInlining )]
 		public Transform setRotation( float radians )
 		{
 			_rotation = radians;
@@ -382,6 +386,7 @@ namespace Nez
 		/// </summary>
 		/// <returns>The rotation.</returns>
 		/// <param name="radians">Radians.</param>
+		[MethodImpl( MethodImplOptions.AggressiveInlining )]
 		public Transform setRotationDegrees( float degrees )
 		{
 			return setRotation( MathHelper.ToRadians( degrees ) );
@@ -394,6 +399,7 @@ namespace Nez
 		/// </summary>
 		/// <returns>The local rotation.</returns>
 		/// <param name="radians">Radians.</param>
+		[MethodImpl( MethodImplOptions.AggressiveInlining )]
 		public Transform setLocalRotation( float radians )
 		{
 			_localRotation = radians;
@@ -410,6 +416,7 @@ namespace Nez
 		/// </summary>
 		/// <returns>The local rotation.</returns>
 		/// <param name="radians">Radians.</param>
+		[MethodImpl( MethodImplOptions.AggressiveInlining )]
 		public Transform setLocalRotationDegrees( float degrees )
 		{
 			return setLocalRotation( MathHelper.ToRadians( degrees ) );
@@ -421,6 +428,7 @@ namespace Nez
 		/// </summary>
 		/// <returns>The scale.</returns>
 		/// <param name="scale">Scale.</param>
+		[MethodImpl( MethodImplOptions.AggressiveInlining )]
 		public Transform setScale( Vector2 scale )
 		{
 			_scale = scale;
@@ -438,6 +446,7 @@ namespace Nez
 		/// </summary>
 		/// <returns>The scale.</returns>
 		/// <param name="scale">Scale.</param>
+		[MethodImpl( MethodImplOptions.AggressiveInlining )]
 		public Transform setScale( float scale )
 		{
 			return setScale( new Vector2( scale ) );
@@ -449,6 +458,7 @@ namespace Nez
 		/// </summary>
 		/// <returns>The local scale.</returns>
 		/// <param name="scale">Scale.</param>
+		[MethodImpl( MethodImplOptions.AggressiveInlining )]
 		public Transform setLocalScale( Vector2 scale )
 		{
 			_localScale = scale;
@@ -464,6 +474,7 @@ namespace Nez
 		/// </summary>
 		/// <returns>The local scale.</returns>
 		/// <param name="scale">Scale.</param>
+		[MethodImpl( MethodImplOptions.AggressiveInlining )]
 		public Transform setLocalScale( float scale )
 		{
 			return setLocalScale( new Vector2( scale ) );
@@ -481,6 +492,7 @@ namespace Nez
 		}
 	
 
+		[MethodImpl( MethodImplOptions.AggressiveInlining )]
 		void updateTransform()
 		{
 			if( hierarchyDirty != DirtyType.Clean )
@@ -541,6 +553,7 @@ namespace Nez
 		/// sets the dirty flag on the enum and passes it down to our children
 		/// </summary>
 		/// <param name="dirtyFlagType">Dirty flag type.</param>
+		[MethodImpl( MethodImplOptions.AggressiveInlining )]
 		void setDirty( DirtyType dirtyFlagType )
 		{
 			if( ( hierarchyDirty & dirtyFlagType ) == 0 )

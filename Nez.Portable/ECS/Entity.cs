@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using Microsoft.Xna.Framework;
 
 
@@ -78,6 +79,110 @@ namespace Nez
 		int _tag = 0;
 		bool _enabled = true;
 		internal int _updateOrder = 0;
+
+		#endregion
+
+
+		#region Transform passthroughs
+
+		public Transform parent
+		{
+			[MethodImpl( MethodImplOptions.AggressiveInlining )]
+			get { return transform.parent; }
+			[MethodImpl( MethodImplOptions.AggressiveInlining )]
+			set { transform.setParent( value ); }
+		}
+
+		public int childCount
+		{
+			[MethodImpl( MethodImplOptions.AggressiveInlining )]
+			get { return transform.childCount; }
+		}
+
+		public Vector2 position
+		{
+			[MethodImpl( MethodImplOptions.AggressiveInlining )]
+			get { return transform.position; }
+			[MethodImpl( MethodImplOptions.AggressiveInlining )]
+			set { transform.setPosition( value ); }
+		}
+
+		public Vector2 localPosition
+		{
+			[MethodImpl( MethodImplOptions.AggressiveInlining )]
+			get { return transform.localPosition; }
+			[MethodImpl( MethodImplOptions.AggressiveInlining )]
+			set { transform.setLocalPosition( value ); }
+		}
+
+		public float rotation
+		{
+			[MethodImpl( MethodImplOptions.AggressiveInlining )]
+			get { return transform.rotation; }
+			[MethodImpl( MethodImplOptions.AggressiveInlining )]
+			set { transform.setRotation( value ); }
+		}
+
+		public float rotationDegrees
+		{
+			[MethodImpl( MethodImplOptions.AggressiveInlining )]
+			get { return transform.rotationDegrees; }
+			[MethodImpl( MethodImplOptions.AggressiveInlining )]
+			set { transform.setRotationDegrees( value ); }
+		}
+
+		public float localRotation
+		{
+			[MethodImpl( MethodImplOptions.AggressiveInlining )]
+			get { return transform.localRotation; }
+			[MethodImpl( MethodImplOptions.AggressiveInlining )]
+			set { transform.setLocalRotation( value ); }
+		}
+
+		public float localRotationDegrees
+		{
+			[MethodImpl( MethodImplOptions.AggressiveInlining )]
+			get { return transform.localRotationDegrees; }
+			[MethodImpl( MethodImplOptions.AggressiveInlining )]
+			set { transform.setLocalRotationDegrees( value ); }
+		}
+
+		public Vector2 scale
+		{
+			[MethodImpl( MethodImplOptions.AggressiveInlining )]
+			get { return transform.scale; }
+			[MethodImpl( MethodImplOptions.AggressiveInlining )]
+			set { transform.setScale( value ); }
+		}
+
+		public Vector2 localScale
+		{
+			[MethodImpl( MethodImplOptions.AggressiveInlining )]
+			get { return transform.localScale; }
+			[MethodImpl( MethodImplOptions.AggressiveInlining )]
+			set { transform.setLocalScale( value ); }
+		}
+
+
+		public Matrix2D worldInverseTransform
+		{
+			[MethodImpl( MethodImplOptions.AggressiveInlining )]
+			get { return transform.worldInverseTransform; }
+		}
+
+
+		public Matrix2D localToWorldTransform
+		{
+			[MethodImpl( MethodImplOptions.AggressiveInlining )]
+			get { return transform.localToWorldTransform; }
+		}
+
+
+		public Matrix2D worldToLocalTransform
+		{
+			[MethodImpl( MethodImplOptions.AggressiveInlining )]
+			get { return transform.worldToLocalTransform; }
+		}
 
 		#endregion
 

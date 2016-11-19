@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Runtime.CompilerServices;
 
 
 namespace Nez
@@ -24,7 +25,11 @@ namespace Nez
 		/// shortcut to entity.transform
 		/// </summary>
 		/// <value>The transform.</value>
-		public Transform transform { get { return entity.transform; } }
+		public Transform transform
+		{
+			[MethodImpl( MethodImplOptions.AggressiveInlining )]
+			get { return entity.transform; }
+		}
 
 		/// <summary>
 		/// true if the Component is enabled and the Entity is enabled. When enabled this Components lifecycle methods will be called.
