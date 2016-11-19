@@ -639,39 +639,37 @@ namespace FarseerPhysics.Dynamics
 
 		public bool ignoreCCD;
 
+		/// <summary>
+		/// wires up the onCollision event for every fixture on the Body
+		/// </summary>
 		public event OnCollisionEventHandler onCollision
 		{
 			add
 			{
 				for( int i = 0; i < fixtureList.Count; i++ )
-				{
 					fixtureList[i].onCollision += value;
-				}
 			}
 			remove
 			{
 				for( int i = 0; i < fixtureList.Count; i++ )
-				{
 					fixtureList[i].onCollision -= value;
-				}
 			}
 		}
 
+		/// <summary>
+		/// wires up the onSeparation event for every fixture on the Body
+		/// </summary>
 		public event OnSeparationEventHandler onSeparation
 		{
 			add
 			{
 				for( int i = 0; i < fixtureList.Count; i++ )
-				{
 					fixtureList[i].onSeparation += value;
-				}
 			}
 			remove
 			{
 				for( int i = 0; i < fixtureList.Count; i++ )
-				{
 					fixtureList[i].onSeparation -= value;
-				}
 			}
 		}
 

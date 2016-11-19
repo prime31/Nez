@@ -18,8 +18,27 @@ The Nez Farseer implementation has a few important goals that it aims to achieve
 The Farseer code is all in progress and the API is definitely not in its final state. Usually this would be kept out of the main repo until the API is solidified but since Farseer is entirely optional all in-progress changes will be public. If you are itching to get going with Farseer for now you are mostly on your own. The high level API (and all Nez-specific additions) are available in the Nez.FarseerPhysics/Nez folder.
 
 
+## Using Farseer with Nez
+First and foremost, you should always set your pixel-to-meter ratio before doing anything. By default, the value is set to 100. You can change this to whatever you want by calling `FSConvert.setDisplayUnitToSimUnitRatio`. Behind the scenes, the high level API will be using this value to deal with converting to/from simulation units to pixels. If you choose to use the Farseer API directly be sure to remember to convert your units with the FSDebug `displayToSim` and `simToDisplay` fields.
 
-## Understanding Farseer Objects
+There are a couple options for using Farseer physics with Nez to provide some flexibility. Regardless of if you choose to use the Component-based high level API or use Farseer directly it is recommended to use the `FSWorld` `SceneComponent` to manage the Farseer `World` object. All of the the high level API will get the World object from the FSWorld SceneComponent. You can easily access it by just calling `Scene.getOrCreateSceneComponent<FSWorld>()`. As the name implies, this will fetch the FSWorld SceneComponent or first create it then fetch it.
+
+The `FSDebugView` Component can be added to your Scene to get a visual representation of the physics world. This is very handy for development and debugging of Farseer objects and it will work with the high or low level API.
+
+
+## High Level API
+
+
+
+
+
+## Low Level API
+
+
+
+
+
+### Understanding Farseer Objects
 Farseer consists of a few key objects that are paramount to understanding the API and being able to effectively use it.
 
 - **World**: the world object is the manager of it all. It iterates all the objects in the world each frame steps through and makes sure everything is consistent and stable.
@@ -34,16 +53,5 @@ Farseer consists of a few key objects that are paramount to understanding the AP
 - **Fixture**: a fixture attaches (fixes) the shape to the body so that the centroid of the shape becomes the body’s position. Whenever you move the body, you also move the shape. Once a collision occurs to the shape, the force is calculated and applied to the body.
 
 
-
-## Using Farseer with Nez
-There are a couple options for using Farseer physics with Nez to provide some flexibility. The recommended approach is to use or subclass `FarseerScene`. FarseerScene has a `world` field that houses the Farseer World object and takes care of the physics step each frame.
-
-Alternatively, you can add an `FSWorld` Component to your Scene to get the same effect. Note that you must add your FSWorld Component before attempting to use any of the built in Components since they rely on the World existing.
-
-The `FSDebugView` Component can be added to your Scene to get a visual representation of the physics world. This is very handy for development and debugging of Farseer objects.
-
-
-
-## More coming soon after solidifying the API
 
 

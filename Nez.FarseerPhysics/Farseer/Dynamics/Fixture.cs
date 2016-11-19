@@ -237,7 +237,7 @@ namespace FarseerPhysics.Dynamics
 		public int fixtureId { get; internal set; }
 
 		/// <summary>
-		/// Fires after two shapes has collided and are solved. This gives you a chance to get the impact force.
+		/// Fires after two shapes have collided and are solved. This gives you a chance to get the impact force.
 		/// </summary>
 		public AfterCollisionEventHandler afterCollision;
 
@@ -249,14 +249,14 @@ namespace FarseerPhysics.Dynamics
 
 		/// <summary>
 		/// Fires when two shapes collide and a contact is created between them.
-		/// Note that the first fixture argument is always the fixture that the delegate is subscribed to.
+		/// Note: the first fixture argument is always the fixture that the delegate is subscribed to.
 		/// </summary>
 		public OnCollisionEventHandler onCollision;
 
 		/// <summary>
 		/// Fires when two shapes separate and a contact is removed between them.
-		/// Note: This can in some cases be called multiple times, as a fixture can have multiple contacts.
-		/// Note The first fixture argument is always the fixture that the delegate is subscribed to.
+		/// Note: this can in some cases be called multiple times, as a fixture can have multiple contacts.
+		/// Note: the first fixture argument is always the fixture that the delegate is subscribed to.
 		/// </summary>
 		public OnSeparationEventHandler onSeparation;
 
