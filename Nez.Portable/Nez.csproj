@@ -561,6 +561,7 @@
     <Compile Include="ECS\Components\Renderables\IRenderable.cs" />
     <Compile Include="ECS\SceneComponent.cs" />
     <Compile Include="Utils\Extensions\EntityExt.cs" />
+    <Compile Include="Math\SubpixelFloat.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="MonoGame.Framework">

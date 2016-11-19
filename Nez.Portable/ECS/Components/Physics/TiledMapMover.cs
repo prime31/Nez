@@ -42,7 +42,7 @@ namespace Nez.Tiled
 			public bool hasCollision { get { return below || right || left || above; } }
 
 			// state used by the TiledMapMover
-			internal float _movementRemainderX, _movementRemainderY;
+			internal SubpixelFloat _movementRemainderX, _movementRemainderY;
 			internal TiledTile _lastGroundTile;
 
 
@@ -75,23 +75,15 @@ namespace Nez.Tiled
 				slopeAngle = 0f;
 
 				// deal with subpixel movement, storing off any non-integar remainder for the next frame
-				_movementRemainderX += motion.X;
-				var motionX = Mathf.truncateToInt( _movementRemainderX );
-				_movementRemainderX -= motionX;
-				motion.X = motionX;
-
-				_movementRemainderY += motion.Y;
-				var motionY = Mathf.truncateToInt( _movementRemainderY );
-				_movementRemainderY -= motionY;
+				_movementRemainderX.update( ref motion.X );
+				_movementRemainderY.update( ref motion.Y );
 
 				// due to subpixel movement we might end up with 0 gravity when we really want there to be at least 1 pixel so slopes can work
-				if( below && motionY == 0 && _movementRemainderY > 0 )
+				if( below && motion.Y == 0 && _movementRemainderY.remainder > 0 )
 				{
-					motionY = 1;
-					_movementRemainderY = 0;
+					motion.Y = 1;
+					_movementRemainderY.reset();
 				}
-
-				motion.Y = motionY;
 			}
 
 
@@ -185,7 +177,7 @@ namespace Nez.Tiled
 					motion.X = collisionResponse - boxColliderBounds.getSide( direction );
 					collisionState.left = direction == Edge.Left;
 					collisionState.right = direction == Edge.Right;
-					collisionState._movementRemainderX = 0;
+					collisionState._movementRemainderX.reset();
 				}
 				else
 				{
@@ -207,7 +199,7 @@ namespace Nez.Tiled
 					motion.Y = collisionResponse - boxColliderBounds.getSide( direction );
 					collisionState.above = direction == Edge.Top;
 					collisionState.below = direction == Edge.Bottom;
-					collisionState._movementRemainderY = 0;
+					collisionState._movementRemainderY.reset();
 
 					if( collisionState.below && collisionState._lastGroundTile != null && collisionState._lastGroundTile.isSlope() )
 						collisionState.slopeAngle = MathHelper.ToDegrees( (float)Math.Atan( collisionState._lastGroundTile.getSlope() ) );
