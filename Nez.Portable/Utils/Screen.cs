@@ -1,5 +1,4 @@
-﻿using System;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 
@@ -17,7 +16,7 @@ namespace Nez
 
 
 		/// <summary>
-		/// alias for backBufferWidth
+		/// width of the GraphicsDevice back buffer
 		/// </summary>
 		/// <value>The width.</value>
 		public static int width
@@ -28,7 +27,7 @@ namespace Nez
 
 
 		/// <summary>
-		/// alias for backBufferHeight
+		/// height of the GraphicsDevice back buffer
 		/// </summary>
 		/// <value>The height.</value>
 		public static int height
@@ -43,20 +42,6 @@ namespace Nez
 		/// </summary>
 		/// <value>The center.</value>
 		public static Vector2 center { get { return new Vector2( width / 2, height / 2 ); } }
-
-
-		public static int backBufferWidth
-		{
-			get { return _graphicsManager.GraphicsDevice.PresentationParameters.BackBufferWidth; }
-			set { _graphicsManager.GraphicsDevice.PresentationParameters.BackBufferWidth = value; }
-		}
-
-
-		public static int backBufferHeight
-		{
-			get { return _graphicsManager.GraphicsDevice.PresentationParameters.BackBufferHeight; }
-			set { _graphicsManager.GraphicsDevice.PresentationParameters.BackBufferHeight = value; }
-		}
 
 
 		public static int preferredBackBufferWidth

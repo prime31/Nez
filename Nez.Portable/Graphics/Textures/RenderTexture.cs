@@ -37,7 +37,7 @@ namespace Nez.Textures
 		/// </summary>
 		public RenderTexture()
 		{
-			renderTarget = RenderTarget.create( Screen.backBufferWidth, Screen.backBufferHeight, Screen.backBufferFormat, Screen.preferredDepthStencilFormat );
+			renderTarget = RenderTarget.create( Screen.width, Screen.height, Screen.backBufferFormat, Screen.preferredDepthStencilFormat );
 		}
 
 
@@ -47,7 +47,7 @@ namespace Nez.Textures
 		/// <param name="preferredDepthFormat">Preferred depth format.</param>
 		public RenderTexture( DepthFormat preferredDepthFormat )
 		{
-			renderTarget = RenderTarget.create( Screen.backBufferWidth, Screen.backBufferHeight, Screen.backBufferFormat, preferredDepthFormat );
+			renderTarget = RenderTarget.create( Screen.width, Screen.height, Screen.backBufferFormat, preferredDepthFormat );
 		}
 
 
@@ -115,7 +115,7 @@ namespace Nez.Textures
 		/// </summary>
 		public void resizeToFitBackbuffer()
 		{
-			resize( Screen.backBufferWidth, Screen.backBufferHeight );
+			resize( Screen.width, Screen.height );
 		}
 
 

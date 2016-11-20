@@ -62,8 +62,10 @@ namespace Nez
 			/// </summary>
 			FixedWidthPixelPerfect,
 			/// <summary>
-			/// The application takes the width and height that best fits the design resolution with optional
-			/// cropping inside of "bleed area" and possible letter/pillar boxing
+			/// The application takes the width and height that best fits the design resolution with optional cropping inside of the "bleed area"
+			/// and possible letter/pillar boxing. Works just like ShowAll except with horizontal/vertical bleed (padding). Gives you an area much
+			/// like the old TitleSafeArea. Example: if design resolution is 1348x900 and bleed is 148x140 the safe area would be 1200x760 (design
+			/// resolution - bleed).
 			/// </summary>
 			BestFit
 		}
@@ -159,20 +161,23 @@ namespace Nez
 		}
 		IFinalRenderDelegate _finalRenderDelegate;
 
+
+		#region SceneResolutionPolicy private fields
+
 		/// <summary>
 		/// default resolution size used for all scenes
 		/// </summary>
-		static Point defaultDesignResolutionSize;
+		static Point _defaultDesignResolutionSize;
 
 		/// <summary>
 		/// default bleed size for <see cref="SceneResolutionPolicy.BestFit"/> resolution policy
 		/// </summary>
-		static Point defaultDesignBleedSize;
+		static Point _defaultDesignBleedSize;
 		
 		/// <summary>
 		/// default resolution policy used for all scenes
 		/// </summary>
-		static SceneResolutionPolicy defaultSceneResolutionPolicy = SceneResolutionPolicy.None;
+		static SceneResolutionPolicy _defaultSceneResolutionPolicy = SceneResolutionPolicy.None;
 
 		/// <summary>
 		/// resolution policy used by the scene
@@ -194,6 +199,9 @@ namespace Nez
 		/// </summary>
 		Rectangle _finalRenderDestinationRect;
 
+		#endregion
+
+
 		RenderTarget2D _sceneRenderTarget;
 		RenderTarget2D _destinationRenderTarget;
 		Action<Texture2D> _screenshotRequestCallback;
@@ -206,7 +214,7 @@ namespace Nez
 
 
 		/// <summary>
-		/// sets the default design size and resolution policy that new scenes will use
+		/// sets the default design size and resolution policy that new scenes will use. horizontal/verticalBleed are only relevant for BestFit.
 		/// </summary>
 		/// <param name="width">Width.</param>
 		/// <param name="height">Height.</param>
@@ -215,23 +223,12 @@ namespace Nez
 		/// <param name="verticalBleed">Vertical bleed size. Used only if resolution policy is set to <see cref="SceneResolutionPolicy.BestFit"/>.</param>
 		public static void setDefaultDesignResolution( int width, int height, SceneResolutionPolicy sceneResolutionPolicy, int horizontalBleed = 0, int verticalBleed = 0 )
 		{
-			defaultDesignResolutionSize = new Point( width, height );
-			defaultSceneResolutionPolicy = sceneResolutionPolicy;
-			if( defaultSceneResolutionPolicy == SceneResolutionPolicy.BestFit )
-			{
-				setDefaultDesignBleedSize( horizontalBleed, verticalBleed );
-			}
+			_defaultDesignResolutionSize = new Point( width, height );
+			_defaultSceneResolutionPolicy = sceneResolutionPolicy;
+			if( _defaultSceneResolutionPolicy == SceneResolutionPolicy.BestFit )
+				_defaultDesignBleedSize = new Point( horizontalBleed, verticalBleed );
 		}
 
-		/// <summary>
-		/// sets the default bleed size for <see cref="SceneResolutionPolicy.BestFit"/> resolution policy
-		/// </summary>
-		/// <param name="horizontalBleed">Horizontal bleed size.</param>
-		/// <param name="verticalBleed">Vertical bleed size.</param>
-		public static void setDefaultDesignBleedSize( int horizontalBleed, int verticalBleed )
-		{
-			defaultDesignBleedSize = new Point( horizontalBleed, verticalBleed );
-		}
 
 		#region Scene creation helpers
 
@@ -313,9 +310,9 @@ namespace Nez
 				entityProcessors = new EntityProcessorList();
 
 			// setup our resolution policy. we'll commit it in begin
-			_resolutionPolicy = defaultSceneResolutionPolicy;
-			_designResolutionSize = defaultDesignResolutionSize;
-			_designBleedSize = defaultDesignBleedSize;
+			_resolutionPolicy = _defaultSceneResolutionPolicy;
+			_designResolutionSize = _defaultDesignResolutionSize;
+			_designBleedSize = _defaultDesignBleedSize;
 
 			initialize();
 		}
@@ -546,27 +543,15 @@ namespace Nez
 			_designResolutionSize = new Point( width, height );
 			_resolutionPolicy = sceneResolutionPolicy;
 			if( _resolutionPolicy == SceneResolutionPolicy.BestFit )
-			{
-				setDesignBleedSize(horizontalBleed, verticalBleed);
-			}
+				_designBleedSize = new Point( horizontalBleed, verticalBleed );
 			updateResolutionScaler();
 		}
 
-		/// <summary>
-		/// sets the bleed size for <see cref="SceneResolutionPolicy.BestFit"/> resolution policy.
-		/// this method will not invoke <see cref="updateResolutionScaler"/> directly.
-		/// </summary>
-		/// <param name="horizontalBleed">Horizontal bleed size.</param>
-		/// <param name="verticalBleed">Vertical bleed size.</param>
-		public void setDesignBleedSize( int horizontalBleed, int verticalBleed )
-		{
-			_designBleedSize = new Point( horizontalBleed, verticalBleed );
-		}
 
 		void updateResolutionScaler()
 		{
 			var designSize = _designResolutionSize;
-			var screenSize = new Point( Screen.backBufferWidth, Screen.backBufferHeight );
+			var screenSize = new Point( Screen.width, Screen.height );
 			var screenAspectRatio = (float)screenSize.X / (float)screenSize.Y;
 
 			var renderTargetWidth = screenSize.X;
@@ -697,16 +682,14 @@ namespace Nez
 					renderTargetHeight = (int)( designSize.Y * resolutionScaleY / pixelPerfectScale );
 
 					break;
-
 				case SceneResolutionPolicy.BestFit:
+					var safeScaleX = (float)screenSize.X / ( designSize.X - _designBleedSize.X );
+					var safeScaleY = (float)screenSize.Y / ( designSize.Y - _designBleedSize.Y );
 
-					var safeScaleX = (float)screenSize.X / (designSize.X - _designBleedSize.X);
-					var safeScaleY = (float)screenSize.Y / (designSize.Y - _designBleedSize.Y);
+					var resolutionScale = MathHelper.Max( resolutionScaleX, resolutionScaleY );
+					var safeScale = MathHelper.Min( safeScaleX, safeScaleY );
 
-					float resolutionScale = MathHelper.Max(resolutionScaleX, resolutionScaleY);
-					float safeScale = MathHelper.Min(safeScaleX, safeScaleY);
-
-					resolutionScaleX = resolutionScaleY = MathHelper.Min(resolutionScale, safeScale);
+					resolutionScaleX = resolutionScaleY = MathHelper.Min( resolutionScale, safeScale );
 
 					renderTargetWidth = designSize.X;
 					renderTargetHeight = designSize.Y;
