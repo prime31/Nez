@@ -17,7 +17,7 @@ namespace Nez.Farseer
 		/// <summary>
 		/// if true, the left mouse button will be used for picking and dragging physics objects around
 		/// </summary>
-		public bool enableMousePicking = true;
+		public bool enableMousePicking = false;
 
 		FixedMouseJoint _mouseJoint;
 
