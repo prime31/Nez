@@ -39,7 +39,7 @@ namespace FarseerPhysics
 		/// if there was a collision or not. Swtich this to false to revert to the 
 		/// collision agreement used in FPE 3.3.x
 		/// </summary>
-		public const bool allCollisionCallbacksAgree = true;
+		public static bool allCollisionCallbacksAgree = true;
 
 		/// <summary>
 		/// Enabling diagnistics causes the engine to gather timing information.

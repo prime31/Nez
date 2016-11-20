@@ -58,7 +58,7 @@ namespace FarseerPhysics.Common.Decomposition
 			foreach( DelaunayTriangle triangle in poly.Triangles )
 			{
 				Vertices v = new Vertices();
-				foreach( TriangulationPoint p in triangle.Points )
+				foreach( TriangulationPoint p in triangle.points )
 				{
 					v.Add( new Vector2( (float)p.X, (float)p.Y ) );
 				}

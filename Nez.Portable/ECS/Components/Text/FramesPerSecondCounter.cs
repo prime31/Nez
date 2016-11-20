@@ -63,7 +63,7 @@ namespace Nez
 		{
 			this.maximumSamples = maximumSamples;
 			this.dockPosition = dockPosition;
-			initialize();
+			init();
 		}
 
 
@@ -71,11 +71,11 @@ namespace Nez
 		{
 			this.maximumSamples = maximumSamples;
 			this.dockPosition = dockPosition;
-			initialize();
+			init();
 		}
 
 
-		void initialize()
+		void init()
 		{
 			updateTextPosition();
 		}

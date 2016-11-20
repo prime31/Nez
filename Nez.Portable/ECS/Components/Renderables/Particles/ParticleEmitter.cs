@@ -64,14 +64,14 @@ namespace Nez.Particles
 			collisionConfig.minKillSpeedSquared = float.MinValue;
 			collisionConfig.radiusScale = 0.8f;
 
-			initialize();
+			init();
 		}
 
 
 		/// <summary>
 		/// creates the Batcher and loads the texture if it is available
 		/// </summary>
-		void initialize()
+		void init()
 		{
 			// prep our custom BlendState and set the Material with it
 			var blendState = new BlendState();
@@ -255,7 +255,7 @@ namespace Nez.Particles
 		{
 			var rootPosition = entity.transform.position + _localOffset;
 
-			initialize();
+			init();
 			_active = true;
 			for( var i = 0; i < count; i++ )
 				addParticle( rootPosition );

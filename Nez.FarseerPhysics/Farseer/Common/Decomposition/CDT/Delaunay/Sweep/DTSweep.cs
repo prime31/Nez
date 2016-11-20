@@ -487,7 +487,7 @@ namespace FarseerPhysics.Common.Decomposition.CDT.Delaunay.Sweep
 			if( index != -1 )
 			{
 				triangle.MarkConstrainedEdge( index );
-				triangle = triangle.Neighbors[index];
+				triangle = triangle.neighbors[index];
 				if( triangle != null )
 				{
 					triangle.MarkConstrainedEdge( ep, eq );
@@ -674,16 +674,16 @@ namespace FarseerPhysics.Common.Decomposition.CDT.Delaunay.Sweep
 			{
 				// ot is not crossing edge after flip
 				edgeIndex = ot.EdgeIndex( p, op );
-				ot.EdgeIsDelaunay[edgeIndex] = true;
+				ot.edgeIsDelaunay[edgeIndex] = true;
 				Legalize( tcx, ot );
-				ot.EdgeIsDelaunay.Clear();
+				ot.edgeIsDelaunay.Clear();
 				return t;
 			}
 			// t is not crossing edge after flip
 			edgeIndex = t.EdgeIndex( p, op );
-			t.EdgeIsDelaunay[edgeIndex] = true;
+			t.edgeIsDelaunay[edgeIndex] = true;
 			Legalize( tcx, t );
-			t.EdgeIsDelaunay.Clear();
+			t.edgeIsDelaunay.Clear();
 			return ot;
 		}
 
@@ -1028,22 +1028,22 @@ namespace FarseerPhysics.Common.Decomposition.CDT.Delaunay.Sweep
 			{
 				// TODO: fix so that cEdge is always valid when creating new triangles then we can check it here
 				//       instead of below with ot
-				if(t.EdgeIsDelaunay[i] )
+				if(t.edgeIsDelaunay[i] )
 				{
 					continue;
 				}
 
-				DelaunayTriangle ot = t.Neighbors[i];
+				DelaunayTriangle ot = t.neighbors[i];
 				if( ot != null )
 				{
-					TriangulationPoint p = t.Points[i];
+					TriangulationPoint p = t.points[i];
 					TriangulationPoint op = ot.OppositePoint( t, p );
 					int oi = ot.IndexOf( op );
 					// If this is a Constrained Edge or a Delaunay Edge(only during recursive legalization)
 					// then we should not try to legalize
-					if( ot.EdgeIsConstrained[oi] || ot.EdgeIsDelaunay[oi] )
+					if( ot.edgeIsConstrained[oi] || ot.edgeIsDelaunay[oi] )
 					{
-						t.EdgeIsConstrained[i] = ot.EdgeIsConstrained[oi];
+						t.edgeIsConstrained[i] = ot.edgeIsConstrained[oi];
 						// XXX: have no good way of setting this property when creating new triangles so lets set it here
 						continue;
 					}
@@ -1053,8 +1053,8 @@ namespace FarseerPhysics.Common.Decomposition.CDT.Delaunay.Sweep
 					if(inside)
 					{
 						// Lets mark this shared edge as Delaunay 
-						t.EdgeIsDelaunay[i] = true;
-						ot.EdgeIsDelaunay[oi] = true;
+						t.edgeIsDelaunay[i] = true;
+						ot.edgeIsDelaunay[oi] = true;
 
 						// Lets rotate shared edge one vertex CW to legalize it
 						RotateTrianglePair( t, p, ot, op );
@@ -1079,8 +1079,8 @@ namespace FarseerPhysics.Common.Decomposition.CDT.Delaunay.Sweep
 						// until we add a new triangle or point.
 						// XXX: need to think about this. Can these edges be tried after we 
 						//      return to previous recursive level?
-						t.EdgeIsDelaunay[i] = false;
-						ot.EdgeIsDelaunay[oi] = false;
+						t.edgeIsDelaunay[i] = false;
+						ot.edgeIsDelaunay[oi] = false;
 
 						// If triangle have been legalized no need to check the other edges since
 						// the recursive legalization will handles those so we can end here.
@@ -1140,8 +1140,8 @@ namespace FarseerPhysics.Common.Decomposition.CDT.Delaunay.Sweep
 			//      what side should be assigned to what neighbor after the 
 			//      rotation. Now mark neighbor does lots of testing to find 
 			//      the right side.
-			t.Neighbors.Clear();
-			ot.Neighbors.Clear();
+			t.neighbors.Clear();
+			ot.neighbors.Clear();
 			if( n1 != null ) ot.MarkNeighbor( n1 );
 			if( n2 != null ) t.MarkNeighbor( n2 );
 			if( n3 != null ) t.MarkNeighbor( n3 );

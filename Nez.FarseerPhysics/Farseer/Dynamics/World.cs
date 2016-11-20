@@ -1036,6 +1036,7 @@ namespace FarseerPhysics.Dynamics
 				// Also, some contacts can be destroyed.
 				contactManager.findNewContacts();
 
+				#pragma warning disable CS0162
 				if( Settings.enableSubStepping )
 				{
 					_stepComplete = false;

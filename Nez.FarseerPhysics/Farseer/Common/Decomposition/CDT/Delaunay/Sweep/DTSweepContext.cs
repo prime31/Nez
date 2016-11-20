@@ -78,15 +78,15 @@ namespace FarseerPhysics.Common.Decomposition.CDT.Delaunay.Sweep
 
         private void MeshCleanReq(DelaunayTriangle triangle)
         {
-            if (triangle != null && !triangle.IsInterior)
+            if (triangle != null && !triangle.isInterior)
             {
-                triangle.IsInterior = true;
+                triangle.isInterior = true;
                 Triangulatable.AddTriangle(triangle);
                 for (int i = 0; i < 3; i++)
                 {
-                    if (!triangle.EdgeIsConstrained[i])
+                    if (!triangle.edgeIsConstrained[i])
                     {
-                        MeshCleanReq(triangle.Neighbors[i]);
+                        MeshCleanReq(triangle.neighbors[i]);
                     }
                 }
             }
@@ -124,11 +124,11 @@ namespace FarseerPhysics.Common.Decomposition.CDT.Delaunay.Sweep
             DelaunayTriangle iTriangle = new DelaunayTriangle(Points[0], Tail, Head);
             Triangles.Add(iTriangle);
 
-            head = new AdvancingFrontNode(iTriangle.Points[1]);
+            head = new AdvancingFrontNode(iTriangle.points[1]);
             head.Triangle = iTriangle;
-            middle = new AdvancingFrontNode(iTriangle.Points[0]);
+            middle = new AdvancingFrontNode(iTriangle.points[0]);
             middle.Triangle = iTriangle;
-            tail = new AdvancingFrontNode(iTriangle.Points[2]);
+            tail = new AdvancingFrontNode(iTriangle.points[2]);
 
             aFront = new AdvancingFront(head, tail);
             aFront.AddNode(middle);
@@ -150,9 +150,9 @@ namespace FarseerPhysics.Common.Decomposition.CDT.Delaunay.Sweep
             AdvancingFrontNode n;
             for (int i = 0; i < 3; i++)
             {
-                if (t.Neighbors[i] == null)
+                if (t.neighbors[i] == null)
                 {
-                    n = aFront.LocatePoint(t.PointCW(t.Points[i]));
+                    n = aFront.LocatePoint(t.PointCW(t.points[i]));
                     if (n != null)
                     {
                         n.Triangle = t;
