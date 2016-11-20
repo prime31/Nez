@@ -60,7 +60,12 @@ namespace Nez
 			/// <summary>
 			/// Pixel perfect version of FixedWidth. Scaling is limited to integer values.
 			/// </summary>
-			FixedWidthPixelPerfect
+			FixedWidthPixelPerfect,
+			/// <summary>
+			/// The application takes the width and height that best fits the design resolution with optional
+			/// cropping inside of "bleed area" and possible letter/pillar boxing
+			/// </summary>
+			BestFit
 		}
 
 
@@ -160,6 +165,11 @@ namespace Nez
 		static Point defaultDesignResolutionSize;
 
 		/// <summary>
+		/// default bleed size for <see cref="SceneResolutionPolicy.BestFit"/> resolution policy
+		/// </summary>
+		static Point defaultDesignBleedSize;
+		
+		/// <summary>
 		/// default resolution policy used for all scenes
 		/// </summary>
 		static SceneResolutionPolicy defaultSceneResolutionPolicy = SceneResolutionPolicy.None;
@@ -173,6 +183,11 @@ namespace Nez
 		/// design resolution size used by the scene
 		/// </summary>
 		Point _designResolutionSize;
+
+		/// <summary>
+		/// bleed size for <see cref="SceneResolutionPolicy.BestFit"/> resolution policy
+		/// </summary>
+		Point _designBleedSize;
 
 		/// <summary>
 		/// this gets setup based on the resolution policy and is used for the final blit of the RenderTarget
@@ -196,12 +211,27 @@ namespace Nez
 		/// <param name="width">Width.</param>
 		/// <param name="height">Height.</param>
 		/// <param name="sceneResolutionPolicy">Scene resolution policy.</param>
-		public static void setDefaultDesignResolution( int width, int height, SceneResolutionPolicy sceneResolutionPolicy )
+		/// <param name="horizontalBleed">Horizontal bleed size. Used only if resolution policy is set to <see cref="SceneResolutionPolicy.BestFit"/>.</param>
+		/// <param name="verticalBleed">Vertical bleed size. Used only if resolution policy is set to <see cref="SceneResolutionPolicy.BestFit"/>.</param>
+		public static void setDefaultDesignResolution( int width, int height, SceneResolutionPolicy sceneResolutionPolicy, int horizontalBleed = 0, int verticalBleed = 0 )
 		{
 			defaultDesignResolutionSize = new Point( width, height );
 			defaultSceneResolutionPolicy = sceneResolutionPolicy;
+			if( defaultSceneResolutionPolicy == SceneResolutionPolicy.BestFit )
+			{
+				setDefaultDesignBleedSize( horizontalBleed, verticalBleed );
+			}
 		}
 
+		/// <summary>
+		/// sets the default bleed size for <see cref="SceneResolutionPolicy.BestFit"/> resolution policy
+		/// </summary>
+		/// <param name="horizontalBleed">Horizontal bleed size.</param>
+		/// <param name="verticalBleed">Vertical bleed size.</param>
+		public static void setDefaultDesignBleedSize( int horizontalBleed, int verticalBleed )
+		{
+			defaultDesignBleedSize = new Point( horizontalBleed, verticalBleed );
+		}
 
 		#region Scene creation helpers
 
@@ -285,6 +315,7 @@ namespace Nez
 			// setup our resolution policy. we'll commit it in begin
 			_resolutionPolicy = defaultSceneResolutionPolicy;
 			_designResolutionSize = defaultDesignResolutionSize;
+			_designBleedSize = defaultDesignBleedSize;
 
 			initialize();
 		}
@@ -508,13 +539,29 @@ namespace Nez
 		/// <param name="width">Width.</param>
 		/// <param name="height">Height.</param>
 		/// <param name="sceneResolutionPolicy">Scene resolution policy.</param>
-		public void setDesignResolution( int width, int height, SceneResolutionPolicy sceneResolutionPolicy )
+		/// <param name="horizontalBleed">Horizontal bleed size. Used only if resolution policy is set to <see cref="SceneResolutionPolicy.BestFit"/>.</param>
+		/// <param name="verticalBleed">Horizontal bleed size. Used only if resolution policy is set to <see cref="SceneResolutionPolicy.BestFit"/>.</param>
+		public void setDesignResolution( int width, int height, SceneResolutionPolicy sceneResolutionPolicy, int horizontalBleed = 0, int verticalBleed = 0 )
 		{
 			_designResolutionSize = new Point( width, height );
 			_resolutionPolicy = sceneResolutionPolicy;
+			if( _resolutionPolicy == SceneResolutionPolicy.BestFit )
+			{
+				setDesignBleedSize(horizontalBleed, verticalBleed);
+			}
 			updateResolutionScaler();
 		}
 
+		/// <summary>
+		/// sets the bleed size for <see cref="SceneResolutionPolicy.BestFit"/> resolution policy.
+		/// this method will not invoke <see cref="updateResolutionScaler"/> directly.
+		/// </summary>
+		/// <param name="horizontalBleed">Horizontal bleed size.</param>
+		/// <param name="verticalBleed">Vertical bleed size.</param>
+		public void setDesignBleedSize( int horizontalBleed, int verticalBleed )
+		{
+			_designBleedSize = new Point( horizontalBleed, verticalBleed );
+		}
 
 		void updateResolutionScaler()
 		{
@@ -648,6 +695,21 @@ namespace Nez
 					rectCalculated = true;
 
 					renderTargetHeight = (int)( designSize.Y * resolutionScaleY / pixelPerfectScale );
+
+					break;
+
+				case SceneResolutionPolicy.BestFit:
+
+					var safeScaleX = (float)screenSize.X / (designSize.X - _designBleedSize.X);
+					var safeScaleY = (float)screenSize.Y / (designSize.Y - _designBleedSize.Y);
+
+					float resolutionScale = MathHelper.Max(resolutionScaleX, resolutionScaleY);
+					float safeScale = MathHelper.Min(safeScaleX, safeScaleY);
+
+					resolutionScaleX = resolutionScaleY = MathHelper.Min(resolutionScale, safeScale);
+
+					renderTargetWidth = designSize.X;
+					renderTargetHeight = designSize.Y;
 
 					break;
 			}
