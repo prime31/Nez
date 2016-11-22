@@ -1,5 +1,4 @@
 ﻿using System;
-using FarseerPhysics;
 using FarseerPhysics.Collision;
 using FarseerPhysics.Collision.Shapes;
 using FarseerPhysics.Common;
@@ -17,7 +16,7 @@ namespace Nez.Farseer
 
 
 		/// <summary>
-		/// tests for an overlap of shapeA and shapeB. Returns false if both Shapes are chains
+		/// tests for an overlap of shapeA and shapeB. Returns false if both Shapes are chains or if they are not overlapping.
 		/// </summary>
 		/// <returns><c>true</c>, if overlap was tested, <c>false</c> otherwise.</returns>
 		/// <param name="shapeA">Shape a.</param>
