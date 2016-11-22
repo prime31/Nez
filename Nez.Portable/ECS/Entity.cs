@@ -31,11 +31,6 @@ namespace Nez
 		public readonly ComponentList components;
 
 		/// <summary>
-		/// list of all the Colliders currently attached to this entity
-		/// </summary>
-		public readonly ColliderList colliders;
-
-		/// <summary>
 		/// use this however you want to. It can later be used to query the scene for all Entities with a specific tag
 		/// </summary>
 		public int tag
@@ -190,7 +185,6 @@ namespace Nez
 		public Entity()
 		{
 			components = new ComponentList( this );
-			colliders = new ColliderList( this );
 			transform = new Transform( this );
 
 			if( Core.entitySystemsEnabled )
@@ -208,7 +202,6 @@ namespace Nez
 		{
 			// notify our children of our changed position
 			components.onEntityTransformChanged( comp );
-			colliders.onEntityTransformChanged( comp );
 		}
 
 
@@ -248,15 +241,9 @@ namespace Nez
 				_enabled = isEnabled;
 
 				if( _enabled )
-				{
 					components.onEntityEnabled();
-					colliders.onEntityEnabled();
-				}
 				else
-				{
 					components.onEntityDisabled();
-					colliders.onEntityDisabled();
-				}
 			}
 
 			return this;
@@ -371,12 +358,6 @@ namespace Nez
 			for( var i = 0; i < entity.components._componentsToAdd.Count; i++ )
 				addComponent( entity.components._componentsToAdd[i].clone() );
 
-			// clone Colliders
-			for( var i = 0; i < entity.colliders.Count; i++ )
-				colliders.add( entity.colliders[i].clone() );
-			for( var i = 0; i < entity.colliders._collidersToAdd.Count; i++ )
-				colliders.add( entity.colliders._collidersToAdd[i].clone() );
-
 			// clone any children of the Entity.transform
 			for( var i = 0; i < entity.transform.childCount; i++ )
 			{
@@ -395,10 +376,7 @@ namespace Nez
 		/// Called when this entity is added to a scene after all pending entity changes are committed
 		/// </summary>
 		public virtual void onAddedToScene()
-		{
-			// if we have a collider, we need to let it register with the Physics system when we are added to a scene
-			colliders.onEntityAddedToScene();
-		}
+		{}
 
 
 		/// <summary>
@@ -406,8 +384,6 @@ namespace Nez
 		/// </summary>
 		public virtual void onRemovedFromScene()
 		{
-			colliders.onEntityRemovedFromScene();
-
 			// if we were destroyed, remove our components. If we were just detached we need to keep our components on the Entity.
 			if( _isDestroyed )
 				components.removeAllComponents();
@@ -419,8 +395,6 @@ namespace Nez
 		/// </summary>
 		public virtual void update()
 		{
-			components.updateLists();
-			colliders.updateLists();
 			components.update();
 		}
 
@@ -432,7 +406,6 @@ namespace Nez
 		public virtual void debugRender( Graphics graphics )
 		{
 			components.debugRender( graphics );
-			colliders.debugRender( graphics );
 		}
 
 		#endregion
@@ -572,83 +545,45 @@ namespace Nez
 
 		#region Collider management
 
-		/// <summary>
-		/// adds a Collider to the list and registers it with the Physics system
-		/// </summary>
-		/// <param name="collider">Collider.</param>
-		/// <typeparam name="T">The 1st type parameter.</typeparam>
+		[Obsolete( "Colliders are now Components. Use addComponent instead." )]
 		public T addCollider<T>( T collider ) where T : Collider
 		{
-			return colliders.add( collider );
+			return addComponent( collider );
 		}
 
 
-		/// <summary>
-		/// removes the Collider and unregisters it from the Pysics system
-		/// </summary>
-		/// <param name="collider">Collider.</param>
+		[Obsolete( "Colliders are now Components. Use removeComponent instead." )]
 		public void removeCollider( Collider collider )
 		{
-			colliders.remove( collider );
+			removeComponent( collider );
 		}
 
 
-		/// <summary>
-		/// removes all Colliders from the Entity
-		/// </summary>
+		[Obsolete( "Colliders are now Components. Use the normal Component methods to manage Colliders." )]
 		public void removeAllColliders()
 		{
-			colliders.removeAllColliders();
+			throw new NotImplementedException();
 		}
 
 
-		/// <summary>
-		/// returns the first Collider of type T found
-		/// </summary>
-		/// <returns>The collider.</returns>
-		/// <param name="onlyReturnInitializedColliders">Only return initialized colliders.</param>
-		/// <typeparam name="T">The 1st type parameter.</typeparam>
+		[Obsolete( "Colliders are now Components. Use the normal Component methods to manage Colliders." )]
 		public T getCollider<T>( bool onlyReturnInitializedColliders = false ) where T : Collider
 		{
-			return colliders.getCollider<T>( onlyReturnInitializedColliders );
+			return getComponent<T>( onlyReturnInitializedColliders );
 		}
 
 
-		/// <summary>
-		/// returns all the Colliders whether they have been initialized or not without a list allocation
-		/// </summary>
-		/// <returns>The colliders.</returns>
-		/// <param name="colliders">Colliders.</param>
+		[Obsolete( "Colliders are now Components. Use the normal Component methods to manage Colliders." )]
 		public void getColliders( List<Collider> colliders )
 		{
-			this.colliders.getColliders( colliders );
+			getComponents( colliders );
 		}
 
 
-		/// <summary>
-		/// Gets all the Colliders. The returned List can be put back in the pool via ListPool.free.
-		/// </summary>
-		/// <returns>The colliders.</returns>
+		[Obsolete( "Colliders are now Components. Use the normal Component methods to manage Colliders." )]
 		public List<Collider> getColliders()
 		{
-			return colliders.getColliders();
-		}
-
-		#endregion
-
-
-		#region Movement helpers
-
-		/// <summary>
-		/// simple movement helper that should be used if you have Colliders attached to this Entity. It handles keeping the Colliders
-		/// in sync in the Physics system.
-		/// </summary>
-		/// <param name="motion">Motion.</param>
-		public void move( Vector2 motion )
-		{
-			colliders.unregisterAllCollidersWithPhysicsSystem();
-			transform.position += motion;
-			colliders.registerAllCollidersWithPhysicsSystem();
+			return getComponents<Collider>();
 		}
 
 		#endregion

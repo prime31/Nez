@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-
+using System.Runtime.CompilerServices;
 
 namespace Nez
 {
@@ -136,6 +136,18 @@ namespace Nez
 		internal void removeFromTagList( Entity entity )
 		{
 			_entityDict[entity.tag].Remove( entity );
+		}
+
+
+		[MethodImpl( MethodImplOptions.AggressiveInlining )]
+		internal void update()
+		{
+			for( var i = 0; i < _entities.length; i++ )
+			{
+				var entity = _entities.buffer[i];
+				if( entity.enabled && ( entity.updateInterval == 1 || Time.frameCount % entity.updateInterval == 0 ) )
+					entity.update();
+			}
 		}
 
 

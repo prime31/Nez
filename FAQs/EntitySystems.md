@@ -33,11 +33,11 @@ A basic entity processing system. Use this as the base for processing many entit
 public override void process( Entity entity )
 {
 	var damage = entity.getComponent<DamageComponent>();
-	var colliders = Physics.boxcastBroadphase( entity.colliders.mainCollider.bounds, damage.layerMask );
+	var colliders = Physics.boxcastBroadphase( entity.getComponent<Collider>.bounds, damage.layerMask );
 
 	foreach( var coll in colliders )
 	{
-		if( entity.colliders.mainCollider.collidesWith( coll, out collResult ) )
+		if( entity.getComponent<Collider>.collidesWith( coll, out collResult ) )
 		{
 			triggerDamage( coll.entity, entity );
 			entity.enabled = false;

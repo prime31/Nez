@@ -139,7 +139,7 @@ namespace Nez
 		public override void debugRender( Graphics graphics )
 		{
 			// if we have no collider draw our bounds
-			if( entity.colliders.Count == 0 )
+			if( entity.getComponent<Collider>() == null )
 				graphics.batcher.drawHollowRect( bounds, Color.Yellow );
 
 			// draw a square for our pivot/origin

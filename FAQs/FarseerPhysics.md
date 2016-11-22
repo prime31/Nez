@@ -29,7 +29,7 @@ The `FSDebugView` Component can be added to your Scene to get a visual represent
 ## High Level API
 The high level API wraps up the Farseer API in standard Nez Components. Farseer Components come in 3 different flavors explained below each of them with a fluent API for configuring the objects for easy method chaining and API exploration.
 
-- **FSRigidBody**: wraps the Farseer Body. Handles keeping the Entity.transform in sync with the Farseer Body. FSRigidBody's can be any of the three body types: Dynamic, Static or Kinematic (see Understanding Farseer Objects for details on each). An FSRigidBody is required for any of the other Farseer Components to be of any use.
+- **FSRigidBody**: wraps the Farseer Body. Handles keeping the Entity's Transform in sync with the Farseer Body. FSRigidBody's can be any of the three body types: Dynamic, Static or Kinematic (see Understanding Farseer Objects for details on each). An FSRigidBody is required for any of the other Farseer Components to be of any use.
 
 - **FSCollisionShape**: wraps the Farseer Fixture and Shape objects. This is the physical shape of the collider. You can have 1 or more FSCollisionShapes on your Entity. Available FSCollisionShapes are circle, box, polygon, edge and chain.
 

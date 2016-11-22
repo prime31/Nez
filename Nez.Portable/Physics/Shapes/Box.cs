@@ -60,6 +60,9 @@ namespace Nez.PhysicsShapes
 			points[1] = new Vector2( halfWidth, -halfHeight );
 			points[2] = new Vector2( halfWidth, halfHeight );
 			points[3] = new Vector2( -halfWidth, halfHeight );
+
+			for( var i = 0; i < points.Length; i++ )
+				_originalPoints[i] = points[i];
 		}
 
 

@@ -29,7 +29,7 @@ namespace Nez.PhysicsShapes
 		public Vector2[] _edgeNormals;
 
 		// we cache the original details of our polygon
-		Vector2[] _originalPoints;
+		protected Vector2[] _originalPoints;
 		internal Vector2 _polygonCenter;
 
 		// used as an optimization for unrotated Box collisions

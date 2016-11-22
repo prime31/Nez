@@ -7,7 +7,7 @@ namespace Nez.PhysicsShapes
 	public class Circle : Shape
 	{
 		public float radius;
-		float _originalRadius;
+		internal float _originalRadius;
 
 
 		public Circle( float radius )

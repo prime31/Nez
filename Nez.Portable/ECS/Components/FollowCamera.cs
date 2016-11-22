@@ -46,6 +46,7 @@ namespace Nez
 		public Vector2 mapSize;
 
 		Entity _targetEntity;
+		Collider _targetCollider;
 		Vector2 _desiredPositionDelta;
 		CameraStyle _cameraStyle;
 		RectangleF _worldSpaceDeadzone;
@@ -160,10 +161,15 @@ namespace Nez
 			}
 			else
 			{
-				if( _targetEntity == null || _targetEntity.colliders.mainCollider == null )
-					return;
+				// make sure we have a targetCollider for CameraWindow. If we dont bail out.
+				if( _targetCollider == null )
+				{
+					_targetCollider = _targetEntity.getComponent<Collider>();
+					if( _targetCollider == null )
+						return;
+				}
 				
-				var targetBounds = _targetEntity.colliders.mainCollider.bounds;
+				var targetBounds = _targetEntity.getComponent<Collider>().bounds;
 				if( !_worldSpaceDeadzone.contains( targetBounds ) )
 				{
 					// x-axis
