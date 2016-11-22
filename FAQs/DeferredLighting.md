@@ -2,7 +2,7 @@ Deferred Lighting
 ==========
 The Deferred Lighting system lets you use real lights in your scene. Included light types are point, directional, spot and area lights.
 
-Deferred lighting is a method of rendering that defers dealing with lights until after all objects are rendered. This makes having lots of lights more effiecient. The general gist of how it works is like this: first, we render all objects to a diffuse render texture and render their normal maps to a normal render texture simultaneously (via multiple render targets). All of the lights are then rendered using the normal data into a 3rd render texture. Finally, the light render texture and the diffuse render texture are combined for the final output. You can see the output of all of the render textures by toggling the `DeferredRenderer.enableDebugBufferRender` property at runtime.
+Deferred lighting is a method of rendering that defers dealing with lights until after all objects are rendered. This makes having lots of lights more efficient. The general gist of how it works is like this: first, we render all objects to a diffuse render texture and render their normal maps to a normal render texture simultaneously (via multiple render targets). All of the lights are then rendered using the normal data into a 3rd render texture. Finally, the light render texture and the diffuse render texture are combined for the final output. You can see the output of all of the render textures by toggling the `DeferredRenderer.enableDebugBufferRender` property at runtime.
 
 
 ## Material Setup
@@ -30,7 +30,7 @@ var selfLitMaterial = new DeferredSpriteMaterial( selfLitNormalMapTexture );
 
 // we can access the Effect on a Material<T> via the typedEffect property. We need to tell the Effect that we want self illumination and
 // optionally set the self illumination power.
-selfLitMaterial.typedEffect.setUseNormalAlphaChannelForSelfIllumination( true )
+selfLitMaterial.effect.setUseNormalAlphaChannelForSelfIllumination( true )
 	.setSelfIlluminationPower( 0.5f );
 ```
 

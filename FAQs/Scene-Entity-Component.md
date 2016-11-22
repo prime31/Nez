@@ -10,6 +10,8 @@ The root of the ECS. Scenes can be thought of as the different parts of your gam
 
 Scene's provide a NezContentManager (Scene.contentManager) that you can use to load up scene-specific content. When the scene is finished the content will be unloaded automatically for you. If you need to load global content (anything that would be used by several scenes) you can use the Core.contentManager which is not ever explicitly unloaded.
 
+A Scene can contain a special kind of Component called a `SceneComponent`. SceneComponents are managed via the add/get/getOrCreate/removeSceneComponent methods. A SceneComponent can be thought of as a simplified Component. It contains a small amount of lifecycle methods that are overrideable (onEnabled/onDisabled/update/onRemovedFromScene). These can be used when you need an object that lives at the Scene level but does not require an Entity container. One example included with Nez is the Farseer world object which manages the physics simulation.
+
 Nez provides several different ways to get your final scene rendered flexibly and efficiently. It uses a concept called `SceneResolutionPolicy` to manage how things are rendered. The `SceneResolutionPolicy` along with the design time width/height that you set decides what size the RenderTarget2D should be and how it changes when the window size changes. Several SceneResolutionPolicys also include pixel perfect variants for use with pixal art games. Pixel perfect variants may end up with letter/pillar boxing which you can control via the **Scene.letterboxColor**. You can set the default `SceneResolutionPolicy` used for all scenes by calling **Scene.setDefaultDesignResolution**. The included SceneResolutionPolicys are below:
 
 - **None**: Default. RenderTarget2D matches the sceen size
@@ -22,6 +24,7 @@ Nez provides several different ways to get your final scene rendered flexibly an
 - **FixedHeightPixelPerfect**: Pixel perfect version of FixedHeight. Scaling is limited to integer values.
 - **FixedWidth**: The application takes the width of the design resolution size and modifies the height of the internal canvas so that it fits the aspect ratio of the device. no distortion will occur however you must make sure your application works on different aspect ratios
 - **FixedWidthPixelPerfect**: Pixel perfect version of FixedWidth. Scaling is limited to integer values.
+- **BestFit**: The application takes the width and height that best fits the design resolution with optional cropping inside of the "bleed area" and possible letter/pillar boxing. Works just like ShowAll except with horizontal/vertical bleed (padding). Gives you an area much like the old TitleSafeArea. Example: if design resolution is 1348x900 and bleed is 148x140 the safe area would be 1200x760 (design resolution - bleed).
 
 
 
@@ -49,6 +52,7 @@ Components are added to and managed by an Entity. They make up the meat of your 
 
 Component Lifecycle methods:
 
+- **initialize**: Called when the Component is created and the Entity field is assigned but before onAddedToEntity
 - **onAddedToEntity**: Called when the Component is added to an entity after all pending component changes are committed
 - **onRemovedFromEntity**:  Called when the component is removed from its entity. Do all cleanup here.
 - **onEntityPositionChanged**: called when the entity's position changes. This allows components to be aware that they have moved due to the parent entity moving.

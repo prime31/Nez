@@ -3,41 +3,37 @@
 Nez aims to be a lightweight 2D framework that sits on top of MonoGame/FNA. It provides a solid base for you to build a 2D game on. Some of the many features it includes are:
 
 - Scene/Entity/Component system with Component render layer tracking and optional entity systems (an implementation that operates on a group of entities that share a specific set of components)
-- SpatialHash for super fast broadphase physics lookups. You won't ever see it since it works behind the scenes but you'll love it nonetheless since it makes finding everything in your proximity crazy fast. (note that Nez does not provide any physics engine. It provides collision data that you can do whatever you want to with and some example Components showing how to implement things: Mover and ArcadeRigidBody).
-- AABB, circle and polygon collision/trigger detection along with linecasts against the SpatialHash
-- Verlet physics bodies for super fun, constraint-to-particle squishy physics
+- SpatialHash for super fast broadphase physics lookups. You won't ever see it since it works behind the scenes but you'll love it nonetheless since it makes finding everything in your proximity crazy fast via raycasts or overlap checks.
+- AABB, circle and polygon collision/trigger detection
+- Farseer Physics (based on Box2D) integration for when you need a full physics simulation
 - efficient coroutines for breaking up large tasks across multiple frames or animation timing (Core.startCoroutine)
 - in-game debug console extendable by adding an attribute to any static method. Just press the tilde key like in the old days with Quake. Out of the box, it includes a visual physics debugging system, asset tracker, basic profiler and more. Just type 'help' to see all the commands or type 'help COMMAND' to see specific hints.
-- in-game Component inspector. Open the debug console and use the command `inspect entity_name` to display and edit fields/properties and call methods with a button click.
+- in-game Component inspector. Open the debug console and use the command `inspect ENTITY_NAME` to display and edit fields/properties and call methods with a button click.
 - extensible rendering system. Add/remove renderers and post processors as needed. Renderables are sorted by render layer first then layer depth for maximum flexibility out of the box.
 - pathfinding support via Astar and Breadth First Search
 - deferred lighting engine with normal map support and both runtime and offline normal map generation
 - tween system. Tween any int/float/Vector/quaternion/color/rectangle field or property.
 - sprites with sprite animations, scrolling sprites, repeating sprites and sprite trails
+- flexible line renderer with configurable end caps including super smooth rounded edges or lightning bolt-like sharp edges
 - kick-ass particle system with added support for importing [Particle Designer](https://71squared.com/particledesigner) files
 - optimized event emitter for core events that you can also add to any class of your own
 - scheduler for delayed and repeating tasks (`Core.schedule` method)
 - per-scene content managers. Load your scene-specific content then forget about it. Nez will unload it for you when you change scenes.
-- synchronous or asynchronous asset loading
 - customizable Scene transition system with several built in transitions
+- Verlet physics bodies for super fun, constraint-to-particle squishy physics
 - tons more stuff
-
-
-Samples Repository
-==========
-You can find the samples repo [here](https://github.com/prime31/Nez-Samples). It contains a variety of sample scenes that demonstrate the basics of getting stuff done with Nez.
-
 
 
 Nez Systems
 ==========
-There are various systems documented separately on the [Nez website docs.](http://prime31.github.io/Nez/documentation/setup/installation) You can also access the markdown files directly below.
+There are various systems documented separately on the [Nez website docs.](http://prime31.github.io/Nez/documentation/setup/installation) You can also access the markdown files directly below. Note that sometimes the Nez website docs lag behind the markdown files linked below.
 
 - [Nez-Core](FAQs/Nez-Core.md)
 - [Scene-Entity-Component](FAQs/Scene-Entity-Component.md)
 - [Rendering](FAQs/Rendering.md)
 - [Content Management](FAQs/ContentManagement.md)
-- [Physics/Collisions](FAQs/Physics.md)
+- [Nez Physics/Collisions](FAQs/Physics.md)
+- [Farseer Physics](FAQs/FarseerPhysics.md)
 - [Scene Transitions](FAQs/SceneTransitions.md)
 - [Pathfinding](FAQs/Pathfinding.md)
 - [Runtime Inspector](FAQs/RuntimeInspector.md)
@@ -78,18 +74,6 @@ If you are developing a mobile application you will need to enable touch input b
 
 
 
-Using Nez with FNA
-==========
-See the [Nez.FNA repo](https://github.com/prime31/Nez.FNA) for details.
-
-
-
-Tutorials
-==========
-[The wiki](https://github.com/prime31/Nez/wiki) contains a few basic tutorials littered with code snippets that should be enough to get you rolling your own games. If you have a suggestion for a new tutorial feel free to open an issue with the details.
-
-
-
 Pipeline Importers
 ==========
 Nez comes stock with a decent bunch of Pipeline tool importers including:
@@ -106,15 +90,26 @@ Nez comes stock with a decent bunch of Pipeline tool importers including:
 - **XMLTemplateMaker**: this isn't so much an importer as a helper to make your own importer. Pass it a class and it spits out an XML template that you can use for your own custom XML-to-object importers.
 
 
+Samples Repository
+==========
+You can find the samples repo [here](https://github.com/prime31/Nez-Samples). It contains a variety of sample scenes that demonstrate the basics of getting stuff done with Nez. [The wiki](https://github.com/prime31/Nez/wiki) also contains a few short examples. [This YouTube playlist](https://www.youtube.com/playlist?list=PLb8LPjN5zpx0ZerxdoVarLKlWJ1_-YD9M) also has a few relevant videos.
+
+
+
+Using Nez with FNA
+==========
+See the [Nez.FNA repo](https://github.com/prime31/Nez.FNA) for details.
+
+
 
 ### Acknowledgements/Attributions
 Bits and pieces of Nez were cherry-picked from various places around the internet. If you see something in Nez that looks familiar open an issue with the details so that we can properly attribute the code.
 
-I want to extend a special thanks to the three people and their repos listed below. The Monocle Engine and MonoGame.Extended allowed me to get up and running with MonoGame nearly instantly when I was first evaluating if it would be a good alternative to use for making games. [libGDX](https://github.com/libgdx/libgdx) scene2D UI was ported over to Nez to get a jump start on a UI as well. Nez uses a bunch of concepts and code from all three of these repos.
+I want to extend a special thanks to three people and their repos listed below. The Monocle Engine and MonoGame.Extended allowed me to get up and running with MonoGame nearly instantly when I was first evaluating if it would be a good alternative to use for making games. [libGDX](https://github.com/libgdx/libgdx) scene2D UI was ported over to Nez to get a jump start on a UI as well. Nez uses a bunch of concepts and code from all three of these repos.
 
 Matt Thorson's fantastic [Monocle Engine](https://bitbucket.org/MattThorson/monocle-engine)
 
-Dylan Wilson's excellent [MonoGame.Extended](https://github.com/craftworkgames/MonoGame.Extended)
+Dylan Wilson's excellent [MonoGame.Extended](https://github.com/craftworkgames/MonoGame.Extended) and his initial work on converted [Farseer Physics Engine](https://farseerphysics.codeplex.com/) to a Portable Class Library. Farseer is [Microsoft Permissive v1.1](https://farseerphysics.codeplex.com/license) licensed.
 
 Nathan Sweet's libGDX Scene2D UI [libGDX](https://github.com/libgdx/libgdx). Nez UI is based on libGDX Scene2D which is [Apache licensed](UI_LICENSE).
 
