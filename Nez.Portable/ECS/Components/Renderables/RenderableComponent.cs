@@ -70,8 +70,7 @@ namespace Nez
 		public Color color = Color.White;
 
 		/// <summary>
-		/// used by Renderers to specify how this sprite should be rendered. If non-null, it is automatically disposed of when the Component
-		/// is removed from the Entity.
+		/// used by Renderers to specify how this sprite should be rendered
 		/// </summary>
 		public virtual Material material { get; set; }
 

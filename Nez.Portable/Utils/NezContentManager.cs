@@ -247,13 +247,15 @@ namespace Nez.Systems
 		/// unloads an Effect that was loaded via loadEffect, loadNezEffect or loadMonoGameEffect
 		/// </summary>
 		/// <param name="effectName">Effect.name</param>
-		public void unloadEffect( string effectName )
+		public bool unloadEffect( string effectName )
 		{
 			if( _loadedEffects.ContainsKey( effectName ) )
 			{
 				_loadedEffects[effectName].Dispose();
 				_loadedEffects.Remove( effectName );
+				return true;
 			}
+			return false;
 		}
 
 
@@ -261,9 +263,9 @@ namespace Nez.Systems
 		/// unloads an Effect that was loaded via loadEffect, loadNezEffect or loadMonoGameEffect
 		/// </summary>
 		/// <param name="effectName">Effect.name</param>
-		public void unloadEffect( Effect effect )
+		public bool unloadEffect( Effect effect )
 		{
-			unloadEffect( effect.Name );
+			return unloadEffect( effect.Name );
 		}
 
 
