@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 
+
 namespace Nez
 {
 	public static class ComponentExt
@@ -60,24 +61,6 @@ namespace Nez
 		public static void removeComponent( this Component self )
 		{
 			self.entity.removeComponent( self );
-		}
-
-		#endregion
-
-
-		#region Collider management
-
-		[MethodImpl( MethodImplOptions.AggressiveInlining )]
-		public static T addCollider<T>( this Component self, T collider ) where T : Collider
-		{
-			return self.entity.addCollider( collider );
-		}
-
-
-		[MethodImpl( MethodImplOptions.AggressiveInlining )]
-		public static void removeCollider( this Component self, Collider collider )
-		{
-			self.entity.removeCollider( collider );
 		}
 
 		#endregion

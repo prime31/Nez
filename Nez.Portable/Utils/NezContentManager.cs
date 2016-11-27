@@ -32,7 +32,7 @@ namespace Nez.Systems
 
 
 		/// <summary>
-		/// loads an ogl effect directly from file and handles disposing of it when the ContentManager is disposed. Name should the the path
+		/// loads an ogl effect directly from file and handles disposing of it when the ContentManager is disposed. Name should be the path
 		/// relative to the Content folder or including the Content folder.
 		/// </summary>
 		/// <returns>The effect.</returns>
@@ -87,10 +87,7 @@ namespace Nez.Systems
 		/// <param name="name">Name.</param>
 		internal T loadEffect<T>( string name, byte[] effectCode ) where T : Effect
 		{
-			var graphicsDeviceService = (IGraphicsDeviceService)ServiceProvider.GetService( typeof( IGraphicsDeviceService ) );
-			var graphicsDevice = graphicsDeviceService.GraphicsDevice;
-
-			var effect = Activator.CreateInstance( typeof( T ), graphicsDevice, effectCode ) as T;
+			var effect = Activator.CreateInstance( typeof( T ), Core.graphicsDevice, effectCode ) as T;
 			effect.Name = typeof( T ).Name + "-" + Utils.randomString( 5 );
 			_loadedEffects[effect.Name] = effect;
 
@@ -107,10 +104,7 @@ namespace Nez.Systems
 		/// <typeparam name="T">The 1st type parameter.</typeparam>
 		public T loadMonoGameEffect<T>() where T : Effect
 		{
-			var graphicsDeviceService = (IGraphicsDeviceService)ServiceProvider.GetService( typeof( IGraphicsDeviceService ) );
-			var graphicsDevice = graphicsDeviceService.GraphicsDevice;
-
-			var effect = Activator.CreateInstance( typeof( T ), graphicsDevice ) as T;
+			var effect = Activator.CreateInstance( typeof( T ), Core.graphicsDevice ) as T;
 			effect.Name = typeof( T ).Name + "-" + Utils.randomString( 5 );
 			_loadedEffects[effect.Name] = effect;
 

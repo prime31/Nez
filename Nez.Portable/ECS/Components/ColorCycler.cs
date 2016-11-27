@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 
+
 namespace Nez
 {
 	public enum Colorchannels
@@ -23,6 +24,10 @@ namespace Nez
 	}
 
 
+	/// <summary>
+	/// takes a RenderableComponent and cycles the color using different wave forms. A specific color channel can be affected or all of them.
+	/// Useful for making flickering lights and adding atmosphere.
+	/// </summary>
 	public class ColorCycler : Component, IUpdatable
 	{
 		public Colorchannels colorChannel = Colorchannels.All;
@@ -131,5 +136,6 @@ namespace Nez
 
 			return ( y * amplitude ) + offset;
 		}
+	
 	}
 }
