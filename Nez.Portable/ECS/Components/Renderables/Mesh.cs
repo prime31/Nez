@@ -200,7 +200,7 @@ namespace Nez
 		#endregion
 
 
-		#region RenderableComponent
+		#region Component/RenderableComponent overrides
 
 		public override void onAddedToEntity()
 		{
@@ -213,6 +213,13 @@ namespace Nez
 				_basicEffect.TextureEnabled = true;
 				_texture = null;
 			}
+		}
+
+
+		public override void onRemovedFromEntity()
+		{
+			entity.scene.content.unloadEffect( _basicEffect );
+			_basicEffect = null;
 		}
 
 
