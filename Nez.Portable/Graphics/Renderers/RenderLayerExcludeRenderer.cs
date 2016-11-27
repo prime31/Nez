@@ -37,6 +37,8 @@
 
 		protected override void debugRender( Scene scene, Camera cam )
 		{
+			base.debugRender( scene, cam );
+
 			for( var i = 0; i < scene.renderableComponents.count; i++ )
 			{
 				var renderable = scene.renderableComponents[i];

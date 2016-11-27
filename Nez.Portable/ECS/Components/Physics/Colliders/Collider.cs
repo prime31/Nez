@@ -231,7 +231,7 @@ namespace Nez
 		public virtual void registerColliderWithPhysicsSystem()
 		{
 			// entity could be null if properties such as origin are changed before we are added to an Entity
-			if( _isParentEntityAddedToScene )
+			if( _isParentEntityAddedToScene && !_isColliderRegistered )
 			{
 				Physics.addCollider( this );
 				_isColliderRegistered = true;
