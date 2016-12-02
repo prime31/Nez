@@ -168,11 +168,13 @@
     <Compile Include="Nez\HighLevel\Components\Joints\FSWheelJoint.cs" />
     <Compile Include="Nez\HighLevel\Components\Joints\FSGearJoint.cs" />
     <Compile Include="Nez\HighLevel\Components\Joints\FSPulleyJoint.cs" />
-    <Compile Include="Nez\Common\FarseerCollisions.cs" />
+    <Compile Include="Nez\Common\FSCollisions.cs" />
     <Compile Include="Nez\Common\FSConvert.cs" />
     <Compile Include="Nez\Common\FSWorld.cs" />
     <Compile Include="Nez\HighLevel\Components\Joints\FSMouseJoint.cs" />
     <Compile Include="Nez\Common\FSDebugView.cs" />
+    <Compile Include="Nez\LowLevel\Extensions\FixtureExt.cs" />
+    <Compile Include="Nez\Common\FSCollisionResult.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Nez.Portable\Nez.csproj">

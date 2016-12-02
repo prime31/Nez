@@ -1,4 +1,5 @@
-﻿using System;
+﻿//#define DEBUG_FSCOLLISIONS // uncomment to enable Debug of collision points and normals
+using System;
 using FarseerPhysics.Collision;
 using FarseerPhysics.Collision.Shapes;
 using FarseerPhysics.Common;
@@ -10,7 +11,12 @@ using FSTransform = FarseerPhysics.Common.Transform;
 
 namespace Nez.Farseer
 {
-	public static class FarseerCollisions
+	/// <summary>
+	/// a collection of helper methods for doing manual collision detection. Why would you want such a thing with a physics engine? The big
+	/// reason is so that you can have a fully kinematic Body and retain full and complete control over its movement while it can still
+	/// interact with any other dynamic Bodies.
+	/// </summary>
+	public static class FSCollisions
 	{
 		static Manifold _manifold;
 
@@ -51,16 +57,70 @@ namespace Nez.Farseer
 
 
 		/// <summary>
-		/// handles collisions between two Fixtures. Note that the first Fixture must have a Circle/PolygonShape and one of the Fixtures must be
+		/// checks to see if fixtureA with motion applied (delta movement vector) collides with any collider. If it does, true will be
+		/// returned and result will be populated with collision data. Motion will be set to the maximum distance the Body can travel
+		/// before colliding.
+		/// </summary>
+		/// <returns><c>true</c>, if fixtures was collided, <c>false</c> otherwise.</returns>
+		/// <param name="fixtureA">Fixture a.</param>
+		/// <param name="motion">delta movement in simulation space</param>
+		/// <param name="fixtureB">Fixture b.</param>
+		/// <param name="result">Result.</param>
+		public static bool collideFixtures( Fixture fixtureA, ref Vector2 motion, Fixture fixtureB, out FSCollisionResult result )
+		{
+			// gather our transforms and adjust fixtureA's transform to account for the motion so we check for the collision at its new location
+			FSTransform transformA;
+			fixtureA.body.getTransform( out transformA );
+			transformA.p += motion;
+
+			FSTransform transformB;
+			fixtureB.body.getTransform( out transformB );
+
+			if( collideFixtures( fixtureA, ref transformA, fixtureB, ref transformB, out result ) )
+			{
+				motion += result.minimumTranslationVector;
+				return true;
+			}
+
+			return false;
+		}
+
+
+		/// <summary>
+		/// checks for collisions between two Fixtures. Note that the first Fixture must have a Circle/PolygonShape and one of the Fixtures must be
 		/// static.
 		/// </summary>
 		/// <returns><c>true</c>, if shapes was collided, <c>false</c> otherwise.</returns>
 		/// <param name="fixtureA">Fixture a.</param>
 		/// <param name="fixtureB">Fixture b.</param>
 		/// <param name="result">Result.</param>
-		public static bool collideShapes( Fixture fixtureA, Fixture fixtureB, out CollisionResult result )
+		public static bool collideFixtures( Fixture fixtureA, Fixture fixtureB, out FSCollisionResult result )
 		{
-			result = new CollisionResult();
+			// gather our transforms
+			FSTransform transformA;
+			fixtureA.body.getTransform( out transformA );
+
+			FSTransform transformB;
+			fixtureB.body.getTransform( out transformB );
+
+			return collideFixtures( fixtureA, ref transformA, fixtureB, ref transformB, out result );
+		}
+
+
+		/// <summary>
+		/// checks for collisions between two Fixtures. Note that the first Fixture must have a Circle/PolygonShape and one of the Fixtures must be
+		/// static.
+		/// </summary>
+		/// <returns><c>true</c>, if fixtures was collided, <c>false</c> otherwise.</returns>
+		/// <param name="fixtureA">Fixture a.</param>
+		/// <param name="transformA">Transform a.</param>
+		/// <param name="fixtureB">Fixture b.</param>
+		/// <param name="transformB">Transform b.</param>
+		/// <param name="result">Result.</param>
+		public static bool collideFixtures( Fixture fixtureA, ref FSTransform transformA, Fixture fixtureB, ref FSTransform transformB, out FSCollisionResult result )
+		{
+			result = new FSCollisionResult();
+			result.fixture = fixtureB;
 
 			// we need at least one static fixture
 			if( !fixtureA.body.isStatic && !fixtureB.body.isStatic )
@@ -78,13 +138,6 @@ namespace Nez.Farseer
 			// check user filtering
 			if( fixtureA.body.world.contactManager.onContactFilter != null && !fixtureA.body.world.contactManager.onContactFilter( fixtureA, fixtureB ) )
 				return false;
-
-			// gather our transforms
-			FSTransform transformA;
-			fixtureA.body.getTransform( out transformA );
-
-			FSTransform transformB;
-			fixtureB.body.getTransform( out transformB );
 
 			// we only handle Circle or Polygon collisions
 			if( fixtureA.shape is CircleShape )
@@ -141,9 +194,9 @@ namespace Nez.Farseer
 		}
 
 
-		public static bool collidePolygons( PolygonShape polygonA, ref FSTransform transformA, PolygonShape polygonB, ref FSTransform transformB, out CollisionResult result )
+		static bool collidePolygons( PolygonShape polygonA, ref FSTransform transformA, PolygonShape polygonB, ref FSTransform transformB, out FSCollisionResult result )
 		{
-			result = new CollisionResult();
+			result = new FSCollisionResult();
 
 			Collision.collidePolygons( ref _manifold, polygonA as PolygonShape, ref transformA, polygonB as PolygonShape, ref transformB );
 			if( _manifold.pointCount > 0 )
@@ -178,9 +231,10 @@ namespace Nez.Farseer
 					result.minimumTranslationVector = result.normal * -separation;
 				}
 
-
+				#if DEBUG_FSCOLLISIONS
 				Debug.drawPixel( result.point, 2, Color.Red, 0.2f );
 				Debug.drawLine( result.point, result.point + result.normal * 20, Color.Yellow, 0.2f );
+				#endif
 
 				return true;
 			}
@@ -189,9 +243,9 @@ namespace Nez.Farseer
 		}
 
 
-		public static bool collidePolygonCircle( PolygonShape polygon, ref FSTransform polyTransform, CircleShape circle, ref FSTransform circleTransform, out CollisionResult result )
+		static bool collidePolygonCircle( PolygonShape polygon, ref FSTransform polyTransform, CircleShape circle, ref FSTransform circleTransform, out FSCollisionResult result )
 		{
-			result = new CollisionResult();
+			result = new FSCollisionResult();
 			Collision.collidePolygonAndCircle( ref _manifold, polygon, ref polyTransform, circle, ref circleTransform );
 			if( _manifold.pointCount > 0 )
 			{
@@ -210,8 +264,10 @@ namespace Nez.Farseer
 				result.point = points[0] * FSConvert.simToDisplay;
 				result.minimumTranslationVector = result.normal * separation;
 
+				#if DEBUG_FSCOLLISIONS
 				Debug.drawPixel( result.point, 2, Color.Red, 0.2f );
 				Debug.drawLine( result.point, result.point + result.normal * 20, Color.Yellow, 0.2f );
+				#endif
 
 				return true;
 			}
@@ -220,9 +276,9 @@ namespace Nez.Farseer
 		}
 
 
-		public static bool collideCircles( CircleShape circleA, ref FSTransform firstTransform, CircleShape circleB, ref FSTransform secondTransform, out CollisionResult result )
+		static bool collideCircles( CircleShape circleA, ref FSTransform firstTransform, CircleShape circleB, ref FSTransform secondTransform, out FSCollisionResult result )
 		{
-			result = new CollisionResult();
+			result = new FSCollisionResult();
 			Collision.collideCircles( ref _manifold, circleA, ref firstTransform, circleB, ref secondTransform );
 			if( _manifold.pointCount > 0 )
 			{
@@ -242,8 +298,10 @@ namespace Nez.Farseer
 				var separation = Vector2.Dot( pointA - pointB, result.normal ) - circleA.radius - circleB.radius;
 				result.minimumTranslationVector = result.normal * Math.Abs( separation );
 
+				#if DEBUG_FSCOLLISIONS
 				Debug.drawPixel( result.point, 5, Color.Red, 0.2f );
 				Debug.drawLine( result.point, result.point + result.normal * 20, Color.Yellow, 0.2f );
+				#endif
 
 				return true;
 			}
@@ -252,9 +310,9 @@ namespace Nez.Farseer
 		}
 
 
-		public static bool collideEdgeAndCircle( EdgeShape edge, ref FSTransform edgeTransform, CircleShape circle, ref FSTransform circleTransform, out CollisionResult result )
+		static bool collideEdgeAndCircle( EdgeShape edge, ref FSTransform edgeTransform, CircleShape circle, ref FSTransform circleTransform, out FSCollisionResult result )
 		{
-			result = new CollisionResult();
+			result = new FSCollisionResult();
 			Collision.collideEdgeAndCircle( ref _manifold, edge, ref edgeTransform, circle, ref circleTransform );
 			if( _manifold.pointCount > 0 )
 			{
@@ -292,9 +350,10 @@ namespace Nez.Farseer
 					result.minimumTranslationVector = result.normal * -separation;
 				}
 
-
+				#if DEBUG_FSCOLLISIONS
 				Debug.drawPixel( result.point, 5, Color.Red, 0.2f );
 				Debug.drawLine( result.point, result.point + result.normal * 20, Color.Yellow, 0.2f );
+				#endif
 
 				return true;
 			}
@@ -303,9 +362,9 @@ namespace Nez.Farseer
 		}
 
 
-		public static bool collideEdgeAndPolygon( EdgeShape edge, ref FSTransform edgeTransform, PolygonShape polygon, ref FSTransform polygonTransform, out CollisionResult result )
+		static bool collideEdgeAndPolygon( EdgeShape edge, ref FSTransform edgeTransform, PolygonShape polygon, ref FSTransform polygonTransform, out FSCollisionResult result )
 		{
-			result = new CollisionResult();
+			result = new FSCollisionResult();
 			Collision.collideEdgeAndPolygon( ref _manifold, edge, ref edgeTransform, polygon, ref polygonTransform );
 			if( _manifold.pointCount > 0 )
 			{
@@ -339,8 +398,10 @@ namespace Nez.Farseer
 					result.minimumTranslationVector = result.normal * -separation;
 				}
 
+				#if DEBUG_FSCOLLISIONS
 				Debug.drawPixel( result.point, 5, Color.Red, 0.2f );
 				Debug.drawLine( result.point, result.point + result.normal * 20, Color.Yellow, 0.2f );
+				#endif
 
 				return true;
 			}
