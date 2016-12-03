@@ -9,27 +9,29 @@ namespace FarseerPhysics.Controllers
 {
 	public sealed class BuoyancyController : Controller
 	{
+		#region Properties/Fields
+
 		/// <summary>
 		/// Controls the rotational drag that the fluid exerts on the bodies within it. Use higher values will simulate thick fluid, like honey, lower values to
 		/// simulate water-like fluids. 
 		/// </summary>
-		public float AngularDragCoefficient;
+		public float angularDragCoefficient;
 
 		/// <summary>
 		/// Density of the fluid. Higher values will make things more buoyant, lower values will cause things to sink.
 		/// </summary>
-		public float Density;
+		public float density;
 
 		/// <summary>
 		/// Controls the linear drag that the fluid exerts on the bodies within it. Use higher values will simulate thick fluid, like honey, lower values to
 		/// simulate water-like fluids.
 		/// </summary>
-		public float LinearDragCoefficient;
+		public float linearDragCoefficient;
 
 		/// <summary>
 		/// Acts like waterflow. Defaults to 0,0.
 		/// </summary>
-		public Vector2 Velocity;
+		public Vector2 velocity;
 
 		AABB _container;
 
@@ -37,6 +39,9 @@ namespace FarseerPhysics.Controllers
 		Vector2 _normal;
 		float _offset;
 		Dictionary<int, Body> _uniqueBodies = new Dictionary<int, Body>();
+
+		#endregion
+
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="BuoyancyController"/> class.
@@ -49,15 +54,15 @@ namespace FarseerPhysics.Controllers
 		public BuoyancyController( AABB container, float density, float linearDragCoefficient, float rotationalDragCoefficient, Vector2 gravity )
 			: base( ControllerType.BuoyancyController )
 		{
-			Container = container;
+			this.container = container;
 			_normal = new Vector2( 0, 1 );
-			Density = density;
-			LinearDragCoefficient = linearDragCoefficient;
-			AngularDragCoefficient = rotationalDragCoefficient;
+			this.density = density;
+			this.linearDragCoefficient = linearDragCoefficient;
+			angularDragCoefficient = rotationalDragCoefficient;
 			_gravity = gravity;
 		}
 
-		public AABB Container
+		public AABB container
 		{
 			get { return _container; }
 			set
@@ -67,10 +72,10 @@ namespace FarseerPhysics.Controllers
 			}
 		}
 
-		public override void Update( float dt )
+		public override void update( float dt )
 		{
 			_uniqueBodies.Clear();
-			World.queryAABB( fixture =>
+			world.queryAABB( fixture =>
 								 {
 									 if( fixture.body.isStatic || !fixture.body.isAwake )
 										 return true;
@@ -119,17 +124,18 @@ namespace FarseerPhysics.Controllers
 					continue;
 
 				//Buoyancy
-				var buoyancyForce = -Density * area * _gravity;
+				var buoyancyForce = -density * area * _gravity;
 				body.applyForce( buoyancyForce, massc );
 
 				//Linear drag
-				var dragForce = body.getLinearVelocityFromWorldPoint( areac ) - Velocity;
-				dragForce *= -LinearDragCoefficient * area;
+				var dragForce = body.getLinearVelocityFromWorldPoint( areac ) - velocity;
+				dragForce *= -linearDragCoefficient * area;
 				body.applyForce( dragForce, areac );
 
 				//Angular drag
-				body.applyTorque( -body.inertia / body.mass * area * body.angularVelocity * AngularDragCoefficient );
+				body.applyTorque( -body.inertia / body.mass * area * body.angularVelocity * angularDragCoefficient );
 			}
 		}
+	
 	}
 }

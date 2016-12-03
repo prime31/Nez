@@ -31,7 +31,7 @@ namespace FarseerPhysics.Controllers
 
 		public override void ApplyForce( float dt, float strength )
 		{
-			foreach( var body in World.bodyList )
+			foreach( var body in world.bodyList )
 			{
 				//TODO: Consider Force Type
 				float decayMultiplier = GetDecayMultiplier( body );

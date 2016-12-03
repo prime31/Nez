@@ -293,7 +293,7 @@ namespace Nez.Farseer
 					var buoyancy = controller as BuoyancyController;
 					if( buoyancy != null )
 					{
-						AABB container = buoyancy.Container;
+						AABB container = buoyancy.container;
 						drawAABB( ref container, Color.LightBlue );
 					}
 				}

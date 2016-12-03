@@ -88,7 +88,7 @@ namespace FarseerPhysics.Controllers
 		/// </summary>
 		public AbstractForceController() : base( ControllerType.AbstractForceController )
 		{
-			Enabled = true;
+			enabled = true;
 
 			Strength = 1.0f;
 			Position = new Vector2( 0, 0 );
@@ -122,13 +122,13 @@ namespace FarseerPhysics.Controllers
 			switch( mode )
 			{
 				case TimingModes.Switched:
-					Enabled = true;
+					enabled = true;
 					break;
 				case TimingModes.Triggered:
-					Enabled = false;
+					enabled = false;
 					break;
 				case TimingModes.Curve:
-					Enabled = false;
+					enabled = false;
 					break;
 			}
 		}
@@ -266,13 +266,13 @@ namespace FarseerPhysics.Controllers
 		/// Depending on the TimingMode perform timing logic and call ApplyForce()
 		/// </summary>
 		/// <param name="dt"></param>
-		public override void Update( float dt )
+		public override void update( float dt )
 		{
 			switch( TimingMode )
 			{
 				case TimingModes.Switched:
 					{
-						if( Enabled )
+						if( enabled )
 						{
 							ApplyForce( dt, Strength );
 						}
@@ -280,7 +280,7 @@ namespace FarseerPhysics.Controllers
 					}
 				case TimingModes.Triggered:
 					{
-						if( Enabled && Triggered )
+						if( enabled && Triggered )
 						{
 							if( ImpulseTime < ImpulseLength )
 							{
@@ -296,7 +296,7 @@ namespace FarseerPhysics.Controllers
 					}
 				case TimingModes.Curve:
 					{
-						if( Enabled && Triggered )
+						if( enabled && Triggered )
 						{
 							if( ImpulseTime < ImpulseLength )
 							{

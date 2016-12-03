@@ -93,11 +93,11 @@ namespace FarseerPhysics.Collision.Shapes
 			output = new RayCastOutput();
 
 			var pos = transform.p + MathUtils.mul( transform.q, this.position );
-			var s = input.Point1 - pos;
+			var s = input.point1 - pos;
 			var b = Vector2.Dot( s, s ) - _2radius;
 
 			// Solve quadratic equation.
-			var r = input.Point2 - input.Point1;
+			var r = input.point2 - input.point1;
 			var c = Vector2.Dot( s, r );
 			var rr = Vector2.Dot( r, r );
 			var sigma = c * c - rr * b;
@@ -110,14 +110,14 @@ namespace FarseerPhysics.Collision.Shapes
 			float a = -( c + (float)Math.Sqrt( sigma ) );
 
 			// Is the intersection point on the segment?
-			if( 0.0f <= a && a <= input.MaxFraction * rr )
+			if( 0.0f <= a && a <= input.maxFraction * rr )
 			{
 				a /= rr;
-				output.Fraction = a;
+				output.fraction = a;
 
 				//TODO: Check results here
-				output.Normal = s + a * r;
-				output.Normal.Normalize();
+				output.normal = s + a * r;
+				output.normal.Normalize();
 				return true;
 			}
 

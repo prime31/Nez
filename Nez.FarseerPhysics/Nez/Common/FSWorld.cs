@@ -32,6 +32,8 @@ namespace Nez.Farseer
 		}
 
 
+		#region SceneComponent
+
 		public override void onEnabled()
 		{
 			world.enabled = true;
@@ -78,6 +80,15 @@ namespace Nez.Farseer
 
 			world.step( MathHelper.Min( Time.deltaTime, minimumUpdateDeltaTime ) );
 		}
+
+		#endregion
+
+
+		#region World Querying
+
+
+
+		#endregion
 
 
 		public static implicit operator World( FSWorld self )

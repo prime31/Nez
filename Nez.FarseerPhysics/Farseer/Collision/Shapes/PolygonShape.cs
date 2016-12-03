@@ -245,11 +245,11 @@ namespace FarseerPhysics.Collision.Shapes
 			output = new RayCastOutput();
 
 			// Put the ray into the polygon's frame of reference.
-			Vector2 p1 = MathUtils.mulT( transform.q, input.Point1 - transform.p );
-			Vector2 p2 = MathUtils.mulT( transform.q, input.Point2 - transform.p );
+			Vector2 p1 = MathUtils.mulT( transform.q, input.point1 - transform.p );
+			Vector2 p2 = MathUtils.mulT( transform.q, input.point2 - transform.p );
 			Vector2 d = p2 - p1;
 
-			float lower = 0.0f, upper = input.MaxFraction;
+			float lower = 0.0f, upper = input.maxFraction;
 
 			int index = -1;
 
@@ -299,12 +299,12 @@ namespace FarseerPhysics.Collision.Shapes
 				}
 			}
 
-			Debug.Assert( 0.0f <= lower && lower <= input.MaxFraction );
+			Debug.Assert( 0.0f <= lower && lower <= input.maxFraction );
 
 			if( index >= 0 )
 			{
-				output.Fraction = lower;
-				output.Normal = MathUtils.mul( transform.q, normals[index] );
+				output.fraction = lower;
+				output.normal = MathUtils.mul( transform.q, normals[index] );
 				return true;
 			}
 

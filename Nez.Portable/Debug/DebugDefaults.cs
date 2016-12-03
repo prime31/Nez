@@ -18,6 +18,9 @@ namespace Nez
 			public static Color colliderPosition = Color.Yellow;
 			public static Color colliderCenter = Color.Red;
 
+			public static Color renderableBounds = Color.Yellow;
+			public static Color renderableCenter = Color.DarkOrchid;
+
 			public static Color verletParticle = new Color( 220, 52, 94 );
 			public static Color verletConstraintEdge = new Color( 67, 62, 54 );
 

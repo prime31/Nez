@@ -304,7 +304,7 @@ namespace FarseerPhysics.Dynamics
 				if( value )
 				{
 					// Create all proxies.
-					IBroadPhase broadPhase = _world.contactManager.broadPhase;
+					var broadPhase = _world.contactManager.broadPhase;
 					for( int i = 0; i < fixtureList.Count; i++ )
 						fixtureList[i].createProxies( broadPhase, ref _xf );
 
@@ -785,11 +785,11 @@ namespace FarseerPhysics.Dynamics
 			ContactEdge edge = contactList;
 			while( edge != null )
 			{
-				Contact c = edge.contact;
+				var c = edge.contact;
 				edge = edge.next;
 
-				Fixture fixtureA = c.fixtureA;
-				Fixture fixtureB = c.fixtureB;
+				var fixtureA = c.fixtureA;
+				var fixtureB = c.fixtureB;
 
 				if( fixture == fixtureA || fixture == fixtureB )
 				{
@@ -801,7 +801,7 @@ namespace FarseerPhysics.Dynamics
 
 			if( _enabled )
 			{
-				IBroadPhase broadPhase = _world.contactManager.broadPhase;
+				var broadPhase = _world.contactManager.broadPhase;
 				fixture.destroyProxies( broadPhase );
 			}
 
@@ -853,8 +853,8 @@ namespace FarseerPhysics.Dynamics
 			_sweep.C0 = _sweep.C;
 			_sweep.A0 = angle;
 
-			IBroadPhase broadPhase = _world.contactManager.broadPhase;
-			for( int i = 0; i < fixtureList.Count; i++ )
+			var broadPhase = _world.contactManager.broadPhase;
+			for( var i = 0; i < fixtureList.Count; i++ )
 				fixtureList[i].synchronize( broadPhase, ref _xf, ref _xf );
 		}
 
@@ -1247,11 +1247,9 @@ namespace FarseerPhysics.Dynamics
 			xf1.q.Set( _sweep.A0 );
 			xf1.p = _sweep.C0 - MathUtils.mul( xf1.q, _sweep.LocalCenter );
 
-			IBroadPhase broadPhase = _world.contactManager.broadPhase;
+			var broadPhase = _world.contactManager.broadPhase;
 			for( int i = 0; i < fixtureList.Count; i++ )
-			{
 				fixtureList[i].synchronize( broadPhase, ref xf1, ref _xf );
-			}
 		}
 
 		internal void synchronizeTransform()

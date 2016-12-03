@@ -1,4 +1,5 @@
-﻿using FarseerPhysics.Collision;
+﻿using System.Collections.Generic;
+using FarseerPhysics.Collision;
 using FarseerPhysics.Dynamics;
 using Microsoft.Xna.Framework;
 using FSTransform = FarseerPhysics.Common.Transform;
@@ -29,7 +30,8 @@ namespace Nez.Farseer
 			xf.p += motion;
 			self.shape.computeAABB( out aabb, ref xf, 0 );
 
-			var neighbors = self.body.world.queryAABB( ref aabb );
+			var neighbors = ListPool<Fixture>.obtain();
+			self.body.world.queryAABB( ref aabb, neighbors );
 			if( neighbors.Count > 1 )
 			{
 				// handle collisions with all but ourself
@@ -46,6 +48,7 @@ namespace Nez.Farseer
 				}
 			}
 
+			ListPool<Fixture>.free( neighbors );
 			motion *= FSConvert.simToDisplay;
 
 			return didCollide;

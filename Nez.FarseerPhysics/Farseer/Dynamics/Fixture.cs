@@ -388,11 +388,9 @@ namespace FarseerPhysics.Dynamics
 			}
 
 			// Touch each proxy so that new pairs may be created
-			IBroadPhase broadPhase = world.contactManager.broadPhase;
-			for( int i = 0; i < proxyCount; ++i )
-			{
+			var broadPhase = world.contactManager.broadPhase;
+			for( var i = 0; i < proxyCount; ++i )
 				broadPhase.touchProxy( proxies[i].proxyId );
-			}
 		}
 
 		void registerFixture()
@@ -403,7 +401,7 @@ namespace FarseerPhysics.Dynamics
 
 			if( body.enabled )
 			{
-				IBroadPhase broadPhase = body._world.contactManager.broadPhase;
+				var broadPhase = body._world.contactManager.broadPhase;
 				createProxies( broadPhase, ref body._xf );
 			}
 
@@ -490,7 +488,7 @@ namespace FarseerPhysics.Dynamics
 		}
 
 		// These support body activation/deactivation.
-		internal void createProxies( IBroadPhase broadPhase, ref Transform xf )
+		internal void createProxies( DynamicTreeBroadPhase broadPhase, ref Transform xf )
 		{
 			Debug.Assert( proxyCount == 0 );
 
@@ -511,7 +509,7 @@ namespace FarseerPhysics.Dynamics
 			}
 		}
 
-		internal void destroyProxies( IBroadPhase broadPhase )
+		internal void destroyProxies( DynamicTreeBroadPhase broadPhase )
 		{
 			// Destroy proxies in the broad-phase.
 			for( int i = 0; i < proxyCount; ++i )
@@ -523,16 +521,14 @@ namespace FarseerPhysics.Dynamics
 			proxyCount = 0;
 		}
 
-		internal void synchronize( IBroadPhase broadPhase, ref Transform transform1, ref Transform transform2 )
+		internal void synchronize( DynamicTreeBroadPhase broadPhase, ref Transform transform1, ref Transform transform2 )
 		{
 			if( proxyCount == 0 )
-			{
 				return;
-			}
 
-			for( int i = 0; i < proxyCount; ++i )
+			for( var i = 0; i < proxyCount; ++i )
 			{
-				FixtureProxy proxy = proxies[i];
+				var proxy = proxies[i];
 
 				// Compute an AABB that covers the swept Shape (may miss some rotation effect).
 				AABB aabb1, aabb2;
