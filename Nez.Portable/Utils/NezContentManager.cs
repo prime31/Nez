@@ -88,7 +88,7 @@ namespace Nez.Systems
 		internal T loadEffect<T>( string name, byte[] effectCode ) where T : Effect
 		{
 			var effect = Activator.CreateInstance( typeof( T ), Core.graphicsDevice, effectCode ) as T;
-			effect.Name = typeof( T ).Name + "-" + Utils.randomString( 5 );
+			effect.Name = name + "-" + Utils.randomString( 5 );
 			_loadedEffects[effect.Name] = effect;
 
 			return effect;

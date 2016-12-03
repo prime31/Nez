@@ -94,6 +94,7 @@
     <Folder Include="Physics\Shapes\ShapeCollisions\" />
     <Folder Include="Graphics\SVG\" />
     <Folder Include="ECS\Components\Physics\Colliders\" />
+    <Folder Include="ECS\Components\Renderables\PolygonLight\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Debug\Debug.cs" />
@@ -562,6 +563,10 @@
     <Compile Include="ECS\Components\Physics\Colliders\CircleCollider.cs" />
     <Compile Include="ECS\Components\Physics\Colliders\Collider.cs" />
     <Compile Include="ECS\Components\Physics\Colliders\PolygonCollider.cs" />
+    <Compile Include="ECS\Components\Renderables\PolygonLight\EndPoint.cs" />
+    <Compile Include="ECS\Components\Renderables\PolygonLight\PolygonLight.cs" />
+    <Compile Include="ECS\Components\Renderables\PolygonLight\Segment.cs" />
+    <Compile Include="ECS\Components\Renderables\PolygonLight\VisibilityComputer.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="MonoGame.Framework">
