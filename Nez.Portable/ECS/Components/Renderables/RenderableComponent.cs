@@ -139,10 +139,10 @@ namespace Nez
 		{
 			// if we have no collider draw our bounds
 			if( entity.getComponent<Collider>() == null )
-				graphics.batcher.drawHollowRect( bounds, Color.Yellow );
+				graphics.batcher.drawHollowRect( bounds, Debug.Colors.renderableBounds );
 
 			// draw a square for our pivot/origin
-			graphics.batcher.drawPixel( entity.transform.position + _localOffset, Color.DarkOrchid, 4 );
+			graphics.batcher.drawPixel( entity.transform.position + _localOffset, Debug.Colors.renderableCenter, 4 );
 		}
 
 

@@ -404,7 +404,10 @@ namespace Nez
 
 			// update our SceneComponents
 			for( var i = _sceneComponents.length - 1; i >= 0; i-- )
-				_sceneComponents.buffer[i].update();
+			{
+				if( _sceneComponents.buffer[i].enabled )
+					_sceneComponents.buffer[i].update();
+			}
 				
 			// update our EntityProcessors
 			if( entityProcessors != null )
