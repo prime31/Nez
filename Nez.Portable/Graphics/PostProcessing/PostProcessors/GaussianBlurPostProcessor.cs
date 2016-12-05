@@ -51,18 +51,18 @@ namespace Nez
 			// aquire a temporary rendertarget for the processing. It can be scaled via renderTargetScale in order to minimize fillrate costs. Reducing
 			// the resolution in this way doesn't hurt quality, because we are going to be blurring the images in any case.
 			var sceneRenderTargetSize = scene.sceneRenderTargetSize;
-			var renderTarget1 = RenderTarget.getTemporary( (int)( sceneRenderTargetSize.X * _renderTargetScale ), (int)( sceneRenderTargetSize.Y * _renderTargetScale ), DepthFormat.None );
+			var tempRenderTarget = RenderTarget.getTemporary( (int)( sceneRenderTargetSize.X * _renderTargetScale ), (int)( sceneRenderTargetSize.Y * _renderTargetScale ), DepthFormat.None );
 
 
-			// Pass 1: draw from source into rendertarget1, applying a horizontal gaussian blur filter.
+			// Pass 1: draw from source into tempRenderTarget, applying a horizontal gaussian blur filter.
 			effect.prepareForHorizontalBlur();
-			drawFullscreenQuad( source, renderTarget1, effect );
+			drawFullscreenQuad( source, tempRenderTarget, effect );
 
-			// Pass 2: draw from rendertarget1 into destination, applying a vertical gaussian blur filter.
+			// Pass 2: draw from tempRenderTarget into destination, applying a vertical gaussian blur filter.
 			effect.prepareForVerticalBlur();
-			drawFullscreenQuad( renderTarget1, destination, effect );
+			drawFullscreenQuad( tempRenderTarget, destination, effect );
 
-			RenderTarget.releaseTemporary( renderTarget1 );
+			RenderTarget.releaseTemporary( tempRenderTarget );
 		}
 
 	}

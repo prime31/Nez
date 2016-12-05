@@ -567,6 +567,7 @@
     <Compile Include="ECS\Components\Renderables\PolygonLight\PolyLight.cs" />
     <Compile Include="ECS\Components\Renderables\PolygonLight\Segment.cs" />
     <Compile Include="ECS\Components\Renderables\PolygonLight\VisibilityComputer.cs" />
+    <Compile Include="Graphics\PostProcessing\PostProcessors\PolyLightPostProcessor.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="MonoGame.Framework">
