@@ -25,7 +25,7 @@ namespace Nez
 		int _updateOrder = 0;
 
 
-		#region SceneComponentLifecycle
+		#region SceneComponent Lifecycle
 
 		/// <summary>
 		/// called when this SceneComponent is enabled

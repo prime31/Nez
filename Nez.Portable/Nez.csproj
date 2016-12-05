@@ -93,6 +93,8 @@
     <Folder Include="Physics\Verlet\" />
     <Folder Include="Physics\Shapes\ShapeCollisions\" />
     <Folder Include="Graphics\SVG\" />
+    <Folder Include="ECS\Components\Physics\Colliders\" />
+    <Folder Include="ECS\Components\Renderables\PolygonLight\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Debug\Debug.cs" />
@@ -100,9 +102,6 @@
     <Compile Include="ECS\Component.cs" />
     <Compile Include="ECS\Entity.cs" />
     <Compile Include="ECS\Scene.cs" />
-    <Compile Include="ECS\Components\Physics\BoxCollider.cs" />
-    <Compile Include="ECS\Components\Physics\CircleCollider.cs" />
-    <Compile Include="ECS\Components\Physics\Collider.cs" />
     <Compile Include="ECS\Components\Renderables\RenderableComponent.cs" />
     <Compile Include="ECS\Components\Renderables\TiledMapComponent.cs" />
     <Compile Include="ECS\Components\Text\FramesPerSecondCounter.cs" />
@@ -182,7 +181,6 @@
     <Compile Include="PipelineRuntime\Overlap2D\O2DScene.cs" />
     <Compile Include="PipelineRuntime\Overlap2D\O2DSceneReader.cs" />
     <Compile Include="Utils\NezContentManager.cs" />
-    <Compile Include="ECS\Components\Physics\PolygonCollider.cs" />
     <Compile Include="ECS\Components\CameraShake.cs" />
     <Compile Include="Utils\Screen.cs" />
     <Compile Include="Physics\QuadTree\QuadTree.cs" />
@@ -215,7 +213,6 @@
     <Compile Include="Physics\Shapes\RealtimeCollisions.cs" />
     <Compile Include="Utils\Triangulator.cs" />
     <Compile Include="ECS\Systems\PassiveSystem.cs" />
-    <Compile Include="ECS\InternalUtils\ColliderList.cs" />
     <Compile Include="ECS\Components\Renderables\Sprites\ScrollingSprite.cs" />
     <Compile Include="Graphics\PostProcessing\IFinalRenderDelegate.cs" />
     <Compile Include="Graphics\PostProcessing\PostProcessors\PixelMosaicRenderDelegate.cs" />
@@ -563,6 +560,14 @@
     <Compile Include="ECS\SceneComponent.cs" />
     <Compile Include="Utils\Extensions\EntityExt.cs" />
     <Compile Include="Math\SubpixelFloat.cs" />
+    <Compile Include="ECS\Components\Physics\Colliders\BoxCollider.cs" />
+    <Compile Include="ECS\Components\Physics\Colliders\CircleCollider.cs" />
+    <Compile Include="ECS\Components\Physics\Colliders\Collider.cs" />
+    <Compile Include="ECS\Components\Physics\Colliders\PolygonCollider.cs" />
+    <Compile Include="ECS\Components\Renderables\PolygonLight\EndPoint.cs" />
+    <Compile Include="ECS\Components\Renderables\PolygonLight\PolygonLight.cs" />
+    <Compile Include="ECS\Components\Renderables\PolygonLight\Segment.cs" />
+    <Compile Include="ECS\Components\Renderables\PolygonLight\VisibilityComputer.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="MonoGame.Framework">

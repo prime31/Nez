@@ -36,7 +36,7 @@ namespace Nez
 		{
 			// 3. do an overlap check of all entity.colliders that are triggers with all broadphase colliders, triggers or not.
 			//    Any overlaps result in trigger events.
-			var colliders = _entity.colliders.getColliders();
+			var colliders = _entity.getComponents<Collider>();
 			for( var i = 0; i < colliders.Count; i++ )
 			{
 				var collider = colliders[i];

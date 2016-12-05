@@ -78,7 +78,7 @@ namespace FarseerPhysics.Controllers
             }
         }
 
-        public override void Update(float dt)
+        public override void update(float dt)
         {
             foreach (Body body in _bodies)
             {

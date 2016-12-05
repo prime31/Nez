@@ -31,17 +31,14 @@ namespace Nez
 			collisionResult = new CollisionResult();
 
 			// no collider? just move and forget about it
-			if( entity.colliders.Count == 0 || _triggerHelper == null )
+			if( entity.getComponent<Collider>() == null || _triggerHelper == null )
 			{
 				entity.transform.position += motion;
 				return false;
 			}
 
-			// remove ourself from the physics system until after we are done moving
-			entity.colliders.unregisterAllCollidersWithPhysicsSystem();
-
 			// 1. move all non-trigger Colliders and get closest collision
-			var colliders = entity.getColliders();
+			var colliders = entity.getComponents<Collider>();
 			for( var i = 0; i < colliders.Count; i++ )
 			{
 				var collider = colliders[i];
@@ -54,7 +51,7 @@ namespace Nez
 				var bounds = collider.bounds;
 				bounds.x += motion.X;
 				bounds.y += motion.Y;
-				var neighbors = Physics.boxcastBroadphase( ref bounds, collider.collidesWithLayers );
+				var neighbors = Physics.boxcastBroadphaseExcludingSelf( collider, ref bounds, collider.collidesWithLayers );
 
 				foreach( var neighbor in neighbors )
 				{
@@ -77,9 +74,6 @@ namespace Nez
 			// 3. do an overlap check of all Colliders that are triggers with all broadphase colliders, triggers or not.
 			//    Any overlaps result in trigger events.
 			_triggerHelper.update();
-
-			// let Physics know about our new position
-			entity.colliders.registerAllCollidersWithPhysicsSystem();
 
 			return collisionResult.collider != null;
 		}

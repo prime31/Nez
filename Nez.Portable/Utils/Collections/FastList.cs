@@ -31,7 +31,7 @@ namespace Nez
 		}
 
 
-		public FastList() : this( 10 )
+		public FastList() : this( 5 )
 		{}
 
 

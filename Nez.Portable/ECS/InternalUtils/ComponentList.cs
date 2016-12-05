@@ -130,7 +130,10 @@ namespace Nez
 		}
 
 
-		public void updateLists()
+		/// <summary>
+		/// handles any Components that need to be removed or added
+		/// </summary>
+		void updateLists()
 		{
 			// handle removals
 			if( _componentsToRemove.Count > 0 )
@@ -287,6 +290,7 @@ namespace Nez
 		[MethodImpl( MethodImplOptions.AggressiveInlining )]
 		internal void update()
 		{
+			updateLists();
 			for( var i = 0; i < _updatableComponents.length; i++ )
 			{
 				if( _updatableComponents.buffer[i].enabled )

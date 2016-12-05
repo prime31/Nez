@@ -6,7 +6,7 @@ It serves to reiterate what has been stated before: Nez physics is *not* a reali
 
 
 ## Colliders: The Root of the Physics System
-Nothing happens in the physics system without Colliders. Colliders live on the Entity class and come in several varieties: BoxCollider, CircleCollider and PolygonCollider. You can add a Collider like so: `entity.colliders.add( new BoxCollider() )`. When you have debugRender enabled Colliders will be displayed with red lines (to enable debugRender either set `Core.debugRenderEnabled = true` or open the console and type "debug-render"). Colliders are automatically added to the SpatialHash when you add them to an Entity, which brings us to our next topic.
+Nothing happens in the physics system without Colliders. Colliders live on the Entity class and come in several varieties: BoxCollider, CircleCollider and PolygonCollider. You can add a Collider like so: `entity.addComponent( new BoxCollider() )`. When you have debugRender enabled Colliders will be displayed with red lines (to enable debugRender either set `Core.debugRenderEnabled = true` or open the console and type "debug-render"). Colliders are automatically added to the SpatialHash when you add them to an Entity, which brings us to our next topic.
 
 
 
@@ -50,16 +50,16 @@ This first example is the easiest way to deal with collisions. `deltaMovement` i
 // move the colliding Entity directly adjacent to the hit Collider.
 CollisionResult collisionResult;
 
-// do a check to see if entity.colliders[0] (the first Collider on the Entity) collides with any other Colliders in the Scene
-// Note that if you have multiple Colliders you could just loop through them instead of only checking the first one.
-if( entity.colliders[0].collidesWithAny( ref deltaMovement, out collisionResult ) )
+// do a check to see if entity.getComponent<Collider> (the first Collider on the Entity) collides with any other Colliders in the Scene
+// Note that if you have multiple Colliders you could fetch and loop through them instead of only checking the first one.
+if( entity.getComponent<Collider>.collidesWithAny( ref deltaMovement, out collisionResult ) )
 {
 	// log the CollisionResult. You may want to use it to add some particle effects or anything else relevant to your game.
 	Debug.log( "collision result: {0}", collisionResult );
 }
 
 // move the Entity to the new position. deltaMovement is already adjusted to resolve collisions for us.
-entity.transform.position += deltaMovement;
+entity.position += deltaMovement;
 ```
 
 
@@ -69,11 +69,11 @@ If you need a bit more control over what happens when a collision occurs you can
 // declare the CollisionResult
 CollisionResult collisionResult;
 
-// do a check to see if entity.colliders[0] collides with someOtherCollider
-if( entity.colliders[0].collidesWith( someOtherCollider, deltaMovement, out collisionResult ) )
+// do a check to see if entity.getComponent<Collider> collides with someOtherCollider
+if( entity.getComponent<Collider>.collidesWith( someOtherCollider, deltaMovement, out collisionResult ) )
 {
 	// move entity to the position directly adjacent to the hit Collider then log the CollisionResult
-	entity.transform.position += deltaMovement - collisionResult.minimumTranslationVector;
+	entity.position += deltaMovement - collisionResult.minimumTranslationVector;
 	Debug.log( "collision result: {0}", collisionResult );
 }
 ```
@@ -82,12 +82,12 @@ We can take the above example a step further using the previously mentioned `Phy
 
 ```cs
 // fetch anything that we might overlap with at our position excluding ourself. We don't care about ourself here.
-var neighborColliders = Physics.boxcastBroadphaseExcludingSelf( entity.colliders[0] );
+var neighborColliders = Physics.boxcastBroadphaseExcludingSelf( entity.getComponent<Collider> );
 
 // loop through and check each Collider for an overlap
 foreach( var collider in neighborColliders )
 {
-	if( entity.colliders[0].overlaps( collider )
+	if( entity.getComponent<Collider>.overlaps( collider )
 		Debug.log( "We are overlapping a Collider: {0}", collider );
 }
 ```

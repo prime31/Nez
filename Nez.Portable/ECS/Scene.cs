@@ -364,18 +364,20 @@ namespace Nez
 		{
 			_didSceneBegin = false;
 
-			for( var i = 0; i < _sceneComponents.length; i++ )
-				_sceneComponents.buffer[i].onRemovedFromScene();
-			_sceneComponents.clear();
-
+			// we kill Renderers and PostProcessors first since they rely on Entities
 			for( var i = 0; i < _renderers.length; i++ )
 				_renderers.buffer[i].unload();
 
 			for( var i = 0; i < _postProcessors.length; i++ )
 				_postProcessors.buffer[i].unload();
 
+			// now we can remove the Entities and finally the SceneComponents
 			Core.emitter.removeObserver( CoreEvents.GraphicsDeviceReset, onGraphicsDeviceReset );
 			entities.removeAllEntities();
+
+			for( var i = 0; i < _sceneComponents.length; i++ )
+				_sceneComponents.buffer[i].onRemovedFromScene();
+			_sceneComponents.clear();
 
 			camera = null;
 			content.Dispose();
@@ -402,19 +404,17 @@ namespace Nez
 
 			// update our SceneComponents
 			for( var i = _sceneComponents.length - 1; i >= 0; i-- )
-				_sceneComponents.buffer[i].update();
+			{
+				if( _sceneComponents.buffer[i].enabled )
+					_sceneComponents.buffer[i].update();
+			}
 				
 			// update our EntityProcessors
 			if( entityProcessors != null )
 				entityProcessors.update();
 
 			// update our Entities
-			for( int i = 0, count = entities.count; i < count; i++ )
-			{
-				var entity = entities[i];
-				if( entity.enabled && ( entity.updateInterval == 1 || Time.frameCount % entity.updateInterval == 0 ) )
-					entity.update();
-			}
+			entities.update();
 
 			if( entityProcessors != null )
 				entityProcessors.lateUpdate();

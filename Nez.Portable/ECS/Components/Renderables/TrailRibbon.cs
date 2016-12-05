@@ -137,6 +137,8 @@ namespace Nez
 		}
 
 
+		#region Component/RenderableComponent/IUpdatable
+
 		public override void onEnabled()
 		{
 			base.onEnabled();
@@ -153,6 +155,13 @@ namespace Nez
 			_basicEffect = entity.scene.content.loadMonoGameEffect<BasicEffect>();
 			_basicEffect.World = Matrix.Identity;
 			_basicEffect.VertexColorEnabled = true;
+		}
+
+
+		public override void onRemovedFromEntity()
+		{
+			entity.scene.content.unloadEffect( _basicEffect );
+			_basicEffect = null;
 		}
 
 
@@ -199,6 +208,8 @@ namespace Nez
 
 			Core.graphicsDevice.DrawUserPrimitives( PrimitiveType.TriangleStrip, _vertices, 0, _ribbonLength * 2 + 1 );
 		}
+
+		#endregion
 
 
 		class RibbonSegment

@@ -18,7 +18,12 @@ namespace Nez
 		/// entity is added to the scene.
 		/// </summary>
 		public CircleCollider()
-		{ }
+		{
+			// we stick a 1px circle in here as a placeholder until the next frame when the Collider is added to the Entity and can get more
+			// accurate auto-sizing data
+			shape = new Circle( 1 );
+			_colliderRequiresAutoSizing = true;
+		}
 
 
 		/// <summary>
@@ -44,6 +49,7 @@ namespace Nez
 			if( radius != ( (Circle)shape ).radius )
 			{
 				( (Circle)shape ).radius = radius;
+				( (Circle)shape )._originalRadius = radius;
 				_isPositionDirty = true;
 
 				if( entity != null && _isParentEntityAddedToScene )

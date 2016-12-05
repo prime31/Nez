@@ -24,7 +24,12 @@ namespace Nez
 		/// entity is added to the scene.
 		/// </summary>
 		public BoxCollider()
-		{}
+		{
+			// we stick a 1x1 box in here as a placeholder until the next frame when the Collider is added to the Entity and can get more
+			// accurate auto-sizing data
+			shape = new Box( 1, 1 );
+			_colliderRequiresAutoSizing = true;
+		}
 
 
 		/// <summary>
@@ -60,8 +65,9 @@ namespace Nez
 			var box = shape as Box;
 			if( width != box.width )
 			{
-				// update the box and if we need to update our bounds in the Physics system
+				// update the box, dirty our bounds and if we need to update our bounds in the Physics system
 				box.updateBox( width, box.height );
+				_isPositionDirty = true;
 				if( entity != null && _isParentEntityAddedToScene )
 					Physics.updateCollider( this );
 			}
@@ -75,8 +81,9 @@ namespace Nez
 			var box = shape as Box;
 			if( height != box.height )
 			{
-				// update the box and if we need to update our bounds in the Physics system
+				// update the box, dirty our bounds and if we need to update our bounds in the Physics system
 				box.updateBox( box.width, height );
+				_isPositionDirty = true;
 				if( entity != null && _isParentEntityAddedToScene )
 					Physics.updateCollider( this );
 			}

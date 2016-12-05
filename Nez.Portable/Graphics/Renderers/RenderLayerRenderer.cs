@@ -48,6 +48,8 @@ namespace Nez
 
 		protected override void debugRender( Scene scene, Camera cam )
 		{
+			base.debugRender( scene, cam );
+
 			for( var i = 0; i < renderLayers.Length; i++ )
 			{
 				var renderables = scene.renderableComponents.componentsWithRenderLayer( renderLayers[i] );

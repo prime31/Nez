@@ -138,6 +138,10 @@ namespace Nez.Farseer
 		#endregion
 
 
+		/// <summary>
+		/// wakes any contacting bodies. Useful when creating a fixture or changing something that won't trigger the bodies to wake themselves
+		/// such as Circle.center.
+		/// </summary>
 		protected void wakeAnyContactingBodies()
 		{
 			var body = this.getComponent<FSRigidBody>().body;

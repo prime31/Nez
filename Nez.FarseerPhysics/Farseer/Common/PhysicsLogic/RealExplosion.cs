@@ -350,17 +350,17 @@ namespace FarseerPhysics.Common.PhysicsLogic
 					{
 						Fixture f = fl[x];
 						RayCastInput ri;
-						ri.Point1 = p1;
-						ri.Point2 = p2;
-						ri.MaxFraction = 50f;
+						ri.point1 = p1;
+						ri.point2 = p2;
+						ri.maxFraction = 50f;
 
 						RayCastOutput ro;
 						if( f.rayCast( out ro, ref ri, 0 ) )
 						{
-							if( minlambda > ro.Fraction )
+							if( minlambda > ro.fraction )
 							{
-								minlambda = ro.Fraction;
-								hitpoint = ro.Fraction * p2 + ( 1 - ro.Fraction ) * p1;
+								minlambda = ro.fraction;
+								hitpoint = ro.fraction * p2 + ( 1 - ro.fraction ) * p1;
 							}
 						}
 
@@ -369,7 +369,7 @@ namespace FarseerPhysics.Common.PhysicsLogic
 						float impulse = ( arclen / ( minRays + insertedRays ) ) * maxForce * 180.0f / MathHelper.Pi * ( 1.0f - Math.Min( 1.0f, minlambda ) );
 
 						// We Apply the impulse!!!
-						Vector2 vectImp = Vector2.Dot( impulse * new Vector2( (float)Math.Cos( j ), (float)Math.Sin( j ) ), -ro.Normal ) * new Vector2( (float)Math.Cos( j ), (float)Math.Sin( j ) );
+						Vector2 vectImp = Vector2.Dot( impulse * new Vector2( (float)Math.Cos( j ), (float)Math.Sin( j ) ), -ro.normal ) * new Vector2( (float)Math.Cos( j ), (float)Math.Sin( j ) );
 						_data[i].Body.applyLinearImpulse( ref vectImp, ref hitpoint );
 
 						// We gather the fixtures for returning them

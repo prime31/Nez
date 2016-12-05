@@ -28,7 +28,9 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Runtime.CompilerServices;
 using FarseerPhysics.Collision;
+using FarseerPhysics.Collision.Shapes;
 using FarseerPhysics.Common;
 using FarseerPhysics.Controllers;
 using FarseerPhysics.Dynamics.Contacts;
@@ -44,7 +46,7 @@ namespace FarseerPhysics.Dynamics
 	/// </summary>
 	public class World
 	{
-		#region Properties
+		#region Properties/Fields
 
 		public List<Controller> controllerList;
 		public List<BreakableBody> breakableBodyList;
@@ -110,6 +112,9 @@ namespace FarseerPhysics.Dynamics
 		public bool enabled;
 
 		public Island island;
+
+
+		CircleShape _tempOverlapCircle = new CircleShape();
 
 		#endregion
 
@@ -1123,7 +1128,7 @@ namespace FarseerPhysics.Dynamics
 		{
 			Debug.Assert( !controllerList.Contains( controller ), "You are adding the same controller more than once." );
 
-			controller.World = this;
+			controller.world = this;
 			controllerList.Add( controller );
 
 			if( onControllerAdded != null )
@@ -1196,7 +1201,7 @@ namespace FarseerPhysics.Dynamics
 
 			// Update controllers
 			for( var i = 0; i < controllerList.Count; i++ )
-				controllerList[i].Update( dt );
+				controllerList[i].update( dt );
 
 			if( Settings.enableDiagnostics )
 				controllersUpdateTime = _watch.ElapsedTicks - ( addRemoveTime + newContactsTime );
@@ -1256,9 +1261,38 @@ namespace FarseerPhysics.Dynamics
 
 		#region World queries
 
-		public void overlapCircle( Vector2 center, float radius )
+		/// <summary>
+		/// returns via fixtures all the Fixtures that overlap a circle
+		/// </summary>
+		/// <param name="center">Center.</param>
+		/// <param name="radius">Radius.</param>
+		/// <param name="fixtures">Fixtures.</param>
+		public void queryCircle( Vector2 center, float radius, List<Fixture> fixtures )
 		{
-			throw new NotImplementedException();
+			// prep the CircleShape
+			_tempOverlapCircle.radius = radius;
+
+			var circleTransform = new Transform();
+			circleTransform.p = center;
+
+			// create an AABB for our query
+			AABB aabb;
+			var d = new Vector2( radius, radius );
+			aabb.lowerBound = center - d;
+			aabb.upperBound = center + d;
+
+			// fetch all the Fixtures the AABB overlaps
+			contactManager.broadPhase.query( ref aabb, fixtures );
+
+			Transform transformB;
+
+			// loop through and remove any Fixtures that arent overlapping the CircleShape
+			for( var i = fixtures.Count - 1; i >= 0; i-- )
+			{
+				fixtures[i].body.getTransform( out transformB );
+				if( !Nez.Farseer.FSCollisions.testOverlap( _tempOverlapCircle, fixtures[i].shape, ref circleTransform, ref transformB ) )
+					fixtures.RemoveAt( i );
+			}
 		}
 
 		/// <summary>
@@ -1296,6 +1330,17 @@ namespace FarseerPhysics.Dynamics
 			return affected;
 		}
 
+		/// <summary>
+		/// Query an AABB for overlapping proxies
+		/// </summary>
+		/// <param name="aabb">Aabb.</param>
+		/// <param name="fixtures">Fixtures.</param>
+		[MethodImpl( MethodImplOptions.AggressiveInlining )]
+		public void queryAABB( ref AABB aabb, List<Fixture> fixtures )
+		{
+			contactManager.broadPhase.query( ref aabb, fixtures );
+		}
+
 		bool queryAABBCallbackWrapper( int proxyId )
 		{
 			var proxy = contactManager.broadPhase.getProxy( proxyId );
@@ -1319,9 +1364,9 @@ namespace FarseerPhysics.Dynamics
 		public void rayCast( Func<Fixture, Vector2, Vector2, float, float> callback, Vector2 point1, Vector2 point2 )
 		{
 			var input = new RayCastInput();
-			input.MaxFraction = 1.0f;
-			input.Point1 = point1;
-			input.Point2 = point2;
+			input.maxFraction = 1.0f;
+			input.point1 = point1;
+			input.point2 = point2;
 
 			_rayCastCallback = callback;
 			contactManager.broadPhase.rayCast( _rayCastCallbackWrapper, ref input );
@@ -1351,12 +1396,12 @@ namespace FarseerPhysics.Dynamics
 
 			if( hit )
 			{
-				var fraction = output.Fraction;
-				var point = ( 1.0f - fraction ) * rayCastInput.Point1 + fraction * rayCastInput.Point2;
-				return _rayCastCallback( fixture, point, output.Normal, fraction );
+				var fraction = output.fraction;
+				var point = ( 1.0f - fraction ) * rayCastInput.point1 + fraction * rayCastInput.point2;
+				return _rayCastCallback( fixture, point, output.normal, fraction );
 			}
 
-			return rayCastInput.MaxFraction;
+			return rayCastInput.maxFraction;
 		}
 
 		public Fixture testPoint( Vector2 point )
@@ -1422,10 +1467,11 @@ namespace FarseerPhysics.Dynamics
 		#endregion
 
 
-		/// Shift the world origin. Useful for large worlds.
-		/// The body shift formula is: position -= newOrigin
-		/// @param newOrigin the new origin with respect to the old origin
+		/// <summary>
+		/// Shift the world origin. Useful for large worlds. The body shift formula is: position -= newOrigin
 		/// Warning: Calling this method mid-update might cause a crash.
+		/// </summary>
+		/// <param name="newOrigin">the new origin with respect to the old origin</param>
 		public void shiftOrigin( Vector2 newOrigin )
 		{
 			foreach( Body b in bodyList )

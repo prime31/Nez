@@ -5,13 +5,8 @@ using Nez.PhysicsShapes;
 
 namespace Nez
 {
-	public abstract class Collider
+	public abstract class Collider : Component
 	{
-		/// <summary>
-		/// the entity that owns this Collider
-		/// </summary>
-		public Entity entity;
-
 		/// <summary>
 		/// the underlying Shape of the Collider
 		/// </summary>
@@ -89,6 +84,7 @@ namespace Nez
 		/// safely remove the Collider from the Physics system even if it was moved before attempting to remove it.
 		/// </summary>
 		internal RectangleF registeredPhysicsBounds;
+		protected bool _colliderRequiresAutoSizing;
 
 		protected Vector2 _localOffset;
 		internal float _localOffsetLength;
@@ -143,14 +139,11 @@ namespace Nez
 		#endregion
 
 
-		#region Collider Lifecycle
+		#region Component Lifecycle
 
-		/// <summary>
-		/// Called when the parent entity is added to a scene
-		/// </summary>
-		public virtual void onEntityAddedToScene()
+		public override void onAddedToEntity()
 		{
-			if( shape == null )
+			if( _colliderRequiresAutoSizing )
 			{
 				// we only deal with boxes and circles here
 				Assert.isTrue( this is BoxCollider || this is CircleCollider, "Only box and circle colliders can be created automatically" );
@@ -168,16 +161,17 @@ namespace Nez
 					// circle colliders need special care with the origin
 					if( this is CircleCollider )
 					{
-						var circle = this as CircleCollider;
-						circle.shape = new Circle( width * 0.5f );
-						circle.radius = Math.Max( width, height ) * 0.5f;
+						var circleCollider = this as CircleCollider;
+						circleCollider.radius = Math.Max( width, height ) * 0.5f;
 
 						// fetch the Renderable's center, transfer it to local coordinates and use that as the localOffset of our collider
 						localOffset = renderableBounds.center - entity.transform.position;
 					}
 					else
 					{
-						shape = new Box( width, height );
+						var boxCollider = this as BoxCollider;
+						boxCollider.width = width;
+						boxCollider.height = height;
 
 						// fetch the Renderable's center, transfer it to local coordinates and use that as the localOffset of our collider
 						localOffset = renderableBounds.center - entity.transform.position;
@@ -189,17 +183,14 @@ namespace Nez
 		}
 
 
-		/// <summary>
-		/// Called when the parent entity is removed from a scene
-		/// </summary>
-		public virtual void onEntityRemovedFromScene()
+		public override void onRemovedFromEntity()
 		{
 			unregisterColliderWithPhysicsSystem();
 			_isParentEntityAddedToScene = false;
 		}
 
 
-		public virtual void onEntityTransformChanged( Transform.Component comp )
+		public override void onEntityTransformChanged( Transform.Component comp )
 		{
 			// set the appropriate dirty flags
 			switch( comp )
@@ -220,13 +211,27 @@ namespace Nez
 		}
 
 
+		public override void onEnabled()
+		{
+			registerColliderWithPhysicsSystem();
+		}
+
+
+		public override void onDisabled()
+		{
+			unregisterColliderWithPhysicsSystem();
+		}
+
+		#endregion
+
+
 		/// <summary>
 		/// the parent Entity will call this at various times (when added to a scene, enabled, etc)
 		/// </summary>
 		public virtual void registerColliderWithPhysicsSystem()
 		{
 			// entity could be null if properties such as origin are changed before we are added to an Entity
-			if( _isParentEntityAddedToScene )
+			if( _isParentEntityAddedToScene && !_isColliderRegistered )
 			{
 				Physics.addCollider( this );
 				_isColliderRegistered = true;
@@ -243,8 +248,6 @@ namespace Nez
 				Physics.removeCollider( this );
 			_isColliderRegistered = false;
 		}
-
-		#endregion
 
 
 		#region collision checks
@@ -376,11 +379,7 @@ namespace Nez
 		#endregion
 
 
-		public virtual void debugRender( Graphics graphics )
-		{ }
-
-
-		public virtual Collider clone()
+		public override Component clone()
 		{
 			var collider = MemberwiseClone() as Collider;
 			collider.entity = null;

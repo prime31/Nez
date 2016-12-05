@@ -30,7 +30,7 @@ namespace FarseerPhysics.Dynamics
 {
 	public class ContactManager
 	{
-		public IBroadPhase broadPhase;
+		public DynamicTreeBroadPhase broadPhase;
 
 		public List<Contact> contactList = new List<Contact>( 128 );
 
@@ -79,7 +79,7 @@ namespace FarseerPhysics.Dynamics
 		public PreSolveDelegate onPreSolve;
 
 
-		internal ContactManager( IBroadPhase broadPhase )
+		internal ContactManager( DynamicTreeBroadPhase broadPhase )
 		{
 			this.broadPhase = broadPhase;
 			onBroadphaseCollision = addPair;

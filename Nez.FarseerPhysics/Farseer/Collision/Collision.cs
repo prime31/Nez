@@ -220,17 +220,17 @@ namespace FarseerPhysics.Collision
 		/// If you supply a max fraction of 1, the ray extends from p1 to p2.
 		/// A max fraction of 0.5 makes the ray go from p1 and half way to p2.
 		/// </summary>
-		public float MaxFraction;
+		public float maxFraction;
 
 		/// <summary>
 		/// The starting point of the ray.
 		/// </summary>
-		public Vector2 Point1;
+		public Vector2 point1;
 
 		/// <summary>
 		/// The ending point of the ray.
 		/// </summary>
-		public Vector2 Point2;
+		public Vector2 point2;
 	}
 
 
@@ -243,12 +243,12 @@ namespace FarseerPhysics.Collision
 		/// The ray hits at p1 + fraction * (p2 - p1), where p1 and p2 come from RayCastInput.
 		/// Contains the actual fraction of the ray where it has the intersection point.
 		/// </summary>
-		public float Fraction;
+		public float fraction;
 
 		/// <summary>
 		/// The normal of the face of the shape the ray has hit.
 		/// </summary>
-		public Vector2 Normal;
+		public Vector2 normal;
 	}
 
 
@@ -478,8 +478,8 @@ namespace FarseerPhysics.Collision
 			float tmin = -Settings.maxFloat;
 			float tmax = Settings.maxFloat;
 
-			Vector2 p = input.Point1;
-			Vector2 d = input.Point2 - input.Point1;
+			Vector2 p = input.point1;
+			Vector2 d = input.point2 - input.point1;
 			Vector2 absD = MathUtils.abs( d );
 
 			Vector2 normal = Vector2.Zero;
@@ -543,14 +543,14 @@ namespace FarseerPhysics.Collision
 
 			// Does the ray start inside the box?
 			// Does the ray intersect beyond the max fraction?
-			if( doInteriorCheck && ( tmin < 0.0f || input.MaxFraction < tmin ) )
+			if( doInteriorCheck && ( tmin < 0.0f || input.maxFraction < tmin ) )
 			{
 				return false;
 			}
 
 			// Intersection.
-			output.Fraction = tmin;
-			output.Normal = normal;
+			output.fraction = tmin;
+			output.normal = normal;
 			return true;
 		}
 
@@ -573,9 +573,9 @@ namespace FarseerPhysics.Collision
 	/// </summary>
 	public struct EPAxis
 	{
-		public int Index;
-		public float Separation;
-		public EPAxisType Type;
+		public int index;
+		public float separation;
+		public EPAxisType type;
 	}
 
 
@@ -1362,18 +1362,18 @@ namespace FarseerPhysics.Collision
 				EPAxis edgeAxis = ComputeEdgeSeparation();
 
 				// If no valid normal can be found than this edge should not collide.
-				if( edgeAxis.Type == EPAxisType.Unknown )
+				if( edgeAxis.type == EPAxisType.Unknown )
 				{
 					return;
 				}
 
-				if( edgeAxis.Separation > _radius )
+				if( edgeAxis.separation > _radius )
 				{
 					return;
 				}
 
 				EPAxis polygonAxis = ComputePolygonSeparation();
-				if( polygonAxis.Type != EPAxisType.Unknown && polygonAxis.Separation > _radius )
+				if( polygonAxis.type != EPAxisType.Unknown && polygonAxis.separation > _radius )
 				{
 					return;
 				}
@@ -1383,11 +1383,11 @@ namespace FarseerPhysics.Collision
 				const float k_absoluteTol = 0.001f;
 
 				EPAxis primaryAxis;
-				if( polygonAxis.Type == EPAxisType.Unknown )
+				if( polygonAxis.type == EPAxisType.Unknown )
 				{
 					primaryAxis = edgeAxis;
 				}
-				else if( polygonAxis.Separation > k_relativeTol * edgeAxis.Separation + k_absoluteTol )
+				else if( polygonAxis.separation > k_relativeTol * edgeAxis.separation + k_absoluteTol )
 				{
 					primaryAxis = polygonAxis;
 				}
@@ -1398,7 +1398,7 @@ namespace FarseerPhysics.Collision
 
 				FixedArray2<ClipVertex> ie = new FixedArray2<ClipVertex>();
 				ReferenceFace rf;
-				if( primaryAxis.Type == EPAxisType.EdgeA )
+				if( primaryAxis.type == EPAxisType.EdgeA )
 				{
 					manifold.type = ManifoldType.FaceA;
 
@@ -1457,7 +1457,7 @@ namespace FarseerPhysics.Collision
 					ClipVertex c0 = ie[0];
 					c0.V = _v1;
 					c0.ID.features.indexA = 0;
-					c0.ID.features.indexB = (byte)primaryAxis.Index;
+					c0.ID.features.indexB = (byte)primaryAxis.index;
 					c0.ID.features.typeA = (byte)ContactFeatureType.Vertex;
 					c0.ID.features.typeB = (byte)ContactFeatureType.Face;
 					ie[0] = c0;
@@ -1465,12 +1465,12 @@ namespace FarseerPhysics.Collision
 					ClipVertex c1 = ie[1];
 					c1.V = _v2;
 					c1.ID.features.indexA = 0;
-					c1.ID.features.indexB = (byte)primaryAxis.Index;
+					c1.ID.features.indexB = (byte)primaryAxis.index;
 					c1.ID.features.typeA = (byte)ContactFeatureType.Vertex;
 					c1.ID.features.typeB = (byte)ContactFeatureType.Face;
 					ie[1] = c1;
 
-					rf.i1 = primaryAxis.Index;
+					rf.i1 = primaryAxis.index;
 					rf.i2 = rf.i1 + 1 < _polygonB.count ? rf.i1 + 1 : 0;
 					rf.v1 = _polygonB.vertices[rf.i1];
 					rf.v2 = _polygonB.vertices[rf.i2];
@@ -1504,7 +1504,7 @@ namespace FarseerPhysics.Collision
 				}
 
 				// Now clipPoints2 contains the clipped points.
-				if( primaryAxis.Type == EPAxisType.EdgeA )
+				if( primaryAxis.type == EPAxisType.EdgeA )
 				{
 					manifold.localNormal = rf.normal;
 					manifold.localPoint = rf.v1;
@@ -1524,7 +1524,7 @@ namespace FarseerPhysics.Collision
 					{
 						ManifoldPoint cp = manifold.points[pointCount];
 
-						if( primaryAxis.Type == EPAxisType.EdgeA )
+						if( primaryAxis.type == EPAxisType.EdgeA )
 						{
 							cp.localPoint = MathUtils.mulT( ref _xf, clipPoints2[i].V );
 							cp.id = clipPoints2[i].ID;
@@ -1549,16 +1549,16 @@ namespace FarseerPhysics.Collision
 			EPAxis ComputeEdgeSeparation()
 			{
 				EPAxis axis;
-				axis.Type = EPAxisType.EdgeA;
-				axis.Index = _front ? 0 : 1;
-				axis.Separation = Settings.maxFloat;
+				axis.type = EPAxisType.EdgeA;
+				axis.index = _front ? 0 : 1;
+				axis.separation = Settings.maxFloat;
 
 				for( int i = 0; i < _polygonB.count; ++i )
 				{
 					float s = Vector2.Dot( _normal, _polygonB.vertices[i] - _v1 );
-					if( s < axis.Separation )
+					if( s < axis.separation )
 					{
-						axis.Separation = s;
+						axis.separation = s;
 					}
 				}
 
@@ -1568,9 +1568,9 @@ namespace FarseerPhysics.Collision
 			EPAxis ComputePolygonSeparation()
 			{
 				EPAxis axis;
-				axis.Type = EPAxisType.Unknown;
-				axis.Index = -1;
-				axis.Separation = -Settings.maxFloat;
+				axis.type = EPAxisType.Unknown;
+				axis.index = -1;
+				axis.separation = -Settings.maxFloat;
 
 				Vector2 perp = new Vector2( -_normal.Y, _normal.X );
 
@@ -1585,9 +1585,9 @@ namespace FarseerPhysics.Collision
 					if( s > _radius )
 					{
 						// No collision
-						axis.Type = EPAxisType.EdgeB;
-						axis.Index = i;
-						axis.Separation = s;
+						axis.type = EPAxisType.EdgeB;
+						axis.index = i;
+						axis.separation = s;
 						return axis;
 					}
 
@@ -1607,11 +1607,11 @@ namespace FarseerPhysics.Collision
 						}
 					}
 
-					if( s > axis.Separation )
+					if( s > axis.separation )
 					{
-						axis.Type = EPAxisType.EdgeB;
-						axis.Index = i;
-						axis.Separation = s;
+						axis.type = EPAxisType.EdgeB;
+						axis.index = i;
+						axis.separation = s;
 					}
 				}
 
@@ -1857,4 +1857,5 @@ namespace FarseerPhysics.Collision
 		}
 
 	}
+
 }

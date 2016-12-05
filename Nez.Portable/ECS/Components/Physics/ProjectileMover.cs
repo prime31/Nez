@@ -1,5 +1,4 @@
-﻿using System;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using System.Collections.Generic;
 
 
@@ -12,6 +11,14 @@ namespace Nez
 	public class ProjectileMover : Component
 	{
 		List<ITriggerListener> _tempTriggerList = new List<ITriggerListener>();
+		Collider _collider;
+
+
+		public override void onAddedToEntity()
+		{
+			_collider = entity.getComponent<Collider>();
+			Assert.isNotNull( _collider, "null Collider. ProjectilMover requires a Collider!" );
+		}
 
 
 		/// <summary>
@@ -19,38 +26,23 @@ namespace Nez
 		/// </summary>
 		/// <returns><c>true</c>, if move actor was newed, <c>false</c> otherwise.</returns>
 		/// <param name="motion">Motion.</param>
-		/// <param name="collisionResult">Collision result.</param>
 		public bool move( Vector2 motion )
 		{
-			var collider = entity.colliders.mainCollider;
-
-			// no collider? just move and forget about it
-			if( collider == null )
-			{
-				entity.transform.position += motion;
-				return false;
-			}
-
-			// remove ourself from the physics system until after we are done moving
-			entity.colliders.unregisterAllCollidersWithPhysicsSystem();
 			var didCollide = false;
 
 			// fetch anything that we might collide with at our new position
 			entity.transform.position += motion;
 
 			// fetch anything that we might collide with us at our new position
-			var neighbors = Physics.boxcastBroadphase( collider.bounds, collider.collidesWithLayers );
+			var neighbors = Physics.boxcastBroadphase( _collider.bounds, _collider.collidesWithLayers );
 			foreach( var neighbor in neighbors )
 			{
-				if( collider.overlaps( neighbor ) )
+				if( _collider.overlaps( neighbor ) )
 				{
 					didCollide = true;
-					notifyTriggerListeners( collider, neighbor );
+					notifyTriggerListeners( _collider, neighbor );
 				}
 			}
-
-			// let Physics know about our new position
-			entity.colliders.registerAllCollidersWithPhysicsSystem();
 
 			return didCollide;
 		}

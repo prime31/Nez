@@ -774,8 +774,6 @@ namespace Nez
 		[MethodImpl( MethodImplOptions.AggressiveInlining )]
 		void addVert( int index, Vector2 position, Vector2 texCoord, Color col )
 		{
-			if( position == Vector2.Zero )
-				Debug.break_();
 			_vertices.ensureCapacity();
 			_vertices.buffer[index].Position = position.toVector3();
 			_vertices.buffer[index].TextureCoordinate = texCoord;

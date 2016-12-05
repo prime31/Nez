@@ -140,8 +140,8 @@ namespace FarseerPhysics.Collision.Shapes
 			output = new RayCastOutput();
 
 			// Put the ray into the edge's frame of reference.
-			var p1 = MathUtils.mulT( transform.q, input.Point1 - transform.p );
-			var p2 = MathUtils.mulT( transform.q, input.Point2 - transform.p );
+			var p1 = MathUtils.mulT( transform.q, input.point1 - transform.p );
+			var p2 = MathUtils.mulT( transform.q, input.point2 - transform.p );
 			var d = p2 - p1;
 
 			var v1 = _vertex1;
@@ -160,7 +160,7 @@ namespace FarseerPhysics.Collision.Shapes
 				return false;
 
 			float t = numerator / denominator;
-			if( t < 0.0f || input.MaxFraction < t )
+			if( t < 0.0f || input.maxFraction < t )
 				return false;
 
 			var q = p1 + t * d;
@@ -176,11 +176,11 @@ namespace FarseerPhysics.Collision.Shapes
 			if( s < 0.0f || 1.0f < s )
 				return false;
 
-			output.Fraction = t;
+			output.fraction = t;
 			if( numerator > 0.0f )
-				output.Normal = -normal;
+				output.normal = -normal;
 			else
-				output.Normal = normal;
+				output.normal = normal;
 			
 			return true;
 		}

@@ -70,8 +70,7 @@ namespace Nez
 		public Color color = Color.White;
 
 		/// <summary>
-		/// used by Renderers to specify how this sprite should be rendered. If non-null, it is automatically disposed of when the Component
-		/// is removed from the Entity.
+		/// used by Renderers to specify how this sprite should be rendered
 		/// </summary>
 		public virtual Material material { get; set; }
 
@@ -139,11 +138,11 @@ namespace Nez
 		public override void debugRender( Graphics graphics )
 		{
 			// if we have no collider draw our bounds
-			if( entity.colliders.Count == 0 )
-				graphics.batcher.drawHollowRect( bounds, Color.Yellow );
+			if( entity.getComponent<Collider>() == null )
+				graphics.batcher.drawHollowRect( bounds, Debug.Colors.renderableBounds );
 
 			// draw a square for our pivot/origin
-			graphics.batcher.drawPixel( entity.transform.position + _localOffset, Color.DarkOrchid, 4 );
+			graphics.batcher.drawPixel( entity.transform.position + _localOffset, Debug.Colors.renderableCenter, 4 );
 		}
 
 
