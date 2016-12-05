@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
+using Nez.PhysicsShapes;
 
 
 namespace Nez.Shadows
@@ -17,6 +18,12 @@ namespace Nez.Shadows
 	/// </summary>
 	public class VisibilityComputer
 	{
+		/// <summary>
+		/// total number of lines that will be used when approximating a circle. Only a 180 degree hemisphere is needed so this will be the number
+		/// of segments to approximate that hemisphere.
+		/// </summary>
+		public int lineCountForCircleApproximation = 10;
+
 		float _radius;
 		Vector2 _origin;
 
@@ -39,6 +46,37 @@ namespace Nez.Shadows
 		{
 			_origin = origin;
 			_radius = radius;
+		}
+
+
+		/// <summary>
+		/// adds a Collider as an occluder for the PolyLight
+		/// </summary>
+		/// <param name="collider">Collider.</param>
+		public void addColliderOccluder( Collider collider )
+		{
+			// special case for BoxColliders with no rotation
+			if( collider is BoxCollider && collider.rotation == 0 )
+			{
+				addSquareOccluder( collider.bounds );
+				return;
+			}
+
+			if( collider is PolygonCollider )
+			{
+				var poly = collider.shape as Polygon;
+				for( var i = 0; i < poly.points.Length; i++ )
+				{
+					var firstIndex = i - 1;
+					if( i == 0 )
+						firstIndex += poly.points.Length;
+					addLineOccluder( poly.points[firstIndex] + poly.position, poly.points[i] + poly.position );
+				}
+			}
+			else if( collider is CircleCollider )
+			{
+				addCircleOccluder( collider.absolutePosition, ( collider as CircleCollider ).radius );
+			}
 		}
 
 
@@ -84,6 +122,23 @@ namespace Nez.Shadows
 			addSegment( tr, br );
 			addSegment( br, bl );
 			addSegment( bl, bounds.location );
+		}
+
+
+		public void addCircleOccluder( Vector2 position, float radius )
+		{
+			var dirToCircle = position - _origin;
+			var angle = Mathf.atan2( dirToCircle.Y, dirToCircle.X );
+
+			var stepSize = MathHelper.Pi / lineCountForCircleApproximation;
+			var startAngle = angle + MathHelper.PiOver2;
+			var lastPt = Mathf.angleToVector( startAngle, radius ) + position;
+			for( var i = 1; i < lineCountForCircleApproximation; i++ )
+			{
+				var nextPt = Mathf.angleToVector( startAngle + i * stepSize, radius ) + position;
+				addLineOccluder( lastPt, nextPt );
+				lastPt = nextPt;
+			}
 		}
 
 

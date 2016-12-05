@@ -668,7 +668,7 @@ namespace Nez
 		[MethodImpl( MethodImplOptions.AggressiveInlining )]
 		static public Vector2 angleToVector( float angleRadians, float length )
 		{
-			return new Vector2( (float)Math.Cos( angleRadians ) * length, (float)Math.Sin( angleRadians ) * length );
+			return new Vector2( cos( angleRadians ) * length, sin( angleRadians ) * length );
 		}
 
 

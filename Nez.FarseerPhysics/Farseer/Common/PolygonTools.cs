@@ -172,7 +172,7 @@ namespace FarseerPhysics.Common
 
 			var vertices = new Vertices();
 
-			float stepSize = radians / sides;
+			var stepSize = radians / sides;
 			for( int i = sides - 1; i > 0; i-- )
 			{
 				vertices.Add( new Vector2( radius * (float)Math.Cos( stepSize * i ),

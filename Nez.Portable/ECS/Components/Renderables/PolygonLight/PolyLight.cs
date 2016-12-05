@@ -9,7 +9,7 @@ namespace Nez.Shadows
 	/// <summary>
 	/// Point light that also casts shadows
 	/// </summary>
-	public class PolygonLight : RenderableComponent
+	public class PolyLight : RenderableComponent
 	{
 		/// <summary>
 		/// layer mask of all the layers this light should interact with. defaults to all layers.
@@ -67,15 +67,15 @@ namespace Nez.Shadows
 		static Collider[] _colliderCache = new Collider[10];
 
 
-		public PolygonLight( float radius ) : this( radius, Color.White )
+		public PolyLight( float radius ) : this( radius, Color.White )
 		{ }
 
 
-		public PolygonLight( float radius, Color color ) : this( radius, color, 1.0f )
+		public PolyLight( float radius, Color color ) : this( radius, color, 1.0f )
 		{ }
 
 
-		public PolygonLight( float radius, Color color, float power )
+		public PolyLight( float radius, Color color, float power )
 		{
 			this.radius = radius;
 			this.power = power;
@@ -105,7 +105,10 @@ namespace Nez.Shadows
 				for( var i = 0; i < totalOverlaps; i++ )
 				{
 					if( !_colliderCache[i].isTrigger )
-						_visibility.addSquareOccluder( _colliderCache[i].bounds );
+					{
+						_visibility.addColliderOccluder( _colliderCache[i] );
+						//_visibility.addSquareOccluder( _colliderCache[i].bounds );
+					}
 				}
 				System.Array.Clear( _colliderCache, 0, totalOverlaps );
 

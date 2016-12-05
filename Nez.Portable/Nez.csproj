@@ -564,7 +564,7 @@
     <Compile Include="ECS\Components\Physics\Colliders\Collider.cs" />
     <Compile Include="ECS\Components\Physics\Colliders\PolygonCollider.cs" />
     <Compile Include="ECS\Components\Renderables\PolygonLight\EndPoint.cs" />
-    <Compile Include="ECS\Components\Renderables\PolygonLight\PolygonLight.cs" />
+    <Compile Include="ECS\Components\Renderables\PolygonLight\PolyLight.cs" />
     <Compile Include="ECS\Components\Renderables\PolygonLight\Segment.cs" />
     <Compile Include="ECS\Components\Renderables\PolygonLight\VisibilityComputer.cs" />
   </ItemGroup>
