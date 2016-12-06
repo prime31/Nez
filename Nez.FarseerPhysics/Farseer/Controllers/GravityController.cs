@@ -18,18 +18,15 @@ namespace FarseerPhysics.Controllers
 		public float minRadius;
 		public float maxRadius;
 		public float strength;
-		public GravityType gravityType;
-		public List<Body> bodies;
-		public List<Vector2> points;
+		public GravityType gravityType = GravityType.DistanceSquared;
+		public List<Body> bodies = new List<Body>();
+		public List<Vector2> points = new List<Vector2>();
 
 
 		public GravityController( float strength ) : base( ControllerType.GravityController )
 		{
-			strength = strength;
+			this.strength = strength;
 			maxRadius = float.MaxValue;
-			gravityType = GravityType.DistanceSquared;
-			points = new List<Vector2>();
-			bodies = new List<Body>();
 		}
 
 		public GravityController( float strength, float maxRadius, float minRadius ) : base( ControllerType.GravityController )
