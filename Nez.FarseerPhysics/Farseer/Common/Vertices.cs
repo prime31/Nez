@@ -47,9 +47,8 @@ namespace FarseerPhysics.Common
 	}
 
 
-#if !( XBOX360 )
+
 	[DebuggerDisplay( "Count = {Count} Vertices = {ToString()}" )]
-#endif
 	public class Vertices : List<Vector2>
 	{
 		internal bool attachedToBody;
@@ -276,21 +275,20 @@ namespace FarseerPhysics.Common
 		/// <summary>
 		/// Rotate the vertices with the defined value in radians.
 		/// 
-		/// Warning: Using this method on an active set of vertices of a Body,
-		/// will cause problems with collisions. Use Body.Rotation instead.
+		/// Warning: Using this method on an active set of vertices of a Body, will cause problems with collisions. Use Body.Rotation instead.
 		/// </summary>
 		/// <param name="value">The amount to rotate by in radians.</param>
 		public void rotate( float value )
 		{
 			Debug.Assert( !attachedToBody, "Rotating vertices that are used by a Body can result in unstable behavior." );
 
-			float num1 = (float)Math.Cos( value );
-			float num2 = (float)Math.Sin( value );
+			var cos = (float)Math.Cos( value );
+			var sin = (float)Math.Sin( value );
 
-			for( int i = 0; i < Count; i++ )
+			for( var i = 0; i < Count; i++ )
 			{
-				Vector2 position = this[i];
-				this[i] = new Vector2( ( position.X * num1 + position.Y * -num2 ), ( position.X * num2 + position.Y * num1 ) );
+				var position = this[i];
+				this[i] = new Vector2( ( position.X * cos + position.Y * -sin ), ( position.X * sin + position.Y * cos ) );
 			}
 
 			if( holes != null && holes.Count > 0 )

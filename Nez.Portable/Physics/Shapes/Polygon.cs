@@ -7,7 +7,7 @@ namespace Nez.PhysicsShapes
 	public class Polygon : Shape
 	{
 		/// <summary>
-		/// the points that make up the Polygon. They should be CCW and convex.
+		/// the points that make up the Polygon. They should be CW and convex.
 		/// </summary>
 		public Vector2[] points;
 
@@ -29,7 +29,7 @@ namespace Nez.PhysicsShapes
 		public Vector2[] _edgeNormals;
 
 		// we cache the original details of our polygon
-		protected Vector2[] _originalPoints;
+		internal Vector2[] _originalPoints;
 		internal Vector2 _polygonCenter;
 
 		// used as an optimization for unrotated Box collisions
@@ -225,6 +225,25 @@ namespace Nez.PhysicsShapes
 			Vector2Ext.normalize( ref edgeNormal );
 
 			return closestPoint;
+		}
+
+
+		/// <summary>
+		/// rotates the originalPoints and copys the rotated values to rotatedPoints
+		/// </summary>
+		/// <param name="radians">Radians.</param>
+		/// <param name="originalPoints">Original points.</param>
+		/// <param name="rotatedPoints">Rotated points.</param>
+		public static void rotatePolygonVerts( float radians, Vector2[] originalPoints, Vector2[] rotatedPoints )
+		{
+			var cos = Mathf.cos( radians );
+			var sin = Mathf.sin( radians );
+
+			for( var i = 0; i < originalPoints.Length; i++ )
+			{
+				var position = originalPoints[i];
+				rotatedPoints[i] = new Vector2( ( position.X * cos + position.Y * -sin ), ( position.X * sin + position.Y * cos ) );
+			}
 		}
 
 		#endregion

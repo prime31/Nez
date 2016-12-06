@@ -167,7 +167,7 @@ namespace FarseerPhysics.Common
 		public static Vertices createArc( float radians, int sides, float radius )
 		{
 			Debug.Assert( radians > 0, "The arc needs to be larger than 0" );
-			Debug.Assert( sides > 1, "The arc needs to have more than 1 sides" );
+			Debug.Assert( sides > 1, "The arc needs to have more than 1 side" );
 			Debug.Assert( radius > 0, "The arc needs to have a radius larger than 0" );
 
 			var vertices = new Vertices();

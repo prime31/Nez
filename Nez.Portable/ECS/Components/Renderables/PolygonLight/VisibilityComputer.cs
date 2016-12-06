@@ -125,6 +125,11 @@ namespace Nez.Shadows
 		}
 
 
+		/// <summary>
+		/// adds a circle shaped occluder
+		/// </summary>
+		/// <param name="position">Position.</param>
+		/// <param name="radius">Radius.</param>
 		public void addCircleOccluder( Vector2 position, float radius )
 		{
 			var dirToCircle = position - _origin;
@@ -189,15 +194,13 @@ namespace Nez.Shadows
 		{
 			_origin = origin;
 			_radius = radius;
-
-			loadBoundaries();
 		}
 
 
 		/// <summary>
 		/// Helper function to construct segments along the outside perimiter in order to limit the radius of the light
 		/// </summary>        
-		void loadBoundaries()
+		public void loadRectangleBoundaries()
 		{
 			//Top
 			addSegment( new Vector2( _origin.X - _radius, _origin.Y - _radius ),
@@ -217,6 +220,20 @@ namespace Nez.Shadows
 		}
 
 
+		public void loadPolygonBoundaries( Vector2[] points )
+		{
+			// add the arc at the end of the spotlight
+			for( var i = 1; i < points.Length - 1; i++ )
+			{
+				addSegment( _origin + points[i], _origin + points[i + 1] );
+			}
+			
+			// add the two outer edges of the polygon
+			//addSegment( _origin, _origin + points[1] );
+			//addSegment( _origin, _origin + points[points.Length - 1] );
+		}
+
+
 		/// <summary>
 		/// Processess segments so that we can sort them later
 		/// </summary>
@@ -228,8 +245,8 @@ namespace Nez.Shadows
 				// ratio), instead of calling atan2. See <https://github.com/mikolalysenko/compare-slope> for a
 				// library that does this.
 
-				segment.p1.angle = (float)Math.Atan2( segment.p1.position.Y - _origin.Y, segment.p1.position.X - _origin.X );
-				segment.p2.angle = (float)Math.Atan2( segment.p2.position.Y - _origin.Y, segment.p2.position.X - _origin.X );
+				segment.p1.angle = Mathf.atan2( segment.p1.position.Y - _origin.Y, segment.p1.position.X - _origin.X );
+				segment.p2.angle = Mathf.atan2( segment.p2.position.Y - _origin.Y, segment.p2.position.X - _origin.X );
 
 				// Map angle between -Pi and Pi
 				var dAngle = segment.p2.angle - segment.p1.angle;
@@ -247,7 +264,7 @@ namespace Nez.Shadows
 
 		/// <summary>
 		/// Helper: do we know that segment a is in front of b? Implementation not anti-symmetric (that is to say,
-		/// _segment_in_front_of(a, b) != (!_segment_in_front_of(b, a)). Also note that it only has to work in a restricted set of cases
+		/// isSegmentInFrontOf(a, b) != (!isSegmentInFrontOf(b, a)). Also note that it only has to work in a restricted set of cases
 		/// in the visibility algorithm; I don't think it handles all cases. See http://www.redblobgames.com/articles/visibility/segment-sorting.html
 		/// </summary>
 		/// <returns><c>true</c>, if in front of was segmented, <c>false</c> otherwise.</returns>
@@ -266,12 +283,9 @@ namespace Nez.Shadows
 			var b2 = isLeftOf( b.p2.position, b.p1.position, interpolate( a.p2.position, a.p1.position, 0.01f ) );
 			var b3 = isLeftOf( b.p2.position, b.p1.position, relativeTo );
 
-			// NOTE: this algorithm is probably worthy of a short article
-			// but for now, draw it on paper to see how it works. Consider
-			// the line A1-A2. If both B1 and B2 are on one side and
-			// relativeTo is on the other side, then A is in between the
-			// viewer and B. We can do the same with B1-B2: if A1 and A2
-			// are on one side, and relativeTo is on the other side, then
+			// NOTE: this algorithm is probably worthy of a short article but for now, draw it on paper to see how it works. Consider
+			// the line A1-A2. If both B1 and B2 are on one side and relativeTo is on the other side, then A is in between the
+			// viewer and B. We can do the same with B1-B2: if A1 and A2 are on one side, and relativeTo is on the other side, then
 			// B is in between the viewer and A.
 			if( b1 == b2 && b2 != b3 )
 				return true;
@@ -282,18 +296,13 @@ namespace Nez.Shadows
 			if( b1 == b2 && b2 == b3 )
 				return false;
 
-			// If A1 != A2 and B1 != B2 then we have an intersection.
-			// Expose it for the GUI to show a message. A more robust
-			// implementation would split segments at intersections so
-			// that part of the segment is in front and part is behind.
+			// If A1 != A2 and B1 != B2 then we have an intersection. A more robust implementation would split segments at intersections so that
+			// part of the segment is in front and part is behind but we shouldnt have overlapping colliders anyway so it isnt too important.
 
-			//demo_intersectionsDetected.push([a.p1, a.p2, b.p1, b.p2]);
 			return false;
 
-			// NOTE: previous implementation was a.d < b.d. That's simpler
-			// but trouble when the segments are of dissimilar sizes. If
-			// you're on a grid and the segments are similarly sized, then
-			// using distance will be a simpler and faster implementation.
+			// NOTE: previous implementation was a.d < b.d. That's simpler but trouble when the segments are of dissimilar sizes. If
+			// you're on a grid and the segments are similarly sized, then using distance will be a simpler and faster implementation.
 		}
 
 
@@ -309,12 +318,9 @@ namespace Nez.Shadows
 
 			var currentAngle = 0f;
 
-			// At the beginning of the sweep we want to know which
-			// segments are active. The simplest way to do this is to make
-			// a pass collecting the segments, and make another pass to
-			// both collect and process them. However it would be more
-			// efficient to go through all the segments, figure out which
-			// ones intersect the initial sweep line, and then sort them.
+			// At the beginning of the sweep we want to know which segments are active. The simplest way to do this is to make
+			// a pass collecting the segments, and make another pass to both collect and process them. However it would be more
+			// efficient to go through all the segments, figure out which ones intersect the initial sweep line, and then sort them.
 			for( var pass = 0; pass < 2; pass++ )
 			{
 				foreach( var p in _endpoints )
@@ -362,7 +368,7 @@ namespace Nez.Shadows
 		void addTriangle( List<Vector2> triangles, float angle1, float angle2, Segment segment )
 		{
 			var p1 = _origin;
-			var p2 = new Vector2( _origin.X + (float)Math.Cos( angle1 ), _origin.Y + (float)Math.Sin( angle1 ) );
+			var p2 = new Vector2( _origin.X + Mathf.cos( angle1 ), _origin.Y + Mathf.sin( angle1 ) );
 			var p3 = Vector2.Zero;
 			var p4 = Vector2.Zero;
 
@@ -376,8 +382,7 @@ namespace Nez.Shadows
 			}
 			else
 			{
-				// Stop the triangle at a fixed distance; this probably is
-				// not what we want, but it never gets used in the demo
+				// Stop the triangle at a fixed distance; this probably is not what we want, but it never gets used in the demo
 				p3.X = _origin.X + Mathf.cos( angle1 ) * _radius * 2;
 				p3.Y = _origin.Y + Mathf.sin( angle1 ) * _radius * 2;
 				p4.X = _origin.X + Mathf.cos( angle2 ) * _radius * 2;

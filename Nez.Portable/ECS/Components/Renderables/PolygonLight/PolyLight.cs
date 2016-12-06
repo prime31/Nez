@@ -16,16 +16,13 @@ namespace Nez.Shadows
 		/// </summary>
 		public int collidesWithLayers = Physics.allLayers;
 
-		public override float width { get { return _radius * 2f; } }
-		public override float height { get { return _radius * 2f; } }
-
 		public override RectangleF bounds
 		{
 			get
 			{
 				if( _areBoundsDirty )
 				{
-					_bounds.calculateBounds( entity.transform.position, _localOffset, new Vector2( _radius, _radius ), Vector2.One, 0, width, height );
+					_bounds.calculateBounds( entity.transform.position, _localOffset, new Vector2( _radius, _radius ), Vector2.One, 0, _radius * 2f, _radius * 2f );
 					_areBoundsDirty = false;
 				}
 
@@ -39,17 +36,7 @@ namespace Nez.Shadows
 		public float radius
 		{
 			get { return _radius; }
-			set
-			{
-				if( value != _radius )
-				{
-					_radius = value;
-					_areBoundsDirty = true;
-
-					if( _lightEffect != null )
-						_lightEffect.Parameters["lightRadius"].SetValue( radius );
-				}
-			}
+			set { setRadius( value ); }
 		}
 
 		/// <summary>
@@ -57,14 +44,15 @@ namespace Nez.Shadows
 		/// </summary>
 		public float power;
 
-		float _radius;
+		protected float _radius;
+		protected VisibilityComputer _visibility;
+
 		Effect _lightEffect;
-		VisibilityComputer _visibility;
 		FastList<short> _indices = new FastList<short>( 50 );
 		FastList<VertexPositionTexture> _vertices = new FastList<VertexPositionTexture>( 20 );
 
-		// shared Collider cache used for querying for nearby geometry
-		static Collider[] _colliderCache = new Collider[10];
+		// shared Collider cache used for querying for nearby geometry. Maxes out at 10 Colliders.
+		static protected Collider[] _colliderCache = new Collider[10];
 
 
 		public PolyLight( float radius ) : this( radius, Color.White )
@@ -84,6 +72,52 @@ namespace Nez.Shadows
 		}
 
 
+		#region Fluent setters
+
+		public virtual PolyLight setRadius( float radius )
+		{
+			if( radius != _radius )
+			{
+				_radius = radius;
+				_areBoundsDirty = true;
+
+				if( _lightEffect != null )
+					_lightEffect.Parameters["lightRadius"].SetValue( radius );
+			}
+
+			return this;
+		}
+
+
+		public PolyLight setPower( float power )
+		{
+			this.power = power;
+			return this;
+		}
+
+		#endregion
+
+
+		/// <summary>
+		/// fetches any Colliders that should be considered for occlusion. Subclasses with a shape other than a circle can override this.
+		/// </summary>
+		/// <returns>The overlapped components.</returns>
+		protected virtual int getOverlappedColliders()
+		{
+			return Physics.overlapCircleAll( entity.position + _localOffset, _radius, _colliderCache, collidesWithLayers );
+		}
+
+
+		/// <summary>
+		/// override point for calling through to VisibilityComputer that allows subclasses to setup their visibility boundaries for
+		/// different shaped lights.
+		/// </summary>
+		protected virtual void loadVisibilityBoundaries()
+		{
+			_visibility.loadRectangleBoundaries();
+		}
+
+
 		#region Component and RenderableComponent
 
 		public override void onAddedToEntity()
@@ -98,17 +132,15 @@ namespace Nez.Shadows
 		{
 			if( power > 0 && isVisibleFromCamera( camera ) )
 			{
-				var totalOverlaps = Physics.overlapCircleAll( entity.position + _localOffset, _radius, _colliderCache, collidesWithLayers );
+				var totalOverlaps = getOverlappedColliders();
 
 				// compute the visibility mesh
 				_visibility.begin( entity.transform.position + _localOffset, _radius );
+				loadVisibilityBoundaries();
 				for( var i = 0; i < totalOverlaps; i++ )
 				{
 					if( !_colliderCache[i].isTrigger )
-					{
 						_visibility.addColliderOccluder( _colliderCache[i] );
-						//_visibility.addSquareOccluder( _colliderCache[i].bounds );
-					}
 				}
 				System.Array.Clear( _colliderCache, 0, totalOverlaps );
 
@@ -135,6 +167,14 @@ namespace Nez.Shadows
 				var primitiveCount = _vertices.length / 2;
 				Core.graphicsDevice.DrawUserIndexedPrimitives( PrimitiveType.TriangleList, _vertices.buffer, 0, _vertices.length, _indices.buffer, 0, primitiveCount );
 			}
+		}
+
+
+		public override void debugRender( Graphics graphics )
+		{
+			// draw a square for our pivot/origin and draw our bounds
+			graphics.batcher.drawPixel( entity.transform.position + _localOffset, Debug.Colors.renderableCenter, 4 );
+			graphics.batcher.drawHollowRect( bounds, Debug.Colors.renderableBounds );
 		}
 
 		#endregion
