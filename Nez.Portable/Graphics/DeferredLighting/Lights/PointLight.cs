@@ -9,14 +9,26 @@ namespace Nez.DeferredLighting
 	/// </summary>
 	public class PointLight : DeferredLight
 	{
-		public override float width { get { return _radius * 2; } }
+        public override RectangleF bounds
+        {
+            get
+            {
+                if( _areBoundsDirty )
+                {
+					// the size of the light only uses the x scale value
+					var size = radius * entity.transform.scale.X * 2;
+                    _bounds.calculateBounds( entity.transform.position, _localOffset, _radius * entity.transform.scale, Vector2.One, 0, size, size );
+                    _areBoundsDirty = false;
+                }
 
-		public override float height { get { return _radius * 2; } }
+                return _bounds;
+            }
+        }
 
-		/// <summary>
-		/// "height" above the scene in the z direction
-		/// </summary>
-		public float zPosition = 150f;
+        /// <summary>
+        /// "height" above the scene in the z direction
+        /// </summary>
+        public float zPosition = 150f;
 		
 		/// <summary>
 		/// how far does this light reaches
