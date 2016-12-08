@@ -7,7 +7,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
 using Nez.BitmapFonts;
 using System.Runtime.CompilerServices;
-
+using Nez.Textures;
 
 namespace Nez
 {
@@ -359,6 +359,34 @@ namespace Nez
 
 
 		public void draw(
+			Subtexture subtexture,
+			Vector2 position,
+			Color color,
+			float rotation,
+			Vector2 origin,
+			float scale,
+			SpriteEffects effects,
+			float layerDepth
+		)
+		{
+			checkBegin();
+			pushSprite(
+				subtexture,
+				position.X,
+				position.Y,
+				scale,
+				scale,
+				color,
+				origin,
+				rotation,
+				layerDepth,
+				(byte)( effects & (SpriteEffects)0x03 ),
+				0, 0, 0, 0
+			);
+		}
+
+
+		public void draw(
 			Texture2D texture,
 			Vector2 position,
 			Rectangle? sourceRectangle,
@@ -384,6 +412,34 @@ namespace Nez
 				layerDepth,
 				(byte)( effects & (SpriteEffects)0x03 ),
 				false,
+				0, 0, 0, 0
+			);
+		}
+
+
+		public void draw(
+			Subtexture subtexture,
+			Vector2 position,
+			Color color,
+			float rotation,
+			Vector2 origin,
+			Vector2 scale,
+			SpriteEffects effects,
+			float layerDepth
+		)
+		{
+			checkBegin();
+			pushSprite(
+				subtexture,
+				position.X,
+				position.Y,
+				scale.X,
+				scale.Y,
+				color,
+				origin,
+				rotation,
+				layerDepth,
+				(byte)( effects & (SpriteEffects)0x03 ),
 				0, 0, 0, 0
 			);
 		}
@@ -610,8 +666,8 @@ namespace Nez
 				sourceW = 1.0f;
 				sourceH = 1.0f;
 
-				originX = origin.X * ( 1.0f / (float)texture.Width );
-				originY = origin.Y * ( 1.0f / (float)texture.Height );
+				originX = origin.X * ( 1.0f / texture.Width );
+				originY = origin.Y * ( 1.0f / texture.Height );
 
 				if( !destSizeInPixels )
 				{
@@ -625,7 +681,7 @@ namespace Nez
 			float rotationMatrix1Y;
 			float rotationMatrix2X;
 			float rotationMatrix2Y;
-			if( !Mathf.withinEpsilon( rotation, 0.0f ) )
+			if( !Mathf.withinEpsilon( rotation, 0 ) )
 			{
 				var sin = Mathf.sin( rotation );
 				var cos = Mathf.cos( rotation );
@@ -739,12 +795,148 @@ namespace Nez
 		}
 
 
+		/// <summary>
+		/// Subtexture alternative to the old SpriteBatch pushSprite
+		/// </summary>
+		[MethodImpl( MethodImplOptions.AggressiveInlining )]
+		void pushSprite( Subtexture subtexture, float destinationX, float destinationY, float destinationW, float destinationH, Color color, Vector2 origin,
+				float rotation, float depth, byte effects, float skewTopX, float skewBottomX, float skewLeftY, float skewRightY )
+		{
+			// out of space, flush
+			if( _numSprites >= MAX_SPRITES )
+				flushBatch();
+
+			// Source/Destination/Origin Calculations. destinationW/H is the scale value so we multiply by the size of the texture region
+			var originX = ( origin.X / subtexture.uvs.width ) / subtexture.texture2D.Width;
+			var originY = ( origin.Y / subtexture.uvs.height ) / subtexture.texture2D.Height;
+			destinationW *= subtexture.sourceRect.Width;
+			destinationH *= subtexture.sourceRect.Height;
+
+			// Rotation Calculations
+			float rotationMatrix1X;
+			float rotationMatrix1Y;
+			float rotationMatrix2X;
+			float rotationMatrix2Y;
+			if( !Mathf.withinEpsilon( rotation, 0 ) )
+			{
+				var sin = Mathf.sin( rotation );
+				var cos = Mathf.cos( rotation );
+				rotationMatrix1X = cos;
+				rotationMatrix1Y = sin;
+				rotationMatrix2X = -sin;
+				rotationMatrix2Y = cos;
+			}
+			else
+			{
+				rotationMatrix1X = 1.0f;
+				rotationMatrix1Y = 0.0f;
+				rotationMatrix2X = 0.0f;
+				rotationMatrix2Y = 1.0f;
+			}
+
+
+			// flip our skew values if we have a flipped sprite
+			if( effects != 0 )
+			{
+				skewTopX *= -1;
+				skewBottomX *= -1;
+				skewLeftY *= -1;
+				skewRightY *= -1;
+			}
+
+			// calculate vertices
+			// top-left
+			var cornerX = ( _cornerOffsetX[0] - originX ) * destinationW + skewTopX;
+			var cornerY = ( _cornerOffsetY[0] - originY ) * destinationH - skewLeftY;
+			_vertexInfo[_numSprites].position0.X = (
+				( rotationMatrix2X * cornerY ) +
+				( rotationMatrix1X * cornerX ) +
+				destinationX
+			);
+			_vertexInfo[_numSprites].position0.Y = (
+				( rotationMatrix2Y * cornerY ) +
+				( rotationMatrix1Y * cornerX ) +
+				destinationY
+			);
+
+			// top-right
+			cornerX = ( _cornerOffsetX[1] - originX ) * destinationW + skewTopX;
+			cornerY = ( _cornerOffsetY[1] - originY ) * destinationH - skewRightY;
+			_vertexInfo[_numSprites].position1.X = (
+				( rotationMatrix2X * cornerY ) +
+				( rotationMatrix1X * cornerX ) +
+				destinationX
+			);
+			_vertexInfo[_numSprites].position1.Y = (
+				( rotationMatrix2Y * cornerY ) +
+				( rotationMatrix1Y * cornerX ) +
+				destinationY
+			);
+
+			// bottom-left
+			cornerX = ( _cornerOffsetX[2] - originX ) * destinationW + skewBottomX;
+			cornerY = ( _cornerOffsetY[2] - originY ) * destinationH - skewLeftY;
+			_vertexInfo[_numSprites].position2.X = (
+				( rotationMatrix2X * cornerY ) +
+				( rotationMatrix1X * cornerX ) +
+				destinationX
+			);
+			_vertexInfo[_numSprites].position2.Y = (
+				( rotationMatrix2Y * cornerY ) +
+				( rotationMatrix1Y * cornerX ) +
+				destinationY
+			);
+
+			// bottom-right
+			cornerX = ( _cornerOffsetX[3] - originX ) * destinationW + skewBottomX;
+			cornerY = ( _cornerOffsetY[3] - originY ) * destinationH - skewRightY;
+			_vertexInfo[_numSprites].position3.X = (
+				( rotationMatrix2X * cornerY ) +
+				( rotationMatrix1X * cornerX ) +
+				destinationX
+			);
+			_vertexInfo[_numSprites].position3.Y = (
+				( rotationMatrix2Y * cornerY ) +
+				( rotationMatrix1Y * cornerX ) +
+				destinationY
+			);
+
+			_vertexInfo[_numSprites].textureCoordinate0.X = ( _cornerOffsetX[0 ^ effects] * subtexture.uvs.width ) + subtexture.uvs.x;
+			_vertexInfo[_numSprites].textureCoordinate0.Y = ( _cornerOffsetY[0 ^ effects] * subtexture.uvs.height ) + subtexture.uvs.y;
+			_vertexInfo[_numSprites].textureCoordinate1.X = ( _cornerOffsetX[1 ^ effects] * subtexture.uvs.width ) + subtexture.uvs.x;
+			_vertexInfo[_numSprites].textureCoordinate1.Y = ( _cornerOffsetY[1 ^ effects] * subtexture.uvs.height ) + subtexture.uvs.y;
+			_vertexInfo[_numSprites].textureCoordinate2.X = ( _cornerOffsetX[2 ^ effects] * subtexture.uvs.width ) + subtexture.uvs.x;
+			_vertexInfo[_numSprites].textureCoordinate2.Y = ( _cornerOffsetY[2 ^ effects] * subtexture.uvs.height ) + subtexture.uvs.y;
+			_vertexInfo[_numSprites].textureCoordinate3.X = ( _cornerOffsetX[3 ^ effects] * subtexture.uvs.width ) + subtexture.uvs.x;
+			_vertexInfo[_numSprites].textureCoordinate3.Y = ( _cornerOffsetY[3 ^ effects] * subtexture.uvs.height ) + subtexture.uvs.y;
+			_vertexInfo[_numSprites].position0.Z = depth;
+			_vertexInfo[_numSprites].position1.Z = depth;
+			_vertexInfo[_numSprites].position2.Z = depth;
+			_vertexInfo[_numSprites].position3.Z = depth;
+			_vertexInfo[_numSprites].color0 = color;
+			_vertexInfo[_numSprites].color1 = color;
+			_vertexInfo[_numSprites].color2 = color;
+			_vertexInfo[_numSprites].color3 = color;
+
+			if( _disableBatching )
+			{
+				_vertexBuffer.SetData( 0, _vertexInfo, 0, 1, VertexPositionColorTexture4.realStride, SetDataOptions.None );
+				drawPrimitives( subtexture, 0, 1 );
+			}
+			else
+			{
+				_textureInfo[_numSprites] = subtexture;
+				_numSprites += 1;
+			}
+		}
+
+
 		public void flushBatch()
 		{
 			if( _numSprites == 0 )
 				return;
 
-			int offset = 0;
+			var offset = 0;
 			Texture2D curTexture = null;
 
 			prepRenderState();

@@ -204,7 +204,7 @@ namespace Nez.Sprites
 
 		public override void render( Graphics graphics, Camera camera )
 		{
-			graphics.batcher.draw( _subtexture, entity.transform.position + localOffset, _subtexture.sourceRect, color, entity.transform.rotation, origin, entity.transform.scale, spriteEffects, _layerDepth );
+			graphics.batcher.draw( _subtexture, entity.transform.position + localOffset, color, entity.transform.rotation, origin, entity.transform.scale, spriteEffects, _layerDepth );
 		}
 
 	}

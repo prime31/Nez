@@ -21,6 +21,11 @@ namespace Nez.Textures
 		public readonly Rectangle sourceRect;
 
 		/// <summary>
+		/// UVs for the texture region
+		/// </summary>
+		public readonly RectangleF uvs;
+
+		/// <summary>
 		/// center of the sourceRect if it had a 0,0 origin. This is basically the center in sourceRect-space.
 		/// </summary>
 		/// <value>The center.</value>
@@ -38,6 +43,14 @@ namespace Nez.Textures
 			this.sourceRect = sourceRect;
 			center = new Vector2( sourceRect.Width * 0.5f, sourceRect.Height * 0.5f );
 			this.origin = origin;
+
+			var inverseTexW = 1.0f / texture2D.Width;
+			var inverseTexH = 1.0f / texture2D.Height;
+
+			uvs.x = sourceRect.X * inverseTexW;
+			uvs.y = sourceRect.Y * inverseTexH;
+			uvs.width = sourceRect.Width * inverseTexW;
+			uvs.height = sourceRect.Height * inverseTexH;
 		}
 
 

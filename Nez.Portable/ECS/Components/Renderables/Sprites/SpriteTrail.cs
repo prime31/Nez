@@ -85,7 +85,7 @@ namespace Nez.Sprites
 			[MethodImpl( MethodImplOptions.AggressiveInlining )]
 			public void render( Graphics graphics, Camera camera )
 			{
-				graphics.batcher.draw( _subtexture, position, _subtexture.sourceRect, _renderColor, _rotation, _origin, _scale, _spriteEffects, _layerDepth );
+				graphics.batcher.draw( _subtexture, position, _renderColor, _rotation, _origin, _scale, _spriteEffects, _layerDepth );
 			}
 		}
 
