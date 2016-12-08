@@ -4,6 +4,10 @@ using Nez.PhysicsShapes;
 
 namespace Nez.Shadows
 {
+	/// <summary>
+	/// WIP: still has some odd rendering bugs that need to get worked out
+	/// poly spot light. Works just like a PolyLight except it is limited to a cone shape (spotAngle).
+	/// </summary>
 	public class PolySpotLight : PolyLight
 	{
 		public override RectangleF bounds
@@ -157,8 +161,7 @@ namespace Nez.Shadows
 
 		protected override void loadVisibilityBoundaries()
 		{
-			//_visibility.loadRectangleBoundaries();
-			_visibility.loadPolygonBoundaries( _polygon.points );
+			_visibility.loadSpotLightBoundaries( _polygon.points );
 		}
 
 		#endregion

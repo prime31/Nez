@@ -149,6 +149,10 @@ namespace Nez.Shadows
 				generateVertsFromEncounters( encounters );
 				ListPool<Vector2>.free( encounters );
 
+				var primitiveCount = _vertices.length / 2;
+				if( primitiveCount == 0 )
+					return;
+
 				Core.graphicsDevice.BlendState = BlendState.Additive;
 				Core.graphicsDevice.RasterizerState = RasterizerState.CullNone;
 
@@ -164,7 +168,6 @@ namespace Nez.Shadows
 				_lightEffect.Parameters["lightColor"].SetValue( color.ToVector3() * power );
 				_lightEffect.Techniques[0].Passes[0].Apply();
 
-				var primitiveCount = _vertices.length / 2;
 				Core.graphicsDevice.DrawUserIndexedPrimitives( PrimitiveType.TriangleList, _vertices.buffer, 0, _vertices.length, _indices.buffer, 0, primitiveCount );
 			}
 		}
@@ -186,12 +189,12 @@ namespace Nez.Shadows
 		/// <param name="position">Position.</param>
 		/// <param name="texCoord">Tex coordinate.</param>
 		[MethodImpl( MethodImplOptions.AggressiveInlining )]
-		void addVert( Vector3 position, Vector2 texCoord )
+		void addVert( Vector2 position )
 		{
 			var index = _vertices.length;
 			_vertices.ensureCapacity();
-			_vertices.buffer[index].Position = position;
-			_vertices.buffer[index].TextureCoordinate = texCoord;
+			_vertices.buffer[index].Position = position.toVector3();
+			_vertices.buffer[index].TextureCoordinate = position;
 			_vertices.length++;
 		}
 
@@ -215,11 +218,11 @@ namespace Nez.Shadows
 			_vertices.reset();
 
 			// add a vertex for the center of the mesh
-			addVert( new Vector3( entity.transform.position.X, entity.transform.position.Y, 0 ), entity.transform.position );
+			addVert( entity.transform.position );
 
 			// add all the other encounter points as vertices storing their world position as UV coordinates
 			for( var i = 0; i < encounters.Count; i++ )
-				addVert( encounters[i].toVector3(), encounters[i] );
+				addVert( encounters[i] );
 
 			// if we dont have enough tri indices add enough for our encounter list
 			var triIndices = _indices.length / 3;

@@ -8,12 +8,12 @@
 		/// <summary>
 		/// First end-point of the segment
 		/// </summary>
-		internal EndPoint p1 { get; set; }
+		internal EndPoint p1;
 
 		/// <summary>
 		/// Second end-point of the segment
 		/// </summary>
-		internal EndPoint p2 { get; set; }
+		internal EndPoint p2;
 
 
 		internal Segment()
