@@ -18,20 +18,6 @@ namespace Nez.Farseer
 
 		#region Configuration
 
-		public FSCollisionEdge setVertex1( Vector2 vertex )
-		{
-			setVertices( vertex, _vertex2 );
-			return this;
-		}
-
-
-		public FSCollisionEdge setVertex2( Vector2 vertex )
-		{
-			setVertices( _vertex2, vertex );
-			return this;
-		}
-
-
 		public FSCollisionEdge setVertices( Vector2 vertex1, Vector2 vertex2 )
 		{
 			_vertex1 = vertex1;

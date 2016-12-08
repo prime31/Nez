@@ -19,6 +19,7 @@ namespace Nez.Farseer
 		public FSCollisionCircle( float radius ) : this()
 		{
 			_radius = radius;
+			_fixtureDef.shape.radius = _radius * FSConvert.displayToSim;
 		}
 
 

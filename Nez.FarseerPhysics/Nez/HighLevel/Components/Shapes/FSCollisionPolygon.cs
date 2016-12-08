@@ -9,7 +9,7 @@ namespace Nez.Farseer
 	public class FSCollisionPolygon : FSCollisionShape
 	{
 		/// <summary>
-		/// verts are stored in display units. We convert to sim units if the Transform.scale changes.
+		/// verts are stored in sim units
 		/// </summary>updateVerts
 		protected Vertices _verts;
 		Vector2 _center;
@@ -24,6 +24,14 @@ namespace Nez.Farseer
 		public FSCollisionPolygon( List<Vector2> vertices ) : this()
 		{
 			_verts = new Vertices( vertices );
+			_verts.scale( new Vector2( FSConvert.displayToSim ) );
+		}
+
+
+		public FSCollisionPolygon( Vector2[] vertices ) : this()
+		{
+			_verts = new Vertices( vertices );
+			_verts.scale( new Vector2( FSConvert.displayToSim ) );
 		}
 
 

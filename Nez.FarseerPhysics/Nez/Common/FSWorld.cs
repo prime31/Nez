@@ -17,7 +17,7 @@ namespace Nez.Farseer
 		/// <summary>
 		/// if true, the left mouse button will be used for picking and dragging physics objects around
 		/// </summary>
-		public bool enableMousePicking = false;
+		public bool enableMousePicking;
 
 		FixedMouseJoint _mouseJoint;
 
@@ -29,6 +29,13 @@ namespace Nez.Farseer
 		public FSWorld( Vector2 gravity )
 		{
 			world = new World( gravity );
+		}
+
+
+		public FSWorld setEnableMousePicking( bool enableMousePicking )
+		{
+			this.enableMousePicking = enableMousePicking;
+			return this;
 		}
 
 

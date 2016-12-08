@@ -47,5 +47,21 @@ namespace Nez.Svg
 			return pts;
 		}
 
+
+		/// <summary>
+		/// gets the points relative to the center. SVG by default uses absolute positions for points.
+		/// </summary>
+		/// <returns>The relative points.</returns>
+		public Vector2[] getRelativePoints()
+		{
+			var pts = new Vector2[points.Length];
+
+			var center = new Vector2( centerX, centerY );
+			for( var i = 0; i < points.Length; i++ )
+				pts[i] = points[i] - center;
+
+			return pts;
+		}
+
 	}
 }

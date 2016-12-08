@@ -43,6 +43,18 @@ namespace Nez.Farseer
 			return this;
 		}
 
+
+		public FSCollisionChain setVertices( Vector2[] verts )
+		{
+			if( _verts == null )
+				_verts = new List<Vector2>();
+
+			_verts.Clear();
+			_verts.AddRange( verts );
+			recreateFixture();
+			return this;
+		}
+
 		#endregion
 
 
