@@ -13,9 +13,11 @@ namespace Nez.DeferredLighting
         {
             get
             {
-                if (_areBoundsDirty)
+                if( _areBoundsDirty )
                 {
-                    _bounds.calculateBounds(entity.transform.position, _localOffset, _radius * entity.transform.scale, Vector2.One, 0, (_radius * entity.transform.scale.X) * 2f, (_radius * entity.transform.scale.Y) * 2f);
+					// the size of the light only uses the x scale value
+					var size = radius * entity.transform.scale.X * 2;
+                    _bounds.calculateBounds( entity.transform.position, _localOffset, _radius * entity.transform.scale, Vector2.One, 0, size, size );
                     _areBoundsDirty = false;
                 }
 
