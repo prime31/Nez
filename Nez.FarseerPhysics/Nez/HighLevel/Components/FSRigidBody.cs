@@ -150,6 +150,12 @@ namespace Nez.Farseer
 
 		#region Component lifecycle
 
+		public override void initialize()
+		{
+			createBody();
+		}
+
+
 		public override void onAddedToEntity()
 		{
 			createBody();

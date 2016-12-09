@@ -122,7 +122,7 @@ namespace FarseerPhysics.Dynamics
 
 				mainBody.destroyFixture( oldFixture );
 
-				var body = BodyFactory.CreateBody( _world, mainBody.position, mainBody.rotation, BodyType.Dynamic, mainBody.userData );
+				var body = BodyFactory.createBody( _world, mainBody.position, mainBody.rotation, BodyType.Dynamic, mainBody.userData );
 
 				var newFixture = body.createFixture( shape );
 				newFixture.userData = userData;

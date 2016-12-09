@@ -61,8 +61,7 @@ namespace FarseerPhysics.Common
 		/// <param name="yRadius">The rounding Y radius.</param>
 		/// <param name="segments">The number of segments to subdivide the edges.</param>
 		/// <returns></returns>
-		public static Vertices createRoundedRectangle( float width, float height, float xRadius, float yRadius,
-													  int segments )
+		public static Vertices createRoundedRectangle( float width, float height, float xRadius, float yRadius, int segments )
 		{
 			if( yRadius > height / 2 || xRadius > width / 2 )
 				throw new Exception( "Rounding amount can't be more than half the height and width respectively." );

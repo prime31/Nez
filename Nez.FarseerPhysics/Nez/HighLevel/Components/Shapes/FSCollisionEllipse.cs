@@ -15,27 +15,26 @@ namespace Nez.Farseer
 		{}
 
 
-		public FSCollisionEllipse( float xRadius, float yRadius )
+		public FSCollisionEllipse( float xRadius, float yRadius ) : this( xRadius, yRadius, Settings.maxPolygonVertices )
+		{}
+
+
+		public FSCollisionEllipse( float xRadius, float yRadius, int edgeCount )
 		{
+			Assert.isFalse( edgeCount > Settings.maxPolygonVertices, "edgeCount must be less than Settings.maxPolygonVertices" );
+
 			_xRadius = xRadius;
 			_yRadius = yRadius;
+			_edgeCount = edgeCount;
 			_verts = PolygonTools.createEllipse( _xRadius * FSConvert.displayToSim, _yRadius * FSConvert.displayToSim, _edgeCount );
 		}
 
 
 		#region Configuration
 
-		public FSCollisionEllipse setRadiusX( float xRadius )
+		public FSCollisionEllipse setRadii( float xRadius, float yRadius )
 		{
 			_xRadius = xRadius;
-			_verts = PolygonTools.createEllipse( _xRadius * FSConvert.displayToSim, _yRadius * FSConvert.displayToSim, _edgeCount );
-			recreateFixture();
-			return this;
-		}
-
-
-		public FSCollisionEllipse setRadiusY( float yRadius )
-		{
 			_yRadius = yRadius;
 			_verts = PolygonTools.createEllipse( _xRadius * FSConvert.displayToSim, _yRadius * FSConvert.displayToSim, _edgeCount );
 			recreateFixture();
@@ -45,6 +44,8 @@ namespace Nez.Farseer
 
 		public FSCollisionEllipse setEdgeCount( int edgeCount )
 		{
+			Assert.isFalse( edgeCount > Settings.maxPolygonVertices, "edgeCount must be less than Settings.maxPolygonVertices" );
+
 			_edgeCount = edgeCount;
 			_verts = PolygonTools.createEllipse( _xRadius * FSConvert.displayToSim, _yRadius * FSConvert.displayToSim, _edgeCount );
 			recreateFixture();

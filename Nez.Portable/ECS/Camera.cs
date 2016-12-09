@@ -477,6 +477,16 @@ namespace Nez
 
 
 		/// <summary>
+		/// returns the mouse position in world space
+		/// </summary>
+		/// <returns>The to world point.</returns>
+		public Vector2 mouseToWorldPoint()
+		{
+			return screenToWorldPoint( Input.mousePosition );
+		}
+
+
+		/// <summary>
 		/// converts a point from screen coordinates to world
 		/// </summary>
 		/// <returns>The to world point.</returns>

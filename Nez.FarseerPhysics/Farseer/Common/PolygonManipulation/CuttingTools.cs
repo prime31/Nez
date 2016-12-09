@@ -193,7 +193,7 @@ namespace FarseerPhysics.Common.PolygonManipulation
 					//Delete the original shape and create two new. Retain the properties of the body.
 					if( first.checkPolygon() == PolygonError.NoError )
 					{
-						Body firstFixture = BodyFactory.CreatePolygon( world, first, fixtures[i].shape.density, fixtures[i].body.position );
+						Body firstFixture = BodyFactory.createPolygon( world, first, fixtures[i].shape.density, fixtures[i].body.position );
 						firstFixture.rotation = fixtures[i].body.rotation;
 						firstFixture.linearVelocity = fixtures[i].body.linearVelocity;
 						firstFixture.angularVelocity = fixtures[i].body.angularVelocity;
@@ -202,7 +202,7 @@ namespace FarseerPhysics.Common.PolygonManipulation
 
 					if( second.checkPolygon() == PolygonError.NoError )
 					{
-						Body secondFixture = BodyFactory.CreatePolygon( world, second, fixtures[i].shape.density, fixtures[i].body.position );
+						Body secondFixture = BodyFactory.createPolygon( world, second, fixtures[i].shape.density, fixtures[i].body.position );
 						secondFixture.rotation = fixtures[i].body.rotation;
 						secondFixture.linearVelocity = fixtures[i].body.linearVelocity;
 						secondFixture.angularVelocity = fixtures[i].body.angularVelocity;

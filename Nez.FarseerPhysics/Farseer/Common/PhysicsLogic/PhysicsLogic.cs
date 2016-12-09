@@ -60,7 +60,7 @@ namespace FarseerPhysics.Common.PhysicsLogic
 			return base.isActiveOn( body );
 		}
 
-		public PhysicsLogic( World world, PhysicsLogicType type )
+		protected PhysicsLogic( World world, PhysicsLogicType type )
 		{
 			_type = type;
 			this.world = world;

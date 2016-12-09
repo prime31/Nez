@@ -35,23 +35,21 @@ namespace FarseerPhysics.Common.PhysicsLogic
 		/// <returns>A list of bodies and the amount of force that was applied to them.</returns>
 		public Dictionary<Body, Vector2> activate( Vector2 pos, float radius, float force, float maxForce = float.MaxValue )
 		{
-			HashSet<Body> affectedBodies = new HashSet<Body>();
+			var affectedBodies = new HashSet<Body>();
 
 			AABB aabb;
 			aabb.lowerBound = pos - new Vector2( radius );
 			aabb.upperBound = pos + new Vector2( radius );
+			var radiusSquared = radius * radius;
 
 			// Query the world for bodies within the radius.
 			world.queryAABB( fixture =>
-			 {
-				 if( Vector2.Distance( fixture.body.position, pos ) <= radius )
-				 {
-					 if( !affectedBodies.Contains( fixture.body ) )
-						 affectedBodies.Add( fixture.body );
-				 }
+			{
+				if( Vector2.DistanceSquared( fixture.body.position, pos ) <= radiusSquared )
+					 affectedBodies.Add( fixture.body );
 
 				 return true;
-			 }, ref aabb );
+			}, ref aabb );
 
 			return applyImpulse( pos, radius, force, maxForce, affectedBodies );
 		}
@@ -65,10 +63,10 @@ namespace FarseerPhysics.Common.PhysicsLogic
 			{
 				if( isActiveOn( overlappingBody ) )
 				{
-					float distance = Vector2.Distance( pos, overlappingBody.position );
-					float forcePercent = GetPercent( distance, radius );
+					var distance = Vector2.Distance( pos, overlappingBody.position );
+					var forcePercent = getPercent( distance, radius );
 
-					Vector2 forceVector = pos - overlappingBody.position;
+					var forceVector = pos - overlappingBody.position;
 					forceVector *= 1f / (float)Math.Sqrt( forceVector.X * forceVector.X + forceVector.Y * forceVector.Y );
 					forceVector *= MathHelper.Min( force * forcePercent, maxForce );
 					forceVector *= -1;
@@ -82,7 +80,7 @@ namespace FarseerPhysics.Common.PhysicsLogic
 		}
 
 
-		float GetPercent( float distance, float radius )
+		float getPercent( float distance, float radius )
 		{
 			//(1-(distance/radius))^power-1
 			float percent = (float)Math.Pow( 1 - ( ( distance - radius ) / radius ), power ) - 1;

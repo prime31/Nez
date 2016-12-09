@@ -10,9 +10,10 @@ namespace Nez.Farseer
 	{
 		/// <summary>
 		/// verts are stored in sim units
-		/// </summary>updateVerts
+		/// </summary>
 		protected Vertices _verts;
 		Vector2 _center;
+		protected bool _areVertsDirty = true;
 
 
 		public FSCollisionPolygon()
@@ -40,6 +41,7 @@ namespace Nez.Farseer
 		public FSCollisionPolygon setVertices( Vertices vertices )
 		{
 			_verts = new Vertices( vertices );
+			_areVertsDirty = true;
 			recreateFixture();
 			return this;
 		}
@@ -48,6 +50,7 @@ namespace Nez.Farseer
 		public FSCollisionPolygon setVertices( List<Vector2> vertices )
 		{
 			_verts = new Vertices( vertices );
+			_areVertsDirty = true;
 			recreateFixture();
 			return this;
 		}
@@ -56,6 +59,7 @@ namespace Nez.Farseer
 		public FSCollisionPolygon setCenter( Vector2 center )
 		{
 			_center = center;
+			_areVertsDirty = true;
 			recreateFixture();
 			return this;
 		}
@@ -94,15 +98,21 @@ namespace Nez.Farseer
 
 		protected void updateVerts()
 		{
-			var defVerts = ( _fixtureDef.shape as PolygonShape ).vertices;
-			defVerts.attachedToBody = false;
+			Assert.isNotNull( _verts, "verts cannot be null!" );
 
-			defVerts.Clear();
-			defVerts.AddRange( _verts );
-			defVerts.scale( transform.scale );
-			defVerts.translate( ref _center );
+			if( !_areVertsDirty )
+				return;
+			_areVertsDirty = false;
 
-			( _fixtureDef.shape as PolygonShape ).setVerticesNoCopy( defVerts );
+			var shapeVerts = ( _fixtureDef.shape as PolygonShape ).vertices;
+			shapeVerts.attachedToBody = false;
+
+			shapeVerts.Clear();
+			shapeVerts.AddRange( _verts );
+			shapeVerts.scale( transform.scale );
+			shapeVerts.translate( ref _center );
+
+			( _fixtureDef.shape as PolygonShape ).setVerticesNoCopy( shapeVerts );
 		}
 
 	}

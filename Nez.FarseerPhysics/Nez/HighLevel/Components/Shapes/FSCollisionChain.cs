@@ -18,6 +18,18 @@ namespace Nez.Farseer
 		}
 
 
+		public FSCollisionChain( List<Vector2> verts ) : this()
+		{
+			_verts = verts;
+		}
+
+
+		public FSCollisionChain( Vector2[] verts ) : this()
+		{
+			_verts = new List<Vector2>( verts );
+		}
+
+
 		#region Configuration
 
 		public FSCollisionChain setLoop( bool loop )
@@ -67,6 +79,8 @@ namespace Nez.Farseer
 
 		void recreateFixture()
 		{
+			Assert.isNotNull( _verts, "verts cannot be null!" );
+
 			destroyFixture();
 
 			// scale our verts and convert them to sim units

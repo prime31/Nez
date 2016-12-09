@@ -261,7 +261,7 @@ namespace FarseerPhysics.Common.TextureTools
 				foreach( Vertices poly in decompPolys )
 				{
 					if( poly.Count > 2 )
-						_bodyMap[gx, gy].Add( BodyFactory.CreatePolygon( world, poly, 1 ) );
+						_bodyMap[gx, gy].Add( BodyFactory.createPolygon( world, poly, 1 ) );
 				}
 			}
 		}

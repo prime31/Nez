@@ -14,25 +14,25 @@ namespace FarseerPhysics.Factories
 	/// </summary>
 	public static class FixtureFactory
 	{
-		public static Fixture AttachEdge( Vector2 start, Vector2 end, Body body, object userData = null )
+		public static Fixture attachEdge( Vector2 start, Vector2 end, Body body, object userData = null )
 		{
 			var edgeShape = new EdgeShape( start, end );
 			return body.createFixture( edgeShape, userData );
 		}
 
-		public static Fixture AttachChainShape( Vertices vertices, Body body, object userData = null )
+		public static Fixture attachChainShape( Vertices vertices, Body body, object userData = null )
 		{
 			var shape = new ChainShape( vertices );
 			return body.createFixture( shape, userData );
 		}
 
-		public static Fixture AttachLoopShape( Vertices vertices, Body body, object userData = null )
+		public static Fixture attachLoopShape( Vertices vertices, Body body, object userData = null )
 		{
 			var shape = new ChainShape( vertices, true );
 			return body.createFixture( shape, userData );
 		}
 
-		public static Fixture AttachRectangle( float width, float height, float density, Vector2 offset, Body body, object userData = null )
+		public static Fixture attachRectangle( float width, float height, float density, Vector2 offset, Body body, object userData = null )
 		{
 			var rectangleVertices = PolygonTools.createRectangle( width / 2, height / 2 );
 			rectangleVertices.translate( ref offset );
@@ -40,7 +40,23 @@ namespace FarseerPhysics.Factories
 			return body.createFixture( rectangleShape, userData );
 		}
 
-		public static Fixture AttachCircle( float radius, float density, Body body, object userData = null )
+		public static List<Fixture> attachRoundedRectangle( float width, float height, float xRadius, float yRadius, int segments, float density, Body body, object userData = null )
+		{
+			var verts = PolygonTools.createRoundedRectangle( width, height, xRadius, yRadius, segments );
+
+			//There are too many vertices in the capsule. We decompose it.
+			if( verts.Count >= Settings.maxPolygonVertices )
+			{
+				var vertList = Triangulate.convexPartition( verts, TriangulationAlgorithm.Earclip );
+				return attachCompoundPolygon( vertList, density, body, userData );
+			}
+
+			var fixtures = new List<Fixture>( 1 );
+			fixtures.Add( attachPolygon( verts, density, body, userData ) );
+			return fixtures;
+		}
+
+		public static Fixture attachCircle( float radius, float density, Body body, object userData = null )
 		{
 			if( radius <= 0 )
 				throw new ArgumentOutOfRangeException( nameof( radius ), "Radius must be more than 0 meters" );
@@ -49,7 +65,7 @@ namespace FarseerPhysics.Factories
 			return body.createFixture( circleShape, userData );
 		}
 
-		public static Fixture AttachCircle( float radius, float density, Body body, Vector2 offset, object userData = null )
+		public static Fixture attachCircle( float radius, float density, Body body, Vector2 offset, object userData = null )
 		{
 			if( radius <= 0 )
 				throw new ArgumentOutOfRangeException( nameof( radius ), "Radius must be more than 0 meters" );
@@ -59,7 +75,7 @@ namespace FarseerPhysics.Factories
 			return body.createFixture( circleShape, userData );
 		}
 
-		public static Fixture AttachPolygon( Vertices vertices, float density, Body body, object userData = null )
+		public static Fixture attachPolygon( Vertices vertices, float density, Body body, object userData = null )
 		{
 			if( vertices.Count <= 1 )
 				throw new ArgumentOutOfRangeException( nameof( vertices ), "Too few points to be a polygon" );
@@ -68,7 +84,7 @@ namespace FarseerPhysics.Factories
 			return body.createFixture( polygon, userData );
 		}
 
-		public static Fixture AttachEllipse( float xRadius, float yRadius, int edges, float density, Body body, object userData = null )
+		public static Fixture attachEllipse( float xRadius, float yRadius, int edges, float density, Body body, object userData = null )
 		{
 			if( xRadius <= 0 )
 				throw new ArgumentOutOfRangeException( nameof( xRadius ), "X-radius must be more than 0" );
@@ -81,7 +97,7 @@ namespace FarseerPhysics.Factories
 			return body.createFixture( polygonShape, userData );
 		}
 
-		public static List<Fixture> AttachCompoundPolygon( List<Vertices> list, float density, Body body, object userData = null )
+		public static List<Fixture> attachCompoundPolygon( List<Vertices> list, float density, Body body, object userData = null )
 		{
 			var res = new List<Fixture>( list.Count );
 
@@ -103,14 +119,14 @@ namespace FarseerPhysics.Factories
 			return res;
 		}
 
-		public static Fixture AttachLineArc( float radians, int sides, float radius, bool closed, Body body )
+		public static Fixture attachLineArc( float radians, int sides, float radius, bool closed, Body body )
 		{
 			var arc = PolygonTools.createArc( radians, sides, radius );
 			arc.rotate( ( MathHelper.Pi - radians ) / 2 );
-			return closed ? AttachLoopShape( arc, body ) : AttachChainShape( arc, body );
+			return closed ? attachLoopShape( arc, body ) : attachChainShape( arc, body );
 		}
 
-		public static List<Fixture> AttachSolidArc( float density, float radians, int sides, float radius, Body body )
+		public static List<Fixture> attachSolidArc( float density, float radians, int sides, float radius, Body body )
 		{
 			var arc = PolygonTools.createArc( radians, sides, radius );
 			arc.rotate( ( MathHelper.Pi - radians ) / 2 );
@@ -120,7 +136,8 @@ namespace FarseerPhysics.Factories
 
 			var triangles = Triangulate.convexPartition( arc, TriangulationAlgorithm.Earclip );
 
-			return AttachCompoundPolygon( triangles, density, body );
+			return attachCompoundPolygon( triangles, density, body );
 		}
+	
 	}
 }

@@ -23,19 +23,12 @@ namespace Nez.Farseer
 
 		#region Configuration
 
-		public FSCollisionBox setWidth( float width )
+		public FSCollisionBox setSize( float width, float height )
 		{
 			_width = width;
-			_verts = PolygonTools.createRectangle( FSConvert.displayToSim * _width / 2, FSConvert.displayToSim * _height / 2 );
-			recreateFixture();
-			return this;
-		}
-
-
-		public FSCollisionBox setHeight( float height )
-		{
 			_height = height;
 			_verts = PolygonTools.createRectangle( FSConvert.displayToSim * _width / 2, FSConvert.displayToSim * _height / 2 );
+			_areVertsDirty = true;
 			recreateFixture();
 			return this;
 		}

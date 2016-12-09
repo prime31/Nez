@@ -181,7 +181,7 @@ namespace Nez.Farseer
 		}
 
 
-		internal void destroyFixture()
+		internal virtual void destroyFixture()
 		{
 			if( _fixture == null )
 				return;

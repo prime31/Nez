@@ -43,7 +43,7 @@ namespace FarseerPhysics.Common.PhysicsLogic
 			if( body.fixtureList == null )
 				return false;
 
-			foreach( Fixture fixture in body.fixtureList )
+			foreach( var fixture in body.fixtureList )
 			{
 				//Disable
 				if( ( fixture.collisionGroup == disabledOnGroup ) && fixture.collisionGroup != 0 && disabledOnGroup != 0 )
