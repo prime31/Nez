@@ -23,10 +23,10 @@ VertexShaderOutput mainVS( VertexShaderInput input )
 {
 	VertexShaderOutput output;
 	//output.position = float4( input.Position, 1 );
-	output.position = mul( input.Position, viewProjectionMatrix );
+	output.position = mul( input.position, viewProjectionMatrix );
 
 	// vertex position in 2D world space
-	output.worldPos = input.TexCoord;
+	output.worldPos = input.texCoord;
 
 	return output;
 }
