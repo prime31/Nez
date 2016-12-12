@@ -60,8 +60,37 @@ namespace Nez
 
 		#region Fluent setters
 
+		/// <summary>
+		/// sets the size of the BoxCollider
+		/// </summary>
+		/// <returns>The size.</returns>
+		/// <param name="width">Width.</param>
+		/// <param name="height">Height.</param>
+		public BoxCollider setSize( float width, float height )
+		{
+			_colliderRequiresAutoSizing = false;
+			var box = shape as Box;
+			if( width != box.width || height != box.height )
+			{
+				// update the box, dirty our bounds and if we need to update our bounds in the Physics system
+				box.updateBox( width, height );
+				_isPositionDirty = true;
+				if( entity != null && _isParentEntityAddedToScene )
+					Physics.updateCollider( this );
+			}
+
+			return this;
+		}
+
+
+		/// <summary>
+		/// sets the width of the BoxCollider
+		/// </summary>
+		/// <returns>The width.</returns>
+		/// <param name="width">Width.</param>
 		public BoxCollider setWidth( float width )
 		{
+			_colliderRequiresAutoSizing = false;
 			var box = shape as Box;
 			if( width != box.width )
 			{
@@ -76,8 +105,14 @@ namespace Nez
 		}
 
 
+		/// <summary>
+		/// sets the height of the BoxCollider
+		/// </summary>
+		/// <returns>The height.</returns>
+		/// <param name="height">Height.</param>
 		public BoxCollider setHeight( float height )
 		{
+			_colliderRequiresAutoSizing = false;
 			var box = shape as Box;
 			if( height != box.height )
 			{

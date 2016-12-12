@@ -44,12 +44,19 @@ namespace Nez
 
 		#region Fluent setters
 
+		/// <summary>
+		/// sets the radius for the CircleCollider
+		/// </summary>
+		/// <returns>The radius.</returns>
+		/// <param name="radius">Radius.</param>
 		public CircleCollider setRadius( float radius )
 		{
-			if( radius != ( (Circle)shape ).radius )
+			_colliderRequiresAutoSizing = false;
+			var circle = shape as Circle;
+			if( radius != circle.radius )
 			{
-				( (Circle)shape ).radius = radius;
-				( (Circle)shape )._originalRadius = radius;
+				circle.radius = radius;
+				circle._originalRadius = radius;
 				_isPositionDirty = true;
 
 				if( entity != null && _isParentEntityAddedToScene )
