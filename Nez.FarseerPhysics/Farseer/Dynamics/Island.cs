@@ -103,14 +103,14 @@ namespace FarseerPhysics.Dynamics
 			{
 				var b = Bodies[i];
 
-				var c = b._sweep.C;
-				float a = b._sweep.A;
+				var c = b._sweep.c;
+				float a = b._sweep.a;
 				var v = b._linearVelocity;
 				float w = b._angularVelocity;
 
 				// Store positions for continuous collision.
-				b._sweep.C0 = b._sweep.C;
-				b._sweep.A0 = b._sweep.A;
+				b._sweep.c0 = b._sweep.c;
+				b._sweep.a0 = b._sweep.a;
 
 				if( b.bodyType == BodyType.Dynamic )
 				{
@@ -270,8 +270,8 @@ namespace FarseerPhysics.Dynamics
 			for( int i = 0; i < BodyCount; ++i )
 			{
 				Body body = Bodies[i];
-				body._sweep.C = _positions[i].c;
-				body._sweep.A = _positions[i].a;
+				body._sweep.c = _positions[i].c;
+				body._sweep.a = _positions[i].a;
 				body._linearVelocity = _velocities[i].v;
 				body._angularVelocity = _velocities[i].w;
 				body.synchronizeTransform();
@@ -322,8 +322,8 @@ namespace FarseerPhysics.Dynamics
 			for( int i = 0; i < BodyCount; ++i )
 			{
 				Body b = Bodies[i];
-				_positions[i].c = b._sweep.C;
-				_positions[i].a = b._sweep.A;
+				_positions[i].c = b._sweep.c;
+				_positions[i].a = b._sweep.a;
 				_velocities[i].v = b._linearVelocity;
 				_velocities[i].w = b._angularVelocity;
 			}
@@ -341,10 +341,10 @@ namespace FarseerPhysics.Dynamics
 			}
 
 			// Leap of faith to new safe state.
-			Bodies[toiIndexA]._sweep.C0 = _positions[toiIndexA].c;
-			Bodies[toiIndexA]._sweep.A0 = _positions[toiIndexA].a;
-			Bodies[toiIndexB]._sweep.C0 = _positions[toiIndexB].c;
-			Bodies[toiIndexB]._sweep.A0 = _positions[toiIndexB].a;
+			Bodies[toiIndexA]._sweep.c0 = _positions[toiIndexA].c;
+			Bodies[toiIndexA]._sweep.a0 = _positions[toiIndexA].a;
+			Bodies[toiIndexB]._sweep.c0 = _positions[toiIndexB].c;
+			Bodies[toiIndexB]._sweep.a0 = _positions[toiIndexB].a;
 
 			// No warm starting is needed for TOI events because warm
 			// starting impulses were applied in the discrete solver.
@@ -395,8 +395,8 @@ namespace FarseerPhysics.Dynamics
 
 				// Sync bodies
 				Body body = Bodies[i];
-				body._sweep.C = c;
-				body._sweep.A = a;
+				body._sweep.c = c;
+				body._sweep.a = a;
 				body._linearVelocity = v;
 				body._angularVelocity = w;
 				body.synchronizeTransform();

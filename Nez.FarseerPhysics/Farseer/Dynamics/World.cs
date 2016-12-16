@@ -738,7 +738,7 @@ namespace FarseerPhysics.Dynamics
 				for( int i = 0; i < bodyList.Count; i++ )
 				{
 					bodyList[i]._island = false;
-					bodyList[i]._sweep.Alpha0 = 0.0f;
+					bodyList[i]._sweep.alpha0 = 0.0f;
 				}
 #endif
 #if USE_ACTIVE_CONTACT_SET
@@ -836,34 +836,34 @@ namespace FarseerPhysics.Dynamics
 #endif
 						// Compute the TOI for this contact.
 						// Put the sweeps onto the same time interval.
-						float alpha0 = bA._sweep.Alpha0;
+						float alpha0 = bA._sweep.alpha0;
 
-						if( bA._sweep.Alpha0 < bB._sweep.Alpha0 )
+						if( bA._sweep.alpha0 < bB._sweep.alpha0 )
 						{
-							alpha0 = bB._sweep.Alpha0;
-							bA._sweep.Advance( alpha0 );
+							alpha0 = bB._sweep.alpha0;
+							bA._sweep.advance( alpha0 );
 						}
-						else if( bB._sweep.Alpha0 < bA._sweep.Alpha0 )
+						else if( bB._sweep.alpha0 < bA._sweep.alpha0 )
 						{
-							alpha0 = bA._sweep.Alpha0;
-							bB._sweep.Advance( alpha0 );
+							alpha0 = bA._sweep.alpha0;
+							bB._sweep.advance( alpha0 );
 						}
 
 						Debug.Assert( alpha0 < 1.0f );
 
 						// Compute the time of impact in interval [0, minTOI]
-						_input.ProxyA.set( fA.shape, c.childIndexA );
-						_input.ProxyB.set( fB.shape, c.childIndexB );
-						_input.SweepA = bA._sweep;
-						_input.SweepB = bB._sweep;
-						_input.TMax = 1.0f;
+						_input.proxyA.set( fA.shape, c.childIndexA );
+						_input.proxyB.set( fB.shape, c.childIndexB );
+						_input.sweepA = bA._sweep;
+						_input.sweepB = bB._sweep;
+						_input.tMax = 1.0f;
 
 						TOIOutput output;
-						TimeOfImpact.CalculateTimeOfImpact( out output, _input );
+						TimeOfImpact.calculateTimeOfImpact( out output, _input );
 
 						// Beta is the fraction of the remaining portion of the .
-						float beta = output.T;
-						if( output.State == TOIOutputState.Touching )
+						float beta = output.t;
+						if( output.state == TOIOutputState.Touching )
 							alpha = Math.Min( alpha0 + ( 1.0f - alpha0 ) * beta, 1.0f );
 						else
 							alpha = 1.0f;
@@ -1477,8 +1477,8 @@ namespace FarseerPhysics.Dynamics
 			foreach( Body b in bodyList )
 			{
 				b._xf.p -= newOrigin;
-				b._sweep.C0 -= newOrigin;
-				b._sweep.C -= newOrigin;
+				b._sweep.c0 -= newOrigin;
+				b._sweep.c -= newOrigin;
 			}
 
 			foreach( Joint joint in jointList )

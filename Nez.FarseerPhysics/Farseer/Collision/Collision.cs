@@ -991,7 +991,7 @@ namespace FarseerPhysics.Collision
 			manifold.pointCount = 0;
 
 			// Compute circle in frame of edge
-			var Q = MathUtils.mulT( ref transformA, MathUtils.Mul( ref transformB, ref circleB._position ) );
+			var Q = MathUtils.mulT( ref transformA, MathUtils.mul( ref transformB, ref circleB._position ) );
 
 			Vector2 A = edgeA.vertex1, B = edgeA.vertex2;
 			var e = B - A;

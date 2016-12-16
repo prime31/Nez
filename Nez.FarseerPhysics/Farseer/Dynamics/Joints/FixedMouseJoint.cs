@@ -163,7 +163,7 @@ namespace FarseerPhysics.Dynamics.Joints
 		internal override void initVelocityConstraints( ref SolverData data )
 		{
 			_indexA = bodyA.islandIndex;
-			_localCenterA = bodyA._sweep.LocalCenter;
+			_localCenterA = bodyA._sweep.localCenter;
 			_invMassA = bodyA._invMass;
 			_invIA = bodyA._invI;
 

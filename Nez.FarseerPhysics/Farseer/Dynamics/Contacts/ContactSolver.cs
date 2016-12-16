@@ -153,8 +153,8 @@ namespace FarseerPhysics.Dynamics.Contacts
 				pc.indexB = bodyB.islandIndex;
 				pc.invMassA = bodyA._invMass;
 				pc.invMassB = bodyB._invMass;
-				pc.localCenterA = bodyA._sweep.LocalCenter;
-				pc.localCenterB = bodyB._sweep.LocalCenter;
+				pc.localCenterA = bodyA._sweep.localCenter;
+				pc.localCenterB = bodyB._sweep.localCenter;
 				pc.invIA = bodyA._invI;
 				pc.invIB = bodyB._invI;
 				pc.localNormal = manifold.localNormal;

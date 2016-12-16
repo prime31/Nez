@@ -79,7 +79,7 @@ namespace FarseerPhysics.Dynamics.Joints
 		/// </summary>
 		public float jointAngle
 		{
-			get { return bodyB._sweep.A - bodyA._sweep.A - referenceAngle; }
+			get { return bodyB._sweep.a - bodyA._sweep.a - referenceAngle; }
 		}
 
 		/// <summary>
@@ -313,8 +313,8 @@ namespace FarseerPhysics.Dynamics.Joints
 		{
 			_indexA = bodyA.islandIndex;
 			_indexB = bodyB.islandIndex;
-			_localCenterA = bodyA._sweep.LocalCenter;
-			_localCenterB = bodyB._sweep.LocalCenter;
+			_localCenterA = bodyA._sweep.localCenter;
+			_localCenterB = bodyB._sweep.localCenter;
 			_invMassA = bodyA._invMass;
 			_invMassB = bodyB._invMass;
 			_invIA = bodyA._invI;

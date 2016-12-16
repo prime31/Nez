@@ -214,8 +214,8 @@ namespace FarseerPhysics.Dynamics.Joints
 		{
 			_indexA = bodyA.islandIndex;
 			_indexB = bodyB.islandIndex;
-			_localCenterA = bodyA._sweep.LocalCenter;
-			_localCenterB = bodyB._sweep.LocalCenter;
+			_localCenterA = bodyA._sweep.localCenter;
+			_localCenterB = bodyB._sweep.localCenter;
 			_invMassA = bodyA._invMass;
 			_invMassB = bodyB._invMass;
 			_invIA = bodyA._invI;

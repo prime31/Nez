@@ -166,9 +166,9 @@ namespace FarseerPhysics.Dynamics.Joints
 
 			// Get geometry of joint1
 			Transform xfA = _bodyA._xf;
-			float aA = _bodyA._sweep.A;
+			float aA = _bodyA._sweep.a;
 			Transform xfC = _bodyC._xf;
-			float aC = _bodyC._sweep.A;
+			float aC = _bodyC._sweep.a;
 
 			if( _typeA == JointType.Revolute )
 			{
@@ -198,9 +198,9 @@ namespace FarseerPhysics.Dynamics.Joints
 
 			// Get geometry of joint2
 			Transform xfB = _bodyB._xf;
-			float aB = _bodyB._sweep.A;
+			float aB = _bodyB._sweep.a;
 			Transform xfD = _bodyD._xf;
-			float aD = _bodyD._sweep.A;
+			float aD = _bodyD._sweep.a;
 
 			if( _typeB == JointType.Revolute )
 			{
@@ -248,10 +248,10 @@ namespace FarseerPhysics.Dynamics.Joints
 			_indexB = _bodyB.islandIndex;
 			_indexC = _bodyC.islandIndex;
 			_indexD = _bodyD.islandIndex;
-			_lcA = _bodyA._sweep.LocalCenter;
-			_lcB = _bodyB._sweep.LocalCenter;
-			_lcC = _bodyC._sweep.LocalCenter;
-			_lcD = _bodyD._sweep.LocalCenter;
+			_lcA = _bodyA._sweep.localCenter;
+			_lcB = _bodyB._sweep.localCenter;
+			_lcC = _bodyC._sweep.localCenter;
+			_lcD = _bodyD._sweep.localCenter;
 			_mA = _bodyA._invMass;
 			_mB = _bodyB._invMass;
 			_mC = _bodyC._invMass;

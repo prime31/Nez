@@ -33,11 +33,11 @@ namespace FarseerPhysics.Collision
 	/// </summary>
 	public class TOIInput
 	{
-		public DistanceProxy ProxyA = new DistanceProxy();
-		public DistanceProxy ProxyB = new DistanceProxy();
-		public Sweep SweepA;
-		public Sweep SweepB;
-		public float TMax; // defines sweep interval [0, tMax]
+		public DistanceProxy proxyA = new DistanceProxy();
+		public DistanceProxy proxyB = new DistanceProxy();
+		public Sweep sweepA;
+		public Sweep sweepB;
+		public float tMax; // defines sweep interval [0, tMax]
 	}
 
 	public enum TOIOutputState
@@ -51,8 +51,8 @@ namespace FarseerPhysics.Collision
 
 	public struct TOIOutput
 	{
-		public TOIOutputState State;
-		public float T;
+		public TOIOutputState state;
+		public float t;
 	}
 
 	public enum SeparationFunctionType
@@ -78,28 +78,29 @@ namespace FarseerPhysics.Collision
 		[ThreadStatic]
 		static SeparationFunctionType _type;
 
-		public static void Set( ref SimplexCache cache, DistanceProxy proxyA, ref Sweep sweepA, DistanceProxy proxyB, ref Sweep sweepB, float t1 )
+
+		public static void set( ref SimplexCache cache, DistanceProxy proxyA, ref Sweep sweepA, DistanceProxy proxyB, ref Sweep sweepB, float t1 )
 		{
 			_localPoint = Vector2.Zero;
 			_proxyA = proxyA;
 			_proxyB = proxyB;
-			int count = cache.Count;
+			var count = cache.Count;
 			Debug.Assert( 0 < count && count < 3 );
 
 			_sweepA = sweepA;
 			_sweepB = sweepB;
 
 			Transform xfA, xfB;
-			_sweepA.GetTransform( out xfA, t1 );
-			_sweepB.GetTransform( out xfB, t1 );
+			_sweepA.getTransform( out xfA, t1 );
+			_sweepB.getTransform( out xfB, t1 );
 
 			if( count == 1 )
 			{
 				_type = SeparationFunctionType.Points;
-				Vector2 localPointA = _proxyA.vertices[cache.IndexA[0]];
-				Vector2 localPointB = _proxyB.vertices[cache.IndexB[0]];
-				Vector2 pointA = MathUtils.mul( ref xfA, localPointA );
-				Vector2 pointB = MathUtils.mul( ref xfB, localPointB );
+				var localPointA = _proxyA.vertices[cache.IndexA[0]];
+				var localPointB = _proxyB.vertices[cache.IndexB[0]];
+				var pointA = MathUtils.mul( ref xfA, localPointA );
+				var pointB = MathUtils.mul( ref xfB, localPointB );
 				_axis = pointB - pointA;
 				_axis.Normalize();
 			}
@@ -107,113 +108,109 @@ namespace FarseerPhysics.Collision
 			{
 				// Two points on B and one on A.
 				_type = SeparationFunctionType.FaceB;
-				Vector2 localPointB1 = proxyB.vertices[cache.IndexB[0]];
-				Vector2 localPointB2 = proxyB.vertices[cache.IndexB[1]];
+				var localPointB1 = proxyB.vertices[cache.IndexB[0]];
+				var localPointB2 = proxyB.vertices[cache.IndexB[1]];
 
-				Vector2 a = localPointB2 - localPointB1;
+				var a = localPointB2 - localPointB1;
 				_axis = new Vector2( a.Y, -a.X );
 				_axis.Normalize();
-				Vector2 normal = MathUtils.mul( ref xfB.q, _axis );
+				var normal = MathUtils.mul( ref xfB.q, _axis );
 
 				_localPoint = 0.5f * ( localPointB1 + localPointB2 );
-				Vector2 pointB = MathUtils.mul( ref xfB, _localPoint );
+				var pointB = MathUtils.mul( ref xfB, _localPoint );
 
-				Vector2 localPointA = proxyA.vertices[cache.IndexA[0]];
-				Vector2 pointA = MathUtils.mul( ref xfA, localPointA );
+				var localPointA = proxyA.vertices[cache.IndexA[0]];
+				var pointA = MathUtils.mul( ref xfA, localPointA );
 
-				float s = Vector2.Dot( pointA - pointB, normal );
+				var s = Vector2.Dot( pointA - pointB, normal );
 				if( s < 0.0f )
-				{
 					_axis = -_axis;
-				}
 			}
 			else
 			{
 				// Two points on A and one or two points on B.
 				_type = SeparationFunctionType.FaceA;
-				Vector2 localPointA1 = _proxyA.vertices[cache.IndexA[0]];
-				Vector2 localPointA2 = _proxyA.vertices[cache.IndexA[1]];
+				var localPointA1 = _proxyA.vertices[cache.IndexA[0]];
+				var localPointA2 = _proxyA.vertices[cache.IndexA[1]];
 
-				Vector2 a = localPointA2 - localPointA1;
+				var a = localPointA2 - localPointA1;
 				_axis = new Vector2( a.Y, -a.X );
 				_axis.Normalize();
-				Vector2 normal = MathUtils.mul( ref xfA.q, _axis );
+				var normal = MathUtils.mul( ref xfA.q, _axis );
 
 				_localPoint = 0.5f * ( localPointA1 + localPointA2 );
-				Vector2 pointA = MathUtils.mul( ref xfA, _localPoint );
+				var pointA = MathUtils.mul( ref xfA, _localPoint );
 
-				Vector2 localPointB = _proxyB.vertices[cache.IndexB[0]];
-				Vector2 pointB = MathUtils.mul( ref xfB, localPointB );
+				var localPointB = _proxyB.vertices[cache.IndexB[0]];
+				var pointB = MathUtils.mul( ref xfB, localPointB );
 
-				float s = Vector2.Dot( pointB - pointA, normal );
+				var s = Vector2.Dot( pointB - pointA, normal );
 				if( s < 0.0f )
-				{
 					_axis = -_axis;
-				}
 			}
 
 			//FPE note: the returned value that used to be here has been removed, as it was not used.
 		}
 
-		public static float FindMinSeparation( out int indexA, out int indexB, float t )
+		public static float findMinSeparation( out int indexA, out int indexB, float t )
 		{
 			Transform xfA, xfB;
-			_sweepA.GetTransform( out xfA, t );
-			_sweepB.GetTransform( out xfB, t );
+			_sweepA.getTransform( out xfA, t );
+			_sweepB.getTransform( out xfB, t );
 
 			switch( _type )
 			{
 				case SeparationFunctionType.Points:
-					{
-						Vector2 axisA = MathUtils.mulT( ref xfA.q, _axis );
-						Vector2 axisB = MathUtils.mulT( ref xfB.q, -_axis );
+				{
+					var axisA = MathUtils.mulT( ref xfA.q, _axis );
+					var axisB = MathUtils.mulT( ref xfB.q, -_axis );
 
-						indexA = _proxyA.getSupport( axisA );
-						indexB = _proxyB.getSupport( axisB );
+					indexA = _proxyA.getSupport( axisA );
+					indexB = _proxyB.getSupport( axisB );
 
-						Vector2 localPointA = _proxyA.vertices[indexA];
-						Vector2 localPointB = _proxyB.vertices[indexB];
+					var localPointA = _proxyA.vertices[indexA];
+					var localPointB = _proxyB.vertices[indexB];
 
-						Vector2 pointA = MathUtils.mul( ref xfA, localPointA );
-						Vector2 pointB = MathUtils.mul( ref xfB, localPointB );
+					var pointA = MathUtils.mul( ref xfA, localPointA );
+					var pointB = MathUtils.mul( ref xfB, localPointB );
 
-						float separation = Vector2.Dot( pointB - pointA, _axis );
-						return separation;
-					}
+					var separation = Vector2.Dot( pointB - pointA, _axis );
+					return separation;
+				}
 
 				case SeparationFunctionType.FaceA:
-					{
-						Vector2 normal = MathUtils.mul( ref xfA.q, _axis );
-						Vector2 pointA = MathUtils.mul( ref xfA, _localPoint );
+				{
+					var normal = MathUtils.mul( ref xfA.q, _axis );
+					var pointA = MathUtils.mul( ref xfA, _localPoint );
 
-						Vector2 axisB = MathUtils.mulT( ref xfB.q, -normal );
+					var axisB = MathUtils.mulT( ref xfB.q, -normal );
 
-						indexA = -1;
-						indexB = _proxyB.getSupport( axisB );
+					indexA = -1;
+					indexB = _proxyB.getSupport( axisB );
 
-						Vector2 localPointB = _proxyB.vertices[indexB];
-						Vector2 pointB = MathUtils.mul( ref xfB, localPointB );
+					var localPointB = _proxyB.vertices[indexB];
+					var pointB = MathUtils.mul( ref xfB, localPointB );
 
-						float separation = Vector2.Dot( pointB - pointA, normal );
-						return separation;
-					}
+					var separation = Vector2.Dot( pointB - pointA, normal );
+					return separation;
+				}
 
 				case SeparationFunctionType.FaceB:
-					{
-						Vector2 normal = MathUtils.mul( ref xfB.q, _axis );
-						Vector2 pointB = MathUtils.mul( ref xfB, _localPoint );
+				{
+					var normal = MathUtils.mul( ref xfB.q, _axis );
+					var pointB = MathUtils.mul( ref xfB, _localPoint );
 
-						Vector2 axisA = MathUtils.mulT( ref xfA.q, -normal );
+					var axisA = MathUtils.mulT( ref xfA.q, -normal );
 
-						indexB = -1;
-						indexA = _proxyA.getSupport( axisA );
+					indexB = -1;
+					indexA = _proxyA.getSupport( axisA );
 
-						Vector2 localPointA = _proxyA.vertices[indexA];
-						Vector2 pointA = MathUtils.mul( ref xfA, localPointA );
+					var localPointA = _proxyA.vertices[indexA];
+					var pointA = MathUtils.mul( ref xfA, localPointA );
 
-						float separation = Vector2.Dot( pointA - pointB, normal );
-						return separation;
-					}
+					var separation = Vector2.Dot( pointA - pointB, normal );
+					return separation;
+				}
 
 				default:
 					Debug.Assert( false );
@@ -223,47 +220,47 @@ namespace FarseerPhysics.Collision
 			}
 		}
 
-		public static float Evaluate( int indexA, int indexB, float t )
+		public static float evaluate( int indexA, int indexB, float t )
 		{
 			Transform xfA, xfB;
-			_sweepA.GetTransform( out xfA, t );
-			_sweepB.GetTransform( out xfB, t );
+			_sweepA.getTransform( out xfA, t );
+			_sweepB.getTransform( out xfB, t );
 
 			switch( _type )
 			{
 				case SeparationFunctionType.Points:
-					{
-						Vector2 localPointA = _proxyA.vertices[indexA];
-						Vector2 localPointB = _proxyB.vertices[indexB];
+				{
+					var localPointA = _proxyA.vertices[indexA];
+					var localPointB = _proxyB.vertices[indexB];
 
-						Vector2 pointA = MathUtils.mul( ref xfA, localPointA );
-						Vector2 pointB = MathUtils.mul( ref xfB, localPointB );
-						float separation = Vector2.Dot( pointB - pointA, _axis );
+					var pointA = MathUtils.mul( ref xfA, localPointA );
+					var pointB = MathUtils.mul( ref xfB, localPointB );
+					var separation = Vector2.Dot( pointB - pointA, _axis );
 
-						return separation;
-					}
+					return separation;
+				}
 				case SeparationFunctionType.FaceA:
-					{
-						Vector2 normal = MathUtils.mul( ref xfA.q, _axis );
-						Vector2 pointA = MathUtils.mul( ref xfA, _localPoint );
+				{
+					var normal = MathUtils.mul( ref xfA.q, _axis );
+					var pointA = MathUtils.mul( ref xfA, _localPoint );
 
-						Vector2 localPointB = _proxyB.vertices[indexB];
-						Vector2 pointB = MathUtils.mul( ref xfB, localPointB );
+					var localPointB = _proxyB.vertices[indexB];
+					var pointB = MathUtils.mul( ref xfB, localPointB );
 
-						float separation = Vector2.Dot( pointB - pointA, normal );
-						return separation;
-					}
+					var separation = Vector2.Dot( pointB - pointA, normal );
+					return separation;
+				}
 				case SeparationFunctionType.FaceB:
-					{
-						Vector2 normal = MathUtils.mul( ref xfB.q, _axis );
-						Vector2 pointB = MathUtils.mul( ref xfB, _localPoint );
+				{
+					var normal = MathUtils.mul( ref xfB.q, _axis );
+					var pointB = MathUtils.mul( ref xfB, _localPoint );
 
-						Vector2 localPointA = _proxyA.vertices[indexA];
-						Vector2 pointA = MathUtils.mul( ref xfA, localPointA );
+					var localPointA = _proxyA.vertices[indexA];
+					var pointA = MathUtils.mul( ref xfA, localPointA );
 
-						float separation = Vector2.Dot( pointA - pointB, normal );
-						return separation;
-					}
+					var separation = Vector2.Dot( pointA - pointB, normal );
+					return separation;
+				}
 				default:
 					Debug.Assert( false );
 					return 0.0f;
@@ -294,47 +291,47 @@ namespace FarseerPhysics.Collision
 		/// </summary>
 		/// <param name="output">The output.</param>
 		/// <param name="input">The input.</param>
-		public static void CalculateTimeOfImpact( out TOIOutput output, TOIInput input )
+		public static void calculateTimeOfImpact( out TOIOutput output, TOIInput input )
 		{
 			if( Settings.enableDiagnostics ) //FPE: We only gather diagnostics when enabled
 				++TOICalls;
 
 			output = new TOIOutput();
-			output.State = TOIOutputState.Unknown;
-			output.T = input.TMax;
+			output.state = TOIOutputState.Unknown;
+			output.t = input.tMax;
 
-			Sweep sweepA = input.SweepA;
-			Sweep sweepB = input.SweepB;
+			var sweepA = input.sweepA;
+			var sweepB = input.sweepB;
 
 			// Large rotations can make the root finder fail, so we normalize the
 			// sweep angles.
-			sweepA.Normalize();
-			sweepB.Normalize();
+			sweepA.normalize();
+			sweepB.normalize();
 
-			float tMax = input.TMax;
+			var tMax = input.tMax;
 
-			float totalRadius = input.ProxyA.radius + input.ProxyB.radius;
-			float target = Math.Max( Settings.linearSlop, totalRadius - 3.0f * Settings.linearSlop );
+			var totalRadius = input.proxyA.radius + input.proxyB.radius;
+			var target = Math.Max( Settings.linearSlop, totalRadius - 3.0f * Settings.linearSlop );
 			const float tolerance = 0.25f * Settings.linearSlop;
 			Debug.Assert( target > tolerance );
 
-			float t1 = 0.0f;
+			var t1 = 0.0f;
 			const int k_maxIterations = 20;
-			int iter = 0;
+			var iter = 0;
 
 			// Prepare input for distance query.
 			_distanceInput = _distanceInput ?? new DistanceInput();
-			_distanceInput.ProxyA = input.ProxyA;
-			_distanceInput.ProxyB = input.ProxyB;
+			_distanceInput.ProxyA = input.proxyA;
+			_distanceInput.ProxyB = input.proxyB;
 			_distanceInput.UseRadii = false;
 
 			// The outer loop progressively attempts to compute new separating axes.
 			// This loop terminates when an axis is repeated (no progress is made).
-			for( ;;)
+			for( ;; )
 			{
 				Transform xfA, xfB;
-				sweepA.GetTransform( out xfA, t1 );
-				sweepB.GetTransform( out xfB, t1 );
+				sweepA.getTransform( out xfA, t1 );
+				sweepB.getTransform( out xfB, t1 );
 
 				// Get the distance between shapes. We can also use the results
 				// to get a separating axis.
@@ -348,38 +345,38 @@ namespace FarseerPhysics.Collision
 				if( distanceOutput.Distance <= 0.0f )
 				{
 					// Failure!
-					output.State = TOIOutputState.Overlapped;
-					output.T = 0.0f;
+					output.state = TOIOutputState.Overlapped;
+					output.t = 0.0f;
 					break;
 				}
 
 				if( distanceOutput.Distance < target + tolerance )
 				{
 					// Victory!
-					output.State = TOIOutputState.Touching;
-					output.T = t1;
+					output.state = TOIOutputState.Touching;
+					output.t = t1;
 					break;
 				}
 
-				SeparationFunction.Set( ref cache, input.ProxyA, ref sweepA, input.ProxyB, ref sweepB, t1 );
+				SeparationFunction.set( ref cache, input.proxyA, ref sweepA, input.proxyB, ref sweepB, t1 );
 
 				// Compute the TOI on the separating axis. We do this by successively
 				// resolving the deepest point. This loop is bounded by the number of vertices.
-				bool done = false;
-				float t2 = tMax;
-				int pushBackIter = 0;
-				for( ;;)
+				var done = false;
+				var t2 = tMax;
+				var pushBackIter = 0;
+				for( ;; )
 				{
 					// Find the deepest point at t2. Store the witness point indices.
 					int indexA, indexB;
-					float s2 = SeparationFunction.FindMinSeparation( out indexA, out indexB, t2 );
+					var s2 = SeparationFunction.findMinSeparation( out indexA, out indexB, t2 );
 
 					// Is the final configuration separated?
 					if( s2 > target + tolerance )
 					{
 						// Victory!
-						output.State = TOIOutputState.Seperated;
-						output.T = tMax;
+						output.state = TOIOutputState.Seperated;
+						output.t = tMax;
 						done = true;
 						break;
 					}
@@ -393,14 +390,14 @@ namespace FarseerPhysics.Collision
 					}
 
 					// Compute the initial separation of the witness points.
-					float s1 = SeparationFunction.Evaluate( indexA, indexB, t1 );
+					float s1 = SeparationFunction.evaluate( indexA, indexB, t1 );
 
 					// Check for initial overlap. This might happen if the root finder
 					// runs out of iterations.
 					if( s1 < target - tolerance )
 					{
-						output.State = TOIOutputState.Failed;
-						output.T = t1;
+						output.state = TOIOutputState.Failed;
+						output.t = t1;
 						done = true;
 						break;
 					}
@@ -409,8 +406,8 @@ namespace FarseerPhysics.Collision
 					if( s1 <= target + tolerance )
 					{
 						// Victory! t1 should hold the TOI (could be 0.0).
-						output.State = TOIOutputState.Touching;
-						output.T = t1;
+						output.state = TOIOutputState.Touching;
+						output.t = t1;
 						done = true;
 						break;
 					}
@@ -418,7 +415,7 @@ namespace FarseerPhysics.Collision
 					// Compute 1D root of: f(x) - target = 0
 					int rootIterCount = 0;
 					float a1 = t1, a2 = t2;
-					for( ;;)
+					for( ;; )
 					{
 						// Use a mix of the secant rule and bisection.
 						float t;
@@ -438,7 +435,7 @@ namespace FarseerPhysics.Collision
 						if( Settings.enableDiagnostics ) //FPE: We only gather diagnostics when enabled
 							++TOIRootIters;
 
-						float s = SeparationFunction.Evaluate( indexA, indexB, t );
+						var s = SeparationFunction.evaluate( indexA, indexB, t );
 
 						if( Math.Abs( s - target ) < tolerance )
 						{
@@ -471,9 +468,7 @@ namespace FarseerPhysics.Collision
 					++pushBackIter;
 
 					if( pushBackIter == Settings.maxPolygonVertices )
-					{
 						break;
-					}
 				}
 
 				++iter;
@@ -482,15 +477,13 @@ namespace FarseerPhysics.Collision
 					++TOIIters;
 
 				if( done )
-				{
 					break;
-				}
 
 				if( iter == k_maxIterations )
 				{
 					// Root finder got stuck. Semi-victory.
-					output.State = TOIOutputState.Failed;
-					output.T = t1;
+					output.state = TOIOutputState.Failed;
+					output.t = t1;
 					break;
 				}
 			}

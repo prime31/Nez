@@ -73,10 +73,10 @@ namespace FarseerPhysics.Common
 
 		public static Vector2 mul( ref Transform T, Vector2 v )
 		{
-			return Mul( ref T, ref v );
+			return mul( ref T, ref v );
 		}
 
-		public static Vector2 Mul( ref Transform T, ref Vector2 v )
+		public static Vector2 mul( ref Transform T, ref Vector2 v )
 		{
 			float x = ( T.q.c * v.X - T.q.s * v.Y ) + T.p.X;
 			float y = ( T.q.s * v.X + T.q.c * v.Y ) + T.p.Y;
@@ -758,66 +758,67 @@ namespace FarseerPhysics.Common
 		/// <summary>
 		/// World angles
 		/// </summary>
-		public float A;
+		public float a;
 
-		public float A0;
+		public float a0;
 
 		/// <summary>
 		/// Fraction of the current time step in the range [0,1]
 		/// c0 and a0 are the positions at alpha0.
 		/// </summary>
-		public float Alpha0;
+		public float alpha0;
 
 		/// <summary>
 		/// Center world positions
 		/// </summary>
-		public Vector2 C;
+		public Vector2 c;
 
-		public Vector2 C0;
+		public Vector2 c0;
 
 		/// <summary>
 		/// Local center of mass position
 		/// </summary>
-		public Vector2 LocalCenter;
+		public Vector2 localCenter;
+
 
 		/// <summary>
 		/// Get the interpolated transform at a specific time.
 		/// </summary>
 		/// <param name="xfb">The transform.</param>
 		/// <param name="beta">beta is a factor in [0,1], where 0 indicates alpha0.</param>
-		public void GetTransform( out Transform xfb, float beta )
+		public void getTransform( out Transform xfb, float beta )
 		{
 			xfb = new Transform();
-			xfb.p.X = ( 1.0f - beta ) * C0.X + beta * C.X;
-			xfb.p.Y = ( 1.0f - beta ) * C0.Y + beta * C.Y;
-			float angle = ( 1.0f - beta ) * A0 + beta * A;
+			xfb.p.X = ( 1.0f - beta ) * c0.X + beta * c.X;
+			xfb.p.Y = ( 1.0f - beta ) * c0.Y + beta * c.Y;
+			var angle = ( 1.0f - beta ) * a0 + beta * a;
 			xfb.q.Set( angle );
 
 			// Shift to origin
-			xfb.p -= MathUtils.mul( xfb.q, LocalCenter );
+			xfb.p -= MathUtils.mul( xfb.q, localCenter );
 		}
 
 		/// <summary>
 		/// Advance the sweep forward, yielding a new initial state.
 		/// </summary>
 		/// <param name="alpha">new initial time..</param>
-		public void Advance( float alpha )
+		public void advance( float alpha )
 		{
-			Debug.Assert( Alpha0 < 1.0f );
-			float beta = ( alpha - Alpha0 ) / ( 1.0f - Alpha0 );
-			C0 += beta * ( C - C0 );
-			A0 += beta * ( A - A0 );
-			Alpha0 = alpha;
+			Debug.Assert( alpha0 < 1.0f );
+			var beta = ( alpha - alpha0 ) / ( 1.0f - alpha0 );
+			c0 += beta * ( c - c0 );
+			a0 += beta * ( a - a0 );
+			alpha0 = alpha;
 		}
 
 		/// <summary>
 		/// Normalize the angles.
 		/// </summary>
-		public void Normalize()
+		public void normalize()
 		{
-			float d = MathHelper.TwoPi * (float)Math.Floor( A0 / MathHelper.TwoPi );
-			A0 -= d;
-			A -= d;
+			var d = MathHelper.TwoPi * (float)Math.Floor( a0 / MathHelper.TwoPi );
+			a0 -= d;
+			a -= d;
 		}
 	}
 

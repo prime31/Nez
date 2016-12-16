@@ -152,8 +152,8 @@ namespace FarseerPhysics.Dynamics.Joints
 
 				var r1 = MathUtils.mul( ref xf1.q, localAnchorA - bodyA.localCenter );
 				var r2 = MathUtils.mul( ref xf2.q, localAnchorB - bodyB.localCenter );
-				var p1 = bodyA._sweep.C + r1;
-				var p2 = bodyB._sweep.C + r2;
+				var p1 = bodyA._sweep.c + r1;
+				var p2 = bodyB._sweep.c + r2;
 				var d = p2 - p1;
 				var axis = bodyA.getWorldVector( localXAxis );
 
@@ -416,8 +416,8 @@ namespace FarseerPhysics.Dynamics.Joints
 		{
 			_indexA = bodyA.islandIndex;
 			_indexB = bodyB.islandIndex;
-			_localCenterA = bodyA._sweep.LocalCenter;
-			_localCenterB = bodyB._sweep.LocalCenter;
+			_localCenterA = bodyA._sweep.localCenter;
+			_localCenterB = bodyB._sweep.localCenter;
 			_invMassA = bodyA._invMass;
 			_invMassB = bodyB._invMass;
 			_invIA = bodyA._invI;
