@@ -288,17 +288,16 @@ namespace FarseerPhysics.Dynamics.Joints
 
 			// Solve linear friction
 			{
-				Vector2 Cdot = vB + MathUtils.cross( wB, _rB ) - vA - MathUtils.cross( wA, _rA ) + inv_h * correctionFactor * _linearError;
+				var Cdot = vB + MathUtils.cross( wB, _rB ) - vA - MathUtils.cross( wA, _rA ) + inv_h * correctionFactor * _linearError;
 
-				Vector2 impulse = -MathUtils.mul( ref _linearMass, ref Cdot );
-				Vector2 oldImpulse = _linearImpulse;
+				var impulse = -MathUtils.mul( ref _linearMass, ref Cdot );
+				var oldImpulse = _linearImpulse;
 				_linearImpulse += impulse;
 
-				float maxImpulse = h * _maxForce;
-
+				var maxImpulse = h * _maxForce;
 				if( _linearImpulse.LengthSquared() > maxImpulse * maxImpulse )
 				{
-					_linearImpulse.Normalize();
+					Nez.Vector2Ext.normalize( ref _linearImpulse );
 					_linearImpulse *= maxImpulse;
 				}
 

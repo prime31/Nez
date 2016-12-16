@@ -117,7 +117,7 @@ namespace FarseerPhysics.Collision.Shapes
 
 				//TODO: Check results here
 				output.normal = s + a * r;
-				output.normal.Normalize();
+				Nez.Vector2Ext.normalize( ref output.normal );
 				return true;
 			}
 

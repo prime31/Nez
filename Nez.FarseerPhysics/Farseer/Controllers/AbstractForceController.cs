@@ -61,18 +61,18 @@ namespace FarseerPhysics.Controllers
 		/// <summary>
 		/// Curve to be used for Decay in Curve mode
 		/// </summary>
-		public Curve DecayCurve;
+		public Curve decayCurve;
 
 		/// <summary>
 		/// The Forcetype of the instance
 		/// </summary>
-		public ForceTypes ForceType;
+		public ForceTypes forceType;
 
 		/// <summary>
 		/// Provided for reuse to provide Variation functionality in 
 		/// inheriting classes
 		/// </summary>
-		protected Random Randomize;
+		protected Random randomize;
 
 		/// <summary>
 		/// Curve used by Curve Mode as an animated multiplier for the force 
@@ -80,35 +80,35 @@ namespace FarseerPhysics.Controllers
 		/// Only positions between 0 and 1 are considered as that range is 
 		/// stretched to have ImpulseLength.
 		/// </summary>
-		public Curve StrengthCurve;
+		public Curve strengthCurve;
 
 
 		/// <summary>
 		/// Constructor
 		/// </summary>
-		public AbstractForceController() : base( ControllerType.AbstractForceController )
+		protected AbstractForceController() : base( ControllerType.AbstractForceController )
 		{
 			enabled = true;
 
-			Strength = 1.0f;
-			Position = new Vector2( 0, 0 );
-			MaximumSpeed = 100.0f;
-			TimingMode = TimingModes.Switched;
-			ImpulseTime = 0.0f;
-			ImpulseLength = 1.0f;
-			Triggered = false;
-			StrengthCurve = new Curve();
-			Variation = 0.0f;
-			Randomize = new Random( 1234 );
-			DecayMode = DecayModes.None;
-			DecayCurve = new Curve();
-			DecayStart = 0.0f;
-			DecayEnd = 0.0f;
+			strength = 1.0f;
+			position = new Vector2( 0, 0 );
+			maximumSpeed = 100.0f;
+			timingMode = TimingModes.Switched;
+			impulseTime = 0.0f;
+			impulseLength = 1.0f;
+			triggered = false;
+			strengthCurve = new Curve();
+			variation = 0.0f;
+			randomize = new Random( 1234 );
+			decayMode = DecayModes.None;
+			decayCurve = new Curve();
+			decayStart = 0.0f;
+			decayEnd = 0.0f;
 
-			StrengthCurve.Keys.Add( new CurveKey( 0, 5 ) );
-			StrengthCurve.Keys.Add( new CurveKey( 0.1f, 5 ) );
-			StrengthCurve.Keys.Add( new CurveKey( 0.2f, -4 ) );
-			StrengthCurve.Keys.Add( new CurveKey( 1f, 0 ) );
+			strengthCurve.Keys.Add( new CurveKey( 0, 5 ) );
+			strengthCurve.Keys.Add( new CurveKey( 0.1f, 5 ) );
+			strengthCurve.Keys.Add( new CurveKey( 0.2f, -4 ) );
+			strengthCurve.Keys.Add( new CurveKey( 1f, 0 ) );
 		}
 
 		/// <summary>
@@ -118,7 +118,7 @@ namespace FarseerPhysics.Controllers
 		public AbstractForceController( TimingModes mode )
 			: base( ControllerType.AbstractForceController )
 		{
-			TimingMode = mode;
+			timingMode = mode;
 			switch( mode )
 			{
 				case TimingModes.Switched:
@@ -136,69 +136,70 @@ namespace FarseerPhysics.Controllers
 		/// <summary>
 		/// Global Strength of the force to be applied
 		/// </summary>
-		public float Strength { get; set; }
+		public float strength;
 
 		/// <summary>
 		/// Position of the Force. Can be ignored (left at (0,0) for forces
 		/// that are not position-dependent
 		/// </summary>
-		public Vector2 Position { get; set; }
+		public Vector2 position { get; set; }
 
 		/// <summary>
 		/// Maximum speed of the bodies. Bodies that are travelling faster are
 		/// supposed to be ignored
 		/// </summary>
-		public float MaximumSpeed { get; set; }
+		public float maximumSpeed;
 
 		/// <summary>
 		/// Maximum Force to be applied. As opposed to Maximum Speed this is 
 		/// independent of the velocity of
 		/// the affected body
 		/// </summary>
-		public float MaximumForce { get; set; }
+		public float maximumForce;
 
 		/// <summary>
 		/// Timing Mode of the force instance
 		/// </summary>
-		public TimingModes TimingMode { get; set; }
+		public TimingModes timingMode;
 
 		/// <summary>
 		/// Time of the current impulse. Incremented in update till 
 		/// ImpulseLength is reached
 		/// </summary>
-		public float ImpulseTime { get; private set; }
+		public float impulseTime { get; private set; }
 
 		/// <summary>
 		/// Length of a triggered impulse. Used in both Triggered and Curve Mode
 		/// </summary>
-		public float ImpulseLength { get; set; }
+		public float impulseLength;
 
 		/// <summary>
 		/// Indicating if we are currently during an Impulse 
 		/// (Triggered and Curve Mode)
 		/// </summary>
-		public bool Triggered { get; private set; }
+		public bool triggered { get; private set; }
 
 		/// <summary>
 		/// Variation of the force applied to each body affected
 		/// !! Must be used in inheriting classes properly !!
 		/// </summary>
-		public float Variation { get; set; }
+		public float variation;
 
 		/// <summary>
 		/// See DecayModes
 		/// </summary>
-		public DecayModes DecayMode { get; set; }
+		public DecayModes decayMode;
 
 		/// <summary>
 		/// Start of the distance based Decay. To set a non decaying area
 		/// </summary>
-		public float DecayStart { get; set; }
+		public float decayStart;
 
 		/// <summary>
 		/// Maximum distance a force should be applied
 		/// </summary>
-		public float DecayEnd { get; set; }
+		public float decayEnd;
+
 
 		/// <summary>
 		/// Calculate the Decay for a given body. Meant to ease force 
@@ -208,11 +209,11 @@ namespace FarseerPhysics.Controllers
 		/// <param name="body">The body to calculate decay for</param>
 		/// <returns>A multiplier to multiply the force with to add decay 
 		/// support in inheriting classes</returns>
-		protected float GetDecayMultiplier( Body body )
+		protected float getDecayMultiplier( Body body )
 		{
 			//TODO: Consider ForceType in distance calculation!
-			float distance = ( body.position - Position ).Length();
-			switch( DecayMode )
+			float distance = ( body.position - position ).Length();
+			switch( decayMode )
 			{
 				case DecayModes.None:
 					{
@@ -220,32 +221,32 @@ namespace FarseerPhysics.Controllers
 					}
 				case DecayModes.Step:
 					{
-						if( distance < DecayEnd )
+						if( distance < decayEnd )
 							return 1.0f;
 						else
 							return 0.0f;
 					}
 				case DecayModes.Linear:
 					{
-						if( distance < DecayStart )
+						if( distance < decayStart )
 							return 1.0f;
-						if( distance > DecayEnd )
+						if( distance > decayEnd )
 							return 0.0f;
-						return ( DecayEnd - DecayStart / distance - DecayStart );
+						return ( decayEnd - decayStart / distance - decayStart );
 					}
 				case DecayModes.InverseSquare:
 					{
-						if( distance < DecayStart )
+						if( distance < decayStart )
 							return 1.0f;
 						else
-							return 1.0f / ( ( distance - DecayStart ) * ( distance - DecayStart ) );
+							return 1.0f / ( ( distance - decayStart ) * ( distance - decayStart ) );
 					}
 				case DecayModes.Curve:
 					{
-						if( distance < DecayStart )
+						if( distance < decayStart )
 							return 1.0f;
 						else
-							return DecayCurve.Evaluate( distance - DecayStart );
+							return decayCurve.Evaluate( distance - decayStart );
 					}
 				default:
 					return 1.0f;
@@ -255,10 +256,10 @@ namespace FarseerPhysics.Controllers
 		/// <summary>
 		/// Triggers the trigger modes (Trigger and Curve)
 		/// </summary>
-		public void Trigger()
+		public void trigger()
 		{
-			Triggered = true;
-			ImpulseTime = 0;
+			triggered = true;
+			impulseTime = 0;
 		}
 
 		/// <summary>
@@ -268,44 +269,44 @@ namespace FarseerPhysics.Controllers
 		/// <param name="dt"></param>
 		public override void update( float dt )
 		{
-			switch( TimingMode )
+			switch( timingMode )
 			{
 				case TimingModes.Switched:
 					{
 						if( enabled )
 						{
-							ApplyForce( dt, Strength );
+							applyForce( dt, strength );
 						}
 						break;
 					}
 				case TimingModes.Triggered:
 					{
-						if( enabled && Triggered )
+						if( enabled && triggered )
 						{
-							if( ImpulseTime < ImpulseLength )
+							if( impulseTime < impulseLength )
 							{
-								ApplyForce( dt, Strength );
-								ImpulseTime += dt;
+								applyForce( dt, strength );
+								impulseTime += dt;
 							}
 							else
 							{
-								Triggered = false;
+								triggered = false;
 							}
 						}
 						break;
 					}
 				case TimingModes.Curve:
 					{
-						if( enabled && Triggered )
+						if( enabled && triggered )
 						{
-							if( ImpulseTime < ImpulseLength )
+							if( impulseTime < impulseLength )
 							{
-								ApplyForce( dt, Strength * StrengthCurve.Evaluate( ImpulseTime ) );
-								ImpulseTime += dt;
+								applyForce( dt, strength * strengthCurve.Evaluate( impulseTime ) );
+								impulseTime += dt;
 							}
 							else
 							{
-								Triggered = false;
+								triggered = false;
 							}
 						}
 						break;
@@ -319,6 +320,7 @@ namespace FarseerPhysics.Controllers
 		/// </summary>
 		/// <param name="dt"></param>
 		/// <param name="strength">The strength</param>
-		public abstract void ApplyForce( float dt, float strength );
+		public abstract void applyForce( float dt, float strength );
+	
 	}
 }

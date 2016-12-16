@@ -706,21 +706,21 @@ namespace Nez.Farseer
 			drawSegment( start, end, color );
 
 			// Precalculate halfwidth
-			float halfWidth = width / 2;
+			var halfWidth = width / 2;
 
 			// Create directional reference
-			Vector2 rotation = ( start - end );
-			rotation.Normalize();
+			var rotation = ( start - end );
+			Nez.Vector2Ext.normalize( ref rotation );
 
 			// Calculate angle of directional vector
 			var angle = (float)Math.Atan2( rotation.X, -rotation.Y );
 			// Create matrix for rotation
-			Matrix rotMatrix = Matrix.CreateRotationZ( angle );
+			var rotMatrix = Matrix.CreateRotationZ( angle );
 			// Create translation matrix for end-point
-			Matrix endMatrix = Matrix.CreateTranslation( end.X, end.Y, 0 );
+			var endMatrix = Matrix.CreateTranslation( end.X, end.Y, 0 );
 
 			// Setup arrow end shape
-			Vector2[] verts = new Vector2[3];
+			var verts = new Vector2[3];
 			verts[0] = new Vector2( 0, 0 );
 			verts[1] = new Vector2( -halfWidth, -length );
 			verts[2] = new Vector2( halfWidth, -length );
@@ -736,9 +736,9 @@ namespace Nez.Farseer
 			if( drawStartIndicator )
 			{
 				// Create translation matrix for start
-				Matrix startMatrix = Matrix.CreateTranslation( start.X, start.Y, 0 );
+				var startMatrix = Matrix.CreateTranslation( start.X, start.Y, 0 );
 				// Setup arrow start shape
-				Vector2[] baseVerts = new Vector2[4];
+				var baseVerts = new Vector2[4];
 				baseVerts[0] = new Vector2( -halfWidth, length / 4 );
 				baseVerts[1] = new Vector2( halfWidth, length / 4 );
 				baseVerts[2] = new Vector2( halfWidth, 0 );

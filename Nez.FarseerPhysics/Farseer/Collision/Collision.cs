@@ -908,7 +908,7 @@ namespace FarseerPhysics.Collision
 			var v12 = poly1.vertices[iv2];
 
 			var localTangent = v12 - v11;
-			localTangent.Normalize();
+			Nez.Vector2Ext.normalize( ref localTangent );
 
 			var localNormal = new Vector2( localTangent.Y, -localTangent.X );
 			var planePoint = 0.5f * ( v11 + v12 );
@@ -1098,7 +1098,7 @@ namespace FarseerPhysics.Collision
 			var n = new Vector2( -e.Y, e.X );
 			if( Vector2.Dot( n, Q - A ) < 0.0f )
 				n = new Vector2( -n.X, -n.Y );
-			n.Normalize();
+			Nez.Vector2Ext.normalize( ref n );
 
 			cf.indexA = 0;
 			cf.typeA = (byte)ContactFeatureType.Face;
@@ -1162,21 +1162,21 @@ namespace FarseerPhysics.Collision
 				_v2 = edgeA._vertex2;
 				_v3 = edgeA.vertex3;
 
-				bool hasVertex0 = edgeA.hasVertex0;
-				bool hasVertex3 = edgeA.hasVertex3;
+				var hasVertex0 = edgeA.hasVertex0;
+				var hasVertex3 = edgeA.hasVertex3;
 
-				Vector2 edge1 = _v2 - _v1;
-				edge1.Normalize();
+				var edge1 = _v2 - _v1;
+				Nez.Vector2Ext.normalize( ref edge1 );
 				_normal1 = new Vector2( edge1.Y, -edge1.X );
-				float offset1 = Vector2.Dot( _normal1, _centroidB - _v1 );
+				var offset1 = Vector2.Dot( _normal1, _centroidB - _v1 );
 				float offset0 = 0.0f, offset2 = 0.0f;
 				bool convex1 = false, convex2 = false;
 
 				// Is there a preceding edge?
 				if( hasVertex0 )
 				{
-					Vector2 edge0 = _v1 - _v0;
-					edge0.Normalize();
+					var edge0 = _v1 - _v0;
+					Nez.Vector2Ext.normalize( ref edge0 );
 					_normal0 = new Vector2( edge0.Y, -edge0.X );
 					convex1 = MathUtils.cross( edge0, edge1 ) >= 0.0f;
 					offset0 = Vector2.Dot( _normal0, _centroidB - _v0 );
@@ -1185,8 +1185,8 @@ namespace FarseerPhysics.Collision
 				// Is there a following edge?
 				if( hasVertex3 )
 				{
-					Vector2 edge2 = _v3 - _v2;
-					edge2.Normalize();
+					var edge2 = _v3 - _v2;
+					Nez.Vector2Ext.normalize( ref edge2 );
 					_normal2 = new Vector2( edge2.Y, -edge2.X );
 					convex2 = MathUtils.cross( edge1, edge2 ) > 0.0f;
 					offset2 = Vector2.Dot( _normal2, _centroidB - _v2 );

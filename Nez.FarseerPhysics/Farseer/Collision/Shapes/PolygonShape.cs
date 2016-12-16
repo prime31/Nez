@@ -123,7 +123,7 @@ namespace FarseerPhysics.Collision.Shapes
 
 				// FPE optimization: Normals.Add(MathHelper.Cross(edge, 1.0f));
 				var temp = new Vector2( edge.Y, -edge.X );
-				temp.Normalize();
+				Nez.Vector2Ext.normalize( ref temp );
 				_normals.Add( temp );
 			}
 
@@ -165,8 +165,8 @@ namespace FarseerPhysics.Collision.Shapes
 
 			//FPE optimization: Consolidated the calculate centroid and mass code to a single method.
 			var center = Vector2.Zero;
-			float area = 0.0f;
-			float I = 0.0f;
+			var area = 0.0f;
+			var I = 0.0f;
 
 			// pRef is the reference point for forming triangles.
 			// It's location doesn't change the result (except for rounding error).
@@ -174,9 +174,7 @@ namespace FarseerPhysics.Collision.Shapes
 
 			// This code would put the reference point inside the polygon.
 			for( int i = 0; i < vertices.Count; ++i )
-			{
 				s += vertices[i];
-			}
 			s *= 1.0f / vertices.Count;
 
 			const float k_inv3 = 1.0f / 3.0f;
@@ -187,9 +185,9 @@ namespace FarseerPhysics.Collision.Shapes
 				Vector2 e1 = vertices[i] - s;
 				Vector2 e2 = i + 1 < vertices.Count ? vertices[i + 1] - s : vertices[0] - s;
 
-				float D = MathUtils.cross( e1, e2 );
+				var D = MathUtils.cross( e1, e2 );
 
-				float triangleArea = 0.5f * D;
+				var triangleArea = 0.5f * D;
 				area += triangleArea;
 
 				// Area weighted centroid
@@ -198,8 +196,8 @@ namespace FarseerPhysics.Collision.Shapes
 				float ex1 = e1.X, ey1 = e1.Y;
 				float ex2 = e2.X, ey2 = e2.Y;
 
-				float intx2 = ex1 * ex1 + ex2 * ex1 + ex2 * ex2;
-				float inty2 = ey1 * ey1 + ey2 * ey1 + ey2 * ey2;
+				var intx2 = ex1 * ex1 + ex2 * ex1 + ex2 * ex2;
+				var inty2 = ey1 * ey1 + ey2 * ey1 + ey2 * ey2;
 
 				I += ( 0.25f * k_inv3 * D ) * ( intx2 + inty2 );
 			}

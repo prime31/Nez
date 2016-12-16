@@ -876,7 +876,7 @@ namespace FarseerPhysics.Dynamics.Contacts
 							if( Vector2.DistanceSquared( pointA, pointB ) > Settings.epsilon * Settings.epsilon )
 							{
 								normal = pointB - pointA;
-								normal.Normalize();
+								Nez.Vector2Ext.normalize( ref normal );
 							}
 
 							var cA = pointA + radiusA * normal;
@@ -932,40 +932,41 @@ namespace FarseerPhysics.Dynamics.Contacts
 				switch( pc.type )
 				{
 					case ManifoldType.Circles:
-						{
-							Vector2 pointA = MathUtils.mul( ref xfA, pc.localPoint );
-							Vector2 pointB = MathUtils.mul( ref xfB, pc.localPoints[0] );
-							normal = pointB - pointA;
-							normal.Normalize();
-							point = 0.5f * ( pointA + pointB );
-							separation = Vector2.Dot( pointB - pointA, normal ) - pc.radiusA - pc.radiusB;
-						}
+					{
+						var pointA = MathUtils.mul( ref xfA, pc.localPoint );
+						var pointB = MathUtils.mul( ref xfB, pc.localPoints[0] );
+						normal = pointB - pointA;
+						Nez.Vector2Ext.normalize( ref normal );
+						point = 0.5f * ( pointA + pointB );
+						separation = Vector2.Dot( pointB - pointA, normal ) - pc.radiusA - pc.radiusB;
 						break;
+					}
 
 					case ManifoldType.FaceA:
-						{
-							normal = MathUtils.mul( xfA.q, pc.localNormal );
-							Vector2 planePoint = MathUtils.mul( ref xfA, pc.localPoint );
+					{
+						normal = MathUtils.mul( xfA.q, pc.localNormal );
+						var planePoint = MathUtils.mul( ref xfA, pc.localPoint );
 
-							Vector2 clipPoint = MathUtils.mul( ref xfB, pc.localPoints[index] );
-							separation = Vector2.Dot( clipPoint - planePoint, normal ) - pc.radiusA - pc.radiusB;
-							point = clipPoint;
-						}
+						var clipPoint = MathUtils.mul( ref xfB, pc.localPoints[index] );
+						separation = Vector2.Dot( clipPoint - planePoint, normal ) - pc.radiusA - pc.radiusB;
+						point = clipPoint;
 						break;
+					}
 
 					case ManifoldType.FaceB:
-						{
-							normal = MathUtils.mul( xfB.q, pc.localNormal );
-							Vector2 planePoint = MathUtils.mul( ref xfB, pc.localPoint );
+					{
+						normal = MathUtils.mul( xfB.q, pc.localNormal );
+						var planePoint = MathUtils.mul( ref xfB, pc.localPoint );
 
-							Vector2 clipPoint = MathUtils.mul( ref xfA, pc.localPoints[index] );
-							separation = Vector2.Dot( clipPoint - planePoint, normal ) - pc.radiusA - pc.radiusB;
-							point = clipPoint;
+						var clipPoint = MathUtils.mul( ref xfA, pc.localPoints[index] );
+						separation = Vector2.Dot( clipPoint - planePoint, normal ) - pc.radiusA - pc.radiusB;
+						point = clipPoint;
 
-							// Ensure normal points from A to B
-							normal = -normal;
-						}
+						// Ensure normal points from A to B
+						normal = -normal;
 						break;
+					}
+
 					default:
 						normal = Vector2.Zero;
 						point = Vector2.Zero;

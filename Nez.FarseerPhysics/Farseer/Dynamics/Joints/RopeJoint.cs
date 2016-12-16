@@ -262,24 +262,25 @@ namespace FarseerPhysics.Dynamics.Joints
 
 		internal override bool solvePositionConstraints( ref SolverData data )
 		{
-			Vector2 cA = data.positions[_indexA].c;
-			float aA = data.positions[_indexA].a;
-			Vector2 cB = data.positions[_indexB].c;
-			float aB = data.positions[_indexB].a;
+			var cA = data.positions[_indexA].c;
+			var aA = data.positions[_indexA].a;
+			var cB = data.positions[_indexB].c;
+			var aB = data.positions[_indexB].a;
 
 			Rot qA = new Rot( aA ), qB = new Rot( aB );
 
-			Vector2 rA = MathUtils.mul( qA, localAnchorA - _localCenterA );
-			Vector2 rB = MathUtils.mul( qB, localAnchorB - _localCenterB );
-			Vector2 u = cB + rB - cA - rA;
+			var rA = MathUtils.mul( qA, localAnchorA - _localCenterA );
+			var rB = MathUtils.mul( qB, localAnchorB - _localCenterB );
+			var u = cB + rB - cA - rA;
 
-			float length = u.Length(); u.Normalize();
+			var length = u.Length();
+			Nez.Vector2Ext.normalize( ref u );
 			float C = length - maxLength;
 
 			C = MathUtils.clamp( C, 0.0f, Settings.maxLinearCorrection );
 
-			float impulse = -_mass * C;
-			Vector2 P = impulse * u;
+			var impulse = -_mass * C;
+			var P = impulse * u;
 
 			cA -= _invMassA * P;
 			aA -= _invIA * MathUtils.cross( rA, P );

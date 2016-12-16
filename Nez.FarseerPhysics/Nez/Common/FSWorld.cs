@@ -1,7 +1,7 @@
 ﻿using FarseerPhysics.Dynamics;
 using FarseerPhysics.Dynamics.Joints;
 using Microsoft.Xna.Framework;
-
+using Nez.Analysis;
 
 namespace Nez.Farseer
 {
@@ -85,7 +85,9 @@ namespace Nez.Farseer
 				}
 			}
 
+			TimeRuler.instance.beginMark( "physics", Color.Blue );
 			world.step( MathHelper.Min( Time.deltaTime, minimumUpdateDeltaTime ) );
+			TimeRuler.instance.endMark( "physics" );
 		}
 
 		#endregion

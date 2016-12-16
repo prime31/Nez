@@ -231,19 +231,18 @@ namespace FarseerPhysics.Common
 		/// <returns>The normal.</returns>
 		public Vector2 getPositionNormal( float time )
 		{
-			float offsetTime = time + 0.0001f;
+			var offsetTime = time + 0.0001f;
 
-			Vector2 a = getPosition( time );
-			Vector2 b = getPosition( offsetTime );
+			var a = getPosition( time );
+			var b = getPosition( offsetTime );
 
 			Vector2 output, temp;
-
 			Vector2.Subtract( ref a, ref b, out temp );
 
 			output.X = -temp.Y;
 			output.Y = temp.X;
 
-			Vector2.Normalize( ref output, out output );
+			Nez.Vector2Ext.normalize( ref output );
 
 			return output;
 		}

@@ -281,7 +281,7 @@ namespace FarseerPhysics.Dynamics.Joints
 			{
 				_axis1 = value;
 				localXAxis = bodyA.getLocalVector( _axis1 );
-				localXAxis.Normalize();
+				Nez.Vector2Ext.normalize( ref localXAxis );
 				_localYAxisA = MathUtils.cross( 1.0f, localXAxis );
 			}
 		}
@@ -289,7 +289,7 @@ namespace FarseerPhysics.Dynamics.Joints
 		/// <summary>
 		/// The axis in local coordinates relative to BodyA
 		/// </summary>
-		public Vector2 localXAxis { get; private set; }
+		public Vector2 localXAxis;
 
 		/// <summary>
 		/// The reference angle.

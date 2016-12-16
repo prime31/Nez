@@ -773,7 +773,7 @@ namespace FarseerPhysics.Collision
 					// Move the witness points to the outer surface.
 					output.Distance -= rA + rB;
 					var normal = output.PointB - output.PointA;
-					normal.Normalize();
+					Nez.Vector2Ext.normalize( ref normal );
 					output.PointA += rA * normal;
 					output.PointB -= rB * normal;
 				}

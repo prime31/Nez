@@ -105,14 +105,10 @@ namespace FarseerPhysics.Common.PolygonManipulation
 			{
 				Vector2 offset;
 				if( cutAdded[n] > 0 )
-				{
 					offset = ( newPolygon[n][cutAdded[n] - 1] - newPolygon[n][cutAdded[n]] );
-				}
 				else
-				{
 					offset = ( newPolygon[n][newPolygon[n].Count - 1] - newPolygon[n][0] );
-				}
-				offset.Normalize();
+				Nez.Vector2Ext.normalize( ref offset );
 
 				if( !offset.isValid() )
 					offset = Vector2.One;
@@ -120,14 +116,10 @@ namespace FarseerPhysics.Common.PolygonManipulation
 				newPolygon[n][cutAdded[n]] += Settings.epsilon * offset;
 
 				if( cutAdded[n] < newPolygon[n].Count - 2 )
-				{
 					offset = ( newPolygon[n][cutAdded[n] + 2] - newPolygon[n][cutAdded[n] + 1] );
-				}
 				else
-				{
 					offset = ( newPolygon[n][0] - newPolygon[n][newPolygon[n].Count - 1] );
-				}
-				offset.Normalize();
+				Nez.Vector2Ext.normalize( ref offset );
 
 				if( !offset.isValid() )
 					offset = Vector2.One;

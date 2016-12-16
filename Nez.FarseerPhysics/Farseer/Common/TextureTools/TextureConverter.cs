@@ -31,47 +31,27 @@ namespace FarseerPhysics.Common.TextureTools
 		/// <summary>
 		/// Get or set the polygon detection type.
 		/// </summary>
-		public VerticesDetectionType polygonDetectionType
-		{
-			get { return _polygonDetectionType; }
-			set { _polygonDetectionType = value; }
-		}
+		public VerticesDetectionType polygonDetectionType;
 
 		/// <summary>
 		/// Will detect texture 'holes' if set to true. Slows down the detection. Default is false.
 		/// </summary>
-		public bool holeDetection
-		{
-			get { return _holeDetection; }
-			set { _holeDetection = value; }
-		}
+		public bool holeDetection;
 
 		/// <summary>
 		/// Will detect texture multiple 'solid' isles if set to true. Slows down the detection. Default is false.
 		/// </summary>
-		public bool multipartDetection
-		{
-			get { return _multipartDetection; }
-			set { _multipartDetection = value; }
-		}
+		public bool multipartDetection;
 
 		/// <summary>
 		/// Will optimize the vertex positions along the interpolated normal between two edges about a half pixel (post processing). Default is false.
 		/// </summary>
-		public bool pixelOffsetOptimization
-		{
-			get { return _pixelOffsetOptimization; }
-			set { _pixelOffsetOptimization = value; }
-		}
+		public bool pixelOffsetOptimization;
 
 		/// <summary>
 		/// Can be used for scaling.
 		/// </summary>
-		public Matrix transform
-		{
-			get { return _transform; }
-			set { _transform = value; }
-		}
+		public Matrix transform = Matrix.Identity;
 
 		/// <summary>
 		/// Alpha (coverage) tolerance. Default is 20: Every pixel with a coverage value equal or greater to 20 will be counts as solid.
@@ -91,17 +71,11 @@ namespace FarseerPhysics.Common.TextureTools
 			set
 			{
 				if( value > 4f )
-				{
 					_hullTolerance = 4f;
-				}
 				else if( value < 0.9f )
-				{
 					_hullTolerance = 0.9f;
-				}
 				else
-				{
 					_hullTolerance = value;
-				}
 			}
 		}
 
@@ -118,16 +92,8 @@ namespace FarseerPhysics.Common.TextureTools
 		int _width;
 		int _height;
 
-		VerticesDetectionType _polygonDetectionType;
-
 		uint _alphaTolerance;
 		float _hullTolerance;
-
-		bool _holeDetection;
-		bool _multipartDetection;
-		bool _pixelOffsetOptimization;
-
-		Matrix _transform = Matrix.Identity;
 
 		#endregion
 
@@ -313,7 +279,7 @@ namespace FarseerPhysics.Common.TextureTools
 			Vector2? holeEntrance = null;
 			Vector2? polygonEntrance = null;
 
-			List<Vector2> blackList = new List<Vector2>();
+			var blackList = new List<Vector2>();
 
 			bool searchOn;
 			do
@@ -340,7 +306,7 @@ namespace FarseerPhysics.Common.TextureTools
 
 				if( polygon.Count > 2 )
 				{
-					if( _holeDetection )
+					if( holeDetection )
 					{
 						do
 						{
@@ -351,12 +317,12 @@ namespace FarseerPhysics.Common.TextureTools
 								if( !blackList.Contains( holeEntrance.Value ) )
 								{
 									blackList.Add( holeEntrance.Value );
-									Vertices holePolygon = createSimplePolygon( holeEntrance.Value,
+									var holePolygon = createSimplePolygon( holeEntrance.Value,
 																			   new Vector2( holeEntrance.Value.X + 1, holeEntrance.Value.Y ) );
 
 									if( holePolygon != null && holePolygon.Count > 2 )
 									{
-										switch( _polygonDetectionType )
+										switch( polygonDetectionType )
 										{
 											case VerticesDetectionType.Integrated:
 
@@ -390,7 +356,7 @@ namespace FarseerPhysics.Common.TextureTools
 					detectedPolygons.Add( polygon );
 				}
 
-				if( _multipartDetection || polygon.Count <= 2 )
+				if( multipartDetection || polygon.Count <= 2 )
 				{
 					if( searchNextHullEntrance( detectedPolygons, polygonEntrance.Value, out polygonEntrance ) )
 						searchOn = true;
@@ -405,7 +371,7 @@ namespace FarseerPhysics.Common.TextureTools
 			if( polygonDetectionType == VerticesDetectionType.Separated ) // Only when VerticesDetectionType.Separated? -> Recheck.
 				applyTriangulationCompatibleWinding( ref detectedPolygons );
 
-			if( _transform != Matrix.Identity )
+			if( transform != Matrix.Identity )
 				applyTransform( ref detectedPolygons );
 
 			return detectedPolygons;
@@ -428,7 +394,7 @@ namespace FarseerPhysics.Common.TextureTools
 		void applyTransform( ref List<Vertices> detectedPolygons )
 		{
 			for( int i = 0; i < detectedPolygons.Count; i++ )
-				detectedPolygons[i].transform( ref _transform );
+				detectedPolygons[i].transform( ref transform );
 		}
 
 
@@ -765,7 +731,7 @@ namespace FarseerPhysics.Common.TextureTools
 			// Used to search the x coordinates of edges in the polygon for a specific y coordinate.
 			// (Usualy comming from the texture data, that's why it's an int and not a float.)
 
-			List<float> edges = new List<float>();
+			var edges = new List<float>();
 
 			// current edge
 			Vector2 slope;
@@ -897,9 +863,9 @@ namespace FarseerPhysics.Common.TextureTools
 					if( edgeFound )
 					{
 						slope = polygon[nearestEdgeVertex2Index] - polygon[nearestEdgeVertex1Index];
-						slope.Normalize();
+						Nez.Vector2Ext.normalize( ref slope );
 
-						Vector2 tempVector = polygon[nearestEdgeVertex1Index];
+						var tempVector = polygon[nearestEdgeVertex1Index];
 						distance = Vector2.Distance( tempVector, foundEdgeCoord );
 
 						vertex1Index = nearestEdgeVertex1Index;
@@ -918,14 +884,14 @@ namespace FarseerPhysics.Common.TextureTools
 
 		Vertices createSimplePolygon( Vector2 entrance, Vector2 last )
 		{
-			bool entranceFound = false;
-			bool endOfHull = false;
+			var entranceFound = false;
+			var endOfHull = false;
 
-			Vertices polygon = new Vertices( 32 );
-			Vertices hullArea = new Vertices( 32 );
-			Vertices endOfHullArea = new Vertices( 32 );
+			var polygon = new Vertices( 32 );
+			var hullArea = new Vertices( 32 );
+			var endOfHullArea = new Vertices( 32 );
 
-			Vector2 current = Vector2.Zero;
+			var current = Vector2.Zero;
 
 			#region Entrance check
 

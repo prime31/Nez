@@ -360,7 +360,7 @@ namespace FarseerPhysics.Collision
 			var p2 = input.point2;
 			var r = p2 - p1;
 			Debug.Assert( r.LengthSquared() > 0.0f );
-			r.Normalize();
+			Nez.Vector2Ext.normalize( ref r );
 
 			// v is perpendicular to the segment.
 			var absV = MathUtils.abs( new Vector2( -r.Y, r.X ) ); //FPE: Inlined the 'v' variable
@@ -368,7 +368,7 @@ namespace FarseerPhysics.Collision
 			// Separating axis for segment (Gino, p80).
 			// |dot(v, p1 - c)| > dot(|v|, h)
 
-			float maxFraction = input.maxFraction;
+			var maxFraction = input.maxFraction;
 
 			// Build a bounding box for the segment.
 			var segmentAABB = new AABB();

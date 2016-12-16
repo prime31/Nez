@@ -84,7 +84,7 @@ namespace FarseerPhysics.Common.Decomposition
 					if( Settings.skipSanityChecks )
 					{
 						Debug.Assert( !vertices.isCounterClockWise(), "The Earclip algorithm expects the polygon to be clockwise." );
-						results = EarclipDecomposer.ConvexPartition( vertices, tolerance );
+						results = EarclipDecomposer.convexPartition( vertices, tolerance );
 					}
 					else
 					{
@@ -92,11 +92,11 @@ namespace FarseerPhysics.Common.Decomposition
 						{
 							var temp = new Vertices( vertices );
 							temp.Reverse();
-							results = EarclipDecomposer.ConvexPartition( temp, tolerance );
+							results = EarclipDecomposer.convexPartition( temp, tolerance );
 						}
 						else
 						{
-							results = EarclipDecomposer.ConvexPartition( vertices, tolerance );
+							results = EarclipDecomposer.convexPartition( vertices, tolerance );
 						}
 					}
 					break;
