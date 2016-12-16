@@ -935,6 +935,23 @@ namespace Nez
 
 
 		/// <summary>
+		/// gets the first PostProcessor of Type T
+		/// </summary>
+		/// <returns>The post processor.</returns>
+		/// <typeparam name="T">The 1st type parameter.</typeparam>
+		public T getPostProcessor<T>() where T : PostProcessor
+		{
+			for( var i = 0; i < _postProcessors.length; i++ )
+			{
+				if( _postProcessors.buffer[i] is T )
+					return _postProcessors[i] as T;
+			}
+
+			return null;
+		}
+
+
+		/// <summary>
 		/// removes a PostProcessor. Note that unload is not called when removing so if you no longer need the PostProcessor be sure to call
 		/// unload to free resources.
 		/// </summary>

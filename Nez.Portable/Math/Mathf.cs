@@ -726,6 +726,49 @@ namespace Nez
 			};
 		}
 
+
+		/// <summary>
+		/// lissajou curve
+		/// </summary>
+		/// <param name="xFrequency">X frequency.</param>
+		/// <param name="yFrequency">Y frequency.</param>
+		/// <param name="xMagnitude">X magnitude.</param>
+		/// <param name="yMagnitude">Y magnitude.</param>
+		/// <param name="phase">Phase.</param>
+		[MethodImpl( MethodImplOptions.AggressiveInlining )]
+		public static Vector2 lissajou( float xFrequency = 2f, float yFrequency = 3f, float xMagnitude = 1, float yMagnitude = 1, float phase = 0 )
+		{
+			var x = Mathf.sin( Time.time * xFrequency + phase ) * xMagnitude;
+			var y = Mathf.cos( Time.time * yFrequency ) * yMagnitude;
+
+			return new Vector2( x, y );
+		}
+
+
+		/// <summary>
+		/// damped version of a lissajou curve with oscillation between 0 and max magnitude over time. Damping should be between 0 and 1 for best
+		/// results. oscillationInterval is the time in seconds for half of the animation loop to complete.
+		/// </summary>
+		/// <returns>The damped.</returns>
+		/// <param name="xFrequency">X frequency.</param>
+		/// <param name="yFrequency">Y frequency.</param>
+		/// <param name="xMagnitude">X magnitude.</param>
+		/// <param name="yMagnitude">Y magnitude.</param>
+		/// <param name="phase">Phase.</param>
+		/// <param name="damping">Damping.</param>
+		/// <param name="oscillationInterval">Oscillation interval.</param>
+		[MethodImpl( MethodImplOptions.AggressiveInlining )]
+		public static Vector2 lissajouDamped( float xFrequency = 2f, float yFrequency = 3f, float xMagnitude = 1, float yMagnitude = 1, float phase = 0.5f, float damping = 0f, float oscillationInterval = 5f )
+		{
+			var wrappedTime = Mathf.pingPong( Time.time, oscillationInterval );
+			var damped = Mathf.pow( MathHelper.E, -damping * wrappedTime );
+
+			var x = damped * Mathf.sin( Time.time * xFrequency + phase ) * xMagnitude;
+			var y = damped * Mathf.cos( Time.time * yFrequency ) * yMagnitude;
+
+			return new Vector2( x, y );
+		}
+
 		#endregion
 
 	}
