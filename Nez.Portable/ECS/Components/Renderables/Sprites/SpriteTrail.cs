@@ -92,6 +92,12 @@ namespace Nez.Sprites
 
 		public override RectangleF bounds { get { return _bounds; } }
 
+		public int maxSpriteInstances
+		{
+			get { return _maxSpriteInstances; }
+			set { setMaxSpriteInstances( value ); }
+		}
+
 		/// <summary>
 		/// how far does the Sprite have to move before a new instance is spawned
 		/// </summary>
@@ -117,8 +123,9 @@ namespace Nez.Sprites
 		/// </summary>
 		public Color fadeToColor = Color.Transparent;
 
-		Stack<SpriteTrailInstance> _availableSpriteTrailInstances;
-		List<SpriteTrailInstance> _liveSpriteTrailInstances;
+		int _maxSpriteInstances = 15;
+		Stack<SpriteTrailInstance> _availableSpriteTrailInstances = new Stack<SpriteTrailInstance>();
+		List<SpriteTrailInstance> _liveSpriteTrailInstances = new List<SpriteTrailInstance>( 5 );
 		Vector2 _lastPosition;
 		Sprite _sprite;
 
@@ -133,16 +140,130 @@ namespace Nez.Sprites
 		bool _awaitingDisable;
 
 
-		public SpriteTrail( Sprite sprite, int maxInstances = 15 )
+		public SpriteTrail()
+		{}
+
+
+		public SpriteTrail( Sprite sprite )
 		{
-			// we want to store the sprite and move ourself before the Sprite in render order
 			_sprite = sprite;
+		}
+
+
+		#region Fluent setters
+
+		public SpriteTrail setMaxSpriteInstances( int maxSpriteInstances )
+		{
+			// if our new value is greater than our previous count instantiate the required SpriteTrailInstances
+			if( _availableSpriteTrailInstances.Count < maxSpriteInstances )
+			{
+				var newInstances = _availableSpriteTrailInstances.Count - maxSpriteInstances;
+				for( var i = 0; i < newInstances; i++ )
+					_availableSpriteTrailInstances.Push( new SpriteTrailInstance() );
+			}
+
+			// if our new value is less than our previous count trim the List
+			if( _availableSpriteTrailInstances.Count > maxSpriteInstances )
+			{
+				var excessInstances = maxSpriteInstances - _availableSpriteTrailInstances.Count;
+				for( var i = 0; i < excessInstances; i++ )
+					_availableSpriteTrailInstances.Pop();
+			}
+
+			_maxSpriteInstances = maxSpriteInstances;
+
+
+			return this;
+		}
+
+
+		public SpriteTrail setMinDistanceBetweenInstances( float minDistanceBetweenInstances )
+		{
+			this.minDistanceBetweenInstances = minDistanceBetweenInstances;
+			return this;
+		}
+
+
+		public SpriteTrail setFadeDuration( float fadeDuration )
+		{
+			this.fadeDuration = fadeDuration;
+			return this;
+		}
+
+
+		public SpriteTrail setFadeDelay( float fadeDelay )
+		{
+			this.fadeDelay = fadeDelay;
+			return this;
+		}
+
+
+		public SpriteTrail setInitialColor( Color initialColor )
+		{
+			this.initialColor = initialColor;
+			return this;
+		}
+
+
+		public SpriteTrail setFadeToColor( Color fadeToColor )
+		{
+			this.fadeToColor = fadeToColor;
+			return this;
+		}
+
+		#endregion
+
+
+		/// <summary>
+		/// enables the SpriteTrail
+		/// </summary>
+		/// <returns>The sprite trail.</returns>
+		public SpriteTrail enableSpriteTrail()
+		{
+			_awaitingDisable = false;
+			_isFirstInstance = true;
+			enabled = true;
+			return this;
+		}
+
+
+		/// <summary>
+		/// disables the SpriteTrail optionally waiting for the current trail to fade out first
+		/// </summary>
+		/// <param name="completeCurrentTrail">If set to <c>true</c> complete current trail.</param>
+		public void disableSpriteTrail( bool completeCurrentTrail = true )
+		{
+			if( completeCurrentTrail )
+			{
+				_awaitingDisable = true;
+			}
+			else
+			{
+				enabled = false;
+
+				for( var i = 0; i < _liveSpriteTrailInstances.Count; i++ )
+					_availableSpriteTrailInstances.Push( _liveSpriteTrailInstances[i] );
+				_liveSpriteTrailInstances.Clear();
+			}
+		}
+
+
+		public override void onAddedToEntity()
+		{
+			if( _sprite == null )
+				_sprite = this.getComponent<Sprite>();
+
+			Assert.isNotNull( _sprite, "There is no Sprite on this Entity for the SpriteTrail to use" );
+
+			// move the trail behind the Sprite
 			layerDepth = _sprite.layerDepth + 0.001f;
 
-			_liveSpriteTrailInstances = new List<SpriteTrailInstance>( 5 );
-			_availableSpriteTrailInstances = new Stack<SpriteTrailInstance>( maxInstances );
-			for( var i = 0; i < maxInstances; i++ )
-				_availableSpriteTrailInstances.Push( new SpriteTrailInstance() );
+			// if setMaxSpriteInstances is called it will handle initializing the SpriteTrailInstances so make sure we dont do it twice
+			if( _availableSpriteTrailInstances.Count == 0 )
+			{
+				for( var i = 0; i < _maxSpriteInstances; i++ )
+					_availableSpriteTrailInstances.Push( new SpriteTrailInstance() );
+			}
 		}
 
 
@@ -187,40 +308,6 @@ namespace Nez.Sprites
 			// nothing left to render. disable ourself
 			if( _awaitingDisable && _liveSpriteTrailInstances.Count == 0 )
 				enabled = false;
-		}
-
-
-		/// <summary>
-		/// enables the SpriteTrail
-		/// </summary>
-		/// <returns>The sprite trail.</returns>
-		public SpriteTrail enableSpriteTrail()
-		{
-			_awaitingDisable = false;
-			_isFirstInstance = true;
-			enabled = true;
-			return this;
-		}
-
-
-		/// <summary>
-		/// disables the SpriteTrail optionally waiting for the current trail to fade out first
-		/// </summary>
-		/// <param name="completeCurrentTrail">If set to <c>true</c> complete current trail.</param>
-		public void disableSpriteTrail( bool completeCurrentTrail = true )
-		{
-			if( completeCurrentTrail )
-			{
-				_awaitingDisable = true;
-			}
-			else
-			{
-				enabled = false;
-
-				for( var i = 0; i < _liveSpriteTrailInstances.Count; i++ )
-					_availableSpriteTrailInstances.Push( _liveSpriteTrailInstances[i] );
-				_liveSpriteTrailInstances.Clear();
-			}
 		}
 
 

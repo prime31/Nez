@@ -14,9 +14,20 @@
 		Sprite _spriteToMime;
 
 
+		public SpriteMime()
+		{}
+
+
 		public SpriteMime( Sprite spriteToMime )
 		{
 			_spriteToMime = spriteToMime;
+		}
+
+
+		public override void onAddedToEntity()
+		{
+			if( _spriteToMime == null )
+				_spriteToMime = this.getComponent<Sprite>();
 		}
 
 
