@@ -18,7 +18,7 @@ namespace Nez.ParticleDesignerImporter
 				var deserializer = new XmlSerializer( typeof( ParticleDesignerEmitterConfig ) );
 				var emitterConfig = (ParticleDesignerEmitterConfig)deserializer.Deserialize( streamReader );
 
-				return new ParticleDesignerContent( context, emitterConfig );
+				return new ParticleDesignerContent( context, emitterConfig, filename );
 			}
 		}
 	}
