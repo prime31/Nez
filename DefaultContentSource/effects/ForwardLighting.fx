@@ -21,7 +21,7 @@ struct VSOutput
 };
 
 
-VSOutput MainVS( float4 position : POSITION0, float4 color : COLOR0, float2 texCoord : TEXCOORD0 )
+VSOutput mainVS( float4 position : POSITION0, float4 color : COLOR0, float2 texCoord : TEXCOORD0 )
 {
 	VSOutput output;
     output.position = mul( position, _matrixTransform );
@@ -33,7 +33,7 @@ VSOutput MainVS( float4 position : POSITION0, float4 color : COLOR0, float2 texC
 }
 
 
-float4 MainPS( VSOutput input ) : COLOR
+float4 mainPS( VSOutput input ) : COLOR
 {
     // get normal data from the normalMap
     float4 normalData = tex2D( _normalMapSampler, input.texCoord );
@@ -78,7 +78,7 @@ technique Diffuse
 {
 	pass P0
 	{
-		VertexShader = compile vs_2_0 MainVS();
-		PixelShader = compile ps_2_0 MainPS();
+		VertexShader = compile vs_2_0 mainVS();
+		PixelShader = compile ps_2_0 mainPS();
 	}
 }
