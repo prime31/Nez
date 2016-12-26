@@ -12,7 +12,7 @@ using Microsoft.Xna.Framework.Content.Pipeline.Processors;
 namespace Nez.ParticleDesignerImporter
 {
 	[ContentProcessor( DisplayName = "Particle Designer Processor" )]
-	public class ParticleDesignerProcessor : ContentProcessor<ParticleDesignerContent,ParticleDesignerProcessorResult>
+	public class ParticleDesignerProcessor : ContentProcessor<ParticleDesignerContent, ParticleDesignerProcessorResult>
 	{
 		public static ContentBuildLogger logger;
 
@@ -21,7 +21,7 @@ namespace Nez.ParticleDesignerImporter
 		{
 			logger = context.Logger;
 			var result = new ParticleDesignerProcessorResult();
-            
+
 			// check for an embedded tiff texture
 			if( input.emitterConfig.texture.data != null )
 			{
@@ -62,21 +62,22 @@ namespace Nez.ParticleDesignerImporter
 
 				// process
 				context.Logger.LogMessage( "processing TextureContent" );
-				var textureProcessor = new TextureProcessor {
+				var textureProcessor = new TextureProcessor
+				{
 					GenerateMipmaps = false,
 					TextureFormat = TextureProcessorOutputFormat.Color
 				};
 				result.texture = (Texture2DContent)textureProcessor.Process( result.texture, context );
 				context.Logger.LogMessage( "TextureContent processed" );
 			}
-            else //No tiff data, so let's try loading the texture with the texture name, from the same directory as the particle file
-            {
-                string fileDirectory = Path.GetDirectoryName(input.path);
-                string fullPath = Path.Combine(fileDirectory, input.emitterConfig.texture.name);
-                context.Logger.LogMessage("Looking for texture file at {0}", fullPath);
-                result.texture = context.BuildAndLoadAsset<string, Texture2DContent>(new ExternalReference<string>(fullPath), "TextureProcessor");
-                context.Logger.LogMessage("Texture file found");
-            }
+			else // no tiff data, so let's try loading the texture with the texture name, from the same directory as the particle file
+			{
+				string fileDirectory = Path.GetDirectoryName( input.path );
+				string fullPath = Path.Combine( fileDirectory, input.emitterConfig.texture.name );
+				context.Logger.LogMessage( "Looking for texture file at {0}", fullPath );
+				result.texture = context.BuildAndLoadAsset<string, Texture2DContent>( new ExternalReference<string>( fullPath ), "TextureProcessor" );
+				context.Logger.LogMessage( "Texture file found" );
+			}
 
 			result.particleEmitterConfig = input.emitterConfig;
 
