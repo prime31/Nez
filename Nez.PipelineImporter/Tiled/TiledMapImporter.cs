@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics;
 using System.IO;
 using System.Xml.Serialization;
 using Microsoft.Xna.Framework.Content.Pipeline;
@@ -40,11 +39,11 @@ namespace Nez.TiledMaps
 						var tilesetLocation = tileset.source.Replace( '/', Path.DirectorySeparatorChar );
 						var filePath = Path.Combine( directoryName, tilesetLocation );
 
-						var normExtTilesetPath = new DirectoryInfo( filePath ).FullName;                         
+						var normExtTilesetPath = new DirectoryInfo( filePath ).FullName;
 						context.Logger.LogMessage( "Reading External Tileset File: " + normExtTilesetPath );
 						using( var file = new FileStream( filePath, FileMode.Open ) )
 						{
-							map.tilesets[i] = (TmxTileset)xmlSerializer.Deserialize( file );                            
+							map.tilesets[i] = (TmxTileset)xmlSerializer.Deserialize( file );
 							map.tilesets[i].fixImagePath( filename, tileset.source );
 							map.tilesets[i].firstGid = tileset.firstGid;
 						}
