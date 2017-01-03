@@ -138,7 +138,7 @@ namespace Nez.Tiled
 		}
 
 
-		static TiledTileLayer readTileLayer( ContentReader reader, TiledMap tileMap, string layerName )
+		static TiledLayer readTileLayer( ContentReader reader, TiledMap tileMap, string layerName )
 		{
 			var tileCount = reader.ReadInt32();
 			var tiles = new TiledTile[tileCount];
