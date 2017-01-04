@@ -599,7 +599,9 @@ namespace Nez.Console
 				var appDomainType = typeof( string ).GetTypeInfo().Assembly.GetType( "System.AppDomain" );
 				var domain = appDomainType.GetRuntimeProperty( "CurrentDomain" ).GetMethod.Invoke( null, new object[]{} );
 				var assembliesMethod = ReflectionUtils.getMethodInfo( domain, "GetAssemblies" );
-				var assemblies = assembliesMethod.Invoke( domain, new object[]{ false } ) as Assembly[];
+				// not sure about arguments, detect in runtime
+				var methodCallParams = assembliesMethod.GetParameters().Length == 0 ? new object[] { } : new object[] { false };
+				var assemblies = assembliesMethod.Invoke( domain, methodCallParams ) as Assembly[];
 
 				var ignoredAssemblies = new string[] { "mscorlib", "MonoMac", "MonoGame.Framework", "Mono.Security", "System", "OpenTK", "ObjCImplementations", "Nez" };
 				foreach( var assembly in assemblies )
