@@ -67,6 +67,11 @@ namespace Nez
 		/// </summary>
 		public Action onScreenObscured;
 
+        /// <summary>
+        /// called when the Transition has completed it's execution, so that other work can be called, such as Starting another transition.
+        /// </summary>
+        public Action onTransitionCompleted;
+
 		/// <summary>
 		/// flag indicating if this transition will load a new scene or not
 		/// </summary>
@@ -184,6 +189,9 @@ namespace Nez
 				previousSceneRender.Dispose();
 				previousSceneRender = null;
 			}
+
+            if (onTransitionCompleted != null)
+                onTransitionCompleted();
 		}
 
 
