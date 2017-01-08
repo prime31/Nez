@@ -12,6 +12,10 @@ namespace Nez.Textures
 		public int top;
 		public int bottom;
 		public Rectangle[] ninePatchRects = new Rectangle[9];
+        public int? padLeft;
+        public int padRight;
+        public int padTop;
+        public int padBottom;
 
 
 		public NinePatchSubtexture( Texture2D texture, Rectangle sourceRect, int left, int right, int top, int bottom ) : base( texture, sourceRect )
@@ -20,6 +24,7 @@ namespace Nez.Textures
 			this.right = right;
 			this.top = top;
 			this.bottom = bottom;
+            this.padLeft = null;
 
 			generateNinePatchRects( sourceRect, ninePatchRects, left, right, top, bottom );
 		}
