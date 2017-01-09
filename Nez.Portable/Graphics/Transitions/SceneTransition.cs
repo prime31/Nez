@@ -190,7 +190,7 @@ namespace Nez
 				previousSceneRender = null;
 			}
 
-            if (onTransitionCompleted != null)
+            if( onTransitionCompleted != null )
                 onTransitionCompleted();
 		}
 
