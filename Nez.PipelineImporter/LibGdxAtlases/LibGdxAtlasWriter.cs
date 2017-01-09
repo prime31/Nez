@@ -52,6 +52,20 @@ namespace Nez.LibGdxAtlases
 							writer.Write( region.splits[3] );
 							LibGdxAtlasProcessor.logger.LogMessage( "Writing splits for region: {0}", region.name );
 						}
+
+                        if (region.pads == null)
+                        {
+                            writer.Write(false);
+                        }
+                        else
+                        {
+                            writer.Write(true);
+                            writer.Write(region.pads[0]);
+                            writer.Write(region.pads[1]);
+                            writer.Write(region.pads[2]);
+                            writer.Write(region.pads[3]);
+                            LibGdxAtlasProcessor.logger.LogMessage("Writing pads for region: {0}", region.name);
+                        }
 					}
 				}
 			}

@@ -33,12 +33,21 @@ namespace Nez.LibGdxAtlases
 					rect.Height = reader.ReadInt32();
 
 					var hasSplits = reader.ReadBoolean();
-					if( hasSplits )
-						subtextures[i] = new NinePatchSubtexture( texture, rect, reader.ReadInt32(), reader.ReadInt32(), reader.ReadInt32(), reader.ReadInt32() );
-					else
-						subtextures[i] = new Subtexture( texture, rect );
+                    if (hasSplits)
+                        subtextures[i] = new NinePatchSubtexture(texture, rect, reader.ReadInt32(), reader.ReadInt32(), reader.ReadInt32(), reader.ReadInt32());
+                    else
+                        subtextures[i] = new Subtexture(texture, rect);
 
-					regionNames[i] = name;
+                    var hasPads = reader.ReadBoolean();
+                    if (hasPads && hasSplits)
+                    {
+                        ((NinePatchSubtexture)subtextures[i]).padLeft = reader.ReadInt32();
+                        ((NinePatchSubtexture)subtextures[i]).padRight = reader.ReadInt32();
+                        ((NinePatchSubtexture)subtextures[i]).padTop = reader.ReadInt32();
+                        ((NinePatchSubtexture)subtextures[i]).padBottom = reader.ReadInt32();
+                    }
+
+                    regionNames[i] = name;
 				}
 
 				var atlas = new TextureAtlas( regionNames, subtextures );

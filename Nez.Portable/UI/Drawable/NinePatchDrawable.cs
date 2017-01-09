@@ -63,11 +63,22 @@ namespace Nez.UI
 			minWidth = _subtexture.ninePatchRects[MIDDLE_LEFT].Width + _subtexture.ninePatchRects[MIDDLE_CENTER].Width + _subtexture.ninePatchRects[MIDDLE_RIGHT].Width;
 			minHeight = _subtexture.ninePatchRects[TOP_CENTER].Height + _subtexture.ninePatchRects[MIDDLE_CENTER].Height + _subtexture.ninePatchRects[BOTTOM_CENTER].Height;
 
-			// by default, we will pad the content by the nine patch margins
-			leftWidth = _subtexture.left;
-			rightWidth = _subtexture.right;
-			topHeight = _subtexture.top;
-			bottomHeight = _subtexture.bottom;
+			// by default, if padding isn't given, we will pad the content by the nine patch margins
+            if (_subtexture.padLeft != null)
+            {
+                leftWidth = (float)_subtexture.padLeft;
+                rightWidth = _subtexture.padRight;
+                topHeight = _subtexture.padTop;
+                bottomHeight = _subtexture.padBottom;
+            }
+            else
+            {
+                leftWidth = _subtexture.left;
+                rightWidth = _subtexture.right;
+                topHeight = _subtexture.top;
+                bottomHeight = _subtexture.bottom;
+            }
+
 		}
 
 
