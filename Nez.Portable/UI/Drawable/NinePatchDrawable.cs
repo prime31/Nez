@@ -1,5 +1,4 @@
-﻿using System;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Nez.Textures;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -64,20 +63,20 @@ namespace Nez.UI
 			minHeight = _subtexture.ninePatchRects[TOP_CENTER].Height + _subtexture.ninePatchRects[MIDDLE_CENTER].Height + _subtexture.ninePatchRects[BOTTOM_CENTER].Height;
 
 			// by default, if padding isn't given, we will pad the content by the nine patch margins
-            if (_subtexture.padLeft != null)
-            {
-                leftWidth = (float)_subtexture.padLeft;
-                rightWidth = _subtexture.padRight;
-                topHeight = _subtexture.padTop;
-                bottomHeight = _subtexture.padBottom;
-            }
-            else
-            {
-                leftWidth = _subtexture.left;
-                rightWidth = _subtexture.right;
-                topHeight = _subtexture.top;
-                bottomHeight = _subtexture.bottom;
-            }
+			if( _subtexture.hasPadding )
+			{
+				leftWidth = _subtexture.padLeft;
+				rightWidth = _subtexture.padRight;
+				topHeight = _subtexture.padTop;
+				bottomHeight = _subtexture.padBottom;
+			}
+			else
+			{
+				leftWidth = _subtexture.left;
+				rightWidth = _subtexture.right;
+				topHeight = _subtexture.top;
+				bottomHeight = _subtexture.bottom;
+			}
 
 		}
 
@@ -91,11 +90,11 @@ namespace Nez.UI
 		/// <param name="top">Top.</param>
 		/// <param name="bottom">Bottom.</param>
 		public NinePatchDrawable( Texture2D texture, int left, int right, int top, int bottom ) : this( new NinePatchSubtexture( texture, left, right, top, bottom ) )
-		{}
+		{ }
 
 
 		public NinePatchDrawable( Subtexture subtexture, int left, int right, int top, int bottom ) : this( new NinePatchSubtexture( subtexture.texture2D, subtexture.sourceRect, left, right, top, bottom ) )
-		{}
+		{ }
 
 
 		/// <summary>
@@ -118,7 +117,7 @@ namespace Nez.UI
 		{
 			if( tintColor.HasValue )
 				color = color.multiply( tintColor.Value );
-			
+
 			if( _finalRenderRect.Height != height || _finalRenderRect.Width != width )
 			{
 				_finalRenderRect.Height = (int)height;
@@ -131,7 +130,7 @@ namespace Nez.UI
 				// only draw if we have width/height to draw.
 				if( _destRects[i].Width == 0 || _destRects[i].Height == 0 )
 					continue;
-				
+
 				// shift our destination rect over to our position
 				var dest = _destRects[i];
 				dest.X += (int)x;
@@ -148,7 +147,8 @@ namespace Nez.UI
 		/// <param name="tint">Tint.</param>
 		public NinePatchDrawable newTintedDrawable( Color tint )
 		{
-			return new NinePatchDrawable( _subtexture ) {
+			return new NinePatchDrawable( _subtexture )
+			{
 				leftWidth = leftWidth,
 				rightWidth = rightWidth,
 				topHeight = topHeight,
