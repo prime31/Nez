@@ -41,7 +41,7 @@ namespace Nez.TiledMaps
 
 						var normExtTilesetPath = new DirectoryInfo( filePath ).FullName;
 						context.Logger.LogMessage( "Reading External Tileset File: " + normExtTilesetPath );
-						using( var file = new FileStream( filePath, FileMode.Open ) )
+						using( var file = new StreamReader( filePath ) )
 						{
 							map.tilesets[i] = (TmxTileset)xmlSerializer.Deserialize( file );
 							map.tilesets[i].fixImagePath( filename, tileset.source );
