@@ -13,41 +13,41 @@ namespace Nez.UI
 	{
 		public Color? tintColor;
 
-        public SpriteEffects spriteEffects = SpriteEffects.None;
+		public SpriteEffects spriteEffects = SpriteEffects.None;
 
-        /// <summary>
-        /// determines if the sprite should be rendered normally or flipped horizontally
-        /// </summary>
-        /// <value><c>true</c> if flip x; otherwise, <c>false</c>.</value>
-        public bool flipX
-        {
-            get
-            {
-                return (spriteEffects & SpriteEffects.FlipHorizontally) == SpriteEffects.FlipHorizontally;
-            }
-            set
-            {
-                spriteEffects = value ? (spriteEffects | SpriteEffects.FlipHorizontally) : (spriteEffects & ~SpriteEffects.FlipHorizontally);
-            }
-        }
+		/// <summary>
+		/// determines if the sprite should be rendered normally or flipped horizontally
+		/// </summary>
+		/// <value><c>true</c> if flip x; otherwise, <c>false</c>.</value>
+		public bool flipX
+		{
+			get
+			{
+				return (spriteEffects & SpriteEffects.FlipHorizontally) == SpriteEffects.FlipHorizontally;
+			}
+			set
+			{
+				spriteEffects = value ? (spriteEffects | SpriteEffects.FlipHorizontally) : (spriteEffects & ~SpriteEffects.FlipHorizontally);
+			}
+		}
 
-        /// <summary>
-        /// determines if the sprite should be rendered normally or flipped vertically
-        /// </summary>
-        /// <value><c>true</c> if flip y; otherwise, <c>false</c>.</value>
-        public bool flipY
-        {
-            get
-            {
-                return (spriteEffects & SpriteEffects.FlipVertically) == SpriteEffects.FlipVertically;
-            }
-            set
-            {
-                spriteEffects = value ? (spriteEffects | SpriteEffects.FlipVertically) : (spriteEffects & ~SpriteEffects.FlipVertically);
-            }
-        }
+		/// <summary>
+		/// determines if the sprite should be rendered normally or flipped vertically
+		/// </summary>
+		/// <value><c>true</c> if flip y; otherwise, <c>false</c>.</value>
+		public bool flipY
+		{
+			get
+			{
+				return (spriteEffects & SpriteEffects.FlipVertically) == SpriteEffects.FlipVertically;
+			}
+			set
+			{
+				spriteEffects = value ? (spriteEffects | SpriteEffects.FlipVertically) : (spriteEffects & ~SpriteEffects.FlipVertically);
+			}
+		}
 
-        public Subtexture subtexture
+		public Subtexture subtexture
 		{
 			get { return _subtexture; }
 			set
@@ -95,8 +95,8 @@ namespace Nez.UI
 		{
 			if( tintColor.HasValue )
 				color = color.multiply( tintColor.Value );
-            graphics.batcher.draw(_subtexture, new Rectangle((int)x, (int)y, (int)width, (int)height), _subtexture.sourceRect, color, spriteEffects);
-        }
+			graphics.batcher.draw(_subtexture, new Rectangle((int)x, (int)y, (int)width, (int)height), _subtexture.sourceRect, color, spriteEffects);
+		}
 
 
 		/// <summary>
