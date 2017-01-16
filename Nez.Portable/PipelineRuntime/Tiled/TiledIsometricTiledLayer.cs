@@ -98,25 +98,23 @@ namespace Nez.Tiled
 							continue;
 					}
 
-					drawTile( batcher, position, layerDepth, x, y );
+					drawTile( batcher, position, layerDepth, x, y, 1 );
 				}
 			}
 		}
 
 
-		public void drawTile( Batcher batcher, Vector2 position, float layerDepth, int x, int y )
+		public void drawTile( Batcher batcher, Vector2 position, float layerDepth, int x, int y, float scale )
 		{
 			var tile = getTile( x, y );
 			if( tile == null )
 				return;
 
-			var tileworldpos = tiledMap.isometricTileToWorldPosition( x, y );
+			var t = tiledMap.isometricTileToWorldPosition( x, y );
 			var tileRegion = tile.textureRegion;
 
 			// for the y position, we need to take into account if the tile is larger than the tileHeight and shift. Tiled uses
 			// a bottom-left coordinate system and MonoGame a top-left
-			var tx = tileworldpos.X + position.X;
-			var ty = tileworldpos.Y + position.Y;
 			var rotation = 0f;
 
 			var spriteEffects = SpriteEffects.None;
@@ -130,36 +128,39 @@ namespace Nez.Tiled
 				{
 					spriteEffects ^= SpriteEffects.FlipVertically;
 					rotation = MathHelper.PiOver2;
-					tx += tiledMap.tileHeight + ( tileRegion.sourceRect.Height - tiledMap.tileHeight );
-					ty -= ( tileRegion.sourceRect.Width - tiledMap.tileWidth );
+					t.X += tiledMap.tileHeight + ( tileRegion.sourceRect.Height - tiledMap.tileHeight );
+					t.Y -= ( tileRegion.sourceRect.Width - tiledMap.tileWidth );
 				}
 				else if( tile.flippedHorizonally )
 				{
 					spriteEffects ^= SpriteEffects.FlipVertically;
 					rotation = -MathHelper.PiOver2;
-					ty += tiledMap.tileHeight;
+					t.Y += tiledMap.tileHeight;
 				}
 				else if( tile.flippedVertically )
 				{
 					spriteEffects ^= SpriteEffects.FlipHorizontally;
 					rotation = MathHelper.PiOver2;
-					tx += tiledMap.tileWidth + ( tileRegion.sourceRect.Height - tiledMap.tileHeight );
-					ty += ( tiledMap.tileWidth - tileRegion.sourceRect.Width );
+					t.X += tiledMap.tileWidth + ( tileRegion.sourceRect.Height - tiledMap.tileHeight );
+					t.Y += ( tiledMap.tileWidth - tileRegion.sourceRect.Width );
 				}
 				else
 				{
 					spriteEffects ^= SpriteEffects.FlipHorizontally;
 					rotation = -MathHelper.PiOver2;
-					ty += tiledMap.tileHeight;
+					t.Y += tiledMap.tileHeight;
 				}
 			}
 
 			// if we had no rotations (diagonal flipping) shift our y-coord to account for any non-tileSized tiles to account for
 			// Tiled being bottom-left origin
 			if( rotation == 0 )
-				ty += ( tiledMap.tileHeight - tileRegion.sourceRect.Height );
+				t.Y += ( tiledMap.tileHeight - tileRegion.sourceRect.Height );
 
-			batcher.draw( tileRegion.texture2D, new Vector2( tx, ty ), tileRegion.sourceRect, color, rotation, Vector2.Zero, 1, spriteEffects, layerDepth );
+            // Scale the tile's relative position, but not the origin
+            t = t * new Vector2(scale) + position;
+
+			batcher.draw( tileRegion.texture2D, t, tileRegion.sourceRect, color, rotation, Vector2.Zero, scale, spriteEffects, layerDepth );
 		}
 
 
