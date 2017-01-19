@@ -1,5 +1,4 @@
-﻿using System;
-using Nez.Textures;
+﻿using Nez.Textures;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -12,6 +11,40 @@ namespace Nez.UI
 	public class SubtextureDrawable : IDrawable
 	{
 		public Color? tintColor;
+
+		public SpriteEffects spriteEffects = SpriteEffects.None;
+
+		/// <summary>
+		/// determines if the sprite should be rendered normally or flipped horizontally
+		/// </summary>
+		/// <value><c>true</c> if flip x; otherwise, <c>false</c>.</value>
+		public bool flipX
+		{
+			get
+			{
+				return ( spriteEffects & SpriteEffects.FlipHorizontally ) == SpriteEffects.FlipHorizontally;
+			}
+			set
+			{
+				spriteEffects = value ? ( spriteEffects | SpriteEffects.FlipHorizontally ) : ( spriteEffects & ~SpriteEffects.FlipHorizontally );
+			}
+		}
+
+		/// <summary>
+		/// determines if the sprite should be rendered normally or flipped vertically
+		/// </summary>
+		/// <value><c>true</c> if flip y; otherwise, <c>false</c>.</value>
+		public bool flipY
+		{
+			get
+			{
+				return ( spriteEffects & SpriteEffects.FlipVertically ) == SpriteEffects.FlipVertically;
+			}
+			set
+			{
+				spriteEffects = value ? ( spriteEffects | SpriteEffects.FlipVertically ) : ( spriteEffects & ~SpriteEffects.FlipVertically );
+			}
+		}
 
 		public Subtexture subtexture
 		{
@@ -54,14 +87,15 @@ namespace Nez.UI
 
 
 		public SubtextureDrawable( Texture2D texture ) : this( new Subtexture( texture ) )
-		{}
+		{ }
 
 
 		public virtual void draw( Graphics graphics, float x, float y, float width, float height, Color color )
 		{
 			if( tintColor.HasValue )
 				color = color.multiply( tintColor.Value );
-			graphics.batcher.draw( _subtexture, new Rectangle( (int)x, (int)y, (int)width, (int)height ), _subtexture.sourceRect, color );
+
+			graphics.batcher.draw( _subtexture, new Rectangle( (int)x, (int)y, (int)width, (int)height ), _subtexture.sourceRect, color, spriteEffects );
 		}
 
 
@@ -72,7 +106,8 @@ namespace Nez.UI
 		/// <param name="tint">Tint.</param>
 		public SubtextureDrawable newTintedDrawable( Color tint )
 		{
-			return new SubtextureDrawable( _subtexture ) {
+			return new SubtextureDrawable( _subtexture )
+			{
 				leftWidth = leftWidth,
 				rightWidth = rightWidth,
 				topHeight = topHeight,
