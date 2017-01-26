@@ -68,6 +68,15 @@ namespace Nez
 
 		public void remove( Component component )
 		{
+			Debug.warnIf( _componentsToRemove.Contains( component ), "You are trying to remove a Component ({0}) that you already removed", component );
+
+			// this may not be a live Component so we have to watch out for if it hasnt been processed yet but it is being removed in the same frame
+			if( _componentsToAdd.Contains( component ) )
+			{
+				_componentsToAdd.Remove( component );
+				return;
+			}
+			
 			_componentsToRemove.Add( component );
 		}
 

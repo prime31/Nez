@@ -82,6 +82,13 @@ namespace Nez
 		{
 			Debug.warnIf( _entitiesToRemove.Contains( entity ), "You are trying to remove an entity ({0}) that you already removed", entity.name );
 
+			// guard against adding and then removing an Entity in the same frame
+			if( _entitiesToAdd.Contains( entity ) )
+			{
+				_entitiesToAdd.Remove( entity );
+				return;
+			}
+
 			if( !_entitiesToRemove.Contains( entity ) )
 				_entitiesToRemove.Add( entity );
 		}
