@@ -5,7 +5,7 @@ Nez includes several different options for setting up AI ranging from a super si
 
 Simple State Machine
 ==========
-The fastest and easiest way to get AI up and running. `SimpleStateMachine` is a Component subclass that lets you set an enum as it's generic contraint and it will use that enum to control the state machine. The enum values each map to a state and can have optional enter/tick/exit methods. The naming conventions for these methods are best shown with an example:
+The fastest and easiest way to get AI up and running. `SimpleStateMachine` is a Component subclass that lets you set an enum as its generic constraint and it will use that enum to control the state machine. The enum values each map to a state and can have optional enter/tick/exit methods. The naming conventions for these methods are best shown with an example:
 
 ```csharp
 enum SomeEnum
@@ -36,7 +36,7 @@ State Machine
 ==========
 The next step up is `StateMachine` which implements the "states as objects" pattern. `StateMachine` uses separate classes for each state so it is a better choice for more complex systems.
 
-We start to get into the concept of a **context** with `StateMachine`. In coding, the context is just the class used to satisfy a generic contraint. in a `List<string>` the *string* would be the context class, the class that the list operates on. With all of the rest of the AI solutions you get to specify the context class. It could be your Enemy class, Player class or a helper object that contains any information relevant to your AI (such as the Player, a list of Enemies, navigation information, etc).
+We start to get into the concept of a **context** with `StateMachine`. In coding, the context is just the class used to satisfy a generic constraint. in a `List<string>` the *string* would be the context class, the class that the list operates on. With all of the rest of the AI solutions you get to specify the context class. It could be your Enemy class, Player class or a helper object that contains any information relevant to your AI (such as the Player, a list of Enemies, navigation information, etc).
 
 Here is a simple example showing the usage (with the State subclasses omitted for brevity):
 
@@ -45,8 +45,8 @@ Here is a simple example showing the usage (with the State subclasses omitted fo
 var machine = new SKStateMachine<SomeClass>( someClass, new PatrollingState() );
 
 // we can now add any additional states
-_machine.addState( new AttackState() );
-_machine.addState( new ChaseState() );
+machine.addState( new AttackState() );
+machine.addState( new ChaseState() );
 
 // this method would typically be called in an update of an object
 machine.update( Time.deltaTime );
@@ -125,7 +125,7 @@ Agent is a helper class that encapsulates an AI agent. It keeps a list of availa
 
 Utility Based AI
 ==========
-Utility Theory for games. The most complex of the AI solutions. Best used in very dynamic environments where it's scoring system works best. Utility based AI are more appropriate in situations where there are a large number of potentially competing actions the AI can take such as in a RTS. A great overview of utility AI is [available here](http://www.gdcvault.com/play/1012410/Improving-AI-Decision-Modeling-Through).
+Utility Theory for games. The most complex of the AI solutions. Best used in very dynamic environments where its scoring system works best. Utility based AI are more appropriate in situations where there are a large number of potentially competing actions the AI can take such as in a RTS. A great overview of utility AI is [available here](http://www.gdcvault.com/play/1012410/Improving-AI-Decision-Modeling-Through).
 
 
 ## Reasoner
@@ -133,7 +133,7 @@ Selects the best Consideration from a list of Considerations attached to the Rea
 
 
 ## Consideration
-Houses a list of Appraisals and an Action. Calculates a score that represents numerically the utility of it's Action
+Houses a list of Appraisals and an Action. Calculates a score that represents numerically the utility of its Action.
 
 
 ## Appraisal
@@ -141,5 +141,5 @@ One or more Appraisals can be added to a Consideration. They calculate and retur
 
 
 ## Action
-The action that the AI executes when a specific Consideration is selected
+The action that the AI executes when a specific Consideration is selected.
 
