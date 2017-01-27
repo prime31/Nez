@@ -261,9 +261,7 @@ namespace Nez.UI
 		public override void layout()
 		{
 			if( _prefSizeInvalid )
-			{
 				computePrefSize();
-			}
 
 			var isWrapped = _wrapText && _ellipsis == null;
 			if( isWrapped )
