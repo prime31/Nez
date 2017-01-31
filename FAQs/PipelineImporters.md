@@ -29,7 +29,7 @@ Give it a directory or a list of files and it will combine them all into a singl
 
 
 ## UI Skin
-Imports uiskin files which are JSON files that define the varies styles for UI elements. See the [UI page](FAQs/UI.md) for details on the file format and an example.
+Imports uiskin files which are JSON files that define the various styles for UI elements. See the [UI page](FAQs/UI.md) for details on the file format and an example.
 
 
 
@@ -54,7 +54,7 @@ The Normal Map Generator uses the TextureImporter in the Pipeline Tool. Select N
 
 
 ## XMLTemplateMaker
-This isn't so much an importer as a helper to make your own importer. It does not create any xnb files. The XML file passed to this processor should just be a System.string with the namespace.class of the type that you want a tempalate for, like below:
+This isn't so much an importer as a helper to make your own importer. It does not create any xnb files. The XML file passed to this processor should just be a System.string with the namespace.class of the type that you want a template for, like below:
 
 ```xml
 <?xml version="1.0" encoding="utf-8"?>
@@ -78,7 +78,7 @@ public class MyClassProcessor : ContentProcessor<MyClass,MyClass>
 }
 ```
 
-With that all setup, add the XML file to the Pipeline tool and choose the XML File Processor that you just made in Settings -> Processor and you are all set.
+With that all set up, add the XML file to the Pipeline tool and choose the XML File Processor that you just made in Settings -> Processor and you are all set.
 
 You can then access the data at runtime like so: `var data = content.Load<MyClass>( "LocationOfXnbFile" );`
 

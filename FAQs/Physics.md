@@ -1,7 +1,7 @@
 Nez Physics/Collisions
 ==========
 
-It serves to reiterate what has been stated before: Nez physics is *not* a realistic physics simulation. It provides what I call *game* physics. You can do things like linecasts to detect colliders, overlap checks, collision checks, sweep tests and more. What you don't get is a full rigid body simulation. *You* get to control your games feel from top to bottom. If you are looking for a full physics simulation see the optional [Farseer Physics implementation](FarseerPhysics.md).
+It serves to reiterate what has been stated before: Nez physics is *not* a realistic physics simulation. It provides what I call *game* physics. You can do things like linecasts to detect colliders, overlap checks, collision checks, sweep tests and more. What you don't get is a full rigid body simulation. *You* get to control your game's feel from top to bottom. If you are looking for a full physics simulation see the optional [Farseer Physics implementation](FarseerPhysics.md).
 
 
 
@@ -24,7 +24,7 @@ The **Physics** class is your gateway to all things Physics. There are some prop
 
 - **linecast**: casts a line from start to end and returns the first hit of a collider that matches layerMask
 - **overlapRectangle**: check if any collider falls within a rectangular area
-- **overlapCircle**: check if aany collider falls within a circular area
+- **overlapCircle**: check if any collider falls within a circular area
 - **boxcastBroadphase**: returns all colliders with bounds that are intersected by collider.bounds. Note that this is a broadphase check so it only checks bounds and does not do individual Collider-to-Collider checks!
 
 Astute readers will have noticed the *layerMask* mentioned above. The layerMask lets you decide which colliders are collided with. Each Collider can have its `physicsLayer` set so that when you query the Physics system you can choose to get back only Colliders that match the passed in layerMask. All Physics methods accept a layerMask parameter that defaults to all layers. Use this wisely to filter your collision checks and keep things as performant as possible by not doing unnecessary collision checks.
@@ -46,7 +46,7 @@ This first example is the easiest way to deal with collisions. `deltaMovement` i
 
 ```cs
 // CollisionResult will contain some really useful information such as the Collider that was hit,
-// the normal of the surface it and the minimum translation vector (MTV). The MTV can be used to
+// the normal of the surface hit and the minimum translation vector (MTV). The MTV can be used to
 // move the colliding Entity directly adjacent to the hit Collider.
 CollisionResult collisionResult;
 

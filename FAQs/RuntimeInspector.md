@@ -40,7 +40,7 @@ public void doSomethingWithParameter( bool isDone )
 
 
 [InspectorCallable]
-public void thisWontWordBecauseItHasTwoParameters( bool isDone, int stuff )
+public void thisWontWorkBecauseItHasTwoParameters( bool isDone, int stuff )
 {}
 ```
 

@@ -1,6 +1,6 @@
 Nez Core
 ==========
-The root class in the Nez world is the Core class which is a subclass of the Game class. Your Game class should subclass Core. Core provides access to all the importnt subsystems via static fields and methods for easy access.
+The root class in the Nez world is the Core class which is a subclass of the Game class. Your Game class should subclass Core. Core provides access to all the important subsystems via static fields and methods for easy access.
 
 
 ## Graphics

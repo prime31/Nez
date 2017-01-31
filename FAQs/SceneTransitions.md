@@ -15,7 +15,7 @@ Core.startSceneTransition( new WindTransition( () => new YourNextScene() ) );
 // transitions within the current Scene with a SquaresTransition
 var transition = new SquaresTransition();
 
-// for intra-Scene transitions we will probably be interested in knowing then the screen is obscured so we can take action
+// for intra-Scene transitions we will probably be interested in knowing when the screen is obscured so we can take action
 transition.onScreenObscured = myOnScreenObscuredMethod;
 Core.startSceneTransition( transition );
 
@@ -32,7 +32,7 @@ void myOnScreenObscuredMethod()
 ## Custom Transitions
 The real power of transitions comes when creating your own custom transitions that match your games style. You can use the included transitions as examples to base yours off of. This guide will go over the details, hows and whys of everything as well.
 
-Transitions generally come in two flavors: one part and two part. A one part transition will obscure the screen with a render of the previous Scene, load a new Scene and then transition from the old render to the new Scene's render with an effect (for example, slide the old render off the screen). A two part transition will first perform a transition effect, then load the new Scene and then transition to displaying the new Scene (for example, fade to black, load new Scene, fade to new Scene). Either way, the process if very similar.
+Transitions generally come in two flavors: one part and two part. A one part transition will obscure the screen with a render of the previous Scene, load a new Scene and then transition from the old render to the new Scene's render with an effect (for example, slide the old render off the screen). A two part transition will first perform a transition effect, then load the new Scene and then transition to displaying the new Scene (for example, fade to black, load new Scene, fade to new Scene). Either way, the process is very similar.
 
 - subclass `SceneTransition`
 - if you are using an `Effect` load it up in the constructor so it is ready to use

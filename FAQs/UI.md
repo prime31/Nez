@@ -163,7 +163,7 @@ skin.add( "textfield", new TextFieldStyle( null, Color.White, skin.getDrawable( 
 
 
 ## Gamepad Input
-Nez UI supports gamepad input out of the box via the `IGamepadFocusable` interface. Buttons (and any subclasses such as TextButton, Checkbox, etc) and Sliders will work out of the box (Note that Sliders require `shouldUseExplicitFocusableControl` to be true). To enable gamepad input processing just set the first focusable element via the `stage.setGamepadFocusElement` method. That will trigger the stage to use gamepad input. By default, the A button will be used for activating a UI Element. You can change this via the `stage.gamepadActionButton`. Also by default keyboard input (arrow keys and enter) will also work and is customizable via `keyboardEmulatesGamepad` and `keyboardActionKey`. If you have custom controls that would like to take part in gamepad input just implement the IGamepadFocusable interface on the element. If you are subclassing Button or Slider it is even easier: just override any of the 4 focus handlers: `onFocused`, `onUnfocused`, `onActionButtonPressed` and `onActionButtonReleased`.
+Nez UI supports gamepad input out of the box via the `IGamepadFocusable` interface. Buttons (and any subclasses such as TextButton, Checkbox, etc) and Sliders will work out of the box (note that Sliders require `shouldUseExplicitFocusableControl` to be true). To enable gamepad input processing just set the first focusable element via the `stage.setGamepadFocusElement` method. That will trigger the stage to use gamepad input. By default, the A button will be used for activating a UI Element. You can change this via the `stage.gamepadActionButton`. Also by default keyboard input (arrow keys and enter) will also work and is customizable via `keyboardEmulatesGamepad` and `keyboardActionKey`. If you have custom controls that would like to take part in gamepad input just implement the IGamepadFocusable interface on the element. If you are subclassing Button or Slider it is even easier: just override any of the 4 focus handlers: `onFocused`, `onUnfocused`, `onActionButtonPressed` and `onActionButtonReleased`.
 
 If you want finer grained control over which Element gains focus when a particular direction is pressed on the gamepad you can manually set the `gamepadUp/Down/Left/RightElement` properties. Leaving any null will result in no focus change when that direction is pressed and the `onUnhandledDirectionPressed` method will be called. Note that you must also set `IGamepadFocusable.shouldUseExplicitFocusableControl` when setting these directly. Below is a simple example of setting up 2 buttons and a slider horizontally. The slider's value will be changed when up/down is pressed on the gamepad.
 
@@ -184,7 +184,7 @@ middleSlider.gamepadRightElement = rightButton;
 
 rightButton.shouldUseExplicitFocusableControl = true;
 rightButton.gamepadLeftElement = middleSlider;
-// optional. This would making pressing right wrap around to the leftButton
+// optional. This would make pressing right wrap around to the leftButton
 rightButton.gamepadRightElement = leftButton;
 
 ```
