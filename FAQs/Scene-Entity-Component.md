@@ -20,9 +20,9 @@ Nez provides several different ways to get your final scene rendered flexibly an
 - **NoBorderPixelPerfect**: Pixel perfect version of NoBorder. Scaling is limited to integer values.
 - **ShowAll**: The entire application is visible in the specified area without distortion while maintaining the original aspect ratio of the application. Borders can appear on two sides of the application.
 - **ShowAllPixelPerfect**: Pixel perfect version of ShowAll. Scaling is limited to integer values.
-- **FixedHeight**: The application takes the height of the design resolution size and modifies the width of the internal canvas so that it fits the aspect ratio of the device. no distortion will occur however you must make sure your application works on different aspect ratios
+- **FixedHeight**: The application takes the height of the design resolution size and modifies the width of the internal canvas so that it fits the aspect ratio of the device. No distortion will occur, however you must make sure your application works on different aspect ratios
 - **FixedHeightPixelPerfect**: Pixel perfect version of FixedHeight. Scaling is limited to integer values.
-- **FixedWidth**: The application takes the width of the design resolution size and modifies the height of the internal canvas so that it fits the aspect ratio of the device. no distortion will occur however you must make sure your application works on different aspect ratios
+- **FixedWidth**: The application takes the width of the design resolution size and modifies the height of the internal canvas so that it fits the aspect ratio of the device. No distortion will occur, however you must make sure your application works on different aspect ratios
 - **FixedWidthPixelPerfect**: Pixel perfect version of FixedWidth. Scaling is limited to integer values.
 - **BestFit**: The application takes the width and height that best fits the design resolution with optional cropping inside of the "bleed area" and possible letter/pillar boxing. Works just like ShowAll except with horizontal/vertical bleed (padding). Gives you an area much like the old TitleSafeArea. Example: if design resolution is 1348x900 and bleed is 148x140 the safe area would be 1200x760 (design resolution - bleed).
 
@@ -33,8 +33,8 @@ Entities are added/removed to/from the Scene and managed by it. You can either s
 
 Entity Lifecycle methods:
 
-- **onAddedToScene**: Called when the entity is added to a scene after all pending entity changes are committed
-- **onRemovedFromScene**: Called when the entity is removed from a scene
+- **onAddedToScene**: called when the entity is added to a scene after all pending entity changes are committed
+- **onRemovedFromScene**: called when the entity is removed from a scene
 - **update**: called each frame as long as the Entity is enabled
 - **debugRender**: called if Core.debugRenderEnabled is true by the default renderers. Custom renderers can choose to call it or not. The default implementation calls debugRender on all Components and the attached Colliders if there are any
 
@@ -52,9 +52,9 @@ Components are added to and managed by an Entity. They make up the meat of your 
 
 Component Lifecycle methods:
 
-- **initialize**: Called when the Component is created and the Entity field is assigned but before onAddedToEntity
-- **onAddedToEntity**: Called when the Component is added to an entity after all pending component changes are committed
-- **onRemovedFromEntity**:  Called when the component is removed from its entity. Do all cleanup here.
+- **initialize**: called when the Component is created and the Entity field is assigned but before onAddedToEntity
+- **onAddedToEntity**: called when the Component is added to an entity after all pending component changes are committed
+- **onRemovedFromEntity**:  called when the component is removed from its entity. Do all cleanup here.
 - **onEntityPositionChanged**: called when the entity's position changes. This allows components to be aware that they have moved due to the parent entity moving.
 - **update**: called each frame as long as the Entity and Component are enabled and the Component implements IUpdatable
 - **debugRender**: conditionally called. See Entity section for details.
