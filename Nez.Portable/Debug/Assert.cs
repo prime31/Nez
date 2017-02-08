@@ -52,11 +52,39 @@ namespace Nez
 		/// <param name="obj">Object.</param>
 		/// <param name="message">Message.</param>
 		/// <param name="args">Arguments.</param>
+		[Conditional("DEBUG")]
+		[DebuggerHidden]
+		public static void isNull( object obj )
+		{
+			isTrue( obj == null );
+		}
+
+
+		/// <summary>
+		/// asserts that obj is null
+		/// </summary>
+		/// <param name="obj">Object.</param>
+		/// <param name="message">Message.</param>
+		/// <param name="args">Arguments.</param>
 		[Conditional( "DEBUG" )]
 		[DebuggerHidden]
 		public static void isNull( object obj, string message, params object[] args )
 		{
 			isTrue( obj == null, message, args );
+		}
+
+
+		/// <summary>
+		/// asserts that obj is not null
+		/// </summary>
+		/// <param name="obj">Object.</param>
+		/// <param name="message">Message.</param>
+		/// <param name="args">Arguments.</param>
+		[Conditional("DEBUG")]
+		[DebuggerHidden]
+		public static void isNotNull( object obj )
+		{
+			isTrue( obj != null );
 		}
 
 
