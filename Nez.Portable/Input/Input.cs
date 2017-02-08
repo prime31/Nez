@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework;
 using System.Collections.Generic;
 using Nez.Systems;
+using System.Runtime.CompilerServices;
 #if !FNA
 using Microsoft.Xna.Framework.Input.Touch;
 #endif
@@ -22,7 +23,7 @@ namespace Nez
 		/// </summary>
 		internal static Vector2 _resolutionScale;
 		/// <summary>
-		/// set by the Scene and used to scale mouse input
+		/// set by the Scene and used to scale input
 		/// </summary>
 		internal static Point _resolutionOffset;
 		static KeyboardState _previousKbState;
@@ -80,6 +81,16 @@ namespace Nez
 				_virtualInputs.buffer[i].update();
 		}
 
+		/// <summary>
+		/// this takes into account the SceneResolutionPolicy and returns the value scaled to the RenderTargets coordinates
+		/// </summary>
+		/// <value>The scaled position.</value>
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public static Vector2 scaledPosition(Vector2 position)
+		{
+			var scaledPos = new Vector2(position.X - _resolutionOffset.X, position.Y - _resolutionOffset.Y);
+			return scaledPos * _resolutionScale;
+		}
 
 		#region Keyboard
 
@@ -253,14 +264,7 @@ namespace Nez
 		/// this takes into account the SceneResolutionPolicy and returns the value scaled to the RenderTargets coordinates
 		/// </summary>
 		/// <value>The scaled mouse position.</value>
-		public static Vector2 scaledMousePosition
-		{
-			get
-			{
-				var mousePosition = new Vector2( _currentMouseState.X - _resolutionOffset.X, _currentMouseState.Y - _resolutionOffset.Y );
-				return mousePosition * _resolutionScale;
-			}
-		}
+		public static Vector2 scaledMousePosition { get { return scaledPosition(new Vector2(_currentMouseState.X, _currentMouseState.Y)); } }
 
 		public static Point mousePositionDelta
 		{
