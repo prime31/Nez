@@ -1,6 +1,8 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
-
+#if !FNA
+using Microsoft.Xna.Framework.Input.Touch;
+#endif
 
 namespace Nez
 {
@@ -477,6 +479,17 @@ namespace Nez
 
 
 		/// <summary>
+		/// converts a point from screen coordinates to world
+		/// </summary>
+		/// <returns>The to world point.</returns>
+		/// <param name="screenPosition">Screen position.</param>
+		public Vector2 screenToWorldPoint(Point screenPosition)
+		{
+			return screenToWorldPoint(screenPosition.ToVector2());
+		}
+
+
+		/// <summary>
 		/// returns the mouse position in world space
 		/// </summary>
 		/// <returns>The to world point.</returns>
@@ -486,15 +499,16 @@ namespace Nez
 		}
 
 
+		#if !FNA
 		/// <summary>
-		/// converts a point from screen coordinates to world
+		/// returns the touch position in world space
 		/// </summary>
 		/// <returns>The to world point.</returns>
-		/// <param name="screenPosition">Screen position.</param>
-		public Vector2 screenToWorldPoint( Point screenPosition )
+		public Vector2 touchToWorldPoint(TouchLocation touch)
 		{
-			return screenToWorldPoint( screenPosition.ToVector2() );
+			return screenToWorldPoint( touch.scaledPosition() );
 		}
+		#endif
 
 		#endregion
 
