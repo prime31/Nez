@@ -38,7 +38,7 @@ namespace Nez.UI
 				var textButtonStyle = (TextButtonStyle)style;
 				var labelStyle = label.getStyle();
 				labelStyle.font = textButtonStyle.font;
-				labelStyle.fontColor = textButtonStyle.fontColor;
+				labelStyle.fontColor = textButtonStyle.fontColor;             
 				label.setStyle( labelStyle );
 			}
 		}
@@ -89,6 +89,10 @@ namespace Nez.UI
 			label.setText( text );
 		}
 
+	    public void setFontScale(float scale)
+	    {
+	        label.setFontScale( scale );
+	    }
 
 		public string getText()
 		{
