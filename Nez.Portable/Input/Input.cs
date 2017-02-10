@@ -1,5 +1,4 @@
-﻿using System;
-using Microsoft.Xna.Framework.Input;
+﻿using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework;
 using System.Collections.Generic;
 using Nez.Systems;
@@ -13,7 +12,7 @@ namespace Nez
 {
 	public static class Input
 	{
-		public static Emitter<InputEventType,InputEvent> emitter;
+		public static Emitter<InputEventType, InputEvent> emitter;
 
 		public static GamePadData[] gamePads;
 		public const float DEFAULT_DEADZONE = 0.1f;
@@ -51,7 +50,7 @@ namespace Nez
 
 		static Input()
 		{
-			emitter = new Emitter<InputEventType,InputEvent>();
+			emitter = new Emitter<InputEventType, InputEvent>();
 			touch = new TouchInput();
 
 			_previousKbState = new KeyboardState();
@@ -85,17 +84,17 @@ namespace Nez
 		/// this takes into account the SceneResolutionPolicy and returns the value scaled to the RenderTargets coordinates
 		/// </summary>
 		/// <value>The scaled position.</value>
-		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public static Vector2 scaledPosition(Vector2 position)
+		[MethodImpl( MethodImplOptions.AggressiveInlining )]
+		public static Vector2 scaledPosition( Vector2 position )
 		{
-			var scaledPos = new Vector2(position.X - _resolutionOffset.X, position.Y - _resolutionOffset.Y);
+			var scaledPos = new Vector2( position.X - _resolutionOffset.X, position.Y - _resolutionOffset.Y );
 			return scaledPos * _resolutionScale;
 		}
 
-		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public static Vector2 scaledPosition(Point position)
+		[MethodImpl( MethodImplOptions.AggressiveInlining )]
+		public static Vector2 scaledPosition( Point position )
 		{
-			return scaledPosition(new Vector2(position.X, position.Y));
+			return scaledPosition( new Vector2( position.X, position.Y ) );
 		}
 
 		#region Keyboard
@@ -270,7 +269,7 @@ namespace Nez
 		/// this takes into account the SceneResolutionPolicy and returns the value scaled to the RenderTargets coordinates
 		/// </summary>
 		/// <value>The scaled mouse position.</value>
-		public static Vector2 scaledMousePosition { get { return scaledPosition(new Vector2(_currentMouseState.X, _currentMouseState.Y)); } }
+		public static Vector2 scaledMousePosition { get { return scaledPosition( new Vector2( _currentMouseState.X, _currentMouseState.Y ) ); } }
 
 		public static Point mousePositionDelta
 		{
@@ -288,7 +287,7 @@ namespace Nez
 		}
 
 		#endregion
-	
+
 	}
 
 

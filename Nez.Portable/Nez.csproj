@@ -570,6 +570,7 @@
     <Compile Include="ECS\Components\Renderables\PolygonLight\VisibilityComputer.cs" />
     <Compile Include="Graphics\PostProcessing\PostProcessors\PolyLightPostProcessor.cs" />
     <Compile Include="ECS\Components\Renderables\PolygonLight\PolySpotLight.cs" />
+    <Compile Include="Utils\Extensions\TouchLocationExt.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="MonoGame.Framework">
