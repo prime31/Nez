@@ -6,14 +6,31 @@ namespace Nez
 {
 	public static class Assert
 	{
+		[Conditional("DEBUG")]
+		[DebuggerHidden]
+		public static void fail()
+		{
+			System.Diagnostics.Debug.Assert(false);
+			Debugger.Break();
+		}
+
+
+		[Conditional("DEBUG")]
+		[DebuggerHidden]
+		public static void fail( string message, params object[] args)
+		{
+			System.Diagnostics.Debug.Assert(false, string.Format(message, args));
+			Debugger.Break();
+		}
+
+
 		[Conditional( "DEBUG" )]
 		[DebuggerHidden]
 		public static void isTrue( bool condition )
 		{
 			if( !condition )
 			{
-				System.Diagnostics.Debug.Assert( false );
-				Debugger.Break();
+				fail();
 			}
 		}
 
@@ -24,8 +41,7 @@ namespace Nez
 		{
 			if( !condition )
 			{
-				System.Diagnostics.Debug.Assert( false, string.Format( message, args ) );
-				Debugger.Break();
+				fail(message, args);
 			}
 		}
 
@@ -113,8 +129,8 @@ namespace Nez
 		[DebuggerHidden]
 		public static void areEqual( object first, object second, string message, params object[] args )
 		{
-			if( first != second )
-				System.Diagnostics.Debug.Assert( false, string.Format( message, args ) );
+			if (first != second)
+				fail(message, args);
 		}
 
 
@@ -130,10 +146,7 @@ namespace Nez
 		public static void areNotEqual( object first, object second, string message, params object[] args )
 		{
 			if( first == second )
-			{
-				System.Diagnostics.Debug.Assert( false, string.Format( message, args ) );
-				Debugger.Break();
-			}
+				fail(message, args);
 		}
 
 	}
