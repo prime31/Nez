@@ -4,14 +4,15 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input.Touch;
 #endif
 
+
 namespace Nez
 {
 	public class Camera : Component
 	{
 		#region Fields and Properties
-		
+
 		#region 3D Camera Fields
-		
+
 		/// <summary>
 		/// z-position of the 3D camera projections. Affects the fov greatly. Lower values make the objects appear very long in the z-direction.
 		/// </summary>
@@ -26,7 +27,7 @@ namespace Nez
 		/// far clip plane of the 3D camera projection
 		/// </summary>
 		public float farClipPlane3D = 5000f;
-		
+
 		#endregion
 
 
@@ -78,10 +79,10 @@ namespace Nez
 			{
 				if( _zoom == 0 )
 					return 1f;
-				else if( _zoom < 1 )
+
+				if( _zoom < 1 )
 					return Mathf.map( _zoom, _minimumZoom, 1, -1, 0 );
-				else
-					return Mathf.map( _zoom, 1, _maximumZoom, 0, 1 );
+				return Mathf.map( _zoom, 1, _maximumZoom, 0, 1 );
 			}
 			set { setZoom( value ); }
 		}
@@ -127,7 +128,7 @@ namespace Nez
 					{
 						// special care for rotated bounds. we need to find our absolute min/max values and create the bounds from that
 						var topRight = screenToWorldPoint( new Vector2( Core.graphicsDevice.Viewport.X + Core.graphicsDevice.Viewport.Width, Core.graphicsDevice.Viewport.Y ) );
-						var bottomLeft = screenToWorldPoint( new Vector2( Core.graphicsDevice.Viewport.X, Core.graphicsDevice.Viewport.Y + Core.graphicsDevice.Viewport.Height ) );	
+						var bottomLeft = screenToWorldPoint( new Vector2( Core.graphicsDevice.Viewport.X, Core.graphicsDevice.Viewport.Y + Core.graphicsDevice.Viewport.Height ) );
 
 						var minX = Mathf.minOf( topLeft.X, bottomRight.X, topRight.X, bottomLeft.X );
 						var maxX = Mathf.maxOf( topLeft.X, bottomRight.X, topRight.X, bottomLeft.X );
@@ -204,7 +205,7 @@ namespace Nez
 		public Matrix viewProjectionMatrix { get { return transformMatrix * projectionMatrix; } }
 
 		#region 3D Camera Matrixes
-		
+
 		/// <summary>
 		/// returns a perspective projection for this camera for use when rendering 3D objects
 		/// </summary>
@@ -232,7 +233,7 @@ namespace Nez
 				return Matrix.CreateLookAt( position3D, position3D + Vector3.Forward, Vector3.Up );
 			}
 		}
-		
+
 		#endregion
 
 		public Vector2 origin
@@ -483,9 +484,9 @@ namespace Nez
 		/// </summary>
 		/// <returns>The to world point.</returns>
 		/// <param name="screenPosition">Screen position.</param>
-		public Vector2 screenToWorldPoint(Point screenPosition)
+		public Vector2 screenToWorldPoint( Point screenPosition )
 		{
-			return screenToWorldPoint(screenPosition.ToVector2());
+			return screenToWorldPoint( screenPosition.ToVector2() );
 		}
 
 
@@ -499,16 +500,16 @@ namespace Nez
 		}
 
 
-		#if !FNA
+#if !FNA
 		/// <summary>
 		/// returns the touch position in world space
 		/// </summary>
 		/// <returns>The to world point.</returns>
-		public Vector2 touchToWorldPoint(TouchLocation touch)
+		public Vector2 touchToWorldPoint( TouchLocation touch )
 		{
 			return screenToWorldPoint( touch.scaledPosition() );
 		}
-		#endif
+#endif
 
 		#endregion
 
