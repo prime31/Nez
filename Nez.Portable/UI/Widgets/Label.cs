@@ -251,7 +251,7 @@ namespace Nez.UI
 		/// <param name="shouldWrap">If set to <c>true</c> should wrap.</param>
 		public void setWrap( bool shouldWrap )
 		{
-			_wrapText = true;
+			_wrapText = shouldWrap;
 			invalidateHierarchy();
 		}
 
