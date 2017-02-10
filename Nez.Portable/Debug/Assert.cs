@@ -1,25 +1,24 @@
-﻿using System;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 
 
 namespace Nez
 {
 	public static class Assert
 	{
-		[Conditional("DEBUG")]
+		[Conditional( "DEBUG" )]
 		[DebuggerHidden]
 		public static void fail()
 		{
-			System.Diagnostics.Debug.Assert(false);
+			System.Diagnostics.Debug.Assert( false );
 			Debugger.Break();
 		}
 
 
-		[Conditional("DEBUG")]
+		[Conditional( "DEBUG" )]
 		[DebuggerHidden]
-		public static void fail( string message, params object[] args)
+		public static void fail( string message, params object[] args )
 		{
-			System.Diagnostics.Debug.Assert(false, string.Format(message, args));
+			System.Diagnostics.Debug.Assert( false, string.Format( message, args ) );
 			Debugger.Break();
 		}
 
@@ -41,7 +40,7 @@ namespace Nez
 		{
 			if( !condition )
 			{
-				fail(message, args);
+				fail( message, args );
 			}
 		}
 
@@ -68,7 +67,7 @@ namespace Nez
 		/// <param name="obj">Object.</param>
 		/// <param name="message">Message.</param>
 		/// <param name="args">Arguments.</param>
-		[Conditional("DEBUG")]
+		[Conditional( "DEBUG" )]
 		[DebuggerHidden]
 		public static void isNull( object obj )
 		{
@@ -96,7 +95,7 @@ namespace Nez
 		/// <param name="obj">Object.</param>
 		/// <param name="message">Message.</param>
 		/// <param name="args">Arguments.</param>
-		[Conditional("DEBUG")]
+		[Conditional( "DEBUG" )]
 		[DebuggerHidden]
 		public static void isNotNull( object obj )
 		{
@@ -129,8 +128,8 @@ namespace Nez
 		[DebuggerHidden]
 		public static void areEqual( object first, object second, string message, params object[] args )
 		{
-			if (first != second)
-				fail(message, args);
+			if( first != second )
+				fail( message, args );
 		}
 
 
@@ -146,7 +145,7 @@ namespace Nez
 		public static void areNotEqual( object first, object second, string message, params object[] args )
 		{
 			if( first == second )
-				fail(message, args);
+				fail( message, args );
 		}
 
 	}
