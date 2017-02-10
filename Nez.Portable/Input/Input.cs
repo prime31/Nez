@@ -92,6 +92,12 @@ namespace Nez
 			return scaledPos * _resolutionScale;
 		}
 
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public static Vector2 scaledPosition(Point position)
+		{
+			return scaledPosition(new Vector2(position.X, position.Y));
+		}
+
 		#region Keyboard
 
 		public static KeyboardState previousKeyboardState { get { return _previousKbState; } }
