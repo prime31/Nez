@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Nez.Systems;
@@ -1066,24 +1066,24 @@ namespace Nez
 
 
 		/// <summary>
-		/// returns the first enabled loaded object of Type T
+		/// returns the first enabled loaded component of Type T
 		/// </summary>
-		/// <returns>The object of type.</returns>
+		/// <returns>The component of type.</returns>
 		/// <typeparam name="T">The 1st type parameter.</typeparam>
-		public T findObjectOfType<T>() where T : Component
+		public T findComponentOfType<T>() where T : Component
 		{
-			return entities.findObjectOfType<T>();
+			return entities.findComponentOfType<T>();
 		}
 
 
 		/// <summary>
-		/// returns a list of all enabled loaded objects of Type T
+		/// returns a list of all enabled loaded components of Type T
 		/// </summary>
-		/// <returns>The objects of type.</returns>
+		/// <returns>The components of type.</returns>
 		/// <typeparam name="T">The 1st type parameter.</typeparam>
-		public List<T> findObjectsOfType<T>() where T : Component
+		public List<T> findComponentsOfType<T>() where T : Component
 		{
-			return entities.findObjectsOfType<T>();
+			return entities.findComponentsOfType<T>();
 		}
 
 		#endregion

@@ -300,9 +300,9 @@ namespace Nez
 		/// <summary>
 		/// returns the first Component found in the Scene of type T
 		/// </summary>
-		/// <returns>The object of type.</returns>
+		/// <returns>The component of type.</returns>
 		/// <typeparam name="T">The 1st type parameter.</typeparam>
-		public T findObjectOfType<T>() where T : Component
+		public T findComponentOfType<T>() where T : Component
 		{
 			for( var i = 0; i < _entities.length; i++ )
 			{
@@ -332,9 +332,9 @@ namespace Nez
 		/// <summary>
 		/// returns all Components found in the Scene of type T. The returned List can be put back in the pool via ListPool.free.
 		/// </summary>
-		/// <returns>The objects of type.</returns>
+		/// <returns>The components of type.</returns>
 		/// <typeparam name="T">The 1st type parameter.</typeparam>
-		public List<T> findObjectsOfType<T>() where T : Component
+		public List<T> findComponentsOfType<T>() where T : Component
 		{
 			var comps = ListPool<T>.obtain();
 			for( var i = 0; i < _entities.length; i++ )
