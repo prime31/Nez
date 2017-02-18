@@ -1066,7 +1066,7 @@ namespace Nez
 
 
 		/// <summary>
-		/// Returns the first enabled loaded object of Type T
+		/// returns the first enabled loaded object of Type T
 		/// </summary>
 		/// <returns>The object of type.</returns>
 		/// <typeparam name="T">The 1st type parameter.</typeparam>
@@ -1077,7 +1077,7 @@ namespace Nez
 
 
 		/// <summary>
-		/// Returns a list of all enabled loaded objects of Type T
+		/// returns a list of all enabled loaded objects of Type T
 		/// </summary>
 		/// <returns>The objects of type.</returns>
 		/// <typeparam name="T">The 1st type parameter.</typeparam>
@@ -1105,7 +1105,7 @@ namespace Nez
 
 
 		/// <summary>
-		/// Removes an EntitySystem processor from the scene
+		/// removes an EntitySystem processor from the scene
 		/// </summary>
 		/// <param name="processor">Processor.</param>
 		public void removeEntityProcessor( EntitySystem processor )
@@ -1115,7 +1115,7 @@ namespace Nez
 
 
 		/// <summary>
-		/// Gets an EntitySystem processor
+		/// gets an EntitySystem processor
 		/// </summary>
 		/// <returns>The processor.</returns>
 		/// <typeparam name="T">The 1st type parameter.</typeparam>
