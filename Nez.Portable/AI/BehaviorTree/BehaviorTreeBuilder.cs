@@ -239,10 +239,10 @@ namespace Nez.AI.BehaviorTrees
 		#endregion
 
 
-		public BehaviorTree<T> build()
+		public BehaviorTree<T> build( float updatePeriod = 0.2f )
 		{
 			Assert.isNotNull( _currentNode, "Can't create a behaviour tree with zero nodes" );
-			return new BehaviorTree<T>( _context, _currentNode );
+			return new BehaviorTree<T>( _context, _currentNode, updatePeriod );
 		}
 
 	}
