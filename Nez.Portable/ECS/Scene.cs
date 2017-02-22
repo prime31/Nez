@@ -771,6 +771,7 @@ namespace Nez
 		public T addSceneComponent<T>() where T : SceneComponent, new()
 		{
 			var component = new T();
+			component.scene = this;
 			component.onEnabled();
 			_sceneComponents.add( component );
 			_sceneComponents.sort();
