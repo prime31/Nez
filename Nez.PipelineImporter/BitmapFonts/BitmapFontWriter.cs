@@ -70,7 +70,7 @@ namespace Nez.BitmapFontImporter
 			foreach( var c in fontFile.chars )
 			{
 				if( c.width > 0 && c.height > 0 )
-					descent = Math.Min( fontFile.common.base_ + c.yOffset, descent );
+					descent = Math.Min( fontFile.common.base_ + c.yOffset + fontFile.info.outLine, descent );
 			}
 
 			return descent + padBottom;
