@@ -45,7 +45,7 @@ namespace Nez.BitmapFontImporter
 			writer.Write( int.Parse( padding[2] ) ); // bottom
 			writer.Write( int.Parse( padding[3] ) ); // right
 
-			writer.Write( getDescent( fontFile, int.Parse( padding[3] ) ) );
+			writer.Write( getDescent( fontFile, int.Parse( padding[2] ) ) );
 
 			writer.Write( fontFile.chars.Count );
 			foreach( var c in fontFile.chars )
