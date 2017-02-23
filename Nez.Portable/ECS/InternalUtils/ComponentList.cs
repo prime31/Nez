@@ -51,6 +51,29 @@ namespace Nez
 
 		public Component this[int index] { get { return _components.buffer[index]; } }
 
+		/// <summary>
+		/// simple dump of all current components and components to be added, without requiring a type check
+		/// </summary>
+		/// <returns>all components</returns>
+		public Component[] toArray()
+		{
+			var components = ListPool<Component>.obtain();
+			getComponents(components);
+
+			for (var i = 0; i < _components.length; i++)
+			{
+				components.Add(_components.buffer[i]);
+			}
+
+			// we also check the pending components just in case addComponent and getComponent are called in the same frame
+			for (var i = 0; i < _componentsToAdd.Count; i++)
+			{
+				components.Add(_componentsToAdd[i]);
+			}
+
+			return components.ToArray();
+		}
+
 		#endregion
 
 
