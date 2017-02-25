@@ -49,27 +49,6 @@ namespace Nez
 
 		public Entity this[int index] { get { return _entities.buffer[index]; } }
 
-		/// <summary>
-		/// simple dump of all current entities and entities to be added, without requiring a type check
-		/// </summary>
-		/// <returns>all entities</returns>
-		public Entity[] toArray()
-		{
-			var list = ListPool<Entity>.obtain();
-			for (var i = 0; i < _entities.length; i++)
-			{
-				list.Add(_entities.buffer[i]);
-			}
-
-			// in case an entity is added and searched for in the same frame we check the toAdd list
-			for (var i = 0; i < _entitiesToAdd.Count; i++)
-			{
-				list.Add(_entitiesToAdd[i]);
-			}
-
-			return list.ToArray();
-		}
-
 		#endregion
 
 
@@ -290,6 +269,24 @@ namespace Nez
 			}
 
 			return _entityDict[tag];
+		}
+
+
+		/// <summary>
+		/// gets current Entities and Entities to be added, without requiring a type check. The returned List can be put back in the pool via ListPool.free.
+		/// </summary>
+		/// <returns>all entities</returns>
+		public List<Entity> get()
+		{
+			var list = ListPool<Entity>.obtain();
+			for (var i = 0; i < _entities.length; i++)
+				list.Add(_entities.buffer[i]);
+		
+			// in case an entity is added and searched for in the same frame we check the toAdd list
+			for (var i = 0; i < _entitiesToAdd.Count; i++)
+				list.Add(_entitiesToAdd[i]);
+		
+			return list;
 		}
 
 

@@ -51,29 +51,6 @@ namespace Nez
 
 		public Component this[int index] { get { return _components.buffer[index]; } }
 
-		/// <summary>
-		/// simple dump of all current components and components to be added, without requiring a type check
-		/// </summary>
-		/// <returns>all components</returns>
-		public Component[] toArray()
-		{
-			var components = ListPool<Component>.obtain();
-			getComponents(components);
-
-			for (var i = 0; i < _components.length; i++)
-			{
-				components.Add(_components.buffer[i]);
-			}
-
-			// we also check the pending components just in case addComponent and getComponent are called in the same frame
-			for (var i = 0; i < _componentsToAdd.Count; i++)
-			{
-				components.Add(_componentsToAdd[i]);
-			}
-
-			return components.ToArray();
-		}
-
 		#endregion
 
 
@@ -93,7 +70,7 @@ namespace Nez
 		{
 			Debug.warnIf( _componentsToRemove.Contains( component ), "You are trying to remove a Component ({0}) that you already removed", component );
 
-			// this may not be a live Component so we have to watch out for if it hasnt been processed yet but it is being removed in the same frame
+			// this may not be a live Component so we have to watch out for if it hasn't been processed yet but it is being removed in the same frame
 			if( _componentsToAdd.Contains( component ) )
 			{
 				_componentsToAdd.Remove( component );
@@ -276,6 +253,27 @@ namespace Nez
 			}
 
 			return null;
+		}
+
+
+		/// <summary>
+		/// Gets current components and components to be added, without requiring a type check. The returned List can be put back in the pool via ListPool.free.
+		/// </summary>
+		/// <returns>all components</returns>
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public List<Component> getComponents()
+		{
+			var components = ListPool<Component>.obtain();
+			getComponents(components);
+
+			for (var i = 0; i < _components.length; i++)
+				components.Add(_components.buffer[i]);
+
+			// we also check the pending components just in case addComponent and getComponent are called in the same frame
+			for (var i = 0; i < _componentsToAdd.Count; i++)
+				components.Add(_componentsToAdd[i]);
+
+			return components;
 		}
 
 

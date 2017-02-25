@@ -8,32 +8,32 @@ namespace Nez
 	/// </summary>
 	public static class ListPool<T>
 	{
-		static readonly Queue<List<T>> _objectQueue = new Queue<List<T>>();
+		static readonly Queue<List<T>> _listQueue = new Queue<List<T>>();
 
 
 		/// <summary>
-		/// warms up the cache filling it with a max of cacheCount objects
+		/// warms up the cache filling it with a max of cacheCount lists
 		/// </summary>
 		/// <param name="cacheCount">new cache count</param>
 		public static void warmCache( int cacheCount )
 		{
-			cacheCount -= _objectQueue.Count;
+			cacheCount -= _listQueue.Count;
 			if( cacheCount > 0 )
 			{
 				for( var i = 0; i < cacheCount; i++ )
-					_objectQueue.Enqueue( new List<T>() );
+					_listQueue.Enqueue( new List<T>() );
 			}
 		}
 
 
 		/// <summary>
-		/// trims the cache down to cacheCount items
+		/// trims the cache down to cacheCount lists
 		/// </summary>
 		/// <param name="cacheCount">Cache count.</param>
 		public static void trimCache( int cacheCount )
 		{
-			while( cacheCount > _objectQueue.Count )
-				_objectQueue.Dequeue();
+			while( cacheCount > _listQueue.Count )
+				_listQueue.Dequeue();
 		}
 
 
@@ -42,30 +42,30 @@ namespace Nez
 		/// </summary>
 		public static void clearCache()
 		{
-			_objectQueue.Clear();
+			_listQueue.Clear();
 		}
 
 
 		/// <summary>
-		/// pops an item off the stack if available creating a new item as necessary
+		/// pops a list off the stack if available creating a new list as necessary
 		/// </summary>
 		public static List<T> obtain()
 		{
-			if( _objectQueue.Count > 0 )
-				return _objectQueue.Dequeue();
+			if( _listQueue.Count > 0 )
+				return _listQueue.Dequeue();
 
 			return new List<T>();
 		}
 
 
 		/// <summary>
-		/// pushes an item back on the stack
+		/// pushes an list back on the stack
 		/// </summary>
-		/// <param name="obj">Object.</param>
-		public static void free( List<T> obj )
+		/// <param name="list">List.</param>
+		public static void free( List<T> list )
 		{
-			_objectQueue.Enqueue( obj );
-			obj.Clear();
+			_listQueue.Enqueue( list );
+			list.Clear();
 		}
 	}
 }
