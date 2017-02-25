@@ -30,14 +30,14 @@ namespace Nez
 		/// <summary>
 		/// tracks entities by tag for easy retrieval
 		/// </summary>
-		Dictionary<int, List<Entity>> _entityDict = new Dictionary<int, List<Entity>>();
+		Dictionary<int,List<Entity>> _entityDict = new Dictionary<int, List<Entity>>();
 		List<int> _unsortedTags = new List<int>();
 
 		// used in updateLists to double buffer so that the original lists can be modified elsewhere
 		List<Entity> _tempEntityList = new List<Entity>();
 
 
-		public EntityList(Scene scene)
+		public EntityList( Scene scene )
 		{
 			this.scene = scene;
 		}
@@ -79,9 +79,9 @@ namespace Nez
 		}
 
 
-		internal void markTagUnsorted(int tag)
+		internal void markTagUnsorted( int tag )
 		{
-			_unsortedTags.Add(tag);
+			_unsortedTags.Add( tag );
 		}
 
 
@@ -89,9 +89,9 @@ namespace Nez
 		/// adds an Entity to the list. All lifecycle methods will be called in the next frame.
 		/// </summary>
 		/// <param name="entity">Entity.</param>
-		public void add(Entity entity)
+		public void add( Entity entity )
 		{
-			_entitiesToAdd.Add(entity);
+			_entitiesToAdd.Add( entity );
 		}
 
 
@@ -99,19 +99,19 @@ namespace Nez
 		/// removes an Entity from the list. All lifecycle methods will be called in the next frame.
 		/// </summary>
 		/// <param name="entity">Entity.</param>
-		public void remove(Entity entity)
+		public void remove( Entity entity )
 		{
-			Debug.warnIf(_entitiesToRemove.Contains(entity), "You are trying to remove an entity ({0}) that you already removed", entity.name);
+			Debug.warnIf( _entitiesToRemove.Contains( entity ), "You are trying to remove an entity ({0}) that you already removed", entity.name );
 
 			// guard against adding and then removing an Entity in the same frame
-			if (_entitiesToAdd.Contains(entity))
+			if( _entitiesToAdd.Contains( entity ) )
 			{
-				_entitiesToAdd.Remove(entity);
+				_entitiesToAdd.Remove( entity );
 				return;
 			}
 
-			if (!_entitiesToRemove.Contains(entity))
-				_entitiesToRemove.Add(entity);
+			if( !_entitiesToRemove.Contains( entity ) )
+				_entitiesToRemove.Add( entity );
 		}
 
 
@@ -129,7 +129,7 @@ namespace Nez
 			// be in the _entitiesToRemove list which will get handled by updateLists.
 			updateLists();
 
-			for (var i = 0; i < _entities.length; i++)
+			for( var i = 0; i < _entities.length; i++ )
 			{
 				_entities.buffer[i]._isDestroyed = true;
 				_entities.buffer[i].onRemovedFromScene();
@@ -145,35 +145,35 @@ namespace Nez
 		/// checks to see if the Entity is presently managed by this EntityList
 		/// </summary>
 		/// <param name="entity">Entity.</param>
-		public bool contains(Entity entity)
+		public bool contains( Entity entity )
 		{
-			return _entities.contains(entity) || _entitiesToAdd.Contains(entity);
+			return _entities.contains( entity ) || _entitiesToAdd.Contains( entity );
 		}
 
 
-		internal void addToTagList(Entity entity)
+		internal void addToTagList( Entity entity )
 		{
-			var list = entitiesWithTag(entity.tag);
-			Assert.isFalse(list.Contains(entity), "Entity tag list already contains this entity: {0}", entity);
+			var list = entitiesWithTag( entity.tag );
+			Assert.isFalse( list.Contains( entity ), "Entity tag list already contains this entity: {0}", entity );
 
-			list.Add(entity);
-			_unsortedTags.Add(entity.tag);
+			list.Add( entity );
+			_unsortedTags.Add( entity.tag );
 		}
 
 
-		internal void removeFromTagList(Entity entity)
+		internal void removeFromTagList( Entity entity )
 		{
-			_entityDict[entity.tag].Remove(entity);
+			_entityDict[entity.tag].Remove( entity );
 		}
 
 
-		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		[MethodImpl( MethodImplOptions.AggressiveInlining )]
 		internal void update()
 		{
-			for (var i = 0; i < _entities.length; i++)
+			for( var i = 0; i < _entities.length; i++ )
 			{
 				var entity = _entities.buffer[i];
-				if (entity.enabled && (entity.updateInterval == 1 || Time.frameCount % entity.updateInterval == 0))
+				if( entity.enabled && ( entity.updateInterval == 1 || Time.frameCount % entity.updateInterval == 0 ) )
 					entity.update();
 			}
 		}
@@ -182,64 +182,64 @@ namespace Nez
 		public void updateLists()
 		{
 			// handle removals
-			if (_entitiesToRemove.Count > 0)
+			if( _entitiesToRemove.Count > 0 )
 			{
-				Utils.swap(ref _entitiesToRemove, ref _tempEntityList);
-				for (var i = 0; i < _tempEntityList.Count; i++)
+				Utils.swap( ref _entitiesToRemove, ref _tempEntityList );
+				for( var i = 0; i < _tempEntityList.Count; i++ )
 				{
 					var entity = _tempEntityList[i];
 
 					// handle the tagList
-					removeFromTagList(entity);
+					removeFromTagList( entity );
 
 					// handle the regular entity list
-					_entities.remove(entity);
+					_entities.remove( entity );
 					entity.onRemovedFromScene();
 					entity.scene = null;
 
-					if (Core.entitySystemsEnabled)
-						scene.entityProcessors.onEntityRemoved(entity);
+					if( Core.entitySystemsEnabled )
+						scene.entityProcessors.onEntityRemoved( entity );
 				}
 
 				_tempEntityList.Clear();
 			}
 
 			// handle additions
-			if (_entitiesToAdd.Count > 0)
+			if( _entitiesToAdd.Count > 0 )
 			{
-				Utils.swap(ref _entitiesToAdd, ref _tempEntityList);
-				for (var i = 0; i < _tempEntityList.Count; i++)
+				Utils.swap( ref _entitiesToAdd, ref _tempEntityList );
+				for( var i = 0; i < _tempEntityList.Count; i++ )
 				{
 					var entity = _tempEntityList[i];
 
-					_entities.add(entity);
+					_entities.add( entity );
 					entity.scene = scene;
 
 					// handle the tagList
-					addToTagList(entity);
+					addToTagList( entity );
 
-					if (Core.entitySystemsEnabled)
-						scene.entityProcessors.onEntityAdded(entity);
+					if( Core.entitySystemsEnabled )
+						scene.entityProcessors.onEntityAdded( entity );
 				}
 
 				// now that all entities are added to the scene, we loop through again and call onAddedToScene
-				for (var i = 0; i < _tempEntityList.Count; i++)
+				for( var i = 0; i < _tempEntityList.Count; i++ )
 					_tempEntityList[i].onAddedToScene();
 
 				_tempEntityList.Clear();
 				_isEntityListUnsorted = true;
 			}
 
-			if (_isEntityListUnsorted)
+			if( _isEntityListUnsorted )
 			{
 				_entities.sort();
 				_isEntityListUnsorted = false;
 			}
 
 			// sort our tagList if needed
-			if (_unsortedTags.Count > 0)
+			if( _unsortedTags.Count > 0 )
 			{
-				for (int i = 0, count = _unsortedTags.Count; i < count; i++)
+				for( int i = 0, count = _unsortedTags.Count; i < count; i++ )
 				{
 					var tag = _unsortedTags[i];
 					_entityDict[tag].Sort();
@@ -256,18 +256,18 @@ namespace Nez
 		/// </summary>
 		/// <returns>The entity.</returns>
 		/// <param name="name">Name.</param>
-		public Entity findEntity(string name)
+		public Entity findEntity( string name )
 		{
-			for (var i = 0; i < _entities.length; i++)
+			for( var i = 0; i < _entities.length; i++ )
 			{
-				if (_entities.buffer[i].name == name)
+				if( _entities.buffer[i].name == name )
 					return _entities.buffer[i];
 			}
 
 			// in case an entity is added and searched for in the same frame we check the toAdd list
-			for (var i = 0; i < _entitiesToAdd.Count; i++)
+			for( var i = 0; i < _entitiesToAdd.Count; i++ )
 			{
-				if (_entitiesToAdd[i].name == name)
+				if( _entitiesToAdd[i].name == name )
 					return _entitiesToAdd[i];
 			}
 
@@ -280,10 +280,10 @@ namespace Nez
 		/// </summary>
 		/// <returns>The with tag.</returns>
 		/// <param name="tag">Tag.</param>
-		public List<Entity> entitiesWithTag(int tag)
+		public List<Entity> entitiesWithTag( int tag )
 		{
 			List<Entity> list = null;
-			if (!_entityDict.TryGetValue(tag, out list))
+			if( !_entityDict.TryGetValue( tag, out list ) )
 			{
 				list = new List<Entity>();
 				_entityDict[tag] = list;
@@ -301,17 +301,17 @@ namespace Nez
 		public List<Entity> entitiesOfType<T>() where T : Entity
 		{
 			var list = ListPool<Entity>.obtain();
-			for (var i = 0; i < _entities.length; i++)
+			for( var i = 0; i < _entities.length; i++ )
 			{
-				if (_entities.buffer[i] is T)
-					list.Add(_entities.buffer[i]);
+				if( _entities.buffer[i] is T )
+					list.Add( _entities.buffer[i] );
 			}
 
 			// in case an entity is added and searched for in the same frame we check the toAdd list
-			for (var i = 0; i < _entitiesToAdd.Count; i++)
+			for( var i = 0; i < _entitiesToAdd.Count; i++ )
 			{
-				if (_entitiesToAdd[i] is T)
-					list.Add(_entitiesToAdd[i]);
+				if( _entitiesToAdd[i] is T )
+					list.Add( _entitiesToAdd[i] );
 			}
 
 			return list;
@@ -325,23 +325,23 @@ namespace Nez
 		/// <typeparam name="T">The 1st type parameter.</typeparam>
 		public T findComponentOfType<T>() where T : Component
 		{
-			for (var i = 0; i < _entities.length; i++)
+			for( var i = 0; i < _entities.length; i++ )
 			{
-				if (_entities.buffer[i].enabled)
+				if( _entities.buffer[i].enabled )
 				{
 					var comp = _entities.buffer[i].getComponent<T>();
-					if (comp != null)
+					if( comp != null )
 						return comp;
 				}
 			}
 
 			// in case an entity is added and searched for in the same frame we check the toAdd list
-			for (var i = 0; i < _entitiesToAdd.Count; i++)
+			for( var i = 0; i < _entitiesToAdd.Count; i++ )
 			{
-				if (_entitiesToAdd[i].enabled)
+				if( _entitiesToAdd[i].enabled )
 				{
 					var comp = _entitiesToAdd[i].getComponent<T>();
-					if (comp != null)
+					if( comp != null )
 						return comp;
 				}
 			}
@@ -358,17 +358,17 @@ namespace Nez
 		public List<T> findComponentsOfType<T>() where T : Component
 		{
 			var comps = ListPool<T>.obtain();
-			for (var i = 0; i < _entities.length; i++)
+			for( var i = 0; i < _entities.length; i++ )
 			{
-				if (_entities.buffer[i].enabled)
-					_entities.buffer[i].getComponents<T>(comps);
+				if( _entities.buffer[i].enabled )
+					_entities.buffer[i].getComponents<T>( comps );
 			}
 
 			// in case an entity is added and searched for in the same frame we check the toAdd list
-			for (var i = 0; i < _entitiesToAdd.Count; i++)
+			for( var i = 0; i < _entitiesToAdd.Count; i++ )
 			{
-				if (_entitiesToAdd[i].enabled)
-					_entitiesToAdd[i].getComponents<T>(comps);
+				if( _entitiesToAdd[i].enabled )
+					_entitiesToAdd[i].getComponents<T>( comps );
 			}
 
 			return comps;
