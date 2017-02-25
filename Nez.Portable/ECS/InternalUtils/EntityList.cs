@@ -378,4 +378,3 @@ namespace Nez
 
 	}
 }
-
