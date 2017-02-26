@@ -261,7 +261,7 @@ namespace Nez
 		/// </summary>
 		/// <returns>all components</returns>
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public List<Component> getComponents()
+		public List<Component> getAllComponents()
 		{
 			var components = ListPool<Component>.obtain();
 			getComponents(components);

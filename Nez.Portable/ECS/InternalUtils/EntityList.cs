@@ -276,7 +276,7 @@ namespace Nez
 		/// gets current Entities and Entities to be added, without requiring a type check. The returned List can be put back in the pool via ListPool.free.
 		/// </summary>
 		/// <returns>all entities</returns>
-		public List<Entity> get()
+		public List<Entity> getAllEntities()
 		{
 			var list = ListPool<Entity>.obtain();
 			for (var i = 0; i < _entities.length; i++)
