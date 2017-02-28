@@ -207,44 +207,12 @@ namespace Nez.UI
 							var style = Activator.CreateInstance( type );
 							var styleDict = config.styles.getStyleDict( styleType, styleNames[j] );
 
-							foreach( var styleConfig in styleDict )
-							{
-								var name = styleConfig.Key;
-								var identifier = styleConfig.Value;
-
-								// if name has 'color' in it, we are looking for a color. we check color first because some styles have things like
-								// fontColor so we'll check for font after color.
-								if( name.ToLower().Contains( "color" ) )
-								{
-									ReflectionUtils.getFieldInfo( style, name ).SetValue( style, getColor( identifier ) );
-								}
-								else if( name.ToLower().Contains( "font" ) )
-								{
-									ReflectionUtils.getFieldInfo( style, name ).SetValue( style, contentManager.Load<BitmapFont>( identifier ) );
-								}
-								else if( name.ToLower().EndsWith( "style" ) )
-								{
-									// we have a style reference. first we need to find out what type of style name refers to from the field.
-									// then we need to fetch the "get" method and properly type it.
-									var styleField = ReflectionUtils.getFieldInfo( style, name );
-									var getStyleMethod = ReflectionUtils.getMethodInfo( this, "get", new Type[] { typeof( string ) } );
-									getStyleMethod = getStyleMethod.MakeGenericMethod( styleField.FieldType );
-
-									// now we look up the style and finally set it
-									var theStyle = getStyleMethod.Invoke( this, new object[] { identifier } );
-									styleField.SetValue( style, theStyle );
-								}
-								else
-								{
-									// we have an IDrawable. first we'll try to find a Subtexture and if we cant find one we will see if
-									// identifier is a color
-									var drawable = getDrawable( identifier );
-									if( drawable != null )
-										ReflectionUtils.getFieldInfo( style, name ).SetValue( style, drawable );
-									else
-										Debug.error( "could not find a drawable or color named {0} when setting {1} on {2}", identifier, name, styleNames[j] );
-								}
-							}
+							// Get the method by simple name check since we know it's the only one
+							var setStylesForStyleClassMethod = ReflectionUtils.getMethodInfo(this, "setStylesForStyleClass");
+							setStylesForStyleClassMethod = setStylesForStyleClassMethod.MakeGenericMethod(type);
+							
+							// Return not nec., but it shows that the style is being modified
+							style = setStylesForStyleClassMethod.Invoke( this, new object[] {style, styleDict, contentManager, styleNames[j]} );
 
 							add( styleNames[j], style, type );
 						}
@@ -257,6 +225,82 @@ namespace Nez.UI
 			}
 		}
 
+
+		/// <summary>
+		/// Recursively finds and sets all styles for a specific style config class that are within 
+		/// the dictionary passed in. This allows skins to contain nested, dynamic style declarations.
+		///	For example, it allows a SelectBoxStyle to contain a listStyle that is declared inline 
+		///	(and not a reference).
+		/// </summary>
+		/// <param name="styleClass">The style config class instance that needs to be "filled out"</param>
+		/// <param name="styleDict">A dictionary that represents one style name within the style config class (i.e. 'default').</param>
+		/// <param name="styleName">The style name that the dictionary represents (i.e. 'default').</param>
+		/// <typeparam name="T">The style config class type (i.e. SelectBoxStyle)</typeparam>
+		public T setStylesForStyleClass<T>(T styleClass, Dictionary<string, object> styleDict, NezContentManager contentManager, string styleName)
+		{
+			foreach( var styleConfig in styleDict )
+			{
+				var name = styleConfig.Key;
+				var valueObject = styleConfig.Value;
+				var identifier = valueObject.ToString();
+
+				// if name has 'color' in it, we are looking for a color. we check color first because some styles have things like
+				// fontColor so we'll check for font after color. We assume these are strings and do no error checking on 'identifier'
+				if( name.ToLower().Contains( "color" ) )
+				{
+					ReflectionUtils.getFieldInfo( styleClass, name ).SetValue( styleClass, getColor( identifier ) );
+				}
+				else if( name.ToLower().Contains( "font" ) )
+				{
+					ReflectionUtils.getFieldInfo( styleClass, name ).SetValue( styleClass, contentManager.Load<BitmapFont>( identifier ) );
+				}
+				else if( name.ToLower().EndsWith( "style" ) )
+				{
+					var styleField = ReflectionUtils.getFieldInfo( styleClass, name );
+
+					// Check to see if valueObject is a Dictionary object instead of a string. If so, it is an 'inline' style
+					//	and needs to be recursively parsed like any other style. Otherwise, it is assumed to be a string and 
+					//	represents an existing style that has been previously parsed.
+					if(valueObject is Dictionary<string, object>)
+					{
+						// Since there is no existing field to reference, we create it and fill it out by hand
+						var inlineStyle = Activator.CreateInstance( styleField.FieldType );
+
+						// Recursively call this method with the new field type and dictionary
+						var setStylesForStyleClassMethod = ReflectionUtils.getMethodInfo(this, "setStylesForStyleClass");
+						setStylesForStyleClassMethod = setStylesForStyleClassMethod.MakeGenericMethod(styleField.FieldType);
+						inlineStyle = setStylesForStyleClassMethod.Invoke(this, new object[] { inlineStyle, valueObject as Dictionary<string, object>, contentManager, styleName });
+						styleField.SetValue( styleClass, inlineStyle );
+					}
+					else
+					{
+						// We have a style reference. First we need to find out what type of style name refers to from the field.
+						// Then we need to fetch the "get" method and properly type it.
+						var getStyleMethod = ReflectionUtils.getMethodInfo( this, "get", new Type[] { typeof( string ) } );
+						getStyleMethod = getStyleMethod.MakeGenericMethod( styleField.FieldType );
+
+						// now we look up the style and finally set it
+						var theStyle = getStyleMethod.Invoke( this, new object[] { identifier } );
+						styleField.SetValue( styleClass, theStyle );
+
+						if(theStyle == null)
+							Debug.error( "could not find a style reference named {0} when setting {1} on {2}", identifier, name, styleName );
+					}
+				}
+				else
+				{
+					// we have an IDrawable. first we'll try to find a Subtexture and if we cant find one we will see if
+					// identifier is a color
+					var drawable = getDrawable( identifier );
+					if( drawable != null )
+						ReflectionUtils.getFieldInfo( styleClass, name ).SetValue( styleClass, drawable );
+					else
+						Debug.error( "could not find a drawable or color named {0} when setting {1} on {2}", identifier, name, styleName );
+				}
+			}
+
+			return styleClass;
+		}
 
 		/// <summary>
 		/// Adds all named subtextures from the atlas. If NinePatchSubtextures are found they will be explicitly added as such.
