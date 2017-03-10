@@ -1,4 +1,4 @@
-﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System.Collections.Generic;
 
@@ -112,6 +112,36 @@ namespace Nez.Textures
 			destArray[7] = new Rectangle( leftX, bottomY, stretchedCenterWidth, marginBottom ); // bottom-center
 			destArray[8] = new Rectangle( rightX, bottomY, marginRight, marginBottom ); // bottom-right
 		}
+
+	    /// <summary>
+	    /// Helper function to create tiles out of this TextureRegion starting from the top left corner going to the right and ending at
+	    /// bottom right corner. Only complete tiles will be returned so if the region's width or height are not a multiple of the
+	    /// tile width and height not all of the region will be used. This will not work on texture regions returned form a TextureAtlas
+	    /// that either have whitespace removed or where flipped before the region is split.
+	    /// </summary>
+	    /// <param name="tileWidth">a tile's width in pixels</param>
+	    /// <param name="tileHeight">a tile's height in pixels</param>
+	    /// <returns>a 2D array of Subtextures indexed by [row, column]</returns>
+	    public Subtexture[,] split(int tileWidth, int tileHeight)
+	    {
+	        var x = sourceRect.Left;
+	        var y = sourceRect.Top;
+	        var width = sourceRect.Right;
+	        var height = sourceRect.Bottom;
+
+	        var rows = height / tileHeight;
+	        var cols = width / tileWidth;
+
+	        var startX = x;
+	        var tiles = new Subtexture[rows, cols];
+	        for (var row = 0; row < rows; row++, y += tileHeight) {
+	            x = startX;
+	            for (var col = 0; col < cols; col++, x += tileWidth) {
+	                tiles[row,col] = new Subtexture(texture2D, x, y, tileWidth, tileHeight);
+	            }
+	        }
+	        return tiles;
+	    }
 
 
 		/// <summary>
