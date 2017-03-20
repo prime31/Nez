@@ -130,10 +130,10 @@ namespace Nez
 		}
 
 
-		private List<Entity> getTagList( int tag )
+		List<Entity> getTagList( int tag )
 		{
 			List<Entity> list = null;
-			if (!_entityDict.TryGetValue(tag, out list))
+			if( !_entityDict.TryGetValue( tag, out list ) )
 			{
 				list = new List<Entity>();
 				_entityDict[tag] = list;
@@ -274,7 +274,7 @@ namespace Nez
 		/// <param name="tag">Tag.</param>
 		public List<Entity> entitiesWithTag( int tag )
 		{
-			List<Entity> list = getTagList( tag );
+			var list = getTagList( tag );
 
 			var returnList = ListPool<Entity>.obtain();
 			returnList.AddRange( list );
