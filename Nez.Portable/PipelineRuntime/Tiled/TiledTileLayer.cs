@@ -147,7 +147,7 @@ namespace Nez.Tiled
 					if( rotation == 0 )
 						ty += ( tiledMap.tileHeight - tileRegion.sourceRect.Height );
 
-					batcher.draw(tileRegion, new Vector2(tx, ty) + offset, color, rotation, Vector2.Zero, 1, spriteEffects, layerDepth );
+					batcher.draw( tileRegion, new Vector2( tx, ty ) + offset, color, rotation, Vector2.Zero, 1, spriteEffects, layerDepth );
 				}
 			}
 		}
