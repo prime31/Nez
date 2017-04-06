@@ -2,14 +2,34 @@
 using System.IO;
 using System.Xml.Serialization;
 using Microsoft.Xna.Framework.Content.Pipeline;
-
+using System.Collections;
 
 namespace Nez.TiledMaps
 {
 	[ContentImporter( ".tmx", DefaultProcessor = "TiledMapProcessor", DisplayName = "Tiled Map Importer" )]
 	public class TiledMapImporter : ContentImporter<TmxMap>
-	{
-		public override TmxMap Import( string filename, ContentImporterContext context )
+    {
+        protected void LayerGroup( TmxMap map, IList group, ContentImporterContext context )
+        {
+            foreach ( TmxLayerGroup g in group )
+            {
+                context.Logger.LogMessage( "Deserialized LayerGroup: {0}", g );
+                if ( g.layer != null )
+                {
+                    foreach ( var l in g.layer )
+                    {
+                        map.layers.Add( l );
+                    }
+                }
+
+                if ( g.groups != null )
+                {
+                    LayerGroup( map, g.groups, context );
+                }
+            }
+        }
+
+        public override TmxMap Import( string filename, ContentImporterContext context )
 		{
 			if( filename == null )
 				throw new ArgumentNullException( nameof( filename ) );
@@ -22,7 +42,18 @@ namespace Nez.TiledMaps
 				var map = (TmxMap)serializer.Deserialize( reader );
 				var xmlSerializer = new XmlSerializer( typeof( TmxTileset ) );
 
-				foreach( var l in map.layers )
+                foreach ( var g in map.layerGroups )
+                {
+                    context.Logger.LogMessage( "Deserialized LayerGroup: {0}", g );
+                    foreach ( var l in g.layer )
+                    {
+                        map.layers.Add( l );
+                    }
+                }
+
+                LayerGroup( map, map.layerGroups, context );
+
+                foreach ( var l in map.layers )
 					context.Logger.LogMessage( "Deserialized Layer: {0}", l );
 
 				foreach( var o in map.objectGroups )
