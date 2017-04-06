@@ -18,6 +18,12 @@ namespace Nez.TiledMaps
                 {
                     foreach ( var l in g.layer )
                     {
+                        l.offsetx = g.offsetx;
+                        l.offsety = g.offsety;
+                        l.opacity = g.opacity;
+
+                        l.properties.AddRange(g.properties);
+
                         map.layers.Add( l );
                     }
                 }
