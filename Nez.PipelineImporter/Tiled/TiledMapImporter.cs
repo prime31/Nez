@@ -18,20 +18,28 @@ namespace Nez.TiledMaps
                 {
                     foreach ( var l in g.layer )
                     {
-                        l.offsetx = g.offsetx;
-                        l.offsety = g.offsety;
-                        l.opacity = g.opacity;
+                        //Copy group visbility ?
+                        if ( l.visible && !g.visible )
+                            l.visible = g.visible;
 
-                        l.properties.AddRange(g.properties);
+                        l.offsetx += g.offsetx;
+                        l.offsety += g.offsety;
+
+                        l.opacity -= g.opacity;
+                        l.opacity = Math.Min( 0f, l.opacity );
+                        l.opacity = Math.Max( 1f, l.opacity );
+
+
+                        l.properties.AddRange( g.properties );
+
+                        context.Logger.LogMessage( "Add found Layer: {0} \n", l );
 
                         map.layers.Add( l );
                     }
                 }
 
                 if ( g.groups != null )
-                {
                     LayerGroup( map, g.groups, context );
-                }
             }
         }
 
