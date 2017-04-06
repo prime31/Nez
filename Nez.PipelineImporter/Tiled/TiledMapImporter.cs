@@ -48,15 +48,6 @@ namespace Nez.TiledMaps
 				var map = (TmxMap)serializer.Deserialize( reader );
 				var xmlSerializer = new XmlSerializer( typeof( TmxTileset ) );
 
-                foreach ( var g in map.layerGroups )
-                {
-                    context.Logger.LogMessage( "Deserialized LayerGroup: {0}", g );
-                    foreach ( var l in g.layer )
-                    {
-                        map.layers.Add( l );
-                    }
-                }
-
                 LayerGroup( map, map.layerGroups, context );
 
                 foreach ( var l in map.layers )
