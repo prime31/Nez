@@ -44,7 +44,7 @@ namespace Nez.UI
 		ProgressBarStyle style;
 
 
-		public ProgressBar( float min, float max, float stepSize, bool vertical, ProgressBarStyle style )
+		public ProgressBar( float min, float max, float stepSize, bool vertical, float def, ProgressBarStyle style )
 		{
 			Assert.isTrue( min < max, "min must be less than max" );
 			Assert.isTrue( stepSize > 0, "stepSize must be greater than 0" );
@@ -54,13 +54,16 @@ namespace Nez.UI
 			_max = max;
 			_stepSize = stepSize;
 			_vertical = vertical;
-			_value = _min;
+            if ( min > def || min < def )
+                _value = def;
+            else
+			    _value = _min;
 
 			setSize( preferredWidth, preferredHeight );
 		}
 
 
-		public ProgressBar( Skin skin, string styleName = null ) : this( 0, 1, 0.01f, false, skin.get<ProgressBarStyle>( styleName ) )
+		public ProgressBar( Skin skin, string styleName = null ) : this( 0, 1, 0.01f, false, 0, skin.get<ProgressBarStyle>( styleName ) )
 		{}
 
 
