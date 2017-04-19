@@ -587,13 +587,12 @@ namespace Nez.UI
 			}
 
 			var textY = getTextY( font, background );
+			var yOffset = (textY < 0) ? -textY - font.lineHeight/2 + preferredWidth / 2  : 0;
 			calculateOffsets();
 
 			if( _isFocused && hasSelection && selection != null )
-				drawSelection( selection, graphics, font, x + bgLeftWidth, y + textY );
+				drawSelection( selection, graphics, font, x + bgLeftWidth, y + textY + yOffset );
 
-			//float yOffset = font.isFlipped() ? -textHeight : 0;
-			float yOffset = 0;
 			if( displayText.Length == 0 )
 			{
 				if( !_isFocused && messageText != null )
@@ -616,7 +615,7 @@ namespace Nez.UI
 			{
 				blink();
 				if( cursorOn && style.cursor != null )
-					drawCursor( style.cursor, graphics, font, x + bgLeftWidth, y + textY );
+					drawCursor( style.cursor, graphics, font, x + bgLeftWidth, y + textY + yOffset );
 			}
 		}
 
