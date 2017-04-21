@@ -26,14 +26,14 @@ namespace Nez.UI
 		/// <param name="stepSize">Step size.</param>
 		/// <param name="vertical">If set to <c>true</c> vertical.</param>
 		/// <param name="background">Background.</param>
-		public Slider( float min, float max, float stepSize, bool vertical, SliderStyle style ) : base( min, max, stepSize, vertical, style )
+		public Slider( float min, float max, float stepSize, bool vertical, float def, SliderStyle style ) : base( min, max, stepSize, vertical, def, style )
 		{
 			shiftIgnoresSnap = true;
 			this.style = style;
 		}
 
 
-		public Slider( Skin skin, string styleName = null, float min = 0, float max = 1, float step = 0.1f ) : this( min, max, step, false, skin.get<SliderStyle>( styleName ) )
+		public Slider( Skin skin, string styleName = null, float min = 0, float max = 1, float step = 0.1f, float def = 0.0f ) : this( min, max, step, false, def, skin.get<SliderStyle>( styleName ) )
 		{}
 
 
