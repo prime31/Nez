@@ -6,7 +6,7 @@ namespace Nez.UI
 {
 	public class UISkinConfig
 	{
-		public Dictionary<string,Color> colors;
+		public Dictionary<string, Color> colors;
 		public string[] textureAtlases;
 		public string[] libGdxAtlases;
 		public UISkinStyleConfig styles;
@@ -38,7 +38,7 @@ namespace Nez.UI
 		/// <param name="styleType">Style type.</param>
 		public List<string> getStyleNames( string styleType )
 		{
-            var type = this[styleType] as Dictionary<string, object>;
+			var type = this[styleType] as Dictionary<string, object>;
 			return new List<string>( type.Keys );
 		}
 
@@ -51,8 +51,8 @@ namespace Nez.UI
 		/// <param name="styleName">Style name.</param>
 		public Dictionary<string, object> getStyleDict( string styleType, string styleName )
 		{
-            var styleDict = this[styleType] as Dictionary<string, object>;
-            return styleDict[styleName] as Dictionary<string, object>;
+			var styleDict = this[styleType] as Dictionary<string, object>;
+			return styleDict[styleName] as Dictionary<string, object>;
 		}
 	}
 }
