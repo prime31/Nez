@@ -84,9 +84,10 @@ namespace Nez.UI
 		}
 
 
-		public void setText( String text )
+		public TextButton setText( String text )
 		{
 			label.setText( text );
+			return this;
 		}
 
 

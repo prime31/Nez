@@ -472,7 +472,6 @@ namespace Nez.UI
 		/// <summary>
 		/// Sets the {@link Element} embedded in this scroll pane
 		/// </summary>
-		/// <returns>The widget.</returns>
 		/// <param name="widget">Widget.</param>
 		public ScrollPane setWidget( Element widget )
 		{
@@ -497,7 +496,6 @@ namespace Nez.UI
 		/// <summary>
 		/// sets the scroll speed when the mouse wheel is used to scroll the ScrollPane
 		/// </summary>
-		/// <returns>The scroll speed.</returns>
 		/// <param name="scrollSpeed">Scroll speed.</param>
 		public ScrollPane setScrollSpeed( float scrollSpeed )
 		{
@@ -519,7 +517,6 @@ namespace Nez.UI
 		/// <summary>
 		/// sets x scroll amount
 		/// </summary>
-		/// <returns>The scroll x.</returns>
 		/// <param name="pixelsX">Pixels x.</param>
 		public ScrollPane setScrollX( float pixelsX )
 		{
@@ -541,7 +538,6 @@ namespace Nez.UI
 		/// <summary>
 		/// Called whenever the y scroll amount is changed
 		/// </summary>
-		/// <returns>The scroll y.</returns>
 		/// <param name="pixelsY">Pixels y.</param>
 		public ScrollPane setScrollY( float pixelsY )
 		{
@@ -564,7 +560,6 @@ namespace Nez.UI
 		/// sets how the mouse wheel/trackpad operates. Natural scrolling moves the contents of a window the same direction as
 		/// your fingers.
 		/// </summary>
-		/// <returns>The use natural scrolling.</returns>
 		/// <param name="useNaturalScrolling">Use natural scrolling.</param>
 		public ScrollPane setUseNaturalScrolling( bool useNaturalScrolling )
 		{
@@ -724,7 +719,6 @@ namespace Nez.UI
 		/// <summary>
 		/// Disables scrolling in a direction. The widget will be sized to the FlickScrollPane in the disabled direction.
 		/// </summary>
-		/// <returns>The scrolling disabled.</returns>
 		/// <param name="x">The x coordinate.</param>
 		/// <param name="y">The y coordinate.</param>
 		public ScrollPane setScrollingDisabled( bool x, bool y )
@@ -814,7 +808,6 @@ namespace Nez.UI
 		/// For flick scroll, if true the widget can be scrolled slightly past its bounds and will animate back to its bounds
 		/// when scrolling is stopped. Default is true.
 		/// </summary>
-		/// <returns>The overscroll.</returns>
 		/// <param name="overscrollX">Overscroll x.</param>
 		/// <param name="overscrollY">Overscroll y.</param>
 		public ScrollPane setOverscroll( bool overscrollX, bool overscrollY )
@@ -829,7 +822,6 @@ namespace Nez.UI
 		/// For flick scroll, sets the overscroll distance in pixels and the speed it returns to the widget's bounds in seconds.
 		/// Default is 50, 30, 200.
 		/// </summary>
-		/// <returns>The overscroll.</returns>
 		/// <param name="distance">Distance.</param>
 		/// <param name="speedMin">Speed minimum.</param>
 		/// <param name="speedMax">Speed max.</param>
@@ -872,7 +864,6 @@ namespace Nez.UI
 		/// <summary>
 		/// For flick scroll, sets the amount of time in seconds that a fling will continue to scroll. Default is 1.
 		/// </summary>
-		/// <returns>The fling time.</returns>
 		/// <param name="flingTime">Fling time.</param>
 		public ScrollPane setFlingTime( float flingTime )
 		{
@@ -884,7 +875,6 @@ namespace Nez.UI
 		/// <summary>
 		/// For flick scroll, prevents scrolling out of the widget's bounds. Default is true.
 		/// </summary>
-		/// <returns>The clamp.</returns>
 		/// <param name="clamp">Clamp.</param>
 		public ScrollPane setClamp( bool clamp )
 		{
@@ -896,7 +886,6 @@ namespace Nez.UI
 		/// <summary>
 		/// Set the position of the vertical and horizontal scroll bars.
 		/// </summary>
-		/// <returns>The scroll bar positions.</returns>
 		/// <param name="bottom">Bottom.</param>
 		/// <param name="right">Right.</param>
 		public ScrollPane setScrollBarPositions( bool bottom, bool right )
@@ -910,7 +899,6 @@ namespace Nez.UI
 		/// <summary>
 		/// When true the scrollbars don't reduce the scrollable size and fade out after some time of not being used.
 		/// </summary>
-		/// <returns>The fade scroll bars.</returns>
 		/// <param name="fadeScrollBars">Fade scroll bars.</param>
 		public ScrollPane setFadeScrollBars( bool fadeScrollBars )
 		{
@@ -943,7 +931,6 @@ namespace Nez.UI
 		/// to the entire scroll pane bounds and the scrollbars are drawn on top of the widget. If {@link #setFadeScrollBars(boolean)}
 		/// is true, the scroll bars are always drawn on top.
 		/// </summary>
-		/// <returns>The scrollbars on top.</returns>
 		/// <param name="scrollbarsOnTop">Scrollbars on top.</param>
 		public ScrollPane setScrollbarsOnTop( bool scrollbarsOnTop )
 		{
@@ -963,7 +950,6 @@ namespace Nez.UI
 		/// If true, the scroll knobs are sized based on getMaxX() or getMaxY(). If false, the scroll knobs are sized
 		/// based on Drawable#getMinWidth() or Drawable#getMinHeight(). Default is true.
 		/// </summary>
-		/// <returns>The variable size knobs.</returns>
 		/// <param name="variableSizeKnobs">Variable size knobs.</param>
 		public ScrollPane setVariableSizeKnobs( bool variableSizeKnobs )
 		{

@@ -20,11 +20,12 @@ namespace Nez.UI
 		/// <summary>
 		/// An Element to fire ChangeEvent on when the selection changes, or null
 		/// </summary>
-		/// <returns>The actor.</returns>
-		/// <param name="element">Actor.</param>
-		public void setElement( Element element )
+		/// <returns>The element.</returns>
+		/// <param name="element">element.</param>
+		public Element setElement( Element element )
 		{
 			this.element = element;
+			return element;
 		}
 
 
@@ -134,12 +135,12 @@ namespace Nez.UI
 		/// Sets the selection to only the specified item
 		/// </summary>
 		/// <param name="item">Item.</param>
-		public void set( T item )
+		public Selection<T> set( T item )
 		{
 			Assert.isNotNull( item, "item cannot be null." );
 
 			if( selected.Count == 1 && selected.First() == item )
-				return;
+				return this;
 
 			snapshot();
 			selected.Clear();
@@ -155,10 +156,11 @@ namespace Nez.UI
 				changed();
 			}
 			cleanup();
+			return this;
 		}
 
 
-		public void setAll( List<T> items )
+		public Selection<T> setAll( List<T> items )
 		{
 			var added = false;
 			snapshot();
@@ -184,6 +186,7 @@ namespace Nez.UI
 				}
 			}
 			cleanup();
+			return this;
 		}
 
 
@@ -311,7 +314,6 @@ namespace Nez.UI
 		/// Fires a change event on the selection's Element, if any. Called internally when the selection changes, depending on
 		/// setProgrammaticChangeEvents(bool)
 		/// </summary>
-		/// <returns>The change event.</returns>
 		public bool fireChangeEvent()
 		{
 			if( element == null )
@@ -353,7 +355,6 @@ namespace Nez.UI
 		/// <summary>
 		/// If true, prevents choose(Object) from changing the selection. Default is false.
 		/// </summary>
-		/// <returns>The disabled.</returns>
 		/// <param name="isDisabled">Is disabled.</param>
 		public Selection<T> setDisabled( bool isDisabled )
 		{
@@ -377,7 +378,6 @@ namespace Nez.UI
 		/// <summary>
 		/// If true, prevents choose(Object) from clearing the selection. Default is false.
 		/// </summary>
-		/// <returns>The toggle.</returns>
 		/// <param name="toggle">Toggle.</param>
 		public Selection<T> setToggle( bool toggle )
 		{
@@ -395,7 +395,6 @@ namespace Nez.UI
 		/// <summary>
 		/// If true, allows choose(Object) to select multiple items. Default is false.
 		/// </summary>
-		/// <returns>The multiple.</returns>
 		/// <param name="multiple">Multiple.</param>
 		public Selection<T> setMultiple( bool multiple )
 		{
@@ -413,7 +412,6 @@ namespace Nez.UI
 		/// <summary>
 		/// If true, prevents choose(Object) from selecting none. Default is false.
 		/// </summary>
-		/// <returns>The required.</returns>
 		/// <param name="required">Required.</param>
 		public Selection<T> setRequired( bool required )
 		{
@@ -425,7 +423,6 @@ namespace Nez.UI
 		/// <summary>
 		/// If false, only choose(Object) will fire a change event. Default is true.
 		/// </summary>
-		/// <returns>The programmatic change events.</returns>
 		/// <param name="programmaticChangeEvents">Programmatic change events.</param>
 		public Selection<T> setProgrammaticChangeEvents( bool programmaticChangeEvents )
 		{

@@ -86,7 +86,7 @@ namespace Nez.UI
 		/// Sets the progress bar position, rounded to the nearest step size and clamped to the minimum and maximum values.
 		/// </summary>
 		/// <param name="value">Value.</param>
-		public void setValue( float value )
+		public ProgressBar setValue( float value )
 		{
 			if( !shiftIgnoresSnap || !InputUtils.isShiftDown() )
 			{
@@ -99,13 +99,15 @@ namespace Nez.UI
 			}
 
 			if( value == _value )
-				return;
+				return this;
 
 			_value = value;
 
 			// fire changed event
 			if( onChanged != null )
 				onChanged( _value );
+
+			return this;
 		}
 
 
