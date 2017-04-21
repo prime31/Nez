@@ -233,7 +233,7 @@ namespace Nez.UI
 		public ListBox<T> setStyle( ListBoxStyle style )
 		{
 			Assert.isNotNull( style, "style cannot be null" );
-			this._style = style;
+			_style = style;
 			invalidateHierarchy();
 			return this;
 		}
@@ -268,9 +268,8 @@ namespace Nez.UI
 		/// <summary>
 		/// Sets the selection to only the passed item, if it is a possible choice.
 		/// </summary>
-		/// <returns>The selected.</returns>
 		/// <param name="item">Item.</param>
-		public void setSelected( T item )
+		public ListBox<T> setSelected( T item )
 		{
 			if( _items.Contains( item ) )
 				_selection.set( item );
@@ -278,6 +277,8 @@ namespace Nez.UI
 				_selection.set( _items[0] );
 			else
 				_selection.clear();
+
+			return this;
 		}
 
 
@@ -295,9 +296,8 @@ namespace Nez.UI
 		/// <summary>
 		/// Sets the selection to only the selected index
 		/// </summary>
-		/// <returns>The selected index.</returns>
 		/// <param name="index">Index.</param>
-		public void setSelectedIndex( int index )
+		public ListBox<T> setSelectedIndex( int index )
 		{
 			Assert.isFalse( index < -1 || index >= _items.Count, "index must be >= -1 and < " + _items.Count + ": " + index );
 
@@ -305,12 +305,15 @@ namespace Nez.UI
 				_selection.clear();
 			else
 				_selection.set( _items[index] );
+
+			return this;
 		}
 
 
-		public void setItems( params T[] newItems )
+		public ListBox<T> setItems( params T[] newItems )
 		{
 			setItems( new List<T>( newItems ) );
+			return this;
 		}
 
 
@@ -318,9 +321,8 @@ namespace Nez.UI
 		/// Sets the items visible in the list, clearing the selection if it is no longer valid. If a selection is
 		/// ArraySelection#getRequired(), the first item is selected.
 		/// </summary>
-		/// <returns>The items.</returns>
 		/// <param name="newItems">New items.</param>
-		public void setItems( IList<T> newItems )
+		public ListBox<T> setItems( IList<T> newItems )
 		{
 			Assert.isNotNull( newItems, "newItems cannot be null" );
 			float oldPrefWidth = _prefWidth, oldPrefHeight = _prefHeight;
@@ -336,6 +338,7 @@ namespace Nez.UI
 				invalidateHierarchy();
 				setSize( _prefWidth, _prefHeight );
 			}
+			return this;
 		}
 
 
@@ -368,7 +371,7 @@ namespace Nez.UI
 
 		public ListBox<T> setCullingArea( Rectangle cullingArea )
 		{
-			this._cullingArea = cullingArea;
+			_cullingArea = cullingArea;
 			return this;
 		}
 

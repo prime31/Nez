@@ -457,7 +457,6 @@ namespace Nez.UI
 		/// <summary>
 		/// background may be null to clear the background.
 		/// </summary>
-		/// <returns>The background.</returns>
 		/// <param name="background">Background.</param>
 		public Table setBackground( IDrawable background )
 		{
@@ -530,7 +529,6 @@ namespace Nez.UI
 		/// <summary>
 		/// Padding at the top edge of the table.
 		/// </summary>
-		/// <returns>The top.</returns>
 		/// <param name="padTop">Pad top.</param>
 		public Table padTop( Value padTop )
 		{
@@ -545,7 +543,6 @@ namespace Nez.UI
 		/// <summary>
 		/// Padding at the left edge of the table.
 		/// </summary>
-		/// <returns>The left.</returns>
 		/// <param name="padLeft">Pad left.</param>
 		public Table padLeft( Value padLeft )
 		{
@@ -561,7 +558,6 @@ namespace Nez.UI
 		/// <summary>
 		/// Padding at the bottom edge of the table.
 		/// </summary>
-		/// <returns>The bottom.</returns>
 		/// <param name="padBottom">Pad bottom.</param>
 		public Table padBottom( Value padBottom )
 		{
@@ -576,7 +572,6 @@ namespace Nez.UI
 		/// <summary>
 		/// Padding at the right edge of the table.
 		/// </summary>
-		/// <returns>The right.</returns>
 		/// <param name="padRight">Pad right.</param>
 		public Table padRight( Value padRight )
 		{
@@ -613,7 +608,6 @@ namespace Nez.UI
 		/// <summary>
 		/// Padding at the top edge of the table.
 		/// </summary>
-		/// <returns>The top.</returns>
 		/// <param name="padTop">Pad top.</param>
 		public Table padTop( float padTop )
 		{
@@ -626,7 +620,6 @@ namespace Nez.UI
 		/// <summary>
 		/// Padding at the left edge of the table.
 		/// </summary>
-		/// <returns>The left.</returns>
 		/// <param name="padLeft">Pad left.</param>
 		public Table padLeft( float padLeft )
 		{
@@ -639,7 +632,6 @@ namespace Nez.UI
 		/// <summary>
 		/// Padding at the bottom edge of the table.
 		/// </summary>
-		/// <returns>The bottom.</returns>
 		/// <param name="padBottom">Pad bottom.</param>
 		public Table padBottom( float padBottom )
 		{
@@ -652,7 +644,6 @@ namespace Nez.UI
 		/// <summary>
 		/// Padding at the right edge of the table.
 		/// </summary>
-		/// <returns>The right.</returns>
 		/// <param name="padRight">Pad right.</param>
 		public Table padRight( float padRight )
 		{
@@ -770,7 +761,6 @@ namespace Nez.UI
 		/// <summary>
 		/// Turns on cell debug lines.
 		/// </summary>
-		/// <returns>The cell.</returns>
 		public Table debugCell()
 		{
 			base.setDebug( true );
@@ -786,7 +776,6 @@ namespace Nez.UI
 		/// <summary>
 		/// Turns on element debug lines.
 		/// </summary>
-		/// <returns>The element.</returns>
 		public Table debugElement()
 		{
 			base.setDebug( true );
@@ -802,7 +791,6 @@ namespace Nez.UI
 		/// <summary>
 		/// Turns debug lines on or off.
 		/// </summary>
-		/// <returns>The debug.</returns>
 		/// <param name="tableDebug">Table debug.</param>
 		public Table tableDebug( TableDebug tableDebug )
 		{

@@ -63,7 +63,6 @@ namespace Nez.UI
 		/// <summary>
 		/// Adds the given Label to the content table
 		/// </summary>
-		/// <returns>The text.</returns>
 		/// <param name="label">Label.</param>
 		public Dialog addText( Label label )
 		{

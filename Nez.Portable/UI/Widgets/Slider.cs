@@ -175,12 +175,13 @@ namespace Nez.UI
 		#endregion
 
 
-		public void setStyle( SliderStyle style )
+		public Slider setStyle( SliderStyle style )
 		{
 			Assert.isTrue( style is SliderStyle, "style must be a SliderStyle" );
 
 			base.setStyle( style );
 			this.style = style;
+			return this;
 		}
 
 

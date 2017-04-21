@@ -282,7 +282,6 @@ namespace Nez.UI
 		/// <summary>
 		/// The split amount between the min and max amount
 		/// </summary>
-		/// <returns>The split amount.</returns>
 		/// <param name="amount">Amount.</param>
 		public SplitPane setSplitAmount( float amount )
 		{
