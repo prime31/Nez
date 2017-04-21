@@ -130,9 +130,22 @@ namespace Nez
 		}
 
 
+		List<Entity> getTagList( int tag )
+		{
+			List<Entity> list = null;
+			if( !_entityDict.TryGetValue( tag, out list ) )
+			{
+				list = new List<Entity>();
+				_entityDict[tag] = list;
+			}
+
+			return _entityDict[tag];
+		}
+
+
 		internal void addToTagList( Entity entity )
 		{
-			var list = entitiesWithTag( entity.tag );
+			var list = getTagList( entity.tag );
 			Assert.isFalse( list.Contains( entity ), "Entity tag list already contains this entity: {0}", entity );
 
 			list.Add( entity );
@@ -255,20 +268,18 @@ namespace Nez
 
 
 		/// <summary>
-		/// returns a list of all entities with tag. If no entities have the tag an empty list is returned.
+		/// returns a list of all entities with tag. If no entities have the tag an empty list is returned. The returned List can be put back in the pool via ListPool.free.
 		/// </summary>
 		/// <returns>The with tag.</returns>
 		/// <param name="tag">Tag.</param>
 		public List<Entity> entitiesWithTag( int tag )
 		{
-			List<Entity> list = null;
-			if( !_entityDict.TryGetValue( tag, out list ) )
-			{
-				list = new List<Entity>();
-				_entityDict[tag] = list;
-			}
+			var list = getTagList( tag );
 
-			return _entityDict[tag];
+			var returnList = ListPool<Entity>.obtain();
+			returnList.AddRange( list );
+
+			return returnList;
 		}
 
 
@@ -300,9 +311,9 @@ namespace Nez
 		/// <summary>
 		/// returns the first Component found in the Scene of type T
 		/// </summary>
-		/// <returns>The object of type.</returns>
+		/// <returns>The component of type.</returns>
 		/// <typeparam name="T">The 1st type parameter.</typeparam>
-		public T findObjectOfType<T>() where T : Component
+		public T findComponentOfType<T>() where T : Component
 		{
 			for( var i = 0; i < _entities.length; i++ )
 			{
@@ -332,9 +343,9 @@ namespace Nez
 		/// <summary>
 		/// returns all Components found in the Scene of type T. The returned List can be put back in the pool via ListPool.free.
 		/// </summary>
-		/// <returns>The objects of type.</returns>
+		/// <returns>The components of type.</returns>
 		/// <typeparam name="T">The 1st type parameter.</typeparam>
-		public List<T> findObjectsOfType<T>() where T : Component
+		public List<T> findComponentsOfType<T>() where T : Component
 		{
 			var comps = ListPool<T>.obtain();
 			for( var i = 0; i < _entities.length; i++ )

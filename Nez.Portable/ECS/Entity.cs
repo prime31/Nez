@@ -326,7 +326,7 @@ namespace Nez
 		/// the copyFrom method should be called which will clone all Components, Colliders and Transform children for you. Note that cloned
 		/// objects will not be added to any Scene! You must add them yourself!
 		/// </summary>
-		public Entity clone( Vector2 position = default( Vector2 ) )
+		public virtual Entity clone( Vector2 position = default( Vector2 ) )
 		{
 			var entity = Activator.CreateInstance( GetType() ) as Entity;
 			entity.name = name + "(clone)";

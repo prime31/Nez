@@ -6,6 +6,11 @@ namespace Nez
 	public class SceneComponent : IComparable<SceneComponent>
 	{
 		/// <summary>
+		/// the scene this SceneComponent is attached to
+		/// </summary>
+		public Scene scene;
+	    
+		/// <summary>
 		/// true if the SceneComponent is enabled. Changes in state result in onEnabled/onDisable being called.
 		/// </summary>
 		/// <value><c>true</c> if enabled; otherwise, <c>false</c>.</value>
