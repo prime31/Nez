@@ -137,7 +137,6 @@ namespace Nez.UI
 		/// {@link Drawable#getRightWidth()}.
 		/// If background is null, the background will be cleared and padding removed.
 		/// </summary>
-		/// <returns>The background.</returns>
 		/// <param name="background">Background.</param>
 		/// <param name="adjustPadding">If set to <c>true</c> adjust padding.</param>
 		public Container setBackground( IDrawable background, bool adjustPadding )
@@ -266,7 +265,7 @@ namespace Nez.UI
 
 		public override bool removeElement( Element element )
 		{
-			if( element != this._element )
+			if( element != _element )
 				return false;
 			setElement( null );
 			return true;
@@ -276,7 +275,6 @@ namespace Nez.UI
 		/// <summary>
 		/// Sets the minWidth, prefWidth, maxWidth, minHeight, prefHeight, and maxHeight to the specified value
 		/// </summary>
-		/// <returns>The size.</returns>
 		/// <param name="size">Size.</param>
 		public Container setSize( Value size )
 		{
@@ -295,7 +293,6 @@ namespace Nez.UI
 		/// <summary>
 		/// Sets the minWidth, prefWidth, maxWidth, minHeight, prefHeight, and maxHeight to the specified values
 		/// </summary>
-		/// <returns>The size.</returns>
 		/// <param name="width">Width.</param>
 		/// <param name="height">Height.</param>
 		public Container setSize( Value width, Value height )
@@ -317,7 +314,6 @@ namespace Nez.UI
 		/// <summary>
 		/// Sets the minWidth, prefWidth, maxWidth, minHeight, prefHeight, and maxHeight to the specified value
 		/// </summary>
-		/// <returns>The size.</returns>
 		/// <param name="size">Size.</param>
 		public Container setSize( float size )
 		{
@@ -329,7 +325,6 @@ namespace Nez.UI
 		/// <summary>
 		/// Sets the minWidth, prefWidth, maxWidth, minHeight, prefHeight, and maxHeight to the specified values
 		/// </summary>
-		/// <returns>The size.</returns>
 		/// <param name="width">Width.</param>
 		/// <param name="height">Height.</param>
 		public new Container setSize( float width, float height )
@@ -342,7 +337,6 @@ namespace Nez.UI
 		/// <summary>
 		/// Sets the minWidth, prefWidth, and maxWidth to the specified value
 		/// </summary>
-		/// <returns>The width.</returns>
 		/// <param name="width">Width.</param>
 		public Container setWidth( Value width )
 		{
@@ -358,7 +352,6 @@ namespace Nez.UI
 		/// <summary>
 		/// Sets the minWidth, prefWidth, and maxWidth to the specified value
 		/// </summary>
-		/// <returns>The width.</returns>
 		/// <param name="width">Width.</param>
 		public new Container setWidth( float width )
 		{
@@ -370,7 +363,6 @@ namespace Nez.UI
 		/// <summary>
 		/// Sets the minHeight, prefHeight, and maxHeight to the specified value.
 		/// </summary>
-		/// <returns>The height.</returns>
 		/// <param name="height">Height.</param>
 		public Container setHeight( Value height )
 		{
@@ -386,7 +378,6 @@ namespace Nez.UI
 		/// <summary>
 		/// Sets the minHeight, prefHeight, and maxHeight to the specified value
 		/// </summary>
-		/// <returns>The height.</returns>
 		/// <param name="height">Height.</param>
 		public new Container setHeight( float height )
 		{
@@ -398,7 +389,6 @@ namespace Nez.UI
 		/// <summary>
 		/// Sets the minWidth and minHeight to the specified value
 		/// </summary>
-		/// <returns>The minimum size.</returns>
 		/// <param name="size">Size.</param>
 		public Container setMinSize( Value size )
 		{
@@ -413,7 +403,6 @@ namespace Nez.UI
 		/// <summary>
 		/// Sets the minimum size.
 		/// </summary>
-		/// <returns>The minimum size.</returns>
 		/// <param name="width">Width.</param>
 		/// <param name="height">Height.</param>
 		public Container setMinSize( Value width, Value height )
@@ -432,7 +421,7 @@ namespace Nez.UI
 		{
 			if( minWidth == null )
 				throw new Exception( "minWidth cannot be null." );
-			this._minWidthValue = minWidth;
+			_minWidthValue = minWidth;
 			return this;
 		}
 
@@ -441,7 +430,7 @@ namespace Nez.UI
 		{
 			if( minHeight == null )
 				throw new Exception( "minHeight cannot be null." );
-			this._minHeightValue = minHeight;
+			_minHeightValue = minHeight;
 			return this;
 		}
 
@@ -449,7 +438,6 @@ namespace Nez.UI
 		/// <summary>
 		/// Sets the minWidth and minHeight to the specified value
 		/// </summary>
-		/// <returns>The minimum size.</returns>
 		/// <param name="size">Size.</param>
 		public Container setMinSize( float size )
 		{
@@ -461,7 +449,6 @@ namespace Nez.UI
 		/// <summary>
 		/// Sets the minWidth and minHeight to the specified values
 		/// </summary>
-		/// <returns>The minimum size.</returns>
 		/// <param name="width">Width.</param>
 		/// <param name="height">Height.</param>
 		public Container setMinSize( float width, float height )
@@ -473,14 +460,14 @@ namespace Nez.UI
 
 		public Container setMinWidth( float minWidth )
 		{
-			this._minWidthValue = new Value.Fixed( minWidth );
+			_minWidthValue = new Value.Fixed( minWidth );
 			return this;
 		}
 
 
 		public Container setMinHeight( float minHeight )
 		{
-			this._minHeightValue = new Value.Fixed( minHeight );
+			_minHeightValue = new Value.Fixed( minHeight );
 			return this;
 		}
 
@@ -488,7 +475,6 @@ namespace Nez.UI
 		/// <summary>
 		/// Sets the prefWidth and prefHeight to the specified value.
 		/// </summary>
-		/// <returns>The size.</returns>
 		/// <param name="size">Size.</param>
 		public Container prefSize( Value size )
 		{
@@ -503,7 +489,6 @@ namespace Nez.UI
 		/// <summary>
 		/// Sets the prefWidth and prefHeight to the specified values.
 		/// </summary>
-		/// <returns>The size.</returns>
 		/// <param name="width">Width.</param>
 		/// <param name="height">Height.</param>
 		public Container prefSize( Value width, Value height )
@@ -522,7 +507,7 @@ namespace Nez.UI
 		{
 			if( prefWidth == null )
 				throw new Exception( "prefWidth cannot be null." );
-			this._prefWidthValue = prefWidth;
+			_prefWidthValue = prefWidth;
 			return this;
 		}
 
@@ -531,7 +516,7 @@ namespace Nez.UI
 		{
 			if( prefHeight == null )
 				throw new Exception( "prefHeight cannot be null." );
-			this._prefHeightValue = prefHeight;
+			_prefHeightValue = prefHeight;
 			return this;
 		}
 
@@ -539,7 +524,6 @@ namespace Nez.UI
 		/// <summary>
 		/// Sets the prefWidth and prefHeight to the specified value.
 		/// </summary>
-		/// <returns>The preference size.</returns>
 		/// <param name="width">Width.</param>
 		/// <param name="height">Height.</param>
 		public Container setPrefSize( float width, float height )
@@ -552,7 +536,6 @@ namespace Nez.UI
 		/// <summary>
 		/// Sets the prefWidth and prefHeight to the specified values
 		/// </summary>
-		/// <returns>The preference size.</returns>
 		/// <param name="size">Size.</param>
 		public Container setPrefSize( float size )
 		{
@@ -563,14 +546,14 @@ namespace Nez.UI
 
 		public Container setPrefWidth( float prefWidth )
 		{
-			this._prefWidthValue = new Value.Fixed( prefWidth );
+			_prefWidthValue = new Value.Fixed( prefWidth );
 			return this;
 		}
 
 
 		public Container setPrefHeight( float prefHeight )
 		{
-			this._prefHeightValue = new Value.Fixed( prefHeight );
+			_prefHeightValue = new Value.Fixed( prefHeight );
 			return this;
 		}
 
@@ -578,7 +561,6 @@ namespace Nez.UI
 		/// <summary>
 		/// Sets the maxWidth and maxHeight to the specified value.
 		/// </summary>
-		/// <returns>The max size.</returns>
 		/// <param name="size">Size.</param>
 		public Container setMaxSize( Value size )
 		{
@@ -593,7 +575,6 @@ namespace Nez.UI
 		/// <summary>
 		/// Sets the maxWidth and maxHeight to the specified values
 		/// </summary>
-		/// <returns>The max size.</returns>
 		/// <param name="width">Width.</param>
 		/// <param name="height">Height.</param>
 		public Container setMaxSize( Value width, Value height )
@@ -612,7 +593,7 @@ namespace Nez.UI
 		{
 			if( maxWidth == null )
 				throw new Exception( "maxWidth cannot be null." );
-			this._maxWidthValue = maxWidth;
+			_maxWidthValue = maxWidth;
 			return this;
 		}
 
@@ -621,7 +602,7 @@ namespace Nez.UI
 		{
 			if( maxHeight == null )
 				throw new Exception( "maxHeight cannot be null." );
-			this._maxHeightValue = maxHeight;
+			_maxHeightValue = maxHeight;
 			return this;
 		}
 
@@ -629,7 +610,6 @@ namespace Nez.UI
 		/// <summary>
 		/// Sets the maxWidth and maxHeight to the specified value
 		/// </summary>
-		/// <returns>The max size.</returns>
 		/// <param name="size">Size.</param>
 		public Container setMaxSize( float size )
 		{
@@ -641,7 +621,6 @@ namespace Nez.UI
 		/// <summary>
 		/// Sets the maxWidth and maxHeight to the specified values
 		/// </summary>
-		/// <returns>The max size.</returns>
 		/// <param name="width">Width.</param>
 		/// <param name="height">Height.</param>
 		public Container setMaxSize( float width, float height )
@@ -653,14 +632,14 @@ namespace Nez.UI
 
 		public Container setMaxWidth( float maxWidth )
 		{
-			this._maxWidthValue = new Value.Fixed( maxWidth );
+			_maxWidthValue = new Value.Fixed( maxWidth );
 			return this;
 		}
 
 
 		public Container setMaxHeight( float maxHeight )
 		{
-			this._maxHeightValue = new Value.Fixed( maxHeight );
+			_maxHeightValue = new Value.Fixed( maxHeight );
 			return this;
 		}
 
@@ -668,7 +647,6 @@ namespace Nez.UI
 		/// <summary>
 		/// Sets the padTop, padLeft, padBottom, and padRight to the specified value.
 		/// </summary>
-		/// <returns>The pad.</returns>
 		/// <param name="pad">Pad.</param>
 		public Container setPad( Value pad )
 		{
@@ -704,7 +682,7 @@ namespace Nez.UI
 		{
 			if( padTop == null )
 				throw new Exception( "padTop cannot be null." );
-			this._padTop = padTop;
+			_padTop = padTop;
 			return this;
 		}
 
@@ -713,7 +691,7 @@ namespace Nez.UI
 		{
 			if( padLeft == null )
 				throw new Exception( "padLeft cannot be null." );
-			this._padLeft = padLeft;
+			_padLeft = padLeft;
 			return this;
 		}
 
@@ -722,7 +700,7 @@ namespace Nez.UI
 		{
 			if( padBottom == null )
 				throw new Exception( "padBottom cannot be null." );
-			this._padBottom = padBottom;
+			_padBottom = padBottom;
 			return this;
 		}
 
@@ -731,7 +709,7 @@ namespace Nez.UI
 		{
 			if( padRight == null )
 				throw new Exception( "padRight cannot be null." );
-			this._padRight = padRight;
+			_padRight = padRight;
 			return this;
 		}
 
@@ -739,7 +717,6 @@ namespace Nez.UI
 		/// <summary>
 		/// Sets the padTop, padLeft, padBottom, and padRight to the specified value
 		/// </summary>
-		/// <returns>The pad.</returns>
 		/// <param name="pad">Pad.</param>
 		public Container setPad( float pad )
 		{
@@ -764,28 +741,28 @@ namespace Nez.UI
 
 		public Container setPadTop( float padTop )
 		{
-			this._padTop = new Value.Fixed( padTop );
+			_padTop = new Value.Fixed( padTop );
 			return this;
 		}
 
 
 		public Container setPadLeft( float padLeft )
 		{
-			this._padLeft = new Value.Fixed( padLeft );
+			_padLeft = new Value.Fixed( padLeft );
 			return this;
 		}
 
 
 		public Container setPadBottom( float padBottom )
 		{
-			this._padBottom = new Value.Fixed( padBottom );
+			_padBottom = new Value.Fixed( padBottom );
 			return this;
 		}
 
 
 		public Container setPadRight( float padRight )
 		{
-			this._padRight = new Value.Fixed( padRight );
+			_padRight = new Value.Fixed( padRight );
 			return this;
 		}
 
@@ -793,7 +770,6 @@ namespace Nez.UI
 		/// <summary>
 		/// Sets fillX and fillY to 1
 		/// </summary>
-		/// <returns>The fill.</returns>
 		public Container setFill()
 		{
 			_fillX = 1f;
@@ -805,7 +781,6 @@ namespace Nez.UI
 		/// <summary>
 		/// Sets fillX to 1
 		/// </summary>
-		/// <returns>The fill x.</returns>
 		public Container setFillX()
 		{
 			_fillX = 1f;
@@ -816,7 +791,6 @@ namespace Nez.UI
 		/// <summary>
 		/// Sets fillY to 1
 		/// </summary>
-		/// <returns>The fill y.</returns>
 		public Container setFillY()
 		{
 			_fillY = 1f;
@@ -835,7 +809,6 @@ namespace Nez.UI
 		/// <summary>
 		/// Sets fillX and fillY to 1 if true, 0 if false
 		/// </summary>
-		/// <returns>The fill.</returns>
 		/// <param name="x">If set to <c>true</c> x.</param>
 		/// <param name="y">If set to <c>true</c> y.</param>
 		public Container setFill( bool x, bool y )
@@ -849,7 +822,6 @@ namespace Nez.UI
 		/// <summary>
 		/// Sets fillX and fillY to 1 if true, 0 if false
 		/// </summary>
-		/// <returns>The fill.</returns>
 		/// <param name="fill">If set to <c>true</c> fill.</param>
 		public Container setFill( bool fill )
 		{
@@ -863,7 +835,6 @@ namespace Nez.UI
 		/// Sets the alignment of the element within the container. Set to {@link Align#center}, {@link Align#top}, {@link Align#bottom},
 		/// {@link Align#left}, {@link Align#right}, or any combination of those.
 		/// </summary>
-		/// <returns>The align.</returns>
 		/// <param name="align">Align.</param>
 		public Container setAlign( Align align )
 		{
@@ -875,7 +846,6 @@ namespace Nez.UI
 		/// <summary>
 		/// Sets the alignment of the element within the container to {@link Align#center}. This clears any other alignment.
 		/// </summary>
-		/// <returns>The center.</returns>
 		public Container setAlignCenter()
 		{
 			_align = AlignInternal.center;
@@ -886,7 +856,6 @@ namespace Nez.UI
 		/// <summary>
 		/// Sets {@link Align#top} and clears {@link Align#bottom} for the alignment of the element within the container.
 		/// </summary>
-		/// <returns>The top.</returns>
 		public Container setTop()
 		{
 			_align |= AlignInternal.top;
@@ -898,7 +867,6 @@ namespace Nez.UI
 		/// <summary>
 		/// Sets {@link Align#left} and clears {@link Align#right} for the alignment of the element within the container.
 		/// </summary>
-		/// <returns>The left.</returns>
 		public Container setLeft()
 		{
 			_align |= AlignInternal.left;
@@ -910,7 +878,6 @@ namespace Nez.UI
 		/// <summary>
 		/// Sets {@link Align#bottom} and clears {@link Align#top} for the alignment of the element within the container.
 		/// </summary>
-		/// <returns>The bottom.</returns>
 		public Container setBottom()
 		{
 			_align |= AlignInternal.bottom;
@@ -922,7 +889,6 @@ namespace Nez.UI
 		/// <summary>
 		/// Sets {@link Align#right} and clears {@link Align#left} for the alignment of the element within the container.
 		/// </summary>
-		/// <returns>The right.</returns>
 		public Container setRight()
 		{
 			_align |= AlignInternal.right;
@@ -1117,7 +1083,7 @@ namespace Nez.UI
 		/// <param name="round">If set to <c>true</c> round.</param>
 		public void setRound( bool round )
 		{
-			this._round = round;
+			_round = round;
 		}
 
 

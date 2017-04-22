@@ -184,7 +184,7 @@ namespace Nez.UI
 		#endregion
 
 
-		public void setStyle( WindowStyle style )
+		public Window setStyle( WindowStyle style )
 		{
 			this.style = style;
 			setBackground( style.background );
@@ -195,6 +195,7 @@ namespace Nez.UI
 			titleLabel.setStyle( labelStyle );
 
 			invalidateHierarchy();
+			return this;
 		}
 
 

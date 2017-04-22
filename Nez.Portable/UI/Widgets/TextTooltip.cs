@@ -14,10 +14,11 @@
 		}
 
 
-		public void setStyle( TextTooltipStyle style )
+		public TextTooltip setStyle( TextTooltipStyle style )
 		{
 			_container.getElement<Label>().setStyle( style.labelStyle );
 			_container.setBackground( style.background );
+			return this;
 		}
 	}
 
