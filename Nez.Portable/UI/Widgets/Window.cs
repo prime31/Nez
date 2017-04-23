@@ -231,6 +231,8 @@ namespace Nez.UI
 
 		public override void draw( Graphics graphics, float parentAlpha )
 		{
+            keepWithinStage();
+
 			if( style.stageBackground != null )
 			{
 				var stagePos = stageToLocalCoordinates( Vector2.Zero );
@@ -283,23 +285,7 @@ namespace Nez.UI
 			}
 			return hit;
 		}
-
-
-		protected override void positionChanged()
-		{
-			base.positionChanged();
-
-			keepWithinStage();
-		}
-
-
-		protected override void sizeChanged()
-		{
-			base.sizeChanged();
-
-			keepWithinStage();
-		}
-
+        
 
 		public bool isMovable()
 		{

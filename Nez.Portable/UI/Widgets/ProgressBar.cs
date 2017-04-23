@@ -59,8 +59,10 @@ namespace Nez.UI
 			setSize( preferredWidth, preferredHeight );
 		}
 
+		public ProgressBar( float min, float max, float stepSize, bool vertical,  Skin skin, string styleName = null ) : this( min, max, stepSize, vertical, skin.get<ProgressBarStyle>( styleName ) )
+		{}
 
-		public ProgressBar( Skin skin, string styleName = null ) : this( 0, 1, 0.01f, false, skin.get<ProgressBarStyle>( styleName ) )
+		public ProgressBar( Skin skin, string styleName = null ) : this( 0, 1, 0.01f, false, skin )
 		{}
 
 
@@ -136,7 +138,7 @@ namespace Nez.UI
 			var width = this.width;
 			var height = this.height;
 			var knobHeight = knob == null ? 0 : knob.minHeight;
-			var knobWidth = knob == null ? 0 : knob.minHeight;
+			var knobWidth = knob == null ? 0 : knob.minWidth;
 			var percent = getVisualPercent();
 			var color = new Color( this.color, this.color.A * parentAlpha );
 
