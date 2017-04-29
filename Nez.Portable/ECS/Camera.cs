@@ -121,14 +121,14 @@ namespace Nez
 				if( _areBoundsDirty )
 				{
 					// top-left and bottom-right are needed by either rotated or non-rotated bounds
-					var topLeft = screenToWorldPoint( new Vector2( Core.graphicsDevice.Viewport.X, Core.graphicsDevice.Viewport.Y ) );
-					var bottomRight = screenToWorldPoint( new Vector2( Core.graphicsDevice.Viewport.X + Core.graphicsDevice.Viewport.Width, Core.graphicsDevice.Viewport.Y + Core.graphicsDevice.Viewport.Height ) );
+					var topLeft = screenToWorldPoint( _internalBounds.location );
+					var bottomRight = screenToWorldPoint( new Vector2( _internalBounds.right, _internalBounds.bottom) );
 
 					if( entity.transform.rotation != 0 )
 					{
 						// special care for rotated bounds. we need to find our absolute min/max values and create the bounds from that
-						var topRight = screenToWorldPoint( new Vector2( Core.graphicsDevice.Viewport.X + Core.graphicsDevice.Viewport.Width, Core.graphicsDevice.Viewport.Y ) );
-						var bottomLeft = screenToWorldPoint( new Vector2( Core.graphicsDevice.Viewport.X, Core.graphicsDevice.Viewport.Y + Core.graphicsDevice.Viewport.Height ) );
+						var topRight = screenToWorldPoint( new Vector2( _internalBounds.right, _internalBounds.y ) );
+						var bottomLeft = screenToWorldPoint( new Vector2( _internalBounds.x, _internalBounds.bottom ) );
 
 						var minX = Mathf.minOf( topLeft.X, bottomRight.X, topRight.X, bottomLeft.X );
 						var maxX = Mathf.maxOf( topLeft.X, bottomRight.X, topRight.X, bottomLeft.X );
@@ -254,6 +254,7 @@ namespace Nez
 		float _minimumZoom = 0.3f;
 		float _maximumZoom = 3f;
 		RectangleF _bounds;
+		RectangleF _internalBounds;
 		Matrix2D _transformMatrix = Matrix2D.identity;
 		Matrix2D _inverseTransformMatrix = Matrix2D.identity;
 		Matrix _projectionMatrix;
@@ -269,6 +270,8 @@ namespace Nez
 		public Camera()
 		{
 			setZoom( 0 );
+			setBounds( new RectangleF( Core.graphicsDevice.Viewport.X, Core.graphicsDevice.Viewport.Y,
+				Core.graphicsDevice.Viewport.Width, Core.graphicsDevice.Viewport.Height ) );
 		}
 
 
@@ -323,10 +326,21 @@ namespace Nez
 		#region Fluent setters
 
 		/// <summary>
+		/// sets custom bounds for the camera. useful for culling.
+		/// </summary>
+		/// <param name="bounds">Bounds.</param>
+		public Camera setBounds( RectangleF bounds )
+		{
+			_internalBounds = bounds;
+			_areBoundsDirty = true;
+			return this;
+		}
+
+
+		/// <summary>
 		/// shortcut to entity.transform.setPosition
 		/// </summary>
-		/// <returns>The position.</returns>
-		/// <param name="value">Value.</param>
+		/// <param name="position">Position.</param>
 		public Camera setPosition( Vector2 position )
 		{
 			entity.transform.setPosition( position );
@@ -337,7 +351,6 @@ namespace Nez
 		/// <summary>
 		/// shortcut to entity.transform.setRotation
 		/// </summary>
-		/// <returns>The rotation.</returns>
 		/// <param name="radians">Radians.</param>
 		public Camera setRotation( float radians )
 		{
@@ -349,7 +362,6 @@ namespace Nez
 		/// <summary>
 		/// shortcut to entity.transform.setRotationDegrees
 		/// </summary>
-		/// <returns>The rotation degrees.</returns>
 		/// <param name="degrees">Degrees.</param>
 		public Camera setRotationDegrees( float degrees )
 		{
@@ -362,7 +374,6 @@ namespace Nez
 		/// sets the the zoom value which should be between -1 and 1. This value is then translated to be from minimumZoom to maximumZoom.
 		/// This lets you set appropriate minimum/maximum values then use a more intuitive -1 to 1 mapping to change the zoom.
 		/// </summary>
-		/// <returns>The zoom.</returns>
 		/// <param name="zoom">Zoom.</param>
 		public Camera setZoom( float zoom )
 		{
@@ -383,7 +394,6 @@ namespace Nez
 		/// <summary>
 		/// minimum non-scaled value (0 - float.Max) that the camera zoom can be. Defaults to 0.3
 		/// </summary>
-		/// <returns>The minimum zoom.</returns>
 		/// <param name="value">Value.</param>
 		public Camera setMinimumZoom( float minZoom )
 		{
@@ -400,7 +410,6 @@ namespace Nez
 		/// <summary>
 		/// maximum non-scaled value (0 - float.Max) that the camera zoom can be. Defaults to 3
 		/// </summary>
-		/// <returns>The maximum zoom.</returns>
 		/// <param name="maxZoom">Max zoom.</param>
 		public Camera setMaximumZoom( float maxZoom )
 		{
