@@ -9,6 +9,15 @@ namespace Nez
 {
 	public class Camera : Component
 	{
+		struct CameraInset
+		{
+			internal float left;
+			internal float right;
+			internal float top;
+			internal float bottom;
+		}
+
+		
 		#region Fields and Properties
 
 		#region 3D Camera Fields
@@ -121,14 +130,14 @@ namespace Nez
 				if( _areBoundsDirty )
 				{
 					// top-left and bottom-right are needed by either rotated or non-rotated bounds
-					var topLeft = screenToWorldPoint( _internalBounds.location );
-					var bottomRight = screenToWorldPoint( new Vector2( _internalBounds.right, _internalBounds.bottom) );
+					var topLeft = screenToWorldPoint( new Vector2( Core.graphicsDevice.Viewport.X + _inset.left, Core.graphicsDevice.Viewport.Y + _inset.top ) );
+					var bottomRight = screenToWorldPoint( new Vector2( Core.graphicsDevice.Viewport.X + Core.graphicsDevice.Viewport.Width - _inset.right, Core.graphicsDevice.Viewport.Y + Core.graphicsDevice.Viewport.Height - _inset.bottom ) );
 
-					if( entity.transform.rotation != 0 )
+					if ( entity.transform.rotation != 0 )
 					{
 						// special care for rotated bounds. we need to find our absolute min/max values and create the bounds from that
-						var topRight = screenToWorldPoint( new Vector2( _internalBounds.right, _internalBounds.y ) );
-						var bottomLeft = screenToWorldPoint( new Vector2( _internalBounds.x, _internalBounds.bottom ) );
+						var topRight = screenToWorldPoint( new Vector2( Core.graphicsDevice.Viewport.X + Core.graphicsDevice.Viewport.Width - _inset.right, Core.graphicsDevice.Viewport.Y + _inset.top ) );
+						var bottomLeft = screenToWorldPoint( new Vector2( Core.graphicsDevice.Viewport.X + _inset.left, Core.graphicsDevice.Viewport.Y + Core.graphicsDevice.Viewport.Height - _inset.bottom ) );
 
 						var minX = Mathf.minOf( topLeft.X, bottomRight.X, topRight.X, bottomLeft.X );
 						var maxX = Mathf.maxOf( topLeft.X, bottomRight.X, topRight.X, bottomLeft.X );
@@ -254,7 +263,7 @@ namespace Nez
 		float _minimumZoom = 0.3f;
 		float _maximumZoom = 3f;
 		RectangleF _bounds;
-		RectangleF _internalBounds;
+		CameraInset _inset;
 		Matrix2D _transformMatrix = Matrix2D.identity;
 		Matrix2D _inverseTransformMatrix = Matrix2D.identity;
 		Matrix _projectionMatrix;
@@ -270,8 +279,6 @@ namespace Nez
 		public Camera()
 		{
 			setZoom( 0 );
-			setBounds( new RectangleF( Core.graphicsDevice.Viewport.X, Core.graphicsDevice.Viewport.Y,
-				Core.graphicsDevice.Viewport.Width, Core.graphicsDevice.Viewport.Height ) );
 		}
 
 
@@ -326,12 +333,15 @@ namespace Nez
 		#region Fluent setters
 
 		/// <summary>
-		/// sets custom bounds for the camera. useful for culling.
+		/// sets the amount used to inset the camera bounds from the viewport edge
 		/// </summary>
-		/// <param name="bounds">Bounds.</param>
-		public Camera setBounds( RectangleF bounds )
+		/// <param name="left">The amount to set the left bounds in from the viewport.</param>
+		/// <param name="right">The amount to set the right bounds in from the viewport.</param>
+		/// <param name="top">The amount to set the top bounds in from the viewport.</param>
+		/// <param name="bottom">The amount to set the bottom bounds in from the viewport.</param>
+		public Camera setInset( float left, float right, float top, float bottom )
 		{
-			_internalBounds = bounds;
+			_inset = new CameraInset { left = left, right = right , top = top, bottom = bottom };
 			_areBoundsDirty = true;
 			return this;
 		}
