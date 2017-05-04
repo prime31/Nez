@@ -64,6 +64,7 @@ namespace Nez
 
 			_width = max.X - _topLeftVertPosition.X;
 			_height = max.Y - _topLeftVertPosition.Y;
+			_areBoundsDirty = true;
 
 			// handle UVs if need be
 			if( recalculateUVs )
