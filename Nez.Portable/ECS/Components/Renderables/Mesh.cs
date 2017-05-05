@@ -204,9 +204,9 @@ namespace Nez
 		/// </summary>
 		/// <param name="primitiveType">The ordering of the verticies.</param>
 		/// <returns>The mesh.</returns>
-		public Mesh setPrimitiveType(PrimitiveType primitiveType)
+		public Mesh setPrimitiveType( PrimitiveType primitiveType )
 		{
-			Assert.isTrue(primitiveType == PrimitiveType.TriangleList || primitiveType == PrimitiveType.TriangleStrip, "Only triangles are supported.");
+			Assert.isTrue( primitiveType == PrimitiveType.TriangleList || primitiveType == PrimitiveType.TriangleStrip, "Only triangles are supported." );
 			_primitiveType = primitiveType;
 			return this;
 		}
@@ -244,13 +244,13 @@ namespace Nez
 			_basicEffect.World = entity.transform.localToWorldTransform;
 			_basicEffect.CurrentTechnique.Passes[0].Apply();
 
-			if (_primitiveType == PrimitiveType.TriangleList)
+			if( _primitiveType == PrimitiveType.TriangleList )
 			{
-				Core.graphicsDevice.DrawUserIndexedPrimitives(_primitiveType, _verts, 0, _verts.Length, _triangles, 0, _primitiveCount);
+				Core.graphicsDevice.DrawUserIndexedPrimitives( _primitiveType, _verts, 0, _verts.Length, _triangles, 0, _primitiveCount );
 			}
-			else if (_primitiveType == PrimitiveType.TriangleStrip)
+			else if( _primitiveType == PrimitiveType.TriangleStrip )
 			{
-				Core.graphicsDevice.DrawUserPrimitives(_primitiveType, _verts, 0, _verts.Length - 2);
+				Core.graphicsDevice.DrawUserPrimitives( _primitiveType, _verts, 0, _verts.Length - 2 );
 			}
 		}
 
