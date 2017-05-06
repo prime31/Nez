@@ -225,7 +225,10 @@ namespace Nez.UI
 
 				updateInputPoint( inputPos, inputPressed, inputReleased, inputMoved, ref lastOver );
 
-				_touchOverElement[touch.Id] = lastOver;
+				if ( inputReleased )
+					_touchOverElement.Remove( touch.Id );
+				else
+					_touchOverElement[touch.Id] = lastOver;
 			}
 			#endif
 		}
