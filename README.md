@@ -28,6 +28,8 @@ Nez aims to be a lightweight 2D framework that sits on top of MonoGame/FNA. It p
 
 Nez Systems
 ==========
+
+[![Join the chat at https://gitter.im/Nez-Devs/Lobby](https://badges.gitter.im/Nez-Devs/Lobby.svg)](https://gitter.im/Nez-Devs/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 There are various systems documented separately on the [Nez website docs.](http://prime31.github.io/Nez/documentation/setup/installation) You can also access the markdown files directly below. Note that sometimes the Nez website docs lag behind the markdown files linked below.
 
 - [Nez-Core](FAQs/Nez-Core.md)
