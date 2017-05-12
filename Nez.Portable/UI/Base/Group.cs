@@ -216,7 +216,7 @@ namespace Nez.UI
 
 		public void debugRenderChildren( Graphics graphics, float parentAlpha )
 		{
-			parentAlpha *= color.A;
+			parentAlpha *= color.A / 255.0f;
 			if( transform )
 			{
 				for( var i = 0; i < children.Count; i++ )

@@ -85,7 +85,7 @@ namespace Nez.UI
 		{
 			validate();
 
-			var col = new Color( color.R, color.G, color.B, color.A * parentAlpha );
+			var col = new Color( color.R, color.G, color.B, (int)(color.A * parentAlpha) );
 
 //			if( drawable instanceof TransformDrawable )
 //			{
