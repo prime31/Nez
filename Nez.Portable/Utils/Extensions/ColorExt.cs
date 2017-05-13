@@ -86,8 +86,8 @@ namespace Nez
 		/// <param name="t">T.</param>
 		public static Color lerp( Color from, Color to, float t )
 		{
-			var t256 = (int)( t * 256 );
-			return new Color( from.R + ( to.R - from.R ) * t256 / 256, from.G + ( to.G - from.G ) * t256 / 256, from.B + ( to.B - from.B ) * t256 / 256, from.A + ( to.A - from.A ) * t256 / 256 );
+			var t255 = (int)( t * 255 );
+			return new Color( from.R + ( to.R - from.R ) * t255 / 255, from.G + ( to.G - from.G ) * t255 / 255, from.B + ( to.B - from.B ) * t255 / 255, from.A + ( to.A - from.A ) * t255 / 255 );
 		}
 
 
@@ -100,11 +100,11 @@ namespace Nez
 		public static void lerp( ref Color from, ref Color to, out Color result, float t )
 		{
 			result = new Color();
-			var t256 = (int)( t * 256 );
-			result.R = (byte)( from.R + ( to.R - from.R ) * t256 / 256 );
-			result.G = (byte)( from.G + ( to.G - from.G ) * t256 / 256 );
-			result.B = (byte)( from.B + ( to.B - from.B ) * t256 / 256 );
-			result.A = (byte)( from.A + ( to.A - from.A ) * t256 / 256 );
+			var t255 = (int)( t * 255 );
+			result.R = (byte)( from.R + ( to.R - from.R ) * t255 / 255 );
+			result.G = (byte)( from.G + ( to.G - from.G ) * t255 / 255 );
+			result.B = (byte)( from.B + ( to.B - from.B ) * t255 / 255 );
+			result.A = (byte)( from.A + ( to.A - from.A ) * t255 / 255 );
 		}
 
 	}
