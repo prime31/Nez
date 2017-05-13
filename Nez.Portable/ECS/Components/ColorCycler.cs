@@ -81,13 +81,13 @@ namespace Nez
 					color = originalColor * evaluateWaveFunction();
 					break;
 				case Colorchannels.Red:
-					color = new Color( originalColor.R * evaluateWaveFunction(), color.G, color.B, color.A );
+					color = new Color( (int)(originalColor.R * evaluateWaveFunction()), color.G, color.B, color.A );
 					break;
 				case Colorchannels.Green:
-					color = new Color( color.R, originalColor.G * evaluateWaveFunction(), color.B, color.A );
+					color = new Color( color.R, (int)(originalColor.G * evaluateWaveFunction()), color.B, color.A );
 					break;
 				case Colorchannels.Blue:
-					color = new Color( color.R, color.G, originalColor.B * evaluateWaveFunction(), color.A );
+					color = new Color( color.R, color.G, (int)(originalColor.B * evaluateWaveFunction()), color.A );
 					break;
 			}
 

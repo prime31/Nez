@@ -600,7 +600,7 @@ namespace Nez.UI
 			{
 				if( !_isFocused && messageText != null )
 				{
-					var messageFontColor = style.messageFontColor.HasValue ? style.messageFontColor.Value : new Color( 180, 180, 180, color.A * parentAlpha );
+					var messageFontColor = style.messageFontColor.HasValue ? style.messageFontColor.Value : new Color( 180, 180, 180, (int)(color.A * parentAlpha) );
 					var messageFont = style.messageFont != null ? style.messageFont : font;
 					graphics.batcher.drawString( messageFont, messageText, new Vector2( x + bgLeftWidth, y + textY + yOffset ), messageFontColor );
 					//messageFont.draw( graphics.batcher, messageText, x + bgLeftWidth, y + textY + yOffset, 0, messageText.length(),
