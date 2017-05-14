@@ -343,7 +343,7 @@ namespace Nez.UI
 		{
 			validate();
 
-			var color = new Color( this.color, this.color.A * parentAlpha );
+			var color = new Color( this.color, (int)(this.color.A * parentAlpha) );
 			if( _style.background != null )
 				_style.background.draw( graphics, x, y, width == 0 ? _prefSize.X : width, height, color );
 

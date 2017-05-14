@@ -117,7 +117,7 @@ namespace Nez.UI
 			if( _background == null )
 				return;
 			
-			_background.draw( graphics, x, y, getWidth(), getHeight(), new Color( color, color.A * parentAlpha ) );
+			_background.draw( graphics, x, y, getWidth(), getHeight(), new Color( color, (int)(color.A * parentAlpha) ) );
 		}
 
 

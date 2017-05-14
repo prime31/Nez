@@ -140,7 +140,7 @@ namespace Nez.UI
 			var knobHeight = knob == null ? 0 : knob.minHeight;
 			var knobWidth = knob == null ? 0 : knob.minWidth;
 			var percent = getVisualPercent();
-			var color = new Color( this.color, this.color.A * parentAlpha );
+			var color = new Color( this.color, (int)(this.color.A * parentAlpha) );
 
 			if( _vertical )
 			{

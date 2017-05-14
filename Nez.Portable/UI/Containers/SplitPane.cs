@@ -194,7 +194,7 @@ namespace Nez.UI
 				}
 			}
 				
-			_style.handle.draw( graphics, _handleBounds.x, _handleBounds.y, _handleBounds.width, _handleBounds.height, new Color( color, color.A * parentAlpha ) );
+			_style.handle.draw( graphics, _handleBounds.x, _handleBounds.y, _handleBounds.width, _handleBounds.height, new Color( color, (int)(color.A * parentAlpha) ) );
 
 			if( transform )
 				resetTransform( graphics );
