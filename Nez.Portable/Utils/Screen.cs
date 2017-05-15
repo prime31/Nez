@@ -105,6 +105,13 @@ namespace Nez
 		}
 
 
+		public static DisplayOrientation supportedOrientations
+		{
+			get { return _graphicsManager.SupportedOrientations; }
+			set { _graphicsManager.SupportedOrientations = value; }
+		}
+
+
 		public static void applyChanges()
 		{
 			_graphicsManager.ApplyChanges();
