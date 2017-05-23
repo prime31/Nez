@@ -70,10 +70,10 @@ namespace Nez
 		public static Color multiply( this Color self, Color second )
 		{
 			return new Color {
-				R = (byte)( self.R * second.R ),
-				G = (byte)( self.G * second.G ),
-				B = (byte)( self.B * second.B ),
-				A = (byte)( self.A * second.A )
+				R = (byte)( self.R * second.R / 255 ),
+				G = (byte)( self.G * second.G / 255 ),
+				B = (byte)( self.B * second.B / 255 ),
+				A = (byte)( self.A * second.A / 255 )
 			};
 		}
 
