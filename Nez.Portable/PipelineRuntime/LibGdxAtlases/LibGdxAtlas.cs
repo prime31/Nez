@@ -11,7 +11,7 @@ namespace Nez.LibGdxAtlases
 	public class LibGdxAtlas
 	{
 		public List<TextureAtlas> atlases = new List<TextureAtlas>();
-        public Dictionary<string, List<Subtexture>> animations = new Dictionary<string, List<Subtexture>>();
+		public Dictionary<string, List<Subtexture>> animations = new Dictionary<string, List<Subtexture>>();
 
 
 		/// <summary>
@@ -55,15 +55,15 @@ namespace Nez.LibGdxAtlases
 		{
 			return get( name );
 		}
-        /// <summary>
-        /// gets the sprite animation frames for a given name
-        /// </summary>
-        /// <param name="name">name of the anmation</param>
-        /// <returns></returns>
+		/// <summary>
+		/// gets the sprite animation frames for a given name
+		/// </summary>
+		/// <param name="name">name of the anmation</param>
+		/// <returns></returns>
 	    public List<Subtexture> getAnimation( string name )
-        {
-            return animations[name];
-        }
+		{
+			return animations[name];
+		}
 	}
 }
 

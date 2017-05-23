@@ -66,7 +66,8 @@ namespace Nez.LibGdxAtlases
 							writer.Write( region.pads[3] );
 							LibGdxAtlasProcessor.logger.LogMessage( "Writing pads for region: {0}", region.name );
 						}
-                        writer.Write( region.index );
+
+						writer.Write( region.index );
 					}
 				}
 			}

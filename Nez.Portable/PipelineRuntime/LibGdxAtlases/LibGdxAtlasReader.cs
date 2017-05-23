@@ -49,19 +49,19 @@ namespace Nez.LibGdxAtlases
 						( (NinePatchSubtexture)subtextures[i] ).padBottom = reader.ReadInt32();
 					}
 
-				    var index = reader.ReadInt32();
+					var index = reader.ReadInt32();
 
-                    // animation
-                    if ( index != -1 )
-                    {
-                        List<Subtexture> frames;
-                        if ( !atlasContainer.animations.TryGetValue( name, out frames ) )
-                        {
-                            frames = new List<Subtexture>();
-                            atlasContainer.animations[name] = frames;
-                        }
+					// animation
+					if ( index != -1 )
+					{
+						List<Subtexture> frames;
+						if ( !atlasContainer.animations.TryGetValue( name, out frames ) )
+						{
+							frames = new List<Subtexture>();
+							atlasContainer.animations[name] = frames;
+						}
 
-                        frames.Insert( index, subtextures[i] );
+						frames.Insert( index, subtextures[i] );
 				    }
 
 					regionNames[i] = name;
