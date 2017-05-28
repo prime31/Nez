@@ -113,7 +113,7 @@ namespace Nez
             if( _triNext.Length < count )
                 Array.Resize( ref _triNext, Math.Max( _triNext.Length * 2, count ) );
             if( _triPrev.Length < count )
-                Array.Resize( ref _triPrev, Math.Min( _triPrev.Length * 2, count ) );
+                Array.Resize( ref _triPrev, Math.Max( _triPrev.Length * 2, count ) );
 
             for( var i = 0; i < count; i++ )
 			{
