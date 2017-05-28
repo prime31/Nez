@@ -85,7 +85,7 @@ namespace Nez.UI
 		{
 			validate();
 
-			var col = color.A == 255 ? color : color * (color.A / 255f);
+			var col = color * (color.A / 255f);
 
 			//			if( drawable instanceof TransformDrawable )
 			//			{
