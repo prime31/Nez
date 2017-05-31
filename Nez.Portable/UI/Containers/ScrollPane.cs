@@ -1203,7 +1203,7 @@ namespace Nez.UI
 
 			// draw the background
 			var color = getColor();
-			color = new Color( color, color.A * parentAlpha );
+			color = new Color( color, (int)(color.A * parentAlpha) );
 			if( _style.background != null )
 				_style.background.draw( graphics, 0, 0, getWidth(), getHeight(), color );
 

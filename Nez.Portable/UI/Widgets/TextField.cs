@@ -584,7 +584,7 @@ namespace Nez.UI
 			float bgLeftWidth = 0, bgRightWidth = 0;
 			if( background != null )
 			{
-				background.draw( graphics, x, y, width, height, new Color( color, color.A * parentAlpha ) );
+				background.draw( graphics, x, y, width, height, new Color( color, (int)(color.A * parentAlpha) ) );
 				bgLeftWidth = background.leftWidth;
 				bgRightWidth = background.rightWidth;
 			}
@@ -600,7 +600,7 @@ namespace Nez.UI
 			{
 				if( !_isFocused && messageText != null )
 				{
-					var messageFontColor = style.messageFontColor.HasValue ? style.messageFontColor.Value : new Color( 180, 180, 180, color.A * parentAlpha );
+					var messageFontColor = style.messageFontColor.HasValue ? style.messageFontColor.Value : new Color( 180, 180, 180, (int)(color.A * parentAlpha) );
 					var messageFont = style.messageFont != null ? style.messageFont : font;
 					graphics.batcher.drawString( messageFont, messageText, new Vector2( x + bgLeftWidth, y + textY + yOffset ), messageFontColor );
 					//messageFont.draw( graphics.batcher, messageText, x + bgLeftWidth, y + textY + yOffset, 0, messageText.length(),
@@ -609,7 +609,7 @@ namespace Nez.UI
 			}
 			else
 			{
-				var col = new Color( fontColor, fontColor.A * parentAlpha );
+				var col = new Color( fontColor, (int)(fontColor.A * parentAlpha / 255.0f) );
 				var t = displayText.Substring( visibleTextStart, visibleTextEnd - visibleTextStart );
 				graphics.batcher.drawString( font, t, new Vector2( x + bgLeftWidth + textOffset, y + textY + yOffset ), col );
 			}

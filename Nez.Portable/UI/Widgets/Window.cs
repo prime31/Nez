@@ -246,7 +246,7 @@ namespace Nez.UI
 
 		protected void drawStageBackground( Graphics graphics, float parentAlpha, float x, float y, float width, float height )
 		{
-			style.stageBackground.draw( graphics, x, y, width, height, new Color( color, color.A * parentAlpha ) );
+			style.stageBackground.draw( graphics, x, y, width, height, new Color( color, (int)(color.A * parentAlpha) ) );
 		}
 
 

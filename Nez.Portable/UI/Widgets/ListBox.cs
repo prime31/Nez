@@ -175,7 +175,7 @@ namespace Nez.UI
 			var selectedDrawable = _style.selection;
 
 			var color = getColor();
-			color = new Color( color, color.A * parentAlpha );
+			color = new Color( color, (int)(color.A * parentAlpha) );
 
 			float x = getX(), y = getY(), width = getWidth(), height = getHeight();
 			var itemY = 0f;
@@ -190,9 +190,9 @@ namespace Nez.UI
 				width -= leftWidth + background.rightWidth;
 			}
 
-			var unselectedFontColor = new Color( _style.fontColorUnselected, _style.fontColorUnselected.A * parentAlpha );
-			var selectedFontColor = new Color( _style.fontColorSelected, _style.fontColorSelected.A * parentAlpha );
-			var hoveredFontColor = new Color( _style.fontColorHovered, _style.fontColorHovered.A * parentAlpha );
+			var unselectedFontColor = new Color( _style.fontColorUnselected, (int)(_style.fontColorUnselected.A * parentAlpha) );
+			var selectedFontColor = new Color( _style.fontColorSelected, (int)(_style.fontColorSelected.A * parentAlpha) );
+			var hoveredFontColor = new Color( _style.fontColorHovered, (int)(_style.fontColorHovered.A * parentAlpha) );
 			Color fontColor;
 			for( var i = 0; i < _items.Count; i++ )
 			{
