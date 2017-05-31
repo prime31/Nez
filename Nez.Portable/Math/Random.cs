@@ -4,11 +4,31 @@ using Microsoft.Xna.Framework;
 
 namespace Nez
 {
-	public static class Random
-	{
-		public static System.Random random = new System.Random();
+    public static class Random
+    {
+        private static int _seed = Environment.TickCount;
+		public static System.Random random = new System.Random(_seed);
 
 
+        /// <summary>
+        /// returns current seed value
+        /// </summary>
+        /// <returns>Seed.</returns>
+        static public int getSeed()
+        {
+            return _seed;
+        }
+
+        /// <summary>
+        /// resets rng with new seed
+        /// </summary>
+        /// <param name="seed">Seed.</param>
+        static public void setSeed(int seed)
+        {
+            _seed = seed;
+            random = new System.Random(_seed);
+        }
+        
 		/// <summary>
 		/// returns a random float between 0 (inclusive) and 1 (exclusive)
 		/// </summary>
