@@ -19,6 +19,7 @@ namespace Nez
 			return _seed;
 		}
 
+
 		/// <summary>
 		/// resets rng with new seed
 		/// </summary>
@@ -28,6 +29,7 @@ namespace Nez
 			_seed = seed;
 			random = new System.Random( _seed );
 		}
+
 
 		/// <summary>
 		/// returns a random float between 0 (inclusive) and 1 (exclusive)
@@ -96,7 +98,6 @@ namespace Nez
 		/// <summary>
 		/// Returns a random float between min (inclusive) and max (exclusive)
 		/// </summary>
-		/// <param name="random"></param>
 		/// <param name="min"></param>
 		/// <param name="max"></param>
 		/// <returns></returns>
@@ -109,7 +110,6 @@ namespace Nez
 		/// <summary>
 		/// Returns a random Vector2, and x- and y-values of which are between min (inclusive) and max (exclusive)
 		/// </summary>
-		/// <param name="random"></param>
 		/// <param name="min"></param>
 		/// <param name="max"></param>
 		/// <returns></returns>
@@ -152,59 +152,11 @@ namespace Nez
 		/// <summary>
 		/// randomly returns one of the given values
 		/// </summary>
-		/// <param name="first">First.</param>
-		/// <param name="second">Second.</param>
-		/// <typeparam name="T">The 1st type parameter.</typeparam>
-		public static T choose<T>( T first, T second )
+		/// <param name="choices">Parameter array of choices.</param>
+		/// <typeparam name="T">Value type parameter.</typeparam>
+		public static T choose<T>( params T[] choices )
 		{
-			if( nextInt( 2 ) == 0 )
-				return first;
-			return second;
-		}
-
-
-		/// <summary>
-		/// randomly returns one of the given values
-		/// </summary>
-		/// <param name="first">First.</param>
-		/// <param name="second">Second.</param>
-		/// <param name="third">Third.</param>
-		/// <typeparam name="T">The 1st type parameter.</typeparam>
-		public static T choose<T>( T first, T second, T third )
-		{
-			switch( nextInt( 3 ) )
-			{
-				case 0:
-				return first;
-				case 1:
-				return second;
-				default:
-				return third;
-			}
-		}
-
-
-		/// <summary>
-		/// randomly returns one of the given values
-		/// </summary>
-		/// <param name="first">First.</param>
-		/// <param name="second">Second.</param>
-		/// <param name="third">Third.</param>
-		/// <param name="fourth">Fourth.</param>
-		/// <typeparam name="T">The 1st type parameter.</typeparam>
-		public static T choose<T>( T first, T second, T third, T fourth )
-		{
-			switch( nextInt( 4 ) )
-			{
-				case 0:
-				return first;
-				case 1:
-				return second;
-				case 2:
-				return third;
-				default:
-				return fourth;
-			}
+			return choices[nextInt( choices.Length )];
 		}
 
 	}
