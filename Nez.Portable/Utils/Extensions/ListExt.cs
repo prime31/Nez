@@ -64,6 +64,29 @@ namespace Nez
 			return list[Nez.Random.range( 0, list.Count )];
 		}
 
+
+		/// <summary>
+		/// gets random items from the list. Does not empty check the list or verify that list count is greater than item count! The returned List can be put back in the pool via ListPool.free.
+		/// </summary>
+		/// <returns>The item.</returns>
+		/// <param name="list">List.</param>
+		/// <param name="itemCount">The number of random items to return from the list.</param>
+		/// <typeparam name="T">The 1st type parameter.</typeparam>
+		public static List<T> randomItems<T>( this IList<T> list, int itemCount )
+		{
+			var set = new HashSet<T>();
+			while ( set.Count != itemCount )
+			{
+				var item = list.randomItem();
+				if ( !set.Contains( item ) )
+					set.Add( item );
+			}
+
+			var items = ListPool<T>.obtain();
+			items.AddRange( set );
+			return items;
+		}
+
 	}
 }
 
