@@ -99,7 +99,7 @@ namespace Nez
 		/// </summary>
 		public void removeAllEntities()
 		{
-			// clear lists we dont need anymore
+			// clear lists we don't need anymore
 			_unsortedTags.Clear();
 			_entitiesToAdd.Clear();
 			_isEntityListUnsorted = false;
@@ -284,6 +284,24 @@ namespace Nez
 
 
 		/// <summary>
+		/// gets current Entities and Entities to be added, without requiring a type check. The returned List can be put back in the pool via ListPool.free.
+		/// </summary>
+		/// <returns>all entities</returns>
+		public List<Entity> getAllEntities()
+		{
+			var list = ListPool<Entity>.obtain();
+			for (var i = 0; i < _entities.length; i++)
+				list.Add(_entities.buffer[i]);
+		
+			// in case an entity is added and searched for in the same frame we check the toAdd list
+			for (var i = 0; i < _entitiesToAdd.Count; i++)
+				list.Add(_entitiesToAdd[i]);
+		
+			return list;
+		}
+
+
+		/// <summary>
 		/// returns a List of all Entities of type T. The returned List can be put back in the pool via ListPool.free.
 		/// </summary>
 		/// <returns>The of type.</returns>
@@ -309,7 +327,7 @@ namespace Nez
 
 
 		/// <summary>
-		/// returns the first Component found in the Scene of type T
+		/// returns the first enabled Component found in the Scene of type T
 		/// </summary>
 		/// <returns>The component of type.</returns>
 		/// <typeparam name="T">The 1st type parameter.</typeparam>
@@ -341,7 +359,7 @@ namespace Nez
 
 
 		/// <summary>
-		/// returns all Components found in the Scene of type T. The returned List can be put back in the pool via ListPool.free.
+		/// returns all enabled Components found in the Scene of type T. The returned List can be put back in the pool via ListPool.free.
 		/// </summary>
 		/// <returns>The components of type.</returns>
 		/// <typeparam name="T">The 1st type parameter.</typeparam>
@@ -368,4 +386,3 @@ namespace Nez
 
 	}
 }
-
