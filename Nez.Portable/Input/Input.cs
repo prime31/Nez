@@ -65,6 +65,8 @@ namespace Nez
 
 		public static void update()
 		{
+			if (Core._instance._sceneTransition != null) return;
+			
 			touch.update();
 
 			_previousKbState = _currentKbState;
