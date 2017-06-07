@@ -32,7 +32,7 @@ namespace Nez.LibGdxAtlases
 				{
 					if( region.page == page.textureFile )
 					{
-						LibGdxAtlasProcessor.logger.LogMessage( "Writing region: {0}", region.name );
+						LibGdxAtlasProcessor.logger.LogMessage( "Writing region: {0} {1}", region.name, region.index == -1 ? string.Empty : $"(index {region.index})" );
 						writer.Write( region.name );
 						writer.Write( region.sourceRectangle.x );
 						writer.Write( region.sourceRectangle.y );
@@ -66,6 +66,8 @@ namespace Nez.LibGdxAtlases
 							writer.Write( region.pads[3] );
 							LibGdxAtlasProcessor.logger.LogMessage( "Writing pads for region: {0}", region.name );
 						}
+
+						writer.Write( region.index );
 					}
 				}
 			}
