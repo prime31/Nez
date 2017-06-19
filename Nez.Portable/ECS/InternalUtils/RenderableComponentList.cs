@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 
 
 namespace Nez
@@ -106,14 +106,14 @@ namespace Nez
 			if( _unsortedRenderLayers.Count > 0 )
 			{
 				for( int i = 0, count = _unsortedRenderLayers.Count; i < count; i++ )
-                {
-                    FastList<IRenderable> renderLayerComponents;
-                    if (_componentsByRenderLayer.TryGetValue(i, out renderLayerComponents))
-                    {
-                        renderLayerComponents.sort(compareUpdatableOrder);
-                        _unsortedRenderLayers.Remove(i);
-                    }
-                }
+				{
+					FastList<IRenderable> renderLayerComponents;
+					if ( _componentsByRenderLayer.TryGetValue( i, out renderLayerComponents ) )
+					{
+						renderLayerComponents.sort( compareUpdatableOrder );
+						_unsortedRenderLayers.Remove( i );
+					}
+				}
 			}
 		}
 
