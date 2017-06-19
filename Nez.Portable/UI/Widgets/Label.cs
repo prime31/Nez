@@ -212,11 +212,12 @@ namespace Nez.UI
 		}
 
 
-		public void setFontScale( float fontScaleX, float fontScaleY )
+		public Label setFontScale( float fontScaleX, float fontScaleY )
 		{
 			_fontScaleX = fontScaleX;
 			_fontScaleY = fontScaleY;
 			invalidateHierarchy();
+			return this;
 		}
 
 
@@ -225,9 +226,10 @@ namespace Nez.UI
 		/// when ellipsis is enabled. Default is false.
 		/// </summary>
 		/// <param name="ellipsis">Ellipsis.</param>
-		public void setEllipsis( String ellipsis )
+		public Label setEllipsis( String ellipsis )
 		{
-			this._ellipsis = ellipsis;
+			_ellipsis = ellipsis;
+			return this;
 		}
 
 
@@ -236,12 +238,13 @@ namespace Nez.UI
 		/// ellipsis is true. Default is false.
 		/// </summary>
 		/// <param name="ellipsis">Ellipsis.</param>
-		public void setEllipsis( bool ellipsis )
+		public Label setEllipsis( bool ellipsis )
 		{
 			if( ellipsis )
-				this._ellipsis = "...";
+				_ellipsis = "...";
 			else
-				this._ellipsis = null;
+				_ellipsis = null;
+			return this;
 		}
 
 
@@ -249,10 +252,11 @@ namespace Nez.UI
 		/// should the text be wrapped?
 		/// </summary>
 		/// <param name="shouldWrap">If set to <c>true</c> should wrap.</param>
-		public void setWrap( bool shouldWrap )
+		public Label setWrap( bool shouldWrap )
 		{
 			_wrapText = shouldWrap;
 			invalidateHierarchy();
+			return this;
 		}
 
 		#endregion
@@ -339,7 +343,7 @@ namespace Nez.UI
 		{
 			validate();
 
-			var color = new Color( this.color, this.color.A * parentAlpha );
+			var color = new Color( this.color, (int)(this.color.A * parentAlpha) );
 			if( _style.background != null )
 				_style.background.draw( graphics, x, y, width == 0 ? _prefSize.X : width, height, color );
 

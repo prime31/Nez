@@ -184,7 +184,7 @@ namespace Nez.UI
 		#endregion
 
 
-		public void setStyle( WindowStyle style )
+		public Window setStyle( WindowStyle style )
 		{
 			this.style = style;
 			setBackground( style.background );
@@ -195,6 +195,7 @@ namespace Nez.UI
 			titleLabel.setStyle( labelStyle );
 
 			invalidateHierarchy();
+			return this;
 		}
 
 
@@ -230,6 +231,8 @@ namespace Nez.UI
 
 		public override void draw( Graphics graphics, float parentAlpha )
 		{
+            keepWithinStage();
+
 			if( style.stageBackground != null )
 			{
 				var stagePos = stageToLocalCoordinates( Vector2.Zero );
@@ -243,7 +246,7 @@ namespace Nez.UI
 
 		protected void drawStageBackground( Graphics graphics, float parentAlpha, float x, float y, float width, float height )
 		{
-			style.stageBackground.draw( graphics, x, y, width, height, new Color( color, color.A * parentAlpha ) );
+			style.stageBackground.draw( graphics, x, y, width, height, new Color( color, (int)(color.A * parentAlpha) ) );
 		}
 
 
@@ -282,23 +285,7 @@ namespace Nez.UI
 			}
 			return hit;
 		}
-
-
-		protected override void positionChanged()
-		{
-			base.positionChanged();
-
-			keepWithinStage();
-		}
-
-
-		protected override void sizeChanged()
-		{
-			base.sizeChanged();
-
-			keepWithinStage();
-		}
-
+        
 
 		public bool isMovable()
 		{

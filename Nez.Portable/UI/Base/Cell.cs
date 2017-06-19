@@ -978,7 +978,6 @@ namespace Nez.UI
 		/// <summary>
 		/// Sets uniformX to true
 		/// </summary>
-		/// <returns>The uniform x.</returns>
 		public Cell setUniformX()
 		{
 			uniformX = true;
@@ -989,7 +988,6 @@ namespace Nez.UI
 		/// <summary>
 		/// Sets uniformY to true
 		/// </summary>
-		/// <returns>The uniform y.</returns>
 		public Cell setUniformY()
 		{
 			uniformY = true;

@@ -76,7 +76,6 @@ namespace Nez.UI
 		/// <summary>
 		/// If true, this tooltip is shown without delay when hovered
 		/// </summary>
-		/// <returns>The instant.</returns>
 		/// <param name="instant">Instant.</param>
 		public Tooltip setInstant( bool instant )
 		{
@@ -94,7 +93,6 @@ namespace Nez.UI
 		/// <summary>
 		/// If true, this tooltip is shown even when tooltips are not TooltipManager#enabled
 		/// </summary>
-		/// <returns>The always.</returns>
 		/// <param name="always">Always.</param>
 		public Tooltip setAlways( bool always )
 		{

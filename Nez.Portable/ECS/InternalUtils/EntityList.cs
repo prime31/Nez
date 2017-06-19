@@ -130,9 +130,22 @@ namespace Nez
 		}
 
 
+		List<Entity> getTagList( int tag )
+		{
+			List<Entity> list = null;
+			if( !_entityDict.TryGetValue( tag, out list ) )
+			{
+				list = new List<Entity>();
+				_entityDict[tag] = list;
+			}
+
+			return _entityDict[tag];
+		}
+
+
 		internal void addToTagList( Entity entity )
 		{
-			var list = entitiesWithTag( entity.tag );
+			var list = getTagList( entity.tag );
 			Assert.isFalse( list.Contains( entity ), "Entity tag list already contains this entity: {0}", entity );
 
 			list.Add( entity );
@@ -255,20 +268,18 @@ namespace Nez
 
 
 		/// <summary>
-		/// returns a list of all entities with tag. If no entities have the tag an empty list is returned.
+		/// returns a list of all entities with tag. If no entities have the tag an empty list is returned. The returned List can be put back in the pool via ListPool.free.
 		/// </summary>
 		/// <returns>The with tag.</returns>
 		/// <param name="tag">Tag.</param>
 		public List<Entity> entitiesWithTag( int tag )
 		{
-			List<Entity> list = null;
-			if( !_entityDict.TryGetValue( tag, out list ) )
-			{
-				list = new List<Entity>();
-				_entityDict[tag] = list;
-			}
+			var list = getTagList( tag );
 
-			return _entityDict[tag];
+			var returnList = ListPool<Entity>.obtain();
+			returnList.AddRange( list );
+
+			return returnList;
 		}
 
 

@@ -3,14 +3,14 @@ using System.Collections.Generic;
 using Newtonsoft.Json.Linq;
 using Microsoft.Xna.Framework;
 using Nez.UI;
-
+using System;
 
 namespace Nez.UISkinImporter
 {
 	[ContentProcessor( DisplayName = "UISkin Processor" )]
-	public class UISkinProcessor : ContentProcessor<Dictionary<string,object>, UISkinConfig>
+	public class UISkinProcessor : ContentProcessor<Dictionary<string, object>, UISkinConfig>
 	{
-		public override UISkinConfig Process( Dictionary<string,object> input, ContentProcessorContext context )
+		public override UISkinConfig Process( Dictionary<string, object> input, ContentProcessorContext context )
 		{
 			var skinConfig = new UISkinConfig();
 			var styleConfig = new UISkinStyleConfig();
@@ -20,7 +20,7 @@ namespace Nez.UISkinImporter
 				// special cases first
 				if( key == "colors" )
 				{
-					skinConfig.colors = parseColors( input[key] as JObject );
+					skinConfig.colors = parseColors( input[key] as Dictionary<string, object> );
 				}
 				else if( key == "libGdxAtlases" )
 				{
@@ -37,7 +37,7 @@ namespace Nez.UISkinImporter
 				else
 				{
 					UISkinImporter.logger.LogMessage( "adding style type: {0}", key );
-					styleConfig.Add( key, parseStyles( input[key] as JObject ) );
+					styleConfig.Add( key, input[key] );
 				}
 			}
 
@@ -48,66 +48,93 @@ namespace Nez.UISkinImporter
 		}
 
 
-		Dictionary<string,Color> parseColors( JObject colors )
+		Dictionary<string, Color> parseColors( Dictionary<string, object> colors )
 		{
 			if( colors.Count == 0 )
 				return null;
 
-			var result = new Dictionary<string,Color>( colors.Count );
-			foreach( JProperty key in colors.Children() )
+			var result = new Dictionary<string, Color>( colors.Count );
+			foreach( var key in colors.Keys )
 			{
-				var obj = colors[key.Name];
-				UISkinImporter.logger.LogMessage( "adding color: {0}", key.Name );
+				var obj = colors[key];
+				UISkinImporter.logger.LogMessage( "adding color: {0}", key );
+				Color color;
 
-				if( obj is JValue  )
+				// Allow the passing of strings (hex), arrays and objects (r:, g:, b:) to
+				//  represent colors. Also detect the usage of integers or normalized floats
+				if( obj is string )
 				{
-					var jVal = obj as JValue;
-					var val = jVal.Value as string;
+					var val = obj as string;
 
 					// we could have hex or hex
 					if( val.StartsWith( "#" ) )
-						result.Add( key.Name, ColorExt.hexToColor( val.Substring( 1 ) ) );
+						color = ColorExt.hexToColor( val.Substring( 1 ) );
 					else if( val.StartsWith( "0x" ) )
-						result.Add( key.Name, ColorExt.hexToColor( val.Substring( 2 ) ) );
+						color = ColorExt.hexToColor( val.Substring( 2 ) );
 					else
-						UISkinImporter.logger.LogMessage( "unsupported color definition {0}: {1}", key.Name, val );
+					{
+						UISkinImporter.logger.LogMessage( "unsupported color definition {0}: {1}", key, val );
+						continue;
+					}
 				}
 				else if( obj is JArray )
 				{
 					var jArr = obj as JArray;
-					var arr = jArr.ToObject<int[]>();
-					result.Add( key.Name, new Color( arr[0], arr[1], arr[2], arr[3] ) );
+					if( jArr.Count < 3 )
+					{
+						UISkinImporter.logger.LogMessage( "unsupported color definition {0}: color array requires at least 3 members", key );
+						continue;
+					}
+
+					if( jArr[0].Type == JTokenType.Integer )
+					{
+						var arr = jArr.ToObject<int[]>();
+						color = new Color( arr[0], arr[1], arr[2] );
+						if( arr.Length == 4 )
+							color = new Color( color, arr[3] );
+					}
+					else if( jArr[0].Type == JTokenType.Float )
+					{
+						var arr = jArr.ToObject<float[]>();
+						color = new Color( arr[0], arr[1], arr[2] );
+						if( arr.Length == 4 )
+							color = new Color( color, arr[3] );
+					}
+					else
+					{
+						UISkinImporter.logger.LogMessage( "unsupported color definition {0}: unknown type", key );
+						continue;
+					}
 				}
+				else if( obj is Dictionary<string, object> )
+				{
+					var dict = obj as Dictionary<string, object>;
+					if( dict.Count < 3 )
+					{
+						UISkinImporter.logger.LogMessage( "unsupported color definition {0}: color object requires at least 3 members", key );
+						continue;
+					}
+
+					if( dict["r"] is long )
+					{
+						color = new Color( Convert.ToInt32( dict["r"] ), Convert.ToInt32( dict["g"] ), Convert.ToInt32( dict["b"] ) );
+						if( dict.Count == 4 )
+							color = new Color( color, Convert.ToInt32( dict["a"] ) );
+					}
+					else if( dict["r"] is double )
+					{
+						color = new Color( Convert.ToSingle( dict["r"] ), Convert.ToSingle( dict["g"] ), Convert.ToSingle( dict["b"] ) );
+						if( dict.Count == 4 )
+							color = new Color( color, Convert.ToSingle( dict["a"] ) );
+					}
+				}
+
+				result.Add( key, color );
 			}
 
 			UISkinImporter.logger.LogMessage( "" );
 			return result;
 		}
-	
-
-		Dictionary<string,Dictionary<string,string>> parseStyles( JObject styles )
-		{
-			var res = new Dictionary<string,Dictionary<string,string>>();
-			foreach( JProperty key in styles.Children() )
-			{
-				UISkinImporter.logger.LogMessage( "\tadding style: {0}", key.Name );
-				res.Add( key.Name, parseStyle( styles[key.Name] as JObject ) );
-			}
-
-			UISkinImporter.logger.LogMessage( "" );
-			return res;
-		}
-
-
-		Dictionary<string,string> parseStyle( JObject styles )
-		{
-			var res = new Dictionary<string,string>();
-			foreach( JProperty key in styles.Children() )
-				res.Add( key.Name, ( styles[key.Name] as JValue ).Value as string );
-
-			return res;
-		}
-
 	}
 }
 

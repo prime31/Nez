@@ -129,7 +129,7 @@ namespace Nez
 				return;
 			
 			for( var i = 0; i < _compiledMarkup.Count; i++ )
-				_compiledMarkup[i].render( graphics, transform.position );
+				_compiledMarkup[i].render( graphics, transform.position + _localOffset );
 		}
 
 

@@ -92,6 +92,7 @@
     <Compile Include="TextureAtlasGenerator\TextureAtlasContent.cs" />
     <Compile Include="TextureAtlasGenerator\TextureAtlasProcessor.cs" />
     <Compile Include="TextureAtlasGenerator\TextureAtlasWriter.cs" />
+    <Compile Include="UISkin\JsonDictionaryConverter.cs" />
     <Compile Include="XMLTemplateMaker\XmlTemplateMakerProcessor.cs" />
     <Compile Include="LibGdxAtlases\LibGdxAtlasFile.cs" />
     <Compile Include="LibGdxAtlases\LibGdxAtlasImporter.cs" />

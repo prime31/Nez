@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework.Content;
+﻿using System.Collections.Generic;
+using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Nez.Pipeline.Content;
 using Microsoft.Xna.Framework;
@@ -46,6 +47,21 @@ namespace Nez.LibGdxAtlases
 						( (NinePatchSubtexture)subtextures[i] ).padRight = reader.ReadInt32();
 						( (NinePatchSubtexture)subtextures[i] ).padTop = reader.ReadInt32();
 						( (NinePatchSubtexture)subtextures[i] ).padBottom = reader.ReadInt32();
+					}
+
+					var index = reader.ReadInt32();
+
+					// animation
+					if ( index != -1 )
+					{
+						List<Subtexture> frames;
+						if ( !atlasContainer.animations.TryGetValue( name, out frames ) )
+						{
+							frames = new List<Subtexture>();
+							atlasContainer.animations[name] = frames;
+						}
+
+						frames.Insert( index, subtextures[i] );
 					}
 
 					regionNames[i] = name;

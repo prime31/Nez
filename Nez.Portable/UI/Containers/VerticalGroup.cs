@@ -154,7 +154,6 @@ namespace Nez.UI
 		/// Sets the alignment of widgets within the vertical group. Set to {@link Align#center}, {@link Align#top},
 		/// {@link Align#bottom}, {@link Align#left}, {@link Align#right}, or any combination of those
 		/// </summary>
-		/// <returns>The alignment.</returns>
 		/// <param name="align">Align.</param>
 		public VerticalGroup setAlignment( Align align )
 		{
@@ -166,7 +165,6 @@ namespace Nez.UI
 		/// <summary>
 		/// If true, the children will be ordered from bottom to top rather than the default top to bottom.
 		/// </summary>
-		/// <returns>The reverse.</returns>
 		/// <param name="reverse">If set to <c>true</c> reverse.</param>
 		public VerticalGroup setReverse( bool reverse )
 		{
@@ -178,7 +176,6 @@ namespace Nez.UI
 		/// <summary>
 		/// Sets the space between children
 		/// </summary>
-		/// <returns>The spacing.</returns>
 		/// <param name="spacing">Spacing.</param>
 		public VerticalGroup setSpacing( float spacing )
 		{
@@ -190,7 +187,6 @@ namespace Nez.UI
 		/// <summary>
 		/// Sets the padTop, padLeft, padBottom, and padRight to the specified value
 		/// </summary>
-		/// <returns>The pad.</returns>
 		/// <param name="pad">Pad.</param>
 		public VerticalGroup setPad( float pad )
 		{
@@ -243,7 +239,6 @@ namespace Nez.UI
 		/// <summary>
 		/// If true (the default), positions and sizes are rounded to integers.
 		/// </summary>
-		/// <returns>The round.</returns>
 		/// <param name="round">If set to <c>true</c> round.</param>
 		public VerticalGroup setRound( bool round )
 		{
@@ -255,7 +250,6 @@ namespace Nez.UI
 		/// <summary>
 		/// fill 0 will use pref width
 		/// </summary>
-		/// <returns>The fill.</returns>
 		/// <param name="fill">Fill.</param>
 		public VerticalGroup setFill( float fill )
 		{

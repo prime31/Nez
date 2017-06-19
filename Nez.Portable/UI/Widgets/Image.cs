@@ -85,20 +85,20 @@ namespace Nez.UI
 		{
 			validate();
 
-			var col = new Color( color.R, color.G, color.B, color.A * parentAlpha );
+			var col = color * (color.A / 255f);
 
-//			if( drawable instanceof TransformDrawable )
-//			{
-//				float rotation = getRotation();
-//				if (scaleX != 1 || scaleY != 1 || rotation != 0)
-//				{
-//					((TransformDrawable)drawable).draw(batch, x + imageX, y + imageY, getOriginX() - imageX, getOriginY() - imageY,
-//						imageWidth, imageHeight, scaleX, scaleY, rotation);
-//					return;
-//				}
-//			}
+			//			if( drawable instanceof TransformDrawable )
+			//			{
+			//				float rotation = getRotation();
+			//				if (scaleX != 1 || scaleY != 1 || rotation != 0)
+			//				{
+			//					((TransformDrawable)drawable).draw(batch, x + imageX, y + imageY, getOriginX() - imageX, getOriginY() - imageY,
+			//						imageWidth, imageHeight, scaleX, scaleY, rotation);
+			//					return;
+			//				}
+			//			}
 
-			if( _drawable != null )
+			if ( _drawable != null )
 				_drawable.draw( graphics, x + imageX, y + imageY, imageWidth * scaleX, imageHeight * scaleY, col );
 		}
 

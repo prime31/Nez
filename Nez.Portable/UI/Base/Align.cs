@@ -20,7 +20,7 @@ namespace Nez.UI
 
 
 	/// <summary>
-	/// used internally so that alignment can be stored as an int and can have an unlimited numver of options by just setting it outside
+	/// used internally so that alignment can be stored as an int and can have an unlimited number of options by just setting it outside
 	/// the bounds of the flags
 	/// </summary>
 	internal class AlignInternal

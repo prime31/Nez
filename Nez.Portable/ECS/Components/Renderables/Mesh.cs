@@ -41,6 +41,7 @@ namespace Nez
 		float _height;
 		int[] _triangles;
 		VertexPositionColorTexture[] _verts;
+		PrimitiveType _primitiveType = PrimitiveType.TriangleList;
 
 
 		#region configuration
@@ -64,6 +65,7 @@ namespace Nez
 
 			_width = max.X - _topLeftVertPosition.X;
 			_height = max.Y - _topLeftVertPosition.Y;
+			_areBoundsDirty = true;
 
 			// handle UVs if need be
 			if( recalculateUVs )
@@ -197,6 +199,19 @@ namespace Nez
 			return this;
 		}
 
+		/// <summary>
+		/// Change the rendering primitive type.
+		/// If it is PrimitiveType.TriangleStrip then you don't need to setTriangles.
+		/// </summary>
+		/// <param name="primitiveType">The ordering of the verticies.</param>
+		/// <returns>The mesh.</returns>
+		public Mesh setPrimitiveType( PrimitiveType primitiveType )
+		{
+			Assert.isTrue( primitiveType == PrimitiveType.TriangleList || primitiveType == PrimitiveType.TriangleStrip, "Only triangles are supported." );
+			_primitiveType = primitiveType;
+			return this;
+		}
+
 		#endregion
 
 
@@ -230,7 +245,14 @@ namespace Nez
 			_basicEffect.World = entity.transform.localToWorldTransform;
 			_basicEffect.CurrentTechnique.Passes[0].Apply();
 
-			Core.graphicsDevice.DrawUserIndexedPrimitives( PrimitiveType.TriangleList, _verts, 0, _verts.Length, _triangles, 0, _primitiveCount );
+			if( _primitiveType == PrimitiveType.TriangleList )
+			{
+				Core.graphicsDevice.DrawUserIndexedPrimitives( _primitiveType, _verts, 0, _verts.Length, _triangles, 0, _primitiveCount );
+			}
+			else if( _primitiveType == PrimitiveType.TriangleStrip )
+			{
+				Core.graphicsDevice.DrawUserPrimitives( _primitiveType, _verts, 0, _verts.Length - 2 );
+			}
 		}
 
 		#endregion

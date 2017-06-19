@@ -59,8 +59,10 @@ namespace Nez.UI
 			setSize( preferredWidth, preferredHeight );
 		}
 
+		public ProgressBar( float min, float max, float stepSize, bool vertical,  Skin skin, string styleName = null ) : this( min, max, stepSize, vertical, skin.get<ProgressBarStyle>( styleName ) )
+		{}
 
-		public ProgressBar( Skin skin, string styleName = null ) : this( 0, 1, 0.01f, false, skin.get<ProgressBarStyle>( styleName ) )
+		public ProgressBar( Skin skin, string styleName = null ) : this( 0, 1, 0.01f, false, skin )
 		{}
 
 
@@ -86,7 +88,7 @@ namespace Nez.UI
 		/// Sets the progress bar position, rounded to the nearest step size and clamped to the minimum and maximum values.
 		/// </summary>
 		/// <param name="value">Value.</param>
-		public void setValue( float value )
+		public ProgressBar setValue( float value )
 		{
 			if( !shiftIgnoresSnap || !InputUtils.isShiftDown() )
 			{
@@ -99,13 +101,15 @@ namespace Nez.UI
 			}
 
 			if( value == _value )
-				return;
+				return this;
 
 			_value = value;
 
 			// fire changed event
 			if( onChanged != null )
 				onChanged( _value );
+
+			return this;
 		}
 
 
@@ -134,9 +138,9 @@ namespace Nez.UI
 			var width = this.width;
 			var height = this.height;
 			var knobHeight = knob == null ? 0 : knob.minHeight;
-			var knobWidth = knob == null ? 0 : knob.minHeight;
+			var knobWidth = knob == null ? 0 : knob.minWidth;
 			var percent = getVisualPercent();
-			var color = new Color( this.color, this.color.A * parentAlpha );
+			var color = new Color( this.color, (int)(this.color.A * parentAlpha) );
 
 			if( _vertical )
 			{

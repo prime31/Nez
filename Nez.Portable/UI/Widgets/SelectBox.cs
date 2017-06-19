@@ -91,7 +91,7 @@ namespace Nez.UI
 			var fontColor = _isDisabled ? style.disabledFontColor : style.fontColor;
 
 			var color = getColor();
-			color = new Color( color, color.A * parentAlpha );
+			color = new Color( color, (int)(color.A * parentAlpha) );
 			float x = getX();
 			float y = getY();
 			float width = getWidth();
@@ -116,7 +116,7 @@ namespace Nez.UI
 					y += (int)( height / 2 + font.lineHeight / 2 );
 				}
 
-				fontColor = new Color( fontColor, fontColor.A * parentAlpha );
+				fontColor = new Color( fontColor, (int)(fontColor.A * parentAlpha) );
 				graphics.batcher.drawString( font, str, new Vector2( x, y ), fontColor );
 			}
 		}

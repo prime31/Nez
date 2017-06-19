@@ -194,7 +194,7 @@ namespace Nez.UI
 				}
 			}
 				
-			_style.handle.draw( graphics, _handleBounds.x, _handleBounds.y, _handleBounds.width, _handleBounds.height, new Color( color, color.A * parentAlpha ) );
+			_style.handle.draw( graphics, _handleBounds.x, _handleBounds.y, _handleBounds.width, _handleBounds.height, new Color( color, (int)(color.A * parentAlpha) ) );
 
 			if( transform )
 				resetTransform( graphics );
@@ -282,7 +282,6 @@ namespace Nez.UI
 		/// <summary>
 		/// The split amount between the min and max amount
 		/// </summary>
-		/// <returns>The split amount.</returns>
 		/// <param name="amount">Amount.</param>
 		public SplitPane setSplitAmount( float amount )
 		{
