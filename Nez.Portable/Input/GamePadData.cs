@@ -198,7 +198,7 @@ namespace Nez
 		/// <param name="deadzone">Deadzone.</param>
 		public bool isLeftStickRightPressed( float deadzone = Input.DEFAULT_DEADZONE )
 		{
-			return _currentState.ThumbSticks.Left.X < deadzone && _previousState.ThumbSticks.Left.X > deadzone;
+			return _currentState.ThumbSticks.Left.X > deadzone && _previousState.ThumbSticks.Left.X < deadzone;
 		}
 
 
@@ -215,7 +215,7 @@ namespace Nez
 		/// <param name="deadzone">Deadzone.</param>
 		public bool isLeftStickUpPressed( float deadzone = Input.DEFAULT_DEADZONE )
 		{
-			return _currentState.ThumbSticks.Left.Y < deadzone && _previousState.ThumbSticks.Left.Y > deadzone;
+			return _currentState.ThumbSticks.Left.Y > deadzone && _previousState.ThumbSticks.Left.Y < deadzone;
 		}
 
 
