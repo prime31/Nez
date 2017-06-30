@@ -61,11 +61,11 @@ namespace Nez
 		}
 
 
-		public NineSliceSprite( Subtexture subtexture, int top, int bottom, int left, int right ) : this( new NinePatchSubtexture( subtexture, top, bottom, left, right ) )
+		public NineSliceSprite( Subtexture subtexture, int top, int bottom, int left, int right ) : this( new NinePatchSubtexture( subtexture, left, right, top, bottom ) )
 		{}
 
 
-		public NineSliceSprite( Texture2D texture, int top, int bottom, int left, int right ) : this( new NinePatchSubtexture( texture, top, bottom, left, right ) )
+		public NineSliceSprite( Texture2D texture, int top, int bottom, int left, int right ) : this( new NinePatchSubtexture( texture, left, right, top, bottom) )
 		{}
 
 
@@ -73,7 +73,7 @@ namespace Nez
 		{
 			if( _destRectsDirty )
 			{
-				subtexture.generateNinePatchRects( _finalRenderRect, _destRects, subtexture.top, subtexture.bottom, subtexture.right, subtexture.left );
+				subtexture.generateNinePatchRects( _finalRenderRect, _destRects, subtexture.left, subtexture.right, subtexture.top, subtexture.bottom);
 				_destRectsDirty = false;
 			}
 
