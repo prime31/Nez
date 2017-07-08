@@ -52,14 +52,15 @@ namespace Nez
 		RectangleF _worldSpaceDeadzone;
 
 		
-		public FollowCamera( Entity targetEntity, Camera camera )
+		public FollowCamera( Entity targetEntity, Camera camera, CameraStyle cameraStyle = CameraStyle.LockOn  )
 		{
 			_targetEntity = targetEntity;
+			_cameraStyle = cameraStyle;
 			this.camera = camera;
 		}
 
 
-		public FollowCamera( Entity targetEntity ) : this( targetEntity, null )
+		public FollowCamera( Entity targetEntity, CameraStyle cameraStyle = CameraStyle.LockOn ) : this( targetEntity, null, cameraStyle )
 		{}
 
 

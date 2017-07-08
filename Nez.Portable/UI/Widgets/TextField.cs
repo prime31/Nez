@@ -590,7 +590,7 @@ namespace Nez.UI
 			}
 
 			var textY = getTextY( font, background );
-			var yOffset = (textY < 0) ? -textY - font.lineHeight/2 + preferredWidth / 2  : 0;
+			var yOffset = (textY < 0) ? -textY - font.lineHeight/2f + getHeight() / 2  : 0;
 			calculateOffsets();
 
 			if( _isFocused && hasSelection && selection != null )

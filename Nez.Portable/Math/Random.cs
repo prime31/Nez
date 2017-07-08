@@ -6,7 +6,29 @@ namespace Nez
 {
 	public static class Random
 	{
-		public static System.Random random = new System.Random();
+		private static int _seed = Environment.TickCount;
+		public static System.Random random = new System.Random( _seed );
+
+
+		/// <summary>
+		/// returns current seed value
+		/// </summary>
+		/// <returns>Seed.</returns>
+		static public int getSeed()
+		{
+			return _seed;
+		}
+
+
+		/// <summary>
+		/// resets rng with new seed
+		/// </summary>
+		/// <param name="seed">Seed.</param>
+		static public void setSeed( int seed )
+		{
+			_seed = seed;
+			random = new System.Random( _seed );
+		}
 
 
 		/// <summary>
@@ -76,7 +98,6 @@ namespace Nez
 		/// <summary>
 		/// Returns a random float between min (inclusive) and max (exclusive)
 		/// </summary>
-		/// <param name="random"></param>
 		/// <param name="min"></param>
 		/// <param name="max"></param>
 		/// <returns></returns>
@@ -89,7 +110,6 @@ namespace Nez
 		/// <summary>
 		/// Returns a random Vector2, and x- and y-values of which are between min (inclusive) and max (exclusive)
 		/// </summary>
-		/// <param name="random"></param>
 		/// <param name="min"></param>
 		/// <param name="max"></param>
 		/// <returns></returns>
@@ -155,11 +175,11 @@ namespace Nez
 			switch( nextInt( 3 ) )
 			{
 				case 0:
-					return first;
+				return first;
 				case 1:
-					return second;
+				return second;
 				default:
-					return third;
+				return third;
 			}
 		}
 
@@ -177,13 +197,13 @@ namespace Nez
 			switch( nextInt( 4 ) )
 			{
 				case 0:
-					return first;
+				return first;
 				case 1:
-					return second;
+				return second;
 				case 2:
-					return third;
+				return third;
 				default:
-					return fourth;
+				return fourth;
 			}
 		}
 
