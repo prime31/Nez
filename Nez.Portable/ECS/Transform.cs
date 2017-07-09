@@ -232,10 +232,10 @@ namespace Nez
 		Transform _parent;
 		DirtyType hierarchyDirty;
 
-		bool _localDirty;
-		bool _localPositionDirty;
-		bool _localScaleDirty;
-		bool _localRotationDirty;
+		bool _localDirty = true;
+		bool _localPositionDirty = true;
+		bool _localScaleDirty = true;
+		bool _localRotationDirty = true;
 		bool _positionDirty;
 		bool _worldToLocalDirty;
 		bool _worldInverseDirty;
