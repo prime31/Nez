@@ -108,12 +108,11 @@ namespace Nez
 				for( int i = 0, count = _unsortedRenderLayers.Count; i < count; i++ )
 				{
 					FastList<IRenderable> renderLayerComponents;
-					if ( _componentsByRenderLayer.TryGetValue( i, out renderLayerComponents ) )
-					{
+					if( _componentsByRenderLayer.TryGetValue( _unsortedRenderLayers[i], out renderLayerComponents ) )
 						renderLayerComponents.sort( compareUpdatableOrder );
-						_unsortedRenderLayers.Remove( i );
-					}
 				}
+
+				_unsortedRenderLayers.Clear();
 			}
 		}
 
