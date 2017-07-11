@@ -103,17 +103,14 @@ namespace Nez
 				_componentsNeedSort = false;
 			}
 
-			if( _unsortedRenderLayers.Count > 0 )
+			while (_unsortedRenderLayers.Count > 0)
 			{
-				for( int i = 0, count = _unsortedRenderLayers.Count; i < count; i++ )
+				FastList<IRenderable> renderLayerComponents;
+				if (_componentsByRenderLayer.TryGetValue(_unsortedRenderLayers[0], out renderLayerComponents))
 				{
-					FastList<IRenderable> renderLayerComponents;
-					if ( _componentsByRenderLayer.TryGetValue( i, out renderLayerComponents ) )
-					{
-						renderLayerComponents.sort( compareUpdatableOrder );
-						_unsortedRenderLayers.Remove( i );
-					}
+					renderLayerComponents.sort(compareUpdatableOrder);
 				}
+				_unsortedRenderLayers.RemoveAt(0);
 			}
 		}
 
