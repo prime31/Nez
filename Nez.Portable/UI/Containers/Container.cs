@@ -125,9 +125,9 @@ namespace Nez.UI
 		/// Sets the background drawable and adjusts the container's padding to match the background.
 		/// </summary>
 		/// <param name="background">Background.</param>
-		public void setBackground( IDrawable background )
+		public Container setBackground( IDrawable background )
 		{
-			setBackground( background, true );
+			return setBackground( background, true );
 		}
 
 
