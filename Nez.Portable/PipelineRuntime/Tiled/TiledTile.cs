@@ -44,7 +44,7 @@ namespace Nez.Tiled
 		public bool flippedHorizonally;
 		public bool flippedVertically;
 		public bool flippedDiagonally;
-		internal TiledTileset tileset;
+		public TiledTileset tileset;
 
 		/// <summary>
 		/// we use this for 3 states: HasValue is false means we havent yet checked for the TiledTilesetTile, less than 0 means there is no
