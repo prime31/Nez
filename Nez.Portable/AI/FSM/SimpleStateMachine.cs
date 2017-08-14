@@ -79,7 +79,7 @@ namespace Nez.AI.FSM
 		}
 
 
-		public void update()
+		public virtual void update()
 		{
 			elapsedTimeInState += Time.deltaTime;
 
