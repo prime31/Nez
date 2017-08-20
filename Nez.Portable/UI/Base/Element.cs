@@ -29,6 +29,7 @@ namespace Nez.UI
 		protected bool _needsLayout = true;
 		protected bool _layoutEnabled = true;
 
+		public object userData;
 
 		/// <summary>
 		/// If this method is overridden, the super method or {@link #validate()} should be called to ensure the widget is laid out.
