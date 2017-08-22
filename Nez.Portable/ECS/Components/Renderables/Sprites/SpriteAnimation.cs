@@ -54,8 +54,8 @@ namespace Nez.Sprites
 		public List<Subtexture> frames = new List<Subtexture>();
 
 		// calculated values used by SpriteT
-		internal float secondsPerFrame;
-		internal float iterationDuration;
+		public float secondsPerFrame;
+		public float iterationDuration;
 
 		float _fps = 10;
 		bool _loop = true;
