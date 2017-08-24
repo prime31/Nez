@@ -284,6 +284,11 @@ namespace Nez.Spatial
 			var stepX = Math.Sign( ray.direction.X );
 			var stepY = Math.Sign( ray.direction.Y );
 
+            // we make sure that if we're on the same line or row we don't step 
+            // in the unneeded direction
+			if (intX == endCell.X) stepX = 0;
+			if (intY == endCell.Y) stepY = 0;
+
 			// Calculate cell boundaries. when the step is positive, the next cell is after this one meaning we add 1.
 			// If negative, cell is before this one in which case dont add to boundary
 			var boundaryX = intX + ( stepX > 0 ? 1 : 0 );
@@ -294,9 +299,9 @@ namespace Nez.Spatial
 			// may be infinite for near vertical/horizontal rays
 			var tMaxX = ( boundaryX - start.X ) / ray.direction.X;
 			var tMaxY = ( boundaryY - start.Y ) / ray.direction.Y;
-			if( ray.direction.X == 0f )
+			if( ray.direction.X == 0f || stepX == 0)
 				tMaxX = float.PositiveInfinity;
-			if( ray.direction.Y == 0f )
+            if( ray.direction.Y == 0f || stepY == 0 )
 				tMaxY = float.PositiveInfinity;
 
 			// how far do we have to walk before crossing a cell from a cell boundary. may be infinite for near vertical/horizontal rays
