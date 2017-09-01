@@ -1005,8 +1005,8 @@ namespace Nez
 
 			// inlined CreateOrthographicOffCenter
 #if FNA
-			_projectionMatrix.M11 = (float)( 2.0 / (double)viewport.Width - 1 );
-			_projectionMatrix.M22 = (float)( -2.0 / (double)viewport.Height - 1 );
+			_projectionMatrix.M11 = (float)( 2.0 / (double) ( viewport.Width / 2 * 2 - 1 ) );
+			_projectionMatrix.M22 = (float)( -2.0 / (double) ( viewport.Height / 2 * 2 - 1 ) );
 #else
 			_projectionMatrix.M11 = (float)( 2.0 / (double)viewport.Width );
 			_projectionMatrix.M22 = (float)( -2.0 / (double)viewport.Height );
