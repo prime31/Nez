@@ -181,7 +181,7 @@ namespace Nez.UI
                         var child = children[i];
                         if (!child.isVisible()) continue;
                         float cx = child.x, cy = child.y;
-                        if ( cx <= cullRight && cy <= cullTop && cx + child.width >= cullLeft &&
+                        if( cx <= cullRight && cy <= cullTop && cx + child.width >= cullLeft &&
                             cy + child.height >= cullBottom )
                         {
                             child.draw(graphics, parentAlpha);
@@ -220,7 +220,7 @@ namespace Nez.UI
                     for( int i = 0, n = children.Count; i < n; i++ )
                     {
                         var child = children[i];
-                        if ( !child.isVisible() ) continue;
+                        if( !child.isVisible() ) continue;
                         child.draw(graphics, parentAlpha);
                     }
                 }
