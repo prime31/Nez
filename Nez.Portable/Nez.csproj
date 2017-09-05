@@ -124,6 +124,7 @@
     <Compile Include="Physics\Ray2D.cs" />
     <Compile Include="Physics\SpatialHash.cs" />
     <Compile Include="PipelineRuntime\Tiled\TiledIsometricTiledLayer.cs" />
+    <Compile Include="UI\Base\ICullable.cs" />
     <Compile Include="Utils\Emitter.cs" />
     <Compile Include="Utils\Time.cs" />
     <Compile Include="Core.cs" />
