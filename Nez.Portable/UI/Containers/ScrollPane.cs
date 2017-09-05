@@ -1201,7 +1201,7 @@ namespace Nez.UI
 
 			_widget.setPosition( eleX, eleY );
 
-			if (_widget is ICullable)
+			if( _widget is ICullable )
 			{
 				var cull = new Rectangle(
 					(int) (-_widget.getX() + _widgetAreaBounds.X),
