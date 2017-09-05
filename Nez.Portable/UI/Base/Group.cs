@@ -4,12 +4,12 @@ using Microsoft.Xna.Framework;
 
 namespace Nez.UI
 {
-	public class Group : Element
+	public class Group : Element, ICullable
 	{
 		internal List<Element> children = new List<Element>();
 		protected bool transform = false;
 		Matrix _previousBatcherTransform;
-
+		Rectangle? _cullingArea;
 
 		public T addElement<T>( T element ) where T : Element
 		{
@@ -166,36 +166,85 @@ namespace Nez.UI
 		public void drawChildren( Graphics graphics, float parentAlpha )
 		{
 			parentAlpha *= color.A / 255.0f;
-			if( transform )
-			{
-				for( var i = 0; i < children.Count; i++ )
-				{
-					if( !children[i].isVisible() )
-						continue;
-					
-					children[i].draw( graphics, parentAlpha );
-				}
-			}
-			else
-			{
-				// No transform for this group, offset each child.
-				float offsetX = x, offsetY = y;
-				x = 0;
-				y = 0;
-				for( var i = 0; i < children.Count; i++ )
-				{
-					if( !children[i].isVisible() )
-						continue;
-					
-		                        children[i].x += offsetX;
-		                        children[i].y += offsetY;
-					children[i].draw( graphics, parentAlpha );
-					children[i].x -= offsetX;
-					children[i].y -= offsetY;
-				}
-				x = offsetX;
-				y = offsetY;
-			}
+		
+			if( _cullingArea.HasValue )
+            {
+                float cullLeft = _cullingArea.Value.X;
+                float cullRight = cullLeft + _cullingArea.Value.Width;
+                float cullBottom = _cullingArea.Value.Y;
+                float cullTop = cullBottom + _cullingArea.Value.Height;
+
+                if( transform )
+                {
+                    for( int i = 0, n = children.Count; i < n; i++ )
+                    {
+                        var child = children[i];
+                        if (!child.isVisible()) continue;
+                        float cx = child.x, cy = child.y;
+                        if( cx <= cullRight && cy <= cullTop && cx + child.width >= cullLeft &&
+                            cy + child.height >= cullBottom )
+                        {
+                            child.draw(graphics, parentAlpha);
+                        }
+                    }
+                }
+                else
+                {
+                    float offsetX = x, offsetY = y;
+                    x = 0;
+                    y = 0;
+                    for( int i = 0, n = children.Count; i < n; i++ )
+                    {
+                        var child = children[i];
+                        if( !child.isVisible() ) continue;
+                        float cx = child.x, cy = child.y;
+                        if (cx <= cullRight && cy <= cullTop && cx + child.width >= cullLeft &&
+                            cy + child.height >= cullBottom)
+                        {
+                            child.x = cx + offsetX;
+                            child.y = cy + offsetY;
+                            child.draw(graphics, parentAlpha);
+                            child.x = cx;
+                            child.y = cy;
+                        }
+                    }
+                    x = offsetX;
+                    y = offsetY;
+                }
+            }
+            else
+            {
+                // No culling, draw all children.
+                if ( transform )
+                {
+                    for( int i = 0, n = children.Count; i < n; i++ )
+                    {
+                        var child = children[i];
+                        if( !child.isVisible() ) continue;
+                        child.draw(graphics, parentAlpha);
+                    }
+                }
+                else
+                {
+                    // No transform for this group, offset each child.
+                    float offsetX = x, offsetY = y;
+                    x = 0;
+                    y = 0;
+                    for( int i = 0, n = children.Count; i < n; i++ )
+                    {
+                        var child = children[i];
+                        if( !child.isVisible() ) continue;
+                        float cx = child.x, cy = child.y;
+                        child.x = cx + offsetX;
+                        child.y = cy + offsetY;
+                        child.draw(graphics, parentAlpha);
+                        child.x = cx;
+                        child.y = cy;
+                    }
+                    x = offsetX;
+                    y = offsetY;
+                }
+            }
 		}
 
 
@@ -384,6 +433,10 @@ namespace Nez.UI
 
 		#endregion
 
+		public void setCullingArea( Rectangle cullingArea )
+		{
+			_cullingArea = cullingArea;
+		}
 	}
 }
 

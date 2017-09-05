@@ -1201,6 +1201,16 @@ namespace Nez.UI
 
 			_widget.setPosition( eleX, eleY );
 
+			if( _widget is ICullable )
+			{
+				var cull = new Rectangle(
+					(int) (-_widget.getX() + _widgetAreaBounds.X),
+					(int) (-_widget.getY() + _widgetAreaBounds.Y),
+					_widgetAreaBounds.Width,
+					_widgetAreaBounds.Height);
+				((ICullable) _widget).setCullingArea(cull);
+			}
+			
 			// draw the background
 			var color = getColor();
 			color = new Color( color, (int)(color.A * parentAlpha) );
