@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System.Text;
 using System;
+using System.Globalization;
 
 
 namespace Nez.BitmapFonts
@@ -221,10 +222,32 @@ namespace Nez.BitmapFonts
 			var fullLineCount = 0;
 			BitmapFontRegion currentFontRegion = null;
 			var offset = Vector2.Zero;
-
+			
+			var skip = -1;
 			for( var i = 0; i < text.Length; i++ )
 			{
 				var c = text[i];
+				
+				if( text[i] == '[' )
+				{
+					if( text[i + 1] == '#' )
+					{
+						// we are in color tag
+						skip = 8;
+					}
+					else if( text[i + 1] == ']' )
+					{
+						// skip closing state
+						skip = 1;
+					}
+				}
+                
+				if( skip >= 0 )
+				{
+					// skip markup junk
+					skip--;
+					continue;
+				}
 
 				if( c == '\r' )
 					continue;
@@ -322,9 +345,47 @@ namespace Nez.BitmapFonts
 			BitmapFontRegion currentFontRegion = null;
 			var offset = requiresTransformation ? Vector2.Zero : position - origin;
 
+			var skip = -1;
+			var useMarkupColor = false;
+			var oldColor = color;
+			var markupColor = oldColor;
+			
 			for( var i = 0; i < text.Length; ++i )
 			{
 				var c = text[i];
+				
+				if( text[i] == '[' )
+				{
+					if( text[i + 1] == '#' )
+					{
+						// parse color
+						// [#FFFFFF]
+						skip = 8;
+						var hexMC =  text.value.Substring(i+2);
+						hexMC = hexMC.Substring(0, 6);
+						int rgb = int.Parse(hexMC, NumberStyles.HexNumber);
+						markupColor = new Color(
+							(byte) ((rgb & 0xff0000) >> 16), 
+							(byte) ((rgb & 0xff00) >> 8),
+							(byte) (rgb & 0xff)
+						);
+						useMarkupColor = true;
+					}
+					else if( text[i + 1] == ']' )
+					{
+						// revert to predefined color
+						skip = 1;
+						useMarkupColor = false;
+					}
+				}
+                
+				if( skip >= 0 )
+				{
+					// skip markup junk
+					skip--;
+					continue;
+				}
+				
 				if( c == '\r' )
 					continue;
 
@@ -364,7 +425,7 @@ namespace Nez.BitmapFonts
 	               currentFontRegion.height * scale.Y
                );
 
-				batcher.draw( currentFontRegion.subtexture, destRect, currentFontRegion.subtexture.sourceRect, color, rotation, Vector2.Zero, effect, depth );
+				batcher.draw( currentFontRegion.subtexture, destRect, currentFontRegion.subtexture.sourceRect, useMarkupColor ? markupColor : color, rotation, Vector2.Zero, effect, depth );
 			}
 		}
 

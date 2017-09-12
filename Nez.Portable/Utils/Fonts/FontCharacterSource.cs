@@ -13,6 +13,10 @@ namespace Nez
 		readonly StringBuilder _builder;
 		public readonly int Length;
 
+		public string value
+		{
+			get { return _string; }
+		}
 
 		public FontCharacterSource( string s )
 		{
