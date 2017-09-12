@@ -224,6 +224,7 @@ namespace Nez.BitmapFonts
 			var offset = Vector2.Zero;
 			
 			var skip = -1;
+			
 			for( var i = 0; i < text.Length; i++ )
 			{
 				var c = text[i];
