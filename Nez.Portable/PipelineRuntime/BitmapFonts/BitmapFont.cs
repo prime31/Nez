@@ -96,7 +96,7 @@ namespace Nez.BitmapFonts
 		public string wrapText( string text, float maxLineWidth )
 		{
 			var ret = text;
-            var accw = 0f;
+			var accw = 0f;
             var charAdded = 0;
             for( var i = 0; i < text.Length; i++ )
             {
