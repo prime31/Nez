@@ -55,7 +55,7 @@ Setup
 ### Quick version:
 
 - clone or download the Nez repository
-- add the `Nez-PCL/Nez.csproj` project to your solution and add a reference to it in your main project
+- add the `Nez.Portable/Nez.csproj` project to your solution and add a reference to it in your main project
 - make your main Game class (`Game1.cs` in a default project) subclass `Nez.Core`
 
 
