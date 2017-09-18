@@ -56,11 +56,11 @@ namespace Nez.Tiled
 
 		#region Tileset and Layer creation
 
-		public TiledTileset createTileset( Texture2D texture, int firstId, int tileWidth, int tileHeight, bool isStandardTileset, int spacing = 2, int margin = 2 )
+		public TiledTileset createTileset( Texture2D texture, int firstId, int tileWidth, int tileHeight, bool isStandardTileset, int spacing = 2, int margin = 2, int tileCount = 1, int columns = 1 )
 		{
 			TiledTileset tileset;
 			if( isStandardTileset )
-				tileset = new TiledTileset( texture, firstId, tileWidth, tileHeight, spacing, margin );
+				tileset = new TiledTileset( texture, firstId, tileWidth, tileHeight, spacing, margin, tileCount, columns );
 			else
 				tileset = new TiledImageCollectionTileset( texture, firstId );
 

@@ -56,6 +56,8 @@ namespace Nez.TiledMaps
 				writer.Write( tileset.tileHeight );
 				writer.Write( tileset.spacing );
 				writer.Write( tileset.margin );
+				writer.Write( tileset.tileCount );
+				writer.Write( tileset.columns );
 				writeCustomProperties( writer, tileset.properties );
 
 				writer.Write( tileset.tiles.Count );

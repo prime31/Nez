@@ -27,7 +27,7 @@ namespace Nez.Tiled
 		}
 
 
-		public TiledTileset( Texture2D texture, int firstId, int tileWidth, int tileHeight, int spacing = 2, int margin = 2 )
+		public TiledTileset( Texture2D texture, int firstId, int tileWidth, int tileHeight, int spacing = 2, int margin = 2, int tileCount = 2, int columns = 2 )
 		{
 			this.texture = texture;
 			this.firstId = firstId;
@@ -40,10 +40,15 @@ namespace Nez.Tiled
 			_regions = new Dictionary<int,Subtexture>();
 			for( var y = margin; y < texture.Height - margin; y += tileHeight + spacing )
 			{
+				var column = 0;
+
 				for( var x = margin; x < texture.Width - margin; x += tileWidth + spacing )
 				{
 					_regions.Add( id, new Subtexture( texture, x, y, tileWidth, tileHeight ) );
 					id++;
+
+					if( ++column >= columns ) 
+						break;
 				}
 			}
 		}
