@@ -54,7 +54,9 @@ namespace Nez.Tiled
 										tileHeight: reader.ReadInt32(),
 										isStandardTileset: isStandardTileset,
 										spacing: reader.ReadInt32(),
-										margin: reader.ReadInt32() );
+										margin: reader.ReadInt32(),
+										tileCount: reader.ReadInt32(),
+										columns: reader.ReadInt32() );
 				readCustomProperties( reader, tileset.properties );
 
 				// tiledset tile array

@@ -35,6 +35,12 @@ namespace Nez.TiledMaps
 		[XmlAttribute( AttributeName = "margin" )]
 		public int margin;
 
+		[XmlAttribute( AttributeName = "tilecount" )]
+		public int tileCount;
+
+		[XmlAttribute( AttributeName = "columns" )]
+		public int columns;
+
 		[XmlElement( ElementName = "tileoffset" )]
 		public TmxTileOffset tileOffset;
 
