@@ -74,11 +74,15 @@ namespace Nez
 		/// </summary>
 		internal static Core _instance;
 
-		#if DEBUG
-		internal static ulong drawCalls;
+	    /// <summary>
+	    ///  allows changing of the window's title
+	    /// </summary>
+	    public static string windowTitle { get; set; }
+
+        #if DEBUG
+        internal static ulong drawCalls;
 		TimeSpan _frameCounterElapsedTime = TimeSpan.Zero;
 		int _frameCounter = 0;
-		string _windowTitle;
 		#endif
 
 		Scene _scene;
@@ -108,11 +112,8 @@ namespace Nez
 
 		public Core( int width = 1280, int height = 720, bool isFullScreen = false, bool enableEntitySystems = true, string windowTitle = "Nez", string contentDirectory = "Content" )
 		{
-			#if DEBUG
-			_windowTitle = windowTitle;
-			#endif
-
-			_instance = this;
+		    Core.windowTitle = windowTitle;
+            _instance = this;
 			emitter = new Emitter<CoreEvents>( new CoreEventsComparer() );
 
 			var graphicsManager = new GraphicsDeviceManager( this );
