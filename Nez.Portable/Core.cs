@@ -74,11 +74,15 @@ namespace Nez
 		/// </summary>
 		internal static Core _instance;
 
-		#if DEBUG
-		internal static ulong drawCalls;
+	    /// <summary>
+	    ///  allows changing of the window's title
+	    /// </summary>
+	    public static string windowTitle { get; set; }
+
+        #if DEBUG
+        internal static ulong drawCalls;
 		TimeSpan _frameCounterElapsedTime = TimeSpan.Zero;
 		int _frameCounter = 0;
-		string _windowTitle;
 		#endif
 
 		Scene _scene;
@@ -108,11 +112,8 @@ namespace Nez
 
 		public Core( int width = 1280, int height = 720, bool isFullScreen = false, bool enableEntitySystems = true, string windowTitle = "Nez", string contentDirectory = "Content" )
 		{
-			#if DEBUG
-			_windowTitle = windowTitle;
-			#endif
-
-			_instance = this;
+		    Core.windowTitle = windowTitle;
+            _instance = this;
 			emitter = new Emitter<CoreEvents>( new CoreEventsComparer() );
 
 			var graphicsManager = new GraphicsDeviceManager( this );
@@ -130,7 +131,7 @@ namespace Nez
 			Content.RootDirectory = contentDirectory;
 			content = new NezGlobalContentManager( Services, Content.RootDirectory );
 			IsMouseVisible = true;
-			IsFixedTimeStep = false;
+			IsFixedTimeStep = true;
 
 			entitySystemsEnabled = enableEntitySystems;
 
@@ -263,7 +264,7 @@ namespace Nez
 			if( _frameCounterElapsedTime >= TimeSpan.FromSeconds( 1 ) )
 			{
 				var totalMemory = ( GC.GetTotalMemory( false ) / 1048576f ).ToString( "F" );
-				Window.Title = string.Format( "{0} {1} fps - {2} MB", _windowTitle, _frameCounter, totalMemory );
+				Window.Title = string.Format( "{0} {1} fps - {2} MB", Core.windowTitle, _frameCounter, totalMemory );
 				_frameCounter = 0;
 				_frameCounterElapsedTime -= TimeSpan.FromSeconds( 1 );
 			}
