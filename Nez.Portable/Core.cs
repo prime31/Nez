@@ -264,7 +264,7 @@ namespace Nez
 			if( _frameCounterElapsedTime >= TimeSpan.FromSeconds( 1 ) )
 			{
 				var totalMemory = ( GC.GetTotalMemory( false ) / 1048576f ).ToString( "F" );
-				Window.Title = string.Format( "{0} {1} fps - {2} MB", _windowTitle, _frameCounter, totalMemory );
+				Window.Title = string.Format( "{0} {1} fps - {2} MB", Core.windowTitle, _frameCounter, totalMemory );
 				_frameCounter = 0;
 				_frameCounterElapsedTime -= TimeSpan.FromSeconds( 1 );
 			}
