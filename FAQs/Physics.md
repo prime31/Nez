@@ -52,7 +52,7 @@ CollisionResult collisionResult;
 
 // do a check to see if entity.getComponent<Collider> (the first Collider on the Entity) collides with any other Colliders in the Scene
 // Note that if you have multiple Colliders you could fetch and loop through them instead of only checking the first one.
-if( entity.getComponent<Collider>.collidesWithAny( ref deltaMovement, out collisionResult ) )
+if( entity.getComponent<Collider>().collidesWithAny( ref deltaMovement, out collisionResult ) )
 {
 	// log the CollisionResult. You may want to use it to add some particle effects or anything else relevant to your game.
 	Debug.log( "collision result: {0}", collisionResult );
@@ -70,7 +70,7 @@ If you need a bit more control over what happens when a collision occurs you can
 CollisionResult collisionResult;
 
 // do a check to see if entity.getComponent<Collider> collides with someOtherCollider
-if( entity.getComponent<Collider>.collidesWith( someOtherCollider, deltaMovement, out collisionResult ) )
+if( entity.getComponent<Collider>().collidesWith( someOtherCollider, deltaMovement, out collisionResult ) )
 {
 	// move entity to the position directly adjacent to the hit Collider then log the CollisionResult
 	entity.position += deltaMovement - collisionResult.minimumTranslationVector;
