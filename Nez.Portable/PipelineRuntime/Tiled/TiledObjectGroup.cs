@@ -43,7 +43,7 @@ namespace Nez.Tiled
 		/// <summary>
 		/// gets all the TiledObjects with the given name
 		/// </summary>
-		/// <returns>The with name.</returns>
+		/// <returns>The objects with matching names.</returns>
 		/// <param name="name">Name.</param>
 		public List<TiledObject> objectsWithName( string name )
 		{
@@ -51,6 +51,22 @@ namespace Nez.Tiled
 			for( int i = 0; i < objects.Length; i++ )
 			{
 				if( objects[i].name == name )
+					list.Add( objects[i] );
+			}
+			return list;
+		}
+
+		/// <summary>
+		/// gets all the TiledObjects with the given type
+		/// </summary>
+		/// <returns>The objects with matching types.</returns>
+		/// <param name="type">Type.</param>
+		public List<TiledObject> objectsWithType( string type )
+		{
+			var list = new List<TiledObject>();
+			for( int i = 0; i < objects.Length; i++ )
+			{
+				if( objects[i].type == type )
 					list.Add( objects[i] );
 			}
 			return list;
