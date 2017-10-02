@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Nez.PhysicsShapes;
 
@@ -374,6 +375,28 @@ namespace Nez
 			shape.position = oldPosition;
 
 			return didCollide;
+		}
+
+		/// <summary>
+		/// checks for collisions with other colliders. The collisionResults list will be populated with any collisions that occur.
+		/// </summary>
+		/// <param name="collisionResults">The list to populate with collision results.</param>
+		public void getAllCollisions(List<CollisionResult> collisionResults)
+		{
+			// retrieve neighbors
+			var neighbors = Physics.boxcastBroadphaseExcludingSelf( this, collidesWithLayers );
+
+			foreach ( var neighbor in neighbors )
+			{
+				CollisionResult result;
+				
+				// skip triggers
+				if( neighbor.isTrigger )
+					continue;
+
+				if ( collidesWith( neighbor, out result ) )
+					collisionResults.Add(result);
+			}
 		}
 
 		#endregion
