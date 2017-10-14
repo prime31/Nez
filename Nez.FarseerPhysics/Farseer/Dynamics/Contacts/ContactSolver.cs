@@ -479,10 +479,12 @@ namespace FarseerPhysics.Dynamics.Contacts
 					// Compute b'
 					b -= MathUtils.mul( ref vc.K, a );
 
+#if B2_DEBUG_SOLVER
 					const float k_errorTol = 1e-3f;
 					//B2_NOT_USED(k_errorTol);
+#endif
 
-					for( ;;)
+					for( ;; )
 					{
 						//
 						// Case 1: vn = 0
