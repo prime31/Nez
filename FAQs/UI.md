@@ -105,7 +105,7 @@ Nez UI supports a skin system similar to [libGDX skins](https://github.com/libgd
 Now that we have the skin lets create a few elements with it.
 
 ```csharp
-var skin = new Skin( "skins/uiskinconfig", Core.contentManager );
+var skin = new Skin( "skins/uiskinconfig", Core.content );
 
 // notice that we can directly fetch the style for the button via the name we specified in the JSON
 var button = new Button( skin.get<TextButtonStyle>( "default" ) );
