@@ -131,6 +131,7 @@ public class SpawnerSystem : EntityProcessingSystem
 ## Matchers
 Matchers are the equivalent of Artemis-odb's Aspects. They match entities based on a pattern of components. Matchers are used to define what components a system is interested in.
 
+**Note: Matchers do not match Component types inherited from the requested type.**
 
 ## Using matchers
 Matchers are passed during creation of an EntitySystem and define what components the system is interested in.
