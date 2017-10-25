@@ -2,7 +2,7 @@
 Using MonoGame 3.6
 ==========
 
-Nez works fairly well (though it has not been extensively tested at this time) on newer versions of MonoGame, such as 3.6.
+Nez works fairly well on newer versions of MonoGame, such as 3.6, though it has not been extensively tested at this time with these versions.
 Some minor tweaks are necessary to get it working with newer versions of MonoGame.
 
 These instructions are for [MonoGame 3.6.0.1625](https://www.nuget.org/packages/MonoGame.Framework.Portable/3.6.0.1625) on NuGet.
