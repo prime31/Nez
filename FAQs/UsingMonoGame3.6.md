@@ -8,4 +8,5 @@ Some minor tweaks are necessary to get it working with newer versions of MonoGam
 - Rebuild the effects (`.fx` files in `DefaultContentSource/effects`) to `.mgfxo` and replace those in `DefaultContent`
 - In `Nez.Portable/Core.cs`, add a `ulong` cast to the line `drawCalls = graphicsDevice.Metrics.DrawCount;`
 - In `Nez.Portable/Graphics/Effects/WaterReflectionEffect.cs`, change the return type of `OnApply` to `void` and remove the `return false;`
+- Update the references to the desired version of `MonoGame.Framework` as needed.
 - Rebuild your project, and Nez should now be running on MonoGame 3.6
