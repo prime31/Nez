@@ -233,6 +233,33 @@ namespace Nez
 		}
 
 		/// <summary>
+		/// only true if down this frame
+		/// </summary>
+		public static bool middleMouseButtonPressed
+		{
+			get { return _currentMouseState.MiddleButton == ButtonState.Pressed && _previousMouseState.MiddleButton == ButtonState.Released; }
+		}
+
+		/// <summary>
+		/// true while the button is down
+		/// </summary>
+		public static bool middleMouseButtonDown
+		{
+			get { return _currentMouseState.MiddleButton == ButtonState.Pressed; }
+		}
+
+		/// <summary>
+		/// true only the frame the button is released
+		/// </summary>
+		public static bool middleMouseButtonReleased
+		{
+			get
+			{
+				return _currentMouseState.MiddleButton == ButtonState.Released && _previousMouseState.MiddleButton == ButtonState.Pressed;
+			}
+		}
+
+		/// <summary>
 		/// gets the raw ScrollWheelValue
 		/// </summary>
 		/// <value>The mouse wheel.</value>
