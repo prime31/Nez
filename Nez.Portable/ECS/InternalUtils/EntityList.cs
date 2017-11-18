@@ -177,18 +177,18 @@ namespace Nez
 			if( _entitiesToRemove.Count > 0 )
 			{
 				Utils.swap( ref _entitiesToRemove, ref _tempEntityList );
-				foreach(var entity in _tempEntityList)
+				foreach( var entity in _tempEntityList )
 				{
 					// handle the tagList
-					removeFromTagList(entity);
+					removeFromTagList( entity );
 
 					// handle the regular entity list
-					_entities.remove(entity);
+					_entities.remove( entity );
 					entity.onRemovedFromScene();
 					entity.scene = null;
 
-					if (Core.entitySystemsEnabled)
-						scene.entityProcessors.onEntityRemoved(entity);
+					if( Core.entitySystemsEnabled )
+						scene.entityProcessors.onEntityRemoved( entity );
 				}
 
 				_tempEntityList.Clear();
@@ -198,20 +198,20 @@ namespace Nez
 			if( _entitiesToAdd.Count > 0 )
 			{
 				Utils.swap( ref _entitiesToAdd, ref _tempEntityList );
-				foreach(var entity in _tempEntityList)
+				foreach( var entity in _tempEntityList )
 				{
-					_entities.add(entity);
+					_entities.add( entity );
 					entity.scene = scene;
 
 					// handle the tagList
-					addToTagList(entity);
+					addToTagList( entity );
 
-					if (Core.entitySystemsEnabled)
-						scene.entityProcessors.onEntityAdded(entity);
+					if( Core.entitySystemsEnabled )
+						scene.entityProcessors.onEntityAdded( entity );
 				}
 
 				// now that all entities are added to the scene, we loop through again and call onAddedToScene
-				foreach (var entity in _tempEntityList)
+				foreach( var entity in _tempEntityList )
 					entity.onAddedToScene();
 
 				_tempEntityList.Clear();
@@ -252,9 +252,9 @@ namespace Nez
 					return _entities.buffer[i];
 			}
 
-			foreach(var entity in _entitiesToAdd)
+			foreach( var entity in _entitiesToAdd )
 			{
-				if(entity.name == name)
+				if( entity.name == name )
 				{
 					return entity;
 				}
@@ -294,11 +294,11 @@ namespace Nez
 					list.Add( _entities.buffer[i] );
 			}
 
-			foreach (var entity in _entitiesToAdd)
+			foreach( var entity in _entitiesToAdd )
 			{
-				if (entity is T)
+				if ( entity is T )
 				{
-					list.Add(entity);
+					list.Add( entity );
 				}
 			}
 
@@ -323,12 +323,12 @@ namespace Nez
 				}
 			}
 
-			foreach (var entity in _entitiesToAdd)
+			foreach( var entity in _entitiesToAdd )
 			{
-				if (entity.enabled)
+				if ( entity.enabled )
 				{
 					var comp =  entity.getComponent<T>();
-					if (comp != null)
+					if( comp != null )
 						return comp;
 				}
 			}
@@ -351,9 +351,9 @@ namespace Nez
 					_entities.buffer[i].getComponents<T>( comps );
 			}
 
-			foreach(var entity in _entitiesToAdd)
+			foreach( var entity in _entitiesToAdd )
 			{
-				if (entity.enabled)
+				if ( entity.enabled )
 				{
 					entity.getComponents<T>( comps );
 				}
