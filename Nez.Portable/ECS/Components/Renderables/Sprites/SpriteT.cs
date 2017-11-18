@@ -77,6 +77,20 @@ namespace Nez.Sprites
 
 		#region Component overrides
 
+		public override RectangleF bounds
+		{
+			get
+			{
+				if( _areBoundsDirty && subtexture != null )
+				{
+					_bounds.calculateBounds( entity.transform.position, _localOffset, _origin, entity.transform.scale, entity.transform.rotation, subtexture.sourceRect.Width, subtexture.sourceRect.Height );
+					_areBoundsDirty = false;
+				}
+
+				return _bounds;
+			}
+		}
+
 		void IUpdatable.update()
 		{
 			if( _currentAnimation == null || !isPlaying )

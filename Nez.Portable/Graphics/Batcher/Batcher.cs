@@ -809,6 +809,11 @@ namespace Nez
 		void pushSprite( Subtexture subtexture, float destinationX, float destinationY, float destinationW, float destinationH, Color color, Vector2 origin,
 				float rotation, float depth, byte effects, float skewTopX, float skewBottomX, float skewLeftY, float skewRightY )
 		{
+			if( subtexture == null )
+			{
+				return;
+			}
+
 			// out of space, flush
 			if( _numSprites >= MAX_SPRITES )
 				flushBatch();
