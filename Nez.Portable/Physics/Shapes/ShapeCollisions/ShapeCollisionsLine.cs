@@ -25,7 +25,7 @@ namespace Nez.PhysicsShapes
 					// TODO: is this the correct and most efficient way to get the fraction?
 					// check x fraction first. if it is NaN use y instead
 					var distanceFraction = ( intersection.X - start.X ) / ( end.X - start.X );
-					if( float.IsNaN( distanceFraction ) )
+					if( float.IsNaN( distanceFraction ) || float.IsInfinity( distanceFraction ) )
 						distanceFraction = ( intersection.Y - start.Y ) / ( end.Y - start.Y );
 
 					if( distanceFraction < fraction )
