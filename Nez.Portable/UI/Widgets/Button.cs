@@ -137,6 +137,7 @@ namespace Nez.UI
 
 		void IInputListener.onMouseUp( Vector2 mousePos )
 		{
+			if (!_mouseDown) return; //onMouseUp has already been fired once.
 			_mouseDown = false;
 
 			setChecked( !_isChecked, true );
