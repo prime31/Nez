@@ -1,6 +1,5 @@
-﻿using System;
+﻿using System.Collections.Generic;
 using Microsoft.Xna.Framework;
-using System.Collections.Generic;
 using Nez.Tiled;
 
 
@@ -11,24 +10,38 @@ namespace Nez.AI.Pathfinding
 	/// </summary>
 	public class UnweightedGridGraph : IUnweightedGraph<Point>
 	{
-		static readonly Point[] DIRS = new []
+		static readonly Point[] CARDINAL_DIRS = new[]
 		{
 			new Point( 1, 0 ),
 			new Point( 0, -1 ),
 			new Point( -1, 0 ),
-			new Point( 0, 1 )
+			new Point( 0, 1 ),
+		};
+
+		static readonly Point[] COMPASS_DIRS = new []
+		{
+			new Point( 1, 0 ),
+			new Point( 1, -1 ),
+			new Point( 0, -1 ),
+			new Point( -1, -1 ),
+			new Point( -1, 0 ),
+			new Point( -1, 1 ),
+			new Point( 0, 1 ),
+			new Point( 1, 1 ),
 		};
 
 		public HashSet<Point> walls = new HashSet<Point>();
 
 		int _width, _height;
+		Point[] _dirs;
 		List<Point> _neighbors = new List<Point>( 4 );
 
 
-		public UnweightedGridGraph( int width, int height )
+		public UnweightedGridGraph( int width, int height, bool allowDiagonalSearch = false )
 		{
 			this._width = width;
 			this._height = height;
+			this._dirs = allowDiagonalSearch ? COMPASS_DIRS : CARDINAL_DIRS;
 		}
 
 
@@ -36,8 +49,9 @@ namespace Nez.AI.Pathfinding
 		{
 			_width = tiledLayer.width;
 			_height = tiledLayer.height;
+			_dirs = CARDINAL_DIRS;
 
-			for( var y = 0; y < tiledLayer.tiledMap.height; y++ )
+			for ( var y = 0; y < tiledLayer.tiledMap.height; y++ )
 			{
 				for( var x = 0; x < tiledLayer.tiledMap.width; x++ )
 				{
@@ -64,7 +78,7 @@ namespace Nez.AI.Pathfinding
 		{
 			_neighbors.Clear();
 
-			foreach( var dir in DIRS )
+			foreach( var dir in _dirs )
 			{
 				var next = new Point( node.X + dir.X, node.Y + dir.Y );
 				if( isNodeInBounds( next ) && isNodePassable( next ) )
