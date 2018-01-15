@@ -139,7 +139,7 @@ namespace Nez
 				_entityDict[tag] = list;
 			}
 
-			return new List<Entity>( _entityDict[tag].buffer );
+			return _entityDict[tag].toList();
 		}
 
 
