@@ -30,7 +30,7 @@ namespace Nez
 		/// <summary>
 		/// tracks entities by tag for easy retrieval
 		/// </summary>
-		Dictionary<int,List<Entity>> _entityDict = new Dictionary<int, List<Entity>>();
+		Dictionary<int, FastList<Entity>> _entityDict = new Dictionary<int, FastList<Entity>>();
 		List<int> _unsortedTags = new List<int>();
 
 		// used in updateLists to double buffer so that the original lists can be modified elsewhere
@@ -99,7 +99,7 @@ namespace Nez
 		/// </summary>
 		public void removeAllEntities()
 		{
-			// clear lists we dont need anymore
+			// clear lists we don't need anymore
 			_unsortedTags.Clear();
 			_entitiesToAdd.Clear();
 			_isEntityListUnsorted = false;
@@ -132,14 +132,14 @@ namespace Nez
 
 		List<Entity> getTagList( int tag )
 		{
-			List<Entity> list = null;
+			FastList<Entity> list = null;
 			if( !_entityDict.TryGetValue( tag, out list ) )
 			{
-				list = new List<Entity>();
+				list = new FastList<Entity>();
 				_entityDict[tag] = list;
 			}
 
-			return _entityDict[tag];
+			return new List<Entity>( _entityDict[tag].buffer );
 		}
 
 
@@ -155,7 +155,7 @@ namespace Nez
 
 		internal void removeFromTagList( Entity entity )
 		{
-			_entityDict[entity.tag].Remove( entity );
+			_entityDict[entity.tag].remove( entity );
 		}
 
 
@@ -234,7 +234,7 @@ namespace Nez
 				for( int i = 0, count = _unsortedTags.Count; i < count; i++ )
 				{
 					var tag = _unsortedTags[i];
-					_entityDict[tag].Sort();
+					_entityDict[tag].sort();
 				}
 				_unsortedTags.Clear();
 			}
