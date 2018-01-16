@@ -130,7 +130,7 @@ namespace Nez
 		}
 
 
-		List<Entity> getTagList( int tag )
+		FastList<Entity> getTagList( int tag )
 		{
 			FastList<Entity> list = null;
 			if( !_entityDict.TryGetValue( tag, out list ) )
@@ -139,16 +139,16 @@ namespace Nez
 				_entityDict[tag] = list;
 			}
 
-			return _entityDict[tag].toList();
+			return _entityDict[tag];
 		}
 
 
 		internal void addToTagList( Entity entity )
 		{
 			var list = getTagList( entity.tag );
-			Assert.isFalse( list.Contains( entity ), "Entity tag list already contains this entity: {0}", entity );
+			Assert.isFalse( list.contains( entity ), "Entity tag list already contains this entity: {0}", entity );
 
-			list.Add( entity );
+			list.add( entity );
 			_unsortedTags.Add( entity.tag );
 		}
 
@@ -277,7 +277,11 @@ namespace Nez
 			var list = getTagList( tag );
 
 			var returnList = ListPool<Entity>.obtain();
-			returnList.AddRange( list );
+			returnList.Capacity = _entities.length;
+			for( var i = 0; i < list.length; i++ )
+			{
+				returnList.Add( _entities.buffer[i] );
+			}
 
 			return returnList;
 		}

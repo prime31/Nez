@@ -182,19 +182,6 @@ namespace Nez
 			Array.Sort( buffer, 0, length, comparer );
 		}
 
-		/// <summary>
-		/// returns a list of items in the buffer up to length
-		/// </summary>
-		public List<T> toList()
-		{
-			var list = new List<T>( length );
-			for( var i = 0; i < length; ++i )
-			{
-				list.Add( buffer[i] );
-			}
-			return list;
-		}
-
 	}
 }
 
