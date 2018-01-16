@@ -30,7 +30,7 @@ namespace Nez
 		/// <summary>
 		/// tracks entities by tag for easy retrieval
 		/// </summary>
-		Dictionary<int,List<Entity>> _entityDict = new Dictionary<int, List<Entity>>();
+		Dictionary<int, FastList<Entity>> _entityDict = new Dictionary<int, FastList<Entity>>();
 		List<int> _unsortedTags = new List<int>();
 
 		// used in updateLists to double buffer so that the original lists can be modified elsewhere
@@ -99,7 +99,7 @@ namespace Nez
 		/// </summary>
 		public void removeAllEntities()
 		{
-			// clear lists we dont need anymore
+			// clear lists we don't need anymore
 			_unsortedTags.Clear();
 			_entitiesToAdd.Clear();
 			_isEntityListUnsorted = false;
@@ -130,12 +130,12 @@ namespace Nez
 		}
 
 
-		List<Entity> getTagList( int tag )
+		FastList<Entity> getTagList( int tag )
 		{
-			List<Entity> list = null;
+			FastList<Entity> list = null;
 			if( !_entityDict.TryGetValue( tag, out list ) )
 			{
-				list = new List<Entity>();
+				list = new FastList<Entity>();
 				_entityDict[tag] = list;
 			}
 
@@ -146,16 +146,16 @@ namespace Nez
 		internal void addToTagList( Entity entity )
 		{
 			var list = getTagList( entity.tag );
-			Assert.isFalse( list.Contains( entity ), "Entity tag list already contains this entity: {0}", entity );
+			Assert.isFalse( list.contains( entity ), "Entity tag list already contains this entity: {0}", entity );
 
-			list.Add( entity );
+			list.add( entity );
 			_unsortedTags.Add( entity.tag );
 		}
 
 
 		internal void removeFromTagList( Entity entity )
 		{
-			_entityDict[entity.tag].Remove( entity );
+			_entityDict[entity.tag].remove( entity );
 		}
 
 
@@ -230,7 +230,7 @@ namespace Nez
 				for( int i = 0, count = _unsortedTags.Count; i < count; i++ )
 				{
 					var tag = _unsortedTags[i];
-					_entityDict[tag].Sort();
+					_entityDict[tag].sort();
 				}
 				_unsortedTags.Clear();
 			}
@@ -274,7 +274,11 @@ namespace Nez
 			var list = getTagList( tag );
 
 			var returnList = ListPool<Entity>.obtain();
-			returnList.AddRange( list );
+			returnList.Capacity = _entities.length;
+			for( var i = 0; i < list.length; i++ )
+			{
+				returnList.Add( _entities.buffer[i] );
+			}
 
 			return returnList;
 		}
