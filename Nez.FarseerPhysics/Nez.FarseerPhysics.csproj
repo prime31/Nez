@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -188,16 +188,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Nez\" />
-    <Folder Include="Nez\LowLevel\" />
-    <Folder Include="Nez\HighLevel\" />
-    <Folder Include="Nez\HighLevel\Components\" />
-    <Folder Include="Nez\HighLevel\InternalObjectDefs\" />
-    <Folder Include="Nez\LowLevel\Factories\" />
-    <Folder Include="Nez\LowLevel\Extensions\" />
-    <Folder Include="Nez\LowLevel\Components\" />
-    <Folder Include="Nez\LowLevel\Components\Renderables\" />
-    <Folder Include="Nez\Common\" />
+    <None Include="Nez.FarseerPhysics.nuspec" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
 </Project>

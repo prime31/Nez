@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -30,72 +30,7 @@
     <ConsolePause>false</ConsolePause>
   </PropertyGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
-  <ItemGroup>
-    <Folder Include="Debug\" />
-    <Folder Include="ECS\" />
-    <Folder Include="Graphics\" />
-    <Folder Include="Input\" />
-    <Folder Include="Math\" />
-    <Folder Include="Physics\" />
-    <Folder Include="Utils\" />
-    <Folder Include="PipelineRuntime\" />
-    <Folder Include="Utils\DebugConsole\" />
-    <Folder Include="Utils\Tweens\" />
-    <Folder Include="Utils\Tweens\Easing\" />
-    <Folder Include="Utils\Tweens\Interfaces\" />
-    <Folder Include="Utils\Timers\" />
-    <Folder Include="Utils\Coroutines\" />
-    <Folder Include="ECS\Components\Renderables\Sprites\" />
-    <Folder Include="Graphics\Textures\" />
-    <Folder Include="PipelineRuntime\TextureAtlas\" />
-    <Folder Include="Physics\QuadTree\" />
-    <Folder Include="ECS\Components\Renderables\Particles\" />
-    <Folder Include="PipelineRuntime\ParticleDesigner\" />
-    <Folder Include="Utils\Analysis\" />
-    <Folder Include="ECS\Systems\" />
-    <Folder Include="Physics\Shapes\" />
-    <Folder Include="Graphics\PostProcessing\PostProcessors\" />
-    <Folder Include="Graphics\Effects\" />
-    <Folder Include="Graphics\Transitions\" />
-    <Folder Include="PipelineRuntime\UISkin\" />
-    <Folder Include="Input\Virtual\" />
-    <Folder Include="Graphics\Batcher\" />
-    <Folder Include="Graphics\DeferredLighting\" />
-    <Folder Include="AI\" />
-    <Folder Include="AI\FSM\" />
-    <Folder Include="AI\BehaviorTree\" />
-    <Folder Include="AI\BehaviorTree\Actions\" />
-    <Folder Include="AI\BehaviorTree\Composites\" />
-    <Folder Include="AI\BehaviorTree\Conditionals\" />
-    <Folder Include="AI\BehaviorTree\Decorators\" />
-    <Folder Include="AI\UtilityAI\" />
-    <Folder Include="AI\UtilityAI\Actions\" />
-    <Folder Include="AI\UtilityAI\Reasoners\" />
-    <Folder Include="AI\UtilityAI\Considerations\" />
-    <Folder Include="AI\UtilityAI\Considerations\Appraisals\" />
-    <Folder Include="AI\GOAP\" />
-    <Folder Include="Graphics\Renderers\Reflections\" />
-    <Folder Include="Utils\Fonts\" />
-    <Folder Include="Utils\Collections\" />
-    <Folder Include="AI\Pathfinding\" />
-    <Folder Include="AI\Pathfinding\BreadthFirst\" />
-    <Folder Include="AI\Pathfinding\AStar\" />
-    <Folder Include="Utils\Extensions\" />
-    <Folder Include="Debug\Inspector\" />
-    <Folder Include="Debug\Inspector\Attributes\" />
-    <Folder Include="Debug\Inspector\Inspectors\" />
-    <Folder Include="UI\Utils\" />
-    <Folder Include="Content\" />
-    <Folder Include="Utils\Audio\" />
-    <Folder Include="Graphics\Materials\" />
-    <Folder Include="AI\Pathfinding\Dijkstra\" />
-    <Folder Include="ECS\Components\Renderables\3D\" />
-    <Folder Include="Physics\Verlet\" />
-    <Folder Include="Physics\Shapes\ShapeCollisions\" />
-    <Folder Include="Graphics\SVG\" />
-    <Folder Include="ECS\Components\Physics\Colliders\" />
-    <Folder Include="ECS\Components\Renderables\PolygonLight\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Compile Include="Debug\Debug.cs" />
     <Compile Include="ECS\Camera.cs" />
@@ -584,5 +519,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Graphics\SVG\Shapes\Paths\SvgPathBuilder.cs" />
+    <None Include="Nez.nuspec" />
   </ItemGroup>
 </Project>
