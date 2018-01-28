@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework.Input;
 using System.Reflection;
@@ -63,6 +63,7 @@ namespace Nez.Console
 		float _repeatCounter = 0;
 		Keys? _repeatKey = null;
 		bool _canOpen;
+		public static Keys consoleKey = Keys.OemTilde;
 		#if DEBUG
 		internal RuntimeInspector _runtimeInspector;
 		#endif
@@ -174,7 +175,7 @@ namespace Nez.Console
 			{
 				_canOpen = true;
 			}
-			else if( Input.isKeyPressed( Keys.OemTilde, Keys.Oem8 ) )
+			else if( Input.isKeyPressed( consoleKey, Keys.Oem8 ) )
 			{
 				isOpen = true;
 				_currentState = Keyboard.GetState();
@@ -230,7 +231,7 @@ namespace Nez.Console
 			if( key != Keys.Tab && key != Keys.LeftShift && key != Keys.RightShift && key != Keys.RightAlt && key != Keys.LeftAlt && key != Keys.RightControl && key != Keys.LeftControl )
 				_tabIndex = -1;
 
-			if( key != Keys.OemTilde && key != Keys.Oem8 && key != Keys.Enter && _repeatKey != key )
+			if( key != consoleKey && key != Keys.Oem8 && key != Keys.Enter && _repeatKey != key )
 			{
 				_repeatKey = key;
 				_repeatCounter = 0;
@@ -453,8 +454,12 @@ namespace Nez.Console
 
 				case Keys.Oem8:
 				case Keys.OemTilde:
-					isOpen = _canOpen = false;
 				break;
+			}
+
+			if( key == consoleKey )
+			{
+				isOpen = _canOpen = false;
 			}
 		}
 
