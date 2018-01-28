@@ -583,7 +583,7 @@
   </ItemGroup>
   <ItemGroup>
     <Reference Include="MonoGame.Framework">
-      <HintPath>..\..\..\..\..\Desktop\Fucker\packages\MonoGame.Framework.Portable.3.6.0.1625\lib\portable-net45+win8+wpa81\MonoGame.Framework.dll</HintPath>
+      <HintPath>..\packages\MonoGame.Framework.Portable.3.6.0.1625\lib\portable-net45+win8+wpa81\MonoGame.Framework.dll</HintPath>
     </Reference>
   </ItemGroup>
 </Project>
