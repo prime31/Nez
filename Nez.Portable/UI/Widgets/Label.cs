@@ -346,8 +346,8 @@ namespace Nez.UI
 			var color = new Color( this.color, (int)(this.color.A * parentAlpha) );
 			if( _style.background != null )
 				_style.background.draw( graphics, x, y, width == 0 ? _prefSize.X : width, height, color );
-
-			graphics.batcher.drawString( _style.font, _wrappedString, new Vector2( x, y ) + _textPosition, _style.fontColor, 0, Vector2.Zero, new Vector2( _fontScaleX, _fontScaleY ), SpriteEffects.None, 0 );
+			if (_style.fontColor != null) color.multiply(_style.fontColor);
+			graphics.batcher.drawString( _style.font, _wrappedString, new Vector2( x, y ) + _textPosition, color, 0, Vector2.Zero, new Vector2( _fontScaleX, _fontScaleY ), SpriteEffects.None, 0 );
 		}
 
 	}
