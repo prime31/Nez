@@ -75,7 +75,7 @@ namespace Nez
 		internal static Core _instance;
 
 		#if DEBUG
-		internal static ulong drawCalls;
+		internal static long drawCalls;
 		TimeSpan _frameCounterElapsedTime = TimeSpan.Zero;
 		int _frameCounter = 0;
 		string _windowTitle;

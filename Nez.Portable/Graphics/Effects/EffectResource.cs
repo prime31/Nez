@@ -108,7 +108,7 @@ namespace Nez
 			}
 			catch( Exception e )
 			{
-				var txt = string.Format( "OpenStream failed to find file at path: {0}. Did you add it to the Content folder?", path );
+				var txt = string.Format( "OpenStream failed to find file at path: {0}. Did you add it to the Content folder and set its properties to copy to output directory?", path );
 				throw new Exception( txt, e );
 			}
 

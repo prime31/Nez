@@ -575,14 +575,15 @@
     <Compile Include="Utils\Extensions\GestureSampleExt.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="MonoGame.Framework">
-      <HintPath>MonoGamePCL\MonoGame.Framework.dll</HintPath>
-    </Reference>
-  </ItemGroup>
-  <ItemGroup>
     <EmbeddedResource Include="Content\NezDefaultBMFont.xnb" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Graphics\SVG\Shapes\Paths\SvgPathBuilder.cs" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="MonoGame.Framework">
+      <HintPath>..\..\..\..\..\Desktop\Fucker\packages\MonoGame.Framework.Portable.3.6.0.1625\lib\portable-net45+win8+wpa81\MonoGame.Framework.dll</HintPath>
+    </Reference>
   </ItemGroup>
 </Project>
