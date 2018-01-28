@@ -1,3 +1,7 @@
+tools/*
+!tools/packages.config
+output/
+
 PipelineImporter/bin
 PipelineImporter/obj
 packages/MonoGame.Framework.MacOS.3.4.0.459

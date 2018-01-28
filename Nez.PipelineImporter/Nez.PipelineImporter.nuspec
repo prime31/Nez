@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<package>
+  <metadata>
+    <id>Nez.PipelineImporter</id>
+    <version>1.0.0</version>
+    <title>Nez</title>
+    <authors>prime31</authors>
+    <owners>prime31</owners>
+    <licenseUrl>https://github.com/prime31/Nez/blob/master/LICENSE</licenseUrl>
+    <projectUrl>https://github.com/prime31/Nez</projectUrl>
+    <iconUrl>https://avatars2.githubusercontent.com/u/60377?s=460&amp;v=4</iconUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>A pipeline importer for the Nez MonoGame framework.</description>
+    <releaseNotes></releaseNotes>
+    <copyright>Copyright 2018</copyright>
+    <tags>MonoGame XNA FNA</tags>
+  </metadata>
+</package>
