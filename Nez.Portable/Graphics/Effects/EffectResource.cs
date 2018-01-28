@@ -102,8 +102,11 @@ namespace Nez
 			{
 				using( var stream = TitleContainer.OpenStream( path ) )
 				{
-					bytes = new byte[stream.Length];
-					stream.Read( bytes, 0, bytes.Length );
+					using ( var ms = new MemoryStream() )
+					{
+						stream.CopyTo( ms );
+						bytes = ms.ToArray();
+					}
 				}
 			}
 			catch( Exception e )
