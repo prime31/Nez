@@ -122,6 +122,19 @@ namespace Nez.UI
 			if( ( edge & MOVE ) != 0 )
 			{
 				float amountX = mousePos.X - startX, amountY = mousePos.Y - startY;
+
+				if( clampPosition )
+				{
+					if( windowX + amountX < 0 )
+						amountX = -windowX;
+					if( windowY + amountY < 0 )
+						amountY = -windowY;
+					if( windowX + width + amountX > parentWidth )
+						amountX = parentWidth - windowX - width;
+					if( windowY + height + amountY > parentHeight )
+						amountY = parentHeight - windowY - height;
+				}
+
 				windowX += amountX;
 				windowY += amountY;
 			}
