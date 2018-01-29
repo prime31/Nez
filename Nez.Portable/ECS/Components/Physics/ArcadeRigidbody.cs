@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Microsoft.Xna.Framework;
 
 
@@ -184,6 +184,12 @@ namespace Nez
 			var neighbors = Physics.boxcastBroadphaseExcludingSelf( _collider, _collider.collidesWithLayers );
 			foreach( var neighbor in neighbors )
 			{
+				// if the neighbor collider is of the same entity, ignore it
+				if( neighbor.entity == entity )
+				{
+					continue;
+				}
+
 				if( _collider.collidesWith( neighbor, out collisionResult ) )
 				{
 					// if the neighbor has an ArcadeRigidbody we handle full collision response. If not, we calculate things based on the
