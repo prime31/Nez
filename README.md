@@ -54,6 +54,7 @@ Setup
 ==========
 ### Quick version:
 
+- create a `Monogame Cross Platform Desktop Project`
 - clone or download the Nez repository
 - add the `Nez.Portable/Nez.csproj` project to your solution and add a reference to it in your main project
 - make your main Game class (`Game1.cs` in a default project) subclass `Nez.Core`
@@ -64,7 +65,7 @@ Setup
 - add the `Nez.PipelineImporter/Nez.PipelineImporter.csproj` project to your solution
 - open the `Nez.PipelineImporter` references dialog and add a reference to the Nez project
 - build the `Nez.PipelineImporter` project to generate the DLLs
-- open the Pipeline Tool by double-clicking your `Content.mgcb` file and add references to `PipelineImporter.dll`, `Ionic.ZLib.dll`, `Newtonsoft.Json.dll` and `Nez.dll`.
+- open the Pipeline Tool by double-clicking your `Content.mgcb` file, select `Content` and under Settings add `PipelineImporter.dll`, `Ionic.ZLib.dll`, `Newtonsoft.Json.dll` and `Nez.dll` to the References collection.
 
 
 All Nez shaders are compiled for OpenGL so be sure to use the DesktopGL template, not DirectX! Nez only supports OpenGL out of the box to keep things compatible across Android/iOS/Mac/Linux/Windows.
