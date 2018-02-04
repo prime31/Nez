@@ -11,12 +11,24 @@ namespace Nez.AI.Pathfinding
 	/// </summary>
 	public class WeightedGridGraph : IWeightedGraph<Point>
 	{
-		public static readonly Point[] DIRS = new []
+		public static readonly Point[] CARDINAL_DIRS = new []
 		{
 			new Point( 1, 0 ),
 			new Point( 0, -1 ),
 			new Point( -1, 0 ),
 			new Point( 0, 1 )
+		};
+
+		static readonly Point[] COMPASS_DIRS = new []
+		{
+			new Point( 1, 0 ),
+			new Point( 1, -1 ),
+			new Point( 0, -1 ),
+			new Point( -1, -1 ),
+			new Point( -1, 0 ),
+			new Point( -1, 1 ),
+			new Point( 0, 1 ),
+			new Point( 1, 1 ),
 		};
 
 		public HashSet<Point> walls = new HashSet<Point>();
@@ -25,13 +37,15 @@ namespace Nez.AI.Pathfinding
 		public int weightedNodeWeight = 5;
 
 		int _width, _height;
+		Point[] _dirs;
 		List<Point> _neighbors = new List<Point>( 4 );
 
 
-		public WeightedGridGraph( int width, int height )
+		public WeightedGridGraph( int width, int height, bool allowDiagonalSearch = false )
 		{
-			this._width = width;
-			this._height = height;
+			_width = width;
+			_height = height;
+			_dirs = allowDiagonalSearch ? COMPASS_DIRS : CARDINAL_DIRS;
 		}
 
 
@@ -43,6 +57,7 @@ namespace Nez.AI.Pathfinding
 		{
 			_width = tiledLayer.width;
 			_height = tiledLayer.height;
+			_dirs = CARDINAL_DIRS;
 
 			for( var y = 0; y < tiledLayer.tiledMap.height; y++ )
 			{
@@ -71,7 +86,7 @@ namespace Nez.AI.Pathfinding
 		/// </summary>
 		/// <returns><c>true</c>, if node passable was ised, <c>false</c> otherwise.</returns>
 		/// <param name="node">Node.</param>
-		bool isNodePassable( Point node )
+		public bool isNodePassable( Point node )
 		{
 			return !walls.Contains( node );
 		}
@@ -94,7 +109,7 @@ namespace Nez.AI.Pathfinding
 		{
 			_neighbors.Clear();
 
-			foreach( var dir in DIRS )
+			foreach( var dir in _dirs )
 			{
 				var next = new Point( node.X + dir.X, node.Y + dir.Y );
 				if( isNodeInBounds( next ) && isNodePassable( next ) )
