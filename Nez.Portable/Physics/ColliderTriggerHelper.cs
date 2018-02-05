@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 
 
 namespace Nez
@@ -101,17 +101,20 @@ namespace Nez
 
 			_tempTriggerList.Clear();
 
-			// also call it for the collider we moved onto
-			collisionPair.second.entity.getComponents( _tempTriggerList );
-			for( var i = 0; i < _tempTriggerList.Count; i++ )
+			// also call it for the collider we moved onto if it wasn't destroyed by the first
+			if( collisionPair.second.entity != null )
 			{
-				if( isEntering )
-					_tempTriggerList[i].onTriggerEnter( collisionPair.first, collisionPair.second );
-				else
-					_tempTriggerList[i].onTriggerExit( collisionPair.first, collisionPair.second );
-			}
+				collisionPair.second.entity.getComponents( _tempTriggerList );
+				for( var i = 0; i < _tempTriggerList.Count; i++ )
+				{
+					if( isEntering )
+						_tempTriggerList[i].onTriggerEnter( collisionPair.first, collisionPair.second );
+					else
+						_tempTriggerList[i].onTriggerExit( collisionPair.first, collisionPair.second );
+				}
 
-			_tempTriggerList.Clear();
+				_tempTriggerList.Clear();
+			}
 		}
 
 	}
