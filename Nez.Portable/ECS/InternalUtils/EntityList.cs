@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 
 namespace Nez
@@ -146,16 +146,21 @@ namespace Nez
 		internal void addToTagList( Entity entity )
 		{
 			var list = getTagList( entity.tag );
-			Assert.isFalse( list.contains( entity ), "Entity tag list already contains this entity: {0}", entity );
-
-			list.add( entity );
-			_unsortedTags.Add( entity.tag );
+			if( !list.contains( entity ) )
+			{
+				list.add( entity );
+				_unsortedTags.Add( entity.tag );
+			}
 		}
 
 
 		internal void removeFromTagList( Entity entity )
 		{
-			_entityDict[entity.tag].remove( entity );
+			FastList<Entity> list = null;
+			if( _entityDict.TryGetValue( entity.tag, out list ) )
+			{
+				list.remove( entity );
+			}
 		}
 
 
