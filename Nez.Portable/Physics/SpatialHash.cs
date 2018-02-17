@@ -470,7 +470,7 @@ namespace Nez.Spatial
 		[MethodImpl( MethodImplOptions.AggressiveInlining )]
 		long getKey( int x, int y )
 		{
-			return (long)x << 32 | (long)(uint)y;
+			return unchecked((long)x << 32 | (uint)y);
 		}
 
 
