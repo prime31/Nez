@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.IO;
 using Microsoft.Xna.Framework;
 
@@ -102,8 +102,19 @@ namespace Nez
 			{
 				using( var stream = TitleContainer.OpenStream( path ) )
 				{
-					bytes = new byte[stream.Length];
-					stream.Read( bytes, 0, bytes.Length );
+					if( stream.CanSeek )
+					{
+						bytes = new byte[stream.Length];
+						stream.Read( bytes, 0, bytes.Length );
+					}
+					else
+					{
+						using( var ms = new MemoryStream() )
+						{
+							stream.CopyTo( ms );
+							bytes = ms.ToArray();
+						}
+					}
 				}
 			}
 			catch( Exception e )
