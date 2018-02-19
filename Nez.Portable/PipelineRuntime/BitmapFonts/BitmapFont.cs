@@ -132,6 +132,69 @@ namespace Nez.BitmapFonts
 
 
 		/// <summary>
+		/// truncates text and returns a new string with ellipsis appended if necessary. This method ignores all
+		/// line breaks.
+		/// </summary>
+		/// <returns>The text.</returns>
+		/// <param name="text">Text.</param>
+		/// <param name="ellipsis">Ellipsis.</param>
+		/// <param name="maxLineWidth">Max line width.</param>
+		public string truncateText( string text, string ellipsis, float maxLineWidth )
+		{
+			if( maxLineWidth < spaceWidth )
+				return string.Empty;
+
+			var size = measureString( text );
+
+			// do we even need to truncate?
+			var ellipsisWidth = measureString( ellipsis ).X;
+			if( size.X > maxLineWidth )
+			{
+				var sb = new StringBuilder();
+
+				var width = 0.0f;
+				BitmapFontRegion currentFontRegion = null;
+				var offsetX = 0.0f;
+
+				// determine how many chars we can fit in maxLineWidth - ellipsisWidth
+				for( var i = 0; i < text.Length; i++ )
+				{
+					var c = text[i];
+
+					// we dont deal with line breaks or tabs
+					if( c == '\r' || c == '\n' )
+						continue;
+
+					if( currentFontRegion != null )
+						offsetX += spacing + currentFontRegion.xAdvance;
+
+					if( !_characterMap.TryGetValue( c, out currentFontRegion ) )
+						currentFontRegion = defaultCharacterRegion;
+
+					var proposedWidth = offsetX + currentFontRegion.xAdvance + spacing;
+					if( proposedWidth > width )
+						width = proposedWidth;
+
+					if( width < maxLineWidth - ellipsisWidth )
+					{
+						sb.Append( c );
+					}
+					else
+					{
+						// no more room. append our ellipsis and get out of here
+						sb.Append( ellipsis );
+						break;
+					}
+				}
+
+				return sb.ToString();
+			}
+
+			return text;
+		}
+
+
+		/// <summary>
 		/// Returns the size of the contents of a string when rendered in this font.
 		/// </summary>
 		/// <returns>The string.</returns>
@@ -156,55 +219,6 @@ namespace Nez.BitmapFonts
 			Vector2 size;
 			measureString( ref source, out size );
 			return size;
-		}
-
-
-		/// <summary>
-		/// gets the BitmapFontRegion for the given char optionally substituting the default region if it isnt present.
-		/// </summary>
-		/// <returns><c>true</c>, if get font region for char was tryed, <c>false</c> otherwise.</returns>
-		/// <param name="c">C.</param>
-		/// <param name="fontRegion">Font region.</param>
-		/// <param name="useDefaultRegionIfNotPresent">If set to <c>true</c> use default region if not present.</param>
-		public bool tryGetFontRegionForChar( char c, out BitmapFontRegion fontRegion, bool useDefaultRegionIfNotPresent = false )
-		{
-			if( !_characterMap.TryGetValue( c, out fontRegion ) )
-			{
-				if( useDefaultRegionIfNotPresent )
-				{
-					fontRegion = defaultCharacterRegion;
-					return true;
-				}
-				return false;
-			}
-
-			return true;
-		}
-
-
-		/// <summary>
-		/// checks to see if a BitmapFontRegion exists for the char
-		/// </summary>
-		/// <returns><c>true</c>, if region exists for char was fonted, <c>false</c> otherwise.</returns>
-		/// <param name="c">C.</param>
-		public bool hasCharacter( char c )
-		{
-			BitmapFontRegion fontRegion;
-			return tryGetFontRegionForChar( c, out fontRegion );
-		}
-
-
-		/// <summary>
-		/// gets the BitmapFontRegion for char. Returns null if it doesnt exist and useDefaultRegionIfNotPresent is false.
-		/// </summary>
-		/// <returns>The region for char.</returns>
-		/// <param name="c">C.</param>
-		/// <param name="useDefaultRegionIfNotPresent">If set to <c>true</c> use default region if not present.</param>
-		public BitmapFontRegion fontRegionForChar( char c, bool useDefaultRegionIfNotPresent = false )
-		{
-			BitmapFontRegion fontRegion;
-			tryGetFontRegionForChar( c, out fontRegion, useDefaultRegionIfNotPresent );
-			return fontRegion;
 		}
 
 
@@ -256,6 +270,55 @@ namespace Nez.BitmapFonts
 
 			size.X = width;
 			size.Y = fullLineCount * lineHeight + finalLineHeight;
+		}
+
+
+		/// <summary>
+		/// gets the BitmapFontRegion for the given char optionally substituting the default region if it isnt present.
+		/// </summary>
+		/// <returns><c>true</c>, if get font region for char was tryed, <c>false</c> otherwise.</returns>
+		/// <param name="c">C.</param>
+		/// <param name="fontRegion">Font region.</param>
+		/// <param name="useDefaultRegionIfNotPresent">If set to <c>true</c> use default region if not present.</param>
+		public bool tryGetFontRegionForChar( char c, out BitmapFontRegion fontRegion, bool useDefaultRegionIfNotPresent = false )
+		{
+			if( !_characterMap.TryGetValue( c, out fontRegion ) )
+			{
+				if( useDefaultRegionIfNotPresent )
+				{
+					fontRegion = defaultCharacterRegion;
+					return true;
+				}
+				return false;
+			}
+
+			return true;
+		}
+
+
+		/// <summary>
+		/// checks to see if a BitmapFontRegion exists for the char
+		/// </summary>
+		/// <returns><c>true</c>, if region exists for char was fonted, <c>false</c> otherwise.</returns>
+		/// <param name="c">C.</param>
+		public bool hasCharacter( char c )
+		{
+			BitmapFontRegion fontRegion;
+			return tryGetFontRegionForChar( c, out fontRegion );
+		}
+
+
+		/// <summary>
+		/// gets the BitmapFontRegion for char. Returns null if it doesnt exist and useDefaultRegionIfNotPresent is false.
+		/// </summary>
+		/// <returns>The region for char.</returns>
+		/// <param name="c">C.</param>
+		/// <param name="useDefaultRegionIfNotPresent">If set to <c>true</c> use default region if not present.</param>
+		public BitmapFontRegion fontRegionForChar( char c, bool useDefaultRegionIfNotPresent = false )
+		{
+			BitmapFontRegion fontRegion;
+			tryGetFontRegionForChar( c, out fontRegion, useDefaultRegionIfNotPresent );
+			return fontRegion;
 		}
 
 

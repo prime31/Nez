@@ -119,6 +119,15 @@ namespace Nez.UI
 
 				_wrappedString = _style.font.wrapText( _text, widthCalc / _fontScaleX );
 			}
+			else if( _ellipsis != null && width > 0 )
+			{
+				// we have a max width and an ellipsis so we will truncate the text
+				var widthCalc = width;
+				if( _style.background != null )
+					widthCalc -= _style.background.leftWidth + _style.background.rightWidth;
+				
+				_wrappedString = _style.font.truncateText( _text, _ellipsis, widthCalc / _fontScaleX );
+			}
 			else
 			{
 				_wrappedString = _text;
@@ -223,10 +232,10 @@ namespace Nez.UI
 
 		/// <summary>
 		/// When non-null the text will be truncated "..." if it does not fit within the width of the label. Wrapping will not occur
-		/// when ellipsis is enabled. Default is false.
+		/// when ellipsis is enabled. Default is null.
 		/// </summary>
 		/// <param name="ellipsis">Ellipsis.</param>
-		public Label setEllipsis( String ellipsis )
+		public Label setEllipsis( string ellipsis )
 		{
 			_ellipsis = ellipsis;
 			return this;
