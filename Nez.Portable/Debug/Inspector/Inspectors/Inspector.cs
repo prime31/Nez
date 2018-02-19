@@ -343,10 +343,14 @@ namespace Nez
 		/// <returns>The name label.</returns>
 		/// <param name="table">Table.</param>
 		/// <param name="skin">Skin.</param>
-		protected Label createNameLabel( Table table, Skin skin )
+		protected Label createNameLabel( Table table, Skin skin, float leftCellWidth = -1 )
 		{
 			var label = new Label( _name, skin );
 			label.setTouchable( Touchable.Enabled );
+
+			// set a width on the cell so long labels dont cause issues if we have a leftCellWidth set
+			if( leftCellWidth > 0 )
+				label.setEllipsis( "..." ).setWidth( leftCellWidth );
 
 			var tooltipAttribute = getFieldOrPropertyAttribute<TooltipAttribute>();
 			if( tooltipAttribute != null )
@@ -364,7 +368,7 @@ namespace Nez
 		/// </summary>
 		/// <param name="table">Table.</param>
 		/// <param name="skin">Skin.</param>
-		public abstract void initialize( Table table, Skin skin );
+		public abstract void initialize( Table table, Skin skin, float leftCellWidth );
 
 
 		/// <summary>

@@ -33,7 +33,7 @@ namespace Nez
 		}
 
 
-		public void initialize( Table table, Skin skin )
+		public void initialize( Table table, Skin skin, float leftCellWidth )
 		{
 			table.getRowDefaults().setPadTop( 10 );
 			table.add( name.Replace( "PostProcessor", string.Empty ) ).getElement<Label>().setFontScale( 1f ).setFontColor( new Color( 241, 156, 0 ) );
@@ -63,7 +63,7 @@ namespace Nez
 
 			foreach( var i in _inspectors )
 			{
-				i.initialize( table, skin );
+				i.initialize( table, skin, leftCellWidth );
 				table.row();
 			}
 		}

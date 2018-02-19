@@ -9,9 +9,10 @@ namespace Nez
 		CheckBox _checkbox;
 
 
-		public override void initialize( Table table, Skin skin )
+		public override void initialize( Table table, Skin skin, float leftCellWidth )
 		{
-			var label = createNameLabel( table, skin );
+			var label = createNameLabel( table, skin, leftCellWidth );
+
 			_checkbox = new CheckBox( string.Empty, skin );
 			_checkbox.programmaticChangeEvents = false;
 			_checkbox.isChecked = getValue<bool>();
@@ -20,7 +21,7 @@ namespace Nez
 				setValue( newValue );
 			};
 
-			table.add( label );
+			table.add( label ).width( 135 );
 			table.add( _checkbox );
 		}
 

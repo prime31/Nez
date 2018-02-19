@@ -14,7 +14,7 @@ namespace Nez
 		List<Inspector> _inspectors = new List<Inspector>();
 
 
-		public override void initialize( Table table, Skin skin )
+		public override void initialize( Table table, Skin skin, float leftCellWidth )
 		{
 			// we either have a getter that gets a Material or an Effedt
 			var effect = _valueType == typeof( Material ) ? getValue<Material>().effect : getValue<Effect>();
@@ -42,7 +42,7 @@ namespace Nez
 				if( inspector != null )
 				{
 					inspector.setTarget( effect, prop );
-					inspector.initialize( table, skin );
+					inspector.initialize( table, skin, leftCellWidth );
 					_inspectors.Add( inspector );
 
 					table.row().setPadLeft( 15 );

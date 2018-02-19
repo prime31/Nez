@@ -1,6 +1,5 @@
 ﻿using System;
 using Nez.UI;
-using System.Linq;
 using System.Collections.Generic;
 
 
@@ -12,9 +11,9 @@ namespace Nez
 		SelectBox<string> _selectBox;
 
 
-		public override void initialize( Table table, Skin skin )
+		public override void initialize( Table table, Skin skin, float leftCellWidth )
 		{
-			var label = createNameLabel( table, skin );
+			var label = createNameLabel( table, skin, leftCellWidth );
 
 			// gotta get ugly here
 			_selectBox = new SelectBox<string>( skin );

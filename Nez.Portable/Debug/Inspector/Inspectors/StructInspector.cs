@@ -13,7 +13,7 @@ namespace Nez
 		List<Inspector> _inspectors = new List<Inspector>();
 
 
-		public override void initialize( Table table, Skin skin )
+		public override void initialize( Table table, Skin skin, float leftCellWidth )
 		{
 			// add a header
 			var label = table.add( createNameLabel( table, skin ) ).setColspan( 2 ).getElement<Label>();
@@ -31,7 +31,7 @@ namespace Nez
 				if( inspector != null )
 				{
 					inspector.setStructTarget( _target, this, field );
-					inspector.initialize( table, skin );
+					inspector.initialize( table, skin, leftCellWidth );
 					_inspectors.Add( inspector );
 					table.row().setPadLeft( 15 );
 				}
@@ -50,7 +50,7 @@ namespace Nez
 				if( inspector != null )
 				{
 					inspector.setStructTarget( _target, this, prop );
-					inspector.initialize( table, skin );
+					inspector.initialize( table, skin, leftCellWidth );
 					_inspectors.Add( inspector );
 					table.row().setPadLeft( 15 );
 				}

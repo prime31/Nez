@@ -34,7 +34,7 @@ namespace Nez
 		}
 
 
-		public override void initialize( Table table, Skin skin )
+		public override void initialize( Table table, Skin skin, float leftCellWidth )
 		{
 			var button = new TextButton( _name, skin );
 			button.onClicked += onButtonClicked;

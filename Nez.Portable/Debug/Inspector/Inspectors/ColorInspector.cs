@@ -10,10 +10,10 @@ namespace Nez
 		TextField _textFieldR, _textFieldG, _textFieldB, _textFieldA;
 
 
-		public override void initialize( Table table, Skin skin )
+		public override void initialize( Table table, Skin skin, float leftCellWidth )
 		{
 			var value = getValue<Color>();
-			var label = createNameLabel( table, skin );
+			var label = createNameLabel( table, skin, leftCellWidth );
 
 			var labelR = new Label( "r", skin );
 			_textFieldR = new TextField( value.R.ToString(), skin );

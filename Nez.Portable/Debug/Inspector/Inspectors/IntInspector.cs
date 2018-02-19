@@ -10,20 +10,20 @@ namespace Nez
 		Slider _slider;
 
 
-		public override void initialize( Table table, Skin skin )
+		public override void initialize( Table table, Skin skin, float leftCellWidth )
 		{
 			// if we have a RangeAttribute we need to make a slider
 			var rangeAttr = getFieldOrPropertyAttribute<RangeAttribute>();
 			if( rangeAttr != null )
-				setupSlider( table, skin, rangeAttr.minValue, rangeAttr.maxValue, rangeAttr.stepSize );
+				setupSlider( table, skin, leftCellWidth, rangeAttr.minValue, rangeAttr.maxValue, rangeAttr.stepSize );
 			else
-				setupTextField( table, skin );
+				setupTextField( table, skin, leftCellWidth );
 		}
 
 
-		void setupTextField( Table table, Skin skin )
+		void setupTextField( Table table, Skin skin, float leftCellWidth )
 		{
-			var label = createNameLabel( table, skin );
+			var label = createNameLabel( table, skin, leftCellWidth );
 			_textField = new TextField( getValue<int>().ToString(), skin );
 			_textField.setTextFieldFilter( new FloatFilter() );
 			_textField.onTextChanged += ( field, str ) =>
@@ -38,9 +38,9 @@ namespace Nez
 		}
 
 
-		void setupSlider( Table table, Skin skin, float minValue, float maxValue, float stepSize )
+		void setupSlider( Table table, Skin skin, float leftCellWidth, float minValue, float maxValue, float stepSize )
 		{
-			var label = createNameLabel( table, skin );
+			var label = createNameLabel( table, skin, leftCellWidth );
 			_slider = new Slider( skin, null, minValue, maxValue );
 			_slider.setStepSize( stepSize );
 			_slider.setValue( getValue<int>() );

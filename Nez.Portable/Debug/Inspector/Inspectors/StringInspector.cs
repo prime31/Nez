@@ -9,9 +9,9 @@ namespace Nez
 		TextField _textField;
 
 
-		public override void initialize( Table table, Skin skin )
+		public override void initialize( Table table, Skin skin, float leftCellWidth )
 		{
-			var label = createNameLabel( table, skin );
+			var label = createNameLabel( table, skin, leftCellWidth );
 			_textField = new TextField( getValue<string>(), skin );
 			_textField.setTextFieldFilter( new FloatFilter() );
 			_textField.onTextChanged += ( field, str ) =>

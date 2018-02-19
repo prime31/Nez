@@ -10,6 +10,8 @@ namespace Nez
 {
 	public class RuntimeInspector : IDisposable
 	{
+		const float kLeftCellWidth = 100;
+
 		UICanvas ui;
 		ScreenSpaceCamera _camera;
 		List<InspectorList> _inspectors = new List<InspectorList>();
@@ -104,7 +106,7 @@ namespace Nez
 			if( inspector == null )
 			{
 				inspector = new InspectorList( comp );
-				inspector.initialize( _table, _skin );
+				inspector.initialize( _table, _skin, kLeftCellWidth );
 				_inspectors.Add( inspector );
 			}
 
@@ -116,7 +118,7 @@ namespace Nez
 		{
 			// add Transform separately
 			var transformInspector = new InspectorList( _entity.transform );
-			transformInspector.initialize( _table, _skin );
+			transformInspector.initialize( _table, _skin, kLeftCellWidth );
 			_inspectors.Add( transformInspector );
 		}
 
