@@ -46,7 +46,6 @@
     <Compile Include="Farseer\Common\PathManager.cs" />
     <Compile Include="Farseer\Common\PolygonTools.cs" />
     <Compile Include="Farseer\Common\Serialization.cs" />
-    <Compile Include="Farseer\Common\Stopwatch.cs" />
     <Compile Include="Farseer\Common\Vertices.cs" />
     <Compile Include="Farseer\Common\ConvexHull\ChainHull.cs" />
     <Compile Include="Farseer\Common\ConvexHull\GiftWrap.cs" />

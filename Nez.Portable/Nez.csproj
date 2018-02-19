@@ -195,7 +195,6 @@
     <Compile Include="PipelineRuntime\ParticleDesigner\ParticleEmitterConfigReader.cs" />
     <Compile Include="Utils\Analysis\TimeRuler.cs" />
     <Compile Include="Utils\Analysis\Layout.cs" />
-    <Compile Include="Utils\Analysis\Stopwatch.cs" />
     <Compile Include="ECS\Components\Renderables\Particles\ParticleCollisionConfig.cs" />
     <Compile Include="ECS\Components\Renderables\Sprites\SpriteTrail.cs" />
     <Compile Include="ECS\Components\Renderables\Sprites\SpriteT.cs" />
