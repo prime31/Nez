@@ -254,10 +254,10 @@ namespace Nez.Tiled
 				if( _collidingTiles[i] == null )
 					continue;
 
-				// disregard horizontal collisions if the last tile we were grounded on was a slope. Our y movement will push us up on the slope.
-				// this is not a fantastic solution
-				if( direction.isHorizontal() && collisionState._lastGroundTile != null && collisionState._lastGroundTile.isSlope() && _collidingTiles[i].isSlope() )
-					return false;
+				// disregard horizontal collisions with tiles on the same row as a slope if the last tile we were grounded on was a slope.
+				// the y collision response will push us up on the slope.
+				if( direction.isHorizontal() && collisionState._lastGroundTile != null && collisionState._lastGroundTile.isSlope() && isSlopeCollisionRow(_collidingTiles[i].y) )
+					continue;
 				
 				if( testTileCollision( _collidingTiles[i], side, perpindicularPosition, leadingPosition, shouldTestSlopes, out collisionResponse ) )
 				{
@@ -286,6 +286,22 @@ namespace Nez.Tiled
 				}
 			}
 
+			return false;
+		}
+
+
+		/// <summary>
+		/// Checks whether collision is occurring with a slope on a given row.
+		/// </summary>
+		/// <returns>Whether collision is occurring with a slope on a given row</returns>
+		/// <param name="rowY">the row to check</param>
+		bool isSlopeCollisionRow( int rowY )
+		{
+			for( var i = 0; i < _collidingTiles.Count; i++ )
+			{
+				if( _collidingTiles[i] != null && _collidingTiles[i].isSlope() && _collidingTiles[i].y == rowY )
+					return true;
+			}
 			return false;
 		}
 
