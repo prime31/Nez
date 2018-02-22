@@ -31,7 +31,7 @@ namespace Nez
 		/// tracks entities by tag for easy retrieval
 		/// </summary>
 		Dictionary<int, FastList<Entity>> _entityDict = new Dictionary<int, FastList<Entity>>();
-		List<int> _unsortedTags = new List<int>();
+		HashSet<int> _unsortedTags = new HashSet<int>();
 
 		// used in updateLists to double buffer so that the original lists can be modified elsewhere
 		HashSet<Entity> _tempEntityList = new HashSet<Entity>();
@@ -232,11 +232,8 @@ namespace Nez
 			// sort our tagList if needed
 			if( _unsortedTags.Count > 0 )
 			{
-				for( int i = 0, count = _unsortedTags.Count; i < count; i++ )
-				{
-					var tag = _unsortedTags[i];
+				foreach( var tag in _unsortedTags )
 					_entityDict[tag].sort();
-				}
 				_unsortedTags.Clear();
 			}
 		}
@@ -260,9 +257,7 @@ namespace Nez
 			foreach( var entity in _entitiesToAdd )
 			{
 				if( entity.name == name )
-				{
 					return entity;
-				}
 			}
 
 			return null;
