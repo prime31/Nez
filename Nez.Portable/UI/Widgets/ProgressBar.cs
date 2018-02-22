@@ -6,8 +6,10 @@ using Microsoft.Xna.Framework.Input;
 namespace Nez.UI
 {
 	public class ProgressBar : Element
-	{
-		public event Action<float> onChanged;
+    {
+        #region properties and fields
+        
+        public event Action<float> onChanged;
 
 		public bool disabled;
 
@@ -31,30 +33,41 @@ namespace Nez.UI
 				else
 					return Math.Max( style.knob == null ? 0 : style.knob.minHeight, style.background != null ? style.background.minHeight : 0 );
 			}
-		}
+        }
 
-		public float[] snapValues;
+        public float min { get; protected set; }
+        public float max { get; protected set; }
+        public float stepSize { get; protected set; }
+
+        public float value
+        {
+            get { return _value; }
+            set { setValue(value); }
+        }
+
+        public float[] snapValues;
 		public float snapThreshold;
 		public bool shiftIgnoresSnap;
 
 		protected float _value;
-		protected float _min, _max, _stepSize;
 		protected bool _vertical;
 		protected float position;
 		ProgressBarStyle style;
 
+        #endregion
 
-		public ProgressBar( float min, float max, float stepSize, bool vertical, ProgressBarStyle style )
+
+        public ProgressBar( float min, float max, float stepSize, bool vertical, ProgressBarStyle style )
 		{
 			Assert.isTrue( min < max, "min must be less than max" );
 			Assert.isTrue( stepSize > 0, "stepSize must be greater than 0" );
 
 			setStyle( style );
-			_min = min;
-			_max = max;
-			_stepSize = stepSize;
+			this.min = min;
+			this.max = max;
+			this.stepSize = stepSize;
 			_vertical = vertical;
-			_value = _min;
+            _value = this.min;
 
 			setSize( preferredWidth, preferredHeight );
 		}
@@ -92,12 +105,12 @@ namespace Nez.UI
 		{
 			if( !shiftIgnoresSnap || !InputUtils.isShiftDown() )
 			{
-				value = Mathf.clamp( Mathf.round( value / _stepSize ) * _stepSize, _min, _max );
+				value = Mathf.clamp( Mathf.round( value / stepSize ) * stepSize, min, max );
 				value = snap( value );
 			}
 			else
 			{
-				value = Mathf.clamp( value, _min, _max );
+				value = Mathf.clamp( value, min, max );
 			}
 
 			if( value == _value )
@@ -115,9 +128,20 @@ namespace Nez.UI
 
 		public ProgressBar setStepSize( float stepSize )
 		{
-			_stepSize = stepSize;
+			this.stepSize = stepSize;
 			return this;
 		}
+
+
+        public ProgressBar setMinMax( float min, float max )
+        {
+            Assert.isTrue(min < max, "min must be less than max");
+            this.min = min;
+            this.max = max;
+            _value = Mathf.clamp(_value, this.min, this.max);
+
+            return this;
+        }
 
 
 		protected virtual IDrawable getKnobDrawable()
@@ -155,7 +179,7 @@ namespace Nez.UI
 				}
 
 				float knobHeightHalf = 0;
-				if( _min != _max )
+				if( min != max )
 				{
 					if( knob == null )
 					{
@@ -204,7 +228,7 @@ namespace Nez.UI
 				}
 
 				float knobWidthHalf = 0;
-				if( _min != _max )
+				if( min != max )
 				{
 					if( knob == null )
 					{
@@ -244,7 +268,7 @@ namespace Nez.UI
 
 		public float getVisualPercent()
 		{
-			return ( _value - _min ) / ( _max - _min );
+			return ( _value - min ) / ( max - min );
 		}
 
 

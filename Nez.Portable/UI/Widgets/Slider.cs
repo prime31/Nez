@@ -148,9 +148,9 @@ namespace Nez.UI
 		protected virtual void onUnhandledDirectionPressed( Direction direction )
 		{
 			if( direction == Direction.Up || direction == Direction.Right )
-				setValue( _value + _stepSize );
+				setValue( _value + stepSize );
 			else
-				setValue( _value - _stepSize );
+				setValue( _value - stepSize );
 		}
 
 
@@ -231,7 +231,7 @@ namespace Nez.UI
 				var height = this.height - style.background.topHeight - style.background.bottomHeight;
 				var knobHeight = knob == null ? 0 : knob.minHeight;
 				position = mousePos.Y - style.background.bottomHeight - knobHeight * 0.5f;
-				value = _min + ( _max - _min ) * ( position / ( height - knobHeight ) );
+				value = min + ( max - min ) * ( position / ( height - knobHeight ) );
 				position = Math.Max( 0, position );
 				position = Math.Min( height - knobHeight, position );
 			}
@@ -240,7 +240,7 @@ namespace Nez.UI
 				var width = this.width - style.background.leftWidth - style.background.rightWidth;
 				var knobWidth = knob == null ? 0 : knob.minWidth;
 				position = mousePos.X - style.background.leftWidth - knobWidth * 0.5f;
-				value = _min + ( _max - _min ) * ( position / ( width - knobWidth ) );
+				value = min + ( max - min ) * ( position / ( width - knobWidth ) );
 				position = Math.Max( 0, position );
 				position = Math.Min( width - knobWidth, position );
 			}
