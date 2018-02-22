@@ -97,7 +97,7 @@ namespace Nez.UI
 			}
 			else
 			{
-				Mathf.clamp( value, _min, _max );
+				value = Mathf.clamp( value, _min, _max );
 			}
 
 			if( value == _value )
