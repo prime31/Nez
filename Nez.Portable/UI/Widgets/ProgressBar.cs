@@ -37,7 +37,12 @@ namespace Nez.UI
 
         public float min { get; protected set; }
         public float max { get; protected set; }
-        public float stepSize { get; protected set; }
+
+        public float stepSize
+        {
+            get { return _stepSize; }
+            set { setStepSize(_value); }
+        }
 
         public float value
         {
@@ -49,7 +54,7 @@ namespace Nez.UI
 		public float snapThreshold;
 		public bool shiftIgnoresSnap;
 
-		protected float _value;
+		protected float _stepSize, _value;
 		protected bool _vertical;
 		protected float position;
 		ProgressBarStyle style;
@@ -136,7 +141,7 @@ namespace Nez.UI
 
 		public ProgressBar setStepSize( float stepSize )
 		{
-			this.stepSize = stepSize;
+			_stepSize = stepSize;
 			return this;
 		}
 
