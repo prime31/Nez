@@ -110,7 +110,14 @@ namespace Nez.UI
 			}
 			else
             {
-                value = Mathf.clamp(Mathf.round(value / stepSize) * stepSize, min, max);
+                // if value is lower/higher than min/max then we're not rounding to avoid situation where we can't achieve those values
+                if (value >= max)
+                    value = max;
+                else if (value <= min)
+                    value = min;
+                else
+                    value = Mathf.clamp(Mathf.round(value / stepSize) * stepSize, min, max);
+
                 value = snap(value);
             }
 
