@@ -97,21 +97,22 @@ namespace Nez.UI
 		}
 
 
-		/// <summary>
-		/// Sets the progress bar position, rounded to the nearest step size and clamped to the minimum and maximum values.
-		/// </summary>
-		/// <param name="value">Value.</param>
-		public ProgressBar setValue( float value )
+        /// <summary>
+        /// Sets the progress bar position, rounded to the nearest step size and clamped to the minimum and maximum values.
+        /// </summary>
+        /// <param name="value">Value.</param>
+        /// <param name="ignoreSnap">If set to <c>true</c> we ignore value snapping.</param>
+        public ProgressBar setValue( float value, bool ignoreSnap = false )
 		{
-			if( !shiftIgnoresSnap || !InputUtils.isShiftDown() )
-			{
-				value = Mathf.clamp( Mathf.round( value / stepSize ) * stepSize, min, max );
-				value = snap( value );
+			if( ( shiftIgnoresSnap && InputUtils.isShiftDown() ) || ignoreSnap )
+            {
+                value = Mathf.clamp(value, min, max);
 			}
 			else
-			{
-				value = Mathf.clamp( value, min, max );
-			}
+            {
+                value = Mathf.clamp(Mathf.round(value / stepSize) * stepSize, min, max);
+                value = snap(value);
+            }
 
 			if( value == _value )
 				return this;
