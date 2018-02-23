@@ -276,7 +276,7 @@ namespace Nez.Tiled
 				{
 					// if grounded on a slope and intersecting a slope or if grounded on a wall and intersecting a tall slope we go sticky.
 					// tall slope here means one where the the slopeTopLeft/Right is 0, i.e. it connects to a wall
-					var isHighSlopeNearest = _collidingTiles[i].getNearestEdge( perpindicularPosition ) == _collidingTiles[i].getHighestSlopeEdge();
+					var isHighSlopeNearest = _collidingTiles[i].isSlope() && _collidingTiles[i].getNearestEdge( perpindicularPosition ) == _collidingTiles[i].getHighestSlopeEdge();
 					if( ( collisionState._lastGroundTile.isSlope() && _collidingTiles[i].isSlope() ) || ( !collisionState._lastGroundTile.isSlope() && isHighSlopeNearest ) )
 					{
 						// store off our last ground tile if we collided below
