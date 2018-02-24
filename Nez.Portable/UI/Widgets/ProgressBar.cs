@@ -157,6 +157,18 @@ namespace Nez.UI
         }
 
 
+        /// <summary>
+        /// Sets stepSize to a value that will evenly divide this progress bar into specified amount of steps.
+        /// </summary>
+        /// <param name="totalSteps">Total amount of steps.</param>
+        public ProgressBar setTotalSteps( int totalSteps )
+        {
+            Assert.isTrue(totalSteps != 0, "totalSteps cannot be equal to 0");
+            _stepSize = Math.Abs((min - max) / totalSteps);
+            return this;
+        }
+
+
 		protected virtual IDrawable getKnobDrawable()
 		{
 			return ( disabled && style.disabledKnob != null ) ? style.disabledKnob : style.knob;
