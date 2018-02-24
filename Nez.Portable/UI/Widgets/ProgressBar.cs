@@ -41,7 +41,7 @@ namespace Nez.UI
         public float stepSize
         {
             get { return _stepSize; }
-            set { setStepSize(_value); }
+            set { setStepSize(value); }
         }
 
         public float value
