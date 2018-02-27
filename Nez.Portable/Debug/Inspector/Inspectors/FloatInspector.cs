@@ -1,4 +1,5 @@
 ﻿using Nez.UI;
+using System.Globalization;
 
 
 #if DEBUG
@@ -24,12 +25,12 @@ namespace Nez
 		void setupTextField( Table table, Skin skin, float leftCellWidth )
 		{
 			var label = createNameLabel( table, skin, leftCellWidth );
-			_textField = new TextField( getValue<float>().ToString(), skin );
+			_textField = new TextField( getValue<float>().ToString( CultureInfo.InvariantCulture ), skin );
 			_textField.setTextFieldFilter( new FloatFilter() );
 			_textField.onTextChanged += ( field, str ) =>
 			{
 				float newValue;
-				if( float.TryParse( str, out newValue ) )
+				if( float.TryParse( str, NumberStyles.Float, CultureInfo.InvariantCulture, out newValue ) )
 					setValue( newValue );
 			};
 
@@ -57,7 +58,7 @@ namespace Nez
 		public override void update()
 		{
 			if( _textField != null )
-				_textField.setText( getValue<float>().ToString() );
+				_textField.setText( getValue<float>().ToString( CultureInfo.InvariantCulture ));
 			if( _slider != null )
 				_slider.setValue( getValue<float>() );
 		}
