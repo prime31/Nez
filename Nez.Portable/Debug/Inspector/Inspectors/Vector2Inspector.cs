@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Nez.UI;
+using System.Globalization;
 
 
 #if DEBUG
@@ -16,12 +17,12 @@ namespace Nez
 			var label = createNameLabel( table, skin, leftCellWidth );
 
 			var labelX = new Label( "x", skin );
-			_textFieldX = new TextField( value.X.ToString(), skin );
+			_textFieldX = new TextField( value.X.ToString( CultureInfo.InvariantCulture ), skin );
 			_textFieldX.setTextFieldFilter( new FloatFilter() ).setPreferredWidth( 50 );
 			_textFieldX.onTextChanged += ( field, str ) =>
 			{
 				float newX;
-				if( float.TryParse( str, out newX ) )
+				if( float.TryParse( str, NumberStyles.Float, CultureInfo.InvariantCulture, out newX ) )
 				{
 					var newValue = getValue<Vector2>();
 					newValue.X = newX;
@@ -30,12 +31,12 @@ namespace Nez
 			};
 
 			var labelY = new Label( "y", skin );
-			_textFieldY = new TextField( value.Y.ToString(), skin );
+			_textFieldY = new TextField( value.Y.ToString( CultureInfo.InvariantCulture ), skin );
 			_textFieldY.setTextFieldFilter( new FloatFilter() ).setPreferredWidth( 50 );
 			_textFieldY.onTextChanged += ( field, str ) =>
 			{
 				float newY;
-				if( float.TryParse( str, out newY ) )
+				if( float.TryParse( str, NumberStyles.Float, CultureInfo.InvariantCulture, out newY ) )
 				{
 					var newValue = getValue<Vector2>();
 					newValue.Y = newY;
@@ -57,8 +58,8 @@ namespace Nez
 		public override void update()
 		{
 			var value = getValue<Vector2>();
-			_textFieldX.setText( value.X.ToString() );
-			_textFieldY.setText( value.Y.ToString() );
+			_textFieldX.setText( value.X.ToString( CultureInfo.InvariantCulture ) );
+			_textFieldY.setText( value.Y.ToString( CultureInfo.InvariantCulture ) );
 		}
 
 	}
