@@ -69,6 +69,8 @@ namespace Nez.UI
 			var col = this.color.HasValue ? this.color.Value : color;
 			if( color.A != 255 )
 				col *= ( color.A / 255f );
+			if (col.A != 255)
+				col *= ( col.A / 255f );
 
 			if( useFilledRect )
 				graphics.batcher.drawRect( x, y, width, height, col );
