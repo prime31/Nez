@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Runtime.InteropServices;
 
 
 namespace Nez
@@ -9,7 +10,12 @@ namespace Nez
 	public class Clipboard : IClipboard
 	{
 		static IClipboard _instance;
-		string _text;
+		
+		//The Monogame.Framework.dll.config maps SDL2.dll to platform specific libraries
+		[DllImport("SDL2.dll")]
+		private static extern int SDL_SetClipboardText(string text);
+		[DllImport("SDL2.dll")]
+		private static extern string SDL_GetClipboardText();
 
 
 		public static string getContents()
@@ -33,13 +39,13 @@ namespace Nez
 
 		string IClipboard.getContents()
 		{
-			return _text;
+			return SDL_GetClipboardText();
 		}
 
 
 		void IClipboard.setContents( string text )
 		{
-			_text = text;
+			SDL_SetClipboardText(text);
 		}
 
 		#endregion
