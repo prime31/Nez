@@ -277,7 +277,7 @@ namespace Nez
 			returnList.Capacity = _entities.length;
 			for( var i = 0; i < list.length; i++ )
 			{
-				returnList.Add( _entities.buffer[i] );
+				returnList.Add( list[i] );
 			}
 
 			return returnList;
