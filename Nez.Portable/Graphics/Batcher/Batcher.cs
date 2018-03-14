@@ -16,9 +16,9 @@ namespace Nez
 		public Matrix transformMatrix { get { return _transformMatrix; } }
 
 		/// <summary>
-		/// If true, positions will be rounded before being drawn.
+		/// If true, destination positions will be rounded before being drawn.
 		/// </summary>
-		public bool shouldRoundPositions { get; set; } = true;
+		public bool shouldRoundDestinations { get; set; } = true;
 
 		#region variables
 
@@ -645,7 +645,7 @@ namespace Nez
 		void pushSprite( Texture2D texture, Rectangle? sourceRectangle, float destinationX, float destinationY, float destinationW, float destinationH, Color color, Vector2 origin,
 						float rotation, float depth, byte effects, bool destSizeInPixels, float skewTopX, float skewBottomX, float skewLeftY, float skewRightY )
 		{
-			if (shouldRoundPositions)
+			if (shouldRoundDestinations)
 			{
 				destinationX = Mathf.round(destinationX);
 				destinationY = Mathf.round(destinationX);
