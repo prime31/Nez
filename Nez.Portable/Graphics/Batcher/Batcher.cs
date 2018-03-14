@@ -15,6 +15,11 @@ namespace Nez
 	{
 		public Matrix transformMatrix { get { return _transformMatrix; } }
 
+		/// <summary>
+		/// If true, destination positions will be rounded before being drawn.
+		/// </summary>
+		public bool shouldRoundDestinations { get; set; } = true;
+
 		#region variables
 
 		// Buffer objects used for actual drawing
@@ -31,7 +36,7 @@ namespace Nez
 
 		// Tracks Begin/End calls
 		bool _beginCalled;
-
+		
 		// Keep render state for non-Immediate modes.
 		BlendState _blendState;
 		SamplerState _samplerState;
@@ -640,6 +645,12 @@ namespace Nez
 		void pushSprite( Texture2D texture, Rectangle? sourceRectangle, float destinationX, float destinationY, float destinationW, float destinationH, Color color, Vector2 origin,
 						float rotation, float depth, byte effects, bool destSizeInPixels, float skewTopX, float skewBottomX, float skewLeftY, float skewRightY )
 		{
+			if (shouldRoundDestinations)
+			{
+				destinationX = Mathf.round(destinationX);
+				destinationY = Mathf.round(destinationX);
+			}
+
 			// out of space, flush
 			if( _numSprites >= MAX_SPRITES )
 				flushBatch();
