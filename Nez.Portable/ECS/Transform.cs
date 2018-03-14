@@ -30,7 +30,7 @@ namespace Nez
 		/// <summary>
 		/// if true, everytime position is set it will be rounded automatically
 		/// </summary>
-		public static bool shouldRoundPosition = true;
+		public static bool shouldRoundPosition = false;
 
 		/// <summary>
 		/// the Entity associated with this transform
