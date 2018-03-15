@@ -28,11 +28,6 @@ namespace Nez
 		#region properties and fields
 
 		/// <summary>
-		/// if true, everytime position is set it will be rounded automatically
-		/// </summary>
-		public static bool shouldRoundPosition = true;
-
-		/// <summary>
 		/// the Entity associated with this transform
 		/// </summary>
 		public readonly Entity entity;
@@ -316,9 +311,6 @@ namespace Nez
 		[MethodImpl( MethodImplOptions.AggressiveInlining )]
 		public Transform setPosition( Vector2 position )
 		{
-			if( shouldRoundPosition )
-				Vector2Ext.round( ref position );
-
 			if( position == _position )
 				return this;
 			
@@ -350,9 +342,6 @@ namespace Nez
 		[MethodImpl( MethodImplOptions.AggressiveInlining )]
 		public Transform setLocalPosition( Vector2 localPosition )
 		{
-			if( shouldRoundPosition )
-				Vector2Ext.round( ref localPosition );
-
 			if( localPosition == _localPosition )
 				return this;
 
