@@ -654,7 +654,7 @@ namespace Nez
 			if( shouldRoundDestinations )
 			{
 				destinationX = Mathf.round( destinationX );
-				destinationY = Mathf.round( destinationX );
+				destinationY = Mathf.round( destinationY );
 			}
 
 			// Source/Destination/Origin Calculations
