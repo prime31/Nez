@@ -777,6 +777,20 @@ namespace Nez
 			_sceneComponents.sort();
 			return component;
 		}
+		
+		/// <summary>
+		/// Adds and returns a SceneComponent to the components list
+		/// </summary>
+		/// <returns>Scene.</returns>
+		/// <typeparam name="T">The 1st type parameter.</typeparam>
+		public T addSceneComponent<T>(T component) where T : SceneComponent
+		{
+			component.scene = this;
+			component.onEnabled();
+			_sceneComponents.add( component );
+			_sceneComponents.sort();
+			return component;
+		}
 
 
 		/// <summary>
