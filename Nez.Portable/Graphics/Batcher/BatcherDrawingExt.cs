@@ -1,8 +1,5 @@
-﻿using System;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using System.Collections.Generic;
-using System.Reflection;
-using Nez;
 using Microsoft.Xna.Framework.Graphics;
 
 
@@ -47,8 +44,10 @@ namespace Nez
 			if( points.Count < 2 )
 				return;
 
+			batcher.setIgnoreRoundingDestinations( true );
 			for( int i = 1; i < points.Count; i++ )
 				drawLine( batcher, points[i - 1], points[i], color, thickness );
+			batcher.setIgnoreRoundingDestinations( false );
 		}
 
 
@@ -63,8 +62,10 @@ namespace Nez
 			if( points.Length < 2 )
 				return;
 
+			batcher.setIgnoreRoundingDestinations( true );
 			for( int i = 1; i < points.Length; i++ )
 				drawLine( batcher, points[i - 1], points[i], color, thickness );
+			batcher.setIgnoreRoundingDestinations( false );
 		}
 
 
@@ -80,11 +81,13 @@ namespace Nez
 			if( points.Length < 2 )
 				return;
 
+			batcher.setIgnoreRoundingDestinations( true );
 			for( int i = 1; i < points.Length; i++ )
 				drawLine( batcher, position + points[i - 1], position + points[i], color, thickness );
 
 			if( closePoly )
 				drawLine( batcher, position + points[points.Length - 1], position + points[0], color, thickness );
+			batcher.setIgnoreRoundingDestinations( false );
 		}
 
 
@@ -93,12 +96,14 @@ namespace Nez
 			if( points.Length < 2 )
 				return;
 
+			batcher.setIgnoreRoundingDestinations( true );
 			for( int i = 1; i < points.Length; i++ )
 				drawLine( batcher, position + points[i - 1], position + points[i], color, thickness );
 
 
 			if( closePoly )
 				drawLine( batcher, position + points[points.Length - 1], position + points[0], color, thickness );
+			batcher.setIgnoreRoundingDestinations( false );
 		}
 
 		#endregion
@@ -133,6 +138,7 @@ namespace Nez
 			var last = Vector2.UnitX * radius;
 			var lastP = Vector2Ext.perpendicular( last );
 
+			batcher.setIgnoreRoundingDestinations( true );
 			for( int i = 1; i <= resolution; i++ )
 			{
 				var at = Mathf.angleToVector( i * MathHelper.PiOver2 / resolution, radius );
@@ -146,6 +152,7 @@ namespace Nez
 				last = at;
 				lastP = atP;
 			}
+			batcher.setIgnoreRoundingDestinations( false );
 		}
 
 
@@ -192,10 +199,12 @@ namespace Nez
 			var br = new Vector2( x + width, y + height ).round();
 			var bl = new Vector2( x, y + height ).round();
 
+			batcher.setIgnoreRoundingDestinations( true );
 			batcher.drawLine( tl, tr, color, thickness );
 			batcher.drawLine( tr, br, color, thickness );
 			batcher.drawLine( br, bl, color, thickness );
 			batcher.drawLine( bl, tl, color, thickness );
+			batcher.setIgnoreRoundingDestinations( false );
 		}
 
 
