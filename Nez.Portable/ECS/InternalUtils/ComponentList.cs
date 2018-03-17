@@ -302,7 +302,7 @@ namespace Nez
 			updateLists();
 			for( var i = 0; i < _updatableComponents.length; i++ )
 			{
-				if( _updatableComponents.buffer[i].enabled )
+				if( _updatableComponents.buffer[i].enabled && ( _updatableComponents.buffer[i] as Component ).enabled )
 					_updatableComponents.buffer[i].update();
 			}
 		}
