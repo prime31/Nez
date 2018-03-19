@@ -770,7 +770,17 @@ namespace Nez
 		/// <typeparam name="T">The 1st type parameter.</typeparam>
 		public T addSceneComponent<T>() where T : SceneComponent, new()
 		{
-			var component = new T();
+			return addSceneComponent( new T() );
+		}
+
+
+		/// <summary>
+		/// Adds and returns a SceneComponent to the components list
+		/// </summary>
+		/// <returns>Scene.</returns>
+		/// <typeparam name="T">The 1st type parameter.</typeparam>
+		public T addSceneComponent<T>( T component ) where T : SceneComponent
+		{
 			component.scene = this;
 			component.onEnabled();
 			_sceneComponents.add( component );
