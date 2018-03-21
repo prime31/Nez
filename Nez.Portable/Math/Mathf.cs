@@ -108,6 +108,23 @@ namespace Nez
 		}
 
 
+		/// <summary>
+		/// clamps value between 0 and 1
+		/// </summary>
+		/// <param name="value">Value.</param>
+		[MethodImpl( MethodImplOptions.AggressiveInlining )]
+		public static double clamp01( double value )
+		{
+			if( value < 0f )
+				return 0f;
+
+			if( value > 1f )
+				return 1f;
+
+			return value;
+		}
+
+
 		[MethodImpl( MethodImplOptions.AggressiveInlining )]
 		public static float clamp( float value, float min, float max )
 		{
@@ -154,6 +171,13 @@ namespace Nez
 
 		[MethodImpl( MethodImplOptions.AggressiveInlining )]
 		public static float lerp( float from, float to, float t )
+		{
+			return from + ( to - from ) * Mathf.clamp01( t );
+		}
+
+
+		[MethodImpl( MethodImplOptions.AggressiveInlining )]
+		public static double lerp( double from, double to, double t )
 		{
 			return from + ( to - from ) * Mathf.clamp01( t );
 		}
