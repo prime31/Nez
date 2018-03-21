@@ -768,6 +768,37 @@ namespace Nez
 		}
 
 
+		/// <summary>
+		/// Creates a new <see cref="RectangleF"/> where the rectangles overlap.
+		/// </summary>
+		/// <param name="value1">The first <see cref="RectangleF"/>.</param>
+		/// <param name="value2">The second <see cref="RectangleF"/>.</param>
+		/// <returns>The overlap of the two rectangles.</returns>
+		public static RectangleF overlap( RectangleF value1, RectangleF value2 )
+		{
+			var x = Math.Max( Math.Max( value1.x, value2.x ), 0 );
+			var y = Math.Max( Math.Max( value1.y, value2.y ), 0 );
+			return new RectangleF( x, y,
+				Math.Max( Math.Min( value1.right, value2.right ) - x, 0 ),
+				Math.Max( Math.Min( value1.bottom, value2.bottom ) - y, 0 ) );
+		}
+
+
+		/// <summary>
+		/// Creates a new <see cref="RectangleF"/> where the rectangles overlap.
+		/// </summary>
+		/// <param name="value1">The first <see cref="RectangleF"/>.</param>
+		/// <param name="value2">The second <see cref="RectangleF"/>.</param>
+		/// <param name="result">The overlap of the two rectangles as an output parameter.</param>
+		public static void overlap( ref RectangleF value1, ref RectangleF value2, out RectangleF result )
+		{
+			result.x = Math.Max( Math.Max( value1.x, value2.x ), 0 );
+			result.y = Math.Max( Math.Max( value1.y, value2.y ), 0 );
+			result.width = Math.Max( Math.Min( value1.right, value2.right ) - result.x, 0 );
+			result.height = Math.Max( Math.Min( value1.bottom, value2.bottom ) - result.y, 0 );
+		}
+
+
 		public void calculateBounds( Vector2 parentPosition, Vector2 position, Vector2 origin, Vector2 scale, float rotation, float width, float height )
 		{
 			if( rotation == 0f )
