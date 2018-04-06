@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
-using System.Collections.Generic;
 using Microsoft.Xna.Framework.Graphics;
+using System;
+using System.Collections.Generic;
 
 
 namespace Nez.Particles
@@ -12,6 +13,7 @@ namespace Nez.Particles
 		public bool isPaused { get { return _isPaused; } }
 		public bool isPlaying { get { return _active && !_isPaused; } }
 		public bool isStopped { get { return !_active && !_isPaused; } }
+		public bool isEmitting { get { return _emitting; } }
 		public float elapsedTime { get { return _elapsedTime; } }
 
 		/// <summary>
@@ -24,6 +26,16 @@ namespace Nez.Particles
 		/// config object with various properties to deal with particle collisions
 		/// </summary>
 		public ParticleCollisionConfig collisionConfig;
+
+		/// <summary>
+		/// event that's going to be called when particles count becomes 0 after stopping emission.
+		/// emission can stop after either we stop it manually or when we run for entire duration specified in ParticleEmitterConfig.
+		/// </summary>
+		public event Action<ParticleEmitter> onAllParticlesExpired;
+		/// <summary>
+		/// event that's going to be called when emission is stopped due to reaching duration specified in ParticleEmitterConfig
+		/// </summary>
+		public event Action<ParticleEmitter> onEmissionDurationReached;
 
 		/// <summary>
 		/// keeps track of how many particles should be emitted
@@ -54,7 +66,7 @@ namespace Nez.Particles
 			_playOnAwake = playOnAwake;
 			_particles = new List<Particle>( (int)_emitterConfig.maxParticles );
 			Pool<Particle>.warmCache( (int)_emitterConfig.maxParticles );
-
+			
 			// set some sensible defaults
 			collisionConfig.elasticity = 0.5f;
 			collisionConfig.friction = 0.5f;
@@ -102,27 +114,38 @@ namespace Nez.Particles
 			// if the emitter is active and the emission rate is greater than zero then emit particles
 			if( _active && _emitterConfig.emissionRate > 0 )
 			{
-				var rate = 1.0f / _emitterConfig.emissionRate;
-
-				if( _particles.Count < _emitterConfig.maxParticles )
-					_emitCounter += Time.deltaTime;
-
-				while( _emitting && _particles.Count < _emitterConfig.maxParticles && _emitCounter > rate )
+				if( _emitting )
 				{
-					addParticle( rootPosition );
-					_emitCounter -= rate;
+					var rate = 1.0f / _emitterConfig.emissionRate;
+
+					if( _particles.Count < _emitterConfig.maxParticles )
+						_emitCounter += Time.deltaTime;
+
+					while( _particles.Count < _emitterConfig.maxParticles && _emitCounter > rate )
+					{
+						addParticle( rootPosition );
+						_emitCounter -= rate;
+					}
+
+					_elapsedTime += Time.deltaTime;
+
+					if( _emitterConfig.duration != -1 && _emitterConfig.duration < _elapsedTime )
+					{
+						// when we hit our duration we dont emit any more particles
+						_emitting = false;
+
+						if( onEmissionDurationReached != null )
+							onEmissionDurationReached( this );
+					}
 				}
 
-				_elapsedTime += Time.deltaTime;
-
-				if( _emitterConfig.duration != -1 && _emitterConfig.duration < _elapsedTime )
+				// once all our particles are done we stop the emitter
+				if( _particles.Count == 0 )
 				{
-					// when we hit our duration we dont emit any more particles
-					_emitting = false;
+					stop();
 
-					// once all our particles are done we stop the emitter
-					if( _particles.Count == 0 )
-						stop();
+					if( onAllParticlesExpired != null )
+						onAllParticlesExpired( this );
 				}
 			}
 
@@ -244,6 +267,28 @@ namespace Nez.Particles
 		{
 			_isPaused = true;
 			_active = false;
+		}
+
+
+		/// <summary>
+		/// resumes emission of particles.
+		/// this is possible only if stop() wasn't called and emission wasn't stopped due to duration
+		/// </summary>
+		public void resumeEmission()
+		{
+			if( isStopped || ( _emitterConfig.duration != -1 && _emitterConfig.duration < _elapsedTime ) )
+				return;
+
+			_emitting = true;
+		}
+
+
+		/// <summary>
+		/// pauses emission of particles while allowing existing particles to expire
+		/// </summary>
+		public void pauseEmission()
+		{
+			_emitting = false;
 		}
 
 
