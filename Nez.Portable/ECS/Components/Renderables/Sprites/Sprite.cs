@@ -41,8 +41,8 @@ namespace Nez.Sprites
 		/// <value>The origin normalized.</value>
 		public Vector2 originNormalized
 		{
-			get { return new Vector2( _origin.X / width, _origin.Y / height ); }
-			set { setOrigin( new Vector2( value.X * width, value.Y * height ) ); }
+			get { return new Vector2( _origin.X / width * entity.transform.scale.X, _origin.Y / height * entity.transform.scale.Y ); }
+			set { setOrigin( new Vector2( value.X * width / entity.transform.scale.X, value.Y * height / entity.transform.scale.Y ) ); }
 		}
 
 		/// <summary>
@@ -152,7 +152,7 @@ namespace Nez.Sprites
 		/// <param name="origin">Origin.</param>
 		public Sprite setOriginNormalized( Vector2 value )
 		{
-			setOrigin( new Vector2( value.X * width, value.Y * height ) );
+			setOrigin( new Vector2( value.X * width / entity.transform.scale.X, value.Y * height / entity.transform.scale.Y ) );
 			return this;
 		}
 
