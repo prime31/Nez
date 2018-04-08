@@ -140,7 +140,7 @@ namespace Nez.Particles
 				}
 
 				// once all our particles are done we stop the emitter
-				if( _particles.Count == 0 )
+				if( !_emitting && _particles.Count == 0 )
 				{
 					stop();
 
