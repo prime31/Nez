@@ -192,6 +192,18 @@ namespace Nez
 			return true;
 		}
 
+		/// <summary>
+		/// rounds and converts a Vector2 to a Point
+		/// </summary>
+		/// <returns>The point.</returns>
+		/// <param name="vec">Vec.</param>
+		[MethodImpl( MethodImplOptions.AggressiveInlining )]
+		public static Point roundToPoint( this Vector2 vec )
+		{
+			var roundedVec = vec.round();
+			return new Point((int) roundedVec.X, (int) roundedVec.Y);
+		}
+
 
 		/// <summary>
 		/// converts a Vector2 to a Vector3 with a 0 z-position
