@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Library</OutputType>
+    <TargetFramework>netcoreapp2.0</TargetFramework>
+    <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="MonoGame.Framework.Portable" Version="3.6.0.1625"/>
+    <PackageReference Include="System.Drawing.Common" Version="4.5.0-preview2-26406-04"/>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Content\NezDefaultBMFont.xnb" />
+  </ItemGroup>
+</Project>
