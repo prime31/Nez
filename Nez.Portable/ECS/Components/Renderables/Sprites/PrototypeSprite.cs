@@ -41,7 +41,6 @@ namespace Nez
 		{
 			_width = width;
 			_height = height;
-			originNormalized = new Vector2( 0.5f, 0.5f );
 		}
 
 
@@ -86,8 +85,12 @@ namespace Nez
 			return this;
 		}
 
+        public override void onAddedToEntity()
+        {
+            originNormalized = new Vector2(0.5f, 0.5f);
+        }
 
-		public override void render( Graphics graphics, Camera camera )
+        public override void render( Graphics graphics, Camera camera )
 		{
 			var pos = ( entity.transform.position - ( origin * entity.transform.localScale ) + localOffset );
 			var size = new Point( (int)( _width * entity.transform.localScale.X ), (int)( _height * entity.transform.localScale.Y ) );
