@@ -7,8 +7,8 @@ namespace Nez.TiledMaps
 {
 	public class TmxObject
 	{
-		[XmlAttribute( DataType = "int", AttributeName = "gid" )]
-		public int gid;
+		[XmlAttribute( DataType = "int", AttributeName = "id" )]
+		public int id;
 
 		[XmlAttribute( DataType = "string", AttributeName = "name" )]
 		public string name;
@@ -30,6 +30,9 @@ namespace Nez.TiledMaps
 
 		[XmlAttribute( DataType = "int", AttributeName = "rotation" )]
 		public int rotation;
+
+	    [XmlAttribute( DataType = "int", AttributeName = "gid" )]
+	    public int gid;
 
 		[XmlAttribute( DataType = "boolean", AttributeName = "visible" )]
 		public bool visible = true;

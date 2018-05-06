@@ -157,7 +157,7 @@ namespace Nez.TiledMaps
 				writer.Write( group.objects.Count );
 				foreach( var obj in group.objects )
 				{
-					writer.Write( obj.gid );
+					writer.Write( obj.id );
 					writer.Write( obj.name ?? string.Empty );
 					writer.Write( obj.type ?? string.Empty );
 					writer.Write( (int)obj.x );

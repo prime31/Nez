@@ -16,7 +16,7 @@ namespace Nez.Tiled
 			Polyline
 		}
 
-		public int gid;
+		public int id;
 		public string name;
 		public string type;
 		public int x;
