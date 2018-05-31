@@ -124,9 +124,9 @@ namespace Nez
 
 		static public bool rectToCircle( float rectX, float rectY, float rectWidth, float rectHeight, Vector2 circleCenter, float radius )
 		{
-			// Check if the circle contains the rectangle's center-point
-			if( Collisions.circleToPoint( circleCenter, radius, new Vector2( rectX + rectWidth / 2, rectY + rectHeight / 2 ) ) )
-				return true;
+		    //Check if the rectangle contains the circle's center-point
+		    if (Collisions.rectToPoint(rectX, rectY, rectWidth, rectHeight, circleCenter))
+		        return true;
 
 			// Check the circle against the relevant edges
 			Vector2 edgeFrom;
