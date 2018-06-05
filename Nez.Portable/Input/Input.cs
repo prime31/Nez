@@ -40,7 +40,7 @@ namespace Nez
 			get { return _maxSupportedGamePads; }
 			set
 			{
-				_maxSupportedGamePads = Mathf.clamp( value, 1, 4 );
+				_maxSupportedGamePads = Mathf.clamp( value, 1, GamePad.MaximumGamePadCount );
 				gamePads = new GamePadData[_maxSupportedGamePads];
 				for( var i = 0; i < _maxSupportedGamePads; i++ )
 					gamePads[i] = new GamePadData( (PlayerIndex)i );
