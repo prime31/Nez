@@ -358,7 +358,7 @@ namespace Nez.UI
 		public static ProgressBarStyle create( Color knobBeforeColor, Color knobAfterColor )
 		{
 			var knobBefore = new PrimitiveDrawable( knobBeforeColor );
-			knobBefore.minWidth = knobBefore.minHeight = 10;
+			knobBefore.minHeight = 10;
 
 			var knobAfter = new PrimitiveDrawable( knobAfterColor );
 			knobAfter.minWidth = knobAfter.minHeight = 10;
