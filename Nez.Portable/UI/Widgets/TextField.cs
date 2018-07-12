@@ -609,7 +609,7 @@ namespace Nez.UI
 			}
 			else
 			{
-				var col = new Color( fontColor, (int)(fontColor.A * parentAlpha / 255.0f) );
+				var col = new Color( fontColor, (int)(fontColor.A * parentAlpha) );
 				var t = displayText.Substring( visibleTextStart, visibleTextEnd - visibleTextStart );
 				graphics.batcher.drawString( font, t, new Vector2( x + bgLeftWidth + textOffset, y + textY + yOffset ), col );
 			}
