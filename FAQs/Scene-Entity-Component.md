@@ -57,7 +57,7 @@ Component Lifecycle methods:
 - **onRemovedFromEntity**:  called when the component is removed from its entity. Do all cleanup here.
 - **onEntityPositionChanged**: called when the entity's position changes. This allows components to be aware that they have moved due to the parent entity moving.
 - **update**: called each frame as long as the Entity and Component are enabled and the Component implements IUpdatable
-- **debugRender**: conditionally called. See Entity section for details.
+- **debugRender**: conditionally called. See Entity section for details. It can be disabled by setting `debugRenderEnabled` to false for something that should be excluded from debug render
 - **onEnabled**: called when the parent Entity or the Component is enabled
 - **onDisabled**: called when the parent Entity or the Component is disabled
 

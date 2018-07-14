@@ -105,6 +105,8 @@ namespace Nez
 			}
 		}
 
+		public bool debugRenderEnabled = true;
+
 		protected Vector2 _localOffset;
 		protected float _layerDepth;
 		protected int _renderLayer;
@@ -137,6 +139,9 @@ namespace Nez
 		/// <param name="graphics">Graphics.</param>
 		public override void debugRender( Graphics graphics )
 		{
+			if( !debugRenderEnabled )
+				return;
+
 			// if we have no collider draw our bounds
 			if( entity.getComponent<Collider>() == null )
 				graphics.batcher.drawHollowRect( bounds, Debug.Colors.renderableBounds );
