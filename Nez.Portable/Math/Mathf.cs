@@ -328,6 +328,39 @@ namespace Nez
 			return Math.Max( start - shift, end );
 		}
 
+		/// <summary>
+		/// moves start angle towards end angle by shift amount clamping the result and choosing the shortest path. start can be less than or greater than end.
+		/// example 1: start is 30, end is 100, shift is 25 results in 55
+		/// example 2: start is 340, end is 30, shift is 25 results in 5 (365 is wrapped to 5)
+		/// </summary>
+		/// <param name="start">Start.</param>
+		/// <param name="end">End.</param>
+		/// <param name="shift">Shift.</param>
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public static float approachAngle( float start, float end, float shift )
+		{
+			float deltaAngle = Mathf.deltaAngle( start, end );
+			if ( -shift < deltaAngle && deltaAngle < shift )
+				return end;
+			return repeat( approach( start, start + deltaAngle, shift ), 360f );
+		}
+
+		/// <summary>
+		/// moves start angle towards end angle by shift amount (all in radians) clamping the result and choosing the shortest path. start can be less than or greater than end.
+		/// this method works very similar to approachAngle, the only difference is use of radians instead of degrees and wrapping at 2*Pi instead of 360.
+		/// </summary>
+		/// <param name="start">Start.</param>
+		/// <param name="end">End.</param>
+		/// <param name="shift">Shift.</param>
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public static float approachAngleRadians( float start, float end, float shift )
+		{
+			float deltaAngleRadians = Mathf.deltaAngleRadians( start, end );
+			if ( -shift < deltaAngleRadians && deltaAngleRadians < shift )
+				return end;
+			return repeat( approach( start, start + deltaAngleRadians, shift ), MathHelper.TwoPi );
+		}
+
 
 		/// <summary>
 		/// checks to see if two values are approximately the same using an acceptable tolerance for the check
