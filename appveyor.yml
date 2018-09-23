@@ -1,0 +1,29 @@
+version: 0.0.{build}
+
+skip_non_tags: false
+
+image: Visual Studio 2017
+
+configuration: Release
+
+init:
+- ps: >-
+    # Install MonoGame 3.6
+
+    (New-Object Net.WebClient).DownloadFile('http://www.monogame.net/releases/v3.6/MonoGameSetup.exe', 'C:\MonoGameSetup.exe')
+
+    Invoke-Command -ScriptBlock {C:\MonoGameSetup.exe /S /v/qn}
+  
+before_build:
+- cmd: nuget restore -Verbosity quiet
+
+after_build:
+-cmd: >-
+    # Build NuGet packages
+    nuget pack -Verbosity quiet ./Nez.Portable/Nez.nuspec
+    nuget pack -Verbosity quiet ./Nez.FarseerPhysics/Nez.FarseerPhysics.nuspec
+    nuget pack -Verbosity quiet ./Nez.PipelineImporter/Nez.PipelineImporter.nuspec
+
+artifacts:
+- path: Nez.*\**\*.nupkg
+  name: NuGet
