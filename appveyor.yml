@@ -6,10 +6,9 @@ image: Visual Studio 2017
 
 configuration: Release
 
+# Install MonoGame 3.6
 init:
 - ps: >-
-    # Install MonoGame 3.6
-
     (New-Object Net.WebClient).DownloadFile('http://www.monogame.net/releases/v3.6/MonoGameSetup.exe', 'C:\MonoGameSetup.exe')
 
     Invoke-Command -ScriptBlock {C:\MonoGameSetup.exe /S /v/qn}
@@ -17,14 +16,13 @@ init:
 before_build:
 - cmd: nuget restore -Verbosity quiet
 
+# Build NuGet packages
 after_build:
 - cmd: >-
-    # Build NuGet packages
-
     nuget pack -Verbosity quiet ./Nez.Portable/Nez.nuspec
 
     nuget pack -Verbosity quiet ./Nez.FarseerPhysics/Nez.FarseerPhysics.nuspec
-    
+
     nuget pack -Verbosity quiet ./Nez.PipelineImporter/Nez.PipelineImporter.nuspec
 
 artifacts:
