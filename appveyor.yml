@@ -18,7 +18,7 @@ before_build:
 - cmd: nuget restore -Verbosity quiet
 
 after_build:
--cmd: >-
+- cmd: >-
     # Build NuGet packages
     nuget pack -Verbosity quiet ./Nez.Portable/Nez.nuspec
     nuget pack -Verbosity quiet ./Nez.FarseerPhysics/Nez.FarseerPhysics.nuspec
