@@ -20,8 +20,11 @@ before_build:
 after_build:
 - cmd: >-
     # Build NuGet packages
+
     nuget pack -Verbosity quiet ./Nez.Portable/Nez.nuspec
+
     nuget pack -Verbosity quiet ./Nez.FarseerPhysics/Nez.FarseerPhysics.nuspec
+    
     nuget pack -Verbosity quiet ./Nez.PipelineImporter/Nez.PipelineImporter.nuspec
 
 artifacts:
