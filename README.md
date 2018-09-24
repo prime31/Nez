@@ -84,10 +84,10 @@ The latter will not add any references to your projects, installing it this way 
 
 #-------------------------------- References -------------------------------#
 
-/reference:../../packages/Nez.PipelineImporter.0.9.0/Nez.dll
-/reference:../../packages/Nez.PipelineImporter.0.9.0/Nez.PipelineImporter.dll
-/reference:../../packages/Nez.PipelineImporter.0.9.0/Newtonsoft.Json.dll
-/reference:../../packages/Nez.PipelineImporter.0.9.0/Ionic.ZLib.dll
+/reference:../../packages/Nez.PipelineImporter.0.9.0/tools/Nez.dll
+/reference:../../packages/Nez.PipelineImporter.0.9.0/tools/Nez.PipelineImporter.dll
+/reference:../../packages/Nez.PipelineImporter.0.9.0/tools/Newtonsoft.Json.dll
+/reference:../../packages/Nez.PipelineImporter.0.9.0/tools/Ionic.ZLib.dll
 
 #---------------------------------- Content --------------------------------#
 
