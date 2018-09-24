@@ -1,0 +1,5 @@
+
+# We just want errors displayed
+/ConsoleLoggerParameters:NoSummary
+/Verbosity=quiet
+/p:WarningLevel=0

@@ -9,7 +9,7 @@ configuration: Release
 shallow_clone: true
 
 environment:
-  NUGET_FLAGS: "-Verbosity quiet -Prop Configuration=Release -OutputDirectory dist -Version '%APPVEYOR_REPO_TAG%'"
+  NUGET_FLAGS: "-Verbosity quiet -Prop Configuration=Release -OutputDirectory dist"
 
 # Install MonoGame 3.6
 init:
@@ -24,7 +24,7 @@ before_build:
 # Build NuGet packages
 after_build:
 - cmd: >-
-    echo %NUGET_FLAGS%
+    if %APPVEYOR_REPO_TAG% neq false set NUGET_FLAGS="%NUGET_FLAGS% -Version '%APPVEYOR_REPO_TAG%'"
 
     nuget pack %NUGET_FLAGS% ./Nez.Portable/Nez.nuspec
 
