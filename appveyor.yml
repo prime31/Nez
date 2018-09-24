@@ -24,7 +24,7 @@ before_build:
 # Build NuGet packages
 after_build:
 - cmd: >-
-    if %APPVEYOR_REPO_TAG% neq false (set NUGET_FLAGS=%NUGET_FLAGS% -Version '%APPVEYOR_REPO_TAG%') else (set NUGET_FLAGS=%NUGET_FLAGS% -Version '%APPVEYOR_BUILD_VERSION%')
+    if %APPVEYOR_REPO_TAG% neq false (set NUGET_FLAGS=%NUGET_FLAGS% -Version %APPVEYOR_REPO_TAG%) else (set NUGET_FLAGS=%NUGET_FLAGS% -Version %APPVEYOR_BUILD_VERSION%)
 
     nuget pack %NUGET_FLAGS% ./Nez.Portable/Nez.nuspec
 
