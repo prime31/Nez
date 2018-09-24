@@ -9,7 +9,7 @@ configuration: Release
 shallow_clone: true
 
 environment:
-  NUGET_FLAGS: "-Verbosity quiet -Prop Configuration=Release -OutputDirectory dist"
+  NUGET_FLAGS: "-Verbosity quiet -Prop Configuration=Release -OutputDirectory dist -Version '%APPVEYOR_REPO_TAG%'"
 
 # Install MonoGame 3.6
 init:
@@ -24,6 +24,8 @@ before_build:
 # Build NuGet packages
 after_build:
 - cmd: >-
+    echo %NUGET_FLAGS%
+
     nuget pack %NUGET_FLAGS% ./Nez.Portable/Nez.nuspec
 
     nuget pack %NUGET_FLAGS% ./Nez.FarseerPhysics/Nez.FarseerPhysics.nuspec
@@ -33,3 +35,10 @@ after_build:
 artifacts:
 - path: dist\*.nupkg
   name: NuGet
+
+deploy:
+- provider: NuGet
+  on:
+    appveyor_repo_tag: true
+  api_key:
+  secure: "ENCRYPTED API KEY HERE"
