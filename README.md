@@ -1,6 +1,10 @@
 ![Nez](FAQs/images/nez-logo-black.png)
 
+[![Build status](https://ci.appveyor.com/api/projects/status/github/prime31/Nez?branch=master&svg=true)](https://ci.appveyor.com/project/prime31/nez/branch/master)
+[![NuGet version](https://img.shields.io/nuget/v/Nez.svg)](https://www.nuget.org/packages/Nez)
+[![NuGet downloads](https://img.shields.io/nuget/dt/Nez.svg)](https://www.nuget.org/packages/Nez)
 [![Join the chat at https://gitter.im/Nez-Devs/Lobby](https://badges.gitter.im/Nez-Devs/Lobby.svg)](https://gitter.im/Nez-Devs/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 
 Nez aims to be a lightweight 2D framework that sits on top of MonoGame/FNA. It provides a solid base for you to build a 2D game on. Some of the many features it includes are:
 
@@ -52,29 +56,52 @@ There are various systems documented separately on the [Nez website docs.](http:
 
 Setup
 ==========
-### Quick version:
+### Install as a submodule:
 
 - create a `Monogame Cross Platform Desktop Project`
 - clone or download the Nez repository
 - add the `Nez.Portable/Nez.csproj` project to your solution and add a reference to it in your main project
 - make your main Game class (`Game1.cs` in a default project) subclass `Nez.Core`
 
+If you intend to use any of the built in Effects or PostProcessors you should also copy or link the `DefaultContent/effects` folder into your projects `Content/nez/effects` folder. Be sure to set the Build Action to Content and enable the "Copy to output directory" property so they get copied into your compiled game.
 
-### (optional) Pipeline Tool setup for access to the Nez Pipeline importers
+#### (optional) Pipeline Tool setup for access to the Nez Pipeline importers
 
 - add the `Nez.PipelineImporter/Nez.PipelineImporter.csproj` project to your solution
 - open the `Nez.PipelineImporter` references dialog and add a reference to the Nez project
 - build the `Nez.PipelineImporter` project to generate the DLLs
 - open the Pipeline Tool by double-clicking your `Content.mgcb` file, select `Content` and under Settings add `PipelineImporter.dll`, `Ionic.ZLib.dll`, `Newtonsoft.Json.dll` and `Nez.dll` to the References collection.
 
+### Install through NuGet:
+
+Add [Nez](https://www.nuget.org/packages/Nez/) and [Nez.PipelineImporter](https://www.nuget.org/packages/Nez.PipelineImporter/) to your project's NuGet packages.
+
+The latter will not add any references to your projects, installing it this way fetches the necessary `dll` files that your `Content.mgcb` needs to reference. Given the version of Nez that you installed, edit `Content.mgcb` so it looks like this:
+
+```bash
+#----------------------------- Global Properties ---------------------------#
+
+...
+
+#-------------------------------- References -------------------------------#
+
+/reference:../../packages/Nez.PipelineImporter.{VERSION}/tools/Nez.dll
+/reference:../../packages/Nez.PipelineImporter.{VERSION}/tools/Nez.PipelineImporter.dll
+/reference:../../packages/Nez.PipelineImporter.{VERSION}/tools/Newtonsoft.Json.dll
+/reference:../../packages/Nez.PipelineImporter.{VERSION}/tools/Ionic.ZLib.dll
+
+#---------------------------------- Content --------------------------------#
+
+...
+```
+
+Installing through NuGet, the contents of the `DefaultContent` content folder are also included in the package. You will find them under `packages/Nez.{VERSION}/tools`.
+
+---
 
 All Nez shaders are compiled for OpenGL so be sure to use the DesktopGL template, not DirectX! Nez only supports OpenGL out of the box to keep things compatible across Android/iOS/Mac/Linux/Windows.
 
-If you intend to use any of the built in Effects or PostProcessors you should also copy or link the DefaultContent/effects folder into your projects Content/nez/effects folder. Be sure to set the Build Action to Content and enable the "Copy to output directory" property so they get copied into your compiled game.
-
 If you are developing a mobile application you will need to enable touch input by calling `Input.touch.enableTouchSupport()`.
-
-
 
 
 Pipeline Importers
