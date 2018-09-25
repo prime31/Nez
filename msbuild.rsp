@@ -1,0 +1,4 @@
+
+# We just want errors displayed
+/ConsoleLoggerParameters:NoSummary
+/p:WarningLevel=1

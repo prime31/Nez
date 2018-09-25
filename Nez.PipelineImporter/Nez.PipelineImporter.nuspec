@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>Nez.PipelineImporter</id>
+    <version>0.10.0</version>
+    <title>Nez.PipelineImporter</title>
+    <authors>prime31</authors>
+    <iconUrl>https://raw.githubusercontent.com/prime31/Nez/master/FAQs/images/nez-logo-black.png</iconUrl>
+    <projectUrl>https://github.com/prime31/Nez</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>The pipeline importer binaries for the Nez framework. This package comes with no references and installing it simply downloads the dlls you need to reference in your Content.mgcb.</description>
+    <releaseNotes>Initial release.</releaseNotes>
+    <copyright>Copyright 2018</copyright>
+	<tags>nez monogame xna fna</tags>
+  </metadata>
+  <files>
+    <file src="bin\$configuration$\Ionic.ZLib.dll" target="tools" />
+    <file src="bin\$configuration$\Newtonsoft.Json.dll" target="tools" />
+    <file src="bin\$configuration$\Nez.dll" target="tools" /> 
+    <file src="bin\$configuration$\Nez.PipelineImporter.dll" target="tools" />
+  </files>
+</package>

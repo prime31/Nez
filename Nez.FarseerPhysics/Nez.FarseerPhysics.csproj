@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -19,12 +19,14 @@
     <DefineConstants>DEBUG;</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\Debug\Nez.FarseerPhysics.XML</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <Optimize>true</Optimize>
     <OutputPath>bin\Release</OutputPath>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\Release\Nez.FarseerPhysics.XML</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -181,18 +183,7 @@
       <Name>Nez</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Nez\" />
-    <Folder Include="Nez\LowLevel\" />
-    <Folder Include="Nez\HighLevel\" />
-    <Folder Include="Nez\HighLevel\Components\" />
-    <Folder Include="Nez\HighLevel\InternalObjectDefs\" />
-    <Folder Include="Nez\LowLevel\Factories\" />
-    <Folder Include="Nez\LowLevel\Extensions\" />
-    <Folder Include="Nez\LowLevel\Components\" />
-    <Folder Include="Nez\LowLevel\Components\Renderables\" />
-    <Folder Include="Nez\Common\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Reference Include="MonoGame.Framework">
       <HintPath>..\packages\MonoGame.Framework.Portable.3.6.0.1625\lib\portable-net45+win8+wpa81\MonoGame.Framework.dll</HintPath>
