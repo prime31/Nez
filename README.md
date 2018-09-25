@@ -63,6 +63,7 @@ Setup
 - add the `Nez.Portable/Nez.csproj` project to your solution and add a reference to it in your main project
 - make your main Game class (`Game1.cs` in a default project) subclass `Nez.Core`
 
+If you intend to use any of the built in Effects or PostProcessors you should also copy or link the `DefaultContent/effects` folder into your projects `Content/nez/effects` folder. Be sure to set the Build Action to Content and enable the "Copy to output directory" property so they get copied into your compiled game.
 
 #### (optional) Pipeline Tool setup for access to the Nez Pipeline importers
 
@@ -75,7 +76,7 @@ Setup
 
 Add [Nez](https://www.nuget.org/packages/Nez/) and [Nez.PipelineImporter](https://www.nuget.org/packages/Nez.PipelineImporter/) to your project's NuGet packages.
 
-The latter will not add any references to your projects, installing it this way fetches the necessary `dll` files that your `Content.mgcb` needs to reference. Then edit `Content.mgcb` so it looks like this:
+The latter will not add any references to your projects, installing it this way fetches the necessary `dll` files that your `Content.mgcb` needs to reference. Given the version of Nez that you installed, edit `Content.mgcb` so it looks like this:
 
 ```bash
 #----------------------------- Global Properties ---------------------------#
@@ -84,21 +85,21 @@ The latter will not add any references to your projects, installing it this way 
 
 #-------------------------------- References -------------------------------#
 
-/reference:../../packages/Nez.PipelineImporter.0.9.0/tools/Nez.dll
-/reference:../../packages/Nez.PipelineImporter.0.9.0/tools/Nez.PipelineImporter.dll
-/reference:../../packages/Nez.PipelineImporter.0.9.0/tools/Newtonsoft.Json.dll
-/reference:../../packages/Nez.PipelineImporter.0.9.0/tools/Ionic.ZLib.dll
+/reference:../../packages/Nez.PipelineImporter.{VERSION}/tools/Nez.dll
+/reference:../../packages/Nez.PipelineImporter.{VERSION}/tools/Nez.PipelineImporter.dll
+/reference:../../packages/Nez.PipelineImporter.{VERSION}/tools/Newtonsoft.Json.dll
+/reference:../../packages/Nez.PipelineImporter.{VERSION}/tools/Ionic.ZLib.dll
 
 #---------------------------------- Content --------------------------------#
 
 ...
 ```
 
+Installing through NuGet, the contents of the `DefaultContent` content folder are also included in the package. You will find them under `packages/Nez.{VERSION}/tools`.
+
 ---
 
 All Nez shaders are compiled for OpenGL so be sure to use the DesktopGL template, not DirectX! Nez only supports OpenGL out of the box to keep things compatible across Android/iOS/Mac/Linux/Windows.
-
-If you intend to use any of the built in Effects or PostProcessors you should also copy or link the DefaultContent/effects folder into your projects Content/nez/effects folder. Be sure to set the Build Action to Content and enable the "Copy to output directory" property so they get copied into your compiled game.
 
 If you are developing a mobile application you will need to enable touch input by calling `Input.touch.enableTouchSupport()`.
 
