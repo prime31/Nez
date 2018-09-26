@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System.Text;
 using System;
+using System.Globalization;
 
 
 namespace Nez.BitmapFonts
@@ -94,40 +95,68 @@ namespace Nez.BitmapFonts
 
 		public string wrapText( string text, float maxLineWidth )
 		{
-			var words = text.Split( ' ' );
-			var sb = new StringBuilder();
-			var lineWidth = 0f;
+			var ret = text;
+			var accw = 0f;
+            var charAdded = 0;
+            for( var i = 0; i < text.Length; i++ )
+            {
+                if( text[i] == '[' )
+                {
+                    if( text[i + 1] == '#' )
+                    {
+                        i += 8;
+                        continue;
+                    }
+                    else if(text[i + 1] == ']' )
+                    {
+                        i += 1;
+                        continue;
+                    }
+                }
+                
+                if( text[i] == '\n' )
+                {
+                    accw = 0f;
+                }
+                else if( text[i] == ' ' )
+                {
+                    if ( accw + spaceWidth > maxLineWidth && i != text.Length )
+                    {
+                        ret = ret.Insert(i + charAdded, "\n");
+                        charAdded++;
+                        accw = 0f;
+                    }
+                    else
+                        accw += spaceWidth;
+                }
+                else
+                {
+                    var world = "";
+                    var cursor = 0;
+                    var currentc = text[i];
+                    while( currentc != ' ' && currentc != '\n' )
+                    {
+                        world += currentc;
+                        cursor++;
+                        if (i + cursor >= text.Length) break; 
+                        currentc = text[i + cursor];
+                    }
+                    var size = measureString(world);
+                    
+                    if( accw + size.X + spaceWidth > maxLineWidth )
+                    {
+                        ret = ret.Insert(i + charAdded, "\n");
+                        charAdded++;
+                        accw = 0f;
+                    }
+                    else
+                        accw += size.X + spaceWidth;
+                    
+                    i += cursor;
+                }
+            }
 
-			if( maxLineWidth < spaceWidth )
-				return string.Empty;
-
-			foreach( var word in words )
-			{
-				var size = measureString( word );
-
-				if( lineWidth + size.X < maxLineWidth )
-				{
-					sb.Append( word + " " );
-					lineWidth += size.X + spaceWidth;
-				}
-				else
-				{
-					if( size.X > maxLineWidth )
-					{
-						if( sb.ToString() == "" )
-							sb.Append( wrapText( word.Insert( word.Length / 2, " " ) + " ", maxLineWidth ) );
-						else
-							sb.Append( "\n" + wrapText( word.Insert( word.Length / 2, " " ) + " ", maxLineWidth ) );
-					}
-					else
-					{
-						sb.Append( "\n" + word + " " );
-						lineWidth = size.X + spaceWidth;
-					}
-				}
-			}
-
-			return sb.ToString();
+            return ret;
 		}
 
 
@@ -235,11 +264,27 @@ namespace Nez.BitmapFonts
 			var fullLineCount = 0;
 			BitmapFontRegion currentFontRegion = null;
 			var offset = Vector2.Zero;
-
+			
 			for( var i = 0; i < text.Length; i++ )
 			{
 				var c = text[i];
-
+				
+				if( text[i] == '[' )
+				{
+					if( text[i + 1] == '#' )
+					{
+						// we are in color tag
+						i += 8;
+						continue;
+					}
+					else if( text[i + 1] == ']' )
+					{
+						// skip closing state
+						i += 1;
+						continue;
+					}
+				}
+				
 				if( c == '\r' )
 					continue;
 
@@ -385,9 +430,47 @@ namespace Nez.BitmapFonts
 			BitmapFontRegion currentFontRegion = null;
 			var offset = requiresTransformation ? Vector2.Zero : position - origin;
 
+			var skip = -1;
+			var useMarkupColor = false;
+			var oldColor = color;
+			var markupColor = oldColor;
+			
 			for( var i = 0; i < text.Length; ++i )
 			{
 				var c = text[i];
+				
+				if( text[i] == '[' )
+				{
+					if( text[i + 1] == '#' )
+					{
+						// parse color
+						// [#FFFFFF]
+						skip = 8;
+						var hexMC =  text.value.Substring(i+2);
+						hexMC = hexMC.Substring(0, 6);
+						int rgb = int.Parse(hexMC, NumberStyles.HexNumber);
+						markupColor = new Color(
+							(byte) ((rgb & 0xff0000) >> 16), 
+							(byte) ((rgb & 0xff00) >> 8),
+							(byte) (rgb & 0xff)
+						);
+						useMarkupColor = true;
+					}
+					else if( text[i + 1] == ']' )
+					{
+						// revert to predefined color
+						skip = 1;
+						useMarkupColor = false;
+					}
+				}
+                
+				if( skip >= 0 )
+				{
+					// skip markup junk
+					skip--;
+					continue;
+				}
+				
 				if( c == '\r' )
 					continue;
 
@@ -427,7 +510,7 @@ namespace Nez.BitmapFonts
 	               currentFontRegion.height * scale.Y
                );
 
-				batcher.draw( currentFontRegion.subtexture, destRect, currentFontRegion.subtexture.sourceRect, color, rotation, Vector2.Zero, effect, depth );
+				batcher.draw( currentFontRegion.subtexture, destRect, currentFontRegion.subtexture.sourceRect, useMarkupColor ? markupColor : color, rotation, Vector2.Zero, effect, depth );
 			}
 		}
 
