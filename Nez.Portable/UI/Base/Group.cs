@@ -7,7 +7,7 @@ namespace Nez.UI
 	public class Group : Element, ICullable
 	{
 		internal List<Element> children = new List<Element>();
-		protected bool transform = false;
+		protected bool transform = true;
 		Matrix _previousBatcherTransform;
 		Rectangle? _cullingArea;
 
