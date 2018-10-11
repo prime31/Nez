@@ -53,7 +53,9 @@ namespace Nez.Overlap2D.Runtime
 		/// helper to translate zIndex to layerDepth. zIndexMax should be at least equal to the highest zIndex
 		/// </summary>
 		/// <returns>The depth.</returns>
+		/// <param name="zIndexMin">Z index min.</param>
 		/// <param name="zIndexMax">Z index max.</param>
+		/// <param name="compositeItem"></param>
 		public float calculateLayerDepth( float zIndexMin, float zIndexMax, CompositeItemVO compositeItem )
 		{
 			if( compositeItem != null )

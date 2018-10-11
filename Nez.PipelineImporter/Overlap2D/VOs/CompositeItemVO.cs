@@ -18,6 +18,7 @@ namespace Nez.Overlap2D.Runtime
 		public float height;
 
 
+
 		/// <summary>
 		/// gets the layerDepth for a child composite. It calculates it by first getting the composite (parent) layerDepth the standard way
 		/// (via zIndexMin/Max) and then subtracting the inverse of the child (O2DMainItem) layerDepth which uses zIndexMaxChild. For this to
@@ -27,7 +28,8 @@ namespace Nez.Overlap2D.Runtime
 		/// Example: parent is 14. Any children must end up being between 14 and 15 so they dont overflow on top of another composite.
 		/// </summary>
 		/// <returns>The depth for child.</returns>
-		/// <param name="zIndexMaxComp">Z index max comp.</param>
+		/// <param name="zIndexMin">Z index minimum.</param>
+		/// <param name="zIndexMax">Z index max.</param>
 		/// <param name="child">Child.</param>
 		/// <param name="zIndexMaxChild">Z index max child.</param>
 		public float calculateLayerDepthForChild( float zIndexMin, float zIndexMax, MainItemVO child, float zIndexMaxChild = 100 )
