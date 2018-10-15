@@ -980,7 +980,6 @@ namespace Nez
 		/// <summary>
 		/// add the Entity to this Scene, and return it
 		/// </summary>
-		/// <typeparam name="T">entity type</typeparam>
 		/// <returns></returns>
 		public Entity createEntity( string name )
 		{

@@ -29,13 +29,8 @@ namespace Nez.Tweens
 
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="Prime31.ZestKit.TransformSpringTween"/> class.
+		/// Initializes a new instance of the TransformSpringTween class.
 		/// </summary>
-		/// <param name="transform">Transform.</param>
-		/// <param name="dampingRatio">lower values are less damped and higher values are more damped resulting in less springiness.
-		/// should be between 0.01f, 1f to avoid unstable systems.</param>
-		/// <param name="angularFrequency">An angular frequency of 2pi (radians per second) means the oscillation completes one
-		/// full period over one second, i.e. 1Hz. should be less than 35 or so to remain stable</param>
 		public TransformSpringTween( Transform transform, TransformTargetType targetType, Vector2 targetValue )
 		{
 			_transform = transform;

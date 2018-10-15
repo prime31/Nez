@@ -14,7 +14,7 @@ environment:
 # Install MonoGame 3.6
 init:
 - ps: >-
-    (New-Object Net.WebClient).DownloadFile('http://www.monogame.net/releases/v3.6/MonoGameSetup.exe', 'C:\MonoGameSetup.exe')
+    (New-Object Net.WebClient).DownloadFile('https://github.com/MonoGame/MonoGame/releases/download/v3.7/MonoGameSetup.exe', 'C:\MonoGameSetup.exe')
 
     Invoke-Command -ScriptBlock {C:\MonoGameSetup.exe /S /v/qn}
 

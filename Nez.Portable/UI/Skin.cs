@@ -362,7 +362,6 @@ namespace Nez.UI
 		/// </summary>
 		/// <param name="name">Name.</param>
 		/// <param name="resource">Resource.</param>
-		/// <typeparam name="T">The 1st type parameter.</typeparam>
 		public void add( string name, object resource, Type type )
 		{
 			Dictionary<string, object> typedResources;
