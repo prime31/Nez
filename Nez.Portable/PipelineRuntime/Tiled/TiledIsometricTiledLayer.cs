@@ -6,7 +6,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Nez.Tiled
 {
-	public class TiledIsometricTiledLayer : TiledLayer
+	public class TiledIsometricTiledLayer : TiledTileLayer
 	{
 		public readonly TiledMap tiledMap;
 		public int width;
@@ -20,7 +20,7 @@ namespace Nez.Tiled
 		public int tileHeight { get { return tiledMap.tileHeight; } }
 
 
-		public TiledIsometricTiledLayer( TiledMap map, string name, int width, int height, TiledTile[] tiles ) : base( name )
+		public TiledIsometricTiledLayer( TiledMap map, string name, int width, int height, TiledTile[] tiles ) : base(map, name, width, height)
 		{
 			this.width = width;
 			this.height = height;
