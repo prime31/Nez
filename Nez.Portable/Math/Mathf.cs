@@ -207,6 +207,24 @@ namespace Nez
 
 
 		/// <summary>
+		/// lerps an angle in radians between a and b. handles wrapping around 2*Pi
+		/// </summary>
+		/// <returns>The angle.</returns>
+		/// <param name="a">The alpha component.</param>
+		/// <param name="b">The blue component.</param>
+		/// <param name="t">T.</param>
+		[MethodImpl( MethodImplOptions.AggressiveInlining )]
+		public static float lerpAngleRadians( float a, float b, float t )
+		{
+			float num = Mathf.repeat( b - a, MathHelper.TwoPi );
+			if( num > MathHelper.Pi )
+				num -= MathHelper.TwoPi;
+			
+			return a + num * clamp01( t );
+		}
+
+
+		/// <summary>
 		/// loops t so that it is never larger than length and never smaller than 0
 		/// </summary>
 		/// <param name="t">T.</param>
@@ -742,6 +760,26 @@ namespace Nez
 
 
 		/// <summary>
+		/// the rotation is relative to the current position not the total rotation. For example, if you are currently at 1 Pi radians and
+		/// want to rotate to 1.5 Pi radians, you would use an angle of 0.5 Pi, not 1.5 Pi.
+		/// </summary>
+		/// <returns>The around.</returns>
+		/// <param name="point">Point.</param>
+		/// <param name="center">Center.</param>
+		/// <param name="angleInDegrees">Angle in radians.</param>
+		[MethodImpl( MethodImplOptions.AggressiveInlining )]
+		public static Vector2 rotateAroundRadians( Vector2 point, Vector2 center, float angleInRadians )
+		{
+			var cos = Mathf.cos( angleInRadians );
+			var sin = Mathf.sin( angleInRadians );
+			var rotatedX = cos * ( point.X - center.X ) - sin * ( point.Y - center.Y ) + center.X;
+			var rotatedY = sin * ( point.X - center.X ) + cos * ( point.Y - center.Y ) + center.Y;
+
+			return new Vector2( rotatedX, rotatedY );
+		}
+
+
+		/// <summary>
 		/// gets a point on the circumference of the circle given its center, radius and angle. 0 degrees is 3 o'clock.
 		/// </summary>
 		/// <returns>The on circle.</returns>
@@ -756,6 +794,24 @@ namespace Nez
 			{
 				X = cos( radians ) * radius + circleCenter.X,
 				Y = sin( radians ) * radius + circleCenter.Y
+			};
+		}
+
+
+		/// <summary>
+		/// gets a point on the circumference of the circle given its center, radius and angle. 0 radians is 3 o'clock.
+		/// </summary>
+		/// <returns>The on circle.</returns>
+		/// <param name="circleCenter">Circle center.</param>
+		/// <param name="radius">Radius.</param>
+		/// <param name="angleInDegrees">Angle in radians.</param>
+		[MethodImpl( MethodImplOptions.AggressiveInlining )]
+		public static Vector2 pointOnCircleRadians( Vector2 circleCenter, float radius, float angleInRadians )
+		{
+			return new Vector2
+			{
+				X = cos( angleInRadians ) * radius + circleCenter.X,
+				Y = sin( angleInRadians ) * radius + circleCenter.Y
 			};
 		}
 
