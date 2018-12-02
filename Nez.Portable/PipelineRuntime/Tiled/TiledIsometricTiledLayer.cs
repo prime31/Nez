@@ -8,52 +8,12 @@ namespace Nez.Tiled
 {
 	public class TiledIsometricTiledLayer : TiledTileLayer
 	{
-		public readonly TiledMap tiledMap;
-		public int width;
-		public int height;
-		public readonly TiledTile[] tiles;
-		public Color color = Color.White;
-
-
-		public int tileWidth { get { return tiledMap.tileWidth; } }
-
-		public int tileHeight { get { return tiledMap.tileHeight; } }
-
-
-		public TiledIsometricTiledLayer( TiledMap map, string name, int width, int height, TiledTile[] tiles ) : base(map, name, width, height)
-		{
-			this.width = width;
-			this.height = height;
-			this.tiles = tiles;
-
-			tiledMap = map;
-			tiles = populateTilePositions();
-		}
+		public TiledIsometricTiledLayer( TiledMap map, string name, int width, int height, TiledTile[] tiles ) : base(map, name, width, height, tiles)
+		{}
 
 
 		public TiledIsometricTiledLayer( TiledMap map, string name, int width, int height ) : this( map, name, width, height, new TiledTile[width * height] )
 		{ }
-
-		/// <summary>
-		/// loops through the tiles and sets each tiles x/y value
-		/// </summary>
-		/// <returns>The tile positions.</returns>
-		TiledTile[] populateTilePositions()
-		{
-			for( var y = 0; y < height; y++ )
-			{
-				for( var x = 0; x < width; x++ )
-				{
-					if( tiles[x + y * width] != null )
-					{
-						tiles[x + y * width].x = x;
-						tiles[x + y * width].y = y;
-					}
-				}
-			}
-
-			return tiles;
-		}
 
 
 		public override void draw( Batcher batcher, Vector2 position, float layerDepth, RectangleF cameraClipBounds )
@@ -164,72 +124,6 @@ namespace Nez.Tiled
 		}
 
 
-		#region Tile management
-
-		/// <summary>
-		/// gets the TiledTile at the x/y coordinates. Note that these are tile coordinates not world coordinates!
-		/// </summary>
-		/// <returns>The tile.</returns>
-		/// <param name="x">The x coordinate.</param>
-		/// <param name="y">The y coordinate.</param>
-		public TiledTile getTile( int x, int y )
-		{
-			return tiles[x + y * width];
-		}
-
-
-		/// <summary>
-		/// gets the TiledTile at the x/y coordinates. Note that these are tile coordinates not world coordinates!
-		/// </summary>
-		/// <returns>The tile.</returns>
-		/// <param name="x">The x coordinate.</param>
-		/// <param name="y">The y coordinate.</param>
-		/// <typeparam name="T">The 1st type parameter.</typeparam>
-		public T getTile<T>( int x, int y ) where T : TiledTile
-		{
-			return tiles[x + y * width] as T;
-		}
-
-
-		/// <summary>
-		/// sets the tile and updates its tileset
-		/// </summary>
-		/// <returns>The tile.</returns>
-		/// <param name="tile">Tile.</param>
-		public TiledTile setTile( TiledTile tile )
-		{
-			tiles[tile.x + tile.y * width] = tile;
-			tile.tileset = tiledMap.getTilesetForTileId( tile.id );
-
-			return tile;
-		}
-
-
-		/// <summary>
-		/// nulls out the tile at the x/y coordinates
-		/// </summary>
-		/// <param name="x">The x coordinate.</param>
-		/// <param name="y">The y coordinate.</param>
-		public void removeTile( int x, int y )
-		{
-			tiles[x + y * width] = null;
-		}
-
-		#endregion
-
-
-		/// <summary>
-		/// returns the bounds Rectangle of the passed in tile
-		/// </summary>
-		/// <returns>The bounds for tile.</returns>
-		/// <param name="tile">Tile.</param>
-		/// <param name="tilemap">Tilemap.</param>
-		public static Rectangle getBoundsForTile( TiledTile tile, TiledMap tilemap )
-		{
-			return new Rectangle( tile.x * tilemap.tileWidth, tile.y * tilemap.tileHeight, tilemap.tileWidth, tilemap.tileHeight );
-		}
-
-
 		/// <summary>
 		/// note that world position assumes that the Vector2 was normalized to be in the tilemaps coordinates. i.e. if the tilemap
 		/// is not at 0,0 then the world position should be moved so that it takes into consideration the tilemap offset from 0,0.
@@ -237,96 +131,10 @@ namespace Nez.Tiled
 		/// </summary>
 		/// <returns>The tile at world position.</returns>
 		/// <param name="pos">Position.</param>
-		public TiledTile getTileAtWorldPosition( Vector2 pos )
+		public new TiledTile getTileAtWorldPosition( Vector2 pos )
 		{
-			Point tilePos = tiledMap.isometricWorldToTilePosition( pos );
+			var tilePos = tiledMap.isometricWorldToTilePosition( pos );
 			return getTile( tilePos.X, tilePos.Y );
-		}
-
-
-		/// <summary>
-		/// Returns a list of rectangles in tile space, where any non-null tile is combined into bounding regions
-		/// </summary>
-		/// <param name="layer">Layer.</param>
-		public List<Rectangle> getCollisionRectangles()
-		{
-			var checkedIndexes = new bool?[tiles.Length];
-			var rectangles = new List<Rectangle>();
-			var startCol = -1;
-			var index = -1;
-
-			for( var y = 0; y < tiledMap.height; y++ )
-			{
-				for( var x = 0; x < tiledMap.width; x++ )
-				{
-					index = y * tiledMap.width + x;
-					var tile = getTile( x, y );
-
-					if( tile != null && ( checkedIndexes[index] == false || checkedIndexes[index] == null ) )
-					{
-						if( startCol < 0 )
-							startCol = x;
-
-						checkedIndexes[index] = true;
-					}
-					else if( tile == null || checkedIndexes[index] == true )
-					{
-						if( startCol >= 0 )
-						{
-							rectangles.Add( findBoundsRect( startCol, x, y, checkedIndexes ) );
-							startCol = -1;
-						}
-					}
-				} // end for x
-
-				if( startCol >= 0 )
-				{
-					rectangles.Add( findBoundsRect( startCol, tiledMap.width, y, checkedIndexes ) );
-					startCol = -1;
-				}
-			}
-
-			return rectangles;
-		}
-
-
-		/// <summary>
-		/// Finds the largest bounding rect around tiles between startX and endX, starting at startY and going
-		/// down as far as possible
-		/// </summary>
-		/// <returns>The bounds rect.</returns>
-		/// <param name="startX">Start x.</param>
-		/// <param name="endX">End x.</param>
-		/// <param name="startY">Start y.</param>
-		/// <param name="checkedIndexes">Checked indexes.</param>
-		public Rectangle findBoundsRect( int startX, int endX, int startY, bool?[] checkedIndexes )
-		{
-			var index = -1;
-
-			for( var y = startY + 1; y < tiledMap.height; y++ )
-			{
-				for( var x = startX; x < endX; x++ )
-				{
-					index = y * tiledMap.width + x;
-					var tile = getTile( x, y );
-
-					if( tile == null || checkedIndexes[index] == true )
-					{
-						// Set everything we've visited so far in this row to false again because it won't be included in the rectangle and should be checked again
-						for( var _x = startX; _x < x; _x++ )
-						{
-							index = y * tiledMap.width + _x;
-							checkedIndexes[index] = false;
-						}
-
-						return new Rectangle( startX * tiledMap.tileWidth, startY * tiledMap.tileHeight, ( endX - startX ) * tiledMap.tileWidth, ( y - startY ) * tiledMap.tileHeight );
-					}
-
-					checkedIndexes[index] = true;
-				}
-			}
-
-			return new Rectangle( startX * tiledMap.tileWidth, startY * tiledMap.tileHeight, ( endX - startX ) * tiledMap.tileWidth, ( tiledMap.height - startY ) * tiledMap.tileHeight );
 		}
 
 
@@ -335,7 +143,7 @@ namespace Nez.Tiled
 		/// </summary>
 		/// <returns>The tiles intersecting bounds.</returns>
 		/// <param name="bounds">Bounds.</param>
-		public List<TiledTile> getTilesIntersectingBounds( Rectangle bounds )
+		public new List<TiledTile> getTilesIntersectingBounds( Rectangle bounds )
 		{
 			// Note that after transforming the bounds to isometric, top left is the left most tile, bottom right is the right most, top right is top most, bottom left is bottom most
 			var topLeft = tiledMap.isometricWorldToTilePosition( bounds.X, bounds.Y );
@@ -366,7 +174,7 @@ namespace Nez.Tiled
 		/// </summary>
 		/// <param name="start">Start.</param>
 		/// <param name="end">End.</param>
-		public TiledTile linecast( Vector2 start, Vector2 end )
+		public new TiledTile linecast( Vector2 start, Vector2 end )
 		{
 			var direction = end - start;
 
