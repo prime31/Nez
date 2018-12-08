@@ -264,6 +264,39 @@ namespace Nez
 			return this;
 		}
 
+
+		/// <summary>
+		/// adds a right mouse click to this VirtualButton
+		/// </summary>
+		/// <returns>The mouse right button.</returns>
+		public VirtualButton addMouseMiddleButton()
+		{
+			nodes.Add( new MouseMiddleButton() );
+			return this;
+		}
+
+
+		/// <summary>
+		/// adds a right mouse click to this VirtualButton
+		/// </summary>
+		/// <returns>The mouse right button.</returns>
+		public VirtualButton addMouseFirstExtendedButton()
+		{
+			nodes.Add( new MouseFirstExtendedButton() );
+			return this;
+		}
+
+
+		/// <summary>
+		/// adds a right mouse click to this VirtualButton
+		/// </summary>
+		/// <returns>The mouse right button.</returns>
+		public VirtualButton addMouseSecondExtendedButton()
+		{
+			nodes.Add( new MouseSecondExtendedButton() );
+			return this;
+		}
+
 		#endregion
 
 
@@ -600,6 +633,63 @@ namespace Nez
 			public override bool isReleased
 			{
 				get { return Input.rightMouseButtonReleased; }
+			}
+		}
+
+
+		public class MouseMiddleButton : Node
+		{
+			public override bool isDown
+			{
+				get { return Input.middleMouseButtonDown; }
+			}
+
+			public override bool isPressed
+			{
+				get { return Input.middleMouseButtonPressed; }
+			}
+
+			public override bool isReleased
+			{
+				get { return Input.middleMouseButtonReleased; }
+			}
+		}
+
+
+		public class MouseFirstExtendedButton : Node
+		{
+			public override bool isDown
+			{
+				get { return Input.firstExtendedMouseButtonDown; }
+			}
+
+			public override bool isPressed
+			{
+				get { return Input.firstExtendedMouseButtonPressed; }
+			}
+
+			public override bool isReleased
+			{
+				get { return Input.firstExtendedMouseButtonReleased; }
+			}
+		}
+
+
+		public class MouseSecondExtendedButton : Node
+		{
+			public override bool isDown
+			{
+				get { return Input.secondExtendedMouseButtonDown; }
+			}
+
+			public override bool isPressed
+			{
+				get { return Input.secondExtendedMouseButtonPressed; }
+			}
+
+			public override bool isReleased
+			{
+				get { return Input.secondExtendedMouseButtonReleased; }
 			}
 		}
 
