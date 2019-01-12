@@ -12,9 +12,6 @@ namespace Nez.UI
 		{
 			get
 			{
-				if( _wrapText )
-					return 0;
-
 				if( _prefSizeInvalid )
 					computePrefSize();
 
@@ -352,11 +349,19 @@ namespace Nez.UI
 		{
 			validate();
 
-			var color = new Color( this.color, (int)(this.color.A * parentAlpha) );
 			if( _style.background != null )
-				_style.background.draw( graphics, x, y, width == 0 ? _prefSize.X : width, height, color );
+			{
+				var desiredColor = new Color( color, (int)( color.A * parentAlpha ) );
+				_style.background.draw( graphics, x, y, width == 0 ? _prefSize.X : width, height, desiredColor );
+			}
 
-			graphics.batcher.drawString( _style.font, _wrappedString, new Vector2( x, y ) + _textPosition, _style.fontColor, 0, Vector2.Zero, new Vector2( _fontScaleX, _fontScaleY ), SpriteEffects.None, 0 );
+			var position = new Vector2( x, y );
+			if( fillParent )
+			{
+				position.X = 0;
+				position.Y = 0;
+			}
+			graphics.batcher.drawString( _style.font, _wrappedString, position + _textPosition, _style.fontColor, 0, Vector2.Zero, new Vector2( _fontScaleX, _fontScaleY ), SpriteEffects.None, 0 );
 		}
 
 	}
