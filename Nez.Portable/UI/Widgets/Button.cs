@@ -13,14 +13,14 @@ namespace Nez.UI
 		{
 			get
 			{
-				var width = base.preferredWidth;
+				var prefWidth = base.preferredWidth;
 				if( style.up != null )
-					width = Math.Max( width, style.up.minWidth );
+					prefWidth = Math.Max( prefWidth, style.up.minWidth );
 				if( style.down != null )
-					width = Math.Max( width, style.down.minWidth );
+					prefWidth = Math.Max( prefWidth, style.down.minWidth );
 				if( style.checkked != null )
-					width = Math.Max( width, style.checkked.minWidth );
-				return width;
+					prefWidth = Math.Max( prefWidth, style.checkked.minWidth );
+				return prefWidth;
 			}
 		}
 
@@ -28,14 +28,14 @@ namespace Nez.UI
 		{
 			get
 			{
-				var height = base.preferredHeight;
+				var prefHeight = base.preferredHeight;
 				if( style.up != null )
-					height = Math.Max( height, style.up.minHeight );
+					prefHeight = Math.Max( prefHeight, style.up.minHeight );
 				if( style.down != null )
-					height = Math.Max( height, style.down.minHeight );
+					prefHeight = Math.Max( prefHeight, style.down.minHeight );
 				if( style.checkked != null )
-					height = Math.Max( height, style.checkked.minHeight );
-				return height;
+					prefHeight = Math.Max( prefHeight, style.checkked.minHeight );
+				return prefHeight;
 			}
 		}
 
@@ -260,14 +260,14 @@ namespace Nez.UI
 		}
 
 
-		void setChecked( bool isChecked, bool fireEvent )
+		void setChecked( bool isCheckked, bool fireEvent )
 		{
-			if( _isChecked == isChecked )
+			if( _isChecked == isCheckked )
 				return;
 
-			if( _buttonGroup != null && !_buttonGroup.canCheck( this, isChecked ) )
+			if( _buttonGroup != null && !_buttonGroup.canCheck( this, isCheckked ) )
 				return;
-			_isChecked = isChecked;
+			_isChecked = isCheckked;
 
 			if( fireEvent && onChanged != null )
 			{
