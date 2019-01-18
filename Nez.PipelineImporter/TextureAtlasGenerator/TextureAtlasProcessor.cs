@@ -87,19 +87,22 @@ namespace Nez.TextureAtlasGenerator
 				}
 
                 // Convert sprite's color key color to transparent
-                if (colorKeyEnabled) {
+                if ( colorKeyEnabled ) 
+                {
                     var originalType = texture.Faces[0][0].GetType();
-                    try {
-                        texture.ConvertBitmapType(typeof(PixelBitmapContent<Vector4>));
+                    try 
+                    {
+                        texture.ConvertBitmapType( typeof( PixelBitmapContent<Vector4> ) );
                     }
-                    catch (Exception ex) {
-                        context.Logger.LogImportantMessage("Could not convert input texture for processing. " + ex.ToString());
+                    catch ( Exception ex ) 
+                    {
+                        context.Logger.LogImportantMessage( "Could not convert input texture for processing. " + ex.ToString() );
                         throw ex;
                     }
                     var bmp = (PixelBitmapContent<Vector4>)texture.Faces[0][0];
-                    bmp.ReplaceColor(colorKeyColor.ToVector4(), Vector4.Zero);
+                    bmp.ReplaceColor( colorKeyColor.ToVector4(), Vector4.Zero );
                     texture.Faces[0][0] = bmp;
-                    texture.ConvertBitmapType(originalType);
+                    texture.ConvertBitmapType( originalType );
                 }
 
                 sourceSprites.Add( texture.Faces[0][0] );
