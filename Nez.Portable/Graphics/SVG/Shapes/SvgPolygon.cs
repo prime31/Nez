@@ -27,13 +27,14 @@ namespace Nez.Svg
 
 		void parsePoints( string str )
 		{
+			var format = System.Globalization.CultureInfo.InvariantCulture.NumberFormat;
 			var pairs = str.Split( new char[] { ' ' }, System.StringSplitOptions.RemoveEmptyEntries );
 			points = new Vector2[pairs.Length];
 
 			for( var i = 0; i < pairs.Length; i++ )
 			{
 				var parts = pairs[i].Split( new char[] { ',' }, System.StringSplitOptions.RemoveEmptyEntries );
-				points[i] = new Vector2( float.Parse( parts[0] ), float.Parse( parts[1] ) );
+				points[i] = new Vector2( float.Parse( parts[0], format ), float.Parse( parts[1], format ) );
 			}
 		}
 
