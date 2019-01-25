@@ -33,15 +33,22 @@ namespace Nez.TextureAtlasGenerator
 		public bool flattenPaths { get; set; } = true;
 
 
-		/// <summary>
-		/// Converts an array of sprite filenames into a texture atlas object.
-		/// </summary>
-		public override TextureAtlasContent Process( string[] input, ContentProcessorContext context )
+        [Description("This color will be treated as transparent by the atlas.")]
+        [DefaultValue( typeof(Color), "0,0,0,0")]
+        public Color colorKeyColor { get; set; } = Color.Transparent;
+
+        [DefaultValue( false )]
+        public bool colorKeyEnabled { get; set; } = false;
+
+        /// <summary>
+        /// Converts an array of sprite filenames into a texture atlas object.
+        /// </summary>
+        public override TextureAtlasContent Process( string[] input, ContentProcessorContext context )
 		{
 			logger = context.Logger;
-			var textureAtlas = new TextureAtlasContent
-			{
-				animationFPS = (int)animationFPS
+            var textureAtlas = new TextureAtlasContent 
+            {
+                animationFPS = (int)animationFPS,
 			};
 			var sourceSprites = new List<BitmapContent>();
 			var imagePaths = new List<string>();
@@ -78,8 +85,27 @@ namespace Nez.TextureAtlasGenerator
 					logger.LogMessage( "\tprocessing nine patch texture" );
 					textureAtlas.nineSliceSplits[spriteName] = processNinePatchTexture( texture );
 				}
-				
-				sourceSprites.Add( texture.Faces[0][0] );
+
+                // Convert sprite's color key color to transparent
+                if ( colorKeyEnabled ) 
+                {
+                    var originalType = texture.Faces[0][0].GetType();
+                    try 
+                    {
+                        texture.ConvertBitmapType( typeof( PixelBitmapContent<Vector4> ) );
+                    }
+                    catch ( Exception ex ) 
+                    {
+                        context.Logger.LogImportantMessage( "Could not convert input texture for processing. " + ex.ToString() );
+                        throw ex;
+                    }
+                    var bmp = (PixelBitmapContent<Vector4>)texture.Faces[0][0];
+                    bmp.ReplaceColor( colorKeyColor.ToVector4(), Vector4.Zero );
+                    texture.Faces[0][0] = bmp;
+                    texture.ConvertBitmapType( originalType );
+                }
+
+                sourceSprites.Add( texture.Faces[0][0] );
 			}
 
 			// Pack all the sprites into a single large texture.
