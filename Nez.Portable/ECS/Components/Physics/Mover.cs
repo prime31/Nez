@@ -21,12 +21,13 @@ namespace Nez
 
 
 		/// <summary>
-		/// moves the entity taking collisions into account
+		/// caculates the movement modifying the motion vector to take into account any collisions that will
+		/// occur when moving
 		/// </summary>
-		/// <returns><c>true</c>, if move actor was newed, <c>false</c> otherwise.</returns>
+		/// <returns><c>true</c>, if movement was calculated, <c>false</c> otherwise.</returns>
 		/// <param name="motion">Motion.</param>
 		/// <param name="collisionResult">Collision result.</param>
-		public bool move( Vector2 motion, out CollisionResult collisionResult )
+		public bool calculateMovement( ref Vector2 motion, out CollisionResult collisionResult )
 		{
 			collisionResult = new CollisionResult();
 
@@ -68,12 +69,36 @@ namespace Nez
 			}
 			ListPool<Collider>.free( colliders );
 
+			return collisionResult.collider != null;
+		}
+
+
+		/// <summary>
+		/// applies the movement from calculateMovement to the entity and updates the triggerHelper
+		/// </summary>
+		/// <param name="motion">Motion.</param>
+		public void applyMovement( Vector2 motion )
+		{
 			// 2. move entity to its new position if we have a collision else move the full amount. motion is updated when a collision occurs
 			entity.transform.position += motion;
 
 			// 3. do an overlap check of all Colliders that are triggers with all broadphase colliders, triggers or not.
 			//    Any overlaps result in trigger events.
 			_triggerHelper.update();
+		}
+
+
+		/// <summary>
+		/// moves the entity taking collisions into account by calling calculateMovement followed by applyMovement;
+		/// </summary>
+		/// <returns><c>true</c>, if move actor was newed, <c>false</c> otherwise.</returns>
+		/// <param name="motion">Motion.</param>
+		/// <param name="collisionResult">Collision result.</param>
+		public bool move( Vector2 motion, out CollisionResult collisionResult )
+		{
+			calculateMovement( ref motion, out collisionResult );
+
+			applyMovement( motion );
 
 			return collisionResult.collider != null;
 		}
