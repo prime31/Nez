@@ -125,9 +125,14 @@ namespace Nez.Tiled
 		/// </summary>
 		Rectangle _boxColliderBounds;
 
+		bool _handleSubpixelMovement;
+		SubpixelVector2 _subpixelV2 = new SubpixelVector2();
 
-		public TiledMapMover( TiledTileLayer collisionLayer )
+
+		public TiledMapMover( TiledTileLayer collisionLayer, bool handleSubpixelMovement = false )
 		{
+			_handleSubpixelMovement = handleSubpixelMovement;
+
 			this.collisionLayer = collisionLayer;
 			tiledMap = collisionLayer.tiledMap;
 			Assert.isNotNull( collisionLayer, nameof( collisionLayer ) + " is required" );
@@ -145,6 +150,8 @@ namespace Nez.Tiled
 			testCollisions( ref motion, boxCollider.bounds, collisionState );
 
 			boxCollider.unregisterColliderWithPhysicsSystem();
+			if( _handleSubpixelMovement )
+				_subpixelV2.update( ref motion );
 			boxCollider.entity.transform.position += motion;
 			boxCollider.registerColliderWithPhysicsSystem();
 		}
