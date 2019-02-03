@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Nez.Textures;
 
 
 namespace Nez.Tiled
@@ -60,6 +59,12 @@ namespace Nez.Tiled
 
 		public override void draw( Batcher batcher, Vector2 position, float layerDepth, RectangleF cameraClipBounds )
 		{
+			draw( batcher, position, Vector2.One, layerDepth, cameraClipBounds );
+		}
+
+
+		public override void draw( Batcher batcher, Vector2 position, Vector2 scale, float layerDepth, RectangleF cameraClipBounds )
+		{
 			// offset it by the entity position since the tilemap will always expect positions in its own coordinate space
 			cameraClipBounds.location -= ( position + offset );
 
@@ -103,8 +108,8 @@ namespace Nez.Tiled
 
 					// for the y position, we need to take into account if the tile is larger than the tileHeight and shift. Tiled uses
 					// a bottom-left coordinate system and MonoGame a top-left
-					var tx = tile.x * tiledMap.tileWidth + (int)position.X;
-					var ty = tile.y * tiledMap.tileHeight + (int)position.Y;
+					var tx = tile.x * tiledMap.tileWidth * scale.X + (int)position.X;
+					var ty = tile.y * tiledMap.tileHeight * scale.Y + (int)position.Y;
 					var rotation = 0f;
 
 					var spriteEffects = SpriteEffects.None;
@@ -147,7 +152,7 @@ namespace Nez.Tiled
 					if( rotation == 0 )
 						ty += ( tiledMap.tileHeight - tileRegion.sourceRect.Height );
 
-					batcher.draw( tileRegion, new Vector2( tx, ty ) + offset, color, rotation, Vector2.Zero, 1, spriteEffects, layerDepth );
+					batcher.draw( tileRegion, new Vector2( tx, ty ) + offset, color, rotation, Vector2.Zero, scale, spriteEffects, layerDepth );
 				}
 			}
 		}
@@ -283,7 +288,6 @@ namespace Nez.Tiled
 		/// down as far as possible
 		/// </summary>
 		/// <returns>The bounds rect.</returns>
-		/// <param name="layer">Layer.</param>
 		/// <param name="startX">Start x.</param>
 		/// <param name="endX">End x.</param>
 		/// <param name="startY">Start y.</param>

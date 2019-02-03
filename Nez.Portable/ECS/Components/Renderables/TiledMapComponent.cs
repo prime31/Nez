@@ -144,14 +144,14 @@ namespace Nez
 		{
 			if( layerIndicesToRender == null )
 			{
-				tiledMap.draw( graphics.batcher, entity.transform.position + _localOffset, layerDepth, camera.bounds );
+				tiledMap.draw( graphics.batcher, entity.transform.position + _localOffset, transform.scale, layerDepth, camera.bounds );
 			}
 			else
 			{
 				for( var i = 0; i < tiledMap.layers.Count; i++ )
 				{
 					if( tiledMap.layers[i].visible && layerIndicesToRender.contains( i ) )
-						tiledMap.layers[i].draw( graphics.batcher, entity.transform.position + _localOffset, layerDepth, camera.bounds );
+						tiledMap.layers[i].draw( graphics.batcher, entity.transform.position + _localOffset, transform.scale, layerDepth, camera.bounds );
 				}
 			}
 		}
