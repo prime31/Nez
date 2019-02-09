@@ -117,9 +117,6 @@
     <Compile Include="PipelineRuntime\TextureAtlas\TextureAtlasReader.cs" />
     <Compile Include="PipelineRuntime\LibGdxAtlases\LibGdxAtlas.cs" />
     <Compile Include="PipelineRuntime\LibGdxAtlases\LibGdxAtlasReader.cs" />
-    <Compile Include="PipelineRuntime\Overlap2D\O2DMainItem.cs" />
-    <Compile Include="PipelineRuntime\Overlap2D\O2DScene.cs" />
-    <Compile Include="PipelineRuntime\Overlap2D\O2DSceneReader.cs" />
     <Compile Include="Utils\NezContentManager.cs" />
     <Compile Include="ECS\Components\CameraShake.cs" />
     <Compile Include="Utils\Screen.cs" />
@@ -199,9 +196,6 @@
     <Compile Include="PipelineRuntime\Tiled\TiledTileAnimationFrame.cs" />
     <Compile Include="PipelineRuntime\Tiled\TiledAnimatedTile.cs" />
     <Compile Include="ECS\Components\Renderables\Mesh.cs" />
-    <Compile Include="PipelineRuntime\Overlap2D\O2DComposite.cs" />
-    <Compile Include="PipelineRuntime\Overlap2D\O2DCompositeItem.cs" />
-    <Compile Include="PipelineRuntime\Overlap2D\O2DImage.cs" />
     <Compile Include="Graphics\Renderers\ScreenSpaceRenderer.cs" />
     <Compile Include="Input\InputUtils.cs" />
     <Compile Include="Input\Clipboard.cs" />
@@ -250,7 +244,6 @@
     <Compile Include="ECS\Components\Renderables\UICanvas.cs" />
     <Compile Include="ECS\Components\Physics\ITriggerListener.cs" />
     <Compile Include="ECS\Components\Physics\ProjectileMover.cs" />
-    <Compile Include="PipelineRuntime\Overlap2D\O2DColorPrimitive.cs" />
     <Compile Include="Input\Virtual\VirtualAxis.cs" />
     <Compile Include="Input\Virtual\VirtualButton.cs" />
     <Compile Include="Input\Virtual\VirtualInput.cs" />
