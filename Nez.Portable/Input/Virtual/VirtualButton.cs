@@ -83,6 +83,7 @@ namespace Nez
 			{
 				_repeatCounter = 0;
 				_bufferCounter = 0;
+				isRepeating = false;
 			}
 			else if( _willRepeat )
 			{
