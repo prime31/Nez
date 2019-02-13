@@ -126,11 +126,15 @@
     <Compile Include="Common\ContentWriterExt.cs" />
     <Compile Include="NormalMapGenerator\NormalMapProcessor.cs" />
     <Compile Include="Common\PixelBitmapContentExt.cs" />
+    <Compile Include="FNAAudio\OggSongProcessor.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Nez.Portable\Nez.csproj">
       <Project>{60B7197D-D0D5-405C-90A2-A56903E9B039}</Project>
       <Name>Nez</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="FNAAudio\" />
   </ItemGroup>
 </Project>
