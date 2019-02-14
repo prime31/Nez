@@ -3,9 +3,7 @@ using Microsoft.Xna.Framework;
 using System.Collections.Generic;
 using Nez.Systems;
 using System.Runtime.CompilerServices;
-#if !FNA
 using Microsoft.Xna.Framework.Input.Touch;
-#endif
 
 
 namespace Nez
@@ -17,13 +15,7 @@ namespace Nez
 		public static GamePadData[] gamePads;
 		public const float DEFAULT_DEADZONE = 0.1f;
 
-		/// <summary>
-		/// set by the Scene and used to scale mouse input
-		/// </summary>
 		internal static Vector2 _resolutionScale;
-		/// <summary>
-		/// set by the Scene and used to scale input
-		/// </summary>
 		internal static Point _resolutionOffset;
 		static KeyboardState _previousKbState;
 		static KeyboardState _currentKbState;
@@ -32,9 +24,30 @@ namespace Nez
 		static internal FastList<VirtualInput> _virtualInputs = new FastList<VirtualInput>();
 		static int _maxSupportedGamePads;
 
+		/// <summary>
+		/// the TouchInput details when on a device that supports touch
+		/// </summary>
 		public static TouchInput touch;
 
+		/// <summary>
+		/// set by the Scene and used to scale mouse input for cases where the Scene render target is a different size
+		/// than the backbuffer. This situation basically results in mouse coordinates in screen space instead of
+		/// in the render target coordinate system;
+		/// </summary>
+		public static Vector2 resolutionScale => _resolutionScale;
 
+		/// <summary>
+		/// set by the Scene and used to get mouse input from raw screen coordinates to render target coordinates. Any
+		/// SceneResolutionPolicy that can result in letterboxing could potentially have an offset (basically, the
+		/// letterbox portion of the render).
+		/// </summary>
+		/// <returns></returns>
+		public static Vector2 resolutionOffset => _resolutionOffset.ToVector2();
+
+		/// <summary>
+		/// gets/sets the maximum supported gamepads
+		/// </summary>
+		/// <value></value>
 		public static int maxSupportedGamePads
 		{
 			get { return _maxSupportedGamePads; }
@@ -95,17 +108,30 @@ namespace Nez
 			return scaledPos * _resolutionScale;
 		}
 
-		[MethodImpl( MethodImplOptions.AggressiveInlining )]
-		public static Vector2 scaledPosition( Point position )
+		/// <summary>
+		/// to be used with great care! This lets you override the current MouseState. This is useful
+		/// when the Nez render is embedded in a larger window so that mouse coordinates can be translated
+		/// to Nez space from the outer window coordinates.
+		/// </summary>
+		/// <param name="state"></param>
+		public static void setCurrentMouseState( MouseState state )
 		{
-			return scaledPosition( new Vector2( position.X, position.Y ) );
+			_currentMouseState = state;
 		}
 
 		#region Keyboard
 
-		public static KeyboardState previousKeyboardState { get { return _previousKbState; } }
+		/// <summary>
+		/// returns the previous KeyboardState from the last frame
+		/// </summary>
+		/// <value></value>
+		public static KeyboardState previousKeyboardState => _previousKbState;
 
-		public static KeyboardState currentKeyboardState { get { return _currentKbState; } }
+		/// <summary>
+		/// returns the KeyboardState from this frame
+		/// </summary>
+		/// <value></value>
+		public static KeyboardState currentKeyboardState => _currentKbState;
 
 
 		/// <summary>
@@ -177,7 +203,13 @@ namespace Nez
 		/// Input.mousePosition does.
 		/// </summary>
 		/// <value>The state of the previous mouse.</value>
-		public static MouseState previousMouseState { get { return _previousMouseState; } }
+		public static MouseState previousMouseState => _previousMouseState;
+
+		/// <summary>
+		/// returns the current mouse state. Use with caution as it only contains raw data and does not take camera scaling into affect like
+		/// Input.mousePosition does.
+		/// </summary>
+		public static MouseState currentMouseState => _currentMouseState;
 
 		/// <summary>
 		/// only true if down this frame
