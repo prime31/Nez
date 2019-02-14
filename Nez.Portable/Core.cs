@@ -65,14 +65,19 @@ namespace Nez
 		public static GameServiceContainer services { get { return _instance.Services; } }
 
 		/// <summary>
-		/// internal flag used to determine if EntitySystems should be used or not
+		/// provides access to the single Core/Game instance
 		/// </summary>
-		internal static bool entitySystemsEnabled;
+		public static Core instance => _instance;
 
 		/// <summary>
 		/// facilitates easy access to the global Content instance for internal classes
 		/// </summary>
 		internal static Core _instance;
+
+		/// <summary>
+		/// internal flag used to determine if EntitySystems should be used or not
+		/// </summary>
+		internal static bool entitySystemsEnabled;
 
 		#if DEBUG
 		internal static long drawCalls;
