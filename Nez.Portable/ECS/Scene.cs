@@ -151,8 +151,12 @@ namespace Nez
 					_finalRenderDelegate.unload();
 
 				_finalRenderDelegate = value;
-				_finalRenderDelegate.scene = this;
-				_finalRenderDelegate.onAddedToScene();
+
+				if( _finalRenderDelegate != null )
+				{
+					_finalRenderDelegate.scene = this;
+					_finalRenderDelegate.onAddedToScene();
+				}
 			}
 			get
 			{
@@ -458,7 +462,9 @@ namespace Nez
 
 
 		/// <summary>
-		/// any PostProcessors present get to do their processing then we do the final render of the RenderTarget to the screen
+		/// any PostProcessors present get to do their processing then we do the final render of the RenderTarget to the screen.
+		/// In almost all cases finalRenderTarget will be null. The only time it will have a value is the first frame of a
+		/// SceneTransition if the transition is requesting the render.
 		/// </summary>
 		/// <returns>The render.</returns>
 		internal void postRender( RenderTarget2D finalRenderTarget = null )
@@ -507,7 +513,7 @@ namespace Nez
 			// render our final result to the backbuffer or let our delegate do so
 			if( _finalRenderDelegate != null )
 			{
-				_finalRenderDelegate.handleFinalRender( letterboxColor, Mathf.isEven( enabledCounter ) ? _sceneRenderTarget : _destinationRenderTarget, _finalRenderDestinationRect, samplerState );
+				_finalRenderDelegate.handleFinalRender( finalRenderTarget, letterboxColor, Mathf.isEven( enabledCounter ) ? _sceneRenderTarget : _destinationRenderTarget, _finalRenderDestinationRect, samplerState );
 			}
 			else
 			{

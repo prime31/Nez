@@ -87,10 +87,9 @@ namespace Nez
 		}
 
 
-		public void handleFinalRender( Color letterboxColor, RenderTarget2D source, Rectangle finalRenderDestinationRect, SamplerState samplerState )
+		public void handleFinalRender( RenderTarget2D finalRenderTarget, Color letterboxColor, RenderTarget2D source, Rectangle finalRenderDestinationRect, SamplerState samplerState )
 		{
-			// we can just draw directly to the screen here with our effect
-			Core.graphicsDevice.setRenderTarget( null );
+			Core.graphicsDevice.setRenderTarget( finalRenderTarget );
 			Core.graphicsDevice.Clear( letterboxColor );
 			Graphics.instance.batcher.begin( BlendState.Opaque, samplerState, DepthStencilState.None, RasterizerState.CullNone, effect );
 			Graphics.instance.batcher.draw( source, finalRenderDestinationRect, Color.White );
