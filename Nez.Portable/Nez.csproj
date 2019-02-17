@@ -407,7 +407,6 @@
     <Compile Include="Utils\Extensions\ComponentExt.cs" />
     <Compile Include="Debug\Inspector\InspectorList.cs" />
     <Compile Include="Input\TouchInput.cs" />
-    <Compile Include="Utils\IUpdatableManager.cs" />
     <Compile Include="Utils\Collections\FastList.cs" />
     <Compile Include="Utils\Audio\AudioSource.cs" />
     <Compile Include="Utils\MonoGameCompat.cs" />
@@ -505,6 +504,7 @@
     <Compile Include="Utils\Extensions\TouchLocationExt.cs" />
     <Compile Include="Utils\Extensions\GestureSampleExt.cs" />
     <Compile Include="Math\SubpixelVector2.cs" />
+    <Compile Include="Utils\GlobalManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Content\NezDefaultBMFont.xnb" />

@@ -96,7 +96,7 @@ namespace Nez
 		ITimer _graphicsDeviceChangeTimer;
 
 		// globally accessible systems
-		FastList<IUpdatableManager> _globalManagers = new FastList<IUpdatableManager>();
+		FastList<GlobalManager> _globalManagers = new FastList<GlobalManager>();
 		CoroutineManager _coroutineManager = new CoroutineManager();
 		TimerManager _timerManager = new TimerManager();
 
@@ -120,11 +120,13 @@ namespace Nez
 			_instance = this;
 			emitter = new Emitter<CoreEvents>( new CoreEventsComparer() );
 
-			var graphicsManager = new GraphicsDeviceManager( this );
-			graphicsManager.PreferredBackBufferWidth = width;
-			graphicsManager.PreferredBackBufferHeight = height;
-			graphicsManager.IsFullScreen = isFullScreen;
-			graphicsManager.SynchronizeWithVerticalRetrace = true;
+			var graphicsManager = new GraphicsDeviceManager( this )
+			{
+				PreferredBackBufferWidth = width,
+				PreferredBackBufferHeight = height,
+				IsFullScreen = isFullScreen,
+				SynchronizeWithVerticalRetrace = true
+			};
 			graphicsManager.DeviceReset += onGraphicsDeviceReset;
 			graphicsManager.PreferredDepthStencilFormat = DepthFormat.Depth24Stencil8;
 
@@ -217,7 +219,10 @@ namespace Nez
 			Input.update();
 
 			for( var i = _globalManagers.length - 1; i >= 0; i-- )
-				_globalManagers.buffer[i].update();
+			{
+				if( _globalManagers.buffer[i].enabled )
+					_globalManagers.buffer[i].update();
+			}
 
 			if( exitOnEscapeKeypress && ( Input.isKeyDown( Keys.Escape ) || Input.gamePads[0].isButtonReleased( Buttons.Back ) ) )
 			{
@@ -356,7 +361,7 @@ namespace Nez
 		/// </summary>
 		/// <returns>The global manager.</returns>
 		/// <param name="manager">Manager.</param>
-		public static void registerGlobalManager( IUpdatableManager manager )
+		public static void registerGlobalManager( GlobalManager manager )
 		{
 			_instance._globalManagers.add( manager );
 		}
@@ -367,7 +372,7 @@ namespace Nez
 		/// </summary>
 		/// <returns>The global manager.</returns>
 		/// <param name="manager">Manager.</param>
-		public static void unregisterGlobalManager( IUpdatableManager manager )
+		public static void unregisterGlobalManager( GlobalManager manager )
 		{
 			_instance._globalManagers.remove( manager );
 		}
@@ -378,7 +383,7 @@ namespace Nez
 		/// </summary>
 		/// <returns>The global manager.</returns>
 		/// <typeparam name="T">The 1st type parameter.</typeparam>
-		public static T getGlobalManager<T>() where T : class, IUpdatableManager
+		public static T getGlobalManager<T>() where T : GlobalManager
 		{
 			for( var i = 0; i < _instance._globalManagers.length; i++ )
 			{
