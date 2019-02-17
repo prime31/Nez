@@ -242,9 +242,9 @@ namespace Nez.ImGuiTools
 			_scrollWheelValue = mouse.ScrollWheelValue;
 		}
 
-#endregion Setup & Update
+		#endregion Setup & Update
 
-#region Internals
+		#region Internals
 
 		/// <summary>
 		/// Gets the geometry as set up by ImGui and sends it to the graphics device
@@ -374,6 +374,6 @@ namespace Nez.ImGuiTools
 			}
 		}
 
-#endregion Internals
+		#endregion Internals
 	}
 }

@@ -1,25 +1,34 @@
-<?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
+		<Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+		<Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
 		<OutputType>Library</OutputType>
-		<TargetFramework>net471</TargetFramework>
-		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
-		<PlatformTarget>AnyCPU</PlatformTarget>
-		<RootNamespace>Nez.ImGui</RootNamespace>
+		<RootNamespace>Nez.ImGuiTools</RootNamespace>
 		<AssemblyName>Nez.ImGui</AssemblyName>
+		<TargetFrameworks>net471</TargetFrameworks>
 		<AllowUnsafeBlocks>True</AllowUnsafeBlocks>
+		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
 	</PropertyGroup>
-	
+
+	<PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+		<DefineConstants>TRACE;DEBUG;NETFRAMEWORK;NET46;FNA</DefineConstants>
+	</PropertyGroup>
+
+	<PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+		<DefineConstants>NETFRAMEWORK;NET46;FNA</DefineConstants>
+	</PropertyGroup>
+
 	<ItemGroup>
-		<ProjectReference Include="../Nez.Portable/Nez.csproj" />
+		<ProjectReference Include="..\..\..\FNA\FNA.csproj"></ProjectReference>
+		<ProjectReference Include="..\Nez.Portable\Nez.FNA.csproj"></ProjectReference>
 	</ItemGroup>
-	
-	
+
 	<PropertyGroup>
 		<IsOSX Condition="'$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::OSX)))' == 'true'">true</IsOSX>
 		<IsLinux Condition="'$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Linux)))' == 'true'">true</IsLinux>
 	</PropertyGroup>
-	
+
+
 	<!-- Copy ImGui native code to output -->
 	<PropertyGroup>
 		<ImGuiRuntimes>$(NuGetPackageRoot)\imgui.net\**\runtimes\</ImGuiRuntimes>
@@ -43,9 +52,8 @@
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</Content>
 	</ItemGroup>
-	
+
 	<ItemGroup>
 		<PackageReference Include="ImGui.NET" Version="1.67.0" />
-		<PackageReference Include="MonoGame.Framework.Portable" Version="3.7.1.189" />
 	</ItemGroup>
 </Project>
