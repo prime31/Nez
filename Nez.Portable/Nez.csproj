@@ -505,6 +505,7 @@
     <Compile Include="Utils\Extensions\GestureSampleExt.cs" />
     <Compile Include="Math\SubpixelVector2.cs" />
     <Compile Include="Utils\GlobalManager.cs" />
+    <Compile Include="Utils\Extensions\GameServiceContainerExt.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Content\NezDefaultBMFont.xnb" />
