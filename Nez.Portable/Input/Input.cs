@@ -3,7 +3,6 @@ using Microsoft.Xna.Framework;
 using System.Collections.Generic;
 using Nez.Systems;
 using System.Runtime.CompilerServices;
-using Microsoft.Xna.Framework.Input.Touch;
 
 
 namespace Nez
@@ -111,12 +110,22 @@ namespace Nez
 		/// <summary>
 		/// to be used with great care! This lets you override the current MouseState. This is useful
 		/// when the Nez render is embedded in a larger window so that mouse coordinates can be translated
-		/// to Nez space from the outer window coordinates.
+		/// to Nez space from the outer window coordinates and for simulating mouse input.
 		/// </summary>
 		/// <param name="state"></param>
 		public static void setCurrentMouseState( MouseState state )
 		{
 			_currentMouseState = state;
+		}
+
+
+		/// <summary>
+		/// useful for simulating keyboard input
+		/// </summary>
+		/// <param name="state">State.</param>
+		public static void setCurrentKeyboardState( KeyboardState state )
+		{
+			_currentKbState = state;
 		}
 
 		#region Keyboard
