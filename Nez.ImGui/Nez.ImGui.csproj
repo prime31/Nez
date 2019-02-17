@@ -48,7 +48,4 @@
         <PackageReference Include="ImGui.NET" Version="1.67.0" />
         <PackageReference Include="MonoGame.Framework.Portable" Version="3.7.1.189" />
     </ItemGroup>
-    <ItemGroup>
-      <Compile Remove="Properties\AssemblyInfo.cs" />
-    </ItemGroup>
 </Project>
