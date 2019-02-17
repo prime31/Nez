@@ -129,7 +129,21 @@ You can find the samples repo [here](https://github.com/prime31/Nez-Samples). It
 
 Using Nez with FNA
 ==========
-See the [Nez.FNA repo](https://github.com/prime31/Nez.FNA) for details.
+Note that you have to install FNA the required FNA native libs per the [FNA documentation](https://github.com/FNA-XNA/FNA/wiki/1:-Download-and-Update-FNA). Here is what you need to do to get up and running with Nez + FNA:
+
+- clone this repo recursively
+- open the Nez solution (Nez/Nez.sln) and build it. This will cause the NuGet packages to refresh.
+- download/clone FNA
+- open your game's project and add a reference to the FNA and Nez.FNA
+- (optinally) add references to Nez.FNA.ImGui or Nez.FNA.FarseerPhysics if you need them
+
+
+The folder structure the cscproj files expect is something like this:
+
+- TopLevelFolderHousingEverything
+	- FNA
+	- YourGameProject
+	- Nez
 
 
 
