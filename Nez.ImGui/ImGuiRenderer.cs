@@ -1,12 +1,12 @@
-﻿using Microsoft.Xna.Framework;
+﻿using ImGuiNET;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using Nez;
 using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 
-namespace ImGuiNET
+namespace Nez.ImGuiTools
 {
 	/// <summary>
 	/// ImGui renderer for use with XNA-likes (FNA & MonoGame)

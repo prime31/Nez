@@ -1,11 +1,10 @@
-using Nez;
 using ImGuiNET;
 using Microsoft.Xna.Framework;
 using System;
 using Microsoft.Xna.Framework.Graphics;
 using System.Collections.Generic;
 
-namespace Nez
+namespace Nez.ImGuiTools
 {
 	public class ImGuiManager : GlobalManager, IFinalRenderDelegate, IDisposable
 	{
