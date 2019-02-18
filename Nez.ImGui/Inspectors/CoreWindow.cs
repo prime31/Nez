@@ -23,8 +23,8 @@ namespace Nez.ImGuiTools
             if( !isOpen )
                 return;
 
-            ImGui.SetNextWindowPos( new Num.Vector2( 10, 10 ), ImGuiCond.FirstUseEver );
-            ImGui.SetNextWindowSize( new Num.Vector2( 350, Screen.height / 2 ), ImGuiCond.FirstUseEver );
+            ImGui.SetNextWindowPos( new Num.Vector2( Screen.width - 315, Screen.height - 315 ), ImGuiCond.FirstUseEver );
+            ImGui.SetNextWindowSize( new Num.Vector2( 315, 315 ), ImGuiCond.FirstUseEver );
             ImGui.Begin( "Nez Core", ref isOpen );
             drawSettings();
             ImGui.End();

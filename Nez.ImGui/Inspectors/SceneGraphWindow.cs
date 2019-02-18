@@ -21,7 +21,7 @@ namespace Nez.ImGuiTools
 			if( Core.scene == null || !isOpen )
 				return;
 
-			ImGui.SetNextWindowPos( new Num.Vector2( 10, 10 ), ImGuiCond.FirstUseEver );
+			ImGui.SetNextWindowPos( new Num.Vector2( 0, 25 ), ImGuiCond.FirstUseEver );
 			ImGui.SetNextWindowSize( new Num.Vector2( 300, Screen.height / 2 ), ImGuiCond.FirstUseEver );
 
 			if( ImGui.Begin( "Scene Graph", ref isOpen ) )

@@ -4,6 +4,7 @@ using System;
 using Microsoft.Xna.Framework.Graphics;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework.Input;
+using Num = System.Numerics;
 
 namespace Nez.ImGuiTools
 {
@@ -38,7 +39,7 @@ namespace Nez.ImGuiTools
 			if( _lastRenderTarget == null )
 				return;
 
-			var maxSize = new System.Numerics.Vector2( _lastRenderTarget.Width, _lastRenderTarget.Height );
+			var maxSize = new Num.Vector2( _lastRenderTarget.Width, _lastRenderTarget.Height );
 			var minSize = maxSize / 4;
 			maxSize *= 4;
 			unsafe
@@ -51,8 +52,10 @@ namespace Nez.ImGuiTools
 				} );
 			}
 
-			ImGui.SetNextWindowPos( new System.Numerics.Vector2( 0, 0 ), ImGuiCond.FirstUseEver );
-			ImGui.PushStyleVar( ImGuiStyleVar.WindowPadding, new System.Numerics.Vector2( 0, 0 ) );
+			var rtAspectRatio = (float)_lastRenderTarget.Width / (float)_lastRenderTarget.Height;
+			ImGui.SetNextWindowPos( new Num.Vector2( 345, 25 ), ImGuiCond.FirstUseEver );
+			ImGui.SetNextWindowSize( new Num.Vector2( Screen.width / 2, ( Screen.width / 2 ) / rtAspectRatio ), ImGuiCond.FirstUseEver );
+			ImGui.PushStyleVar( ImGuiStyleVar.WindowPadding, new Num.Vector2( 0, 0 ) );
 			ImGui.Begin( "Game Window" );
 
 			// convert mouse input to the game windows coordinates

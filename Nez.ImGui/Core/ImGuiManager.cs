@@ -4,13 +4,14 @@ using System;
 using Microsoft.Xna.Framework.Graphics;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework.Input;
+using Num = System.Numerics;
 
 namespace Nez.ImGuiTools
 {
 	public partial class ImGuiManager : GlobalManager, IFinalRenderDelegate, IDisposable
 	{
 		public bool showSceneGraphWindow = true;
-		public bool showDemoWindow = true;
+		public bool showDemoWindow = false;
 		public bool showCoreWindow = true;
 
 		List<EntityInspector> _entityInspectors = new List<EntityInspector>();
@@ -48,6 +49,9 @@ namespace Nez.ImGuiTools
 				_drawCommands[i]();
 
 			// this is just test/junk code
+            ImGui.SetNextWindowPos( new Num.Vector2( 530, 475 ), ImGuiCond.FirstUseEver );
+            ImGui.SetNextWindowSize( new Num.Vector2( 340, 200 ), ImGuiCond.FirstUseEver );
+			if( ImGui.Begin( "Debug##junk" ) )
 			{
 				ImGui.Text( $"Mouse position: {ImGui.GetMousePos()}" );
 				ImGui.ShowStyleSelector( "Style" );
@@ -60,6 +64,7 @@ namespace Nez.ImGuiTools
 
 				float framerate = ImGui.GetIO().Framerate;
 				ImGui.Text( $"Application average {1000.0f / framerate:0.##} ms/frame ({framerate:0.#} FPS)" );
+				ImGui.End();
 			}
 
 
