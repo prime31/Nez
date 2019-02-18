@@ -62,7 +62,7 @@ namespace Nez
 		/// default GameServiceContainer access
 		/// </summary>
 		/// <value>The services.</value>
-		public static GameServiceContainer services { get { return _instance.Services; } }
+		public static GameServiceContainer services => _instance.Services;
 
 		/// <summary>
 		/// provides access to the single Core/Game instance

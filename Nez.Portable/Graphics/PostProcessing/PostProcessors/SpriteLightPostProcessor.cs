@@ -40,7 +40,7 @@ namespace Nez
 		}
 
 
-		public override void onAddedToScene()
+		public override void onAddedToScene( Scene scene )
 		{
 			effect = scene.content.loadEffect<Effect>( "spriteLightMultiply", EffectResource.spriteLightMultiplyBytes );
 			effect.Parameters["_lightTexture"].SetValue( _lightsRenderTexture );

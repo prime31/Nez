@@ -13,9 +13,7 @@ namespace Nez
 	/// </summary>
 	public interface IFinalRenderDelegate
 	{
-		Scene scene { get; set; }
-
-		void onAddedToScene();
+		void onAddedToScene( Scene scene );
 
 		void onSceneBackBufferSizeChanged( int newWidth, int newHeight );
 

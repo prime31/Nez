@@ -153,10 +153,7 @@ namespace Nez
 				_finalRenderDelegate = value;
 
 				if( _finalRenderDelegate != null )
-				{
-					_finalRenderDelegate.scene = this;
-					_finalRenderDelegate.onAddedToScene();
-				}
+					_finalRenderDelegate.onAddedToScene( this );
 			}
 			get
 			{
@@ -931,8 +928,7 @@ namespace Nez
 		{
 			_postProcessors.add( postProcessor );
 			_postProcessors.sort();
-			postProcessor.scene = this;
-			postProcessor.onAddedToScene();
+			postProcessor.onAddedToScene( this );
 
 			// if we already began let the PostProcessor know what size our RenderTarget is
 			if( _didSceneBegin )

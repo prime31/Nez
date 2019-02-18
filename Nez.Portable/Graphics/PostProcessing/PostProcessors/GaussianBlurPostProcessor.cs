@@ -23,11 +23,17 @@ namespace Nez
 		}
 
 		float _renderTargetScale = 1f;
+		Scene _scene;
 
 
 		public GaussianBlurPostProcessor( int executionOrder ) : base( executionOrder, new GaussianBlurEffect() )
 		{}
 
+
+		public override void onAddedToScene( Scene scene )
+		{
+			_scene = scene;
+		}
 
 		public override void onSceneBackBufferSizeChanged( int newWidth, int newHeight )
 		{
@@ -40,7 +46,7 @@ namespace Nez
 		/// </summary>
 		void updateEffectDeltas()
 		{
-			var sceneRenderTargetSize = scene.sceneRenderTargetSize;
+			var sceneRenderTargetSize = _scene.sceneRenderTargetSize;
 			effect.horizontalBlurDelta = 1f / ( sceneRenderTargetSize.X * _renderTargetScale );
 			effect.verticalBlurDelta = 1f / ( sceneRenderTargetSize.Y * _renderTargetScale );
 		}
@@ -50,7 +56,7 @@ namespace Nez
 		{
 			// aquire a temporary rendertarget for the processing. It can be scaled via renderTargetScale in order to minimize fillrate costs. Reducing
 			// the resolution in this way doesn't hurt quality, because we are going to be blurring the images in any case.
-			var sceneRenderTargetSize = scene.sceneRenderTargetSize;
+			var sceneRenderTargetSize = _scene.sceneRenderTargetSize;
 			var tempRenderTarget = RenderTarget.getTemporary( (int)( sceneRenderTargetSize.X * _renderTargetScale ), (int)( sceneRenderTargetSize.Y * _renderTargetScale ), DepthFormat.None );
 
 

@@ -21,11 +21,6 @@ namespace Nez
 		public readonly int executionOrder = 0;
 
 		/// <summary>
-		/// the Scene this PostProcessor resides in
-		/// </summary>
-		public Scene scene;
-
-		/// <summary>
 		/// The effect used to render with
 		/// </summary>
 		public Effect effect;
@@ -53,7 +48,7 @@ namespace Nez
 		/// called when the PostProcessor is added to the scene. The scene field is not valid until this is called
 		/// </summary>
 		/// <param name="scene">Scene.</param>
-		public virtual void onAddedToScene()
+		public virtual void onAddedToScene( Scene scene )
 		{}
 
 

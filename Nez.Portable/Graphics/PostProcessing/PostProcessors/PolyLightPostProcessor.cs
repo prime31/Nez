@@ -63,6 +63,7 @@ namespace Nez
 
 		GaussianBlurEffect _blurEffect;
 		RenderTexture _lightsRenderTexture;
+		Scene _scene;
 
 
 		public PolyLightPostProcessor( int executionOrder, RenderTexture lightsRenderTexture ) : base( executionOrder )
@@ -76,7 +77,7 @@ namespace Nez
 		/// </summary>
 		void updateBlurEffectDeltas()
 		{
-			var sceneRenderTargetSize = scene.sceneRenderTargetSize;
+			var sceneRenderTargetSize = _scene.sceneRenderTargetSize;
 			_blurEffect.horizontalBlurDelta = 1f / ( sceneRenderTargetSize.X * _blurRenderTargetScale );
 			_blurEffect.verticalBlurDelta = 1f / ( sceneRenderTargetSize.Y * _blurRenderTargetScale );
 		}
@@ -100,10 +101,10 @@ namespace Nez
 			{
 				_blurEnabled = enableBlur;
 
-				if( _blurEnabled && _blurEffect == null && scene != null )
+				if( _blurEnabled && _blurEffect == null && _scene != null )
 				{
-					_blurEffect = scene.content.loadNezEffect<GaussianBlurEffect>();
-					if( scene.sceneRenderTarget != null )
+					_blurEffect = _scene.content.loadNezEffect<GaussianBlurEffect>();
+					if( _scene.sceneRenderTarget != null )
 						updateBlurEffectDeltas();
 				}
 			}
@@ -117,7 +118,7 @@ namespace Nez
 			if( _blurRenderTargetScale != blurRenderTargetScale )
 			{
 				_blurRenderTargetScale = blurRenderTargetScale;
-				if( _blurEffect != null && scene.sceneRenderTarget != null )
+				if( _blurEffect != null && _scene.sceneRenderTarget != null )
 					updateBlurEffectDeltas();
 			}
 
@@ -136,8 +137,9 @@ namespace Nez
 		#endregion
 
 
-		public override void onAddedToScene()
+		public override void onAddedToScene( Scene scene )
 		{
+			_scene = scene;
 			effect = scene.content.loadEffect<Effect>( "spriteLightMultiply", EffectResource.spriteLightMultiplyBytes );
 			effect.Parameters["_lightTexture"].SetValue( _lightsRenderTexture );
 			effect.Parameters["_multiplicativeFactor"].SetValue( _multiplicativeFactor );
@@ -153,7 +155,7 @@ namespace Nez
 			{
 				// aquire a temporary rendertarget for the processing. It can be scaled via renderTargetScale in order to minimize fillrate costs. Reducing
 				// the resolution in this way doesn't hurt quality, because we are going to be blurring the images in any case.
-				var sceneRenderTargetSize = scene.sceneRenderTargetSize;
+				var sceneRenderTargetSize = _scene.sceneRenderTargetSize;
 				var tempRenderTarget = RenderTarget.getTemporary( (int)( sceneRenderTargetSize.X * _blurRenderTargetScale ), (int)( sceneRenderTargetSize.Y * _blurRenderTargetScale ), DepthFormat.None );
 
 

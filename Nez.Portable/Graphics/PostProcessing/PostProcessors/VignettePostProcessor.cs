@@ -46,7 +46,7 @@ namespace Nez
 		{}
 
 
-		public override void onAddedToScene()
+		public override void onAddedToScene( Scene scene )
 		{
 			effect = scene.content.loadEffect<Effect>( "vignette", EffectResource.vignetteBytes );
 
