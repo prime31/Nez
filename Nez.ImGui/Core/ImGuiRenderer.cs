@@ -234,8 +234,8 @@ namespace Nez.ImGuiTools
 		{
 			var io = ImGui.GetIO();
 
-			var mouse = Mouse.GetState();
-			var keyboard = Keyboard.GetState();
+			var mouse = Input.currentMouseState;
+			var keyboard = Input.currentKeyboardState;
 
 			for( int i = 0; i < _keys.Count; i++ )
 			{
@@ -258,7 +258,7 @@ namespace Nez.ImGuiTools
 
 			var scrollDelta = mouse.ScrollWheelValue - _scrollWheelValue;
 			io.MouseWheel = scrollDelta > 0 ? 1 : scrollDelta < 0 ? -1 : 0;
-			_scrollWheelValue = mouse.ScrollWheelValue;
+			_scrollWheelValue = mouse.ScrollWheelValue * 0.5;
 		}
 
 		#endregion

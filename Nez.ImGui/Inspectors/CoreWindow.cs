@@ -36,7 +36,7 @@ namespace Nez.ImGuiTools
             _frameRateArray[_frameRateArrayIndex] = ImGui.GetIO().Framerate;
             _frameRateArrayIndex = ( _frameRateArrayIndex + 1 ) % _frameRateArray.Length;
 
-            ImGui.PlotLines( "", ref _frameRateArray[0], _frameRateArray.Length, _frameRateArrayIndex, $"FPS: {ImGui.GetIO().Framerate:0}", 0, 60, new Num.Vector2( ImGui.GetContentRegionAvail().X, 50 ) );
+            ImGui.PlotLines( "##hidelabel", ref _frameRateArray[0], _frameRateArray.Length, _frameRateArrayIndex, $"FPS: {ImGui.GetIO().Framerate:0}", 0, 60, new Num.Vector2( ImGui.GetContentRegionAvail().X, 50 ) );
 
             ImGui.Text( "Core Settings" );
             ImGui.Checkbox( "exitOnEscapeKeypress", ref Core.exitOnEscapeKeypress );

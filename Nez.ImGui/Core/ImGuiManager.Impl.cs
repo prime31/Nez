@@ -9,11 +9,15 @@ namespace Nez.ImGuiTools
 {
 	public partial class ImGuiManager : GlobalManager, IFinalRenderDelegate, IDisposable
 	{
+		/// <summary>
+		/// here we do some cleanup in preparation for a new Scene
+		/// </summary>
 		void onSceneChanged()
 		{
 			// when the Scene changes we need to rewire ourselves up as the IFinalRenderDelegate in the new Scene
 			// if we were previously enabled and do some cleanup
 			_drawCommands.Clear();
+			_entityInspectors.Clear();
 
 			if( _renderTargetId != IntPtr.Zero )
 			{

@@ -13,6 +13,7 @@ namespace Nez.ImGuiTools
 		public bool showDemoWindow = true;
 		public bool showCoreWindow = true;
 
+		List<EntityInspector> _entityInspectors = new List<EntityInspector>();
 		List<Action> _drawCommands = new List<Action>();
 		ImGuiRenderer _renderer;
 
@@ -39,8 +40,9 @@ namespace Nez.ImGuiTools
 		/// </summary>
 		void layoutGui()
 		{
-			drawMenu();
+			drawMainMenuBar();
 			drawGameWindow();
+			drawEntityInspectors();
 
 			for( var i = _drawCommands.Count - 1; i >= 0; i-- )
 				_drawCommands[i]();
@@ -68,7 +70,10 @@ namespace Nez.ImGuiTools
 				ImGui.ShowDemoWindow( ref showDemoWindow );
 		}
 
-		void drawMenu()
+		/// <summary>
+		/// draws the main menu bar
+		/// </summary>
+		void drawMainMenuBar()
 		{
 			if( ImGui.BeginMainMenuBar() )
 			{
@@ -84,6 +89,14 @@ namespace Nez.ImGuiTools
 			}
 		}
 
+		/// <summary>
+		/// draws all the EntityInspectors
+		/// </summary>
+		void drawEntityInspectors()
+		{
+			for( var i = _entityInspectors.Count - 1; i >= 0; i-- )
+				_entityInspectors[i].draw();
+		}
 
 		#region Public API
 
@@ -112,6 +125,53 @@ namespace Nez.ImGuiTools
 		/// <param name="texture"></param>
 		/// <returns></returns>
 		public IntPtr bindTexture( Texture2D texture ) => _renderer.bindTexture( texture );
+
+		/// <summary>
+		/// creates an EntityInspector window
+		/// </summary>
+		/// <param name="entity"></param>
+		public void startInspectingEntity( Entity entity )
+		{
+			// if we are already inspecting the Entity focus the window
+			foreach( var inspector in _entityInspectors )
+			{
+				if( inspector.entity == entity )
+				{
+					inspector.setWindowFocus();
+					return;
+				}
+			}
+
+			var entityInspector = new EntityInspector( entity );
+			entityInspector.setWindowFocus();
+			_entityInspectors.Add( entityInspector );
+		}
+
+		/// <summary>
+		/// removes the EntityInspector for this Entity
+		/// </summary>
+		/// <param name="entity"></param>
+		public void stopInspectingEntity( Entity entity )
+		{
+			for( var i = 0; i < _entityInspectors.Count; i++ )
+			{
+				var inspector = _entityInspectors[i];
+				if( inspector.entity == entity )
+				{
+					_entityInspectors.RemoveAt( i );
+					return;
+				}
+			}
+		}
+
+		/// <summary>
+		/// removes the EntityInspector
+		/// </summary>
+		/// <param name="entityInspector"></param>
+		public void stopInspectingEntity( EntityInspector entityInspector )
+		{
+			_entityInspectors.RemoveAt( _entityInspectors.IndexOf( entityInspector ) );
+		}
 
 		#endregion
 
