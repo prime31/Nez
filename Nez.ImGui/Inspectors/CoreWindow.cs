@@ -8,19 +8,14 @@ namespace Nez.ImGuiTools
     static class CoreWindow
     {
         static string[] _textureFilters;
-        static int _currentTextureFilter;
         static string[] _textureAddressModes;
-        static int _addressU, _addressV, _addressW;
+        static float[] _frameRateArray = new float[100];
+        static int _frameRateArrayIndex = 0;
 
         static CoreWindow()
         {
             _textureFilters = Enum.GetNames( typeof( TextureFilter ) );
-            _currentTextureFilter = Array.IndexOf( _textureFilters, Core.defaultSamplerState.Filter.ToString() );
-
             _textureAddressModes = Enum.GetNames( typeof( TextureAddressMode ) );
-            _addressU = Array.IndexOf( _textureAddressModes, Core.defaultSamplerState.AddressU.ToString() );
-            _addressV = Array.IndexOf( _textureAddressModes, Core.defaultSamplerState.AddressV.ToString() );
-            _addressW = Array.IndexOf( _textureAddressModes, Core.defaultSamplerState.AddressW.ToString() );
         }
 
         public static void show( ref bool isOpen )
@@ -38,6 +33,11 @@ namespace Nez.ImGuiTools
 
         static void drawSettings()
         {
+            _frameRateArray[_frameRateArrayIndex] = ImGui.GetIO().Framerate;
+            _frameRateArrayIndex = ( _frameRateArrayIndex + 1 ) % _frameRateArray.Length;
+
+            ImGui.PlotLines( "", ref _frameRateArray[0], _frameRateArray.Length, _frameRateArrayIndex, $"FPS: {ImGui.GetIO().Framerate:0}", 0, 60, new Num.Vector2( ImGui.GetContentRegionAvail().X, 50 ) );
+
             ImGui.Text( "Core Settings" );
             ImGui.Checkbox( "exitOnEscapeKeypress", ref Core.exitOnEscapeKeypress );
             ImGui.Checkbox( "pauseOnFocusLost", ref Core.pauseOnFocusLost );
@@ -45,21 +45,25 @@ namespace Nez.ImGuiTools
             ImGui.Separator();
 
             ImGui.Text( "Core.defaultSamplerState" );
-            if( ImGui.Combo( "Filter", ref _currentTextureFilter, _textureFilters, _textureFilters.Length ) )
-                Core.defaultSamplerState.Filter = (TextureFilter)Enum.Parse( typeof( TextureFilter ), _textureFilters[_currentTextureFilter] );
+            var currentTextureFilter = (int)Core.defaultSamplerState.Filter;
+            if( ImGui.Combo( "Filter", ref currentTextureFilter, _textureFilters, _textureFilters.Length ) )
+                Core.defaultSamplerState.Filter = (TextureFilter)Enum.Parse( typeof( TextureFilter ), _textureFilters[currentTextureFilter] );
 
             var anisotropy = Core.defaultSamplerState.MaxAnisotropy;
             if( ImGui.InputInt( "MaxAnisotropy", ref anisotropy ) )
                 Core.defaultSamplerState.MaxAnisotropy = anisotropy;
 
-            if( ImGui.Combo( "AddressU", ref _addressU, _textureAddressModes, _textureAddressModes.Length ) )
-                Core.defaultSamplerState.AddressU = (TextureAddressMode)Enum.Parse( typeof( TextureAddressMode ), _textureAddressModes[_addressU] );
+            var addressU = (int)Core.defaultSamplerState.AddressU;
+            if( ImGui.Combo( "AddressU", ref addressU, _textureAddressModes, _textureAddressModes.Length ) )
+                Core.defaultSamplerState.AddressU = (TextureAddressMode)addressU;
 
-            if( ImGui.Combo( "AddressV", ref _addressV, _textureAddressModes, _textureAddressModes.Length ) )
-                Core.defaultSamplerState.AddressV = (TextureAddressMode)Enum.Parse( typeof( TextureAddressMode ), _textureAddressModes[_addressV] );
+            var addressV = (int)Core.defaultSamplerState.AddressV;
+            if( ImGui.Combo( "AddressV", ref addressV, _textureAddressModes, _textureAddressModes.Length ) )
+                Core.defaultSamplerState.AddressV = (TextureAddressMode)addressV;
 
-            if( ImGui.Combo( "AddressW", ref _addressW, _textureAddressModes, _textureAddressModes.Length ) )
-                Core.defaultSamplerState.AddressW = (TextureAddressMode)Enum.Parse( typeof( TextureAddressMode ), _textureAddressModes[_addressW] );
+            var addressW = (int)Core.defaultSamplerState.AddressW;
+            if( ImGui.Combo( "AddressW", ref addressW, _textureAddressModes, _textureAddressModes.Length ) )
+                Core.defaultSamplerState.AddressW = (TextureAddressMode)addressW;
         }
     }
 }

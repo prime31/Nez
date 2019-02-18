@@ -16,6 +16,7 @@ namespace Nez.ImGuiTools
             ImGui.Begin( "Scene Graph", ref isOpen );
 
             ImGui.Text( "Entity List" );
+
             for( var i = 0; i < Core.scene.entities.count; i++ )
             {
                 drawEntity( Core.scene.entities[i] );
@@ -24,12 +25,19 @@ namespace Nez.ImGuiTools
             ImGui.End();
         }
 
-		static void drawEntity( Entity entity )
+		static void drawEntity( Entity entity, bool onlyDrawRoots = true )
 		{
-			if( ImGui.TreeNode( entity.name ) )
+            if( onlyDrawRoots && entity.transform.parent != null )
+                return;
+
+			if( ImGui.TreeNode( $"{entity.name} ({entity.transform.childCount})" ) )
             {
                 ImGui.Text( $"Update Inverval: {entity.updateInterval}" );
                 ImGui.Text( $"Tag: {entity.tag}" );
+                ImGui.Button( "Inspect Entity" );
+
+                for( var i = 0; i < entity.transform.childCount; i++ )
+                    drawEntity( entity.transform.getChild( i ).entity, false );
 
                 ImGui.TreePop();
             }

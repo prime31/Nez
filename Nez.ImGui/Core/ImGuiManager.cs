@@ -45,22 +45,23 @@ namespace Nez.ImGuiTools
 			for( var i = _drawCommands.Count - 1; i >= 0; i-- )
 				_drawCommands[i]();
 
-			ImGui.Text( $"Mouse position: {ImGui.GetMousePos()}" );
-			ImGui.ShowStyleSelector( "label" );
+			// this is just test/junk code
+			{
+				ImGui.Text( $"Mouse position: {ImGui.GetMousePos()}" );
+				ImGui.ShowStyleSelector( "Style" );
 
-			ImGui.Checkbox( "Demo Window", ref showDemoWindow );
-			ImGui.Checkbox( "Scene Graph", ref showSceneGraphWindow );
-			ImGui.Checkbox( "Core Window", ref showCoreWindow );
+				ImGui.Checkbox( "Demo Window", ref showDemoWindow );
+				ImGui.Checkbox( "Scene Graph", ref showSceneGraphWindow );
+				ImGui.Checkbox( "Core Window", ref showCoreWindow );
 
-			ImGui.Separator();
+				ImGui.Separator();
 
-			float framerate = ImGui.GetIO().Framerate;
-			ImGui.Text( $"Application average {1000.0f / framerate:0.##} ms/frame ({framerate:0.#} FPS)" );
-
+				float framerate = ImGui.GetIO().Framerate;
+				ImGui.Text( $"Application average {1000.0f / framerate:0.##} ms/frame ({framerate:0.#} FPS)" );
+			}
 
 
 			SceneGraphWindow.show( ref showSceneGraphWindow );
-
 			CoreWindow.show( ref showCoreWindow );
 
 			if( showDemoWindow )
@@ -73,9 +74,9 @@ namespace Nez.ImGuiTools
 			{
 				if( ImGui.BeginMenu( "Window" ) )
 				{
-					ImGui.MenuItem( "Demo Window", "", ref showDemoWindow );
-					ImGui.MenuItem( "Core Window", "", ref showCoreWindow );
-					ImGui.MenuItem( "Scene Graph Window", "", ref showSceneGraphWindow );
+					ImGui.MenuItem( "Demo Window", null, ref showDemoWindow );
+					ImGui.MenuItem( "Core Window", null, ref showCoreWindow );
+					ImGui.MenuItem( "Scene Graph Window", null, ref showSceneGraphWindow );
 					ImGui.EndMenu();
 				}
 
