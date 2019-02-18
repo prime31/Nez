@@ -63,7 +63,7 @@ Setup
 - add the `Nez.Portable/Nez.csproj` project to your solution and add a reference to it in your main project
 - make your main Game class (`Game1.cs` in a default project) subclass `Nez.Core`
 
-If you intend to use any of the built in Effects or PostProcessors you should also copy or link the `DefaultContent/effects` folder into your projects `Content/nez/effects` folder. Be sure to set the Build Action to Content and enable the "Copy to output directory" property so they get copied into your compiled game.
+If you intend to use any of the built in Effects or PostProcessors you should also copy or link the `DefaultContent/effects` folder into your projects `Content/nez/effects` folder and the `DefaultContent/textures` folder into `Content/nez/textures`. Be sure to set the Build Action to Content and enable the "Copy to output directory" property so they get copied into your compiled game.
 
 #### (optional) Pipeline Tool setup for access to the Nez Pipeline importers
 

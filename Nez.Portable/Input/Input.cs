@@ -144,7 +144,7 @@ namespace Nez
 
 
 		/// <summary>
-		/// only true if down this frame
+		/// only true if down this frame and not down the previous frame
 		/// </summary>
 		/// <returns><c>true</c>, if key pressed was gotten, <c>false</c> otherwise.</returns>
 		public static bool isKeyPressed( Keys key )

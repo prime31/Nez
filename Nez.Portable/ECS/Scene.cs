@@ -139,6 +139,11 @@ namespace Nez
 		public int pixelPerfectScale = 1;
 
 		/// <summary>
+		/// provides direct access to the postProcessors. Do not modify the returned list!
+		/// </summary>
+		public FastList<PostProcessor> rawPostProcessorList => _postProcessors;
+
+		/// <summary>
 		/// the final render to the screen can be deferred to this delegate if set. This is really only useful for cases where the final render
 		/// might need a full screen size effect even though a small back buffer is used.
 		/// </summary>
@@ -370,7 +375,10 @@ namespace Nez
 				_renderers.buffer[i].unload();
 
 			for( var i = 0; i < _postProcessors.length; i++ )
+			{
+				_postProcessors.buffer[i]._isAttachedToScene = false;
 				_postProcessors.buffer[i].unload();
+			}
 
 			// now we can remove the Entities and finally the SceneComponents
 			Core.emitter.removeObserver( CoreEvents.GraphicsDeviceReset, onGraphicsDeviceReset );
@@ -928,6 +936,7 @@ namespace Nez
 		{
 			_postProcessors.add( postProcessor );
 			_postProcessors.sort();
+			postProcessor._isAttachedToScene = true;
 			postProcessor.onAddedToScene( this );
 
 			// if we already began let the PostProcessor know what size our RenderTarget is
@@ -968,10 +977,11 @@ namespace Nez
 		/// removes a PostProcessor. Note that unload is not called when removing so if you no longer need the PostProcessor be sure to call
 		/// unload to free resources.
 		/// </summary>
-		/// <param name="step">Step.</param>
-		public void removePostProcessor( PostProcessor step )
+		/// <param name="postProcessor">Step.</param>
+		public void removePostProcessor( PostProcessor postProcessor )
 		{
-			_postProcessors.remove( step );
+			postProcessor._isAttachedToScene = true;
+			_postProcessors.remove( postProcessor );
 		}
 
 		#endregion

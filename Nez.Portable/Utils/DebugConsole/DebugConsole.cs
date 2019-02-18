@@ -50,8 +50,6 @@ namespace Nez.Console
 		Dictionary<string,CommandInfo> _commands;
 		List<string> _sorted;
 
-		KeyboardState _oldState;
-		KeyboardState _currentState;
 		string _currentText = "";
 		List<string> _drawCommands;
 		bool _underscore;
@@ -178,7 +176,6 @@ namespace Nez.Console
 			else if( Input.isKeyPressed( consoleKey, Keys.Oem8 ) )
 			{
 				isOpen = true;
-				_currentState = Keyboard.GetState();
 			}
 
 			for( var i = 0; i < _functionKeyActions.Length; i++ )
@@ -189,9 +186,6 @@ namespace Nez.Console
 
 		void updateOpen()
 		{
-			_oldState = _currentState;
-			_currentState = Keyboard.GetState();
-
 			_underscoreCounter += Time.deltaTime;
 			while( _underscoreCounter >= UNDERSCORE_TIME )
 			{
@@ -201,7 +195,7 @@ namespace Nez.Console
 
 			if( _repeatKey.HasValue )
 			{
-				if( _currentState[_repeatKey.Value] == KeyState.Down )
+				if( Input.isKeyDown( _repeatKey.Value ) )
 				{
 					_repeatCounter += Time.deltaTime;
 
@@ -215,9 +209,9 @@ namespace Nez.Console
 					_repeatKey = null;
 			}
 
-			foreach( var key in _currentState.GetPressedKeys() )
+			foreach( var key in Input.currentKeyboardState.GetPressedKeys() )
 			{
-				if( _oldState[key] == KeyState.Up )
+				if( Input.isKeyPressed( key ) )
 				{
 					handleKey( key );
 					break;

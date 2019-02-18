@@ -64,12 +64,17 @@ namespace Nez
 			set { setUpdateOrder( value ); }
 		}
 
-		internal BitSet componentBits;
+		/// <summary>
+		/// if destroy was called, this will be true until the next time Entitys are processed
+		/// </summary>
+		public bool isDestroyed => _isDestroyed;
 
 		/// <summary>
 		/// flag indicating if destroy was called on this Entity
 		/// </summary>
 		internal bool _isDestroyed;
+		
+		internal BitSet componentBits;
 
 		int _tag = 0;
 		bool _enabled = true;

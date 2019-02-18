@@ -95,7 +95,7 @@ namespace Nez
 
 
 		/// <summary>
-		/// removes all entities from the entities list and passes them back to the entity cache
+		/// removes all entities from the entities list
 		/// </summary>
 		public void removeAllEntities()
 		{

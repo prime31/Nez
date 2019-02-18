@@ -35,6 +35,13 @@ namespace Nez
 		/// </summary>
 		public BlendState blendState = BlendState.Opaque;
 
+		/// <summary>
+		/// indicates if this PostProcess is currently in a Scene's PostProcessor list
+		/// </summary>
+		public bool isAttachedToScene => _isAttachedToScene;
+
+		internal bool _isAttachedToScene;
+
 
 		public PostProcessor( int executionOrder, Effect effect = null )
 		{
@@ -45,11 +52,13 @@ namespace Nez
 
 
 		/// <summary>
-		/// called when the PostProcessor is added to the scene. The scene field is not valid until this is called
+		/// called when the PostProcessor is added to the Scene
 		/// </summary>
 		/// <param name="scene">Scene.</param>
 		public virtual void onAddedToScene( Scene scene )
-		{}
+		{
+			_isAttachedToScene = true;
+		}
 
 
 		/// <summary>

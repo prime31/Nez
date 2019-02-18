@@ -92,8 +92,8 @@ namespace Nez
 
         public override void render( Graphics graphics, Camera camera )
 		{
-			var pos = ( entity.transform.position - ( origin * entity.transform.localScale ) + localOffset );
-			var size = new Point( (int)( _width * entity.transform.localScale.X ), (int)( _height * entity.transform.localScale.Y ) );
+			var pos = ( entity.transform.position - ( origin * entity.transform.scale ) + localOffset );
+			var size = new Point( (int)( _width * entity.transform.scale.X ), (int)( _height * entity.transform.scale.Y ) );
 			var destRect = new Rectangle( (int)pos.X, (int)pos.Y, size.X, size.Y );
 			graphics.batcher.draw( subtexture, destRect, subtexture.sourceRect, color, entity.transform.rotation, SpriteEffects.None, layerDepth, _skewTopX, _skewBottomX, _skewLeftY, _skewRightY );
 		}
