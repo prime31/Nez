@@ -19,8 +19,10 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\..\FNA\FNA.csproj"></ProjectReference>
-		<ProjectReference Include="..\Nez.Portable\Nez.FNA.csproj"></ProjectReference>
+		<ProjectReference Include="..\..\FNA\FNA.csproj">
+		</ProjectReference>
+		<ProjectReference Include="..\Nez.Portable\Nez.FNA.csproj">
+		</ProjectReference>
 	</ItemGroup>
 
 	<PropertyGroup>

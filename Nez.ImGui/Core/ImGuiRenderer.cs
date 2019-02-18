@@ -69,17 +69,19 @@ namespace Nez.ImGuiTools
 			setupInput();
 		}
 
+
 		#region ImGuiRenderer
 
 		/// <summary>
 		/// Creates a texture and loads the font data from ImGui. Should be called when the <see cref="GraphicsDevice" /> is initialized but before any rendering is done
 		/// </summary>
-		public unsafe void rebuildFontAtlas()
+		public unsafe void rebuildFontAtlas( bool includeDefaultFont = true )
 		{
 			// Get font texture from ImGui
 			var io = ImGui.GetIO();
 
-			defaultFontPtr = ImGui.GetIO().Fonts.AddFontDefault();
+			if( includeDefaultFont )
+				defaultFontPtr = ImGui.GetIO().Fonts.AddFontDefault();
 
 			io.Fonts.GetTexDataAsRGBA32( out byte* pixelData, out int width, out int height, out int bytesPerPixel );
 
@@ -140,9 +142,17 @@ namespace Nez.ImGuiTools
 			unsafe { renderDrawData( ImGui.GetDrawData() ); }
 		}
 
-		#endregion ImGuiRenderer
+		#endregion
+
 
 		#region Setup & Update
+
+#if FNA
+		static void setClipboardText( IntPtr userData, string txt )
+		{
+			SDL2.SDL.SDL_SetClipboardText( txt );
+		}
+#endif
 
 		/// <summary>
 		/// Maps ImGui keys to XNA keys. We use this later on to tell ImGui what keys were pressed
@@ -150,6 +160,15 @@ namespace Nez.ImGuiTools
 		void setupInput()
 		{
 			var io = ImGui.GetIO();
+
+#if FNA
+			// forward clipboard methods to SDL
+			var setClipboardMethod = GetType().GetMethod( "setClipboardText", System.Reflection.BindingFlags.Static | System.Reflection.BindingFlags.NonPublic );
+			io.SetClipboardTextFn = Marshal.GetFunctionPointerForDelegate( Delegate.CreateDelegate( typeof( Action<IntPtr,string> ), null, setClipboardMethod ) );
+
+			var getClipMethod = typeof( SDL2.SDL ).GetMethod( "SDL_GetClipboardText" );
+			io.GetClipboardTextFn = Marshal.GetFunctionPointerForDelegate( Delegate.CreateDelegate( typeof( Func<string> ), null, getClipMethod ) );
+#endif
 
 			_keys.Add( io.KeyMap[(int)ImGuiKey.Tab] = (int)Keys.Tab );
 			_keys.Add( io.KeyMap[(int)ImGuiKey.LeftArrow] = (int)Keys.Left );
@@ -242,7 +261,8 @@ namespace Nez.ImGuiTools
 			_scrollWheelValue = mouse.ScrollWheelValue;
 		}
 
-		#endregion Setup & Update
+		#endregion
+
 
 		#region Internals
 
@@ -355,7 +375,7 @@ namespace Nez.ImGuiTools
 					{
 						pass.Apply();
 
-#pragma warning disable CS0618 // // FNA does not expose an alternative method.
+#pragma warning disable CS0618 // FNA does not expose an alternative method.
 						Core.graphicsDevice.DrawIndexedPrimitives(
 							primitiveType: PrimitiveType.TriangleList,
 							baseVertex: vtxOffset,
@@ -374,6 +394,6 @@ namespace Nez.ImGuiTools
 			}
 		}
 
-		#endregion Internals
+		#endregion
 	}
 }
