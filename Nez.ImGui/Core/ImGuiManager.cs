@@ -12,6 +12,7 @@ namespace Nez.ImGuiTools
 		public bool showSceneGraphWindow = true;
 		public bool showDemoWindow = true;
 		public bool showCoreWindow = true;
+		public bool showSeperateGameWindow = true;
 
 		List<EntityInspector> _entityInspectors = new List<EntityInspector>();
 		List<Action> _drawCommands = new List<Action>();
@@ -41,7 +42,8 @@ namespace Nez.ImGuiTools
 		void layoutGui()
 		{
 			drawMainMenuBar();
-			drawGameWindow();
+			if (showSeperateGameWindow)
+				drawGameWindow();
 			drawEntityInspectors();
 
 			for( var i = _drawCommands.Count - 1; i >= 0; i-- )
@@ -82,6 +84,7 @@ namespace Nez.ImGuiTools
 					ImGui.MenuItem( "Demo Window", null, ref showDemoWindow );
 					ImGui.MenuItem( "Core Window", null, ref showCoreWindow );
 					ImGui.MenuItem( "Scene Graph Window", null, ref showSceneGraphWindow );
+					ImGui.MenuItem( "Separate Game Window", null, ref showSeperateGameWindow );
 					ImGui.EndMenu();
 				}
 

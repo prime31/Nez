@@ -128,25 +128,36 @@ namespace Nez.ImGuiTools
 
 		void IFinalRenderDelegate.handleFinalRender( RenderTarget2D finalRenderTarget, Color letterboxColor, RenderTarget2D source, Rectangle finalRenderDestinationRect, SamplerState samplerState )
 		{
-			if( _lastRenderTarget != source )
-			{
-				// unbind the old texture if we had one
-				if( _lastRenderTarget != null )
-					_renderer.unbindTexture( _renderTargetId );
+            if (!showSeperateGameWindow)
+            {
+                Core.graphicsDevice.setRenderTarget(finalRenderTarget);
+                Core.graphicsDevice.Clear(letterboxColor);
+                Graphics.instance.batcher.begin(BlendState.Opaque, samplerState, null, null);
+                Graphics.instance.batcher.draw(source, finalRenderDestinationRect, Color.White);
+                Graphics.instance.batcher.end();
+            }
+            else
+            {
+                if (_lastRenderTarget != source)
+                {
+                    // unbind the old texture if we had one
+                    if (_lastRenderTarget != null)
+                        _renderer.unbindTexture(_renderTargetId);
 
-				// bind the new texture
-				_lastRenderTarget = source;
-				_renderTargetId = _renderer.bindTexture( source );
-			}
+                    // bind the new texture
+                    _lastRenderTarget = source;
+                    _renderTargetId = _renderer.bindTexture(source);
+                }
 
-			// we cant draw the game window until we have the texture bound so we append it here
-			ImGui.Begin( "Game Window" );
-			ImGui.Image( _renderTargetId, ImGui.GetContentRegionAvail() );
-			ImGui.End();
+                // we cant draw the game window until we have the texture bound so we append it here
+                ImGui.Begin("Game Window");
+                ImGui.Image(_renderTargetId, ImGui.GetContentRegionAvail());
+                ImGui.End();
 
-			Core.graphicsDevice.SamplerStates[0] = samplerState;
-			Core.graphicsDevice.setRenderTarget( finalRenderTarget );
-			Core.graphicsDevice.Clear( letterboxColor );
+                Core.graphicsDevice.SamplerStates[0] = samplerState;
+                Core.graphicsDevice.setRenderTarget(finalRenderTarget);
+                Core.graphicsDevice.Clear(letterboxColor);
+            }
 
 			_renderer.afterLayout();
 		}
