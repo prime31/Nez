@@ -47,6 +47,7 @@ namespace Nez
 		/// standard Batcher layerdepth. 0 is in front and 1 is in back. Changing this value will trigger a sort of the renderableComponents
 		/// list on the scene.
 		/// </summary>
+		[Range( 0, 1 )]
 		public float layerDepth
 		{
 			get { return _layerDepth; }

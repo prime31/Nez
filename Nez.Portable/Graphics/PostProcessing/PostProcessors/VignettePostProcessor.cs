@@ -6,6 +6,7 @@ namespace Nez
 {
 	public class VignettePostProcessor : PostProcessor
 	{
+		[Range( 0.001f, 10f, 0.001f )]
 		public float power
 		{
 			get { return _power; }
@@ -21,6 +22,7 @@ namespace Nez
 			}
 		}
 
+		[Range( 0.001f, 10f, 0.001f )]
 		public float radius
 		{
 			get { return _radius; }

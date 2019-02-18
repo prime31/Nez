@@ -64,6 +64,7 @@ namespace Nez
 		/// raw zoom value. This is the exact value used for the scale matrix. Default is 1.
 		/// </summary>
 		/// <value>The raw zoom.</value>
+		[Range( 0, float.MaxValue )]
 		public float rawZoom
 		{
 			get { return _zoom; }
@@ -82,6 +83,7 @@ namespace Nez
 		/// appropriate minimum/maximum values then use a more intuitive -1 to 1 mapping to change the zoom.
 		/// </summary>
 		/// <value>The zoom.</value>
+		[Range( 1, 1 )]
 		public float zoom
 		{
 			get
@@ -100,6 +102,7 @@ namespace Nez
 		/// minimum non-scaled value (0 - float.Max) that the camera zoom can be. Defaults to 0.3
 		/// </summary>
 		/// <value>The minimum zoom.</value>
+		[Range( 0, float.MaxValue )]
 		public float minimumZoom
 		{
 			get { return _minimumZoom; }
@@ -110,6 +113,7 @@ namespace Nez
 		/// maximum non-scaled value (0 - float.Max) that the camera zoom can be. Defaults to 3
 		/// </summary>
 		/// <value>The maximum zoom.</value>
+		[Range( 0, float.MaxValue )]
 		public float maximumZoom
 		{
 			get { return _maximumZoom; }
