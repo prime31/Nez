@@ -61,7 +61,6 @@ namespace Nez.ImGuiTools
 			if( !ImGui.IsWindowFocused() )
 				Input.setCurrentKeyboardState( new KeyboardState() );
 
-			ImGui.Image( _renderTargetId, ImGui.GetContentRegionAvail() );
 			ImGui.End();
 
 			ImGui.PopStyleVar();
@@ -140,6 +139,12 @@ namespace Nez.ImGuiTools
 				_renderTargetId = _renderer.bindTexture( source );
 			}
 
+			// we cant draw the game window until we have the texture bound so we append it here
+			ImGui.Begin( "Game Window" );
+			ImGui.Image( _renderTargetId, ImGui.GetContentRegionAvail() );
+			ImGui.End();
+
+			Core.graphicsDevice.SamplerStates[0] = samplerState;
 			Core.graphicsDevice.setRenderTarget( finalRenderTarget );
 			Core.graphicsDevice.Clear( letterboxColor );
 

@@ -258,7 +258,7 @@ namespace Nez.ImGuiTools
 
 			var scrollDelta = mouse.ScrollWheelValue - _scrollWheelValue;
 			io.MouseWheel = scrollDelta > 0 ? 1 : scrollDelta < 0 ? -1 : 0;
-			_scrollWheelValue = mouse.ScrollWheelValue * 0.5;
+			_scrollWheelValue = mouse.ScrollWheelValue;
 		}
 
 		#endregion

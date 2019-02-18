@@ -73,7 +73,7 @@ namespace Nez.ImGuiTools
 	
         static void drawPostProcessors()
         {
-            // first, we check our list of inspectors and sync it up with the currnet list of PostProcessors in the Scene
+            // first, we check our list of inspectors and sync it up with the current list of PostProcessors in the Scene
             for( var i = 0; i < Core.scene.rawPostProcessorList.length; i++ )
             {
                 var postProcessor = Core.scene.rawPostProcessorList.buffer[i];
@@ -84,9 +84,14 @@ namespace Nez.ImGuiTools
             for( var i = _postProcessorInspectors.Count - 1; i >= 0; i-- )
             {
                 if( !_postProcessorInspectors[i].postProcessor.isAttachedToScene )
+                {
                     _postProcessorInspectors.RemoveAt( i );
+                }
                 else
+                {
                     _postProcessorInspectors[i].draw();
+                    NezImGui.smallVerticalSpace();
+                }
             }
         }
 

@@ -16,6 +16,10 @@ namespace Nez.ImGuiTools
         public EntityInspector( Entity entity )
 		{
 			_entity = entity;
+
+			for( var i = 0; i < entity.components.count; i++ )
+				_componentInspectors.Add( new ComponentInspector( entity.components[i] ) );
+			
 			_componentInspectors.Add( new TransformInspector( entity.transform ) );
 		}
 
@@ -53,12 +57,12 @@ namespace Nez.ImGuiTools
 				if( ImGui.InputInt( "Tag", ref tag ) )
                     entity.tag = tag;
 
-				ImGui.Dummy( new Num.Vector2( 0, 10 ) );
+				NezImGui.mediumVerticalSpace();
 
 				for( var i = _componentInspectors.Count - 1; i >= 0; i-- )
 				{
 					_componentInspectors[i].draw();
-					ImGui.Dummy( new Num.Vector2( 0, 10 ) );
+					NezImGui.mediumVerticalSpace();
 				}
 				ImGui.End();
 			}

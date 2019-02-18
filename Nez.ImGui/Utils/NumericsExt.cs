@@ -38,5 +38,15 @@ namespace Nez.ImGuiTools
         {
             return new Num.Vector4( self.X, self.Y, self.Z, self.W );
         }
+
+        public static Num.Vector4 toNumerics( this Color self )
+        {
+            return new Num.Vector4( self.R / 255.0f, self.G / 255.0f, self.B / 255.0f, self.A / 255.0f );
+        }
+
+        public static Color toXNAColor( this Num.Vector4 self )
+        {
+            return new Color( self.X * 1.0f, self.Y * 1.0f, self.Z * 1.0f, self.W * 1.0f );
+        }
     }
 }
