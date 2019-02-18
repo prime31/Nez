@@ -10,9 +10,10 @@ namespace Nez.ImGuiTools
 {
 	public partial class ImGuiManager : GlobalManager, IFinalRenderDelegate, IDisposable
 	{
-		public bool showSceneGraphWindow = true;
 		public bool showDemoWindow = false;
+		public bool showSceneGraphWindow = true;
 		public bool showCoreWindow = true;
+		public bool showSeperateGameWindow = true;
 
 		List<EntityInspector> _entityInspectors = new List<EntityInspector>();
 		List<Action> _drawCommands = new List<Action>();
@@ -42,11 +43,20 @@ namespace Nez.ImGuiTools
 		void layoutGui()
 		{
 			drawMainMenuBar();
-			drawGameWindow();
+
+			if( showSeperateGameWindow )
+				drawGameWindow();
 			drawEntityInspectors();
 
 			for( var i = _drawCommands.Count - 1; i >= 0; i-- )
 				_drawCommands[i]();
+
+			SceneGraphWindow.show( ref showSceneGraphWindow );
+			CoreWindow.show( ref showCoreWindow );
+
+			if( showDemoWindow )
+				ImGui.ShowDemoWindow( ref showDemoWindow );
+
 
 			// this is just test/junk code
             ImGui.SetNextWindowPos( new Num.Vector2( 530, 475 ), ImGuiCond.FirstUseEver );
@@ -66,13 +76,6 @@ namespace Nez.ImGuiTools
 				ImGui.Text( $"Application average {1000.0f / framerate:0.##} ms/frame ({framerate:0.#} FPS)" );
 				ImGui.End();
 			}
-
-
-			SceneGraphWindow.show( ref showSceneGraphWindow );
-			CoreWindow.show( ref showCoreWindow );
-
-			if( showDemoWindow )
-				ImGui.ShowDemoWindow( ref showDemoWindow );
 		}
 
 		/// <summary>
@@ -87,6 +90,7 @@ namespace Nez.ImGuiTools
 					ImGui.MenuItem( "Demo Window", null, ref showDemoWindow );
 					ImGui.MenuItem( "Core Window", null, ref showCoreWindow );
 					ImGui.MenuItem( "Scene Graph Window", null, ref showSceneGraphWindow );
+					ImGui.MenuItem( "Separate Game Window", null, ref showSeperateGameWindow );
 					ImGui.EndMenu();
 				}
 

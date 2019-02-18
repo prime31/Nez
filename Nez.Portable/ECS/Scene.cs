@@ -516,11 +516,8 @@ namespace Nez
 			}
 
 			// render our final result to the backbuffer or let our delegate do so
-			if( _finalRenderDelegate != null )
-			{
-				_finalRenderDelegate.handleFinalRender( finalRenderTarget, letterboxColor, Mathf.isEven( enabledCounter ) ? _sceneRenderTarget : _destinationRenderTarget, _finalRenderDestinationRect, samplerState );
-			}
-			else
+			if( _finalRenderDelegate == null ||
+				!_finalRenderDelegate.handleFinalRender( finalRenderTarget, letterboxColor, Mathf.isEven( enabledCounter ) ? _sceneRenderTarget : _destinationRenderTarget, _finalRenderDestinationRect, samplerState ) )
 			{
 				Core.graphicsDevice.setRenderTarget( finalRenderTarget );
 				Core.graphicsDevice.Clear( letterboxColor );

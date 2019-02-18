@@ -118,8 +118,8 @@ namespace Nez.ImGuiTools
 
 		public override void update()
 		{
-			// we have to do our layout in update so that if we the game window is not active we can wipe the Input, essentially
-			// letting ImGui consume it
+			// we have to do our layout in update so that if the game window is not focused or being displayed we can wipe
+			// the Input, essentially letting ImGui consume it
 			_renderer.beforeLayout( Time.deltaTime );
 			layoutGui();
 		}
@@ -129,29 +129,34 @@ namespace Nez.ImGuiTools
 
         #region IFinalRenderDelegate
 
-		void IFinalRenderDelegate.handleFinalRender( RenderTarget2D finalRenderTarget, Color letterboxColor, RenderTarget2D source, Rectangle finalRenderDestinationRect, SamplerState samplerState )
+		bool IFinalRenderDelegate.handleFinalRender( RenderTarget2D finalRenderTarget, Color letterboxColor, RenderTarget2D source, Rectangle finalRenderDestinationRect, SamplerState samplerState )
 		{
-			if( _lastRenderTarget != source )
+			if( showSeperateGameWindow )
 			{
-				// unbind the old texture if we had one
-				if( _lastRenderTarget != null )
-					_renderer.unbindTexture( _renderTargetId );
+				if( _lastRenderTarget != source )
+				{
+					// unbind the old texture if we had one
+					if( _lastRenderTarget != null )
+						_renderer.unbindTexture( _renderTargetId );
 
-				// bind the new texture
-				_lastRenderTarget = source;
-				_renderTargetId = _renderer.bindTexture( source );
+					// bind the new texture
+					_lastRenderTarget = source;
+					_renderTargetId = _renderer.bindTexture( source );
+				}
+
+				// we cant draw the game window until we have the texture bound so we append it here
+				ImGui.Begin( "Game Window" );
+				ImGui.Image( _renderTargetId, ImGui.GetContentRegionAvail() );
+				ImGui.End();
+
+				Core.graphicsDevice.SamplerStates[0] = samplerState;
+				Core.graphicsDevice.setRenderTarget( finalRenderTarget );
+				Core.graphicsDevice.Clear( letterboxColor );
 			}
 
-			// we cant draw the game window until we have the texture bound so we append it here
-			ImGui.Begin( "Game Window" );
-			ImGui.Image( _renderTargetId, ImGui.GetContentRegionAvail() );
-			ImGui.End();
-
-			Core.graphicsDevice.SamplerStates[0] = samplerState;
-			Core.graphicsDevice.setRenderTarget( finalRenderTarget );
-			Core.graphicsDevice.Clear( letterboxColor );
-
 			_renderer.afterLayout();
+
+			return showSeperateGameWindow;
 		}
 
 		void IFinalRenderDelegate.onAddedToScene( Scene scene )

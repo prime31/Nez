@@ -87,13 +87,15 @@ namespace Nez
 		}
 
 
-		public void handleFinalRender( RenderTarget2D finalRenderTarget, Color letterboxColor, RenderTarget2D source, Rectangle finalRenderDestinationRect, SamplerState samplerState )
+		public bool handleFinalRender( RenderTarget2D finalRenderTarget, Color letterboxColor, RenderTarget2D source, Rectangle finalRenderDestinationRect, SamplerState samplerState )
 		{
 			Core.graphicsDevice.setRenderTarget( finalRenderTarget );
 			Core.graphicsDevice.Clear( letterboxColor );
 			Graphics.instance.batcher.begin( BlendState.Opaque, samplerState, DepthStencilState.None, RasterizerState.CullNone, _effect );
 			Graphics.instance.batcher.draw( source, finalRenderDestinationRect, Color.White );
 			Graphics.instance.batcher.end();
+
+			return true;
 		}
 
 

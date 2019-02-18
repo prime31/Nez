@@ -13,22 +13,37 @@ namespace Nez
 	/// </summary>
 	public interface IFinalRenderDelegate
 	{
+		/// <summary>
+		/// called when added to the Scene
+		/// </summary>
+		/// <param name="scene"></param>
 		void onAddedToScene( Scene scene );
 
+		/// <summary>
+		/// called when the back buffer size changes
+		/// </summary>
+		/// <param name="newWidth"></param>
+		/// <param name="newHeight"></param>
 		void onSceneBackBufferSizeChanged( int newWidth, int newHeight );
 
 		/// <summary>
 		/// this gets called by a Scene so that the final render can be handled. The render should be done into finalRenderTarget.
 		/// In most cases, finalRenderTarget will be null so the render will just be to the backbuffer. The only time finalRenderTarget
 		/// will be set is the first frame of a SceneTransition where the transition has requested the previous Scene render.
+		/// 
+		/// If the final render was handled return true. If false is returned the Scene will handle the final render.
 		/// </summary>
 		/// <param name="finalRenderTarget"></param>
 		/// <param name="letterboxColor"></param>
 		/// <param name="source"></param>
 		/// <param name="finalRenderDestinationRect"></param>
 		/// <param name="samplerState"></param>
-		void handleFinalRender( RenderTarget2D finalRenderTarget, Color letterboxColor, RenderTarget2D source, Rectangle finalRenderDestinationRect, SamplerState samplerState );
+		/// <returns></returns>
+		bool handleFinalRender( RenderTarget2D finalRenderTarget, Color letterboxColor, RenderTarget2D source, Rectangle finalRenderDestinationRect, SamplerState samplerState );
 
+		/// <summary>
+		/// called when a Scene ends. Release any resources here.
+		/// </summary>
 		void unload();
 	}
 }
