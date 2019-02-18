@@ -30,8 +30,6 @@ namespace Nez
 		/// this gets called by a Scene so that the final render can be handled. The render should be done into finalRenderTarget.
 		/// In most cases, finalRenderTarget will be null so the render will just be to the backbuffer. The only time finalRenderTarget
 		/// will be set is the first frame of a SceneTransition where the transition has requested the previous Scene render.
-		/// 
-		/// If the final render was handled return true. If false is returned the Scene will handle the final render.
 		/// </summary>
 		/// <param name="finalRenderTarget"></param>
 		/// <param name="letterboxColor"></param>
@@ -39,7 +37,7 @@ namespace Nez
 		/// <param name="finalRenderDestinationRect"></param>
 		/// <param name="samplerState"></param>
 		/// <returns></returns>
-		bool handleFinalRender( RenderTarget2D finalRenderTarget, Color letterboxColor, RenderTarget2D source, Rectangle finalRenderDestinationRect, SamplerState samplerState );
+		void handleFinalRender( RenderTarget2D finalRenderTarget, Color letterboxColor, RenderTarget2D source, Rectangle finalRenderDestinationRect, SamplerState samplerState );
 
 		/// <summary>
 		/// called when a Scene ends. Release any resources here.

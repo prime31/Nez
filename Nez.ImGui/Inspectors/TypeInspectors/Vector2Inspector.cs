@@ -12,6 +12,7 @@ namespace Nez.ImGuiTools.TypeInspectors
 			var value = getValue<Vector2>().toNumerics();
 			if( ImGui.DragFloat2( _name, ref value ) )
 				setValue( value.toXNA() );
+			handleTooltip();
 		}
 	}
 }

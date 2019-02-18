@@ -1,4 +1,5 @@
 ﻿using ImGuiNET;
+using System.Reflection;
 
 namespace Nez.ImGuiTools.TypeInspectors
 {
@@ -8,8 +9,8 @@ namespace Nez.ImGuiTools.TypeInspectors
 
 		public override void initialize()
 		{
-			// if we have a RangeAttribute we need to make a slider
-			_rangeAttribute = getFieldOrPropertyAttribute<RangeAttribute>();
+			base.initialize();
+			_rangeAttribute = _memberInfo.GetCustomAttribute<RangeAttribute>();
 		}
 
 		public override void draw()
@@ -25,6 +26,7 @@ namespace Nez.ImGuiTools.TypeInspectors
 				if( ImGui.DragFloat( _name, ref value ) )
 					setValue( value );
 			}
+			handleTooltip();
 		}
 	}
 }

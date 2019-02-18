@@ -9,6 +9,7 @@ namespace Nez.ImGuiTools.TypeInspectors
 			var value = getValue<bool>();
 			if( ImGui.Checkbox( _name, ref value ) )
 				setValue( value );
+			handleTooltip();
 		}
 	}
 }

@@ -15,6 +15,8 @@ namespace Nez.ImGuiTools.TypeInspectors
 
 		public override void initialize()
 		{
+			base.initialize();
+
 			// we either have a getter that gets a Material or an Effect
 			var effect = _valueType == typeof( Material ) ? getValue<Material>().effect : getValue<Effect>();
 			if( effect == null )

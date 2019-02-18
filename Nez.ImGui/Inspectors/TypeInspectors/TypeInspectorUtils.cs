@@ -52,7 +52,7 @@ namespace Nez.ImGuiTools.TypeInspectors
 					continue;
 
 				// skip Component.enabled which is handled elsewhere
-				if( prop.Name == "enabled" )
+				if( prop.Name == "enabled" || prop.Name == "entity" )
 					continue;
 
 				var inspector = getInspectorForType( prop.PropertyType, target, prop );
@@ -107,6 +107,10 @@ namespace Nez.ImGuiTools.TypeInspectors
 				return new TI.Vector3Inspector();
 			if( valueType == typeof( Color ) )
 				return new TI.ColorInspector();
+			if( valueType == typeof( Entity ) )
+				return new TI.EntityInspector();
+			if( valueType == typeof( BlendState ) )
+				return new TI.BlendStateInspector();
 			if( valueType.GetTypeInfo().IsEnum )
 				return new TI.EnumInspector();
 			if( valueType.GetTypeInfo().IsValueType )

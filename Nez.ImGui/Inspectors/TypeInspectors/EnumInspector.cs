@@ -10,6 +10,7 @@ namespace Nez.ImGuiTools.TypeInspectors
 
 		public override void initialize()
 		{
+			base.initialize();
 			_enumNames = Enum.GetNames( _valueType );
 		}
 
@@ -18,6 +19,7 @@ namespace Nez.ImGuiTools.TypeInspectors
             var index = Array.IndexOf( _enumNames, getValue<object>().ToString() );
             if( ImGui.Combo( _name, ref index, _enumNames, _enumNames.Length ) )
                 setValue( Enum.Parse( _valueType, _enumNames[index] ) );
+			handleTooltip();
 		}
 	}
 }

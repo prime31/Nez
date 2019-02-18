@@ -1,5 +1,6 @@
 using System;
 using System.Reflection;
+using ImGuiNET;
 
 namespace Nez.ImGuiTools.TypeInspectors
 {
@@ -11,19 +12,34 @@ namespace Nez.ImGuiTools.TypeInspectors
 		protected Func<object> _getter;
 		protected Action<object> _setter;
 		protected MemberInfo _memberInfo;
+		protected string _tooltip;
 
 		
 		/// <summary>
 		/// used to prep the inspector
 		/// </summary>
 		public virtual void initialize()
-		{}
+		{
+			_tooltip = _memberInfo.GetCustomAttribute<TooltipAttribute>()?.tooltip;
+		}
 
 		/// <summary>
 		/// used to draw the UI for the Inspector
 		/// </summary>
 		public abstract void draw();
 
+		/// <summary>
+		/// if there is a tooltip and the item is hovered this will display it
+		/// </summary>
+		protected void handleTooltip()
+		{
+			if( !string.IsNullOrEmpty( _tooltip ) && ImGui.IsItemHovered() )
+			{
+				ImGui.BeginTooltip();
+				ImGui.Text( _tooltip );
+				ImGui.EndTooltip();
+			}
+		}
 
 		#region Set target methods
 
@@ -143,17 +159,6 @@ namespace Nez.ImGuiTools.TypeInspectors
 		}
 
 		#endregion
-
-		protected T getFieldOrPropertyAttribute<T>() where T : Attribute
-		{
-			var attributes = _memberInfo.GetCustomAttributes<T>();
-			foreach( var attr in attributes )
-			{
-				if( attr is T )
-					return attr;
-			}
-			return null;
-		}
 
 	}
 }

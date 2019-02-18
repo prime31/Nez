@@ -10,6 +10,7 @@ namespace Nez.ImGuiTools.TypeInspectors
 			var value = getValue<string>() ?? string.Empty;
 			if( ImGui.InputText( _name, ref value, 100 ) )
 				setValue( value );
+			handleTooltip();
 		}
 	}
 }

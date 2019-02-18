@@ -85,6 +85,13 @@ namespace Nez.ImGuiTools
 		{
 			if( ImGui.BeginMainMenuBar() )
 			{
+				if( ImGui.BeginMenu( "File" ) )
+				{
+					if( ImGui.MenuItem( "Quit ImGui" ) )
+						setEnabled( false );
+					ImGui.EndMenu();
+				}
+
 				if( ImGui.BeginMenu( "Window" ) )
 				{
 					ImGui.MenuItem( "Demo Window", null, ref showDemoWindow );

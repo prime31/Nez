@@ -39,7 +39,13 @@ namespace Nez.ImGuiTools
 			if( _lastRenderTarget == null )
 				return;
 
+			var rtAspectRatio = (float)_lastRenderTarget.Width / (float)_lastRenderTarget.Height;
 			var maxSize = new Num.Vector2( _lastRenderTarget.Width, _lastRenderTarget.Height );
+			if( maxSize.X >= Screen.width || maxSize.Y >= Screen.height )
+			{
+				maxSize.X = Screen.width * 0.8f;
+				maxSize.Y = maxSize.X / rtAspectRatio;
+			}
 			var minSize = maxSize / 4;
 			maxSize *= 4;
 			unsafe
@@ -52,7 +58,6 @@ namespace Nez.ImGuiTools
 				} );
 			}
 
-			var rtAspectRatio = (float)_lastRenderTarget.Width / (float)_lastRenderTarget.Height;
 			ImGui.SetNextWindowPos( new Num.Vector2( 345, 25 ), ImGuiCond.FirstUseEver );
 			ImGui.SetNextWindowSize( new Num.Vector2( Screen.width / 2, ( Screen.width / 2 ) / rtAspectRatio ), ImGuiCond.FirstUseEver );
 			ImGui.PushStyleVar( ImGuiStyleVar.WindowPadding, new Num.Vector2( 0, 0 ) );
@@ -129,7 +134,7 @@ namespace Nez.ImGuiTools
 
         #region IFinalRenderDelegate
 
-		bool IFinalRenderDelegate.handleFinalRender( RenderTarget2D finalRenderTarget, Color letterboxColor, RenderTarget2D source, Rectangle finalRenderDestinationRect, SamplerState samplerState )
+		void IFinalRenderDelegate.handleFinalRender( RenderTarget2D finalRenderTarget, Color letterboxColor, RenderTarget2D source, Rectangle finalRenderDestinationRect, SamplerState samplerState )
 		{
 			if( showSeperateGameWindow )
 			{
@@ -153,10 +158,16 @@ namespace Nez.ImGuiTools
 				Core.graphicsDevice.setRenderTarget( finalRenderTarget );
 				Core.graphicsDevice.Clear( letterboxColor );
 			}
+			else
+			{
+				Core.graphicsDevice.setRenderTarget( finalRenderTarget );
+				Core.graphicsDevice.Clear( letterboxColor );
+				Graphics.instance.batcher.begin( BlendState.Opaque, samplerState, null, null );
+				Graphics.instance.batcher.draw( source, finalRenderDestinationRect, Color.White );
+				Graphics.instance.batcher.end();
+			}
 
 			_renderer.afterLayout();
-
-			return showSeperateGameWindow;
 		}
 
 		void IFinalRenderDelegate.onAddedToScene( Scene scene )

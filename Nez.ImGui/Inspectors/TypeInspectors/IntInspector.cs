@@ -1,4 +1,5 @@
-﻿using ImGuiNET;
+﻿using System.Reflection;
+using ImGuiNET;
 
 namespace Nez.ImGuiTools.TypeInspectors
 {
@@ -8,7 +9,8 @@ namespace Nez.ImGuiTools.TypeInspectors
 
 		public override void initialize()
 		{
-			_rangeAttribute = getFieldOrPropertyAttribute<RangeAttribute>();
+			base.initialize();
+			_rangeAttribute = _memberInfo.GetCustomAttribute<RangeAttribute>();
 		}
 
 		public override void draw()
@@ -24,6 +26,7 @@ namespace Nez.ImGuiTools.TypeInspectors
 				if( ImGui.DragInt( _name, ref value ) )
 					setValue( value );
 			}
+			handleTooltip();
 		}
 	}
 }

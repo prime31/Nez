@@ -10,6 +10,7 @@ namespace Nez.ImGuiTools.TypeInspectors
 			var value = getValue<Color>().toNumerics();
 			if( ImGui.ColorEdit4( _name, ref value ) )
 				setValue( value.toXNAColor() );
+			handleTooltip();
 		}
 	}
 }

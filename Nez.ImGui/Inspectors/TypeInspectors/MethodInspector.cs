@@ -41,6 +41,8 @@ namespace Nez.ImGuiTools.TypeInspectors
 
 		public override void initialize()
 		{
+			base.initialize();
+
 			// we could have zero or 1 param
 			var parameters = ( _memberInfo as MethodInfo ).GetParameters();
 			if( parameters.Length == 0 )
@@ -70,6 +72,7 @@ namespace Nez.ImGuiTools.TypeInspectors
 				ImGui.DragFloat2( "##", ref _vec2Param );
 			else if( _parameterType == typeof( Vector3 ) )
 				ImGui.DragFloat3( "##", ref _vec3Param );
+			handleTooltip();
 		}
 
 		void onButtonClicked()
