@@ -10,11 +10,11 @@ namespace Nez.ImGuiTools
 {
 	public partial class ImGuiManager : GlobalManager, IFinalRenderDelegate, IDisposable
 	{
-		bool _showDemoWindow = false;
-		bool _showStyleEditor = false;
-		bool _showSceneGraphWindow = true;
-		bool _showCoreWindow = true;
-		bool _showSeperateGameWindow = true;
+		public bool showDemoWindow = false;
+		public bool showStyleEditor = false;
+		public bool showSceneGraphWindow = true;
+		public bool showCoreWindow = true;
+		public bool showSeperateGameWindow = true;
 
 		List<Type> _sceneSubclasses = new List<Type>();
 		System.Reflection.MethodInfo[] _themes;
@@ -72,22 +72,22 @@ namespace Nez.ImGuiTools
 		{
 			drawMainMenuBar();
 
-			if( _showSeperateGameWindow )
+			if( showSeperateGameWindow )
 				drawGameWindow();
 			drawEntityInspectors();
 
 			for( var i = _drawCommands.Count - 1; i >= 0; i-- )
 				_drawCommands[i]();
 
-			SceneGraphWindow.show( ref _showSceneGraphWindow );
-			CoreWindow.show( ref _showCoreWindow );
+			SceneGraphWindow.show( ref showSceneGraphWindow );
+			CoreWindow.show( ref showCoreWindow );
 
-			if( _showDemoWindow )
-				ImGui.ShowDemoWindow( ref _showDemoWindow );
+			if( showDemoWindow )
+				ImGui.ShowDemoWindow( ref showDemoWindow );
 
-			if( _showStyleEditor )
+			if( showStyleEditor )
 			{
-				ImGui.Begin( "Style Editor", ref _showStyleEditor );
+				ImGui.Begin( "Style Editor", ref showStyleEditor );
 				ImGui.ShowStyleEditor();
 				ImGui.End();
 			}
@@ -101,10 +101,10 @@ namespace Nez.ImGuiTools
 				ImGui.Text( $"Mouse position: {ImGui.GetMousePos()}" );
 				ImGui.ShowStyleSelector( "Style" );
 
-				ImGui.Checkbox( "Demo Window", ref _showDemoWindow );
-				ImGui.Checkbox( "Style Editor", ref _showStyleEditor );
-				ImGui.Checkbox( "Scene Graph", ref _showSceneGraphWindow );
-				ImGui.Checkbox( "Core Window", ref _showCoreWindow );
+				ImGui.Checkbox( "Demo Window", ref showDemoWindow );
+				ImGui.Checkbox( "Style Editor", ref showStyleEditor );
+				ImGui.Checkbox( "Scene Graph", ref showSceneGraphWindow );
+				ImGui.Checkbox( "Core Window", ref showCoreWindow );
 
 				ImGui.Separator();
 
@@ -153,12 +153,12 @@ namespace Nez.ImGuiTools
 
 				if( ImGui.BeginMenu( "Window" ) )
 				{
-					ImGui.MenuItem( "Demo Window", null, ref _showDemoWindow );
-					ImGui.MenuItem( "Style Editor", null, ref _showStyleEditor );
+					ImGui.MenuItem( "Demo Window", null, ref showDemoWindow );
+					ImGui.MenuItem( "Style Editor", null, ref showStyleEditor );
 					ImGui.Separator();
-					ImGui.MenuItem( "Core Window", null, ref _showCoreWindow );
-					ImGui.MenuItem( "Scene Graph Window", null, ref _showSceneGraphWindow );
-					ImGui.MenuItem( "Separate Game Window", null, ref _showSeperateGameWindow );
+					ImGui.MenuItem( "Core Window", null, ref showCoreWindow );
+					ImGui.MenuItem( "Scene Graph Window", null, ref showSceneGraphWindow );
+					ImGui.MenuItem( "Separate Game Window", null, ref showSeperateGameWindow );
 					ImGui.EndMenu();
 				}
 
