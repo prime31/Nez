@@ -136,7 +136,7 @@ namespace Nez.ImGuiTools
 
 		void IFinalRenderDelegate.handleFinalRender( RenderTarget2D finalRenderTarget, Color letterboxColor, RenderTarget2D source, Rectangle finalRenderDestinationRect, SamplerState samplerState )
 		{
-			if( _showSeperateGameWindow )
+			if( showSeperateGameWindow )
 			{
 				if( _lastRenderTarget != source )
 				{
