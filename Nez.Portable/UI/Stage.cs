@@ -171,12 +171,10 @@ namespace Nez.UI
 			updateKeyboardState();
 			updateInputMouse();
 
-			#if !FNA
 			if( Input.touch.isConnected && Input.touch.currentTouches.Count > 0 )
 			{
 				updateInputTouch();
 			}
-			#endif
 		}
 
 
@@ -207,7 +205,6 @@ namespace Nez.UI
 		/// </summary>
 		void updateInputTouch()
 		{
-			#if !FNA
 			foreach( var touch in Input.touch.currentTouches )
 			{
 				var inputPos = screenToStageCoordinates( touch.Position );
@@ -233,7 +230,6 @@ namespace Nez.UI
 				else
 					_touchOverElement[touch.Id] = lastOver;
 			}
-			#endif
 		}
 
 
