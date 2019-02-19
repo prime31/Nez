@@ -11,7 +11,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Nez.Portable\Nez.csproj">
     </ProjectReference>
-    <PackageReference Include="MonoGame.Framework.Portable" Version="3.7.0.1708" />
+    <PackageReference Include="MonoGame.Framework.Portable" Version="3.7.1.189" />
   </ItemGroup>
 
 </Project>
