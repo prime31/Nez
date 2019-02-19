@@ -11,6 +11,7 @@ namespace Nez.ImGuiTools
 	public partial class ImGuiManager : GlobalManager, IFinalRenderDelegate, IDisposable
 	{
 		public bool showDemoWindow = false;
+		public bool showStyleEditor = false;
 		public bool showSceneGraphWindow = true;
 		public bool showCoreWindow = true;
 		public bool showSeperateGameWindow = true;
@@ -56,6 +57,13 @@ namespace Nez.ImGuiTools
 
 			if( showDemoWindow )
 				ImGui.ShowDemoWindow( ref showDemoWindow );
+			
+			if( showStyleEditor )
+			{
+				ImGui.Begin( "Style Editor", ref showStyleEditor );
+				ImGui.ShowStyleEditor();
+				ImGui.End();
+			}
 
 
 			// this is just test/junk code
@@ -67,6 +75,7 @@ namespace Nez.ImGuiTools
 				ImGui.ShowStyleSelector( "Style" );
 
 				ImGui.Checkbox( "Demo Window", ref showDemoWindow );
+				ImGui.Checkbox( "Style Editor", ref showStyleEditor );
 				ImGui.Checkbox( "Scene Graph", ref showSceneGraphWindow );
 				ImGui.Checkbox( "Core Window", ref showCoreWindow );
 
@@ -95,6 +104,8 @@ namespace Nez.ImGuiTools
 				if( ImGui.BeginMenu( "Window" ) )
 				{
 					ImGui.MenuItem( "Demo Window", null, ref showDemoWindow );
+					ImGui.MenuItem( "Style Editor", null, ref showStyleEditor );
+					ImGui.Separator();
 					ImGui.MenuItem( "Core Window", null, ref showCoreWindow );
 					ImGui.MenuItem( "Scene Graph Window", null, ref showSceneGraphWindow );
 					ImGui.MenuItem( "Separate Game Window", null, ref showSeperateGameWindow );

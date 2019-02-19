@@ -38,32 +38,37 @@ namespace Nez.ImGuiTools
 
             ImGui.PlotLines( "##hidelabel", ref _frameRateArray[0], _frameRateArray.Length, _frameRateArrayIndex, $"FPS: {ImGui.GetIO().Framerate:0}", 0, 60, new Num.Vector2( ImGui.GetContentRegionAvail().X, 50 ) );
 
-            ImGui.Text( "Core Settings" );
-            ImGui.Checkbox( "exitOnEscapeKeypress", ref Core.exitOnEscapeKeypress );
-            ImGui.Checkbox( "pauseOnFocusLost", ref Core.pauseOnFocusLost );
-            ImGui.Checkbox( "debugRenderEnabled", ref Core.debugRenderEnabled );
-            ImGui.Separator();
+            NezImGui.smallVerticalSpace();
 
-            ImGui.Text( "Core.defaultSamplerState" );
-            var currentTextureFilter = (int)Core.defaultSamplerState.Filter;
-            if( ImGui.Combo( "Filter", ref currentTextureFilter, _textureFilters, _textureFilters.Length ) )
-                Core.defaultSamplerState.Filter = (TextureFilter)Enum.Parse( typeof( TextureFilter ), _textureFilters[currentTextureFilter] );
+            if( ImGui.CollapsingHeader( "Core Settings", ImGuiTreeNodeFlags.DefaultOpen ) )
+            {
+                ImGui.Checkbox( "exitOnEscapeKeypress", ref Core.exitOnEscapeKeypress );
+                ImGui.Checkbox( "pauseOnFocusLost", ref Core.pauseOnFocusLost );
+                ImGui.Checkbox( "debugRenderEnabled", ref Core.debugRenderEnabled );
+            }
 
-            var anisotropy = Core.defaultSamplerState.MaxAnisotropy;
-            if( ImGui.InputInt( "MaxAnisotropy", ref anisotropy ) )
-                Core.defaultSamplerState.MaxAnisotropy = anisotropy;
+            if( ImGui.CollapsingHeader( "Core.defaultSamplerState", ImGuiTreeNodeFlags.DefaultOpen ) )
+            {
+                var currentTextureFilter = (int)Core.defaultSamplerState.Filter;
+                if( ImGui.Combo( "Filter", ref currentTextureFilter, _textureFilters, _textureFilters.Length ) )
+                    Core.defaultSamplerState.Filter = (TextureFilter)Enum.Parse( typeof( TextureFilter ), _textureFilters[currentTextureFilter] );
 
-            var addressU = (int)Core.defaultSamplerState.AddressU;
-            if( ImGui.Combo( "AddressU", ref addressU, _textureAddressModes, _textureAddressModes.Length ) )
-                Core.defaultSamplerState.AddressU = (TextureAddressMode)addressU;
+                var anisotropy = Core.defaultSamplerState.MaxAnisotropy;
+                if( ImGui.InputInt( "MaxAnisotropy", ref anisotropy ) )
+                    Core.defaultSamplerState.MaxAnisotropy = anisotropy;
 
-            var addressV = (int)Core.defaultSamplerState.AddressV;
-            if( ImGui.Combo( "AddressV", ref addressV, _textureAddressModes, _textureAddressModes.Length ) )
-                Core.defaultSamplerState.AddressV = (TextureAddressMode)addressV;
+                var addressU = (int)Core.defaultSamplerState.AddressU;
+                if( ImGui.Combo( "AddressU", ref addressU, _textureAddressModes, _textureAddressModes.Length ) )
+                    Core.defaultSamplerState.AddressU = (TextureAddressMode)addressU;
 
-            var addressW = (int)Core.defaultSamplerState.AddressW;
-            if( ImGui.Combo( "AddressW", ref addressW, _textureAddressModes, _textureAddressModes.Length ) )
-                Core.defaultSamplerState.AddressW = (TextureAddressMode)addressW;
+                var addressV = (int)Core.defaultSamplerState.AddressV;
+                if( ImGui.Combo( "AddressV", ref addressV, _textureAddressModes, _textureAddressModes.Length ) )
+                    Core.defaultSamplerState.AddressV = (TextureAddressMode)addressV;
+
+                var addressW = (int)Core.defaultSamplerState.AddressW;
+                if( ImGui.Combo( "AddressW", ref addressW, _textureAddressModes, _textureAddressModes.Length ) )
+                    Core.defaultSamplerState.AddressW = (TextureAddressMode)addressW;
+            }
         }
     }
 }

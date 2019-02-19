@@ -30,7 +30,7 @@ namespace Nez.ImGuiTools.TypeInspectors
 					continue;
 
 				// skip enabled which is handled elsewhere
-				if( field.Name == "enabled" )
+				if( field.Name == "enabled" || field.Name == "entity" )
 					continue;
 
 				var inspector = getInspectorForType( field.FieldType, target, field );

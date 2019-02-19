@@ -8,6 +8,10 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Nez.ImGuiTools.TypeInspectors
 {
+	/// <summary>
+	/// this is a bit of a hack. The class implements properties that just forward the calls to the BlendState
+	/// that we are inspecting.
+	/// </summary>
 	public class BlendStateInspector : AbstractTypeInspector
 	{
 		List<AbstractTypeInspector> _inspectors = new List<AbstractTypeInspector>();
@@ -22,7 +26,7 @@ namespace Nez.ImGuiTools.TypeInspectors
 		Blend AlphaDestinationBlend
 		{
 			get => _blendState.AlphaDestinationBlend;
-			set => _blendState.AlphaSourceBlend = value;
+			set => _blendState.AlphaDestinationBlend = value;
 		}
 
 		Blend AlphaSourceBlend
@@ -57,7 +61,25 @@ namespace Nez.ImGuiTools.TypeInspectors
 
 		public override void initialize()
 		{
-			_blendState = getValue<BlendState>();
+			// we have to clone the BlendState since it is often set from one of the static BlendState ivars
+			var tmpBlendState = getValue<BlendState>();
+			_blendState = new BlendState
+			{
+				AlphaBlendFunction = tmpBlendState.AlphaBlendFunction,
+				AlphaDestinationBlend = tmpBlendState.AlphaDestinationBlend,
+				AlphaSourceBlend = tmpBlendState.AlphaSourceBlend,
+				ColorBlendFunction = tmpBlendState.ColorBlendFunction,
+				ColorDestinationBlend = tmpBlendState.ColorDestinationBlend,
+				ColorSourceBlend = tmpBlendState.ColorSourceBlend,
+				ColorWriteChannels = tmpBlendState.ColorWriteChannels,
+				ColorWriteChannels1 = tmpBlendState.ColorWriteChannels1,
+				ColorWriteChannels2 = tmpBlendState.ColorWriteChannels2,
+				ColorWriteChannels3 = tmpBlendState.ColorWriteChannels3,
+				BlendFactor = tmpBlendState.BlendFactor,
+				MultiSampleMask = tmpBlendState.MultiSampleMask
+			};
+			setValue( _blendState );
+			
 			var props = GetType().GetRuntimeProperties();
 
 			AbstractTypeInspector inspector = new EnumInspector();
@@ -100,13 +122,11 @@ namespace Nez.ImGuiTools.TypeInspectors
 		{
 			if( ImGui.CollapsingHeader( _name ) )
 			{
-				ImGui.Indent();
-				//NezImGui.beginBorderedGroup();
-				ImGui.Text( _name );
+				// this is the amount of space the labels on the right require. The rest goes to the widgets
+				ImGui.PushItemWidth( -125 );
 				foreach( var i in _inspectors )
 					i.draw();
-				//NezImGui.endBorderedGroup();
-				ImGui.Unindent();
+				ImGui.PopItemWidth();
 			}
 		}
 	}
