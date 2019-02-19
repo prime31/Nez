@@ -3,7 +3,7 @@ using System.Text;
 
 namespace Nez.ImGuiTools.TypeInspectors
 {
-	public class EntityInspector : AbstractTypeInspector
+	public class EntityFieldInspector : AbstractTypeInspector
 	{
 		public override void draw()
 		{

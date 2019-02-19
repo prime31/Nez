@@ -34,8 +34,13 @@ namespace Nez.ImGuiTools
 			}
 
 			_renderer.rebuildFontAtlas( options?._includeDefaultFont ?? true );
-
 			Core.emitter.addObserver( CoreEvents.SceneChanged, onSceneChanged );
+			applyTheme();
+		}
+
+		void applyTheme()
+		{
+			ImGui.GetStyle().Colors[(int)ImGuiCol.FrameBg] = new Num.Vector4( 0.45f, 0.51f, 0.57f, 0.54f );
 		}
 
 		/// <summary>

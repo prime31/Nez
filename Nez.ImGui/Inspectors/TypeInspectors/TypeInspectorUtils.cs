@@ -108,7 +108,7 @@ namespace Nez.ImGuiTools.TypeInspectors
 			if( valueType == typeof( Color ) )
 				return new TI.ColorInspector();
 			if( valueType == typeof( Entity ) )
-				return new TI.EntityInspector();
+				return new TI.EntityFieldInspector();
 			if( valueType == typeof( BlendState ) )
 				return new TI.BlendStateInspector();
 			if( valueType.GetTypeInfo().IsEnum )
