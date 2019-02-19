@@ -10,11 +10,14 @@ namespace Nez.ImGuiTools
 {
 	public partial class ImGuiManager : GlobalManager, IFinalRenderDelegate, IDisposable
 	{
-		public bool showDemoWindow = false;
-		public bool showStyleEditor = false;
-		public bool showSceneGraphWindow = true;
-		public bool showCoreWindow = true;
-		public bool showSeperateGameWindow = true;
+		bool _showDemoWindow = false;
+		bool _showStyleEditor = false;
+		bool _showSceneGraphWindow = true;
+		bool _showCoreWindow = true;
+		bool _showSeperateGameWindow = true;
+
+		List<Type> _sceneSubclasses = new List<Type>();
+		System.Reflection.MethodInfo[] _themes;
 
 		List<EntityInspector> _entityInspectors = new List<EntityInspector>();
 		List<Action> _drawCommands = new List<Action>();
@@ -36,11 +39,30 @@ namespace Nez.ImGuiTools
 			_renderer.rebuildFontAtlas( options?._includeDefaultFont ?? true );
 			Core.emitter.addObserver( CoreEvents.SceneChanged, onSceneChanged );
 			applyTheme();
+
+			// find all Scenes
+			foreach( var assembly in AppDomain.CurrentDomain.GetAssemblies() )
+			{
+				foreach( var type in assembly.GetTypes() )
+				{
+					if( type.BaseType == typeof( Scene ) )
+					{
+						if( type.GetConstructor( Type.EmptyTypes ) != null )
+							_sceneSubclasses.Add( type );
+					}
+				}
+			}
+
+			// find all themes
+			_themes = typeof( NezImGuiThemes ).GetMethods( System.Reflection.BindingFlags.Static | System.Reflection.BindingFlags.Public );
 		}
 
 		void applyTheme()
 		{
-			ImGui.GetStyle().Colors[(int)ImGuiCol.FrameBg] = new Num.Vector4( 0.45f, 0.51f, 0.57f, 0.54f );
+			var style = ImGui.GetStyle();
+
+			//style.Colors[(int)ImGuiCol.FrameBg] = new Num.Vector4( 0.45f, 0.51f, 0.57f, 0.54f );
+			NezImGuiThemes.photoshopDark();
 		}
 
 		/// <summary>
@@ -50,39 +72,39 @@ namespace Nez.ImGuiTools
 		{
 			drawMainMenuBar();
 
-			if( showSeperateGameWindow )
+			if( _showSeperateGameWindow )
 				drawGameWindow();
 			drawEntityInspectors();
 
 			for( var i = _drawCommands.Count - 1; i >= 0; i-- )
 				_drawCommands[i]();
 
-			SceneGraphWindow.show( ref showSceneGraphWindow );
-			CoreWindow.show( ref showCoreWindow );
+			SceneGraphWindow.show( ref _showSceneGraphWindow );
+			CoreWindow.show( ref _showCoreWindow );
 
-			if( showDemoWindow )
-				ImGui.ShowDemoWindow( ref showDemoWindow );
-			
-			if( showStyleEditor )
+			if( _showDemoWindow )
+				ImGui.ShowDemoWindow( ref _showDemoWindow );
+
+			if( _showStyleEditor )
 			{
-				ImGui.Begin( "Style Editor", ref showStyleEditor );
+				ImGui.Begin( "Style Editor", ref _showStyleEditor );
 				ImGui.ShowStyleEditor();
 				ImGui.End();
 			}
 
 
 			// this is just test/junk code
-            ImGui.SetNextWindowPos( new Num.Vector2( 530, 475 ), ImGuiCond.FirstUseEver );
-            ImGui.SetNextWindowSize( new Num.Vector2( 340, 200 ), ImGuiCond.FirstUseEver );
+			ImGui.SetNextWindowPos( new Num.Vector2( 530, 475 ), ImGuiCond.FirstUseEver );
+			ImGui.SetNextWindowSize( new Num.Vector2( 340, 200 ), ImGuiCond.FirstUseEver );
 			if( ImGui.Begin( "Debug##junk" ) )
 			{
 				ImGui.Text( $"Mouse position: {ImGui.GetMousePos()}" );
 				ImGui.ShowStyleSelector( "Style" );
 
-				ImGui.Checkbox( "Demo Window", ref showDemoWindow );
-				ImGui.Checkbox( "Style Editor", ref showStyleEditor );
-				ImGui.Checkbox( "Scene Graph", ref showSceneGraphWindow );
-				ImGui.Checkbox( "Core Window", ref showCoreWindow );
+				ImGui.Checkbox( "Demo Window", ref _showDemoWindow );
+				ImGui.Checkbox( "Style Editor", ref _showStyleEditor );
+				ImGui.Checkbox( "Scene Graph", ref _showSceneGraphWindow );
+				ImGui.Checkbox( "Core Window", ref _showCoreWindow );
 
 				ImGui.Separator();
 
@@ -106,14 +128,37 @@ namespace Nez.ImGuiTools
 					ImGui.EndMenu();
 				}
 
+				if( _sceneSubclasses.Count > 0 && ImGui.BeginMenu( "Scenes" ) )
+				{
+					foreach( var sceneType in _sceneSubclasses )
+					{
+						if( ImGui.MenuItem( sceneType.Name ) )
+						{
+							var scene = (Scene)sceneType.GetConstructor( Type.EmptyTypes ).Invoke( new object[] { } );
+							Core.startSceneTransition( new CrossFadeTransition( () => scene ) );
+						}
+					}
+					ImGui.EndMenu();
+				}
+
+				if( _themes.Length > 0 && ImGui.BeginMenu( "Themes" ) )
+				{
+					foreach( var theme in _themes )
+					{
+						if( ImGui.MenuItem( theme.Name ) )
+							theme.Invoke( null, new object[] {} );
+					}
+					ImGui.EndMenu();
+				}
+
 				if( ImGui.BeginMenu( "Window" ) )
 				{
-					ImGui.MenuItem( "Demo Window", null, ref showDemoWindow );
-					ImGui.MenuItem( "Style Editor", null, ref showStyleEditor );
+					ImGui.MenuItem( "Demo Window", null, ref _showDemoWindow );
+					ImGui.MenuItem( "Style Editor", null, ref _showStyleEditor );
 					ImGui.Separator();
-					ImGui.MenuItem( "Core Window", null, ref showCoreWindow );
-					ImGui.MenuItem( "Scene Graph Window", null, ref showSceneGraphWindow );
-					ImGui.MenuItem( "Separate Game Window", null, ref showSeperateGameWindow );
+					ImGui.MenuItem( "Core Window", null, ref _showCoreWindow );
+					ImGui.MenuItem( "Scene Graph Window", null, ref _showSceneGraphWindow );
+					ImGui.MenuItem( "Separate Game Window", null, ref _showSeperateGameWindow );
 					ImGui.EndMenu();
 				}
 

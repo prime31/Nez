@@ -165,7 +165,8 @@ namespace Nez
 
 
 		/// <summary>
-		/// do all of your rendering here
+		/// do all of your rendering here.static This is a base implementation. Any special rendering should override
+		/// this method.
 		/// </summary>
 		/// <param name="graphics">Graphics.</param>
 		public virtual void render( Graphics graphics )
@@ -178,7 +179,7 @@ namespace Nez
 
 
 		/// <summary>
-		/// this should be called when your transition is complete and the new Scene has been set. It will clean up
+		/// this will be called when your transition is complete and the new Scene has been set. It will clean up
 		/// </summary>
 		protected virtual void transitionComplete()
 		{

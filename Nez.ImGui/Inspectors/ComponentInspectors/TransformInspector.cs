@@ -37,9 +37,9 @@ namespace Nez.ImGuiTools.ComponentInspectors
                 if( ImGui.DragFloat2( "Local Position", ref pos ) )
                     _transform.setLocalPosition( pos.toXNA() );
                 
-                var rot = _transform.localRotation;
-                if( ImGui.SliderAngle( "Local Rotation", ref rot ) )
-                    _transform.setLocalRotation( rot );
+                var rot = _transform.localRotationDegrees;
+                if( ImGui.DragFloat( "Local Rotation", ref rot, 1, -360, 360 ) )
+                    _transform.setLocalRotationDegrees( rot );
                 
                 var scale = _transform.localScale.toNumerics();
                 if( ImGui.DragFloat2( "Local Scale", ref scale, 0.05f ) )
