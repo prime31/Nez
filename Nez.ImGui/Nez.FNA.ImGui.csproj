@@ -9,16 +9,16 @@
 		<AllowUnsafeBlocks>True</AllowUnsafeBlocks>
 		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
 		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+		<IntermediateOutputPath>obj\Nez.FNA.ImGui\$(Configuration)</IntermediateOutputPath>
+		<OutputPath>bin\$(Configuration)\FNA</OutputPath>
 	</PropertyGroup>
 
 	<PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
 		<DefineConstants>TRACE;DEBUG;FNA</DefineConstants>
-		<OutputPath>bin\Debug\FNA</OutputPath>
 	</PropertyGroup>
 
 	<PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
 		<DefineConstants>FNA</DefineConstants>
-		<OutputPath>bin\Release\FNA</OutputPath>
 	</PropertyGroup>
 
 	<ItemGroup>
