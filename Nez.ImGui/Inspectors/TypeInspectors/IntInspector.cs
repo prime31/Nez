@@ -16,14 +16,22 @@ namespace Nez.ImGuiTools.TypeInspectors
 		public override void draw()
 		{
 			var value = getValue<int>();
-			if( _rangeAttribute != null && _rangeAttribute.useDragVersion )
+			if( _rangeAttribute != null )
 			{
-				if( ImGui.DragInt( _name, ref value, 1, (int)_rangeAttribute.minValue, (int)_rangeAttribute.maxValue ) )
-					setValue( value );
+				if( _rangeAttribute != null && _rangeAttribute.useDragVersion )
+				{
+					if( ImGui.DragInt( _name, ref value, 1, (int)_rangeAttribute.minValue, (int)_rangeAttribute.maxValue ) )
+						setValue( value );
+				}
+				else
+				{
+					if( ImGui.SliderInt( _name, ref value, (int)_rangeAttribute.minValue, (int)_rangeAttribute.maxValue ) )
+						setValue( value );
+				}
 			}
 			else
 			{
-				if( ImGui.SliderInt( _name, ref value, (int)_rangeAttribute.minValue, (int)_rangeAttribute.maxValue ) )
+				if( ImGui.DragInt( _name, ref value ) )
 					setValue( value );
 			}
 			handleTooltip();
