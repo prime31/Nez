@@ -11,7 +11,7 @@ namespace Nez.ImGuiTools
         /// gets a unique id that can be used with ImGui.PushId() to avoid conflicts with type inspectors
         /// </summary>
         /// <returns></returns>
-        public static int getIdScope() => _idScope++;
+        public static int getScopeId() => _idScope++;
         
 		public static void smallVerticalSpace() => ImGui.Dummy( new Num.Vector2( 0, 5 ) );
 

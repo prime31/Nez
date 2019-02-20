@@ -10,7 +10,9 @@ namespace Nez.ImGuiTools.TypeInspectors
 	{
 		static Type[] _allowedTypes = { typeof( int ), typeof( float ), typeof( string ), typeof( bool ), typeof( Vector2 ), typeof( Vector3 ) };
 		Type _parameterType;
-
+		string _parameterName;
+		int _scopeId;
+		
 		int _intParam;
 		float _floatParam;
 		string _stringParam = string.Empty;
@@ -43,6 +45,8 @@ namespace Nez.ImGuiTools.TypeInspectors
 		{
 			base.initialize();
 
+			_scopeId = NezImGui.getScopeId();
+
 			// we could have zero or 1 param
 			var parameters = ( _memberInfo as MethodInfo ).GetParameters();
 			if( parameters.Length == 0 )
@@ -50,29 +54,37 @@ namespace Nez.ImGuiTools.TypeInspectors
 
 			var parameter = parameters[0];
 			_parameterType = parameter.ParameterType;
+			_parameterName = parameter.Name;
 		}
 
 		public override void draw()
 		{
+			ImGui.PushID( _scopeId );
+
 			if( ImGui.Button( _name ) )
 				onButtonClicked();
 			
 			if( _parameterType != null )
 				ImGui.SameLine();
 			
+			ImGui.PushItemWidth( -ImGui.CalcTextSize( _parameterName ).X ); // spacing on the right for the label
 			if( _parameterType == typeof( float ) )
-				ImGui.DragFloat( "##", ref _floatParam );
+				ImGui.DragFloat( $"{_parameterName}##", ref _floatParam );
 			else if( _parameterType == typeof( int ) )
-				ImGui.DragInt( "##", ref _intParam );
+				ImGui.DragInt( $"{_parameterName}##", ref _intParam );
 			else if( _parameterType == typeof( bool ) )
-				ImGui.Checkbox( "##", ref _boolParam );
+				ImGui.Checkbox( $"{_parameterName}##", ref _boolParam );
 			else if( _parameterType == typeof( string ) )
-				ImGui.InputText( "##", ref _stringParam, 100 );
+				ImGui.InputText( $"{_parameterName}##", ref _stringParam, 100 );
 			else if( _parameterType == typeof( Vector2 ) )
-				ImGui.DragFloat2( "##", ref _vec2Param );
+				ImGui.DragFloat2( $"{_parameterName}##", ref _vec2Param );
 			else if( _parameterType == typeof( Vector3 ) )
-				ImGui.DragFloat3( "##", ref _vec3Param );
+				ImGui.DragFloat3( $"{_parameterName}##", ref _vec3Param );
+			ImGui.PopItemWidth();
+
 			handleTooltip();
+
+			ImGui.PopID();
 		}
 
 		void onButtonClicked()

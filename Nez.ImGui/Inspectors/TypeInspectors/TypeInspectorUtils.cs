@@ -23,13 +23,13 @@ namespace Nez.ImGuiTools.TypeInspectors
 			var fields = ReflectionUtils.getFields( targetType );
 			foreach( var field in fields )
 			{
-				if( !field.IsPublic && IEnumerableExt.count( field.GetCustomAttributes<InspectableAttribute>() ) == 0 )
+				if( !field.IsPublic && field.getCustomAttribute<InspectableAttribute>() == null )
 					continue;
 
 				if( field.IsInitOnly )
 					continue;
 
-				// skip enabled which is handled elsewhere
+				// skip enabled and entity which is handled elsewhere
 				if( field.Name == "enabled" || field.Name == "entity" )
 					continue;
 
@@ -48,10 +48,10 @@ namespace Nez.ImGuiTools.TypeInspectors
 				if( !prop.CanRead || !prop.CanWrite )
 					continue;
 
-				if( ( !prop.GetMethod.IsPublic || !prop.SetMethod.IsPublic ) && IEnumerableExt.count( prop.GetCustomAttributes<InspectableAttribute>() ) == 0 )
+				if( ( !prop.GetMethod.IsPublic || !prop.SetMethod.IsPublic ) && prop.getCustomAttribute<InspectableAttribute>() == null )
 					continue;
 
-				// skip Component.enabled which is handled elsewhere
+				// skip Component.enabled  and entity which is handled elsewhere
 				if( prop.Name == "enabled" || prop.Name == "entity" )
 					continue;
 
@@ -67,7 +67,7 @@ namespace Nez.ImGuiTools.TypeInspectors
 			var methods = ReflectionUtils.getMethods( targetType );
 			foreach( var method in methods )
 			{
-				var attr = method.GetCustomAttribute<InspectorCallableAttribute>();
+				var attr = method.getCustomAttribute<InspectorCallableAttribute>();
 				if( attr == null )
 					continue;
 
@@ -117,7 +117,7 @@ namespace Nez.ImGuiTools.TypeInspectors
 				return new TI.StructInspector();
 
 			// check for custom inspectors before checking Nez types in case a subclass implemented one
-			var customInspectorType = valueType.GetTypeInfo().GetCustomAttribute<CustomInspectorAttribute>();
+			var customInspectorType = valueType.GetTypeInfo().getCustomAttribute<CustomInspectorAttribute>();
 			if( customInspectorType != null )
 			{
 				if( customInspectorType.inspectorType.GetTypeInfo().IsSubclassOf( typeof( AbstractTypeInspector ) ) )
@@ -131,7 +131,7 @@ namespace Nez.ImGuiTools.TypeInspectors
 			if( valueType.GetTypeInfo().IsSubclassOf( typeof( Effect ) ) )
 				return getEffectInspector( target, memberInfo );
 
-			Debug.log( $"no inspector found for type {valueType}" );
+			Debug.info( $"no inspector found for type {valueType}" );
 
 			return null;
 		}
