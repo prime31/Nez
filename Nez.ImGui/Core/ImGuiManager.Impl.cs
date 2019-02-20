@@ -10,6 +10,20 @@ namespace Nez.ImGuiTools
 {
 	public partial class ImGuiManager : GlobalManager, IFinalRenderDelegate, IDisposable
 	{
+		[Flags]
+		enum WindowPosition
+		{
+			topLeft,
+			top,
+			topRight,
+			left,
+			center,
+			right,
+			bottomLeft,
+			bottom,
+			bottomRight
+		}
+
 		/// <summary>
 		/// here we do some cleanup in preparation for a new Scene
 		/// </summary>
@@ -60,6 +74,9 @@ namespace Nez.ImGuiTools
 
 			ImGui.SetNextWindowPos( new Num.Vector2( 345, 25 ), ImGuiCond.FirstUseEver );
 			ImGui.SetNextWindowSize( new Num.Vector2( Screen.width / 2, ( Screen.width / 2 ) / rtAspectRatio ), ImGuiCond.FirstUseEver );
+
+			handleForcedGameViewParams();
+
 			ImGui.PushStyleVar( ImGuiStyleVar.WindowPadding, new Num.Vector2( 0, 0 ) );
 			ImGui.Begin( "Game Window" );
 
@@ -72,6 +89,70 @@ namespace Nez.ImGuiTools
 			ImGui.End();
 
 			ImGui.PopStyleVar();
+		}
+
+		/// <summary>
+		/// handles any SetNextWindow* options chosen from a menu
+		/// </summary>
+		void handleForcedGameViewParams()
+		{
+			if( _gameViewForcedSize.HasValue )
+			{
+				ImGui.SetNextWindowSize( _gameViewForcedSize.Value );
+				_gameViewForcedSize = null;
+			}
+
+			if( _gameViewForcedPos.HasValue )
+			{
+				ImGui.Begin( "Game Window" );
+				var windowSize = ImGui.GetWindowSize();
+				ImGui.End();
+
+				var pos = new Num.Vector2();
+				switch( _gameViewForcedPos.Value )
+				{
+					case WindowPosition.topLeft:
+						pos.Y = _mainMenuBarHeight;
+						pos.X = 0;
+						break;
+					case WindowPosition.top:
+						pos.Y = _mainMenuBarHeight;
+						pos.X = ( Screen.width / 2f ) - ( windowSize.X / 2f );
+						break;
+					case WindowPosition.topRight:
+						pos.Y = _mainMenuBarHeight;
+						pos.X = Screen.width - windowSize.X;
+						break;
+					case WindowPosition.left:
+						pos.Y = ( Screen.height / 2f ) - ( windowSize.Y / 2f );
+						pos.X = 0;
+						break;
+					case WindowPosition.center:
+						pos.Y = ( Screen.height / 2f ) - ( windowSize.Y / 2f );
+						pos.X = ( Screen.width / 2f ) - ( windowSize.X / 2f );
+						break;
+					case WindowPosition.right:
+						pos.Y = ( Screen.height / 2f ) - ( windowSize.Y / 2f );
+						pos.X = Screen.width - windowSize.X;
+						break;
+					case WindowPosition.bottomLeft:
+						pos.Y = Screen.height - windowSize.Y;
+						pos.X = 0;
+						break;
+					case WindowPosition.bottom:
+						pos.Y = Screen.height - windowSize.Y;
+						pos.X = ( Screen.width / 2f ) - ( windowSize.X / 2f );
+						break;
+					case WindowPosition.bottomRight:
+						pos.Y = Screen.height - windowSize.Y;
+						pos.X = Screen.width - windowSize.X;
+						break;
+				}
+
+				ImGui.SetNextWindowPos( pos );
+				_gameViewForcedPos = null;
+			}
+
 		}
 
 		/// <summary>
