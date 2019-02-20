@@ -8,6 +8,7 @@
 		<RootNamespace>Nez.ImGui</RootNamespace>
 		<AssemblyName>Nez.ImGui</AssemblyName>
 		<AllowUnsafeBlocks>True</AllowUnsafeBlocks>
+		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
 	</PropertyGroup>
 	
 	<ItemGroup>

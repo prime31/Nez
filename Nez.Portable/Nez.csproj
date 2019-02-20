@@ -9,6 +9,7 @@
     <AssemblyName>Nez</AssemblyName>
     <TargetFramework>net471</TargetFramework>
 	<NoWarn>1591,1570,1572,1573</NoWarn>
+	<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
   </PropertyGroup>
 
   <ItemGroup>
