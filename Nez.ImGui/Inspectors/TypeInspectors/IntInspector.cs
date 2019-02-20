@@ -16,7 +16,7 @@ namespace Nez.ImGuiTools.TypeInspectors
 		public override void draw()
 		{
 			var value = getValue<int>();
-			if( _rangeAttribute.useDragVersion )
+			if( _rangeAttribute != null && _rangeAttribute.useDragVersion )
 			{
 				if( ImGui.DragInt( _name, ref value, 1, (int)_rangeAttribute.minValue, (int)_rangeAttribute.maxValue ) )
 					setValue( value );

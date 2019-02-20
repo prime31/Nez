@@ -18,7 +18,7 @@ namespace Nez.ImGuiTools.TypeInspectors
 			var value = getValue<float>();
 			if( _rangeAttribute != null )
 			{
-				if( _rangeAttribute.useDragVersion )
+				if( _rangeAttribute != null && _rangeAttribute.useDragVersion )
 				{
 					if( ImGui.DragFloat( _name, ref value, 1, _rangeAttribute.minValue, _rangeAttribute.maxValue ) )
 						setValue( value );
