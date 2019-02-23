@@ -285,7 +285,54 @@ The non-collection `Variant` subclasses are `ProxyBoolean`, `ProxyNumber` and `P
 Variant's can also be turned back into strongly typed objects via the `VariantConverter.Decode<T>` method.
 
 
-## Meta
+## Advanced: JsonTypeConverter for custom encoding/decoding
+
+Json lets you fully take over the encoding to JSON and the conversion back to a strongly typed object. You can do this by creating an `JsonTypeConverter<T>` and implementing the abstract methods. Any time Json comes accross an object of Type `T` it will pass it off to your `JsonObjectConverter`. Note that you can turn down the job by overriding `CanRead` or `CanWrite`.
+
+The `WriteJson` method will be passed a `IJsonEncoder` which can be used to write the JSON for your object. The `ConvertToObject` method will be passed an `IObjectConverter` which can be used to convert the raw data back into your object.
+
+You can add fields, remove fields or set any data on the object that you want when overriding these methods.
+
+
+```csharp
+class Doodle
+{
+	public int x;
+	public int y;
+	public int z;
+}
+
+class DoodleJsonConverter : JsonTypeConverter<Doodle>
+{
+	public override void WriteJson( IJsonEncoder encoder, Doodle value )
+	{
+		encoder.EncodeValue( true );
+	}
+
+	public override Doodle ConvertToObject( IObjectConverter converter, Type objectType, Doodle existingValue, ProxyObject data )
+	{
+		var doodle = new Doodle();
+		foreach( var bits in data )
+		{
+			// do something with data
+			Debug.log( $"field name: {bits.Key}, value: {bits.Value}" );
+		}
+
+		return doodle;
+	}
+}
+
+```
+
+To use a `JsonTypeConverter` you just have to tell Json about it by sticking it in your JsonSettings object or using one of the convenience methods:
+
+```csharp
+var doodle = new Doodle();
+
+var settings = new JsonSettings { TypeConverters = new JsonTypeConverter[] { new DoodleJsonConverter() } };
+var json = Json.Encode( doodle, settings );
+var newDoodle = Json.Decode<Doodle>( json, settings );
+```
 
 Released under the [MIT License](http://www.opensource.org/licenses/mit-license.php).
 

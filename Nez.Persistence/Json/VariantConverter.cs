@@ -6,7 +6,7 @@ using System.Reflection;
 
 namespace Nez.Persistence
 {
-	public class VariantConverter
+	public class VariantConverter : IObjectConverter
 	{
 		internal const BindingFlags instanceBindingFlags = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance;
 
@@ -14,20 +14,20 @@ namespace Nez.Persistence
 		static readonly Type afterDecodeAttrType = typeof( AfterDecodeAttribute );
 
 		static readonly Dictionary<string, Type> typeCache = new Dictionary<string, Type>();
-		static CacheResolver _cacheResolver = new CacheResolver();
+		CacheResolver _cacheResolver = new CacheResolver();
+		JsonSettings _settings;
 
 
-		public static T Decode<T>( Variant data )
+		public static T Decode<T>( Variant data, JsonSettings settings = null )
 		{
-			var item = (T)DecodeType( data, typeof( T ) );
-			_cacheResolver.Clear();
-			return item;
+			var converter = new VariantConverter( settings );
+			return (T)converter.DecodeType( data, typeof( T ) );
 		}
 
 		public static void DecodeInto<T>( Variant data, out T item )
 		{
-			item = (T)DecodeType( data, typeof( T ) );
-			_cacheResolver.Clear();
+			var converter = new VariantConverter( null );
+			item = (T)converter.DecodeType( data, typeof( T ) );
 		}
 
 		static Type FindType( string fullName )
@@ -55,7 +55,12 @@ namespace Nez.Persistence
 			return null;
 		}
 
-		static object DecodeType( Variant data, Type type )
+		public VariantConverter( JsonSettings settings = null )
+		{
+			_settings = settings;
+		}
+
+		public object DecodeType( Variant data, Type type )
 		{
 			if( data == null )
 			{
@@ -122,8 +127,6 @@ namespace Nez.Persistence
 
 			if( typeof( IDictionary ).IsAssignableFrom( type ) )
 			{
-				//var makeFunc = decodeDictionaryMethod.MakeGenericMethod( type.GetGenericArguments() );
-				//return makeFunc.Invoke( null, new object[] { data } );
 				return DecodeDictionary( type, data );
 			}
 
@@ -134,49 +137,83 @@ namespace Nez.Persistence
 			{
 				throw new InvalidCastException( "ProxyObject expected when decoding into '" + type.FullName + "'." );
 			}
+			var instance = DecodeObject( type, proxyObject );
 
-			var refId = proxyObject.ReferenceId;
+			// Invoke methods tagged with [AfterDecode] attribute.
+			foreach( var method in type.GetMethods( instanceBindingFlags ) )
+			{
+				if( method.IsDefined( afterDecodeAttrType ) )
+				{
+					method.Invoke( instance, method.GetParameters().Length == 0 ? null : new object[] { data } );
+				}
+			}
+
+			return instance;
+		}
+
+		public object DecodeObject( Type type, ProxyObject data )
+		{
+			var refId = data.ReferenceId;
 			if( refId != null )
 			{
 				return _cacheResolver.GetReference( refId );
 			}
 
-			// If there's a type hint, use it to create the instance.
-			object instance;
-			var typeHint = proxyObject.TypeHint;
-			if( typeHint != null && typeHint != type.FullName )
-			{
-				var makeType = FindType( typeHint );
-				if( makeType == null )
-				{
-					throw new TypeLoadException( "Could not load type '" + typeHint + "'." );
-				}
 
-				if( type.IsAssignableFrom( makeType ) )
-				{
-					instance = _cacheResolver.CreateInstance( makeType );
-					type = makeType;
-				}
-				else
-				{
-					throw new InvalidCastException( "Cannot assign type '" + typeHint + "' to type '" + type.FullName + "'." );
-				}
+			bool didCreateInstanceViaConverter = false;
+			object instance;
+
+			// check for a JsonConverter and use it if we have one
+			var converter = _settings?.GetTypeConverterForType( type );
+			if( converter != null )
+			{
+				instance = converter.ConvertToObject( this, type, null, data );
+				didCreateInstanceViaConverter = true;
 			}
 			else
 			{
-				// We don't have a type hint, so just instantiate the type we have.
-				instance = _cacheResolver.CreateInstance( type );
+				// If there's a type hint, use it to create the instance.
+				var typeHint = data.TypeHint;
+				if( typeHint != null && typeHint != type.FullName )
+				{
+					var makeType = FindType( typeHint );
+					if( makeType == null )
+					{
+						throw new TypeLoadException( "Could not load type '" + typeHint + "'." );
+					}
+
+					if( type.IsAssignableFrom( makeType ) )
+					{
+						instance = _cacheResolver.CreateInstance( makeType );
+						type = makeType;
+					}
+					else
+					{
+						throw new InvalidCastException( "Cannot assign type '" + typeHint + "' to type '" + type.FullName + "'." );
+					}
+				}
+				else
+				{
+					// We don't have a type hint, so just instantiate the type we have.
+					instance = _cacheResolver.CreateInstance( type );
+				}
 			}
 
 			// if there is an instanceId, cache the object in case any other objects are referencing it
-			var id = proxyObject.InstanceId;
+			var id = data.InstanceId;
 			if( id != null )
 			{
 				_cacheResolver.TrackReference( id, instance );
 			}
 
+			// if we were created by a JsonTypeConverter we are done. No need to fill in the object data.
+			if( didCreateInstanceViaConverter )
+			{
+				return instance;
+			}
+
 			// Now decode fields and properties.
-			foreach( var pair in (ProxyObject)data )
+			foreach( var pair in data )
 			{
 				var field = _cacheResolver.GetField( type, pair.Key );
 				if( field != null )
@@ -217,19 +254,10 @@ namespace Nez.Persistence
 				}
 			}
 
-			// Invoke methods tagged with [AfterDecode] attribute.
-			foreach( var method in type.GetMethods( instanceBindingFlags ) )
-			{
-				if( method.IsDefined( afterDecodeAttrType ) )
-				{
-					method.Invoke( instance, method.GetParameters().Length == 0 ? null : new object[] { data } );
-				}
-			}
-
 			return instance;
 		}
 
-		static object DecodeList( Type type, Variant data )
+		public object DecodeList( Type type, Variant data )
 		{
 			var proxyArray = data as ProxyArray;
 			if( proxyArray == null )
@@ -249,7 +277,7 @@ namespace Nez.Persistence
 			return list;
 		}
 
-		static object DecodeDictionary( Type type, Variant data )
+		public object DecodeDictionary( Type type, Variant data )
 		{
 			var proxyObject = data as ProxyObject;
 			if( proxyObject == null )
@@ -273,7 +301,7 @@ namespace Nez.Persistence
 			return dict;
 		}
 
-		static object DecodeArray( Type elementType, Variant data )
+		public object DecodeArray( Type elementType, Variant data )
 		{
 			var arrayData = data as ProxyArray;
 			if( arrayData == null )
@@ -292,7 +320,7 @@ namespace Nez.Persistence
 			return array;
 		}
 
-		static void DecodeMultiRankArray( Type elementType, ProxyArray arrayData, Array array, int arrayRank, int[] indices )
+		public void DecodeMultiRankArray( Type elementType, ProxyArray arrayData, Array array, int arrayRank, int[] indices )
 		{
 			var count = arrayData.Count;
 			for( var i = 0; i < count; i++ )

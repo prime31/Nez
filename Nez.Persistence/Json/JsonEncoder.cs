@@ -2,13 +2,12 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
-using System.Reflection;
 using System.Text;
 
 
 namespace Nez.Persistence
 {
-	public sealed class JsonEncoder
+	public sealed class JsonEncoder : IJsonEncoder
 	{
 		static readonly StringBuilder _builder = new StringBuilder( 2000 );
 		static readonly CacheResolver _cacheResolver = new CacheResolver();
@@ -18,16 +17,10 @@ namespace Nez.Persistence
 		int indent;
 
 
-		JsonEncoder( JsonSettings settings )
-		{
-			_settings = settings;
-			indent = 0;
-		}
-
 		public static string Encode( object obj, JsonSettings settings )
 		{
 			var instance = new JsonEncoder( settings );
-			instance.EncodeValue( obj );
+			instance.EncodeValue( obj, false );
 			_cacheResolver.Clear();
 
 			var json = _builder.ToString();
@@ -35,7 +28,13 @@ namespace Nez.Persistence
 			return json;
 		}
 
-		void EncodeValue( object value, bool forceTypeHint = false )
+		JsonEncoder( JsonSettings settings )
+		{
+			_settings = settings;
+			indent = 0;
+		}
+
+		public void EncodeValue( object value, bool forceTypeHint = false )
 		{
 			if( value == null )
 			{
@@ -104,66 +103,47 @@ namespace Nez.Persistence
 			}
 		}
 
-		void EncodeObject( object value, bool forceTypeHint )
+		public void EncodeObject( object value, bool forceTypeHint )
 		{
-			forceTypeHint = forceTypeHint || ( _settings.TypeNameHandling == TypeNameHandling.All || _settings.TypeNameHandling == TypeNameHandling.Objects );
 			var type = value.GetType();
+
+			// check for an override converter and use it if present
+			var converter = _settings.GetTypeConverterForType( type );
+			if( converter != null && converter.CanWrite )
+			{
+				converter.WriteJson( this, value );
+				return;
+			}
+
 			WriteStartObject();
 
-			var firstItem = true;
-			if( _settings.PreserveReferencesHandling )
+			var isFirstItem = true;
+			if( WriteOptionalReferenceData( value, ref isFirstItem ) )
 			{
-				if( !_referenceTracker.ContainsKey( value ) )
-				{
-					_referenceTracker[value] = ++_referenceCounter;
-
-					WriteValueDelimiter( firstItem );
-					WriteString( Json.IdPropertyName );
-					AppendColon();
-					WriteString( _referenceCounter.ToString() );
-					firstItem = false;
-				}
-				else
-				{
-					var id = _referenceTracker[value];
-
-					WriteValueDelimiter( firstItem );
-					WriteString( Json.RefPropertyName );
-					AppendColon();
-					WriteString( id.ToString() );
-					WriteEndObject();
-					return;
-				}
+				WriteEndObject();
+				return;
 			}
 
-			if( forceTypeHint )
-			{
-				WriteValueDelimiter( firstItem );
-				WriteString( Json.TypeHintPropertyName );
-				AppendColon();
-				WriteString( type.FullName );
-
-				firstItem = false;
-			}
+			WriteOptionalTypeHint( type, forceTypeHint, ref isFirstItem );
 
 			foreach( var field in _cacheResolver.GetEncodableFieldsForType( type, _settings.EnforceHeirarchyOrderEnabled ) )
 			{
-				WriteValueDelimiter( firstItem );
+				WriteValueDelimiter( isFirstItem );
 				WriteString( field.Name );
 				AppendColon();
 				EncodeValue( field.GetValue( value ) );
-				firstItem = false;
+				isFirstItem = false;
 			}
 
 			foreach( var property in _cacheResolver.GetEncodablePropertiesForType( type, _settings.EnforceHeirarchyOrderEnabled ) )
 			{
 				if( property.CanRead )
 				{
-					WriteValueDelimiter( firstItem );
+					WriteValueDelimiter( isFirstItem );
 					WriteString( property.Name );
 					AppendColon();
 					EncodeValue( property.GetValue( value, null ) );
-					firstItem = false;
+					isFirstItem = false;
 				}
 			}
 
@@ -202,7 +182,7 @@ namespace Nez.Persistence
 			WriteEndObject();
 		}
 
-		void EncodeDictionary( IDictionary value )
+		public void EncodeDictionary( IDictionary value )
 		{
 			WriteStartObject();
 
@@ -219,7 +199,7 @@ namespace Nez.Persistence
 			WriteEndObject();
 		}
 
-		void EncodeList( IList value )
+		public void EncodeList( IList value )
 		{
 			var forceTypeHint = _settings.TypeNameHandling == TypeNameHandling.All || _settings.TypeNameHandling == TypeNameHandling.Arrays;
 
@@ -253,7 +233,7 @@ namespace Nez.Persistence
 			WriteEndArray();
 		}
 
-		void EncodeArray( Array value )
+		public void EncodeArray( Array value )
 		{
 			if( value.Rank == 1 )
 			{
@@ -266,7 +246,7 @@ namespace Nez.Persistence
 			}
 		}
 
-		void EncodeArrayRank( Array value, int rank, int[] indices )
+		public void EncodeArrayRank( Array value, int rank, int[] indices )
 		{
 			WriteStartArray();
 
@@ -308,7 +288,7 @@ namespace Nez.Persistence
 
 		#region Writers
 
-		void AppendIndent()
+		public void AppendIndent()
 		{
 			for( var i = 0; i < indent; i++ )
 			{
@@ -316,7 +296,7 @@ namespace Nez.Persistence
 			}
 		}
 
-		void AppendColon()
+		public void AppendColon()
 		{
 			_builder.Append( ':' );
 
@@ -326,9 +306,65 @@ namespace Nez.Persistence
 			}
 		}
 
-		void WriteValueDelimiter( bool firstItem )
+		/// <summary>
+		/// uses the JsonSettings and object details to deal with reference tracking. If a reference was found and written
+		/// to the JSON stream it will return true and the rest of the object data should not be written.
+		/// </summary>
+		/// <param name="value">Value.</param>
+		/// <param name="isFirstItem">If set to <c>true</c> is first item.</param>
+		public bool WriteOptionalReferenceData( object value, ref bool isFirstItem )
 		{
-			if( !firstItem )
+			if( _settings.PreserveReferencesHandling )
+			{
+				if( !_referenceTracker.ContainsKey( value ) )
+				{
+					_referenceTracker[value] = ++_referenceCounter;
+
+					WriteValueDelimiter( isFirstItem );
+					WriteString( Json.IdPropertyName );
+					AppendColon();
+					WriteString( _referenceCounter.ToString() );
+					isFirstItem = false;
+				}
+				else
+				{
+					var id = _referenceTracker[value];
+
+					WriteValueDelimiter( isFirstItem );
+					WriteString( Json.RefPropertyName );
+					AppendColon();
+					WriteString( id.ToString() );
+
+					isFirstItem = false;
+					return true;
+				}
+			}
+			return false;
+		}
+
+		/// <summary>
+		/// optionally writes the type hint. Sets isFirstItem to false if it was written.
+		/// </summary>
+		/// <param name="type">Type.</param>
+		/// <param name="forceTypeHint">If set to <c>true</c> force type hint.</param>
+		/// <param name="isFirstItem">If set to <c>true</c> is first item.</param>
+		public void WriteOptionalTypeHint( Type type, bool forceTypeHint, ref bool isFirstItem )
+		{
+			forceTypeHint = forceTypeHint || _settings.TypeNameHandling == TypeNameHandling.All || _settings.TypeNameHandling == TypeNameHandling.Objects;
+			if( forceTypeHint )
+			{
+				WriteValueDelimiter( isFirstItem );
+				WriteString( Json.TypeHintPropertyName );
+				AppendColon();
+				WriteString( type.FullName );
+
+				isFirstItem = false;
+			}
+		}
+
+		public void WriteValueDelimiter( bool isFirstItem )
+		{
+			if( !isFirstItem )
 			{
 				_builder.Append( ',' );
 
@@ -344,7 +380,7 @@ namespace Nez.Persistence
 			}
 		}
 
-		void WriteStartObject()
+		public void WriteStartObject()
 		{
 			_builder.Append( '{' );
 
@@ -355,7 +391,7 @@ namespace Nez.Persistence
 			}
 		}
 
-		void WriteEndObject()
+		public void WriteEndObject()
 		{
 			if( _settings.PrettyPrint )
 			{
@@ -367,7 +403,7 @@ namespace Nez.Persistence
 			_builder.Append( '}' );
 		}
 
-		void WriteStartArray()
+		public void WriteStartArray()
 		{
 			_builder.Append( '[' );
 
@@ -378,7 +414,7 @@ namespace Nez.Persistence
 			}
 		}
 
-		void WriteEndArray()
+		public void WriteEndArray()
 		{
 			if( _settings.PrettyPrint )
 			{
@@ -390,7 +426,7 @@ namespace Nez.Persistence
 			_builder.Append( ']' );
 		}
 
-		void WriteString( string value )
+		public void WriteString( string value )
 		{
 			_builder.Append( '\"' );
 

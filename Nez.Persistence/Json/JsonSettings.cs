@@ -1,4 +1,7 @@
-﻿namespace Nez.Persistence
+﻿using System;
+using System.Collections.Generic;
+
+namespace Nez.Persistence
 {
 	public enum TypeNameHandling
 	{
@@ -26,7 +29,10 @@
 
 	public class JsonSettings
 	{
-		public static JsonSettings HandleReferences = new JsonSettings()
+		/// <summary>
+		/// stub to save the most useful configuration for object graphs
+		/// </summary>
+		public static JsonSettings HandlesReferences = new JsonSettings()
 		{
 			TypeNameHandling = TypeNameHandling.Auto,
 			PreserveReferencesHandling = true
@@ -36,6 +42,22 @@
 		public bool PrettyPrint;
 		public bool EnforceHeirarchyOrderEnabled;
 		public bool PreserveReferencesHandling;
+		public JsonTypeConverter[] TypeConverters;
+
+
+		internal JsonTypeConverter GetTypeConverterForType( Type objectType )
+		{
+			if( TypeConverters == null )
+				return null;
+			foreach( var converter in TypeConverters )
+			{
+				if( converter.CanConvert( objectType ) )
+				{
+					return converter;
+				}
+			}
+			return null;
+		}
 	}
 
 }

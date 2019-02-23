@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Reflection;
 
 
@@ -22,6 +23,17 @@ namespace Nez.Persistence
 		internal static readonly Type excludeAttrType = typeof( NonSerializedAttribute );
 		static readonly Type beforeEncodeAttrType = typeof( BeforeEncodeAttribute );
 
+		public static string Encode( object obj, bool prettyPrint )
+		{
+			var settings = new JsonSettings { PrettyPrint = prettyPrint };
+			return Encode( obj, settings );
+		}
+
+		public static string Encode( object obj, params JsonTypeConverter[] converters )
+		{
+			var settings = new JsonSettings { TypeConverters = converters };
+			return Encode( obj, settings );
+		}
 
 		/// <summary>
 		/// encodes <paramref name="obj"/> to a json string
@@ -52,7 +64,7 @@ namespace Nez.Persistence
 
 		/// <summary>
 		/// decodes <paramref name="json"/> into a Variant object which can be used directly or converted to
-		/// a strongly typed object via <cref="VaraintConverter"/>
+		/// a strongly typed object via <cref="VariantConverter"/>
 		/// </summary>
 		/// <param name="json"></param>
 		/// <returns></returns>
@@ -60,6 +72,17 @@ namespace Nez.Persistence
 		{
 			System.Diagnostics.Debug.Assert( json != null );
 			return JsonDecoder.Decode( json );
+		}
+
+		public static T Decode<T>( string json, JsonSettings settings )
+		{
+			return VariantConverter.Decode<T>( JsonDecoder.Decode( json ), settings );
+		}
+
+		public static T Decode<T>( string json, params JsonTypeConverter[] converters )
+		{
+			var settings = new JsonSettings { TypeConverters = converters };
+			return VariantConverter.Decode<T>( JsonDecoder.Decode( json ), settings );
 		}
 
 		/// <summary>
@@ -87,6 +110,12 @@ namespace Nez.Persistence
 			VariantConverter.DecodeInto( JsonDecoder.Decode( json ), out item );
 		}
 
+		/// <summary>
+		/// decodes the <paramref name="json"/> and then fills in the data on <paramref name="item"/> as opposed
+		/// to creating a new instance.
+		/// </summary>
+		/// <param name="json">Json.</param>
+		/// <param name="item">Item.</param>
 		public static void PopulateObject( string json, object item )
 		{
 			throw new NotImplementedException();

@@ -10,9 +10,10 @@ namespace Nez.Persistence
 	{
 		#region Fields and Props
 
-		const string whiteSpace = " \t\n\r";
-		const string wordBreak = " \t\n\r{}[],:\"";
+		const string kWhiteSpace = " \t\n\r";
+		const string kWordBreak = " \t\n\r{}[],:\"";
 		static readonly StringBuilder _builder = new StringBuilder();
+
 
 		enum Token
 		{
@@ -30,28 +31,28 @@ namespace Nez.Persistence
 			Null
 		}
 
-		StringReader json;
+		StringReader _json;
 
 		char PeekChar
 		{
 			get
 			{
-				var peek = json.Peek();
+				var peek = _json.Peek();
 				return peek == -1 ? '\0' : Convert.ToChar( peek );
 			}
 		}
 
-		char NextChar => Convert.ToChar( json.Read() );
+		char NextChar => Convert.ToChar( _json.Read() );
 
 		string NextWord
 		{
 			get
 			{
-				while( wordBreak.IndexOf( PeekChar ) == -1 )
+				while( kWordBreak.IndexOf( PeekChar ) == -1 )
 				{
 					_builder.Append( NextChar );
 
-					if( json.Peek() == -1 )
+					if( _json.Peek() == -1 )
 					{
 						break;
 					}
@@ -69,7 +70,7 @@ namespace Nez.Persistence
 			{
 				ConsumeWhiteSpace();
 
-				if( json.Peek() == -1 )
+				if( _json.Peek() == -1 )
 				{
 					return Token.None;
 				}
@@ -80,18 +81,18 @@ namespace Nez.Persistence
 						return Token.OpenBrace;
 
 					case '}':
-						json.Read();
+						_json.Read();
 						return Token.CloseBrace;
 
 					case '[':
 						return Token.OpenBracket;
 
 					case ']':
-						json.Read();
+						_json.Read();
 						return Token.CloseBracket;
 
 					case ',':
-						json.Read();
+						_json.Read();
 						return Token.Comma;
 
 					case '"':
@@ -143,13 +144,13 @@ namespace Nez.Persistence
 
 		JsonDecoder( string jsonString )
 		{
-			json = new StringReader( jsonString );
+			_json = new StringReader( jsonString );
 		}
 
 		public void Dispose()
 		{
-			json.Dispose();
-			json = null;
+			_json.Dispose();
+			_json = null;
 		}
 
 		ProxyObject DecodeObject()
@@ -157,7 +158,7 @@ namespace Nez.Persistence
 			var proxy = new ProxyObject();
 
 			// Ditch opening brace.
-			json.Read();
+			_json.Read();
 
 			// {
 			while( true )
@@ -183,7 +184,7 @@ namespace Nez.Persistence
 							return null;
 						}
 
-						json.Read();
+						_json.Read();
 
 						// Value
 						proxy.Add( key, DecodeValue() );
@@ -197,7 +198,7 @@ namespace Nez.Persistence
 			var proxy = new ProxyArray();
 
 			// Ditch opening bracket.
-			json.Read();
+			_json.Read();
 
 			// [
 			var parsing = true;
@@ -255,12 +256,12 @@ namespace Nez.Persistence
 		Variant DecodeString()
 		{
 			// ditch opening quote
-			json.Read();
+			_json.Read();
 
 			var parsing = true;
 			while( parsing )
 			{
-				if( json.Peek() == -1 )
+				if( _json.Peek() == -1 )
 				{
 					parsing = false;
 					break;
@@ -274,7 +275,7 @@ namespace Nez.Persistence
 						break;
 
 					case '\\':
-						if( json.Peek() == -1 )
+						if( _json.Peek() == -1 )
 						{
 							parsing = false;
 							break;
@@ -339,11 +340,11 @@ namespace Nez.Persistence
 
 		void ConsumeWhiteSpace()
 		{
-			while( whiteSpace.IndexOf( PeekChar ) != -1 )
+			while( kWhiteSpace.IndexOf( PeekChar ) != -1 )
 			{
-				json.Read();
+				_json.Read();
 
-				if( json.Peek() == -1 )
+				if( _json.Peek() == -1 )
 				{
 					break;
 				}
