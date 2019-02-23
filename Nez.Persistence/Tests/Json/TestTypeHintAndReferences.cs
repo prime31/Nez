@@ -63,7 +63,7 @@ namespace Nez.Persistence.JsonTests
 			{
 				PrettyPrint = true,
 				TypeNameHandling = TypeNameHandling.Auto,
-				PreserveReferencesHandling = PreserveReferencesHandling.All
+				PreserveReferencesHandling = true
 			} );
 
 			var outEntity = Json.Decode<Entity>( json );

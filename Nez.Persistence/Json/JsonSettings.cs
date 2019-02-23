@@ -1,17 +1,5 @@
 ﻿namespace Nez.Persistance
 {
-	public enum PreserveReferencesHandling
-	{
-		/// <summary>
-		/// Do not preserve references when serializing types
-		/// </summary>
-		None,
-		/// <summary>
-		/// Preserve references when serializing
-		/// </summary>
-		All
-	}
-
 	public enum TypeNameHandling
 	{
 		/// <summary>
@@ -38,10 +26,16 @@
 
 	public class JsonSettings
 	{
-		public PreserveReferencesHandling PreserveReferencesHandling = PreserveReferencesHandling.None;
+		public static JsonSettings HandleReferences = new JsonSettings()
+		{
+			TypeNameHandling = TypeNameHandling.Auto,
+			PreserveReferencesHandling = true
+		};
+
 		public TypeNameHandling TypeNameHandling = TypeNameHandling.None;
-		public bool PrettyPrint = false;
-		public bool EnforceHeirarchyOrderEnabled = false;
+		public bool PrettyPrint;
+		public bool EnforceHeirarchyOrderEnabled;
+		public bool PreserveReferencesHandling;
 	}
 
 }

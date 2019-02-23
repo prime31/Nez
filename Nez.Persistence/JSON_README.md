@@ -38,6 +38,14 @@ namespace Nez.Persistance
 }
 ```
 
+`Encode()` will take a C# object, list, dictionary or primitive value type and turn it into JSON.
+
+```csharp
+var data = new List<int>() { { 0 }, { 1 }, { 2 } };
+Console.WriteLine( Json.Encode( data ) ); // output: [1,2,3]
+```
+
+
 `Decode()` will load a string of JSON, returns `null` if invalid or a `Variant` proxy object if successful. The proxy allows for implicit casts and can convert between various C# numeric value types.
 
 ```csharp
@@ -46,12 +54,12 @@ int i = data["foo"];
 float f = data["bar"];
 ```
 
-`Encode()` will take a C# object, list, dictionary or primitive value type and turn it into JSON.
+`Decode<T>()` will load a string of JSON, returns `null` if invalid or a an object of type `T` if successful.
 
 ```csharp
-var data = new List<int>() { { 0 }, { 1 }, { 2 } };
-Console.WriteLine( Json.Encode( data ) ); // output: [1,2,3]
+var obj = Json.Decode<SomeClass>( json );
 ```
+
 
 Json can also handle classes, structs, enums and nested objects. Given these definitions:
 
@@ -131,6 +139,13 @@ Will output (if pretty printed):
 }
 ```
 
+And then you can rehydrate your object from the JSON using `Decode<T>`:
+
+```
+var obj = Json.Decode<TestClass>( testClassJson );
+```
+
+
 You can use `Decode` or `DecodeInto` to reconstruct JSON data back into an object:
 
 ```csharp
@@ -206,7 +221,7 @@ var settings = new JsonSettings
 {
 	PrettyPrint = true,
 	TypeNameHandling = TypeNameHandling.Auto,
-	PreserveReferencesHandling = PreserveReferencesHandling.All
+	PreserveReferencesHandling = true
 };
 var json = Json.Encode( entity, settings );
 ```

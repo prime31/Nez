@@ -208,7 +208,7 @@ namespace Nez.Persistance
 			WriteStartObject();
 
 			var firstItem = true;
-			if( _settings.PreserveReferencesHandling == PreserveReferencesHandling.All )
+			if( _settings.PreserveReferencesHandling )
 			{
 				if( !_referenceTracker.ContainsKey( value ) )
 				{
