@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project Sdk="Microsoft.NET.Sdk">
+	<PropertyGroup>
+		<OutputType>Library</OutputType>
+		<TargetFramework>net471</TargetFramework>
+		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+		<PlatformTarget>AnyCPU</PlatformTarget>
+		<RootNamespace>Nez.Persistence</RootNamespace>
+		<AssemblyName>Nez.Persistence</AssemblyName>
+		<AllowUnsafeBlocks>True</AllowUnsafeBlocks>
+		<IntermediateOutputPath>obj\Nez.Persistence\$(Configuration)</IntermediateOutputPath>
+		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+	</PropertyGroup>
+
+    <PropertyGroup>
+        <DefaultItemExcludes>$(DefaultItemExcludes);Tests\**\*.*</DefaultItemExcludes>
+    </PropertyGroup>
+   
+	<ItemGroup>
+        <ProjectReference Include="../Nez.Portable/Nez.csproj" />
+		<PackageReference Include="MonoGame.Framework.Portable" Version="3.7.1.189" />
+	</ItemGroup>
+</Project>
