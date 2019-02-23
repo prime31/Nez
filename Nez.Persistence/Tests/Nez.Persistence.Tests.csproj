@@ -16,6 +16,15 @@
         <DefaultItemExcludes>$(DefaultItemExcludes);Tests\**\*.*</DefaultItemExcludes>
     </PropertyGroup>
 
+    <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+      <NoWarn>1701;1702;0649</NoWarn>
+      <PlatformTarget>anycpu</PlatformTarget>
+      <DefineConstants>TRACE;DEBUG;NETFRAMEWORK;NET471</DefineConstants>
+    </PropertyGroup>
+    <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+      <DebugType></DebugType>
+      <PlatformTarget>anycpu</PlatformTarget>
+    </PropertyGroup>
 	<ItemGroup>
 		<ProjectReference Include="../../Nez.Portable/Nez.csproj" />
         <ProjectReference Include="../Nez.Persistence.csproj" />

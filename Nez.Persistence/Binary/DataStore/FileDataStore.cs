@@ -2,89 +2,99 @@ using System.IO;
 
 namespace Nez.Persistence.Binary
 {
-    public class FileDataStore
-    {
-        public enum FileFormat
-        {
-            Binary,
-            Text
-        }
+	public class FileDataStore
+	{
+		public enum FileFormat
+		{
+			Binary,
+			Text
+		}
 
-        FileFormat _fileFormat;
-        string _persistentDataPath;
+		FileFormat _fileFormat;
+		string _persistentDataPath;
 
-        ReuseableBinaryWriter _writer;
-        ReuseableBinaryReader _reader;
+		ReuseableBinaryWriter _writer;
+		ReuseableBinaryReader _reader;
 
-        public FileDataStore(string persistentDataPath, FileFormat fileFormat = FileFormat.Binary)
-        {
-            // var gamePath = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Watercolor Games", "Peacenet");
-            // ensure directory exists
-            Directory.CreateDirectory(persistentDataPath);
-            _persistentDataPath = persistentDataPath;
-            _fileFormat = fileFormat;
-            if (_fileFormat == FileFormat.Binary)
-            {
-                // if we are binary, cache our reader/writer since they are reuseable
-                _writer = new ReuseableBinaryWriter();
-                _reader = new ReuseableBinaryReader();
-            }
-        }
+		public FileDataStore() : this( null, FileFormat.Binary )
+		{}
 
-        #region IDataStore
+		/// <summary>
+		/// Initializes a new instance of the <see cref="T:Nez.Persistence.Binary.FileDataStore"/> class. If <paramref name="persistentDataPath"/>
+		/// is null, it will use Utils.GetStorageRoot().
+		/// </summary>
+		/// <param name="persistentDataPath">Persistent data path.</param>
+		/// <param name="fileFormat">File format.</param>
+		public FileDataStore( string persistentDataPath = null, FileFormat fileFormat = FileFormat.Binary )
+		{
+			persistentDataPath = persistentDataPath ?? Utils.GetStorageRoot();
 
-        public void Save(string filename, IPersistable persistable)
-        {
-            var tmpFile = GetTmpFile(filename);
-            using (var writer = GetDataWriter(tmpFile))
-                writer.Write(persistable);
+			// ensure directory exists
+			Directory.CreateDirectory( persistentDataPath );
+			_persistentDataPath = persistentDataPath;
+			_fileFormat = fileFormat;
+			if( _fileFormat == FileFormat.Binary )
+			{
+				// if we are binary, cache our reader/writer since they are reuseable
+				_writer = new ReuseableBinaryWriter();
+				_reader = new ReuseableBinaryReader();
+			}
+		}
 
-            File.Copy(tmpFile, Path.Combine(_persistentDataPath, filename), true);
-            File.Delete(tmpFile);
-        }
+		#region DataStore
 
-        public void Load(string filename, IPersistable persistable, string legacyKey = null)
-        {
-            var file = Path.Combine(_persistentDataPath, filename);
-            if (File.Exists(file))
-            {
-                using (var reader = GetDataReader(file))
-                    reader.ReadPersistableInto(persistable);
-            }
-        }
+		public void Save( string filename, IPersistable persistable )
+		{
+			var tmpFile = GetTmpFile( filename );
+			using( var writer = GetDataWriter( tmpFile ) )
+				writer.Write( persistable );
 
-        public void Clear()
-        {
-            var di = new DirectoryInfo(_persistentDataPath);
-            foreach (var file in di.GetFiles())
-                file.Delete();
-        }
+			File.Copy( tmpFile, Path.Combine( _persistentDataPath, filename ), true );
+			File.Delete( tmpFile );
+		}
 
-        #endregion
+		public void Load( string filename, IPersistable persistable )
+		{
+			var file = Path.Combine( _persistentDataPath, filename );
+			if( File.Exists( file ) )
+			{
+				using( var reader = GetDataReader( file ) )
+					reader.ReadPersistableInto( persistable );
+			}
+		}
 
-        IPersistableWriter GetDataWriter(string file)
-        {
-            if (_fileFormat == FileFormat.Binary)
-            {
-                _writer.SetStream(file);
-                return _writer;
-            }
-            return new TextPersistableWriter(file);
-        }
+		public void Clear()
+		{
+			var di = new DirectoryInfo( _persistentDataPath );
+			foreach( var file in di.GetFiles() )
+				file.Delete();
+		}
 
-        IPersistableReader GetDataReader(string file)
-        {
-            if (_fileFormat == FileFormat.Binary)
-            {
-                _reader.SetStream(file);
-                return _reader;
-            }
-            return new TextPersistableReader(file);
-        }
+		#endregion
 
-        string GetTmpFile(string filename)
-        {
-            return Path.Combine(_persistentDataPath, filename + ".tmp");
-        }
-    }
+		IPersistableWriter GetDataWriter( string file )
+		{
+			if( _fileFormat == FileFormat.Binary )
+			{
+				_writer.SetStream( file );
+				return _writer;
+			}
+			return new TextPersistableWriter( file );
+		}
+
+		IPersistableReader GetDataReader( string file )
+		{
+			if( _fileFormat == FileFormat.Binary )
+			{
+				_reader.SetStream( file );
+				return _reader;
+			}
+			return new TextPersistableReader( file );
+		}
+
+		string GetTmpFile( string filename )
+		{
+			return Path.Combine( _persistentDataPath, filename + ".tmp" );
+		}
+	}
 }

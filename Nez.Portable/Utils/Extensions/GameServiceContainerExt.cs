@@ -32,5 +32,22 @@ namespace Nez
 
 			return (T)service;
 		}
+
+		/// <summary>
+		/// attempts to get the service and if it does not exist it will be created. Requires a parameterless
+		/// constructor.
+		/// </summary>
+		/// <returns>The or add service.</returns>
+		/// <param name="self">Self.</param>
+		/// <typeparam name="T">The 1st type parameter.</typeparam>
+		public static T GetOrAddService<T>( this GameServiceContainer self ) where T : class, new()
+		{
+			var service = self.GetService( typeof( T ) );
+
+			if( service == null )
+				return AddService( self, new T() );
+
+			return (T)service;
+		}
 	}
 }
