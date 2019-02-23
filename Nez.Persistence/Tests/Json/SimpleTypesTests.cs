@@ -145,8 +145,8 @@ namespace Nez.Persistence.JsonTests
 			ValueTypes item = new ValueTypes();
 			const string json = "{\"i16\":1,\"u16\":2,\"i32\":3,\"u32\":4,\"i64\":5,\"u64\":6,\"s\":7,\"d\":8,\"m\":9,\"b\":true}";
 			var data = Json.Decode( json );
-			Assert.DoesNotThrow( () => VariantConverter.Make<ValueTypes>( data ) );
-			Assert.DoesNotThrow( () => VariantConverter.MakeInto( data, out item ) );
+			Assert.DoesNotThrow( () => VariantConverter.Decode<ValueTypes>( data ) );
+			Assert.DoesNotThrow( () => VariantConverter.DecodeInto( data, out item ) );
 		}
 	}
 }

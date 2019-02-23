@@ -279,7 +279,7 @@ foreach( var pair in dict as ProxyObject )
 
 The non-collection `Variant` subclasses are `ProxyBoolean`, `ProxyNumber` and `ProxyString`. A variant can also be `null`. Any `Variant` object can be directly encoded to JSON by calling its `ToJson()` method or passing it to `Json.Encode()`.
 
-Variant's can also be turned back into strongly typed objects via the `VariantConverter.Make<T>` method.
+Variant's can also be turned back into strongly typed objects via the `VariantConverter.Decode<T>` method.
 
 
 ## Meta

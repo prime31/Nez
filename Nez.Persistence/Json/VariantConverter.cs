@@ -10,11 +10,6 @@ namespace Nez.Persistence
 	{
 		internal const BindingFlags instanceBindingFlags = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance;
 		const BindingFlags staticBindingFlags = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static;
-		internal static readonly MethodInfo decodeTypeMethod = typeof( VariantConverter ).GetMethod( "DecodeType", staticBindingFlags );
-		static readonly MethodInfo decodeListMethod = typeof( VariantConverter ).GetMethod( "DecodeList", staticBindingFlags );
-		static readonly MethodInfo decodeDictionaryMethod = typeof( VariantConverter ).GetMethod( "DecodeDictionary", staticBindingFlags );
-		static readonly MethodInfo decodeArrayMethod = typeof( VariantConverter ).GetMethod( "DecodeArray", staticBindingFlags );
-		static readonly MethodInfo decodeMultiRankArrayMethod = typeof( VariantConverter ).GetMethod( "DecodeMultiRankArray", staticBindingFlags );
 
 		internal static readonly Type decodeAliasAttrType = typeof( DecodeAliasAttribute );
 		static readonly Type afterDecodeAttrType = typeof( AfterDecodeAttribute );
@@ -23,16 +18,16 @@ namespace Nez.Persistence
 		static CacheResolver _cacheResolver = new CacheResolver();
 
 
-		public static T Make<T>( Variant data )
+		public static T Decode<T>( Variant data )
 		{
-			var item = DecodeType<T>( data );
+			var item = (T)DecodeType( data, typeof( T ) );
 			_cacheResolver.Clear();
 			return item;
 		}
 
-		public static void MakeInto<T>( Variant data, out T item )
+		public static void DecodeInto<T>( Variant data, out T item )
 		{
-			item = DecodeType<T>( data );
+			item = (T)DecodeType( data, typeof( T ) );
 			_cacheResolver.Clear();
 		}
 
@@ -61,33 +56,32 @@ namespace Nez.Persistence
 			return null;
 		}
 
-		static T DecodeType<T>( Variant data )
+		static object DecodeType( Variant data, Type type )
 		{
 			if( data == null )
 			{
-				return default( T );
+				if( type.IsValueType )
+					return Activator.CreateInstance( type );
+				return null;
 			}
-
-			var type = typeof( T );
 
 			// handle Nullables. If the type is Nullable use the underlying type
 			type = Nullable.GetUnderlyingType( type ) ?? type;
 			if( type.IsEnum )
 			{
-				return (T)Enum.Parse( type, data.ToString( CultureInfo.InvariantCulture ) );
+				return Enum.Parse( type, data.ToString( CultureInfo.InvariantCulture ) );
 			}
 
 			if( type.IsPrimitive || type == typeof( string ) || type == typeof( decimal ) )
 			{
-				return (T)Convert.ChangeType( data, type );
+				return Convert.ChangeType( data, type );
 			}
 
 			if( type.IsArray )
 			{
 				if( type.GetArrayRank() == 1 )
 				{
-					var makeFunc = decodeArrayMethod.MakeGenericMethod( type.GetElementType() );
-					return (T)makeFunc.Invoke( null, new object[] { data } );
+					return DecodeArray( type.GetElementType(), data );
 				}
 
 				var arrayData = data as ProxyArray;
@@ -103,21 +97,20 @@ namespace Nez.Persistence
 					var elementType = type.GetElementType();
 					if( elementType == null )
 					{
-						throw new DecodeException( "Array element type is expected to be not null, but it is." );
+						throw new DecodeException( "Array element type is expected to not be null, but it is." );
 					}
 
 					var array = Array.CreateInstance( elementType, rankLengths );
-					var makeFunc = decodeMultiRankArrayMethod.MakeGenericMethod( elementType );
 					try
 					{
-						makeFunc.Invoke( null, new object[] { arrayData, array, 1, rankLengths } );
+						DecodeMultiRankArray( elementType, arrayData, array, 1, rankLengths );
 					}
 					catch( Exception e )
 					{
 						throw new DecodeException( "Error decoding multidimensional array. Did you try to decode into an array of incompatible rank or element type?", e );
 					}
 
-					return (T)Convert.ChangeType( array, typeof( T ) );
+					return Convert.ChangeType( array, type );
 				}
 
 				throw new DecodeException( "Error decoding multidimensional array; JSON data doesn't seem fit this structure." );
@@ -125,14 +118,14 @@ namespace Nez.Persistence
 
 			if( typeof( IList ).IsAssignableFrom( type ) )
 			{
-				var makeFunc = decodeListMethod.MakeGenericMethod( type.GetGenericArguments() );
-				return (T)makeFunc.Invoke( null, new object[] { data } );
+				return DecodeList( type, data );
 			}
 
 			if( typeof( IDictionary ).IsAssignableFrom( type ) )
 			{
-				var makeFunc = decodeDictionaryMethod.MakeGenericMethod( type.GetGenericArguments() );
-				return (T)makeFunc.Invoke( null, new object[] { data } );
+				//var makeFunc = decodeDictionaryMethod.MakeGenericMethod( type.GetGenericArguments() );
+				//return makeFunc.Invoke( null, new object[] { data } );
+				return DecodeDictionary( type, data );
 			}
 
 
@@ -146,11 +139,11 @@ namespace Nez.Persistence
 			var refId = proxyObject.ReferenceId;
 			if( refId != null )
 			{
-				return _cacheResolver.GetReference<T>( refId );
+				return _cacheResolver.GetReference( refId );
 			}
 
 			// If there's a type hint, use it to create the instance.
-			T instance;
+			object instance;
 			var typeHint = proxyObject.TypeHint;
 			if( typeHint != null && typeHint != type.FullName )
 			{
@@ -162,7 +155,7 @@ namespace Nez.Persistence
 
 				if( type.IsAssignableFrom( makeType ) )
 				{
-					instance = _cacheResolver.CreateInstance<T>( makeType );
+					instance = _cacheResolver.CreateInstance( makeType );
 					type = makeType;
 				}
 				else
@@ -173,7 +166,7 @@ namespace Nez.Persistence
 			else
 			{
 				// We don't have a type hint, so just instantiate the type we have.
-				instance = _cacheResolver.CreateInstance<T>( typeof( T ) );
+				instance = _cacheResolver.CreateInstance( type );
 			}
 
 			// if there is an instanceId, cache the object in case any other objects are referencing it
@@ -191,41 +184,36 @@ namespace Nez.Persistence
 				{
 					if( CacheResolver.IsMemberInfoEncodeableOrDecodeable( field, field.IsPublic ) )
 					{
-						var makeFunc = _cacheResolver.GetDecodeTypeMethodForField( field.FieldType );
 						if( type.IsValueType )
 						{
 							// Type is a struct.
-							var instanceRef = (object)instance;
-							field.SetValue( instanceRef, makeFunc.Invoke( null, new object[] { pair.Value } ) );
-							instance = (T)instanceRef;
+							var instanceRef = instance;
+							field.SetValue( instanceRef, DecodeType( pair.Value, field.FieldType ) );
+							instance = instanceRef;
 						}
 						else
 						{
 							// Type is a class.
-							field.SetValue( instance, makeFunc.Invoke( null, new object[] { pair.Value } ) );
+							field.SetValue( instance, DecodeType( pair.Value, field.FieldType ) );
 						}
 					}
 					continue;
 				}
 
 				var property = _cacheResolver.GetProperty( type, pair.Key );
-				if( property != null )
+				if( property != null && property.CanWrite && property.IsDefined( Json.includeAttrType ) )
 				{
-					if( property.CanWrite && property.IsDefined( Json.includeAttrType ) )
+					if( type.IsValueType )
 					{
-						var makeFunc = _cacheResolver.GetDecodeTypeMethodForField( property.PropertyType );
-						if( type.IsValueType )
-						{
-							// Type is a struct.
-							var instanceRef = (object)instance;
-							property.SetValue( instanceRef, makeFunc.Invoke( null, new object[] { pair.Value } ), null );
-							instance = (T)instanceRef;
-						}
-						else
-						{
-							// Type is a class.
-							property.SetValue( instance, makeFunc.Invoke( null, new object[] { pair.Value } ), null );
-						}
+						// Type is a struct
+						var instanceRef = instance;
+						property.SetValue( instanceRef, DecodeType( pair.Value, property.PropertyType ), null );
+						instance = instanceRef;
+					}
+					else
+					{
+						// Type is a class
+						property.SetValue( instance, DecodeType( pair.Value, property.PropertyType ), null );
 					}
 				}
 			}
@@ -242,46 +230,51 @@ namespace Nez.Persistence
 			return instance;
 		}
 
-		static List<T> DecodeList<T>( Variant data )
+		static object DecodeList( Type type, Variant data )
 		{
-			var list = new List<T>();
-
 			var proxyArray = data as ProxyArray;
 			if( proxyArray == null )
 			{
 				throw new DecodeException( "Variant is expected to be a ProxyArray here, but it is not." );
 			}
 
+			var innerType = type.GetGenericArguments()[0];
+			var genericType = typeof( List<> ).MakeGenericType( innerType );
+			var list = (IList)_cacheResolver.CreateInstance( genericType );
+
 			foreach( var item in proxyArray )
 			{
-				list.Add( DecodeType<T>( item ) );
+				list.Add( DecodeType( item, innerType ) );
 			}
 
 			return list;
 		}
 
-		static Dictionary<TKey, TValue> DecodeDictionary<TKey, TValue>( Variant data )
+		static object DecodeDictionary( Type type, Variant data )
 		{
-			var dict = new Dictionary<TKey, TValue>();
-			var type = typeof( TKey );
-
 			var proxyObject = data as ProxyObject;
 			if( proxyObject == null )
 			{
 				throw new DecodeException( "Variant is expected to be a ProxyObject here, but it is not." );
 			}
 
+			var keyType = type.GetGenericArguments()[0];
+			var valueType = type.GetGenericArguments()[1];
+
+			var genericType = typeof( Dictionary<,> ).MakeGenericType( keyType, valueType );
+			var dict = (IDictionary)_cacheResolver.CreateInstance( genericType );
+
 			foreach( var pair in proxyObject )
 			{
-				var k = (TKey)( type.IsEnum ? Enum.Parse( type, pair.Key ) : Convert.ChangeType( pair.Key, type ) );
-				var v = DecodeType<TValue>( pair.Value );
+				var k = keyType.IsEnum ? Enum.Parse( keyType, pair.Key ) : Convert.ChangeType( pair.Key, keyType );
+				var v = DecodeType( pair.Value, valueType );
 				dict.Add( k, v );
 			}
 
 			return dict;
 		}
 
-		static T[] DecodeArray<T>( Variant data )
+		static object DecodeArray( Type elementType, Variant data )
 		{
 			var arrayData = data as ProxyArray;
 			if( arrayData == null )
@@ -289,19 +282,18 @@ namespace Nez.Persistence
 				throw new DecodeException( "Variant is expected to be a ProxyArray here, but it is not." );
 			}
 
-			var arraySize = arrayData.Count;
-			var array = new T[arraySize];
+			var arrayLength = arrayData.Count;
+			var array = Array.CreateInstance( elementType, arrayLength );
 
-			var i = 0;
-			foreach( var item in arrayData )
+			for( var i = 0; i < arrayLength;  i++ )
 			{
-				array[i++] = DecodeType<T>( item );
+				array.SetValue( DecodeType( data[i], elementType ), i );
 			}
 
 			return array;
 		}
 
-		static void DecodeMultiRankArray<T>( ProxyArray arrayData, Array array, int arrayRank, int[] indices )
+		static void DecodeMultiRankArray( Type elementType, ProxyArray arrayData, Array array, int arrayRank, int[] indices )
 		{
 			var count = arrayData.Count;
 			for( var i = 0; i < count; i++ )
@@ -309,11 +301,11 @@ namespace Nez.Persistence
 				indices[arrayRank - 1] = i;
 				if( arrayRank < array.Rank )
 				{
-					DecodeMultiRankArray<T>( arrayData[i] as ProxyArray, array, arrayRank + 1, indices );
+					DecodeMultiRankArray( elementType, arrayData[i] as ProxyArray, array, arrayRank + 1, indices );
 				}
 				else
 				{
-					array.SetValue( DecodeType<T>( arrayData[i] ), indices );
+					array.SetValue( DecodeType( arrayData[i], elementType ), indices );
 				}
 			}
 		}

@@ -71,7 +71,7 @@ namespace Nez.Persistence
 		public static T Decode<T>( string json )
 		{
 			System.Diagnostics.Debug.Assert( json != null );
-			return VariantConverter.Make<T>( JsonDecoder.Decode( json ) );
+			return VariantConverter.Decode<T>( JsonDecoder.Decode( json ) );
 		}
 
 		/// <summary>
@@ -84,7 +84,12 @@ namespace Nez.Persistence
 		public static void DecodeInto<T>( string json, out T item )
 		{
 			System.Diagnostics.Debug.Assert( json != null );
-			VariantConverter.MakeInto<T>( JsonDecoder.Decode( json ), out item );
+			VariantConverter.DecodeInto( JsonDecoder.Decode( json ), out item );
+		}
+
+		public static void PopulateObject( string json, object item )
+		{
+			throw new NotImplementedException();
 		}
 
 	}

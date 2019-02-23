@@ -116,7 +116,7 @@ namespace Nez.Persistence.JsonTests
 		[Test]
 		public void TestLoadClass()
 		{
-			var testClass = VariantConverter.Make<TestClass>( Json.Decode( "{\"x\":5,\"y\":7,\"z\":3,\"list\":[3,1,4],\"p1\":1,\"p2\":2,\"p3\":3}" ) );
+			var testClass = VariantConverter.Decode<TestClass>( Json.Decode( "{\"x\":5,\"y\":7,\"z\":3,\"list\":[3,1,4],\"p1\":1,\"p2\":2,\"p3\":3}" ) );
 
 			Assert.AreEqual( 5, testClass.x );
 			Assert.AreEqual( 7, testClass.y );

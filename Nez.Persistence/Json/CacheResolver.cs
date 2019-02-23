@@ -13,7 +13,6 @@ namespace Nez.Persistence
 		Dictionary<Type, ConstructorInfo> _constructorCache = new Dictionary<Type, ConstructorInfo>();
 		Dictionary<Type, Dictionary<string, FieldInfo>> _fieldInfoCache = new Dictionary<Type, Dictionary<string, FieldInfo>>();
 		Dictionary<Type, Dictionary<string, PropertyInfo>> _propertyInfoCache = new Dictionary<Type, Dictionary<string, PropertyInfo>>();
-		Dictionary<Type, MethodInfo> _decodeTypeMethodCache = new Dictionary<Type, MethodInfo>();
 		static Dictionary<MemberInfo, bool> _memberInfoEncodeableCache = new Dictionary<MemberInfo, bool>();
 
 		/// <summary>
@@ -46,10 +45,7 @@ namespace Nez.Persistence
 			return isPublic;
 		}
 
-		public static void Flush()
-		{
-			_memberInfoEncodeableCache.Clear();
-		}
+		public static void Flush() => _memberInfoEncodeableCache.Clear();
 
 		internal void Clear()
 		{
@@ -60,28 +56,27 @@ namespace Nez.Persistence
 			_memberInfoEncodeableCache.Clear();
 		}
 
-		internal void TrackReference<T>( string id, T instance )
-		{
-			_referenceTracker[id] = instance;
-		}
+		internal void TrackReference<T>( string id, T instance ) => _referenceTracker[id] = instance;
 
-		internal T GetReference<T>( string refId )
-		{
-			return (T)_referenceTracker[refId];
-		}
+		internal object GetReference( string refId ) => _referenceTracker[refId];
 
-		internal T CreateInstance<T>( Type type )
+		/// <summary>
+		/// Creates an instance of <paramref name="type"/> and caches the ConstructorInfo for future use
+		/// </summary>
+		/// <returns>The instance.</returns>
+		/// <param name="type">Type.</param>
+		internal object CreateInstance( Type type )
 		{
 			// structs have no constructors present so just let Activator.CreateInstance make them
 			if( type.IsValueType )
-				return Activator.CreateInstance<T>();
+				return Activator.CreateInstance( type );
 
 			if( _constructorCache.TryGetValue( type, out var constructor ) )
-				return (T)constructor.Invoke( null );
-		
+				return constructor.Invoke( null );
+
 			constructor = type.GetConstructor( BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance, null, Type.EmptyTypes, null );
 			_constructorCache[type] = constructor;
-			return (T)constructor.Invoke( null );
+			return constructor.Invoke( null );
 		}
 
 		/// <summary>
@@ -152,7 +147,6 @@ namespace Nez.Persistence
 			return FindPropertyFromDecodeAlias( type, name );
 		}
 
-
 		PropertyInfo FindPropertyFromDecodeAlias( Type type, string name )
 		{
 			foreach( var kvPair in _propertyInfoCache[type] )
@@ -169,16 +163,6 @@ namespace Nez.Persistence
 				}
 			}
 			return null;
-		}
-
-		internal MethodInfo GetDecodeTypeMethodForField( Type type )
-		{
-			if( _decodeTypeMethodCache.TryGetValue( type, out var method ) )
-				return method;
-
-			method = VariantConverter.decodeTypeMethod.MakeGenericMethod( type );
-			_decodeTypeMethodCache[type] = method;
-			return method;
 		}
 
 	}

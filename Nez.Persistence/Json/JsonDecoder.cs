@@ -1,11 +1,15 @@
 ﻿using System.IO;
 using System.Text;
 using System;
+using JsonArray = System.Collections.Generic.List<object>;
+using JsonDict = System.Collections.Generic.Dictionary<string, object>;
 
 namespace Nez.Persistence
 {
 	public sealed class JsonDecoder : IDisposable
 	{
+		#region Fields and Props
+
 		const string whiteSpace = " \t\n\r";
 		const string wordBreak = " \t\n\r{}[],:\"";
 		static readonly StringBuilder _builder = new StringBuilder();
@@ -27,7 +31,6 @@ namespace Nez.Persistence
 		}
 
 		StringReader json;
-
 
 		char PeekChar
 		{
@@ -71,7 +74,6 @@ namespace Nez.Persistence
 					return Token.None;
 				}
 
-				// ReSharper disable once SwitchStatementMissingSomeCases
 				switch( PeekChar )
 				{
 					case '{':
@@ -112,7 +114,6 @@ namespace Nez.Persistence
 						return Token.Number;
 				}
 
-				// ReSharper disable once SwitchStatementMissingSomeCases
 				switch( NextWord )
 				{
 					case "false":
@@ -129,10 +130,8 @@ namespace Nez.Persistence
 			}
 		}
 
-		JsonDecoder( string jsonString )
-		{
-			json = new StringReader( jsonString );
-		}
+		#endregion
+
 
 		public static Variant Decode( string jsonString )
 		{
@@ -140,6 +139,11 @@ namespace Nez.Persistence
 			{
 				return instance.DecodeValue();
 			}
+		}
+
+		JsonDecoder( string jsonString )
+		{
+			json = new StringReader( jsonString );
 		}
 
 		public void Dispose()

@@ -38,7 +38,7 @@ namespace Nez.Persistence.JsonTests
 		[Test]
 		public void LoadStruct()
 		{
-			var testStruct = VariantConverter.Make<TestStruct>( Json.Decode( "{\"x\":5,\"y\":7,\"z\":3}" ) );
+			var testStruct = VariantConverter.Decode<TestStruct>( Json.Decode( "{\"x\":5,\"y\":7,\"z\":3}" ) );
 
 			Assert.AreEqual( 5, testStruct.x );
 			Assert.AreEqual( 7, testStruct.y );
