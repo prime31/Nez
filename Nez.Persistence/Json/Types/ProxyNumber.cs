@@ -22,30 +22,26 @@ namespace Nez.Persistence
 			{
 				if( value[0] == '-' )
 				{
-					Int64 parsedValue;
-					if( Int64.TryParse( value, NumberStyles.Float, NumberFormatInfo.InvariantInfo, out parsedValue ) )
+					if( long.TryParse( value, NumberStyles.Float, NumberFormatInfo.InvariantInfo, out long parsedValue ) )
 					{
 						return parsedValue;
 					}
 				}
 				else
 				{
-					UInt64 parsedValue;
-					if( UInt64.TryParse( value, NumberStyles.Float, NumberFormatInfo.InvariantInfo, out parsedValue ) )
+					if( UInt64.TryParse( value, NumberStyles.Float, NumberFormatInfo.InvariantInfo, out ulong parsedValue ) )
 					{
 						return parsedValue;
 					}
 				}
 			}
 
-			Decimal decimalValue;
-			if( Decimal.TryParse( value, NumberStyles.Float, NumberFormatInfo.InvariantInfo, out decimalValue ) )
+			if( Decimal.TryParse( value, NumberStyles.Float, NumberFormatInfo.InvariantInfo, out decimal decimalValue ) )
 			{
 				// Check for decimal underflow.
 				if( decimalValue == Decimal.Zero )
 				{
-					Double parsedValue;
-					if( Double.TryParse( value, NumberStyles.Float, NumberFormatInfo.InvariantInfo, out parsedValue ) )
+					if( double.TryParse( value, NumberStyles.Float, NumberFormatInfo.InvariantInfo, out double parsedValue ) )
 					{
 						if( Math.Abs( parsedValue ) > Double.Epsilon )
 						{
@@ -57,8 +53,7 @@ namespace Nez.Persistence
 				return decimalValue;
 			}
 
-			Double doubleValue;
-			if( Double.TryParse( value, NumberStyles.Float, NumberFormatInfo.InvariantInfo, out doubleValue ) )
+			if( double.TryParse( value, NumberStyles.Float, NumberFormatInfo.InvariantInfo, out double doubleValue ) )
 			{
 				return doubleValue;
 			}
