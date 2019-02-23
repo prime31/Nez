@@ -19,7 +19,7 @@ init:
     Invoke-Command -ScriptBlock {C:\MonoGameSetup.exe /S /v/qn}
 
 before_build:
-- cmd: nuget restore -Verbosity quiet
+- cmd: nuget restore -Verbosity quiet Nez.sln
 
 # Build NuGet packages
 after_build:
