@@ -287,7 +287,7 @@ Variant's can also be turned back into strongly typed objects via the `VariantCo
 
 ## Advanced: JsonTypeConverter for custom encoding/decoding
 
-Json lets you fully take over the encoding to JSON and the conversion back to a strongly typed object. You can do this by creating an `JsonTypeConverter<T>` and implementing the abstract methods. Any time Json comes accross an object of Type `T` it will pass it off to your `JsonObjectConverter`. Note that you can turn down the job by overriding `CanRead` or `CanWrite`.
+Json lets you fully take over the encoding to JSON and the conversion back to a strongly typed object. You can do this by creating an `JsonTypeConverter<T>` and implementing the abstract methods. Any time Json comes accross an object of Type `T` it will pass it off to your `JsonObjectConverter`. Note that you can turn down the job by overriding `CanConvert` or `CanWrite` properties.
 
 The `WriteJson` method will be passed a `IJsonEncoder` which can be used to write the JSON for your object. The `ConvertToObject` method will be passed an `IObjectConverter` which can be used to convert the raw data back into your object.
 

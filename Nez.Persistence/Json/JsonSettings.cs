@@ -51,7 +51,7 @@ namespace Nez.Persistence
 				return null;
 			foreach( var converter in TypeConverters )
 			{
-				if( converter.CanConvert( objectType ) )
+				if( converter.CanConvertType( objectType ) )
 				{
 					return converter;
 				}
