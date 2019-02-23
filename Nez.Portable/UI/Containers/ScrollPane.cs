@@ -66,7 +66,7 @@ namespace Nez.UI
 
 		public ScrollPane( Element widget, ScrollPaneStyle style )
 		{
-			Assert.isNotNull( style, "style cannot be null" );
+			Insist.isNotNull( style, "style cannot be null" );
 			transform = true;
 			_style = style;
 			setWidget( widget );
@@ -451,7 +451,7 @@ namespace Nez.UI
 
 		public ScrollPane setStyle( ScrollPaneStyle style )
 		{
-			Assert.isNotNull( style, "style cannot be null" );
+			Insist.isNotNull( style, "style cannot be null" );
 			_style = style;
 			invalidateHierarchy();
 

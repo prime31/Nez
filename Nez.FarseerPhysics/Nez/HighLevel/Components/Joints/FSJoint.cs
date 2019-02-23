@@ -37,7 +37,7 @@ namespace Nez.Farseer
 		public override void onAddedToEntity()
 		{
 			_ownerBody = this.getComponent<FSRigidBody>();
-			Assert.isNotNull( _ownerBody, "Joint added to an Entity with no RigidBody!" );
+			Insist.isNotNull( _ownerBody, "Joint added to an Entity with no RigidBody!" );
 			createJoint();
 		}
 

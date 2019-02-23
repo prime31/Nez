@@ -130,7 +130,7 @@ namespace Nez.Tiled
 		{
 			this.collisionLayer = collisionLayer;
 			tiledMap = collisionLayer.tiledMap;
-			Assert.isNotNull( collisionLayer, nameof( collisionLayer ) + " is required" );
+			Insist.isNotNull( collisionLayer, nameof( collisionLayer ) + " is required" );
 		}
 
 

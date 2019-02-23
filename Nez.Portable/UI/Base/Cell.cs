@@ -103,7 +103,7 @@ namespace Nez.UI
 		/// <param name="size">Size.</param>
 		public Cell size( Value size )
 		{
-			Assert.isNotNull( size, "size cannot be null." );
+			Insist.isNotNull( size, "size cannot be null." );
 			
 			minWidth = size;
 			minHeight = size;
@@ -122,8 +122,8 @@ namespace Nez.UI
 		/// <param name="height">Height.</param>
 		public Cell size( Value width, Value height )
 		{
-			Assert.isNotNull( width, "width cannot be null." );
-			Assert.isNotNull( height, "height cannot be null." );
+			Insist.isNotNull( width, "width cannot be null." );
+			Insist.isNotNull( height, "height cannot be null." );
 
 			minWidth = width;
 			minHeight = height;

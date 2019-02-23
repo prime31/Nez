@@ -206,7 +206,7 @@ namespace Nez.Sprites
 
 		public SpriteAnimation getAnimation( TEnum key )
 		{
-			Assert.isTrue( _animations.ContainsKey( key ), "{0} is not present in animations", key );
+			Insist.isTrue( _animations.ContainsKey( key ), "{0} is not present in animations", key );
 			return _animations[key];
 		}
 
@@ -220,7 +220,7 @@ namespace Nez.Sprites
 		/// <param name="startFrame">Start frame.</param>
 		public SpriteAnimation play( TEnum animationKey, int startFrame = 0 )
 		{
-			Assert.isTrue( _animations.ContainsKey( animationKey ), "Attempted to play an animation that doesnt exist" );
+			Insist.isTrue( _animations.ContainsKey( animationKey ), "Attempted to play an animation that doesnt exist" );
 
 			var animation = _animations[animationKey];
 			animation.prepareForUse();

@@ -86,7 +86,7 @@ namespace Nez.Textures
 		/// <param name="renderTarget">Render target.</param>
 		public static void releaseTemporary( RenderTarget2D renderTarget )
 		{
-			Assert.isTrue( renderTarget is TrackedRenderTarget2D, "Attempted to release a temporary RenderTarget2D that is not managed by the system" );
+			Insist.isTrue( renderTarget is TrackedRenderTarget2D, "Attempted to release a temporary RenderTarget2D that is not managed by the system" );
 
 			var trackedRT = renderTarget as TrackedRenderTarget2D;
 			trackedRT.lastFrameUsed = Time.frameCount;

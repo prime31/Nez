@@ -79,7 +79,7 @@ namespace Nez.Farseer
 
 		void recreateFixture()
 		{
-			Assert.isNotNull( _verts, "verts cannot be null!" );
+			Insist.isNotNull( _verts, "verts cannot be null!" );
 
 			destroyFixture();
 

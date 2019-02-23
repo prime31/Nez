@@ -350,7 +350,7 @@ namespace Nez
 
 		internal void begin()
 		{
-			Assert.isFalse( _renderers.length == 0, "Scene has begun with no renderer. At least one renderer must be present before beginning a scene." );
+			Insist.isFalse( _renderers.length == 0, "Scene has begun with no renderer. At least one renderer must be present before beginning a scene." );
 			Physics.reset();
 
 			// prep our render textures
@@ -855,7 +855,7 @@ namespace Nez
 		/// </summary>
 		public void removeSceneComponent( SceneComponent component )
 		{
-			Assert.isTrue( _sceneComponents.contains( component ), "SceneComponent {0} is not in the SceneComponents list!", component );
+			Insist.isTrue( _sceneComponents.contains( component ), "SceneComponent {0} is not in the SceneComponents list!", component );
 			_sceneComponents.remove( component );
 			component.onRemovedFromScene();
 		}
@@ -1020,7 +1020,7 @@ namespace Nez
 		/// <param name="entity">The Entity to add</param>
 		public Entity addEntity( Entity entity )
 		{
-			Assert.isFalse( entities.contains( entity ), "You are attempting to add the same entity to a scene twice: {0}", entity );
+			Insist.isFalse( entities.contains( entity ), "You are attempting to add the same entity to a scene twice: {0}", entity );
 			entities.add( entity );
 			entity.scene = this;
 
@@ -1037,7 +1037,7 @@ namespace Nez
 		/// <param name="entity">The Entity to add</param>
 		public T addEntity<T>( T entity ) where T : Entity
 		{
-			Assert.isFalse( entities.contains( entity ), "You are attempting to add the same entity to a scene twice: {0}", entity );
+			Insist.isFalse( entities.contains( entity ), "You are attempting to add the same entity to a scene twice: {0}", entity );
 			entities.add( entity );
 			entity.scene = this;
 			return entity;

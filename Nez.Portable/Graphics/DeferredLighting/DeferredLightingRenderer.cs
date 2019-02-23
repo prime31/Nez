@@ -217,7 +217,7 @@ namespace Nez.DeferredLighting
 			var renderables = scene.renderableComponents.componentsWithRenderLayer( _lightLayer );
 			for( var i = 0; i < renderables.length; i++ )
 			{
-				Assert.isTrue( renderables.buffer[i] is DeferredLight, "Found a Renderable in the lightLayer that is not a DeferredLight!" );
+				Insist.isTrue( renderables.buffer[i] is DeferredLight, "Found a Renderable in the lightLayer that is not a DeferredLight!" );
 				var renderable = renderables.buffer[i];
 				if( renderable.enabled )
 				{

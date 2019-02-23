@@ -182,7 +182,7 @@ namespace Nez.UI
 
 		public Slider setStyle( SliderStyle style )
 		{
-			Assert.isTrue( style is SliderStyle, "style must be a SliderStyle" );
+			Insist.isTrue( style is SliderStyle, "style must be a SliderStyle" );
 
 			base.setStyle( style );
 			this.style = style;

@@ -15,7 +15,7 @@ namespace Nez.AI.BehaviorTrees
 
 		public ConditionalDecorator( IConditional<T> conditional, bool shouldReevalute )
 		{
-			Assert.isTrue( conditional is IConditional<T>, "conditional must implment IConditional" );
+			Insist.isTrue( conditional is IConditional<T>, "conditional must implment IConditional" );
 			_conditional = conditional;
 			_shouldReevaluate = shouldReevalute;
 		}
@@ -40,7 +40,7 @@ namespace Nez.AI.BehaviorTrees
 		
 		public override TaskStatus update( T context )
 		{
-			Assert.isNotNull( child, "child must not be null" );
+			Insist.isNotNull( child, "child must not be null" );
 
 			// evalute the condition if we need to
 			_conditionalStatus = executeConditional( context );

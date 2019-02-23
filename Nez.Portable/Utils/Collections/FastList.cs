@@ -95,7 +95,7 @@ namespace Nez
 		/// </summary>
 		public void removeAt( int index )
 		{
-			Assert.isTrue( index < length, "Index out of range!" );
+			Insist.isTrue( index < length, "Index out of range!" );
 
 			length--;
 			if( index < length )
@@ -110,7 +110,7 @@ namespace Nez
 		/// <param name="index">Index.</param>
 		public void removeAtWithSwap( int index )
 		{
-			Assert.isTrue( index < length, "Index out of range!" );
+			Insist.isTrue( index < length, "Index out of range!" );
 
 			buffer[index] = buffer[length - 1];
 			buffer[length - 1] = default( T );

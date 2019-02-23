@@ -28,7 +28,7 @@ namespace Nez.UI
 
 		public override void setStyle( ButtonStyle style )
 		{
-			Assert.isTrue( style is TextButtonStyle, "style must be a TextButtonStyle" );
+			Insist.isTrue( style is TextButtonStyle, "style must be a TextButtonStyle" );
 
 			base.setStyle( style );
 			this.style = (TextButtonStyle)style;

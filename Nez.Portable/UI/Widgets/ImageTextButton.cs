@@ -39,7 +39,7 @@ namespace Nez.UI
 
 		public void setStyle( ImageTextButtonStyle style )
 		{
-			Assert.isTrue( style is ImageTextButtonStyle, "style must be a ImageTextButtonStyle" );
+			Insist.isTrue( style is ImageTextButtonStyle, "style must be a ImageTextButtonStyle" );
 
 			base.setStyle( style );
 

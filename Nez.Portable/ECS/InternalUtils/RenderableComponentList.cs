@@ -73,7 +73,7 @@ namespace Nez
 		void addToRenderLayerList( IRenderable component, int renderLayer )
 		{
 			var list = componentsWithRenderLayer( renderLayer );
-			Assert.isFalse( list.contains( component ), "Component renderLayer list already contains this component" );
+			Insist.isFalse( list.contains( component ), "Component renderLayer list already contains this component" );
 
 			list.add( component );
 			if( !_unsortedRenderLayers.Contains( renderLayer ) )

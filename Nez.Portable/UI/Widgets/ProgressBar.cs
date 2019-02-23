@@ -64,8 +64,8 @@ namespace Nez.UI
 
         public ProgressBar( float min, float max, float stepSize, bool vertical, ProgressBarStyle style )
 		{
-			Assert.isTrue( min < max, "min must be less than max" );
-			Assert.isTrue( stepSize > 0, "stepSize must be greater than 0" );
+			Insist.isTrue( min < max, "min must be less than max" );
+			Insist.isTrue( stepSize > 0, "stepSize must be greater than 0" );
 
 			setStyle( style );
 			this.min = min;
@@ -148,7 +148,7 @@ namespace Nez.UI
 
         public ProgressBar setMinMax( float min, float max )
         {
-            Assert.isTrue(min < max, "min must be less than max");
+            Insist.isTrue(min < max, "min must be less than max");
             this.min = min;
             this.max = max;
             _value = Mathf.clamp(_value, this.min, this.max);
@@ -163,7 +163,7 @@ namespace Nez.UI
         /// <param name="totalSteps">Total amount of steps.</param>
         public ProgressBar setTotalSteps( int totalSteps )
         {
-            Assert.isTrue(totalSteps != 0, "totalSteps cannot be equal to 0");
+            Insist.isTrue(totalSteps != 0, "totalSteps cannot be equal to 0");
             _stepSize = Math.Abs((min - max) / totalSteps);
             return this;
         }

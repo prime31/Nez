@@ -409,7 +409,7 @@ namespace Nez
 		/// <param name="value">Value.</param>
 		public Camera setMinimumZoom( float minZoom )
 		{
-			Assert.isTrue( minZoom > 0, "minimumZoom must be greater than zero" );
+			Insist.isTrue( minZoom > 0, "minimumZoom must be greater than zero" );
 
 			if( _zoom < minZoom )
 				_zoom = minimumZoom;
@@ -425,7 +425,7 @@ namespace Nez
 		/// <param name="maxZoom">Max zoom.</param>
 		public Camera setMaximumZoom( float maxZoom )
 		{
-			Assert.isTrue( maxZoom > 0, "MaximumZoom must be greater than zero" );
+			Insist.isTrue( maxZoom > 0, "MaximumZoom must be greater than zero" );
 
 			if( _zoom > maxZoom )
 				_zoom = maxZoom;

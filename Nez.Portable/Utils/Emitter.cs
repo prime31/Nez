@@ -38,7 +38,7 @@ namespace Nez.Systems
 				_messageTable.Add( eventType, list );
 			}
 
-			Assert.isFalse( list.Contains( handler ), "You are trying to add the same observer twice" );
+			Insist.isFalse( list.Contains( handler ), "You are trying to add the same observer twice" );
 			list.Add( handler );
 		}
 
@@ -98,7 +98,7 @@ namespace Nez.Systems
 				_messageTable.Add( eventType, list );
 			}
 
-			Assert.isFalse( list.Contains( handler ), "You are trying to add the same observer twice" );
+			Insist.isFalse( list.Contains( handler ), "You are trying to add the same observer twice" );
 			list.Add( handler );
 		}
 

@@ -26,7 +26,7 @@ namespace Nez.UI
 
 		public Window( string title, WindowStyle style )
 		{
-			Assert.isNotNull( title, "title cannot be null" );
+			Insist.isNotNull( title, "title cannot be null" );
 
 			touchable = Touchable.Enabled;
 			clip = true;

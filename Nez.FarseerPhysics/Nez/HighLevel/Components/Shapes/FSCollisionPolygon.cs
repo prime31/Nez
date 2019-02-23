@@ -98,7 +98,7 @@ namespace Nez.Farseer
 
 		protected void updateVerts()
 		{
-			Assert.isNotNull( _verts, "verts cannot be null!" );
+			Insist.isNotNull( _verts, "verts cannot be null!" );
 
 			if( !_areVertsDirty )
 				return;

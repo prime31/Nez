@@ -63,7 +63,7 @@ namespace Nez.AI.FSM
 			if( _currentState != null )
 				_currentState.end();
 
-			Assert.isTrue( _states.ContainsKey( newType ), "{0}: state {1} does not exist. Did you forget to add it by calling addState?", GetType(), newType );
+			Insist.isTrue( _states.ContainsKey( newType ), "{0}: state {1} does not exist. Did you forget to add it by calling addState?", GetType(), newType );
 
 			// swap states and call begin
 			elapsedTimeInState = 0f;

@@ -253,7 +253,7 @@ namespace Nez.Sprites
 			if( _sprite == null )
 				_sprite = this.getComponent<Sprite>();
 
-			Assert.isNotNull( _sprite, "There is no Sprite on this Entity for the SpriteTrail to use" );
+			Insist.isNotNull( _sprite, "There is no Sprite on this Entity for the SpriteTrail to use" );
 
 			// move the trail behind the Sprite
 			layerDepth = _sprite.layerDepth + 0.001f;

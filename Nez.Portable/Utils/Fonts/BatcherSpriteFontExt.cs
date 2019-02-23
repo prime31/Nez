@@ -41,7 +41,7 @@ namespace Nez
 		public static void drawString( this Batcher batcher, NezSpriteFont spriteFont, StringBuilder text, Vector2 position, Color color,
 			float rotation, Vector2 origin, Vector2 scale, SpriteEffects effects, float layerDepth )
 		{
-			Assert.isFalse( text == null );
+			Insist.isFalse( text == null );
 
 			if( text.Length == 0 )
 				return;
@@ -54,7 +54,7 @@ namespace Nez
 		public static void drawString( this Batcher batcher, NezSpriteFont spriteFont, string text, Vector2 position, Color color, float rotation,
 			Vector2 origin, Vector2 scale, SpriteEffects effects, float layerDepth )
 		{
-			Assert.isFalse( text == null );
+			Insist.isFalse( text == null );
 
 			if( text.Length == 0 )
 				return;

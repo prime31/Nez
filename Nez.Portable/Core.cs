@@ -348,7 +348,7 @@ namespace Nez
 		/// <param name="sceneTransition">Scene transition.</param>
 		public static T startSceneTransition<T>( T sceneTransition ) where T : SceneTransition
 		{
-			Assert.isNull( _instance._sceneTransition, "You cannot start a new SceneTransition until the previous one has completed" );
+			Insist.isNull( _instance._sceneTransition, "You cannot start a new SceneTransition until the previous one has completed" );
 			_instance._sceneTransition = sceneTransition;
 			return sceneTransition;
 		}

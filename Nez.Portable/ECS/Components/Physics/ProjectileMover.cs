@@ -17,7 +17,7 @@ namespace Nez
 		public override void onAddedToEntity()
 		{
 			_collider = entity.getComponent<Collider>();
-			Assert.isNotNull( _collider, "null Collider. ProjectilMover requires a Collider!" );
+			Insist.isNotNull( _collider, "null Collider. ProjectilMover requires a Collider!" );
 		}
 
 

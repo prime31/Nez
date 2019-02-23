@@ -19,7 +19,7 @@ namespace Nez
 			}
 			internal set
 			{
-				Assert.isTrue( value != null );
+				Insist.isTrue( value != null );
 
 				if( _graphicsDevice == value )
 					return;

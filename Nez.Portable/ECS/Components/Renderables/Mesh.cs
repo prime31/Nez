@@ -193,7 +193,7 @@ namespace Nez
 		/// <param name="triangles">Triangles.</param>
 		public Mesh setTriangles( int[] triangles )
 		{
-			Assert.isTrue( triangles.Length % 3 == 0, "triangles must be a multiple of 3" );
+			Insist.isTrue( triangles.Length % 3 == 0, "triangles must be a multiple of 3" );
 			_primitiveCount = triangles.Length / 3;
 			_triangles = triangles;
 			return this;
@@ -207,7 +207,7 @@ namespace Nez
 		/// <returns>The mesh.</returns>
 		public Mesh setPrimitiveType( PrimitiveType primitiveType )
 		{
-			Assert.isTrue( primitiveType == PrimitiveType.TriangleList || primitiveType == PrimitiveType.TriangleStrip, "Only triangles are supported." );
+			Insist.isTrue( primitiveType == PrimitiveType.TriangleList || primitiveType == PrimitiveType.TriangleStrip, "Only triangles are supported." );
 			_primitiveType = primitiveType;
 			return this;
 		}

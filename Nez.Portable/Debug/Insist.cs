@@ -3,7 +3,7 @@
 
 namespace Nez
 {
-	public static class Assert
+	public static class Insist
 	{
 		[Conditional( "DEBUG" )]
 		[DebuggerHidden]

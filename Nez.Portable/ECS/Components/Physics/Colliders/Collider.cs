@@ -146,7 +146,7 @@ namespace Nez
 			if( _colliderRequiresAutoSizing )
 			{
 				// we only deal with boxes and circles here
-				Assert.isTrue( this is BoxCollider || this is CircleCollider, "Only box and circle colliders can be created automatically" );
+				Insist.isTrue( this is BoxCollider || this is CircleCollider, "Only box and circle colliders can be created automatically" );
 
 				var renderable = entity.getComponent<RenderableComponent>();
 				Debug.warnIf( renderable == null, "Collider has no shape and no RenderableComponent. Can't figure out how to size it." );

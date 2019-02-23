@@ -83,7 +83,7 @@ namespace Nez
 		/// <param name="worldPos">World position.</param>
 		public TiledTile getTileAtWorldPosition( Vector2 worldPos )
 		{
-			Assert.isNotNull( collisionLayer, "collisionLayer must not be null!" );
+			Insist.isNotNull( collisionLayer, "collisionLayer must not be null!" );
 
 			// offset the passed in world position to compensate for the entity position
 			worldPos -= entity.transform.position + _localOffset;
@@ -99,7 +99,7 @@ namespace Nez
 		/// <param name="bounds">Bounds.</param>
 		public List<TiledTile> getTilesIntersectingBounds( Rectangle bounds )
 		{
-			Assert.isNotNull( collisionLayer, "collisionLayer must not be null!" );
+			Insist.isNotNull( collisionLayer, "collisionLayer must not be null!" );
 
 			// offset the passed in world position to compensate for the entity position
 			bounds.Location -= ( entity.transform.position + _localOffset ).ToPoint();

@@ -149,7 +149,7 @@ namespace Nez.Spatial
 				{
 					// the cell should always exist since this collider should be in all queryed cells
 					var cell = cellAtPosition( x, y );
-					Assert.isNotNull( cell, "removing Collider [{0}] from a cell that it is not present in", collider );
+					Insist.isNotNull( cell, "removing Collider [{0}] from a cell that it is not present in", collider );
 					if( cell != null )
 						cell.Remove( collider );
 				}

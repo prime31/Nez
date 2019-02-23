@@ -79,7 +79,7 @@ namespace Nez.AI.BehaviorTrees
 
 		public BehaviorTreeBuilder<T> action( Func<T,TaskStatus> func )
 		{
-			Assert.isFalse( _parentNodeStack.Count == 0, "Can't create an unnested Action node. It must be a leaf node." );
+			Insist.isFalse( _parentNodeStack.Count == 0, "Can't create an unnested Action node. It must be a leaf node." );
 			return setChildOnParent( new ExecuteAction<T>( func ) );
 		}
 
@@ -95,7 +95,7 @@ namespace Nez.AI.BehaviorTrees
 
 		public BehaviorTreeBuilder<T> conditional( Func<T,TaskStatus> func )
 		{
-			Assert.isFalse( _parentNodeStack.Count == 0, "Can't create an unnested Conditional node. It must be a leaf node." );
+			Insist.isFalse( _parentNodeStack.Count == 0, "Can't create an unnested Conditional node. It must be a leaf node." );
 			return setChildOnParent( new ExecuteActionConditional<T>( func ) );
 		}
 
@@ -111,14 +111,14 @@ namespace Nez.AI.BehaviorTrees
 
 		public BehaviorTreeBuilder<T> logAction( string text )
 		{
-			Assert.isFalse( _parentNodeStack.Count == 0, "Can't create an unnested Action node. It must be a leaf node." );
+			Insist.isFalse( _parentNodeStack.Count == 0, "Can't create an unnested Action node. It must be a leaf node." );
 			return setChildOnParent( new LogAction<T>( text ) );
 		}
 
 
 		public BehaviorTreeBuilder<T> waitAction( float waitTime )
 		{
-			Assert.isFalse( _parentNodeStack.Count == 0, "Can't create an unnested Action node. It must be a leaf node." );
+			Insist.isFalse( _parentNodeStack.Count == 0, "Can't create an unnested Action node. It must be a leaf node." );
 			return setChildOnParent( new WaitAction<T>( waitTime ) );
 		}
 
@@ -128,7 +128,7 @@ namespace Nez.AI.BehaviorTrees
 		/// </summary>
 		public BehaviorTreeBuilder<T> subTree( BehaviorTree<T> subTree )
 		{
-			Assert.isFalse( _parentNodeStack.Count == 0, "Can't splice an unnested sub tree, there must be a parent tree." );
+			Insist.isFalse( _parentNodeStack.Count == 0, "Can't splice an unnested sub tree, there must be a parent tree." );
 			return setChildOnParent( new BehaviorTreeReference<T>( subTree ) );
 		}
 
@@ -231,7 +231,7 @@ namespace Nez.AI.BehaviorTrees
 
 		public BehaviorTreeBuilder<T> endComposite()
 		{
-			Assert.isTrue( _parentNodeStack.Peek() is Composite<T>, "attempting to end a composite but the top node is a decorator" );
+			Insist.isTrue( _parentNodeStack.Peek() is Composite<T>, "attempting to end a composite but the top node is a decorator" );
 			_currentNode = _parentNodeStack.Pop();
 			return this;
 		}
@@ -241,7 +241,7 @@ namespace Nez.AI.BehaviorTrees
 
 		public BehaviorTree<T> build( float updatePeriod = 0.2f )
 		{
-			Assert.isNotNull( _currentNode, "Can't create a behaviour tree with zero nodes" );
+			Insist.isNotNull( _currentNode, "Can't create a behaviour tree with zero nodes" );
 			return new BehaviorTree<T>( _context, _currentNode, updatePeriod );
 		}
 
