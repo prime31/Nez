@@ -146,7 +146,7 @@ var obj = Json.Decode<TestClass>( testClassJson );
 ```
 
 
-You can use `Decode` or `DecodeInto` to reconstruct JSON data back into an object:
+You can also use `Decode` or `DecodeInto` to reconstruct JSON data back into an object if you opted to load a `Variant`:
 
 ```csharp
 TestClass testClass;
