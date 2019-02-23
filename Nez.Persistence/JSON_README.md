@@ -3,7 +3,7 @@ Nez Persistence: JSON
 
 ## Description
 
-Forked and hacked from the excellent [TinyJSON](https://github.com/pbhogan/TinyJSON) by Patrick Hogan [[twitter](http://twitter.com/pbhogan)
+Forked and hacked from the excellent [TinyJSON](https://github.com/pbhogan/TinyJSON) by Patrick Hogan [twitter](http://twitter.com/pbhogan)
 
 
 ## Features
