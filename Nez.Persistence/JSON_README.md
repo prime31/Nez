@@ -249,7 +249,7 @@ And the resulting JSON. What we have in there is some extra metadata Json can us
 
 ## Encode Options
 
-Several options are currently available for JSON encoding, and can be passed in as a second parameter to `JSON.Dump()`.
+Several options are currently available for JSON encoding, and can be passed in as a second parameter to `JSON.Encode()`.
 
 * `PrettyPrint` will output nicely formatted JSON to make it more readable.
 * `PreserveReferencesHandling` will add extra metadata into the JSON so an object graph with circular references can be rebuilt
