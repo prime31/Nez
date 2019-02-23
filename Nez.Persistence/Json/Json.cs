@@ -1,8 +1,8 @@
-using System;
+﻿using System;
 using System.Reflection;
 
 
-namespace Nez.Persistance
+namespace Nez.Persistence
 {
 	public sealed class DecodeException : Exception
 	{
@@ -47,7 +47,7 @@ namespace Nez.Persistance
 				}
 			}
 
-			return Encoder.Encode( obj, options ?? new JsonSettings() );
+			return JsonEncoder.Encode( obj, options ?? new JsonSettings() );
 		}
 
 		/// <summary>
@@ -59,7 +59,7 @@ namespace Nez.Persistance
 		public static Variant Decode( string json )
 		{
 			System.Diagnostics.Debug.Assert( json != null );
-			return Decoder.Decode( json );
+			return JsonDecoder.Decode( json );
 		}
 
 		/// <summary>
@@ -71,7 +71,7 @@ namespace Nez.Persistance
 		public static T Decode<T>( string json )
 		{
 			System.Diagnostics.Debug.Assert( json != null );
-			return VariantConverter.Make<T>( Decoder.Decode( json ) );
+			return VariantConverter.Make<T>( JsonDecoder.Decode( json ) );
 		}
 
 		/// <summary>
@@ -84,7 +84,7 @@ namespace Nez.Persistance
 		public static void DecodeInto<T>( string json, out T item )
 		{
 			System.Diagnostics.Debug.Assert( json != null );
-			VariantConverter.MakeInto<T>( Decoder.Decode( json ), out item );
+			VariantConverter.MakeInto<T>( JsonDecoder.Decode( json ), out item );
 		}
 
 	}

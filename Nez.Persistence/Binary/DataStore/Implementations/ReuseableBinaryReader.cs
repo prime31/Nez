@@ -11,12 +11,12 @@ namespace Nez.Persistence.Binary
 		const int MaxCharBytesSize = 128;
 		const int MaxBuilderSize = 360;
 
-		private Stream _stream;
-		private byte[] _buffer;
-		private Decoder _decoder;
-		private byte[] _charBytes;
-		private char[] _charBuffer;
-		private int _maxCharsSize;
+		Stream _stream;
+		byte[] _buffer;
+		Decoder _decoder;
+		byte[] _charBytes;
+		char[] _charBuffer;
+		int _maxCharsSize;
 		StringBuilder _stringBuilder;
 
 

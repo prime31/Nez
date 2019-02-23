@@ -1,27 +1,27 @@
-﻿using Nez.Persistance;
+﻿using Nez.Persistence;
 using NUnit.Framework;
 
 
 namespace Nez.Persistence.JsonTests
 {
 	[TestFixture]
-	public class TestDecodeAlias
+	public class DecodeAliasTests
 	{
 		class AliasData
 		{
-			[DecodeAliasAttribute( "numberFieldAlias" )]
+			[DecodeAlias( "numberFieldAlias" )]
 			public int NumberField;
 
-			[SerializedAttribute]
-			[DecodeAliasAttribute( "NumberPropertyAlias" )]
+			[Serialized]
+			[DecodeAlias( "NumberPropertyAlias" )]
 			public int NumberProperty { get; set; }
 
-			[DecodeAliasAttribute( "anotherNumberFieldAliasOne", "anotherNumberFieldAliasTwo" )]
+			[DecodeAlias( "anotherNumberFieldAliasOne", "anotherNumberFieldAliasTwo" )]
 			public int AnotherNumberField;
 
-			[DecodeAliasAttribute( "AnotherNumberPropertyAliasOne" )]
-			[DecodeAliasAttribute( "AnotherNumberPropertyAliasTwo" )]
-			public int AnotherNumberProperty;
+			[DecodeAlias( "AnotherNumberPropertyAliasOne" )]
+			[DecodeAlias( "AnotherNumberPropertyAliasTwo" )]
+			public int YetAnotherNumberField;
 		}
 
 
@@ -34,7 +34,7 @@ namespace Nez.Persistence.JsonTests
 			Assert.AreEqual( 1, aliasData.NumberField );
 			Assert.AreEqual( 2, aliasData.NumberProperty );
 			Assert.IsTrue( aliasData.AnotherNumberField == 3 || aliasData.AnotherNumberField == 4 );
-			Assert.IsTrue( aliasData.AnotherNumberProperty == 5 || aliasData.AnotherNumberProperty == 6 );
+			Assert.IsTrue( aliasData.YetAnotherNumberField == 5 || aliasData.YetAnotherNumberField == 6 );
 		}
 	}
 }

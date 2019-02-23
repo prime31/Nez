@@ -1,4 +1,4 @@
-﻿namespace Nez.Persistance
+﻿namespace Nez.Persistence
 {
 	public enum TypeNameHandling
 	{

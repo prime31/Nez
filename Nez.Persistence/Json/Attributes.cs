@@ -1,6 +1,6 @@
 using System;
 
-namespace Nez.Persistance
+namespace Nez.Persistence
 {
 	/// <summary>
 	/// Mark members that should be included. Public fields and properties are included by default.

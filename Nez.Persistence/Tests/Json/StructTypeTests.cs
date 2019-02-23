@@ -1,4 +1,4 @@
-using Nez.Persistance;
+﻿using Nez.Persistence;
 using NUnit.Framework;
 using System;
 
@@ -6,7 +6,7 @@ using System;
 namespace Nez.Persistence.JsonTests
 {
 	[TestFixture]
-	public class TestStructType
+	public class StructTypeTests
 	{
 		public static bool LoadCallbackFired;
 
@@ -27,7 +27,7 @@ namespace Nez.Persistence.JsonTests
 
 
 		[Test]
-		public void TestDumpStruct()
+		public void DumpStruct()
 		{
 			var testStruct = new TestStruct { x = 5, y = 7, z = 0 };
 
@@ -36,7 +36,7 @@ namespace Nez.Persistence.JsonTests
 
 
 		[Test]
-		public void TestLoadStruct()
+		public void LoadStruct()
 		{
 			var testStruct = VariantConverter.Make<TestStruct>( Json.Decode( "{\"x\":5,\"y\":7,\"z\":3}" ) );
 

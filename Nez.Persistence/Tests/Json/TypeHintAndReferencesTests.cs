@@ -1,4 +1,4 @@
-﻿using Nez.Persistance;
+﻿using Nez.Persistence;
 using NUnit.Framework;
 using System.Collections.Generic;
 
@@ -6,7 +6,7 @@ using System.Collections.Generic;
 namespace Nez.Persistence.JsonTests
 {
 	[TestFixture]
-	public class TestTypeHintAndReferences
+	public class TypeHintAndReferencesTests
 	{
 		class Entity
 		{
@@ -37,7 +37,7 @@ namespace Nez.Persistence.JsonTests
 
 
 		[Test]
-		public void TestTypeHintAuto()
+		public void TypeHintAuto()
 		{
 			var entity = new Entity
 			{
@@ -54,7 +54,7 @@ namespace Nez.Persistence.JsonTests
 		}
 
 		[Test]
-		public void TestPreserveReferences()
+		public void PreserveReferences()
 		{
 			var entity = new Entity();
 			entity.components = new List<Component> { new Component(), new Sprite() { entity = entity } };

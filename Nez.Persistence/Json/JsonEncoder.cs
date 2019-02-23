@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
@@ -6,29 +6,32 @@ using System.Reflection;
 using System.Text;
 
 
-namespace Nez.Persistance
+namespace Nez.Persistence
 {
-	public sealed class Encoder
+	public sealed class JsonEncoder
 	{
-		readonly StringBuilder _builder;
+		static readonly StringBuilder _builder = new StringBuilder( 2000 );
 		readonly JsonSettings _settings;
 		Dictionary<object, int> _referenceTracker = new Dictionary<object, int>();
 		int _referenceCounter = 0;
 		int indent;
 
 
-		Encoder( JsonSettings settings )
+		JsonEncoder( JsonSettings settings )
 		{
-			this._settings = settings;
-			_builder = new StringBuilder();
+			_settings = settings;
 			indent = 0;
 		}
 
 		public static string Encode( object obj, JsonSettings settings )
 		{
-			var instance = new Encoder( settings );
+			var instance = new JsonEncoder( settings );
 			instance.EncodeValue( obj );
-			return instance._builder.ToString();
+			CacheResolver.Flush();
+
+			var json = _builder.ToString();
+			_builder.Length = 0;
+			return json;
 		}
 
 		void EncodeValue( object value, bool forceTypeHint = false )
@@ -130,21 +133,7 @@ namespace Nez.Persistance
 			// cleanse the fields based on our attributes
 			foreach( var field in allFields )
 			{
-				var shouldEncode = field.IsPublic;
-				foreach( var attribute in field.GetCustomAttributes( true ) )
-				{
-					if( Json.excludeAttrType.IsInstanceOfType( attribute ) )
-					{
-						shouldEncode = false;
-					}
-
-					if( Json.includeAttrType.IsInstanceOfType( attribute ) )
-					{
-						shouldEncode = true;
-					}
-				}
-
-				if( shouldEncode )
+				if( CacheResolver.IsMemberInfoEncodeableOrDecodeable( field, field.IsPublic ) )
 					yield return field;
 			}
 		}
@@ -179,21 +168,7 @@ namespace Nez.Persistance
 			{
 				if( property.CanRead )
 				{
-					var shouldEncode = true;
-					foreach( var attribute in property.GetCustomAttributes( true ) )
-					{
-						if( Json.excludeAttrType.IsInstanceOfType( attribute ) )
-						{
-							shouldEncode = false;
-						}
-
-						if( Json.includeAttrType.IsInstanceOfType( attribute ) )
-						{
-							shouldEncode = true;
-						}
-					}
-
-					if( shouldEncode )
+					if( CacheResolver.IsMemberInfoEncodeableOrDecodeable( property, true ) )
 						yield return property;
 				}
 			}

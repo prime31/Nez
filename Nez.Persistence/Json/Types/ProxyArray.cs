@@ -1,8 +1,8 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 
 
-namespace Nez.Persistance
+namespace Nez.Persistence
 {
 	public sealed class ProxyArray : Variant, IEnumerable<Variant>
 	{

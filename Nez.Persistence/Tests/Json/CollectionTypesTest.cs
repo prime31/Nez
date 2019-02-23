@@ -1,12 +1,12 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
-using Nez.Persistance;
+using Nez.Persistence;
 using NUnit.Framework;
 
 namespace Nez.Persistence.JsonTests
 {
 	[TestFixture]
-	public class TestCollectionTypes
+	public class CollectionTypesTest
 	{
 		[Test]
 		public void TestDumpRank1Array()

@@ -1,11 +1,11 @@
-﻿using Nez.Persistance;
+﻿using Nez.Persistence;
 using NUnit.Framework;
 
 
 namespace Nez.Persistence.JsonTests
 {
 	[TestFixture]
-	public class TestEnforceHeirarchyOrder
+	public class EnforceHeirarchyOrderTests
 	{
 		class ClassA
 		{

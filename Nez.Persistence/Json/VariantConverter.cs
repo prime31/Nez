@@ -1,40 +1,39 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Globalization;
 using System.Reflection;
 
-namespace Nez.Persistance
+namespace Nez.Persistence
 {
 	public class VariantConverter
 	{
-		const BindingFlags instanceBindingFlags = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance;
+		internal const BindingFlags instanceBindingFlags = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance;
 		const BindingFlags staticBindingFlags = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static;
-		static readonly MethodInfo decodeTypeMethod = typeof( VariantConverter ).GetMethod( "DecodeType", staticBindingFlags );
+		internal static readonly MethodInfo decodeTypeMethod = typeof( VariantConverter ).GetMethod( "DecodeType", staticBindingFlags );
 		static readonly MethodInfo decodeListMethod = typeof( VariantConverter ).GetMethod( "DecodeList", staticBindingFlags );
 		static readonly MethodInfo decodeDictionaryMethod = typeof( VariantConverter ).GetMethod( "DecodeDictionary", staticBindingFlags );
 		static readonly MethodInfo decodeArrayMethod = typeof( VariantConverter ).GetMethod( "DecodeArray", staticBindingFlags );
 		static readonly MethodInfo decodeMultiRankArrayMethod = typeof( VariantConverter ).GetMethod( "DecodeMultiRankArray", staticBindingFlags );
 
-		static readonly Type decodeAliasAttrType = typeof( DecodeAliasAttribute );
+		internal static readonly Type decodeAliasAttrType = typeof( DecodeAliasAttribute );
 		static readonly Type afterDecodeAttrType = typeof( AfterDecodeAttribute );
 
 		static readonly Dictionary<string, Type> typeCache = new Dictionary<string, Type>();
-		static Dictionary<string, object> _referenceTracker = new Dictionary<string, object>();
+		static CacheResolver _cacheResolver = new CacheResolver();
 
 
 		public static T Make<T>( Variant data )
 		{
 			var item = DecodeType<T>( data );
-			_referenceTracker.Clear();
+			_cacheResolver.Clear();
 			return item;
 		}
 
 		public static void MakeInto<T>( Variant data, out T item )
 		{
 			item = DecodeType<T>( data );
-			_referenceTracker.Clear();
+			_cacheResolver.Clear();
 		}
 
 		static Type FindType( string fullName )
@@ -70,6 +69,9 @@ namespace Nez.Persistance
 			}
 
 			var type = typeof( T );
+
+			// handle Nullables. If the type is Nullable use the underlying type
+			type = Nullable.GetUnderlyingType( type ) ?? type;
 			if( type.IsEnum )
 			{
 				return (T)Enum.Parse( type, data.ToString( CultureInfo.InvariantCulture ) );
@@ -133,6 +135,7 @@ namespace Nez.Persistance
 				return (T)makeFunc.Invoke( null, new object[] { data } );
 			}
 
+
 			// At this point we should be dealing with a class or struct			
 			var proxyObject = data as ProxyObject;
 			if( proxyObject == null )
@@ -143,7 +146,7 @@ namespace Nez.Persistance
 			var refId = proxyObject.ReferenceId;
 			if( refId != null )
 			{
-				return (T)_referenceTracker[refId];
+				return _cacheResolver.GetReference<T>( refId );
 			}
 
 			// If there's a type hint, use it to create the instance.
@@ -159,7 +162,7 @@ namespace Nez.Persistance
 
 				if( type.IsAssignableFrom( makeType ) )
 				{
-					instance = (T)Activator.CreateInstance( makeType );
+					instance = _cacheResolver.CreateInstance<T>( makeType );
 					type = makeType;
 				}
 				else
@@ -170,60 +173,25 @@ namespace Nez.Persistance
 			else
 			{
 				// We don't have a type hint, so just instantiate the type we have.
-				instance = Activator.CreateInstance<T>();
+				instance = _cacheResolver.CreateInstance<T>( typeof( T ) );
 			}
 
 			// if there is an instanceId, cache the object in case any other objects are referencing it
 			var id = proxyObject.InstanceId;
 			if( id != null )
 			{
-				_referenceTracker[id] = instance;
+				_cacheResolver.TrackReference( id, instance );
 			}
 
 			// Now decode fields and properties.
 			foreach( var pair in (ProxyObject)data )
 			{
-				var field = type.GetField( pair.Key, instanceBindingFlags );
-
-				// If the field doesn't exist, search through any [DecodeAlias] attributes.
-				if( field == null )
-				{
-					var fields = type.GetFields( instanceBindingFlags );
-					foreach( var fieldInfo in fields )
-					{
-						foreach( var attribute in fieldInfo.GetCustomAttributes( true ) )
-						{
-							if( decodeAliasAttrType.IsInstanceOfType( attribute ) )
-							{
-								if( ( (DecodeAliasAttribute)attribute ).Contains( pair.Key ) )
-								{
-									field = fieldInfo;
-									break;
-								}
-							}
-						}
-					}
-				}
-
+				var field = _cacheResolver.GetField( type, pair.Key );
 				if( field != null )
 				{
-					var shouldDecode = field.IsPublic;
-					foreach( var attribute in field.GetCustomAttributes( true ) )
+					if( CacheResolver.IsMemberInfoEncodeableOrDecodeable( field, field.IsPublic ) )
 					{
-						if( Json.excludeAttrType.IsInstanceOfType( attribute ) )
-						{
-							shouldDecode = false;
-						}
-
-						if( Json.includeAttrType.IsInstanceOfType( attribute ) )
-						{
-							shouldDecode = true;
-						}
-					}
-
-					if( shouldDecode )
-					{
-						var makeFunc = decodeTypeMethod.MakeGenericMethod( field.FieldType );
+						var makeFunc = _cacheResolver.GetDecodeTypeMethodForField( field.FieldType );
 						if( type.IsValueType )
 						{
 							// Type is a struct.
@@ -237,35 +205,15 @@ namespace Nez.Persistance
 							field.SetValue( instance, makeFunc.Invoke( null, new object[] { pair.Value } ) );
 						}
 					}
+					continue;
 				}
 
-				var property = type.GetProperty( pair.Key, instanceBindingFlags );
-
-				// If the property doesn't exist, search through any [DecodeAlias] attributes.
-				if( property == null )
-				{
-					var properties = type.GetProperties( instanceBindingFlags );
-					foreach( var propertyInfo in properties )
-					{
-						foreach( var attribute in propertyInfo.GetCustomAttributes( false ) )
-						{
-							if( decodeAliasAttrType.IsInstanceOfType( attribute ) )
-							{
-								if( ( (DecodeAliasAttribute)attribute ).Contains( pair.Key ) )
-								{
-									property = propertyInfo;
-									break;
-								}
-							}
-						}
-					}
-				}
-
+				var property = _cacheResolver.GetProperty( type, pair.Key );
 				if( property != null )
 				{
 					if( property.CanWrite && property.IsDefined( Json.includeAttrType ) )
 					{
-						var makeFunc = decodeTypeMethod.MakeGenericMethod( new Type[] { property.PropertyType } );
+						var makeFunc = _cacheResolver.GetDecodeTypeMethodForField( property.PropertyType );
 						if( type.IsValueType )
 						{
 							// Type is a struct.

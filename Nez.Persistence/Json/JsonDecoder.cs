@@ -1,13 +1,14 @@
-using System.IO;
+﻿using System.IO;
 using System.Text;
 using System;
 
-namespace Nez.Persistance
+namespace Nez.Persistence
 {
-	public sealed class Decoder : IDisposable
+	public sealed class JsonDecoder : IDisposable
 	{
 		const string whiteSpace = " \t\n\r";
 		const string wordBreak = " \t\n\r{}[],:\"";
+		static readonly StringBuilder _builder = new StringBuilder();
 
 		enum Token
 		{
@@ -43,10 +44,9 @@ namespace Nez.Persistance
 		{
 			get
 			{
-				var word = new StringBuilder();
 				while( wordBreak.IndexOf( PeekChar ) == -1 )
 				{
-					word.Append( NextChar );
+					_builder.Append( NextChar );
 
 					if( json.Peek() == -1 )
 					{
@@ -54,7 +54,9 @@ namespace Nez.Persistance
 					}
 				}
 
-				return word.ToString();
+				var word = _builder.ToString();
+				_builder.Length = 0;
+				return word;
 			}
 		}
 
@@ -127,14 +129,14 @@ namespace Nez.Persistance
 			}
 		}
 
-		Decoder( string jsonString )
+		JsonDecoder( string jsonString )
 		{
 			json = new StringReader( jsonString );
 		}
 
 		public static Variant Decode( string jsonString )
 		{
-			using( var instance = new Decoder( jsonString ) )
+			using( var instance = new JsonDecoder( jsonString ) )
 			{
 				return instance.DecodeValue();
 			}
@@ -248,8 +250,6 @@ namespace Nez.Persistance
 
 		Variant DecodeString()
 		{
-			var stringBuilder = new StringBuilder();
-
 			// ditch opening quote
 			json.Read();
 
@@ -283,22 +283,22 @@ namespace Nez.Persistance
 							case '"':
 							case '\\':
 							case '/':
-								stringBuilder.Append( c );
+								_builder.Append( c );
 								break;
 							case 'b':
-								stringBuilder.Append( '\b' );
+								_builder.Append( '\b' );
 								break;
 							case 'f':
-								stringBuilder.Append( '\f' );
+								_builder.Append( '\f' );
 								break;
 							case 'n':
-								stringBuilder.Append( '\n' );
+								_builder.Append( '\n' );
 								break;
 							case 'r':
-								stringBuilder.Append( '\r' );
+								_builder.Append( '\r' );
 								break;
 							case 't':
-								stringBuilder.Append( '\t' );
+								_builder.Append( '\t' );
 								break;
 							case 'u':
 								var hex = new StringBuilder();
@@ -308,7 +308,7 @@ namespace Nez.Persistance
 									hex.Append( NextChar );
 								}
 
-								stringBuilder.Append( (char)Convert.ToInt32( hex.ToString(), 16 ) );
+								_builder.Append( (char)Convert.ToInt32( hex.ToString(), 16 ) );
 								break;
 
 								//default:
@@ -318,12 +318,14 @@ namespace Nez.Persistance
 						break;
 
 					default:
-						stringBuilder.Append( c );
+						_builder.Append( c );
 						break;
 				}
 			}
 
-			return new ProxyString( stringBuilder.ToString() );
+			var str = _builder.ToString();
+			_builder.Length = 0;
+			return new ProxyString( str );
 		}
 
 		Variant DecodeNumber()

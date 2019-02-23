@@ -1,8 +1,8 @@
-using System;
+﻿using System;
 using System.Globalization;
 
 
-namespace Nez.Persistance
+namespace Nez.Persistence
 {
 	public sealed class ProxyNumber : Variant
 	{

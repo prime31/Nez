@@ -1,4 +1,4 @@
-Nez Persistence: JSON
+﻿Nez Persistence: JSON
 ==========
 
 ## Description
@@ -17,17 +17,17 @@ Forked and hacked from the excellent [TinyJSON](https://github.com/pbhogan/TinyJ
 * Numeric types are handled without fuss.
 * Polymorphic classes supported with a type hint encoded into the JSON.
 * Supports optionally pretty printing JSON output.
-* Supports optionally encode properties and private fields.
+* Supports optionally encode properties and private fields (via the SerializedAttribute on them).
 * Supports decoding fields and properties from aliased names.
 * Unit tested.
 
 
 ## Usage
 
-The API is namespaced under `Nez.Persistance` and the primary class is `Json`. There are really only a few methods you need to know:
+The API is namespaced under `Nez.Persistence` and the primary class is `Json`. There are really only a few methods you need to know:
 
 ```csharp
-namespace Nez.Persistance
+namespace Nez.Persistence
 {
 	public static class Json
 	{
@@ -278,6 +278,8 @@ foreach( var pair in dict as ProxyObject )
 ```
 
 The non-collection `Variant` subclasses are `ProxyBoolean`, `ProxyNumber` and `ProxyString`. A variant can also be `null`. Any `Variant` object can be directly encoded to JSON by calling its `ToJson()` method or passing it to `Json.Encode()`.
+
+Variant's can also be turned back into strongly typed objects via the `VariantConverter.Make<T>` method.
 
 
 ## Meta

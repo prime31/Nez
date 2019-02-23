@@ -1,4 +1,4 @@
-Nez Persistence: Binary
+﻿Nez Persistence: Binary
 ==========
 
 ## Features
@@ -17,7 +17,7 @@ The API is namespaced under `Nez.Persistence.Binary` and the primary class is `F
 It is recommended to create a single `FileDataStore` and store it in the `GameServiceContainer` for easy access.
 
 ```csharp
-namespace Nez.Persistance
+namespace Nez.Persistence
 {
 	public class FileDataStore
 	{

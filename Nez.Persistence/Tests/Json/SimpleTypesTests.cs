@@ -1,13 +1,13 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
-using Nez.Persistance;
+using Nez.Persistence;
 using NUnit.Framework;
 
 namespace Nez.Persistence.JsonTests
 {
 	[TestFixture]
-	public class TestSimpleTypes
+	public class SimpleTypesTests
 	{
 		[Test]
 		public void TestDumpBool()

@@ -1,14 +1,14 @@
-﻿using Nez.Persistance;
+﻿using Nez.Persistence;
 using NUnit.Framework;
 
 
 namespace Nez.Persistence.JsonTests
 {
 	[TestFixture]
-	public class TestVariantEncoding
+	public class VariantEncodingTests
 	{
 		[Test]
-		public void TestDumpProxyBoolean()
+		public void DumpProxyBoolean()
 		{
 			Assert.AreEqual( "true", new ProxyBoolean( true ).ToJson() );
 			Assert.AreEqual( "false", new ProxyBoolean( false ).ToJson() );
@@ -16,7 +16,7 @@ namespace Nez.Persistence.JsonTests
 
 
 		[Test]
-		public void TestDumpProxyNumber()
+		public void DumpProxyNumber()
 		{
 			Assert.AreEqual( "12345", new ProxyNumber( 12345 ).ToJson() );
 			Assert.AreEqual( "12.34", new ProxyNumber( 12.34 ).ToJson() );
@@ -24,21 +24,21 @@ namespace Nez.Persistence.JsonTests
 
 
 		[Test]
-		public void TestDumpProxyString()
+		public void DumpProxyString()
 		{
 			Assert.AreEqual( "\"string\"", new ProxyString( "string" ).ToJson() );
 		}
 
 
 		[Test]
-		public void TestDumpProxyArray()
+		public void DumpProxyArray()
 		{
 			Assert.AreEqual( "[1,true,\"three\"]", Json.Decode( "[1,true,\"three\"]" ).ToJson() );
 		}
 
 
 		[Test]
-		public void TestDumpProxyObject()
+		public void DumpProxyObject()
 		{
 			Assert.AreEqual( "{\"x\":1,\"y\":2}", Json.Decode( "{\"x\":1,\"y\":2}" ).ToJson() );
 		}

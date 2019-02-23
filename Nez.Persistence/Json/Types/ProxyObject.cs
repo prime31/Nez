@@ -1,9 +1,9 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
 
 
-namespace Nez.Persistance
+namespace Nez.Persistence
 {
 	public sealed class ProxyObject : Variant, IEnumerable<KeyValuePair<string, Variant>>
 	{
