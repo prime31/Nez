@@ -9,7 +9,6 @@ namespace Nez.Persistence
 	public class VariantConverter
 	{
 		internal const BindingFlags instanceBindingFlags = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance;
-		const BindingFlags staticBindingFlags = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static;
 
 		internal static readonly Type decodeAliasAttrType = typeof( DecodeAliasAttribute );
 		static readonly Type afterDecodeAttrType = typeof( AfterDecodeAttribute );
@@ -182,7 +181,7 @@ namespace Nez.Persistence
 				var field = _cacheResolver.GetField( type, pair.Key );
 				if( field != null )
 				{
-					if( CacheResolver.IsMemberInfoEncodeableOrDecodeable( field, field.IsPublic ) )
+					if( _cacheResolver.IsMemberInfoEncodeableOrDecodeable( field, field.IsPublic ) )
 					{
 						if( type.IsValueType )
 						{
@@ -200,7 +199,7 @@ namespace Nez.Persistence
 					continue;
 				}
 
-				var property = _cacheResolver.GetProperty( type, pair.Key );
+				var property = _cacheResolver.GetEncodeableProperty( type, pair.Key );
 				if( property != null && property.CanWrite && property.IsDefined( Json.includeAttrType ) )
 				{
 					if( type.IsValueType )

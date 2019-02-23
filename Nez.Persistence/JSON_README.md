@@ -165,6 +165,9 @@ Fields and properties can be decoded from aliases using the `DecodeAlias` attrib
 ```csharp
 class TestClass
 {
+	[Serialized] // note that properties are opt-in! You must tell Json you want them serialized.
+	public int index { get; set; }
+	
 	[DecodeAlias("anotherName")]
 	public string name; // decode from "name" or "anotherName"
 

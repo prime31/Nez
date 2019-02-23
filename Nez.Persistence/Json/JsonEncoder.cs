@@ -11,6 +11,7 @@ namespace Nez.Persistence
 	public sealed class JsonEncoder
 	{
 		static readonly StringBuilder _builder = new StringBuilder( 2000 );
+		static readonly CacheResolver _cacheResolver = new CacheResolver();
 		readonly JsonSettings _settings;
 		Dictionary<object, int> _referenceTracker = new Dictionary<object, int>();
 		int _referenceCounter = 0;
@@ -27,7 +28,7 @@ namespace Nez.Persistence
 		{
 			var instance = new JsonEncoder( settings );
 			instance.EncodeValue( obj );
-			CacheResolver.Flush();
+			_cacheResolver.Clear();
 
 			var json = _builder.ToString();
 			_builder.Length = 0;
@@ -103,79 +104,6 @@ namespace Nez.Persistence
 			}
 		}
 
-		#region Reflection Helpers
-
-		IEnumerable<FieldInfo> GetEncodableFieldsForType( Type type )
-		{
-			IEnumerable<FieldInfo> allFields = null;
-			if( _settings.EnforceHeirarchyOrderEnabled )
-			{
-				var types = new Stack<Type>();
-				while( type != null )
-				{
-					types.Push( type );
-					type = type.BaseType;
-				}
-
-				var fields = new List<FieldInfo>();
-				while( types.Count > 0 )
-				{
-					fields.AddRange( types.Pop().GetFields( BindingFlags.DeclaredOnly | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance ) );
-				}
-
-				allFields = fields;
-			}
-			else
-			{
-				allFields = type.GetFields( BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance );
-			}
-
-			// cleanse the fields based on our attributes
-			foreach( var field in allFields )
-			{
-				if( CacheResolver.IsMemberInfoEncodeableOrDecodeable( field, field.IsPublic ) )
-					yield return field;
-			}
-		}
-
-		IEnumerable<PropertyInfo> GetEncodablePropertiesForType( Type type )
-		{
-			IEnumerable<PropertyInfo> allProps = null;
-			if( _settings.EnforceHeirarchyOrderEnabled )
-			{
-				var types = new Stack<Type>();
-				while( type != null )
-				{
-					types.Push( type );
-					type = type.BaseType;
-				}
-
-				var properties = new List<PropertyInfo>();
-				while( types.Count > 0 )
-				{
-					properties.AddRange( types.Pop().GetProperties( BindingFlags.DeclaredOnly | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance ) );
-				}
-
-				allProps = properties;
-			}
-			else
-			{
-				allProps = type.GetProperties( BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance );
-			}
-
-			// cleanse the fields based on our attributes
-			foreach( var property in allProps )
-			{
-				if( property.CanRead )
-				{
-					if( CacheResolver.IsMemberInfoEncodeableOrDecodeable( property, true ) )
-						yield return property;
-				}
-			}
-		}
-
-		#endregion
-
 		void EncodeObject( object value, bool forceTypeHint )
 		{
 			forceTypeHint = forceTypeHint || ( _settings.TypeNameHandling == TypeNameHandling.All || _settings.TypeNameHandling == TypeNameHandling.Objects );
@@ -218,7 +146,7 @@ namespace Nez.Persistence
 				firstItem = false;
 			}
 
-			foreach( var field in GetEncodableFieldsForType( type ) )
+			foreach( var field in _cacheResolver.GetEncodableFieldsForType( type, _settings.EnforceHeirarchyOrderEnabled ) )
 			{
 				WriteValueDelimiter( firstItem );
 				WriteString( field.Name );
@@ -227,7 +155,7 @@ namespace Nez.Persistence
 				firstItem = false;
 			}
 
-			foreach( var property in GetEncodablePropertiesForType( type ) )
+			foreach( var property in _cacheResolver.GetEncodablePropertiesForType( type, _settings.EnforceHeirarchyOrderEnabled ) )
 			{
 				if( property.CanRead )
 				{

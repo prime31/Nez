@@ -13,7 +13,7 @@ namespace Nez.Persistence
 		Dictionary<Type, ConstructorInfo> _constructorCache = new Dictionary<Type, ConstructorInfo>();
 		Dictionary<Type, Dictionary<string, FieldInfo>> _fieldInfoCache = new Dictionary<Type, Dictionary<string, FieldInfo>>();
 		Dictionary<Type, Dictionary<string, PropertyInfo>> _propertyInfoCache = new Dictionary<Type, Dictionary<string, PropertyInfo>>();
-		static Dictionary<MemberInfo, bool> _memberInfoEncodeableCache = new Dictionary<MemberInfo, bool>();
+		Dictionary<MemberInfo, bool> _memberInfoEncodeableCache = new Dictionary<MemberInfo, bool>();
 
 		/// <summary>
 		/// checks the <paramref name="memberInfo"/> custom attributes to see if it should be encoded/decoded
@@ -21,12 +21,11 @@ namespace Nez.Persistence
 		/// <returns><c>true</c>, if member info encodeable or decodeable was ised, <c>false</c> otherwise.</returns>
 		/// <param name="memberInfo">Member info.</param>
 		/// <param name="isPublic">If set to <c>true</c> is public.</param>
-		internal static bool IsMemberInfoEncodeableOrDecodeable( MemberInfo memberInfo, bool isPublic )
+		internal bool IsMemberInfoEncodeableOrDecodeable( MemberInfo memberInfo, bool isPublic )
 		{
 			if( _memberInfoEncodeableCache.TryGetValue( memberInfo, out var isEncodeable ) )
 				return isEncodeable;
 				
-
 			foreach( var attribute in memberInfo.GetCustomAttributes( true ) )
 			{
 				if( Json.excludeAttrType.IsInstanceOfType( attribute ) )
@@ -44,8 +43,6 @@ namespace Nez.Persistence
 
 			return isPublic;
 		}
-
-		public static void Flush() => _memberInfoEncodeableCache.Clear();
 
 		internal void Clear()
 		{
@@ -79,6 +76,19 @@ namespace Nez.Persistence
 			return constructor.Invoke( null );
 		}
 
+
+		#region FieldInfo methods
+
+		internal IEnumerable<FieldInfo> GetEncodableFieldsForType( Type type, bool enforceHeirarchyOrderEnabled )
+		{
+			// cleanse the fields based on our attributes
+			foreach( var kvPair in GetFieldInfoCache( type, enforceHeirarchyOrderEnabled ) )
+			{
+				if( IsMemberInfoEncodeableOrDecodeable( kvPair.Value, kvPair.Value.IsPublic ) )
+					yield return kvPair.Value;
+			}
+		}
+
 		/// <summary>
 		/// Gets the FieldInfo with <paramref name="name"/> or if that isnt found checks for any matching
 		/// <seealso cref="DecodeAliasAttribute"/>
@@ -88,24 +98,57 @@ namespace Nez.Persistence
 		/// <param name="name">Name.</param>
 		internal FieldInfo GetField( Type type, string name )
 		{
-			if( _fieldInfoCache.TryGetValue( type, out var map ) )
-				if( map.TryGetValue( name, out var fieldInfo ) )
-					return fieldInfo;
-
-			if( map == null )
+			var map = GetFieldInfoCache( type );
+			if( map.TryGetValue( name, out var fieldInfo ) )
 			{
-				map = new Dictionary<string, FieldInfo>();
-				_fieldInfoCache[type] = map;
-
-				foreach( var field in type.GetFields( VariantConverter.instanceBindingFlags ) )
-					map[field.Name] = field;
-
-				if( map.TryGetValue( name, out var fieldInfo ) )
-					return fieldInfo;
+				return fieldInfo;
 			}
 
 			// last resort: check DecodeAliasAttributes
 			return FindFieldFromDecodeAlias( type, name );
+		}
+
+		Dictionary<string, FieldInfo> GetFieldInfoCache( Type type, bool enforceHeirarchyOrderEnabled = false )
+		{
+			if( _fieldInfoCache.TryGetValue( type, out var map ) )
+			{
+				return map;
+			}
+
+			// no data cached. Fetch and populate it now
+			map = new Dictionary<string, FieldInfo>();
+			_fieldInfoCache[type] = map;
+
+			IEnumerable<FieldInfo> allFields = null;
+			if( enforceHeirarchyOrderEnabled )
+			{
+				var types = new Stack<Type>();
+				while( type != null )
+				{
+					types.Push( type );
+					type = type.BaseType;
+				}
+
+				var fields = new List<FieldInfo>();
+				while( types.Count > 0 )
+				{
+					fields.AddRange( types.Pop().GetFields( VariantConverter.instanceBindingFlags ) );
+				}
+
+				allFields = fields;
+			}
+			else
+			{
+				allFields = type.GetFields( VariantConverter.instanceBindingFlags );
+			}
+
+			// cleanse the fields based on our attributes
+			foreach( var field in allFields )
+			{
+				map[field.Name] = field;
+			}
+
+			return map;
 		}
 
 		FieldInfo FindFieldFromDecodeAlias( Type type, string name )
@@ -126,25 +169,76 @@ namespace Nez.Persistence
 			return null;
 		}
 
-		internal PropertyInfo GetProperty( Type type, string name )
+		#endregion
+
+
+		#region PropertyInfo methods
+
+		internal IEnumerable<PropertyInfo> GetEncodablePropertiesForType( Type type, bool enforceHeirarchyOrderEnabled )
 		{
-			if( _propertyInfoCache.TryGetValue( type, out var map ) )
-				if( map.TryGetValue( name, out var propInfo ) )
-					return propInfo;
-
-			if( map == null )
+			// cleanse the fields based on our attributes
+			foreach( var kvPair in GetPropertyInfoCache( type, enforceHeirarchyOrderEnabled ) )
 			{
-				map = new Dictionary<string, PropertyInfo>();
-				_propertyInfoCache[type] = map;
+				if( IsMemberInfoEncodeableOrDecodeable( kvPair.Value, true ) )
+				{
+					yield return kvPair.Value;
+				}
+			}
+		}
 
-				foreach( var prop in type.GetProperties( VariantConverter.instanceBindingFlags ) )
-					map[prop.Name] = prop;
-
-				if( map.TryGetValue( name, out var propInfo ) )
-					return propInfo;
+		internal PropertyInfo GetEncodeableProperty( Type type, string name )
+		{
+			var map = GetPropertyInfoCache( type );
+			if( map.TryGetValue( name, out var propInfo ) )
+			{
+				return propInfo;
 			}
 
+			// last resort: check DecodeAliasAttributes
 			return FindPropertyFromDecodeAlias( type, name );
+		}
+
+		Dictionary<string, PropertyInfo> GetPropertyInfoCache( Type type, bool enforceHeirarchyOrderEnabled = false )
+		{
+			if( _propertyInfoCache.TryGetValue( type, out var map ) )
+			{
+				return map;
+			}
+
+			// no data cached. Fetch and populate it now
+			map = new Dictionary<string, PropertyInfo>();
+			_propertyInfoCache[type] = map;
+
+			IEnumerable<PropertyInfo> allProps = null;
+			if( enforceHeirarchyOrderEnabled )
+			{
+				var types = new Stack<Type>();
+				while( type != null )
+				{
+					types.Push( type );
+					type = type.BaseType;
+				}
+
+				var fields = new List<PropertyInfo>();
+				while( types.Count > 0 )
+				{
+					fields.AddRange( types.Pop().GetProperties( BindingFlags.DeclaredOnly | VariantConverter.instanceBindingFlags ) );
+				}
+
+				allProps = fields;
+			}
+			else
+			{
+				allProps = type.GetProperties( VariantConverter.instanceBindingFlags );
+			}
+
+			// cleanse the fields based on our attributes
+			foreach( var prop in allProps )
+			{
+				map[prop.Name] = prop;
+			}
+
+			return map;
 		}
 
 		PropertyInfo FindPropertyFromDecodeAlias( Type type, string name )
@@ -164,6 +258,8 @@ namespace Nez.Persistence
 			}
 			return null;
 		}
+
+		#endregion
 
 	}
 }
