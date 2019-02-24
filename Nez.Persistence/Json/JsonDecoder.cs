@@ -1,8 +1,6 @@
 ﻿using System.IO;
 using System.Text;
 using System;
-using JsonArray = System.Collections.Generic.List<object>;
-using JsonDict = System.Collections.Generic.Dictionary<string, object>;
 
 namespace Nez.Persistence
 {

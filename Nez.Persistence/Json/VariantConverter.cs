@@ -9,8 +9,6 @@ namespace Nez.Persistence
 	public class VariantConverter : IObjectConverter
 	{
 		internal const BindingFlags instanceBindingFlags = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance;
-
-		internal static readonly Type decodeAliasAttrType = typeof( DecodeAliasAttribute );
 		static readonly Type afterDecodeAttrType = typeof( AfterDecodeAttribute );
 
 		static readonly Dictionary<string, Type> typeCache = new Dictionary<string, Type>();

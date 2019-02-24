@@ -9,6 +9,7 @@ namespace Nez.Persistence
 	/// </summary>
 	class CacheResolver
 	{
+		static Type decodeAliasAttrType = typeof( DecodeAliasAttribute );
 		Dictionary<string, object> _referenceTracker = new Dictionary<string, object>();
 		Dictionary<Type, ConstructorInfo> _constructorCache = new Dictionary<Type, ConstructorInfo>();
 		Dictionary<Type, Dictionary<string, FieldInfo>> _fieldInfoCache = new Dictionary<Type, Dictionary<string, FieldInfo>>();
@@ -135,7 +136,7 @@ namespace Nez.Persistence
 			{
 				foreach( var attribute in kvPair.Value.GetCustomAttributes( true ) )
 				{
-					if( VariantConverter.decodeAliasAttrType.IsInstanceOfType( attribute ) )
+					if( decodeAliasAttrType.IsInstanceOfType( attribute ) )
 					{
 						if( ( (DecodeAliasAttribute)attribute ).Contains( name ) )
 						{
@@ -152,6 +153,11 @@ namespace Nez.Persistence
 
 		#region PropertyInfo methods
 
+		/// <summary>
+		/// returns all the encodeable properties based on the attributes set on each
+		/// </summary>
+		/// <returns>The encodable properties for type.</returns>
+		/// <param name="type">Type.</param>
 		internal IEnumerable<PropertyInfo> GetEncodablePropertiesForType( Type type )
 		{
 			// cleanse the fields based on our attributes
@@ -164,6 +170,12 @@ namespace Nez.Persistence
 			}
 		}
 
+		/// <summary>
+		/// first checks the property cache. If nothing is found it will check for DecoedeAliases
+		/// </summary>
+		/// <returns>The encodeable property.</returns>
+		/// <param name="type">Type.</param>
+		/// <param name="name">Name.</param>
 		internal PropertyInfo GetEncodeableProperty( Type type, string name )
 		{
 			var map = GetPropertyInfoCache( type );
@@ -176,6 +188,11 @@ namespace Nez.Persistence
 			return FindPropertyFromDecodeAlias( type, name );
 		}
 
+		/// <summary>
+		/// fetches the PropertyInfo cache, creating it if it doesnt exist already
+		/// </summary>
+		/// <returns>The property info cache.</returns>
+		/// <param name="type">Type.</param>
 		Dictionary<string, PropertyInfo> GetPropertyInfoCache( Type type )
 		{
 			if( _propertyInfoCache.TryGetValue( type, out var map ) )
@@ -197,13 +214,19 @@ namespace Nez.Persistence
 			return map;
 		}
 
+		/// <summary>
+		/// looks for a property matching the name based on the DecodeAlias attribute
+		/// </summary>
+		/// <returns>The property from decode alias.</returns>
+		/// <param name="type">Type.</param>
+		/// <param name="name">Name.</param>
 		PropertyInfo FindPropertyFromDecodeAlias( Type type, string name )
 		{
 			foreach( var kvPair in _propertyInfoCache[type] )
 			{
 				foreach( var attribute in kvPair.Value.GetCustomAttributes( true ) )
 				{
-					if( VariantConverter.decodeAliasAttrType.IsInstanceOfType( attribute ) )
+					if( decodeAliasAttrType.IsInstanceOfType( attribute ) )
 					{
 						if( ( (DecodeAliasAttribute)attribute ).Contains( name ) )
 						{
