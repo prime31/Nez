@@ -33,14 +33,14 @@ namespace Nez.Persistence.JsonTests
 		[Test]
 		public void DumpProxyArray()
 		{
-			Assert.AreEqual( "[1,true,\"three\"]", Json.Decode( "[1,true,\"three\"]" ).ToJson() );
+			Assert.AreEqual( "[1,true,\"three\"]", Json.FromJson( "[1,true,\"three\"]" ).ToJson() );
 		}
 
 
 		[Test]
 		public void DumpProxyObject()
 		{
-			Assert.AreEqual( "{\"x\":1,\"y\":2}", Json.Decode( "{\"x\":1,\"y\":2}" ).ToJson() );
+			Assert.AreEqual( "{\"x\":1,\"y\":2}", Json.FromJson( "{\"x\":1,\"y\":2}" ).ToJson() );
 		}
 	}
 }

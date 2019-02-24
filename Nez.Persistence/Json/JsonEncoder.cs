@@ -13,9 +13,9 @@ namespace Nez.Persistence
 	public sealed class JsonEncoder : IJsonEncoder
 	{
 		static readonly StringBuilder _builder = new StringBuilder( 2000 );
-		static readonly CacheResolver _cacheResolver = new CacheResolver();
+		readonly CacheResolver _cacheResolver = new CacheResolver();
 		readonly JsonSettings _settings;
-		Dictionary<object, int> _referenceTracker = new Dictionary<object, int>();
+		readonly Dictionary<object, int> _referenceTracker = new Dictionary<object, int>();
 		int _referenceCounter = 0;
 		int indent;
 
@@ -26,11 +26,10 @@ namespace Nez.Persistence
 		Stack<bool> _isFirstItemWrittenStack = new Stack<bool>();
 
 
-		public static string Encode( object obj, JsonSettings settings )
+		public static string ToJson( object obj, JsonSettings settings )
 		{
-			var instance = new JsonEncoder( settings );
-			instance.EncodeValue( obj, false );
-			_cacheResolver.Clear();
+			var encoder = new JsonEncoder( settings );
+			encoder.EncodeValue( obj, false );
 
 			var json = _builder.ToString();
 			_builder.Length = 0;

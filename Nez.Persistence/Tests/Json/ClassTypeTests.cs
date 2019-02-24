@@ -57,7 +57,7 @@ namespace Nez.Persistence.JsonTests
 			var testClass = new TestClass { x = 5, y = 7, z = 0 };
 			testClass.list = new List<int> { 3, 1, 4 };
 
-			var json = Json.Encode( testClass );
+			var json = Json.ToJson( testClass );
 			Assert.AreEqual( "{\"x\":5,\"y\":7,\"list\":[3,1,4],\"p1\":1,\"p2\":2,\"p3\":3}", json );
 
 			Assert.IsTrue( BeforeEncodeCallbackFired );
@@ -74,7 +74,7 @@ namespace Nez.Persistence.JsonTests
 			{
 				TypeNameHandling = TypeNameHandling.None
 			};
-			var json = Json.Encode( testClass, settings );
+			var json = Json.ToJson( testClass, settings );
 			Assert.AreEqual( "{\"x\":5,\"y\":7,\"list\":[3,1,4],\"p1\":1,\"p2\":2,\"p3\":3}", json );
 		}
 
@@ -101,7 +101,7 @@ namespace Nez.Persistence.JsonTests
 	""p1"": 1,
 	""p2"": 2,
 	""p3"": 3
-}", Json.Encode( testClass, settings ) );
+}", Json.ToJson( testClass, settings ) );
 		}
 
 
@@ -109,14 +109,14 @@ namespace Nez.Persistence.JsonTests
 		public void TestDumpClassIncludePublicProperties()
 		{
 			var testClass = new TestClass { x = 5, y = 7, z = 0 };
-			Assert.AreEqual( "{\"x\":5,\"y\":7,\"list\":null,\"p1\":1,\"p2\":2,\"p3\":3}", Json.Encode( testClass ) );
+			Assert.AreEqual( "{\"x\":5,\"y\":7,\"list\":null,\"p1\":1,\"p2\":2,\"p3\":3}", Json.ToJson( testClass ) );
 		}
 
 
 		[Test]
 		public void TestLoadClass()
 		{
-			var testClass = VariantConverter.Decode<TestClass>( Json.Decode( "{\"x\":5,\"y\":7,\"z\":3,\"list\":[3,1,4],\"p1\":1,\"p2\":2,\"p3\":3}" ) );
+			var testClass = VariantConverter.Decode<TestClass>( Json.FromJson( "{\"x\":5,\"y\":7,\"z\":3,\"list\":[3,1,4],\"p1\":1,\"p2\":2,\"p3\":3}" ) );
 
 			Assert.AreEqual( 5, testClass.x );
 			Assert.AreEqual( 7, testClass.y );
@@ -147,7 +147,7 @@ namespace Nez.Persistence.JsonTests
 		{
 			var outerClass = new OuterClass();
 			outerClass.inner = new InnerClass();
-			Assert.AreEqual( "{\"inner\":{}}", Json.Encode( outerClass ) );
+			Assert.AreEqual( "{\"inner\":{}}", Json.ToJson( outerClass ) );
 		}
 
 	}

@@ -11,9 +11,12 @@ namespace Nez.Persistence
 		internal const BindingFlags instanceBindingFlags = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance;
 		static readonly Type afterDecodeAttrType = typeof( AfterDecodeAttribute );
 
+		/// <summary>
+		/// cache of all types that have been found. persistant accross calls.
+		/// </summary>
 		static readonly Dictionary<string, Type> typeCache = new Dictionary<string, Type>();
-		CacheResolver _cacheResolver = new CacheResolver();
-		JsonSettings _settings;
+		readonly CacheResolver _cacheResolver = new CacheResolver();
+		readonly JsonSettings _settings;
 
 
 		public static T Decode<T>( Variant data, JsonSettings settings = null )

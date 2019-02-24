@@ -38,7 +38,7 @@ namespace Nez.Persistence.JsonTests
 		public void Converter_CanWriteJson()
 		{
 			var doodle = new Doodle { x = 5, y = 7, z = 9 };
-			var json = Json.Encode( doodle, new TrueJsonConverter() );
+			var json = Json.ToJson( doodle, new TrueJsonConverter() );
 
 			Assert.AreEqual( "true", json );
 		}
@@ -48,10 +48,10 @@ namespace Nez.Persistence.JsonTests
 		public void Converter_CanConvertToObject()
 		{
 			var doodle = new Doodle { x = 5, y = 7, z = 9 };
-			var json = Json.Encode( doodle );
+			var json = Json.ToJson( doodle );
 
 			var settings = new JsonSettings { TypeConverters = new JsonTypeConverter[] { new TrueJsonConverter() } };
-			var newDoodle = Json.Decode<Doodle>( json, settings );
+			var newDoodle = Json.FromJson<Doodle>( json, settings );
 
 			Assert.AreNotEqual( doodle.x, newDoodle.x );
 			Assert.AreNotEqual( doodle.y, newDoodle.y );

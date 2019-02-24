@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Reflection;
 
 
@@ -23,16 +22,17 @@ namespace Nez.Persistence
 		internal static readonly Type excludeAttrType = typeof( NonSerializedAttribute );
 		static readonly Type beforeEncodeAttrType = typeof( BeforeEncodeAttribute );
 
-		public static string Encode( object obj, bool prettyPrint )
+
+		public static string ToJson( object obj, bool prettyPrint )
 		{
 			var settings = new JsonSettings { PrettyPrint = prettyPrint };
-			return Encode( obj, settings );
+			return ToJson( obj, settings );
 		}
 
-		public static string Encode( object obj, params JsonTypeConverter[] converters )
+		public static string ToJson( object obj, params JsonTypeConverter[] converters )
 		{
 			var settings = new JsonSettings { TypeConverters = converters };
-			return Encode( obj, settings );
+			return ToJson( obj, settings );
 		}
 
 		/// <summary>
@@ -41,7 +41,7 @@ namespace Nez.Persistence
 		/// <param name="obj"></param>
 		/// <param name="options"></param>
 		/// <returns></returns>
-		public static string Encode( object obj, JsonSettings options = null )
+		public static string ToJson( object obj, JsonSettings options = null )
 		{
 			// Invoke methods tagged with [BeforeEncode] attribute.
 			if( obj != null )
@@ -59,7 +59,7 @@ namespace Nez.Persistence
 				}
 			}
 
-			return JsonEncoder.Encode( obj, options ?? new JsonSettings() );
+			return JsonEncoder.ToJson( obj, options ?? new JsonSettings() );
 		}
 
 		/// <summary>
@@ -68,21 +68,28 @@ namespace Nez.Persistence
 		/// </summary>
 		/// <param name="json"></param>
 		/// <returns></returns>
-		public static Variant Decode( string json )
+		public static Variant FromJson( string json )
 		{
 			System.Diagnostics.Debug.Assert( json != null );
-			return JsonDecoder.Decode( json );
+			return JsonDecoder.FromJson( json );
 		}
 
-		public static T Decode<T>( string json, JsonSettings settings )
+		/// <summary>
+		/// decodes <paramref name="json"/> into a strongly typed object of type T
+		/// </summary>
+		/// <returns>The json.</returns>
+		/// <param name="json">Json.</param>
+		/// <param name="settings">Settings.</param>
+		/// <typeparam name="T">The 1st type parameter.</typeparam>
+		public static T FromJson<T>( string json, JsonSettings settings = null )
 		{
-			return VariantConverter.Decode<T>( JsonDecoder.Decode( json ), settings );
+			return VariantConverter.Decode<T>( JsonDecoder.FromJson( json ), settings );
 		}
 
-		public static T Decode<T>( string json, params JsonTypeConverter[] converters )
+		public static T FromJson<T>( string json, params JsonTypeConverter[] converters )
 		{
 			var settings = new JsonSettings { TypeConverters = converters };
-			return VariantConverter.Decode<T>( JsonDecoder.Decode( json ), settings );
+			return VariantConverter.Decode<T>( JsonDecoder.FromJson( json ), settings );
 		}
 
 		/// <summary>
@@ -91,34 +98,16 @@ namespace Nez.Persistence
 		/// <param name="json"></param>
 		/// <typeparam name="T"></typeparam>
 		/// <returns></returns>
-		public static T Decode<T>( string json )
+		public static T FromJson<T>( string json )
 		{
 			System.Diagnostics.Debug.Assert( json != null );
-			return VariantConverter.Decode<T>( JsonDecoder.Decode( json ) );
+			return VariantConverter.Decode<T>( JsonDecoder.FromJson( json ) );
 		}
 
-		/// <summary>
-		/// note: this does not do what the name implies! <paramref name="item"/> can be null when passed in
-		/// and it will be overwritten entirely.
-		/// </summary>
-		/// <param name="json"></param>
-		/// <param name="item"></param>
-		/// <typeparam name="T"></typeparam>
-		public static void DecodeInto<T>( string json, out T item )
+		public static void FromJsonOverwrite( string json, object item )
 		{
 			System.Diagnostics.Debug.Assert( json != null );
-			VariantConverter.DecodeInto( JsonDecoder.Decode( json ), out item );
-		}
-
-		/// <summary>
-		/// decodes the <paramref name="json"/> and then fills in the data on <paramref name="item"/> as opposed
-		/// to creating a new instance.
-		/// </summary>
-		/// <param name="json">Json.</param>
-		/// <param name="item">Item.</param>
-		public static void PopulateObject( string json, object item )
-		{
-			throw new NotImplementedException();
+			VariantConverter.DecodeInto( JsonDecoder.FromJson( json ), out item );
 		}
 
 	}

@@ -42,7 +42,7 @@ namespace Nez.Persistence
 
 ```csharp
 var data = new List<int>() { { 0 }, { 1 }, { 2 } };
-Console.WriteLine( Json.Encode( data ) ); // output: [1,2,3]
+Console.WriteLine( Json.ToJson( data ) ); // output: [1,2,3]
 ```
 
 
@@ -112,7 +112,7 @@ testClass.data.Add( new TestStruct() { x = 1, y = 2 } );
 testClass.data.Add( new TestStruct() { x = 3, y = 4 } );
 testClass.data.Add( new TestStruct() { x = 5, y = 6 } );
 
-var testClassJson = Json.Encode( testClass );
+var testClassJson = Json.ToJson( testClass );
 Console.WriteLine( testClassJson );
 ```
 
@@ -226,7 +226,7 @@ var settings = new JsonSettings
 	TypeNameHandling = TypeNameHandling.Auto,
 	PreserveReferencesHandling = true
 };
-var json = Json.Encode( entity, settings );
+var json = Json.ToJson( entity, settings );
 ```
 
 And the resulting JSON. What we have in there is some extra metadata Json can use when it decodes this JSON into an Entity again. Each object gets a unique @id field and any references to existing objects get replaced by a @ref field. Magic!
@@ -252,7 +252,7 @@ And the resulting JSON. What we have in there is some extra metadata Json can us
 
 ## Encode Options
 
-Several options are currently available for JSON encoding, and can be passed in as a second parameter to `JSON.Encode()`.
+Several options are currently available for JSON encoding, and can be passed in as a second parameter to `JSON.ToJson()`.
 
 * `PrettyPrint` will output nicely formatted JSON to make it more readable.
 * `PreserveReferencesHandling` will add extra metadata into the JSON so an object graph with circular references can be rebuilt
@@ -279,7 +279,7 @@ foreach( var pair in dict as ProxyObject )
 }
 ```
 
-The non-collection `Variant` subclasses are `ProxyBoolean`, `ProxyNumber` and `ProxyString`. A variant can also be `null`. Any `Variant` object can be directly encoded to JSON by calling its `ToJson()` method or passing it to `Json.Encode()`.
+The non-collection `Variant` subclasses are `ProxyBoolean`, `ProxyNumber` and `ProxyString`. A variant can also be `null`. Any `Variant` object can be directly encoded to JSON by calling its `ToJson()` method or passing it to `Json.ToJson()`.
 
 Variant's can also be turned back into strongly typed objects via the `VariantConverter.Decode<T>` method.
 
@@ -307,7 +307,7 @@ class DoodleJsonConverter : JsonTypeConverter<Doodle>
 	{
 		// note the encoder.WriteOptionalReferenceData and WriteOptionalTypeHint methods! They are important if you want
 		// reference tracking to work
-		encoder.EncodeValue( true );
+		encoder.ToJsonValue( true );
 	}
 
 	public override Doodle ConvertToObject( IObjectConverter converter, Type objectType, Doodle existingValue, ProxyObject data )
@@ -331,7 +331,7 @@ To use a `JsonTypeConverter` you just have to tell Json about it by sticking it 
 var doodle = new Doodle();
 
 var settings = new JsonSettings { TypeConverters = new JsonTypeConverter[] { new DoodleJsonConverter() } };
-var json = Json.Encode( doodle, settings );
+var json = Json.ToJson( doodle, settings );
 var newDoodle = Json.Decode<Doodle>( json, settings );
 ```
 

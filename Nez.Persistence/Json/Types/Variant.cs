@@ -10,7 +10,7 @@ namespace Nez.Persistence
 
 		public string ToJson()
 		{
-			return Json.Encode( this );
+			return Json.ToJson( this );
 		}
 
 		public virtual TypeCode GetTypeCode() => TypeCode.Object;

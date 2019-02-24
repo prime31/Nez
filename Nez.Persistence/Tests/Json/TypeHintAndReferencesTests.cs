@@ -43,13 +43,13 @@ namespace Nez.Persistence.JsonTests
 			{
 				components = new List<Component> { new Component(), new Sprite() }
 			};
-			var json = Json.Encode( entity, new JsonSettings
+			var json = Json.ToJson( entity, new JsonSettings
 			{
 				PrettyPrint = true,
 				TypeNameHandling = TypeNameHandling.Auto
 			} );
 
-			var outEntity = Json.Decode<Entity>( json );
+			var outEntity = Json.FromJson<Entity>( json );
 			Assert.IsInstanceOf( typeof( Sprite ), outEntity.components[1] );
 		}
 
@@ -59,14 +59,14 @@ namespace Nez.Persistence.JsonTests
 			var entity = new Entity();
 			entity.components = new List<Component> { new Component(), new Sprite() { entity = entity } };
 
-			var json = Json.Encode( entity, new JsonSettings
+			var json = Json.ToJson( entity, new JsonSettings
 			{
 				PrettyPrint = true,
 				TypeNameHandling = TypeNameHandling.Auto,
 				PreserveReferencesHandling = true
 			} );
 
-			var outEntity = Json.Decode<Entity>( json );
+			var outEntity = Json.FromJson<Entity>( json );
 			Assert.AreEqual( outEntity, outEntity.components[1].entity );
 		}
 

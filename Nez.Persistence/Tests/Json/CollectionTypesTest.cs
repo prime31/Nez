@@ -12,7 +12,7 @@ namespace Nez.Persistence.JsonTests
 		public void TestDumpRank1Array()
 		{
 			var array = new[] { 3, 1, 4 };
-			Assert.AreEqual( "[3,1,4]", Json.Encode( array ) );
+			Assert.AreEqual( "[3,1,4]", Json.ToJson( array ) );
 		}
 
 
@@ -20,7 +20,7 @@ namespace Nez.Persistence.JsonTests
 		public void TestDumpRank2Array()
 		{
 			var array = new[,] { { 1, 2, 3 }, { 4, 5, 6 } };
-			Assert.AreEqual( "[[1,2,3],[4,5,6]]", Json.Encode( array ) );
+			Assert.AreEqual( "[[1,2,3],[4,5,6]]", Json.ToJson( array ) );
 		}
 
 
@@ -28,7 +28,7 @@ namespace Nez.Persistence.JsonTests
 		public void TestDumpRank3Array()
 		{
 			var array = new[, ,] { { { 1, 2 }, { 3, 4 } }, { { 5, 6 }, { 7, 8 } }, { { 9, 0 }, { 1, 2 } } };
-			Assert.AreEqual( "[[[1,2],[3,4]],[[5,6],[7,8]],[[9,0],[1,2]]]", Json.Encode( array ) );
+			Assert.AreEqual( "[[[1,2],[3,4]],[[5,6],[7,8]],[[9,0],[1,2]]]", Json.ToJson( array ) );
 		}
 
 
@@ -36,14 +36,14 @@ namespace Nez.Persistence.JsonTests
 		public void TestDumpJaggedArray()
 		{
 			var array = new[] { new[] { 1, 2, 3 }, new[] { 4, 5, 6 } };
-			Assert.AreEqual( "[[1,2,3],[4,5,6]]", Json.Encode( array ) );
+			Assert.AreEqual( "[[1,2,3],[4,5,6]]", Json.ToJson( array ) );
 		}
 
 
 		[Test]
 		public void TestLoadRank1Array()
 		{
-			var variant = Json.Decode( "[1,2,3]" );
+			var variant = Json.FromJson( "[1,2,3]" );
 			int[] array = VariantConverter.Decode<int[]>( variant );
 			Assert.AreNotEqual( null, array );
 
@@ -57,7 +57,7 @@ namespace Nez.Persistence.JsonTests
 		[Test]
 		public void TestLoadRank2Array()
 		{
-			var variant = Json.Decode( "[[1,2,3],[4,5,6]]" );
+			var variant = Json.FromJson( "[[1,2,3],[4,5,6]]" );
 			var array = VariantConverter.Decode<int[,]>( variant );
 			Assert.AreNotEqual( null, array );
 
@@ -78,7 +78,7 @@ namespace Nez.Persistence.JsonTests
 		[Test]
 		public void TestLoadRank3Array()
 		{
-			var variant = Json.Decode( "[[[1,2],[3,4]],[[5,6],[7,8]],[[9,0],[1,2]]]" );
+			var variant = Json.FromJson( "[[[1,2],[3,4]],[[5,6],[7,8]],[[9,0],[1,2]]]" );
 			int[,,] array = VariantConverter.Decode<int[,,]>( variant );
 			Assert.AreNotEqual( null, array );
 
@@ -110,7 +110,7 @@ namespace Nez.Persistence.JsonTests
 		[Test]
 		public void TestLoadJaggedArray()
 		{
-			var variant = Json.Decode( "[[1,2,3],[4,5,6]]" );
+			var variant = Json.FromJson( "[[1,2,3],[4,5,6]]" );
 			int[][] array = VariantConverter.Decode<int[][]>( variant );
 			Assert.AreNotEqual( null, array );
 
@@ -132,14 +132,14 @@ namespace Nez.Persistence.JsonTests
 		public void TestDumpList()
 		{
 			var list = new List<int>() { { 3 }, { 1 }, { 4 } };
-			Assert.AreEqual( "[3,1,4]", Json.Encode( list ) );
+			Assert.AreEqual( "[3,1,4]", Json.ToJson( list ) );
 		}
 
 
 		[Test]
 		public void TestLoadList()
 		{
-			var variant = Json.Decode( "[3,1,4]" );
+			var variant = Json.FromJson( "[3,1,4]" );
 			var list = VariantConverter.Decode<List<int>>( variant );
 
 			Assert.AreNotEqual( null, list );
@@ -158,14 +158,14 @@ namespace Nez.Persistence.JsonTests
 			dict["foo"] = 1337f;
 			dict["bar"] = 3.14f;
 
-			Assert.AreEqual( "{\"foo\":1337,\"bar\":3.14}", Json.Encode( dict ) );
+			Assert.AreEqual( "{\"foo\":1337,\"bar\":3.14}", Json.ToJson( dict ) );
 		}
 
 
 		[Test]
 		public void TestLoadDict()
 		{
-			var variant = Json.Decode( "{\"foo\":1337,\"bar\":3.14}" );
+			var variant = Json.FromJson( "{\"foo\":1337,\"bar\":3.14}" );
 
 			Dictionary<string, float> dict = VariantConverter.Decode<Dictionary<string, float>>( variant );
 
@@ -179,7 +179,7 @@ namespace Nez.Persistence.JsonTests
 		[Test]
 		public void TestLoadDictIntoProxy()
 		{
-			var variant = Json.Decode( "{\"foo\":1337,\"bar\":3.14}" );
+			var variant = Json.FromJson( "{\"foo\":1337,\"bar\":3.14}" );
 			var proxy = variant as ProxyObject;
 
 			Assert.IsNotNull( proxy );
@@ -200,19 +200,19 @@ namespace Nez.Persistence.JsonTests
 		public void TestDumpEnum()
 		{
 			const TestEnum testEnum = TestEnum.Thing2;
-			Assert.AreEqual( "\"Thing2\"", Json.Encode( testEnum ) );
+			Assert.AreEqual( "\"Thing2\"", Json.ToJson( testEnum ) );
 		}
 
 
 		[Test]
 		public void TestLoadEnum()
 		{
-			var testEnum = VariantConverter.Decode<TestEnum>( Json.Decode( "\"Thing2\"" ) );
+			var testEnum = VariantConverter.Decode<TestEnum>( Json.FromJson( "\"Thing2\"" ) );
 			Assert.AreEqual( TestEnum.Thing2, testEnum );
 
 			try
 			{
-				VariantConverter.Decode<TestEnum>( Json.Decode( "\"Thing4\"" ) );
+				VariantConverter.Decode<TestEnum>( Json.FromJson( "\"Thing4\"" ) );
 			}
 			catch( ArgumentException e )
 			{
@@ -228,7 +228,7 @@ namespace Nez.Persistence.JsonTests
 			dict[TestEnum.Thing1] = "Item 1";
 			dict[TestEnum.Thing2] = "Item 2";
 			dict[TestEnum.Thing3] = "Item 3";
-			Assert.AreEqual( "{\"Thing1\":\"Item 1\",\"Thing2\":\"Item 2\",\"Thing3\":\"Item 3\"}", Json.Encode( dict ) );
+			Assert.AreEqual( "{\"Thing1\":\"Item 1\",\"Thing2\":\"Item 2\",\"Thing3\":\"Item 3\"}", Json.ToJson( dict ) );
 		}
 
 
@@ -236,7 +236,7 @@ namespace Nez.Persistence.JsonTests
 		public void TestLoadDictWithEnumKeys()
 		{
 			const string json = "{\"Thing1\":\"Item 1\",\"Thing2\":\"Item 2\",\"Thing3\":\"Item 3\"}";
-			var dict = VariantConverter.Decode<Dictionary<TestEnum, String>>( Json.Decode( json ) );
+			var dict = VariantConverter.Decode<Dictionary<TestEnum, String>>( Json.FromJson( json ) );
 			Assert.AreNotEqual( null, dict );
 			Assert.AreEqual( 3, dict.Count );
 			Assert.AreEqual( "Item 1", dict[TestEnum.Thing1] );

@@ -132,7 +132,7 @@ namespace Nez.Persistence
 		#endregion
 
 
-		public static Variant Decode( string jsonString )
+		public static Variant FromJson( string jsonString )
 		{
 			using( var instance = new JsonDecoder( jsonString ) )
 			{

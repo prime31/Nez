@@ -45,17 +45,18 @@ namespace Nez.Persistence
 			return isPublic;
 		}
 
-		internal void Clear()
-		{
-			_referenceTracker.Clear();
-			_constructorCache.Clear();
-			_fieldInfoCache.Clear();
-			_propertyInfoCache.Clear();
-			_memberInfoEncodeableCache.Clear();
-		}
+		/// <summary>
+		/// tracks a reference to an object for later fetching via <seealso cref="GetReference"/>
+		/// </summary>
+		/// <param name="id">Identifier.</param>
+		/// <param name="instance">Instance.</param>
+		internal void TrackReference( string id, object instance ) => _referenceTracker[id] = instance;
 
-		internal void TrackReference<T>( string id, T instance ) => _referenceTracker[id] = instance;
-
+		/// <summary>
+		/// fetches a cached reference to an object
+		/// </summary>
+		/// <returns>The reference.</returns>
+		/// <param name="refId">Reference identifier.</param>
 		internal object GetReference( string refId ) => _referenceTracker[refId];
 
 		/// <summary>
@@ -80,6 +81,11 @@ namespace Nez.Persistence
 
 		#region FieldInfo methods
 
+		/// <summary>
+		/// returns all the encodeable fields based on the attributes set on each
+		/// </summary>
+		/// <returns>The encodable fields for type.</returns>
+		/// <param name="type">Type.</param>
 		internal IEnumerable<FieldInfo> GetEncodableFieldsForType( Type type )
 		{
 			// cleanse the fields based on our attributes
