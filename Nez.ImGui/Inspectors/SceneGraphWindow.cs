@@ -90,7 +90,7 @@ namespace Nez.ImGuiTools
                 else
                 {
                     _postProcessorInspectors[i].draw();
-                    NezImGui.smallVerticalSpace();
+                    NezImGui.SmallVerticalSpace();
                 }
             }
         }

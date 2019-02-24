@@ -13,7 +13,7 @@ namespace Nez.ImGuiTools.TypeInspectors
 			_rangeAttribute = _memberInfo.getCustomAttribute<RangeAttribute>();
 		}
 
-		public override void draw()
+		public override void drawMutable()
 		{
 			var value = getValue<int>();
 			if( _rangeAttribute != null )
@@ -36,5 +36,6 @@ namespace Nez.ImGuiTools.TypeInspectors
 			}
 			handleTooltip();
 		}
+
 	}
 }

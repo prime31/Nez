@@ -16,22 +16,19 @@ namespace Nez.ImGuiTools.ComponentInspectors
 		{
 			if( ImGui.CollapsingHeader( "Transform", ImGuiTreeNodeFlags.DefaultOpen ) )
 			{
-                ImGui.Indent();
-                ImGui.Text( $"Children: {_transform.childCount}" );
-                ImGui.Text( "Parent: " );
-                ImGui.SameLine();
+                ImGui.LabelText( "Children", _transform.childCount.ToString() );
+                
                 if( _transform.parent == null )
                 {
-                    ImGui.Text( "none" );
+                    ImGui.LabelText( "Parent", "none" );
                 }
                 else
                 {
-                    if( ImGui.SmallButton( _transform.parent.entity.name ) )
-					    Core.getGlobalManager<ImGuiManager>().startInspectingEntity( _transform.parent.entity );
+                    if( NezImGui.LabelButton( "Parent", _transform.parent.entity.name ) )
+                        Core.getGlobalManager<ImGuiManager>().startInspectingEntity( _transform.parent.entity );
                 }
-                ImGui.Unindent();
 
-                NezImGui.smallVerticalSpace();
+                NezImGui.SmallVerticalSpace();
 
                 var pos = _transform.localPosition.toNumerics();
                 if( ImGui.DragFloat2( "Local Position", ref pos ) )

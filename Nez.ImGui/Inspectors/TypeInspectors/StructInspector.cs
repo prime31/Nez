@@ -19,7 +19,7 @@ namespace Nez.ImGuiTools.TypeInspectors
 			var fields = ReflectionUtils.getFields( _valueType );
 			foreach( var field in fields )
 			{
-				if( !field.IsPublic && IEnumerableExt.count( field.GetCustomAttributes<InspectableAttribute>() ) == 0 )
+				if( !field.IsPublic && !field.IsDefined( typeof( InspectableAttribute ) ) )
 					continue;
 
 				var inspector = TypeInspectorUtils.getInspectorForType( field.FieldType, _target, field );
@@ -37,7 +37,8 @@ namespace Nez.ImGuiTools.TypeInspectors
 				if( !prop.CanRead || !prop.CanWrite )
 					continue;
 
-				if( ( !prop.GetMethod.IsPublic || !prop.SetMethod.IsPublic ) && IEnumerableExt.count( prop.GetCustomAttributes<InspectableAttribute>() ) == 0 )
+				var isPropertyUndefinedOrPublic = !prop.CanWrite || ( prop.CanWrite && prop.SetMethod.IsPublic );
+				if( ( !prop.GetMethod.IsPublic || !isPropertyUndefinedOrPublic ) && !prop.IsDefined( typeof( InspectableAttribute ) ) )
 					continue;
 
 				var inspector = TypeInspectorUtils.getInspectorForType( prop.PropertyType, _target, prop );
@@ -50,13 +51,13 @@ namespace Nez.ImGuiTools.TypeInspectors
 			}
 		}
 
-		public override void draw()
+		public override void drawMutable()
 		{
-			NezImGui.beginBorderedGroup();
+			NezImGui.BeginBorderedGroup();
 			ImGui.Text( _name );
 			foreach( var i in _inspectors )
 				i.draw();
-			NezImGui.endBorderedGroup();
+			NezImGui.EndBorderedGroup();
 		}
 
 	}

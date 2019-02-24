@@ -45,7 +45,7 @@ namespace Nez.ImGuiTools.TypeInspectors
 		{
 			base.initialize();
 
-			_scopeId = NezImGui.getScopeId();
+			_scopeId = NezImGui.SetScopeId();
 
 			// we could have zero or 1 param
 			var parameters = ( _memberInfo as MethodInfo ).GetParameters();
@@ -57,7 +57,7 @@ namespace Nez.ImGuiTools.TypeInspectors
 			_parameterName = parameter.Name;
 		}
 
-		public override void draw()
+		public override void drawMutable()
 		{
 			ImGui.PushID( _scopeId );
 

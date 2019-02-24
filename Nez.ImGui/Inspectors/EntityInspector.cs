@@ -57,12 +57,12 @@ namespace Nez.ImGuiTools
 				if( ImGui.InputInt( "Tag", ref tag ) )
                     entity.tag = tag;
 
-				NezImGui.mediumVerticalSpace();
+				NezImGui.MediumVerticalSpace();
 
 				for( var i = _componentInspectors.Count - 1; i >= 0; i-- )
 				{
 					_componentInspectors[i].draw();
-					NezImGui.mediumVerticalSpace();
+					NezImGui.MediumVerticalSpace();
 				}
 				ImGui.End();
 			}

@@ -5,7 +5,7 @@ namespace Nez.ImGuiTools.TypeInspectors
 {
 	public class StringInspector : AbstractTypeInspector
 	{
-		public override void draw()
+		public override void drawMutable()
 		{
 			var value = getValue<string>() ?? string.Empty;
 			if( ImGui.InputText( _name, ref value, 100 ) )

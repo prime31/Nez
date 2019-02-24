@@ -3,15 +3,16 @@ using System.Text;
 
 namespace Nez.ImGuiTools.TypeInspectors
 {
+	/// <summary>
+	/// special Inspector that handles Entity references displaying a button that opens the inspector for the Entity
+	/// </summary>
 	public class EntityFieldInspector : AbstractTypeInspector
 	{
-		public override void draw()
+		public override void drawMutable()
 		{
 			var entity = getValue<Entity>();
-			ImGui.AlignTextToFramePadding();
-			ImGui.Text( _name );
-			ImGui.SameLine();
-			if( ImGui.Button( entity.name ) )
+
+			if( NezImGui.LabelButton( _name, entity.name ) )
 				Core.getGlobalManager<ImGuiManager>().startInspectingEntity( entity );
 			handleTooltip();
 		}

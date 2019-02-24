@@ -7,12 +7,13 @@ namespace Nez.ImGuiTools.TypeInspectors
 {
 	public class Vector3Inspector : AbstractTypeInspector
 	{
-		public override void draw()
+		public override void drawMutable()
 		{
 			var value = getValue<Vector3>().toNumerics();
 			if( ImGui.DragFloat3( _name, ref value ) )
 				setValue( value.toXNA() );
 			handleTooltip();
 		}
+
 	}
 }

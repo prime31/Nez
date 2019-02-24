@@ -118,7 +118,7 @@ namespace Nez.ImGuiTools.TypeInspectors
 			_inspectors.Add( inspector );
 		}
 
-		public override void draw()
+		public override void drawMutable()
 		{
 			if( ImGui.CollapsingHeader( _name ) )
 			{

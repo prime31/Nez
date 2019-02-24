@@ -12,6 +12,7 @@ namespace Nez.ImGuiTools.TypeInspectors
 		protected Func<object> _getter;
 		protected Action<object> _setter;
 		protected MemberInfo _memberInfo;
+		protected bool _isReadOnly;
 		protected string _tooltip;
 
 		
@@ -24,9 +25,35 @@ namespace Nez.ImGuiTools.TypeInspectors
 		}
 
 		/// <summary>
-		/// used to draw the UI for the Inspector
+		/// used to draw the UI for the Inspector. Calls either drawMutable or drawReadOnly depending on the _isReadOnly bool
 		/// </summary>
-		public abstract void draw();
+		public void draw()
+		{
+			if( _isReadOnly )
+			{
+				ImGui.PushStyleVar( ImGuiStyleVar.Alpha, ImGui.GetStyle().Alpha * 0.5f );
+				drawReadOnly();
+				ImGui.PopStyleVar();
+			}
+			else
+			{
+				drawMutable();
+			}
+		}
+
+		public abstract void drawMutable();
+
+		/// <summary>
+		/// default implementation disables the next widget and calls through to drawMutable. If specialy drawing needs to
+		/// be done (such as a multi-widget setup) this can be overridden.
+		/// </summary>
+		public virtual void drawReadOnly()
+		{
+			if( _isReadOnly )
+				NezImGui.DisableNextWidget();
+			drawMutable();
+		}
+
 
 		/// <summary>
 		/// if there is a tooltip and the item is hovered this will display it
@@ -49,15 +76,20 @@ namespace Nez.ImGuiTools.TypeInspectors
 			_memberInfo = field;
 			_name = field.Name;
 			_valueType = field.FieldType;
+			_isReadOnly = field.IsInitOnly;
 
 			_getter = () =>
 			{
 				return field.GetValue( target );
 			};
-			_setter = ( val ) =>
+
+			if( !_isReadOnly )
 			{
-				field.SetValue( target, val );
-			};
+				_setter = ( val ) =>
+				{
+					field.SetValue( target, val );
+				};
+			}
 		}
 
 		public void setTarget( object target, PropertyInfo prop )
@@ -66,15 +98,20 @@ namespace Nez.ImGuiTools.TypeInspectors
 			_target = target;
 			_name = prop.Name;
 			_valueType = prop.PropertyType;
+			_isReadOnly = !prop.CanWrite;
 
 			_getter = () =>
 			{
 				return ReflectionUtils.getPropertyGetter( prop ).Invoke( target, null );
 			};
-			_setter = ( val ) =>
+
+			if( !_isReadOnly )
 			{
-				ReflectionUtils.getPropertySetter( prop ).Invoke( target, new object[] { val } );
-			};
+				_setter = ( val ) =>
+				{
+					ReflectionUtils.getPropertySetter( prop ).Invoke( target, new object[] { val } );
+				};
+			}
 		}
 
 		/// <summary>
@@ -90,18 +127,23 @@ namespace Nez.ImGuiTools.TypeInspectors
 			_memberInfo = field;
 			_name = field.Name;
 			_valueType = field.FieldType;
+			_isReadOnly = field.IsInitOnly || parentInspector._isReadOnly;
 
 			_getter = () =>
 			{
 				var structValue = parentInspector.getValue();
 				return field.GetValue( structValue );
 			};
-			_setter = ( val ) =>
+
+			if( !_isReadOnly )
 			{
-				var structValue = parentInspector.getValue();
-				field.SetValue( structValue, val );
-				parentInspector.setValue( structValue );
-			};
+				_setter = ( val ) =>
+				{
+					var structValue = parentInspector.getValue();
+					field.SetValue( structValue, val );
+					parentInspector.setValue( structValue );
+				};
+			}
 		}
 
 		/// <summary>
@@ -117,18 +159,23 @@ namespace Nez.ImGuiTools.TypeInspectors
 			_memberInfo = prop;
 			_name = prop.Name;
 			_valueType = prop.PropertyType;
+			_isReadOnly = !prop.CanWrite || parentInspector._isReadOnly;
 
 			_getter = () =>
 			{
 				var structValue = parentInspector.getValue();
 				return ReflectionUtils.getPropertyGetter( prop ).Invoke( structValue, null );
 			};
-			_setter = ( val ) =>
+
+			if( !_isReadOnly )
 			{
-				var structValue = parentInspector.getValue();
-				prop.SetValue( structValue, val );
-				parentInspector.setValue( structValue );
-			};
+				_setter = ( val ) =>
+				{
+					var structValue = parentInspector.getValue();
+					prop.SetValue( structValue, val );
+					parentInspector.setValue( structValue );
+				};
+			}
 		}
 
 		public void setTarget( object target, MethodInfo method )

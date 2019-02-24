@@ -41,7 +41,7 @@ namespace Nez.ImGuiTools
 
 			_renderer.rebuildFontAtlas( options?._includeDefaultFont ?? true );
 			Core.emitter.addObserver( CoreEvents.SceneChanged, onSceneChanged );
-			NezImGuiThemes.photoshopDark();
+			NezImGuiThemes.darkTheme1();
 
 			// find all Scenes
 			foreach( var assembly in AppDomain.CurrentDomain.GetAssemblies() )

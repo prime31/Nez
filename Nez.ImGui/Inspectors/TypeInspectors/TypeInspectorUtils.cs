@@ -23,10 +23,7 @@ namespace Nez.ImGuiTools.TypeInspectors
 			var fields = ReflectionUtils.getFields( targetType );
 			foreach( var field in fields )
 			{
-				if( !field.IsPublic && field.getCustomAttribute<InspectableAttribute>() == null )
-					continue;
-
-				if( field.IsInitOnly )
+				if( !field.IsPublic && !field.IsDefined( typeof( InspectableAttribute ) ) )
 					continue;
 
 				// skip enabled and entity which is handled elsewhere
@@ -45,10 +42,15 @@ namespace Nez.ImGuiTools.TypeInspectors
 			var properties = ReflectionUtils.getProperties( targetType );
 			foreach( var prop in properties )
 			{
-				if( !prop.CanRead || !prop.CanWrite )
+				// Transforms and Component subclasses arent useful to inspect
+				if( prop.PropertyType == typeof( Transform ) || prop.PropertyType.IsSubclassOf( typeof( Component ) ) )
 					continue;
 
-				if( ( !prop.GetMethod.IsPublic || !prop.SetMethod.IsPublic ) && prop.getCustomAttribute<InspectableAttribute>() == null )
+				if( !prop.CanRead )
+					continue;
+
+				var isPropertyUndefinedOrPublic = !prop.CanWrite || ( prop.CanWrite && prop.SetMethod.IsPublic );
+				if( ( !prop.GetMethod.IsPublic || !isPropertyUndefinedOrPublic ) && !prop.IsDefined( typeof( InspectableAttribute ) ) )
 					continue;
 
 				// skip Component.enabled  and entity which is handled elsewhere

@@ -11,20 +11,20 @@ namespace Nez.ImGuiTools
         /// gets a unique id that can be used with ImGui.PushId() to avoid conflicts with type inspectors
         /// </summary>
         /// <returns></returns>
-        public static int getScopeId() => _idScope++;
+        public static int SetScopeId() => _idScope++;
         
-		public static void smallVerticalSpace() => ImGui.Dummy( new Num.Vector2( 0, 5 ) );
+		public static void SmallVerticalSpace() => ImGui.Dummy( new Num.Vector2( 0, 5 ) );
 
-        public static void mediumVerticalSpace() => ImGui.Dummy( new Num.Vector2( 0, 10 ) );
+        public static void MediumVerticalSpace() => ImGui.Dummy( new Num.Vector2( 0, 10 ) );
 
-        public static void beginBorderedGroup()
+        public static void BeginBorderedGroup()
         {
 			ImGui.BeginGroup();
         }
 
-        public static void endBorderedGroup() => endBorderedGroup( new Num.Vector2( 3, 2 ) );
+        public static void EndBorderedGroup() => EndBorderedGroup( new Num.Vector2( 3, 2 ) );
 
-        public static void endBorderedGroup( Num.Vector2 minPadding )
+        public static void EndBorderedGroup( Num.Vector2 minPadding )
         {
             ImGui.EndGroup();
 
@@ -40,5 +40,46 @@ namespace Nez.ImGuiTools
 			// this fits just the content, not the full width
 			//ImGui.GetWindowDrawList().AddRect( ImGui.GetItemRectMin() - padding, ImGui.GetItemRectMax() + padding, packedColor );
         }
-	}
+	
+        /// <summary>
+        /// aligns a button and label in the same way LabelText and regular widgets are lined up
+        /// </summary>
+        /// <param name="label"></param>
+        /// <param name="buttonText"></param>
+        /// <returns></returns>
+        public static bool LabelButton( string label, string buttonText )
+        {
+            ImGui.AlignTextToFramePadding();
+
+            var wasClicked = ImGui.Button( buttonText );
+            ImGui.SameLine( 0, ImGui.GetWindowWidth() * 0.65f - ImGui.GetItemRectSize().X + ImGui.GetStyle().ItemInnerSpacing.X );
+            ImGui.Text( label );
+
+            return wasClicked;
+        }
+    
+        /// <summary>
+        /// most widgets heights are calculated using this formula. Some let you specifiy a height though.
+        /// </summary>
+        /// <returns></returns>
+        public static float DefaultWidgetHeight()
+        {
+            Debug.log(ImGui.GetFontSize());
+            var style = ImGui.GetStyle();
+            return ImGui.GetFontSize() + style.FramePadding.Y * 2f;
+        }
+
+        /// <summary>
+        /// draws an invisible button that will cover the next widget rect
+        /// </summary>
+        /// <param name="widgetCustomHeight"></param>
+        public static void DisableNextWidget( float widgetCustomHeight = 0 )
+        {
+			var origCursorPos = ImGui.GetCursorPos();
+			var widgetSize = new Num.Vector2( ImGui.GetContentRegionAvailWidth(), widgetCustomHeight > 0 ? DefaultWidgetHeight() : DefaultWidgetHeight() );
+			ImGui.InvisibleButton( "##disabled", widgetSize );
+			ImGui.SetCursorPos( origCursorPos );
+        }
+    
+    }
 }

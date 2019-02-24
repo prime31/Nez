@@ -38,7 +38,7 @@ namespace Nez.ImGuiTools
 
             ImGui.PlotLines( "##hidelabel", ref _frameRateArray[0], _frameRateArray.Length, _frameRateArrayIndex, $"FPS: {ImGui.GetIO().Framerate:0}", 0, 60, new Num.Vector2( ImGui.GetContentRegionAvail().X, 50 ) );
 
-            NezImGui.smallVerticalSpace();
+            NezImGui.SmallVerticalSpace();
 
             if( ImGui.CollapsingHeader( "Core Settings", ImGuiTreeNodeFlags.DefaultOpen ) )
             {

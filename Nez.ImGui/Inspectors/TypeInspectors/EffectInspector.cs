@@ -48,7 +48,7 @@ namespace Nez.ImGuiTools.TypeInspectors
 			}
 		}
 
-		public override void draw()
+		public override void drawMutable()
 		{
 			ImGui.Text( _name );
 			foreach( var i in _inspectors )

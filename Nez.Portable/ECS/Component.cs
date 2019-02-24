@@ -46,7 +46,11 @@ namespace Nez
 		/// update order of the Components on this Entity
 		/// </summary>
 		/// <value>The order.</value>
-		public int updateOrder { get { return _updateOrder; } }
+		public int updateOrder
+		{
+			get => _updateOrder;
+			set => setUpdateOrder( value );
+		}
 
 		bool _enabled = true;
 		internal int _updateOrder = 0;
