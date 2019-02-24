@@ -16,6 +16,12 @@ namespace Nez.Persistence
 		int _referenceCounter = 0;
 		int indent;
 
+		/// <summary>
+		/// maintains state on whether the first item of an object/array was written. This lets use know if we
+		/// need to stick a comma in between values
+		/// </summary>
+		Stack<bool> _isFirstItemWrittenStack = new Stack<bool>();
+
 
 		public static string Encode( object obj, JsonSettings settings )
 		{
@@ -117,33 +123,30 @@ namespace Nez.Persistence
 
 			WriteStartObject();
 
-			var isFirstItem = true;
-			if( WriteOptionalReferenceData( value, ref isFirstItem ) )
+			if( WriteOptionalReferenceData( value ) )
 			{
 				WriteEndObject();
 				return;
 			}
 
-			WriteOptionalTypeHint( type, forceTypeHint, ref isFirstItem );
+			WriteOptionalTypeHint( type, forceTypeHint );
 
 			foreach( var field in _cacheResolver.GetEncodableFieldsForType( type, _settings.EnforceHeirarchyOrderEnabled ) )
 			{
-				WriteValueDelimiter( isFirstItem );
+				WriteValueDelimiter();
 				WriteString( field.Name );
 				AppendColon();
 				EncodeValue( field.GetValue( value ) );
-				isFirstItem = false;
 			}
 
 			foreach( var property in _cacheResolver.GetEncodablePropertiesForType( type, _settings.EnforceHeirarchyOrderEnabled ) )
 			{
 				if( property.CanRead )
 				{
-					WriteValueDelimiter( isFirstItem );
+					WriteValueDelimiter();
 					WriteString( property.Name );
 					AppendColon();
 					EncodeValue( property.GetValue( value, null ) );
-					isFirstItem = false;
 				}
 			}
 
@@ -154,12 +157,10 @@ namespace Nez.Persistence
 		{
 			WriteStartArray();
 
-			var firstItem = true;
 			foreach( var obj in value )
 			{
-				WriteValueDelimiter( firstItem );
+				WriteValueDelimiter();
 				EncodeValue( obj );
-				firstItem = false;
 			}
 
 			WriteEndArray();
@@ -172,7 +173,7 @@ namespace Nez.Persistence
 			var firstItem = true;
 			foreach( var e in value.Keys )
 			{
-				WriteValueDelimiter( firstItem );
+				WriteValueDelimiter();
 				WriteString( e );
 				AppendColon();
 				EncodeValue( value[e] );
@@ -186,14 +187,12 @@ namespace Nez.Persistence
 		{
 			WriteStartObject();
 
-			var firstItem = true;
 			foreach( var e in value.Keys )
 			{
-				WriteValueDelimiter( firstItem );
+				WriteValueDelimiter();
 				WriteString( e.ToString() );
 				AppendColon();
 				EncodeValue( value[e] );
-				firstItem = false;
 			}
 
 			WriteEndObject();
@@ -221,13 +220,11 @@ namespace Nez.Persistence
 
 			WriteStartArray();
 
-			var firstItem = true;
 			foreach( var obj in value )
 			{
-				WriteValueDelimiter( firstItem );
+				WriteValueDelimiter();
 				forceTypeHint = forceTypeHint || ( listItemType != null && listItemType != obj.GetType() );
 				EncodeValue( obj, forceTypeHint );
-				firstItem = false;
 			}
 
 			WriteEndArray();
@@ -266,7 +263,7 @@ namespace Nez.Persistence
 				for( var i = min; i <= max; i++ )
 				{
 					indices[rank] = i;
-					WriteValueDelimiter( i == min );
+					WriteValueDelimiter();
 					var val = value.GetValue( indices );
 					forceTypeHint = forceTypeHint || ( arrayItemType != null && arrayItemType != val.GetType() );
 					EncodeValue( val, forceTypeHint );
@@ -277,7 +274,7 @@ namespace Nez.Persistence
 				for( var i = min; i <= max; i++ )
 				{
 					indices[rank] = i;
-					WriteValueDelimiter( i == min );
+					WriteValueDelimiter();
 					EncodeArrayRank( value, rank + 1, indices );
 				}
 			}
@@ -311,8 +308,7 @@ namespace Nez.Persistence
 		/// to the JSON stream it will return true and the rest of the object data should not be written.
 		/// </summary>
 		/// <param name="value">Value.</param>
-		/// <param name="isFirstItem">If set to <c>true</c> is first item.</param>
-		public bool WriteOptionalReferenceData( object value, ref bool isFirstItem )
+		public bool WriteOptionalReferenceData( object value )
 		{
 			if( _settings.PreserveReferencesHandling )
 			{
@@ -320,22 +316,20 @@ namespace Nez.Persistence
 				{
 					_referenceTracker[value] = ++_referenceCounter;
 
-					WriteValueDelimiter( isFirstItem );
+					WriteValueDelimiter();
 					WriteString( Json.IdPropertyName );
 					AppendColon();
 					WriteString( _referenceCounter.ToString() );
-					isFirstItem = false;
 				}
 				else
 				{
 					var id = _referenceTracker[value];
 
-					WriteValueDelimiter( isFirstItem );
+					WriteValueDelimiter();
 					WriteString( Json.RefPropertyName );
 					AppendColon();
 					WriteString( id.ToString() );
 
-					isFirstItem = false;
 					return true;
 				}
 			}
@@ -343,28 +337,28 @@ namespace Nez.Persistence
 		}
 
 		/// <summary>
-		/// optionally writes the type hint. Sets isFirstItem to false if it was written.
+		/// optionally writes the type hint
 		/// </summary>
 		/// <param name="type">Type.</param>
 		/// <param name="forceTypeHint">If set to <c>true</c> force type hint.</param>
-		/// <param name="isFirstItem">If set to <c>true</c> is first item.</param>
-		public void WriteOptionalTypeHint( Type type, bool forceTypeHint, ref bool isFirstItem )
+		public void WriteOptionalTypeHint( Type type, bool forceTypeHint )
 		{
 			forceTypeHint = forceTypeHint || _settings.TypeNameHandling == TypeNameHandling.All || _settings.TypeNameHandling == TypeNameHandling.Objects;
 			if( forceTypeHint )
 			{
-				WriteValueDelimiter( isFirstItem );
+				WriteValueDelimiter();
 				WriteString( Json.TypeHintPropertyName );
 				AppendColon();
 				WriteString( type.FullName );
-
-				isFirstItem = false;
 			}
 		}
 
-		public void WriteValueDelimiter( bool isFirstItem )
+		/// <summary>
+		/// writes a comma when needed. Call this before writing any object/array key-value pairs.
+		/// </summary>
+		public void WriteValueDelimiter()
 		{
-			if( !isFirstItem )
+			if( _isFirstItemWrittenStack.Peek() )
 			{
 				_builder.Append( ',' );
 
@@ -372,6 +366,11 @@ namespace Nez.Persistence
 				{
 					_builder.Append( '\n' );
 				}
+			}
+			else
+			{
+				_isFirstItemWrittenStack.Pop();
+				_isFirstItemWrittenStack.Push( true );
 			}
 
 			if( _settings.PrettyPrint )
@@ -382,6 +381,7 @@ namespace Nez.Persistence
 
 		public void WriteStartObject()
 		{
+			_isFirstItemWrittenStack.Push( false );
 			_builder.Append( '{' );
 
 			if( _settings.PrettyPrint )
@@ -393,6 +393,7 @@ namespace Nez.Persistence
 
 		public void WriteEndObject()
 		{
+			_isFirstItemWrittenStack.Pop();
 			if( _settings.PrettyPrint )
 			{
 				_builder.Append( '\n' );
@@ -405,6 +406,7 @@ namespace Nez.Persistence
 
 		public void WriteStartArray()
 		{
+			_isFirstItemWrittenStack.Push( false );
 			_builder.Append( '[' );
 
 			if( _settings.PrettyPrint )
@@ -416,6 +418,7 @@ namespace Nez.Persistence
 
 		public void WriteEndArray()
 		{
+			_isFirstItemWrittenStack.Pop();
 			if( _settings.PrettyPrint )
 			{
 				_builder.Append( '\n' );

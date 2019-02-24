@@ -15,9 +15,9 @@ namespace Nez.Persistence
 		void AppendIndent();
 		void AppendColon();
 
-		bool WriteOptionalReferenceData( object value, ref bool isFirstItem );
-		void WriteOptionalTypeHint( Type type, bool forceTypeHint, ref bool isFirstItem );
-		void WriteValueDelimiter( bool isFirstItem );
+		bool WriteOptionalReferenceData( object value );
+		void WriteOptionalTypeHint( Type type, bool forceTypeHint );
+		void WriteValueDelimiter();
 		void WriteStartObject();
 		void WriteEndObject();
 		void WriteStartArray();

@@ -306,6 +306,8 @@ class DoodleJsonConverter : JsonTypeConverter<Doodle>
 {
 	public override void WriteJson( IJsonEncoder encoder, Doodle value )
 	{
+		// note the encoder.WriteOptionalReferenceData and WriteOptionalTypeHint methods! They are important if you want
+		// reference tracking to work
 		encoder.EncodeValue( true );
 	}
 
