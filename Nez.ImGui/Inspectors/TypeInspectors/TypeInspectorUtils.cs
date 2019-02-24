@@ -5,6 +5,7 @@ using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using TI = Nez.ImGuiTools.TypeInspectors;
+using System.Collections;
 
 namespace Nez.ImGuiTools.TypeInspectors
 {
@@ -117,6 +118,13 @@ namespace Nez.ImGuiTools.TypeInspectors
 				return new TI.EnumInspector();
 			if( valueType.GetTypeInfo().IsValueType )
 				return new TI.StructInspector();
+			if( target is IList && ListInspector.kSupportedTypes.contains( valueType.GetElementType() ) )
+				return new TI.ListInspector();
+			if( valueType.IsArray && valueType.GetArrayRank() == 1 && ListInspector.kSupportedTypes.contains( valueType.GetElementType() ) )
+				return new TI.ListInspector();
+			if( valueType.IsGenericType && typeof( IList ).IsAssignableFrom( valueType ) &&
+				valueType.GetInterface( nameof( IList ) ) != null && ListInspector.kSupportedTypes.contains( valueType.GetGenericArguments()[0] ) )
+				return new TI.ListInspector();
 
 			// check for custom inspectors before checking Nez types in case a subclass implemented one
 			var customInspectorType = valueType.GetTypeInfo().getCustomAttribute<CustomInspectorAttribute>();
