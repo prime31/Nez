@@ -43,7 +43,6 @@ namespace Nez
 			_height = height;
 		}
 
-
 		/// <summary>
 		/// sets the width of the sprite
 		/// </summary>
@@ -55,7 +54,6 @@ namespace Nez
 			return this;
 		}
 
-
 		/// <summary>
 		/// sets the height of the sprite
 		/// </summary>
@@ -66,7 +64,6 @@ namespace Nez
 			_height = height;
 			return this;
 		}
-
 
 		/// <summary>
 		/// sets the skew values for the sprite
@@ -84,7 +81,6 @@ namespace Nez
 			_skewRightY = skewRightY;
 			return this;
 		}
-
         public override void onAddedToEntity()
         {
             originNormalized = new Vector2(0.5f, 0.5f);

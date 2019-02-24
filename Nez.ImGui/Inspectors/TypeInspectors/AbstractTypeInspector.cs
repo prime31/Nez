@@ -53,8 +53,7 @@ namespace Nez.ImGuiTools.TypeInspectors
 		/// </summary>
 		public virtual void drawReadOnly()
 		{
-			if( _isReadOnly )
-				NezImGui.DisableNextWidget();
+			NezImGui.DisableNextWidget();
 			drawMutable();
 		}
 

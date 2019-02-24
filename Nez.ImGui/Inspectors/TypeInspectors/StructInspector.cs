@@ -10,6 +10,7 @@ namespace Nez.ImGuiTools.TypeInspectors
 	public class StructInspector : AbstractTypeInspector
 	{
 		List<AbstractTypeInspector> _inspectors = new List<AbstractTypeInspector>();
+		bool _isHeaderOpen;
 
 		public override void initialize()
 		{
@@ -53,11 +54,25 @@ namespace Nez.ImGuiTools.TypeInspectors
 
 		public override void drawMutable()
 		{
+			ImGui.Indent();
 			NezImGui.BeginBorderedGroup();
-			ImGui.Text( _name );
-			foreach( var i in _inspectors )
-				i.draw();
-			NezImGui.EndBorderedGroup();
+			
+			_isHeaderOpen = ImGui.CollapsingHeader( $"{_name}" );
+			if( _isHeaderOpen )
+			{
+				foreach( var i in _inspectors )
+					i.draw();
+			}
+			NezImGui.EndBorderedGroup( new System.Numerics.Vector2( 4, 1 ), new System.Numerics.Vector2( 4, 2 ) );
+			ImGui.Unindent();
+		}
+
+		/// <summary>
+		/// we need to override here so that we can keep the header enabled so that it can be opened
+		/// </summary>
+		public override void drawReadOnly()
+		{
+			drawMutable();
 		}
 
 	}

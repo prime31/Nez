@@ -12,7 +12,6 @@ namespace Nez.ImGuiTools.TypeInspectors
 	{
 		List<AbstractTypeInspector> _inspectors = new List<AbstractTypeInspector>();
 
-
 		public override void initialize()
 		{
 			base.initialize();
@@ -22,7 +21,6 @@ namespace Nez.ImGuiTools.TypeInspectors
 			if( effect == null )
 				return;
 
-			Debug.log( $"name was {_name}" );
 			_name = effect.GetType().Name;
 
 			// figure out which properties are useful to add to the inspector
@@ -31,7 +29,7 @@ namespace Nez.ImGuiTools.TypeInspectors
 			{
 				if( prop.DeclaringType == typeof( Effect ) )
 					continue;
-				
+
 				if( !prop.CanRead || !prop.CanWrite || prop.Name == "Name" )
 					continue;
 
@@ -50,9 +48,13 @@ namespace Nez.ImGuiTools.TypeInspectors
 
 		public override void drawMutable()
 		{
-			ImGui.Text( _name );
-			foreach( var i in _inspectors )
-				i.draw();
+			ImGui.Indent();
+			if( ImGui.CollapsingHeader( $"{_name}", ImGuiTreeNodeFlags.FramePadding ) )
+			{
+				foreach( var i in _inspectors )
+					i.draw();
+			}
+			ImGui.Unindent();
 		}
 	}
 }

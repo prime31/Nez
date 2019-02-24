@@ -23,8 +23,8 @@ namespace Nez.ImGuiTools
             if( !isOpen )
                 return;
 
-            ImGui.SetNextWindowPos( new Num.Vector2( Screen.width - 315, Screen.height - 315 ), ImGuiCond.FirstUseEver );
-            ImGui.SetNextWindowSize( new Num.Vector2( 315, 315 ), ImGuiCond.FirstUseEver );
+            ImGui.SetNextWindowPos( new Num.Vector2( Screen.width - 300, Screen.height - 240 ), ImGuiCond.FirstUseEver );
+            ImGui.SetNextWindowSize( new Num.Vector2( 300, 240 ), ImGuiCond.FirstUseEver );
             ImGui.Begin( "Nez Core", ref isOpen );
             drawSettings();
             ImGui.End();
@@ -52,22 +52,6 @@ namespace Nez.ImGuiTools
                 var currentTextureFilter = (int)Core.defaultSamplerState.Filter;
                 if( ImGui.Combo( "Filter", ref currentTextureFilter, _textureFilters, _textureFilters.Length ) )
                     Core.defaultSamplerState.Filter = (TextureFilter)Enum.Parse( typeof( TextureFilter ), _textureFilters[currentTextureFilter] );
-
-                var anisotropy = Core.defaultSamplerState.MaxAnisotropy;
-                if( ImGui.InputInt( "MaxAnisotropy", ref anisotropy ) )
-                    Core.defaultSamplerState.MaxAnisotropy = anisotropy;
-
-                var addressU = (int)Core.defaultSamplerState.AddressU;
-                if( ImGui.Combo( "AddressU", ref addressU, _textureAddressModes, _textureAddressModes.Length ) )
-                    Core.defaultSamplerState.AddressU = (TextureAddressMode)addressU;
-
-                var addressV = (int)Core.defaultSamplerState.AddressV;
-                if( ImGui.Combo( "AddressV", ref addressV, _textureAddressModes, _textureAddressModes.Length ) )
-                    Core.defaultSamplerState.AddressV = (TextureAddressMode)addressV;
-
-                var addressW = (int)Core.defaultSamplerState.AddressW;
-                if( ImGui.Combo( "AddressW", ref addressW, _textureAddressModes, _textureAddressModes.Length ) )
-                    Core.defaultSamplerState.AddressW = (TextureAddressMode)addressW;
             }
         }
     }

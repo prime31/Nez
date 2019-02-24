@@ -50,7 +50,10 @@ namespace Nez
 		/// default SamplerState used by Materials. Note that this must be set at launch! Changing it after that time will result in only
 		/// Materials created after it was set having the new SamplerState
 		/// </summary>
-		public static SamplerState defaultSamplerState = SamplerState.PointClamp;
+		public static SamplerState defaultSamplerState = new SamplerState
+		{
+			Filter = TextureFilter.Point
+		};
 
 		/// <summary>
 		/// default wrapped SamplerState. Determined by the Filter of the defaultSamplerState.

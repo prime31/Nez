@@ -20,15 +20,23 @@ namespace Nez.ImGuiTools.TypeInspectors
 		{
 			var props = new List<AbstractTypeInspector>();
 			var targetType = target.GetType();
+			var isComponentSubclass = targetType.IsSubclassOf( typeof( Component ) );
 
 			var fields = ReflectionUtils.getFields( targetType );
 			foreach( var field in fields )
 			{
-				if( !field.IsPublic && !field.IsDefined( typeof( InspectableAttribute ) ) )
+				var hasInspectableAttribute = field.IsDefined( typeof( InspectableAttribute ) );
+
+				// private fields must have the InspectableAttribute
+				if( !field.IsPublic && !hasInspectableAttribute )
+					continue;
+				
+				// similarly, readonly fields must have the InspectableAttribute
+				if( field.IsInitOnly && !hasInspectableAttribute )
 					continue;
 
-				// skip enabled and entity which is handled elsewhere
-				if( field.Name == "enabled" || field.Name == "entity" )
+				// skip enabled and entity which is handled elsewhere if this is a Component
+				if( isComponentSubclass && ( field.Name == "enabled" || field.Name == "entity" ) )
 					continue;
 
 				var inspector = getInspectorForType( field.FieldType, target, field );
@@ -50,8 +58,14 @@ namespace Nez.ImGuiTools.TypeInspectors
 				if( !prop.CanRead )
 					continue;
 
-				var isPropertyUndefinedOrPublic = !prop.CanWrite || ( prop.CanWrite && prop.SetMethod.IsPublic );
-				if( ( !prop.GetMethod.IsPublic || !isPropertyUndefinedOrPublic ) && !prop.IsDefined( typeof( InspectableAttribute ) ) )
+				var hasInspectableAttribute = prop.IsDefined( typeof( InspectableAttribute ) );
+
+				// private props must have the InspectableAttribute
+				if( !prop.GetMethod.IsPublic && !hasInspectableAttribute )
+					continue;
+
+				// similarly, readonly props must have the InspectableAttribute
+				if( !prop.CanWrite && !hasInspectableAttribute )
 					continue;
 
 				// skip Component.enabled  and entity which is handled elsewhere
@@ -96,20 +110,8 @@ namespace Nez.ImGuiTools.TypeInspectors
 		public static AbstractTypeInspector getInspectorForType( Type valueType, object target, MemberInfo memberInfo )
 		{
 			// built-in types
-			if( valueType == typeof( int ) )
-				return new TI.IntInspector();
-			if( valueType == typeof( float ) )
-				return new TI.FloatInspector();
-			if( valueType == typeof( bool ) )
-				return new TI.BoolInspector();
-			if( valueType == typeof( string ) )
-				return new TI.StringInspector();
-			if( valueType == typeof( Vector2 ) )
-				return new TI.Vector2Inspector();
-			if( valueType == typeof( Vector3 ) )
-				return new TI.Vector3Inspector();
-			if( valueType == typeof( Color ) )
-				return new TI.ColorInspector();
+			if( SimpleTypeInspector.kSupportedTypes.contains( valueType ) )
+				return new TI.SimpleTypeInspector();
 			if( valueType == typeof( Entity ) )
 				return new TI.EntityFieldInspector();
 			if( valueType == typeof( BlendState ) )
@@ -132,7 +134,7 @@ namespace Nez.ImGuiTools.TypeInspectors
 			{
 				if( customInspectorType.inspectorType.GetTypeInfo().IsSubclassOf( typeof( AbstractTypeInspector ) ) )
 					return (AbstractTypeInspector)Activator.CreateInstance( customInspectorType.inspectorType );
-				Debug.warn( $"found CustomInspector {customInspectorType.inspectorType} but it is not a subclass of Inspector" );
+				Debug.warn( $"found CustomInspector {customInspectorType.inspectorType} but it is not a subclass of AbstractTypeInspector" );
 			}
 
 			// Nez types
@@ -165,7 +167,6 @@ namespace Nez.ImGuiTools.TypeInspectors
 
 			return null;
 		}
-
 
 		/// <summary>
 		/// null checks the Effect and creates an Inspector only if it is not null

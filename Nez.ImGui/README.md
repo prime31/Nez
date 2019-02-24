@@ -34,3 +34,8 @@ public override void onRemovedFromEntity()
     Core.getGlobalManager<ImGuiManager>().unregisterDrawCommand( imGuiDraw );
 }
 ```
+
+
+Some notes that need more details later...
+- `CustomInspectorAttribute` example
+- readonly props/fields can be made visible in the inspector by putting an InspectableAttribute on the prop/field.

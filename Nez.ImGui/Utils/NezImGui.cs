@@ -22,9 +22,9 @@ namespace Nez.ImGuiTools
 			ImGui.BeginGroup();
 		}
 
-		public static void EndBorderedGroup() => EndBorderedGroup( new Num.Vector2( 3, 2 ) );
+		public static void EndBorderedGroup() => EndBorderedGroup( new Num.Vector2( 3, 2 ), new Num.Vector2( 0, 3 ) );
 
-		public static void EndBorderedGroup( Num.Vector2 minPadding )
+		public static void EndBorderedGroup( Num.Vector2 minPadding, Num.Vector2 maxPadding = default( Num.Vector2 ) )
 		{
 			ImGui.EndGroup();
 
@@ -34,8 +34,7 @@ namespace Nez.ImGuiTools
 			var min = ImGui.GetItemRectMin();
 			var max = ImGui.GetItemRectMax();
 			max.X = min.X + ImGui.GetContentRegionAvailWidth();
-			max.Y += 3;
-			ImGui.GetWindowDrawList().AddRect( min - minPadding, max, ImGui.ColorConvertFloat4ToU32( color ) );
+			ImGui.GetWindowDrawList().AddRect( min - minPadding, max + maxPadding, ImGui.ColorConvertFloat4ToU32( color ) );
 
 			// this fits just the content, not the full width
 			//ImGui.GetWindowDrawList().AddRect( ImGui.GetItemRectMin() - padding, ImGui.GetItemRectMax() + padding, packedColor );

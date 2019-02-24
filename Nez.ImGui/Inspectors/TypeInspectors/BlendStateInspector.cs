@@ -112,7 +112,7 @@ namespace Nez.ImGuiTools.TypeInspectors
 			inspector.initialize();
 			_inspectors.Add( inspector );
 
-			inspector = new ColorInspector();
+			inspector = new SimpleTypeInspector();
 			inspector.setTarget( this, props.Where( p => p.Name == "BlendFactor" ).First() );
 			inspector.initialize();
 			_inspectors.Add( inspector );
