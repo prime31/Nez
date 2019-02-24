@@ -257,7 +257,6 @@ Several options are currently available for JSON encoding, and can be passed in 
 * `PrettyPrint` will output nicely formatted JSON to make it more readable.
 * `PreserveReferencesHandling` will add extra metadata into the JSON so an object graph with circular references can be rebuilt
 * `TypeNameHandling` lets you specify when type names will be injected into the JSON
-* `EnforceHeirarchyOrderEnabled` will ensure fields and properties are encoded in class heirarchy order, from the root base class on down, but comes at a slight performance cost.
 
 
 ## Using Variants

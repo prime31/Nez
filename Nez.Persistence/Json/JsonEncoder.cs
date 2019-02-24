@@ -7,6 +7,9 @@ using System.Text;
 
 namespace Nez.Persistence
 {
+	/// <summary>
+	/// responsible for serializing an object to JSON
+	/// </summary>
 	public sealed class JsonEncoder : IJsonEncoder
 	{
 		static readonly StringBuilder _builder = new StringBuilder( 2000 );
@@ -131,7 +134,7 @@ namespace Nez.Persistence
 
 			WriteOptionalTypeHint( type, forceTypeHint );
 
-			foreach( var field in _cacheResolver.GetEncodableFieldsForType( type, _settings.EnforceHeirarchyOrderEnabled ) )
+			foreach( var field in _cacheResolver.GetEncodableFieldsForType( type ) )
 			{
 				WriteValueDelimiter();
 				WriteString( field.Name );
@@ -139,7 +142,7 @@ namespace Nez.Persistence
 				EncodeValue( field.GetValue( value ) );
 			}
 
-			foreach( var property in _cacheResolver.GetEncodablePropertiesForType( type, _settings.EnforceHeirarchyOrderEnabled ) )
+			foreach( var property in _cacheResolver.GetEncodablePropertiesForType( type ) )
 			{
 				if( property.CanRead )
 				{
@@ -170,14 +173,12 @@ namespace Nez.Persistence
 		{
 			WriteStartObject();
 
-			var firstItem = true;
 			foreach( var e in value.Keys )
 			{
 				WriteValueDelimiter();
 				WriteString( e );
 				AppendColon();
 				EncodeValue( value[e] );
-				firstItem = false;
 			}
 
 			WriteEndObject();

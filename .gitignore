@@ -63,3 +63,4 @@ bld/
 *.nuget.props
 *.nuget.targets
 Nez.Portable/project.lock.json
+Nez.Portable/Nez.FNA.csproj.nuget.cache

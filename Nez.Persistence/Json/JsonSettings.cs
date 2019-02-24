@@ -40,7 +40,6 @@ namespace Nez.Persistence
 
 		public TypeNameHandling TypeNameHandling = TypeNameHandling.None;
 		public bool PrettyPrint;
-		public bool EnforceHeirarchyOrderEnabled;
 		public bool PreserveReferencesHandling;
 		public JsonTypeConverter[] TypeConverters;
 

@@ -79,10 +79,10 @@ namespace Nez.Persistence
 
 		#region FieldInfo methods
 
-		internal IEnumerable<FieldInfo> GetEncodableFieldsForType( Type type, bool enforceHeirarchyOrderEnabled )
+		internal IEnumerable<FieldInfo> GetEncodableFieldsForType( Type type )
 		{
 			// cleanse the fields based on our attributes
-			foreach( var kvPair in GetFieldInfoCache( type, enforceHeirarchyOrderEnabled ) )
+			foreach( var kvPair in GetFieldInfoCache( type ) )
 			{
 				if( IsMemberInfoEncodeableOrDecodeable( kvPair.Value, kvPair.Value.IsPublic ) )
 					yield return kvPair.Value;
@@ -108,7 +108,7 @@ namespace Nez.Persistence
 			return FindFieldFromDecodeAlias( type, name );
 		}
 
-		Dictionary<string, FieldInfo> GetFieldInfoCache( Type type, bool enforceHeirarchyOrderEnabled = false )
+		Dictionary<string, FieldInfo> GetFieldInfoCache( Type type )
 		{
 			if( _fieldInfoCache.TryGetValue( type, out var map ) )
 			{
@@ -119,29 +119,7 @@ namespace Nez.Persistence
 			map = new Dictionary<string, FieldInfo>();
 			_fieldInfoCache[type] = map;
 
-			IEnumerable<FieldInfo> allFields = null;
-			if( enforceHeirarchyOrderEnabled )
-			{
-				var types = new Stack<Type>();
-				while( type != null )
-				{
-					types.Push( type );
-					type = type.BaseType;
-				}
-
-				var fields = new List<FieldInfo>();
-				while( types.Count > 0 )
-				{
-					fields.AddRange( types.Pop().GetFields( VariantConverter.instanceBindingFlags ) );
-				}
-
-				allFields = fields;
-			}
-			else
-			{
-				allFields = type.GetFields( VariantConverter.instanceBindingFlags );
-			}
-
+			var allFields = type.GetFields( VariantConverter.instanceBindingFlags );
 			// cleanse the fields based on our attributes
 			foreach( var field in allFields )
 			{
@@ -174,10 +152,10 @@ namespace Nez.Persistence
 
 		#region PropertyInfo methods
 
-		internal IEnumerable<PropertyInfo> GetEncodablePropertiesForType( Type type, bool enforceHeirarchyOrderEnabled )
+		internal IEnumerable<PropertyInfo> GetEncodablePropertiesForType( Type type )
 		{
 			// cleanse the fields based on our attributes
-			foreach( var kvPair in GetPropertyInfoCache( type, enforceHeirarchyOrderEnabled ) )
+			foreach( var kvPair in GetPropertyInfoCache( type ) )
 			{
 				if( IsMemberInfoEncodeableOrDecodeable( kvPair.Value, true ) )
 				{
@@ -198,7 +176,7 @@ namespace Nez.Persistence
 			return FindPropertyFromDecodeAlias( type, name );
 		}
 
-		Dictionary<string, PropertyInfo> GetPropertyInfoCache( Type type, bool enforceHeirarchyOrderEnabled = false )
+		Dictionary<string, PropertyInfo> GetPropertyInfoCache( Type type )
 		{
 			if( _propertyInfoCache.TryGetValue( type, out var map ) )
 			{
@@ -209,29 +187,7 @@ namespace Nez.Persistence
 			map = new Dictionary<string, PropertyInfo>();
 			_propertyInfoCache[type] = map;
 
-			IEnumerable<PropertyInfo> allProps = null;
-			if( enforceHeirarchyOrderEnabled )
-			{
-				var types = new Stack<Type>();
-				while( type != null )
-				{
-					types.Push( type );
-					type = type.BaseType;
-				}
-
-				var fields = new List<PropertyInfo>();
-				while( types.Count > 0 )
-				{
-					fields.AddRange( types.Pop().GetProperties( BindingFlags.DeclaredOnly | VariantConverter.instanceBindingFlags ) );
-				}
-
-				allProps = fields;
-			}
-			else
-			{
-				allProps = type.GetProperties( VariantConverter.instanceBindingFlags );
-			}
-
+			var allProps = type.GetProperties( VariantConverter.instanceBindingFlags );
 			// cleanse the fields based on our attributes
 			foreach( var prop in allProps )
 			{
