@@ -43,7 +43,8 @@ namespace Nez.ImGuiTools.TypeInspectors
                         }
                     }
 
-                    ImGui.SameLine( 0, ImGui.GetWindowWidth() * 0.65f - ImGui.GetItemRectSize().X + ImGui.GetStyle().ItemInnerSpacing.X - ImGui.GetStyle().IndentSpacing );
+                    ImGui.SameLine( ImGui.GetWindowWidth() - ImGui.GetItemRectSize().X - ImGui.GetStyle().ItemInnerSpacing.X );
+					// ImGui.SameLine( 0, ImGui.GetWindowWidth() * 0.65f - ImGui.GetItemRectSize().X + ImGui.GetStyle().ItemInnerSpacing.X - ImGui.GetStyle().IndentSpacing );
                     if( ImGui.Button( "Clear" ) )
                     {
                         ImGui.OpenPopup( "Clear Data" );

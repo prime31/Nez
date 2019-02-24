@@ -98,7 +98,7 @@ namespace Nez.ImGuiTools
 			{
                 result = false;
 
-				ImGui.Text( message );
+				ImGui.TextWrapped( message );
 				MediumVerticalSpace();
 				ImGui.Separator();
 				SmallVerticalSpace();

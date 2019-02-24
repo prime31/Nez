@@ -6,6 +6,8 @@ namespace Nez.ImGuiTools.TypeInspectors
 {
 	public abstract class AbstractTypeInspector
 	{
+		protected int _scopeId = NezImGui.SetScopeId();
+
 		protected object _target;
 		protected string _name;
 		protected Type _valueType;
@@ -29,6 +31,7 @@ namespace Nez.ImGuiTools.TypeInspectors
 		/// </summary>
 		public void draw()
 		{
+			ImGui.PushID( _scopeId );
 			if( _isReadOnly )
 			{
 				ImGui.PushStyleVar( ImGuiStyleVar.Alpha, ImGui.GetStyle().Alpha * 0.5f );
@@ -39,6 +42,7 @@ namespace Nez.ImGuiTools.TypeInspectors
 			{
 				drawMutable();
 			}
+			ImGui.PopID();
 		}
 
 		public abstract void drawMutable();

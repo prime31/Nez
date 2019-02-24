@@ -11,7 +11,6 @@ namespace Nez.ImGuiTools.TypeInspectors
 		static Type[] _allowedTypes = { typeof( int ), typeof( float ), typeof( string ), typeof( bool ), typeof( Vector2 ), typeof( Vector3 ) };
 		Type _parameterType;
 		string _parameterName;
-		int _scopeId;
 		
 		int _intParam;
 		float _floatParam;
@@ -59,8 +58,6 @@ namespace Nez.ImGuiTools.TypeInspectors
 
 		public override void drawMutable()
 		{
-			ImGui.PushID( _scopeId );
-
 			if( ImGui.Button( _name ) )
 				onButtonClicked();
 			
@@ -83,8 +80,6 @@ namespace Nez.ImGuiTools.TypeInspectors
 			ImGui.PopItemWidth();
 
 			handleTooltip();
-
-			ImGui.PopID();
 		}
 
 		void onButtonClicked()
