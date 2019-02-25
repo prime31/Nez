@@ -286,11 +286,9 @@ Variant's can also be turned back into strongly typed objects via the `VariantCo
 
 ## Advanced: JsonTypeConverter for custom encoding/decoding
 
-Json lets you fully take over the encoding to JSON and the conversion back to a strongly typed object. You can do this by creating an `JsonTypeConverter<T>` and implementing the abstract methods. Any time Json comes accross an object of Type `T` it will pass it off to your `JsonObjectConverter`. Note that you can turn down the job by overriding `CanConvert` or `CanWrite` properties.
+Json lets you add some custom data to the JSON and then fetch it for any strongly typed object. You can do this by creating an `JsonTypeConverter<T>` and implementing the abstract methods. Any time Json comes accross an object of Type `T` it will pass it off to your `JsonObjectConverter`.
 
-The `WriteJson` method will be passed a `IJsonEncoder` which can be used to write the JSON for your object. The `ConvertToObject` method will be passed an `IObjectConverter` which can be used to convert the raw data back into your object.
-
-You can add fields, remove fields or set any data on the object that you want when overriding these methods.
+The `WriteJson` method will be passed an `IJsonEncoder` which can be used to write custom JSON for your object. The `OnFoundCustomData` method will be passed any key/value pairs that do not have corresponding fields/properties.
 
 
 ```csharp
@@ -305,21 +303,21 @@ class DoodleJsonConverter : JsonTypeConverter<Doodle>
 {
 	public override void WriteJson( IJsonEncoder encoder, Doodle value )
 	{
-		// note the encoder.WriteOptionalReferenceData and WriteOptionalTypeHint methods! They are important if you want
-		// reference tracking to work
-		encoder.ToJsonValue( true );
+		// always call WriteValueDelimiter before writing a key/value pair!
+		encoder.WriteValueDelimiter();
+		encoder.WriteString( "key-that-isnt-on-object" );
+		encoder.AppendColon();
+		encoder.EncodeValue( true );
+
+		encoder.WriteValueDelimiter();
+		encoder.WriteString( "another_key" );
+		encoder.AppendColon();
+		encoder.EncodeValue( "with a value" );
 	}
 
-	public override Doodle ConvertToObject( IObjectConverter converter, Type objectType, Doodle existingValue, ProxyObject data )
+	public override void OnFoundCustomData( Doodle instance, string key, object value )
 	{
-		var doodle = new Doodle();
-		foreach( var bits in data )
-		{
-			// do something with data
-			Debug.log( $"field name: {bits.Key}, value: {bits.Value}" );
-		}
-
-		return doodle;
+		Debug.log( $"field name: {key}, value: {value}" );
 	}
 }
 
@@ -330,8 +328,11 @@ To use a `JsonTypeConverter` you just have to tell Json about it by sticking it 
 ```csharp
 var doodle = new Doodle();
 
+// convert to JSON. The WriteJson method will be called
 var settings = new JsonSettings { TypeConverters = new JsonTypeConverter[] { new DoodleJsonConverter() } };
 var json = Json.ToJson( doodle, settings );
+
+// rehydrate the JSON. The OnFoundCustomData will be called twice given the demo code above.
 var newDoodle = Json.Decode<Doodle>( json, settings );
 ```
 

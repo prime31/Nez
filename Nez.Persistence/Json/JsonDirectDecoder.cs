@@ -486,7 +486,7 @@ namespace Nez.Persistence
 
 			// check for a JsonConverter and use it if we have one
 			var converter = _settings?.GetTypeConverterForType( obj.GetType() );
-			if( converter != null && converter.WantsFoundCustomDataOnRead )
+			if( converter != null )
 			{
 				converter.OnFoundCustomData( obj, key, orhpanedValue );
 			}

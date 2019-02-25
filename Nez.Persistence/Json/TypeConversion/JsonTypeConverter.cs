@@ -3,8 +3,6 @@ namespace Nez.Persistence
 {
 	public abstract class JsonTypeConverter
 	{
-		public virtual bool WantsFoundCustomDataOnRead { get; } = true;
-		public virtual bool WantsWrite { get; } = true;
 		public abstract bool CanConvertType( Type objectType );
 
 		public abstract void WriteJson( IJsonEncoder encoder, object value );
