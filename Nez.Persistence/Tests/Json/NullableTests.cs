@@ -26,7 +26,11 @@ namespace Nez.Persistence.JsonTests
 			System.Diagnostics.Debug.WriteLine( json );
 			var obj = Json.FromJson<NullableMembers>( json );
 			Assert.AreEqual( hasNull.nullableBool, obj.nullableBool );
-		}
+
+
+            obj = JsonDirectDecoder.FromJson<NullableMembers>( json );
+            Assert.AreEqual( hasNull.nullableBool, obj.nullableBool );
+        }
 
 		[Test]
 		public void Nullable_BoolIsTrue()
@@ -38,8 +42,12 @@ namespace Nez.Persistence.JsonTests
 			System.Diagnostics.Debug.WriteLine( json );
 
 			var obj = Json.FromJson<NullableMembers>( json );
-			Assert.AreEqual( hasNull.nullableBool, obj.nullableBool );
-		}
+            Assert.AreEqual( hasNull.nullableBool, obj.nullableBool );
+
+
+            obj = JsonDirectDecoder.FromJson<NullableMembers>( json );
+            Assert.AreEqual( hasNull.nullableBool, obj.nullableBool );
+        }
 
 		[Test]
 		public void Nullable_BoolIsFalse()
@@ -52,7 +60,11 @@ namespace Nez.Persistence.JsonTests
 
 			var obj = Json.FromJson<NullableMembers>( json );
 			Assert.AreEqual( hasNull.nullableBool, obj.nullableBool );
-		}
+
+
+            obj = JsonDirectDecoder.FromJson<NullableMembers>( json );
+            Assert.AreEqual( hasNull.nullableBool, obj.nullableBool );
+        }
 
 		[Test]
 		public void Nullable_IntIsNull()
@@ -63,7 +75,11 @@ namespace Nez.Persistence.JsonTests
 			System.Diagnostics.Debug.WriteLine( json );
 			var obj = Json.FromJson<NullableMembers>( json );
 			Assert.AreEqual( hasNull.nullableInt, obj.nullableInt );
-		}
+
+
+            obj = JsonDirectDecoder.FromJson<NullableMembers>( json );
+            Assert.AreEqual( hasNull.nullableInt, obj.nullableInt );
+        }
 
 		[Test]
 		public void Nullable_IntHasValue()
@@ -76,7 +92,11 @@ namespace Nez.Persistence.JsonTests
 
 			var obj = Json.FromJson<NullableMembers>( json );
 			Assert.AreEqual( hasNull.nullableInt, obj.nullableInt );
-		}
+
+
+            obj = JsonDirectDecoder.FromJson<NullableMembers>( json );
+            Assert.AreEqual( hasNull.nullableInt, obj.nullableInt );
+        }
 
 		[Test]
 		public void Nullable_FloatIsNull()
@@ -89,7 +109,11 @@ namespace Nez.Persistence.JsonTests
 
 			var obj = Json.FromJson<NullableMembers>( json );
 			Assert.AreEqual( hasNull.nullableFloat, obj.nullableFloat );
-		}
+
+
+            obj = JsonDirectDecoder.FromJson<NullableMembers>( json );
+            Assert.AreEqual( hasNull.nullableFloat, obj.nullableFloat );
+        }
 
 		[Test]
 		public void Nullable_FloatIsHasValue()
@@ -102,19 +126,10 @@ namespace Nez.Persistence.JsonTests
 
 			var obj = Json.FromJson<NullableMembers>( json );
 			Assert.AreEqual( hasNull.nullableFloat, obj.nullableFloat );
-		}
 
 
-
-
-		public static bool isNullableType( Type type )
-		{
-			return type.IsGenericType && type.GetGenericTypeDefinition() == typeof( Nullable<> );
-		}
-
-		public static object toNullableType( object obj, Type nullableType )
-		{
-			return obj == null ? null : Convert.ChangeType( obj, Nullable.GetUnderlyingType( nullableType ), CultureInfo.InvariantCulture );
-		}
+            obj = JsonDirectDecoder.FromJson<NullableMembers>( json );
+            Assert.AreEqual( hasNull.nullableFloat, obj.nullableFloat );
+        }
 	}
 }
