@@ -14,7 +14,7 @@ namespace Nez.Persistence
 		/// <summary>
 		/// cache of all types that have been found. persistant accross calls.
 		/// </summary>
-		static readonly Dictionary<string, Type> typeCache = new Dictionary<string, Type>();
+		static readonly Dictionary<string, Type> _typeCache = new Dictionary<string, Type>();
 		readonly CacheResolver _cacheResolver = new CacheResolver();
 		readonly JsonSettings _settings;
 
@@ -38,7 +38,7 @@ namespace Nez.Persistence
 				return null;
 			}
 
-			if( typeCache.TryGetValue( fullName, out var type ) )
+			if( _typeCache.TryGetValue( fullName, out var type ) )
 			{
 				return type;
 			}
@@ -48,7 +48,7 @@ namespace Nez.Persistence
 				type = assembly.GetType( fullName );
 				if( type != null )
 				{
-					typeCache.Add( fullName, type );
+					_typeCache.Add( fullName, type );
 					return type;
 				}
 			}
@@ -157,47 +157,37 @@ namespace Nez.Persistence
 			var refId = data.ReferenceId;
 			if( refId != null )
 			{
-				return _cacheResolver.GetReference( refId );
+				return _cacheResolver.ResolveReference( refId );
 			}
 
 
 			bool didCreateInstanceViaConverter = false;
 			object instance;
 
-			// check for a JsonConverter and use it if we have one
-			var converter = _settings?.GetTypeConverterForType( type );
-			if( converter != null )
+			// If there's a type hint, use it to create the instance.
+			var typeHint = data.TypeHint;
+			if( typeHint != null && typeHint != type.FullName )
 			{
-				instance = converter.ConvertToObject( this, type, null, data );
-				didCreateInstanceViaConverter = true;
-			}
-			else
-			{
-				// If there's a type hint, use it to create the instance.
-				var typeHint = data.TypeHint;
-				if( typeHint != null && typeHint != type.FullName )
+				var makeType = FindType( typeHint );
+				if( makeType == null )
 				{
-					var makeType = FindType( typeHint );
-					if( makeType == null )
-					{
-						throw new TypeLoadException( "Could not load type '" + typeHint + "'." );
-					}
+					throw new TypeLoadException( $"Could not find type '{typeHint}' in any loaded assemblies" );
+				}
 
-					if( type.IsAssignableFrom( makeType ) )
-					{
-						instance = _cacheResolver.CreateInstance( makeType );
-						type = makeType;
-					}
-					else
-					{
-						throw new InvalidCastException( "Cannot assign type '" + typeHint + "' to type '" + type.FullName + "'." );
-					}
+				if( type.IsAssignableFrom( makeType ) )
+				{
+					instance = _cacheResolver.CreateInstance( makeType );
+					type = makeType;
 				}
 				else
 				{
-					// We don't have a type hint, so just instantiate the type we have.
-					instance = _cacheResolver.CreateInstance( type );
+					throw new InvalidCastException( "Cannot assign type '" + typeHint + "' to type '" + type.FullName + "'." );
 				}
+			}
+			else
+			{
+				// We don't have a type hint, so just instantiate the type we have.
+				instance = _cacheResolver.CreateInstance( type );
 			}
 
 			// if there is an instanceId, cache the object in case any other objects are referencing it
@@ -237,7 +227,7 @@ namespace Nez.Persistence
 					continue;
 				}
 
-				var property = _cacheResolver.GetEncodeableProperty( type, pair.Key );
+				var property = _cacheResolver.GetProperty( type, pair.Key );
 				if( property != null && property.CanWrite && property.IsDefined( Json.includeAttrType ) )
 				{
 					if( type.IsValueType )

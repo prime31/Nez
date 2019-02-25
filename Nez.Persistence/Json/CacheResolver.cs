@@ -46,7 +46,7 @@ namespace Nez.Persistence
 		}
 
 		/// <summary>
-		/// tracks a reference to an object for later fetching via <seealso cref="GetReference"/>
+		/// tracks a reference to an object for later fetching via <seealso cref="ResolveReference"/>
 		/// </summary>
 		/// <param name="id">Identifier.</param>
 		/// <param name="instance">Instance.</param>
@@ -57,7 +57,7 @@ namespace Nez.Persistence
 		/// </summary>
 		/// <returns>The reference.</returns>
 		/// <param name="refId">Reference identifier.</param>
-		internal object GetReference( string refId ) => _referenceTracker[refId];
+		internal object ResolveReference( string refId ) => _referenceTracker[refId];
 
 		/// <summary>
 		/// Creates an instance of <paramref name="type"/> and caches the ConstructorInfo for future use
@@ -182,7 +182,7 @@ namespace Nez.Persistence
 		/// <returns>The encodeable property.</returns>
 		/// <param name="type">Type.</param>
 		/// <param name="name">Name.</param>
-		internal PropertyInfo GetEncodeableProperty( Type type, string name )
+		internal PropertyInfo GetProperty( Type type, string name )
 		{
 			var map = GetPropertyInfoCache( type );
 			if( map.TryGetValue( name, out var propInfo ) )

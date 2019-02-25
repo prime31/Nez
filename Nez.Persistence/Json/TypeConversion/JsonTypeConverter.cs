@@ -3,15 +3,13 @@ namespace Nez.Persistence
 {
 	public abstract class JsonTypeConverter
 	{
-		public virtual bool CanConvert { get; } = true;
-
-		public virtual bool CanWrite { get; } = true;
-
+		public virtual bool WantsFoundCustomDataOnRead { get; } = true;
+		public virtual bool WantsWrite { get; } = true;
 		public abstract bool CanConvertType( Type objectType );
 
 		public abstract void WriteJson( IJsonEncoder encoder, object value );
 
-		public abstract object ConvertToObject( IObjectConverter converter, Type objectType, object existingValue, ProxyObject data );
+		public abstract void OnFoundCustomData( object instance, string key, object value );
 	}
 
 	/// <summary>
@@ -36,19 +34,20 @@ namespace Nez.Persistence
 		/// <param name="value">Value.</param>
 		public abstract void WriteJson( IJsonEncoder encoder, T value );
 
-		public override object ConvertToObject( IObjectConverter converter, Type objectType, object existingValue, ProxyObject data )
+		public override void OnFoundCustomData( object instance, string key, object value )
 		{
-			return ConvertToObject( converter, objectType, (T)existingValue, data );
+			OnFoundCustomData( (T)instance, key, value );
 		}
 
 		/// <summary>
-		/// If CanConvert returns true this will be called so you can repopulate your object. 
+		/// If CanConvert returns true this will be called anytime a key/value pair that isnt found via
+		/// reflection is in the JSON
 		/// </summary>
 		/// <returns>The to object.</returns>
-		/// <param name="converter">Converter.</param>
-		/// <param name="objectType">Object type.</param>
-		/// <param name="existingValue">Existing value.</param>
-		/// <param name="data">Data.</param>
-		public abstract T ConvertToObject( IObjectConverter converter, Type objectType, T existingValue, ProxyObject data );
+		/// <param name="instance">Instance.</param>
+		/// <param name="key">Key.</param>
+		/// <param name="value">Value.</param>
+		public abstract void OnFoundCustomData( T instance, string key, object value );
+	
 	}
 }

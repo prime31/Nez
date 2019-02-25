@@ -115,14 +115,6 @@ namespace Nez.Persistence
 		{
 			var type = value.GetType();
 
-			// check for an override converter and use it if present
-			var converter = _settings.GetTypeConverterForType( type );
-			if( converter != null && converter.CanWrite )
-			{
-				converter.WriteJson( this, value );
-				return;
-			}
-
 			WriteStartObject();
 
 			if( WriteOptionalReferenceData( value ) )
@@ -132,6 +124,13 @@ namespace Nez.Persistence
 			}
 
 			WriteOptionalTypeHint( type, forceTypeHint );
+
+			// check for an override converter and use it if present
+			var converter = _settings.GetTypeConverterForType( type );
+			if( converter != null && converter.WantsWrite )
+			{
+				converter.WriteJson( this, value );
+			}
 
 			foreach( var field in _cacheResolver.GetEncodableFieldsForType( type ) )
 			{

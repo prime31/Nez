@@ -9,16 +9,16 @@ namespace Nez.Persistence
 	public sealed class SerializedAttribute : Attribute { }
 
 	/// <summary>
-	/// Mark methods to be called after an object is decoded.
-	/// </summary>
-	[AttributeUsage( AttributeTargets.Method )]
-	public class AfterDecodeAttribute : Attribute { }
-
-	/// <summary>
 	/// Mark methods to be called before an object is encoded.
 	/// </summary>
 	[AttributeUsage( AttributeTargets.Method )]
 	public class BeforeEncodeAttribute : Attribute { }
+
+	/// <summary>
+	/// Mark methods to be called after an object is decoded.
+	/// </summary>
+	[AttributeUsage( AttributeTargets.Method )]
+	public class AfterDecodeAttribute : Attribute { }
 
 	/// <summary>
 	/// Provide field and property aliases when an object is decoded.

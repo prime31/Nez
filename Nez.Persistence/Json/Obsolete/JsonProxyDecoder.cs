@@ -4,14 +4,13 @@ using System;
 
 namespace Nez.Persistence
 {
-	public sealed class JsonDecoder : IDisposable
+	public sealed class JsonProxyDecoder : IDisposable
 	{
 		#region Fields and Props
 
 		const string kWhiteSpace = " \t\n\r";
 		const string kWordBreak = " \t\n\r{}[],:\"";
 		static readonly StringBuilder _builder = new StringBuilder();
-
 
 		enum Token
 		{
@@ -134,13 +133,13 @@ namespace Nez.Persistence
 
 		public static Variant FromJson( string jsonString )
 		{
-			using( var instance = new JsonDecoder( jsonString ) )
+			using( var instance = new JsonProxyDecoder( jsonString ) )
 			{
-				return instance.DecodeValue();
+				return instance.DecodeValue( instance.NextToken );
 			}
 		}
 
-		JsonDecoder( string jsonString )
+		JsonProxyDecoder( string jsonString )
 		{
 			_json = new StringReader( jsonString );
 		}
@@ -149,6 +148,29 @@ namespace Nez.Persistence
 		{
 			_json.Dispose();
 			_json = null;
+		}
+
+		Variant DecodeValue( Token token )
+		{
+			switch( token )
+			{
+				case Token.String:
+					return DecodeString();
+				case Token.Number:
+					return DecodeNumber();
+				case Token.OpenBrace:
+					return DecodeObject();
+				case Token.OpenBracket:
+					return DecodeArray();
+				case Token.True:
+					return new ProxyBoolean( true );
+				case Token.False:
+					return new ProxyBoolean( false );
+				case Token.Null:
+					return null;
+				default:
+					return null;
+			}
 		}
 
 		ProxyObject DecodeObject()
@@ -185,7 +207,7 @@ namespace Nez.Persistence
 						_json.Read();
 
 						// Value
-						proxy.Add( key, DecodeValue() );
+						proxy.Add( key, DecodeValue( NextToken ) );
 						break;
 				}
 			}
@@ -214,41 +236,12 @@ namespace Nez.Persistence
 						parsing = false;
 						break;
 					default:
-						proxy.Add( DecodeByToken( nextToken ) );
+						proxy.Add( DecodeValue( nextToken ) );
 						break;
 				}
 			}
 
 			return proxy;
-		}
-
-		Variant DecodeValue()
-		{
-			var nextToken = NextToken;
-			return DecodeByToken( nextToken );
-		}
-
-		Variant DecodeByToken( Token token )
-		{
-			switch( token )
-			{
-				case Token.String:
-					return DecodeString();
-				case Token.Number:
-					return DecodeNumber();
-				case Token.OpenBrace:
-					return DecodeObject();
-				case Token.OpenBracket:
-					return DecodeArray();
-				case Token.True:
-					return new ProxyBoolean( true );
-				case Token.False:
-					return new ProxyBoolean( false );
-				case Token.Null:
-					return null;
-				default:
-					return null;
-			}
 		}
 
 		Variant DecodeString()

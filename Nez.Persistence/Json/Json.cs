@@ -71,7 +71,7 @@ namespace Nez.Persistence
 		public static Variant FromJson( string json )
 		{
 			System.Diagnostics.Debug.Assert( json != null );
-			return JsonDecoder.FromJson( json );
+			return JsonProxyDecoder.FromJson( json );
 		}
 
 		/// <summary>
@@ -83,13 +83,13 @@ namespace Nez.Persistence
 		/// <typeparam name="T">The 1st type parameter.</typeparam>
 		public static T FromJson<T>( string json, JsonSettings settings = null )
 		{
-			return VariantConverter.Decode<T>( JsonDecoder.FromJson( json ), settings );
+			return VariantConverter.Decode<T>( JsonProxyDecoder.FromJson( json ), settings );
 		}
 
 		public static T FromJson<T>( string json, params JsonTypeConverter[] converters )
 		{
 			var settings = new JsonSettings { TypeConverters = converters };
-			return VariantConverter.Decode<T>( JsonDecoder.FromJson( json ), settings );
+			return VariantConverter.Decode<T>( JsonProxyDecoder.FromJson( json ), settings );
 		}
 
 		/// <summary>
@@ -101,13 +101,13 @@ namespace Nez.Persistence
 		public static T FromJson<T>( string json )
 		{
 			System.Diagnostics.Debug.Assert( json != null );
-			return VariantConverter.Decode<T>( JsonDecoder.FromJson( json ) );
+			return VariantConverter.Decode<T>( JsonProxyDecoder.FromJson( json ) );
 		}
 
 		public static void FromJsonOverwrite( string json, object item )
 		{
 			System.Diagnostics.Debug.Assert( json != null );
-			VariantConverter.DecodeInto( JsonDecoder.FromJson( json ), out item );
+			JsonDirectDecoder.FromJsonOverwrite( json, item );
 		}
 
 	}
