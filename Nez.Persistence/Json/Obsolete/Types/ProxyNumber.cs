@@ -29,21 +29,21 @@ namespace Nez.Persistence
 				}
 				else
 				{
-					if( UInt64.TryParse( value, NumberStyles.Float, NumberFormatInfo.InvariantInfo, out ulong parsedValue ) )
+					if( ulong.TryParse( value, NumberStyles.Float, NumberFormatInfo.InvariantInfo, out ulong parsedValue ) )
 					{
 						return parsedValue;
 					}
 				}
 			}
 
-			if( Decimal.TryParse( value, NumberStyles.Float, NumberFormatInfo.InvariantInfo, out decimal decimalValue ) )
+			if( decimal.TryParse( value, NumberStyles.Float, NumberFormatInfo.InvariantInfo, out decimal decimalValue ) )
 			{
 				// Check for decimal underflow.
-				if( decimalValue == Decimal.Zero )
+				if( decimalValue == decimal.Zero )
 				{
 					if( double.TryParse( value, NumberStyles.Float, NumberFormatInfo.InvariantInfo, out double parsedValue ) )
 					{
-						if( Math.Abs( parsedValue ) > Double.Epsilon )
+						if( Math.Abs( parsedValue ) > double.Epsilon )
 						{
 							return parsedValue;
 						}
