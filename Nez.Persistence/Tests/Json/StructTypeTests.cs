@@ -38,13 +38,16 @@ namespace Nez.Persistence.JsonTests
 		[Test]
 		public void LoadStruct()
 		{
-			var testStruct = VariantConverter.Decode<TestStruct>( Json.FromJson( "{\"x\":5,\"y\":7,\"z\":3}" ) );
+			var testStruct = Json.FromJson<TestStruct>( "{\"x\":5,\"y\":7,\"z\":3}" );
 
 			Assert.AreEqual( 5, testStruct.x );
 			Assert.AreEqual( 7, testStruct.y );
 			Assert.AreEqual( 0, testStruct.z ); // should not get assigned
 
 			Assert.IsTrue( LoadCallbackFired );
+
+
+			var wtf = JsonDirectDecoder.FromJson<TestStruct>( "{\"x\":5,\"y\":7,\"z\":3}" );
 		}
 	}
 }

@@ -1,5 +1,4 @@
-﻿using Nez.Persistence;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using System.Collections.Generic;
 
 
@@ -10,16 +9,17 @@ namespace Nez.Persistence.JsonTests
 	{
 		class Entity
 		{
+			[Serialized]
 			public bool enabled { get; set; } = true;
 			public List<Component> components;
 
-			[BeforeEncodeAttribute]
+			[BeforeEncode]
 			public void BeforeDecode()
 			{
 				System.Console.WriteLine( "Entity.BeforeEncode" );
 			}
 
-			[AfterDecodeAttribute]
+			[AfterDecode]
 			public void AfterDecode()
 			{
 				System.Console.WriteLine( "Entity.AfterDecode" );
@@ -51,13 +51,17 @@ namespace Nez.Persistence.JsonTests
 
 			var outEntity = Json.FromJson<Entity>( json );
 			Assert.IsInstanceOf( typeof( Sprite ), outEntity.components[1] );
+
+
+			outEntity = JsonDirectDecoder.FromJson<Entity>( json );
+			Assert.IsInstanceOf( typeof( Sprite ), outEntity.components[1] );
 		}
 
 		[Test]
 		public void PreserveReferences()
 		{
 			var entity = new Entity();
-			entity.components = new List<Component> { new Component(), new Sprite() { entity = entity } };
+			entity.components = new List<Component> { new Component(), new Sprite { entity = entity } };
 
 			var json = Json.ToJson( entity, new JsonSettings
 			{
@@ -67,6 +71,10 @@ namespace Nez.Persistence.JsonTests
 			} );
 
 			var outEntity = Json.FromJson<Entity>( json );
+			Assert.AreEqual( outEntity, outEntity.components[1].entity );
+
+
+			outEntity = JsonDirectDecoder.FromJson<Entity>( json );
 			Assert.AreEqual( outEntity, outEntity.components[1].entity );
 		}
 
