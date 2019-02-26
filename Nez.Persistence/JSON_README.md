@@ -153,7 +153,7 @@ Json.FromJsonOverwrite( json, testClass );
 
 Finally, you'll notice that `TestClass` has the methods `BeforeEncode()` and `AfterDecode()` which have the `BeforeEncode` and `AfterDecode` attributes. These methods will be called *before* the object starts being serialized and *after* the object has been fully deserialized. This is useful when some further preparation or initialization logic is required.
 
-By default, public fields and properties are encoded, not private fields. You can tag any field or property to be included with the `SerializedAttribute` attribute, or force a public field to be excluded with the `NonSerialized` attribute.
+By default, public fields and properties are encoded, not private fields. You can tag any field or property to be included with the `Serialized` attribute, or force a public field to be excluded with the `NonSerialized` attribute.
 
 
 ## Decode Aliases
@@ -210,7 +210,7 @@ class Sprite : Component
 {}
 ```
 
-Now, let's create an `Entity` and populate it with a `Component` and a `Sprite` then serialize it to JSON. Note the `JsonSettings` object. It lets you opt in to the features. Once really neat option is the `TypeNameHandling.Auto`. Json will figure out on the fly if it needs to inject the objects type into the JSON or not. You'll see the results in the JSON below.
+Now, let's create an `Entity` and populate it with a `Component` and a `Sprite` then serialize it to JSON. Note the `JsonSettings` object. It lets you opt in to the features. One really neat option is the `TypeNameHandling.Auto`. Json will figure out on the fly if it needs to inject the objects type into the JSON or not. You'll see the results in the JSON below.
 
 ```csharp
 var entity = new Entity
@@ -224,7 +224,8 @@ var settings = new JsonSettings
 	TypeNameHandling = TypeNameHandling.Auto,
 	PreserveReferencesHandling = true
 };
-// or var settings = JsonSettings.HandlesReferences
+
+// or for convenience since this is used often: var settings = JsonSettings.HandlesReferences
 var json = Json.ToJson( entity, settings );
 ```
 
@@ -259,9 +260,9 @@ Several options are currently available for JSON encoding, and can be passed in 
 * `TypeConverters` lets you augment the encoding/decoding of the object. More on this later.
 
 
-## Using Variants
+## Using Generics
 
-For most use cases you can just assign, cast or make your object graph using the API outlined above, but at times you may need to work with the intermediate objects to, say, dig through and iterate over a collection. To do this, just omit the type when calling `FromJson`. You will get back either a primitive, a `List<object>` or a `Dictionary<string, object>`::
+For most use cases you can just assign, cast or make your object graph using the API outlined above, but at times you may need to work with the intermediate objects to dig through and iterate over a collection. To do this, just omit the type when calling `FromJson`. You will get back either a primitive, a `List<object>` or a `Dictionary<string, object>`:
 
 ```csharp
 var list = Json.Decode( "[1,2,3]" );
@@ -282,9 +283,11 @@ foreach( var pair in dict as IDictionary )
 
 ## Advanced: JsonTypeConverter for custom encoding/decoding
 
-Json lets you add some custom data to the JSON and then fetch it for any strongly typed object. You can also fully take over encoding to JSON writing whatever you want for any particular object. You can do this by creating an `JsonTypeConverter<T>` and implementing the abstract methods. Any time Json comes accross an object of Type `T` it will pass it off to your `JsonObjectConverter`.
+Json lets you add some custom data to the JSON and then fetch it for any strongly typed object. You can also fully take over encoding to JSON writing whatever you want for any particular object. You can do this by creating a `JsonTypeConverter<T>` and implementing the abstract methods. Any time Json comes accross an object of Type `T` it will pass it off to your `JsonObjectConverter`.
 
-The `WriteJson` method will be passed an `IJsonEncoder` which can be used to write custom JSON for your object. It will be called *before* the encoder encodes the object's fields and properties. If you do not want the encoder to write any data at all you can override `WantsExclusiveWrite` returning `true` (see second example below). The `OnFoundCustomData` method will be passed any key/value pairs that do not have corresponding fields/properties.
+The `WriteJson` method will be passed an `IJsonEncoder` which can be used to write custom JSON for your object. It will be called *before* the encoder encodes the object's fields and properties. If you do not want the encoder to write any data at all you can override `WantsExclusiveWrite` returning `true` (see second example below).
+
+When encoding the JSON back to an object, the `OnFoundCustomData` method will be passed any key/value pairs that do not have corresponding fields/properties.
 
 
 ```csharp
