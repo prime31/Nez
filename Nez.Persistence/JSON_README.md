@@ -3,7 +3,7 @@
 
 ## Description
 
-Forked and hacked from the excellent [TinyJSON](https://github.com/pbhogan/TinyJSON) by Patrick Hogan [twitter](http://twitter.com/pbhogan)
+A little JSON library that does big things.
 
 
 ## Features
@@ -13,9 +13,7 @@ Forked and hacked from the excellent [TinyJSON](https://github.com/pbhogan/TinyJ
 * Supports object graphs with references preserved.
 * Supports primitives, classes, structs, enums, lists, dictionaries and arrays.
 * Supports single dimensional arrays, multidimensional arrays and jagged arrays.
-* Parsed data uses proxy variants that can be implicitly cast to primitive types for cleaner code, or directly encoded back to JSON.
-* Numeric types are handled without fuss.
-* Polymorphic classes supported with a type hint encoded into the JSON.
+* Polymorphic classes supported with a type hint encoded into the JSON automatically.
 * Supports optionally pretty printing JSON output.
 * Supports optionally encode properties and private fields (via the SerializedAttribute on them).
 * Supports decoding fields and properties from aliased names.
@@ -31,14 +29,14 @@ namespace Nez.Persistence
 {
 	public static class Json
 	{
-		public static string Encode( object obj, JsonSettings options = null )
-		public static Variant Decode( string json )
-		public static T Decode<T>( string json )
+		public static string ToJson( object obj, JsonSettings options = null )
+		public static object FromJson( string json, JsonSettings settings = null )
+		public static void FromJsonOverwrite( string json, object item )
 	}
 }
 ```
 
-`Encode()` will take a C# object, list, dictionary or primitive value type and turn it into JSON.
+`ToJson()` will take a C# object, list, dictionary or primitive value type and turn it into JSON.
 
 ```csharp
 var data = new List<int>() { { 0 }, { 1 }, { 2 } };
@@ -46,18 +44,18 @@ Console.WriteLine( Json.ToJson( data ) ); // output: [1,2,3]
 ```
 
 
-`Decode()` will load a string of JSON, returns `null` if invalid or a `Variant` proxy object if successful. The proxy allows for implicit casts and can convert between various C# numeric value types.
+`FromJson()` will load a string of JSON, returns `null` if invalid or an object if successful.
 
 ```csharp
-var data = Json.Decode( "{\"foo\": 1, \"bar\": 2.34}" );
-int i = data["foo"];
-float f = data["bar"];
+var data = Json.FromJson( "{\"foo\": 1, \"bar\": 2.34}" ) as IDictionary;
+var i = Convert.ToInt32( data["foo"] );
+var f = Convert.ToSingle( data["bar"] );
 ```
 
-`Decode<T>()` will load a string of JSON, returns `null` if invalid or a an object of type `T` if successful.
+`FromJson<T>()` will load a string of JSON, returns `null` if invalid or a an object of type `T` if successful.
 
 ```csharp
-var obj = Json.Decode<SomeClass>( json );
+var obj = Json.FromJson<SomeClass>( json );
 ```
 
 
@@ -112,7 +110,7 @@ testClass.data.Add( new TestStruct() { x = 1, y = 2 } );
 testClass.data.Add( new TestStruct() { x = 3, y = 4 } );
 testClass.data.Add( new TestStruct() { x = 5, y = 6 } );
 
-var testClassJson = Json.ToJson( testClass );
+var testClassJson = Json.ToJson( testClass, prettyPrint: true );
 Console.WriteLine( testClassJson );
 ```
 
@@ -139,18 +137,18 @@ Will output (if pretty printed):
 }
 ```
 
-And then you can rehydrate your object from the JSON using `Decode<T>`:
+And then you can rehydrate your object from the JSON using `FromJson<T>`:
 
 ```
-var obj = Json.Decode<TestClass>( testClassJson );
+var obj = Json.FromJson<TestClass>( testClassJson );
 ```
 
 
-You can also use `Decode` or `DecodeInto` to reconstruct JSON data back into an object if you opted to load a `Variant`:
+You can also use `FromJsonOverwrite` to reconstruct partial or full JSON data back into an existing object. It will overwrite any properties/fields on the object with the data in JSON:
 
 ```csharp
-TestClass testClass;
-Json.DecodeInto( JSON.Load( testClassJson ), out testClass );
+var testClass = new TestClass();
+Json.FromJsonOverwrite( json, testClass );
 ```
 
 Finally, you'll notice that `TestClass` has the methods `BeforeEncode()` and `AfterDecode()` which have the `BeforeEncode` and `AfterDecode` attributes. These methods will be called *before* the object starts being serialized and *after* the object has been fully deserialized. This is useful when some further preparation or initialization logic is required.
@@ -226,6 +224,7 @@ var settings = new JsonSettings
 	TypeNameHandling = TypeNameHandling.Auto,
 	PreserveReferencesHandling = true
 };
+// or var settings = JsonSettings.HandlesReferences
 var json = Json.ToJson( entity, settings );
 ```
 
@@ -252,43 +251,40 @@ And the resulting JSON. What we have in there is some extra metadata Json can us
 
 ## Encode Options
 
-Several options are currently available for JSON encoding, and can be passed in as a second parameter to `JSON.ToJson()`.
+Several options are currently available for JSON encoding, and can be passed in as a second parameter to `Json.ToJson()`.
 
 * `PrettyPrint` will output nicely formatted JSON to make it more readable.
 * `PreserveReferencesHandling` will add extra metadata into the JSON so an object graph with circular references can be rebuilt
 * `TypeNameHandling` lets you specify when type names will be injected into the JSON
+* `TypeConverters` lets you augment the encoding/decoding of the object. More on this later.
 
 
 ## Using Variants
 
-For most use cases you can just assign, cast or make your object graph using the API outlined above, but at times you may need to work with the intermediate proxy objects to, say, dig through and iterate over a collection. To do this, cast the `Variant` to the appropriate subclass (likely either `ProxyArray` or `ProxyObject`) and you're good to go:
+For most use cases you can just assign, cast or make your object graph using the API outlined above, but at times you may need to work with the intermediate objects to, say, dig through and iterate over a collection. To do this, just omit the type when calling `FromJson`. You will get back either a primitive, a `List<object>` or a `Dictionary<string, object>`::
 
 ```csharp
 var list = Json.Decode( "[1,2,3]" );
-foreach( var item in list as ProxyArray )
+foreach( var item in list as IList )
 {
-	int number = item;
+	var number = item;
 	Console.WriteLine( number );
 }
 
 var dict = Json.Decode( "{\"x\":1,\"y\":2}" );
-foreach( var pair in dict as ProxyObject )
+foreach( var pair in dict as IDictionary )
 {
-	float value = pair.Value;
+	var value = pair.Value;
 	Console.WriteLine( pair.Key + " = " + value );
 }
 ```
 
-The non-collection `Variant` subclasses are `ProxyBoolean`, `ProxyNumber` and `ProxyString`. A variant can also be `null`. Any `Variant` object can be directly encoded to JSON by calling its `ToJson()` method or passing it to `Json.ToJson()`.
-
-Variant's can also be turned back into strongly typed objects via the `VariantConverter.Decode<T>` method.
-
 
 ## Advanced: JsonTypeConverter for custom encoding/decoding
 
-Json lets you add some custom data to the JSON and then fetch it for any strongly typed object. You can do this by creating an `JsonTypeConverter<T>` and implementing the abstract methods. Any time Json comes accross an object of Type `T` it will pass it off to your `JsonObjectConverter`.
+Json lets you add some custom data to the JSON and then fetch it for any strongly typed object. You can also fully take over encoding to JSON writing whatever you want for any particular object. You can do this by creating an `JsonTypeConverter<T>` and implementing the abstract methods. Any time Json comes accross an object of Type `T` it will pass it off to your `JsonObjectConverter`.
 
-The `WriteJson` method will be passed an `IJsonEncoder` which can be used to write custom JSON for your object. The `OnFoundCustomData` method will be passed any key/value pairs that do not have corresponding fields/properties.
+The `WriteJson` method will be passed an `IJsonEncoder` which can be used to write custom JSON for your object. It will be called *before* the encoder encodes the object's fields and properties. If you do not want the encoder to write any data at all you can override `WantsExclusiveWrite` returning `true` (see second example below). The `OnFoundCustomData` method will be passed any key/value pairs that do not have corresponding fields/properties.
 
 
 ```csharp
@@ -303,16 +299,9 @@ class DoodleJsonConverter : JsonTypeConverter<Doodle>
 {
 	public override void WriteJson( IJsonEncoder encoder, Doodle value )
 	{
-		// always call WriteValueDelimiter before writing a key/value pair!
-		encoder.WriteValueDelimiter();
-		encoder.WriteString( "key-that-isnt-on-object" );
-		encoder.AppendColon();
-		encoder.EncodeValue( true );
-
-		encoder.WriteValueDelimiter();
-		encoder.WriteString( "another_key" );
-		encoder.AppendColon();
-		encoder.EncodeValue( "with a value" );
+		// EncodeKeyValuePair can take any primitive, list, array, dictionary or object
+		encoder.EncodeKeyValuePair( "key-that-isnt-on-object", true );
+		encoder.EncodeKeyValuePair( "another_key", "with a value" );
 	}
 
 	public override void OnFoundCustomData( Doodle instance, string key, object value )
@@ -323,7 +312,7 @@ class DoodleJsonConverter : JsonTypeConverter<Doodle>
 
 ```
 
-To use a `JsonTypeConverter` you just have to tell Json about it by sticking it in your JsonSettings object or using one of the convenience methods:
+To use a `JsonTypeConverter` you just have to tell Json about it by sticking it in your JsonSettings object:
 
 ```csharp
 var doodle = new Doodle();
@@ -335,6 +324,47 @@ var json = Json.ToJson( doodle, settings );
 // rehydrate the JSON. The OnFoundCustomData will be called twice given the demo code above.
 var newDoodle = Json.Decode<Doodle>( json, settings );
 ```
+
+This example `JsonTypeConverter` fully takes over JSON encoding by returning `true` for `WantsExclusiveWrite`. The only thing the encoder will write in this case is id/reference data for reference tracking if enabled.
+
+```csharp
+class WantsExclusiveWriteConverter : JsonTypeConverter<Doodle>
+{
+	public override bool WantsExclusiveWrite => true;
+
+	public override void WriteJson( IJsonEncoder encoder, Doodle value )
+	{
+		encoder.EncodeKeyValuePair( "key-that-isnt-on-object", true );
+		encoder.EncodeKeyValuePair( "another_key", "with a value" );
+		encoder.EncodeKeyValuePair( "string_array", new string[] { "first", "second" } );
+	}
+
+	public override void OnFoundCustomData( Doodle instance, string key, object value )
+	{}
+}
+
+
+// using the converter
+var doodle = new Doodle();
+
+// Convert to JSON. The WriteJson method will be called.
+// Since WantsExclusiveWrite is true, no other data will be present in the JSON string.
+var settings = new JsonSettings { TypeConverters = new JsonTypeConverter[] { new WantsExclusiveWriteConverter() } };
+var json = Json.ToJson( doodle, settings );
+
+// rehydrate the JSON. The OnFoundCustomData will be called three times given the demo code above.
+var newDoodle = Json.Decode<Doodle>( json, settings );
+```
+
+The resulting json would be the following. Notice that none of the normal `Doodle` data is present:
+
+`{"key-that-isnt-on-object":true,"another_key":"with a value","string_array":["first","second"]}`
+
+
+
+## Meta
+
+Forked and hacked from the excellent [TinyJSON](https://github.com/pbhogan/TinyJSON) by Patrick Hogan [twitter](http://twitter.com/pbhogan)
 
 Released under the [MIT License](http://www.opensource.org/licenses/mit-license.php).
 

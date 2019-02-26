@@ -26,10 +26,10 @@ namespace Nez.Persistence.JsonTests
 
 
 		[Test]
-		public void TestLoadAlias()
+		public void LoadAlias()
 		{
 			const string json = "{ \"numberFieldAlias\" : 1, \"NumberPropertyAlias\" : 2, \"anotherNumberFieldAliasOne\" : 3, \"anotherNumberFieldAliasTwo\" : 4, \"AnotherNumberPropertyAliasOne\" : 5, \"AnotherNumberPropertyAliasTwo\" : 6 }";
-			var aliasData = VariantConverter.Decode<AliasData>( Json.FromJson( json ) );
+			var aliasData = Json.FromJson<AliasData>( json );
 
 			Assert.AreEqual( 1, aliasData.NumberField );
 			Assert.AreEqual( 2, aliasData.NumberProperty );

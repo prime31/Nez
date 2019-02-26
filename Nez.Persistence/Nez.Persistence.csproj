@@ -15,7 +15,7 @@
     <PropertyGroup>
         <DefaultItemExcludes>$(DefaultItemExcludes);Tests\**\*.*</DefaultItemExcludes>
     </PropertyGroup>
-   
+
 	<ItemGroup>
         <ProjectReference Include="../Nez.Portable/Nez.csproj" />
 		<PackageReference Include="MonoGame.Framework.Portable" Version="3.7.1.189" />

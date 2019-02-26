@@ -29,12 +29,12 @@ namespace Nez.Persistence
 				
 			foreach( var attribute in memberInfo.GetCustomAttributes( true ) )
 			{
-				if( Json.excludeAttrType.IsInstanceOfType( attribute ) )
+				if( JsonConstants.excludeAttrType.IsInstanceOfType( attribute ) )
 				{
 					isPublic = false;
 				}
 
-				if( Json.includeAttrType.IsInstanceOfType( attribute ) )
+				if( JsonConstants.includeAttrType.IsInstanceOfType( attribute ) )
 				{
 					isPublic = true;
 				}
@@ -126,7 +126,7 @@ namespace Nez.Persistence
 			map = new Dictionary<string, FieldInfo>();
 			_fieldInfoCache[type] = map;
 
-			var allFields = type.GetFields( VariantConverter.instanceBindingFlags );
+			var allFields = type.GetFields( JsonConstants.instanceBindingFlags );
 			// cleanse the fields based on our attributes
 			foreach( var field in allFields )
 			{
@@ -210,7 +210,7 @@ namespace Nez.Persistence
 			map = new Dictionary<string, PropertyInfo>();
 			_propertyInfoCache[type] = map;
 
-			var allProps = type.GetProperties( VariantConverter.instanceBindingFlags );
+			var allProps = type.GetProperties( JsonConstants.instanceBindingFlags );
 			// cleanse the fields based on our attributes
 			foreach( var prop in allProps )
 			{

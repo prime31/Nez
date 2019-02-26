@@ -45,9 +45,6 @@ namespace Nez.Persistence.JsonTests
 			Assert.AreEqual( 0, testStruct.z ); // should not get assigned
 
 			Assert.IsTrue( LoadCallbackFired );
-
-
-			var wtf = JsonDirectDecoder.FromJson<TestStruct>( "{\"x\":5,\"y\":7,\"z\":3}" );
 		}
 	}
 }

@@ -1,9 +1,20 @@
 ﻿using System;
+
 namespace Nez.Persistence
 {
+	/// <summary>
+	/// used to override the default JSON writing and augment converting JSON to an object
+	/// </summary>
 	public abstract class JsonTypeConverter
 	{
 		public abstract bool CanConvertType( Type objectType );
+
+		/// <summary>
+		/// indicates this converter wants to exclusively write the JSON data. The props/fields will
+		/// not be encoded.
+		/// </summary>
+		/// <value><c>true</c> if wants exclusive write; otherwise, <c>false</c>.</value>
+		public virtual bool WantsExclusiveWrite { get; }
 
 		public abstract void WriteJson( IJsonEncoder encoder, object value );
 

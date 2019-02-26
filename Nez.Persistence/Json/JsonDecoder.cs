@@ -8,12 +8,14 @@ using System.Globalization;
 
 namespace Nez.Persistence
 {
-	public sealed class JsonDirectDecoder : IDisposable
+	/// <summary>
+	/// responsible for taking a json string and decoding it into objects, either generic or strongly typed
+	/// </summary>
+	public sealed class JsonDecoder : IDisposable
 	{
 		#region Fields and Props
 
 		static readonly char[] floatingPointCharacters = { '.', 'e' };
-		internal const BindingFlags instanceBindingFlags = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance;
 		static readonly Type afterDecodeAttrType = typeof( AfterDecodeAttribute );
 
 		const string kWhiteSpace = " \t\n\r";
@@ -61,14 +63,44 @@ namespace Nez.Persistence
 		#endregion
 
 
+		#region static methods
+
+		/// <summary>
+		/// decodes <paramref name="jsonString"/> into an object of type T
+		/// </summary>
+		/// <returns>The json.</returns>
+		/// <param name="jsonString">Json string.</param>
+		/// <param name="settings">Settings.</param>
+		/// <typeparam name="T">The 1st type parameter.</typeparam>
 		public static T FromJson<T>( string jsonString, JsonSettings settings = null )
 		{
 			return (T)FromJson( jsonString, typeof( T ), settings );
 		}
 
+		/// <summary>
+		/// decodes <paramref name="jsonString"/> into standard system and generic types
+		/// </summary>
+		/// <returns>The json.</returns>
+		/// <param name="jsonString">Json string.</param>
+		/// <param name="settings">Settings.</param>
+		public static object FromJson( string jsonString, JsonSettings settings = null )
+		{
+			using( var instance = new JsonDecoder( jsonString, settings ) )
+			{
+				return instance.DecodeValueUntyped( instance.GetNextToken() );
+			}
+		}
+
+		/// <summary>
+		/// decodes <paramref name="jsonString"/> into an object of type <paramref name="type"/>
+		/// </summary>
+		/// <returns>The json.</returns>
+		/// <param name="jsonString">Json string.</param>
+		/// <param name="type">Type.</param>
+		/// <param name="settings">Settings.</param>
 		public static object FromJson( string jsonString, Type type, JsonSettings settings = null )
 		{
-			using( var instance = new JsonDirectDecoder( jsonString, settings ) )
+			using( var instance = new JsonDecoder( jsonString, settings ) )
 			{
 				return instance.DecodeValue( instance.GetNextToken(), type );
 			}
@@ -83,7 +115,7 @@ namespace Nez.Persistence
 		/// <param name="settings">Settings.</param>
 		public static void FromJsonOverwrite( string jsonString, object obj, JsonSettings settings = null )
 		{
-			using( var instance = new JsonDirectDecoder( jsonString, settings ) )
+			using( var instance = new JsonDecoder( jsonString, settings ) )
 			{
 				var type = obj.GetType();
 				if( obj is IDictionary )
@@ -108,6 +140,11 @@ namespace Nez.Persistence
 			}
 		}
 
+		/// <summary>
+		/// uses a type cache to lookup an objects Type by string
+		/// </summary>
+		/// <returns>The type.</returns>
+		/// <param name="fullName">Full name.</param>
 		static Type FindType( string fullName )
 		{
 			if( fullName == null )
@@ -133,8 +170,10 @@ namespace Nez.Persistence
 			return null;
 		}
 
+		#endregion
 
-		JsonDirectDecoder( string jsonString, JsonSettings settings = null )
+
+		JsonDecoder( string jsonString, JsonSettings settings = null )
 		{
 			_json = new StringReader( jsonString );
 			_settings = settings;
@@ -243,9 +282,7 @@ namespace Nez.Persistence
 			return Token.None;
 		}
 
-		#endregion
-
-		IConvertible ParseStringToNumber( string value )
+		IConvertible ParseNumber( string value )
 		{
 			if( value.IndexOfAny( floatingPointCharacters ) == -1 )
 			{
@@ -289,6 +326,8 @@ namespace Nez.Persistence
 
 			return 0;
 		}
+
+		#endregion
 
 		string DecodeString()
 		{
@@ -370,6 +409,12 @@ namespace Nez.Persistence
 			return str;
 		}
 
+		/// <summary>
+		/// decodes and returns the next value in the JSON string
+		/// </summary>
+		/// <returns>The value.</returns>
+		/// <param name="token">Token.</param>
+		/// <param name="type">Type.</param>
 		object DecodeValue( Token token, Type type )
 		{
 			// handle Nullables. If the type is Nullable use the underlying type
@@ -381,7 +426,7 @@ namespace Nez.Persistence
 					var str = DecodeString();
 					return type.IsEnum ? Enum.Parse( type, str ) : str;
 				case Token.Number:
-					return Convert.ChangeType( ParseStringToNumber( GetNextWord() ), type );
+					return Convert.ChangeType( ParseNumber( GetNextWord() ), type );
 				case Token.OpenBrace:
 					// either a Dictionary or an object
 					if( typeof( IDictionary ).IsAssignableFrom( type ) )
@@ -414,11 +459,11 @@ namespace Nez.Persistence
 				case Token.String:
 					return DecodeString();
 				case Token.Number:
-					return ParseStringToNumber( GetNextWord() );
+					return ParseNumber( GetNextWord() );
 				case Token.OpenBrace:
 					return DecodeDictionary( typeof( Dictionary<string,object> ) );
 				case Token.OpenBracket:
-					return DecodeArrayOrList( typeof( object ) );
+					return DecodeArrayOrList( typeof( List<object> ) );
 				case Token.True:
 					return true;
 				case Token.False:
@@ -463,7 +508,7 @@ namespace Nez.Persistence
 			var property = _cacheResolver.GetProperty( obj.GetType(), key );
 			if( property != null )
 			{
-				if( property != null && property.CanWrite && property.IsDefined( Json.includeAttrType ) )
+				if( property != null && property.CanWrite && property.IsDefined( JsonConstants.includeAttrType ) )
 				{
 					var value = DecodeValue( GetNextToken(), property.PropertyType );
 					if( obj.GetType().IsValueType )
@@ -694,7 +739,7 @@ namespace Nez.Persistence
 							_json.Read();
 
 							var k = keyType.IsEnum ? Enum.Parse( keyType, key ) : Convert.ChangeType( key, keyType );
-							dict[k] = DecodeValue( GetNextToken(), valueType );
+							dict[k] = valueType == typeof( object ) ? DecodeValueUntyped( GetNextToken() ) : dict[k] = DecodeValue( GetNextToken(), valueType );
 							break;
 						}
 				}
@@ -719,7 +764,7 @@ namespace Nez.Persistence
 						continue;
 					case Token.CloseBrace:
 						// Invoke methods tagged with [AfterDecode] attribute.
-						foreach( var method in type.GetMethods( instanceBindingFlags ) )
+						foreach( var method in type.GetMethods( JsonConstants.instanceBindingFlags ) )
 						{
 							if( method.IsDefined( afterDecodeAttrType ) && method.GetParameters().Length == 0 )
 							{
@@ -744,14 +789,14 @@ namespace Nez.Persistence
 							_json.Read();
 
 							// check for @id or @ref
-							if( key == Json.IdPropertyName )
+							if( key == JsonConstants.IdPropertyName )
 							{
 								var dump = GetNextToken();
 								id = DecodeString();
 								break;
 							}
 
-							if( key == Json.RefPropertyName )
+							if( key == JsonConstants.RefPropertyName )
 							{
 								var dump = GetNextToken();
 								var refObj = _cacheResolver.ResolveReference( DecodeString() );
@@ -762,7 +807,7 @@ namespace Nez.Persistence
 								return refObj;
 							}
 
-							if( key == Json.TypeHintPropertyName )
+							if( key == JsonConstants.TypeHintPropertyName )
 							{
 								var dump = GetNextToken();
 								var typeHint = DecodeString();

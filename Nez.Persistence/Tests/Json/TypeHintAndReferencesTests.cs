@@ -53,7 +53,7 @@ namespace Nez.Persistence.JsonTests
 			Assert.IsInstanceOf( typeof( Sprite ), outEntity.components[1] );
 
 
-			outEntity = JsonDirectDecoder.FromJson<Entity>( json );
+			outEntity = Json.FromJson<Entity>( json );
 			Assert.IsInstanceOf( typeof( Sprite ), outEntity.components[1] );
 		}
 
@@ -71,10 +71,6 @@ namespace Nez.Persistence.JsonTests
 			} );
 
 			var outEntity = Json.FromJson<Entity>( json );
-			Assert.AreEqual( outEntity, outEntity.components[1].entity );
-
-
-			outEntity = JsonDirectDecoder.FromJson<Entity>( json );
 			Assert.AreEqual( outEntity, outEntity.components[1].entity );
 		}
 

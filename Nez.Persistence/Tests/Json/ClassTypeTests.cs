@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using Nez.Persistence;
 using NUnit.Framework;
 
 namespace Nez.Persistence.JsonTests
@@ -52,7 +51,7 @@ namespace Nez.Persistence.JsonTests
 
 
 		[Test]
-		public void TestDumpClass()
+		public void DumpClass()
 		{
 			var testClass = new TestClass { x = 5, y = 7, z = 0 };
 			testClass.list = new List<int> { 3, 1, 4 };
@@ -65,7 +64,7 @@ namespace Nez.Persistence.JsonTests
 
 
 		[Test]
-		public void TestDumpClassNoTypeHint()
+		public void DumpClassNoTypeHint()
 		{
 			var testClass = new TestClass { x = 5, y = 7, z = 0 };
 			testClass.list = new List<int> { 3, 1, 4 };
@@ -80,7 +79,7 @@ namespace Nez.Persistence.JsonTests
 
 
 		[Test]
-		public void TestDumpClassPrettyPrint()
+		public void DumpClassPrettyPrint()
 		{
 			var testClass = new TestClass { x = 5, y = 7, z = 0 };
 			testClass.list = new List<int> { 3, 1, 4 };
@@ -106,7 +105,7 @@ namespace Nez.Persistence.JsonTests
 
 
 		[Test]
-		public void TestDumpClassIncludePublicProperties()
+		public void DumpClassIncludePublicProperties()
 		{
 			var testClass = new TestClass { x = 5, y = 7, z = 0 };
 			Assert.AreEqual( "{\"x\":5,\"y\":7,\"list\":null,\"p1\":1,\"p2\":2,\"p3\":3}", Json.ToJson( testClass ) );
@@ -114,9 +113,9 @@ namespace Nez.Persistence.JsonTests
 
 
 		[Test]
-		public void TestLoadClass()
+		public void LoadClass()
 		{
-			var testClass = VariantConverter.Decode<TestClass>( Json.FromJson( "{\"x\":5,\"y\":7,\"z\":3,\"list\":[3,1,4],\"p1\":1,\"p2\":2,\"p3\":3}" ) );
+			var testClass = Json.FromJson<TestClass>( "{\"x\":5,\"y\":7,\"z\":3,\"list\":[3,1,4],\"p1\":1,\"p2\":2,\"p3\":3}" );
 
 			Assert.AreEqual( 5, testClass.x );
 			Assert.AreEqual( 7, testClass.y );
@@ -143,7 +142,7 @@ namespace Nez.Persistence.JsonTests
 		}
 
 		[Test]
-		public void TestDumpOuterClassWithNoTypeHintPropagatesToInnerClasses()
+		public void DumpOuterClassWithNoTypeHintPropagatesToInnerClasses()
 		{
 			var outerClass = new OuterClass();
 			outerClass.inner = new InnerClass();

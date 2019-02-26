@@ -42,7 +42,20 @@ namespace Nez.Persistence
 			indent = 0;
 		}
 
-		public void EncodeValue( object value, bool forceTypeHint = false )
+		public void EncodeKeyValuePair( string key, object value )
+		{
+			WriteValueDelimiter();
+			EncodeString( key );
+			AppendColon();
+			EncodeValue( value );
+		}
+
+		/// <summary>
+		/// handles writing any arbitrary object type to the JSON string
+		/// </summary>
+		/// <param name="value">Value.</param>
+		/// <param name="forceTypeHint">If set to <c>true</c> force type hint.</param>
+		void EncodeValue( object value, bool forceTypeHint = false )
 		{
 			if( value == null )
 			{
@@ -50,15 +63,11 @@ namespace Nez.Persistence
 			}
 			else if( value is string )
 			{
-				WriteString( (string)value );
-			}
-			else if( value is ProxyString )
-			{
-				WriteString( ( (ProxyString)value ).ToString( CultureInfo.InvariantCulture ) );
+				EncodeString( (string)value );
 			}
 			else if( value is char )
 			{
-				WriteString( value.ToString() );
+				EncodeString( value.ToString() );
 			}
 			else if( value is bool )
 			{
@@ -66,7 +75,7 @@ namespace Nez.Persistence
 			}
 			else if( value is Enum )
 			{
-				WriteString( value.ToString() );
+				EncodeString( value.ToString() );
 			}
 			else if( value is Array )
 			{
@@ -80,14 +89,6 @@ namespace Nez.Persistence
 			{
 				EncodeDictionary( (IDictionary)value );
 			}
-			else if( value is ProxyArray )
-			{
-				EncodeProxyArray( (ProxyArray)value );
-			}
-			else if( value is ProxyObject )
-			{
-				EncodeProxyObject( (ProxyObject)value );
-			}
 			else if( value is float ||
 				value is double ||
 				value is int ||
@@ -98,9 +99,7 @@ namespace Nez.Persistence
 				value is short ||
 				value is ushort ||
 				value is ulong ||
-				value is decimal ||
-				value is ProxyBoolean ||
-				value is ProxyNumber )
+				value is decimal )
 			{
 				_builder.Append( Convert.ToString( value, CultureInfo.InvariantCulture ) );
 				return;
@@ -111,324 +110,7 @@ namespace Nez.Persistence
 			}
 		}
 
-		public void EncodeObject( object value, bool forceTypeHint )
-		{
-			var type = value.GetType();
-
-			WriteStartObject();
-
-			if( WriteOptionalReferenceData( value ) )
-			{
-				WriteEndObject();
-				return;
-			}
-
-			WriteOptionalTypeHint( type, forceTypeHint );
-
-			// check for an override converter and use it if present
-			var converter = _settings.GetTypeConverterForType( type );
-			if( converter != null )
-			{
-				converter.WriteJson( this, value );
-			}
-
-			foreach( var field in _cacheResolver.GetEncodableFieldsForType( type ) )
-			{
-				WriteValueDelimiter();
-				WriteString( field.Name );
-				AppendColon();
-				EncodeValue( field.GetValue( value ) );
-			}
-
-			foreach( var property in _cacheResolver.GetEncodablePropertiesForType( type ) )
-			{
-				if( property.CanRead )
-				{
-					WriteValueDelimiter();
-					WriteString( property.Name );
-					AppendColon();
-					EncodeValue( property.GetValue( value, null ) );
-				}
-			}
-
-			WriteEndObject();
-		}
-
-		void EncodeProxyArray( ProxyArray value )
-		{
-			WriteStartArray();
-
-			foreach( var obj in value )
-			{
-				WriteValueDelimiter();
-				EncodeValue( obj );
-			}
-
-			WriteEndArray();
-		}
-
-		void EncodeProxyObject( ProxyObject value )
-		{
-			WriteStartObject();
-
-			foreach( var e in value.Keys )
-			{
-				WriteValueDelimiter();
-				WriteString( e );
-				AppendColon();
-				EncodeValue( value[e] );
-			}
-
-			WriteEndObject();
-		}
-
-		public void EncodeDictionary( IDictionary value )
-		{
-			WriteStartObject();
-
-			foreach( var e in value.Keys )
-			{
-				WriteValueDelimiter();
-				WriteString( e.ToString() );
-				AppendColon();
-				EncodeValue( value[e] );
-			}
-
-			WriteEndObject();
-		}
-
-		public void EncodeList( IList value )
-		{
-			var forceTypeHint = _settings.TypeNameHandling == TypeNameHandling.All || _settings.TypeNameHandling == TypeNameHandling.Arrays;
-
-			Type listItemType = null;
-			// auto means we need to know the item type of the list. If our object is not the same as the list type
-			// then we need to put the type hint in.
-			if( !forceTypeHint && _settings.TypeNameHandling == TypeNameHandling.Auto )
-			{
-				var listType = value.GetType();
-				foreach( Type interfaceType in listType.GetInterfaces() )
-				{
-					if( interfaceType.IsGenericType && interfaceType.GetGenericTypeDefinition() == typeof( IList<> ) )
-					{
-						listItemType = listType.GetGenericArguments()[0];
-						break;
-					}
-				}
-			}
-
-			WriteStartArray();
-
-			foreach( var obj in value )
-			{
-				WriteValueDelimiter();
-				forceTypeHint = forceTypeHint || ( listItemType != null && listItemType != obj.GetType() );
-				EncodeValue( obj, forceTypeHint );
-			}
-
-			WriteEndArray();
-		}
-
-		public void EncodeArray( Array value )
-		{
-			if( value.Rank == 1 )
-			{
-				EncodeList( value );
-			}
-			else
-			{
-				var indices = new int[value.Rank];
-				EncodeArrayRank( value, 0, indices );
-			}
-		}
-
-		public void EncodeArrayRank( Array value, int rank, int[] indices )
-		{
-			WriteStartArray();
-
-			var min = value.GetLowerBound( rank );
-			var max = value.GetUpperBound( rank );
-
-			if( rank == value.Rank - 1 )
-			{
-				var forceTypeHint = _settings.TypeNameHandling == TypeNameHandling.All || _settings.TypeNameHandling == TypeNameHandling.Arrays;
-
-				Type arrayItemType = null;
-				if( _settings.TypeNameHandling == TypeNameHandling.Auto || _settings.TypeNameHandling == TypeNameHandling.Arrays )
-				{
-					arrayItemType = value.GetType().GetElementType();
-				}
-
-				for( var i = min; i <= max; i++ )
-				{
-					indices[rank] = i;
-					WriteValueDelimiter();
-					var val = value.GetValue( indices );
-					forceTypeHint = forceTypeHint || ( arrayItemType != null && arrayItemType != val.GetType() );
-					EncodeValue( val, forceTypeHint );
-				}
-			}
-			else
-			{
-				for( var i = min; i <= max; i++ )
-				{
-					indices[rank] = i;
-					WriteValueDelimiter();
-					EncodeArrayRank( value, rank + 1, indices );
-				}
-			}
-
-			WriteEndArray();
-		}
-
-
-		#region Writers
-
-		public void AppendIndent()
-		{
-			for( var i = 0; i < indent; i++ )
-			{
-				_builder.Append( '\t' );
-			}
-		}
-
-		public void AppendColon()
-		{
-			_builder.Append( ':' );
-
-			if( _settings.PrettyPrint )
-			{
-				_builder.Append( ' ' );
-			}
-		}
-
-		/// <summary>
-		/// uses the JsonSettings and object details to deal with reference tracking. If a reference was found and written
-		/// to the JSON stream it will return true and the rest of the object data should not be written.
-		/// </summary>
-		/// <param name="value">Value.</param>
-		public bool WriteOptionalReferenceData( object value )
-		{
-			if( _settings.PreserveReferencesHandling )
-			{
-				if( !_referenceTracker.ContainsKey( value ) )
-				{
-					_referenceTracker[value] = ++_referenceCounter;
-
-					WriteValueDelimiter();
-					WriteString( Json.IdPropertyName );
-					AppendColon();
-					WriteString( _referenceCounter.ToString() );
-				}
-				else
-				{
-					var id = _referenceTracker[value];
-
-					WriteValueDelimiter();
-					WriteString( Json.RefPropertyName );
-					AppendColon();
-					WriteString( id.ToString() );
-
-					return true;
-				}
-			}
-			return false;
-		}
-
-		/// <summary>
-		/// optionally writes the type hint
-		/// </summary>
-		/// <param name="type">Type.</param>
-		/// <param name="forceTypeHint">If set to <c>true</c> force type hint.</param>
-		public void WriteOptionalTypeHint( Type type, bool forceTypeHint )
-		{
-			forceTypeHint = forceTypeHint || _settings.TypeNameHandling == TypeNameHandling.All || _settings.TypeNameHandling == TypeNameHandling.Objects;
-			if( forceTypeHint )
-			{
-				WriteValueDelimiter();
-				WriteString( Json.TypeHintPropertyName );
-				AppendColon();
-				WriteString( type.FullName );
-			}
-		}
-
-		/// <summary>
-		/// writes a comma when needed. Call this before writing any object/array key-value pairs.
-		/// </summary>
-		public void WriteValueDelimiter()
-		{
-			if( _isFirstItemWrittenStack.Peek() )
-			{
-				_builder.Append( ',' );
-
-				if( _settings.PrettyPrint )
-				{
-					_builder.Append( '\n' );
-				}
-			}
-			else
-			{
-				_isFirstItemWrittenStack.Pop();
-				_isFirstItemWrittenStack.Push( true );
-			}
-
-			if( _settings.PrettyPrint )
-			{
-				AppendIndent();
-			}
-		}
-
-		public void WriteStartObject()
-		{
-			_isFirstItemWrittenStack.Push( false );
-			_builder.Append( '{' );
-
-			if( _settings.PrettyPrint )
-			{
-				_builder.Append( '\n' );
-				indent++;
-			}
-		}
-
-		public void WriteEndObject()
-		{
-			_isFirstItemWrittenStack.Pop();
-			if( _settings.PrettyPrint )
-			{
-				_builder.Append( '\n' );
-				indent--;
-				AppendIndent();
-			}
-
-			_builder.Append( '}' );
-		}
-
-		public void WriteStartArray()
-		{
-			_isFirstItemWrittenStack.Push( false );
-			_builder.Append( '[' );
-
-			if( _settings.PrettyPrint )
-			{
-				_builder.Append( '\n' );
-				indent++;
-			}
-		}
-
-		public void WriteEndArray()
-		{
-			_isFirstItemWrittenStack.Pop();
-			if( _settings.PrettyPrint )
-			{
-				_builder.Append( '\n' );
-				indent--;
-				AppendIndent();
-			}
-
-			_builder.Append( ']' );
-		}
-
-		public void WriteString( string value )
+		void EncodeString( string value )
 		{
 			_builder.Append( '\"' );
 
@@ -481,6 +163,301 @@ namespace Nez.Persistence
 			}
 
 			_builder.Append( '\"' );
+		}
+
+		void EncodeObject( object value, bool forceTypeHint )
+		{
+			var type = value.GetType();
+
+			WriteStartObject();
+
+			// if this returns true, we have a reference so we are done
+			if( WriteOptionalReferenceData( value ) )
+			{
+				WriteEndObject();
+				return;
+			}
+
+			WriteOptionalTypeHint( type, forceTypeHint );
+
+			// check for an override converter and use it if present
+			var converter = _settings.GetTypeConverterForType( type );
+			if( converter != null )
+			{
+				converter.WriteJson( this, value );
+				if( converter.WantsExclusiveWrite )
+				{
+					WriteEndObject();
+					return;
+				}
+			}
+
+			foreach( var field in _cacheResolver.GetEncodableFieldsForType( type ) )
+			{
+				WriteValueDelimiter();
+				EncodeString( field.Name );
+				AppendColon();
+				EncodeValue( field.GetValue( value ) );
+			}
+
+			foreach( var property in _cacheResolver.GetEncodablePropertiesForType( type ) )
+			{
+				if( property.CanRead )
+				{
+					WriteValueDelimiter();
+					EncodeString( property.Name );
+					AppendColon();
+					EncodeValue( property.GetValue( value, null ) );
+				}
+			}
+
+			WriteEndObject();
+		}
+
+		void EncodeDictionary( IDictionary value )
+		{
+			WriteStartObject();
+
+			foreach( var e in value.Keys )
+			{
+				WriteValueDelimiter();
+				EncodeString( e.ToString() );
+				AppendColon();
+				EncodeValue( value[e] );
+			}
+
+			WriteEndObject();
+		}
+
+		void EncodeList( IList value )
+		{
+			var forceTypeHint = _settings.TypeNameHandling == TypeNameHandling.All || _settings.TypeNameHandling == TypeNameHandling.Arrays;
+
+			Type listItemType = null;
+			// auto means we need to know the item type of the list. If our object is not the same as the list type
+			// then we need to put the type hint in.
+			if( !forceTypeHint && _settings.TypeNameHandling == TypeNameHandling.Auto )
+			{
+				var listType = value.GetType();
+				foreach( Type interfaceType in listType.GetInterfaces() )
+				{
+					if( interfaceType.IsGenericType && interfaceType.GetGenericTypeDefinition() == typeof( IList<> ) )
+					{
+						listItemType = listType.GetGenericArguments()[0];
+						break;
+					}
+				}
+			}
+
+			WriteStartArray();
+
+			foreach( var obj in value )
+			{
+				WriteValueDelimiter();
+				forceTypeHint = forceTypeHint || ( listItemType != null && listItemType != obj.GetType() );
+				EncodeValue( obj, forceTypeHint );
+			}
+
+			WriteEndArray();
+		}
+
+		void EncodeArray( Array value )
+		{
+			if( value.Rank == 1 )
+			{
+				EncodeList( value );
+			}
+			else
+			{
+				var indices = new int[value.Rank];
+				EncodeArrayRank( value, 0, indices );
+			}
+		}
+
+		void EncodeArrayRank( Array value, int rank, int[] indices )
+		{
+			WriteStartArray();
+
+			var min = value.GetLowerBound( rank );
+			var max = value.GetUpperBound( rank );
+
+			if( rank == value.Rank - 1 )
+			{
+				var forceTypeHint = _settings.TypeNameHandling == TypeNameHandling.All || _settings.TypeNameHandling == TypeNameHandling.Arrays;
+
+				Type arrayItemType = null;
+				if( _settings.TypeNameHandling == TypeNameHandling.Auto || _settings.TypeNameHandling == TypeNameHandling.Arrays )
+				{
+					arrayItemType = value.GetType().GetElementType();
+				}
+
+				for( var i = min; i <= max; i++ )
+				{
+					indices[rank] = i;
+					WriteValueDelimiter();
+					var val = value.GetValue( indices );
+					forceTypeHint = forceTypeHint || ( arrayItemType != null && arrayItemType != val.GetType() );
+					EncodeValue( val, forceTypeHint );
+				}
+			}
+			else
+			{
+				for( var i = min; i <= max; i++ )
+				{
+					indices[rank] = i;
+					WriteValueDelimiter();
+					EncodeArrayRank( value, rank + 1, indices );
+				}
+			}
+
+			WriteEndArray();
+		}
+
+
+		#region Writers
+
+		void AppendIndent()
+		{
+			for( var i = 0; i < indent; i++ )
+			{
+				_builder.Append( '\t' );
+			}
+		}
+
+		void AppendColon()
+		{
+			_builder.Append( ':' );
+
+			if( _settings.PrettyPrint )
+			{
+				_builder.Append( ' ' );
+			}
+		}
+
+		/// <summary>
+		/// uses the JsonSettings and object details to deal with reference tracking. If a reference was found and written
+		/// to the JSON stream it will return true and the rest of the object data should not be written.
+		/// </summary>
+		/// <param name="value">Value.</param>
+		bool WriteOptionalReferenceData( object value )
+		{
+			if( _settings.PreserveReferencesHandling )
+			{
+				if( !_referenceTracker.ContainsKey( value ) )
+				{
+					_referenceTracker[value] = ++_referenceCounter;
+
+					WriteValueDelimiter();
+					EncodeString( JsonConstants.IdPropertyName );
+					AppendColon();
+					EncodeString( _referenceCounter.ToString() );
+				}
+				else
+				{
+					var id = _referenceTracker[value];
+
+					WriteValueDelimiter();
+					EncodeString( JsonConstants.RefPropertyName );
+					AppendColon();
+					EncodeString( id.ToString() );
+
+					return true;
+				}
+			}
+			return false;
+		}
+
+		/// <summary>
+		/// optionally writes the type hint
+		/// </summary>
+		/// <param name="type">Type.</param>
+		/// <param name="forceTypeHint">If set to <c>true</c> force type hint.</param>
+		void WriteOptionalTypeHint( Type type, bool forceTypeHint )
+		{
+			forceTypeHint = forceTypeHint || _settings.TypeNameHandling == TypeNameHandling.All || _settings.TypeNameHandling == TypeNameHandling.Objects;
+			if( forceTypeHint )
+			{
+				WriteValueDelimiter();
+				EncodeString( JsonConstants.TypeHintPropertyName );
+				AppendColon();
+				EncodeString( type.FullName );
+			}
+		}
+
+		/// <summary>
+		/// writes a comma when needed. Call this before writing any object/array key-value pairs.
+		/// </summary>
+		void WriteValueDelimiter()
+		{
+			if( _isFirstItemWrittenStack.Peek() )
+			{
+				_builder.Append( ',' );
+
+				if( _settings.PrettyPrint )
+				{
+					_builder.Append( '\n' );
+				}
+			}
+			else
+			{
+				_isFirstItemWrittenStack.Pop();
+				_isFirstItemWrittenStack.Push( true );
+			}
+
+			if( _settings.PrettyPrint )
+			{
+				AppendIndent();
+			}
+		}
+
+		void WriteStartObject()
+		{
+			_isFirstItemWrittenStack.Push( false );
+			_builder.Append( '{' );
+
+			if( _settings.PrettyPrint )
+			{
+				_builder.Append( '\n' );
+				indent++;
+			}
+		}
+
+		void WriteEndObject()
+		{
+			_isFirstItemWrittenStack.Pop();
+			if( _settings.PrettyPrint )
+			{
+				_builder.Append( '\n' );
+				indent--;
+				AppendIndent();
+			}
+
+			_builder.Append( '}' );
+		}
+
+		void WriteStartArray()
+		{
+			_isFirstItemWrittenStack.Push( false );
+			_builder.Append( '[' );
+
+			if( _settings.PrettyPrint )
+			{
+				_builder.Append( '\n' );
+				indent++;
+			}
+		}
+
+		void WriteEndArray()
+		{
+			_isFirstItemWrittenStack.Pop();
+			if( _settings.PrettyPrint )
+			{
+				_builder.Append( '\n' );
+				indent--;
+				AppendIndent();
+			}
+
+			_builder.Append( ']' );
 		}
 
 		#endregion

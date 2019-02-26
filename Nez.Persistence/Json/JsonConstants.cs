@@ -1,0 +1,21 @@
+﻿using System;
+using System.Reflection;
+
+namespace Nez.Persistence
+{
+	/// <summary>
+	/// caches some commonly used data by the Json classes
+	/// </summary>
+	internal static class JsonConstants
+	{
+		internal const string TypeHintPropertyName = "@type";
+		internal const string IdPropertyName = "@id";
+		internal const string RefPropertyName = "@ref";
+
+		internal static readonly Type includeAttrType = typeof( SerializedAttribute );
+		internal static readonly Type excludeAttrType = typeof( NonSerializedAttribute );
+		internal static readonly Type beforeEncodeAttrType = typeof( BeforeEncodeAttribute );
+
+		internal const BindingFlags instanceBindingFlags = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance;
+	}
+}

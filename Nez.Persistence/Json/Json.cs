@@ -14,21 +14,24 @@ namespace Nez.Persistence
 
 	public static class Json
 	{
-		internal const string TypeHintPropertyName = "@type";
-		internal const string IdPropertyName = "@id";
-		internal const string RefPropertyName = "@ref";
-
-		internal static readonly Type includeAttrType = typeof( SerializedAttribute );
-		internal static readonly Type excludeAttrType = typeof( NonSerializedAttribute );
-		static readonly Type beforeEncodeAttrType = typeof( BeforeEncodeAttribute );
-
-
+		/// <summary>
+		/// encodes <paramref name="obj"/> to a json string, pretty printed
+		/// </summary>
+		/// <returns>The json.</returns>
+		/// <param name="obj">Object.</param>
+		/// <param name="prettyPrint">If set to <c>true</c> pretty print.</param>
 		public static string ToJson( object obj, bool prettyPrint )
 		{
 			var settings = new JsonSettings { PrettyPrint = prettyPrint };
 			return ToJson( obj, settings );
 		}
 
+		/// <summary>
+		/// encodes <paramref name="obj"/> to a json string with an optional <see cref="JsonTypeConverter"/>
+		/// </summary>
+		/// <returns>The json.</returns>
+		/// <param name="obj">Object.</param>
+		/// <param name="converters">Converters.</param>
 		public static string ToJson( object obj, params JsonTypeConverter[] converters )
 		{
 			var settings = new JsonSettings { TypeConverters = converters };
@@ -51,7 +54,7 @@ namespace Nez.Persistence
 				{
 					foreach( var method in type.GetMethods( BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance ) )
 					{
-						if( method.IsDefined( beforeEncodeAttrType ) && method.GetParameters().Length == 0 )
+						if( method.IsDefined( JsonConstants.beforeEncodeAttrType ) && method.GetParameters().Length == 0 )
 						{
 							method.Invoke( obj, null );
 						}
@@ -63,33 +66,16 @@ namespace Nez.Persistence
 		}
 
 		/// <summary>
-		/// decodes <paramref name="json"/> into a Variant object which can be used directly or converted to
-		/// a strongly typed object via <cref="VariantConverter"/>
-		/// </summary>
-		/// <param name="json"></param>
-		/// <returns></returns>
-		public static Variant FromJson( string json )
-		{
-			System.Diagnostics.Debug.Assert( json != null );
-			return JsonProxyDecoder.FromJson( json );
-		}
-
-		/// <summary>
 		/// decodes <paramref name="json"/> into a strongly typed object of type T
 		/// </summary>
 		/// <returns>The json.</returns>
 		/// <param name="json">Json.</param>
 		/// <param name="settings">Settings.</param>
 		/// <typeparam name="T">The 1st type parameter.</typeparam>
-		public static T FromJson<T>( string json, JsonSettings settings = null )
+		public static object FromJson( string json, JsonSettings settings = null )
 		{
-			return VariantConverter.Decode<T>( JsonProxyDecoder.FromJson( json ), settings );
-		}
-
-		public static T FromJson<T>( string json, params JsonTypeConverter[] converters )
-		{
-			var settings = new JsonSettings { TypeConverters = converters };
-			return VariantConverter.Decode<T>( JsonProxyDecoder.FromJson( json ), settings );
+			System.Diagnostics.Debug.Assert( json != null );
+			return JsonDecoder.FromJson( json );
 		}
 
 		/// <summary>
@@ -98,16 +84,21 @@ namespace Nez.Persistence
 		/// <param name="json"></param>
 		/// <typeparam name="T"></typeparam>
 		/// <returns></returns>
-		public static T FromJson<T>( string json )
+		public static T FromJson<T>( string json, JsonSettings settings = null )
 		{
 			System.Diagnostics.Debug.Assert( json != null );
-			return VariantConverter.Decode<T>( JsonProxyDecoder.FromJson( json ) );
+			return JsonDecoder.FromJson<T>( json, settings );
 		}
 
+		/// <summary>
+		/// overwrites any data on <paramref name="item"/> with the data found in the json string
+		/// </summary>
+		/// <param name="json">Json.</param>
+		/// <param name="item">Item.</param>
 		public static void FromJsonOverwrite( string json, object item )
 		{
 			System.Diagnostics.Debug.Assert( json != null );
-			JsonDirectDecoder.FromJsonOverwrite( json, item );
+			JsonDecoder.FromJsonOverwrite( json, item );
 		}
 
 	}
