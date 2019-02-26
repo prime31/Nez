@@ -5,11 +5,17 @@ using Microsoft.Xna.Framework.Graphics;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework.Input;
 using Num = System.Numerics;
+using Nez.Persistence.Binary;
 
 namespace Nez.ImGuiTools
 {
 	public partial class ImGuiManager : GlobalManager, IFinalRenderDelegate, IDisposable
 	{
+		const string kShowStyleEditor = "ImGui_ShowStyleEditor";
+		const string kShowSceneGraphWindow = "ImGui_ShowSceneGraphWindow";
+		const string kShowCoreWindow = "ImGui_ShowCoreWindow";
+		const string kShowSeperateGameWindow = "ImGui_ShowSeperateGameWindow";
+
 		[Flags]
 		enum WindowPosition
 		{
@@ -22,6 +28,26 @@ namespace Nez.ImGuiTools
 			bottomLeft,
 			bottom,
 			bottomRight
+		}
+
+		void loadSettings()
+		{
+			showStyleEditor = KeyValueDataStore.Default.GetBool( kShowStyleEditor, showStyleEditor );
+			showSceneGraphWindow = KeyValueDataStore.Default.GetBool( kShowSceneGraphWindow, showSceneGraphWindow );
+			showCoreWindow = KeyValueDataStore.Default.GetBool( kShowCoreWindow, showCoreWindow );
+			showSeperateGameWindow = KeyValueDataStore.Default.GetBool( kShowSeperateGameWindow, showSeperateGameWindow );
+
+			Core.emitter.addObserver( CoreEvents.Exiting, persistSettings );
+		}
+
+		void persistSettings()
+		{
+			KeyValueDataStore.Default.Set( kShowStyleEditor, showStyleEditor );
+			KeyValueDataStore.Default.Set( kShowSceneGraphWindow, showSceneGraphWindow );
+			KeyValueDataStore.Default.Set( kShowCoreWindow, showCoreWindow );
+			KeyValueDataStore.Default.Set( kShowSeperateGameWindow, showSeperateGameWindow );
+
+			KeyValueDataStore.Default.Flush();
 		}
 
 		/// <summary>
@@ -232,7 +258,9 @@ namespace Nez.ImGuiTools
 
 				// we cant draw the game window until we have the texture bound so we append it here
 				ImGui.Begin( "Game Window" );
-				ImGui.Image( _renderTargetId, ImGui.GetContentRegionAvail() );
+				ImGui.PushStyleVar( ImGuiStyleVar.FramePadding, Num.Vector2.Zero );
+				ImGui.ImageButton( _renderTargetId, ImGui.GetContentRegionAvail() );
+				ImGui.PopStyleVar();
 				ImGui.End();
 
 				Core.graphicsDevice.SamplerStates[0] = samplerState;

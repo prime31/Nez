@@ -1,8 +1,8 @@
+using System;
+using System.Collections.Generic;
 using ImGuiNET;
 using Microsoft.Xna.Framework;
-using System;
 using Microsoft.Xna.Framework.Graphics;
-using System.Collections.Generic;
 using Microsoft.Xna.Framework.Input;
 using Num = System.Numerics;
 
@@ -31,6 +31,7 @@ namespace Nez.ImGuiTools
 
 		public ImGuiManager( ImGuiOptions options = null )
 		{
+			loadSettings();
 			_renderer = new ImGuiRenderer( Core.instance );
 
 			if( options != null )
@@ -84,27 +85,6 @@ namespace Nez.ImGuiTools
 			{
 				ImGui.Begin( "Style Editor", ref showStyleEditor );
 				ImGui.ShowStyleEditor();
-				ImGui.End();
-			}
-
-
-			// this is just test/junk code
-			ImGui.SetNextWindowPos( new Num.Vector2( 530, 475 ), ImGuiCond.FirstUseEver );
-			ImGui.SetNextWindowSize( new Num.Vector2( 340, 200 ), ImGuiCond.FirstUseEver );
-			if( ImGui.Begin( "Debug##junk" ) )
-			{
-				ImGui.Text( $"Mouse position: {ImGui.GetMousePos()}" );
-				ImGui.ShowStyleSelector( "Style" );
-
-				ImGui.Checkbox( "Demo Window", ref showDemoWindow );
-				ImGui.Checkbox( "Style Editor", ref showStyleEditor );
-				ImGui.Checkbox( "Scene Graph", ref showSceneGraphWindow );
-				ImGui.Checkbox( "Core Window", ref showCoreWindow );
-
-				ImGui.Separator();
-
-				float framerate = ImGui.GetIO().Framerate;
-				ImGui.Text( $"Application average {1000.0f / framerate:0.##} ms/frame ({framerate:0.#} FPS)" );
 				ImGui.End();
 			}
 		}

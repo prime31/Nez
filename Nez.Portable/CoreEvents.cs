@@ -19,7 +19,12 @@ namespace Nez
 		/// <summary>
 		/// fired when the device orientation changes
 		/// </summary>
-		OrientationChanged
+		OrientationChanged,
+
+		/// <summary>
+		/// fired when the game is exiting
+		/// </summary>
+		Exiting
 	}
 
 
