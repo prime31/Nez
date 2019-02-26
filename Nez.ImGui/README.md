@@ -10,7 +10,7 @@ Core.registerGlobalManager( imGuiManager );
 imGuiManager.setEnabled( false );
 ```
 
-Once the ImGui manager is installed and enabled you can register and issue ImGui commands from any Component by just fetching the ImGuiManager and calling `registerDrawCommand`:
+Once the ImGui manager is installed and enabled you can register and issue ImGui commands from any `Component` by just fetching the ImGuiManager and calling `registerDrawCommand`:
 
 ```csharp
 public override void onAddedToEntity()
@@ -26,12 +26,23 @@ void imGuiDraw()
 }
 ```
 
-You should deregister when your Component is no longer active by calling `unregisterDrawCommand`:
+You should deregister when your `Component` is no longer active by calling `unregisterDrawCommand`:
 
 ```csharp
 public override void onRemovedFromEntity()
 {
     Core.getGlobalManager<ImGuiManager>().unregisterDrawCommand( imGuiDraw );
+}
+```
+
+You can also display custom data in the inspector for your `Component` by putting an `InspectorDelegateAttribute` on any parameterless method in your class. Whenever your `Component` is visible in the inspector the method will be called in the context of the inspector. Anything you draw will appear after the normal `Component` data.
+
+```csharp
+[InspectorDelegate]
+public void testOtherMethod()
+{
+    ImGui.TextColored( new System.Numerics.Vector4( 0, 1, 0, 1 ), "Colored text..." );
+    ImGui.Combo( "Combo Box", ref privateInt, "First\0Second\0Third\0No Way\0Fifth Option" );
 }
 ```
 

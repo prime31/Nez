@@ -81,13 +81,9 @@ namespace Nez.ImGuiTools.TypeInspectors
 				}
 			}
 
-			var methods = ReflectionUtils.getMethods( targetType );
+			var methods = GetAllMethodsWithAttribute<InspectorCallableAttribute>( targetType );
 			foreach( var method in methods )
 			{
-				var attr = method.getCustomAttribute<InspectorCallableAttribute>();
-				if( attr == null )
-					continue;
-
 				if( !MethodInspector.areParametersValid( method.GetParameters() ) )
 					continue;
 
@@ -98,6 +94,19 @@ namespace Nez.ImGuiTools.TypeInspectors
 			}
 
 			return props;
+		}
+
+		public static IEnumerable<MethodInfo> GetAllMethodsWithAttribute<T>( Type type ) where T : Attribute
+		{
+			var methods = ReflectionUtils.getMethods( type );
+			foreach( var method in methods )
+			{
+				var attr = method.getCustomAttribute<T>();
+				if( attr == null )
+					continue;
+
+				yield return method;
+			}
 		}
 
 		/// <summary>
