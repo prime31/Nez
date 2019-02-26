@@ -13,7 +13,6 @@ namespace Nez.Persistence.JsonTests
 			Assert.AreEqual( "false", Json.ToJson( false ) );
 		}
 
-
 		[Test]
 		public void DumpNumber()
 		{
@@ -21,20 +20,17 @@ namespace Nez.Persistence.JsonTests
 			Assert.AreEqual( "12.34", Json.ToJson( 12.34 ) );
 		}
 
-
 		[Test]
 		public void DumpString()
 		{
 			Assert.AreEqual( "\"string\"", Json.ToJson( "string" ) );
 		}
 
-
 		[Test]
 		public void DumpArray()
 		{
 			Assert.AreEqual( "[1,true,\"three\"]", Json.ToJson( Json.FromJson( "[1,true,\"three\"]" ) ) );
 		}
-
 
 		[Test]
 		public void DumpObject()

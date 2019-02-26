@@ -13,6 +13,7 @@ namespace Nez.Persistence.JsonTests
 
 		class TestClass
 		{
+			public DateTime date = new DateTime( 2020, 1, 1 );
 			public int x;
 			public int y;
 
@@ -35,14 +36,14 @@ namespace Nez.Persistence.JsonTests
 			}
 
 
-			[AfterDecodeAttribute]
+			[AfterDecode]
 			public void AfterDecode()
 			{
 				AfterDecodeCallbackFired = true;
 			}
 
 
-			[BeforeEncodeAttribute]
+			[BeforeEncode]
 			public void BeforeDecode()
 			{
 				BeforeEncodeCallbackFired = true;
@@ -57,11 +58,10 @@ namespace Nez.Persistence.JsonTests
 			testClass.list = new List<int> { 3, 1, 4 };
 
 			var json = Json.ToJson( testClass );
-			Assert.AreEqual( "{\"x\":5,\"y\":7,\"list\":[3,1,4],\"p1\":1,\"p2\":2,\"p3\":3}", json );
+			Assert.AreEqual( "{\"date\":\"2020-01-01T00:00:00Z\",\"x\":5,\"y\":7,\"list\":[3,1,4],\"p1\":1,\"p2\":2,\"p3\":3}", json );
 
 			Assert.IsTrue( BeforeEncodeCallbackFired );
 		}
-
 
 		[Test]
 		public void DumpClassNoTypeHint()
@@ -74,9 +74,8 @@ namespace Nez.Persistence.JsonTests
 				TypeNameHandling = TypeNameHandling.None
 			};
 			var json = Json.ToJson( testClass, settings );
-			Assert.AreEqual( "{\"x\":5,\"y\":7,\"list\":[3,1,4],\"p1\":1,\"p2\":2,\"p3\":3}", json );
+			Assert.AreEqual( "{\"date\":\"2020-01-01T00:00:00Z\",\"x\":5,\"y\":7,\"list\":[3,1,4],\"p1\":1,\"p2\":2,\"p3\":3}", json );
 		}
-
 
 		[Test]
 		public void DumpClassPrettyPrint()
@@ -90,6 +89,7 @@ namespace Nez.Persistence.JsonTests
 				PrettyPrint = true
 			};
 			Assert.AreEqual( @"{
+	""date"": ""2020-01-01T00:00:00Z"",
 	""x"": 5,
 	""y"": 7,
 	""list"": [
@@ -103,20 +103,19 @@ namespace Nez.Persistence.JsonTests
 }", Json.ToJson( testClass, settings ) );
 		}
 
-
 		[Test]
 		public void DumpClassIncludePublicProperties()
 		{
 			var testClass = new TestClass { x = 5, y = 7, z = 0 };
-			Assert.AreEqual( "{\"x\":5,\"y\":7,\"list\":null,\"p1\":1,\"p2\":2,\"p3\":3}", Json.ToJson( testClass ) );
+			Assert.AreEqual( "{\"date\":\"2020-01-01T00:00:00Z\",\"x\":5,\"y\":7,\"list\":null,\"p1\":1,\"p2\":2,\"p3\":3}", Json.ToJson( testClass ) );
 		}
-
 
 		[Test]
 		public void LoadClass()
 		{
-			var testClass = Json.FromJson<TestClass>( "{\"x\":5,\"y\":7,\"z\":3,\"list\":[3,1,4],\"p1\":1,\"p2\":2,\"p3\":3}" );
+			var testClass = Json.FromJson<TestClass>( "{\"date\":\"2020-01-01T00:00:00Z\",\"x\":5,\"y\":7,\"z\":3,\"list\":[3,1,4],\"p1\":1,\"p2\":2,\"p3\":3}" );
 
+			Assert.AreEqual( new DateTime( 2020, 1, 1 ), testClass.date );
 			Assert.AreEqual( 5, testClass.x );
 			Assert.AreEqual( 7, testClass.y );
 			Assert.AreEqual( 0, testClass.z ); // should not get assigned

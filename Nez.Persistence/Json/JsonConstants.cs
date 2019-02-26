@@ -17,5 +17,12 @@ namespace Nez.Persistence
 		internal static readonly Type beforeEncodeAttrType = typeof( BeforeEncodeAttribute );
 
 		internal const BindingFlags instanceBindingFlags = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance;
+
+		internal static readonly string[] iso8601Format =
+		{
+			@"yyyy-MM-dd\THH:mm:ss.FFFFFFF\Z",
+			@"yyyy-MM-dd\THH:mm:ss\Z",
+			@"yyyy-MM-dd\THH:mm:ssK"
+		};
 	}
 }

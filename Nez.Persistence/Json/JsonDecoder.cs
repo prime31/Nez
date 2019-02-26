@@ -327,6 +327,23 @@ namespace Nez.Persistence
 			return 0;
 		}
 
+		/// <summary>
+		/// takes in either seconds or milliseoncds since the epoch and converts it to a DateTime
+		/// </summary>
+		/// <returns>The time from epoch time.</returns>
+		/// <param name="number">Number.</param>
+		DateTime DateTimeFromEpochTime( long number )
+		{
+			const long minSeconds = -62135596800;
+			const long maxSeconds = 253402300799;
+
+			if( number < minSeconds || number > maxSeconds )
+			{
+				return DateTimeOffset.FromUnixTimeMilliseconds( number ).UtcDateTime;
+			}
+			return DateTimeOffset.FromUnixTimeSeconds( number ).UtcDateTime;
+		}
+
 		#endregion
 
 		string DecodeString()
@@ -424,8 +441,16 @@ namespace Nez.Persistence
 			{
 				case Token.String:
 					var str = DecodeString();
+					if( type == typeof( DateTime ) )
+					{
+						return DateTime.ParseExact( str, JsonConstants.iso8601Format, CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal | DateTimeStyles.AdjustToUniversal );
+					}
 					return type.IsEnum ? Enum.Parse( type, str ) : str;
 				case Token.Number:
+					if( type == typeof( DateTime ) )
+					{
+						return DateTimeFromEpochTime( (long)Convert.ChangeType( ParseNumber( GetNextWord() ), typeof( long ) ) );
+					}
 					return Convert.ChangeType( ParseNumber( GetNextWord() ), type );
 				case Token.OpenBrace:
 					// either a Dictionary or an object

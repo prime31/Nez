@@ -73,6 +73,11 @@ namespace Nez.Persistence
 			{
 				_builder.Append( (bool)value ? "true" : "false" );
 			}
+			else if( value is DateTime )
+			{
+				var output = ( (DateTime)value ).ToString( JsonConstants.iso8601Format[0], CultureInfo.InvariantCulture );
+				EncodeString( output );
+			}
 			else if( value is Enum )
 			{
 				EncodeString( value.ToString() );
