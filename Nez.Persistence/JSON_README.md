@@ -15,7 +15,8 @@ A little JSON library that does big things.
 * Supports single dimensional arrays, multidimensional arrays and jagged arrays.
 * Polymorphic classes supported with a type hint encoded into the JSON automatically.
 * Supports optionally pretty printing JSON output.
-* Supports optionally encode properties and private fields (via the SerializedAttribute on them).
+* Supports optionally encoding properties and private fields (via the `JsonIncludeAttribute` on them).
+* Supports optionally excluding public fields (via the `JsonExcludeAttribute` on them)
 * Supports decoding fields and properties from aliased names.
 * Unit tested.
 
@@ -83,7 +84,7 @@ class TestClass
 	public TestEnum type;
 	public List<TestStruct> data = new List<TestStruct>();
 
-	[NonSerialized]
+	[JsonExclude]
 	public int _ignored;
 
 	[BeforeEncode]
@@ -163,7 +164,7 @@ Fields and properties can be decoded from aliases using the `DecodeAlias` attrib
 ```csharp
 class TestClass
 {
-	[Serialized] // note that properties are opt-in! You must tell Json you want them serialized.
+	[JsonInclude] // note that properties are opt-in! You must tell Json you want them serialized.
 	public int index { get; set; }
 	
 	[DecodeAlias("anotherName")]

@@ -12,7 +12,7 @@ namespace Nez.Persistence.JsonTests
 			public int x;
 			public int y;
 
-			[NonSerialized]
+			[JsonExclude]
 			public int z;
 
 			public List<int> list;

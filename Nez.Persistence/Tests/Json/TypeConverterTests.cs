@@ -13,7 +13,7 @@ namespace Nez.Persistence.JsonTests
 			public int y;
 			public int z;
 
-			[NonSerialized]
+			[JsonExclude]
 			public int totalOrphanedKeys;
 		}
 

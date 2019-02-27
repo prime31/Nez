@@ -25,8 +25,10 @@ namespace Nez.Persistence
 		internal bool IsMemberInfoEncodeableOrDecodeable( MemberInfo memberInfo, bool isPublic )
 		{
 			if( _memberInfoEncodeableCache.TryGetValue( memberInfo, out var isEncodeable ) )
+			{
 				return isEncodeable;
-				
+			}
+
 			foreach( var attribute in memberInfo.GetCustomAttributes( true ) )
 			{
 				if( JsonConstants.excludeAttrType.IsInstanceOfType( attribute ) )
@@ -127,7 +129,6 @@ namespace Nez.Persistence
 			_fieldInfoCache[type] = map;
 
 			var allFields = type.GetFields( JsonConstants.instanceBindingFlags );
-			// cleanse the fields based on our attributes
 			foreach( var field in allFields )
 			{
 				map[field.Name] = field;
@@ -166,10 +167,10 @@ namespace Nez.Persistence
 		/// <param name="type">Type.</param>
 		internal IEnumerable<PropertyInfo> GetEncodablePropertiesForType( Type type )
 		{
-			// cleanse the fields based on our attributes
+			// cleanse the properties based on our attributes
 			foreach( var kvPair in GetPropertyInfoCache( type ) )
 			{
-				if( IsMemberInfoEncodeableOrDecodeable( kvPair.Value, true ) )
+				if( IsMemberInfoEncodeableOrDecodeable( kvPair.Value, false ) )
 				{
 					yield return kvPair.Value;
 				}
@@ -211,9 +212,16 @@ namespace Nez.Persistence
 			_propertyInfoCache[type] = map;
 
 			var allProps = type.GetProperties( JsonConstants.instanceBindingFlags );
-			// cleanse the fields based on our attributes
 			foreach( var prop in allProps )
 			{
+				// skip properties that have index parameters (i.e. array accessor)
+				if( prop.GetIndexParameters().Length > 0 )
+				{
+					continue;
+				}
+
+				// skip properties that didnt opt-in
+
 				map[prop.Name] = prop;
 			}
 

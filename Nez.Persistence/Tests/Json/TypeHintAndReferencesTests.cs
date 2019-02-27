@@ -9,7 +9,7 @@ namespace Nez.Persistence.JsonTests
 	{
 		class Entity
 		{
-			[Serialized]
+			[JsonInclude]
 			public bool enabled { get; set; } = true;
 			public List<Component> components;
 

@@ -12,7 +12,7 @@ namespace Nez.Persistence.JsonTests
 			[DecodeAlias( "numberFieldAlias" )]
 			public int NumberField;
 
-			[Serialized]
+			[JsonInclude]
 			[DecodeAlias( "NumberPropertyAlias" )]
 			public int NumberProperty { get; set; }
 

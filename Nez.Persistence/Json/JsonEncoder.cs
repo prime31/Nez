@@ -212,7 +212,16 @@ namespace Nez.Persistence
 					WriteValueDelimiter();
 					EncodeString( property.Name );
 					AppendColon();
-					EncodeValue( property.GetValue( value, null ) );
+					try
+					{
+						EncodeValue( property.GetValue( value, null ) );
+					}
+					catch( Exception e )
+					{
+						// encode failed. stick a default value in there
+						EncodeValue( type.IsValueType ? Activator.CreateInstance( type ) : null );
+						System.Console.WriteLine( $"Failed to write property {property.Name} for type {type.Name}. {e}" );
+					}
 				}
 			}
 

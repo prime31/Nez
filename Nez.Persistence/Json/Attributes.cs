@@ -6,7 +6,13 @@ namespace Nez.Persistence
 	/// Mark members that should be included. Public fields and properties are included by default.
 	/// </summary>
 	[AttributeUsage( AttributeTargets.Field | AttributeTargets.Property )]
-	public sealed class SerializedAttribute : Attribute { }
+	public sealed class JsonIncludeAttribute : Attribute { }
+
+	/// <summary>
+	/// Mark members that should not be included.
+	/// </summary>
+	[AttributeUsage( AttributeTargets.Field | AttributeTargets.Property )]
+	public sealed class JsonExcludeAttribute : Attribute { }
 
 	/// <summary>
 	/// Mark methods to be called before an object is encoded.
