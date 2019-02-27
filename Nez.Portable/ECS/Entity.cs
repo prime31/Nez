@@ -329,7 +329,7 @@ namespace Nez
 		/// <summary>
 		/// creates a deep clone of this Entity. Subclasses can override this method to copy any custom fields. When overriding,
 		/// the copyFrom method should be called which will clone all Components, Colliders and Transform children for you. Note that cloned
-		/// objects will not be added to any Scene! You must add them yourself!
+		/// Entity will not be added to any Scene! You must add them yourself!
 		/// </summary>
 		public virtual Entity clone( Vector2 position = default( Vector2 ) )
 		{

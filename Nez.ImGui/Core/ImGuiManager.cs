@@ -166,8 +166,12 @@ namespace Nez.ImGuiTools
 
 				if( ImGui.BeginMenu( "Window" ) )
 				{
-					ImGui.MenuItem( "Demo Window", null, ref showDemoWindow );
+					ImGui.MenuItem( "ImGui Demo Window", null, ref showDemoWindow );
 					ImGui.MenuItem( "Style Editor", null, ref showStyleEditor );
+					if( ImGui.MenuItem( "Open imgui_demo.cpp on GitHub" ) )
+					{
+						System.Diagnostics.Process.Start( "https://github.com/ocornut/imgui/blob/master/imgui_demo.cpp" );
+					}
 					ImGui.Separator();
 					ImGui.MenuItem( "Core Window", null, ref showCoreWindow );
 					ImGui.MenuItem( "Scene Graph Window", null, ref showSceneGraphWindow );
@@ -185,7 +189,9 @@ namespace Nez.ImGuiTools
 		void drawEntityInspectors()
 		{
 			for( var i = _entityInspectors.Count - 1; i >= 0; i-- )
+			{
 				_entityInspectors[i].draw();
+			}
 		}
 
 		#region Public API

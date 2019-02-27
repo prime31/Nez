@@ -9,12 +9,12 @@ namespace Nez.ImGuiTools
 {
 	static class SceneGraphWindow
 	{
-        static List<PostProcessorInspector> _postProcessorInspectors = new List<PostProcessorInspector>();
-        
-        public static void onSceneChanged()
-        {
-            _postProcessorInspectors.Clear();
-        }
+		static List<PostProcessorInspector> _postProcessorInspectors = new List<PostProcessorInspector>();
+
+		public static void onSceneChanged()
+		{
+			_postProcessorInspectors.Clear();
+		}
 
 		public static void show( ref bool isOpen )
 		{
@@ -28,14 +28,16 @@ namespace Nez.ImGuiTools
 			{
 				if( Core.scene.rawPostProcessorList.length > 0 && ImGui.CollapsingHeader( "Post Processors" ) )
 				{
-                    drawPostProcessors();
+					drawPostProcessors();
 				}
 
 				if( ImGui.CollapsingHeader( "Entities (double-click label to inspect)", ImGuiTreeNodeFlags.DefaultOpen ) )
 				{
 					for( var i = Core.scene.entities.count - 1; i >= 0; i-- )
 					{
+						ImGui.PushID( Core.scene.entities.GetHashCode() );
 						drawEntity( Core.scene.entities[i] );
+						ImGui.PopID();
 					}
 				}
 
@@ -58,9 +60,26 @@ namespace Nez.ImGuiTools
 				treeNodeOpened = ImGui.TreeNodeEx( $"{entity.name} ({entity.transform.childCount})", ImGuiTreeNodeFlags.Leaf | ImGuiTreeNodeFlags.OpenOnArrow );
 			}
 
-            // we are looking for a double-click that is not on the arrow
+			// context menu
+			if( ImGui.BeginPopupContextItem() )
+			{
+				if( ImGui.Selectable( "Clone Entity " + entity.name ) )
+				{
+					var clone = entity.clone();
+					entity.scene.addEntity( clone );
+				}
+				if( ImGui.Selectable( "Destroy Entity" ) )
+				{
+					entity.destroy();
+				}
+				ImGui.EndPopup();
+			}
+
+			// we are looking for a double-click that is not on the arrow
 			if( ImGui.IsMouseDoubleClicked( 0 ) && ImGui.IsItemClicked() && ( ImGui.GetMousePos().X - ImGui.GetItemRectMin().X ) > ImGui.GetTreeNodeToLabelSpacing() )
+			{
 				Core.getGlobalManager<ImGuiManager>().startInspectingEntity( entity );
+			}
 
 			if( treeNodeOpened )
 			{
@@ -70,30 +89,30 @@ namespace Nez.ImGuiTools
 				ImGui.TreePop();
 			}
 		}
-	
-        static void drawPostProcessors()
-        {
-            // first, we check our list of inspectors and sync it up with the current list of PostProcessors in the Scene
-            for( var i = 0; i < Core.scene.rawPostProcessorList.length; i++ )
-            {
-                var postProcessor = Core.scene.rawPostProcessorList.buffer[i];
-                if( _postProcessorInspectors.Where( inspector => inspector.postProcessor == postProcessor ).Count() == 0 )
-                    _postProcessorInspectors.Add( new PostProcessorInspector( postProcessor ) );
-            }
 
-            for( var i = _postProcessorInspectors.Count - 1; i >= 0; i-- )
-            {
-                if( !_postProcessorInspectors[i].postProcessor.isAttachedToScene )
-                {
-                    _postProcessorInspectors.RemoveAt( i );
-                }
-                else
-                {
-                    _postProcessorInspectors[i].draw();
-                    NezImGui.SmallVerticalSpace();
-                }
-            }
-        }
+		static void drawPostProcessors()
+		{
+			// first, we check our list of inspectors and sync it up with the current list of PostProcessors in the Scene
+			for( var i = 0; i < Core.scene.rawPostProcessorList.length; i++ )
+			{
+				var postProcessor = Core.scene.rawPostProcessorList.buffer[i];
+				if( _postProcessorInspectors.Where( inspector => inspector.postProcessor == postProcessor ).Count() == 0 )
+					_postProcessorInspectors.Add( new PostProcessorInspector( postProcessor ) );
+			}
 
-    }
+			for( var i = _postProcessorInspectors.Count - 1; i >= 0; i-- )
+			{
+				if( !_postProcessorInspectors[i].postProcessor.isAttachedToScene )
+				{
+					_postProcessorInspectors.RemoveAt( i );
+				}
+				else
+				{
+					_postProcessorInspectors[i].draw();
+					NezImGui.SmallVerticalSpace();
+				}
+			}
+		}
+
+	}
 }

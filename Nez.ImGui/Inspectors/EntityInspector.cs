@@ -16,9 +16,10 @@ namespace Nez.ImGuiTools
         public EntityInspector( Entity entity )
 		{
 			_entity = entity;
-
 			for( var i = 0; i < entity.components.count; i++ )
+			{
 				_componentInspectors.Add( new ComponentInspector( entity.components[i] ) );
+			}
 			
 			_componentInspectors.Add( new TransformInspector( entity.transform ) );
 		}
