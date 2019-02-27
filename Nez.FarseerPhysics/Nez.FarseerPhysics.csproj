@@ -1,19 +1,24 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
-
-  <PropertyGroup>
-    <RootNamespace>Nez.Farseer</RootNamespace>
-    <AssemblyName>Nez.FarseerPhysics</AssemblyName>
-    <OutputType>Library</OutputType>
-    <TargetFramework>net471</TargetFramework>
-    <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
-	<IntermediateOutputPath>obj\Nez.FarseerPhysics\$(Configuration)</IntermediateOutputPath>
-	<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
-  </PropertyGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\Nez.Portable\Nez.csproj">
-    </ProjectReference>
-    <PackageReference Include="MonoGame.Framework.Portable" Version="3.7.1.189" />
-  </ItemGroup>
-
+﻿<Project>
+	<PropertyGroup>
+		<BaseIntermediateOutputPath>obj\$(MSBuildProjectName)</BaseIntermediateOutputPath>
+	</PropertyGroup>
+	<Import Sdk="Microsoft.NET.Sdk" Project="Sdk.props" />
+	
+	<PropertyGroup>
+		<RootNamespace>Nez.Farseer</RootNamespace>
+		<AssemblyName>Nez.FarseerPhysics</AssemblyName>
+		<OutputType>Library</OutputType>
+		<TargetFramework>net471</TargetFramework>
+		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+		<CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+		<IntermediateOutputPath>obj\Nez.FarseerPhysics\$(Configuration)</IntermediateOutputPath>
+		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+	</PropertyGroup>
+	
+	<ItemGroup>
+		<ProjectReference Include="..\Nez.Portable\Nez.csproj" />
+		<PackageReference Include="MonoGame.Framework.Portable" Version="3.7.1.189" />
+	</ItemGroup>
+	
+	<Import Sdk="Microsoft.NET.Sdk" Project="Sdk.targets" />
 </Project>

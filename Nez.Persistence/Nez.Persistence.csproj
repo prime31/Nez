@@ -1,8 +1,13 @@
-<?xml version="1.0" encoding="utf-8"?>
-<Project Sdk="Microsoft.NET.Sdk">
+<Project>
+	<PropertyGroup>
+		<BaseIntermediateOutputPath>obj\$(MSBuildProjectName)</BaseIntermediateOutputPath>
+	</PropertyGroup>
+	<Import Sdk="Microsoft.NET.Sdk" Project="Sdk.props" />
+	
 	<PropertyGroup>
 		<OutputType>Library</OutputType>
 		<TargetFramework>net471</TargetFramework>
+		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
 		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
 		<PlatformTarget>AnyCPU</PlatformTarget>
 		<RootNamespace>Nez.Persistence</RootNamespace>
@@ -20,4 +25,6 @@
         <ProjectReference Include="../Nez.Portable/Nez.csproj" />
 		<PackageReference Include="MonoGame.Framework.Portable" Version="3.7.1.189" />
 	</ItemGroup>
+	
+	<Import Sdk="Microsoft.NET.Sdk" Project="Sdk.targets" />
 </Project>
