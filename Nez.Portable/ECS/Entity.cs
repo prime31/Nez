@@ -47,7 +47,6 @@ namespace Nez
 		/// <summary>
 		/// enables/disables the Entity. When disabled colliders are removed from the Physics system and components methods will not be called
 		/// </summary>
-		/// <value><c>true</c> if enabled; otherwise, <c>false</c>.</value>
 		public bool enabled
 		{
 			get { return _enabled; }
