@@ -185,6 +185,32 @@ namespace Nez.Persistence.JsonTests
 			Assert.AreEqual( 4, list[2] );
 		}
 
+		class ListOfObjects
+		{
+			public int x = 5;
+			public int y = 10;
+		}
+
+		[Test]
+		public void DumpListOfObjects()
+		{
+			var list = new List<ListOfObjects> { { new ListOfObjects() }, { new ListOfObjects() }, { new ListOfObjects() } };
+			var json = Json.ToJson( list );
+
+			Assert.AreEqual( "[{\"x\":5,\"y\":10},{\"x\":5,\"y\":10},{\"x\":5,\"y\":10}]", Json.ToJson( list ) );
+		}
+
+		[Test]
+		public void LoadListOfObjects()
+		{
+			var list = Json.FromJson<List<ListOfObjects>>( "[{\"x\":5,\"y\":10},{\"x\":15,\"y\":10},{\"x\":25,\"y\":10}]" );
+			Assert.AreNotEqual( null, list );
+
+			Assert.AreEqual( 3, list.Count );
+			Assert.AreEqual( 5, list[0].x );
+			Assert.AreEqual( 15, list[1].x );
+			Assert.AreEqual( 25, list[2].x );
+		}
 
 		[Test]
 		public void DumpDict()

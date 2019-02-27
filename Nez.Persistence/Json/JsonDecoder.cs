@@ -508,7 +508,6 @@ namespace Nez.Persistence
 		/// <param name="key">Key.</param>
 		void SetNextValueOnObject( ref object obj, string key )
 		{
-			// if we have no object by this point we are in trouble
 			var field = _cacheResolver.GetField( obj.GetType(), key );
 			if( field != null )
 			{
@@ -517,14 +516,14 @@ namespace Nez.Persistence
 					var value = DecodeValue( GetNextToken(), field.FieldType );
 					if( obj.GetType().IsValueType )
 					{
-						// Type is a struct.
+						// obj is a struct.
 						var instanceRef = obj;
 						field.SetValue( instanceRef, value );
 						obj = instanceRef;
 						return;
 					}
 
-					// Type is a class.
+					// obj is a class.
 					field.SetValue( obj, value );
 					return;
 				}
@@ -538,14 +537,14 @@ namespace Nez.Persistence
 					var value = DecodeValue( GetNextToken(), property.PropertyType );
 					if( obj.GetType().IsValueType )
 					{
-						// Type is a struct.
+						// obj is a struct.
 						var instanceRef = obj;
 						property.SetValue( instanceRef, value );
 						obj = instanceRef;
 						return;
 					}
 
-					// Type is a class.
+					// obj is a class.
 					property.SetValue( obj, value );
 					return;
 				}
