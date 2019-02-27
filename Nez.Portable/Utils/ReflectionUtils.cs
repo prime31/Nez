@@ -20,11 +20,13 @@ namespace Nez
 			#endif
 		}
 
+
+		public static FieldInfo getFieldInfo( System.Object targetObject, string fieldName ) => getFieldInfo( targetObject.GetType(), fieldName );
+
 		
-		public static FieldInfo getFieldInfo( System.Object targetObject, string fieldName )
+		public static FieldInfo getFieldInfo( Type type, string fieldName )
 		{
 			FieldInfo fieldInfo = null;
-			var type = targetObject.GetType();
 
 			#if NETFX_CORE
 			foreach( var fi in type.GetRuntimeFields() )
@@ -64,12 +66,15 @@ namespace Nez
 		}
 
 
-		public static PropertyInfo getPropertyInfo( System.Object targetObject, string propertyName )
+		public static PropertyInfo getPropertyInfo( System.Object targetObject, string propertyName ) => getPropertyInfo( targetObject.GetType(), propertyName );
+
+
+		public static PropertyInfo getPropertyInfo( Type type, string propertyName )
 		{
 			#if NETFX_CORE
-			return targetObject.GetType().GetRuntimeProperty( propertyName );
+			return type.GetRuntimeProperty( propertyName );
 			#else
-			return targetObject.GetType().GetProperty( propertyName, BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public );
+			return type.GetProperty( propertyName, BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public );
 			#endif
 		}
 
