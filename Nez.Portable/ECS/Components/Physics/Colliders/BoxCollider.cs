@@ -31,7 +31,6 @@ namespace Nez
 			_colliderRequiresAutoSizing = true;
 		}
 
-
 		/// <summary>
 		/// creates a BoxCollider and uses the x/y components as the localOffset
 		/// </summary>
@@ -45,10 +44,8 @@ namespace Nez
 			shape = new Box( width, height );
 		}
 
-
 		public BoxCollider( float width, float height ) : this( -width / 2, -height / 2, width, height )
 		{}
-
 
 		/// <summary>
 		/// creates a BoxCollider and uses the x/y components of the Rect as the localOffset
@@ -82,7 +79,6 @@ namespace Nez
 			return this;
 		}
 
-
 		/// <summary>
 		/// sets the width of the BoxCollider
 		/// </summary>
@@ -103,7 +99,6 @@ namespace Nez
 
 			return this;
 		}
-
 
 		/// <summary>
 		/// sets the height of the BoxCollider
@@ -137,7 +132,6 @@ namespace Nez
 			graphics.batcher.drawPixel( entity.transform.position, Debug.Colors.colliderPosition, 4 * Debug.Size.lineSizeMultiplier );
 			graphics.batcher.drawPixel( entity.transform.position + shape.center, Debug.Colors.colliderCenter, 2 * Debug.Size.lineSizeMultiplier );
 		}
-
 
 		public override string ToString()
 		{

@@ -23,12 +23,10 @@ namespace Nez
 			_vertices.Add( new VertexPositionColorNormal( position, color, normal ) );
 		}
 
-
 		protected void addIndex( int index )
 		{
 			_indices.Add( (ushort)index );
 		}
-
 
 		/// <summary>
 		/// Once all the geometry has been specified by calling AddVertex and AddIndex, this method copies the vertex and index data into
@@ -43,7 +41,6 @@ namespace Nez
 			_indexBuffer = new IndexBuffer( Core.graphicsDevice, typeof( ushort ), _indices.Count, BufferUsage.None );
 			_indexBuffer.SetData( _indices.ToArray() );
 		}
-
 
 		public override void onAddedToEntity()
 		{
@@ -64,7 +61,6 @@ namespace Nez
 			Dispose( false );
 		}
 
-
 		/// <summary>
 		/// frees resources used by this object.
 		/// </summary>
@@ -73,7 +69,6 @@ namespace Nez
 			Dispose( true );
 			GC.SuppressFinalize( this );
 		}
-
 
 		/// <summary>
 		/// frees resources used by this object.

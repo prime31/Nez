@@ -17,7 +17,6 @@ namespace Nez.Systems
 			_messageTable = new Dictionary<T,List<Action>>();
 		}
 
-
 		/// <summary>
 		/// if using an enum as the generic constraint you may want to pass in a custom comparer to avoid boxing/unboxing. See the CoreEventsComparer
 		/// for an example implementation.
@@ -27,7 +26,6 @@ namespace Nez.Systems
 		{
 			_messageTable = new Dictionary<T,List<Action>>( customComparer );
 		}
-
 
 		public void addObserver( T eventType, Action handler )
 		{
@@ -42,14 +40,12 @@ namespace Nez.Systems
 			list.Add( handler );
 		}
 
-
 		public void removeObserver( T eventType, Action handler )
 		{
 			// we purposely do this in unsafe fashion so that it will throw an Exception if someone tries to remove a handler that
 			// was never added
 			_messageTable[eventType].Remove( handler );
 		}
-
 
 		public void emit( T eventType )
 		{
@@ -77,7 +73,6 @@ namespace Nez.Systems
 			_messageTable = new Dictionary<T,List<Action<U>>>();
 		}
 
-
 		/// <summary>
 		/// if using an enum as the generic constraint you may want to pass in a custom comparer to avoid boxing/unboxing. See the CoreEventsComparer
 		/// for an example implementation.
@@ -87,7 +82,6 @@ namespace Nez.Systems
 		{
 			_messageTable = new Dictionary<T,List<Action<U>>>( customComparer );
 		}
-
 
 		public void addObserver( T eventType, Action<U> handler )
 		{
@@ -102,14 +96,12 @@ namespace Nez.Systems
 			list.Add( handler );
 		}
 
-
 		public void removeObserver( T eventType, Action<U> handler )
 		{
 			// we purposely do this in unsafe fashion so that it will throw an Exception if someone tries to remove a handler that
 			// was never added
 			_messageTable[eventType].Remove( handler );
 		}
-
 
 		public void emit( T eventType, U data )
 		{

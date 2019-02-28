@@ -9,6 +9,9 @@ namespace Nez
 	/// </summary>
 	public abstract class Renderable3D : RenderableComponent
 	{
+		float _positionZ;
+		Vector2 _rotationXY;
+
 		/// <summary>
 		/// by default, uses a magic number of 1.5 * the scale of the object. This will work fine for objects ~1 unit in width/height.
 		/// Any other odd sizes should override this appropriately.
@@ -90,9 +93,5 @@ namespace Nez
 				return rotationMatrix * Matrix.CreateScale( scale ) * Matrix.CreateTranslation( pos.X, -pos.Y, pos.Z );
 			}
 		}
-
-
-		float _positionZ;
-		Vector2 _rotationXY;
 	}
 }

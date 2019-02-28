@@ -1,7 +1,6 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
 
-
 namespace Nez
 {
 	public class CameraShake : Component, IUpdatable
