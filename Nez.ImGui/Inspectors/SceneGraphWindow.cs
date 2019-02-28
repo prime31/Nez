@@ -58,6 +58,8 @@ namespace Nez.ImGuiTools
 				treeNodeOpened = ImGui.TreeNodeEx( $"{entity.name} ({entity.transform.childCount})###{entity.id}", ImGuiTreeNodeFlags.Leaf | ImGuiTreeNodeFlags.OpenOnArrow );
 			}
 
+			NezImGui.ShowContextMenuTooltip();
+
 			// context menu for entity commands
 			ImGui.OpenPopupOnItemClick( "entityContextMenu", 1 );
 			drawEntityContextMenuPopup( entity );

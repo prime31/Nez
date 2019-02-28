@@ -90,6 +90,19 @@ namespace Nez.ImGuiTools
 			return ImGui.Button( label, new System.Numerics.Vector2( buttonWidth, GetDefaultWidgetHeight() ) );
 		}
 
+		/// <summary>
+		/// shows a tooltip informing the user they can right click
+		/// </summary>
+		public static void ShowContextMenuTooltip()
+		{
+			if( ImGui.IsItemHovered() )
+			{
+				ImGui.BeginTooltip();
+				ImGui.Text( "Right click for more options" );
+				ImGui.EndTooltip();
+			}
+		}
+
         /// <summary>
         /// displays a simple dialog with some text and a couple buttons. Note that ImGui.OpenPopup( name ) has to be called
         /// in the same ID scope as this call.

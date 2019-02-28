@@ -51,6 +51,9 @@ namespace Nez.ImGuiTools
 				}
 			}
 
+			// tone down indent
+			ImGui.GetStyle().IndentSpacing = 12;
+
 			// find all themes
 			_themes = typeof( NezImGuiThemes ).GetMethods( System.Reflection.BindingFlags.Static | System.Reflection.BindingFlags.Public );
 		}

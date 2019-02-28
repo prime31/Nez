@@ -43,6 +43,8 @@ namespace Nez.ImGuiTools.TypeInspectors
 				return;
 			}
 
+			NezImGui.ShowContextMenuTooltip();
+
 			if( ImGui.BeginPopupContextItem() )
 			{
 				if( ImGui.Selectable( "Remove Material" ) )

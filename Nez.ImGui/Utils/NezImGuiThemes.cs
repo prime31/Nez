@@ -30,7 +30,6 @@ namespace Nez.ImGuiTools
 			style.FrameRounding = 4.0f;
 			style.ItemSpacing = new Num.Vector2( 12, 8 );
 			style.ItemInnerSpacing = new Num.Vector2( 8, 6 );
-			style.IndentSpacing = 25.0f;
 			style.ScrollbarSize = 15.0f;
 			style.ScrollbarRounding = 9.0f;
 			style.GrabMinSize = 5.0f;
@@ -272,7 +271,6 @@ namespace Nez.ImGuiTools
 			style.GrabRounding = 2;
 			style.ItemSpacing.X = 10;
 			style.ItemSpacing.Y = 4;
-			style.IndentSpacing = 22;
 			style.FramePadding.X = 6;
 			style.FramePadding.Y = 4;
 			style.Alpha = 1.0f;

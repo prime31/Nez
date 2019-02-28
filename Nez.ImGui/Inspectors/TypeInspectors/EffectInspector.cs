@@ -31,6 +31,9 @@ namespace Nez.ImGuiTools.TypeInspectors
 		public override void drawMutable()
 		{
 			var isOpen = ImGui.CollapsingHeader( $"{_name}", ImGuiTreeNodeFlags.FramePadding );
+
+			NezImGui.ShowContextMenuTooltip();
+
 			if( ImGui.BeginPopupContextItem() )
 			{
 				if( ImGui.Selectable( "Remove Effect" ) )
