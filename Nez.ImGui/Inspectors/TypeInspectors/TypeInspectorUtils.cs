@@ -25,6 +25,9 @@ namespace Nez.ImGuiTools.TypeInspectors
 			var fields = ReflectionUtils.getFields( targetType );
 			foreach( var field in fields )
 			{
+				if( field.IsDefined( typeof( NotInspectableAttribute ) ) )
+					continue;
+
 				var hasInspectableAttribute = field.IsDefined( typeof( InspectableAttribute ) );
 
 				// private fields must have the InspectableAttribute
@@ -51,6 +54,9 @@ namespace Nez.ImGuiTools.TypeInspectors
 			var properties = ReflectionUtils.getProperties( targetType );
 			foreach( var prop in properties )
 			{
+				if( prop.IsDefined( typeof( NotInspectableAttribute ) ) )
+					continue;
+
 				// Transforms and Component subclasses arent useful to inspect
 				if( prop.PropertyType == typeof( Transform ) || prop.PropertyType.IsSubclassOf( typeof( Component ) ) )
 					continue;

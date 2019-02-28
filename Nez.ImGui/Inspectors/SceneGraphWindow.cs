@@ -92,12 +92,16 @@ namespace Nez.ImGuiTools
 
 		static void drawPostProcessors()
 		{
-			// first, we check our list of inspectors and sync it up with the current list of PostProcessors in the Scene
-			for( var i = 0; i < Core.scene.rawPostProcessorList.length; i++ )
+			// first, we check our list of inspectors and sync it up with the current list of PostProcessors in the Scene.
+			// we limit the check to once every 60 fames
+			if( Time.frameCount % 60 == 0 )
 			{
-				var postProcessor = Core.scene.rawPostProcessorList.buffer[i];
-				if( _postProcessorInspectors.Where( inspector => inspector.postProcessor == postProcessor ).Count() == 0 )
-					_postProcessorInspectors.Add( new PostProcessorInspector( postProcessor ) );
+				for( var i = 0; i < Core.scene.rawPostProcessorList.length; i++ )
+				{
+					var postProcessor = Core.scene.rawPostProcessorList.buffer[i];
+					if( _postProcessorInspectors.Where( inspector => inspector.postProcessor == postProcessor ).Count() == 0 )
+						_postProcessorInspectors.Add( new PostProcessorInspector( postProcessor ) );
+				}
 			}
 
 			for( var i = _postProcessorInspectors.Count - 1; i >= 0; i-- )

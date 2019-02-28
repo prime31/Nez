@@ -3,7 +3,7 @@ using Num = System.Numerics;
 
 namespace Nez.ImGuiTools.ComponentInspectors
 {
-	public class TransformInspector : IComponentInspector
+	public class TransformInspector
 	{
 		Transform _transform;
 
@@ -12,7 +12,7 @@ namespace Nez.ImGuiTools.ComponentInspectors
 			_transform = transform;
 		}
 
-		void IComponentInspector.draw()
+		public void draw()
 		{
 			if( ImGui.CollapsingHeader( "Transform", ImGuiTreeNodeFlags.DefaultOpen ) )
 			{
@@ -47,5 +47,6 @@ namespace Nez.ImGuiTools.ComponentInspectors
                     _transform.setScale( scale.toXNA() );
             }
 		}
-	}
+	
+    }
 }

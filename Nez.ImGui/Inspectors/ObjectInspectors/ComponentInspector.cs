@@ -8,7 +8,10 @@ namespace Nez.ImGuiTools.ComponentInspectors
 {
 	public class ComponentInspector : AbstractComponentInspector
 	{
-        Component _component;
+		public override Entity entity => _component.entity;
+		public override Component component => _component;
+
+		Component _component;
         List<Action> _componentDelegateMethods = new List<Action>();
 
         public ComponentInspector( Component component )
@@ -30,7 +33,19 @@ namespace Nez.ImGuiTools.ComponentInspectors
 		public override void draw()
 		{
             ImGui.PushID( _scopeId );
-            if( ImGui.CollapsingHeader( _component.GetType().Name ) )
+            var isHeaderOpen = ImGui.CollapsingHeader( _component.GetType().Name );
+
+            // context menu has to be outside the isHeaderOpen block so it works open or closed
+            if( ImGui.BeginPopupContextItem() )
+            {
+                if( ImGui.Selectable( "Remove Component" ) )
+                {
+                    _component.removeComponent();
+                }
+                ImGui.EndPopup();
+            }
+
+            if( isHeaderOpen )
             {
                 var enabled = _component.enabled;
                 if( ImGui.Checkbox( "Enabled", ref enabled ) )

@@ -1,11 +1,15 @@
+using System.Collections.Generic;
 using ImGuiNET;
 using Nez.ImGuiTools.TypeInspectors;
 
 namespace Nez.ImGuiTools.ComponentInspectors
 {
-    public class PostProcessorInspector : AbstractComponentInspector
+    public class PostProcessorInspector
     {
         public PostProcessor postProcessor => _postProcessor;
+
+        protected List<AbstractTypeInspector> _inspectors;
+		protected int _scopeId = NezImGui.SetScopeId();
 
         PostProcessor _postProcessor;
 
@@ -15,7 +19,7 @@ namespace Nez.ImGuiTools.ComponentInspectors
             _inspectors = TypeInspectorUtils.getInspectableProperties( postProcessor );
         }
 
-        public override void draw()
+        public void draw()
         {
             ImGui.PushID( _scopeId );
             ImGui.Indent();

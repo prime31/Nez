@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using ImGuiNET;
 using Nez.ImGuiTools.ComponentInspectors;
 using Num = System.Numerics;
@@ -11,17 +13,17 @@ namespace Nez.ImGuiTools
 
 		Entity _entity;
 		bool _shouldFocusWindow;
+		string _componentNameFilter;
+		TransformInspector _transformInspector;
 		List<IComponentInspector> _componentInspectors = new List<IComponentInspector>();
 
         public EntityInspector( Entity entity )
 		{
 			_entity = entity;
+			_transformInspector = new TransformInspector( _entity.transform );
+
 			for( var i = 0; i < entity.components.count; i++ )
-			{
 				_componentInspectors.Add( new ComponentInspector( entity.components[i] ) );
-			}
-			
-			_componentInspectors.Add( new TransformInspector( entity.transform ) );
 		}
 
 		public void draw()
@@ -38,6 +40,17 @@ namespace Nez.ImGuiTools
 				_shouldFocusWindow = false;
 				ImGui.SetNextWindowFocus();
 				ImGui.SetNextWindowCollapsed( false );
+			}
+
+			// every 60 frames we check for newly added Components and add them
+			if( Time.frameCount % 60 == 0 )
+			{
+				for( var i = 0; i < _entity.components.count; i++ )
+				{
+					var component = _entity.components[i];
+					if( _componentInspectors.Where( inspector => inspector.component != null && inspector.component == component ).Count() == 0 )
+						_componentInspectors.Insert( 0, new ComponentInspector( component ) );
+				}
 			}
 
 			ImGui.SetNextWindowSize( new Num.Vector2( 335, 400 ), ImGuiCond.FirstUseEver );
@@ -59,17 +72,70 @@ namespace Nez.ImGuiTools
                     entity.tag = tag;
 
 				NezImGui.MediumVerticalSpace();
+				_transformInspector.draw();
+				NezImGui.MediumVerticalSpace();
 
+				// watch out for removed Components
 				for( var i = _componentInspectors.Count - 1; i >= 0; i-- )
 				{
+					if( _componentInspectors[i].entity == null )
+					{
+						_componentInspectors.RemoveAt( i );
+						continue;
+					}
 					_componentInspectors[i].draw();
 					NezImGui.MediumVerticalSpace();
 				}
+
+				if( ImGui.Button( "Add Component", new Num.Vector2( -1, ImGui.GetFontSize() + ImGui.GetStyle().FramePadding.Y * 2 ) ) )
+				{
+					_componentNameFilter = "";
+					ImGui.OpenPopup( "component-selector" );
+				}
+
+				drawComponentSelectorPopup();
+
 				ImGui.End();
 			}
 
 			if( !open )
 				Core.getGlobalManager<ImGuiManager>().stopInspectingEntity( this );
+		}
+
+		private void drawComponentSelectorPopup()
+		{
+			if( ImGui.BeginPopup( "component-selector" ) )
+			{
+				ImGui.InputText( "###ComponentFilter", ref _componentNameFilter, 25 );
+				ImGui.Separator();
+
+				var isNezType = false;
+				var isColliderType = false;
+				foreach( var subclassType in InspectorCache.getAllComponentTypes() )
+				{
+					if( string.IsNullOrEmpty( _componentNameFilter ) || subclassType.Name.ToLower().Contains( _componentNameFilter.ToLower() ) )
+					{
+						if( !isNezType && subclassType.Namespace.StartsWith( "Nez" ) )
+						{
+							isNezType = true;
+							ImGui.Separator();
+						}
+						
+						if( !isColliderType && typeof( Collider ).IsAssignableFrom( subclassType ) )
+						{
+							isColliderType = true;
+							ImGui.Separator();
+						}
+
+						if( ImGui.Selectable( subclassType.FullName ) )
+						{
+							entity.addComponent( Activator.CreateInstance( subclassType ) as Component );
+							ImGui.CloseCurrentPopup();
+						}
+					}
+				}
+				ImGui.EndPopup();
+			}
 		}
 
 		/// <summary>

@@ -20,10 +20,10 @@ namespace Nez
 			#endif
 		}
 
+		#region Fields
 
 		public static FieldInfo getFieldInfo( System.Object targetObject, string fieldName ) => getFieldInfo( targetObject.GetType(), fieldName );
 
-		
 		public static FieldInfo getFieldInfo( Type type, string fieldName )
 		{
 			FieldInfo fieldInfo = null;
@@ -48,7 +48,6 @@ namespace Nez
 			return fieldInfo;
 		}
 
-
 		public static IEnumerable<FieldInfo> getFields( Type type )
 		{
 			#if NETFX_CORE
@@ -58,16 +57,17 @@ namespace Nez
 			#endif
 		}
 
-
 		public static object getFieldValue( object targetObject, string fieldName )
 		{
 			var fieldInfo = getFieldInfo( targetObject, fieldName );
 			return fieldInfo.GetValue( targetObject );
 		}
 
+		#endregion
+
+		#region Properties
 
 		public static PropertyInfo getPropertyInfo( System.Object targetObject, string propertyName ) => getPropertyInfo( targetObject.GetType(), propertyName );
-
 
 		public static PropertyInfo getPropertyInfo( Type type, string propertyName )
 		{
@@ -78,7 +78,6 @@ namespace Nez
 			#endif
 		}
 
-
 		public static IEnumerable<PropertyInfo> getProperties( Type type )
 		{
 			#if NETFX_CORE
@@ -87,7 +86,6 @@ namespace Nez
 			return type.GetProperties( BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic );
 			#endif
 		}
-
 
 		public static MethodInfo getPropertyGetter( PropertyInfo prop )
 		{
@@ -98,7 +96,6 @@ namespace Nez
 			#endif
 		}
 
-
 		public static MethodInfo getPropertySetter( PropertyInfo prop )
 		{
 			#if NETFX_CORE
@@ -108,7 +105,6 @@ namespace Nez
 			#endif
 		}
 
-
 		public static object getPropertyValue( object targetObject, string propertyName )
 		{
 			var propInfo = getPropertyInfo( targetObject, propertyName );
@@ -116,6 +112,37 @@ namespace Nez
 			return methodInfo.Invoke( targetObject, new object[] { } );
 		}
 
+		/// <summary>
+		/// either returns a super fast Delegate to set the given property or null if it couldn't be found
+		/// via reflection
+		/// </summary>
+		public static T setterForProperty<T>( System.Object targetObject, string propertyName )
+		{
+			// first get the property
+			var propInfo = getPropertyInfo( targetObject, propertyName );
+			if( propInfo == null )
+				return default(T);
+
+			return createDelegate<T>( targetObject, propInfo.SetMethod );
+		}
+
+		/// <summary>
+		/// either returns a super fast Delegate to get the given property or null if it couldn't be found
+		/// via reflection
+		/// </summary>
+		public static T getterForProperty<T>( System.Object targetObject, string propertyName )
+		{
+			// first get the property
+			var propInfo = getPropertyInfo( targetObject, propertyName );
+			if( propInfo == null )
+				return default(T);
+
+			return createDelegate<T>( targetObject, propInfo.GetMethod );
+		}
+
+		#endregion
+
+		#region Methods
 
 		public static IEnumerable<MethodInfo> getMethods( Type type )
 		{
@@ -126,18 +153,15 @@ namespace Nez
 			#endif
 		}
 
-
 		public static MethodInfo getMethodInfo( System.Object targetObject, string methodName )
 		{
 			return getMethodInfo( targetObject.GetType(), methodName );
 		}
 
-
 		public static MethodInfo getMethodInfo( System.Object targetObject, string methodName, Type[] parameters )
 		{
 			return getMethodInfo( targetObject.GetType(), methodName, parameters );
 		}
-
 
 		public static MethodInfo getMethodInfo( Type type, string methodName, Type[] parameters = null )
 		{
@@ -156,6 +180,7 @@ namespace Nez
 			#endif
 		}
 
+		#endregion
 
 		public static T createDelegate<T>( System.Object targetObject, MethodInfo methodInfo )
 		{
@@ -166,34 +191,60 @@ namespace Nez
 			#endif
 		}
 
-		
 		/// <summary>
-		/// either returns a super fast Delegate to set the given property or null if it couldn't be found
-		/// via reflection
+		/// gets all subclasses of <paramref name="baseClassType"> optionally filtering only for those with
+		/// a parameterless constructor
 		/// </summary>
-		public static T setterForProperty<T>( System.Object targetObject, string propertyName )
+		/// <param name="baseClassType"></param>
+		/// <param name="onlyIncludeParameterlessConstructors"></param>
+		/// <returns></returns>
+		public static List<Type> getAllSubclasses( Type baseClassType, bool onlyIncludeParameterlessConstructors = false )
 		{
-			// first get the property
-			var propInfo = getPropertyInfo( targetObject, propertyName );
-			if( propInfo == null )
-				return default(T);
-
-			return createDelegate<T>( targetObject, propInfo.SetMethod );
+			var typeList = new List<Type>();
+			foreach( var assembly in AppDomain.CurrentDomain.GetAssemblies() )
+			{
+				foreach( var type in assembly.GetTypes() )
+				{
+					if( type.IsSubclassOf( baseClassType ) )
+					{
+						if( onlyIncludeParameterlessConstructors )
+						{
+							if( type.GetConstructor( Type.EmptyTypes ) == null )
+								continue;
+						}
+						typeList.Add( type );
+					}
+				}
+			}
+			return typeList;
 		}
 
-
 		/// <summary>
-		/// either returns a super fast Delegate to get the given property or null if it couldn't be found
-		/// via reflection
+		/// gets all Types assignable from <paramref name="baseClassType"> optionally filtering only for those with
+		/// a parameterless constructor
 		/// </summary>
-		public static T getterForProperty<T>( System.Object targetObject, string propertyName )
+		/// <param name="baseClassType"></param>
+		/// <param name="onlyIncludeParameterlessConstructors"></param>
+		/// <returns></returns>
+		public static List<Type> getAllTypesAssignableFrom( Type baseClassType, bool onlyIncludeParameterlessConstructors = false )
 		{
-			// first get the property
-			var propInfo = getPropertyInfo( targetObject, propertyName );
-			if( propInfo == null )
-				return default(T);
-
-			return createDelegate<T>( targetObject, propInfo.GetMethod );
+			var typeList = new List<Type>();
+			foreach( var assembly in AppDomain.CurrentDomain.GetAssemblies() )
+			{
+				foreach( var type in assembly.GetTypes() )
+				{
+					if( baseClassType.IsAssignableFrom( type ) )
+					{
+						if( onlyIncludeParameterlessConstructors )
+						{
+							if( type.GetConstructor( Type.EmptyTypes ) == null )
+								continue;
+						}
+						typeList.Add( type );
+					}
+				}
+			}
+			return typeList;
 		}
 
 	}
