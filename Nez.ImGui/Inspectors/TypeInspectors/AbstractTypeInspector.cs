@@ -6,8 +6,17 @@ namespace Nez.ImGuiTools.TypeInspectors
 {
 	public abstract class AbstractTypeInspector
 	{
+		public string name => _name;
+
+		/// <summary>
+		/// parent inspectors that also keep a list sub-inspectors can check this to ensure the object the sub-inspectors was inspecting
+		/// is still around. Of course, child inspectors must be dilgent about setting it when the remove themselves!
+		/// </summary>
+		public bool isTargetDestroyed => _isTargetDestroyed;
+
 		protected int _scopeId = NezImGui.GetScopeId();
 
+		protected bool _isTargetDestroyed;
 		protected object _target;
 		protected string _name;
 		protected Type _valueType;

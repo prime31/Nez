@@ -53,17 +53,21 @@ namespace Nez.ImGuiTools.ComponentInspectors
                     _component.setEnabled( enabled );
                 }
 
-                foreach( var inspector in _inspectors )
+                for( var i = _inspectors.Count - 1; i >= 0; i-- )
                 {
-                    inspector.draw();
+                    if( _inspectors[i].isTargetDestroyed )
+                    {
+                        _inspectors.RemoveAt( i );
+                        continue;
+                    }
+                    _inspectors[i].draw();
                 }
                 
                 foreach( var action in _componentDelegateMethods )
-                {
                     action();
-                }
             }
             ImGui.PopID();
 		}
-	}
+	
+    }
 }

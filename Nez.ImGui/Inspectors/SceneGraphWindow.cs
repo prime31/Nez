@@ -60,6 +60,26 @@ namespace Nez.ImGuiTools
 
 			// context menu for entity commands
 			ImGui.OpenPopupOnItemClick( "entityContextMenu", 1 );
+			drawEntityContextMenuPopup( entity );
+
+			// we are looking for a double-click that is not on the arrow
+			if( ImGui.IsMouseDoubleClicked( 0 ) && ImGui.IsItemClicked() && ( ImGui.GetMousePos().X - ImGui.GetItemRectMin().X ) > ImGui.GetTreeNodeToLabelSpacing() )
+			{
+				Core.getGlobalManager<ImGuiManager>().startInspectingEntity( entity );
+			}
+
+			if( treeNodeOpened )
+			{
+				for( var i = 0; i < entity.transform.childCount; i++ )
+					drawEntity( entity.transform.getChild( i ).entity, false );
+
+				ImGui.TreePop();
+			}
+			ImGui.PopID();
+		}
+
+		private static void drawEntityContextMenuPopup( Entity entity )
+		{
 			if( ImGui.BeginPopup( "entityContextMenu" ) )
 			{
 				if( ImGui.Selectable( "Clone Entity " + entity.name ) )
@@ -104,21 +124,6 @@ namespace Nez.ImGuiTools
 
 				ImGui.EndPopup();
 			}
-
-			// we are looking for a double-click that is not on the arrow
-			if( ImGui.IsMouseDoubleClicked( 0 ) && ImGui.IsItemClicked() && ( ImGui.GetMousePos().X - ImGui.GetItemRectMin().X ) > ImGui.GetTreeNodeToLabelSpacing() )
-			{
-				Core.getGlobalManager<ImGuiManager>().startInspectingEntity( entity );
-			}
-
-			if( treeNodeOpened )
-			{
-				for( var i = 0; i < entity.transform.childCount; i++ )
-					drawEntity( entity.transform.getChild( i ).entity, false );
-
-				ImGui.TreePop();
-			}
-			ImGui.PopID();
 		}
 
 		static void drawPostProcessors()

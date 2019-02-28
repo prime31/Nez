@@ -8,7 +8,7 @@ using Nez.IEnumerableExtensions;
 
 namespace Nez.ImGuiTools.TypeInspectors
 {
-	public class EffectInspector : AbstractTypeInspector
+	public class MaterialInspector : AbstractTypeInspector
 	{
 		List<AbstractTypeInspector> _inspectors = new List<AbstractTypeInspector>();
 
@@ -16,28 +16,23 @@ namespace Nez.ImGuiTools.TypeInspectors
 		{
 			base.initialize();
 
-			// we either have a getter that gets a Material or an Effect
-			var effect = getValue<Effect>();
-			if( effect == null )
+			var material = getValue<Material>();
+			if( material == null )
 				return;
 
-			_name = effect.GetType().Name;
+			_name = material.GetType().Name;
 
-			var inspectors = TypeInspectorUtils.getInspectableProperties( effect );
-			foreach( var inspector in inspectors )
-			{
-				// we dont need the Name field. It serves no purpose.
-				if( inspector.name != "Name" )
-					_inspectors.Add( inspector );
-			}
+			// fetch our inspectors and let them know who their parent is
+			_inspectors = TypeInspectorUtils.getInspectableProperties( material );
 		}
 
 		public override void drawMutable()
 		{
+			ImGui.Indent();
 			var isOpen = ImGui.CollapsingHeader( $"{_name}", ImGuiTreeNodeFlags.FramePadding );
 			if( ImGui.BeginPopupContextItem() )
 			{
-				if( ImGui.Selectable( "Remove Effect" ) )
+				if( ImGui.Selectable( "Remove Material" ) )
 				{
 					setValue( null );
 					_isTargetDestroyed = true;
@@ -48,9 +43,19 @@ namespace Nez.ImGuiTools.TypeInspectors
 
 			if( isOpen && !_isTargetDestroyed )
 			{
-				foreach( var i in _inspectors )
-					i.draw();
+				ImGui.Indent();
+				for( var i = _inspectors.Count - 1; i >= 0; i-- )
+				{
+					if( _inspectors[i].isTargetDestroyed )
+					{
+						_inspectors.RemoveAt( i );
+						continue;
+					}
+					_inspectors[i].draw();
+				}
+				ImGui.Unindent();
 			}
+			ImGui.Unindent();
 		}
 	}
 }

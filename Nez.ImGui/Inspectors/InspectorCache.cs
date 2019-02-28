@@ -15,7 +15,7 @@ namespace Nez.ImGuiTools
 		{
 			if( _componentSubclasses == null )
 			{
-				var subclasses = ReflectionUtils.getAllTypesAssignableFrom( typeof( Component ), true );
+				var subclasses = ReflectionUtils.getAllSubclasses( typeof( Component ), true );
 				// sort so the Colliders are on the bottom
 				subclasses.Sort( (t, u) =>
 				{

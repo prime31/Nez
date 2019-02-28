@@ -25,7 +25,7 @@ namespace Nez.ImGuiTools.TypeInspectors
 			var fields = ReflectionUtils.getFields( targetType );
 			foreach( var field in fields )
 			{
-				if( field.IsDefined( typeof( NotInspectableAttribute ) ) )
+				if( field.IsStatic || field.IsDefined( typeof( NotInspectableAttribute ) ) )
 					continue;
 
 				var hasInspectableAttribute = field.IsDefined( typeof( InspectableAttribute ) );
@@ -61,7 +61,7 @@ namespace Nez.ImGuiTools.TypeInspectors
 				if( prop.PropertyType == typeof( Transform ) || prop.PropertyType.IsSubclassOf( typeof( Component ) ) )
 					continue;
 
-				if( !prop.CanRead )
+				if( !prop.CanRead || prop.GetGetMethod( true ).IsStatic )
 					continue;
 
 				var hasInspectableAttribute = prop.IsDefined( typeof( InspectableAttribute ) );
@@ -154,31 +154,37 @@ namespace Nez.ImGuiTools.TypeInspectors
 
 			// Nez types
 			if( valueType == typeof( Material ) )
-				return getMaterialInspector( target );
-			if( valueType.GetTypeInfo().IsSubclassOf( typeof( Effect ) ) )
+				return getMaterialInspector( target, memberInfo );
+			if( valueType == typeof( Effect ) )
 				return getEffectInspector( target, memberInfo );
 
-			Debug.info( $"no inspector found for type {valueType}" );
+			Debug.info( $"no inspector found for type {valueType} on object {target.GetType()}" );
 
 			return null;
 		}
 
 		/// <summary>
-		/// null checks the Material and Material.effect and ony returns an Inspector if we have data
+		/// null checks the Material and ony returns an Inspector if we have data since Material will almost always
+		/// be null
 		/// </summary>
 		/// <returns>The material inspector.</returns>
 		/// <param name="target">Target.</param>
-		static AbstractTypeInspector getMaterialInspector( object target )
+		static AbstractTypeInspector getMaterialInspector( object target, MemberInfo memberInfo )
 		{
-			var materialProp = ReflectionUtils.getPropertyInfo( target, "material" );
-			var materialMethod = ReflectionUtils.getPropertyGetter( materialProp );
-			var material = materialMethod.Invoke( target, new object[] { } ) as Material;
-			if( material == null || material.effect == null )
-				return null;
+			Material material = null;
+			var fieldInfo = memberInfo as FieldInfo;
+			if( fieldInfo != null )
+				material = fieldInfo.GetValue( target ) as Material;
 
-			// we only want subclasses of Effect. Effect itself is not interesting
-			if( material.effect.GetType().GetTypeInfo().IsSubclassOf( typeof( Effect ) ) )
-				return new EffectInspector();
+			var propInfo = memberInfo as PropertyInfo;
+			if( propInfo != null )
+			{
+				var getter = ReflectionUtils.getPropertyGetter( propInfo );
+				material = getter.Invoke( target, new object[] {} ) as Material;
+			}
+
+			if( material != null )
+				return new MaterialInspector();
 
 			return null;
 		}
@@ -191,20 +197,21 @@ namespace Nez.ImGuiTools.TypeInspectors
 		/// <param name="memberInfo">Member info.</param>
 		static AbstractTypeInspector getEffectInspector( object target, MemberInfo memberInfo )
 		{
+			// we only want subclasses of Effect. Effect itself is not interesting so we have to fetch the data
+			Effect effect = null;
 			var fieldInfo = memberInfo as FieldInfo;
 			if( fieldInfo != null )
-			{
-				if( fieldInfo.GetValue( target ) != null )
-					return new EffectInspector();
-			}
+				effect = fieldInfo.GetValue( target ) as Effect;
 
 			var propInfo = memberInfo as PropertyInfo;
 			if( propInfo != null )
 			{
 				var getter = ReflectionUtils.getPropertyGetter( propInfo );
-				if( getter.Invoke( target, new object[] {} ) != null )
-					return new EffectInspector();
+				effect = getter.Invoke( target, new object[] {} ) as Effect;
 			}
+
+			if( effect != null && effect.GetType().IsSubclassOf( typeof( Effect ) ) )
+				return new EffectInspector();
 
 			return null;
 		}
