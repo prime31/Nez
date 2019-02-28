@@ -44,6 +44,6 @@ namespace Nez.ImGuiTools
 			}
 			return _componentSubclasses;
 		}
-   
+
 	}
 }

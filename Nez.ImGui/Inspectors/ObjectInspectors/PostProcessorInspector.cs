@@ -9,7 +9,7 @@ namespace Nez.ImGuiTools.ComponentInspectors
         public PostProcessor postProcessor => _postProcessor;
 
         protected List<AbstractTypeInspector> _inspectors;
-		protected int _scopeId = NezImGui.SetScopeId();
+		protected int _scopeId = NezImGui.GetScopeId();
 
         PostProcessor _postProcessor;
 

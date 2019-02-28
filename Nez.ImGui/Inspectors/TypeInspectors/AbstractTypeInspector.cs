@@ -6,7 +6,7 @@ namespace Nez.ImGuiTools.TypeInspectors
 {
 	public abstract class AbstractTypeInspector
 	{
-		protected int _scopeId = NezImGui.SetScopeId();
+		protected int _scopeId = NezImGui.GetScopeId();
 
 		protected object _target;
 		protected string _name;

@@ -11,12 +11,15 @@ namespace Nez.ImGuiTools
 		/// gets a unique id that can be used with ImGui.PushId() to avoid conflicts with type inspectors
 		/// </summary>
 		/// <returns></returns>
-		public static int SetScopeId() => _idScope++;
+		public static int GetScopeId() => _idScope++;
 
 		public static void SmallVerticalSpace() => ImGui.Dummy( new Num.Vector2( 0, 5 ) );
 
 		public static void MediumVerticalSpace() => ImGui.Dummy( new Num.Vector2( 0, 10 ) );
 
+		/// <summary>
+		/// adds a DrawList command to draw a border around the group
+		/// </summary>
 		public static void BeginBorderedGroup()
 		{
 			ImGui.BeginGroup();

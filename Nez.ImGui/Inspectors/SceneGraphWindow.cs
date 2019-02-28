@@ -10,6 +10,7 @@ namespace Nez.ImGuiTools
 	static class SceneGraphWindow
 	{
 		static List<PostProcessorInspector> _postProcessorInspectors = new List<PostProcessorInspector>();
+		static string _entityName = "";
 
 		public static void onSceneChanged()
 		{
@@ -34,11 +35,7 @@ namespace Nez.ImGuiTools
 				if( ImGui.CollapsingHeader( "Entities (double-click label to inspect)", ImGuiTreeNodeFlags.DefaultOpen ) )
 				{
 					for( var i = Core.scene.entities.count - 1; i >= 0; i-- )
-					{
-						ImGui.PushID( Core.scene.entities.GetHashCode() );
 						drawEntity( Core.scene.entities[i] );
-						ImGui.PopID();
-					}
 				}
 
 				ImGui.End();
@@ -50,28 +47,61 @@ namespace Nez.ImGuiTools
 			if( onlyDrawRoots && entity.transform.parent != null )
 				return;
 
+			ImGui.PushID( (int)entity.id );
 			var treeNodeOpened = false;
 			if( entity.transform.childCount > 0 )
 			{
-				treeNodeOpened = ImGui.TreeNodeEx( $"{entity.name} ({entity.transform.childCount})", ImGuiTreeNodeFlags.OpenOnArrow );
+				treeNodeOpened = ImGui.TreeNodeEx( $"{entity.name} ({entity.transform.childCount})###{entity.id}", ImGuiTreeNodeFlags.OpenOnArrow );
 			}
 			else
 			{
-				treeNodeOpened = ImGui.TreeNodeEx( $"{entity.name} ({entity.transform.childCount})", ImGuiTreeNodeFlags.Leaf | ImGuiTreeNodeFlags.OpenOnArrow );
+				treeNodeOpened = ImGui.TreeNodeEx( $"{entity.name} ({entity.transform.childCount})###{entity.id}", ImGuiTreeNodeFlags.Leaf | ImGuiTreeNodeFlags.OpenOnArrow );
 			}
 
-			// context menu
-			if( ImGui.BeginPopupContextItem() )
+			// context menu for entity commands
+			ImGui.OpenPopupOnItemClick( "entityContextMenu", 1 );
+			if( ImGui.BeginPopup( "entityContextMenu" ) )
 			{
 				if( ImGui.Selectable( "Clone Entity " + entity.name ) )
 				{
 					var clone = entity.clone();
 					entity.scene.addEntity( clone );
 				}
+
 				if( ImGui.Selectable( "Destroy Entity" ) )
-				{
 					entity.destroy();
+
+				if( ImGui.Button( "Create Child Entity" ) )
+					ImGui.OpenPopup( "create-entity" );
+
+				if( ImGui.BeginPopup( "create-entity" ) )
+				{
+					ImGui.Text( "New Entity Name:" );
+					ImGui.InputText( "##cloneEntityName", ref _entityName, 25 );
+
+					if( ImGui.Button( "Cancel") )
+					{
+						_entityName = "";
+						ImGui.CloseCurrentPopup();
+					}
+					
+					ImGui.SameLine( ImGui.GetContentRegionAvailWidth() - ImGui.GetItemRectSize().X );
+
+					ImGui.PushStyleColor( ImGuiCol.Button, Microsoft.Xna.Framework.Color.Green.PackedValue );
+					if( ImGui.Button( "Create" ) )
+					{
+						var newEntity = new Entity( _entityName );
+						newEntity.transform.setParent( entity.transform );
+						entity.scene.addEntity( newEntity );
+
+						_entityName = "";
+						ImGui.CloseCurrentPopup();
+					}
+					ImGui.PopStyleColor();
+
+					ImGui.EndPopup();
 				}
+
 				ImGui.EndPopup();
 			}
 
@@ -88,6 +118,7 @@ namespace Nez.ImGuiTools
 
 				ImGui.TreePop();
 			}
+			ImGui.PopID();
 		}
 
 		static void drawPostProcessors()

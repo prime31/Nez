@@ -115,19 +115,20 @@ namespace Nez.ImGuiTools
 				{
 					if( string.IsNullOrEmpty( _componentNameFilter ) || subclassType.Name.ToLower().Contains( _componentNameFilter.ToLower() ) )
 					{
+						// stick a seperator in after custom Components and before Colliders
 						if( !isNezType && subclassType.Namespace.StartsWith( "Nez" ) )
 						{
 							isNezType = true;
 							ImGui.Separator();
 						}
-						
+
 						if( !isColliderType && typeof( Collider ).IsAssignableFrom( subclassType ) )
 						{
 							isColliderType = true;
 							ImGui.Separator();
 						}
 
-						if( ImGui.Selectable( subclassType.FullName ) )
+						if( ImGui.Selectable( subclassType.Name ) )
 						{
 							entity.addComponent( Activator.CreateInstance( subclassType ) as Component );
 							ImGui.CloseCurrentPopup();
