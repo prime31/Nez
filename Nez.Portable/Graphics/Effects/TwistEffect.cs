@@ -7,9 +7,10 @@ namespace Nez
 {
 	public class TwistEffect : Effect
 	{
+		[Range( 0, 2 )]
 		public float radius
 		{
-			get { return _radius; }
+			get => _radius;
 			set
 			{
 				if( _radius != value )
@@ -20,10 +21,10 @@ namespace Nez
 			}
 		}
 
-
+		[Range( -50, 50 )]
 		public float angle
 		{
-			get { return _angle; }
+			get => _angle;
 			set
 			{
 				if( _angle != value )
@@ -36,7 +37,7 @@ namespace Nez
 
 		public Vector2 offset
 		{
-			get { return _offset; }
+			get => _offset;
 			set
 			{
 				if( _offset != value )

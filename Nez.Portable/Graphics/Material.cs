@@ -11,8 +11,8 @@ namespace Nez
 	{
 		public new T effect
 		{
-			get { return (T)base.effect; }
-			set { base.effect = value; }
+			get => (T)base.effect;
+			set => base.effect = value;
 		}
 
 		public Material()

@@ -19,9 +19,10 @@ namespace Nez
 		/// alpha value used for the comparison. Should be in the 0 - 1 range. Defaults to 0.5f.
 		/// </summary>
 		/// <value>The reference alpha.</value>
+		[Range( 0, 1 )]
 		public float referenceAlpha
 		{
-			get { return _referenceAlpha; }
+			get => _referenceAlpha;
 			set
 			{
 				if( _referenceAlpha != value )
@@ -34,7 +35,7 @@ namespace Nez
 
 		public AlphaTestCompareFunction compareFunction
 		{
-			get { return _compareFunction; }
+			get => _compareFunction;
 			set
 			{
 				if( _compareFunction != value )
