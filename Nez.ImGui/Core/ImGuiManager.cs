@@ -34,13 +34,7 @@ namespace Nez.ImGuiTools
 			loadSettings();
 			_renderer = new ImGuiRenderer( Core.instance );
 
-			if( options != null )
-			{
-				foreach( var font in options._fonts )
-					ImGui.GetIO().Fonts.AddFontFromFileTTF( font.Item1, font.Item2 );
-			}
-
-			_renderer.rebuildFontAtlas( options?._includeDefaultFont ?? true );
+			_renderer.rebuildFontAtlas( options );
 			Core.emitter.addObserver( CoreEvents.SceneChanged, onSceneChanged );
 			NezImGuiThemes.darkTheme1();
 

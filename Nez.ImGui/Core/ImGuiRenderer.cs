@@ -75,13 +75,23 @@ namespace Nez.ImGuiTools
 		/// <summary>
 		/// Creates a texture and loads the font data from ImGui. Should be called when the <see cref="GraphicsDevice" /> is initialized but before any rendering is done
 		/// </summary>
-		public unsafe void rebuildFontAtlas( bool includeDefaultFont = true )
+		public unsafe void rebuildFontAtlas( ImGuiOptions options )
 		{
 			// Get font texture from ImGui
 			var io = ImGui.GetIO();
 
-			if( includeDefaultFont )
-				defaultFontPtr = ImGui.GetIO().Fonts.AddFontDefault();
+			if( options != null )
+			{
+				if( options._includeDefaultFont )
+					defaultFontPtr = io.Fonts.AddFontDefault();
+
+				foreach( var font in options._fonts )
+					io.Fonts.AddFontFromFileTTF( font.Item1, font.Item2 );
+			}
+			else
+			{
+				defaultFontPtr = io.Fonts.AddFontDefault();
+			}	
 
 			io.Fonts.GetTexDataAsRGBA32( out byte* pixelData, out int width, out int height, out int bytesPerPixel );
 
