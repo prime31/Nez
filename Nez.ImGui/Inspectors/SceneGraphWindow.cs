@@ -91,7 +91,7 @@ namespace Nez.ImGuiTools
 				if( ImGui.Selectable( "Destroy Entity" ) )
 					entity.destroy();
 
-				if( ImGui.Button( "Create Child Entity" ) )
+				if( ImGui.Selectable( "Create Child Entity", false, ImGuiSelectableFlags.DontClosePopups ) )
 					ImGui.OpenPopup( "create-entity" );
 
 				if( ImGui.BeginPopup( "create-entity" ) )

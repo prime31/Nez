@@ -15,6 +15,7 @@ namespace Nez.ImGuiTools.TypeInspectors
 		public bool isTargetDestroyed => _isTargetDestroyed;
 
 		protected int _scopeId = NezImGui.GetScopeId();
+		protected bool _wantsIndentWhenDrawn;
 
 		protected bool _isTargetDestroyed;
 		protected object _target;
@@ -40,6 +41,9 @@ namespace Nez.ImGuiTools.TypeInspectors
 		/// </summary>
 		public void draw()
 		{
+			if( _wantsIndentWhenDrawn )
+				ImGui.Indent();
+
 			ImGui.PushID( _scopeId );
 			if( _isReadOnly )
 			{
@@ -52,6 +56,9 @@ namespace Nez.ImGuiTools.TypeInspectors
 				drawMutable();
 			}
 			ImGui.PopID();
+
+			if( _wantsIndentWhenDrawn )
+				ImGui.Unindent();
 		}
 
 		public abstract void drawMutable();
@@ -90,6 +97,9 @@ namespace Nez.ImGuiTools.TypeInspectors
 			_valueType = field.FieldType;
 			_isReadOnly = field.IsInitOnly;
 
+			if( target == null )
+				return;
+
 			_getter = () =>
 			{
 				return field.GetValue( target );
@@ -111,6 +121,9 @@ namespace Nez.ImGuiTools.TypeInspectors
 			_name = prop.Name;
 			_valueType = prop.PropertyType;
 			_isReadOnly = !prop.CanWrite;
+
+			if( target == null )
+				return;
 
 			_getter = () =>
 			{

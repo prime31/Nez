@@ -16,12 +16,8 @@ namespace Nez.ImGuiTools.TypeInspectors
 		{
 			base.initialize();
 
-			// we either have a getter that gets a Material or an Effect
 			var effect = getValue<Effect>();
-			if( effect == null )
-				return;
-
-			_name = effect.GetType().Name;
+			_name += $" ({effect.GetType().Name})";
 
 			var inspectors = TypeInspectorUtils.getInspectableProperties( effect );
 			foreach( var inspector in inspectors )
@@ -52,5 +48,6 @@ namespace Nez.ImGuiTools.TypeInspectors
 					i.draw();
 			}
 		}
+	
 	}
 }

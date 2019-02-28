@@ -154,7 +154,7 @@ namespace Nez.ImGuiTools.TypeInspectors
 
 			// Nez types
 			if( valueType == typeof( Material ) )
-				return getMaterialInspector( target, memberInfo );
+				return new MaterialInspector();
 			if( valueType == typeof( Effect ) )
 				return getEffectInspector( target, memberInfo );
 
@@ -183,10 +183,7 @@ namespace Nez.ImGuiTools.TypeInspectors
 				material = getter.Invoke( target, new object[] {} ) as Material;
 			}
 
-			if( material != null )
-				return new MaterialInspector();
-
-			return null;
+			return new MaterialInspector();
 		}
 
 		/// <summary>

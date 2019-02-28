@@ -64,11 +64,7 @@ namespace Nez.ImGuiTools
 		/// most widgets heights are calculated using this formula. Some let you specifiy a height though.
 		/// </summary>
 		/// <returns></returns>
-		public static float DefaultWidgetHeight()
-		{
-			var style = ImGui.GetStyle();
-			return ImGui.GetFontSize() + style.FramePadding.Y * 2f;
-		}
+		public static float GetDefaultWidgetHeight() => ImGui.GetFontSize() + ImGui.GetStyle().FramePadding.Y * 2f;
 
 		/// <summary>
 		/// draws an invisible button that will cover the next widget rect
@@ -77,11 +73,22 @@ namespace Nez.ImGuiTools
 		public static void DisableNextWidget( float widgetCustomHeight = 0 )
 		{
 			var origCursorPos = ImGui.GetCursorPos();
-			var widgetSize = new Num.Vector2( ImGui.GetContentRegionAvailWidth(), widgetCustomHeight > 0 ? DefaultWidgetHeight() : DefaultWidgetHeight() );
+			var widgetSize = new Num.Vector2( ImGui.GetContentRegionAvailWidth(), widgetCustomHeight > 0 ? GetDefaultWidgetHeight() : GetDefaultWidgetHeight() );
 			ImGui.InvisibleButton( "##disabled", widgetSize );
 			ImGui.SetCursorPos( origCursorPos );
 		}
 
+		/// <summary>
+		/// draws a button with the width as a percentage of the window contnet region centered.
+		/// </summary>
+		/// <param name="percentWidth"></param>
+		/// <returns></returns>
+		public static bool CenteredButton( string label, float percentWidth, float xIndent = 0 )
+		{
+			var buttonWidth = ImGui.GetWindowContentRegionWidth() * percentWidth;
+			ImGui.SetCursorPosX( xIndent + ( ImGui.GetWindowContentRegionWidth() - buttonWidth ) / 2f );
+			return ImGui.Button( label, new System.Numerics.Vector2( buttonWidth, GetDefaultWidgetHeight() ) );
+		}
 
         /// <summary>
         /// displays a simple dialog with some text and a couple buttons. Note that ImGui.OpenPopup( name ) has to be called
@@ -122,5 +129,6 @@ namespace Nez.ImGuiTools
 			}
             return result;
 		}
+	
 	}
 }

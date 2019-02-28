@@ -1,17 +1,19 @@
 using System;
 using System.Collections.Generic;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace Nez.ImGuiTools
 {
 	public static class InspectorCache
 	{
 		static Type[] _componentSubclasses;
+		static Type[] _effectSubclasses;
 		
 		/// <summary>
 		/// gets all the Component subclasses that have a parameterless constructor
 		/// </summary>
 		/// <returns></returns>
-		public static Type[] getAllComponentTypes()
+		public static Type[] getAllComponentSubclassTypes()
 		{
 			if( _componentSubclasses == null )
 			{
@@ -44,6 +46,26 @@ namespace Nez.ImGuiTools
 			}
 			return _componentSubclasses;
 		}
+
+		/// <summary>
+		/// gets all the Effect subclasses that have a parameterless constructor
+		/// </summary>
+		/// <returns></returns>
+		public static Type[] getAllEffectSubclassTypes()
+		{
+			if( _effectSubclasses == null )
+			{
+				var subclasses = ReflectionUtils.getAllSubclasses( typeof( Effect ), true );
+				// sort so the Colliders are on the bottom
+				subclasses.Sort( (t, u) =>
+				{
+					return t.Name.CompareTo( u.Name );
+				} );
+				_effectSubclasses = subclasses.ToArray();
+			}
+			return _effectSubclasses;
+		}
+
 
 	}
 }

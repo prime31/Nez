@@ -87,7 +87,7 @@ namespace Nez.ImGuiTools
 					NezImGui.MediumVerticalSpace();
 				}
 
-				if( ImGui.Button( "Add Component", new Num.Vector2( -1, ImGui.GetFontSize() + ImGui.GetStyle().FramePadding.Y * 2 ) ) )
+				if( NezImGui.CenteredButton( "Add Component", 0.6f ) )
 				{
 					_componentNameFilter = "";
 					ImGui.OpenPopup( "component-selector" );
@@ -111,7 +111,7 @@ namespace Nez.ImGuiTools
 
 				var isNezType = false;
 				var isColliderType = false;
-				foreach( var subclassType in InspectorCache.getAllComponentTypes() )
+				foreach( var subclassType in InspectorCache.getAllComponentSubclassTypes() )
 				{
 					if( string.IsNullOrEmpty( _componentNameFilter ) || subclassType.Name.ToLower().Contains( _componentNameFilter.ToLower() ) )
 					{
