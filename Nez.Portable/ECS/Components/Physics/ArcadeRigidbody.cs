@@ -96,7 +96,6 @@ namespace Nez
 			return this;
 		}
 
-
 		/// <summary>
 		/// 0 - 1 range where 0 is no bounce and 1 is perfect reflection
 		/// </summary>
@@ -107,7 +106,6 @@ namespace Nez
 			_elasticity = Mathf.clamp01( value );
 			return this;
 		}
-
 
 		/// <summary>
 		/// 0 - 1 range. 0 means no friction, 1 means the object will stop dead on
@@ -120,7 +118,6 @@ namespace Nez
 			return this;
 		}
 
-
 		/// <summary>
 		/// 0 - 9 range. When a collision occurs and it has risidual motion along the surface of collision if its square magnitude is less
 		/// than glue friction will be set to the maximum for the collision resolution.
@@ -132,7 +129,6 @@ namespace Nez
 			_glue = Mathf.clamp( value, 0, 10 );
 			return this;
 		}
-
 
 		/// <summary>
 		/// velocity of this rigidbody
@@ -159,16 +155,15 @@ namespace Nez
 				velocity += force * 100000 * ( _inverseMass * Time.deltaTime * Time.deltaTime );
 		}
 
-
 		public override void onAddedToEntity()
 		{
 			_collider = entity.getComponent<Collider>();
+			Debug.warnIf( _collider == null, "ArcadeRigidbody has no Collider. ArcadeRigidbody requires a Collider!" );
 		}
-
 
 		void IUpdatable.update()
 		{
-			if( isImmovable )
+			if( isImmovable || _collider == null )
 			{
 				velocity = Vector2.Zero;
 				return;
@@ -212,7 +207,6 @@ namespace Nez
 			}
 		}
 
-
 		/// <summary>
 		/// separates two overlapping rigidbodies. Handles the case of either being immovable as well.
 		/// </summary>
@@ -235,7 +229,6 @@ namespace Nez
 			}
 		}
 
-
 		/// <summary>
 		/// handles the collision of two non-overlapping rigidbodies. New velocities will be assigned to each rigidbody as appropriate.
 		/// </summary>
@@ -257,7 +250,6 @@ namespace Nez
 			velocity += relativeVelocity * ourResponseFraction;
 			other.velocity -= relativeVelocity * otherResponseFraction;
 		}
-
 
 		/// <summary>
 		/// given the relative velocity between the two objects and the MTV this method modifies the relativeVelocity to make it a collision
