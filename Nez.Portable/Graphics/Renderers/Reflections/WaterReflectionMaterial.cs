@@ -25,7 +25,6 @@ namespace Nez
 		public WaterReflectionMaterial() : base( new WaterReflectionEffect() )
 		{}
 
-
 		public override void onPreRender( Camera camera )
 		{
 			Core.graphicsDevice.GetRenderTargets( _renderTargetBinding );
