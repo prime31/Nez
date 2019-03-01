@@ -44,12 +44,14 @@ namespace Nez.ImGuiTools
                 ImGui.Checkbox( "debugRenderEnabled", ref Core.debugRenderEnabled );
             }
 
+            #if !FNA
             if( ImGui.CollapsingHeader( "Core.defaultSamplerState", ImGuiTreeNodeFlags.DefaultOpen ) )
             {
                 var currentTextureFilter = (int)Core.defaultSamplerState.Filter;
                 if( ImGui.Combo( "Filter", ref currentTextureFilter, _textureFilters, _textureFilters.Length ) )
                     Core.defaultSamplerState.Filter = (TextureFilter)Enum.Parse( typeof( TextureFilter ), _textureFilters[currentTextureFilter] );
             }
+            #endif
         }
     
     }

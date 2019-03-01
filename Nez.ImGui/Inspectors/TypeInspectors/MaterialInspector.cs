@@ -28,7 +28,7 @@ namespace Nez.ImGuiTools.TypeInspectors
 			_inspectors = TypeInspectorUtils.getInspectableProperties( material );
 
 			// if we are a Material<T>, we need to fix the duplicate Effect due to the "new T effect"
-			if( material.GetType().IsGenericType )
+			if( ReflectionUtils.isGenericTypeOrSubclassOfGenericType( material.GetType() ) )
 			{
 				var didFindEffectInspector = false;
 				for( var i = 0; i < _inspectors.Count; i++ )

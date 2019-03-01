@@ -54,7 +54,7 @@ namespace Nez
 		public override void onAddedToScene( Scene scene )
 		{
 			base.onAddedToScene( scene );
-			effect = scene.content.loadEffect<Effect>( "heatDistortion", EffectResource.heatDistortionBytes );
+			effect = _scene.content.loadEffect<Effect>( "heatDistortion", EffectResource.heatDistortionBytes );
 
 			_timeParam = effect.Parameters["_time"];
 			_distortionFactorParam = effect.Parameters["_distortionFactor"];
@@ -64,6 +64,12 @@ namespace Nez
 			_riseFactorParam.SetValue( _riseFactor );
 
 			distortionTexture = scene.content.Load<Texture2D>( "nez/textures/heatDistortionNoise" );
+		}
+
+		public override void unload()
+		{
+			_scene.content.unloadEffect( effect );
+			base.unload();
 		}
 
 		public override void process( RenderTarget2D source, RenderTarget2D destination )

@@ -13,12 +13,10 @@ namespace Nez
 	{
 		ColliderTriggerHelper _triggerHelper;
 
-
 		public override void onAddedToEntity()
 		{
 			_triggerHelper = new ColliderTriggerHelper( entity );
 		}
-
 
 		/// <summary>
 		/// caculates the movement modifying the motion vector to take into account any collisions that will
@@ -33,10 +31,7 @@ namespace Nez
 
 			// no collider? just move and forget about it
 			if( entity.getComponent<Collider>() == null || _triggerHelper == null )
-			{
-				entity.transform.position += motion;
 				return false;
-			}
 
 			// 1. move all non-trigger Colliders and get closest collision
 			var colliders = entity.getComponents<Collider>();
@@ -72,7 +67,6 @@ namespace Nez
 			return collisionResult.collider != null;
 		}
 
-
 		/// <summary>
 		/// applies the movement from calculateMovement to the entity and updates the triggerHelper
 		/// </summary>
@@ -84,9 +78,8 @@ namespace Nez
 
 			// 3. do an overlap check of all Colliders that are triggers with all broadphase colliders, triggers or not.
 			//    Any overlaps result in trigger events.
-			_triggerHelper.update();
+			_triggerHelper?.update();
 		}
-
 
 		/// <summary>
 		/// moves the entity taking collisions into account by calling calculateMovement followed by applyMovement;

@@ -48,6 +48,15 @@ namespace Nez
 			effect.Parameters["_multiplicativeFactor"].SetValue( _multiplicativeFactor );
 		}
 
+		public override void unload()
+		{
+			_scene.content.unloadEffect( effect );
+			effect = null;
+			_lightsRenderTexture.Dispose();
+
+			base.unload();
+		}
+
 		public override void process( RenderTarget2D source, RenderTarget2D destination )
 		{
 			Core.graphicsDevice.setRenderTarget( destination );

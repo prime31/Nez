@@ -13,11 +13,11 @@ namespace Nez
 	{
 		public static Assembly getAssembly( Type type )
 		{
-			#if NETFX_CORE
+#if NETFX_CORE
 			return type.GetTypeInfo().Assembly;
-			#else
+#else
 			return type.Assembly;
-			#endif
+#endif
 		}
 
 		#region Fields
@@ -28,7 +28,7 @@ namespace Nez
 		{
 			FieldInfo fieldInfo = null;
 
-			#if NETFX_CORE
+#if NETFX_CORE
 			foreach( var fi in type.GetRuntimeFields() )
 			{
 				if( fi.Name == fieldName )
@@ -37,24 +37,24 @@ namespace Nez
 					break;
 				}
 			}
-			#else
+#else
 			do
 			{
 				fieldInfo = type.GetField( fieldName, BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic );
 				type = type.BaseType;
 			} while ( fieldInfo == null && type != null );
-			#endif
+#endif
 
 			return fieldInfo;
 		}
 
 		public static IEnumerable<FieldInfo> getFields( Type type )
 		{
-			#if NETFX_CORE
+#if NETFX_CORE
 			return type.GetRuntimeFields();
-			#else
+#else
 			return type.GetFields( BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic );
-			#endif
+#endif
 		}
 
 		public static object getFieldValue( object targetObject, string fieldName )
@@ -71,38 +71,38 @@ namespace Nez
 
 		public static PropertyInfo getPropertyInfo( Type type, string propertyName )
 		{
-			#if NETFX_CORE
+#if NETFX_CORE
 			return type.GetRuntimeProperty( propertyName );
-			#else
+#else
 			return type.GetProperty( propertyName, BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public );
-			#endif
+#endif
 		}
 
 		public static IEnumerable<PropertyInfo> getProperties( Type type )
 		{
-			#if NETFX_CORE
+#if NETFX_CORE
 			return type.GetRuntimeProperties();
-			#else
+#else
 			return type.GetProperties( BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic );
-			#endif
+#endif
 		}
 
 		public static MethodInfo getPropertyGetter( PropertyInfo prop )
 		{
-			#if NETFX_CORE
+#if NETFX_CORE
 			return prop.GetMethod;
-			#else
+#else
 			return prop.GetGetMethod( true );
-			#endif
+#endif
 		}
 
 		public static MethodInfo getPropertySetter( PropertyInfo prop )
 		{
-			#if NETFX_CORE
+#if NETFX_CORE
 			return prop.SetMethod;
-			#else
+#else
 			return prop.GetSetMethod( true );
-			#endif
+#endif
 		}
 
 		public static object getPropertyValue( object targetObject, string propertyName )
@@ -121,7 +121,7 @@ namespace Nez
 			// first get the property
 			var propInfo = getPropertyInfo( targetObject, propertyName );
 			if( propInfo == null )
-				return default(T);
+				return default( T );
 
 			return createDelegate<T>( targetObject, propInfo.SetMethod );
 		}
@@ -135,7 +135,7 @@ namespace Nez
 			// first get the property
 			var propInfo = getPropertyInfo( targetObject, propertyName );
 			if( propInfo == null )
-				return default(T);
+				return default( T );
 
 			return createDelegate<T>( targetObject, propInfo.GetMethod );
 		}
@@ -146,11 +146,11 @@ namespace Nez
 
 		public static IEnumerable<MethodInfo> getMethods( Type type )
 		{
-			#if NETFX_CORE
+#if NETFX_CORE
 			return type.GetRuntimeMethods();
-			#else
+#else
 			return type.GetMethods( BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic );
-			#endif
+#endif
 		}
 
 		public static MethodInfo getMethodInfo( object targetObject, string methodName ) => getMethodInfo( targetObject.GetType(), methodName );
@@ -159,7 +159,7 @@ namespace Nez
 
 		public static MethodInfo getMethodInfo( Type type, string methodName, Type[] parameters = null )
 		{
-			#if NETFX_CORE
+#if NETFX_CORE
 			if( parameters != null )
 				return type.GetRuntimeMethod( methodName, parameters );
 
@@ -167,22 +167,22 @@ namespace Nez
 				if( method.Name == methodName )
 					return method;
 			return null;
-			#else
+#else
 			if( parameters == null )
 				return type.GetMethod( methodName, BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public );
 			return type.GetMethod( methodName, BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public, Type.DefaultBinder, parameters, null );
-			#endif
+#endif
 		}
 
 		#endregion
 
 		public static T createDelegate<T>( object targetObject, MethodInfo methodInfo )
 		{
-			#if NETFX_CORE
+#if NETFX_CORE
 			return (T)(object)methodInfo.CreateDelegate( typeof( T ), targetObject );
-			#else
+#else
 			return (T)(object)Delegate.CreateDelegate( typeof( T ), targetObject, methodInfo );
-			#endif
+#endif
 		}
 
 		/// <summary>
@@ -239,6 +239,23 @@ namespace Nez
 				}
 			}
 			return typeList;
+		}
+
+		/// <summary>
+		/// checks <paramref name="type"/> to see if it or any base class in the chain IsGenericType
+		/// </summary>
+		/// <param name="type"></param>
+		/// <returns></returns>
+		public static bool isGenericTypeOrSubclassOfGenericType( Type type )
+		{
+			var currentType = type;
+			while( currentType != null && currentType != typeof( object ) )
+			{
+				if( currentType.IsGenericType )
+					return true;
+				currentType = currentType.BaseType;
+			}
+			return false;
 		}
 
 	}

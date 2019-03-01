@@ -17,6 +17,32 @@ namespace Nez.ImGuiTools.ObjectInspectors
         {
             _postProcessor = postProcessor;
             _inspectors = TypeInspectorUtils.getInspectableProperties( postProcessor );
+
+			// if we are a Material<T>, we need to fix the duplicate Effect due to the "new T effect"
+			if( ReflectionUtils.isGenericTypeOrSubclassOfGenericType( _postProcessor.GetType() ) )
+			{
+				var didFindEffectInspector = false;
+				for( var i = 0; i < _inspectors.Count; i++ )
+				{
+					var isEffectInspector = _inspectors[i] is Nez.ImGuiTools.TypeInspectors.EffectInspector;
+					if( isEffectInspector )
+					{
+						if( didFindEffectInspector )
+						{
+							_inspectors.RemoveAt( i );
+							break;
+						}
+						didFindEffectInspector = true;
+					}
+				}
+			}
+
+            for( var i = 0; i < _inspectors.Count; i++ )
+            {
+                var effectInspector = _inspectors[i] as Nez.ImGuiTools.TypeInspectors.EffectInspector;
+                if( effectInspector != null )
+                    effectInspector.allowsEffectRemoval = false;
+            }
         }
 
         public void draw()

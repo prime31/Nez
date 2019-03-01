@@ -59,6 +59,12 @@ namespace Nez
 			_radiusParam.SetValue( _radius );
 		}
 
+		public override void unload()
+		{
+			_scene.content.unloadEffect( effect );
+			base.unload();
+		}
+
 	}
 }
 

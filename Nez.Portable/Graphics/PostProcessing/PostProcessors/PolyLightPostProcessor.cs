@@ -152,6 +152,8 @@ namespace Nez
 			if( _blurEffect != null )
 				_scene.content.unloadEffect( _blurEffect );
 			
+			_scene.content.unloadEffect( effect );
+			
 			base.unload();
 		}
 

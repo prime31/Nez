@@ -10,6 +10,8 @@ namespace Nez.ImGuiTools.TypeInspectors
 {
 	public class EffectInspector : AbstractTypeInspector
 	{
+		public bool allowsEffectRemoval = true;
+
 		List<AbstractTypeInspector> _inspectors = new List<AbstractTypeInspector>();
 
 		public override void initialize()
@@ -32,9 +34,10 @@ namespace Nez.ImGuiTools.TypeInspectors
 		{
 			var isOpen = ImGui.CollapsingHeader( $"{_name}", ImGuiTreeNodeFlags.FramePadding );
 
-			NezImGui.ShowContextMenuTooltip();
+			if( allowsEffectRemoval )
+				NezImGui.ShowContextMenuTooltip();
 
-			if( ImGui.BeginPopupContextItem() )
+			if( allowsEffectRemoval && ImGui.BeginPopupContextItem() )
 			{
 				if( ImGui.Selectable( "Remove Effect" ) )
 				{

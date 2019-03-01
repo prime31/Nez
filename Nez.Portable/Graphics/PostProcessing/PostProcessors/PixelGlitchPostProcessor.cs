@@ -73,6 +73,12 @@ namespace Nez
 			_screenSizeParam.SetValue( new Vector2( Screen.width, Screen.height ) );
 		}
 
+		public override void unload()
+		{
+			_scene.content.unloadEffect( effect );
+			base.unload();
+		}
+
 		public override void onSceneBackBufferSizeChanged( int newWidth, int newHeight )
 		{
 			_screenSizeParam.SetValue( new Vector2( newWidth, newHeight ) );

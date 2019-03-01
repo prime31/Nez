@@ -92,8 +92,12 @@ namespace Nez
 		/// </summary>
 		public virtual void unload()
 		{
-			if( effect != null )
+			// Nez-specific Effects will have a null name. We don't want to try to remove them.
+			if( effect != null && effect.Name != null )
+			{
 				_scene.content.unloadEffect( effect );
+				effect = null;
+			}
 
 			_scene = null;
 		}

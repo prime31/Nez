@@ -50,6 +50,7 @@ namespace Nez.Systems
 		{
 			var cacheKey = typeof( T ).Name + "-" + Utils.randomString( 5 );
 			var effect = new T();
+			effect.Name = cacheKey;
 			_loadedEffects[cacheKey] = effect;
 
 			return effect;

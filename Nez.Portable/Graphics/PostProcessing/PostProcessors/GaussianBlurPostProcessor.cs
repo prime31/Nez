@@ -25,8 +25,20 @@ namespace Nez
 		float _renderTargetScale = 1f;
 
 
-		public GaussianBlurPostProcessor( int executionOrder ) : base( executionOrder, new GaussianBlurEffect() )
+		public GaussianBlurPostProcessor( int executionOrder ) : base( executionOrder )
 		{}
+
+		public override void onAddedToScene(Scene scene)
+		{
+			base.onAddedToScene( scene );
+			effect = _scene.content.loadNezEffect<GaussianBlurEffect>();
+		}
+
+		public override void unload()
+		{
+			_scene.content.unloadEffect( effect );
+			base.unload();
+		}
 
 		public override void onSceneBackBufferSizeChanged( int newWidth, int newHeight )
 		{
