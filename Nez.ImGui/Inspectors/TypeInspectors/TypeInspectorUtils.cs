@@ -11,6 +11,19 @@ namespace Nez.ImGuiTools.TypeInspectors
 {
     public static class TypeInspectorUtils
     {
+		// Type cache seeing as how typeof isnt free and this will be hit a lot
+		static readonly Type notInspectableAttrType = typeof( NotInspectableAttribute );
+		static readonly Type inspectableAttrType = typeof( InspectableAttribute );
+		static readonly Type componentType = typeof( Component );
+		static readonly Type transformType = typeof( Transform );
+		static readonly Type materialType = typeof( Material );
+		static readonly Type effectType = typeof( Effect );
+		static readonly Type iListType = typeof( IList );
+		static readonly Type abstractTypeInspectorType = typeof( AbstractTypeInspector );
+		static readonly Type objectType = typeof( object );
+		static readonly Type serializationAttrType = typeof( SerializableAttribute );
+
+
         /// <summary>
         /// fetches all the relevant AbstractTypeInspectors for target including fields, properties and methods.
         /// </summary>
@@ -20,15 +33,15 @@ namespace Nez.ImGuiTools.TypeInspectors
 		{
 			var inspectors = new List<AbstractTypeInspector>();
 			var targetType = target.GetType();
-			var isComponentSubclass = targetType.IsSubclassOf( typeof( Component ) );
+			var isComponentSubclass = target is Component;
 
 			var fields = ReflectionUtils.getFields( targetType );
 			foreach( var field in fields )
 			{
-				if( field.IsStatic || field.IsDefined( typeof( NotInspectableAttribute ) ) )
+				if( field.IsStatic || field.IsDefined( notInspectableAttrType ) )
 					continue;
 
-				var hasInspectableAttribute = field.IsDefined( typeof( InspectableAttribute ) );
+				var hasInspectableAttribute = field.IsDefined( inspectableAttrType );
 
 				// private fields must have the InspectableAttribute
 				if( !field.IsPublic && !hasInspectableAttribute )
@@ -54,17 +67,17 @@ namespace Nez.ImGuiTools.TypeInspectors
 			var properties = ReflectionUtils.getProperties( targetType );
 			foreach( var prop in properties )
 			{
-				if( prop.IsDefined( typeof( NotInspectableAttribute ) ) )
+				if( prop.IsDefined( notInspectableAttrType ) )
 					continue;
 
 				// Transforms and Component subclasses arent useful to inspect
-				if( prop.PropertyType == typeof( Transform ) || prop.PropertyType.IsSubclassOf( typeof( Component ) ) )
+				if( prop.PropertyType == transformType || prop.PropertyType.IsSubclassOf( componentType ) )
 					continue;
 
 				if( !prop.CanRead || prop.GetGetMethod( true ).IsStatic )
 					continue;
 
-				var hasInspectableAttribute = prop.IsDefined( typeof( InspectableAttribute ) );
+				var hasInspectableAttribute = prop.IsDefined( inspectableAttrType );
 
 				// private props must have the InspectableAttribute
 				if( !prop.GetMethod.IsPublic && !hasInspectableAttribute )
@@ -127,9 +140,9 @@ namespace Nez.ImGuiTools.TypeInspectors
 			// built-in types
 			if( SimpleTypeInspector.kSupportedTypes.contains( valueType ) )
 				return new TI.SimpleTypeInspector();
-			if( valueType == typeof( Entity ) )
+			if( target is Entity )
 				return new TI.EntityFieldInspector();
-			if( valueType == typeof( BlendState ) )
+			if( target is BlendState )
 				return new TI.BlendStateInspector();
 			if( valueType.GetTypeInfo().IsEnum )
 				return new TI.EnumInspector();
@@ -139,7 +152,7 @@ namespace Nez.ImGuiTools.TypeInspectors
 				return new TI.ListInspector();
 			if( valueType.IsArray && valueType.GetArrayRank() == 1 && ListInspector.kSupportedTypes.contains( valueType.GetElementType() ) )
 				return new TI.ListInspector();
-			if( valueType.IsGenericType && typeof( IList ).IsAssignableFrom( valueType ) &&
+			if( valueType.IsGenericType && iListType.IsAssignableFrom( valueType ) &&
 				valueType.GetInterface( nameof( IList ) ) != null && ListInspector.kSupportedTypes.contains( valueType.GetGenericArguments()[0] ) )
 				return new TI.ListInspector();
 
@@ -147,19 +160,19 @@ namespace Nez.ImGuiTools.TypeInspectors
 			var customInspectorType = valueType.GetTypeInfo().getCustomAttribute<CustomInspectorAttribute>();
 			if( customInspectorType != null )
 			{
-				if( customInspectorType.inspectorType.GetTypeInfo().IsSubclassOf( typeof( AbstractTypeInspector ) ) )
+				if( customInspectorType.inspectorType.GetTypeInfo().IsSubclassOf( abstractTypeInspectorType ) )
 					return (AbstractTypeInspector)Activator.CreateInstance( customInspectorType.inspectorType );
 				Debug.warn( $"found CustomInspector {customInspectorType.inspectorType} but it is not a subclass of AbstractTypeInspector" );
 			}
 
 			// Nez types
-			if( valueType == typeof( Material ) || valueType.IsSubclassOf( typeof( Material ) ) )
+			if( valueType == materialType || valueType.IsSubclassOf( materialType ) )
 				return new MaterialInspector();
-			if( valueType == typeof( Effect ) || valueType.IsSubclassOf( typeof( Effect ) ) )
+			if( valueType == effectType || valueType.IsSubclassOf( effectType ) )
 				return getEffectInspector( target, memberInfo );
 
 			// last ditch effort. If the class is serializeable we use a generic ObjectInspector
-			if( valueType != typeof( object ) && valueType.IsDefined( typeof( SerializableAttribute ) ) )
+			if( valueType != objectType && valueType.IsDefined( serializationAttrType ) )
 				return new ObjectInspectors.ObjectInspector();
 
 			Debug.info( $"no inspector found for type {valueType} on object {target.GetType()}" );
@@ -211,7 +224,7 @@ namespace Nez.ImGuiTools.TypeInspectors
 				effect = getter.Invoke( target, new object[] {} ) as Effect;
 			}
 
-			if( effect != null && effect.GetType() != typeof( Effect ) )
+			if( effect != null && effect.GetType() != effectType )
 				return new EffectInspector();
 
 			return null;

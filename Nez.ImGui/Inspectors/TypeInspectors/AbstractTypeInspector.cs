@@ -132,14 +132,14 @@ namespace Nez.ImGuiTools.TypeInspectors
 
 			_getter = obj =>
 			{
-				return ReflectionUtils.getPropertyGetter( prop ).Invoke( obj, null );
+				return prop.GetMethod.Invoke( obj, null );
 			};
 
 			if( !_isReadOnly )
 			{
 				_setter = ( val ) =>
 				{
-					ReflectionUtils.getPropertySetter( prop ).Invoke( target, new object[] { val } );
+					prop.SetMethod.Invoke( target, new object[] { val } );
 				};
 			}
 		}

@@ -22,7 +22,7 @@ namespace Nez
 
 		#region Fields
 
-		public static FieldInfo getFieldInfo( System.Object targetObject, string fieldName ) => getFieldInfo( targetObject.GetType(), fieldName );
+		public static FieldInfo getFieldInfo( object targetObject, string fieldName ) => getFieldInfo( targetObject.GetType(), fieldName );
 
 		public static FieldInfo getFieldInfo( Type type, string fieldName )
 		{
@@ -67,7 +67,7 @@ namespace Nez
 
 		#region Properties
 
-		public static PropertyInfo getPropertyInfo( System.Object targetObject, string propertyName ) => getPropertyInfo( targetObject.GetType(), propertyName );
+		public static PropertyInfo getPropertyInfo( object targetObject, string propertyName ) => getPropertyInfo( targetObject.GetType(), propertyName );
 
 		public static PropertyInfo getPropertyInfo( Type type, string propertyName )
 		{
@@ -116,7 +116,7 @@ namespace Nez
 		/// either returns a super fast Delegate to set the given property or null if it couldn't be found
 		/// via reflection
 		/// </summary>
-		public static T setterForProperty<T>( System.Object targetObject, string propertyName )
+		public static T setterForProperty<T>( object targetObject, string propertyName )
 		{
 			// first get the property
 			var propInfo = getPropertyInfo( targetObject, propertyName );
@@ -130,7 +130,7 @@ namespace Nez
 		/// either returns a super fast Delegate to get the given property or null if it couldn't be found
 		/// via reflection
 		/// </summary>
-		public static T getterForProperty<T>( System.Object targetObject, string propertyName )
+		public static T getterForProperty<T>( object targetObject, string propertyName )
 		{
 			// first get the property
 			var propInfo = getPropertyInfo( targetObject, propertyName );
@@ -153,15 +153,9 @@ namespace Nez
 			#endif
 		}
 
-		public static MethodInfo getMethodInfo( System.Object targetObject, string methodName )
-		{
-			return getMethodInfo( targetObject.GetType(), methodName );
-		}
+		public static MethodInfo getMethodInfo( object targetObject, string methodName ) => getMethodInfo( targetObject.GetType(), methodName );
 
-		public static MethodInfo getMethodInfo( System.Object targetObject, string methodName, Type[] parameters )
-		{
-			return getMethodInfo( targetObject.GetType(), methodName, parameters );
-		}
+		public static MethodInfo getMethodInfo( object targetObject, string methodName, Type[] parameters ) => getMethodInfo( targetObject.GetType(), methodName, parameters );
 
 		public static MethodInfo getMethodInfo( Type type, string methodName, Type[] parameters = null )
 		{
@@ -182,7 +176,7 @@ namespace Nez
 
 		#endregion
 
-		public static T createDelegate<T>( System.Object targetObject, MethodInfo methodInfo )
+		public static T createDelegate<T>( object targetObject, MethodInfo methodInfo )
 		{
 			#if NETFX_CORE
 			return (T)(object)methodInfo.CreateDelegate( typeof( T ), targetObject );
