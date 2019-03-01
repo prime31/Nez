@@ -11,6 +11,7 @@ namespace Nez.ImGuiTools.TypeInspectors
 {
 	public class MaterialInspector : AbstractTypeInspector
 	{
+		public bool allowsMaterialRemoval = true;
 		List<AbstractTypeInspector> _inspectors = new List<AbstractTypeInspector>();
 
 		public override void initialize()
@@ -61,7 +62,7 @@ namespace Nez.ImGuiTools.TypeInspectors
 
 			if( ImGui.BeginPopupContextItem() )
 			{
-				if( ImGui.Selectable( "Remove Material" ) )
+				if( allowsMaterialRemoval && ImGui.Selectable( "Remove Material" ) )
 				{
 					setValue( null );
 					_inspectors.Clear();
@@ -70,9 +71,6 @@ namespace Nez.ImGuiTools.TypeInspectors
 
 				if( ImGui.Selectable( "Set Effect", false, ImGuiSelectableFlags.DontClosePopups ) )
 					ImGui.OpenPopup( "effect-chooser" );
-				
-				if( drawEffectChooserPopup() )
-					ImGui.CloseCurrentPopup();
 
 				ImGui.EndPopup();
 			}
@@ -80,6 +78,13 @@ namespace Nez.ImGuiTools.TypeInspectors
 			if( isOpen )
 			{
 				ImGui.Indent();
+
+				if( _inspectors.Count == 0 )
+				{
+					if( NezImGui.CenteredButton( "Set Effect", 0.6f ) )
+						ImGui.OpenPopup( "effect-chooser" );
+				}
+
 				for( var i = _inspectors.Count - 1; i >= 0; i-- )
 				{
 					if( _inspectors[i].isTargetDestroyed )
@@ -91,6 +96,9 @@ namespace Nez.ImGuiTools.TypeInspectors
 				}
 				ImGui.Unindent();
 			}
+
+			if( drawEffectChooserPopup() )
+				ImGui.CloseCurrentPopup();
 		}
 
 		void drawNullMaterial()

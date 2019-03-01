@@ -11,11 +11,13 @@ namespace Nez.ImGuiTools
 	class SceneGraphWindow
 	{
 		PostProcessorsPane _postProcessorsPane = new PostProcessorsPane();
+		RenderersPane _renderersPane = new RenderersPane();
 		EntityPane _entityPane = new EntityPane();
 
 		public void onSceneChanged()
 		{
 			_postProcessorsPane.onSceneChanged();
+			_renderersPane.onSceneChanged();
 		}
 
 		public void show( ref bool isOpen )
@@ -29,14 +31,13 @@ namespace Nez.ImGuiTools
 			if( ImGui.Begin( "Scene Graph", ref isOpen ) )
 			{
 				if( ImGui.CollapsingHeader( "Post Processors" ) )
-				{
 					_postProcessorsPane.draw();
-				}
+
+				if( ImGui.CollapsingHeader( "Renderers" ) )
+					_renderersPane.draw();
 
 				if( ImGui.CollapsingHeader( "Entities (double-click label to inspect)", ImGuiTreeNodeFlags.DefaultOpen ) )
-				{
 					_entityPane.draw();
-				}
 
 				ImGui.End();
 			}
