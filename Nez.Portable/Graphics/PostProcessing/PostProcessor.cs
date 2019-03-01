@@ -50,7 +50,6 @@ namespace Nez
 			this.effect = effect;
 		}
 
-
 		/// <summary>
 		/// called when the PostProcessor is added to the Scene
 		/// </summary>
@@ -59,7 +58,6 @@ namespace Nez
 		{
 			_isAttachedToScene = true;
 		}
-
 
 		/// <summary>
 		/// called when the default scene RenderTarget is resized. If a PostProcessor is added to a scene before it begins this method will be
@@ -70,7 +68,6 @@ namespace Nez
 		/// <param name="newHeight">New height.</param>
 		public virtual void onSceneBackBufferSizeChanged( int newWidth, int newHeight )
 		{}
-
 
 		/// <summary>
 		/// this is the meat method here. The source passed in contains the full scene with any previous PostProcessors
@@ -87,13 +84,11 @@ namespace Nez
 			drawFullscreenQuad( source, destination, effect );
 		}
 
-
 		/// <summary>
 		/// called when a scene is ended. use this for cleanup.
 		/// </summary>
 		public virtual void unload()
 		{}
-
 
 		/// <summary>
 		/// helper for drawing a texture into a rendertarget, optionally using a custom shader to apply postprocessing effects.
@@ -104,7 +99,6 @@ namespace Nez
 			drawFullscreenQuad( texture, renderTarget.Width, renderTarget.Height, effect );
 		}
 
-
 		/// <summary>
 		/// helper for drawing a texture into the current rendertarget, optionally using a custom shader to apply postprocessing effects.
 		/// </summary>
@@ -114,7 +108,6 @@ namespace Nez
 			Graphics.instance.batcher.draw( texture, new Rectangle( 0, 0, width, height ), Color.White );
 			Graphics.instance.batcher.end();
 		}
-
 
 		public int CompareTo( PostProcessor other )
 		{

@@ -47,7 +47,6 @@ namespace Nez
 		public VignettePostProcessor( int executionOrder ) : base( executionOrder )
 		{}
 
-
 		public override void onAddedToScene( Scene scene )
 		{
 			effect = scene.content.loadEffect<Effect>( "vignette", EffectResource.vignetteBytes );

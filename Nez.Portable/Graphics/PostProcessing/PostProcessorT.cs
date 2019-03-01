@@ -20,7 +20,6 @@ namespace Nez
 			this.effect = effect;
 		}
 
-
 		/// <summary>
 		/// we have to override the default implementation here because we use a custom Effect subclass and the effect field of the base class
 		/// will be null.
@@ -31,7 +30,6 @@ namespace Nez
 		{
 			drawFullscreenQuad( source, destination, effect );
 		}
-
 
 		public override void unload()
 		{
