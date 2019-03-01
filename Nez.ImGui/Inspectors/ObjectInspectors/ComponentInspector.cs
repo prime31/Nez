@@ -12,12 +12,23 @@ namespace Nez.ImGuiTools.ObjectInspectors
 		public override Component component => _component;
 
 		Component _component;
+        string _name;
         List<Action> _componentDelegateMethods = new List<Action>();
 
         public ComponentInspector( Component component )
         {
             _component = component;
             _inspectors = TypeInspectorUtils.getInspectableProperties( component );
+
+            if( _component.GetType().IsGenericType )
+            {
+                var genericType = _component.GetType().GetGenericArguments()[0].Name;
+                _name = $"{_component.GetType().BaseType.Name}<{genericType}>";
+            }
+            else
+            {
+                _name = _component.GetType().Name;
+            }
             
             var methods = TypeInspectorUtils.GetAllMethodsWithAttribute<InspectorDelegateAttribute>( _component.GetType() );
             foreach( var method in methods )
@@ -33,7 +44,7 @@ namespace Nez.ImGuiTools.ObjectInspectors
 		public override void draw()
 		{
             ImGui.PushID( _scopeId );
-            var isHeaderOpen = ImGui.CollapsingHeader( _component.GetType().Name );
+            var isHeaderOpen = ImGui.CollapsingHeader( _name );
 
             // context menu has to be outside the isHeaderOpen block so it works open or closed
             if( ImGui.BeginPopupContextItem() )
