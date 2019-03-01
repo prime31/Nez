@@ -10,7 +10,6 @@
 		public DefaultRenderer( int renderOrder = 0, Camera camera = null ) : base( renderOrder, camera )
 		{}
 
-
 		public override void render( Scene scene )
 		{
 			var cam = camera ?? scene.camera;
@@ -22,11 +21,12 @@
 				if( renderable.enabled && renderable.isVisibleFromCamera( cam ) )
 					renderAfterStateCheck( renderable, cam );
 			}
-				
+	
 			if( shouldDebugRender && Core.debugRenderEnabled )
 				debugRender( scene, cam );
 
 			endRender();
 		}
+
 	}
 }

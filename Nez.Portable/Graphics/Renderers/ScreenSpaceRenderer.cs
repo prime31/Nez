@@ -19,7 +19,6 @@ namespace Nez
 			wantsToRenderAfterPostProcessors = true;
 		}
 
-
 		public override void render( Scene scene )
 		{
 			beginRender( camera );
@@ -40,7 +39,6 @@ namespace Nez
 
 			endRender();
 		}
-
 
 		public override void onSceneBackBufferSizeChanged( int newWidth, int newHeight )
 		{

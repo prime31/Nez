@@ -49,6 +49,8 @@ namespace Nez
 
 		public override void onAddedToScene( Scene scene )
 		{
+			base.onAddedToScene( scene );
+
 			effect = scene.content.loadEffect<Effect>( "vignette", EffectResource.vignetteBytes );
 
 			_powerParam = effect.Parameters["_power"];

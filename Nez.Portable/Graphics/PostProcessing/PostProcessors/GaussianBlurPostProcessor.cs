@@ -11,7 +11,7 @@ namespace Nez
 		/// </summary>
 		public float renderTargetScale
 		{
-			get { return _renderTargetScale; }
+			get => _renderTargetScale;
 			set
 			{
 				if( _renderTargetScale != value )
@@ -23,23 +23,15 @@ namespace Nez
 		}
 
 		float _renderTargetScale = 1f;
-		Scene _scene;
 
 
 		public GaussianBlurPostProcessor( int executionOrder ) : base( executionOrder, new GaussianBlurEffect() )
 		{}
 
-
-		public override void onAddedToScene( Scene scene )
-		{
-			_scene = scene;
-		}
-
 		public override void onSceneBackBufferSizeChanged( int newWidth, int newHeight )
 		{
 			updateEffectDeltas();
 		}
-
 
 		/// <summary>
 		/// updates the Effect with the new vertical and horizontal deltas
@@ -50,7 +42,6 @@ namespace Nez
 			effect.horizontalBlurDelta = 1f / ( sceneRenderTargetSize.X * _renderTargetScale );
 			effect.verticalBlurDelta = 1f / ( sceneRenderTargetSize.Y * _renderTargetScale );
 		}
-
 
 		public override void process( RenderTarget2D source, RenderTarget2D destination )
 		{

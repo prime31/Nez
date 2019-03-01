@@ -19,7 +19,6 @@ namespace Nez
 		ReflectionRenderer( int renderOrder, params int[] reflectableObjectRenderLayers ) : base( renderOrder, reflectableObjectRenderLayers )
 		{}
 
-
 		public static ReflectionRenderer createAndSetupScene( Scene scene, int renderOrder, params int[] renderLayers )
 		{
 			var reflectionRenderer = scene.addRenderer( new ReflectionRenderer( -1, renderLayers ) );
@@ -33,7 +32,6 @@ namespace Nez
 
 			return reflectionRenderer;
 		}
-
 
 		public override void onSceneBackBufferSizeChanged( int newWidth, int newHeight )
 		{

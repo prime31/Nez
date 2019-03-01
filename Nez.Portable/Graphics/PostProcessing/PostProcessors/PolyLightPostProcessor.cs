@@ -19,8 +19,8 @@ namespace Nez
 		/// <value>The multiplicative factor.</value>
 		public float multiplicativeFactor
 		{
-			get { return _multiplicativeFactor; }
-			set { setMultiplicativeFactor( value ); }
+			get => _multiplicativeFactor;
+			set => setMultiplicativeFactor( value );
 		}
 
 		/// <summary>
@@ -29,8 +29,8 @@ namespace Nez
 		/// <value><c>true</c> if enable blur; otherwise, <c>false</c>.</value>
 		public bool enableBlur
 		{
-			get { return _blurEnabled; }
-			set { setEnableBlur( value ); }
+			get => _blurEnabled;
+			set => setEnableBlur( value );
 		}
 
 		/// <summary>
@@ -39,8 +39,8 @@ namespace Nez
 		/// </summary>
 		public float blurRenderTargetScale
 		{
-			get { return _blurRenderTargetScale; }
-			set { setBlurRenderTargetScale( value ); }
+			get => _blurRenderTargetScale;
+			set => setBlurRenderTargetScale( value );
 		}
 
 		/// <summary>
@@ -49,7 +49,7 @@ namespace Nez
 		/// <value>The blur amount.</value>
 		public float blurAmount
 		{
-			get { return _blurEffect != null ? _blurEffect.blurAmount : -1; }
+			get => _blurEffect != null ? _blurEffect.blurAmount : -1;
 			set
 			{
 				if( _blurEffect != null )
@@ -63,14 +63,12 @@ namespace Nez
 
 		GaussianBlurEffect _blurEffect;
 		RenderTexture _lightsRenderTexture;
-		Scene _scene;
 
 
 		public PolyLightPostProcessor( int executionOrder, RenderTexture lightsRenderTexture ) : base( executionOrder )
 		{
 			_lightsRenderTexture = lightsRenderTexture;
 		}
-
 
 		/// <summary>
 		/// updates the GaussianBlurEffect with the new vertical and horizontal deltas after a back buffer size or blurRenderTargetScale change
@@ -94,7 +92,6 @@ namespace Nez
 			return this;
 		}
 
-
 		public PolyLightPostProcessor setEnableBlur( bool enableBlur )
 		{
 			if( enableBlur != _blurEnabled )
@@ -112,7 +109,6 @@ namespace Nez
 			return this;
 		}
 
-
 		public PolyLightPostProcessor setBlurRenderTargetScale( float blurRenderTargetScale )
 		{
 			if( _blurRenderTargetScale != blurRenderTargetScale )
@@ -124,7 +120,6 @@ namespace Nez
 
 			return this;
 		}
-
 
 		public PolyLightPostProcessor setBlurAmount( float blurAmount )
 		{
@@ -139,7 +134,8 @@ namespace Nez
 
 		public override void onAddedToScene( Scene scene )
 		{
-			_scene = scene;
+			base.onAddedToScene( scene );
+
 			effect = scene.content.loadEffect<Effect>( "spriteLightMultiply", EffectResource.spriteLightMultiplyBytes );
 			effect.Parameters["_lightTexture"].SetValue( _lightsRenderTexture );
 			effect.Parameters["_multiplicativeFactor"].SetValue( _multiplicativeFactor );
@@ -148,6 +144,16 @@ namespace Nez
 				_blurEffect = scene.content.loadNezEffect<GaussianBlurEffect>();
 		}
 
+		public override void unload()
+		{
+			if( _lightsRenderTexture != null )
+				_lightsRenderTexture.Dispose();
+
+			if( _blurEffect != null )
+				_scene.content.unloadEffect( _blurEffect );
+			
+			base.unload();
+		}
 
 		public override void process( RenderTarget2D source, RenderTarget2D destination )
 		{
@@ -175,7 +181,6 @@ namespace Nez
 			Graphics.instance.batcher.draw( source, new Rectangle( 0, 0, destination.Width, destination.Height ), Color.White );
 			Graphics.instance.batcher.end();
 		}
-
 
 		public override void onSceneBackBufferSizeChanged( int newWidth, int newHeight )
 		{

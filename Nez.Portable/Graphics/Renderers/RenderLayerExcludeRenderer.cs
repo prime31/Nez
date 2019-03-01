@@ -15,7 +15,6 @@
 			this.excludedRenderLayers = excludedRenderLayers;
 		}
 
-
 		public override void render( Scene scene )
 		{
 			var cam = camera ?? scene.camera;
@@ -33,7 +32,6 @@
 
 			endRender();
 		}
-
 
 		protected override void debugRender( Scene scene, Camera cam )
 		{

@@ -23,14 +23,12 @@ namespace Nez
 			_tempRT = new RenderTexture( _layerRT.renderTarget.Width, _layerRT.renderTarget.Height, DepthFormat.None );
 		}
 
-
 		public override void onSceneBackBufferSizeChanged( int newWidth, int newHeight )
 		{
 			base.onSceneBackBufferSizeChanged( newWidth, newHeight );
 
 			_tempRT.resize( newWidth, newHeight );
 		}
-
 
 		public override void process( RenderTarget2D source, RenderTarget2D destination )
 		{
@@ -48,7 +46,6 @@ namespace Nez
 
 			Graphics.instance.batcher.end();
 		}
-
 
 		public override void unload()
 		{

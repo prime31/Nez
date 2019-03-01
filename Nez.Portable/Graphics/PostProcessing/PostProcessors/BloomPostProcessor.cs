@@ -14,8 +14,8 @@ namespace Nez
 		/// </summary>
 		public BloomSettings settings
 		{
-			get { return _settings; }
-			set { setBloomSettings( value ); }
+			get => _settings;
+			set => setBloomSettings( value );
 		}
 
 		/// <summary>
@@ -24,7 +24,7 @@ namespace Nez
 		[Range( 0.25f, 1 )]
 		public float renderTargetScale
 		{
-			get { return _renderTargetScale; }
+			get => _renderTargetScale;
 			set
 			{
 				if( _renderTargetScale != value )
@@ -37,7 +37,6 @@ namespace Nez
 
 		float _renderTargetScale = 1f;
 		BloomSettings _settings;
-		Scene _scene;
 
 		Effect _bloomExtractEffect;
 		Effect _bloomCombineEffect;
@@ -56,7 +55,8 @@ namespace Nez
 
 		public override void onAddedToScene( Scene scene )
 		{
-			_scene = scene;
+			base.onAddedToScene( scene );
+
 			_bloomExtractEffect = scene.content.loadEffect<Effect>( "bloomExtract", EffectResource.bloomExtractBytes );
 			_bloomCombineEffect = scene.content.loadEffect<Effect>( "bloomCombine", EffectResource.bloomCombineBytes );
 			_gaussianBlurEffect = scene.content.loadNezEffect<GaussianBlurEffect>();
@@ -70,6 +70,15 @@ namespace Nez
 			_bloomBaseMapParm = _bloomCombineEffect.Parameters["_baseMap"];
 
 			setBloomSettings( _settings );
+		}
+
+		public override void unload()
+		{
+			_scene.content.unloadEffect( _bloomExtractEffect );
+			_scene.content.unloadEffect( _bloomCombineEffect );
+			_scene.content.unloadEffect( _gaussianBlurEffect );
+
+			base.unload();
 		}
 
 		/// <summary>

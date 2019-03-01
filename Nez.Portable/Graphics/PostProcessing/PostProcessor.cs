@@ -38,9 +38,12 @@ namespace Nez
 		/// <summary>
 		/// indicates if this PostProcess is currently in a Scene's PostProcessor list
 		/// </summary>
-		public bool isAttachedToScene => _isAttachedToScene;
+		public bool isAttachedToScene => _scene != null;
 
-		internal bool _isAttachedToScene;
+		/// <summary>
+		/// the Scene this PostProcessor is attached to or null
+		/// </summary>
+		protected Scene _scene;
 
 
 		public PostProcessor( int executionOrder, Effect effect = null )
@@ -51,12 +54,12 @@ namespace Nez
 		}
 
 		/// <summary>
-		/// called when the PostProcessor is added to the Scene
+		/// called when the PostProcessor is added to the Scene. Subclasses must base!
 		/// </summary>
 		/// <param name="scene">Scene.</param>
 		public virtual void onAddedToScene( Scene scene )
 		{
-			_isAttachedToScene = true;
+			_scene = scene;
 		}
 
 		/// <summary>
@@ -85,10 +88,15 @@ namespace Nez
 		}
 
 		/// <summary>
-		/// called when a scene is ended. use this for cleanup.
+		/// called when a scene is ended or this PostProcessor is removed. use this for cleanup.
 		/// </summary>
 		public virtual void unload()
-		{}
+		{
+			if( effect != null )
+				_scene.content.unloadEffect( effect );
+
+			_scene = null;
+		}
 
 		/// <summary>
 		/// helper for drawing a texture into a rendertarget, optionally using a custom shader to apply postprocessing effects.

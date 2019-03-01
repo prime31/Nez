@@ -23,7 +23,6 @@ namespace Nez
 			_effect = scene.content.loadEffect<Effect>( "multiTextureOverlay", EffectResource.multiTextureOverlayBytes );
 		}
 
-
 		void createMosaicTexture( int size )
 		{
 			if( _mosaicTexture != null )
@@ -55,7 +54,6 @@ namespace Nez
 			_effect.Parameters["_secondTexture"].SetValue( _mosaicTexture );
 		}
 
-
 		public void onSceneBackBufferSizeChanged( int newWidth, int newHeight )
 		{
 			// dont recreate the mosaic unless we really need to
@@ -86,7 +84,6 @@ namespace Nez
 			_effect.Parameters["_secondTexture"].SetValue( _mosaicRenderTex );
 		}
 
-
 		public void handleFinalRender( RenderTarget2D finalRenderTarget, Color letterboxColor, RenderTarget2D source, Rectangle finalRenderDestinationRect, SamplerState samplerState )
 		{
 			Core.graphicsDevice.setRenderTarget( finalRenderTarget );
@@ -95,7 +92,6 @@ namespace Nez
 			Graphics.instance.batcher.draw( source, finalRenderDestinationRect, Color.White );
 			Graphics.instance.batcher.end();
 		}
-
 
 		public void unload()
 		{
