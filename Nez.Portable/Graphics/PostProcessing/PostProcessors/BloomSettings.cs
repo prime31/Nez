@@ -19,7 +19,6 @@ namespace Nez
 		public readonly float intensity;
 		public readonly float baseIntensity;
 
-
 		// Independently control the color saturation of the bloom and
 		// base images. Zero is totally desaturated, 1.0 leaves saturation
 		// unchanged, while higher values increase the saturation level.
@@ -39,7 +38,6 @@ namespace Nez
 			saturation = bloomSaturation;
 			this.baseSaturation = baseSaturation;
 		}
-
 
 		/// <summary>
 		/// Table of preset bloom settings. Note that BaseSat needs to be near 0 if the final render needs transparency!

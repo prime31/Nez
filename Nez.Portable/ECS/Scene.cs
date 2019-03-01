@@ -920,6 +920,8 @@ namespace Nez
 		/// <param name="renderer">Renderer.</param>
 		public void removeRenderer( Renderer renderer )
 		{
+			Insist.isTrue( _renderers.contains( renderer ) || _afterPostProcessorRenderers.contains( renderer ) );
+
 			if( renderer.wantsToRenderAfterPostProcessors )
 				_afterPostProcessorRenderers.remove( renderer );
 			else
@@ -980,7 +982,9 @@ namespace Nez
 		/// <param name="postProcessor">Step.</param>
 		public void removePostProcessor( PostProcessor postProcessor )
 		{
-			postProcessor._isAttachedToScene = true;
+			Insist.isTrue( _postProcessors.contains( postProcessor ) );
+
+			postProcessor._isAttachedToScene = false;
 			_postProcessors.remove( postProcessor );
 		}
 

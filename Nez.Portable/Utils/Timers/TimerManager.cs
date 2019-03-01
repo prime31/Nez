@@ -4,6 +4,9 @@ using System.Collections.Generic;
 
 namespace Nez.Timers
 {
+	/// <summary>
+	/// allows delayed and repeated execution of an Action
+	/// </summary>
 	public class TimerManager : GlobalManager
 	{
 		List<Timer> _timers = new List<Timer>();
@@ -22,7 +25,6 @@ namespace Nez.Timers
 			}
 		}
 
-
 		/// <summary>
 		/// schedules a one-time or repeating timer that will call the passed in Action
 		/// </summary>
@@ -32,7 +34,7 @@ namespace Nez.Timers
 		/// <param name="onTime">On time.</param>
 		internal ITimer schedule( float timeInSeconds, bool repeats, object context, Action<ITimer> onTime )
 		{
-			var timer = Pool<Timer>.obtain();
+			var timer = new Timer();
 			timer.initialize( timeInSeconds, repeats, context, onTime );
 			_timers.Add( timer );
 

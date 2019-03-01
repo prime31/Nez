@@ -22,18 +22,15 @@ namespace Nez.Timers
 			_isDone = true;
 		}
 
-
 		public void reset()
 		{
 			_elapsedTime = 0f;
 		}
 
-
 		public T getContext<T>()
 		{
 			return (T)context;
 		}
-
 
 		internal bool tick()
 		{
@@ -52,7 +49,6 @@ namespace Nez.Timers
 			return _isDone;
 		}
 
-
 		internal void initialize( float timeInSeconds, bool repeats, object context, Action<ITimer> onTime )
 		{
 			_timeInSeconds = timeInSeconds;
@@ -60,7 +56,6 @@ namespace Nez.Timers
 			this.context = context;
 			_onTime = onTime;
 		}
-
 
 		/// <summary>
 		/// nulls out the object references so the GC can pick them up if needed

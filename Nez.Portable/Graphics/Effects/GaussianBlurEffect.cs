@@ -5,6 +5,10 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Nez
 {
+	/// <summary>
+	/// this effect requires that you render it twice. The first time horizontally (prepareForHorizontalBlur) and then
+	/// vertically (prepareForVerticalBlur).
+	/// </summary>
 	public class GaussianBlurEffect : Effect
 	{
 		/// <summary>
@@ -33,6 +37,7 @@ namespace Nez
 		/// horizontal delta for the blur. Typically 1 / backbuffer width
 		/// </summary>
 		/// <value>The horizontal blur delta.</value>
+		[Range( 0.0001f, 0.005f, true )]
 		public float horizontalBlurDelta
 		{
 			get { return _horizontalBlurDelta; }
@@ -50,6 +55,7 @@ namespace Nez
 		/// vertical delta for the blur. Typically 1 / backbuffer height
 		/// </summary>
 		/// <value>The vertical blur delta.</value>
+		[Range( 0.0001f, 0.005f, true )]
 		public float verticalBlurDelta
 		{
 			get { return _verticalBlurDelta; }
@@ -64,8 +70,8 @@ namespace Nez
 		}
 
 		float _blurAmount = 2f;
-		float _horizontalBlurDelta;
-		float _verticalBlurDelta;
+		float _horizontalBlurDelta = 0.01f;
+		float _verticalBlurDelta = 0.01f;
 
 		int _sampleCount;
 		float[] _sampleWeights;
@@ -95,8 +101,10 @@ namespace Nez
 
 			// we can calculate the sample weights just once since they are always the same for horizontal or vertical blur
 			calculateSampleWeights();
-		}
 
+			setBlurEffectParameters( _horizontalBlurDelta, 0, _horizontalSampleOffsets );
+			prepareForHorizontalBlur();
+		}
 
 		/// <summary>
 		/// prepares the Effect for performing a horizontal blur
@@ -106,7 +114,6 @@ namespace Nez
 			_blurOffsetsParam.SetValue( _horizontalSampleOffsets );
 		}
 
-
 		/// <summary>
 		/// prepares the Effect for performing a vertical blur
 		/// </summary>
@@ -114,7 +121,6 @@ namespace Nez
 		{
 			_blurOffsetsParam.SetValue( _verticalSampleOffsets );
 		}
-
 
 		/// <summary>
 		/// computes sample weightings and texture coordinate offsets for one pass of a separable gaussian blur filter.
@@ -137,7 +143,6 @@ namespace Nez
 				offsets[i * 2 + 2] = -delta;
 			}
 		}
-
 
 		/// <summary>
 		/// calculates the sample weights and passes them along to the shader
@@ -169,7 +174,6 @@ namespace Nez
 			// Tell the effect about our new filter settings.
 			_blurWeightsParam.SetValue( _sampleWeights );
 		}
-
 
 		/// <summary>
 		/// Evaluates a single point on the gaussian falloff curve.

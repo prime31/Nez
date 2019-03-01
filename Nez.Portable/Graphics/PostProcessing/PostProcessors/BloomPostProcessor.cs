@@ -21,6 +21,7 @@ namespace Nez
 		/// <summary>
 		/// scale of the internal RenderTargets. For high resolution renders a half sized RT is usually more than enough. Defaults to 1.
 		/// </summary>
+		[Range( 0.25f, 1 )]
 		public float renderTargetScale
 		{
 			get { return _renderTargetScale; }
@@ -53,7 +54,6 @@ namespace Nez
 			_settings = BloomSettings.presetSettings[3];
 		}
 
-
 		public override void onAddedToScene( Scene scene )
 		{
 			_scene = scene;
@@ -71,7 +71,6 @@ namespace Nez
 
 			setBloomSettings( _settings );
 		}
-
 
 		/// <summary>
 		/// sets the settings used by the bloom and blur shaders
@@ -91,12 +90,10 @@ namespace Nez
 			_gaussianBlurEffect.blurAmount = _settings.blurAmount;
 		}
 
-
 		public override void onSceneBackBufferSizeChanged( int newWidth, int newHeight )
 		{
 			updateBlurEffectDeltas();
 		}
-
 
 		/// <summary>
 		/// updates the Effect with the new vertical and horizontal deltas
@@ -107,7 +104,6 @@ namespace Nez
 			_gaussianBlurEffect.horizontalBlurDelta = 1f / ( sceneRenderTargetSize.X * _renderTargetScale );
 			_gaussianBlurEffect.verticalBlurDelta = 1f / ( sceneRenderTargetSize.Y * _renderTargetScale );
 		}
-
 
 		public override void process( RenderTarget2D source, RenderTarget2D destination )
 		{

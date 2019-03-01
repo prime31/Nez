@@ -151,12 +151,10 @@ namespace Nez
 			_globalManagers.add( new RenderTarget() );
 		}
 
-
 		void onOrientationChanged( object sender, EventArgs e )
 		{
 			emitter.emit( CoreEvents.OrientationChanged );
 		}
-
 
 		/// <summary>
 		/// this gets called whenever the screen size changes
@@ -202,7 +200,6 @@ namespace Nez
 			var font = content.Load<BitmapFont>( "nez://Nez.Content.NezDefaultBMFont.xnb" );
 			Graphics.instance = new Graphics( font );
 		}
-
 
 		protected override void Update( GameTime gameTime )
 		{
@@ -260,7 +257,6 @@ namespace Nez
 			FrameworkDispatcher.Update();
 			#endif
 		}
-
 
 		protected override void Draw( GameTime gameTime )
 		{
@@ -331,7 +327,6 @@ namespace Nez
 			#endif
 		}
 
-
 		protected override void OnExiting( object sender, EventArgs args )
 		{
 			base.OnExiting( sender, args );
@@ -350,7 +345,6 @@ namespace Nez
 			Time.sceneChanged();
 			GC.Collect();
 		}
-
 
 		/// <summary>
 		/// temporarily runs SceneTransition allowing one Scene to transition to another smoothly with custom effects.
@@ -376,7 +370,6 @@ namespace Nez
 			_instance._globalManagers.add( manager );
 		}
 
-
 		/// <summary>
 		/// removes the global manager object
 		/// </summary>
@@ -386,7 +379,6 @@ namespace Nez
 		{
 			_instance._globalManagers.remove( manager );
 		}
-
 
 		/// <summary>
 		/// gets the global manager of type T
@@ -419,7 +411,6 @@ namespace Nez
 			return _instance._coroutineManager.startCoroutine( enumerator );
 		}
 
-
 		/// <summary>
 		/// schedules a one-time or repeating timer that will call the passed in Action
 		/// </summary>
@@ -432,7 +423,6 @@ namespace Nez
 			return _instance._timerManager.schedule( timeInSeconds, repeats, context, onTime );
 		}
 
-
 		/// <summary>
 		/// schedules a one-time timer that will call the passed in Action after timeInSeconds
 		/// </summary>
@@ -444,7 +434,6 @@ namespace Nez
 			return _instance._timerManager.schedule( timeInSeconds, false, context, onTime );
 		}
 
-
 		/// <summary>
 		/// schedules a one-time or repeating timer that will call the passed in Action
 		/// </summary>
@@ -455,7 +444,6 @@ namespace Nez
 		{
 			return _instance._timerManager.schedule( timeInSeconds, repeats, null, onTime );
 		}
-
 
 		/// <summary>
 		/// schedules a one-time timer that will call the passed in Action after timeInSeconds
