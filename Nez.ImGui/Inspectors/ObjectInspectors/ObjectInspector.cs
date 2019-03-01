@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using ImGuiNET;
 using Nez.ImGuiTools.TypeInspectors;
@@ -10,7 +11,11 @@ namespace Nez.ImGuiTools.ObjectInspectors
         
         public override void initialize()
         {
+            // we need something to inspect here so if we have a null object create a new one
             var obj = getValue();
+            if( obj == null && _valueType.GetConstructor( Type.EmptyTypes ) != null )
+                obj = Activator.CreateInstance( _valueType );
+
             if( obj != null )
                 _inspectors = TypeInspectorUtils.getInspectableProperties( obj );
             else

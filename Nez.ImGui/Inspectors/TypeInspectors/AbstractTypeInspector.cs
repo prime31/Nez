@@ -4,6 +4,11 @@ using ImGuiNET;
 
 namespace Nez.ImGuiTools.TypeInspectors
 {
+	/// <summary>
+	/// subclasses are used to inspect various built-in types. A bit of care has to be taken when we are dealing with any non-value types. Objects
+	/// can be null and we don't want to inspect a null object. Having a null value for an inspected class when initialize is called means we
+	/// cant create the AbstractTypeInspectors for the fields of the object since we need an object to wrap the getter/setter with.
+	/// </summary>
 	public abstract class AbstractTypeInspector
 	{
 		public string name => _name;
@@ -21,7 +26,7 @@ namespace Nez.ImGuiTools.TypeInspectors
 		protected object _target;
 		protected string _name;
 		protected Type _valueType;
-		protected Func<object> _getter;
+		protected Func<object, object> _getter;
 		protected Action<object> _setter;
 		protected MemberInfo _memberInfo;
 		protected bool _isReadOnly;
@@ -100,9 +105,9 @@ namespace Nez.ImGuiTools.TypeInspectors
 			if( target == null )
 				return;
 
-			_getter = () =>
+			_getter = obj =>
 			{
-				return field.GetValue( target );
+				return field.GetValue( obj );
 			};
 
 			if( !_isReadOnly )
@@ -125,9 +130,9 @@ namespace Nez.ImGuiTools.TypeInspectors
 			if( target == null )
 				return;
 
-			_getter = () =>
+			_getter = obj =>
 			{
-				return ReflectionUtils.getPropertyGetter( prop ).Invoke( target, null );
+				return ReflectionUtils.getPropertyGetter( prop ).Invoke( obj, null );
 			};
 
 			if( !_isReadOnly )
@@ -154,7 +159,7 @@ namespace Nez.ImGuiTools.TypeInspectors
 			_valueType = field.FieldType;
 			_isReadOnly = field.IsInitOnly || parentInspector._isReadOnly;
 
-			_getter = () =>
+			_getter = obj =>
 			{
 				var structValue = parentInspector.getValue();
 				return field.GetValue( structValue );
@@ -162,7 +167,7 @@ namespace Nez.ImGuiTools.TypeInspectors
 
 			if( !_isReadOnly )
 			{
-				_setter = ( val ) =>
+				_setter = val =>
 				{
 					var structValue = parentInspector.getValue();
 					field.SetValue( structValue, val );
@@ -186,7 +191,7 @@ namespace Nez.ImGuiTools.TypeInspectors
 			_valueType = prop.PropertyType;
 			_isReadOnly = !prop.CanWrite || parentInspector._isReadOnly;
 
-			_getter = () =>
+			_getter = obj =>
 			{
 				var structValue = parentInspector.getValue();
 				return ReflectionUtils.getPropertyGetter( prop ).Invoke( structValue, null );
@@ -217,12 +222,12 @@ namespace Nez.ImGuiTools.TypeInspectors
 
 		protected T getValue<T>()
 		{
-			return (T)_getter.Invoke();
+			return (T)_getter( _target );
 		}
 
 		protected object getValue()
 		{
-			return _getter.Invoke();
+			return _getter( _target );
 		}
 
 		protected void setValue( object value )
