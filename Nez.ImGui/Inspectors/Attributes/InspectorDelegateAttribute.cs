@@ -1,6 +1,6 @@
 using System;
 
-namespace Nez.ImGuiTools.ComponentInspectors
+namespace Nez.ImGuiTools.ObjectInspectors
 {
 	/// <summary>
 	/// adding this to a method on a Component will cause the ImGui ComponentInspector to call the method whenever

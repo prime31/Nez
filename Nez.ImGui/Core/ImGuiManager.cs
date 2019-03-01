@@ -19,6 +19,9 @@ namespace Nez.ImGuiTools
 		List<Type> _sceneSubclasses = new List<Type>();
 		System.Reflection.MethodInfo[] _themes;
 
+		CoreWindow _coreWindow = new CoreWindow();
+		SceneGraphWindow _sceneGraphWindow = new SceneGraphWindow();
+
 		List<EntityInspector> _entityInspectors = new List<EntityInspector>();
 		List<Action> _drawCommands = new List<Action>();
 		ImGuiRenderer _renderer;
@@ -72,8 +75,8 @@ namespace Nez.ImGuiTools
 			for( var i = _drawCommands.Count - 1; i >= 0; i-- )
 				_drawCommands[i]();
 
-			SceneGraphWindow.show( ref showSceneGraphWindow );
-			CoreWindow.show( ref showCoreWindow );
+			_sceneGraphWindow.show( ref showSceneGraphWindow );
+			_coreWindow.show( ref showCoreWindow );
 
 			if( showDemoWindow )
 				ImGui.ShowDemoWindow( ref showDemoWindow );
@@ -186,10 +189,9 @@ namespace Nez.ImGuiTools
 		void drawEntityInspectors()
 		{
 			for( var i = _entityInspectors.Count - 1; i >= 0; i-- )
-			{
 				_entityInspectors[i].draw();
-			}
 		}
+
 
 		#region Public API
 

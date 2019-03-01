@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using ImGuiNET;
 using Nez.ImGuiTools.TypeInspectors;
 
-namespace Nez.ImGuiTools.ComponentInspectors
+namespace Nez.ImGuiTools.ObjectInspectors
 {
     public class PostProcessorInspector
     {
@@ -22,14 +22,30 @@ namespace Nez.ImGuiTools.ComponentInspectors
         public void draw()
         {
             ImGui.PushID( _scopeId );
-            ImGui.Indent();
-            if( ImGui.CollapsingHeader( _postProcessor.GetType().Name.Replace( "PostProcessor", string.Empty ) ) )
+            var isOpen = ImGui.CollapsingHeader( _postProcessor.GetType().Name.Replace( "PostProcessor", string.Empty ) );
+            
+            NezImGui.ShowContextMenuTooltip();
+
+			if( ImGui.BeginPopupContextItem() )
+			{
+				if( ImGui.Selectable( "Remove PostProcessor" ) )
+				{
+                    isOpen = false;
+                    Core.scene.removePostProcessor( _postProcessor );
+					ImGui.CloseCurrentPopup();
+				}
+
+				ImGui.EndPopup();
+			}
+
+            if( isOpen )
             {
-                ImGui.Checkbox( "Enabled", ref _postProcessor.enabled );
+                ImGui.Indent();
                 foreach( var inspector in _inspectors )
                     inspector.draw();
+                ImGui.Unindent();
             }
-            ImGui.Unindent();
+
             ImGui.PopID();
         }
     }

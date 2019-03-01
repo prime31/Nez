@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using ImGuiNET;
-using Nez.ImGuiTools.ComponentInspectors;
+using Nez.ImGuiTools.ObjectInspectors;
 using Num = System.Numerics;
 
 namespace Nez.ImGuiTools

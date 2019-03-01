@@ -8,6 +8,7 @@ namespace Nez.ImGuiTools
 	{
 		static Type[] _componentSubclasses;
 		static Type[] _effectSubclasses;
+		static Type[] _postProcessorSubclasses;
 		
 		/// <summary>
 		/// gets all the Component subclasses that have a parameterless constructor
@@ -56,7 +57,6 @@ namespace Nez.ImGuiTools
 			if( _effectSubclasses == null )
 			{
 				var subclasses = ReflectionUtils.getAllSubclasses( typeof( Effect ), true );
-				// sort so the Colliders are on the bottom
 				subclasses.Sort( (t, u) =>
 				{
 					return t.Name.CompareTo( u.Name );
@@ -66,6 +66,32 @@ namespace Nez.ImGuiTools
 			return _effectSubclasses;
 		}
 
+		/// <summary>
+		/// gets all the Effect subclasses that have a parameterless constructor
+		/// </summary>
+		/// <returns></returns>
+		public static Type[] getAllPostProcessorSubclassTypes()
+		{
+			if( _effectSubclasses == null )
+			{
+				var subclasses = ReflectionUtils.getAllSubclasses( typeof( PostProcessor ) );
+
+				// filter out all except those with a single parameter constructor
+				var constructorParams = new Type[] { typeof( int ) };
+				for( var i = subclasses.Count - 1; i >= 0; i-- )
+				{
+					if( subclasses[i].GetConstructor( constructorParams ) == null )
+						subclasses.RemoveAt( i );
+				}
+
+				subclasses.Sort( (t, u) =>
+				{
+					return t.Name.CompareTo( u.Name );
+				} );
+				_postProcessorSubclasses = subclasses.ToArray();
+			}
+			return _postProcessorSubclasses;
+		}
 
 	}
 }

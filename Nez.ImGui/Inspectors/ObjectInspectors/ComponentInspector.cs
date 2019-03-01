@@ -4,7 +4,7 @@ using System.Reflection;
 using ImGuiNET;
 using Nez.ImGuiTools.TypeInspectors;
 
-namespace Nez.ImGuiTools.ComponentInspectors
+namespace Nez.ImGuiTools.ObjectInspectors
 {
 	public class ComponentInspector : AbstractComponentInspector
 	{

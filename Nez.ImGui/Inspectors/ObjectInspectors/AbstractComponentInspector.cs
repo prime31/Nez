@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using Nez.ImGuiTools.TypeInspectors;
 
-namespace Nez.ImGuiTools.ComponentInspectors
+namespace Nez.ImGuiTools.ObjectInspectors
 {
 	public abstract class AbstractComponentInspector : IComponentInspector
 	{

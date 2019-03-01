@@ -1,4 +1,4 @@
-namespace Nez.ImGuiTools.ComponentInspectors
+namespace Nez.ImGuiTools.ObjectInspectors
 {
     public interface IComponentInspector
     {

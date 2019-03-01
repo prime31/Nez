@@ -115,7 +115,6 @@ namespace Nez.ImGuiTools.TypeInspectors
 						_inspectors.Add( inspector );
 
 						createdEffect = true;
-						//ImGui.CloseCurrentPopup();
 					}
 				}
 				ImGui.EndPopup();

@@ -1,7 +1,7 @@
 using ImGuiNET;
 using Num = System.Numerics;
 
-namespace Nez.ImGuiTools.ComponentInspectors
+namespace Nez.ImGuiTools.ObjectInspectors
 {
 	public class TransformInspector
 	{

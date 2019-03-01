@@ -59,6 +59,7 @@ namespace Nez.ImGuiTools
 			// if we were previously enabled and do some cleanup
 			_drawCommands.Clear();
 			_entityInspectors.Clear();
+			_sceneGraphWindow.onSceneChanged();
 
 			if( _renderTargetId != IntPtr.Zero )
 			{

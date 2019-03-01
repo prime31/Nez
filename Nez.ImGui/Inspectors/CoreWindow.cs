@@ -5,20 +5,18 @@ using Num = System.Numerics;
 
 namespace Nez.ImGuiTools
 {
-    static class CoreWindow
+    class CoreWindow
     {
-        static string[] _textureFilters;
-        static string[] _textureAddressModes;
-        static float[] _frameRateArray = new float[100];
-        static int _frameRateArrayIndex = 0;
+        string[] _textureFilters;
+        float[] _frameRateArray = new float[100];
+        int _frameRateArrayIndex = 0;
 
-        static CoreWindow()
+        public CoreWindow()
         {
             _textureFilters = Enum.GetNames( typeof( TextureFilter ) );
-            _textureAddressModes = Enum.GetNames( typeof( TextureAddressMode ) );
         }
 
-        public static void show( ref bool isOpen )
+        public void show( ref bool isOpen )
         {
             if( !isOpen )
                 return;
@@ -30,8 +28,7 @@ namespace Nez.ImGuiTools
             ImGui.End();
         }
 
-
-        static void drawSettings()
+        void drawSettings()
         {
             _frameRateArray[_frameRateArrayIndex] = ImGui.GetIO().Framerate;
             _frameRateArrayIndex = ( _frameRateArrayIndex + 1 ) % _frameRateArray.Length;
@@ -54,5 +51,6 @@ namespace Nez.ImGuiTools
                     Core.defaultSamplerState.Filter = (TextureFilter)Enum.Parse( typeof( TextureFilter ), _textureFilters[currentTextureFilter] );
             }
         }
+    
     }
 }
