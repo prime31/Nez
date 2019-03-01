@@ -23,13 +23,27 @@ namespace Nez.ImGuiTools.TypeInspectors
 			if( material == null )
 				return;
 
-			if( material.GetType().IsGenericType )
-			{
-				_name += $" ({material.GetType().GetGenericArguments()[0].Name})";
-			}
-
 			// fetch our inspectors and let them know who their parent is
 			_inspectors = TypeInspectorUtils.getInspectableProperties( material );
+
+			// if we are a Material<T>, we need to fix the duplicate Effect due to the "new T effect"
+			if( material.GetType().IsGenericType )
+			{
+				var didFindEffectInspector = false;
+				for( var i = 0; i < _inspectors.Count; i++ )
+				{
+					var isEffectInspector = _inspectors[i] is EffectInspector;
+					if( isEffectInspector )
+					{
+						if( didFindEffectInspector )
+						{
+							_inspectors.RemoveAt( i );
+							break;
+						}
+						didFindEffectInspector = true;
+					}
+				}
+			}
 		}
 
 		public override void drawMutable()

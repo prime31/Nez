@@ -73,7 +73,6 @@ namespace Nez.ImGuiTools.TypeInspectors
 			drawMutable();
 		}
 
-
 		/// <summary>
 		/// if there is a tooltip and the item is hovered this will display it
 		/// </summary>
@@ -86,6 +85,7 @@ namespace Nez.ImGuiTools.TypeInspectors
 				ImGui.EndTooltip();
 			}
 		}
+
 
 		#region Set target methods
 

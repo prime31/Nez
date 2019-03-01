@@ -18,7 +18,7 @@ namespace Nez.ImGuiTools.TypeInspectors
         /// <returns></returns>
 		public static List<AbstractTypeInspector> getInspectableProperties( object target )
 		{
-			var props = new List<AbstractTypeInspector>();
+			var inspectors = new List<AbstractTypeInspector>();
 			var targetType = target.GetType();
 			var isComponentSubclass = targetType.IsSubclassOf( typeof( Component ) );
 
@@ -47,7 +47,7 @@ namespace Nez.ImGuiTools.TypeInspectors
 				{
 					inspector.setTarget( target, field );
 					inspector.initialize();
-					props.Add( inspector );
+					inspectors.Add( inspector );
 				}
 			}
 
@@ -75,7 +75,7 @@ namespace Nez.ImGuiTools.TypeInspectors
 					continue;
 
 				// skip Component.enabled  and entity which is handled elsewhere
-				if( prop.Name == "enabled" || prop.Name == "entity" )
+				if( isComponentSubclass && ( prop.Name == "enabled" || prop.Name == "entity" ) )
 					continue;
 
 				var inspector = getInspectorForType( prop.PropertyType, target, prop );
@@ -83,7 +83,7 @@ namespace Nez.ImGuiTools.TypeInspectors
 				{
 					inspector.setTarget( target, prop );
 					inspector.initialize();
-					props.Add( inspector );
+					inspectors.Add( inspector );
 				}
 			}
 
@@ -96,10 +96,10 @@ namespace Nez.ImGuiTools.TypeInspectors
 				var inspector = new MethodInspector();
 				inspector.setTarget( target, method );
 				inspector.initialize();
-				props.Add( inspector );
+				inspectors.Add( inspector );
 			}
 
-			return props;
+			return inspectors;
 		}
 
 		public static IEnumerable<MethodInfo> GetAllMethodsWithAttribute<T>( Type type ) where T : Attribute
@@ -153,10 +153,14 @@ namespace Nez.ImGuiTools.TypeInspectors
 			}
 
 			// Nez types
-			if( valueType == typeof( Material ) )
+			if( valueType == typeof( Material ) || valueType.IsSubclassOf( typeof( Material ) ) )
 				return new MaterialInspector();
-			if( valueType == typeof( Effect ) )
+			if( valueType == typeof( Effect ) || valueType.IsSubclassOf( typeof( Effect ) ) )
 				return getEffectInspector( target, memberInfo );
+
+			// last ditch effort. If the class is serializeable we use a generic ObjectInspector
+			if( valueType != typeof( object ) && valueType.IsDefined( typeof( SerializableAttribute ) ) )
+				return new ObjectInspectors.ObjectInspector();
 
 			Debug.info( $"no inspector found for type {valueType} on object {target.GetType()}" );
 
@@ -207,7 +211,7 @@ namespace Nez.ImGuiTools.TypeInspectors
 				effect = getter.Invoke( target, new object[] {} ) as Effect;
 			}
 
-			if( effect != null && effect.GetType().IsSubclassOf( typeof( Effect ) ) )
+			if( effect != null && effect.GetType() != typeof( Effect ) )
 				return new EffectInspector();
 
 			return null;
