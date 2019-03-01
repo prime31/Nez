@@ -72,7 +72,7 @@ namespace Nez.ImGuiTools
 		/// <returns></returns>
 		public static Type[] getAllPostProcessorSubclassTypes()
 		{
-			if( _effectSubclasses == null )
+			if( _postProcessorSubclasses == null )
 			{
 				var subclasses = ReflectionUtils.getAllSubclasses( typeof( PostProcessor ) );
 
