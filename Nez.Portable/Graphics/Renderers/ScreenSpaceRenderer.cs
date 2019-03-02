@@ -40,6 +40,19 @@ namespace Nez
 			endRender();
 		}
 
+		protected override void debugRender( Scene scene, Camera cam )
+		{
+			Graphics.instance.batcher.end();
+			Graphics.instance.batcher.begin( cam.transformMatrix );
+
+			for( var i = 0; i < scene.entities.count; i++ )
+			{
+				var entity = scene.entities[i];
+				if( entity.enabled )
+					entity.debugRender( Graphics.instance );
+			}
+		}
+
 		public override void onSceneBackBufferSizeChanged( int newWidth, int newHeight )
 		{
 			base.onSceneBackBufferSizeChanged( newWidth, newHeight );

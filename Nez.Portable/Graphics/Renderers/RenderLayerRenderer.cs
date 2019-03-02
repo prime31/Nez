@@ -46,7 +46,8 @@ namespace Nez
 
 		protected override void debugRender( Scene scene, Camera cam )
 		{
-			base.debugRender( scene, cam );
+			Graphics.instance.batcher.end();
+			Graphics.instance.batcher.begin( cam.transformMatrix );
 
 			for( var i = 0; i < renderLayers.Length; i++ )
 			{
