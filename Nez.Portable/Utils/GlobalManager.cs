@@ -8,12 +8,9 @@
 		/// <value><c>true</c> if enabled; otherwise, <c>false</c>.</value>
 		public bool enabled
 		{
-			get { return _enabled; }
-			set { setEnabled( value ); }
+			get => _enabled;
+			set => setEnabled( value );
 		}
-
-		bool _enabled = true;
-
 
 		/// <summary>
 		/// enables/disables this GlobalManager
@@ -33,6 +30,8 @@
 			}
 		}
 
+		bool _enabled;
+
 
 		#region GlobalManager Lifecycle
 
@@ -42,19 +41,17 @@
 		public virtual void onEnabled()
 		{ }
 
-
 		/// <summary>
 		/// called when the this GlobalManager is disabled
 		/// </summary>
 		public virtual void onDisabled()
 		{ }
 
-
 		/// <summary>
 		/// called each frame before Scene.update
 		/// </summary>
 		public virtual void update()
-		{}
+		{ }
 
 		#endregion
 

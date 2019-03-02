@@ -42,17 +42,7 @@ namespace Nez.ImGuiTools
 			NezImGuiThemes.darkTheme1();
 
 			// find all Scenes
-			foreach( var assembly in AppDomain.CurrentDomain.GetAssemblies() )
-			{
-				foreach( var type in assembly.GetTypes() )
-				{
-					if( type.BaseType == typeof( Scene ) )
-					{
-						if( type.GetConstructor( Type.EmptyTypes ) != null )
-							_sceneSubclasses.Add( type );
-					}
-				}
-			}
+			_sceneSubclasses = ReflectionUtils.getAllSubclasses( typeof( Scene ), true );
 
 			// tone down indent
 			ImGui.GetStyle().IndentSpacing = 12;
@@ -110,7 +100,7 @@ namespace Nez.ImGuiTools
 					{
 						if( ImGui.MenuItem( sceneType.Name ) )
 						{
-							var scene = (Scene)sceneType.GetConstructor( Type.EmptyTypes ).Invoke( new object[] { } );
+							var scene = (Scene)Activator.CreateInstance( sceneType );
 							Core.startSceneTransition( new CrossFadeTransition( () => scene ) );
 						}
 					}

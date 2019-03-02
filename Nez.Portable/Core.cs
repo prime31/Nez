@@ -111,8 +111,8 @@ namespace Nez
 		/// </summary>
 		public static Scene scene
 		{
-			get { return _instance._scene; }
-			set { _instance._nextScene = value; }
+			get => _instance._scene;
+			set => _instance._nextScene = value;
 		}
 
 
@@ -147,10 +147,10 @@ namespace Nez
 			entitySystemsEnabled = enableEntitySystems;
 
 			// setup systems
-			_globalManagers.add( _coroutineManager );
-			_globalManagers.add( new TweenManager() );
-			_globalManagers.add( _timerManager );
-			_globalManagers.add( new RenderTarget() );
+			registerGlobalManager( _coroutineManager );
+			registerGlobalManager( new TweenManager() );
+			registerGlobalManager( _timerManager );
+			registerGlobalManager( new RenderTarget() );
 		}
 
 		void onOrientationChanged( object sender, EventArgs e )
@@ -370,6 +370,7 @@ namespace Nez
 		public static void registerGlobalManager( GlobalManager manager )
 		{
 			_instance._globalManagers.add( manager );
+			manager.enabled = true;
 		}
 
 		/// <summary>
@@ -380,6 +381,7 @@ namespace Nez
 		public static void unregisterGlobalManager( GlobalManager manager )
 		{
 			_instance._globalManagers.remove( manager );
+			manager.enabled = false;
 		}
 
 		/// <summary>
