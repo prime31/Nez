@@ -1,4 +1,5 @@
 ﻿using NUnit.Framework;
+using System;
 using System.Collections.Generic;
 
 
@@ -58,7 +59,7 @@ namespace Nez.Persistence.JsonTests
 		}
 
 		[Test]
-		public void PreserveReferences()
+		public void PreserveReferences_Preserves()
 		{
 			var entity = new Entity();
 			entity.components = new List<Component> { new Component(), new Sprite { entity = entity } };
@@ -72,6 +73,38 @@ namespace Nez.Persistence.JsonTests
 
 			var outEntity = Json.FromJson<Entity>( json );
 			Assert.AreEqual( outEntity, outEntity.components[1].entity );
+		}
+
+		[Test]
+		public void ArrayTypeHint_Hints()
+		{
+			var entity = new Entity();
+			entity.components = new List<Component> { new Component(), new Sprite { entity = entity } };
+
+			var json = Json.ToJson( entity, new JsonSettings
+			{
+				PrettyPrint = true,
+				TypeNameHandling = TypeNameHandling.Arrays,
+				PreserveReferencesHandling = true
+			} );
+
+			var outEntity = Json.FromJson<Entity>( json );
+			Assert.IsInstanceOf( typeof( Sprite ), outEntity.components[1] );
+		}
+
+		[Test]
+		public void NoTypeHint_DoesntHint()
+		{
+			var entity = new Entity();
+			entity.components = new List<Component> { new Component(), new Sprite { entity = entity } };
+
+			var json = Json.ToJson( entity, new JsonSettings
+			{
+				PreserveReferencesHandling = true
+			} );
+
+			var outEntity = Json.FromJson<Entity>( json );
+			Assert.IsNotInstanceOf( typeof( Sprite ), outEntity.components[1] );
 		}
 
 	}

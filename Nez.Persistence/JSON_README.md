@@ -140,7 +140,7 @@ Will output (if pretty printed):
 
 And then you can rehydrate your object from the JSON using `FromJson<T>`:
 
-```
+```csharp
 var obj = Json.FromJson<TestClass>( testClassJson );
 ```
 
@@ -271,6 +271,7 @@ foreach( var item in list as IList )
 {
 	var number = item;
 	Console.WriteLine( number );
+	// note that if you want to strongly type the number `Convert.ChangeType`/`Convert.ToInt32` and friends work best
 }
 
 var dict = Json.Decode( "{\"x\":1,\"y\":2}" );
@@ -286,9 +287,11 @@ foreach( var pair in dict as IDictionary )
 
 Json lets you add some custom data to the JSON and then fetch it for any strongly typed object. You can also fully take over encoding to JSON writing whatever you want for any particular object. You can do this by creating a `JsonTypeConverter<T>` and implementing the abstract methods. Any time Json comes accross an object of Type `T` it will pass it off to your `JsonObjectConverter`.
 
-The `WriteJson` method will be passed an `IJsonEncoder` which can be used to write custom JSON for your object. It will be called *before* the encoder encodes the object's fields and properties. If you do not want the encoder to write any data at all you can override `WantsExclusiveWrite` returning `true` (see second example below).
+The `JsonTypeConverter` indicates what it wants to do via the three properties `CanRead` (defaults to true), `CanWrite` (defaults to true) and `WantsExclusiveWrite` (defaults to false).
 
-When encoding the JSON back to an object, the `OnFoundCustomData` method will be passed any key/value pairs that do not have corresponding fields/properties.
+If `CanWrite` is true, the `WriteJson` method will be passed an `IJsonEncoder` which can be used to write custom JSON for your object. It will be called *before* the encoder encodes the object's fields and properties. If you do not want the encoder to write any data at all you can override `WantsExclusiveWrite` returning `true` (see second example below).
+
+When encoding the JSON back to an object, if `CanRead` is true, the `OnFoundCustomData` method will be passed any key/value pairs that do not have corresponding fields/properties.
 
 
 ```csharp
@@ -364,6 +367,36 @@ The resulting json would be the following. Notice that none of the normal `Doodl
 
 `{"key-that-isnt-on-object":true,"another_key":"with a value","string_array":["first","second"]}`
 
+
+## Advanced: JsonObjectFactory to override object creation
+
+Creating a `JsonObjectFactory` lets you override object creation entirely. This is extremely useful when you have an object that needs a specific constructor called or some object-specific setup. You can write any data you want and then override how the object gets instantiated and populated.
+
+Continuing to use our Doodle class above, we will create a `JsonObjectFactory` that overrides object creation:
+
+
+```csharp
+class ObjectFactoryConverter : JsonObjectFactory<Doodle>
+{
+	public override Doodle Create( Type objectType, IDictionary objectData )
+	{
+		var doodle = new Doodle();
+
+		doodle.x = Convert.ToInt32( objectData["x"] );
+		doodle.y = Convert.ToInt32( objectData["y"] );
+		doodle.z = Convert.ToInt32( objectData["z"] );
+
+		return doodle;
+	}
+}
+```
+
+`JsonObjectFactory` is actually a subclass of `JsonTypeConverter` so usage is identical. You just add your `JsonObjectFactory` to the `TypeConverters` on the `JsonSettings` object and pass it in to `FromJson`:
+
+```csharp
+var settings = new JsonSettings { TypeConverters = new JsonTypeConverter[] { new ObjectFactoryConverter() } };
+var newDoodle = Json.FromJson<Doodle>( json, settings );
+```
 
 
 ## Meta

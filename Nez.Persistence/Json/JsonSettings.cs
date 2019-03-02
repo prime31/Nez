@@ -44,6 +44,11 @@ namespace Nez.Persistence
 		public JsonTypeConverter[] TypeConverters;
 
 
+		/// <summary>
+		/// finds and returns the first <see cref="JsonTypeConverter"/> found that can convert <paramref name="objectType"/>
+		/// </summary>
+		/// <returns>The type converter for type.</returns>
+		/// <param name="objectType">Object type.</param>
 		internal JsonTypeConverter GetTypeConverterForType( Type objectType )
 		{
 			if( TypeConverters == null )
@@ -53,6 +58,25 @@ namespace Nez.Persistence
 				if( converter.CanConvertType( objectType ) )
 				{
 					return converter;
+				}
+			}
+			return null;
+		}
+
+		/// <summary>
+		/// finds and returns the first <see cref="JsonObjectFactory"/> found that can convert <paramref name="objectType"/>
+		/// </summary>
+		/// <returns>The object factory for type.</returns>
+		/// <param name="objectType">Object type.</param>
+		internal JsonObjectFactory GetObjectFactoryForType( Type objectType )
+		{
+			if( TypeConverters == null )
+				return null;
+			foreach( var converter in TypeConverters )
+			{
+				if( converter.CanConvertType( objectType ) && converter is JsonObjectFactory )
+				{
+					return converter as JsonObjectFactory;
 				}
 			}
 			return null;

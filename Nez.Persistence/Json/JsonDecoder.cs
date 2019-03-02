@@ -282,20 +282,25 @@ namespace Nez.Persistence
 			return Token.None;
 		}
 
+		/// <summary>
+		/// parses the string into a long, ulong, decimal or double. If parsing fails returns 0.
+		/// </summary>
+		/// <returns>The number.</returns>
+		/// <param name="value">Value.</param>
 		IConvertible ParseNumber( string value )
 		{
 			if( value.IndexOfAny( floatingPointCharacters ) == -1 )
 			{
 				if( value[0] == '-' )
 				{
-					if( long.TryParse( value, NumberStyles.Float, NumberFormatInfo.InvariantInfo, out long parsedValue ) )
+					if( long.TryParse( value, NumberStyles.Integer, NumberFormatInfo.InvariantInfo, out long parsedValue ) )
 					{
 						return parsedValue;
 					}
 				}
 				else
 				{
-					if( ulong.TryParse( value, NumberStyles.Float, NumberFormatInfo.InvariantInfo, out ulong parsedValue ) )
+					if( ulong.TryParse( value, NumberStyles.Integer, NumberFormatInfo.InvariantInfo, out ulong parsedValue ) )
 					{
 						return parsedValue;
 					}
@@ -555,7 +560,7 @@ namespace Nez.Persistence
 
 			// check for a JsonConverter and use it if we have one
 			var converter = _settings?.GetTypeConverterForType( obj.GetType() );
-			if( converter != null )
+			if( converter != null && converter.CanRead )
 			{
 				converter.OnFoundCustomData( obj, key, orhpanedValue );
 			}
@@ -783,6 +788,7 @@ namespace Nez.Persistence
 				switch( GetNextToken() )
 				{
 					case Token.None:
+					case Token.Null:
 						return null;
 					case Token.Comma:
 						continue;
@@ -826,7 +832,7 @@ namespace Nez.Persistence
 								var refObj = _cacheResolver.ResolveReference( DecodeString() );
 
 								// we could break and let the next iteration catch the } but then the AfterDecode method
-								// will be called multiple times.
+								// will be called multiple times so instead we eat the token.
 								dump = GetNextToken();
 								return refObj;
 							}
@@ -841,6 +847,17 @@ namespace Nez.Persistence
 									throw new TypeLoadException( $"Could not find type '{typeHint}' in any loaded assemblies" );
 								}
 
+								// handle the JsonObjectFactory if we have one
+								var converter = _settings?.GetObjectFactoryForType( type );
+								if( converter != null )
+								{
+									// fetch the remaining data into a Dictionary and pass it off to the factory
+									var dict = new Dictionary<string, object>();
+									DecodeDictionary( dict.GetType(), dict );
+									obj = converter.CreateObject( type, dict );
+									return obj;
+								}
+
 								obj = _cacheResolver.CreateInstance( makeType );
 								break;
 							}
@@ -848,6 +865,20 @@ namespace Nez.Persistence
 							// if obj is still null we need to create it
 							if( obj == null )
 							{
+								// handle the JsonObjectFactory if we have one
+								var converter = _settings?.GetObjectFactoryForType( type );
+								if( converter != null )
+								{
+									// we have to do a little bit of hacking the JSON here. We need to popuplate an untyped
+									// Dictionary with the object data but we have already read in the first key. We read the
+									// next value in untyped fashion before passing off the Dictionary to finish decoding.
+									var dict = new Dictionary<string, object>();
+									dict[key] = DecodeValueUntyped( GetNextToken() );
+
+									DecodeDictionary( dict.GetType(), dict );
+									obj = converter.CreateObject( type, dict );
+									return obj;
+								}
 								obj = _cacheResolver.CreateInstance( type );
 							}
 

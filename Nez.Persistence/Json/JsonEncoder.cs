@@ -187,7 +187,7 @@ namespace Nez.Persistence
 
 			// check for an override converter and use it if present
 			var converter = _settings.GetTypeConverterForType( type );
-			if( converter != null )
+			if( converter != null && converter.CanWrite )
 			{
 				converter.WriteJson( this, value );
 				if( converter.WantsExclusiveWrite )
