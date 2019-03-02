@@ -58,7 +58,7 @@ namespace Nez.UISkinImporter
 			{
 				var obj = colors[key];
 				UISkinImporter.logger.LogMessage( "adding color: {0}", key );
-				Color color;
+				Color color = new Color();
 
 				// Allow the passing of strings (hex), arrays and objects (r:, g:, b:) to
 				//  represent colors. Also detect the usage of integers or normalized floats
