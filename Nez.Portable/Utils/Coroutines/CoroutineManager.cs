@@ -95,7 +95,6 @@ namespace Nez.Systems
 			return coroutine;
 		}
 
-
 		public override void update()
 		{
 			_isInUpdate = true;
@@ -143,7 +142,6 @@ namespace Nez.Systems
 
 			_isInUpdate = false;
 		}
-
 
 		/// <summary>
 		/// ticks a coroutine. returns true if the coroutine should continue to run next frame. This method will put finished coroutines
