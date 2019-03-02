@@ -57,19 +57,24 @@ namespace Nez.ImGuiTools
 		{
 			// when the Scene changes we need to rewire ourselves up as the IFinalRenderDelegate in the new Scene
 			// if we were previously enabled and do some cleanup
-			_drawCommands.Clear();
-			_entityInspectors.Clear();
+			unload();
 			_sceneGraphWindow.onSceneChanged();
 
+			if( enabled )
+				onEnabled();
+		}
+
+		void unload()
+		{
+			_drawCommands.Clear();
+			_entityInspectors.Clear();
+			
 			if( _renderTargetId != IntPtr.Zero )
 			{
 				_renderer.unbindTexture( _renderTargetId );
 				_renderTargetId = IntPtr.Zero;
 			}
 			_lastRenderTarget = null;
-
-			if( enabled )
-				onEnabled();
 		}
 
 		/// <summary>
@@ -221,12 +226,20 @@ namespace Nez.ImGuiTools
 
 		public override void onEnabled()
 		{
-			Core.scene.finalRenderDelegate = this;
+			if( Core.scene != null )
+			{
+				Core.scene.finalRenderDelegate = this;
+				// why call beforeLayout here? If added from the DebugConsole we missed the GlobalManger.update call and ImGui needs NextFrame
+				// called or it fails. Calling NextFrame twice in a frame causes no harm, just missed input.
+				_renderer.beforeLayout( Time.deltaTime );
+			}
 		}
 
 		public override void onDisabled()
 		{
-			Core.scene.finalRenderDelegate = null;
+			unload();
+			if( Core.scene != null )
+				Core.scene.finalRenderDelegate = null;
 		}
 
 		public override void update()
@@ -326,8 +339,10 @@ namespace Nez.ImGuiTools
 				service = new ImGuiManager();
 				Core.registerGlobalManager( service );
 			}
-
-			service.setEnabled( !service.enabled );
+			else
+			{
+				service.setEnabled( !service.enabled );
+			}
 		}
 
 	}

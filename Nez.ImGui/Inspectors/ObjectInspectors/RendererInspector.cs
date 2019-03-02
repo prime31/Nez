@@ -9,12 +9,14 @@ namespace Nez.ImGuiTools.ObjectInspectors
         public Renderer renderer => _renderer;
 
 		int _scopeId = NezImGui.GetScopeId();
+        string _name;
         Renderer _renderer;
         MaterialInspector _materialInspector;
 
         public RendererInspector( Renderer renderer )
         {
             _renderer = renderer;
+            _name = _renderer.GetType().Name;
             _materialInspector = new MaterialInspector {
                 allowsMaterialRemoval = false
             };
@@ -24,7 +26,7 @@ namespace Nez.ImGuiTools.ObjectInspectors
         public void draw()
         {
             ImGui.PushID( _scopeId );
-            var isOpen = ImGui.CollapsingHeader( _renderer.GetType().Name );
+            var isOpen = ImGui.CollapsingHeader( _name );
             
             NezImGui.ShowContextMenuTooltip();
 
