@@ -66,16 +66,6 @@ namespace Nez
 		public bool wantsToRenderAfterPostProcessors;
 
 		/// <summary>
-		/// indicates if this Renderer is currently in a Scene's PostProcessor list
-		/// </summary>
-		public bool isAttachedToScene => _scene != null;
-
-		/// <summary>
-		/// The Scene this Renderer is attached to or null
-		/// </summary>
-		protected Scene _scene;
-
-		/// <summary>
 		/// holds the current Material of the last rendered Renderable (or the Renderer.material if no changes were made)
 		/// </summary>
 		protected Material _currentMaterial;
@@ -91,12 +81,19 @@ namespace Nez
 		}
 
 		/// <summary>
-		/// called when the Renderer is added to the Scene. Subclasses must base!
+		/// called when the Renderer is added to the Scene
 		/// </summary>
 		/// <param name="scene">Scene.</param>
 		public virtual void onAddedToScene( Scene scene )
+		{}
+
+		/// <summary>
+		/// called when a scene is ended or this Renderer is removed from the Scene. use this for cleanup.
+		/// </summary>
+		public virtual void unload()
 		{
-			_scene = scene;
+			if( renderTexture != null )
+				renderTexture.Dispose();
 		}
 
 		/// <summary>
@@ -162,13 +159,14 @@ namespace Nez
 		}
 
 		/// <summary>
-		/// default debugRender method just loops through all entities and calls entity.debugRender
+		/// default debugRender method just loops through all entities and calls entity.debugRender. Note that you are in the middle of a batch
+		/// at this point so you may want to call Batcher.End and Batcher.begin to clear out any Materials and items awaiting rendering.
 		/// </summary>
 		/// <param name="scene">Scene.</param>
 		protected virtual void debugRender( Scene scene, Camera cam )
 		{
 			Graphics.instance.batcher.end();
-			Graphics.instance.batcher.begin( Core.scene.camera.transformMatrix );
+			Graphics.instance.batcher.begin( cam.transformMatrix );
 
 			for( var i = 0; i < scene.entities.count; i++ )
 			{
@@ -189,16 +187,6 @@ namespace Nez
 		{
 			if( renderTexture != null )
 				renderTexture.onSceneBackBufferSizeChanged( newWidth, newHeight );
-		}
-
-		/// <summary>
-		/// called when a scene is ended or this Renderer is removed from the Scene. use this for cleanup.
-		/// </summary>
-		public virtual void unload()
-		{
-			_scene = null;
-			if( renderTexture != null )
-				renderTexture.Dispose();
 		}
 
 		public int CompareTo( Renderer other ) => renderOrder.CompareTo( other.renderOrder );

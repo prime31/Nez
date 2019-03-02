@@ -56,7 +56,7 @@ namespace Nez.ImGuiTools.SceneGraphPanes
 			{
 				if( ImGui.Selectable( "Clone Entity " + entity.name ) )
 				{
-					var clone = entity.clone();
+					var clone = entity.clone( Core.scene.camera.position );
 					entity.scene.addEntity( clone );
 				}
 

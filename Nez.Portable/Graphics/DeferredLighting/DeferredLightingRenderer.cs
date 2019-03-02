@@ -28,13 +28,21 @@ namespace Nez.DeferredLighting
 		/// ambient lighting color. Alpha is ignored
 		/// </summary>
 		/// <value>The color of the ambient.</value>
-		public Color ambientColor { get { return _ambientColor; } }
+		public Color ambientColor
+		{
+			get => _ambientColor;
+			set => setAmbientColor( value );
+		} 
 
 		/// <summary>
 		/// clear color for the diffuse portion of the gbuffer
 		/// </summary>
 		/// <value>The color of the clear.</value>
-		public Color clearColor { get { return _clearColor; } }
+		public Color clearColor
+		{
+			get => _clearColor;
+			set => setClearColor( value );
+		}
 
 		/// <summary>
 		/// single pixel texture of a neutral normal map. This will effectively make the object have only diffuse lighting if applied as the normal map.

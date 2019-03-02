@@ -36,14 +36,9 @@ namespace Nez
 		public BlendState blendState = BlendState.Opaque;
 
 		/// <summary>
-		/// indicates if this PostProcess is currently in a Scene's PostProcessor list
-		/// </summary>
-		public bool isAttachedToScene => _scene != null;
-
-		/// <summary>
 		/// the Scene this PostProcessor is attached to or null
 		/// </summary>
-		protected Scene _scene;
+		protected internal Scene _scene;
 
 
 		public PostProcessor( int executionOrder, Effect effect = null )

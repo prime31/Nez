@@ -6,16 +6,20 @@ namespace Nez
 {
 	public class BoxCollider : Collider
 	{
+		[Inspectable]
+		[Range( 1, float.MaxValue, true )]
 		public float width
 		{
-			get { return ((Box)shape).width; }
-			set { setWidth( value ); }
+			get => ((Box)shape).width;
+			set => setWidth( value );
 		}
 
+		[Inspectable]
+		[Range( 1, float.MaxValue, true )]
 		public float height
 		{
-			get { return ((Box)shape).height; }
-			set { setHeight( value ); }
+			get => ((Box)shape).height;
+			set => setHeight( value );
 		}
 
 

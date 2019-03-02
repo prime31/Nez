@@ -21,9 +21,9 @@ namespace Nez.ImGuiTools.SceneGraphPanes
 			if( !_isRendererListInitialized || Time.frameCount % 60 == 0 )
 			{
 				_isRendererListInitialized = true;
-				for( var i = 0; i < Core.scene.rawRendererList.length; i++ )
+				for( var i = 0; i < Core.scene._renderers.length; i++ )
 				{
-					var renderer = Core.scene.rawRendererList.buffer[i];
+					var renderer = Core.scene._renderers.buffer[i];
 					if( _renderers.Where( inspector => inspector.renderer == renderer ).Count() == 0 )
 						_renderers.Add( new RendererInspector( renderer ) );
 				}
@@ -44,11 +44,8 @@ namespace Nez.ImGuiTools.SceneGraphPanes
 			ImGui.Indent();
 			for( var i = 0; i < _renderers.Count; i++ )
 			{
-				if( _renderers[i].renderer.isAttachedToScene )
-				{
-					_renderers[i].draw();
-					NezImGui.SmallVerticalSpace();
-				}
+				_renderers[i].draw();
+				NezImGui.SmallVerticalSpace();
 			}
 
 			if( _renderers.Count == 0 )

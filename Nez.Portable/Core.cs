@@ -11,6 +11,8 @@ using Nez.BitmapFonts;
 using Nez.Analysis;
 using Nez.Textures;
 
+[assembly: System.Runtime.CompilerServices.InternalsVisibleTo( "Nez.ImGui" )]
+[assembly: System.Runtime.CompilerServices.InternalsVisibleTo( "Nez.Persistence" )]
 
 namespace Nez
 {

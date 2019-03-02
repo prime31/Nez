@@ -21,9 +21,9 @@ namespace Nez.ImGuiTools.SceneGraphPanes
 			if( !_isPostProcessorListInitialized || Time.frameCount % 60 == 0 )
 			{
 				_isPostProcessorListInitialized = true;
-				for( var i = 0; i < Core.scene.rawPostProcessorList.length; i++ )
+				for( var i = 0; i < Core.scene._postProcessors.length; i++ )
 				{
-					var postProcessor = Core.scene.rawPostProcessorList.buffer[i];
+					var postProcessor = Core.scene._postProcessors.buffer[i];
 					if( _postProcessorInspectors.Where( inspector => inspector.postProcessor == postProcessor ).Count() == 0 )
 						_postProcessorInspectors.Add( new PostProcessorInspector( postProcessor ) );
 				}
@@ -44,7 +44,7 @@ namespace Nez.ImGuiTools.SceneGraphPanes
 			ImGui.Indent();
 			for( var i = 0; i < _postProcessorInspectors.Count; i++ )
 			{
-				if( _postProcessorInspectors[i].postProcessor.isAttachedToScene )
+				if( _postProcessorInspectors[i].postProcessor._scene != null )
 				{
 					_postProcessorInspectors[i].draw();
 					NezImGui.SmallVerticalSpace();

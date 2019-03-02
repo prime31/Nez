@@ -136,16 +136,6 @@ namespace Nez
 		public int pixelPerfectScale = 1;
 
 		/// <summary>
-		/// provides direct access to the PostProcessors. Do not modify the returned list!
-		/// </summary>
-		public FastList<PostProcessor> rawPostProcessorList => _postProcessors;
-
-		/// <summary>
-		/// provides direct access to the Renderers. Do not modify the returned list!
-		/// </summary>
-		public FastList<Renderer> rawRendererList => _renderers;
-
-		/// <summary>
 		/// the final render to the screen can be deferred to this delegate if set. This is really only useful for cases where the final render
 		/// might need a full screen size effect even though a small back buffer is used.
 		/// </summary>
@@ -215,8 +205,8 @@ namespace Nez
 		Action<Texture2D> _screenshotRequestCallback;
 
 		internal readonly FastList<SceneComponent> _sceneComponents = new FastList<SceneComponent>();
-		FastList<Renderer> _renderers = new FastList<Renderer>();
-		readonly FastList<Renderer> _afterPostProcessorRenderers = new FastList<Renderer>();
+		internal FastList<Renderer> _renderers = new FastList<Renderer>();
+		internal readonly FastList<Renderer> _afterPostProcessorRenderers = new FastList<Renderer>();
 		internal readonly FastList<PostProcessor> _postProcessors = new FastList<PostProcessor>();
 		bool _didSceneBegin;
 
@@ -346,7 +336,12 @@ namespace Nez
 
 		internal void begin()
 		{
-			Insist.isFalse( _renderers.length == 0, "Scene has begun with no renderer. At least one renderer must be present before beginning a scene." );
+			if( _renderers.length == 0 )
+			{
+				addRenderer( new DefaultRenderer() );
+				Debug.warn( "Scene has begun with no renderer. A DefaultRenderer was added automatically so that something is visible." );
+			}
+
 			Physics.reset();
 
 			// prep our render textures
