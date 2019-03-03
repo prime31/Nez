@@ -10,6 +10,7 @@ using Nez.Timers;
 using Nez.BitmapFonts;
 using Nez.Analysis;
 using Nez.Textures;
+using System.Diagnostics;
 
 [assembly: System.Runtime.CompilerServices.InternalsVisibleTo( "Nez.ImGui" )]
 [assembly: System.Runtime.CompilerServices.InternalsVisibleTo( "Nez.Persistence" )]
@@ -84,12 +85,12 @@ namespace Nez
 		/// </summary>
 		internal static bool entitySystemsEnabled;
 
-		#if DEBUG
+#if DEBUG
 		internal static long drawCalls;
 		TimeSpan _frameCounterElapsedTime = TimeSpan.Zero;
 		int _frameCounter = 0;
 		string _windowTitle;
-		#endif
+#endif
 
 		Scene _scene;
 		Scene _nextScene;
@@ -112,15 +113,30 @@ namespace Nez
 		public static Scene scene
 		{
 			get => _instance._scene;
-			set => _instance._nextScene = value;
+			set
+			{
+				Insist.isNotNull( value, "Scene cannot be null!" );
+
+				// handle our initial Scene. If we have no Scene and one is assigned directly wire it up
+				if( _instance._scene == null )
+				{
+					_instance._scene = value;
+					_instance._scene.begin();
+					_instance.onSceneChanged();
+				}
+				else
+				{
+					_instance._nextScene = value;
+				}
+			}
 		}
 
 
 		public Core( int width = 1280, int height = 720, bool isFullScreen = false, bool enableEntitySystems = true, string windowTitle = "Nez", string contentDirectory = "Content" )
 		{
-			#if DEBUG
+#if DEBUG
 			_windowTitle = windowTitle;
-			#endif
+#endif
 
 			_instance = this;
 			emitter = new Emitter<CoreEvents>( new CoreEventsComparer() );
@@ -211,20 +227,11 @@ namespace Nez
 				return;
 			}
 
-			#if DEBUG
-			TimeRuler.instance.startFrame();
-			TimeRuler.instance.beginMark( "update", Color.Green );
-			#endif
+			startDebugUpdate();
 
 			// update all our systems and global managers
 			Time.update( (float)gameTime.ElapsedGameTime.TotalSeconds );
 			Input.update();
-
-			for( var i = _globalManagers.length - 1; i >= 0; i-- )
-			{
-				if( _globalManagers.buffer[i].enabled )
-					_globalManagers.buffer[i].update();
-			}
 
 			if( exitOnEscapeKeypress && ( Input.isKeyDown( Keys.Escape ) || Input.gamePads[0].isButtonReleased( Buttons.Back ) ) )
 			{
@@ -233,31 +240,42 @@ namespace Nez
 			}
 
 			if( _scene != null )
-				_scene.update();
-
-			if( _scene != _nextScene )
 			{
-				if( _scene != null )
+				for( var i = _globalManagers.length - 1; i >= 0; i-- )
+				{
+					if( _globalManagers.buffer[i].enabled )
+						_globalManagers.buffer[i].update();
+				}
+
+				// read carefully:
+				// - we do not update the Scene while a SceneTransition is happening
+				// 		- unless it is SceneTransition that doesn't change Scenes (no reason not to update)
+				//		- or it is a SceneTransition that has already switched to the new Scene (the new Scene needs to do its thing)
+				if( _sceneTransition == null ||
+					( _sceneTransition != null && ( !_sceneTransition._loadsNewScene || _sceneTransition._isNewSceneLoaded ) ) )
+				{
+					_scene.update();
+				}
+
+				if( _nextScene != null )
+				{
 					_scene.end();
 
-				_scene = _nextScene;
-				onSceneChanged();
+					_scene = _nextScene;
+					_nextScene = null;
+					onSceneChanged();
 
-				if( _scene != null )
 					_scene.begin();
+				}
 			}
 
-			#if DEBUG
-			TimeRuler.instance.endMark( "update" );
-			DebugConsole.instance.update();
-			drawCalls = 0;
-			#endif
+			endDebugUpdate();
 
-			#if FNA
+#if FNA
 			// MonoGame only updates old-school XNA Components in Update which we dont care about. FNA's core FrameworkDispatcher needs
 			// Update called though so we do so here.
 			FrameworkDispatcher.Update();
-			#endif
+#endif
 		}
 
 		protected override void Draw( GameTime gameTime )
@@ -265,68 +283,42 @@ namespace Nez
 			if( pauseOnFocusLost && !IsActive )
 				return;
 
-			#if DEBUG
-			TimeRuler.instance.beginMark( "draw", Color.Gold );
-
-			// fps counter
-			_frameCounter++;
-			_frameCounterElapsedTime += gameTime.ElapsedGameTime;
-			if( _frameCounterElapsedTime >= TimeSpan.FromSeconds( 1 ) )
-			{
-				var totalMemory = ( GC.GetTotalMemory( false ) / 1048576f ).ToString( "F" );
-				Window.Title = string.Format( "{0} {1} fps - {2} MB", _windowTitle, _frameCounter, totalMemory );
-				_frameCounter = 0;
-				_frameCounterElapsedTime -= TimeSpan.FromSeconds( 1 );
-			}
-			#endif
+			startDebugDraw( gameTime.ElapsedGameTime );
 
 			if( _sceneTransition != null )
 				_sceneTransition.preRender( Graphics.instance );
 
-			if( _scene != null )
-			{
-				_scene.render();
-
-				#if DEBUG
-				if( debugRenderEnabled )
-					Debug.render();
-				#endif
-
-				// render as usual if we dont have an active SceneTransition
-				if( _sceneTransition == null )
-					_scene.postRender();
-			}
-
-			// special handling of SceneTransition if we have one
+			// special handling of SceneTransition if we have one. We either render the SceneTransition or the Scene
 			if( _sceneTransition != null )
 			{
 				if( _scene != null && _sceneTransition.wantsPreviousSceneRender && !_sceneTransition.hasPreviousSceneRender )
 				{
+					_scene.render();
 					_scene.postRender( _sceneTransition.previousSceneRender );
-					if( _sceneTransition._loadsNewScene )
-						scene = null;
 					startCoroutine( _sceneTransition.onBeginTransition() );
 				}
-				else if( _scene != null )
+				else if( _scene != null && _sceneTransition._isNewSceneLoaded )
 				{
+					_scene.render();
 					_scene.postRender();
 				}
 
 				_sceneTransition.render( Graphics.instance );
 			}
+			else if( _scene != null )
+			{
+				_scene.render();
 
-			#if DEBUG
-			TimeRuler.instance.endMark( "draw" );
-			DebugConsole.instance.render();
+#if DEBUG
+				if( debugRenderEnabled )
+					Debug.render();
+#endif
 
-			// the TimeRuler only needs to render when the DebugConsole is not open
-			if( !DebugConsole.instance.isOpen )
-				TimeRuler.instance.render();
+				// render as usual if we dont have an active SceneTransition
+				_scene.postRender();
+			}
 
-			#if !FNA
-			drawCalls = graphicsDevice.Metrics.DrawCount;
-			#endif
-			#endif
+			endDebugDraw();
 		}
 
 		protected override void OnExiting( object sender, EventArgs args )
@@ -337,6 +329,62 @@ namespace Nez
 
 		#endregion
 
+		#region Debug Injection
+
+		[Conditional( "DEBUG" )]
+		void startDebugUpdate()
+		{
+			TimeRuler.instance.startFrame();
+			TimeRuler.instance.beginMark( "update", Color.Green );
+		}
+
+		[Conditional( "DEBUG" )]
+		void endDebugUpdate()
+		{
+#if DEBUG
+			TimeRuler.instance.endMark( "update" );
+			DebugConsole.instance.update();
+			drawCalls = 0;
+#endif
+		}
+
+		[Conditional( "DEBUG" )]
+		void startDebugDraw( TimeSpan elapsedGameTime )
+		{
+#if DEBUG
+			TimeRuler.instance.beginMark( "draw", Color.Gold );
+
+			// fps counter
+			_frameCounter++;
+			_frameCounterElapsedTime += elapsedGameTime;
+			if( _frameCounterElapsedTime >= TimeSpan.FromSeconds( 1 ) )
+			{
+				var totalMemory = ( GC.GetTotalMemory( false ) / 1048576f ).ToString( "F" );
+				Window.Title = string.Format( "{0} {1} fps - {2} MB", _windowTitle, _frameCounter, totalMemory );
+				_frameCounter = 0;
+				_frameCounterElapsedTime -= TimeSpan.FromSeconds( 1 );
+			}
+#endif
+		}
+
+		[Conditional( "DEBUG" )]
+		void endDebugDraw()
+		{
+#if DEBUG
+			TimeRuler.instance.endMark( "draw" );
+			DebugConsole.instance.render();
+
+			// the TimeRuler only needs to render when the DebugConsole is not open
+			if( !DebugConsole.instance.isOpen )
+				TimeRuler.instance.render();
+
+#if !FNA
+			drawCalls = graphicsDevice.Metrics.DrawCount;
+#endif
+#endif
+		}
+
+		#endregion
 
 		/// <summary>
 		/// Called after a Scene ends, before the next Scene begins
