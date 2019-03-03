@@ -16,7 +16,8 @@ namespace Nez.Sprites
 			{
 				if( _areBoundsDirty )
 				{
-					_bounds.calculateBounds( entity.transform.position, _localOffset, _origin, entity.transform.scale, entity.transform.rotation, subtexture.sourceRect.Width, subtexture.sourceRect.Height );
+					if( subtexture != null )
+						_bounds.calculateBounds( entity.transform.position, _localOffset, _origin, entity.transform.scale, entity.transform.rotation, subtexture.sourceRect.Width, subtexture.sourceRect.Height );
 					_areBoundsDirty = false;
 				}
 

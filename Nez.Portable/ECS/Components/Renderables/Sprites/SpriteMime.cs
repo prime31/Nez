@@ -7,22 +7,22 @@
 	/// </summary>
 	public class SpriteMime : RenderableComponent
 	{
-		public override float width { get { return _spriteToMime.width; } }
-		public override float height { get { return _spriteToMime.height; } }
-		public override RectangleF bounds { get { return _spriteToMime.bounds; } }
+		public override float width => _spriteToMime.width;
+		public override float height => _spriteToMime.height;
+		public override RectangleF bounds => _spriteToMime.bounds;
 
 		Sprite _spriteToMime;
 
 
 		public SpriteMime()
-		{}
-
+		{
+			enabled = false;
+		}
 
 		public SpriteMime( Sprite spriteToMime )
 		{
 			_spriteToMime = spriteToMime;
 		}
-
 
 		public override void onAddedToEntity()
 		{
@@ -30,11 +30,11 @@
 				_spriteToMime = this.getComponent<Sprite>();
 		}
 
-
 		public override void render( Graphics graphics, Camera camera )
 		{
 			graphics.batcher.draw( _spriteToMime.subtexture, entity.transform.position + _localOffset, color, entity.transform.rotation, _spriteToMime.origin, entity.transform.scale, _spriteToMime.spriteEffects, _layerDepth );
 		}
+
 	}
 }
 

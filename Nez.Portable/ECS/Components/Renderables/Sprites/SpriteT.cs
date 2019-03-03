@@ -22,8 +22,8 @@ namespace Nez.Sprites
 		/// <value>The current animation.</value>
 		public TEnum currentAnimation
 		{
-			get { return _currentAnimationKey; }
-			set { play( value ); }
+			get => _currentAnimationKey;
+			set => play( value );
 		}
 
 		Dictionary<TEnum, SpriteAnimation> _animations;
@@ -49,12 +49,10 @@ namespace Nez.Sprites
 			_animations = new Dictionary<TEnum, SpriteAnimation>( customComparer );
 		}
 
-
 		public Sprite( IEqualityComparer<TEnum> customComparer, Subtexture subtexture ) : base( subtexture )
 		{
 			_animations = new Dictionary<TEnum, SpriteAnimation>( customComparer );
 		}
-
 
 		/// <summary>
 		/// Sprite needs a Subtexture at constructor time so that it knows how to size itself
@@ -62,7 +60,6 @@ namespace Nez.Sprites
 		/// <param name="subtexture">Subtexture.</param>
 		public Sprite( Subtexture subtexture ) : this( null, subtexture )
 		{ }
-
 
 		/// <summary>
 		/// Sprite needs a Subtexture at constructor time so the first frame of the passed in animation will be used for this constructor
@@ -203,7 +200,6 @@ namespace Nez.Sprites
 			return this;
 		}
 
-
 		public SpriteAnimation getAnimation( TEnum key )
 		{
 			Insist.isTrue( _animations.ContainsKey( key ), "{0} is not present in animations", key );
@@ -236,30 +232,25 @@ namespace Nez.Sprites
 			return animation;
 		}
 
-
 		public bool isAnimationPlaying( TEnum animationKey )
 		{
 			return _currentAnimation != null && _currentAnimationKey.Equals( animationKey );
 		}
-
 
 		public void pause()
 		{
 			isPlaying = false;
 		}
 
-
 		public void unPause()
 		{
 			isPlaying = true;
 		}
 
-
 		public void reverseAnimation()
 		{
 			_isReversed = !_isReversed;
 		}
-
 
 		public void stop()
 		{

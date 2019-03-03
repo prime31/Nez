@@ -74,12 +74,10 @@ namespace Nez
 			Core.emitter.addObserver( CoreEvents.GraphicsDeviceReset, onGraphicsDeviceReset );
 		}
 
-
 		public override void onRemovedFromEntity()
 		{
 			Core.emitter.removeObserver( CoreEvents.GraphicsDeviceReset, onGraphicsDeviceReset );
 		}
-
 
 		void IUpdatable.update()
 		{
@@ -103,7 +101,6 @@ namespace Nez
 			}
 		}
 
-
 		/// <summary>
 		/// Clamps the camera so it never leaves the visible area of the map.
 		/// </summary>
@@ -117,7 +114,6 @@ namespace Nez
 			return Vector2.Clamp( position, halfScreen, cameraMax );
 		}
 
-
         public override void debugRender( Graphics graphics )
 		{
 			if( _cameraStyle == CameraStyle.LockOn )
@@ -125,7 +121,6 @@ namespace Nez
 			else
 				graphics.batcher.drawHollowRect( _worldSpaceDeadzone, Color.DarkRed );
 		}
-
 
 		void onGraphicsDeviceReset()
 		{
@@ -136,7 +131,6 @@ namespace Nez
 				self.follow( self._targetEntity, self._cameraStyle );
 			} );
 		}
-
 
 		void updateFollow()
 		{
@@ -187,7 +181,6 @@ namespace Nez
 			}
 		}
 
-
 		public void follow( Entity targetEntity, CameraStyle cameraStyle = CameraStyle.CameraWindow )
 		{
 			_targetEntity = targetEntity;
@@ -206,7 +199,6 @@ namespace Nez
 					break;
 			}
 		}
-
 
 		/// <summary>
 		/// sets up the deadzone centered in the current cameras bounds with the given size

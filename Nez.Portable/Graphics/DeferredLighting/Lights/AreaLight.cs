@@ -9,9 +9,8 @@ namespace Nez.DeferredLighting
 	/// </summary>
 	public class AreaLight : DeferredLight
 	{
-		public override float width { get { return _areaWidth; } }
-
-		public override float height { get { return _areaHeight; } }
+		public override float width => _areaWidth;
+		public override float height => _areaHeight;
 
 		/// <summary>
 		/// direction of the light
@@ -26,12 +25,13 @@ namespace Nez.DeferredLighting
 
 		float _areaWidth, _areaHeight;
 
+		public AreaLight() : this( 200, 200 )
+		{}
 
 		public AreaLight( float width, float height )
 		{
 			setWidth( width ).setHeight( height );
 		}
-
 
 		public AreaLight setWidth( float width )
 		{
@@ -40,7 +40,6 @@ namespace Nez.DeferredLighting
 			return this;
 		}
 
-
 		public AreaLight setHeight( float height )
 		{
 			_areaHeight = height;
@@ -48,19 +47,18 @@ namespace Nez.DeferredLighting
 			return this;
 		}
 
-
 		public AreaLight setDirection( Vector3 direction )
 		{
 			this.direction = direction;
 			return this;
 		}
 
-
 		public AreaLight setIntensity( float intensity )
 		{
 			this.intensity = intensity;
 			return this;
 		}
+
 	}
 }
 

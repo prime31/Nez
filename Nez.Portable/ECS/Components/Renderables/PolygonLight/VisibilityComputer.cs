@@ -43,13 +43,11 @@ namespace Nez.Shadows
 			_radialComparer = new EndPointComparer();
 		}
 
-
 		public VisibilityComputer( Vector2 origin, float radius ) : this()
 		{
 			_origin = origin;
 			_radius = radius;
 		}
-
 
 		/// <summary>
 		/// adds a Collider as an occluder for the PolyLight
@@ -81,7 +79,6 @@ namespace Nez.Shadows
 			}
 		}
 
-
 		/// <summary>
 		/// Add a square shaped occluder
 		/// </summary>        
@@ -110,7 +107,6 @@ namespace Nez.Shadows
 			addSegment( _cornerCache[3], _cornerCache[0] );
 		}
 
-
 		/// <summary>
 		/// Add a square shaped occluder
 		/// </summary>        
@@ -125,7 +121,6 @@ namespace Nez.Shadows
 			addSegment( br, bl );
 			addSegment( bl, bounds.location );
 		}
-
 
 		/// <summary>
 		/// adds a circle shaped occluder
@@ -148,7 +143,6 @@ namespace Nez.Shadows
 			}
 		}
 
-
 		/// <summary>
 		/// Add a line shaped occluder
 		/// </summary>        
@@ -156,7 +150,6 @@ namespace Nez.Shadows
 		{
 			addSegment( p1, p2 );
 		}
-
 
 		// Add a segment, where the first point shows up in the
 		// visualization but the second one does not. (Every endpoint is
@@ -181,7 +174,6 @@ namespace Nez.Shadows
 			_endpoints.Add( endPoint2 );
 		}
 
-
 		/// <summary>
 		/// Remove all occluders
 		/// </summary>
@@ -190,7 +182,6 @@ namespace Nez.Shadows
 			_segments.Clear();
 			_endpoints.Clear();
 		}
-
 
 		/// <summary>
 		/// prepares the computer for calculating the current poly light
@@ -203,7 +194,6 @@ namespace Nez.Shadows
 			_radius = radius;
 			_isSpotLight = false;
 		}
-
 
 		/// <summary>
 		/// Computes the visibility polygon and returns the vertices of the triangle fan (minus the center vertex). Returned List is from the
@@ -270,7 +260,6 @@ namespace Nez.Shadows
 			return output;
 		}
 
-
 		[MethodImpl( MethodImplOptions.AggressiveInlining )]
 		static bool between( float value, float min, float max )
 		{
@@ -299,7 +288,6 @@ namespace Nez.Shadows
 			//return value >= min && value <= max;
 		}
 
-
 		/// <summary>
 		/// Helper function to construct segments along the outside perimiter in order to limit the radius of the light
 		/// </summary>        
@@ -322,7 +310,6 @@ namespace Nez.Shadows
 				new Vector2( _origin.X + _radius, _origin.Y + _radius ) );
 		}
 
-
 		public void loadSpotLightBoundaries( Vector2[] points )
 		{
 			_isSpotLight = true;
@@ -335,7 +322,6 @@ namespace Nez.Shadows
 
 			loadRectangleBoundaries();
 		}
-
 
 		/// <summary>
 		/// Processes segments so that we can sort them later
@@ -371,7 +357,6 @@ namespace Nez.Shadows
 				_spotEndAngle = _segments[1].p2.angle;
 			}
 		}
-
 
 		/// <summary>
 		/// Helper: do we know that segment a is in front of b? Implementation not anti-symmetric (that is to say,
@@ -415,7 +400,6 @@ namespace Nez.Shadows
 			// you're on a grid and the segments are similarly sized, then using distance will be a simpler and faster implementation.
 		}
 
-
 		void addTriangle( List<Vector2> triangles, float angle1, float angle2, Segment segment )
 		{
 			var p1 = _origin;
@@ -451,7 +435,6 @@ namespace Nez.Shadows
 			triangles.Add( pEnd );
 		}
 
-
 		/// <summary>
 		/// Computes the intersection point of the line p1-p2 with p3-p4
 		/// </summary>        
@@ -463,7 +446,6 @@ namespace Nez.Shadows
 			return new Vector2( p1.X + s * ( p2.X - p1.X ), p1.Y + s * ( p2.Y - p1.Y ) );
 		}
 
-
 		/// <summary>
 		/// Returns if the point is 'left' of the line p1-p2
 		/// </summary>        
@@ -474,7 +456,6 @@ namespace Nez.Shadows
 
 			return cross < 0;
 		}
-
 
 		/// <summary>
 		/// Returns a slightly shortened version of the vector:

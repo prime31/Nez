@@ -17,8 +17,8 @@ namespace Nez
 		/// </summary>
 		public int[] layerIndicesToRender;
 
-		public override float width { get { return tiledMap.width * tiledMap.tileWidth; } }
-		public override float height { get { return tiledMap.height * tiledMap.tileHeight; } }
+		public override float width => tiledMap.width * tiledMap.tileWidth;
+		public override float height => tiledMap.height * tiledMap.tileHeight;
 
 		public TiledTileLayer collisionLayer;
 
@@ -35,7 +35,6 @@ namespace Nez
 				collisionLayer = tiledMap.getLayer<TiledTileLayer>( collisionLayerName );
 		}
 
-
 		/// <summary>
 		/// sets this component to only render a single layer
 		/// </summary>
@@ -45,7 +44,6 @@ namespace Nez
 			layerIndicesToRender = new int[1];
 			layerIndicesToRender[0] = tiledMap.getLayerIndex( layerName );
 		}
-
 
 		/// <summary>
 		/// sets which layers should be rendered by this component by name. If you know the indices you can set layerIndicesToRender directly.
@@ -68,13 +66,11 @@ namespace Nez
 			return tiledMap.worldToTilePositionY( yPos );
 		}
 
-
 		public int getColumnAtWorldPosition( float xPos )
 		{
 			xPos -= entity.transform.position.X + _localOffset.X;
 			return tiledMap.worldToTilePositionY( xPos );
 		}
-
 
 		/// <summary>
 		/// this method requires that you are using a collision layer setup in the constructor.
@@ -89,7 +85,6 @@ namespace Nez
 			worldPos -= entity.transform.position + _localOffset;
 			return collisionLayer.getTileAtWorldPosition( worldPos );
 		}
-
 
 		/// <summary>
 		/// gets all the non-empty tiles that intersect the passed in bounds for the collision layer. The returned List can be put back in the
@@ -121,24 +116,20 @@ namespace Nez
 			}
 		}
 
-
 		public override void onAddedToEntity()
 		{
 			addColliders();
 		}
-
 
 		public override void onRemovedFromEntity()
 		{
 			removeColliders();
 		}
 
-
 		void IUpdatable.update()
 		{
 			tiledMap.update();
 		}
-
 
 		public override void render( Graphics graphics, Camera camera )
 		{
@@ -155,7 +146,6 @@ namespace Nez
 				}
 			}
 		}
-
 
 		public override void debugRender( Graphics graphics )
 		{
@@ -194,7 +184,6 @@ namespace Nez
 				Physics.addCollider( collider );
 			}
 		}
-
 
 		public void removeColliders()
 		{

@@ -44,33 +44,36 @@ namespace Nez.PhysicsShapes
 		/// <param name="points">Points.</param>
 		public Polygon( Vector2[] points )
 		{
-			this.points = points;
-			recalculateCenterAndEdgeNormals();
-
-			_originalPoints = new Vector2[points.Length];
-			Array.Copy( points, _originalPoints, points.Length );
+			setPoints( points );
 		}
-
-
-		internal Polygon( Vector2[] points, bool isBox )
-		{
-			this.points = points;
-			this.isBox = isBox;
-			recalculateCenterAndEdgeNormals();
-
-			_originalPoints = new Vector2[points.Length];
-			Array.Copy( points, _originalPoints, points.Length );
-		}
-
 
 		/// <summary>
 		/// creates a symmetrical polygon based on the radius and vertCount passed in
 		/// </summary>
 		/// <param name="vertCount">Vert count.</param>
 		/// <param name="radius">Radius.</param>
-		public Polygon( int vertCount, float radius ) : this( buildSymmetricalPolygon( vertCount, radius ) )
-		{}
+		public Polygon( int vertCount, float radius )
+		{
+			setPoints( buildSymmetricalPolygon( vertCount, radius ) );
+		}
 
+		internal Polygon( Vector2[] points, bool isBox ) : this( points )
+		{
+			this.isBox = isBox;
+		}
+
+		/// <summary>
+		/// resets the points and recalculates center and edge normals
+		/// </summary>
+		/// <param name="points"></param>
+		public void setPoints( Vector2[] points )
+		{
+			this.points = points;
+			recalculateCenterAndEdgeNormals();
+
+			_originalPoints = new Vector2[points.Length];
+			Array.Copy( points, _originalPoints, points.Length );
+		}
 
 		/// <summary>
 		/// recalculates the Polygon centers. This must be called if the points are changed!
@@ -80,7 +83,6 @@ namespace Nez.PhysicsShapes
 			_polygonCenter = findPolygonCenter( points );
 			_areEdgeNormalsDirty = true;
 		}
-
 
 		/// <summary>
 		/// builds the Polygon edge normals. These are lazily created and updated only by the edgeNormals getter
@@ -131,7 +133,6 @@ namespace Nez.PhysicsShapes
 			return verts;
 		}
 
-
 		/// <summary>
 		/// recenters the points of the polygon
 		/// </summary>
@@ -142,7 +143,6 @@ namespace Nez.PhysicsShapes
 			for( var i = 0; i < points.Length; i++ )
 				points[i] -= center;
 		}
-
 
 		/// <summary>
 		/// finds the center of the Polygon. Note that this will be accurate for regular polygons. Irregular polygons have no center.
@@ -161,7 +161,6 @@ namespace Nez.PhysicsShapes
 
 			return new Vector2( x / points.Length, y / points.Length );
 		}
-
 
 		// Dont know adjancent vertices so take each vertex
 		// If you know adjancent vertices, perform hill climbing algorithm
@@ -184,7 +183,6 @@ namespace Nez.PhysicsShapes
 
 			return points[index];
 		}
-
 
 		/// <summary>
 		/// iterates all the edges of the polygon and gets the closest point on any edge to point. Returns via out the squared distance
@@ -226,7 +224,6 @@ namespace Nez.PhysicsShapes
 
 			return closestPoint;
 		}
-
 
 		/// <summary>
 		/// rotates the originalPoints and copys the rotated values to rotatedPoints
@@ -303,7 +300,6 @@ namespace Nez.PhysicsShapes
 			bounds.location += position;
 		}
 
-
 		public override bool overlaps( Shape other )
 		{
 			CollisionResult result;
@@ -323,7 +319,6 @@ namespace Nez.PhysicsShapes
 			throw new NotImplementedException( string.Format( "overlaps of Polygon to {0} are not supported", other ) );
 		}
 
-
 		public override bool collidesWithShape( Shape other, out CollisionResult result )
 		{
 			if( other is Polygon )
@@ -342,13 +337,11 @@ namespace Nez.PhysicsShapes
 			throw new NotImplementedException( string.Format( "overlaps of Polygon to {0} are not supported", other ) );
 		}
 
-
 		public override bool collidesWithLine( Vector2 start, Vector2 end, out RaycastHit hit )
 		{
 			hit = new RaycastHit();
 			return ShapeCollisions.lineToPoly( start, end, this, out hit );
 		}
-
 
 		/// <summary>
 		/// essentially what the algorithm is doing is shooting a ray from point out. If it intersects an odd number of polygon sides
@@ -373,7 +366,6 @@ namespace Nez.PhysicsShapes
 
 			return isInside;
 		}
-
 
 		public override bool pointCollidesWithShape( Vector2 point, out CollisionResult result )
 		{

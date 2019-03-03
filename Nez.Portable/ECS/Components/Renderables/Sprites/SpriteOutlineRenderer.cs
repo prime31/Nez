@@ -10,10 +10,10 @@ namespace Nez
 	/// </summary>
 	public class SpriteOutlineRenderer : RenderableComponent
 	{
-		public override float width { get { return _sprite.width + outlineWidth * 2; } }
-		public override float height { get { return _sprite.height + outlineWidth * 2; } }
+		public override float width => _sprite.width + outlineWidth * 2;
+		public override float height => _sprite.height + outlineWidth * 2;
 
-		public override RectangleF bounds { get { return _sprite.bounds; } }
+		public override RectangleF bounds => _sprite.bounds;
 
 		/// <summary>
 		/// the width of the outline
@@ -40,7 +40,6 @@ namespace Nez
 			_sprite.enabled = false;
 		}
 
-
 		public override void onEntityTransformChanged( Transform.Component comp )
 		{
 			base.onEntityTransformChanged( comp );
@@ -49,12 +48,12 @@ namespace Nez
 			_sprite.onEntityTransformChanged( comp );
 		}
 
-
 		public override void render( Graphics graphics, Camera camera )
 		{
 			_sprite.drawOutline( graphics, camera, outlineColor, outlineWidth );
 			_sprite.render( graphics, camera );
 		}
+
 	}
 }
 

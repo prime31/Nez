@@ -10,8 +10,8 @@ namespace Nez
 	/// </summary>
 	public class PrototypeSprite : Sprite
 	{
-		public override float width { get { return _width; } }
-		public override float height { get { return _height; } }
+		public override float width => _width;
+		public override float height => _height;
 
 		public override RectangleF bounds
 		{
@@ -27,15 +27,16 @@ namespace Nez
 			}
 		}
 
-		public float skewTopX { get { return _skewTopX; } }
-		public float skewBottomX { get { return _skewBottomX; } }
-		public float skewLeftY { get { return _skewLeftY; } }
-		public float skewRightY { get { return _skewRightY; } }
+		public float skewTopX;
+		public float skewBottomX;
+		public float skewLeftY;
+		public float skewRightY;
 
 		float _width, _height;
-		[Inspectable]
-		float _skewTopX, _skewBottomX, _skewLeftY, _skewRightY;
 
+
+		public PrototypeSprite() : this( 50, 50 )
+		{}
 
 		public PrototypeSprite( float width, float height ) : base( Graphics.instance.pixelTexture )
 		{
@@ -75,15 +76,16 @@ namespace Nez
 		/// <param name="skewRightY">Skew right y.</param>
 		public PrototypeSprite setSkew( float skewTopX, float skewBottomX, float skewLeftY, float skewRightY )
 		{
-			_skewTopX = skewTopX;
-			_skewBottomX = skewBottomX;
-			_skewLeftY = skewLeftY;
-			_skewRightY = skewRightY;
+			this.skewTopX = skewTopX;
+			this.skewBottomX = skewBottomX;
+			this.skewLeftY = skewLeftY;
+			this.skewRightY = skewRightY;
 			return this;
 		}
-        public override void onAddedToEntity()
+       
+	    public override void onAddedToEntity()
         {
-            originNormalized = new Vector2(0.5f, 0.5f);
+            originNormalized = Vector2Ext.halfVector();
         }
 
         public override void render( Graphics graphics, Camera camera )
@@ -91,7 +93,7 @@ namespace Nez
 			var pos = ( entity.transform.position - ( origin * entity.transform.scale ) + localOffset );
 			var size = new Point( (int)( _width * entity.transform.scale.X ), (int)( _height * entity.transform.scale.Y ) );
 			var destRect = new Rectangle( (int)pos.X, (int)pos.Y, size.X, size.Y );
-			graphics.batcher.draw( subtexture, destRect, subtexture.sourceRect, color, entity.transform.rotation, SpriteEffects.None, layerDepth, _skewTopX, _skewBottomX, _skewLeftY, _skewRightY );
+			graphics.batcher.draw( subtexture, destRect, subtexture.sourceRect, color, entity.transform.rotation, SpriteEffects.None, layerDepth, skewTopX, skewBottomX, skewLeftY, skewRightY );
 		}
 
 	}

@@ -85,10 +85,8 @@ namespace Nez
 		/// </summary>
 		protected bool _isNewSceneLoaded;
 
-
 		protected SceneTransition( bool wantsPreviousSceneRender = true ) : this( null, wantsPreviousSceneRender )
 		{}
-
 
 		protected SceneTransition( Func<Scene> sceneLoadAction, bool wantsPreviousSceneRender = true )
 		{
@@ -100,7 +98,6 @@ namespace Nez
 			if( wantsPreviousSceneRender )
 				previousSceneRender = new RenderTarget2D( Core.graphicsDevice, Screen.width, Screen.height, false, Screen.backBufferFormat, DepthFormat.None, 0, RenderTargetUsage.PreserveContents );
 		}
-
 
 		protected IEnumerator loadNextScene()
 		{
@@ -142,7 +139,6 @@ namespace Nez
 				yield return null;
 		}
 
-
 		/// <summary>
 		/// called after the previousSceneRender occurs for the first (and only) time. At this point you can load your new Scene after
 		/// yielding one frame (so the first render call happens before scene loading).
@@ -154,7 +150,6 @@ namespace Nez
 			transitionComplete();
 		}
 
-
 		/// <summary>
 		/// called before the Scene is rendered. This allows a transition to render to a RenderTarget if needed and avoids issues with MonoGame
 		/// clearing the framebuffer when a RenderTarget is used.
@@ -162,7 +157,6 @@ namespace Nez
 		/// <param name="graphics">Graphics.</param>
 		public virtual void preRender( Graphics graphics )
 		{}
-
 
 		/// <summary>
 		/// do all of your rendering here.static This is a base implementation. Any special rendering should override
@@ -176,7 +170,6 @@ namespace Nez
 			graphics.batcher.draw( previousSceneRender, Vector2.Zero, Color.White );
 			graphics.batcher.end();
 		}
-
 
 		/// <summary>
 		/// this will be called when your transition is complete and the new Scene has been set. It will clean up
@@ -194,7 +187,6 @@ namespace Nez
             if( onTransitionCompleted != null )
                 onTransitionCompleted();
 		}
-
 
 		/// <summary>
 		/// the most common type of transition seems to be one that ticks progress from 0 - 1. This method takes care of that for you

@@ -20,7 +20,7 @@ namespace Nez
 		/// <value>The opacity.</value>
 		public float opacity
 		{
-			set { _textureWipeEffect.Parameters["_opacity"].SetValue( value ); }
+			set => _textureWipeEffect.Parameters["_opacity"].SetValue( value );
 		}
 
 		/// <summary>
@@ -29,7 +29,7 @@ namespace Nez
 		/// <value>The color.</value>
 		public Color color
 		{
-			set { _textureWipeEffect.Parameters["_color"].SetValue( value.ToVector4() ); }
+			set => _textureWipeEffect.Parameters["_color"].SetValue( value.ToVector4() );
 		}
 
 		/// <summary>
@@ -39,7 +39,7 @@ namespace Nez
 		/// <value>The transition texture.</value>
 		public Texture2D transitionTexture
 		{
-			set { _textureWipeEffect.Parameters["_transitionTex"].SetValue( value ); }
+			set => _textureWipeEffect.Parameters["_transitionTex"].SetValue( value );
 		}
 
 		/// <summary>
@@ -48,7 +48,7 @@ namespace Nez
 		/// <value><c>true</c> if use red green channels for distortion; otherwise, <c>false</c>.</value>
 		public bool useRedGreenChannelsForDistortion
 		{
-			set { _textureWipeEffect.CurrentTechnique = _textureWipeEffect.Techniques[value ? "TextureWipeWithDistort" : "TextureWipe"]; }
+			set => _textureWipeEffect.CurrentTechnique = _textureWipeEffect.Techniques[value ? "TextureWipeWithDistort" : "TextureWipe"];
 		}
 
 		/// <summary>
@@ -77,18 +77,14 @@ namespace Nez
 			this.transitionTexture = transitionTexture;
 		}
 
-
 		public TextureWipeTransition( Func<Scene> sceneLoadAction ) : this( sceneLoadAction, Core.content.Load<Texture2D>( "nez/textures/textureWipeTransition/angular" ) )
 		{}
-
 
 		public TextureWipeTransition() : this( null, Core.content.Load<Texture2D>( "nez/textures/textureWipeTransition/angular" ) )
 		{}
 
-
 		public TextureWipeTransition( Texture2D transitionTexture ) : this( null, transitionTexture )
 		{}
-
 
 		public override IEnumerator onBeginTransition()
 		{
@@ -115,7 +111,6 @@ namespace Nez
 			Core.content.unloadEffect( _textureWipeEffect );
 		}
 
-
 		public override void render( Graphics graphics )
 		{
 			Core.graphicsDevice.setRenderTarget( null );
@@ -129,6 +124,7 @@ namespace Nez
 
 			graphics.batcher.end();
 		}
+	
 	}
 }
 
