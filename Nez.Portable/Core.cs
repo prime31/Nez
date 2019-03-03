@@ -334,8 +334,10 @@ namespace Nez
 		[Conditional( "DEBUG" )]
 		void startDebugUpdate()
 		{
+#if DEBUG
 			TimeRuler.instance.startFrame();
 			TimeRuler.instance.beginMark( "update", Color.Green );
+#endif
 		}
 
 		[Conditional( "DEBUG" )]
