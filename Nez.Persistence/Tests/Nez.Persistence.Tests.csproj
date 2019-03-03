@@ -25,12 +25,10 @@
       <PlatformTarget>anycpu</PlatformTarget>
     </PropertyGroup>
 	<ItemGroup>
-		<ProjectReference Include="../../Nez.Portable/Nez.csproj" />
         <ProjectReference Include="../Nez.Persistence.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="MonoGame.Framework.Portable" Version="3.7.1.189" />
 		<PackageReference Include="NUnit" Version="3.11.0" />
 	</ItemGroup>
 </Project>

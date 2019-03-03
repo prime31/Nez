@@ -31,9 +31,6 @@ namespace Nez.Persistence.Binary
 		public KeyValueDataStore( string filename )
 		{
 			_filename = filename;
-
-			if( _filename == kDefaultFileName )
-				Load();
 		}
 
 
@@ -61,26 +58,6 @@ namespace Nez.Persistence.Binary
 		public void Load( FileDataStore dataStore )
 		{
 			dataStore.Load( _filename, this );
-		}
-
-		/// <summary>
-		/// flushes the data to disk either using a FileDataStore from the GameServiceContainer or creating and adding
-		/// one if one is not present.
-		/// </summary>
-		public void Flush()
-		{
-			Core.services.GetOrAddService<FileDataStore>().Save( _filename, this );
-		}
-
-		/// <summary>
-		/// restores the data from disk if it is available either using a FileDataStore from the GameServiceContainer or creating and adding
-		/// one if one is not present.
-		/// </summary>
-		public void Load()
-		{
-			// guard for when running in unit test
-			if( Core.instance != null )
-				Core.services.GetOrAddService<FileDataStore>().Load( _filename, this );
 		}
 
 		#region IPersistable

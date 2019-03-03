@@ -3,8 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Nez.Persistence.Tests", "Nez.Persistence.Tests.csproj", "{7F2D4561-4F7F-423D-B259-5C199FD9E439}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Nez", "..\..\Nez.Portable\Nez.csproj", "{8F2D4561-4F7F-423D-B259-5C199FD9E439}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Nez.Persistence", "..\Nez.Persistence.csproj", "{9F2D4561-4F7F-423D-B259-5C199FD9E439}"
 EndProject
 Global

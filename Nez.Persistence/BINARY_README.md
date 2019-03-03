@@ -68,13 +68,20 @@ dataStore.Load( "the-filename.bin", myObj );
 
 ## Usage: KeyValueDataStore
 
-The `KeyValueDataStore` is for storing small bits of data. It contains a default instance accessible via the `Default` ivar. An important bit to know is that `KeyValueDataStore.Default` will use the `FileDataStore` that is present in the `GameServiceContainer`. If none is there, it will create and add one that saves to `Utils.GetStorageRoot()`. The `Default` `KeyValueDataStore` will automatically call `Load` the first time it is accessed so data will always be available.
+The `KeyValueDataStore` is for storing small bits of data. It contains a default instance accessible via the `Default` ivar. Be sure to call `Load` before using it the first time, preferably at application init. Calling `Flush` at application shutdown will save the data.
 
-You can also create your own instances via the constructor passing in the filename of your choosing. You have the option of saving/loading from any `FileDataStore` by passing the `FileDataStore` to `Load` or `Flush`. If you do not pass a `FileDataStore` into these methods the default `FileDataStore` will be used as in the case above.
+You can also create your own instances via the constructor passing in the filename of your choosing. You have the option of saving/loading from any `FileDataStore` by passing the `FileDataStore` to `Load` or `Flush`.
 
 Useage example:
 
 ```csharp
+// fetch the FileDataStore from your service container
+var fileDataStore = Core.services.GetOrAddService<FileDataStore>().
+
+// load data
+KeyValueDataStore.Load( fileDataStore );
+
+
 // setting data
 KeyValueDataStore.Default.Set( "the-key", true ); // values can be of type string, bool, int or float.
 
@@ -88,4 +95,8 @@ if( KeyValueDataStore.Default.ContainsBoolKey( "the-key" ) )
 	
 // deleting a keys data
 KeyValueDataStore.Default.DeleteBoolKey( "the-key" );
+
+
+// saving data
+KeyValueDataStore.Flush( fileDataStore );
 ```

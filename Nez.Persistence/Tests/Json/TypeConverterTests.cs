@@ -37,7 +37,7 @@ namespace Nez.Persistence.JsonTests
 			public override void OnFoundCustomData( Doodle instance, string key, object value )
 			{
 				instance.totalOrphanedKeys++;
-				Debug.log( $"field name: {key}, value: {value}" );
+				System.Console.WriteLine( $"field name: {key}, value: {value}" );
 			}
 		}
 
