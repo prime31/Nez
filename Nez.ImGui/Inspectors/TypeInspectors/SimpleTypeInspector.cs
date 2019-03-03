@@ -10,9 +10,10 @@ namespace Nez.ImGuiTools.TypeInspectors
 	/// </summary>
     public class SimpleTypeInspector : AbstractTypeInspector
     {
-        public static Type[] kSupportedTypes = { typeof( bool ), typeof( Color ), typeof( int ), typeof( uint ), typeof( long ), typeof( float ), typeof( string ), typeof( Vector2 ), typeof( Vector3 ) };
+        public static Type[] kSupportedTypes = { typeof( bool ), typeof( Color ), typeof( int ), typeof( uint ), typeof( long ), typeof( ulong ), typeof( float ), typeof( string ), typeof( Vector2 ), typeof( Vector3 ) };
         RangeAttribute _rangeAttribute;
         Action _inspectMethodAction;
+		bool _isUnsignedInt;
 
         public override void initialize()
         {
@@ -24,6 +25,13 @@ namespace Nez.ImGuiTools.TypeInspectors
             var inspectorMethodName = "inspect" + valueTypeName[0].ToString().ToUpper() + valueTypeName.Substring( 1 );
             var inspectMethodInfo = ReflectionUtils.getMethodInfo( this, inspectorMethodName );
             _inspectMethodAction = ReflectionUtils.createDelegate<Action>( this, inspectMethodInfo );
+
+			// fix up the Range.minValue if we have an unsigned value to avoid overflow when converting
+			_isUnsignedInt = _valueType == typeof( uint ) || _valueType == typeof( ulong );
+			if( _isUnsignedInt && _rangeAttribute == null )
+				_rangeAttribute = new RangeAttribute( 0 );
+			else if( _isUnsignedInt && _rangeAttribute != null && _rangeAttribute.minValue < 0 )
+				_rangeAttribute.minValue = 0;
         }
 
 		public override void drawMutable()
@@ -72,23 +80,15 @@ namespace Nez.ImGuiTools.TypeInspectors
 		void inspectUInt32()
 		{
 			var value = Convert.ToInt32( getValue() );
-			if( _rangeAttribute != null )
+			if( _rangeAttribute.useDragVersion )
 			{
-				if( _rangeAttribute != null && _rangeAttribute.useDragVersion )
-				{
-					if( ImGui.DragInt( _name, ref value, 1, (int)_rangeAttribute.minValue, (int)_rangeAttribute.maxValue ) )
-						setValue( value );
-				}
-				else
-				{
-					if( ImGui.SliderInt( _name, ref value, (int)_rangeAttribute.minValue, (int)_rangeAttribute.maxValue ) )
-						setValue( value );
-				}
+				if( ImGui.DragInt( _name, ref value, 1, (int)_rangeAttribute.minValue, (int)_rangeAttribute.maxValue ) )
+					setValue( Convert.ToUInt32( value ) );
 			}
 			else
 			{
-				if( ImGui.DragInt( _name, ref value ) )
-					setValue( value );
+				if( ImGui.SliderInt( _name, ref value, (int)_rangeAttribute.minValue, (int)_rangeAttribute.maxValue ) )
+					setValue( Convert.ToUInt32( value ) );
 			}
 		}
 
@@ -112,6 +112,23 @@ namespace Nez.ImGuiTools.TypeInspectors
 			{
 				if( ImGui.DragInt( _name, ref value ) )
 					setValue( value );
+			}
+		}
+
+		void inspectUInt64()
+		{
+			var value = Convert.ToInt32( getValue() );
+
+			// we will always have a RangeAttribute for unsigneds
+			if( _rangeAttribute.useDragVersion )
+			{
+				if( ImGui.DragInt( _name, ref value, 1, (int)_rangeAttribute.minValue, (int)_rangeAttribute.maxValue ) )
+					setValue( Convert.ToUInt64( value ) );
+			}
+			else
+			{
+				if( ImGui.SliderInt( _name, ref value, (int)_rangeAttribute.minValue, (int)_rangeAttribute.maxValue ) )
+					setValue( Convert.ToUInt64( value ) );
 			}
 		}
 
