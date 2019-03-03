@@ -44,9 +44,20 @@ namespace Nez
 	[AttributeUsage( AttributeTargets.Field | AttributeTargets.Property )]
 	public class RangeAttribute : InspectableAttribute
 	{
-		public float minValue, maxValue, stepSize;
+		public float minValue;
+		public float maxValue;
+		public float stepSize = 1;
 		public bool useDragVersion;
 
+
+		public RangeAttribute( float minValue )
+		{
+			this.minValue = minValue;
+
+			// magic number! This is the highest number ImGui functions properly with for some reason.
+			maxValue = int.MaxValue - 100;
+			useDragVersion = true;
+		}
 
 		public RangeAttribute( float minValue, float maxValue, float stepSize )
 		{
