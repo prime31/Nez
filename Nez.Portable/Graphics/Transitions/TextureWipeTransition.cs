@@ -88,7 +88,7 @@ namespace Nez
 
 		public override IEnumerator onBeginTransition()
 		{
-			// create a single pixel transparent texture so we can do our squares out to the next scene
+			// create a single pixel transparent texture. Our shader handles the rest.
 			_overlayTexture = Graphics.createSingleColorTexture( 1, 1, Color.Transparent );
 
 			// obscure the screen
@@ -96,10 +96,6 @@ namespace Nez
 
 			// load up the new Scene
 			yield return Core.startCoroutine( loadNextScene() );
-
-			// dispose of our previousSceneRender. We dont need it anymore.
-			previousSceneRender.Dispose();
-			previousSceneRender = null;
 
 			// undo the effect
 			yield return Core.startCoroutine( tickEffectProgressProperty( _textureWipeEffect, duration, EaseHelper.oppositeEaseType( easeType ), true ) );
@@ -116,7 +112,7 @@ namespace Nez
 			Core.graphicsDevice.setRenderTarget( null );
 			graphics.batcher.begin( BlendState.AlphaBlend, Core.defaultSamplerState, DepthStencilState.None, null, _textureWipeEffect );
 
-			// we only render the previousSceneRender while populating the squares
+			// we only render the previousSceneRender until we load up the new Scene
 			if( !_isNewSceneLoaded )
 				graphics.batcher.draw( previousSceneRender, _destinationRect, Color.White );
 			else

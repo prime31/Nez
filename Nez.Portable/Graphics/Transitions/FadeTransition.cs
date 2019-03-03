@@ -20,17 +20,17 @@ namespace Nez
 		/// <summary>
 		/// duration to fade to fadeToColor
 		/// </summary>
-		public float fadeOutDuration = 0.6f;
+		public float fadeOutDuration = 0.4f;
 
 		/// <summary>
 		/// delay to start fading out
 		/// </summary>
-		public float delayBeforeFadeInDuration = 0.2f;
+		public float delayBeforeFadeInDuration = 0.1f;
 
 		/// <summary>
 		/// duration to fade from fadeToColor to the new Scene
 		/// </summary>
-		public float fadeInDuration = 0.8f;
+		public float fadeInDuration = 0.6f;
 
 		/// <summary>
 		/// ease equation to use for the fade
@@ -50,10 +50,8 @@ namespace Nez
 			_destinationRect = previousSceneRender.Bounds;
 		}
 
-
 		public FadeTransition() : this( null )
 		{}
-
 
 		public override IEnumerator onBeginTransition()
 		{
@@ -91,7 +89,6 @@ namespace Nez
 			_overlayTexture.Dispose();
 		}
 
-
 		public override void render( Graphics graphics )
 		{
 			Core.graphicsDevice.setRenderTarget( null );
@@ -105,6 +102,7 @@ namespace Nez
 			
 			graphics.batcher.end();
 		}
+
 	}
 }
 

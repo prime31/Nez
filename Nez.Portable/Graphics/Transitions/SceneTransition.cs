@@ -81,9 +81,10 @@ namespace Nez
 
 		/// <summary>
 		/// use this for two part transitions. For example, a fade would fade to black first then when _isNewSceneLoaded becomes true it would
-		/// fade in. For in-Scene transitions _isNewSceneLoaded will be set to true at the midpoint just as if a new Scene was loaded.
+		/// fade in. For in-Scene transitions _isNewSceneLoaded should be set to true at the midpoint just as if a new Scene was loaded.
 		/// </summary>
-		protected bool _isNewSceneLoaded;
+		internal  bool _isNewSceneLoaded;
+
 
 		protected SceneTransition( bool wantsPreviousSceneRender = true ) : this( null, wantsPreviousSceneRender )
 		{}
@@ -105,7 +106,7 @@ namespace Nez
 			if( onScreenObscured != null )
 				onScreenObscured();
 			
-			// if we arent loading a new scene we just set the flag as if we did so that 2 phase transitions complete
+			// if we arent loading a new scene we just set the flag as if we did so that the 2 phase transitions complete
 			if( !_loadsNewScene )
 			{
 				_isNewSceneLoaded = true;
@@ -115,17 +116,18 @@ namespace Nez
 			if( loadSceneOnBackgroundThread )
 			{
 				// load the Scene on a background thread
-				var syncContext = SynchronizationContext.Current;
 				Task.Run( () =>
 				{
 					var scene = sceneLoadAction();
 
-					// get back to the main thread before setting the new Scene active
-					syncContext.Post( d =>
+					// get back to the main thread before setting the new Scene active. This isnt fantastic seeing as how
+					// the scheduler is not thread-safe but it should be empty between Scenes and SynchronizationContext.Current
+					// is null for some reason
+					Core.schedule( 0, false, null, timer =>
 					{
 						Core.scene = scene;
 						_isNewSceneLoaded = true;
-					}, null );
+					});
 				} );
 			}
 			else
@@ -146,7 +148,7 @@ namespace Nez
 		public virtual IEnumerator onBeginTransition()
 		{
 			yield return null;
-			Core.scene = sceneLoadAction();
+			yield return Core.startCoroutine( loadNextScene() );
 			transitionComplete();
 		}
 
