@@ -1,6 +1,6 @@
 ﻿using Nez.Textures;
 using Microsoft.Xna.Framework.Graphics;
-
+using Microsoft.Xna.Framework;
 
 namespace Nez.Sprites
 {
@@ -11,26 +11,43 @@ namespace Nez.Sprites
 	public class ScrollingSprite : TiledSprite, IUpdatable
 	{
 		/// <summary>
-		/// x speed of automatic scrolling
+		/// x speed of automatic scrolling in pixels/s
 		/// </summary>
-		public float scrollSpeedX = 0;
+		public float scrollSpeedX = 15;
 
 		/// <summary>
-		/// y speed of automatic scrolling
+		/// y speed of automatic scrolling in pixels/s
 		/// </summary>
 		public float scrollSpeedY = 0;
+
+		/// <summary>
+		/// scale of the texture
+		/// </summary>
+		/// <value>The texture scale.</value>
+		public override Vector2 textureScale
+		{
+			get => _textureScale;
+			set
+			{
+				_textureScale = value;
+
+				// recalulcate our inverseTextureScale and the source rect size
+				_inverseTexScale = new Vector2( 1f / _textureScale.X, 1f / _textureScale.Y );
+			}
+		}
 
 		// accumulate scroll in a separate float so that we can round it without losing precision for small scroll speeds
 		float _scrollX, _scrollY;
 
 
+		public ScrollingSprite()
+		{}
+
 		public ScrollingSprite( Subtexture subtexture ) : base( subtexture )
 		{}
 
-
 		public ScrollingSprite( Texture2D texture ) : this( new Subtexture( texture ) )
 		{}
-
 
 		void IUpdatable.update()
 		{

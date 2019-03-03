@@ -459,10 +459,10 @@ namespace Nez.Analysis
 				if( bar.markers[markerIdx].markerId != markerId )
 				{
 					throw new InvalidOperationException(
-						"Incorrect call order of BeginMark/EndMark method." +
-						"You call it like BeginMark(A), BeginMark(B), EndMark(B), EndMark(A)" +
-						" But you can't call it like " +
-						"BeginMark(A), BeginMark(B), EndMark(A), EndMark(B)." );
+						"Incorrect call order of beginMark/endMark method." +
+						"beginMark(A), beginMark(B), endMark(B), endMark(A)" +
+						" But you can't called it like " +
+						"beginMark(A), beginMark(B), endMark(A), endMark(B)." );
 				}
 
 				bar.markers[markerIdx].endTime = (float)stopwatch.Elapsed.TotalMilliseconds;

@@ -28,23 +28,25 @@ namespace Nez.Shadows
 		/// the angle of the light's spotlight cone in degrees. Defaults to 45.
 		/// </summary>
 		/// <value>The spot angle.</value>
+		[Range( 0, 360 )]
 		public float spotAngle
 		{
-			get { return _spotAngle; }
-			set { setSpotAngle( value ); }
+			get => _spotAngle;
+			set => setSpotAngle( value );
 		}
 
 		float _spotAngle = 45;
 		Polygon _polygon;
 
 
+		public PolySpotLight() : this( 400 )
+		{}
+
 		public PolySpotLight( float radius ) : this( radius, Color.White )
 		{ }
 
-
 		public PolySpotLight( float radius, Color color ) : this( radius, color, 1.0f )
 		{ }
-
 
 		public PolySpotLight( float radius, Color color, float power ) : base( radius, color, power )
 		{ }
@@ -58,7 +60,6 @@ namespace Nez.Shadows
 			recalculatePolyPoints();
 			return this;
 		}
-
 
 		public PolySpotLight setSpotAngle( float spotAngle )
 		{
@@ -93,8 +94,10 @@ namespace Nez.Shadows
 
 			if( _polygon == null )
 				_polygon = new Polygon( verts );
-			else
+			else if( _polygon._originalPoints.Length == verts.Length )
 				_polygon._originalPoints = verts;
+			else
+				_polygon.setPoints( verts );
 
 			// rotate our verts based on the Entity.rotation and offset half of the spot angle so that the center of the spot points in
 			// the direction of rotation
@@ -110,13 +113,11 @@ namespace Nez.Shadows
 			recalculatePolyPoints();
 		}
 
-
 		public override void debugRender( Graphics graphics )
 		{
 			base.debugRender( graphics );
 			graphics.batcher.drawPolygon( _polygon.position, _polygon.points, Debug.Colors.colliderEdge, true, Debug.Size.lineSizeMultiplier );
 		}
-
 
 		public override void onEntityTransformChanged( Transform.Component comp )
 		{
@@ -157,7 +158,6 @@ namespace Nez.Shadows
 
 			return totalCollisions;
 		}
-
 
 		protected override void loadVisibilityBoundaries()
 		{

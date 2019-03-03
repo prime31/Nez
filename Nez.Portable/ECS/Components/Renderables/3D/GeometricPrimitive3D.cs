@@ -29,10 +29,17 @@ namespace Nez
 		}
 
 		/// <summary>
-		/// Once all the geometry has been specified by calling AddVertex and AddIndex, this method copies the vertex and index data into
+		/// Once all the geometry has been specified by calling addVertex and addIndex, this method copies the vertex and index data into
 		/// GPU format buffers, ready for efficient rendering.
+		/// </summary>
 		protected void initializePrimitive()
 		{
+			if( _vertexBuffer != null )
+				_vertexBuffer.Dispose();
+			
+			if( _indexBuffer != null )
+				_indexBuffer.Dispose();
+
 			// create a vertex buffer, and copy our vertex data into it.
 			_vertexBuffer = new VertexBuffer( Core.graphicsDevice, typeof( VertexPositionColorNormal ), _vertices.Count, BufferUsage.None );
 			_vertexBuffer.SetData( _vertices.ToArray() );

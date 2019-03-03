@@ -39,6 +39,9 @@ namespace Nez.Sprites
 		bool _isLoopingBackOnPingPong;
 
 
+		public Sprite() : this( default( IEqualityComparer<TEnum>) )
+		{}
+
 		/// <summary>
 		/// beware the beast man! If you use this constructor you must set the subtexture or set animations so that this sprite has proper bounds
 		/// when the Scene is running.

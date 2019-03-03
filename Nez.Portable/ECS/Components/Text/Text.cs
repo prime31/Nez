@@ -26,8 +26,8 @@ namespace Nez
 		/// <value>The text.</value>
 		public string text
 		{
-			get { return _text; }
-			set { setText( value ); }
+			get => _text;
+			set => setText( value );
 		}
 
 		/// <summary>
@@ -36,8 +36,8 @@ namespace Nez
 		/// <value>The horizontal origin.</value>
 		public HorizontalAlign horizontalOrigin
 		{
-			get { return _horizontalAlign; }
-			set { setHorizontalAlign( value ); }
+			get => _horizontalAlign;
+			set => setHorizontalAlign( value );
 		}
 
 		/// <summary>
@@ -46,8 +46,8 @@ namespace Nez
 		/// <value>The vertical origin.</value>
 		public VerticalAlign verticalOrigin
 		{
-			get { return _verticalAlign; }
-			set { setVerticalAlign( value ); }
+			get => _verticalAlign;
+			set => setVerticalAlign( value );
 		}
 
 
@@ -57,6 +57,9 @@ namespace Nez
 		protected string _text;
 		Vector2 _size;
 
+
+		public Text() : this( Graphics.instance.bitmapFont, "", Vector2.Zero, Color.White )
+		{}
 
 		public Text( IFont font, string text, Vector2 localOffset, Color color )
 		{
@@ -81,7 +84,6 @@ namespace Nez
 			return this;
 		}
 
-
 		public Text setText( string text )
 		{
 			_text = text;
@@ -91,7 +93,6 @@ namespace Nez
 			return this;
 		}
 
-
 		public Text setHorizontalAlign( HorizontalAlign hAlign )
 		{
 			_horizontalAlign = hAlign;
@@ -99,7 +100,6 @@ namespace Nez
 
 			return this;
 		}
-
 
 		public Text setVerticalAlign( VerticalAlign vAlign )
 		{
@@ -117,7 +117,6 @@ namespace Nez
 			_size = _font.measureString( _text );
 			updateCentering();
 		}
-
 
 		void updateCentering()
 		{
@@ -139,7 +138,6 @@ namespace Nez
 
 			origin = new Vector2( (int)oldOrigin.X, (int)oldOrigin.Y );
 		}
-
 
 		public override void render( Graphics graphics, Camera camera )
 		{

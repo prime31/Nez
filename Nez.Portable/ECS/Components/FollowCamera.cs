@@ -58,10 +58,11 @@ namespace Nez
 			this.camera = camera;
 		}
 
-
 		public FollowCamera( Entity targetEntity, CameraStyle cameraStyle = CameraStyle.LockOn ) : this( targetEntity, null, cameraStyle )
 		{}
 
+		public FollowCamera() : this( null, null )
+		{}
 
 		public override void onAddedToEntity()
 		{

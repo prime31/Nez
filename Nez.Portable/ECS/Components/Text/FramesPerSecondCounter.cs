@@ -32,7 +32,7 @@ namespace Nez
 		/// <value>The dock position.</value>
 		public FPSDockPosition dockPosition
 		{
-			get { return _dockPosition; }
+			get => _dockPosition;
 			set
 			{
 				_dockPosition = value;
@@ -46,7 +46,7 @@ namespace Nez
 		/// <value>The dock offset.</value>
 		public Vector2 dockOffset
 		{
-			get { return _dockOffset; }
+			get => _dockOffset;
 			set
 			{
 				_dockOffset = value;
@@ -59,13 +59,15 @@ namespace Nez
 		readonly Queue<float> _sampleBuffer = new Queue<float>();
 
 
+		public FramesPerSecondCounter() : this( Graphics.instance.bitmapFont, Color.White )
+		{}
+
 		public FramesPerSecondCounter( BitmapFont font, Color color, FPSDockPosition dockPosition = FPSDockPosition.TopRight, int maximumSamples = 100 ) : base( font, string.Empty, Vector2.Zero, color )
 		{
 			this.maximumSamples = maximumSamples;
 			this.dockPosition = dockPosition;
 			init();
 		}
-
 
 		public FramesPerSecondCounter( NezSpriteFont font, Color color, FPSDockPosition dockPosition = FPSDockPosition.TopRight, int maximumSamples = 100 ) : base( font, string.Empty, Vector2.Zero, color )
 		{
@@ -74,12 +76,10 @@ namespace Nez
 			init();
 		}
 
-
 		void init()
 		{
 			updateTextPosition();
 		}
-
 
 		void updateTextPosition()
 		{
@@ -108,13 +108,11 @@ namespace Nez
 			}
 		}
 
-
 		public void reset()
 		{
 			totalFrames = 0;
 			_sampleBuffer.Clear();
 		}
-
 
 		void IUpdatable.update()
 		{
@@ -136,13 +134,16 @@ namespace Nez
 			text = string.Format( "FPS: {0:0.00}", averageFramesPerSecond );
 		}
 
+		public override bool isVisibleFromCamera( Camera camera )
+		{
+			return true;
+		}
 
 		public override void render( Graphics graphics, Camera camera )
 		{
 			// we override render and use position instead of entityPosition. this keeps the text in place even if the entity moves
 			graphics.batcher.drawString( _font, _text, localOffset, color, entity.transform.rotation, origin, entity.transform.scale, spriteEffects, layerDepth );
 		}
-
 
 		public override void debugRender( Graphics graphics )
 		{
@@ -164,7 +165,6 @@ namespace Nez
 			this.dockOffset = dockOffset;
 			return this;
 		}
-
 
 		/// <summary>
 		/// Sets which corner of the screen the fps text will show.
