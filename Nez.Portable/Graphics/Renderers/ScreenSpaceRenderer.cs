@@ -45,11 +45,15 @@ namespace Nez
 			Graphics.instance.batcher.end();
 			Graphics.instance.batcher.begin( cam.transformMatrix );
 
-			for( var i = 0; i < scene.entities.count; i++ )
+			for( var i = 0; i < renderLayers.Length; i++ )
 			{
-				var entity = scene.entities[i];
-				if( entity.enabled )
-					entity.debugRender( Graphics.instance );
+				var renderables = scene.renderableComponents.componentsWithRenderLayer( renderLayers[i] );
+				for( var j = 0; j < renderables.length; j++ )
+				{
+					var entity = renderables.buffer[j];
+					if( entity.enabled )
+						entity.debugRender( Graphics.instance );
+				}
 			}
 		}
 

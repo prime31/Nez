@@ -1,4 +1,5 @@
 using System;
+using System.Runtime.InteropServices;
 using ImGuiNET;
 using Microsoft.Xna.Framework;
 using Num = System.Numerics;
@@ -54,82 +55,53 @@ namespace Nez.ImGuiTools.TypeInspectors
 				setValue( value.toXNAColor() );
 		}
 
-		void inspectInt32()
+		/// <summary>
+		/// simplifies int, uint, long and ulong handling. They all get converted to Int32 so there is some precision loss.
+		/// </summary>
+		/// <param name="value"></param>
+		/// <returns></returns>
+		bool inspectAnyInt( ref int value )
 		{
-			var value = getValue<int>();
 			if( _rangeAttribute != null )
 			{
-				if( _rangeAttribute != null && _rangeAttribute.useDragVersion )
-				{
-					if( ImGui.DragInt( _name, ref value, 1, (int)_rangeAttribute.minValue, (int)_rangeAttribute.maxValue ) )
-						setValue( value );
-				}
+				if( _rangeAttribute.useDragVersion )
+					return ImGui.DragInt( _name, ref value, 1, (int)_rangeAttribute.minValue, (int)_rangeAttribute.maxValue );
 				else
-				{
-					if( ImGui.SliderInt( _name, ref value, (int)_rangeAttribute.minValue, (int)_rangeAttribute.maxValue ) )
-						setValue( value );
-				}
+					return ImGui.SliderInt( _name, ref value, (int)_rangeAttribute.minValue, (int)_rangeAttribute.maxValue );
 			}
 			else
 			{
-				if( ImGui.DragInt( _name, ref value ) )
-					setValue( value );
+				return ImGui.InputInt( _name, ref value );
 			}
+		}
+
+		void inspectInt32()
+		{
+			var value = getValue<int>();
+
+			if( inspectAnyInt( ref value ) )
+				setValue( value );
 		}
 
 		void inspectUInt32()
 		{
 			var value = Convert.ToInt32( getValue() );
-			if( _rangeAttribute.useDragVersion )
-			{
-				if( ImGui.DragInt( _name, ref value, 1, (int)_rangeAttribute.minValue, (int)_rangeAttribute.maxValue ) )
-					setValue( Convert.ToUInt32( value ) );
-			}
-			else
-			{
-				if( ImGui.SliderInt( _name, ref value, (int)_rangeAttribute.minValue, (int)_rangeAttribute.maxValue ) )
-					setValue( Convert.ToUInt32( value ) );
-			}
+			if( inspectAnyInt( ref value ) )
+				setValue( Convert.ToUInt32( value ) );
 		}
 
 		void inspectInt64()
 		{
 			var value = Convert.ToInt32( getValue() );
-			if( _rangeAttribute != null )
-			{
-				if( _rangeAttribute != null && _rangeAttribute.useDragVersion )
-				{
-					if( ImGui.DragInt( _name, ref value, 1, (int)_rangeAttribute.minValue, (int)_rangeAttribute.maxValue ) )
-						setValue( value );
-				}
-				else
-				{
-					if( ImGui.SliderInt( _name, ref value, (int)_rangeAttribute.minValue, (int)_rangeAttribute.maxValue ) )
-						setValue( value );
-				}
-			}
-			else
-			{
-				if( ImGui.DragInt( _name, ref value ) )
-					setValue( value );
-			}
+			if( inspectAnyInt( ref value ) )
+				setValue( Convert.ToInt64( value ) );
 		}
 
-		void inspectUInt64()
+		unsafe void inspectUInt64()
 		{
 			var value = Convert.ToInt32( getValue() );
-
-			// we will always have a RangeAttribute for unsigneds
-			if( _rangeAttribute.useDragVersion )
-			{
-				if( ImGui.DragInt( _name, ref value, 1, (int)_rangeAttribute.minValue, (int)_rangeAttribute.maxValue ) )
-					setValue( Convert.ToUInt64( value ) );
-			}
-			else
-			{
-				if( ImGui.SliderInt( _name, ref value, (int)_rangeAttribute.minValue, (int)_rangeAttribute.maxValue ) )
-					setValue( Convert.ToUInt64( value ) );
-			}
+			if( inspectAnyInt( ref value ) )
+				setValue( Convert.ToUInt64( value ) );
 		}
 
 		void inspectSingle()
