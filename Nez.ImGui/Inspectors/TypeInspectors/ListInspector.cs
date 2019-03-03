@@ -9,7 +9,7 @@ namespace Nez.ImGuiTools.TypeInspectors
 {
 	public class ListInspector : AbstractTypeInspector
 	{
-		public static Type[] kSupportedTypes = { typeof( int ), typeof( float ), typeof( string ), typeof( Vector2 ) };
+		public static Type[] kSupportedTypes = { typeof( int ), typeof( uint ), typeof( long ), typeof( ulong ), typeof( float ), typeof( string ), typeof( Vector2 ) };
 		IList _list;
 		Type _elementType;
 		bool _isArray;

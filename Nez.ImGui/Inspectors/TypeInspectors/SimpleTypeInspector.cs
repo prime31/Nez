@@ -10,7 +10,7 @@ namespace Nez.ImGuiTools.TypeInspectors
 	/// </summary>
     public class SimpleTypeInspector : AbstractTypeInspector
     {
-        public static Type[] kSupportedTypes = { typeof( bool ), typeof( Color ), typeof( int ), typeof( float ), typeof( string ), typeof( Vector2 ), typeof( Vector3 ) };
+        public static Type[] kSupportedTypes = { typeof( bool ), typeof( Color ), typeof( int ), typeof( uint ), typeof( long ), typeof( float ), typeof( string ), typeof( Vector2 ), typeof( Vector3 ) };
         RangeAttribute _rangeAttribute;
         Action _inspectMethodAction;
 
@@ -49,6 +49,52 @@ namespace Nez.ImGuiTools.TypeInspectors
 		void inspectInt32()
 		{
 			var value = getValue<int>();
+			if( _rangeAttribute != null )
+			{
+				if( _rangeAttribute != null && _rangeAttribute.useDragVersion )
+				{
+					if( ImGui.DragInt( _name, ref value, 1, (int)_rangeAttribute.minValue, (int)_rangeAttribute.maxValue ) )
+						setValue( value );
+				}
+				else
+				{
+					if( ImGui.SliderInt( _name, ref value, (int)_rangeAttribute.minValue, (int)_rangeAttribute.maxValue ) )
+						setValue( value );
+				}
+			}
+			else
+			{
+				if( ImGui.DragInt( _name, ref value ) )
+					setValue( value );
+			}
+		}
+
+		void inspectUInt32()
+		{
+			var value = Convert.ToInt32( getValue() );
+			if( _rangeAttribute != null )
+			{
+				if( _rangeAttribute != null && _rangeAttribute.useDragVersion )
+				{
+					if( ImGui.DragInt( _name, ref value, 1, (int)_rangeAttribute.minValue, (int)_rangeAttribute.maxValue ) )
+						setValue( value );
+				}
+				else
+				{
+					if( ImGui.SliderInt( _name, ref value, (int)_rangeAttribute.minValue, (int)_rangeAttribute.maxValue ) )
+						setValue( value );
+				}
+			}
+			else
+			{
+				if( ImGui.DragInt( _name, ref value ) )
+					setValue( value );
+			}
+		}
+
+		void inspectInt64()
+		{
+			var value = Convert.ToInt32( getValue() );
 			if( _rangeAttribute != null )
 			{
 				if( _rangeAttribute != null && _rangeAttribute.useDragVersion )

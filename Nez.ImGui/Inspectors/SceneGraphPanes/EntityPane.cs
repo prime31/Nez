@@ -1,3 +1,4 @@
+using System;
 using ImGuiNET;
 
 namespace Nez.ImGuiTools.SceneGraphPanes
@@ -10,6 +11,14 @@ namespace Nez.ImGuiTools.SceneGraphPanes
         {
             for( var i = 0; i < Core.scene.entities.count; i++ )
                 drawEntity( Core.scene.entities[i] );
+
+			NezImGui.MediumVerticalSpace();
+			if( NezImGui.CenteredButton( "Create Entity", 0.6f ) )
+			{
+				ImGui.OpenPopup( "create-entity" );
+			}
+
+			drawCreateEntityPopup();
         }
 
 		void drawEntity( Entity entity, bool onlyDrawRoots = true )
@@ -47,6 +56,7 @@ namespace Nez.ImGuiTools.SceneGraphPanes
 
 				ImGui.TreePop();
 			}
+
 			ImGui.PopID();
 		}
 
@@ -64,10 +74,45 @@ namespace Nez.ImGuiTools.SceneGraphPanes
 					entity.destroy();
 
 				if( ImGui.Selectable( "Create Child Entity", false, ImGuiSelectableFlags.DontClosePopups ) )
-					ImGui.OpenPopup( "create-entity" );
+					ImGui.OpenPopup( "create-new-entity" );
 
-				if( ImGui.BeginPopup( "create-entity" ) )
+				if( ImGui.BeginPopup( "create-new-entity" ) )
 				{
+					ImGui.Text( "New Entity Name:" );
+					ImGui.InputText( "##newChildEntityName", ref _newEntityName, 25 );
+
+					if( ImGui.Button( "Cancel") )
+					{
+						_newEntityName = "";
+						ImGui.CloseCurrentPopup();
+					}
+					
+					ImGui.SameLine( ImGui.GetContentRegionAvailWidth() - ImGui.GetItemRectSize().X );
+
+					ImGui.PushStyleColor( ImGuiCol.Button, Microsoft.Xna.Framework.Color.Green.PackedValue );
+					if( ImGui.Button( "Create" ) )
+					{
+						_newEntityName = _newEntityName.Length > 0 ? _newEntityName : Utils.randomString( 8 );
+						var newEntity = new Entity( _newEntityName );
+						newEntity.transform.setParent( entity.transform );
+						entity.scene.addEntity( newEntity );
+
+						_newEntityName = "";
+						ImGui.CloseCurrentPopup();
+					}
+					ImGui.PopStyleColor();
+
+					ImGui.EndPopup();
+				}
+
+				ImGui.EndPopup();
+			}
+		}
+
+		void drawCreateEntityPopup()
+		{
+			if( ImGui.BeginPopup( "create-entity" ) )
+			{
 					ImGui.Text( "New Entity Name:" );
 					ImGui.InputText( "##newEntityName", ref _newEntityName, 25 );
 
@@ -82,19 +127,15 @@ namespace Nez.ImGuiTools.SceneGraphPanes
 					ImGui.PushStyleColor( ImGuiCol.Button, Microsoft.Xna.Framework.Color.Green.PackedValue );
 					if( ImGui.Button( "Create" ) )
 					{
+						_newEntityName = _newEntityName.Length > 0 ? _newEntityName : Utils.randomString( 8 );
 						var newEntity = new Entity( _newEntityName );
-						newEntity.transform.setParent( entity.transform );
-						entity.scene.addEntity( newEntity );
+						newEntity.transform.position = Core.scene.camera.transform.position;
+						Core.scene.addEntity( newEntity );
 
 						_newEntityName = "";
 						ImGui.CloseCurrentPopup();
 					}
 					ImGui.PopStyleColor();
-
-					ImGui.EndPopup();
-				}
-
-				ImGui.EndPopup();
 			}
 		}
 

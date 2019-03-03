@@ -26,6 +26,9 @@ namespace Nez.ImGuiTools.ObjectInspectors
                 {
                     if( NezImGui.LabelButton( "Parent", _transform.parent.entity.name ) )
                         Core.getGlobalManager<ImGuiManager>().startInspectingEntity( _transform.parent.entity );
+
+                    if( ImGui.Button( "Detach From Parent" ) )
+                        _transform.parent = null;
                 }
 
                 NezImGui.SmallVerticalSpace();

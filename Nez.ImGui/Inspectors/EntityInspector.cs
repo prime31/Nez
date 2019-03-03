@@ -12,6 +12,7 @@ namespace Nez.ImGuiTools
 		public Entity entity => _entity;
 
 		Entity _entity;
+		string _entityWindowId = "entity-" + NezImGui.GetScopeId().ToString();
 		bool _shouldFocusWindow;
 		string _componentNameFilter;
 		TransformInspector _transformInspector;
@@ -57,11 +58,13 @@ namespace Nez.ImGuiTools
 			ImGui.SetNextWindowSizeConstraints( new Num.Vector2( 335, 200 ), new Num.Vector2( Screen.width, Screen.height ) );
 
 			var open = true;
-			if( ImGui.Begin( $"Entity Inspector: {entity.name}", ref open ) )
+			if( ImGui.Begin( $"Entity Inspector: {entity.name}###" + _entityWindowId, ref open ) )
 			{
                 var enabled = entity.enabled;
                 if( ImGui.Checkbox( "Enabled", ref enabled ) )
                     entity.enabled = enabled;
+				
+				ImGui.InputText( "Name", ref _entity.name, 25 );
 
                 var updateInterval = (int)entity.updateInterval;
                 if( ImGui.SliderInt( "Update Interval", ref updateInterval, 1, 100 ) )
@@ -146,5 +149,6 @@ namespace Nez.ImGuiTools
 		{
 			_shouldFocusWindow = true;
 		}
+	
 	}
 }

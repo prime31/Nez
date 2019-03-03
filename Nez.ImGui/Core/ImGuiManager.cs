@@ -101,7 +101,7 @@ namespace Nez.ImGuiTools
 						if( ImGui.MenuItem( sceneType.Name ) )
 						{
 							var scene = (Scene)Activator.CreateInstance( sceneType );
-							Core.startSceneTransition( new CrossFadeTransition( () => scene ) );
+							Core.startSceneTransition( new FadeTransition( () => scene ) );
 						}
 					}
 					ImGui.EndMenu();

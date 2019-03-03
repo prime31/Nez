@@ -187,7 +187,7 @@ namespace Nez
 
 		/// <summary>
 		/// gets all subclasses of <paramref name="baseClassType"> optionally filtering only for those with
-		/// a parameterless constructor
+		/// a parameterless constructor. Abstract Types will not be returned.
 		/// </summary>
 		/// <param name="baseClassType"></param>
 		/// <param name="onlyIncludeParameterlessConstructors"></param>
@@ -199,12 +199,15 @@ namespace Nez
 			{
 				foreach( var type in assembly.GetTypes() )
 				{
-					if( type.IsSubclassOf( baseClassType ) )
+					if( type.IsSubclassOf( baseClassType ) && !type.IsAbstract )
 					{
 						if( onlyIncludeParameterlessConstructors )
 						{
 							if( type.GetConstructor( Type.EmptyTypes ) == null )
+							{
+								Debug.log( "no go: " + type.Name );
 								continue;
+							}
 						}
 						typeList.Add( type );
 					}
@@ -215,7 +218,7 @@ namespace Nez
 
 		/// <summary>
 		/// gets all Types assignable from <paramref name="baseClassType"> optionally filtering only for those with
-		/// a parameterless constructor
+		/// a parameterless constructor. Abstract Types will not be returned.
 		/// </summary>
 		/// <param name="baseClassType"></param>
 		/// <param name="onlyIncludeParameterlessConstructors"></param>
@@ -227,7 +230,7 @@ namespace Nez
 			{
 				foreach( var type in assembly.GetTypes() )
 				{
-					if( baseClassType.IsAssignableFrom( type ) )
+					if( baseClassType.IsAssignableFrom( type ) && !type.IsAbstract )
 					{
 						if( onlyIncludeParameterlessConstructors )
 						{

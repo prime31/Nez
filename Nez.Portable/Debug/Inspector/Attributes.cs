@@ -53,7 +53,6 @@ namespace Nez
 			this.minValue = minValue;
 			this.maxValue = maxValue;
 			this.stepSize = stepSize;
-			useDragVersion = false;
 		}
 
 		public RangeAttribute( float minValue, float maxValue, bool useDragFloat )

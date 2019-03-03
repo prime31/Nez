@@ -19,6 +19,14 @@ namespace Nez.ImGuiTools
 			if( _componentSubclasses == null )
 			{
 				var subclasses = ReflectionUtils.getAllSubclasses( typeof( Component ), true );
+
+				// filter out any Components that have generic parameters
+				for( var i = subclasses.Count - 1; i >= 0; i-- )
+				{
+					if( subclasses[i].ContainsGenericParameters )
+						subclasses.RemoveAt( i );
+				}
+
 				// sort so the Colliders are on the bottom
 				subclasses.Sort( (t, u) =>
 				{
