@@ -1,3 +1,5 @@
+using System;
+using System.Runtime.InteropServices;
 using ImGuiNET;
 using Num = System.Numerics;
 
@@ -143,5 +145,157 @@ namespace Nez.ImGuiTools
             return result;
 		}
 	
+		#region Wrappers for unsinged Drag/SliderScaler
+
+		/// <summary>
+		/// wraps ImGui.DragScaler and handles all IntPtr conversion
+		/// </summary>
+		/// <param name="label"></param>
+		/// <param name="value"></param>
+		/// <param name="speed"></param>
+		/// <param name="min"></param>
+		/// <param name="max"></param>
+		/// <returns></returns>
+		public unsafe static bool DragScaler( string label, ref ulong value, float speed, int min, int max )
+		{
+			var tempValue = value;
+			var valuePtr = new IntPtr( &tempValue );
+			var minPtr = new IntPtr( &min );
+			var maxPtr = new IntPtr( &max );
+
+			if( ImGui.DragScalar( label, ImGuiDataType.U64, valuePtr, speed, minPtr, maxPtr ) )
+			{
+				value = Marshal.PtrToStructure<ulong>( valuePtr );
+				return true;
+			}
+			return false;
+		}
+
+		public unsafe static bool DragScaler( string label, ref ulong value, float speed )
+		{
+			var tempValue = value;
+			var valuePtr = new IntPtr( &tempValue );
+
+			if( ImGui.DragScalar( label, ImGuiDataType.U64, valuePtr, speed ) )
+			{
+				value = Marshal.PtrToStructure<ulong>( valuePtr );
+				return true;
+			}
+			return false;
+		}
+
+		/// <summary>
+		/// wraps ImGui.DragScaler and handles all IntPtr conversion
+		/// </summary>
+		/// <param name="label"></param>
+		/// <param name="value"></param>
+		/// <param name="speed"></param>
+		/// <param name="min"></param>
+		/// <param name="max"></param>
+		/// <returns></returns>
+		public unsafe static bool DragScaler( string label, ref uint value, float speed, int min, int max )
+		{
+			var tempValue = value;
+			var valuePtr = new IntPtr( &tempValue );
+			var minPtr = new IntPtr( &min );
+			var maxPtr = new IntPtr( &max );
+
+			if( ImGui.DragScalar( label, ImGuiDataType.U32, valuePtr, speed, minPtr, maxPtr ) )
+			{
+				value = Marshal.PtrToStructure<uint>( valuePtr );
+				return true;
+			}
+			return false;
+		}
+
+		public unsafe static bool DragScaler( string label, ref uint value, float speed )
+		{
+			var tempValue = value;
+			var valuePtr = new IntPtr( &tempValue );
+
+			if( ImGui.DragScalar( label, ImGuiDataType.U32, valuePtr, speed ) )
+			{
+				value = Marshal.PtrToStructure<uint>( valuePtr );
+				return true;
+			}
+			return false;
+		}
+
+		/// <summary>
+		/// wraps ImGui.SliderScalar and handles all IntPtr conversion
+		/// </summary>
+		/// <param name="label"></param>
+		/// <param name="value"></param>
+		/// <param name="speed"></param>
+		/// <param name="min"></param>
+		/// <param name="max"></param>
+		/// <returns></returns>
+		public unsafe static bool SliderScalar( string label, ref ulong value, int min, int max )
+		{
+			var tempValue = value;
+			var valuePtr = new IntPtr( &tempValue );
+			var minPtr = new IntPtr( &min );
+			var maxPtr = new IntPtr( &max );
+
+			if( ImGui.SliderScalar( label, ImGuiDataType.U64, valuePtr, minPtr, maxPtr ) )
+			{
+				value = Marshal.PtrToStructure<ulong>( valuePtr );
+				return true;
+			}
+			return false;
+		}
+
+		/// <summary>
+		/// wraps ImGui.SliderScalar and handles all IntPtr conversion
+		/// </summary>
+		/// <param name="label"></param>
+		/// <param name="value"></param>
+		/// <param name="speed"></param>
+		/// <param name="min"></param>
+		/// <param name="max"></param>
+		/// <returns></returns>
+		public unsafe static bool SliderScalar( string label, ref uint value, int min, int max )
+		{
+			var tempValue = value;
+			var valuePtr = new IntPtr( &tempValue );
+			var minPtr = new IntPtr( &min );
+			var maxPtr = new IntPtr( &max );
+
+			if( ImGui.SliderScalar( label, ImGuiDataType.U32, valuePtr, minPtr, maxPtr ) )
+			{
+				value = Marshal.PtrToStructure<uint>( valuePtr );
+				return true;
+			}
+			return false;
+		}
+
+		public unsafe static bool InputScaler( string label, ref ulong value )
+		{
+			var tempValue = value;
+			var valuePtr = new IntPtr( &tempValue );
+
+			if( ImGui.InputScalar( label, ImGuiDataType.U64, valuePtr ) )
+			{
+				value = Marshal.PtrToStructure<ulong>( valuePtr );
+				return true;
+			}
+			return false;
+		}
+
+		public unsafe static bool InputScaler( string label, ref uint value )
+		{
+			var tempValue = value;
+			var valuePtr = new IntPtr( &tempValue );
+
+			if( ImGui.InputScalar( label, ImGuiDataType.U32, valuePtr ) )
+			{
+				value = Marshal.PtrToStructure<uint>( valuePtr );
+				return true;
+			}
+			return false;
+		}
+
+		#endregion
+
 	}
 }
