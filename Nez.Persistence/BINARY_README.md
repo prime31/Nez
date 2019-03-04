@@ -76,7 +76,7 @@ Useage example:
 
 ```csharp
 // fetch the FileDataStore from your service container
-var fileDataStore = Core.services.GetOrAddService<FileDataStore>().
+var fileDataStore = Core.services.GetOrAddService<FileDataStore>();
 
 // load data
 KeyValueDataStore.Load( fileDataStore );

@@ -32,6 +32,9 @@ namespace Nez.ImGuiTools
 
 		void loadSettings()
 		{
+			var fileDataStore = Core.services.GetOrAddService<FileDataStore>();
+			KeyValueDataStore.Default.Load( fileDataStore );
+
 			showStyleEditor = KeyValueDataStore.Default.GetBool( kShowStyleEditor, showStyleEditor );
 			showSceneGraphWindow = KeyValueDataStore.Default.GetBool( kShowSceneGraphWindow, showSceneGraphWindow );
 			showCoreWindow = KeyValueDataStore.Default.GetBool( kShowCoreWindow, showCoreWindow );
@@ -47,7 +50,7 @@ namespace Nez.ImGuiTools
 			KeyValueDataStore.Default.Set( kShowCoreWindow, showCoreWindow );
 			KeyValueDataStore.Default.Set( kShowSeperateGameWindow, showSeperateGameWindow );
 
-			KeyValueDataStore.Default.Flush();
+			KeyValueDataStore.Default.Flush( Core.services.GetOrAddService<FileDataStore>() );
 		}
 
 		/// <summary>
