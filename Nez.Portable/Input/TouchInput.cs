@@ -40,7 +40,8 @@ namespace Nez
 			_previousTouches = _currentTouches;
 			_currentTouches = TouchPanel.GetState();
 
-			_previousGestures = _currentGestures;
+			_previousGestures.Clear();
+			_previousGestures.AddRange( _currentGestures );
 			_currentGestures.Clear();
 			while( TouchPanel.IsGestureAvailable )
 				_currentGestures.Add( TouchPanel.ReadGesture() );
