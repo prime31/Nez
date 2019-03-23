@@ -75,7 +75,7 @@ namespace Nez.Persistence
 		public static object FromJson( string json, JsonSettings settings = null )
 		{
 			System.Diagnostics.Debug.Assert( json != null );
-			return JsonDecoder.FromJson( json );
+			return JsonDecoder.FromJson( json, settings );
 		}
 
 		/// <summary>
