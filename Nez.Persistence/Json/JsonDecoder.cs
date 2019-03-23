@@ -848,7 +848,7 @@ namespace Nez.Persistence
 								}
 
 								// handle the JsonObjectFactory if we have one
-								var converter = _settings?.GetObjectFactoryForType( type );
+								var converter = _settings?.GetObjectFactoryForType( makeType );
 								if( converter != null )
 								{
 									// fetch the remaining data into a Dictionary and pass it off to the factory
