@@ -12,6 +12,21 @@ namespace Nez
 	/// </summary>
 	public class TiledSprite : Sprite
 	{
+		public override RectangleF bounds
+		{
+			get
+			{
+				if( _areBoundsDirty )
+				{
+					if( subtexture != null )
+						_bounds.calculateBounds( entity.transform.position, _localOffset, _origin, entity.transform.scale, entity.transform.rotation, width, height );
+					_areBoundsDirty = false;
+				}
+
+				return _bounds;
+			}
+		}
+
 		/// <summary>
 		/// x value of the texture scroll
 		/// </summary>
@@ -57,7 +72,11 @@ namespace Nez
 		public new int width
 		{
 			get => _sourceRect.Width;
-			set => _sourceRect.Width = value;
+			set
+			{
+				_areBoundsDirty = true;
+				_sourceRect.Width = value;
+			}
 		}
 
 		/// <summary>
@@ -67,7 +86,11 @@ namespace Nez
 		public new int height
 		{
 			get => _sourceRect.Height;
-			set => _sourceRect.Height = value;
+			set
+			{
+				_areBoundsDirty = true;
+				_sourceRect.Height = value;
+			}
 		}
 
 		/// <summary>
