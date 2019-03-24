@@ -225,6 +225,7 @@ namespace Nez.Tiled
 					width = reader.ReadInt32(),
 					height = reader.ReadInt32(),
 					rotation = reader.ReadInt32(),
+					gid = reader.ReadInt32(),
 					visible = reader.ReadBoolean()
 				};
 
