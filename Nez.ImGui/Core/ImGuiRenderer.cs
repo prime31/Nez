@@ -158,10 +158,12 @@ namespace Nez.ImGuiTools
 		#region Setup & Update
 
 #if FNA
-		static void setClipboardText( IntPtr userData, string txt )
-		{
-			SDL2.SDL.SDL_SetClipboardText( txt );
-		}
+		delegate string GetClipboardTextDelegate();
+		delegate void SetClipboardTextDelegate(IntPtr userData, string txt);
+
+		static void SetClipboardText(IntPtr userData, string txt) => SDL2.SDL.SDL_SetClipboardText(txt);
+
+		static string GetClipboardText() => SDL2.SDL.SDL_GetClipboardText();
 #endif
 
 		/// <summary>
@@ -173,11 +175,8 @@ namespace Nez.ImGuiTools
 
 #if FNA
 			// forward clipboard methods to SDL
-			var setClipboardMethod = GetType().GetMethod( "setClipboardText", System.Reflection.BindingFlags.Static | System.Reflection.BindingFlags.NonPublic );
-			io.SetClipboardTextFn = Marshal.GetFunctionPointerForDelegate( Delegate.CreateDelegate( typeof( Action<IntPtr,string> ), null, setClipboardMethod ) );
-
-			var getClipMethod = typeof( SDL2.SDL ).GetMethod( "SDL_GetClipboardText" );
-			io.GetClipboardTextFn = Marshal.GetFunctionPointerForDelegate( Delegate.CreateDelegate( typeof( Func<string> ), null, getClipMethod ) );
+			io.SetClipboardTextFn = Marshal.GetFunctionPointerForDelegate<SetClipboardTextDelegate>(SetClipboardText);
+			io.GetClipboardTextFn = Marshal.GetFunctionPointerForDelegate<GetClipboardTextDelegate>(SDL2.SDL.SDL_GetClipboardText);
 #endif
 
 			_keys.Add( io.KeyMap[(int)ImGuiKey.Tab] = (int)Keys.Tab );
