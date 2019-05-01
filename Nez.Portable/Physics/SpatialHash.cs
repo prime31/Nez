@@ -257,7 +257,9 @@ namespace Nez.Spatial
 
 
 		/// <summary>
-		/// casts a line through the spatial hash and fills the hits array up with any colliders that the line hits
+		/// casts a line through the spatial hash and fills the hits array up with any colliders that the line hits.
+		/// https://github.com/francisengelmann/fast_voxel_traversal/blob/master/main.cpp
+		/// http://www.cse.yorku.ca/~amana/research/grid.pdf
 		/// </summary>
 		/// <returns>the number of Colliders returned</returns>
 		/// <param name="start">Start.</param>
@@ -291,26 +293,22 @@ namespace Nez.Spatial
 
 			// Calculate cell boundaries. when the step is positive, the next cell is after this one meaning we add 1.
 			// If negative, cell is before this one in which case dont add to boundary
-			var boundaryX = intX + ( stepX > 0 ? 1 : 0 );
-			var boundaryY = intY + ( stepY > 0 ? 1 : 0 );
+			var nextBoundaryX = (float)ray.start.X + (float)stepX * _cellSize;
+			var nextBoundaryY = (float)ray.start.Y + (float)stepY * _cellSize;
 
 			// determine the value of t at which the ray crosses the first vertical voxel boundary. same for y/horizontal.
 			// The minimum of these two values will indicate how much we can travel along the ray and still remain in the current voxel
 			// may be infinite for near vertical/horizontal rays
-			var tMaxX = ( boundaryX - start.X ) / ray.direction.X;
-			var tMaxY = ( boundaryY - start.Y ) / ray.direction.Y;
-			if( ray.direction.X == 0f || stepX == 0)
-				tMaxX = float.PositiveInfinity;
-            if( ray.direction.Y == 0f || stepY == 0 )
-				tMaxY = float.PositiveInfinity;
+			var tMaxX = ray.direction.X != 0 ? (nextBoundaryX - ray.start.X) / ray.direction.X : float.MaxValue;
+			var tMaxY = ray.direction.Y != 0 ? (nextBoundaryY - ray.start.Y) / ray.direction.Y : float.MaxValue;
 
 			// how far do we have to walk before crossing a cell from a cell boundary. may be infinite for near vertical/horizontal rays
-			var tDeltaX = stepX / ray.direction.X;
-			var tDeltaY = stepY / ray.direction.Y;
+			var tDeltaX = ray.direction.X != 0 ? _cellSize / ( ray.direction.X * stepX ) : float.MaxValue;
+			var tDeltaY = ray.direction.Y != 0 ? _cellSize / ( ray.direction.Y * stepY ) : float.MaxValue;
 
 			// start walking and returning the intersecting cells.
 			var cell = cellAtPosition( intX, intY );
-			//debugDrawCellDetails( intX, intY, cell != null ? cell.Count : 0 );
+			// debugDrawCellDetails( intX, intY, cell != null ? cell.Count : 0 );
 			if( cell != null && _raycastParser.checkRayIntersection( intX, intY, cell ) )
 			{
 				_raycastParser.reset();
