@@ -314,12 +314,15 @@ namespace Nez.Spatial
 			{
 				if( tMaxX < tMaxY )
 				{
-					currentCell.X += stepX;
+					// HACK: ensures we never overshoot our values
+					currentCell.X = (int)Mathf.approach( currentCell.X, lastCell.X, Math.Abs( stepX ) );
+					// currentCell.X += stepX;
 					tMaxX += tDeltaX;
 				}
 				else
 				{
-					currentCell.Y += stepY;
+					currentCell.Y = (int)Mathf.approach( currentCell.Y, lastCell.Y, Math.Abs( stepY ) );
+					// currentCell.Y += stepY;
 					tMaxY += tDeltaY;
 				}
 
