@@ -141,7 +141,7 @@ namespace Nez
 			// handle removals
 			if( _componentsToRemove.Count > 0 )
 			{
-				for( int i = 0, count = _componentsToRemove.Count; i < count; i++ )
+				for( int i = 0; i < _componentsToRemove.Count; i++ )
 				{
 					handleRemove( _componentsToRemove[i] );
 					_components.remove( _componentsToRemove[i] );
