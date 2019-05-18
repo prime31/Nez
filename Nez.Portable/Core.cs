@@ -45,6 +45,11 @@ namespace Nez
 		public static GraphicsDevice graphicsDevice;
 
 		/// <summary>
+		/// global access to the graphicsDeviceManager
+		/// </summary>
+		public static GraphicsDeviceManager graphicsManager;
+
+		/// <summary>
 		/// global content manager for loading any assets that should stick around between scenes
 		/// </summary>
 		public static NezContentManager content;
@@ -141,7 +146,7 @@ namespace Nez
 			_instance = this;
 			emitter = new Emitter<CoreEvents>( new CoreEventsComparer() );
 
-			var graphicsManager = new GraphicsDeviceManager( this )
+			graphicsManager = new GraphicsDeviceManager( this )
 			{
 				PreferredBackBufferWidth = width,
 				PreferredBackBufferHeight = height,
