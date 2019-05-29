@@ -15,6 +15,7 @@ namespace Nez.ImGuiTools
 		public bool showSceneGraphWindow = true;
 		public bool showCoreWindow = true;
 		public bool showSeperateGameWindow = true;
+		public bool showMenuBar = true;
 
 		List<Type> _sceneSubclasses = new List<Type>();
 		System.Reflection.MethodInfo[] _themes;
@@ -68,7 +69,8 @@ namespace Nez.ImGuiTools
 		/// </summary>
 		void layoutGui()
 		{
-			drawMainMenuBar();
+			if( showMenuBar )
+				drawMainMenuBar();
 
 			if( showSeperateGameWindow )
 				drawGameWindow();
