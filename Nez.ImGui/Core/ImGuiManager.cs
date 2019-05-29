@@ -26,6 +26,10 @@ namespace Nez.ImGuiTools
 		List<Action> _drawCommands = new List<Action>();
 		ImGuiRenderer _renderer;
 
+		Num.Vector2 _gameWindowFirstPosition;
+		string _gameWindowTitle;
+		ImGuiWindowFlags _gameWindowFlags = 0;
+
 		RenderTarget2D _lastRenderTarget;
 		IntPtr _renderTargetId = IntPtr.Zero;
 		Num.Vector2? _gameViewForcedSize;
@@ -34,6 +38,13 @@ namespace Nez.ImGuiTools
 
 		public ImGuiManager( ImGuiOptions options = null )
 		{
+			if( options == null )
+				options = new ImGuiOptions();
+
+			_gameWindowFirstPosition = options._gameWindowFirstPosition;
+			_gameWindowTitle = options._gameWindowTitle;
+			_gameWindowFlags = options._gameWindowFlags;
+
 			loadSettings();
 			_renderer = new ImGuiRenderer( Core.instance );
 
@@ -49,6 +60,7 @@ namespace Nez.ImGuiTools
 
 			// find all themes
 			_themes = typeof( NezImGuiThemes ).GetMethods( System.Reflection.BindingFlags.Static | System.Reflection.BindingFlags.Public );
+
 		}
 
 		/// <summary>
