@@ -107,13 +107,13 @@ namespace Nez.ImGuiTools
 				} );
 			}
 
-			ImGui.SetNextWindowPos( new Num.Vector2( 345, 25 ), ImGuiCond.FirstUseEver );
+			ImGui.SetNextWindowPos( _gameWindowFirstPosition, ImGuiCond.FirstUseEver );
 			ImGui.SetNextWindowSize( new Num.Vector2( Screen.width / 2, ( Screen.width / 2 ) / rtAspectRatio ), ImGuiCond.FirstUseEver );
 
 			handleForcedGameViewParams();
 
 			ImGui.PushStyleVar( ImGuiStyleVar.WindowPadding, new Num.Vector2( 0, 0 ) );
-			ImGui.Begin( "Game Window" );
+			ImGui.Begin( _gameWindowTitle, _gameWindowFlags );
 
 			// convert mouse input to the game windows coordinates
 			overrideMouseInput();
@@ -139,7 +139,7 @@ namespace Nez.ImGuiTools
 
 			if( _gameViewForcedPos.HasValue )
 			{
-				ImGui.Begin( "Game Window" );
+				ImGui.Begin( _gameWindowTitle, _gameWindowFlags );
 				var windowSize = ImGui.GetWindowSize();
 				ImGui.End();
 
@@ -274,7 +274,7 @@ namespace Nez.ImGuiTools
 				}
 
 				// we cant draw the game window until we have the texture bound so we append it here
-				ImGui.Begin( "Game Window" );
+				ImGui.Begin( _gameWindowTitle, _gameWindowFlags );
 				ImGui.PushStyleVar( ImGuiStyleVar.FramePadding, Num.Vector2.Zero );
 				ImGui.ImageButton( _renderTargetId, ImGui.GetContentRegionAvail() );
 				ImGui.PopStyleVar();

@@ -80,18 +80,11 @@ namespace Nez.ImGuiTools
 			// Get font texture from ImGui
 			var io = ImGui.GetIO();
 
-			if( options != null )
-			{
-				if( options._includeDefaultFont )
-					defaultFontPtr = io.Fonts.AddFontDefault();
-
-				foreach( var font in options._fonts )
-					io.Fonts.AddFontFromFileTTF( font.Item1, font.Item2 );
-			}
-			else
-			{
+			if(options._includeDefaultFont)
 				defaultFontPtr = io.Fonts.AddFontDefault();
-			}	
+
+			foreach(var font in options._fonts)
+				io.Fonts.AddFontFromFileTTF( font.Item1, font.Item2 );
 
 			io.Fonts.GetTexDataAsRGBA32( out byte* pixelData, out int width, out int height, out int bytesPerPixel );
 
