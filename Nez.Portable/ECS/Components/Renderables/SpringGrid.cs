@@ -99,13 +99,13 @@ namespace Nez
 		/// width of the grid
 		/// </summary>
 		/// <value>The width.</value>
-		public override float width { get { return _gridSize.Width; } }
+		public override float width => _gridSize.Width;
 
 		/// <summary>
 		/// height of the grid
 		/// </summary>
 		/// <value>The height.</value>
-		public override float height { get { return _gridSize.Height; } }
+		public override float height => _gridSize.Height;
 
 		/// <summary>
 		/// color of all major grid lines
@@ -120,30 +120,47 @@ namespace Nez
 		/// <summary>
 		/// thickness of all major grid lines
 		/// </summary>
+		[Range( 1, 10 )]
 		public float gridMajorThickness = 3f;
 
 		/// <summary>
 		/// thickness of all minor grid lines
 		/// </summary>
+		[Range( 1, 10 )]
 		public float gridMinorThickness = 1f;
 
 		/// <summary>
 		/// how often a major grid line should appear on the x axis
 		/// </summary>
+		[Range( 1, 10 )]
 		public int gridMajorPeriodX = 3;
 
 		/// <summary>
 		/// how often a major grid line should appear on the y axis
 		/// </summary>
+		[Range( 1, 10 )]
 		public int gridMajorPeriodY = 3;
 
 		Spring[] _springs;
 		PointMass[,] _points;
-		Vector2 _screenSize;
 		Rectangle _gridSize;
+		Vector2 _screenSize;
 
+
+		public SpringGrid() : this( new Rectangle( 0, 0, Screen.width, Screen.height ), new Vector2( 30 ) )
+		{}
 
 		public SpringGrid( Rectangle gridSize, Vector2 spacing )
+		{
+			setGridSizeAndSpacing( gridSize, spacing );
+		}
+
+		/// <summary>
+		/// sets up the SpringGrid springs and points so that it can be drawn
+		/// </summary>
+		/// <param name="gridSize"></param>
+		/// <param name="spacing"></param>
+		public void setGridSizeAndSpacing( Rectangle gridSize, Vector2 spacing )
 		{
 			_gridSize = gridSize;
 			var springList = new List<Spring>();
@@ -197,6 +214,7 @@ namespace Nez
 			_springs = springList.ToArray();
 		}
 
+		#region Force application
 
 		/// <summary>
 		/// applies a force in a 3-dimensional direction
@@ -208,7 +226,6 @@ namespace Nez
 		{
 			applyDirectedForce( new Vector3( force, 0 ), new Vector3( position, 0 ), radius );
 		}
-
 
 		/// <summary>
 		/// applies a force in a 3-dimensional direction
@@ -227,7 +244,6 @@ namespace Nez
 			}
 		}
 
-
 		/// <summary>
 		/// applies a force that sucks the grid in towards the point
 		/// </summary>
@@ -238,7 +254,6 @@ namespace Nez
 		{
 			applyImplosiveForce( force, new Vector3( position, 0 ), radius );
 		}
-
 
 		/// <summary>
 		/// applies a force that sucks the grid in towards the point
@@ -261,7 +276,6 @@ namespace Nez
 			}
 		}
 
-
 		/// <summary>
 		/// applies a force the pushes the grid out aware from the point
 		/// </summary>
@@ -272,7 +286,6 @@ namespace Nez
 		{
 			applyExplosiveForce( force, new Vector3( position, 0 ), radius );
 		}
-
 
 		/// <summary>
 		/// applies a force the pushes the grid out aware from the point
@@ -295,6 +308,8 @@ namespace Nez
 			}
 		}
 
+		#endregion
+
 
 		void IUpdatable.update()
 		{
@@ -307,7 +322,6 @@ namespace Nez
 			foreach( var mass in _points )
 				mass.update();
 		}
-
 
 		public override void render( Graphics graphics, Camera camera )
 		{
@@ -398,14 +412,12 @@ namespace Nez
 			}
 		}
 
-
 		Vector2 projectToVector2( Vector3 v )
 		{
 			// do a perspective projection
 			var factor = ( v.Z + 2000 ) * 0.0005f;
 			return ( new Vector2( v.X, v.Y ) - _screenSize * 0.5f ) * factor + _screenSize * 0.5f;
 		}
-
 
 		void drawLine( Batcher batcher, Vector2 start, Vector2 end, Color color, float thickness = 2f )
 		{

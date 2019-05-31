@@ -17,7 +17,7 @@ namespace Nez
 		public override void onAddedToEntity()
 		{
 			_collider = entity.getComponent<Collider>();
-			Assert.isNotNull( _collider, "null Collider. ProjectilMover requires a Collider!" );
+			Debug.warnIf( _collider == null, "ProjectileMover has no Collider. ProjectilMover requires a Collider!" );
 		}
 
 
@@ -28,6 +28,9 @@ namespace Nez
 		/// <param name="motion">Motion.</param>
 		public bool move( Vector2 motion )
 		{
+			if( _collider == null )
+				return false;
+
 			var didCollide = false;
 
 			// fetch anything that we might collide with at our new position
@@ -46,7 +49,6 @@ namespace Nez
 
 			return didCollide;
 		}
-
 
 		void notifyTriggerListeners( Collider self, Collider other )
 		{

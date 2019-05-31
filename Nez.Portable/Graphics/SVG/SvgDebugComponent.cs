@@ -30,7 +30,7 @@ namespace Nez.Svg
 		/// <summary>
 		/// beware! If pathBuilder is null the SvgReflectionPathBuilder will be used and it is slow as dirt.
 		/// </summary>
-		/// <param name="pathToSvgFile">Path to svg file.</param>
+		/// <param name="pathToSvgFile">Path to svg file relative to the Content folder</param>
 		/// <param name="pathBuilder">Path builder.</param>
 		public SvgDebugComponent( string pathToSvgFile, ISvgPathBuilder pathBuilder = null )
 		{
@@ -41,7 +41,6 @@ namespace Nez.Svg
 			if( _pathBuilder == null )
 				_pathBuilder = new SvgReflectionPathBuilder();
 		}
-
 
 		public override void render( Graphics graphics, Camera camera )
 		{
@@ -70,6 +69,8 @@ namespace Nez.Svg
 		}
 
 
+		#region SVG part renderers
+
 		void renderRects( Batcher batcher, SvgRectangle[] rects )
 		{
 			if( rects == null )
@@ -83,7 +84,6 @@ namespace Nez.Svg
 				batcher.drawLine( fixedPts[3], fixedPts[0], rect.strokeColor, rect.strokeWidth );
 			}
 		}
-
 
 		void renderPaths( Batcher batcher, SvgPath[] paths )
 		{
@@ -101,7 +101,6 @@ namespace Nez.Svg
 			}
 		}
 
-
 		void renderLines( Batcher batcher, SvgLine[] lines )
 		{
 			if( lines == null )
@@ -114,7 +113,6 @@ namespace Nez.Svg
 			}
 		}
 
-
 		void renderCircles( Batcher batcher, SvgCircle[] circles )
 		{
 			if( circles == null )
@@ -123,7 +121,6 @@ namespace Nez.Svg
 			foreach( var circ in circles )
 				batcher.drawCircle( circ.centerX, circ.centerY, circ.radius, circ.strokeColor, (int)circ.strokeWidth );
 		}
-
 
 		void renderPolygons( Batcher batcher, SvgPolygon[] polygons )
 		{
@@ -138,7 +135,6 @@ namespace Nez.Svg
 			}
 		}
 
-
 		void renderPolylines( Batcher batcher, SvgPolyline[] polylines )
 		{
 			if( polylines == null )
@@ -151,7 +147,6 @@ namespace Nez.Svg
 					batcher.drawLine( fixedPts[i], fixedPts[i + 1], poly.strokeColor, poly.strokeWidth );
 			}
 		}
-
 
 		/// <summary>
 		/// attempts to load and draw the SvgImage. If it cannot load a Texture it will just draw a rect.
@@ -188,6 +183,8 @@ namespace Nez.Svg
 				}
 			}
 		}
+
+		#endregion
 
 	}
 }

@@ -36,7 +36,7 @@ namespace Nez.UI
 		/// <param name="item">Item.</param>
 		public virtual void choose( T item )
 		{
-			Assert.isNotNull( item, "item cannot be null" );
+			Insist.isNotNull( item, "item cannot be null" );
 			if( _isDisabled )
 				return;
 			snapshot();
@@ -137,7 +137,7 @@ namespace Nez.UI
 		/// <param name="item">Item.</param>
 		public Selection<T> set( T item )
 		{
-			Assert.isNotNull( item, "item cannot be null." );
+			Insist.isNotNull( item, "item cannot be null." );
 
 			if( selected.Count == 1 && selected.First() == item )
 				return this;
@@ -169,7 +169,7 @@ namespace Nez.UI
 			for( var i = 0; i < items.Count; i++ )
 			{
 				var item = items[i];
-				Assert.isNotNull( item, "item cannot be null" );
+				Insist.isNotNull( item, "item cannot be null" );
 				added = selected.addIfNotPresent( item );
 			}
 
@@ -196,7 +196,7 @@ namespace Nez.UI
 		/// <param name="item">Item.</param>
 		public void add( T item )
 		{
-			Assert.isNotNull( item, "item cannot be null" );
+			Insist.isNotNull( item, "item cannot be null" );
 			if( !selected.addIfNotPresent( item ) )
 				return;
 
@@ -219,7 +219,7 @@ namespace Nez.UI
 			for( var i = 0; i < items.Count; i++ )
 			{
 				var item = items[i];
-				Assert.isNotNull( item, "item cannot be null" );
+				Insist.isNotNull( item, "item cannot be null" );
 				added = selected.addIfNotPresent( item );
 			}
 			if( added )
@@ -240,7 +240,7 @@ namespace Nez.UI
 
 		public void remove( T item )
 		{
-			Assert.isNotNull( item, "item cannot be null" );
+			Insist.isNotNull( item, "item cannot be null" );
 			if( !selected.Remove( item ) )
 				return;
 
@@ -263,7 +263,7 @@ namespace Nez.UI
 			for( var i = 0; i < items.Count; i++ )
 			{
 				var item = items[i];
-				Assert.isNotNull( item, "item cannot be null" );
+				Insist.isNotNull( item, "item cannot be null" );
 				removed = selected.Remove( item );
 			}
 

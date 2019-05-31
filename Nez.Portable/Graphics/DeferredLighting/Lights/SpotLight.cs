@@ -26,7 +26,6 @@ namespace Nez.DeferredLighting
 		public SpotLight() : base()
 		{}
 
-
 		public SpotLight( Color color )
 		{
 			this.color = color;
@@ -41,7 +40,6 @@ namespace Nez.DeferredLighting
 			return this;
 		}
 
-
 		/// <summary>
 		/// how far does this light reach
 		/// </summary>
@@ -52,7 +50,6 @@ namespace Nez.DeferredLighting
 			base.setRadius( radius );
 			return this;
 		}
-
 
 		/// <summary>
 		/// brightness of the light
@@ -74,7 +71,6 @@ namespace Nez.DeferredLighting
 			return this;
 		}
 
-
 		/// <summary>
 		/// wrapper for entity.transform.rotation to ease in setting up direction of spots to point at specific locations
 		/// </summary>
@@ -85,6 +81,7 @@ namespace Nez.DeferredLighting
 			entity.transform.rotation = (float)Math.Atan2( direction.Y, direction.X );
 			return this;
 		}
+		
 	}
 }
 

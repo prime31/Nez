@@ -46,7 +46,6 @@ namespace Nez3D
 			}
 		}
 
-
 		public Model3D enableDefaultLighting()
 		{
 			foreach( var mesh in _model.Meshes )
@@ -54,7 +53,6 @@ namespace Nez3D
 					effect.EnableDefaultLighting();
 			return this;
 		}
-
 
 		public override void render( Graphics graphics, Camera camera )
 		{

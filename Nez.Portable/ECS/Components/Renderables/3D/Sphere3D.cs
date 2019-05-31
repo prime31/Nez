@@ -6,6 +6,9 @@ namespace Nez
 {
 	public class Sphere3D : GeometricPrimitive3D
 	{
+		public Sphere3D() : this( 5, Color.Red )
+		{}
+
 		public Sphere3D( int tessellation, Color color )
 		{
 			var radius = 0.5f;

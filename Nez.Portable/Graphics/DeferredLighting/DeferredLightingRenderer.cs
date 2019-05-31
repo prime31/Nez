@@ -28,13 +28,21 @@ namespace Nez.DeferredLighting
 		/// ambient lighting color. Alpha is ignored
 		/// </summary>
 		/// <value>The color of the ambient.</value>
-		public Color ambientColor { get { return _ambientColor; } }
+		public Color ambientColor
+		{
+			get => _ambientColor;
+			set => setAmbientColor( value );
+		} 
 
 		/// <summary>
 		/// clear color for the diffuse portion of the gbuffer
 		/// </summary>
 		/// <value>The color of the clear.</value>
-		public Color clearColor { get { return _clearColor; } }
+		public Color clearColor
+		{
+			get => _clearColor;
+			set => setClearColor( value );
+		}
 
 		/// <summary>
 		/// single pixel texture of a neutral normal map. This will effectively make the object have only diffuse lighting if applied as the normal map.
@@ -95,7 +103,6 @@ namespace Nez.DeferredLighting
 				.setClearColor( Color.CornflowerBlue );
 		}
 
-
 		/// <summary>
 		/// we override render completely here so we can do our thing with multiple render targets
 		/// </summary>
@@ -110,7 +117,6 @@ namespace Nez.DeferredLighting
 			if( enableDebugBufferRender )
 				renderAllBuffers( scene );
 		}
-
 
 		protected override void debugRender( Scene scene, Camera cam )
 		{
@@ -152,7 +158,6 @@ namespace Nez.DeferredLighting
 			return this;
 		}
 
-
 		/// <summary>
 		/// clear color for the diffuse portion of the gbuffer
 		/// </summary>
@@ -180,7 +185,6 @@ namespace Nez.DeferredLighting
 			_quadMesh.render();
 		}
 
-
 		void renderSprites( Scene scene )
 		{
 			beginRender( scene.camera );
@@ -202,7 +206,6 @@ namespace Nez.DeferredLighting
 			endRender();
 		}
 
-
 		void renderLights( Scene scene )
 		{
 			// bind the normalMap and update the Effect with our camera
@@ -217,7 +220,7 @@ namespace Nez.DeferredLighting
 			var renderables = scene.renderableComponents.componentsWithRenderLayer( _lightLayer );
 			for( var i = 0; i < renderables.length; i++ )
 			{
-				Assert.isTrue( renderables.buffer[i] is DeferredLight, "Found a Renderable in the lightLayer that is not a DeferredLight!" );
+				Insist.isTrue( renderables.buffer[i] is DeferredLight, "Found a Renderable in the lightLayer that is not a DeferredLight!" );
 				var renderable = renderables.buffer[i];
 				if( renderable.enabled )
 				{
@@ -227,7 +230,6 @@ namespace Nez.DeferredLighting
 				}
 			}
 		}
-
 
 		void renderFinalCombine( Scene scene )
 		{
@@ -239,7 +241,6 @@ namespace Nez.DeferredLighting
 			_lightEffect.prepareForFinalCombine( diffuseRT, lightRT, normalRT );
 			_quadMesh.render();
 		}
-
 
 		void renderAllBuffers( Scene scene )
 		{
@@ -283,13 +284,11 @@ namespace Nez.DeferredLighting
 				renderLight( light as DirLight );
 		}
 
-
 		void renderLight( DirLight light )
 		{
 			_lightEffect.updateForLight( light );
 			_quadMesh.render();
 		}
-
 
 		void renderLight( PointLight light )
 		{
@@ -297,13 +296,11 @@ namespace Nez.DeferredLighting
 			_polygonMesh.render();
 		}
 
-
 		void renderLight( SpotLight light )
 		{
 			_lightEffect.updateForLight( light );
 			_polygonMesh.render();
 		}
-
 
 		void renderLight( AreaLight light )
 		{
@@ -331,7 +328,6 @@ namespace Nez.DeferredLighting
 			}
 		}
 
-
 		public override void unload()
 		{
 			_lightEffect.Dispose();
@@ -342,6 +338,8 @@ namespace Nez.DeferredLighting
 
 			if( _nullNormalMapTexture != null )
 				_nullNormalMapTexture.Dispose();
+			
+			base.unload();
 		}
 
 	}

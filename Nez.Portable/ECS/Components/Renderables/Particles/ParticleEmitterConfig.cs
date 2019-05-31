@@ -6,6 +6,7 @@ using Nez.Textures;
 
 namespace Nez.Particles
 {
+	[Serializable]
 	public class ParticleEmitterConfig
 	{
 		public Subtexture subtexture;
@@ -29,8 +30,8 @@ namespace Nez.Particles
 		public Vector2 gravity;
 		public float radialAcceleration, radialAccelVariance;
 		public float tangentialAcceleration, tangentialAccelVariance;
-		public Color startColor, startColorVariance;
-		public Color finishColor, finishColorVariance;
+		public Color startColor = Color.White, startColorVariance = Color.White;
+		public Color finishColor = Color.Black, finishColorVariance = Color.Black;
 		public uint maxParticles;
 		public float startParticleSize, startParticleSizeVariance;
 		public float finishParticleSize, finishParticleSizeVariance;

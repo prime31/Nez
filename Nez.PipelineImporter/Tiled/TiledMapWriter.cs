@@ -165,6 +165,7 @@ namespace Nez.TiledMaps
 					writer.Write( (int)obj.width );
 					writer.Write( (int)obj.height );
 					writer.Write( obj.rotation );
+					writer.Write( obj.gid );
 					writer.Write( obj.visible );
 
 					if( obj.ellipse != null )

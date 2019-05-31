@@ -22,7 +22,6 @@ namespace Nez
 			this.renderLayers = renderLayers;
 		}
 
-
 		public override void render( Scene scene )
 		{
 			var cam = camera ?? scene.camera;
@@ -45,10 +44,10 @@ namespace Nez
 			endRender();
 		}
 
-
 		protected override void debugRender( Scene scene, Camera cam )
 		{
-			base.debugRender( scene, cam );
+			Graphics.instance.batcher.end();
+			Graphics.instance.batcher.begin( cam.transformMatrix );
 
 			for( var i = 0; i < renderLayers.Length; i++ )
 			{

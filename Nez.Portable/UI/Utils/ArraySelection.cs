@@ -20,7 +20,7 @@ namespace Nez.UI
 
 		public override void choose( T item )
 		{
-			Assert.isNotNull( item, "item cannot be null" );
+			Insist.isNotNull( item, "item cannot be null" );
 			if( _isDisabled )
 				return;
 			

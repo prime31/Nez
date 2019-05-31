@@ -21,11 +21,6 @@ namespace Nez
 		public readonly int executionOrder = 0;
 
 		/// <summary>
-		/// the Scene this PostProcessor resides in
-		/// </summary>
-		public Scene scene;
-
-		/// <summary>
 		/// The effect used to render with
 		/// </summary>
 		public Effect effect;
@@ -40,6 +35,11 @@ namespace Nez
 		/// </summary>
 		public BlendState blendState = BlendState.Opaque;
 
+		/// <summary>
+		/// the Scene this PostProcessor is attached to or null
+		/// </summary>
+		protected internal Scene _scene;
+
 
 		public PostProcessor( int executionOrder, Effect effect = null )
 		{
@@ -48,14 +48,14 @@ namespace Nez
 			this.effect = effect;
 		}
 
-
 		/// <summary>
-		/// called when the PostProcessor is added to the scene. The scene field is not valid until this is called
+		/// called when the PostProcessor is added to the Scene. Subclasses must base!
 		/// </summary>
 		/// <param name="scene">Scene.</param>
-		public virtual void onAddedToScene()
-		{}
-
+		public virtual void onAddedToScene( Scene scene )
+		{
+			_scene = scene;
+		}
 
 		/// <summary>
 		/// called when the default scene RenderTarget is resized. If a PostProcessor is added to a scene before it begins this method will be
@@ -66,7 +66,6 @@ namespace Nez
 		/// <param name="newHeight">New height.</param>
 		public virtual void onSceneBackBufferSizeChanged( int newWidth, int newHeight )
 		{}
-
 
 		/// <summary>
 		/// this is the meat method here. The source passed in contains the full scene with any previous PostProcessors
@@ -83,13 +82,20 @@ namespace Nez
 			drawFullscreenQuad( source, destination, effect );
 		}
 
-
 		/// <summary>
-		/// called when a scene is ended. use this for cleanup.
+		/// called when a scene is ended or this PostProcessor is removed. use this for cleanup.
 		/// </summary>
 		public virtual void unload()
-		{}
+		{
+			// Nez-specific Effects will have a null name. We don't want to try to remove them.
+			if( effect != null && effect.Name != null )
+			{
+				_scene.content.unloadEffect( effect );
+				effect = null;
+			}
 
+			_scene = null;
+		}
 
 		/// <summary>
 		/// helper for drawing a texture into a rendertarget, optionally using a custom shader to apply postprocessing effects.
@@ -100,7 +106,6 @@ namespace Nez
 			drawFullscreenQuad( texture, renderTarget.Width, renderTarget.Height, effect );
 		}
 
-
 		/// <summary>
 		/// helper for drawing a texture into the current rendertarget, optionally using a custom shader to apply postprocessing effects.
 		/// </summary>
@@ -110,7 +115,6 @@ namespace Nez
 			Graphics.instance.batcher.draw( texture, new Rectangle( 0, 0, width, height ), Color.White );
 			Graphics.instance.batcher.end();
 		}
-
 
 		public int CompareTo( PostProcessor other )
 		{

@@ -10,7 +10,7 @@ Nez provides a set of basic systems that you can directly use or that you can ex
 
 
 ## EntitySystem
-The base of all systems. It provied an unsorted list of entities matching the components required.
+The base of all systems. It provides an unsorted list of entities matching the components required.
 
 Here's an example of sorting the entities before consuming them for whatever use you might need.
 

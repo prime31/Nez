@@ -49,7 +49,7 @@ namespace Nez.AI.BehaviorTrees
 
 		public override TaskStatus update( T context )
 		{
-			Assert.isNotNull( child, "child must not be null" );
+			Insist.isNotNull( child, "child must not be null" );
 
 			// early out if we are done. we check here and after running just in case the count is 0
 			if( !repeatForever && _iterationCount == count )

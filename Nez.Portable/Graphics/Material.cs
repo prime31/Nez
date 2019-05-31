@@ -11,14 +11,12 @@ namespace Nez
 	{
 		public new T effect
 		{
-			get { return (T)base.effect; }
-			set { base.effect = value; }
+			get => (T)base.effect;
+			set => base.effect = value;
 		}
-
 
 		public Material()
 		{}
-
 
 		public Material( T effect ) : base( effect )
 		{}
@@ -77,7 +75,6 @@ namespace Nez
 			};
 		}
 
-
 		public static Material stencilRead( int stencilRef = 1 )
 		{
 			return new Material
@@ -91,7 +88,6 @@ namespace Nez
 				}
 			};
 		}
-
 
 		public static Material blendDarken()
 		{
@@ -107,7 +103,6 @@ namespace Nez
 			};
 		}
 
-
 		public static Material blendLighten()
 		{
 			return new Material {
@@ -122,7 +117,6 @@ namespace Nez
 			};
 		}
 
-
 		public static Material blendScreen()
 		{
 			return new Material {
@@ -133,7 +127,6 @@ namespace Nez
 				}
 			};
 		}
-
 
 		public static Material blendMultiply()
 		{
@@ -166,7 +159,6 @@ namespace Nez
 			};
 		}
 
-
 		public static Material blendLinearDodge()
 		{
 			return new Material {
@@ -177,7 +169,6 @@ namespace Nez
 				}
 			};
 		}
-
 
 		public static Material blendLinearBurn()
 		{
@@ -190,7 +181,6 @@ namespace Nez
 			};
 		}
 
-
 		public static Material blendDifference()
 		{
 			return new Material {
@@ -201,7 +191,6 @@ namespace Nez
 				}
 			};
 		}
-
 
 		public static Material blendSubtractive()
 		{
@@ -218,7 +207,6 @@ namespace Nez
 				}
 			};
 		}
-
 
 		public static Material blendAdditive()
 		{
@@ -240,12 +228,10 @@ namespace Nez
 		public Material()
 		{}
 
-
 		public Material( Effect effect )
 		{
 			this.effect = effect;
 		}
-
 
 		public Material( BlendState blendState, Effect effect = null )
 		{
@@ -253,22 +239,20 @@ namespace Nez
 			this.effect = effect;
 		}
 
-
 		public Material( DepthStencilState depthStencilState, Effect effect = null )
 		{
 			this.depthStencilState = depthStencilState;
 			this.effect = effect;
 		}
 
-
 		~Material()
 		{
 			Dispose();
 		}
 
-
 		public virtual void Dispose()
 		{
+			// dispose of our state only if they are not using the shared instances
 			if( blendState != null && blendState != BlendState.AlphaBlend )
 			{
 				blendState.Dispose();
@@ -294,7 +278,6 @@ namespace Nez
 			}
 		}
 
-
 		/// <summary>
 		/// called when the Material is initialy set right before Batcher.begin to allow any Effects that have parameters set if necessary
 		/// based on the Camera Matrix such as to set the MatrixTransform via camera.viewProjectionMatrix mimicking what Batcher does. This will
@@ -304,9 +287,6 @@ namespace Nez
 		public virtual void onPreRender( Camera camera )
 		{}
 
-
-		/// <Docs>To be added.</Docs>
-		/// <para>Returns the sort order of the current instance compared to the specified object.</para>
 		/// <summary>
 		/// very basic here. We only check if the pointers are the same
 		/// </summary>
@@ -323,7 +303,6 @@ namespace Nez
 			return -1;
 		}
 
-
 		/// <summary>
 		/// clones the Material. Note that the Effect is not cloned. It is the same instance as the original Material.
 		/// </summary>
@@ -336,6 +315,7 @@ namespace Nez
 				effect = effect
 			};
 		}
+	
 	}
 }
 

@@ -96,7 +96,7 @@ Several virtual input classes are also provided which let you combine multiple i
 
 
 ## Debug
-The Debug class provides logging and a few drawing methods. The Assert class provides an assortment of assert conditions. These classes are only compiled into DEBUG builds so you can use them freely throughout your code and when you do a non-DEBUG build none of them will be compiled into your game.
+The Debug class provides logging and a few drawing methods. The `Insist` class provides an assortment of assert conditions. These classes are only compiled into DEBUG builds so you can use them freely throughout your code and when you do a non-DEBUG build none of them will be compiled into your game.
 
 
 

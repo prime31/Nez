@@ -144,7 +144,7 @@ namespace Nez
 		/// <param name="layerMask">Layer mask.</param>
 		public static int linecastAll( Vector2 start, Vector2 end, RaycastHit[] hits, int layerMask = allLayers )
 		{
-			Assert.isFalse( hits.Length == 0, "An empty hits array was passed in. No hits will ever be returned." );
+			Insist.isFalse( hits.Length == 0, "An empty hits array was passed in. No hits will ever be returned." );
 			return _spatialHash.linecast( start, end, hits, layerMask );
 		}
 
@@ -184,7 +184,7 @@ namespace Nez
 		/// <param name="layerMask">Layer mask.</param>
 		public static int overlapRectangleAll( ref RectangleF rect, Collider[] results, int layerMask = allLayers )
 		{
-			Assert.isFalse( results.Length == 0, "An empty results array was passed in. No results will ever be returned." );
+			Insist.isFalse( results.Length == 0, "An empty results array was passed in. No results will ever be returned." );
 			return _spatialHash.overlapRectangle( ref rect, results, layerMask );
 		}
 
@@ -214,7 +214,7 @@ namespace Nez
 		/// <param name="layerMask">Layer mask.</param>
 		public static int overlapCircleAll( Vector2 center, float radius, Collider[] results, int layerMask = allLayers )
 		{
-			Assert.isFalse( results.Length == 0, "An empty results array was passed in. No results will ever be returned." );
+			Insist.isFalse( results.Length == 0, "An empty results array was passed in. No results will ever be returned." );
 			return _spatialHash.overlapCircle( center, radius, results, layerMask );
 		}
 

@@ -14,16 +14,17 @@ namespace Nez
 		/// </summary>
 		public BloomSettings settings
 		{
-			get { return _settings; }
-			set { setBloomSettings( value ); }
+			get => _settings;
+			set => setBloomSettings( value );
 		}
 
 		/// <summary>
 		/// scale of the internal RenderTargets. For high resolution renders a half sized RT is usually more than enough. Defaults to 1.
 		/// </summary>
+		[Range( 0.25f, 1 )]
 		public float renderTargetScale
 		{
-			get { return _renderTargetScale; }
+			get => _renderTargetScale;
 			set
 			{
 				if( _renderTargetScale != value )
@@ -52,9 +53,10 @@ namespace Nez
 			_settings = BloomSettings.presetSettings[3];
 		}
 
-
-		public override void onAddedToScene()
+		public override void onAddedToScene( Scene scene )
 		{
+			base.onAddedToScene( scene );
+
 			_bloomExtractEffect = scene.content.loadEffect<Effect>( "bloomExtract", EffectResource.bloomExtractBytes );
 			_bloomCombineEffect = scene.content.loadEffect<Effect>( "bloomCombine", EffectResource.bloomCombineBytes );
 			_gaussianBlurEffect = scene.content.loadNezEffect<GaussianBlurEffect>();
@@ -70,6 +72,14 @@ namespace Nez
 			setBloomSettings( _settings );
 		}
 
+		public override void unload()
+		{
+			_scene.content.unloadEffect( _bloomExtractEffect );
+			_scene.content.unloadEffect( _bloomCombineEffect );
+			_scene.content.unloadEffect( _gaussianBlurEffect );
+
+			base.unload();
+		}
 
 		/// <summary>
 		/// sets the settings used by the bloom and blur shaders
@@ -89,29 +99,26 @@ namespace Nez
 			_gaussianBlurEffect.blurAmount = _settings.blurAmount;
 		}
 
-
 		public override void onSceneBackBufferSizeChanged( int newWidth, int newHeight )
 		{
 			updateBlurEffectDeltas();
 		}
-
 
 		/// <summary>
 		/// updates the Effect with the new vertical and horizontal deltas
 		/// </summary>
 		void updateBlurEffectDeltas()
 		{
-			var sceneRenderTargetSize = scene.sceneRenderTargetSize;
+			var sceneRenderTargetSize = _scene.sceneRenderTargetSize;
 			_gaussianBlurEffect.horizontalBlurDelta = 1f / ( sceneRenderTargetSize.X * _renderTargetScale );
 			_gaussianBlurEffect.verticalBlurDelta = 1f / ( sceneRenderTargetSize.Y * _renderTargetScale );
 		}
-
 
 		public override void process( RenderTarget2D source, RenderTarget2D destination )
 		{
 			// aquire two rendertargets for the bloom processing. These can be scaled via renderTargetScale in order to minimize fillrate costs. Reducing
 			// the resolution in this way doesn't hurt quality, because we are going to be blurring the bloom images in any case.
-			var sceneRenderTargetSize = scene.sceneRenderTargetSize;
+			var sceneRenderTargetSize = _scene.sceneRenderTargetSize;
 			var renderTarget1 = RenderTarget.getTemporary( (int)( sceneRenderTargetSize.X * renderTargetScale ), (int)( sceneRenderTargetSize.Y * renderTargetScale ), DepthFormat.None );
 			var renderTarget2 = RenderTarget.getTemporary( (int)( sceneRenderTargetSize.X * renderTargetScale ), (int)( sceneRenderTargetSize.Y * renderTargetScale ), DepthFormat.None );
 

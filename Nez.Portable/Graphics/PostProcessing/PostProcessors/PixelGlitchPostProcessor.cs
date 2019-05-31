@@ -17,7 +17,7 @@ namespace Nez
 		/// <value>The size of the vertical.</value>
 		public float verticalSize
 		{
-			get { return _verticalSize; }
+			get => _verticalSize;
 			set
 			{
 				if( _verticalSize != value )
@@ -36,7 +36,7 @@ namespace Nez
 		/// <value>The horizontal offset.</value>
 		public float horizontalOffset
 		{
-			get { return _horizontalOffset; }
+			get => _horizontalOffset;
 			set
 			{
 				if( _horizontalOffset != value )
@@ -49,7 +49,6 @@ namespace Nez
 			}
 		}
 
-
 		float _verticalSize = 5f;
 		float _horizontalOffset = 10f;
 		EffectParameter _verticalSizeParam;
@@ -60,9 +59,9 @@ namespace Nez
 		public PixelGlitchPostProcessor( int executionOrder ) : base( executionOrder )
 		{}
 
-
-		public override void onAddedToScene()
+		public override void onAddedToScene( Scene scene )
 		{
+			base.onAddedToScene( scene );
 			effect = scene.content.loadEffect<Effect>( "pixelGlitch", EffectResource.pixelGlitchBytes );
 
 			_verticalSizeParam = effect.Parameters["_verticalSize"];
@@ -74,6 +73,11 @@ namespace Nez
 			_screenSizeParam.SetValue( new Vector2( Screen.width, Screen.height ) );
 		}
 
+		public override void unload()
+		{
+			_scene.content.unloadEffect( effect );
+			base.unload();
+		}
 
 		public override void onSceneBackBufferSizeChanged( int newWidth, int newHeight )
 		{

@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using Microsoft.Xna.Framework.Input;
 
 
@@ -63,6 +63,7 @@ namespace Nez
 		public override void update()
 		{
 			_bufferCounter -= Time.unscaledDeltaTime;
+			isRepeating = false;
 
 			var check = false;
 			for( var i = 0; i < nodes.Count; i++ )
@@ -86,7 +87,6 @@ namespace Nez
 			}
 			else if( _willRepeat )
 			{
-				isRepeating = false;
 				if( _repeatCounter == 0 )
 				{
 					_repeatCounter = firstRepeatTime;

@@ -24,10 +24,9 @@ namespace Nez
 		/// update order of the SceneComponents on this Scene
 		/// </summary>
 		/// <value>The order.</value>
-		public int updateOrder { get { return _updateOrder; } }
+		public int updateOrder { get; private set; } = 0;
 
 		bool _enabled = true;
-		int _updateOrder = 0;
 
 
 		#region SceneComponent Lifecycle
@@ -91,9 +90,9 @@ namespace Nez
 		/// <param name="updateOrder">Update order.</param>
 		public SceneComponent setUpdateOrder( int updateOrder )
 		{
-			if( _updateOrder != updateOrder )
+			if( this.updateOrder != updateOrder )
 			{
-				_updateOrder = updateOrder;
+				this.updateOrder = updateOrder;
 				Core.scene._sceneComponents.sort();
 			}
 			return this;
@@ -104,7 +103,7 @@ namespace Nez
 
 		int IComparable<SceneComponent>.CompareTo( SceneComponent other )
 		{
-			return _updateOrder.CompareTo( other._updateOrder );
+			return updateOrder.CompareTo( other.updateOrder );
 		}
 
 	}

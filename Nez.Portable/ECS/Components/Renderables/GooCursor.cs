@@ -68,7 +68,10 @@ namespace Nez
 		TrailNode[] _trailNodes;
 
 
-		public GooCursor( int trailNodeCount = 50 )
+		public GooCursor() : this( 50 )
+		{}
+
+		public GooCursor( int trailNodeCount )
 		{
 			_trailNodeCount = trailNodeCount;
 			_trailNodes = new TrailNode[_trailNodeCount];
@@ -78,13 +81,11 @@ namespace Nez
 				_trailNodes[i].position = Input.scaledMousePosition;
 		}
 
-
 		public override void onAddedToEntity()
 		{
 			_cursorTexture = entity.scene.content.Load<Texture2D>( "nez/textures/gooCursor" );
 			_textureCenter = new Vector2( _cursorTexture.Width / 2, _cursorTexture.Height / 2 );
 		}
-
 
 		void IUpdatable.update()
 		{
@@ -109,7 +110,6 @@ namespace Nez
 				_trailNodes[i] = node;
 			}
 		}
-
 
 		public override void render( Graphics graphics, Camera camera )
 		{
@@ -152,6 +152,7 @@ namespace Nez
 			public Vector2 position;
 			public Vector2 velocity;
 		}
+
 	}
 }
 

@@ -14,7 +14,9 @@ Nez aims to be a lightweight 2D framework that sits on top of MonoGame/FNA. It p
 - Farseer Physics (based on Box2D) integration for when you need a full physics simulation
 - efficient coroutines for breaking up large tasks across multiple frames or animation timing (Core.startCoroutine)
 - in-game debug console extendable by adding an attribute to any static method. Just press the tilde key like in the old days with Quake. Out of the box, it includes a visual physics debugging system, asset tracker, basic profiler and more. Just type 'help' to see all the commands or type 'help COMMAND' to see specific hints.
+- Dear ImGui in-game debug panels with the ability to wire up your own ImGui windows
 - in-game Component inspector. Open the debug console and use the command `inspect ENTITY_NAME` to display and edit fields/properties and call methods with a button click.
+- Nez.Persistence Json and binary serialization. Json includes the ability to automatically resolve references and deal with polymorphic classes
 - extensible rendering system. Add/remove renderers and post processors as needed. Renderables are sorted by render layer first then layer depth for maximum flexibility out of the box.
 - pathfinding support via Astar and Breadth First Search
 - deferred lighting engine with normal map support and both runtime and offline normal map generation
@@ -32,7 +34,6 @@ Nez aims to be a lightweight 2D framework that sits on top of MonoGame/FNA. It p
 
 Nez Systems
 ==========
-There are various systems documented separately on the [Nez website docs.](http://prime31.github.io/Nez/documentation/setup/installation) You can also access the markdown files directly below. Note that sometimes the Nez website docs lag behind the markdown files linked below.
 
 - [Nez-Core](FAQs/Nez-Core.md)
 - [Scene-Entity-Component](FAQs/Scene-Entity-Component.md)
@@ -46,6 +47,8 @@ There are various systems documented separately on the [Nez website docs.](http:
 - [Verlet Physics](FAQs/Verlet.md)
 - [Entity Processing Systems](FAQs/EntitySystems.md)
 - [Nez.UI](FAQs/UI.md)
+- [Nez.Persistence](Nez.Persistence/README.md)
+- [Nez.ImGui](Nez.ImGui/README.md)
 - [SVG Support](FAQs/SVG.md)
 - [AI (FSM, Behavior Tree, GOAP, Utility AI)](FAQs/AI.md)
 - [Deferred Lighting](FAQs/DeferredLighting.md)
@@ -63,7 +66,10 @@ Setup
 - add the `Nez.Portable/Nez.csproj` project to your solution and add a reference to it in your main project
 - make your main Game class (`Game1.cs` in a default project) subclass `Nez.Core`
 
-If you intend to use any of the built in Effects or PostProcessors you should also copy or link the `DefaultContent/effects` folder into your projects `Content/nez/effects` folder. Be sure to set the Build Action to Content and enable the "Copy to output directory" property so they get copied into your compiled game.
+If you intend to use any of the built in Effects or PostProcessors you should also copy or link the `DefaultContent/effects` folder into your projects `Content/nez/effects` folder and the `DefaultContent/textures` folder into `Content/nez/textures`. Be sure to set the Build Action to Content and enable the "Copy to output directory" property so they get copied into your compiled game.
+
+Note: if you get compile errors referencing a missing `project.assets.json` file run `msbuild Nez.sln /t:restore` in the root Nez folder to restore them.
+
 
 #### (optional) Pipeline Tool setup for access to the Nez Pipeline importers
 
@@ -116,7 +122,6 @@ Nez comes stock with a decent bunch of Pipeline tool importers including:
 - **Particle Designer Importer**: imports [Particle Designer](https://71squared.com/particledesigner) particle systems for use with the Nez particle system
 - **LibGdxAtlases**: imports libGDX texture atlases including nine patch support
 - **Texture Packer**: imports a [TexturePacker](https://www.codeandweb.com/texturepacker) atlas and JSON file
-- **Overlap2D**: imports [Overlap2D](http://overlap2d.com/) projects. Imports most of the data but currently only offers renderers for the basics (no fancy stuff like Spriter animations, lights, etc).
 - **UISkin Importer**: imports uiskin files (JSON format) that are converted to UISkins. See the [UI page](FAQs/UI.md) for an example and details of the JSON format.
 - **Normal Map Generator**: generates normal maps from standard textures
 - **XMLTemplateMaker**: this isn't so much an importer as a helper to make your own importer. Pass it a class and it spits out an XML template that you can use for your own custom XML-to-object importers.
@@ -130,7 +135,21 @@ You can find the samples repo [here](https://github.com/prime31/Nez-Samples). It
 
 Using Nez with FNA
 ==========
-See the [Nez.FNA repo](https://github.com/prime31/Nez.FNA) for details.
+Note that you have to install FNA the required FNA native libs per the [FNA documentation](https://github.com/FNA-XNA/FNA/wiki/1:-Download-and-Update-FNA). Here is what you need to do to get up and running with Nez + FNA:
+
+- clone this repo recursively
+- open the Nez solution (Nez/Nez.sln) and build it. This will cause the NuGet packages to refresh.
+- download/clone FNA
+- open your game's project and add a reference to the FNA and Nez.FNA
+- (optinally) add references to Nez.FNA.ImGui or Nez.FNA.FarseerPhysics if you need them
+
+
+The folder structure the cscproj files expect is something like this:
+
+- TopLevelFolderHousingEverything
+	- FNA
+	- YourGameProject
+	- Nez
 
 
 

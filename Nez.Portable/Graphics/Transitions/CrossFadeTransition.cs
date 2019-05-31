@@ -30,10 +30,8 @@ namespace Nez
 		public CrossFadeTransition( Func<Scene> sceneLoadAction ) : base( sceneLoadAction, true )
 		{}
 
-
 		public CrossFadeTransition() : this( null )
 		{}
-
 
 		public override IEnumerator onBeginTransition()
 		{
@@ -53,7 +51,6 @@ namespace Nez
 
 			transitionComplete();
 		}
-
 
 		public override void render( Graphics graphics )
 		{

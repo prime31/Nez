@@ -283,13 +283,19 @@ namespace Nez.Tiled
 		/// <param name="cameraClipBounds">Camera clip bounds.</param>
 		public void draw( Batcher batcher, Vector2 position, float layerDepth, RectangleF cameraClipBounds )
 		{
+			draw( batcher, position, Vector2.One, layerDepth, cameraClipBounds );
+		}
+
+
+		public void draw( Batcher batcher, Vector2 position, Vector2 scale, float layerDepth, RectangleF cameraClipBounds )
+		{
 			// render any visible image or tile layer
 			foreach( var layer in layers )
 			{
 				if( !layer.visible )
 					continue;
 
-				layer.draw( batcher, position, layerDepth, cameraClipBounds );
+				layer.draw( batcher, position, scale, layerDepth, cameraClipBounds );
 			}
 		}
 

@@ -28,12 +28,13 @@ namespace Nez
 			shape = new Polygon( points );
 		}
 
-
 		public PolygonCollider( int vertCount, float radius )
 		{
 			shape = new Polygon( vertCount, radius );
 		}
 
+		public PolygonCollider() : this( 6, 40 )
+		{}
 
 		public override void debugRender( Graphics graphics )
 		{

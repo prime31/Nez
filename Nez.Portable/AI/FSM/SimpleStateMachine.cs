@@ -12,7 +12,7 @@ namespace Nez.AI.FSM
 	/// Note: if you use an enum as the contraint you can avoid allocations/boxing in Mono by doing what the Core
 	/// Emitter does for its enum: pass in a IEqualityComparer to the constructor.
 	/// </summary>
-	public class SimpleStateMachine<TEnum> : Component, IUpdatable where TEnum : struct, IComparable, IFormattable
+	public abstract class SimpleStateMachine<TEnum> : Component, IUpdatable where TEnum : struct, IComparable, IFormattable
 	{
 		class StateMethodCache
 		{
@@ -29,10 +29,7 @@ namespace Nez.AI.FSM
 		TEnum _currentState;
 		protected TEnum currentState
 		{
-			get
-			{
-				return _currentState;
-			}
+			get => _currentState;
 			set
 			{
 				// dont change to the current state
@@ -78,7 +75,6 @@ namespace Nez.AI.FSM
 				configureAndCacheState( e );
 		}
 
-
 		public virtual void update()
 		{
 			elapsedTimeInState += Time.deltaTime;
@@ -86,7 +82,6 @@ namespace Nez.AI.FSM
 			if( _stateMethods.tick != null )
 				_stateMethods.tick();
 		}
-
 
 		void configureAndCacheState( TEnum stateEnum )
 		{
@@ -99,7 +94,6 @@ namespace Nez.AI.FSM
 
 			_stateCache[stateEnum] = state;
 		}
-
 
 		Action getDelegateForMethod( string methodName )
 		{

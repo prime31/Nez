@@ -33,15 +33,17 @@ namespace Nez.Shadows
 		/// <summary>
 		/// Radius of influence of the light
 		/// </summary>
+		[Range( 0, 2000 )]
 		public float radius
 		{
-			get { return _radius; }
-			set { setRadius( value ); }
+			get => _radius;
+			set => setRadius( value );
 		}
 
 		/// <summary>
 		/// Power of the light, from 0 (turned off) to 1 for maximum brightness        
 		/// </summary>
+		[Range( 0, 50 )]
 		public float power;
 
 		protected float _radius;
@@ -55,13 +57,14 @@ namespace Nez.Shadows
 		static protected Collider[] _colliderCache = new Collider[10];
 
 
+		public PolyLight() : this( 400 )
+		{}
+
 		public PolyLight( float radius ) : this( radius, Color.White )
 		{ }
 
-
 		public PolyLight( float radius, Color color ) : this( radius, color, 1.0f )
 		{ }
-
 
 		public PolyLight( float radius, Color color, float power )
 		{
@@ -70,7 +73,6 @@ namespace Nez.Shadows
 			this.color = color;
 			computeTriangleIndices();
 		}
-
 
 		#region Fluent setters
 
@@ -87,7 +89,6 @@ namespace Nez.Shadows
 
 			return this;
 		}
-
 
 		public PolyLight setPower( float power )
 		{
@@ -106,7 +107,6 @@ namespace Nez.Shadows
 		{
 			return Physics.overlapCircleAll( entity.position + _localOffset, _radius, _colliderCache, collidesWithLayers );
 		}
-
 
 		/// <summary>
 		/// override point for calling through to VisibilityComputer that allows subclasses to setup their visibility boundaries for
@@ -127,8 +127,19 @@ namespace Nez.Shadows
 			_visibility = new VisibilityComputer();
 		}
 
+		public override void render( Graphics graphics, Camera camera ) => renderImpl( graphics, camera, false );
 
-		public override void render( Graphics graphics, Camera camera )
+		public override void debugRender( Graphics graphics )
+		{
+			// here, we just assume the Camera being used by the Renderer is the standard Scene Camera
+			renderImpl( Graphics.instance, entity.scene.camera, true );
+
+			// draw a square for our pivot/origin and draw our bounds
+			graphics.batcher.drawPixel( entity.transform.position + _localOffset, Debug.Colors.renderableCenter, 4 );
+			graphics.batcher.drawHollowRect( bounds, Debug.Colors.renderableBounds );
+		}
+
+		void renderImpl( Graphics graphics, Camera camera, bool debugDraw )
 		{
 			if( power > 0 && isVisibleFromCamera( camera ) )
 			{
@@ -156,28 +167,22 @@ namespace Nez.Shadows
 				Core.graphicsDevice.BlendState = BlendState.Additive;
 				Core.graphicsDevice.RasterizerState = RasterizerState.CullNone;
 
-				// wireframe debug
-				//var rasterizerState = new RasterizerState();
-				//rasterizerState.FillMode = FillMode.WireFrame;
-				//rasterizerState.CullMode = CullMode.None;
-				//Core.graphicsDevice.RasterizerState = rasterizerState;
+				if( debugDraw )
+				{
+					var rasterizerState = new RasterizerState();
+					rasterizerState.FillMode = FillMode.WireFrame;
+					rasterizerState.CullMode = CullMode.None;
+					Core.graphicsDevice.RasterizerState = rasterizerState;
+				}
 
 				// Apply the effect
-				_lightEffect.Parameters["viewProjectionMatrix"].SetValue( entity.scene.camera.viewProjectionMatrix );
+				_lightEffect.Parameters["viewProjectionMatrix"].SetValue( camera.viewProjectionMatrix );
 				_lightEffect.Parameters["lightSource"].SetValue( entity.transform.position );
 				_lightEffect.Parameters["lightColor"].SetValue( color.ToVector3() * power );
 				_lightEffect.Techniques[0].Passes[0].Apply();
 
 				Core.graphicsDevice.DrawUserIndexedPrimitives( PrimitiveType.TriangleList, _vertices.buffer, 0, _vertices.length, _indices.buffer, 0, primitiveCount );
 			}
-		}
-
-
-		public override void debugRender( Graphics graphics )
-		{
-			// draw a square for our pivot/origin and draw our bounds
-			graphics.batcher.drawPixel( entity.transform.position + _localOffset, Debug.Colors.renderableCenter, 4 );
-			graphics.batcher.drawHollowRect( bounds, Debug.Colors.renderableBounds );
 		}
 
 		#endregion
@@ -198,7 +203,6 @@ namespace Nez.Shadows
 			_vertices.length++;
 		}
 
-
 		void computeTriangleIndices( int totalTris = 20 )
 		{
 			_indices.reset();
@@ -211,7 +215,6 @@ namespace Nez.Shadows
 				_indices.add( (short)( i + 1 ) );
 			}
 		}
-
 
 		void generateVertsFromEncounters( List<Vector2> encounters )
 		{

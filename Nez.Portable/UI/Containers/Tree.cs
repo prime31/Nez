@@ -469,7 +469,6 @@ namespace Nez.UI.Containers
                 }
 
                 selection.fireChangeEvent();
-                rangeStart = rangeStart;
                 return true;
             }
 

@@ -15,7 +15,7 @@ namespace Nez.IEnumerableExtensions
 		/// <returns>The number of items in the source.</returns>
 		public static int count<TSource>( this IEnumerable<TSource> source )
 		{
-			Assert.isNotNull( source, "source cannot be null" );
+			Insist.isNotNull( source, "source cannot be null" );
 
 			// Optimization for ICollection<T> 
 			var genericCollection = source as ICollection<TSource>;

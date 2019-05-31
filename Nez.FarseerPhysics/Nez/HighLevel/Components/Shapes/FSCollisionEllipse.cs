@@ -21,7 +21,7 @@ namespace Nez.Farseer
 
 		public FSCollisionEllipse( float xRadius, float yRadius, int edgeCount )
 		{
-			Assert.isFalse( edgeCount > Settings.maxPolygonVertices, "edgeCount must be less than Settings.maxPolygonVertices" );
+			Insist.isFalse( edgeCount > Settings.maxPolygonVertices, "edgeCount must be less than Settings.maxPolygonVertices" );
 
 			_xRadius = xRadius;
 			_yRadius = yRadius;
@@ -44,7 +44,7 @@ namespace Nez.Farseer
 
 		public FSCollisionEllipse setEdgeCount( int edgeCount )
 		{
-			Assert.isFalse( edgeCount > Settings.maxPolygonVertices, "edgeCount must be less than Settings.maxPolygonVertices" );
+			Insist.isFalse( edgeCount > Settings.maxPolygonVertices, "edgeCount must be less than Settings.maxPolygonVertices" );
 
 			_edgeCount = edgeCount;
 			_verts = PolygonTools.createEllipse( _xRadius * FSConvert.displayToSim, _yRadius * FSConvert.displayToSim, _edgeCount );

@@ -20,7 +20,7 @@ namespace Nez
 		/// <value>The opacity.</value>
 		public float opacity
 		{
-			set { _textureWipeEffect.Parameters["_opacity"].SetValue( value ); }
+			set => _textureWipeEffect.Parameters["_opacity"].SetValue( value );
 		}
 
 		/// <summary>
@@ -29,7 +29,7 @@ namespace Nez
 		/// <value>The color.</value>
 		public Color color
 		{
-			set { _textureWipeEffect.Parameters["_color"].SetValue( value.ToVector4() ); }
+			set => _textureWipeEffect.Parameters["_color"].SetValue( value.ToVector4() );
 		}
 
 		/// <summary>
@@ -39,7 +39,7 @@ namespace Nez
 		/// <value>The transition texture.</value>
 		public Texture2D transitionTexture
 		{
-			set { _textureWipeEffect.Parameters["_transitionTex"].SetValue( value ); }
+			set => _textureWipeEffect.Parameters["_transitionTex"].SetValue( value );
 		}
 
 		/// <summary>
@@ -48,7 +48,7 @@ namespace Nez
 		/// <value><c>true</c> if use red green channels for distortion; otherwise, <c>false</c>.</value>
 		public bool useRedGreenChannelsForDistortion
 		{
-			set { _textureWipeEffect.CurrentTechnique = _textureWipeEffect.Techniques[value ? "TextureWipeWithDistort" : "TextureWipe"]; }
+			set => _textureWipeEffect.CurrentTechnique = _textureWipeEffect.Techniques[value ? "TextureWipeWithDistort" : "TextureWipe"];
 		}
 
 		/// <summary>
@@ -77,22 +77,18 @@ namespace Nez
 			this.transitionTexture = transitionTexture;
 		}
 
-
 		public TextureWipeTransition( Func<Scene> sceneLoadAction ) : this( sceneLoadAction, Core.content.Load<Texture2D>( "nez/textures/textureWipeTransition/angular" ) )
 		{}
-
 
 		public TextureWipeTransition() : this( null, Core.content.Load<Texture2D>( "nez/textures/textureWipeTransition/angular" ) )
 		{}
 
-
 		public TextureWipeTransition( Texture2D transitionTexture ) : this( null, transitionTexture )
 		{}
 
-
 		public override IEnumerator onBeginTransition()
 		{
-			// create a single pixel transparent texture so we can do our squares out to the next scene
+			// create a single pixel transparent texture. Our shader handles the rest.
 			_overlayTexture = Graphics.createSingleColorTexture( 1, 1, Color.Transparent );
 
 			// obscure the screen
@@ -100,10 +96,6 @@ namespace Nez
 
 			// load up the new Scene
 			yield return Core.startCoroutine( loadNextScene() );
-
-			// dispose of our previousSceneRender. We dont need it anymore.
-			previousSceneRender.Dispose();
-			previousSceneRender = null;
 
 			// undo the effect
 			yield return Core.startCoroutine( tickEffectProgressProperty( _textureWipeEffect, duration, EaseHelper.oppositeEaseType( easeType ), true ) );
@@ -115,13 +107,12 @@ namespace Nez
 			Core.content.unloadEffect( _textureWipeEffect );
 		}
 
-
 		public override void render( Graphics graphics )
 		{
 			Core.graphicsDevice.setRenderTarget( null );
 			graphics.batcher.begin( BlendState.AlphaBlend, Core.defaultSamplerState, DepthStencilState.None, null, _textureWipeEffect );
 
-			// we only render the previousSceneRender while populating the squares
+			// we only render the previousSceneRender until we load up the new Scene
 			if( !_isNewSceneLoaded )
 				graphics.batcher.draw( previousSceneRender, _destinationRect, Color.White );
 			else
@@ -129,6 +120,7 @@ namespace Nez
 
 			graphics.batcher.end();
 		}
+	
 	}
 }
 

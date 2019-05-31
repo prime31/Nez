@@ -25,7 +25,6 @@ namespace Nez
 			}
 		}
 
-
 		/// <summary>
 		/// trims the cache down to cacheCount items
 		/// </summary>
@@ -36,7 +35,6 @@ namespace Nez
 				_objectQueue.Dequeue();
 		}
 
-
 		/// <summary>
 		/// clears out the cache
 		/// </summary>
@@ -44,7 +42,6 @@ namespace Nez
 		{
 			_objectQueue.Clear();
 		}
-
 
 		/// <summary>
 		/// pops an item off the stack if available creating a new item as necessary
@@ -56,7 +53,6 @@ namespace Nez
 
 			return new List<T>();
 		}
-
 
 		/// <summary>
 		/// pushes an item back on the stack

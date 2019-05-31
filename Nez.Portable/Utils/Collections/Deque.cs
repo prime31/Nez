@@ -9,7 +9,7 @@ namespace System.Collections.Generic
 {
 	/// <summary>
 	/// sourced from: https://github.com/tejacques/Deque
-	/// A genetic Deque class. It can be thought of as a double-ended queue, hence Deque. This allows for
+	/// A generic Deque class. It can be thought of as a double-ended queue, hence Deque. This allows for
 	/// an O(1) AddFront, AddBack, RemoveFront, RemoveBack. The Deque also has O(1) indexed lookup, as it is backed
 	/// by a circular array.
 	/// </summary>

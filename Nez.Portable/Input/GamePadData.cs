@@ -9,12 +9,12 @@ namespace Nez
 		/// <summary>
 		/// toggles inverting the left sticks vertical value
 		/// </summary>
-		public bool isLeftStickVertcialInverted = false;
+		public bool isLeftStickVerticalInverted = false;
 
 		/// <summary>
 		/// toggles inverting the right sticks vertical value
 		/// </summary>
-		public bool isRightStickVertcialInverted = false;
+		public bool isRightStickVerticalInverted = false;
 
 		public GamePadDeadZone deadZone = GamePadDeadZone.IndependentAxes;
 
@@ -122,7 +122,7 @@ namespace Nez
 		{
 			var res = _currentState.ThumbSticks.Left;
 
-			if( isLeftStickVertcialInverted )
+			if( isLeftStickVerticalInverted )
 				res.Y = -res.Y;
 
 			return res;
@@ -135,7 +135,7 @@ namespace Nez
 
 			if( res.LengthSquared() < deadzone * deadzone )
 				res = Vector2.Zero;
-			else if( isLeftStickVertcialInverted )
+			else if( isLeftStickVerticalInverted )
 				res.Y = -res.Y;
 
 			return res;
@@ -146,7 +146,7 @@ namespace Nez
 		{
 			var res = _currentState.ThumbSticks.Right;
 
-			if( isRightStickVertcialInverted )
+			if( isRightStickVerticalInverted )
 				res.Y = -res.Y;
 
 			return res;
@@ -159,7 +159,7 @@ namespace Nez
 
 			if( res.LengthSquared() < deadzone * deadzone )
 				res = Vector2.Zero;
-			else if( isRightStickVertcialInverted )
+			else if( isRightStickVerticalInverted )
 				res.Y = -res.Y;
 
 			return res;

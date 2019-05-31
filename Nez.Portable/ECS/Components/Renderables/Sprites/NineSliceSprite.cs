@@ -10,7 +10,7 @@ namespace Nez
 	{
 		public new float width
 		{
-			get { return _finalRenderRect.Width; }
+			get => _finalRenderRect.Width;
 			set
 			{
 				_finalRenderRect.Width = (int)value;
@@ -20,7 +20,7 @@ namespace Nez
 
 		public new float height
 		{
-			get { return _finalRenderRect.Height; }
+			get => _finalRenderRect.Height;
 			set
 			{
 				_finalRenderRect.Height = (int)value;
@@ -60,14 +60,11 @@ namespace Nez
 			this.subtexture = subtexture;
 		}
 
-
 		public NineSliceSprite( Subtexture subtexture, int top, int bottom, int left, int right ) : this( new NinePatchSubtexture( subtexture, left, right, top, bottom ) )
 		{}
 
-
 		public NineSliceSprite( Texture2D texture, int top, int bottom, int left, int right ) : this( new NinePatchSubtexture( texture, left, right, top, bottom) )
 		{}
-
 
 		public override void render( Graphics graphics, Camera camera )
 		{
@@ -88,6 +85,7 @@ namespace Nez
 				graphics.batcher.draw( subtexture, dest, subtexture.ninePatchRects[i], color );
 			}
 		}
+
 	}
 }
 

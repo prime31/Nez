@@ -19,8 +19,8 @@ namespace Nez
 		/// <value>The multiplicative factor.</value>
 		public float multiplicativeFactor
 		{
-			get { return _multiplicativeFactor; }
-			set { setMultiplicativeFactor( value ); }
+			get => _multiplicativeFactor;
+			set => setMultiplicativeFactor( value );
 		}
 
 		/// <summary>
@@ -29,8 +29,8 @@ namespace Nez
 		/// <value><c>true</c> if enable blur; otherwise, <c>false</c>.</value>
 		public bool enableBlur
 		{
-			get { return _blurEnabled; }
-			set { setEnableBlur( value ); }
+			get => _blurEnabled;
+			set => setEnableBlur( value );
 		}
 
 		/// <summary>
@@ -39,8 +39,8 @@ namespace Nez
 		/// </summary>
 		public float blurRenderTargetScale
 		{
-			get { return _blurRenderTargetScale; }
-			set { setBlurRenderTargetScale( value ); }
+			get => _blurRenderTargetScale;
+			set => setBlurRenderTargetScale( value );
 		}
 
 		/// <summary>
@@ -49,7 +49,7 @@ namespace Nez
 		/// <value>The blur amount.</value>
 		public float blurAmount
 		{
-			get { return _blurEffect != null ? _blurEffect.blurAmount : -1; }
+			get => _blurEffect != null ? _blurEffect.blurAmount : -1;
 			set
 			{
 				if( _blurEffect != null )
@@ -70,13 +70,12 @@ namespace Nez
 			_lightsRenderTexture = lightsRenderTexture;
 		}
 
-
 		/// <summary>
 		/// updates the GaussianBlurEffect with the new vertical and horizontal deltas after a back buffer size or blurRenderTargetScale change
 		/// </summary>
 		void updateBlurEffectDeltas()
 		{
-			var sceneRenderTargetSize = scene.sceneRenderTargetSize;
+			var sceneRenderTargetSize = _scene.sceneRenderTargetSize;
 			_blurEffect.horizontalBlurDelta = 1f / ( sceneRenderTargetSize.X * _blurRenderTargetScale );
 			_blurEffect.verticalBlurDelta = 1f / ( sceneRenderTargetSize.Y * _blurRenderTargetScale );
 		}
@@ -93,17 +92,16 @@ namespace Nez
 			return this;
 		}
 
-
 		public PolyLightPostProcessor setEnableBlur( bool enableBlur )
 		{
 			if( enableBlur != _blurEnabled )
 			{
 				_blurEnabled = enableBlur;
 
-				if( _blurEnabled && _blurEffect == null && scene != null )
+				if( _blurEnabled && _blurEffect == null && _scene != null )
 				{
-					_blurEffect = scene.content.loadNezEffect<GaussianBlurEffect>();
-					if( scene.sceneRenderTarget != null )
+					_blurEffect = _scene.content.loadNezEffect<GaussianBlurEffect>();
+					if( _scene.sceneRenderTarget != null )
 						updateBlurEffectDeltas();
 				}
 			}
@@ -111,19 +109,17 @@ namespace Nez
 			return this;
 		}
 
-
 		public PolyLightPostProcessor setBlurRenderTargetScale( float blurRenderTargetScale )
 		{
 			if( _blurRenderTargetScale != blurRenderTargetScale )
 			{
 				_blurRenderTargetScale = blurRenderTargetScale;
-				if( _blurEffect != null && scene.sceneRenderTarget != null )
+				if( _blurEffect != null && _scene.sceneRenderTarget != null )
 					updateBlurEffectDeltas();
 			}
 
 			return this;
 		}
-
 
 		public PolyLightPostProcessor setBlurAmount( float blurAmount )
 		{
@@ -136,8 +132,10 @@ namespace Nez
 		#endregion
 
 
-		public override void onAddedToScene()
+		public override void onAddedToScene( Scene scene )
 		{
+			base.onAddedToScene( scene );
+
 			effect = scene.content.loadEffect<Effect>( "spriteLightMultiply", EffectResource.spriteLightMultiplyBytes );
 			effect.Parameters["_lightTexture"].SetValue( _lightsRenderTexture );
 			effect.Parameters["_multiplicativeFactor"].SetValue( _multiplicativeFactor );
@@ -146,6 +144,18 @@ namespace Nez
 				_blurEffect = scene.content.loadNezEffect<GaussianBlurEffect>();
 		}
 
+		public override void unload()
+		{
+			if( _lightsRenderTexture != null )
+				_lightsRenderTexture.Dispose();
+
+			if( _blurEffect != null )
+				_scene.content.unloadEffect( _blurEffect );
+			
+			_scene.content.unloadEffect( effect );
+			
+			base.unload();
+		}
 
 		public override void process( RenderTarget2D source, RenderTarget2D destination )
 		{
@@ -153,7 +163,7 @@ namespace Nez
 			{
 				// aquire a temporary rendertarget for the processing. It can be scaled via renderTargetScale in order to minimize fillrate costs. Reducing
 				// the resolution in this way doesn't hurt quality, because we are going to be blurring the images in any case.
-				var sceneRenderTargetSize = scene.sceneRenderTargetSize;
+				var sceneRenderTargetSize = _scene.sceneRenderTargetSize;
 				var tempRenderTarget = RenderTarget.getTemporary( (int)( sceneRenderTargetSize.X * _blurRenderTargetScale ), (int)( sceneRenderTargetSize.Y * _blurRenderTargetScale ), DepthFormat.None );
 
 
@@ -173,7 +183,6 @@ namespace Nez
 			Graphics.instance.batcher.draw( source, new Rectangle( 0, 0, destination.Width, destination.Height ), Color.White );
 			Graphics.instance.batcher.end();
 		}
-
 
 		public override void onSceneBackBufferSizeChanged( int newWidth, int newHeight )
 		{

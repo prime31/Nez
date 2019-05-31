@@ -10,7 +10,7 @@ namespace Nez.AI.BehaviorTrees
 	{
 		public override TaskStatus update( T context )
 		{
-			Assert.isNotNull( child, "child must not be null" );
+			Insist.isNotNull( child, "child must not be null" );
 
 			var status = child.update( context );
 

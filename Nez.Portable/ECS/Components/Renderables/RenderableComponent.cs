@@ -5,9 +5,9 @@ using Microsoft.Xna.Framework;
 namespace Nez
 {
 	/// <summary>
-	/// concrete implementation of IRenderable. Contains convenience 
+	/// concrete implementation of IRenderable. Contains convenience methods.
 	/// 
-	/// Subclasses MUST either override width/height or bounds!
+	/// VERY IMPORTANT! Subclasses MUST either override width/height or bounds!
 	/// </summary>
 	public abstract class RenderableComponent : Component, IRenderable, IComparable<RenderableComponent>
 	{
@@ -17,13 +17,13 @@ namespace Nez
 		/// width of the RenderableComponent. subclasses that do not override the bounds property must implement this!
 		/// </summary>
 		/// <value>The width.</value>
-		public virtual float width { get { return bounds.width; } }
+		public virtual float width => bounds.width;
 
 		/// <summary>
 		/// height of the RenderableComponent. subclasses that do not override the bounds property must implement this!
 		/// </summary>
 		/// <value>The height.</value>
-		public virtual float height { get { return bounds.height; } }
+		public virtual float height => bounds.height;
 
 		/// <summary>
 		/// the AABB that wraps this object. Used for camera culling.
@@ -47,10 +47,11 @@ namespace Nez
 		/// standard Batcher layerdepth. 0 is in front and 1 is in back. Changing this value will trigger a sort of the renderableComponents
 		/// list on the scene.
 		/// </summary>
+		[Range( 0, 1 )]
 		public float layerDepth
 		{
-			get { return _layerDepth; }
-			set { setLayerDepth( value ); }
+			get => _layerDepth;
+			set => setLayerDepth( value );
 		}
 
 		/// <summary>
@@ -60,8 +61,8 @@ namespace Nez
 		/// <value>The render layer.</value>
 		public int renderLayer
 		{
-			get { return _renderLayer; }
-			set { setRenderLayer( value ); }
+			get => _renderLayer;
+			set => setRenderLayer( value );
 		}
 
 		/// <summary>
@@ -80,8 +81,8 @@ namespace Nez
 		/// <value>The local position.</value>
 		public Vector2 localOffset
 		{
-			get { return _localOffset; }
-			set { setLocalOffset( value ); }
+			get => _localOffset;
+			set => setLocalOffset( value );
 		}
 
 		/// <summary>
@@ -90,7 +91,7 @@ namespace Nez
 		/// <value><c>true</c> if is visible; otherwise, <c>false</c>.</value>
 		public bool isVisible
 		{
-			get { return _isVisible; }
+			get => _isVisible;
 			private set
 			{
 				if( _isVisible != value )
@@ -124,14 +125,12 @@ namespace Nez
 			_areBoundsDirty = true;
 		}
 
-
 		/// <summary>
 		/// called by a Renderer. The Camera can be used for culling and the Graphics instance to draw with.
 		/// </summary>
 		/// <param name="graphics">Graphics.</param>
 		/// <param name="camera">Camera.</param>
 		public abstract void render( Graphics graphics, Camera camera );
-
 
 		/// <summary>
 		/// renders the bounds only if there is no collider. Always renders a square on the origin.
@@ -150,14 +149,12 @@ namespace Nez
 			graphics.batcher.drawPixel( entity.transform.position + _localOffset, Debug.Colors.renderableCenter, 4 );
 		}
 
-
 		/// <summary>
 		/// called when the Renderable enters the camera frame. Note that these methods will not be called if your Renderer does not use
 		/// isVisibleFromCamera for its culling check. All default Renderers do.
 		/// </summary>
 		protected virtual void onBecameVisible()
 		{ }
-
 
 		/// <summary>
 		/// called when the renderable exits the camera frame. Note that these methods will not be called if your Renderer does not use
@@ -166,10 +163,8 @@ namespace Nez
 		protected virtual void onBecameInvisible()
 		{ }
 
-
 		public override void onRemovedFromEntity()
 		{ }
-
 
 		/// <summary>
 		/// returns true if the Renderables bounds intersects the Camera.bounds. Handles state switches for the isVisible flag. Use this method
@@ -196,7 +191,6 @@ namespace Nez
 			return this;
 		}
 
-
 		/// <summary>
 		/// standard Batcher layerdepth. 0 is in front and 1 is in back. Changing this value will trigger a sort of the renderableComponents
 		/// </summary>
@@ -210,7 +204,6 @@ namespace Nez
 				entity.scene.renderableComponents.setRenderLayerNeedsComponentSort( renderLayer );
 			return this;
 		}
-
 
 		/// <summary>
 		/// lower renderLayers are in the front and higher are in the back, just like layerDepth but not clamped to 0-1. Note that this means
@@ -232,7 +225,6 @@ namespace Nez
 			return this;
 		}
 
-
 		/// <summary>
 		/// color passed along to the Batcher when rendering
 		/// </summary>
@@ -243,7 +235,6 @@ namespace Nez
 			this.color = color;
 			return this;
 		}
-
 
 		/// <summary>
 		/// offset from the parent entity. Useful for adding multiple Renderables to an Entity that need specific positioning.

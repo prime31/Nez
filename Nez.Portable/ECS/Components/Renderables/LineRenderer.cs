@@ -159,7 +159,7 @@ namespace Nez
 		/// <param name="degreesPerSubdivision">Degrees per subdivision.</param>
 		public LineRenderer setDegreesPerSubdivision( float degreesPerSubdivision )
 		{
-			Assert.isTrue( degreesPerSubdivision > 0, "degreesPerSubdivision must be greater than 0" );
+			Insist.isTrue( degreesPerSubdivision > 0, "degreesPerSubdivision must be greater than 0" );
 			this.degreesPerSubdivision = degreesPerSubdivision;
 			return this;
 		}

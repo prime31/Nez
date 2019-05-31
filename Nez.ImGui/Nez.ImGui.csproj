@@ -1,0 +1,61 @@
+<Project>	
+	<PropertyGroup>
+		<BaseIntermediateOutputPath>obj\$(MSBuildProjectName)</BaseIntermediateOutputPath>
+	</PropertyGroup>
+	<Import Sdk="Microsoft.NET.Sdk" Project="Sdk.props" />
+
+	<PropertyGroup>
+		<OutputType>Library</OutputType>
+		<TargetFramework>net471</TargetFramework>
+		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+		<PlatformTarget>AnyCPU</PlatformTarget>
+		<RootNamespace>Nez.ImGui</RootNamespace>
+		<AssemblyName>Nez.ImGui</AssemblyName>
+		<AllowUnsafeBlocks>True</AllowUnsafeBlocks>
+		<IntermediateOutputPath>obj\Nez.ImGui\$(Configuration)</IntermediateOutputPath>
+		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+	</PropertyGroup>
+	
+	<ItemGroup>
+		<ProjectReference Include="../Nez.Portable/Nez.csproj" />
+		<ProjectReference Include="../Nez.Persistence/Nez.Persistence.csproj" />
+	</ItemGroup>
+	
+	
+	<PropertyGroup>
+		<IsOSX Condition="'$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::OSX)))' == 'true'">true</IsOSX>
+		<IsLinux Condition="'$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Linux)))' == 'true'">true</IsLinux>
+	</PropertyGroup>
+	
+	<!-- Copy ImGui native code to output -->
+	<PropertyGroup>
+		<ImGuiRuntimes>$(NuGetPackageRoot)\imgui.net\**\runtimes\</ImGuiRuntimes>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<Content Include="$(ImGuiRuntimes)win-x86\native\cimgui.dll" Condition="'$(OS)' == 'Windows_NT' AND '$(Platform)' != 'x64'">
+			<Link>%(Filename)%(Extension)</Link>
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Content>
+		<Content Include="$(ImGuiRuntimes)win-x64\native\cimgui.dll" Condition="'$(OS)' == 'Windows_NT' AND '$(Platform)' != 'x86'">
+			<Link>%(Filename)%(Extension)</Link>
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Content>
+		<Content Include="$(ImGuiRuntimes)osx-x64\native\cimgui.dylib" Condition="'$(OS)' != 'Windows_NT' AND $(IsOSX) == 'true'">
+			<Link>libcimgui.dylib</Link>
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Content>
+		<Content Include=".$(ImGuiRuntimes)linux-x64\native\cimgui.so" Condition="'$(OS)' != 'Windows_NT' AND $(IsLinux) == 'true'">
+			<Link>%(Filename)%(Extension)</Link>
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Content>
+	</ItemGroup>
+	
+	<ItemGroup>
+		<PackageReference Include="ImGui.NET" Version="1.67.0" />
+		<PackageReference Include="MonoGame.Framework.Portable" Version="3.7.1.189" />
+	</ItemGroup>
+	
+	<Import Sdk="Microsoft.NET.Sdk" Project="Sdk.targets" />
+</Project>

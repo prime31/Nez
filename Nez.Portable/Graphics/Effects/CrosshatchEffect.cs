@@ -10,6 +10,7 @@ namespace Nez
 		/// size in pixels of the crosshatch. Should be an even number because the half size is also required. Defaults to 16.
 		/// </summary>
 		/// <value>The size of the cross hatch.</value>
+		[Range( 8, 80, false )]
 		public int crosshatchSize
 		{
 			get { return _crosshatchSize; }

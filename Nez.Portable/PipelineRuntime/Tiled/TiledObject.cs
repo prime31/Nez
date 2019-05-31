@@ -24,6 +24,7 @@ namespace Nez.Tiled
 		public int width;
 		public int height;
 		public int rotation;
+		public int gid;
 		public bool visible;
 		public TiledObjectType tiledObjectType;
 		public string objectType;

@@ -20,7 +20,7 @@ namespace Nez
 		/// <value>The multiplicative factor.</value>
 		public float multiplicativeFactor
 		{
-			get { return _multiplicativeFactor; }
+			get => _multiplicativeFactor;
 			set
 			{
 				if( effect != null )
@@ -39,14 +39,23 @@ namespace Nez
 			_lightsRenderTexture = lightsRenderTexture;
 		}
 
-
-		public override void onAddedToScene()
+		public override void onAddedToScene( Scene scene )
 		{
+			base.onAddedToScene( scene );
+
 			effect = scene.content.loadEffect<Effect>( "spriteLightMultiply", EffectResource.spriteLightMultiplyBytes );
 			effect.Parameters["_lightTexture"].SetValue( _lightsRenderTexture );
 			effect.Parameters["_multiplicativeFactor"].SetValue( _multiplicativeFactor );
 		}
 
+		public override void unload()
+		{
+			_scene.content.unloadEffect( effect );
+			effect = null;
+			_lightsRenderTexture.Dispose();
+
+			base.unload();
+		}
 
 		public override void process( RenderTarget2D source, RenderTarget2D destination )
 		{
@@ -55,7 +64,6 @@ namespace Nez
 			Graphics.instance.batcher.draw( source, new Rectangle( 0, 0, destination.Width, destination.Height ), Color.White );
 			Graphics.instance.batcher.end();
 		}
-
 
 		public override void onSceneBackBufferSizeChanged( int newWidth, int newHeight )
 		{

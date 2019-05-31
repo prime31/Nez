@@ -149,7 +149,7 @@ namespace Nez.Spatial
 				{
 					// the cell should always exist since this collider should be in all queryed cells
 					var cell = cellAtPosition( x, y );
-					Assert.isNotNull( cell, "removing Collider [{0}] from a cell that it is not present in", collider );
+					Insist.isNotNull( cell, "removing Collider [{0}] from a cell that it is not present in", collider );
 					if( cell != null )
 						cell.Remove( collider );
 				}
@@ -257,7 +257,9 @@ namespace Nez.Spatial
 
 
 		/// <summary>
-		/// casts a line through the spatial hash and fills the hits array up with any colliders that the line hits
+		/// casts a line through the spatial hash and fills the hits array up with any colliders that the line hits.
+		/// https://github.com/francisengelmann/fast_voxel_traversal/blob/master/main.cpp
+		/// http://www.cse.yorku.ca/~amana/research/grid.pdf
 		/// </summary>
 		/// <returns>the number of Colliders returned</returns>
 		/// <param name="start">Start.</param>
@@ -270,68 +272,63 @@ namespace Nez.Spatial
 			_raycastParser.start( ref ray, hits, layerMask );
 
 			// get our start/end position in the same space as our grid
-			start.X *= _inverseCellSize;
-			start.Y *= _inverseCellSize;
-			var endCell = cellCoords( end.X, end.Y );
+			var currentCell = cellCoords( start.X, start.Y );
+			var lastCell = cellCoords( end.X, end.Y );
 
-			// TODO: check gridBounds to ensure the ray starts/ends in the grid. watch out for end cells since they report out of bounds due to int comparison
-
-			// what voxel are we on
-			var intX = Mathf.floorToInt( start.X );
-			var intY = Mathf.floorToInt( start.Y );
-
-			// which way we go
+			// what direction are we incrementing the cell checks?
 			var stepX = Math.Sign( ray.direction.X );
 			var stepY = Math.Sign( ray.direction.Y );
 
-            // we make sure that if we're on the same line or row we don't step 
-            // in the unneeded direction
-			if (intX == endCell.X) stepX = 0;
-			if (intY == endCell.Y) stepY = 0;
+			// we make sure that if we're on the same line or row we don't step in the unneeded direction
+			if (currentCell.X == lastCell.X) stepX = 0;
+			if (currentCell.Y == lastCell.Y) stepY = 0;
 
 			// Calculate cell boundaries. when the step is positive, the next cell is after this one meaning we add 1.
 			// If negative, cell is before this one in which case dont add to boundary
-			var boundaryX = intX + ( stepX > 0 ? 1 : 0 );
-			var boundaryY = intY + ( stepY > 0 ? 1 : 0 );
+			var xStep = stepX < 0 ? 0f : (float)stepX;
+			var yStep = stepY < 0 ? 0f : (float)stepY;
+			var nextBoundaryX = ((float)currentCell.X + xStep) * _cellSize;
+			var nextBoundaryY = ((float)currentCell.Y + yStep) * _cellSize;
 
 			// determine the value of t at which the ray crosses the first vertical voxel boundary. same for y/horizontal.
 			// The minimum of these two values will indicate how much we can travel along the ray and still remain in the current voxel
 			// may be infinite for near vertical/horizontal rays
-			var tMaxX = ( boundaryX - start.X ) / ray.direction.X;
-			var tMaxY = ( boundaryY - start.Y ) / ray.direction.Y;
-			if( ray.direction.X == 0f || stepX == 0)
-				tMaxX = float.PositiveInfinity;
-            if( ray.direction.Y == 0f || stepY == 0 )
-				tMaxY = float.PositiveInfinity;
+			var tMaxX = ray.direction.X != 0 ? (nextBoundaryX - ray.start.X) / ray.direction.X : float.MaxValue;
+			var tMaxY = ray.direction.Y != 0 ? (nextBoundaryY - ray.start.Y) / ray.direction.Y : float.MaxValue;
 
 			// how far do we have to walk before crossing a cell from a cell boundary. may be infinite for near vertical/horizontal rays
-			var tDeltaX = stepX / ray.direction.X;
-			var tDeltaY = stepY / ray.direction.Y;
+			var tDeltaX = ray.direction.X != 0 ? _cellSize / ( ray.direction.X * stepX ) : float.MaxValue;
+			var tDeltaY = ray.direction.Y != 0 ? _cellSize / ( ray.direction.Y * stepY ) : float.MaxValue;
 
 			// start walking and returning the intersecting cells.
-			var cell = cellAtPosition( intX, intY );
-			//debugDrawCellDetails( intX, intY, cell != null ? cell.Count : 0 );
-			if( cell != null && _raycastParser.checkRayIntersection( intX, intY, cell ) )
+			var cell = cellAtPosition( currentCell.X, currentCell.Y );
+			// Debug.log( $"cell: {currentCell.X}, {currentCell.Y}" );
+			// debugDrawCellDetails( intX, intY, cell != null ? cell.Count : 10 );
+			if( cell != null && _raycastParser.checkRayIntersection( currentCell.X, currentCell.Y, cell ) )
 			{
 				_raycastParser.reset();
 				return _raycastParser.hitCounter;
 			}
 
-			while( intX != endCell.X || intY != endCell.Y )
+			while( currentCell.X != lastCell.X || currentCell.Y != lastCell.Y )
 			{
 				if( tMaxX < tMaxY )
 				{
-					intX += stepX;
+					// HACK: ensures we never overshoot our values
+					currentCell.X = (int)Mathf.approach( currentCell.X, lastCell.X, Math.Abs( stepX ) );
+					// currentCell.X += stepX;
 					tMaxX += tDeltaX;
 				}
 				else
 				{
-					intY += stepY;
+					currentCell.Y = (int)Mathf.approach( currentCell.Y, lastCell.Y, Math.Abs( stepY ) );
+					// currentCell.Y += stepY;
 					tMaxY += tDeltaY;
 				}
 
-				cell = cellAtPosition( intX, intY );
-				if( cell != null && _raycastParser.checkRayIntersection( intX, intY, cell ) )
+				// Debug.log( $"cell: {currentCell.X}, {currentCell.Y}" );
+				cell = cellAtPosition( currentCell.X, currentCell.Y );
+				if( cell != null && _raycastParser.checkRayIntersection( currentCell.X, currentCell.Y, cell ) )
 				{
 					_raycastParser.reset();
 					return _raycastParser.hitCounter;

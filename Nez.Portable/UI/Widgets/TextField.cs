@@ -1025,8 +1025,8 @@ namespace Nez.UI
 		/// <param name="selectionEnd">Selection end.</param>
 		public TextField setSelection( int selectionStart, int selectionEnd )
 		{
-			Assert.isFalse( selectionStart < 0, "selectionStart must be >= 0" );
-			Assert.isFalse( selectionEnd < 0, "selectionEnd must be >= 0" );
+			Insist.isFalse( selectionStart < 0, "selectionStart must be >= 0" );
+			Insist.isFalse( selectionEnd < 0, "selectionEnd must be >= 0" );
 
 			selectionStart = Math.Min( text.Length, selectionStart );
 			selectionEnd = Math.Min( text.Length, selectionEnd );
@@ -1077,7 +1077,7 @@ namespace Nez.UI
 		/// <param name="cursorPosition">Cursor position.</param>
 		public TextField setCursorPosition( int cursorPosition )
 		{
-			Assert.isFalse( cursorPosition < 0, "cursorPosition must be >= 0" );
+			Insist.isFalse( cursorPosition < 0, "cursorPosition must be >= 0" );
 			clearSelection();
 			cursor = Math.Min( cursorPosition, text.Length );
 			return this;

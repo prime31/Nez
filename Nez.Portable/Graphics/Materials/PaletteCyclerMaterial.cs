@@ -7,7 +7,6 @@
 			effect = new PaletteCyclerEffect();
 		}
 
-
 		public override void onPreRender( Camera camera )
 		{
 			effect.updateTime();

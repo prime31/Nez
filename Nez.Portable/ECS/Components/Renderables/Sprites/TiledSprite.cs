@@ -12,14 +12,29 @@ namespace Nez
 	/// </summary>
 	public class TiledSprite : Sprite
 	{
+		public override RectangleF bounds
+		{
+			get
+			{
+				if( _areBoundsDirty )
+				{
+					if( subtexture != null )
+						_bounds.calculateBounds( entity.transform.position, _localOffset, _origin, entity.transform.scale, entity.transform.rotation, width, height );
+					_areBoundsDirty = false;
+				}
+
+				return _bounds;
+			}
+		}
+
 		/// <summary>
 		/// x value of the texture scroll
 		/// </summary>
 		/// <value>The scroll x.</value>
 		public int scrollX
 		{
-			get { return _sourceRect.X; }
-			set { _sourceRect.X = value; }
+			get => _sourceRect.X;
+			set => _sourceRect.X = value;
 		}
 
 		/// <summary>
@@ -28,17 +43,17 @@ namespace Nez
 		/// <value>The scroll y.</value>
 		public int scrollY
 		{
-			get { return _sourceRect.Y; }
-			set { _sourceRect.Y = value; }
+			get => _sourceRect.Y;
+			set => _sourceRect.Y = value;
 		}
 
 		/// <summary>
 		/// scale of the texture
 		/// </summary>
 		/// <value>The texture scale.</value>
-		public Vector2 textureScale
+		public virtual Vector2 textureScale
 		{
-			get { return _textureScale; }
+			get => _textureScale;
 			set
 			{
 				_textureScale = value;
@@ -56,8 +71,12 @@ namespace Nez
 		/// <value>The width.</value>
 		public new int width
 		{
-			get { return _sourceRect.Width; }
-			set { _sourceRect.Width = value; }
+			get => _sourceRect.Width;
+			set
+			{
+				_areBoundsDirty = true;
+				_sourceRect.Width = value;
+			}
 		}
 
 		/// <summary>
@@ -66,17 +85,24 @@ namespace Nez
 		/// <value>The height.</value>
 		public new int height
 		{
-			get { return _sourceRect.Height; }
-			set { _sourceRect.Height = value; }
+			get => _sourceRect.Height;
+			set
+			{
+				_areBoundsDirty = true;
+				_sourceRect.Height = value;
+			}
 		}
 
 		/// <summary>
 		/// we keep a copy of the sourceRect so that we dont change the Subtexture in case it is used elsewhere
 		/// </summary>
 		protected Rectangle _sourceRect;
-		Vector2 _textureScale = Vector2.One;
-		Vector2 _inverseTexScale = Vector2.One;
+		protected Vector2 _textureScale = Vector2.One;
+		protected Vector2 _inverseTexScale = Vector2.One;
 
+
+		public TiledSprite()
+		{}
 
 		public TiledSprite( Subtexture subtexture ) : base( subtexture )
 		{
@@ -87,13 +113,14 @@ namespace Nez
 			};
 		}
 
-
 		public TiledSprite( Texture2D texture ) : this( new Subtexture( texture ) )
 		{}
 
-
 		public override void render( Graphics graphics, Camera camera )
 		{
+			if( subtexture == null )
+				return;
+
 			var topLeft = entity.transform.position + _localOffset;
 			var destinationRect = RectangleExt.fromFloats( topLeft.X, topLeft.Y, _sourceRect.Width * entity.transform.scale.X * textureScale.X, _sourceRect.Height * entity.transform.scale.Y * textureScale.Y );
 

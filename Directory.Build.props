@@ -1,0 +1,10 @@
+<!--
+This will cause project.assets.json to be written to $(ProjectDir)\obj\ProjectFileWithNoExtension\project.assets.json. The reason this is required
+is because we have Nez.* and Nez.FNA.* csproj files in the same folder. NuGet is dumb af and writes the project.assets.json files to the same folder
+causing each csproj file to mess up the other.
+-->
+<Project>
+  <PropertyGroup>
+    <MSBuildProjectExtensionsPath>obj\$(MSBuildProjectName)\</MSBuildProjectExtensionsPath>
+  </PropertyGroup>
+</Project>

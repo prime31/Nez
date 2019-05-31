@@ -9,6 +9,7 @@ namespace Nez
 	/// IMGUI is a very simple class with only static methods designed to make sticking buttons, checkboxes, sliders and progress bars on screen
 	/// in quick and dirty fashion. It is not designed to be a full and proper UI system.
 	/// </summary>
+	[System.Obsolete( "This class is deprecated in favor of Nez.ImGui and will be removed in the future" )]
 	public class IMGUI
 	{
 		enum TextAlign

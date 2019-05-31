@@ -17,7 +17,6 @@ namespace Nez.Systems
 			_messageTable = new Dictionary<T,List<Action>>();
 		}
 
-
 		/// <summary>
 		/// if using an enum as the generic constraint you may want to pass in a custom comparer to avoid boxing/unboxing. See the CoreEventsComparer
 		/// for an example implementation.
@@ -28,7 +27,6 @@ namespace Nez.Systems
 			_messageTable = new Dictionary<T,List<Action>>( customComparer );
 		}
 
-
 		public void addObserver( T eventType, Action handler )
 		{
 			List<Action> list = null;
@@ -38,10 +36,9 @@ namespace Nez.Systems
 				_messageTable.Add( eventType, list );
 			}
 
-			Assert.isFalse( list.Contains( handler ), "You are trying to add the same observer twice" );
+			Insist.isFalse( list.Contains( handler ), "You are trying to add the same observer twice" );
 			list.Add( handler );
 		}
-
 
 		public void removeObserver( T eventType, Action handler )
 		{
@@ -49,7 +46,6 @@ namespace Nez.Systems
 			// was never added
 			_messageTable[eventType].Remove( handler );
 		}
-
 
 		public void emit( T eventType )
 		{
@@ -77,7 +73,6 @@ namespace Nez.Systems
 			_messageTable = new Dictionary<T,List<Action<U>>>();
 		}
 
-
 		/// <summary>
 		/// if using an enum as the generic constraint you may want to pass in a custom comparer to avoid boxing/unboxing. See the CoreEventsComparer
 		/// for an example implementation.
@@ -88,7 +83,6 @@ namespace Nez.Systems
 			_messageTable = new Dictionary<T,List<Action<U>>>( customComparer );
 		}
 
-
 		public void addObserver( T eventType, Action<U> handler )
 		{
 			List<Action<U>> list = null;
@@ -98,10 +92,9 @@ namespace Nez.Systems
 				_messageTable.Add( eventType, list );
 			}
 
-			Assert.isFalse( list.Contains( handler ), "You are trying to add the same observer twice" );
+			Insist.isFalse( list.Contains( handler ), "You are trying to add the same observer twice" );
 			list.Add( handler );
 		}
-
 
 		public void removeObserver( T eventType, Action<U> handler )
 		{
@@ -109,7 +102,6 @@ namespace Nez.Systems
 			// was never added
 			_messageTable[eventType].Remove( handler );
 		}
-
 
 		public void emit( T eventType, U data )
 		{

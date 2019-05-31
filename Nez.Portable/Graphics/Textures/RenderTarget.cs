@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace Nez.Textures
 {
-	public class RenderTarget : IUpdatableManager
+	public class RenderTarget : GlobalManager
 	{
 		/// <summary>
 		/// internal class with additional lastFrameUsed field for managing temporary RenderTargets
@@ -18,7 +18,9 @@ namespace Nez.Textures
 			{}
 		}
 
-
+		/// <summary>
+		/// facilitates exposing a static API for easy access
+		/// </summary>
 		internal static RenderTarget instance;
 		List<TrackedRenderTarget2D> _renderTargetPool = new List<TrackedRenderTarget2D>();
 
@@ -84,7 +86,7 @@ namespace Nez.Textures
 		/// <param name="renderTarget">Render target.</param>
 		public static void releaseTemporary( RenderTarget2D renderTarget )
 		{
-			Assert.isTrue( renderTarget is TrackedRenderTarget2D, "Attempted to release a temporary RenderTarget2D that is not managed by the system" );
+			Insist.isTrue( renderTarget is TrackedRenderTarget2D, "Attempted to release a temporary RenderTarget2D that is not managed by the system" );
 
 			var trackedRT = renderTarget as TrackedRenderTarget2D;
 			trackedRT.lastFrameUsed = Time.frameCount;
@@ -152,8 +154,7 @@ namespace Nez.Textures
 
 		#endregion
 
-
-		void IUpdatableManager.update()
+		public override void update()
 		{
 			// remove any TrackedRenderTarget2Ds that havent been used for 2 frames or more
 			for( var i = _renderTargetPool.Count - 1; i >= 0; i-- )

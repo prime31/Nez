@@ -8,7 +8,7 @@ namespace Nez
 	{
 		public float distortionFactor
 		{
-			get { return _distortionFactor; }
+			get => _distortionFactor;
 			set
 			{
 				if( _distortionFactor != value )
@@ -23,7 +23,7 @@ namespace Nez
 
 		public float riseFactor
 		{
-			get { return _riseFactor; }
+			get => _riseFactor;
 			set
 			{
 				if( _riseFactor != value )
@@ -41,7 +41,6 @@ namespace Nez
 			set { effect.Parameters["_distortionTexture"].SetValue( value ); }
 		}
 
-
 		float _distortionFactor = 0.005f;
 		float _riseFactor = 0.15f;
 		EffectParameter _timeParam;
@@ -52,10 +51,10 @@ namespace Nez
 		public HeatDistortionPostProcessor( int executionOrder ) : base( executionOrder )
 		{}
 
-
-		public override void onAddedToScene()
+		public override void onAddedToScene( Scene scene )
 		{
-			effect = scene.content.loadEffect<Effect>( "heatDistortion", EffectResource.heatDistortionBytes );
+			base.onAddedToScene( scene );
+			effect = _scene.content.loadEffect<Effect>( "heatDistortion", EffectResource.heatDistortionBytes );
 
 			_timeParam = effect.Parameters["_time"];
 			_distortionFactorParam = effect.Parameters["_distortionFactor"];
@@ -67,6 +66,11 @@ namespace Nez
 			distortionTexture = scene.content.Load<Texture2D>( "nez/textures/heatDistortionNoise" );
 		}
 
+		public override void unload()
+		{
+			_scene.content.unloadEffect( effect );
+			base.unload();
+		}
 
 		public override void process( RenderTarget2D source, RenderTarget2D destination )
 		{

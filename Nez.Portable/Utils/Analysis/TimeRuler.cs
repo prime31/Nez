@@ -12,12 +12,7 @@ namespace Nez.Analysis
 	#if DEBUG
 
 	/// <summary>
-	/// Realtime CPU measuring tool
-	/// </summary>
-	/// <remarks>
-	/// You can visually find bottle neck, and know how much you can put more CPU jobs
-	/// by using this tool.
-	/// Because of this is real time profile, you can find glitches in the game too.
+	/// You can visually find bottle necks, and basic CPU usage by using this class.
 	/// 
 	/// TimeRuler provide the following features:
 	///  * Up to 8 bars (Configurable)
@@ -29,23 +24,15 @@ namespace Nez.Analysis
 	///  * Automatically changes display frames based on frame duration.
 	///  
 	/// How to use:
-	/// call timerRuler.StartFrame in top of the Game.Update method.
+	/// call timerRuler.startFrame in top of the Game.Update method. Then, surround the code that you want measure by BbginMark and endMark.
 	/// 
-	/// Then, surround the code that you want measure by BeginMark and EndMark.
-	/// 
-	/// timeRuler.BeginMark( "Update", Color.Blue );
+	/// timeRuler.beginMark( "Update", Color.Blue );
 	/// // process that you want to measure.
-	/// timerRuler.EndMark( "Update" );
+	/// timerRuler.endMark( "Update" );
 	/// 
 	/// Also, you can specify bar index of marker (default value is 0)
 	/// 
-	/// timeRuler.BeginMark( 1, "Update", Color.Blue );
-	/// 
-	/// All profiling methods has CondionalAttribute with "DEBUG".
-	/// If you not specified "DEBUG" constant, it doesn't even generate
-	/// method calls for BeginMark/EndMark.
-	/// So, don't forget remove "DEBUG" constant when you release your game.
-	/// 
+	/// timeRuler.bginMark( 1, "Update", Color.Blue );
 	/// </remarks>
 	public class TimeRuler
 	{
@@ -245,7 +232,6 @@ namespace Nez.Analysis
 			instance = new TimeRuler();
 		}
 
-
 		public TimeRuler()
 		{
 			// Initialize Parameters.
@@ -261,13 +247,11 @@ namespace Nez.Analysis
 			onGraphicsDeviceReset();
 		}
 
-
 		void onGraphicsDeviceReset()
 		{
 			var layout = new Layout( Core.graphicsDevice.Viewport );
 			_position = layout.place( new Vector2( width, barHeight ), 0, 0.01f, Alignment.BottomCenter );
 		}
-
 
 		[Command( "timeruler", "Toggles the display of the TimerRuler on/off" )]
 		static void toggleTimeRuler()
@@ -370,7 +354,6 @@ namespace Nez.Analysis
 			}
 		}
 
-
 		/// <summary>
 		/// Start measure time.
 		/// </summary>
@@ -379,9 +362,8 @@ namespace Nez.Analysis
 		[Conditional( "DEBUG" )]
 		public void beginMark( string markerName, Color color )
 		{
-			beginMark( 0, markerName, color );
+			beginMark( markerName, color, 0 );
 		}
-
 
 		/// <summary>
 		/// Start measure time.
@@ -390,7 +372,7 @@ namespace Nez.Analysis
 		/// <param name="markerName">name of marker.</param>
 		/// <param name="color">color/param>
 		[Conditional( "DEBUG" )]
-		public void beginMark( int barIndex, string markerName, Color color )
+		public void beginMark( string markerName, Color color, int barIndex )
 		{
 			lock( this )
 			{
@@ -439,7 +421,6 @@ namespace Nez.Analysis
 			}
 		}
 
-
 		/// <summary>
 		/// End measuring.
 		/// </summary>
@@ -447,9 +428,8 @@ namespace Nez.Analysis
 		[Conditional( "DEBUG" )]
 		public void endMark( string markerName )
 		{
-			endMark( 0, markerName );
+			endMark( markerName, 0 );
 		}
-
 
 		/// <summary>
 		/// End measuring.
@@ -457,7 +437,7 @@ namespace Nez.Analysis
 		/// <param name="barIndex">Index of bar.</param>
 		/// <param name="markerName">Name of marker.</param>
 		[Conditional( "DEBUG" )]
-		public void endMark( int barIndex, string markerName )
+		public void endMark( string markerName, int barIndex )
 		{
 			lock( this )
 			{
@@ -467,33 +447,27 @@ namespace Nez.Analysis
 				var bar = curLog.bars[barIndex];
 
 				if( bar.nestCount <= 0 )
-				{
-					throw new InvalidOperationException( "Call BeingMark method before calling EndMark method." );
-				}
+					throw new InvalidOperationException( "Call beginMark method before calling endMark method." );
 
 				int markerId;
 				if( !markerNameToIdMap.TryGetValue( markerName, out markerId ) )
 				{
-					throw new InvalidOperationException(
-						String.Format( "Maker '{0}' is not registered." +
-						"Make sure you specifed same name as you used for BeginMark method",
-							markerName ) );
+					throw new InvalidOperationException( $"Marker '{markerName}' is not registered. Make sure you specifed same name as you used for BeginMark method" );
 				}
 
 				var markerIdx = bar.markerNests[--bar.nestCount];
 				if( bar.markers[markerIdx].markerId != markerId )
 				{
 					throw new InvalidOperationException(
-						"Incorrect call order of BeginMark/EndMark method." +
-						"You call it like BeginMark(A), BeginMark(B), EndMark(B), EndMark(A)" +
-						" But you can't call it like " +
-						"BeginMark(A), BeginMark(B), EndMark(A), EndMark(B)." );
+						"Incorrect call order of beginMark/endMark method." +
+						"beginMark(A), beginMark(B), endMark(B), endMark(A)" +
+						" But you can't called it like " +
+						"beginMark(A), beginMark(B), endMark(A), endMark(B)." );
 				}
 
 				bar.markers[markerIdx].endTime = (float)stopwatch.Elapsed.TotalMilliseconds;
 			}
 		}
-
 
 		/// <summary>
 		/// Get average time of given bar index and marker name.
@@ -513,7 +487,6 @@ namespace Nez.Analysis
 
 			return result;
 		}
-
 
 		/// <summary>
 		/// Reset marker log.
@@ -552,7 +525,6 @@ namespace Nez.Analysis
 		{
 			render( _position, width );
 		}
-
 
 		[Conditional( "DEBUG" )]
 		public void render( Vector2 position, int width )

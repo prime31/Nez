@@ -16,7 +16,8 @@ namespace Nez.Sprites
 			{
 				if( _areBoundsDirty )
 				{
-					_bounds.calculateBounds( entity.transform.position, _localOffset, _origin, entity.transform.scale, entity.transform.rotation, subtexture.sourceRect.Width, subtexture.sourceRect.Height );
+					if( subtexture != null )
+						_bounds.calculateBounds( entity.transform.position, _localOffset, _origin, entity.transform.scale, entity.transform.rotation, subtexture.sourceRect.Width, subtexture.sourceRect.Height );
 					_areBoundsDirty = false;
 				}
 
@@ -24,15 +25,14 @@ namespace Nez.Sprites
 			}
 		}
 
-
 		/// <summary>
 		/// the origin of the Sprite. This is set automatically when setting a Subtexture.
 		/// </summary>
 		/// <value>The origin.</value>
 		public Vector2 origin
 		{
-			get { return _origin; }
-			set { setOrigin( value ); }
+			get => _origin;
+			set => setOrigin( value );
 		}
 
 		/// <summary>
@@ -41,8 +41,8 @@ namespace Nez.Sprites
 		/// <value>The origin normalized.</value>
 		public Vector2 originNormalized
 		{
-			get { return new Vector2( _origin.X / width * entity.transform.scale.X, _origin.Y / height * entity.transform.scale.Y ); }
-			set { setOrigin( new Vector2( value.X * width / entity.transform.scale.X, value.Y * height / entity.transform.scale.Y ) ); }
+			get => new Vector2( _origin.X / width * entity.transform.scale.X, _origin.Y / height * entity.transform.scale.Y );
+			set => setOrigin( new Vector2( value.X * width / entity.transform.scale.X, value.Y * height / entity.transform.scale.Y ) );
 		}
 
 		/// <summary>
@@ -51,14 +51,8 @@ namespace Nez.Sprites
 		/// <value><c>true</c> if flip x; otherwise, <c>false</c>.</value>
 		public bool flipX
 		{
-			get
-			{
-				return ( spriteEffects & SpriteEffects.FlipHorizontally ) == SpriteEffects.FlipHorizontally;
-			}
-			set
-			{
-				spriteEffects = value ? ( spriteEffects | SpriteEffects.FlipHorizontally ) : ( spriteEffects & ~SpriteEffects.FlipHorizontally );
-			}
+			get => ( spriteEffects & SpriteEffects.FlipHorizontally ) == SpriteEffects.FlipHorizontally;
+			set => spriteEffects = value ? ( spriteEffects | SpriteEffects.FlipHorizontally ) : ( spriteEffects & ~SpriteEffects.FlipHorizontally );
 		}
 
 		/// <summary>
@@ -67,14 +61,8 @@ namespace Nez.Sprites
 		/// <value><c>true</c> if flip y; otherwise, <c>false</c>.</value>
 		public bool flipY
 		{
-			get
-			{
-				return ( spriteEffects & SpriteEffects.FlipVertically ) == SpriteEffects.FlipVertically;
-			}
-			set
-			{
-				spriteEffects = value ? ( spriteEffects | SpriteEffects.FlipVertically ) : ( spriteEffects & ~SpriteEffects.FlipVertically );
-			}
+			get => ( spriteEffects & SpriteEffects.FlipVertically ) == SpriteEffects.FlipVertically;
+			set => spriteEffects = value ? ( spriteEffects | SpriteEffects.FlipVertically ) : ( spriteEffects & ~SpriteEffects.FlipVertically );
 		}
 
 		/// <summary>
@@ -88,8 +76,8 @@ namespace Nez.Sprites
 		/// <value>The subtexture.</value>
 		public Subtexture subtexture
 		{
-			get { return _subtexture; }
-			set { setSubtexture( value ); }
+			get => _subtexture;
+			set => setSubtexture( value );
 		}
 
 		protected Vector2 _origin;
@@ -99,13 +87,11 @@ namespace Nez.Sprites
 		public Sprite()
 		{}
 
-
 		public Sprite( Subtexture subtexture )
 		{
 			_subtexture = subtexture;
 			_origin = subtexture.center;
 		}
-
 
 		public Sprite( Texture2D texture ) : this( new Subtexture( texture ) )
 		{ }
@@ -128,7 +114,6 @@ namespace Nez.Sprites
 			return this;
 		}
 
-
 		/// <summary>
 		/// sets the origin for the Renderable
 		/// </summary>
@@ -143,7 +128,6 @@ namespace Nez.Sprites
 			}
 			return this;
 		}
-
 
 		/// <summary>
 		/// helper for setting the origin in normalized fashion (0-1 for x and y)
@@ -170,7 +154,6 @@ namespace Nez.Sprites
 		{
 			drawOutline( graphics, camera, Color.Black, offset );
 		}
-
 
 		public void drawOutline( Graphics graphics, Camera camera, Color outlineColor, int offset = 1 )
 		{
@@ -200,7 +183,6 @@ namespace Nez.Sprites
 			color = originalColor;
 			_layerDepth = originalLayerDepth;
 		}
-
 
 		public override void render( Graphics graphics, Camera camera )
 		{

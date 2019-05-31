@@ -42,7 +42,6 @@ namespace Nez
 			this.scene = scene;
 		}
 
-
 		#region array access
 
 		public int count { get { return _entities.length; } }
@@ -57,12 +56,10 @@ namespace Nez
 			_isEntityListUnsorted = true;
 		}
 
-
 		internal void markTagUnsorted( int tag )
 		{
 			_unsortedTags.Add( tag );
 		}
-
 
 		/// <summary>
 		/// adds an Entity to the list. All lifecycle methods will be called in the next frame.
@@ -72,7 +69,6 @@ namespace Nez
 		{
 			_entitiesToAdd.Add( entity );
 		}
-
 
 		/// <summary>
 		/// removes an Entity from the list. All lifecycle methods will be called in the next frame.
@@ -93,9 +89,8 @@ namespace Nez
 				_entitiesToRemove.Add( entity );
 		}
 
-
 		/// <summary>
-		/// removes all entities from the entities list and passes them back to the entity cache
+		/// removes all entities from the entities list
 		/// </summary>
 		public void removeAllEntities()
 		{
@@ -119,7 +114,6 @@ namespace Nez
 			_entityDict.Clear();
 		}
 
-
 		/// <summary>
 		/// checks to see if the Entity is presently managed by this EntityList
 		/// </summary>
@@ -128,7 +122,6 @@ namespace Nez
 		{
 			return _entities.contains( entity ) || _entitiesToAdd.Contains( entity );
 		}
-
 
 		FastList<Entity> getTagList( int tag )
 		{
@@ -142,7 +135,6 @@ namespace Nez
 			return _entityDict[tag];
 		}
 
-
 		internal void addToTagList( Entity entity )
 		{
 			var list = getTagList( entity.tag );
@@ -153,7 +145,6 @@ namespace Nez
 			}
 		}
 
-
 		internal void removeFromTagList( Entity entity )
 		{
 			FastList<Entity> list = null;
@@ -162,7 +153,6 @@ namespace Nez
 				list.remove( entity );
 			}
 		}
-
 
 		[MethodImpl( MethodImplOptions.AggressiveInlining )]
 		internal void update()
@@ -174,7 +164,6 @@ namespace Nez
 					entity.update();
 			}
 		}
-
 
 		public void updateLists()
 		{
@@ -263,7 +252,6 @@ namespace Nez
 			return null;
 		}
 
-
 		/// <summary>
 		/// returns a list of all entities with tag. If no entities have the tag an empty list is returned. The returned List can be put back in the pool via ListPool.free.
 		/// </summary>
@@ -282,7 +270,6 @@ namespace Nez
 
 			return returnList;
 		}
-
 
 		/// <summary>
 		/// returns a List of all Entities of type T. The returned List can be put back in the pool via ListPool.free.
@@ -308,7 +295,6 @@ namespace Nez
 
 			return list;
 		}
-
 
 		/// <summary>
 		/// returns the first Component found in the Scene of type T
@@ -339,7 +325,6 @@ namespace Nez
 
 			return null;
 		}
-
 
 		/// <summary>
 		/// returns all Components found in the Scene of type T. The returned List can be put back in the pool via ListPool.free.

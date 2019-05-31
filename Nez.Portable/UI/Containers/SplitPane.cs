@@ -292,7 +292,7 @@ namespace Nez.UI
 
 		public SplitPane setMinSplitAmount( float amount )
 		{
-			Assert.isTrue( amount < 0, "minAmount has to be >= 0" );
+			Insist.isTrue( amount < 0, "minAmount has to be >= 0" );
 			_minAmount = amount;
 			return this;
 		}
@@ -300,7 +300,7 @@ namespace Nez.UI
 
 		public SplitPane setMaxSplitAmount( float amount )
 		{
-			Assert.isTrue( amount > 0, "maxAmount has to be <= 1" );
+			Insist.isTrue( amount > 0, "maxAmount has to be <= 1" );
 			_maxAmount = amount;
 			return this;
 		}

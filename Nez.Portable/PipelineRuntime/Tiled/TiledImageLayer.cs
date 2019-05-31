@@ -25,9 +25,15 @@ namespace Nez.Tiled
 		}
 
 
-		public override void draw( Batcher batcher, Vector2 parentPosition, float layerDepth, RectangleF cameraClipBounds )
+		public override void draw( Batcher batcher, Vector2 position, float layerDepth, RectangleF cameraClipBounds )
 		{
-			batcher.draw( texture, parentPosition + offset, null, Color.White, 0, Vector2.Zero, 1, SpriteEffects.None, layerDepth );
+			draw( batcher, position, Vector2.One, layerDepth, cameraClipBounds );
+		}
+
+
+		public override void draw( Batcher batcher, Vector2 position, Vector2 scale, float layerDepth, RectangleF cameraClipBounds )
+		{
+			batcher.draw( texture, position + offset, null, Color.White, 0, Vector2.Zero, scale, SpriteEffects.None, layerDepth );
 		}
 
 	}

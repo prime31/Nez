@@ -68,7 +68,7 @@ namespace Nez.Svg
 		/// <returns>The bezier spline for path.</returns>
 		public BezierSpline getBezierSplineForPath()
 		{
-			Assert.isTrue( isPathCubicBezier(), "SvgPath is not a cubic bezier" );
+			Insist.isTrue( isPathCubicBezier(), "SvgPath is not a cubic bezier" );
 
 			var bezier = new BezierSpline();
 			for( var i = 1; i < segments.Count; i++ )
@@ -88,7 +88,7 @@ namespace Nez.Svg
 		/// <param name="distanceTolerance">Distance tolerance.</param>
 		public List<Vector2> getOptimizedDrawingPoints( float distanceTolerance = 2f )
 		{
-			Assert.isTrue( isPathCubicBezier(), "SvgPath is not a cubic bezier" );
+			Insist.isTrue( isPathCubicBezier(), "SvgPath is not a cubic bezier" );
 
 			var points = ListPool<Vector2>.obtain();
 			for( var i = 1; i < segments.Count; i++ )

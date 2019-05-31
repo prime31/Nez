@@ -81,14 +81,13 @@ namespace Nez
 
 		/// <summary>
 		/// use this for two part transitions. For example, a fade would fade to black first then when _isNewSceneLoaded becomes true it would
-		/// fade in. For in-Scene transitions _isNewSceneLoaded will be set to true at the midpoint just as if a new Scene was loaded.
+		/// fade in. For in-Scene transitions _isNewSceneLoaded should be set to true at the midpoint just as if a new Scene was loaded.
 		/// </summary>
-		protected bool _isNewSceneLoaded;
+		internal  bool _isNewSceneLoaded;
 
 
 		protected SceneTransition( bool wantsPreviousSceneRender = true ) : this( null, wantsPreviousSceneRender )
 		{}
-
 
 		protected SceneTransition( Func<Scene> sceneLoadAction, bool wantsPreviousSceneRender = true )
 		{
@@ -101,14 +100,13 @@ namespace Nez
 				previousSceneRender = new RenderTarget2D( Core.graphicsDevice, Screen.width, Screen.height, false, Screen.backBufferFormat, DepthFormat.None, 0, RenderTargetUsage.PreserveContents );
 		}
 
-
 		protected IEnumerator loadNextScene()
 		{
 			// let the listener know the screen is obscured if we have one
 			if( onScreenObscured != null )
 				onScreenObscured();
 			
-			// if we arent loading a new scene we just set the flag as if we did so that 2 phase transitions complete
+			// if we arent loading a new scene we just set the flag as if we did so that the 2 phase transitions complete
 			if( !_loadsNewScene )
 			{
 				_isNewSceneLoaded = true;
@@ -118,17 +116,18 @@ namespace Nez
 			if( loadSceneOnBackgroundThread )
 			{
 				// load the Scene on a background thread
-				var syncContext = SynchronizationContext.Current;
 				Task.Run( () =>
 				{
 					var scene = sceneLoadAction();
 
-					// get back to the main thread before setting the new Scene active
-					syncContext.Post( d =>
+					// get back to the main thread before setting the new Scene active. This isnt fantastic seeing as how
+					// the scheduler is not thread-safe but it should be empty between Scenes and SynchronizationContext.Current
+					// is null for some reason
+					Core.schedule( 0, false, null, timer =>
 					{
 						Core.scene = scene;
 						_isNewSceneLoaded = true;
-					}, null );
+					});
 				} );
 			}
 			else
@@ -142,7 +141,6 @@ namespace Nez
 				yield return null;
 		}
 
-
 		/// <summary>
 		/// called after the previousSceneRender occurs for the first (and only) time. At this point you can load your new Scene after
 		/// yielding one frame (so the first render call happens before scene loading).
@@ -150,10 +148,9 @@ namespace Nez
 		public virtual IEnumerator onBeginTransition()
 		{
 			yield return null;
-			Core.scene = sceneLoadAction();
+			yield return Core.startCoroutine( loadNextScene() );
 			transitionComplete();
 		}
-
 
 		/// <summary>
 		/// called before the Scene is rendered. This allows a transition to render to a RenderTarget if needed and avoids issues with MonoGame
@@ -163,9 +160,9 @@ namespace Nez
 		public virtual void preRender( Graphics graphics )
 		{}
 
-
 		/// <summary>
-		/// do all of your rendering here
+		/// do all of your rendering here.static This is a base implementation. Any special rendering should override
+		/// this method.
 		/// </summary>
 		/// <param name="graphics">Graphics.</param>
 		public virtual void render( Graphics graphics )
@@ -176,9 +173,8 @@ namespace Nez
 			graphics.batcher.end();
 		}
 
-
 		/// <summary>
-		/// this should be called when your transition is complete and the new Scene has been set. It will clean up
+		/// this will be called when your transition is complete and the new Scene has been set. It will clean up
 		/// </summary>
 		protected virtual void transitionComplete()
 		{
@@ -193,7 +189,6 @@ namespace Nez
             if( onTransitionCompleted != null )
                 onTransitionCompleted();
 		}
-
 
 		/// <summary>
 		/// the most common type of transition seems to be one that ticks progress from 0 - 1. This method takes care of that for you

@@ -63,7 +63,7 @@ namespace Nez.TextureAtlases
 
 		public Subtexture createRegion( string name, int x, int y, int width, int height, float pivotX = 0.5f, float pivotY = 0.5f )
 		{
-			Assert.isFalse( _subtextureMap.ContainsKey( name ), "Region {0} already exists in the texture atlas", name );
+			Insist.isFalse( _subtextureMap.ContainsKey( name ), "Region {0} already exists in the texture atlas", name );
 
 			var region = new Subtexture( texture, new Rectangle( x, y, width, height ), new Vector2( pivotX * width, pivotY * height ) );
 			var index = subtextures.Count;
@@ -128,7 +128,7 @@ namespace Nez.TextureAtlases
 
 		public Subtexture getSubtexture( int index )
 		{
-			Assert.isFalse( index < 0 || index >= subtextures.Count, "index out of range" );
+			Insist.isFalse( index < 0 || index >= subtextures.Count, "index out of range" );
 			return subtextures[index];
 		}
 

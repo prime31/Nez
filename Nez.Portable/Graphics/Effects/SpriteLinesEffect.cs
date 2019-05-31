@@ -32,6 +32,7 @@ namespace Nez
 		/// size of the lines in pixels. Defaults to 5.
 		/// </summary>
 		/// <value>The size of the line.</value>
+		[Range( 0, 100 )]
 		public float lineSize
 		{
 			get { return _lineSize; }

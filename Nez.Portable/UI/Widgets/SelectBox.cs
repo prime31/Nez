@@ -223,7 +223,7 @@ namespace Nez.UI
 
 		public void setStyle( SelectBoxStyle style )
 		{
-			Assert.isNotNull( style, "style cannot be null" );
+			Insist.isNotNull( style, "style cannot be null" );
 			this.style = style;
 			invalidateHierarchy();
 		}
@@ -258,7 +258,7 @@ namespace Nez.UI
 		/// <param name="newItems">New items.</param>
 		public void setItems( List<T> newItems )
 		{
-			Assert.isNotNull( newItems, "newItems cannot be null" );
+			Insist.isNotNull( newItems, "newItems cannot be null" );
 			float oldPrefWidth = preferredWidth;
 
 			_items.Clear();

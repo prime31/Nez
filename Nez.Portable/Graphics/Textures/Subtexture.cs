@@ -91,7 +91,7 @@ namespace Nez.Textures
 		/// <param name="marginRight">Margin right.</param>
 		public void generateNinePatchRects( Rectangle renderRect, Rectangle[] destArray, int marginLeft, int marginRight, int marginTop, int marginBottom )
 		{
-			Assert.isTrue( destArray.Length == 9, "destArray does not have a length of 9" );
+			Insist.isTrue( destArray.Length == 9, "destArray does not have a length of 9" );
 
 			var stretchedCenterWidth = renderRect.Width - marginLeft - marginRight;
 			var stretchedCenterHeight = renderRect.Height - marginTop - marginBottom;

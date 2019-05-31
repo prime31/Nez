@@ -126,13 +126,15 @@ namespace Nez.Tiled
 		Rectangle _boxColliderBounds;
 
 
+		public TiledMapMover()
+		{}
+
 		public TiledMapMover( TiledTileLayer collisionLayer )
 		{
+			Insist.isNotNull( collisionLayer, nameof( collisionLayer ) + " is required" );
 			this.collisionLayer = collisionLayer;
 			tiledMap = collisionLayer.tiledMap;
-			Assert.isNotNull( collisionLayer, nameof( collisionLayer ) + " is required" );
 		}
-
 
 		/// <summary>
 		/// moves the Entity taking into account the tiled map
@@ -141,6 +143,9 @@ namespace Nez.Tiled
 		/// <param name="boxCollider">Box collider.</param>
 		public void move( Vector2 motion, BoxCollider boxCollider, CollisionState collisionState )
 		{
+			if( tiledMap == null )
+				return;
+
 			// test for collisions then move the Entity
 			testCollisions( ref motion, boxCollider.bounds, collisionState );
 
@@ -148,7 +153,6 @@ namespace Nez.Tiled
 			boxCollider.entity.transform.position += motion;
 			boxCollider.registerColliderWithPhysicsSystem();
 		}
-
 
 		public void testCollisions( ref Vector2 motion, Rectangle boxColliderBounds, CollisionState collisionState )
 		{
@@ -239,7 +243,6 @@ namespace Nez.Tiled
 				collisionState.becameGroundedThisFrame = true;
 		}
 
-
 		bool testMapCollision( Rectangle collisionRect, Edge direction, CollisionState collisionState, out int collisionResponse )
 		{
 			collisionResponse = 0;
@@ -289,7 +292,6 @@ namespace Nez.Tiled
 			return false;
 		}
 
-
 		/// <summary>
 		/// Checks whether collision is occurring with a slope on a given row.
 		/// </summary>
@@ -304,7 +306,6 @@ namespace Nez.Tiled
 			}
 			return false;
 		}
-
 
 		/// <summary>
 		/// Tests the tile for a collision. Returns via out the position in world space where the collision occured.
@@ -397,7 +398,6 @@ namespace Nez.Tiled
 			return false;
 		}
 
-
 		/// <summary>
 		/// gets a list of all the tiles intersecting bounds. The returned list is ordered for collision detection based on the
 		/// direction passed in so they can be processed in order.
@@ -445,7 +445,6 @@ namespace Nez.Tiled
 			}
 		}
 
-
 		/// <summary>
 		/// returns the tile position clamped to the tiled map
 		/// </summary>
@@ -458,7 +457,6 @@ namespace Nez.Tiled
 				return tiledMap.worldToTilePositionY( worldPosition );
 			return tiledMap.worldToTilePositionX( worldPosition );
 		}
-
 
 		/// <summary>
 		/// gets a collision rect for the given side expanded to take into account motion

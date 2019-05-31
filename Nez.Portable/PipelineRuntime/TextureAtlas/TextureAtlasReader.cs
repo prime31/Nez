@@ -46,7 +46,7 @@ namespace Nez.TextureAtlases
 					if( splits.ContainsKey( spriteNames[i] ) )
 					{
 						var split = splits[spriteNames[i]];
-						subtextures[i] = new NinePatchSubtexture( texture, split[0], split[1], split[2], split[3] );
+						subtextures[i] = new NinePatchSubtexture( texture, spriteRectangles[i], split[0], split[1], split[2], split[3] );
 					}
 					else
 					{

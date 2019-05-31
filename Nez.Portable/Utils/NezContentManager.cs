@@ -22,10 +22,8 @@ namespace Nez.Systems
 		public NezContentManager( IServiceProvider serviceProvider, string rootDirectory ) : base( serviceProvider, rootDirectory )
 		{}
 
-
 		public NezContentManager( IServiceProvider serviceProvider ) : base( serviceProvider )
 		{}
-
 
 		public NezContentManager() : base( Core._instance.Services, Core._instance.Content.RootDirectory )
 		{}
@@ -42,7 +40,6 @@ namespace Nez.Systems
 			return loadEffect<Effect>( name );
 		}
 
-
 		/// <summary>
 		/// loads an embedded Nez effect. These are any of the Effect subclasses in the Nez/Graphics/Effects folder.
 		/// Note that this will return a unique instance if you attempt to load the same Effect twice to avoid Effect duplication.
@@ -53,11 +50,11 @@ namespace Nez.Systems
 		{
 			var cacheKey = typeof( T ).Name + "-" + Utils.randomString( 5 );
 			var effect = new T();
+			effect.Name = cacheKey;
 			_loadedEffects[cacheKey] = effect;
 
 			return effect;
 		}
-
 
 		/// <summary>
 		/// loads an ogl effect directly from file and handles disposing of it when the ContentManager is disposed. Name should the the path
@@ -77,7 +74,6 @@ namespace Nez.Systems
 			return loadEffect<T>( name, bytes );
 		}
 
-
 		/// <summary>
 		/// loads an ogl effect directly from its bytes and handles disposing of it when the ContentManager is disposed. Name should the the path
 		/// relative to the Content folder or including the Content folder. Effects must have a constructor that accepts GraphicsDevice and
@@ -94,7 +90,6 @@ namespace Nez.Systems
 			return effect;
 		}
 
-
 		/// <summary>
 		/// loads and manages any Effect that is built-in to MonoGame such as BasicEffect, AlphaTestEffect, etc. Note that this will
 		/// return a unique instance if you attempt to load the same Effect twice. If you intend to use the same Effect in multiple locations
@@ -110,7 +105,6 @@ namespace Nez.Systems
 
 			return effect;
 		}
-
 
 		/// <summary>
 		/// loads an asset on a background thread with optional callback for when it is loaded. The callback will occur on the main thread.
@@ -135,7 +129,6 @@ namespace Nez.Systems
 				}
 			} );
 		}
-
 
 		/// <summary>
 		/// loads an asset on a background thread with optional callback that includes a context parameter for when it is loaded.
@@ -162,7 +155,6 @@ namespace Nez.Systems
 			} );
 		}
 
-
 		/// <summary>
 		/// loads a group of assets on a background thread with optional callback for when it is loaded
 		/// </summary>
@@ -187,7 +179,6 @@ namespace Nez.Systems
 				}
 			} );
 		}
-
 
 		/// <summary>
 		/// removes assetName from LoadedAssets and Disposes of it. Note that this method uses reflection to get at the private ContentManager
@@ -214,7 +205,7 @@ namespace Nez.Systems
 
 					// first fetch the actual asset. we already know its loaded so we'll grab it directly
 					#if FNA
-					fieldInfo = typeof( ContentManager ).GetRuntimeField( "loadedAssets" );
+					fieldInfo = ReflectionUtils.getFieldInfo( typeof( ContentManager ), "loadedAssets" );
 					var LoadedAssets = fieldInfo.GetValue( this ) as Dictionary<string, object>;
 					#endif
 
@@ -242,7 +233,6 @@ namespace Nez.Systems
 			}
 		}
 
-
 		/// <summary>
 		/// unloads an Effect that was loaded via loadEffect, loadNezEffect or loadMonoGameEffect
 		/// </summary>
@@ -258,7 +248,6 @@ namespace Nez.Systems
 			return false;
 		}
 
-
 		/// <summary>
 		/// unloads an Effect that was loaded via loadEffect, loadNezEffect or loadMonoGameEffect
 		/// </summary>
@@ -268,7 +257,6 @@ namespace Nez.Systems
 			return unloadEffect( effect.Name );
 		}
 
-
 		/// <summary>
 		/// checks to see if an asset with assetName is loaded
 		/// </summary>
@@ -277,13 +265,12 @@ namespace Nez.Systems
 		public bool isAssetLoaded( string assetName )
 		{
 			#if FNA
-			var fieldInfo = ReflectionUtils.getFieldInfo( this, "loadedAssets" );
+			var fieldInfo = ReflectionUtils.getFieldInfo( typeof( ContentManager ), "loadedAssets" );
 			var LoadedAssets = fieldInfo.GetValue( this ) as Dictionary<string, object>;
 			#endif
 
 			return LoadedAssets.ContainsKey( assetName );
 		}
-
 
 		/// <summary>
 		/// provides a string suitable for logging with all the currently loaded assets and effects
@@ -292,7 +279,7 @@ namespace Nez.Systems
 		internal string logLoadedAssets()
 		{
 			#if FNA
-			var fieldInfo = ReflectionUtils.getFieldInfo( this, "loadedAssets" );
+			var fieldInfo = ReflectionUtils.getFieldInfo( typeof( ContentManager ), "loadedAssets" );
 			var LoadedAssets = fieldInfo.GetValue( this ) as Dictionary<string, object>;
 			#endif
 
@@ -310,6 +297,28 @@ namespace Nez.Systems
 			return builder.ToString();
 		}
 
+		/// <summary>
+		/// reverse lookup. Gets the asset path given the asset. This is useful for making editor and non-runtime stuff.
+		/// </summary>
+		/// <param name="asset"></param>
+		/// <returns></returns>
+		public string getPathForLoadedAsset( object asset )
+		{
+			#if FNA
+			var fieldInfo = ReflectionUtils.getFieldInfo( typeof( ContentManager ), "loadedAssets" );
+			var LoadedAssets = fieldInfo.GetValue( this ) as Dictionary<string, object>;
+			#endif
+
+			if( LoadedAssets.ContainsValue( asset ) )
+			{
+				foreach( var kv in LoadedAssets )
+				{
+					if( kv.Value == asset )
+						return kv.Key;
+				}
+			}
+			return null;
+		}
 
 		/// <summary>
 		/// override that disposes of all loaded Effects

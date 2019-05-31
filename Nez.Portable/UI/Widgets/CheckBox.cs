@@ -33,7 +33,7 @@ namespace Nez.UI
 
 		public override void setStyle( ButtonStyle style )
 		{
-			Assert.isTrue( style is CheckBoxStyle, "style must be a CheckBoxStyle" );
+			Insist.isTrue( style is CheckBoxStyle, "style must be a CheckBoxStyle" );
 			base.setStyle( style );
 			this.style = (CheckBoxStyle)style;
 		}

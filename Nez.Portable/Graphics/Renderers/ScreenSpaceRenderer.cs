@@ -19,7 +19,6 @@ namespace Nez
 			wantsToRenderAfterPostProcessors = true;
 		}
 
-
 		public override void render( Scene scene )
 		{
 			beginRender( camera );
@@ -41,6 +40,22 @@ namespace Nez
 			endRender();
 		}
 
+		protected override void debugRender( Scene scene, Camera cam )
+		{
+			Graphics.instance.batcher.end();
+			Graphics.instance.batcher.begin( cam.transformMatrix );
+
+			for( var i = 0; i < renderLayers.Length; i++ )
+			{
+				var renderables = scene.renderableComponents.componentsWithRenderLayer( renderLayers[i] );
+				for( var j = 0; j < renderables.length; j++ )
+				{
+					var entity = renderables.buffer[j];
+					if( entity.enabled )
+						entity.debugRender( Graphics.instance );
+				}
+			}
+		}
 
 		public override void onSceneBackBufferSizeChanged( int newWidth, int newHeight )
 		{

@@ -143,7 +143,6 @@ namespace Nez.Sprites
 		public SpriteTrail()
 		{}
 
-
 		public SpriteTrail( Sprite sprite )
 		{
 			_sprite = sprite;
@@ -226,7 +225,6 @@ namespace Nez.Sprites
 			return this;
 		}
 
-
 		/// <summary>
 		/// disables the SpriteTrail optionally waiting for the current trail to fade out first
 		/// </summary>
@@ -247,13 +245,16 @@ namespace Nez.Sprites
 			}
 		}
 
-
 		public override void onAddedToEntity()
 		{
 			if( _sprite == null )
 				_sprite = this.getComponent<Sprite>();
 
-			Assert.isNotNull( _sprite, "There is no Sprite on this Entity for the SpriteTrail to use" );
+			if( _sprite == null )
+			{
+				enabled = false;
+				return;
+			}
 
 			// move the trail behind the Sprite
 			layerDepth = _sprite.layerDepth + 0.001f;
@@ -265,7 +266,6 @@ namespace Nez.Sprites
 					_availableSpriteTrailInstances.Push( new SpriteTrailInstance() );
 			}
 		}
-
 
 		void IUpdatable.update()
 		{
@@ -310,7 +310,6 @@ namespace Nez.Sprites
 				enabled = false;
 		}
 
-
 		/// <summary>
 		/// stores the last position for distance calculations and spawns a new trail instance if there is one available in the stack
 		/// </summary>
@@ -326,7 +325,6 @@ namespace Nez.Sprites
 			instance.setSpriteRenderOptions( _sprite.entity.transform.rotation, _sprite.origin, _sprite.entity.transform.scale, _sprite.spriteEffects, layerDepth );
 			_liveSpriteTrailInstances.Add( instance );
 		}
-
 
 		public override void render( Graphics graphics, Camera camera )
 		{

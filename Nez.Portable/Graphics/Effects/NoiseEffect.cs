@@ -9,9 +9,10 @@ namespace Nez
 		/// <summary>
 		/// Intensity of the noise. Defaults to 1.
 		/// </summary>
+		[Range( 0, 10 )]
 		public float noise
 		{
-			get { return _noise; }
+			get => _noise;
 			set
 			{
 				if( _noise != value )

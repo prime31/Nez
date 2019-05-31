@@ -6,10 +6,11 @@ namespace Nez
 {
 	public class CircleCollider : Collider
 	{
+		[Inspectable]
 		public float radius
 		{
-			get { return ( (Circle)shape ).radius; }
-			set { setRadius( value ); }
+			get => ( (Circle)shape ).radius;
+			set => setRadius( value );
 		}
 
 
@@ -75,7 +76,6 @@ namespace Nez
 			graphics.batcher.drawPixel( entity.transform.position, Debug.Colors.colliderPosition, 4 * Debug.Size.lineSizeMultiplier );
 			graphics.batcher.drawPixel( shape.position, Debug.Colors.colliderCenter, 2 * Debug.Size.lineSizeMultiplier );
 		}
-
 
 		public override string ToString()
 		{

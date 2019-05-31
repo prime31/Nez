@@ -80,7 +80,6 @@ namespace Nez
 			return this;
 		}
 
-
 		/// <summary>
 		/// sets whether vertex colors will be used by the shader
 		/// </summary>
@@ -95,7 +94,6 @@ namespace Nez
 
 			return this;
 		}
-
 
 		/// <summary>
 		/// sets the texture. Pass in null to unset the texture.
@@ -118,7 +116,6 @@ namespace Nez
 			return this;
 		}
 
-
 		/// <summary>
 		/// helper that sets the color for all verts
 		/// </summary>
@@ -129,7 +126,6 @@ namespace Nez
 				_verts[i].Color = color;
 			return this;
 		}
-
 
 		/// <summary>
 		/// sets the color for all of the verts
@@ -142,7 +138,6 @@ namespace Nez
 			return this;
 		}
 
-
 		/// <summary>
 		/// sets the vertex color for a single vert
 		/// </summary>
@@ -154,7 +149,6 @@ namespace Nez
 			_verts[vertIndex].Color = color;
 			return this;
 		}
-
 
 		/// <summary>
 		/// sets the vert positions. If the positions array does not match the verts array size the verts array will be recreated.
@@ -170,7 +164,6 @@ namespace Nez
 			return this;
 		}
 
-
 		/// <summary>
 		/// sets the vert positions. If the positions array does not match the verts array size the verts array will be recreated.
 		/// </summary>
@@ -185,7 +178,6 @@ namespace Nez
 			return this;
 		}
 
-
 		/// <summary>
 		/// sets the triangle indices for rendering
 		/// </summary>
@@ -193,7 +185,7 @@ namespace Nez
 		/// <param name="triangles">Triangles.</param>
 		public Mesh setTriangles( int[] triangles )
 		{
-			Assert.isTrue( triangles.Length % 3 == 0, "triangles must be a multiple of 3" );
+			Insist.isTrue( triangles.Length % 3 == 0, "triangles must be a multiple of 3" );
 			_primitiveCount = triangles.Length / 3;
 			_triangles = triangles;
 			return this;
@@ -207,7 +199,7 @@ namespace Nez
 		/// <returns>The mesh.</returns>
 		public Mesh setPrimitiveType( PrimitiveType primitiveType )
 		{
-			Assert.isTrue( primitiveType == PrimitiveType.TriangleList || primitiveType == PrimitiveType.TriangleStrip, "Only triangles are supported." );
+			Insist.isTrue( primitiveType == PrimitiveType.TriangleList || primitiveType == PrimitiveType.TriangleStrip, "Only triangles are supported." );
 			_primitiveType = primitiveType;
 			return this;
 		}
@@ -230,16 +222,17 @@ namespace Nez
 			}
 		}
 
-
 		public override void onRemovedFromEntity()
 		{
 			entity.scene.content.unloadEffect( _basicEffect );
 			_basicEffect = null;
 		}
 
-
 		public override void render( Graphics graphics, Camera camera )
 		{
+			if( _verts == null )
+				return;
+
 			_basicEffect.Projection = camera.projectionMatrix;
 			_basicEffect.View = camera.transformMatrix;
 			_basicEffect.World = entity.transform.localToWorldTransform;

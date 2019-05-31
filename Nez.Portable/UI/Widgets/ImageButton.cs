@@ -46,7 +46,7 @@ namespace Nez.UI
 
 		public override void setStyle( ButtonStyle style )
 		{
-			Assert.isTrue( style is ImageButtonStyle, "style must be a ImageButtonStyle" );
+			Insist.isTrue( style is ImageButtonStyle, "style must be a ImageButtonStyle" );
 
 			base.setStyle( style );
 			this.style = (ImageButtonStyle)style;

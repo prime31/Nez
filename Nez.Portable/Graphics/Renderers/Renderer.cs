@@ -55,7 +55,7 @@ namespace Nez
 		/// has a renderTexture
 		/// </summary>
 		/// <value><c>true</c> if wants to render to scene render target; otherwise, <c>false</c>.</value>
-		public virtual bool wantsToRenderToSceneRenderTarget { get { return renderTexture == null; } }
+		public virtual bool wantsToRenderToSceneRenderTarget => renderTexture == null;
 
 		/// <summary>
 		/// if true, the Scene will call the render method AFTER all PostProcessors have finished. This must be set to true BEFORE calling
@@ -74,13 +74,27 @@ namespace Nez
 		protected Renderer( int renderOrder ) : this( renderOrder, null )
 		{}
 
-
 		protected Renderer( int renderOrder, Camera camera )
 		{
 			this.camera = camera;
 			this.renderOrder = renderOrder;
 		}
 
+		/// <summary>
+		/// called when the Renderer is added to the Scene
+		/// </summary>
+		/// <param name="scene">Scene.</param>
+		public virtual void onAddedToScene( Scene scene )
+		{}
+
+		/// <summary>
+		/// called when a scene is ended or this Renderer is removed from the Scene. use this for cleanup.
+		/// </summary>
+		public virtual void unload()
+		{
+			if( renderTexture != null )
+				renderTexture.Dispose();
+		}
 
 		/// <summary>
 		/// if a RenderTarget is used this will set it up. The Batcher is also started. The passed in Camera will be used to set the ViewPort
@@ -100,9 +114,7 @@ namespace Nez
 			Graphics.instance.batcher.begin( _currentMaterial, cam.transformMatrix );
 		}
 
-
 		abstract public void render( Scene scene );
-
 
 		/// <summary>
 		/// renders the RenderableComponent flushing the Batcher and resetting current material if necessary
@@ -129,7 +141,6 @@ namespace Nez
 			renderable.render( Graphics.instance, cam );
 		}
 
-
 		/// <summary>
 		/// force flushes the Batcher by calling End then Begin on it.
 		/// </summary>
@@ -139,7 +150,6 @@ namespace Nez
 			Graphics.instance.batcher.begin( _currentMaterial, cam.transformMatrix );
 		}
 
-
 		/// <summary>
 		/// ends the Batcher and clears the RenderTarget if it had a RenderTarget
 		/// </summary>
@@ -148,15 +158,15 @@ namespace Nez
 			Graphics.instance.batcher.end();
 		}
 
-
 		/// <summary>
-		/// default debugRender method just loops through all entities and calls entity.debugRender
+		/// default debugRender method just loops through all entities and calls entity.debugRender. Note that you are in the middle of a batch
+		/// at this point so you may want to call Batcher.End and Batcher.begin to clear out any Materials and items awaiting rendering.
 		/// </summary>
 		/// <param name="scene">Scene.</param>
 		protected virtual void debugRender( Scene scene, Camera cam )
 		{
 			Graphics.instance.batcher.end();
-			Graphics.instance.batcher.begin( Core.scene.camera.transformMatrix );
+			Graphics.instance.batcher.begin( cam.transformMatrix );
 
 			for( var i = 0; i < scene.entities.count; i++ )
 			{
@@ -165,7 +175,6 @@ namespace Nez
 					entity.debugRender( Graphics.instance );
 			}
 		}
-
 
 		/// <summary>
 		/// called when the default scene RenderTarget is resized and when adding a Renderer if the scene has already began. default implementation
@@ -180,24 +189,7 @@ namespace Nez
 				renderTexture.onSceneBackBufferSizeChanged( newWidth, newHeight );
 		}
 
-
-		/// <summary>
-		/// called when a scene is ended. use this for cleanup.
-		/// </summary>
-		public virtual void unload()
-		{
-			if( renderTexture != null )
-			{
-				renderTexture.Dispose();
-				renderTexture = null;
-			}
-		}
-
-
-		public int CompareTo( Renderer other )
-		{
-			return renderOrder.CompareTo( other.renderOrder );
-		}
+		public int CompareTo( Renderer other ) => renderOrder.CompareTo( other.renderOrder );
 	
 	}
 }

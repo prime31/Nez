@@ -8,19 +8,23 @@ namespace Nez.Particles
 {
 	public class ParticleEmitter : RenderableComponent, IUpdatable
 	{
-		public override RectangleF bounds { get { return _bounds; } }
+		public override RectangleF bounds => _bounds;
 
-		public bool isPaused { get { return _isPaused; } }
-		public bool isPlaying { get { return _active && !_isPaused; } }
-		public bool isStopped { get { return !_active && !_isPaused; } }
-		public bool isEmitting { get { return _emitting; } }
-		public float elapsedTime { get { return _elapsedTime; } }
+		public bool isPaused => _isPaused;
+		public bool isPlaying => _active && !_isPaused;
+		public bool isStopped => !_active && !_isPaused;
+		public bool isEmitting => _emitting;
+		public float elapsedTime => _elapsedTime;
+
 
 		/// <summary>
 		/// convenience method for setting ParticleEmitterConfig.simulateInWorldSpace. If true, particles will simulate in world space. ie when the
 		/// parent Transform moves it will have no effect on any already active Particles.
 		/// </summary>
-		public bool simulateInWorldSpace { set { _emitterConfig.simulateInWorldSpace = value; } }
+		public bool simulateInWorldSpace
+		{
+			set => _emitterConfig.simulateInWorldSpace = value;
+		}
 
 		/// <summary>
 		/// config object with various properties to deal with particle collisions
@@ -32,6 +36,7 @@ namespace Nez.Particles
 		/// emission can stop after either we stop it manually or when we run for entire duration specified in ParticleEmitterConfig.
 		/// </summary>
 		public event Action<ParticleEmitter> onAllParticlesExpired;
+
 		/// <summary>
 		/// event that's going to be called when emission is stopped due to reaching duration specified in ParticleEmitterConfig
 		/// </summary>
@@ -57,8 +62,12 @@ namespace Nez.Particles
 		bool _emitting;
 		List<Particle> _particles;
 		bool _playOnAwake;
+		[Inspectable]
 		ParticleEmitterConfig _emitterConfig;
 
+
+		public ParticleEmitter() : this( new ParticleEmitterConfig() )
+		{}
 
 		public ParticleEmitter( ParticleEmitterConfig emitterConfig, bool playOnAwake = true )
 		{
@@ -226,7 +235,6 @@ namespace Nez.Particles
 			_particles.Clear();
 		}
 
-
 		/// <summary>
 		/// plays the particle emitter
 		/// </summary>
@@ -246,7 +254,6 @@ namespace Nez.Particles
 			_emitCounter = 0;
 		}
 
-
 		/// <summary>
 		/// stops the particle emitter
 		/// </summary>
@@ -259,7 +266,6 @@ namespace Nez.Particles
 			clear();
 		}
 
-
 		/// <summary>
 		/// pauses the particle emitter
 		/// </summary>
@@ -268,7 +274,6 @@ namespace Nez.Particles
 			_isPaused = true;
 			_active = false;
 		}
-
 
 		/// <summary>
 		/// resumes emission of particles.
@@ -282,7 +287,6 @@ namespace Nez.Particles
 			_emitting = true;
 		}
 
-
 		/// <summary>
 		/// pauses emission of particles while allowing existing particles to expire
 		/// </summary>
@@ -290,7 +294,6 @@ namespace Nez.Particles
 		{
 			_emitting = false;
 		}
-
 
 		/// <summary>
 		/// manually emit some particles
@@ -305,7 +308,6 @@ namespace Nez.Particles
 			for( var i = 0; i < count; i++ )
 				addParticle( rootPosition );
 		}
-
 
 		/// <summary>
 		/// adds a Particle to the emitter

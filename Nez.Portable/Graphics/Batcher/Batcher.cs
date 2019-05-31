@@ -83,7 +83,7 @@ namespace Nez
 
 		public Batcher( GraphicsDevice graphicsDevice )
 		{
-			Assert.isTrue( graphicsDevice != null );
+			Insist.isTrue( graphicsDevice != null );
 
 			this.graphicsDevice = graphicsDevice;
 
@@ -223,7 +223,7 @@ namespace Nez
 		public void begin( BlendState blendState, SamplerState samplerState, DepthStencilState depthStencilState, RasterizerState rasterizerState,
 			Effect effect, Matrix transformationMatrix, bool disableBatching )
 		{
-			Assert.isFalse( _beginCalled, "Begin has been called before calling End after the last call to Begin. Begin cannot be called again until End has been successfully called." );
+			Insist.isFalse( _beginCalled, "Begin has been called before calling End after the last call to Begin. Begin cannot be called again until End has been successfully called." );
 			_beginCalled = true;
 
 			_blendState = blendState ?? BlendState.AlphaBlend;
@@ -242,7 +242,7 @@ namespace Nez
 
 		public void end()
 		{
-			Assert.isTrue( _beginCalled, "End was called, but Begin has not yet been called. You must call Begin successfully before you can call End." );
+			Insist.isTrue( _beginCalled, "End was called, but Begin has not yet been called. You must call Begin successfully before you can call End." );
 			_beginCalled = false;
 
 			if( !_disableBatching )
@@ -545,9 +545,9 @@ namespace Nez
 		/// <param name="colors">Colors.</param>
 		public void drawRaw( Texture2D texture, Vector3[] verts, Vector2[] textureCoords, Color[] colors )
 		{
-			Assert.isTrue( verts.Length == 4, "there must be only 4 verts" );
-			Assert.isTrue( textureCoords.Length == 4, "there must be only 4 texture coordinates" );
-			Assert.isTrue( colors.Length == 4, "there must be only 4 colors" );
+			Insist.isTrue( verts.Length == 4, "there must be only 4 verts" );
+			Insist.isTrue( textureCoords.Length == 4, "there must be only 4 texture coordinates" );
+			Insist.isTrue( colors.Length == 4, "there must be only 4 colors" );
 
 			// we're out of space, flush
 			if( _numSprites >= MAX_SPRITES )
@@ -591,8 +591,8 @@ namespace Nez
 		/// <param name="color">Color.</param>
 		public void drawRaw( Texture2D texture, Vector3[] verts, Vector2[] textureCoords, Color color )
 		{
-			Assert.isTrue( verts.Length == 4, "there must be only 4 verts" );
-			Assert.isTrue( textureCoords.Length == 4, "there must be only 4 texture coordinates" );
+			Insist.isTrue( verts.Length == 4, "there must be only 4 verts" );
+			Insist.isTrue( textureCoords.Length == 4, "there must be only 4 texture coordinates" );
 
 			// we're out of space, flush
 			if( _numSprites >= MAX_SPRITES )

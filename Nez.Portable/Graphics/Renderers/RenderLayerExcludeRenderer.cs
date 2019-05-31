@@ -15,7 +15,6 @@
 			this.excludedRenderLayers = excludedRenderLayers;
 		}
 
-
 		public override void render( Scene scene )
 		{
 			var cam = camera ?? scene.camera;
@@ -34,10 +33,10 @@
 			endRender();
 		}
 
-
 		protected override void debugRender( Scene scene, Camera cam )
 		{
-			base.debugRender( scene, cam );
+			Graphics.instance.batcher.end();
+			Graphics.instance.batcher.begin( cam.transformMatrix );
 
 			for( var i = 0; i < scene.renderableComponents.count; i++ )
 			{

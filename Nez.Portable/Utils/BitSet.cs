@@ -96,7 +96,7 @@ namespace Nez
 		/// <param name="nbits">nbits the initial size of the bit set</param>
 		public BitSet( int nbits )
 		{
-			Assert.isFalse( nbits < 0, "nbits may not be negative" );
+			Insist.isFalse( nbits < 0, "nbits may not be negative" );
 
 			var length = (uint)nbits >> 6;
 			if( ( nbits & LONG_MASK ) != 0 )

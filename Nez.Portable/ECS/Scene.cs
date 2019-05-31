@@ -121,17 +121,14 @@ namespace Nez
 		/// gets the size of the sceneRenderTarget
 		/// </summary>
 		/// <value>The size of the scene render texture.</value>
-		public Point sceneRenderTargetSize
-		{
-			get { return new Point( _sceneRenderTarget.Bounds.Width, _sceneRenderTarget.Bounds.Height ); }
-		}
+		public Point sceneRenderTargetSize => new Point( _sceneRenderTarget.Bounds.Width, _sceneRenderTarget.Bounds.Height );
 
 		/// <summary>
 		/// accesses the main scene RenderTarget. Some Renderers that use multiple RenderTargets may need to render into them first and then
 		/// render the result into the sceneRenderTarget.
 		/// </summary>
 		/// <value>The scene render target.</value>
-		public RenderTarget2D sceneRenderTarget { get { return _sceneRenderTarget; } }
+		public RenderTarget2D sceneRenderTarget => _sceneRenderTarget;
 
 		/// <summary>
 		/// if the ResolutionPolicy is pixel perfect this will be set to the scale calculated for it
@@ -151,8 +148,9 @@ namespace Nez
 					_finalRenderDelegate.unload();
 
 				_finalRenderDelegate = value;
-				_finalRenderDelegate.scene = this;
-				_finalRenderDelegate.onAddedToScene();
+
+				if( _finalRenderDelegate != null )
+					_finalRenderDelegate.onAddedToScene( this );
 			}
 			get
 			{
@@ -207,8 +205,8 @@ namespace Nez
 		Action<Texture2D> _screenshotRequestCallback;
 
 		internal readonly FastList<SceneComponent> _sceneComponents = new FastList<SceneComponent>();
-		FastList<Renderer> _renderers = new FastList<Renderer>();
-		readonly FastList<Renderer> _afterPostProcessorRenderers = new FastList<Renderer>();
+		internal FastList<Renderer> _renderers = new FastList<Renderer>();
+		internal readonly FastList<Renderer> _afterPostProcessorRenderers = new FastList<Renderer>();
 		internal readonly FastList<PostProcessor> _postProcessors = new FastList<PostProcessor>();
 		bool _didSceneBegin;
 
@@ -246,7 +244,6 @@ namespace Nez
 			return scene;
 		}
 
-
 		/// <summary>
 		/// helper that creates a scene of type T with the DefaultRenderer attached and ready for use
 		/// </summary>
@@ -262,7 +259,6 @@ namespace Nez
 			return scene;
 		}
 
-
 		/// <summary>
 		/// helper that creates a scene with no Renderer
 		/// </summary>
@@ -277,7 +273,6 @@ namespace Nez
 
 			return scene;
 		}
-
 
 		/// <summary>
 		/// helper that creates a scene of type T with no Renderer
@@ -327,13 +322,11 @@ namespace Nez
 		public virtual void initialize()
 		{}
 
-
 		/// <summary>
 		/// override this in Scene subclasses. this will be called when Core sets this scene as the active scene.
 		/// </summary>
 		public virtual void onStart()
 		{}
-
 
 		/// <summary>
 		/// override this in Scene subclasses and do any unloading necessary here. this is called when Core removes this scene from the active slot.
@@ -341,10 +334,14 @@ namespace Nez
 		public virtual void unload()
 		{}
 
-
 		internal void begin()
 		{
-			Assert.isFalse( _renderers.length == 0, "Scene has begun with no renderer. At least one renderer must be present before beginning a scene." );
+			if( _renderers.length == 0 )
+			{
+				addRenderer( new DefaultRenderer() );
+				Debug.warn( "Scene has begun with no renderer. A DefaultRenderer was added automatically so that something is visible." );
+			}
+
 			Physics.reset();
 
 			// prep our render textures
@@ -358,7 +355,6 @@ namespace Nez
 			_didSceneBegin = true;
 			onStart();
 		}
-
 
 		internal void end()
 		{
@@ -393,7 +389,6 @@ namespace Nez
 			unload();
 		}
 
-
 		public virtual void update()
 		{
 			// we set the RenderTarget here so that the Viewport will match the RenderTarget properly
@@ -423,9 +418,14 @@ namespace Nez
 			renderableComponents.updateLists();
 		}
 
-
 		internal void render()
 		{
+			if( _renderers.length == 0 )
+			{
+				Debug.error( "There are no Renderers in the Scene!" );
+				return;
+			}
+
 			// Renderers should always have those that require a RenderTarget first. They clear themselves and set themselves as
 			// the current RenderTarget when they render. If the first Renderer wants the sceneRenderTarget we set and clear it now.
 			if( _renderers[0].wantsToRenderToSceneRenderTarget )
@@ -456,9 +456,10 @@ namespace Nez
 			}
 		}
 
-
 		/// <summary>
-		/// any PostProcessors present get to do their processing then we do the final render of the RenderTarget to the screen
+		/// any PostProcessors present get to do their processing then we do the final render of the RenderTarget to the screen.
+		/// In almost all cases finalRenderTarget will be null. The only time it will have a value is the first frame of a
+		/// SceneTransition if the transition is requesting the render.
 		/// </summary>
 		/// <returns>The render.</returns>
 		internal void postRender( RenderTarget2D finalRenderTarget = null )
@@ -507,7 +508,7 @@ namespace Nez
 			// render our final result to the backbuffer or let our delegate do so
 			if( _finalRenderDelegate != null )
 			{
-				_finalRenderDelegate.handleFinalRender( letterboxColor, Mathf.isEven( enabledCounter ) ? _sceneRenderTarget : _destinationRenderTarget, _finalRenderDestinationRect, samplerState );
+				_finalRenderDelegate.handleFinalRender( finalRenderTarget, letterboxColor, Mathf.isEven( enabledCounter ) ? _sceneRenderTarget : _destinationRenderTarget, _finalRenderDestinationRect, samplerState );
 			}
 			else
 			{
@@ -518,7 +519,6 @@ namespace Nez
 				Graphics.instance.batcher.end();
 			}
 		}
-
 
 		void onGraphicsDeviceReset()
 		{
@@ -546,7 +546,6 @@ namespace Nez
 				_designBleedSize = new Point( horizontalBleed, verticalBleed );
 			updateResolutionScaler();
 		}
-
 
 		void updateResolutionScaler()
 		{
@@ -773,7 +772,6 @@ namespace Nez
 			return addSceneComponent( new T() );
 		}
 
-
 		/// <summary>
 		/// Adds and returns a SceneComponent to the components list
 		/// </summary>
@@ -787,7 +785,6 @@ namespace Nez
 			_sceneComponents.sort();
 			return component;
 		}
-
 
 		/// <summary>
 		/// Gets the first SceneComponent of type T and returns it. If no component is found returns null.
@@ -805,7 +802,6 @@ namespace Nez
 			return null;
 		}
 
-
 		/// <summary>
 		/// Gets the first SceneComponent of type T and returns it. If no SceneComponent is found the SceneComponent will be created.
 		/// </summary>
@@ -819,7 +815,6 @@ namespace Nez
 
 			return comp;
 		}
-
 
 		/// <summary>
 		/// removes the first SceneComponent of type T from the components list
@@ -838,13 +833,12 @@ namespace Nez
 			return false;
 		}
 
-
 		/// <summary>
 		/// removes a SceneComponent from the SceneComponents list
 		/// </summary>
 		public void removeSceneComponent( SceneComponent component )
 		{
-			Assert.isTrue( _sceneComponents.contains( component ), "SceneComponent {0} is not in the SceneComponents list!", component );
+			Insist.isTrue( _sceneComponents.contains( component ), "SceneComponent {0} is not in the SceneComponents list!", component );
 			_sceneComponents.remove( component );
 			component.onRemovedFromScene();
 		}
@@ -872,13 +866,14 @@ namespace Nez
 				_renderers.sort();
 			}
 
+			renderer.onAddedToScene( this );
+
 			// if we already began let the PostProcessor know what size our RenderTarget is
 			if( _didSceneBegin )
 				renderer.onSceneBackBufferSizeChanged( _sceneRenderTarget.Width, _sceneRenderTarget.Height );
 
 			return renderer;
 		}
-
 
 		/// <summary>
 		/// gets the first Renderer of Type T
@@ -902,19 +897,20 @@ namespace Nez
 			return null;
 		}
 
-
 		/// <summary>
 		/// removes the Renderer from the scene
 		/// </summary>
 		/// <param name="renderer">Renderer.</param>
 		public void removeRenderer( Renderer renderer )
 		{
+			Insist.isTrue( _renderers.contains( renderer ) || _afterPostProcessorRenderers.contains( renderer ) );
+
 			if( renderer.wantsToRenderAfterPostProcessors )
 				_afterPostProcessorRenderers.remove( renderer );
 			else
 				_renderers.remove( renderer );
+			renderer.unload();
 		}
-
 
 		/// <summary>
 		/// adds a PostProcessor to the scene. Sets the scene field and calls PostProcessor.onAddedToScene so that PostProcessors can load
@@ -925,8 +921,7 @@ namespace Nez
 		{
 			_postProcessors.add( postProcessor );
 			_postProcessors.sort();
-			postProcessor.scene = this;
-			postProcessor.onAddedToScene();
+			postProcessor.onAddedToScene( this );
 
 			// if we already began let the PostProcessor know what size our RenderTarget is
 			if( _didSceneBegin )
@@ -944,7 +939,6 @@ namespace Nez
 			return postProcessor;
 		}
 
-
 		/// <summary>
 		/// gets the first PostProcessor of Type T
 		/// </summary>
@@ -961,15 +955,17 @@ namespace Nez
 			return null;
 		}
 
-
 		/// <summary>
 		/// removes a PostProcessor. Note that unload is not called when removing so if you no longer need the PostProcessor be sure to call
 		/// unload to free resources.
 		/// </summary>
-		/// <param name="step">Step.</param>
-		public void removePostProcessor( PostProcessor step )
+		/// <param name="postProcessor">Step.</param>
+		public void removePostProcessor( PostProcessor postProcessor )
 		{
-			_postProcessors.remove( step );
+			Insist.isTrue( _postProcessors.contains( postProcessor ) );
+
+			_postProcessors.remove( postProcessor );
+			postProcessor.unload();
 		}
 
 		#endregion
@@ -987,7 +983,6 @@ namespace Nez
 			return addEntity( entity );
 		}
 
-
 		/// <summary>
 		/// add the Entity to this Scene at position, and return it
 		/// </summary>
@@ -1001,14 +996,13 @@ namespace Nez
 			return addEntity( entity );
 		}
 
-
 		/// <summary>
 		/// adds an Entity to the Scene's Entities list
 		/// </summary>
 		/// <param name="entity">The Entity to add</param>
 		public Entity addEntity( Entity entity )
 		{
-			Assert.isFalse( entities.contains( entity ), "You are attempting to add the same entity to a scene twice: {0}", entity );
+			Insist.isFalse( entities.contains( entity ), "You are attempting to add the same entity to a scene twice: {0}", entity );
 			entities.add( entity );
 			entity.scene = this;
 
@@ -1018,19 +1012,17 @@ namespace Nez
 			return entity;
 		}
 
-
 		/// <summary>
 		/// adds an Entity to the Scene's Entities list
 		/// </summary>
 		/// <param name="entity">The Entity to add</param>
 		public T addEntity<T>( T entity ) where T : Entity
 		{
-			Assert.isFalse( entities.contains( entity ), "You are attempting to add the same entity to a scene twice: {0}", entity );
+			Insist.isFalse( entities.contains( entity ), "You are attempting to add the same entity to a scene twice: {0}", entity );
 			entities.add( entity );
 			entity.scene = this;
 			return entity;
 		}
-
 
 		/// <summary>
 		/// removes all entities from the scene
@@ -1040,7 +1032,6 @@ namespace Nez
 			for( var i = 0; i < entities.count; i++ )
 				entities[i].destroy();
 		}
-
 
 		/// <summary>
 		/// searches for and returns the first Entity with name
@@ -1052,7 +1043,6 @@ namespace Nez
 			return entities.findEntity( name );
 		}
 
-
 		/// <summary>
 		/// returns all entities with the given tag
 		/// </summary>
@@ -1062,7 +1052,6 @@ namespace Nez
 		{
 			return entities.entitiesWithTag( tag );
 		}
-
 
 		/// <summary>
 		/// returns all entities of Type T
@@ -1074,7 +1063,6 @@ namespace Nez
 			return entities.entitiesOfType<T>();
 		}
 
-
 		/// <summary>
 		/// returns the first enabled loaded component of Type T
 		/// </summary>
@@ -1084,7 +1072,6 @@ namespace Nez
 		{
 			return entities.findComponentOfType<T>();
 		}
-
 
 		/// <summary>
 		/// returns a list of all enabled loaded components of Type T
@@ -1113,7 +1100,6 @@ namespace Nez
 			return processor;
 		}
 
-
 		/// <summary>
 		/// removes an EntitySystem processor from the scene
 		/// </summary>
@@ -1122,7 +1108,6 @@ namespace Nez
 		{
 			entityProcessors.remove( processor );
 		}
-
 
 		/// <summary>
 		/// gets an EntitySystem processor

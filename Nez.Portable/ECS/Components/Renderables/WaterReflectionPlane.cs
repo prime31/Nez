@@ -13,12 +13,12 @@ namespace Nez
 	/// </summary>
 	public class WaterReflectionPlane : RenderableComponent
 	{
-		public override float width { get { return _width; } }
-		public override float height { get { return _height; } }
+		public override float width => _width;
+		public override float height => _height;
 		public override Material material
 		{
-			get { return _waterReflectionMaterial; }
-			set { _waterReflectionMaterial = value as WaterReflectionMaterial; }
+			get => _waterReflectionMaterial;
+			set => _waterReflectionMaterial = value as WaterReflectionMaterial;
 		}
 
 		float _width;
@@ -27,6 +27,9 @@ namespace Nez
 		WaterReflectionMaterial _waterReflectionMaterial;
 
 
+		public WaterReflectionPlane() : this( Screen.width, Screen.height )
+		{}
+		
 		public WaterReflectionPlane( float width, float height )
 		{
 			// we need a separate texture (not part of an atlas) so that we get uvs in the 0 - 1 range that the Effect requires
@@ -37,12 +40,10 @@ namespace Nez
 			_waterReflectionMaterial = new WaterReflectionMaterial();
 		}
 
-
 		~WaterReflectionPlane()
 		{
 			_texture.Dispose();
 		}
-
 
 		public override void render( Graphics graphics, Camera camera )
 		{
@@ -52,6 +53,7 @@ namespace Nez
 
 			graphics.batcher.draw( _texture, bounds, new Rectangle( 0, 0, 1, 1 ), color );
 		}
+
 	}
 }
 

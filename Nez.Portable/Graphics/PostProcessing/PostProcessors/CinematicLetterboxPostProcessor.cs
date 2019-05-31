@@ -57,10 +57,10 @@ namespace Nez
 		public CinematicLetterboxPostProcessor( int executionOrder ) : base( executionOrder )
 		{}
 
-
-		public override void onAddedToScene()
+		public override void onAddedToScene( Scene scene )
 		{
-			effect = scene.content.loadEffect<Effect>( "vignette", EffectResource.letterboxBytes );
+			base.onAddedToScene( scene );
+			effect = _scene.content.loadEffect<Effect>( "vignette", EffectResource.letterboxBytes );
 
 			_colorParam = effect.Parameters["_color"];
 			_letterboxSizeParam = effect.Parameters["_letterboxSize"];
@@ -68,6 +68,11 @@ namespace Nez
 			_letterboxSizeParam.SetValue( _letterboxSize );
 		}
 
+		public override void unload()
+		{
+			_scene.content.unloadEffect( effect );
+			base.unload();
+		}
 
 		/// <summary>
 		/// animates the letterbox in
@@ -92,7 +97,6 @@ namespace Nez
 			}
 			_isAnimating = false;
 		}
-
 
 		/// <summary>
 		/// animates the letterbox out
