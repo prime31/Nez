@@ -27,6 +27,9 @@
 		<EmbeddedResource Include="Content\NezDefaultBMFont.xnb" />
 	</ItemGroup>
 	<ItemGroup>
+		<Reference Include="MonoGame.Framework">
+		  <HintPath>C:\Program Files (x86)\MSBuild\MonoGame\v3.0\Tools\MonoGame.Framework.dll</HintPath>
+		</Reference>
 		<Reference Include="System.Net.Http" />
 	</ItemGroup>
 	
