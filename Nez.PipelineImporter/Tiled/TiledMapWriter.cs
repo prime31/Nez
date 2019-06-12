@@ -43,14 +43,14 @@ namespace Nez.TiledMaps
 			{
 				if( tileset.image != null )
 					TiledMapProcessor.logger.LogMessage( "\nExpecting texture asset: {0}\n", tileset.image.source );
-				
+
 				writer.Write( tileset.isStandardTileset );
 
 				if( tileset.image != null )
 					writer.Write( removeExtension( tileset.image.source ) );
 				else
 					writer.Write( string.Empty );
-				
+
 				writer.Write( tileset.firstGid );
 				writer.Write( tileset.tileWidth );
 				writer.Write( tileset.tileHeight );
@@ -89,6 +89,7 @@ namespace Nez.TiledMaps
 					}
 
 					writeCustomProperties( writer, tile.properties );
+					writeObjectGroups( writer, tile.objectGroups );
 				}
 			}
 
@@ -127,7 +128,7 @@ namespace Nez.TiledMaps
 						writer.Write( tile.flippedDiagonally );
 					}
 
-					writer.Write( tileLayer.width ); 
+					writer.Write( tileLayer.width );
 					writer.Write( tileLayer.height );
 				}
 
@@ -144,10 +145,15 @@ namespace Nez.TiledMaps
 				TiledMapProcessor.logger.LogMessage( "done writing Layer: {0}", layer );
 			}
 
-			writer.Write( map.objectGroups.Count );
-			foreach( var group in map.objectGroups )
+			writeObjectGroups( writer, map.objectGroups );
+		}
+
+		static void writeObjectGroups( ContentWriter writer, List<TmxObjectGroup> objectGroups )
+		{
+			writer.Write( objectGroups.Count );
+			foreach( var group in objectGroups )
 			{
-				writer.Write( group.name );
+				writer.Write( group.name ?? string.Empty );
 				writer.Write( hexToColor( group.color ) );
 				writer.Write( group.visible );
 				writer.Write( group.opacity );
@@ -195,7 +201,7 @@ namespace Nez.TiledMaps
 
 					writeCustomProperties( writer, obj.properties );
 				}
-				
+
 				TiledMapProcessor.logger.LogMessage( "done writing ObjectGroup: {0}", group );
 			}
 		}
