@@ -82,6 +82,12 @@ namespace Nez.Tiled
 
 					readCustomProperties( reader, tile.properties );
 
+					var tileObjectGroupCount = reader.ReadInt32();
+					if( tileObjectGroupCount > 0 )
+						tile.objectGroups = new List<TiledObjectGroup>( tileObjectGroupCount );
+					for( var k = 0; k < tileObjectGroupCount; k++ )
+						tile.objectGroups.Add( readObjectGroup( reader, tiledMap ) );
+
 					// give the TiledTilesetTile a chance to process and cache any data required
 					tile.processProperties();
 
@@ -102,7 +108,7 @@ namespace Nez.Tiled
 
 			var objectGroupCount = reader.ReadInt32();
 			for( var i = 0; i < objectGroupCount; i++ )
-				readObjectGroup( reader, tiledMap );
+				tiledMap.objectGroups.Add( readObjectGroup( reader, tiledMap ) );
 
 			return tiledMap;
 		}
@@ -206,7 +212,7 @@ namespace Nez.Tiled
 
 		static TiledObjectGroup readObjectGroup( ContentReader reader, TiledMap tiledMap )
 		{
-			var objectGroup = tiledMap.createObjectGroup(
+			var objectGroup = new TiledObjectGroup(
 				reader.ReadString(), reader.ReadColor(), reader.ReadBoolean(), reader.ReadSingle() );
 
 			readCustomProperties( reader, objectGroup.properties );

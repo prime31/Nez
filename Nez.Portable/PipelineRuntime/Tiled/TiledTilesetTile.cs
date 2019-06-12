@@ -12,6 +12,7 @@ namespace Nez.Tiled
 	{
 		public readonly int id;
 		public readonly TiledMap tiledMap;
+		public List<TiledObjectGroup> objectGroups;
 		public List<TiledTileAnimationFrame> animationFrames;
 		public Dictionary<string, string> properties = new Dictionary<string, string>();
 

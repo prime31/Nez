@@ -123,14 +123,6 @@ namespace Nez.Tiled
 			return layer;
 		}
 
-
-		public TiledObjectGroup createObjectGroup( string name, Color color, bool visible, float opacity )
-		{
-			var group = new TiledObjectGroup( name, color, visible, opacity );
-			objectGroups.Add( group );
-			return group;
-		}
-
 		#endregion
 
 
