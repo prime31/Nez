@@ -19,7 +19,7 @@ namespace Nez
 			Right
 		}
 			
-		static SpriteBatch _spriteBatch;
+		static Batcher _batcher;
 		static BitmapFont _font;
 
 		// constants
@@ -57,7 +57,7 @@ namespace Nez
 
 		static IMGUI()
 		{
-			_spriteBatch = new SpriteBatch( Core.graphicsDevice );
+			_batcher = new Batcher( Core.graphicsDevice );
 			_font = Graphics.instance.bitmapFont;
 
 			var scale = FONT_LINE_HEIGHT / _font.lineHeight;
@@ -84,7 +84,7 @@ namespace Nez
 
 			var y = _lastY + ELEMENT_PADDING + ( elementHeight - FONT_LINE_HEIGHT ) * 0.5f;
 
-			_spriteBatch.DrawString( _font, text, new Vector2( x, y ), color, 0, Vector2.Zero, FONT_SCALE, SpriteEffects.None, 0 );
+			_batcher.DrawString( _font, text, new Vector2( x, y ), color, 0, Vector2.Zero, FONT_SCALE, SpriteEffects.None, 0 );
 		}
 
 
@@ -121,9 +121,9 @@ namespace Nez
 		/// <param name="useRawMousePosition">If set to <c>true</c> use raw mouse position.</param>
 		public static void beginWindow( float x, float y, float width, float height, bool useRawMousePosition = true )
 		{
-			_spriteBatch.Begin();
+			_batcher.begin();
 
-			_spriteBatch.drawRect( x, y, width, height, WINDOW_COLOR );
+			_batcher.drawRect( x, y, width, height, WINDOW_COLOR );
 
 			_elementX = x + ELEMENT_PADDING;
 			_lastY = y;
@@ -138,7 +138,7 @@ namespace Nez
 
 		public static void endWindow()
 		{
-			_spriteBatch.End();
+			_batcher.end();
 		}
 
 
@@ -153,7 +153,7 @@ namespace Nez
 				color = Input.leftMouseButtonDown ? BUTTON_COLOR_DOWN : BUTTON_COLOR_ACTIVE;
 			}
 
-			_spriteBatch.drawRect( _elementX, _lastY + ELEMENT_PADDING, _elementWidth, ELEMENT_HEIGHT, color );
+			_batcher.drawRect( _elementX, _lastY + ELEMENT_PADDING, _elementWidth, ELEMENT_HEIGHT, color );
 			drawString( text, FONT_COLOR );
 			endElement();
 
@@ -187,10 +187,10 @@ namespace Nez
 			}
 
 			drawString( text, FONT_COLOR, TextAlign.Left );
-			_spriteBatch.drawRect( toggleX, _lastY + ELEMENT_PADDING, ELEMENT_HEIGHT, ELEMENT_HEIGHT, color );
+			_batcher.drawRect( toggleX, _lastY + ELEMENT_PADDING, ELEMENT_HEIGHT, ELEMENT_HEIGHT, color );
 
 			if( isChecked || isToggleActive )
-				_spriteBatch.drawRect( toggleX + 3, _lastY + ELEMENT_PADDING + 3, ELEMENT_HEIGHT - 6, ELEMENT_HEIGHT - 6, toggleCheckColor );
+				_batcher.drawRect( toggleX + 3, _lastY + ELEMENT_PADDING + 3, ELEMENT_HEIGHT - 6, ELEMENT_HEIGHT - 6, toggleCheckColor );
 
 			endElement();
 
@@ -223,8 +223,8 @@ namespace Nez
 				}
 			}
 				
-			_spriteBatch.drawRect( _elementX, _lastY + ELEMENT_PADDING, _elementWidth, SHORT_ELEMENT_HEIGHT, SLIDER_BG );
-			_spriteBatch.drawRect( _elementX + thumbPos, _lastY + ELEMENT_PADDING, SHORT_ELEMENT_HEIGHT, SHORT_ELEMENT_HEIGHT, color );
+			_batcher.drawRect( _elementX, _lastY + ELEMENT_PADDING, _elementWidth, SHORT_ELEMENT_HEIGHT, SLIDER_BG );
+			_batcher.drawRect( _elementX + thumbPos, _lastY + ELEMENT_PADDING, SHORT_ELEMENT_HEIGHT, SHORT_ELEMENT_HEIGHT, color );
 			drawString( name + value.ToString( "F" ), FONT_COLOR, TextAlign.Center, SHORT_ELEMENT_HEIGHT );
 			endElement();
 
@@ -257,8 +257,8 @@ namespace Nez
 				}
 			}
 
-			_spriteBatch.drawRect( _elementX, _lastY + ELEMENT_PADDING, _elementWidth, ELEMENT_HEIGHT, SLIDER_BG );
-			_spriteBatch.drawRect( _elementX, _lastY + ELEMENT_PADDING, thumbPos, ELEMENT_HEIGHT, color );
+			_batcher.drawRect( _elementX, _lastY + ELEMENT_PADDING, _elementWidth, ELEMENT_HEIGHT, SLIDER_BG );
+			_batcher.drawRect( _elementX, _lastY + ELEMENT_PADDING, thumbPos, ELEMENT_HEIGHT, color );
 			drawString( value.ToString( "F" ), FONT_COLOR );
 			endElement();
 
@@ -273,7 +273,7 @@ namespace Nez
 		public static void header( string text )
 		{
 			// expand the header to full width and use a shorter element height
-			_spriteBatch.drawRect( _elementX - ELEMENT_PADDING, _lastY + ELEMENT_PADDING, _elementWidth + ELEMENT_PADDING * 2, SHORT_ELEMENT_HEIGHT, HEADER_BG );
+			_batcher.drawRect( _elementX - ELEMENT_PADDING, _lastY + ELEMENT_PADDING, _elementWidth + ELEMENT_PADDING * 2, SHORT_ELEMENT_HEIGHT, HEADER_BG );
 			drawString( text, FONT_COLOR, TextAlign.Center, SHORT_ELEMENT_HEIGHT );
 			endElement( SHORT_ELEMENT_HEIGHT );
 		}

@@ -158,7 +158,7 @@ namespace Nez
 		public void compile()
 		{
 			_charDetails = new CharDetails[_text.Length];
-			BitmapFontRegion currentFontRegion = null;
+			Character currentCharacter = null;
 			var effects = (byte)SpriteEffects.None;
 
 			var _transformationMatrix = Matrix2D.identity;
@@ -187,35 +187,36 @@ namespace Nez
 				{
 					offset.X = requiresTransformation ? 0f : position.X - _origin.X;
 					offset.Y += _font.lineHeight;
-					currentFontRegion = null;
+					currentCharacter = null;
 					continue;
 				}
 
-				if( currentFontRegion != null )
-					offset.X += _font.spacing + currentFontRegion.xAdvance;
+				if( currentCharacter != null )
+					offset.X += _font.spacing.X + currentCharacter.xAdvance;
 
-				currentFontRegion = _font.fontRegionForChar( c, true );
+				currentCharacter = _font[c];
 				var p = offset;
-				p.X += currentFontRegion.xOffset;
-				p.Y += currentFontRegion.yOffset;
+				p.X += currentCharacter.offset.X;
+				p.Y += currentCharacter.offset.Y;
 
 				// transform our point if we need to
 				if( requiresTransformation )
 					Vector2Ext.transform( ref p, ref _transformationMatrix, out p );
 
-				var destination = new Vector4( p.X, p.Y, currentFontRegion.width * _scale.X, currentFontRegion.height * _scale.Y );
-				_charDetails[i].texture = currentFontRegion.subtexture.texture2D;
+				var destination = new Vector4( p.X, p.Y, currentCharacter.bounds.Width * _scale.X, currentCharacter.bounds.Height * _scale.Y );
+                _charDetails[i].texture = _font.textures[_font[currentCharacter.character].texturePage];
+				//_charDetails[i].texture = currentCharacter.subtexture.texture2D;
 
 
 				// Batcher calculations
-				var sourceRectangle = currentFontRegion.subtexture.sourceRect;
+				var sourceRectangle = currentCharacter.bounds;
 				float sourceX, sourceY, sourceW, sourceH;
 				var destW = destination.Z;
 				var destH = destination.W;
 
 				// calculate uvs
-				var inverseTexW = 1.0f / (float)currentFontRegion.subtexture.texture2D.Width;
-				var inverseTexH = 1.0f / (float)currentFontRegion.subtexture.texture2D.Height;
+				var inverseTexW = 1.0f / (float)currentCharacter.bounds.Width;
+				var inverseTexH = 1.0f / (float)currentCharacter.bounds.Height;
 
 				sourceX = sourceRectangle.X * inverseTexW;
 				sourceY = sourceRectangle.Y * inverseTexH;

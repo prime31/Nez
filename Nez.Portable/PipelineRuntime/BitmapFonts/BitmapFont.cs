@@ -1,541 +1,406 @@
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
+using System.IO;
+using System.Text;
+using System.Xml;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System.Text;
-using System;
-
+using Nez;
 
 namespace Nez.BitmapFonts
 {
-	public class BitmapFont : IFont
-	{
-		float IFont.lineSpacing { get { return lineHeight; } }
-
-		/// <summary>
-		/// Gets or sets the line spacing (the distance from baseline to baseline) of the font.
-		/// </summary>
-		/// <value>The height of the line.</value>
-		public int lineHeight;
-
-		/// <summary>
-		/// Gets or sets the spacing (tracking) between characters in the font.
-		/// </summary>
-		public float spacing;
-
-		/// <summary>
-		/// The distance from the bottom of the glyph that extends the lowest to the baseline. This number is negative.
-		/// </summary>
-		public float descent;
-
-		/// <summary>
-		/// these are currently read in from the .fnt file but not used
-		/// </summary>
-		public float padTop, padBottom, padLeft, padRight;
-
-		/// <summary>
-		/// Gets or sets the character that will be substituted when a given character is not included in the font.
-		/// </summary>
-		public char defaultCharacter
-		{
-			set
-			{
-				if( !_characterMap.TryGetValue( value, out defaultCharacterRegion ) )
-					Debug.error( "BitmapFont does not contain a region for the default character being set: {0}", value );
-			}
-		}
-
-		/// <summary>
-		/// populated with ' ' by default and reset whenever defaultCharacter is set
-		/// </summary>
-		public BitmapFontRegion defaultCharacterRegion;
-
-		/// <summary>
-		/// this sucker gets used a lot so we cache it to avoid having to create it every frame
-		/// </summary>
-		Matrix2D _transformationMatrix = Matrix2D.identity;
-
-		/// <summary>
-		/// width of a space
-		/// </summary>
-		public readonly int spaceWidth;
-
-
-		readonly Dictionary<char,BitmapFontRegion> _characterMap;
-
-
-		class CharComparer : IEqualityComparer<char>
-		{
-			static public readonly CharComparer defaultCharComparer = new CharComparer();
-
-			public bool Equals( char x, char y )
-			{
-				return x == y;
-			}
-
-			public int GetHashCode( char b )
-			{
-				return ( b | ( b << 16 ) );
-			}
-		}
-
-
-		internal BitmapFont( BitmapFontRegion[] regions, int lineHeight )
-		{
-			_characterMap = new Dictionary<char,BitmapFontRegion>( regions.Length, CharComparer.defaultCharComparer );
-			for( var i = 0; i < regions.Length; i++ )
-				_characterMap[regions[i].character] = regions[i];
-
-			this.lineHeight = lineHeight;
-			defaultCharacter = ' ';
-			spaceWidth = defaultCharacterRegion.width + defaultCharacterRegion.xAdvance;
-		}
-
-
-		public string wrapText( string text, float maxLineWidth )
-		{
-			var words = text.Split( ' ' );
-			var sb = new StringBuilder();
-			var lineWidth = 0f;
-
-			if( maxLineWidth < spaceWidth )
-				return string.Empty;
-
-			foreach( var word in words )
-			{
-				var size = measureString( word );
-
-				if( lineWidth + size.X < maxLineWidth )
-				{
-					sb.Append( word + " " );
-					lineWidth += size.X + spaceWidth;
-				}
-				else
-				{
-					if( size.X > maxLineWidth )
-					{
-						if( sb.ToString() == "" )
-							sb.Append( wrapText( word.Insert( word.Length / 2, " " ) + " ", maxLineWidth ) );
-						else
-							sb.Append( "\n" + wrapText( word.Insert( word.Length / 2, " " ) + " ", maxLineWidth ) );
-					}
-					else
-					{
-						sb.Append( "\n" + word + " " );
-						lineWidth = size.X + spaceWidth;
-					}
-				}
-			}
-
-			return sb.ToString();
-		}
-
-
-		/// <summary>
-		/// truncates text and returns a new string with ellipsis appended if necessary. This method ignores all
-		/// line breaks.
-		/// </summary>
-		/// <returns>The text.</returns>
-		/// <param name="text">Text.</param>
-		/// <param name="ellipsis">Ellipsis.</param>
-		/// <param name="maxLineWidth">Max line width.</param>
-		public string truncateText( string text, string ellipsis, float maxLineWidth )
-		{
-			if( maxLineWidth < spaceWidth )
-				return string.Empty;
-
-			var size = measureString( text );
-
-			// do we even need to truncate?
-			var ellipsisWidth = measureString( ellipsis ).X;
-			if( size.X > maxLineWidth )
-			{
-				var sb = new StringBuilder();
-
-				var width = 0.0f;
-				BitmapFontRegion currentFontRegion = null;
-				var offsetX = 0.0f;
-
-				// determine how many chars we can fit in maxLineWidth - ellipsisWidth
-				for( var i = 0; i < text.Length; i++ )
-				{
-					var c = text[i];
-
-					// we dont deal with line breaks or tabs
-					if( c == '\r' || c == '\n' )
-						continue;
-
-					if( currentFontRegion != null )
-						offsetX += spacing + currentFontRegion.xAdvance;
-
-					if( !_characterMap.TryGetValue( c, out currentFontRegion ) )
-						currentFontRegion = defaultCharacterRegion;
-
-					var proposedWidth = offsetX + currentFontRegion.xAdvance + spacing;
-					if( proposedWidth > width )
-						width = proposedWidth;
-
-					if( width < maxLineWidth - ellipsisWidth )
-					{
-						sb.Append( c );
-					}
-					else
-					{
-						// no more room. append our ellipsis and get out of here
-						sb.Append( ellipsis );
-						break;
-					}
-				}
-
-				return sb.ToString();
-			}
-
-			return text;
-		}
-
-
-		/// <summary>
-		/// Returns the size of the contents of a string when rendered in this font.
-		/// </summary>
-		/// <returns>The string.</returns>
-		/// <param name="text">Text.</param>
-		public Vector2 measureString( string text )
-		{
-			var source = new FontCharacterSource( text );
-			Vector2 size;
-			measureString( ref source, out size );
-			return size;
-		}
-
-
-		/// <summary>
-		/// Returns the size of the contents of a StringBuilder when rendered in this font.
-		/// </summary>
-		/// <returns>The string.</returns>
-		/// <param name="text">Text.</param>
-		public Vector2 measureString( StringBuilder text )
-		{
-			var source = new FontCharacterSource( text );
-			Vector2 size;
-			measureString( ref source, out size );
-			return size;
-		}
-
-
-		void measureString( ref FontCharacterSource text, out Vector2 size )
-		{
-			if( text.Length == 0 )
-			{
-				size = Vector2.Zero;
-				return;
-			}
-
-			var width = 0.0f;
-			var finalLineHeight = (float)lineHeight;
-			var fullLineCount = 0;
-			BitmapFontRegion currentFontRegion = null;
-			var offset = Vector2.Zero;
-
-			for( var i = 0; i < text.Length; i++ )
-			{
-				var c = text[i];
-
-				if( c == '\r' )
-					continue;
-
-				if( c == '\n' )
-				{
-					fullLineCount++;
-					finalLineHeight = lineHeight;
-
-					offset.X = 0;
-					offset.Y = lineHeight * fullLineCount;
-					currentFontRegion = null;
-					continue;
-				}
-
-				if( currentFontRegion != null )
-					offset.X += spacing + currentFontRegion.xAdvance;
-
-				if( !_characterMap.TryGetValue( c, out currentFontRegion ) )
-					currentFontRegion = defaultCharacterRegion;
-
-				var proposedWidth = offset.X + currentFontRegion.xAdvance + spacing;
-				if( proposedWidth > width )
-					width = proposedWidth;
-
-				if( currentFontRegion.height + currentFontRegion.yOffset > finalLineHeight )
-					finalLineHeight = currentFontRegion.height + currentFontRegion.yOffset;
-			}
-
-			size.X = width;
-			size.Y = fullLineCount * lineHeight + finalLineHeight;
-		}
-
-
-		/// <summary>
-		/// gets the BitmapFontRegion for the given char optionally substituting the default region if it isnt present.
-		/// </summary>
-		/// <returns><c>true</c>, if get font region for char was tryed, <c>false</c> otherwise.</returns>
-		/// <param name="c">C.</param>
-		/// <param name="fontRegion">Font region.</param>
-		/// <param name="useDefaultRegionIfNotPresent">If set to <c>true</c> use default region if not present.</param>
-		public bool tryGetFontRegionForChar( char c, out BitmapFontRegion fontRegion, bool useDefaultRegionIfNotPresent = false )
-		{
-			if( !_characterMap.TryGetValue( c, out fontRegion ) )
-			{
-				if( useDefaultRegionIfNotPresent )
-				{
-					fontRegion = defaultCharacterRegion;
-					return true;
-				}
-				return false;
-			}
-
-			return true;
-		}
-
-
-		/// <summary>
-		/// checks to see if a BitmapFontRegion exists for the char
-		/// </summary>
-		/// <returns><c>true</c>, if region exists for char was fonted, <c>false</c> otherwise.</returns>
-		/// <param name="c">C.</param>
-		public bool hasCharacter( char c )
-		{
-			BitmapFontRegion fontRegion;
-			return tryGetFontRegionForChar( c, out fontRegion );
-		}
-
-
-		/// <summary>
-		/// gets the BitmapFontRegion for char. Returns null if it doesnt exist and useDefaultRegionIfNotPresent is false.
-		/// </summary>
-		/// <returns>The region for char.</returns>
-		/// <param name="c">C.</param>
-		/// <param name="useDefaultRegionIfNotPresent">If set to <c>true</c> use default region if not present.</param>
-		public BitmapFontRegion fontRegionForChar( char c, bool useDefaultRegionIfNotPresent = false )
-		{
-			BitmapFontRegion fontRegion;
-			tryGetFontRegionForChar( c, out fontRegion, useDefaultRegionIfNotPresent );
-			return fontRegion;
-		}
-
-
-		#region drawing
-
-		void IFont.drawInto( Batcher batcher, string text, Vector2 position, Color color,
-			float rotation, Vector2 origin, Vector2 scale, SpriteEffects effect, float depth )
-		{
-			var source = new FontCharacterSource( text );
-			drawInto( batcher, ref source, position, color, rotation, origin, scale, effect, depth );
-		}
-
-
-		void IFont.drawInto( Batcher batcher, StringBuilder text, Vector2 position, Color color,
-			float rotation, Vector2 origin, Vector2 scale, SpriteEffects effect, float depth )
-		{
-			var source = new FontCharacterSource( text );
-			drawInto( batcher, ref source, position, color, rotation, origin, scale, effect, depth );
-		}
-
-
-		internal void drawInto( Batcher batcher, ref FontCharacterSource text, Vector2 position, Color color,
-		                        float rotation, Vector2 origin, Vector2 scale, SpriteEffects effect, float depth )
-		{
-			var flipAdjustment = Vector2.Zero;
-
-			var flippedVert = ( effect & SpriteEffects.FlipVertically ) == SpriteEffects.FlipVertically;
-			var flippedHorz = ( effect & SpriteEffects.FlipHorizontally ) == SpriteEffects.FlipHorizontally;
-
-			if( flippedVert || flippedHorz )
-			{
-				Vector2 size;
-				measureString( ref text, out size );
-
-				if( flippedHorz )
-				{
-					origin.X *= -1;
-					flipAdjustment.X = -size.X;
-				}
-
-				if( flippedVert )
-				{
-					origin.Y *= -1;
-					flipAdjustment.Y = lineHeight - size.Y;
-				}
-			}
-
-
-			var requiresTransformation = flippedHorz || flippedVert || rotation != 0f || scale != Vector2.One;
-			if( requiresTransformation )
-			{
-				Matrix2D temp;
-				Matrix2D.createTranslation( -origin.X, -origin.Y, out _transformationMatrix );
-				Matrix2D.createScale( ( flippedHorz ? -scale.X : scale.X ), ( flippedVert ? -scale.Y : scale.Y ), out temp );
-				Matrix2D.multiply( ref _transformationMatrix, ref temp, out _transformationMatrix );
-				Matrix2D.createTranslation( flipAdjustment.X, flipAdjustment.Y, out temp );
-				Matrix2D.multiply( ref temp, ref _transformationMatrix, out _transformationMatrix );
-				Matrix2D.createRotation( rotation, out temp );
-				Matrix2D.multiply( ref _transformationMatrix, ref temp, out _transformationMatrix );
-				Matrix2D.createTranslation( position.X, position.Y, out temp );
-				Matrix2D.multiply( ref _transformationMatrix, ref temp, out _transformationMatrix );
-			}
-
-			BitmapFontRegion currentFontRegion = null;
-			var offset = requiresTransformation ? Vector2.Zero : position - origin;
-
-			for( var i = 0; i < text.Length; ++i )
-			{
-				var c = text[i];
-				if( c == '\r' )
-					continue;
-
-				if( c == '\n' )
-				{
-					offset.X = requiresTransformation ? 0f : position.X - origin.X;
-					offset.Y += lineHeight;
-					currentFontRegion = null;
-					continue;
-				}
-
-				if( currentFontRegion != null )
-					offset.X += spacing + currentFontRegion.xAdvance;
-
-				if( !_characterMap.TryGetValue( c, out currentFontRegion ) )
-					currentFontRegion = defaultCharacterRegion;
-
-
-				var p = offset;
-
-				if( flippedHorz )
-					p.X += currentFontRegion.width;
-				p.X += currentFontRegion.xOffset;
-
-				if( flippedVert )
-					p.Y += currentFontRegion.height - lineHeight;
-				p.Y += currentFontRegion.yOffset;
-
-				// transform our point if we need to
-				if( requiresTransformation )
-					Vector2Ext.transform( ref p, ref _transformationMatrix, out p );
-
-				var destRect = RectangleExt.fromFloats
-				(
-	               p.X, p.Y, 
-	               currentFontRegion.width * scale.X,
-	               currentFontRegion.height * scale.Y
-               );
-
-				batcher.draw( currentFontRegion.subtexture, destRect, currentFontRegion.subtexture.sourceRect, color, rotation, Vector2.Zero, effect, depth );
-			}
-		}
-
-
-		/// <summary>
-		/// old SpriteBatch drawing method. This should probably be removed since SpriteBatch was replaced by Batcher
-		/// </summary>
-		/// <param name="spriteBatch">Sprite batch.</param>
-		/// <param name="text">Text.</param>
-		/// <param name="position">Position.</param>
-		/// <param name="color">Color.</param>
-		/// <param name="rotation">Rotation.</param>
-		/// <param name="origin">Origin.</param>
-		/// <param name="scale">Scale.</param>
-		/// <param name="effect">Effect.</param>
-		/// <param name="depth">Depth.</param>
-		internal void drawInto( SpriteBatch spriteBatch, ref FontCharacterSource text, Vector2 position, Color color,
-			float rotation, Vector2 origin, Vector2 scale, SpriteEffects effect, float depth )
-		{
-			var flipAdjustment = Vector2.Zero;
-
-			var flippedVert = ( effect & SpriteEffects.FlipVertically ) == SpriteEffects.FlipVertically;
-			var flippedHorz = ( effect & SpriteEffects.FlipHorizontally ) == SpriteEffects.FlipHorizontally;
-
-			if( flippedVert || flippedHorz )
-			{
-				Vector2 size;
-				measureString( ref text, out size );
-
-				if( flippedHorz )
-				{
-					origin.X *= -1;
-					flipAdjustment.X = -size.X;
-				}
-
-				if( flippedVert )
-				{
-					origin.Y *= -1;
-					flipAdjustment.Y = lineHeight - size.Y;
-				}
-			}
-
-
-			var requiresTransformation = flippedHorz || flippedVert || rotation != 0f || scale != Vector2.One;
-			if( requiresTransformation )
-			{
-				Matrix2D temp;
-				Matrix2D.createTranslation( -origin.X, -origin.Y, out _transformationMatrix );
-				Matrix2D.createScale( ( flippedHorz ? -scale.X : scale.X ), ( flippedVert ? -scale.Y : scale.Y ), out temp );
-				Matrix2D.multiply( ref _transformationMatrix, ref temp, out _transformationMatrix );
-				Matrix2D.createTranslation( flipAdjustment.X, flipAdjustment.Y, out temp );
-				Matrix2D.multiply( ref temp, ref _transformationMatrix, out _transformationMatrix );
-				Matrix2D.createRotation( rotation, out temp );
-				Matrix2D.multiply( ref _transformationMatrix, ref temp, out _transformationMatrix );
-				Matrix2D.createTranslation( position.X, position.Y, out temp );
-				Matrix2D.multiply( ref _transformationMatrix, ref temp, out _transformationMatrix );
-			}
-
-			BitmapFontRegion currentFontRegion = null;
-			var offset = requiresTransformation ? Vector2.Zero : position - origin;
-
-			for( var i = 0; i < text.Length; ++i )
-			{
-				var c = text[i];
-				if( c == '\r' )
-					continue;
-
-				if( c == '\n' )
-				{
-					offset.X = requiresTransformation ? 0f : position.X - origin.X;
-					offset.Y += lineHeight;
-					currentFontRegion = null;
-					continue;
-				}
-
-				if( currentFontRegion != null )
-					offset.X += spacing + currentFontRegion.xAdvance;
-
-				if( !_characterMap.TryGetValue( c, out currentFontRegion ) )
-					currentFontRegion = defaultCharacterRegion;
-
-
-				var p = offset;
-
-				if( flippedHorz )
-					p.X += currentFontRegion.width;
-				p.X += currentFontRegion.xOffset;
-
-				if( flippedVert )
-					p.Y += currentFontRegion.height - lineHeight;
-				p.Y += currentFontRegion.yOffset;
-
-				// transform our point if we need to
-				if( requiresTransformation )
-					Vector2Ext.transform( ref p, ref _transformationMatrix, out p );
-
-				var destRect = RectangleExt.fromFloats
-				(
-					p.X, p.Y, 
-					currentFontRegion.width * scale.X,
-					currentFontRegion.height * scale.Y
-				);
-
-				spriteBatch.Draw( currentFontRegion.subtexture, destRect, currentFontRegion.subtexture.sourceRect, color, rotation, Vector2.Zero, effect, depth );
-			}
-		}
-
-		#endregion
-
-	}
+    public partial class BitmapFont : IDisposable, IFont
+    {
+        /// <summary>
+        /// When used with <see cref="MeasureFont(string,double)"/>, specifies that no wrapping should occur.
+        /// </summary>
+        const int kNoMaxWidth = -1;
+
+        #region Properties
+
+        /// <summary>
+        /// alpha channel.
+        /// </summary>
+        /// <remarks>Set to 0 if the channel holds the glyph data, 1 if it holds the outline, 2 if it holds the glyph and the outline, 3 if it's set to zero, and 4 if it's set to one.</remarks>
+        public int alphaChannel;
+
+        /// <summary>
+        /// number of pixels from the absolute top of the line to the base of the characters.
+        /// </summary>
+        public int baseHeight;
+
+        /// <summary>
+        /// blue channel.
+        /// </summary>
+        /// <remarks>Set to 0 if the channel holds the glyph data, 1 if it holds the outline, 2 if it holds the glyph and the outline, 3 if it's set to zero, and 4 if it's set to one.</remarks>
+        public int blueChannel;
+
+        public bool bold;
+
+        /// <summary>
+        /// characters that comprise the font.
+        /// </summary>
+        public IDictionary<char, Character> characters;
+
+        /// <summary>
+        /// name of the OEM charset used.
+        /// </summary>
+        public string charset;
+
+        /// <summary>
+        /// name of the true type font.
+        /// </summary>
+        public string familyName;
+
+        /// <summary>
+        /// size of the font.
+        /// </summary>
+        public int fontSize;
+
+        /// <summary>
+        /// green channel.
+        /// </summary>
+        /// <remarks>Set to 0 if the channel holds the glyph data, 1 if it holds the outline, 2 if it holds the glyph and the outline, 3 if it's set to zero, and 4 if it's set to one.</remarks>
+        public int greenChannel;
+
+        public bool italic;
+
+        /// <summary>
+        /// character kernings for the font.
+        /// </summary>
+        public IDictionary<Kerning, int> kernings;
+
+        /// <summary>
+        /// distance in pixels between each line of text.
+        /// </summary>
+        public int lineHeight;
+
+        public float lineSpacing => lineHeight;
+
+        /// <summary>
+        /// outline thickness for the characters.
+        /// </summary>
+        public int outlineSize;
+
+        /// <summary>
+        /// Gets or sets a value indicating whether the monochrome charaters have been packed into each of the texture channels.
+        /// </summary>
+        /// <remarks>
+        /// When packed, the <see cref="alphaChannel"/> property describes what is stored in each channel.
+        /// </remarks>
+        public bool packed;
+
+        /// <summary>
+        /// padding for each character.
+        /// </summary>
+        public Padding padding;
+
+        /// <summary>
+        /// texture pages for the font.
+        /// </summary>
+        public Page[] pages;
+
+        /// <summary>
+        /// houses the Textures for each Page, with the same index as the Page.
+        /// </summary>
+        public Texture2D[] textures;
+
+        /// <summary>
+        /// red channel.
+        /// </summary>
+        /// <remarks>Set to 0 if the channel holds the glyph data, 1 if it holds the outline, 2 if it holds the glyph and the outline, 3 if it's set to zero, and 4 if it's set to one.</remarks>
+        public int redChannel;
+
+        /// <summary>
+        /// Gets or sets a value indicating whether the font is smoothed.
+        /// </summary>
+        public bool smoothed;
+
+        /// <summary>
+        /// spacing for each character.
+        /// </summary>
+        public Point spacing;
+
+        /// <summary>
+        /// font height stretch.
+        /// </summary>
+        /// <remarks>100% means no stretch.</remarks>
+        public int stretchedHeight;
+
+        /// <summary>
+        /// level of super sampling used by the font.
+        /// </summary>
+        /// <remarks>A value of 1 indicates no super sampling is in use.</remarks>
+        public int superSampling;
+
+        /// <summary>
+        /// size of the texture images used by the font.
+        /// </summary>
+        public Point textureSize;
+
+        public bool unicode;
+
+        public Character defaultCharacter;
+
+        internal int _spaceWidth;
+
+        #endregion
+
+        /// <summary>
+        /// Index to get items within thsi collection using array index syntax.
+        /// </summary>
+        public Character this[char character] => characters[character];
+
+        public void Initialize()
+        {
+            LoadTextures();
+            if (characters.TryGetValue(' ', out var defaultChar))
+            {
+                defaultCharacter = defaultChar;
+            }
+            else
+            {
+                Debug.log($"Font {this.familyName} has no space character!");
+                defaultCharacter = this['a'];
+            }
+            _spaceWidth = defaultCharacter.bounds.Width + defaultCharacter.xAdvance;
+        }
+
+        /// <summary>
+        /// Gets the kerning for the specified character combination.
+        /// </summary>
+        /// <param name="previous">The previous character.</param>
+        /// <param name="current">The current character.</param>
+        /// <returns>
+        /// The spacing between the specified characters.
+        /// </returns>
+        public int GetKerning(char previous, char current)
+        {
+            var key = new Kerning(previous, current, 0);
+            if (!kernings.TryGetValue(key, out var result))
+                return 0;
+
+            return result;
+        }
+
+        public bool ContainsCharacter(char character) => characters.ContainsKey(character);
+
+        public bool hasCharacter(char character) => ContainsCharacter(character);
+
+        public string wrapText(string text, float maxLineWidth)
+        {
+            var words = text.Split(' ');
+            var sb = new StringBuilder();
+            var lineWidth = 0f;
+
+            if (maxLineWidth < _spaceWidth)
+                return string.Empty;
+
+            foreach (var word in words)
+            {
+                var size = measureString(word);
+                if (lineWidth + size.X < maxLineWidth)
+                {
+                    sb.Append(word + " ");
+                    lineWidth += size.X + _spaceWidth;
+                }
+                else
+                {
+                    if (size.X > maxLineWidth)
+                    {
+                        if (sb.ToString() == "")
+                            sb.Append(wrapText(word.Insert(word.Length / 2, " ") + " ", maxLineWidth));
+                        else
+                            sb.Append("\n" + wrapText(word.Insert(word.Length / 2, " ") + " ", maxLineWidth));
+                    }
+                    else
+                    {
+                        sb.Append("\n" + word + " ");
+                        lineWidth = size.X + _spaceWidth;
+                    }
+                }
+            }
+
+            return sb.ToString();
+        }
+
+        /// <summary>
+        /// truncates text and returns a new string with ellipsis appended if necessary. This method ignores all
+        /// line breaks.
+        /// </summary>
+        /// <returns>The text.</returns>
+        /// <param name="text">Text.</param>
+        /// <param name="ellipsis">Ellipsis.</param>
+        /// <param name="maxLineWidth">Max line width.</param>
+        public string truncateText(string text, string ellipsis, float maxLineWidth)
+        {
+            if (maxLineWidth < _spaceWidth)
+                return string.Empty;
+
+            var size = measureString(text);
+
+            // do we even need to truncate?
+            var ellipsisWidth = measureString(ellipsis).X;
+            if (size.X > maxLineWidth)
+            {
+                var sb = new StringBuilder();
+
+                var width = 0.0f;
+                Character currentChar = null;
+                var offsetX = 0.0f;
+
+                // determine how many chars we can fit in maxLineWidth - ellipsisWidth
+                for (var i = 0; i < text.Length; i++)
+                {
+                    var c = text[i];
+
+                    // we don't deal with line breaks or tabs
+                    if (c == '\r' || c == '\n')
+                        continue;
+
+                    if (currentChar != null)
+                        offsetX += spacing.X + currentChar.xAdvance;
+
+                    if (ContainsCharacter(c))
+                        currentChar = this[c];
+                    else
+                        currentChar = defaultCharacter;
+
+                    var proposedWidth = offsetX + currentChar.xAdvance + spacing.X;
+                    if (proposedWidth > width)
+                        width = proposedWidth;
+
+                    if (width < maxLineWidth - ellipsisWidth)
+                    {
+                        sb.Append(c);
+                    }
+                    else
+                    {
+                        // no more room. append our ellipsis and get out of here
+                        sb.Append(ellipsis);
+                        break;
+                    }
+                }
+
+                return sb.ToString();
+            }
+
+            return text;
+        }
+
+        public Vector2 measureString(string text)
+        {
+            var result = measureString(text, kNoMaxWidth);
+            return new Vector2(result.X, result.Y);
+        }
+
+        public Vector2 measureString(StringBuilder text)
+        {
+            var result = measureString(text, kNoMaxWidth);
+            return new Vector2(result.X, result.Y);
+        }
+
+        public Point measureString(string text, float maxWidth = kNoMaxWidth)
+        {
+            var source = new FontCharacterSource(text);
+            return measureString(ref source, maxWidth);
+        }
+
+        public Point measureString(StringBuilder text, float maxWidth = kNoMaxWidth)
+        {
+            var source = new FontCharacterSource(text);
+            return measureString(ref source, maxWidth);
+        }
+
+        /// <summary>
+        /// Provides the size, in pixels, of the specified text when drawn with this font, automatically wrapping to keep within the specified with.
+        /// </summary>
+        /// <param name="text">The text to measure.</param>
+        /// <param name="maxWidth">The maximum width.</param>
+        /// <returns>
+        /// The <see cref="Size"/>, in pixels, of <paramref name="text"/> drawn with this font.
+        /// </returns>
+        /// <remarks>The MeasureString method uses the <paramref name="maxWidth"/> parameter to automatically wrap when determining text size.</remarks>
+        public Point measureString(ref FontCharacterSource text, float maxWidth = kNoMaxWidth)
+        {
+            if (text.Length == 0)
+                return Point.Zero;
+
+            var length = text.Length;
+            var previousCharacter = ' ';
+            var currentLineWidth = 0;
+            var currentLineHeight = lineHeight;
+            var blockWidth = 0;
+            var blockHeight = 0;
+            var lineHeights = new List<int>();
+
+            for (var i = 0; i < length; i++)
+            {
+                var character = text[i];
+                if (character == '\n' || character == '\r')
+                {
+                    if (character == '\n' || i + 1 == length || text[i + 1] != '\n')
+                    {
+                        lineHeights.Add(currentLineHeight);
+                        blockWidth = Math.Max(blockWidth, currentLineWidth);
+                        currentLineWidth = 0;
+                        currentLineHeight = lineHeight;
+                    }
+                }
+                else
+                {
+                    var data = this[character];
+                    var width = data.xAdvance + GetKerning(previousCharacter, character) + spacing.X;
+                    if (maxWidth != kNoMaxWidth && currentLineWidth + width >= maxWidth)
+                    {
+                        lineHeights.Add(currentLineHeight);
+                        blockWidth = Math.Max(blockWidth, currentLineWidth);
+                        currentLineWidth = 0;
+                        currentLineHeight = lineHeight;
+                    }
+
+                    currentLineWidth += width;
+                    currentLineHeight = Math.Max(currentLineHeight, data.bounds.Height + data.offset.Y);
+                    previousCharacter = character;
+                }
+            }
+
+            // finish off the current line if required
+            if (currentLineHeight != 0)
+                lineHeights.Add(currentLineHeight);
+
+            // reduce any lines other than the last back to the base
+            for (var i = 0; i < lineHeights.Count - 1; i++)
+                lineHeights[i] = lineHeight;
+
+            return new Point(Math.Max(currentLineWidth, blockWidth), blockHeight);
+        }
+
+        ~BitmapFont() => Dispose();
+
+        public void Dispose()
+        {
+            if (textures == null)
+                return;
+
+            foreach (var tex in textures)
+                tex.Dispose();
+            textures = null;
+        }
+
+        public BitmapFontEnumerator GetGlyphs(string text)
+        {
+            var source = new FontCharacterSource(text);
+            return GetGlyphs(ref source);
+        }
+
+        public BitmapFontEnumerator GetGlyphs(StringBuilder text)
+        {
+            var source = new FontCharacterSource(text);
+            return GetGlyphs(ref source);
+        }
+
+        public BitmapFontEnumerator GetGlyphs(ref FontCharacterSource text) => new BitmapFontEnumerator(this, ref text);
+    }
 }

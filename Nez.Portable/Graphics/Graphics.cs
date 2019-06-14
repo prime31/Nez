@@ -43,8 +43,8 @@ namespace Nez
 			batcher = new Batcher( Core.graphicsDevice );
 			bitmapFont = font;
 
-			// the bottom/right pixel is white on the default font so we'll use that for the pixelTexture
-			var fontTex = bitmapFont.defaultCharacterRegion.subtexture.texture2D;
+            // the bottom/right pixel is white on the default font so we'll use that for the pixelTexture
+            var fontTex = bitmapFont.textures[bitmapFont.defaultCharacter.texturePage];// bitmapFont.defaultCharacterRegion.subtexture.texture2D;
 			pixelTexture = new Subtexture( fontTex, fontTex.Width - 1, fontTex.Height - 1, 1, 1 );
 		}
 

@@ -138,11 +138,11 @@ namespace Nez.UI
 			var font = _style.font;
 			IDrawable selectedDrawable = _style.selection;
 
-			_itemHeight = /*font.getCapHeight()*/ font.lineHeight - font.descent * 2;
+			_itemHeight = /*font.getCapHeight()*/ font.lineHeight - font.padding.bottom * 2;
 			_itemHeight += selectedDrawable.topHeight + selectedDrawable.bottomHeight;
 
 			_textOffsetX = selectedDrawable.leftWidth;
-			_textOffsetY = selectedDrawable.topHeight - font.descent;
+			_textOffsetY = selectedDrawable.topHeight - font.padding.bottom;
 
 			_prefWidth = 0;
 			for( var i = 0; i < _items.Count; i++ )
