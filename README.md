@@ -3,7 +3,7 @@
 [![Build status](https://ci.appveyor.com/api/projects/status/github/prime31/Nez?branch=master&svg=true)](https://ci.appveyor.com/project/prime31/nez/branch/master)
 [![NuGet version](https://img.shields.io/nuget/v/Nez.svg)](https://www.nuget.org/packages/Nez)
 [![NuGet downloads](https://img.shields.io/nuget/dt/Nez.svg)](https://www.nuget.org/packages/Nez)
-[![Join the chat](https://img.shields.io/badge/discord-join-7289DA.svg?logo=discord&longCache=true&style=flat)](https://discord.gg/dsT3Cv)
+[![Join the chat](https://img.shields.io/badge/discord-join-7289DA.svg?logo=discord&longCache=true&style=flat)](https://discord.gg/uFtGHNv)
 
 
 Nez aims to be a lightweight 2D framework that sits on top of MonoGame/FNA. It provides a solid base for you to build a 2D game on. Some of the many features it includes are:
