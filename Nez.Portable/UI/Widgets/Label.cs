@@ -324,12 +324,12 @@ namespace Nez.UI
 			if( ( labelAlign & AlignInternal.bottom ) != 0 )
 			{
 				_textPosition.Y += height - textHeight;
-				y += _style.font.descent;
+				y += _style.font.padding.bottom;
 			}
 			else if( ( labelAlign & AlignInternal.top ) != 0 )
 			{
 				_textPosition.Y += 0;
-				y -= _style.font.descent;
+				y -= _style.font.padding.bottom;
 			}
 			else
 			{

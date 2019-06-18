@@ -46,9 +46,9 @@ namespace Nez.UI
 			var font = style.font;
 
 			if( bg != null )
-				_prefHeight = Math.Max( bg.topHeight + bg.bottomHeight + font.lineHeight - font.descent * 2f, bg.minHeight );
+				_prefHeight = Math.Max( bg.topHeight + bg.bottomHeight + font.lineHeight - font.padding.bottom * 2f, bg.minHeight );
 			else
-				_prefHeight = font.lineHeight - font.descent * 2;
+				_prefHeight = font.lineHeight - font.padding.bottom * 2;
 
 			float maxItemWidth = 0;
 			for( var i = 0; i < _items.Count; i++ )

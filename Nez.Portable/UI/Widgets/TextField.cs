@@ -389,7 +389,7 @@ namespace Nez.UI
 
 		protected int letterUnderCursor( float x )
 		{
-			var halfSpaceSize = style.font.spaceWidth;
+			var halfSpaceSize = style.font.defaultCharacter.bounds.Width + style.font.defaultCharacter.xAdvance;
 			x -= textOffset + fontOffset + halfSpaceSize /*- style.font.getData().cursorX*/ - glyphPositions[visibleTextStart];
 			var n = glyphPositions.Count;
 			for( var i = 0; i < n; i++ )
@@ -626,7 +626,7 @@ namespace Nez.UI
 		protected float getTextY( BitmapFont font, IDrawable background )
 		{
 			float height = getHeight();
-			float textY = textHeight / 2 + font.descent;
+			float textY = textHeight / 2 + font.padding.bottom;
 			if( background != null )
 			{
 				var bottom = background.bottomHeight;
@@ -651,7 +651,7 @@ namespace Nez.UI
 		/// <param name="y">The y coordinate.</param>
 		protected void drawSelection( IDrawable selection, Graphics graphics, BitmapFont font, float x, float y )
 		{
-			selection.draw( graphics, x + selectionX + renderOffset + fontOffset, y - font.descent / 2, selectionWidth, textHeight, Color.White );
+			selection.draw( graphics, x + selectionX + renderOffset + fontOffset, y - font.padding.bottom / 2, selectionWidth, textHeight, Color.White );
 		}
 
 
@@ -659,7 +659,7 @@ namespace Nez.UI
 		{
 			cursorPatch.draw( graphics,
 				x + textOffset + glyphPositions[cursor] - glyphPositions[visibleTextStart] + fontOffset - 1 /*font.getData().cursorX*/,
-				y - font.descent / 2, cursorPatch.minWidth, textHeight, color );
+				y - font.padding.bottom / 2, cursorPatch.minWidth, textHeight, color );
 		}
 
 		#endregion
@@ -700,7 +700,7 @@ namespace Nez.UI
 			{
 				for( var i = 0; i < displayText.Length; i++ )
 				{
-					var region = style.font.fontRegionForChar( displayText[i] );
+					var region = style.font[ displayText[i] ];
 					// we dont have fontOffset in BitmapFont, it is the first Glyph in a GlyphRun
 					//if( i == 0 )
 					//	fontOffset = region.xAdvance;
