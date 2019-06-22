@@ -23,7 +23,7 @@ namespace Nez.ImGuiTools.TypeInspectors
 
             // the inspect method name matters! We use reflection to feth it.
             var valueTypeName = _valueType.Name.ToString();
-            var inspectorMethodName = "inspect" + valueTypeName[0].ToString().ToUpper() + valueTypeName.Substring( 1 );
+            var inspectorMethodName = "Inspect" + valueTypeName[0].ToString().ToUpper() + valueTypeName.Substring( 1 );
             var inspectMethodInfo = ReflectionUtils.GetMethodInfo( this, inspectorMethodName );
             _inspectMethodAction = ReflectionUtils.CreateDelegate<Action>( this, inspectMethodInfo );
 
