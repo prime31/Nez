@@ -7,10 +7,10 @@ namespace Nez.ParticleDesignerImporter
 {
 	public class ParticleDesignerVector2
 	{
-		[XmlAttribute]
+		[XmlElement( "x" )]
 		public float X;
 
-		[XmlAttribute]
+		[XmlElement( "y" )]
 		public float Y;
 
 

@@ -6,7 +6,7 @@ namespace Nez.ParticleDesignerImporter
 {
 	public class ParticleDesignerFloatValue
 	{
-		[XmlAttribute]
+		[XmlElement( "value" )]
 		public float Value;
 
 

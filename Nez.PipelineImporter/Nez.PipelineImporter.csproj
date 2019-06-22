@@ -14,7 +14,6 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\Nez.Portable\Nez.csproj" />
 
 		<PackageReference Include="MonoGame.Framework.Content.Pipeline.Portable" Version="3.7.1.189" />
 		<PackageReference Include="Newtonsoft.json" Version="12.0.1" />

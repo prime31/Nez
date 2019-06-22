@@ -6,7 +6,7 @@ namespace Nez.ParticleDesignerImporter
 {
 	public class ParticleDesignerIntValue
 	{
-		[XmlAttribute]
+		[XmlElement( "value" )]
 		public int Value;
 
 

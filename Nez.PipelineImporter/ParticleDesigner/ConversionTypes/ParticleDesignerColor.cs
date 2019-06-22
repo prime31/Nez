@@ -7,16 +7,16 @@ namespace Nez.ParticleDesignerImporter
 {
 	public class ParticleDesignerColor
 	{
-		[XmlAttribute]
+		[XmlElement( "red" )]
 		public float Red;
 
-		[XmlAttribute]
+		[XmlElement( "green" )]
 		public float Green;
 
-		[XmlAttribute]
+		[XmlElement( "blue" )]
 		public float Blue;
 
-		[XmlAttribute]
+		[XmlElement( "alpha" )]
 		public float Alpha;
 
 
