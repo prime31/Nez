@@ -147,7 +147,7 @@ skin.Add( "toggle-button", new ButtonStyle( skin.GetDrawable( "default-round-dow
 skin.Add( "text-button", new TextButtonStyle {
 	Down = skin.getDrawable( "default-round-down" ),
 	Up = skin.getDrawable( "default-round" ),
-	GontColor = Color.White
+	FontColor = Color.White
 } );
 
 skin.Add( "progressbar-h", new ProgressBarStyle( skin.GetDrawable( "default-slider" ), skin.GetDrawable( "default-slider-knob" ) ) );
