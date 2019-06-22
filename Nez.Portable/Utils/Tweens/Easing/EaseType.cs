@@ -62,7 +62,7 @@ namespace Nez.Tweens
 		/// </summary>
 		/// <returns>The ease type.</returns>
 		/// <param name="easeType">Ease type.</param>
-		public static EaseType oppositeEaseType( EaseType easeType )
+		public static EaseType OppositeEaseType( EaseType easeType )
 		{
 			switch( easeType )
 			{
@@ -148,7 +148,7 @@ namespace Nez.Tweens
 		}
 
 		
-		public static float ease( EaseType easeType, float t, float duration )
+		public static float Ease( EaseType easeType, float t, float duration )
 		{
 			switch( easeType )
 			{

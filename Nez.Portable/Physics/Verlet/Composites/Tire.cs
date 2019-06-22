@@ -13,18 +13,18 @@ namespace Nez.Verlet
 			for( var i = 0; i < segments; i++ )
 			{
 				var theta = i * stride;
-				addParticle( new Particle( new Vector2( origin.X + Mathf.cos( theta ) * radius, origin.Y + Mathf.sin( theta ) * radius ) ) );
+				AddParticle( new Particle( new Vector2( origin.X + Mathf.Cos( theta ) * radius, origin.Y + Mathf.Sin( theta ) * radius ) ) );
 			}
 
-			var centerParticle = addParticle( new Particle( origin ) );
+			var centerParticle = AddParticle( new Particle( origin ) );
 
 			// constraints
 			for( var i = 0; i < segments; i++ )
 			{
-				addConstraint( new DistanceConstraint( particles[i], particles[( i + 1 ) % segments], treadStiffness ) );
-				addConstraint( new DistanceConstraint( particles[i], centerParticle, spokeStiffness ) )
-					.setCollidesWithColliders( false );
-				addConstraint( new DistanceConstraint( particles[i], particles[( i + 5 ) % segments], treadStiffness ) );
+				AddConstraint( new DistanceConstraint( Particles[i], Particles[( i + 1 ) % segments], treadStiffness ) );
+				AddConstraint( new DistanceConstraint( Particles[i], centerParticle, spokeStiffness ) )
+					.SetCollidesWithColliders( false );
+				AddConstraint( new DistanceConstraint( Particles[i], Particles[( i + 5 ) % segments], treadStiffness ) );
 			}
 		}
 	}

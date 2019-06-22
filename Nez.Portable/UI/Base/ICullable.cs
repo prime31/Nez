@@ -4,6 +4,6 @@ namespace Nez.UI
 {
     public interface ICullable
     {
-        void setCullingArea(Rectangle cullingArea);
+        void SetCullingArea(Rectangle cullingArea);
     }
 }

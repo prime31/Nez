@@ -114,22 +114,22 @@ namespace Nez.Tweens
 		{
 			public static float EaseIn( float t, float d )
 			{
-				return -( Mathf.sqrt( 1 - ( t /= d ) * t ) - 1 );
+				return -( Mathf.Sqrt( 1 - ( t /= d ) * t ) - 1 );
 			}
 
 
 			public static float EaseOut( float t, float d )
 			{
-				return Mathf.sqrt( 1 - ( t = t / d - 1 ) * t );
+				return Mathf.Sqrt( 1 - ( t = t / d - 1 ) * t );
 			}
 
 
 			public static float EaseInOut( float t, float d )
 			{
 				if( ( t /= d / 2 ) < 1 )
-					return -0.5f * ( Mathf.sqrt( 1 - t * t ) - 1 );
+					return -0.5f * ( Mathf.Sqrt( 1 - t * t ) - 1 );
 
-				return 0.5f * ( Mathf.sqrt( 1 - ( t -= 2 ) * t ) + 1 );
+				return 0.5f * ( Mathf.Sqrt( 1 - ( t -= 2 ) * t ) + 1 );
 			}
 		}
 
@@ -170,7 +170,7 @@ namespace Nez.Tweens
 
 				float p = d * .3f;
 				float s = p / 4;
-				return -( 1 * Mathf.pow( 2, 10 * ( t -= 1 ) ) * Mathf.sin( ( t * d - s ) * ( 2 * MathHelper.Pi ) / p ) );
+				return -( 1 * Mathf.Pow( 2, 10 * ( t -= 1 ) ) * Mathf.Sin( ( t * d - s ) * ( 2 * MathHelper.Pi ) / p ) );
 			}
 
 
@@ -184,7 +184,7 @@ namespace Nez.Tweens
 
 				float p = d * .3f;
 				float s = p / 4;
-				return ( 1 * Mathf.pow( 2, -10 * t ) * Mathf.sin( ( t * d - s ) * ( 2 * MathHelper.Pi ) / p ) + 1 );
+				return ( 1 * Mathf.Pow( 2, -10 * t ) * Mathf.Sin( ( t * d - s ) * ( 2 * MathHelper.Pi ) / p ) + 1 );
 			}
 
 
@@ -200,9 +200,9 @@ namespace Nez.Tweens
 				float s = p / 4;
 
 				if( t < 1 )
-					return -.5f * ( Mathf.pow( 2, 10 * ( t -= 1 ) ) * Mathf.sin( ( t * d - s ) * ( 2 * MathHelper.Pi ) / p ) );
+					return -.5f * ( Mathf.Pow( 2, 10 * ( t -= 1 ) ) * Mathf.Sin( ( t * d - s ) * ( 2 * MathHelper.Pi ) / p ) );
 
-				return ( Mathf.pow( 2f, -10f * ( t -= 1f ) ) * Mathf.sin( ( t * d - s ) * ( 2 * MathHelper.Pi ) / p ) * 0.5f + 1f );
+				return ( Mathf.Pow( 2f, -10f * ( t -= 1f ) ) * Mathf.Sin( ( t * d - s ) * ( 2 * MathHelper.Pi ) / p ) * 0.5f + 1f );
 			}
 
 
@@ -215,7 +215,7 @@ namespace Nez.Tweens
 		            return 0;
 
 		        const float p = 0.3f;
-				return ( Mathf.pow( 2, -10 * t ) * Mathf.sin( t * ( 2 * MathHelper.Pi ) / p ) );
+				return ( Mathf.Pow( 2, -10 * t ) * Mathf.Sin( t * ( 2 * MathHelper.Pi ) / p ) );
 		    }
 		}
 
@@ -224,13 +224,13 @@ namespace Nez.Tweens
 		{
 			public static float EaseIn( float t, float d )
 			{
-				return ( t == 0 ) ? 0 : Mathf.pow( 2, 10 * ( t / d - 1 ) );
+				return ( t == 0 ) ? 0 : Mathf.Pow( 2, 10 * ( t / d - 1 ) );
 			}
 
 
 			public static float EaseOut( float t, float d )
 			{
-				return t == d ? 1 : ( -Mathf.pow( 2, -10 * t / d ) + 1 );
+				return t == d ? 1 : ( -Mathf.Pow( 2, -10 * t / d ) + 1 );
 			}
 
 
@@ -244,9 +244,9 @@ namespace Nez.Tweens
 
 				if( ( t /= d / 2 ) < 1 )
 				{
-					return 0.5f * Mathf.pow( 2, 10 * ( t - 1 ) );
+					return 0.5f * Mathf.Pow( 2, 10 * ( t - 1 ) );
 				}
-				return 0.5f * ( -Mathf.pow( 2, -10 * --t ) + 2 );
+				return 0.5f * ( -Mathf.Pow( 2, -10 * --t ) + 2 );
 			}
 		}
 
@@ -305,19 +305,19 @@ namespace Nez.Tweens
 		{
 			public static float EaseIn( float t, float d )
 			{
-				return -1 * Mathf.cos( t / d * ( MathHelper.Pi / 2 ) ) + 1f;
+				return -1 * Mathf.Cos( t / d * ( MathHelper.Pi / 2 ) ) + 1f;
 			}
 
 
 			public static float EaseOut( float t, float d )
 			{
-				return Mathf.sin( t / d * ( MathHelper.Pi / 2 ) );
+				return Mathf.Sin( t / d * ( MathHelper.Pi / 2 ) );
 			}
 
 
 			public static float EaseInOut( float t, float d )
 			{
-				return -0.5f * ( Mathf.cos( MathHelper.Pi * t / d ) - 1 );
+				return -0.5f * ( Mathf.Cos( MathHelper.Pi * t / d ) - 1 );
 			}
 		}
 	}

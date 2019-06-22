@@ -19,42 +19,42 @@ namespace Nez.Systems
 		/// </summary>
 		class CoroutineImpl : ICoroutine, IPoolable
 		{
-			public IEnumerator enumerator;
+			public IEnumerator Enumerator;
 			/// <summary>
 			/// anytime a delay is yielded it is added to the waitTimer which tracks the delays
 			/// </summary>
-			public float waitTimer;
-			public bool isDone;
-			public CoroutineImpl waitForCoroutine;
-			public bool useUnscaledDeltaTime = false;
+			public float WaitTimer;
+			public bool IsDone;
+			public CoroutineImpl WaitForCoroutine;
+			public bool UseUnscaledDeltaTime = false;
 
 
-			public void stop()
+			public void Stop()
 			{
-				isDone = true;
+				IsDone = true;
 			}
 
 
-			public ICoroutine setUseUnscaledDeltaTime( bool useUnscaledDeltaTime )
+			public ICoroutine SetUseUnscaledDeltaTime( bool useUnscaledDeltaTime )
 			{
-				this.useUnscaledDeltaTime = useUnscaledDeltaTime;
+				this.UseUnscaledDeltaTime = useUnscaledDeltaTime;
 				return this;
 			}
 
 
-			internal void prepareForReuse()
+			internal void PrepareForReuse()
 			{
-				isDone = false;
+				IsDone = false;
 			}
 
 
-			void IPoolable.reset()
+			void IPoolable.Reset()
 			{
-				isDone = true;
-				waitTimer = 0;
-				waitForCoroutine = null;
-				enumerator = null;
-				useUnscaledDeltaTime = false;
+				IsDone = true;
+				WaitTimer = 0;
+				WaitForCoroutine = null;
+				Enumerator = null;
+				UseUnscaledDeltaTime = false;
 			}
 		}
 
@@ -73,15 +73,15 @@ namespace Nez.Systems
 		/// </summary>
 		/// <returns>The coroutine.</returns>
 		/// <param name="enumerator">Enumerator.</param>
-		public ICoroutine startCoroutine( IEnumerator enumerator )
+		public ICoroutine StartCoroutine( IEnumerator enumerator )
 		{
 			// find or create a CoroutineImpl
-			var coroutine = Pool<CoroutineImpl>.obtain();
-			coroutine.prepareForReuse();
+			var coroutine = Pool<CoroutineImpl>.Obtain();
+			coroutine.PrepareForReuse();
 
 			// setup the coroutine and add it
-			coroutine.enumerator = enumerator;
-			var shouldContinueCoroutine = tickCoroutine( coroutine );
+			coroutine.Enumerator = enumerator;
+			var shouldContinueCoroutine = TickCoroutine( coroutine );
 
 			// guard against empty coroutines
 			if( !shouldContinueCoroutine )
@@ -95,7 +95,7 @@ namespace Nez.Systems
 			return coroutine;
 		}
 
-		public override void update()
+		public override void Update()
 		{
 			_isInUpdate = true;
 			for( var i = 0; i < _unblockedCoroutines.Count; i++ )
@@ -103,18 +103,18 @@ namespace Nez.Systems
 				var coroutine = _unblockedCoroutines[i];
 
 				// check for stopped coroutines
-				if( coroutine.isDone )
+				if( coroutine.IsDone )
 				{
-					Pool<CoroutineImpl>.free( coroutine );
+					Pool<CoroutineImpl>.Free( coroutine );
 					continue;
 				}
 
 				// are we waiting for any other coroutines to finish?
-				if( coroutine.waitForCoroutine != null )
+				if( coroutine.WaitForCoroutine != null )
 				{
-					if( coroutine.waitForCoroutine.isDone )
+					if( coroutine.WaitForCoroutine.IsDone )
 					{
-						coroutine.waitForCoroutine = null;
+						coroutine.WaitForCoroutine = null;
 					}
 					else
 					{
@@ -124,15 +124,15 @@ namespace Nez.Systems
 				}
 
 				// deal with timers if we have them
-				if( coroutine.waitTimer > 0 )
+				if( coroutine.WaitTimer > 0 )
 				{
 					// still has time left. decrement and run again next frame being sure to decrement with the appropriate deltaTime.
-					coroutine.waitTimer -= coroutine.useUnscaledDeltaTime ? Time.unscaledDeltaTime : Time.deltaTime;
+					coroutine.WaitTimer -= coroutine.UseUnscaledDeltaTime ? Time.UnscaledDeltaTime : Time.DeltaTime;
 					_shouldRunNextFrame.Add( coroutine );
 					continue;
 				}
 
-				if( tickCoroutine( coroutine ) )
+				if( TickCoroutine( coroutine ) )
 					_shouldRunNextFrame.Add( coroutine );
 			}
 
@@ -149,47 +149,47 @@ namespace Nez.Systems
 		/// </summary>
 		/// <returns><c>true</c>, if coroutine was ticked, <c>false</c> otherwise.</returns>
 		/// <param name="coroutine">Coroutine.</param>
-		bool tickCoroutine( CoroutineImpl coroutine )
+		bool TickCoroutine( CoroutineImpl coroutine )
 		{
 			// This coroutine has finished
-			if( !coroutine.enumerator.MoveNext() || coroutine.isDone )
+			if( !coroutine.Enumerator.MoveNext() || coroutine.IsDone )
 			{
-				Pool<CoroutineImpl>.free( coroutine );
+				Pool<CoroutineImpl>.Free( coroutine );
 				return false;
 			}
 
-			if( coroutine.enumerator.Current == null )
+			if( coroutine.Enumerator.Current == null )
 			{
 				// yielded null. run again next frame
 				return true;
 			}
 
-			if( coroutine.enumerator.Current is WaitForSeconds )
+			if( coroutine.Enumerator.Current is WaitForSeconds )
 			{
-				coroutine.waitTimer = ( coroutine.enumerator.Current as WaitForSeconds ).waitTime;
+				coroutine.WaitTimer = ( coroutine.Enumerator.Current as WaitForSeconds ).waitTime;
 				return true;
 			}
 
 			#if DEBUG
 			// deprecation warning for yielding an int/float
-			if( coroutine.enumerator.Current is int )
+			if( coroutine.Enumerator.Current is int )
 			{
-				Debug.error( "yield Coroutine.waitForSeconds instead of an int. Yielding an int will not work in a release build." );
-				coroutine.waitTimer = (int)coroutine.enumerator.Current;
+				Debug.Error( "yield Coroutine.waitForSeconds instead of an int. Yielding an int will not work in a release build." );
+				coroutine.WaitTimer = (int)coroutine.Enumerator.Current;
 				return true;
 			}
 
-			if( coroutine.enumerator.Current is float )
+			if( coroutine.Enumerator.Current is float )
 			{
-				Debug.error( "yield Coroutine.waitForSeconds instead of a float. Yielding a float will not work in a release build." );
-				coroutine.waitTimer = (float)coroutine.enumerator.Current;
+				Debug.Error( "yield Coroutine.waitForSeconds instead of a float. Yielding a float will not work in a release build." );
+				coroutine.WaitTimer = (float)coroutine.Enumerator.Current;
 				return true;
 			}
 			#endif
 
-			if( coroutine.enumerator.Current is CoroutineImpl )
+			if( coroutine.Enumerator.Current is CoroutineImpl )
 			{
-				coroutine.waitForCoroutine = coroutine.enumerator.Current as CoroutineImpl;
+				coroutine.WaitForCoroutine = coroutine.Enumerator.Current as CoroutineImpl;
 				return true;
 			}
 			else

@@ -11,21 +11,21 @@ namespace Nez.TiledMaps
 
 
 		[XmlAttribute( AttributeName = "encoding" )]
-		public string encoding;
+		public string Encoding;
 
 		[XmlAttribute( AttributeName = "compression" )]
-		public string compression;
+		public string Compression;
 
 		[XmlElement( ElementName = "tile" )]
-		public List<TmxDataTile> tiles = new List<TmxDataTile>();
+		public List<TmxDataTile> Tiles = new List<TmxDataTile>();
 
 		[XmlText]
-		public string value;
+		public string Value;
 
 
 		public override string ToString()
 		{
-			return string.Format( "{0} {1}", encoding, compression );
+			return string.Format( "{0} {1}", Encoding, Compression );
 		}
 	}
 }

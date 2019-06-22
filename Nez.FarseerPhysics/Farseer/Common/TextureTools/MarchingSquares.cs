@@ -49,7 +49,7 @@ namespace FarseerPhysics.Common.TextureTools
 		/// <param name="lerpCount"></param>
 		/// <param name="combine"></param>
 		/// <returns></returns>
-		public static List<Vertices> detectSquares( AABB domain, float cellWidth, float cellHeight, sbyte[,] f, int lerpCount, bool combine )
+		public static List<Vertices> DetectSquares( AABB domain, float cellWidth, float cellHeight, sbyte[,] f, int lerpCount, bool combine )
 		{
 			var ret = new CxFastList<GeomPoly>();
 			var verticesList = new List<Vertices>();
@@ -58,10 +58,10 @@ namespace FarseerPhysics.Common.TextureTools
 			List<GeomPoly> polyList;
 			GeomPoly gp;
 
-			int xn = (int)( domain.extents.X * 2 / cellWidth );
-			bool xp = xn == ( domain.extents.X * 2 / cellWidth );
-			int yn = (int)( domain.extents.Y * 2 / cellHeight );
-			bool yp = yn == ( domain.extents.Y * 2 / cellHeight );
+			int xn = (int)( domain.Extents.X * 2 / cellWidth );
+			bool xp = xn == ( domain.Extents.X * 2 / cellWidth );
+			int yn = (int)( domain.Extents.Y * 2 / cellHeight );
+			bool yp = yn == ( domain.Extents.Y * 2 / cellHeight );
 			if( !xp ) xn++;
 			if( !yp ) yn++;
 
@@ -72,13 +72,13 @@ namespace FarseerPhysics.Common.TextureTools
 			for( int x = 0; x < xn + 1; x++ )
 			{
 				int x0;
-				if( x == xn ) x0 = (int)domain.upperBound.X;
-				else x0 = (int)( x * cellWidth + domain.lowerBound.X );
+				if( x == xn ) x0 = (int)domain.UpperBound.X;
+				else x0 = (int)( x * cellWidth + domain.LowerBound.X );
 				for( int y = 0; y < yn + 1; y++ )
 				{
 					int y0;
-					if( y == yn ) y0 = (int)domain.upperBound.Y;
-					else y0 = (int)( y * cellHeight + domain.lowerBound.Y );
+					if( y == yn ) y0 = (int)domain.UpperBound.Y;
+					else y0 = (int)( y * cellHeight + domain.LowerBound.Y );
 					fs[x, y] = f[x0, y0];
 				}
 			}
@@ -86,26 +86,26 @@ namespace FarseerPhysics.Common.TextureTools
 			//generate sub-polys and combine to scan lines
 			for( int y = 0; y < yn; y++ )
 			{
-				float y0 = y * cellHeight + domain.lowerBound.Y;
+				float y0 = y * cellHeight + domain.LowerBound.Y;
 				float y1;
-				if( y == yn - 1 ) y1 = domain.upperBound.Y;
+				if( y == yn - 1 ) y1 = domain.UpperBound.Y;
 				else y1 = y0 + cellHeight;
 				GeomPoly pre = null;
 				for( int x = 0; x < xn; x++ )
 				{
-					float x0 = x * cellWidth + domain.lowerBound.X;
+					float x0 = x * cellWidth + domain.LowerBound.X;
 					float x1;
-					if( x == xn - 1 ) x1 = domain.upperBound.X;
+					if( x == xn - 1 ) x1 = domain.UpperBound.X;
 					else x1 = x0 + cellWidth;
 
 					gp = new GeomPoly();
 
-					int key = marchSquare( f, fs, ref gp, x, y, x0, y0, x1, y1, lerpCount );
+					int key = MarchSquare( f, fs, ref gp, x, y, x0, y0, x1, y1, lerpCount );
 					if( gp.Length != 0 )
 					{
 						if( combine && pre != null && ( key & 9 ) != 0 )
 						{
-							combLeft( ref pre, ref gp );
+							CombLeft( ref pre, ref gp );
 							gp = pre;
 						}
 						else
@@ -166,8 +166,8 @@ namespace FarseerPhysics.Common.TextureTools
 						continue;
 					}
 
-					float ax = x * cellWidth + domain.lowerBound.X;
-					float ay = y * cellHeight + domain.lowerBound.Y;
+					float ax = x * cellWidth + domain.LowerBound.X;
+					float ay = y * cellHeight + domain.LowerBound.Y;
 
 					CxFastList<Vector2> bp = p.GeomP.Points;
 					CxFastList<Vector2> ap = u.GeomP.Points;
@@ -181,12 +181,12 @@ namespace FarseerPhysics.Common.TextureTools
 
 					//combine above (but disallow the hole thingies
 					CxFastListNode<Vector2> bi = bp.Begin();
-					while( square( bi.Elem().Y - ay ) > Settings.epsilon || bi.Elem().X < ax ) bi = bi.Next();
+					while( Square( bi.Elem().Y - ay ) > Settings.Epsilon || bi.Elem().X < ax ) bi = bi.Next();
 
 					//NOTE: Unused
 					//Vector2 b0 = bi.elem();
 					Vector2 b1 = bi.Next().Elem();
-					if( square( b1.Y - ay ) > Settings.epsilon )
+					if( Square( b1.Y - ay ) > Settings.Epsilon )
 					{
 						x++;
 						continue;
@@ -196,7 +196,7 @@ namespace FarseerPhysics.Common.TextureTools
 					CxFastListNode<Vector2> ai = ap.Begin();
 					while( ai != ap.End() )
 					{
-						if( vecDsq( ai.Elem(), b1 ) < Settings.epsilon )
+						if( VecDsq( ai.Elem(), b1 ) < Settings.Epsilon )
 						{
 							brk = false;
 							break;
@@ -247,7 +247,7 @@ namespace FarseerPhysics.Common.TextureTools
 					ret.Remove( p.GeomP );
 					p.GeomP = u.GeomP;
 
-					x = (int)( ( bi.Next().Elem().X - domain.lowerBound.X ) / cellWidth ) + 1;
+					x = (int)( ( bi.Next().Elem().X - domain.LowerBound.X ) / cellWidth ) + 1;
 					//x++; this was already commented out!
 				}
 			}
@@ -273,11 +273,11 @@ namespace FarseerPhysics.Common.TextureTools
 
 		static int[] _lookMarch = { 0x00, 0xE0, 0x38, 0xD8, 0x0E, 0xEE, 0x36, 0xD6, 0x83, 0x63, 0xBB, 0x5B, 0x8D, 0x6D, 0xB5, 0x55 };
 
-		static float lerp( float x0, float x1, float v0, float v1 )
+		static float Lerp( float x0, float x1, float v0, float v1 )
 		{
 			float dv = v0 - v1;
 			float t;
-			if( dv * dv < Settings.epsilon )
+			if( dv * dv < Settings.Epsilon )
 				t = 0.5f;
 			else t = v0 / dv;
 			return x0 + t * ( x1 - x0 );
@@ -286,48 +286,48 @@ namespace FarseerPhysics.Common.TextureTools
 		//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 
 		/** Recursive linear interpolation for use in marching squares **/
-		static float xLerp( float x0, float x1, float y, float v0, float v1, sbyte[,] f, int c )
+		static float XLerp( float x0, float x1, float y, float v0, float v1, sbyte[,] f, int c )
 		{
-			float xm = lerp( x0, x1, v0, v1 );
+			float xm = Lerp( x0, x1, v0, v1 );
 			if( c == 0 )
 				return xm;
 
 			sbyte vm = f[(int)xm, (int)y];
 
 			if( v0 * vm < 0 )
-				return xLerp( x0, xm, y, v0, vm, f, c - 1 );
+				return XLerp( x0, xm, y, v0, vm, f, c - 1 );
 
-			return xLerp( xm, x1, y, vm, v1, f, c - 1 );
+			return XLerp( xm, x1, y, vm, v1, f, c - 1 );
 		}
 
 		/** Recursive linear interpolation for use in marching squares **/
-		static float yLerp( float y0, float y1, float x, float v0, float v1, sbyte[,] f, int c )
+		static float YLerp( float y0, float y1, float x, float v0, float v1, sbyte[,] f, int c )
 		{
-			float ym = lerp( y0, y1, v0, v1 );
+			float ym = Lerp( y0, y1, v0, v1 );
 			if( c == 0 )
 				return ym;
 
 			sbyte vm = f[(int)x, (int)ym];
 
 			if( v0 * vm < 0 )
-				return yLerp( y0, ym, x, v0, vm, f, c - 1 );
+				return YLerp( y0, ym, x, v0, vm, f, c - 1 );
 
-			return yLerp( ym, y1, x, vm, v1, f, c - 1 );
+			return YLerp( ym, y1, x, vm, v1, f, c - 1 );
 		}
 
 		/** Square value for use in marching squares **/
-		static float square( float x )
+		static float Square( float x )
 		{
 			return x * x;
 		}
 
-		static float vecDsq( Vector2 a, Vector2 b )
+		static float VecDsq( Vector2 a, Vector2 b )
 		{
 			var d = a - b;
 			return d.X * d.X + d.Y * d.Y;
 		}
 
-		static float vecCross( Vector2 a, Vector2 b )
+		static float VecCross( Vector2 a, Vector2 b )
 		{
 			return a.X * b.Y - a.Y * b.X;
 		}
@@ -341,7 +341,7 @@ namespace FarseerPhysics.Common.TextureTools
             the values of 'f' at cell vertices with the result to be stored in 'poly' given the actual
             coordinates of 'ax' 'ay' in the marching squares mesh.
         **/
-		static int marchSquare( sbyte[,] f, sbyte[,] fs, ref GeomPoly poly, int ax, int ay, float x0, float y0,
+		static int MarchSquare( sbyte[,] f, sbyte[,] fs, ref GeomPoly poly, int ax, int ay, float x0, float y0,
 									   float x1, float y1, int bin )
 		{
 			//key lookup
@@ -365,7 +365,7 @@ namespace FarseerPhysics.Common.TextureTools
 					if( ( val & ( 1 << i ) ) != 0 )
 					{
 						if( i == 7 && ( val & 1 ) == 0 )
-							poly.Points.Add( p = new Vector2( x0, yLerp( y0, y1, x0, v0, v3, f, bin ) ) );
+							poly.Points.Add( p = new Vector2( x0, YLerp( y0, y1, x0, v0, v3, f, bin ) ) );
 						else
 						{
 							if( i == 0 ) p = new Vector2( x0, y0 );
@@ -373,11 +373,11 @@ namespace FarseerPhysics.Common.TextureTools
 							else if( i == 4 ) p = new Vector2( x1, y1 );
 							else if( i == 6 ) p = new Vector2( x0, y1 );
 
-							else if( i == 1 ) p = new Vector2( xLerp( x0, x1, y0, v0, v1, f, bin ), y0 );
-							else if( i == 5 ) p = new Vector2( xLerp( x0, x1, y1, v3, v2, f, bin ), y1 );
+							else if( i == 1 ) p = new Vector2( XLerp( x0, x1, y0, v0, v1, f, bin ), y0 );
+							else if( i == 5 ) p = new Vector2( XLerp( x0, x1, y1, v3, v2, f, bin ), y1 );
 
-							else if( i == 3 ) p = new Vector2( x1, yLerp( y0, y1, x1, v1, v2, f, bin ) );
-							else p = new Vector2( x0, yLerp( y0, y1, x0, v0, v3, f, bin ) );
+							else if( i == 3 ) p = new Vector2( x1, YLerp( y0, y1, x1, v1, v2, f, bin ) );
+							else p = new Vector2( x0, YLerp( y0, y1, x0, v0, v3, f, bin ) );
 
 							pi = poly.Points.Insert( pi, p );
 						}
@@ -393,7 +393,7 @@ namespace FarseerPhysics.Common.TextureTools
             Combining polya and polyb into one super-polygon stored in polya.
         **/
 
-		static void combLeft( ref GeomPoly polya, ref GeomPoly polyb )
+		static void CombLeft( ref GeomPoly polya, ref GeomPoly polyb )
 		{
 			CxFastList<Vector2> ap = polya.Points;
 			CxFastList<Vector2> bp = polyb.Points;
@@ -405,7 +405,7 @@ namespace FarseerPhysics.Common.TextureTools
 			while( ai != ap.End() )
 			{
 				Vector2 a = ai.Elem();
-				if( vecDsq( a, b ) < Settings.epsilon)
+				if( VecDsq( a, b ) < Settings.Epsilon)
 				{
 					//ignore shared vertex if parallel
 					if(prea != null )
@@ -417,8 +417,8 @@ namespace FarseerPhysics.Common.TextureTools
 						//vec_new(u); vec_sub(a.p.p, a0.p.p, u);
 						Vector2 v = b - a;
 						//vec_new(v); vec_sub(b.p.p, a.p.p, v);
-						float dot = vecCross( u, v );
-						if( dot * dot < Settings.epsilon )
+						float dot = VecCross( u, v );
+						if( dot * dot < Settings.Epsilon )
 						{
 							ap.Erase( prea, ai );
 							polya.Length--;
@@ -453,8 +453,8 @@ namespace FarseerPhysics.Common.TextureTools
 					//vec_new(u); vec_sub(a1.p, a0.p, u);
 					Vector2 vv = a2 - a1;
 					//vec_new(v); vec_sub(a2.p, a1.p, v);
-					float dot1 = vecCross( uu, vv );
-					if( dot1 * dot1 < Settings.epsilon )
+					float dot1 = VecCross( uu, vv );
+					if( dot1 * dot1 < Settings.Epsilon )
 					{
 						ap.Erase( preb, preb.Next() );
 						polya.Length--;

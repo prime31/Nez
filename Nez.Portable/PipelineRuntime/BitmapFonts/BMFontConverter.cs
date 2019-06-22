@@ -20,10 +20,10 @@ namespace Nez.BitmapFonts
         public static SpriteFont LoadSpriteFontFromBitmapFont(string filename)
         {
             var fontData = BitmapFontLoader.LoadFontFromFile(filename);
-            if (fontData.pages.Length > 1)
+            if (fontData.Pages.Length > 1)
                 throw new Exception($"Found multiple textures in font file {filename}. Only single texture fonts are supported.");
 
-            var texture = Texture2D.FromStream(Core.graphicsDevice, File.OpenRead(fontData.pages[0].filename));
+            var texture = Texture2D.FromStream(Core.GraphicsDevice, File.OpenRead(fontData.Pages[0].Filename));
             return LoadSpriteFontFromBitmapFont(fontData, texture);
         }
 
@@ -40,21 +40,21 @@ namespace Nez.BitmapFonts
             var chars = new List<char>();
             var kerning = new List<Vector3>();
 
-            var characters = font.characters.Values.OrderBy(c => c.character);
+            var characters = font.Characters.Values.OrderBy(c => c.Char);
             foreach (var character in characters)
             {
-                var bounds = character.bounds;
+                var bounds = character.Bounds;
                 glyphBounds.Add(bounds);
-                cropping.Add(new Rectangle(character.offset.X, character.offset.Y, bounds.Width, bounds.Height));
-                chars.Add(character.character);
-                kerning.Add(new Vector3(0, character.bounds.Width, character.xAdvance - character.bounds.Width));
+                cropping.Add(new Rectangle(character.Offset.X, character.Offset.Y, bounds.Width, bounds.Height));
+                chars.Add(character.Char);
+                kerning.Add(new Vector3(0, character.Bounds.Width, character.XAdvance - character.Bounds.Width));
             }
 
             var constructorInfo = typeof(SpriteFont).GetTypeInfo().DeclaredConstructors.First();
             var result = (SpriteFont)constructorInfo.Invoke(new object[]
             {
                 texture, glyphBounds, cropping,
-                chars, font.lineHeight, 0, kerning, ' '
+                chars, font.LineHeight, 0, kerning, ' '
             });
 
             return result;

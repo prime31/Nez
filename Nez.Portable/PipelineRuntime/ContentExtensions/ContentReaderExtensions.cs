@@ -9,7 +9,7 @@ namespace Nez.Pipeline.Content
 {
 	internal static class ContentReaderExtensions
 	{
-		public static string getRelativeAssetPath( this ContentReader contentReader, string relativePath )
+		public static string GetRelativeAssetPath( this ContentReader contentReader, string relativePath )
 		{
 			var assetName = contentReader.AssetName;
 			var assetNodes = assetName.Split( new[] { '/', '\\' }, StringSplitOptions.RemoveEmptyEntries );
@@ -35,7 +35,7 @@ namespace Nez.Pipeline.Content
 		}
 
 
-		public static Rectangle readRectangle( this ContentReader reader )
+		public static Rectangle ReadRectangle( this ContentReader reader )
 		{
 			return new Rectangle( reader.ReadInt32(), reader.ReadInt32(), reader.ReadInt32(), reader.ReadInt32() );
 		}

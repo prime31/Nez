@@ -6,7 +6,7 @@ namespace Nez.ImGuiTools.ObjectInspectors
 {
     public class RendererInspector
     {
-        public Renderer renderer => _renderer;
+        public Renderer Renderer => _renderer;
 
 		int _scopeId = NezImGui.GetScopeId();
         string _name;
@@ -18,12 +18,12 @@ namespace Nez.ImGuiTools.ObjectInspectors
             _renderer = renderer;
             _name = _renderer.GetType().Name;
             _materialInspector = new MaterialInspector {
-                allowsMaterialRemoval = false
+                AllowsMaterialRemoval = false
             };
-            _materialInspector.setTarget( renderer, renderer.GetType().GetField( "material" ) );
+            _materialInspector.SetTarget( renderer, renderer.GetType().GetField( "material" ) );
         }
 
-        public void draw()
+        public void Draw()
         {
             ImGui.PushID( _scopeId );
             var isOpen = ImGui.CollapsingHeader( _name );
@@ -35,7 +35,7 @@ namespace Nez.ImGuiTools.ObjectInspectors
 				if( ImGui.Selectable( "Remove Renderer" ) )
 				{
                     isOpen = false;
-                    Core.scene.removeRenderer( _renderer );
+                    Core.Scene.RemoveRenderer( _renderer );
 					ImGui.CloseCurrentPopup();
 				}
 
@@ -46,27 +46,27 @@ namespace Nez.ImGuiTools.ObjectInspectors
             {
                 ImGui.Indent();
 
-                _materialInspector.draw();
+                _materialInspector.Draw();
                 
-                ImGui.Checkbox( "shouldDebugRender", ref renderer.shouldDebugRender );
+                ImGui.Checkbox( "shouldDebugRender", ref Renderer.ShouldDebugRender );
 
-			    var value = renderer.renderTargetClearColor.toNumerics();
+			    var value = Renderer.RenderTargetClearColor.ToNumerics();
 			    if( ImGui.ColorEdit4( "renderTargetClearColor", ref value ) )
-				    renderer.renderTargetClearColor = value.toXNAColor();
+				    Renderer.RenderTargetClearColor = value.ToXNAColor();
                 
-                if( renderer.camera != null )
+                if( Renderer.Camera != null )
                 {
-                    if( NezImGui.LabelButton( "Camera", renderer.camera.entity.name ) )
-				        Core.getGlobalManager<ImGuiManager>().startInspectingEntity( renderer.camera.entity );
+                    if( NezImGui.LabelButton( "Camera", Renderer.Camera.Entity.Name ) )
+				        Core.GetGlobalManager<ImGuiManager>().StartInspectingEntity( Renderer.Camera.Entity );
                 }
 
                 ImGui.PushStyleVar( ImGuiStyleVar.Alpha, ImGui.GetStyle().Alpha * 0.5f );
                 NezImGui.DisableNextWidget();
-                var tempBool = renderer.wantsToRenderToSceneRenderTarget;
+                var tempBool = Renderer.WantsToRenderToSceneRenderTarget;
                 ImGui.Checkbox( "wantsToRenderToSceneRenderTarget", ref tempBool );
 
                 NezImGui.DisableNextWidget();
-                tempBool = renderer.wantsToRenderAfterPostProcessors;
+                tempBool = Renderer.WantsToRenderAfterPostProcessors;
                 ImGui.Checkbox( "wantsToRenderAfterPostProcessors", ref tempBool );
                 ImGui.PopStyleVar();
                 

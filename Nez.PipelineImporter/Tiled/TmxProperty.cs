@@ -10,15 +10,15 @@ namespace Nez.TiledMaps
 			
 
 		[XmlAttribute(AttributeName = "name")]
-		public string name;
+		public string Name;
 
 		[XmlAttribute(AttributeName = "value")]
-		public string value;
+		public string Value;
 
 
         public override string ToString()
         {
-            return string.Format("{0}: {1}", name, value);
+            return string.Format("{0}: {1}", Name, Value);
         }
     }
 }

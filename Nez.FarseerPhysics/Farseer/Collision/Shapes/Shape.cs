@@ -36,22 +36,22 @@ namespace FarseerPhysics.Collision.Shapes
 		/// <summary>
 		/// The area of the shape
 		/// </summary>
-		public float area { get; internal set; }
+		public float Area { get; internal set; }
 
 		/// <summary>
 		/// The position of the shape's centroid relative to the shape's origin.
 		/// </summary>
-		public Vector2 centroid { get; internal set; }
+		public Vector2 Centroid { get; internal set; }
 
 		/// <summary>
 		/// The rotational inertia of the shape about the local origin.
 		/// </summary>
-		public float inertia { get; internal set; }
+		public float Inertia { get; internal set; }
 
 		/// <summary>
 		/// The mass of the shape, usually in kilograms.
 		/// </summary>
-		public float mass { get; internal set; }
+		public float Mass { get; internal set; }
 
 
 		/// <summary>
@@ -62,7 +62,7 @@ namespace FarseerPhysics.Collision.Shapes
 		/// <returns></returns>
 		public static bool operator ==( MassData left, MassData right )
 		{
-			return ( left.area == right.area && left.mass == right.mass && left.centroid == right.centroid && left.inertia == right.inertia );
+			return ( left.Area == right.Area && left.Mass == right.Mass && left.Centroid == right.Centroid && left.Inertia == right.Inertia );
 		}
 
 		/// <summary>
@@ -96,10 +96,10 @@ namespace FarseerPhysics.Collision.Shapes
 		{
 			unchecked
 			{
-				int result = area.GetHashCode();
-				result = ( result * 397 ) ^ centroid.GetHashCode();
-				result = ( result * 397 ) ^ inertia.GetHashCode();
-				result = ( result * 397 ) ^ mass.GetHashCode();
+				int result = Area.GetHashCode();
+				result = ( result * 397 ) ^ Centroid.GetHashCode();
+				result = ( result * 397 ) ^ Inertia.GetHashCode();
+				result = ( result * 397 ) ^ Mass.GetHashCode();
 				return result;
 			}
 		}
@@ -132,33 +132,33 @@ namespace FarseerPhysics.Collision.Shapes
 		/// - Inertia
 		/// - Mass
 		/// </summary>
-		public MassData massData;
+		public MassData MassData;
 
 		/// <summary>
 		/// Get the type of this shape.
 		/// </summary>
 		/// <value>The type of the shape.</value>
-		public ShapeType shapeType { get; internal set; }
+		public ShapeType ShapeType { get; internal set; }
 
 		/// <summary>
 		/// Get the number of child primitives.
 		/// </summary>
 		/// <value></value>
-		public abstract int childCount { get; }
+		public abstract int ChildCount { get; }
 
 		/// <summary>
 		/// Gets or sets the density.
 		/// Changing the density causes a recalculation of shape properties.
 		/// </summary>
 		/// <value>The density.</value>
-		public float density
+		public float Density
 		{
 			get { return _density; }
 			set
 			{
 				Debug.Assert( value >= 0 );
 				_density = value;
-				computeProperties();
+				ComputeProperties();
 			}
 		}
 
@@ -166,7 +166,7 @@ namespace FarseerPhysics.Collision.Shapes
 		/// Radius of the Shape
 		/// Changing the radius causes a recalculation of shape properties.
 		/// </summary>
-		public float radius
+		public float Radius
 		{
 			get { return _radius; }
 			set
@@ -176,7 +176,7 @@ namespace FarseerPhysics.Collision.Shapes
 				_radius = value;
 				_2radius = _radius * _radius;
 
-				computeProperties();
+				ComputeProperties();
 			}
 		}
 
@@ -188,14 +188,14 @@ namespace FarseerPhysics.Collision.Shapes
 		protected Shape( float density )
 		{
 			_density = density;
-			shapeType = ShapeType.Unknown;
+			ShapeType = ShapeType.Unknown;
 		}
 
 		/// <summary>
 		/// Clone the concrete shape
 		/// </summary>
 		/// <returns>A clone of the shape</returns>
-		public abstract Shape clone();
+		public abstract Shape Clone();
 
 		/// <summary>
 		/// Test a point for containment in this shape.
@@ -204,7 +204,7 @@ namespace FarseerPhysics.Collision.Shapes
 		/// <param name="transform">The shape world transform.</param>
 		/// <param name="point">A point in world coordinates.</param>
 		/// <returns>True if the point is inside the shape</returns>
-		public abstract bool testPoint( ref Transform transform, ref Vector2 point );
+		public abstract bool TestPoint( ref Transform transform, ref Vector2 point );
 
 		/// <summary>
 		/// Cast a ray against a child shape.
@@ -214,7 +214,7 @@ namespace FarseerPhysics.Collision.Shapes
 		/// <param name="transform">The transform to be applied to the shape.</param>
 		/// <param name="childIndex">The child shape index.</param>
 		/// <returns>True if the ray-cast hits the shape</returns>
-		public abstract bool rayCast( out RayCastOutput output, ref RayCastInput input, ref Transform transform, int childIndex );
+		public abstract bool RayCast( out RayCastOutput output, ref RayCastInput input, ref Transform transform, int childIndex );
 
 		/// <summary>
 		/// Given a transform, compute the associated axis aligned bounding box for a child shape.
@@ -222,13 +222,13 @@ namespace FarseerPhysics.Collision.Shapes
 		/// <param name="aabb">The aabb results.</param>
 		/// <param name="transform">The world transform of the shape.</param>
 		/// <param name="childIndex">The child shape index.</param>
-		public abstract void computeAABB( out AABB aabb, ref Transform transform, int childIndex );
+		public abstract void ComputeAABB( out AABB aabb, ref Transform transform, int childIndex );
 
 		/// <summary>
 		/// Compute the mass properties of this shape using its dimensions and density.
 		/// The inertia tensor is computed about the local origin, not the centroid.
 		/// </summary>
-		protected abstract void computeProperties();
+		protected abstract void ComputeProperties();
 
 		/// <summary>
 		/// Compare this shape to another shape based on type and properties.
@@ -255,7 +255,7 @@ namespace FarseerPhysics.Collision.Shapes
 		/// <summary>
 		/// Used for the buoyancy controller
 		/// </summary>
-		public abstract float computeSubmergedArea( ref Vector2 normal, float offset, ref Transform xf, out Vector2 sc );
+		public abstract float ComputeSubmergedArea( ref Vector2 normal, float offset, ref Transform xf, out Vector2 sc );
 	
 	}
 }

@@ -6,9 +6,9 @@ namespace Nez.UI
 {
     public class TabPane : Table
     {
-        public Tab currentTab;
-        public List<Tab> tabs;
-        public List<TabButton> tabButtons;
+        public Tab CurrentTab;
+        public List<Tab> Tabs;
+        public List<TabButton> TabButtons;
         private TabWindowStyle _style;
         private Table _buttonsTable;
         private Table _tabTable;
@@ -16,110 +16,110 @@ namespace Nez.UI
         public TabPane( TabWindowStyle style )
         {
             _style = style;
-            init();
+            Init();
         }
 
-        private void init()
+        private void Init()
         {
-            setSize( 100, 100 );
+            SetSize( 100, 100 );
 
-            setBackground( _style.background );
+            SetBackground( _style.Background );
 
-            top().left();
+            Top().Left();
 
-            tabs = new List<Tab>();
-            tabButtons = new List<TabButton>();
+            Tabs = new List<Tab>();
+            TabButtons = new List<TabButton>();
 
             _buttonsTable = new Table();
-            _buttonsTable.setFillParent( true );
-            _buttonsTable.top().left();
+            _buttonsTable.SetFillParent( true );
+            _buttonsTable.Top().Left();
             _tabTable = new Table();
-            _tabTable.top().left();
+            _tabTable.Top().Left();
 
-            row();
-            add( _buttonsTable ).fill().setExpandX();
-            row();
-            add( _tabTable ).fill().setExpandY();
+            Row();
+            Add( _buttonsTable ).Fill().SetExpandX();
+            Row();
+            Add( _tabTable ).Fill().SetExpandY();
         }
 
-        public void addTab( Tab tab )
+        public void AddTab( Tab tab )
         {
-            tabs.Add( tab );
+            Tabs.Add( tab );
 
-            var tabBtn = new TabButton( tab, _style.tabButtonStyle );
-            tabBtn.onClick += () =>
+            var tabBtn = new TabButton( tab, _style.TabButtonStyle );
+            tabBtn.OnClick += () =>
             {
-                setActiveTab( tabBtn.getTab() );
+                SetActiveTab( tabBtn.GetTab() );
             };
-            tabButtons.Add( tabBtn );
-            _buttonsTable.add( tabBtn );
+            TabButtons.Add( tabBtn );
+            _buttonsTable.Add( tabBtn );
 
-            if( tabs.Count == 1 )
+            if( Tabs.Count == 1 )
             {
-                currentTab = tabs[0];
-                _tabTable.add( tab ).left().top().fill().expand();
+                CurrentTab = Tabs[0];
+                _tabTable.Add( tab ).Left().Top().Fill().Expand();
 
-                tabBtn.toggleOn();
+                tabBtn.ToggleOn();
             }
 
-            if( tabs.Count == 1 )
-                setActiveTab( 0 );
+            if( Tabs.Count == 1 )
+                SetActiveTab( 0 );
         }
 
-        public void setActiveTab( int index )
+        public void SetActiveTab( int index )
         {
-            var tab = tabs[index];
-            if( tab != currentTab )
+            var tab = Tabs[index];
+            if( tab != CurrentTab )
             {
-                _tabTable.clear();
-                _tabTable.add( tab ).left().top().fill().expand();
+                _tabTable.Clear();
+                _tabTable.Add( tab ).Left().Top().Fill().Expand();
 
-                tabButtons[index].toggleOn();
+                TabButtons[index].ToggleOn();
 
-                var i = tabs.IndexOf( currentTab );
-                tabButtons[i].toggleOff();
+                var i = Tabs.IndexOf( CurrentTab );
+                TabButtons[i].ToggleOff();
 
-                currentTab = tab;
+                CurrentTab = tab;
             }
         }
 
-        protected void setActiveTab( Tab tab )
+        protected void SetActiveTab( Tab tab )
         {
-            var i = tabs.IndexOf( tab );
-            setActiveTab( i );
+            var i = Tabs.IndexOf( tab );
+            SetActiveTab( i );
         }
     }
 
     public class TabWindowStyle
     {
-        public IDrawable background;
-        public TabButtonStyle tabButtonStyle;
+        public IDrawable Background;
+        public TabButtonStyle TabButtonStyle;
     }
 
     public class Tab : Table
     {
         private TabStyle _style;
-        public string tabName;
+        public string TabName;
 
         public Tab( string name, TabStyle style )
         {
-            tabName = name;
+            TabName = name;
             _style = style;
-            setTouchable( Touchable.Enabled );
-            setup();
+            SetTouchable( Touchable.Enabled );
+            Setup();
         }
 
-        private void setup()
+        private void Setup()
         {
-            setBackground( _style.background );
-            setFillParent( true );
-            top().left();
+            SetBackground( _style.Background );
+            SetFillParent( true );
+            Top().Left();
         }
     }
 
     public class TabStyle
     {
-        public IDrawable background;
+        public IDrawable Background;
     }
 
     public class TabButton : Table, IInputListener
@@ -138,134 +138,134 @@ namespace Nez.UI
         private string tabName;
         private Tab tab;
 
-        public Action onClick;
+        public Action OnClick;
 
         public TabButton( Tab tab, TabButtonStyle style )
         {
             this.style = style;
-            tabName = tab.tabName;
+            tabName = tab.TabName;
             this.tab = tab;
-            init();
+            Init();
         }
 
-        private void init()
+        private void Init()
         {
-            setTouchable( Touchable.Enabled );
-            text = new Label( tabName, style.labelStyle );
-            add( text ).setFillX().pad( 8 );
-            setBackground( style.inactive );
-            padTop( style.paddingTop );
+            SetTouchable( Touchable.Enabled );
+            text = new Label( tabName, style.LabelStyle );
+            Add( text ).SetFillX().Pad( 8 );
+            SetBackground( style.Inactive );
+            PadTop( style.PaddingTop );
         }
 
-        public string getTabeName()
+        public string GetTabeName()
         {
             return tabName;
         }
 
-        public Tab getTab()
+        public Tab GetTab()
         {
             return tab;
         }
 
-        public bool isSwitchedOn()
+        public bool IsSwitchedOn()
         {
             return state == TabButtonState.Active;
         }
 
-        public void toggle()
+        public void Toggle()
         {
             if( state != TabButtonState.Locked )
             {
                 if( state == TabButtonState.Active )
                 {
                     state = TabButtonState.Inactive;
-                    setBackground( style.inactive );
+                    SetBackground( style.Inactive );
                 }
                 else
                 {
                     state = TabButtonState.Active;
-                    setBackground( style.active );
+                    SetBackground( style.Active );
                 }
             }
         }
 
-        public void toggleOff()
+        public void ToggleOff()
         {
             if( state != TabButtonState.Locked )
             {
                 state = TabButtonState.Inactive;
 
-                setBackground( style.inactive );
+                SetBackground( style.Inactive );
             }
         }
 
-        public void toggleOn()
+        public void ToggleOn()
         {
             if( state != TabButtonState.Locked )
             {
                 state = TabButtonState.Active;
 
-                setBackground( style.active );
+                SetBackground( style.Active );
             }
         }
 
-        public void toggleLock()
+        public void ToggleLock()
         {
             if( state != TabButtonState.Inactive )
             {
                 if( state == TabButtonState.Active )
                 {
                     state = TabButtonState.Locked;
-                    setBackground( style.locked );
+                    SetBackground( style.Locked );
                 }
                 else
                 {
                     state = TabButtonState.Active;
-                    setBackground( style.active );
+                    SetBackground( style.Active );
                 }
             }
         }
 
-        public void unlock()
+        public void Unlock()
         {
             if( state == TabButtonState.Locked )
             {
                 state = TabButtonState.Active;
-                setBackground( style.active );
+                SetBackground( style.Active );
             }
         }
 
-        void IInputListener.onMouseEnter()
+        void IInputListener.OnMouseEnter()
         {
             if( state == TabButtonState.Inactive )
             {
-                setBackground( style.hover );
+                SetBackground( style.Hover );
             }
         }
 
-        void IInputListener.onMouseExit()
+        void IInputListener.OnMouseExit()
         {
             if( state == TabButtonState.Inactive )
             {
-                setBackground( style.inactive );
+                SetBackground( style.Inactive );
             }
         }
 
-        bool IInputListener.onMousePressed( Vector2 mousePos )
+        bool IInputListener.OnMousePressed( Vector2 mousePos )
         {
             return true;
         }
 
-        void IInputListener.onMouseMoved( Vector2 mousePos )
+        void IInputListener.OnMouseMoved( Vector2 mousePos )
         {
         }
 
-        void IInputListener.onMouseUp( Vector2 mousePos )
+        void IInputListener.OnMouseUp( Vector2 mousePos )
         {
-            onClick?.Invoke();
+            OnClick?.Invoke();
         }
 
-        bool IInputListener.onMouseScrolled( int mouseWheelDelta )
+        bool IInputListener.OnMouseScrolled( int mouseWheelDelta )
         {
             return true;
         }
@@ -273,11 +273,11 @@ namespace Nez.UI
 
     public class TabButtonStyle
     {
-        public IDrawable active;
-        public IDrawable inactive;
-        public IDrawable locked;
-        public IDrawable hover;
-        public float paddingTop = 0.0F;
-        public LabelStyle labelStyle;
+        public IDrawable Active;
+        public IDrawable Inactive;
+        public IDrawable Locked;
+        public IDrawable Hover;
+        public float PaddingTop = 0.0F;
+        public LabelStyle LabelStyle;
     }
 }

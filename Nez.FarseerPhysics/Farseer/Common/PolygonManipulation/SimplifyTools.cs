@@ -17,7 +17,7 @@ namespace FarseerPhysics.Common.PolygonManipulation
 		/// <param name="vertices">The polygon that needs simplification.</param>
 		/// <param name="collinearityTolerance">The collinearity tolerance.</param>
 		/// <returns>A simplified polygon.</returns>
-		public static Vertices collinearSimplify( Vertices vertices, float collinearityTolerance = 0 )
+		public static Vertices CollinearSimplify( Vertices vertices, float collinearityTolerance = 0 )
 		{
 			if( vertices.Count <= 3 )
 				return vertices;
@@ -26,12 +26,12 @@ namespace FarseerPhysics.Common.PolygonManipulation
 
 			for( int i = 0; i < vertices.Count; i++ )
 			{
-				var prev = vertices.previousVertex( i );
+				var prev = vertices.PreviousVertex( i );
 				var current = vertices[i];
-				var next = vertices.nextVertex( i );
+				var next = vertices.NextVertex( i );
 
 				//If they collinear, continue
-				if( MathUtils.isCollinear( ref prev, ref current, ref next, collinearityTolerance ) )
+				if( MathUtils.IsCollinear( ref prev, ref current, ref next, collinearityTolerance ) )
 					continue;
 
 				simplified.Add( current );
@@ -48,7 +48,7 @@ namespace FarseerPhysics.Common.PolygonManipulation
 		/// If you pass in 0, it will remove all collinear points.
 		/// </summary>
 		/// <returns>The simplified polygon</returns>
-		public static Vertices douglasPeuckerSimplify( Vertices vertices, float distanceTolerance )
+		public static Vertices DouglasPeuckerSimplify( Vertices vertices, float distanceTolerance )
 		{
 			if( vertices.Count <= 3 )
 				return vertices;
@@ -58,7 +58,7 @@ namespace FarseerPhysics.Common.PolygonManipulation
 			for( int i = 0; i < vertices.Count; i++ )
 				usePoint[i] = true;
 
-			simplifySection( vertices, 0, vertices.Count - 1, usePoint, distanceTolerance );
+			SimplifySection( vertices, 0, vertices.Count - 1, usePoint, distanceTolerance );
 
 			Vertices simplified = new Vertices( vertices.Count );
 
@@ -72,7 +72,7 @@ namespace FarseerPhysics.Common.PolygonManipulation
 		}
 
 
-		static void simplifySection( Vertices vertices, int i, int j, bool[] usePoint, float distanceTolerance )
+		static void SimplifySection( Vertices vertices, int i, int j, bool[] usePoint, float distanceTolerance )
 		{
 			if( ( i + 1 ) == j )
 				return;
@@ -86,7 +86,7 @@ namespace FarseerPhysics.Common.PolygonManipulation
 			{
 				Vector2 point = vertices[k];
 
-				double distance = LineTools.distanceBetweenPointAndLineSegment( ref point, ref a, ref b );
+				double distance = LineTools.DistanceBetweenPointAndLineSegment( ref point, ref a, ref b );
 
 				if( distance > maxDistance )
 				{
@@ -104,8 +104,8 @@ namespace FarseerPhysics.Common.PolygonManipulation
 			}
 			else
 			{
-				simplifySection( vertices, i, maxIndex, usePoint, distanceTolerance );
-				simplifySection( vertices, maxIndex, j, usePoint, distanceTolerance );
+				SimplifySection( vertices, i, maxIndex, usePoint, distanceTolerance );
+				SimplifySection( vertices, maxIndex, j, usePoint, distanceTolerance );
 			}
 		}
 
@@ -115,7 +115,7 @@ namespace FarseerPhysics.Common.PolygonManipulation
 		/// </summary>
 		/// <param name="vertices">The vertices.</param>
 		/// <param name="tolerance">The tolerance.</param>
-		public static Vertices mergeParallelEdges( Vertices vertices, float tolerance )
+		public static Vertices MergeParallelEdges( Vertices vertices, float tolerance )
 		{
 			//From Eric Jordan's convex decomposition library
 
@@ -189,7 +189,7 @@ namespace FarseerPhysics.Common.PolygonManipulation
 		/// Merges the identical points in the polygon.
 		/// </summary>
 		/// <param name="vertices">The vertices.</param>
-		public static Vertices mergeIdenticalPoints( Vertices vertices )
+		public static Vertices MergeIdenticalPoints( Vertices vertices )
 		{
 			var unique = new HashSet<Vector2>();
 			foreach( Vector2 vertex in vertices )
@@ -204,7 +204,7 @@ namespace FarseerPhysics.Common.PolygonManipulation
 		/// </summary>
 		/// <param name="vertices">The vertices.</param>
 		/// <param name="distance">The distance between points. Points closer than this will be removed.</param>
-		public static Vertices reduceByDistance( Vertices vertices, float distance )
+		public static Vertices ReduceByDistance( Vertices vertices, float distance )
 		{
 			if( vertices.Count <= 3 )
 				return vertices;
@@ -216,7 +216,7 @@ namespace FarseerPhysics.Common.PolygonManipulation
 			for( int i = 0; i < vertices.Count; i++ )
 			{
 				Vector2 current = vertices[i];
-				Vector2 next = vertices.nextVertex( i );
+				Vector2 next = vertices.NextVertex( i );
 
 				//If they are closer than the distance, continue
 				if( ( next - current ).LengthSquared() <= distance2 )
@@ -235,7 +235,7 @@ namespace FarseerPhysics.Common.PolygonManipulation
 		/// <param name="vertices">The vertices.</param>
 		/// <param name="nth">The Nth point to remove. Example: 5.</param>
 		/// <returns></returns>
-		public static Vertices reduceByNth( Vertices vertices, int nth )
+		public static Vertices ReduceByNth( Vertices vertices, int nth )
 		{
 			if( vertices.Count <= 3 )
 				return vertices;
@@ -265,7 +265,7 @@ namespace FarseerPhysics.Common.PolygonManipulation
 		/// <param name="vertices"></param>
 		/// <param name="areaTolerance"></param>
 		/// <returns></returns>
-		public static Vertices reduceByArea( Vertices vertices, float areaTolerance )
+		public static Vertices ReduceByArea( Vertices vertices, float areaTolerance )
 		{
 			//From physics2d.net
 
@@ -286,13 +286,13 @@ namespace FarseerPhysics.Common.PolygonManipulation
 				v3 = i == vertices.Count - 1 ? simplified[0] : vertices[i];
 
 				float old1;
-				MathUtils.cross( ref v1, ref v2, out old1 );
+				MathUtils.Cross( ref v1, ref v2, out old1 );
 
 				float old2;
-				MathUtils.cross( ref v2, ref v3, out old2 );
+				MathUtils.Cross( ref v2, ref v3, out old2 );
 
 				float new1;
-				MathUtils.cross( ref v1, ref v3, out new1 );
+				MathUtils.Cross( ref v1, ref v3, out new1 );
 
 				if( Math.Abs( new1 - ( old1 + old2 ) ) > areaTolerance )
 				{

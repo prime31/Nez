@@ -10,7 +10,7 @@ namespace Nez.Verlet
 	{
 		public Ball( Vector2 position, float radius = 10 )
 		{
-			addParticle( new Particle( position ) ).radius = radius;
+			AddParticle( new Particle( position ) ).Radius = radius;
 		}
 	}
 }

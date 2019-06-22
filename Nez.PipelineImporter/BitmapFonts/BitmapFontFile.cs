@@ -14,24 +14,24 @@ namespace Nez.BitmapFontImporter
 		/// <summary>
 		/// the full path to the fnt font
 		/// </summary>
-		public string file;
+		public string File;
 
 		[XmlElement( "info" )]
-		public BitmapFontInfo info;
+		public BitmapFontInfo Info;
 		
 		[XmlElement( "common" )]
-		public BitmapFontCommon common;
+		public BitmapFontCommon Common;
 
 		[XmlArray( "pages" )]
 		[XmlArrayItem( "page" )]
-		public List<BitmapFontPage> pages;
+		public List<BitmapFontPage> Pages;
 
 		[XmlArray( "chars" )]
 		[XmlArrayItem( "char" )]
-		public List<BitmapFontChar> chars;
+		public List<BitmapFontChar> Chars;
 		
 		[XmlArray( "kernings" )]
 		[XmlArrayItem( "kerning" )]
-		public List<BitmapFontKerning> kernings;
+		public List<BitmapFontKerning> Kernings;
 	}
 }

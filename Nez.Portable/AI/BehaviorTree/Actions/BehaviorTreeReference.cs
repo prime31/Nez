@@ -17,9 +17,9 @@ namespace Nez.AI.BehaviorTrees
 		}
 
 
-		public override TaskStatus update( T context )
+		public override TaskStatus Update( T context )
 		{
-			_childTree.tick();
+			_childTree.Tick();
 			return TaskStatus.Success;
 		}
 	}

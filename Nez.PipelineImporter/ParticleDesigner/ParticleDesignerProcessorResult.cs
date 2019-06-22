@@ -7,9 +7,9 @@ namespace Nez.ParticleDesignerImporter
 {
 	public class ParticleDesignerProcessorResult
 	{
-		public ParticleDesignerEmitterConfig particleEmitterConfig;
-		public Texture2DContent texture;
-		public byte[] textureTiffData;
+		public ParticleDesignerEmitterConfig ParticleEmitterConfig;
+		public Texture2DContent Texture;
+		public byte[] TextureTiffData;
 
 
 		public ParticleDesignerProcessorResult()

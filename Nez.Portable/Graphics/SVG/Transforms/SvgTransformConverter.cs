@@ -10,7 +10,7 @@ namespace Nez.Svg
 	/// </summary>
 	public static class SvgTransformConverter
 	{
-		static IEnumerable<string> splitTransforms( string transforms )
+		static IEnumerable<string> SplitTransforms( string transforms )
 		{
 			var transformEnd = 0;
 			for( var i = 0; i < transforms.Length; i++ )
@@ -26,7 +26,7 @@ namespace Nez.Svg
 		}
 
 
-		public static List<SvgTransform> parseTransforms( string transforms )
+		public static List<SvgTransform> ParseTransforms( string transforms )
 		{
 			var transformList = new List<SvgTransform>();
 
@@ -34,7 +34,7 @@ namespace Nez.Svg
 			string contents;
 			string transformName;
 
-			foreach( var transform in splitTransforms( transforms ) )
+			foreach( var transform in SplitTransforms( transforms ) )
 			{
 				if( string.IsNullOrEmpty( transform ) )
 					continue;

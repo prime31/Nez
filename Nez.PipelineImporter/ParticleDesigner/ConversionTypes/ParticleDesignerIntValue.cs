@@ -7,12 +7,12 @@ namespace Nez.ParticleDesignerImporter
 	public class ParticleDesignerIntValue
 	{
 		[XmlAttribute]
-		public int value;
+		public int Value;
 
 
 		public static implicit operator int( ParticleDesignerIntValue obj )
 		{
-			return obj.value;
+			return obj.Value;
 		}
 
 	}

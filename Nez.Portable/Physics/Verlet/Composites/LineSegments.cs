@@ -13,10 +13,10 @@ namespace Nez.Verlet
 			for( var i = 0; i < vertices.Length; i++ )
 			{
 				var p = new Particle( vertices[i] );
-				addParticle( p );
+				AddParticle( p );
 
 				if( i > 0 )
-					addConstraint( new DistanceConstraint( particles.buffer[i], particles.buffer[i - 1], stiffness ) );
+					AddConstraint( new DistanceConstraint( Particles.Buffer[i], Particles.Buffer[i - 1], stiffness ) );
 			}
 		}
 
@@ -25,9 +25,9 @@ namespace Nez.Verlet
 		/// pins the Particle at the given index
 		/// </summary>
 		/// <param name="index">Index.</param>
-		public LineSegments pinParticleAtIndex( int index )
+		public LineSegments PinParticleAtIndex( int index )
 		{
-			particles.buffer[index].pin();
+			Particles.Buffer[index].Pin();
 			return this;
 		}
 

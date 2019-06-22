@@ -16,7 +16,7 @@ namespace Nez.BitmapFontImporter
 			{
 				var deserializer = new XmlSerializer( typeof( BitmapFontFile ) );
 				var bmFontFile = (BitmapFontFile)deserializer.Deserialize( streamReader );
-				bmFontFile.file = filename;
+				bmFontFile.File = filename;
 
 				return bmFontFile;
 			}

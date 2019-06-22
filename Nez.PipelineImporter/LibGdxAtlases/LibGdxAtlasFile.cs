@@ -7,8 +7,8 @@ namespace Nez.LibGdxAtlases
 {
 	public class LibGdxAtlasFile
 	{
-		public List<LibGdxAtlasPage> pages = new List<LibGdxAtlasPage>();
-		public List<LibGdxAtlasRegion> regions = new List<LibGdxAtlasRegion>();
+		public List<LibGdxAtlasPage> Pages = new List<LibGdxAtlasPage>();
+		public List<LibGdxAtlasRegion> Regions = new List<LibGdxAtlasRegion>();
 	}
 }
 

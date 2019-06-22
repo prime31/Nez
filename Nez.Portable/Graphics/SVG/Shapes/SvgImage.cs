@@ -15,25 +15,25 @@ namespace Nez.Svg
 	public class SvgImage : SvgElement
 	{
 		[XmlAttribute( "x" )]
-		public float x;
+		public float X;
 
 		[XmlAttribute( "y" )]
-		public float y;
+		public float Y;
 
 		[XmlAttribute( "width" )]
-		public float width;
+		public float Width;
 
 		[XmlAttribute( "height" )]
-		public float height;
+		public float Height;
 
 		/// <summary>
 		/// the rect encompassing this image. Note that the rect is with no transforms applied.
 		/// </summary>
 		/// <value>The rect.</value>
-		public RectangleF rect { get { return new RectangleF( x, y, width, height ); } }
+		public RectangleF Rect { get { return new RectangleF( X, Y, Width, Height ); } }
 
 		[XmlAttribute( "href", Namespace = "http://www.w3.org/1999/xlink" )]
-		public string href;
+		public string Href;
 
 		/// <summary>
 		/// flag that determines if we tried to load the texture. We only attempt to load it once.
@@ -54,39 +54,39 @@ namespace Nez.Svg
 		/// </summary>
 		/// <returns>The texture.</returns>
 		/// <param name="content">Content.</param>
-		public Texture2D getTexture( NezContentManager content )
+		public Texture2D GetTexture( NezContentManager content )
 		{
 			if( _didAttemptTextureLoad || _texture != null )
 				return _texture;
 
 			// check for a url
-			if( href.StartsWith( "http" ) )
+			if( Href.StartsWith( "http" ) )
 			{
 				using( var client = new System.Net.Http.HttpClient() )
 				{
-					var stream = client.GetStreamAsync( href ).Result;
-					_texture = Texture2D.FromStream( Core.graphicsDevice, stream );
+					var stream = client.GetStreamAsync( Href ).Result;
+					_texture = Texture2D.FromStream( Core.GraphicsDevice, stream );
 				}
 			}
 			// see if we have a path to a png files in the href
-			else if( href.EndsWith( "png" ) )
+			else if( Href.EndsWith( "png" ) )
 			{
 				// check for existance before attempting to load! We are a PCL so we cant so we'll catch the Exception instead
 				try
 				{
 					if( content != null )
-						_texture = content.Load<Texture2D>( href );
+						_texture = content.Load<Texture2D>( Href );
 				}
 				catch( ContentLoadException )
 				{
-					Debug.error( "Could not load SvgImage from href: {0}", href );
+					Debug.Error( "Could not load SvgImage from href: {0}", Href );
 				}
 			}
 			// attempt to parse the base64 string if it is embedded in the href
-			else if( href.StartsWith( "data:" ) )
+			else if( Href.StartsWith( "data:" ) )
 			{
-				var startIndex = href.IndexOf( "base64,", StringComparison.OrdinalIgnoreCase ) + 7;
-				var imageContents = href.Substring( startIndex );
+				var startIndex = Href.IndexOf( "base64,", StringComparison.OrdinalIgnoreCase ) + 7;
+				var imageContents = Href.Substring( startIndex );
 				var bytes = Convert.FromBase64String( imageContents );
 
 				using( var m = new MemoryStream() )
@@ -94,7 +94,7 @@ namespace Nez.Svg
 					m.Write( bytes, 0, bytes.Length );
 					m.Seek( 0, SeekOrigin.Begin );
 
-					_texture = Texture2D.FromStream( Core.graphicsDevice, m );
+					_texture = Texture2D.FromStream( Core.GraphicsDevice, m );
 				}
 			}
 

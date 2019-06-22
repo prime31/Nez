@@ -11,7 +11,7 @@ namespace Nez.AI.BehaviorTrees
 		/// <summary>
 		/// how often the behavior tree should update. An updatePeriod of 0.2 will make the tree update 5 times a second.
 		/// </summary>
-		public float updatePeriod;
+		public float UpdatePeriod;
 		
 		/// <summary>
 		/// The context should contain all the data needed to run the tree
@@ -31,28 +31,28 @@ namespace Nez.AI.BehaviorTrees
 			_context = context;
 			_root = rootNode;
 
-			this.updatePeriod = _elapsedTime = updatePeriod;
+			this.UpdatePeriod = _elapsedTime = updatePeriod;
 		}
 
 
-		public void tick()
+		public void Tick()
 		{
 			// updatePeriod less than or equal to 0 will tick every frame
-			if( updatePeriod > 0 )
+			if( UpdatePeriod > 0 )
 			{
-				_elapsedTime -= Time.deltaTime;
+				_elapsedTime -= Time.DeltaTime;
 				if( _elapsedTime <= 0 )
 				{
 					// ensure we only tick once for long frames
 					while( _elapsedTime <= 0 )
-						_elapsedTime += updatePeriod;
+						_elapsedTime += UpdatePeriod;
 					
-					_root.tick( _context );
+					_root.Tick( _context );
 				}
 			}
 			else
 			{
-				_root.tick( _context );
+				_root.Tick( _context );
 			}
 		}
 	

@@ -9,15 +9,15 @@ namespace Nez.DeferredLighting
 	/// </summary>
 	public class PointLight : DeferredLight
 	{
-        public override RectangleF bounds
+        public override RectangleF Bounds
         {
             get
             {
                 if( _areBoundsDirty )
                 {
 					// the size of the light only uses the x scale value
-					var size = radius * entity.transform.scale.X * 2;
-                    _bounds.calculateBounds( entity.transform.position, _localOffset, _radius * entity.transform.scale, Vector2.One, 0, size, size );
+					var size = Radius * Entity.Transform.Scale.X * 2;
+                    _bounds.CalculateBounds( Entity.Transform.Position, _localOffset, _radius * Entity.Transform.Scale, Vector2.One, 0, size, size );
                     _areBoundsDirty = false;
                 }
 
@@ -28,17 +28,17 @@ namespace Nez.DeferredLighting
         /// <summary>
         /// "height" above the scene in the z direction
         /// </summary>
-        public float zPosition = 150f;
+        public float ZPosition = 150f;
 		
 		/// <summary>
 		/// how far does this light reaches
 		/// </summary>
-		public float radius { get { return _radius; } }
+		public float Radius { get { return _radius; } }
 
 		/// <summary>
 		/// brightness of the light
 		/// </summary>
-		public float intensity = 3f;
+		public float Intensity = 3f;
 
 
 		protected float _radius;
@@ -46,19 +46,19 @@ namespace Nez.DeferredLighting
 
 		public PointLight()
 		{
-			setRadius( 400f );
+			SetRadius( 400f );
 		}
 
 
 		public PointLight( Color color ) : this()
 		{
-			this.color = color;
+			this.Color = color;
 		}
 
 
-		public PointLight setZPosition( float z )
+		public PointLight SetZPosition( float z )
 		{
-			zPosition = z;
+			ZPosition = z;
 			return this;
 		}
 
@@ -68,7 +68,7 @@ namespace Nez.DeferredLighting
 		/// </summary>
 		/// <returns>The radius.</returns>
 		/// <param name="radius">Radius.</param>
-		public PointLight setRadius( float radius )
+		public PointLight SetRadius( float radius )
 		{
 			_radius = radius;
 			_areBoundsDirty = true;
@@ -81,9 +81,9 @@ namespace Nez.DeferredLighting
 		/// </summary>
 		/// <returns>The intensity.</returns>
 		/// <param name="intensity">Intensity.</param>
-		public PointLight setIntensity( float intensity )
+		public PointLight SetIntensity( float intensity )
 		{
-			this.intensity = intensity;
+			this.Intensity = intensity;
 			return this;
 		}
 
@@ -92,9 +92,9 @@ namespace Nez.DeferredLighting
 		/// renders the bounds only if there is no collider. Always renders a square on the origin.
 		/// </summary>
 		/// <param name="graphics">Graphics.</param>
-		public override void debugRender( Graphics graphics )
+		public override void DebugRender( Graphics graphics )
 		{
-			graphics.batcher.drawCircle( entity.transform.position + _localOffset, radius * entity.transform.scale.X, Color.DarkOrchid, 2 );
+			graphics.Batcher.DrawCircle( Entity.Transform.Position + _localOffset, Radius * Entity.Transform.Scale.X, Color.DarkOrchid, 2 );
 		}
 
 	}

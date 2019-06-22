@@ -22,35 +22,35 @@ namespace Nez.TiledMaps
 				var map = (TmxMap)serializer.Deserialize( reader );
 				var xmlSerializer = new XmlSerializer( typeof( TmxTileset ) );
 
-				foreach( var l in map.layers )
+				foreach( var l in map.Layers )
 					context.Logger.LogMessage( "Deserialized Layer: {0}", l );
 
-				foreach( var o in map.objectGroups )
-					context.Logger.LogMessage( "Deserialized ObjectGroup: {0}, object count: {1}", o.name, o.objects.Count );
+				foreach( var o in map.ObjectGroups )
+					context.Logger.LogMessage( "Deserialized ObjectGroup: {0}, object count: {1}", o.Name, o.Objects.Count );
 
 				context.Logger.LogMessage( "" );
 
-				for( var i = 0; i < map.tilesets.Count; i++ )
+				for( var i = 0; i < map.Tilesets.Count; i++ )
 				{
-					var tileset = map.tilesets[i];
-					if( !string.IsNullOrWhiteSpace( tileset.source ) )
+					var tileset = map.Tilesets[i];
+					if( !string.IsNullOrWhiteSpace( tileset.Source ) )
 					{
 						var directoryName = Path.GetDirectoryName( filename );
-						var tilesetLocation = tileset.source.Replace( '/', Path.DirectorySeparatorChar );
+						var tilesetLocation = tileset.Source.Replace( '/', Path.DirectorySeparatorChar );
 						var filePath = Path.Combine( directoryName, tilesetLocation );
 
 						var normExtTilesetPath = new DirectoryInfo( filePath ).FullName;
 						context.Logger.LogMessage( "Reading External Tileset File: " + normExtTilesetPath );
 						using( var file = new StreamReader( filePath ) )
 						{
-							map.tilesets[i] = (TmxTileset)xmlSerializer.Deserialize( file );
-							map.tilesets[i].fixImagePath( filename, tileset.source );
-							map.tilesets[i].firstGid = tileset.firstGid;
+							map.Tilesets[i] = (TmxTileset)xmlSerializer.Deserialize( file );
+							map.Tilesets[i].FixImagePath( filename, tileset.Source );
+							map.Tilesets[i].FirstGid = tileset.FirstGid;
 						}
 					}
 					else
 					{
-						tileset.mapFolder = Path.GetDirectoryName( Path.GetFullPath( filename ) );
+						tileset.MapFolder = Path.GetDirectoryName( Path.GetFullPath( filename ) );
 					}
 				}
 

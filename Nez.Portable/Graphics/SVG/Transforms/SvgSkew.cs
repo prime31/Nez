@@ -14,7 +14,7 @@ namespace Nez.Svg
 			_angleX = angleX;
 			_angleY = angleY;
 
-			Debug.warn( "SvgSkew matrix is not implemented" );
+			Debug.Warn( "SvgSkew matrix is not implemented" );
 			//matrix = Matrix2D.Shear(
 			//	(float)System.Math.Tan( _angleX / 180 * MathHelper.Pi ),
 			//	(float)System.Math.Tan( _angleY / 180 * MathHelper.Pi ) );

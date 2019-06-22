@@ -6,19 +6,19 @@ namespace Nez.Farseer
 {
 	internal class FSBodyDef
 	{
-		public BodyType bodyType = BodyType.Static;
-		public Vector2 linearVelocity;
-		public float angularVelocity;
-		public float linearDamping;
-		public float angularDamping;
+		public BodyType BodyType = BodyType.Static;
+		public Vector2 LinearVelocity;
+		public float AngularVelocity;
+		public float LinearDamping;
+		public float AngularDamping;
 
-		public bool isBullet;
-		public bool isSleepingAllowed = true;
-		public bool isAwake = true;
-		public bool fixedRotation;
-		public bool ignoreGravity;
-		public float gravityScale = 1;
-		public float mass;
-		public float inertia;
+		public bool IsBullet;
+		public bool IsSleepingAllowed = true;
+		public bool IsAwake = true;
+		public bool FixedRotation;
+		public bool IgnoreGravity;
+		public float GravityScale = 1;
+		public float Mass;
+		public float Inertia;
 	}
 }

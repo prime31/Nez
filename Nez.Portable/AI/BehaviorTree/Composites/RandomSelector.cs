@@ -8,9 +8,9 @@ namespace Nez.AI.BehaviorTrees
 	/// </summary>
 	public class RandomSelector<T> : Selector<T>
 	{
-		public override void onStart()
+		public override void OnStart()
 		{
-			_children.shuffle();
+			_children.Shuffle();
 		}
 	}
 }

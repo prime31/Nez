@@ -17,11 +17,11 @@ namespace Nez.AI.UtilityAI
 		}
 
 
-		void IAction<T>.execute( T context )
+		void IAction<T>.Execute( T context )
 		{
-			var action = _reasoner.select( context );
+			var action = _reasoner.Select( context );
 			if( action != null )
-				action.execute( context );
+				action.Execute( context );
 		}
 	}
 }

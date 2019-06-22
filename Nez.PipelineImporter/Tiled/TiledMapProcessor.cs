@@ -17,40 +17,40 @@ namespace Nez.TiledMaps
 	[ContentProcessor( DisplayName = "Tiled Map Processor" )]
 	public class TiledMapProcessor : ContentProcessor<TmxMap,TmxMap>
 	{
-		public static ContentBuildLogger logger;
+		public static ContentBuildLogger Logger;
 
 
 		public override TmxMap Process( TmxMap map, ContentProcessorContext context )
 		{
-			logger = context.Logger;
-			foreach( var layer in map.layers.OfType<TmxTileLayer>() )
+			Logger = context.Logger;
+			foreach( var layer in map.Layers.OfType<TmxTileLayer>() )
 			{
-				var data = layer.data;
+				var data = layer.Data;
 
-				if( data.encoding == "csv" )
+				if( data.Encoding == "csv" )
 				{
-					data.tiles = data.value
+					data.Tiles = data.Value
                         .Split( new[] { ',' }, StringSplitOptions.RemoveEmptyEntries )
                         .Select( uint.Parse )
                         .Select( gid => new TmxDataTile( (uint)gid ) )
                         .ToList();
 				}
-				else if( data.encoding == "base64" )
+				else if( data.Encoding == "base64" )
 				{
-					var encodedData = data.value.Trim();
+					var encodedData = data.Value.Trim();
 					var decodedData = Convert.FromBase64String( encodedData );
 
-					using( var stream = OpenStream( decodedData, data.compression ) )
+					using( var stream = OpenStream( decodedData, data.Compression ) )
 						using( var reader = new BinaryReader( stream ) )
 						{
-							data.tiles = new List<TmxDataTile>();
+							data.Tiles = new List<TmxDataTile>();
 
-							for( var y = 0; y < layer.width; y++ )
+							for( var y = 0; y < layer.Width; y++ )
 							{
-								for( var x = 0; x < layer.height; x++ )
+								for( var x = 0; x < layer.Height; x++ )
 								{
 									var gid = reader.ReadUInt32();
-									data.tiles.Add( new TmxDataTile( gid ) );
+									data.Tiles.Add( new TmxDataTile( gid ) );
 								}
 							}
 						}
@@ -58,25 +58,25 @@ namespace Nez.TiledMaps
 			}
 
 			// deal with tilesets that have image collections
-			foreach( var tileset in map.tilesets )
-				setTilesetTextureIfNecessary( tileset, context );
+			foreach( var tileset in map.Tilesets )
+				SetTilesetTextureIfNecessary( tileset, context );
 
 			return map;
 		}
 
 
-		static void setTilesetTextureIfNecessary( TmxTileset tileset, ContentProcessorContext context )
+		static void SetTilesetTextureIfNecessary( TmxTileset tileset, ContentProcessorContext context )
 		{
-			if( tileset.image != null )
+			if( tileset.Image != null )
 				return;
 
-			tileset.isStandardTileset = false;
+			tileset.IsStandardTileset = false;
 
 			var imagePaths = new List<string>();
-			foreach( var tile in tileset.tiles )
+			foreach( var tile in tileset.Tiles )
 			{
-				if( tile.image != null && !imagePaths.Contains( tile.image.source ) )
-					imagePaths.Add( tile.image.source );
+				if( tile.Image != null && !imagePaths.Contains( tile.Image.Source ) )
+					imagePaths.Add( tile.Image.Source );
 			}
 
 			context.Logger.LogMessage( "\n\t --- need to pack images: {0}\n", imagePaths.Count );
@@ -88,7 +88,7 @@ namespace Nez.TiledMaps
 				// Store the name of this sprite.
 				var spriteName = Path.GetFileName( inputFilename );
 
-				var absolutePath = PathHelper.getAbsolutePath( inputFilename, tileset.mapFolder );
+				var absolutePath = PathHelper.GetAbsolutePath( inputFilename, tileset.MapFolder );
 				context.Logger.LogMessage( "Adding texture: {0}", spriteName );
 
 				// Load the sprite texture into memory.
@@ -101,7 +101,7 @@ namespace Nez.TiledMaps
 			var spriteRectangles = new List<Rectangle>();
 
 			// pack all the sprites into a single large texture.
-			var packedSprites = TextureAtlasPacker.packSprites( sourceSprites, spriteRectangles, false, context );
+			var packedSprites = TextureAtlasPacker.PackSprites( sourceSprites, spriteRectangles, false, context );
 			context.Logger.LogMessage( "packed: {0}", packedSprites );
 
 			// save out a PNG with our atlas
@@ -116,21 +116,21 @@ namespace Nez.TiledMaps
 				}
 			}
 
-			var atlasFilename = tileset.name + "-atlas.png";
-			bm.Save( Path.Combine( tileset.mapFolder, atlasFilename ), System.Drawing.Imaging.ImageFormat.Png );
+			var atlasFilename = tileset.Name + "-atlas.png";
+			bm.Save( Path.Combine( tileset.MapFolder, atlasFilename ), System.Drawing.Imaging.ImageFormat.Png );
 			context.Logger.LogImportantMessage( "\n-- generated atlas {0}. Make sure you add it to the Pipeline tool!", atlasFilename );
 
 			// set the new atlas as our tileset source image
-			tileset.image = new TmxImage();
-			tileset.image.source = atlasFilename;
+			tileset.Image = new TmxImage();
+			tileset.Image.Source = atlasFilename;
 
 			// last step: set the new atlas info and source rectangle for each tile
-			foreach( var tile in tileset.tiles )
+			foreach( var tile in tileset.Tiles )
 			{
-				if( tile.image == null )
+				if( tile.Image == null )
 					continue;
 
-				tile.sourceRect = spriteRectangles[imagePaths.IndexOf( tile.image.source )];
+				tile.SourceRect = spriteRectangles[imagePaths.IndexOf( tile.Image.Source )];
 			}
 		}
 

@@ -6,15 +6,15 @@ namespace Nez.TexturePackerImporter
 	public class TexturePackerPoint
 	{
 		[JsonProperty( "x" )]
-		public double x;
+		public double X;
 
 		[JsonProperty( "y" )]
-		public double y;
+		public double Y;
 
 
 		public override string ToString()
 		{
-			return string.Format( "{0} {1}", x, y );
+			return string.Format( "{0} {1}", X, Y );
 		}
 
 	}

@@ -8,114 +8,114 @@ namespace Nez.ParticleDesignerImporter
 	public class ParticleDesignerEmitterConfig
 	{
 		[XmlElement]
-		public ParticleDesignerVector2 sourcePosition;
+		public ParticleDesignerVector2 SourcePosition;
 
 		[XmlElement]
-		public ParticleDesignerVector2 sourcePositionVariance;
+		public ParticleDesignerVector2 SourcePositionVariance;
 
 		[XmlElement]
-		public ParticleDesignerFloatValue speed;
+		public ParticleDesignerFloatValue Speed;
 
 		[XmlElement]
-		public ParticleDesignerFloatValue speedVariance;
+		public ParticleDesignerFloatValue SpeedVariance;
 
 		[XmlElement]
-		public ParticleDesignerFloatValue particleLifeSpan;
+		public ParticleDesignerFloatValue ParticleLifeSpan;
 
 		[XmlElement]
-		public ParticleDesignerFloatValue particleLifespanVariance;
+		public ParticleDesignerFloatValue ParticleLifespanVariance;
 
 		[XmlElement]
-		public ParticleDesignerFloatValue angle;
+		public ParticleDesignerFloatValue Angle;
 
 		[XmlElement]
-		public ParticleDesignerFloatValue angleVariance;
+		public ParticleDesignerFloatValue AngleVariance;
 
 		[XmlElement]
-		public ParticleDesignerVector2 gravity;
+		public ParticleDesignerVector2 Gravity;
 
 		[XmlElement]
-		public ParticleDesignerFloatValue radialAcceleration;
+		public ParticleDesignerFloatValue RadialAcceleration;
 
 		[XmlElement]
-		public ParticleDesignerFloatValue tangentialAcceleration;
+		public ParticleDesignerFloatValue TangentialAcceleration;
 
 		[XmlElement]
-		public ParticleDesignerFloatValue radialAccelVariance;
+		public ParticleDesignerFloatValue RadialAccelVariance;
 
 		[XmlElement]
-		public ParticleDesignerFloatValue tangentialAccelVariance;
+		public ParticleDesignerFloatValue TangentialAccelVariance;
 
 		[XmlElement]
-		public ParticleDesignerColor startColor;
+		public ParticleDesignerColor StartColor;
 
 		[XmlElement]
-		public ParticleDesignerColor startColorVariance;
+		public ParticleDesignerColor StartColorVariance;
 
 		[XmlElement]
-		public ParticleDesignerColor finishColor;
+		public ParticleDesignerColor FinishColor;
 
 		[XmlElement]
-		public ParticleDesignerColor finishColorVariance;
+		public ParticleDesignerColor FinishColorVariance;
 
 		[XmlElement]
-		public ParticleDesignerIntValue maxParticles;
+		public ParticleDesignerIntValue MaxParticles;
 
 		[XmlElement]
-		public ParticleDesignerFloatValue startParticleSize;
+		public ParticleDesignerFloatValue StartParticleSize;
 
 		[XmlElement]
-		public ParticleDesignerFloatValue startParticleSizeVariance;
+		public ParticleDesignerFloatValue StartParticleSizeVariance;
 
 		[XmlElement]
-		public ParticleDesignerFloatValue finishParticleSize;
+		public ParticleDesignerFloatValue FinishParticleSize;
 
 		[XmlElement]
-		public ParticleDesignerFloatValue finishParticleSizeVariance;
+		public ParticleDesignerFloatValue FinishParticleSizeVariance;
 
 		[XmlElement]
-		public ParticleDesignerFloatValue duration;
+		public ParticleDesignerFloatValue Duration;
 
 		[XmlElement]
-		public ParticleDesignerIntValue emitterType;
+		public ParticleDesignerIntValue EmitterType;
 
 		[XmlElement]
-		public ParticleDesignerFloatValue maxRadius;
+		public ParticleDesignerFloatValue MaxRadius;
 
 		[XmlElement]
-		public ParticleDesignerFloatValue maxRadiusVariance;
+		public ParticleDesignerFloatValue MaxRadiusVariance;
 
 		[XmlElement]
-		public ParticleDesignerFloatValue minRadius;
+		public ParticleDesignerFloatValue MinRadius;
 
 		[XmlElement]
-		public ParticleDesignerFloatValue minRadiusVariance;
+		public ParticleDesignerFloatValue MinRadiusVariance;
 
 		[XmlElement]
-		public ParticleDesignerFloatValue rotatePerSecond;
+		public ParticleDesignerFloatValue RotatePerSecond;
 
 		[XmlElement]
-		public ParticleDesignerFloatValue rotatePerSecondVariance;
+		public ParticleDesignerFloatValue RotatePerSecondVariance;
 
 		[XmlElement]
-		public ParticleDesignerIntValue blendFuncSource;
+		public ParticleDesignerIntValue BlendFuncSource;
 
 		[XmlElement]
-		public ParticleDesignerIntValue blendFuncDestination;
+		public ParticleDesignerIntValue BlendFuncDestination;
 
 		[XmlElement]
-		public ParticleDesignerFloatValue rotationStart;
+		public ParticleDesignerFloatValue RotationStart;
 
 		[XmlElement]
-		public ParticleDesignerFloatValue rotationStartVariance;
+		public ParticleDesignerFloatValue RotationStartVariance;
 
 		[XmlElement]
-		public ParticleDesignerFloatValue rotationEnd;
+		public ParticleDesignerFloatValue RotationEnd;
 
 		[XmlElement]
-		public ParticleDesignerFloatValue rotationEndVariance;
+		public ParticleDesignerFloatValue RotationEndVariance;
 
 		[XmlElement]
-		public ParticleDesignerTexture texture;
+		public ParticleDesignerTexture Texture;
 	}
 }

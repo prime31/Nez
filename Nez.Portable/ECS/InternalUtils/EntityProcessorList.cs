@@ -9,79 +9,79 @@ namespace Nez
 		protected List<EntitySystem> _processors = new List<EntitySystem>();
 
 
-		public void add( EntitySystem processor )
+		public void Add( EntitySystem processor )
 		{
 			_processors.Add( processor );
 		}
 
 
-		public void remove( EntitySystem processor )
+		public void Remove( EntitySystem processor )
 		{
 			_processors.Remove( processor );
 		}
 
 
-		public virtual void onComponentAdded( Entity entity )
+		public virtual void OnComponentAdded( Entity entity )
 		{
-			notifyEntityChanged( entity );
+			NotifyEntityChanged( entity );
 		}
 
 
-		public virtual void onComponentRemoved( Entity entity )
+		public virtual void OnComponentRemoved( Entity entity )
 		{
-			notifyEntityChanged( entity );
+			NotifyEntityChanged( entity );
 		}
 
 
-		public virtual void onEntityAdded( Entity entity )
+		public virtual void OnEntityAdded( Entity entity )
 		{
-			notifyEntityChanged( entity );
+			NotifyEntityChanged( entity );
 		}
 
 
-		public virtual void onEntityRemoved( Entity entity )
+		public virtual void OnEntityRemoved( Entity entity )
 		{
-			removeFromProcessors( entity );
+			RemoveFromProcessors( entity );
 		}
 
 
-		protected virtual void notifyEntityChanged( Entity entity )
-		{
-			for( var i = 0; i < _processors.Count; i++ )
-				_processors[i].onChange( entity );
-		}
-
-
-		protected virtual void removeFromProcessors( Entity entity )
+		protected virtual void NotifyEntityChanged( Entity entity )
 		{
 			for( var i = 0; i < _processors.Count; i++ )
-				_processors[i].remove( entity );
+				_processors[i].OnChange( entity );
 		}
 
 
-		public void begin()
+		protected virtual void RemoveFromProcessors( Entity entity )
+		{
+			for( var i = 0; i < _processors.Count; i++ )
+				_processors[i].Remove( entity );
+		}
+
+
+		public void Begin()
 		{}
 
 
-		public void update()
+		public void Update()
 		{
 			for( var i = 0; i < _processors.Count; i++ )
-				_processors[i].update();
+				_processors[i].Update();
 		}
 
 
-        public void lateUpdate()
+        public void LateUpdate()
         {
             for( var i = 0; i < _processors.Count; i++ )
-                _processors[ i ].lateUpdate();
+                _processors[ i ].LateUpdate();
         }
 
 
-        public void end()
+        public void End()
 		{}
 
 
-		public T getProcessor<T>() where T : EntitySystem
+		public T GetProcessor<T>() where T : EntitySystem
 		{
 			for( var i = 0; i < _processors.Count; i++ )
 			{

@@ -16,19 +16,19 @@ namespace Nez.ImGuiTools
             _textureFilters = Enum.GetNames( typeof( TextureFilter ) );
         }
 
-        public void show( ref bool isOpen )
+        public void Show( ref bool isOpen )
         {
             if( !isOpen )
                 return;
 
-            ImGui.SetNextWindowPos( new Num.Vector2( Screen.width - 300, Screen.height - 240 ), ImGuiCond.FirstUseEver );
+            ImGui.SetNextWindowPos( new Num.Vector2( Screen.Width - 300, Screen.Height - 240 ), ImGuiCond.FirstUseEver );
             ImGui.SetNextWindowSize( new Num.Vector2( 300, 240 ), ImGuiCond.FirstUseEver );
             ImGui.Begin( "Nez Core", ref isOpen );
-            drawSettings();
+            DrawSettings();
             ImGui.End();
         }
 
-        void drawSettings()
+        void DrawSettings()
         {
             _frameRateArray[_frameRateArrayIndex] = ImGui.GetIO().Framerate;
             _frameRateArrayIndex = ( _frameRateArrayIndex + 1 ) % _frameRateArray.Length;
@@ -39,9 +39,9 @@ namespace Nez.ImGuiTools
 
             if( ImGui.CollapsingHeader( "Core Settings", ImGuiTreeNodeFlags.DefaultOpen ) )
             {
-                ImGui.Checkbox( "exitOnEscapeKeypress", ref Core.exitOnEscapeKeypress );
-                ImGui.Checkbox( "pauseOnFocusLost", ref Core.pauseOnFocusLost );
-                ImGui.Checkbox( "debugRenderEnabled", ref Core.debugRenderEnabled );
+                ImGui.Checkbox( "exitOnEscapeKeypress", ref Core.ExitOnEscapeKeypress );
+                ImGui.Checkbox( "pauseOnFocusLost", ref Core.PauseOnFocusLost );
+                ImGui.Checkbox( "debugRenderEnabled", ref Core.DebugRenderEnabled );
             }
 
             if( ImGui.CollapsingHeader( "Core.defaultSamplerState", ImGuiTreeNodeFlags.DefaultOpen ) )
@@ -51,9 +51,9 @@ namespace Nez.ImGuiTools
                 NezImGui.DisableNextWidget();
                 #endif
                 
-                var currentTextureFilter = (int)Core.defaultSamplerState.Filter;
+                var currentTextureFilter = (int)Core.DefaultSamplerState.Filter;
                 if( ImGui.Combo( "Filter", ref currentTextureFilter, _textureFilters, _textureFilters.Length ) )
-                    Core.defaultSamplerState.Filter = (TextureFilter)Enum.Parse( typeof( TextureFilter ), _textureFilters[currentTextureFilter] );
+                    Core.DefaultSamplerState.Filter = (TextureFilter)Enum.Parse( typeof( TextureFilter ), _textureFilters[currentTextureFilter] );
                 
                 #if !FNA
                 ImGui.PopStyleVar();

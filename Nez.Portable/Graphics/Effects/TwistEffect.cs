@@ -8,7 +8,7 @@ namespace Nez
 	public class TwistEffect : Effect
 	{
 		[Range( 0, 2 )]
-		public float radius
+		public float Radius
 		{
 			get => _radius;
 			set
@@ -22,7 +22,7 @@ namespace Nez
 		}
 
 		[Range( -50, 50 )]
-		public float angle
+		public float Angle
 		{
 			get => _angle;
 			set
@@ -35,7 +35,7 @@ namespace Nez
 			}
 		}
 
-		public Vector2 offset
+		public Vector2 Offset
 		{
 			get => _offset;
 			set
@@ -50,14 +50,14 @@ namespace Nez
 
 		float _radius = 0.5f;
 		float _angle = 5f;
-		Vector2 _offset = Vector2Ext.halfVector();
+		Vector2 _offset = Vector2Ext.HalfVector();
 
 		EffectParameter _radiusParam;
 		EffectParameter _angleParam;
 		EffectParameter _offsetParam;
 
 
-		public TwistEffect() : base( Core.graphicsDevice, EffectResource.twistBytes )
+		public TwistEffect() : base( Core.GraphicsDevice, EffectResource.TwistBytes )
 		{
 			_radiusParam = Parameters["radius"];
 			_angleParam = Parameters["angle"];

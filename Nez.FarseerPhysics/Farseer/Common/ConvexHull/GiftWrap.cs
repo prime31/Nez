@@ -17,7 +17,7 @@ namespace FarseerPhysics.Common.ConvexHull
 		/// Returns the convex hull from the given vertices.
 		/// </summary>
 		/// <param name="vertices">The vertices.</param>
-		public static Vertices getConvexHull( Vertices vertices )
+		public static Vertices GetConvexHull( Vertices vertices )
 		{
 			if( vertices.Count <= 3 )
 				return vertices;
@@ -54,7 +54,7 @@ namespace FarseerPhysics.Common.ConvexHull
 
 					Vector2 r = vertices[ie] - vertices[hull[m]];
 					Vector2 v = vertices[j] - vertices[hull[m]];
-					float c = MathUtils.cross( ref r, ref v );
+					float c = MathUtils.Cross( ref r, ref v );
 					if( c < 0.0f )
 					{
 						ie = j;

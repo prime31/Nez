@@ -20,35 +20,35 @@ namespace Nez.Farseer
 		{ }
 
 
-		public override void initialize()
+		public override void Initialize()
 		{
-			base.initialize();
+			base.Initialize();
 
-			var data = new uint[_subtexture.sourceRect.Width * _subtexture.sourceRect.Height];
-			_subtexture.texture2D.GetData( 0, _subtexture.sourceRect, data, 0, data.Length );
+			var data = new uint[_subtexture.SourceRect.Width * _subtexture.SourceRect.Height];
+			_subtexture.Texture2D.GetData( 0, _subtexture.SourceRect, data, 0, data.Length );
 
-			var verts = PolygonTools.createPolygonFromTextureData( data, _subtexture.sourceRect.Width );
-			verts = SimplifyTools.douglasPeuckerSimplify( verts, 2 );
+			var verts = PolygonTools.CreatePolygonFromTextureData( data, _subtexture.SourceRect.Width );
+			verts = SimplifyTools.DouglasPeuckerSimplify( verts, 2 );
 
-			var decomposedVerts = Triangulate.convexPartition( verts, TriangulationAlgorithm.Bayazit );
+			var decomposedVerts = Triangulate.ConvexPartition( verts, TriangulationAlgorithm.Bayazit );
 			for( var i = 0; i < decomposedVerts.Count; i++ )
 			{
 				var polygon = decomposedVerts[i];
-				polygon.translate( -_subtexture.center );
+				polygon.Translate( -_subtexture.Center );
 			}
 
 			// add the fixtures
-			var fixtures = body.attachCompoundPolygon( decomposedVerts, 1 );
+			var fixtures = Body.AttachCompoundPolygon( decomposedVerts, 1 );
 
 			// fetch all the Vertices and save a copy in case we need to scale them later
 			foreach( var fixture in fixtures )
-				_verts.Add( new Vertices( ( fixture.shape as PolygonShape ).vertices ) );
+				_verts.Add( new Vertices( ( fixture.Shape as PolygonShape ).Vertices ) );
 		}
 
 
-		public override void onEntityTransformChanged( Transform.Component comp )
+		public override void OnEntityTransformChanged( Transform.Component comp )
 		{
-			base.onEntityTransformChanged( comp );
+			base.OnEntityTransformChanged( comp );
 			if( _ignoreTransformChanges )
 				return;
 
@@ -56,14 +56,14 @@ namespace Nez.Farseer
 			if( comp == Transform.Component.Scale )
 			{
 				// fetch the Vertices, clear them, add our originals and scale them
-				for( var i = 0; i < body.fixtureList.Count; i++ )
+				for( var i = 0; i < Body.FixtureList.Count; i++ )
 				{
-					var poly = body.fixtureList[i].shape as PolygonShape;
-					var verts = poly.vertices;
+					var poly = Body.FixtureList[i].Shape as PolygonShape;
+					var verts = poly.Vertices;
 					verts.Clear();
 					verts.AddRange( _verts[i] );
-					verts.scale( transform.scale );
-					poly.vertices = verts;
+					verts.Scale( Transform.Scale );
+					poly.Vertices = verts;
 				}
 			}
 		}

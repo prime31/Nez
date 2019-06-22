@@ -11,24 +11,24 @@ namespace Nez.ImGuiTools.TypeInspectors
 {
 	public class MaterialInspector : AbstractTypeInspector
 	{
-		public bool allowsMaterialRemoval = true;
+		public bool AllowsMaterialRemoval = true;
 		List<AbstractTypeInspector> _inspectors = new List<AbstractTypeInspector>();
 
-		public override void initialize()
+		public override void Initialize()
 		{
-			base.initialize();
+			base.Initialize();
 
 			_wantsIndentWhenDrawn = true;
 
-			var material = getValue<Material>();
+			var material = GetValue<Material>();
 			if( material == null )
 				return;
 
 			// fetch our inspectors and let them know who their parent is
-			_inspectors = TypeInspectorUtils.getInspectableProperties( material );
+			_inspectors = TypeInspectorUtils.GetInspectableProperties( material );
 
 			// if we are a Material<T>, we need to fix the duplicate Effect due to the "new T effect"
-			if( ReflectionUtils.isGenericTypeOrSubclassOfGenericType( material.GetType() ) )
+			if( ReflectionUtils.IsGenericTypeOrSubclassOfGenericType( material.GetType() ) )
 			{
 				var didFindEffectInspector = false;
 				for( var i = 0; i < _inspectors.Count; i++ )
@@ -47,14 +47,14 @@ namespace Nez.ImGuiTools.TypeInspectors
 			}
 		}
 
-		public override void drawMutable()
+		public override void DrawMutable()
 		{
 			var isOpen = ImGui.CollapsingHeader( $"{_name}", ImGuiTreeNodeFlags.FramePadding );
 
-			if( getValue() == null )
+			if( GetValue() == null )
 			{
 				if( isOpen )
-					drawNullMaterial();
+					DrawNullMaterial();
 				return;
 			}
 
@@ -62,9 +62,9 @@ namespace Nez.ImGuiTools.TypeInspectors
 
 			if( ImGui.BeginPopupContextItem() )
 			{
-				if( allowsMaterialRemoval && ImGui.Selectable( "Remove Material" ) )
+				if( AllowsMaterialRemoval && ImGui.Selectable( "Remove Material" ) )
 				{
-					setValue( null );
+					SetValue( null );
 					_inspectors.Clear();
 					ImGui.CloseCurrentPopup();
 				}
@@ -87,43 +87,43 @@ namespace Nez.ImGuiTools.TypeInspectors
 
 				for( var i = _inspectors.Count - 1; i >= 0; i-- )
 				{
-					if( _inspectors[i].isTargetDestroyed )
+					if( _inspectors[i].IsTargetDestroyed )
 					{
 						_inspectors.RemoveAt( i );
 						continue;
 					}
-					_inspectors[i].draw();
+					_inspectors[i].Draw();
 				}
 				ImGui.Unindent();
 			}
 
-			if( drawEffectChooserPopup() )
+			if( DrawEffectChooserPopup() )
 				ImGui.CloseCurrentPopup();
 		}
 
-		void drawNullMaterial()
+		void DrawNullMaterial()
 		{
 			if( NezImGui.CenteredButton( "Create Material", 0.5f, ImGui.GetStyle().IndentSpacing * 0.5f ) )
 			{
 				var material = new Material();
-				setValue( material );
-				_inspectors = TypeInspectorUtils.getInspectableProperties( material );
+				SetValue( material );
+				_inspectors = TypeInspectorUtils.GetInspectableProperties( material );
 			}
 		}
 
-		bool drawEffectChooserPopup()
+		bool DrawEffectChooserPopup()
 		{
 			var createdEffect = false;
 			if( ImGui.BeginPopup( "effect-chooser" ) )
 			{
-				foreach( var subclassType in InspectorCache.getAllEffectSubclassTypes() )
+				foreach( var subclassType in InspectorCache.GetAllEffectSubclassTypes() )
 				{
 					if( ImGui.Selectable( subclassType.Name ) )
 					{
 						// create the Effect, remove the existing EffectInspector and create a new one
 						var effect = Activator.CreateInstance( subclassType ) as Effect;
-						var material = getValue<Material>();
-						material.effect = effect;
+						var material = GetValue<Material>();
+						material.Effect = effect;
 
 						for( var i = _inspectors.Count - 1; i >= 0; i-- )
 						{
@@ -132,8 +132,8 @@ namespace Nez.ImGuiTools.TypeInspectors
 						}
 
 						var inspector = new EffectInspector();
-						inspector.setTarget( material, ReflectionUtils.getFieldInfo( material, "effect" ) );
-						inspector.initialize();
+						inspector.SetTarget( material, ReflectionUtils.GetFieldInfo( material, "effect" ) );
+						inspector.Initialize();
 						_inspectors.Add( inspector );
 
 						createdEffect = true;

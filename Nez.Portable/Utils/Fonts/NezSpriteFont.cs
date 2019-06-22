@@ -10,7 +10,7 @@ namespace Nez
 #if !FNA
 	public class NezSpriteFont : IFont
 	{
-		public float lineSpacing { get { return _font.LineSpacing; } }
+		public float LineSpacing { get { return _font.LineSpacing; } }
 
 		SpriteFont _font;
 		readonly Dictionary<char,SpriteFont.Glyph> _glyphs;
@@ -18,7 +18,7 @@ namespace Nez
 		/// <summary>
 		/// this sucker gets used a lot so we cache it to avoid having to create it every frame
 		/// </summary>
-		Matrix2D _transformationMatrix = Matrix2D.identity;
+		Matrix2D _transformationMatrix = Matrix2D.Identity;
 
 
 		public NezSpriteFont( SpriteFont font )
@@ -34,11 +34,11 @@ namespace Nez
 		/// <param name="text">The text to measure.</param>
 		/// <returns>The size, in pixels, of 'text' when rendered in
 		/// this font.</returns>
-		public Vector2 measureString( string text )
+		public Vector2 MeasureString( string text )
 		{
 			var source = new FontCharacterSource( text );
 			Vector2 size;
-			measureString( ref source, out size );
+			MeasureString( ref source, out size );
 			return size;
 		}
 
@@ -50,16 +50,16 @@ namespace Nez
 		/// <param name="text">The text to measure.</param>
 		/// <returns>The size, in pixels, of 'text' when rendered in
 		/// this font.</returns>
-		public Vector2 measureString( StringBuilder text )
+		public Vector2 MeasureString( StringBuilder text )
 		{
 			var source = new FontCharacterSource( text );
 			Vector2 size;
-			measureString( ref source, out size );
+			MeasureString( ref source, out size );
 			return size;
 		}
 
 
-		void measureString( ref FontCharacterSource text, out Vector2 size )
+		void MeasureString( ref FontCharacterSource text, out Vector2 size )
 		{
 			if( text.Length == 0 )
 			{
@@ -141,7 +141,7 @@ namespace Nez
 		/// <param name="c">C.</param>
 		/// <param name="fontRegion">Font region.</param>
 		/// <param name="useDefaultRegionIfNotPresent">If set to <c>true</c> use default region if not present.</param>
-		public bool tryGetFontRegionForChar( char c, out SpriteFont.Glyph fontGlyph, bool useDefaultRegionIfNotPresent = false )
+		public bool TryGetFontRegionForChar( char c, out SpriteFont.Glyph fontGlyph, bool useDefaultRegionIfNotPresent = false )
 		{
 			if( !_glyphs.TryGetValue( c, out fontGlyph ) )
 			{
@@ -162,32 +162,32 @@ namespace Nez
 		/// </summary>
 		/// <returns><c>true</c>, if region exists for char was fonted, <c>false</c> otherwise.</returns>
 		/// <param name="c">C.</param>
-		public bool hasCharacter( char c )
+		public bool HasCharacter( char c )
 		{
 			SpriteFont.Glyph fontGlyph;
-			return tryGetFontRegionForChar( c, out fontGlyph );
+			return TryGetFontRegionForChar( c, out fontGlyph );
 		}
 
 
 		#region drawing
 
-		void IFont.drawInto( Batcher batcher, string text, Vector2 position, Color color,
+		void IFont.DrawInto( Batcher batcher, string text, Vector2 position, Color color,
 			float rotation, Vector2 origin, Vector2 scale, SpriteEffects effect, float depth )
 		{
 			var source = new FontCharacterSource( text );
-			drawInto( batcher, ref source, position, color, rotation, origin, scale, effect, depth );
+			DrawInto( batcher, ref source, position, color, rotation, origin, scale, effect, depth );
 		}
 
 
-		void IFont.drawInto( Batcher batcher, StringBuilder text, Vector2 position, Color color,
+		void IFont.DrawInto( Batcher batcher, StringBuilder text, Vector2 position, Color color,
 			float rotation, Vector2 origin, Vector2 scale, SpriteEffects effect, float depth )
 		{
 			var source = new FontCharacterSource( text );
-			drawInto( batcher, ref source, position, color, rotation, origin, scale, effect, depth );
+			DrawInto( batcher, ref source, position, color, rotation, origin, scale, effect, depth );
 		}
 		
 
-		public void drawInto( Batcher batcher, ref FontCharacterSource text, Vector2 position, Color color,
+		public void DrawInto( Batcher batcher, ref FontCharacterSource text, Vector2 position, Color color,
 		                        float rotation, Vector2 origin, Vector2 scale, SpriteEffects effect, float depth )
 		{
 			var flipAdjustment = Vector2.Zero;
@@ -198,7 +198,7 @@ namespace Nez
 			if( flippedVert || flippedHorz )
 			{
 				Vector2 size;
-				measureString( ref text, out size );
+				MeasureString( ref text, out size );
 
 				if( flippedHorz )
 				{
@@ -218,15 +218,15 @@ namespace Nez
 			if( requiresTransformation )
 			{
 				Matrix2D temp;
-				Matrix2D.createTranslation( -origin.X, -origin.Y, out _transformationMatrix );
-				Matrix2D.createScale( ( flippedHorz ? -scale.X : scale.X ), ( flippedVert ? -scale.Y : scale.Y ), out temp );
-				Matrix2D.multiply( ref _transformationMatrix, ref temp, out _transformationMatrix );
-				Matrix2D.createTranslation( flipAdjustment.X, flipAdjustment.Y, out temp );
-				Matrix2D.multiply( ref temp, ref _transformationMatrix, out _transformationMatrix );
-				Matrix2D.createRotation( rotation, out temp );
-				Matrix2D.multiply( ref _transformationMatrix, ref temp, out _transformationMatrix );
-				Matrix2D.createTranslation( position.X, position.Y, out temp );
-				Matrix2D.multiply( ref _transformationMatrix, ref temp, out _transformationMatrix );
+				Matrix2D.CreateTranslation( -origin.X, -origin.Y, out _transformationMatrix );
+				Matrix2D.CreateScale( ( flippedHorz ? -scale.X : scale.X ), ( flippedVert ? -scale.Y : scale.Y ), out temp );
+				Matrix2D.Multiply( ref _transformationMatrix, ref temp, out _transformationMatrix );
+				Matrix2D.CreateTranslation( flipAdjustment.X, flipAdjustment.Y, out temp );
+				Matrix2D.Multiply( ref temp, ref _transformationMatrix, out _transformationMatrix );
+				Matrix2D.CreateRotation( rotation, out temp );
+				Matrix2D.Multiply( ref _transformationMatrix, ref temp, out _transformationMatrix );
+				Matrix2D.CreateTranslation( position.X, position.Y, out temp );
+				Matrix2D.Multiply( ref _transformationMatrix, ref temp, out _transformationMatrix );
 			}
 
 			// Get the default glyph here once.
@@ -286,13 +286,13 @@ namespace Nez
 
 				// transform our point if we need to
 				if( requiresTransformation )
-					Vector2Ext.transform( ref p, ref _transformationMatrix, out p );
+					Vector2Ext.Transform( ref p, ref _transformationMatrix, out p );
 
-				var destRect = RectangleExt.fromFloats( p.X, p.Y, 
+				var destRect = RectangleExt.FromFloats( p.X, p.Y, 
 					               currentGlyph.BoundsInTexture.Width * scale.X,
 					               currentGlyph.BoundsInTexture.Height * scale.Y );
 
-				batcher.draw( _font.Texture, destRect, currentGlyph.BoundsInTexture, color, rotation, Vector2.Zero, effect, depth );
+				batcher.Draw( _font.Texture, destRect, currentGlyph.BoundsInTexture, color, rotation, Vector2.Zero, effect, depth );
 
 				offset.X += currentGlyph.Width + currentGlyph.RightSideBearing;
 			}

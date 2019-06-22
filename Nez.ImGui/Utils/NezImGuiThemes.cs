@@ -5,22 +5,22 @@ namespace Nez.ImGuiTools
 {
 	public static class NezImGuiThemes
 	{
-        public static void defaultDarkTheme()
+        public static void DefaultDarkTheme()
         {
             ImGui.StyleColorsDark();
         }
 
-        public static void defaultLightTheme()
+        public static void DefaultLightTheme()
         {
             ImGui.StyleColorsLight();
         }
 
-        public static void defaultClassic()
+        public static void DefaultClassic()
         {
             ImGui.StyleColorsClassic();
         }
 
-		public static void darkHighContrastTheme()
+		public static void DarkHighContrastTheme()
 		{
 			var style = ImGui.GetStyle();
 
@@ -73,7 +73,7 @@ namespace Nez.ImGuiTools
 			style.Colors[(int)ImGuiCol.ModalWindowDimBg] = new Num.Vector4( 1.00f, 0.98f, 0.95f, 0.73f );
 		}
 
-		public static void darkTheme1()
+		public static void DarkTheme1()
 		{
 			var colors = ImGui.GetStyle().Colors;
 
@@ -121,7 +121,7 @@ namespace Nez.ImGuiTools
 			colors[(int)ImGuiCol.NavWindowingHighlight] = new Num.Vector4( 1.00f, 1.00f, 1.00f, 0.70f );
 		}
 
-		public static void darkTheme2()
+		public static void DarkTheme2()
 		{
 			var st = ImGui.GetStyle();
 			var colors = st.Colors;
@@ -188,7 +188,7 @@ namespace Nez.ImGuiTools
 			colors[(int)ImGuiCol.ModalWindowDimBg] = new Num.Vector4( 0.80f, 0.80f, 0.80f, 0.35f );
 		}
 
-		public static void photoshopDark()
+		public static void PhotoshopDark()
 		{
 			var style = ImGui.GetStyle();
 			var colors = style.Colors;
@@ -254,7 +254,7 @@ namespace Nez.ImGuiTools
 			style.WindowRounding = 4.0f;
 		}
 
-		public static void lightGreenMiniDart()
+		public static void LightGreenMiniDart()
 		{
 			var style = ImGui.GetStyle();
 			var colors = style.Colors;
@@ -321,7 +321,7 @@ namespace Nez.ImGuiTools
 			colors[(int)ImGuiCol.NavWindowingHighlight] = new Num.Vector4( 0.70f, 0.70f, 0.70f, 0.70f );
 		}
 
-		public static void highContrast()
+		public static void HighContrast()
 		{
 			var style = ImGui.GetStyle();
 

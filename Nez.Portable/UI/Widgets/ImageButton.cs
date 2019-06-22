@@ -19,13 +19,13 @@ namespace Nez.UI
 		public ImageButton( ImageButtonStyle style ) : base( style )
 		{
 			image = new Image();
-			image.setScaling( Scaling.Fit );
-			add( image );
-			setStyle( style );
-			setSize( preferredWidth, preferredHeight );
+			image.SetScaling( Scaling.Fit );
+			Add( image );
+			SetStyle( style );
+			SetSize( PreferredWidth, PreferredHeight );
 		}
 
-		public ImageButton( Skin skin, string styleName = null ) : this( skin.get<ImageButtonStyle>( styleName ) )
+		public ImageButton( Skin skin, string styleName = null ) : this( skin.Get<ImageButtonStyle>( styleName ) )
 		{}
 
 
@@ -44,57 +44,57 @@ namespace Nez.UI
 		}
 
 
-		public override void setStyle( ButtonStyle style )
+		public override void SetStyle( ButtonStyle style )
 		{
-			Insist.isTrue( style is ImageButtonStyle, "style must be a ImageButtonStyle" );
+			Insist.IsTrue( style is ImageButtonStyle, "style must be a ImageButtonStyle" );
 
-			base.setStyle( style );
+			base.SetStyle( style );
 			this.style = (ImageButtonStyle)style;
 			if( image != null )
-				updateImage();
+				UpdateImage();
 		}
 
 
-		public new ImageButtonStyle getStyle()
+		public new ImageButtonStyle GetStyle()
 		{
 			return style;
 		}
 
 
-		public Image getImage()
+		public Image GetImage()
 		{
 			return image;
 		}
 
 
-		public Cell getImageCell()
+		public Cell GetImageCell()
 		{
-			return getCell( image );
+			return GetCell( image );
 		}
 
 
-		private void updateImage()
+		private void UpdateImage()
 		{
 			IDrawable drawable = null;
-			if( _isDisabled && style.imageDisabled != null )
-				drawable = style.imageDisabled;
-			else if( _mouseDown && style.imageDown != null )
-				drawable = style.imageDown;
-			else if( isChecked && style.imageChecked != null )
-				drawable = ( style.imageCheckedOver != null && _mouseOver ) ? style.imageCheckedOver : style.imageChecked;
-			else if( _mouseOver && style.imageOver != null )
-				drawable = style.imageOver;
-			else if( style.imageUp != null ) //
-				drawable = style.imageUp;
+			if( _isDisabled && style.ImageDisabled != null )
+				drawable = style.ImageDisabled;
+			else if( _mouseDown && style.ImageDown != null )
+				drawable = style.ImageDown;
+			else if( IsChecked && style.ImageChecked != null )
+				drawable = ( style.ImageCheckedOver != null && _mouseOver ) ? style.ImageCheckedOver : style.ImageChecked;
+			else if( _mouseOver && style.ImageOver != null )
+				drawable = style.ImageOver;
+			else if( style.ImageUp != null ) //
+				drawable = style.ImageUp;
 
-			image.setDrawable( drawable );
+			image.SetDrawable( drawable );
 		}
 
 
-		public override void draw( Graphics graphics, float parentAlpha )
+		public override void Draw( Graphics graphics, float parentAlpha )
 		{
-			updateImage();
-			base.draw( graphics, parentAlpha );
+			UpdateImage();
+			base.Draw( graphics, parentAlpha );
 		}
 
 	}
@@ -103,7 +103,7 @@ namespace Nez.UI
 	public class ImageButtonStyle : ButtonStyle
 	{
 		/** Optional. */
-		public IDrawable imageUp, imageDown, imageOver, imageChecked, imageCheckedOver, imageDisabled;
+		public IDrawable ImageUp, ImageDown, ImageOver, ImageChecked, ImageCheckedOver, ImageDisabled;
 
 
 		public ImageButtonStyle()
@@ -112,28 +112,28 @@ namespace Nez.UI
 
 		public ImageButtonStyle( IDrawable up, IDrawable down, IDrawable checkked, IDrawable imageUp, IDrawable imageDown, IDrawable imageChecked ) : base( up, down, checkked )
 		{
-			this.imageUp = imageUp;
-			this.imageDown = imageDown;
-			this.imageChecked = imageChecked;
+			this.ImageUp = imageUp;
+			this.ImageDown = imageDown;
+			this.ImageChecked = imageChecked;
 		}
 
 
-		public new ImageButtonStyle clone()
+		public new ImageButtonStyle Clone()
 		{
 			return new ImageButtonStyle {
-				up = up,
-				down = down,
-				over = over,
-				checkked = checkked,
-				checkedOver = checkedOver,
-				disabled = disabled,
+				Up = Up,
+				Down = Down,
+				Over = Over,
+				Checkked = Checkked,
+				CheckedOver = CheckedOver,
+				Disabled = Disabled,
 
-				imageUp = imageUp,
-				imageDown = imageDown,
-				imageOver = imageOver,
-				imageChecked = imageChecked,
-				imageCheckedOver = imageCheckedOver,
-				imageDisabled = imageDisabled
+				ImageUp = ImageUp,
+				ImageDown = ImageDown,
+				ImageOver = ImageOver,
+				ImageChecked = ImageChecked,
+				ImageCheckedOver = ImageCheckedOver,
+				ImageDisabled = ImageDisabled
 			};
 		}
 	}

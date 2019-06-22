@@ -21,16 +21,16 @@ namespace Nez.Farseer
 		}
 
 
-		public override void initialize()
+		public override void Initialize()
 		{
-			base.initialize();
-			body.attachPolygon( _verts, 1 );
+			base.Initialize();
+			Body.AttachPolygon( _verts, 1 );
 		}
 
 
-		public override void onEntityTransformChanged( Transform.Component comp )
+		public override void OnEntityTransformChanged( Transform.Component comp )
 		{
-			base.onEntityTransformChanged( comp );
+			base.OnEntityTransformChanged( comp );
 			if( _ignoreTransformChanges )
 				return;
 
@@ -38,16 +38,16 @@ namespace Nez.Farseer
 			if( comp == Transform.Component.Scale )
 			{
 				// fetch the Vertices, clear them, add our originals and scale them
-				var poly = body.fixtureList[0].shape as PolygonShape;
-				var verts = poly.vertices;
+				var poly = Body.FixtureList[0].Shape as PolygonShape;
+				var verts = poly.Vertices;
 				verts.Clear();
 				verts.AddRange( _verts );
-				verts.scale( transform.scale );
-				poly.setVerticesNoCopy( verts );
+				verts.Scale( Transform.Scale );
+				poly.SetVerticesNoCopy( verts );
 
 				// wake the body if it is asleep to update collisions
-				if( !body.isAwake )
-					body.isAwake = true;
+				if( !Body.IsAwake )
+					Body.IsAwake = true;
 			}
 		}
 

@@ -9,14 +9,14 @@ namespace Nez.ImGuiTools.TypeInspectors
 {
 	public class ListInspector : AbstractTypeInspector
 	{
-		public static Type[] kSupportedTypes = { typeof( int ), typeof( uint ), typeof( long ), typeof( ulong ), typeof( float ), typeof( string ), typeof( Vector2 ) };
+		public static Type[] KSupportedTypes = { typeof( int ), typeof( uint ), typeof( long ), typeof( ulong ), typeof( float ), typeof( string ), typeof( Vector2 ) };
 		IList _list;
 		Type _elementType;
 		bool _isArray;
 
-		public override void initialize()
+		public override void Initialize()
 		{
-			base.initialize();
+			base.Initialize();
 
 			_list = (IList)_getter( _target );
 			_isArray = _valueType.IsArray;
@@ -38,7 +38,7 @@ namespace Nez.ImGuiTools.TypeInspectors
 			}
 		}
 
-		public override void drawMutable()
+		public override void DrawMutable()
 		{
 			ImGui.Indent();
 			if( ImGui.CollapsingHeader( $"{_name} [{_list.Count}]###{_name}", ImGuiTreeNodeFlags.FramePadding ) )
@@ -69,7 +69,7 @@ namespace Nez.ImGuiTools.TypeInspectors
 					if( NezImGui.SimpleDialog( "Clear Data", "Are you sure you want to clear the data?" ) )
 					{
 						_list.Clear();
-						Debug.log( $"list count: {_list.Count}" );
+						Debug.Log( $"list count: {_list.Count}" );
 					}
 				}
 
@@ -77,13 +77,13 @@ namespace Nez.ImGuiTools.TypeInspectors
 				for( var i = 0; i < _list.Count; i++ )
 				{
 					if( _elementType == typeof( int ) )
-						drawWidget( (int)Convert.ChangeType( _list[i], _elementType ), i );
+						DrawWidget( (int)Convert.ChangeType( _list[i], _elementType ), i );
 					else if( _elementType == typeof( float ) )
-						drawWidget( (float)Convert.ChangeType( _list[i], _elementType ), i );
+						DrawWidget( (float)Convert.ChangeType( _list[i], _elementType ), i );
 					else if( _elementType == typeof( string ) )
-						drawWidget( (string)Convert.ChangeType( _list[i], _elementType ), i );
+						DrawWidget( (string)Convert.ChangeType( _list[i], _elementType ), i );
 					else if( _elementType == typeof( Vector2 ) )
-						drawWidget( (Vector2)Convert.ChangeType( _list[i], _elementType ), i );
+						DrawWidget( (Vector2)Convert.ChangeType( _list[i], _elementType ), i );
 				}
 				ImGui.PopItemWidth();
 				ImGui.Unindent();
@@ -91,29 +91,29 @@ namespace Nez.ImGuiTools.TypeInspectors
 			ImGui.Unindent();
 		}
 
-		void drawWidget( int value, int index )
+		void DrawWidget( int value, int index )
 		{
 			if( ImGui.DragInt( $"{index}", ref value ) )
 				_list[index] = value;
 		}
 
-		void drawWidget( float value, int index )
+		void DrawWidget( float value, int index )
 		{
 			if( ImGui.DragFloat( $"{index}", ref value ) )
 				_list[index] = value;
 		}
 
-		void drawWidget( string value, int index )
+		void DrawWidget( string value, int index )
 		{
 			if( ImGui.InputText( $"{index}", ref value, 200 ) )
 				_list[index] = value;
 		}
 
-		void drawWidget( Vector2 value, int index )
+		void DrawWidget( Vector2 value, int index )
 		{
-			var vec = value.toNumerics();
+			var vec = value.ToNumerics();
 			if( ImGui.DragFloat2( $"{index}", ref vec ) )
-				_list[index] = vec.toXNA();
+				_list[index] = vec.ToXNA();
 		}
 	}
 }

@@ -12,23 +12,23 @@ namespace Nez.BitmapFonts
 {
     public partial class BitmapFont
     {
-        Matrix2D _transformationMatrix = Matrix2D.identity;
+        Matrix2D _transformationMatrix = Matrix2D.Identity;
 
-        public void drawInto(Batcher batcher, string text, Vector2 position, Color color,
+        public void DrawInto(Batcher batcher, string text, Vector2 position, Color color,
             float rotation, Vector2 origin, Vector2 scale, SpriteEffects effect, float depth)
         {
             var source = new FontCharacterSource(text);
-            drawInto(batcher, ref source, position, color, rotation, origin, scale, effect, depth);
+            DrawInto(batcher, ref source, position, color, rotation, origin, scale, effect, depth);
         }
 
-        public void drawInto(Batcher batcher, StringBuilder text, Vector2 position, Color color,
+        public void DrawInto(Batcher batcher, StringBuilder text, Vector2 position, Color color,
             float rotation, Vector2 origin, Vector2 scale, SpriteEffects effect, float depth)
         {
             var source = new FontCharacterSource(text);
-            drawInto(batcher, ref source, position, color, rotation, origin, scale, effect, depth);
+            DrawInto(batcher, ref source, position, color, rotation, origin, scale, effect, depth);
         }
 
-        public void drawInto(Batcher batcher, ref FontCharacterSource text, Vector2 position, Color color,
+        public void DrawInto(Batcher batcher, ref FontCharacterSource text, Vector2 position, Color color,
                                 float rotation, Vector2 origin, Vector2 scale, SpriteEffects effect, float depth)
         {
             var flipAdjustment = Vector2.Zero;
@@ -38,7 +38,7 @@ namespace Nez.BitmapFonts
 
             if (flippedVert || flippedHorz)
             {
-                var size = measureString(ref text);
+                var size = MeasureString(ref text);
 
                 if (flippedHorz)
                 {
@@ -49,7 +49,7 @@ namespace Nez.BitmapFonts
                 if (flippedVert)
                 {
                     origin.Y *= -1;
-                    flipAdjustment.Y = lineHeight - size.Y;
+                    flipAdjustment.Y = LineHeight - size.Y;
                 }
             }
 
@@ -58,15 +58,15 @@ namespace Nez.BitmapFonts
             if (requiresTransformation)
             {
                 Matrix2D temp;
-                Matrix2D.createTranslation(-origin.X, -origin.Y, out _transformationMatrix);
-                Matrix2D.createScale((flippedHorz ? -scale.X : scale.X), (flippedVert ? -scale.Y : scale.Y), out temp);
-                Matrix2D.multiply(ref _transformationMatrix, ref temp, out _transformationMatrix);
-                Matrix2D.createTranslation(flipAdjustment.X, flipAdjustment.Y, out temp);
-                Matrix2D.multiply(ref temp, ref _transformationMatrix, out _transformationMatrix);
-                Matrix2D.createRotation(rotation, out temp);
-                Matrix2D.multiply(ref _transformationMatrix, ref temp, out _transformationMatrix);
-                Matrix2D.createTranslation(position.X, position.Y, out temp);
-                Matrix2D.multiply(ref _transformationMatrix, ref temp, out _transformationMatrix);
+                Matrix2D.CreateTranslation(-origin.X, -origin.Y, out _transformationMatrix);
+                Matrix2D.CreateScale((flippedHorz ? -scale.X : scale.X), (flippedVert ? -scale.Y : scale.Y), out temp);
+                Matrix2D.Multiply(ref _transformationMatrix, ref temp, out _transformationMatrix);
+                Matrix2D.CreateTranslation(flipAdjustment.X, flipAdjustment.Y, out temp);
+                Matrix2D.Multiply(ref temp, ref _transformationMatrix, out _transformationMatrix);
+                Matrix2D.CreateRotation(rotation, out temp);
+                Matrix2D.Multiply(ref _transformationMatrix, ref temp, out _transformationMatrix);
+                Matrix2D.CreateTranslation(position.X, position.Y, out temp);
+                Matrix2D.Multiply(ref _transformationMatrix, ref temp, out _transformationMatrix);
             }
 
             var previousCharacter = ' ';
@@ -82,38 +82,38 @@ namespace Nez.BitmapFonts
                 if (c == '\n')
                 {
                     offset.X = requiresTransformation ? 0f : position.X - origin.X;
-                    offset.Y += lineHeight;
+                    offset.Y += LineHeight;
                     currentChar = null;
                     continue;
                 }
 
                 if (currentChar != null)
-                    offset.X += spacing.X + currentChar.xAdvance;
+                    offset.X += Spacing.X + currentChar.XAdvance;
 
-                currentChar = ContainsCharacter(c) ? this[c] : defaultCharacter;
+                currentChar = ContainsCharacter(c) ? this[c] : DefaultCharacter;
 
                 var p = offset;
 
                 if (flippedHorz)
-                    p.X += currentChar.bounds.Width;
-                p.X += currentChar.offset.X + GetKerning(previousCharacter, currentChar.character);
+                    p.X += currentChar.Bounds.Width;
+                p.X += currentChar.Offset.X + GetKerning(previousCharacter, currentChar.Char);
 
                 if (flippedVert)
-                    p.Y += currentChar.bounds.Height - lineHeight;
-                p.Y += currentChar.offset.Y;
+                    p.Y += currentChar.Bounds.Height - LineHeight;
+                p.Y += currentChar.Offset.Y;
 
                 // transform our point if we need to
                 if (requiresTransformation)
-                    Vector2Ext.transform(ref p, ref _transformationMatrix, out p);
+                    Vector2Ext.Transform(ref p, ref _transformationMatrix, out p);
 
-                var destRect = RectangleExt.fromFloats
+                var destRect = RectangleExt.FromFloats
                 (
                    p.X, p.Y,
-                   currentChar.bounds.Width * scale.X,
-                   currentChar.bounds.Height * scale.Y
+                   currentChar.Bounds.Width * scale.X,
+                   currentChar.Bounds.Height * scale.Y
                    );
 
-                batcher.draw(textures[currentChar.texturePage], destRect, currentChar.bounds, color, rotation, Vector2.Zero, effect, depth);
+                batcher.Draw(Textures[currentChar.TexturePage], destRect, currentChar.Bounds, color, rotation, Vector2.Zero, effect, depth);
                 previousCharacter = c;
             }
         }

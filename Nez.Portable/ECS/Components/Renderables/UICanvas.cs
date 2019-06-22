@@ -10,63 +10,63 @@ namespace Nez
 	/// </summary>
 	public class UICanvas : RenderableComponent, IUpdatable
 	{
-		public override float width { get { return stage.getWidth(); } }
+		public override float Width { get { return Stage.GetWidth(); } }
 
-		public override float height { get { return stage.getHeight(); } }
+		public override float Height { get { return Stage.GetHeight(); } }
 
-		public Stage stage;
+		public Stage Stage;
 
 		/// <summary>
 		/// if true, the rawMousePosition will be used else the scaledMousePosition will be used. If your UI is in screen space (using a 
 		/// ScreenSpaceRenderer for example) then set this to true so input is not scaled.
 		/// </summary>
-		public bool isFullScreen
+		public bool IsFullScreen
 		{
-			get { return stage.isFullScreen; }
-			set { stage.isFullScreen = value; }
+			get { return Stage.IsFullScreen; }
+			set { Stage.IsFullScreen = value; }
 		}
 
 
 		public UICanvas()
 		{
-			stage = new Stage();
+			Stage = new Stage();
 		}
 
 
-		public override void onAddedToEntity()
+		public override void OnAddedToEntity()
 		{
-			stage.entity = entity;
+			Stage.Entity = Entity;
 
-			foreach( var child in stage.getRoot().children )
+			foreach( var child in Stage.GetRoot().children )
 			{
 				if( child is Window )
-					( child as Window ).keepWithinStage();
+					( child as Window ).KeepWithinStage();
 			}
 		}
 
 
-		public override void onRemovedFromEntity()
+		public override void OnRemovedFromEntity()
 		{
-			stage.entity = null;
-			stage.dispose();
+			Stage.Entity = null;
+			Stage.Dispose();
 		}
 
 
-		void IUpdatable.update()
+		void IUpdatable.Update()
 		{
-			stage.update();
+			Stage.Update();
 		}
 
 
-		public override void render( Graphics graphics, Camera camera )
+		public override void Render( Graphics graphics, Camera camera )
 		{
-			stage.render( graphics, camera );
+			Stage.Render( graphics, camera );
 		}
 
 
-		public override void debugRender( Graphics graphics )
+		public override void DebugRender( Graphics graphics )
 		{
-			stage.getRoot().debugRender( graphics );
+			Stage.GetRoot().DebugRender( graphics );
 		}
 
 
@@ -77,22 +77,22 @@ namespace Nez
 		/// <param name="title">Title.</param>
 		/// <param name="messageText">Message text.</param>
 		/// <param name="closeButtonText">Close button text.</param>
-		public Dialog showDialog( string title, string messageText, string closeButtonText )
+		public Dialog ShowDialog( string title, string messageText, string closeButtonText )
 		{
-			var skin = Skin.createDefaultSkin();
+			var skin = Skin.CreateDefaultSkin();
 
 			var style = new WindowStyle
 			{
-				background = new PrimitiveDrawable( new Color( 50, 50, 50 ) ),
-				stageBackground = new PrimitiveDrawable( new Color( 0, 0, 0, 150 ) )
+				Background = new PrimitiveDrawable( new Color( 50, 50, 50 ) ),
+				StageBackground = new PrimitiveDrawable( new Color( 0, 0, 0, 150 ) )
 			};
 
 			var dialog = new Dialog( title, style );
-			dialog.getTitleLabel().getStyle().background = new PrimitiveDrawable( new Color( 55, 100, 100 ) );
-			dialog.pad( 20, 5, 5, 5 );
-			dialog.addText( messageText );
-			dialog.addButton( new TextButton( closeButtonText, skin ) ).onClicked += butt => dialog.hide();
-			dialog.show( stage );
+			dialog.GetTitleLabel().GetStyle().Background = new PrimitiveDrawable( new Color( 55, 100, 100 ) );
+			dialog.Pad( 20, 5, 5, 5 );
+			dialog.AddText( messageText );
+			dialog.AddButton( new TextButton( closeButtonText, skin ) ).OnClicked += butt => dialog.Hide();
+			dialog.Show( Stage );
 
 			return dialog;
 		}

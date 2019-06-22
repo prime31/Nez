@@ -16,7 +16,7 @@ namespace Nez
 		/// warms up the cache filling it with a max of cacheCount objects
 		/// </summary>
 		/// <param name="cacheCount">new cache count</param>
-		public static void warmCache( int cacheCount )
+		public static void WarmCache( int cacheCount )
 		{
 			cacheCount -= _objectQueue.Count;
 			if( cacheCount > 0 )
@@ -31,7 +31,7 @@ namespace Nez
 		/// trims the cache down to cacheCount items
 		/// </summary>
 		/// <param name="cacheCount">Cache count.</param>
-		public static void trimCache( int cacheCount )
+		public static void TrimCache( int cacheCount )
 		{
 			while( cacheCount > _objectQueue.Count )
 				_objectQueue.Dequeue();
@@ -41,7 +41,7 @@ namespace Nez
 		/// <summary>
 		/// clears out the cache
 		/// </summary>
-		public static void clearCache()
+		public static void ClearCache()
 		{
 			_objectQueue.Clear();
 		}
@@ -50,7 +50,7 @@ namespace Nez
 		/// <summary>
 		/// pops an item off the stack if available creating a new item as necessary
 		/// </summary>
-		public static T obtain()
+		public static T Obtain()
 		{
 			if( _objectQueue.Count > 0 )
 				return _objectQueue.Dequeue();
@@ -63,12 +63,12 @@ namespace Nez
 		/// pushes an item back on the stack
 		/// </summary>
 		/// <param name="obj">Object.</param>
-		public static void free( T obj )
+		public static void Free( T obj )
 		{
 			_objectQueue.Enqueue( obj );
 
 			if( obj is IPoolable )
-				( (IPoolable)obj ).reset();
+				( (IPoolable)obj ).Reset();
 		}
 	}
 
@@ -81,6 +81,6 @@ namespace Nez
 		/// <summary>
 		/// Resets the object for reuse. Object references should be nulled and fields may be set to default values
 		/// </summary>
-		void reset();
+		void Reset();
 	}
 }

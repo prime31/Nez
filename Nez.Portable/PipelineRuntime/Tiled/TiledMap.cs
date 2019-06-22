@@ -10,26 +10,26 @@ namespace Nez.Tiled
 	{
 		#region Fields and Properties
 
-		public readonly int firstGid;
-		public readonly int width;
-		public readonly int height;
-		public readonly int tileWidth;
-		public readonly int tileHeight;
-		public Color? backgroundColor;
-		public TiledRenderOrder renderOrder;
-		public readonly TiledMapOrientation orientation;
-		public readonly Dictionary<string, string> properties = new Dictionary<string, string>();
-		public readonly List<TiledLayer> layers = new List<TiledLayer>();
-		public readonly List<TiledImageLayer> imageLayers = new List<TiledImageLayer>();
-		public readonly List<TiledObjectGroup> objectGroups = new List<TiledObjectGroup>();
-		public readonly List<TiledTileset> tilesets = new List<TiledTileset>();
+		public readonly int FirstGid;
+		public readonly int Width;
+		public readonly int Height;
+		public readonly int TileWidth;
+		public readonly int TileHeight;
+		public Color? BackgroundColor;
+		public TiledRenderOrder RenderOrder;
+		public readonly TiledMapOrientation Orientation;
+		public readonly Dictionary<string, string> Properties = new Dictionary<string, string>();
+		public readonly List<TiledLayer> Layers = new List<TiledLayer>();
+		public readonly List<TiledImageLayer> ImageLayers = new List<TiledImageLayer>();
+		public readonly List<TiledObjectGroup> ObjectGroups = new List<TiledObjectGroup>();
+		public readonly List<TiledTileset> Tilesets = new List<TiledTileset>();
 
-		public int widthInPixels { get { return width * tileWidth; } }
+		public int WidthInPixels { get { return Width * TileWidth; } }
 
-		public int heightInPixels { get { return height * tileHeight; } }
+		public int HeightInPixels { get { return Height * TileHeight; } }
 
-		public int largestTileWidth;
-		public int largestTileHeight;
+		public int LargestTileWidth;
+		public int LargestTileHeight;
 
 		internal bool requiresLargeTileCulling;
 		internal List<TiledAnimatedTile> _animatedTiles = new List<TiledAnimatedTile>();
@@ -45,18 +45,18 @@ namespace Nez.Tiled
 			int tileHeight,
 			TiledMapOrientation orientation = TiledMapOrientation.Orthogonal )
 		{
-			this.firstGid = firstGid;
-			this.width = width;
-			this.height = height;
-			this.tileWidth = tileWidth;
-			this.tileHeight = tileHeight;
-			this.orientation = orientation;
+			this.FirstGid = firstGid;
+			this.Width = width;
+			this.Height = height;
+			this.TileWidth = tileWidth;
+			this.TileHeight = tileHeight;
+			this.Orientation = orientation;
 		}
 
 
 		#region Tileset and Layer creation
 
-		public TiledTileset createTileset( Texture2D texture, int firstId, int tileWidth, int tileHeight, bool isStandardTileset, int spacing = 2, int margin = 2, int tileCount = 1, int columns = 1 )
+		public TiledTileset CreateTileset( Texture2D texture, int firstId, int tileWidth, int tileHeight, bool isStandardTileset, int spacing = 2, int margin = 2, int tileCount = 1, int columns = 1 )
 		{
 			TiledTileset tileset;
 			if( isStandardTileset )
@@ -64,31 +64,31 @@ namespace Nez.Tiled
 			else
 				tileset = new TiledImageCollectionTileset( texture, firstId );
 
-			if( tileset.tileWidth > largestTileWidth )
-				largestTileWidth = tileset.tileWidth;
+			if( tileset.TileWidth > LargestTileWidth )
+				LargestTileWidth = tileset.TileWidth;
 
-			if( tileset.tileHeight > largestTileHeight )
-				largestTileHeight = tileset.tileHeight;
+			if( tileset.TileHeight > LargestTileHeight )
+				LargestTileHeight = tileset.TileHeight;
 
-			tilesets.Add( tileset );
+			Tilesets.Add( tileset );
 
 			return tileset;
 		}
 
 
-		public TiledLayer createTileLayer( string name, int width, int height )
+		public TiledLayer CreateTileLayer( string name, int width, int height )
 		{
-			if( orientation == TiledMapOrientation.Orthogonal )
+			if( Orientation == TiledMapOrientation.Orthogonal )
 			{
 				var layer = new TiledTileLayer( this, name, width, height );
-				layers.Add( layer );
+				Layers.Add( layer );
 				return layer;
 			}
 
-			if( orientation == TiledMapOrientation.Isometric )
+			if( Orientation == TiledMapOrientation.Isometric )
 			{
 				var layer = new TiledIsometricTiledLayer( this, name, width, height );
-				layers.Add( layer );
+				Layers.Add( layer );
 				return layer;
 			}
 
@@ -96,19 +96,19 @@ namespace Nez.Tiled
 		}
 
 
-		public TiledLayer createTileLayer( string name, int width, int height, TiledTile[] tiles )
+		public TiledLayer CreateTileLayer( string name, int width, int height, TiledTile[] tiles )
 		{
-			if( orientation == TiledMapOrientation.Orthogonal )
+			if( Orientation == TiledMapOrientation.Orthogonal )
 			{
 				var layer = new TiledTileLayer( this, name, width, height, tiles );
-				layers.Add( layer );
+				Layers.Add( layer );
 				return layer;
 			}
 
-			if( orientation == TiledMapOrientation.Isometric )
+			if( Orientation == TiledMapOrientation.Isometric )
 			{
 				var layer = new TiledIsometricTiledLayer( this, name, width, height, tiles );
-				layers.Add( layer );
+				Layers.Add( layer );
 				return layer;
 			}
 
@@ -116,10 +116,10 @@ namespace Nez.Tiled
 		}
 
 
-		public TiledImageLayer createImageLayer( string name, Texture2D texture )
+		public TiledImageLayer CreateImageLayer( string name, Texture2D texture )
 		{
 			var layer = new TiledImageLayer( name, texture );
-			layers.Add( layer );
+			Layers.Add( layer );
 			return layer;
 		}
 
@@ -133,12 +133,12 @@ namespace Nez.Tiled
 		/// </summary>
 		/// <returns>The tileset for tile identifier.</returns>
 		/// <param name="tileId">Identifier.</param>
-		public TiledTileset getTilesetForTileId( int tileId )
+		public TiledTileset GetTilesetForTileId( int tileId )
 		{
-			for( var i = tilesets.Count - 1; i >= 0; i-- )
+			for( var i = Tilesets.Count - 1; i >= 0; i-- )
 			{
-				if( tilesets[i].firstId <= tileId )
-					return tilesets[i];
+				if( Tilesets[i].FirstId <= tileId )
+					return Tilesets[i];
 			}
 
 			throw new Exception( string.Format( "tileId {0} was not foind in any tileset", tileId ) );
@@ -151,17 +151,17 @@ namespace Nez.Tiled
 		/// </summary>
 		/// <returns>The tileset tile.</returns>
 		/// <param name="id">Identifier.</param>
-		public TiledTilesetTile getTilesetTile( int id )
+		public TiledTilesetTile GetTilesetTile( int id )
 		{
-			for( var i = tilesets.Count - 1; i >= 0; i-- )
+			for( var i = Tilesets.Count - 1; i >= 0; i-- )
 			{
-				if( tilesets[i].firstId <= id )
+				if( Tilesets[i].FirstId <= id )
 				{
-					for( var j = 0; j < tilesets[i].tiles.Count; j++ )
+					for( var j = 0; j < Tilesets[i].Tiles.Count; j++ )
 					{
 						// id is a gid so we need to subtract the tileset.firstId to get a local id
-						if( tilesets[i].tiles[j].id == id - tilesets[i].firstId )
-							return tilesets[i].tiles[j];
+						if( Tilesets[i].Tiles[j].Id == id - Tilesets[i].FirstId )
+							return Tilesets[i].Tiles[j];
 					}
 				}
 			}
@@ -175,11 +175,11 @@ namespace Nez.Tiled
 		/// </summary>
 		/// <returns>The layer index.</returns>
 		/// <param name="name">Name.</param>
-		public int getLayerIndex( string name )
+		public int GetLayerIndex( string name )
 		{
-			for( var i = 0; i < layers.Count; i++ )
+			for( var i = 0; i < Layers.Count; i++ )
 			{
-				if( layers[i].name == name )
+				if( Layers[i].Name == name )
 					return i;
 			}
 
@@ -192,12 +192,12 @@ namespace Nez.Tiled
 		/// </summary>
 		/// <returns>The layer.</returns>
 		/// <param name="name">Name.</param>
-		public TiledLayer getLayer( string name )
+		public TiledLayer GetLayer( string name )
 		{
-			for( var i = 0; i < layers.Count; i++ )
+			for( var i = 0; i < Layers.Count; i++ )
 			{
-				if( layers[i].name == name )
-					return layers[i];
+				if( Layers[i].Name == name )
+					return Layers[i];
 			}
 			return null;
 		}
@@ -208,9 +208,9 @@ namespace Nez.Tiled
 		/// </summary>
 		/// <param name="index"></param>
 		/// <returns>The Layer.</returns>
-		public TiledLayer getLayer( int index )
+		public TiledLayer GetLayer( int index )
 		{
-			return layers[index];
+			return Layers[index];
 		}
 
 
@@ -220,9 +220,9 @@ namespace Nez.Tiled
 		/// <returns>The layer.</returns>
 		/// <param name="index">Index.</param>
 		/// <typeparam name="T">The 1st type parameter.</typeparam>
-		public T getLayer<T>( int index ) where T : TiledLayer
+		public T GetLayer<T>( int index ) where T : TiledLayer
 		{
-			return (T)getLayer( index );
+			return (T)GetLayer( index );
 		}
 
 
@@ -232,9 +232,9 @@ namespace Nez.Tiled
 		/// <returns>The layer.</returns>
 		/// <param name="name">Name.</param>
 		/// <typeparam name="T">The 1st type parameter.</typeparam>
-		public T getLayer<T>( string name ) where T : TiledLayer
+		public T GetLayer<T>( string name ) where T : TiledLayer
 		{
-			return (T)getLayer( name );
+			return (T)GetLayer( name );
 		}
 
 
@@ -243,12 +243,12 @@ namespace Nez.Tiled
 		/// </summary>
 		/// <returns>The object group.</returns>
 		/// <param name="name">Name.</param>
-		public TiledObjectGroup getObjectGroup( string name )
+		public TiledObjectGroup GetObjectGroup( string name )
 		{
-			for( var i = 0; i < objectGroups.Count; i++ )
+			for( var i = 0; i < ObjectGroups.Count; i++ )
 			{
-				if( objectGroups[i].name == name )
-					return objectGroups[i];
+				if( ObjectGroups[i].Name == name )
+					return ObjectGroups[i];
 			}
 			return null;
 		}
@@ -259,10 +259,10 @@ namespace Nez.Tiled
 		/// <summary>
 		/// handles calling update on all animated tiles
 		/// </summary>
-		public void update()
+		public void Update()
 		{
 			for( var i = 0; i < _animatedTiles.Count; i++ )
-				_animatedTiles[i].update();
+				_animatedTiles[i].Update();
 		}
 
 
@@ -273,21 +273,21 @@ namespace Nez.Tiled
 		/// <param name="position">Position.</param>
 		/// <param name="layerDepth">Layer depth.</param>
 		/// <param name="cameraClipBounds">Camera clip bounds.</param>
-		public void draw( Batcher batcher, Vector2 position, float layerDepth, RectangleF cameraClipBounds )
+		public void Draw( Batcher batcher, Vector2 position, float layerDepth, RectangleF cameraClipBounds )
 		{
-			draw( batcher, position, Vector2.One, layerDepth, cameraClipBounds );
+			Draw( batcher, position, Vector2.One, layerDepth, cameraClipBounds );
 		}
 
 
-		public void draw( Batcher batcher, Vector2 position, Vector2 scale, float layerDepth, RectangleF cameraClipBounds )
+		public void Draw( Batcher batcher, Vector2 position, Vector2 scale, float layerDepth, RectangleF cameraClipBounds )
 		{
 			// render any visible image or tile layer
-			foreach( var layer in layers )
+			foreach( var layer in Layers )
 			{
-				if( !layer.visible )
+				if( !layer.Visible )
 					continue;
 
-				layer.draw( batcher, position, scale, layerDepth, cameraClipBounds );
+				layer.Draw( batcher, position, scale, layerDepth, cameraClipBounds );
 			}
 		}
 
@@ -299,9 +299,9 @@ namespace Nez.Tiled
 		/// </summary>
 		/// <returns>The to tile position.</returns>
 		/// <param name="pos">Position.</param>
-		public Point worldToTilePosition( Vector2 pos, bool clampToTilemapBounds = true )
+		public Point WorldToTilePosition( Vector2 pos, bool clampToTilemapBounds = true )
 		{
-			return new Point( worldToTilePositionX( pos.X, clampToTilemapBounds ), worldToTilePositionY( pos.Y, clampToTilemapBounds ) );
+			return new Point( WorldToTilePositionX( pos.X, clampToTilemapBounds ), WorldToTilePositionY( pos.Y, clampToTilemapBounds ) );
 		}
 
 		/// <summary>
@@ -309,9 +309,9 @@ namespace Nez.Tiled
 		/// </summary>
 		/// <returns>The to tile position.</returns>
 		/// <param name="pos">Position.</param>
-		public Point isometricWorldToTilePosition( Vector2 pos, bool clampToTilemapBounds = true )
+		public Point IsometricWorldToTilePosition( Vector2 pos, bool clampToTilemapBounds = true )
 		{
-			return isometricWorldToTilePosition( pos.X, pos.Y, clampToTilemapBounds );
+			return IsometricWorldToTilePosition( pos.X, pos.Y, clampToTilemapBounds );
 		}
 
 		/// <summary>
@@ -320,23 +320,23 @@ namespace Nez.Tiled
 		/// <returns>The to tile position.</returns>
 		/// <param name="x">The x coordinate.</param>
 		/// <param name="y">The y coordinate.</param>
-		public Point isometricWorldToTilePosition( float x, float y, bool clampToTilemapBounds = true )
+		public Point IsometricWorldToTilePosition( float x, float y, bool clampToTilemapBounds = true )
 		{
-			x -= ( height - 1 ) * tileWidth / 2;
-			var tileX = Mathf.fastFloorToInt( ( y / tileHeight ) + ( x / tileWidth ) );
-			var tileY = Mathf.fastFloorToInt( ( -x / tileWidth ) + ( y / tileHeight ) );
+			x -= ( Height - 1 ) * TileWidth / 2;
+			var tileX = Mathf.FastFloorToInt( ( y / TileHeight ) + ( x / TileWidth ) );
+			var tileY = Mathf.FastFloorToInt( ( -x / TileWidth ) + ( y / TileHeight ) );
 			if( !clampToTilemapBounds )
 				return new Point( tileX, tileY );
-			return new Point( Mathf.clamp( tileX, 0, width - 1 ), Mathf.clamp( tileY, 0, height - 1 ) );
+			return new Point( Mathf.Clamp( tileX, 0, Width - 1 ), Mathf.Clamp( tileY, 0, Height - 1 ) );
 		}
 
 		/// converts from isometric tile to world position
 		/// </summary>
 		/// <returns>The to world position.</returns>
 		/// <param name="pos">Position.</param>
-		public Vector2 isometricTileToWorldPosition( Point pos )
+		public Vector2 IsometricTileToWorldPosition( Point pos )
 		{
-			return isometricTileToWorldPosition( pos.X, pos.Y );
+			return IsometricTileToWorldPosition( pos.X, pos.Y );
 		}
 
 		/// <summary>
@@ -345,10 +345,10 @@ namespace Nez.Tiled
 		/// <returns>The to world position.</returns>
 		/// <param name="x">The x coordinate.</param>
 		/// <param name="y">The y coordinate.</param>
-		public Vector2 isometricTileToWorldPosition( int x, int y )
+		public Vector2 IsometricTileToWorldPosition( int x, int y )
 		{
-			var worldX = x * tileWidth / 2 - y * tileWidth / 2 + ( height - 1 ) * tileWidth / 2;
-			var worldY = y * tileHeight / 2 + x * tileHeight / 2;
+			var worldX = x * TileWidth / 2 - y * TileWidth / 2 + ( Height - 1 ) * TileWidth / 2;
+			var worldY = y * TileHeight / 2 + x * TileHeight / 2;
 			return new Vector2( worldX, worldY );
 		}
 
@@ -357,12 +357,12 @@ namespace Nez.Tiled
 		/// </summary>
 		/// <returns>The to tile position x.</returns>
 		/// <param name="x">The x coordinate.</param>
-		public int worldToTilePositionX( float x, bool clampToTilemapBounds = true )
+		public int WorldToTilePositionX( float x, bool clampToTilemapBounds = true )
 		{
-			var tileX = Mathf.fastFloorToInt( x / tileWidth );
+			var tileX = Mathf.FastFloorToInt( x / TileWidth );
 			if( !clampToTilemapBounds )
 				return tileX;
-			return Mathf.clamp( tileX, 0, width - 1 );
+			return Mathf.Clamp( tileX, 0, Width - 1 );
 		}
 
 
@@ -371,12 +371,12 @@ namespace Nez.Tiled
 		/// </summary>
 		/// <returns>The to tile position y.</returns>
 		/// <param name="y">The y coordinate.</param>
-		public int worldToTilePositionY( float y, bool clampToTilemapBounds = true )
+		public int WorldToTilePositionY( float y, bool clampToTilemapBounds = true )
 		{
-			var tileY = Mathf.fastFloorToInt( y / tileHeight );
+			var tileY = Mathf.FastFloorToInt( y / TileHeight );
 			if( !clampToTilemapBounds )
 				return tileY;
-			return Mathf.clamp( tileY, 0, height - 1 );
+			return Mathf.Clamp( tileY, 0, Height - 1 );
 		}
 
 		/// <summary>
@@ -384,9 +384,9 @@ namespace Nez.Tiled
 		/// </summary>
 		/// <returns>The to world position.</returns>
 		/// <param name="pos">Position.</param>
-		public Vector2 tileToWorldPosition( Point pos )
+		public Vector2 TileToWorldPosition( Point pos )
 		{
-			return new Vector2( tileToWorldPositionX( pos.X ), tileToWorldPositionY( pos.Y ) );
+			return new Vector2( TileToWorldPositionX( pos.X ), TileToWorldPositionY( pos.Y ) );
 		}
 
 		/// <summary>
@@ -394,9 +394,9 @@ namespace Nez.Tiled
 		/// </summary>
 		/// <returns>The to world position x.</returns>
 		/// <param name="x">The x coordinate.</param>
-		public int tileToWorldPositionX( int x )
+		public int TileToWorldPositionX( int x )
 		{
-			return x * tileWidth;
+			return x * TileWidth;
 		}
 
 
@@ -405,9 +405,9 @@ namespace Nez.Tiled
 		/// </summary>
 		/// <returns>The to world position y.</returns>
 		/// <param name="y">The y coordinate.</param>
-		public int tileToWorldPositionY( int y )
+		public int TileToWorldPositionY( int y )
 		{
-			return y * tileHeight;
+			return y * TileHeight;
 		}
 
 		#endregion

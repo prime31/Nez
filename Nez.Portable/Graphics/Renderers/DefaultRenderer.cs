@@ -10,22 +10,22 @@
 		public DefaultRenderer( int renderOrder = 0, Camera camera = null ) : base( renderOrder, camera )
 		{}
 
-		public override void render( Scene scene )
+		public override void Render( Scene scene )
 		{
-			var cam = camera ?? scene.camera;
-			beginRender( cam );
+			var cam = Camera ?? scene.Camera;
+			BeginRender( cam );
 
-			for( var i = 0; i < scene.renderableComponents.count; i++ )
+			for( var i = 0; i < scene.RenderableComponents.Count; i++ )
 			{
-				var renderable = scene.renderableComponents[i];
-				if( renderable.enabled && renderable.isVisibleFromCamera( cam ) )
-					renderAfterStateCheck( renderable, cam );
+				var renderable = scene.RenderableComponents[i];
+				if( renderable.Enabled && renderable.IsVisibleFromCamera( cam ) )
+					RenderAfterStateCheck( renderable, cam );
 			}
 	
-			if( shouldDebugRender && Core.debugRenderEnabled )
-				debugRender( scene, cam );
+			if( ShouldDebugRender && Core.DebugRenderEnabled )
+				DebugRender( scene, cam );
 
-			endRender();
+			EndRender();
 		}
 
 	}

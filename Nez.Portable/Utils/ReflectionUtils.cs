@@ -11,7 +11,7 @@ namespace Nez
 	/// </summary>
 	public class ReflectionUtils
 	{
-		public static Assembly getAssembly( Type type )
+		public static Assembly GetAssembly( Type type )
 		{
 #if NETFX_CORE
 			return type.GetTypeInfo().Assembly;
@@ -22,9 +22,9 @@ namespace Nez
 
 		#region Fields
 
-		public static FieldInfo getFieldInfo( object targetObject, string fieldName ) => getFieldInfo( targetObject.GetType(), fieldName );
+		public static FieldInfo GetFieldInfo( object targetObject, string fieldName ) => GetFieldInfo( targetObject.GetType(), fieldName );
 
-		public static FieldInfo getFieldInfo( Type type, string fieldName )
+		public static FieldInfo GetFieldInfo( Type type, string fieldName )
 		{
 			FieldInfo fieldInfo = null;
 
@@ -48,7 +48,7 @@ namespace Nez
 			return fieldInfo;
 		}
 
-		public static IEnumerable<FieldInfo> getFields( Type type )
+		public static IEnumerable<FieldInfo> GetFields( Type type )
 		{
 #if NETFX_CORE
 			return type.GetRuntimeFields();
@@ -57,9 +57,9 @@ namespace Nez
 #endif
 		}
 
-		public static object getFieldValue( object targetObject, string fieldName )
+		public static object GetFieldValue( object targetObject, string fieldName )
 		{
-			var fieldInfo = getFieldInfo( targetObject, fieldName );
+			var fieldInfo = GetFieldInfo( targetObject, fieldName );
 			return fieldInfo.GetValue( targetObject );
 		}
 
@@ -67,9 +67,9 @@ namespace Nez
 
 		#region Properties
 
-		public static PropertyInfo getPropertyInfo( object targetObject, string propertyName ) => getPropertyInfo( targetObject.GetType(), propertyName );
+		public static PropertyInfo GetPropertyInfo( object targetObject, string propertyName ) => GetPropertyInfo( targetObject.GetType(), propertyName );
 
-		public static PropertyInfo getPropertyInfo( Type type, string propertyName )
+		public static PropertyInfo GetPropertyInfo( Type type, string propertyName )
 		{
 #if NETFX_CORE
 			return type.GetRuntimeProperty( propertyName );
@@ -78,7 +78,7 @@ namespace Nez
 #endif
 		}
 
-		public static IEnumerable<PropertyInfo> getProperties( Type type )
+		public static IEnumerable<PropertyInfo> GetProperties( Type type )
 		{
 #if NETFX_CORE
 			return type.GetRuntimeProperties();
@@ -87,7 +87,7 @@ namespace Nez
 #endif
 		}
 
-		public static MethodInfo getPropertyGetter( PropertyInfo prop )
+		public static MethodInfo GetPropertyGetter( PropertyInfo prop )
 		{
 #if NETFX_CORE
 			return prop.GetMethod;
@@ -96,7 +96,7 @@ namespace Nez
 #endif
 		}
 
-		public static MethodInfo getPropertySetter( PropertyInfo prop )
+		public static MethodInfo GetPropertySetter( PropertyInfo prop )
 		{
 #if NETFX_CORE
 			return prop.SetMethod;
@@ -105,10 +105,10 @@ namespace Nez
 #endif
 		}
 
-		public static object getPropertyValue( object targetObject, string propertyName )
+		public static object GetPropertyValue( object targetObject, string propertyName )
 		{
-			var propInfo = getPropertyInfo( targetObject, propertyName );
-			var methodInfo = getPropertyGetter( propInfo );
+			var propInfo = GetPropertyInfo( targetObject, propertyName );
+			var methodInfo = GetPropertyGetter( propInfo );
 			return methodInfo.Invoke( targetObject, new object[] { } );
 		}
 
@@ -116,35 +116,35 @@ namespace Nez
 		/// either returns a super fast Delegate to set the given property or null if it couldn't be found
 		/// via reflection
 		/// </summary>
-		public static T setterForProperty<T>( object targetObject, string propertyName )
+		public static T SetterForProperty<T>( object targetObject, string propertyName )
 		{
 			// first get the property
-			var propInfo = getPropertyInfo( targetObject, propertyName );
+			var propInfo = GetPropertyInfo( targetObject, propertyName );
 			if( propInfo == null )
 				return default( T );
 
-			return createDelegate<T>( targetObject, propInfo.SetMethod );
+			return CreateDelegate<T>( targetObject, propInfo.SetMethod );
 		}
 
 		/// <summary>
 		/// either returns a super fast Delegate to get the given property or null if it couldn't be found
 		/// via reflection
 		/// </summary>
-		public static T getterForProperty<T>( object targetObject, string propertyName )
+		public static T GetterForProperty<T>( object targetObject, string propertyName )
 		{
 			// first get the property
-			var propInfo = getPropertyInfo( targetObject, propertyName );
+			var propInfo = GetPropertyInfo( targetObject, propertyName );
 			if( propInfo == null )
 				return default( T );
 
-			return createDelegate<T>( targetObject, propInfo.GetMethod );
+			return CreateDelegate<T>( targetObject, propInfo.GetMethod );
 		}
 
 		#endregion
 
 		#region Methods
 
-		public static IEnumerable<MethodInfo> getMethods( Type type )
+		public static IEnumerable<MethodInfo> GetMethods( Type type )
 		{
 #if NETFX_CORE
 			return type.GetRuntimeMethods();
@@ -153,11 +153,11 @@ namespace Nez
 #endif
 		}
 
-		public static MethodInfo getMethodInfo( object targetObject, string methodName ) => getMethodInfo( targetObject.GetType(), methodName );
+		public static MethodInfo GetMethodInfo( object targetObject, string methodName ) => GetMethodInfo( targetObject.GetType(), methodName );
 
-		public static MethodInfo getMethodInfo( object targetObject, string methodName, Type[] parameters ) => getMethodInfo( targetObject.GetType(), methodName, parameters );
+		public static MethodInfo GetMethodInfo( object targetObject, string methodName, Type[] parameters ) => GetMethodInfo( targetObject.GetType(), methodName, parameters );
 
-		public static MethodInfo getMethodInfo( Type type, string methodName, Type[] parameters = null )
+		public static MethodInfo GetMethodInfo( Type type, string methodName, Type[] parameters = null )
 		{
 #if NETFX_CORE
 			if( parameters != null )
@@ -176,7 +176,7 @@ namespace Nez
 
 		#endregion
 
-		public static T createDelegate<T>( object targetObject, MethodInfo methodInfo )
+		public static T CreateDelegate<T>( object targetObject, MethodInfo methodInfo )
 		{
 #if NETFX_CORE
 			return (T)(object)methodInfo.CreateDelegate( typeof( T ), targetObject );
@@ -192,7 +192,7 @@ namespace Nez
 		/// <param name="baseClassType"></param>
 		/// <param name="onlyIncludeParameterlessConstructors"></param>
 		/// <returns></returns>
-		public static List<Type> getAllSubclasses( Type baseClassType, bool onlyIncludeParameterlessConstructors = false )
+		public static List<Type> GetAllSubclasses( Type baseClassType, bool onlyIncludeParameterlessConstructors = false )
 		{
 			var typeList = new List<Type>();
 			foreach( var assembly in AppDomain.CurrentDomain.GetAssemblies() )
@@ -205,7 +205,7 @@ namespace Nez
 						{
 							if( type.GetConstructor( Type.EmptyTypes ) == null )
 							{
-								Debug.log( "no go: " + type.Name );
+								Debug.Log( "no go: " + type.Name );
 								continue;
 							}
 						}
@@ -223,7 +223,7 @@ namespace Nez
 		/// <param name="baseClassType"></param>
 		/// <param name="onlyIncludeParameterlessConstructors"></param>
 		/// <returns></returns>
-		public static List<Type> getAllTypesAssignableFrom( Type baseClassType, bool onlyIncludeParameterlessConstructors = false )
+		public static List<Type> GetAllTypesAssignableFrom( Type baseClassType, bool onlyIncludeParameterlessConstructors = false )
 		{
 			var typeList = new List<Type>();
 			foreach( var assembly in AppDomain.CurrentDomain.GetAssemblies() )
@@ -249,7 +249,7 @@ namespace Nez
 		/// </summary>
 		/// <param name="type"></param>
 		/// <returns></returns>
-		public static bool isGenericTypeOrSubclassOfGenericType( Type type )
+		public static bool IsGenericTypeOrSubclassOfGenericType( Type type )
 		{
 			var currentType = type;
 			while( currentType != null && currentType != typeof( object ) )

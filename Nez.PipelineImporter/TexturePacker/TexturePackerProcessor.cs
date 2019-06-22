@@ -8,42 +8,42 @@ namespace Nez.TexturePackerImporter
 	[ContentProcessor( DisplayName = "TexturePacker Processor" )]
 	public class TexturePackerProcessor : ContentProcessor<TexturePackerFile, TexturePackerFile>
 	{
-		public static ContentBuildLogger logger;
+		public static ContentBuildLogger Logger;
 
 		[Description( "Enable this to automatically create animations based on texturepacker regions filenames metadata" )]
 		[DefaultValue( false )]
-		public bool parseAnimations { get; set; } = false;
+		public bool ParseAnimations { get; set; } = false;
 
 		public override TexturePackerFile Process( TexturePackerFile input, ContentProcessorContext context )
 		{
-			logger = context.Logger;
+			Logger = context.Logger;
 
-			if( parseAnimations )
-				processAnimations( input );
+			if( ParseAnimations )
+				ProcessAnimations( input );
 
 			return input;
 		}
 
 
-		void processAnimations( TexturePackerFile input )
+		void ProcessAnimations( TexturePackerFile input )
 		{
-			input.spriteAnimationDetails = new Dictionary<string, List<int>>();
+			input.SpriteAnimationDetails = new Dictionary<string, List<int>>();
 
-			for( var i = 0; i < input.regions.Count; i++ )
+			for( var i = 0; i < input.Regions.Count; i++ )
 			{
-				var region = input.regions[i];
-				var rawFileName = region.filename.Split( '.' )[0];
+				var region = input.Regions[i];
+				var rawFileName = region.Filename.Split( '.' )[0];
 
 				// texturepacker always ends the filename's frame with 4 digits
 				var animationName = rawFileName.Substring( 0, rawFileName.Length - 4 );
-				if( input.spriteAnimationDetails.ContainsKey( animationName ) == false )
+				if( input.SpriteAnimationDetails.ContainsKey( animationName ) == false )
 				{
-					logger.LogMessage( "found new animation [{0}]", animationName );
-					input.spriteAnimationDetails.Add( animationName, new List<int>() );
+					Logger.LogMessage( "found new animation [{0}]", animationName );
+					input.SpriteAnimationDetails.Add( animationName, new List<int>() );
 				}
 
-				logger.LogMessage( "adding frame {0} to animation {1} ", i, animationName );
-				input.spriteAnimationDetails[animationName].Add( i );
+				Logger.LogMessage( "adding frame {0} to animation {1} ", i, animationName );
+				input.SpriteAnimationDetails[animationName].Add( i );
 
 				// TODO add support for "Detect identical sprites"
 				#region WIP detect identical sprites

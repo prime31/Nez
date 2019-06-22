@@ -12,7 +12,7 @@ namespace Nez.Svg
 		/// parses the 'd' element of an SVG file and returns the command series
 		/// </summary>
 		/// <param name="path">Path.</param>
-		public static List<SvgPathSegment> parse( string path )
+		public static List<SvgPathSegment> Parse( string path )
 		{
 			var segments = new List<SvgPathSegment>();
 
@@ -20,7 +20,7 @@ namespace Nez.Svg
 			{
 				char command;
 				bool isRelative;
-				foreach( var commandSet in splitCommands( path.TrimEnd( null ) ) )
+				foreach( var commandSet in SplitCommands( path.TrimEnd( null ) ) )
 				{
 					command = commandSet[0];
 					isRelative = char.IsLower( command );
@@ -34,12 +34,12 @@ namespace Nez.Svg
 
 					var floatArgs = splitArgs.Select( arg => float.Parse( arg ) ).ToArray();
 
-					createPathSegment( command, segments, floatArgs, isRelative );
+					CreatePathSegment( command, segments, floatArgs, isRelative );
 				}
 			}
 			catch( System.Exception exc )
 			{
-				Debug.error( "Error parsing path \"{0}\": {1}", path, exc.Message );
+				Debug.Error( "Error parsing path \"{0}\": {1}", path, exc.Message );
 			}
 
 			return segments;
@@ -53,19 +53,19 @@ namespace Nez.Svg
 		/// <param name="segments">Segments.</param>
 		/// <param name="coords">Coords.</param>
 		/// <param name="isRelative">If set to <c>true</c> is relative.</param>
-		static void createPathSegment( char command, List<SvgPathSegment> segments, float[] coords, bool isRelative )
+		static void CreatePathSegment( char command, List<SvgPathSegment> segments, float[] coords, bool isRelative )
 		{
 			switch( command )
 			{
 				case 'm': // relative moveto
 				case 'M': // moveto
 				{
-					segments.Add( new SvgMoveToSegment( toAbsolute( coords[0], coords[1], segments, isRelative ) ) );
+					segments.Add( new SvgMoveToSegment( ToAbsolute( coords[0], coords[1], segments, isRelative ) ) );
 
 					var index = 2;
 					while( index < coords.Length )
 					{
-						segments.Add( new SvgLineSegment( segments.lastItem().end, toAbsolute( coords[index], coords[index + 1], segments, isRelative ) ) );
+						segments.Add( new SvgLineSegment( segments.LastItem().End, ToAbsolute( coords[index], coords[index + 1], segments, isRelative ) ) );
 						index += 2;
 					}
 				}
@@ -83,7 +83,7 @@ namespace Nez.Svg
 					var index = 0;
 					while( index < coords.Length )
 					{
-						segments.Add( new SvgLineSegment( segments.lastItem().end, toAbsolute( coords[index], coords[index + 1], segments, isRelative ) ) );
+						segments.Add( new SvgLineSegment( segments.LastItem().End, ToAbsolute( coords[index], coords[index + 1], segments, isRelative ) ) );
 						index += 2;
 					}
 				}
@@ -95,7 +95,7 @@ namespace Nez.Svg
 					var index = 0;
 					while( index < coords.Length )
 					{
-						segments.Add( new SvgLineSegment( segments.lastItem().end, toAbsolute( coords[index], segments.lastItem().end.Y, segments, isRelative, false ) ) );
+						segments.Add( new SvgLineSegment( segments.LastItem().End, ToAbsolute( coords[index], segments.LastItem().End.Y, segments, isRelative, false ) ) );
 						index += 1;
 					}
 				}
@@ -107,7 +107,7 @@ namespace Nez.Svg
 					var index = 0;
 					while( index < coords.Length )
 					{
-						segments.Add( new SvgLineSegment( segments.lastItem().end, toAbsolute( coords[index], segments.lastItem().end.X, segments, false, isRelative ) ) );
+						segments.Add( new SvgLineSegment( segments.LastItem().End, ToAbsolute( coords[index], segments.LastItem().End.X, segments, false, isRelative ) ) );
 						index += 1;
 					}
 				}
@@ -119,9 +119,9 @@ namespace Nez.Svg
 					var index = 0;
 					while( index < coords.Length )
 					{
-						var controlPoint = toAbsolute( coords[index], coords[index + 1], segments, isRelative );
-						var end = toAbsolute( coords[index + 2], coords[index + 3], segments, isRelative );
-						segments.Add( new SvgQuadraticCurveSegment( segments.lastItem().end, controlPoint, end ) );
+						var controlPoint = ToAbsolute( coords[index], coords[index + 1], segments, isRelative );
+						var end = ToAbsolute( coords[index + 2], coords[index + 3], segments, isRelative );
+						segments.Add( new SvgQuadraticCurveSegment( segments.LastItem().End, controlPoint, end ) );
 						index += 4;
 					}
 				}
@@ -133,14 +133,14 @@ namespace Nez.Svg
 					var index = 0;
 					while( index < coords.Length )
 					{
-						var lastQuadCurve = segments.lastItem() as SvgQuadraticCurveSegment;
+						var lastQuadCurve = segments.LastItem() as SvgQuadraticCurveSegment;
 
 						var controlPoint = lastQuadCurve != null
-							? reflect( lastQuadCurve.controlPoint, segments.lastItem().end )
-							: segments.lastItem().end;
+							? Reflect( lastQuadCurve.ControlPoint, segments.LastItem().End )
+							: segments.LastItem().End;
 
-						var end = toAbsolute( coords[index], coords[index + 1], segments, isRelative );
-						segments.Add( new SvgQuadraticCurveSegment( segments.lastItem().end, controlPoint, end ) );
+						var end = ToAbsolute( coords[index], coords[index + 1], segments, isRelative );
+						segments.Add( new SvgQuadraticCurveSegment( segments.LastItem().End, controlPoint, end ) );
 						index += 2;
 					}
 				}
@@ -152,10 +152,10 @@ namespace Nez.Svg
 					var index = 0;
 					while( index < coords.Length )
 					{
-						var firstControlPoint = toAbsolute( coords[index], coords[index + 1], segments, isRelative );
-						var secondControlPoint = toAbsolute( coords[index + 2], coords[index + 3], segments, isRelative );
-						var end = toAbsolute( coords[index + 4], coords[index + 5], segments, isRelative );
-						segments.Add( new SvgCubicCurveSegment( segments.lastItem().end, firstControlPoint, secondControlPoint, end ) );
+						var firstControlPoint = ToAbsolute( coords[index], coords[index + 1], segments, isRelative );
+						var secondControlPoint = ToAbsolute( coords[index + 2], coords[index + 3], segments, isRelative );
+						var end = ToAbsolute( coords[index + 4], coords[index + 5], segments, isRelative );
+						segments.Add( new SvgCubicCurveSegment( segments.LastItem().End, firstControlPoint, secondControlPoint, end ) );
 						index += 6;
 					}
 				}
@@ -167,15 +167,15 @@ namespace Nez.Svg
 					var index = 0;
 					while( index < coords.Length )
 					{
-						var lastCubicCurve = segments.lastItem() as SvgCubicCurveSegment;
+						var lastCubicCurve = segments.LastItem() as SvgCubicCurveSegment;
 
 						var firstControlPoint = lastCubicCurve != null
-								? reflect( lastCubicCurve.secondCtrlPoint, segments.lastItem().end )
-							: segments.lastItem().end;
+								? Reflect( lastCubicCurve.SecondCtrlPoint, segments.LastItem().End )
+							: segments.LastItem().End;
 
-						var secondControlPoint = toAbsolute( coords[index], coords[index + 1], segments, isRelative );
-						var end = toAbsolute( coords[index + 2], coords[index + 3], segments, isRelative );
-						segments.Add( new SvgCubicCurveSegment( segments.lastItem().end, firstControlPoint, secondControlPoint, end ) );
+						var secondControlPoint = ToAbsolute( coords[index], coords[index + 1], segments, isRelative );
+						var end = ToAbsolute( coords[index + 2], coords[index + 3], segments, isRelative );
+						segments.Add( new SvgCubicCurveSegment( segments.LastItem().End, firstControlPoint, secondControlPoint, end ) );
 						index += 4;
 					}
 				}
@@ -199,9 +199,9 @@ namespace Nez.Svg
 		/// <param name="y">The y coordinate.</param>
 		/// <param name="segments">Segments.</param>
 		/// <param name="areBothRelative">If set to <c>true</c> is relative both.</param>
-		static Vector2 toAbsolute( float x, float y, List<SvgPathSegment> segments, bool areBothRelative )
+		static Vector2 ToAbsolute( float x, float y, List<SvgPathSegment> segments, bool areBothRelative )
 		{
-			return toAbsolute( x, y, segments, areBothRelative, areBothRelative );
+			return ToAbsolute( x, y, segments, areBothRelative, areBothRelative );
 		}
 
 
@@ -214,30 +214,30 @@ namespace Nez.Svg
 		/// <param name="isRelativeX"><b>true</b> if <paramref name="x"/> contains relative coordinate value, otherwise <b>false</b>.</param>
 		/// <param name="isRelativeY"><b>true</b> if <paramref name="y"/> contains relative coordinate value, otherwise <b>false</b>.</param>
 		/// <returns><see cref="Vector2"/> that contains absolute coordinates.</returns>
-		static Vector2 toAbsolute( float x, float y, List<SvgPathSegment> segments, bool isRelativeX, bool isRelativeY )
+		static Vector2 ToAbsolute( float x, float y, List<SvgPathSegment> segments, bool isRelativeX, bool isRelativeY )
 		{
 			var point = new Vector2( x, y );
 
 			if( ( isRelativeX || isRelativeY ) && segments.Count > 0 )
 			{
-				var lastSegment = segments.lastItem();
+				var lastSegment = segments.LastItem();
 
 				// if the last element is a SvgClosePathSegment the position of the previous element should be used because the position of SvgClosePathSegment is 0,0
 				if( lastSegment is SvgClosePathSegment )
 					lastSegment = ( (IList<SvgPathSegment>)segments ).Reverse().OfType<SvgMoveToSegment>().First();
 
 				if( isRelativeX )
-					point.X += lastSegment.end.X;
+					point.X += lastSegment.End.X;
 
 				if( isRelativeY )
-					point.Y += lastSegment.end.Y;
+					point.Y += lastSegment.End.Y;
 			}
 
 			return point;
 		}
 
 
-		static Vector2 reflect( Vector2 point, Vector2 mirror )
+		static Vector2 Reflect( Vector2 point, Vector2 mirror )
 		{
 			float x, y, dx, dy;
 			dx = System.Math.Abs( mirror.X - point.X );
@@ -257,7 +257,7 @@ namespace Nez.Svg
 		}
 
 
-		static IEnumerable<string> splitCommands( string path )
+		static IEnumerable<string> SplitCommands( string path )
 		{
 			var commandStart = 0;
 

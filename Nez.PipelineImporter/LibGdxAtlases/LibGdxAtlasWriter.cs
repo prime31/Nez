@@ -11,63 +11,63 @@ namespace Nez.LibGdxAtlases
 	{
 		protected override void Write( ContentWriter writer, LibGdxAtlasProcessorResult result )
 		{
-			var data = result.data;
+			var data = result.Data;
 
-			LibGdxAtlasProcessor.logger.LogMessage( "Writing {0} pages", data.pages.Count );
-			writer.Write( data.pages.Count );
-			foreach( var page in data.pages )
+			LibGdxAtlasProcessor.Logger.LogMessage( "Writing {0} pages", data.Pages.Count );
+			writer.Write( data.Pages.Count );
+			foreach( var page in data.Pages )
 			{
-				LibGdxAtlasProcessor.logger.LogMessage( "Writing page: {0}", page.textureFile );
-				writer.Write( Path.GetFileNameWithoutExtension( page.textureFile ) );
+				LibGdxAtlasProcessor.Logger.LogMessage( "Writing page: {0}", page.TextureFile );
+				writer.Write( Path.GetFileNameWithoutExtension( page.TextureFile ) );
 				int count = 0;
-				foreach( var region in data.regions )
+				foreach( var region in data.Regions )
 				{
-					if( region.page == page.textureFile )
+					if( region.Page == page.TextureFile )
 						count++;
 				}
 
-				LibGdxAtlasProcessor.logger.LogMessage( "Writing {0} regions", count );
+				LibGdxAtlasProcessor.Logger.LogMessage( "Writing {0} regions", count );
 				writer.Write( count );
-				foreach( var region in data.regions )
+				foreach( var region in data.Regions )
 				{
-					if( region.page == page.textureFile )
+					if( region.Page == page.TextureFile )
 					{
-						LibGdxAtlasProcessor.logger.LogMessage( "Writing region: {0} {1}", region.name, region.index == -1 ? string.Empty : $"(index {region.index})" );
-						writer.Write( region.name );
-						writer.Write( region.sourceRectangle.x );
-						writer.Write( region.sourceRectangle.y );
-						writer.Write( region.sourceRectangle.w );
-						writer.Write( region.sourceRectangle.h );
+						LibGdxAtlasProcessor.Logger.LogMessage( "Writing region: {0} {1}", region.Name, region.Index == -1 ? string.Empty : $"(index {region.Index})" );
+						writer.Write( region.Name );
+						writer.Write( region.SourceRectangle.X );
+						writer.Write( region.SourceRectangle.Y );
+						writer.Write( region.SourceRectangle.W );
+						writer.Write( region.SourceRectangle.H );
 
-						if( region.splits == null )
+						if( region.Splits == null )
 						{
 							writer.Write( false );
 						}
 						else
 						{
 							writer.Write( true );
-							writer.Write( region.splits[0] );
-							writer.Write( region.splits[1] );
-							writer.Write( region.splits[2] );
-							writer.Write( region.splits[3] );
-							LibGdxAtlasProcessor.logger.LogMessage( "Writing splits for region: {0}", region.name );
+							writer.Write( region.Splits[0] );
+							writer.Write( region.Splits[1] );
+							writer.Write( region.Splits[2] );
+							writer.Write( region.Splits[3] );
+							LibGdxAtlasProcessor.Logger.LogMessage( "Writing splits for region: {0}", region.Name );
 						}
 
-						if( region.pads == null )
+						if( region.Pads == null )
 						{
 							writer.Write( false );
 						}
 						else
 						{
 							writer.Write( true );
-							writer.Write( region.pads[0] );
-							writer.Write( region.pads[1] );
-							writer.Write( region.pads[2] );
-							writer.Write( region.pads[3] );
-							LibGdxAtlasProcessor.logger.LogMessage( "Writing pads for region: {0}", region.name );
+							writer.Write( region.Pads[0] );
+							writer.Write( region.Pads[1] );
+							writer.Write( region.Pads[2] );
+							writer.Write( region.Pads[3] );
+							LibGdxAtlasProcessor.Logger.LogMessage( "Writing pads for region: {0}", region.Name );
 						}
 
-						writer.Write( region.index );
+						writer.Write( region.Index );
 					}
 				}
 			}

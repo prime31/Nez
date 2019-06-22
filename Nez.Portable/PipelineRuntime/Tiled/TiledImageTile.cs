@@ -5,14 +5,14 @@ namespace Nez.Tiled
 {
 	public class TiledImageTile : TiledTile
 	{
-		public new TiledTilesetTile tilesetTile;
-		public string imageSource;
+		public new TiledTilesetTile TilesetTile;
+		public string ImageSource;
 
 
 		public TiledImageTile( int id, TiledTilesetTile tilesetTile, string imageSource ) : base( id )
 		{
-			this.tilesetTile = tilesetTile;
-			this.imageSource = imageSource;
+			this.TilesetTile = tilesetTile;
+			this.ImageSource = imageSource;
 		}
 	}
 }

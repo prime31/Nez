@@ -13,7 +13,7 @@ namespace Nez.Svg
 		{
 			_shearX = shearX;
 			_shearY = shearY;
-			Debug.warn( "SvgSkew shear is not implemented" );
+			Debug.Warn( "SvgSkew shear is not implemented" );
 		}
 
 

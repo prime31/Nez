@@ -11,26 +11,26 @@ namespace Nez.AI.BehaviorTrees
 		/// <summary>
 		/// text to log
 		/// </summary>
-		public string text;
+		public string Text;
 
 		/// <summary>
 		/// is this text an error
 		/// </summary>
-		public bool isError;
+		public bool IsError;
 
 
 		public LogAction( string text )
 		{
-			this.text = text;
+			this.Text = text;
 		}
 
 
-		public override TaskStatus update( T context )
+		public override TaskStatus Update( T context )
 		{
-			if( isError )
-				Debug.error( text );
+			if( IsError )
+				Debug.Error( Text );
 			else
-				Debug.log( text );
+				Debug.Log( Text );
 
 			return TaskStatus.Success;
 		}

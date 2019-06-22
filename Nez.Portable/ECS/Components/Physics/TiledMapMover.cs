@@ -33,29 +33,29 @@ namespace Nez.Tiled
 		/// </summary>
 		public class CollisionState
 		{
-			public bool right, left, above, below;
-			public bool becameGroundedThisFrame;
-			public bool wasGroundedLastFrame;
-			public bool isGroundedOnOneWayPlatform;
-			public float slopeAngle;
+			public bool Right, Left, Above, Below;
+			public bool BecameGroundedThisFrame;
+			public bool WasGroundedLastFrame;
+			public bool IsGroundedOnOneWayPlatform;
+			public float SlopeAngle;
 
-			public bool hasCollision { get { return below || right || left || above; } }
+			public bool HasCollision { get { return Below || Right || Left || Above; } }
 
 			// state used by the TiledMapMover
 			internal SubpixelFloat _movementRemainderX, _movementRemainderY;
 			internal TiledTile _lastGroundTile;
 
 
-			public void clearLastGroundTile()
+			public void ClearLastGroundTile()
 			{
 				_lastGroundTile = null;
 			}
 
 
-			public void reset()
+			public void Reset()
 			{
-				becameGroundedThisFrame = isGroundedOnOneWayPlatform = right = left = above = below = false;
-				slopeAngle = 0f;
+				BecameGroundedThisFrame = IsGroundedOnOneWayPlatform = Right = Left = Above = Below = false;
+				SlopeAngle = 0f;
 			}
 
 
@@ -63,26 +63,26 @@ namespace Nez.Tiled
 			/// resets collision state and does sub-pixel movement calculations
 			/// </summary>
 			/// <param name="motion">Motion.</param>
-			public void reset( ref Vector2 motion )
+			public void Reset( ref Vector2 motion )
 			{
 				if( motion.X == 0 )
-					right = left = false;
+					Right = Left = false;
 
 				if( motion.Y == 0 )
-					above = below = false;
+					Above = Below = false;
 				
-				becameGroundedThisFrame = isGroundedOnOneWayPlatform = false;
-				slopeAngle = 0f;
+				BecameGroundedThisFrame = IsGroundedOnOneWayPlatform = false;
+				SlopeAngle = 0f;
 
 				// deal with subpixel movement, storing off any non-integar remainder for the next frame
-				_movementRemainderX.update( ref motion.X );
-				_movementRemainderY.update( ref motion.Y );
+				_movementRemainderX.Update( ref motion.X );
+				_movementRemainderY.Update( ref motion.Y );
 
 				// due to subpixel movement we might end up with 0 gravity when we really want there to be at least 1 pixel so slopes can work
-				if( below && motion.Y == 0 && _movementRemainderY.remainder > 0 )
+				if( Below && motion.Y == 0 && _movementRemainderY.Remainder > 0 )
 				{
 					motion.Y = 1;
-					_movementRemainderY.reset();
+					_movementRemainderY.Reset();
 				}
 			}
 
@@ -90,7 +90,7 @@ namespace Nez.Tiled
 			public override string ToString()
 			{
 				return string.Format( "[CollisionState] r: {0}, l: {1}, a: {2}, b: {3}, angle: {4}, wasGroundedLastFrame: {5}, becameGroundedThisFrame: {6}",
-					right, left, above, below, slopeAngle, wasGroundedLastFrame, becameGroundedThisFrame );
+					Right, Left, Above, Below, SlopeAngle, WasGroundedLastFrame, BecameGroundedThisFrame );
 			}
 
 		}
@@ -98,22 +98,22 @@ namespace Nez.Tiled
 		/// <summary>
 		/// the inset on the horizontal plane that the BoxCollider will be shrunk by when moving vertically
 		/// </summary>
-		public int colliderHorizontalInset = 2;
+		public int ColliderHorizontalInset = 2;
 
 		/// <summary>
 		/// the inset on the vertical plane that the BoxCollider will be shrunk by when moving horizontally
 		/// </summary>
-		public int colliderVerticalInset = 6;
+		public int ColliderVerticalInset = 6;
 
 		/// <summary>
 		/// the TiledTileLayer used for collision checks
 		/// </summary>
-		public readonly TiledTileLayer collisionLayer;
+		public readonly TiledTileLayer CollisionLayer;
 
 		/// <summary>
 		/// the TiledMap that contains collisionLayer
 		/// </summary>
-		public readonly TiledMap tiledMap;
+		public readonly TiledMap TiledMap;
 
 		/// <summary>
 		/// temporary storage for all the tiles that intersect the bounds being checked
@@ -131,9 +131,9 @@ namespace Nez.Tiled
 
 		public TiledMapMover( TiledTileLayer collisionLayer )
 		{
-			Insist.isNotNull( collisionLayer, nameof( collisionLayer ) + " is required" );
-			this.collisionLayer = collisionLayer;
-			tiledMap = collisionLayer.tiledMap;
+			Insist.IsNotNull( collisionLayer, nameof( collisionLayer ) + " is required" );
+			this.CollisionLayer = collisionLayer;
+			TiledMap = collisionLayer.TiledMap;
 		}
 
 		/// <summary>
@@ -141,28 +141,28 @@ namespace Nez.Tiled
 		/// </summary>
 		/// <param name="motion">Motion.</param>
 		/// <param name="boxCollider">Box collider.</param>
-		public void move( Vector2 motion, BoxCollider boxCollider, CollisionState collisionState )
+		public void Move( Vector2 motion, BoxCollider boxCollider, CollisionState collisionState )
 		{
-			if( tiledMap == null )
+			if( TiledMap == null )
 				return;
 
 			// test for collisions then move the Entity
-			testCollisions( ref motion, boxCollider.bounds, collisionState );
+			TestCollisions( ref motion, boxCollider.Bounds, collisionState );
 
-			boxCollider.unregisterColliderWithPhysicsSystem();
-			boxCollider.entity.transform.position += motion;
-			boxCollider.registerColliderWithPhysicsSystem();
+			boxCollider.UnregisterColliderWithPhysicsSystem();
+			boxCollider.Entity.Transform.Position += motion;
+			boxCollider.RegisterColliderWithPhysicsSystem();
 		}
 
-		public void testCollisions( ref Vector2 motion, Rectangle boxColliderBounds, CollisionState collisionState )
+		public void TestCollisions( ref Vector2 motion, Rectangle boxColliderBounds, CollisionState collisionState )
 		{
 			_boxColliderBounds = boxColliderBounds;
 
 			// save off our current grounded state which we will use for wasGroundedLastFrame and becameGroundedThisFrame
-			collisionState.wasGroundedLastFrame = collisionState.below;
+			collisionState.WasGroundedLastFrame = collisionState.Below;
 
 			// reset our collisions state
-			collisionState.reset( ref motion );
+			collisionState.Reset( ref motion );
 
 			// reset rounded motion for us while dealing with subpixel movement so fetch the rounded values to use for our actual detection
 			var motionX = (int)motion.X;
@@ -172,46 +172,46 @@ namespace Nez.Tiled
 			if( motionX != 0 )
 			{
 				var direction = motionX > 0 ? Edge.Right : Edge.Left;
-				var sweptBounds = collisionRectForSide( direction, motionX );
+				var sweptBounds = CollisionRectForSide( direction, motionX );
 
 				int collisionResponse;
-				if( testMapCollision( sweptBounds, direction, collisionState, out collisionResponse ) )
+				if( TestMapCollision( sweptBounds, direction, collisionState, out collisionResponse ) )
 				{
 					// react to collision. get the distance between our leading edge and what we collided with
-					motion.X = collisionResponse - boxColliderBounds.getSide( direction );
-					collisionState.left = direction == Edge.Left;
-					collisionState.right = direction == Edge.Right;
-					collisionState._movementRemainderX.reset();
+					motion.X = collisionResponse - boxColliderBounds.GetSide( direction );
+					collisionState.Left = direction == Edge.Left;
+					collisionState.Right = direction == Edge.Right;
+					collisionState._movementRemainderX.Reset();
 				}
 				else
 				{
-					collisionState.left = false;
-					collisionState.right = false;
+					collisionState.Left = false;
+					collisionState.Right = false;
 				}
 			}
 
 			// next, check movement in the vertical dir
 			{
 				var direction = motionY >= 0 ? Edge.Bottom : Edge.Top;
-				var sweptBounds = collisionRectForSide( direction, motionY );
+				var sweptBounds = CollisionRectForSide( direction, motionY );
 				sweptBounds.X += (int)motion.X;
 
 				int collisionResponse;
-				if( testMapCollision( sweptBounds, direction, collisionState, out collisionResponse ) )
+				if( TestMapCollision( sweptBounds, direction, collisionState, out collisionResponse ) )
 				{
 					// react to collision. get the distance between our leading edge and what we collided with
-					motion.Y = collisionResponse - boxColliderBounds.getSide( direction );
-					collisionState.above = direction == Edge.Top;
-					collisionState.below = direction == Edge.Bottom;
-					collisionState._movementRemainderY.reset();
+					motion.Y = collisionResponse - boxColliderBounds.GetSide( direction );
+					collisionState.Above = direction == Edge.Top;
+					collisionState.Below = direction == Edge.Bottom;
+					collisionState._movementRemainderY.Reset();
 
-					if( collisionState.below && collisionState._lastGroundTile != null && collisionState._lastGroundTile.isSlope() )
-						collisionState.slopeAngle = MathHelper.ToDegrees( (float)Math.Atan( collisionState._lastGroundTile.getSlope() ) );
+					if( collisionState.Below && collisionState._lastGroundTile != null && collisionState._lastGroundTile.IsSlope() )
+						collisionState.SlopeAngle = MathHelper.ToDegrees( (float)Math.Atan( collisionState._lastGroundTile.GetSlope() ) );
 				}
 				else
 				{
-					collisionState.above = false;
-					collisionState.below = false;
+					collisionState.Above = false;
+					collisionState.Below = false;
 					collisionState._lastGroundTile = null;
 				}
 
@@ -220,37 +220,37 @@ namespace Nez.Tiled
 				// a jump is made but misses by the colliderVerticalInset
 				if( direction == Edge.Bottom )
 				{
-					direction = direction.oppositeEdge();
-					sweptBounds = collisionRectForSide( direction, 0 );
+					direction = direction.OppositeEdge();
+					sweptBounds = CollisionRectForSide( direction, 0 );
 					sweptBounds.X += (int)motion.X;
 					sweptBounds.Y += (int)motion.Y;
 
-					if( testMapCollision( sweptBounds, direction, collisionState, out collisionResponse ) )
+					if( TestMapCollision( sweptBounds, direction, collisionState, out collisionResponse ) )
 					{
 						// react to collision. get the distance between our leading edge and what we collided with
-						motion.Y = collisionResponse - boxColliderBounds.getSide( direction );
+						motion.Y = collisionResponse - boxColliderBounds.GetSide( direction );
 						// if we collide here this is an overlap of a slope above us. this small bump down will prevent hitches when hitting
 						// our head on a slope that connects to a solid tile. It puts us below the slope when the normal response would put us
 						// above it
 						motion.Y += 2;
-						collisionState.above = true;
+						collisionState.Above = true;
 					}
 				}
 			}
 
 			// set our becameGrounded state based on the previous and current collision state
-			if( !collisionState.wasGroundedLastFrame && collisionState.below )
-				collisionState.becameGroundedThisFrame = true;
+			if( !collisionState.WasGroundedLastFrame && collisionState.Below )
+				collisionState.BecameGroundedThisFrame = true;
 		}
 
-		bool testMapCollision( Rectangle collisionRect, Edge direction, CollisionState collisionState, out int collisionResponse )
+		bool TestMapCollision( Rectangle collisionRect, Edge direction, CollisionState collisionState, out int collisionResponse )
 		{
 			collisionResponse = 0;
-			var side = direction.oppositeEdge();
-			var perpindicularPosition = side.isVertical() ? collisionRect.Center.X : collisionRect.Center.Y;
-			var leadingPosition = collisionRect.getSide( direction );
-			var shouldTestSlopes = side.isVertical();
-			populateCollidingTiles( collisionRect, direction );
+			var side = direction.OppositeEdge();
+			var perpindicularPosition = side.IsVertical() ? collisionRect.Center.X : collisionRect.Center.Y;
+			var leadingPosition = collisionRect.GetSide( direction );
+			var shouldTestSlopes = side.IsVertical();
+			PopulateCollidingTiles( collisionRect, direction );
 
 			for( var i = 0; i < _collidingTiles.Count; i++ )
 			{
@@ -259,16 +259,16 @@ namespace Nez.Tiled
 
 				// disregard horizontal collisions with tiles on the same row as a slope if the last tile we were grounded on was a slope.
 				// the y collision response will push us up on the slope.
-				if( direction.isHorizontal() && collisionState._lastGroundTile != null && collisionState._lastGroundTile.isSlope() && isSlopeCollisionRow(_collidingTiles[i].y) )
+				if( direction.IsHorizontal() && collisionState._lastGroundTile != null && collisionState._lastGroundTile.IsSlope() && IsSlopeCollisionRow(_collidingTiles[i].Y) )
 					continue;
 				
-				if( testTileCollision( _collidingTiles[i], side, perpindicularPosition, leadingPosition, shouldTestSlopes, out collisionResponse ) )
+				if( TestTileCollision( _collidingTiles[i], side, perpindicularPosition, leadingPosition, shouldTestSlopes, out collisionResponse ) )
 				{
 					// store off our last ground tile if we collided below
 					if( direction == Edge.Bottom )
 					{
 						collisionState._lastGroundTile = _collidingTiles[i];
-						collisionState.isGroundedOnOneWayPlatform = collisionState._lastGroundTile.isOneWayPlatform();
+						collisionState.IsGroundedOnOneWayPlatform = collisionState._lastGroundTile.IsOneWayPlatform();
 					}
 					
 					return true;
@@ -279,8 +279,8 @@ namespace Nez.Tiled
 				{
 					// if grounded on a slope and intersecting a slope or if grounded on a wall and intersecting a tall slope we go sticky.
 					// tall slope here means one where the the slopeTopLeft/Right is 0, i.e. it connects to a wall
-					var isHighSlopeNearest = _collidingTiles[i].isSlope() && _collidingTiles[i].getNearestEdge( perpindicularPosition ) == _collidingTiles[i].getHighestSlopeEdge();
-					if( ( collisionState._lastGroundTile.isSlope() && _collidingTiles[i].isSlope() ) || ( !collisionState._lastGroundTile.isSlope() && isHighSlopeNearest ) )
+					var isHighSlopeNearest = _collidingTiles[i].IsSlope() && _collidingTiles[i].GetNearestEdge( perpindicularPosition ) == _collidingTiles[i].GetHighestSlopeEdge();
+					if( ( collisionState._lastGroundTile.IsSlope() && _collidingTiles[i].IsSlope() ) || ( !collisionState._lastGroundTile.IsSlope() && isHighSlopeNearest ) )
 					{
 						// store off our last ground tile if we collided below
 						collisionState._lastGroundTile = _collidingTiles[i];
@@ -297,11 +297,11 @@ namespace Nez.Tiled
 		/// </summary>
 		/// <returns>Whether collision is occurring with a slope on a given row</returns>
 		/// <param name="rowY">the row to check</param>
-		bool isSlopeCollisionRow( int rowY )
+		bool IsSlopeCollisionRow( int rowY )
 		{
 			for( var i = 0; i < _collidingTiles.Count; i++ )
 			{
-				if( _collidingTiles[i] != null && _collidingTiles[i].isSlope() && _collidingTiles[i].y == rowY )
+				if( _collidingTiles[i] != null && _collidingTiles[i].IsSlope() && _collidingTiles[i].Y == rowY )
 					return true;
 			}
 			return false;
@@ -317,19 +317,19 @@ namespace Nez.Tiled
 		/// <param name="leadingPosition">Leading position.</param>
 		/// <param name="shouldTestSlopes">Should test slopes.</param>
 		/// <param name="collisionResponse">Collision response.</param>
-		bool testTileCollision( TiledTile tile, Edge edgeToTest, int perpindicularPosition, int leadingPosition, bool shouldTestSlopes, out int collisionResponse )
+		bool TestTileCollision( TiledTile tile, Edge edgeToTest, int perpindicularPosition, int leadingPosition, bool shouldTestSlopes, out int collisionResponse )
 		{
 			collisionResponse = leadingPosition;
 
 			// one way platforms are only collideable from the top when the player is already above them
-			if( tile.isOneWayPlatform() )
+			if( tile.IsOneWayPlatform() )
 			{
 				// only the top edge of one way platforms are checked for collisions
 				if( edgeToTest != Edge.Top )
 					return false;
 
 				// our response should be the top of the platform
-				collisionResponse = tiledMap.tileToWorldPositionX( tile.y );
+				collisionResponse = TiledMap.TileToWorldPositionX( tile.Y );
 				return _boxColliderBounds.Bottom <= collisionResponse;
 			}
 
@@ -338,13 +338,13 @@ namespace Nez.Tiled
 			// when moving horizontally the only time a slope is considered for collision testing is when its closest side is the tallest side
 			// and we were not intesecting the tile before moving.
 			// this prevents clipping through a tile when hitting its edge: -> |\
-			if( edgeToTest.isHorizontal() && tile.isSlope() && tile.getNearestEdge( leadingPosition ) == tile.getHighestSlopeEdge() )
+			if( edgeToTest.IsHorizontal() && tile.IsSlope() && tile.GetNearestEdge( leadingPosition ) == tile.GetHighestSlopeEdge() )
 			{
-				var moveDir = edgeToTest.oppositeEdge();
-				var leadingPositionPreMovement = _boxColliderBounds.getSide( moveDir );
+				var moveDir = edgeToTest.OppositeEdge();
+				var leadingPositionPreMovement = _boxColliderBounds.GetSide( moveDir );
 
 				// we need the tile x position that is on the opposite side of our move direction. Moving right we want the left edge
-				var tileX = moveDir == Edge.Right ? tiledMap.tileToWorldPositionX( tile.x ) : tiledMap.tileToWorldPositionX( tile.x + 1 );
+				var tileX = moveDir == Edge.Right ? TiledMap.TileToWorldPositionX( tile.X ) : TiledMap.TileToWorldPositionX( tile.X + 1 );
 
 				// using the edge before movement, we see if we were colliding before moving.
 				var wasCollidingBeforeMove = moveDir == Edge.Right ? leadingPositionPreMovement > tileX : leadingPositionPreMovement < tileX;
@@ -354,21 +354,21 @@ namespace Nez.Tiled
 			}
 
 
-			if( forceSlopedTileCheckAsWall || !tile.isSlope() )
+			if( forceSlopedTileCheckAsWall || !tile.IsSlope() )
 			{				
 				switch( edgeToTest )
 				{
 					case Edge.Top:
-						collisionResponse = tiledMap.tileToWorldPositionY( tile.y );
+						collisionResponse = TiledMap.TileToWorldPositionY( tile.Y );
 						break;
 					case Edge.Bottom:
-						collisionResponse = tiledMap.tileToWorldPositionY( tile.y + 1 );
+						collisionResponse = TiledMap.TileToWorldPositionY( tile.Y + 1 );
 						break;
 					case Edge.Left:
-						collisionResponse = tiledMap.tileToWorldPositionX( tile.x );
+						collisionResponse = TiledMap.TileToWorldPositionX( tile.X );
 						break;
 					case Edge.Right:
-						collisionResponse = tiledMap.tileToWorldPositionX( tile.x + 1 );
+						collisionResponse = TiledMap.TileToWorldPositionX( tile.X + 1 );
 						break;
 				}
 
@@ -377,14 +377,14 @@ namespace Nez.Tiled
 
 			if( shouldTestSlopes )
 			{
-				var tileWorldX = tiledMap.tileToWorldPositionX( tile.x );
-				var tileWorldY = tiledMap.tileToWorldPositionX( tile.y );
-				var slope = tile.getSlope();
-				var offset = tile.getSlopeOffset();
+				var tileWorldX = TiledMap.TileToWorldPositionX( tile.X );
+				var tileWorldY = TiledMap.TileToWorldPositionX( tile.Y );
+				var slope = tile.GetSlope();
+				var offset = tile.GetSlopeOffset();
 
 				// calculate the point on the slope at perpindicularPosition
-				collisionResponse = (int)( edgeToTest.isVertical() ? slope * ( perpindicularPosition - tileWorldX ) + offset + tileWorldY : ( perpindicularPosition - tileWorldY - offset ) / slope + tileWorldX );
-				var isColliding = edgeToTest.isMax() ? leadingPosition <= collisionResponse : leadingPosition >= collisionResponse;
+				collisionResponse = (int)( edgeToTest.IsVertical() ? slope * ( perpindicularPosition - tileWorldX ) + offset + tileWorldY : ( perpindicularPosition - tileWorldY - offset ) / slope + tileWorldX );
+				var isColliding = edgeToTest.IsMax() ? leadingPosition <= collisionResponse : leadingPosition >= collisionResponse;
 
 				// this code ensures that we dont consider collisions on a slope while jumping up that dont intersect our collider.
 				// It also makes sure when testing the bottom edge that the leadingPosition is actually above the collisionResponse.
@@ -405,21 +405,21 @@ namespace Nez.Tiled
 		/// <returns>The colliding tiles.</returns>
 		/// <param name="bounds">Bounds.</param>
 		/// <param name="direction">Direction.</param>
-		void populateCollidingTiles( Rectangle bounds, Edge direction )
+		void PopulateCollidingTiles( Rectangle bounds, Edge direction )
 		{
 			_collidingTiles.Clear();
-			var isHorizontal = direction.isHorizontal();
+			var isHorizontal = direction.IsHorizontal();
 			var primaryAxis = isHorizontal ? Axis.X : Axis.Y;
 			var oppositeAxis = primaryAxis == Axis.X ? Axis.Y : Axis.X;
 
-			var oppositeDirection = direction.oppositeEdge();
-			var firstPrimary = worldToTilePosition( bounds.getSide( oppositeDirection ), primaryAxis );
-			var lastPrimary = worldToTilePosition( bounds.getSide( direction ), primaryAxis );
-			var primaryIncr = direction.isMax() ? 1 : -1;
+			var oppositeDirection = direction.OppositeEdge();
+			var firstPrimary = WorldToTilePosition( bounds.GetSide( oppositeDirection ), primaryAxis );
+			var lastPrimary = WorldToTilePosition( bounds.GetSide( direction ), primaryAxis );
+			var primaryIncr = direction.IsMax() ? 1 : -1;
 
-			var min = worldToTilePosition( isHorizontal ? bounds.Top : bounds.Left, oppositeAxis );
-			var mid = worldToTilePosition( isHorizontal ? bounds.getCenter().Y : bounds.getCenter().X, oppositeAxis );
-			var max = worldToTilePosition( isHorizontal ? bounds.Bottom : bounds.Right, oppositeAxis );
+			var min = WorldToTilePosition( isHorizontal ? bounds.Top : bounds.Left, oppositeAxis );
+			var mid = WorldToTilePosition( isHorizontal ? bounds.GetCenter().Y : bounds.GetCenter().X, oppositeAxis );
+			var max = WorldToTilePosition( isHorizontal ? bounds.Bottom : bounds.Right, oppositeAxis );
 
 			var isPositive = mid - min < max - mid;
 			var secondaryIncr = isPositive ? 1 : -1;
@@ -432,7 +432,7 @@ namespace Nez.Tiled
 				{
 					var col = isHorizontal ? primary : secondary;
 					var row = !isHorizontal ? primary : secondary;
-					_collidingTiles.Add( collisionLayer.getTile( col, row ) );
+					_collidingTiles.Add( CollisionLayer.GetTile( col, row ) );
 
 					#if DEBUG_MOVER
 					if( direction.isHorizontal() )
@@ -451,11 +451,11 @@ namespace Nez.Tiled
 		/// <returns>The to tile position.</returns>
 		/// <param name="worldPosition">World position.</param>
 		/// <param name="axis">Axis.</param>
-		int worldToTilePosition( float worldPosition, Axis axis )
+		int WorldToTilePosition( float worldPosition, Axis axis )
 		{
 			if( axis == Axis.Y )
-				return tiledMap.worldToTilePositionY( worldPosition );
-			return tiledMap.worldToTilePositionX( worldPosition );
+				return TiledMap.WorldToTilePositionY( worldPosition );
+			return TiledMap.WorldToTilePositionX( worldPosition );
 		}
 
 		/// <summary>
@@ -464,25 +464,25 @@ namespace Nez.Tiled
 		/// <returns>The rect for side.</returns>
 		/// <param name="side">Side.</param>
 		/// <param name="motion">Motion.</param>
-		Rectangle collisionRectForSide( Edge side, int motion )
+		Rectangle CollisionRectForSide( Edge side, int motion )
 		{
 			Rectangle bounds;
 
 			// for horizontal collision checks we use just a sliver for our bounds. Vertical gets the half rect so that it can properly push
 			// up when intersecting a slope which is ignored when moving horizontally.
-			if( side.isHorizontal() )
-				bounds = _boxColliderBounds.getRectEdgePortion( side );
+			if( side.IsHorizontal() )
+				bounds = _boxColliderBounds.GetRectEdgePortion( side );
 			else
-				bounds = _boxColliderBounds.getHalfRect( side );
+				bounds = _boxColliderBounds.GetHalfRect( side );
 
 			// we contract horizontally for vertical movement and vertically for horizontal movement
-			if( side.isVertical() )
-				RectangleExt.contract( ref bounds, colliderHorizontalInset, 0 );
+			if( side.IsVertical() )
+				RectangleExt.Contract( ref bounds, ColliderHorizontalInset, 0 );
 			else
-				RectangleExt.contract( ref bounds, 0, colliderVerticalInset );
+				RectangleExt.Contract( ref bounds, 0, ColliderVerticalInset );
 
 			// finally expand the side in the direction of movement
-			RectangleExt.expandSide( ref bounds, side, motion );
+			RectangleExt.ExpandSide( ref bounds, side, motion );
 
 			return bounds;
 		}

@@ -6,12 +6,12 @@ namespace Nez
 {
 	public class EntitySystem
 	{
-		public Matcher matcher
+		public Matcher Matcher
 		{
 			get { return _matcher; }
 		}
 
-		public Scene scene
+		public Scene Scene
 		{
 			get { return _scene; }
 			set
@@ -28,7 +28,7 @@ namespace Nez
 
 		public EntitySystem()
 		{
-			_matcher = Matcher.empty();
+			_matcher = Matcher.Empty();
 		}
 
 
@@ -38,67 +38,67 @@ namespace Nez
 		}
 
 
-		public virtual void onChange( Entity entity )
+		public virtual void OnChange( Entity entity )
 		{
 			var contains = _entities.Contains( entity );
-			var interest = _matcher.isInterested( entity );
+			var interest = _matcher.IsInterested( entity );
 
 			if( interest && !contains )
-				add( entity );
+				Add( entity );
 			else if( !interest && contains )
-				remove( entity );
+				Remove( entity );
 		}
 
 
-		public virtual void add( Entity entity )
+		public virtual void Add( Entity entity )
 		{
 			_entities.Add( entity );
-			onAdded( entity );
+			OnAdded( entity );
 		}
 
 
-		public virtual void remove( Entity entity )
+		public virtual void Remove( Entity entity )
 		{
 			_entities.Remove( entity );
-			onRemoved( entity );
+			OnRemoved( entity );
 		}
 
 
-		public virtual void onAdded( Entity entity )
+		public virtual void OnAdded( Entity entity )
 		{}
 
 
-		public virtual void onRemoved( Entity entity )
+		public virtual void OnRemoved( Entity entity )
 		{}
 
 
-		protected virtual void process( List<Entity> entities )
+		protected virtual void Process( List<Entity> entities )
 		{}
 
 
-        protected virtual void lateProcess( List<Entity> entities )
+        protected virtual void LateProcess( List<Entity> entities )
         {}
 
 
-        protected virtual void begin()
+        protected virtual void Begin()
 		{}
 
 
-		public void update()
+		public void Update()
 		{
-			begin();
-			process( _entities );
+			Begin();
+			Process( _entities );
 		}
 
 
-        public void lateUpdate()
+        public void LateUpdate()
         {
-            lateProcess( _entities );
-            end();
+            LateProcess( _entities );
+            End();
         }
 
 
-        protected virtual void end()
+        protected virtual void End()
 		{}
 
 	}

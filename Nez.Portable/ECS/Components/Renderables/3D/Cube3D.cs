@@ -34,21 +34,21 @@ namespace Nez
 				var side1 = new Vector3( normal.Y, normal.Z, normal.X );
 				var side2 = Vector3.Cross( normal, side1 );
 
-				addIndex( _vertices.Count + 0 );
-				addIndex( _vertices.Count + 1 );
-				addIndex( _vertices.Count + 2 );
+				AddIndex( _vertices.Count + 0 );
+				AddIndex( _vertices.Count + 1 );
+				AddIndex( _vertices.Count + 2 );
 
-				addIndex( _vertices.Count + 0 );
-				addIndex( _vertices.Count + 2 );
-               	addIndex( _vertices.Count + 3 );
+				AddIndex( _vertices.Count + 0 );
+				AddIndex( _vertices.Count + 2 );
+               	AddIndex( _vertices.Count + 3 );
 
-				addVertex( ( normal - side1 - side2 ) / 2, vertColor, normal );
-				addVertex( ( normal - side1 + side2 ) / 2, vertColor, normal );
-				addVertex( ( normal + side1 + side2 ) / 2, vertColor, normal );
-				addVertex( ( normal + side1 - side2 ) / 2, vertColor, normal );
+				AddVertex( ( normal - side1 - side2 ) / 2, vertColor, normal );
+				AddVertex( ( normal - side1 + side2 ) / 2, vertColor, normal );
+				AddVertex( ( normal + side1 + side2 ) / 2, vertColor, normal );
+				AddVertex( ( normal + side1 - side2 ) / 2, vertColor, normal );
 			}
 
-			initializePrimitive();
+			InitializePrimitive();
 		}
 	}
 }

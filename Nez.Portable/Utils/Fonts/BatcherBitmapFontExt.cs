@@ -21,10 +21,10 @@ namespace Nez
 		/// <param name="text">The text which will be drawn.</param>
 		/// <param name="position">The drawing location on screen.</param>
 		/// <param name="color">A color mask.</param>
-		public static void drawString( this Batcher batcher, BitmapFont bitmapFont, string text, Vector2 position, Color color )
+		public static void DrawString( this Batcher batcher, BitmapFont bitmapFont, string text, Vector2 position, Color color )
 		{
 			var source = new FontCharacterSource( text );
-			bitmapFont.drawInto( batcher, ref source, position, color, 0, Vector2.Zero, Vector2.One, SpriteEffects.None, 0f );
+			bitmapFont.DrawInto( batcher, ref source, position, color, 0, Vector2.Zero, Vector2.One, SpriteEffects.None, 0f );
 		}
 
 
@@ -40,12 +40,12 @@ namespace Nez
 		/// <param name="scale">A scaling of this string.</param>
 		/// <param name="effects">Modificators for drawing. Can be combined.</param>
 		/// <param name="layerDepth">A depth of the layer of this string.</param>
-		public static void drawString( this Batcher batcher, BitmapFont bitmapFont, string text, Vector2 position, Color color,
+		public static void DrawString( this Batcher batcher, BitmapFont bitmapFont, string text, Vector2 position, Color color,
 			float rotation, Vector2 origin, float scale, SpriteEffects effects, float layerDepth )
 		{
 			var scaleVec = new Vector2( scale, scale );
 			var source = new FontCharacterSource( text );
-			bitmapFont.drawInto( batcher, ref source, position, color, rotation, origin, scaleVec, effects, layerDepth );
+			bitmapFont.DrawInto( batcher, ref source, position, color, rotation, origin, scaleVec, effects, layerDepth );
 		}
 
 
@@ -61,11 +61,11 @@ namespace Nez
 		/// <param name="scale">A scaling of this string.</param>
 		/// <param name="effects">Modificators for drawing. Can be combined.</param>
 		/// <param name="layerDepth">A depth of the layer of this string.</param>
-		public static void drawString( this Batcher batcher, BitmapFont bitmapFont, string text, Vector2 position, Color color,
+		public static void DrawString( this Batcher batcher, BitmapFont bitmapFont, string text, Vector2 position, Color color,
 			float rotation, Vector2 origin, Vector2 scale, SpriteEffects effects, float layerDepth )
 		{
 			var source = new FontCharacterSource( text );
-			bitmapFont.drawInto( batcher, ref source, position, color, rotation, origin, scale, effects, layerDepth );
+			bitmapFont.DrawInto( batcher, ref source, position, color, rotation, origin, scale, effects, layerDepth );
 		}
 
 
@@ -76,10 +76,10 @@ namespace Nez
 		/// <param name="text">The text which will be drawn.</param>
 		/// <param name="position">The drawing location on screen.</param>
 		/// <param name="color">A color mask.</param>
-		public static void drawString( this Batcher batcher, BitmapFont bitmapFont, StringBuilder text, Vector2 position, Color color )
+		public static void DrawString( this Batcher batcher, BitmapFont bitmapFont, StringBuilder text, Vector2 position, Color color )
 		{
 			var source = new FontCharacterSource( text );
-			bitmapFont.drawInto( batcher, ref source, position, color, 0, Vector2.Zero, Vector2.One, SpriteEffects.None, 0f );
+			bitmapFont.DrawInto( batcher, ref source, position, color, 0, Vector2.Zero, Vector2.One, SpriteEffects.None, 0f );
 		}
 
 
@@ -95,13 +95,13 @@ namespace Nez
 		/// <param name="scale">A scaling of this string.</param>
 		/// <param name="effects">Modificators for drawing. Can be combined.</param>
 		/// <param name="layerDepth">A depth of the layer of this string.</param>
-		public static void drawString(
+		public static void DrawString(
 			this Batcher batcher, BitmapFont bitmapFont, StringBuilder text, Vector2 position, Color color,
 			float rotation, Vector2 origin, float scale, SpriteEffects effects, float layerDepth )
 		{
 			var scaleVec = new Vector2( scale, scale );
 			var source = new FontCharacterSource( text );
-			bitmapFont.drawInto( batcher, ref source, position, color, rotation, origin, scaleVec, effects, layerDepth );
+			bitmapFont.DrawInto( batcher, ref source, position, color, rotation, origin, scaleVec, effects, layerDepth );
 		}
 
 
@@ -117,12 +117,12 @@ namespace Nez
 		/// <param name="scale">A scaling of this string.</param>
 		/// <param name="effects">Modificators for drawing. Can be combined.</param>
 		/// <param name="layerDepth">A depth of the layer of this string.</param>
-		public static void drawString(
+		public static void DrawString(
 			this Batcher batcher, BitmapFont bitmapFont, StringBuilder text, Vector2 position, Color color,
 			float rotation, Vector2 origin, Vector2 scale, SpriteEffects effects, float layerDepth )
 		{
 			var source = new FontCharacterSource( text );
-			bitmapFont.drawInto( batcher, ref source, position, color, rotation, origin, scale, effects, layerDepth );
+			bitmapFont.DrawInto( batcher, ref source, position, color, rotation, origin, scale, effects, layerDepth );
 		}
 
 	}

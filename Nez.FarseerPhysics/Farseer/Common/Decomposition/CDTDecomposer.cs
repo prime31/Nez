@@ -36,9 +36,9 @@ namespace FarseerPhysics.Common.Decomposition
 			foreach( Vector2 vertex in vertices )
 				poly.Points.Add( new TriangulationPoint( vertex.X, vertex.Y ) );
 
-			if( vertices.holes != null )
+			if( vertices.Holes != null )
 			{
-				foreach( Vertices holeVertices in vertices.holes )
+				foreach( Vertices holeVertices in vertices.Holes )
 				{
 					var hole = new Polygon();
 
@@ -58,7 +58,7 @@ namespace FarseerPhysics.Common.Decomposition
 			foreach( DelaunayTriangle triangle in poly.Triangles )
 			{
 				Vertices v = new Vertices();
-				foreach( TriangulationPoint p in triangle.points )
+				foreach( TriangulationPoint p in triangle.Points )
 				{
 					v.Add( new Vector2( (float)p.X, (float)p.Y ) );
 				}

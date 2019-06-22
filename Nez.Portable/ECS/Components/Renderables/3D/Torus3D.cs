@@ -7,17 +7,17 @@ namespace Nez
 	public class Torus3D : GeometricPrimitive3D
 	{
 		[Range( 0.01f, 1f )]
-		public float thickness
+		public float Thickness
 		{
 			get => _thickness;
-			set => generateTorusGeometry( value, _tessellation, _color );
+			set => GenerateTorusGeometry( value, _tessellation, _color );
 		}
 
 		[Range( 5, 300 )]
-		public int tessellation
+		public int Tessellation
 		{
 			get => _tessellation;
-			set => generateTorusGeometry( _thickness, value, _color );
+			set => GenerateTorusGeometry( _thickness, value, _color );
 		}
 
 		float _thickness;
@@ -30,10 +30,10 @@ namespace Nez
 
 		public Torus3D( float thickness, int tessellation, Color color )
 		{
-			generateTorusGeometry( thickness, tessellation, color );
+			GenerateTorusGeometry( thickness, tessellation, color );
 		}
 
-		void generateTorusGeometry( float torusThickness, int torusTessellation, Color torusColor )
+		void GenerateTorusGeometry( float torusThickness, int torusTessellation, Color torusColor )
 		{
 			_thickness = torusThickness;
 			_tessellation = torusTessellation;
@@ -67,23 +67,23 @@ namespace Nez
 					pos = Vector3.Transform( pos, vertTransform );
 					normal = Vector3.TransformNormal( normal, vertTransform );
 
-					addVertex( pos, torusColor, normal );
+					AddVertex( pos, torusColor, normal );
 
 					// and create indices for two triangles. 
 					int nextI = ( i + 1 ) % torusTessellation;
 					int nextJ = ( j + 1 ) % torusTessellation;
 
-					addIndex( i * torusTessellation + j );
-					addIndex( i * torusTessellation + nextJ );
-					addIndex( nextI * torusTessellation + j );
+					AddIndex( i * torusTessellation + j );
+					AddIndex( i * torusTessellation + nextJ );
+					AddIndex( nextI * torusTessellation + j );
 
-					addIndex( i * torusTessellation + nextJ );
-					addIndex( nextI * torusTessellation + nextJ );
-					addIndex( nextI * torusTessellation + j );
+					AddIndex( i * torusTessellation + nextJ );
+					AddIndex( nextI * torusTessellation + nextJ );
+					AddIndex( nextI * torusTessellation + j );
 				}
 			}
 
-			initializePrimitive();
+			InitializePrimitive();
 		}
 	
 	}

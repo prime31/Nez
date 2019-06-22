@@ -13,16 +13,16 @@ namespace Nez.UI
 			var skinConfig = new UISkinConfig();
 
 			if( reader.ReadBoolean() )
-				skinConfig.colors = reader.ReadObject<Dictionary<string,Color>>();
+				skinConfig.Colors = reader.ReadObject<Dictionary<string,Color>>();
 
 			if( reader.ReadBoolean() )
-				skinConfig.textureAtlases = reader.ReadObject<string[]>();
+				skinConfig.TextureAtlases = reader.ReadObject<string[]>();
 
 			if( reader.ReadBoolean() )
-				skinConfig.libGdxAtlases = reader.ReadObject<string[]>();
+				skinConfig.LibGdxAtlases = reader.ReadObject<string[]>();
 
 			if( reader.ReadBoolean() )
-				skinConfig.styles = reader.ReadObject<UISkinStyleConfig>();
+				skinConfig.Styles = reader.ReadObject<UISkinStyleConfig>();
 
 			return skinConfig;
 		}

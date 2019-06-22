@@ -11,39 +11,39 @@ namespace Nez.BitmapFontImporter
 	public class BitmapFontInfo
 	{
 		[XmlAttribute( "face" )]
-		public string face;
+		public string Face;
 
 		[XmlAttribute( "size" )]
-		public int size;
+		public int Size;
 		
 		[XmlAttribute( "bold" )]
-		public int bold;
+		public int Bold;
 		
 		[XmlAttribute( "italic" )]
-		public int italic;
+		public int Italic;
 		
 		[XmlAttribute( "charset" )]
-		public string charSet;
+		public string CharSet;
 		
 		[XmlAttribute( "unicode" )]
-		public string unicode;
+		public string Unicode;
 		
 		[XmlAttribute( "stretchH" )]
-		public int stretchHeight;
+		public int StretchHeight;
 		
 		[XmlAttribute( "smooth" )]
-		public int smooth;
+		public int Smooth;
 
 		[XmlAttribute( "aa" )]
-		public int superSampling;
+		public int SuperSampling;
 
 		[XmlAttribute( "padding" )]
-		public string padding;
+		public string Padding;
 
 		[XmlAttribute( "spacing" )]
-		public string spacing;
+		public string Spacing;
 		
 		[XmlAttribute( "outline" )]
-		public int outLine;
+		public int OutLine;
 	}
 }

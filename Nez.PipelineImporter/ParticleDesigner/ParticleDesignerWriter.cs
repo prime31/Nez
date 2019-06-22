@@ -14,56 +14,56 @@ namespace Nez.ParticleDesignerImporter
 	{
 		protected override void Write( ContentWriter writer, ParticleDesignerProcessorResult value )
 		{
-			var emissionRate = value.particleEmitterConfig.maxParticles / value.particleEmitterConfig.particleLifeSpan;
+			var emissionRate = value.ParticleEmitterConfig.MaxParticles / value.ParticleEmitterConfig.ParticleLifeSpan;
 			if( float.IsInfinity( emissionRate ) )
 			{
-				ParticleDesignerProcessor.logger.LogMessage( "---- emissionRate (maxParticles / particleLifespace) is infinity. Resetting to 10000" );
+				ParticleDesignerProcessor.Logger.LogMessage( "---- emissionRate (maxParticles / particleLifespace) is infinity. Resetting to 10000" );
 				emissionRate = 10000;
 			}
 
 			// Write out all the members
-			writer.Write( (Vector2)value.particleEmitterConfig.sourcePosition );
-			writer.Write( (Vector2)value.particleEmitterConfig.sourcePositionVariance );
-			writer.Write( value.particleEmitterConfig.speed.value );
-			writer.Write( value.particleEmitterConfig.speedVariance.value );
-			writer.Write( value.particleEmitterConfig.particleLifeSpan.value );
-			writer.Write( value.particleEmitterConfig.particleLifespanVariance.value );
-			writer.Write( value.particleEmitterConfig.angle.value );
-			writer.Write( value.particleEmitterConfig.angleVariance.value );
-			writer.Write( (Vector2)value.particleEmitterConfig.gravity );
-			writer.Write( value.particleEmitterConfig.radialAcceleration.value );
-			writer.Write( value.particleEmitterConfig.radialAccelVariance.value );
-			writer.Write( value.particleEmitterConfig.tangentialAcceleration.value );
-			writer.Write( value.particleEmitterConfig.tangentialAccelVariance.value );
-			writer.Write( value.particleEmitterConfig.startColor );
-			writer.Write( value.particleEmitterConfig.startColorVariance );
-			writer.Write( value.particleEmitterConfig.finishColor );
-			writer.Write( value.particleEmitterConfig.finishColorVariance );
-			writer.Write( value.particleEmitterConfig.maxParticles.value );
-			writer.Write( value.particleEmitterConfig.startParticleSize.value );
-			writer.Write( value.particleEmitterConfig.startParticleSizeVariance.value );
-			writer.Write( value.particleEmitterConfig.finishParticleSize.value );
-			writer.Write( value.particleEmitterConfig.finishParticleSizeVariance.value );
-			writer.Write( value.particleEmitterConfig.duration.value );
-			writer.Write( value.particleEmitterConfig.emitterType.value );
+			writer.Write( (Vector2)value.ParticleEmitterConfig.SourcePosition );
+			writer.Write( (Vector2)value.ParticleEmitterConfig.SourcePositionVariance );
+			writer.Write( value.ParticleEmitterConfig.Speed.Value );
+			writer.Write( value.ParticleEmitterConfig.SpeedVariance.Value );
+			writer.Write( value.ParticleEmitterConfig.ParticleLifeSpan.Value );
+			writer.Write( value.ParticleEmitterConfig.ParticleLifespanVariance.Value );
+			writer.Write( value.ParticleEmitterConfig.Angle.Value );
+			writer.Write( value.ParticleEmitterConfig.AngleVariance.Value );
+			writer.Write( (Vector2)value.ParticleEmitterConfig.Gravity );
+			writer.Write( value.ParticleEmitterConfig.RadialAcceleration.Value );
+			writer.Write( value.ParticleEmitterConfig.RadialAccelVariance.Value );
+			writer.Write( value.ParticleEmitterConfig.TangentialAcceleration.Value );
+			writer.Write( value.ParticleEmitterConfig.TangentialAccelVariance.Value );
+			writer.Write( value.ParticleEmitterConfig.StartColor );
+			writer.Write( value.ParticleEmitterConfig.StartColorVariance );
+			writer.Write( value.ParticleEmitterConfig.FinishColor );
+			writer.Write( value.ParticleEmitterConfig.FinishColorVariance );
+			writer.Write( value.ParticleEmitterConfig.MaxParticles.Value );
+			writer.Write( value.ParticleEmitterConfig.StartParticleSize.Value );
+			writer.Write( value.ParticleEmitterConfig.StartParticleSizeVariance.Value );
+			writer.Write( value.ParticleEmitterConfig.FinishParticleSize.Value );
+			writer.Write( value.ParticleEmitterConfig.FinishParticleSizeVariance.Value );
+			writer.Write( value.ParticleEmitterConfig.Duration.Value );
+			writer.Write( value.ParticleEmitterConfig.EmitterType.Value );
 
-			writer.Write( value.particleEmitterConfig.maxRadius.value );
-			writer.Write( value.particleEmitterConfig.maxRadiusVariance.value );
-			writer.Write( value.particleEmitterConfig.minRadius.value );
-			writer.Write( value.particleEmitterConfig.minRadiusVariance.value );
-			writer.Write( value.particleEmitterConfig.rotatePerSecond.value );
-			writer.Write( value.particleEmitterConfig.rotatePerSecondVariance.value );
+			writer.Write( value.ParticleEmitterConfig.MaxRadius.Value );
+			writer.Write( value.ParticleEmitterConfig.MaxRadiusVariance.Value );
+			writer.Write( value.ParticleEmitterConfig.MinRadius.Value );
+			writer.Write( value.ParticleEmitterConfig.MinRadiusVariance.Value );
+			writer.Write( value.ParticleEmitterConfig.RotatePerSecond.Value );
+			writer.Write( value.ParticleEmitterConfig.RotatePerSecondVariance.Value );
 
-			writer.Write( value.particleEmitterConfig.rotationStart.value );
-			writer.Write( value.particleEmitterConfig.rotationStartVariance.value );
-			writer.Write( value.particleEmitterConfig.rotationEnd.value );
-			writer.Write( value.particleEmitterConfig.rotationEndVariance.value );
+			writer.Write( value.ParticleEmitterConfig.RotationStart.Value );
+			writer.Write( value.ParticleEmitterConfig.RotationStartVariance.Value );
+			writer.Write( value.ParticleEmitterConfig.RotationEnd.Value );
+			writer.Write( value.ParticleEmitterConfig.RotationEndVariance.Value );
 			writer.Write( emissionRate );
-			writer.Write( (int)blendForParticleDesignerInt( value.particleEmitterConfig.blendFuncSource ) );
-			writer.Write( (int)blendForParticleDesignerInt( value.particleEmitterConfig.blendFuncDestination ) );
+			writer.Write( (int)BlendForParticleDesignerInt( value.ParticleEmitterConfig.BlendFuncSource ) );
+			writer.Write( (int)BlendForParticleDesignerInt( value.ParticleEmitterConfig.BlendFuncDestination ) );
 
 			// use raw tiff data for now
-			writer.WriteObject( value.texture );
+			writer.WriteObject( value.Texture );
 
 			#if USE_RAW_TIFFS
 			if( value.textureTiffData != null )
@@ -79,7 +79,7 @@ namespace Nez.ParticleDesignerImporter
 		}
 
 
-		Blend blendForParticleDesignerInt( int value )
+		Blend BlendForParticleDesignerInt( int value )
 		{
 			switch( value )
 			{

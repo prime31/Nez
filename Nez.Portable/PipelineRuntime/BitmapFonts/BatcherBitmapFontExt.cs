@@ -22,7 +22,7 @@ namespace Nez.BitmapFonts
 		public static void DrawString(this Batcher batcher, BitmapFont bitmapFont, string text, Vector2 position, Color color)
         {
             var source = new FontCharacterSource(text);
-            bitmapFont.drawInto(batcher, ref source, position, color, 0, Vector2.Zero, new Vector2(1), SpriteEffects.None, 0f);
+            bitmapFont.DrawInto(batcher, ref source, position, color, 0, Vector2.Zero, new Vector2(1), SpriteEffects.None, 0f);
         }
 
         /// <summary>
@@ -42,7 +42,7 @@ namespace Nez.BitmapFonts
         {
             var scaleVec = new Vector2(scale, scale);
             var source = new FontCharacterSource(text);
-            bitmapFont.drawInto(batcher, ref source, position, color, rotation, origin, scaleVec, effects, layerDepth);
+            bitmapFont.DrawInto(batcher, ref source, position, color, rotation, origin, scaleVec, effects, layerDepth);
         }
 
         /// <summary>
@@ -61,7 +61,7 @@ namespace Nez.BitmapFonts
             float rotation, Vector2 origin, Vector2 scale, SpriteEffects effects, float layerDepth)
         {
             var source = new FontCharacterSource(text);
-            bitmapFont.drawInto(batcher, ref source, position, color, rotation, origin, scale, effects, layerDepth);
+            bitmapFont.DrawInto(batcher, ref source, position, color, rotation, origin, scale, effects, layerDepth);
         }
 
         /// <summary>
@@ -74,7 +74,7 @@ namespace Nez.BitmapFonts
         public static void DrawString(this Batcher batcher, BitmapFont bitmapFont, StringBuilder text, Vector2 position, Color color)
         {
             var source = new FontCharacterSource(text);
-            bitmapFont.drawInto(batcher, ref source, position, color, 0, Vector2.Zero, new Vector2(1), SpriteEffects.None, 0f);
+            bitmapFont.DrawInto(batcher, ref source, position, color, 0, Vector2.Zero, new Vector2(1), SpriteEffects.None, 0f);
         }
 
         /// <summary>
@@ -94,7 +94,7 @@ namespace Nez.BitmapFonts
         {
             var scaleVec = new Vector2(scale, scale);
             var source = new FontCharacterSource(text);
-            bitmapFont.drawInto(batcher, ref source, position, color, rotation, origin, scaleVec, effects, layerDepth);
+            bitmapFont.DrawInto(batcher, ref source, position, color, rotation, origin, scaleVec, effects, layerDepth);
         }
 
         /// <summary>
@@ -113,15 +113,15 @@ namespace Nez.BitmapFonts
             Color color, float rotation, Vector2 origin, Vector2 scale, SpriteEffects effects, float layerDepth)
         {
             var source = new FontCharacterSource(text);
-            bitmapFont.drawInto(batcher, ref source, position, color, rotation, origin, scale, effects, layerDepth);
+            bitmapFont.DrawInto(batcher, ref source, position, color, rotation, origin, scale, effects, layerDepth);
         }
 
         public static void DrawGlyphs(this Batcher batcher, BitmapFontEnumerator glyphs, Vector2 position, Color color, float rotation, Vector2 origin, Vector2 scale, float layerDepth)
         {
             foreach (var glyph in glyphs)
             {
-                var characterOrigin = origin - glyph.position;
-                Graphics.instance.batcher.draw(glyph.texture, position, glyph.character.bounds, color, rotation, characterOrigin, scale, SpriteEffects.None, layerDepth);
+                var characterOrigin = origin - glyph.Position;
+                Graphics.Instance.Batcher.Draw(glyph.Texture, position, glyph.Character.Bounds, color, rotation, characterOrigin, scale, SpriteEffects.None, layerDepth);
             }
         }
     }

@@ -8,37 +8,37 @@ namespace Nez.TiledMaps
 	public class TmxTilesetTile
 	{
 		[XmlAttribute( AttributeName = "id" )]
-		public int id;
+		public int Id;
 
 		[XmlElement( ElementName = "terrain" )]
-		public TmxTerrain terrain;
+		public TmxTerrain Terrain;
 
 		[XmlAttribute( AttributeName = "probability" )]
-		public float probability = 1f;
+		public float Probability = 1f;
 
 		[XmlElement( ElementName = "image" )]
-		public TmxImage image;
+		public TmxImage Image;
 
 		[XmlElement( ElementName = "objectgroup" )]
-		public List<TmxObjectGroup> objectGroups;
+		public List<TmxObjectGroup> ObjectGroups;
 
 		[XmlArray( "properties" )]
 		[XmlArrayItem( "property" )]
-		public List<TmxProperty> properties = new List<TmxProperty>();
+		public List<TmxProperty> Properties = new List<TmxProperty>();
 
 		[XmlArray( "animation" )]
 		[XmlArrayItem( "frame" )]
-		public List<TmxTilesetTileAnimationFrame> animationFrames;
+		public List<TmxTilesetTileAnimationFrame> AnimationFrames;
 
 		/// <summary>
 		/// source Rectangle for tilesets that use the collection of images
 		/// </summary>
-		public Rectangle sourceRect;
+		public Rectangle SourceRect;
 
 
 		public override string ToString()
 		{
-			return string.Format( "[TmxTilesetTile] id: {0}, animationFrames: {1}, image: {2}", id, animationFrames.Count, image );
+			return string.Format( "[TmxTilesetTile] id: {0}, animationFrames: {1}, image: {2}", Id, AnimationFrames.Count, Image );
 		}
 	}
 }

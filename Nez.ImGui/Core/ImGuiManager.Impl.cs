@@ -19,62 +19,62 @@ namespace Nez.ImGuiTools
 		[Flags]
 		enum WindowPosition
 		{
-			topLeft,
-			top,
-			topRight,
-			left,
-			center,
-			right,
-			bottomLeft,
-			bottom,
-			bottomRight
+			TopLeft,
+			Top,
+			TopRight,
+			Left,
+			Center,
+			Right,
+			BottomLeft,
+			Bottom,
+			BottomRight
 		}
 
-		void loadSettings()
+		void LoadSettings()
 		{
-			var fileDataStore = Core.services.GetOrAddService<FileDataStore>();
+			var fileDataStore = Core.Services.GetOrAddService<FileDataStore>();
 			KeyValueDataStore.Default.Load( fileDataStore );
 
-			showStyleEditor = KeyValueDataStore.Default.GetBool( kShowStyleEditor, showStyleEditor );
-			showSceneGraphWindow = KeyValueDataStore.Default.GetBool( kShowSceneGraphWindow, showSceneGraphWindow );
-			showCoreWindow = KeyValueDataStore.Default.GetBool( kShowCoreWindow, showCoreWindow );
-			showSeperateGameWindow = KeyValueDataStore.Default.GetBool( kShowSeperateGameWindow, showSeperateGameWindow );
+			ShowStyleEditor = KeyValueDataStore.Default.GetBool( kShowStyleEditor, ShowStyleEditor );
+			ShowSceneGraphWindow = KeyValueDataStore.Default.GetBool( kShowSceneGraphWindow, ShowSceneGraphWindow );
+			ShowCoreWindow = KeyValueDataStore.Default.GetBool( kShowCoreWindow, ShowCoreWindow );
+			ShowSeperateGameWindow = KeyValueDataStore.Default.GetBool( kShowSeperateGameWindow, ShowSeperateGameWindow );
 
-			Core.emitter.addObserver( CoreEvents.Exiting, persistSettings );
+			Core.Emitter.AddObserver( CoreEvents.Exiting, PersistSettings );
 		}
 
-		void persistSettings()
+		void PersistSettings()
 		{
-			KeyValueDataStore.Default.Set( kShowStyleEditor, showStyleEditor );
-			KeyValueDataStore.Default.Set( kShowSceneGraphWindow, showSceneGraphWindow );
-			KeyValueDataStore.Default.Set( kShowCoreWindow, showCoreWindow );
-			KeyValueDataStore.Default.Set( kShowSeperateGameWindow, showSeperateGameWindow );
+			KeyValueDataStore.Default.Set( kShowStyleEditor, ShowStyleEditor );
+			KeyValueDataStore.Default.Set( kShowSceneGraphWindow, ShowSceneGraphWindow );
+			KeyValueDataStore.Default.Set( kShowCoreWindow, ShowCoreWindow );
+			KeyValueDataStore.Default.Set( kShowSeperateGameWindow, ShowSeperateGameWindow );
 
-			KeyValueDataStore.Default.Flush( Core.services.GetOrAddService<FileDataStore>() );
+			KeyValueDataStore.Default.Flush( Core.Services.GetOrAddService<FileDataStore>() );
 		}
 
 		/// <summary>
 		/// here we do some cleanup in preparation for a new Scene
 		/// </summary>
-		void onSceneChanged()
+		void OnSceneChanged()
 		{
 			// when the Scene changes we need to rewire ourselves up as the IFinalRenderDelegate in the new Scene
 			// if we were previously enabled and do some cleanup
-			unload();
-			_sceneGraphWindow.onSceneChanged();
+			Unload();
+			_sceneGraphWindow.OnSceneChanged();
 
-			if( enabled )
-				onEnabled();
+			if( Enabled )
+				OnEnabled();
 		}
 
-		void unload()
+		void Unload()
 		{
 			_drawCommands.Clear();
 			_entityInspectors.Clear();
 			
 			if( _renderTargetId != IntPtr.Zero )
 			{
-				_renderer.unbindTexture( _renderTargetId );
+				_renderer.UnbindTexture( _renderTargetId );
 				_renderTargetId = IntPtr.Zero;
 			}
 			_lastRenderTarget = null;
@@ -83,16 +83,16 @@ namespace Nez.ImGuiTools
 		/// <summary>
 		/// draws the game window and deals with overriding Nez.Input when appropriate
 		/// </summary>
-		void drawGameWindow()
+		void DrawGameWindow()
 		{
 			if( _lastRenderTarget == null )
 				return;
 
 			var rtAspectRatio = (float)_lastRenderTarget.Width / (float)_lastRenderTarget.Height;
 			var maxSize = new Num.Vector2( _lastRenderTarget.Width, _lastRenderTarget.Height );
-			if( maxSize.X >= Screen.width || maxSize.Y >= Screen.height )
+			if( maxSize.X >= Screen.Width || maxSize.Y >= Screen.Height )
 			{
-				maxSize.X = Screen.width * 0.8f;
+				maxSize.X = Screen.Width * 0.8f;
 				maxSize.Y = maxSize.X / rtAspectRatio;
 			}
 			var minSize = maxSize / 4;
@@ -108,18 +108,18 @@ namespace Nez.ImGuiTools
 			}
 
 			ImGui.SetNextWindowPos( _gameWindowFirstPosition, ImGuiCond.FirstUseEver );
-			ImGui.SetNextWindowSize( new Num.Vector2( Screen.width / 2, ( Screen.width / 2 ) / rtAspectRatio ), ImGuiCond.FirstUseEver );
+			ImGui.SetNextWindowSize( new Num.Vector2( Screen.Width / 2, ( Screen.Width / 2 ) / rtAspectRatio ), ImGuiCond.FirstUseEver );
 
-			handleForcedGameViewParams();
+			HandleForcedGameViewParams();
 
 			ImGui.PushStyleVar( ImGuiStyleVar.WindowPadding, new Num.Vector2( 0, 0 ) );
 			ImGui.Begin( _gameWindowTitle, _gameWindowFlags );
 
 			// convert mouse input to the game windows coordinates
-			overrideMouseInput();
+			OverrideMouseInput();
 
 			if( !ImGui.IsWindowFocused() )
-				Input.setCurrentKeyboardState( new KeyboardState() );
+				Input.SetCurrentKeyboardState( new KeyboardState() );
 
 			ImGui.End();
 
@@ -129,7 +129,7 @@ namespace Nez.ImGuiTools
 		/// <summary>
 		/// handles any SetNextWindow* options chosen from a menu
 		/// </summary>
-		void handleForcedGameViewParams()
+		void HandleForcedGameViewParams()
 		{
 			if( _gameViewForcedSize.HasValue )
 			{
@@ -146,41 +146,41 @@ namespace Nez.ImGuiTools
 				var pos = new Num.Vector2();
 				switch( _gameViewForcedPos.Value )
 				{
-					case WindowPosition.topLeft:
+					case WindowPosition.TopLeft:
 						pos.Y = _mainMenuBarHeight;
 						pos.X = 0;
 						break;
-					case WindowPosition.top:
+					case WindowPosition.Top:
 						pos.Y = _mainMenuBarHeight;
-						pos.X = ( Screen.width / 2f ) - ( windowSize.X / 2f );
+						pos.X = ( Screen.Width / 2f ) - ( windowSize.X / 2f );
 						break;
-					case WindowPosition.topRight:
+					case WindowPosition.TopRight:
 						pos.Y = _mainMenuBarHeight;
-						pos.X = Screen.width - windowSize.X;
+						pos.X = Screen.Width - windowSize.X;
 						break;
-					case WindowPosition.left:
-						pos.Y = ( Screen.height / 2f ) - ( windowSize.Y / 2f );
+					case WindowPosition.Left:
+						pos.Y = ( Screen.Height / 2f ) - ( windowSize.Y / 2f );
 						pos.X = 0;
 						break;
-					case WindowPosition.center:
-						pos.Y = ( Screen.height / 2f ) - ( windowSize.Y / 2f );
-						pos.X = ( Screen.width / 2f ) - ( windowSize.X / 2f );
+					case WindowPosition.Center:
+						pos.Y = ( Screen.Height / 2f ) - ( windowSize.Y / 2f );
+						pos.X = ( Screen.Width / 2f ) - ( windowSize.X / 2f );
 						break;
-					case WindowPosition.right:
-						pos.Y = ( Screen.height / 2f ) - ( windowSize.Y / 2f );
-						pos.X = Screen.width - windowSize.X;
+					case WindowPosition.Right:
+						pos.Y = ( Screen.Height / 2f ) - ( windowSize.Y / 2f );
+						pos.X = Screen.Width - windowSize.X;
 						break;
-					case WindowPosition.bottomLeft:
-						pos.Y = Screen.height - windowSize.Y;
+					case WindowPosition.BottomLeft:
+						pos.Y = Screen.Height - windowSize.Y;
 						pos.X = 0;
 						break;
-					case WindowPosition.bottom:
-						pos.Y = Screen.height - windowSize.Y;
-						pos.X = ( Screen.width / 2f ) - ( windowSize.X / 2f );
+					case WindowPosition.Bottom:
+						pos.Y = Screen.Height - windowSize.Y;
+						pos.X = ( Screen.Width / 2f ) - ( windowSize.X / 2f );
 						break;
-					case WindowPosition.bottomRight:
-						pos.Y = Screen.height - windowSize.Y;
-						pos.X = Screen.width - windowSize.X;
+					case WindowPosition.BottomRight:
+						pos.Y = Screen.Height - windowSize.Y;
+						pos.X = Screen.Width - windowSize.X;
 						break;
 				}
 
@@ -194,14 +194,14 @@ namespace Nez.ImGuiTools
 		/// converts the mouse position from global window position to the game window's coordinates and overrides Nez.Input with
 		/// the new value. This keeps input working properly in the game window.
 		/// </summary>
-		void overrideMouseInput()
+		void OverrideMouseInput()
 		{
 			// ImGui.GetCursorScreenPos() is the position of top-left pixel in windows drawable area
 			var offset = new Vector2( ImGui.GetCursorScreenPos().X, ImGui.GetCursorScreenPos().Y );
 
 			// remove window position offset from our raw input. this gets us normalized back to the top-left origin.
 			// We are essentilly removing any input delta that is not in the game window.
-			var normalizedPos = Input.rawMousePosition.ToVector2() - offset;
+			var normalizedPos = Input.RawMousePosition.ToVector2() - offset;
 
 			var scaleX = ImGui.GetContentRegionAvail().X / _lastRenderTarget.Width;
 			var scaleY = ImGui.GetContentRegionAvail().Y / _lastRenderTarget.Height;
@@ -215,42 +215,42 @@ namespace Nez.ImGuiTools
 			// trick the input system. Take our normalizedPos and undo the scale and offsets (do the
 			// reverse of what Input.scaledPosition does) so that any consumers of mouse input can get
 			// the correct coordinates.
-			var unNormalizedPos = normalizedPos / Input.resolutionScale;
-			unNormalizedPos += Input.resolutionOffset;
+			var unNormalizedPos = normalizedPos / Input.ResolutionScale;
+			unNormalizedPos += Input.ResolutionOffset;
 
-			var mouseState = Input.currentMouseState;
+			var mouseState = Input.CurrentMouseState;
 			var newMouseState = new MouseState( (int)unNormalizedPos.X, (int)unNormalizedPos.Y, mouseState.ScrollWheelValue,
 				mouseState.LeftButton, mouseState.MiddleButton, mouseState.RightButton, mouseState.XButton1, mouseState.XButton2 );
-			Input.setCurrentMouseState( newMouseState );
+			Input.SetCurrentMouseState( newMouseState );
 		}
 
 
 		#region GlobalManager Lifecycle
 
-		public override void onEnabled()
+		public override void OnEnabled()
 		{
-			if( Core.scene != null )
+			if( Core.Scene != null )
 			{
-				Core.scene.finalRenderDelegate = this;
+				Core.Scene.FinalRenderDelegate = this;
 				// why call beforeLayout here? If added from the DebugConsole we missed the GlobalManger.update call and ImGui needs NextFrame
 				// called or it fails. Calling NextFrame twice in a frame causes no harm, just missed input.
-				_renderer.beforeLayout( Time.deltaTime );
+				_renderer.BeforeLayout( Time.DeltaTime );
 			}
 		}
 
-		public override void onDisabled()
+		public override void OnDisabled()
 		{
-			unload();
-			if( Core.scene != null )
-				Core.scene.finalRenderDelegate = null;
+			Unload();
+			if( Core.Scene != null )
+				Core.Scene.FinalRenderDelegate = null;
 		}
 
-		public override void update()
+		public override void Update()
 		{
 			// we have to do our layout in update so that if the game window is not focused or being displayed we can wipe
 			// the Input, essentially letting ImGui consume it
-			_renderer.beforeLayout( Time.deltaTime );
-			layoutGui();
+			_renderer.BeforeLayout( Time.DeltaTime );
+			LayoutGui();
 		}
 
 		#endregion
@@ -258,19 +258,19 @@ namespace Nez.ImGuiTools
 
         #region IFinalRenderDelegate
 
-		void IFinalRenderDelegate.handleFinalRender( RenderTarget2D finalRenderTarget, Color letterboxColor, RenderTarget2D source, Rectangle finalRenderDestinationRect, SamplerState samplerState )
+		void IFinalRenderDelegate.HandleFinalRender( RenderTarget2D finalRenderTarget, Color letterboxColor, RenderTarget2D source, Rectangle finalRenderDestinationRect, SamplerState samplerState )
 		{
-			if( showSeperateGameWindow )
+			if( ShowSeperateGameWindow )
 			{
 				if( _lastRenderTarget != source )
 				{
 					// unbind the old texture if we had one
 					if( _lastRenderTarget != null )
-						_renderer.unbindTexture( _renderTargetId );
+						_renderer.UnbindTexture( _renderTargetId );
 
 					// bind the new texture
 					_lastRenderTarget = source;
-					_renderTargetId = _renderer.bindTexture( source );
+					_renderTargetId = _renderer.BindTexture( source );
 				}
 
 				// we cant draw the game window until we have the texture bound so we append it here
@@ -280,29 +280,29 @@ namespace Nez.ImGuiTools
 				ImGui.PopStyleVar();
 				ImGui.End();
 
-				Core.graphicsDevice.SamplerStates[0] = samplerState;
-				Core.graphicsDevice.setRenderTarget( finalRenderTarget );
-				Core.graphicsDevice.Clear( letterboxColor );
+				Core.GraphicsDevice.SamplerStates[0] = samplerState;
+                GraphicsDeviceExt.SetRenderTarget(Core.GraphicsDevice, finalRenderTarget);
+				Core.GraphicsDevice.Clear( letterboxColor );
 			}
 			else
 			{
-				Core.graphicsDevice.setRenderTarget( finalRenderTarget );
-				Core.graphicsDevice.Clear( letterboxColor );
-				Graphics.instance.batcher.begin( BlendState.Opaque, samplerState, null, null );
-				Graphics.instance.batcher.draw( source, finalRenderDestinationRect, Color.White );
-				Graphics.instance.batcher.end();
+                GraphicsDeviceExt.SetRenderTarget(Core.GraphicsDevice, finalRenderTarget);
+				Core.GraphicsDevice.Clear( letterboxColor );
+				Graphics.Instance.Batcher.Begin( BlendState.Opaque, samplerState, null, null );
+				Graphics.Instance.Batcher.Draw( source, finalRenderDestinationRect, Color.White );
+				Graphics.Instance.Batcher.End();
 			}
 
-			_renderer.afterLayout();
+			_renderer.AfterLayout();
 		}
 
-		void IFinalRenderDelegate.onAddedToScene( Scene scene )
+		void IFinalRenderDelegate.OnAddedToScene( Scene scene )
 		{ }
 
-		void IFinalRenderDelegate.onSceneBackBufferSizeChanged( int newWidth, int newHeight )
+		void IFinalRenderDelegate.OnSceneBackBufferSizeChanged( int newWidth, int newHeight )
 		{ }
 
-		void IFinalRenderDelegate.unload()
+		void IFinalRenderDelegate.Unload()
 		{ }
 
         #endregion
@@ -318,7 +318,7 @@ namespace Nez.ImGuiTools
 			{
 				if( disposing )
 				{
-					Core.emitter.removeObserver( CoreEvents.SceneChanged, onSceneChanged );
+					Core.Emitter.RemoveObserver( CoreEvents.SceneChanged, OnSceneChanged );
 				}
 
 				_isDisposed = true;
@@ -333,18 +333,18 @@ namespace Nez.ImGuiTools
 		#endregion
 
 		[Console.Command( "toggle-imgui", "Toggles the Dear ImGui renderer" )]
-		static void toggleImGui()
+		static void ToggleImGui()
 		{
 			// install the service if it isnt already there
-			var service = Core.getGlobalManager<ImGuiManager>();
+			var service = Core.GetGlobalManager<ImGuiManager>();
 			if( service == null )
 			{
 				service = new ImGuiManager();
-				Core.registerGlobalManager( service );
+				Core.RegisterGlobalManager( service );
 			}
 			else
 			{
-				service.setEnabled( !service.enabled );
+				service.SetEnabled( !service.Enabled );
 			}
 		}
 

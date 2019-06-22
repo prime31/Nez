@@ -16,8 +16,8 @@ namespace Nez.TextureAtlases
 				// read the texture
 				var texture = input.ReadObject<Texture2D>();
 
-				foreach( var subtexture in existingInstance.subtextures )
-					subtexture.texture2D = texture;
+				foreach( var subtexture in existingInstance.Subtextures )
+					subtexture.Texture2D = texture;
 
 				// discard the rest of the SpriteSheet data as we are only reloading GPU resources for now
 				input.ReadObject<List<Rectangle>>();

@@ -7,7 +7,7 @@ namespace Nez
 	{
 		[Conditional( "DEBUG" )]
 		[DebuggerHidden]
-		public static void fail()
+		public static void Fail()
 		{
 			System.Diagnostics.Debug.Assert( false );
 			Debugger.Break();
@@ -16,7 +16,7 @@ namespace Nez
 
 		[Conditional( "DEBUG" )]
 		[DebuggerHidden]
-		public static void fail( string message, params object[] args )
+		public static void Fail( string message, params object[] args )
 		{
 			System.Diagnostics.Debug.Assert( false, string.Format( message, args ) );
 			Debugger.Break();
@@ -25,39 +25,39 @@ namespace Nez
 
 		[Conditional( "DEBUG" )]
 		[DebuggerHidden]
-		public static void isTrue( bool condition )
+		public static void IsTrue( bool condition )
 		{
 			if( !condition )
 			{
-				fail();
+				Fail();
 			}
 		}
 
 
 		[Conditional( "DEBUG" )]
 		[DebuggerHidden]
-		public static void isTrue( bool condition, string message, params object[] args )
+		public static void IsTrue( bool condition, string message, params object[] args )
 		{
 			if( !condition )
 			{
-				fail( message, args );
+				Fail( message, args );
 			}
 		}
 
 
 		[Conditional( "DEBUG" )]
 		[DebuggerHidden]
-		public static void isFalse( bool condition )
+		public static void IsFalse( bool condition )
 		{
-			isTrue( !condition );
+			IsTrue( !condition );
 		}
 
 
 		[Conditional( "DEBUG" )]
 		[DebuggerHidden]
-		public static void isFalse( bool condition, string message, params object[] args )
+		public static void IsFalse( bool condition, string message, params object[] args )
 		{
-			isTrue( !condition, message, args );
+			IsTrue( !condition, message, args );
 		}
 
 
@@ -69,9 +69,9 @@ namespace Nez
 		/// <param name="args">Arguments.</param>
 		[Conditional( "DEBUG" )]
 		[DebuggerHidden]
-		public static void isNull( object obj )
+		public static void IsNull( object obj )
 		{
-			isTrue( obj == null );
+			IsTrue( obj == null );
 		}
 
 
@@ -83,9 +83,9 @@ namespace Nez
 		/// <param name="args">Arguments.</param>
 		[Conditional( "DEBUG" )]
 		[DebuggerHidden]
-		public static void isNull( object obj, string message, params object[] args )
+		public static void IsNull( object obj, string message, params object[] args )
 		{
-			isTrue( obj == null, message, args );
+			IsTrue( obj == null, message, args );
 		}
 
 
@@ -97,9 +97,9 @@ namespace Nez
 		/// <param name="args">Arguments.</param>
 		[Conditional( "DEBUG" )]
 		[DebuggerHidden]
-		public static void isNotNull( object obj )
+		public static void IsNotNull( object obj )
 		{
-			isTrue( obj != null );
+			IsTrue( obj != null );
 		}
 
 
@@ -111,9 +111,9 @@ namespace Nez
 		/// <param name="args">Arguments.</param>
 		[Conditional( "DEBUG" )]
 		[DebuggerHidden]
-		public static void isNotNull( object obj, string message, params object[] args )
+		public static void IsNotNull( object obj, string message, params object[] args )
 		{
-			isTrue( obj != null, message, args );
+			IsTrue( obj != null, message, args );
 		}
 
 
@@ -126,10 +126,10 @@ namespace Nez
 		/// <param name="args">Arguments.</param>
 		[Conditional( "DEBUG" )]
 		[DebuggerHidden]
-		public static void areEqual( object first, object second, string message, params object[] args )
+		public static void AreEqual( object first, object second, string message, params object[] args )
 		{
 			if( first != second )
-				fail( message, args );
+				Fail( message, args );
 		}
 
 
@@ -142,10 +142,10 @@ namespace Nez
 		/// <param name="args">Arguments.</param>
 		[Conditional( "DEBUG" )]
 		[DebuggerHidden]
-		public static void areNotEqual( object first, object second, string message, params object[] args )
+		public static void AreNotEqual( object first, object second, string message, params object[] args )
 		{
 			if( first == second )
-				fail( message, args );
+				Fail( message, args );
 		}
 
 	}

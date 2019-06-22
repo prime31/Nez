@@ -5,13 +5,13 @@ namespace Nez.AI.BehaviorTrees
 {
 	public abstract class Decorator<T> : Behavior<T>
 	{
-		public Behavior<T> child;
+		public Behavior<T> Child;
 
 
-		public override void invalidate()
+		public override void Invalidate()
 		{
-			base.invalidate();
-			child.invalidate();
+			base.Invalidate();
+			Child.Invalidate();
 		}
 	}
 }

@@ -13,48 +13,48 @@ namespace Nez.Textures
 		/// <summary>
 		/// the actual Texture2D
 		/// </summary>
-		public Texture2D texture2D;
+		public Texture2D Texture2D;
 
 		/// <summary>
 		/// rectangle in the Texture2D for this element
 		/// </summary>
-		public readonly Rectangle sourceRect;
+		public readonly Rectangle SourceRect;
 
 		/// <summary>
 		/// UVs for the texture region
 		/// </summary>
-		public readonly RectangleF uvs;
+		public readonly RectangleF Uvs;
 
 		/// <summary>
 		/// center of the sourceRect if it had a 0,0 origin. This is basically the center in sourceRect-space.
 		/// </summary>
 		/// <value>The center.</value>
-		public readonly Vector2 center;
+		public readonly Vector2 Center;
 
 		/// <summary>
 		/// the origin that a RenderableComponent should use when using this Subtexture. Defaults to the center.
 		/// </summary>
-		public Vector2 origin;
+		public Vector2 Origin;
 
 
 		public Subtexture( Texture2D texture, Rectangle sourceRect, Vector2 origin )
 		{
-			texture2D = texture;
-			this.sourceRect = sourceRect;
-			center = new Vector2( sourceRect.Width * 0.5f, sourceRect.Height * 0.5f );
-			this.origin = origin;
+			Texture2D = texture;
+			this.SourceRect = sourceRect;
+			Center = new Vector2( sourceRect.Width * 0.5f, sourceRect.Height * 0.5f );
+			this.Origin = origin;
 
-			var inverseTexW = 1.0f / texture2D.Width;
-			var inverseTexH = 1.0f / texture2D.Height;
+			var inverseTexW = 1.0f / Texture2D.Width;
+			var inverseTexH = 1.0f / Texture2D.Height;
 
-			uvs.x = sourceRect.X * inverseTexW;
-			uvs.y = sourceRect.Y * inverseTexH;
-			uvs.width = sourceRect.Width * inverseTexW;
-			uvs.height = sourceRect.Height * inverseTexH;
+			Uvs.X = sourceRect.X * inverseTexW;
+			Uvs.Y = sourceRect.Y * inverseTexH;
+			Uvs.Width = sourceRect.Width * inverseTexW;
+			Uvs.Height = sourceRect.Height * inverseTexH;
 		}
 
 
-		public Subtexture( Texture2D texture, Rectangle sourceRect ) : this( texture, sourceRect, sourceRect.getHalfSize() )
+		public Subtexture( Texture2D texture, Rectangle sourceRect ) : this( texture, sourceRect, sourceRect.GetHalfSize() )
 		{ }
 
 
@@ -89,9 +89,9 @@ namespace Nez.Textures
 		/// <param name="marginBottom">Margin bottom.</param>
 		/// <param name="marginLeft">Margin left.</param>
 		/// <param name="marginRight">Margin right.</param>
-		public void generateNinePatchRects( Rectangle renderRect, Rectangle[] destArray, int marginLeft, int marginRight, int marginTop, int marginBottom )
+		public void GenerateNinePatchRects( Rectangle renderRect, Rectangle[] destArray, int marginLeft, int marginRight, int marginTop, int marginBottom )
 		{
-			Insist.isTrue( destArray.Length == 9, "destArray does not have a length of 9" );
+			Insist.IsTrue( destArray.Length == 9, "destArray does not have a length of 9" );
 
 			var stretchedCenterWidth = renderRect.Width - marginLeft - marginRight;
 			var stretchedCenterHeight = renderRect.Height - marginTop - marginBottom;
@@ -117,11 +117,11 @@ namespace Nez.Textures
 		/// <summary>
 		/// clones the Subtexture
 		/// </summary>
-		public Subtexture clone()
+		public Subtexture Clone()
 		{
-			return new Subtexture( texture2D, sourceRect )
+			return new Subtexture( Texture2D, SourceRect )
 			{
-				origin = origin
+				Origin = Origin
 			};
 		}
 
@@ -135,7 +135,7 @@ namespace Nez.Textures
 		/// <param name="cellHeight">Cell height.</param>
 		/// <param name="cellOffset">the first cell to include while processing. 0 based indexing.</param>
 		/// <param name="maxCellsToInclude">Max cells to included.</param>
-		public static List<Subtexture> subtexturesFromAtlas( Texture2D texture, int cellWidth, int cellHeight, int cellOffset = 0, int maxCellsToInclude = int.MaxValue )
+		public static List<Subtexture> SubtexturesFromAtlas( Texture2D texture, int cellWidth, int cellHeight, int cellOffset = 0, int maxCellsToInclude = int.MaxValue )
 		{
 			var subtextures = new List<Subtexture>();
 
@@ -165,13 +165,13 @@ namespace Nez.Textures
 
 		public static implicit operator Texture2D( Subtexture tex )
 		{
-			return tex.texture2D;
+			return tex.Texture2D;
 		}
 
 
 		public override string ToString()
 		{
-			return string.Format( "{0}", sourceRect );
+			return string.Format( "{0}", SourceRect );
 		}
 
 	}

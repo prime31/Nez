@@ -11,19 +11,19 @@ namespace Nez.AI.BehaviorTrees
 	/// </summary>
 	public class Parallel<T> : Composite<T>
 	{
-		public override TaskStatus update( T context )
+		public override TaskStatus Update( T context )
 		{
 			var didAllSucceed = true;
 			for( var i = 0; i < _children.Count; i++ )
 			{
 				var child = _children[i];
-				child.tick( context );
+				child.Tick( context );
 
 				// if any child fails the whole branch fails
-				if( child.status == TaskStatus.Failure )
+				if( child.Status == TaskStatus.Failure )
 					return TaskStatus.Failure;
 				// if all children didn't succeed, we're not done yet
-				else if( child.status != TaskStatus.Success )
+				else if( child.Status != TaskStatus.Success )
 					didAllSucceed = false;
 			}
 

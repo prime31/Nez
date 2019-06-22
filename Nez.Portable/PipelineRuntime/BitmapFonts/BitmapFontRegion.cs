@@ -5,30 +5,30 @@ namespace Nez.BitmapFonts
 {
 	public class BitmapFontRegion
 	{
-		public char character;
-		public Subtexture subtexture;
-		public int xOffset;
-		public int yOffset;
-		public int xAdvance;
+		public char Character;
+		public Subtexture Subtexture;
+		public int XOffset;
+		public int YOffset;
+		public int XAdvance;
 
-		public int width
+		public int Width
 		{
-			get { return subtexture.sourceRect.Width; }
+			get { return Subtexture.SourceRect.Width; }
 		}
 
-		public int height
+		public int Height
 		{
-			get { return subtexture.sourceRect.Height; }
+			get { return Subtexture.SourceRect.Height; }
 		}
 
 
 		public BitmapFontRegion( Subtexture textureRegion, char character, int xOffset, int yOffset, int xAdvance )
 		{
-			this.subtexture = textureRegion;
-			this.character = character;
-			this.xOffset = xOffset;
-			this.yOffset = yOffset;
-			this.xAdvance = xAdvance;
+			this.Subtexture = textureRegion;
+			this.Character = character;
+			this.XOffset = xOffset;
+			this.YOffset = yOffset;
+			this.XAdvance = xAdvance;
 		}
 
 	}

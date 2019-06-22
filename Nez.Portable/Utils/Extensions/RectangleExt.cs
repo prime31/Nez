@@ -11,7 +11,7 @@ namespace Nez
 		/// </summary>
 		/// <returns>The side.</returns>
 		/// <param name="edge">Side.</param>
-		public static int getSide( this Rectangle rect, Edge edge )
+		public static int GetSide( this Rectangle rect, Edge edge )
 		{
 			switch( edge )
 			{
@@ -29,7 +29,7 @@ namespace Nez
 		}
 
 
-		public static Rectangle getHalfRect( this Rectangle rect, Edge edge )
+		public static Rectangle GetHalfRect( this Rectangle rect, Edge edge )
 		{
 			switch( edge )
 			{
@@ -54,7 +54,7 @@ namespace Nez
 		/// <param name="rect">Rect.</param>
 		/// <param name="edge">Edge.</param>
 		/// <param name="size">Size.</param>
-		public static Rectangle getRectEdgePortion( this Rectangle rect, Edge edge, int size = 1 )
+		public static Rectangle GetRectEdgePortion( this Rectangle rect, Edge edge, int size = 1 )
 		{
 			switch( edge )
 			{
@@ -72,7 +72,7 @@ namespace Nez
 		}
 
 
-		public static void expandSide( ref Rectangle rect, Edge edge, int amount )
+		public static void ExpandSide( ref Rectangle rect, Edge edge, int amount )
 		{
 			// ensure we have a positive value
 			amount = Math.Abs( amount );
@@ -99,7 +99,7 @@ namespace Nez
 		}
 
 
-		public static void contract( ref Rectangle rect, int horizontalAmount, int verticalAmount )
+		public static void Contract( ref Rectangle rect, int horizontalAmount, int verticalAmount )
 		{
 			rect.X += horizontalAmount;
 			rect.Y += verticalAmount;
@@ -116,7 +116,7 @@ namespace Nez
 		/// <param name="y">The y coordinate.</param>
 		/// <param name="width">Width.</param>
 		/// <param name="height">Height.</param>
-		public static Rectangle fromFloats( float x, float y, float width, float height )
+		public static Rectangle FromFloats( float x, float y, float width, float height )
 		{
 			return new Rectangle( (int)x, (int)y, (int)width, (int)height );
 		}
@@ -128,7 +128,7 @@ namespace Nez
 		/// <returns>The minimum max points.</returns>
 		/// <param name="min">Minimum.</param>
 		/// <param name="max">Max.</param>
-		public static Rectangle fromMinMaxPoints( Point min, Point max )
+		public static Rectangle FromMinMaxPoints( Point min, Point max )
 		{
 			return new Rectangle( min.X, min.Y, max.X - min.X, max.Y - min.Y );
 		}
@@ -140,7 +140,7 @@ namespace Nez
 		/// <param name="first">First.</param>
 		/// <param name="second">Second.</param>
 		/// <param name="result">Result.</param>
-		public static void union( ref Rectangle value1, ref Rectangle value2, out Rectangle result )
+		public static void Union( ref Rectangle value1, ref Rectangle value2, out Rectangle result )
 		{
 			result.X = Math.Min( value1.X, value2.X );
 			result.Y = Math.Min( value1.Y, value2.Y );
@@ -155,10 +155,10 @@ namespace Nez
 		/// <param name="first">First.</param>
 		/// <param name="point">Point.</param>
 		/// <param name="result">Result.</param>
-		public static void union( ref Rectangle first, ref Point point, out Rectangle result )
+		public static void Union( ref Rectangle first, ref Point point, out Rectangle result )
 		{
 			var rect = new Rectangle( point.X, point.Y, 0, 0 );
-			union( ref first, ref rect, out result );
+			Union( ref first, ref rect, out result );
 		}
 
 
@@ -167,7 +167,7 @@ namespace Nez
 		/// </summary>
 		/// <returns>The from polygon points.</returns>
 		/// <param name="points">Points.</param>
-		public static Rectangle boundsFromPolygonPoints( Vector2[] points )
+		public static Rectangle BoundsFromPolygonPoints( Vector2[] points )
 		{
 			// we need to find the min/max x/y values
 			var minX = float.PositiveInfinity;
@@ -190,11 +190,11 @@ namespace Nez
 					maxY = pt.Y;
 			}
 
-			return RectangleExt.fromMinMaxPoints( new Point( (int)minX, (int)minY ), new Point( (int)maxX, (int)maxY ) );
+			return RectangleExt.FromMinMaxPoints( new Point( (int)minX, (int)minY ), new Point( (int)maxX, (int)maxY ) );
 		}
 
 
-		public static void calculateBounds( ref Rectangle rect, Vector2 parentPosition, Vector2 position, Vector2 origin, Vector2 scale, float rotation, float width, float height )
+		public static void CalculateBounds( ref Rectangle rect, Vector2 parentPosition, Vector2 position, Vector2 origin, Vector2 scale, float rotation, float width, float height )
 		{
 			if( rotation == 0f )
 			{
@@ -211,13 +211,13 @@ namespace Nez
 
 				Matrix2D tempMat;
 				// set the reference point to world reference taking origin into account
-				var transformMatrix = Matrix2D.createTranslation( -worldPosX - origin.X, -worldPosY - origin.Y );
-				Matrix2D.createScale( scale.X, scale.Y, out tempMat ); // scale ->
-				Matrix2D.multiply( ref transformMatrix, ref tempMat, out transformMatrix );
-				Matrix2D.createRotation( rotation, out tempMat ); // rotate ->
-				Matrix2D.multiply( ref transformMatrix, ref tempMat, out transformMatrix );
-				Matrix2D.createTranslation( worldPosX, worldPosY, out tempMat ); // translate back
-				Matrix2D.multiply( ref transformMatrix, ref tempMat, out transformMatrix );
+				var transformMatrix = Matrix2D.CreateTranslation( -worldPosX - origin.X, -worldPosY - origin.Y );
+				Matrix2D.CreateScale( scale.X, scale.Y, out tempMat ); // scale ->
+				Matrix2D.Multiply( ref transformMatrix, ref tempMat, out transformMatrix );
+				Matrix2D.CreateRotation( rotation, out tempMat ); // rotate ->
+				Matrix2D.Multiply( ref transformMatrix, ref tempMat, out transformMatrix );
+				Matrix2D.CreateTranslation( worldPosX, worldPosY, out tempMat ); // translate back
+				Matrix2D.Multiply( ref transformMatrix, ref tempMat, out transformMatrix );
 
 				// TODO: this is a bit silly. we can just leave the worldPos translation in the Matrix and avoid this
 				// get all four corners in world space
@@ -227,16 +227,16 @@ namespace Nez
 				var bottomRight = new Vector2( worldPosX + width, worldPosY + height );
 
 				// transform the corners into our work space
-				Vector2Ext.transform( ref topLeft, ref transformMatrix, out topLeft );
-				Vector2Ext.transform( ref topRight, ref transformMatrix, out topRight );
-				Vector2Ext.transform( ref bottomLeft, ref transformMatrix, out bottomLeft );
-				Vector2Ext.transform( ref bottomRight, ref transformMatrix, out bottomRight );
+				Vector2Ext.Transform( ref topLeft, ref transformMatrix, out topLeft );
+				Vector2Ext.Transform( ref topRight, ref transformMatrix, out topRight );
+				Vector2Ext.Transform( ref bottomLeft, ref transformMatrix, out bottomLeft );
+				Vector2Ext.Transform( ref bottomRight, ref transformMatrix, out bottomRight );
 
 				// find the min and max values so we can concoct our bounding box
-				var minX = (int)Mathf.minOf( topLeft.X, bottomRight.X, topRight.X, bottomLeft.X );
-				var maxX = (int)Mathf.maxOf( topLeft.X, bottomRight.X, topRight.X, bottomLeft.X );
-				var minY = (int)Mathf.minOf( topLeft.Y, bottomRight.Y, topRight.Y, bottomLeft.Y );
-				var maxY = (int)Mathf.maxOf( topLeft.Y, bottomRight.Y, topRight.Y, bottomLeft.Y );
+				var minX = (int)Mathf.MinOf( topLeft.X, bottomRight.X, topRight.X, bottomLeft.X );
+				var maxX = (int)Mathf.MaxOf( topLeft.X, bottomRight.X, topRight.X, bottomLeft.X );
+				var minY = (int)Mathf.MinOf( topLeft.Y, bottomRight.Y, topRight.Y, bottomLeft.Y );
+				var maxY = (int)Mathf.MaxOf( topLeft.Y, bottomRight.Y, topRight.Y, bottomLeft.Y );
 
 				rect.Location = new Point( minX, minY );
 				rect.Width = (int)( maxX - minX );
@@ -249,7 +249,7 @@ namespace Nez
 		/// clones and returns a new Rectangle with the same data as the current rectangle
 		/// </summary>
 		/// <param name="rect">Rect.</param>
-		public static Rectangle clone( this Rectangle rect )
+		public static Rectangle Clone( this Rectangle rect )
 		{
 			return new Rectangle( rect.X, rect.Y, rect.Width, rect.Height );
 		}
@@ -260,7 +260,7 @@ namespace Nez
 		/// </summary>
 		/// <param name="rect">Rect.</param>
 		/// <param name="scale">Scale.</param>
-		public static void scale( ref Rectangle rect, Vector2 scale )
+		public static void Scale( ref Rectangle rect, Vector2 scale )
 		{
 			rect.X = (int)( rect.X * scale.X );
 			rect.Y = (int)( rect.Y * scale.Y );
@@ -269,27 +269,27 @@ namespace Nez
 		}
 
 
-		public static void translate( ref Rectangle rect, Vector2 vec )
+		public static void Translate( ref Rectangle rect, Vector2 vec )
 		{
 			rect.Location += vec.ToPoint();
 		}
 
 		
-		public static bool rayIntersects( ref Rectangle rect, ref Ray2D ray, out float distance )
+		public static bool RayIntersects( ref Rectangle rect, ref Ray2D ray, out float distance )
 		{
 			distance = 0f;
 			var maxValue = float.MaxValue;
 
-			if( Math.Abs( ray.direction.X ) < 1E-06f )
+			if( Math.Abs( ray.Direction.X ) < 1E-06f )
 			{
-				if( ( ray.start.X < rect.X ) || ( ray.start.X > rect.X + rect.Width ) )
+				if( ( ray.Start.X < rect.X ) || ( ray.Start.X > rect.X + rect.Width ) )
 					return false;
 			}
 			else
 			{
-				var num11 = 1f / ray.direction.X;
-				var num8 = ( rect.X - ray.start.X ) * num11;
-				var num7 = ( rect.X + rect.Width - ray.start.X ) * num11;
+				var num11 = 1f / ray.Direction.X;
+				var num8 = ( rect.X - ray.Start.X ) * num11;
+				var num7 = ( rect.X + rect.Width - ray.Start.X ) * num11;
 				if( num8 > num7 )
 				{
 					var num14 = num8;
@@ -303,18 +303,18 @@ namespace Nez
 					return false;
 			}
 
-			if( Math.Abs( ray.direction.Y ) < 1E-06f )
+			if( Math.Abs( ray.Direction.Y ) < 1E-06f )
 			{
-				if( ( ray.start.Y < rect.Y ) || ( ray.start.Y > rect.Y + rect.Height ) )
+				if( ( ray.Start.Y < rect.Y ) || ( ray.Start.Y > rect.Y + rect.Height ) )
 				{
 					return false;
 				}
 			}
 			else
 			{
-				var num10 = 1f / ray.direction.Y;
-				var num6 = ( rect.Y - ray.start.Y ) * num10;
-				var num5 = ( rect.Y + rect.Height - ray.start.Y ) * num10;
+				var num10 = 1f / ray.Direction.Y;
+				var num6 = ( rect.Y - ray.Start.Y ) * num10;
+				var num5 = ( rect.Y + rect.Height - ray.Start.Y ) * num10;
 				if( num6 > num5 )
 				{
 					var num13 = num6;
@@ -332,7 +332,7 @@ namespace Nez
 		}
 
 
-		public static float? rayIntersects( this Rectangle rectangle, Ray ray )
+		public static float? RayIntersects( this Rectangle rectangle, Ray ray )
 		{
 			var num = 0f;
 			var maxValue = float.MaxValue;
@@ -397,9 +397,9 @@ namespace Nez
 		/// <returns>The swept broadphase box.</returns>
 		/// <param name="velocityX">Velocity x.</param>
 		/// <param name="velocityY">Velocity y.</param>
-		public static Rectangle getSweptBroadphaseBounds( ref Rectangle rect, float deltaX, float deltaY )
+		public static Rectangle GetSweptBroadphaseBounds( ref Rectangle rect, float deltaX, float deltaY )
 		{
-			return getSweptBroadphaseBounds( ref rect, (int)deltaX, (int)deltaY );
+			return GetSweptBroadphaseBounds( ref rect, (int)deltaX, (int)deltaY );
 		}
 
 
@@ -409,7 +409,7 @@ namespace Nez
 		/// <returns>The swept broadphase box.</returns>
 		/// <param name="velocityX">Velocity x.</param>
 		/// <param name="velocityY">Velocity y.</param>
-		public static Rectangle getSweptBroadphaseBounds( ref Rectangle rect, int deltaX, int deltaY )
+		public static Rectangle GetSweptBroadphaseBounds( ref Rectangle rect, int deltaX, int deltaY )
 		{
 			var broadphasebox = Rectangle.Empty;
 
@@ -427,7 +427,7 @@ namespace Nez
 		/// </summary>
 		/// <param name="value1">Value1.</param>
 		/// <param name="value2">Value2.</param>
-		public static bool intersect( ref Rectangle rect1, ref Rectangle rect2 )
+		public static bool Intersect( ref Rectangle rect1, ref Rectangle rect2 )
 		{
 			bool result;
 			rect1.Intersects( ref rect2, out result );
@@ -442,7 +442,7 @@ namespace Nez
 		/// <param name="other">Other.</param>
 		/// <param name="moveX">Move x.</param>
 		/// <param name="moveY">Move y.</param>
-		public static bool collisionCheck( ref Rectangle rect, ref Rectangle other, out float moveX, out float moveY )
+		public static bool CollisionCheck( ref Rectangle rect, ref Rectangle other, out float moveX, out float moveY )
 		{
 			moveX = moveY = 0.0f;
 
@@ -477,7 +477,7 @@ namespace Nez
 		/// intersect. This allows callers to determine the correct direction to push objects in order to resolve collisions.
 		/// If the rectangles are not intersecting, Vector2.Zero is returned.
 		/// </returns>
-		public static Vector2 getIntersectionDepth( ref Rectangle rectA, ref Rectangle rectB )
+		public static Vector2 GetIntersectionDepth( ref Rectangle rectA, ref Rectangle rectB )
 		{
 			// calculate half sizes
 			var halfWidthA = rectA.Width / 2.0f;
@@ -507,9 +507,9 @@ namespace Nez
 		}
 
 
-		public static Vector2 getClosestPointOnBoundsToOrigin( ref Rectangle rect )
+		public static Vector2 GetClosestPointOnBoundsToOrigin( ref Rectangle rect )
 		{
-			var max = RectangleExt.getMax( ref rect );
+			var max = RectangleExt.GetMax( ref rect );
 			var minDist = Math.Abs( rect.Location.X );
 			var boundsPoint = new Vector2( rect.Location.X, 0 );
 
@@ -544,7 +544,7 @@ namespace Nez
 		/// <returns>The closest point on rectangle to point.</returns>
 		/// <param name="rect">Rect.</param>
 		/// <param name="point">Point.</param>
-		public static Vector2 getClosestPointOnRectangleToPoint( ref Rectangle rect, Vector2 point )
+		public static Vector2 GetClosestPointOnRectangleToPoint( ref Rectangle rect, Vector2 point )
 		{
 			// for each axis, if the point is outside the box clamp it to the box else leave it alone
 			var res = new Vector2();
@@ -561,12 +561,12 @@ namespace Nez
 		/// <returns>The closest point on rectangle border to point.</returns>
 		/// <param name="rect">Rect.</param>
 		/// <param name="point">Point.</param>
-		public static Point getClosestPointOnRectangleBorderToPoint( ref Rectangle rect, Vector2 point )
+		public static Point GetClosestPointOnRectangleBorderToPoint( ref Rectangle rect, Vector2 point )
 		{
 			// for each axis, if the point is outside the box clamp it to the box else leave it alone
 			var res = new Point();
-			res.X = Mathf.clamp( (int)point.X, rect.Left, rect.Right );
-			res.Y = Mathf.clamp( (int)point.Y, rect.Top, rect.Bottom );
+			res.X = Mathf.Clamp( (int)point.X, rect.Left, rect.Right );
+			res.Y = Mathf.Clamp( (int)point.Y, rect.Top, rect.Bottom );
 
 			// if point is inside the rectangle we need to push res to the border since it will be inside the rect
 			if( rect.Contains( res ) )
@@ -576,7 +576,7 @@ namespace Nez
 				var dt = res.Y - rect.Top;
 				var db = rect.Bottom - res.Y;
 
-				var min = Mathf.minOf( dl, dr, dt, db );
+				var min = Mathf.MinOf( dl, dr, dt, db );
 				if( min == dt )
 					res.Y = rect.Top;
 				else if( min == db )
@@ -596,7 +596,7 @@ namespace Nez
 		/// </summary>
 		/// <returns>The center.</returns>
 		/// <param name="rect">Rect.</param>
-		public static Vector2 getCenter( ref Rectangle rect )
+		public static Vector2 GetCenter( ref Rectangle rect )
 		{
 			return new Vector2( rect.X + rect.Width / 2, rect.Y + rect.Height / 2 );
 		}
@@ -607,7 +607,7 @@ namespace Nez
 		/// </summary>
 		/// <returns>The center.</returns>
 		/// <param name="rect">Rect.</param>
-		public static Vector2 getCenter( this Rectangle rect )
+		public static Vector2 GetCenter( this Rectangle rect )
 		{
 			return new Vector2( rect.X + rect.Width / 2, rect.Y + rect.Height / 2 );
 		}
@@ -618,7 +618,7 @@ namespace Nez
 		/// </summary>
 		/// <returns>The half size.</returns>
 		/// <param name="rect">Rect.</param>
-		public static Vector2 getHalfSize( this Rectangle rect )
+		public static Vector2 GetHalfSize( this Rectangle rect )
 		{
 			return new Vector2( rect.Width * 0.5f, rect.Height * 0.5f );
 		}
@@ -628,7 +628,7 @@ namespace Nez
 		/// </summary>
 		/// <returns>The max.</returns>
 		/// <param name="rect">Rect.</param>
-		public static Point getMax( ref Rectangle rect )
+		public static Point GetMax( ref Rectangle rect )
 		{
 			return new Point( rect.Right, rect.Bottom );
 		}
@@ -639,7 +639,7 @@ namespace Nez
 		/// </summary>
 		/// <returns>The position.</returns>
 		/// <param name="rect">Rect.</param>
-		public static Vector2 getPosition( ref Rectangle rect )
+		public static Vector2 GetPosition( ref Rectangle rect )
 		{
 			return new Vector2( rect.X, rect.Y );
 		}

@@ -6,27 +6,27 @@ namespace Nez.TiledMaps
 	public class TmxImage
 	{
 		[XmlAttribute( AttributeName = "source" )]
-		public string source;
+		public string Source;
 
 		[XmlAttribute( AttributeName = "width" )]
-		public int width;
+		public int Width;
 
 		[XmlAttribute( AttributeName = "height" )]
-		public int height;
+		public int Height;
 
 		[XmlAttribute( AttributeName = "format" )]
-		public string format;
+		public string Format;
 
 		[XmlAttribute( AttributeName = "trans" )]
-		public string trans;
+		public string Trans;
 
 		[XmlElement( ElementName = "data" )]
-		public TmxData data;
+		public TmxData Data;
 
 
 		public override string ToString()
 		{
-			return source;
+			return Source;
 		}
 	}
 }

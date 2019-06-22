@@ -125,29 +125,29 @@ namespace Nez.BitmapFonts
                         switch (parts[0])
                         {
                             case "info":
-                                familyName = BitmapFontLoader.GetNamedString(parts, "face");
-                                fontSize = BitmapFontLoader.GetNamedInt(parts, "size");
-                                bold = BitmapFontLoader.GetNamedBool(parts, "bold");
-                                italic = BitmapFontLoader.GetNamedBool(parts, "italic");
-                                charset = BitmapFontLoader.GetNamedString(parts, "charset");
-                                unicode = BitmapFontLoader.GetNamedBool(parts, "unicode");
-                                stretchedHeight = BitmapFontLoader.GetNamedInt(parts, "stretchH");
-                                smoothed = BitmapFontLoader.GetNamedBool(parts, "smooth");
-                                superSampling = BitmapFontLoader.GetNamedInt(parts, "aa");
-                                padding = BitmapFontLoader.ParsePadding(BitmapFontLoader.GetNamedString(parts, "padding"));
-                                spacing = BitmapFontLoader.ParseInt2(BitmapFontLoader.GetNamedString(parts, "spacing"));
-                                outlineSize = BitmapFontLoader.GetNamedInt(parts, "outline");
+                                FamilyName = BitmapFontLoader.GetNamedString(parts, "face");
+                                FontSize = BitmapFontLoader.GetNamedInt(parts, "size");
+                                Bold = BitmapFontLoader.GetNamedBool(parts, "bold");
+                                Italic = BitmapFontLoader.GetNamedBool(parts, "italic");
+                                Charset = BitmapFontLoader.GetNamedString(parts, "charset");
+                                Unicode = BitmapFontLoader.GetNamedBool(parts, "unicode");
+                                StretchedHeight = BitmapFontLoader.GetNamedInt(parts, "stretchH");
+                                Smoothed = BitmapFontLoader.GetNamedBool(parts, "smooth");
+                                SuperSampling = BitmapFontLoader.GetNamedInt(parts, "aa");
+                                Padding = BitmapFontLoader.ParsePadding(BitmapFontLoader.GetNamedString(parts, "padding"));
+                                Spacing = BitmapFontLoader.ParseInt2(BitmapFontLoader.GetNamedString(parts, "spacing"));
+                                OutlineSize = BitmapFontLoader.GetNamedInt(parts, "outline");
                                 break;
                             case "common":
-                                lineHeight = BitmapFontLoader.GetNamedInt(parts, "lineHeight");
-                                baseHeight = BitmapFontLoader.GetNamedInt(parts, "base");
-                                textureSize = new Point(BitmapFontLoader.GetNamedInt(parts, "scaleW"),
+                                LineHeight = BitmapFontLoader.GetNamedInt(parts, "lineHeight");
+                                BaseHeight = BitmapFontLoader.GetNamedInt(parts, "base");
+                                TextureSize = new Point(BitmapFontLoader.GetNamedInt(parts, "scaleW"),
                                                             BitmapFontLoader.GetNamedInt(parts, "scaleH"));
-                                packed = BitmapFontLoader.GetNamedBool(parts, "packed");
-                                alphaChannel = BitmapFontLoader.GetNamedInt(parts, "alphaChnl");
-                                redChannel = BitmapFontLoader.GetNamedInt(parts, "redChnl");
-                                greenChannel = BitmapFontLoader.GetNamedInt(parts, "greenChnl");
-                                blueChannel = BitmapFontLoader.GetNamedInt(parts, "blueChnl");
+                                Packed = BitmapFontLoader.GetNamedBool(parts, "packed");
+                                AlphaChannel = BitmapFontLoader.GetNamedInt(parts, "alphaChnl");
+                                RedChannel = BitmapFontLoader.GetNamedInt(parts, "redChnl");
+                                GreenChannel = BitmapFontLoader.GetNamedInt(parts, "greenChnl");
+                                BlueChannel = BitmapFontLoader.GetNamedInt(parts, "blueChnl");
                                 break;
                             case "page":
                                 var id = BitmapFontLoader.GetNamedInt(parts, "id");
@@ -158,18 +158,18 @@ namespace Nez.BitmapFonts
                             case "char":
                                 var charData = new Character
                                 {
-                                    character = (char)BitmapFontLoader.GetNamedInt(parts, "id"),
-                                    bounds = new Rectangle(BitmapFontLoader.GetNamedInt(parts, "x"),
+                                    Char = (char)BitmapFontLoader.GetNamedInt(parts, "id"),
+                                    Bounds = new Rectangle(BitmapFontLoader.GetNamedInt(parts, "x"),
                                                              BitmapFontLoader.GetNamedInt(parts, "y"),
                                                              BitmapFontLoader.GetNamedInt(parts, "width"),
                                                              BitmapFontLoader.GetNamedInt(parts, "height")),
-                                    offset = new Point(BitmapFontLoader.GetNamedInt(parts, "xoffset"),
+                                    Offset = new Point(BitmapFontLoader.GetNamedInt(parts, "xoffset"),
                                                          BitmapFontLoader.GetNamedInt(parts, "yoffset")),
-                                    xAdvance = BitmapFontLoader.GetNamedInt(parts, "xadvance"),
-                                    texturePage = BitmapFontLoader.GetNamedInt(parts, "page"),
-                                    channel = BitmapFontLoader.GetNamedInt(parts, "chnl")
+                                    XAdvance = BitmapFontLoader.GetNamedInt(parts, "xadvance"),
+                                    TexturePage = BitmapFontLoader.GetNamedInt(parts, "page"),
+                                    Channel = BitmapFontLoader.GetNamedInt(parts, "chnl")
                                 };
-                                charDictionary.Add(charData.character, charData);
+                                charDictionary.Add(charData.Char, charData);
                                 break;
                             case "kerning":
                                 var key = new Kerning((char)BitmapFontLoader.GetNamedInt(parts, "first"),
@@ -177,16 +177,16 @@ namespace Nez.BitmapFonts
                                                   BitmapFontLoader.GetNamedInt(parts, "amount"));
 
                                 if (!kerningDictionary.ContainsKey(key))
-                                    kerningDictionary.Add(key, key.amount);
+                                    kerningDictionary.Add(key, key.Amount);
                                 break;
                         }
                     }
                 }
             } while (line != null);
 
-            pages = BitmapFontLoader.ToArray(pageData.Values);
-            characters = charDictionary;
-            kernings = kerningDictionary;
+            Pages = BitmapFontLoader.ToArray(pageData.Values);
+            Characters = charDictionary;
+            Kernings = kerningDictionary;
         }
 
         /// <summary>
@@ -230,60 +230,60 @@ namespace Nez.BitmapFonts
 
             // load the basic attributes
             var properties = root.SelectSingleNode("info");
-            familyName = properties.Attributes["face"].Value;
-            fontSize = Convert.ToInt32(properties.Attributes["size"].Value);
-            bold = Convert.ToInt32(properties.Attributes["bold"].Value) != 0;
-            italic = Convert.ToInt32(properties.Attributes["italic"].Value) != 0;
-            unicode = properties.Attributes["unicode"].Value != "0";
-            stretchedHeight = Convert.ToInt32(properties.Attributes["stretchH"].Value);
-            charset = properties.Attributes["charset"].Value;
-            smoothed = Convert.ToInt32(properties.Attributes["smooth"].Value) != 0;
-            superSampling = Convert.ToInt32(properties.Attributes["aa"].Value);
-            padding = BitmapFontLoader.ParsePadding(properties.Attributes["padding"].Value);
-            spacing = BitmapFontLoader.ParseInt2(properties.Attributes["spacing"].Value);
-            outlineSize = properties.Attributes["outline"] != null ? Convert.ToInt32(properties.Attributes["outline"].Value) : 0;
+            FamilyName = properties.Attributes["face"].Value;
+            FontSize = Convert.ToInt32(properties.Attributes["size"].Value);
+            Bold = Convert.ToInt32(properties.Attributes["bold"].Value) != 0;
+            Italic = Convert.ToInt32(properties.Attributes["italic"].Value) != 0;
+            Unicode = properties.Attributes["unicode"].Value != "0";
+            StretchedHeight = Convert.ToInt32(properties.Attributes["stretchH"].Value);
+            Charset = properties.Attributes["charset"].Value;
+            Smoothed = Convert.ToInt32(properties.Attributes["smooth"].Value) != 0;
+            SuperSampling = Convert.ToInt32(properties.Attributes["aa"].Value);
+            Padding = BitmapFontLoader.ParsePadding(properties.Attributes["padding"].Value);
+            Spacing = BitmapFontLoader.ParseInt2(properties.Attributes["spacing"].Value);
+            OutlineSize = properties.Attributes["outline"] != null ? Convert.ToInt32(properties.Attributes["outline"].Value) : 0;
 
             // common attributes
             properties = root.SelectSingleNode("common");
-            baseHeight = Convert.ToInt32(properties.Attributes["base"].Value);
-            lineHeight = Convert.ToInt32(properties.Attributes["lineHeight"].Value);
-            textureSize = new Point(Convert.ToInt32(properties.Attributes["scaleW"].Value), Convert.ToInt32(properties.Attributes["scaleH"].Value));
-            packed = Convert.ToInt32(properties.Attributes["packed"].Value) != 0;
+            BaseHeight = Convert.ToInt32(properties.Attributes["base"].Value);
+            LineHeight = Convert.ToInt32(properties.Attributes["lineHeight"].Value);
+            TextureSize = new Point(Convert.ToInt32(properties.Attributes["scaleW"].Value), Convert.ToInt32(properties.Attributes["scaleH"].Value));
+            Packed = Convert.ToInt32(properties.Attributes["packed"].Value) != 0;
 
-            alphaChannel = properties.Attributes["alphaChnl"] != null ? Convert.ToInt32(properties.Attributes["alphaChnl"].Value) : 0;
-            redChannel = properties.Attributes["redChnl"] != null ? Convert.ToInt32(properties.Attributes["redChnl"].Value) : 0;
-            greenChannel = properties.Attributes["greenChnl"] != null ? Convert.ToInt32(properties.Attributes["greenChnl"].Value) : 0;
-            blueChannel = properties.Attributes["blueChnl"] != null ? Convert.ToInt32(properties.Attributes["blueChnl"].Value) : 0;
+            AlphaChannel = properties.Attributes["alphaChnl"] != null ? Convert.ToInt32(properties.Attributes["alphaChnl"].Value) : 0;
+            RedChannel = properties.Attributes["redChnl"] != null ? Convert.ToInt32(properties.Attributes["redChnl"].Value) : 0;
+            GreenChannel = properties.Attributes["greenChnl"] != null ? Convert.ToInt32(properties.Attributes["greenChnl"].Value) : 0;
+            BlueChannel = properties.Attributes["blueChnl"] != null ? Convert.ToInt32(properties.Attributes["blueChnl"].Value) : 0;
 
             // load texture information
             foreach (XmlNode node in root.SelectNodes("pages/page"))
             {
                 var page = new Page();
-                page.id = Convert.ToInt32(node.Attributes["id"].Value);
-                page.filename = node.Attributes["file"].Value;
+                page.Id = Convert.ToInt32(node.Attributes["id"].Value);
+                page.Filename = node.Attributes["file"].Value;
 
-                pageData.Add(page.id, page);
+                pageData.Add(page.Id, page);
             }
-            pages = BitmapFontLoader.ToArray(pageData.Values);
+            Pages = BitmapFontLoader.ToArray(pageData.Values);
 
             // load character information
             foreach (XmlNode node in root.SelectNodes("chars/char"))
             {
                 var character = new Character();
-                character.character = (char)Convert.ToInt32(node.Attributes["id"].Value);
-                character.bounds = new Rectangle(Convert.ToInt32(node.Attributes["x"].Value),
+                character.Char = (char)Convert.ToInt32(node.Attributes["id"].Value);
+                character.Bounds = new Rectangle(Convert.ToInt32(node.Attributes["x"].Value),
                                                  Convert.ToInt32(node.Attributes["y"].Value),
                                                  Convert.ToInt32(node.Attributes["width"].Value),
                                                  Convert.ToInt32(node.Attributes["height"].Value));
-                character.offset = new Point(Convert.ToInt32(node.Attributes["xoffset"].Value),
+                character.Offset = new Point(Convert.ToInt32(node.Attributes["xoffset"].Value),
                                              Convert.ToInt32(node.Attributes["yoffset"].Value));
-                character.xAdvance = Convert.ToInt32(node.Attributes["xadvance"].Value);
-                character.texturePage = Convert.ToInt32(node.Attributes["page"].Value);
-                character.channel = Convert.ToInt32(node.Attributes["chnl"].Value);
+                character.XAdvance = Convert.ToInt32(node.Attributes["xadvance"].Value);
+                character.TexturePage = Convert.ToInt32(node.Attributes["page"].Value);
+                character.Channel = Convert.ToInt32(node.Attributes["chnl"].Value);
 
-                charDictionary[character.character] = character;
+                charDictionary[character.Char] = character;
             }
-            characters = charDictionary;
+            Characters = charDictionary;
 
             // loading kerning information
             foreach (XmlNode node in root.SelectNodes("kernings/kerning"))
@@ -293,16 +293,16 @@ namespace Nez.BitmapFonts
                                   Convert.ToInt32(node.Attributes["amount"].Value));
 
                 if (!kerningDictionary.ContainsKey(key))
-                    kerningDictionary.Add(key, key.amount);
+                    kerningDictionary.Add(key, key.Amount);
             }
-            kernings = kerningDictionary;
+            Kernings = kerningDictionary;
         }
 
         void LoadTextures()
         {
-            textures = new Texture2D[pages.Length];
-            for (var i = 0; i < textures.Length; i++)
-                textures[i] = Texture2D.FromStream(Core.graphicsDevice, TitleContainer.OpenStream(pages[i].filename));
+            Textures = new Texture2D[Pages.Length];
+            for (var i = 0; i < Textures.Length; i++)
+                Textures[i] = Texture2D.FromStream(Core.GraphicsDevice, TitleContainer.OpenStream(Pages[i].Filename));
         }
     }
 }

@@ -10,20 +10,20 @@ namespace Nez
 	/// </summary>
 	public class SpriteOutlineRenderer : RenderableComponent
 	{
-		public override float width => _sprite.width + outlineWidth * 2;
-		public override float height => _sprite.height + outlineWidth * 2;
+		public override float Width => _sprite.Width + OutlineWidth * 2;
+		public override float Height => _sprite.Height + OutlineWidth * 2;
 
-		public override RectangleF bounds => _sprite.bounds;
+		public override RectangleF Bounds => _sprite.Bounds;
 
 		/// <summary>
 		/// the width of the outline
 		/// </summary>
-		public int outlineWidth = 3;
+		public int OutlineWidth = 3;
 
 		/// <summary>
 		/// the color the sprite will be tinted when it is rendered
 		/// </summary>
-		public Color outlineColor = Color.Black;
+		public Color OutlineColor = Color.Black;
 
 		Sprite _sprite;
 
@@ -36,22 +36,22 @@ namespace Nez
 		{
 			_sprite = sprite;
 			// RenderableComponent doesnt have an origin so we copy over the Sprite.origin to our localOffset
-			_localOffset = sprite.origin;
-			_sprite.enabled = false;
+			_localOffset = sprite.Origin;
+			_sprite.Enabled = false;
 		}
 
-		public override void onEntityTransformChanged( Transform.Component comp )
+		public override void OnEntityTransformChanged( Transform.Component comp )
 		{
-			base.onEntityTransformChanged( comp );
+			base.OnEntityTransformChanged( comp );
 
 			// our sprite is disabled so we need to forward the call over to it so it can update its bounds for rendering
-			_sprite.onEntityTransformChanged( comp );
+			_sprite.OnEntityTransformChanged( comp );
 		}
 
-		public override void render( Graphics graphics, Camera camera )
+		public override void Render( Graphics graphics, Camera camera )
 		{
-			_sprite.drawOutline( graphics, camera, outlineColor, outlineWidth );
-			_sprite.render( graphics, camera );
+			_sprite.DrawOutline( graphics, camera, OutlineColor, OutlineWidth );
+			_sprite.Render( graphics, camera );
 		}
 
 	}

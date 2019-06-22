@@ -10,14 +10,14 @@ namespace Nez.Sprites
 	/// </summary>
 	public class Sprite : RenderableComponent
 	{
-		public override RectangleF bounds
+		public override RectangleF Bounds
 		{
 			get
 			{
 				if( _areBoundsDirty )
 				{
-					if( subtexture != null )
-						_bounds.calculateBounds( entity.transform.position, _localOffset, _origin, entity.transform.scale, entity.transform.rotation, subtexture.sourceRect.Width, subtexture.sourceRect.Height );
+					if( Subtexture != null )
+						_bounds.CalculateBounds( Entity.Transform.Position, _localOffset, _origin, Entity.Transform.Scale, Entity.Transform.Rotation, Subtexture.SourceRect.Width, Subtexture.SourceRect.Height );
 					_areBoundsDirty = false;
 				}
 
@@ -29,55 +29,55 @@ namespace Nez.Sprites
 		/// the origin of the Sprite. This is set automatically when setting a Subtexture.
 		/// </summary>
 		/// <value>The origin.</value>
-		public Vector2 origin
+		public Vector2 Origin
 		{
 			get => _origin;
-			set => setOrigin( value );
+			set => SetOrigin( value );
 		}
 
 		/// <summary>
 		/// helper property for setting the origin in normalized fashion (0-1 for x and y)
 		/// </summary>
 		/// <value>The origin normalized.</value>
-		public Vector2 originNormalized
+		public Vector2 OriginNormalized
 		{
-			get => new Vector2( _origin.X / width * entity.transform.scale.X, _origin.Y / height * entity.transform.scale.Y );
-			set => setOrigin( new Vector2( value.X * width / entity.transform.scale.X, value.Y * height / entity.transform.scale.Y ) );
+			get => new Vector2( _origin.X / Width * Entity.Transform.Scale.X, _origin.Y / Height * Entity.Transform.Scale.Y );
+			set => SetOrigin( new Vector2( value.X * Width / Entity.Transform.Scale.X, value.Y * Height / Entity.Transform.Scale.Y ) );
 		}
 
 		/// <summary>
 		/// determines if the sprite should be rendered normally or flipped horizontally
 		/// </summary>
 		/// <value><c>true</c> if flip x; otherwise, <c>false</c>.</value>
-		public bool flipX
+		public bool FlipX
 		{
-			get => ( spriteEffects & SpriteEffects.FlipHorizontally ) == SpriteEffects.FlipHorizontally;
-			set => spriteEffects = value ? ( spriteEffects | SpriteEffects.FlipHorizontally ) : ( spriteEffects & ~SpriteEffects.FlipHorizontally );
+			get => ( SpriteEffects & SpriteEffects.FlipHorizontally ) == SpriteEffects.FlipHorizontally;
+			set => SpriteEffects = value ? ( SpriteEffects | SpriteEffects.FlipHorizontally ) : ( SpriteEffects & ~SpriteEffects.FlipHorizontally );
 		}
 
 		/// <summary>
 		/// determines if the sprite should be rendered normally or flipped vertically
 		/// </summary>
 		/// <value><c>true</c> if flip y; otherwise, <c>false</c>.</value>
-		public bool flipY
+		public bool FlipY
 		{
-			get => ( spriteEffects & SpriteEffects.FlipVertically ) == SpriteEffects.FlipVertically;
-			set => spriteEffects = value ? ( spriteEffects | SpriteEffects.FlipVertically ) : ( spriteEffects & ~SpriteEffects.FlipVertically );
+			get => ( SpriteEffects & SpriteEffects.FlipVertically ) == SpriteEffects.FlipVertically;
+			set => SpriteEffects = value ? ( SpriteEffects | SpriteEffects.FlipVertically ) : ( SpriteEffects & ~SpriteEffects.FlipVertically );
 		}
 
 		/// <summary>
 		/// Batchers passed along to the Batcher when rendering. flipX/flipY are helpers for setting this.
 		/// </summary>
-		public SpriteEffects spriteEffects = SpriteEffects.None;
+		public SpriteEffects SpriteEffects = SpriteEffects.None;
 
 		/// <summary>
 		/// the Subtexture that should be displayed by this Sprite. When set, the origin of the Sprite is also set to match Subtexture.origin.
 		/// </summary>
 		/// <value>The subtexture.</value>
-		public Subtexture subtexture
+		public Subtexture Subtexture
 		{
 			get => _subtexture;
-			set => setSubtexture( value );
+			set => SetSubtexture( value );
 		}
 
 		protected Vector2 _origin;
@@ -90,7 +90,7 @@ namespace Nez.Sprites
 		public Sprite( Subtexture subtexture )
 		{
 			_subtexture = subtexture;
-			_origin = subtexture.center;
+			_origin = subtexture.Center;
 		}
 
 		public Sprite( Texture2D texture ) : this( new Subtexture( texture ) )
@@ -105,12 +105,12 @@ namespace Nez.Sprites
 		/// </summary>
 		/// <returns>The subtexture.</returns>
 		/// <param name="subtexture">Subtexture.</param>
-		public Sprite setSubtexture( Subtexture subtexture )
+		public Sprite SetSubtexture( Subtexture subtexture )
 		{
 			_subtexture = subtexture;
 
 			if( _subtexture != null )
-				_origin = subtexture.origin;
+				_origin = subtexture.Origin;
 			return this;
 		}
 
@@ -119,7 +119,7 @@ namespace Nez.Sprites
 		/// </summary>
 		/// <returns>The origin.</returns>
 		/// <param name="origin">Origin.</param>
-		public Sprite setOrigin( Vector2 origin )
+		public Sprite SetOrigin( Vector2 origin )
 		{
 			if( _origin != origin )
 			{
@@ -134,9 +134,9 @@ namespace Nez.Sprites
 		/// </summary>
 		/// <returns>The origin normalized.</returns>
 		/// <param name="origin">Origin.</param>
-		public Sprite setOriginNormalized( Vector2 value )
+		public Sprite SetOriginNormalized( Vector2 value )
 		{
-			setOrigin( new Vector2( value.X * width / entity.transform.scale.X, value.Y * height / entity.transform.scale.Y ) );
+			SetOrigin( new Vector2( value.X * Width / Entity.Transform.Scale.X, value.Y * Height / Entity.Transform.Scale.Y ) );
 			return this;
 		}
 
@@ -150,20 +150,20 @@ namespace Nez.Sprites
 		/// <param name="graphics">Graphics.</param>
 		/// <param name="camera">Camera.</param>
 		/// <param name="offset">Offset.</param>
-		public void drawOutline( Graphics graphics, Camera camera, int offset = 1 )
+		public void DrawOutline( Graphics graphics, Camera camera, int offset = 1 )
 		{
-			drawOutline( graphics, camera, Color.Black, offset );
+			DrawOutline( graphics, camera, Color.Black, offset );
 		}
 
-		public void drawOutline( Graphics graphics, Camera camera, Color outlineColor, int offset = 1 )
+		public void DrawOutline( Graphics graphics, Camera camera, Color outlineColor, int offset = 1 )
 		{
 			// save the stuff we are going to modify so we can restore it later
 			var originalPosition = _localOffset;
-			var originalColor = color;
+			var originalColor = Color;
 			var originalLayerDepth = _layerDepth;
 
 			// set our new values
-			color = outlineColor;
+			Color = outlineColor;
 			_layerDepth += 0.01f;
 
 			for( var i = -1; i < 2; i++ )
@@ -173,20 +173,20 @@ namespace Nez.Sprites
 					if( i != 0 || j != 0 )
 					{
 						_localOffset = originalPosition + new Vector2( i * offset, j * offset );
-						render( graphics, camera );
+						Render( graphics, camera );
 					}
 				}
 			}
 
 			// restore changed state
 			_localOffset = originalPosition;
-			color = originalColor;
+			Color = originalColor;
 			_layerDepth = originalLayerDepth;
 		}
 
-		public override void render( Graphics graphics, Camera camera )
+		public override void Render( Graphics graphics, Camera camera )
 		{
-			graphics.batcher.draw( _subtexture, entity.transform.position + localOffset, color, entity.transform.rotation, origin, entity.transform.scale, spriteEffects, _layerDepth );
+			graphics.Batcher.Draw( _subtexture, Entity.Transform.Position + LocalOffset, Color, Entity.Transform.Rotation, Origin, Entity.Transform.Scale, SpriteEffects, _layerDepth );
 		}
 
 	}

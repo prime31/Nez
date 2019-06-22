@@ -8,18 +8,18 @@ namespace Nez.Tiled
 		/// <summary>
 		/// tileId for this frame of the animation
 		/// </summary>
-		public readonly int tileId;
+		public readonly int TileId;
 
 		/// <summary>
 		/// duration in seconds for this frame of the animation
 		/// </summary>
-		public float duration;
+		public float Duration;
 
 
 		public TiledTileAnimationFrame( int tileId, float duration )
 		{
-			this.tileId = tileId;
-			this.duration = duration / 1000;
+			this.TileId = tileId;
+			this.Duration = duration / 1000;
 		}
 	}
 }

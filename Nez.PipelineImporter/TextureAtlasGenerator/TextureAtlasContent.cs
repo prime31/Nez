@@ -16,29 +16,29 @@ namespace Nez.TextureAtlasGenerator
 		/// <summary>
 		/// Single texture contains many separate sprite images.
 		/// </summary>
-		public Texture2DContent texture = new Texture2DContent();
+		public Texture2DContent Texture = new Texture2DContent();
 
 		/// <summary>
 		/// Remember where in the texture each sprite has been placed.
 		/// </summary>
-		public List<Rectangle> spriteRectangles = new List<Rectangle>();
+		public List<Rectangle> SpriteRectangles = new List<Rectangle>();
 
 		/// <summary>
 		/// Store the original sprite filenames, so we can look up sprites by name.
 		/// </summary>
-		public Dictionary<string,int> spriteNames = new Dictionary<string,int>();
+		public Dictionary<string,int> SpriteNames = new Dictionary<string,int>();
 
 		/// <summary>
 		/// stores the folder name (ie animation name) and a point. The point.x represents the index of the first frame
 		/// and point.y is the last frame. The indexes are for the spriteRectangles array
 		/// </summary>
-		public Dictionary<string,Point> spriteAnimationDetails = new Dictionary<string,Point>();
+		public Dictionary<string,Point> SpriteAnimationDetails = new Dictionary<string,Point>();
 
 		/// <summary>
 		/// optional nine-slice padding for a sprite
 		/// </summary>
-		public Dictionary<string,int[]> nineSliceSplits = new Dictionary<string,int[]>();
+		public Dictionary<string,int[]> NineSliceSplits = new Dictionary<string,int[]>();
 
-		public int animationFPS;
+		public int AnimationFPS;
 	}
 }

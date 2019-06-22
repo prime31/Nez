@@ -8,11 +8,11 @@ namespace Nez.AI.BehaviorTrees
 	/// </summary>
 	public class AlwaysFail<T> : Decorator<T>
 	{
-		public override TaskStatus update( T context )
+		public override TaskStatus Update( T context )
 		{
-			Insist.isNotNull( child, "child must not be null" );
+			Insist.IsNotNull( Child, "child must not be null" );
 
-			var status = child.update( context );
+			var status = Child.Update( context );
 
 			if( status == TaskStatus.Running )
 				return TaskStatus.Running;

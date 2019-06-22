@@ -10,53 +10,53 @@ namespace Nez
 	/// </summary>
 	public class GooCursor : RenderableComponent, IUpdatable
 	{
-		public override float width { get { return _cursorTexture.Width; } }
-		public override float height { get { return _cursorTexture.Height; } }
+		public override float Width { get { return _cursorTexture.Width; } }
+		public override float Height { get { return _cursorTexture.Height; } }
 
 		/// <summary>
 		/// Gets of Sets the stiffness of the trail A lower number means the trail will be longer
 		/// </summary>
-		public float trailStiffness = 30000;
+		public float TrailStiffness = 30000;
 
 		/// <summary>
 		/// Controls the damping of the velocity of trail nodes
 		/// </summary>
-		public float trailDamping = 600;
+		public float TrailDamping = 600;
 
 		/// <summary>
 		/// Mass of a trails node
 		/// </summary>
-		public float trailNodeMass = 11f;
+		public float TrailNodeMass = 11f;
 
 		/// <summary>
 		/// The scaling applied at the tip of the cursor
 		/// </summary>
-		public float startScale = 1f;
+		public float StartScale = 1f;
 
 		/// <summary>
 		/// The scaling applied at the end of the cursor
 		/// </summary>
-		public float endScale = 0.3f;
+		public float EndScale = 0.3f;
 
 		/// <summary>
 		/// use this to control the rate of change between the StartScale and the EndScale
 		/// </summary>
-		public float lerpExponent = 0.5f;
+		public float LerpExponent = 0.5f;
 
 		/// <summary>
 		/// Color used to fill the cursor
 		/// </summary>
-		public Color fillColor = Color.Black;
+		public Color FillColor = Color.Black;
 
 		/// <summary>
 		/// color used for the cursor border
 		/// </summary>
-		public Color borderColor = Color.White;
+		public Color BorderColor = Color.White;
 
 		/// <summary>
 		/// Size of the border (in pixels)
 		/// </summary>
-		public float borderSize = 10;
+		public float BorderSize = 10;
 
 
 		// this is the sprite that is drawn at the current cursor position.
@@ -78,19 +78,19 @@ namespace Nez
 
 			// initialize all positions to the current mouse position to avoid jankiness
 			for( var i = 0; i < _trailNodeCount; i++ )
-				_trailNodes[i].position = Input.scaledMousePosition;
+				_trailNodes[i].Position = Input.ScaledMousePosition;
 		}
 
-		public override void onAddedToEntity()
+		public override void OnAddedToEntity()
 		{
-			_cursorTexture = entity.scene.content.Load<Texture2D>( "nez/textures/gooCursor" );
+			_cursorTexture = Entity.Scene.Content.Load<Texture2D>( "nez/textures/gooCursor" );
 			_textureCenter = new Vector2( _cursorTexture.Width / 2, _cursorTexture.Height / 2 );
 		}
 
-		void IUpdatable.update()
+		void IUpdatable.Update()
 		{
 			// set position of first trail node;
-			_trailNodes[0].position = Input.rawMousePosition.ToVector2();
+			_trailNodes[0].Position = Input.RawMousePosition.ToVector2();
 
 			// update the trails
 			for( var i = 1; i < _trailNodeCount; i++ )
@@ -98,38 +98,38 @@ namespace Nez
 				var node = _trailNodes[i];
 
 				// calculate spring force
-				var stretch = node.position - _trailNodes[i - 1].position;
-				var force = -trailStiffness * stretch - trailDamping * node.velocity;
+				var stretch = node.Position - _trailNodes[i - 1].Position;
+				var force = -TrailStiffness * stretch - TrailDamping * node.Velocity;
 
 				// apply acceleration
-				var acceleration = force / trailNodeMass;
-				node.velocity += acceleration * Time.deltaTime;
+				var acceleration = force / TrailNodeMass;
+				node.Velocity += acceleration * Time.DeltaTime;
 
 				// apply velocity
-				node.position += node.velocity * Time.deltaTime;
+				node.Position += node.Velocity * Time.DeltaTime;
 				_trailNodes[i] = node;
 			}
 		}
 
-		public override void render( Graphics graphics, Camera camera )
+		public override void Render( Graphics graphics, Camera camera )
 		{
 			// First we draw all the trail nodes using the border color. we need to draw them slightly larger, so the border is left visible
 			// when we draw the actual nodes
 
 			// adjust the startScale and endScale to take into consideration the border
-			var borderStartScale = startScale + borderSize / _cursorTexture.Width;
-			var borderEndScale = endScale + borderSize / _cursorTexture.Width;
+			var borderStartScale = StartScale + BorderSize / _cursorTexture.Width;
+			var borderEndScale = EndScale + BorderSize / _cursorTexture.Width;
 
 			// draw all nodes with the new scales
 			for( var i = 0; i < _trailNodeCount; i++ )
 			{
 				var node = _trailNodes[i];
 				var lerpFactor = (float)i / (float)( _trailNodeCount - 1 );
-				lerpFactor = Mathf.pow( lerpFactor, lerpExponent );
+				lerpFactor = Mathf.Pow( lerpFactor, LerpExponent );
 				var scale = MathHelper.Lerp( borderStartScale, borderEndScale, lerpFactor );
 
 				// draw using the border Color
-				graphics.batcher.draw( _cursorTexture, node.position, null, borderColor, 0.0f, _textureCenter, scale, SpriteEffects.None, 0.0f );
+				graphics.Batcher.Draw( _cursorTexture, node.Position, null, BorderColor, 0.0f, _textureCenter, scale, SpriteEffects.None, 0.0f );
 			}
 
 			// Next, we draw all the nodes normally, using the fill Color because before we drew them larger, after we draw them at
@@ -138,19 +138,19 @@ namespace Nez
 			{
 				var node = _trailNodes[i];
 				var lerpFactor = (float)i / (float)( _trailNodeCount - 1 );
-				lerpFactor = Mathf.pow( lerpFactor, lerpExponent );
-				var scale = MathHelper.Lerp( startScale, endScale, lerpFactor );
+				lerpFactor = Mathf.Pow( lerpFactor, LerpExponent );
+				var scale = MathHelper.Lerp( StartScale, EndScale, lerpFactor );
 
 				// draw using the fill color
-				graphics.batcher.draw( _cursorTexture, node.position, null, fillColor, 0.0f, _textureCenter, scale, SpriteEffects.None, 0.0f );
+				graphics.Batcher.Draw( _cursorTexture, node.Position, null, FillColor, 0.0f, _textureCenter, scale, SpriteEffects.None, 0.0f );
 			}
 		}
 
 
 		private struct TrailNode
 		{
-			public Vector2 position;
-			public Vector2 velocity;
+			public Vector2 Position;
+			public Vector2 Velocity;
 		}
 
 	}

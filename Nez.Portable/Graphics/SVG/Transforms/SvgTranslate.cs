@@ -14,7 +14,7 @@ namespace Nez.Svg
 			_x = x;
 			_y = y;
 
-			matrix = Matrix2D.createTranslation( _x, _y );
+			Matrix = Matrix2D.CreateTranslation( _x, _y );
 		}
 
 

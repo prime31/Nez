@@ -8,8 +8,8 @@ namespace Nez.ImGuiTools.ObjectInspectors
 {
 	public class ComponentInspector : AbstractComponentInspector
 	{
-		public override Entity entity => _component.entity;
-		public override Component component => _component;
+		public override Entity Entity => _component.Entity;
+		public override Component Component => _component;
 
 		Component _component;
         string _name;
@@ -18,7 +18,7 @@ namespace Nez.ImGuiTools.ObjectInspectors
         public ComponentInspector( Component component )
         {
             _component = component;
-            _inspectors = TypeInspectorUtils.getInspectableProperties( component );
+            _inspectors = TypeInspectorUtils.GetInspectableProperties( component );
 
             if( _component.GetType().IsGenericType )
             {
@@ -41,7 +41,7 @@ namespace Nez.ImGuiTools.ObjectInspectors
             }
         }
 
-		public override void draw()
+		public override void Draw()
 		{
             ImGui.PushID( _scopeId );
             var isHeaderOpen = ImGui.CollapsingHeader( _name );
@@ -51,27 +51,27 @@ namespace Nez.ImGuiTools.ObjectInspectors
             {
                 if( ImGui.Selectable( "Remove Component" ) )
                 {
-                    _component.removeComponent();
+                    _component.RemoveComponent();
                 }
                 ImGui.EndPopup();
             }
 
             if( isHeaderOpen )
             {
-                var enabled = _component.enabled;
+                var enabled = _component.Enabled;
                 if( ImGui.Checkbox( "Enabled", ref enabled ) )
                 {
-                    _component.setEnabled( enabled );
+                    _component.SetEnabled( enabled );
                 }
 
                 for( var i = _inspectors.Count - 1; i >= 0; i-- )
                 {
-                    if( _inspectors[i].isTargetDestroyed )
+                    if( _inspectors[i].IsTargetDestroyed )
                     {
                         _inspectors.RemoveAt( i );
                         continue;
                     }
-                    _inspectors[i].draw();
+                    _inspectors[i].Draw();
                 }
                 
                 foreach( var action in _componentDelegateMethods )

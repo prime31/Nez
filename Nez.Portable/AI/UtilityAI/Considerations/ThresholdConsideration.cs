@@ -9,26 +9,26 @@ namespace Nez.AI.UtilityAI
 	/// </summary>
 	public class ThresholdConsideration<T> : IConsideration<T>
 	{
-		public float threshold;
+		public float Threshold;
 
-		public IAction<T> action { get; set; }
+		public IAction<T> Action { get; set; }
 
 		List<IAppraisal<T>> _appraisals = new List<IAppraisal<T>>();
 
 
 		public ThresholdConsideration( float threshold )
 		{
-			this.threshold = threshold;
+			this.Threshold = threshold;
 		}
 
 
-		float IConsideration<T>.getScore( T context )
+		float IConsideration<T>.GetScore( T context )
 		{
 			var sum = 0f;
 			for( var i = 0; i < _appraisals.Count; i++ )
 			{
-				var score = _appraisals[i].getScore( context );
-				if( score < threshold )
+				var score = _appraisals[i].GetScore( context );
+				if( score < Threshold )
 					return sum;
 				sum += score;
 			}

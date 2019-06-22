@@ -10,28 +10,28 @@ namespace Nez.TexturePackerImporter
 	{
 		protected override void Write( ContentWriter writer, TexturePackerFile data )
 		{
-			var assetName = Path.GetFileNameWithoutExtension( data.metadata.image );
+			var assetName = Path.GetFileNameWithoutExtension( data.Metadata.Image );
 
 			writer.Write( assetName );
-			writer.Write( data.regions.Count );
+			writer.Write( data.Regions.Count );
 
-			foreach( var region in data.regions )
+			foreach( var region in data.Regions )
 			{
-				var regionName = region.filename.Replace( Path.GetExtension( region.filename ), string.Empty );
-				TexturePackerProcessor.logger.LogMessage( "writing region: {0}", regionName );
+				var regionName = region.Filename.Replace( Path.GetExtension( region.Filename ), string.Empty );
+				TexturePackerProcessor.Logger.LogMessage( "writing region: {0}", regionName );
 
 				writer.Write( regionName );
-				writer.Write( region.frame.x );
-				writer.Write( region.frame.y );
-				writer.Write( region.frame.width );
-				writer.Write( region.frame.height );
+				writer.Write( region.Frame.X );
+				writer.Write( region.Frame.Y );
+				writer.Write( region.Frame.Width );
+				writer.Write( region.Frame.Height );
 
 				// no use to write as double, since Subtexture.center holds floats
-				writer.Write( (float)region.pivotPoint.x );
-				writer.Write( (float)region.pivotPoint.y );
+				writer.Write( (float)region.PivotPoint.X );
+				writer.Write( (float)region.PivotPoint.Y );
 			}
 
-			writer.WriteObject( data.spriteAnimationDetails );
+			writer.WriteObject( data.SpriteAnimationDetails );
 		}
 
 

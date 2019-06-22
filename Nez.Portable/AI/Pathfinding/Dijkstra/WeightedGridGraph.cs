@@ -31,10 +31,10 @@ namespace Nez.AI.Pathfinding
 			new Point( 1, 1 ),
 		};
 
-		public HashSet<Point> walls = new HashSet<Point>();
-		public HashSet<Point> weightedNodes = new HashSet<Point>();
-		public int defaultWeight = 1;
-		public int weightedNodeWeight = 5;
+		public HashSet<Point> Walls = new HashSet<Point>();
+		public HashSet<Point> WeightedNodes = new HashSet<Point>();
+		public int DefaultWeight = 1;
+		public int WeightedNodeWeight = 5;
 
 		int _width, _height;
 		Point[] _dirs;
@@ -55,16 +55,16 @@ namespace Nez.AI.Pathfinding
 		/// <param name="tiledLayer">Tiled layer.</param>
 		public WeightedGridGraph( TiledTileLayer tiledLayer )
 		{
-			_width = tiledLayer.width;
-			_height = tiledLayer.height;
+			_width = tiledLayer.Width;
+			_height = tiledLayer.Height;
 			_dirs = CARDINAL_DIRS;
 
-			for( var y = 0; y < tiledLayer.tiledMap.height; y++ )
+			for( var y = 0; y < tiledLayer.TiledMap.Height; y++ )
 			{
-				for( var x = 0; x < tiledLayer.tiledMap.width; x++ )
+				for( var x = 0; x < tiledLayer.TiledMap.Width; x++ )
 				{
-					if( tiledLayer.getTile( x, y ) != null )
-						walls.Add( new Point( x, y ) );
+					if( tiledLayer.GetTile( x, y ) != null )
+						Walls.Add( new Point( x, y ) );
 				}
 			}
 		}
@@ -75,7 +75,7 @@ namespace Nez.AI.Pathfinding
 		/// </summary>
 		/// <returns><c>true</c>, if node in bounds was ised, <c>false</c> otherwise.</returns>
 		/// <param name="node">Node.</param>
-		bool isNodeInBounds( Point node )
+		bool IsNodeInBounds( Point node )
 		{
 			return 0 <= node.X && node.X < _width && 0 <= node.Y && node.Y < _height;
 		}
@@ -86,9 +86,9 @@ namespace Nez.AI.Pathfinding
 		/// </summary>
 		/// <returns><c>true</c>, if node passable was ised, <c>false</c> otherwise.</returns>
 		/// <param name="node">Node.</param>
-		public bool isNodePassable( Point node )
+		public bool IsNodePassable( Point node )
 		{
-			return !walls.Contains( node );
+			return !Walls.Contains( node );
 		}
 
 
@@ -97,22 +97,22 @@ namespace Nez.AI.Pathfinding
 		/// </summary>
 		/// <param name="start">Start.</param>
 		/// <param name="goal">Goal.</param>
-		public List<Point> search( Point start, Point goal )
+		public List<Point> Search( Point start, Point goal )
 		{
-			return WeightedPathfinder.search( this, start, goal );
+			return WeightedPathfinder.Search( this, start, goal );
 		}
 
 
 		#region IWeightedGraph implementation
 
-		IEnumerable<Point> IWeightedGraph<Point>.getNeighbors( Point node )
+		IEnumerable<Point> IWeightedGraph<Point>.GetNeighbors( Point node )
 		{
 			_neighbors.Clear();
 
 			foreach( var dir in _dirs )
 			{
 				var next = new Point( node.X + dir.X, node.Y + dir.Y );
-				if( isNodeInBounds( next ) && isNodePassable( next ) )
+				if( IsNodeInBounds( next ) && IsNodePassable( next ) )
 					_neighbors.Add( next );
 			}
 
@@ -120,9 +120,9 @@ namespace Nez.AI.Pathfinding
 		}
 
 
-		int IWeightedGraph<Point>.cost( Point from, Point to )
+		int IWeightedGraph<Point>.Cost( Point from, Point to )
 		{
-			return weightedNodes.Contains( to ) ? weightedNodeWeight : defaultWeight;
+			return WeightedNodes.Contains( to ) ? WeightedNodeWeight : DefaultWeight;
 		}
 
 		#endregion

@@ -13,30 +13,30 @@ namespace Nez.BitmapFontImporter
 	{
 		protected override void Write( ContentWriter writer, BitmapFontProcessorResult result )
 		{
-			writer.Write( result.packTexturesIntoXnb );
+			writer.Write( result.PackTexturesIntoXnb );
 
 			// write our textures if we should else write the texture names
-			if( result.packTexturesIntoXnb )
+			if( result.PackTexturesIntoXnb )
 			{
-				writer.Write( result.textures.Count );
-				foreach( var tex in result.textures )
+				writer.Write( result.Textures.Count );
+				foreach( var tex in result.Textures )
 					writer.WriteObject( tex );
 			}
 			else
 			{
-				writer.Write( result.textureNames.Count );
-				for( var i = 0; i < result.textureNames.Count; i++ )
+				writer.Write( result.TextureNames.Count );
+				for( var i = 0; i < result.TextureNames.Count; i++ )
 				{
-					writer.Write( result.textureNames[i] );
-					writer.Write( result.textureOrigins[i] );
+					writer.Write( result.TextureNames[i] );
+					writer.Write( result.TextureOrigins[i] );
 				}
 			}
 
 			// write the font data
-			var fontFile = result.fontFile;
-			writer.Write( fontFile.common.lineHeight );
+			var fontFile = result.FontFile;
+			writer.Write( fontFile.Common.LineHeight );
 
-			var padding = fontFile.info.padding.Split( new char[] { ',' } );
+			var padding = fontFile.Info.Padding.Split( new char[] { ',' } );
 			if( padding.Length != 4 )
 				throw new PipelineException( "font padding is invalid! It should contain 4 values" );
 
@@ -45,32 +45,32 @@ namespace Nez.BitmapFontImporter
 			writer.Write( int.Parse( padding[2] ) ); // bottom
 			writer.Write( int.Parse( padding[3] ) ); // right
 
-			writer.Write( getDescent( fontFile, int.Parse( padding[2] ) ) );
+			writer.Write( GetDescent( fontFile, int.Parse( padding[2] ) ) );
 
-			writer.Write( fontFile.chars.Count );
-			foreach( var c in fontFile.chars )
+			writer.Write( fontFile.Chars.Count );
+			foreach( var c in fontFile.Chars )
 			{
-				writer.Write( c.id );
-				writer.Write( c.page );
-				writer.Write( c.x );
-				writer.Write( c.y );
-				writer.Write( c.width );
-				writer.Write( c.height );
-				writer.Write( c.xOffset );
-				writer.Write( c.yOffset );
-				writer.Write( c.xAdvance );
+				writer.Write( c.Id );
+				writer.Write( c.Page );
+				writer.Write( c.X );
+				writer.Write( c.Y );
+				writer.Write( c.Width );
+				writer.Write( c.Height );
+				writer.Write( c.XOffset );
+				writer.Write( c.YOffset );
+				writer.Write( c.XAdvance );
 			}
 		}
 
 
-		int getDescent( BitmapFontFile fontFile, int padBottom )
+		int GetDescent( BitmapFontFile fontFile, int padBottom )
 		{
 			var descent = 0;
 
-			foreach( var c in fontFile.chars )
+			foreach( var c in fontFile.Chars )
 			{
-				if( c.width > 0 && c.height > 0 )
-					descent = Math.Min( fontFile.common.base_ + c.yOffset + fontFile.info.outLine, descent );
+				if( c.Width > 0 && c.Height > 0 )
+					descent = Math.Min( fontFile.Common.Base_ + c.YOffset + fontFile.Info.OutLine, descent );
 			}
 
 			return descent + padBottom;

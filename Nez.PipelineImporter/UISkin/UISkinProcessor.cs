@@ -20,35 +20,35 @@ namespace Nez.UISkinImporter
 				// special cases first
 				if( key == "colors" )
 				{
-					skinConfig.colors = parseColors( input[key] as Dictionary<string, object> );
+					skinConfig.Colors = ParseColors( input[key] as Dictionary<string, object> );
 				}
 				else if( key == "libGdxAtlases" )
 				{
 					var jArr = input[key] as JArray;
-					skinConfig.libGdxAtlases = jArr.ToObject<string[]>();
-					UISkinImporter.logger.LogMessage( "added {0} LibGdxAtlases\n", jArr.Count );
+					skinConfig.LibGdxAtlases = jArr.ToObject<string[]>();
+					UISkinImporter.Logger.LogMessage( "added {0} LibGdxAtlases\n", jArr.Count );
 				}
 				else if( key == "textureAtlases" )
 				{
 					var jArr = input[key] as JArray;
-					skinConfig.textureAtlases = jArr.ToObject<string[]>();
-					UISkinImporter.logger.LogMessage( "added {0} TextureAtlases\n", jArr.Count );
+					skinConfig.TextureAtlases = jArr.ToObject<string[]>();
+					UISkinImporter.Logger.LogMessage( "added {0} TextureAtlases\n", jArr.Count );
 				}
 				else
 				{
-					UISkinImporter.logger.LogMessage( "adding style type: {0}", key );
+					UISkinImporter.Logger.LogMessage( "adding style type: {0}", key );
 					styleConfig.Add( key, input[key] );
 				}
 			}
 
 			if( styleConfig.Keys.Count > 0 )
-				skinConfig.styles = styleConfig;
+				skinConfig.Styles = styleConfig;
 
 			return skinConfig;
 		}
 
 
-		Dictionary<string, Color> parseColors( Dictionary<string, object> colors )
+		Dictionary<string, Color> ParseColors( Dictionary<string, object> colors )
 		{
 			if( colors.Count == 0 )
 				return null;
@@ -57,7 +57,7 @@ namespace Nez.UISkinImporter
 			foreach( var key in colors.Keys )
 			{
 				var obj = colors[key];
-				UISkinImporter.logger.LogMessage( "adding color: {0}", key );
+				UISkinImporter.Logger.LogMessage( "adding color: {0}", key );
 				Color color;
 
 				// Allow the passing of strings (hex), arrays and objects (r:, g:, b:) to
@@ -68,12 +68,12 @@ namespace Nez.UISkinImporter
 
 					// we could have hex or hex
 					if( val.StartsWith( "#" ) )
-						color = ColorExt.hexToColor( val.Substring( 1 ) );
+						color = ColorExt.HexToColor( val.Substring( 1 ) );
 					else if( val.StartsWith( "0x" ) )
-						color = ColorExt.hexToColor( val.Substring( 2 ) );
+						color = ColorExt.HexToColor( val.Substring( 2 ) );
 					else
 					{
-						UISkinImporter.logger.LogMessage( "unsupported color definition {0}: {1}", key, val );
+						UISkinImporter.Logger.LogMessage( "unsupported color definition {0}: {1}", key, val );
 						continue;
 					}
 				}
@@ -82,7 +82,7 @@ namespace Nez.UISkinImporter
 					var jArr = obj as JArray;
 					if( jArr.Count < 3 )
 					{
-						UISkinImporter.logger.LogMessage( "unsupported color definition {0}: color array requires at least 3 members", key );
+						UISkinImporter.Logger.LogMessage( "unsupported color definition {0}: color array requires at least 3 members", key );
 						continue;
 					}
 
@@ -102,7 +102,7 @@ namespace Nez.UISkinImporter
 					}
 					else
 					{
-						UISkinImporter.logger.LogMessage( "unsupported color definition {0}: unknown type", key );
+						UISkinImporter.Logger.LogMessage( "unsupported color definition {0}: unknown type", key );
 						continue;
 					}
 				}
@@ -111,7 +111,7 @@ namespace Nez.UISkinImporter
 					var dict = obj as Dictionary<string, object>;
 					if( dict.Count < 3 )
 					{
-						UISkinImporter.logger.LogMessage( "unsupported color definition {0}: color object requires at least 3 members", key );
+						UISkinImporter.Logger.LogMessage( "unsupported color definition {0}: color object requires at least 3 members", key );
 						continue;
 					}
 
@@ -132,7 +132,7 @@ namespace Nez.UISkinImporter
 				result.Add( key, color );
 			}
 
-			UISkinImporter.logger.LogMessage( "" );
+			UISkinImporter.Logger.LogMessage( "" );
 			return result;
 		}
 	}

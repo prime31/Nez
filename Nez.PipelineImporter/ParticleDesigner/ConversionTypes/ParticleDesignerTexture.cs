@@ -7,10 +7,10 @@ namespace Nez.ParticleDesignerImporter
 	public class ParticleDesignerTexture
 	{
 		[XmlAttribute]
-		public string name;
+		public string Name;
 
 		[XmlAttribute]
-		public string data;
+		public string Data;
 	}
 }
 

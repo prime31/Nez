@@ -56,15 +56,15 @@ namespace Nez.BitmapFonts
             {
                 var character = new Character();
 
-                character.character = (char)reader.ReadInt32();
-                character.texturePage = reader.ReadInt32();
-                character.bounds.X = reader.ReadInt32();
-                character.bounds.Y = reader.ReadInt32();
-                character.bounds.Width = reader.ReadInt32();
-                character.bounds.Height = reader.ReadInt32();
-                character.offset.X = reader.ReadInt32();
-                character.offset.Y = reader.ReadInt32();
-                character.xAdvance = reader.ReadInt32();
+                character.Char = (char)reader.ReadInt32();
+                character.TexturePage = reader.ReadInt32();
+                character.Bounds.X = reader.ReadInt32();
+                character.Bounds.Y = reader.ReadInt32();
+                character.Bounds.Width = reader.ReadInt32();
+                character.Bounds.Height = reader.ReadInt32();
+                character.Offset.X = reader.ReadInt32();
+                character.Offset.Y = reader.ReadInt32();
+                character.XAdvance = reader.ReadInt32();
 
                 // Subtexture textureRegion = null;
                 // if (hasEmbeddedTextures)
@@ -72,17 +72,17 @@ namespace Nez.BitmapFonts
                 // else
                 // 	textureRegion = new Subtexture(textures[textureIndex], atlasOrigins[textureIndex].x + x, atlasOrigins[textureIndex].y + y, width, height);
 
-                characters[character.character] = character;
+                characters[character.Char] = character;
             }
 
             var font = new BitmapFont();
-            font.kernings = new Dictionary<Kerning, int>();
-            font.textures = textures;
-            font.lineHeight = lineHeight;
-            font.padding = new Padding(padLeft, padTop, padRight, padBottom);
-            font.characters = characters;
-            font.defaultCharacter = font[' '];
-            font._spaceWidth = font.defaultCharacter.bounds.Width + font.defaultCharacter.xAdvance;
+            font.Kernings = new Dictionary<Kerning, int>();
+            font.Textures = textures;
+            font.LineHeight = lineHeight;
+            font.Padding = new Padding(padLeft, padTop, padRight, padBottom);
+            font.Characters = characters;
+            font.DefaultCharacter = font[' '];
+            font._spaceWidth = font.DefaultCharacter.Bounds.Width + font.DefaultCharacter.XAdvance;
 
             return font;
         }

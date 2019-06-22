@@ -12,15 +12,15 @@ namespace Nez.BitmapFonts
         /// <summary>
         /// Gets or sets how much the x position should be adjusted when drawing the second character immediately following the first.
         /// </summary>
-        public int amount;
-        public char firstCharacter;
-        public char secondCharacter;
+        public int Amount;
+        public char FirstCharacter;
+        public char SecondCharacter;
 
         public Kerning(char firstCharacter, char secondCharacter, int amount)
         {
-            this.firstCharacter = firstCharacter;
-            this.secondCharacter = secondCharacter;
-            this.amount = amount;
+            this.FirstCharacter = firstCharacter;
+            this.SecondCharacter = secondCharacter;
+            this.Amount = amount;
         }
 
         public override bool Equals(object obj)
@@ -33,10 +33,10 @@ namespace Nez.BitmapFonts
             return Equals((Kerning)obj);
         }
 
-        public bool Equals(Kerning other) => firstCharacter == other.firstCharacter && secondCharacter == other.secondCharacter;
+        public bool Equals(Kerning other) => FirstCharacter == other.FirstCharacter && SecondCharacter == other.SecondCharacter;
 
-        public override int GetHashCode() => (firstCharacter << 16) | secondCharacter;
+        public override int GetHashCode() => (FirstCharacter << 16) | SecondCharacter;
 
-        public override string ToString() => string.Format("{0} to {1} = {2}", firstCharacter, secondCharacter, amount);
+        public override string ToString() => string.Format("{0} to {1} = {2}", FirstCharacter, SecondCharacter, Amount);
     }
 }

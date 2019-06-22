@@ -15,7 +15,7 @@ namespace Nez.AI.BehaviorTrees
 
 		public ConditionalDecorator( IConditional<T> conditional, bool shouldReevalute )
 		{
-			Insist.isTrue( conditional is IConditional<T>, "conditional must implment IConditional" );
+			Insist.IsTrue( conditional is IConditional<T>, "conditional must implment IConditional" );
 			_conditional = conditional;
 			_shouldReevaluate = shouldReevalute;
 		}
@@ -25,28 +25,28 @@ namespace Nez.AI.BehaviorTrees
 		{}
 
 
-		public override void invalidate()
+		public override void Invalidate()
 		{
-			base.invalidate();
+			base.Invalidate();
 			_conditionalStatus = TaskStatus.Invalid;
 		}
 
 
-		public override void onStart()
+		public override void OnStart()
 		{
 			_conditionalStatus = TaskStatus.Invalid;
 		}
 
 		
-		public override TaskStatus update( T context )
+		public override TaskStatus Update( T context )
 		{
-			Insist.isNotNull( child, "child must not be null" );
+			Insist.IsNotNull( Child, "child must not be null" );
 
 			// evalute the condition if we need to
-			_conditionalStatus = executeConditional( context );
+			_conditionalStatus = ExecuteConditional( context );
 			
 			if( _conditionalStatus == TaskStatus.Success )
-				return child.tick( context );
+				return Child.Tick( context );
 
 			return TaskStatus.Failure;
 		}
@@ -59,10 +59,10 @@ namespace Nez.AI.BehaviorTrees
 		/// <returns>The conditional.</returns>
 		/// <param name="context">Context.</param>
 		/// <param name="forceUpdate">If set to <c>true</c> force update.</param>
-		internal TaskStatus executeConditional( T context, bool forceUpdate = false )
+		internal TaskStatus ExecuteConditional( T context, bool forceUpdate = false )
 		{
 			if( forceUpdate || _shouldReevaluate || _conditionalStatus == TaskStatus.Invalid )
-				_conditionalStatus = _conditional.update( context );
+				_conditionalStatus = _conditional.Update( context );
 			return _conditionalStatus;
 		}
 

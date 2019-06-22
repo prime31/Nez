@@ -27,11 +27,11 @@ namespace Nez
 	/// </summary>
 	public class MarkupText : RenderableComponent
 	{
-		public override float width { get { return _textWidth; } }
-		public override float height { get { return _textHeight; } }
+		public override float Width { get { return _textWidth; } }
+		public override float Height { get { return _textHeight; } }
 
-		public string text { get { return _text; } }
-		public float textWidth { get { return _textWidth; } }
+		public string Text { get { return _text; } }
+		public float TextWidth { get { return _textWidth; } }
 
 		string _text;
 		float _textWidth, _textHeight;
@@ -44,7 +44,7 @@ namespace Nez
 
 		public MarkupText()
 		{
-			setFont( "default", Graphics.instance.bitmapFont );
+			SetFont( "default", Graphics.Instance.BitmapFont );
 		}
 
 
@@ -59,7 +59,7 @@ namespace Nez
 		/// </summary>
 		/// <returns>The text.</returns>
 		/// <param name="text">Text.</param>
-		public MarkupText setText( string text )
+		public MarkupText SetText( string text )
 		{
 			_text = text;
 			return this;
@@ -71,7 +71,7 @@ namespace Nez
 		/// </summary>
 		/// <returns>The width.</returns>
 		/// <param name="textWidth">Width.</param>
-		public MarkupText setTextWidth( float textWidth )
+		public MarkupText SetTextWidth( float textWidth )
 		{
 			_textWidth = textWidth;
 			return this;
@@ -84,7 +84,7 @@ namespace Nez
 		/// <returns>The font.</returns>
 		/// <param name="name">Name.</param>
 		/// <param name="font">Font.</param>
-		public MarkupText setFont( string name, IFont font )
+		public MarkupText SetFont( string name, IFont font )
 		{
 			_fontDict[name] = font;
 			return this;
@@ -97,7 +97,7 @@ namespace Nez
 		/// <returns>The texture.</returns>
 		/// <param name="name">Name.</param>
 		/// <param name="texture">Texture.</param>
-		public MarkupText setTexture( string name, Texture2D texture )
+		public MarkupText SetTexture( string name, Texture2D texture )
 		{
 			_textureDict[name] = texture;
 			return this;
@@ -111,7 +111,7 @@ namespace Nez
 		/// <returns>The conditional.</returns>
 		/// <param name="name">Name.</param>
 		/// <param name="conditional">Conditional.</param>
-		public MarkupText setConditional( string name, bool conditional )
+		public MarkupText SetConditional( string name, bool conditional )
 		{
 			_conditionalDict[name] = conditional;
 			return this;
@@ -123,20 +123,20 @@ namespace Nez
 		/// </summary>
 		/// <param name="graphics">Graphics.</param>
 		/// <param name="camera">Camera.</param>
-		public override void render( Graphics graphics, Camera camera )
+		public override void Render( Graphics graphics, Camera camera )
 		{
 			if( _compiledMarkup == null )
 				return;
 			
 			for( var i = 0; i < _compiledMarkup.Count; i++ )
-				_compiledMarkup[i].render( graphics, transform.position + _localOffset );
+				_compiledMarkup[i].Render( graphics, Transform.Position + _localOffset );
 		}
 
 
 		/// <summary>
 		/// compiles the current text to prepare it for rendering
 		/// </summary>
-		public void compile()
+		public void Compile()
 		{
 			if( _compiledMarkup == null )
 				_compiledMarkup = new List<ICompiledElement>();
@@ -167,21 +167,21 @@ namespace Nez
 							if( !string.IsNullOrEmpty( s ) )
 								font = _fontDict[s];
 							else if( formatingStack.Count > 0 )
-								font = formatingStack.Peek().font;
+								font = formatingStack.Peek().Font;
 							else
 								font = _fontDict["default"];
 
 							var color = Color.White;
 							s = reader.GetAttribute( "color" );
 							if( !string.IsNullOrEmpty( s ) )
-								color = parseColor( s );
+								color = ParseColor( s );
 							else if( formatingStack.Count > 0 )
-								color = formatingStack.Peek().color;
+								color = formatingStack.Peek().Color;
 
 							var scale = Vector2.One;
 							s = reader.GetAttribute( "scale" );
 							if( !string.IsNullOrEmpty( s ) )
-								scale = parseVector2( s );
+								scale = ParseVector2( s );
 
 							if( reader.Name == "markuptext" )
 							{
@@ -219,14 +219,14 @@ namespace Nez
 						{
 							if( lineBuffer.Count > 0 )
 							{
-								position = wrapLine( position, lineBuffer, alignStack.Peek(), out currentLineHeight );
+								position = WrapLine( position, lineBuffer, alignStack.Peek(), out currentLineHeight );
 								currentTotalHeight += currentLineHeight;
 							}
 							else
 							{
 								var currentFormatting = formatingStack.Peek();
-								position.Y += currentFormatting.font.lineSpacing * currentFormatting.scale.Y;
-								currentTotalHeight += currentFormatting.font.lineSpacing * currentFormatting.scale.Y;
+								position.Y += currentFormatting.Font.LineSpacing * currentFormatting.Scale.Y;
+								currentTotalHeight += currentFormatting.Font.LineSpacing * currentFormatting.Scale.Y;
 							}
 							currentLineWidth = 0;
 
@@ -255,18 +255,18 @@ namespace Nez
 							var color = Color.White;
 							var s = reader.GetAttribute( "color" );
 							if( !string.IsNullOrEmpty( s ) )
-								color = parseColor( s );
+								color = ParseColor( s );
 
 							var scale = Vector2.One;
 							s = reader.GetAttribute( "scale" );
 							if( !string.IsNullOrEmpty( s ) )
-								scale = parseVector2( s );
+								scale = ParseVector2( s );
 
 							var image = _textureDict[imgSrc];
 							var imageWidth = image.Width * scale.X;
 							if( position.X + imageWidth > _textWidth )
 							{
-								position = wrapLine( position, lineBuffer, alignStack.Peek(), out currentLineHeight );
+								position = WrapLine( position, lineBuffer, alignStack.Peek(), out currentLineHeight );
 								currentTotalHeight += currentLineHeight;
 							}
 
@@ -279,7 +279,7 @@ namespace Nez
 						case "nbsp":
 						{
 							var currentFormatting = formatingStack.Peek();
-							var spaceX = currentFormatting.font.measureString( " " ).X * currentFormatting.scale.X;
+							var spaceX = currentFormatting.Font.MeasureString( " " ).X * currentFormatting.Scale.X;
 							if( position.X + spaceX < _textWidth )
 							{
 								position.X += spaceX;
@@ -297,7 +297,7 @@ namespace Nez
 					var currentFormatting = formatingStack.Peek();
 					var re = new Regex( @"\s+" );
 					var words = re.Split( reader.Value );
-					var spaceX = currentFormatting.font.measureString( " " ).X * currentFormatting.scale.X;
+					var spaceX = currentFormatting.Font.MeasureString( " " ).X * currentFormatting.Scale.X;
 
 					var wordIndex = 0;
 					var wordRunSize = 0f;
@@ -308,7 +308,7 @@ namespace Nez
 					{
 						var isLastWord = wordIndex == words.Length - 1;
 						var word = words[wordIndex];
-						var wordSize = currentFormatting.font.measureString( word ) * currentFormatting.scale;
+						var wordSize = currentFormatting.Font.MeasureString( word ) * currentFormatting.Scale;
 
 						// make sure the word fits
 						var currentWordFits = position.X + wordRunSize + wordSize.X <= _textWidth;
@@ -342,7 +342,7 @@ namespace Nez
 						// if the current word doesnt fit we need a newline
 						if( !currentWordFits )
 						{
-							position = wrapLine( position, lineBuffer, alignStack.Peek(), out currentLineHeight );
+							position = WrapLine( position, lineBuffer, alignStack.Peek(), out currentLineHeight );
 							currentTotalHeight += currentLineHeight;
 							currentLineWidth = 0;
 						}
@@ -367,14 +367,14 @@ namespace Nez
 						{
 							if( lineBuffer.Count > 0 )
 							{
-								position = wrapLine( position, lineBuffer, alignStack.Peek(), out currentLineHeight );
+								position = WrapLine( position, lineBuffer, alignStack.Peek(), out currentLineHeight );
 								currentTotalHeight += currentLineHeight;
 							}
 							else
 							{
 								var currentFormatting = formatingStack.Peek();
-								position.Y += currentFormatting.font.lineSpacing * currentFormatting.scale.Y;
-								currentTotalHeight += currentFormatting.font.lineSpacing * currentFormatting.scale.Y;
+								position.Y += currentFormatting.Font.LineSpacing * currentFormatting.Scale.Y;
+								currentTotalHeight += currentFormatting.Font.LineSpacing * currentFormatting.Scale.Y;
 							}
 							currentLineWidth = 0;
 							alignStack.Pop();
@@ -386,11 +386,11 @@ namespace Nez
 
 			if( lineBuffer.Count > 0 )
 			{
-				wrapLine( position, lineBuffer, alignStack.Peek(), out currentLineHeight );
+				WrapLine( position, lineBuffer, alignStack.Peek(), out currentLineHeight );
 				for( var i = 0; i < lineBuffer.Count; i++ )
 				{
 					var element = lineBuffer[i];
-					element.position = new Vector2( element.position.X, position.Y + currentLineHeight / 2f );
+					element.Position = new Vector2( element.Position.X, position.Y + currentLineHeight / 2f );
 				}
 				currentTotalHeight += currentLineHeight;
 				_compiledMarkup.AddRange( lineBuffer );
@@ -401,7 +401,7 @@ namespace Nez
 		}
 
 
-		Vector2 wrapLine( Vector2 position, List<ICompiledElement> lineBuffer, HorizontalAlign alignment, out float currentLineHeight )
+		Vector2 WrapLine( Vector2 position, List<ICompiledElement> lineBuffer, HorizontalAlign alignment, out float currentLineHeight )
 		{
 			currentLineHeight = 0;
 			var lineWidth = 0f;
@@ -409,8 +409,8 @@ namespace Nez
 			// figure out the max height for anything in the line
 			for( var i = 0; i < lineBuffer.Count; i++ )
 			{
-				currentLineHeight = Math.Max( currentLineHeight, lineBuffer[i].size.Y );
-				lineWidth += lineBuffer[i].size.X;
+				currentLineHeight = Math.Max( currentLineHeight, lineBuffer[i].Size.Y );
+				lineWidth += lineBuffer[i].Size.X;
 			}
 
 			// calculate the offset that we will shift each line
@@ -427,7 +427,7 @@ namespace Nez
 
 			// run back through and reset the y position of all the items to match the currentLineHeight and apply the xOffset
 			for( var i = 0; i < lineBuffer.Count; i++ )
-				lineBuffer[i].position = new Vector2( lineBuffer[i].position.X + xOffset, position.Y + currentLineHeight / 2f );
+				lineBuffer[i].Position = new Vector2( lineBuffer[i].Position.X + xOffset, position.Y + currentLineHeight / 2f );
 
 			_compiledMarkup.AddRange( lineBuffer );
 			lineBuffer.Clear();
@@ -438,7 +438,7 @@ namespace Nez
 		}
 
 
-		static Color parseColor( string hexString )
+		static Color ParseColor( string hexString )
 		{
 			if( hexString.StartsWith( "#" ) )
 				hexString = hexString.Substring( 1 );
@@ -466,7 +466,7 @@ namespace Nez
 		}
 
 
-		static Vector2 parseVector2( string vectorString )
+		static Vector2 ParseVector2( string vectorString )
 		{
 			var split = Regex.Split( vectorString, @"[\\s,]+" );
 			return new Vector2( float.Parse( split[0], CultureInfo.InvariantCulture ), float.Parse( split[1], CultureInfo.InvariantCulture ) );
@@ -479,32 +479,32 @@ namespace Nez
 
 	struct FormatInstruction
 	{
-		public readonly Color color;
-		public readonly IFont font;
-		public readonly Vector2 scale;
+		public readonly Color Color;
+		public readonly IFont Font;
+		public readonly Vector2 Scale;
 
 
 		public FormatInstruction( IFont font, Color color, Vector2 scale )
 		{
-			this.font = font;
-			this.color = color;
-			this.scale = scale;
+			this.Font = font;
+			this.Color = color;
+			this.Scale = scale;
 		}
 	}
 
 
 	interface ICompiledElement
 	{
-		Vector2 size { get; }
-		Vector2 position { get; set; }
-		void render( Graphics graphics, Vector2 offset );
+		Vector2 Size { get; }
+		Vector2 Position { get; set; }
+		void Render( Graphics graphics, Vector2 offset );
 	}
 
 
 	struct CompiledTextElement : ICompiledElement
 	{
-		public Vector2 position { get; set; }
-		public Vector2 size { get; set; }
+		public Vector2 Position { get; set; }
+		public Vector2 Size { get; set; }
 
 		readonly FormatInstruction _formatInstruction;
 		readonly string _text;
@@ -513,16 +513,16 @@ namespace Nez
 		public CompiledTextElement( string text, Vector2 position, FormatInstruction formatInstruction )
 		{
 			_text = text;
-			this.position = position;
+			this.Position = position;
 			_formatInstruction = formatInstruction;
-			size = formatInstruction.font.measureString( text ) * formatInstruction.scale;
+			Size = formatInstruction.Font.MeasureString( text ) * formatInstruction.Scale;
 		}
 
 
-		public void render( Graphics graphics, Vector2 offset )
+		public void Render( Graphics graphics, Vector2 offset )
 		{
-			var origin = new Vector2( 0, size.Y / ( 2 * _formatInstruction.scale.Y ) );
-			graphics.batcher.drawString( _formatInstruction.font, _text, offset + position, _formatInstruction.color, 0, origin, _formatInstruction.scale, SpriteEffects.None, 0 );
+			var origin = new Vector2( 0, Size.Y / ( 2 * _formatInstruction.Scale.Y ) );
+			graphics.Batcher.DrawString( _formatInstruction.Font, _text, offset + Position, _formatInstruction.Color, 0, origin, _formatInstruction.Scale, SpriteEffects.None, 0 );
 		}
 
 	}
@@ -530,8 +530,8 @@ namespace Nez
 
 	struct CompiledImageElement : ICompiledElement
 	{
-		public Vector2 position { get; set; }
-		public Vector2 size { get; set; }
+		public Vector2 Position { get; set; }
+		public Vector2 Size { get; set; }
 
 		readonly Color _color;
 		readonly Texture2D _image;
@@ -541,17 +541,17 @@ namespace Nez
 		public CompiledImageElement( Texture2D image, Color color, Vector2 position, Vector2 scale )
 		{
 			_image = image;
-			this.position = position;
+			this.Position = position;
 			_color = color;
 			_scale = scale;
-			size = new Vector2( image.Width, image.Height ) * scale;
+			Size = new Vector2( image.Width, image.Height ) * scale;
 		}
 
 
-		public void render( Graphics graphics, Vector2 offset )
+		public void Render( Graphics graphics, Vector2 offset )
 		{
 			var origin = new Vector2( 0, _image.Height / 2f );
-			graphics.batcher.draw( _image, offset + position, null, _color, 0, origin, _scale, SpriteEffects.None, 0 );
+			graphics.Batcher.Draw( _image, offset + Position, null, _color, 0, origin, _scale, SpriteEffects.None, 0 );
 		}
 
 	}

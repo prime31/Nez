@@ -47,7 +47,7 @@ namespace FarseerPhysics.Common.Decomposition.CDT.Delaunay.Sweep
         public DTSweepEdgeEvent EdgeEvent = new DTSweepEdgeEvent();
 
         private DTSweepPointComparator _comparator = new DTSweepPointComparator();
-        public AdvancingFront aFront;
+        public AdvancingFront AFront;
 
         public DTSweepContext()
         {
@@ -78,15 +78,15 @@ namespace FarseerPhysics.Common.Decomposition.CDT.Delaunay.Sweep
 
         private void MeshCleanReq(DelaunayTriangle triangle)
         {
-            if (triangle != null && !triangle.isInterior)
+            if (triangle != null && !triangle.IsInterior)
             {
-                triangle.isInterior = true;
+                triangle.IsInterior = true;
                 Triangulatable.AddTriangle(triangle);
                 for (int i = 0; i < 3; i++)
                 {
-                    if (!triangle.edgeIsConstrained[i])
+                    if (!triangle.EdgeIsConstrained[i])
                     {
-                        MeshCleanReq(triangle.neighbors[i]);
+                        MeshCleanReq(triangle.Neighbors[i]);
                     }
                 }
             }
@@ -102,19 +102,19 @@ namespace FarseerPhysics.Common.Decomposition.CDT.Delaunay.Sweep
         {
             //        Console.WriteLine( "add:" + node.key + ":" + System.identityHashCode(node.key));
             //        m_nodeTree.put( node.getKey(), node );
-            aFront.AddNode(node);
+            AFront.AddNode(node);
         }
 
         public void RemoveNode(AdvancingFrontNode node)
         {
             //        Console.WriteLine( "remove:" + node.key + ":" + System.identityHashCode(node.key));
             //        m_nodeTree.delete( node.getKey() );
-            aFront.RemoveNode(node);
+            AFront.RemoveNode(node);
         }
 
         public AdvancingFrontNode LocateNode(TriangulationPoint point)
         {
-            return aFront.LocateNode(point);
+            return AFront.LocateNode(point);
         }
 
         public void CreateAdvancingFront()
@@ -124,21 +124,21 @@ namespace FarseerPhysics.Common.Decomposition.CDT.Delaunay.Sweep
             DelaunayTriangle iTriangle = new DelaunayTriangle(Points[0], Tail, Head);
             Triangles.Add(iTriangle);
 
-            head = new AdvancingFrontNode(iTriangle.points[1]);
+            head = new AdvancingFrontNode(iTriangle.Points[1]);
             head.Triangle = iTriangle;
-            middle = new AdvancingFrontNode(iTriangle.points[0]);
+            middle = new AdvancingFrontNode(iTriangle.Points[0]);
             middle.Triangle = iTriangle;
-            tail = new AdvancingFrontNode(iTriangle.points[2]);
+            tail = new AdvancingFrontNode(iTriangle.Points[2]);
 
-            aFront = new AdvancingFront(head, tail);
-            aFront.AddNode(middle);
+            AFront = new AdvancingFront(head, tail);
+            AFront.AddNode(middle);
 
             // TODO: I think it would be more intuitive if head is middles next and not previous
             //       so swap head and tail
-            aFront.Head.Next = middle;
-            middle.Next = aFront.Tail;
-            middle.Prev = aFront.Head;
-            aFront.Tail.Prev = middle;
+            AFront.Head.Next = middle;
+            middle.Next = AFront.Tail;
+            middle.Prev = AFront.Head;
+            AFront.Tail.Prev = middle;
         }
 
         /// <summary>
@@ -150,9 +150,9 @@ namespace FarseerPhysics.Common.Decomposition.CDT.Delaunay.Sweep
             AdvancingFrontNode n;
             for (int i = 0; i < 3; i++)
             {
-                if (t.neighbors[i] == null)
+                if (t.Neighbors[i] == null)
                 {
-                    n = aFront.LocatePoint(t.PointCW(t.points[i]));
+                    n = AFront.LocatePoint(t.PointCW(t.Points[i]));
                     if (n != null)
                     {
                         n.Triangle = t;
@@ -214,11 +214,11 @@ namespace FarseerPhysics.Common.Decomposition.CDT.Delaunay.Sweep
 
         public class DTSweepBasin
         {
-            public AdvancingFrontNode bottomNode;
-            public bool leftHighest;
-            public AdvancingFrontNode leftNode;
-            public AdvancingFrontNode rightNode;
-            public double width;
+            public AdvancingFrontNode BottomNode;
+            public bool LeftHighest;
+            public AdvancingFrontNode LeftNode;
+            public AdvancingFrontNode RightNode;
+            public double Width;
         }
 
         #endregion

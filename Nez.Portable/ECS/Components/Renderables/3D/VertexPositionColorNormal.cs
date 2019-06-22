@@ -8,9 +8,9 @@ namespace Nez
 	[StructLayout( LayoutKind.Sequential, Pack = 1 )]
 	public struct VertexPositionColorNormal : IVertexType
 	{
-		public Vector3 position;
-		public Color color;
-		public Vector3 normal;
+		public Vector3 Position;
+		public Color Color;
+		public Vector3 Normal;
 
 
 		static readonly VertexDeclaration _vertexDeclaration = new VertexDeclaration
@@ -25,9 +25,9 @@ namespace Nez
 
 		public VertexPositionColorNormal( Vector3 position, Color color, Vector3 normal )
 		{
-			this.position = position;
-			this.color = color;
-			this.normal = normal;
+			this.Position = position;
+			this.Color = color;
+			this.Normal = normal;
 		}
 
 
