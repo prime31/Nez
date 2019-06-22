@@ -18,17 +18,17 @@ namespace Nez.UISkinImporter
 			foreach( var key in input.Keys )
 			{
 				// special cases first
-				if( key == "colors" )
+				if( key == "Colors" )
 				{
 					skinConfig.Colors = ParseColors( input[key] as Dictionary<string, object> );
 				}
-				else if( key == "libGdxAtlases" )
+				else if( key == "LibGdxAtlases" )
 				{
 					var jArr = input[key] as JArray;
 					skinConfig.LibGdxAtlases = jArr.ToObject<string[]>();
 					UISkinImporter.Logger.LogMessage( "added {0} LibGdxAtlases\n", jArr.Count );
 				}
-				else if( key == "textureAtlases" )
+				else if( key == "TextureAtlases" )
 				{
 					var jArr = input[key] as JArray;
 					skinConfig.TextureAtlases = jArr.ToObject<string[]>();

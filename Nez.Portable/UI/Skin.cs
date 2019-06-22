@@ -84,7 +84,7 @@ namespace Nez.UI
 				Up = new PrimitiveDrawable( buttonColor, 10, 5 ),
 				Over = new PrimitiveDrawable( buttonOver ),
 				Down = new PrimitiveDrawable( buttonDown ),
-				Checkked = new PrimitiveDrawable( new Color( 255, 0, 0, 255 ) ),
+				Checked = new PrimitiveDrawable( new Color( 255, 0, 0, 255 ) ),
 				CheckedOverFontColor = checkedOverFontColor,
 				OverFontColor = overFontColor,
 				DownFontColor = downFontColor,
@@ -216,7 +216,7 @@ namespace Nez.UI
 							var styleDict = config.Styles.GetStyleDict( styleType, styleNames[j] );
 
 							// Get the method by simple name check since we know it's the only one
-							var setStylesForStyleClassMethod = ReflectionUtils.GetMethodInfo( this, "setStylesForStyleClass" );
+							var setStylesForStyleClassMethod = ReflectionUtils.GetMethodInfo( this, "SetStylesForStyleClass" );
 							setStylesForStyleClassMethod = setStylesForStyleClassMethod.MakeGenericMethod( type );
 
 							// Return not nec., but it shows that the style is being modified
@@ -275,7 +275,7 @@ namespace Nez.UI
 						var inlineStyle = Activator.CreateInstance( styleField.FieldType );
 
 						// Recursively call this method with the new field type and dictionary
-						var setStylesForStyleClassMethod = ReflectionUtils.GetMethodInfo( this, "setStylesForStyleClass" );
+						var setStylesForStyleClassMethod = ReflectionUtils.GetMethodInfo( this, "SetStylesForStyleClass" );
 						setStylesForStyleClassMethod = setStylesForStyleClassMethod.MakeGenericMethod( styleField.FieldType );
 						inlineStyle = setStylesForStyleClassMethod.Invoke( this, new object[] { inlineStyle, valueObject as Dictionary<string, object>, contentManager, styleName } );
 						styleField.SetValue( styleClass, inlineStyle );
@@ -284,7 +284,7 @@ namespace Nez.UI
 					{
 						// We have a style reference. First we need to find out what type of style name refers to from the field.
 						// Then we need to fetch the "get" method and properly type it.
-						var getStyleMethod = ReflectionUtils.GetMethodInfo( this, "get", new Type[] { typeof( string ) } );
+						var getStyleMethod = ReflectionUtils.GetMethodInfo( this, "Get", new Type[] { typeof( string ) } );
 						getStyleMethod = getStyleMethod.MakeGenericMethod( styleField.FieldType );
 
 						// now we look up the style and finally set it

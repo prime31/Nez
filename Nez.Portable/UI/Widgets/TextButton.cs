@@ -149,7 +149,7 @@ namespace Nez.UI
 				Up = Up,
 				Down = Down,
 				Over = Over,
-				Checkked = Checkked,
+				Checked = Checked,
 				CheckedOver = CheckedOver,
 				Disabled = Disabled,
 					

@@ -18,8 +18,8 @@ namespace Nez.UI
 					prefWidth = Math.Max( prefWidth, style.Up.MinWidth );
 				if( style.Down != null )
 					prefWidth = Math.Max( prefWidth, style.Down.MinWidth );
-				if( style.Checkked != null )
-					prefWidth = Math.Max( prefWidth, style.Checkked.MinWidth );
+				if( style.Checked != null )
+					prefWidth = Math.Max( prefWidth, style.Checked.MinWidth );
 				return prefWidth;
 			}
 		}
@@ -33,8 +33,8 @@ namespace Nez.UI
 					prefHeight = Math.Max( prefHeight, style.Up.MinHeight );
 				if( style.Down != null )
 					prefHeight = Math.Max( prefHeight, style.Down.MinHeight );
-				if( style.Checkked != null )
-					prefHeight = Math.Max( prefHeight, style.Checkked.MinHeight );
+				if( style.Checked != null )
+					prefHeight = Math.Max( prefHeight, style.Checked.MinHeight );
 				return prefHeight;
 			}
 		}
@@ -248,8 +248,8 @@ namespace Nez.UI
 			{
 				if( _isDisabled && style.Disabled != null )
 					_background = style.Disabled;
-				else if( _isChecked && style.Checkked != null )
-					_background = ( _mouseOver && style.CheckedOver != null ) ? style.CheckedOver : style.Checkked;
+				else if( _isChecked && style.Checked != null )
+					_background = ( _mouseOver && style.CheckedOver != null ) ? style.CheckedOver : style.Checked;
 				else if( _mouseOver && style.Over != null )
 					_background = style.Over;
 				else
@@ -326,8 +326,8 @@ namespace Nez.UI
 				_background = style.Disabled;
 			else if( _mouseDown && style.Down != null )
 				_background = style.Down;
-			else if( _isChecked && style.Checkked != null )
-				_background = ( style.CheckedOver != null && _mouseOver ) ? style.CheckedOver : style.Checkked;
+			else if( _isChecked && style.Checked != null )
+				_background = ( style.CheckedOver != null && _mouseOver ) ? style.CheckedOver : style.Checked;
 			else if( _mouseOver && style.Over != null )
 				_background = style.Over;
 			else if( style.Up != null ) //
@@ -375,7 +375,7 @@ namespace Nez.UI
 	public class ButtonStyle
 	{
 		/** Optional. */
-		public IDrawable Up, Down, Over, Checkked, CheckedOver, Disabled;
+		public IDrawable Up, Down, Over, Checked, CheckedOver, Disabled;
 
 		/** Optional. offsets children (labels for example). */
 		public float PressedOffsetX, PressedOffsetY, UnpressedOffsetX, UnpressedOffsetY, CheckedOffsetX, CheckedOffsetY;
@@ -409,7 +409,7 @@ namespace Nez.UI
 				Up = Up,
 				Down = Down,
 				Over = Over,
-				Checkked = Checkked,
+				Checked = Checked,
 				CheckedOver = CheckedOver,
 				Disabled = Disabled
 			};
