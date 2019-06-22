@@ -13,7 +13,7 @@ namespace Nez.ImGuiTools
 	/// </summary>
 	public class ImGuiRenderer
 	{
-		public ImFontPtr defaultFontPtr { get; private set; }
+		public ImFontPtr DefaultFontPtr { get; private set; }
 
 		// Graphics
 		BasicEffect _effect;
@@ -66,7 +66,7 @@ namespace Nez.ImGuiTools
 				SlopeScaleDepthBias = 0
 			};
 
-			setupInput();
+			SetupInput();
 		}
 
 
@@ -75,13 +75,13 @@ namespace Nez.ImGuiTools
 		/// <summary>
 		/// Creates a texture and loads the font data from ImGui. Should be called when the <see cref="GraphicsDevice" /> is initialized but before any rendering is done
 		/// </summary>
-		public unsafe void rebuildFontAtlas( ImGuiOptions options )
+		public unsafe void RebuildFontAtlas( ImGuiOptions options )
 		{
 			// Get font texture from ImGui
 			var io = ImGui.GetIO();
 
 			if(options._includeDefaultFont)
-				defaultFontPtr = io.Fonts.AddFontDefault();
+				DefaultFontPtr = io.Fonts.AddFontDefault();
 
 			foreach(var font in options._fonts)
 				io.Fonts.AddFontFromFileTTF( font.Item1, font.Item2 );
@@ -93,15 +93,15 @@ namespace Nez.ImGuiTools
 			Marshal.Copy( new IntPtr( pixelData ), pixels, 0, pixels.Length );
 
 			// Create and register the texture as an XNA texture
-			var tex2d = new Texture2D( Core.graphicsDevice, width, height, false, SurfaceFormat.Color );
+			var tex2d = new Texture2D( Core.GraphicsDevice, width, height, false, SurfaceFormat.Color );
 			tex2d.SetData( pixels );
 
 			// Should a texture already have been built previously, unbind it first so it can be deallocated
 			if( _fontTextureId.HasValue )
-				unbindTexture( _fontTextureId.Value );
+				UnbindTexture( _fontTextureId.Value );
 
 			// Bind the new texture to an ImGui-friendly id
-			_fontTextureId = bindTexture( tex2d );
+			_fontTextureId = BindTexture( tex2d );
 
 			// Let ImGui know where to find the texture
 			io.Fonts.SetTexID( _fontTextureId.Value );
@@ -111,7 +111,7 @@ namespace Nez.ImGuiTools
 		/// <summary>
 		/// Creates a pointer to a texture, which can be passed through ImGui calls such as <see cref="ImGui.Image" />. That pointer is then used by ImGui to let us know what texture to draw
 		/// </summary>
-		public IntPtr bindTexture( Texture2D texture )
+		public IntPtr BindTexture( Texture2D texture )
 		{
 			var id = new IntPtr( _textureId++ );
 			_loadedTextures.Add( id, texture );
@@ -121,7 +121,7 @@ namespace Nez.ImGuiTools
 		/// <summary>
 		/// Removes a previously created texture pointer, releasing its reference and allowing it to be deallocated
 		/// </summary>
-		public void unbindTexture( IntPtr textureId )
+		public void UnbindTexture( IntPtr textureId )
 		{
 			_loadedTextures.Remove( textureId );
 		}
@@ -129,20 +129,20 @@ namespace Nez.ImGuiTools
 		/// <summary>
 		/// Sets up ImGui for a new frame, should be called at frame start
 		/// </summary>
-		public void beforeLayout( float deltaTime )
+		public void BeforeLayout( float deltaTime )
 		{
 			ImGui.GetIO().DeltaTime = deltaTime;
-			updateInput();
+			UpdateInput();
 			ImGui.NewFrame();
 		}
 
 		/// <summary>
 		/// Asks ImGui for the generated geometry data and sends it to the graphics pipeline, should be called after the UI is drawn using ImGui.** calls
 		/// </summary>
-		public void afterLayout()
+		public void AfterLayout()
 		{
 			ImGui.Render();
-			unsafe { renderDrawData( ImGui.GetDrawData() ); }
+			unsafe { RenderDrawData( ImGui.GetDrawData() ); }
 		}
 
 		#endregion
@@ -162,7 +162,7 @@ namespace Nez.ImGuiTools
 		/// <summary>
 		/// Maps ImGui keys to XNA keys. We use this later on to tell ImGui what keys were pressed
 		/// </summary>
-		void setupInput()
+		void SetupInput()
 		{
 			var io = ImGui.GetIO();
 
@@ -194,7 +194,7 @@ namespace Nez.ImGuiTools
 
 
 #if !FNA
-			Core.instance.Window.TextInput += (s, a) =>
+			Core.Instance.Window.TextInput += (s, a) =>
 			{
 				if (a.Character == '\t')
 					return;
@@ -213,9 +213,9 @@ namespace Nez.ImGuiTools
 		/// <summary>
 		/// Updates the <see cref="Effect" /> to the current matrices and texture
 		/// </summary>
-		Effect updateEffect( Texture2D texture )
+		Effect UpdateEffect( Texture2D texture )
 		{
-			_effect = _effect ?? new BasicEffect( Core.graphicsDevice );
+			_effect = _effect ?? new BasicEffect( Core.GraphicsDevice );
 
 			var io = ImGui.GetIO();
 
@@ -232,12 +232,12 @@ namespace Nez.ImGuiTools
 		/// <summary>
 		/// Sends XNA input state to ImGui
 		/// </summary>
-		void updateInput()
+		void UpdateInput()
 		{
 			var io = ImGui.GetIO();
 
-			var mouse = Input.currentMouseState;
-			var keyboard = Input.currentKeyboardState;
+			var mouse = Input.CurrentMouseState;
+			var keyboard = Input.CurrentKeyboardState;
 
 			for( int i = 0; i < _keys.Count; i++ )
 			{
@@ -249,7 +249,7 @@ namespace Nez.ImGuiTools
 			io.KeyAlt = keyboard.IsKeyDown( Keys.LeftAlt ) || keyboard.IsKeyDown( Keys.RightAlt );
 			io.KeySuper = keyboard.IsKeyDown( Keys.LeftWindows ) || keyboard.IsKeyDown( Keys.RightWindows );
 
-			io.DisplaySize = new System.Numerics.Vector2( Core.graphicsDevice.PresentationParameters.BackBufferWidth, Core.graphicsDevice.PresentationParameters.BackBufferHeight );
+			io.DisplaySize = new System.Numerics.Vector2( Core.GraphicsDevice.PresentationParameters.BackBufferWidth, Core.GraphicsDevice.PresentationParameters.BackBufferHeight );
 			io.DisplayFramebufferScale = new System.Numerics.Vector2( 1f, 1f );
 
 			io.MousePos = new System.Numerics.Vector2( mouse.X, mouse.Y );
@@ -271,32 +271,32 @@ namespace Nez.ImGuiTools
 		/// <summary>
 		/// Gets the geometry as set up by ImGui and sends it to the graphics device
 		/// </summary>
-		void renderDrawData( ImDrawDataPtr drawData )
+		void RenderDrawData( ImDrawDataPtr drawData )
 		{
 			// Setup render state: alpha-blending enabled, no face culling, no depth testing, scissor enabled, vertex/texcoord/color pointers
-			var lastViewport = Core.graphicsDevice.Viewport;
-			var lastScissorBox = Core.graphicsDevice.ScissorRectangle;
+			var lastViewport = Core.GraphicsDevice.Viewport;
+			var lastScissorBox = Core.GraphicsDevice.ScissorRectangle;
 
-			Core.graphicsDevice.BlendFactor = Color.White;
-			Core.graphicsDevice.BlendState = BlendState.NonPremultiplied;
-			Core.graphicsDevice.RasterizerState = _rasterizerState;
-			Core.graphicsDevice.DepthStencilState = DepthStencilState.DepthRead;
+			Core.GraphicsDevice.BlendFactor = Color.White;
+			Core.GraphicsDevice.BlendState = BlendState.NonPremultiplied;
+			Core.GraphicsDevice.RasterizerState = _rasterizerState;
+			Core.GraphicsDevice.DepthStencilState = DepthStencilState.DepthRead;
 
 			// Handle cases of screen coordinates != from framebuffer coordinates (e.g. retina displays)
 			drawData.ScaleClipRects( ImGui.GetIO().DisplayFramebufferScale );
 
 			// Setup projection
-			Core.graphicsDevice.Viewport = new Viewport( 0, 0, Core.graphicsDevice.PresentationParameters.BackBufferWidth, Core.graphicsDevice.PresentationParameters.BackBufferHeight );
+			Core.GraphicsDevice.Viewport = new Viewport( 0, 0, Core.GraphicsDevice.PresentationParameters.BackBufferWidth, Core.GraphicsDevice.PresentationParameters.BackBufferHeight );
 
-			updateBuffers( drawData );
-			renderCommandLists( drawData );
+			UpdateBuffers( drawData );
+			RenderCommandLists( drawData );
 
 			// Restore modified state
-			Core.graphicsDevice.Viewport = lastViewport;
-			Core.graphicsDevice.ScissorRectangle = lastScissorBox;
+			Core.GraphicsDevice.Viewport = lastViewport;
+			Core.GraphicsDevice.ScissorRectangle = lastScissorBox;
 		}
 
-		unsafe void updateBuffers( ImDrawDataPtr drawData )
+		unsafe void UpdateBuffers( ImDrawDataPtr drawData )
 		{
 			if( drawData.TotalVtxCount == 0 )
 			{
@@ -309,7 +309,7 @@ namespace Nez.ImGuiTools
 				_vertexBuffer?.Dispose();
 
 				_vertexBufferSize = (int)( drawData.TotalVtxCount * 1.5f );
-				_vertexBuffer = new VertexBuffer( Core.graphicsDevice, _vertexDeclaration, _vertexBufferSize, BufferUsage.None );
+				_vertexBuffer = new VertexBuffer( Core.GraphicsDevice, _vertexDeclaration, _vertexBufferSize, BufferUsage.None );
 				_vertexData = new byte[_vertexBufferSize * _vertexDeclarationSize];
 			}
 
@@ -318,7 +318,7 @@ namespace Nez.ImGuiTools
 				_indexBuffer?.Dispose();
 
 				_indexBufferSize = (int)( drawData.TotalIdxCount * 1.5f );
-				_indexBuffer = new IndexBuffer( Core.graphicsDevice, IndexElementSize.SixteenBits, _indexBufferSize, BufferUsage.None );
+				_indexBuffer = new IndexBuffer( Core.GraphicsDevice, IndexElementSize.SixteenBits, _indexBufferSize, BufferUsage.None );
 				_indexData = new byte[_indexBufferSize * sizeof( ushort )];
 			}
 
@@ -346,10 +346,10 @@ namespace Nez.ImGuiTools
 			_indexBuffer.SetData( _indexData, 0, drawData.TotalIdxCount * sizeof( ushort ) );
 		}
 
-		unsafe void renderCommandLists( ImDrawDataPtr drawData )
+		unsafe void RenderCommandLists( ImDrawDataPtr drawData )
 		{
-			Core.graphicsDevice.SetVertexBuffer( _vertexBuffer );
-			Core.graphicsDevice.Indices = _indexBuffer;
+			Core.GraphicsDevice.SetVertexBuffer( _vertexBuffer );
+			Core.GraphicsDevice.Indices = _indexBuffer;
 
 			int vtxOffset = 0;
 			int idxOffset = 0;
@@ -365,20 +365,20 @@ namespace Nez.ImGuiTools
 						throw new InvalidOperationException( $"Could not find a texture with id '{drawCmd.TextureId}', please check your bindings" );
 					}
 
-					Core.graphicsDevice.ScissorRectangle = new Rectangle(
+					Core.GraphicsDevice.ScissorRectangle = new Rectangle(
 						(int)drawCmd.ClipRect.X,
 						(int)drawCmd.ClipRect.Y,
 						(int)( drawCmd.ClipRect.Z - drawCmd.ClipRect.X ),
 						(int)( drawCmd.ClipRect.W - drawCmd.ClipRect.Y )
 					);
 
-					var effect = updateEffect( _loadedTextures[drawCmd.TextureId] );
+					var effect = UpdateEffect( _loadedTextures[drawCmd.TextureId] );
 					foreach( var pass in effect.CurrentTechnique.Passes )
 					{
 						pass.Apply();
 
 #pragma warning disable CS0618 // FNA does not expose an alternative method.
-						Core.graphicsDevice.DrawIndexedPrimitives(
+						Core.GraphicsDevice.DrawIndexedPrimitives(
 							primitiveType: PrimitiveType.TriangleList,
 							baseVertex: vtxOffset,
 							minVertexIndex: 0,

@@ -8,7 +8,7 @@
 		/// </summary>
 		/// <param name="graphics">Graphics.</param>
 		/// <param name="camera">Camera.</param>
-		public override void render( Graphics graphics, Camera camera )
+		public override void Render( Graphics graphics, Camera camera )
 		{ }
 	}
 }

@@ -12,14 +12,14 @@ namespace Nez.Console
 	[AttributeUsage( AttributeTargets.Method, AllowMultiple = false )]
 	public class CommandAttribute : Attribute
 	{
-		public string name;
-		public string help;
+		public string Name;
+		public string Help;
 
 
 		public CommandAttribute( string name, string help )
 		{
-			this.name = name;
-			this.help = help;
+			this.Name = name;
+			this.Help = help;
 		}
 	}
 }
@@ -31,86 +31,86 @@ namespace Nez.Console
 	public partial class DebugConsole
 	{
 		[Command( "clear", "Clears the terminal" )]
-		static void clear()
+		static void Clear()
 		{
-			instance._drawCommands.Clear();
+			Instance._drawCommands.Clear();
 		}
 
 
 		[Command( "exit", "Exits the game" )]
-		static void exit()
+		static void Exit()
 		{
-			Core.exit();
+			Core.Exit();
 		}
 
 
 		[Command( "inspect", "Inspects the Entity with the passed in name, or pass in 'pp' or 'postprocessors' to inspect all PostProccessors in the Scene. Pass in no name to close the inspector." )]
-		static void inspectEntity( string entityName = "" )
+		static void InspectEntity( string entityName = "" )
 		{
 			// clean up no matter what
-			if( instance._runtimeInspector != null )
+			if( Instance._runtimeInspector != null )
 			{
-				instance._runtimeInspector.Dispose();
-				instance._runtimeInspector = null;
+				Instance._runtimeInspector.Dispose();
+				Instance._runtimeInspector = null;
 			}
 
 			if( entityName == "pp" || entityName == "postprocessors" )
 			{
-				instance._runtimeInspector = new RuntimeInspector();
-				instance.isOpen = false;
+				Instance._runtimeInspector = new RuntimeInspector();
+				Instance.isOpen = false;
 			}
 			else if( entityName != "" )
 			{
-				var entity = Core.scene.findEntity( entityName );
+				var entity = Core.Scene.FindEntity( entityName );
 				if( entity == null )
 				{
-					instance.log( "could not find entity named " + entityName );
+					Instance.Log( "could not find entity named " + entityName );
 					return;
 				}
 
-				instance._runtimeInspector = new RuntimeInspector( entity );
-				instance.isOpen = false;
+				Instance._runtimeInspector = new RuntimeInspector( entity );
+				Instance.isOpen = false;
 			}
 		}
 
 
 		[Command( "console-scale", "Sets the scale that the console is rendered. Defaults to 1 and has a max of 5." )]
-		static void setScale( float scale = 1f )
+		static void SetScale( float scale = 1f )
 		{
-			renderScale = Mathf.clamp( scale, 0.2f, 5f );
+			RenderScale = Mathf.Clamp( scale, 0.2f, 5f );
 		}
 
 
 		[Command( "assets", "Logs all loaded assets. Pass 's' for scene assets or 'g' for global assets" )]
-		static void logLoadedAssets( string whichAssets = "s" )
+		static void LogLoadedAssets( string whichAssets = "s" )
 		{
 			if( whichAssets == "s" )
-				DebugConsole.instance.log( Core.scene.content.logLoadedAssets() );
+				DebugConsole.Instance.Log( Core.Scene.Content.LogLoadedAssets() );
 			else if( whichAssets == "g" )
-				DebugConsole.instance.log( Core.content.logLoadedAssets() );
+				DebugConsole.Instance.Log( Core.Content.LogLoadedAssets() );
 			else
-				DebugConsole.instance.log( "Invalid parameter" );
+				DebugConsole.Instance.Log( "Invalid parameter" );
 		}
 
 
 		[Command( "vsync", "Enables or disables vertical sync" )]
-		static void vsync( bool enabled = true )
+		static void Vsync( bool enabled = true )
 		{
-			Screen.synchronizeWithVerticalRetrace = enabled;
-			DebugConsole.instance.log( "Vertical Sync " + ( enabled ? "Enabled" : "Disabled" ) );
+			Screen.SynchronizeWithVerticalRetrace = enabled;
+			DebugConsole.Instance.Log( "Vertical Sync " + ( enabled ? "Enabled" : "Disabled" ) );
 		}
 
 
 		[Command( "fixed", "Enables or disables fixed time step" )]
-		static void fixedTimestep( bool enabled = true )
+		static void FixedTimestep( bool enabled = true )
 		{
 			Core._instance.IsFixedTimeStep = enabled;
-			DebugConsole.instance.log( "Fixed Time Step " + ( enabled ? "Enabled" : "Disabled" ) );
+			DebugConsole.Instance.Log( "Fixed Time Step " + ( enabled ? "Enabled" : "Disabled" ) );
 		}
 
 
 		[Command( "framerate", "Sets the target framerate. Defaults to 60." )]
-		static void framerate( float target = 60f )
+		static void Framerate( float target = 60f )
 		{
 			Core._instance.TargetElapsedTime = TimeSpan.FromSeconds( 1.0 / target );
 		}
@@ -118,138 +118,138 @@ namespace Nez.Console
 
 		static ITimer _drawCallTimer;
 		[Command( "log-drawcalls", "Enables/disables logging of draw calls in the standard console. Call once to enable and again to disable. delay is how often they should be logged and defaults to 1s." )]
-		static void logDrawCalls( float delay = 1f )
+		static void LogDrawCalls( float delay = 1f )
 		{
 			if( _drawCallTimer != null )
 			{
-				_drawCallTimer.stop();
+				_drawCallTimer.Stop();
 				_drawCallTimer = null;
-				Debug.log( "Draw call logging stopped" );
+				Debug.Log( "Draw call logging stopped" );
 			}
 			else
 			{
-				_drawCallTimer = Core.schedule( delay, true, timer =>
+				_drawCallTimer = Core.Schedule( delay, true, timer =>
 				{
-					Debug.log( "Draw Calls: {0}", Core.drawCalls );
+					Debug.Log( "Draw Calls: {0}", Core.drawCalls );
 				} );
 			}
 		}
 
 
 		[Command( "entity-count", "Logs amount of Entities in the Scene. Pass a tagIndex to count only Entities with that tag" )]
-		static void entityCount( int tagIndex = -1 )
+		static void EntityCount( int tagIndex = -1 )
 		{
-			if( Core.scene == null )
+			if( Core.Scene == null )
 			{
-				DebugConsole.instance.log( "Current Scene is null!" );
+				DebugConsole.Instance.Log( "Current Scene is null!" );
 				return;
 			}
 
 			if( tagIndex < 0 )
-				DebugConsole.instance.log( "Total entities: " + Core.scene.entities.count.ToString() );
+				DebugConsole.Instance.Log( "Total entities: " + Core.Scene.Entities.Count.ToString() );
 			else
-				DebugConsole.instance.log( "Total entities with tag [" + tagIndex + "] " + Core.scene.findEntitiesWithTag( tagIndex ).Count.ToString() );
+				DebugConsole.Instance.Log( "Total entities with tag [" + tagIndex + "] " + Core.Scene.FindEntitiesWithTag( tagIndex ).Count.ToString() );
 		}
 
 
 		[Command( "renderable-count", "Logs amount of Renderables in the Scene. Pass a renderLayer to count only Renderables in that layer" )]
-		static void renderableCount( int renderLayer = int.MinValue )
+		static void RenderableCount( int renderLayer = int.MinValue )
 		{
-			if( Core.scene == null )
+			if( Core.Scene == null )
 			{
-				DebugConsole.instance.log( "Current Scene is null!" );
+				DebugConsole.Instance.Log( "Current Scene is null!" );
 				return;
 			}
 
 			if( renderLayer != int.MinValue )
-				DebugConsole.instance.log( "Total renderables with tag [" + renderLayer + "] " + Core.scene.renderableComponents.componentsWithRenderLayer( renderLayer ).length.ToString() );
+				DebugConsole.Instance.Log( "Total renderables with tag [" + renderLayer + "] " + Core.Scene.RenderableComponents.ComponentsWithRenderLayer( renderLayer ).Length.ToString() );
 			else
-				DebugConsole.instance.log( "Total renderables: " + Core.scene.renderableComponents.count.ToString() );
+				DebugConsole.Instance.Log( "Total renderables: " + Core.Scene.RenderableComponents.Count.ToString() );
 		}
 
 
 		[Command( "renderable-log", "Logs the Renderables in the Scene. Pass a renderLayer to log only Renderables in that layer" )]
-		static void renderableLog( int renderLayer = int.MinValue )
+		static void RenderableLog( int renderLayer = int.MinValue )
 		{
-			if( Core.scene == null )
+			if( Core.Scene == null )
 			{
-				DebugConsole.instance.log( "Current Scene is null!" );
+				DebugConsole.Instance.Log( "Current Scene is null!" );
 				return;
 			}
 
 			var builder = new StringBuilder();
-			for( var i = 0; i < Core.scene.renderableComponents.count; i++ )
+			for( var i = 0; i < Core.Scene.RenderableComponents.Count; i++ )
 			{
-				var renderable = Core.scene.renderableComponents[i];
-				if( renderLayer == int.MinValue || renderable.renderLayer == renderLayer )
+				var renderable = Core.Scene.RenderableComponents[i];
+				if( renderLayer == int.MinValue || renderable.RenderLayer == renderLayer )
 					builder.AppendFormat( "{0}\n", renderable );
 			}
 
-			DebugConsole.instance.log( builder.ToString() );
+			DebugConsole.Instance.Log( builder.ToString() );
 		}
 
 
 		[Command( "entity-list", "Logs all entities" )]
-		static void logEntities( string whichAssets = "s" )
+		static void LogEntities( string whichAssets = "s" )
 		{
-			if( Core.scene == null )
+			if( Core.Scene == null )
 			{
-				DebugConsole.instance.log( "Current Scene is null!" );
+				DebugConsole.Instance.Log( "Current Scene is null!" );
 				return;
 			}
 
 			var builder = new StringBuilder();
-			for( var i = 0; i < Core.scene.entities.count; i++ )
-				builder.AppendLine( Core.scene.entities[i].ToString() );
+			for( var i = 0; i < Core.Scene.Entities.Count; i++ )
+				builder.AppendLine( Core.Scene.Entities[i].ToString() );
 
-			DebugConsole.instance.log( builder.ToString() );
+			DebugConsole.Instance.Log( builder.ToString() );
 		}
 
 
 		[Command( "timescale", "Sets the timescale. Defaults to 1" )]
-		static void tilescale( float timeScale = 1 )
+		static void Tilescale( float timeScale = 1 )
 		{
-			Time.timeScale = timeScale;
+			Time.TimeScale = timeScale;
 		}
 
 
 		[Command( "physics", "Logs the total Collider count in the spatial hash" )]
-		static void physics( float secondsToDisplay = 5f )
+		static void Physics( float secondsToDisplay = 5f )
 		{
 			// store off the current state so we can reset it when we are done
-			var debugRenderState = Core.debugRenderEnabled;
-			Core.debugRenderEnabled = true;
+			var debugRenderState = Core.DebugRenderEnabled;
+			Core.DebugRenderEnabled = true;
 
 			var ticker = 0f;
-			Core.schedule( 0f, true, null, timer =>
+            Core.Schedule( 0f, true, null, timer =>
 			{
-				Physics.debugDraw( 0f );
-				ticker += Time.deltaTime;
+                Nez.Physics.DebugDraw( 0f );
+				ticker += Time.DeltaTime;
 				if( ticker >= secondsToDisplay )
 				{
-					timer.stop();
-					Core.debugRenderEnabled = debugRenderState;
+					timer.Stop();
+                    Core.DebugRenderEnabled = debugRenderState;
 				}
 			});
 
-			DebugConsole.instance.log( "Physics system collider count: " + ((HashSet<Collider>)Physics.getAllColliders()).Count );
+            DebugConsole.Instance.Log( "Physics system collider count: " + ((HashSet<Collider>)Nez.Physics.GetAllColliders()).Count );
 		}
 
 
 		[Command( "debug-render", "enables/disables debug rendering" )]
-		static void debugRender()
+		static void DebugRender()
 		{
-			Core.debugRenderEnabled = !Core.debugRenderEnabled;
-			DebugConsole.instance.log( string.Format( "Debug rendering {0}", Core.debugRenderEnabled ? "enabled" : "disabled" ) );
+			Core.DebugRenderEnabled = !Core.DebugRenderEnabled;
+			DebugConsole.Instance.Log( string.Format( "Debug rendering {0}", Core.DebugRenderEnabled ? "enabled" : "disabled" ) );
 		}
 
 
 		[Command( "help", "Shows usage help for a given command" )]
-		static void help( string command )
+		static void Help( string command )
 		{
-			if( instance._sorted.Contains( command ) )
+			if( Instance._sorted.Contains( command ) )
 			{
-				var c = instance._commands[command];
+				var c = Instance._commands[command];
 				StringBuilder str = new StringBuilder();
 
 				//Title
@@ -257,26 +257,26 @@ namespace Nez.Console
 				str.Append( command );
 
 				//Usage
-				if( !string.IsNullOrEmpty( c.usage ) )
+				if( !string.IsNullOrEmpty( c.Usage ) )
 				{
 					str.Append( " " );
-					str.Append( c.usage );
+					str.Append( c.Usage );
 				}
-				DebugConsole.instance.log( str.ToString() );
+				DebugConsole.Instance.Log( str.ToString() );
 
 				//Help
-				if( string.IsNullOrEmpty( c.help ) )
-					DebugConsole.instance.log( "No help info set" );
+				if( string.IsNullOrEmpty( c.Help ) )
+					DebugConsole.Instance.Log( "No help info set" );
 				else
-					DebugConsole.instance.log( c.help );
+					DebugConsole.Instance.Log( c.Help );
 			}
 			else
 			{
 				StringBuilder str = new StringBuilder();
 				str.Append( "Commands list: " );
-				str.Append( string.Join( ", ", instance._sorted ) );
-				DebugConsole.instance.log( str.ToString() );
-				DebugConsole.instance.log( "Type 'help command' for more info on that command!" );
+				str.Append( string.Join( ", ", Instance._sorted ) );
+				DebugConsole.Instance.Log( str.ToString() );
+				DebugConsole.Instance.Log( "Type 'help command' for more info on that command!" );
 			}
 		}
 

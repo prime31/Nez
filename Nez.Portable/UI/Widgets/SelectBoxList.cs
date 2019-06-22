@@ -7,8 +7,8 @@ namespace Nez.UI
 {
 	public class SelectBoxList<T> : ScrollPane where T : class
 	{
-		public int maxListCount;
-		public ListBox<T> listBox;
+		public int MaxListCount;
+		public ListBox<T> ListBox;
 
 		SelectBox<T> _selectBox;
 		Element _previousScrollFocus;
@@ -16,49 +16,49 @@ namespace Nez.UI
 		bool _isListBelowSelectBox;
 
 
-		public SelectBoxList( SelectBox<T> selectBox ) : base( null, selectBox.getStyle().scrollStyle )
+		public SelectBoxList( SelectBox<T> selectBox ) : base( null, selectBox.GetStyle().ScrollStyle )
 		{
 			_selectBox = selectBox;
 
-			setOverscroll( false, false );
-			setFadeScrollBars( false );
-			setScrollingDisabled( true, false );
+			SetOverscroll( false, false );
+			SetFadeScrollBars( false );
+			SetScrollingDisabled( true, false );
 
-			listBox = new ListBox<T>( selectBox.getStyle().listStyle );
-			listBox.setTouchable( Touchable.Disabled );
-			setWidget( listBox );
+			ListBox = new ListBox<T>( selectBox.GetStyle().ListStyle );
+			ListBox.SetTouchable( Touchable.Disabled );
+			SetWidget( ListBox );
 
-			listBox.onChanged += item =>
+			ListBox.OnChanged += item =>
 			{
-				selectBox.getSelection().choose( item );
-				if( selectBox.onChanged != null )
-					selectBox.onChanged( item );
-				hide();
+				selectBox.GetSelection().Choose( item );
+				if( selectBox.OnChanged != null )
+					selectBox.OnChanged( item );
+				Hide();
 			};
 		}
 
 
-		public void show( Stage stage )
+		public void Show( Stage stage )
 		{
-			if( listBox.isTouchable() )
+			if( ListBox.IsTouchable() )
 				return;
 
-			stage.addElement( this );
+			stage.AddElement( this );
 
-			_screenPosition = _selectBox.localToStageCoordinates( Vector2.Zero );
+			_screenPosition = _selectBox.LocalToStageCoordinates( Vector2.Zero );
 
 			// show the list above or below the select box, limited to a number of items and the available height in the stage.
-			float itemHeight = listBox.getItemHeight();
-			float height = itemHeight * ( maxListCount <= 0 ? _selectBox.getItems().Count : Math.Min( maxListCount, _selectBox.getItems().Count ) );
-			var scrollPaneBackground = getStyle().background;
+			float itemHeight = ListBox.GetItemHeight();
+			float height = itemHeight * ( MaxListCount <= 0 ? _selectBox.GetItems().Count : Math.Min( MaxListCount, _selectBox.GetItems().Count ) );
+			var scrollPaneBackground = GetStyle().Background;
 			if( scrollPaneBackground != null )
-				height += scrollPaneBackground.topHeight + scrollPaneBackground.bottomHeight;
-			var listBackground = listBox.getStyle().background;
+				height += scrollPaneBackground.TopHeight + scrollPaneBackground.BottomHeight;
+			var listBackground = ListBox.GetStyle().Background;
 			if( listBackground != null )
-				height += listBackground.topHeight + listBackground.bottomHeight;
+				height += listBackground.TopHeight + listBackground.BottomHeight;
 
 			float heightAbove = _screenPosition.Y;
-			float heightBelow = Screen.height /*camera.viewportHeight */ - _screenPosition.Y - _selectBox.getHeight();
+			float heightBelow = Screen.Height /*camera.viewportHeight */ - _screenPosition.Y - _selectBox.GetHeight();
 			_isListBelowSelectBox = true;
 			if( height > heightBelow )
 			{
@@ -74,69 +74,69 @@ namespace Nez.UI
 			}
 
 			if( !_isListBelowSelectBox )
-				setY( _screenPosition.Y - height );
+				SetY( _screenPosition.Y - height );
 			else
-				setY( _screenPosition.Y + _selectBox.getHeight() );
-			setX( _screenPosition.X );
-			setHeight( height );
-			validate();
+				SetY( _screenPosition.Y + _selectBox.GetHeight() );
+			SetX( _screenPosition.X );
+			SetHeight( height );
+			Validate();
 
-			var width = Math.Max( preferredWidth, _selectBox.getWidth() );
-			if( preferredHeight > height && !_disableY )
-				width += getScrollBarWidth();
-			setWidth( width );
+			var width = Math.Max( PreferredWidth, _selectBox.GetWidth() );
+			if( PreferredHeight > height && !_disableY )
+				width += GetScrollBarWidth();
+			SetWidth( width );
 
-			validate();
-			scrollTo( 0, listBox.getHeight() - _selectBox.getSelectedIndex() * itemHeight - itemHeight / 2, 0, 0, true, true );
-			updateVisualScroll();
+			Validate();
+			ScrollTo( 0, ListBox.GetHeight() - _selectBox.GetSelectedIndex() * itemHeight - itemHeight / 2, 0, 0, true, true );
+			UpdateVisualScroll();
 
 			_previousScrollFocus = null;
 
-			listBox.getSelection().set( _selectBox.getSelected() );
-			listBox.setTouchable( Touchable.Enabled );
-			_selectBox.onShow( this, _isListBelowSelectBox );
+			ListBox.GetSelection().Set( _selectBox.GetSelected() );
+			ListBox.SetTouchable( Touchable.Enabled );
+			_selectBox.OnShow( this, _isListBelowSelectBox );
 		}
 
 
-		public void hide()
+		public void Hide()
 		{
-			if( !listBox.isTouchable() || !hasParent() )
+			if( !ListBox.IsTouchable() || !HasParent() )
 				return;
 			
-			listBox.setTouchable( Touchable.Disabled );
+			ListBox.SetTouchable( Touchable.Disabled );
 
 			if( stage != null )
 			{
-				if( _previousScrollFocus != null && _previousScrollFocus.getStage() == null )
+				if( _previousScrollFocus != null && _previousScrollFocus.GetStage() == null )
 					_previousScrollFocus = null;
 			}
 
-			_selectBox.onHide( this );
+			_selectBox.OnHide( this );
 		}
 
 
-		public override void draw( Graphics graphics, float parentAlpha )
+		public override void Draw( Graphics graphics, float parentAlpha )
 		{
-			var temp = _selectBox.localToStageCoordinates( Vector2.Zero );
+			var temp = _selectBox.LocalToStageCoordinates( Vector2.Zero );
 			if( temp != _screenPosition )
-				Core.schedule( 0f, false, this, t => ((SelectBoxList<T>)t.context).hide() );
+				Core.Schedule( 0f, false, this, t => ((SelectBoxList<T>)t.Context).Hide() );
 			
-			base.draw( graphics, parentAlpha );
+			base.Draw( graphics, parentAlpha );
 		}
 
 
-		protected override void update()
+		protected override void Update()
 		{
-			if( Input.isKeyPressed( Keys.Escape ) )
+			if( Input.IsKeyPressed( Keys.Escape ) )
 			{
-				Core.schedule( 0f, false, this, t => ( (SelectBoxList<T>)t.context ).hide() );
+				Core.Schedule( 0f, false, this, t => ( (SelectBoxList<T>)t.Context ).Hide() );
 				return;
 			}
 
-			if( Input.leftMouseButtonPressed )
+			if( Input.LeftMouseButtonPressed )
 			{
-				var point = stage.getMousePosition();
-				point = screenToLocalCoordinates( point );
+				var point = stage.GetMousePosition();
+				point = ScreenToLocalCoordinates( point );
 
 				float yMin = 0, yMax = height;
 
@@ -148,11 +148,11 @@ namespace Nez.UI
 					yMax += _selectBox.height;
 				
 				if( point.X < 0 || point.X > width || point.Y > yMax || point.Y < yMin )
-					Core.schedule( 0f, false, this, t => ( (SelectBoxList<T>)t.context ).hide() );
+					Core.Schedule( 0f, false, this, t => ( (SelectBoxList<T>)t.Context ).Hide() );
 			}
 			
-			base.update();
-			toFront();
+			base.Update();
+			ToFront();
 		}
 	
 	}

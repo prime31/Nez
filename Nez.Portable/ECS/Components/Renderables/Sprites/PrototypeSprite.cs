@@ -10,16 +10,16 @@ namespace Nez
 	/// </summary>
 	public class PrototypeSprite : Sprite
 	{
-		public override float width => _width;
-		public override float height => _height;
+		public override float Width => _width;
+		public override float Height => _height;
 
-		public override RectangleF bounds
+		public override RectangleF Bounds
 		{
 			get
 			{
 				if( _areBoundsDirty )
 				{
-					_bounds.calculateBounds( entity.transform.position, _localOffset, _origin, entity.transform.scale, entity.transform.rotation, _width, _height );
+					_bounds.CalculateBounds( Entity.Transform.Position, _localOffset, _origin, Entity.Transform.Scale, Entity.Transform.Rotation, _width, _height );
 					_areBoundsDirty = false;
 				}
 
@@ -27,10 +27,10 @@ namespace Nez
 			}
 		}
 
-		public float skewTopX;
-		public float skewBottomX;
-		public float skewLeftY;
-		public float skewRightY;
+		public float SkewTopX;
+		public float SkewBottomX;
+		public float SkewLeftY;
+		public float SkewRightY;
 
 		float _width, _height;
 
@@ -38,7 +38,7 @@ namespace Nez
 		public PrototypeSprite() : this( 50, 50 )
 		{}
 
-		public PrototypeSprite( float width, float height ) : base( Graphics.instance.pixelTexture )
+		public PrototypeSprite( float width, float height ) : base( Graphics.Instance.PixelTexture )
 		{
 			_width = width;
 			_height = height;
@@ -49,7 +49,7 @@ namespace Nez
 		/// </summary>
 		/// <returns>The width.</returns>
 		/// <param name="width">Width.</param>
-		public PrototypeSprite setWidth( float width )
+		public PrototypeSprite SetWidth( float width )
 		{
 			_width = width;
 			return this;
@@ -60,7 +60,7 @@ namespace Nez
 		/// </summary>
 		/// <returns>The height.</returns>
 		/// <param name="height">Height.</param>
-		public PrototypeSprite setHeight( float height )
+		public PrototypeSprite SetHeight( float height )
 		{
 			_height = height;
 			return this;
@@ -74,26 +74,26 @@ namespace Nez
 		/// <param name="skewBottomX">Skew bottom x.</param>
 		/// <param name="skewLeftY">Skew left y.</param>
 		/// <param name="skewRightY">Skew right y.</param>
-		public PrototypeSprite setSkew( float skewTopX, float skewBottomX, float skewLeftY, float skewRightY )
+		public PrototypeSprite SetSkew( float skewTopX, float skewBottomX, float skewLeftY, float skewRightY )
 		{
-			this.skewTopX = skewTopX;
-			this.skewBottomX = skewBottomX;
-			this.skewLeftY = skewLeftY;
-			this.skewRightY = skewRightY;
+			this.SkewTopX = skewTopX;
+			this.SkewBottomX = skewBottomX;
+			this.SkewLeftY = skewLeftY;
+			this.SkewRightY = skewRightY;
 			return this;
 		}
        
-	    public override void onAddedToEntity()
+	    public override void OnAddedToEntity()
         {
-            originNormalized = Vector2Ext.halfVector();
+            OriginNormalized = Vector2Ext.HalfVector();
         }
 
-        public override void render( Graphics graphics, Camera camera )
+        public override void Render( Graphics graphics, Camera camera )
 		{
-			var pos = ( entity.transform.position - ( origin * entity.transform.scale ) + localOffset );
-			var size = new Point( (int)( _width * entity.transform.scale.X ), (int)( _height * entity.transform.scale.Y ) );
+			var pos = ( Entity.Transform.Position - ( Origin * Entity.Transform.Scale ) + LocalOffset );
+			var size = new Point( (int)( _width * Entity.Transform.Scale.X ), (int)( _height * Entity.Transform.Scale.Y ) );
 			var destRect = new Rectangle( (int)pos.X, (int)pos.Y, size.X, size.Y );
-			graphics.batcher.draw( subtexture, destRect, subtexture.sourceRect, color, entity.transform.rotation, SpriteEffects.None, layerDepth, skewTopX, skewBottomX, skewLeftY, skewRightY );
+			graphics.Batcher.Draw( Subtexture, destRect, Subtexture.SourceRect, Color, Entity.Transform.Rotation, SpriteEffects.None, LayerDepth, SkewTopX, SkewBottomX, SkewLeftY, SkewRightY );
 		}
 
 	}

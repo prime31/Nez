@@ -21,7 +21,7 @@ namespace FarseerPhysics.Common.ConvexHull
 		/// Returns a convex hull from the given vertices.
 		/// </summary>
 		/// <returns>A convex hull in counter clockwise winding order.</returns>
-		public static Vertices getConvexHull( Vertices vertices )
+		public static Vertices GetConvexHull( Vertices vertices )
 		{
 			if( vertices.Count <= 3 )
 				return vertices;
@@ -33,7 +33,7 @@ namespace FarseerPhysics.Common.ConvexHull
 
 			//Start by placing first 3 vertices in convex CCW order
 			int startIndex = 3;
-			float k = MathUtils.area( vertices[0], vertices[1], vertices[2] );
+			float k = MathUtils.Area( vertices[0], vertices[1], vertices[2] );
 			if( k == 0 )
 			{
 				//Vertices are collinear.
@@ -46,7 +46,7 @@ namespace FarseerPhysics.Common.ConvexHull
 				for( startIndex = 3; startIndex < vertices.Count; startIndex++ )
 				{
 					Vector2 tmp = vertices[startIndex];
-					if( MathUtils.area( ref deque[0], ref deque[1], ref tmp ) == 0 ) //This point is also collinear
+					if( MathUtils.Area( ref deque[0], ref deque[1], ref tmp ) == 0 ) //This point is also collinear
 						deque[1] = vertices[startIndex];
 					else break;
 				}
@@ -77,11 +77,11 @@ namespace FarseerPhysics.Common.ConvexHull
 				Vector2 nextPt = vertices[i];
 
 				//Ignore if it is already within the convex hull we have constructed
-				if( MathUtils.area( ref deque[qfm1], ref deque[qf], ref nextPt ) > 0 && MathUtils.area( ref deque[qb], ref deque[qbm1], ref nextPt ) > 0 )
+				if( MathUtils.Area( ref deque[qfm1], ref deque[qf], ref nextPt ) > 0 && MathUtils.Area( ref deque[qb], ref deque[qbm1], ref nextPt ) > 0 )
 					continue;
 
 				//Pop front until convex
-				while( !( MathUtils.area( ref deque[qfm1], ref deque[qf], ref nextPt ) > 0 ) )
+				while( !( MathUtils.Area( ref deque[qfm1], ref deque[qf], ref nextPt ) > 0 ) )
 				{
 					//Pop the front element from the queue
 					qf = qfm1; //qf--;
@@ -94,7 +94,7 @@ namespace FarseerPhysics.Common.ConvexHull
 				deque[qf] = nextPt;
 
 				//Pop back until convex
-				while( !( MathUtils.area( ref deque[qb], ref deque[qbm1], ref nextPt ) > 0 ) )
+				while( !( MathUtils.Area( ref deque[qb], ref deque[qbm1], ref nextPt ) > 0 ) )
 				{
 					//Pop the back element from the queue
 					qb = qbm1; //qb++;

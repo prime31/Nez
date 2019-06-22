@@ -10,7 +10,7 @@ namespace Nez
 		/// value from 0 - 1 that determines how much the dissolve effect will encompass
 		/// </summary>
 		/// <value>The progress.</value>
-		public float progress
+		public float Progress
 		{
 			get { return _progress; }
 			set
@@ -24,7 +24,7 @@ namespace Nez
 		/// determines how much area around the current dissolve threshold will be colored with dissolveThresholdColor
 		/// </summary>
 		/// <value>The dissolve threshold.</value>
-		public float dissolveThreshold
+		public float DissolveThreshold
 		{
 			get { return _dissolveThreshold; }
 			set
@@ -38,7 +38,7 @@ namespace Nez
 		/// the Color that will appear on the threshold of the dissolve effect
 		/// </summary>
 		/// <value>The color of the dissolve threshold.</value>
-		public Color dissolveThresholdColor
+		public Color DissolveThresholdColor
 		{
 			get { return _dissolveThresholdColor; }
 			set
@@ -52,7 +52,7 @@ namespace Nez
 		/// the grayscale texture used to determine what is disolved
 		/// </summary>
 		/// <value>The dissolve texture.</value>
-		public Texture2D dissolveTexture
+		public Texture2D DissolveTexture
 		{
 			set { _dissolveTexParam.SetValue( value ); }
 		}
@@ -68,7 +68,7 @@ namespace Nez
 		EffectParameter _dissolveTexParam;
 
 
-		public DissolveEffect( Texture2D dissolveTexture ) : base( Core.graphicsDevice, EffectResource.dissolveBytes )
+		public DissolveEffect( Texture2D dissolveTexture ) : base( Core.GraphicsDevice, EffectResource.DissolveBytes )
 		{
 			_progressParam = Parameters["_progress"];
 			_dissolveThresholdParam = Parameters["_dissolveThreshold"];

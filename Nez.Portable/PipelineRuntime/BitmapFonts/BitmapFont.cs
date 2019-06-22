@@ -23,125 +23,125 @@ namespace Nez.BitmapFonts
         /// alpha channel.
         /// </summary>
         /// <remarks>Set to 0 if the channel holds the glyph data, 1 if it holds the outline, 2 if it holds the glyph and the outline, 3 if it's set to zero, and 4 if it's set to one.</remarks>
-        public int alphaChannel;
+        public int AlphaChannel;
 
         /// <summary>
         /// number of pixels from the absolute top of the line to the base of the characters.
         /// </summary>
-        public int baseHeight;
+        public int BaseHeight;
 
         /// <summary>
         /// blue channel.
         /// </summary>
         /// <remarks>Set to 0 if the channel holds the glyph data, 1 if it holds the outline, 2 if it holds the glyph and the outline, 3 if it's set to zero, and 4 if it's set to one.</remarks>
-        public int blueChannel;
+        public int BlueChannel;
 
-        public bool bold;
+        public bool Bold;
 
         /// <summary>
         /// characters that comprise the font.
         /// </summary>
-        public IDictionary<char, Character> characters;
+        public IDictionary<char, Character> Characters;
 
         /// <summary>
         /// name of the OEM charset used.
         /// </summary>
-        public string charset;
+        public string Charset;
 
         /// <summary>
         /// name of the true type font.
         /// </summary>
-        public string familyName;
+        public string FamilyName;
 
         /// <summary>
         /// size of the font.
         /// </summary>
-        public int fontSize;
+        public int FontSize;
 
         /// <summary>
         /// green channel.
         /// </summary>
         /// <remarks>Set to 0 if the channel holds the glyph data, 1 if it holds the outline, 2 if it holds the glyph and the outline, 3 if it's set to zero, and 4 if it's set to one.</remarks>
-        public int greenChannel;
+        public int GreenChannel;
 
-        public bool italic;
+        public bool Italic;
 
         /// <summary>
         /// character kernings for the font.
         /// </summary>
-        public IDictionary<Kerning, int> kernings;
+        public IDictionary<Kerning, int> Kernings;
 
         /// <summary>
         /// distance in pixels between each line of text.
         /// </summary>
-        public int lineHeight;
+        public int LineHeight;
 
-        public float lineSpacing => lineHeight;
+        public float LineSpacing => LineHeight;
 
         /// <summary>
         /// outline thickness for the characters.
         /// </summary>
-        public int outlineSize;
+        public int OutlineSize;
 
         /// <summary>
         /// Gets or sets a value indicating whether the monochrome charaters have been packed into each of the texture channels.
         /// </summary>
         /// <remarks>
-        /// When packed, the <see cref="alphaChannel"/> property describes what is stored in each channel.
+        /// When packed, the <see cref="AlphaChannel"/> property describes what is stored in each channel.
         /// </remarks>
-        public bool packed;
+        public bool Packed;
 
         /// <summary>
         /// padding for each character.
         /// </summary>
-        public Padding padding;
+        public Padding Padding;
 
         /// <summary>
         /// texture pages for the font.
         /// </summary>
-        public Page[] pages;
+        public Page[] Pages;
 
         /// <summary>
         /// houses the Textures for each Page, with the same index as the Page.
         /// </summary>
-        public Texture2D[] textures;
+        public Texture2D[] Textures;
 
         /// <summary>
         /// red channel.
         /// </summary>
         /// <remarks>Set to 0 if the channel holds the glyph data, 1 if it holds the outline, 2 if it holds the glyph and the outline, 3 if it's set to zero, and 4 if it's set to one.</remarks>
-        public int redChannel;
+        public int RedChannel;
 
         /// <summary>
         /// Gets or sets a value indicating whether the font is smoothed.
         /// </summary>
-        public bool smoothed;
+        public bool Smoothed;
 
         /// <summary>
         /// spacing for each character.
         /// </summary>
-        public Point spacing;
+        public Point Spacing;
 
         /// <summary>
         /// font height stretch.
         /// </summary>
         /// <remarks>100% means no stretch.</remarks>
-        public int stretchedHeight;
+        public int StretchedHeight;
 
         /// <summary>
         /// level of super sampling used by the font.
         /// </summary>
         /// <remarks>A value of 1 indicates no super sampling is in use.</remarks>
-        public int superSampling;
+        public int SuperSampling;
 
         /// <summary>
         /// size of the texture images used by the font.
         /// </summary>
-        public Point textureSize;
+        public Point TextureSize;
 
-        public bool unicode;
+        public bool Unicode;
 
-        public Character defaultCharacter;
+        public Character DefaultCharacter;
 
         internal int _spaceWidth;
 
@@ -150,21 +150,21 @@ namespace Nez.BitmapFonts
         /// <summary>
         /// Index to get items within thsi collection using array index syntax.
         /// </summary>
-        public Character this[char character] => characters[character];
+        public Character this[char character] => Characters[character];
 
         public void Initialize()
         {
             LoadTextures();
-            if (characters.TryGetValue(' ', out var defaultChar))
+            if (Characters.TryGetValue(' ', out var defaultChar))
             {
-                defaultCharacter = defaultChar;
+                DefaultCharacter = defaultChar;
             }
             else
             {
-                Debug.log($"Font {this.familyName} has no space character!");
-                defaultCharacter = this['a'];
+                Debug.Log($"Font {this.FamilyName} has no space character!");
+                DefaultCharacter = this['a'];
             }
-            _spaceWidth = defaultCharacter.bounds.Width + defaultCharacter.xAdvance;
+            _spaceWidth = DefaultCharacter.Bounds.Width + DefaultCharacter.XAdvance;
         }
 
         /// <summary>
@@ -178,17 +178,17 @@ namespace Nez.BitmapFonts
         public int GetKerning(char previous, char current)
         {
             var key = new Kerning(previous, current, 0);
-            if (!kernings.TryGetValue(key, out var result))
+            if (!Kernings.TryGetValue(key, out var result))
                 return 0;
 
             return result;
         }
 
-        public bool ContainsCharacter(char character) => characters.ContainsKey(character);
+        public bool ContainsCharacter(char character) => Characters.ContainsKey(character);
 
-        public bool hasCharacter(char character) => ContainsCharacter(character);
+        public bool HasCharacter(char character) => ContainsCharacter(character);
 
-        public string wrapText(string text, float maxLineWidth)
+        public string WrapText(string text, float maxLineWidth)
         {
             var words = text.Split(' ');
             var sb = new StringBuilder();
@@ -199,7 +199,7 @@ namespace Nez.BitmapFonts
 
             foreach (var word in words)
             {
-                var size = measureString(word);
+                var size = MeasureString(word);
                 if (lineWidth + size.X < maxLineWidth)
                 {
                     sb.Append(word + " ");
@@ -210,9 +210,9 @@ namespace Nez.BitmapFonts
                     if (size.X > maxLineWidth)
                     {
                         if (sb.ToString() == "")
-                            sb.Append(wrapText(word.Insert(word.Length / 2, " ") + " ", maxLineWidth));
+                            sb.Append(WrapText(word.Insert(word.Length / 2, " ") + " ", maxLineWidth));
                         else
-                            sb.Append("\n" + wrapText(word.Insert(word.Length / 2, " ") + " ", maxLineWidth));
+                            sb.Append("\n" + WrapText(word.Insert(word.Length / 2, " ") + " ", maxLineWidth));
                     }
                     else
                     {
@@ -233,15 +233,15 @@ namespace Nez.BitmapFonts
         /// <param name="text">Text.</param>
         /// <param name="ellipsis">Ellipsis.</param>
         /// <param name="maxLineWidth">Max line width.</param>
-        public string truncateText(string text, string ellipsis, float maxLineWidth)
+        public string TruncateText(string text, string ellipsis, float maxLineWidth)
         {
             if (maxLineWidth < _spaceWidth)
                 return string.Empty;
 
-            var size = measureString(text);
+            var size = MeasureString(text);
 
             // do we even need to truncate?
-            var ellipsisWidth = measureString(ellipsis).X;
+            var ellipsisWidth = MeasureString(ellipsis).X;
             if (size.X > maxLineWidth)
             {
                 var sb = new StringBuilder();
@@ -260,14 +260,14 @@ namespace Nez.BitmapFonts
                         continue;
 
                     if (currentChar != null)
-                        offsetX += spacing.X + currentChar.xAdvance;
+                        offsetX += Spacing.X + currentChar.XAdvance;
 
                     if (ContainsCharacter(c))
                         currentChar = this[c];
                     else
-                        currentChar = defaultCharacter;
+                        currentChar = DefaultCharacter;
 
-                    var proposedWidth = offsetX + currentChar.xAdvance + spacing.X;
+                    var proposedWidth = offsetX + currentChar.XAdvance + Spacing.X;
                     if (proposedWidth > width)
                         width = proposedWidth;
 
@@ -289,28 +289,28 @@ namespace Nez.BitmapFonts
             return text;
         }
 
-        public Vector2 measureString(string text)
+        public Vector2 MeasureString(string text)
         {
-            var result = measureString(text, kNoMaxWidth);
+            var result = MeasureString(text, kNoMaxWidth);
             return new Vector2(result.X, result.Y);
         }
 
-        public Vector2 measureString(StringBuilder text)
+        public Vector2 MeasureString(StringBuilder text)
         {
-            var result = measureString(text, kNoMaxWidth);
+            var result = MeasureString(text, kNoMaxWidth);
             return new Vector2(result.X, result.Y);
         }
 
-        public Point measureString(string text, float maxWidth = kNoMaxWidth)
+        public Point MeasureString(string text, float maxWidth = kNoMaxWidth)
         {
             var source = new FontCharacterSource(text);
-            return measureString(ref source, maxWidth);
+            return MeasureString(ref source, maxWidth);
         }
 
-        public Point measureString(StringBuilder text, float maxWidth = kNoMaxWidth)
+        public Point MeasureString(StringBuilder text, float maxWidth = kNoMaxWidth)
         {
             var source = new FontCharacterSource(text);
-            return measureString(ref source, maxWidth);
+            return MeasureString(ref source, maxWidth);
         }
 
         /// <summary>
@@ -322,7 +322,7 @@ namespace Nez.BitmapFonts
         /// The <see cref="Size"/>, in pixels, of <paramref name="text"/> drawn with this font.
         /// </returns>
         /// <remarks>The MeasureString method uses the <paramref name="maxWidth"/> parameter to automatically wrap when determining text size.</remarks>
-        public Point measureString(ref FontCharacterSource text, float maxWidth = kNoMaxWidth)
+        public Point MeasureString(ref FontCharacterSource text, float maxWidth = kNoMaxWidth)
         {
             if (text.Length == 0)
                 return Point.Zero;
@@ -330,7 +330,7 @@ namespace Nez.BitmapFonts
             var length = text.Length;
             var previousCharacter = ' ';
             var currentLineWidth = 0;
-            var currentLineHeight = lineHeight;
+            var currentLineHeight = LineHeight;
             var blockWidth = 0;
             var blockHeight = 0;
             var lineHeights = new List<int>();
@@ -345,23 +345,23 @@ namespace Nez.BitmapFonts
                         lineHeights.Add(currentLineHeight);
                         blockWidth = Math.Max(blockWidth, currentLineWidth);
                         currentLineWidth = 0;
-                        currentLineHeight = lineHeight;
+                        currentLineHeight = LineHeight;
                     }
                 }
                 else
                 {
                     var data = this[character];
-                    var width = data.xAdvance + GetKerning(previousCharacter, character) + spacing.X;
+                    var width = data.XAdvance + GetKerning(previousCharacter, character) + Spacing.X;
                     if (maxWidth != kNoMaxWidth && currentLineWidth + width >= maxWidth)
                     {
                         lineHeights.Add(currentLineHeight);
                         blockWidth = Math.Max(blockWidth, currentLineWidth);
                         currentLineWidth = 0;
-                        currentLineHeight = lineHeight;
+                        currentLineHeight = LineHeight;
                     }
 
                     currentLineWidth += width;
-                    currentLineHeight = Math.Max(currentLineHeight, data.bounds.Height + data.offset.Y);
+                    currentLineHeight = Math.Max(currentLineHeight, data.Bounds.Height + data.Offset.Y);
                     previousCharacter = character;
                 }
             }
@@ -372,7 +372,7 @@ namespace Nez.BitmapFonts
 
             // reduce any lines other than the last back to the base
             for (var i = 0; i < lineHeights.Count - 1; i++)
-                lineHeights[i] = lineHeight;
+                lineHeights[i] = LineHeight;
 
             return new Point(Math.Max(currentLineWidth, blockWidth), blockHeight);
         }
@@ -381,12 +381,12 @@ namespace Nez.BitmapFonts
 
         public void Dispose()
         {
-            if (textures == null)
+            if (Textures == null)
                 return;
 
-            foreach (var tex in textures)
+            foreach (var tex in Textures)
                 tex.Dispose();
-            textures = null;
+            Textures = null;
         }
 
         public BitmapFontEnumerator GetGlyphs(string text)

@@ -17,9 +17,9 @@ namespace Nez.Splines
 		/// <param name="p1">P1.</param>
 		/// <param name="p2">P2.</param>
 		/// <param name="t">T.</param>
-		public static Vector2 getPoint( Vector2 p0, Vector2 p1, Vector2 p2, float t )
+		public static Vector2 GetPoint( Vector2 p0, Vector2 p1, Vector2 p2, float t )
 		{
-			t = Mathf.clamp01( t );
+			t = Mathf.Clamp01( t );
 			var oneMinusT = 1f - t;
 			return oneMinusT * oneMinusT * p0 +
 				2f * oneMinusT * t * p1 +
@@ -35,7 +35,7 @@ namespace Nez.Splines
 		/// <param name="p1">P1.</param>
 		/// <param name="p2">P2.</param>
 		/// <param name="t">T.</param>
-		public static Vector2 getFirstDerivative( Vector2 p0, Vector2 p1, Vector2 p2, float t )
+		public static Vector2 GetFirstDerivative( Vector2 p0, Vector2 p1, Vector2 p2, float t )
 		{
 			return 2f * ( 1f - t ) * ( p1 - p0 ) +
 				2f * t * ( p2 - p1 );
@@ -51,9 +51,9 @@ namespace Nez.Splines
 		/// <param name="secondControlPoint">P2.</param>
 		/// <param name="end">P3.</param>
 		/// <param name="t">T.</param>
-		public static Vector2 getPoint( Vector2 start, Vector2 firstControlPoint, Vector2 secondControlPoint, Vector2 end, float t )
+		public static Vector2 GetPoint( Vector2 start, Vector2 firstControlPoint, Vector2 secondControlPoint, Vector2 end, float t )
 		{
-			t = Mathf.clamp01( t );
+			t = Mathf.Clamp01( t );
 			var oneMinusT = 1f - t;
 			return oneMinusT * oneMinusT * oneMinusT * start +
 				3f * oneMinusT * oneMinusT * t * firstControlPoint +
@@ -71,9 +71,9 @@ namespace Nez.Splines
 		/// <param name="secondControlPoint">P2.</param>
 		/// <param name="end">P3.</param>
 		/// <param name="t">T.</param>
-		public static Vector2 getFirstDerivative( Vector2 start, Vector2 firstControlPoint, Vector2 secondControlPoint, Vector2 end, float t )
+		public static Vector2 GetFirstDerivative( Vector2 start, Vector2 firstControlPoint, Vector2 secondControlPoint, Vector2 end, float t )
 		{
-			t = Mathf.clamp01( t );
+			t = Mathf.Clamp01( t );
 			var oneMinusT = 1f - t;
 			return 3f * oneMinusT * oneMinusT * ( firstControlPoint - start ) +
 				6f * oneMinusT * t * ( secondControlPoint - firstControlPoint ) +
@@ -95,7 +95,7 @@ namespace Nez.Splines
 		/// <param name="end">End.</param>
 		/// <param name="points">Points.</param>
 		/// <param name="distanceTolerance">Distance tolerance.</param>
-		static void recursiveGetOptimizedDrawingPoints( Vector2 start, Vector2 firstCtrlPoint, Vector2 secondCtrlPoint, Vector2 end, List<Vector2> points, float distanceTolerance )
+		static void RecursiveGetOptimizedDrawingPoints( Vector2 start, Vector2 firstCtrlPoint, Vector2 secondCtrlPoint, Vector2 end, List<Vector2> points, float distanceTolerance )
 		{
 			// calculate all the mid-points of the line segments
 			var pt12 = ( start + firstCtrlPoint ) / 2;
@@ -122,8 +122,8 @@ namespace Nez.Splines
 			}
 
 			// Continue subdivision
-			recursiveGetOptimizedDrawingPoints( start, pt12, pt123, pt1234, points, distanceTolerance );
-			recursiveGetOptimizedDrawingPoints( pt1234, pt234, pt34, end, points, distanceTolerance );
+			RecursiveGetOptimizedDrawingPoints( start, pt12, pt123, pt1234, points, distanceTolerance );
+			RecursiveGetOptimizedDrawingPoints( pt1234, pt234, pt34, end, points, distanceTolerance );
 		}
 
 
@@ -136,11 +136,11 @@ namespace Nez.Splines
 		/// <param name="secondCtrlPoint">Second ctrl point.</param>
 		/// <param name="end">End.</param>
 		/// <param name="distanceTolerance">Distance tolerance.</param>
-		public static List<Vector2> getOptimizedDrawingPoints( Vector2 start, Vector2 firstCtrlPoint, Vector2 secondCtrlPoint, Vector2 end, float distanceTolerance = 1f )
+		public static List<Vector2> GetOptimizedDrawingPoints( Vector2 start, Vector2 firstCtrlPoint, Vector2 secondCtrlPoint, Vector2 end, float distanceTolerance = 1f )
 		{
-			var points = ListPool<Vector2>.obtain();
+			var points = ListPool<Vector2>.Obtain();
 			points.Add( start );
-			recursiveGetOptimizedDrawingPoints( start, firstCtrlPoint, secondCtrlPoint, end, points, distanceTolerance );
+			RecursiveGetOptimizedDrawingPoints( start, firstCtrlPoint, secondCtrlPoint, end, points, distanceTolerance );
 			points.Add( end );
 
 			return points;

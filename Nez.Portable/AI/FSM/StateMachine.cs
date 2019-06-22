@@ -6,11 +6,11 @@ namespace Nez.AI.FSM
 {
 	public class StateMachine<T>
 	{
-		public event Action onStateChanged;
+		public event Action OnStateChanged;
 
-		public State<T> currentState { get { return _currentState; } }
-		public State<T> previousState;
-		public float elapsedTimeInState = 0f;
+		public State<T> CurrentState { get { return _currentState; } }
+		public State<T> PreviousState;
+		public float ElapsedTimeInState = 0f;
 
 		protected State<T> _currentState;
 		protected T _context;
@@ -22,18 +22,18 @@ namespace Nez.AI.FSM
 			_context = context;
 
 			// setup our initial state
-			addState( initialState );
+			AddState( initialState );
 			_currentState = initialState;
-			_currentState.begin();
+			_currentState.Begin();
 		}
 
 
 		/// <summary>
 		/// adds the state to the machine
 		/// </summary>
-		public void addState( State<T> state )
+		public void AddState( State<T> state )
 		{
-			state.setMachineAndContext( this, _context );
+			state.SetMachineAndContext( this, _context );
 			_states[state.GetType()] = state;
 		}
 
@@ -41,18 +41,18 @@ namespace Nez.AI.FSM
 		/// <summary>
 		/// ticks the state machine with the provided delta time
 		/// </summary>
-		public virtual void update( float deltaTime )
+		public virtual void Update( float deltaTime )
 		{
-			elapsedTimeInState += deltaTime;
-			_currentState.reason();
-			_currentState.update( deltaTime );
+			ElapsedTimeInState += deltaTime;
+			_currentState.Reason();
+			_currentState.Update( deltaTime );
 		}
 
 
 		/// <summary>
 		/// changes the current state
 		/// </summary>
-		public R changeState<R>() where R : State<T>
+		public R ChangeState<R>() where R : State<T>
 		{
 			// avoid changing to the same state
 			var newType = typeof( R );
@@ -61,19 +61,19 @@ namespace Nez.AI.FSM
 
 			// only call end if we have a currentState
 			if( _currentState != null )
-				_currentState.end();
+				_currentState.End();
 
-			Insist.isTrue( _states.ContainsKey( newType ), "{0}: state {1} does not exist. Did you forget to add it by calling addState?", GetType(), newType );
+			Insist.IsTrue( _states.ContainsKey( newType ), "{0}: state {1} does not exist. Did you forget to add it by calling addState?", GetType(), newType );
 
 			// swap states and call begin
-			elapsedTimeInState = 0f;
-			previousState = _currentState;
+			ElapsedTimeInState = 0f;
+			PreviousState = _currentState;
 			_currentState = _states[newType];
-			_currentState.begin();
+			_currentState.Begin();
 
 			// fire the changed event if we have a listener
-			if( onStateChanged != null )
-				onStateChanged();
+			if( OnStateChanged != null )
+				OnStateChanged();
 
 			return _currentState as R;
 		}

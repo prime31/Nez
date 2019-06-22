@@ -13,33 +13,33 @@ namespace Nez.BitmapFonts
         /// <summary>
         /// bounds of the character image in the source texture.
         /// </summary>
-        public Rectangle bounds;
+        public Rectangle Bounds;
 
         /// <summary>
         /// texture channel where the character image is found.
         /// </summary>
-        public int channel;
+        public int Channel;
 
         /// <summary>
         /// character.
         /// </summary>
-        public char character;
+        public char Char;
 
         /// <summary>
         /// offset when copying the image from the texture to the screen.
         /// </summary>
-        public Point offset;
+        public Point Offset;
 
         /// <summary>
         /// texture page where the character image is found.
         /// </summary>
-        public int texturePage;
+        public int TexturePage;
 
         /// <summary>
         /// value used to advance the current position after drawing the character.
         /// </summary>
-        public int xAdvance;
+        public int XAdvance;
 
-        public override string ToString() => character.ToString();
+        public override string ToString() => Char.ToString();
     }
 }

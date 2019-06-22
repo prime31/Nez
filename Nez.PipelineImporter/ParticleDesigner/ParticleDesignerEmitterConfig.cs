@@ -7,115 +7,115 @@ namespace Nez.ParticleDesignerImporter
 	[XmlRoot( "particleEmitterConfig" )]
 	public class ParticleDesignerEmitterConfig
 	{
-		[XmlElement]
-		public ParticleDesignerVector2 sourcePosition;
+		[XmlElement( "sourcePosition" )]
+		public ParticleDesignerVector2 SourcePosition;
 
-		[XmlElement]
-		public ParticleDesignerVector2 sourcePositionVariance;
+		[XmlElement( "sourcePositionVariance" )]
+		public ParticleDesignerVector2 SourcePositionVariance;
 
-		[XmlElement]
-		public ParticleDesignerFloatValue speed;
+		[XmlElement( "speed" )]
+		public ParticleDesignerFloatValue Speed;
 
-		[XmlElement]
-		public ParticleDesignerFloatValue speedVariance;
+		[XmlElement( "speedVariance" )]
+		public ParticleDesignerFloatValue SpeedVariance;
 
-		[XmlElement]
-		public ParticleDesignerFloatValue particleLifeSpan;
+		[XmlElement( "particleLifeSpan" )]
+		public ParticleDesignerFloatValue ParticleLifeSpan;
 
-		[XmlElement]
-		public ParticleDesignerFloatValue particleLifespanVariance;
+		[XmlElement( "particleLifespanVariance" )]
+		public ParticleDesignerFloatValue ParticleLifespanVariance;
 
-		[XmlElement]
-		public ParticleDesignerFloatValue angle;
+		[XmlElement( "angle" )]
+		public ParticleDesignerFloatValue Angle;
 
-		[XmlElement]
-		public ParticleDesignerFloatValue angleVariance;
+		[XmlElement( "angleVariance" )]
+		public ParticleDesignerFloatValue AngleVariance;
 
-		[XmlElement]
-		public ParticleDesignerVector2 gravity;
+		[XmlElement( "gravity" )]
+		public ParticleDesignerVector2 Gravity;
 
-		[XmlElement]
-		public ParticleDesignerFloatValue radialAcceleration;
+		[XmlElement( "radialAcceleration" )]
+		public ParticleDesignerFloatValue RadialAcceleration;
 
-		[XmlElement]
-		public ParticleDesignerFloatValue tangentialAcceleration;
+		[XmlElement( "tangentialAcceleration" )]
+		public ParticleDesignerFloatValue TangentialAcceleration;
 
-		[XmlElement]
-		public ParticleDesignerFloatValue radialAccelVariance;
+		[XmlElement( "radialAccelVariance" )]
+		public ParticleDesignerFloatValue RadialAccelVariance;
 
-		[XmlElement]
-		public ParticleDesignerFloatValue tangentialAccelVariance;
+		[XmlElement( "tangentialAccelVariance" )]
+		public ParticleDesignerFloatValue TangentialAccelVariance;
 
-		[XmlElement]
-		public ParticleDesignerColor startColor;
+		[XmlElement( "startColor" )]
+		public ParticleDesignerColor StartColor;
 
-		[XmlElement]
-		public ParticleDesignerColor startColorVariance;
+		[XmlElement( "startColorVariance" )]
+		public ParticleDesignerColor StartColorVariance;
 
-		[XmlElement]
-		public ParticleDesignerColor finishColor;
+		[XmlElement( "finishColor" )]
+		public ParticleDesignerColor FinishColor;
 
-		[XmlElement]
-		public ParticleDesignerColor finishColorVariance;
+		[XmlElement( "finishColorVariance" )]
+		public ParticleDesignerColor FinishColorVariance;
 
-		[XmlElement]
-		public ParticleDesignerIntValue maxParticles;
+		[XmlElement( "maxParticles" )]
+		public ParticleDesignerIntValue MaxParticles;
 
-		[XmlElement]
-		public ParticleDesignerFloatValue startParticleSize;
+		[XmlElement( "startParticleSize" )]
+		public ParticleDesignerFloatValue StartParticleSize;
 
-		[XmlElement]
-		public ParticleDesignerFloatValue startParticleSizeVariance;
+		[XmlElement( "startParticleSizeVariance" )]
+		public ParticleDesignerFloatValue StartParticleSizeVariance;
 
-		[XmlElement]
-		public ParticleDesignerFloatValue finishParticleSize;
+		[XmlElement( "finishParticleSize" )]
+		public ParticleDesignerFloatValue FinishParticleSize;
 
-		[XmlElement]
-		public ParticleDesignerFloatValue finishParticleSizeVariance;
+		[XmlElement( "finishParticleSizeVariance" )]
+		public ParticleDesignerFloatValue FinishParticleSizeVariance;
 
-		[XmlElement]
-		public ParticleDesignerFloatValue duration;
+		[XmlElement( "duration" )]
+		public ParticleDesignerFloatValue Duration;
 
-		[XmlElement]
-		public ParticleDesignerIntValue emitterType;
+		[XmlElement( "emitterType" )]
+		public ParticleDesignerIntValue EmitterType;
 
-		[XmlElement]
-		public ParticleDesignerFloatValue maxRadius;
+		[XmlElement( "maxRadius" )]
+		public ParticleDesignerFloatValue MaxRadius;
 
-		[XmlElement]
-		public ParticleDesignerFloatValue maxRadiusVariance;
+		[XmlElement( "maxRadiusVariance" )]
+		public ParticleDesignerFloatValue MaxRadiusVariance;
 
-		[XmlElement]
-		public ParticleDesignerFloatValue minRadius;
+		[XmlElement( "minRadius" )]
+		public ParticleDesignerFloatValue MinRadius;
 
-		[XmlElement]
-		public ParticleDesignerFloatValue minRadiusVariance;
+		[XmlElement( "minRadiusVariance" )]
+		public ParticleDesignerFloatValue MinRadiusVariance;
 
-		[XmlElement]
-		public ParticleDesignerFloatValue rotatePerSecond;
+		[XmlElement( "rotatePerSecond" )]
+		public ParticleDesignerFloatValue RotatePerSecond;
 
-		[XmlElement]
-		public ParticleDesignerFloatValue rotatePerSecondVariance;
+		[XmlElement( "rotatePerSecondVariance" )]
+		public ParticleDesignerFloatValue RotatePerSecondVariance;
 
-		[XmlElement]
-		public ParticleDesignerIntValue blendFuncSource;
+		[XmlElement( "blendFuncSource" )]
+		public ParticleDesignerIntValue BlendFuncSource;
 
-		[XmlElement]
-		public ParticleDesignerIntValue blendFuncDestination;
+		[XmlElement( "blendFuncDestination" )]
+		public ParticleDesignerIntValue BlendFuncDestination;
 
-		[XmlElement]
-		public ParticleDesignerFloatValue rotationStart;
+		[XmlElement( "rotationStart" )]
+		public ParticleDesignerFloatValue RotationStart;
 
-		[XmlElement]
-		public ParticleDesignerFloatValue rotationStartVariance;
+		[XmlElement( "rotationStartVariance" )]
+		public ParticleDesignerFloatValue RotationStartVariance;
 
-		[XmlElement]
-		public ParticleDesignerFloatValue rotationEnd;
+		[XmlElement( "rotationEnd" )]
+		public ParticleDesignerFloatValue RotationEnd;
 
-		[XmlElement]
-		public ParticleDesignerFloatValue rotationEndVariance;
+		[XmlElement( "rotationEndVariance" )]
+		public ParticleDesignerFloatValue RotationEndVariance;
 
-		[XmlElement]
-		public ParticleDesignerTexture texture;
+		[XmlElement( "texture" )]
+		public ParticleDesignerTexture Texture;
 	}
 }

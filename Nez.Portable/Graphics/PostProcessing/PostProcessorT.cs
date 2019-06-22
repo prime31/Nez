@@ -12,12 +12,12 @@ namespace Nez
 		/// <summary>
 		/// The effect used to render the scene with
 		/// </summary>
-		public new T effect;
+		public new T Effect;
 
 
 		public PostProcessor( int executionOrder, T effect = null ) : base( executionOrder, effect )
 		{
-			this.effect = effect;
+			this.Effect = effect;
 		}
 
 		/// <summary>
@@ -27,14 +27,14 @@ namespace Nez
 		/// </summary>
 		/// <param name="source">Source.</param>
 		/// <param name="destination">Destination.</param>
-		public override void process( RenderTarget2D source, RenderTarget2D destination )
+		public override void Process( RenderTarget2D source, RenderTarget2D destination )
 		{
-			drawFullscreenQuad( source, destination, effect );
+			DrawFullscreenQuad( source, destination, Effect );
 		}
 
-		public override void unload()
+		public override void Unload()
 		{
-			base.unload();
+			base.Unload();
 		}
 	}
 }

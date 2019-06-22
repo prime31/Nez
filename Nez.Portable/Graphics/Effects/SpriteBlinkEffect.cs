@@ -12,7 +12,7 @@ namespace Nez
 		/// just the sprite being displayed. Any value in between 0 and 1 will interpolate between the two colors.
 		/// </summary>
 		/// <value>The color of the blink.</value>
-		public Color blinkColor
+		public Color BlinkColor
 		{
 			get { return new Color( _blinkColor ); }
 			set
@@ -30,7 +30,7 @@ namespace Nez
 		EffectParameter _blinkColorParam;
 
 
-		public SpriteBlinkEffect() : base( Core.graphicsDevice, EffectResource.spriteBlinkEffectBytes )
+		public SpriteBlinkEffect() : base( Core.GraphicsDevice, EffectResource.SpriteBlinkEffectBytes )
 		{
 			_blinkColorParam = Parameters["_blinkColor"];
 			_blinkColorParam.SetValue( _blinkColor );

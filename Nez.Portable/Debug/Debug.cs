@@ -23,7 +23,7 @@ namespace Nez
 		#region Logging
 
 		[DebuggerHidden]
-		static void log( LogType type, string format, params object[] args )
+		static void Log( LogType type, string format, params object[] args )
 		{
 			switch( type )
 			{
@@ -49,73 +49,73 @@ namespace Nez
 
 
 		[DebuggerHidden]
-		public static void error( string format, params object[] args )
+		public static void Error( string format, params object[] args )
 		{
-			log( LogType.Error, format, args );
+			Log( LogType.Error, format, args );
 		}
 
 
 		[DebuggerHidden]
-		public static void errorIf( bool condition, string format, params object[] args )
+		public static void ErrorIf( bool condition, string format, params object[] args )
 		{
 			if( condition )
-				log( LogType.Error, format, args );
+				Log( LogType.Error, format, args );
 		}
 
 
 		[DebuggerHidden]
-		public static void warn( string format, params object[] args )
+		public static void Warn( string format, params object[] args )
 		{
-			log( LogType.Warn, format, args );
+			Log( LogType.Warn, format, args );
 		}
 
 
 		[DebuggerHidden]
-		public static void warnIf( bool condition, string format, params object[] args )
-		{
-			if( condition )
-				log( LogType.Warn, format, args );
-		}
-
-
-		[Conditional( "DEBUG" )]
-		[DebuggerHidden]
-		public static void log( object obj )
-		{
-			log( LogType.Log, "{0}", obj );
-		}
-
-
-		[Conditional( "DEBUG" )]
-		[DebuggerHidden]
-		public static void log( string format, params object[] args )
-		{
-			log( LogType.Log, format, args );
-		}
-
-
-		[Conditional( "DEBUG" )]
-		[DebuggerHidden]
-		public static void logIf( bool condition, string format, params object[] args )
+		public static void WarnIf( bool condition, string format, params object[] args )
 		{
 			if( condition )
-				log( LogType.Log, format, args );
+				Log( LogType.Warn, format, args );
 		}
 
 
 		[Conditional( "DEBUG" )]
 		[DebuggerHidden]
-		public static void info( string format, params object[] args )
+		public static void Log( object obj )
 		{
-			log( LogType.Info, format, args );
+			Log( LogType.Log, "{0}", obj );
 		}
 
 
 		[Conditional( "DEBUG" )]
 		[DebuggerHidden]
-		public static void trace( string format, params object[] args )
+		public static void Log( string format, params object[] args )
 		{
-			log( LogType.Trace, format, args );
+			Log( LogType.Log, format, args );
+		}
+
+
+		[Conditional( "DEBUG" )]
+		[DebuggerHidden]
+		public static void LogIf( bool condition, string format, params object[] args )
+		{
+			if( condition )
+				Log( LogType.Log, format, args );
+		}
+
+
+		[Conditional( "DEBUG" )]
+		[DebuggerHidden]
+		public static void Info( string format, params object[] args )
+		{
+			Log( LogType.Info, format, args );
+		}
+
+
+		[Conditional( "DEBUG" )]
+		[DebuggerHidden]
+		public static void Trace( string format, params object[] args )
+		{
+			Log( LogType.Trace, format, args );
 		}
 
 		#endregion
@@ -123,100 +123,100 @@ namespace Nez
 
 		#region Drawing
 
-		public static bool drawTextFromBottom = false;
+		public static bool DrawTextFromBottom = false;
 
 		static List<DebugDrawItem> _debugDrawItems = new List<DebugDrawItem>();
 		static List<DebugDrawItem> _screenSpaceDebugDrawItems = new List<DebugDrawItem>();
 
 		[Conditional( "DEBUG" )]
-		internal static void render()
+		internal static void Render()
 		{
 			if( _debugDrawItems.Count > 0 )
 			{
-				if( Core.scene != null && Core.scene.camera != null )
-					Graphics.instance.batcher.begin( Core.scene.camera.transformMatrix );
+				if( Core.Scene != null && Core.Scene.Camera != null )
+					Graphics.Instance.Batcher.Begin( Core.Scene.Camera.TransformMatrix );
 				else
-					Graphics.instance.batcher.begin();
+					Graphics.Instance.Batcher.Begin();
 
 				for( var i = _debugDrawItems.Count - 1; i >= 0; i-- )
 				{
 					var item = _debugDrawItems[i];
-					if( item.draw( Graphics.instance ) )
+					if( item.Draw( Graphics.Instance ) )
 						_debugDrawItems.RemoveAt( i );
 				}
 
-				Graphics.instance.batcher.end();
+				Graphics.Instance.Batcher.End();
 			}
 
 			if( _screenSpaceDebugDrawItems.Count > 0 )
 			{
-				var pos = drawTextFromBottom ? new Vector2( 0, Core.scene.sceneRenderTargetSize.Y ) : Vector2.Zero;
-				Graphics.instance.batcher.begin();
+				var pos = DrawTextFromBottom ? new Vector2( 0, Core.Scene.SceneRenderTargetSize.Y ) : Vector2.Zero;
+				Graphics.Instance.Batcher.Begin();
 
 				for( var i = _screenSpaceDebugDrawItems.Count - 1; i >= 0; i-- )
 				{
 					var item = _screenSpaceDebugDrawItems[i];
-					var itemHeight = item.getHeight();
+					var itemHeight = item.GetHeight();
 
-					if( drawTextFromBottom )
-						item.position = pos - new Vector2( 0, itemHeight );
+					if( DrawTextFromBottom )
+						item.Position = pos - new Vector2( 0, itemHeight );
 					else
-						item.position = pos;
+						item.Position = pos;
 
-					if( item.draw( Graphics.instance ) )
+					if( item.Draw( Graphics.Instance ) )
 						_screenSpaceDebugDrawItems.RemoveAt( i );
 
-					if( drawTextFromBottom )
+					if( DrawTextFromBottom )
 						pos.Y -= itemHeight;
 					else
 						pos.Y += itemHeight;
 				}
 
-				Graphics.instance.batcher.end();
+				Graphics.Instance.Batcher.End();
 			}
 		}
 
 
 		[Conditional( "DEBUG" )]
-		public static void drawLine( Vector2 start, Vector2 end, Color color, float duration = 0f )
+		public static void DrawLine( Vector2 start, Vector2 end, Color color, float duration = 0f )
 		{
-			if( !Core.debugRenderEnabled )
+			if( !Core.DebugRenderEnabled )
 				return;
 			_debugDrawItems.Add( new DebugDrawItem( start, end, color, duration ) );
 		}
 
 
 		[Conditional( "DEBUG" )]
-		public static void drawPixel( float x, float y, int size, Color color, float duration = 0f )
+		public static void DrawPixel( float x, float y, int size, Color color, float duration = 0f )
 		{
-			if( !Core.debugRenderEnabled )
+			if( !Core.DebugRenderEnabled )
 				return;
 			_debugDrawItems.Add( new DebugDrawItem( x, y, size, color, duration ) );
 		}
 
 
 		[Conditional( "DEBUG" )]
-		public static void drawPixel( Vector2 position, int size, Color color, float duration = 0f )
+		public static void DrawPixel( Vector2 position, int size, Color color, float duration = 0f )
 		{
-			if( !Core.debugRenderEnabled )
+			if( !Core.DebugRenderEnabled )
 				return;
 			_debugDrawItems.Add( new DebugDrawItem( position.X, position.Y, size, color, duration ) );
 		}
 
 
 		[Conditional( "DEBUG" )]
-		public static void drawHollowRect( Rectangle rectangle, Color color, float duration = 0f )
+		public static void DrawHollowRect( Rectangle rectangle, Color color, float duration = 0f )
 		{
-			if( !Core.debugRenderEnabled )
+			if( !Core.DebugRenderEnabled )
 				return;
 			_debugDrawItems.Add( new DebugDrawItem( rectangle, color, duration ) );
 		}
 
 
 		[Conditional( "DEBUG" )]
-		public static void drawHollowBox( Vector2 center, int size, Color color, float duration = 0f )
+		public static void DrawHollowBox( Vector2 center, int size, Color color, float duration = 0f )
 		{
-			if( !Core.debugRenderEnabled )
+			if( !Core.DebugRenderEnabled )
 				return;
 			var halfSize = size * 0.5f;
 			_debugDrawItems.Add( new DebugDrawItem( new Rectangle( (int)( center.X - halfSize ), (int)( center.Y - halfSize ), size, size ), color, duration ) );
@@ -224,42 +224,42 @@ namespace Nez
 
 
 		[Conditional( "DEBUG" )]
-		public static void drawText( BitmapFont font, string text, Vector2 position, Color color, float duration = 0f, float scale = 1f )
+		public static void DrawText( BitmapFont font, string text, Vector2 position, Color color, float duration = 0f, float scale = 1f )
 		{
-			if( !Core.debugRenderEnabled )
+			if( !Core.DebugRenderEnabled )
 				return;
 			_debugDrawItems.Add( new DebugDrawItem( font, text, position, color, duration, scale ) );
 		}
 
 
 		[Conditional( "DEBUG" )]
-		public static void drawText( NezSpriteFont font, string text, Vector2 position, Color color, float duration = 0f, float scale = 1f )
+		public static void DrawText( NezSpriteFont font, string text, Vector2 position, Color color, float duration = 0f, float scale = 1f )
 		{
-			if( !Core.debugRenderEnabled )
+			if( !Core.DebugRenderEnabled )
 				return;
 			_debugDrawItems.Add( new DebugDrawItem( font, text, position, color, duration, scale ) );
 		}
 
 
 		[Conditional( "DEBUG" )]
-		public static void drawText( string text, float duration = 0 )
+		public static void DrawText( string text, float duration = 0 )
 		{
-			drawText( text, Colors.debugText, duration );
+			DrawText( text, Colors.DebugText, duration );
 		}
 
 
 		[Conditional( "DEBUG" )]
-		public static void drawText( string format, params object[] args )
+		public static void DrawText( string format, params object[] args )
 		{
 			var text = string.Format( format, args );
-			drawText( text, Colors.debugText );
+			DrawText( text, Colors.DebugText );
 		}
 
 
 		[Conditional( "DEBUG" )]
-		public static void drawText( string text, Color color, float duration = 1f, float scale = 1f )
+		public static void DrawText( string text, Color color, float duration = 1f, float scale = 1f )
 		{
-			if( !Core.debugRenderEnabled )
+			if( !Core.DebugRenderEnabled )
 				return;
 			_screenSpaceDebugDrawItems.Add( new DebugDrawItem( text, color, duration, scale ) );
 		}
@@ -268,7 +268,7 @@ namespace Nez
 
 
 		[Conditional( "DEBUG" )]
-		public static void breakIf( bool condition )
+		public static void BreakIf( bool condition )
 		{
 			if( condition )
 				System.Diagnostics.Debugger.Break();
@@ -276,7 +276,7 @@ namespace Nez
 
 
 		[Conditional( "DEBUG" )]
-		public static void break_()
+		public static void Break_()
 		{
 			System.Diagnostics.Debugger.Break();
 		}
@@ -287,7 +287,7 @@ namespace Nez
 		/// </summary>
 		/// <returns>The action.</returns>
 		/// <param name="action">Action.</param>
-		public static TimeSpan timeAction( Action action, uint numberOfIterations = 1 )
+		public static TimeSpan TimeAction( Action action, uint numberOfIterations = 1 )
 		{
 			var stopwatch = new Stopwatch();
 			stopwatch.Start();

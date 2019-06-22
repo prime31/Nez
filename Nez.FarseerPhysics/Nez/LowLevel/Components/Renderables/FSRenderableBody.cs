@@ -7,13 +7,13 @@ namespace Nez.Farseer
 {
 	public abstract class FSRenderableBody : RenderableComponent, IUpdatable
 	{
-		public override RectangleF bounds
+		public override RectangleF Bounds
 		{
 			get
 			{
 				if( _areBoundsDirty )
 				{
-					_bounds.calculateBounds( transform.position, _localOffset, _subtexture.center, transform.scale, transform.rotation, _subtexture.sourceRect.Width, _subtexture.sourceRect.Height );
+					_bounds.CalculateBounds( Transform.Position, _localOffset, _subtexture.Center, Transform.Scale, Transform.Rotation, _subtexture.SourceRect.Width, _subtexture.SourceRect.Height );
 					_areBoundsDirty = false;
 				}
 
@@ -21,7 +21,7 @@ namespace Nez.Farseer
 			}
 		}
 
-		public Body body;
+		public Body Body;
 
 		protected bool _ignoreTransformChanges;
 		protected Subtexture _subtexture;
@@ -35,66 +35,66 @@ namespace Nez.Farseer
 
 		#region Component overrides
 
-		public override void initialize()
+		public override void Initialize()
 		{
-			var world = entity.scene.getOrCreateSceneComponent<FSWorld>();
-			body = new Body( world, transform.position * FSConvert.displayToSim, transform.rotation );
+			var world = Entity.Scene.GetOrCreateSceneComponent<FSWorld>();
+			Body = new Body( world, Transform.Position * FSConvert.DisplayToSim, Transform.Rotation );
 		}
 
 
-		public override void onEntityTransformChanged( Transform.Component comp )
+		public override void OnEntityTransformChanged( Transform.Component comp )
 		{
 			_areBoundsDirty = true;
 			if( _ignoreTransformChanges )
 				return;
 
 			if( comp == Transform.Component.Position )
-				body.position = transform.position * FSConvert.displayToSim;
+				Body.Position = Transform.Position * FSConvert.DisplayToSim;
 			else if( comp == Transform.Component.Rotation )
-				body.rotation = transform.rotation;
+				Body.Rotation = Transform.Rotation;
 		}
 
 
-		public override void onRemovedFromEntity()
+		public override void OnRemovedFromEntity()
 		{
-			if( body != null )
+			if( Body != null )
 			{
-				body.world.removeBody( body );
-				body = null;
+				Body.World.RemoveBody( Body );
+				Body = null;
 			}
 		}
 
 
-		void IUpdatable.update()
+		void IUpdatable.Update()
 		{
-			if( !body.isAwake )
+			if( !Body.IsAwake )
 				return;
 
 			_ignoreTransformChanges = true;
-			transform.position = FSConvert.simToDisplay * body.position;
-			transform.rotation = body.rotation;
+			Transform.Position = FSConvert.SimToDisplay * Body.Position;
+			Transform.Rotation = Body.Rotation;
 			_ignoreTransformChanges = false;
 		}
 
 
-		public override void render( Graphics graphics, Camera camera )
+		public override void Render( Graphics graphics, Camera camera )
 		{
-			graphics.batcher.draw( _subtexture, transform.position, _subtexture.sourceRect, color, transform.rotation, _subtexture.center, transform.scale, SpriteEffects.None, _layerDepth );
+			graphics.Batcher.Draw( _subtexture, Transform.Position, _subtexture.SourceRect, Color, Transform.Rotation, _subtexture.Center, Transform.Scale, SpriteEffects.None, _layerDepth );
 		}
 
 		#endregion
 
 
-		public FSRenderableBody setBodyType( BodyType bodyType )
+		public FSRenderableBody SetBodyType( BodyType bodyType )
 		{
-			body.bodyType = bodyType;
+			Body.BodyType = bodyType;
 			return this;
 		}
 
 
 		public static implicit operator Body( FSRenderableBody self )
 		{
-			return self.body;
+			return self.Body;
 		}
 
 	}

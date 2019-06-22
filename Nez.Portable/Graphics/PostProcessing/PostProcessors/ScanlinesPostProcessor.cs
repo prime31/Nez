@@ -7,16 +7,16 @@ namespace Nez
 		public ScanlinesPostProcessor( int executionOrder ) : base( executionOrder )
 		{}
 		
-		public override void onAddedToScene(Scene scene)
+		public override void OnAddedToScene(Scene scene)
 		{
-			base.onAddedToScene( scene );
-			effect = _scene.content.loadNezEffect<ScanlinesEffect>();
+			base.OnAddedToScene( scene );
+			Effect = _scene.Content.LoadNezEffect<ScanlinesEffect>();
 		}
 
-		public override void unload()
+		public override void Unload()
 		{
-			_scene.content.unloadEffect( effect );
-			base.unload();
+			_scene.Content.UnloadEffect( Effect );
+			base.Unload();
 		}
 
 	}

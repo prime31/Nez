@@ -9,54 +9,54 @@ namespace Nez.TiledMaps
 	{
 		public TmxMap()
 		{
-			properties = new List<TmxProperty>();
-			tilesets = new List<TmxTileset>();
-			layers = new List<TmxLayer>();
-			objectGroups = new List<TmxObjectGroup>();
+			Properties = new List<TmxProperty>();
+			Tilesets = new List<TmxTileset>();
+			Layers = new List<TmxLayer>();
+			ObjectGroups = new List<TmxObjectGroup>();
 		}
 
 		[XmlAttribute( AttributeName = "version" )]
-		public string version;
+		public string Version;
 
 		[XmlAttribute( AttributeName = "orientation" )]
-		public TmxOrientation orientation;
+		public TmxOrientation Orientation;
 
 		[XmlAttribute( AttributeName = "renderorder" )]
-		public TmxRenderOrder renderOrder;
+		public TmxRenderOrder RenderOrder;
 
 		[XmlAttribute( AttributeName = "backgroundcolor" )]
-		public string backgroundColor;
+		public string BackgroundColor;
 
 		[XmlAttribute( AttributeName = "firstgid" )]
-		public int firstGid;
+		public int FirstGid;
 
 		[XmlAttribute( AttributeName = "width" )]
-		public int width;
+		public int Width;
 
 		[XmlAttribute( AttributeName = "height" )]
-		public int height;
+		public int Height;
 
 		[XmlAttribute( AttributeName = "tilewidth" )]
-		public int tileWidth;
+		public int TileWidth;
 
 		[XmlAttribute( AttributeName = "tileheight" )]
-		public int tileHeight;
+		public int TileHeight;
 
 		[XmlAttribute( "nextobjectid" )]
-		public int nextObjectId;
+		public int NextObjectId;
 
 		[XmlElement( ElementName = "tileset" )]
-		public List<TmxTileset> tilesets;
+		public List<TmxTileset> Tilesets;
 
 		[XmlElement( ElementName = "objectgroup" )]
-		public List<TmxObjectGroup> objectGroups;
+		public List<TmxObjectGroup> ObjectGroups;
 
 		[XmlElement( ElementName = "layer", Type = typeof( TmxTileLayer ) )]
 		[XmlElement( ElementName = "imagelayer", Type = typeof( TmxImageLayer ) )]
-		public List<TmxLayer> layers;
+		public List<TmxLayer> Layers;
 
 		[XmlArray( "properties" )]
 		[XmlArrayItem( "property" )]
-		public List<TmxProperty> properties;
+		public List<TmxProperty> Properties;
 	}
 }

@@ -5,20 +5,20 @@ namespace Nez.LibGdxAtlases
 {
 	public class LibGdxAtlasRegion
 	{
-		public string name = "";
-		public string page = "";
-		public LibGdxAtlasRect sourceRectangle = new LibGdxAtlasRect();
-		public LibGdxAtlasPoint originalSize = new LibGdxAtlasPoint();
-		public LibGdxAtlasPoint offset = new LibGdxAtlasPoint();
+		public string Name = "";
+		public string Page = "";
+		public LibGdxAtlasRect SourceRectangle = new LibGdxAtlasRect();
+		public LibGdxAtlasPoint OriginalSize = new LibGdxAtlasPoint();
+		public LibGdxAtlasPoint Offset = new LibGdxAtlasPoint();
 
 		/// <summary>
 		/// nine patch details in this order: left, right, top, bottom
 		/// </summary>
-		public int[] splits;
-		public int[] pads;
-		public bool rotate = false;
-		public int index;
-		public bool flip = false;
+		public int[] Splits;
+		public int[] Pads;
+		public bool Rotate = false;
+		public int Index;
+		public bool Flip = false;
 
 
 		public LibGdxAtlasRegion()
@@ -27,7 +27,7 @@ namespace Nez.LibGdxAtlases
 
 		public override string ToString()
 		{
-			return string.Format( "{0}", name );
+			return string.Format( "{0}", Name );
 		}
 
 	}

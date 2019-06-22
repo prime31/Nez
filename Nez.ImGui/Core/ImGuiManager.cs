@@ -10,12 +10,12 @@ namespace Nez.ImGuiTools
 {
 	public partial class ImGuiManager : GlobalManager, IFinalRenderDelegate, IDisposable
 	{
-		public bool showDemoWindow = false;
-		public bool showStyleEditor = false;
-		public bool showSceneGraphWindow = true;
-		public bool showCoreWindow = true;
-		public bool showSeperateGameWindow = true;
-		public bool showMenuBar = true;
+		public bool ShowDemoWindow = false;
+		public bool ShowStyleEditor = false;
+		public bool ShowSceneGraphWindow = true;
+		public bool ShowCoreWindow = true;
+		public bool ShowSeperateGameWindow = true;
+		public bool ShowMenuBar = true;
 
 		List<Type> _sceneSubclasses = new List<Type>();
 		System.Reflection.MethodInfo[] _themes;
@@ -46,15 +46,15 @@ namespace Nez.ImGuiTools
 			_gameWindowTitle = options._gameWindowTitle;
 			_gameWindowFlags = options._gameWindowFlags;
 
-			loadSettings();
-			_renderer = new ImGuiRenderer( Core.instance );
+			LoadSettings();
+			_renderer = new ImGuiRenderer( Core.Instance );
 
-			_renderer.rebuildFontAtlas( options );
-			Core.emitter.addObserver( CoreEvents.SceneChanged, onSceneChanged );
-			NezImGuiThemes.darkTheme1();
+			_renderer.RebuildFontAtlas( options );
+			Core.Emitter.AddObserver( CoreEvents.SceneChanged, OnSceneChanged );
+			NezImGuiThemes.DarkTheme1();
 
 			// find all Scenes
-			_sceneSubclasses = ReflectionUtils.getAllSubclasses( typeof( Scene ), true );
+			_sceneSubclasses = ReflectionUtils.GetAllSubclasses( typeof( Scene ), true );
 
 			// tone down indent
 			ImGui.GetStyle().IndentSpacing = 12;
@@ -67,27 +67,27 @@ namespace Nez.ImGuiTools
 		/// <summary>
 		/// this is where we issue any and all ImGui commands to be drawn
 		/// </summary>
-		void layoutGui()
+		void LayoutGui()
 		{
-			if( showMenuBar )
-				drawMainMenuBar();
+			if( ShowMenuBar )
+				DrawMainMenuBar();
 
-			if( showSeperateGameWindow )
-				drawGameWindow();
-			drawEntityInspectors();
+			if( ShowSeperateGameWindow )
+				DrawGameWindow();
+			DrawEntityInspectors();
 
 			for( var i = _drawCommands.Count - 1; i >= 0; i-- )
 				_drawCommands[i]();
 
-			_sceneGraphWindow.show( ref showSceneGraphWindow );
-			_coreWindow.show( ref showCoreWindow );
+			_sceneGraphWindow.Show( ref ShowSceneGraphWindow );
+			_coreWindow.Show( ref ShowCoreWindow );
 
-			if( showDemoWindow )
-				ImGui.ShowDemoWindow( ref showDemoWindow );
+			if( ShowDemoWindow )
+				ImGui.ShowDemoWindow( ref ShowDemoWindow );
 
-			if( showStyleEditor )
+			if( ShowStyleEditor )
 			{
-				ImGui.Begin( "Style Editor", ref showStyleEditor );
+				ImGui.Begin( "Style Editor", ref ShowStyleEditor );
 				ImGui.ShowStyleEditor();
 				ImGui.End();
 			}
@@ -96,7 +96,7 @@ namespace Nez.ImGuiTools
 		/// <summary>
 		/// draws the main menu bar
 		/// </summary>
-		void drawMainMenuBar()
+		void DrawMainMenuBar()
 		{
 			if( ImGui.BeginMainMenuBar() )
 			{
@@ -104,7 +104,7 @@ namespace Nez.ImGuiTools
 				if( ImGui.BeginMenu( "File" ) )
 				{
 					if( ImGui.MenuItem( "Quit ImGui" ) )
-						setEnabled( false );
+						SetEnabled( false );
 					ImGui.EndMenu();
 				}
 
@@ -115,7 +115,7 @@ namespace Nez.ImGuiTools
 						if( ImGui.MenuItem( sceneType.Name ) )
 						{
 							var scene = (Scene)Activator.CreateInstance( sceneType );
-							Core.startSceneTransition( new FadeTransition( () => scene ) );
+							Core.StartSceneTransition( new FadeTransition( () => scene ) );
 						}
 					}
 					ImGui.EndMenu();
@@ -133,7 +133,7 @@ namespace Nez.ImGuiTools
 
 				if( ImGui.BeginMenu( "Game View" ) )
 				{
-					var rtSize = Core.scene.sceneRenderTargetSize;
+					var rtSize = Core.Scene.SceneRenderTargetSize;
 
 					if( ImGui.BeginMenu( "Resize" ) )
 					{
@@ -170,16 +170,16 @@ namespace Nez.ImGuiTools
 
 				if( ImGui.BeginMenu( "Window" ) )
 				{
-					ImGui.MenuItem( "ImGui Demo Window", null, ref showDemoWindow );
-					ImGui.MenuItem( "Style Editor", null, ref showStyleEditor );
+					ImGui.MenuItem( "ImGui Demo Window", null, ref ShowDemoWindow );
+					ImGui.MenuItem( "Style Editor", null, ref ShowStyleEditor );
 					if( ImGui.MenuItem( "Open imgui_demo.cpp on GitHub" ) )
 					{
 						System.Diagnostics.Process.Start( "https://github.com/ocornut/imgui/blob/master/imgui_demo.cpp" );
 					}
 					ImGui.Separator();
-					ImGui.MenuItem( "Core Window", null, ref showCoreWindow );
-					ImGui.MenuItem( "Scene Graph Window", null, ref showSceneGraphWindow );
-					ImGui.MenuItem( "Separate Game Window", null, ref showSeperateGameWindow );
+					ImGui.MenuItem( "Core Window", null, ref ShowCoreWindow );
+					ImGui.MenuItem( "Scene Graph Window", null, ref ShowSceneGraphWindow );
+					ImGui.MenuItem( "Separate Game Window", null, ref ShowSeperateGameWindow );
 					ImGui.EndMenu();
 				}
 
@@ -190,10 +190,10 @@ namespace Nez.ImGuiTools
 		/// <summary>
 		/// draws all the EntityInspectors
 		/// </summary>
-		void drawEntityInspectors()
+		void DrawEntityInspectors()
 		{
 			for( var i = _entityInspectors.Count - 1; i >= 0; i-- )
-				_entityInspectors[i].draw();
+				_entityInspectors[i].Draw();
 		}
 
 
@@ -203,46 +203,46 @@ namespace Nez.ImGuiTools
 		/// registers an Action that will be called and any ImGui drawing can be done in it
 		/// </summary>
 		/// <param name="drawCommand"></param>
-		public void registerDrawCommand( Action drawCommand ) => _drawCommands.Add( drawCommand );
+		public void RegisterDrawCommand( Action drawCommand ) => _drawCommands.Add( drawCommand );
 
 		/// <summary>
 		/// removes the Action from the draw commands
 		/// </summary>
 		/// <param name="drawCommand"></param>
-		public void unregisterDrawCommand( Action drawCommand ) => _drawCommands.Remove( drawCommand );
+		public void UnregisterDrawCommand( Action drawCommand ) => _drawCommands.Remove( drawCommand );
 
 		/// <summary>
 		/// Creates a pointer to a texture, which can be passed through ImGui calls such as <see cref="ImGui.Image" />.
 		/// That pointer is then used by ImGui to let us know what texture to draw
 		/// </summary>
 		/// <param name="textureId"></param>
-		public void unbindTexture( IntPtr textureId ) => _renderer.unbindTexture( textureId );
+		public void UnbindTexture( IntPtr textureId ) => _renderer.UnbindTexture( textureId );
 
 		/// <summary>
 		/// Removes a previously created texture pointer, releasing its reference and allowing it to be deallocated
 		/// </summary>
 		/// <param name="texture"></param>
 		/// <returns></returns>
-		public IntPtr bindTexture( Texture2D texture ) => _renderer.bindTexture( texture );
+		public IntPtr BindTexture( Texture2D texture ) => _renderer.BindTexture( texture );
 
 		/// <summary>
 		/// creates an EntityInspector window
 		/// </summary>
 		/// <param name="entity"></param>
-		public void startInspectingEntity( Entity entity )
+		public void StartInspectingEntity( Entity entity )
 		{
 			// if we are already inspecting the Entity focus the window
 			foreach( var inspector in _entityInspectors )
 			{
-				if( inspector.entity == entity )
+				if( inspector.Entity == entity )
 				{
-					inspector.setWindowFocus();
+					inspector.SetWindowFocus();
 					return;
 				}
 			}
 
 			var entityInspector = new EntityInspector( entity );
-			entityInspector.setWindowFocus();
+			entityInspector.SetWindowFocus();
 			_entityInspectors.Add( entityInspector );
 		}
 
@@ -250,12 +250,12 @@ namespace Nez.ImGuiTools
 		/// removes the EntityInspector for this Entity
 		/// </summary>
 		/// <param name="entity"></param>
-		public void stopInspectingEntity( Entity entity )
+		public void StopInspectingEntity( Entity entity )
 		{
 			for( var i = 0; i < _entityInspectors.Count; i++ )
 			{
 				var inspector = _entityInspectors[i];
-				if( inspector.entity == entity )
+				if( inspector.Entity == entity )
 				{
 					_entityInspectors.RemoveAt( i );
 					return;
@@ -267,7 +267,7 @@ namespace Nez.ImGuiTools
 		/// removes the EntityInspector
 		/// </summary>
 		/// <param name="entityInspector"></param>
-		public void stopInspectingEntity( EntityInspector entityInspector )
+		public void StopInspectingEntity( EntityInspector entityInspector )
 		{
 			_entityInspectors.RemoveAt( _entityInspectors.IndexOf( entityInspector ) );
 		}

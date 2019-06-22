@@ -21,14 +21,14 @@ Lets take a look at a functional example of a node based graph of plain old stri
 var graph = new UnweightedGraph<string>();
 	
 // add a set of 5 nodes and edges for each
-graph.addEdgesForNode( "a", new string[] { "b" } ); // a→b
-graph.addEdgesForNode( "b", new string[] { "a", "c", "d" } ); // b→a, b→c, b→d
-graph.addEdgesForNode( "c", new string[] { "a" } ); // c→a
-graph.addEdgesForNode( "d", new string[] { "e", "a" } ); // d→e, d→a
-graph.addEdgesForNode( "e", new string[] { "b" } ); // e→b
+graph.AddEdgesForNode( "a", new string[] { "b" } ); // a→b
+graph.AddEdgesForNode( "b", new string[] { "a", "c", "d" } ); // b→a, b→c, b→d
+graph.AddEdgesForNode( "c", new string[] { "a" } ); // c→a
+graph.AddEdgesForNode( "d", new string[] { "e", "a" } ); // d→e, d→a
+graph.AddEdgesForNode( "e", new string[] { "b" } ); // e→b
 
 // calculate a path from "c" to "e". The result is c→a→b→d→e, which we can confirm by looking at the edge comments above.
-var path = BreadthFirstPathfinder.search( graph, "c", "e" );
+var path = BreadthFirstPathfinder.Search( graph, "c", "e" );
 ```
 
 
@@ -45,13 +45,13 @@ Below is an example of using the `WeightedGridGraph` with a TiledMap layer. A gr
 var graph = new WeightedGridGraph( tiledMapCollisionLayer );
 
 // add some weighted nodes
-graph.weightedNodes.Add( new Point( 3, 3 ) );
-graph.weightedNodes.Add( new Point( 3, 4 ) );
-graph.weightedNodes.Add( new Point( 4, 3 ) );
-graph.weightedNodes.Add( new Point( 4, 4 ) );
+graph.WeightedNodes.Add( new Point( 3, 3 ) );
+graph.WeightedNodes.Add( new Point( 3, 4 ) );
+graph.WeightedNodes.Add( new Point( 4, 3 ) );
+graph.WeightedNodes.Add( new Point( 4, 4 ) );
 
 // calculate the path
-var path = graph.search( new Point( 3, 4 ), new Point( 15, 17 ) );
+var path = graph.Search( new Point( 3, 4 ), new Point( 15, 17 ) );
 ```
 
 
@@ -70,11 +70,11 @@ Below is an example of using the `AstarGridGraph` with a TiledMap layer. A graph
 var graph = new AstarGridGraph( tiledMapCollisionLayer );
 
 // add some weighted nodes
-graph.weightedNodes.Add( new Point( 3, 3 ) );
-graph.weightedNodes.Add( new Point( 3, 4 ) );
-graph.weightedNodes.Add( new Point( 4, 3 ) );
-graph.weightedNodes.Add( new Point( 4, 4 ) );
+graph.WeightedNodes.Add( new Point( 3, 3 ) );
+graph.WeightedNodes.Add( new Point( 3, 4 ) );
+graph.WeightedNodes.Add( new Point( 4, 3 ) );
+graph.WeightedNodes.Add( new Point( 4, 4 ) );
 
 // calculate the path
-var path = graph.search( new Point( 3, 4 ), new Point( 15, 17 ) );
+var path = graph.Search( new Point( 3, 4 ), new Point( 15, 17 ) );
 ```

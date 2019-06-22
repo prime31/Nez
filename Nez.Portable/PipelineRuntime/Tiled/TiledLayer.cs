@@ -6,23 +6,23 @@ namespace Nez.Tiled
 {
 	public abstract class TiledLayer
 	{
-		public Vector2 offset;
-		public string name;
-		public Dictionary<string,string> properties;
-		public bool visible = true;
-		public float opacity;
+		public Vector2 Offset;
+		public string Name;
+		public Dictionary<string,string> Properties;
+		public bool Visible = true;
+		public float Opacity;
 
 
 		protected TiledLayer( string name )
 		{
-			this.name = name;
-			properties = new Dictionary<string,string>();
+			this.Name = name;
+			Properties = new Dictionary<string,string>();
 		}
 
 
-		public abstract void draw( Batcher batcher, Vector2 position, float layerDepth, RectangleF cameraClipBounds );
+		public abstract void Draw( Batcher batcher, Vector2 position, float layerDepth, RectangleF cameraClipBounds );
 
-		public abstract void draw( Batcher batcher, Vector2 position, Vector2 scale, float layerDepth, RectangleF cameraClipBounds );
+		public abstract void Draw( Batcher batcher, Vector2 position, Vector2 scale, float layerDepth, RectangleF cameraClipBounds );
 
 	}
 }

@@ -13,18 +13,18 @@ namespace Nez.Sprites
 		/// <summary>
 		/// x speed of automatic scrolling in pixels/s
 		/// </summary>
-		public float scrollSpeedX = 15;
+		public float ScrollSpeedX = 15;
 
 		/// <summary>
 		/// y speed of automatic scrolling in pixels/s
 		/// </summary>
-		public float scrollSpeedY = 0;
+		public float ScrollSpeedY = 0;
 
 		/// <summary>
 		/// scale of the texture
 		/// </summary>
 		/// <value>The texture scale.</value>
-		public override Vector2 textureScale
+		public override Vector2 TextureScale
 		{
 			get => _textureScale;
 			set
@@ -49,10 +49,10 @@ namespace Nez.Sprites
 		public ScrollingSprite( Texture2D texture ) : this( new Subtexture( texture ) )
 		{}
 
-		void IUpdatable.update()
+		void IUpdatable.Update()
 		{
-			_scrollX += scrollSpeedX * Time.deltaTime;
-			_scrollY += scrollSpeedY * Time.deltaTime;
+			_scrollX += ScrollSpeedX * Time.DeltaTime;
+			_scrollY += ScrollSpeedY * Time.DeltaTime;
 			_sourceRect.X = (int)_scrollX;
 			_sourceRect.Y = (int)_scrollY;
 		}

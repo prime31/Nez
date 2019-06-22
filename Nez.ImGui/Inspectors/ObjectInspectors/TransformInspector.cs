@@ -12,42 +12,42 @@ namespace Nez.ImGuiTools.ObjectInspectors
 			_transform = transform;
 		}
 
-		public void draw()
+		public void Draw()
 		{
 			if( ImGui.CollapsingHeader( "Transform", ImGuiTreeNodeFlags.DefaultOpen ) )
 			{
-                ImGui.LabelText( "Children", _transform.childCount.ToString() );
+                ImGui.LabelText( "Children", _transform.ChildCount.ToString() );
                 
-                if( _transform.parent == null )
+                if( _transform.Parent == null )
                 {
                     ImGui.LabelText( "Parent", "none" );
                 }
                 else
                 {
-                    if( NezImGui.LabelButton( "Parent", _transform.parent.entity.name ) )
-                        Core.getGlobalManager<ImGuiManager>().startInspectingEntity( _transform.parent.entity );
+                    if( NezImGui.LabelButton( "Parent", _transform.Parent.Entity.Name ) )
+                        Core.GetGlobalManager<ImGuiManager>().StartInspectingEntity( _transform.Parent.Entity );
 
                     if( ImGui.Button( "Detach From Parent" ) )
-                        _transform.parent = null;
+                        _transform.Parent = null;
                 }
 
                 NezImGui.SmallVerticalSpace();
 
-                var pos = _transform.localPosition.toNumerics();
+                var pos = _transform.LocalPosition.ToNumerics();
                 if( ImGui.DragFloat2( "Local Position", ref pos ) )
-                    _transform.setLocalPosition( pos.toXNA() );
+                    _transform.SetLocalPosition( pos.ToXNA() );
                 
-                var rot = _transform.localRotationDegrees;
+                var rot = _transform.LocalRotationDegrees;
                 if( ImGui.DragFloat( "Local Rotation", ref rot, 1, -360, 360 ) )
-                    _transform.setLocalRotationDegrees( rot );
+                    _transform.SetLocalRotationDegrees( rot );
                 
-                var scale = _transform.localScale.toNumerics();
+                var scale = _transform.LocalScale.ToNumerics();
                 if( ImGui.DragFloat2( "Local Scale", ref scale, 0.05f ) )
-                    _transform.setLocalScale( scale.toXNA() );
+                    _transform.SetLocalScale( scale.ToXNA() );
 
-                scale = _transform.scale.toNumerics();
+                scale = _transform.Scale.ToNumerics();
                 if( ImGui.DragFloat2( "Scale", ref scale, 0.05f ) )
-                    _transform.setScale( scale.toXNA() );
+                    _transform.SetScale( scale.ToXNA() );
             }
 		}
 	

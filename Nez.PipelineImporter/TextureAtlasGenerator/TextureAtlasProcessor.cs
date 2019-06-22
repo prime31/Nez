@@ -18,37 +18,37 @@ namespace Nez.TextureAtlasGenerator
 	[ContentProcessor( DisplayName = "Texture Atlas Generator Processor" )]
 	public class TextureAtlasProcessor : ContentProcessor<string[],TextureAtlasContent>
 	{
-		public static ContentBuildLogger logger;
+		public static ContentBuildLogger Logger;
 
 		[Description( "Enable/disable texture compression" )]
 		[DefaultValue( false )]
-		public bool compressTexture { get; set; } = false;
+		public bool CompressTexture { get; set; } = false;
 
 		[Description( "FPS value used when creating SpriteAnimations" )]
 		[DefaultValue( 10f )]
-		public float animationFPS { get; set; } = 10f;
+		public float AnimationFPS { get; set; } = 10f;
 
 		[Description( "If true, subdirectory prefixes are stripped from image file names. Image file names should be unique." )]
 		[DefaultValue( true )]
-		public bool flattenPaths { get; set; } = true;
+		public bool FlattenPaths { get; set; } = true;
 
 
         [Description("This color will be treated as transparent by the atlas.")]
         [DefaultValue( typeof(Color), "0,0,0,0")]
-        public Color colorKeyColor { get; set; } = Color.Transparent;
+        public Color ColorKeyColor { get; set; } = Color.Transparent;
 
         [DefaultValue( false )]
-        public bool colorKeyEnabled { get; set; } = false;
+        public bool ColorKeyEnabled { get; set; } = false;
 
         /// <summary>
         /// Converts an array of sprite filenames into a texture atlas object.
         /// </summary>
         public override TextureAtlasContent Process( string[] input, ContentProcessorContext context )
 		{
-			logger = context.Logger;
+			Logger = context.Logger;
             var textureAtlas = new TextureAtlasContent 
             {
-                animationFPS = (int)animationFPS,
+                AnimationFPS = (int)AnimationFPS,
 			};
 			var sourceSprites = new List<BitmapContent>();
 			var imagePaths = new List<string>();
@@ -59,21 +59,21 @@ namespace Nez.TextureAtlasGenerator
 				// first, the easy one. if it isnt a directory its an image so just add it
 				if( !Directory.Exists( inputPath ) )
 				{
-					if( isValidImageFile( inputPath ) )
+					if( IsValidImageFile( inputPath ) )
 						imagePaths.Add( inputPath );
 					continue;
 				}
 
 				// we have a directory. we need to recursively add all images in all subfolders
-				processDirectory( inputPath, imagePaths, textureAtlas );
+				ProcessDirectory( inputPath, imagePaths, textureAtlas );
 			}
 
 			// Loop over each input sprite filename
 			foreach( var inputFilename in imagePaths )
 			{
 				// Store the name of this sprite.
-				var spriteName = getSpriteNameFromFilename( inputFilename, input );
-				textureAtlas.spriteNames.Add( spriteName, sourceSprites.Count );
+				var spriteName = GetSpriteNameFromFilename( inputFilename, input );
+				textureAtlas.SpriteNames.Add( spriteName, sourceSprites.Count );
 				context.Logger.LogMessage( "Adding texture: {0}", spriteName );
 
 				// Load the sprite texture into memory.
@@ -82,12 +82,12 @@ namespace Nez.TextureAtlasGenerator
 
 				if( inputFilename.Contains( ".9" ) )
 				{
-					logger.LogMessage( "\tprocessing nine patch texture" );
-					textureAtlas.nineSliceSplits[spriteName] = processNinePatchTexture( texture );
+					Logger.LogMessage( "\tprocessing nine patch texture" );
+					textureAtlas.NineSliceSplits[spriteName] = ProcessNinePatchTexture( texture );
 				}
 
                 // Convert sprite's color key color to transparent
-                if ( colorKeyEnabled ) 
+                if ( ColorKeyEnabled ) 
                 {
                     var originalType = texture.Faces[0][0].GetType();
                     try 
@@ -100,7 +100,7 @@ namespace Nez.TextureAtlasGenerator
                         throw ex;
                     }
                     var bmp = (PixelBitmapContent<Vector4>)texture.Faces[0][0];
-                    bmp.ReplaceColor( colorKeyColor.ToVector4(), Vector4.Zero );
+                    bmp.ReplaceColor( ColorKeyColor.ToVector4(), Vector4.Zero );
                     texture.Faces[0][0] = bmp;
                     texture.ConvertBitmapType( originalType );
                 }
@@ -109,25 +109,25 @@ namespace Nez.TextureAtlasGenerator
 			}
 
 			// Pack all the sprites into a single large texture.
-			var packedSprites = TextureAtlasPacker.packSprites( sourceSprites, textureAtlas.spriteRectangles, compressTexture, context );
-			textureAtlas.texture.Mipmaps.Add( packedSprites );
+			var packedSprites = TextureAtlasPacker.PackSprites( sourceSprites, textureAtlas.SpriteRectangles, CompressTexture, context );
+			textureAtlas.Texture.Mipmaps.Add( packedSprites );
 			
-			if( compressTexture )
-				textureAtlas.texture.ConvertBitmapType( typeof( Dxt5BitmapContent ) );
+			if( CompressTexture )
+				textureAtlas.Texture.ConvertBitmapType( typeof( Dxt5BitmapContent ) );
 
 			return textureAtlas;
 		}
 
 
-		string getSpriteNameFromFilename( string filepath, string[] input )
+		string GetSpriteNameFromFilename( string filepath, string[] input )
 		{
 			try
 			{
-				if( flattenPaths )
-					return getFileNameWithoutExtension( filepath );
+				if( FlattenPaths )
+					return GetFileNameWithoutExtension( filepath );
 
 				// if this was a directly specified image path in the XML return it directly
-				if( input.contains( filepath ) )
+				if( input.Contains( filepath ) )
 					return Path.GetFileNameWithoutExtension( filepath );
 				
 				// return the folder-filename as our first option
@@ -139,16 +139,16 @@ namespace Nez.TextureAtlasGenerator
 			}
 			catch( Exception )
 			{
-				return getFileNameWithoutExtension( filepath );
+				return GetFileNameWithoutExtension( filepath );
 			}
 		}
 
 
-		void processDirectory( string directory, List<string> imagePaths, TextureAtlasContent textureAtlas )
+		void ProcessDirectory( string directory, List<string> imagePaths, TextureAtlasContent textureAtlas )
 		{
 			var allFolders = Directory.GetDirectories( directory, "*", SearchOption.TopDirectoryOnly );
 			foreach( var folder in allFolders )
-				processDirectory( folder, imagePaths, textureAtlas );
+				ProcessDirectory( folder, imagePaths, textureAtlas );
 
 			// handle the files in this directory
 			var didFindImages = false;
@@ -156,7 +156,7 @@ namespace Nez.TextureAtlasGenerator
 			var allFiles = Directory.GetFiles( directory, "*.*", SearchOption.TopDirectoryOnly );
 			foreach( var file in allFiles )
 			{
-				if( isValidImageFile( file ) )
+				if( IsValidImageFile( file ) )
 				{
 					didFindImages = true;
 					imagePaths.Add( file );
@@ -166,8 +166,8 @@ namespace Nez.TextureAtlasGenerator
 
 			if( didFindImages )
 			{
-				logger.LogMessage( "----- adding animation: {0}, frames: [{1} - {2}]", Path.GetFileName( directory ), animationStartIndex, animationEndIndex );
-				textureAtlas.spriteAnimationDetails.Add( Path.GetFileName( directory ), new Point( animationStartIndex, animationEndIndex ) );
+				Logger.LogMessage( "----- adding animation: {0}, frames: [{1} - {2}]", Path.GetFileName( directory ), animationStartIndex, animationEndIndex );
+				textureAtlas.SpriteAnimationDetails.Add( Path.GetFileName( directory ), new Point( animationStartIndex, animationEndIndex ) );
 			}
 		}
 
@@ -176,7 +176,7 @@ namespace Nez.TextureAtlasGenerator
 		/// locates the black pixels from a nine patch image and sets the splits for this image
 		/// </summary>
 		/// <param name="texture">Texture.</param>
-		int[] processNinePatchTexture( TextureContent texture )
+		int[] ProcessNinePatchTexture( TextureContent texture )
 		{
 			// left, right, top, bottom of nine patch splits
 			var splits = new int[4];
@@ -223,7 +223,7 @@ namespace Nez.TextureAtlasGenerator
 			splits[2] = padStart;
 			splits[3] = bitmap.Height - padEnd;
 
-			logger.LogMessage( "\tnine patch details. l: {0}, r: {1}, t: {2}, b: {3}", splits[0], splits[1], splits[2], splits[3] );
+			Logger.LogMessage( "\tnine patch details. l: {0}, r: {1}, t: {2}, b: {3}", splits[0], splits[1], splits[2], splits[3] );
 
 			// copy the data to a new Bitmap excluding the outside 1 pixel border
 			var output = new PixelBitmapContent<Color>( bitmap.Width - 2, bitmap.Height - 2 );
@@ -234,7 +234,7 @@ namespace Nez.TextureAtlasGenerator
 		}
 
 
-		bool isValidImageFile( string file )
+		bool IsValidImageFile( string file )
 		{
 			var ext = Path.GetExtension( file );
 			if( ext == ".DS_Store" )
@@ -244,7 +244,7 @@ namespace Nez.TextureAtlasGenerator
 		}
 
 
-		string getFileNameWithoutExtension( string filepath )
+		string GetFileNameWithoutExtension( string filepath )
 		{
 			// strip out our nine patch if we have one
 			return Path.GetFileNameWithoutExtension( filepath.Replace( ".9", string.Empty ) );

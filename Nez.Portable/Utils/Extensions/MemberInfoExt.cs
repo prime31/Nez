@@ -12,7 +12,7 @@ namespace Nez
         /// <param name="self"></param>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
-        public static T getCustomAttribute<T>( this MemberInfo self ) where T : Attribute
+        public static T GetCustomAttribute<T>( this MemberInfo self ) where T : Attribute
         {
             var attributes = self.GetCustomAttributes( typeof( T ) );
             foreach( var attribute in attributes )

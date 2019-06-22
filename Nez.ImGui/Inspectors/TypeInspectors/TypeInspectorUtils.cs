@@ -29,13 +29,13 @@ namespace Nez.ImGuiTools.TypeInspectors
         /// </summary>
         /// <param name="target"></param>
         /// <returns></returns>
-		public static List<AbstractTypeInspector> getInspectableProperties( object target )
+		public static List<AbstractTypeInspector> GetInspectableProperties( object target )
 		{
 			var inspectors = new List<AbstractTypeInspector>();
 			var targetType = target.GetType();
 			var isComponentSubclass = target is Component;
 
-			var fields = ReflectionUtils.getFields( targetType );
+			var fields = ReflectionUtils.GetFields( targetType );
 			foreach( var field in fields )
 			{
 				if( field.IsStatic || field.IsDefined( notInspectableAttrType ) )
@@ -55,16 +55,16 @@ namespace Nez.ImGuiTools.TypeInspectors
 				if( isComponentSubclass && ( field.Name == "enabled" || field.Name == "entity" ) )
 					continue;
 
-				var inspector = getInspectorForType( field.FieldType, target, field );
+				var inspector = GetInspectorForType( field.FieldType, target, field );
 				if( inspector != null )
 				{
-					inspector.setTarget( target, field );
-					inspector.initialize();
+					inspector.SetTarget( target, field );
+					inspector.Initialize();
 					inspectors.Add( inspector );
 				}
 			}
 
-			var properties = ReflectionUtils.getProperties( targetType );
+			var properties = ReflectionUtils.GetProperties( targetType );
 			foreach( var prop in properties )
 			{
 				if( prop.IsDefined( notInspectableAttrType ) )
@@ -91,11 +91,11 @@ namespace Nez.ImGuiTools.TypeInspectors
 				if( isComponentSubclass && ( prop.Name == "enabled" || prop.Name == "entity" ) )
 					continue;
 
-				var inspector = getInspectorForType( prop.PropertyType, target, prop );
+				var inspector = GetInspectorForType( prop.PropertyType, target, prop );
 				if( inspector != null )
 				{
-					inspector.setTarget( target, prop );
-					inspector.initialize();
+					inspector.SetTarget( target, prop );
+					inspector.Initialize();
 					inspectors.Add( inspector );
 				}
 			}
@@ -103,12 +103,12 @@ namespace Nez.ImGuiTools.TypeInspectors
 			var methods = GetAllMethodsWithAttribute<InspectorCallableAttribute>( targetType );
 			foreach( var method in methods )
 			{
-				if( !MethodInspector.areParametersValid( method.GetParameters() ) )
+				if( !MethodInspector.AreParametersValid( method.GetParameters() ) )
 					continue;
 
 				var inspector = new MethodInspector();
-				inspector.setTarget( target, method );
-				inspector.initialize();
+				inspector.SetTarget( target, method );
+				inspector.Initialize();
 				inspectors.Add( inspector );
 			}
 
@@ -117,10 +117,10 @@ namespace Nez.ImGuiTools.TypeInspectors
 
 		public static IEnumerable<MethodInfo> GetAllMethodsWithAttribute<T>( Type type ) where T : Attribute
 		{
-			var methods = ReflectionUtils.getMethods( type );
+			var methods = ReflectionUtils.GetMethods( type );
 			foreach( var method in methods )
 			{
-				var attr = method.getCustomAttribute<T>();
+				var attr = method.GetCustomAttribute<T>();
 				if( attr == null )
 					continue;
 
@@ -135,10 +135,10 @@ namespace Nez.ImGuiTools.TypeInspectors
 		/// <returns>The inspector for type.</returns>
 		/// <param name="valueType">Value type.</param>
 		/// <param name="memberInfo">Member info.</param>
-		public static AbstractTypeInspector getInspectorForType( Type valueType, object target, MemberInfo memberInfo )
+		public static AbstractTypeInspector GetInspectorForType( Type valueType, object target, MemberInfo memberInfo )
 		{
 			// built-in types
-			if( SimpleTypeInspector.kSupportedTypes.contains( valueType ) )
+			if( SimpleTypeInspector.KSupportedTypes.Contains( valueType ) )
 				return new TI.SimpleTypeInspector();
 			if( target is Entity )
 				return new TI.EntityFieldInspector();
@@ -148,34 +148,34 @@ namespace Nez.ImGuiTools.TypeInspectors
 				return new TI.EnumInspector();
 			if( valueType.GetTypeInfo().IsValueType )
 				return new TI.StructInspector();
-			if( target is IList && ListInspector.kSupportedTypes.contains( valueType.GetElementType() ) )
+			if( target is IList && ListInspector.KSupportedTypes.Contains( valueType.GetElementType() ) )
 				return new TI.ListInspector();
-			if( valueType.IsArray && valueType.GetArrayRank() == 1 && ListInspector.kSupportedTypes.contains( valueType.GetElementType() ) )
+			if( valueType.IsArray && valueType.GetArrayRank() == 1 && ListInspector.KSupportedTypes.Contains( valueType.GetElementType() ) )
 				return new TI.ListInspector();
 			if( valueType.IsGenericType && iListType.IsAssignableFrom( valueType ) &&
-				valueType.GetInterface( nameof( IList ) ) != null && ListInspector.kSupportedTypes.contains( valueType.GetGenericArguments()[0] ) )
+				valueType.GetInterface( nameof( IList ) ) != null && ListInspector.KSupportedTypes.Contains( valueType.GetGenericArguments()[0] ) )
 				return new TI.ListInspector();
 
 			// check for custom inspectors before checking Nez types in case a subclass implemented one
-			var customInspectorType = valueType.GetTypeInfo().getCustomAttribute<CustomInspectorAttribute>();
+			var customInspectorType = valueType.GetTypeInfo().GetCustomAttribute<CustomInspectorAttribute>();
 			if( customInspectorType != null )
 			{
-				if( customInspectorType.inspectorType.GetTypeInfo().IsSubclassOf( abstractTypeInspectorType ) )
-					return (AbstractTypeInspector)Activator.CreateInstance( customInspectorType.inspectorType );
-				Debug.warn( $"found CustomInspector {customInspectorType.inspectorType} but it is not a subclass of AbstractTypeInspector" );
+				if( customInspectorType.InspectorType.GetTypeInfo().IsSubclassOf( abstractTypeInspectorType ) )
+					return (AbstractTypeInspector)Activator.CreateInstance( customInspectorType.InspectorType );
+				Debug.Warn( $"found CustomInspector {customInspectorType.InspectorType} but it is not a subclass of AbstractTypeInspector" );
 			}
 
 			// Nez types
 			if( valueType == materialType || valueType.IsSubclassOf( materialType ) )
 				return new MaterialInspector();
 			if( valueType == effectType || valueType.IsSubclassOf( effectType ) )
-				return getEffectInspector( target, memberInfo );
+				return GetEffectInspector( target, memberInfo );
 
 			// last ditch effort. If the class is serializeable we use a generic ObjectInspector
 			if( valueType != objectType && valueType.IsDefined( serializationAttrType ) )
 				return new ObjectInspectors.ObjectInspector();
 
-			Debug.info( $"no inspector found for type {valueType} on object {target.GetType()}" );
+			Debug.Info( $"no inspector found for type {valueType} on object {target.GetType()}" );
 
 			return null;
 		}
@@ -186,7 +186,7 @@ namespace Nez.ImGuiTools.TypeInspectors
 		/// </summary>
 		/// <returns>The material inspector.</returns>
 		/// <param name="target">Target.</param>
-		static AbstractTypeInspector getMaterialInspector( object target, MemberInfo memberInfo )
+		static AbstractTypeInspector GetMaterialInspector( object target, MemberInfo memberInfo )
 		{
 			Material material = null;
 			var fieldInfo = memberInfo as FieldInfo;
@@ -196,7 +196,7 @@ namespace Nez.ImGuiTools.TypeInspectors
 			var propInfo = memberInfo as PropertyInfo;
 			if( propInfo != null )
 			{
-				var getter = ReflectionUtils.getPropertyGetter( propInfo );
+				var getter = ReflectionUtils.GetPropertyGetter( propInfo );
 				material = getter.Invoke( target, new object[] {} ) as Material;
 			}
 
@@ -209,7 +209,7 @@ namespace Nez.ImGuiTools.TypeInspectors
 		/// <returns>The effect inspector.</returns>
 		/// <param name="target">Target.</param>
 		/// <param name="memberInfo">Member info.</param>
-		static AbstractTypeInspector getEffectInspector( object target, MemberInfo memberInfo )
+		static AbstractTypeInspector GetEffectInspector( object target, MemberInfo memberInfo )
 		{
 			// we only want subclasses of Effect. Effect itself is not interesting so we have to fetch the data
 			Effect effect = null;
@@ -220,7 +220,7 @@ namespace Nez.ImGuiTools.TypeInspectors
 			var propInfo = memberInfo as PropertyInfo;
 			if( propInfo != null )
 			{
-				var getter = ReflectionUtils.getPropertyGetter( propInfo );
+				var getter = ReflectionUtils.GetPropertyGetter( propInfo );
 				effect = getter.Invoke( target, new object[] {} ) as Effect;
 			}
 

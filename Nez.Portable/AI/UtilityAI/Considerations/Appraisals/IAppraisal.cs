@@ -8,7 +8,7 @@ namespace Nez.AI.UtilityAI
 	/// </summary>
 	public interface IAppraisal<T>
 	{
-		float getScore( T context );
+		float GetScore( T context );
 	}
 }
 

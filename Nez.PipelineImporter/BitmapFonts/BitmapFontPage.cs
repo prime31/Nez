@@ -11,21 +11,21 @@ namespace Nez.BitmapFontImporter
 	public class BitmapFontPage
 	{
 		[XmlAttribute( "id" )]
-		public int id;
+		public int Id;
 		
 		[XmlAttribute( "file" )]
-		public string file;
+		public string File;
 
 		/// <summary>
 		/// not part of fnt spec. this is manually added.
 		/// </summary>
 		[XmlAttribute( "x" )]
-		public int x;
+		public int X;
 
 		/// <summary>
 		/// not part of fnt spec. this is manually added.
 		/// </summary>
 		[XmlAttribute( "y" )]
-		public int y;
+		public int Y;
 	}
 }

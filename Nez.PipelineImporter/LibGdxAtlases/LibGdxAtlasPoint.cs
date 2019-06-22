@@ -5,8 +5,8 @@ namespace Nez.LibGdxAtlases
 {
 	public class LibGdxAtlasPoint
 	{
-		public float x;
-		public float y;
+		public float X;
+		public float Y;
 
 
 		public LibGdxAtlasPoint()
@@ -15,8 +15,8 @@ namespace Nez.LibGdxAtlases
 
 		public LibGdxAtlasPoint( float x, float y )
 		{
-			this.x = x;
-			this.y = y;
+			this.X = x;
+			this.Y = y;
 		}
 	}
 }

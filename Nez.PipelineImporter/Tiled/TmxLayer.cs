@@ -9,28 +9,28 @@ namespace Nez.TiledMaps
 	public abstract class TmxLayer
 	{
 		[XmlAttribute( AttributeName = "offsetx" )]
-		public float offsetx;
+		public float Offsetx;
 
 		[XmlAttribute( AttributeName = "offsety" )]
-		public float offsety;
+		public float Offsety;
 
 		[XmlAttribute( AttributeName = "name" )]
-		public string name;
+		public string Name;
 
 		[XmlAttribute( AttributeName = "opacity" )]
-		public float opacity = 1f;
+		public float Opacity = 1f;
 
 		[XmlAttribute( AttributeName = "visible" )]
-		public bool visible = true;
+		public bool Visible = true;
 
 		[XmlArray( "properties" )]
 		[XmlArrayItem( "property" )]
-		public List<TmxProperty> properties = new List<TmxProperty>();
+		public List<TmxProperty> Properties = new List<TmxProperty>();
 
 
 		public override string ToString()
 		{
-			return string.Format( "[TmxLayer] name: {0}, visible: {1}", name, visible );
+			return string.Format( "[TmxLayer] name: {0}, visible: {1}", Name, Visible );
 		}
 	}
 }

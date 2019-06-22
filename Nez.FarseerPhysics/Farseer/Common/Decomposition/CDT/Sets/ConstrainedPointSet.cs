@@ -109,7 +109,7 @@ namespace FarseerPhysics.Common.Decomposition.CDT.Sets
 		/// Ises the valid.
 		/// </summary>
 		/// <returns><c>true</c>, if valid was ised, <c>false</c> otherwise.</returns>
-        public bool isValid()
+        public bool IsValid()
         {
             return true;
         }

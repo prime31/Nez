@@ -7,7 +7,7 @@ namespace Nez
 	public class VignettePostProcessor : PostProcessor
 	{
 		[Range( 0.001f, 10f, 0.001f )]
-		public float power
+		public float Power
 		{
 			get { return _power; }
 			set
@@ -16,14 +16,14 @@ namespace Nez
 				{
 					_power = value;
 
-					if( effect != null )
+					if( Effect != null )
 						_powerParam.SetValue( _power );
 				}
 			}
 		}
 
 		[Range( 0.001f, 10f, 0.001f )]
-		public float radius
+		public float Radius
 		{
 			get { return _radius; }
 			set
@@ -32,7 +32,7 @@ namespace Nez
 				{
 					_radius = value;
 
-					if( effect != null )
+					if( Effect != null )
 						_radiusParam.SetValue( _radius );
 				}
 			}
@@ -47,22 +47,22 @@ namespace Nez
 		public VignettePostProcessor( int executionOrder ) : base( executionOrder )
 		{}
 
-		public override void onAddedToScene( Scene scene )
+		public override void OnAddedToScene( Scene scene )
 		{
-			base.onAddedToScene( scene );
+			base.OnAddedToScene( scene );
 
-			effect = scene.content.loadEffect<Effect>( "vignette", EffectResource.vignetteBytes );
+			Effect = scene.Content.LoadEffect<Effect>( "vignette", EffectResource.VignetteBytes );
 
-			_powerParam = effect.Parameters["_power"];
-			_radiusParam = effect.Parameters["_radius"];
+			_powerParam = Effect.Parameters["_power"];
+			_radiusParam = Effect.Parameters["_radius"];
 			_powerParam.SetValue( _power );
 			_radiusParam.SetValue( _radius );
 		}
 
-		public override void unload()
+		public override void Unload()
 		{
-			_scene.content.unloadEffect( effect );
-			base.unload();
+			_scene.Content.UnloadEffect( Effect );
+			base.Unload();
 		}
 
 	}

@@ -152,10 +152,10 @@ namespace Nez.BitmapFonts
             var parts = s.Split(',');
             return new Padding()
             {
-                left = Convert.ToInt32(parts[3].Trim()),
-                top = Convert.ToInt32(parts[0].Trim()),
-                right = Convert.ToInt32(parts[1].Trim()),
-                bottom = Convert.ToInt32(parts[2].Trim())
+                Left = Convert.ToInt32(parts[3].Trim()),
+                Top = Convert.ToInt32(parts[0].Trim()),
+                Right = Convert.ToInt32(parts[1].Trim()),
+                Bottom = Convert.ToInt32(parts[2].Trim())
             };
         }
 
@@ -181,15 +181,15 @@ namespace Nez.BitmapFonts
         /// <param name="resourcePath">The path where texture resources are located.</param>
         internal static void QualifyResourcePaths(BitmapFont font, string resourcePath)
         {
-            var pages = font.pages;
+            var pages = font.Pages;
             for (var i = 0; i < pages.Length; i++)
             {
                 var page = pages[i];
-                page.filename = Path.Combine(resourcePath, page.filename);
+                page.Filename = Path.Combine(resourcePath, page.Filename);
                 pages[i] = page;
             }
 
-            font.pages = pages;
+            font.Pages = pages;
         }
 
         /// <summary>

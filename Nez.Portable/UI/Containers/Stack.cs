@@ -13,62 +13,62 @@ namespace Nez.UI
 	{
 		#region ILayout
 
-		public override float minWidth
+		public override float MinWidth
 		{
 			get
 			{
 				if( sizeInvalid )
-					computeSize();
+					ComputeSize();
 				return _minWidth;
 			}
 		}
 
-		public override float minHeight
+		public override float MinHeight
 		{
 			get
 			{
 				if( sizeInvalid )
-					computeSize();
+					ComputeSize();
 				return _minHeight;
 			}
 		}
 
-		public override float preferredWidth
+		public override float PreferredWidth
 		{
 			get
 			{
 				if( sizeInvalid )
-					computeSize();
+					ComputeSize();
 				return _prefWidth;
 			}
 		}
 
-		public override float preferredHeight
+		public override float PreferredHeight
 		{
 			get
 			{
 				if( sizeInvalid )
-					computeSize();
+					ComputeSize();
 				return _prefHeight;
 			}
 		}
 
-		public override float maxWidth
+		public override float MaxWidth
 		{
 			get
 			{
 				if( sizeInvalid )
-					computeSize();
+					ComputeSize();
 				return _maxWidth;
 			}
 		}
 
-		public override float maxHeight
+		public override float MaxHeight
 		{
 			get
 			{
 				if( sizeInvalid )
-					computeSize();
+					ComputeSize();
 				return _maxHeight;
 			}
 		}
@@ -83,19 +83,19 @@ namespace Nez.UI
 		public Stack()
 		{
 			transform = false;
-			setSize( 150, 150 );
+			SetSize( 150, 150 );
 			touchable = Touchable.ChildrenOnly;
 		}
 
 
-		public override void invalidate()
+		public override void Invalidate()
 		{
-			base.invalidate();
+			base.Invalidate();
 			sizeInvalid = true;
 		}
 
 
-		private void computeSize()
+		private void ComputeSize()
 		{
 			sizeInvalid = false;
 			_prefWidth = 0;
@@ -112,12 +112,12 @@ namespace Nez.UI
 				if( child is ILayout )
 				{
 					var layout = (ILayout)child;
-					_prefWidth = Math.Max( _prefWidth, layout.preferredWidth );
-					_prefHeight = Math.Max( _prefHeight, layout.preferredHeight );
-					_minWidth = Math.Max( _minWidth, layout.minWidth );
-					_minHeight = Math.Max( _minHeight, layout.minHeight );
-					childMaxWidth = layout.maxWidth;
-					childMaxHeight = layout.maxHeight;
+					_prefWidth = Math.Max( _prefWidth, layout.PreferredWidth );
+					_prefHeight = Math.Max( _prefHeight, layout.PreferredHeight );
+					_minWidth = Math.Max( _minWidth, layout.MinWidth );
+					_minHeight = Math.Max( _minHeight, layout.MinHeight );
+					childMaxWidth = layout.MaxWidth;
+					childMaxHeight = layout.MaxHeight;
 				}
 				else
 				{
@@ -137,23 +137,23 @@ namespace Nez.UI
 		}
 
 
-		public T add<T>( T element ) where T : Element
+		public T Add<T>( T element ) where T : Element
 		{
-			return addElement( element );
+			return AddElement( element );
 		}
 
 
-		public override void layout()
+		public override void Layout()
 		{
 			if( sizeInvalid )
-				computeSize();
+				ComputeSize();
 			
 			for( int i = 0, n = children.Count; i < n; i++ )
 			{
 				Element child = children[i];
-				child.setBounds( 0, 0, width, height );
+				child.SetBounds( 0, 0, width, height );
 				if( child is ILayout )
-					( (ILayout)child ).validate();
+					( (ILayout)child ).Validate();
 			}
 		}
 

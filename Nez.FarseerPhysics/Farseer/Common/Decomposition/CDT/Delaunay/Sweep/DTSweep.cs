@@ -110,7 +110,7 @@ namespace FarseerPhysics.Common.Decomposition.CDT.Delaunay.Sweep
 		{
 			DelaunayTriangle t1, t2;
 
-			AdvancingFrontNode n1 = tcx.aFront.Head.Next;
+			AdvancingFrontNode n1 = tcx.AFront.Head.Next;
 			AdvancingFrontNode n2 = n1.Next;
 
 			TurnAdvancingFrontConvex( tcx, n1, n2 );
@@ -124,7 +124,7 @@ namespace FarseerPhysics.Common.Decomposition.CDT.Delaunay.Sweep
 			//      Same for last three nodes!
 			// !!! If I implement ConvexHull for lower right and left boundary this fix should not be 
 			//     needed and the removed triangles will be added again by default
-			n1 = tcx.aFront.Tail.Prev;
+			n1 = tcx.AFront.Tail.Prev;
 			if( n1.Triangle.Contains( n1.Next.Point ) && n1.Triangle.Contains( n1.Prev.Point ) )
 			{
 				t1 = n1.Triangle.NeighborAcross( n1.Point );
@@ -132,7 +132,7 @@ namespace FarseerPhysics.Common.Decomposition.CDT.Delaunay.Sweep
 				tcx.MapTriangleToNodes( n1.Triangle );
 				tcx.MapTriangleToNodes( t1 );
 			}
-			n1 = tcx.aFront.Head.Next;
+			n1 = tcx.AFront.Head.Next;
 			if( n1.Triangle.Contains( n1.Prev.Point ) && n1.Triangle.Contains( n1.Next.Point ) )
 			{
 				t1 = n1.Triangle.NeighborAcross( n1.Point );
@@ -142,8 +142,8 @@ namespace FarseerPhysics.Common.Decomposition.CDT.Delaunay.Sweep
 			}
 
 			// Lower right boundary 
-			TriangulationPoint first = tcx.aFront.Head.Point;
-			n2 = tcx.aFront.Tail.Prev;
+			TriangulationPoint first = tcx.AFront.Head.Point;
+			n2 = tcx.AFront.Tail.Prev;
 			t1 = n2.Triangle;
 			TriangulationPoint p1 = n2.Point;
 			n2.Triangle = null;
@@ -158,9 +158,9 @@ namespace FarseerPhysics.Common.Decomposition.CDT.Delaunay.Sweep
 			} while(true);
 
 			// Lower left boundary
-			first = tcx.aFront.Head.Next.Point;
-			p1 = t1.PointCW( tcx.aFront.Head.Point );
-			t2 = t1.NeighborCW( tcx.aFront.Head.Point );
+			first = tcx.AFront.Head.Next.Point;
+			p1 = t1.PointCW( tcx.AFront.Head.Point );
+			t2 = t1.NeighborCW( tcx.AFront.Head.Point );
 			t1.Clear();
 			t1 = t2;
 			while( p1 != first ) //TODO: Port note. This was do while before.
@@ -174,10 +174,10 @@ namespace FarseerPhysics.Common.Decomposition.CDT.Delaunay.Sweep
 
 			// Remove current head and tail node now that we have removed all triangles attached
 			// to them. Then set new head and tail node points
-			tcx.aFront.Head = tcx.aFront.Head.Next;
-			tcx.aFront.Head.Prev = null;
-			tcx.aFront.Tail = tcx.aFront.Tail.Prev;
-			tcx.aFront.Tail.Next = null;
+			tcx.AFront.Head = tcx.AFront.Head.Next;
+			tcx.AFront.Head.Prev = null;
+			tcx.AFront.Tail = tcx.AFront.Tail.Prev;
+			tcx.AFront.Tail.Next = null;
 
 			tcx.FinalizeTriangulation();
 		}
@@ -188,7 +188,7 @@ namespace FarseerPhysics.Common.Decomposition.CDT.Delaunay.Sweep
 		static void TurnAdvancingFrontConvex( DTSweepContext tcx, AdvancingFrontNode b, AdvancingFrontNode c )
 		{
 			AdvancingFrontNode first = b;
-			while( c != tcx.aFront.Tail )
+			while( c != tcx.AFront.Tail )
 			{
 				if( TriangulationUtil.Orient2d( b.Point, c.Point, c.Next.Point ) == Orientation.CCW )
 				{
@@ -218,8 +218,8 @@ namespace FarseerPhysics.Common.Decomposition.CDT.Delaunay.Sweep
 		static void FinalizationPolygon( DTSweepContext tcx )
 		{
 			// Get an Internal triangle to start with
-			DelaunayTriangle t = tcx.aFront.Head.Next.Triangle;
-			TriangulationPoint p = tcx.aFront.Head.Next.Point;
+			DelaunayTriangle t = tcx.AFront.Head.Next.Triangle;
+			TriangulationPoint p = tcx.AFront.Head.Next.Point;
 			while( !t.GetConstrainedEdgeCW( p ) )
 			{
 				t = t.NeighborCCW( p );
@@ -487,7 +487,7 @@ namespace FarseerPhysics.Common.Decomposition.CDT.Delaunay.Sweep
 			if( index != -1 )
 			{
 				triangle.MarkConstrainedEdge( index );
-				triangle = triangle.neighbors[index];
+				triangle = triangle.Neighbors[index];
 				if( triangle != null )
 				{
 					triangle.MarkConstrainedEdge( ep, eq );
@@ -674,16 +674,16 @@ namespace FarseerPhysics.Common.Decomposition.CDT.Delaunay.Sweep
 			{
 				// ot is not crossing edge after flip
 				edgeIndex = ot.EdgeIndex( p, op );
-				ot.edgeIsDelaunay[edgeIndex] = true;
+				ot.EdgeIsDelaunay[edgeIndex] = true;
 				Legalize( tcx, ot );
-				ot.edgeIsDelaunay.Clear();
+				ot.EdgeIsDelaunay.Clear();
 				return t;
 			}
 			// t is not crossing edge after flip
 			edgeIndex = t.EdgeIndex( p, op );
-			t.edgeIsDelaunay[edgeIndex] = true;
+			t.EdgeIsDelaunay[edgeIndex] = true;
 			Legalize( tcx, t );
-			t.edgeIsDelaunay.Clear();
+			t.EdgeIsDelaunay.Clear();
 			return ot;
 		}
 
@@ -849,42 +849,42 @@ namespace FarseerPhysics.Common.Decomposition.CDT.Delaunay.Sweep
 			if( TriangulationUtil.Orient2d( node.Point, node.Next.Point, node.Next.Next.Point ) == Orientation.CCW )
 			{
 				// tcx.basin.leftNode = node.next.next;
-				tcx.Basin.leftNode = node;
+				tcx.Basin.LeftNode = node;
 			}
 			else
 			{
-				tcx.Basin.leftNode = node.Next;
+				tcx.Basin.LeftNode = node.Next;
 			}
 
 			// Find the bottom and right node
-			tcx.Basin.bottomNode = tcx.Basin.leftNode;
-			while( tcx.Basin.bottomNode.HasNext && tcx.Basin.bottomNode.Point.Y >= tcx.Basin.bottomNode.Next.Point.Y )
+			tcx.Basin.BottomNode = tcx.Basin.LeftNode;
+			while( tcx.Basin.BottomNode.HasNext && tcx.Basin.BottomNode.Point.Y >= tcx.Basin.BottomNode.Next.Point.Y )
 			{
-				tcx.Basin.bottomNode = tcx.Basin.bottomNode.Next;
+				tcx.Basin.BottomNode = tcx.Basin.BottomNode.Next;
 			}
 
-			if( tcx.Basin.bottomNode == tcx.Basin.leftNode )
-			{
-				// No valid basins
-				return;
-			}
-
-			tcx.Basin.rightNode = tcx.Basin.bottomNode;
-			while( tcx.Basin.rightNode.HasNext && tcx.Basin.rightNode.Point.Y < tcx.Basin.rightNode.Next.Point.Y )
-			{
-				tcx.Basin.rightNode = tcx.Basin.rightNode.Next;
-			}
-
-			if( tcx.Basin.rightNode == tcx.Basin.bottomNode )
+			if( tcx.Basin.BottomNode == tcx.Basin.LeftNode )
 			{
 				// No valid basins
 				return;
 			}
 
-			tcx.Basin.width = tcx.Basin.rightNode.Point.X - tcx.Basin.leftNode.Point.X;
-			tcx.Basin.leftHighest = tcx.Basin.leftNode.Point.Y > tcx.Basin.rightNode.Point.Y;
+			tcx.Basin.RightNode = tcx.Basin.BottomNode;
+			while( tcx.Basin.RightNode.HasNext && tcx.Basin.RightNode.Point.Y < tcx.Basin.RightNode.Next.Point.Y )
+			{
+				tcx.Basin.RightNode = tcx.Basin.RightNode.Next;
+			}
 
-			FillBasinReq( tcx, tcx.Basin.bottomNode );
+			if( tcx.Basin.RightNode == tcx.Basin.BottomNode )
+			{
+				// No valid basins
+				return;
+			}
+
+			tcx.Basin.Width = tcx.Basin.RightNode.Point.X - tcx.Basin.LeftNode.Point.X;
+			tcx.Basin.LeftHighest = tcx.Basin.LeftNode.Point.Y > tcx.Basin.RightNode.Point.Y;
+
+			FillBasinReq( tcx, tcx.Basin.BottomNode );
 		}
 
 		/// <summary>
@@ -899,11 +899,11 @@ namespace FarseerPhysics.Common.Decomposition.CDT.Delaunay.Sweep
 			}
 
 			Fill( tcx, node );
-			if( node.Prev == tcx.Basin.leftNode && node.Next == tcx.Basin.rightNode )
+			if( node.Prev == tcx.Basin.LeftNode && node.Next == tcx.Basin.RightNode )
 			{
 				return;
 			}
-			else if( node.Prev == tcx.Basin.leftNode )
+			else if( node.Prev == tcx.Basin.LeftNode )
 			{
 				Orientation o = TriangulationUtil.Orient2d( node.Point, node.Next.Point, node.Next.Next.Point );
 				if( o == Orientation.CW )
@@ -912,7 +912,7 @@ namespace FarseerPhysics.Common.Decomposition.CDT.Delaunay.Sweep
 				}
 				node = node.Next;
 			}
-			else if( node.Next == tcx.Basin.rightNode )
+			else if( node.Next == tcx.Basin.RightNode )
 			{
 				Orientation o = TriangulationUtil.Orient2d( node.Point, node.Prev.Point, node.Prev.Prev.Point );
 				if( o == Orientation.CCW )
@@ -940,15 +940,15 @@ namespace FarseerPhysics.Common.Decomposition.CDT.Delaunay.Sweep
 		{
 			double height;
 
-			if( tcx.Basin.leftHighest )
+			if( tcx.Basin.LeftHighest )
 			{
-				height = tcx.Basin.leftNode.Point.Y - node.Point.Y;
+				height = tcx.Basin.LeftNode.Point.Y - node.Point.Y;
 			}
 			else
 			{
-				height = tcx.Basin.rightNode.Point.Y - node.Point.Y;
+				height = tcx.Basin.RightNode.Point.Y - node.Point.Y;
 			}
-			if( tcx.Basin.width > height )
+			if( tcx.Basin.Width > height )
 			{
 				return true;
 			}
@@ -1028,22 +1028,22 @@ namespace FarseerPhysics.Common.Decomposition.CDT.Delaunay.Sweep
 			{
 				// TODO: fix so that cEdge is always valid when creating new triangles then we can check it here
 				//       instead of below with ot
-				if(t.edgeIsDelaunay[i] )
+				if(t.EdgeIsDelaunay[i] )
 				{
 					continue;
 				}
 
-				DelaunayTriangle ot = t.neighbors[i];
+				DelaunayTriangle ot = t.Neighbors[i];
 				if( ot != null )
 				{
-					TriangulationPoint p = t.points[i];
+					TriangulationPoint p = t.Points[i];
 					TriangulationPoint op = ot.OppositePoint( t, p );
 					int oi = ot.IndexOf( op );
 					// If this is a Constrained Edge or a Delaunay Edge(only during recursive legalization)
 					// then we should not try to legalize
-					if( ot.edgeIsConstrained[oi] || ot.edgeIsDelaunay[oi] )
+					if( ot.EdgeIsConstrained[oi] || ot.EdgeIsDelaunay[oi] )
 					{
-						t.edgeIsConstrained[i] = ot.edgeIsConstrained[oi];
+						t.EdgeIsConstrained[i] = ot.EdgeIsConstrained[oi];
 						// XXX: have no good way of setting this property when creating new triangles so lets set it here
 						continue;
 					}
@@ -1053,8 +1053,8 @@ namespace FarseerPhysics.Common.Decomposition.CDT.Delaunay.Sweep
 					if(inside)
 					{
 						// Lets mark this shared edge as Delaunay 
-						t.edgeIsDelaunay[i] = true;
-						ot.edgeIsDelaunay[oi] = true;
+						t.EdgeIsDelaunay[i] = true;
+						ot.EdgeIsDelaunay[oi] = true;
 
 						// Lets rotate shared edge one vertex CW to legalize it
 						RotateTrianglePair( t, p, ot, op );
@@ -1079,8 +1079,8 @@ namespace FarseerPhysics.Common.Decomposition.CDT.Delaunay.Sweep
 						// until we add a new triangle or point.
 						// XXX: need to think about this. Can these edges be tried after we 
 						//      return to previous recursive level?
-						t.edgeIsDelaunay[i] = false;
-						ot.edgeIsDelaunay[oi] = false;
+						t.EdgeIsDelaunay[i] = false;
+						ot.EdgeIsDelaunay[oi] = false;
 
 						// If triangle have been legalized no need to check the other edges since
 						// the recursive legalization will handles those so we can end here.
@@ -1140,8 +1140,8 @@ namespace FarseerPhysics.Common.Decomposition.CDT.Delaunay.Sweep
 			//      what side should be assigned to what neighbor after the 
 			//      rotation. Now mark neighbor does lots of testing to find 
 			//      the right side.
-			t.neighbors.Clear();
-			ot.neighbors.Clear();
+			t.Neighbors.Clear();
+			ot.Neighbors.Clear();
 			if( n1 != null ) ot.MarkNeighbor( n1 );
 			if( n2 != null ) t.MarkNeighbor( n2 );
 			if( n3 != null ) t.MarkNeighbor( n3 );

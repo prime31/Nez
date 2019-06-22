@@ -14,11 +14,11 @@ namespace Nez.ImGuiTools
 		/// gets all the Component subclasses that have a parameterless constructor
 		/// </summary>
 		/// <returns></returns>
-		public static Type[] getAllComponentSubclassTypes()
+		public static Type[] GetAllComponentSubclassTypes()
 		{
 			if( _componentSubclasses == null )
 			{
-				var subclasses = ReflectionUtils.getAllSubclasses( typeof( Component ), true );
+				var subclasses = ReflectionUtils.GetAllSubclasses( typeof( Component ), true );
 
 				// filter out any Components that have generic parameters
 				for( var i = subclasses.Count - 1; i >= 0; i-- )
@@ -60,11 +60,11 @@ namespace Nez.ImGuiTools
 		/// gets all the Effect subclasses that have a parameterless constructor
 		/// </summary>
 		/// <returns></returns>
-		public static Type[] getAllEffectSubclassTypes()
+		public static Type[] GetAllEffectSubclassTypes()
 		{
 			if( _effectSubclasses == null )
 			{
-				var subclasses = ReflectionUtils.getAllSubclasses( typeof( Effect ), true );
+				var subclasses = ReflectionUtils.GetAllSubclasses( typeof( Effect ), true );
 				subclasses.Sort( (t, u) =>
 				{
 					return t.Name.CompareTo( u.Name );
@@ -78,11 +78,11 @@ namespace Nez.ImGuiTools
 		/// gets all the Effect subclasses that have a parameterless constructor
 		/// </summary>
 		/// <returns></returns>
-		public static Type[] getAllPostProcessorSubclassTypes()
+		public static Type[] GetAllPostProcessorSubclassTypes()
 		{
 			if( _postProcessorSubclasses == null )
 			{
-				var subclasses = ReflectionUtils.getAllSubclasses( typeof( PostProcessor ) );
+				var subclasses = ReflectionUtils.GetAllSubclasses( typeof( PostProcessor ) );
 
 				// filter out all except those with a single parameter constructor
 				var constructorParams = new Type[] { typeof( int ) };

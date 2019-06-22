@@ -14,7 +14,7 @@ namespace Nez.Svg
 			_scaleX = x;
 			_scaleY = y;
 
-			matrix = Matrix2D.createScale( _scaleX, _scaleY );
+			Matrix = Matrix2D.CreateScale( _scaleX, _scaleY );
 		}
 
 

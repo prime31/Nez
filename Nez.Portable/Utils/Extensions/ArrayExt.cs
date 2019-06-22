@@ -13,7 +13,7 @@ namespace Nez
 		/// <param name="value">Value.</param>
 		/// <typeparam name="T">The 1st type parameter.</typeparam>
 		[MethodImpl( MethodImplOptions.AggressiveInlining )]
-		public static bool contains<T>( this T[] source, T value )
+		public static bool Contains<T>( this T[] source, T value )
 		{
 			return Array.IndexOf( source, value ) >= 0;
 		}

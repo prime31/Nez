@@ -20,29 +20,29 @@ namespace Nez.ImGuiTools.TypeInspectors
 		Num.Vector3 _vec3Param;
 
 
-		public static bool areParametersValid( ParameterInfo[] parameters )
+		public static bool AreParametersValid( ParameterInfo[] parameters )
 		{
 			if( parameters.Length == 0 )
 				return true;
 
 			if( parameters.Length > 1 )
 			{
-				Debug.warn( $"method {parameters[0].Member.Name} has InspectorCallableAttribute but it has more than 1 parameter" );
+				Debug.Warn( $"method {parameters[0].Member.Name} has InspectorCallableAttribute but it has more than 1 parameter" );
 				return false;
 			}
 
 			var paramType = parameters[0].ParameterType;
-			if( _allowedTypes.contains( paramType ) )
+			if( _allowedTypes.Contains( paramType ) )
 				return true;
 
-			Debug.warn( $"method {parameters[0].Member.Name} has InspectorCallableAttribute but it has an invalid paraemter type {paramType}" );
+			Debug.Warn( $"method {parameters[0].Member.Name} has InspectorCallableAttribute but it has an invalid paraemter type {paramType}" );
 
 			return false;
 		}
 
-		public override void initialize()
+		public override void Initialize()
 		{
-			base.initialize();
+			base.Initialize();
 
 			_scopeId = NezImGui.GetScopeId();
 
@@ -56,10 +56,10 @@ namespace Nez.ImGuiTools.TypeInspectors
 			_parameterName = parameter.Name;
 		}
 
-		public override void drawMutable()
+		public override void DrawMutable()
 		{
 			if( ImGui.Button( _name ) )
-				onButtonClicked();
+				OnButtonClicked();
 			
 			if( _parameterType != null )
 				ImGui.SameLine();
@@ -79,10 +79,10 @@ namespace Nez.ImGuiTools.TypeInspectors
 				ImGui.DragFloat3( $"{_parameterName}##", ref _vec3Param );
 			ImGui.PopItemWidth();
 
-			handleTooltip();
+			HandleTooltip();
 		}
 
-		void onButtonClicked()
+		void OnButtonClicked()
 		{
 			if( _parameterType == null )
 			{
@@ -104,15 +104,15 @@ namespace Nez.ImGuiTools.TypeInspectors
 			        else if( _parameterType == typeof( string ) )
 			            parameters[0] = _stringParam;
 					else if( _parameterType == typeof( Vector2 ) )
-						parameters[0] = _vec2Param.toXNA();
+						parameters[0] = _vec2Param.ToXNA();
 					else if( _parameterType == typeof( Vector3 ) )
-						parameters[0] = _vec3Param.toXNA();
+						parameters[0] = _vec3Param.ToXNA();
 			
 			        ( _memberInfo as MethodInfo ).Invoke( _target, parameters );
 			    }
 			    catch( Exception e )
 			    {
-			        Debug.error( e.ToString() );
+			        Debug.Error( e.ToString() );
 			    }
 			}
 		}

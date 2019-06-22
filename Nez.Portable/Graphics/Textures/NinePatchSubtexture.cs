@@ -6,30 +6,30 @@ namespace Nez.Textures
 {
 	public class NinePatchSubtexture : Subtexture
 	{
-		public int left;
-		public int right;
-		public int top;
-		public int bottom;
-		public Rectangle[] ninePatchRects = new Rectangle[9];
+		public int Left;
+		public int Right;
+		public int Top;
+		public int Bottom;
+		public Rectangle[] NinePatchRects = new Rectangle[9];
 
 		/// <summary>
 		/// used to indicate if this nine patch has additional padding information
 		/// </summary>
-		public bool hasPadding;
-        public int padLeft;
-        public int padRight;
-        public int padTop;
-        public int padBottom;
+		public bool HasPadding;
+        public int PadLeft;
+        public int PadRight;
+        public int PadTop;
+        public int PadBottom;
 
 
 		public NinePatchSubtexture( Texture2D texture, Rectangle sourceRect, int left, int right, int top, int bottom ) : base( texture, sourceRect )
 		{
-			this.left = left;
-			this.right = right;
-			this.top = top;
-			this.bottom = bottom;
+			this.Left = left;
+			this.Right = right;
+			this.Top = top;
+			this.Bottom = bottom;
 
-			generateNinePatchRects( sourceRect, ninePatchRects, left, right, top, bottom );
+			GenerateNinePatchRects( sourceRect, NinePatchRects, left, right, top, bottom );
 		}
 
 
@@ -37,7 +37,7 @@ namespace Nez.Textures
 		{}
 
 
-		public NinePatchSubtexture( Subtexture subtexture, int left, int right, int top, int bottom ) : this( subtexture, subtexture.sourceRect, left, right, top, bottom )
+		public NinePatchSubtexture( Subtexture subtexture, int left, int right, int top, int bottom ) : this( subtexture, subtexture.SourceRect, left, right, top, bottom )
 		{}
 
 	}

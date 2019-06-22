@@ -16,7 +16,7 @@ namespace Nez.Svg
 		/// </summary>
 		/// <returns>The draw point.</returns>
 		/// <param name="vec">Vec.</param>
-		static object toDrawPoint( Vector2 vec )
+		static object ToDrawPoint( Vector2 vec )
 		{
 			var args = new object[] { (int)vec.X, (int)vec.Y };
 			return System.Activator.CreateInstance( System.Type.GetType( "System.Drawing.Point, System.Drawing" ), args );
@@ -28,7 +28,7 @@ namespace Nez.Svg
 		/// </summary>
 		/// <returns>The drawing points.</returns>
 		/// <param name="segments">Segments.</param>
-		public Vector2[] getDrawingPoints( List<SvgPathSegment> segments, float flatness = 3 )
+		public Vector2[] GetDrawingPoints( List<SvgPathSegment> segments, float flatness = 3 )
 		{
 			var path = new FauxGraphicsPath();
 			for( var j = 0; j < segments.Count; j++ )
@@ -41,7 +41,7 @@ namespace Nez.Svg
 				else if( segment is SvgCubicCurveSegment )
 				{
 					var cubicSegment = segment as SvgCubicCurveSegment;
-					path.AddBezier( toDrawPoint( segment.start ), toDrawPoint( cubicSegment.firstCtrlPoint ), toDrawPoint( cubicSegment.secondCtrlPoint ), toDrawPoint( segment.end ) );
+					path.AddBezier( ToDrawPoint( segment.Start ), ToDrawPoint( cubicSegment.FirstCtrlPoint ), ToDrawPoint( cubicSegment.SecondCtrlPoint ), ToDrawPoint( segment.End ) );
 				}
 				else if( segment is SvgClosePathSegment )
 				{
@@ -59,23 +59,23 @@ namespace Nez.Svg
 				}
 				else if( segment is SvgLineSegment )
 				{
-					path.AddLine( toDrawPoint( segment.start ), toDrawPoint( segment.end ) );
+					path.AddLine( ToDrawPoint( segment.Start ), ToDrawPoint( segment.End ) );
 				}
 				else if( segment is SvgQuadraticCurveSegment )
 				{
 					var quadSegment = segment as SvgQuadraticCurveSegment;
-					path.AddBezier( toDrawPoint( segment.start ), toDrawPoint( quadSegment.firstCtrlPoint ), toDrawPoint( quadSegment.secondCtrlPoint ), toDrawPoint( segment.end ) );
+					path.AddBezier( ToDrawPoint( segment.Start ), ToDrawPoint( quadSegment.FirstCtrlPoint ), ToDrawPoint( quadSegment.SecondCtrlPoint ), ToDrawPoint( segment.End ) );
 				}
 				else
 				{
-					Debug.warn( "unknown type in getDrawingPoints" );
+					Debug.Warn( "unknown type in getDrawingPoints" );
 				}
 			}
 
 			var matrix = System.Activator.CreateInstance( System.Type.GetType( "System.Drawing.Drawing2D.Matrix, System.Drawing" ) );
 			path.Flatten( matrix, flatness );
 
-			return path.pathPointsAsVectors();
+			return path.PathPointsAsVectors();
 		}
 
 	}

@@ -14,39 +14,39 @@ namespace Nez.ImGuiTools.SceneGraphPanes
         List<PostProcessorInspector> _postProcessorInspectors = new List<PostProcessorInspector>();
 		bool _isPostProcessorListInitialized;
 
-        void updatePostProcessorInspectorList()
+        void UpdatePostProcessorInspectorList()
         {
 			// first, we check our list of inspectors and sync it up with the current list of PostProcessors in the Scene.
 			// we limit the check to once every 60 fames
-			if( !_isPostProcessorListInitialized || Time.frameCount % 60 == 0 )
+			if( !_isPostProcessorListInitialized || Time.FrameCount % 60 == 0 )
 			{
 				_isPostProcessorListInitialized = true;
-				for( var i = 0; i < Core.scene._postProcessors.length; i++ )
+				for( var i = 0; i < Core.Scene._postProcessors.Length; i++ )
 				{
-					var postProcessor = Core.scene._postProcessors.buffer[i];
-					if( _postProcessorInspectors.Where( inspector => inspector.postProcessor == postProcessor ).Count() == 0 )
+					var postProcessor = Core.Scene._postProcessors.Buffer[i];
+					if( _postProcessorInspectors.Where( inspector => inspector.PostProcessor == postProcessor ).Count() == 0 )
 						_postProcessorInspectors.Add( new PostProcessorInspector( postProcessor ) );
 				}
 			}
         }
 
-        public void onSceneChanged()
+        public void OnSceneChanged()
         {
             _postProcessorInspectors.Clear();
 			_isPostProcessorListInitialized = false;
-            updatePostProcessorInspectorList();
+            UpdatePostProcessorInspectorList();
         }
 
-        public void draw()
+        public void Draw()
         {
-            updatePostProcessorInspectorList();
+            UpdatePostProcessorInspectorList();
 
 			ImGui.Indent();
 			for( var i = 0; i < _postProcessorInspectors.Count; i++ )
 			{
-				if( _postProcessorInspectors[i].postProcessor._scene != null )
+				if( _postProcessorInspectors[i].PostProcessor._scene != null )
 				{
-					_postProcessorInspectors[i].draw();
+					_postProcessorInspectors[i].Draw();
 					NezImGui.SmallVerticalSpace();
 				}
 			}
@@ -62,19 +62,19 @@ namespace Nez.ImGuiTools.SceneGraphPanes
 			ImGui.Unindent();
 
 			NezImGui.MediumVerticalSpace();
-            drawPostProcessorSelectorPopup();
+            DrawPostProcessorSelectorPopup();
         }
 
-        void drawPostProcessorSelectorPopup()
+        void DrawPostProcessorSelectorPopup()
         {
 			if( ImGui.BeginPopup( "postprocessor-selector" ) )
 			{
-				foreach( var subclassType in InspectorCache.getAllPostProcessorSubclassTypes() )
+				foreach( var subclassType in InspectorCache.GetAllPostProcessorSubclassTypes() )
 				{
 					if( ImGui.Selectable( subclassType.Name ) )
 					{
 						var postprocessor = (PostProcessor)Activator.CreateInstance( subclassType, new object[] { _postProcessorInspectors.Count } );
-						Core.scene.addPostProcessor( postprocessor );
+						Core.Scene.AddPostProcessor( postprocessor );
 						_isPostProcessorListInitialized = false;
 					}
 				}

@@ -5,7 +5,7 @@ namespace Nez
 {
 	public class DotsEffect : Effect
 	{
-		public float scale
+		public float Scale
 		{
 			get { return _scale; }
 			set
@@ -18,7 +18,7 @@ namespace Nez
 			}
 		}
 
-		public float angle
+		public float Angle
 		{
 			get { return _angle; }
 			set
@@ -38,7 +38,7 @@ namespace Nez
 		EffectParameter _angleParam;
 
 
-		public DotsEffect() : base( Core.graphicsDevice, EffectResource.dotsBytes )
+		public DotsEffect() : base( Core.GraphicsDevice, EffectResource.DotsBytes )
 		{
 			_scaleParam = Parameters["scale"];
 			_angleParam = Parameters["angle"];

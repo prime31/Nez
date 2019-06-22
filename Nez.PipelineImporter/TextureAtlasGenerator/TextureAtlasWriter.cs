@@ -16,15 +16,15 @@ namespace Nez.TextureAtlasGenerator
 	{
 		protected override void Write( ContentWriter output, TextureAtlasContent value )
 		{
-			var spriteNames = new List<string>( value.spriteNames.Keys );
+			var spriteNames = new List<string>( value.SpriteNames.Keys );
 
 			// write out all the members
-			output.WriteObject( value.texture );
-			output.WriteObject( value.spriteRectangles );
+			output.WriteObject( value.Texture );
+			output.WriteObject( value.SpriteRectangles );
 			output.WriteObject( spriteNames.ToArray() );
-			output.WriteObject( value.spriteAnimationDetails );
-			output.WriteObject( value.nineSliceSplits );
-			output.Write( value.animationFPS );
+			output.WriteObject( value.SpriteAnimationDetails );
+			output.WriteObject( value.NineSliceSplits );
+			output.Write( value.AnimationFPS );
 		}
 
 

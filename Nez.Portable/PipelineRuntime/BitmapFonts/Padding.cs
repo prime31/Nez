@@ -9,19 +9,19 @@ namespace Nez.BitmapFonts
     /// </summary>
     public struct Padding
     {
-        public int bottom;
-        public int left;
-        public int right;
-        public int top;
+        public int Bottom;
+        public int Left;
+        public int Right;
+        public int Top;
 
         public Padding(int left, int top, int right, int bottom)
         {
-            this.top = top;
-            this.left = left;
-            this.bottom = bottom;
-            this.right = right;
+            this.Top = top;
+            this.Left = left;
+            this.Bottom = bottom;
+            this.Right = right;
         }
 
-        public override string ToString() => string.Format("{0}, {1}, {2}, {3}", left, top, right, bottom);
+        public override string ToString() => string.Format("{0}, {1}, {2}, {3}", Left, Top, Right, Bottom);
     }
 }

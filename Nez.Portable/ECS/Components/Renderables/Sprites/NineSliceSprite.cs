@@ -8,7 +8,7 @@ namespace Nez
 {
 	public class NineSliceSprite : Sprite
 	{
-		public new float width
+		public new float Width
 		{
 			get => _finalRenderRect.Width;
 			set
@@ -18,7 +18,7 @@ namespace Nez
 			}
 		}
 
-		public new float height
+		public new float Height
 		{
 			get => _finalRenderRect.Height;
 			set
@@ -28,15 +28,15 @@ namespace Nez
 			}
 		}
 
-		public override RectangleF bounds
+		public override RectangleF Bounds
 		{
 			get
 			{
 				if( _areBoundsDirty )
 				{
-					_bounds.location = entity.transform.position + _localOffset;
-					_bounds.width = width;
-					_bounds.height = height;
+					_bounds.Location = Entity.Transform.Position + _localOffset;
+					_bounds.Width = Width;
+					_bounds.Height = Height;
 					_areBoundsDirty = false;
 				}
 
@@ -44,7 +44,7 @@ namespace Nez
 			}
 		}
 
-		public new NinePatchSubtexture subtexture;
+		public new NinePatchSubtexture Subtexture;
 
 
 		/// <summary>
@@ -57,7 +57,7 @@ namespace Nez
 
 		public NineSliceSprite( NinePatchSubtexture subtexture ) : base( subtexture )
 		{
-			this.subtexture = subtexture;
+			this.Subtexture = subtexture;
 		}
 
 		public NineSliceSprite( Subtexture subtexture, int top, int bottom, int left, int right ) : this( new NinePatchSubtexture( subtexture, left, right, top, bottom ) )
@@ -66,15 +66,15 @@ namespace Nez
 		public NineSliceSprite( Texture2D texture, int top, int bottom, int left, int right ) : this( new NinePatchSubtexture( texture, left, right, top, bottom) )
 		{}
 
-		public override void render( Graphics graphics, Camera camera )
+		public override void Render( Graphics graphics, Camera camera )
 		{
 			if( _destRectsDirty )
 			{
-				subtexture.generateNinePatchRects( _finalRenderRect, _destRects, subtexture.left, subtexture.right, subtexture.top, subtexture.bottom);
+				Subtexture.GenerateNinePatchRects( _finalRenderRect, _destRects, Subtexture.Left, Subtexture.Right, Subtexture.Top, Subtexture.Bottom);
 				_destRectsDirty = false;
 			}
 
-			var pos = ( entity.transform.position + _localOffset ).ToPoint();
+			var pos = ( Entity.Transform.Position + _localOffset ).ToPoint();
 
 			for( var i = 0; i < 9; i++ )
 			{
@@ -82,7 +82,7 @@ namespace Nez
 				var dest = _destRects[i];
 				dest.X += pos.X;
 				dest.Y += pos.Y;
-				graphics.batcher.draw( subtexture, dest, subtexture.ninePatchRects[i], color );
+				graphics.Batcher.Draw( Subtexture, dest, Subtexture.NinePatchRects[i], Color );
 			}
 		}
 

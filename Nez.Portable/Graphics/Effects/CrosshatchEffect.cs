@@ -11,13 +11,13 @@ namespace Nez
 		/// </summary>
 		/// <value>The size of the cross hatch.</value>
 		[Range( 8, 80, false )]
-		public int crosshatchSize
+		public int CrosshatchSize
 		{
 			get { return _crosshatchSize; }
 			set
 			{
 				// ensure we have an even number
-				if( !Mathf.isEven( value ) )
+				if( !Mathf.IsEven( value ) )
 					value += 1;
 				
 				if( _crosshatchSize != value )
@@ -32,7 +32,7 @@ namespace Nez
 		EffectParameter _crosshatchSizeParam;
 
 		
-		public CrosshatchEffect() : base( Core.graphicsDevice, EffectResource.crosshatchBytes )
+		public CrosshatchEffect() : base( Core.GraphicsDevice, EffectResource.CrosshatchBytes )
 		{
 			_crosshatchSizeParam = Parameters["crossHatchSize"];
 			_crosshatchSizeParam.SetValue( _crosshatchSize );

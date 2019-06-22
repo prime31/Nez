@@ -8,11 +8,11 @@ namespace Nez.AI.BehaviorTrees
 	/// </summary>
 	public class Inverter<T> : Decorator<T>
 	{
-		public override TaskStatus update( T context )
+		public override TaskStatus Update( T context )
 		{
-			Insist.isNotNull( child, "child must not be null" );
+			Insist.IsNotNull( Child, "child must not be null" );
 
-			var status = child.tick( context );
+			var status = Child.Tick( context );
 
 			if( status == TaskStatus.Success )
 				return TaskStatus.Failure;

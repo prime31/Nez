@@ -8,18 +8,18 @@ namespace Nez.ImGuiTools.TypeInspectors
 	{
 		string[] _enumNames;
 
-		public override void initialize()
+		public override void Initialize()
 		{
-			base.initialize();
+			base.Initialize();
 			_enumNames = Enum.GetNames( _valueType );
 		}
 
-		public override void drawMutable()
+		public override void DrawMutable()
 		{
-            var index = Array.IndexOf( _enumNames, getValue<object>().ToString() );
+            var index = Array.IndexOf( _enumNames, GetValue<object>().ToString() );
             if( ImGui.Combo( _name, ref index, _enumNames, _enumNames.Length ) )
-                setValue( Enum.Parse( _valueType, _enumNames[index] ) );
-			handleTooltip();
+                SetValue( Enum.Parse( _valueType, _enumNames[index] ) );
+			HandleTooltip();
 		}
 
 	}

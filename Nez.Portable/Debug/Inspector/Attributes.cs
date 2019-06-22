@@ -30,11 +30,11 @@ namespace Nez
 	[AttributeUsage( AttributeTargets.Property | AttributeTargets.Field | AttributeTargets.Method )]
 	public class TooltipAttribute : InspectableAttribute
 	{
-		public string tooltip;
+		public string Tooltip;
 
 		public TooltipAttribute( string tooltip )
 		{
-			this.tooltip = tooltip;
+			this.Tooltip = tooltip;
 		}
 	}
 
@@ -44,33 +44,33 @@ namespace Nez
 	[AttributeUsage( AttributeTargets.Field | AttributeTargets.Property )]
 	public class RangeAttribute : InspectableAttribute
 	{
-		public float minValue;
-		public float maxValue;
-		public float stepSize = 1;
-		public bool useDragVersion;
+		public float MinValue;
+		public float MaxValue;
+		public float StepSize = 1;
+		public bool UseDragVersion;
 
 
 		public RangeAttribute( float minValue )
 		{
-			this.minValue = minValue;
+			this.MinValue = minValue;
 
 			// magic number! This is the highest number ImGui functions properly with for some reason.
-			maxValue = int.MaxValue - 100;
-			useDragVersion = true;
+			MaxValue = int.MaxValue - 100;
+			UseDragVersion = true;
 		}
 
 		public RangeAttribute( float minValue, float maxValue, float stepSize )
 		{
-			this.minValue = minValue;
-			this.maxValue = maxValue;
-			this.stepSize = stepSize;
+			this.MinValue = minValue;
+			this.MaxValue = maxValue;
+			this.StepSize = stepSize;
 		}
 
 		public RangeAttribute( float minValue, float maxValue, bool useDragFloat )
 		{
-			this.minValue = minValue;
-			this.maxValue = maxValue;
-			this.useDragVersion = useDragFloat;
+			this.MinValue = minValue;
+			this.MaxValue = maxValue;
+			this.UseDragVersion = useDragFloat;
 		}
 
 
@@ -87,12 +87,12 @@ namespace Nez
 	[AttributeUsage( AttributeTargets.Class | AttributeTargets.Struct )]
 	public class CustomInspectorAttribute : Attribute
 	{
-		public Type inspectorType;
+		public Type InspectorType;
 
 
 		public CustomInspectorAttribute( Type inspectorType )
 		{
-			this.inspectorType = inspectorType;
+			this.InspectorType = inspectorType;
 		}
 	}
 }

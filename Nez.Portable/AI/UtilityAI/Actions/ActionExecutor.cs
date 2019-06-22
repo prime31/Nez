@@ -17,7 +17,7 @@ namespace Nez.AI.UtilityAI
 		}
 
 
-		void IAction<T>.execute( T context )
+		void IAction<T>.Execute( T context )
 		{
 			_action( context );
 		}

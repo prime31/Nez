@@ -8,9 +8,9 @@ namespace Nez.BitmapFonts
 {
     public struct BitmapFontGlyph
     {
-        public Vector2 position;
-        public Character character;
-        public Texture2D texture;
+        public Vector2 Position;
+        public Character Character;
+        public Texture2D Texture;
     }
     /// <summary>
     /// returned by <seealso cref="BitmapFont.GetGlyphs"/>, provding a way to iterate over a string. Can be drawn with
@@ -64,7 +64,7 @@ namespace Nez.BitmapFonts
             if (currentChar == '\n')
             {
                 _runningPosition.X = 0;
-                _runningPosition.Y += _font.lineHeight;
+                _runningPosition.Y += _font.LineHeight;
                 _previousGlyph = null;
                 _previousChar = null;
                 return true;
@@ -72,23 +72,23 @@ namespace Nez.BitmapFonts
 
             _currentGlyph = new BitmapFontGlyph
             {
-                position = _runningPosition,
-                character = _font[currentChar],
-                texture = _font.textures[_font[currentChar].texturePage]
+                Position = _runningPosition,
+                Character = _font[currentChar],
+                Texture = _font.Textures[_font[currentChar].TexturePage]
             };
 
-            if (_currentGlyph.character != null)
+            if (_currentGlyph.Character != null)
             {
-                _currentGlyph.position.X += _currentGlyph.character.offset.X;
-                _currentGlyph.position.Y += _currentGlyph.character.offset.Y;
-                _runningPosition.X += _currentGlyph.character.xAdvance + _font.spacing.X;
+                _currentGlyph.Position.X += _currentGlyph.Character.Offset.X;
+                _currentGlyph.Position.Y += _currentGlyph.Character.Offset.Y;
+                _runningPosition.X += _currentGlyph.Character.XAdvance + _font.Spacing.X;
             }
 
-            if (_previousChar.HasValue && _previousGlyph.Value.character != null)
+            if (_previousChar.HasValue && _previousGlyph.Value.Character != null)
             {
                 var amount = _font.GetKerning(_previousChar.Value, currentChar);
                 _runningPosition.X += amount;
-                _currentGlyph.position.X += amount;
+                _currentGlyph.Position.X += amount;
             }
 
             _previousGlyph = _currentGlyph;

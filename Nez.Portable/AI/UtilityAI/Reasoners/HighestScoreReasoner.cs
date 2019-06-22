@@ -8,13 +8,13 @@ namespace Nez.AI.UtilityAI
 	/// </summary>
 	public class HighestScoreReasoner<T> : Reasoner<T>
 	{
-		protected override IConsideration<T> selectBestConsideration( T context )
+		protected override IConsideration<T> SelectBestConsideration( T context )
 		{
-			var highestScore = defaultConsideration.getScore( context );
+			var highestScore = DefaultConsideration.GetScore( context );
 			IConsideration<T> consideration = null;
 			for( var i = 0; i < _considerations.Count; i++ )
 			{
-				var score = _considerations[i].getScore( context );
+				var score = _considerations[i].GetScore( context );
 				if( score > highestScore )
 				{
 					highestScore = score;
@@ -23,7 +23,7 @@ namespace Nez.AI.UtilityAI
 			}
 
 			if( consideration == null )
-				return defaultConsideration;
+				return DefaultConsideration;
 
 			return consideration;
 		}

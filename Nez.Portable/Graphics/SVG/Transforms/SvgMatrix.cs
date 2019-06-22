@@ -12,7 +12,7 @@ namespace Nez.Svg
 		public SvgMatrix( List<float> points )
 		{
 			_points = points;
-			matrix = new Matrix2D(
+			Matrix = new Matrix2D(
 					_points[0],
 					_points[1],
 					_points[2],

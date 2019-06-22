@@ -22,27 +22,27 @@ namespace Nez
 			if( isPolygonClosed )
 				Array.Resize( ref points, points.Length - 1 );
 
-			var center = Polygon.findPolygonCenter( points );
-			setLocalOffset( center );
-			Polygon.recenterPolygonVerts( points );
-			shape = new Polygon( points );
+			var center = Polygon.FindPolygonCenter( points );
+			SetLocalOffset( center );
+			Polygon.RecenterPolygonVerts( points );
+			Shape = new Polygon( points );
 		}
 
 		public PolygonCollider( int vertCount, float radius )
 		{
-			shape = new Polygon( vertCount, radius );
+			Shape = new Polygon( vertCount, radius );
 		}
 
 		public PolygonCollider() : this( 6, 40 )
 		{}
 
-		public override void debugRender( Graphics graphics )
+		public override void DebugRender( Graphics graphics )
 		{
-			var poly = shape as Polygon;
-			graphics.batcher.drawHollowRect( bounds, Debug.Colors.colliderBounds, Debug.Size.lineSizeMultiplier );
-			graphics.batcher.drawPolygon( shape.position, poly.points, Debug.Colors.colliderEdge, true, Debug.Size.lineSizeMultiplier );
-			graphics.batcher.drawPixel( entity.transform.position, Debug.Colors.colliderPosition, 4 * Debug.Size.lineSizeMultiplier );
-			graphics.batcher.drawPixel( shape.position, Debug.Colors.colliderCenter, 2 * Debug.Size.lineSizeMultiplier );
+			var poly = Shape as Polygon;
+			graphics.Batcher.DrawHollowRect( Bounds, Debug.Colors.ColliderBounds, Debug.Size.LineSizeMultiplier );
+			graphics.Batcher.DrawPolygon( Shape.position, poly.Points, Debug.Colors.ColliderEdge, true, Debug.Size.LineSizeMultiplier );
+			graphics.Batcher.DrawPixel( Entity.Transform.Position, Debug.Colors.ColliderPosition, 4 * Debug.Size.LineSizeMultiplier );
+			graphics.Batcher.DrawPixel( Shape.position, Debug.Colors.ColliderCenter, 2 * Debug.Size.LineSizeMultiplier );
 
 			// Normal debug code
 			//for( var i = 0; i < poly.points.Length; i++ )

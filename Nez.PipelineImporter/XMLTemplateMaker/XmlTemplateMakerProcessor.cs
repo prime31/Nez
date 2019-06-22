@@ -22,7 +22,7 @@ namespace Nez.XmlTemplateMaker
 	{
 		public override object Process( string inputClass, ContentProcessorContext context )
 		{
-			var inputType = findTypeForClass( inputClass, context );
+			var inputType = FindTypeForClass( inputClass, context );
 
 			var xmlSettings = new XmlWriterSettings();
 			xmlSettings.Indent = true;
@@ -38,7 +38,7 @@ namespace Nez.XmlTemplateMaker
 		}
 
 
-		Type findTypeForClass( string inputClass, ContentProcessorContext context )
+		Type FindTypeForClass( string inputClass, ContentProcessorContext context )
 		{
 			foreach( var assembly in AppDomain.CurrentDomain.GetAssemblies() )
 			{

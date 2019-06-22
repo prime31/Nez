@@ -13,24 +13,24 @@ namespace Nez.Svg
 	public class SvgDocument : SvgGroup
 	{
 		[XmlAttribute( "width" )]
-		public string widthAttribute
+		public string WidthAttribute
 		{
 			get { return null; }
-			set { width = int.Parse( Regex.Replace( value, @"[^\d]", string.Empty ) ); }
+			set { Width = int.Parse( Regex.Replace( value, @"[^\d]", string.Empty ) ); }
 		}
-		public int width;
+		public int Width;
 
 		[XmlAttribute( "height" )]
-		public string heightAttribute
+		public string HeightAttribute
 		{
 			get { return null; }
-			set { height = int.Parse( Regex.Replace( value, @"[^\d]", string.Empty ) ); }
+			set { Height = int.Parse( Regex.Replace( value, @"[^\d]", string.Empty ) ); }
 		}
-		public int height;
+		public int Height;
 
 
 
-		public static SvgDocument open( Stream stream )
+		public static SvgDocument Open( Stream stream )
 		{
 			var serializer = new XmlSerializer( typeof( SvgDocument ) );
 			return (SvgDocument)serializer.Deserialize( stream );

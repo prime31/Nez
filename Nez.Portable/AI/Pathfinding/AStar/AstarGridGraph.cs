@@ -12,7 +12,7 @@ namespace Nez.AI.Pathfinding
 	/// </summary>
 	public class AstarGridGraph : IAstarGraph<Point>
 	{
-		public List<Point> dirs = new List<Point>
+		public List<Point> Dirs = new List<Point>
 		{
 			new Point( 1, 0 ),
 			new Point( 0, -1 ),
@@ -20,10 +20,10 @@ namespace Nez.AI.Pathfinding
 			new Point( 0, 1 )
 		};
 
-		public HashSet<Point> walls = new HashSet<Point>();
-		public HashSet<Point> weightedNodes = new HashSet<Point>();
-		public int defaultWeight = 1;
-		public int weightedNodeWeight = 5;
+		public HashSet<Point> Walls = new HashSet<Point>();
+		public HashSet<Point> WeightedNodes = new HashSet<Point>();
+		public int DefaultWeight = 1;
+		public int WeightedNodeWeight = 5;
 
 		int _width, _height;
 		List<Point> _neighbors = new List<Point>( 4 );
@@ -42,15 +42,15 @@ namespace Nez.AI.Pathfinding
 		/// <param name="tiledLayer">Tiled layer.</param>
 		public AstarGridGraph( TiledTileLayer tiledLayer )
 		{
-			_width = tiledLayer.width;
-			_height = tiledLayer.height;
+			_width = tiledLayer.Width;
+			_height = tiledLayer.Height;
 
-			for( var y = 0; y < tiledLayer.tiledMap.height; y++ )
+			for( var y = 0; y < tiledLayer.TiledMap.Height; y++ )
 			{
-				for( var x = 0; x < tiledLayer.tiledMap.width; x++ )
+				for( var x = 0; x < tiledLayer.TiledMap.Width; x++ )
 				{
-					if( tiledLayer.getTile( x, y ) != null )
-						walls.Add( new Point( x, y ) );
+					if( tiledLayer.GetTile( x, y ) != null )
+						Walls.Add( new Point( x, y ) );
 				}
 			}
 		}
@@ -61,7 +61,7 @@ namespace Nez.AI.Pathfinding
 		/// </summary>
 		/// <returns><c>true</c>, if node in bounds was ised, <c>false</c> otherwise.</returns>
 		/// <param name="node">Node.</param>
-		bool isNodeInBounds( Point node )
+		bool IsNodeInBounds( Point node )
 		{
 			return 0 <= node.X && node.X < _width && 0 <= node.Y && node.Y < _height;
 		}
@@ -72,9 +72,9 @@ namespace Nez.AI.Pathfinding
 		/// </summary>
 		/// <returns><c>true</c>, if node passable was ised, <c>false</c> otherwise.</returns>
 		/// <param name="node">Node.</param>
-		bool isNodePassable( Point node )
+		bool IsNodePassable( Point node )
 		{
-			return !walls.Contains( node );
+			return !Walls.Contains( node );
 		}
 
 
@@ -83,22 +83,22 @@ namespace Nez.AI.Pathfinding
 		/// </summary>
 		/// <param name="start">Start.</param>
 		/// <param name="goal">Goal.</param>
-		public List<Point> search( Point start, Point goal )
+		public List<Point> Search( Point start, Point goal )
 		{
-			return AStarPathfinder.search( this, start, goal );
+			return AStarPathfinder.Search( this, start, goal );
 		}
 
 
 		#region IAstarGraph implementation
 
-		IEnumerable<Point> IAstarGraph<Point>.getNeighbors( Point node )
+		IEnumerable<Point> IAstarGraph<Point>.GetNeighbors( Point node )
 		{
 			_neighbors.Clear();
 
-			foreach( var dir in dirs )
+			foreach( var dir in Dirs )
 			{
 				var next = new Point( node.X + dir.X, node.Y + dir.Y );
-				if( isNodeInBounds( next ) && isNodePassable( next ) )
+				if( IsNodeInBounds( next ) && IsNodePassable( next ) )
 					_neighbors.Add( next );
 			}
 
@@ -106,13 +106,13 @@ namespace Nez.AI.Pathfinding
 		}
 
 
-		int IAstarGraph<Point>.cost( Point from, Point to )
+		int IAstarGraph<Point>.Cost( Point from, Point to )
 		{
-			return weightedNodes.Contains( to ) ? weightedNodeWeight : defaultWeight;
+			return WeightedNodes.Contains( to ) ? WeightedNodeWeight : DefaultWeight;
 		}
 
 
-		int IAstarGraph<Point>.heuristic( Point node, Point goal )
+		int IAstarGraph<Point>.Heuristic( Point node, Point goal )
 		{
 			return Math.Abs( node.X - goal.X ) + Math.Abs( node.Y - goal.Y );
 		}

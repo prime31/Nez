@@ -17,42 +17,42 @@ namespace Nez.Spatial
 		/// <summary>
 		/// The area this QuadTree represents.
 		/// </summary>
-		public Rectangle quadRect { get { return _rect; } }
+		public Rectangle QuadRect { get { return _rect; } }
 
 		/// <summary>
 		/// The top left child for this QuadTree
 		/// </summary>
-		public QuadTreeNode<T> topLeftChild { get { return _childTL; } }
+		public QuadTreeNode<T> TopLeftChild { get { return _childTL; } }
 
 		/// <summary>
 		/// The top right child for this QuadTree
 		/// </summary>
-		public QuadTreeNode<T> topRightChild { get { return _childTR; } }
+		public QuadTreeNode<T> TopRightChild { get { return _childTR; } }
 
 		/// <summary>
 		/// The bottom left child for this QuadTree
 		/// </summary>
-		public QuadTreeNode<T> bottomLeftChild { get { return _childBL; } }
+		public QuadTreeNode<T> BottomLeftChild { get { return _childBL; } }
 
 		/// <summary>
 		/// The bottom right child for this QuadTree
 		/// </summary>
-		public QuadTreeNode<T> bottomRightChild { get { return _childBR; } }
+		public QuadTreeNode<T> BottomRightChild { get { return _childBR; } }
 
 		/// <summary>
 		/// This QuadTree's parent
 		/// </summary>
-		public QuadTreeNode<T> parent { get { return _parent; } }
+		public QuadTreeNode<T> Parent { get { return _parent; } }
 
 		/// <summary>
 		/// How many total objects are contained within this QuadTree (ie, includes children)
 		/// </summary>
-		public int count { get { return objectCount(); } }
+		public int Count { get { return ObjectCount(); } }
 
 		/// <summary>
 		/// Returns true if this is a empty leaf node
 		/// </summary>
-		public bool isEmptyLeaf { get { return count == 0 && _childTL == null; } }
+		public bool IsEmptyLeaf { get { return Count == 0 && _childTL == null; } }
 
 
 		// The objects in this QuadTree
@@ -110,7 +110,7 @@ namespace Nez.Spatial
 		/// Add an item to the object list.
 		/// </summary>
 		/// <param name="item">The item to add.</param>
-		void add( QuadTreeObject<T> item )
+		void Add( QuadTreeObject<T> item )
 		{
 			if( _objects == null )
 				_objects = new List<QuadTreeObject<T>>();
@@ -124,7 +124,7 @@ namespace Nez.Spatial
 		/// Remove an item from the object list.
 		/// </summary>
 		/// <param name="item">The object to remove.</param>
-		void remove( QuadTreeObject<T> item )
+		void Remove( QuadTreeObject<T> item )
 		{
 			if( _objects != null )
 			{
@@ -142,7 +142,7 @@ namespace Nez.Spatial
 		/// Get the total for all objects in this QuadTree, including children.
 		/// </summary>
 		/// <returns>The number of objects contained within this QuadTree and its children.</returns>
-		int objectCount()
+		int ObjectCount()
 		{
 			var count = 0;
 
@@ -155,10 +155,10 @@ namespace Nez.Spatial
 			// Add the objects that are contained in the children
 			if( _childTL != null )
 			{
-				count += _childTL.objectCount();
-				count += _childTR.objectCount();
-				count += _childBL.objectCount();
-				count += _childBR.objectCount();
+				count += _childTL.ObjectCount();
+				count += _childTR.ObjectCount();
+				count += _childBL.ObjectCount();
+				count += _childBR.ObjectCount();
 			}
 
 			return count;
@@ -168,7 +168,7 @@ namespace Nez.Spatial
 		/// <summary>
 		/// Subdivide this QuadTree and move it's children into the appropriate Quads where applicable.
 		/// </summary>
-		void subdivide()
+		void Subdivide()
 		{
 			// We've reached capacity, subdivide...
 			var size = new Point( _rect.Width / 2, _rect.Height / 2 );
@@ -182,13 +182,13 @@ namespace Nez.Spatial
 			// If they're completely contained by the quad, bump objects down
 			for( var i = 0; i < _objects.Count; i++ )
 			{
-				var destTree = getDestinationTree( _objects[i] );
+				var destTree = GetDestinationTree( _objects[i] );
 
 				if( destTree != this )
 				{
 					// Insert to the appropriate tree, remove the object, and back up one in the loop
-					destTree.insert( _objects[i] );
-					remove( _objects[i] );
+					destTree.Insert( _objects[i] );
+					Remove( _objects[i] );
 					i--;
 				}
 			}
@@ -200,43 +200,43 @@ namespace Nez.Spatial
 		/// </summary>
 		/// <param name="item">The object to get a child for.</param>
 		/// <returns></returns>
-		QuadTreeNode<T> getDestinationTree( QuadTreeObject<T> item )
+		QuadTreeNode<T> GetDestinationTree( QuadTreeObject<T> item )
 		{
 			// If a child can't contain an object, it will live in this Quad
 			var destTree = this;
 
-			if( _childTL.quadRect.Contains( item.data.bounds ) )
+			if( _childTL.QuadRect.Contains( item.Data.Bounds ) )
 				destTree = _childTL;
-			else if( _childTR.quadRect.Contains( item.data.bounds ) )
+			else if( _childTR.QuadRect.Contains( item.Data.Bounds ) )
 				destTree = _childTR;
-			else if( _childBL.quadRect.Contains( item.data.bounds ) )
+			else if( _childBL.QuadRect.Contains( item.Data.Bounds ) )
 				destTree = _childBL;
-			else if( _childBR.quadRect.Contains( item.data.bounds ) )
+			else if( _childBR.QuadRect.Contains( item.Data.Bounds ) )
 				destTree = _childBR;
 
 			return destTree;
 		}
 
 
-		void relocate( QuadTreeObject<T> item )
+		void Relocate( QuadTreeObject<T> item )
 		{
 			// Are we still inside our parent?
-			if( quadRect.Contains( item.data.bounds ) )
+			if( QuadRect.Contains( item.Data.Bounds ) )
 			{
 				// Good, have we moved inside any of our children?
 				if( _childTL != null )
 				{
-					var dest = getDestinationTree( item );
+					var dest = GetDestinationTree( item );
 					if( item.owner != dest )
 					{
 						// Delete the item from this quad and add it to our child
 						// Note: Do NOT clean during this call, it can potentially delete our destination quad
 						var formerOwner = item.owner;
-						delete( item, false );
-						dest.insert( item );
+						Delete( item, false );
+						dest.Insert( item );
 
 						// Clean up ourselves
-						formerOwner.cleanUpwards();
+						formerOwner.CleanUpwards();
 					}
 				}
 			}
@@ -244,32 +244,32 @@ namespace Nez.Spatial
 			{
 				// We don't fit here anymore, move up, if we can
 				if( _parent != null )
-					_parent.relocate( item );
+					_parent.Relocate( item );
 			}
 		}
 
 
-		void cleanUpwards()
+		void CleanUpwards()
 		{
 			if( _childTL != null )
 			{
 				// If all the children are empty leaves, delete all the children
-				if( _childTL.isEmptyLeaf && _childTR.isEmptyLeaf && _childBL.isEmptyLeaf && _childBR.isEmptyLeaf )
+				if( _childTL.IsEmptyLeaf && _childTR.IsEmptyLeaf && _childBL.IsEmptyLeaf && _childBR.IsEmptyLeaf )
 				{
 					_childTL = null;
 					_childTR = null;
 					_childBL = null;
 					_childBR = null;
 
-					if( _parent != null && count == 0 )
-						_parent.cleanUpwards();
+					if( _parent != null && Count == 0 )
+						_parent.CleanUpwards();
 				}
 			}
 			else
 			{
 				// I could be one of 4 empty leaves, tell my parent to clean up
-				if( _parent != null && count == 0 )
-					_parent.cleanUpwards();
+				if( _parent != null && Count == 0 )
+					_parent.CleanUpwards();
 			}
 		}
 
@@ -277,15 +277,15 @@ namespace Nez.Spatial
 		/// <summary>
 		/// Clears the QuadTree of all objects, including any objects living in its children.
 		/// </summary>
-		internal void clear()
+		internal void Clear()
 		{
 			// Clear out the children, if we have any
 			if( _childTL != null )
 			{
-				_childTL.clear();
-				_childTR.clear();
-				_childBL.clear();
-				_childBR.clear();
+				_childTL.Clear();
+				_childTR.Clear();
+				_childBL.Clear();
+				_childBR.Clear();
 			}
 
 			// Clear any objects at this level
@@ -308,19 +308,19 @@ namespace Nez.Spatial
 		/// </summary>
 		/// <param name="item">The item to remove.</param>
 		/// <param name="clean">Whether or not to clean the tree</param>
-		internal void delete( QuadTreeObject<T> item, bool clean )
+		internal void Delete( QuadTreeObject<T> item, bool clean )
 		{
 			if( item.owner != null )
 			{
 				if( item.owner == this )
 				{
-					remove( item );
+					Remove( item );
 					if( clean )
-						cleanUpwards();
+						CleanUpwards();
 				}
 				else
 				{
-					item.owner.delete( item, clean );
+					item.owner.Delete( item, clean );
 				}
 			}
 		}
@@ -331,16 +331,16 @@ namespace Nez.Spatial
 		/// Insert an item into this QuadTree object.
 		/// </summary>
 		/// <param name="item">The item to insert.</param>
-		internal void insert( QuadTreeObject<T> item )
+		internal void Insert( QuadTreeObject<T> item )
 		{
 			// If this quad doesn't contain the items rectangle, do nothing, unless we are the root
-			if( !_rect.Contains( item.data.bounds ) )
+			if( !_rect.Contains( item.Data.Bounds ) )
 			{
-				Insist.isNull( _parent, "We are not the root, and this object doesn't fit here. How did we get here?" );
+				Insist.IsNull( _parent, "We are not the root, and this object doesn't fit here. How did we get here?" );
 				if( _parent == null )
 				{
 					// This object is outside of the QuadTree bounds, we should add it at the root level
-					add( item );
+					Add( item );
 				}
 				else
 				{
@@ -351,20 +351,20 @@ namespace Nez.Spatial
 			if( _objects == null || ( _childTL == null && _objects.Count + 1 <= maxObjectsPerNode ) )
 			{
 				// If there's room to add the object, just add it
-				add( item );
+				Add( item );
 			}
 			else
 			{
 				// No quads, create them and bump objects down where appropriate
 				if( _childTL == null )
-					subdivide();
+					Subdivide();
 
 				// Find out which tree this object should go in and add it there
-				var destTree = getDestinationTree( item );
+				var destTree = GetDestinationTree( item );
 				if( destTree == this )
-					add( item );
+					Add( item );
 				else
-					destTree.insert( item );
+					destTree.Insert( item );
 			}
 		}
 
@@ -373,10 +373,10 @@ namespace Nez.Spatial
 		/// Get the objects in this tree that intersect with the specified rectangle.
 		/// </summary>
 		/// <param name="searchRect">The rectangle to find objects in.</param>
-		internal List<T> getObjects( Rectangle searchRect )
+		internal List<T> GetObjects( Rectangle searchRect )
 		{
 			var results = new List<T>();
-			getObjects( searchRect, ref results );
+			GetObjects( searchRect, ref results );
 			return results;
 		}
 
@@ -386,7 +386,7 @@ namespace Nez.Spatial
 		/// </summary>
 		/// <param name="searchRect">The rectangle to find objects in.</param>
 		/// <param name="results">A reference to a list that will be populated with the results.</param>
-		internal void getObjects( Rectangle searchRect, ref List<T> results )
+		internal void GetObjects( Rectangle searchRect, ref List<T> results )
 		{
 			// We can't do anything if the results list doesn't exist
 			if( results != null )
@@ -394,7 +394,7 @@ namespace Nez.Spatial
 				if( searchRect.Contains( this._rect ) )
 				{
 					// If the search area completely contains this quad, just get every object this quad and all it's children have
-					getAllObjects( ref results );
+					GetAllObjects( ref results );
 				}
 				else if( searchRect.Intersects( this._rect ) )
 				{
@@ -403,18 +403,18 @@ namespace Nez.Spatial
 					{
 						for( int i = 0; i < _objects.Count; i++ )
 						{
-							if( searchRect.Intersects( _objects[i].data.bounds ) )
-								results.Add( _objects[i].data );
+							if( searchRect.Intersects( _objects[i].Data.Bounds ) )
+								results.Add( _objects[i].Data );
 						}
 					}
 
 					// Get the objects for the search rectangle from the children
 					if( _childTL != null )
 					{
-						_childTL.getObjects( searchRect, ref results );
-						_childTR.getObjects( searchRect, ref results );
-						_childBL.getObjects( searchRect, ref results );
-						_childBR.getObjects( searchRect, ref results );
+						_childTL.GetObjects( searchRect, ref results );
+						_childTR.GetObjects( searchRect, ref results );
+						_childBL.GetObjects( searchRect, ref results );
+						_childBR.GetObjects( searchRect, ref results );
 					}
 				}
 			}
@@ -425,22 +425,22 @@ namespace Nez.Spatial
 		/// Get all objects in this Quad, and it's children.
 		/// </summary>
 		/// <param name="results">A reference to a list in which to store the objects.</param>
-		internal void getAllObjects( ref List<T> results )
+		internal void GetAllObjects( ref List<T> results )
 		{
 			// If this Quad has objects, add them
 			if( _objects != null )
 			{
 				for( var i = 0; i < _objects.Count; i++ )
-					results.Add( _objects[i].data );
+					results.Add( _objects[i].Data );
 			}
 
 			// If we have children, get their objects too
 			if( _childTL != null )
 			{
-				_childTL.getAllObjects( ref results );
-				_childTR.getAllObjects( ref results );
-				_childBL.getAllObjects( ref results );
-				_childBR.getAllObjects( ref results );
+				_childTL.GetAllObjects( ref results );
+				_childTR.GetAllObjects( ref results );
+				_childBL.GetAllObjects( ref results );
+				_childBR.GetAllObjects( ref results );
 			}
 		}
 
@@ -449,12 +449,12 @@ namespace Nez.Spatial
 		/// Moves the QuadTree object in the tree
 		/// </summary>
 		/// <param name="item">The item that has moved</param>
-		internal void move( QuadTreeObject<T> item )
+		internal void Move( QuadTreeObject<T> item )
 		{
 			if( item.owner != null )
-				item.owner.relocate( item );
+				item.owner.Relocate( item );
 			else
-				relocate( item );
+				Relocate( item );
 		}
 
 	}

@@ -7,10 +7,10 @@ namespace Nez.ImGuiTools.SceneGraphPanes
     {
         string _newEntityName = "";
 
-        public void draw()
+        public void Draw()
         {
-            for( var i = 0; i < Core.scene.entities.count; i++ )
-                drawEntity( Core.scene.entities[i] );
+            for( var i = 0; i < Core.Scene.Entities.Count; i++ )
+                DrawEntity( Core.Scene.Entities[i] );
 
 			NezImGui.MediumVerticalSpace();
 			if( NezImGui.CenteredButton( "Create Entity", 0.6f ) )
@@ -18,41 +18,41 @@ namespace Nez.ImGuiTools.SceneGraphPanes
 				ImGui.OpenPopup( "create-entity" );
 			}
 
-			drawCreateEntityPopup();
+			DrawCreateEntityPopup();
         }
 
-		void drawEntity( Entity entity, bool onlyDrawRoots = true )
+		void DrawEntity( Entity entity, bool onlyDrawRoots = true )
 		{
-			if( onlyDrawRoots && entity.transform.parent != null )
+			if( onlyDrawRoots && entity.Transform.Parent != null )
 				return;
 
-			ImGui.PushID( (int)entity.id );
+			ImGui.PushID( (int)entity.Id );
 			var treeNodeOpened = false;
-			if( entity.transform.childCount > 0 )
+			if( entity.Transform.ChildCount > 0 )
 			{
-				treeNodeOpened = ImGui.TreeNodeEx( $"{entity.name} ({entity.transform.childCount})###{entity.id}", ImGuiTreeNodeFlags.OpenOnArrow );
+				treeNodeOpened = ImGui.TreeNodeEx( $"{entity.Name} ({entity.Transform.ChildCount})###{entity.Id}", ImGuiTreeNodeFlags.OpenOnArrow );
 			}
 			else
 			{
-				treeNodeOpened = ImGui.TreeNodeEx( $"{entity.name} ({entity.transform.childCount})###{entity.id}", ImGuiTreeNodeFlags.Leaf | ImGuiTreeNodeFlags.OpenOnArrow );
+				treeNodeOpened = ImGui.TreeNodeEx( $"{entity.Name} ({entity.Transform.ChildCount})###{entity.Id}", ImGuiTreeNodeFlags.Leaf | ImGuiTreeNodeFlags.OpenOnArrow );
 			}
 
 			NezImGui.ShowContextMenuTooltip();
 
 			// context menu for entity commands
 			ImGui.OpenPopupOnItemClick( "entityContextMenu", 1 );
-			drawEntityContextMenuPopup( entity );
+			DrawEntityContextMenuPopup( entity );
 
 			// we are looking for a double-click that is not on the arrow
 			if( ImGui.IsMouseDoubleClicked( 0 ) && ImGui.IsItemClicked() && ( ImGui.GetMousePos().X - ImGui.GetItemRectMin().X ) > ImGui.GetTreeNodeToLabelSpacing() )
 			{
-				Core.getGlobalManager<ImGuiManager>().startInspectingEntity( entity );
+				Core.GetGlobalManager<ImGuiManager>().StartInspectingEntity( entity );
 			}
 
 			if( treeNodeOpened )
 			{
-				for( var i = 0; i < entity.transform.childCount; i++ )
-					drawEntity( entity.transform.getChild( i ).entity, false );
+				for( var i = 0; i < entity.Transform.ChildCount; i++ )
+					DrawEntity( entity.Transform.GetChild( i ).Entity, false );
 
 				ImGui.TreePop();
 			}
@@ -60,18 +60,18 @@ namespace Nez.ImGuiTools.SceneGraphPanes
 			ImGui.PopID();
 		}
 
-		void drawEntityContextMenuPopup( Entity entity )
+		void DrawEntityContextMenuPopup( Entity entity )
 		{
 			if( ImGui.BeginPopup( "entityContextMenu" ) )
 			{
-				if( ImGui.Selectable( "Clone Entity " + entity.name ) )
+				if( ImGui.Selectable( "Clone Entity " + entity.Name ) )
 				{
-					var clone = entity.clone( Core.scene.camera.position );
-					entity.scene.addEntity( clone );
+					var clone = entity.Clone( Core.Scene.Camera.Position );
+					entity.Scene.AddEntity( clone );
 				}
 
 				if( ImGui.Selectable( "Destroy Entity" ) )
-					entity.destroy();
+					entity.Destroy();
 
 				if( ImGui.Selectable( "Create Child Entity", false, ImGuiSelectableFlags.DontClosePopups ) )
 					ImGui.OpenPopup( "create-new-entity" );
@@ -92,10 +92,10 @@ namespace Nez.ImGuiTools.SceneGraphPanes
 					ImGui.PushStyleColor( ImGuiCol.Button, Microsoft.Xna.Framework.Color.Green.PackedValue );
 					if( ImGui.Button( "Create" ) )
 					{
-						_newEntityName = _newEntityName.Length > 0 ? _newEntityName : Utils.randomString( 8 );
+						_newEntityName = _newEntityName.Length > 0 ? _newEntityName : Utils.RandomString( 8 );
 						var newEntity = new Entity( _newEntityName );
-						newEntity.transform.setParent( entity.transform );
-						entity.scene.addEntity( newEntity );
+						newEntity.Transform.SetParent( entity.Transform );
+						entity.Scene.AddEntity( newEntity );
 
 						_newEntityName = "";
 						ImGui.CloseCurrentPopup();
@@ -109,7 +109,7 @@ namespace Nez.ImGuiTools.SceneGraphPanes
 			}
 		}
 
-		void drawCreateEntityPopup()
+		void DrawCreateEntityPopup()
 		{
 			if( ImGui.BeginPopup( "create-entity" ) )
 			{
@@ -127,10 +127,10 @@ namespace Nez.ImGuiTools.SceneGraphPanes
 					ImGui.PushStyleColor( ImGuiCol.Button, Microsoft.Xna.Framework.Color.Green.PackedValue );
 					if( ImGui.Button( "Create" ) )
 					{
-						_newEntityName = _newEntityName.Length > 0 ? _newEntityName : Utils.randomString( 8 );
+						_newEntityName = _newEntityName.Length > 0 ? _newEntityName : Utils.RandomString( 8 );
 						var newEntity = new Entity( _newEntityName );
-						newEntity.transform.position = Core.scene.camera.transform.position;
-						Core.scene.addEntity( newEntity );
+						newEntity.Transform.Position = Core.Scene.Camera.Transform.Position;
+						Core.Scene.AddEntity( newEntity );
 
 						_newEntityName = "";
 						ImGui.CloseCurrentPopup();

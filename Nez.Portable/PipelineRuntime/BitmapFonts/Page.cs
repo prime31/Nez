@@ -7,15 +7,15 @@ namespace Nez.BitmapFonts
     /// </summary>
     public struct Page
     {
-        public string filename;
-        public int id;
+        public string Filename;
+        public int Id;
 
         public Page(int id, string filename)
         {
-            this.filename = filename;
-            this.id = id;
+            this.Filename = filename;
+            this.Id = id;
         }
 
-        public override string ToString() => string.Format("{0} ({1})", id, Path.GetFileName(filename));
+        public override string ToString() => string.Format("{0} ({1})", Id, Path.GetFileName(Filename));
     }
 }

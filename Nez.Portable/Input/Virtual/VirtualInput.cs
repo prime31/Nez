@@ -28,19 +28,19 @@ namespace Nez
 
 		protected VirtualInput()
 		{
-			Input._virtualInputs.add( this );
+			Input._virtualInputs.Add( this );
 		}
 
 
 		/// <summary>
 		/// deregisters the VirtualInput from the Input system. Call this when you are done polling the VirtualInput
 		/// </summary>
-		public void deregister()
+		public void Deregister()
 		{
-			Input._virtualInputs.remove( this );
+			Input._virtualInputs.Remove( this );
 		}
 
-		public abstract void update();
+		public abstract void Update();
 	}
 
 
@@ -50,7 +50,7 @@ namespace Nez
 	/// </summary>
 	public abstract class VirtualInputNode
 	{
-		public virtual void update()
+		public virtual void Update()
 		{
 		}
 	}

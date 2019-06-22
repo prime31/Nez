@@ -33,7 +33,7 @@ namespace Nez.AI.BehaviorTrees
 
 	public static class AbortTypesExt
 	{
-		public static bool has( this AbortTypes self, AbortTypes check )
+		public static bool Has( this AbortTypes self, AbortTypes check )
 		{
 			return ( self & check ) == check;
 		}

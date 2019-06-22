@@ -6,11 +6,11 @@ namespace Nez.ParticleDesignerImporter
 {
 	public class ParticleDesignerTexture
 	{
-		[XmlAttribute]
-		public string name;
+		[XmlElement( "name" )]
+		public string Name;
 
-		[XmlAttribute]
-		public string data;
+		[XmlElement( "data" )]
+		public string Data;
 	}
 }
 

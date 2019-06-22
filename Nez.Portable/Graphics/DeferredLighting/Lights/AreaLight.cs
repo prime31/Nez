@@ -9,18 +9,18 @@ namespace Nez.DeferredLighting
 	/// </summary>
 	public class AreaLight : DeferredLight
 	{
-		public override float width => _areaWidth;
-		public override float height => _areaHeight;
+		public override float Width => _areaWidth;
+		public override float Height => _areaHeight;
 
 		/// <summary>
 		/// direction of the light
 		/// </summary>
-		public Vector3 direction = new Vector3( 500, 500, 50 );
+		public Vector3 Direction = new Vector3( 500, 500, 50 );
 
 		/// <summary>
 		/// brightness of the light
 		/// </summary>
-		public float intensity = 12f;
+		public float Intensity = 12f;
 
 
 		float _areaWidth, _areaHeight;
@@ -30,32 +30,32 @@ namespace Nez.DeferredLighting
 
 		public AreaLight( float width, float height )
 		{
-			setWidth( width ).setHeight( height );
+			SetWidth( width ).SetHeight( height );
 		}
 
-		public AreaLight setWidth( float width )
+		public AreaLight SetWidth( float width )
 		{
 			_areaWidth = width;
 			_areBoundsDirty = true;
 			return this;
 		}
 
-		public AreaLight setHeight( float height )
+		public AreaLight SetHeight( float height )
 		{
 			_areaHeight = height;
 			_areBoundsDirty = true;
 			return this;
 		}
 
-		public AreaLight setDirection( Vector3 direction )
+		public AreaLight SetDirection( Vector3 direction )
 		{
-			this.direction = direction;
+			this.Direction = direction;
 			return this;
 		}
 
-		public AreaLight setIntensity( float intensity )
+		public AreaLight SetIntensity( float intensity )
 		{
-			this.intensity = intensity;
+			this.Intensity = intensity;
 			return this;
 		}
 

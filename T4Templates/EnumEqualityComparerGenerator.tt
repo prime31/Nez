@@ -21,7 +21,7 @@ namespace Nez
 		WriteLine( "\tpublic class {0}Comparer : IEqualityComparer<{1}>", classPrefix, enumType );
 		WriteLine( "\t{" );
 
-		WriteLine( "\t\tstatic public readonly {0}Comparer default{0}Comparer = new {0}Comparer();\n", classPrefix );
+		WriteLine( "\t\tstatic public readonly {0}Comparer Default{0}Comparer = new {0}Comparer();\n", classPrefix );
 
 		WriteLine( "\t\tpublic bool Equals( {0} x, {0} y )", enumType );
 		WriteLine( "\t\t{" );

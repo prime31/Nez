@@ -7,7 +7,7 @@ namespace Nez
 	public class ScanlinesEffect : Effect
 	{
 		[Range( 0.001f, 1f, 0.001f )]
-		public float attenuation
+		public float Attenuation
 		{
 			get { return _attenuation; }
 			set
@@ -21,7 +21,7 @@ namespace Nez
 		}
 
 		[Range( 10, 1000, 1 )]
-		public float linesFactor
+		public float LinesFactor
 		{
 			get { return _linesFactor; }
 			set
@@ -42,7 +42,7 @@ namespace Nez
 		EffectParameter _linesFactorParam;
 
 		
-		public ScanlinesEffect() : base( Core.graphicsDevice, EffectResource.scanlinesBytes )
+		public ScanlinesEffect() : base( Core.GraphicsDevice, EffectResource.ScanlinesBytes )
 		{
 			_attenuationParam = Parameters["_attenuation"];
 			_linesFactorParam = Parameters["_linesFactor"];

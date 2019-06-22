@@ -13,7 +13,7 @@ namespace FarseerPhysics.Common.PhysicsLogic
 
 	public struct PhysicsLogicFilter
 	{
-		public PhysicsLogicType controllerIgnores;
+		public PhysicsLogicType ControllerIgnores;
 
 		/// <summary>
 		/// Ignores the controller. The controller has no effect on this body.
@@ -21,7 +21,7 @@ namespace FarseerPhysics.Common.PhysicsLogic
 		/// <param name="type">The logic type.</param>
 		public void IgnorePhysicsLogic( PhysicsLogicType type )
 		{
-			controllerIgnores |= type;
+			ControllerIgnores |= type;
 		}
 
 		/// <summary>
@@ -30,7 +30,7 @@ namespace FarseerPhysics.Common.PhysicsLogic
 		/// <param name="type">The logic type.</param>
 		public void RestorePhysicsLogic( PhysicsLogicType type )
 		{
-			controllerIgnores &= ~type;
+			ControllerIgnores &= ~type;
 		}
 
 		/// <summary>
@@ -42,28 +42,28 @@ namespace FarseerPhysics.Common.PhysicsLogic
 		/// </returns>
 		public bool IsPhysicsLogicIgnored( PhysicsLogicType type )
 		{
-			return ( controllerIgnores & type ) == type;
+			return ( ControllerIgnores & type ) == type;
 		}
 	}
 
 
 	public abstract class PhysicsLogic : FilterData
 	{
-		public World world;
+		public World World;
 		PhysicsLogicType _type;
 
-		public override bool isActiveOn( Body body )
+		public override bool IsActiveOn( Body body )
 		{
-			if( body.physicsLogicFilter.IsPhysicsLogicIgnored( _type ) )
+			if( body.PhysicsLogicFilter.IsPhysicsLogicIgnored( _type ) )
 				return false;
 
-			return base.isActiveOn( body );
+			return base.IsActiveOn( body );
 		}
 
 		protected PhysicsLogic( World world, PhysicsLogicType type )
 		{
 			_type = type;
-			this.world = world;
+			this.World = world;
 		}
 	}
 }

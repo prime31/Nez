@@ -6,27 +6,27 @@ namespace Nez
 {
 	public class StringInspector : Inspector
 	{
-		TextField _textField;
+        UI.TextField _textField;
 
 
-		public override void initialize( Table table, Skin skin, float leftCellWidth )
+		public override void Initialize( Table table, Skin skin, float leftCellWidth )
 		{
-			var label = createNameLabel( table, skin, leftCellWidth );
-			_textField = new TextField( getValue<string>(), skin );
-			_textField.setTextFieldFilter( new FloatFilter() );
-			_textField.onTextChanged += ( field, str ) =>
+			var label = CreateNameLabel( table, skin, leftCellWidth );
+            _textField = new UI.TextField(GetValue<string>(), skin );
+			_textField.SetTextFieldFilter( new FloatFilter() );
+			_textField.OnTextChanged += ( field, str ) =>
 			{
-				setValue( str );
+				SetValue( str );
 			};
 
-			table.add( label );
-			table.add( _textField ).setMaxWidth( 70 );
+			table.Add( label );
+			table.Add( _textField ).SetMaxWidth( 70 );
 		}
 
 
-		public override void update()
+		public override void Update()
 		{
-			_textField.setText( getValue<string>() );
+			_textField.SetText( GetValue<string>() );
 		}
 	}
 }

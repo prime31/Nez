@@ -11,7 +11,7 @@ namespace Nez
 		/// multiplied by the grayscale value for the final output. Defaults to 1.2f, 1.0f, 0.8f
 		/// </summary>
 		/// <value>The sepia tone.</value>
-		public Vector3 sepiaTone
+		public Vector3 SepiaTone
 		{
 			get { return _sepiaTone; }
 			set
@@ -26,7 +26,7 @@ namespace Nez
 		EffectParameter _sepiaToneParam;
 
 		
-		public SepiaEffect() : base( Core.graphicsDevice, EffectResource.sepiaBytes )
+		public SepiaEffect() : base( Core.GraphicsDevice, EffectResource.SepiaBytes )
 		{
 			_sepiaToneParam = Parameters["_sepiaTone"];
 			_sepiaToneParam.SetValue( _sepiaTone );

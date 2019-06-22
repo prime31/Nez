@@ -17,7 +17,7 @@ namespace Nez.TextureAtlasGenerator
 		/// Packs a list of sprites into a single big texture,
 		/// recording where each one was stored.
 		/// </summary>
-		public static PixelBitmapContent<Color> packSprites( IList<BitmapContent> sourceSprites, ICollection<Rectangle> outputSprites, bool isCompressed, ContentProcessorContext context )
+		public static PixelBitmapContent<Color> PackSprites( IList<BitmapContent> sourceSprites, ICollection<Rectangle> outputSprites, bool isCompressed, ContentProcessorContext context )
 		{
 			if( sourceSprites.Count == 0 )
 				throw new InvalidContentException( "There are no sprites to pack" );
@@ -29,28 +29,28 @@ namespace Nez.TextureAtlasGenerator
 				var sprite = new ArrangedSprite();
 
 				// Include a single pixel padding around each sprite, to avoid filtering problems if the sprite is scaled or rotated.
-				sprite.width = sourceSprites[i].Width + 2;
-				sprite.height = sourceSprites[i].Height + 2;
-				sprite.index = i;
+				sprite.Width = sourceSprites[i].Width + 2;
+				sprite.Height = sourceSprites[i].Height + 2;
+				sprite.Index = i;
 
 				sprites.Add( sprite );
 			}
 
 			// Sort so the largest sprites get arranged first.
-			sprites.Sort( compareSpriteSizes );
+			sprites.Sort( CompareSpriteSizes );
 
 			// Work out how big the output bitmap should be.
-			var outputWidth = guessOutputWidth( sprites );
+			var outputWidth = GuessOutputWidth( sprites );
 			var outputHeight = 0;
 			var totalSpriteSize = 0;
 
 			// Choose positions for each sprite, one at a time.
 			for( var i = 0; i < sprites.Count; i++ )
 			{
-				positionSprite( sprites, i, outputWidth );
+				PositionSprite( sprites, i, outputWidth );
 
-				outputHeight = Math.Max( outputHeight, sprites[i].y + sprites[i].height );
-				totalSpriteSize += sprites[i].width * sprites[i].height;
+				outputHeight = Math.Max( outputHeight, sprites[i].Y + sprites[i].Height );
+				totalSpriteSize += sprites[i].Width * sprites[i].Height;
 			}
 
 			// DXT compression requires texture sizes to be a multiple of 4
@@ -58,14 +58,14 @@ namespace Nez.TextureAtlasGenerator
 				outputHeight = (outputHeight + 3) & ~3;
 
 			// sort the sprites back into index order.
-			sprites.Sort( compareSpriteIndices );
+			sprites.Sort( CompareSpriteIndices );
 
 			context.Logger.LogImportantMessage(
 				"\nPacked {0} sprites into a {1}x{2} sheet, {3}% efficiency",
 				sprites.Count, outputWidth, outputHeight,
 				totalSpriteSize * 100 / outputWidth / outputHeight );
 
-			return copySpritesToOutput( sprites, sourceSprites, outputSprites, outputWidth, outputHeight );
+			return CopySpritesToOutput( sprites, sourceSprites, outputSprites, outputWidth, outputHeight );
 		}
 
 
@@ -73,17 +73,17 @@ namespace Nez.TextureAtlasGenerator
 		/// Once the arranging is complete, copies the bitmap data for each
 		/// sprite to its chosen position in the single larger output bitmap.
 		/// </summary>
-		static PixelBitmapContent<Color> copySpritesToOutput( List<ArrangedSprite> sprites, IList<BitmapContent> sourceSprites,
+		static PixelBitmapContent<Color> CopySpritesToOutput( List<ArrangedSprite> sprites, IList<BitmapContent> sourceSprites,
 		                                               ICollection<Rectangle> outputSprites, int width, int height )
 		{
 			var output = new PixelBitmapContent<Color>( width, height );
 
 			foreach( var sprite in sprites )
 			{
-				var source = sourceSprites[sprite.index];
+				var source = sourceSprites[sprite.Index];
 
-				var x = sprite.x;
-				var y = sprite.y;
+				var x = sprite.X;
+				var y = sprite.Y;
 
 				var w = source.Width;
 				var h = source.Height;
@@ -118,20 +118,20 @@ namespace Nez.TextureAtlasGenerator
 		/// </summary>
 		class ArrangedSprite
 		{
-			public int index;
+			public int Index;
 
-			public int x;
-			public int y;
+			public int X;
+			public int Y;
 
-			public int width;
-			public int height;
+			public int Width;
+			public int Height;
 		}
 
 
 		/// <summary>
 		/// Works out where to position a single sprite.
 		/// </summary>
-		static void positionSprite( List<ArrangedSprite> sprites, int index, int outputWidth )
+		static void PositionSprite( List<ArrangedSprite> sprites, int index, int outputWidth )
 		{
 			int x = 0;
 			int y = 0;
@@ -139,21 +139,21 @@ namespace Nez.TextureAtlasGenerator
 			while( true )
 			{
 				// Is this position free for us to use?
-				var intersects = findIntersectingSprite( sprites, index, x, y );
+				var intersects = FindIntersectingSprite( sprites, index, x, y );
 				if( intersects < 0 )
 				{
-					sprites[index].x = x;
-					sprites[index].y = y;
+					sprites[index].X = x;
+					sprites[index].Y = y;
 
 					return;
 				}
 
 				// Skip past the existing sprite that we collided with.
-				x = sprites[intersects].x + sprites[intersects].width;
+				x = sprites[intersects].X + sprites[intersects].Width;
 
 				// If we ran out of room to move to the right,
 				// try the next line down instead.
-				if( x + sprites[index].width > outputWidth )
+				if( x + sprites[index].Width > outputWidth )
 				{
 					x = 0;
 					y++;
@@ -166,23 +166,23 @@ namespace Nez.TextureAtlasGenerator
 		/// Checks if a proposed sprite position collides with anything
 		/// that we already arranged.
 		/// </summary>
-		static int findIntersectingSprite( List<ArrangedSprite> sprites, int index, int x, int y )
+		static int FindIntersectingSprite( List<ArrangedSprite> sprites, int index, int x, int y )
 		{
-			var w = sprites[index].width;
-			var h = sprites[index].height;
+			var w = sprites[index].Width;
+			var h = sprites[index].Height;
 
 			for( var i = 0; i < index; i++ )
 			{
-				if( sprites[i].x >= x + w )
+				if( sprites[i].X >= x + w )
 					continue;
 
-				if( sprites[i].x + sprites[i].width <= x )
+				if( sprites[i].X + sprites[i].Width <= x )
 					continue;
 
-				if( sprites[i].y >= y + h )
+				if( sprites[i].Y >= y + h )
 					continue;
 
-				if( sprites[i].y + sprites[i].height <= y )
+				if( sprites[i].Y + sprites[i].Height <= y )
 					continue;
 
 				return i;
@@ -195,10 +195,10 @@ namespace Nez.TextureAtlasGenerator
 		/// <summary>
 		/// Comparison function for sorting sprites by size.
 		/// </summary>
-		static int compareSpriteSizes( ArrangedSprite a, ArrangedSprite b )
+		static int CompareSpriteSizes( ArrangedSprite a, ArrangedSprite b )
 		{
-			var aSize = a.height * 1024 + a.width;
-			var bSize = b.height * 1024 + b.width;
+			var aSize = a.Height * 1024 + a.Width;
+			var bSize = b.Height * 1024 + b.Width;
 
 			return bSize.CompareTo( aSize );
 		}
@@ -207,23 +207,23 @@ namespace Nez.TextureAtlasGenerator
 		/// <summary>
 		/// Comparison function for sorting sprites by their original indices.
 		/// </summary>
-		static int compareSpriteIndices( ArrangedSprite a, ArrangedSprite b )
+		static int CompareSpriteIndices( ArrangedSprite a, ArrangedSprite b )
 		{
-			return a.index.CompareTo( b.index );
+			return a.Index.CompareTo( b.Index );
 		}
 
 
 		/// <summary>
 		/// Heuristic guesses what might be a good output width for a list of sprites.
 		/// </summary>
-		static int guessOutputWidth( List<ArrangedSprite> sprites )
+		static int GuessOutputWidth( List<ArrangedSprite> sprites )
 		{
 			// Gather the widths of all our sprites into a temporary list.
 			var widths = new List<int>();
 
 			foreach( ArrangedSprite sprite in sprites )
 			{
-				widths.Add( sprite.width );
+				widths.Add( sprite.Width );
 			}
 
 			// Sort the widths into ascending order.

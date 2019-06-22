@@ -24,15 +24,15 @@ namespace Nez
 		protected MemberInfo _memberInfo;
 
 
-		public static List<Inspector> getInspectableProperties( object target )
+		public static List<Inspector> GetInspectableProperties( object target )
 		{
 			var props = new List<Inspector>();
 			var targetType = target.GetType();
 
-			var fields = ReflectionUtils.getFields( targetType );
+			var fields = ReflectionUtils.GetFields( targetType );
 			foreach( var field in fields )
 			{
-				if( !field.IsPublic && IEnumerableExt.count( field.GetCustomAttributes<InspectableAttribute>() ) == 0 )
+				if( !field.IsPublic && IEnumerableExt.Count( field.GetCustomAttributes<InspectableAttribute>() ) == 0 )
 					continue;
 
 				if( field.IsInitOnly )
@@ -42,47 +42,47 @@ namespace Nez
 				if( field.Name == "enabled" )
 					continue;
 
-				var inspector = getInspectorForType( field.FieldType, target, field );
+				var inspector = GetInspectorForType( field.FieldType, target, field );
 				if( inspector != null )
 				{
-					inspector.setTarget( target, field );
+					inspector.SetTarget( target, field );
 					props.Add( inspector );
 				}
 			}
 
-			var properties = ReflectionUtils.getProperties( targetType );
+			var properties = ReflectionUtils.GetProperties( targetType );
 			foreach( var prop in properties )
 			{
 				if( !prop.CanRead || !prop.CanWrite )
 					continue;
 
-				if( ( !prop.GetMethod.IsPublic || !prop.SetMethod.IsPublic ) && IEnumerableExt.count( prop.GetCustomAttributes<InspectableAttribute>() ) == 0 )
+				if( ( !prop.GetMethod.IsPublic || !prop.SetMethod.IsPublic ) && IEnumerableExt.Count( prop.GetCustomAttributes<InspectableAttribute>() ) == 0 )
 					continue;
 
 				// skip Component.enabled which is handled elsewhere
 				if( prop.Name == "enabled" )
 					continue;
 
-				var inspector = getInspectorForType( prop.PropertyType, target, prop );
+				var inspector = GetInspectorForType( prop.PropertyType, target, prop );
 				if( inspector != null )
 				{
-					inspector.setTarget( target, prop );
+					inspector.SetTarget( target, prop );
 					props.Add( inspector );
 				}
 			}
 
-			var methods = ReflectionUtils.getMethods( targetType );
+			var methods = ReflectionUtils.GetMethods( targetType );
 			foreach( var method in methods )
 			{
-				var attr = method.GetCustomAttribute<InspectorCallableAttribute>();
+				var attr = CustomAttributeExtensions.GetCustomAttribute<InspectorCallableAttribute>(method);
 				if( attr == null )
 					continue;
 
-				if( !MethodInspector.areParametersValid( method.GetParameters() ) )
+				if( !MethodInspector.AreParametersValid( method.GetParameters() ) )
 					continue;
 
 				var inspector = new MethodInspector();
-				inspector.setTarget( target, method );
+				inspector.SetTarget( target, method );
 				props.Add( inspector );
 			}
 
@@ -90,20 +90,20 @@ namespace Nez
 		}
 
 
-		public static List<Inspector> getTransformProperties( object transform )
+		public static List<Inspector> GetTransformProperties( object transform )
 		{
 			var props = new List<Inspector>();
 			var type = transform.GetType();
 
 			var allowedProps = new string[] { "localPosition", "localRotationDegrees", "localScale" };
-			var properties = ReflectionUtils.getProperties( type );
+			var properties = ReflectionUtils.GetProperties( type );
 			foreach( var prop in properties )
 			{
-				if( !allowedProps.contains( prop.Name ) )
+				if( !allowedProps.Contains( prop.Name ) )
 					continue;
 
-				var inspector = getInspectorForType( prop.PropertyType, transform, prop );
-				inspector.setTarget( transform, prop );
+				var inspector = GetInspectorForType( prop.PropertyType, transform, prop );
+				inspector.SetTarget( transform, prop );
 				props.Add( inspector );
 			}
 
@@ -118,7 +118,7 @@ namespace Nez
 		/// <returns>The inspector for type.</returns>
 		/// <param name="valueType">Value type.</param>
 		/// <param name="memberInfo">Member info.</param>
-		protected static Inspector getInspectorForType( Type valueType, object target, MemberInfo memberInfo )
+		protected static Inspector GetInspectorForType( Type valueType, object target, MemberInfo memberInfo )
 		{
 			// built-in types
 			if( valueType == typeof( int ) )
@@ -139,19 +139,19 @@ namespace Nez
 				return new StructInspector();
 
 			// check for custom inspectors before checking Nez types in case a subclass implemented one
-			var customInspectorType = valueType.GetTypeInfo().GetCustomAttribute<CustomInspectorAttribute>();
+			var customInspectorType = CustomAttributeExtensions.GetCustomAttribute<CustomInspectorAttribute>(valueType.GetTypeInfo());
 			if( customInspectorType != null )
 			{
-				if( customInspectorType.inspectorType.GetTypeInfo().IsSubclassOf( typeof( Inspector ) ) )
-					return (Inspector)Activator.CreateInstance( customInspectorType.inspectorType );
-				Debug.warn( $"found CustomInspector {customInspectorType.inspectorType} but it is not a subclass of Inspector" );
+				if( customInspectorType.InspectorType.GetTypeInfo().IsSubclassOf( typeof( Inspector ) ) )
+					return (Inspector)Activator.CreateInstance( customInspectorType.InspectorType );
+				Debug.Warn( $"found CustomInspector {customInspectorType.InspectorType} but it is not a subclass of Inspector" );
 			}
 
 			// Nez types
 			if( valueType == typeof( Material ) )
-				return getMaterialInspector( target );
+				return GetMaterialInspector( target );
 			if( valueType.GetTypeInfo().IsSubclassOf( typeof( Effect ) ) )
-				return getEffectInspector( target, memberInfo );
+				return GetEffectInspector( target, memberInfo );
 
 			//Debug.log( $"no inspector for type {valueType}" );
 
@@ -164,16 +164,16 @@ namespace Nez
 		/// </summary>
 		/// <returns>The material inspector.</returns>
 		/// <param name="target">Target.</param>
-		static Inspector getMaterialInspector( object target )
+		static Inspector GetMaterialInspector( object target )
 		{
-			var materialProp = ReflectionUtils.getPropertyInfo( target, "material" );
-			var materialMethod = ReflectionUtils.getPropertyGetter( materialProp );
+			var materialProp = ReflectionUtils.GetPropertyInfo( target, "material" );
+			var materialMethod = ReflectionUtils.GetPropertyGetter( materialProp );
 			var material = materialMethod.Invoke( target, new object[] { } ) as Material;
-			if( material == null || material.effect == null )
+			if( material == null || material.Effect == null )
 				return null;
 
 			// we only want subclasses of Effect. Effect itself is not interesting
-			if( material.effect.GetType().GetTypeInfo().IsSubclassOf( typeof( Effect ) ) )
+			if( material.Effect.GetType().GetTypeInfo().IsSubclassOf( typeof( Effect ) ) )
 				return new EffectInspector();
 
 			return null;
@@ -186,7 +186,7 @@ namespace Nez
 		/// <returns>The effect inspector.</returns>
 		/// <param name="target">Target.</param>
 		/// <param name="memberInfo">Member info.</param>
-		static Inspector getEffectInspector( object target, MemberInfo memberInfo )
+		static Inspector GetEffectInspector( object target, MemberInfo memberInfo )
 		{
 			var fieldInfo = memberInfo as FieldInfo;
 			if( fieldInfo != null )
@@ -198,7 +198,7 @@ namespace Nez
 			var propInfo = memberInfo as PropertyInfo;
 			if( propInfo != null )
 			{
-				var getter = ReflectionUtils.getPropertyGetter( propInfo );
+				var getter = ReflectionUtils.GetPropertyGetter( propInfo );
 				if( getter.Invoke( target, new object[] {} ) != null )
 					return new EffectInspector();
 			}
@@ -207,7 +207,7 @@ namespace Nez
 		}
 
 
-		public void setTarget( object target, FieldInfo field )
+		public void SetTarget( object target, FieldInfo field )
 		{
 			_target = target;
 			_memberInfo = field;
@@ -232,7 +232,7 @@ namespace Nez
 		/// <param name="target">Target.</param>
 		/// <param name="structName">Struct name.</param>
 		/// <param name="field">Field.</param>
-		public void setStructTarget( object target, Inspector parentInspector, FieldInfo field )
+		public void SetStructTarget( object target, Inspector parentInspector, FieldInfo field )
 		{
 			_target = target;
 			_memberInfo = field;
@@ -241,19 +241,19 @@ namespace Nez
 
 			_getter = () =>
 			{
-				var structValue = parentInspector.getValue();
+				var structValue = parentInspector.GetValue();
 				return field.GetValue( structValue );
 			};
 			_setter = ( val ) =>
 			{
-				var structValue = parentInspector.getValue();
+				var structValue = parentInspector.GetValue();
 				field.SetValue( structValue, val );
-				parentInspector.setValue( structValue );
+				parentInspector.SetValue( structValue );
 			};
 		}
 
 
-		public void setTarget( object target, PropertyInfo prop )
+		public void SetTarget( object target, PropertyInfo prop )
 		{
 			_memberInfo = prop;
 			_target = target;
@@ -262,11 +262,11 @@ namespace Nez
 
 			_getter = () =>
 			{
-				return ReflectionUtils.getPropertyGetter( prop ).Invoke( target, null );
+				return ReflectionUtils.GetPropertyGetter( prop ).Invoke( target, null );
 			};
 			_setter = ( val ) =>
 			{
-				ReflectionUtils.getPropertySetter( prop ).Invoke( target, new object[] { val } );
+				ReflectionUtils.GetPropertySetter( prop ).Invoke( target, new object[] { val } );
 			};
 		}
 
@@ -278,7 +278,7 @@ namespace Nez
 		/// <param name="target">Target.</param>
 		/// <param name="structName">Struct name.</param>
 		/// <param name="field">Field.</param>
-		public void setStructTarget( object target, Inspector parentInspector, PropertyInfo prop )
+		public void SetStructTarget( object target, Inspector parentInspector, PropertyInfo prop )
 		{
 			_target = target;
 			_memberInfo = prop;
@@ -287,19 +287,19 @@ namespace Nez
 
 			_getter = () =>
 			{
-				var structValue = parentInspector.getValue();
-				return ReflectionUtils.getPropertyGetter( prop ).Invoke( structValue, null );
+				var structValue = parentInspector.GetValue();
+				return ReflectionUtils.GetPropertyGetter( prop ).Invoke( structValue, null );
 			};
 			_setter = ( val ) =>
 			{
-				var structValue = parentInspector.getValue();
+				var structValue = parentInspector.GetValue();
 				prop.SetValue( structValue, val );
-				parentInspector.setValue( structValue );
+				parentInspector.SetValue( structValue );
 			};
 		}
 
 
-		public void setTarget( object target, MethodInfo method )
+		public void SetTarget( object target, MethodInfo method )
 		{
 			_memberInfo = method;
 			_target = target;
@@ -307,25 +307,25 @@ namespace Nez
 		}
 
 
-		protected T getValue<T>()
+		protected T GetValue<T>()
 		{
 			return (T)_getter.Invoke();
 		}
 
 
-		protected object getValue()
+		protected object GetValue()
 		{
 			return _getter.Invoke();
 		}
 
 
-		protected void setValue( object value )
+		protected void SetValue( object value )
 		{
 			_setter.Invoke( value );
 		}
 
 
-		protected T getFieldOrPropertyAttribute<T>() where T : Attribute
+		protected T GetFieldOrPropertyAttribute<T>() where T : Attribute
 		{
 			var attributes = _memberInfo.GetCustomAttributes<T>();
 			foreach( var attr in attributes )
@@ -343,20 +343,20 @@ namespace Nez
 		/// <returns>The name label.</returns>
 		/// <param name="table">Table.</param>
 		/// <param name="skin">Skin.</param>
-		protected Label createNameLabel( Table table, Skin skin, float leftCellWidth = -1 )
+		protected Label CreateNameLabel( Table table, Skin skin, float leftCellWidth = -1 )
 		{
 			var label = new Label( _name, skin );
-			label.setTouchable( Touchable.Enabled );
+			label.SetTouchable( Touchable.Enabled );
 
 			// set a width on the cell so long labels dont cause issues if we have a leftCellWidth set
 			if( leftCellWidth > 0 )
-				label.setEllipsis( "..." ).setWidth( leftCellWidth );
+				label.SetEllipsis( "..." ).SetWidth( leftCellWidth );
 
-			var tooltipAttribute = getFieldOrPropertyAttribute<TooltipAttribute>();
+			var tooltipAttribute = GetFieldOrPropertyAttribute<TooltipAttribute>();
 			if( tooltipAttribute != null )
 			{
-				var tooltip = new TextTooltip( tooltipAttribute.tooltip, label, skin );
-				table.getStage().addElement( tooltip );
+				var tooltip = new TextTooltip( tooltipAttribute.Tooltip, label, skin );
+				table.GetStage().AddElement( tooltip );
 			}
 
 			return label;
@@ -368,13 +368,13 @@ namespace Nez
 		/// </summary>
 		/// <param name="table">Table.</param>
 		/// <param name="skin">Skin.</param>
-		public abstract void initialize( Table table, Skin skin, float leftCellWidth );
+		public abstract void Initialize( Table table, Skin skin, float leftCellWidth );
 
 
 		/// <summary>
 		/// used to update the UI for the Inspector
 		/// </summary>
-		public abstract void update();
+		public abstract void Update();
 
 	}
 }

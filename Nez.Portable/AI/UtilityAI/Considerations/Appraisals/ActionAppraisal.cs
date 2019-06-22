@@ -17,7 +17,7 @@ namespace Nez.AI.UtilityAI
 		}
 
 
-		float IAppraisal<T>.getScore( T context )
+		float IAppraisal<T>.GetScore( T context )
 		{
 			return _appraisalAction( context );
 		}

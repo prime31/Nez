@@ -8,6 +8,6 @@ namespace Nez.AI.BehaviorTrees
 	/// </summary>
 	public interface IConditional<T>
 	{
-		TaskStatus update( T context );
+		TaskStatus Update( T context );
 	}
 }

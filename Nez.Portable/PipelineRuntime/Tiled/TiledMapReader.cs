@@ -21,17 +21,17 @@ namespace Nez.Tiled
 										 tileHeight: reader.ReadInt32(),
 										 orientation: (TiledMapOrientation)reader.ReadInt32() )
 			{
-				backgroundColor = backgroundColor,
-				renderOrder = renderOrder
+				BackgroundColor = backgroundColor,
+				RenderOrder = renderOrder
 			};
-			tiledMap.largestTileWidth = reader.ReadInt32();
-			tiledMap.largestTileHeight = reader.ReadInt32();
+			tiledMap.LargestTileWidth = reader.ReadInt32();
+			tiledMap.LargestTileHeight = reader.ReadInt32();
 
 			// determine if we have some tiles that are larger than our standard tile size and if so mark this map for requiring culling
-			if( tiledMap.largestTileWidth > tiledMap.tileWidth || tiledMap.largestTileHeight > tiledMap.tileHeight )
+			if( tiledMap.LargestTileWidth > tiledMap.TileWidth || tiledMap.LargestTileHeight > tiledMap.TileHeight )
 				tiledMap.requiresLargeTileCulling = true;
 
-			readCustomProperties( reader, tiledMap.properties );
+			ReadCustomProperties( reader, tiledMap.Properties );
 
 			var tilesetCount = reader.ReadInt32();
 			for( var i = 0; i < tilesetCount; i++ )
@@ -43,11 +43,11 @@ namespace Nez.Tiled
 				Texture2D texture = null;
 				if( textureName != string.Empty )
 				{
-					var textureAssetName = reader.getRelativeAssetPath( textureName );
+					var textureAssetName = reader.GetRelativeAssetPath( textureName );
 					texture = reader.ContentManager.Load<Texture2D>( textureAssetName );
 				}
 
-				var tileset = tiledMap.createTileset(
+				var tileset = tiledMap.CreateTileset(
 										texture: texture,
 										firstId: reader.ReadInt32(),
 										tileWidth: reader.ReadInt32(),
@@ -57,7 +57,7 @@ namespace Nez.Tiled
 										margin: reader.ReadInt32(),
 										tileCount: reader.ReadInt32(),
 										columns: reader.ReadInt32() );
-				readCustomProperties( reader, tileset.properties );
+				ReadCustomProperties( reader, tileset.Properties );
 
 				// tiledset tile array
 				var tileCount = reader.ReadInt32();
@@ -67,54 +67,54 @@ namespace Nez.Tiled
 
 					var tileAnimationFrameCount = reader.ReadInt32();
 					if( tileAnimationFrameCount > 0 )
-						tile.animationFrames = new List<TiledTileAnimationFrame>( tileAnimationFrameCount );
+						tile.AnimationFrames = new List<TiledTileAnimationFrame>( tileAnimationFrameCount );
 
 					for( var k = 0; k < tileAnimationFrameCount; k++ )
-						tile.animationFrames.Add( new TiledTileAnimationFrame( reader.ReadInt32(), reader.ReadSingle() ) );
+						tile.AnimationFrames.Add( new TiledTileAnimationFrame( reader.ReadInt32(), reader.ReadSingle() ) );
 
 					// image source is optional
 					var isFromImageCollection = reader.ReadBoolean();
 					if( isFromImageCollection )
 					{
 						var rect = new Rectangle( reader.ReadInt32(), reader.ReadInt32(), reader.ReadInt32(), reader.ReadInt32() );
-						( (TiledImageCollectionTileset)tileset ).setTileTextureRegion( tileset.firstId + tile.id, rect );
+						( (TiledImageCollectionTileset)tileset ).SetTileTextureRegion( tileset.FirstId + tile.Id, rect );
 					}
 
-					readCustomProperties( reader, tile.properties );
+					ReadCustomProperties( reader, tile.Properties );
 
 					var tileObjectGroupCount = reader.ReadInt32();
 					if( tileObjectGroupCount > 0 )
-						tile.objectGroups = new List<TiledObjectGroup>( tileObjectGroupCount );
+						tile.ObjectGroups = new List<TiledObjectGroup>( tileObjectGroupCount );
 					for( var k = 0; k < tileObjectGroupCount; k++ )
-						tile.objectGroups.Add( readObjectGroup( reader, tiledMap ) );
+						tile.ObjectGroups.Add( ReadObjectGroup( reader, tiledMap ) );
 
 					// give the TiledTilesetTile a chance to process and cache any data required
-					tile.processProperties();
+					tile.ProcessProperties();
 
 					// if this tile is from an image collection and it has no properties there is no need to keep it around since we
 					// already grabbed the image source above
-					if( !( isFromImageCollection && tile.properties.Count == 0 ) )
-						tileset.tiles.Add( tile );
+					if( !( isFromImageCollection && tile.Properties.Count == 0 ) )
+						tileset.Tiles.Add( tile );
 				}
 			}
 
 			var layerCount = reader.ReadInt32();
 			for( var i = 0; i < layerCount; i++ )
 			{
-				var layer = readLayer( reader, tiledMap );
-				readCustomProperties( reader, layer.properties );
+				var layer = ReadLayer( reader, tiledMap );
+				ReadCustomProperties( reader, layer.Properties );
 			}
 
 
 			var objectGroupCount = reader.ReadInt32();
 			for( var i = 0; i < objectGroupCount; i++ )
-				tiledMap.objectGroups.Add( readObjectGroup( reader, tiledMap ) );
+				tiledMap.ObjectGroups.Add( ReadObjectGroup( reader, tiledMap ) );
 
 			return tiledMap;
 		}
 
 
-		static void readCustomProperties( ContentReader reader, Dictionary<string, string> properties )
+		static void ReadCustomProperties( ContentReader reader, Dictionary<string, string> properties )
 		{
 			var count = reader.ReadInt32();
 			for( var i = 0; i < count; i++ )
@@ -122,7 +122,7 @@ namespace Nez.Tiled
 		}
 
 
-		static TiledLayer readLayer( ContentReader reader, TiledMap tiledMap )
+		static TiledLayer ReadLayer( ContentReader reader, TiledMap tiledMap )
 		{
 			var layerName = reader.ReadString();
 			var visible = reader.ReadBoolean();
@@ -132,21 +132,21 @@ namespace Nez.Tiled
 
 			TiledLayer layer;
 			if( layerType == TiledLayerType.Tile )
-				layer = readTileLayer( reader, tiledMap, layerName );
+				layer = ReadTileLayer( reader, tiledMap, layerName );
 			else if( layerType == TiledLayerType.Image )
-				layer = readImageLayer( reader, tiledMap, layerName );
+				layer = ReadImageLayer( reader, tiledMap, layerName );
 			else
 				throw new NotSupportedException( string.Format( "Layer type {0} with name {1} is not supported", layerType, layerName ) );
 
-			layer.offset = offset;
-			layer.visible = visible;
-			layer.opacity = opacity;
+			layer.Offset = offset;
+			layer.Visible = visible;
+			layer.Opacity = opacity;
 
 			return layer;
 		}
 
 
-		static TiledLayer readTileLayer( ContentReader reader, TiledMap tileMap, string layerName )
+		static TiledLayer ReadTileLayer( ContentReader reader, TiledMap tileMap, string layerName )
 		{
 			var tileCount = reader.ReadInt32();
 			var tiles = new TiledTile[tileCount];
@@ -161,16 +161,16 @@ namespace Nez.Tiled
 				// dont add null tiles
 				if( tileId != 0 )
 				{
-					var tilesetTile = tileMap.getTilesetTile( tileId );
-					if( tilesetTile != null && tilesetTile.animationFrames != null )
+					var tilesetTile = tileMap.GetTilesetTile( tileId );
+					if( tilesetTile != null && tilesetTile.AnimationFrames != null )
 					{
-						if( tilesetTile.animationFrames.Count > 0 )
+						if( tilesetTile.AnimationFrames.Count > 0 )
 						{
 							tiles[i] = new TiledAnimatedTile( tileId, tilesetTile )
 							{
-								flippedHorizonally = flippedHorizonally,
-								flippedVertically = flippedVertically,
-								flippedDiagonally = flippedDiagonally
+								FlippedHorizonally = flippedHorizonally,
+								FlippedVertically = flippedVertically,
+								FlippedDiagonally = flippedDiagonally
 							};
 							tileMap._animatedTiles.Add( tiles[i] as TiledAnimatedTile );
 						}
@@ -179,13 +179,13 @@ namespace Nez.Tiled
 					{
 						tiles[i] = new TiledTile( tileId )
 						{
-							flippedHorizonally = flippedHorizonally,
-							flippedVertically = flippedVertically,
-							flippedDiagonally = flippedDiagonally
+							FlippedHorizonally = flippedHorizonally,
+							FlippedVertically = flippedVertically,
+							FlippedDiagonally = flippedDiagonally
 						};
 					}
 
-					tiles[i].tileset = tileMap.getTilesetForTileId( tileId );
+					tiles[i].Tileset = tileMap.GetTilesetForTileId( tileId );
 				}
 				else
 				{
@@ -193,7 +193,7 @@ namespace Nez.Tiled
 				}
 			}
 
-			return tileMap.createTileLayer(
+			return tileMap.CreateTileLayer(
 				name: layerName,
 				width: reader.ReadInt32(),
 				height: reader.ReadInt32(),
@@ -201,78 +201,78 @@ namespace Nez.Tiled
 		}
 
 
-		static TiledImageLayer readImageLayer( ContentReader reader, TiledMap tileMap, string layerName )
+		static TiledImageLayer ReadImageLayer( ContentReader reader, TiledMap tileMap, string layerName )
 		{
-			var assetName = reader.getRelativeAssetPath( reader.ReadString() );
+			var assetName = reader.GetRelativeAssetPath( reader.ReadString() );
 			var texture = reader.ContentManager.Load<Texture2D>( assetName );
 
-			return tileMap.createImageLayer( layerName, texture );
+			return tileMap.CreateImageLayer( layerName, texture );
 		}
 
 
-		static TiledObjectGroup readObjectGroup( ContentReader reader, TiledMap tiledMap )
+		static TiledObjectGroup ReadObjectGroup( ContentReader reader, TiledMap tiledMap )
 		{
 			var objectGroup = new TiledObjectGroup(
 				reader.ReadString(), reader.ReadColor(), reader.ReadBoolean(), reader.ReadSingle() );
 
-			readCustomProperties( reader, objectGroup.properties );
+			ReadCustomProperties( reader, objectGroup.Properties );
 
 			var objectCount = reader.ReadInt32();
-			objectGroup.objects = new TiledObject[objectCount];
+			objectGroup.Objects = new TiledObject[objectCount];
 			for( var i = 0; i < objectCount; i++ )
 			{
 				var obj = new TiledObject()
 				{
-					id = reader.ReadInt32(),
-					name = reader.ReadString(),
-					type = reader.ReadString(),
-					x = reader.ReadInt32(),
-					y = reader.ReadInt32(),
-					width = reader.ReadInt32(),
-					height = reader.ReadInt32(),
-					rotation = reader.ReadInt32(),
-					gid = reader.ReadInt32(),
-					visible = reader.ReadBoolean()
+					Id = reader.ReadInt32(),
+					Name = reader.ReadString(),
+					Type = reader.ReadString(),
+					X = reader.ReadInt32(),
+					Y = reader.ReadInt32(),
+					Width = reader.ReadInt32(),
+					Height = reader.ReadInt32(),
+					Rotation = reader.ReadInt32(),
+					Gid = reader.ReadInt32(),
+					Visible = reader.ReadBoolean()
 				};
 
 				var tiledObjectType = reader.ReadString();
 				if( tiledObjectType == "ellipse" )
 				{
 					// ellipse has no extra props
-					obj.tiledObjectType = TiledObject.TiledObjectType.Ellipse;
+					obj.TiledObjectType = TiledObjectType.Ellipse;
 				}
 				else if( tiledObjectType == "image" )
 				{
-					obj.tiledObjectType = TiledObject.TiledObjectType.Image;
+					obj.TiledObjectType = TiledObjectType.Image;
 					throw new NotImplementedException( "Image objects are not yet implemented" );
 				}
 				else if( tiledObjectType == "polygon" )
 				{
-					obj.tiledObjectType = TiledObject.TiledObjectType.Polygon;
-					obj.polyPoints = readVector2Array( reader );
+					obj.TiledObjectType = TiledObjectType.Polygon;
+					obj.PolyPoints = ReadVector2Array( reader );
 				}
 				else if( tiledObjectType == "polyline" )
 				{
-					obj.tiledObjectType = TiledObject.TiledObjectType.Polyline;
-					obj.polyPoints = readVector2Array( reader );
+					obj.TiledObjectType = TiledObjectType.Polyline;
+					obj.PolyPoints = ReadVector2Array( reader );
 				}
 				else
 				{
-					obj.tiledObjectType = TiledObject.TiledObjectType.None;
+					obj.TiledObjectType = TiledObjectType.None;
 				}
 
-				obj.objectType = reader.ReadString();
+				obj.ObjectType = reader.ReadString();
 
-				readCustomProperties( reader, obj.properties );
+				ReadCustomProperties( reader, obj.Properties );
 
-				objectGroup.objects[i] = obj;
+				objectGroup.Objects[i] = obj;
 			}
 
 			return objectGroup;
 		}
 
 
-		static Vector2[] readVector2Array( ContentReader reader )
+		static Vector2[] ReadVector2Array( ContentReader reader )
 		{
 			var pointCount = reader.ReadInt32();
 			var points = new Vector2[pointCount];

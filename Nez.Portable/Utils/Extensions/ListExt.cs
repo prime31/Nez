@@ -11,13 +11,13 @@ namespace Nez
 		/// </summary>
 		/// <param name="list">List.</param>
 		/// <typeparam name="T">The 1st type parameter.</typeparam>
-		public static void shuffle<T>( this IList<T> list )
+		public static void Shuffle<T>( this IList<T> list )
 		{
 			var n = list.Count;
 			while( n > 1 )
 			{
 				n--;
-				int k = Nez.Random.range( 0, n + 1 );
+				int k = Nez.Random.Range( 0, n + 1 );
 				T value = list[k];
 				list[k] = list[n];
 				list[n] = value;
@@ -32,7 +32,7 @@ namespace Nez
 		/// <param name="list">List.</param>
 		/// <param name="item">Item.</param>
 		/// <typeparam name="T">The 1st type parameter.</typeparam>
-		public static bool addIfNotPresent<T>( this IList<T> list, T item )
+		public static bool AddIfNotPresent<T>( this IList<T> list, T item )
 		{
 			if( list.Contains( item ) )
 				return false;
@@ -47,7 +47,7 @@ namespace Nez
 		/// </summary>
 		/// <param name="list">List.</param>
 		/// <typeparam name="T">The 1st type parameter.</typeparam>
-		public static T lastItem<T>( this IList<T> list )
+		public static T LastItem<T>( this IList<T> list )
 		{
 			return list[list.Count - 1];
 		}
@@ -59,9 +59,9 @@ namespace Nez
 		/// <returns>The item.</returns>
 		/// <param name="list">List.</param>
 		/// <typeparam name="T">The 1st type parameter.</typeparam>
-		public static T randomItem<T>( this IList<T> list )
+		public static T RandomItem<T>( this IList<T> list )
 		{
-			return list[Nez.Random.range( 0, list.Count )];
+			return list[Nez.Random.Range( 0, list.Count )];
 		}
 
 
@@ -72,17 +72,17 @@ namespace Nez
 		/// <param name="list">List.</param>
 		/// <param name="itemCount">The number of random items to return from the list.</param>
 		/// <typeparam name="T">The 1st type parameter.</typeparam>
-		public static List<T> randomItems<T>( this IList<T> list, int itemCount )
+		public static List<T> RandomItems<T>( this IList<T> list, int itemCount )
 		{
 			var set = new HashSet<T>();
 			while ( set.Count != itemCount )
 			{
-				var item = list.randomItem();
+				var item = list.RandomItem();
 				if ( !set.Contains( item ) )
 					set.Add( item );
 			}
 
-			var items = ListPool<T>.obtain();
+			var items = ListPool<T>.Obtain();
 			items.AddRange( set );
 			return items;
 		}

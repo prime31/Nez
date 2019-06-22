@@ -12,27 +12,27 @@ namespace Nez.ImGuiTools.TypeInspectors
 		List<AbstractTypeInspector> _inspectors = new List<AbstractTypeInspector>();
 		bool _isHeaderOpen;
 
-		public override void initialize()
+		public override void Initialize()
 		{
-			base.initialize();
+			base.Initialize();
 
 			// figure out which fields and properties are useful to add to the inspector
-			var fields = ReflectionUtils.getFields( _valueType );
+			var fields = ReflectionUtils.GetFields( _valueType );
 			foreach( var field in fields )
 			{
 				if( !field.IsPublic && !field.IsDefined( typeof( InspectableAttribute ) ) )
 					continue;
 
-				var inspector = TypeInspectorUtils.getInspectorForType( field.FieldType, _target, field );
+				var inspector = TypeInspectorUtils.GetInspectorForType( field.FieldType, _target, field );
 				if( inspector != null )
 				{
-					inspector.setStructTarget( _target, this, field );
-					inspector.initialize();
+					inspector.SetStructTarget( _target, this, field );
+					inspector.Initialize();
 					_inspectors.Add( inspector );
 				}
 			}
 
-			var properties = ReflectionUtils.getProperties( _valueType );
+			var properties = ReflectionUtils.GetProperties( _valueType );
 			foreach( var prop in properties )
 			{
 				if( !prop.CanRead || !prop.CanWrite )
@@ -42,17 +42,17 @@ namespace Nez.ImGuiTools.TypeInspectors
 				if( ( !prop.GetMethod.IsPublic || !isPropertyUndefinedOrPublic ) && !prop.IsDefined( typeof( InspectableAttribute ) ) )
 					continue;
 
-				var inspector = TypeInspectorUtils.getInspectorForType( prop.PropertyType, _target, prop );
+				var inspector = TypeInspectorUtils.GetInspectorForType( prop.PropertyType, _target, prop );
 				if( inspector != null )
 				{
-					inspector.setStructTarget( _target, this, prop );
-					inspector.initialize();
+					inspector.SetStructTarget( _target, this, prop );
+					inspector.Initialize();
 					_inspectors.Add( inspector );
 				}
 			}
 		}
 
-		public override void drawMutable()
+		public override void DrawMutable()
 		{
 			ImGui.Indent();
 			NezImGui.BeginBorderedGroup();
@@ -61,7 +61,7 @@ namespace Nez.ImGuiTools.TypeInspectors
 			if( _isHeaderOpen )
 			{
 				foreach( var i in _inspectors )
-					i.draw();
+					i.Draw();
 			}
 			NezImGui.EndBorderedGroup( new System.Numerics.Vector2( 4, 1 ), new System.Numerics.Vector2( 4, 2 ) );
 			ImGui.Unindent();
@@ -70,9 +70,9 @@ namespace Nez.ImGuiTools.TypeInspectors
 		/// <summary>
 		/// we need to override here so that we can keep the header enabled so that it can be opened
 		/// </summary>
-		public override void drawReadOnly()
+		public override void DrawReadOnly()
 		{
-			drawMutable();
+			DrawMutable();
 		}
 
 	}

@@ -9,25 +9,25 @@ namespace Nez.ImGuiTools.ObjectInspectors
     {
         List<AbstractTypeInspector> _inspectors;
         
-        public override void initialize()
+        public override void Initialize()
         {
             // we need something to inspect here so if we have a null object create a new one
-            var obj = getValue();
+            var obj = GetValue();
             if( obj == null && _valueType.GetConstructor( Type.EmptyTypes ) != null )
                 obj = Activator.CreateInstance( _valueType );
 
             if( obj != null )
-                _inspectors = TypeInspectorUtils.getInspectableProperties( obj );
+                _inspectors = TypeInspectorUtils.GetInspectableProperties( obj );
             else
                 _inspectors = new List<AbstractTypeInspector>();
         }
 
-		public override void drawMutable()
+		public override void DrawMutable()
 		{
 			if( ImGui.CollapsingHeader( _name ) )
             {
                 foreach( var inspector in _inspectors )
-                    inspector.draw();
+                    inspector.Draw();
             }
 		}
 

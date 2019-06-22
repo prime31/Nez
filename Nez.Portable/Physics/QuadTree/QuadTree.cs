@@ -44,9 +44,9 @@ namespace Nez.Spatial
 		/// <summary>
 		/// Gets the rectangle that bounds this QuadTree
 		/// </summary>
-		public Rectangle quadRect
+		public Rectangle QuadRect
 		{
-			get { return _quadTreeRoot.quadRect; }
+			get { return _quadTreeRoot.QuadRect; }
 		}
 
 
@@ -54,9 +54,9 @@ namespace Nez.Spatial
 		/// Get the objects in this tree that intersect with the specified rectangle.
 		/// </summary>
 		/// <param name="rect">The rectangle to find objects in.</param>
-		public List<T> getObjects( Rectangle rect )
+		public List<T> GetObjects( Rectangle rect )
 		{
-			return _quadTreeRoot.getObjects( rect );
+			return _quadTreeRoot.GetObjects( rect );
 		}
 
 
@@ -65,16 +65,16 @@ namespace Nez.Spatial
 		/// </summary>
 		/// <param name="rect">The rectangle to find objects in.</param>
 		/// <param name="results">A reference to a list that will be populated with the results.</param>
-		public void getObjects( Rectangle rect, ref List<T> results )
+		public void GetObjects( Rectangle rect, ref List<T> results )
 		{
-			_quadTreeRoot.getObjects( rect, ref results );
+			_quadTreeRoot.GetObjects( rect, ref results );
 		}
 
 
 		/// <summary>
 		/// Get all objects in this Quad, and it's children.
 		/// </summary>
-		public List<T> getAllObjects()
+		public List<T> GetAllObjects()
 		{
 			return new List<T>( _wrappedDictionary.Keys );
 		}
@@ -84,51 +84,51 @@ namespace Nez.Spatial
 		/// Moves the object in the tree
 		/// </summary>
 		/// <param name="item">The item that has moved</param>
-		public bool move( T item )
+		public bool Move( T item )
 		{
 			if( Contains( item ) )
 			{
-				_quadTreeRoot.move( _wrappedDictionary[item] );
+				_quadTreeRoot.Move( _wrappedDictionary[item] );
 				return true;
 			}
 			return false;
 		}
 
 
-		public void debugRender( Graphics graphics )
+		public void DebugRender( Graphics graphics )
 		{
-			debugRenderNode( graphics, _quadTreeRoot );
+			DebugRenderNode( graphics, _quadTreeRoot );
 
 			foreach( var ele in this )
 			{
-				graphics.batcher.drawHollowRect( ele.bounds, Debug.Colors.colliderBounds, Debug.Size.lineSizeMultiplier );
+				graphics.Batcher.DrawHollowRect( ele.Bounds, Debug.Colors.ColliderBounds, Debug.Size.LineSizeMultiplier );
 			}
 		}
 
 
-		public void debugRenderNode( Graphics graphics, QuadTreeNode<T> node )
+		public void DebugRenderNode( Graphics graphics, QuadTreeNode<T> node )
 		{
-			if( node.isEmptyLeaf )
-				graphics.batcher.drawHollowRect( node.quadRect, Color.Red * 0.5f, Debug.Size.lineSizeMultiplier );
+			if( node.IsEmptyLeaf )
+				graphics.Batcher.DrawHollowRect( node.QuadRect, Color.Red * 0.5f, Debug.Size.LineSizeMultiplier );
 			
-			if( node.topLeftChild != null )
-				debugRenderNode( graphics, node.topLeftChild );
+			if( node.TopLeftChild != null )
+				DebugRenderNode( graphics, node.TopLeftChild );
 
-			if( node.topRightChild != null )
-				debugRenderNode( graphics, node.topRightChild );
+			if( node.TopRightChild != null )
+				DebugRenderNode( graphics, node.TopRightChild );
 
-			if( node.bottomLeftChild != null )
-				debugRenderNode( graphics, node.bottomLeftChild );
+			if( node.BottomLeftChild != null )
+				DebugRenderNode( graphics, node.BottomLeftChild );
 
-			if( node.bottomRightChild != null )
-				debugRenderNode( graphics, node.bottomRightChild );
+			if( node.BottomRightChild != null )
+				DebugRenderNode( graphics, node.BottomRightChild );
 		}
 
 
 		/// <summary>
 		/// The top left child for this QuadTree, only usable in debug mode
 		/// </summary>
-		public QuadTreeNode<T> rootQuad
+		public QuadTreeNode<T> RootQuad
 		{
 			get { return _quadTreeRoot; }
 		}
@@ -146,7 +146,7 @@ namespace Nez.Spatial
 		{
 			var wrappedObject = new QuadTreeObject<T>( item );
 			_wrappedDictionary.Add( item, wrappedObject );
-			_quadTreeRoot.insert( wrappedObject );
+			_quadTreeRoot.Insert( wrappedObject );
 		}
 
 
@@ -158,7 +158,7 @@ namespace Nez.Spatial
 		public void Clear()
 		{
 			_wrappedDictionary.Clear();
-			_quadTreeRoot.clear();
+			_quadTreeRoot.Clear();
 		}
 
 
@@ -228,7 +228,7 @@ namespace Nez.Spatial
 		{
 			if( Contains( item ) )
 			{
-				_quadTreeRoot.delete( _wrappedDictionary[item], true );
+				_quadTreeRoot.Delete( _wrappedDictionary[item], true );
 				_wrappedDictionary.Remove( item );
 				return true;
 			}

@@ -15,7 +15,7 @@ namespace FarseerPhysics.Common
 		/// </summary>
 		/// <param name="hx">the half-width.</param>
 		/// <param name="hy">the half-height.</param>
-		public static Vertices createRectangle( float hx, float hy )
+		public static Vertices CreateRectangle( float hx, float hy )
 		{
 			var vertices = new Vertices( 4 );
 			vertices.Add( new Vector2( -hx, -hy ) );
@@ -33,18 +33,18 @@ namespace FarseerPhysics.Common
 		/// <param name="hy">the half-height.</param>
 		/// <param name="center">the center of the box in local coordinates.</param>
 		/// <param name="angle">the rotation of the box in local coordinates.</param>
-		public static Vertices createRectangle( float hx, float hy, Vector2 center, float angle )
+		public static Vertices CreateRectangle( float hx, float hy, Vector2 center, float angle )
 		{
-			var vertices = createRectangle( hx, hy );
+			var vertices = CreateRectangle( hx, hy );
 
 			var xf = new Transform();
-			xf.p = center;
-			xf.q.Set( angle );
+			xf.P = center;
+			xf.Q.Set( angle );
 
 			// Transform vertices
 			for( int i = 0; i < 4; ++i )
 			{
-				vertices[i] = MathUtils.mul( ref xf, vertices[i] );
+				vertices[i] = MathUtils.Mul( ref xf, vertices[i] );
 			}
 
 			return vertices;
@@ -61,7 +61,7 @@ namespace FarseerPhysics.Common
 		/// <param name="yRadius">The rounding Y radius.</param>
 		/// <param name="segments">The number of segments to subdivide the edges.</param>
 		/// <returns></returns>
-		public static Vertices createRoundedRectangle( float width, float height, float xRadius, float yRadius, int segments )
+		public static Vertices CreateRoundedRectangle( float width, float height, float xRadius, float yRadius, int segments )
 		{
 			if( yRadius > height / 2 || xRadius > width / 2 )
 				throw new Exception( "Rounding amount can't be more than half the height and width respectively." );
@@ -69,7 +69,7 @@ namespace FarseerPhysics.Common
 				throw new Exception( "Segments must be zero or more." );
 
 			//We need at least 8 vertices to create a rounded rectangle
-			Debug.Assert( Settings.maxPolygonVertices >= 8 );
+			Debug.Assert( Settings.MaxPolygonVertices >= 8 );
 
 			var vertices = new Vertices();
 			if( segments == 0 )
@@ -122,7 +122,7 @@ namespace FarseerPhysics.Common
 		/// </summary>
 		/// <param name="start">The first point.</param>
 		/// <param name="end">The second point.</param>
-		public static Vertices createLine( Vector2 start, Vector2 end )
+		public static Vertices CreateLine( Vector2 start, Vector2 end )
 		{
 			var vertices = new Vertices( 2 );
 			vertices.Add( start );
@@ -137,9 +137,9 @@ namespace FarseerPhysics.Common
 		/// <param name="radius">The radius.</param>
 		/// <param name="numberOfEdges">The number of edges. The more edges, the more it resembles a circle</param>
 		/// <returns></returns>
-		public static Vertices createCircle( float radius, int numberOfEdges )
+		public static Vertices CreateCircle( float radius, int numberOfEdges )
 		{
-			return createEllipse( radius, radius, numberOfEdges );
+			return CreateEllipse( radius, radius, numberOfEdges );
 		}
 
 		/// <summary>
@@ -149,7 +149,7 @@ namespace FarseerPhysics.Common
 		/// <param name="yRadius">Height of the ellipse.</param>
 		/// <param name="numberOfEdges">The number of edges. The more edges, the more it resembles an ellipse</param>
 		/// <returns></returns>
-		public static Vertices createEllipse( float xRadius, float yRadius, int numberOfEdges )
+		public static Vertices CreateEllipse( float xRadius, float yRadius, int numberOfEdges )
 		{
 			var vertices = new Vertices();
 
@@ -163,7 +163,7 @@ namespace FarseerPhysics.Common
 			return vertices;
 		}
 
-		public static Vertices createArc( float radians, int sides, float radius )
+		public static Vertices CreateArc( float radians, int sides, float radius )
 		{
 			Debug.Assert( radians > 0, "The arc needs to be larger than 0" );
 			Debug.Assert( sides > 1, "The arc needs to have more than 1 side" );
@@ -191,14 +191,14 @@ namespace FarseerPhysics.Common
 		/// <param name="endRadius">Radius of the capsule ends.</param>
 		/// <param name="edges">The number of edges of the capsule ends. The more edges, the more it resembles an capsule</param>
 		/// <returns></returns>
-		public static Vertices createCapsule( float height, float endRadius, int edges )
+		public static Vertices CreateCapsule( float height, float endRadius, int edges )
 		{
 			if( endRadius >= height / 2 )
 				throw new ArgumentException(
 					"The radius must be lower than height / 2. Higher values of radius would create a circle, and not a half circle.",
 nameof( endRadius ) );
 
-			return createCapsule( height, endRadius, edges, endRadius, edges );
+			return CreateCapsule( height, endRadius, edges, endRadius, edges );
 		}
 
 		/// <summary>
@@ -211,7 +211,7 @@ nameof( endRadius ) );
 		/// <param name="bottomRadius">Radius of bottom.</param>
 		/// <param name="bottomEdges">The number of edges of the bottom. The more edges, the more it resembles an capsule</param>
 		/// <returns></returns>
-		public static Vertices createCapsule( float height, float topRadius, int topEdges, float bottomRadius,
+		public static Vertices CreateCapsule( float height, float topRadius, int topEdges, float bottomRadius,
 											 int bottomEdges )
 		{
 			if( height <= 0 )
@@ -277,7 +277,7 @@ nameof( bottomRadius ) );
 		/// <param name="tipPercentage">The tip percentage.</param>
 		/// <param name="toothHeight">Height of the tooth.</param>
 		/// <returns></returns>
-		public static Vertices createGear( float radius, int numberOfTeeth, float tipPercentage, float toothHeight )
+		public static Vertices CreateGear( float radius, int numberOfTeeth, float tipPercentage, float toothHeight )
 		{
 			var vertices = new Vertices();
 
@@ -318,19 +318,19 @@ nameof( bottomRadius ) );
 		}
 
 
-		public static Vertices createPolygonFromTextureData( Texture2D texture )
+		public static Vertices CreatePolygonFromTextureData( Texture2D texture )
 		{
 			var data = new uint[texture.Width * texture.Height];
 			texture.GetData( data, 0, data.Length );
-			return TextureConverter.detectVertices( data, texture.Width );
+			return TextureConverter.DetectVertices( data, texture.Width );
 		}
 
 
-		public static Vertices createPolygonFromTextureData( Nez.Textures.Subtexture subtexture )
+		public static Vertices CreatePolygonFromTextureData( Nez.Textures.Subtexture subtexture )
 		{
-			var data = new uint[subtexture.sourceRect.Width * subtexture.sourceRect.Height];
-			subtexture.texture2D.GetData( 0, subtexture.sourceRect, data, 0, data.Length );
-			return TextureConverter.detectVertices( data, subtexture.texture2D.Width );
+			var data = new uint[subtexture.SourceRect.Width * subtexture.SourceRect.Height];
+			subtexture.Texture2D.GetData( 0, subtexture.SourceRect, data, 0, data.Length );
+			return TextureConverter.DetectVertices( data, subtexture.Texture2D.Width );
 		}
 
 		/// <summary>
@@ -339,9 +339,9 @@ nameof( bottomRadius ) );
 		/// <param name="data">The texture data.</param>
 		/// <param name="width">The texture width.</param>
 		/// <returns></returns>
-		public static Vertices createPolygonFromTextureData( uint[] data, int width )
+		public static Vertices CreatePolygonFromTextureData( uint[] data, int width )
 		{
-			return TextureConverter.detectVertices( data, width );
+			return TextureConverter.DetectVertices( data, width );
 		}
 
 		/// <summary>
@@ -351,9 +351,9 @@ nameof( bottomRadius ) );
 		/// <param name="width">The texture width.</param>
 		/// <param name="holeDetection">if set to <c>true</c> it will perform hole detection.</param>
 		/// <returns></returns>
-		public static Vertices createPolygonFromTextureData( uint[] data, int width, bool holeDetection )
+		public static Vertices CreatePolygonFromTextureData( uint[] data, int width, bool holeDetection )
 		{
-			return TextureConverter.detectVertices( data, width, holeDetection );
+			return TextureConverter.DetectVertices( data, width, holeDetection );
 		}
 
 		/// <summary>
@@ -366,10 +366,10 @@ nameof( bottomRadius ) );
 		/// <param name="multiPartDetection">if set to <c>true</c> it will perform multi part detection.</param>
 		/// <param name="holeDetection">if set to <c>true</c> it will perform hole detection.</param>
 		/// <returns></returns>
-		public static List<Vertices> createPolygonFromTextureData( uint[] data, int width, float hullTolerance,
+		public static List<Vertices> CreatePolygonFromTextureData( uint[] data, int width, float hullTolerance,
 												   byte alphaTolerance, bool multiPartDetection, bool holeDetection )
 		{
-			return TextureConverter.detectVertices( data, width, hullTolerance, alphaTolerance,
+			return TextureConverter.DetectVertices( data, width, hullTolerance, alphaTolerance,
 												   multiPartDetection, holeDetection );
 		}
 

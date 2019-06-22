@@ -12,7 +12,7 @@ namespace Nez.AI.UtilityAI
 		protected List<IActionOptionAppraisal<T,U>> _appraisals = new List<IActionOptionAppraisal<T,U>>();
 
 
-		public U getBestOption( T context, List<U> options )
+		public U GetBestOption( T context, List<U> options )
 		{
 			var result = default(U);
 			var bestScore = float.MinValue;
@@ -22,7 +22,7 @@ namespace Nez.AI.UtilityAI
 				var option = options[i];
 				var current = 0f;
 				for( var j = 0; j < _appraisals.Count; j++ )
-					current += _appraisals[j].getScore( context, option );
+					current += _appraisals[j].GetScore( context, option );
 
 				if( current > bestScore )
 				{
@@ -34,10 +34,10 @@ namespace Nez.AI.UtilityAI
 			return result;
 		}
 
-		public abstract void execute( T context );
+		public abstract void Execute( T context );
 
 
-		public ActionWithOptions<T,U> addScorer( IActionOptionAppraisal<T,U> scorer )
+		public ActionWithOptions<T,U> AddScorer( IActionOptionAppraisal<T,U> scorer )
 		{
 			_appraisals.Add( scorer );
 			return this;

@@ -29,14 +29,14 @@ namespace Nez.Textures
 		/// <param name="image">Image.</param>
 		/// <param name="opaqueColor">Opaque color.</param>
 		/// <param name="transparentColor">Transparent color.</param>
-		public static Texture2D createFlatHeightmap( Texture2D image, Color opaqueColor, Color transparentColor )
+		public static Texture2D CreateFlatHeightmap( Texture2D image, Color opaqueColor, Color transparentColor )
 		{
-			var resultTex = new Texture2D( Core.graphicsDevice, image.Width, image.Height, false, SurfaceFormat.Color );
+			var resultTex = new Texture2D( Core.GraphicsDevice, image.Width, image.Height, false, SurfaceFormat.Color );
 
 			var srcData = new Color[image.Width * image.Height];
 			image.GetData<Color>( srcData );
 
-			var destData = createFlatHeightmap( srcData, opaqueColor, transparentColor );
+			var destData = CreateFlatHeightmap( srcData, opaqueColor, transparentColor );
 
 			resultTex.SetData( destData );
 
@@ -44,7 +44,7 @@ namespace Nez.Textures
 		}
 
 
-		public static Color[] createFlatHeightmap( Color[] srcData, Color opaqueColor, Color transparentColor )
+		public static Color[] CreateFlatHeightmap( Color[] srcData, Color opaqueColor, Color transparentColor )
 		{
 			var destData = new Color[srcData.Length];
 
@@ -68,15 +68,15 @@ namespace Nez.Textures
 		/// <returns>The blurred texture.</returns>
 		/// <param name="image">Image.</param>
 		/// <param name="deviation">Deviation.</param>
-		public static Texture2D createBlurredGrayscaleTexture( Texture2D image, double deviation = 1 )
+		public static Texture2D CreateBlurredGrayscaleTexture( Texture2D image, double deviation = 1 )
 		{
-			return GaussianBlur.createBlurredGrayscaleTexture( image, deviation );
+			return GaussianBlur.CreateBlurredGrayscaleTexture( image, deviation );
 		}
 
 
-		public static Color[] createBlurredTexture( Color[] srcData, int width, int height, double deviation = 1 )
+		public static Color[] CreateBlurredTexture( Color[] srcData, int width, int height, double deviation = 1 )
 		{
-			return GaussianBlur.createBlurredTexture( srcData, width, height, deviation );
+			return GaussianBlur.CreateBlurredTexture( srcData, width, height, deviation );
 		}
 
 
@@ -86,15 +86,15 @@ namespace Nez.Textures
 		/// <returns>The blurred texture.</returns>
 		/// <param name="image">Image.</param>
 		/// <param name="deviation">Deviation.</param>
-		public static Texture2D createBlurredTexture( Texture2D image, double deviation = 1 )
+		public static Texture2D CreateBlurredTexture( Texture2D image, double deviation = 1 )
 		{
-			return GaussianBlur.createBlurredTexture( image, deviation );
+			return GaussianBlur.CreateBlurredTexture( image, deviation );
 		}
 
 
-		public static Color[] createBlurredGrayscaleTexture( Color[] srcData, int width, int height, double deviation = 1 )
+		public static Color[] CreateBlurredGrayscaleTexture( Color[] srcData, int width, int height, double deviation = 1 )
 		{
-			return GaussianBlur.createBlurredGrayscaleTexture( srcData, width, height, deviation );
+			return GaussianBlur.CreateBlurredGrayscaleTexture( srcData, width, height, deviation );
 		}
 
 
@@ -104,21 +104,21 @@ namespace Nez.Textures
 		/// <returns>The sobel filter.</returns>
 		/// <param name="image">Image.</param>
 		/// <param name="normalStrength">Normal strength.</param>
-		public static Texture2D createNormalMap( Texture2D image, EdgeDetectionFilter filter, float normalStrength = 1f, bool invertX = false, bool invertY = false )
+		public static Texture2D CreateNormalMap( Texture2D image, EdgeDetectionFilter filter, float normalStrength = 1f, bool invertX = false, bool invertY = false )
 		{
-			var resultTex = new Texture2D( Core.graphicsDevice, image.Width, image.Height, false, SurfaceFormat.Color );
+			var resultTex = new Texture2D( Core.GraphicsDevice, image.Width, image.Height, false, SurfaceFormat.Color );
 
 			var srcData = new Color[image.Width * image.Height];
 			image.GetData<Color>( srcData );
 
-			var destData = createNormalMap( srcData, filter, image.Width, image.Height, normalStrength, invertX, invertY );
+			var destData = CreateNormalMap( srcData, filter, image.Width, image.Height, normalStrength, invertX, invertY );
 			resultTex.SetData( destData );
 
 			return resultTex;
 		}
 
 
-		public static Color[] createNormalMap( Color[] srcData, EdgeDetectionFilter filter, int width, int height, float normalStrength = 1f, bool invertX = false, bool invertY = false )
+		public static Color[] CreateNormalMap( Color[] srcData, EdgeDetectionFilter filter, int width, int height, float normalStrength = 1f, bool invertX = false, bool invertY = false )
 		{
 			// TODO: why does teh scharr algorithm require us to flip the y axis?
 			if( filter == EdgeDetectionFilter.Scharr )
@@ -132,15 +132,15 @@ namespace Nez.Textures
 			{
 				for( var j = 1; j < height - 1; j++ )
 				{
-					var c = srcData[i + j * width].grayscale().B / 255f;
-					var r = srcData[i + 1 + j * width].grayscale().B / 255f;
-					var l = srcData[i - 1 + j * width].grayscale().B / 255f;
-					var t = srcData[i + ( j - 1 ) * width].grayscale().B / 255f;
-					var b = srcData[i + ( j + 1 ) * width].grayscale().B / 255f;
-					var bl = srcData[i - 1 + ( j + 1 ) * width].grayscale().B / 255f;
-					var tl = srcData[i - 1 + ( j - 1 ) * width].grayscale().B / 255f;
-					var br = srcData[i + 1 + ( j + 1 ) * width].grayscale().B / 255f;
-					var tr = srcData[i + 1 + ( j - 1 ) * width].grayscale().B / 255f;
+					var c = srcData[i + j * width].Grayscale().B / 255f;
+					var r = srcData[i + 1 + j * width].Grayscale().B / 255f;
+					var l = srcData[i - 1 + j * width].Grayscale().B / 255f;
+					var t = srcData[i + ( j - 1 ) * width].Grayscale().B / 255f;
+					var b = srcData[i + ( j + 1 ) * width].Grayscale().B / 255f;
+					var bl = srcData[i - 1 + ( j + 1 ) * width].Grayscale().B / 255f;
+					var tl = srcData[i - 1 + ( j - 1 ) * width].Grayscale().B / 255f;
+					var br = srcData[i + 1 + ( j + 1 ) * width].Grayscale().B / 255f;
+					var tr = srcData[i + 1 + ( j - 1 ) * width].Grayscale().B / 255f;
 
 					float dX = 0f, dY = 0f;
 					switch( filter )

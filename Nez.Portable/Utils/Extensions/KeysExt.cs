@@ -6,9 +6,9 @@ namespace Nez
 {
 	public static class KeysExt
 	{
-		public static char? getChar( this Keys key )
+		public static char? GetChar( this Keys key )
 		{
-			var isShiftDown = InputUtils.isShiftDown();
+			var isShiftDown = InputUtils.IsShiftDown();
 
 			if( key == Keys.A )
 				return isShiftDown ? 'A' : 'a';

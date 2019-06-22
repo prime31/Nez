@@ -12,18 +12,18 @@ namespace Nez.Sprites
 	/// </summary>
 	public class Sprite<TEnum> : Sprite, IUpdatable where TEnum : struct, IComparable, IFormattable
 	{
-		public event Action<TEnum> onAnimationCompletedEvent;
-		public bool isPlaying { get; private set; }
-		public int currentFrame { get; private set; }
+		public event Action<TEnum> OnAnimationCompletedEvent;
+		public bool IsPlaying { get; private set; }
+		public int CurrentFrame { get; private set; }
 
 		/// <summary>
 		/// gets/sets the currently playing animation
 		/// </summary>
 		/// <value>The current animation.</value>
-		public TEnum currentAnimation
+		public TEnum CurrentAnimation
 		{
 			get => _currentAnimationKey;
-			set => play( value );
+			set => Play( value );
 		}
 
 		Dictionary<TEnum, SpriteAnimation> _animations;
@@ -47,7 +47,7 @@ namespace Nez.Sprites
 		/// when the Scene is running.
 		/// </summary>
 		/// <param name="customComparer">Custom comparer.</param>
-		public Sprite( IEqualityComparer<TEnum> customComparer = null ) : base( Graphics.instance.pixelTexture )
+		public Sprite( IEqualityComparer<TEnum> customComparer = null ) : base( Graphics.Instance.PixelTexture )
 		{
 			_animations = new Dictionary<TEnum, SpriteAnimation>( customComparer );
 		}
@@ -69,24 +69,24 @@ namespace Nez.Sprites
 		/// </summary>
 		/// <param name="animationKey">Animation key.</param>
 		/// <param name="animation">Animation.</param>
-		public Sprite( TEnum animationKey, SpriteAnimation animation ) : this( null, animation.frames[0] )
+		public Sprite( TEnum animationKey, SpriteAnimation animation ) : this( null, animation.Frames[0] )
 		{
-			addAnimation( animationKey, animation );
+			AddAnimation( animationKey, animation );
 		}
 
 
 		#region Component overrides
 
-		void IUpdatable.update()
+		void IUpdatable.Update()
 		{
-			if( _currentAnimation == null || !isPlaying )
+			if( _currentAnimation == null || !IsPlaying )
 				return;
 
 			// handle delay
-			if( !_delayComplete && _elapsedDelay < _currentAnimation.delay )
+			if( !_delayComplete && _elapsedDelay < _currentAnimation.Delay )
 			{
-				_elapsedDelay += Time.deltaTime;
-				if( _elapsedDelay >= _currentAnimation.delay )
+				_elapsedDelay += Time.DeltaTime;
+				if( _elapsedDelay >= _currentAnimation.Delay )
 					_delayComplete = true;
 
 				return;
@@ -94,48 +94,48 @@ namespace Nez.Sprites
 
 			// count backwards if we are going in reverse
 			if( _isReversed )
-				_totalElapsedTime -= Time.deltaTime;
+				_totalElapsedTime -= Time.DeltaTime;
 			else
-				_totalElapsedTime += Time.deltaTime;
+				_totalElapsedTime += Time.DeltaTime;
 
 
-			_totalElapsedTime = Mathf.clamp( _totalElapsedTime, 0f, _currentAnimation.totalDuration );
-			_completedIterations = Mathf.floorToInt( _totalElapsedTime / _currentAnimation.iterationDuration );
+			_totalElapsedTime = Mathf.Clamp( _totalElapsedTime, 0f, _currentAnimation.TotalDuration );
+			_completedIterations = Mathf.FloorToInt( _totalElapsedTime / _currentAnimation.IterationDuration );
 			_isLoopingBackOnPingPong = false;
 
 
 			// handle ping pong loops. if loop is false but pingPongLoop is true we allow a single forward-then-backward iteration
-			if( _currentAnimation.pingPong )
+			if( _currentAnimation.PingPong )
 			{
-				if( _currentAnimation.loop || _completedIterations < 2 )
+				if( _currentAnimation.Loop || _completedIterations < 2 )
 					_isLoopingBackOnPingPong = _completedIterations % 2 != 0;
 			}
 
 
 			var elapsedTime = 0f;
-			if( _totalElapsedTime < _currentAnimation.iterationDuration )
+			if( _totalElapsedTime < _currentAnimation.IterationDuration )
 			{
 				elapsedTime = _totalElapsedTime;
 			}
 			else
 			{
-				elapsedTime = _totalElapsedTime % _currentAnimation.iterationDuration;
+				elapsedTime = _totalElapsedTime % _currentAnimation.IterationDuration;
 
 				// if we arent looping and elapsedTime is 0 we are done. Handle it appropriately
-				if( !_currentAnimation.loop && elapsedTime == 0 )
+				if( !_currentAnimation.Loop && elapsedTime == 0 )
 				{
 					// the animation is done so fire our event
-					if( onAnimationCompletedEvent != null )
-						onAnimationCompletedEvent( _currentAnimationKey );
+					if( OnAnimationCompletedEvent != null )
+						OnAnimationCompletedEvent( _currentAnimationKey );
 
-					isPlaying = false;
+					IsPlaying = false;
 
-					switch( _currentAnimation.completionBehavior )
+					switch( _currentAnimation.CompletionBehavior )
 					{
 						case AnimationCompletionBehavior.RemainOnFinalFrame:
 							return;
 						case AnimationCompletionBehavior.RevertToFirstFrame:
-							setSubtexture( _currentAnimation.frames[0] );
+							SetSubtexture( _currentAnimation.Frames[0] );
 							return;
 						case AnimationCompletionBehavior.HideSprite:
 							_subtexture = null;
@@ -151,41 +151,41 @@ namespace Nez.Sprites
 			{
 				_isReversed = false;
 
-				if( _currentAnimation.loop )
+				if( _currentAnimation.Loop )
 				{
 					_totalElapsedTime = 0f;
 				}
 				else
 				{
 					// the animation is done so fire our event
-					if( onAnimationCompletedEvent != null )
-						onAnimationCompletedEvent( _currentAnimationKey );
+					if( OnAnimationCompletedEvent != null )
+						OnAnimationCompletedEvent( _currentAnimationKey );
 
-					isPlaying = false;
+					IsPlaying = false;
 					return;
 				}
 			}
 
 			// time goes backwards when we are reversing a ping-pong loop
 			if( _isLoopingBackOnPingPong )
-				elapsedTime = _currentAnimation.iterationDuration - elapsedTime;
+				elapsedTime = _currentAnimation.IterationDuration - elapsedTime;
 
 
 			// fetch our desired frame
-			var desiredFrame = Mathf.floorToInt( elapsedTime / _currentAnimation.secondsPerFrame );
-			if( desiredFrame != currentFrame )
+			var desiredFrame = Mathf.FloorToInt( elapsedTime / _currentAnimation.SecondsPerFrame );
+			if( desiredFrame != CurrentFrame )
 			{
-				currentFrame = desiredFrame;
-				setSubtexture( _currentAnimation.frames[currentFrame] );
-				handleFrameChanged();
+				CurrentFrame = desiredFrame;
+				SetSubtexture( _currentAnimation.Frames[CurrentFrame] );
+				HandleFrameChanged();
 
 				// ping-pong needs special care. we don't want to double the frame time when wrapping so we man-handle the totalElapsedTime
-				if( _currentAnimation.pingPong && ( currentFrame == 0 || currentFrame == _currentAnimation.frames.Count - 1 ) )
+				if( _currentAnimation.PingPong && ( CurrentFrame == 0 || CurrentFrame == _currentAnimation.Frames.Count - 1 ) )
 				{
 					if( _isReversed )
-						_totalElapsedTime -= _currentAnimation.secondsPerFrame;
+						_totalElapsedTime -= _currentAnimation.SecondsPerFrame;
 					else
-						_totalElapsedTime += _currentAnimation.secondsPerFrame;
+						_totalElapsedTime += _currentAnimation.SecondsPerFrame;
 				}
 			}
 		}
@@ -193,19 +193,19 @@ namespace Nez.Sprites
 		#endregion
 
 
-		public Sprite<TEnum> addAnimation( TEnum key, SpriteAnimation animation )
+		public Sprite<TEnum> AddAnimation( TEnum key, SpriteAnimation animation )
 		{
 			// if we have no subtexture use the first frame we find
-			if( _subtexture == null && animation.frames.Count > 0 )
-				setSubtexture( animation.frames[0] );
+			if( _subtexture == null && animation.Frames.Count > 0 )
+				SetSubtexture( animation.Frames[0] );
 			_animations[key] = animation;
 
 			return this;
 		}
 
-		public SpriteAnimation getAnimation( TEnum key )
+		public SpriteAnimation GetAnimation( TEnum key )
 		{
-			Insist.isTrue( _animations.ContainsKey( key ), "{0} is not present in animations", key );
+			Insist.IsTrue( _animations.ContainsKey( key ), "{0} is not present in animations", key );
 			return _animations[key];
 		}
 
@@ -217,54 +217,54 @@ namespace Nez.Sprites
 		/// </summary>
 		/// <param name="animationKey">Animation key.</param>
 		/// <param name="startFrame">Start frame.</param>
-		public SpriteAnimation play( TEnum animationKey, int startFrame = 0 )
+		public SpriteAnimation Play( TEnum animationKey, int startFrame = 0 )
 		{
-			Insist.isTrue( _animations.ContainsKey( animationKey ), "Attempted to play an animation that doesnt exist" );
+			Insist.IsTrue( _animations.ContainsKey( animationKey ), "Attempted to play an animation that doesnt exist" );
 
 			var animation = _animations[animationKey];
-			animation.prepareForUse();
+			animation.PrepareForUse();
 
 			_currentAnimationKey = animationKey;
 			_currentAnimation = animation;
-			isPlaying = true;
+			IsPlaying = true;
 			_isReversed = false;
-			currentFrame = startFrame;
-			setSubtexture( _currentAnimation.frames[currentFrame] );
+			CurrentFrame = startFrame;
+			SetSubtexture( _currentAnimation.Frames[CurrentFrame] );
 
-			_totalElapsedTime = (float)startFrame * _currentAnimation.secondsPerFrame;
+			_totalElapsedTime = (float)startFrame * _currentAnimation.SecondsPerFrame;
 			return animation;
 		}
 
-		public bool isAnimationPlaying( TEnum animationKey )
+		public bool IsAnimationPlaying( TEnum animationKey )
 		{
 			return _currentAnimation != null && _currentAnimationKey.Equals( animationKey );
 		}
 
-		public void pause()
+		public void Pause()
 		{
-			isPlaying = false;
+			IsPlaying = false;
 		}
 
-		public void unPause()
+		public void UnPause()
 		{
-			isPlaying = true;
+			IsPlaying = true;
 		}
 
-		public void reverseAnimation()
+		public void ReverseAnimation()
 		{
 			_isReversed = !_isReversed;
 		}
 
-		public void stop()
+		public void Stop()
 		{
-			isPlaying = false;
+			IsPlaying = false;
 			_currentAnimation = null;
 		}
 
 		#endregion
 
 
-		void handleFrameChanged()
+		void HandleFrameChanged()
 		{
 			// TODO: add animation frame triggers
 		}

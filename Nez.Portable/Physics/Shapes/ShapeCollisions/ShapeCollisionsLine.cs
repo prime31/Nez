@@ -5,7 +5,7 @@ namespace Nez.PhysicsShapes
 {
 	public static partial class ShapeCollisions
 	{
-		public static bool lineToPoly( Vector2 start, Vector2 end, Polygon polygon, out RaycastHit hit )
+		public static bool LineToPoly( Vector2 start, Vector2 end, Polygon polygon, out RaycastHit hit )
 		{
 			hit = new RaycastHit();
 			var normal = Vector2.Zero;
@@ -13,12 +13,12 @@ namespace Nez.PhysicsShapes
 			var fraction = float.MaxValue;
 			var hasIntersection = false;
 
-			for( int j = polygon.points.Length - 1, i = 0; i < polygon.points.Length; j = i, i++ )
+			for( int j = polygon.Points.Length - 1, i = 0; i < polygon.Points.Length; j = i, i++ )
 			{
-				var edge1 = polygon.position + polygon.points[j];
-				var edge2 = polygon.position + polygon.points[i];
+				var edge1 = polygon.position + polygon.Points[j];
+				var edge2 = polygon.position + polygon.Points[i];
 				Vector2 intersection;
-				if( lineToLine( edge1, edge2, start, end, out intersection ) )
+				if( LineToLine( edge1, edge2, start, end, out intersection ) )
 				{
 					hasIntersection = true;
 
@@ -43,7 +43,7 @@ namespace Nez.PhysicsShapes
 				normal.Normalize();
 				float distance;
 				Vector2.Distance( ref start, ref intersectionPoint, out distance );
-				hit.setValues( fraction, distance, intersectionPoint, normal );
+				hit.SetValues( fraction, distance, intersectionPoint, normal );
 				return true;
 			}
 
@@ -51,7 +51,7 @@ namespace Nez.PhysicsShapes
 		}
 
 
-		public static bool lineToCircle( Vector2 start, Vector2 end, Circle s, out RaycastHit hit )
+		public static bool LineToCircle( Vector2 start, Vector2 end, Circle s, out RaycastHit hit )
 		{
 			hit = new RaycastHit();
 
@@ -60,7 +60,7 @@ namespace Nez.PhysicsShapes
 			var d = ( end - start ) / lineLength;
 			var m = start - s.position;
 			var b = Vector2.Dot( m, d );
-			var c = Vector2.Dot( m, m ) - s.radius * s.radius;
+			var c = Vector2.Dot( m, m ) - s.Radius * s.Radius;
 
 			// exit if r's origin outside of s (c > 0) and r pointing away from s (b > 0)
 			if( c > 0f && b > 0f )
@@ -73,22 +73,22 @@ namespace Nez.PhysicsShapes
 				return false;
 
 			// ray intersects circle. calculate details now.
-			hit.fraction = -b - Mathf.sqrt( discr );
+			hit.Fraction = -b - Mathf.Sqrt( discr );
 
 			// if fraction is negative, ray started inside circle so clamp fraction to 0
-			if( hit.fraction < 0 )
-				hit.fraction = 0;
+			if( hit.Fraction < 0 )
+				hit.Fraction = 0;
 
-			hit.point = start + hit.fraction * d;
-			Vector2.Distance( ref start, ref hit.point, out hit.distance );
-			hit.normal = Vector2.Normalize( hit.point - s.position );
-			hit.fraction = hit.distance / lineLength;
+			hit.Point = start + hit.Fraction * d;
+			Vector2.Distance( ref start, ref hit.Point, out hit.Distance );
+			hit.Normal = Vector2.Normalize( hit.Point - s.position );
+			hit.Fraction = hit.Distance / lineLength;
 
 			return true;
 		}
 
 
-		public static bool lineToLine( Vector2 a1, Vector2 a2, Vector2 b1, Vector2 b2, out Vector2 intersection )
+		public static bool LineToLine( Vector2 a1, Vector2 a2, Vector2 b1, Vector2 b2, out Vector2 intersection )
 		{
 			intersection = Vector2.Zero;
 

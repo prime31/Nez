@@ -14,31 +14,31 @@ namespace Nez.ImGuiTools
 		internal ImGuiWindowFlags _gameWindowFlags = 0;
 
 
-		public ImGuiOptions addFont( string path, float size )
+		public ImGuiOptions AddFont( string path, float size )
 		{
 			_fonts.Add( new Tuple<string, float>( path, size ) );
 			return this;
 		}
 
-		public ImGuiOptions includeDefaultFont( bool include )
+		public ImGuiOptions IncludeDefaultFont( bool include )
 		{
 			_includeDefaultFont = include;
 			return this;
 		}
 
-		public ImGuiOptions setGameWindowTitle( string title )
+		public ImGuiOptions SetGameWindowTitle( string title )
 		{
 			_gameWindowTitle = title;
 			return this;
 		}
 
-		public ImGuiOptions setGameWindowFirstPosition( float x, float y )
+		public ImGuiOptions SetGameWindowFirstPosition( float x, float y )
 		{
 			_gameWindowFirstPosition = new Num.Vector2( x, y );
 			return this;
 		}
 
-		public ImGuiOptions setGameWindowFlag( ImGuiWindowFlags flag )
+		public ImGuiOptions SetGameWindowFlag( ImGuiWindowFlags flag )
 		{
 			_gameWindowFlags |= flag;
 			return this;

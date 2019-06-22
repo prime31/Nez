@@ -74,12 +74,12 @@ namespace Nez.Analysis
 		/// <summary>
 		/// Gets/Sets client area.
 		/// </summary>
-		public Rectangle clientArea;
+		public Rectangle ClientArea;
 
 		/// <summary>
 		/// Gets/Sets safe area.
 		/// </summary>
-		public Rectangle safeArea;
+		public Rectangle SafeArea;
 
 
 		#region Initialization
@@ -91,8 +91,8 @@ namespace Nez.Analysis
 		/// <param name="safeArea">safe area</param>
 		public Layout( Rectangle clientArea, Rectangle safeArea )
 		{
-			this.clientArea = clientArea;
-			this.safeArea = safeArea;
+			this.ClientArea = clientArea;
+			this.SafeArea = safeArea;
 		}
 
 		/// <summary>
@@ -109,8 +109,8 @@ namespace Nez.Analysis
 		/// </summary>
 		public Layout( Viewport viewport )
 		{
-			clientArea = new Rectangle( (int)viewport.X, (int)viewport.Y, (int)viewport.Width, (int)viewport.Height );
-			safeArea = viewport.TitleSafeArea;
+			ClientArea = new Rectangle( (int)viewport.X, (int)viewport.Y, (int)viewport.Width, (int)viewport.Height );
+			SafeArea = viewport.TitleSafeArea;
 		}
 
 		#endregion
@@ -121,10 +121,10 @@ namespace Nez.Analysis
 		/// </summary>
 		/// <param name="region">placing region</param>
 		/// <returns>Placed position</returns>
-		public Vector2 place( Vector2 size, float horizontalMargin, float verticalMargine, Alignment alignment )
+		public Vector2 Place( Vector2 size, float horizontalMargin, float verticalMargine, Alignment alignment )
 		{
 			var rc = new Rectangle( 0, 0, (int)size.X, (int)size.Y );
-			rc = place( rc, horizontalMargin, verticalMargine, alignment );
+			rc = Place( rc, horizontalMargin, verticalMargine, alignment );
 			return new Vector2( rc.X, rc.Y );
 		}
 
@@ -134,23 +134,23 @@ namespace Nez.Analysis
 		/// </summary>
 		/// <param name="region">placing rectangle</param>
 		/// <returns>placed rectangle</returns>
-		public Rectangle place( Rectangle region, float horizontalMargin, float verticalMargine, Alignment alignment )
+		public Rectangle Place( Rectangle region, float horizontalMargin, float verticalMargine, Alignment alignment )
 		{
 			// Horizontal layout.
 			if( ( alignment & Alignment.Left ) != 0 )
 			{
-				region.X = clientArea.X + (int)( clientArea.Width * horizontalMargin );
+				region.X = ClientArea.X + (int)( ClientArea.Width * horizontalMargin );
 			}
 			else if( ( alignment & Alignment.Right ) != 0 )
 			{
-				region.X = clientArea.X +
-				(int)( clientArea.Width * ( 1.0f - horizontalMargin ) ) -
+				region.X = ClientArea.X +
+				(int)( ClientArea.Width * ( 1.0f - horizontalMargin ) ) -
 				region.Width;
 			}
 			else if( ( alignment & Alignment.HorizontalCenter ) != 0 )
 			{
-				region.X = clientArea.X + ( clientArea.Width - region.Width ) / 2 +
-				(int)( horizontalMargin * clientArea.Width );
+				region.X = ClientArea.X + ( ClientArea.Width - region.Width ) / 2 +
+				(int)( horizontalMargin * ClientArea.Width );
 			}
 			else
 			{
@@ -160,18 +160,18 @@ namespace Nez.Analysis
 			// Vertical layout.
 			if( ( alignment & Alignment.Top ) != 0 )
 			{
-				region.Y = clientArea.Y + (int)( clientArea.Height * verticalMargine );
+				region.Y = ClientArea.Y + (int)( ClientArea.Height * verticalMargine );
 			}
 			else if( ( alignment & Alignment.Bottom ) != 0 )
 			{
-				region.Y = clientArea.Y +
-				(int)( clientArea.Height * ( 1.0f - verticalMargine ) ) -
+				region.Y = ClientArea.Y +
+				(int)( ClientArea.Height * ( 1.0f - verticalMargine ) ) -
 				region.Height;
 			}
 			else if( ( alignment & Alignment.VerticalCenter ) != 0 )
 			{
-				region.Y = clientArea.Y + ( clientArea.Height - region.Height ) / 2 +
-				(int)( verticalMargine * clientArea.Height );
+				region.Y = ClientArea.Y + ( ClientArea.Height - region.Height ) / 2 +
+				(int)( verticalMargine * ClientArea.Height );
 			}
 			else
 			{
@@ -179,17 +179,17 @@ namespace Nez.Analysis
 			}
 
 			// Make sure layout region is in the safe area.
-			if( region.Left < safeArea.Left )
-				region.X = safeArea.Left;
+			if( region.Left < SafeArea.Left )
+				region.X = SafeArea.Left;
 
-			if( region.Right > safeArea.Right )
-				region.X = safeArea.Right - region.Width;
+			if( region.Right > SafeArea.Right )
+				region.X = SafeArea.Right - region.Width;
 
-			if( region.Top < safeArea.Top )
-				region.Y = safeArea.Top;
+			if( region.Top < SafeArea.Top )
+				region.Y = SafeArea.Top;
 
-			if( region.Bottom > safeArea.Bottom )
-				region.Y = safeArea.Bottom - region.Height;
+			if( region.Bottom > SafeArea.Bottom )
+				region.Y = SafeArea.Bottom - region.Height;
 
 			return region;
 		}

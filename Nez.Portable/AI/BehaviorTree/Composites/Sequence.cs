@@ -11,18 +11,18 @@ namespace Nez.AI.BehaviorTrees
 	{
 		public Sequence( AbortTypes abortType = AbortTypes.None )
 		{
-			this.abortType = abortType;
+			this.AbortType = abortType;
 		}
 
 
-		public override TaskStatus update( T context )
+		public override TaskStatus Update( T context )
 		{
 			// first, we handle conditional aborts if we are not already on the first child
 			if( _currentChildIndex != 0 )
-				handleConditionalAborts( context );
+				HandleConditionalAborts( context );
 			
 			var current = _children[_currentChildIndex];
-			var status = current.tick( context );
+			var status = current.Tick( context );
 
 			// if the child failed or is still running, early return
 			if( status != TaskStatus.Success )
@@ -42,13 +42,13 @@ namespace Nez.AI.BehaviorTrees
 		}
 
 
-		void handleConditionalAborts( T context )
+		void HandleConditionalAborts( T context )
 		{
 			if( _hasLowerPriorityConditionalAbort )
-				updateLowerPriorityAbortConditional( context, TaskStatus.Success );
+				UpdateLowerPriorityAbortConditional( context, TaskStatus.Success );
 
-			if( abortType.has( AbortTypes.Self ) )
-				updateSelfAbortConditional( context, TaskStatus.Success );
+			if( AbortType.Has( AbortTypes.Self ) )
+				UpdateSelfAbortConditional( context, TaskStatus.Success );
 		}
 
 	}

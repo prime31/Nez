@@ -10,7 +10,7 @@ namespace Nez
 		static Dictionary<Type,int> _componentTypesMask = new Dictionary<Type,int>();
 
 
-		public static void add( Type type )
+		public static void Add( Type type )
 		{
 			int v;
 			if( !_componentTypesMask.TryGetValue( type, out v ) )
@@ -18,12 +18,12 @@ namespace Nez
 		}
 
 
-		public static int getIndexFor( Type type )
+		public static int GetIndexFor( Type type )
 		{
 			var v = -1;
 			if( !_componentTypesMask.TryGetValue( type, out v ) )
 			{
-				add( type );
+				Add( type );
 				_componentTypesMask.TryGetValue( type, out v );
 			}
 
@@ -31,11 +31,11 @@ namespace Nez
 		}
 
 
-		public static IEnumerable<Type> getTypesFromBits( BitSet bits )
+		public static IEnumerable<Type> GetTypesFromBits( BitSet bits )
 		{
 			foreach( var keyValuePair in _componentTypesMask )
 			{
-				if( bits.get( keyValuePair.Value ) )
+				if( bits.Get( keyValuePair.Value ) )
 					yield return keyValuePair.Key;
 			}   
 		}

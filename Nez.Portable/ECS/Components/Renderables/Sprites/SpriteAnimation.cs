@@ -22,40 +22,40 @@ namespace Nez.Sprites
 		/// frames per second for the animations
 		/// </summary>
 		/// <value>The fps.</value>
-		public float fps
+		public float Fps
 		{
 			get { return _fps; }
-			set { setFps( value ); }
+			set { SetFps( value ); }
 		}
 
 		/// <summary>
 		/// controls whether the animation should loop
 		/// </summary>
 		/// <value>The loop.</value>
-		public bool loop
+		public bool Loop
 		{
 			get { return _loop; }
-			set { setLoop( value ); }
+			set { SetLoop( value ); }
 		}
 
 		/// <summary>
 		/// if loop is true, this controls if an animation loops sequentially or back and forth
 		/// </summary>
 		/// <value>The ping pong.</value>
-		public bool pingPong
+		public bool PingPong
 		{
 			get { return _pingPong; }
-			set { setPingPong( value ); }
+			set { SetPingPong( value ); }
 		}
 
-		public float delay = 0f;
-		public float totalDuration;
-		public AnimationCompletionBehavior completionBehavior;
-		public List<Subtexture> frames = new List<Subtexture>();
+		public float Delay = 0f;
+		public float TotalDuration;
+		public AnimationCompletionBehavior CompletionBehavior;
+		public List<Subtexture> Frames = new List<Subtexture>();
 
 		// calculated values used by SpriteT
-		public float secondsPerFrame;
-		public float iterationDuration;
+		public float SecondsPerFrame;
+		public float IterationDuration;
 
 		float _fps = 10;
 		bool _loop = true;
@@ -69,13 +69,13 @@ namespace Nez.Sprites
 
 		public SpriteAnimation( Subtexture frame )
 		{
-			addFrame( frame );
+			AddFrame( frame );
 		}
 
 
 		public SpriteAnimation( List<Subtexture> frames )
 		{
-			addFrames( frames );
+			AddFrames( frames );
 		}
 
 
@@ -83,20 +83,20 @@ namespace Nez.Sprites
 		/// called by SpriteT to calculate the secondsPerFrame and totalDuration based on the loop details and frame count
 		/// </summary>
 		/// <returns>The for use.</returns>
-		public void prepareForUse()
+		public void PrepareForUse()
 		{
 			if( !_isDirty )
 				return;
 
-			secondsPerFrame = 1f / fps;
-			iterationDuration = secondsPerFrame * (float)frames.Count;
+			SecondsPerFrame = 1f / Fps;
+			IterationDuration = SecondsPerFrame * (float)Frames.Count;
 
-			if( loop )
-				totalDuration = float.PositiveInfinity;
-			else if( pingPong )
-				totalDuration = iterationDuration * 2f;
+			if( Loop )
+				TotalDuration = float.PositiveInfinity;
+			else if( PingPong )
+				TotalDuration = IterationDuration * 2f;
 			else
-				totalDuration = iterationDuration;
+				TotalDuration = IterationDuration;
 
 			_isDirty = false;
 		}
@@ -106,15 +106,15 @@ namespace Nez.Sprites
 		/// sets the origin for all frames in this animation
 		/// </summary>
 		/// <param name="origin"></param>
-		public SpriteAnimation setOrigin( Vector2 origin )
+		public SpriteAnimation SetOrigin( Vector2 origin )
 		{
-			for( var i = 0; i < frames.Count; i++ )
-				frames[i].origin = origin;
+			for( var i = 0; i < Frames.Count; i++ )
+				Frames[i].Origin = origin;
 			return this;
 		}
 
 
-		public SpriteAnimation setFps( float fps )
+		public SpriteAnimation SetFps( float fps )
 		{
 			_fps = fps;
 			_isDirty = true;
@@ -122,7 +122,7 @@ namespace Nez.Sprites
 		}
 
 
-		public SpriteAnimation setLoop( bool loop )
+		public SpriteAnimation SetLoop( bool loop )
 		{
 			_loop = loop;
 			_isDirty = true;
@@ -130,7 +130,7 @@ namespace Nez.Sprites
 		}
 
 
-		public SpriteAnimation setPingPong( bool pingPong )
+		public SpriteAnimation SetPingPong( bool pingPong )
 		{
 			_pingPong = pingPong;
 			_isDirty = true;
@@ -142,9 +142,9 @@ namespace Nez.Sprites
 		/// adds a frame to this animation
 		/// </summary>
 		/// <param name="subtexture">Subtexture.</param>
-		public SpriteAnimation addFrame( Subtexture subtexture )
+		public SpriteAnimation AddFrame( Subtexture subtexture )
 		{
-			frames.Add( subtexture );
+			Frames.Add( subtexture );
 			return this;
 		}
 
@@ -154,10 +154,10 @@ namespace Nez.Sprites
 		/// </summary>
 		/// <returns>The frames.</returns>
 		/// <param name="subtextures">Subtextures.</param>
-		public SpriteAnimation addFrames( List<Subtexture> subtextures )
+		public SpriteAnimation AddFrames( List<Subtexture> subtextures )
 		{
 			for( var i = 0; i < subtextures.Count; i++ )
-				addFrame( subtextures[i] );
+				AddFrame( subtextures[i] );
 			return this;
 		}
 

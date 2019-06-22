@@ -12,30 +12,30 @@ namespace Nez.AI.BehaviorTrees
 		/// <summary>
 		/// the amount of time to wait
 		/// </summary>
-		public float waitTime;
+		public float WaitTime;
 
 		float _startTime;
 
 
 		public WaitAction( float waitTime )
 		{
-			this.waitTime = waitTime;
+			this.WaitTime = waitTime;
 		}
 
 
-		public override void onStart()
+		public override void OnStart()
 		{
 			_startTime = 0;
 		}
 
 
-		public override TaskStatus update( T context )
+		public override TaskStatus Update( T context )
 		{
 			// we cant use Time.deltaTime due to the tree ticking at its own rate so we store the start time instead
 			if( _startTime == 0 )
-				_startTime = Time.time;
+				_startTime = Time.TotalTime;
 
-			if( Time.time - _startTime >= waitTime )
+			if( Time.TotalTime - _startTime >= WaitTime )
 				return TaskStatus.Success;
 
 			return TaskStatus.Running;

@@ -17,9 +17,9 @@ namespace Nez.AI.UtilityAI
 		}
 
 
-		void IAction<T>.execute( T context )
+		void IAction<T>.Execute( T context )
 		{
-			Debug.log( _text );
+			Debug.Log( _text );
 		}
 
 	}

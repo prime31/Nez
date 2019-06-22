@@ -11,13 +11,13 @@ namespace Nez.UISkinImporter
 	[ContentImporter( ".uiskin", DefaultProcessor = "UISkinProcessor", DisplayName = "UISkin Importer" )]
 	public class UISkinImporter : ContentImporter<IDictionary<string,object>>
 	{
-		public static ContentBuildLogger logger;
+		public static ContentBuildLogger Logger;
 
 
 		public override IDictionary<string,object> Import( string filename, ContentImporterContext context )
 		{
-			logger = context.Logger;
-			logger.LogMessage( "Importing uiskin file: {0}", filename );
+			Logger = context.Logger;
+			Logger.LogMessage( "Importing uiskin file: {0}", filename );
 
 			using( var reader = new StreamReader( filename ) )
 			{

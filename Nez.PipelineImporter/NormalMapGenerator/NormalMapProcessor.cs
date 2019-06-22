@@ -10,79 +10,78 @@ using Nez.Textures;
 
 namespace Nez.NormalMapGenerator
 {
-	[ContentProcessor( DisplayName = "Normal Map Generator" )]
+    public enum BlurType
+    {
+        None,
+        Color,
+        Grayscale
+    }
+
+    [ContentProcessor( DisplayName = "Normal Map Generator" )]
 	public class NormalMapProcessor : TextureProcessor
 	{
-		public enum BlurType
-		{
-			None,
-			Color,
-			Grayscale
-		}
-
-
 		#region Processor properties
 
 		[DefaultValueAttribute( false )]
-		public virtual bool flattenImage { get; set; }
+		public virtual bool FlattenImage { get; set; }
 
 		[DefaultValueAttribute( typeof( Color ), "255,255,255,255" )]
-		public Color opaqueColor { get; set; } = Color.White;
+		public Color OpaqueColor { get; set; } = Color.White;
 
 		[DefaultValueAttribute( typeof( Color ), "0,0,0,255" )]
-		public Color transparentColor { get; set; } = Color.Black;
+		public Color TransparentColor { get; set; } = Color.Black;
 
 		[DefaultValueAttribute( typeof( BlurType ), "BlurType.Grayscale" )]
-		public BlurType blurType { get; set; } = BlurType.Grayscale;
+		public BlurType BlurType { get; set; } = BlurType.Grayscale;
 
-		public float blurDeviation { get; set; } = 0.5f;
+		public float BlurDeviation { get; set; } = 0.5f;
 
 		[DefaultValueAttribute( typeof( TextureUtils.EdgeDetectionFilter ), "TextureUtils.EdgeDetectionFilter.Sobel" )]
-		public TextureUtils.EdgeDetectionFilter edgeDetectionFilter { get; set; }
+		public TextureUtils.EdgeDetectionFilter EdgeDetectionFilter { get; set; }
 
-		public float normalStrength { get; set; } = 1f;
-
-		[DefaultValueAttribute( false )]
-		public bool invertX { get; set; }
+		public float NormalStrength { get; set; } = 1f;
 
 		[DefaultValueAttribute( false )]
-		public bool invertY { get; set; }
+		public bool InvertX { get; set; }
+
+		[DefaultValueAttribute( false )]
+		public bool InvertY { get; set; }
 
 		#endregion
 
 
-		public static ContentBuildLogger logger;
+		public static ContentBuildLogger Logger;
 
 
 		public override TextureContent Process( TextureContent input, ContentProcessorContext context )
 		{
-			logger = context.Logger;
-			logger.LogMessage( "sending texture to base TextureProcessor for initial processing" );
+			Logger = context.Logger;
+			Logger.LogMessage( "sending texture to base TextureProcessor for initial processing" );
 
 			var textureContent = base.Process( input, context );
 			var bmp = (PixelBitmapContent<Color>)textureContent.Faces[0][0];
-			var destData = bmp.getData();
+			var destData = bmp.GetData();
 
 			// process the data
-			if( flattenImage )
+			if( FlattenImage )
 			{
-				logger.LogMessage( "flattening image" );
-				destData = TextureUtils.createFlatHeightmap( destData, opaqueColor, transparentColor );
+				Logger.LogMessage( "flattening image" );
+				destData = TextureUtils.CreateFlatHeightmap( destData, OpaqueColor, TransparentColor );
 			}
 
-			if( blurType != BlurType.None )
+			if( BlurType != BlurType.None )
 			{
-				logger.LogMessage( "blurring image width blurDeviation: {0}", blurDeviation );
-				if( blurType == BlurType.Color )
-					destData = TextureUtils.createBlurredTexture( destData, bmp.Width, bmp.Height, (double)blurDeviation );
+				Logger.LogMessage( "blurring image width blurDeviation: {0}", BlurDeviation );
+				if( BlurType == BlurType.Color )
+					destData = TextureUtils.CreateBlurredTexture( destData, bmp.Width, bmp.Height, (double)BlurDeviation );
 				else
-					destData = TextureUtils.createBlurredGrayscaleTexture( destData, bmp.Width, bmp.Height, (double)blurDeviation );
+					destData = TextureUtils.CreateBlurredGrayscaleTexture( destData, bmp.Width, bmp.Height, (double)BlurDeviation );
 			}
 
-			logger.LogMessage( "generating normal map with {0}", edgeDetectionFilter );
-			destData = TextureUtils.createNormalMap( destData, edgeDetectionFilter, bmp.Width, bmp.Height, normalStrength, invertX, invertY );
+			Logger.LogMessage( "generating normal map with {0}", EdgeDetectionFilter );
+			destData = TextureUtils.CreateNormalMap( destData, EdgeDetectionFilter, bmp.Width, bmp.Height, NormalStrength, InvertX, InvertY );
 
-			bmp.setData( destData );
+			bmp.SetData( destData );
 
 			return textureContent;
 		}

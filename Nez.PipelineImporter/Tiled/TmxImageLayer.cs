@@ -7,12 +7,12 @@ namespace Nez.TiledMaps
 	public class TmxImageLayer : TmxLayer
 	{
 		[XmlElement( ElementName = "image" )]
-		public TmxImage image;
+		public TmxImage Image;
 
 
 		public override string ToString()
 		{
-			return string.Format( "[TmxImageLayer] name: {0}, image: {1}, visible: {2}", name, image, visible );
+			return string.Format( "[TmxImageLayer] name: {0}, image: {1}, visible: {2}", Name, Image, Visible );
 		}
 	}
 }

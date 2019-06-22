@@ -14,22 +14,22 @@ namespace Nez.Farseer
 		{ }
 
 
-		public override void initialize()
+		public override void Initialize()
 		{
-			base.initialize();
-			body.attachCircle( _subtexture.sourceRect.Width / 2, 1 );
+			base.Initialize();
+			Body.AttachCircle( _subtexture.SourceRect.Width / 2, 1 );
 		}
 
 
-		public override void onEntityTransformChanged( Transform.Component comp )
+		public override void OnEntityTransformChanged( Transform.Component comp )
 		{
-			base.onEntityTransformChanged( comp );
+			base.OnEntityTransformChanged( comp );
 			if( _ignoreTransformChanges )
 				return;
 
 			// we only care about scale. base handles pos/rot
 			if( comp == Transform.Component.Scale )
-				body.fixtureList[0].shape.radius = _subtexture.sourceRect.Width * transform.scale.X * 0.5f * FSConvert.displayToSim;
+				Body.FixtureList[0].Shape.Radius = _subtexture.SourceRect.Width * Transform.Scale.X * 0.5f * FSConvert.DisplayToSim;
 		}
 
 	}

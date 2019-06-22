@@ -18,7 +18,7 @@ namespace FarseerPhysics.Common.ConvexHull
 		/// <summary>
 		/// Returns the convex hull from the given vertices..
 		/// </summary>
-		public static Vertices getConvexHull( Vertices vertices )
+		public static Vertices GetConvexHull( Vertices vertices )
 		{
 			if( vertices.Count <= 3 )
 				return vertices;
@@ -81,13 +81,13 @@ namespace FarseerPhysics.Common.ConvexHull
 			while( ++i <= maxmin )
 			{
 				// the lower line joins P[minmin] with P[maxmin]
-				if( MathUtils.area( pointSet[minmin], pointSet[maxmin], pointSet[i] ) >= 0 && i < maxmin )
+				if( MathUtils.Area( pointSet[minmin], pointSet[maxmin], pointSet[i] ) >= 0 && i < maxmin )
 					continue; // ignore P[i] above or on the lower line
 
 				while( top > 0 ) // there are at least 2 points on the stack
 				{
 					// test if P[i] is left of the line at the stack top
-					if( MathUtils.area( h[top - 1], h[top], pointSet[i] ) > 0 )
+					if( MathUtils.Area( h[top - 1], h[top], pointSet[i] ) > 0 )
 						break; // P[i] is a new hull vertex
 
 					top--; // pop top point off stack
@@ -103,13 +103,13 @@ namespace FarseerPhysics.Common.ConvexHull
 			while( --i >= minmax )
 			{
 				// the upper line joins P[maxmax] with P[minmax]
-				if( MathUtils.area( pointSet[maxmax], pointSet[minmax], pointSet[i] ) >= 0 && i > minmax )
+				if( MathUtils.Area( pointSet[maxmax], pointSet[minmax], pointSet[i] ) >= 0 && i > minmax )
 					continue; // ignore P[i] below or on the upper line
 
 				while( top > bot ) // at least 2 points on the upper stack
 				{
 					// test if P[i] is left of the line at the stack top
-					if( MathUtils.area( h[top - 1], h[top], pointSet[i] ) > 0 )
+					if( MathUtils.Area( h[top - 1], h[top], pointSet[i] ) > 0 )
 						break; // P[i] is a new hull vertex
 
 					top--; // pop top point off stack

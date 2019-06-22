@@ -18,32 +18,32 @@ namespace Nez
 		private static extern string SDL_GetClipboardText();
 
 
-		public static string getContents()
+		public static string GetContents()
 		{
 			if( _instance == null )
 				_instance = new Clipboard();
-			return _instance.getContents();
+			return _instance.GetContents();
 		}
 
 
-		public static void setContents( string text )
+		public static void SetContents( string text )
 		{
 			if( _instance == null )
 				_instance = new Clipboard();
-			_instance.setContents( text );
+			_instance.SetContents( text );
 		}
 
 
 		
 		#region IClipboard implementation
 
-		string IClipboard.getContents()
+		string IClipboard.GetContents()
 		{
 			return SDL_GetClipboardText();
 		}
 
 
-		void IClipboard.setContents( string text )
+		void IClipboard.SetContents( string text )
 		{
 			SDL_SetClipboardText(text);
 		}

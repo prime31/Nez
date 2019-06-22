@@ -14,19 +14,19 @@ namespace Nez.ParticleDesignerImporter
 	[ContentProcessor( DisplayName = "Particle Designer Processor" )]
 	public class ParticleDesignerProcessor : ContentProcessor<ParticleDesignerContent, ParticleDesignerProcessorResult>
 	{
-		public static ContentBuildLogger logger;
+		public static ContentBuildLogger Logger;
 
 
 		public override ParticleDesignerProcessorResult Process( ParticleDesignerContent input, ContentProcessorContext context )
 		{
-			logger = context.Logger;
+			Logger = context.Logger;
 			var result = new ParticleDesignerProcessorResult();
 
 			// check for an embedded tiff texture
-			if( input.emitterConfig.texture.data != null )
+			if( input.EmitterConfig.Texture.Data != null )
 			{
 				context.Logger.LogMessage( "pex file has an embedded tiff. Extracting now." );
-				using( var memoryStream = new MemoryStream( Convert.FromBase64String( input.emitterConfig.texture.data ), writable: false ) )
+				using( var memoryStream = new MemoryStream( Convert.FromBase64String( input.EmitterConfig.Texture.Data ), writable: false ) )
 				{
 					using( var stream = new GZipStream( memoryStream, CompressionMode.Decompress ) )
 					{
@@ -43,19 +43,19 @@ namespace Nez.ParticleDesignerImporter
 
 							} while( count > 0 );
 
-							result.textureTiffData = memory.ToArray();
+							result.TextureTiffData = memory.ToArray();
 						}
 					}
 				}
 
 				var tempFile = Path.Combine( Path.GetTempPath(), "tempParticleTexture.tif" );
-				File.WriteAllBytes( tempFile, result.textureTiffData );
+				File.WriteAllBytes( tempFile, result.TextureTiffData );
 				context.Logger.LogMessage( "writing tiff to temp file: {0}", tempFile );
 
 				context.Logger.LogMessage( "running TextureImportor on tiff" );
 				var textureImporter = new TextureImporter();
-				result.texture = textureImporter.Import( tempFile, input.context ) as Texture2DContent;
-				result.texture.Name = input.emitterConfig.texture.name;
+				result.Texture = textureImporter.Import( tempFile, input.Context ) as Texture2DContent;
+				result.Texture.Name = input.EmitterConfig.Texture.Name;
 
 				context.Logger.LogMessage( "deleting temp file" );
 				File.Delete( tempFile );
@@ -67,19 +67,19 @@ namespace Nez.ParticleDesignerImporter
 					GenerateMipmaps = false,
 					TextureFormat = TextureProcessorOutputFormat.Color
 				};
-				result.texture = (Texture2DContent)textureProcessor.Process( result.texture, context );
+				result.Texture = (Texture2DContent)textureProcessor.Process( result.Texture, context );
 				context.Logger.LogMessage( "TextureContent processed" );
 			}
 			else // no tiff data, so let's try loading the texture with the texture name, from the same directory as the particle file
 			{
-				string fileDirectory = Path.GetDirectoryName( input.path );
-				string fullPath = Path.Combine( fileDirectory, input.emitterConfig.texture.name );
+				string fileDirectory = Path.GetDirectoryName( input.Path );
+				string fullPath = Path.Combine( fileDirectory, input.EmitterConfig.Texture.Name );
 				context.Logger.LogMessage( "Looking for texture file at {0}", fullPath );
-				result.texture = context.BuildAndLoadAsset<string, Texture2DContent>( new ExternalReference<string>( fullPath ), "TextureProcessor" );
+				result.Texture = context.BuildAndLoadAsset<string, Texture2DContent>( new ExternalReference<string>( fullPath ), "TextureProcessor" );
 				context.Logger.LogMessage( "Texture file found" );
 			}
 
-			result.particleEmitterConfig = input.emitterConfig;
+			result.ParticleEmitterConfig = input.EmitterConfig;
 
 			return result;
 		}

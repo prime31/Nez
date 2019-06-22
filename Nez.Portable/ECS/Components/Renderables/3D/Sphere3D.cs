@@ -47,17 +47,17 @@ namespace Nez
 					var first = ( latNumber * ( longitudeBands + 1 ) ) + longNumber;
 					var second = first + longitudeBands + 1;
 
-					addIndex( first );
-					addIndex( second );
-					addIndex( first + 1 );
+					AddIndex( first );
+					AddIndex( second );
+					AddIndex( first + 1 );
 
-					addIndex( second );
-					addIndex( second + 1 );
-					addIndex( first + 1 );
+					AddIndex( second );
+					AddIndex( second + 1 );
+					AddIndex( first + 1 );
 				}
 			}
 
-			initializePrimitive();
+			InitializePrimitive();
 		}
 	}
 }

@@ -39,7 +39,7 @@ namespace FarseerPhysics.Common.PolygonManipulation
 		///<param name="triangles">The triangles.</param>
 		///<param name="maxPolys">The maximun number of polygons to return.</param>
 		///<param name="tolerance">The tolerance</param>
-		public static List<Vertices> polygonizeTriangles( List<Vertices> triangles, int maxPolys = int.MaxValue, float tolerance = 0.001f )
+		public static List<Vertices> PolygonizeTriangles( List<Vertices> triangles, int maxPolys = int.MaxValue, float tolerance = 0.001f )
 		{
 			if( triangles.Count <= 0 )
 				return triangles;
@@ -98,14 +98,14 @@ namespace FarseerPhysics.Common.PolygonManipulation
 						{
 							continue;
 						}
-						Vertices newP = addTriangle( triangles[index], poly );
+						Vertices newP = AddTriangle( triangles[index], poly );
 						if( newP == null )
 							continue; // is this right
 
-						if( newP.Count > Settings.maxPolygonVertices )
+						if( newP.Count > Settings.MaxPolygonVertices )
 							continue;
 
-						if( newP.isConvex() )
+						if( newP.IsConvex() )
 						{
 							//Or should it be IsUsable?  Maybe re-write IsConvex to apply the angle threshold from Box2d
 							poly = new Vertices( newP );
@@ -116,7 +116,7 @@ namespace FarseerPhysics.Common.PolygonManipulation
 					//We have a maximum of polygons that we need to keep under.
 					if( polyIndex < maxPolys )
 					{
-						SimplifyTools.mergeParallelEdges( poly, tolerance );
+						SimplifyTools.MergeParallelEdges( poly, tolerance );
 
 						//If identical points are present, a triangle gets
 						//borked by the MergeParallelEdges function, hence
@@ -144,7 +144,7 @@ namespace FarseerPhysics.Common.PolygonManipulation
 		}
 
 
-		static Vertices addTriangle( Vertices t, Vertices vertices )
+		static Vertices AddTriangle( Vertices t, Vertices vertices )
 		{
 			// First, find vertices that connect
 			int firstP = -1;

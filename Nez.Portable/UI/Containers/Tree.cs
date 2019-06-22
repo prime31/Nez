@@ -20,22 +20,22 @@ namespace Nez.UI.Containers
         Node overNode, rangeStart;
 
 
-        public override float preferredWidth
+        public override float PreferredWidth
         {
             get
             {
                 if( sizeInvalid )
-                    computeSize();
+                    ComputeSize();
                 return prefWidth;
             }
         }
 
-        public override float preferredHeight
+        public override float PreferredHeight
         {
             get
             {
                 if( sizeInvalid )
-                    computeSize();
+                    ComputeSize();
                 return prefHeight;
             }
         }
@@ -43,82 +43,82 @@ namespace Nez.UI.Containers
         public Tree( TreeStyle style )
         {
             selection = new Selection<Node>();
-            selection.setElement( this );
-            selection.setMultiple( true );
-            setStyle( style );
-            initialize();
+            selection.SetElement( this );
+            selection.SetMultiple( true );
+            SetStyle( style );
+            Initialize();
         }
 
-        private void initialize()
+        private void Initialize()
         {
         }
 
-        public void setStyle( TreeStyle style )
+        public void SetStyle( TreeStyle style )
         {
             this.style = style;
-            indentSpacing = Math.Max( style.plus.minWidth, style.minus.minWidth ) + iconSpacingLeft;
+            indentSpacing = Math.Max( style.Plus.MinWidth, style.Minus.MinWidth ) + iconSpacingLeft;
         }
 
-        public void add( Node node )
+        public void Add( Node node )
         {
-            insert( rootNodes.Count, node );
+            Insert( rootNodes.Count, node );
         }
 
-        public void insert( int index, Node node )
+        public void Insert( int index, Node node )
         {
-            remove( node );
+            Remove( node );
             node.parent = null;
             rootNodes.Insert( index, node );
-            node.addToTree( this );
-            invalidateHierarchy();
+            node.AddToTree( this );
+            InvalidateHierarchy();
         }
 
-        public void remove( Node node )
+        public void Remove( Node node )
         {
             if( node.parent != null )
             {
-                node.parent.remove( node );
+                node.parent.Remove( node );
                 return;
             }
 
             rootNodes.Remove( node );
-            node.removeFromTree( this );
-            invalidateHierarchy();
+            node.RemoveFromTree( this );
+            InvalidateHierarchy();
         }
 
-        public override void clearChildren()
+        public override void ClearChildren()
         {
-            base.clearChildren();
-            setOverNode( null );
+            base.ClearChildren();
+            SetOverNode( null );
             rootNodes.Clear();
-            selection.clear();
+            selection.Clear();
         }
 
-        public List<Node> getNodes()
+        public List<Node> GetNodes()
         {
             return rootNodes;
         }
 
-        public override void invalidate()
+        public override void Invalidate()
         {
-            base.invalidate();
+            base.Invalidate();
             sizeInvalid = true;
         }
 
-        private void computeSize()
+        private void ComputeSize()
         {
             sizeInvalid = false;
-            prefWidth = style.plus.minWidth;
-            prefWidth = Math.Max( prefWidth, style.minus.minWidth );
-            prefHeight = getHeight();
+            prefWidth = style.Plus.MinWidth;
+            prefWidth = Math.Max( prefWidth, style.Minus.MinWidth );
+            prefHeight = GetHeight();
             leftColumnWidth = 0;
-            computeSize( rootNodes, indentSpacing );
+            ComputeSize( rootNodes, indentSpacing );
             leftColumnWidth += iconSpacingLeft + padding;
             prefWidth += leftColumnWidth + padding;
-            prefHeight = getHeight() - prefHeight;
+            prefHeight = GetHeight() - prefHeight;
         }
 
-        private void computeSize( List<Node> nodes, float indent )
+        private void ComputeSize( List<Node> nodes, float indent )
         {
             float ySpacing = this.ySpacing;
             float spacing = iconSpacingLeft + iconSpacingRight;
@@ -129,37 +129,37 @@ namespace Nez.UI.Containers
                 var actor = node.actor;
                 if( actor is ILayout layout )
                 {
-                    rowWidth += layout.preferredWidth;
-                    node.height = layout.preferredHeight;
-                    layout.pack();
+                    rowWidth += layout.PreferredWidth;
+                    node.height = layout.PreferredHeight;
+                    layout.Pack();
                 }
                 else
                 {
-                    rowWidth += actor.getWidth();
-                    node.height = actor.getHeight();
+                    rowWidth += actor.GetWidth();
+                    node.height = actor.GetHeight();
                 }
 
                 if( node.icon != null )
                 {
-                    rowWidth += spacing + node.icon.minWidth;
-                    node.height = Math.Max( node.height, node.icon.minHeight );
+                    rowWidth += spacing + node.icon.MinWidth;
+                    node.height = Math.Max( node.height, node.icon.MinHeight );
                 }
 
                 prefWidth = Math.Max( prefWidth, rowWidth );
                 prefHeight -= node.height + ySpacing;
                 if( node.expanded )
-                    computeSize( node.children, indent + indentSpacing );
+                    ComputeSize( node.children, indent + indentSpacing );
             }
         }
 
-        public override void layout()
+        public override void Layout()
         {
             if( sizeInvalid )
-                computeSize();
-            layout( rootNodes, leftColumnWidth + indentSpacing + iconSpacingRight, ySpacing / 2 );
+                ComputeSize();
+            Layout( rootNodes, leftColumnWidth + indentSpacing + iconSpacingRight, ySpacing / 2 );
         }
 
-        private float layout( List<Node> nodes, float indent, float y )
+        private float Layout( List<Node> nodes, float indent, float y )
         {
             float ySpacing = this.ySpacing;
             for( int i = 0, n = nodes.Count; i < n; i++ )
@@ -167,95 +167,95 @@ namespace Nez.UI.Containers
                 var node = nodes[i];
                 var x = indent;
                 if( node.icon != null )
-                    x += node.icon.minWidth;
-                node.actor.setPosition( x, y );
-                y += node.getHeight();
+                    x += node.icon.MinWidth;
+                node.actor.SetPosition( x, y );
+                y += node.GetHeight();
                 y += ySpacing;
                 if( node.expanded )
-                    y = layout( node.children, indent + indentSpacing, y );
+                    y = Layout( node.children, indent + indentSpacing, y );
             }
 
             return y;
         }
 
-        public override void draw( Graphics graphics, float parentAlpha )
+        public override void Draw( Graphics graphics, float parentAlpha )
         {
-            drawBackground( graphics, parentAlpha );
-            var color = getColor();
+            DrawBackground( graphics, parentAlpha );
+            var color = GetColor();
             color = new Color( color.R, color.G, color.B, color.A * parentAlpha );
-            draw( graphics, rootNodes, leftColumnWidth, color );
-            base.draw( graphics, parentAlpha );
+            Draw( graphics, rootNodes, leftColumnWidth, color );
+            base.Draw( graphics, parentAlpha );
         }
 
-        protected void drawBackground( Graphics Graphics, float parentAlpha )
+        protected void DrawBackground( Graphics Graphics, float parentAlpha )
         {
-            if( style.background != null )
+            if( style.Background != null )
             {
-                var color = getColor();
+                var color = GetColor();
                 color = new Color( color.R, color.G, color.B, color.A * parentAlpha );
-                style.background.draw( Graphics, getX(), getY(), getWidth(), getHeight(), color );
+                style.Background.Draw( Graphics, GetX(), GetY(), GetWidth(), GetHeight(), color );
             }
         }
 
-        private void draw( Graphics batch, List<Node> nodes, float indent, Color color )
+        private void Draw( Graphics batch, List<Node> nodes, float indent, Color color )
         {
-            var plus = style.plus;
-            var minus = style.minus;
-            var x = getX();
-            var y = getY();
+            var plus = style.Plus;
+            var minus = style.Minus;
+            var x = GetX();
+            var y = GetY();
 
             for( int i = 0, n = nodes.Count; i < n; i++ )
             {
                 var node = nodes[i];
                 var actor = node.actor;
 
-                if( selection.contains( node ) && style.selection != null )
+                if( selection.Contains( node ) && style.Selection != null )
                 {
-                    style.selection.draw( batch, x, y + actor.getY() - ySpacing / 2, getWidth(), node.height + ySpacing, color );
+                    style.Selection.Draw( batch, x, y + actor.GetY() - ySpacing / 2, GetWidth(), node.height + ySpacing, color );
                 }
                 else if( node == overNode )
                 {
-                    style.over?.draw( batch, x, y + actor.getY() - ySpacing / 2, getWidth(), node.height + ySpacing, color );
+                    style.Over?.Draw( batch, x, y + actor.GetY() - ySpacing / 2, GetWidth(), node.height + ySpacing, color );
                 }
 
                 if( node.icon != null )
                 {
-                    var iconY = actor.getY() + Mathf.round( ( node.height - node.icon.minHeight ) / 2 );
-                    node.icon.draw( batch, x + node.actor.getX() - iconSpacingRight - node.icon.minWidth, y + iconY, node.icon.minWidth, node.icon.minHeight, actor.getColor() );
+                    var iconY = actor.GetY() + Mathf.Round( ( node.height - node.icon.MinHeight ) / 2 );
+                    node.icon.Draw( batch, x + node.actor.GetX() - iconSpacingRight - node.icon.MinWidth, y + iconY, node.icon.MinWidth, node.icon.MinHeight, actor.GetColor() );
                 }
 
                 if( node.children.Count == 0 )
                     continue;
 
                 var expandIcon = node.expanded ? minus : plus;
-                var expandIconY = actor.getY() + Mathf.round( ( node.height - expandIcon.minHeight ) / 2 );
+                var expandIconY = actor.GetY() + Mathf.Round( ( node.height - expandIcon.MinHeight ) / 2 );
 
-                expandIcon.draw( batch,
+                expandIcon.Draw( batch,
                     x + indent - iconSpacingLeft,
                     y + expandIconY,
-                    expandIcon.minWidth, expandIcon.minHeight, actor.getColor() );
+                    expandIcon.MinWidth, expandIcon.MinHeight, actor.GetColor() );
 
 
                 if( node.expanded )
                 {
-                    draw( batch, node.children, indent + indentSpacing, actor.getColor() );
+                    Draw( batch, node.children, indent + indentSpacing, actor.GetColor() );
                 }
             }
         }
 
-        public Node getNodeAt( float y )
+        public Node GetNodeAt( float y )
         {
             foundNode = null;
-            getNodeAt( rootNodes, y, 0 );
+            GetNodeAt( rootNodes, y, 0 );
             return foundNode;
         }
 
-        private float getNodeAt( IList<Node> nodes, float y, float rowY )
+        private float GetNodeAt( IList<Node> nodes, float y, float rowY )
         {
             for( int i = 0, n = nodes.Count; i < n; i++ )
             {
                 var node = nodes[i];
-                var height = node.getHeight();
+                var height = node.GetHeight();
 
                 if( y > rowY && y < rowY + height + ySpacing )
                 {
@@ -267,7 +267,7 @@ namespace Nez.UI.Containers
 
                 if( node.expanded )
                 {
-                    rowY = getNodeAt( node.children, y, rowY );
+                    rowY = GetNodeAt( node.children, y, rowY );
                     if( rowY == -1 )
                         return -1;
                 }
@@ -276,119 +276,119 @@ namespace Nez.UI.Containers
             return rowY;
         }
 
-        void selectNodes( IList<Node> nodes, float low, float high )
+        void SelectNodes( IList<Node> nodes, float low, float high )
         {
             for( int i = 0, n = nodes.Count; i < n; i++ )
             {
                 Node node = nodes[i];
-                if( node.actor.getY() < low )
+                if( node.actor.GetY() < low )
                     break;
-                if( !node.isSelectable() )
+                if( !node.IsSelectable() )
                     continue;
-                if( node.actor.getY() <= high )
-                    selection.add( node );
+                if( node.actor.GetY() <= high )
+                    selection.Add( node );
                 if( node.expanded )
-                    selectNodes( node.children, low, high );
+                    SelectNodes( node.children, low, high );
             }
         }
 
-        public Selection<Node> getSelection()
+        public Selection<Node> GetSelection()
         {
             return selection;
         }
 
-        public TreeStyle getStyle()
+        public TreeStyle GetStyle()
         {
             return style;
         }
 
-        public List<Node> getRootNodes()
+        public List<Node> GetRootNodes()
         {
             return rootNodes;
         }
 
-        public Node getOverNode()
+        public Node GetOverNode()
         {
             return overNode;
         }
 
-        public object getOverObject()
+        public object GetOverObject()
         {
             if( overNode == null )
                 return null;
-            return overNode.getObject();
+            return overNode.GetObject();
         }
 
-        public void setOverNode( Node overNode )
+        public void SetOverNode( Node overNode )
         {
             this.overNode = overNode;
         }
 
-        public void setPadding( float padding )
+        public void SetPadding( float padding )
         {
             this.padding = padding;
         }
 
-        public float getIndentSpacing()
+        public float GetIndentSpacing()
         {
             return indentSpacing;
         }
 
-        public void setYSpacing( float ySpacing )
+        public void SetYSpacing( float ySpacing )
         {
             this.ySpacing = ySpacing;
         }
 
-        public float getYSpacing()
+        public float GetYSpacing()
         {
             return ySpacing;
         }
 
-        public void setIconSpacing( float left, float right )
+        public void SetIconSpacing( float left, float right )
         {
             this.iconSpacingLeft = left;
             this.iconSpacingRight = right;
         }
 
-        public void findExpandedObjects( List<object> objects )
+        public void FindExpandedObjects( List<object> objects )
         {
-            findExpandedObjects( rootNodes, objects );
+            FindExpandedObjects( rootNodes, objects );
         }
 
-        public void restoreExpandedObjects( List<object> objects )
+        public void RestoreExpandedObjects( List<object> objects )
         {
             for( int i = 0, n = objects.Count; i < n; i++ )
             {
-                Node node = findNode( objects[i] );
+                Node node = FindNode( objects[i] );
                 if( node != null )
                 {
-                    node.setExpanded( true );
-                    node.expandTo();
+                    node.SetExpanded( true );
+                    node.ExpandTo();
                 }
             }
         }
 
-        internal static bool findExpandedObjects( List<Node> nodes, List<object> objects )
+        internal static bool FindExpandedObjects( List<Node> nodes, List<object> objects )
         {
             var expanded = false;
             for( int i = 0, n = nodes.Count; i < n; i++ )
             {
                 Node node = nodes[i];
-                if( node.expanded && !findExpandedObjects( node.children, objects ) )
+                if( node.expanded && !FindExpandedObjects( node.children, objects ) )
                     objects.Add( node.o );
             }
 
             return expanded;
         }
 
-        public Node findNode( object o )
+        public Node FindNode( object o )
         {
             if( o == null )
                 throw new Exception( "object cannot be null." );
-            return findNode( rootNodes, o );
+            return FindNode( rootNodes, o );
         }
 
-        internal static Node findNode( List<Node> nodes, object o )
+        internal static Node FindNode( List<Node> nodes, object o )
         {
             for( int i = 0, n = nodes.Count; i < n; i++ )
             {
@@ -400,7 +400,7 @@ namespace Nez.UI.Containers
             for( int i = 0, n = nodes.Count; i < n; i++ )
             {
                 Node node = nodes[i];
-                Node found = findNode( node.children, o );
+                Node found = FindNode( node.children, o );
                 if( found != null )
                     return found;
             }
@@ -408,104 +408,104 @@ namespace Nez.UI.Containers
             return null;
         }
 
-        public void collapseAll()
+        public void CollapseAll()
         {
-            collapseAll( rootNodes );
+            CollapseAll( rootNodes );
         }
 
-        internal static void collapseAll( List<Node> nodes )
+        internal static void CollapseAll( List<Node> nodes )
         {
             for( int i = 0, n = nodes.Count; i < n; i++ )
             {
                 Node node = nodes[i];
-                node.setExpanded( false );
-                collapseAll( node.children );
+                node.SetExpanded( false );
+                CollapseAll( node.children );
             }
         }
 
-        public void expandAll()
+        public void ExpandAll()
         {
-            expandAll( rootNodes );
+            ExpandAll( rootNodes );
         }
 
-        internal static void expandAll( List<Node> nodes )
+        internal static void ExpandAll( List<Node> nodes )
         {
             for( int i = 0, n = nodes.Count; i < n; i++ )
-                nodes[i].expandAll();
+                nodes[i].ExpandAll();
         }
 
-        void IInputListener.onMouseEnter()
+        void IInputListener.OnMouseEnter()
         {
         }
 
-        void IInputListener.onMouseExit()
+        void IInputListener.OnMouseExit()
         {
             //if (toActor == null || !toActor.isDescendantOf(Tree.this)) setOverNode(null);
         }
 
-        bool IInputListener.onMousePressed( Vector2 mousePos )
+        bool IInputListener.OnMousePressed( Vector2 mousePos )
         {
-            var node = getNodeAt( mousePos.Y );
+            var node = GetNodeAt( mousePos.Y );
             if( node == null )
                 return true;
 
             //if (node != getNodeAt(getTouchDownY())) return;
-            if( selection.getMultiple() && selection.hasItems() && Keyboard.GetState().IsKeyDown( Keys.LeftShift ) )
+            if( selection.GetMultiple() && selection.HasItems() && Keyboard.GetState().IsKeyDown( Keys.LeftShift ) )
             {
                 // Select range (shift).
                 if( rangeStart == null )
                     rangeStart = node;
 
                 if( !Keyboard.GetState().IsKeyDown( Keys.LeftControl ) )
-                    selection.clear();
+                    selection.Clear();
 
-                float start = rangeStart.actor.getY(), end = node.actor.getY();
+                float start = rangeStart.actor.GetY(), end = node.actor.GetY();
                 if( start > end )
-                    selectNodes( rootNodes, end, start );
+                    SelectNodes( rootNodes, end, start );
                 else
                 {
-                    selectNodes( rootNodes, start, end );
-                    selection.items().Reverse();
+                    SelectNodes( rootNodes, start, end );
+                    selection.Items().Reverse();
                 }
 
-                selection.fireChangeEvent();
+                selection.FireChangeEvent();
                 return true;
             }
 
-            if( node.children.Count > 0 && ( !selection.getMultiple() || !Keyboard.GetState().IsKeyDown( Keys.LeftControl ) ) )
+            if( node.children.Count > 0 && ( !selection.GetMultiple() || !Keyboard.GetState().IsKeyDown( Keys.LeftControl ) ) )
             {
                 // Toggle expanded.
-                var rowX = node.actor.getX();
+                var rowX = node.actor.GetX();
                 if( node.icon != null )
-                    rowX -= iconSpacingRight + node.icon.minWidth;
+                    rowX -= iconSpacingRight + node.icon.MinWidth;
 
                 if( mousePos.X < rowX )
                 {
-                    node.setExpanded( !node.expanded );
+                    node.SetExpanded( !node.expanded );
                     return true;
                 }
             }
 
-            if( !node.isSelectable() )
+            if( !node.IsSelectable() )
                 return true;
 
-            selection.choose( node );
-            if( !selection.isEmpty() )
+            selection.Choose( node );
+            if( !selection.IsEmpty() )
                 rangeStart = node;
 
             return true;
         }
 
-        void IInputListener.onMouseMoved( Vector2 mousePos )
+        void IInputListener.OnMouseMoved( Vector2 mousePos )
         {
-            setOverNode( getNodeAt( mousePos.Y ) );
+            SetOverNode( GetNodeAt( mousePos.Y ) );
         }
 
-        void IInputListener.onMouseUp( Vector2 mousePos )
+        void IInputListener.OnMouseUp( Vector2 mousePos )
         {
         }
 
-        bool IInputListener.onMouseScrolled( int mouseWheelDelta )
+        bool IInputListener.OnMouseScrolled( int mouseWheelDelta )
         {
             return true;
         }
@@ -513,10 +513,10 @@ namespace Nez.UI.Containers
 
     public class TreeStyle
     {
-        public IDrawable plus, minus;
+        public IDrawable Plus, Minus;
 
         /** Optional. */
-        public IDrawable over, selection, background;
+        public IDrawable Over, Selection, Background;
     }
 
 
@@ -536,239 +536,239 @@ namespace Nez.UI.Containers
             actor = element;
         }
 
-        public void setExpanded( bool expanded )
+        public void SetExpanded( bool expanded )
         {
             if( expanded == this.expanded )
                 return;
             this.expanded = expanded;
             if( children.Count == 0 )
                 return;
-            var tree = getTree();
+            var tree = GetTree();
             if( tree == null )
                 return;
             if( expanded )
             {
                 for( int i = 0, n = children.Count; i < n; i++ )
-                    children[i].addToTree( tree );
+                    children[i].AddToTree( tree );
             }
             else
             {
                 for( var i = children.Count - 1; i >= 0; i-- )
-                    children[i].removeFromTree( tree );
+                    children[i].RemoveFromTree( tree );
             }
 
-            tree.invalidateHierarchy();
+            tree.InvalidateHierarchy();
         }
 
-        protected internal void addToTree( Tree tree )
+        protected internal void AddToTree( Tree tree )
         {
-            tree.addElement( actor );
+            tree.AddElement( actor );
             if( !expanded )
                 return;
             var children = this.children;
             for( var i = this.children.Count - 1; i >= 0; i-- )
-                children[i].addToTree( tree );
+                children[i].AddToTree( tree );
         }
 
-        protected internal void removeFromTree( Tree tree )
+        protected internal void RemoveFromTree( Tree tree )
         {
-            tree.removeElement( actor );
+            tree.RemoveElement( actor );
             if( !expanded )
                 return;
             var children = this.children;
             for( var i = this.children.Count - 1; i >= 0; i-- )
-                children[i].removeFromTree( tree );
+                children[i].RemoveFromTree( tree );
         }
 
-        public void add( Node node )
+        public void Add( Node node )
         {
-            insert( children.Count, node );
+            Insert( children.Count, node );
         }
 
-        public void addAll( List<Node> nodes )
+        public void AddAll( List<Node> nodes )
         {
             for( int i = 0, n = nodes.Count; i < n; i++ )
-                insert( children.Count, nodes[i] );
+                Insert( children.Count, nodes[i] );
         }
 
-        public void insert( int index, Node node )
+        public void Insert( int index, Node node )
         {
             node.parent = this;
             children.Insert( index, node );
-            updateChildren();
+            UpdateChildren();
         }
 
-        public void remove()
+        public void Remove()
         {
-            var tree = getTree();
+            var tree = GetTree();
             if( tree != null )
-                tree.remove( this );
+                tree.Remove( this );
             else if( parent != null ) //
-                parent.remove( this );
+                parent.Remove( this );
         }
 
-        public void remove( Node node )
+        public void Remove( Node node )
         {
             children.Remove( node );
             if( !expanded )
                 return;
-            var tree = getTree();
+            var tree = GetTree();
             if( tree == null )
                 return;
-            node.removeFromTree( tree );
+            node.RemoveFromTree( tree );
             if( children.Count == 0 )
                 expanded = false;
         }
 
-        public void removeAll()
+        public void RemoveAll()
         {
-            var tree = getTree();
+            var tree = GetTree();
             if( tree != null )
             {
                 var children = this.children;
                 for( var i = this.children.Count - 1; i >= 0; i-- )
-                    ( (Node)children[i] ).removeFromTree( tree );
+                    ( (Node)children[i] ).RemoveFromTree( tree );
             }
 
             children.Clear();
         }
 
-        public Tree getTree()
+        public Tree GetTree()
         {
-            var parent = actor.getParent();
+            var parent = actor.GetParent();
             if( !( parent is Tree ) )
                 return null;
             return (Tree)parent;
         }
 
-        public Element getActor()
+        public Element GetActor()
         {
             return actor;
         }
 
-        public bool isExpanded()
+        public bool IsExpanded()
         {
             return expanded;
         }
 
-        public List<Node> getChildren()
+        public List<Node> GetChildren()
         {
             return children;
         }
 
-        public void updateChildren()
+        public void UpdateChildren()
         {
             if( !expanded )
                 return;
-            var tree = getTree();
+            var tree = GetTree();
             if( tree == null )
                 return;
             for( var i = children.Count - 1; i >= 0; i-- )
-                children[i].removeFromTree( tree );
+                children[i].RemoveFromTree( tree );
             for( int i = 0, n = children.Count; i < n; i++ )
-                children[i].addToTree( tree );
+                children[i].AddToTree( tree );
         }
 
-        public Node getParent()
+        public Node GetParent()
         {
             return parent;
         }
 
-        public void setIcon( IDrawable icon )
+        public void SetIcon( IDrawable icon )
         {
             this.icon = icon;
         }
 
-        public object getObject()
+        public object GetObject()
         {
             return o;
         }
 
-        public void setObject( object o )
+        public void SetObject( object o )
         {
             this.o = o;
         }
 
-        public IDrawable getIcon()
+        public IDrawable GetIcon()
         {
             return icon;
         }
 
-        public int getLevel()
+        public int GetLevel()
         {
             var level = 0;
             var current = this;
             do
             {
                 level++;
-                current = current.getParent();
+                current = current.GetParent();
             } while( current != null );
 
             return level;
         }
 
-        public Node findNode( object o )
+        public Node FindNode( object o )
         {
             if( o == null )
                 throw new Exception( "object cannot be null." );
             if( o.Equals( this.o ) )
                 return this;
-            return Tree.findNode( children, o );
+            return Tree.FindNode( children, o );
         }
 
-        public void collapseAll()
+        public void CollapseAll()
         {
-            setExpanded( false );
-            Tree.collapseAll( children );
+            SetExpanded( false );
+            Tree.CollapseAll( children );
         }
 
-        public void expandAll()
+        public void ExpandAll()
         {
-            setExpanded( true );
+            SetExpanded( true );
             if( children.Count > 0 )
-                Tree.expandAll( children );
+                Tree.ExpandAll( children );
         }
 
-        public void expandTo()
+        public void ExpandTo()
         {
             var node = parent;
             while( node != null )
             {
-                node.setExpanded( true );
+                node.SetExpanded( true );
                 node = node.parent;
             }
         }
 
-        public bool isSelectable()
+        public bool IsSelectable()
         {
             return selectable;
         }
 
-        public void setSelectable( bool selectable )
+        public void SetSelectable( bool selectable )
         {
             this.selectable = selectable;
         }
 
-        public void findExpandedObjects( List<object> objects )
+        public void FindExpandedObjects( List<object> objects )
         {
-            if( expanded && !Tree.findExpandedObjects( children, objects ) )
+            if( expanded && !Tree.FindExpandedObjects( children, objects ) )
                 objects.Add( o );
         }
 
-        public void restoreExpandedObjects( List<object> objects )
+        public void RestoreExpandedObjects( List<object> objects )
         {
             for( int i = 0, n = objects.Count; i < n; i++ )
             {
-                var node = findNode( objects[i] );
+                var node = FindNode( objects[i] );
                 if( node != null )
                 {
-                    node.setExpanded( true );
-                    node.expandTo();
+                    node.SetExpanded( true );
+                    node.ExpandTo();
                 }
             }
         }
 
-        public float getHeight()
+        public float GetHeight()
         {
             return height;
         }

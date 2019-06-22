@@ -13,9 +13,9 @@ namespace Nez.IEnumerableExtensions
 		/// <typeparam name="TSource">The source type.</typeparam>
 		/// <param name="source">The source IEnumerable.</param>
 		/// <returns>The number of items in the source.</returns>
-		public static int count<TSource>( this IEnumerable<TSource> source )
+		public static int Count<TSource>( this IEnumerable<TSource> source )
 		{
-			Insist.isNotNull( source, "source cannot be null" );
+			Insist.IsNotNull( source, "source cannot be null" );
 
 			// Optimization for ICollection<T> 
 			var genericCollection = source as ICollection<TSource>;

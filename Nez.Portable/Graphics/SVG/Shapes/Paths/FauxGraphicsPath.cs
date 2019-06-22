@@ -14,7 +14,7 @@ namespace Nez.Svg
 		{
 			get
 			{
-				var prop = ReflectionUtils.getPropertyInfo( _graphicsPath, "PointCount" );
+				var prop = ReflectionUtils.GetPropertyInfo( _graphicsPath, "PointCount" );
 				return (int)prop.GetValue( _graphicsPath );
 			}
 		}
@@ -23,7 +23,7 @@ namespace Nez.Svg
 		{
 			get
 			{
-				var prop = ReflectionUtils.getPropertyInfo( _graphicsPath, "PathPoints" );
+				var prop = ReflectionUtils.GetPropertyInfo( _graphicsPath, "PathPoints" );
 				return (System.Array)prop.GetValue( _graphicsPath );
 			}
 		}
@@ -32,7 +32,7 @@ namespace Nez.Svg
 		{
 			get
 			{
-				var prop = ReflectionUtils.getPropertyInfo( _graphicsPath, "PathTypes" );
+				var prop = ReflectionUtils.GetPropertyInfo( _graphicsPath, "PathTypes" );
 				return (int[])prop.GetValue( _graphicsPath );
 			}
 		}
@@ -49,28 +49,28 @@ namespace Nez.Svg
 
 		public void StartFigure()
 		{
-			var method = ReflectionUtils.getMethodInfo( _graphicsPath, "StartFigure" );
+			var method = ReflectionUtils.GetMethodInfo( _graphicsPath, "StartFigure" );
 			method.Invoke( _graphicsPath, new object[0] );
 		}
 
 
 		public void CloseFigure()
 		{
-			var method = ReflectionUtils.getMethodInfo( _graphicsPath, "CloseFigure" );
+			var method = ReflectionUtils.GetMethodInfo( _graphicsPath, "CloseFigure" );
 			method.Invoke( _graphicsPath, new object[0] );
 		}
 
 
 		public void AddBezier( object first, object second, object third, object fourth )
 		{
-			var method = ReflectionUtils.getMethodInfo( _graphicsPath, "AddBezier" );
+			var method = ReflectionUtils.GetMethodInfo( _graphicsPath, "AddBezier" );
 			method.Invoke( _graphicsPath, new object[] { first, second, third, fourth } );
 		}
 
 
 		public void AddLine( object first, object second )
 		{
-			var method = ReflectionUtils.getMethodInfo( _graphicsPath, "AddLine" );
+			var method = ReflectionUtils.GetMethodInfo( _graphicsPath, "AddLine" );
 			method.Invoke( _graphicsPath, new object[] { first, second } );
 		}
 
@@ -78,20 +78,20 @@ namespace Nez.Svg
 		public void Flatten( object matrix, float flatness )
 		{
 			var paramTypes = new System.Type[] { matrix.GetType(), flatness.GetType() };
-			var method = ReflectionUtils.getMethodInfo( _graphicsPath, "Flatten", paramTypes );
+			var method = ReflectionUtils.GetMethodInfo( _graphicsPath, "Flatten", paramTypes );
 			method.Invoke( _graphicsPath, new object[] { matrix, flatness } );
 		}
 
 
-		public Vector2[] pathPointsAsVectors()
+		public Vector2[] PathPointsAsVectors()
 		{
 			var pathPoints = PathPoints;
 			if( pathPoints.Length == 0 )
 				return new Vector2[0];
 
 			var pts = new Vector2[pathPoints.Length];
-			var getX = ReflectionUtils.getPropertyInfo( pathPoints.GetValue( 0 ), "X" );
-			var getY = ReflectionUtils.getPropertyInfo( pathPoints.GetValue( 0 ), "Y" );
+			var getX = ReflectionUtils.GetPropertyInfo( pathPoints.GetValue( 0 ), "X" );
+			var getY = ReflectionUtils.GetPropertyInfo( pathPoints.GetValue( 0 ), "Y" );
 
 			for( var i = 0; i < pathPoints.Length; i++ )
 			{

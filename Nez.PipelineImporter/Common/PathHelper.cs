@@ -15,7 +15,7 @@ namespace Nez.PipelineImporter
 		/// <exception cref="ArgumentNullException"></exception>
 		/// <exception cref="UriFormatException"></exception>
 		/// <exception cref="InvalidOperationException"></exception>
-		public static string makeRelativePath( string fromPath, string toPath )
+		public static string MakeRelativePath( string fromPath, string toPath )
 		{
 			var fromUri = new Uri( fromPath );
 			var toUri = new Uri( toPath );
@@ -33,14 +33,14 @@ namespace Nez.PipelineImporter
 		}
 
 
-		public static string getAbsolutePath( string relativePath, string basePath )
+		public static string GetAbsolutePath( string relativePath, string basePath )
 		{
 			if( relativePath == null )
 				return null;
 			if( basePath == null )
 				basePath = Path.GetFullPath( "." ); // quick way of getting current working directory
 			else
-				basePath = getAbsolutePath( basePath, null ); // to be REALLY sure ;)
+				basePath = GetAbsolutePath( basePath, null ); // to be REALLY sure ;)
 
 			// specific for windows paths starting on \ - they need the drive added to them.
 			// I constructed this piece like this for possible Mono support.

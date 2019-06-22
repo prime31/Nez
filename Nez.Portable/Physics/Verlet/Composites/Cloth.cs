@@ -26,21 +26,21 @@ namespace Nez.Verlet
 				{
 					var px = topLeftPosition.X + x * xStride;
 					var py = topLeftPosition.Y + y * yStride;
-					var particle = addParticle( new Particle( new Vector2( px, py ) ) );
+					var particle = AddParticle( new Particle( new Vector2( px, py ) ) );
 
 					// remove this constraint to make only vertical constaints for a hair-like cloth
 					if( connectHorizontalParticles && x > 0 )
-						addConstraint( new DistanceConstraint( particles[y * segments + x], particles[y * segments + x - 1], stiffness ) )
-							.setTearSensitivity( tearSensitivity )
-							.setCollidesWithColliders( false );
+						AddConstraint( new DistanceConstraint( Particles[y * segments + x], Particles[y * segments + x - 1], stiffness ) )
+							.SetTearSensitivity( tearSensitivity )
+							.SetCollidesWithColliders( false );
 
 					if( y > 0 )
-						addConstraint( new DistanceConstraint( particles[y * segments + x], particles[( y - 1 ) * segments + x], stiffness ) )
-							.setTearSensitivity( tearSensitivity )
-							.setCollidesWithColliders( false );
+						AddConstraint( new DistanceConstraint( Particles[y * segments + x], Particles[( y - 1 ) * segments + x], stiffness ) )
+							.SetTearSensitivity( tearSensitivity )
+							.SetCollidesWithColliders( false );
 
 					if( y == 0 )
-						particle.pin();
+						particle.Pin();
 				}
 			}
 		}

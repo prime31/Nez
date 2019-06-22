@@ -8,7 +8,7 @@ namespace Nez.AI.UtilityAI
 	/// </summary>
 	public interface IActionOptionAppraisal<T,U>
 	{
-		float getScore( T context, U option );
+		float GetScore( T context, U option );
 	}
 }
 

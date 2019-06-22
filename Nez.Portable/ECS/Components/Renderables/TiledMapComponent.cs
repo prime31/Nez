@@ -8,19 +8,19 @@ namespace Nez
 {
 	public class TiledMapComponent : RenderableComponent, IUpdatable
 	{
-		public TiledMap tiledMap;
+		public TiledMap TiledMap;
 
-		public int physicsLayer = 1 << 0;
+		public int PhysicsLayer = 1 << 0;
 
 		/// <summary>
 		/// if null, all layers will be rendered
 		/// </summary>
-		public int[] layerIndicesToRender;
+		public int[] LayerIndicesToRender;
 
-		public override float width => tiledMap.width * tiledMap.tileWidth;
-		public override float height => tiledMap.height * tiledMap.tileHeight;
+		public override float Width => TiledMap.Width * TiledMap.TileWidth;
+		public override float Height => TiledMap.Height * TiledMap.TileHeight;
 
-		public TiledTileLayer collisionLayer;
+		public TiledTileLayer CollisionLayer;
 
 		bool _shouldCreateColliders;
 		Collider[] _colliders;
@@ -28,48 +28,48 @@ namespace Nez
 
 		public TiledMapComponent( TiledMap tiledMap, string collisionLayerName = null, bool shouldCreateColliders = true )
 		{
-			this.tiledMap = tiledMap;
+			this.TiledMap = tiledMap;
 			_shouldCreateColliders = shouldCreateColliders;
 
 			if( collisionLayerName != null )
-				collisionLayer = tiledMap.getLayer<TiledTileLayer>( collisionLayerName );
+				CollisionLayer = tiledMap.GetLayer<TiledTileLayer>( collisionLayerName );
 		}
 
 		/// <summary>
 		/// sets this component to only render a single layer
 		/// </summary>
 		/// <param name="layerName">Layer name.</param>
-		public void setLayerToRender( string layerName )
+		public void SetLayerToRender( string layerName )
 		{
-			layerIndicesToRender = new int[1];
-			layerIndicesToRender[0] = tiledMap.getLayerIndex( layerName );
+			LayerIndicesToRender = new int[1];
+			LayerIndicesToRender[0] = TiledMap.GetLayerIndex( layerName );
 		}
 
 		/// <summary>
 		/// sets which layers should be rendered by this component by name. If you know the indices you can set layerIndicesToRender directly.
 		/// </summary>
 		/// <param name="layerNames">Layer names.</param>
-		public void setLayersToRender( params string[] layerNames )
+		public void SetLayersToRender( params string[] layerNames )
 		{
-			layerIndicesToRender = new int[layerNames.Length];
+			LayerIndicesToRender = new int[layerNames.Length];
 
 			for( var i = 0; i < layerNames.Length; i++ )
-				layerIndicesToRender[i] = tiledMap.getLayerIndex( layerNames[i] );
+				LayerIndicesToRender[i] = TiledMap.GetLayerIndex( layerNames[i] );
 		}
 
 
 		#region TiledMap queries
 
-		public int getRowAtWorldPosition( float yPos )
+		public int GetRowAtWorldPosition( float yPos )
 		{
-			yPos -= entity.transform.position.Y + _localOffset.Y;
-			return tiledMap.worldToTilePositionY( yPos );
+			yPos -= Entity.Transform.Position.Y + _localOffset.Y;
+			return TiledMap.WorldToTilePositionY( yPos );
 		}
 
-		public int getColumnAtWorldPosition( float xPos )
+		public int GetColumnAtWorldPosition( float xPos )
 		{
-			xPos -= entity.transform.position.X + _localOffset.X;
-			return tiledMap.worldToTilePositionY( xPos );
+			xPos -= Entity.Transform.Position.X + _localOffset.X;
+			return TiledMap.WorldToTilePositionY( xPos );
 		}
 
 		/// <summary>
@@ -77,13 +77,13 @@ namespace Nez
 		/// </summary>
 		/// <returns>The tile at world position.</returns>
 		/// <param name="worldPos">World position.</param>
-		public TiledTile getTileAtWorldPosition( Vector2 worldPos )
+		public TiledTile GetTileAtWorldPosition( Vector2 worldPos )
 		{
-			Insist.isNotNull( collisionLayer, "collisionLayer must not be null!" );
+			Insist.IsNotNull( CollisionLayer, "collisionLayer must not be null!" );
 
 			// offset the passed in world position to compensate for the entity position
-			worldPos -= entity.transform.position + _localOffset;
-			return collisionLayer.getTileAtWorldPosition( worldPos );
+			worldPos -= Entity.Transform.Position + _localOffset;
+			return CollisionLayer.GetTileAtWorldPosition( worldPos );
 		}
 
 		/// <summary>
@@ -92,13 +92,13 @@ namespace Nez
 		/// </summary>
 		/// <returns>The tiles intersecting bounds.</returns>
 		/// <param name="bounds">Bounds.</param>
-		public List<TiledTile> getTilesIntersectingBounds( Rectangle bounds )
+		public List<TiledTile> GetTilesIntersectingBounds( Rectangle bounds )
 		{
-			Insist.isNotNull( collisionLayer, "collisionLayer must not be null!" );
+			Insist.IsNotNull( CollisionLayer, "collisionLayer must not be null!" );
 
 			// offset the passed in world position to compensate for the entity position
-			bounds.Location -= ( entity.transform.position + _localOffset ).ToPoint();
-			return collisionLayer.getTilesIntersectingBounds( bounds );
+			bounds.Location -= ( Entity.Transform.Position + _localOffset ).ToPoint();
+			return CollisionLayer.GetTilesIntersectingBounds( bounds );
 		}
 
 		#endregion
@@ -106,56 +106,56 @@ namespace Nez
 
 		#region Component overrides
 
-		public override void onEntityTransformChanged( Transform.Component comp )
+		public override void OnEntityTransformChanged( Transform.Component comp )
 		{
 			// we only deal with positional changes here. TiledMaps cant be scaled.
 			if( _shouldCreateColliders && comp == Transform.Component.Position )
 			{
-				removeColliders();
-				addColliders();
+				RemoveColliders();
+				AddColliders();
 			}
 		}
 
-		public override void onAddedToEntity()
+		public override void OnAddedToEntity()
 		{
-			addColliders();
+			AddColliders();
 		}
 
-		public override void onRemovedFromEntity()
+		public override void OnRemovedFromEntity()
 		{
-			removeColliders();
+			RemoveColliders();
 		}
 
-		void IUpdatable.update()
+		void IUpdatable.Update()
 		{
-			tiledMap.update();
+			TiledMap.Update();
 		}
 
-		public override void render( Graphics graphics, Camera camera )
+		public override void Render( Graphics graphics, Camera camera )
 		{
-			if( layerIndicesToRender == null )
+			if( LayerIndicesToRender == null )
 			{
-				tiledMap.draw( graphics.batcher, entity.transform.position + _localOffset, transform.scale, layerDepth, camera.bounds );
+				TiledMap.Draw( graphics.Batcher, Entity.Transform.Position + _localOffset, Transform.Scale, LayerDepth, camera.Bounds );
 			}
 			else
 			{
-				for( var i = 0; i < tiledMap.layers.Count; i++ )
+				for( var i = 0; i < TiledMap.Layers.Count; i++ )
 				{
-					if( tiledMap.layers[i].visible && layerIndicesToRender.contains( i ) )
-						tiledMap.layers[i].draw( graphics.batcher, entity.transform.position + _localOffset, transform.scale, layerDepth, camera.bounds );
+					if( TiledMap.Layers[i].Visible && LayerIndicesToRender.Contains( i ) )
+						TiledMap.Layers[i].Draw( graphics.Batcher, Entity.Transform.Position + _localOffset, Transform.Scale, LayerDepth, camera.Bounds );
 				}
 			}
 		}
 
-		public override void debugRender( Graphics graphics )
+		public override void DebugRender( Graphics graphics )
 		{
-			foreach( var group in tiledMap.objectGroups )
-				renderObjectGroup( group, graphics );
+			foreach( var group in TiledMap.ObjectGroups )
+				RenderObjectGroup( group, graphics );
 
 			if( _colliders != null )
 			{
 				foreach( var collider in _colliders )
-					collider.debugRender( graphics );
+					collider.DebugRender( graphics );
 			}
 		}
 
@@ -164,34 +164,34 @@ namespace Nez
 
 		#region Colliders
 
-		public void addColliders()
+		public void AddColliders()
 		{
-			if( collisionLayer == null || !_shouldCreateColliders )
+			if( CollisionLayer == null || !_shouldCreateColliders )
 				return;
 
 			// fetch the collision layer and its rects for collision
-			var collisionRects = collisionLayer.getCollisionRectangles();
+			var collisionRects = CollisionLayer.GetCollisionRectangles();
 
 			// create colliders for the rects we received
 			_colliders = new Collider[collisionRects.Count];
 			for( var i = 0; i < collisionRects.Count; i++ )
 			{
 				var collider = new BoxCollider( collisionRects[i].X + _localOffset.X, collisionRects[i].Y + _localOffset.Y, collisionRects[i].Width, collisionRects[i].Height );
-				collider.physicsLayer = physicsLayer;
-				collider.entity = entity;
+				collider.PhysicsLayer = PhysicsLayer;
+				collider.Entity = Entity;
 				_colliders[i] = collider;
 
-				Physics.addCollider( collider );
+				Physics.AddCollider( collider );
 			}
 		}
 
-		public void removeColliders()
+		public void RemoveColliders()
 		{
 			if( _colliders == null )
 				return;
 
 			foreach( var collider in _colliders )
-				Physics.removeCollider( collider );
+				Physics.RemoveCollider( collider );
 			_colliders = null;
 		}
 
@@ -200,30 +200,30 @@ namespace Nez
 
 		#region Rendering helpers
 
-		void renderObjectGroup( TiledObjectGroup group, Graphics graphics )
+		void RenderObjectGroup( TiledObjectGroup group, Graphics graphics )
 		{
-			var renderPosition = entity.transform.position + _localOffset;
+			var renderPosition = Entity.Transform.Position + _localOffset;
 
-			foreach( var obj in group.objects )
+			foreach( var obj in group.Objects )
 			{
-				if( !obj.visible )
+				if( !obj.Visible )
 					continue;
 
-				switch( obj.tiledObjectType )
+				switch( obj.TiledObjectType )
 				{
-					case TiledObject.TiledObjectType.Ellipse:
-						graphics.batcher.drawCircle( new Vector2( renderPosition.X + obj.x + obj.width * 0.5f, renderPosition.Y + obj.y + obj.height * 0.5f ), obj.width * 0.5f, group.color );
+					case TiledObjectType.Ellipse:
+						graphics.Batcher.DrawCircle( new Vector2( renderPosition.X + obj.X + obj.Width * 0.5f, renderPosition.Y + obj.Y + obj.Height * 0.5f ), obj.Width * 0.5f, group.Color );
 						break;
-					case TiledObject.TiledObjectType.Image:
+					case TiledObjectType.Image:
 						throw new NotImplementedException( "Image layers are not yet supported" );
-					case TiledObject.TiledObjectType.Polygon:
-						graphics.batcher.drawPoints( renderPosition, obj.polyPoints, group.color, true );
+					case TiledObjectType.Polygon:
+						graphics.Batcher.DrawPoints( renderPosition, obj.PolyPoints, group.Color, true );
 						break;
-					case TiledObject.TiledObjectType.Polyline:
-						graphics.batcher.drawPoints( renderPosition, obj.polyPoints, group.color, false );
+					case TiledObjectType.Polyline:
+						graphics.Batcher.DrawPoints( renderPosition, obj.PolyPoints, group.Color, false );
 						break;
-					case TiledObject.TiledObjectType.None:
-						graphics.batcher.drawHollowRect( renderPosition.X + obj.x, renderPosition.Y + obj.y, obj.width, obj.height, group.color );
+					case TiledObjectType.None:
+						graphics.Batcher.DrawHollowRect( renderPosition.X + obj.X, renderPosition.Y + obj.Y, obj.Width, obj.Height, group.Color );
 						break;
 					default:
 						throw new ArgumentOutOfRangeException();

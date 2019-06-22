@@ -8,13 +8,13 @@ namespace Nez.ImGuiTools.TypeInspectors
 	/// </summary>
 	public class EntityFieldInspector : AbstractTypeInspector
 	{
-		public override void drawMutable()
+		public override void DrawMutable()
 		{
-			var entity = getValue<Entity>();
+			var entity = GetValue<Entity>();
 
-			if( NezImGui.LabelButton( _name, entity.name ) )
-				Core.getGlobalManager<ImGuiManager>().startInspectingEntity( entity );
-			handleTooltip();
+			if( NezImGui.LabelButton( _name, entity.Name ) )
+				Core.GetGlobalManager<ImGuiManager>().StartInspectingEntity( entity );
+			HandleTooltip();
 		}
 	}
 }

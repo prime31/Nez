@@ -11,34 +11,34 @@ namespace Nez.BitmapFontImporter
 	public class BitmapFontCommon
 	{
 		[XmlAttribute( "lineHeight" )]
-		public int lineHeight;
+		public int LineHeight;
 
 		[XmlAttribute( "base" )]
-		public int base_;
+		public int Base_;
 
 		[XmlAttribute( "scaleW" )]
-		public int scaleW;
+		public int ScaleW;
 
 		[XmlAttribute( "scaleH" )]
-		public int scaleH;
+		public int ScaleH;
 
 		[XmlAttribute( "pages" )]
-		public int pages;
+		public int Pages;
 
 		[XmlAttribute( "packed" )]
-		public int packed;
+		public int Packed;
 
 		// Littera doesnt seem to add these
 		[XmlAttribute( "alphaChnl" )]
-		public int alphaChannel;
+		public int AlphaChannel;
 
 		[XmlAttribute( "redChnl" )]
-		public int redChannel;
+		public int RedChannel;
 
 		[XmlAttribute( "greenChnl" )]
-		public int greenChannel;
+		public int GreenChannel;
 
 		[XmlAttribute( "blueChnl" )]
-		public int blueChannel;
+		public int BlueChannel;
 	}
 }

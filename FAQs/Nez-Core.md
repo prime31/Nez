@@ -16,15 +16,15 @@ Be careful not to confuse the Nez Physics system with realistic physics simulati
 
 
 ## TimerManager
-The TimerManager is a simple helper that lets you pass in an Action that can be called once or repeately with or without a delay. The **Core.schedule** method provides easy access to the TimerManager. When you call **schedule** you get back an ITimer object that has a **stop** method that can be used to stop the timer from firing again. Timers are automatically cached and reused so fire up as many as you need.
+The TimerManager is a simple helper that lets you pass in an Action that can be called once or repeately with or without a delay. The **Core.Schedule** method provides easy access to the TimerManager. When you call **schedule** you get back an ITimer object that has a **stop** method that can be used to stop the timer from firing again. Timers are automatically cached and reused so fire up as many as you need.
 
 
 ## CoroutineManager
-The CoroutineManager lets you pass in an IEnumerator which is then ticked each frame allowing you to break long running tasks up into smaller bits. The entry point for starting a coroutine is **Core.startCoroutine** which returns an ICoroutine object with a single method: **stop**. The execution of a coroutine can be paused at any point using the yield statement. You can yield a call to `Coroutine.waitForSeconds` which will delay execution for N seconds or you can yield a call to **startCoroutine** to pause until another coroutine completes.
+The CoroutineManager lets you pass in an IEnumerator which is then ticked each frame allowing you to break long running tasks up into smaller bits. The entry point for starting a coroutine is **Core.StartCoroutine** which returns an ICoroutine object with a single method: **Stop**. The execution of a coroutine can be paused at any point using the yield statement. You can yield a call to `Coroutine.WaitForSeconds` which will delay execution for N seconds or you can yield a call to **StartCoroutine** to pause until another coroutine completes.
 
 
 ## Emitter<CoreEvents>
-Core provides an emitter that fires events at some key times. Access is via **Core.emitter.addObserver** and **Core.emitter.removeObserver**. The **CoreEvents** enum defines all the events available.
+Core provides an emitter that fires events at some key times. Access is via **Core.Emitter.AddObserver** and **Core.Emitter.RemoveObserver**. The **CoreEvents** enum defines all the events available.
 
 The **Emitter<T>** class is available for use in your own classes as well. You can key events by int, enum or any struct. It was really built with int or enum in mind but there is no way to use generics to constrain to just those types. Note that as a performance enhancement if you are using Enums as the event type it is recommended to pass in a custom IEqualityComparer<T> to the Emitter constructor to avoid boxing. See the **CoreEventsComparer** for a simple template to copy for your own custom IEqualityComparer<T>.
 
@@ -38,12 +38,12 @@ You can also easily add your own command to the debug console. Just add the **Co
 
 ```cs
 [Command( "assets", "Logs all loaded assets. Pass 's' for scene assets or 'g' for global assets" )]
-static void logLoadedAssets( string whichAssets = "s" )
+static void LogLoadedAssets( string whichAssets = "s" )
 ```
 
 
 ## Global Managers
-Nez lets you add a global manager object that will have an update method called every frame before Scene.update occurs. Any of your systems that should persist Scene changes can be put here. Nez has several of it's own systems setup as global managers as well including: scheduler, coroutine manager and tween manager. You can register/unregister your global managers via `Core.registerGlobalManager` and `Core.unregisterGlobalManager`.
+Nez lets you add a global manager object that will have an update method called every frame before Scene.update occurs. Any of your systems that should persist Scene changes can be put here. Nez has several of it's own systems setup as global managers as well including: scheduler, coroutine manager and tween manager. You can register/unregister your global managers via `Core.RegisterGlobalManager` and `Core.UnregisterGlobalManager`.
 
 
 
@@ -65,32 +65,32 @@ As you can probably guess, Input gets you access to all input (mouse, keyboard, 
 Several virtual input classes are also provided which let you combine multiple input types into a single class that you can query. For example, you can setup a VirtualButton that can map to a variety of different input types that should result in some object moving to the right. You can create the VirtualButton with the D key, right arrow key, Dpad-right and left GamePad stick and just query it to know if any of those were pressed. The same applies to other common scenarios as well. Virtual input is available for button emulation (`VirtualButton`), analog joystick emulation (`VirtualJoystick`) and digital (on/off) joystick emulation (`VirtualIntegerAxis`). Below is an example of mapping multiple inputs to a single action:
 
 ```csharp
-	void setupVirtualInput()
+	void SetupVirtualInput()
 	{
 		// setup input for shooting a fireball. we will allow z on the keyboard or a on the gamepad
 		_fireInput = new VirtualButton();
-		_fireInput.addKeyboardKey( Keys.X )
-				  .addGamePadButton( 0, Buttons.A );
+		_fireInput.AddKeyboardKey( Keys.X )
+				  .AddGamePadButton( 0, Buttons.A );
 
 		// horizontal input from dpad, left stick or keyboard left/right
 		_xAxisInput = new VirtualIntegerAxis();
-		_xAxisInput.addGamePadDPadLeftRight()
-				   .addGamePadLeftStickX()
-				   .addKeyboardKeys( VirtualInput.OverlapBehavior.TakeNewer, Keys.Left, Keys.Right );
+		_xAxisInput.AddGamePadDPadLeftRight()
+				   .AddGamePadLeftStickX()
+				   .AddKeyboardKeys( VirtualInput.OverlapBehavior.TakeNewer, Keys.Left, Keys.Right );
 
 		// vertical input from dpad, left stick or keyboard up/down
 		_yAxisInput = new VirtualIntegerAxis();
-		_yAxisInput.addGamePadDpadUpDown()
-				   .addGamePadLeftStickY()
-				   .addKeyboardKeys( VirtualInput.OverlapBehavior.TakeNewer, Keys.Up, Keys.Down );
+		_yAxisInput.AddGamePadDpadUpDown()
+				   .AddGamePadLeftStickY()
+				   .AddKeyboardKeys( VirtualInput.OverlapBehavior.TakeNewer, Keys.Up, Keys.Down );
 	}
 		
 			
-	void IUpdatable.update()
+	void IUpdatable.Update()
 	{
 		// gather input from the Virtual Inputs we setup above
-		var moveDir = new Vector2( _xAxisInput.value, _yAxisInput.value );
-		var isShooting = _fireInput.isPressed;
+		var moveDir = new Vector2( _xAxisInput.Value, _yAxisInput.Value );
+		var isShooting = _fireInput.IsPressed;
 	}
 ```
 

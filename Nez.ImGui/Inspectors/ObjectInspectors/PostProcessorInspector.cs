@@ -6,7 +6,7 @@ namespace Nez.ImGuiTools.ObjectInspectors
 {
     public class PostProcessorInspector
     {
-        public PostProcessor postProcessor => _postProcessor;
+        public PostProcessor PostProcessor => _postProcessor;
 
         protected List<AbstractTypeInspector> _inspectors;
 		protected int _scopeId = NezImGui.GetScopeId();
@@ -16,10 +16,10 @@ namespace Nez.ImGuiTools.ObjectInspectors
         public PostProcessorInspector( PostProcessor postProcessor )
         {
             _postProcessor = postProcessor;
-            _inspectors = TypeInspectorUtils.getInspectableProperties( postProcessor );
+            _inspectors = TypeInspectorUtils.GetInspectableProperties( postProcessor );
 
 			// if we are a Material<T>, we need to fix the duplicate Effect due to the "new T effect"
-			if( ReflectionUtils.isGenericTypeOrSubclassOfGenericType( _postProcessor.GetType() ) )
+			if( ReflectionUtils.IsGenericTypeOrSubclassOfGenericType( _postProcessor.GetType() ) )
 			{
 				var didFindEffectInspector = false;
 				for( var i = 0; i < _inspectors.Count; i++ )
@@ -41,11 +41,11 @@ namespace Nez.ImGuiTools.ObjectInspectors
             {
                 var effectInspector = _inspectors[i] as Nez.ImGuiTools.TypeInspectors.EffectInspector;
                 if( effectInspector != null )
-                    effectInspector.allowsEffectRemoval = false;
+                    effectInspector.AllowsEffectRemoval = false;
             }
         }
 
-        public void draw()
+        public void Draw()
         {
             ImGui.PushID( _scopeId );
             var isOpen = ImGui.CollapsingHeader( _postProcessor.GetType().Name.Replace( "PostProcessor", string.Empty ) );
@@ -57,7 +57,7 @@ namespace Nez.ImGuiTools.ObjectInspectors
 				if( ImGui.Selectable( "Remove PostProcessor" ) )
 				{
                     isOpen = false;
-                    Core.scene.removePostProcessor( _postProcessor );
+                    Core.Scene.RemovePostProcessor( _postProcessor );
 					ImGui.CloseCurrentPopup();
 				}
 
@@ -68,7 +68,7 @@ namespace Nez.ImGuiTools.ObjectInspectors
             {
                 ImGui.Indent();
                 foreach( var inspector in _inspectors )
-                    inspector.draw();
+                    inspector.Draw();
                 ImGui.Unindent();
             }
 

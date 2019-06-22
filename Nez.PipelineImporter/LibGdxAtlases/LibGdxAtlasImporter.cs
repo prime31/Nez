@@ -46,22 +46,22 @@ namespace Nez.LibGdxAtlases
 						var width = 0f;
 						var height = 0f;
 
-						if( readTuple( reader ) == 2 )
+						if( ReadTuple( reader ) == 2 )
 						{
 							// size is only optional for an atlas packed with an old TexturePacker.
 							context.Logger.LogMessage( "" + tuple[0] );
 							width = int.Parse( tuple[0] );
 							height = int.Parse( tuple[1] );
-							readTuple( reader );
+							ReadTuple( reader );
 						}
 						context.Logger.LogMessage( "Width, Height: {0}, {1}", width, height );
 						var format = tuple[0];
 
-						readTuple( reader );
+						ReadTuple( reader );
 						var min = tuple[0];
 						var max = tuple[1];
 
-						var direction = readValue( reader );
+						var direction = ReadValue( reader );
 						var repeatX = false;
 						var repeatY = false;
 						if( direction.Equals( "x" ) )
@@ -79,63 +79,63 @@ namespace Nez.LibGdxAtlases
 					}
 					else
 					{
-						var rotate = Boolean.Parse( readValue( reader ) );
+						var rotate = Boolean.Parse( ReadValue( reader ) );
 
-						readTuple( reader );
+						ReadTuple( reader );
 						var left = int.Parse( tuple[0] );
 						var top = int.Parse( tuple[1] );
 						context.Logger.LogMessage( "X, Y: {0}, {1}", top, left );
 
-						readTuple( reader );
+						ReadTuple( reader );
 						var width = int.Parse( tuple[0] );
 						var height = int.Parse( tuple[1] );
 						context.Logger.LogMessage( "width, height: {0}, {1}", width, height );
 
 						var region = new LibGdxAtlasRegion();
-						region.page = pageImage.textureFile;
-						region.sourceRectangle = new LibGdxAtlasRect();
-						region.sourceRectangle.x = left;
-						region.sourceRectangle.y = top;
-						region.sourceRectangle.w = width;
-						region.sourceRectangle.h = height;
-						region.name = line;
-						region.rotate = rotate;
+						region.Page = pageImage.TextureFile;
+						region.SourceRectangle = new LibGdxAtlasRect();
+						region.SourceRectangle.X = left;
+						region.SourceRectangle.Y = top;
+						region.SourceRectangle.W = width;
+						region.SourceRectangle.H = height;
+						region.Name = line;
+						region.Rotate = rotate;
 
-						if( readTuple( reader ) == 4 )
+						if( ReadTuple( reader ) == 4 )
 						{
 							// split is optional
-							region.splits = new int[] {
+							region.Splits = new int[] {
 								int.Parse( tuple[0] ),
 								int.Parse( tuple[1] ),
 								int.Parse( tuple[2] ),
 								int.Parse( tuple[3] )
 							};
 
-							if( readTuple( reader ) == 4 )
+							if( ReadTuple( reader ) == 4 )
 							{
 								// pad is optional, but only present with splits
-								region.pads = new int[] {
+								region.Pads = new int[] {
 									int.Parse( tuple[0] ),
 									int.Parse( tuple[1] ),
 									int.Parse( tuple[2] ),
 									int.Parse( tuple[3] )
 								};
 
-								readTuple( reader );
+								ReadTuple( reader );
 							}
 						}
 
-						region.originalSize.x = int.Parse( tuple[0] );
-						region.originalSize.y = int.Parse( tuple[1] );
-						context.Logger.LogMessage( "Original size: {0}, {1}", region.originalSize.x, region.originalSize.y );
+						region.OriginalSize.X = int.Parse( tuple[0] );
+						region.OriginalSize.Y = int.Parse( tuple[1] );
+						context.Logger.LogMessage( "Original size: {0}, {1}", region.OriginalSize.X, region.OriginalSize.Y );
 
-						readTuple( reader );
-						region.offset.x = int.Parse( tuple[0] );
-						region.offset.y = int.Parse( tuple[1] );
-						context.Logger.LogMessage( "Offset: {0}, {1}", region.offset.x, region.offset.y );
+						ReadTuple( reader );
+						region.Offset.X = int.Parse( tuple[0] );
+						region.Offset.Y = int.Parse( tuple[1] );
+						context.Logger.LogMessage( "Offset: {0}, {1}", region.Offset.X, region.Offset.Y );
 
-						region.index = int.Parse( readValue( reader ) );
-						context.Logger.LogMessage( "Index: {0}", region.index );
+						region.Index = int.Parse( ReadValue( reader ) );
+						context.Logger.LogMessage( "Index: {0}", region.Index );
 
 						//if (flip) region.flip = true;
 
@@ -143,15 +143,15 @@ namespace Nez.LibGdxAtlases
 					}
 				}
 
-				f.regions = regions;
-				f.pages = pages;
+				f.Regions = regions;
+				f.Pages = pages;
 				return f;
 			}
 
 		}
 
 
-		private List<int> getDimensions( string line, ContentBuildLogger logger )
+		private List<int> GetDimensions( string line, ContentBuildLogger logger )
 		{
 			var colonPosition = line.IndexOf( ':' );
 			var comaPosition = line.IndexOf( ',' );
@@ -170,7 +170,7 @@ namespace Nez.LibGdxAtlases
 
 
 		/** Returns the number of tuple values read (1, 2 or 4). */
-		static int readTuple( StreamReader reader )
+		static int ReadTuple( StreamReader reader )
 		{
 			var line = reader.ReadLine();
 			var colon = line.IndexOf( ':' );
@@ -192,7 +192,7 @@ namespace Nez.LibGdxAtlases
 		}
 
 
-		static string readValue( StreamReader reader )
+		static string ReadValue( StreamReader reader )
 		{
 			var line = reader.ReadLine();
 			var colon = line.IndexOf( ':' );

@@ -15,17 +15,17 @@ namespace Nez.AI.GOAP
 		public Action( T context, string name ) : base( name )
 		{
 			_context = context;
-			this.name = name;
+			this.Name = name;
 		}
 
 
 		public Action( T context, string name, int cost ) : this( context, name )
 		{
-			this.cost = cost;
+			this.Cost = cost;
 		}
 
 
-		public virtual void execute()
+		public virtual void Execute()
 		{}
 
 	}

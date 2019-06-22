@@ -27,7 +27,7 @@ namespace Nez.Systems
 			_messageTable = new Dictionary<T,List<Action>>( customComparer );
 		}
 
-		public void addObserver( T eventType, Action handler )
+		public void AddObserver( T eventType, Action handler )
 		{
 			List<Action> list = null;
 			if( !_messageTable.TryGetValue( eventType, out list ) )
@@ -36,18 +36,18 @@ namespace Nez.Systems
 				_messageTable.Add( eventType, list );
 			}
 
-			Insist.isFalse( list.Contains( handler ), "You are trying to add the same observer twice" );
+			Insist.IsFalse( list.Contains( handler ), "You are trying to add the same observer twice" );
 			list.Add( handler );
 		}
 
-		public void removeObserver( T eventType, Action handler )
+		public void RemoveObserver( T eventType, Action handler )
 		{
 			// we purposely do this in unsafe fashion so that it will throw an Exception if someone tries to remove a handler that
 			// was never added
 			_messageTable[eventType].Remove( handler );
 		}
 
-		public void emit( T eventType )
+		public void Emit( T eventType )
 		{
 			List<Action> list = null;
 			if( _messageTable.TryGetValue( eventType, out list ) )
@@ -83,7 +83,7 @@ namespace Nez.Systems
 			_messageTable = new Dictionary<T,List<Action<U>>>( customComparer );
 		}
 
-		public void addObserver( T eventType, Action<U> handler )
+		public void AddObserver( T eventType, Action<U> handler )
 		{
 			List<Action<U>> list = null;
 			if( !_messageTable.TryGetValue( eventType, out list ) )
@@ -92,18 +92,18 @@ namespace Nez.Systems
 				_messageTable.Add( eventType, list );
 			}
 
-			Insist.isFalse( list.Contains( handler ), "You are trying to add the same observer twice" );
+			Insist.IsFalse( list.Contains( handler ), "You are trying to add the same observer twice" );
 			list.Add( handler );
 		}
 
-		public void removeObserver( T eventType, Action<U> handler )
+		public void RemoveObserver( T eventType, Action<U> handler )
 		{
 			// we purposely do this in unsafe fashion so that it will throw an Exception if someone tries to remove a handler that
 			// was never added
 			_messageTable[eventType].Remove( handler );
 		}
 
-		public void emit( T eventType, U data )
+		public void Emit( T eventType, U data )
 		{
 			List<Action<U>> list = null;
 			if( _messageTable.TryGetValue( eventType, out list ) )

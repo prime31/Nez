@@ -45,12 +45,12 @@ namespace FarseerPhysics.Common.Decomposition
 		/// </summary>
 		/// <param name="vertices">The vertices.</param>
 		/// <param name="tolerance">The tolerance.</param>
-		public static List<Vertices> convexPartition( Vertices vertices, float tolerance = 0.001f )
+		public static List<Vertices> ConvexPartition( Vertices vertices, float tolerance = 0.001f )
 		{
 			Debug.Assert( vertices.Count > 3 );
-			Debug.Assert( !vertices.isCounterClockWise() );
+			Debug.Assert( !vertices.IsCounterClockWise() );
 
-			return triangulatePolygon( vertices, tolerance );
+			return TriangulatePolygon( vertices, tolerance );
 		}
 
 		/// <summary>
@@ -71,7 +71,7 @@ namespace FarseerPhysics.Common.Decomposition
 		/// <remarks>
 		/// Only works on simple polygons.
 		/// </remarks>
-		static List<Vertices> triangulatePolygon( Vertices vertices, float tolerance )
+		static List<Vertices> TriangulatePolygon( Vertices vertices, float tolerance )
 		{
 			//FPE note: Check is needed as invalid triangles can be returned in recursive calls.
 			if( vertices.Count < 3 )
@@ -82,10 +82,10 @@ namespace FarseerPhysics.Common.Decomposition
 			//Recurse and split on pinch points
 			Vertices pA, pB;
 			var pin = new Vertices( vertices );
-			if( resolvePinchPoint( pin, out pA, out pB, tolerance ) )
+			if( ResolvePinchPoint( pin, out pA, out pB, tolerance ) )
 			{
-				var mergeA = triangulatePolygon( pA, tolerance );
-				var mergeB = triangulatePolygon( pB, tolerance );
+				var mergeA = TriangulatePolygon( pA, tolerance );
+				var mergeB = TriangulatePolygon( pB, tolerance );
 
 				if( mergeA.Count == -1 || mergeB.Count == -1 )
 					throw new Exception( "Can't triangulate your polygon." );
@@ -117,27 +117,27 @@ namespace FarseerPhysics.Common.Decomposition
 				var earMaxMinCross = -10.0f;
 				for( int i = 0; i < vNum; ++i )
 				{
-					if( isEar( i, xrem, yrem, vNum ) )
+					if( IsEar( i, xrem, yrem, vNum ) )
 					{
-						var lower = remainder( i - 1, vNum );
-						var upper = remainder( i + 1, vNum );
+						var lower = Remainder( i - 1, vNum );
+						var upper = Remainder( i + 1, vNum );
 						var d1 = new Vector2( xrem[upper] - xrem[i], yrem[upper] - yrem[i] );
 						var d2 = new Vector2( xrem[i] - xrem[lower], yrem[i] - yrem[lower] );
 						var d3 = new Vector2( xrem[lower] - xrem[upper], yrem[lower] - yrem[upper] );
 
-						Nez.Vector2Ext.normalize( ref d1 );
-						Nez.Vector2Ext.normalize( ref d2 );
-						Nez.Vector2Ext.normalize( ref d3 );
+						Nez.Vector2Ext.Normalize( ref d1 );
+						Nez.Vector2Ext.Normalize( ref d2 );
+						Nez.Vector2Ext.Normalize( ref d3 );
 						float cross12;
-						MathUtils.cross( ref d1, ref d2, out cross12 );
+						MathUtils.Cross( ref d1, ref d2, out cross12 );
 						cross12 = Math.Abs( cross12 );
 
 						float cross23;
-						MathUtils.cross( ref d2, ref d3, out cross23 );
+						MathUtils.Cross( ref d2, ref d3, out cross23 );
 						cross23 = Math.Abs( cross23 );
 
 						float cross31;
-						MathUtils.cross( ref d3, ref d1, out cross31 );
+						MathUtils.Cross( ref d3, ref d1, out cross31 );
 						cross31 = Math.Abs( cross31 );
 
 						//Find the maximum minimum angle
@@ -215,7 +215,7 @@ namespace FarseerPhysics.Common.Decomposition
 		/// <param name="poutA">The pout A.</param>
 		/// <param name="poutB">The pout B.</param>
 		/// <param name="tolerance"></param>
-		static bool resolvePinchPoint( Vertices pin, out Vertices poutA, out Vertices poutB, float tolerance )
+		static bool ResolvePinchPoint( Vertices pin, out Vertices poutA, out Vertices poutB, float tolerance )
 		{
 			poutA = new Vertices();
 			poutB = new Vertices();
@@ -251,14 +251,14 @@ namespace FarseerPhysics.Common.Decomposition
 				if( sizeA == pin.Count ) return false; //has dupe points at wraparound, not a problem here
 				for( int i = 0; i < sizeA; ++i )
 				{
-					int ind = remainder( pinchIndexA + i, pin.Count ); // is this right
+					int ind = Remainder( pinchIndexA + i, pin.Count ); // is this right
 					poutA.Add( pin[ind] );
 				}
 
 				int sizeB = pin.Count - sizeA;
 				for( int i = 0; i < sizeB; ++i )
 				{
-					int ind = remainder( pinchIndexB + i, pin.Count ); // is this right    
+					int ind = Remainder( pinchIndexB + i, pin.Count ); // is this right    
 					poutB.Add( pin[ind] );
 				}
 			}
@@ -271,7 +271,7 @@ namespace FarseerPhysics.Common.Decomposition
 		/// <param name="x">The x.</param>
 		/// <param name="modulus">The modulus.</param>
 		/// <returns></returns>
-		static int remainder( int x, int modulus )
+		static int Remainder( int x, int modulus )
 		{
 			int rem = x % modulus;
 			while( rem < 0 )
@@ -294,7 +294,7 @@ namespace FarseerPhysics.Common.Decomposition
 		/// <returns>
 		/// 	<c>true</c> if the specified i is ear; otherwise, <c>false</c>.
 		/// </returns>
-		static bool isEar( int i, float[] xv, float[] yv, int xvLength )
+		static bool IsEar( int i, float[] xv, float[] yv, int xvLength )
 		{
 			float dx0, dy0, dx1, dy1;
 			if( i >= xvLength || i < 0 || xvLength < 3 )
@@ -338,7 +338,7 @@ namespace FarseerPhysics.Common.Decomposition
 			{
 				if( j == i || j == lower || j == upper )
 					continue;
-				if( myTri.isInside( xv[j], yv[j] ) )
+				if( myTri.IsInside( xv[j], yv[j] ) )
 					return false;
 			}
 			return true;
@@ -365,7 +365,7 @@ namespace FarseerPhysics.Common.Decomposition
 				}
 			}
 
-			public bool isInside( float x, float y )
+			public bool IsInside( float x, float y )
 			{
 				Vector2 a = this[0];
 				Vector2 b = this[1];
