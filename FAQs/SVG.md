@@ -5,8 +5,8 @@ Nez includes some rudimentary support for importing SVG files. The Nez SVG featu
 The SVG parser supports groups, paths, rects, lines, circles, ellipses, polygons, polylines and images. Images can be embedded, accessible via URL or in your Content folder. A debug renderer component is included as well for testing out SVG files. You can use it by just adding it to an Entity in your scene like so:
 
 ```csharp
-var svgEntity = createEntity( "svg" );
-svgEntity.addComponent( new SvgDebugComponent( "mySvgFile.svg" ) );
+var svgEntity = CreateEntity( "svg" );
+svgEntity.AddComponent( new SvgDebugComponent( "mySvgFile.svg" ) );
 ```
 
 The `SvgDebugComponent` is the best example of what shapes are available and how to access them. It should be considered the documentation until this page is fleshed out. Each of the supported shapes has its own render method in the class so that it is very easy to follow and see how to access the raw data from the SVG file.
@@ -27,5 +27,5 @@ You can access just paths from an SVG file as well without having to parse the w
 ```csharp
 var svgPath = new SvgPath();
 svgPath.d = "the contents of the 'd' attribute in the SVG file";
-var points = svgPath.getTransformedDrawingPoints( new SvgPathBuilder() );
+var points = svgPath.GetTransformedDrawingPoints( new SvgPathBuilder() );
 ```

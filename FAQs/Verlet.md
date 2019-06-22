@@ -6,37 +6,37 @@ A few things should be noted up front: the verlet physics system is not a render
 
 
 ## Basic Example
-Getting started using the verlet physics is pretty simple. All you have to do is create a World object and call it's `update` method. An example Component that does this is below. The verlet system has a built-in debug visual system. It is being used here so that you have something to visualize.
+Getting started using the verlet physics is pretty simple. All you have to do is create a World object and call it's `Update` method. An example Component that does this is below. The verlet system has a built-in debug visual system. It is being used here so that you have something to visualize.
 
 ```cs
 public class VerletDemo : RenderableComponent, IUpdatable
 {
-	public override float width { get { return 800; } }
-	public override float height { get { return 600; } }
+	public override float Width { get { return 800; } }
+	public override float Height { get { return 600; } }
 
 	World _world;
 
 
-	public override void onAddedToEntity()
+	public override void OnAddedToEntity()
 	{
 		// create the verlet world which handles simulation
 		_world = new World( new Rectangle( 0, 0, 800, 600 ) );
 
 		// add a couple built-in Composite objects
-		_world.addComposite( new Tire( new Vector2( 100, 100 ), 50, 20 ) );
-		_world.addComposite( new Cloth( new Vector2( 10, 10 ), 200, 100 ) );
+		_world.AddComposite( new Tire( new Vector2( 100, 100 ), 50, 20 ) );
+		_world.AddComposite( new Cloth( new Vector2( 10, 10 ), 200, 100 ) );
 	}
 
 
-	public void update()
+	public void Update()
 	{
-		_world.update();
+		_world.Update();
 	}
 
 
-	public override void render( Graphics graphics, Camera camera )
+	public override void Render( Graphics graphics, Camera camera )
 	{
-		_world.debugRender( graphics.batcher );
+		_world.DebugRender( graphics.batcher );
 	}
 }
 ```
@@ -56,18 +56,18 @@ In the example above, we used two of the built-in `Composites`, Tire and Cloth (
 var composite = new Composite();
 
 // add some particles. In this case we have three particles in a 'v' shape
-composite.addParticle( new Particle( new Vector2( 50, 50 ) ) );
-composite.addParticle( new Particle( new Vector2( 150, 50 ) ) );
-composite.addParticle( new Particle( new Vector2( 150, 150 ) ) );
+composite.AddParticle( new Particle( new Vector2( 50, 50 ) ) );
+composite.AddParticle( new Particle( new Vector2( 150, 50 ) ) );
+composite.AddParticle( new Particle( new Vector2( 150, 150 ) ) );
 
 // add a squishy AngleConstraint to keep the 'v' angle in place
-composite.addConstraint( new AngleConstraint( composite.particles[0], composite.particles[1], composite.particles[2], 0.1f ) );
+composite.AddConstraint( new AngleConstraint( composite.Particles[0], composite.Particles[1], composite.Particles[2], 0.1f ) );
 
 // add two DistanceConstraints so the two ends of the 'v' keep their length fairly constant (0.8 stiffness so there is a little give)
-composite.addConstraint( new DistanceConstraint( composite.particles[0], composite.particles[1], 0.8f ) );
-composite.addConstraint( new DistanceConstraint( composite.particles[1], composite.particles[2], 0.8f ) );
+composite.AddConstraint( new DistanceConstraint( composite.Particles[0], composite.Particles[1], 0.8f ) );
+composite.AddConstraint( new DistanceConstraint( composite.Particles[1], composite.Particles[2], 0.8f ) );
 
 // add the Composite to the World simulation
-_world.addComposite( composite );
+_world.AddComposite( composite );
 ```
 

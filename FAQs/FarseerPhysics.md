@@ -7,7 +7,7 @@ For situations where you need a full-fledged physics simulation Nez provides the
 ## Background and Goals
 [Farseer Physics Engine](https://farseerphysics.codeplex.com/) is a C# port of the superb Box2D physics engine. The Farseer project was abandoned way back in 2013 but it still remains one of the most popular choices for MonoGame/FNA. Farseer covered almost all of the Box2D API and extended it providing a bunch of super useful tools, many not even physics specific (texture and polygon tools, for example).
 
-Farseer (like most physics engines) operates in metric (kilo/meter/second) as opposed to pixel coordinates. This can make working directly with Farseer error prone. Every time you get or set data you have to convert to/from display/simulation units. The Nez high level API hides all of this and handles converting between display and simulation for you. When accessing the Farseer API directly it will not be converted for you. You can use the `FSConvert` static class to handle conversions via its `displayToSim` and `simToDisplay` fields.
+Farseer (like most physics engines) operates in metric (kilo/meter/second) as opposed to pixel coordinates. This can make working directly with Farseer error prone. Every time you get or set data you have to convert to/from display/simulation units. The Nez high level API hides all of this and handles converting between display and simulation for you. When accessing the Farseer API directly it will not be converted for you. You can use the `FSConvert` static class to handle conversions via its `DisplayToSim` and `SimToDisplay` fields.
 
 The Nez Farseer implementation has a few important goals that it aims to achieve:
 - wrap the most commonly used Farseer features in easy to use Components. The Farseer API is low level. The high level Components will hide all of that complexity and make basic physics simple to use.
@@ -19,9 +19,9 @@ The Farseer code is all in progress and the API is definitely not in its final s
 
 
 ## Using Farseer with Nez
-First and foremost, you should always set your pixel-to-meter ratio before doing anything. By default, the value is set to 100. You can change this to whatever you want by calling `FSConvert.setDisplayUnitToSimUnitRatio`. Behind the scenes, the high level API will be using this value to deal with converting to/from simulation units to pixels. If you choose to use the Farseer API directly be sure to remember to convert your units with the FSDebug `displayToSim` and `simToDisplay` fields.
+First and foremost, you should always set your pixel-to-meter ratio before doing anything. By default, the value is set to 100. You can change this to whatever you want by calling `FSConvert.SetDisplayUnitToSimUnitRatio`. Behind the scenes, the high level API will be using this value to deal with converting to/from simulation units to pixels. If you choose to use the Farseer API directly be sure to remember to convert your units with the FSDebug `DisplayToSim` and `SimToDisplay` fields.
 
-There are a couple options for using Farseer physics with Nez to provide some flexibility. Regardless of if you choose to use the Component-based high level API or use Farseer directly it is recommended to use the `FSWorld` `SceneComponent` to manage the Farseer `World` object. All of the the high level API will get the World object from the FSWorld SceneComponent. You can easily access it by just calling `Scene.getOrCreateSceneComponent<FSWorld>()`. As the name implies, this will fetch the FSWorld SceneComponent or first create it then fetch it.
+There are a couple options for using Farseer physics with Nez to provide some flexibility. Regardless of if you choose to use the Component-based high level API or use Farseer directly it is recommended to use the `FSWorld` `SceneComponent` to manage the Farseer `World` object. All of the the high level API will get the World object from the FSWorld SceneComponent. You can easily access it by just calling `Scene.GetOrCreateSceneComponent<FSWorld>()`. As the name implies, this will fetch the FSWorld SceneComponent or first create it then fetch it.
 
 The `FSDebugView` Component can be added to your Scene to get a visual representation of the physics world. This is very handy for development and debugging of Farseer objects and it will work with the high or low level API.
 
@@ -40,33 +40,33 @@ Lets take a look at some basic examples of using the API.
 Creates a Sprite and a dynamic Farseer rigid body with a circle collider
 ```cs
 // create an Entity and set the position and scale
-createEntity( "circle-sprite" )
-	.setPosition( pos )
-  	.setScale( scale )
+CreateEntity( "circle-sprite" )
+	.SetPosition( pos )
+  	.SetScale( scale )
 
 	// add an FSRigidBody and set the bodyType to dynamic
-	.addComponent<FSRigidBody>()
-	.setBodyType( BodyType.Dynamic )
+	.AddComponent<FSRigidBody>()
+	.SetBodyType( BodyType.Dynamic )
 
 	// add a circle shape for our collisions and set the radius to halve the texture width
-	.addComponent<FSCollisionCircle>()
-	.setRadius( texture.Width / 2 )
+	.AddComponent<FSCollisionCircle>()
+	.SetRadius( texture.Width / 2 )
 
 	// finally add a Sprite
-	.addComponent( new Sprite( texture ) );
+	.AddComponent( new Sprite( texture ) );
 ```
 
 Creates a static Farseer rigid body and an edge collider that goes from vert1 to vert2
 ```cs
-createEntity( "edge" )
-	.setPosition( pos )
+CreateEntity( "edge" )
+	.SetPosition( pos )
 
 	// add the FSRigidBody. By default it will be static
-	.addComponent<FSRigidBody>()
+	.AddComponent<FSRigidBody>()
 
 	// add our edge collision shape with two verts
-	.addComponent<FSCollisionEdge>()
-  	.setVertices( vert1, vert2 );
+	.AddComponent<FSCollisionEdge>()
+  	.SetVertices( vert1, vert2 );
 ```
 
 Creates a static Farseer rigid body with a chain collider. Chains are essentially a free form sequence of line segments that can be collided with from either side.
@@ -80,27 +80,27 @@ verts.Add( new Vector2( 700, 20 ) );
 
 createEntity( "chain" )
 	// add our static FSRigidBody
-	.addComponent<FSRigidBody>()
+	.AddComponent<FSRigidBody>()
 
 	// add the chain shape and set the verts
-	.addComponent<FSCollisionChain>()
-  	.setVertices( verts );
+	.AddComponent<FSCollisionChain>()
+  	.SetVertices( verts );
 ```
 
 This example shows how to use a joint to connect two FSRigidBodies. It is assumed that rigidBody1 and rigidBody2 exist and are FSRigidBodies.
 ```cs
 // add the weld joint to the first rigid body. Weld joints essentially glues two bodies together.
-rigidBody1.addComponent<FSWeldJoint>()
+rigidBody1.AddComponent<FSWeldJoint>()
 		 // configure the anchors for the two bodies. Anchors are relative to the position of each body.
-	     .setOtherBodyAnchor( new Vector2( 50, 0 ) )
-	     .setOwnerBodyAnchor( new Vector2( -50, 50 ) )
+	     .SetOtherBodyAnchor( new Vector2( 50, 0 ) )
+	     .SetOwnerBodyAnchor( new Vector2( -50, 50 ) )
 
 		 // configure the frequency and damping ratio
-	     .setFrequencyHz( 5 )
-	     .setDampingRatio( 0.1f )
+	     .SetFrequencyHz( 5 )
+	     .SetDampingRatio( 0.1f )
 
 		 // set the second FSRigidBody for the joint
-	     .setOtherBody( rigidBody2 );
+	     .SetOtherBody( rigidBody2 );
 ```
 
 Finally lets take a look at creating a slightly more complex collision shape.
@@ -109,16 +109,16 @@ var vertList = new List<Vertices>();
 // fill vertList with some polygon vertices
 
 // create and configure our standard rigid body
-var rb = createEntity( "compound-polygon" )
-	.setPosition( pos )
-	.addComponent<FSRigidBody>()
-	.setBodyType( BodyType.Dynamic );
+var rb = CreateEntity( "compound-polygon" )
+	.SetPosition( pos )
+	.AddComponent<FSRigidBody>()
+	.SetBodyType( BodyType.Dynamic );
 
 // add an FSCollisionPolygon for each of the vert Lists
 foreach( var verts in vertList )
 {
-	rb.addComponent<FSCollisionPolygon>()
-	  .setVertices( verts );
+	rb.AddComponent<FSCollisionPolygon>()
+	  .SetVertices( verts );
 }
 ```
 

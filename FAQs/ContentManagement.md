@@ -2,7 +2,7 @@ Content Management
 ==========
 Nez includes it's own content management system that builds on the MonoGame ContentManager class. All content management goes through the `NezContentManager` which is a subclass of ContentManager. The debug console has a 'assets' command that will log all scene or global assets so you will always know what is still in memory.
 
-Nez provides containers for global and per-scene content. You can also create your own `NezContentManager` at any time if you need to manage some short-lived assets. You can also unload assets at any time via the `unloadAsset<T>` method. Note that Effects should be unloaded with `unloadEffect` since they are a special case.
+Nez provides containers for global and per-scene content. You can also create your own `NezContentManager` at any time if you need to manage some short-lived assets. You can also unload assets at any time via the `UnloadAsset<T>` method. Note that Effects should be unloaded with `UnloadEffect` since they are a special case.
 
 
 ## Global Content
@@ -17,10 +17,10 @@ Each scene has it's own `NezContentManager` (scene.contentManager) that you can 
 ## Loading Effects
 There are several ways to load Effects with Nez that are not present in MonoGame. These were added to make Effect management easier, especially when dealing with Effects that are subclasses of Effect (such as AlphaTestEffect and BasicEffect). All of the built in Nez Effects can also be loaded easily. The available methods are:
 
-- **loadMonoGameEffect<T>:** loads and manages any Effect that is built-in to MonoGame such as BasicEffect, AlphaTestEffect, etc
-- **loadEffect/loadEffect<T>:** loads an ogl effect directly from file and handles disposing of it when the ContentManager is disposed
-- **loadEffect<T>( string name, byte[] effectCode ):** loads an ogl effect directly from its bytes and handles disposing of it when the ContentManager is disposed
-- **loadNezEffect:** loads a built-in Nez effect. These are any of the Effect subclasses in the Nez/Graphics/Effects folder.
+- **LoadMonoGameEffect<T>:** loads and manages any Effect that is built-in to MonoGame such as BasicEffect, AlphaTestEffect, etc
+- **LoadEffect/LoadEffect<T>:** loads an ogl effect directly from file and handles disposing of it when the ContentManager is disposed
+- **LoadEffect<T>( string name, byte[] effectCode ):** loads an ogl effect directly from its bytes and handles disposing of it when the ContentManager is disposed
+- **LoadNezEffect:** loads a built-in Nez effect. These are any of the Effect subclasses in the Nez/Graphics/Effects folder.
 
 
 
@@ -32,7 +32,7 @@ Nez includes a T4 template that will generate a static `Content` class for you t
 var tex = content.Load<Texture2D>( "Textures/Scene1/blueBird" );
 
 // after using the ContentPathGenerator you will have compile-tile safety for your content
-var tex = content.Load<Texture2D>( Content.Textures.Scene1.blueBird" );
+var tex = content.Load<Texture2D>( Content.Textures.Scene1.blueBird );
 ```
 
 The big advantage to using it is that you will never have a reference to content that doesnt actually exist in your project. You get compile-time checking of all your content. Setup is as follows:
@@ -43,4 +43,4 @@ The big advantage to using it is that you will never have a reference to content
 
 
 ## Async Loading
-`NezContentManager` provides asynchronous loading of assets as well. You can load a single asset or an array of assets via the `loadAsync<T>` method. It takes a callback Action that will be called once the assets are loaded.
+`NezContentManager` provides asynchronous loading of assets as well. You can load a single asset or an array of assets via the `LoadAsync<T>` method. It takes a callback Action that will be called once the assets are loaded.
