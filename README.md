@@ -6,6 +6,9 @@
 [![Join the chat](https://img.shields.io/badge/discord-join-7289DA.svg?logo=discord&longCache=true&style=flat)](https://discord.gg/uFtGHNv)
 
 
+There is a new `PascalCase` branch that converts all the camelCase API over to PascalCase. Stop by the Discord channel and feel free to let us know if you would prefer if the PascalCase branch becomes the new Nez public API.
+
+
 Nez aims to be a lightweight 2D framework that sits on top of MonoGame/FNA. It provides a solid base for you to build a 2D game on. Some of the many features it includes are:
 
 - Scene/Entity/Component system with Component render layer tracking and optional entity systems (an implementation that operates on a group of entities that share a specific set of components)
