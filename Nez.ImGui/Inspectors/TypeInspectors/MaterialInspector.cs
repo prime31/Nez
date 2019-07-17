@@ -132,7 +132,7 @@ namespace Nez.ImGuiTools.TypeInspectors
 						}
 
 						var inspector = new EffectInspector();
-						inspector.SetTarget( material, ReflectionUtils.GetFieldInfo( material, "effect" ) );
+						inspector.SetTarget( material, ReflectionUtils.GetFieldInfo( material, "Effect" ) );
 						inspector.Initialize();
 						_inspectors.Add( inspector );
 
