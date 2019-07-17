@@ -20,7 +20,7 @@ namespace Nez.ImGuiTools.ObjectInspectors
             _materialInspector = new MaterialInspector {
                 AllowsMaterialRemoval = false
             };
-            _materialInspector.SetTarget( renderer, renderer.GetType().GetField( "material" ) );
+            _materialInspector.SetTarget( renderer, renderer.GetType().GetField( "Material" ) );
         }
 
         public void Draw()
