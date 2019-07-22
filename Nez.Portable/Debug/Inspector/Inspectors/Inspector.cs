@@ -95,7 +95,7 @@ namespace Nez
 			var props = new List<Inspector>();
 			var type = transform.GetType();
 
-			var allowedProps = new string[] { "localPosition", "localRotationDegrees", "localScale" };
+			var allowedProps = new string[] { "LocalPosition", "LocalRotationDegrees", "LocalScale" };
 			var properties = ReflectionUtils.GetProperties( type );
 			foreach( var prop in properties )
 			{
@@ -166,7 +166,7 @@ namespace Nez
 		/// <param name="target">Target.</param>
 		static Inspector GetMaterialInspector( object target )
 		{
-			var materialProp = ReflectionUtils.GetPropertyInfo( target, "material" );
+			var materialProp = ReflectionUtils.GetPropertyInfo( target, "Material" );
 			var materialMethod = ReflectionUtils.GetPropertyGetter( materialProp );
 			var material = materialMethod.Invoke( target, new object[] { } ) as Material;
 			if( material == null || material.Effect == null )
