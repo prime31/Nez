@@ -13,7 +13,7 @@ namespace Nez.Tiled
 		public Subtexture textureRegion { get { return tileset.getTileTextureRegion( id ); } }
 
 		/// <summary>
-		/// gets the TiledtilesetTile for this TiledTile if it exists. TiledtilesetTile only exist for animated tiles and tiles with attached
+		/// gets the TiledtilesetTile for this TiledTile if it exists. TiledTilesetTile only exist for animated tiles and tiles with attached
 		/// properties.
 		/// </summary>
 		/// <value>The tileset tile.</value>

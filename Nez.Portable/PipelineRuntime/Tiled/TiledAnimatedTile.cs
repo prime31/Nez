@@ -24,7 +24,7 @@ namespace Nez.Tiled
 			if( _elapsedTime > tilesetTile.animationFrames[_currentFrame].duration )
 			{
 				_currentFrame = Mathf.incrementWithWrap( _currentFrame, tilesetTile.animationFrames.Count );
-				// HACK: still not quite sure why we have to resolve the global tildId with the tileset.firstId here...
+				// HACK: still not quite sure why we have to resolve the global tileId with the tileset.firstId here...
 				id = tilesetTile.animationFrames[_currentFrame].tileId + tileset.firstId;
 				_elapsedTime = 0;
 			}
