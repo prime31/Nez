@@ -370,9 +370,15 @@ namespace Nez.BitmapFonts
             if (currentLineHeight != 0)
                 lineHeights.Add(currentLineHeight);
 
-            // reduce any lines other than the last back to the base
-            for (var i = 0; i < lineHeights.Count - 1; i++)
-                lineHeights[i] = LineHeight;
+            for (var i = 0; i < lineHeights.Count; i++)
+            {
+                // reduce any lines other than the last back to the base
+                if (i < lineHeights.Count - 1)
+                    lineHeights[i] = LineHeight;
+
+                // add height of each line to the overall block height
+                blockHeight += lineHeights[i];
+            }
 
             return new Point(Math.Max(currentLineWidth, blockWidth), blockHeight);
         }
