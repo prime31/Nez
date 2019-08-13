@@ -1,0 +1,24 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>    
+    <AssemblyName>Nez</AssemblyName>
+    <RootNamespace>Nez</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Reference Include="netstandard" />
+    <PackageReference Include="MonoGame.Framework.DesktopGL.Core" Version="3.7.0.7"/>
+    <PackageReference Include="System.Drawing.Common" Version="4.5.1"/>
+  </ItemGroup>
+
+  <ItemGroup>
+      <None Remove="Content\NezDefaultBMFont.xnb" />
+  </ItemGroup>
+
+  <ItemGroup>
+      <EmbeddedResource Include="Content\NezDefaultBMFont.xnb">
+        <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+      </EmbeddedResource>
+    </ItemGroup>
+</Project>

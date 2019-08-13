@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Nez.Portable\Nez.DotNetCore.csproj">      
+      <Name>Nez</Name>
+    </ProjectReference>
+    <PackageReference Include="MonoGame.Framework.Content.Pipeline.Portable" Version="3.7.0.1708"/>
+    <PackageReference Include="Newtonsoft.json" Version="11.0.2"/>
+    <PackageReference Include="MarkerMetro.Unity.Ionic.Zlib" Version="2.0.0.14"/>
+  </ItemGroup>
+
+</Project>
