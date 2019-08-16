@@ -53,7 +53,7 @@ namespace Nez
 			set
 			{
 #if FNA
-				_maxSupportedGamePads = Mathf.clamp( value, 1, 8 );
+				_maxSupportedGamePads = Mathf.Clamp( value, 1, 8 );
 #else
 				_maxSupportedGamePads = Mathf.Clamp( value, 1, GamePad.MaximumGamePadCount );
 #endif

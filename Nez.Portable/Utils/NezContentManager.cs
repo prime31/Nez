@@ -205,7 +205,7 @@ namespace Nez.Systems
 
 					// first fetch the actual asset. we already know its loaded so we'll grab it directly
 					#if FNA
-					fieldInfo = ReflectionUtils.getFieldInfo( typeof( ContentManager ), "loadedAssets" );
+					fieldInfo = ReflectionUtils.GetFieldInfo( typeof( ContentManager ), "loadedAssets" );
 					var LoadedAssets = fieldInfo.GetValue( this ) as Dictionary<string, object>;
 					#endif
 
@@ -265,7 +265,7 @@ namespace Nez.Systems
 		public bool IsAssetLoaded( string assetName )
 		{
 			#if FNA
-			var fieldInfo = ReflectionUtils.getFieldInfo( typeof( ContentManager ), "loadedAssets" );
+			var fieldInfo = ReflectionUtils.GetFieldInfo( typeof( ContentManager ), "loadedAssets" );
 			var LoadedAssets = fieldInfo.GetValue( this ) as Dictionary<string, object>;
 			#endif
 
@@ -279,7 +279,7 @@ namespace Nez.Systems
 		internal string LogLoadedAssets()
 		{
 			#if FNA
-			var fieldInfo = ReflectionUtils.getFieldInfo( typeof( ContentManager ), "loadedAssets" );
+			var fieldInfo = ReflectionUtils.GetFieldInfo( typeof( ContentManager ), "loadedAssets" );
 			var LoadedAssets = fieldInfo.GetValue( this ) as Dictionary<string, object>;
 			#endif
 
@@ -305,7 +305,7 @@ namespace Nez.Systems
 		public string GetPathForLoadedAsset( object asset )
 		{
 			#if FNA
-			var fieldInfo = ReflectionUtils.getFieldInfo( typeof( ContentManager ), "loadedAssets" );
+			var fieldInfo = ReflectionUtils.GetFieldInfo( typeof( ContentManager ), "loadedAssets" );
 			var LoadedAssets = fieldInfo.GetValue( this ) as Dictionary<string, object>;
 			#endif
 
