@@ -306,7 +306,7 @@ namespace Nez
 
 	public class NezSpriteFont : IFont
 	{
-		public float lineSpacing { get { return _font.LineSpacing; } }
+		public float LineSpacing { get { return _font.LineSpacing; } }
 
 		SpriteFont _font;
 
@@ -324,39 +324,39 @@ namespace Nez
 		}
 
 
-		public void drawInto( Batcher batcher, StringBuilder text, Vector2 position, Color color, float rotation, Vector2 origin, Vector2 scale, SpriteEffects effect, float depth )
+		public void DrawInto( Batcher batcher, StringBuilder text, Vector2 position, Color color, float rotation, Vector2 origin, Vector2 scale, SpriteEffects effect, float depth )
 		{
 			var source = new FontCharacterSource( text );
-			drawInto( batcher, ref source, position, color, rotation, origin, scale, effect, depth );
+			DrawInto( batcher, ref source, position, color, rotation, origin, scale, effect, depth );
 		}
 
 
-		public void drawInto( Batcher batcher, string text, Vector2 position, Color color, float rotation, Vector2 origin, Vector2 scale, SpriteEffects effect, float depth )
+		public void DrawInto( Batcher batcher, string text, Vector2 position, Color color, float rotation, Vector2 origin, Vector2 scale, SpriteEffects effect, float depth )
 		{
 			var source = new FontCharacterSource( text );
-			drawInto( batcher, ref source, position, color, rotation, origin, scale, effect, depth );
+			DrawInto( batcher, ref source, position, color, rotation, origin, scale, effect, depth );
 		}
 
 
-		public void drawInto( Batcher batcher, ref FontCharacterSource text, Vector2 position, Color color, float rotation, Vector2 origin, Vector2 scale, SpriteEffects effect, float depth )
+		public void DrawInto( Batcher batcher, ref FontCharacterSource text, Vector2 position, Color color, float rotation, Vector2 origin, Vector2 scale, SpriteEffects effect, float depth )
 		{
 			throw new NotImplementedException();
 		}
 
 
-		bool IFont.hasCharacter( char c )
+		bool IFont.HasCharacter( char c )
 		{
 			throw new NotImplementedException();
 		}
 
 
-		public Vector2 measureString( StringBuilder text )
+		public Vector2 MeasureString( StringBuilder text )
 		{
 			return _font.MeasureString( text );
 		}
 
 
-		public Vector2 measureString( string text )
+		public Vector2 MeasureString( string text )
 		{
 			return _font.MeasureString( text );
 		}
