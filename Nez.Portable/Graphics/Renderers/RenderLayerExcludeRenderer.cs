@@ -33,18 +33,18 @@
 			endRender();
 		}
 
-		protected override void debugRender( Scene scene, Camera cam )
-		{
-			Graphics.instance.batcher.end();
-			Graphics.instance.batcher.begin( cam.transformMatrix );
-
-			for( var i = 0; i < scene.renderableComponents.count; i++ )
-			{
-				var renderable = scene.renderableComponents[i];
-				if( !excludedRenderLayers.contains( renderable.renderLayer ) && renderable.enabled && renderable.isVisibleFromCamera( cam ) )
-					renderable.debugRender( Graphics.instance );
-			}
-		}
+//		protected override void debugRender( Scene scene, Camera cam )
+//		{
+//			Graphics.instance.batcher.end();
+//			Graphics.instance.batcher.begin( cam.transformMatrix );
+//
+//			for( var i = 0; i < scene.renderableComponents.count; i++ )
+//			{
+//				var renderable = scene.renderableComponents[i];
+//				if( !excludedRenderLayers.contains( renderable.renderLayer ) && renderable.enabled && renderable.isVisibleFromCamera( cam ) )
+//					renderable.debugRender( Graphics.instance );
+//			}
+//		}
 
 	}
 }
