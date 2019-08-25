@@ -73,17 +73,17 @@ namespace Nez.Tiled
 			{
 				// we expand our cameraClipBounds by the excess tile width/height of the largest tiles to ensure we include tiles whose
 				// origin might be outside of the cameraClipBounds
-				minX = tiledMap.worldToTilePositionX( cameraClipBounds.left - ( tiledMap.largestTileWidth - tiledMap.tileWidth ) );
-				minY = tiledMap.worldToTilePositionY( cameraClipBounds.top - ( tiledMap.largestTileHeight - tiledMap.tileHeight ) );
-				maxX = tiledMap.worldToTilePositionX( cameraClipBounds.right + ( tiledMap.largestTileWidth - tiledMap.tileWidth ) );
-				maxY = tiledMap.worldToTilePositionY( cameraClipBounds.bottom + ( tiledMap.largestTileHeight - tiledMap.tileHeight ) );
+				minX = tiledMap.worldToTilePositionX((cameraClipBounds.left - ( tiledMap.largestTileWidth - tiledMap.tileWidth ) ) / scale.X);
+				minY = tiledMap.worldToTilePositionY((cameraClipBounds.top - ( tiledMap.largestTileHeight - tiledMap.tileHeight ) ) / scale.Y);
+				maxX = tiledMap.worldToTilePositionX((cameraClipBounds.right + ( tiledMap.largestTileWidth - tiledMap.tileWidth ) ) / scale.X);
+				maxY = tiledMap.worldToTilePositionY((cameraClipBounds.bottom + ( tiledMap.largestTileHeight - tiledMap.tileHeight ) ) / scale.Y);
 			}
 			else
 			{
-				minX = tiledMap.worldToTilePositionX( cameraClipBounds.left );
-				minY = tiledMap.worldToTilePositionY( cameraClipBounds.top );
-				maxX = tiledMap.worldToTilePositionX( cameraClipBounds.right );
-				maxY = tiledMap.worldToTilePositionY( cameraClipBounds.bottom );
+				minX = Mathf.clamp(tiledMap.worldToTilePositionX( cameraClipBounds.left / scale.X), 0, tiledMap.width -1);
+				minY = Mathf.clamp(tiledMap.worldToTilePositionY( cameraClipBounds.top / scale.Y), 0, tiledMap.height -1);
+				maxX = Mathf.clamp(tiledMap.worldToTilePositionX( cameraClipBounds.right / scale.X ), 0, tiledMap.width -1);
+				maxY = Mathf.clamp(tiledMap.worldToTilePositionY( cameraClipBounds.bottom / scale.Y), 0, tiledMap.height -1);
 			}
 
 			// loop through and draw all the non-culled tiles
