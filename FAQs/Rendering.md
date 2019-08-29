@@ -36,13 +36,13 @@ public class SimplePostProcessor : PostProcessor
 	{
 			Core.graphicsDevice.SetRenderTarget( destination );
 
-			Graphics.instance.spriteBatch.Begin( effect: effect );
+			Graphics.instance.batcher.begin( effect: effect );
 			// render source contains all of the Scene that was not rendered into _renderTexture
-			Graphics.instance.spriteBatch.Draw( source, Vector2.Zero, Color.White );
+			Graphics.instance.batcher.draw( source, Vector2.Zero, Color.White );
 			
 			// now we render the contents of our _renderTexture on top of it
-			Graphics.instance.spriteBatch.Draw( _renderTexture, Vector2.Zero );
-			Graphics.instance.spriteBatch.End();
+			Graphics.instance.batcher.draw( _renderTexture, Vector2.Zero );
+			Graphics.instance.batcher.end();
 	}
 }
 ```
