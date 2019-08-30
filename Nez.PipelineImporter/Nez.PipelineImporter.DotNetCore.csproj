@@ -6,6 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Reference Include="netstandard" />
     <ProjectReference Include="..\Nez.Portable\Nez.DotNetCore.csproj">      
       <Name>Nez</Name>
     </ProjectReference>
