@@ -3,13 +3,12 @@
 
 namespace Nez.PhysicsShapes
 {
-	public abstract class Shape
-	{
+	public abstract class Shape {
 		/// <summary>
 		/// having a separate position field lets us alter the position of the shape for collisions checks as opposed to having to change the
 		/// Entity.position which triggers collider/bounds/hash updates.
 		/// </summary>
-		internal Vector2 position;
+		public Vector2 position;
 
 		/// <summary>
 		/// center is kind of a misnomer. This value isnt necessarily the center of an object. It is more accurately the Collider.localOffset
