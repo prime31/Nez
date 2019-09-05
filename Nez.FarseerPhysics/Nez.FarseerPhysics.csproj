@@ -10,7 +10,6 @@
 		<OutputType>Library</OutputType>
 		<TargetFramework>net471</TargetFramework>
 		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-		<CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
 		<IntermediateOutputPath>obj\Nez.FarseerPhysics\$(Configuration)</IntermediateOutputPath>
 		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
 	</PropertyGroup>
