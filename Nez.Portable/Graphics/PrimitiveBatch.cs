@@ -23,29 +23,29 @@ namespace Nez
 		int _triangleVertsCount;
 
 
-		public PrimitiveBatch( int bufferSize = 500 )
+		public PrimitiveBatch(int bufferSize = 500)
 		{
 			_triangleVertices = new VertexPositionColor[bufferSize - bufferSize % 3];
 			_lineVertices = new VertexPositionColor[bufferSize - bufferSize % 2];
 
 			// set up a new basic effect, and enable vertex colors.
-			_basicEffect = new BasicEffect( Core.GraphicsDevice );
+			_basicEffect = new BasicEffect(Core.GraphicsDevice);
 			_basicEffect.World = Matrix.Identity;
 			_basicEffect.VertexColorEnabled = true;
 		}
-			
+
 
 		public void Dispose()
 		{
-			Dispose( true );
+			Dispose(true);
 		}
 
 
-		protected virtual void Dispose( bool disposing )
+		protected virtual void Dispose(bool disposing)
 		{
-			if( disposing && !_isDisposed )
+			if (disposing && !_isDisposed)
 			{
-				if( _basicEffect != null )
+				if (_basicEffect != null)
 					_basicEffect.Dispose();
 
 				_isDisposed = true;
@@ -58,10 +58,11 @@ namespace Nez
 		/// </summary>
 		public void Begin()
 		{
-			var projection = Matrix.CreateOrthographicOffCenter( 0, Core.GraphicsDevice.Viewport.Width, Core.GraphicsDevice.Viewport.Height, 0, 0, -1 );
-			var view = Matrix.CreateLookAt( Vector3.Zero, Vector3.Forward, Vector3.Up );
+			var projection = Matrix.CreateOrthographicOffCenter(0, Core.GraphicsDevice.Viewport.Width,
+				Core.GraphicsDevice.Viewport.Height, 0, 0, -1);
+			var view = Matrix.CreateLookAt(Vector3.Zero, Vector3.Forward, Vector3.Up);
 
-			Begin( ref projection, ref view );
+			Begin(ref projection, ref view);
 		}
 
 
@@ -71,9 +72,9 @@ namespace Nez
 		/// </summary>
 		/// <param name="projection">The projection.</param>
 		/// <param name="view">The view.</param>
-		public void Begin( ref Matrix projection, ref Matrix view )
+		public void Begin(ref Matrix projection, ref Matrix view)
 		{
-			Insist.IsFalse( _hasBegun, "Invalid state. End must be called before Begin can be called again." );
+			Insist.IsFalse(_hasBegun, "Invalid state. End must be called before Begin can be called again.");
 
 			// tell our basic effect to begin.
 			_basicEffect.Projection = projection;
@@ -91,9 +92,9 @@ namespace Nez
 		/// </summary>
 		/// <param name="projection">The projection.</param>
 		/// <param name="view">The view.</param>
-		public void Begin( Matrix projection, Matrix view )
+		public void Begin(Matrix projection, Matrix view)
 		{
-			Begin( ref projection, ref view );
+			Begin(ref projection, ref view);
 		}
 
 
@@ -104,8 +105,8 @@ namespace Nez
 		/// </summary>
 		public void End()
 		{
-			if( !_hasBegun )
-				throw new InvalidOperationException( "Begin must be called before End can be called." );
+			if (!_hasBegun)
+				throw new InvalidOperationException("Begin must be called before End can be called.");
 
 			// Draw whatever the user wanted us to draw
 			FlushTriangles();
@@ -114,27 +115,28 @@ namespace Nez
 		}
 
 
-		public void AddVertex( Vector2 vertex, Color color, PrimitiveType primitiveType )
+		public void AddVertex(Vector2 vertex, Color color, PrimitiveType primitiveType)
 		{
-			Insist.IsTrue( _hasBegun, "Invalid state. Begin must be called before AddVertex can be called." );
-			Insist.IsFalse( primitiveType == PrimitiveType.LineStrip || primitiveType == PrimitiveType.TriangleStrip, "The specified primitiveType is not supported by PrimitiveBatch" );
+			Insist.IsTrue(_hasBegun, "Invalid state. Begin must be called before AddVertex can be called.");
+			Insist.IsFalse(primitiveType == PrimitiveType.LineStrip || primitiveType == PrimitiveType.TriangleStrip,
+				"The specified primitiveType is not supported by PrimitiveBatch");
 
-			if( primitiveType == PrimitiveType.TriangleList )
+			if (primitiveType == PrimitiveType.TriangleList)
 			{
-				if( _triangleVertsCount >= _triangleVertices.Length )
+				if (_triangleVertsCount >= _triangleVertices.Length)
 					FlushTriangles();
 
-				_triangleVertices[_triangleVertsCount].Position = new Vector3( vertex, 0 );
+				_triangleVertices[_triangleVertsCount].Position = new Vector3(vertex, 0);
 				_triangleVertices[_triangleVertsCount].Color = color;
 				_triangleVertsCount++;
 			}
 
-			if( primitiveType == PrimitiveType.LineList )
+			if (primitiveType == PrimitiveType.LineList)
 			{
-				if( _lineVertsCount >= _lineVertices.Length )
+				if (_lineVertsCount >= _lineVertices.Length)
 					FlushLines();
 
-				_lineVertices[_lineVertsCount].Position = new Vector3( vertex, 0 );
+				_lineVertices[_lineVertsCount].Position = new Vector3(vertex, 0);
 				_lineVertices[_lineVertsCount].Color = color;
 				_lineVertsCount++;
 			}
@@ -143,15 +145,17 @@ namespace Nez
 
 		void FlushTriangles()
 		{
-			if( !_hasBegun )
-				throw new InvalidOperationException( "Begin must be called before Flush can be called." );
-			
-			if( _triangleVertsCount >= 3 )
+			if (!_hasBegun)
+				throw new InvalidOperationException("Begin must be called before Flush can be called.");
+
+			if (_triangleVertsCount >= 3)
 			{
 				var primitiveCount = _triangleVertsCount / 3;
+
 				// submit the draw call to the graphics card
 				Core.GraphicsDevice.SamplerStates[0] = SamplerState.AnisotropicClamp;
-				Core.GraphicsDevice.DrawUserPrimitives( PrimitiveType.TriangleList, _triangleVertices, 0, primitiveCount );
+				Core.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, _triangleVertices, 0,
+					primitiveCount);
 				_triangleVertsCount -= primitiveCount * 3;
 			}
 		}
@@ -159,15 +163,16 @@ namespace Nez
 
 		void FlushLines()
 		{
-			if( !_hasBegun )
-				throw new InvalidOperationException( "Begin must be called before Flush can be called." );
-			
-			if( _lineVertsCount >= 2 )
+			if (!_hasBegun)
+				throw new InvalidOperationException("Begin must be called before Flush can be called.");
+
+			if (_lineVertsCount >= 2)
 			{
 				int primitiveCount = _lineVertsCount / 2;
+
 				// submit the draw call to the graphics card
 				Core.GraphicsDevice.SamplerStates[0] = SamplerState.AnisotropicClamp;
-				Core.GraphicsDevice.DrawUserPrimitives( PrimitiveType.LineList, _lineVertices, 0, primitiveCount );
+				Core.GraphicsDevice.DrawUserPrimitives(PrimitiveType.LineList, _lineVertices, 0, primitiveCount);
 				_lineVertsCount -= primitiveCount * 2;
 			}
 		}
@@ -175,86 +180,88 @@ namespace Nez
 
 		#region Drawing methods
 
-		public void DrawRectangle( float x, float y, float width, float height, Color color )
+		public void DrawRectangle(float x, float y, float width, float height, Color color)
 		{
 			var verts = new Vector2[4];
-			verts[2] = new Vector2( x + width, y + height );
-			verts[1] = new Vector2( x + width, y );
-			verts[0] = new Vector2( x, y );
-			verts[3] = new Vector2( x, y + height );
+			verts[2] = new Vector2(x + width, y + height);
+			verts[1] = new Vector2(x + width, y);
+			verts[0] = new Vector2(x, y);
+			verts[3] = new Vector2(x, y + height);
 
-			DrawPolygon( verts, 4, color );
+			DrawPolygon(verts, 4, color);
 		}
 
 
-		public void DrawRectangle( ref Rectangle rect, Color color )
+		public void DrawRectangle(ref Rectangle rect, Color color)
 		{
 			var verts = new Vector2[4];
-			verts[0] = new Vector2( rect.Left, rect.Top );
-			verts[1] = new Vector2( rect.Right, rect.Top );
-			verts[2] = new Vector2( rect.Right, rect.Bottom );
-			verts[3] = new Vector2( rect.Left, rect.Bottom );
+			verts[0] = new Vector2(rect.Left, rect.Top);
+			verts[1] = new Vector2(rect.Right, rect.Top);
+			verts[2] = new Vector2(rect.Right, rect.Bottom);
+			verts[3] = new Vector2(rect.Left, rect.Bottom);
 
-			DrawPolygon( verts, 4, color );
+			DrawPolygon(verts, 4, color);
 		}
 
 
-		public void DrawPolygon( Vector2[] vertices, int count, Color color )
+		public void DrawPolygon(Vector2[] vertices, int count, Color color)
 		{
-			for( int i = 1; i < count - 1; i++ )
+			for (int i = 1; i < count - 1; i++)
 			{
-				AddVertex( vertices[0], color, PrimitiveType.TriangleList );
-				AddVertex( vertices[i], color, PrimitiveType.TriangleList );
-				AddVertex( vertices[i + 1], color, PrimitiveType.TriangleList );
+				AddVertex(vertices[0], color, PrimitiveType.TriangleList);
+				AddVertex(vertices[i], color, PrimitiveType.TriangleList);
+				AddVertex(vertices[i + 1], color, PrimitiveType.TriangleList);
 			}
 		}
 
 
-		public void DrawPolygon( Vector2 position, Vector2[] vertices, Color color )
+		public void DrawPolygon(Vector2 position, Vector2[] vertices, Color color)
 		{
 			var v0 = vertices[0];
 			var v1 = v0;
 
-			for( var i = 1; i < vertices.Length; i++ )
+			for (var i = 1; i < vertices.Length; i++)
 			{
 				var v2 = vertices[i];
 
-				AddVertex( position + v1, color, PrimitiveType.TriangleList );
-				AddVertex( position + v2, color, PrimitiveType.TriangleList );
-				AddVertex( position, color, PrimitiveType.TriangleList );
+				AddVertex(position + v1, color, PrimitiveType.TriangleList);
+				AddVertex(position + v2, color, PrimitiveType.TriangleList);
+				AddVertex(position, color, PrimitiveType.TriangleList);
 
 				v1 = v2;
 			}
 
-			AddVertex( position + v1, color, PrimitiveType.TriangleList );
-			AddVertex( position + v0, color, PrimitiveType.TriangleList );
-			AddVertex( position, color, PrimitiveType.TriangleList );
+			AddVertex(position + v1, color, PrimitiveType.TriangleList);
+			AddVertex(position + v0, color, PrimitiveType.TriangleList);
+			AddVertex(position, color, PrimitiveType.TriangleList);
 		}
 
 
-		public void DrawCircle( Vector2 center, float radius, Color color, int circleSegments = 32 )
+		public void DrawCircle(Vector2 center, float radius, Color color, int circleSegments = 32)
 		{
 			var increment = MathHelper.Pi * 2.0f / circleSegments;
 			var theta = 0.0f;
 
-			var v0 = center + radius * new Vector2( (float)Math.Cos( theta ), (float)Math.Sin( theta ) );
+			var v0 = center + radius * new Vector2((float) Math.Cos(theta), (float) Math.Sin(theta));
 			theta += increment;
 
-			for( int i = 1; i < circleSegments - 1; i++ )
+			for (int i = 1; i < circleSegments - 1; i++)
 			{
-				var v1 = center + radius * new Vector2( (float)Math.Cos( theta ), (float)Math.Sin( theta ) );
-				var v2 = center + radius * new Vector2( (float)Math.Cos( theta + increment ), (float)Math.Sin( theta + increment ) );
+				var v1 = center + radius * new Vector2((float) Math.Cos(theta), (float) Math.Sin(theta));
+				var v2 = center + radius * new Vector2((float) Math.Cos(theta + increment),
+					         (float) Math.Sin(theta + increment));
 
-				AddVertex( v0, color, PrimitiveType.TriangleList );
-				AddVertex( v1, color, PrimitiveType.TriangleList );
-				AddVertex( v2, color, PrimitiveType.TriangleList );
+				AddVertex(v0, color, PrimitiveType.TriangleList);
+				AddVertex(v1, color, PrimitiveType.TriangleList);
+				AddVertex(v2, color, PrimitiveType.TriangleList);
 
 				theta += increment;
 			}
 		}
 
 
-		public void DrawArrow( Vector2 start, Vector2 end, float length, float width, bool drawStartIndicator, Color color )
+		public void DrawArrow(Vector2 start, Vector2 end, float length, float width, bool drawStartIndicator,
+		                      Color color)
 		{
 			// Draw connection segment between start- and end-point
 			//drawLine( start, end, color );
@@ -263,51 +270,56 @@ namespace Nez
 			var halfWidth = width / 2;
 
 			// Create directional reference
-			Vector2 rotation = ( start - end );
+			Vector2 rotation = (start - end);
 			rotation.Normalize();
 
 			// Calculate angle of directional vector
-			float angle = (float)Math.Atan2( rotation.X, -rotation.Y );
+			float angle = (float) Math.Atan2(rotation.X, -rotation.Y);
+
 			// Create matrix for rotation
-			Matrix2D rotMatrix = Matrix2D.CreateRotation( angle );
+			Matrix2D rotMatrix = Matrix2D.CreateRotation(angle);
+
 			// Create translation matrix for end-point
-			Matrix2D endMatrix = Matrix2D.CreateTranslation( end.X, end.Y );
+			Matrix2D endMatrix = Matrix2D.CreateTranslation(end.X, end.Y);
 
 			// Setup arrow end shape
 			Vector2[] verts = new Vector2[3];
-			verts[0] = new Vector2( 0, 0 );
-			verts[1] = new Vector2( -halfWidth, -length );
-			verts[2] = new Vector2( halfWidth, -length );
+			verts[0] = new Vector2(0, 0);
+			verts[1] = new Vector2(-halfWidth, -length);
+			verts[2] = new Vector2(halfWidth, -length);
 
 			// Rotate end shape
-			Vector2Ext.Transform( verts, ref rotMatrix, verts );
+			Vector2Ext.Transform(verts, ref rotMatrix, verts);
+
 			// Translate end shape
-			Vector2Ext.Transform( verts, ref endMatrix, verts );
+			Vector2Ext.Transform(verts, ref endMatrix, verts);
 
 			// Draw arrow end shape
-			DrawPolygon( verts, 3, color );
+			DrawPolygon(verts, 3, color);
 
-			if( drawStartIndicator )
+			if (drawStartIndicator)
 			{
 				// Create translation matrix for start
-				Matrix2D startMatrix = Matrix2D.CreateTranslation( start.X, start.Y );
+				Matrix2D startMatrix = Matrix2D.CreateTranslation(start.X, start.Y);
+
 				// Setup arrow start shape
 				Vector2[] baseVerts = new Vector2[4];
-				baseVerts[0] = new Vector2( -halfWidth, length / 4 );
-				baseVerts[1] = new Vector2( halfWidth, length / 4 );
-				baseVerts[2] = new Vector2( halfWidth, 0 );
-				baseVerts[3] = new Vector2( -halfWidth, 0 );
+				baseVerts[0] = new Vector2(-halfWidth, length / 4);
+				baseVerts[1] = new Vector2(halfWidth, length / 4);
+				baseVerts[2] = new Vector2(halfWidth, 0);
+				baseVerts[3] = new Vector2(-halfWidth, 0);
 
 				// Rotate start shape
-				Vector2Ext.Transform( baseVerts, ref rotMatrix, baseVerts );
+				Vector2Ext.Transform(baseVerts, ref rotMatrix, baseVerts);
+
 				// Translate start shape
-				Vector2Ext.Transform( baseVerts, ref startMatrix, baseVerts );
+				Vector2Ext.Transform(baseVerts, ref startMatrix, baseVerts);
+
 				// Draw start shape
-				DrawPolygon( baseVerts, 4, color );
+				DrawPolygon(baseVerts, 4, color);
 			}
 		}
-			
-		#endregion
 
+		#endregion
 	}
 }

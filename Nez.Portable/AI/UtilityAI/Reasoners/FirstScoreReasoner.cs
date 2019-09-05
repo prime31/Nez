@@ -8,12 +8,12 @@ namespace Nez.AI.UtilityAI
 	/// </summary>
 	public class FirstScoreReasoner<T> : Reasoner<T>
 	{
-		protected override IConsideration<T> SelectBestConsideration( T context )
+		protected override IConsideration<T> SelectBestConsideration(T context)
 		{
-			var defaultScore = DefaultConsideration.GetScore( context );
-			for( var i = 0; i < _considerations.Count; i++ )
+			var defaultScore = DefaultConsideration.GetScore(context);
+			for (var i = 0; i < _considerations.Count; i++)
 			{
-				if( _considerations[i].GetScore( context ) >= defaultScore )
+				if (_considerations[i].GetScore(context) >= defaultScore)
 					return _considerations[i];
 			}
 
@@ -21,4 +21,3 @@ namespace Nez.AI.UtilityAI
 		}
 	}
 }
-

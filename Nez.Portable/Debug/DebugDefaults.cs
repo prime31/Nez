@@ -21,9 +21,8 @@ namespace Nez
 			public static Color RenderableBounds = Color.Yellow;
 			public static Color RenderableCenter = Color.DarkOrchid;
 
-			public static Color VerletParticle = new Color( 220, 52, 94 );
-			public static Color VerletConstraintEdge = new Color( 67, 62, 54 );
-
+			public static Color VerletParticle = new Color(220, 52, 94);
+			public static Color VerletConstraintEdge = new Color(67, 62, 54);
 		}
 
 
@@ -33,7 +32,8 @@ namespace Nez
 			{
 				get
 				{
-					return System.Math.Max( Mathf.CeilToInt( (float)Core.Scene.SceneRenderTargetSize.X / Screen.Width ), 1 );
+					return System.Math.Max(Mathf.CeilToInt((float) Core.Scene.SceneRenderTargetSize.X / Screen.Width),
+						1);
 				}
 			}
 		}

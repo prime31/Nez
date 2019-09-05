@@ -37,11 +37,11 @@ namespace Nez.Textures
 		public Vector2 Origin;
 
 
-		public Subtexture( Texture2D texture, Rectangle sourceRect, Vector2 origin )
+		public Subtexture(Texture2D texture, Rectangle sourceRect, Vector2 origin)
 		{
 			Texture2D = texture;
 			this.SourceRect = sourceRect;
-			Center = new Vector2( sourceRect.Width * 0.5f, sourceRect.Height * 0.5f );
+			Center = new Vector2(sourceRect.Width * 0.5f, sourceRect.Height * 0.5f);
 			this.Origin = origin;
 
 			var inverseTexW = 1.0f / Texture2D.Width;
@@ -54,16 +54,20 @@ namespace Nez.Textures
 		}
 
 
-		public Subtexture( Texture2D texture, Rectangle sourceRect ) : this( texture, sourceRect, sourceRect.GetHalfSize() )
-		{ }
+		public Subtexture(Texture2D texture, Rectangle sourceRect) : this(texture, sourceRect, sourceRect.GetHalfSize())
+		{
+		}
 
 
-		public Subtexture( Texture2D texture ) : this( texture, new Rectangle( 0, 0, texture.Width, texture.Height ) )
-		{ }
+		public Subtexture(Texture2D texture) : this(texture, new Rectangle(0, 0, texture.Width, texture.Height))
+		{
+		}
 
 
-		public Subtexture( Texture2D texture, int x, int y, int width, int height ) : this( texture, new Rectangle( x, y, width, height ) )
-		{ }
+		public Subtexture(Texture2D texture, int x, int y, int width, int height) : this(texture,
+			new Rectangle(x, y, width, height))
+		{
+		}
 
 
 		/// <summary>
@@ -74,8 +78,10 @@ namespace Nez.Textures
 		/// <param name="y">The y coordinate.</param>
 		/// <param name="width">Width.</param>
 		/// <param name="height">Height.</param>
-		public Subtexture( Texture2D texture, float x, float y, float width, float height ) : this( texture, (int)x, (int)y, (int)width, (int)height )
-		{ }
+		public Subtexture(Texture2D texture, float x, float y, float width, float height) : this(texture, (int) x,
+			(int) y, (int) width, (int) height)
+		{
+		}
 
 
 		/// <summary>
@@ -89,9 +95,10 @@ namespace Nez.Textures
 		/// <param name="marginBottom">Margin bottom.</param>
 		/// <param name="marginLeft">Margin left.</param>
 		/// <param name="marginRight">Margin right.</param>
-		public void GenerateNinePatchRects( Rectangle renderRect, Rectangle[] destArray, int marginLeft, int marginRight, int marginTop, int marginBottom )
+		public void GenerateNinePatchRects(Rectangle renderRect, Rectangle[] destArray, int marginLeft, int marginRight,
+		                                   int marginTop, int marginBottom)
 		{
-			Insist.IsTrue( destArray.Length == 9, "destArray does not have a length of 9" );
+			Insist.IsTrue(destArray.Length == 9, "destArray does not have a length of 9");
 
 			var stretchedCenterWidth = renderRect.Width - marginLeft - marginRight;
 			var stretchedCenterHeight = renderRect.Height - marginTop - marginBottom;
@@ -100,17 +107,17 @@ namespace Nez.Textures
 			var leftX = renderRect.X + marginLeft;
 			var topY = renderRect.Y + marginTop;
 
-			destArray[0] = new Rectangle( renderRect.X, renderRect.Y, marginLeft, marginTop ); // top-left
-			destArray[1] = new Rectangle( leftX, renderRect.Y, stretchedCenterWidth, marginTop ); // top-center
-			destArray[2] = new Rectangle( rightX, renderRect.Y, marginRight, marginTop ); // top-right
+			destArray[0] = new Rectangle(renderRect.X, renderRect.Y, marginLeft, marginTop); // top-left
+			destArray[1] = new Rectangle(leftX, renderRect.Y, stretchedCenterWidth, marginTop); // top-center
+			destArray[2] = new Rectangle(rightX, renderRect.Y, marginRight, marginTop); // top-right
 
-			destArray[3] = new Rectangle( renderRect.X, topY, marginLeft, stretchedCenterHeight ); // middle-left
-			destArray[4] = new Rectangle( leftX, topY, stretchedCenterWidth, stretchedCenterHeight ); // middle-center
-			destArray[5] = new Rectangle( rightX, topY, marginRight, stretchedCenterHeight ); // middle-right
+			destArray[3] = new Rectangle(renderRect.X, topY, marginLeft, stretchedCenterHeight); // middle-left
+			destArray[4] = new Rectangle(leftX, topY, stretchedCenterWidth, stretchedCenterHeight); // middle-center
+			destArray[5] = new Rectangle(rightX, topY, marginRight, stretchedCenterHeight); // middle-right
 
-			destArray[6] = new Rectangle( renderRect.X, bottomY, marginLeft, marginBottom ); // bottom-left
-			destArray[7] = new Rectangle( leftX, bottomY, stretchedCenterWidth, marginBottom ); // bottom-center
-			destArray[8] = new Rectangle( rightX, bottomY, marginRight, marginBottom ); // bottom-right
+			destArray[6] = new Rectangle(renderRect.X, bottomY, marginLeft, marginBottom); // bottom-left
+			destArray[7] = new Rectangle(leftX, bottomY, stretchedCenterWidth, marginBottom); // bottom-center
+			destArray[8] = new Rectangle(rightX, bottomY, marginRight, marginBottom); // bottom-right
 		}
 
 
@@ -119,7 +126,7 @@ namespace Nez.Textures
 		/// </summary>
 		public Subtexture Clone()
 		{
-			return new Subtexture( Texture2D, SourceRect )
+			return new Subtexture(Texture2D, SourceRect)
 			{
 				Origin = Origin
 			};
@@ -135,7 +142,8 @@ namespace Nez.Textures
 		/// <param name="cellHeight">Cell height.</param>
 		/// <param name="cellOffset">the first cell to include while processing. 0 based indexing.</param>
 		/// <param name="maxCellsToInclude">Max cells to included.</param>
-		public static List<Subtexture> SubtexturesFromAtlas( Texture2D texture, int cellWidth, int cellHeight, int cellOffset = 0, int maxCellsToInclude = int.MaxValue )
+		public static List<Subtexture> SubtexturesFromAtlas(Texture2D texture, int cellWidth, int cellHeight,
+		                                                    int cellOffset = 0, int maxCellsToInclude = int.MaxValue)
 		{
 			var subtextures = new List<Subtexture>();
 
@@ -143,18 +151,19 @@ namespace Nez.Textures
 			var rows = texture.Height / cellHeight;
 			var i = 0;
 
-			for( var y = 0; y < rows; y++ )
+			for (var y = 0; y < rows; y++)
 			{
-				for( var x = 0; x < cols; x++ )
+				for (var x = 0; x < cols; x++)
 				{
 					// skip everything before the first cellOffset
-					if( i++ < cellOffset )
+					if (i++ < cellOffset)
 						continue;
 
-					subtextures.Add( new Subtexture( texture, new Rectangle( x * cellWidth, y * cellHeight, cellWidth, cellHeight ) ) );
+					subtextures.Add(new Subtexture(texture,
+						new Rectangle(x * cellWidth, y * cellHeight, cellWidth, cellHeight)));
 
 					// once we hit the max number of cells to include bail out. were done.
-					if( subtextures.Count == maxCellsToInclude )
+					if (subtextures.Count == maxCellsToInclude)
 						break;
 				}
 			}
@@ -163,7 +172,7 @@ namespace Nez.Textures
 		}
 
 
-		public static implicit operator Texture2D( Subtexture tex )
+		public static implicit operator Texture2D(Subtexture tex)
 		{
 			return tex.Texture2D;
 		}
@@ -171,8 +180,7 @@ namespace Nez.Textures
 
 		public override string ToString()
 		{
-			return string.Format( "{0}", SourceRect );
+			return string.Format("{0}", SourceRect);
 		}
-
 	}
 }

@@ -24,7 +24,5 @@ namespace Nez
 		/// <returns>The context.</returns>
 		/// <typeparam name="T">The 1st type parameter.</typeparam>
 		T GetContext<T>();
-
 	}
 }
-

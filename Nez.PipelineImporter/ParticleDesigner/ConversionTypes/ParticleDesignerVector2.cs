@@ -7,18 +7,14 @@ namespace Nez.ParticleDesignerImporter
 {
 	public class ParticleDesignerVector2
 	{
-		[XmlElement( "x" )]
-		public float X;
+		[XmlElement("x")] public float X;
 
-		[XmlElement( "y" )]
-		public float Y;
+		[XmlElement("y")] public float Y;
 
 
-		public static implicit operator Vector2( ParticleDesignerVector2 pdvec )
+		public static implicit operator Vector2(ParticleDesignerVector2 pdvec)
 		{
-			return new Vector2( pdvec.X, pdvec.Y );
+			return new Vector2(pdvec.X, pdvec.Y);
 		}
-
 	}
 }
-

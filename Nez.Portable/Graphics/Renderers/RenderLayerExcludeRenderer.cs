@@ -10,42 +10,42 @@
 		public int[] ExcludedRenderLayers;
 
 
-		public RenderLayerExcludeRenderer( int renderOrder, params int[] excludedRenderLayers ) : base( renderOrder, null )
+		public RenderLayerExcludeRenderer(int renderOrder, params int[] excludedRenderLayers) : base(renderOrder, null)
 		{
 			this.ExcludedRenderLayers = excludedRenderLayers;
 		}
 
-		public override void Render( Scene scene )
+		public override void Render(Scene scene)
 		{
 			var cam = Camera ?? scene.Camera;
-			BeginRender( cam );
+			BeginRender(cam);
 
-			for( var i = 0; i < scene.RenderableComponents.Count; i++ )
+			for (var i = 0; i < scene.RenderableComponents.Count; i++)
 			{
 				var renderable = scene.RenderableComponents[i];
-				if( !ExcludedRenderLayers.Contains( renderable.RenderLayer ) && renderable.Enabled && renderable.IsVisibleFromCamera( cam ) )
-					RenderAfterStateCheck( renderable, cam );
+				if (!ExcludedRenderLayers.Contains(renderable.RenderLayer) && renderable.Enabled &&
+				    renderable.IsVisibleFromCamera(cam))
+					RenderAfterStateCheck(renderable, cam);
 			}
 
-			if( ShouldDebugRender && Core.DebugRenderEnabled )
-				DebugRender( scene, cam );
+			if (ShouldDebugRender && Core.DebugRenderEnabled)
+				DebugRender(scene, cam);
 
 			EndRender();
 		}
 
-		protected override void DebugRender( Scene scene, Camera cam )
+		protected override void DebugRender(Scene scene, Camera cam)
 		{
 			Graphics.Instance.Batcher.End();
-			Graphics.Instance.Batcher.Begin( cam.TransformMatrix );
+			Graphics.Instance.Batcher.Begin(cam.TransformMatrix);
 
-			for( var i = 0; i < scene.RenderableComponents.Count; i++ )
+			for (var i = 0; i < scene.RenderableComponents.Count; i++)
 			{
 				var renderable = scene.RenderableComponents[i];
-				if( !ExcludedRenderLayers.Contains( renderable.RenderLayer ) && renderable.Enabled && renderable.IsVisibleFromCamera( cam ) )
-					renderable.DebugRender( Graphics.Instance );
+				if (!ExcludedRenderLayers.Contains(renderable.RenderLayer) && renderable.Enabled &&
+				    renderable.IsVisibleFromCamera(cam))
+					renderable.DebugRender(Graphics.Instance);
 			}
 		}
-
 	}
 }
-

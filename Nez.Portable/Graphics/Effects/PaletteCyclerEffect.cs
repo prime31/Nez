@@ -13,7 +13,10 @@ namespace Nez
 		/// palette lookup texture. Should be a 1D texture with a height of 1 pixel
 		/// </summary>
 		/// <value>The palette texture.</value>
-		public Texture2D PaletteTexture { set { _paletteTextureParam.SetValue( value ); } }
+		public Texture2D PaletteTexture
+		{
+			set { _paletteTextureParam.SetValue(value); }
+		}
 
 		/// <summary>
 		/// gets or sets the cycle speed
@@ -24,7 +27,7 @@ namespace Nez
 			get { return _cycleSpeed; }
 			set
 			{
-				_cycleSpeedParam.SetValue( value );
+				_cycleSpeedParam.SetValue(value);
 				_cycleSpeed = value;
 			}
 		}
@@ -36,7 +39,7 @@ namespace Nez
 		EffectParameter _timeParam;
 
 
-		public PaletteCyclerEffect() : base( Core.GraphicsDevice, EffectResource.PaletteCyclerBytes )
+		public PaletteCyclerEffect() : base(Core.GraphicsDevice, EffectResource.PaletteCyclerBytes)
 		{
 			_paletteTextureParam = Parameters["_paletteTexture"];
 			_cycleSpeedParam = Parameters["_cycleSpeed"];
@@ -50,10 +53,8 @@ namespace Nez
 		/// <returns>The time.</returns>
 		public void UpdateTime()
 		{
-			if( _cycleSpeed != 0 )
-				_timeParam.SetValue( Time.TotalTime );
+			if (_cycleSpeed != 0)
+				_timeParam.SetValue(Time.TotalTime);
 		}
-
 	}
 }
-

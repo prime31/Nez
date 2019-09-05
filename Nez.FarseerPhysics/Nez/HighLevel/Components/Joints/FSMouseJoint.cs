@@ -11,38 +11,38 @@ namespace Nez.Farseer
 
 		#region Configuration
 
-		public FSMouseJoint SetWorldAnchor( Vector2 worldAnchor )
+		public FSMouseJoint SetWorldAnchor(Vector2 worldAnchor)
 		{
 			_jointDef.WorldAnchor = worldAnchor;
-			if( _joint != null )
+			if (_joint != null)
 				_joint.WorldAnchorB = worldAnchor * FSConvert.DisplayToSim;
 			return this;
 		}
 
 
-		public FSMouseJoint SetFrequency( float frequency )
+		public FSMouseJoint SetFrequency(float frequency)
 		{
 			_jointDef.Frequency = frequency;
-			if( _joint != null )
-				( _joint as FixedMouseJoint ).Frequency = frequency;
+			if (_joint != null)
+				(_joint as FixedMouseJoint).Frequency = frequency;
 			return this;
 		}
 
 
-		public FSMouseJoint SetDampingRatio( float dampingRatio )
+		public FSMouseJoint SetDampingRatio(float dampingRatio)
 		{
 			_jointDef.DampingRatio = dampingRatio;
-			if( _joint != null )
-				( _joint as FixedMouseJoint ).DampingRatio = dampingRatio;
+			if (_joint != null)
+				(_joint as FixedMouseJoint).DampingRatio = dampingRatio;
 			return this;
 		}
 
 
-		public FSMouseJoint SetMaxForce( float maxForce )
+		public FSMouseJoint SetMaxForce(float maxForce)
 		{
 			_jointDef.MaxForce = maxForce;
-			if( _joint != null )
-				( _joint as FixedMouseJoint ).MaxForce = maxForce;
+			if (_joint != null)
+				(_joint as FixedMouseJoint).MaxForce = maxForce;
 			return this;
 		}
 
@@ -51,22 +51,21 @@ namespace Nez.Farseer
 
 		void IUpdatable.Update()
 		{
-			if( _joint != null )
+			if (_joint != null)
 			{
-				var pos = Core.Scene.Camera.ScreenToWorldPoint( Input.MousePosition );
-				SetWorldAnchor( pos );
+				var pos = Core.Scene.Camera.ScreenToWorldPoint(Input.MousePosition);
+				SetWorldAnchor(pos);
 			}
 		}
 
 
 		internal override FSJointDef GetJointDef()
 		{
-			InitializeJointDef( _jointDef );
-			if( _jointDef.BodyA == null )
+			InitializeJointDef(_jointDef);
+			if (_jointDef.BodyA == null)
 				return null;
 
 			return _jointDef;
 		}
-
 	}
 }

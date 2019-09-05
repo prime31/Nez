@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.IO;
 using Microsoft.Xna.Framework;
 
+
 namespace Nez.Systems
 {
 	/// <summary>
@@ -16,17 +17,22 @@ namespace Nez.Systems
 	/// </summary>
 	public class NezContentManager : ContentManager
 	{
-		Dictionary<string,Effect> _loadedEffects = new Dictionary<string,Effect>();
+		Dictionary<string, Effect> _loadedEffects = new Dictionary<string, Effect>();
 
-		
-		public NezContentManager( IServiceProvider serviceProvider, string rootDirectory ) : base( serviceProvider, rootDirectory )
-		{}
 
-		public NezContentManager( IServiceProvider serviceProvider ) : base( serviceProvider )
-		{}
+		public NezContentManager(IServiceProvider serviceProvider, string rootDirectory) : base(serviceProvider,
+			rootDirectory)
+		{
+		}
 
-		public NezContentManager() : base( ((Game)Core._instance).Services, ((Game)Core._instance).Content.RootDirectory )
-		{}
+		public NezContentManager(IServiceProvider serviceProvider) : base(serviceProvider)
+		{
+		}
+
+		public NezContentManager() : base(((Game) Core._instance).Services,
+			((Game) Core._instance).Content.RootDirectory)
+		{
+		}
 
 
 		/// <summary>
@@ -35,9 +41,9 @@ namespace Nez.Systems
 		/// </summary>
 		/// <returns>The effect.</returns>
 		/// <param name="name">Name.</param>
-		public Effect LoadEffect( string name )
+		public Effect LoadEffect(string name)
 		{
-			return LoadEffect<Effect>( name );
+			return LoadEffect<Effect>(name);
 		}
 
 		/// <summary>
@@ -48,7 +54,7 @@ namespace Nez.Systems
 		/// <typeparam name="T">The 1st type parameter.</typeparam>
 		public T LoadNezEffect<T>() where T : Effect, new()
 		{
-			var cacheKey = typeof( T ).Name + "-" + Utils.RandomString( 5 );
+			var cacheKey = typeof(T).Name + "-" + Utils.RandomString(5);
 			var effect = new T();
 			effect.Name = cacheKey;
 			_loadedEffects[cacheKey] = effect;
@@ -63,15 +69,15 @@ namespace Nez.Systems
 		/// </summary>
 		/// <returns>The effect.</returns>
 		/// <param name="name">Name.</param>
-		public T LoadEffect<T>( string name ) where T : Effect
+		public T LoadEffect<T>(string name) where T : Effect
 		{
 			// make sure the effect has the proper root directory
-			if( !name.StartsWith( RootDirectory ) )
+			if (!name.StartsWith(RootDirectory))
 				name = RootDirectory + "/" + name;
 
-			var bytes = EffectResource.GetFileResourceBytes( name );
+			var bytes = EffectResource.GetFileResourceBytes(name);
 
-			return LoadEffect<T>( name, bytes );
+			return LoadEffect<T>(name, bytes);
 		}
 
 		/// <summary>
@@ -81,10 +87,10 @@ namespace Nez.Systems
 		/// </summary>
 		/// <returns>The effect.</returns>
 		/// <param name="name">Name.</param>
-		internal T LoadEffect<T>( string name, byte[] effectCode ) where T : Effect
+		internal T LoadEffect<T>(string name, byte[] effectCode) where T : Effect
 		{
-			var effect = Activator.CreateInstance( typeof( T ), Core.GraphicsDevice, effectCode ) as T;
-			effect.Name = name + "-" + Utils.RandomString( 5 );
+			var effect = Activator.CreateInstance(typeof(T), Core.GraphicsDevice, effectCode) as T;
+			effect.Name = name + "-" + Utils.RandomString(5);
 			_loadedEffects[effect.Name] = effect;
 
 			return effect;
@@ -99,8 +105,8 @@ namespace Nez.Systems
 		/// <typeparam name="T">The 1st type parameter.</typeparam>
 		public T LoadMonoGameEffect<T>() where T : Effect
 		{
-			var effect = Activator.CreateInstance( typeof( T ), Core.GraphicsDevice ) as T;
-			effect.Name = typeof( T ).Name + "-" + Utils.RandomString( 5 );
+			var effect = Activator.CreateInstance(typeof(T), Core.GraphicsDevice) as T;
+			effect.Name = typeof(T).Name + "-" + Utils.RandomString(5);
 			_loadedEffects[effect.Name] = effect;
 
 			return effect;
@@ -112,22 +118,19 @@ namespace Nez.Systems
 		/// <param name="assetName">Asset name.</param>
 		/// <param name="onLoaded">On loaded.</param>
 		/// <typeparam name="T">The 1st type parameter.</typeparam>
-		public void LoadAsync<T>( string assetName, Action<T> onLoaded = null )
+		public void LoadAsync<T>(string assetName, Action<T> onLoaded = null)
 		{
 			var syncContext = SynchronizationContext.Current;
-			Task.Run( () =>
+			Task.Run(() =>
 			{
-				var asset = Load<T>( assetName );
+				var asset = Load<T>(assetName);
 
 				// if we have a callback do it on the main thread
-				if( onLoaded != null )
+				if (onLoaded != null)
 				{
-					syncContext.Post( d =>
-					{
-						onLoaded( asset );
-					}, null );
+					syncContext.Post(d => { onLoaded(asset); }, null);
 				}
-			} );
+			});
 		}
 
 		/// <summary>
@@ -138,21 +141,18 @@ namespace Nez.Systems
 		/// <param name="onLoaded">On loaded.</param>
 		/// <param name="context">Context.</param>
 		/// <typeparam name="T">The 1st type parameter.</typeparam>
-		public void LoadAsync<T>( string assetName, Action<object,T> onLoaded = null, object context = null )
+		public void LoadAsync<T>(string assetName, Action<object, T> onLoaded = null, object context = null)
 		{
 			var syncContext = SynchronizationContext.Current;
-			Task.Run( () =>
+			Task.Run(() =>
 			{
-				var asset = Load<T>( assetName );
+				var asset = Load<T>(assetName);
 
-				if( onLoaded != null )
+				if (onLoaded != null)
 				{
-					syncContext.Post( d =>
-					{
-						onLoaded( context, asset );
-					}, null );
+					syncContext.Post(d => { onLoaded(context, asset); }, null);
 				}
-			} );
+			});
 		}
 
 		/// <summary>
@@ -161,23 +161,20 @@ namespace Nez.Systems
 		/// <param name="assetName">Asset name.</param>
 		/// <param name="onLoaded">On loaded.</param>
 		/// <typeparam name="T">The 1st type parameter.</typeparam>
-		public void LoadAsync<T>( string[] assetNames, Action onLoaded = null )
+		public void LoadAsync<T>(string[] assetNames, Action onLoaded = null)
 		{
 			var syncContext = SynchronizationContext.Current;
-			Task.Run( () =>
+			Task.Run(() =>
 			{
-				for( var i = 0; i < assetNames.Length; i++ )
-					Load<T>( assetNames[i] );
+				for (var i = 0; i < assetNames.Length; i++)
+					Load<T>(assetNames[i]);
 
 				// if we have a callback do it on the main thread
-				if( onLoaded != null )
+				if (onLoaded != null)
 				{
-					syncContext.Post( d =>
-					{
-						onLoaded();
-					}, null );
+					syncContext.Post(d => { onLoaded(); }, null);
 				}
-			} );
+			});
 		}
 
 		/// <summary>
@@ -186,17 +183,17 @@ namespace Nez.Systems
 		/// </summary>
 		/// <param name="assetName">Asset name.</param>
 		/// <typeparam name="T">The 1st type parameter.</typeparam>
-		public void UnloadAsset<T>( string assetName ) where T : class, IDisposable
+		public void UnloadAsset<T>(string assetName) where T : class, IDisposable
 		{
-			if( IsAssetLoaded( assetName ) )
+			if (IsAssetLoaded(assetName))
 			{
 				try
 				{
 					FieldInfo fieldInfo = null;
-					var fields = typeof( ContentManager ).GetRuntimeFields();
-					foreach( var field in fields )
+					var fields = typeof(ContentManager).GetRuntimeFields();
+					foreach (var field in fields)
 					{
-						if( field.Name == "disposableAssets" )
+						if (field.Name == "disposableAssets")
 						{
 							fieldInfo = field;
 							break;
@@ -204,31 +201,31 @@ namespace Nez.Systems
 					}
 
 					// first fetch the actual asset. we already know its loaded so we'll grab it directly
-					#if FNA
+#if FNA
 					fieldInfo = ReflectionUtils.GetFieldInfo( typeof( ContentManager ), "loadedAssets" );
 					var LoadedAssets = fieldInfo.GetValue( this ) as Dictionary<string, object>;
-					#endif
+#endif
 
 					var assetToRemove = LoadedAssets[assetName];
 
-					var assets = fieldInfo.GetValue( this ) as List<IDisposable>;
-					for( var i = 0; i < assets.Count; i++ )
+					var assets = fieldInfo.GetValue(this) as List<IDisposable>;
+					for (var i = 0; i < assets.Count; i++)
 					{
 						// see if the asset is disposeable. If so, find and dispose of it.
 						var typedAsset = assets[i] as T;
-						if( typedAsset != null && typedAsset == assetToRemove )
+						if (typedAsset != null && typedAsset == assetToRemove)
 						{
 							typedAsset.Dispose();
-							assets.RemoveAt( i );
+							assets.RemoveAt(i);
 							break;
 						}
 					}
 
-					LoadedAssets.Remove( assetName );
+					LoadedAssets.Remove(assetName);
 				}
-				catch( Exception e )
+				catch (Exception e)
 				{
-					Debug.Error( "Could not unload asset {0}. {1}", assetName, e );
+					Debug.Error("Could not unload asset {0}. {1}", assetName, e);
 				}
 			}
 		}
@@ -237,14 +234,15 @@ namespace Nez.Systems
 		/// unloads an Effect that was loaded via loadEffect, loadNezEffect or loadMonoGameEffect
 		/// </summary>
 		/// <param name="effectName">Effect.name</param>
-		public bool UnloadEffect( string effectName )
+		public bool UnloadEffect(string effectName)
 		{
-			if( _loadedEffects.ContainsKey( effectName ) )
+			if (_loadedEffects.ContainsKey(effectName))
 			{
 				_loadedEffects[effectName].Dispose();
-				_loadedEffects.Remove( effectName );
+				_loadedEffects.Remove(effectName);
 				return true;
 			}
+
 			return false;
 		}
 
@@ -252,9 +250,9 @@ namespace Nez.Systems
 		/// unloads an Effect that was loaded via loadEffect, loadNezEffect or loadMonoGameEffect
 		/// </summary>
 		/// <param name="effectName">Effect.name</param>
-		public bool UnloadEffect( Effect effect )
+		public bool UnloadEffect(Effect effect)
 		{
-			return UnloadEffect( effect.Name );
+			return UnloadEffect(effect.Name);
 		}
 
 		/// <summary>
@@ -262,14 +260,14 @@ namespace Nez.Systems
 		/// </summary>
 		/// <returns><c>true</c> if this instance is asset loaded the specified assetName; otherwise, <c>false</c>.</returns>
 		/// <param name="assetName">Asset name.</param>
-		public bool IsAssetLoaded( string assetName )
+		public bool IsAssetLoaded(string assetName)
 		{
-			#if FNA
+#if FNA
 			var fieldInfo = ReflectionUtils.GetFieldInfo( typeof( ContentManager ), "loadedAssets" );
 			var LoadedAssets = fieldInfo.GetValue( this ) as Dictionary<string, object>;
-			#endif
+#endif
 
-			return LoadedAssets.ContainsKey( assetName );
+			return LoadedAssets.ContainsKey(assetName);
 		}
 
 		/// <summary>
@@ -278,20 +276,20 @@ namespace Nez.Systems
 		/// <returns>The loaded assets.</returns>
 		internal string LogLoadedAssets()
 		{
-			#if FNA
+#if FNA
 			var fieldInfo = ReflectionUtils.GetFieldInfo( typeof( ContentManager ), "loadedAssets" );
 			var LoadedAssets = fieldInfo.GetValue( this ) as Dictionary<string, object>;
-			#endif
+#endif
 
 			var builder = new StringBuilder();
-			foreach( var asset in LoadedAssets.Keys )
+			foreach (var asset in LoadedAssets.Keys)
 			{
-				builder.AppendFormat( "{0}: ({1})\n", asset, LoadedAssets[asset].GetType().Name );
+				builder.AppendFormat("{0}: ({1})\n", asset, LoadedAssets[asset].GetType().Name);
 			}
 
-			foreach( var asset in _loadedEffects.Keys )
+			foreach (var asset in _loadedEffects.Keys)
 			{
-				builder.AppendFormat( "{0}: ({1})\n", asset, _loadedEffects[asset].GetType().Name );
+				builder.AppendFormat("{0}: ({1})\n", asset, _loadedEffects[asset].GetType().Name);
 			}
 
 			return builder.ToString();
@@ -302,21 +300,22 @@ namespace Nez.Systems
 		/// </summary>
 		/// <param name="asset"></param>
 		/// <returns></returns>
-		public string GetPathForLoadedAsset( object asset )
+		public string GetPathForLoadedAsset(object asset)
 		{
-			#if FNA
+#if FNA
 			var fieldInfo = ReflectionUtils.GetFieldInfo( typeof( ContentManager ), "loadedAssets" );
 			var LoadedAssets = fieldInfo.GetValue( this ) as Dictionary<string, object>;
-			#endif
+#endif
 
-			if( LoadedAssets.ContainsValue( asset ) )
+			if (LoadedAssets.ContainsValue(asset))
 			{
-				foreach( var kv in LoadedAssets )
+				foreach (var kv in LoadedAssets)
 				{
-					if( kv.Value == asset )
+					if (kv.Value == asset)
 						return kv.Key;
 				}
 			}
+
 			return null;
 		}
 
@@ -327,12 +326,11 @@ namespace Nez.Systems
 		{
 			base.Unload();
 
-			foreach( var key in _loadedEffects.Keys )
+			foreach (var key in _loadedEffects.Keys)
 				_loadedEffects[key].Dispose();
 
 			_loadedEffects.Clear();
 		}
-
 	}
 
 
@@ -341,8 +339,10 @@ namespace Nez.Systems
 	/// </summary>
 	sealed class NezGlobalContentManager : NezContentManager
 	{
-		public NezGlobalContentManager( IServiceProvider serviceProvider, string rootDirectory ) : base( serviceProvider, rootDirectory )
-		{}
+		public NezGlobalContentManager(IServiceProvider serviceProvider, string rootDirectory) : base(serviceProvider,
+			rootDirectory)
+		{
+		}
 
 
 		/// <summary>
@@ -350,13 +350,13 @@ namespace Nez.Systems
 		/// </summary>
 		/// <returns>The stream.</returns>
 		/// <param name="assetName">Asset name.</param>
-		protected override Stream OpenStream( string assetName )
+		protected override Stream OpenStream(string assetName)
 		{
-			if( assetName.StartsWith( "nez://" ) )
+			if (assetName.StartsWith("nez://"))
 			{
-				var assembly = ReflectionUtils.GetAssembly( this.GetType() );
+				var assembly = ReflectionUtils.GetAssembly(this.GetType());
 
-				#if FNA
+#if FNA
 				// for FNA, we will just search for the file by name since the assembly name will not be known at runtime
 				foreach( var item in assembly.GetManifestResourceNames() )
 				{
@@ -366,14 +366,11 @@ namespace Nez.Systems
 						break;
 					}
 				}
-				#endif
-				return assembly.GetManifestResourceStream( assetName.Substring( 6 ) );
+#endif
+				return assembly.GetManifestResourceStream(assetName.Substring(6));
 			}
 
-			return base.OpenStream( assetName );
+			return base.OpenStream(assetName);
 		}
-
 	}
-
 }
-

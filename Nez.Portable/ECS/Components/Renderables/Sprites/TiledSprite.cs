@@ -16,10 +16,11 @@ namespace Nez
 		{
 			get
 			{
-				if( _areBoundsDirty )
+				if (_areBoundsDirty)
 				{
-					if( Subtexture != null )
-						_bounds.CalculateBounds( Entity.Transform.Position, _localOffset, _origin, Entity.Transform.Scale, Entity.Transform.Rotation, Width, Height );
+					if (Subtexture != null)
+						_bounds.CalculateBounds(Entity.Transform.Position, _localOffset, _origin,
+							Entity.Transform.Scale, Entity.Transform.Rotation, Width, Height);
 					_areBoundsDirty = false;
 				}
 
@@ -59,9 +60,9 @@ namespace Nez
 				_textureScale = value;
 
 				// recalulcate our inverseTextureScale and the source rect size
-				_inverseTexScale = new Vector2( 1f / _textureScale.X, 1f / _textureScale.Y );
-				_sourceRect.Width = (int)( Subtexture.SourceRect.Width * _inverseTexScale.X );
-				_sourceRect.Height = (int)( Subtexture.SourceRect.Height * _inverseTexScale.Y );
+				_inverseTexScale = new Vector2(1f / _textureScale.X, 1f / _textureScale.Y);
+				_sourceRect.Width = (int) (Subtexture.SourceRect.Width * _inverseTexScale.X);
+				_sourceRect.Height = (int) (Subtexture.SourceRect.Height * _inverseTexScale.Y);
 			}
 		}
 
@@ -97,14 +98,16 @@ namespace Nez
 		/// we keep a copy of the sourceRect so that we dont change the Subtexture in case it is used elsewhere
 		/// </summary>
 		protected Rectangle _sourceRect;
+
 		protected Vector2 _textureScale = Vector2.One;
 		protected Vector2 _inverseTexScale = Vector2.One;
 
 
 		public TiledSprite()
-		{}
+		{
+		}
 
-		public TiledSprite( Subtexture subtexture ) : base( subtexture )
+		public TiledSprite(Subtexture subtexture) : base(subtexture)
 		{
 			_sourceRect = subtexture.SourceRect;
 			Material = new Material
@@ -113,20 +116,22 @@ namespace Nez
 			};
 		}
 
-		public TiledSprite( Texture2D texture ) : this( new Subtexture( texture ) )
-		{}
-
-		public override void Render( Graphics graphics, Camera camera )
+		public TiledSprite(Texture2D texture) : this(new Subtexture(texture))
 		{
-			if( Subtexture == null )
+		}
+
+		public override void Render(Graphics graphics, Camera camera)
+		{
+			if (Subtexture == null)
 				return;
 
 			var topLeft = Entity.Transform.Position + _localOffset;
-			var destinationRect = RectangleExt.FromFloats( topLeft.X, topLeft.Y, _sourceRect.Width * Entity.Transform.Scale.X * TextureScale.X, _sourceRect.Height * Entity.Transform.Scale.Y * TextureScale.Y );
+			var destinationRect = RectangleExt.FromFloats(topLeft.X, topLeft.Y,
+				_sourceRect.Width * Entity.Transform.Scale.X * TextureScale.X,
+				_sourceRect.Height * Entity.Transform.Scale.Y * TextureScale.Y);
 
-			graphics.Batcher.Draw( Subtexture, destinationRect, _sourceRect, Color, Entity.Transform.Rotation, Origin * _inverseTexScale, SpriteEffects, _layerDepth );
+			graphics.Batcher.Draw(Subtexture, destinationRect, _sourceRect, Color, Entity.Transform.Rotation,
+				Origin * _inverseTexScale, SpriteEffects, _layerDepth);
 		}
-
 	}
 }
-

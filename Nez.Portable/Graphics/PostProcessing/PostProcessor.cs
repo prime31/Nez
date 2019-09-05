@@ -41,7 +41,7 @@ namespace Nez
 		protected internal Scene _scene;
 
 
-		public PostProcessor( int executionOrder, Effect effect = null )
+		public PostProcessor(int executionOrder, Effect effect = null)
 		{
 			Enabled = true;
 			this.ExecutionOrder = executionOrder;
@@ -52,7 +52,7 @@ namespace Nez
 		/// called when the PostProcessor is added to the Scene. Subclasses must base!
 		/// </summary>
 		/// <param name="scene">Scene.</param>
-		public virtual void OnAddedToScene( Scene scene )
+		public virtual void OnAddedToScene(Scene scene)
 		{
 			_scene = scene;
 		}
@@ -64,8 +64,9 @@ namespace Nez
 		/// </summary>
 		/// <param name="newWidth">New width.</param>
 		/// <param name="newHeight">New height.</param>
-		public virtual void OnSceneBackBufferSizeChanged( int newWidth, int newHeight )
-		{}
+		public virtual void OnSceneBackBufferSizeChanged(int newWidth, int newHeight)
+		{
+		}
 
 		/// <summary>
 		/// this is the meat method here. The source passed in contains the full scene with any previous PostProcessors
@@ -77,9 +78,9 @@ namespace Nez
 		/// </summary>
 		/// <param name="source">Source.</param>
 		/// <param name="destination">Destination.</param>
-		public virtual void Process( RenderTarget2D source, RenderTarget2D destination )
+		public virtual void Process(RenderTarget2D source, RenderTarget2D destination)
 		{
-			DrawFullscreenQuad( source, destination, Effect );
+			DrawFullscreenQuad(source, destination, Effect);
 		}
 
 		/// <summary>
@@ -88,9 +89,9 @@ namespace Nez
 		public virtual void Unload()
 		{
 			// Nez-specific Effects will have a null name. We don't want to try to remove them.
-			if( Effect != null && Effect.Name != null )
+			if (Effect != null && Effect.Name != null)
 			{
-				_scene.Content.UnloadEffect( Effect );
+				_scene.Content.UnloadEffect(Effect);
 				Effect = null;
 			}
 
@@ -100,27 +101,26 @@ namespace Nez
 		/// <summary>
 		/// helper for drawing a texture into a rendertarget, optionally using a custom shader to apply postprocessing effects.
 		/// </summary>
-		protected void DrawFullscreenQuad( Texture2D texture, RenderTarget2D renderTarget, Effect effect = null )
+		protected void DrawFullscreenQuad(Texture2D texture, RenderTarget2D renderTarget, Effect effect = null)
 		{
-            GraphicsDeviceExt.SetRenderTarget(Core.GraphicsDevice, renderTarget);
-			DrawFullscreenQuad( texture, renderTarget.Width, renderTarget.Height, effect );
+			GraphicsDeviceExt.SetRenderTarget(Core.GraphicsDevice, renderTarget);
+			DrawFullscreenQuad(texture, renderTarget.Width, renderTarget.Height, effect);
 		}
 
 		/// <summary>
 		/// helper for drawing a texture into the current rendertarget, optionally using a custom shader to apply postprocessing effects.
 		/// </summary>
-		protected void DrawFullscreenQuad( Texture2D texture, int width, int height, Effect effect )
+		protected void DrawFullscreenQuad(Texture2D texture, int width, int height, Effect effect)
 		{
-			Graphics.Instance.Batcher.Begin( BlendState, SamplerState, DepthStencilState.None, RasterizerState.CullNone, effect );
-			Graphics.Instance.Batcher.Draw( texture, new Rectangle( 0, 0, width, height ), Color.White );
+			Graphics.Instance.Batcher.Begin(BlendState, SamplerState, DepthStencilState.None, RasterizerState.CullNone,
+				effect);
+			Graphics.Instance.Batcher.Draw(texture, new Rectangle(0, 0, width, height), Color.White);
 			Graphics.Instance.Batcher.End();
 		}
 
-		public int CompareTo( PostProcessor other )
+		public int CompareTo(PostProcessor other)
 		{
-			return ExecutionOrder.CompareTo( other.ExecutionOrder );
+			return ExecutionOrder.CompareTo(other.ExecutionOrder);
 		}
-
 	}
 }
-

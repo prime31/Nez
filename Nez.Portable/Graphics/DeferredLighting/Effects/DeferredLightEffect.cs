@@ -49,7 +49,7 @@ namespace Nez.DeferredLighting
 		#endregion
 
 
-		public DeferredLightEffect() : base( Core.GraphicsDevice, EffectResource.DeferredLightBytes )
+		public DeferredLightEffect() : base(Core.GraphicsDevice, EffectResource.DeferredLightBytes)
 		{
 			clearGBufferPass = Techniques["ClearGBuffer"].Passes[0];
 			pointLightPass = Techniques["DeferredPointLight"].Passes[0];
@@ -106,11 +106,11 @@ namespace Nez.DeferredLighting
 		/// updates the camera matrixes in the Effect
 		/// </summary>
 		/// <param name="camera">Camera.</param>
-		public void UpdateForCamera( Camera camera )
+		public void UpdateForCamera(Camera camera)
 		{
-			SetWorldToViewMatrix( camera.TransformMatrix );
-			SetProjectionMatrix( camera.ProjectionMatrix );
-			SetScreenToWorld( Matrix.Invert( camera.ViewProjectionMatrix ) );
+			SetWorldToViewMatrix(camera.TransformMatrix);
+			SetProjectionMatrix(camera.ProjectionMatrix);
+			SetScreenToWorld(Matrix.Invert(camera.ViewProjectionMatrix));
 		}
 
 
@@ -118,17 +118,17 @@ namespace Nez.DeferredLighting
 		/// updates the shader values for the light and sets the appropriate CurrentTechnique
 		/// </summary>
 		/// <param name="light">Light.</param>
-		public void UpdateForLight( DeferredLight light )
+		public void UpdateForLight(DeferredLight light)
 		{
 			// check SpotLight first because it is a subclass of PointLight!
-			if( light is SpotLight )
-				UpdateForLight( light as SpotLight );
-			else if( light is PointLight )
-				UpdateForLight( light as PointLight );
-			else if( light is AreaLight )
-				UpdateForLight( light as AreaLight );
-			else if( light is DirLight )
-				UpdateForLight( light as DirLight );
+			if (light is SpotLight)
+				UpdateForLight(light as SpotLight);
+			else if (light is PointLight)
+				UpdateForLight(light as PointLight);
+			else if (light is AreaLight)
+				UpdateForLight(light as AreaLight);
+			else if (light is DirLight)
+				UpdateForLight(light as DirLight);
 		}
 
 
@@ -136,15 +136,17 @@ namespace Nez.DeferredLighting
 		/// updates the shader values for the light and sets the appropriate CurrentTechnique
 		/// </summary>
 		/// <param name="light">Light.</param>
-		public void UpdateForLight( PointLight light )
+		public void UpdateForLight(PointLight light)
 		{
-			SetLightPosition( new Vector3( light.Entity.Transform.Position + light.LocalOffset, light.ZPosition ) );
-			SetColor( light.Color );
-			SetLightRadius( light.Radius * light.Entity.Transform.Scale.X );
-			SetLightIntensity( light.Intensity );
+			SetLightPosition(new Vector3(light.Entity.Transform.Position + light.LocalOffset, light.ZPosition));
+			SetColor(light.Color);
+			SetLightRadius(light.Radius * light.Entity.Transform.Scale.X);
+			SetLightIntensity(light.Intensity);
 
-			var objToWorld = Matrix.CreateScale( light.Radius * light.Entity.Transform.Scale.X ) * Matrix.CreateTranslation( light.Entity.Transform.Position.X + light.LocalOffset.X, light.Entity.Transform.Position.Y + light.LocalOffset.Y, 0 );
-			SetObjectToWorldMatrix( objToWorld );
+			var objToWorld = Matrix.CreateScale(light.Radius * light.Entity.Transform.Scale.X) *
+			                 Matrix.CreateTranslation(light.Entity.Transform.Position.X + light.LocalOffset.X,
+				                 light.Entity.Transform.Position.Y + light.LocalOffset.Y, 0);
+			SetObjectToWorldMatrix(objToWorld);
 
 			pointLightPass.Apply();
 		}
@@ -154,11 +156,11 @@ namespace Nez.DeferredLighting
 		/// updates the shader values for the light and sets the appropriate CurrentTechnique
 		/// </summary>
 		/// <param name="light">Light.</param>
-		public void UpdateForLight( SpotLight light )
+		public void UpdateForLight(SpotLight light)
 		{
-			UpdateForLight( light as PointLight );
-			SetSpotLightDirection( light.Direction );
-			SetSpotConeAngle( light.ConeAngle );
+			UpdateForLight(light as PointLight);
+			SetSpotLightDirection(light.Direction);
+			SetSpotConeAngle(light.ConeAngle);
 
 			spotLightPass.Apply();
 		}
@@ -168,14 +170,17 @@ namespace Nez.DeferredLighting
 		/// updates the shader values for the light and sets the appropriate CurrentTechnique
 		/// </summary>
 		/// <param name="light">Light.</param>
-		public void UpdateForLight( AreaLight light )
+		public void UpdateForLight(AreaLight light)
 		{
-			SetColor( light.Color );
-			SetAreaDirectionalLightDirection( light.Direction );
-			SetLightIntensity( light.Intensity );
+			SetColor(light.Color);
+			SetAreaDirectionalLightDirection(light.Direction);
+			SetLightIntensity(light.Intensity);
 
-			var objToWorld = Matrix.CreateScale( light.Bounds.Width * light.Entity.Transform.Scale.X, light.Bounds.Height * light.Entity.Transform.Scale.Y, 1f ) * Matrix.CreateTranslation( light.Bounds.X - light.Bounds.Width * 0.5f, light.Bounds.Y - light.Bounds.Height * 0.5f, 0 );
-			SetObjectToWorldMatrix( objToWorld );
+			var objToWorld =
+				Matrix.CreateScale(light.Bounds.Width * light.Entity.Transform.Scale.X,
+					light.Bounds.Height * light.Entity.Transform.Scale.Y, 1f) * Matrix.CreateTranslation(
+					light.Bounds.X - light.Bounds.Width * 0.5f, light.Bounds.Y - light.Bounds.Height * 0.5f, 0);
+			SetObjectToWorldMatrix(objToWorld);
 
 			areaLightPass.Apply();
 		}
@@ -185,12 +190,12 @@ namespace Nez.DeferredLighting
 		/// updates the shader values for the light and sets the appropriate CurrentTechnique
 		/// </summary>
 		/// <param name="light">Light.</param>
-		public void UpdateForLight( DirLight light )
+		public void UpdateForLight(DirLight light)
 		{
-			SetColor( light.Color );
-			SetAreaDirectionalLightDirection( light.Direction );
-			SetSpecularPower( light.SpecularPower );
-			SetSpecularIntensity( light.SpecularIntensity );
+			SetColor(light.Color);
+			SetAreaDirectionalLightDirection(light.Direction);
+			SetSpecularPower(light.SpecularPower);
+			SetSpecularIntensity(light.SpecularIntensity);
 
 			directionalLightPass.Apply();
 		}
@@ -198,27 +203,27 @@ namespace Nez.DeferredLighting
 
 		#region Matrix properties
 
-		public void SetClearColor( Color color )
+		public void SetClearColor(Color color)
 		{
-			_clearColorParam.SetValue( color.ToVector3() );
+			_clearColorParam.SetValue(color.ToVector3());
 		}
 
 
-		public void SetObjectToWorldMatrix( Matrix objToWorld )
+		public void SetObjectToWorldMatrix(Matrix objToWorld)
 		{
-			_objectToWorldParam.SetValue( objToWorld );
+			_objectToWorldParam.SetValue(objToWorld);
 		}
 
 
-		public void SetWorldToViewMatrix( Matrix worldToView )
+		public void SetWorldToViewMatrix(Matrix worldToView)
 		{
-			_worldToViewParam.SetValue( worldToView );
+			_worldToViewParam.SetValue(worldToView);
 		}
 
 
-		public void SetProjectionMatrix( Matrix projection )
+		public void SetProjectionMatrix(Matrix projection)
 		{
-			_projectionParam.SetValue( projection );
+			_projectionParam.SetValue(projection);
 		}
 
 
@@ -226,9 +231,9 @@ namespace Nez.DeferredLighting
 		/// inverse of Camera.getViewProjectionMatrix
 		/// </summary>
 		/// <param name="screenToWorld">screenToWorld.</param>
-		public void SetScreenToWorld( Matrix screenToWorld )
+		public void SetScreenToWorld(Matrix screenToWorld)
 		{
-			_screenToWorldParam.SetValue( screenToWorld );
+			_screenToWorldParam.SetValue(screenToWorld);
 		}
 
 		#endregion
@@ -236,33 +241,33 @@ namespace Nez.DeferredLighting
 
 		#region Point/Spot common properties
 
-		public void SetNormalMap( Texture2D normalMap )
+		public void SetNormalMap(Texture2D normalMap)
 		{
-			_normalMapParam.SetValue( normalMap );
+			_normalMapParam.SetValue(normalMap);
 		}
 
 
-		public void SetLightPosition( Vector3 lightPosition )
+		public void SetLightPosition(Vector3 lightPosition)
 		{
-			_lightPositionParam.SetValue( lightPosition );
+			_lightPositionParam.SetValue(lightPosition);
 		}
 
 
-		public void SetColor( Color color )
+		public void SetColor(Color color)
 		{
-			_colorParam.SetValue( color.ToVector3() );
+			_colorParam.SetValue(color.ToVector3());
 		}
 
 
-		public void SetLightRadius( float radius )
+		public void SetLightRadius(float radius)
 		{
-			_lightRadiusParam.SetValue( radius );
+			_lightRadiusParam.SetValue(radius);
 		}
 
 
-		public void SetLightIntensity( float intensity )
+		public void SetLightIntensity(float intensity)
 		{
-			_lightIntensityParam.SetValue( intensity );
+			_lightIntensityParam.SetValue(intensity);
 		}
 
 		#endregion
@@ -274,9 +279,9 @@ namespace Nez.DeferredLighting
 		/// directly sets the light direction
 		/// </summary>
 		/// <param name="lightDirection">Light direction.</param>
-		public void SetSpotLightDirection( Vector2 lightDirection )
+		public void SetSpotLightDirection(Vector2 lightDirection)
 		{
-			_lightDirectionParam.SetValue( lightDirection );
+			_lightDirectionParam.SetValue(lightDirection);
 		}
 
 
@@ -284,17 +289,17 @@ namespace Nez.DeferredLighting
 		/// sets the light direction using just an angle in degrees. 0 degrees points to theright, 90 degrees would be straight down, etc
 		/// </summary>
 		/// <param name="degrees">Degrees.</param>
-		public void SetSpotLightDirection( float degrees )
+		public void SetSpotLightDirection(float degrees)
 		{
-			var radians = MathHelper.ToRadians( degrees );
-			var dir = new Vector2( (float)Math.Cos( radians ), (float)Math.Sin( radians ) );
-			SetSpotLightDirection( dir );
+			var radians = MathHelper.ToRadians(degrees);
+			var dir = new Vector2((float) Math.Cos(radians), (float) Math.Sin(radians));
+			SetSpotLightDirection(dir);
 		}
 
 
-		public void SetSpotConeAngle( float coneAngle )
+		public void SetSpotConeAngle(float coneAngle)
 		{
-			_coneAngleParam.SetValue( coneAngle );
+			_coneAngleParam.SetValue(coneAngle);
 		}
 
 		#endregion
@@ -302,21 +307,21 @@ namespace Nez.DeferredLighting
 
 		#region Directional light properties
 
-		public void SetSpecularIntensity( float specIntensity )
+		public void SetSpecularIntensity(float specIntensity)
 		{
-			_specularIntensityParam.SetValue( specIntensity );
+			_specularIntensityParam.SetValue(specIntensity);
 		}
 
 
-		public void SetSpecularPower( float specPower )
+		public void SetSpecularPower(float specPower)
 		{
-			_specularPowerParam.SetValue( specPower );
+			_specularPowerParam.SetValue(specPower);
 		}
 
 
-		public void SetAreaDirectionalLightDirection( Vector3 lightDir )
+		public void SetAreaDirectionalLightDirection(Vector3 lightDir)
 		{
-			_dirAreaLightDirectionParam.SetValue( lightDir );
+			_dirAreaLightDirectionParam.SetValue(lightDir);
 		}
 
 		#endregion
@@ -324,9 +329,9 @@ namespace Nez.DeferredLighting
 
 		#region Final combine properties
 
-		public void SetAmbientColor( Color color )
+		public void SetAmbientColor(Color color)
 		{
-			_ambientColorParam.SetValue( color.ToVector3() );
+			_ambientColorParam.SetValue(color.ToVector3());
 		}
 
 
@@ -335,17 +340,15 @@ namespace Nez.DeferredLighting
 		/// </summary>
 		/// <param name="diffuse">Diffuse.</param>
 		/// <param name="lightMap">Light map.</param>
-		public void PrepareForFinalCombine( Texture2D diffuse, Texture2D lightMap, Texture2D normalMap )
+		public void PrepareForFinalCombine(Texture2D diffuse, Texture2D lightMap, Texture2D normalMap)
 		{
-			_colorMapParam.SetValue( diffuse );
-			_lightMapParam.SetValue( lightMap );
-			_normalMapParam.SetValue( normalMap );
+			_colorMapParam.SetValue(diffuse);
+			_lightMapParam.SetValue(lightMap);
+			_normalMapParam.SetValue(normalMap);
 
 			finalCombinePass.Apply();
 		}
 
 		#endregion
-
 	}
 }
-

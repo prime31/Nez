@@ -10,14 +10,14 @@ namespace Nez.UI
 		public Color Color;
 
 
-		public DebugRectangleF( float x, float y, float width, float height, Color color )
+		public DebugRectangleF(float x, float y, float width, float height, Color color)
 		{
-			Rect = new RectangleF( x, y, width, height );
+			Rect = new RectangleF(x, y, width, height);
 			this.Color = color;
 		}
 
 
-		public void Set( float x, float y, float width, float height, Color color )
+		public void Set(float x, float y, float width, float height, Color color)
 		{
 			Rect.X = x;
 			Rect.Y = y;
@@ -27,4 +27,3 @@ namespace Nez.UI
 		}
 	}
 }
-

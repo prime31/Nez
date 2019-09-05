@@ -15,6 +15,7 @@ namespace Nez.LibGdxAtlases
 		/// nine patch details in this order: left, right, top, bottom
 		/// </summary>
 		public int[] Splits;
+
 		public int[] Pads;
 		public bool Rotate = false;
 		public int Index;
@@ -22,14 +23,13 @@ namespace Nez.LibGdxAtlases
 
 
 		public LibGdxAtlasRegion()
-		{}
+		{
+		}
 
 
 		public override string ToString()
 		{
-			return string.Format( "{0}", Name );
+			return string.Format("{0}", Name);
 		}
-
 	}
 }
-

@@ -37,4 +37,3 @@ namespace Nez.UI
 		public const int BottomRight = Bottom | Right;
 	}
 }
-

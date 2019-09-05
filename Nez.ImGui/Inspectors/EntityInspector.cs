@@ -5,6 +5,7 @@ using ImGuiNET;
 using Nez.ImGuiTools.ObjectInspectors;
 using Num = System.Numerics;
 
+
 namespace Nez.ImGuiTools
 {
 	public class EntityInspector
@@ -18,82 +19,85 @@ namespace Nez.ImGuiTools
 		TransformInspector _transformInspector;
 		List<IComponentInspector> _componentInspectors = new List<IComponentInspector>();
 
-        public EntityInspector( Entity entity )
+		public EntityInspector(Entity entity)
 		{
 			_entity = entity;
-			_transformInspector = new TransformInspector( _entity.Transform );
+			_transformInspector = new TransformInspector(_entity.Transform);
 
-			for( var i = 0; i < entity.Components.Count; i++ )
-				_componentInspectors.Add( new ComponentInspector( entity.Components[i] ) );
+			for (var i = 0; i < entity.Components.Count; i++)
+				_componentInspectors.Add(new ComponentInspector(entity.Components[i]));
 		}
 
 		public void Draw()
 		{
 			// check to see if we are still alive
-			if( Entity.IsDestroyed )
+			if (Entity.IsDestroyed)
 			{
-				Core.GetGlobalManager<ImGuiManager>().StopInspectingEntity( this );
+				Core.GetGlobalManager<ImGuiManager>().StopInspectingEntity(this);
 				return;
 			}
 
-			if( _shouldFocusWindow )
+			if (_shouldFocusWindow)
 			{
 				_shouldFocusWindow = false;
 				ImGui.SetNextWindowFocus();
-				ImGui.SetNextWindowCollapsed( false );
+				ImGui.SetNextWindowCollapsed(false);
 			}
 
 			// every 60 frames we check for newly added Components and add them
-			if( Time.FrameCount % 60 == 0 )
+			if (Time.FrameCount % 60 == 0)
 			{
-				for( var i = 0; i < _entity.Components.Count; i++ )
+				for (var i = 0; i < _entity.Components.Count; i++)
 				{
 					var component = _entity.Components[i];
-					if( _componentInspectors.Where( inspector => inspector.Component != null && inspector.Component == component ).Count() == 0 )
-						_componentInspectors.Insert( 0, new ComponentInspector( component ) );
+					if (_componentInspectors
+						    .Where(inspector => inspector.Component != null && inspector.Component == component)
+						    .Count() == 0)
+						_componentInspectors.Insert(0, new ComponentInspector(component));
 				}
 			}
 
-			ImGui.SetNextWindowSize( new Num.Vector2( 335, 400 ), ImGuiCond.FirstUseEver );
-			ImGui.SetNextWindowSizeConstraints( new Num.Vector2( 335, 200 ), new Num.Vector2( Screen.Width, Screen.Height ) );
+			ImGui.SetNextWindowSize(new Num.Vector2(335, 400), ImGuiCond.FirstUseEver);
+			ImGui.SetNextWindowSizeConstraints(new Num.Vector2(335, 200), new Num.Vector2(Screen.Width, Screen.Height));
 
 			var open = true;
-			if( ImGui.Begin( $"Entity Inspector: {Entity.Name}###" + _entityWindowId, ref open ) )
+			if (ImGui.Begin($"Entity Inspector: {Entity.Name}###" + _entityWindowId, ref open))
 			{
-                var enabled = Entity.Enabled;
-                if( ImGui.Checkbox( "Enabled", ref enabled ) )
-                    Entity.Enabled = enabled;
-				
-				ImGui.InputText( "Name", ref _entity.Name, 25 );
+				var enabled = Entity.Enabled;
+				if (ImGui.Checkbox("Enabled", ref enabled))
+					Entity.Enabled = enabled;
 
-                var updateInterval = (int)Entity.UpdateInterval;
-                if( ImGui.SliderInt( "Update Interval", ref updateInterval, 1, 100 ) )
-                    Entity.UpdateInterval = (uint)updateInterval;
+				ImGui.InputText("Name", ref _entity.Name, 25);
 
-                var tag = Entity.Tag;
-				if( ImGui.InputInt( "Tag", ref tag ) )
-                    Entity.Tag = tag;
+				var updateInterval = (int) Entity.UpdateInterval;
+				if (ImGui.SliderInt("Update Interval", ref updateInterval, 1, 100))
+					Entity.UpdateInterval = (uint) updateInterval;
+
+				var tag = Entity.Tag;
+				if (ImGui.InputInt("Tag", ref tag))
+					Entity.Tag = tag;
 
 				NezImGui.MediumVerticalSpace();
 				_transformInspector.Draw();
 				NezImGui.MediumVerticalSpace();
 
 				// watch out for removed Components
-				for( var i = _componentInspectors.Count - 1; i >= 0; i-- )
+				for (var i = _componentInspectors.Count - 1; i >= 0; i--)
 				{
-					if( _componentInspectors[i].Entity == null )
+					if (_componentInspectors[i].Entity == null)
 					{
-						_componentInspectors.RemoveAt( i );
+						_componentInspectors.RemoveAt(i);
 						continue;
 					}
+
 					_componentInspectors[i].Draw();
 					NezImGui.MediumVerticalSpace();
 				}
 
-				if( NezImGui.CenteredButton( "Add Component", 0.6f ) )
+				if (NezImGui.CenteredButton("Add Component", 0.6f))
 				{
 					_componentNameFilter = "";
-					ImGui.OpenPopup( "component-selector" );
+					ImGui.OpenPopup("component-selector");
 				}
 
 				DrawComponentSelectorPopup();
@@ -101,43 +105,45 @@ namespace Nez.ImGuiTools
 				ImGui.End();
 			}
 
-			if( !open )
-				Core.GetGlobalManager<ImGuiManager>().StopInspectingEntity( this );
+			if (!open)
+				Core.GetGlobalManager<ImGuiManager>().StopInspectingEntity(this);
 		}
 
 		private void DrawComponentSelectorPopup()
 		{
-			if( ImGui.BeginPopup( "component-selector" ) )
+			if (ImGui.BeginPopup("component-selector"))
 			{
-				ImGui.InputText( "###ComponentFilter", ref _componentNameFilter, 25 );
+				ImGui.InputText("###ComponentFilter", ref _componentNameFilter, 25);
 				ImGui.Separator();
 
 				var isNezType = false;
 				var isColliderType = false;
-				foreach( var subclassType in InspectorCache.GetAllComponentSubclassTypes() )
+				foreach (var subclassType in InspectorCache.GetAllComponentSubclassTypes())
 				{
-					if( string.IsNullOrEmpty( _componentNameFilter ) || subclassType.Name.ToLower().Contains( _componentNameFilter.ToLower() ) )
+					if (string.IsNullOrEmpty(_componentNameFilter) ||
+					    subclassType.Name.ToLower().Contains(_componentNameFilter.ToLower()))
 					{
 						// stick a seperator in after custom Components and before Colliders
-						if( !isNezType && subclassType.Namespace.StartsWith( "Nez" ) )
+						if (!isNezType && subclassType.Namespace.StartsWith("Nez"))
 						{
 							isNezType = true;
 							ImGui.Separator();
 						}
 
-						if( !isColliderType && typeof( Collider ).IsAssignableFrom( subclassType ) )
+						if (!isColliderType && typeof(Collider).IsAssignableFrom(subclassType))
 						{
 							isColliderType = true;
 							ImGui.Separator();
 						}
 
-						if( ImGui.Selectable( subclassType.Name ) )
+						if (ImGui.Selectable(subclassType.Name))
 						{
-							Entity.AddComponent( Activator.CreateInstance( subclassType ) as Component );
+							Entity.AddComponent(Activator.CreateInstance(subclassType) as Component);
 							ImGui.CloseCurrentPopup();
 						}
 					}
 				}
+
 				ImGui.EndPopup();
 			}
 		}
@@ -149,6 +155,5 @@ namespace Nez.ImGuiTools
 		{
 			_shouldFocusWindow = true;
 		}
-	
 	}
 }

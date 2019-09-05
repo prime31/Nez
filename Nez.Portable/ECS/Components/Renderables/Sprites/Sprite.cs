@@ -14,10 +14,12 @@ namespace Nez.Sprites
 		{
 			get
 			{
-				if( _areBoundsDirty )
+				if (_areBoundsDirty)
 				{
-					if( Subtexture != null )
-						_bounds.CalculateBounds( Entity.Transform.Position, _localOffset, _origin, Entity.Transform.Scale, Entity.Transform.Rotation, Subtexture.SourceRect.Width, Subtexture.SourceRect.Height );
+					if (Subtexture != null)
+						_bounds.CalculateBounds(Entity.Transform.Position, _localOffset, _origin,
+							Entity.Transform.Scale, Entity.Transform.Rotation, Subtexture.SourceRect.Width,
+							Subtexture.SourceRect.Height);
 					_areBoundsDirty = false;
 				}
 
@@ -32,7 +34,7 @@ namespace Nez.Sprites
 		public Vector2 Origin
 		{
 			get => _origin;
-			set => SetOrigin( value );
+			set => SetOrigin(value);
 		}
 
 		/// <summary>
@@ -41,8 +43,10 @@ namespace Nez.Sprites
 		/// <value>The origin normalized.</value>
 		public Vector2 OriginNormalized
 		{
-			get => new Vector2( _origin.X / Width * Entity.Transform.Scale.X, _origin.Y / Height * Entity.Transform.Scale.Y );
-			set => SetOrigin( new Vector2( value.X * Width / Entity.Transform.Scale.X, value.Y * Height / Entity.Transform.Scale.Y ) );
+			get => new Vector2(_origin.X / Width * Entity.Transform.Scale.X,
+				_origin.Y / Height * Entity.Transform.Scale.Y);
+			set => SetOrigin(new Vector2(value.X * Width / Entity.Transform.Scale.X,
+				value.Y * Height / Entity.Transform.Scale.Y));
 		}
 
 		/// <summary>
@@ -51,8 +55,10 @@ namespace Nez.Sprites
 		/// <value><c>true</c> if flip x; otherwise, <c>false</c>.</value>
 		public bool FlipX
 		{
-			get => ( SpriteEffects & SpriteEffects.FlipHorizontally ) == SpriteEffects.FlipHorizontally;
-			set => SpriteEffects = value ? ( SpriteEffects | SpriteEffects.FlipHorizontally ) : ( SpriteEffects & ~SpriteEffects.FlipHorizontally );
+			get => (SpriteEffects & SpriteEffects.FlipHorizontally) == SpriteEffects.FlipHorizontally;
+			set => SpriteEffects = value
+				? (SpriteEffects | SpriteEffects.FlipHorizontally)
+				: (SpriteEffects & ~SpriteEffects.FlipHorizontally);
 		}
 
 		/// <summary>
@@ -61,8 +67,10 @@ namespace Nez.Sprites
 		/// <value><c>true</c> if flip y; otherwise, <c>false</c>.</value>
 		public bool FlipY
 		{
-			get => ( SpriteEffects & SpriteEffects.FlipVertically ) == SpriteEffects.FlipVertically;
-			set => SpriteEffects = value ? ( SpriteEffects | SpriteEffects.FlipVertically ) : ( SpriteEffects & ~SpriteEffects.FlipVertically );
+			get => (SpriteEffects & SpriteEffects.FlipVertically) == SpriteEffects.FlipVertically;
+			set => SpriteEffects = value
+				? (SpriteEffects | SpriteEffects.FlipVertically)
+				: (SpriteEffects & ~SpriteEffects.FlipVertically);
 		}
 
 		/// <summary>
@@ -77,7 +85,7 @@ namespace Nez.Sprites
 		public Subtexture Subtexture
 		{
 			get => _subtexture;
-			set => SetSubtexture( value );
+			set => SetSubtexture(value);
 		}
 
 		protected Vector2 _origin;
@@ -85,16 +93,18 @@ namespace Nez.Sprites
 
 
 		public Sprite()
-		{}
+		{
+		}
 
-		public Sprite( Subtexture subtexture )
+		public Sprite(Subtexture subtexture)
 		{
 			_subtexture = subtexture;
 			_origin = subtexture.Center;
 		}
 
-		public Sprite( Texture2D texture ) : this( new Subtexture( texture ) )
-		{ }
+		public Sprite(Texture2D texture) : this(new Subtexture(texture))
+		{
+		}
 
 
 		#region fluent setters
@@ -105,11 +115,11 @@ namespace Nez.Sprites
 		/// </summary>
 		/// <returns>The subtexture.</returns>
 		/// <param name="subtexture">Subtexture.</param>
-		public Sprite SetSubtexture( Subtexture subtexture )
+		public Sprite SetSubtexture(Subtexture subtexture)
 		{
 			_subtexture = subtexture;
 
-			if( _subtexture != null )
+			if (_subtexture != null)
 				_origin = subtexture.Origin;
 			return this;
 		}
@@ -119,13 +129,14 @@ namespace Nez.Sprites
 		/// </summary>
 		/// <returns>The origin.</returns>
 		/// <param name="origin">Origin.</param>
-		public Sprite SetOrigin( Vector2 origin )
+		public Sprite SetOrigin(Vector2 origin)
 		{
-			if( _origin != origin )
+			if (_origin != origin)
 			{
 				_origin = origin;
 				_areBoundsDirty = true;
 			}
+
 			return this;
 		}
 
@@ -134,9 +145,10 @@ namespace Nez.Sprites
 		/// </summary>
 		/// <returns>The origin normalized.</returns>
 		/// <param name="origin">Origin.</param>
-		public Sprite SetOriginNormalized( Vector2 value )
+		public Sprite SetOriginNormalized(Vector2 value)
 		{
-			SetOrigin( new Vector2( value.X * Width / Entity.Transform.Scale.X, value.Y * Height / Entity.Transform.Scale.Y ) );
+			SetOrigin(new Vector2(value.X * Width / Entity.Transform.Scale.X,
+				value.Y * Height / Entity.Transform.Scale.Y));
 			return this;
 		}
 
@@ -150,12 +162,12 @@ namespace Nez.Sprites
 		/// <param name="graphics">Graphics.</param>
 		/// <param name="camera">Camera.</param>
 		/// <param name="offset">Offset.</param>
-		public void DrawOutline( Graphics graphics, Camera camera, int offset = 1 )
+		public void DrawOutline(Graphics graphics, Camera camera, int offset = 1)
 		{
-			DrawOutline( graphics, camera, Color.Black, offset );
+			DrawOutline(graphics, camera, Color.Black, offset);
 		}
 
-		public void DrawOutline( Graphics graphics, Camera camera, Color outlineColor, int offset = 1 )
+		public void DrawOutline(Graphics graphics, Camera camera, Color outlineColor, int offset = 1)
 		{
 			// save the stuff we are going to modify so we can restore it later
 			var originalPosition = _localOffset;
@@ -166,14 +178,14 @@ namespace Nez.Sprites
 			Color = outlineColor;
 			_layerDepth += 0.01f;
 
-			for( var i = -1; i < 2; i++ )
+			for (var i = -1; i < 2; i++)
 			{
-				for( var j = -1; j < 2; j++ )
+				for (var j = -1; j < 2; j++)
 				{
-					if( i != 0 || j != 0 )
+					if (i != 0 || j != 0)
 					{
-						_localOffset = originalPosition + new Vector2( i * offset, j * offset );
-						Render( graphics, camera );
+						_localOffset = originalPosition + new Vector2(i * offset, j * offset);
+						Render(graphics, camera);
 					}
 				}
 			}
@@ -184,11 +196,10 @@ namespace Nez.Sprites
 			_layerDepth = originalLayerDepth;
 		}
 
-		public override void Render( Graphics graphics, Camera camera )
+		public override void Render(Graphics graphics, Camera camera)
 		{
-			graphics.Batcher.Draw( _subtexture, Entity.Transform.Position + LocalOffset, Color, Entity.Transform.Rotation, Origin, Entity.Transform.Scale, SpriteEffects, _layerDepth );
+			graphics.Batcher.Draw(_subtexture, Entity.Transform.Position + LocalOffset, Color,
+				Entity.Transform.Rotation, Origin, Entity.Transform.Scale, SpriteEffects, _layerDepth);
 		}
-
 	}
 }
-

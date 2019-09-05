@@ -1,5 +1,4 @@
-﻿
-namespace Nez
+﻿namespace Nez
 {
 	/// <summary>
 	/// Represents a virtual button, axis or joystick whose state is determined by the state of its VirtualInputNodes
@@ -28,7 +27,7 @@ namespace Nez
 
 		protected VirtualInput()
 		{
-			Input._virtualInputs.Add( this );
+			Input._virtualInputs.Add(this);
 		}
 
 
@@ -37,7 +36,7 @@ namespace Nez
 		/// </summary>
 		public void Deregister()
 		{
-			Input._virtualInputs.Remove( this );
+			Input._virtualInputs.Remove(this);
 		}
 
 		public abstract void Update();
@@ -55,4 +54,3 @@ namespace Nez
 		}
 	}
 }
-

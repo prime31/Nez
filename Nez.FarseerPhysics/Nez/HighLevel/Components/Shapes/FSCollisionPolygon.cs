@@ -12,6 +12,7 @@ namespace Nez.Farseer
 		/// verts are stored in sim units
 		/// </summary>
 		protected Vertices _verts;
+
 		Vector2 _center;
 		protected bool _areVertsDirty = true;
 
@@ -22,41 +23,41 @@ namespace Nez.Farseer
 		}
 
 
-		public FSCollisionPolygon( List<Vector2> vertices ) : this()
+		public FSCollisionPolygon(List<Vector2> vertices) : this()
 		{
-			_verts = new Vertices( vertices );
-			_verts.Scale( new Vector2( FSConvert.DisplayToSim ) );
+			_verts = new Vertices(vertices);
+			_verts.Scale(new Vector2(FSConvert.DisplayToSim));
 		}
 
 
-		public FSCollisionPolygon( Vector2[] vertices ) : this()
+		public FSCollisionPolygon(Vector2[] vertices) : this()
 		{
-			_verts = new Vertices( vertices );
-			_verts.Scale( new Vector2( FSConvert.DisplayToSim ) );
+			_verts = new Vertices(vertices);
+			_verts.Scale(new Vector2(FSConvert.DisplayToSim));
 		}
 
 
 		#region Configuration
 
-		public FSCollisionPolygon SetVertices( Vertices vertices )
+		public FSCollisionPolygon SetVertices(Vertices vertices)
 		{
-			_verts = new Vertices( vertices );
+			_verts = new Vertices(vertices);
 			_areVertsDirty = true;
 			RecreateFixture();
 			return this;
 		}
 
 
-		public FSCollisionPolygon SetVertices( List<Vector2> vertices )
+		public FSCollisionPolygon SetVertices(List<Vector2> vertices)
 		{
-			_verts = new Vertices( vertices );
+			_verts = new Vertices(vertices);
 			_areVertsDirty = true;
 			RecreateFixture();
 			return this;
 		}
 
 
-		public FSCollisionPolygon SetCenter( Vector2 center )
+		public FSCollisionPolygon SetCenter(Vector2 center)
 		{
 			_center = center;
 			_areVertsDirty = true;
@@ -74,9 +75,9 @@ namespace Nez.Farseer
 		}
 
 
-		public override void OnEntityTransformChanged( Transform.Component comp )
+		public override void OnEntityTransformChanged(Transform.Component comp)
 		{
-			if( comp == Transform.Component.Scale )
+			if (comp == Transform.Component.Scale)
 				RecreateFixture();
 		}
 
@@ -98,22 +99,22 @@ namespace Nez.Farseer
 
 		protected void UpdateVerts()
 		{
-			Insist.IsNotNull( _verts, "verts cannot be null!" );
+			Insist.IsNotNull(_verts, "verts cannot be null!");
 
-			if( !_areVertsDirty )
+			if (!_areVertsDirty)
 				return;
+
 			_areVertsDirty = false;
 
-			var shapeVerts = ( _fixtureDef.Shape as PolygonShape ).Vertices;
+			var shapeVerts = (_fixtureDef.Shape as PolygonShape).Vertices;
 			shapeVerts.attachedToBody = false;
 
 			shapeVerts.Clear();
-			shapeVerts.AddRange( _verts );
-			shapeVerts.Scale( Transform.Scale );
-			shapeVerts.Translate( ref _center );
+			shapeVerts.AddRange(_verts);
+			shapeVerts.Scale(Transform.Scale);
+			shapeVerts.Translate(ref _center);
 
-			( _fixtureDef.Shape as PolygonShape ).SetVerticesNoCopy( shapeVerts );
+			(_fixtureDef.Shape as PolygonShape).SetVerticesNoCopy(shapeVerts);
 		}
-
 	}
 }

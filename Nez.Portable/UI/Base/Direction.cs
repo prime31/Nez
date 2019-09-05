@@ -12,4 +12,3 @@ namespace Nez.UI
 		Right
 	}
 }
-

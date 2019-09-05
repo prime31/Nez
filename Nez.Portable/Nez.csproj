@@ -1,34 +1,35 @@
 ﻿<Project>
-	<PropertyGroup>
-		<BaseIntermediateOutputPath>obj\$(MSBuildProjectName)</BaseIntermediateOutputPath>
-	</PropertyGroup>
-	<Import Sdk="Microsoft.NET.Sdk" Project="Sdk.props" />
-	
-	<Import Project="$(MSBuildExtensionsPath)\MonoGame\v3.0\MonoGame.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\MonoGame\v3.0\MonoGame.Common.props')" />
+    <PropertyGroup>
+        <BaseIntermediateOutputPath>obj\$(MSBuildProjectName)</BaseIntermediateOutputPath>
+    </PropertyGroup>
+    <Import Sdk="Microsoft.NET.Sdk" Project="Sdk.props" />
 
-	<PropertyGroup>
-		<OutputType>Library</OutputType>
-		<CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
-		<RootNamespace>Nez</RootNamespace>
-		<AssemblyName>Nez</AssemblyName>
-		<TargetFramework>net471</TargetFramework>
-		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-		<NoWarn>1591,1570,1572,1573</NoWarn>
-		<IntermediateOutputPath>obj\Nez\$(Configuration)</IntermediateOutputPath>
-		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
-	</PropertyGroup>
+    <Import Project="$(MSBuildExtensionsPath)\MonoGame\v3.0\MonoGame.Common.props"
+            Condition="Exists('$(MSBuildExtensionsPath)\MonoGame\v3.0\MonoGame.Common.props')" />
 
-	<ItemGroup>
-		<PackageReference Include="MonoGame.Framework.Portable" Version="3.7.1.189" />
-		<PackageReference Include="System.Drawing.Common" Version="4.5.1" />
-	</ItemGroup>
+    <PropertyGroup>
+        <OutputType>Library</OutputType>
+        <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+        <RootNamespace>Nez</RootNamespace>
+        <AssemblyName>Nez</AssemblyName>
+        <TargetFramework>net471</TargetFramework>
+        <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+        <NoWarn>1591,1570,1572,1573</NoWarn>
+        <IntermediateOutputPath>obj\Nez\$(Configuration)</IntermediateOutputPath>
+        <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    </PropertyGroup>
 
-	<ItemGroup>
-		<EmbeddedResource Include="Content\NezDefaultBMFont.xnb" />
-	</ItemGroup>
-	<ItemGroup>
-		<Reference Include="System.Net.Http" />
-	</ItemGroup>
-	
-	<Import Sdk="Microsoft.NET.Sdk" Project="Sdk.targets" />
+    <ItemGroup>
+        <PackageReference Include="MonoGame.Framework.Portable" Version="3.7.1.189" />
+        <PackageReference Include="System.Drawing.Common" Version="4.5.1" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <EmbeddedResource Include="Content\NezDefaultBMFont.xnb" />
+    </ItemGroup>
+    <ItemGroup>
+        <Reference Include="System.Net.Http" />
+    </ItemGroup>
+
+    <Import Sdk="Microsoft.NET.Sdk" Project="Sdk.targets" />
 </Project>

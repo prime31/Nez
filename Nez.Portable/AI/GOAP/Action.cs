@@ -18,36 +18,37 @@ namespace Nez.AI.GOAP
 		public int Cost = 1;
 
 
-		internal HashSet<Tuple<string,bool>> _preConditions = new HashSet<Tuple<string,bool>>();
+		internal HashSet<Tuple<string, bool>> _preConditions = new HashSet<Tuple<string, bool>>();
 
-		internal HashSet<Tuple<string,bool>> _postConditions = new HashSet<Tuple<string,bool>>();
+		internal HashSet<Tuple<string, bool>> _postConditions = new HashSet<Tuple<string, bool>>();
 
 
 		public Action()
-		{}
+		{
+		}
 
 
-		public Action( string name )
+		public Action(string name)
 		{
 			this.Name = name;
 		}
 
 
-		public Action( string name, int cost ) : this( name )
+		public Action(string name, int cost) : this(name)
 		{
 			this.Cost = cost;
 		}
 
 
-		public void SetPrecondition( string conditionName, bool value )
+		public void SetPrecondition(string conditionName, bool value)
 		{
-			_preConditions.Add( new Tuple<string,bool>( conditionName, value ) );
+			_preConditions.Add(new Tuple<string, bool>(conditionName, value));
 		}
 
 
-		public void SetPostcondition( string conditionName, bool value )
+		public void SetPostcondition(string conditionName, bool value)
 		{
-			_postConditions.Add( new Tuple<string,bool>( conditionName, value ) );
+			_postConditions.Add(new Tuple<string, bool>(conditionName, value));
 		}
 
 
@@ -64,9 +65,7 @@ namespace Nez.AI.GOAP
 
 		public override string ToString()
 		{
-			return string.Format( "[Action] {0} - cost: {1}", Name, Cost );
+			return string.Format("[Action] {0} - cost: {1}", Name, Cost);
 		}
-
 	}
 }
-

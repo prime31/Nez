@@ -35,31 +35,32 @@ namespace FarseerPhysics.Common.PhysicsLogic
 		/// </summary>
 		/// <param name="body"></param>
 		/// <returns></returns>
-		public virtual bool IsActiveOn( Body body )
+		public virtual bool IsActiveOn(Body body)
 		{
-			if( body == null || !body.Enabled || body.IsStatic )
+			if (body == null || !body.Enabled || body.IsStatic)
 				return false;
 
-			if( body.FixtureList == null )
+			if (body.FixtureList == null)
 				return false;
 
-			foreach( var fixture in body.FixtureList )
+			foreach (var fixture in body.FixtureList)
 			{
 				//Disable
-				if( ( fixture.CollisionGroup == DisabledOnGroup ) && fixture.CollisionGroup != 0 && DisabledOnGroup != 0 )
+				if ((fixture.CollisionGroup == DisabledOnGroup) && fixture.CollisionGroup != 0 && DisabledOnGroup != 0)
 					return false;
 
-				if( ( fixture.CollisionCategories & DisabledOnCategories ) != Category.None )
+				if ((fixture.CollisionCategories & DisabledOnCategories) != Category.None)
 					return false;
 
-				if( EnabledOnGroup != 0 || EnabledOnCategories != Category.All )
+				if (EnabledOnGroup != 0 || EnabledOnCategories != Category.All)
 				{
 					//Enable
-					if( ( fixture.CollisionGroup == EnabledOnGroup ) && fixture.CollisionGroup != 0 && EnabledOnGroup != 0 )
+					if ((fixture.CollisionGroup == EnabledOnGroup) && fixture.CollisionGroup != 0 &&
+					    EnabledOnGroup != 0)
 						return true;
 
-					if( ( fixture.CollisionCategories & EnabledOnCategories ) != Category.None &&
-						EnabledOnCategories != Category.All )
+					if ((fixture.CollisionCategories & EnabledOnCategories) != Category.None &&
+					    EnabledOnCategories != Category.All)
 						return true;
 				}
 				else
@@ -75,7 +76,7 @@ namespace FarseerPhysics.Common.PhysicsLogic
 		/// Adds the category.
 		/// </summary>
 		/// <param name="category">The category.</param>
-		public void AddDisabledCategory( Category category )
+		public void AddDisabledCategory(Category category)
 		{
 			DisabledOnCategories |= category;
 		}
@@ -84,7 +85,7 @@ namespace FarseerPhysics.Common.PhysicsLogic
 		/// Removes the category.
 		/// </summary>
 		/// <param name="category">The category.</param>
-		public void RemoveDisabledCategory( Category category )
+		public void RemoveDisabledCategory(Category category)
 		{
 			DisabledOnCategories &= ~category;
 		}
@@ -96,16 +97,16 @@ namespace FarseerPhysics.Common.PhysicsLogic
 		/// <returns>
 		/// 	<c>true</c> if the object has the specified category; otherwise, <c>false</c>.
 		/// </returns>
-		public bool IsInDisabledCategory( Category category )
+		public bool IsInDisabledCategory(Category category)
 		{
-			return ( DisabledOnCategories & category ) == category;
+			return (DisabledOnCategories & category) == category;
 		}
 
 		/// <summary>
 		/// Adds the category.
 		/// </summary>
 		/// <param name="category">The category.</param>
-		public void AddEnabledCategory( Category category )
+		public void AddEnabledCategory(Category category)
 		{
 			EnabledOnCategories |= category;
 		}
@@ -114,7 +115,7 @@ namespace FarseerPhysics.Common.PhysicsLogic
 		/// Removes the category.
 		/// </summary>
 		/// <param name="category">The category.</param>
-		public void RemoveEnabledCategory( Category category )
+		public void RemoveEnabledCategory(Category category)
 		{
 			EnabledOnCategories &= ~category;
 		}
@@ -126,10 +127,9 @@ namespace FarseerPhysics.Common.PhysicsLogic
 		/// <returns>
 		/// 	<c>true</c> if the object has the specified category; otherwise, <c>false</c>.
 		/// </returns>
-		public bool IsInEnabledInCategory( Category category )
+		public bool IsInEnabledInCategory(Category category)
 		{
-			return ( EnabledOnCategories & category ) == category;
+			return (EnabledOnCategories & category) == category;
 		}
-
 	}
 }

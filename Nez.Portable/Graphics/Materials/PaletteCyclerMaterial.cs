@@ -7,11 +7,9 @@
 			Effect = new PaletteCyclerEffect();
 		}
 
-		public override void OnPreRender( Camera camera )
+		public override void OnPreRender(Camera camera)
 		{
 			Effect.UpdateTime();
 		}
-
 	}
 }
-

@@ -11,35 +11,37 @@ namespace Nez.UI
 		TextButtonStyle style;
 
 
-		public TextButton( string text, TextButtonStyle style ) : base( style )
+		public TextButton(string text, TextButtonStyle style) : base(style)
 		{
-			SetStyle( style );
-			label = new Label( text, style.Font, style.FontColor );
-            label.SetAlignment(UI.Align.Center );
+			SetStyle(style);
+			label = new Label(text, style.Font, style.FontColor);
+			label.SetAlignment(UI.Align.Center);
 
-			Add( label ).Expand().Fill();
-			SetSize( PreferredWidth, PreferredHeight );
+			Add(label).Expand().Fill();
+			SetSize(PreferredWidth, PreferredHeight);
 		}
 
 
-		public TextButton( string text, Skin skin, string styleName = null ) : this( text, skin.Get<TextButtonStyle>( styleName ) )
-		{}
-
-
-		public override void SetStyle( ButtonStyle style )
+		public TextButton(string text, Skin skin, string styleName = null) : this(text,
+			skin.Get<TextButtonStyle>(styleName))
 		{
-			Insist.IsTrue( style is TextButtonStyle, "style must be a TextButtonStyle" );
+		}
 
-			base.SetStyle( style );
-			this.style = (TextButtonStyle)style;
 
-			if( label != null )
+		public override void SetStyle(ButtonStyle style)
+		{
+			Insist.IsTrue(style is TextButtonStyle, "style must be a TextButtonStyle");
+
+			base.SetStyle(style);
+			this.style = (TextButtonStyle) style;
+
+			if (label != null)
 			{
-				var textButtonStyle = (TextButtonStyle)style;
+				var textButtonStyle = (TextButtonStyle) style;
 				var labelStyle = label.GetStyle();
 				labelStyle.Font = textButtonStyle.Font;
 				labelStyle.FontColor = textButtonStyle.FontColor;
-				label.SetStyle( labelStyle );
+				label.SetStyle(labelStyle);
 			}
 		}
 
@@ -50,25 +52,28 @@ namespace Nez.UI
 		}
 
 
-		public override void Draw( Graphics graphics, float parentAlpha )
+		public override void Draw(Graphics graphics, float parentAlpha)
 		{
 			Color? fontColor = null;
-			if( _isDisabled && style.DisabledFontColor.HasValue )
+			if (_isDisabled && style.DisabledFontColor.HasValue)
 				fontColor = style.DisabledFontColor;
-			else if( _mouseDown && style.DownFontColor.HasValue )
+			else if (_mouseDown && style.DownFontColor.HasValue)
 				fontColor = style.DownFontColor;
-			else if( IsChecked &&
-				( !_mouseOver && style.CheckedFontColor.HasValue || _mouseOver && style.CheckedOverFontColor.HasValue ) )
-				fontColor = ( _mouseOver && style.CheckedOverFontColor.HasValue ) ? style.CheckedOverFontColor : style.CheckedFontColor;
-			else if( _mouseOver && style.OverFontColor.HasValue )
+			else if (IsChecked &&
+			         (!_mouseOver && style.CheckedFontColor.HasValue ||
+			          _mouseOver && style.CheckedOverFontColor.HasValue))
+				fontColor = (_mouseOver && style.CheckedOverFontColor.HasValue)
+					? style.CheckedOverFontColor
+					: style.CheckedFontColor;
+			else if (_mouseOver && style.OverFontColor.HasValue)
 				fontColor = style.OverFontColor;
 			else
 				fontColor = style.FontColor;
-			
-			if( fontColor != null )
+
+			if (fontColor != null)
 				label.GetStyle().FontColor = fontColor.Value;
-			
-			base.Draw( graphics, parentAlpha );
+
+			base.Draw(graphics, parentAlpha);
 		}
 
 
@@ -80,13 +85,13 @@ namespace Nez.UI
 
 		public Cell GetLabelCell()
 		{
-			return GetCell( label );
+			return GetCell(label);
 		}
 
 
-		public TextButton SetText( String text )
+		public TextButton SetText(String text)
 		{
-			label.SetText( text );
+			label.SetText(text);
 			return this;
 		}
 
@@ -99,7 +104,7 @@ namespace Nez.UI
 
 		public override string ToString()
 		{
-			return string.Format( "[TextButton] text: {0}", GetText() );
+			return string.Format("[TextButton] text: {0}", GetText());
 		}
 	}
 
@@ -122,37 +127,40 @@ namespace Nez.UI
 		}
 
 
-		public TextButtonStyle( IDrawable up, IDrawable down, IDrawable over, BitmapFont font ) : base( up, down, over )
+		public TextButtonStyle(IDrawable up, IDrawable down, IDrawable over, BitmapFont font) : base(up, down, over)
 		{
 			this.Font = font ?? Graphics.Instance.BitmapFont;
 		}
 
 
-		public TextButtonStyle( IDrawable up, IDrawable down, IDrawable over ) : this( up, down, over, Graphics.Instance.BitmapFont )
+		public TextButtonStyle(IDrawable up, IDrawable down, IDrawable over) : this(up, down, over,
+			Graphics.Instance.BitmapFont)
 		{
 		}
 
 
-		public new static TextButtonStyle Create( Color upColor, Color downColor, Color overColor )
+		public new static TextButtonStyle Create(Color upColor, Color downColor, Color overColor)
 		{
-			return new TextButtonStyle {
-				Up = new PrimitiveDrawable( upColor ),
-				Down = new PrimitiveDrawable( downColor ),
-				Over = new PrimitiveDrawable( overColor )
+			return new TextButtonStyle
+			{
+				Up = new PrimitiveDrawable(upColor),
+				Down = new PrimitiveDrawable(downColor),
+				Over = new PrimitiveDrawable(overColor)
 			};
 		}
 
 
 		public new TextButtonStyle Clone()
 		{
-			return new TextButtonStyle {
+			return new TextButtonStyle
+			{
 				Up = Up,
 				Down = Down,
 				Over = Over,
 				Checked = Checked,
 				CheckedOver = CheckedOver,
 				Disabled = Disabled,
-					
+
 				Font = Font,
 				FontColor = FontColor,
 				DownFontColor = DownFontColor,
@@ -162,7 +170,5 @@ namespace Nez.UI
 				DisabledFontColor = DisabledFontColor
 			};
 		}
-
 	}
 }
-

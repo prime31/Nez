@@ -10,7 +10,7 @@ namespace Nez.Farseer
 
 		#region Configuration
 
-		public FSRevoluteJoint SetOwnerBodyAnchor( Vector2 ownerBodyAnchor )
+		public FSRevoluteJoint SetOwnerBodyAnchor(Vector2 ownerBodyAnchor)
 		{
 			_jointDef.OwnerBodyAnchor = ownerBodyAnchor;
 			RecreateJoint();
@@ -18,7 +18,7 @@ namespace Nez.Farseer
 		}
 
 
-		public FSRevoluteJoint SetOtherBodyAnchor( Vector2 otherBodyAnchor )
+		public FSRevoluteJoint SetOtherBodyAnchor(Vector2 otherBodyAnchor)
 		{
 			_jointDef.OtherBodyAnchor = otherBodyAnchor;
 			RecreateJoint();
@@ -26,7 +26,7 @@ namespace Nez.Farseer
 		}
 
 
-		public FSRevoluteJoint SetLimitEnabled( bool limitEnabled )
+		public FSRevoluteJoint SetLimitEnabled(bool limitEnabled)
 		{
 			_jointDef.LimitEnabled = limitEnabled;
 			RecreateJoint();
@@ -34,7 +34,7 @@ namespace Nez.Farseer
 		}
 
 
-		public FSRevoluteJoint SetLowerLimit( float lowerLimit )
+		public FSRevoluteJoint SetLowerLimit(float lowerLimit)
 		{
 			_jointDef.LowerLimit = lowerLimit;
 			RecreateJoint();
@@ -42,7 +42,7 @@ namespace Nez.Farseer
 		}
 
 
-		public FSRevoluteJoint SetUpperLimit( float upperLimit )
+		public FSRevoluteJoint SetUpperLimit(float upperLimit)
 		{
 			_jointDef.UpperLimit = upperLimit;
 			RecreateJoint();
@@ -50,7 +50,7 @@ namespace Nez.Farseer
 		}
 
 
-		public FSRevoluteJoint SetMotorEnabled( bool motorEnabled )
+		public FSRevoluteJoint SetMotorEnabled(bool motorEnabled)
 		{
 			_jointDef.MotorEnabled = motorEnabled;
 			RecreateJoint();
@@ -58,7 +58,7 @@ namespace Nez.Farseer
 		}
 
 
-		public FSRevoluteJoint SetMotorSpeed( float motorSpeed )
+		public FSRevoluteJoint SetMotorSpeed(float motorSpeed)
 		{
 			_jointDef.MotorSpeed = motorSpeed;
 			RecreateJoint();
@@ -66,7 +66,7 @@ namespace Nez.Farseer
 		}
 
 
-		public FSRevoluteJoint SetMaxMotorTorque( float maxMotorTorque )
+		public FSRevoluteJoint SetMaxMotorTorque(float maxMotorTorque)
 		{
 			_jointDef.MaxMotorTorque = maxMotorTorque;
 			RecreateJoint();
@@ -74,7 +74,7 @@ namespace Nez.Farseer
 		}
 
 
-		public FSRevoluteJoint SetMotorImpulse( float motorImpulse )
+		public FSRevoluteJoint SetMotorImpulse(float motorImpulse)
 		{
 			_jointDef.MotorImpulse = motorImpulse;
 			RecreateJoint();
@@ -86,12 +86,11 @@ namespace Nez.Farseer
 
 		internal override FSJointDef GetJointDef()
 		{
-			InitializeJointDef( _jointDef );
-			if( _jointDef.BodyA == null || _jointDef.BodyB == null )
+			InitializeJointDef(_jointDef);
+			if (_jointDef.BodyA == null || _jointDef.BodyB == null)
 				return null;
 
 			return _jointDef;
 		}
-
 	}
 }

@@ -10,7 +10,10 @@ namespace Nez.Tiled
 		/// returns the Subtexture that maps to this particular tile
 		/// </summary>
 		/// <value>The texture region.</value>
-		public Subtexture TextureRegion { get { return Tileset.GetTileTextureRegion( Id ); } }
+		public Subtexture TextureRegion
+		{
+			get { return Tileset.GetTileTextureRegion(Id); }
+		}
 
 		/// <summary>
 		/// gets the TiledtilesetTile for this TiledTile if it exists. TiledtilesetTile only exist for animated tiles and tiles with attached
@@ -21,19 +24,20 @@ namespace Nez.Tiled
 		{
 			get
 			{
-				if( !_tilesetTileIndex.HasValue )
+				if (!_tilesetTileIndex.HasValue)
 				{
 					_tilesetTileIndex = -1;
-					for( var i = 0; i < Tileset.Tiles.Count; i++ )
+					for (var i = 0; i < Tileset.Tiles.Count; i++)
 					{
 						// id is a gid so we need to subtract the tileset.firstId to get a local id
-						if( Tileset.Tiles[i].Id == Id - Tileset.FirstId )
+						if (Tileset.Tiles[i].Id == Id - Tileset.FirstId)
 							_tilesetTileIndex = i;
 					}
 				}
 
-				if( _tilesetTileIndex.Value < 0 )
+				if (_tilesetTileIndex.Value < 0)
 					return null;
+
 				return Tileset.Tiles[_tilesetTileIndex.Value];
 			}
 		}
@@ -53,7 +57,7 @@ namespace Nez.Tiled
 		int? _tilesetTileIndex;
 
 
-		public TiledTile( int id )
+		public TiledTile(int id)
 		{
 			this.Id = id;
 		}
@@ -64,7 +68,7 @@ namespace Nez.Tiled
 		/// </summary>
 		/// <returns>The tile identifier.</returns>
 		/// <param name="id">Identifier.</param>
-		public void SetTileId( int id )
+		public void SetTileId(int id)
 		{
 			this.Id = id;
 			_tilesetTileIndex = null;
@@ -76,9 +80,9 @@ namespace Nez.Tiled
 		/// </summary>
 		/// <returns>The tile rectangle.</returns>
 		/// <param name="tilemap">Tilemap.</param>
-		public Rectangle GetTileRectangle( TiledMap tilemap )
+		public Rectangle GetTileRectangle(TiledMap tilemap)
 		{
-			return new Rectangle( X * tilemap.TileWidth, Y * tilemap.TileHeight, tilemap.TileWidth, tilemap.TileHeight );
+			return new Rectangle(X * tilemap.TileWidth, Y * tilemap.TileHeight, tilemap.TileWidth, tilemap.TileHeight);
 		}
 
 
@@ -87,16 +91,15 @@ namespace Nez.Tiled
 		/// </summary>
 		/// <returns>The world position.</returns>
 		/// <param name="tilemap">Tilemap.</param>
-		public Vector2 GetWorldPosition( TiledMap tilemap )
+		public Vector2 GetWorldPosition(TiledMap tilemap)
 		{
-			return new Vector2( X * tilemap.TileWidth, Y * tilemap.TileHeight );
+			return new Vector2(X * tilemap.TileWidth, Y * tilemap.TileHeight);
 		}
 
 
 		public override string ToString()
 		{
-			return string.Format( "[TiledTile] id: {0}, x: {1}, y: {2}", Id, X, Y );
+			return string.Format("[TiledTile] id: {0}, x: {1}, y: {2}", Id, X, Y);
 		}
-
 	}
 }

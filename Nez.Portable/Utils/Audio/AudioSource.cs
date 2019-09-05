@@ -22,10 +22,10 @@ namespace Nez.Audio
 		/// <returns>The pitch range.</returns>
 		/// <param name="min">Minimum.</param>
 		/// <param name="max">Max.</param>
-		public AudioSource SetPitchRange( float min, float max )
+		public AudioSource SetPitchRange(float min, float max)
 		{
-			_pitchMin = Mathf.Clamp( min, -1, 1 );
-			_pitchMax = Mathf.Clamp( max, -1, 1 );
+			_pitchMin = Mathf.Clamp(min, -1, 1);
+			_pitchMax = Mathf.Clamp(max, -1, 1);
 			_useRandomPitch = _pitchMin != 0 || _pitchMax != 0;
 
 			return this;
@@ -38,10 +38,10 @@ namespace Nez.Audio
 		/// <returns>The pan range.</returns>
 		/// <param name="min">Minimum.</param>
 		/// <param name="max">Max.</param>
-		public AudioSource SetPanRange( float min, float max )
+		public AudioSource SetPanRange(float min, float max)
 		{
-			_panMin = Mathf.Clamp( min, -1, 1 );
-			_panMax = Mathf.Clamp( max, -1, 1 );
+			_panMin = Mathf.Clamp(min, -1, 1);
+			_panMax = Mathf.Clamp(max, -1, 1);
 			_useRandomPan = _panMin != 0 || _panMax != 0;
 
 			return this;
@@ -53,25 +53,26 @@ namespace Nez.Audio
 		/// </summary>
 		/// <returns>The sound effect.</returns>
 		/// <param name="effect">Effect.</param>
-		public AudioSource AddSoundEffect( SoundEffect effect )
+		public AudioSource AddSoundEffect(SoundEffect effect)
 		{
-			_soundEffects.Add( effect );
+			_soundEffects.Add(effect);
 			return this;
 		}
 
 
 		public bool Play()
 		{
-			if( _useRandomPitch || _useRandomPan )
-				return _soundEffects.RandomItem().Play( 1, Random.Range( _pitchMin, _pitchMax ), Random.Range( _panMin, _panMax ) );
+			if (_useRandomPitch || _useRandomPan)
+				return _soundEffects.RandomItem()
+					.Play(1, Random.Range(_pitchMin, _pitchMax), Random.Range(_panMin, _panMax));
 			else
 				return _soundEffects.RandomItem().Play();
 		}
 
 
-		public void Play( float volume, float pitch, float pan = 0 )
+		public void Play(float volume, float pitch, float pan = 0)
 		{
-			_soundEffects.RandomItem().Play( volume, pitch, pan );
+			_soundEffects.RandomItem().Play(volume, pitch, pan);
 		}
 
 
@@ -79,7 +80,5 @@ namespace Nez.Audio
 		{
 			return _soundEffects.RandomItem().CreateInstance();
 		}
-
 	}
 }
-

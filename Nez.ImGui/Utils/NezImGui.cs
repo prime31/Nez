@@ -3,6 +3,7 @@ using System.Runtime.InteropServices;
 using ImGuiNET;
 using Num = System.Numerics;
 
+
 namespace Nez.ImGuiTools
 {
 	public static class NezImGui
@@ -15,9 +16,9 @@ namespace Nez.ImGuiTools
 		/// <returns></returns>
 		public static int GetScopeId() => _idScope++;
 
-		public static void SmallVerticalSpace() => ImGui.Dummy( new Num.Vector2( 0, 5 ) );
+		public static void SmallVerticalSpace() => ImGui.Dummy(new Num.Vector2(0, 5));
 
-		public static void MediumVerticalSpace() => ImGui.Dummy( new Num.Vector2( 0, 10 ) );
+		public static void MediumVerticalSpace() => ImGui.Dummy(new Num.Vector2(0, 10));
 
 		/// <summary>
 		/// adds a DrawList command to draw a border around the group
@@ -27,19 +28,19 @@ namespace Nez.ImGuiTools
 			ImGui.BeginGroup();
 		}
 
-		public static void EndBorderedGroup() => EndBorderedGroup( new Num.Vector2( 3, 2 ), new Num.Vector2( 0, 3 ) );
+		public static void EndBorderedGroup() => EndBorderedGroup(new Num.Vector2(3, 2), new Num.Vector2(0, 3));
 
-		public static void EndBorderedGroup( Num.Vector2 minPadding, Num.Vector2 maxPadding = default( Num.Vector2 ) )
+		public static void EndBorderedGroup(Num.Vector2 minPadding, Num.Vector2 maxPadding = default(Num.Vector2))
 		{
 			ImGui.EndGroup();
 
 			// attempt to size the border around the content to frame it
-			var color = ImGui.GetStyle().Colors[(int)ImGuiCol.Border];
+			var color = ImGui.GetStyle().Colors[(int) ImGuiCol.Border];
 
 			var min = ImGui.GetItemRectMin();
 			var max = ImGui.GetItemRectMax();
 			max.X = min.X + ImGui.GetContentRegionAvailWidth();
-			ImGui.GetWindowDrawList().AddRect( min - minPadding, max + maxPadding, ImGui.ColorConvertFloat4ToU32( color ) );
+			ImGui.GetWindowDrawList().AddRect(min - minPadding, max + maxPadding, ImGui.ColorConvertFloat4ToU32(color));
 
 			// this fits just the content, not the full width
 			//ImGui.GetWindowDrawList().AddRect( ImGui.GetItemRectMin() - padding, ImGui.GetItemRectMax() + padding, packedColor );
@@ -51,13 +52,14 @@ namespace Nez.ImGuiTools
 		/// <param name="label"></param>
 		/// <param name="buttonText"></param>
 		/// <returns></returns>
-		public static bool LabelButton( string label, string buttonText )
+		public static bool LabelButton(string label, string buttonText)
 		{
 			ImGui.AlignTextToFramePadding();
 
-			var wasClicked = ImGui.Button( buttonText );
-			ImGui.SameLine( 0, ImGui.GetWindowWidth() * 0.65f - ImGui.GetItemRectSize().X + ImGui.GetStyle().ItemInnerSpacing.X );
-			ImGui.Text( label );
+			var wasClicked = ImGui.Button(buttonText);
+			ImGui.SameLine(0,
+				ImGui.GetWindowWidth() * 0.65f - ImGui.GetItemRectSize().X + ImGui.GetStyle().ItemInnerSpacing.X);
+			ImGui.Text(label);
 
 			return wasClicked;
 		}
@@ -72,12 +74,13 @@ namespace Nez.ImGuiTools
 		/// draws an invisible button that will cover the next widget rect
 		/// </summary>
 		/// <param name="widgetCustomHeight"></param>
-		public static void DisableNextWidget( float widgetCustomHeight = 0 )
+		public static void DisableNextWidget(float widgetCustomHeight = 0)
 		{
 			var origCursorPos = ImGui.GetCursorPos();
-			var widgetSize = new Num.Vector2( ImGui.GetContentRegionAvailWidth(), widgetCustomHeight > 0 ? GetDefaultWidgetHeight() : GetDefaultWidgetHeight() );
-			ImGui.InvisibleButton( "##disabled", widgetSize );
-			ImGui.SetCursorPos( origCursorPos );
+			var widgetSize = new Num.Vector2(ImGui.GetContentRegionAvailWidth(),
+				widgetCustomHeight > 0 ? GetDefaultWidgetHeight() : GetDefaultWidgetHeight());
+			ImGui.InvisibleButton("##disabled", widgetSize);
+			ImGui.SetCursorPos(origCursorPos);
 		}
 
 		/// <summary>
@@ -85,11 +88,11 @@ namespace Nez.ImGuiTools
 		/// </summary>
 		/// <param name="percentWidth"></param>
 		/// <returns></returns>
-		public static bool CenteredButton( string label, float percentWidth, float xIndent = 0 )
+		public static bool CenteredButton(string label, float percentWidth, float xIndent = 0)
 		{
 			var buttonWidth = ImGui.GetWindowContentRegionWidth() * percentWidth;
-			ImGui.SetCursorPosX( xIndent + ( ImGui.GetWindowContentRegionWidth() - buttonWidth ) / 2f );
-			return ImGui.Button( label, new System.Numerics.Vector2( buttonWidth, GetDefaultWidgetHeight() ) );
+			ImGui.SetCursorPosX(xIndent + (ImGui.GetWindowContentRegionWidth() - buttonWidth) / 2f);
+			return ImGui.Button(label, new System.Numerics.Vector2(buttonWidth, GetDefaultWidgetHeight()));
 		}
 
 		/// <summary>
@@ -97,54 +100,56 @@ namespace Nez.ImGuiTools
 		/// </summary>
 		public static void ShowContextMenuTooltip()
 		{
-			if( ImGui.IsItemHovered() )
+			if (ImGui.IsItemHovered())
 			{
 				ImGui.BeginTooltip();
-				ImGui.Text( "Right click for more options" );
+				ImGui.Text("Right click for more options");
 				ImGui.EndTooltip();
 			}
 		}
 
-        /// <summary>
-        /// displays a simple dialog with some text and a couple buttons. Note that ImGui.OpenPopup( name ) has to be called
-        /// in the same ID scope as this call.
-        /// </summary>
-        /// <param name="name"></param>
-        /// <param name="message"></param>
-        /// <param name="okButton"></param>
-        /// <param name="cxlButton"></param>
-        /// <returns></returns>
-		public static bool SimpleDialog( string name, string message, string okButton = "OK", string cxlButton = "Cancel" )
+		/// <summary>
+		/// displays a simple dialog with some text and a couple buttons. Note that ImGui.OpenPopup( name ) has to be called
+		/// in the same ID scope as this call.
+		/// </summary>
+		/// <param name="name"></param>
+		/// <param name="message"></param>
+		/// <param name="okButton"></param>
+		/// <param name="cxlButton"></param>
+		/// <returns></returns>
+		public static bool SimpleDialog(string name, string message, string okButton = "OK",
+		                                string cxlButton = "Cancel")
 		{
-            var result = false;
-            var junkBool = true;
-			if( ImGui.BeginPopupModal( name, ref junkBool, ImGuiWindowFlags.AlwaysAutoResize ) )
+			var result = false;
+			var junkBool = true;
+			if (ImGui.BeginPopupModal(name, ref junkBool, ImGuiWindowFlags.AlwaysAutoResize))
 			{
-                result = false;
+				result = false;
 
-				ImGui.TextWrapped( message );
+				ImGui.TextWrapped(message);
 				MediumVerticalSpace();
 				ImGui.Separator();
 				SmallVerticalSpace();
 
-				if( ImGui.Button( cxlButton, new Num.Vector2( 120, 0 ) ) )
-                {
-                    ImGui.CloseCurrentPopup();
-                }
+				if (ImGui.Button(cxlButton, new Num.Vector2(120, 0)))
+				{
+					ImGui.CloseCurrentPopup();
+				}
 
 				ImGui.SetItemDefaultFocus();
 				ImGui.SameLine();
-				if( ImGui.Button( okButton, new Num.Vector2( 120, 0 ) ) )
-                {
-                    result = true;
-                    ImGui.CloseCurrentPopup();
-                }
+				if (ImGui.Button(okButton, new Num.Vector2(120, 0)))
+				{
+					result = true;
+					ImGui.CloseCurrentPopup();
+				}
 
 				ImGui.EndPopup();
 			}
-            return result;
+
+			return result;
 		}
-	
+
 		#region Wrappers for unsinged Drag/SliderScaler
 
 		/// <summary>
@@ -156,31 +161,33 @@ namespace Nez.ImGuiTools
 		/// <param name="min"></param>
 		/// <param name="max"></param>
 		/// <returns></returns>
-		public unsafe static bool DragScaler( string label, ref ulong value, float speed, int min, int max )
+		public unsafe static bool DragScaler(string label, ref ulong value, float speed, int min, int max)
 		{
 			var tempValue = value;
-			var valuePtr = new IntPtr( &tempValue );
-			var minPtr = new IntPtr( &min );
-			var maxPtr = new IntPtr( &max );
+			var valuePtr = new IntPtr(&tempValue);
+			var minPtr = new IntPtr(&min);
+			var maxPtr = new IntPtr(&max);
 
-			if( ImGui.DragScalar( label, ImGuiDataType.U64, valuePtr, speed, minPtr, maxPtr ) )
+			if (ImGui.DragScalar(label, ImGuiDataType.U64, valuePtr, speed, minPtr, maxPtr))
 			{
-				value = Marshal.PtrToStructure<ulong>( valuePtr );
+				value = Marshal.PtrToStructure<ulong>(valuePtr);
 				return true;
 			}
+
 			return false;
 		}
 
-		public unsafe static bool DragScaler( string label, ref ulong value, float speed )
+		public unsafe static bool DragScaler(string label, ref ulong value, float speed)
 		{
 			var tempValue = value;
-			var valuePtr = new IntPtr( &tempValue );
+			var valuePtr = new IntPtr(&tempValue);
 
-			if( ImGui.DragScalar( label, ImGuiDataType.U64, valuePtr, speed ) )
+			if (ImGui.DragScalar(label, ImGuiDataType.U64, valuePtr, speed))
 			{
-				value = Marshal.PtrToStructure<ulong>( valuePtr );
+				value = Marshal.PtrToStructure<ulong>(valuePtr);
 				return true;
 			}
+
 			return false;
 		}
 
@@ -193,55 +200,33 @@ namespace Nez.ImGuiTools
 		/// <param name="min"></param>
 		/// <param name="max"></param>
 		/// <returns></returns>
-		public unsafe static bool DragScaler( string label, ref uint value, float speed, int min, int max )
+		public unsafe static bool DragScaler(string label, ref uint value, float speed, int min, int max)
 		{
 			var tempValue = value;
-			var valuePtr = new IntPtr( &tempValue );
-			var minPtr = new IntPtr( &min );
-			var maxPtr = new IntPtr( &max );
+			var valuePtr = new IntPtr(&tempValue);
+			var minPtr = new IntPtr(&min);
+			var maxPtr = new IntPtr(&max);
 
-			if( ImGui.DragScalar( label, ImGuiDataType.U32, valuePtr, speed, minPtr, maxPtr ) )
+			if (ImGui.DragScalar(label, ImGuiDataType.U32, valuePtr, speed, minPtr, maxPtr))
 			{
-				value = Marshal.PtrToStructure<uint>( valuePtr );
+				value = Marshal.PtrToStructure<uint>(valuePtr);
 				return true;
 			}
+
 			return false;
 		}
 
-		public unsafe static bool DragScaler( string label, ref uint value, float speed )
+		public unsafe static bool DragScaler(string label, ref uint value, float speed)
 		{
 			var tempValue = value;
-			var valuePtr = new IntPtr( &tempValue );
+			var valuePtr = new IntPtr(&tempValue);
 
-			if( ImGui.DragScalar( label, ImGuiDataType.U32, valuePtr, speed ) )
+			if (ImGui.DragScalar(label, ImGuiDataType.U32, valuePtr, speed))
 			{
-				value = Marshal.PtrToStructure<uint>( valuePtr );
+				value = Marshal.PtrToStructure<uint>(valuePtr);
 				return true;
 			}
-			return false;
-		}
 
-		/// <summary>
-		/// wraps ImGui.SliderScalar and handles all IntPtr conversion
-		/// </summary>
-		/// <param name="label"></param>
-		/// <param name="value"></param>
-		/// <param name="speed"></param>
-		/// <param name="min"></param>
-		/// <param name="max"></param>
-		/// <returns></returns>
-		public unsafe static bool SliderScalar( string label, ref ulong value, int min, int max )
-		{
-			var tempValue = value;
-			var valuePtr = new IntPtr( &tempValue );
-			var minPtr = new IntPtr( &min );
-			var maxPtr = new IntPtr( &max );
-
-			if( ImGui.SliderScalar( label, ImGuiDataType.U64, valuePtr, minPtr, maxPtr ) )
-			{
-				value = Marshal.PtrToStructure<ulong>( valuePtr );
-				return true;
-			}
 			return false;
 		}
 
@@ -254,48 +239,75 @@ namespace Nez.ImGuiTools
 		/// <param name="min"></param>
 		/// <param name="max"></param>
 		/// <returns></returns>
-		public unsafe static bool SliderScalar( string label, ref uint value, int min, int max )
+		public unsafe static bool SliderScalar(string label, ref ulong value, int min, int max)
 		{
 			var tempValue = value;
-			var valuePtr = new IntPtr( &tempValue );
-			var minPtr = new IntPtr( &min );
-			var maxPtr = new IntPtr( &max );
+			var valuePtr = new IntPtr(&tempValue);
+			var minPtr = new IntPtr(&min);
+			var maxPtr = new IntPtr(&max);
 
-			if( ImGui.SliderScalar( label, ImGuiDataType.U32, valuePtr, minPtr, maxPtr ) )
+			if (ImGui.SliderScalar(label, ImGuiDataType.U64, valuePtr, minPtr, maxPtr))
 			{
-				value = Marshal.PtrToStructure<uint>( valuePtr );
+				value = Marshal.PtrToStructure<ulong>(valuePtr);
 				return true;
 			}
+
 			return false;
 		}
 
-		public unsafe static bool InputScaler( string label, ref ulong value )
+		/// <summary>
+		/// wraps ImGui.SliderScalar and handles all IntPtr conversion
+		/// </summary>
+		/// <param name="label"></param>
+		/// <param name="value"></param>
+		/// <param name="speed"></param>
+		/// <param name="min"></param>
+		/// <param name="max"></param>
+		/// <returns></returns>
+		public unsafe static bool SliderScalar(string label, ref uint value, int min, int max)
 		{
 			var tempValue = value;
-			var valuePtr = new IntPtr( &tempValue );
+			var valuePtr = new IntPtr(&tempValue);
+			var minPtr = new IntPtr(&min);
+			var maxPtr = new IntPtr(&max);
 
-			if( ImGui.InputScalar( label, ImGuiDataType.U64, valuePtr ) )
+			if (ImGui.SliderScalar(label, ImGuiDataType.U32, valuePtr, minPtr, maxPtr))
 			{
-				value = Marshal.PtrToStructure<ulong>( valuePtr );
+				value = Marshal.PtrToStructure<uint>(valuePtr);
 				return true;
 			}
+
 			return false;
 		}
 
-		public unsafe static bool InputScaler( string label, ref uint value )
+		public unsafe static bool InputScaler(string label, ref ulong value)
 		{
 			var tempValue = value;
-			var valuePtr = new IntPtr( &tempValue );
+			var valuePtr = new IntPtr(&tempValue);
 
-			if( ImGui.InputScalar( label, ImGuiDataType.U32, valuePtr ) )
+			if (ImGui.InputScalar(label, ImGuiDataType.U64, valuePtr))
 			{
-				value = Marshal.PtrToStructure<uint>( valuePtr );
+				value = Marshal.PtrToStructure<ulong>(valuePtr);
 				return true;
 			}
+
+			return false;
+		}
+
+		public unsafe static bool InputScaler(string label, ref uint value)
+		{
+			var tempValue = value;
+			var valuePtr = new IntPtr(&tempValue);
+
+			if (ImGui.InputScalar(label, ImGuiDataType.U32, valuePtr))
+			{
+				value = Marshal.PtrToStructure<uint>(valuePtr);
+				return true;
+			}
+
 			return false;
 		}
 
 		#endregion
-
 	}
 }

@@ -13,12 +13,12 @@ namespace Nez.UI
 		/// context May be null
 		/// </summary>
 		/// <param name="context">Context.</param>
-		abstract public float Get( Element context );
+		abstract public float Get(Element context);
 
 		/// <summary>
 		/// A value that is always zero.
 		/// </summary>
-		static public Fixed Zero = new Fixed( 0 );
+		static public Fixed Zero = new Fixed(0);
 
 
 		/// <summary>
@@ -28,12 +28,12 @@ namespace Nez.UI
 		{
 			float value;
 
-			public Fixed( float value )
+			public Fixed(float value)
 			{
 				this.value = value;
 			}
 
-			public override float Get( Element context )
+			public override float Get(Element context)
 			{
 				return value;
 			}
@@ -47,10 +47,11 @@ namespace Nez.UI
 		/// </summary>
 		public class MinWidthValue : Value
 		{
-			public override float Get( Element context )
+			public override float Get(Element context)
 			{
-				if( context is ILayout )
-					return ( (ILayout)context ).MinWidth;
+				if (context is ILayout)
+					return ((ILayout) context).MinWidth;
+
 				return context == null ? 0 : context.width;
 			}
 		}
@@ -63,10 +64,11 @@ namespace Nez.UI
 		/// </summary>
 		public class MinHeightValue : Value
 		{
-			public override float Get( Element context )
+			public override float Get(Element context)
 			{
-				if( context is ILayout )
-					return ( (ILayout)context ).MinHeight;
+				if (context is ILayout)
+					return ((ILayout) context).MinHeight;
+
 				return context == null ? 0 : context.height;
 			}
 		}
@@ -79,12 +81,12 @@ namespace Nez.UI
 		/// </summary>
 		public class PrefWidthValue : Value
 		{
-			public override float Get( Element context )
+			public override float Get(Element context)
 			{
-				if( context is ILayout )
-					return ( (ILayout)context ).PreferredWidth;
-				return context == null ? 0 : context.width;
+				if (context is ILayout)
+					return ((ILayout) context).PreferredWidth;
 
+				return context == null ? 0 : context.width;
 			}
 		}
 
@@ -96,10 +98,11 @@ namespace Nez.UI
 		/// </summary>
 		public class PrefHeightValue : Value
 		{
-			public override float Get( Element context )
+			public override float Get(Element context)
 			{
-				if( context is ILayout )
-					return ( (ILayout)context ).PreferredHeight;
+				if (context is ILayout)
+					return ((ILayout) context).PreferredHeight;
+
 				return context == null ? 0 : context.height;
 			}
 		}
@@ -112,10 +115,11 @@ namespace Nez.UI
 		/// </summary>
 		public class MaxWidthValue : Value
 		{
-			public override float Get( Element context )
+			public override float Get(Element context)
 			{
-				if( context is ILayout )
-					return ( (ILayout)context ).MaxWidth;
+				if (context is ILayout)
+					return ((ILayout) context).MaxWidth;
+
 				return context == null ? 0 : context.width;
 			}
 		}
@@ -128,10 +132,11 @@ namespace Nez.UI
 		/// </summary>
 		public class MaxHeightValue : Value
 		{
-			public override float Get( Element context )
+			public override float Get(Element context)
 			{
-				if( context is ILayout )
-					return ( (ILayout)context ).MaxHeight;
+				if (context is ILayout)
+					return ((ILayout) context).MaxHeight;
+
 				return context == null ? 0 : context.height;
 			}
 		}
@@ -140,9 +145,10 @@ namespace Nez.UI
 		/// <summary>
 		/// Value that is the maxHeight of the element in the cell.
 		/// </summary>
-		static public Value PercentWidth( float percent )
+		static public Value PercentWidth(float percent)
 		{
-			return new PercentWidthValue() {
+			return new PercentWidthValue()
+			{
 				Percent = percent
 			};
 		}
@@ -154,7 +160,7 @@ namespace Nez.UI
 		{
 			public float Percent;
 
-			public override float Get( Element element )
+			public override float Get(Element element)
 			{
 				return element.width * Percent;
 			}
@@ -164,9 +170,10 @@ namespace Nez.UI
 		/// <summary>
 		/// Returns a value that is a percentage of the specified elements's width. The context element is ignored.
 		/// </summary>
-		static public Value PercentWidth( float percent, Element delegateElement )
+		static public Value PercentWidth(float percent, Element delegateElement)
 		{
-			return new PercentWidthDelegateValue() {
+			return new PercentWidthDelegateValue()
+			{
 				DelegateElement = delegateElement,
 				Percent = percent
 			};
@@ -180,7 +187,7 @@ namespace Nez.UI
 			public Element DelegateElement;
 			public float Percent;
 
-			public override float Get( Element element )
+			public override float Get(Element element)
 			{
 				return DelegateElement.width * Percent;
 			}
@@ -190,9 +197,10 @@ namespace Nez.UI
 		/// <summary>
 		/// Returns a value that is a percentage of the element's height.
 		/// </summary>
-		static public Value PercentHeight( float percent )
+		static public Value PercentHeight(float percent)
 		{
-			return new PercentageHeightValue() {
+			return new PercentageHeightValue()
+			{
 				Percent = percent
 			};
 		}
@@ -204,7 +212,7 @@ namespace Nez.UI
 		{
 			public float Percent;
 
-			public override float Get( Element element )
+			public override float Get(Element element)
 			{
 				return element.height * Percent;
 			}
@@ -214,9 +222,10 @@ namespace Nez.UI
 		/// <summary>
 		/// Returns a value that is a percentage of the specified elements's height. The context element is ignored.
 		/// </summary>
-		static public Value PercentHeight( float percent, Element delegateElement )
+		static public Value PercentHeight(float percent, Element delegateElement)
 		{
-			return new PercentHeightDelegateValue() {
+			return new PercentHeightDelegateValue()
+			{
 				DelegateElement = delegateElement,
 				Percent = percent
 			};
@@ -230,12 +239,10 @@ namespace Nez.UI
 			public Element DelegateElement;
 			public float Percent;
 
-			public override float Get( Element element )
+			public override float Get(Element element)
 			{
 				return DelegateElement.height * Percent;
 			}
 		}
-
 	}
 }
-

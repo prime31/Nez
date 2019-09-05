@@ -4,6 +4,7 @@ using Nez.Textures;
 using Microsoft.Xna.Framework;
 using System.Runtime.CompilerServices;
 
+
 namespace Nez
 {
 	/// <summary>
@@ -71,10 +72,11 @@ namespace Nez
 		protected Material _currentMaterial;
 
 
-		protected Renderer( int renderOrder ) : this( renderOrder, null )
-		{}
+		protected Renderer(int renderOrder) : this(renderOrder, null)
+		{
+		}
 
-		protected Renderer( int renderOrder, Camera camera )
+		protected Renderer(int renderOrder, Camera camera)
 		{
 			this.Camera = camera;
 			this.RenderOrder = renderOrder;
@@ -84,15 +86,16 @@ namespace Nez
 		/// called when the Renderer is added to the Scene
 		/// </summary>
 		/// <param name="scene">Scene.</param>
-		public virtual void OnAddedToScene( Scene scene )
-		{}
+		public virtual void OnAddedToScene(Scene scene)
+		{
+		}
 
 		/// <summary>
 		/// called when a scene is ended or this Renderer is removed from the Scene. use this for cleanup.
 		/// </summary>
 		public virtual void Unload()
 		{
-			if( RenderTexture != null )
+			if (RenderTexture != null)
 				RenderTexture.Dispose();
 		}
 
@@ -101,53 +104,53 @@ namespace Nez
 		/// (if a ViewportAdapter is present) and for the Batcher transform Matrix.
 		/// </summary>
 		/// <param name="cam">Cam.</param>
-		protected virtual void BeginRender( Camera cam )
+		protected virtual void BeginRender(Camera cam)
 		{
 			// if we have a renderTarget render into it
-			if( RenderTexture != null )
+			if (RenderTexture != null)
 			{
-                GraphicsDeviceExt.SetRenderTarget(Core.GraphicsDevice, RenderTexture);
-				Core.GraphicsDevice.Clear( RenderTargetClearColor );
+				GraphicsDeviceExt.SetRenderTarget(Core.GraphicsDevice, RenderTexture);
+				Core.GraphicsDevice.Clear(RenderTargetClearColor);
 			}
 
 			_currentMaterial = Material;
-			Graphics.Instance.Batcher.Begin( _currentMaterial, cam.TransformMatrix );
+			Graphics.Instance.Batcher.Begin(_currentMaterial, cam.TransformMatrix);
 		}
 
-		abstract public void Render( Scene scene );
+		abstract public void Render(Scene scene);
 
 		/// <summary>
 		/// renders the RenderableComponent flushing the Batcher and resetting current material if necessary
 		/// </summary>
 		/// <param name="renderable">Renderable.</param>
 		/// <param name="cam">Cam.</param>
-		[MethodImpl( MethodImplOptions.AggressiveInlining )]
-		protected void RenderAfterStateCheck( IRenderable renderable, Camera cam )
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		protected void RenderAfterStateCheck(IRenderable renderable, Camera cam)
 		{
 			// check for Material changes
-			if( renderable.Material != null && renderable.Material != _currentMaterial )
+			if (renderable.Material != null && renderable.Material != _currentMaterial)
 			{
 				_currentMaterial = renderable.Material;
-				if( _currentMaterial.Effect != null )
-					_currentMaterial.OnPreRender( cam );
-				FlushBatch( cam );
+				if (_currentMaterial.Effect != null)
+					_currentMaterial.OnPreRender(cam);
+				FlushBatch(cam);
 			}
-			else if( renderable.Material == null && _currentMaterial != Material )
+			else if (renderable.Material == null && _currentMaterial != Material)
 			{
 				_currentMaterial = Material;
-				FlushBatch( cam );
+				FlushBatch(cam);
 			}
 
-			renderable.Render( Graphics.Instance, cam );
+			renderable.Render(Graphics.Instance, cam);
 		}
 
 		/// <summary>
 		/// force flushes the Batcher by calling End then Begin on it.
 		/// </summary>
-		void FlushBatch( Camera cam )
+		void FlushBatch(Camera cam)
 		{
 			Graphics.Instance.Batcher.End();
-			Graphics.Instance.Batcher.Begin( _currentMaterial, cam.TransformMatrix );
+			Graphics.Instance.Batcher.Begin(_currentMaterial, cam.TransformMatrix);
 		}
 
 		/// <summary>
@@ -163,16 +166,16 @@ namespace Nez
 		/// at this point so you may want to call Batcher.End and Batcher.begin to clear out any Materials and items awaiting rendering.
 		/// </summary>
 		/// <param name="scene">Scene.</param>
-		protected virtual void DebugRender( Scene scene, Camera cam )
+		protected virtual void DebugRender(Scene scene, Camera cam)
 		{
 			Graphics.Instance.Batcher.End();
-			Graphics.Instance.Batcher.Begin( cam.TransformMatrix );
+			Graphics.Instance.Batcher.Begin(cam.TransformMatrix);
 
-			for( var i = 0; i < scene.Entities.Count; i++ )
+			for (var i = 0; i < scene.Entities.Count; i++)
 			{
 				var entity = scene.Entities[i];
-				if( entity.Enabled )
-					entity.DebugRender( Graphics.Instance );
+				if (entity.Enabled)
+					entity.DebugRender(Graphics.Instance);
 			}
 		}
 
@@ -183,14 +186,12 @@ namespace Nez
 		/// </summary>
 		/// <param name="newWidth">New width.</param>
 		/// <param name="newHeight">New height.</param>
-		public virtual void OnSceneBackBufferSizeChanged( int newWidth, int newHeight )
+		public virtual void OnSceneBackBufferSizeChanged(int newWidth, int newHeight)
 		{
-			if( RenderTexture != null )
-				RenderTexture.OnSceneBackBufferSizeChanged( newWidth, newHeight );
+			if (RenderTexture != null)
+				RenderTexture.OnSceneBackBufferSizeChanged(newWidth, newHeight);
 		}
 
-		public int CompareTo( Renderer other ) => RenderOrder.CompareTo( other.RenderOrder );
-	
+		public int CompareTo(Renderer other) => RenderOrder.CompareTo(other.RenderOrder);
 	}
 }
-

@@ -6,19 +6,18 @@ namespace Nez.Svg
 {
 	public class SvgRectangle : SvgElement
 	{
-		[XmlAttribute( "x" )]
-		public float X;
+		[XmlAttribute("x")] public float X;
 
-		[XmlAttribute( "y" )]
-		public float Y;
+		[XmlAttribute("y")] public float Y;
 
-		[XmlAttribute( "width" )]
-		public float Width;
+		[XmlAttribute("width")] public float Width;
 
-		[XmlAttribute( "height" )]
-		public float Height;
+		[XmlAttribute("height")] public float Height;
 
-		public Vector2 Center { get { return new Vector2( X + Width / 2, Y + Height / 2 ); } }
+		public Vector2 Center
+		{
+			get { return new Vector2(X + Width / 2, Y + Height / 2); }
+		}
 
 
 		/// <summary>
@@ -27,12 +26,15 @@ namespace Nez.Svg
 		/// <returns>The transformed points.</returns>
 		public Vector2[] GetTransformedPoints()
 		{
-			var pts = new Vector2[] { new Vector2( X, Y ), new Vector2( X + Width, Y ), new Vector2( X + Width, Y + Height ), new Vector2( X, Y + Height ) };
+			var pts = new Vector2[]
+			{
+				new Vector2(X, Y), new Vector2(X + Width, Y), new Vector2(X + Width, Y + Height),
+				new Vector2(X, Y + Height)
+			};
 			var mat = GetCombinedMatrix();
-			Vector2Ext.Transform( pts, ref mat, pts );
+			Vector2Ext.Transform(pts, ref mat, pts);
 
 			return pts;
 		}
-
 	}
 }

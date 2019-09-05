@@ -38,7 +38,7 @@ namespace Nez
 		/// </summary>
 		bool _isComponentListUnsorted;
 
-		public ComponentList( Entity entity )
+		public ComponentList(Entity entity)
 		{
 			_entity = entity;
 		}
@@ -46,9 +46,15 @@ namespace Nez
 
 		#region array access
 
-		public int Count { get { return _components.Length; } }
+		public int Count
+		{
+			get { return _components.Length; }
+		}
 
-		public Component this[int index] { get { return _components.Buffer[index]; } }
+		public Component this[int index]
+		{
+			get { return _components.Buffer[index]; }
+		}
 
 		#endregion
 
@@ -58,23 +64,24 @@ namespace Nez
 			_isComponentListUnsorted = true;
 		}
 
-		public void Add( Component component )
+		public void Add(Component component)
 		{
-			_componentsToAdd.Add( component );
+			_componentsToAdd.Add(component);
 		}
 
-		public void Remove( Component component )
+		public void Remove(Component component)
 		{
-			Debug.WarnIf( _componentsToRemove.Contains( component ), "You are trying to remove a Component ({0}) that you already removed", component );
+			Debug.WarnIf(_componentsToRemove.Contains(component),
+				"You are trying to remove a Component ({0}) that you already removed", component);
 
 			// this may not be a live Component so we have to watch out for if it hasnt been processed yet but it is being removed in the same frame
-			if( _componentsToAdd.Contains( component ) )
+			if (_componentsToAdd.Contains(component))
 			{
-				_componentsToAdd.Remove( component );
+				_componentsToAdd.Remove(component);
 				return;
 			}
-			
-			_componentsToRemove.Add( component );
+
+			_componentsToRemove.Add(component);
 		}
 
 		/// <summary>
@@ -82,8 +89,8 @@ namespace Nez
 		/// </summary>
 		public void RemoveAllComponents()
 		{
-			for( var i = 0; i < _components.Length; i++ )
-				HandleRemove( _components.Buffer[i] );
+			for (var i = 0; i < _components.Length; i++)
+				HandleRemove(_components.Buffer[i]);
 
 			_components.Clear();
 			_updatableComponents.Clear();
@@ -93,41 +100,41 @@ namespace Nez
 
 		internal void DeregisterAllComponents()
 		{
-			for( var i = 0; i < _components.Length; i++ )
+			for (var i = 0; i < _components.Length; i++)
 			{
 				var component = _components.Buffer[i];
 
 				// deal with renderLayer list if necessary
-				if( component is RenderableComponent )
-					_entity.Scene.RenderableComponents.Remove( component as RenderableComponent );
+				if (component is RenderableComponent)
+					_entity.Scene.RenderableComponents.Remove(component as RenderableComponent);
 
 				// deal with IUpdatable
-				if( component is IUpdatable )
-					_updatableComponents.Remove( component as IUpdatable );
+				if (component is IUpdatable)
+					_updatableComponents.Remove(component as IUpdatable);
 
-				if( Core.entitySystemsEnabled )
+				if (Core.entitySystemsEnabled)
 				{
-					_entity.componentBits.Set( ComponentTypeManager.GetIndexFor( component.GetType() ), false );
-					_entity.Scene.EntityProcessors.OnComponentRemoved( _entity );
+					_entity.componentBits.Set(ComponentTypeManager.GetIndexFor(component.GetType()), false);
+					_entity.Scene.EntityProcessors.OnComponentRemoved(_entity);
 				}
 			}
 		}
 
 		internal void RegisterAllComponents()
 		{
-			for( var i = 0; i < _components.Length; i++ )
+			for (var i = 0; i < _components.Length; i++)
 			{
 				var component = _components.Buffer[i];
-				if( component is RenderableComponent )
-					_entity.Scene.RenderableComponents.Add( component as RenderableComponent );
+				if (component is RenderableComponent)
+					_entity.Scene.RenderableComponents.Add(component as RenderableComponent);
 
-				if( component is IUpdatable )
-					_updatableComponents.Add( component as IUpdatable );
+				if (component is IUpdatable)
+					_updatableComponents.Add(component as IUpdatable);
 
-				if( Core.entitySystemsEnabled )
+				if (Core.entitySystemsEnabled)
 				{
-					_entity.componentBits.Set( ComponentTypeManager.GetIndexFor( component.GetType() ) );
-					_entity.Scene.EntityProcessors.OnComponentAdded( _entity );
+					_entity.componentBits.Set(ComponentTypeManager.GetIndexFor(component.GetType()));
+					_entity.Scene.EntityProcessors.OnComponentAdded(_entity);
 				}
 			}
 		}
@@ -139,36 +146,37 @@ namespace Nez
 		void UpdateLists()
 		{
 			// handle removals
-			if( _componentsToRemove.Count > 0 )
+			if (_componentsToRemove.Count > 0)
 			{
-				for( int i = 0; i < _componentsToRemove.Count; i++ )
+				for (int i = 0; i < _componentsToRemove.Count; i++)
 				{
-					HandleRemove( _componentsToRemove[i] );
-					_components.Remove( _componentsToRemove[i] );
+					HandleRemove(_componentsToRemove[i]);
+					_components.Remove(_componentsToRemove[i]);
 				}
+
 				_componentsToRemove.Clear();
 			}
 
 			// handle additions
-			if( _componentsToAdd.Count > 0 )
+			if (_componentsToAdd.Count > 0)
 			{
-				for( int i = 0, count = _componentsToAdd.Count; i < count; i++ )
+				for (int i = 0, count = _componentsToAdd.Count; i < count; i++)
 				{
 					var component = _componentsToAdd[i];
-					if( component is RenderableComponent )
-						_entity.Scene.RenderableComponents.Add( component as RenderableComponent );
+					if (component is RenderableComponent)
+						_entity.Scene.RenderableComponents.Add(component as RenderableComponent);
 
-					if( component is IUpdatable )
-						_updatableComponents.Add( component as IUpdatable );
+					if (component is IUpdatable)
+						_updatableComponents.Add(component as IUpdatable);
 
-					if( Core.entitySystemsEnabled )
+					if (Core.entitySystemsEnabled)
 					{
-						_entity.componentBits.Set( ComponentTypeManager.GetIndexFor( component.GetType() ) );
-						_entity.Scene.EntityProcessors.OnComponentAdded( _entity );
+						_entity.componentBits.Set(ComponentTypeManager.GetIndexFor(component.GetType()));
+						_entity.Scene.EntityProcessors.OnComponentAdded(_entity);
 					}
 
-					_components.Add( component );
-					_tempBufferList.Add( component );
+					_components.Add(component);
+					_tempBufferList.Add(component);
 				}
 
 				// clear before calling onAddedToEntity in case more Components are added then
@@ -176,40 +184,40 @@ namespace Nez
 				_isComponentListUnsorted = true;
 
 				// now that all components are added to the scene, we loop through again and call onAddedToEntity/onEnabled
-				for( var i = 0; i < _tempBufferList.Count; i++ )
+				for (var i = 0; i < _tempBufferList.Count; i++)
 				{
 					var component = _tempBufferList[i];
 					component.OnAddedToEntity();
 
 					// component.enabled checks both the Entity and the Component
-					if( component.Enabled )
+					if (component.Enabled)
 						component.OnEnabled();
 				}
 
 				_tempBufferList.Clear();
 			}
 
-			if( _isComponentListUnsorted )
+			if (_isComponentListUnsorted)
 			{
-				_updatableComponents.Sort( compareUpdatableOrder );
+				_updatableComponents.Sort(compareUpdatableOrder);
 				_isComponentListUnsorted = false;
 			}
 		}
 
-		void HandleRemove( Component component )
+		void HandleRemove(Component component)
 		{
 			// deal with renderLayer list if necessary
-			if( component is RenderableComponent )
-				_entity.Scene.RenderableComponents.Remove( component as RenderableComponent );
+			if (component is RenderableComponent)
+				_entity.Scene.RenderableComponents.Remove(component as RenderableComponent);
 
 			// deal with IUpdatable
-			if( component is IUpdatable )
-				_updatableComponents.Remove( component as IUpdatable );
+			if (component is IUpdatable)
+				_updatableComponents.Remove(component as IUpdatable);
 
-			if( Core.entitySystemsEnabled )
+			if (Core.entitySystemsEnabled)
 			{
-				_entity.componentBits.Set( ComponentTypeManager.GetIndexFor( component.GetType() ), false );
-				_entity.Scene.EntityProcessors.OnComponentRemoved( _entity );
+				_entity.componentBits.Set(ComponentTypeManager.GetIndexFor(component.GetType()), false);
+				_entity.Scene.EntityProcessors.OnComponentRemoved(_entity);
 			}
 
 			component.OnRemovedFromEntity();
@@ -223,23 +231,23 @@ namespace Nez
 		/// <returns>The component.</returns>
 		/// <param name="onlyReturnInitializedComponents">If set to <c>true</c> only return initialized components.</param>
 		/// <typeparam name="T">The 1st type parameter.</typeparam>
-		[MethodImpl( MethodImplOptions.AggressiveInlining )]
-		public T GetComponent<T>( bool onlyReturnInitializedComponents ) where T : Component
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public T GetComponent<T>(bool onlyReturnInitializedComponents) where T : Component
 		{
-			for( var i = 0; i < _components.Length; i++ )
+			for (var i = 0; i < _components.Length; i++)
 			{
 				var component = _components.Buffer[i];
-				if( component is T )
+				if (component is T)
 					return component as T;
 			}
 
 			// we optionally check the pending components just in case addComponent and getComponent are called in the same frame
-			if( !onlyReturnInitializedComponents )
+			if (!onlyReturnInitializedComponents)
 			{
-				for( var i = 0; i < _componentsToAdd.Count; i++ )
+				for (var i = 0; i < _componentsToAdd.Count; i++)
 				{
 					var component = _componentsToAdd[i];
-					if( component is T )
+					if (component is T)
 						return component as T;
 				}
 			}
@@ -252,22 +260,22 @@ namespace Nez
 		/// </summary>
 		/// <param name="components">Components.</param>
 		/// <typeparam name="T">The 1st type parameter.</typeparam>
-		[MethodImpl( MethodImplOptions.AggressiveInlining )]
-		public void GetComponents<T>( List<T> components ) where T : class
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public void GetComponents<T>(List<T> components) where T : class
 		{
-			for( var i = 0; i < _components.Length; i++ )
+			for (var i = 0; i < _components.Length; i++)
 			{
 				var component = _components.Buffer[i];
-				if( component is T )
-					components.Add( component as T );
+				if (component is T)
+					components.Add(component as T);
 			}
 
 			// we also check the pending components just in case addComponent and getComponent are called in the same frame
-			for( var i = 0; i < _componentsToAdd.Count; i++ )
+			for (var i = 0; i < _componentsToAdd.Count; i++)
 			{
 				var component = _componentsToAdd[i];
-				if( component is T )
-					components.Add( component as T );
+				if (component is T)
+					components.Add(component as T);
 			}
 		}
 
@@ -276,63 +284,61 @@ namespace Nez
 		/// </summary>
 		/// <returns>The components.</returns>
 		/// <typeparam name="T">The 1st type parameter.</typeparam>
-		[MethodImpl( MethodImplOptions.AggressiveInlining )]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public List<T> GetComponents<T>() where T : class
 		{
 			var components = ListPool<T>.Obtain();
-			GetComponents( components );
+			GetComponents(components);
 
 			return components;
 		}
 
-		[MethodImpl( MethodImplOptions.AggressiveInlining )]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		internal void Update()
 		{
 			UpdateLists();
-			for( var i = 0; i < _updatableComponents.Length; i++ )
+			for (var i = 0; i < _updatableComponents.Length; i++)
 			{
-				if( _updatableComponents.Buffer[i].Enabled && ( _updatableComponents.Buffer[i] as Component ).Enabled )
+				if (_updatableComponents.Buffer[i].Enabled && (_updatableComponents.Buffer[i] as Component).Enabled)
 					_updatableComponents.Buffer[i].Update();
 			}
 		}
 
-		[MethodImpl( MethodImplOptions.AggressiveInlining )]
-		internal void OnEntityTransformChanged( Transform.Component comp )
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		internal void OnEntityTransformChanged(Transform.Component comp)
 		{
-			for( var i = 0; i < _components.Length; i++ )
+			for (var i = 0; i < _components.Length; i++)
 			{
-				if( _components.Buffer[i].Enabled )
-					_components.Buffer[i].OnEntityTransformChanged( comp );
+				if (_components.Buffer[i].Enabled)
+					_components.Buffer[i].OnEntityTransformChanged(comp);
 			}
 
-			for( var i = 0; i < _componentsToAdd.Count; i++ )
+			for (var i = 0; i < _componentsToAdd.Count; i++)
 			{
-				if( _componentsToAdd[i].Enabled )
-					_componentsToAdd[i].OnEntityTransformChanged( comp );
+				if (_componentsToAdd[i].Enabled)
+					_componentsToAdd[i].OnEntityTransformChanged(comp);
 			}
 		}
 
 		internal void OnEntityEnabled()
 		{
-			for( var i = 0; i < _components.Length; i++ )
+			for (var i = 0; i < _components.Length; i++)
 				_components.Buffer[i].OnEnabled();
 		}
 
 		internal void OnEntityDisabled()
 		{
-			for( var i = 0; i < _components.Length; i++ )
+			for (var i = 0; i < _components.Length; i++)
 				_components.Buffer[i].OnDisabled();
 		}
 
-		internal void DebugRender( Graphics graphics )
+		internal void DebugRender(Graphics graphics)
 		{
-			for( var i = 0; i < _components.Length; i++ )
+			for (var i = 0; i < _components.Length; i++)
 			{
-				if( _components.Buffer[i].Enabled )
-					_components.Buffer[i].DebugRender( graphics );
+				if (_components.Buffer[i].Enabled)
+					_components.Buffer[i].DebugRender(graphics);
 			}
 		}
-
 	}
 }
-

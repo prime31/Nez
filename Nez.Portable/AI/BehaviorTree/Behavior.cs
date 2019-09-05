@@ -11,7 +11,7 @@ namespace Nez.AI.BehaviorTrees
 		public TaskStatus Status = TaskStatus.Invalid;
 
 
-		public abstract TaskStatus Update( T context );
+		public abstract TaskStatus Update(T context);
 
 
 		/// <summary>
@@ -27,33 +27,33 @@ namespace Nez.AI.BehaviorTrees
 		/// called immediately before execution. It is used to setup any variables that need to be reset from the previous run
 		/// </summary>
 		public virtual void OnStart()
-		{}
+		{
+		}
 
 
 		/// <summary>
 		/// called when a task changes state to something other than running
 		/// </summary>
 		public virtual void OnEnd()
-		{}
+		{
+		}
 
 
 		/// <summary>
 		/// tick handles calling through to update where the actual work is done. It exists so that it can call onStart/onEnd when necessary.
 		/// </summary>
 		/// <param name="context">Context.</param>
-		internal TaskStatus Tick( T context )
+		internal TaskStatus Tick(T context)
 		{
-			if( Status == TaskStatus.Invalid )
+			if (Status == TaskStatus.Invalid)
 				OnStart();
 
-			Status = Update( context );
+			Status = Update(context);
 
-			if( Status != TaskStatus.Running )
+			if (Status != TaskStatus.Running)
 				OnEnd();
 
 			return Status;
 		}
-
 	}
 }
-

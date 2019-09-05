@@ -25,7 +25,7 @@ namespace Nez.Sprites
 		public float Fps
 		{
 			get { return _fps; }
-			set { SetFps( value ); }
+			set { SetFps(value); }
 		}
 
 		/// <summary>
@@ -35,7 +35,7 @@ namespace Nez.Sprites
 		public bool Loop
 		{
 			get { return _loop; }
-			set { SetLoop( value ); }
+			set { SetLoop(value); }
 		}
 
 		/// <summary>
@@ -45,7 +45,7 @@ namespace Nez.Sprites
 		public bool PingPong
 		{
 			get { return _pingPong; }
-			set { SetPingPong( value ); }
+			set { SetPingPong(value); }
 		}
 
 		public float Delay = 0f;
@@ -64,18 +64,19 @@ namespace Nez.Sprites
 
 
 		public SpriteAnimation()
-		{}
-
-
-		public SpriteAnimation( Subtexture frame )
 		{
-			AddFrame( frame );
 		}
 
 
-		public SpriteAnimation( List<Subtexture> frames )
+		public SpriteAnimation(Subtexture frame)
 		{
-			AddFrames( frames );
+			AddFrame(frame);
+		}
+
+
+		public SpriteAnimation(List<Subtexture> frames)
+		{
+			AddFrames(frames);
 		}
 
 
@@ -85,15 +86,15 @@ namespace Nez.Sprites
 		/// <returns>The for use.</returns>
 		public void PrepareForUse()
 		{
-			if( !_isDirty )
+			if (!_isDirty)
 				return;
 
 			SecondsPerFrame = 1f / Fps;
-			IterationDuration = SecondsPerFrame * (float)Frames.Count;
+			IterationDuration = SecondsPerFrame * (float) Frames.Count;
 
-			if( Loop )
+			if (Loop)
 				TotalDuration = float.PositiveInfinity;
-			else if( PingPong )
+			else if (PingPong)
 				TotalDuration = IterationDuration * 2f;
 			else
 				TotalDuration = IterationDuration;
@@ -106,15 +107,15 @@ namespace Nez.Sprites
 		/// sets the origin for all frames in this animation
 		/// </summary>
 		/// <param name="origin"></param>
-		public SpriteAnimation SetOrigin( Vector2 origin )
+		public SpriteAnimation SetOrigin(Vector2 origin)
 		{
-			for( var i = 0; i < Frames.Count; i++ )
+			for (var i = 0; i < Frames.Count; i++)
 				Frames[i].Origin = origin;
 			return this;
 		}
 
 
-		public SpriteAnimation SetFps( float fps )
+		public SpriteAnimation SetFps(float fps)
 		{
 			_fps = fps;
 			_isDirty = true;
@@ -122,7 +123,7 @@ namespace Nez.Sprites
 		}
 
 
-		public SpriteAnimation SetLoop( bool loop )
+		public SpriteAnimation SetLoop(bool loop)
 		{
 			_loop = loop;
 			_isDirty = true;
@@ -130,7 +131,7 @@ namespace Nez.Sprites
 		}
 
 
-		public SpriteAnimation SetPingPong( bool pingPong )
+		public SpriteAnimation SetPingPong(bool pingPong)
 		{
 			_pingPong = pingPong;
 			_isDirty = true;
@@ -142,9 +143,9 @@ namespace Nez.Sprites
 		/// adds a frame to this animation
 		/// </summary>
 		/// <param name="subtexture">Subtexture.</param>
-		public SpriteAnimation AddFrame( Subtexture subtexture )
+		public SpriteAnimation AddFrame(Subtexture subtexture)
 		{
-			Frames.Add( subtexture );
+			Frames.Add(subtexture);
 			return this;
 		}
 
@@ -154,13 +155,11 @@ namespace Nez.Sprites
 		/// </summary>
 		/// <returns>The frames.</returns>
 		/// <param name="subtextures">Subtextures.</param>
-		public SpriteAnimation AddFrames( List<Subtexture> subtextures )
+		public SpriteAnimation AddFrames(List<Subtexture> subtextures)
 		{
-			for( var i = 0; i < subtextures.Count; i++ )
-				AddFrame( subtextures[i] );
+			for (var i = 0; i < subtextures.Count; i++)
+				AddFrame(subtextures[i]);
 			return this;
 		}
-
 	}
 }
-

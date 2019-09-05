@@ -10,8 +10,8 @@ namespace Nez.Tiled
 		/// </summary>
 		/// <returns>The slope.</returns>
 		/// <param name="self">Self.</param>
-		[MethodImpl( MethodImplOptions.AggressiveInlining )]
-		public static bool IsSlope( this TiledTile self )
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public static bool IsSlope(this TiledTile self)
 		{
 			return self.TilesetTile != null && self.TilesetTile.IsSlope;
 		}
@@ -22,8 +22,8 @@ namespace Nez.Tiled
 		/// </summary>
 		/// <returns>The one way platform.</returns>
 		/// <param name="self">Self.</param>
-		[MethodImpl( MethodImplOptions.AggressiveInlining )]
-		public static bool IsOneWayPlatform( this TiledTile self )
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public static bool IsOneWayPlatform(this TiledTile self)
 		{
 			return self.TilesetTile != null && self.TilesetTile.IsOneWayPlatform;
 		}
@@ -34,14 +34,14 @@ namespace Nez.Tiled
 		/// </summary>
 		/// <returns>The slope top left.</returns>
 		/// <param name="self">Self.</param>
-		[MethodImpl( MethodImplOptions.AggressiveInlining )]
-		public static int GetSlopeTopLeft( this TiledTile self )
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public static int GetSlopeTopLeft(this TiledTile self)
 		{
-			if( self.FlippedHorizonally && self.FlippedVertically )
+			if (self.FlippedHorizonally && self.FlippedVertically)
 				return self.TilesetTile.SlopeTopLeft;
-			if( self.FlippedHorizonally )
+			if (self.FlippedHorizonally)
 				return self.TilesetTile.SlopeTopRight;
-			if( self.FlippedVertically )
+			if (self.FlippedVertically)
 				return self.TilesetTile.TiledMap.TileWidth - self.TilesetTile.SlopeTopLeft;
 
 			return self.TilesetTile.SlopeTopLeft;
@@ -53,14 +53,14 @@ namespace Nez.Tiled
 		/// </summary>
 		/// <returns>The slope top right.</returns>
 		/// <param name="self">Self.</param>
-		[MethodImpl( MethodImplOptions.AggressiveInlining )]
-		public static int GetSlopeTopRight( this TiledTile self )
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public static int GetSlopeTopRight(this TiledTile self)
 		{
-			if( self.FlippedHorizonally && self.FlippedVertically )
+			if (self.FlippedHorizonally && self.FlippedVertically)
 				return self.TilesetTile.SlopeTopRight;
-			if( self.FlippedHorizonally )
+			if (self.FlippedHorizonally)
 				return self.TilesetTile.SlopeTopLeft;
-			if( self.FlippedVertically )
+			if (self.FlippedVertically)
 				return self.TilesetTile.TiledMap.TileWidth - self.TilesetTile.SlopeTopRight;
 
 			return self.TilesetTile.SlopeTopRight;
@@ -73,20 +73,20 @@ namespace Nez.Tiled
 		/// <returns>The slope.</returns>
 		/// <param name="self">Self.</param>
 		/// <param name="tileSize">Tile width.</param>
-		[MethodImpl( MethodImplOptions.AggressiveInlining )]
-		public static float GetSlope( this TiledTile self )
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public static float GetSlope(this TiledTile self)
 		{
 			var tileSize = self.TilesetTile.TiledMap.TileWidth;
 
 			// flip our slopes sign if the tile is flipped horizontally or vertically
-			if( self.FlippedHorizonally )
+			if (self.FlippedHorizonally)
 				tileSize *= -1;
 
-			if( self.FlippedVertically )
+			if (self.FlippedVertically)
 				tileSize *= -1;
 
 			// rise over run
-			return ( (float)self.TilesetTile.SlopeTopRight - (float)self.TilesetTile.SlopeTopLeft ) / (float)tileSize;
+			return ((float) self.TilesetTile.SlopeTopRight - (float) self.TilesetTile.SlopeTopLeft) / (float) tileSize;
 		}
 
 
@@ -95,10 +95,10 @@ namespace Nez.Tiled
 		/// </summary>
 		/// <returns>The slope offset.</returns>
 		/// <param name="self">Self.</param>
-		[MethodImpl( MethodImplOptions.AggressiveInlining )]
-		public static float GetSlopeOffset( this TiledTile self )
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public static float GetSlopeOffset(this TiledTile self)
 		{
-			return (float)self.GetSlopeTopLeft();
+			return (float) self.GetSlopeTopLeft();
 		}
 
 
@@ -107,8 +107,8 @@ namespace Nez.Tiled
 		/// </summary>
 		/// <returns>The bigest slope edge.</returns>
 		/// <param name="self">Self.</param>
-		[MethodImpl( MethodImplOptions.AggressiveInlining )]
-		public static Edge GetHighestSlopeEdge( this TiledTile self )
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public static Edge GetHighestSlopeEdge(this TiledTile self)
 		{
 			// left and right already have flipping taken into account. Also remember a lower value means a taller slope since the slope values
 			// are in pixels from the top!
@@ -124,14 +124,12 @@ namespace Nez.Tiled
 		/// <returns>The nearest edge.</returns>
 		/// <param name="self">Self.</param>
 		/// <param name="worldPosition">World position.</param>
-		[MethodImpl( MethodImplOptions.AggressiveInlining )]
-		public static Edge GetNearestEdge( this TiledTile self, int worldPosition )
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public static Edge GetNearestEdge(this TiledTile self, int worldPosition)
 		{
 			var tileWidth = self.TilesetTile.TiledMap.TileWidth;
 			var tileMiddleWorldPosition = self.X * tileWidth + tileWidth / 2;
 			return worldPosition < tileMiddleWorldPosition ? Edge.Left : Edge.Right;
 		}
-
 	}
 }
-

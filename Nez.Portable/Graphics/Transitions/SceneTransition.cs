@@ -51,7 +51,7 @@ namespace Nez
 		{
 			get
 			{
-				if( !_hasPreviousSceneRender )
+				if (!_hasPreviousSceneRender)
 				{
 					_hasPreviousSceneRender = true;
 					return false;
@@ -67,10 +67,10 @@ namespace Nez
 		/// </summary>
 		public Action OnScreenObscured;
 
-        /// <summary>
-        /// called when the Transition has completed it's execution, so that other work can be called, such as Starting another transition.
-        /// </summary>
-        public Action OnTransitionCompleted;
+		/// <summary>
+		/// called when the Transition has completed it's execution, so that other work can be called, such as Starting another transition.
+		/// </summary>
+		public Action OnTransitionCompleted;
 
 		/// <summary>
 		/// flag indicating if this transition will load a new scene or not
@@ -83,52 +83,54 @@ namespace Nez
 		/// use this for two part transitions. For example, a fade would fade to black first then when _isNewSceneLoaded becomes true it would
 		/// fade in. For in-Scene transitions _isNewSceneLoaded should be set to true at the midpoint just as if a new Scene was loaded.
 		/// </summary>
-		internal  bool _isNewSceneLoaded;
+		internal bool _isNewSceneLoaded;
 
 
-		protected SceneTransition( bool wantsPreviousSceneRender = true ) : this( null, wantsPreviousSceneRender )
-		{}
+		protected SceneTransition(bool wantsPreviousSceneRender = true) : this(null, wantsPreviousSceneRender)
+		{
+		}
 
-		protected SceneTransition( Func<Scene> sceneLoadAction, bool wantsPreviousSceneRender = true )
+		protected SceneTransition(Func<Scene> sceneLoadAction, bool wantsPreviousSceneRender = true)
 		{
 			this.sceneLoadAction = sceneLoadAction;
 			this.WantsPreviousSceneRender = wantsPreviousSceneRender;
 			_loadsNewScene = sceneLoadAction != null;
 
 			// create a RenderTarget if we need to for later
-			if( wantsPreviousSceneRender )
-				PreviousSceneRender = new RenderTarget2D( Core.GraphicsDevice, Screen.Width, Screen.Height, false, Screen.BackBufferFormat, DepthFormat.None, 0, RenderTargetUsage.PreserveContents );
+			if (wantsPreviousSceneRender)
+				PreviousSceneRender = new RenderTarget2D(Core.GraphicsDevice, Screen.Width, Screen.Height, false,
+					Screen.BackBufferFormat, DepthFormat.None, 0, RenderTargetUsage.PreserveContents);
 		}
 
 		protected IEnumerator LoadNextScene()
 		{
 			// let the listener know the screen is obscured if we have one
-			if( OnScreenObscured != null )
+			if (OnScreenObscured != null)
 				OnScreenObscured();
-			
+
 			// if we arent loading a new scene we just set the flag as if we did so that the 2 phase transitions complete
-			if( !_loadsNewScene )
+			if (!_loadsNewScene)
 			{
 				_isNewSceneLoaded = true;
 				yield break;
 			}
-			
-			if( LoadSceneOnBackgroundThread )
+
+			if (LoadSceneOnBackgroundThread)
 			{
 				// load the Scene on a background thread
-				Task.Run( () =>
+				Task.Run(() =>
 				{
 					var scene = sceneLoadAction();
 
 					// get back to the main thread before setting the new Scene active. This isnt fantastic seeing as how
 					// the scheduler is not thread-safe but it should be empty between Scenes and SynchronizationContext.Current
 					// is null for some reason
-					Core.Schedule( 0, false, null, timer =>
+					Core.Schedule(0, false, null, timer =>
 					{
 						Core.Scene = scene;
 						_isNewSceneLoaded = true;
 					});
-				} );
+				});
 			}
 			else
 			{
@@ -137,7 +139,7 @@ namespace Nez
 			}
 
 			// wait for the scene to load if it was loaded on a background thread
-			while( !_isNewSceneLoaded )
+			while (!_isNewSceneLoaded)
 				yield return null;
 		}
 
@@ -148,7 +150,8 @@ namespace Nez
 		public virtual IEnumerator OnBeginTransition()
 		{
 			yield return null;
-			yield return Core.StartCoroutine( LoadNextScene() );
+			yield return Core.StartCoroutine(LoadNextScene());
+
 			TransitionComplete();
 		}
 
@@ -157,19 +160,20 @@ namespace Nez
 		/// clearing the framebuffer when a RenderTarget is used.
 		/// </summary>
 		/// <param name="graphics">Graphics.</param>
-		public virtual void PreRender( Graphics graphics )
-		{}
+		public virtual void PreRender(Graphics graphics)
+		{
+		}
 
 		/// <summary>
 		/// do all of your rendering here.static This is a base implementation. Any special rendering should override
 		/// this method.
 		/// </summary>
 		/// <param name="graphics">Graphics.</param>
-		public virtual void Render( Graphics graphics )
+		public virtual void Render(Graphics graphics)
 		{
-            GraphicsDeviceExt.SetRenderTarget(Core.GraphicsDevice, null);
-			graphics.Batcher.Begin( BlendState.Opaque, Core.DefaultSamplerState, DepthStencilState.None, null );
-			graphics.Batcher.Draw( PreviousSceneRender, Vector2.Zero, Color.White );
+			GraphicsDeviceExt.SetRenderTarget(Core.GraphicsDevice, null);
+			graphics.Batcher.Begin(BlendState.Opaque, Core.DefaultSamplerState, DepthStencilState.None, null);
+			graphics.Batcher.Draw(PreviousSceneRender, Vector2.Zero, Color.White);
 			graphics.Batcher.End();
 		}
 
@@ -180,14 +184,14 @@ namespace Nez
 		{
 			Core._instance._sceneTransition = null;
 
-			if( PreviousSceneRender != null )
+			if (PreviousSceneRender != null)
 			{
 				PreviousSceneRender.Dispose();
 				PreviousSceneRender = null;
 			}
 
-            if( OnTransitionCompleted != null )
-                OnTransitionCompleted();
+			if (OnTransitionCompleted != null)
+				OnTransitionCompleted();
 		}
 
 		/// <summary>
@@ -196,23 +200,23 @@ namespace Nez
 		/// </summary>
 		/// <param name="duration">duration</param>
 		/// <param name="reverseDirection">if true, _progress will go from 1 to 0. If false, it goes form 0 to 1</param>
-		public IEnumerator TickEffectProgressProperty( Effect effect, float duration, EaseType easeType = EaseType.ExpoOut, bool reverseDirection = false )
+		public IEnumerator TickEffectProgressProperty(Effect effect, float duration,
+		                                              EaseType easeType = EaseType.ExpoOut,
+		                                              bool reverseDirection = false)
 		{
 			var start = reverseDirection ? 1f : 0f;
 			var end = reverseDirection ? 0f : 1f;
 			var progressParam = effect.Parameters["_progress"];
 
 			var elapsed = 0f;
-			while( elapsed < duration )
+			while (elapsed < duration)
 			{
 				elapsed += Time.DeltaTime;
-				var step = Lerps.Ease( easeType, start, end, elapsed, duration );
-				progressParam.SetValue( step );
+				var step = Lerps.Ease(easeType, start, end, elapsed, duration);
+				progressParam.SetValue(step);
 
 				yield return null;
 			}
 		}
-
 	}
 }
-

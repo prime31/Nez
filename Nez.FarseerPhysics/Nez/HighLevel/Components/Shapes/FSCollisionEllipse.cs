@@ -12,47 +12,53 @@ namespace Nez.Farseer
 
 
 		public FSCollisionEllipse()
-		{}
-
-
-		public FSCollisionEllipse( float xRadius, float yRadius ) : this( xRadius, yRadius, Settings.MaxPolygonVertices )
-		{}
-
-
-		public FSCollisionEllipse( float xRadius, float yRadius, int edgeCount )
 		{
-			Insist.IsFalse( edgeCount > Settings.MaxPolygonVertices, "edgeCount must be less than Settings.maxPolygonVertices" );
+		}
+
+
+		public FSCollisionEllipse(float xRadius, float yRadius) : this(xRadius, yRadius, Settings.MaxPolygonVertices)
+		{
+		}
+
+
+		public FSCollisionEllipse(float xRadius, float yRadius, int edgeCount)
+		{
+			Insist.IsFalse(edgeCount > Settings.MaxPolygonVertices,
+				"edgeCount must be less than Settings.maxPolygonVertices");
 
 			_xRadius = xRadius;
 			_yRadius = yRadius;
 			_edgeCount = edgeCount;
-			_verts = PolygonTools.CreateEllipse( _xRadius * FSConvert.DisplayToSim, _yRadius * FSConvert.DisplayToSim, _edgeCount );
+			_verts = PolygonTools.CreateEllipse(_xRadius * FSConvert.DisplayToSim, _yRadius * FSConvert.DisplayToSim,
+				_edgeCount);
 		}
 
 
 		#region Configuration
 
-		public FSCollisionEllipse SetRadii( float xRadius, float yRadius )
+		public FSCollisionEllipse SetRadii(float xRadius, float yRadius)
 		{
 			_xRadius = xRadius;
 			_yRadius = yRadius;
-			_verts = PolygonTools.CreateEllipse( _xRadius * FSConvert.DisplayToSim, _yRadius * FSConvert.DisplayToSim, _edgeCount );
+			_verts = PolygonTools.CreateEllipse(_xRadius * FSConvert.DisplayToSim, _yRadius * FSConvert.DisplayToSim,
+				_edgeCount);
 			RecreateFixture();
 			return this;
 		}
 
 
-		public FSCollisionEllipse SetEdgeCount( int edgeCount )
+		public FSCollisionEllipse SetEdgeCount(int edgeCount)
 		{
-			Insist.IsFalse( edgeCount > Settings.MaxPolygonVertices, "edgeCount must be less than Settings.maxPolygonVertices" );
+			Insist.IsFalse(edgeCount > Settings.MaxPolygonVertices,
+				"edgeCount must be less than Settings.maxPolygonVertices");
 
 			_edgeCount = edgeCount;
-			_verts = PolygonTools.CreateEllipse( _xRadius * FSConvert.DisplayToSim, _yRadius * FSConvert.DisplayToSim, _edgeCount );
+			_verts = PolygonTools.CreateEllipse(_xRadius * FSConvert.DisplayToSim, _yRadius * FSConvert.DisplayToSim,
+				_edgeCount);
 			RecreateFixture();
 			return this;
 		}
 
 		#endregion
-
 	}
 }

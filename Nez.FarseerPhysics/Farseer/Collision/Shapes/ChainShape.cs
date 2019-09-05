@@ -83,7 +83,7 @@ namespace FarseerPhysics.Collision.Shapes
 		/// <summary>
 		/// Constructor for ChainShape. By default have 0 in density.
 		/// </summary>
-		public ChainShape() : base( 0 )
+		public ChainShape() : base(0)
 		{
 			ShapeType = ShapeType.Chain;
 			_radius = Settings.PolygonRadius;
@@ -94,12 +94,12 @@ namespace FarseerPhysics.Collision.Shapes
 		/// </summary>
 		/// <param name="vertices">The vertices to use. Must contain 2 or more vertices.</param>
 		/// <param name="createLoop">Set to true to create a closed loop. It connects the first vertice to the last, and automatically adjusts connectivity to create smooth collisions along the chain.</param>
-		public ChainShape( Vertices vertices, bool createLoop = false ) : base( 0 )
+		public ChainShape(Vertices vertices, bool createLoop = false) : base(0)
 		{
 			ShapeType = ShapeType.Chain;
 			_radius = Settings.PolygonRadius;
 
-			SetVertices( vertices, createLoop );
+			SetVertices(vertices, createLoop);
 		}
 
 		/// <summary>
@@ -107,10 +107,10 @@ namespace FarseerPhysics.Collision.Shapes
 		/// </summary>
 		/// <param name="edge">The cached edge to set properties on.</param>
 		/// <param name="index">The index.</param>
-		internal void GetChildEdge( EdgeShape edge, int index )
+		internal void GetChildEdge(EdgeShape edge, int index)
 		{
-			Debug.Assert( 0 <= index && index < Vertices.Count - 1 );
-			Debug.Assert( edge != null );
+			Debug.Assert(0 <= index && index < Vertices.Count - 1);
+			Debug.Assert(edge != null);
 
 			edge.ShapeType = ShapeType.Edge;
 			edge._radius = _radius;
@@ -118,7 +118,7 @@ namespace FarseerPhysics.Collision.Shapes
 			edge.Vertex1 = Vertices[index + 0];
 			edge.Vertex2 = Vertices[index + 1];
 
-			if( index > 0 )
+			if (index > 0)
 			{
 				edge.Vertex0 = Vertices[index - 1];
 				edge.HasVertex0 = true;
@@ -129,7 +129,7 @@ namespace FarseerPhysics.Collision.Shapes
 				edge.HasVertex0 = _hasPrevVertex;
 			}
 
-			if( index < Vertices.Count - 2 )
+			if (index < Vertices.Count - 2)
 			{
 				edge.Vertex3 = Vertices[index + 2];
 				edge.HasVertex3 = true;
@@ -145,71 +145,77 @@ namespace FarseerPhysics.Collision.Shapes
 		/// Get a child edge.
 		/// </summary>
 		/// <param name="index">The index.</param>
-		public EdgeShape GetChildEdge( int index )
+		public EdgeShape GetChildEdge(int index)
 		{
 			var edgeShape = new EdgeShape();
-			GetChildEdge( edgeShape, index );
+			GetChildEdge(edgeShape, index);
 			return edgeShape;
 		}
 
-		public void SetVertices( Vertices vertices, bool createLoop = false )
+		public void SetVertices(Vertices vertices, bool createLoop = false)
 		{
-			Debug.Assert( vertices != null && vertices.Count >= 3 );
-			Debug.Assert( vertices[0] != vertices[vertices.Count - 1] ); // FPE. See http://www.box2d.org/forum/viewtopic.php?f=4&t=7973&p=35363
+			Debug.Assert(vertices != null && vertices.Count >= 3);
+			Debug.Assert(vertices[0] !=
+			             vertices[
+				             vertices.Count -
+				             1]); // FPE. See http://www.box2d.org/forum/viewtopic.php?f=4&t=7973&p=35363
 
-			for( int i = 1; i < vertices.Count; ++i )
+			for (int i = 1; i < vertices.Count; ++i)
 			{
 				var v1 = vertices[i - 1];
 				var v2 = vertices[i];
 
 				// If the code crashes here, it means your vertices are too close together.
-				Debug.Assert( Vector2.DistanceSquared( v1, v2 ) > Settings.LinearSlop * Settings.LinearSlop );
+				Debug.Assert(Vector2.DistanceSquared(v1, v2) > Settings.LinearSlop * Settings.LinearSlop);
 			}
 
 			this.Vertices = vertices;
 
-			if( createLoop )
+			if (createLoop)
 			{
-				this.Vertices.Add( vertices[0] );
-				PrevVertex = this.Vertices[this.Vertices.Count - 2]; // FPE: We use the properties instead of the private fields here.
+				this.Vertices.Add(vertices[0]);
+				PrevVertex =
+					this.Vertices
+						[this.Vertices.Count - 2]; // FPE: We use the properties instead of the private fields here.
 				NextVertex = this.Vertices[1]; // FPE: We use the properties instead of the private fields here.
 			}
 		}
 
-		public override bool TestPoint( ref Transform transform, ref Vector2 point )
+		public override bool TestPoint(ref Transform transform, ref Vector2 point)
 		{
 			return false;
 		}
 
-		public override bool RayCast( out RayCastOutput output, ref RayCastInput input, ref Transform transform, int childIndex )
+		public override bool RayCast(out RayCastOutput output, ref RayCastInput input, ref Transform transform,
+		                             int childIndex)
 		{
-			Debug.Assert( childIndex < Vertices.Count );
+			Debug.Assert(childIndex < Vertices.Count);
 
 			int i1 = childIndex;
 			int i2 = childIndex + 1;
-			if( i2 == Vertices.Count )
+			if (i2 == Vertices.Count)
 				i2 = 0;
 
 			_edgeShape.Vertex1 = Vertices[i1];
 			_edgeShape.Vertex2 = Vertices[i2];
 
-			return _edgeShape.RayCast( out output, ref input, ref transform, 0 );
+			return _edgeShape.RayCast(out output, ref input, ref transform, 0);
 		}
 
-		public override void ComputeAABB( out AABB aabb, ref Transform transform, int childIndex )
+		public override void ComputeAABB(out AABB aabb, ref Transform transform, int childIndex)
 		{
-			Debug.Assert( childIndex < Vertices.Count );
+			Debug.Assert(childIndex < Vertices.Count);
 
 			int i1 = childIndex;
 			int i2 = childIndex + 1;
-			if( i2 == Vertices.Count )
+			if (i2 == Vertices.Count)
 				i2 = 0;
 
-			var v1 = MathUtils.Mul( ref transform, Vertices[i1] );
-			var v2 = MathUtils.Mul( ref transform, Vertices[i2] );
+			var v1 = MathUtils.Mul(ref transform, Vertices[i1]);
+			var v2 = MathUtils.Mul(ref transform, Vertices[i2]);
 
-			aabb.LowerBound = Vector2.Min( v1, v2 );
-			aabb.UpperBound = Vector2.Max( v1, v2 );
+			aabb.LowerBound = Vector2.Min(v1, v2);
+			aabb.UpperBound = Vector2.Max(v1, v2);
 		}
 
 		protected override void ComputeProperties()
@@ -217,7 +223,7 @@ namespace FarseerPhysics.Collision.Shapes
 			//Does nothing. Chain shapes don't have properties.
 		}
 
-		public override float ComputeSubmergedArea( ref Vector2 normal, float offset, ref Transform xf, out Vector2 sc )
+		public override float ComputeSubmergedArea(ref Vector2 normal, float offset, ref Transform xf, out Vector2 sc)
 		{
 			sc = Vector2.Zero;
 			return 0;
@@ -228,14 +234,14 @@ namespace FarseerPhysics.Collision.Shapes
 		/// </summary>
 		/// <param name="shape">The other chain</param>
 		/// <returns>True if the two chain shapes are the same</returns>
-		public bool CompareTo( ChainShape shape )
+		public bool CompareTo(ChainShape shape)
 		{
-			if( Vertices.Count != shape.Vertices.Count )
+			if (Vertices.Count != shape.Vertices.Count)
 				return false;
 
-			for( int i = 0; i < Vertices.Count; i++ )
+			for (int i = 0; i < Vertices.Count; i++)
 			{
-				if( Vertices[i] != shape.Vertices[i] )
+				if (Vertices[i] != shape.Vertices[i])
 					return false;
 			}
 
@@ -252,10 +258,9 @@ namespace FarseerPhysics.Collision.Shapes
 			clone.NextVertex = _nextVertex;
 			clone._hasNextVertex = _hasNextVertex;
 			clone._hasPrevVertex = _hasPrevVertex;
-			clone.Vertices = new Vertices( Vertices );
+			clone.Vertices = new Vertices(Vertices);
 			clone.MassData = MassData;
 			return clone;
 		}
-	
 	}
 }

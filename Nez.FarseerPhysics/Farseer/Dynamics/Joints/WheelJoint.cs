@@ -66,14 +66,14 @@ namespace FarseerPhysics.Dynamics.Joints
 
 		public override Vector2 WorldAnchorA
 		{
-			get { return BodyA.GetWorldPoint( LocalAnchorA ); }
-			set { LocalAnchorA = BodyA.GetLocalPoint( value ); }
+			get { return BodyA.GetWorldPoint(LocalAnchorA); }
+			set { LocalAnchorA = BodyA.GetLocalPoint(value); }
 		}
 
 		public override Vector2 WorldAnchorB
 		{
-			get { return BodyB.GetWorldPoint( LocalAnchorB ); }
-			set { LocalAnchorB = BodyB.GetLocalPoint( value ); }
+			get { return BodyB.GetWorldPoint(LocalAnchorB); }
+			set { LocalAnchorB = BodyB.GetLocalPoint(value); }
 		}
 
 		/// <summary>
@@ -85,8 +85,8 @@ namespace FarseerPhysics.Dynamics.Joints
 			set
 			{
 				_axis = value;
-				LocalXAxis = BodyA.GetLocalVector( _axis );
-				_localYAxis = MathUtils.Cross( 1.0f, LocalXAxis );
+				LocalXAxis = BodyA.GetLocalVector(_axis);
+				_localYAxis = MathUtils.Cross(1.0f, LocalXAxis);
 			}
 		}
 
@@ -141,12 +141,12 @@ namespace FarseerPhysics.Dynamics.Joints
 				var bA = BodyA;
 				var bB = BodyB;
 
-				var pA = bA.GetWorldPoint( LocalAnchorA );
-				var pB = bB.GetWorldPoint( LocalAnchorB );
+				var pA = bA.GetWorldPoint(LocalAnchorA);
+				var pB = bB.GetWorldPoint(LocalAnchorB);
 				var d = pB - pA;
-				var axis = bA.GetWorldVector( LocalXAxis );
+				var axis = bA.GetWorldVector(LocalXAxis);
 
-				float translation = Vector2.Dot( d, axis );
+				float translation = Vector2.Dot(d, axis);
 				return translation;
 			}
 		}
@@ -226,19 +226,19 @@ namespace FarseerPhysics.Dynamics.Joints
 		/// <param name="anchor">The anchor point</param>
 		/// <param name="axis">The axis</param>
 		/// <param name="useWorldCoordinates">Set to true if you are using world coordinates as anchors.</param>
-		public WheelJoint( Body bodyA, Body bodyB, Vector2 anchor, Vector2 axis, bool useWorldCoordinates = false )
-			: base( bodyA, bodyB )
+		public WheelJoint(Body bodyA, Body bodyB, Vector2 anchor, Vector2 axis, bool useWorldCoordinates = false)
+			: base(bodyA, bodyB)
 		{
 			JointType = JointType.Wheel;
 
-			if( useWorldCoordinates )
+			if (useWorldCoordinates)
 			{
-				LocalAnchorA = bodyA.GetLocalPoint( anchor );
-				LocalAnchorB = bodyB.GetLocalPoint( anchor );
+				LocalAnchorA = bodyA.GetLocalPoint(anchor);
+				LocalAnchorB = bodyB.GetLocalPoint(anchor);
 			}
 			else
 			{
-				LocalAnchorA = bodyA.GetLocalPoint( bodyB.GetWorldPoint( anchor ) );
+				LocalAnchorA = bodyA.GetLocalPoint(bodyB.GetWorldPoint(anchor));
 				LocalAnchorB = anchor;
 			}
 
@@ -249,22 +249,22 @@ namespace FarseerPhysics.Dynamics.Joints
 		/// Gets the torque of the motor
 		/// </summary>
 		/// <param name="invDt">inverse delta time</param>
-		public float GetMotorTorque( float invDt )
+		public float GetMotorTorque(float invDt)
 		{
 			return invDt * _motorImpulse;
 		}
 
-		public override Vector2 GetReactionForce( float invDt )
+		public override Vector2 GetReactionForce(float invDt)
 		{
-			return invDt * ( _impulse * _ay + _springImpulse * _ax );
+			return invDt * (_impulse * _ay + _springImpulse * _ax);
 		}
 
-		public override float GetReactionTorque( float invDt )
+		public override float GetReactionTorque(float invDt)
 		{
 			return invDt * _motorImpulse;
 		}
 
-		internal override void InitVelocityConstraints( ref SolverData data )
+		internal override void InitVelocityConstraints(ref SolverData data)
 		{
 			_indexA = BodyA.IslandIndex;
 			_indexB = BodyB.IslandIndex;
@@ -288,22 +288,22 @@ namespace FarseerPhysics.Dynamics.Joints
 			Vector2 vB = data.Velocities[_indexB].V;
 			float wB = data.Velocities[_indexB].W;
 
-			Rot qA = new Rot( aA ), qB = new Rot( aB );
+			Rot qA = new Rot(aA), qB = new Rot(aB);
 
 			// Compute the effective masses.
-			Vector2 rA = MathUtils.Mul( qA, LocalAnchorA - _localCenterA );
-			Vector2 rB = MathUtils.Mul( qB, LocalAnchorB - _localCenterB );
+			Vector2 rA = MathUtils.Mul(qA, LocalAnchorA - _localCenterA);
+			Vector2 rB = MathUtils.Mul(qB, LocalAnchorB - _localCenterB);
 			Vector2 d1 = cB + rB - cA - rA;
 
 			// Point to line constraint
 			{
-				_ay = MathUtils.Mul( qA, _localYAxis );
-				_sAy = MathUtils.Cross( d1 + rA, _ay );
-				_sBy = MathUtils.Cross( rB, _ay );
+				_ay = MathUtils.Mul(qA, _localYAxis);
+				_sAy = MathUtils.Cross(d1 + rA, _ay);
+				_sBy = MathUtils.Cross(rB, _ay);
 
 				_mass = mA + mB + iA * _sAy * _sAy + iB * _sBy * _sBy;
 
-				if( _mass > 0.0f )
+				if (_mass > 0.0f)
 				{
 					_mass = 1.0f / _mass;
 				}
@@ -313,19 +313,19 @@ namespace FarseerPhysics.Dynamics.Joints
 			_springMass = 0.0f;
 			_bias = 0.0f;
 			_gamma = 0.0f;
-			if( Frequency > 0.0f )
+			if (Frequency > 0.0f)
 			{
-				_ax = MathUtils.Mul( qA, LocalXAxis );
-				_sAx = MathUtils.Cross( d1 + rA, _ax );
-				_sBx = MathUtils.Cross( rB, _ax );
+				_ax = MathUtils.Mul(qA, LocalXAxis);
+				_sAx = MathUtils.Cross(d1 + rA, _ax);
+				_sBx = MathUtils.Cross(rB, _ax);
 
 				float invMass = mA + mB + iA * _sAx * _sAx + iB * _sBx * _sBx;
 
-				if( invMass > 0.0f )
+				if (invMass > 0.0f)
 				{
 					_springMass = 1.0f / invMass;
 
-					float C = Vector2.Dot( d1, _ax );
+					float C = Vector2.Dot(d1, _ax);
 
 					// Frequency
 					float omega = 2.0f * Settings.Pi * Frequency;
@@ -338,8 +338,8 @@ namespace FarseerPhysics.Dynamics.Joints
 
 					// magic formulas
 					float h = data.Step.Dt;
-					_gamma = h * ( d + h * k );
-					if( _gamma > 0.0f )
+					_gamma = h * (d + h * k);
+					if (_gamma > 0.0f)
 					{
 						_gamma = 1.0f / _gamma;
 					}
@@ -347,7 +347,7 @@ namespace FarseerPhysics.Dynamics.Joints
 					_bias = C * h * k * _gamma;
 
 					_springMass = invMass + _gamma;
-					if( _springMass > 0.0f )
+					if (_springMass > 0.0f)
 					{
 						_springMass = 1.0f / _springMass;
 					}
@@ -359,10 +359,10 @@ namespace FarseerPhysics.Dynamics.Joints
 			}
 
 			// Rotational motor
-			if( _enableMotor )
+			if (_enableMotor)
 			{
 				_motorMass = iA + iB;
-				if( _motorMass > 0.0f )
+				if (_motorMass > 0.0f)
 				{
 					_motorMass = 1.0f / _motorMass;
 				}
@@ -373,7 +373,7 @@ namespace FarseerPhysics.Dynamics.Joints
 				_motorImpulse = 0.0f;
 			}
 
-			if( Settings.EnableWarmstarting )
+			if (Settings.EnableWarmstarting)
 			{
 				// Account for variable time step.
 				_impulse *= data.Step.DtRatio;
@@ -403,7 +403,7 @@ namespace FarseerPhysics.Dynamics.Joints
 			data.Velocities[_indexB].W = wB;
 		}
 
-		internal override void SolveVelocityConstraints( ref SolverData data )
+		internal override void SolveVelocityConstraints(ref SolverData data)
 		{
 			float mA = _invMassA, mB = _invMassB;
 			float iA = _invIA, iB = _invIB;
@@ -415,8 +415,8 @@ namespace FarseerPhysics.Dynamics.Joints
 
 			// Solve spring constraint
 			{
-				float Cdot = Vector2.Dot( _ax, vB - vA ) + _sBx * wB - _sAx * wA;
-				float impulse = -_springMass * ( Cdot + _bias + _gamma * _springImpulse );
+				float Cdot = Vector2.Dot(_ax, vB - vA) + _sBx * wB - _sAx * wA;
+				float impulse = -_springMass * (Cdot + _bias + _gamma * _springImpulse);
 				_springImpulse += impulse;
 
 				Vector2 P = impulse * _ax;
@@ -437,7 +437,7 @@ namespace FarseerPhysics.Dynamics.Joints
 
 				float oldImpulse = _motorImpulse;
 				float maxImpulse = data.Step.Dt * _maxMotorTorque;
-				_motorImpulse = MathUtils.Clamp( _motorImpulse + impulse, -maxImpulse, maxImpulse );
+				_motorImpulse = MathUtils.Clamp(_motorImpulse + impulse, -maxImpulse, maxImpulse);
 				impulse = _motorImpulse - oldImpulse;
 
 				wA -= iA * impulse;
@@ -446,7 +446,7 @@ namespace FarseerPhysics.Dynamics.Joints
 
 			// Solve point to line constraint
 			{
-				float Cdot = Vector2.Dot( _ay, vB - vA ) + _sBy * wB - _sAy * wA;
+				float Cdot = Vector2.Dot(_ay, vB - vA) + _sBy * wB - _sAy * wA;
 				float impulse = -_mass * Cdot;
 				_impulse += impulse;
 
@@ -467,30 +467,30 @@ namespace FarseerPhysics.Dynamics.Joints
 			data.Velocities[_indexB].W = wB;
 		}
 
-		internal override bool SolvePositionConstraints( ref SolverData data )
+		internal override bool SolvePositionConstraints(ref SolverData data)
 		{
 			Vector2 cA = data.Positions[_indexA].C;
 			float aA = data.Positions[_indexA].A;
 			Vector2 cB = data.Positions[_indexB].C;
 			float aB = data.Positions[_indexB].A;
 
-			Rot qA = new Rot( aA ), qB = new Rot( aB );
+			Rot qA = new Rot(aA), qB = new Rot(aB);
 
-			Vector2 rA = MathUtils.Mul( qA, LocalAnchorA - _localCenterA );
-			Vector2 rB = MathUtils.Mul( qB, LocalAnchorB - _localCenterB );
-			Vector2 d = ( cB - cA ) + rB - rA;
+			Vector2 rA = MathUtils.Mul(qA, LocalAnchorA - _localCenterA);
+			Vector2 rB = MathUtils.Mul(qB, LocalAnchorB - _localCenterB);
+			Vector2 d = (cB - cA) + rB - rA;
 
-			Vector2 ay = MathUtils.Mul( qA, _localYAxis );
+			Vector2 ay = MathUtils.Mul(qA, _localYAxis);
 
-			float sAy = MathUtils.Cross( d + rA, ay );
-			float sBy = MathUtils.Cross( rB, ay );
+			float sAy = MathUtils.Cross(d + rA, ay);
+			float sBy = MathUtils.Cross(rB, ay);
 
-			float C = Vector2.Dot( d, ay );
+			float C = Vector2.Dot(d, ay);
 
 			float k = _invMassA + _invMassB + _invIA * _sAy * _sAy + _invIB * _sBy * _sBy;
 
 			float impulse;
-			if( k != 0.0f )
+			if (k != 0.0f)
 			{
 				impulse = -C / k;
 			}
@@ -513,8 +513,7 @@ namespace FarseerPhysics.Dynamics.Joints
 			data.Positions[_indexB].C = cB;
 			data.Positions[_indexB].A = aB;
 
-			return Math.Abs( C ) <= Settings.LinearSlop;
+			return Math.Abs(C) <= Settings.LinearSlop;
 		}
-	
 	}
 }

@@ -17,7 +17,7 @@ namespace Nez
 		public override void OnAddedToEntity()
 		{
 			_collider = Entity.GetComponent<Collider>();
-			Debug.WarnIf( _collider == null, "ProjectileMover has no Collider. ProjectilMover requires a Collider!" );
+			Debug.WarnIf(_collider == null, "ProjectileMover has no Collider. ProjectilMover requires a Collider!");
 		}
 
 
@@ -26,9 +26,9 @@ namespace Nez
 		/// </summary>
 		/// <returns><c>true</c>, if move actor was newed, <c>false</c> otherwise.</returns>
 		/// <param name="motion">Motion.</param>
-		public bool Move( Vector2 motion )
+		public bool Move(Vector2 motion)
 		{
-			if( _collider == null )
+			if (_collider == null)
 				return false;
 
 			var didCollide = false;
@@ -37,35 +37,34 @@ namespace Nez
 			Entity.Transform.Position += motion;
 
 			// fetch anything that we might collide with us at our new position
-			var neighbors = Physics.BoxcastBroadphase( _collider.Bounds, _collider.CollidesWithLayers );
-			foreach( var neighbor in neighbors )
+			var neighbors = Physics.BoxcastBroadphase(_collider.Bounds, _collider.CollidesWithLayers);
+			foreach (var neighbor in neighbors)
 			{
-				if( _collider.Overlaps( neighbor ) )
+				if (_collider.Overlaps(neighbor))
 				{
 					didCollide = true;
-					NotifyTriggerListeners( _collider, neighbor );
+					NotifyTriggerListeners(_collider, neighbor);
 				}
 			}
 
 			return didCollide;
 		}
 
-		void NotifyTriggerListeners( Collider self, Collider other )
+		void NotifyTriggerListeners(Collider self, Collider other)
 		{
 			// notify any listeners on the Entity of the Collider that we overlapped
-			other.Entity.GetComponents( _tempTriggerList );
-			for( var i = 0; i < _tempTriggerList.Count; i++ )
-				_tempTriggerList[i].OnTriggerEnter( self, other );
+			other.Entity.GetComponents(_tempTriggerList);
+			for (var i = 0; i < _tempTriggerList.Count; i++)
+				_tempTriggerList[i].OnTriggerEnter(self, other);
 
 			_tempTriggerList.Clear();
 
 			// notify any listeners on this Entity
-			Entity.GetComponents( _tempTriggerList );
-			for( var i = 0; i < _tempTriggerList.Count; i++ )
-				_tempTriggerList[i].OnTriggerEnter( other, self );
+			Entity.GetComponents(_tempTriggerList);
+			for (var i = 0; i < _tempTriggerList.Count; i++)
+				_tempTriggerList[i].OnTriggerEnter(other, self);
 
 			_tempTriggerList.Clear();
 		}
 	}
 }
-

@@ -19,22 +19,22 @@
 			Enabled = false;
 		}
 
-		public SpriteMime( Sprite spriteToMime )
+		public SpriteMime(Sprite spriteToMime)
 		{
 			_spriteToMime = spriteToMime;
 		}
 
 		public override void OnAddedToEntity()
 		{
-			if( _spriteToMime == null )
+			if (_spriteToMime == null)
 				_spriteToMime = this.GetComponent<Sprite>();
 		}
 
-		public override void Render( Graphics graphics, Camera camera )
+		public override void Render(Graphics graphics, Camera camera)
 		{
-			graphics.Batcher.Draw( _spriteToMime.Subtexture, Entity.Transform.Position + _localOffset, Color, Entity.Transform.Rotation, _spriteToMime.Origin, Entity.Transform.Scale, _spriteToMime.SpriteEffects, _layerDepth );
+			graphics.Batcher.Draw(_spriteToMime.Subtexture, Entity.Transform.Position + _localOffset, Color,
+				Entity.Transform.Rotation, _spriteToMime.Origin, Entity.Transform.Scale, _spriteToMime.SpriteEffects,
+				_layerDepth);
 		}
-
 	}
 }
-

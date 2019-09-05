@@ -9,14 +9,14 @@ namespace Nez.ParticleDesignerImporter
 	{
 		public ContentImporterContext Context;
 		public ParticleDesignerEmitterConfig EmitterConfig;
-        public string Path; //Required so that textures can be loaded from the same directory
+		public string Path; //Required so that textures can be loaded from the same directory
 
-		public ParticleDesignerContent( ContentImporterContext context, ParticleDesignerEmitterConfig emitterConfig, string path )
+		public ParticleDesignerContent(ContentImporterContext context, ParticleDesignerEmitterConfig emitterConfig,
+		                               string path)
 		{
 			this.Context = context;
 			this.EmitterConfig = emitterConfig;
-            this.Path = path;
+			this.Path = path;
 		}
 	}
 }
-

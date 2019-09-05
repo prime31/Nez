@@ -39,7 +39,7 @@ namespace Nez
 		public Transform Parent
 		{
 			get { return _parent; }
-			set { SetParent( value ); }
+			set { SetParent(value); }
 		}
 
 
@@ -47,7 +47,10 @@ namespace Nez
 		/// total children of this Transform
 		/// </summary>
 		/// <value>The child count.</value>
-		public int ChildCount { get { return _children.Count; } }
+		public int ChildCount
+		{
+			get { return _children.Count; }
+		}
 
 
 		/// <summary>
@@ -59,23 +62,24 @@ namespace Nez
 			get
 			{
 				UpdateTransform();
-				if( _positionDirty )
+				if (_positionDirty)
 				{
-					if( Parent == null )
+					if (Parent == null)
 					{
 						_position = _localPosition;
 					}
 					else
 					{
 						Parent.UpdateTransform();
-						Vector2Ext.Transform( ref _localPosition, ref Parent._worldTransform, out _position );
+						Vector2Ext.Transform(ref _localPosition, ref Parent._worldTransform, out _position);
 					}
 
 					_positionDirty = false;
 				}
+
 				return _position;
 			}
-			set { SetPosition( value ); }
+			set { SetPosition(value); }
 		}
 
 
@@ -90,7 +94,7 @@ namespace Nez
 				UpdateTransform();
 				return _localPosition;
 			}
-			set { SetLocalPosition( value ); }
+			set { SetLocalPosition(value); }
 		}
 
 
@@ -105,7 +109,7 @@ namespace Nez
 				UpdateTransform();
 				return _rotation;
 			}
-			set { SetRotation( value ); }
+			set { SetRotation(value); }
 		}
 
 
@@ -115,8 +119,8 @@ namespace Nez
 		/// <value>The rotation degrees.</value>
 		public float RotationDegrees
 		{
-			get { return MathHelper.ToDegrees( _rotation ); }
-			set { SetRotation( MathHelper.ToRadians( value ) ); }
+			get { return MathHelper.ToDegrees(_rotation); }
+			set { SetRotation(MathHelper.ToRadians(value)); }
 		}
 
 
@@ -131,7 +135,7 @@ namespace Nez
 				UpdateTransform();
 				return _localRotation;
 			}
-			set { SetLocalRotation( value ); }
+			set { SetLocalRotation(value); }
 		}
 
 
@@ -141,8 +145,8 @@ namespace Nez
 		/// <value>The rotation degrees.</value>
 		public float LocalRotationDegrees
 		{
-			get { return MathHelper.ToDegrees( _localRotation ); }
-			set { LocalRotation = MathHelper.ToRadians( value ); }
+			get { return MathHelper.ToDegrees(_localRotation); }
+			set { LocalRotation = MathHelper.ToRadians(value); }
 		}
 
 
@@ -157,7 +161,7 @@ namespace Nez
 				UpdateTransform();
 				return _scale;
 			}
-			set { SetScale( value ); }
+			set { SetScale(value); }
 		}
 
 
@@ -172,7 +176,7 @@ namespace Nez
 				UpdateTransform();
 				return _localScale;
 			}
-			set { SetLocalScale( value ); }
+			set { SetLocalScale(value); }
 		}
 
 
@@ -181,11 +185,12 @@ namespace Nez
 			get
 			{
 				UpdateTransform();
-				if( _worldInverseDirty )
+				if (_worldInverseDirty)
 				{
-					Matrix2D.Invert( ref _worldTransform, out _worldInverseTransform );
+					Matrix2D.Invert(ref _worldTransform, out _worldInverseTransform);
 					_worldInverseDirty = false;
 				}
+
 				return _worldInverseTransform;
 			}
 		}
@@ -205,20 +210,21 @@ namespace Nez
 		{
 			get
 			{
-				if( _worldToLocalDirty )
+				if (_worldToLocalDirty)
 				{
-					if( Parent == null )
+					if (Parent == null)
 					{
 						_worldToLocalTransform = Matrix2D.Identity;
 					}
 					else
 					{
 						Parent.UpdateTransform();
-						Matrix2D.Invert( ref Parent._worldTransform, out _worldToLocalTransform );
+						Matrix2D.Invert(ref Parent._worldTransform, out _worldToLocalTransform);
 					}
 
 					_worldToLocalDirty = false;
 				}
+
 				return _worldToLocalTransform;
 			}
 		}
@@ -260,7 +266,7 @@ namespace Nez
 		#endregion
 
 
-		public Transform( Entity entity )
+		public Transform(Entity entity)
 		{
 			this.Entity = entity;
 			_scale = _localScale = Vector2.One;
@@ -272,11 +278,11 @@ namespace Nez
 		/// </summary>
 		/// <returns>The child.</returns>
 		/// <param name="index">Index.</param>
-		public Transform GetChild( int index )
+		public Transform GetChild(int index)
 		{
 			return _children[index];
 		}
-	
+
 
 		#region Fluent setters
 
@@ -285,19 +291,19 @@ namespace Nez
 		/// </summary>
 		/// <returns>The parent.</returns>
 		/// <param name="parent">Parent.</param>
-		public Transform SetParent( Transform parent )
+		public Transform SetParent(Transform parent)
 		{
-			if( _parent == parent )
+			if (_parent == parent)
 				return this;
 
-			if( _parent != null )
-				_parent._children.Remove( this );
+			if (_parent != null)
+				_parent._children.Remove(this);
 
-			if( parent != null )
-				parent._children.Add( this );
+			if (parent != null)
+				parent._children.Add(this);
 
 			_parent = parent;
-			SetDirty( DirtyType.PositionDirty );
+			SetDirty(DirtyType.PositionDirty);
 
 			return this;
 		}
@@ -308,15 +314,15 @@ namespace Nez
 		/// </summary>
 		/// <returns>The position.</returns>
 		/// <param name="position">Position.</param>
-		[MethodImpl( MethodImplOptions.AggressiveInlining )]
-		public Transform SetPosition( Vector2 position )
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public Transform SetPosition(Vector2 position)
 		{
-			if( position == _position )
+			if (position == _position)
 				return this;
-			
+
 			_position = position;
-			if( Parent != null )
-				LocalPosition = Vector2.Transform( _position, WorldToLocalTransform );
+			if (Parent != null)
+				LocalPosition = Vector2.Transform(_position, WorldToLocalTransform);
 			else
 				LocalPosition = position;
 
@@ -326,10 +332,10 @@ namespace Nez
 		}
 
 
-		[MethodImpl( MethodImplOptions.AggressiveInlining )]
-		public Transform SetPosition( float x, float y )
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public Transform SetPosition(float x, float y)
 		{
-			return SetPosition( new Vector2( x, y ) );
+			return SetPosition(new Vector2(x, y));
 		}
 
 
@@ -339,15 +345,15 @@ namespace Nez
 		/// </summary>
 		/// <returns>The local position.</returns>
 		/// <param name="localPosition">Local position.</param>
-		[MethodImpl( MethodImplOptions.AggressiveInlining )]
-		public Transform SetLocalPosition( Vector2 localPosition )
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public Transform SetLocalPosition(Vector2 localPosition)
 		{
-			if( localPosition == _localPosition )
+			if (localPosition == _localPosition)
 				return this;
 
 			_localPosition = localPosition;
 			_localDirty = _positionDirty = _localPositionDirty = _localRotationDirty = _localScaleDirty = true;
-			SetDirty( DirtyType.PositionDirty );
+			SetDirty(DirtyType.PositionDirty);
 
 			return this;
 		}
@@ -358,15 +364,15 @@ namespace Nez
 		/// </summary>
 		/// <returns>The rotation.</returns>
 		/// <param name="radians">Radians.</param>
-		[MethodImpl( MethodImplOptions.AggressiveInlining )]
-		public Transform SetRotation( float radians )
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public Transform SetRotation(float radians)
 		{
 			_rotation = radians;
-			if( Parent != null )
+			if (Parent != null)
 				LocalRotation = Parent.Rotation + radians;
 			else
 				LocalRotation = radians;
-			
+
 			return this;
 		}
 
@@ -376,10 +382,10 @@ namespace Nez
 		/// </summary>
 		/// <returns>The rotation.</returns>
 		/// <param name="radians">Radians.</param>
-		[MethodImpl( MethodImplOptions.AggressiveInlining )]
-		public Transform SetRotationDegrees( float degrees )
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public Transform SetRotationDegrees(float degrees)
 		{
-			return SetRotation( MathHelper.ToRadians( degrees ) );
+			return SetRotation(MathHelper.ToRadians(degrees));
 		}
 
 
@@ -389,12 +395,12 @@ namespace Nez
 		/// </summary>
 		/// <returns>The local rotation.</returns>
 		/// <param name="radians">Radians.</param>
-		[MethodImpl( MethodImplOptions.AggressiveInlining )]
-		public Transform SetLocalRotation( float radians )
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public Transform SetLocalRotation(float radians)
 		{
 			_localRotation = radians;
 			_localDirty = _positionDirty = _localPositionDirty = _localRotationDirty = _localScaleDirty = true;
-			SetDirty( DirtyType.RotationDirty );
+			SetDirty(DirtyType.RotationDirty);
 
 			return this;
 		}
@@ -406,10 +412,10 @@ namespace Nez
 		/// </summary>
 		/// <returns>The local rotation.</returns>
 		/// <param name="radians">Radians.</param>
-		[MethodImpl( MethodImplOptions.AggressiveInlining )]
-		public Transform SetLocalRotationDegrees( float degrees )
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public Transform SetLocalRotationDegrees(float degrees)
 		{
-			return SetLocalRotation( MathHelper.ToRadians( degrees ) );
+			return SetLocalRotation(MathHelper.ToRadians(degrees));
 		}
 
 
@@ -418,15 +424,15 @@ namespace Nez
 		/// </summary>
 		/// <returns>The scale.</returns>
 		/// <param name="scale">Scale.</param>
-		[MethodImpl( MethodImplOptions.AggressiveInlining )]
-		public Transform SetScale( Vector2 scale )
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public Transform SetScale(Vector2 scale)
 		{
 			_scale = scale;
-			if( Parent != null )
+			if (Parent != null)
 				LocalScale = scale / Parent._scale;
 			else
 				LocalScale = scale;
-			
+
 			return this;
 		}
 
@@ -436,10 +442,10 @@ namespace Nez
 		/// </summary>
 		/// <returns>The scale.</returns>
 		/// <param name="scale">Scale.</param>
-		[MethodImpl( MethodImplOptions.AggressiveInlining )]
-		public Transform SetScale( float scale )
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public Transform SetScale(float scale)
 		{
-			return SetScale( new Vector2( scale ) );
+			return SetScale(new Vector2(scale));
 		}
 
 
@@ -448,12 +454,12 @@ namespace Nez
 		/// </summary>
 		/// <returns>The local scale.</returns>
 		/// <param name="scale">Scale.</param>
-		[MethodImpl( MethodImplOptions.AggressiveInlining )]
-		public Transform SetLocalScale( Vector2 scale )
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public Transform SetLocalScale(Vector2 scale)
 		{
 			_localScale = scale;
 			_localDirty = _positionDirty = _localScaleDirty = true;
-			SetDirty( DirtyType.ScaleDirty );
+			SetDirty(DirtyType.ScaleDirty);
 
 			return this;
 		}
@@ -464,10 +470,10 @@ namespace Nez
 		/// </summary>
 		/// <returns>The local scale.</returns>
 		/// <param name="scale">Scale.</param>
-		[MethodImpl( MethodImplOptions.AggressiveInlining )]
-		public Transform SetLocalScale( float scale )
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public Transform SetLocalScale(float scale)
 		{
-			return SetLocalScale( new Vector2( scale ) );
+			return SetLocalScale(new Vector2(scale));
 		}
 
 		#endregion
@@ -480,52 +486,53 @@ namespace Nez
 		{
 			Position = _position.Round();
 		}
-	
 
-		[MethodImpl( MethodImplOptions.AggressiveInlining )]
+
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		void UpdateTransform()
 		{
-			if( hierarchyDirty != DirtyType.Clean )
+			if (hierarchyDirty != DirtyType.Clean)
 			{
-				if( Parent != null )
+				if (Parent != null)
 					Parent.UpdateTransform();
 
-				if( _localDirty )
+				if (_localDirty)
 				{
-					if( _localPositionDirty )
+					if (_localPositionDirty)
 					{
-						Matrix2D.CreateTranslation( _localPosition.X, _localPosition.Y, out _translationMatrix );
+						Matrix2D.CreateTranslation(_localPosition.X, _localPosition.Y, out _translationMatrix);
 						_localPositionDirty = false;
 					}
 
-					if( _localRotationDirty )
+					if (_localRotationDirty)
 					{
-						Matrix2D.CreateRotation( _localRotation, out _rotationMatrix );
+						Matrix2D.CreateRotation(_localRotation, out _rotationMatrix);
 						_localRotationDirty = false;
 					}
 
-					if( _localScaleDirty )
+					if (_localScaleDirty)
 					{
-						Matrix2D.CreateScale( _localScale.X, _localScale.Y, out _scaleMatrix );
+						Matrix2D.CreateScale(_localScale.X, _localScale.Y, out _scaleMatrix);
 						_localScaleDirty = false;
 					}
 
-					Matrix2D.Multiply( ref _scaleMatrix, ref _rotationMatrix, out _localTransform );
-					Matrix2D.Multiply( ref _localTransform, ref _translationMatrix, out _localTransform );
+					Matrix2D.Multiply(ref _scaleMatrix, ref _rotationMatrix, out _localTransform);
+					Matrix2D.Multiply(ref _localTransform, ref _translationMatrix, out _localTransform);
 
-					if( Parent == null )
+					if (Parent == null)
 					{
 						_worldTransform = _localTransform;
 						_rotation = _localRotation;
 						_scale = _localScale;
 						_worldInverseDirty = true;
 					}
+
 					_localDirty = false;
 				}
 
-				if( Parent != null )
+				if (Parent != null)
 				{
-					Matrix2D.Multiply( ref _localTransform, ref Parent._worldTransform, out _worldTransform );
+					Matrix2D.Multiply(ref _localTransform, ref Parent._worldTransform, out _worldTransform);
 
 					_rotation = _localRotation + Parent._rotation;
 					_scale = Parent._scale * _localScale;
@@ -543,34 +550,34 @@ namespace Nez
 		/// sets the dirty flag on the enum and passes it down to our children
 		/// </summary>
 		/// <param name="dirtyFlagType">Dirty flag type.</param>
-		[MethodImpl( MethodImplOptions.AggressiveInlining )]
-		void SetDirty( DirtyType dirtyFlagType )
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		void SetDirty(DirtyType dirtyFlagType)
 		{
-			if( ( hierarchyDirty & dirtyFlagType ) == 0 )
+			if ((hierarchyDirty & dirtyFlagType) == 0)
 			{
 				hierarchyDirty |= dirtyFlagType;
 
-				switch( dirtyFlagType )
+				switch (dirtyFlagType)
 				{
 					case DirtyType.PositionDirty:
-						Entity.OnTransformChanged( Component.Position );
+						Entity.OnTransformChanged(Component.Position);
 						break;
 					case DirtyType.RotationDirty:
-						Entity.OnTransformChanged( Component.Rotation );
+						Entity.OnTransformChanged(Component.Rotation);
 						break;
 					case DirtyType.ScaleDirty:
-						Entity.OnTransformChanged( Component.Scale );
+						Entity.OnTransformChanged(Component.Scale);
 						break;
 				}
 
 				// dirty our children as well so they know of the changes
-				for( var i = 0; i < _children.Count; i++ )
-					_children[i].SetDirty( dirtyFlagType );
+				for (var i = 0; i < _children.Count; i++)
+					_children[i].SetDirty(dirtyFlagType);
 			}
 		}
 
 
-		public void CopyFrom( Transform transform )
+		public void CopyFrom(Transform transform)
 		{
 			_position = transform.Position;
 			_localPosition = transform._localPosition;
@@ -579,17 +586,17 @@ namespace Nez
 			_scale = transform._scale;
 			_localScale = transform._localScale;
 
-			SetDirty( DirtyType.PositionDirty );
-			SetDirty( DirtyType.RotationDirty );
-			SetDirty( DirtyType.ScaleDirty );
+			SetDirty(DirtyType.PositionDirty);
+			SetDirty(DirtyType.RotationDirty);
+			SetDirty(DirtyType.ScaleDirty);
 		}
-	
+
 
 		public override string ToString()
 		{
-			return string.Format( "[Transform: parent: {0}, position: {1}, rotation: {2}, scale: {3}, localPosition: {4}, localRotation: {5}, localScale: {6}]", Parent != null, Position, Rotation, Scale, LocalPosition, LocalRotation, LocalScale );
+			return string.Format(
+				"[Transform: parent: {0}, position: {1}, rotation: {2}, scale: {3}, localPosition: {4}, localRotation: {5}, localScale: {6}]",
+				Parent != null, Position, Rotation, Scale, LocalPosition, LocalRotation, LocalScale);
 		}
-
 	}
 }
-

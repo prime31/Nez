@@ -34,6 +34,7 @@ namespace FarseerPhysics.Dynamics.Joints
 		Prismatic,
 		Distance,
 		Pulley,
+
 		//Mouse, <- We have fixed mouse
 		Gear,
 		Wheel,
@@ -172,10 +173,10 @@ namespace FarseerPhysics.Dynamics.Joints
 			CollideConnected = false;
 		}
 
-		protected Joint( Body bodyA, Body bodyB ) : this()
+		protected Joint(Body bodyA, Body bodyB) : this()
 		{
 			//Can't connect a joint to the same body twice.
-			Debug.Assert( bodyA != bodyB );
+			Debug.Assert(bodyA != bodyB);
 
 			this.BodyA = bodyA;
 			this.BodyB = bodyB;
@@ -184,7 +185,7 @@ namespace FarseerPhysics.Dynamics.Joints
 		/// <summary>
 		/// Constructor for fixed joint
 		/// </summary>
-		protected Joint( Body body ) : this()
+		protected Joint(Body body) : this()
 		{
 			BodyA = body;
 		}
@@ -193,20 +194,20 @@ namespace FarseerPhysics.Dynamics.Joints
 		/// Get the reaction force on body at the joint anchor in Newtons.
 		/// </summary>
 		/// <param name="invDt">The inverse delta time.</param>
-		public abstract Vector2 GetReactionForce( float invDt );
+		public abstract Vector2 GetReactionForce(float invDt);
 
 		/// <summary>
 		/// Get the reaction torque on the body at the joint anchor in N*m.
 		/// </summary>
 		/// <param name="invDt">The inverse delta time.</param>
-		public abstract float GetReactionTorque( float invDt );
+		public abstract float GetReactionTorque(float invDt);
 
 		protected void WakeBodies()
 		{
-			if( BodyA != null )
+			if (BodyA != null)
 				BodyA.IsAwake = true;
 
-			if( BodyB != null )
+			if (BodyB != null)
 				BodyB.IsAwake = true;
 		}
 
@@ -218,32 +219,31 @@ namespace FarseerPhysics.Dynamics.Joints
 			return JointType == JointType.FixedMouse || BodyA.IsStatic || BodyB.IsStatic;
 		}
 
-		internal abstract void InitVelocityConstraints( ref SolverData data );
+		internal abstract void InitVelocityConstraints(ref SolverData data);
 
-		internal void Validate( float invDt )
+		internal void Validate(float invDt)
 		{
-			if( !Enabled )
+			if (!Enabled)
 				return;
 
-			float jointErrorSquared = GetReactionForce( invDt ).LengthSquared();
+			float jointErrorSquared = GetReactionForce(invDt).LengthSquared();
 
-			if( Math.Abs( jointErrorSquared ) <= _breakpointSquared )
+			if (Math.Abs(jointErrorSquared) <= _breakpointSquared)
 				return;
 
 			Enabled = false;
 
-			if( OnJointBroke != null )
-				OnJointBroke( this, (float)Math.Sqrt( jointErrorSquared ) );
+			if (OnJointBroke != null)
+				OnJointBroke(this, (float) Math.Sqrt(jointErrorSquared));
 		}
 
-		internal abstract void SolveVelocityConstraints( ref SolverData data );
+		internal abstract void SolveVelocityConstraints(ref SolverData data);
 
 		/// <summary>
 		/// Solves the position constraints.
 		/// </summary>
 		/// <param name="data"></param>
 		/// <returns>returns true if the position errors are within tolerance.</returns>
-		internal abstract bool SolvePositionConstraints( ref SolverData data );
-	
+		internal abstract bool SolvePositionConstraints(ref SolverData data);
 	}
 }

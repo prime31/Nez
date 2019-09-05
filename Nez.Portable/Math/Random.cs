@@ -7,7 +7,7 @@ namespace Nez
 	public static class Random
 	{
 		private static int _seed = Environment.TickCount;
-		public static System.Random RNG = new System.Random( _seed );
+		public static System.Random RNG = new System.Random(_seed);
 
 
 		/// <summary>
@@ -24,10 +24,10 @@ namespace Nez
 		/// resets rng with new seed
 		/// </summary>
 		/// <param name="seed">Seed.</param>
-		static public void SetSeed( int seed )
+		static public void SetSeed(int seed)
 		{
 			_seed = seed;
-			RNG = new System.Random( _seed );
+			RNG = new System.Random(_seed);
 		}
 
 
@@ -37,7 +37,7 @@ namespace Nez
 		/// <returns>The float.</returns>
 		static public float NextFloat()
 		{
-			return (float)RNG.NextDouble();
+			return (float) RNG.NextDouble();
 		}
 
 
@@ -46,9 +46,9 @@ namespace Nez
 		/// </summary>
 		/// <returns>The float.</returns>
 		/// <param name="max">Max.</param>
-		static public float NextFloat( float max )
+		static public float NextFloat(float max)
 		{
-			return (float)RNG.NextDouble() * max;
+			return (float) RNG.NextDouble() * max;
 		}
 
 
@@ -57,9 +57,9 @@ namespace Nez
 		/// </summary>
 		/// <returns>The float.</returns>
 		/// <param name="max">Max.</param>
-		static public int NextInt( int max )
+		static public int NextInt(int max)
 		{
-			return RNG.Next( max );
+			return RNG.Next(max);
 		}
 
 
@@ -69,7 +69,7 @@ namespace Nez
 		/// <returns>The angle.</returns>
 		static public float NextAngle()
 		{
-			return (float)RNG.NextDouble() * MathHelper.TwoPi;
+			return (float) RNG.NextDouble() * MathHelper.TwoPi;
 		}
 
 
@@ -79,7 +79,7 @@ namespace Nez
 		/// <returns>The color.</returns>
 		public static Color NextColor()
 		{
-			return new Color( NextFloat(), NextFloat(), NextFloat() );
+			return new Color(NextFloat(), NextFloat(), NextFloat());
 		}
 
 
@@ -89,9 +89,9 @@ namespace Nez
 		/// <param name="min"></param>
 		/// <param name="max"></param>
 		/// <returns></returns>
-		static public int Range( int min, int max )
+		static public int Range(int min, int max)
 		{
-			return RNG.Next( min, max );
+			return RNG.Next(min, max);
 		}
 
 
@@ -101,9 +101,9 @@ namespace Nez
 		/// <param name="min"></param>
 		/// <param name="max"></param>
 		/// <returns></returns>
-		static public float Range( float min, float max )
+		static public float Range(float min, float max)
 		{
-			return min + NextFloat( max - min );
+			return min + NextFloat(max - min);
 		}
 
 
@@ -113,9 +113,9 @@ namespace Nez
 		/// <param name="min"></param>
 		/// <param name="max"></param>
 		/// <returns></returns>
-		static public Vector2 Range( Vector2 min, Vector2 max )
+		static public Vector2 Range(Vector2 min, Vector2 max)
 		{
-			return min + new Vector2( NextFloat( max.X - min.X ), NextFloat( max.Y - min.Y ) );
+			return min + new Vector2(NextFloat(max.X - min.X), NextFloat(max.Y - min.Y));
 		}
 
 
@@ -125,7 +125,7 @@ namespace Nez
 		/// <returns>The one to one.</returns>
 		static public float MinusOneToOne()
 		{
-			return NextFloat( 2f ) - 1f;
+			return NextFloat(2f) - 1f;
 		}
 
 
@@ -133,7 +133,7 @@ namespace Nez
 		/// returns true if the next random is less than percent. Percent should be between 0 and 1
 		/// </summary>
 		/// <param name="percent">Percent.</param>
-		public static bool Chance( float percent )
+		public static bool Chance(float percent)
 		{
 			return NextFloat() < percent;
 		}
@@ -143,9 +143,9 @@ namespace Nez
 		/// returns true if the next random is less than value. Value should be between 0 and 100.
 		/// </summary>
 		/// <param name="value">Value.</param>
-		public static bool Chance( int value )
+		public static bool Chance(int value)
 		{
-			return NextInt( 100 ) < value;
+			return NextInt(100) < value;
 		}
 
 
@@ -155,10 +155,11 @@ namespace Nez
 		/// <param name="first">First.</param>
 		/// <param name="second">Second.</param>
 		/// <typeparam name="T">The 1st type parameter.</typeparam>
-		public static T Choose<T>( T first, T second )
+		public static T Choose<T>(T first, T second)
 		{
-			if( NextInt( 2 ) == 0 )
+			if (NextInt(2) == 0)
 				return first;
+
 			return second;
 		}
 
@@ -170,16 +171,16 @@ namespace Nez
 		/// <param name="second">Second.</param>
 		/// <param name="third">Third.</param>
 		/// <typeparam name="T">The 1st type parameter.</typeparam>
-		public static T Choose<T>( T first, T second, T third )
+		public static T Choose<T>(T first, T second, T third)
 		{
-			switch( NextInt( 3 ) )
+			switch (NextInt(3))
 			{
 				case 0:
-				return first;
+					return first;
 				case 1:
-				return second;
+					return second;
 				default:
-				return third;
+					return third;
 			}
 		}
 
@@ -192,21 +193,19 @@ namespace Nez
 		/// <param name="third">Third.</param>
 		/// <param name="fourth">Fourth.</param>
 		/// <typeparam name="T">The 1st type parameter.</typeparam>
-		public static T Choose<T>( T first, T second, T third, T fourth )
+		public static T Choose<T>(T first, T second, T third, T fourth)
 		{
-			switch( NextInt( 4 ) )
+			switch (NextInt(4))
 			{
 				case 0:
-				return first;
+					return first;
 				case 1:
-				return second;
+					return second;
 				case 2:
-				return third;
+					return third;
 				default:
-				return fourth;
+					return fourth;
 			}
 		}
-
 	}
 }
-

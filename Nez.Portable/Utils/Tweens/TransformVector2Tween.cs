@@ -26,9 +26,9 @@ namespace Nez.Tweens
 		TransformTargetType _targetType;
 
 
-		public void SetTweenedValue( Vector2 value )
+		public void SetTweenedValue(Vector2 value)
 		{
-			switch( _targetType )
+			switch (_targetType)
 			{
 				case TransformTargetType.Position:
 					_transform.Position = value;
@@ -56,7 +56,7 @@ namespace Nez.Tweens
 
 		public Vector2 GetTweenedValue()
 		{
-			switch( _targetType )
+			switch (_targetType)
 			{
 				case TransformTargetType.Position:
 					return _transform.Position;
@@ -67,9 +67,9 @@ namespace Nez.Tweens
 				case TransformTargetType.LocalScale:
 					return _transform.LocalScale;
 				case TransformTargetType.RotationDegrees:
-					return new Vector2( _transform.RotationDegrees );
+					return new Vector2(_transform.RotationDegrees);
 				case TransformTargetType.LocalRotationDegrees:
-					return new Vector2( _transform.LocalRotationDegrees, 0 );
+					return new Vector2(_transform.LocalRotationDegrees, 0);
 				default:
 					throw new System.ArgumentOutOfRangeException();
 			}
@@ -82,7 +82,7 @@ namespace Nez.Tweens
 		}
 
 
-		public void SetTargetAndType( Transform transform, TransformTargetType targetType )
+		public void SetTargetAndType(Transform transform, TransformTargetType targetType)
 		{
 			_transform = transform;
 			_targetType = targetType;
@@ -92,23 +92,23 @@ namespace Nez.Tweens
 		protected override void UpdateValue()
 		{
 			// special case for non-relative angle lerps so that they take the shortest possible rotation
-			if( ( _targetType == TransformTargetType.RotationDegrees || _targetType == TransformTargetType.LocalRotationDegrees ) && !_isRelative )
-				SetTweenedValue( Lerps.EaseAngle( _easeType, _fromValue, _toValue, _elapsedTime, _duration ) );
+			if ((_targetType == TransformTargetType.RotationDegrees ||
+			     _targetType == TransformTargetType.LocalRotationDegrees) && !_isRelative)
+				SetTweenedValue(Lerps.EaseAngle(_easeType, _fromValue, _toValue, _elapsedTime, _duration));
 			else
-				SetTweenedValue( Lerps.Ease( _easeType, _fromValue, _toValue, _elapsedTime, _duration ) );
+				SetTweenedValue(Lerps.Ease(_easeType, _fromValue, _toValue, _elapsedTime, _duration));
 		}
 
 
 		public override void RecycleSelf()
 		{
-			if( _shouldRecycleTween )
+			if (_shouldRecycleTween)
 			{
 				_target = null;
 				_nextTween = null;
 				_transform = null;
-				Pool<TransformVector2Tween>.Free( this );
+				Pool<TransformVector2Tween>.Free(this);
 			}
 		}
-
 	}
 }

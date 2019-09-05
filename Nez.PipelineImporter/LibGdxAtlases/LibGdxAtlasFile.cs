@@ -11,4 +11,3 @@ namespace Nez.LibGdxAtlases
 		public List<LibGdxAtlasRegion> Regions = new List<LibGdxAtlasRegion>();
 	}
 }
-

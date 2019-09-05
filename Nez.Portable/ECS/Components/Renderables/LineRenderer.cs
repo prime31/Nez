@@ -6,36 +6,35 @@ using System.Runtime.CompilerServices;
 
 namespace Nez
 {
-    public enum EndCapType
-    {
-        /// <summary>
-        /// will not attempt to add any extra verts at joints
-        /// </summary>
-        Standard,
-
-        /// <summary>
-        /// all joints will be extruded out with an extra vert resulting in jagged, pointy joints
-        /// </summary>
-        Jagged,
-
-        /// <summary>
-        /// the same as jagged but uses cutoffAngleForEndCapSubdivision to decide if a joint should be Jagged or Standard
-        /// </summary>
-        JaggedWithCutoff,
-
-        /// <summary>
-        /// joints are smoothed with some extra geometry. Uses degreesPerSubdivision to decide how smooth to make each joint.
-        /// </summary>
-        Smooth
-    }
-
-    /// <summary>
-    /// Renders a trail behind a moving object
-    /// Adapted from http://www.paradeofrain.com/2010/01/28/update-on-continuous-2d-trails-in-xna/
-    /// </summary>
-    public class LineRenderer : RenderableComponent
+	public enum EndCapType
 	{
+		/// <summary>
+		/// will not attempt to add any extra verts at joints
+		/// </summary>
+		Standard,
 
+		/// <summary>
+		/// all joints will be extruded out with an extra vert resulting in jagged, pointy joints
+		/// </summary>
+		Jagged,
+
+		/// <summary>
+		/// the same as jagged but uses cutoffAngleForEndCapSubdivision to decide if a joint should be Jagged or Standard
+		/// </summary>
+		JaggedWithCutoff,
+
+		/// <summary>
+		/// joints are smoothed with some extra geometry. Uses degreesPerSubdivision to decide how smooth to make each joint.
+		/// </summary>
+		Smooth
+	}
+
+	/// <summary>
+	/// Renders a trail behind a moving object
+	/// Adapted from http://www.paradeofrain.com/2010/01/28/update-on-continuous-2d-trails-in-xna/
+	/// </summary>
+	public class LineRenderer : RenderableComponent
+	{
 		public override RectangleF Bounds
 		{
 			// we calculate bounds in update so no need to mess with anything here
@@ -85,8 +84,8 @@ namespace Nez
 		Segment _firstSegment = new Segment();
 		Segment _secondSegment = new Segment();
 		Segment _lastSegment = new Segment();
-		FastList<short> _indices = new FastList<short>( 50 );
-		FastList<VertexPositionColorTexture> _vertices = new FastList<VertexPositionColorTexture>( 50 );
+		FastList<short> _indices = new FastList<short>(50);
+		FastList<VertexPositionColorTexture> _vertices = new FastList<VertexPositionColorTexture>(50);
 
 
 		#region configuration
@@ -97,7 +96,7 @@ namespace Nez
 		/// </summary>
 		/// <returns>The use world space.</returns>
 		/// <param name="useWorldSpace">If set to <c>true</c> use world space.</param>
-		public LineRenderer SetUseWorldSpace( bool useWorldSpace )
+		public LineRenderer SetUseWorldSpace(bool useWorldSpace)
 		{
 			this.UseWorldSpace = useWorldSpace;
 			return this;
@@ -109,9 +108,9 @@ namespace Nez
 		/// </summary>
 		/// <returns>The texture.</returns>
 		/// <param name="texture">Texture.</param>
-		public LineRenderer SetTexture( Texture2D texture )
+		public LineRenderer SetTexture(Texture2D texture)
 		{
-			if( _basicEffect != null )
+			if (_basicEffect != null)
 			{
 				_basicEffect.Texture = texture;
 				_basicEffect.TextureEnabled = texture != null;
@@ -131,7 +130,7 @@ namespace Nez
 		/// </summary>
 		/// <returns>The end cap type.</returns>
 		/// <param name="endCapType">End cap type.</param>
-		public LineRenderer SetEndCapType( EndCapType endCapType )
+		public LineRenderer SetEndCapType(EndCapType endCapType)
 		{
 			this.EndCapType = endCapType;
 			_areVertsDirty = true;
@@ -145,7 +144,7 @@ namespace Nez
 		/// </summary>
 		/// <returns>The cutoff angle for end cap subdivision.</returns>
 		/// <param name="cutoffAngleForEndCapSubdivision">Cutoff angle for end cap subdivision.</param>
-		public LineRenderer SetCutoffAngleForEndCapSubdivision( float cutoffAngleForEndCapSubdivision )
+		public LineRenderer SetCutoffAngleForEndCapSubdivision(float cutoffAngleForEndCapSubdivision)
 		{
 			this.CutoffAngleForEndCapSubdivision = cutoffAngleForEndCapSubdivision;
 			_areVertsDirty = true;
@@ -158,9 +157,9 @@ namespace Nez
 		/// </summary>
 		/// <returns>The per subdivision.</returns>
 		/// <param name="degreesPerSubdivision">Degrees per subdivision.</param>
-		public LineRenderer SetDegreesPerSubdivision( float degreesPerSubdivision )
+		public LineRenderer SetDegreesPerSubdivision(float degreesPerSubdivision)
 		{
-			Insist.IsTrue( degreesPerSubdivision > 0, "degreesPerSubdivision must be greater than 0" );
+			Insist.IsTrue(degreesPerSubdivision > 0, "degreesPerSubdivision must be greater than 0");
 			this.DegreesPerSubdivision = degreesPerSubdivision;
 			return this;
 		}
@@ -171,7 +170,7 @@ namespace Nez
 		/// <returns>The start end widths.</returns>
 		/// <param name="startWidth">Start width.</param>
 		/// <param name="endWidth">End width.</param>
-		public LineRenderer SetStartEndWidths( float startWidth, float endWidth )
+		public LineRenderer SetStartEndWidths(float startWidth, float endWidth)
 		{
 			_startWidth = startWidth;
 			_endWidth = endWidth;
@@ -198,7 +197,7 @@ namespace Nez
 		/// <returns>The start end colors.</returns>
 		/// <param name="startColor">Start color.</param>
 		/// <param name="endColor">End color.</param>
-		public LineRenderer SetStartEndColors( Color startColor, Color endColor )
+		public LineRenderer SetStartEndColors(Color startColor, Color endColor)
 		{
 			_startColor = startColor;
 			_endColor = endColor;
@@ -220,15 +219,16 @@ namespace Nez
 		}
 
 
-		public LineRenderer SetPoints( Vector2[] points )
+		public LineRenderer SetPoints(Vector2[] points)
 		{
 			_points.Reset();
-			_points.EnsureCapacity( points.Length );
-			for( var i = 0; i < points.Length; i++ )
+			_points.EnsureCapacity(points.Length);
+			for (var i = 0; i < points.Length; i++)
 			{
 				_points.Buffer[i].Position = points[i];
 				_points.Length++;
 			}
+
 			_areVertsDirty = true;
 
 			return this;
@@ -241,9 +241,9 @@ namespace Nez
 		/// <returns>The point.</returns>
 		/// <param name="point">Point.</param>
 		/// <param name="width">Width.</param>
-		public LineRenderer AddPoint( Vector2 point, float width = 20 )
+		public LineRenderer AddPoint(Vector2 point, float width = 20)
 		{
-			_maxWidth = System.Math.Max( _maxWidth, width );
+			_maxWidth = System.Math.Max(_maxWidth, width);
 
 			_points.EnsureCapacity();
 			_points.Buffer[_points.Length].Position = point;
@@ -263,9 +263,9 @@ namespace Nez
 		/// <param name="point">Point.</param>
 		/// <param name="width">Width.</param>
 		/// <param name="color">Color.</param>
-		public LineRenderer AddPoint( Vector2 point, float width, Color color )
+		public LineRenderer AddPoint(Vector2 point, float width, Color color)
 		{
-			_maxWidth = System.Math.Max( _maxWidth, width );
+			_maxWidth = System.Math.Max(_maxWidth, width);
 
 			_points.EnsureCapacity();
 			_points.Buffer[_points.Length].Position = point;
@@ -278,14 +278,15 @@ namespace Nez
 		}
 
 
-		public LineRenderer AddPoints( Vector2[] points )
+		public LineRenderer AddPoints(Vector2[] points)
 		{
-			_points.EnsureCapacity( points.Length );
-			for( var i = 0; i < points.Length; i++ )
+			_points.EnsureCapacity(points.Length);
+			for (var i = 0; i < points.Length; i++)
 			{
 				_points.Buffer[_points.Length].Position = points[i];
 				_points.Length++;
 			}
+
 			_areVertsDirty = true;
 
 			return this;
@@ -298,7 +299,7 @@ namespace Nez
 		/// <returns>The point.</returns>
 		/// <param name="index">Index.</param>
 		/// <param name="point">Point.</param>
-		public LineRenderer UpdatePoint( int index, Vector2 point )
+		public LineRenderer UpdatePoint(int index, Vector2 point)
 		{
 			_points.Buffer[index].Position = point;
 			_areVertsDirty = true;
@@ -314,9 +315,9 @@ namespace Nez
 		/// <param name="index">Index.</param>
 		/// <param name="point">Point.</param>
 		/// <param name="width">Width.</param>
-		public LineRenderer UpdatePoint( int index, Vector2 point, float width )
+		public LineRenderer UpdatePoint(int index, Vector2 point, float width)
 		{
-			_maxWidth = System.Math.Max( _maxWidth, width );
+			_maxWidth = System.Math.Max(_maxWidth, width);
 
 			_points.Buffer[index].Position = point;
 			_points.Buffer[index].Width = width;
@@ -334,9 +335,9 @@ namespace Nez
 		/// <param name="point">Point.</param>
 		/// <param name="width">Width.</param>
 		/// <param name="color">Color.</param>
-		public LineRenderer UpdatePoint( int index, Vector2 point, float width, Color color )
+		public LineRenderer UpdatePoint(int index, Vector2 point, float width, Color color)
 		{
-			_maxWidth = System.Math.Max( _maxWidth, width );
+			_maxWidth = System.Math.Max(_maxWidth, width);
 
 			_points.Buffer[index].Position = point;
 			_points.Buffer[index].Width = width;
@@ -363,7 +364,7 @@ namespace Nez
 
 		void CalculateVertices()
 		{
-			if( !_areVertsDirty || _points.Length < 2 )
+			if (!_areVertsDirty || _points.Length < 2)
 				return;
 
 			_areVertsDirty = false;
@@ -375,23 +376,27 @@ namespace Nez
 			var maxY = float.MinValue;
 			var minY = float.MaxValue;
 
-			if( _useStartEndWidths )
-				_maxWidth = System.Math.Max( _startWidth, _endWidth );
+			if (_useStartEndWidths)
+				_maxWidth = System.Math.Max(_startWidth, _endWidth);
 
 			// calculate line length first and simulataneously get our min/max points for the bounds
 			var lineLength = 0f;
 			var halfMaxWidth = _maxWidth * 0.5f;
 			_points.Buffer[0].LengthFromPreviousPoint = 0;
-			for( var i = 0; i < _points.Length - 1; i++ )
+			for (var i = 0; i < _points.Length - 1; i++)
 			{
-				var distance = Vector2.Distance( _points.Buffer[i].Position, _points.Buffer[i + 1].Position );
+				var distance = Vector2.Distance(_points.Buffer[i].Position, _points.Buffer[i + 1].Position);
 				_points.Buffer[i + 1].LengthFromPreviousPoint = distance;
 				lineLength += distance;
 
-				maxX = Mathf.MaxOf( maxX, _points.Buffer[i].Position.X + halfMaxWidth, _points.Buffer[i + 1].Position.X + halfMaxWidth );
-				minX = Mathf.MinOf( minX, _points.Buffer[i].Position.X - halfMaxWidth, _points.Buffer[i + 1].Position.X - halfMaxWidth );
-				maxY = Mathf.MaxOf( maxY, _points.Buffer[i].Position.Y + halfMaxWidth, _points.Buffer[i + 1].Position.Y + halfMaxWidth );
-				minY = Mathf.MinOf( minY, _points.Buffer[i].Position.Y - halfMaxWidth, _points.Buffer[i + 1].Position.Y - halfMaxWidth );
+				maxX = Mathf.MaxOf(maxX, _points.Buffer[i].Position.X + halfMaxWidth,
+					_points.Buffer[i + 1].Position.X + halfMaxWidth);
+				minX = Mathf.MinOf(minX, _points.Buffer[i].Position.X - halfMaxWidth,
+					_points.Buffer[i + 1].Position.X - halfMaxWidth);
+				maxY = Mathf.MaxOf(maxY, _points.Buffer[i].Position.Y + halfMaxWidth,
+					_points.Buffer[i + 1].Position.Y + halfMaxWidth);
+				minY = Mathf.MinOf(minY, _points.Buffer[i].Position.Y - halfMaxWidth,
+					_points.Buffer[i + 1].Position.Y - halfMaxWidth);
 			}
 
 			_bounds.X = minX;
@@ -400,22 +405,22 @@ namespace Nez
 			_bounds.Height = maxY - minY;
 
 			// special case: single segment
-			if( _points.Length == 2 )
+			if (_points.Length == 2)
 			{
-				if( _useStartEndWidths )
+				if (_useStartEndWidths)
 				{
 					_points.Buffer[0].Width = _startWidth;
 					_points.Buffer[1].Width = _endWidth;
 				}
 
-				if( _useStartEndColors )
+				if (_useStartEndColors)
 				{
 					_points.Buffer[0].Color = _startColor;
 					_points.Buffer[1].Color = _endColor;
 				}
 
-				_firstSegment.SetPoints( ref _points.Buffer[0], ref _points.Buffer[1] );
-				AddSingleSegmentLine( ref _firstSegment, _points.Buffer[1].Color);
+				_firstSegment.SetPoints(ref _points.Buffer[0], ref _points.Buffer[1]);
+				AddSingleSegmentLine(ref _firstSegment, _points.Buffer[1].Color);
 				return;
 			}
 
@@ -424,13 +429,13 @@ namespace Nez
 			var vertIndex = 0;
 			var thirdPoint = new SegmentPoint();
 
-			for( var i = 0; i < _points.Length - 1; i++ )
+			for (var i = 0; i < _points.Length - 1; i++)
 			{
 				var firstPoint = _points.Buffer[i];
 				var secondPoint = _points.Buffer[i + 1];
 
 				var hasThirdPoint = _points.Length > i + 2;
-				if( hasThirdPoint )
+				if (hasThirdPoint)
 					thirdPoint = _points.Buffer[i + 2];
 
 				// we need the distance along the line of both the first and second points. distanceSoFar will always be for the furthest point
@@ -441,54 +446,55 @@ namespace Nez
 				var firstPointRatio = firstPointDistance / lineLength;
 				var secondPointRatio = distanceSoFar / lineLength;
 				var thirdPointRatio = 0f;
-				if( hasThirdPoint )
-					thirdPointRatio = ( distanceSoFar + thirdPoint.LengthFromPreviousPoint ) / lineLength;
+				if (hasThirdPoint)
+					thirdPointRatio = (distanceSoFar + thirdPoint.LengthFromPreviousPoint) / lineLength;
 
-				if( _useStartEndColors )
+				if (_useStartEndColors)
 				{
-					ColorExt.Lerp( ref _startColor, ref _endColor, out firstPoint.Color, firstPointRatio );
-					ColorExt.Lerp( ref _startColor, ref _endColor, out secondPoint.Color, secondPointRatio );
+					ColorExt.Lerp(ref _startColor, ref _endColor, out firstPoint.Color, firstPointRatio);
+					ColorExt.Lerp(ref _startColor, ref _endColor, out secondPoint.Color, secondPointRatio);
 
-					if( hasThirdPoint )
-						ColorExt.Lerp( ref _startColor, ref _endColor, out thirdPoint.Color, thirdPointRatio );
+					if (hasThirdPoint)
+						ColorExt.Lerp(ref _startColor, ref _endColor, out thirdPoint.Color, thirdPointRatio);
 				}
 
-				if( _useStartEndWidths )
+				if (_useStartEndWidths)
 				{
-					firstPoint.Width = Mathf.Lerp( _startWidth, _endWidth, firstPointRatio );
-					secondPoint.Width = Mathf.Lerp( _startWidth, _endWidth, secondPointRatio );
+					firstPoint.Width = Mathf.Lerp(_startWidth, _endWidth, firstPointRatio);
+					secondPoint.Width = Mathf.Lerp(_startWidth, _endWidth, secondPointRatio);
 
-					if( hasThirdPoint )
-						thirdPoint.Width = Mathf.Lerp( _startWidth, _endWidth, thirdPointRatio );
+					if (hasThirdPoint)
+						thirdPoint.Width = Mathf.Lerp(_startWidth, _endWidth, thirdPointRatio);
 				}
 
 
-				if( i == 0 )
+				if (i == 0)
 				{
-					_firstSegment.SetPoints( ref firstPoint, ref secondPoint );
-					_secondSegment.SetPoints( ref secondPoint, ref thirdPoint );
+					_firstSegment.SetPoints(ref firstPoint, ref secondPoint);
+					_secondSegment.SetPoints(ref secondPoint, ref thirdPoint);
 				}
 				else
 				{
-					Utils.Swap( ref _firstSegment, ref _secondSegment );
-					if( hasThirdPoint )
-						_secondSegment.SetPoints( ref secondPoint, ref thirdPoint );
+					Utils.Swap(ref _firstSegment, ref _secondSegment);
+					if (hasThirdPoint)
+						_secondSegment.SetPoints(ref secondPoint, ref thirdPoint);
 				}
 
 				// dont recalculate the fusedPoint for the last segment since there will be no third point to work with
-				if( hasThirdPoint )
+				if (hasThirdPoint)
 				{
-					var shouldFuseBottom = Vector2Ext.IsTriangleCCW( firstPoint.Position, secondPoint.Position, thirdPoint.Position );
-					_secondSegment.SetFusedData( shouldFuseBottom, ref _firstSegment );
+					var shouldFuseBottom =
+						Vector2Ext.IsTriangleCCW(firstPoint.Position, secondPoint.Position, thirdPoint.Position);
+					_secondSegment.SetFusedData(shouldFuseBottom, ref _firstSegment);
 				}
 
 				// special care needs to be take with the first segment since it has a different vert count
-				if( i == 0 )
-					AddFirstSegment( ref _firstSegment, ref _secondSegment, ref vertIndex );
+				if (i == 0)
+					AddFirstSegment(ref _firstSegment, ref _secondSegment, ref vertIndex);
 				else
-					AddSegment( ref _firstSegment, ref vertIndex );
+					AddSegment(ref _firstSegment, ref vertIndex);
 
-				_lastSegment.CloneFrom( ref _firstSegment );
+				_lastSegment.CloneFrom(ref _firstSegment);
 			}
 		}
 
@@ -497,21 +503,21 @@ namespace Nez
 		/// special case for just 2 points, one line segment
 		/// </summary>
 		/// <param name="segment">Segment.</param>
-		[MethodImpl( MethodImplOptions.AggressiveInlining )]
-		void AddSingleSegmentLine( ref Segment segment, Color nextPointColor )
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		void AddSingleSegmentLine(ref Segment segment, Color nextPointColor)
 		{
-			_indices.Add( 0 );
-			_indices.Add( 1 );
-			_indices.Add( 2 );
+			_indices.Add(0);
+			_indices.Add(1);
+			_indices.Add(2);
 
-			_indices.Add( 0 );
-			_indices.Add( 2 );
-			_indices.Add( 3 );
+			_indices.Add(0);
+			_indices.Add(2);
+			_indices.Add(3);
 
-			AddVert( 0, segment.Tl, new Vector2( 0, 1 ), _useStartEndColors ? _startColor : segment.Point.Color );
-			AddVert( 1, segment.Tr, new Vector2( 1, 1 ), nextPointColor );
-			AddVert( 2, segment.Br, new Vector2( 1, 0 ), nextPointColor );
-			AddVert( 3, segment.Bl, new Vector2( 0, 0 ), _useStartEndColors ? _startColor : segment.Point.Color );
+			AddVert(0, segment.Tl, new Vector2(0, 1), _useStartEndColors ? _startColor : segment.Point.Color);
+			AddVert(1, segment.Tr, new Vector2(1, 1), nextPointColor);
+			AddVert(2, segment.Br, new Vector2(1, 0), nextPointColor);
+			AddVert(3, segment.Bl, new Vector2(0, 0), _useStartEndColors ? _startColor : segment.Point.Color);
 		}
 
 
@@ -521,38 +527,40 @@ namespace Nez
 		/// <param name="segment">Segment.</param>
 		/// <param name="nextSegment">Next segment.</param>
 		/// <param name="vertIndex">Vert index.</param>
-		[MethodImpl( MethodImplOptions.AggressiveInlining )]
-		void AddFirstSegment( ref Segment segment, ref Segment nextSegment, ref int vertIndex )
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		void AddFirstSegment(ref Segment segment, ref Segment nextSegment, ref int vertIndex)
 		{
-			_indices.Add( 0 );
-			_indices.Add( 1 );
-			_indices.Add( 4 );
+			_indices.Add(0);
+			_indices.Add(1);
+			_indices.Add(4);
 
-			_indices.Add( 1 );
-			_indices.Add( 2 );
-			_indices.Add( 4 );
+			_indices.Add(1);
+			_indices.Add(2);
+			_indices.Add(4);
 
-			_indices.Add( 2 );
-			_indices.Add( 3 );
-			_indices.Add( 4 );
+			_indices.Add(2);
+			_indices.Add(3);
+			_indices.Add(4);
 
 			// the tl vert will always be present, as weill the bl
-			AddVert( vertIndex++, segment.Tl, new Vector2( 0, 1 ), segment.Point.Color );
+			AddVert(vertIndex++, segment.Tl, new Vector2(0, 1), segment.Point.Color);
 
-			if( nextSegment.ShouldFuseBottom )
+			if (nextSegment.ShouldFuseBottom)
 			{
-				AddVert( vertIndex++, segment.Tr, new Vector2( 1, 1 ), segment.NextPoint.Color );
-				AddVert( vertIndex++, nextSegment.Point.Position, new Vector2( 1, 0.5f ), segment.NextPoint.Color );
-				AddVert( vertIndex++, nextSegment.HasFusedPoint ? nextSegment.FusedPoint : segment.Tl, new Vector2( 1, 0 ), segment.NextPoint.Color );
+				AddVert(vertIndex++, segment.Tr, new Vector2(1, 1), segment.NextPoint.Color);
+				AddVert(vertIndex++, nextSegment.Point.Position, new Vector2(1, 0.5f), segment.NextPoint.Color);
+				AddVert(vertIndex++, nextSegment.HasFusedPoint ? nextSegment.FusedPoint : segment.Tl, new Vector2(1, 0),
+					segment.NextPoint.Color);
 			}
 			else
 			{
-				AddVert( vertIndex++, nextSegment.HasFusedPoint ? nextSegment.FusedPoint : segment.Bl, new Vector2( 1, 1 ), segment.NextPoint.Color );
-				AddVert( vertIndex++, nextSegment.Point.Position, new Vector2( 1, 0.5f ), segment.NextPoint.Color );
-				AddVert( vertIndex++, segment.Br, new Vector2( 1, 0 ), segment.NextPoint.Color );
+				AddVert(vertIndex++, nextSegment.HasFusedPoint ? nextSegment.FusedPoint : segment.Bl, new Vector2(1, 1),
+					segment.NextPoint.Color);
+				AddVert(vertIndex++, nextSegment.Point.Position, new Vector2(1, 0.5f), segment.NextPoint.Color);
+				AddVert(vertIndex++, segment.Br, new Vector2(1, 0), segment.NextPoint.Color);
 			}
 
-			AddVert( vertIndex++, segment.Bl, new Vector2( 0, 0 ), segment.Point.Color );
+			AddVert(vertIndex++, segment.Bl, new Vector2(0, 0), segment.Point.Color);
 		}
 
 
@@ -561,130 +569,134 @@ namespace Nez
 		/// </summary>
 		/// <param name="segment">Segment.</param>
 		/// <param name="vertIndex">Vert index.</param>
-		[MethodImpl( MethodImplOptions.AggressiveInlining )]
-		void AddSegment( ref Segment segment, ref int vertIndex )
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		void AddSegment(ref Segment segment, ref int vertIndex)
 		{
 			// first, we need to patch the previous elbow gap
-			PatchJoint( ref segment, ref vertIndex );
-			
-			_indices.Add( (short)vertIndex );
-			_indices.Add( (short)( vertIndex + 1 ) );
-			_indices.Add( (short)( vertIndex + 2 ) );
+			PatchJoint(ref segment, ref vertIndex);
 
-			_indices.Add( (short)( vertIndex + 4 ) );
-			_indices.Add( (short)vertIndex );
-			_indices.Add( (short)( vertIndex + 2 ) );
+			_indices.Add((short) vertIndex);
+			_indices.Add((short) (vertIndex + 1));
+			_indices.Add((short) (vertIndex + 2));
 
-			_indices.Add( (short)( vertIndex + 3 ) );
-			_indices.Add( (short)( vertIndex + 4 ) );
-			_indices.Add( (short)( vertIndex + 2 ) );
+			_indices.Add((short) (vertIndex + 4));
+			_indices.Add((short) vertIndex);
+			_indices.Add((short) (vertIndex + 2));
 
-			if( segment.ShouldFuseBottom )
+			_indices.Add((short) (vertIndex + 3));
+			_indices.Add((short) (vertIndex + 4));
+			_indices.Add((short) (vertIndex + 2));
+
+			if (segment.ShouldFuseBottom)
 			{
-				AddVert( vertIndex++, segment.Tl, new Vector2( 0, 1 ), segment.Point.Color );
-				AddVert( vertIndex++, segment.Tr, new Vector2( 1, 1 ), segment.NextPoint.Color );
-				AddVert( vertIndex++, segment.Br, new Vector2( 1, 0 ), segment.NextPoint.Color );
-				AddVert( vertIndex++, segment.HasFusedPoint ? segment.FusedPoint : segment.Bl, new Vector2( 0, 0 ), segment.Point.Color );
+				AddVert(vertIndex++, segment.Tl, new Vector2(0, 1), segment.Point.Color);
+				AddVert(vertIndex++, segment.Tr, new Vector2(1, 1), segment.NextPoint.Color);
+				AddVert(vertIndex++, segment.Br, new Vector2(1, 0), segment.NextPoint.Color);
+				AddVert(vertIndex++, segment.HasFusedPoint ? segment.FusedPoint : segment.Bl, new Vector2(0, 0),
+					segment.Point.Color);
 			}
 			else
 			{
-				AddVert( vertIndex++, segment.HasFusedPoint ? segment.FusedPoint : segment.Tl, new Vector2( 0, 1 ), segment.Point.Color );
-				AddVert( vertIndex++, segment.Tr, new Vector2( 1, 1 ), segment.NextPoint.Color );
-				AddVert( vertIndex++, segment.Br, new Vector2( 1, 0 ), segment.NextPoint.Color );
-				AddVert( vertIndex++, segment.Bl, new Vector2( 0, 0 ), segment.Point.Color );
+				AddVert(vertIndex++, segment.HasFusedPoint ? segment.FusedPoint : segment.Tl, new Vector2(0, 1),
+					segment.Point.Color);
+				AddVert(vertIndex++, segment.Tr, new Vector2(1, 1), segment.NextPoint.Color);
+				AddVert(vertIndex++, segment.Br, new Vector2(1, 0), segment.NextPoint.Color);
+				AddVert(vertIndex++, segment.Bl, new Vector2(0, 0), segment.Point.Color);
 			}
 
-			AddVert( vertIndex++, segment.Point.Position, new Vector2( 1, 0.5f ), segment.Point.Color );
+			AddVert(vertIndex++, segment.Point.Position, new Vector2(1, 0.5f), segment.Point.Color);
 		}
 
 
-		[MethodImpl( MethodImplOptions.AggressiveInlining )]
-		void PatchJoint( ref Segment segment, ref int vertIndex )
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		void PatchJoint(ref Segment segment, ref int vertIndex)
 		{
-			switch( EndCapType )
+			switch (EndCapType)
 			{
 				case EndCapType.Standard:
-					PatchStandardJoint( ref segment, ref vertIndex );
+					PatchStandardJoint(ref segment, ref vertIndex);
 					break;
 				case EndCapType.Jagged:
-					PatchJaggedJoint( ref segment, ref vertIndex );
+					PatchJaggedJoint(ref segment, ref vertIndex);
 					break;
 				case EndCapType.JaggedWithCutoff:
-					if( segment.Angle < CutoffAngleForEndCapSubdivision )
-						PatchJaggedJoint( ref segment, ref vertIndex );
+					if (segment.Angle < CutoffAngleForEndCapSubdivision)
+						PatchJaggedJoint(ref segment, ref vertIndex);
 					else
-						PatchStandardJoint( ref segment, ref vertIndex );
+						PatchStandardJoint(ref segment, ref vertIndex);
 					break;
 				case EndCapType.Smooth:
-					PatchSmoothJoint( ref segment, ref vertIndex );
+					PatchSmoothJoint(ref segment, ref vertIndex);
 					break;
 			}
 		}
 
 
-		[MethodImpl( MethodImplOptions.AggressiveInlining )]
-		void PatchStandardJoint( ref Segment segment, ref int vertIndex )
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		void PatchStandardJoint(ref Segment segment, ref int vertIndex)
 		{
-			if( segment.ShouldFuseBottom )
+			if (segment.ShouldFuseBottom)
 			{
-				_indices.Add( (short)vertIndex );
-				_indices.Add( (short)( vertIndex + 4 ) );
-				_indices.Add( (short)( vertIndex - 4 ) );
+				_indices.Add((short) vertIndex);
+				_indices.Add((short) (vertIndex + 4));
+				_indices.Add((short) (vertIndex - 4));
 			}
 			else
 			{
 				// If this is the second segment we need a different vert from the first segment since the first segment has 1 less vert than
 				// all mid segments.
 				var firstSegmentOffset = vertIndex == 5 ? 1 : 0;
-				_indices.Add( (short)( vertIndex - 3 + firstSegmentOffset ) );
-				_indices.Add( (short)( vertIndex + 4 ) );
-				_indices.Add( (short)( vertIndex + 3 ) );
+				_indices.Add((short) (vertIndex - 3 + firstSegmentOffset));
+				_indices.Add((short) (vertIndex + 4));
+				_indices.Add((short) (vertIndex + 3));
 			}
 		}
 
 
-		[MethodImpl( MethodImplOptions.AggressiveInlining )]
-		void PatchJaggedJoint( ref Segment segment, ref int vertIndex )
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		void PatchJaggedJoint(ref Segment segment, ref int vertIndex)
 		{
 			Vector2 intersection;
-			if( segment.ShouldFuseBottom )
+			if (segment.ShouldFuseBottom)
 			{
-				if( Vector2Ext.GetRayIntersection( segment.Tl, segment.Tr, _lastSegment.Tl, _lastSegment.Tr, out intersection ) )
+				if (Vector2Ext.GetRayIntersection(segment.Tl, segment.Tr, _lastSegment.Tl, _lastSegment.Tr,
+					out intersection))
 				{
-					AddVert( vertIndex++, intersection, new Vector2( 1, 1 ), segment.Point.Color );
+					AddVert(vertIndex++, intersection, new Vector2(1, 1), segment.Point.Color);
 
-					_indices.Add( (short)vertIndex );
-					_indices.Add( (short)( vertIndex + 4 ) );
-					_indices.Add( (short)( vertIndex - 1 ) );
+					_indices.Add((short) vertIndex);
+					_indices.Add((short) (vertIndex + 4));
+					_indices.Add((short) (vertIndex - 1));
 
-					_indices.Add( (short)( vertIndex - 1 ) );
-					_indices.Add( (short)( vertIndex + 4 ) );
-					_indices.Add( (short)( vertIndex - 5 ) );
+					_indices.Add((short) (vertIndex - 1));
+					_indices.Add((short) (vertIndex + 4));
+					_indices.Add((short) (vertIndex - 5));
 				}
 			}
 			else
 			{
-				if( Vector2Ext.GetRayIntersection( segment.Bl, segment.Br, _lastSegment.Bl, _lastSegment.Br, out intersection ) )
+				if (Vector2Ext.GetRayIntersection(segment.Bl, segment.Br, _lastSegment.Bl, _lastSegment.Br,
+					out intersection))
 				{
 					var firstSegmentOffset = vertIndex == 5 ? 1 : 0;
-					AddVert( vertIndex++, intersection, new Vector2( 1, 0 ), segment.Point.Color );
+					AddVert(vertIndex++, intersection, new Vector2(1, 0), segment.Point.Color);
 
-					_indices.Add( (short)( vertIndex + 4 ) );
-					_indices.Add( (short)( vertIndex + 3 ) );
-					_indices.Add( (short)( vertIndex - 1 ) );
+					_indices.Add((short) (vertIndex + 4));
+					_indices.Add((short) (vertIndex + 3));
+					_indices.Add((short) (vertIndex - 1));
 
-					_indices.Add( (short)( vertIndex - 3 + firstSegmentOffset ) );
-					_indices.Add( (short)( vertIndex + 4 ) );
-					_indices.Add( (short)( vertIndex - 1 ) );
+					_indices.Add((short) (vertIndex - 3 + firstSegmentOffset));
+					_indices.Add((short) (vertIndex + 4));
+					_indices.Add((short) (vertIndex - 1));
 				}
 			}
 		}
 
 
-		[MethodImpl( MethodImplOptions.AggressiveInlining )]
-		void PatchSmoothJoint( ref Segment segment, ref int vertIndex )
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		void PatchSmoothJoint(ref Segment segment, ref int vertIndex)
 		{
-			if( segment.ShouldFuseBottom )
+			if (segment.ShouldFuseBottom)
 			{
 				// first, we need to get the angle from the point to the tr and tl verts
 				var a = _lastSegment.Tr;
@@ -692,38 +704,38 @@ namespace Nez
 				var center = segment.Point.Position;
 
 				// we get the angle from 3 o'clock to each of the points, then get the angle in degrees of the pacman shape
-				var angle1 = Mathf.Atan2( a.Y - center.Y, a.X - center.X ) * Mathf.Rad2Deg;
-				var angle2 = Mathf.Atan2( b.Y - center.Y, b.X - center.X ) * Mathf.Rad2Deg;
-				var deltaAngle = Mathf.DeltaAngle( angle1, angle2 );
+				var angle1 = Mathf.Atan2(a.Y - center.Y, a.X - center.X) * Mathf.Rad2Deg;
+				var angle2 = Mathf.Atan2(b.Y - center.Y, b.X - center.X) * Mathf.Rad2Deg;
+				var deltaAngle = Mathf.DeltaAngle(angle1, angle2);
 
 				// figure out how many verts we are going to add to the joint
-				var totalNewVerts = Mathf.Ceil( System.Math.Abs( deltaAngle ) / DegreesPerSubdivision );
-				var angleIncrement = deltaAngle / ( totalNewVerts + 1 );
+				var totalNewVerts = Mathf.Ceil(System.Math.Abs(deltaAngle) / DegreesPerSubdivision);
+				var angleIncrement = deltaAngle / (totalNewVerts + 1);
 
 				// first triangle will go from the tr vert of the last segment, to the point, to the first new vert
-				_indices.Add( (short)( vertIndex ) ); // first new vert
-				_indices.Add( (short)( vertIndex + 4 + totalNewVerts ) ); // point
-				_indices.Add( (short)( vertIndex - 4 ) ); // tr of previous
+				_indices.Add((short) (vertIndex)); // first new vert
+				_indices.Add((short) (vertIndex + 4 + totalNewVerts)); // point
+				_indices.Add((short) (vertIndex - 4)); // tr of previous
 
 				// add all the triangles that are not connected to either of the two segments
-				for( var i = 0; i < totalNewVerts - 1; i++ )
+				for (var i = 0; i < totalNewVerts - 1; i++)
 				{
-					_indices.Add( (short)( vertIndex + i ) ); // prev new vert
-					_indices.Add( (short)( vertIndex + i + 1 ) ); // next new vert
-					_indices.Add( (short)( vertIndex + 4 + totalNewVerts ) ); // point
+					_indices.Add((short) (vertIndex + i)); // prev new vert
+					_indices.Add((short) (vertIndex + i + 1)); // next new vert
+					_indices.Add((short) (vertIndex + 4 + totalNewVerts)); // point
 				}
 
 				// finally, add the last triangle
-				_indices.Add( (short)( vertIndex + totalNewVerts ) ); // 0	tl of next
-				_indices.Add( (short)( vertIndex + 4 + totalNewVerts ) ); // point
-				_indices.Add( (short)( vertIndex + totalNewVerts - 1 ) ); // last new vert
+				_indices.Add((short) (vertIndex + totalNewVerts)); // 0	tl of next
+				_indices.Add((short) (vertIndex + 4 + totalNewVerts)); // point
+				_indices.Add((short) (vertIndex + totalNewVerts - 1)); // last new vert
 
 				// and now we add all the verts using the angleIncrement we calcualted earlier to step from angle1 to angle2
-				for( var i = 0; i < totalNewVerts; i++ )
+				for (var i = 0; i < totalNewVerts; i++)
 				{
-					var midAngle = angle1 + angleIncrement * ( i + 1 );
-					var midPoint = Mathf.PointOnCircle( center, segment.Point.Width / 2, midAngle );
-					AddVert( vertIndex++, midPoint, new Vector2( 1, 1 ), segment.Point.Color );
+					var midAngle = angle1 + angleIncrement * (i + 1);
+					var midPoint = Mathf.PointOnCircle(center, segment.Point.Width / 2, midAngle);
+					AddVert(vertIndex++, midPoint, new Vector2(1, 1), segment.Point.Color);
 				}
 			}
 			else
@@ -732,34 +744,34 @@ namespace Nez
 				var b = segment.Bl;
 				var center = segment.Point.Position;
 
-				var angle1 = Mathf.Atan2( a.Y - center.Y, a.X - center.X ) * Mathf.Rad2Deg;
-				var angle2 = Mathf.Atan2( b.Y - center.Y, b.X - center.X ) * Mathf.Rad2Deg;
-				var deltaAngle = Mathf.DeltaAngle( angle1, angle2 );
+				var angle1 = Mathf.Atan2(a.Y - center.Y, a.X - center.X) * Mathf.Rad2Deg;
+				var angle2 = Mathf.Atan2(b.Y - center.Y, b.X - center.X) * Mathf.Rad2Deg;
+				var deltaAngle = Mathf.DeltaAngle(angle1, angle2);
 
-				var totalNewVerts = Mathf.Ceil( System.Math.Abs( deltaAngle ) / DegreesPerSubdivision );
-				var angleIncrement = deltaAngle / ( totalNewVerts + 1 );
+				var totalNewVerts = Mathf.Ceil(System.Math.Abs(deltaAngle) / DegreesPerSubdivision);
+				var angleIncrement = deltaAngle / (totalNewVerts + 1);
 
 				var firstSegmentOffset = vertIndex == 5 ? 1 : 0;
-				_indices.Add( (short)( vertIndex - 3 + firstSegmentOffset ) ); // bl of previous
-				_indices.Add( (short)( vertIndex + 4 + totalNewVerts ) ); // center
-				_indices.Add( (short)( vertIndex ) ); // first new vert
+				_indices.Add((short) (vertIndex - 3 + firstSegmentOffset)); // bl of previous
+				_indices.Add((short) (vertIndex + 4 + totalNewVerts)); // center
+				_indices.Add((short) (vertIndex)); // first new vert
 
-				for( var i = 0; i < totalNewVerts - 1; i++ )
+				for (var i = 0; i < totalNewVerts - 1; i++)
 				{
-					_indices.Add( (short)( vertIndex + 4 + totalNewVerts ) ); // point
-					_indices.Add( (short)( vertIndex + i + 1 ) ); // next new vert
-					_indices.Add( (short)( vertIndex + i ) ); // prev new vert
+					_indices.Add((short) (vertIndex + 4 + totalNewVerts)); // point
+					_indices.Add((short) (vertIndex + i + 1)); // next new vert
+					_indices.Add((short) (vertIndex + i)); // prev new vert
 				}
 
-				_indices.Add( (short)( vertIndex + 4 + totalNewVerts ) ); // point
-				_indices.Add( (short)( vertIndex + 3 + totalNewVerts ) ); // br of next
-				_indices.Add( (short)( vertIndex + totalNewVerts - 1 ) ); // last new vert
+				_indices.Add((short) (vertIndex + 4 + totalNewVerts)); // point
+				_indices.Add((short) (vertIndex + 3 + totalNewVerts)); // br of next
+				_indices.Add((short) (vertIndex + totalNewVerts - 1)); // last new vert
 
-				for( var i = 0; i < totalNewVerts; i++ )
+				for (var i = 0; i < totalNewVerts; i++)
 				{
-					var midAngle = angle1 + angleIncrement * ( i + 1 );
-					var midPoint = Mathf.PointOnCircle( center, segment.Point.Width / 2, midAngle );
-					AddVert( vertIndex++, midPoint, new Vector2( 1, 0 ), segment.Point.Color );
+					var midAngle = angle1 + angleIncrement * (i + 1);
+					var midPoint = Mathf.PointOnCircle(center, segment.Point.Width / 2, midAngle);
+					AddVert(vertIndex++, midPoint, new Vector2(1, 0), segment.Point.Color);
 				}
 			}
 		}
@@ -772,8 +784,8 @@ namespace Nez
 		/// <param name="position">Position.</param>
 		/// <param name="texCoord">Tex coordinate.</param>
 		/// <param name="col">Col.</param>
-		[MethodImpl( MethodImplOptions.AggressiveInlining )]
-		void AddVert( int index, Vector2 position, Vector2 texCoord, Color col )
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		void AddVert(int index, Vector2 position, Vector2 texCoord, Color col)
 		{
 			_vertices.EnsureCapacity();
 			_vertices.Buffer[index].Position = position.ToVector3();
@@ -791,7 +803,7 @@ namespace Nez
 			_basicEffect.World = Matrix.Identity;
 			_basicEffect.VertexColorEnabled = true;
 
-			if( _texture != null )
+			if (_texture != null)
 			{
 				_basicEffect.Texture = _texture;
 				_basicEffect.TextureEnabled = true;
@@ -800,50 +812,52 @@ namespace Nez
 		}
 
 
-		public override void OnEntityTransformChanged( Transform.Component comp )
+		public override void OnEntityTransformChanged(Transform.Component comp)
 		{
 			// we dont care if the transform changed if we are in world space
-			if( UseWorldSpace )
+			if (UseWorldSpace)
 				return;
 
-			_bounds.CalculateBounds( Entity.Transform.Position, _localOffset, Vector2.Zero, Entity.Transform.Scale, Entity.Transform.Rotation, Width, Height );
+			_bounds.CalculateBounds(Entity.Transform.Position, _localOffset, Vector2.Zero, Entity.Transform.Scale,
+				Entity.Transform.Rotation, Width, Height);
 		}
 
 
-		public override bool IsVisibleFromCamera( Camera camera )
+		public override bool IsVisibleFromCamera(Camera camera)
 		{
 			CalculateVertices();
-			return base.IsVisibleFromCamera( camera );
+			return base.IsVisibleFromCamera(camera);
 		}
 
 
-		public override void Render( Graphics graphics, Camera camera )
+		public override void Render(Graphics graphics, Camera camera)
 		{
-			if( _points.Length < 2 )
+			if (_points.Length < 2)
 				return;
-			
+
 			_basicEffect.Projection = camera.ProjectionMatrix;
 			_basicEffect.View = camera.TransformMatrix;
 			_basicEffect.CurrentTechnique.Passes[0].Apply();
 
-			if( !UseWorldSpace )
+			if (!UseWorldSpace)
 				_basicEffect.World = Transform.LocalToWorldTransform;
 
 			var primitiveCount = _indices.Length / 3;
 			Core.GraphicsDevice.SamplerStates[0] = Core.DefaultWrappedSamplerState;
-			Core.GraphicsDevice.DrawUserIndexedPrimitives( PrimitiveType.TriangleList, _vertices.Buffer, 0, _vertices.Length, _indices.Buffer, 0, primitiveCount );
+			Core.GraphicsDevice.DrawUserIndexedPrimitives(PrimitiveType.TriangleList, _vertices.Buffer, 0,
+				_vertices.Length, _indices.Buffer, 0, primitiveCount);
 		}
 
 
-		public override void DebugRender( Graphics graphics )
+		public override void DebugRender(Graphics graphics)
 		{
-			for( var i = 0; i < _vertices.Length; i++ )
+			for (var i = 0; i < _vertices.Length; i++)
 			{
 				var v = _vertices[i];
-				graphics.Batcher.DrawPixel( v.Position.X, v.Position.Y, Color.GhostWhite, 4 );
+				graphics.Batcher.DrawPixel(v.Position.X, v.Position.Y, Color.GhostWhite, 4);
 			}
 
-			graphics.Batcher.DrawHollowRect( _bounds, Debug.Colors.ColliderBounds );
+			graphics.Batcher.DrawHollowRect(_bounds, Debug.Colors.ColliderBounds);
 		}
 
 		#endregion
@@ -874,39 +888,40 @@ namespace Nez
 			public float Angle;
 
 
-			public void SetPoints( ref SegmentPoint point, ref SegmentPoint nextPoint )
+			public void SetPoints(ref SegmentPoint point, ref SegmentPoint nextPoint)
 			{
 				Angle = 0;
 				this.Point = point;
 				this.NextPoint = nextPoint;
 
 				// rotate 90 degrees before calculating and cache cos/sin
-				var radians = Mathf.Atan2( nextPoint.Position.Y - point.Position.Y, nextPoint.Position.X - point.Position.X );
+				var radians = Mathf.Atan2(nextPoint.Position.Y - point.Position.Y,
+					nextPoint.Position.X - point.Position.X);
 				radians += MathHelper.PiOver2;
-				var halfCos = Mathf.Cos( radians ) * 0.5f;
-				var halfSin = Mathf.Sin( radians ) * 0.5f;
+				var halfCos = Mathf.Cos(radians) * 0.5f;
+				var halfSin = Mathf.Sin(radians) * 0.5f;
 
-				Tl = point.Position - new Vector2( point.Width * halfCos, point.Width * halfSin );
-				Tr = nextPoint.Position - new Vector2( nextPoint.Width * halfCos, nextPoint.Width * halfSin );
-				Br = nextPoint.Position + new Vector2( nextPoint.Width * halfCos, nextPoint.Width * halfSin );
-				Bl = point.Position + new Vector2( point.Width * halfCos, point.Width * halfSin );
+				Tl = point.Position - new Vector2(point.Width * halfCos, point.Width * halfSin);
+				Tr = nextPoint.Position - new Vector2(nextPoint.Width * halfCos, nextPoint.Width * halfSin);
+				Br = nextPoint.Position + new Vector2(nextPoint.Width * halfCos, nextPoint.Width * halfSin);
+				Bl = point.Position + new Vector2(point.Width * halfCos, point.Width * halfSin);
 			}
 
 
-			public void SetFusedData( bool shouldFuseBottom, ref Segment segment )
+			public void SetFusedData(bool shouldFuseBottom, ref Segment segment)
 			{
 				// store the angle off for later. For extreme angles we add extra verts to smooth the joint
-				Angle = Vector2Ext.Angle( segment.Point.Position - Point.Position, NextPoint.Position - Point.Position );
+				Angle = Vector2Ext.Angle(segment.Point.Position - Point.Position, NextPoint.Position - Point.Position);
 				this.ShouldFuseBottom = shouldFuseBottom;
 
-				if( shouldFuseBottom )
-					HasFusedPoint = ShapeCollisions.LineToLine( segment.Bl, segment.Br, Bl, Br, out FusedPoint );
+				if (shouldFuseBottom)
+					HasFusedPoint = ShapeCollisions.LineToLine(segment.Bl, segment.Br, Bl, Br, out FusedPoint);
 				else
-					HasFusedPoint = ShapeCollisions.LineToLine( segment.Tl, segment.Tr, Tl, Tr, out FusedPoint );
+					HasFusedPoint = ShapeCollisions.LineToLine(segment.Tl, segment.Tr, Tl, Tr, out FusedPoint);
 			}
 
 
-			public void CloneFrom( ref Segment segment )
+			public void CloneFrom(ref Segment segment)
 			{
 				Tl = segment.Tl;
 				Tr = segment.Tr;
@@ -918,11 +933,8 @@ namespace Nez
 				ShouldFuseBottom = segment.ShouldFuseBottom;
 				Angle = segment.Angle;
 			}
-
 		}
 
 		#endregion
-
 	}
 }
-

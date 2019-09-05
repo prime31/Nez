@@ -10,9 +10,10 @@ namespace Nez
 		{
 			get
 			{
-				if( _areBoundsDirty )
+				if (_areBoundsDirty)
 				{
-					_bounds.CalculateBounds( Entity.Transform.Position, _localOffset, _origin, Entity.Transform.Scale, Entity.Transform.Rotation, _size.X, _size.Y );
+					_bounds.CalculateBounds(Entity.Transform.Position, _localOffset, _origin, Entity.Transform.Scale,
+						Entity.Transform.Rotation, _size.X, _size.Y);
 					_areBoundsDirty = false;
 				}
 
@@ -27,7 +28,7 @@ namespace Nez
 		public string Text
 		{
 			get => _text;
-			set => SetText( value );
+			set => SetText(value);
 		}
 
 		/// <summary>
@@ -37,7 +38,7 @@ namespace Nez
 		public HorizontalAlign HorizontalOrigin
 		{
 			get => _horizontalAlign;
-			set => SetHorizontalAlign( value );
+			set => SetHorizontalAlign(value);
 		}
 
 		/// <summary>
@@ -47,7 +48,7 @@ namespace Nez
 		public VerticalAlign VerticalOrigin
 		{
 			get => _verticalAlign;
-			set => SetVerticalAlign( value );
+			set => SetVerticalAlign(value);
 		}
 
 
@@ -58,10 +59,11 @@ namespace Nez
 		Vector2 _size;
 
 
-		public TextField() : this( Graphics.Instance.BitmapFont, "", Vector2.Zero, Color.White )
-		{}
+		public TextField() : this(Graphics.Instance.BitmapFont, "", Vector2.Zero, Color.White)
+		{
+		}
 
-		public TextField( IFont font, string text, Vector2 localOffset, Color color )
+		public TextField(IFont font, string text, Vector2 localOffset, Color color)
 		{
 			_font = font;
 			_text = text;
@@ -76,7 +78,7 @@ namespace Nez
 
 		#region Fluent setters
 
-		public TextField SetFont( IFont font )
+		public TextField SetFont(IFont font)
 		{
 			_font = font;
 			UpdateSize();
@@ -84,7 +86,7 @@ namespace Nez
 			return this;
 		}
 
-		public TextField SetText( string text )
+		public TextField SetText(string text)
 		{
 			_text = text;
 			UpdateSize();
@@ -93,7 +95,7 @@ namespace Nez
 			return this;
 		}
 
-		public TextField SetHorizontalAlign( HorizontalAlign hAlign )
+		public TextField SetHorizontalAlign(HorizontalAlign hAlign)
 		{
 			_horizontalAlign = hAlign;
 			UpdateCentering();
@@ -101,7 +103,7 @@ namespace Nez
 			return this;
 		}
 
-		public TextField SetVerticalAlign( VerticalAlign vAlign )
+		public TextField SetVerticalAlign(VerticalAlign vAlign)
 		{
 			_verticalAlign = vAlign;
 			UpdateCentering();
@@ -114,7 +116,7 @@ namespace Nez
 
 		void UpdateSize()
 		{
-			_size = _font.MeasureString( _text );
+			_size = _font.MeasureString(_text);
 			UpdateCentering();
 		}
 
@@ -122,28 +124,27 @@ namespace Nez
 		{
 			var oldOrigin = _origin;
 
-			if( _horizontalAlign == HorizontalAlign.Left )
+			if (_horizontalAlign == HorizontalAlign.Left)
 				oldOrigin.X = 0;
-			else if( _horizontalAlign == HorizontalAlign.Center )
+			else if (_horizontalAlign == HorizontalAlign.Center)
 				oldOrigin.X = _size.X / 2;
 			else
 				oldOrigin.X = _size.X;
 
-			if( _verticalAlign == VerticalAlign.Top )
+			if (_verticalAlign == VerticalAlign.Top)
 				oldOrigin.Y = 0;
-			else if( _verticalAlign == VerticalAlign.Center )
+			else if (_verticalAlign == VerticalAlign.Center)
 				oldOrigin.Y = _size.Y / 2;
 			else
 				oldOrigin.Y = _size.Y;
 
-			Origin = new Vector2( (int)oldOrigin.X, (int)oldOrigin.Y );
+			Origin = new Vector2((int) oldOrigin.X, (int) oldOrigin.Y);
 		}
 
-		public override void Render( Graphics graphics, Camera camera )
+		public override void Render(Graphics graphics, Camera camera)
 		{
-			graphics.Batcher.DrawString( _font, _text, Entity.Transform.Position + _localOffset, Color, Entity.Transform.Rotation, Origin, Entity.Transform.Scale, SpriteEffects, LayerDepth );
+			graphics.Batcher.DrawString(_font, _text, Entity.Transform.Position + _localOffset, Color,
+				Entity.Transform.Rotation, Origin, Entity.Transform.Scale, SpriteEffects, LayerDepth);
 		}
-
 	}
 }
-

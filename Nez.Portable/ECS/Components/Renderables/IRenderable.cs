@@ -62,20 +62,20 @@ namespace Nez
 		/// </summary>
 		/// <returns><c>true</c>, if visible from camera was ised, <c>false</c> otherwise.</returns>
 		/// <param name="camera">Camera.</param>
-		bool IsVisibleFromCamera( Camera camera );
+		bool IsVisibleFromCamera(Camera camera);
 
 		/// <summary>
 		/// called by a Renderer. The Camera can be used for culling and the Graphics instance to draw with.
 		/// </summary>
 		/// <param name="graphics">Graphics.</param>
 		/// <param name="camera">Camera.</param>
-		void Render( Graphics graphics, Camera camera );
+		void Render(Graphics graphics, Camera camera);
 
 		/// <summary>
 		/// renders the bounds only if there is no collider. Always renders a square on the origin.
 		/// </summary>
 		/// <param name="graphics">Graphics.</param>
-		void DebugRender( Graphics graphics );
+		void DebugRender(Graphics graphics);
 	}
 
 
@@ -84,26 +84,26 @@ namespace Nez
 	/// </summary>
 	public class IRenderableComparer : IComparer<IRenderable>
 	{
-		public int Compare( IRenderable self, IRenderable other )
+		public int Compare(IRenderable self, IRenderable other)
 		{
-			var res = other.RenderLayer.CompareTo( self.RenderLayer );
-			if( res == 0 )
+			var res = other.RenderLayer.CompareTo(self.RenderLayer);
+			if (res == 0)
 			{
-				res = other.LayerDepth.CompareTo( self.LayerDepth );
-				if( res == 0 )
+				res = other.LayerDepth.CompareTo(self.LayerDepth);
+				if (res == 0)
 				{
 					// both null or equal
-					if( ReferenceEquals( self.Material, other.Material ) )
+					if (ReferenceEquals(self.Material, other.Material))
 						return 0;
 
-					if( other.Material == null )
+					if (other.Material == null)
 						return -1;
 
 					return 1;
 				}
 			}
+
 			return res;
 		}
 	}
-
 }

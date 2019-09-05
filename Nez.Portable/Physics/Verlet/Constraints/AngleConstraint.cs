@@ -23,7 +23,7 @@ namespace Nez.Verlet
 		Particle _particleC;
 
 
-		public AngleConstraint( Particle a, Particle center, Particle c, float stiffness )
+		public AngleConstraint(Particle a, Particle center, Particle c, float stiffness)
 		{
 			_particleA = a;
 			_centerParticle = center;
@@ -42,7 +42,7 @@ namespace Nez.Verlet
 			var first = _particleA.Position - _centerParticle.Position;
 			var second = _particleC.Position - _centerParticle.Position;
 
-			return Mathf.Atan2( first.X * second.Y - first.Y * second.X, first.X * second.X + first.Y * second.Y );
+			return Mathf.Atan2(first.X * second.Y - first.Y * second.X, first.X * second.X + first.Y * second.Y);
 		}
 
 
@@ -51,18 +51,17 @@ namespace Nez.Verlet
 			var angleBetween = AngleBetweenParticles();
 			var diff = angleBetween - AngleInRadians;
 
-			if( diff <= -MathHelper.Pi )
+			if (diff <= -MathHelper.Pi)
 				diff += 2 * MathHelper.Pi;
-			else if( diff >= MathHelper.Pi )
+			else if (diff >= MathHelper.Pi)
 				diff -= 2 * MathHelper.Pi;
 
 			diff *= Stiffness;
 
-			_particleA.Position = Mathf.RotateAround( _particleA.Position, _centerParticle.Position, diff );
-			_particleC.Position = Mathf.RotateAround( _particleC.Position, _centerParticle.Position, -diff );
-			_centerParticle.Position = Mathf.RotateAround( _centerParticle.Position, _particleA.Position, diff );
-			_centerParticle.Position = Mathf.RotateAround( _centerParticle.Position, _particleC.Position, -diff );
+			_particleA.Position = Mathf.RotateAround(_particleA.Position, _centerParticle.Position, diff);
+			_particleC.Position = Mathf.RotateAround(_particleC.Position, _centerParticle.Position, -diff);
+			_centerParticle.Position = Mathf.RotateAround(_centerParticle.Position, _particleA.Position, diff);
+			_centerParticle.Position = Mathf.RotateAround(_centerParticle.Position, _particleC.Position, -diff);
 		}
-
 	}
 }

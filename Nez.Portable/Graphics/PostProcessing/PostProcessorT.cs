@@ -15,7 +15,7 @@ namespace Nez
 		public new T Effect;
 
 
-		public PostProcessor( int executionOrder, T effect = null ) : base( executionOrder, effect )
+		public PostProcessor(int executionOrder, T effect = null) : base(executionOrder, effect)
 		{
 			this.Effect = effect;
 		}
@@ -27,9 +27,9 @@ namespace Nez
 		/// </summary>
 		/// <param name="source">Source.</param>
 		/// <param name="destination">Destination.</param>
-		public override void Process( RenderTarget2D source, RenderTarget2D destination )
+		public override void Process(RenderTarget2D source, RenderTarget2D destination)
 		{
-			DrawFullscreenQuad( source, destination, Effect );
+			DrawFullscreenQuad(source, destination, Effect);
 		}
 
 		public override void Unload()
@@ -38,4 +38,3 @@ namespace Nez
 		}
 	}
 }
-

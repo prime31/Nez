@@ -4,100 +4,102 @@ using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+
 namespace Nez.BitmapFonts
 {
-    public struct BitmapFontGlyph
-    {
-        public Vector2 Position;
-        public Character Character;
-        public Texture2D Texture;
-    }
-    /// <summary>
-    /// returned by <seealso cref="BitmapFont.GetGlyphs"/>, provding a way to iterate over a string. Can be drawn with
-    /// <seealso cref="BatcherBitmapFontExt"/> or by iterating and drawing each glyph.
-    /// </summary>
-    public struct BitmapFontEnumerator : IEnumerator<BitmapFontGlyph>
-    {
-        BitmapFont _font;
-        FontCharacterSource _text;
+	public struct BitmapFontGlyph
+	{
+		public Vector2 Position;
+		public Character Character;
+		public Texture2D Texture;
+	}
 
-        BitmapFontGlyph _currentGlyph;
-        BitmapFontGlyph? _previousGlyph;
-        char? _previousChar;
-        Vector2 _runningPosition;
-        int _index;
+	/// <summary>
+	/// returned by <seealso cref="BitmapFont.GetGlyphs"/>, provding a way to iterate over a string. Can be drawn with
+	/// <seealso cref="BatcherBitmapFontExt"/> or by iterating and drawing each glyph.
+	/// </summary>
+	public struct BitmapFontEnumerator : IEnumerator<BitmapFontGlyph>
+	{
+		BitmapFont _font;
+		FontCharacterSource _text;
 
-        object IEnumerator.Current => throw new InvalidOperationException();
+		BitmapFontGlyph _currentGlyph;
+		BitmapFontGlyph? _previousGlyph;
+		char? _previousChar;
+		Vector2 _runningPosition;
+		int _index;
 
-        public BitmapFontGlyph Current => _currentGlyph;
+		object IEnumerator.Current => throw new InvalidOperationException();
 
-        public BitmapFontEnumerator(BitmapFont font, ref FontCharacterSource text)
-        {
-            _font = font;
-            _text = text;
-            _currentGlyph = new BitmapFontGlyph();
-            _previousGlyph = null;
-            _previousChar = null;
-            _runningPosition = Vector2.Zero;
-            _index = -1;
-        }
+		public BitmapFontGlyph Current => _currentGlyph;
 
-        public void Reset()
-        {
-            _index = -1;
-            _previousGlyph = null;
-            _runningPosition = Vector2.Zero;
-        }
+		public BitmapFontEnumerator(BitmapFont font, ref FontCharacterSource text)
+		{
+			_font = font;
+			_text = text;
+			_currentGlyph = new BitmapFontGlyph();
+			_previousGlyph = null;
+			_previousChar = null;
+			_runningPosition = Vector2.Zero;
+			_index = -1;
+		}
 
-        public void Dispose()
-        { }
+		public void Reset()
+		{
+			_index = -1;
+			_previousGlyph = null;
+			_runningPosition = Vector2.Zero;
+		}
 
-        public bool MoveNext()
-        {
-            if (_text.Length == ++_index)
-                return false;
+		public void Dispose()
+		{
+		}
 
-            var currentChar = _text[_index];
-            if (currentChar == '\r')
-                return true;
+		public bool MoveNext()
+		{
+			if (_text.Length == ++_index)
+				return false;
 
-            if (currentChar == '\n')
-            {
-                _runningPosition.X = 0;
-                _runningPosition.Y += _font.LineHeight;
-                _previousGlyph = null;
-                _previousChar = null;
-                return true;
-            }
+			var currentChar = _text[_index];
+			if (currentChar == '\r')
+				return true;
 
-            _currentGlyph = new BitmapFontGlyph
-            {
-                Position = _runningPosition,
-                Character = _font[currentChar],
-                Texture = _font.Textures[_font[currentChar].TexturePage]
-            };
+			if (currentChar == '\n')
+			{
+				_runningPosition.X = 0;
+				_runningPosition.Y += _font.LineHeight;
+				_previousGlyph = null;
+				_previousChar = null;
+				return true;
+			}
 
-            if (_currentGlyph.Character != null)
-            {
-                _currentGlyph.Position.X += _currentGlyph.Character.Offset.X;
-                _currentGlyph.Position.Y += _currentGlyph.Character.Offset.Y;
-                _runningPosition.X += _currentGlyph.Character.XAdvance + _font.Spacing.X;
-            }
+			_currentGlyph = new BitmapFontGlyph
+			{
+				Position = _runningPosition,
+				Character = _font[currentChar],
+				Texture = _font.Textures[_font[currentChar].TexturePage]
+			};
 
-            if (_previousChar.HasValue && _previousGlyph.Value.Character != null)
-            {
-                var amount = _font.GetKerning(_previousChar.Value, currentChar);
-                _runningPosition.X += amount;
-                _currentGlyph.Position.X += amount;
-            }
+			if (_currentGlyph.Character != null)
+			{
+				_currentGlyph.Position.X += _currentGlyph.Character.Offset.X;
+				_currentGlyph.Position.Y += _currentGlyph.Character.Offset.Y;
+				_runningPosition.X += _currentGlyph.Character.XAdvance + _font.Spacing.X;
+			}
 
-            _previousGlyph = _currentGlyph;
-            _previousChar = currentChar;
+			if (_previousChar.HasValue && _previousGlyph.Value.Character != null)
+			{
+				var amount = _font.GetKerning(_previousChar.Value, currentChar);
+				_runningPosition.X += amount;
+				_currentGlyph.Position.X += amount;
+			}
 
-            return true;
-        }
+			_previousGlyph = _currentGlyph;
+			_previousChar = currentChar;
 
-        public BitmapFontEnumerator GetEnumerator() => this;
+			return true;
+		}
 
-    }
+		public BitmapFontEnumerator GetEnumerator() => this;
+	}
 }

@@ -14,4 +14,3 @@ namespace Nez.Spatial
 		Rectangle Bounds { get; }
 	}
 }
-

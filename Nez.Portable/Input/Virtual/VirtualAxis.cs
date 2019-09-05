@@ -15,10 +15,10 @@ namespace Nez
 		{
 			get
 			{
-				for( var i = 0; i < Nodes.Count; i++ )
+				for (var i = 0; i < Nodes.Count; i++)
 				{
 					var val = Nodes[i].Value;
-					if( val != 0 )
+					if (val != 0)
 						return val;
 				}
 
@@ -27,23 +27,25 @@ namespace Nez
 		}
 
 
-		public VirtualAxis() { }
-
-
-		public VirtualAxis( params Node[] nodes )
+		public VirtualAxis()
 		{
-			this.Nodes.AddRange( nodes );
+		}
+
+
+		public VirtualAxis(params Node[] nodes)
+		{
+			this.Nodes.AddRange(nodes);
 		}
 
 
 		public override void Update()
 		{
-			for( var i = 0; i < Nodes.Count; i++ )
+			for (var i = 0; i < Nodes.Count; i++)
 				Nodes[i].Update();
 		}
 
 
-		static public implicit operator float( VirtualAxis axis )
+		static public implicit operator float(VirtualAxis axis)
 		{
 			return axis.Value;
 		}
@@ -63,7 +65,7 @@ namespace Nez
 			public float Deadzone;
 
 
-			public GamePadLeftStickX( int gamepadIndex = 0, float deadzone = Input.DEFAULT_DEADZONE )
+			public GamePadLeftStickX(int gamepadIndex = 0, float deadzone = Input.DEFAULT_DEADZONE)
 			{
 				this.GamepadIndex = gamepadIndex;
 				this.Deadzone = deadzone;
@@ -71,10 +73,7 @@ namespace Nez
 
 			public override float Value
 			{
-				get
-				{
-					return Mathf.SignThreshold( Input.GamePads[GamepadIndex].GetLeftStick( Deadzone ).X, Deadzone );
-				}
+				get { return Mathf.SignThreshold(Input.GamePads[GamepadIndex].GetLeftStick(Deadzone).X, Deadzone); }
 			}
 		}
 
@@ -85,11 +84,12 @@ namespace Nez
 			/// if true, pressing up will return -1 and down will return 1 matching GamePadDpadUpDown
 			/// </summary>
 			public bool InvertResult = true;
+
 			public int GamepadIndex;
 			public float Deadzone;
 
 
-			public GamePadLeftStickY( int gamepadIndex = 0, float deadzone = Input.DEFAULT_DEADZONE )
+			public GamePadLeftStickY(int gamepadIndex = 0, float deadzone = Input.DEFAULT_DEADZONE)
 			{
 				this.GamepadIndex = gamepadIndex;
 				this.Deadzone = deadzone;
@@ -100,7 +100,8 @@ namespace Nez
 				get
 				{
 					var multiplier = InvertResult ? -1 : 1;
-					return multiplier * Mathf.SignThreshold( Input.GamePads[GamepadIndex].GetLeftStick( Deadzone ).Y, Deadzone );
+					return multiplier *
+					       Mathf.SignThreshold(Input.GamePads[GamepadIndex].GetLeftStick(Deadzone).Y, Deadzone);
 				}
 			}
 		}
@@ -112,7 +113,7 @@ namespace Nez
 			public float Deadzone;
 
 
-			public GamePadRightStickX( int gamepadIndex = 0, float deadzone = Input.DEFAULT_DEADZONE )
+			public GamePadRightStickX(int gamepadIndex = 0, float deadzone = Input.DEFAULT_DEADZONE)
 			{
 				this.GamepadIndex = gamepadIndex;
 				this.Deadzone = deadzone;
@@ -120,10 +121,7 @@ namespace Nez
 
 			public override float Value
 			{
-				get
-				{
-					return Mathf.SignThreshold( Input.GamePads[GamepadIndex].GetRightStick( Deadzone ).X, Deadzone );
-				}
+				get { return Mathf.SignThreshold(Input.GamePads[GamepadIndex].GetRightStick(Deadzone).X, Deadzone); }
 			}
 		}
 
@@ -134,7 +132,7 @@ namespace Nez
 			public float Deadzone;
 
 
-			public GamePadRightStickY( int gamepadIndex = 0, float deadzone = Input.DEFAULT_DEADZONE )
+			public GamePadRightStickY(int gamepadIndex = 0, float deadzone = Input.DEFAULT_DEADZONE)
 			{
 				this.GamepadIndex = gamepadIndex;
 				this.Deadzone = deadzone;
@@ -142,10 +140,7 @@ namespace Nez
 
 			public override float Value
 			{
-				get
-				{
-					return Mathf.SignThreshold( Input.GamePads[GamepadIndex].GetRightStick( Deadzone ).Y, Deadzone );
-				}
+				get { return Mathf.SignThreshold(Input.GamePads[GamepadIndex].GetRightStick(Deadzone).Y, Deadzone); }
 			}
 		}
 
@@ -155,7 +150,7 @@ namespace Nez
 			public int GamepadIndex;
 
 
-			public GamePadDpadLeftRight( int gamepadIndex = 0 )
+			public GamePadDpadLeftRight(int gamepadIndex = 0)
 			{
 				this.GamepadIndex = gamepadIndex;
 			}
@@ -165,9 +160,9 @@ namespace Nez
 			{
 				get
 				{
-					if( Input.GamePads[GamepadIndex].DpadRightDown )
+					if (Input.GamePads[GamepadIndex].DpadRightDown)
 						return 1f;
-					else if( Input.GamePads[GamepadIndex].DpadLeftDown )
+					else if (Input.GamePads[GamepadIndex].DpadLeftDown)
 						return -1f;
 					else
 						return 0f;
@@ -181,7 +176,7 @@ namespace Nez
 			public int GamepadIndex;
 
 
-			public GamePadDpadUpDown( int gamepadIndex = 0 )
+			public GamePadDpadUpDown(int gamepadIndex = 0)
 			{
 				this.GamepadIndex = gamepadIndex;
 			}
@@ -191,9 +186,9 @@ namespace Nez
 			{
 				get
 				{
-					if( Input.GamePads[GamepadIndex].DpadDownDown )
+					if (Input.GamePads[GamepadIndex].DpadDownDown)
 						return 1f;
-					else if( Input.GamePads[GamepadIndex].DpadUpDown )
+					else if (Input.GamePads[GamepadIndex].DpadUpDown)
 						return -1f;
 					else
 						return 0f;
@@ -212,7 +207,7 @@ namespace Nez
 			bool _turned;
 
 
-			public KeyboardKeys( OverlapBehavior overlapBehavior, Keys negative, Keys positive )
+			public KeyboardKeys(OverlapBehavior overlapBehavior, Keys negative, Keys positive)
 			{
 				this.OverlapBehavior = overlapBehavior;
 				this.Negative = negative;
@@ -222,11 +217,11 @@ namespace Nez
 
 			public override void Update()
 			{
-				if( Input.IsKeyDown( Positive ) )
+				if (Input.IsKeyDown(Positive))
 				{
-					if( Input.IsKeyDown( Negative ) )
+					if (Input.IsKeyDown(Negative))
 					{
-						switch( OverlapBehavior )
+						switch (OverlapBehavior)
 						{
 							default:
 							case OverlapBehavior.CancelOut:
@@ -234,11 +229,12 @@ namespace Nez
 								break;
 
 							case OverlapBehavior.TakeNewer:
-								if( !_turned )
+								if (!_turned)
 								{
 									_value *= -1;
 									_turned = true;
 								}
+
 								break;
 							case OverlapBehavior.TakeOlder:
 								//value stays the same
@@ -251,7 +247,7 @@ namespace Nez
 						_value = 1;
 					}
 				}
-				else if( Input.IsKeyDown( Negative ) )
+				else if (Input.IsKeyDown(Negative))
 				{
 					_turned = false;
 					_value = -1;
@@ -271,7 +267,5 @@ namespace Nez
 		}
 
 		#endregion
-
 	}
 }
-

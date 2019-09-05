@@ -46,7 +46,7 @@ namespace Nez.Tiled
 		public int SlopeTopRight;
 
 
-		public TiledTilesetTile( int id, TiledMap tiledMap )
+		public TiledTilesetTile(int id, TiledMap tiledMap)
 		{
 			this.Id = id;
 			this.TiledMap = tiledMap;
@@ -56,22 +56,20 @@ namespace Nez.Tiled
 		internal void ProcessProperties()
 		{
 			string value;
-			if( Properties.TryGetValue( "nez:isDestructable", out value ) )
-				IsDestructable = bool.Parse( value );
+			if (Properties.TryGetValue("nez:isDestructable", out value))
+				IsDestructable = bool.Parse(value);
 
-			if( Properties.TryGetValue( "nez:isSlope", out value ) )
-				IsSlope = bool.Parse( value );
+			if (Properties.TryGetValue("nez:isSlope", out value))
+				IsSlope = bool.Parse(value);
 
-			if( Properties.TryGetValue( "nez:isOneWayPlatform", out value ) )
-				IsOneWayPlatform = bool.Parse( value );
+			if (Properties.TryGetValue("nez:isOneWayPlatform", out value))
+				IsOneWayPlatform = bool.Parse(value);
 
-			if( Properties.TryGetValue( "nez:slopeTopLeft", out value ) )
-				SlopeTopLeft = int.Parse( value );
+			if (Properties.TryGetValue("nez:slopeTopLeft", out value))
+				SlopeTopLeft = int.Parse(value);
 
-			if( Properties.TryGetValue( "nez:slopeTopRight", out value ) )
-				SlopeTopRight = int.Parse( value );
+			if (Properties.TryGetValue("nez:slopeTopRight", out value))
+				SlopeTopRight = int.Parse(value);
 		}
-
 	}
 }
-

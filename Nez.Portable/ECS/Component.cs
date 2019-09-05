@@ -27,7 +27,7 @@ namespace Nez
 		/// <value>The transform.</value>
 		public Transform Transform
 		{
-			[MethodImpl( MethodImplOptions.AggressiveInlining )]
+			[MethodImpl(MethodImplOptions.AggressiveInlining)]
 			get { return Entity.Transform; }
 		}
 
@@ -39,7 +39,7 @@ namespace Nez
 		public bool Enabled
 		{
 			get { return Entity != null ? Entity.Enabled && _enabled : _enabled; }
-			set { SetEnabled( value ); }
+			set { SetEnabled(value); }
 		}
 
 		/// <summary>
@@ -49,7 +49,7 @@ namespace Nez
 		public int UpdateOrder
 		{
 			get => _updateOrder;
-			set => SetUpdateOrder( value );
+			set => SetUpdateOrder(value);
 		}
 
 		bool _enabled = true;
@@ -63,7 +63,8 @@ namespace Nez
 		/// for things like physics Components that need to access the Transform to modify collision body properties.
 		/// </summary>
 		public virtual void Initialize()
-		{}
+		{
+		}
 
 
 		/// <summary>
@@ -71,69 +72,77 @@ namespace Nez
 		/// is set and the entity.scene is also set.
 		/// </summary>
 		public virtual void OnAddedToEntity()
-		{}
+		{
+		}
 
 
 		/// <summary>
 		/// Called when this component is removed from its entity. Do all cleanup here.
 		/// </summary>
 		public virtual void OnRemovedFromEntity()
-		{}
+		{
+		}
 
 
 		/// <summary>
 		/// called when the entity's position changes. This allows components to be aware that they have moved due to the parent
 		/// entity moving.
 		/// </summary>
-		public virtual void OnEntityTransformChanged( Transform.Component comp )
-		{}
+		public virtual void OnEntityTransformChanged(Transform.Component comp)
+		{
+		}
 
 
-		public virtual void DebugRender( Graphics graphics )
-		{}
+		public virtual void DebugRender(Graphics graphics)
+		{
+		}
 
 
 		/// <summary>
 		/// called when the parent Entity or this Component is enabled
 		/// </summary>
 		public virtual void OnEnabled()
-		{}
+		{
+		}
 
 
 		/// <summary>
 		/// called when the parent Entity or this Component is disabled
 		/// </summary>
 		public virtual void OnDisabled()
-		{}
+		{
+		}
 
 		#endregion
 
 
 		#region Fluent setters
 
-		public Component SetEnabled( bool isEnabled )
+		public Component SetEnabled(bool isEnabled)
 		{
-			if( _enabled != isEnabled )
+			if (_enabled != isEnabled)
 			{
 				_enabled = isEnabled;
 
-				if( _enabled )
+				if (_enabled)
 					OnEnabled();
 				else
 					OnDisabled();
 			}
+
 			return this;
 		}
 
 
-		public Component SetUpdateOrder( int updateOrder )
+		public Component SetUpdateOrder(int updateOrder)
 		{
-			if( _updateOrder != updateOrder )
+			if (_updateOrder != updateOrder)
 			{
 				_updateOrder = updateOrder;
-				if( Entity != null )
+				if (Entity != null)
 					Entity.Components.MarkEntityListUnsorted();
 			}
+
 			return this;
 		}
 
@@ -153,17 +162,15 @@ namespace Nez
 		}
 
 
-		public int CompareTo( Component other )
+		public int CompareTo(Component other)
 		{
-			return _updateOrder.CompareTo( other._updateOrder );
+			return _updateOrder.CompareTo(other._updateOrder);
 		}
 
 
 		public override string ToString()
 		{
-			return string.Format( "[Component: type: {0}, updateOrder: {1}]", this.GetType(), UpdateOrder );
+			return string.Format("[Component: type: {0}, updateOrder: {1}]", this.GetType(), UpdateOrder);
 		}
-
 	}
 }
-

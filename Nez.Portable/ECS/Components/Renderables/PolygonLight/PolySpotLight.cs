@@ -14,12 +14,13 @@ namespace Nez.Shadows
 		{
 			get
 			{
-				if( _areBoundsDirty )
+				if (_areBoundsDirty)
 				{
-					_bounds = RectangleF.RectEncompassingPoints( _polygon.Points );
+					_bounds = RectangleF.RectEncompassingPoints(_polygon.Points);
 					_bounds.Location += Entity.Transform.Position;
 					_areBoundsDirty = false;
 				}
+
 				return _bounds;
 			}
 		}
@@ -28,40 +29,44 @@ namespace Nez.Shadows
 		/// the angle of the light's spotlight cone in degrees. Defaults to 45.
 		/// </summary>
 		/// <value>The spot angle.</value>
-		[Range( 0, 360 )]
+		[Range(0, 360)]
 		public float SpotAngle
 		{
 			get => _spotAngle;
-			set => SetSpotAngle( value );
+			set => SetSpotAngle(value);
 		}
 
 		float _spotAngle = 45;
 		Polygon _polygon;
 
 
-		public PolySpotLight() : this( 400 )
-		{}
+		public PolySpotLight() : this(400)
+		{
+		}
 
-		public PolySpotLight( float radius ) : this( radius, Color.White )
-		{ }
+		public PolySpotLight(float radius) : this(radius, Color.White)
+		{
+		}
 
-		public PolySpotLight( float radius, Color color ) : this( radius, color, 1.0f )
-		{ }
+		public PolySpotLight(float radius, Color color) : this(radius, color, 1.0f)
+		{
+		}
 
-		public PolySpotLight( float radius, Color color, float power ) : base( radius, color, power )
-		{ }
+		public PolySpotLight(float radius, Color color, float power) : base(radius, color, power)
+		{
+		}
 
 
 		#region Fluent setters
 
-		public override PolyLight SetRadius( float radius )
+		public override PolyLight SetRadius(float radius)
 		{
-			base.SetRadius( radius );
+			base.SetRadius(radius);
 			RecalculatePolyPoints();
 			return this;
 		}
 
-		public PolySpotLight SetSpotAngle( float spotAngle )
+		public PolySpotLight SetSpotAngle(float spotAngle)
 		{
 			_spotAngle = spotAngle;
 			RecalculatePolyPoints();
@@ -77,31 +82,33 @@ namespace Nez.Shadows
 		void RecalculatePolyPoints()
 		{
 			// no need to recaluc if we dont have an Entity to work with
-			if( Entity == null )
+			if (Entity == null)
 				return;
 
 			// we only need a small number of verts for the spot polygon. We base how many off of the spot angle. Because we are approximating
 			// an arc with a polygon we bump up the radius a bit so that our poly fully encompasses the spot area.
 			var expandedRadius = Radius + Radius * 0.1f;
-			var sides = Mathf.CeilToInt( _spotAngle / 25 ) + 1;
-			var stepSize = ( _spotAngle * Mathf.Deg2Rad ) / sides;
+			var sides = Mathf.CeilToInt(_spotAngle / 25) + 1;
+			var stepSize = (_spotAngle * Mathf.Deg2Rad) / sides;
 
 			var verts = new Vector2[sides + 2];
 			verts[0] = Vector2.Zero;
 
-			for( var i = 0; i <= sides; i++ )
-				verts[i + 1] = new Vector2( expandedRadius * Mathf.Cos( stepSize * i ), expandedRadius * Mathf.Sin( stepSize * i ) );
+			for (var i = 0; i <= sides; i++)
+				verts[i + 1] = new Vector2(expandedRadius * Mathf.Cos(stepSize * i),
+					expandedRadius * Mathf.Sin(stepSize * i));
 
-			if( _polygon == null )
-				_polygon = new Polygon( verts );
-			else if( _polygon._originalPoints.Length == verts.Length )
+			if (_polygon == null)
+				_polygon = new Polygon(verts);
+			else if (_polygon._originalPoints.Length == verts.Length)
 				_polygon._originalPoints = verts;
 			else
-				_polygon.SetPoints( verts );
+				_polygon.SetPoints(verts);
 
 			// rotate our verts based on the Entity.rotation and offset half of the spot angle so that the center of the spot points in
 			// the direction of rotation
-			Polygon.RotatePolygonVerts( Entity.Rotation - _spotAngle * 0.5f * Mathf.Deg2Rad, _polygon._originalPoints, _polygon.Points );
+			Polygon.RotatePolygonVerts(Entity.Rotation - _spotAngle * 0.5f * Mathf.Deg2Rad, _polygon._originalPoints,
+				_polygon.Points);
 		}
 
 
@@ -113,20 +120,22 @@ namespace Nez.Shadows
 			RecalculatePolyPoints();
 		}
 
-		public override void DebugRender( Graphics graphics )
+		public override void DebugRender(Graphics graphics)
 		{
-			base.DebugRender( graphics );
-			graphics.Batcher.DrawPolygon( _polygon.position, _polygon.Points, Debug.Colors.ColliderEdge, true, Debug.Size.LineSizeMultiplier );
+			base.DebugRender(graphics);
+			graphics.Batcher.DrawPolygon(_polygon.position, _polygon.Points, Debug.Colors.ColliderEdge, true,
+				Debug.Size.LineSizeMultiplier);
 		}
 
-		public override void OnEntityTransformChanged( Transform.Component comp )
+		public override void OnEntityTransformChanged(Transform.Component comp)
 		{
-			base.OnEntityTransformChanged( comp );
+			base.OnEntityTransformChanged(comp);
 
-			if( comp == Transform.Component.Rotation )
+			if (comp == Transform.Component.Rotation)
 			{
 				// when rotation changes we need to update our verts to account for the new rotation
-				Polygon.RotatePolygonVerts( Entity.Rotation - _spotAngle * 0.5f * Mathf.Deg2Rad, _polygon._originalPoints, _polygon.Points );
+				Polygon.RotatePolygonVerts(Entity.Rotation - _spotAngle * 0.5f * Mathf.Deg2Rad,
+					_polygon._originalPoints, _polygon.Points);
 			}
 		}
 
@@ -141,17 +150,17 @@ namespace Nez.Shadows
 			var totalCollisions = 0;
 			_polygon.position = Entity.Transform.Position + _localOffset;
 
-			var neighbors = Physics.BoxcastBroadphase( Bounds, CollidesWithLayers );
-			foreach( var neighbor in neighbors )
+			var neighbors = Physics.BoxcastBroadphase(Bounds, CollidesWithLayers);
+			foreach (var neighbor in neighbors)
 			{
 				// skip triggers
-				if( neighbor.IsTrigger )
+				if (neighbor.IsTrigger)
 					continue;
 
-				if( _polygon.CollidesWithShape( neighbor.Shape, out result ) )
+				if (_polygon.CollidesWithShape(neighbor.Shape, out result))
 				{
 					_colliderCache[totalCollisions++] = neighbor;
-					if( totalCollisions == _colliderCache.Length )
+					if (totalCollisions == _colliderCache.Length)
 						return totalCollisions;
 				}
 			}
@@ -161,10 +170,9 @@ namespace Nez.Shadows
 
 		protected override void LoadVisibilityBoundaries()
 		{
-			_visibility.LoadSpotLightBoundaries( _polygon.Points );
+			_visibility.LoadSpotLightBoundaries(_polygon.Points);
 		}
 
 		#endregion
-
 	}
 }

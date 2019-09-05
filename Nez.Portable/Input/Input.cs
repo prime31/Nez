@@ -55,11 +55,11 @@ namespace Nez
 #if FNA
 				_maxSupportedGamePads = Mathf.Clamp( value, 1, 8 );
 #else
-				_maxSupportedGamePads = Mathf.Clamp( value, 1, GamePad.MaximumGamePadCount );
+				_maxSupportedGamePads = Mathf.Clamp(value, 1, GamePad.MaximumGamePadCount);
 #endif
 				GamePads = new GamePadData[_maxSupportedGamePads];
-				for( var i = 0; i < _maxSupportedGamePads; i++ )
-					GamePads[i] = new GamePadData( (PlayerIndex)i );
+				for (var i = 0; i < _maxSupportedGamePads; i++)
+					GamePads[i] = new GamePadData((PlayerIndex) i);
 			}
 		}
 
@@ -89,10 +89,10 @@ namespace Nez
 			_previousMouseState = _currentMouseState;
 			_currentMouseState = Mouse.GetState();
 
-			for( var i = 0; i < _maxSupportedGamePads; i++ )
+			for (var i = 0; i < _maxSupportedGamePads; i++)
 				GamePads[i].Update();
 
-			for( var i = 0; i < _virtualInputs.Length; i++ )
+			for (var i = 0; i < _virtualInputs.Length; i++)
 				_virtualInputs.Buffer[i].Update();
 		}
 
@@ -100,10 +100,10 @@ namespace Nez
 		/// this takes into account the SceneResolutionPolicy and returns the value scaled to the RenderTargets coordinates
 		/// </summary>
 		/// <value>The scaled position.</value>
-		[MethodImpl( MethodImplOptions.AggressiveInlining )]
-		public static Vector2 ScaledPosition( Vector2 position )
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public static Vector2 ScaledPosition(Vector2 position)
 		{
-			var scaledPos = new Vector2( position.X - _resolutionOffset.X, position.Y - _resolutionOffset.Y );
+			var scaledPos = new Vector2(position.X - _resolutionOffset.X, position.Y - _resolutionOffset.Y);
 			return scaledPos * _resolutionScale;
 		}
 
@@ -113,7 +113,7 @@ namespace Nez
 		/// to Nez space from the outer window coordinates and for simulating mouse input.
 		/// </summary>
 		/// <param name="state"></param>
-		public static void SetCurrentMouseState( MouseState state )
+		public static void SetCurrentMouseState(MouseState state)
 		{
 			_currentMouseState = state;
 		}
@@ -123,7 +123,7 @@ namespace Nez
 		/// useful for simulating keyboard input
 		/// </summary>
 		/// <param name="state">State.</param>
-		public static void SetCurrentKeyboardState( KeyboardState state )
+		public static void SetCurrentKeyboardState(KeyboardState state)
 		{
 			_currentKbState = state;
 		}
@@ -147,9 +147,9 @@ namespace Nez
 		/// only true if down this frame and not down the previous frame
 		/// </summary>
 		/// <returns><c>true</c>, if key pressed was gotten, <c>false</c> otherwise.</returns>
-		public static bool IsKeyPressed( Keys key )
+		public static bool IsKeyPressed(Keys key)
 		{
-			return _currentKbState.IsKeyDown( key ) && !_previousKbState.IsKeyDown( key );
+			return _currentKbState.IsKeyDown(key) && !_previousKbState.IsKeyDown(key);
 		}
 
 
@@ -157,9 +157,9 @@ namespace Nez
 		/// true the entire time the key is down
 		/// </summary>
 		/// <returns><c>true</c>, if key down was gotten, <c>false</c> otherwise.</returns>
-		public static bool IsKeyDown( Keys key )
+		public static bool IsKeyDown(Keys key)
 		{
-			return _currentKbState.IsKeyDown( key );
+			return _currentKbState.IsKeyDown(key);
 		}
 
 
@@ -167,9 +167,9 @@ namespace Nez
 		/// true only the frame the key is released
 		/// </summary>
 		/// <returns><c>true</c>, if key up was gotten, <c>false</c> otherwise.</returns>
-		public static bool IsKeyReleased( Keys key )
+		public static bool IsKeyReleased(Keys key)
 		{
-			return !_currentKbState.IsKeyDown( key ) && _previousKbState.IsKeyDown( key );
+			return !_currentKbState.IsKeyDown(key) && _previousKbState.IsKeyDown(key);
 		}
 
 
@@ -177,9 +177,9 @@ namespace Nez
 		/// only true if one of the keys is down this frame
 		/// </summary>
 		/// <returns><c>true</c>, if key pressed was gotten, <c>false</c> otherwise.</returns>
-		public static bool IsKeyPressed( Keys keyA, Keys keyB )
+		public static bool IsKeyPressed(Keys keyA, Keys keyB)
 		{
-			return IsKeyPressed( keyA ) || IsKeyPressed( keyB );
+			return IsKeyPressed(keyA) || IsKeyPressed(keyB);
 		}
 
 
@@ -187,9 +187,9 @@ namespace Nez
 		/// true while either of the keys are down
 		/// </summary>
 		/// <returns><c>true</c>, if key down was gotten, <c>false</c> otherwise.</returns>
-		public static bool IsKeyDown( Keys keyA, Keys keyB )
+		public static bool IsKeyDown(Keys keyA, Keys keyB)
 		{
-			return IsKeyDown( keyA ) || IsKeyDown( keyB );
+			return IsKeyDown(keyA) || IsKeyDown(keyB);
 		}
 
 
@@ -197,9 +197,9 @@ namespace Nez
 		/// true only the frame one of the keys are released
 		/// </summary>
 		/// <returns><c>true</c>, if key up was gotten, <c>false</c> otherwise.</returns>
-		public static bool IsKeyReleased( Keys keyA, Keys keyB )
+		public static bool IsKeyReleased(Keys keyA, Keys keyB)
 		{
-			return IsKeyReleased( keyA ) || IsKeyReleased( keyB );
+			return IsKeyReleased(keyA) || IsKeyReleased(keyB);
 		}
 
 		#endregion
@@ -225,7 +225,11 @@ namespace Nez
 		/// </summary>
 		public static bool LeftMouseButtonPressed
 		{
-			get { return _currentMouseState.LeftButton == ButtonState.Pressed && _previousMouseState.LeftButton == ButtonState.Released; }
+			get
+			{
+				return _currentMouseState.LeftButton == ButtonState.Pressed &&
+				       _previousMouseState.LeftButton == ButtonState.Released;
+			}
 		}
 
 		/// <summary>
@@ -243,7 +247,8 @@ namespace Nez
 		{
 			get
 			{
-				return _currentMouseState.LeftButton == ButtonState.Released && _previousMouseState.LeftButton == ButtonState.Pressed;
+				return _currentMouseState.LeftButton == ButtonState.Released &&
+				       _previousMouseState.LeftButton == ButtonState.Pressed;
 			}
 		}
 
@@ -254,7 +259,8 @@ namespace Nez
 		{
 			get
 			{
-				return _currentMouseState.RightButton == ButtonState.Pressed && _previousMouseState.RightButton == ButtonState.Released;
+				return _currentMouseState.RightButton == ButtonState.Pressed &&
+				       _previousMouseState.RightButton == ButtonState.Released;
 			}
 		}
 
@@ -273,7 +279,8 @@ namespace Nez
 		{
 			get
 			{
-				return _currentMouseState.RightButton == ButtonState.Released && _previousMouseState.RightButton == ButtonState.Pressed;
+				return _currentMouseState.RightButton == ButtonState.Released &&
+				       _previousMouseState.RightButton == ButtonState.Pressed;
 			}
 		}
 
@@ -282,7 +289,11 @@ namespace Nez
 		/// </summary>
 		public static bool MiddleMouseButtonPressed
 		{
-			get { return _currentMouseState.MiddleButton == ButtonState.Pressed && _previousMouseState.MiddleButton == ButtonState.Released; }
+			get
+			{
+				return _currentMouseState.MiddleButton == ButtonState.Pressed &&
+				       _previousMouseState.MiddleButton == ButtonState.Released;
+			}
 		}
 
 		/// <summary>
@@ -300,7 +311,8 @@ namespace Nez
 		{
 			get
 			{
-				return _currentMouseState.MiddleButton == ButtonState.Released && _previousMouseState.MiddleButton == ButtonState.Pressed;
+				return _currentMouseState.MiddleButton == ButtonState.Released &&
+				       _previousMouseState.MiddleButton == ButtonState.Pressed;
 			}
 		}
 
@@ -309,7 +321,11 @@ namespace Nez
 		/// </summary>
 		public static bool FirstExtendedMouseButtonPressed
 		{
-			get { return _currentMouseState.XButton1 == ButtonState.Pressed && _previousMouseState.XButton1 == ButtonState.Released; }
+			get
+			{
+				return _currentMouseState.XButton1 == ButtonState.Pressed &&
+				       _previousMouseState.XButton1 == ButtonState.Released;
+			}
 		}
 
 		/// <summary>
@@ -325,7 +341,11 @@ namespace Nez
 		/// </summary>
 		public static bool FirstExtendedMouseButtonReleased
 		{
-			get { return _currentMouseState.XButton1 == ButtonState.Released && _previousMouseState.XButton1 == ButtonState.Pressed; }
+			get
+			{
+				return _currentMouseState.XButton1 == ButtonState.Released &&
+				       _previousMouseState.XButton1 == ButtonState.Pressed;
+			}
 		}
 
 		/// <summary>
@@ -333,7 +353,11 @@ namespace Nez
 		/// </summary>
 		public static bool SecondExtendedMouseButtonPressed
 		{
-			get { return _currentMouseState.XButton2 == ButtonState.Pressed && _previousMouseState.XButton2 == ButtonState.Released; }
+			get
+			{
+				return _currentMouseState.XButton2 == ButtonState.Pressed &&
+				       _previousMouseState.XButton2 == ButtonState.Released;
+			}
 		}
 
 		/// <summary>
@@ -349,7 +373,11 @@ namespace Nez
 		/// </summary>
 		public static bool SecondExtendedMouseButtonReleased
 		{
-			get { return _currentMouseState.XButton2 == ButtonState.Released && _previousMouseState.XButton2 == ButtonState.Pressed; }
+			get
+			{
+				return _currentMouseState.XButton2 == ButtonState.Released &&
+				       _previousMouseState.XButton2 == ButtonState.Pressed;
+			}
 		}
 
 		/// <summary>
@@ -376,38 +404,48 @@ namespace Nez
 		/// <value>The raw mouse position.</value>
 		public static Point RawMousePosition
 		{
-			get { return new Point( _currentMouseState.X, _currentMouseState.Y ); }
+			get { return new Point(_currentMouseState.X, _currentMouseState.Y); }
 		}
 
 		/// <summary>
 		/// alias for scaledMousePosition
 		/// </summary>
 		/// <value>The mouse position.</value>
-		public static Vector2 MousePosition { get { return ScaledMousePosition; } }
+		public static Vector2 MousePosition
+		{
+			get { return ScaledMousePosition; }
+		}
 
 		/// <summary>
 		/// this takes into account the SceneResolutionPolicy and returns the value scaled to the RenderTargets coordinates
 		/// </summary>
 		/// <value>The scaled mouse position.</value>
-		public static Vector2 ScaledMousePosition { get { return ScaledPosition( new Vector2( _currentMouseState.X, _currentMouseState.Y ) ); } }
+		public static Vector2 ScaledMousePosition
+		{
+			get { return ScaledPosition(new Vector2(_currentMouseState.X, _currentMouseState.Y)); }
+		}
 
 		public static Point MousePositionDelta
 		{
-			get { return new Point( _currentMouseState.X, _currentMouseState.Y ) - new Point( _previousMouseState.X, _previousMouseState.Y ); }
+			get
+			{
+				return new Point(_currentMouseState.X, _currentMouseState.Y) -
+				       new Point(_previousMouseState.X, _previousMouseState.Y);
+			}
 		}
 
 		public static Vector2 ScaledMousePositionDelta
 		{
 			get
 			{
-				var pastPos = new Vector2( _previousMouseState.X - _resolutionOffset.X, _previousMouseState.Y - _resolutionOffset.Y );
+				var pastPos = new Vector2(_previousMouseState.X - _resolutionOffset.X,
+					_previousMouseState.Y - _resolutionOffset.Y);
 				pastPos *= _resolutionScale;
 				return ScaledMousePosition - pastPos;
 			}
 		}
 
 		#endregion
-
 	}
 
 
@@ -430,16 +468,15 @@ namespace Nez
 	/// </summary>
 	public struct InputEventTypeComparer : IEqualityComparer<InputEventType>
 	{
-		public bool Equals( InputEventType x, InputEventType y )
+		public bool Equals(InputEventType x, InputEventType y)
 		{
 			return x == y;
 		}
 
 
-		public int GetHashCode( InputEventType obj )
+		public int GetHashCode(InputEventType obj)
 		{
-			return (int)obj;
+			return (int) obj;
 		}
 	}
 }
-

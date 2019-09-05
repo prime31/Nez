@@ -10,7 +10,7 @@ namespace Nez.Farseer
 
 		#region Configuration
 
-		public FSPrismaticJoint SetOwnerBodyAnchor( Vector2 ownerBodyAnchor )
+		public FSPrismaticJoint SetOwnerBodyAnchor(Vector2 ownerBodyAnchor)
 		{
 			_jointDef.OwnerBodyAnchor = ownerBodyAnchor;
 			RecreateJoint();
@@ -18,7 +18,7 @@ namespace Nez.Farseer
 		}
 
 
-		public FSPrismaticJoint SetOtherBodyAnchor( Vector2 otherBodyAnchor )
+		public FSPrismaticJoint SetOtherBodyAnchor(Vector2 otherBodyAnchor)
 		{
 			_jointDef.OtherBodyAnchor = otherBodyAnchor;
 			RecreateJoint();
@@ -26,7 +26,7 @@ namespace Nez.Farseer
 		}
 
 
-		public FSPrismaticJoint SetAxis( Vector2 axis )
+		public FSPrismaticJoint SetAxis(Vector2 axis)
 		{
 			_jointDef.Axis = axis;
 			RecreateJoint();
@@ -34,7 +34,7 @@ namespace Nez.Farseer
 		}
 
 
-		public FSPrismaticJoint SetLimitEnabled( bool limitEnabled )
+		public FSPrismaticJoint SetLimitEnabled(bool limitEnabled)
 		{
 			_jointDef.LimitEnabled = limitEnabled;
 			RecreateJoint();
@@ -42,7 +42,7 @@ namespace Nez.Farseer
 		}
 
 
-		public FSPrismaticJoint SetLowerLimit( float lowerLimit )
+		public FSPrismaticJoint SetLowerLimit(float lowerLimit)
 		{
 			_jointDef.LowerLimit = lowerLimit;
 			RecreateJoint();
@@ -50,7 +50,7 @@ namespace Nez.Farseer
 		}
 
 
-		public FSPrismaticJoint SetUpperLimit( float upperLimit )
+		public FSPrismaticJoint SetUpperLimit(float upperLimit)
 		{
 			_jointDef.UpperLimit = upperLimit;
 			RecreateJoint();
@@ -58,7 +58,7 @@ namespace Nez.Farseer
 		}
 
 
-		public FSPrismaticJoint SetMotorEnabled( bool motorEnabled )
+		public FSPrismaticJoint SetMotorEnabled(bool motorEnabled)
 		{
 			_jointDef.MotorEnabled = motorEnabled;
 			RecreateJoint();
@@ -66,7 +66,7 @@ namespace Nez.Farseer
 		}
 
 
-		public FSPrismaticJoint SetMotorSpeed( float motorSpeed )
+		public FSPrismaticJoint SetMotorSpeed(float motorSpeed)
 		{
 			_jointDef.MotorSpeed = motorSpeed;
 			RecreateJoint();
@@ -74,7 +74,7 @@ namespace Nez.Farseer
 		}
 
 
-		public FSPrismaticJoint SetMaxMotorForce( float maxMotorForce )
+		public FSPrismaticJoint SetMaxMotorForce(float maxMotorForce)
 		{
 			_jointDef.MaxMotorForce = maxMotorForce;
 			RecreateJoint();
@@ -82,7 +82,7 @@ namespace Nez.Farseer
 		}
 
 
-		public FSPrismaticJoint SetMotorImpulse( float motorImpulse )
+		public FSPrismaticJoint SetMotorImpulse(float motorImpulse)
 		{
 			_jointDef.MotorImpulse = motorImpulse;
 			RecreateJoint();
@@ -94,12 +94,11 @@ namespace Nez.Farseer
 
 		internal override FSJointDef GetJointDef()
 		{
-			InitializeJointDef( _jointDef );
-			if( _jointDef.BodyA == null || _jointDef.BodyB == null )
+			InitializeJointDef(_jointDef);
+			if (_jointDef.BodyA == null || _jointDef.BodyB == null)
 				return null;
 
 			return _jointDef;
 		}
-
 	}
 }

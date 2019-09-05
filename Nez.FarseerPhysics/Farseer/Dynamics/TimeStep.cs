@@ -22,46 +22,46 @@ using Microsoft.Xna.Framework;
 
 namespace FarseerPhysics.Dynamics
 {
-    /// <summary>
-    /// This is an internal structure.
-    /// </summary>
-    public struct TimeStep
-    {
-        /// <summary>
-        /// Time step (Delta time)
-        /// </summary>
-        public float Dt;
+	/// <summary>
+	/// This is an internal structure.
+	/// </summary>
+	public struct TimeStep
+	{
+		/// <summary>
+		/// Time step (Delta time)
+		/// </summary>
+		public float Dt;
 
-        /// <summary>
-        /// dt * inv_dt0
-        /// </summary>
-        public float DtRatio;
+		/// <summary>
+		/// dt * inv_dt0
+		/// </summary>
+		public float DtRatio;
 
-        /// <summary>
-        /// Inverse time step (0 if dt == 0).
-        /// </summary>
-        public float Inv_dt;
-    }
+		/// <summary>
+		/// Inverse time step (0 if dt == 0).
+		/// </summary>
+		public float Inv_dt;
+	}
 
-    /// This is an internal structure.
-    public struct Position
-    {
-        public Vector2 C;
-        public float A;
-    }
+	/// This is an internal structure.
+	public struct Position
+	{
+		public Vector2 C;
+		public float A;
+	}
 
-    /// This is an internal structure.
-    public struct Velocity
-    {
-        public Vector2 V;
-        public float W;
-    }
+	/// This is an internal structure.
+	public struct Velocity
+	{
+		public Vector2 V;
+		public float W;
+	}
 
-    /// Solver Data
-    public struct SolverData
-    {
-        public TimeStep Step;
-        public Position[] Positions;
-        public Velocity[] Velocities;
-    }
+	/// Solver Data
+	public struct SolverData
+	{
+		public TimeStep Step;
+		public Position[] Positions;
+		public Velocity[] Velocities;
+	}
 }

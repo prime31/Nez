@@ -35,17 +35,20 @@ namespace Nez
 
 
 		public Graphics()
-		{}
-
-
-		public Graphics( BitmapFont font )
 		{
-			Batcher = new Batcher( Core.GraphicsDevice );
+		}
+
+
+		public Graphics(BitmapFont font)
+		{
+			Batcher = new Batcher(Core.GraphicsDevice);
 			BitmapFont = font;
 
-            // the bottom/right pixel is white on the default font so we'll use that for the pixelTexture
-            var fontTex = BitmapFont.Textures[BitmapFont.DefaultCharacter.TexturePage];// bitmapFont.defaultCharacterRegion.subtexture.texture2D;
-			PixelTexture = new Subtexture( fontTex, fontTex.Width - 1, fontTex.Height - 1, 1, 1 );
+			// the bottom/right pixel is white on the default font so we'll use that for the pixelTexture
+			var fontTex =
+				BitmapFont.Textures[
+					BitmapFont.DefaultCharacter.TexturePage]; // bitmapFont.defaultCharacterRegion.subtexture.texture2D;
+			PixelTexture = new Subtexture(fontTex, fontTex.Width - 1, fontTex.Height - 1, 1, 1);
 		}
 
 
@@ -56,27 +59,26 @@ namespace Nez
 		/// <param name="width">Width.</param>
 		/// <param name="height">Height.</param>
 		/// <param name="color">Color.</param>
-		public static Texture2D CreateSingleColorTexture( int width, int height, Color color )
+		public static Texture2D CreateSingleColorTexture(int width, int height, Color color)
 		{
-			var texture = new Texture2D( Core.GraphicsDevice, width, height );
+			var texture = new Texture2D(Core.GraphicsDevice, width, height);
 			var data = new Color[width * height];
-			for( var i = 0; i < data.Length; i++ )
+			for (var i = 0; i < data.Length; i++)
 				data[i] = color;
-			
-			texture.SetData<Color>( data );
+
+			texture.SetData<Color>(data);
 			return texture;
 		}
 
 
 		public void Unload()
 		{
-			if( PixelTexture != null )
+			if (PixelTexture != null)
 				PixelTexture.Texture2D.Dispose();
 			PixelTexture = null;
 
 			Batcher.Dispose();
 			Batcher = null;
 		}
-
 	}
 }

@@ -13,12 +13,13 @@ namespace Nez.Tweens
 
 
 		public IntTween()
-		{ }
-
-
-		public IntTween( ITweenTarget<int> target, int to, float duration )
 		{
-			Initialize( target, to, duration );
+		}
+
+
+		public IntTween(ITweenTarget<int> target, int to, float duration)
+		{
+			Initialize(target, to, duration);
 		}
 
 
@@ -32,7 +33,7 @@ namespace Nez.Tweens
 
 		protected override void UpdateValue()
 		{
-			_target.SetTweenedValue( (int)Lerps.Ease( _easeType, _fromValue, _toValue, _elapsedTime, _duration ) );
+			_target.SetTweenedValue((int) Lerps.Ease(_easeType, _fromValue, _toValue, _elapsedTime, _duration));
 		}
 
 
@@ -40,8 +41,8 @@ namespace Nez.Tweens
 		{
 			base.RecycleSelf();
 
-			if( _shouldRecycleTween && TweenManager.CacheIntTweens )
-				Pool<IntTween>.Free( this );
+			if (_shouldRecycleTween && TweenManager.CacheIntTweens)
+				Pool<IntTween>.Free(this);
 		}
 	}
 
@@ -55,12 +56,13 @@ namespace Nez.Tweens
 
 
 		public FloatTween()
-		{ }
-
-
-		public FloatTween( ITweenTarget<float> target, float to, float duration )
 		{
-			Initialize( target, to, duration );
+		}
+
+
+		public FloatTween(ITweenTarget<float> target, float to, float duration)
+		{
+			Initialize(target, to, duration);
 		}
 
 
@@ -74,7 +76,7 @@ namespace Nez.Tweens
 
 		protected override void UpdateValue()
 		{
-			_target.SetTweenedValue( Lerps.Ease( _easeType, _fromValue, _toValue, _elapsedTime, _duration ) );
+			_target.SetTweenedValue(Lerps.Ease(_easeType, _fromValue, _toValue, _elapsedTime, _duration));
 		}
 
 
@@ -82,8 +84,8 @@ namespace Nez.Tweens
 		{
 			base.RecycleSelf();
 
-			if( _shouldRecycleTween && TweenManager.CacheFloatTweens )
-				Pool<FloatTween>.Free( this );
+			if (_shouldRecycleTween && TweenManager.CacheFloatTweens)
+				Pool<FloatTween>.Free(this);
 		}
 	}
 
@@ -97,12 +99,13 @@ namespace Nez.Tweens
 
 
 		public Vector2Tween()
-		{ }
-
-
-		public Vector2Tween( ITweenTarget<Vector2> target, Vector2 to, float duration )
 		{
-			Initialize( target, to, duration );
+		}
+
+
+		public Vector2Tween(ITweenTarget<Vector2> target, Vector2 to, float duration)
+		{
+			Initialize(target, to, duration);
 		}
 
 
@@ -116,7 +119,7 @@ namespace Nez.Tweens
 
 		protected override void UpdateValue()
 		{
-			_target.SetTweenedValue( Lerps.Ease( _easeType, _fromValue, _toValue, _elapsedTime, _duration ) );
+			_target.SetTweenedValue(Lerps.Ease(_easeType, _fromValue, _toValue, _elapsedTime, _duration));
 		}
 
 
@@ -124,8 +127,8 @@ namespace Nez.Tweens
 		{
 			base.RecycleSelf();
 
-			if( _shouldRecycleTween && TweenManager.CacheVector2Tweens )
-				Pool<Vector2Tween>.Free( this );
+			if (_shouldRecycleTween && TweenManager.CacheVector2Tweens)
+				Pool<Vector2Tween>.Free(this);
 		}
 	}
 
@@ -139,12 +142,13 @@ namespace Nez.Tweens
 
 
 		public Vector3Tween()
-		{ }
-
-
-		public Vector3Tween( ITweenTarget<Vector3> target, Vector3 to, float duration )
 		{
-			Initialize( target, to, duration );
+		}
+
+
+		public Vector3Tween(ITweenTarget<Vector3> target, Vector3 to, float duration)
+		{
+			Initialize(target, to, duration);
 		}
 
 
@@ -158,7 +162,7 @@ namespace Nez.Tweens
 
 		protected override void UpdateValue()
 		{
-			_target.SetTweenedValue( Lerps.Ease( _easeType, _fromValue, _toValue, _elapsedTime, _duration ) );
+			_target.SetTweenedValue(Lerps.Ease(_easeType, _fromValue, _toValue, _elapsedTime, _duration));
 		}
 
 
@@ -166,8 +170,8 @@ namespace Nez.Tweens
 		{
 			base.RecycleSelf();
 
-			if( _shouldRecycleTween && TweenManager.CacheVector3Tweens )
-				Pool<Vector3Tween>.Free( this );
+			if (_shouldRecycleTween && TweenManager.CacheVector3Tweens)
+				Pool<Vector3Tween>.Free(this);
 		}
 	}
 
@@ -181,12 +185,13 @@ namespace Nez.Tweens
 
 
 		public Vector4Tween()
-		{ }
-
-
-		public Vector4Tween( ITweenTarget<Vector4> target, Vector4 to, float duration )
 		{
-			Initialize( target, to, duration );
+		}
+
+
+		public Vector4Tween(ITweenTarget<Vector4> target, Vector4 to, float duration)
+		{
+			Initialize(target, to, duration);
 		}
 
 
@@ -200,7 +205,7 @@ namespace Nez.Tweens
 
 		protected override void UpdateValue()
 		{
-			_target.SetTweenedValue( Lerps.Ease( _easeType, _fromValue, _toValue, _elapsedTime, _duration ) );
+			_target.SetTweenedValue(Lerps.Ease(_easeType, _fromValue, _toValue, _elapsedTime, _duration));
 		}
 
 
@@ -208,8 +213,8 @@ namespace Nez.Tweens
 		{
 			base.RecycleSelf();
 
-			if( _shouldRecycleTween && TweenManager.CacheVector4Tweens )
-				Pool<Vector4Tween>.Free( this );
+			if (_shouldRecycleTween && TweenManager.CacheVector4Tweens)
+				Pool<Vector4Tween>.Free(this);
 		}
 	}
 
@@ -223,12 +228,13 @@ namespace Nez.Tweens
 
 
 		public QuaternionTween()
-		{ }
-
-
-		public QuaternionTween( ITweenTarget<Quaternion> target, Quaternion to, float duration )
 		{
-			Initialize( target, to, duration );
+		}
+
+
+		public QuaternionTween(ITweenTarget<Quaternion> target, Quaternion to, float duration)
+		{
+			Initialize(target, to, duration);
 		}
 
 
@@ -242,7 +248,7 @@ namespace Nez.Tweens
 
 		protected override void UpdateValue()
 		{
-			_target.SetTweenedValue( Lerps.Ease( _easeType, _fromValue, _toValue, _elapsedTime, _duration ) );
+			_target.SetTweenedValue(Lerps.Ease(_easeType, _fromValue, _toValue, _elapsedTime, _duration));
 		}
 
 
@@ -250,8 +256,8 @@ namespace Nez.Tweens
 		{
 			base.RecycleSelf();
 
-			if( _shouldRecycleTween && TweenManager.CacheQuaternionTweens )
-				Pool<QuaternionTween>.Free( this );
+			if (_shouldRecycleTween && TweenManager.CacheQuaternionTweens)
+				Pool<QuaternionTween>.Free(this);
 		}
 	}
 
@@ -265,12 +271,13 @@ namespace Nez.Tweens
 
 
 		public ColorTween()
-		{ }
-
-
-		public ColorTween( ITweenTarget<Color> target, Color to, float duration )
 		{
-			Initialize( target, to, duration );
+		}
+
+
+		public ColorTween(ITweenTarget<Color> target, Color to, float duration)
+		{
+			Initialize(target, to, duration);
 		}
 
 
@@ -287,7 +294,7 @@ namespace Nez.Tweens
 
 		protected override void UpdateValue()
 		{
-			_target.SetTweenedValue( Lerps.Ease( _easeType, _fromValue, _toValue, _elapsedTime, _duration ) );
+			_target.SetTweenedValue(Lerps.Ease(_easeType, _fromValue, _toValue, _elapsedTime, _duration));
 		}
 
 
@@ -295,8 +302,8 @@ namespace Nez.Tweens
 		{
 			base.RecycleSelf();
 
-			if( _shouldRecycleTween && TweenManager.CacheColorTweens )
-				Pool<ColorTween>.Free( this );
+			if (_shouldRecycleTween && TweenManager.CacheColorTweens)
+				Pool<ColorTween>.Free(this);
 		}
 	}
 
@@ -310,12 +317,13 @@ namespace Nez.Tweens
 
 
 		public RectangleTween()
-		{ }
-
-
-		public RectangleTween( ITweenTarget<Rectangle> target, Rectangle to, float duration )
 		{
-			Initialize( target, to, duration );
+		}
+
+
+		public RectangleTween(ITweenTarget<Rectangle> target, Rectangle to, float duration)
+		{
+			Initialize(target, to, duration);
 		}
 
 
@@ -336,7 +344,7 @@ namespace Nez.Tweens
 
 		protected override void UpdateValue()
 		{
-			_target.SetTweenedValue( Lerps.Ease( _easeType, _fromValue, _toValue, _elapsedTime, _duration ) );
+			_target.SetTweenedValue(Lerps.Ease(_easeType, _fromValue, _toValue, _elapsedTime, _duration));
 		}
 
 
@@ -344,9 +352,8 @@ namespace Nez.Tweens
 		{
 			base.RecycleSelf();
 
-			if( _shouldRecycleTween && TweenManager.CacheRectTweens )
-				Pool<RectangleTween>.Free( this );
+			if (_shouldRecycleTween && TweenManager.CacheRectTweens)
+				Pool<RectangleTween>.Free(this);
 		}
 	}
-
 }

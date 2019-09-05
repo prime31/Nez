@@ -6,10 +6,10 @@ namespace Nez.Farseer
 {
 	public class FSCollisionEdge : FSCollisionShape
 	{
-		Vector2 _vertex1 = new Vector2( -0.01f, 0 );
-		Vector2 _vertex2 = new Vector2( 0.01f, 0 );
+		Vector2 _vertex1 = new Vector2(-0.01f, 0);
+		Vector2 _vertex2 = new Vector2(0.01f, 0);
 
-		
+
 		public FSCollisionEdge()
 		{
 			_fixtureDef.Shape = new EdgeShape();
@@ -18,7 +18,7 @@ namespace Nez.Farseer
 
 		#region Configuration
 
-		public FSCollisionEdge SetVertices( Vector2 vertex1, Vector2 vertex2 )
+		public FSCollisionEdge SetVertices(Vector2 vertex1, Vector2 vertex2)
 		{
 			_vertex1 = vertex1;
 			_vertex2 = vertex2;
@@ -39,6 +39,5 @@ namespace Nez.Farseer
 
 			CreateFixture();
 		}
-
 	}
 }

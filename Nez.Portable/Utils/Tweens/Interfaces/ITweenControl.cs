@@ -21,7 +21,7 @@ namespace Nez.Tweens
 		/// object whether it is paused, completed or running.
 		/// </summary>
 		/// <param name="elapsedTime">Elapsed time.</param>
-		void JumpToElapsedTime( float elapsedTime );
+		void JumpToElapsedTime(float elapsedTime);
 
 		/// <summary>
 		/// when called from StartCoroutine it will yield until the tween is complete
@@ -37,4 +37,3 @@ namespace Nez.Tweens
 		object GetTargetObject();
 	}
 }
-

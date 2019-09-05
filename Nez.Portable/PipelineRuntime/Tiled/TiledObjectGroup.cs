@@ -11,11 +11,11 @@ namespace Nez.Tiled
 		public Color Color;
 		public float Opacity;
 		public bool Visible;
-		public Dictionary<string,string> Properties = new Dictionary<string,string>();
+		public Dictionary<string, string> Properties = new Dictionary<string, string>();
 		public TiledObject[] Objects;
 
 
-		public TiledObjectGroup( string name, Color color, bool visible, float opacity )
+		public TiledObjectGroup(string name, Color color, bool visible, float opacity)
 		{
 			this.Name = name;
 			this.Color = color;
@@ -29,13 +29,14 @@ namespace Nez.Tiled
 		/// </summary>
 		/// <returns>The with name.</returns>
 		/// <param name="name">Name.</param>
-		public TiledObject ObjectWithName( string name )
+		public TiledObject ObjectWithName(string name)
 		{
-			for( int i = 0; i < Objects.Length; i++ )
+			for (int i = 0; i < Objects.Length; i++)
 			{
-				if( Objects[i].Name == name )
+				if (Objects[i].Name == name)
 					return Objects[i];
 			}
+
 			return null;
 		}
 
@@ -45,14 +46,15 @@ namespace Nez.Tiled
 		/// </summary>
 		/// <returns>The objects with matching names.</returns>
 		/// <param name="name">Name.</param>
-		public List<TiledObject> ObjectsWithName( string name )
+		public List<TiledObject> ObjectsWithName(string name)
 		{
 			var list = new List<TiledObject>();
-			for( int i = 0; i < Objects.Length; i++ )
+			for (int i = 0; i < Objects.Length; i++)
 			{
-				if( Objects[i].Name == name )
-					list.Add( Objects[i] );
+				if (Objects[i].Name == name)
+					list.Add(Objects[i]);
 			}
+
 			return list;
 		}
 
@@ -61,17 +63,16 @@ namespace Nez.Tiled
 		/// </summary>
 		/// <returns>The objects with matching types.</returns>
 		/// <param name="type">Type.</param>
-		public List<TiledObject> ObjectsWithType( string type )
+		public List<TiledObject> ObjectsWithType(string type)
 		{
 			var list = new List<TiledObject>();
-			for( int i = 0; i < Objects.Length; i++ )
+			for (int i = 0; i < Objects.Length; i++)
 			{
-				if( Objects[i].Type == type )
-					list.Add( Objects[i] );
+				if (Objects[i].Type == type)
+					list.Add(Objects[i]);
 			}
+
 			return list;
 		}
-
 	}
 }
-

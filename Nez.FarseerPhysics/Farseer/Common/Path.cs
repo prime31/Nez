@@ -37,13 +37,13 @@ namespace FarseerPhysics.Common
 		/// Initializes a new instance of the <see cref="Path"/> class.
 		/// </summary>
 		/// <param name="vertices">The vertices to created the path from.</param>
-		public Path( Vector2[] vertices )
+		public Path(Vector2[] vertices)
 		{
-			ControlPoints = new List<Vector2>( vertices.Length );
+			ControlPoints = new List<Vector2>(vertices.Length);
 
-			for( int i = 0; i < vertices.Length; i++ )
+			for (int i = 0; i < vertices.Length; i++)
 			{
-				Add( vertices[i] );
+				Add(vertices[i]);
 			}
 		}
 
@@ -51,12 +51,12 @@ namespace FarseerPhysics.Common
 		/// Initializes a new instance of the <see cref="Path"/> class.
 		/// </summary>
 		/// <param name="vertices">The vertices to created the path from.</param>
-		public Path( IList<Vector2> vertices )
+		public Path(IList<Vector2> vertices)
 		{
-			ControlPoints = new List<Vector2>( vertices.Count );
-			for( int i = 0; i < vertices.Count; i++ )
+			ControlPoints = new List<Vector2>(vertices.Count);
+			for (int i = 0; i < vertices.Count; i++)
 			{
-				Add( vertices[i] );
+				Add(vertices[i]);
 			}
 		}
 
@@ -71,12 +71,13 @@ namespace FarseerPhysics.Common
 		/// </summary>
 		/// <param name="index">The index.</param>
 		/// <returns></returns>
-		public int NextIndex( int index )
+		public int NextIndex(int index)
 		{
-			if( index == ControlPoints.Count - 1 )
+			if (index == ControlPoints.Count - 1)
 			{
 				return 0;
 			}
+
 			return index + 1;
 		}
 
@@ -85,12 +86,13 @@ namespace FarseerPhysics.Common
 		/// </summary>
 		/// <param name="index">The index.</param>
 		/// <returns></returns>
-		public int PreviousIndex( int index )
+		public int PreviousIndex(int index)
 		{
-			if( index == 0 )
+			if (index == 0)
 			{
 				return ControlPoints.Count - 1;
 			}
+
 			return index - 1;
 		}
 
@@ -98,46 +100,47 @@ namespace FarseerPhysics.Common
 		/// Translates the control points by the specified vector.
 		/// </summary>
 		/// <param name="vector">The vector.</param>
-		public void Translate( ref Vector2 vector )
+		public void Translate(ref Vector2 vector)
 		{
-			for( int i = 0; i < ControlPoints.Count; i++ )
-				ControlPoints[i] = Vector2.Add( ControlPoints[i], vector );
+			for (int i = 0; i < ControlPoints.Count; i++)
+				ControlPoints[i] = Vector2.Add(ControlPoints[i], vector);
 		}
 
 		/// <summary>
 		/// Scales the control points by the specified vector.
 		/// </summary>
 		/// <param name="value">The Value.</param>
-		public void Scale( ref Vector2 value )
+		public void Scale(ref Vector2 value)
 		{
-			for( int i = 0; i < ControlPoints.Count; i++ )
-				ControlPoints[i] = Vector2.Multiply( ControlPoints[i], value );
+			for (int i = 0; i < ControlPoints.Count; i++)
+				ControlPoints[i] = Vector2.Multiply(ControlPoints[i], value);
 		}
 
 		/// <summary>
 		/// Rotate the control points by the defined value in radians.
 		/// </summary>
 		/// <param name="value">The amount to rotate by in radians.</param>
-		public void Rotate( float value )
+		public void Rotate(float value)
 		{
 			Matrix rotationMatrix;
-			Matrix.CreateRotationZ( value, out rotationMatrix );
+			Matrix.CreateRotationZ(value, out rotationMatrix);
 
-			for( int i = 0; i < ControlPoints.Count; i++ )
-				ControlPoints[i] = Vector2.Transform( ControlPoints[i], rotationMatrix );
+			for (int i = 0; i < ControlPoints.Count; i++)
+				ControlPoints[i] = Vector2.Transform(ControlPoints[i], rotationMatrix);
 		}
 
 		public override string ToString()
 		{
 			StringBuilder builder = new StringBuilder();
-			for( int i = 0; i < ControlPoints.Count; i++ )
+			for (int i = 0; i < ControlPoints.Count; i++)
 			{
-				builder.Append( ControlPoints[i].ToString() );
-				if( i < ControlPoints.Count - 1 )
+				builder.Append(ControlPoints[i].ToString());
+				if (i < ControlPoints.Count - 1)
 				{
-					builder.Append( " " );
+					builder.Append(" ");
 				}
 			}
+
 			return builder.ToString();
 		}
 
@@ -148,77 +151,79 @@ namespace FarseerPhysics.Common
 		/// </summary>
 		/// <param name="divisions">Number of divisions between each control point.</param>
 		/// <returns></returns>
-		public Vertices GetVertices( int divisions )
+		public Vertices GetVertices(int divisions)
 		{
 			var verts = new Vertices();
 			float timeStep = 1f / divisions;
 
-			for( float i = 0; i < 1f; i += timeStep )
+			for (float i = 0; i < 1f; i += timeStep)
 			{
-				verts.Add( GetPosition( i ) );
+				verts.Add(GetPosition(i));
 			}
 
 			return verts;
 		}
 
-		public Vector2 GetPosition( float time )
+		public Vector2 GetPosition(float time)
 		{
 			Vector2 temp;
 
-			if( ControlPoints.Count < 2 )
-				throw new Exception( "You need at least 2 control points to calculate a position." );
+			if (ControlPoints.Count < 2)
+				throw new Exception("You need at least 2 control points to calculate a position.");
 
-			if( IsClosed )
+			if (IsClosed)
 			{
-				Add( ControlPoints[0] );
+				Add(ControlPoints[0]);
 
-				_deltaT = 1f / ( ControlPoints.Count - 1 );
+				_deltaT = 1f / (ControlPoints.Count - 1);
 
-				int p = (int)( time / _deltaT );
+				int p = (int) (time / _deltaT);
 
 				// use a circular indexing system
 				int p0 = p - 1;
-				if( p0 < 0 ) p0 = p0 + ( ControlPoints.Count - 1 );
-				else if( p0 >= ControlPoints.Count - 1 ) p0 = p0 - ( ControlPoints.Count - 1 );
+				if (p0 < 0) p0 = p0 + (ControlPoints.Count - 1);
+				else if (p0 >= ControlPoints.Count - 1) p0 = p0 - (ControlPoints.Count - 1);
 				int p1 = p;
-				if( p1 < 0 ) p1 = p1 + ( ControlPoints.Count - 1 );
-				else if( p1 >= ControlPoints.Count - 1 ) p1 = p1 - ( ControlPoints.Count - 1 );
+				if (p1 < 0) p1 = p1 + (ControlPoints.Count - 1);
+				else if (p1 >= ControlPoints.Count - 1) p1 = p1 - (ControlPoints.Count - 1);
 				int p2 = p + 1;
-				if( p2 < 0 ) p2 = p2 + ( ControlPoints.Count - 1 );
-				else if( p2 >= ControlPoints.Count - 1 ) p2 = p2 - ( ControlPoints.Count - 1 );
+				if (p2 < 0) p2 = p2 + (ControlPoints.Count - 1);
+				else if (p2 >= ControlPoints.Count - 1) p2 = p2 - (ControlPoints.Count - 1);
 				int p3 = p + 2;
-				if( p3 < 0 ) p3 = p3 + ( ControlPoints.Count - 1 );
-				else if( p3 >= ControlPoints.Count - 1 ) p3 = p3 - ( ControlPoints.Count - 1 );
+				if (p3 < 0) p3 = p3 + (ControlPoints.Count - 1);
+				else if (p3 >= ControlPoints.Count - 1) p3 = p3 - (ControlPoints.Count - 1);
 
 				// relative time
-				float lt = ( time - _deltaT * p ) / _deltaT;
+				float lt = (time - _deltaT * p) / _deltaT;
 
-				temp = Vector2.CatmullRom( ControlPoints[p0], ControlPoints[p1], ControlPoints[p2], ControlPoints[p3], lt );
+				temp = Vector2.CatmullRom(ControlPoints[p0], ControlPoints[p1], ControlPoints[p2], ControlPoints[p3],
+					lt);
 
-				RemoveAt( ControlPoints.Count - 1 );
+				RemoveAt(ControlPoints.Count - 1);
 			}
 			else
 			{
-				int p = (int)( time / _deltaT );
+				int p = (int) (time / _deltaT);
 
 				// 
 				int p0 = p - 1;
-				if( p0 < 0 ) p0 = 0;
-				else if( p0 >= ControlPoints.Count - 1 ) p0 = ControlPoints.Count - 1;
+				if (p0 < 0) p0 = 0;
+				else if (p0 >= ControlPoints.Count - 1) p0 = ControlPoints.Count - 1;
 				int p1 = p;
-				if( p1 < 0 ) p1 = 0;
-				else if( p1 >= ControlPoints.Count - 1 ) p1 = ControlPoints.Count - 1;
+				if (p1 < 0) p1 = 0;
+				else if (p1 >= ControlPoints.Count - 1) p1 = ControlPoints.Count - 1;
 				int p2 = p + 1;
-				if( p2 < 0 ) p2 = 0;
-				else if( p2 >= ControlPoints.Count - 1 ) p2 = ControlPoints.Count - 1;
+				if (p2 < 0) p2 = 0;
+				else if (p2 >= ControlPoints.Count - 1) p2 = ControlPoints.Count - 1;
 				int p3 = p + 2;
-				if( p3 < 0 ) p3 = 0;
-				else if( p3 >= ControlPoints.Count - 1 ) p3 = ControlPoints.Count - 1;
+				if (p3 < 0) p3 = 0;
+				else if (p3 >= ControlPoints.Count - 1) p3 = ControlPoints.Count - 1;
 
 				// relative time
-				float lt = ( time - _deltaT * p ) / _deltaT;
+				float lt = (time - _deltaT * p) / _deltaT;
 
-				temp = Vector2.CatmullRom( ControlPoints[p0], ControlPoints[p1], ControlPoints[p2], ControlPoints[p3], lt );
+				temp = Vector2.CatmullRom(ControlPoints[p0], ControlPoints[p1], ControlPoints[p2], ControlPoints[p3],
+					lt);
 			}
 
 			return temp;
@@ -229,59 +234,59 @@ namespace FarseerPhysics.Common
 		/// </summary>
 		/// <param name="time">The time</param>
 		/// <returns>The normal.</returns>
-		public Vector2 GetPositionNormal( float time )
+		public Vector2 GetPositionNormal(float time)
 		{
 			var offsetTime = time + 0.0001f;
 
-			var a = GetPosition( time );
-			var b = GetPosition( offsetTime );
+			var a = GetPosition(time);
+			var b = GetPosition(offsetTime);
 
 			Vector2 output, temp;
-			Vector2.Subtract( ref a, ref b, out temp );
+			Vector2.Subtract(ref a, ref b, out temp);
 
 			output.X = -temp.Y;
 			output.Y = temp.X;
 
-			Nez.Vector2Ext.Normalize( ref output );
+			Nez.Vector2Ext.Normalize(ref output);
 
 			return output;
 		}
 
-		public void Add( Vector2 point )
+		public void Add(Vector2 point)
 		{
-			ControlPoints.Add( point );
-			_deltaT = 1f / ( ControlPoints.Count - 1 );
+			ControlPoints.Add(point);
+			_deltaT = 1f / (ControlPoints.Count - 1);
 		}
 
-		public void Remove( Vector2 point )
+		public void Remove(Vector2 point)
 		{
-			ControlPoints.Remove( point );
-			_deltaT = 1f / ( ControlPoints.Count - 1 );
+			ControlPoints.Remove(point);
+			_deltaT = 1f / (ControlPoints.Count - 1);
 		}
 
-		public void RemoveAt( int index )
+		public void RemoveAt(int index)
 		{
-			ControlPoints.RemoveAt( index );
-			_deltaT = 1f / ( ControlPoints.Count - 1 );
+			ControlPoints.RemoveAt(index);
+			_deltaT = 1f / (ControlPoints.Count - 1);
 		}
 
 		public float GetLength()
 		{
-			List<Vector2> verts = GetVertices( ControlPoints.Count * 25 );
+			List<Vector2> verts = GetVertices(ControlPoints.Count * 25);
 			float length = 0;
 
-			for( int i = 1; i < verts.Count; i++ )
+			for (int i = 1; i < verts.Count; i++)
 			{
-				length += Vector2.Distance( verts[i - 1], verts[i] );
+				length += Vector2.Distance(verts[i - 1], verts[i]);
 			}
 
-			if( IsClosed )
-				length += Vector2.Distance( verts[ControlPoints.Count - 1], verts[0] );
+			if (IsClosed)
+				length += Vector2.Distance(verts[ControlPoints.Count - 1], verts[0]);
 
 			return length;
 		}
 
-		public List<Vector3> SubdivideEvenly( int divisions )
+		public List<Vector3> SubdivideEvenly(int divisions)
 		{
 			List<Vector3> verts = new List<Vector3>();
 
@@ -292,49 +297,50 @@ namespace FarseerPhysics.Common
 
 			// we always start at the first control point
 			Vector2 start = ControlPoints[0];
-			Vector2 end = GetPosition( t );
+			Vector2 end = GetPosition(t);
 
 			// increment t until we are at half the distance
-			while( deltaLength * 0.5f >= Vector2.Distance( start, end ) )
+			while (deltaLength * 0.5f >= Vector2.Distance(start, end))
 			{
-				end = GetPosition( t );
+				end = GetPosition(t);
 				t += 0.0001f;
 
-				if( t >= 1f )
+				if (t >= 1f)
 					break;
 			}
 
 			start = end;
 
 			// for each box
-			for( int i = 1; i < divisions; i++ )
+			for (int i = 1; i < divisions; i++)
 			{
-				Vector2 normal = GetPositionNormal( t );
-				float angle = (float)Math.Atan2( normal.Y, normal.X );
+				Vector2 normal = GetPositionNormal(t);
+				float angle = (float) Math.Atan2(normal.Y, normal.X);
 
-				verts.Add( new Vector3( end, angle ) );
+				verts.Add(new Vector3(end, angle));
 
 				// until we reach the correct distance down the curve
-				while( deltaLength >= Vector2.Distance( start, end ) )
+				while (deltaLength >= Vector2.Distance(start, end))
 				{
-					end = GetPosition( t );
+					end = GetPosition(t);
 					t += 0.00001f;
 
-					if( t >= 1f )
+					if (t >= 1f)
 						break;
 				}
-				if( t >= 1f )
+
+				if (t >= 1f)
 					break;
 
 				start = end;
 			}
+
 			return verts;
 		}
 
-		public static string GetFileNameWithoutExtension( string fontFile )
+		public static string GetFileNameWithoutExtension(string fontFile)
 		{
 			throw new NotImplementedException();
 		}
-	
 	}
 }

@@ -15,7 +15,7 @@ namespace Nez
 
 		public override void OnAddedToEntity()
 		{
-			_triggerHelper = new ColliderTriggerHelper( Entity );
+			_triggerHelper = new ColliderTriggerHelper(Entity);
 		}
 
 		/// <summary>
@@ -25,44 +25,46 @@ namespace Nez
 		/// <returns><c>true</c>, if movement was calculated, <c>false</c> otherwise.</returns>
 		/// <param name="motion">Motion.</param>
 		/// <param name="collisionResult">Collision result.</param>
-		public bool CalculateMovement( ref Vector2 motion, out CollisionResult collisionResult )
+		public bool CalculateMovement(ref Vector2 motion, out CollisionResult collisionResult)
 		{
 			collisionResult = new CollisionResult();
 
 			// no collider? just move and forget about it
-			if( Entity.GetComponent<Collider>() == null || _triggerHelper == null )
+			if (Entity.GetComponent<Collider>() == null || _triggerHelper == null)
 				return false;
 
 			// 1. move all non-trigger Colliders and get closest collision
 			var colliders = Entity.GetComponents<Collider>();
-			for( var i = 0; i < colliders.Count; i++ )
+			for (var i = 0; i < colliders.Count; i++)
 			{
 				var collider = colliders[i];
 
 				// skip triggers for now. we will revisit them after we move.
-				if( collider.IsTrigger )
+				if (collider.IsTrigger)
 					continue;
 
 				// fetch anything that we might collide with at our new position
 				var bounds = collider.Bounds;
 				bounds.X += motion.X;
 				bounds.Y += motion.Y;
-				var neighbors = Physics.BoxcastBroadphaseExcludingSelf( collider, ref bounds, collider.CollidesWithLayers );
+				var neighbors =
+					Physics.BoxcastBroadphaseExcludingSelf(collider, ref bounds, collider.CollidesWithLayers);
 
-				foreach( var neighbor in neighbors )
+				foreach (var neighbor in neighbors)
 				{
 					// skip triggers for now. we will revisit them after we move.
-					if( neighbor.IsTrigger )
+					if (neighbor.IsTrigger)
 						continue;
 
-					if( collider.CollidesWith( neighbor, motion, out collisionResult ) )
+					if (collider.CollidesWith(neighbor, motion, out collisionResult))
 					{
 						// hit. back off our motion
 						motion -= collisionResult.MinimumTranslationVector;
 					}
 				}
 			}
-			ListPool<Collider>.Free( colliders );
+
+			ListPool<Collider>.Free(colliders);
 
 			return collisionResult.Collider != null;
 		}
@@ -71,7 +73,7 @@ namespace Nez
 		/// applies the movement from calculateMovement to the entity and updates the triggerHelper
 		/// </summary>
 		/// <param name="motion">Motion.</param>
-		public void ApplyMovement( Vector2 motion )
+		public void ApplyMovement(Vector2 motion)
 		{
 			// 2. move entity to its new position if we have a collision else move the full amount. motion is updated when a collision occurs
 			Entity.Transform.Position += motion;
@@ -87,14 +89,13 @@ namespace Nez
 		/// <returns><c>true</c>, if move actor was newed, <c>false</c> otherwise.</returns>
 		/// <param name="motion">Motion.</param>
 		/// <param name="collisionResult">Collision result.</param>
-		public bool Move( Vector2 motion, out CollisionResult collisionResult )
+		public bool Move(Vector2 motion, out CollisionResult collisionResult)
 		{
-			CalculateMovement( ref motion, out collisionResult );
+			CalculateMovement(ref motion, out collisionResult);
 
-			ApplyMovement( motion );
+			ApplyMovement(motion);
 
 			return collisionResult.Collider != null;
 		}
 	}
 }
-

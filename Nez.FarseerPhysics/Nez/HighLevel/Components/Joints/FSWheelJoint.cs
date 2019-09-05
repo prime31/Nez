@@ -10,7 +10,7 @@ namespace Nez.Farseer
 
 		#region Configuration
 
-		public FSWheelJoint SetAnchor( Vector2 anchor )
+		public FSWheelJoint SetAnchor(Vector2 anchor)
 		{
 			_jointDef.Anchor = anchor;
 			RecreateJoint();
@@ -18,7 +18,7 @@ namespace Nez.Farseer
 		}
 
 
-		public FSWheelJoint SetAxis( Vector2 axis )
+		public FSWheelJoint SetAxis(Vector2 axis)
 		{
 			_jointDef.Axis = axis;
 			RecreateJoint();
@@ -26,7 +26,7 @@ namespace Nez.Farseer
 		}
 
 
-		public FSWheelJoint SetMotorEnabled( bool motorEnabled )
+		public FSWheelJoint SetMotorEnabled(bool motorEnabled)
 		{
 			_jointDef.MotorEnabled = motorEnabled;
 			RecreateJoint();
@@ -34,7 +34,7 @@ namespace Nez.Farseer
 		}
 
 
-		public FSWheelJoint SetMotorSpeed( float motorSpeed )
+		public FSWheelJoint SetMotorSpeed(float motorSpeed)
 		{
 			_jointDef.MotorSpeed = motorSpeed;
 			RecreateJoint();
@@ -42,7 +42,7 @@ namespace Nez.Farseer
 		}
 
 
-		public FSWheelJoint SetMaxMotorTorque( float maxMotorTorque )
+		public FSWheelJoint SetMaxMotorTorque(float maxMotorTorque)
 		{
 			_jointDef.MaxMotorTorque = maxMotorTorque;
 			RecreateJoint();
@@ -50,7 +50,7 @@ namespace Nez.Farseer
 		}
 
 
-		public FSWheelJoint SetFrequency( float frequency )
+		public FSWheelJoint SetFrequency(float frequency)
 		{
 			_jointDef.Frequency = frequency;
 			RecreateJoint();
@@ -58,7 +58,7 @@ namespace Nez.Farseer
 		}
 
 
-		public FSWheelJoint SetDampingRatio( float damping )
+		public FSWheelJoint SetDampingRatio(float damping)
 		{
 			_jointDef.DampingRatio = damping;
 			RecreateJoint();
@@ -70,12 +70,11 @@ namespace Nez.Farseer
 
 		internal override FSJointDef GetJointDef()
 		{
-			InitializeJointDef( _jointDef );
-			if( _jointDef.BodyA == null || _jointDef.BodyB == null )
+			InitializeJointDef(_jointDef);
+			if (_jointDef.BodyA == null || _jointDef.BodyB == null)
 				return null;
 
 			return _jointDef;
 		}
-
 	}
 }

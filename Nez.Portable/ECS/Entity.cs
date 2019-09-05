@@ -43,7 +43,7 @@ namespace Nez
 		public int Tag
 		{
 			get { return _tag; }
-			set { SetTag( value ); }
+			set { SetTag(value); }
 		}
 
 		/// <summary>
@@ -57,7 +57,7 @@ namespace Nez
 		public bool Enabled
 		{
 			get { return _enabled; }
-			set { SetEnabled( value ); }
+			set { SetEnabled(value); }
 		}
 
 		/// <summary>
@@ -67,7 +67,7 @@ namespace Nez
 		public int UpdateOrder
 		{
 			get { return _updateOrder; }
-			set { SetUpdateOrder( value ); }
+			set { SetUpdateOrder(value); }
 		}
 
 		/// <summary>
@@ -79,7 +79,7 @@ namespace Nez
 		/// flag indicating if destroy was called on this Entity
 		/// </summary>
 		internal bool _isDestroyed;
-		
+
 		internal BitSet componentBits;
 
 		int _tag = 0;
@@ -93,121 +93,122 @@ namespace Nez
 
 		public Transform Parent
 		{
-			[MethodImpl( MethodImplOptions.AggressiveInlining )]
+			[MethodImpl(MethodImplOptions.AggressiveInlining)]
 			get { return Transform.Parent; }
-			[MethodImpl( MethodImplOptions.AggressiveInlining )]
-			set { Transform.SetParent( value ); }
+			[MethodImpl(MethodImplOptions.AggressiveInlining)]
+			set { Transform.SetParent(value); }
 		}
 
 		public int ChildCount
 		{
-			[MethodImpl( MethodImplOptions.AggressiveInlining )]
+			[MethodImpl(MethodImplOptions.AggressiveInlining)]
 			get { return Transform.ChildCount; }
 		}
 
 		public Vector2 Position
 		{
-			[MethodImpl( MethodImplOptions.AggressiveInlining )]
+			[MethodImpl(MethodImplOptions.AggressiveInlining)]
 			get { return Transform.Position; }
-			[MethodImpl( MethodImplOptions.AggressiveInlining )]
-			set { Transform.SetPosition( value ); }
+			[MethodImpl(MethodImplOptions.AggressiveInlining)]
+			set { Transform.SetPosition(value); }
 		}
 
 		public Vector2 LocalPosition
 		{
-			[MethodImpl( MethodImplOptions.AggressiveInlining )]
+			[MethodImpl(MethodImplOptions.AggressiveInlining)]
 			get { return Transform.LocalPosition; }
-			[MethodImpl( MethodImplOptions.AggressiveInlining )]
-			set { Transform.SetLocalPosition( value ); }
+			[MethodImpl(MethodImplOptions.AggressiveInlining)]
+			set { Transform.SetLocalPosition(value); }
 		}
 
 		public float Rotation
 		{
-			[MethodImpl( MethodImplOptions.AggressiveInlining )]
+			[MethodImpl(MethodImplOptions.AggressiveInlining)]
 			get { return Transform.Rotation; }
-			[MethodImpl( MethodImplOptions.AggressiveInlining )]
-			set { Transform.SetRotation( value ); }
+			[MethodImpl(MethodImplOptions.AggressiveInlining)]
+			set { Transform.SetRotation(value); }
 		}
 
 		public float RotationDegrees
 		{
-			[MethodImpl( MethodImplOptions.AggressiveInlining )]
+			[MethodImpl(MethodImplOptions.AggressiveInlining)]
 			get { return Transform.RotationDegrees; }
-			[MethodImpl( MethodImplOptions.AggressiveInlining )]
-			set { Transform.SetRotationDegrees( value ); }
+			[MethodImpl(MethodImplOptions.AggressiveInlining)]
+			set { Transform.SetRotationDegrees(value); }
 		}
 
 		public float LocalRotation
 		{
-			[MethodImpl( MethodImplOptions.AggressiveInlining )]
+			[MethodImpl(MethodImplOptions.AggressiveInlining)]
 			get { return Transform.LocalRotation; }
-			[MethodImpl( MethodImplOptions.AggressiveInlining )]
-			set { Transform.SetLocalRotation( value ); }
+			[MethodImpl(MethodImplOptions.AggressiveInlining)]
+			set { Transform.SetLocalRotation(value); }
 		}
 
 		public float LocalRotationDegrees
 		{
-			[MethodImpl( MethodImplOptions.AggressiveInlining )]
+			[MethodImpl(MethodImplOptions.AggressiveInlining)]
 			get { return Transform.LocalRotationDegrees; }
-			[MethodImpl( MethodImplOptions.AggressiveInlining )]
-			set { Transform.SetLocalRotationDegrees( value ); }
+			[MethodImpl(MethodImplOptions.AggressiveInlining)]
+			set { Transform.SetLocalRotationDegrees(value); }
 		}
 
 		public Vector2 Scale
 		{
-			[MethodImpl( MethodImplOptions.AggressiveInlining )]
+			[MethodImpl(MethodImplOptions.AggressiveInlining)]
 			get { return Transform.Scale; }
-			[MethodImpl( MethodImplOptions.AggressiveInlining )]
-			set { Transform.SetScale( value ); }
+			[MethodImpl(MethodImplOptions.AggressiveInlining)]
+			set { Transform.SetScale(value); }
 		}
 
 		public Vector2 LocalScale
 		{
-			[MethodImpl( MethodImplOptions.AggressiveInlining )]
+			[MethodImpl(MethodImplOptions.AggressiveInlining)]
 			get { return Transform.LocalScale; }
-			[MethodImpl( MethodImplOptions.AggressiveInlining )]
-			set { Transform.SetLocalScale( value ); }
+			[MethodImpl(MethodImplOptions.AggressiveInlining)]
+			set { Transform.SetLocalScale(value); }
 		}
 
 		public Matrix2D WorldInverseTransform
 		{
-			[MethodImpl( MethodImplOptions.AggressiveInlining )]
+			[MethodImpl(MethodImplOptions.AggressiveInlining)]
 			get { return Transform.WorldInverseTransform; }
 		}
 
 		public Matrix2D LocalToWorldTransform
 		{
-			[MethodImpl( MethodImplOptions.AggressiveInlining )]
+			[MethodImpl(MethodImplOptions.AggressiveInlining)]
 			get { return Transform.LocalToWorldTransform; }
 		}
 
 		public Matrix2D WorldToLocalTransform
 		{
-			[MethodImpl( MethodImplOptions.AggressiveInlining )]
+			[MethodImpl(MethodImplOptions.AggressiveInlining)]
 			get { return Transform.WorldToLocalTransform; }
 		}
 
 		#endregion
 
 
-		public Entity( string name )
+		public Entity(string name)
 		{
-			Components = new ComponentList( this );
-			Transform = new Transform( this );
+			Components = new ComponentList(this);
+			Transform = new Transform(this);
 			this.Name = name;
 			Id = _idGenerator++;
-			
-			if( Core.entitySystemsEnabled )
+
+			if (Core.entitySystemsEnabled)
 				componentBits = new BitSet();
 		}
 
-		public Entity() : this( Utils.RandomString( 8 ) )
-		{}
+		public Entity() : this(Utils.RandomString(8))
+		{
+		}
 
-		internal void OnTransformChanged( Transform.Component comp )
+		internal void OnTransformChanged(Transform.Component comp)
 		{
 			// notify our children of our changed position
-			Components.OnEntityTransformChanged( comp );
+			Components.OnEntityTransformChanged(comp);
 		}
 
 
@@ -218,17 +219,17 @@ namespace Nez
 		/// </summary>
 		/// <returns>The tag.</returns>
 		/// <param name="tag">Tag.</param>
-		public Entity SetTag( int tag )
+		public Entity SetTag(int tag)
 		{
-			if( _tag != tag )
+			if (_tag != tag)
 			{
 				// we only call through to the entityTagList if we already have a scene. if we dont have a scene yet we will be
 				// added to the entityTagList when we do
-				if( Scene != null )
-					Scene.Entities.RemoveFromTagList( this );
+				if (Scene != null)
+					Scene.Entities.RemoveFromTagList(this);
 				_tag = tag;
-				if( Scene != null )
-					Scene.Entities.AddToTagList( this );
+				if (Scene != null)
+					Scene.Entities.AddToTagList(this);
 			}
 
 			return this;
@@ -239,13 +240,13 @@ namespace Nez
 		/// </summary>
 		/// <returns>The enabled.</returns>
 		/// <param name="isEnabled">If set to <c>true</c> is enabled.</param>
-		public Entity SetEnabled( bool isEnabled )
+		public Entity SetEnabled(bool isEnabled)
 		{
-			if( _enabled != isEnabled )
+			if (_enabled != isEnabled)
 			{
 				_enabled = isEnabled;
 
-				if( _enabled )
+				if (_enabled)
 					Components.OnEntityEnabled();
 				else
 					Components.OnEntityDisabled();
@@ -259,15 +260,15 @@ namespace Nez
 		/// </summary>
 		/// <returns>The update order.</returns>
 		/// <param name="updateOrder">Update order.</param>
-		public Entity SetUpdateOrder( int updateOrder )
+		public Entity SetUpdateOrder(int updateOrder)
 		{
-			if( _updateOrder != updateOrder )
+			if (_updateOrder != updateOrder)
 			{
 				_updateOrder = updateOrder;
-				if( Scene != null )
+				if (Scene != null)
 				{
 					Scene.Entities.MarkEntityListUnsorted();
-					Scene.Entities.MarkTagUnsorted( Tag );
+					Scene.Entities.MarkTagUnsorted(Tag);
 				}
 			}
 
@@ -283,13 +284,13 @@ namespace Nez
 		public void Destroy()
 		{
 			_isDestroyed = true;
-			Scene.Entities.Remove( this );
+			Scene.Entities.Remove(this);
 			Transform.Parent = null;
 
 			// destroy any children we have
-			for( var i = Transform.ChildCount - 1; i >= 0; i-- )
+			for (var i = Transform.ChildCount - 1; i >= 0; i--)
 			{
-				var child = Transform.GetChild( i );
+				var child = Transform.GetChild(i);
 				child.Entity.Destroy();
 			}
 		}
@@ -301,25 +302,25 @@ namespace Nez
 		/// </summary>
 		public void DetachFromScene()
 		{
-			Scene.Entities.Remove( this );
+			Scene.Entities.Remove(this);
 			Components.DeregisterAllComponents();
 
-			for( var i = 0; i < Transform.ChildCount; i++ )
-				Transform.GetChild( i ).Entity.DetachFromScene();
+			for (var i = 0; i < Transform.ChildCount; i++)
+				Transform.GetChild(i).Entity.DetachFromScene();
 		}
 
 		/// <summary>
 		/// attaches an Entity that was previously detached to a new scene
 		/// </summary>
 		/// <param name="newScene">New scene.</param>
-		public void AttachToScene( Scene newScene )
+		public void AttachToScene(Scene newScene)
 		{
 			Scene = newScene;
-			newScene.Entities.Add( this );
+			newScene.Entities.Add(this);
 			Components.RegisterAllComponents();
 
-			for( var i = 0; i < Transform.ChildCount; i++ )
-				Transform.GetChild( i ).Entity.AttachToScene( newScene );
+			for (var i = 0; i < Transform.ChildCount; i++)
+				Transform.GetChild(i).Entity.AttachToScene(newScene);
 		}
 
 		/// <summary>
@@ -327,11 +328,11 @@ namespace Nez
 		/// the copyFrom method should be called which will clone all Components, Colliders and Transform children for you. Note that cloned
 		/// Entity will not be added to any Scene! You must add them yourself!
 		/// </summary>
-		public virtual Entity Clone( Vector2 position = default( Vector2 ) )
+		public virtual Entity Clone(Vector2 position = default(Vector2))
 		{
-			var entity = Activator.CreateInstance( GetType() ) as Entity;
+			var entity = Activator.CreateInstance(GetType()) as Entity;
 			entity.Name = Name + "(clone)";
-			entity.CopyFrom( this );
+			entity.CopyFrom(this);
 			entity.Transform.Position = position;
 
 			return entity;
@@ -341,7 +342,7 @@ namespace Nez
 		/// copies the properties, components and colliders of Entity to this instance
 		/// </summary>
 		/// <param name="entity">Entity.</param>
-		protected void CopyFrom( Entity entity )
+		protected void CopyFrom(Entity entity)
 		{
 			// Entity fields
 			Tag = entity.Tag;
@@ -353,18 +354,18 @@ namespace Nez
 			Transform.Rotation = entity.Transform.Rotation;
 
 			// clone Components
-			for( var i = 0; i < entity.Components.Count; i++ )
-				AddComponent( entity.Components[i].Clone() );
-			for( var i = 0; i < entity.Components._componentsToAdd.Count; i++ )
-				AddComponent( entity.Components._componentsToAdd[i].Clone() );
+			for (var i = 0; i < entity.Components.Count; i++)
+				AddComponent(entity.Components[i].Clone());
+			for (var i = 0; i < entity.Components._componentsToAdd.Count; i++)
+				AddComponent(entity.Components._componentsToAdd[i].Clone());
 
 			// clone any children of the Entity.transform
-			for( var i = 0; i < entity.Transform.ChildCount; i++ )
+			for (var i = 0; i < entity.Transform.ChildCount; i++)
 			{
-				var child = entity.Transform.GetChild( i ).Entity;
+				var child = entity.Transform.GetChild(i).Entity;
 
 				var childClone = child.Clone();
-				childClone.Transform.CopyFrom( child.Transform );
+				childClone.Transform.CopyFrom(child.Transform);
 				childClone.Transform.Parent = Transform;
 			}
 		}
@@ -376,7 +377,8 @@ namespace Nez
 		/// Called when this entity is added to a scene after all pending entity changes are committed
 		/// </summary>
 		public virtual void OnAddedToScene()
-		{}
+		{
+		}
 
 		/// <summary>
 		/// Called when this entity is removed from a scene
@@ -384,7 +386,7 @@ namespace Nez
 		public virtual void OnRemovedFromScene()
 		{
 			// if we were destroyed, remove our components. If we were just detached we need to keep our components on the Entity.
-			if( _isDestroyed )
+			if (_isDestroyed)
 				Components.RemoveAllComponents();
 		}
 
@@ -400,9 +402,9 @@ namespace Nez
 		/// called if Core.debugRenderEnabled is true by the default renderers. Custom renderers can choose to call it or not.
 		/// </summary>
 		/// <param name="graphics">Graphics.</param>
-		public virtual void DebugRender( Graphics graphics )
+		public virtual void DebugRender(Graphics graphics)
 		{
-			Components.DebugRender( graphics );
+			Components.DebugRender(graphics);
 		}
 
 		#endregion
@@ -416,10 +418,10 @@ namespace Nez
 		/// <returns>Scene.</returns>
 		/// <param name="component">Component.</param>
 		/// <typeparam name="T">The 1st type parameter.</typeparam>
-		public T AddComponent<T>( T component ) where T : Component
+		public T AddComponent<T>(T component) where T : Component
 		{
 			component.Entity = this;
-			Components.Add( component );
+			Components.Add(component);
 			component.Initialize();
 			return component;
 		}
@@ -433,7 +435,7 @@ namespace Nez
 		{
 			var component = new T();
 			component.Entity = this;
-			Components.Add( component );
+			Components.Add(component);
 			component.Initialize();
 			return component;
 		}
@@ -445,7 +447,7 @@ namespace Nez
 		/// <typeparam name="T">The 1st type parameter.</typeparam>
 		public T GetComponent<T>() where T : Component
 		{
-			return Components.GetComponent<T>( false );
+			return Components.GetComponent<T>(false);
 		}
 
 		/// <summary>
@@ -455,8 +457,8 @@ namespace Nez
 		/// <typeparam name="T">The 1st type parameter.</typeparam>
 		public T GetOrCreateComponent<T>() where T : Component, new()
 		{
-			var comp = Components.GetComponent<T>( true );
-			if( comp == null )
+			var comp = Components.GetComponent<T>(true);
+			if (comp == null)
 				comp = AddComponent<T>();
 
 			return comp;
@@ -469,9 +471,9 @@ namespace Nez
 		/// <returns>The component.</returns>
 		/// <param name="onlyReturnInitializedComponents">If set to <c>true</c> only return initialized components.</param>
 		/// <typeparam name="T">The 1st type parameter.</typeparam>
-		public T GetComponent<T>( bool onlyReturnInitializedComponents ) where T : Component
+		public T GetComponent<T>(bool onlyReturnInitializedComponents) where T : Component
 		{
-			return Components.GetComponent<T>( onlyReturnInitializedComponents );
+			return Components.GetComponent<T>(onlyReturnInitializedComponents);
 		}
 
 		/// <summary>
@@ -479,9 +481,9 @@ namespace Nez
 		/// </summary>
 		/// <param name="componentList">Component list.</param>
 		/// <typeparam name="T">The 1st type parameter.</typeparam>
-		public void GetComponents<T>( List<T> componentList ) where T : class
+		public void GetComponents<T>(List<T> componentList) where T : class
 		{
-			Components.GetComponents( componentList );
+			Components.GetComponents(componentList);
 		}
 
 		/// <summary>
@@ -501,9 +503,9 @@ namespace Nez
 		public bool RemoveComponent<T>() where T : Component
 		{
 			var comp = GetComponent<T>();
-			if( comp != null )
+			if (comp != null)
 			{
-				RemoveComponent( comp );
+				RemoveComponent(comp);
 				return true;
 			}
 
@@ -514,9 +516,9 @@ namespace Nez
 		/// removes a Component from the components list
 		/// </summary>
 		/// <param name="component">The Component to remove</param>
-		public void RemoveComponent( Component component )
+		public void RemoveComponent(Component component)
 		{
-			Components.Remove( component );
+			Components.Remove(component);
 		}
 
 		/// <summary>
@@ -524,26 +526,25 @@ namespace Nez
 		/// </summary>
 		public void RemoveAllComponents()
 		{
-			for( var i = 0; i < Components.Count; i++ )
-				RemoveComponent( Components[i] );
+			for (var i = 0; i < Components.Count; i++)
+				RemoveComponent(Components[i]);
 		}
 
 		#endregion
 
 
-		public int CompareTo( Entity other )
+		public int CompareTo(Entity other)
 		{
-			var compare = _updateOrder.CompareTo( other._updateOrder );
-			if( compare == 0 )
-				compare = Id.CompareTo( other.Id );
+			var compare = _updateOrder.CompareTo(other._updateOrder);
+			if (compare == 0)
+				compare = Id.CompareTo(other.Id);
 			return compare;
 		}
 
 		public override string ToString()
 		{
-			return string.Format( "[Entity: name: {0}, tag: {1}, enabled: {2}, depth: {3}]", Name, Tag, Enabled, UpdateOrder );
+			return string.Format("[Entity: name: {0}, tag: {1}, enabled: {2}, depth: {3}]", Name, Tag, Enabled,
+				UpdateOrder);
 		}
-
 	}
 }
-

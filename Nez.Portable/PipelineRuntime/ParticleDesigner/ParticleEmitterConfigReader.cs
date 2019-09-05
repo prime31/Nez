@@ -10,7 +10,7 @@ namespace Nez.ParticleDesigner
 {
 	public class ParticleEmitterConfigReader : ContentTypeReader<ParticleEmitterConfig>
 	{
-		protected override ParticleEmitterConfig Read( ContentReader reader, ParticleEmitterConfig existingInstance )
+		protected override ParticleEmitterConfig Read(ContentReader reader, ParticleEmitterConfig existingInstance)
 		{
 			// Create a fresh TextureAtlas instance
 			var emitterConfig = new ParticleEmitterConfig();
@@ -38,7 +38,7 @@ namespace Nez.ParticleDesigner
 			emitterConfig.FinishParticleSize = reader.ReadSingle();
 			emitterConfig.FinishParticleSizeVariance = reader.ReadSingle();
 			emitterConfig.Duration = reader.ReadSingle();
-			emitterConfig.EmitterType = (ParticleEmitterType)reader.ReadInt32();
+			emitterConfig.EmitterType = (ParticleEmitterType) reader.ReadInt32();
 
 			emitterConfig.MaxRadius = reader.ReadSingle();
 			emitterConfig.MaxRadiusVariance = reader.ReadSingle();
@@ -52,14 +52,14 @@ namespace Nez.ParticleDesigner
 			emitterConfig.RotationEnd = reader.ReadSingle();
 			emitterConfig.RotationEndVariance = reader.ReadSingle();
 			emitterConfig.EmissionRate = reader.ReadSingle();
-			emitterConfig.BlendFuncSource = (Blend)reader.ReadInt32();
-			emitterConfig.BlendFuncDestination = (Blend)reader.ReadInt32();
+			emitterConfig.BlendFuncSource = (Blend) reader.ReadInt32();
+			emitterConfig.BlendFuncDestination = (Blend) reader.ReadInt32();
 
 
 			var texture = reader.ReadObject<Texture2D>();
-			emitterConfig.Subtexture = new Nez.Textures.Subtexture( texture );
+			emitterConfig.Subtexture = new Nez.Textures.Subtexture(texture);
 
-			#if USE_RAW_TIFFS
+#if USE_RAW_TIFFS
 			// raw tiffs from a byte[] were originally used. Leaving this here for now just in case textures dont end up working
 			var tiffSize = reader.ReadInt32();
 			if( tiffSize > 0 )
@@ -71,11 +71,10 @@ namespace Nez.ParticleDesigner
 					emitterConfig.subtexture = new Subtexture( tex );
 				}
 			}
-			#endif
+#endif
 
 
 			return emitterConfig;
 		}
 	}
 }
-

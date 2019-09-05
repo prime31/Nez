@@ -10,7 +10,7 @@ namespace Nez.Farseer
 
 		#region Configuration
 
-		public FSPulleyJoint SetOwnerBodyAnchor( Vector2 ownerBodyAnchor )
+		public FSPulleyJoint SetOwnerBodyAnchor(Vector2 ownerBodyAnchor)
 		{
 			_jointDef.OwnerBodyAnchor = ownerBodyAnchor;
 			RecreateJoint();
@@ -18,7 +18,7 @@ namespace Nez.Farseer
 		}
 
 
-		public FSPulleyJoint SetOtherBodyAnchor( Vector2 otherBodyAnchor )
+		public FSPulleyJoint SetOtherBodyAnchor(Vector2 otherBodyAnchor)
 		{
 			_jointDef.OtherBodyAnchor = otherBodyAnchor;
 			RecreateJoint();
@@ -26,7 +26,7 @@ namespace Nez.Farseer
 		}
 
 
-		public FSPulleyJoint SetOwnerBodyGroundAnchor( Vector2 ownerBodyGroundAnchor )
+		public FSPulleyJoint SetOwnerBodyGroundAnchor(Vector2 ownerBodyGroundAnchor)
 		{
 			_jointDef.OwnerBodyGroundAnchor = ownerBodyGroundAnchor;
 			RecreateJoint();
@@ -34,7 +34,7 @@ namespace Nez.Farseer
 		}
 
 
-		public FSPulleyJoint SetOtherBodyGroundAnchor( Vector2 otherBodyGroundAnchor )
+		public FSPulleyJoint SetOtherBodyGroundAnchor(Vector2 otherBodyGroundAnchor)
 		{
 			_jointDef.OtherBodyGroundAnchor = otherBodyGroundAnchor;
 			RecreateJoint();
@@ -42,7 +42,7 @@ namespace Nez.Farseer
 		}
 
 
-		public FSPulleyJoint SetRatio( float ratio )
+		public FSPulleyJoint SetRatio(float ratio)
 		{
 			_jointDef.Ratio = ratio;
 			RecreateJoint();
@@ -54,13 +54,11 @@ namespace Nez.Farseer
 
 		internal override FSJointDef GetJointDef()
 		{
-			InitializeJointDef( _jointDef );
-			if( _jointDef.BodyA == null || _jointDef.BodyB == null )
+			InitializeJointDef(_jointDef);
+			if (_jointDef.BodyA == null || _jointDef.BodyB == null)
 				return null;
 
 			return _jointDef;
 		}
-
-
 	}
 }

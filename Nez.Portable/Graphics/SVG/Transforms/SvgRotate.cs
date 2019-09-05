@@ -10,7 +10,7 @@ namespace Nez.Svg
 		public float CenterY;
 
 
-		public SvgRotate( float angle )
+		public SvgRotate(float angle)
 		{
 			this.Angle = angle;
 
@@ -18,7 +18,7 @@ namespace Nez.Svg
 		}
 
 
-		public SvgRotate( float angle, float centerX, float centerY )
+		public SvgRotate(float angle, float centerX, float centerY)
 		{
 			this.Angle = angle;
 			this.CenterX = centerX;
@@ -30,9 +30,9 @@ namespace Nez.Svg
 
 		void CalculateMatrix()
 		{
-			var mat = Matrix2D.CreateTranslation( -CenterX, -CenterY );
-			mat.MultiplyRotation( Angle * Mathf.Deg2Rad );
-			mat.MultiplyTranslation( CenterX, CenterY );
+			var mat = Matrix2D.CreateTranslation(-CenterX, -CenterY);
+			mat.MultiplyRotation(Angle * Mathf.Deg2Rad);
+			mat.MultiplyTranslation(CenterX, CenterY);
 
 			Matrix = mat;
 		}
@@ -40,7 +40,7 @@ namespace Nez.Svg
 
 		public override string ToString()
 		{
-			return string.Format( CultureInfo.InvariantCulture, "rotate({0}, {1}, {2})", Angle, CenterX, CenterY );
+			return string.Format(CultureInfo.InvariantCulture, "rotate({0}, {1}, {2})", Angle, CenterX, CenterY);
 		}
 	}
 }

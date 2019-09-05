@@ -12,7 +12,7 @@ namespace Nez.LibGdxAtlases
 
 
 		public LibGdxAtlasRect()
-		{}
+		{
+		}
 	}
 }
-

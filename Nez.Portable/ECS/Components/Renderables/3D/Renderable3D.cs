@@ -23,10 +23,10 @@ namespace Nez
 			{
 				var sizeX = 1.5f * Scale.X;
 				var sizeY = 1.5f * Scale.Y;
-				var x = ( Position.X - sizeX / 2 );
-				var y = ( Position.Y - sizeY / 2 );
+				var x = (Position.X - sizeX / 2);
+				var y = (Position.Y - sizeY / 2);
 
-				return new RectangleF( x, y, sizeX, sizeY );
+				return new RectangleF(x, y, sizeX, sizeY);
 			}
 		}
 
@@ -36,18 +36,18 @@ namespace Nez
 		/// <value>The position.</value>
 		public Vector3 Position
 		{
-			get { return new Vector3( Transform.Position, _positionZ ); }
+			get { return new Vector3(Transform.Position, _positionZ); }
 			set
 			{
 				_positionZ = value.Z;
-				Transform.SetPosition( value.X, value.Y );
+				Transform.SetPosition(value.X, value.Y);
 			}
 		}
 
 		/// <summary>
 		/// the scale of the object. 80 by default. You will need to adjust this depending on your Scene's backbuffer size.
 		/// </summary>
-		public Vector3 Scale = new Vector3( 80f );
+		public Vector3 Scale = new Vector3(80f);
 
 		/// <summary>
 		/// wraps Transform.rotation for the Z rotation along with a private X and Y rotation.
@@ -55,12 +55,12 @@ namespace Nez
 		/// <value>The rotation.</value>
 		public Vector3 Rotation
 		{
-			get { return new Vector3( _rotationXY, Transform.Rotation ); }
+			get { return new Vector3(_rotationXY, Transform.Rotation); }
 			set
 			{
 				_rotationXY.X = value.X;
 				_rotationXY.Y = value.Y;
-				Transform.SetRotation( value.Z );
+				Transform.SetRotation(value.Z);
 			}
 		}
 
@@ -70,7 +70,7 @@ namespace Nez
 		/// <value>The rotation degrees.</value>
 		public Vector3 RotationDegrees
 		{
-			get { return new Vector3( _rotationXY, Transform.Rotation ) * Mathf.Rad2Deg; }
+			get { return new Vector3(_rotationXY, Transform.Rotation) * Mathf.Rad2Deg; }
 			set { Rotation = value *= Mathf.Deg2Rad; }
 		}
 
@@ -84,13 +84,13 @@ namespace Nez
 			{
 				// prep our rotations
 				var rot = Rotation;
-				var rotationMatrix = Matrix.CreateRotationX( rot.X );
-				rotationMatrix *= Matrix.CreateRotationY( rot.Y );
-				rotationMatrix *= Matrix.CreateRotationZ( rot.Z );
+				var rotationMatrix = Matrix.CreateRotationX(rot.X);
+				rotationMatrix *= Matrix.CreateRotationY(rot.Y);
+				rotationMatrix *= Matrix.CreateRotationZ(rot.Z);
 
 				// remember to invert the sign of the y position!
 				var pos = Position;
-				return rotationMatrix * Matrix.CreateScale( Scale ) * Matrix.CreateTranslation( pos.X, -pos.Y, pos.Z );
+				return rotationMatrix * Matrix.CreateScale(Scale) * Matrix.CreateTranslation(pos.X, -pos.Y, pos.Z);
 			}
 		}
 	}

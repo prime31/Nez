@@ -36,7 +36,7 @@ namespace Nez
 		/// creates an Entity inspector
 		/// </summary>
 		/// <param name="entity">Entity.</param>
-		public RuntimeInspector( Entity entity )
+		public RuntimeInspector(Entity entity)
 		{
 			_entity = entity;
 			Initialize();
@@ -48,14 +48,14 @@ namespace Nez
 		{
 			PrepCanvas();
 			_camera = new ScreenSpaceCamera();
-			Core.Emitter.AddObserver( CoreEvents.GraphicsDeviceReset, OnGraphicsDeviceReset );
-			Core.Emitter.AddObserver( CoreEvents.SceneChanged, OnSceneChanged );
+			Core.Emitter.AddObserver(CoreEvents.GraphicsDeviceReset, OnGraphicsDeviceReset);
+			Core.Emitter.AddObserver(CoreEvents.SceneChanged, OnSceneChanged);
 		}
 
 
 		void OnGraphicsDeviceReset()
 		{
-			_scrollPane.SetHeight( Screen.Height );
+			_scrollPane.SetHeight(Screen.Height);
 		}
 
 
@@ -69,18 +69,18 @@ namespace Nez
 		public void Update()
 		{
 			// if we have an Entity this is an Entity inspector else it is a PostProcessor inspector
-			if( _entity != null )
+			if (_entity != null)
 			{
 				// update transform, which has a null Component
-				GetOrCreateInspectorList( (Component)null ).Update();
+				GetOrCreateInspectorList((Component) null).Update();
 
-				for( var i = 0; i < _entity.Components.Count; i++ )
-					GetOrCreateInspectorList( _entity.Components[i] ).Update();
+				for (var i = 0; i < _entity.Components.Count; i++)
+					GetOrCreateInspectorList(_entity.Components[i]).Update();
 			}
 			else
 			{
-				for( var i = 0; i < Core.Scene._postProcessors.Length; i++ )
-					GetOrCreateInspectorList( Core.Scene._postProcessors.Buffer[i] ).Update();
+				for (var i = 0; i < Core.Scene._postProcessors.Length; i++)
+					GetOrCreateInspectorList(Core.Scene._postProcessors.Buffer[i]).Update();
 			}
 		}
 
@@ -89,8 +89,8 @@ namespace Nez
 		{
 			// manually start a fresh batch and call the UICanvas Component lifecycle methods since it isnt attached to the Scene
 			Graphics.Instance.Batcher.Begin();
-			( ui as IUpdatable ).Update();
-			ui.Render( Graphics.Instance, _camera );
+			(ui as IUpdatable).Update();
+			ui.Render(Graphics.Instance, _camera);
 			Graphics.Instance.Batcher.End();
 		}
 
@@ -100,14 +100,14 @@ namespace Nez
 		/// </summary>
 		/// <returns>The or create inspector list.</returns>
 		/// <param name="comp">Comp.</param>
-		InspectorList GetOrCreateInspectorList( object comp )
+		InspectorList GetOrCreateInspectorList(object comp)
 		{
-			var inspector = _inspectors.Where( i => i.Target == comp ).FirstOrDefault();
-			if( inspector == null )
+			var inspector = _inspectors.Where(i => i.Target == comp).FirstOrDefault();
+			if (inspector == null)
 			{
-				inspector = new InspectorList( comp );
-				inspector.Initialize( _table, _skin, kLeftCellWidth );
-				_inspectors.Add( inspector );
+				inspector = new InspectorList(comp);
+				inspector.Initialize(_table, _skin, kLeftCellWidth);
+				_inspectors.Add(inspector);
 			}
 
 			return inspector;
@@ -117,9 +117,9 @@ namespace Nez
 		void CacheTransformInspector()
 		{
 			// add Transform separately
-			var transformInspector = new InspectorList( _entity.Transform );
-			transformInspector.Initialize( _table, _skin, kLeftCellWidth );
-			_inspectors.Add( transformInspector );
+			var transformInspector = new InspectorList(_entity.Transform);
+			transformInspector.Initialize(_table, _skin, kLeftCellWidth);
+			_inspectors.Add(transformInspector);
 		}
 
 
@@ -145,14 +145,15 @@ namespace Nez
 
 			_table = new Table();
 			_table.Top().Left();
-			_table.Defaults().SetPadTop( 4 ).SetPadLeft( 4 ).SetPadRight( 0 ).SetAlign( Align.Left );
-			_table.SetBackground( new PrimitiveDrawable( new Color( 40, 40, 40 ) ) );
+			_table.Defaults().SetPadTop(4).SetPadLeft(4).SetPadRight(0).SetAlign(Align.Left);
+			_table.SetBackground(new PrimitiveDrawable(new Color(40, 40, 40)));
 
 			// wrap up the table in a ScrollPane
-			_scrollPane = ui.Stage.AddElement( new ScrollPane( _table, _skin ) );
+			_scrollPane = ui.Stage.AddElement(new ScrollPane(_table, _skin));
+
 			// force a validate which will layout the ScrollPane and populate the proper scrollBarWidth
 			_scrollPane.Validate();
-			_scrollPane.SetSize( 295 + _scrollPane.GetScrollBarWidth(), Screen.Height );
+			_scrollPane.SetSize(295 + _scrollPane.GetScrollBarWidth(), Screen.Height);
 		}
 
 
@@ -160,12 +161,12 @@ namespace Nez
 
 		bool _disposedValue = false;
 
-		void Dispose( bool disposing )
+		void Dispose(bool disposing)
 		{
-			if( !_disposedValue )
+			if (!_disposedValue)
 			{
-				Core.Emitter.RemoveObserver( CoreEvents.GraphicsDeviceReset, OnGraphicsDeviceReset );
-				Core.Emitter.RemoveObserver( CoreEvents.SceneChanged, OnSceneChanged );
+				Core.Emitter.RemoveObserver(CoreEvents.GraphicsDeviceReset, OnGraphicsDeviceReset);
+				Core.Emitter.RemoveObserver(CoreEvents.SceneChanged, OnSceneChanged);
 				_entity = null;
 				_disposedValue = true;
 			}
@@ -174,11 +175,10 @@ namespace Nez
 
 		public void Dispose()
 		{
-			Dispose( true );
+			Dispose(true);
 		}
 
 		#endregion
-
 	}
 }
 #endif

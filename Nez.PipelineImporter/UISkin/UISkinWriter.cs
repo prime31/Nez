@@ -9,60 +9,59 @@ namespace Nez.UISkinImporter
 	[ContentTypeWriter]
 	public class UISkinWriter : ContentTypeWriter<UISkinConfig>
 	{
-		protected override void Write( ContentWriter writer, UISkinConfig data )
+		protected override void Write(ContentWriter writer, UISkinConfig data)
 		{
-			if( data.Colors != null )
+			if (data.Colors != null)
 			{
-				writer.Write( true );
-				writer.WriteObject( data.Colors );
+				writer.Write(true);
+				writer.WriteObject(data.Colors);
 			}
 			else
 			{
-				writer.Write( false );
+				writer.Write(false);
 			}
 
-			if( data.TextureAtlases != null )
+			if (data.TextureAtlases != null)
 			{
-				writer.Write( true );
-				writer.WriteObject( data.TextureAtlases );
+				writer.Write(true);
+				writer.WriteObject(data.TextureAtlases);
 			}
 			else
 			{
-				writer.Write( false );
+				writer.Write(false);
 			}
 
-			if( data.LibGdxAtlases != null )
+			if (data.LibGdxAtlases != null)
 			{
-				writer.Write( true );
-				writer.WriteObject( data.LibGdxAtlases );
+				writer.Write(true);
+				writer.WriteObject(data.LibGdxAtlases);
 			}
 			else
 			{
-				writer.Write( false );
+				writer.Write(false);
 			}
 
-			if( data.Styles != null )
+			if (data.Styles != null)
 			{
-				writer.Write( true );
-				writer.WriteObject( data.Styles );
+				writer.Write(true);
+				writer.WriteObject(data.Styles);
 			}
 			else
 			{
-				writer.Write( false );
+				writer.Write(false);
 			}
 		}
 
 
-		public override string GetRuntimeType( TargetPlatform targetPlatform )
+		public override string GetRuntimeType(TargetPlatform targetPlatform)
 		{
-			return typeof( Nez.UI.UISkinConfig ).AssemblyQualifiedName;
+			return typeof(Nez.UI.UISkinConfig).AssemblyQualifiedName;
 		}
 
 
-		public override string GetRuntimeReader( TargetPlatform targetPlatform )
+		public override string GetRuntimeReader(TargetPlatform targetPlatform)
 		{
-			return typeof( Nez.UI.UISkinConfigReader ).AssemblyQualifiedName;
+			return typeof(Nez.UI.UISkinConfigReader).AssemblyQualifiedName;
 		}
 	}
 }
-

@@ -8,17 +8,16 @@ namespace Nez.AI.BehaviorTrees
 	/// </summary>
 	public class UntilSuccess<T> : Decorator<T>
 	{
-		public override TaskStatus Update( T context )
+		public override TaskStatus Update(T context)
 		{
-			Insist.IsNotNull( Child, "child must not be null" );
+			Insist.IsNotNull(Child, "child must not be null");
 
-			var status = Child.Tick( context );
+			var status = Child.Tick(context);
 
-			if( status != TaskStatus.Success )
+			if (status != TaskStatus.Success)
 				return TaskStatus.Running;
 
 			return TaskStatus.Success;
 		}
 	}
 }
-

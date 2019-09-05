@@ -10,7 +10,6 @@ namespace Nez.AI.UtilityAI
 	{
 		IAction<T> Action { get; set; }
 
-		float GetScore( T context );
+		float GetScore(T context);
 	}
 }
-

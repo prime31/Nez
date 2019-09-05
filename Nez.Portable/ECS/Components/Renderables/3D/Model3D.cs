@@ -19,25 +19,25 @@ namespace Nez3D
 				var sphere = _model.Meshes[0].BoundingSphere;
 				var sizeX = sphere.Radius * 2 * Scale.X;
 				var sizeY = sphere.Radius * 2 * Scale.Y;
-				var x = ( Position.X + sphere.Center.X - sizeX / 2 );
-				var y = ( Position.Y + sphere.Center.Y - sizeY / 2 );
+				var x = (Position.X + sphere.Center.X - sizeX / 2);
+				var y = (Position.Y + sphere.Center.Y - sizeY / 2);
 
-				return new RectangleF( x, y, sizeX, sizeY );
+				return new RectangleF(x, y, sizeX, sizeY);
 			}
 		}
-		
+
 		Model _model;
 
 
-		public Model3D( Model model, Texture2D texture = null )
+		public Model3D(Model model, Texture2D texture = null)
 		{
 			_model = model;
 
-			if( texture != null )
+			if (texture != null)
 			{
-				foreach( var mesh in model.Meshes )
+				foreach (var mesh in model.Meshes)
 				{
-					foreach( BasicEffect effect in mesh.Effects )
+					foreach (BasicEffect effect in mesh.Effects)
 					{
 						effect.TextureEnabled = true;
 						effect.Texture = texture;
@@ -48,13 +48,13 @@ namespace Nez3D
 
 		public Model3D EnableDefaultLighting()
 		{
-			foreach( var mesh in _model.Meshes )
-				foreach( BasicEffect effect in mesh.Effects )
-					effect.EnableDefaultLighting();
+			foreach (var mesh in _model.Meshes)
+			foreach (BasicEffect effect in mesh.Effects)
+				effect.EnableDefaultLighting();
 			return this;
 		}
 
-		public override void Render( Graphics graphics, Camera camera )
+		public override void Render(Graphics graphics, Camera camera)
 		{
 			// flush the 2D batch so we render appropriately depth-wise
 			graphics.Batcher.FlushBatch();
@@ -62,19 +62,19 @@ namespace Nez3D
 			Core.GraphicsDevice.BlendState = BlendState.Opaque;
 			Core.GraphicsDevice.DepthStencilState = DepthStencilState.Default;
 
-			for( var i = 0; i < _model.Meshes.Count; i++ )
+			for (var i = 0; i < _model.Meshes.Count; i++)
 			{
 				var mesh = _model.Meshes[i];
-				for( var j = 0; j < mesh.Effects.Count; j++ )
+				for (var j = 0; j < mesh.Effects.Count; j++)
 				{
 					var effect = mesh.Effects[j] as BasicEffect;
 					effect.World = WorldMatrix;
 					effect.View = camera.ViewMatrix3D;
 					effect.Projection = camera.ProjectionMatrix3D;
 				}
+
 				mesh.Draw();
 			}
 		}
-
 	}
 }

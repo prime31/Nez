@@ -40,12 +40,13 @@ namespace Nez.Shadows
 		}
 
 
-		public override bool Equals( object obj )
+		public override bool Equals(object obj)
 		{
-			if( obj is EndPoint )
+			if (obj is EndPoint)
 			{
 				var other = obj as EndPoint;
-				return position.Equals( other.position ) && begin.Equals( other.begin ) && angle.Equals( other.angle );
+				return position.Equals(other.position) && begin.Equals(other.begin) && angle.Equals(other.angle);
+
 				// We do not care about the segment being the same since that would create a circular reference
 			}
 
@@ -69,28 +70,28 @@ namespace Nez.Shadows
 	internal class EndPointComparer : IComparer<EndPoint>
 	{
 		internal EndPointComparer()
-		{ }
+		{
+		}
 
 
 		// Helper: comparison function for sorting points by angle
-		public int Compare( EndPoint a, EndPoint b )
+		public int Compare(EndPoint a, EndPoint b)
 		{
 			// Traverse in angle order
-			if( a.angle > b.angle )
+			if (a.angle > b.angle)
 				return 1;
 
-			if( a.angle < b.angle )
+			if (a.angle < b.angle)
 				return -1;
 
 			// But for ties we want Begin nodes before End nodes
-			if( !a.begin && b.begin )
+			if (!a.begin && b.begin)
 				return 1;
 
-			if( a.begin && !b.begin )
+			if (a.begin && !b.begin)
 				return -1;
 
 			return 0;
 		}
 	}
-
 }

@@ -63,14 +63,14 @@ namespace FarseerPhysics.Dynamics.Joints
 
 		public override Vector2 WorldAnchorA
 		{
-			get { return BodyA.GetWorldPoint( LocalAnchorA ); }
-			set { LocalAnchorA = BodyA.GetLocalPoint( value ); }
+			get { return BodyA.GetWorldPoint(LocalAnchorA); }
+			set { LocalAnchorA = BodyA.GetLocalPoint(value); }
 		}
 
 		public override Vector2 WorldAnchorB
 		{
-			get { return BodyB.GetWorldPoint( LocalAnchorB ); }
-			set { LocalAnchorB = BodyB.GetLocalPoint( value ); }
+			get { return BodyB.GetWorldPoint(LocalAnchorB); }
+			set { LocalAnchorB = BodyB.GetLocalPoint(value); }
 		}
 
 		/// <summary>
@@ -126,15 +126,15 @@ namespace FarseerPhysics.Dynamics.Joints
 		/// <param name="anchorA">The first body anchor.</param>
 		/// <param name="anchorB">The second body anchor.</param>
 		/// <param name="useWorldCoordinates">Set to true if you are using world coordinates as anchors.</param>
-		public WeldJoint( Body bodyA, Body bodyB, Vector2 anchorA, Vector2 anchorB, bool useWorldCoordinates = false )
-			: base( bodyA, bodyB )
+		public WeldJoint(Body bodyA, Body bodyB, Vector2 anchorA, Vector2 anchorB, bool useWorldCoordinates = false)
+			: base(bodyA, bodyB)
 		{
 			JointType = JointType.Weld;
 
-			if( useWorldCoordinates )
+			if (useWorldCoordinates)
 			{
-				LocalAnchorA = bodyA.GetLocalPoint( anchorA );
-				LocalAnchorB = bodyB.GetLocalPoint( anchorB );
+				LocalAnchorA = bodyA.GetLocalPoint(anchorA);
+				LocalAnchorB = bodyB.GetLocalPoint(anchorB);
 			}
 			else
 			{
@@ -145,17 +145,17 @@ namespace FarseerPhysics.Dynamics.Joints
 			ReferenceAngle = base.BodyB.Rotation - base.BodyA.Rotation;
 		}
 
-		public override Vector2 GetReactionForce( float invDt )
+		public override Vector2 GetReactionForce(float invDt)
 		{
-			return invDt * new Vector2( _impulse.X, _impulse.Y );
+			return invDt * new Vector2(_impulse.X, _impulse.Y);
 		}
 
-		public override float GetReactionTorque( float invDt )
+		public override float GetReactionTorque(float invDt)
 		{
 			return invDt * _impulse.Z;
 		}
 
-		internal override void InitVelocityConstraints( ref SolverData data )
+		internal override void InitVelocityConstraints(ref SolverData data)
 		{
 			_indexA = BodyA.IslandIndex;
 			_indexB = BodyB.IslandIndex;
@@ -174,10 +174,10 @@ namespace FarseerPhysics.Dynamics.Joints
 			Vector2 vB = data.Velocities[_indexB].V;
 			float wB = data.Velocities[_indexB].W;
 
-			Rot qA = new Rot( aA ), qB = new Rot( aB );
+			Rot qA = new Rot(aA), qB = new Rot(aB);
 
-			_rA = MathUtils.Mul( qA, LocalAnchorA - _localCenterA );
-			_rB = MathUtils.Mul( qB, LocalAnchorB - _localCenterB );
+			_rA = MathUtils.Mul(qA, LocalAnchorA - _localCenterA);
+			_rB = MathUtils.Mul(qB, LocalAnchorB - _localCenterB);
 
 			// J = [-I -r1_skew I r2_skew]
 			//     [ 0       -1 0       1]
@@ -202,9 +202,9 @@ namespace FarseerPhysics.Dynamics.Joints
 			K.Ey.Z = K.Ez.Y;
 			K.Ez.Z = iA + iB;
 
-			if( FrequencyHz > 0.0f )
+			if (FrequencyHz > 0.0f)
 			{
-				K.GetInverse22( ref _mass );
+				K.GetInverse22(ref _mass);
 
 				float invM = iA + iB;
 				float m = invM > 0.0f ? 1.0f / invM : 0.0f;
@@ -222,7 +222,7 @@ namespace FarseerPhysics.Dynamics.Joints
 
 				// magic formulas
 				float h = data.Step.Dt;
-				_gamma = h * ( d + h * k );
+				_gamma = h * (d + h * k);
 				_gamma = _gamma != 0.0f ? 1.0f / _gamma : 0.0f;
 				_bias = C * h * k * _gamma;
 
@@ -231,23 +231,23 @@ namespace FarseerPhysics.Dynamics.Joints
 			}
 			else
 			{
-				K.GetSymInverse33( ref _mass );
+				K.GetSymInverse33(ref _mass);
 				_gamma = 0.0f;
 				_bias = 0.0f;
 			}
 
-			if( Settings.EnableWarmstarting )
+			if (Settings.EnableWarmstarting)
 			{
 				// Scale impulses to support a variable time step.
 				_impulse *= data.Step.DtRatio;
 
-				Vector2 P = new Vector2( _impulse.X, _impulse.Y );
+				Vector2 P = new Vector2(_impulse.X, _impulse.Y);
 
 				vA -= mA * P;
-				wA -= iA * ( MathUtils.Cross( _rA, P ) + _impulse.Z );
+				wA -= iA * (MathUtils.Cross(_rA, P) + _impulse.Z);
 
 				vB += mB * P;
-				wB += iB * ( MathUtils.Cross( _rB, P ) + _impulse.Z );
+				wB += iB * (MathUtils.Cross(_rB, P) + _impulse.Z);
 			}
 			else
 			{
@@ -260,7 +260,7 @@ namespace FarseerPhysics.Dynamics.Joints
 			data.Velocities[_indexB].W = wB;
 		}
 
-		internal override void SolveVelocityConstraints( ref SolverData data )
+		internal override void SolveVelocityConstraints(ref SolverData data)
 		{
 			var vA = data.Velocities[_indexA].V;
 			float wA = data.Velocities[_indexA].W;
@@ -270,46 +270,46 @@ namespace FarseerPhysics.Dynamics.Joints
 			float mA = _invMassA, mB = _invMassB;
 			float iA = _invIA, iB = _invIB;
 
-			if( FrequencyHz > 0.0f )
+			if (FrequencyHz > 0.0f)
 			{
 				float Cdot2 = wB - wA;
 
-				float impulse2 = -_mass.Ez.Z * ( Cdot2 + _bias + _gamma * _impulse.Z );
+				float impulse2 = -_mass.Ez.Z * (Cdot2 + _bias + _gamma * _impulse.Z);
 				_impulse.Z += impulse2;
 
 				wA -= iA * impulse2;
 				wB += iB * impulse2;
 
-				var Cdot1 = vB + MathUtils.Cross( wB, _rB ) - vA - MathUtils.Cross( wA, _rA );
+				var Cdot1 = vB + MathUtils.Cross(wB, _rB) - vA - MathUtils.Cross(wA, _rA);
 
-				var impulse1 = -MathUtils.Mul22( _mass, Cdot1 );
+				var impulse1 = -MathUtils.Mul22(_mass, Cdot1);
 				_impulse.X += impulse1.X;
 				_impulse.Y += impulse1.Y;
 
 				var P = impulse1;
 
 				vA -= mA * P;
-				wA -= iA * MathUtils.Cross( _rA, P );
+				wA -= iA * MathUtils.Cross(_rA, P);
 
 				vB += mB * P;
-				wB += iB * MathUtils.Cross( _rB, P );
+				wB += iB * MathUtils.Cross(_rB, P);
 			}
 			else
 			{
-				var Cdot1 = vB + MathUtils.Cross( wB, _rB ) - vA - MathUtils.Cross( wA, _rA );
+				var Cdot1 = vB + MathUtils.Cross(wB, _rB) - vA - MathUtils.Cross(wA, _rA);
 				float Cdot2 = wB - wA;
-				var Cdot = new Vector3( Cdot1.X, Cdot1.Y, Cdot2 );
+				var Cdot = new Vector3(Cdot1.X, Cdot1.Y, Cdot2);
 
-				var impulse = -MathUtils.Mul( _mass, Cdot );
+				var impulse = -MathUtils.Mul(_mass, Cdot);
 				_impulse += impulse;
 
-				var P = new Vector2( impulse.X, impulse.Y );
+				var P = new Vector2(impulse.X, impulse.Y);
 
 				vA -= mA * P;
-				wA -= iA * ( MathUtils.Cross( _rA, P ) + impulse.Z );
+				wA -= iA * (MathUtils.Cross(_rA, P) + impulse.Z);
 
 				vB += mB * P;
-				wB += iB * ( MathUtils.Cross( _rB, P ) + impulse.Z );
+				wB += iB * (MathUtils.Cross(_rB, P) + impulse.Z);
 			}
 
 			data.Velocities[_indexA].V = vA;
@@ -318,20 +318,20 @@ namespace FarseerPhysics.Dynamics.Joints
 			data.Velocities[_indexB].W = wB;
 		}
 
-		internal override bool SolvePositionConstraints( ref SolverData data )
+		internal override bool SolvePositionConstraints(ref SolverData data)
 		{
 			var cA = data.Positions[_indexA].C;
 			float aA = data.Positions[_indexA].A;
 			var cB = data.Positions[_indexB].C;
 			float aB = data.Positions[_indexB].A;
 
-			Rot qA = new Rot( aA ), qB = new Rot( aB );
+			Rot qA = new Rot(aA), qB = new Rot(aB);
 
 			float mA = _invMassA, mB = _invMassB;
 			float iA = _invIA, iB = _invIB;
 
-			var rA = MathUtils.Mul( qA, LocalAnchorA - _localCenterA );
-			var rB = MathUtils.Mul( qB, LocalAnchorB - _localCenterB );
+			var rA = MathUtils.Mul(qA, LocalAnchorA - _localCenterA);
+			var rB = MathUtils.Mul(qB, LocalAnchorB - _localCenterB);
 
 			float positionError, angularError;
 
@@ -346,20 +346,20 @@ namespace FarseerPhysics.Dynamics.Joints
 			K.Ey.Z = K.Ez.Y;
 			K.Ez.Z = iA + iB;
 
-			if( FrequencyHz > 0.0f )
+			if (FrequencyHz > 0.0f)
 			{
 				Vector2 C1 = cB + rB - cA - rA;
 
 				positionError = C1.Length();
 				angularError = 0.0f;
 
-				Vector2 P = -K.Solve22( C1 );
+				Vector2 P = -K.Solve22(C1);
 
 				cA -= mA * P;
-				aA -= iA * MathUtils.Cross( rA, P );
+				aA -= iA * MathUtils.Cross(rA, P);
 
 				cB += mB * P;
-				aB += iB * MathUtils.Cross( rB, P );
+				aB += iB * MathUtils.Cross(rB, P);
 			}
 			else
 			{
@@ -367,18 +367,18 @@ namespace FarseerPhysics.Dynamics.Joints
 				float C2 = aB - aA - ReferenceAngle;
 
 				positionError = C1.Length();
-				angularError = Math.Abs( C2 );
+				angularError = Math.Abs(C2);
 
-				Vector3 C = new Vector3( C1.X, C1.Y, C2 );
+				Vector3 C = new Vector3(C1.X, C1.Y, C2);
 
-				Vector3 impulse = -K.Solve33( C );
-				Vector2 P = new Vector2( impulse.X, impulse.Y );
+				Vector3 impulse = -K.Solve33(C);
+				Vector2 P = new Vector2(impulse.X, impulse.Y);
 
 				cA -= mA * P;
-				aA -= iA * ( MathUtils.Cross( rA, P ) + impulse.Z );
+				aA -= iA * (MathUtils.Cross(rA, P) + impulse.Z);
 
 				cB += mB * P;
-				aB += iB * ( MathUtils.Cross( rB, P ) + impulse.Z );
+				aB += iB * (MathUtils.Cross(rB, P) + impulse.Z);
 			}
 
 			data.Positions[_indexA].C = cA;
@@ -388,6 +388,5 @@ namespace FarseerPhysics.Dynamics.Joints
 
 			return positionError <= Settings.LinearSlop && angularError <= Settings.AngularSlop;
 		}
-	
 	}
 }

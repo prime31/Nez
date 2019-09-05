@@ -7,6 +7,7 @@ using Microsoft.Xna.Framework.Input;
 using Num = System.Numerics;
 using Nez.Persistence.Binary;
 
+
 namespace Nez.ImGuiTools
 {
 	public partial class ImGuiManager : GlobalManager, IFinalRenderDelegate, IDisposable
@@ -33,24 +34,24 @@ namespace Nez.ImGuiTools
 		void LoadSettings()
 		{
 			var fileDataStore = Core.Services.GetOrAddService<FileDataStore>();
-			KeyValueDataStore.Default.Load( fileDataStore );
+			KeyValueDataStore.Default.Load(fileDataStore);
 
-			ShowStyleEditor = KeyValueDataStore.Default.GetBool( kShowStyleEditor, ShowStyleEditor );
-			ShowSceneGraphWindow = KeyValueDataStore.Default.GetBool( kShowSceneGraphWindow, ShowSceneGraphWindow );
-			ShowCoreWindow = KeyValueDataStore.Default.GetBool( kShowCoreWindow, ShowCoreWindow );
-			ShowSeperateGameWindow = KeyValueDataStore.Default.GetBool( kShowSeperateGameWindow, ShowSeperateGameWindow );
+			ShowStyleEditor = KeyValueDataStore.Default.GetBool(kShowStyleEditor, ShowStyleEditor);
+			ShowSceneGraphWindow = KeyValueDataStore.Default.GetBool(kShowSceneGraphWindow, ShowSceneGraphWindow);
+			ShowCoreWindow = KeyValueDataStore.Default.GetBool(kShowCoreWindow, ShowCoreWindow);
+			ShowSeperateGameWindow = KeyValueDataStore.Default.GetBool(kShowSeperateGameWindow, ShowSeperateGameWindow);
 
-			Core.Emitter.AddObserver( CoreEvents.Exiting, PersistSettings );
+			Core.Emitter.AddObserver(CoreEvents.Exiting, PersistSettings);
 		}
 
 		void PersistSettings()
 		{
-			KeyValueDataStore.Default.Set( kShowStyleEditor, ShowStyleEditor );
-			KeyValueDataStore.Default.Set( kShowSceneGraphWindow, ShowSceneGraphWindow );
-			KeyValueDataStore.Default.Set( kShowCoreWindow, ShowCoreWindow );
-			KeyValueDataStore.Default.Set( kShowSeperateGameWindow, ShowSeperateGameWindow );
+			KeyValueDataStore.Default.Set(kShowStyleEditor, ShowStyleEditor);
+			KeyValueDataStore.Default.Set(kShowSceneGraphWindow, ShowSceneGraphWindow);
+			KeyValueDataStore.Default.Set(kShowCoreWindow, ShowCoreWindow);
+			KeyValueDataStore.Default.Set(kShowSeperateGameWindow, ShowSeperateGameWindow);
 
-			KeyValueDataStore.Default.Flush( Core.Services.GetOrAddService<FileDataStore>() );
+			KeyValueDataStore.Default.Flush(Core.Services.GetOrAddService<FileDataStore>());
 		}
 
 		/// <summary>
@@ -63,7 +64,7 @@ namespace Nez.ImGuiTools
 			Unload();
 			_sceneGraphWindow.OnSceneChanged();
 
-			if( Enabled )
+			if (Enabled)
 				OnEnabled();
 		}
 
@@ -71,12 +72,13 @@ namespace Nez.ImGuiTools
 		{
 			_drawCommands.Clear();
 			_entityInspectors.Clear();
-			
-			if( _renderTargetId != IntPtr.Zero )
+
+			if (_renderTargetId != IntPtr.Zero)
 			{
-				_renderer.UnbindTexture( _renderTargetId );
+				_renderer.UnbindTexture(_renderTargetId);
 				_renderTargetId = IntPtr.Zero;
 			}
+
 			_lastRenderTarget = null;
 		}
 
@@ -85,41 +87,43 @@ namespace Nez.ImGuiTools
 		/// </summary>
 		void DrawGameWindow()
 		{
-			if( _lastRenderTarget == null )
+			if (_lastRenderTarget == null)
 				return;
 
-			var rtAspectRatio = (float)_lastRenderTarget.Width / (float)_lastRenderTarget.Height;
-			var maxSize = new Num.Vector2( _lastRenderTarget.Width, _lastRenderTarget.Height );
-			if( maxSize.X >= Screen.Width || maxSize.Y >= Screen.Height )
+			var rtAspectRatio = (float) _lastRenderTarget.Width / (float) _lastRenderTarget.Height;
+			var maxSize = new Num.Vector2(_lastRenderTarget.Width, _lastRenderTarget.Height);
+			if (maxSize.X >= Screen.Width || maxSize.Y >= Screen.Height)
 			{
 				maxSize.X = Screen.Width * 0.8f;
 				maxSize.Y = maxSize.X / rtAspectRatio;
 			}
+
 			var minSize = maxSize / 4;
 			maxSize *= 4;
 			unsafe
 			{
-				ImGui.SetNextWindowSizeConstraints( minSize, maxSize, data =>
+				ImGui.SetNextWindowSizeConstraints(minSize, maxSize, data =>
 				{
-					var size = ( *data ).CurrentSize;
+					var size = (*data).CurrentSize;
 					var ratio = size.X / _lastRenderTarget.Width;
-					( *data ).DesiredSize.Y = ratio * _lastRenderTarget.Height;
-				} );
+					(*data).DesiredSize.Y = ratio * _lastRenderTarget.Height;
+				});
 			}
 
-			ImGui.SetNextWindowPos( _gameWindowFirstPosition, ImGuiCond.FirstUseEver );
-			ImGui.SetNextWindowSize( new Num.Vector2( Screen.Width / 2, ( Screen.Width / 2 ) / rtAspectRatio ), ImGuiCond.FirstUseEver );
+			ImGui.SetNextWindowPos(_gameWindowFirstPosition, ImGuiCond.FirstUseEver);
+			ImGui.SetNextWindowSize(new Num.Vector2(Screen.Width / 2, (Screen.Width / 2) / rtAspectRatio),
+				ImGuiCond.FirstUseEver);
 
 			HandleForcedGameViewParams();
 
-			ImGui.PushStyleVar( ImGuiStyleVar.WindowPadding, new Num.Vector2( 0, 0 ) );
-			ImGui.Begin( _gameWindowTitle, _gameWindowFlags );
+			ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, new Num.Vector2(0, 0));
+			ImGui.Begin(_gameWindowTitle, _gameWindowFlags);
 
 			// convert mouse input to the game windows coordinates
 			OverrideMouseInput();
 
-			if( !ImGui.IsWindowFocused() )
-				Input.SetCurrentKeyboardState( new KeyboardState() );
+			if (!ImGui.IsWindowFocused())
+				Input.SetCurrentKeyboardState(new KeyboardState());
 
 			ImGui.End();
 
@@ -131,20 +135,20 @@ namespace Nez.ImGuiTools
 		/// </summary>
 		void HandleForcedGameViewParams()
 		{
-			if( _gameViewForcedSize.HasValue )
+			if (_gameViewForcedSize.HasValue)
 			{
-				ImGui.SetNextWindowSize( _gameViewForcedSize.Value );
+				ImGui.SetNextWindowSize(_gameViewForcedSize.Value);
 				_gameViewForcedSize = null;
 			}
 
-			if( _gameViewForcedPos.HasValue )
+			if (_gameViewForcedPos.HasValue)
 			{
-				ImGui.Begin( _gameWindowTitle, _gameWindowFlags );
+				ImGui.Begin(_gameWindowTitle, _gameWindowFlags);
 				var windowSize = ImGui.GetWindowSize();
 				ImGui.End();
 
 				var pos = new Num.Vector2();
-				switch( _gameViewForcedPos.Value )
+				switch (_gameViewForcedPos.Value)
 				{
 					case WindowPosition.TopLeft:
 						pos.Y = _mainMenuBarHeight;
@@ -152,22 +156,22 @@ namespace Nez.ImGuiTools
 						break;
 					case WindowPosition.Top:
 						pos.Y = _mainMenuBarHeight;
-						pos.X = ( Screen.Width / 2f ) - ( windowSize.X / 2f );
+						pos.X = (Screen.Width / 2f) - (windowSize.X / 2f);
 						break;
 					case WindowPosition.TopRight:
 						pos.Y = _mainMenuBarHeight;
 						pos.X = Screen.Width - windowSize.X;
 						break;
 					case WindowPosition.Left:
-						pos.Y = ( Screen.Height / 2f ) - ( windowSize.Y / 2f );
+						pos.Y = (Screen.Height / 2f) - (windowSize.Y / 2f);
 						pos.X = 0;
 						break;
 					case WindowPosition.Center:
-						pos.Y = ( Screen.Height / 2f ) - ( windowSize.Y / 2f );
-						pos.X = ( Screen.Width / 2f ) - ( windowSize.X / 2f );
+						pos.Y = (Screen.Height / 2f) - (windowSize.Y / 2f);
+						pos.X = (Screen.Width / 2f) - (windowSize.X / 2f);
 						break;
 					case WindowPosition.Right:
-						pos.Y = ( Screen.Height / 2f ) - ( windowSize.Y / 2f );
+						pos.Y = (Screen.Height / 2f) - (windowSize.Y / 2f);
 						pos.X = Screen.Width - windowSize.X;
 						break;
 					case WindowPosition.BottomLeft:
@@ -176,7 +180,7 @@ namespace Nez.ImGuiTools
 						break;
 					case WindowPosition.Bottom:
 						pos.Y = Screen.Height - windowSize.Y;
-						pos.X = ( Screen.Width / 2f ) - ( windowSize.X / 2f );
+						pos.X = (Screen.Width / 2f) - (windowSize.X / 2f);
 						break;
 					case WindowPosition.BottomRight:
 						pos.Y = Screen.Height - windowSize.Y;
@@ -184,10 +188,9 @@ namespace Nez.ImGuiTools
 						break;
 				}
 
-				ImGui.SetNextWindowPos( pos );
+				ImGui.SetNextWindowPos(pos);
 				_gameViewForcedPos = null;
 			}
-
 		}
 
 		/// <summary>
@@ -197,7 +200,7 @@ namespace Nez.ImGuiTools
 		void OverrideMouseInput()
 		{
 			// ImGui.GetCursorScreenPos() is the position of top-left pixel in windows drawable area
-			var offset = new Vector2( ImGui.GetCursorScreenPos().X, ImGui.GetCursorScreenPos().Y );
+			var offset = new Vector2(ImGui.GetCursorScreenPos().X, ImGui.GetCursorScreenPos().Y);
 
 			// remove window position offset from our raw input. this gets us normalized back to the top-left origin.
 			// We are essentilly removing any input delta that is not in the game window.
@@ -205,7 +208,7 @@ namespace Nez.ImGuiTools
 
 			var scaleX = ImGui.GetContentRegionAvail().X / _lastRenderTarget.Width;
 			var scaleY = ImGui.GetContentRegionAvail().Y / _lastRenderTarget.Height;
-			var scale = new Vector2( scaleX, scaleY );
+			var scale = new Vector2(scaleX, scaleY);
 
 			// scale the rest of the input since it is in a scaled window (the offset portion is not scaled since
 			// it is outside the scaled portion)
@@ -219,9 +222,11 @@ namespace Nez.ImGuiTools
 			unNormalizedPos += Input.ResolutionOffset;
 
 			var mouseState = Input.CurrentMouseState;
-			var newMouseState = new MouseState( (int)unNormalizedPos.X, (int)unNormalizedPos.Y, mouseState.ScrollWheelValue,
-				mouseState.LeftButton, mouseState.MiddleButton, mouseState.RightButton, mouseState.XButton1, mouseState.XButton2 );
-			Input.SetCurrentMouseState( newMouseState );
+			var newMouseState = new MouseState((int) unNormalizedPos.X, (int) unNormalizedPos.Y,
+				mouseState.ScrollWheelValue,
+				mouseState.LeftButton, mouseState.MiddleButton, mouseState.RightButton, mouseState.XButton1,
+				mouseState.XButton2);
+			Input.SetCurrentMouseState(newMouseState);
 		}
 
 
@@ -229,19 +234,20 @@ namespace Nez.ImGuiTools
 
 		public override void OnEnabled()
 		{
-			if( Core.Scene != null )
+			if (Core.Scene != null)
 			{
 				Core.Scene.FinalRenderDelegate = this;
+
 				// why call beforeLayout here? If added from the DebugConsole we missed the GlobalManger.update call and ImGui needs NextFrame
 				// called or it fails. Calling NextFrame twice in a frame causes no harm, just missed input.
-				_renderer.BeforeLayout( Time.DeltaTime );
+				_renderer.BeforeLayout(Time.DeltaTime);
 			}
 		}
 
 		public override void OnDisabled()
 		{
 			Unload();
-			if( Core.Scene != null )
+			if (Core.Scene != null)
 				Core.Scene.FinalRenderDelegate = null;
 		}
 
@@ -249,76 +255,81 @@ namespace Nez.ImGuiTools
 		{
 			// we have to do our layout in update so that if the game window is not focused or being displayed we can wipe
 			// the Input, essentially letting ImGui consume it
-			_renderer.BeforeLayout( Time.DeltaTime );
+			_renderer.BeforeLayout(Time.DeltaTime);
 			LayoutGui();
 		}
 
 		#endregion
 
 
-        #region IFinalRenderDelegate
+		#region IFinalRenderDelegate
 
-		void IFinalRenderDelegate.HandleFinalRender( RenderTarget2D finalRenderTarget, Color letterboxColor, RenderTarget2D source, Rectangle finalRenderDestinationRect, SamplerState samplerState )
+		void IFinalRenderDelegate.HandleFinalRender(RenderTarget2D finalRenderTarget, Color letterboxColor,
+		                                            RenderTarget2D source, Rectangle finalRenderDestinationRect,
+		                                            SamplerState samplerState)
 		{
-			if( ShowSeperateGameWindow )
+			if (ShowSeperateGameWindow)
 			{
-				if( _lastRenderTarget != source )
+				if (_lastRenderTarget != source)
 				{
 					// unbind the old texture if we had one
-					if( _lastRenderTarget != null )
-						_renderer.UnbindTexture( _renderTargetId );
+					if (_lastRenderTarget != null)
+						_renderer.UnbindTexture(_renderTargetId);
 
 					// bind the new texture
 					_lastRenderTarget = source;
-					_renderTargetId = _renderer.BindTexture( source );
+					_renderTargetId = _renderer.BindTexture(source);
 				}
 
 				// we cant draw the game window until we have the texture bound so we append it here
-				ImGui.Begin( _gameWindowTitle, _gameWindowFlags );
-				ImGui.PushStyleVar( ImGuiStyleVar.FramePadding, Num.Vector2.Zero );
-				ImGui.ImageButton( _renderTargetId, ImGui.GetContentRegionAvail() );
+				ImGui.Begin(_gameWindowTitle, _gameWindowFlags);
+				ImGui.PushStyleVar(ImGuiStyleVar.FramePadding, Num.Vector2.Zero);
+				ImGui.ImageButton(_renderTargetId, ImGui.GetContentRegionAvail());
 				ImGui.PopStyleVar();
 				ImGui.End();
 
 				Core.GraphicsDevice.SamplerStates[0] = samplerState;
-                GraphicsDeviceExt.SetRenderTarget(Core.GraphicsDevice, finalRenderTarget);
-				Core.GraphicsDevice.Clear( letterboxColor );
+				GraphicsDeviceExt.SetRenderTarget(Core.GraphicsDevice, finalRenderTarget);
+				Core.GraphicsDevice.Clear(letterboxColor);
 			}
 			else
 			{
-                GraphicsDeviceExt.SetRenderTarget(Core.GraphicsDevice, finalRenderTarget);
-				Core.GraphicsDevice.Clear( letterboxColor );
-				Graphics.Instance.Batcher.Begin( BlendState.Opaque, samplerState, null, null );
-				Graphics.Instance.Batcher.Draw( source, finalRenderDestinationRect, Color.White );
+				GraphicsDeviceExt.SetRenderTarget(Core.GraphicsDevice, finalRenderTarget);
+				Core.GraphicsDevice.Clear(letterboxColor);
+				Graphics.Instance.Batcher.Begin(BlendState.Opaque, samplerState, null, null);
+				Graphics.Instance.Batcher.Draw(source, finalRenderDestinationRect, Color.White);
 				Graphics.Instance.Batcher.End();
 			}
 
 			_renderer.AfterLayout();
 		}
 
-		void IFinalRenderDelegate.OnAddedToScene( Scene scene )
-		{ }
+		void IFinalRenderDelegate.OnAddedToScene(Scene scene)
+		{
+		}
 
-		void IFinalRenderDelegate.OnSceneBackBufferSizeChanged( int newWidth, int newHeight )
-		{ }
+		void IFinalRenderDelegate.OnSceneBackBufferSizeChanged(int newWidth, int newHeight)
+		{
+		}
 
 		void IFinalRenderDelegate.Unload()
-		{ }
+		{
+		}
 
-        #endregion
+		#endregion
 
 
 		#region IDisposable Support
 
 		bool _isDisposed = false; // To detect redundant calls
 
-		void Dispose( bool disposing )
+		void Dispose(bool disposing)
 		{
-			if( !_isDisposed )
+			if (!_isDisposed)
 			{
-				if( disposing )
+				if (disposing)
 				{
-					Core.Emitter.RemoveObserver( CoreEvents.SceneChanged, OnSceneChanged );
+					Core.Emitter.RemoveObserver(CoreEvents.SceneChanged, OnSceneChanged);
 				}
 
 				_isDisposed = true;
@@ -327,26 +338,25 @@ namespace Nez.ImGuiTools
 
 		void IDisposable.Dispose()
 		{
-			Dispose( true );
+			Dispose(true);
 		}
 
 		#endregion
 
-		[Console.Command( "toggle-imgui", "Toggles the Dear ImGui renderer" )]
+		[Console.Command("toggle-imgui", "Toggles the Dear ImGui renderer")]
 		static void ToggleImGui()
 		{
 			// install the service if it isnt already there
 			var service = Core.GetGlobalManager<ImGuiManager>();
-			if( service == null )
+			if (service == null)
 			{
 				service = new ImGuiManager();
-				Core.RegisterGlobalManager( service );
+				Core.RegisterGlobalManager(service);
 			}
 			else
 			{
-				service.SetEnabled( !service.Enabled );
+				service.SetEnabled(!service.Enabled);
 			}
 		}
-
 	}
 }

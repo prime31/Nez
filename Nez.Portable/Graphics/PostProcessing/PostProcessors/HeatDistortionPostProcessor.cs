@@ -11,12 +11,12 @@ namespace Nez
 			get => _distortionFactor;
 			set
 			{
-				if( _distortionFactor != value )
+				if (_distortionFactor != value)
 				{
 					_distortionFactor = value;
 
-					if( Effect != null )
-						_distortionFactorParam.SetValue( _distortionFactor );
+					if (Effect != null)
+						_distortionFactorParam.SetValue(_distortionFactor);
 				}
 			}
 		}
@@ -26,19 +26,19 @@ namespace Nez
 			get => _riseFactor;
 			set
 			{
-				if( _riseFactor != value )
+				if (_riseFactor != value)
 				{
 					_riseFactor = value;
 
-					if( Effect != null )
-						_riseFactorParam.SetValue( _riseFactor );
+					if (Effect != null)
+						_riseFactorParam.SetValue(_riseFactor);
 				}
 			}
 		}
 
 		public Texture2D DistortionTexture
 		{
-			set { Effect.Parameters["_distortionTexture"].SetValue( value ); }
+			set { Effect.Parameters["_distortionTexture"].SetValue(value); }
 		}
 
 		float _distortionFactor = 0.005f;
@@ -48,35 +48,35 @@ namespace Nez
 		EffectParameter _riseFactorParam;
 
 
-		public HeatDistortionPostProcessor( int executionOrder ) : base( executionOrder )
-		{}
-
-		public override void OnAddedToScene( Scene scene )
+		public HeatDistortionPostProcessor(int executionOrder) : base(executionOrder)
 		{
-			base.OnAddedToScene( scene );
-			Effect = _scene.Content.LoadEffect<Effect>( "heatDistortion", EffectResource.HeatDistortionBytes );
+		}
+
+		public override void OnAddedToScene(Scene scene)
+		{
+			base.OnAddedToScene(scene);
+			Effect = _scene.Content.LoadEffect<Effect>("heatDistortion", EffectResource.HeatDistortionBytes);
 
 			_timeParam = Effect.Parameters["_time"];
 			_distortionFactorParam = Effect.Parameters["_distortionFactor"];
 			_riseFactorParam = Effect.Parameters["_riseFactor"];
 
-			_distortionFactorParam.SetValue( _distortionFactor );
-			_riseFactorParam.SetValue( _riseFactor );
+			_distortionFactorParam.SetValue(_distortionFactor);
+			_riseFactorParam.SetValue(_riseFactor);
 
-			DistortionTexture = scene.Content.Load<Texture2D>( "nez/textures/heatDistortionNoise" );
+			DistortionTexture = scene.Content.Load<Texture2D>("nez/textures/heatDistortionNoise");
 		}
 
 		public override void Unload()
 		{
-			_scene.Content.UnloadEffect( Effect );
+			_scene.Content.UnloadEffect(Effect);
 			base.Unload();
 		}
 
-		public override void Process( RenderTarget2D source, RenderTarget2D destination )
+		public override void Process(RenderTarget2D source, RenderTarget2D destination)
 		{
-			_timeParam.SetValue( Time.TotalTime );
-			base.Process( source, destination );
+			_timeParam.SetValue(Time.TotalTime);
+			base.Process(source, destination);
 		}
 	}
 }
-

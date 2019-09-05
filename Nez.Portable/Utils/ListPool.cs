@@ -15,13 +15,13 @@ namespace Nez
 		/// warms up the cache filling it with a max of cacheCount objects
 		/// </summary>
 		/// <param name="cacheCount">new cache count</param>
-		public static void WarmCache( int cacheCount )
+		public static void WarmCache(int cacheCount)
 		{
 			cacheCount -= _objectQueue.Count;
-			if( cacheCount > 0 )
+			if (cacheCount > 0)
 			{
-				for( var i = 0; i < cacheCount; i++ )
-					_objectQueue.Enqueue( new List<T>() );
+				for (var i = 0; i < cacheCount; i++)
+					_objectQueue.Enqueue(new List<T>());
 			}
 		}
 
@@ -29,9 +29,9 @@ namespace Nez
 		/// trims the cache down to cacheCount items
 		/// </summary>
 		/// <param name="cacheCount">Cache count.</param>
-		public static void TrimCache( int cacheCount )
+		public static void TrimCache(int cacheCount)
 		{
-			while( cacheCount > _objectQueue.Count )
+			while (cacheCount > _objectQueue.Count)
 				_objectQueue.Dequeue();
 		}
 
@@ -48,7 +48,7 @@ namespace Nez
 		/// </summary>
 		public static List<T> Obtain()
 		{
-			if( _objectQueue.Count > 0 )
+			if (_objectQueue.Count > 0)
 				return _objectQueue.Dequeue();
 
 			return new List<T>();
@@ -58,9 +58,9 @@ namespace Nez
 		/// pushes an item back on the stack
 		/// </summary>
 		/// <param name="obj">Object.</param>
-		public static void Free( List<T> obj )
+		public static void Free(List<T> obj)
 		{
-			_objectQueue.Enqueue( obj );
+			_objectQueue.Enqueue(obj);
 			obj.Clear();
 		}
 	}

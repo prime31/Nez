@@ -13,8 +13,8 @@ namespace Nez
 		public Vector2 End;
 		public Vector2 Direction;
 
-		
-		public Ray2D( Vector2 position, Vector2 end )
+
+		public Ray2D(Vector2 position, Vector2 end)
 		{
 			this.Start = position;
 			this.End = end;
@@ -22,4 +22,3 @@ namespace Nez
 		}
 	}
 }
-

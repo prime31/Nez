@@ -10,7 +10,7 @@ namespace Nez.UI
 	public class SelectBox<T> : Element, IInputListener where T : class
 	{
 		public Action<T> OnChanged;
-		
+
 		SelectBoxStyle style;
 		List<T> _items = new List<T>();
 		ArraySelection<T> _selection;
@@ -20,23 +20,25 @@ namespace Nez.UI
 		bool _isMouseOver;
 
 
-		public SelectBox( Skin skin ) : this( skin.Get<SelectBoxStyle>() )
-		{ }
-
-
-		public SelectBox( Skin skin, string styleName = null ) : this( skin.Get<SelectBoxStyle>( styleName ) )
-		{ }
-
-
-		public SelectBox( SelectBoxStyle style )
+		public SelectBox(Skin skin) : this(skin.Get<SelectBoxStyle>())
 		{
-			_selection = new ArraySelection<T>( _items );
-			SetStyle( style );
-			SetSize( PreferredWidth, PreferredHeight );
+		}
 
-			_selection.SetElement( this );
-			_selection.SetRequired( true );
-			_selectBoxList = new SelectBoxList<T>( this );
+
+		public SelectBox(Skin skin, string styleName = null) : this(skin.Get<SelectBoxStyle>(styleName))
+		{
+		}
+
+
+		public SelectBox(SelectBoxStyle style)
+		{
+			_selection = new ArraySelection<T>(_items);
+			SetStyle(style);
+			SetSize(PreferredWidth, PreferredHeight);
+
+			_selection.SetElement(this);
+			_selection.SetRequired(true);
+			_selectBoxList = new SelectBoxList<T>(this);
 		}
 
 
@@ -45,44 +47,45 @@ namespace Nez.UI
 			var bg = style.Background;
 			var font = style.Font;
 
-			if( bg != null )
-				_prefHeight = Math.Max( bg.TopHeight + bg.BottomHeight + font.LineHeight - font.Padding.Bottom * 2f, bg.MinHeight );
+			if (bg != null)
+				_prefHeight = Math.Max(bg.TopHeight + bg.BottomHeight + font.LineHeight - font.Padding.Bottom * 2f,
+					bg.MinHeight);
 			else
 				_prefHeight = font.LineHeight - font.Padding.Bottom * 2;
 
 			float maxItemWidth = 0;
-			for( var i = 0; i < _items.Count; i++ )
-				maxItemWidth = Math.Max( font.MeasureString( _items[i].ToString() ).X, maxItemWidth );
+			for (var i = 0; i < _items.Count; i++)
+				maxItemWidth = Math.Max(font.MeasureString(_items[i].ToString()).X, maxItemWidth);
 
 
 			_prefWidth = maxItemWidth;
-			if( bg != null )
+			if (bg != null)
 				_prefWidth += bg.LeftWidth + bg.RightWidth;
 
 			var listStyle = style.ListStyle;
 			var scrollStyle = style.ScrollStyle;
 			float listWidth = maxItemWidth + listStyle.Selection.LeftWidth + listStyle.Selection.RightWidth;
-			if( scrollStyle.Background != null )
+			if (scrollStyle.Background != null)
 				listWidth += scrollStyle.Background.LeftWidth + scrollStyle.Background.RightWidth;
-			if( _selectBoxList == null || !_selectBoxList.IsScrollingDisabledY() )
-				listWidth += Math.Max( style.ScrollStyle.VScroll != null ? style.ScrollStyle.VScroll.MinWidth : 0,
-				                      style.ScrollStyle.VScrollKnob != null ? style.ScrollStyle.VScrollKnob.MinWidth : 0 );
-			_prefWidth = Math.Max( _prefWidth, listWidth );
+			if (_selectBoxList == null || !_selectBoxList.IsScrollingDisabledY())
+				listWidth += Math.Max(style.ScrollStyle.VScroll != null ? style.ScrollStyle.VScroll.MinWidth : 0,
+					style.ScrollStyle.VScrollKnob != null ? style.ScrollStyle.VScrollKnob.MinWidth : 0);
+			_prefWidth = Math.Max(_prefWidth, listWidth);
 		}
 
 
-		public override void Draw( Graphics graphics, float parentAlpha )
+		public override void Draw(Graphics graphics, float parentAlpha)
 		{
 			Validate();
 
 			IDrawable background;
-			if( _isDisabled && style.BackgroundDisabled != null )
+			if (_isDisabled && style.BackgroundDisabled != null)
 				background = style.BackgroundDisabled;
-			else if( _selectBoxList.HasParent() && style.BackgroundOpen != null )
+			else if (_selectBoxList.HasParent() && style.BackgroundOpen != null)
 				background = style.BackgroundOpen;
-			else if( _isMouseOver && style.BackgroundOver != null )
+			else if (_isMouseOver && style.BackgroundOver != null)
 				background = style.BackgroundOver;
-			else if( style.Background != null )
+			else if (style.Background != null)
 				background = style.Background;
 			else
 				background = null;
@@ -91,33 +94,33 @@ namespace Nez.UI
 			var fontColor = _isDisabled ? style.DisabledFontColor : style.FontColor;
 
 			var color = GetColor();
-			color = new Color( color, (int)(color.A * parentAlpha) );
+			color = new Color(color, (int) (color.A * parentAlpha));
 			float x = GetX();
 			float y = GetY();
 			float width = GetWidth();
 			float height = GetHeight();
 
-			if( background != null )
-				background.Draw( graphics, x, y, width, height, color );
+			if (background != null)
+				background.Draw(graphics, x, y, width, height, color);
 
 			var selected = _selection.First();
-			if( selected != null )
+			if (selected != null)
 			{
 				var str = selected.ToString();
-				if( background != null )
+				if (background != null)
 				{
 					width -= background.LeftWidth + background.RightWidth;
 					height -= background.BottomHeight + background.TopHeight;
 					x += background.LeftWidth;
-					y += (int)( height / 2 + background.BottomHeight - font.LineHeight / 2 );
+					y += (int) (height / 2 + background.BottomHeight - font.LineHeight / 2);
 				}
 				else
 				{
-					y += (int)( height / 2 + font.LineHeight / 2 );
+					y += (int) (height / 2 + font.LineHeight / 2);
 				}
 
-				fontColor = new Color( fontColor, (int)(fontColor.A * parentAlpha) );
-				graphics.Batcher.DrawString( font, str, new Vector2( x, y ), fontColor );
+				fontColor = new Color(fontColor, (int) (fontColor.A * parentAlpha));
+				graphics.Batcher.DrawString(font, str, new Vector2(x, y), fontColor);
 			}
 		}
 
@@ -159,12 +162,12 @@ namespace Nez.UI
 		}
 
 
-		bool IInputListener.OnMousePressed( Vector2 mousePos )
+		bool IInputListener.OnMousePressed(Vector2 mousePos)
 		{
-			if( _isDisabled )
+			if (_isDisabled)
 				return false;
 
-			if( _selectBoxList.HasParent() )
+			if (_selectBoxList.HasParent())
 				HideList();
 			else
 				ShowList();
@@ -173,15 +176,17 @@ namespace Nez.UI
 		}
 
 
-		void IInputListener.OnMouseMoved( Vector2 mousePos )
-		{ }
+		void IInputListener.OnMouseMoved(Vector2 mousePos)
+		{
+		}
 
 
-		void IInputListener.OnMouseUp( Vector2 mousePos )
-		{ }
+		void IInputListener.OnMouseUp(Vector2 mousePos)
+		{
+		}
 
 
-		bool IInputListener.OnMouseScrolled( int mouseWheelDelta )
+		bool IInputListener.OnMouseScrolled(int mouseWheelDelta)
 		{
 			return false;
 		}
@@ -197,7 +202,7 @@ namespace Nez.UI
 		/// </summary>
 		/// <returns>The max list count.</returns>
 		/// <param name="maxListCount">Max list count.</param>
-		public void SetMaxListCount( int maxListCount )
+		public void SetMaxListCount(int maxListCount)
 		{
 			_selectBoxList.MaxListCount = maxListCount;
 		}
@@ -213,17 +218,17 @@ namespace Nez.UI
 		}
 
 
-		internal override void SetStage( Stage stage )
+		internal override void SetStage(Stage stage)
 		{
-			if( stage == null )
+			if (stage == null)
 				_selectBoxList.Hide();
-			base.SetStage( stage );
+			base.SetStage(stage);
 		}
 
 
-		public void SetStyle( SelectBoxStyle style )
+		public void SetStyle(SelectBoxStyle style)
 		{
-			Insist.IsNotNull( style, "style cannot be null" );
+			Insist.IsNotNull(style, "style cannot be null");
 			this.style = style;
 			InvalidateHierarchy();
 		}
@@ -245,9 +250,9 @@ namespace Nez.UI
 		/// </summary>
 		/// <returns>The items.</returns>
 		/// <param name="newItems">New items.</param>
-		public void SetItems( params T[] newItems )
+		public void SetItems(params T[] newItems)
 		{
-			SetItems( new List<T>( newItems ) );
+			SetItems(new List<T>(newItems));
 		}
 
 
@@ -256,29 +261,29 @@ namespace Nez.UI
 		/// </summary>
 		/// <returns>The items.</returns>
 		/// <param name="newItems">New items.</param>
-		public void SetItems( List<T> newItems )
+		public void SetItems(List<T> newItems)
 		{
-			Insist.IsNotNull( newItems, "newItems cannot be null" );
+			Insist.IsNotNull(newItems, "newItems cannot be null");
 			float oldPrefWidth = PreferredWidth;
 
 			_items.Clear();
-			_items.AddRange( newItems );
+			_items.AddRange(newItems);
 			_selection.Validate();
-			_selectBoxList.ListBox.SetItems( _items );
+			_selectBoxList.ListBox.SetItems(_items);
 
 			Invalidate();
 			Validate();
-			if( oldPrefWidth != _prefWidth )
+			if (oldPrefWidth != _prefWidth)
 			{
 				InvalidateHierarchy();
-				SetSize( _prefWidth, _prefHeight );
+				SetSize(_prefWidth, _prefHeight);
 			}
 		}
 
 
 		public void ClearItems()
 		{
-			if( _items.Count == 0 )
+			if (_items.Count == 0)
 				return;
 
 			_items.Clear();
@@ -323,12 +328,12 @@ namespace Nez.UI
 		/// </summary>
 		/// <returns>The selected.</returns>
 		/// <param name="item">Item.</param>
-		public void SetSelected( T item )
+		public void SetSelected(T item)
 		{
-			if( _items.Contains( item ) )
-				_selection.Set( item );
-			else if( _items.Count > 0 )
-				_selection.Set( _items[0] );
+			if (_items.Contains(item))
+				_selection.Set(item);
+			else if (_items.Count > 0)
+				_selection.Set(_items[0]);
 			else
 				_selection.Clear();
 		}
@@ -341,7 +346,7 @@ namespace Nez.UI
 		public int GetSelectedIndex()
 		{
 			var selected = _selection.Items();
-			return selected.Count == 0 ? -1 : _items.IndexOf( selected.First() );
+			return selected.Count == 0 ? -1 : _items.IndexOf(selected.First());
 		}
 
 
@@ -350,15 +355,15 @@ namespace Nez.UI
 		/// </summary>
 		/// <returns>The selected index.</returns>
 		/// <param name="index">Index.</param>
-		public void SetSelectedIndex( int index )
+		public void SetSelectedIndex(int index)
 		{
-			_selection.Set( _items[index] );
+			_selection.Set(_items[index]);
 		}
 
 
-		public void SetDisabled( bool disabled )
+		public void SetDisabled(bool disabled)
 		{
-			if( disabled && !this._isDisabled )
+			if (disabled && !this._isDisabled)
 				HideList();
 			this._isDisabled = disabled;
 		}
@@ -372,9 +377,10 @@ namespace Nez.UI
 
 		public void ShowList()
 		{
-			if( _items.Count == 0 )
+			if (_items.Count == 0)
 				return;
-			_selectBoxList.Show( GetStage() );
+
+			_selectBoxList.Show(GetStage());
 		}
 
 
@@ -399,9 +405,9 @@ namespace Nez.UI
 		/// </summary>
 		/// <returns>The scrolling disabled.</returns>
 		/// <param name="y">The y coordinate.</param>
-		public void SetScrollingDisabled( bool y )
+		public void SetScrollingDisabled(bool y)
 		{
-			_selectBoxList.SetScrollingDisabled( true, y );
+			_selectBoxList.SetScrollingDisabled(true, y);
 			InvalidateHierarchy();
 		}
 
@@ -416,14 +422,14 @@ namespace Nez.UI
 		}
 
 
-		public void OnShow( Element selectBoxList, bool below )
+		public void OnShow(Element selectBoxList, bool below)
 		{
 			//_selectBoxList.getColor().A = 0;
 			//_selectBoxList.addAction( fadeIn( 0.3f, Interpolation.fade ) );
 		}
 
 
-		public void OnHide( Element selectBoxList )
+		public void OnHide(Element selectBoxList)
 		{
 			//selectBoxList.getColor().A = 255;
 			//selectBoxList.addAction( sequence( fadeOut( 0.15f, Interpolation.fade ), removeActor() ) );
@@ -431,20 +437,24 @@ namespace Nez.UI
 		}
 
 		#endregion
-
 	}
 
 
 	public class SelectBoxStyle
 	{
 		public BitmapFont Font;
+
 		public Color FontColor = Color.White;
+
 		/** Optional */
 		public Color DisabledFontColor;
+
 		/** Optional */
 		public IDrawable Background;
 		public ScrollPaneStyle ScrollStyle;
+
 		public ListBoxStyle ListStyle;
+
 		/** Optional */
 		public IDrawable BackgroundOver, BackgroundOpen, BackgroundDisabled;
 
@@ -454,7 +464,8 @@ namespace Nez.UI
 			Font = Graphics.Instance.BitmapFont;
 		}
 
-		public SelectBoxStyle( BitmapFont font, Color fontColor, IDrawable background, ScrollPaneStyle scrollStyle, ListBoxStyle listStyle )
+		public SelectBoxStyle(BitmapFont font, Color fontColor, IDrawable background, ScrollPaneStyle scrollStyle,
+		                      ListBoxStyle listStyle)
 		{
 			this.Font = font;
 			this.FontColor = fontColor;
@@ -463,6 +474,4 @@ namespace Nez.UI
 			this.ListStyle = listStyle;
 		}
 	}
-
 }
-

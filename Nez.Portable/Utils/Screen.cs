@@ -8,7 +8,7 @@ namespace Nez
 	{
 		static internal GraphicsDeviceManager _graphicsManager;
 
-		internal static void Initialize( GraphicsDeviceManager graphicsManager ) => _graphicsManager = graphicsManager;
+		internal static void Initialize(GraphicsDeviceManager graphicsManager) => _graphicsManager = graphicsManager;
 
 		/// <summary>
 		/// width of the GraphicsDevice back buffer
@@ -35,7 +35,7 @@ namespace Nez
 		/// you will need to scale this value appropriately.
 		/// </summary>
 		/// <value>The center.</value>
-		public static Vector2 Center => new Vector2( Width / 2, Height / 2 );
+		public static Vector2 Center => new Vector2(Width / 2, Height / 2);
 
 		public static int PreferredBackBufferWidth
 		{
@@ -53,7 +53,8 @@ namespace Nez
 
 		public static int MonitorHeight => GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height;
 
-		public static SurfaceFormat BackBufferFormat => _graphicsManager.GraphicsDevice.PresentationParameters.BackBufferFormat;
+		public static SurfaceFormat BackBufferFormat =>
+			_graphicsManager.GraphicsDevice.PresentationParameters.BackBufferFormat;
 
 		public static SurfaceFormat PreferredBackBufferFormat
 		{
@@ -93,13 +94,11 @@ namespace Nez
 		/// </summary>
 		/// <param name="width">Width.</param>
 		/// <param name="height">Height.</param>
-		public static void SetSize( int width, int height )
+		public static void SetSize(int width, int height)
 		{
 			PreferredBackBufferWidth = width;
 			PreferredBackBufferHeight = height;
 			ApplyChanges();
 		}
-
 	}
 }
-

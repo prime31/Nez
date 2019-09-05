@@ -44,7 +44,7 @@ namespace FarseerPhysics.Common.Decomposition.CDT.Util
 		{
 			get
 			{
-				switch( index )
+				switch (index)
 				{
 					case 0:
 						return _0;
@@ -58,7 +58,7 @@ namespace FarseerPhysics.Common.Decomposition.CDT.Util
 			}
 			set
 			{
-				switch( index )
+				switch (index)
 				{
 					case 0:
 						_0 = value;
@@ -89,15 +89,21 @@ namespace FarseerPhysics.Common.Decomposition.CDT.Util
 
 		#endregion
 
-		public bool Contains( bool value )
+		public bool Contains(bool value)
 		{
-			for( int i = 0; i < 3; ++i ) if( this[i] == value ) return true;
+			for (int i = 0; i < 3; ++i)
+				if (this[i] == value)
+					return true;
+
 			return false;
 		}
 
-		public int IndexOf( bool value )
+		public int IndexOf(bool value)
 		{
-			for( int i = 0; i < 3; ++i ) if( this[i] == value ) return i;
+			for (int i = 0; i < 3; ++i)
+				if (this[i] == value)
+					return i;
+
 			return -1;
 		}
 
@@ -106,14 +112,16 @@ namespace FarseerPhysics.Common.Decomposition.CDT.Util
 			_0 = _1 = _2 = false;
 		}
 
-		public void Clear( bool value )
+		public void Clear(bool value)
 		{
-			for( int i = 0; i < 3; ++i ) if( this[i] == value ) this[i] = false;
+			for (int i = 0; i < 3; ++i)
+				if (this[i] == value)
+					this[i] = false;
 		}
 
 		private IEnumerable<bool> Enumerate()
 		{
-			for( int i = 0; i < 3; ++i ) yield return this[i];
+			for (int i = 0; i < 3; ++i) yield return this[i];
 		}
 	}
 }

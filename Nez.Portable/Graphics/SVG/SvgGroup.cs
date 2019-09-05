@@ -8,34 +8,24 @@ namespace Nez.Svg
 	/// </summary>
 	public class SvgGroup : SvgElement
 	{
-		[XmlElement( "title" )]
-		public string Title;
+		[XmlElement("title")] public string Title;
 
-		[XmlElement( "g" )]
-		public SvgGroup[] Groups;
+		[XmlElement("g")] public SvgGroup[] Groups;
 
-		[XmlElement( "path" )]
-		public SvgPath[] Paths;
+		[XmlElement("path")] public SvgPath[] Paths;
 
-		[XmlElement( "rect" )]
-		public SvgRectangle[] Rectangles;
+		[XmlElement("rect")] public SvgRectangle[] Rectangles;
 
-		[XmlElement( "line" )]
-		public SvgLine[] Lines;
+		[XmlElement("line")] public SvgLine[] Lines;
 
-		[XmlElement( "circle" )]
-		public SvgCircle[] Circles;
+		[XmlElement("circle")] public SvgCircle[] Circles;
 
-		[XmlElement( "ellipse" )]
-		public SvgEllipse[] Ellipses;
+		[XmlElement("ellipse")] public SvgEllipse[] Ellipses;
 
-		[XmlElement( "polygon" )]
-		public SvgPolygon[] Polygons;
+		[XmlElement("polygon")] public SvgPolygon[] Polygons;
 
-		[XmlElement( "polyline" )]
-		public SvgPolyline[] Polylines;
+		[XmlElement("polyline")] public SvgPolyline[] Polylines;
 
-		[XmlElement( "image" )]
-		public SvgImage[] Images;
+		[XmlElement("image")] public SvgImage[] Images;
 	}
 }

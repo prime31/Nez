@@ -11,7 +11,7 @@ namespace System.Collections.Generic
 		{
 			public T Data { get; set; }
 
-			public SimpleNode( T data )
+			public SimpleNode(T data)
 			{
 				Data = data;
 			}
@@ -24,23 +24,24 @@ namespace System.Collections.Generic
 
 		public SimplePriorityQueue()
 		{
-			_queue = new PriorityQueue<SimpleNode>( INITIAL_QUEUE_SIZE );
+			_queue = new PriorityQueue<SimpleNode>(INITIAL_QUEUE_SIZE);
 		}
 
 		/// <summary>
 		/// Given an item of type T, returns the exist SimpleNode in the queue
 		/// </summary>
-		SimpleNode GetExistingNode( T item )
+		SimpleNode GetExistingNode(T item)
 		{
 			var comparer = EqualityComparer<T>.Default;
-			foreach( var node in _queue )
+			foreach (var node in _queue)
 			{
-				if( comparer.Equals( node.Data, item ) )
+				if (comparer.Equals(node.Data, item))
 				{
 					return node;
 				}
 			}
-			throw new InvalidOperationException( "Item cannot be found in queue: " + item );
+
+			throw new InvalidOperationException("Item cannot be found in queue: " + item);
 		}
 
 		/// <summary>
@@ -51,7 +52,7 @@ namespace System.Collections.Generic
 		{
 			get
 			{
-				lock( _queue )
+				lock (_queue)
 				{
 					return _queue.Count;
 				}
@@ -68,15 +69,15 @@ namespace System.Collections.Generic
 		{
 			get
 			{
-				lock( _queue )
+				lock (_queue)
 				{
-					if( _queue.Count <= 0 )
+					if (_queue.Count <= 0)
 					{
-						throw new InvalidOperationException( "Cannot call .First on an empty queue" );
+						throw new InvalidOperationException("Cannot call .First on an empty queue");
 					}
 
 					SimpleNode first = _queue.First;
-					return ( first != null ? first.Data : default(T) );
+					return (first != null ? first.Data : default(T));
 				}
 			}
 		}
@@ -87,7 +88,7 @@ namespace System.Collections.Generic
 		/// </summary>
 		public void Clear()
 		{
-			lock( _queue )
+			lock (_queue)
 			{
 				_queue.Clear();
 			}
@@ -97,18 +98,19 @@ namespace System.Collections.Generic
 		/// Returns whether the given item is in the queue.
 		/// O(n)
 		/// </summary>
-		public bool Contains( T item )
+		public bool Contains(T item)
 		{
-			lock( _queue )
+			lock (_queue)
 			{
 				var comparer = EqualityComparer<T>.Default;
-				foreach( var node in _queue )
+				foreach (var node in _queue)
 				{
-					if( comparer.Equals( node.Data, item ) )
+					if (comparer.Equals(node.Data, item))
 					{
 						return true;
 					}
 				}
+
 				return false;
 			}
 		}
@@ -120,11 +122,11 @@ namespace System.Collections.Generic
 		/// </summary>
 		public T Dequeue()
 		{
-			lock( _queue )
+			lock (_queue)
 			{
-				if( _queue.Count <= 0 )
+				if (_queue.Count <= 0)
 				{
-					throw new InvalidOperationException( "Cannot call Dequeue() on an empty queue" );
+					throw new InvalidOperationException("Cannot call Dequeue() on an empty queue");
 				}
 
 				SimpleNode node = _queue.Dequeue();
@@ -138,16 +140,17 @@ namespace System.Collections.Generic
 		/// Duplicates are allowed.
 		/// O(log n)
 		/// </summary>
-		public void Enqueue( T item, int priority )
+		public void Enqueue(T item, int priority)
 		{
-			lock( _queue )
+			lock (_queue)
 			{
-				SimpleNode node = new SimpleNode( item );
-				if( _queue.Count == _queue.MaxSize )
+				SimpleNode node = new SimpleNode(item);
+				if (_queue.Count == _queue.MaxSize)
 				{
-					_queue.Resize( _queue.MaxSize * 2 + 1 );
+					_queue.Resize(_queue.MaxSize * 2 + 1);
 				}
-				_queue.Enqueue( node, priority );
+
+				_queue.Enqueue(node, priority);
 			}
 		}
 
@@ -157,17 +160,18 @@ namespace System.Collections.Generic
 		/// If multiple copies of the item are enqueued, only the first one is removed. 
 		/// O(n)
 		/// </summary>
-		public void Remove( T item )
+		public void Remove(T item)
 		{
-			lock( _queue )
+			lock (_queue)
 			{
 				try
 				{
-					_queue.Remove( GetExistingNode( item ) );
+					_queue.Remove(GetExistingNode(item));
 				}
-				catch( InvalidOperationException ex )
+				catch (InvalidOperationException ex)
 				{
-					throw new InvalidOperationException( "Cannot call Remove() on a node which is not enqueued: " + item, ex );
+					throw new InvalidOperationException("Cannot call Remove() on a node which is not enqueued: " + item,
+						ex);
 				}
 			}
 		}
@@ -180,18 +184,19 @@ namespace System.Collections.Generic
 		/// to update all of them, please wrap your items in a wrapper class so they can be distinguished).
 		/// O(n)
 		/// </summary>
-		public void UpdatePriority( T item, int priority )
+		public void UpdatePriority(T item, int priority)
 		{
-			lock( _queue )
+			lock (_queue)
 			{
 				try
 				{
-					SimpleNode updateMe = GetExistingNode( item );
-					_queue.UpdatePriority( updateMe, priority );
+					SimpleNode updateMe = GetExistingNode(item);
+					_queue.UpdatePriority(updateMe, priority);
 				}
-				catch( InvalidOperationException ex )
+				catch (InvalidOperationException ex)
 				{
-					throw new InvalidOperationException( "Cannot call UpdatePriority() on a node which is not enqueued: " + item, ex );
+					throw new InvalidOperationException(
+						"Cannot call UpdatePriority() on a node which is not enqueued: " + item, ex);
 				}
 			}
 		}
@@ -199,12 +204,12 @@ namespace System.Collections.Generic
 		public IEnumerator<T> GetEnumerator()
 		{
 			List<T> queueData = new List<T>();
-			lock( _queue )
+			lock (_queue)
 			{
 				//Copy to a separate list because we don't want to 'yield return' inside a lock
-				foreach( var node in _queue )
+				foreach (var node in _queue)
 				{
-					queueData.Add( node.Data );
+					queueData.Add(node.Data);
 				}
 			}
 
@@ -218,7 +223,7 @@ namespace System.Collections.Generic
 
 		public bool IsValidQueue()
 		{
-			lock( _queue )
+			lock (_queue)
 			{
 				return _queue.IsValidQueue();
 			}

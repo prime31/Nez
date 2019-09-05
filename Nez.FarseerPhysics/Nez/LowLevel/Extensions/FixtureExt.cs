@@ -18,7 +18,7 @@ namespace Nez.Farseer
 		/// <param name="self">Fixture a.</param>
 		/// <param name="motion">the delta movement in Nez pixel coordinates</param>
 		/// <param name="result">Result.</param>
-		public static bool CollidesWithAnyFixtures( this Fixture self, ref Vector2 motion, out FSCollisionResult result )
+		public static bool CollidesWithAnyFixtures(this Fixture self, ref Vector2 motion, out FSCollisionResult result)
 		{
 			result = new FSCollisionResult();
 			motion *= FSConvert.DisplayToSim;
@@ -26,21 +26,21 @@ namespace Nez.Farseer
 			FSTransform xf;
 			var didCollide = false;
 
-			self.Body.GetTransform( out xf );
+			self.Body.GetTransform(out xf);
 			xf.P += motion;
-			self.Shape.ComputeAABB( out aabb, ref xf, 0 );
+			self.Shape.ComputeAABB(out aabb, ref xf, 0);
 
 			var neighbors = ListPool<Fixture>.Obtain();
-			self.Body.World.QueryAABB( ref aabb, neighbors );
-			if( neighbors.Count > 1 )
+			self.Body.World.QueryAABB(ref aabb, neighbors);
+			if (neighbors.Count > 1)
 			{
 				// handle collisions with all but ourself
-				for( var i = 0; i < neighbors.Count; i++ )
+				for (var i = 0; i < neighbors.Count; i++)
 				{
-					if( neighbors[i].FixtureId == self.FixtureId )
+					if (neighbors[i].FixtureId == self.FixtureId)
 						continue;
 
-					if( FSCollisions.CollideFixtures( self, ref motion, neighbors[i], out result ) )
+					if (FSCollisions.CollideFixtures(self, ref motion, neighbors[i], out result))
 					{
 						// if we have a collision, adjust the transform to account for it
 						xf.P += result.MinimumTranslationVector;
@@ -48,7 +48,7 @@ namespace Nez.Farseer
 				}
 			}
 
-			ListPool<Fixture>.Free( neighbors );
+			ListPool<Fixture>.Free(neighbors);
 			motion *= FSConvert.SimToDisplay;
 
 			return didCollide;
@@ -63,10 +63,9 @@ namespace Nez.Farseer
 		/// <param name="self">Self.</param>
 		/// <param name="fixtureB">Fixture b.</param>
 		/// <param name="result">Result.</param>
-		public static bool CollideFixtures( this Fixture self, Fixture fixtureB, out FSCollisionResult result )
+		public static bool CollideFixtures(this Fixture self, Fixture fixtureB, out FSCollisionResult result)
 		{
-			return FSCollisions.CollideFixtures( self, fixtureB, out result );
+			return FSCollisions.CollideFixtures(self, fixtureB, out result);
 		}
-
 	}
 }

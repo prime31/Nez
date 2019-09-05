@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Nez.Tweens;
 
+
 namespace Nez.UI
 {
 	public class TooltipManager
@@ -57,44 +58,44 @@ namespace Nez.UI
 
 		static public TooltipManager GetInstance()
 		{
-			if( instance == null )
+			if (instance == null)
 				instance = new TooltipManager();
 			return instance;
 		}
 
 
-		void StartShowTask( float time )
+		void StartShowTask(float time)
 		{
-			_showTask = Core.Schedule( time, false, this, t =>
+			_showTask = Core.Schedule(time, false, this, t =>
 			{
 				var tm = t.Context as TooltipManager;
 				var shownTooltip = tm._shownTooltip;
-				if( shownTooltip == null )
+				if (shownTooltip == null)
 					return;
 
 				var stage = shownTooltip.GetTargetElement().GetStage();
-				if( stage == null )
+				if (stage == null)
 					return;
 
 
-				stage.AddElement( shownTooltip.GetContainer() );
+				stage.AddElement(shownTooltip.GetContainer());
 				shownTooltip.GetContainer().ToFront();
-				tm._shownTooltips.Add( shownTooltip );
+				tm._shownTooltips.Add(shownTooltip);
 
-				tm.ShowAction( shownTooltip );
+				tm.ShowAction(shownTooltip);
 
-				if( !shownTooltip.GetInstant() )
+				if (!shownTooltip.GetInstant())
 				{
 					tm._time = tm.SubsequentTime;
 					tm.StopResetTask();
 				}
-			} );
+			});
 		}
 
 
 		void StopShowTask()
 		{
-			if( _showTask != null )
+			if (_showTask != null)
 			{
 				_showTask.Stop();
 				_showTask = null;
@@ -104,17 +105,17 @@ namespace Nez.UI
 
 		void StartResetTask()
 		{
-			_resetTask = Core.Schedule( ResetTime, false, this, t =>
+			_resetTask = Core.Schedule(ResetTime, false, this, t =>
 			{
 				var tm = t.Context as TooltipManager;
 				tm._time = tm.InitialTime;
-			} );
+			});
 		}
 
 
 		void StopResetTask()
 		{
-			if( _resetTask != null )
+			if (_resetTask != null)
 			{
 				_resetTask.Stop();
 				_resetTask = null;
@@ -122,48 +123,48 @@ namespace Nez.UI
 		}
 
 
-		public void TouchDown( Tooltip tooltip )
+		public void TouchDown(Tooltip tooltip)
 		{
 			StopShowTask();
-			if( tooltip.GetContainer().Remove() )
+			if (tooltip.GetContainer().Remove())
 				StopResetTask();
-			
+
 			StartResetTask();
-			if( Enabled || tooltip.GetAlways() )
+			if (Enabled || tooltip.GetAlways())
 			{
 				_shownTooltip = tooltip;
-				StartShowTask( _time );
+				StartShowTask(_time);
 			}
 		}
 
 
-		public void Enter( Tooltip tooltip )
+		public void Enter(Tooltip tooltip)
 		{
 			_shownTooltip = tooltip;
 			StopShowTask();
-			if( Enabled || tooltip.GetAlways() )
+			if (Enabled || tooltip.GetAlways())
 			{
-				if( _time == 0 || tooltip.GetInstant() )
-					StartShowTask( 0 );
+				if (_time == 0 || tooltip.GetInstant())
+					StartShowTask(0);
 				else
-					StartShowTask( _time );
+					StartShowTask(_time);
 			}
 		}
 
 
-		public void Hide( Tooltip tooltip )
+		public void Hide(Tooltip tooltip)
 		{
 			// dont go messing with the current tooltip unless it is actually us
-			if( _shownTooltip == tooltip )
+			if (_shownTooltip == tooltip)
 			{
 				_shownTooltip = null;
 				StopShowTask();
 			}
 
-			if( tooltip.GetContainer().HasParent() )
+			if (tooltip.GetContainer().HasParent())
 			{
-				_shownTooltips.Remove( tooltip );
-				HideAction( tooltip );
+				_shownTooltips.Remove(tooltip);
+				HideAction(tooltip);
 				StopResetTask();
 				StartResetTask();
 			}
@@ -175,20 +176,22 @@ namespace Nez.UI
 		/// </summary>
 		/// <returns>The action.</returns>
 		/// <param name="tooltip">Tooltip.</param>
-		protected void ShowAction( Tooltip tooltip )
+		protected void ShowAction(Tooltip tooltip)
 		{
 			var container = tooltip.GetContainer();
-			if( Animations )
+			if (Animations)
 			{
 				var actionTime = _time > 0 ? 0.3f : 0.15f;
-				container.SetTransform( true );
-				container.SetScale( 0.5f );
-				PropertyTweens.FloatPropertyTo( container, "scaleX", 1, actionTime ).SetEaseType( EaseType.QuintIn ).Start();
-				PropertyTweens.FloatPropertyTo( container, "scaleY", 1, actionTime ).SetEaseType( EaseType.QuintIn ).Start();				
+				container.SetTransform(true);
+				container.SetScale(0.5f);
+				PropertyTweens.FloatPropertyTo(container, "scaleX", 1, actionTime).SetEaseType(EaseType.QuintIn)
+					.Start();
+				PropertyTweens.FloatPropertyTo(container, "scaleY", 1, actionTime).SetEaseType(EaseType.QuintIn)
+					.Start();
 			}
 			else
 			{
-				container.SetScale( 1 );
+				container.SetScale(1);
 			}
 		}
 
@@ -199,15 +202,15 @@ namespace Nez.UI
 		/// </summary>
 		/// <returns>The action.</returns>
 		/// <param name="tooltip">Tooltip.</param>
-		protected void HideAction( Tooltip tooltip )
+		protected void HideAction(Tooltip tooltip)
 		{
 			var container = tooltip.GetContainer();
-			if( Animations )
+			if (Animations)
 			{
-				PropertyTweens.FloatPropertyTo( container, "scaleX", 0.2f, 0.2f ).SetEaseType( EaseType.QuintOut ).Start();
-				PropertyTweens.FloatPropertyTo( container, "scaleY", 0.2f, 0.2f ).SetEaseType( EaseType.QuintOut )
-							  .SetCompletionHandler( t => container.Remove() )
-							  .Start();
+				PropertyTweens.FloatPropertyTo(container, "scaleX", 0.2f, 0.2f).SetEaseType(EaseType.QuintOut).Start();
+				PropertyTweens.FloatPropertyTo(container, "scaleY", 0.2f, 0.2f).SetEaseType(EaseType.QuintOut)
+					.SetCompletionHandler(t => container.Remove())
+					.Start();
 			}
 			else
 			{
@@ -223,8 +226,8 @@ namespace Nez.UI
 			_time = InitialTime;
 			_shownTooltip = null;
 
-			foreach( var tooltip in _shownTooltips )
-				Hide( tooltip );
+			foreach (var tooltip in _shownTooltips)
+				Hide(tooltip);
 			_shownTooltips.Clear();
 		}
 
@@ -235,10 +238,8 @@ namespace Nez.UI
 		public void Instant()
 		{
 			_time = 0;
-			StartShowTask( 0 );
+			StartShowTask(0);
 			StopShowTask();
 		}
-
 	}
 }
-

@@ -18,12 +18,12 @@ namespace Nez
 		/// <value>The color of the square.</value>
 		public Color SquareColor
 		{
-			set { _squaresEffect.Parameters["_color"].SetValue( value.ToVector4() ); }
+			set { _squaresEffect.Parameters["_color"].SetValue(value.ToVector4()); }
 		}
 
 		public float Smoothness
 		{
-			set { _squaresEffect.Parameters["_smoothness"].SetValue( value ); }
+			set { _squaresEffect.Parameters["_smoothness"].SetValue(value); }
 		}
 
 		/// <summary>
@@ -32,7 +32,7 @@ namespace Nez
 		/// <value>The size.</value>
 		public Vector2 Size
 		{
-			set { _squaresEffect.Parameters["_size"].SetValue( value ); }
+			set { _squaresEffect.Parameters["_size"].SetValue(value); }
 		}
 
 		/// <summary>
@@ -60,66 +60,69 @@ namespace Nez
 		Texture2D _overlayTexture;
 
 
-		public SquaresTransition( Func<Scene> sceneLoadAction ) : base( sceneLoadAction, true )
+		public SquaresTransition(Func<Scene> sceneLoadAction) : base(sceneLoadAction, true)
 		{
 			_destinationRect = PreviousSceneRender.Bounds;
 
 			// load Effect and set defaults
-			_squaresEffect = Core.Content.LoadEffect( "Content/nez/effects/transitions/Squares.mgfxo" );
+			_squaresEffect = Core.Content.LoadEffect("Content/nez/effects/transitions/Squares.mgfxo");
 			SquareColor = Color.Black;
 			Smoothness = 0.5f;
 
-			var aspectRatio = (float)Screen.Width / (float)Screen.Height;
-			Size = new Vector2( 30, 30 / aspectRatio );
+			var aspectRatio = (float) Screen.Width / (float) Screen.Height;
+			Size = new Vector2(30, 30 / aspectRatio);
 		}
 
 
-		public SquaresTransition() : this( null )
-		{}
+		public SquaresTransition() : this(null)
+		{
+		}
 
 
 		public override IEnumerator OnBeginTransition()
 		{
 			// create a single pixel transparent texture so we can do our squares out to the next scene
-			_overlayTexture = Graphics.CreateSingleColorTexture( 1, 1, Color.Transparent );
+			_overlayTexture = Graphics.CreateSingleColorTexture(1, 1, Color.Transparent);
 
 			// populate squares
-			yield return Core.StartCoroutine( TickEffectProgressProperty( _squaresEffect, SquaresInDuration, EaseType ) );
+			yield return Core.StartCoroutine(TickEffectProgressProperty(_squaresEffect, SquaresInDuration, EaseType));
 
 			// load up the new Scene
-			yield return Core.StartCoroutine( LoadNextScene() );
+			yield return Core.StartCoroutine(LoadNextScene());
 
 			// dispose of our previousSceneRender. We dont need it anymore.
 			PreviousSceneRender.Dispose();
 			PreviousSceneRender = null;
 
 			// delay
-			yield return Coroutine.WaitForSeconds( DelayBeforeSquaresInDuration );
+			yield return Coroutine.WaitForSeconds(DelayBeforeSquaresInDuration);
 
 			// unpopulate squares
-			yield return Core.StartCoroutine( TickEffectProgressProperty( _squaresEffect, SquaresInDuration, EaseHelper.OppositeEaseType( EaseType ), true ) );
+			yield return Core.StartCoroutine(TickEffectProgressProperty(_squaresEffect, SquaresInDuration,
+				EaseHelper.OppositeEaseType(EaseType), true));
 
 			TransitionComplete();
 
 			// cleanup
 			_overlayTexture.Dispose();
-			Core.Content.UnloadEffect( _squaresEffect.Name );
+			Core.Content.UnloadEffect(_squaresEffect.Name);
 		}
 
 
-		public override void Render( Graphics graphics )
+		public override void Render(Graphics graphics)
 		{
-            GraphicsDeviceExt.SetRenderTarget(Core.GraphicsDevice, null);
-			graphics.Batcher.Begin( BlendState.NonPremultiplied, Core.DefaultSamplerState, DepthStencilState.None, null, _squaresEffect );
+			GraphicsDeviceExt.SetRenderTarget(Core.GraphicsDevice, null);
+			graphics.Batcher.Begin(BlendState.NonPremultiplied, Core.DefaultSamplerState, DepthStencilState.None, null,
+				_squaresEffect);
 
 			// we only render the previousSceneRender while populating the squares
-			if( !_isNewSceneLoaded )
-				graphics.Batcher.Draw( PreviousSceneRender, _destinationRect, Color.White );
+			if (!_isNewSceneLoaded)
+				graphics.Batcher.Draw(PreviousSceneRender, _destinationRect, Color.White);
 			else
-				graphics.Batcher.Draw( _overlayTexture, new Rectangle( 0, 0, Screen.Width, Screen.Height ), Color.Transparent );
-			
+				graphics.Batcher.Draw(_overlayTexture, new Rectangle(0, 0, Screen.Width, Screen.Height),
+					Color.Transparent);
+
 			graphics.Batcher.End();
 		}
 	}
 }
-

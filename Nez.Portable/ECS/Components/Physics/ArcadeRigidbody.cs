@@ -17,7 +17,7 @@ namespace Nez
 		public float Mass
 		{
 			get { return _mass; }
-			set { SetMass( value ); }
+			set { SetMass(value); }
 		}
 
 		/// <summary>
@@ -26,7 +26,7 @@ namespace Nez
 		public float Elasticity
 		{
 			get { return _elasticity; }
-			set { SetElasticity( value ); }
+			set { SetElasticity(value); }
 		}
 
 		/// <summary>
@@ -35,7 +35,7 @@ namespace Nez
 		public float Friction
 		{
 			get { return _friction; }
-			set { SetFriction( value ); }
+			set { SetFriction(value); }
 		}
 
 		/// <summary>
@@ -45,7 +45,7 @@ namespace Nez
 		public float Glue
 		{
 			get { return _glue; }
-			set { SetGlue( value );  }
+			set { SetGlue(value); }
 		}
 
 		/// <summary>
@@ -62,7 +62,10 @@ namespace Nez
 		/// rigidbodies with a mass of 0 are considered immovable. Changing velocity and collisions will have no effect on them.
 		/// </summary>
 		/// <value><c>true</c> if is immovable; otherwise, <c>false</c>.</value>
-		public bool IsImmovable { get { return _mass < 0.0001f; } }
+		public bool IsImmovable
+		{
+			get { return _mass < 0.0001f; }
+		}
 
 		float _mass = 10f;
 		float _elasticity = 0.5f;
@@ -85,11 +88,11 @@ namespace Nez
 		/// </summary>
 		/// <returns>The mass.</returns>
 		/// <param name="mass">Mass.</param>
-		public ArcadeRigidbody SetMass( float mass )
+		public ArcadeRigidbody SetMass(float mass)
 		{
-			_mass = Mathf.Clamp( mass, 0, float.MaxValue );
+			_mass = Mathf.Clamp(mass, 0, float.MaxValue);
 
-			if( _mass > 0.0001f )
+			if (_mass > 0.0001f)
 				_inverseMass = 1 / _mass;
 			else
 				_inverseMass = 0f;
@@ -101,9 +104,9 @@ namespace Nez
 		/// </summary>
 		/// <returns>The elasticity.</returns>
 		/// <param name="value">Value.</param>
-		public ArcadeRigidbody SetElasticity( float value )
+		public ArcadeRigidbody SetElasticity(float value)
 		{
-			_elasticity = Mathf.Clamp01( value );
+			_elasticity = Mathf.Clamp01(value);
 			return this;
 		}
 
@@ -112,9 +115,9 @@ namespace Nez
 		/// </summary>
 		/// <returns>The friction.</returns>
 		/// <param name="value">Value.</param>
-		public ArcadeRigidbody SetFriction( float value )
+		public ArcadeRigidbody SetFriction(float value)
 		{
-			_friction = Mathf.Clamp01( value );
+			_friction = Mathf.Clamp01(value);
 			return this;
 		}
 
@@ -124,9 +127,9 @@ namespace Nez
 		/// </summary>
 		/// <returns>The glue.</returns>
 		/// <param name="value">Value.</param>
-		public ArcadeRigidbody SetGlue( float value )
+		public ArcadeRigidbody SetGlue(float value)
 		{
-			_glue = Mathf.Clamp( value, 0, 10 );
+			_glue = Mathf.Clamp(value, 0, 10);
 			return this;
 		}
 
@@ -135,7 +138,7 @@ namespace Nez
 		/// </summary>
 		/// <returns>The velocity.</returns>
 		/// <param name="velocity">Velocity.</param>
-		public ArcadeRigidbody SetVelocity( Vector2 velocity )
+		public ArcadeRigidbody SetVelocity(Vector2 velocity)
 		{
 			this.Velocity = velocity;
 			return this;
@@ -149,58 +152,60 @@ namespace Nez
 		/// force is multiplied by 100000 to make the values more reasonable to use.
 		/// </summary>
 		/// <param name="force">Force.</param>
-		public void AddImpulse( Vector2 force )
+		public void AddImpulse(Vector2 force)
 		{
-			if( !IsImmovable )
-				Velocity += force * 100000 * ( _inverseMass * Time.DeltaTime * Time.DeltaTime );
+			if (!IsImmovable)
+				Velocity += force * 100000 * (_inverseMass * Time.DeltaTime * Time.DeltaTime);
 		}
 
 		public override void OnAddedToEntity()
 		{
 			_collider = Entity.GetComponent<Collider>();
-			Debug.WarnIf( _collider == null, "ArcadeRigidbody has no Collider. ArcadeRigidbody requires a Collider!" );
+			Debug.WarnIf(_collider == null, "ArcadeRigidbody has no Collider. ArcadeRigidbody requires a Collider!");
 		}
 
 		void IUpdatable.Update()
 		{
-			if( IsImmovable || _collider == null )
+			if (IsImmovable || _collider == null)
 			{
 				Velocity = Vector2.Zero;
 				return;
 			}
 
-			if( ShouldUseGravity )
+			if (ShouldUseGravity)
 				Velocity += Physics.Gravity * Time.DeltaTime;
-			
+
 			Entity.Transform.Position += Velocity * Time.DeltaTime;
 
 			CollisionResult collisionResult;
+
 			// fetch anything that we might collide with at our new position
-			var neighbors = Physics.BoxcastBroadphaseExcludingSelf( _collider, _collider.CollidesWithLayers );
-			foreach( var neighbor in neighbors )
+			var neighbors = Physics.BoxcastBroadphaseExcludingSelf(_collider, _collider.CollidesWithLayers);
+			foreach (var neighbor in neighbors)
 			{
 				// if the neighbor collider is of the same entity, ignore it
-				if( neighbor.Entity == Entity )
+				if (neighbor.Entity == Entity)
 				{
 					continue;
 				}
 
-				if( _collider.CollidesWith( neighbor, out collisionResult ) )
+				if (_collider.CollidesWith(neighbor, out collisionResult))
 				{
 					// if the neighbor has an ArcadeRigidbody we handle full collision response. If not, we calculate things based on the
 					// neighbor being immovable.
 					var neighborRigidbody = neighbor.Entity.GetComponent<ArcadeRigidbody>();
-					if( neighborRigidbody != null )
+					if (neighborRigidbody != null)
 					{
-						ProcessOverlap( neighborRigidbody, ref collisionResult.MinimumTranslationVector );
-						ProcessCollision( neighborRigidbody, ref collisionResult.MinimumTranslationVector );
+						ProcessOverlap(neighborRigidbody, ref collisionResult.MinimumTranslationVector);
+						ProcessCollision(neighborRigidbody, ref collisionResult.MinimumTranslationVector);
 					}
 					else
 					{
 						// neighbor has no ArcadeRigidbody so we assume its immovable and only move ourself
 						Entity.Transform.Position -= collisionResult.MinimumTranslationVector;
 						var relativeVelocity = Velocity;
-						CalculateResponseVelocity( ref relativeVelocity, ref collisionResult.MinimumTranslationVector, out relativeVelocity );
+						CalculateResponseVelocity(ref relativeVelocity, ref collisionResult.MinimumTranslationVector,
+							out relativeVelocity);
 						Velocity += relativeVelocity;
 					}
 				}
@@ -212,13 +217,13 @@ namespace Nez
 		/// </summary>
 		/// <param name="other">Other.</param>
 		/// <param name="minimumTranslationVector"></param>
-		void ProcessOverlap( ArcadeRigidbody other, ref Vector2 minimumTranslationVector )
+		void ProcessOverlap(ArcadeRigidbody other, ref Vector2 minimumTranslationVector)
 		{
-			if( IsImmovable )
+			if (IsImmovable)
 			{
 				other.Entity.Transform.Position += minimumTranslationVector;
 			}
-			else if( other.IsImmovable )
+			else if (other.IsImmovable)
 			{
 				Entity.Transform.Position -= minimumTranslationVector;
 			}
@@ -234,13 +239,13 @@ namespace Nez
 		/// </summary>
 		/// <param name="other">Other.</param>
 		/// <param name="inverseMTV">Inverse MT.</param>
-		void ProcessCollision( ArcadeRigidbody other, ref Vector2 minimumTranslationVector )
+		void ProcessCollision(ArcadeRigidbody other, ref Vector2 minimumTranslationVector)
 		{
 			// we compute a response for the two colliding objects. The calculations are based on the relative velocity of the objects
 			// which gets reflected along the collided surface normal. Then a part of the response gets added to each object based on mass.
 			var relativeVelocity = Velocity - other.Velocity;
 
-			CalculateResponseVelocity( ref relativeVelocity, ref minimumTranslationVector, out relativeVelocity );
+			CalculateResponseVelocity(ref relativeVelocity, ref minimumTranslationVector, out relativeVelocity);
 
 			// now we use the masses to linearly scale the response on both rigidbodies
 			var totalInverseMass = _inverseMass + other._inverseMass;
@@ -257,34 +262,34 @@ namespace Nez
 		/// </summary>
 		/// <param name="relativeVelocity">Relative velocity.</param>
 		/// <param name="minimumTranslationVector">Minimum translation vector.</param>
-		void CalculateResponseVelocity( ref Vector2 relativeVelocity, ref Vector2 minimumTranslationVector, out Vector2 responseVelocity )
+		void CalculateResponseVelocity(ref Vector2 relativeVelocity, ref Vector2 minimumTranslationVector,
+		                               out Vector2 responseVelocity)
 		{
 			// first, we get the normalized MTV in the opposite direction: the surface normal
 			var inverseMTV = minimumTranslationVector * -1f;
 			Vector2 normal;
-			Vector2.Normalize( ref inverseMTV, out normal );
+			Vector2.Normalize(ref inverseMTV, out normal);
 
 			// the velocity is decomposed along the normal of the collision and the plane of collision.
 			// The elasticity will affect the response along the normal (normalVelocityComponent) and the friction will affect
 			// the tangential component of the velocity (tangentialVelocityComponent)
 			float n;
-			Vector2.Dot( ref relativeVelocity, ref normal, out n );
+			Vector2.Dot(ref relativeVelocity, ref normal, out n);
 
 			var normalVelocityComponent = normal * n;
 			var tangentialVelocityComponent = relativeVelocity - normalVelocityComponent;
 
-			if( n > 0.0f )
+			if (n > 0.0f)
 				normalVelocityComponent = Vector2.Zero;
 
 			// if the squared magnitude of the tangential component is less than glue then we bump up the friction to the max
 			var coefficientOfFriction = _friction;
-			if( tangentialVelocityComponent.LengthSquared() < _glue )
+			if (tangentialVelocityComponent.LengthSquared() < _glue)
 				coefficientOfFriction = 1.01f;
 
 			// elasticity affects the normal component of the velocity and friction affects the tangential component
-			responseVelocity = -( 1.0f + _elasticity ) * normalVelocityComponent - coefficientOfFriction * tangentialVelocityComponent;
+			responseVelocity = -(1.0f + _elasticity) * normalVelocityComponent -
+			                   coefficientOfFriction * tangentialVelocityComponent;
 		}
-
 	}
 }
-

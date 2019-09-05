@@ -22,4 +22,3 @@ namespace Nez.UI
 		ChildrenOnly
 	}
 }
-

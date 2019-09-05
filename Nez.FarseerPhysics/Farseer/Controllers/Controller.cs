@@ -8,10 +8,10 @@ namespace FarseerPhysics.Controllers
 	[Flags]
 	public enum ControllerType
 	{
-		GravityController = ( 1 << 0 ),
-		VelocityLimitController = ( 1 << 1 ),
-		AbstractForceController = ( 1 << 2 ),
-		BuoyancyController = ( 1 << 3 ),
+		GravityController = (1 << 0),
+		VelocityLimitController = (1 << 1),
+		AbstractForceController = (1 << 2),
+		BuoyancyController = (1 << 3),
 	}
 
 
@@ -23,7 +23,7 @@ namespace FarseerPhysics.Controllers
 		/// Ignores the controller. The controller has no effect on this body.
 		/// </summary>
 		/// <param name="controller">The controller type.</param>
-		public void IgnoreController( ControllerType controller )
+		public void IgnoreController(ControllerType controller)
 		{
 			ControllerFlags |= controller;
 		}
@@ -32,7 +32,7 @@ namespace FarseerPhysics.Controllers
 		/// Restore the controller. The controller affects this body.
 		/// </summary>
 		/// <param name="controller">The controller type.</param>
-		public void RestoreController( ControllerType controller )
+		public void RestoreController(ControllerType controller)
 		{
 			ControllerFlags &= ~controller;
 		}
@@ -44,9 +44,9 @@ namespace FarseerPhysics.Controllers
 		/// <returns>
 		/// 	<c>true</c> if the body has the specified flag; otherwise, <c>false</c>.
 		/// </returns>
-		public bool IsControllerIgnored( ControllerType controller )
+		public bool IsControllerIgnored(ControllerType controller)
 		{
-			return ( ControllerFlags & controller ) == controller;
+			return (ControllerFlags & controller) == controller;
 		}
 	}
 
@@ -58,21 +58,19 @@ namespace FarseerPhysics.Controllers
 
 		ControllerType _type;
 
-		protected Controller( ControllerType controllerType )
+		protected Controller(ControllerType controllerType)
 		{
 			_type = controllerType;
 		}
 
-		public override bool IsActiveOn( Body body )
+		public override bool IsActiveOn(Body body)
 		{
-			if( body.ControllerFilter.IsControllerIgnored( _type ) )
+			if (body.ControllerFilter.IsControllerIgnored(_type))
 				return false;
 
-			return base.IsActiveOn( body );
+			return base.IsActiveOn(body);
 		}
 
-		public abstract void Update( float dt );
-
+		public abstract void Update(float dt);
 	}
-
 }

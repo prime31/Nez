@@ -20,7 +20,7 @@ namespace Nez.AI.UtilityAI
 		float _elapsedTime;
 
 
-		public UtilityAI( T context, Reasoner<T> rootSelector, float updatePeriod = 0.2f )
+		public UtilityAI(T context, Reasoner<T> rootSelector, float updatePeriod = 0.2f)
 		{
 			_rootReasoner = rootSelector;
 			_context = context;
@@ -31,14 +31,13 @@ namespace Nez.AI.UtilityAI
 		public void Tick()
 		{
 			_elapsedTime -= Time.DeltaTime;
-			while( _elapsedTime <= 0 )
+			while (_elapsedTime <= 0)
 			{
 				_elapsedTime += UpdatePeriod;
-				var action = _rootReasoner.Select( _context );
-				if( action != null )
-					action.Execute( _context );
+				var action = _rootReasoner.Select(_context);
+				if (action != null)
+					action.Execute(_context);
 			}
 		}
 	}
 }
-

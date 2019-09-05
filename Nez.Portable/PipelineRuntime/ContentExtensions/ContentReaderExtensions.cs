@@ -9,35 +9,35 @@ namespace Nez.Pipeline.Content
 {
 	internal static class ContentReaderExtensions
 	{
-		public static string GetRelativeAssetPath( this ContentReader contentReader, string relativePath )
+		public static string GetRelativeAssetPath(this ContentReader contentReader, string relativePath)
 		{
 			var assetName = contentReader.AssetName;
-			var assetNodes = assetName.Split( new[] { '/', '\\' }, StringSplitOptions.RemoveEmptyEntries );
-			var relativeNodes = relativePath.Split( new[] { '/', '\\' }, StringSplitOptions.RemoveEmptyEntries );
+			var assetNodes = assetName.Split(new[] {'/', '\\'}, StringSplitOptions.RemoveEmptyEntries);
+			var relativeNodes = relativePath.Split(new[] {'/', '\\'}, StringSplitOptions.RemoveEmptyEntries);
 			var relativeIndex = assetNodes.Length - 1;
 			var newPathNodes = new List<string>();
 
 
-			foreach( var relativeNode in relativeNodes )
+			foreach (var relativeNode in relativeNodes)
 			{
-				if( relativeNode == ".." )
+				if (relativeNode == "..")
 					relativeIndex--;
 				else
-					newPathNodes.Add( relativeNode );
+					newPathNodes.Add(relativeNode);
 			}
 
 			var values = assetNodes
-                .Take( relativeIndex )
-                .Concat( newPathNodes )
-                .ToArray();
+				.Take(relativeIndex)
+				.Concat(newPathNodes)
+				.ToArray();
 
-			return string.Join( "/", values );
+			return string.Join("/", values);
 		}
 
 
-		public static Rectangle ReadRectangle( this ContentReader reader )
+		public static Rectangle ReadRectangle(this ContentReader reader)
 		{
-			return new Rectangle( reader.ReadInt32(), reader.ReadInt32(), reader.ReadInt32(), reader.ReadInt32() );
+			return new Rectangle(reader.ReadInt32(), reader.ReadInt32(), reader.ReadInt32(), reader.ReadInt32());
 		}
 	}
 }

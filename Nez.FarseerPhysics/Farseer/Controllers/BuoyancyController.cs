@@ -51,11 +51,12 @@ namespace FarseerPhysics.Controllers
 		/// <param name="linearDragCoefficient">Linear drag coefficient of the fluid</param>
 		/// <param name="rotationalDragCoefficient">Rotational drag coefficient of the fluid</param>
 		/// <param name="gravity">The direction gravity acts. Buoyancy force will act in opposite direction of gravity.</param>
-		public BuoyancyController( AABB container, float density, float linearDragCoefficient, float rotationalDragCoefficient, Vector2 gravity )
-			: base( ControllerType.BuoyancyController )
+		public BuoyancyController(AABB container, float density, float linearDragCoefficient,
+		                          float rotationalDragCoefficient, Vector2 gravity)
+			: base(ControllerType.BuoyancyController)
 		{
 			this.Container = container;
-			_normal = new Vector2( 0, 1 );
+			_normal = new Vector2(0, 1);
 			this.Density = density;
 			this.LinearDragCoefficient = linearDragCoefficient;
 			AngularDragCoefficient = rotationalDragCoefficient;
@@ -72,21 +73,21 @@ namespace FarseerPhysics.Controllers
 			}
 		}
 
-		public override void Update( float dt )
+		public override void Update(float dt)
 		{
 			_uniqueBodies.Clear();
-			World.QueryAABB( fixture =>
-								 {
-									 if( fixture.Body.IsStatic || !fixture.Body.IsAwake )
-										 return true;
+			World.QueryAABB(fixture =>
+			{
+				if (fixture.Body.IsStatic || !fixture.Body.IsAwake)
+					return true;
 
-									 if( !_uniqueBodies.ContainsKey( fixture.Body.BodyId ) )
-										 _uniqueBodies.Add( fixture.Body.BodyId, fixture.Body );
+				if (!_uniqueBodies.ContainsKey(fixture.Body.BodyId))
+					_uniqueBodies.Add(fixture.Body.BodyId, fixture.Body);
 
-									 return true;
-								 }, ref _container );
+				return true;
+			}, ref _container);
 
-			foreach( KeyValuePair<int, Body> kv in _uniqueBodies )
+			foreach (KeyValuePair<int, Body> kv in _uniqueBodies)
 			{
 				Body body = kv.Value;
 
@@ -95,17 +96,17 @@ namespace FarseerPhysics.Controllers
 				float area = 0;
 				float mass = 0;
 
-				for( int j = 0; j < body.FixtureList.Count; j++ )
+				for (int j = 0; j < body.FixtureList.Count; j++)
 				{
 					Fixture fixture = body.FixtureList[j];
 
-					if( fixture.Shape.ShapeType != ShapeType.Polygon && fixture.Shape.ShapeType != ShapeType.Circle )
+					if (fixture.Shape.ShapeType != ShapeType.Polygon && fixture.Shape.ShapeType != ShapeType.Circle)
 						continue;
 
 					Shape shape = fixture.Shape;
 
 					Vector2 sc;
-					float sarea = shape.ComputeSubmergedArea( ref _normal, _offset, ref body._xf, out sc );
+					float sarea = shape.ComputeSubmergedArea(ref _normal, _offset, ref body._xf, out sc);
 					area += sarea;
 					areac.X += sarea * sc.X;
 					areac.Y += sarea * sc.Y;
@@ -120,22 +121,21 @@ namespace FarseerPhysics.Controllers
 				massc.X /= mass;
 				massc.Y /= mass;
 
-				if( area < Settings.Epsilon )
+				if (area < Settings.Epsilon)
 					continue;
 
 				//Buoyancy
 				var buoyancyForce = -Density * area * _gravity;
-				body.ApplyForce( buoyancyForce, massc );
+				body.ApplyForce(buoyancyForce, massc);
 
 				//Linear drag
-				var dragForce = body.GetLinearVelocityFromWorldPoint( areac ) - Velocity;
+				var dragForce = body.GetLinearVelocityFromWorldPoint(areac) - Velocity;
 				dragForce *= -LinearDragCoefficient * area;
-				body.ApplyForce( dragForce, areac );
+				body.ApplyForce(dragForce, areac);
 
 				//Angular drag
-				body.ApplyTorque( -body.Inertia / body.Mass * area * body.AngularVelocity * AngularDragCoefficient );
+				body.ApplyTorque(-body.Inertia / body.Mass * area * body.AngularVelocity * AngularDragCoefficient);
 			}
 		}
-	
 	}
 }

@@ -14,7 +14,7 @@ namespace Nez.Tweens
 		/// sets the final, tweened value on the object of your choosing.
 		/// </summary>
 		/// <param name="value">Value.</param>
-		void SetTweenedValue( T value );
+		void SetTweenedValue(T value);
 
 
 		T GetTweenedValue();
@@ -27,4 +27,3 @@ namespace Nez.Tweens
 		object GetTargetObject();
 	}
 }
-

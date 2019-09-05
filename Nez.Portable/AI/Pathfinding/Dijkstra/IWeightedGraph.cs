@@ -13,14 +13,13 @@ namespace Nez.AI.Pathfinding
 		/// </summary>
 		/// <returns>The neighbors.</returns>
 		/// <param name="node">Node.</param>
-		IEnumerable<T> GetNeighbors( T node );
+		IEnumerable<T> GetNeighbors(T node);
 
 		/// <summary>
 		/// calculates the cost to get from 'from' to 'to'
 		/// </summary>
 		/// <param name="from">From.</param>
 		/// <param name="to">To.</param>
-		int Cost( T from, T to );
+		int Cost(T from, T to);
 	}
 }
-

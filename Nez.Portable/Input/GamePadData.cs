@@ -24,47 +24,50 @@ namespace Nez
 		float _rumbleTime;
 
 
-		internal GamePadData( PlayerIndex playerIndex )
+		internal GamePadData(PlayerIndex playerIndex)
 		{
 			_playerIndex = playerIndex;
 			_previousState = new GamePadState();
-			_currentState = GamePad.GetState( _playerIndex );
+			_currentState = GamePad.GetState(_playerIndex);
 		}
 
 
 		public void Update()
 		{
 			_previousState = _currentState;
-			_currentState = GamePad.GetState( _playerIndex, DeadZone );
+			_currentState = GamePad.GetState(_playerIndex, DeadZone);
 
 			// check for controller connects/disconnects
-			if( _previousState.IsConnected != _currentState.IsConnected )
+			if (_previousState.IsConnected != _currentState.IsConnected)
 			{
-				var data = new InputEvent {
-					GamePadIndex = (int)_playerIndex
+				var data = new InputEvent
+				{
+					GamePadIndex = (int) _playerIndex
 				};
-				Input.Emitter.Emit( _currentState.IsConnected ? InputEventType.GamePadConnected : InputEventType.GamePadDisconnected, data );
+				Input.Emitter.Emit(
+					_currentState.IsConnected ? InputEventType.GamePadConnected : InputEventType.GamePadDisconnected,
+					data);
 			}
 
-			if( _rumbleTime > 0f )
+			if (_rumbleTime > 0f)
 			{
 				_rumbleTime -= Time.DeltaTime;
-				if( _rumbleTime <= 0f )
-					GamePad.SetVibration( _playerIndex, 0, 0 );
+				if (_rumbleTime <= 0f)
+					GamePad.SetVibration(_playerIndex, 0, 0);
 			}
 		}
 
 
-		public void SetVibration( float left, float right, float duration )
+		public void SetVibration(float left, float right, float duration)
 		{
 			_rumbleTime = duration;
-			GamePad.SetVibration( _playerIndex, left, right );
+			GamePad.SetVibration(_playerIndex, left, right);
 		}
 
 
 		public void StopVibration()
 		{
-			GamePad.SetVibration( _playerIndex, 0, 0 );
+			GamePad.SetVibration(_playerIndex, 0, 0);
 			_rumbleTime = 0f;
 		}
 
@@ -86,9 +89,9 @@ namespace Nez
 		/// </summary>
 		/// <returns><c>true</c>, if button pressed was ised, <c>false</c> otherwise.</returns>
 		/// <param name="button">Button.</param>
-		public bool IsButtonPressed( Buttons button )
+		public bool IsButtonPressed(Buttons button)
 		{
-			return _currentState.IsButtonDown( button ) && !_previousState.IsButtonDown( button );
+			return _currentState.IsButtonDown(button) && !_previousState.IsButtonDown(button);
 		}
 
 
@@ -97,9 +100,9 @@ namespace Nez
 		/// </summary>
 		/// <returns><c>true</c>, if button down was ised, <c>false</c> otherwise.</returns>
 		/// <param name="button">Button.</param>
-		public bool IsButtonDown( Buttons button )
+		public bool IsButtonDown(Buttons button)
 		{
-			return _currentState.IsButtonDown( button );
+			return _currentState.IsButtonDown(button);
 		}
 
 
@@ -108,9 +111,9 @@ namespace Nez
 		/// </summary>
 		/// <returns><c>true</c>, if button released was ised, <c>false</c> otherwise.</returns>
 		/// <param name="button">Button.</param>
-		public bool IsButtonReleased( Buttons button )
+		public bool IsButtonReleased(Buttons button)
 		{
-			return !_currentState.IsButtonDown( button ) && _previousState.IsButtonDown( button );
+			return !_currentState.IsButtonDown(button) && _previousState.IsButtonDown(button);
 		}
 
 		#endregion
@@ -122,20 +125,20 @@ namespace Nez
 		{
 			var res = _currentState.ThumbSticks.Left;
 
-			if( IsLeftStickVerticalInverted )
+			if (IsLeftStickVerticalInverted)
 				res.Y = -res.Y;
 
 			return res;
 		}
 
 
-		public Vector2 GetLeftStick( float deadzone )
+		public Vector2 GetLeftStick(float deadzone)
 		{
 			var res = _currentState.ThumbSticks.Left;
 
-			if( res.LengthSquared() < deadzone * deadzone )
+			if (res.LengthSquared() < deadzone * deadzone)
 				res = Vector2.Zero;
-			else if( IsLeftStickVerticalInverted )
+			else if (IsLeftStickVerticalInverted)
 				res.Y = -res.Y;
 
 			return res;
@@ -146,20 +149,20 @@ namespace Nez
 		{
 			var res = _currentState.ThumbSticks.Right;
 
-			if( IsRightStickVerticalInverted )
+			if (IsRightStickVerticalInverted)
 				res.Y = -res.Y;
 
 			return res;
 		}
 
 
-		public Vector2 GetRightStick( float deadzone )
+		public Vector2 GetRightStick(float deadzone)
 		{
 			var res = _currentState.ThumbSticks.Right;
 
-			if( res.LengthSquared() < deadzone * deadzone )
+			if (res.LengthSquared() < deadzone * deadzone)
 				res = Vector2.Zero;
-			else if( IsRightStickVerticalInverted )
+			else if (IsRightStickVerticalInverted)
 				res.Y = -res.Y;
 
 			return res;
@@ -170,7 +173,7 @@ namespace Nez
 
 		#region Sticks as Buttons
 
-		public bool IsLeftStickLeft( float deadzone = Input.DEFAULT_DEADZONE )
+		public bool IsLeftStickLeft(float deadzone = Input.DEFAULT_DEADZONE)
 		{
 			return _currentState.ThumbSticks.Left.X < -deadzone;
 		}
@@ -181,13 +184,13 @@ namespace Nez
 		/// </summary>
 		/// <returns><c>true</c>, if left stick left pressed was ised, <c>false</c> otherwise.</returns>
 		/// <param name="deadzone">Deadzone.</param>
-		public bool IsLeftStickLeftPressed( float deadzone = Input.DEFAULT_DEADZONE )
+		public bool IsLeftStickLeftPressed(float deadzone = Input.DEFAULT_DEADZONE)
 		{
 			return _currentState.ThumbSticks.Left.X < -deadzone && _previousState.ThumbSticks.Left.X > -deadzone;
 		}
 
 
-		public bool IsLeftStickRight( float deadzone = Input.DEFAULT_DEADZONE )
+		public bool IsLeftStickRight(float deadzone = Input.DEFAULT_DEADZONE)
 		{
 			return _currentState.ThumbSticks.Left.X > deadzone;
 		}
@@ -198,13 +201,13 @@ namespace Nez
 		/// </summary>
 		/// <returns><c>true</c>, if left stick right pressed was ised, <c>false</c> otherwise.</returns>
 		/// <param name="deadzone">Deadzone.</param>
-		public bool IsLeftStickRightPressed( float deadzone = Input.DEFAULT_DEADZONE )
+		public bool IsLeftStickRightPressed(float deadzone = Input.DEFAULT_DEADZONE)
 		{
 			return _currentState.ThumbSticks.Left.X > deadzone && _previousState.ThumbSticks.Left.X < deadzone;
 		}
 
 
-		public bool IsLeftStickUp( float deadzone = Input.DEFAULT_DEADZONE )
+		public bool IsLeftStickUp(float deadzone = Input.DEFAULT_DEADZONE)
 		{
 			return _currentState.ThumbSticks.Left.Y > deadzone;
 		}
@@ -215,13 +218,13 @@ namespace Nez
 		/// </summary>
 		/// <returns><c>true</c>, if left stick up pressed was ised, <c>false</c> otherwise.</returns>
 		/// <param name="deadzone">Deadzone.</param>
-		public bool IsLeftStickUpPressed( float deadzone = Input.DEFAULT_DEADZONE )
+		public bool IsLeftStickUpPressed(float deadzone = Input.DEFAULT_DEADZONE)
 		{
 			return _currentState.ThumbSticks.Left.Y > deadzone && _previousState.ThumbSticks.Left.Y < deadzone;
 		}
 
 
-		public bool IsLeftStickDown( float deadzone = Input.DEFAULT_DEADZONE )
+		public bool IsLeftStickDown(float deadzone = Input.DEFAULT_DEADZONE)
 		{
 			return _currentState.ThumbSticks.Left.Y < -deadzone;
 		}
@@ -232,31 +235,31 @@ namespace Nez
 		/// </summary>
 		/// <returns><c>true</c>, if left stick down pressed was ised, <c>false</c> otherwise.</returns>
 		/// <param name="deadzone">Deadzone.</param>
-		public bool IsLeftStickDownPressed( float deadzone = Input.DEFAULT_DEADZONE )
+		public bool IsLeftStickDownPressed(float deadzone = Input.DEFAULT_DEADZONE)
 		{
 			return _currentState.ThumbSticks.Left.Y < -deadzone && _previousState.ThumbSticks.Left.Y > -deadzone;
 		}
 
 
-		public bool IsRightStickLeft( float deadzone = Input.DEFAULT_DEADZONE )
+		public bool IsRightStickLeft(float deadzone = Input.DEFAULT_DEADZONE)
 		{
 			return _currentState.ThumbSticks.Right.X < -deadzone;
 		}
 
 
-		public bool IsRightStickRight( float deadzone = Input.DEFAULT_DEADZONE )
+		public bool IsRightStickRight(float deadzone = Input.DEFAULT_DEADZONE)
 		{
 			return _currentState.ThumbSticks.Right.X > deadzone;
 		}
 
 
-		public bool IsRightStickUp( float deadzone = Input.DEFAULT_DEADZONE )
+		public bool IsRightStickUp(float deadzone = Input.DEFAULT_DEADZONE)
 		{
 			return _currentState.ThumbSticks.Right.Y > deadzone;
 		}
 
 
-		public bool IsRightStickDown( float deadzone = Input.DEFAULT_DEADZONE )
+		public bool IsRightStickDown(float deadzone = Input.DEFAULT_DEADZONE)
 		{
 			return _currentState.ThumbSticks.Right.Y < -deadzone;
 		}
@@ -282,7 +285,11 @@ namespace Nez
 		/// <value><c>true</c> if dpad left pressed; otherwise, <c>false</c>.</value>
 		public bool DpadLeftPressed
 		{
-			get { return _currentState.DPad.Left == ButtonState.Pressed && _previousState.DPad.Left == ButtonState.Released; }
+			get
+			{
+				return _currentState.DPad.Left == ButtonState.Pressed &&
+				       _previousState.DPad.Left == ButtonState.Released;
+			}
 		}
 
 
@@ -292,7 +299,11 @@ namespace Nez
 		/// <value><c>true</c> if dpad left released; otherwise, <c>false</c>.</value>
 		public bool DpadLeftReleased
 		{
-			get { return _currentState.DPad.Left == ButtonState.Released && _previousState.DPad.Left == ButtonState.Pressed; }
+			get
+			{
+				return _currentState.DPad.Left == ButtonState.Released &&
+				       _previousState.DPad.Left == ButtonState.Pressed;
+			}
 		}
 
 
@@ -312,7 +323,11 @@ namespace Nez
 		/// <value><c>true</c> if dpad left pressed; otherwise, <c>false</c>.</value>
 		public bool DpadRightPressed
 		{
-			get { return _currentState.DPad.Right == ButtonState.Pressed && _previousState.DPad.Right == ButtonState.Released; }
+			get
+			{
+				return _currentState.DPad.Right == ButtonState.Pressed &&
+				       _previousState.DPad.Right == ButtonState.Released;
+			}
 		}
 
 
@@ -322,7 +337,11 @@ namespace Nez
 		/// <value><c>true</c> if dpad left released; otherwise, <c>false</c>.</value>
 		public bool DpadRightReleased
 		{
-			get { return _currentState.DPad.Right == ButtonState.Released && _previousState.DPad.Right == ButtonState.Pressed; }
+			get
+			{
+				return _currentState.DPad.Right == ButtonState.Released &&
+				       _previousState.DPad.Right == ButtonState.Pressed;
+			}
 		}
 
 
@@ -342,7 +361,10 @@ namespace Nez
 		/// <value><c>true</c> if dpad left pressed; otherwise, <c>false</c>.</value>
 		public bool DpadUpPressed
 		{
-			get { return _currentState.DPad.Up == ButtonState.Pressed && _previousState.DPad.Up == ButtonState.Released; }
+			get
+			{
+				return _currentState.DPad.Up == ButtonState.Pressed && _previousState.DPad.Up == ButtonState.Released;
+			}
 		}
 
 
@@ -352,7 +374,10 @@ namespace Nez
 		/// <value><c>true</c> if dpad left released; otherwise, <c>false</c>.</value>
 		public bool DpadUpReleased
 		{
-			get { return _currentState.DPad.Up == ButtonState.Released && _previousState.DPad.Up == ButtonState.Pressed; }
+			get
+			{
+				return _currentState.DPad.Up == ButtonState.Released && _previousState.DPad.Up == ButtonState.Pressed;
+			}
 		}
 
 
@@ -372,7 +397,11 @@ namespace Nez
 		/// <value><c>true</c> if dpad left pressed; otherwise, <c>false</c>.</value>
 		public bool DpadDownPressed
 		{
-			get { return _currentState.DPad.Down == ButtonState.Pressed && _previousState.DPad.Down == ButtonState.Released; }
+			get
+			{
+				return _currentState.DPad.Down == ButtonState.Pressed &&
+				       _previousState.DPad.Down == ButtonState.Released;
+			}
 		}
 
 
@@ -382,7 +411,11 @@ namespace Nez
 		/// <value><c>true</c> if dpad left released; otherwise, <c>false</c>.</value>
 		public bool DpadDownReleased
 		{
-			get { return _currentState.DPad.Down == ButtonState.Released && _previousState.DPad.Down == ButtonState.Pressed; }
+			get
+			{
+				return _currentState.DPad.Down == ButtonState.Released &&
+				       _previousState.DPad.Down == ButtonState.Pressed;
+			}
 		}
 
 		#endregion
@@ -407,7 +440,7 @@ namespace Nez
 		/// </summary>
 		/// <returns><c>true</c>, if left trigger down was ised, <c>false</c> otherwise.</returns>
 		/// <param name="threshold">Threshold.</param>
-		public bool IsLeftTriggerDown( float threshold = 0.2f )
+		public bool IsLeftTriggerDown(float threshold = 0.2f)
 		{
 			return _currentState.Triggers.Left > threshold;
 		}
@@ -418,7 +451,7 @@ namespace Nez
 		/// </summary>
 		/// <returns><c>true</c>, if left trigger pressed was ised, <c>false</c> otherwise.</returns>
 		/// <param name="threshold">Threshold.</param>
-		public bool IsLeftTriggerPressed( float threshold = 0.2f )
+		public bool IsLeftTriggerPressed(float threshold = 0.2f)
 		{
 			return _currentState.Triggers.Left > threshold && _previousState.Triggers.Left < threshold;
 		}
@@ -429,7 +462,7 @@ namespace Nez
 		/// </summary>
 		/// <returns><c>true</c>, if left trigger released was ised, <c>false</c> otherwise.</returns>
 		/// <param name="threshold">Threshold.</param>
-		public bool IsLeftTriggerReleased( float threshold = 0.2f )
+		public bool IsLeftTriggerReleased(float threshold = 0.2f)
 		{
 			return _currentState.Triggers.Left < threshold && _previousState.Triggers.Left > threshold;
 		}
@@ -440,7 +473,7 @@ namespace Nez
 		/// </summary>
 		/// <returns><c>true</c>, if left trigger down was ised, <c>false</c> otherwise.</returns>
 		/// <param name="threshold">Threshold.</param>
-		public bool IsRightTriggerDown( float threshold = 0.2f )
+		public bool IsRightTriggerDown(float threshold = 0.2f)
 		{
 			return _currentState.Triggers.Right > threshold;
 		}
@@ -451,7 +484,7 @@ namespace Nez
 		/// </summary>
 		/// <returns><c>true</c>, if left trigger pressed was ised, <c>false</c> otherwise.</returns>
 		/// <param name="threshold">Threshold.</param>
-		public bool IsRightTriggerPressed( float threshold = 0.2f )
+		public bool IsRightTriggerPressed(float threshold = 0.2f)
 		{
 			return _currentState.Triggers.Right > threshold && _previousState.Triggers.Right < threshold;
 		}
@@ -462,13 +495,11 @@ namespace Nez
 		/// </summary>
 		/// <returns><c>true</c>, if left trigger released was ised, <c>false</c> otherwise.</returns>
 		/// <param name="threshold">Threshold.</param>
-		public bool IsRightTriggerReleased( float threshold = 0.2f )
+		public bool IsRightTriggerReleased(float threshold = 0.2f)
 		{
 			return _currentState.Triggers.Right < threshold && _previousState.Triggers.Right > threshold;
 		}
 
 		#endregion
-
 	}
 }
-

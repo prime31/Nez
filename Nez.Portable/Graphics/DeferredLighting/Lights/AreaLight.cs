@@ -15,7 +15,7 @@ namespace Nez.DeferredLighting
 		/// <summary>
 		/// direction of the light
 		/// </summary>
-		public Vector3 Direction = new Vector3( 500, 500, 50 );
+		public Vector3 Direction = new Vector3(500, 500, 50);
 
 		/// <summary>
 		/// brightness of the light
@@ -25,40 +25,39 @@ namespace Nez.DeferredLighting
 
 		float _areaWidth, _areaHeight;
 
-		public AreaLight() : this( 200, 200 )
-		{}
-
-		public AreaLight( float width, float height )
+		public AreaLight() : this(200, 200)
 		{
-			SetWidth( width ).SetHeight( height );
 		}
 
-		public AreaLight SetWidth( float width )
+		public AreaLight(float width, float height)
+		{
+			SetWidth(width).SetHeight(height);
+		}
+
+		public AreaLight SetWidth(float width)
 		{
 			_areaWidth = width;
 			_areBoundsDirty = true;
 			return this;
 		}
 
-		public AreaLight SetHeight( float height )
+		public AreaLight SetHeight(float height)
 		{
 			_areaHeight = height;
 			_areBoundsDirty = true;
 			return this;
 		}
 
-		public AreaLight SetDirection( Vector3 direction )
+		public AreaLight SetDirection(Vector3 direction)
 		{
 			this.Direction = direction;
 			return this;
 		}
 
-		public AreaLight SetIntensity( float intensity )
+		public AreaLight SetIntensity(float intensity)
 		{
 			this.Intensity = intensity;
 			return this;
 		}
-
 	}
 }
-

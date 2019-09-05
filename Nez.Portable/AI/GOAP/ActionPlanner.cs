@@ -40,11 +40,11 @@ namespace Nez.AI.GOAP
 		public ActionPlanner()
 		{
 			_numConditionNames = 0;
-			for( var i = 0; i < MAX_CONDITIONS; ++i )
+			for (var i = 0; i < MAX_CONDITIONS; ++i)
 			{
 				ConditionNames[i] = null;
-				_preConditions[i] = WorldState.Create( this );
-				_postConditions[i] = WorldState.Create( this );
+				_preConditions[i] = WorldState.Create(this);
+				_postConditions[i] = WorldState.Create(this);
 			}
 		}
 
@@ -55,46 +55,46 @@ namespace Nez.AI.GOAP
 		/// <returns>The world state.</returns>
 		public WorldState CreateWorldState()
 		{
-			return WorldState.Create( this );
+			return WorldState.Create(this);
 		}
 
 
-		public void AddAction( Action action )
+		public void AddAction(Action action)
 		{
-			var actionId = FindActionIndex( action );
-			if( actionId == -1 )
-				throw new KeyNotFoundException( "could not find or create Action" );
+			var actionId = FindActionIndex(action);
+			if (actionId == -1)
+				throw new KeyNotFoundException("could not find or create Action");
 
-			foreach( var preCondition in action._preConditions )
+			foreach (var preCondition in action._preConditions)
 			{
-				var conditionId = FindConditionNameIndex( preCondition.Item1 );
-				if( conditionId == -1 )
-					throw new KeyNotFoundException( "could not find or create conditionName" );
+				var conditionId = FindConditionNameIndex(preCondition.Item1);
+				if (conditionId == -1)
+					throw new KeyNotFoundException("could not find or create conditionName");
 
-				_preConditions[actionId].Set( conditionId, preCondition.Item2 );
+				_preConditions[actionId].Set(conditionId, preCondition.Item2);
 			}
 
-			foreach( var postCondition in action._postConditions )
+			foreach (var postCondition in action._postConditions)
 			{
-				var conditionId = FindConditionNameIndex( postCondition.Item1 );
-				if( conditionId == -1 )
-					throw new KeyNotFoundException( "could not find conditionName" );
+				var conditionId = FindConditionNameIndex(postCondition.Item1);
+				if (conditionId == -1)
+					throw new KeyNotFoundException("could not find conditionName");
 
-				_postConditions[actionId].Set( conditionId, postCondition.Item2 );
+				_postConditions[actionId].Set(conditionId, postCondition.Item2);
 			}
 		}
 
 
-		public Stack<Action> Plan( WorldState startState, WorldState goalState, List<AStarNode> selectedNodes = null )
+		public Stack<Action> Plan(WorldState startState, WorldState goalState, List<AStarNode> selectedNodes = null)
 		{
 			_viableActions.Clear();
-			for( var i = 0; i < _actions.Count; i++ )
+			for (var i = 0; i < _actions.Count; i++)
 			{
-				if( _actions[i].Validate() )
-					_viableActions.Add( _actions[i] );
+				if (_actions[i].Validate())
+					_viableActions.Add(_actions[i]);
 			}
 
-			return AStar.Plan( this, startState, goalState, selectedNodes );
+			return AStar.Plan(this, startState, goalState, selectedNodes);
 		}
 
 
@@ -104,27 +104,27 @@ namespace Nez.AI.GOAP
 		public string Describe()
 		{
 			var sb = new StringBuilder();
-			for( var a = 0; a < _actions.Count; ++a )
+			for (var a = 0; a < _actions.Count; ++a)
 			{
-				sb.AppendLine( _actions[a].GetType().Name );
+				sb.AppendLine(_actions[a].GetType().Name);
 
 				var pre = _preConditions[a];
 				var pst = _postConditions[a];
-				for( var i = 0; i < MAX_CONDITIONS; ++i )
+				for (var i = 0; i < MAX_CONDITIONS; ++i)
 				{
-					if( ( pre.DontCare & ( 1L << i ) ) == 0 )
+					if ((pre.DontCare & (1L << i)) == 0)
 					{
-						bool v = ( pre.Values & ( 1L << i ) ) != 0;
-						sb.AppendFormat( "  {0}=={1}\n", ConditionNames[i], v ? 1 : 0 );
+						bool v = (pre.Values & (1L << i)) != 0;
+						sb.AppendFormat("  {0}=={1}\n", ConditionNames[i], v ? 1 : 0);
 					}
 				}
 
-				for( var i = 0; i < MAX_CONDITIONS; ++i )
+				for (var i = 0; i < MAX_CONDITIONS; ++i)
 				{
-					if( ( pst.DontCare & ( 1L << i ) ) == 0 )
+					if ((pst.DontCare & (1L << i)) == 0)
 					{
-						bool v = ( pst.Values & ( 1L << i ) ) != 0;
-						sb.AppendFormat( "  {0}:={1}\n", ConditionNames[i], v ? 1 : 0 );
+						bool v = (pst.Values & (1L << i)) != 0;
+						sb.AppendFormat("  {0}:={1}\n", ConditionNames[i], v ? 1 : 0);
 					}
 				}
 			}
@@ -133,16 +133,16 @@ namespace Nez.AI.GOAP
 		}
 
 
-		internal int FindConditionNameIndex( string conditionName )
+		internal int FindConditionNameIndex(string conditionName)
 		{
 			int idx;
-			for( idx = 0; idx < _numConditionNames; ++idx )
+			for (idx = 0; idx < _numConditionNames; ++idx)
 			{
-				if( string.Equals( ConditionNames[idx], conditionName ) )
+				if (string.Equals(ConditionNames[idx], conditionName))
 					return idx;
 			}
 
-			if( idx < MAX_CONDITIONS - 1 )
+			if (idx < MAX_CONDITIONS - 1)
 			{
 				ConditionNames[idx] = conditionName;
 				_numConditionNames++;
@@ -153,51 +153,50 @@ namespace Nez.AI.GOAP
 		}
 
 
-		internal int FindActionIndex( Action action )
+		internal int FindActionIndex(Action action)
 		{
-			var idx = _actions.IndexOf( action );
-			if( idx > -1 )
+			var idx = _actions.IndexOf(action);
+			if (idx > -1)
 				return idx;
 
-			_actions.Add( action );
+			_actions.Add(action);
 
 			return _actions.Count - 1;
 		}
 
 
-		internal List<AStarNode> GetPossibleTransitions( WorldState fr )
+		internal List<AStarNode> GetPossibleTransitions(WorldState fr)
 		{
 			var result = ListPool<AStarNode>.Obtain();
-			for( var i = 0; i < _viableActions.Count; ++i )
+			for (var i = 0; i < _viableActions.Count; ++i)
 			{
 				// see if precondition is met
 				var pre = _preConditions[i];
-				var care = ( pre.DontCare ^ -1L );
-				bool met = ( ( pre.Values & care ) == ( fr.Values & care ) );
-				if( met )
+				var care = (pre.DontCare ^ -1L);
+				bool met = ((pre.Values & care) == (fr.Values & care));
+				if (met)
 				{
 					var node = Pool<AStarNode>.Obtain();
 					node.Action = _viableActions[i];
 					node.CostSoFar = _viableActions[i].Cost;
-					node.WorldState = ApplyPostConditions( this, i, fr );
-					result.Add( node );
+					node.WorldState = ApplyPostConditions(this, i, fr);
+					result.Add(node);
 				}
 			}
+
 			return result;
 		}
 
 
-		internal WorldState ApplyPostConditions( ActionPlanner ap, int actionnr, WorldState fr )
+		internal WorldState ApplyPostConditions(ActionPlanner ap, int actionnr, WorldState fr)
 		{
 			var pst = ap._postConditions[actionnr];
 			long unaffected = pst.DontCare;
-			long affected = ( unaffected ^ -1L );
+			long affected = (unaffected ^ -1L);
 
-			fr.Values = ( fr.Values & unaffected ) | ( pst.Values & affected );
+			fr.Values = (fr.Values & unaffected) | (pst.Values & affected);
 			fr.DontCare &= pst.DontCare;
 			return fr;
 		}
-
 	}
 }
-

@@ -36,9 +36,9 @@ namespace FarseerPhysics.Common.Decomposition.CDT
 	/// Forces a triangle edge between two points p and q when triangulating.For example used to enforce
 	/// Polygon Edges during a polygon triangulation.
 	/// </summary>
-    internal class TriangulationConstraint
-    {
-        public TriangulationPoint P;
-        public TriangulationPoint Q;
-    }
+	internal class TriangulationConstraint
+	{
+		public TriangulationPoint P;
+		public TriangulationPoint Q;
+	}
 }

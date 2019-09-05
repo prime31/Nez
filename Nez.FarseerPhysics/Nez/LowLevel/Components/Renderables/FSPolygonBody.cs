@@ -15,41 +15,40 @@ namespace Nez.Farseer
 		protected Vertices _verts;
 
 
-		public FSPolygonBody( Subtexture subtexture, List<Vector2> verts ) : base( subtexture )
-		{			
-			_verts = new Vertices( verts );
+		public FSPolygonBody(Subtexture subtexture, List<Vector2> verts) : base(subtexture)
+		{
+			_verts = new Vertices(verts);
 		}
 
 
 		public override void Initialize()
 		{
 			base.Initialize();
-			Body.AttachPolygon( _verts, 1 );
+			Body.AttachPolygon(_verts, 1);
 		}
 
 
-		public override void OnEntityTransformChanged( Transform.Component comp )
+		public override void OnEntityTransformChanged(Transform.Component comp)
 		{
-			base.OnEntityTransformChanged( comp );
-			if( _ignoreTransformChanges )
+			base.OnEntityTransformChanged(comp);
+			if (_ignoreTransformChanges)
 				return;
 
 			// we only care about scale. base handles pos/rot
-			if( comp == Transform.Component.Scale )
+			if (comp == Transform.Component.Scale)
 			{
 				// fetch the Vertices, clear them, add our originals and scale them
 				var poly = Body.FixtureList[0].Shape as PolygonShape;
 				var verts = poly.Vertices;
 				verts.Clear();
-				verts.AddRange( _verts );
-				verts.Scale( Transform.Scale );
-				poly.SetVerticesNoCopy( verts );
+				verts.AddRange(_verts);
+				verts.Scale(Transform.Scale);
+				poly.SetVerticesNoCopy(verts);
 
 				// wake the body if it is asleep to update collisions
-				if( !Body.IsAwake )
+				if (!Body.IsAwake)
 					Body.IsAwake = true;
 			}
 		}
-
 	}
 }

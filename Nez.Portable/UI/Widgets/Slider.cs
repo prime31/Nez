@@ -26,21 +26,27 @@ namespace Nez.UI
 		/// <param name="stepSize">Step size.</param>
 		/// <param name="vertical">If set to <c>true</c> vertical.</param>
 		/// <param name="background">Background.</param>
-		public Slider( float min, float max, float stepSize, bool vertical, SliderStyle style ) : base( min, max, stepSize, vertical, style )
+		public Slider(float min, float max, float stepSize, bool vertical, SliderStyle style) : base(min, max, stepSize,
+			vertical, style)
 		{
 			ShiftIgnoresSnap = true;
 			this.style = style;
 		}
 
-		public Slider( float min, float max, float stepSize, bool vertical, Skin skin, string styleName = null ) : this( min, max, stepSize, vertical, skin.Get<SliderStyle>(styleName) )
-		{}
+		public Slider(float min, float max, float stepSize, bool vertical, Skin skin, string styleName = null) : this(
+			min, max, stepSize, vertical, skin.Get<SliderStyle>(styleName))
+		{
+		}
 
-		public Slider( Skin skin, string styleName = null ) : this( 0, 1, 0.1f, false, skin.Get<SliderStyle>( styleName ) )
-		{}
+		public Slider(Skin skin, string styleName = null) : this(0, 1, 0.1f, false, skin.Get<SliderStyle>(styleName))
+		{
+		}
 
 		// Leaving this constructor for backwards-compatibility
-		public Slider( Skin skin, string styleName = null, float min = 0, float max = 1, float step = 0.1f ) : this( min, max, step, false, skin.Get<SliderStyle>( styleName ) )
-		{}
+		public Slider(Skin skin, string styleName = null, float min = 0, float max = 1, float step = 0.1f) : this(min,
+			max, step, false, skin.Get<SliderStyle>(styleName))
+		{
+		}
 
 		#region IInputListener
 
@@ -56,35 +62,35 @@ namespace Nez.UI
 		}
 
 
-		bool IInputListener.OnMousePressed( Vector2 mousePos )
+		bool IInputListener.OnMousePressed(Vector2 mousePos)
 		{
-			CalculatePositionAndValue( mousePos );
+			CalculatePositionAndValue(mousePos);
 			_mouseDown = true;
 			return true;
 		}
 
 
-		void IInputListener.OnMouseMoved( Vector2 mousePos )
+		void IInputListener.OnMouseMoved(Vector2 mousePos)
 		{
-			if( DistanceOutsideBoundsToPoint( mousePos ) > SliderBoundaryThreshold )
+			if (DistanceOutsideBoundsToPoint(mousePos) > SliderBoundaryThreshold)
 			{
 				_mouseDown = _mouseOver = false;
-				GetStage().RemoveInputFocusListener( this );
+				GetStage().RemoveInputFocusListener(this);
 			}
 			else
 			{
-				CalculatePositionAndValue( mousePos );
+				CalculatePositionAndValue(mousePos);
 			}
 		}
 
 
-		void IInputListener.OnMouseUp( Vector2 mousePos )
+		void IInputListener.OnMouseUp(Vector2 mousePos)
 		{
 			_mouseDown = false;
 		}
 
 
-		bool IInputListener.OnMouseScrolled( int mouseWheelDelta )
+		bool IInputListener.OnMouseScrolled(int mouseWheelDelta)
 		{
 			return false;
 		}
@@ -101,7 +107,8 @@ namespace Nez.UI
 		public IGamepadFocusable GamepadRightElement { get; set; }
 
 
-		public void EnableExplicitFocusableControl( IGamepadFocusable upEle, IGamepadFocusable downEle, IGamepadFocusable leftEle, IGamepadFocusable rightEle )
+		public void EnableExplicitFocusableControl(IGamepadFocusable upEle, IGamepadFocusable downEle,
+		                                           IGamepadFocusable leftEle, IGamepadFocusable rightEle)
 		{
 			ShouldUseExplicitFocusableControl = true;
 			GamepadUpElement = upEle;
@@ -111,9 +118,9 @@ namespace Nez.UI
 		}
 
 
-		void IGamepadFocusable.OnUnhandledDirectionPressed( Direction direction )
+		void IGamepadFocusable.OnUnhandledDirectionPressed(Direction direction)
 		{
-			OnUnhandledDirectionPressed( direction );
+			OnUnhandledDirectionPressed(direction);
 		}
 
 
@@ -145,12 +152,12 @@ namespace Nez.UI
 
 		#region overrideable focus handlers
 
-		protected virtual void OnUnhandledDirectionPressed( Direction direction )
+		protected virtual void OnUnhandledDirectionPressed(Direction direction)
 		{
-			if( direction == Direction.Up || direction == Direction.Right )
-				SetValue( _value + StepSize );
+			if (direction == Direction.Up || direction == Direction.Right)
+				SetValue(_value + StepSize);
 			else
-				SetValue( _value - StepSize );
+				SetValue(_value - StepSize);
 		}
 
 
@@ -180,11 +187,11 @@ namespace Nez.UI
 		#endregion
 
 
-		public Slider SetStyle( SliderStyle style )
+		public Slider SetStyle(SliderStyle style)
 		{
-			Insist.IsTrue( style is SliderStyle, "style must be a SliderStyle" );
+			Insist.IsTrue(style is SliderStyle, "style must be a SliderStyle");
 
-			base.SetStyle( style );
+			base.SetStyle(style);
 			this.style = style;
 			return this;
 		}
@@ -208,46 +215,45 @@ namespace Nez.UI
 
 		protected override IDrawable GetKnobDrawable()
 		{
-			if( Disabled && style.DisabledKnob != null )
+			if (Disabled && style.DisabledKnob != null)
 				return style.DisabledKnob;
-			
-			if( IsDragging() && style.KnobDown != null )
+
+			if (IsDragging() && style.KnobDown != null)
 				return style.KnobDown;
 
-			if( _mouseOver && style.KnobOver != null )
+			if (_mouseOver && style.KnobOver != null)
 				return style.KnobOver;
 
 			return style.Knob;
 		}
 
 
-		void CalculatePositionAndValue( Vector2 mousePos )
+		void CalculatePositionAndValue(Vector2 mousePos)
 		{
 			var knob = GetKnobDrawable();
 
 			float value;
-			if( _vertical )
+			if (_vertical)
 			{
 				var height = this.height - style.Background.TopHeight - style.Background.BottomHeight;
 				var knobHeight = knob == null ? 0 : knob.MinHeight;
 				position = mousePos.Y - style.Background.BottomHeight - knobHeight * 0.5f;
-				value = Min + ( Max - Min ) * ( position / ( height - knobHeight ) );
-				position = Math.Max( 0, position );
-				position = Math.Min( height - knobHeight, position );
+				value = Min + (Max - Min) * (position / (height - knobHeight));
+				position = Math.Max(0, position);
+				position = Math.Min(height - knobHeight, position);
 			}
 			else
 			{
 				var width = this.width - style.Background.LeftWidth - style.Background.RightWidth;
 				var knobWidth = knob == null ? 0 : knob.MinWidth;
 				position = mousePos.X - style.Background.LeftWidth - knobWidth * 0.5f;
-				value = Min + ( Max - Min ) * ( position / ( width - knobWidth ) );
-				position = Math.Max( 0, position );
-				position = Math.Min( width - knobWidth, position );
+				value = Min + (Max - Min) * (position / (width - knobWidth));
+				position = Math.Max(0, position);
+				position = Math.Min(width - knobWidth, position);
 			}
-				
-			SetValue( value );
-		}
 
+			SetValue(value);
+		}
 	}
 
 
@@ -262,20 +268,21 @@ namespace Nez.UI
 		}
 
 
-		public SliderStyle( IDrawable background, IDrawable knob ) : base( background, knob )
+		public SliderStyle(IDrawable background, IDrawable knob) : base(background, knob)
 		{
 		}
 
 
-		public new static SliderStyle Create( Color backgroundColor, Color knobColor )
+		public new static SliderStyle Create(Color backgroundColor, Color knobColor)
 		{
-			var background = new PrimitiveDrawable( backgroundColor );
+			var background = new PrimitiveDrawable(backgroundColor);
 			background.MinWidth = background.MinHeight = 10;
 
-			var knob = new PrimitiveDrawable( knobColor );
+			var knob = new PrimitiveDrawable(knobColor);
 			knob.MinWidth = knob.MinHeight = 20;
 
-			return new SliderStyle {
+			return new SliderStyle
+			{
 				Background = background,
 				Knob = knob
 			};
@@ -284,7 +291,8 @@ namespace Nez.UI
 
 		public new SliderStyle Clone()
 		{
-			return new SliderStyle {
+			return new SliderStyle
+			{
 				Background = Background,
 				DisabledBackground = DisabledBackground,
 				Knob = Knob,
@@ -293,11 +301,10 @@ namespace Nez.UI
 				KnobAfter = KnobAfter,
 				DisabledKnobBefore = DisabledKnobBefore,
 				DisabledKnobAfter = DisabledKnobAfter,
-					
+
 				KnobOver = KnobOver,
 				KnobDown = KnobDown
 			};
 		}
 	}
 }
-

@@ -11,7 +11,7 @@ namespace Nez.Spatial
 	/// <typeparam name="T">Any object implementing IQuadStorable.</typeparam>
 	public class QuadTree<T> : ICollection<T> where T : IQuadTreeStorable
 	{
-		readonly Dictionary<T,QuadTreeObject<T>> _wrappedDictionary = new Dictionary<T,QuadTreeObject<T>>();
+		readonly Dictionary<T, QuadTreeObject<T>> _wrappedDictionary = new Dictionary<T, QuadTreeObject<T>>();
 
 		// Alternate method, use Parallel arrays
 		// The root of this quad tree
@@ -22,9 +22,9 @@ namespace Nez.Spatial
 		/// Creates a QuadTree for the specified area.
 		/// </summary>
 		/// <param name="rect">The area this QuadTree object will encompass.</param>
-		public QuadTree( Rectangle rect )
+		public QuadTree(Rectangle rect)
 		{
-			_quadTreeRoot = new QuadTreeNode<T>( rect );
+			_quadTreeRoot = new QuadTreeNode<T>(rect);
 		}
 
 
@@ -35,9 +35,9 @@ namespace Nez.Spatial
 		/// <param name="y">The top-right position of the area rectangle.</param>
 		/// <param name="width">The width of the area rectangle.</param>
 		/// <param name="height">The height of the area rectangle.</param>
-		public QuadTree( int x, int y, int width, int height )
+		public QuadTree(int x, int y, int width, int height)
 		{
-			_quadTreeRoot = new QuadTreeNode<T>( new Rectangle( x, y, width, height ) );
+			_quadTreeRoot = new QuadTreeNode<T>(new Rectangle(x, y, width, height));
 		}
 
 
@@ -54,9 +54,9 @@ namespace Nez.Spatial
 		/// Get the objects in this tree that intersect with the specified rectangle.
 		/// </summary>
 		/// <param name="rect">The rectangle to find objects in.</param>
-		public List<T> GetObjects( Rectangle rect )
+		public List<T> GetObjects(Rectangle rect)
 		{
-			return _quadTreeRoot.GetObjects( rect );
+			return _quadTreeRoot.GetObjects(rect);
 		}
 
 
@@ -65,9 +65,9 @@ namespace Nez.Spatial
 		/// </summary>
 		/// <param name="rect">The rectangle to find objects in.</param>
 		/// <param name="results">A reference to a list that will be populated with the results.</param>
-		public void GetObjects( Rectangle rect, ref List<T> results )
+		public void GetObjects(Rectangle rect, ref List<T> results)
 		{
-			_quadTreeRoot.GetObjects( rect, ref results );
+			_quadTreeRoot.GetObjects(rect, ref results);
 		}
 
 
@@ -76,7 +76,7 @@ namespace Nez.Spatial
 		/// </summary>
 		public List<T> GetAllObjects()
 		{
-			return new List<T>( _wrappedDictionary.Keys );
+			return new List<T>(_wrappedDictionary.Keys);
 		}
 
 
@@ -84,44 +84,45 @@ namespace Nez.Spatial
 		/// Moves the object in the tree
 		/// </summary>
 		/// <param name="item">The item that has moved</param>
-		public bool Move( T item )
+		public bool Move(T item)
 		{
-			if( Contains( item ) )
+			if (Contains(item))
 			{
-				_quadTreeRoot.Move( _wrappedDictionary[item] );
+				_quadTreeRoot.Move(_wrappedDictionary[item]);
 				return true;
 			}
+
 			return false;
 		}
 
 
-		public void DebugRender( Graphics graphics )
+		public void DebugRender(Graphics graphics)
 		{
-			DebugRenderNode( graphics, _quadTreeRoot );
+			DebugRenderNode(graphics, _quadTreeRoot);
 
-			foreach( var ele in this )
+			foreach (var ele in this)
 			{
-				graphics.Batcher.DrawHollowRect( ele.Bounds, Debug.Colors.ColliderBounds, Debug.Size.LineSizeMultiplier );
+				graphics.Batcher.DrawHollowRect(ele.Bounds, Debug.Colors.ColliderBounds, Debug.Size.LineSizeMultiplier);
 			}
 		}
 
 
-		public void DebugRenderNode( Graphics graphics, QuadTreeNode<T> node )
+		public void DebugRenderNode(Graphics graphics, QuadTreeNode<T> node)
 		{
-			if( node.IsEmptyLeaf )
-				graphics.Batcher.DrawHollowRect( node.QuadRect, Color.Red * 0.5f, Debug.Size.LineSizeMultiplier );
-			
-			if( node.TopLeftChild != null )
-				DebugRenderNode( graphics, node.TopLeftChild );
+			if (node.IsEmptyLeaf)
+				graphics.Batcher.DrawHollowRect(node.QuadRect, Color.Red * 0.5f, Debug.Size.LineSizeMultiplier);
 
-			if( node.TopRightChild != null )
-				DebugRenderNode( graphics, node.TopRightChild );
+			if (node.TopLeftChild != null)
+				DebugRenderNode(graphics, node.TopLeftChild);
 
-			if( node.BottomLeftChild != null )
-				DebugRenderNode( graphics, node.BottomLeftChild );
+			if (node.TopRightChild != null)
+				DebugRenderNode(graphics, node.TopRightChild);
 
-			if( node.BottomRightChild != null )
-				DebugRenderNode( graphics, node.BottomRightChild );
+			if (node.BottomLeftChild != null)
+				DebugRenderNode(graphics, node.BottomLeftChild);
+
+			if (node.BottomRightChild != null)
+				DebugRenderNode(graphics, node.BottomRightChild);
 		}
 
 
@@ -142,11 +143,11 @@ namespace Nez.Spatial
 		///
 		///<param name="item">The object to add to the <see cref="T:System.Collections.Generic.ICollection`1" />.</param>
 		///<exception cref="T:System.NotSupportedException">The <see cref="T:System.Collections.Generic.ICollection`1" /> is read-only.</exception>
-		public void Add( T item )
+		public void Add(T item)
 		{
-			var wrappedObject = new QuadTreeObject<T>( item );
-			_wrappedDictionary.Add( item, wrappedObject );
-			_quadTreeRoot.Insert( wrappedObject );
+			var wrappedObject = new QuadTreeObject<T>(item);
+			_wrappedDictionary.Add(item, wrappedObject);
+			_quadTreeRoot.Insert(wrappedObject);
 		}
 
 
@@ -171,9 +172,9 @@ namespace Nez.Spatial
 		///</returns>
 		///
 		///<param name="item">The object to locate in the <see cref="T:System.Collections.Generic.ICollection`1" />.</param>
-		public bool Contains( T item )
+		public bool Contains(T item)
 		{
-			return _wrappedDictionary.ContainsKey( item );
+			return _wrappedDictionary.ContainsKey(item);
 		}
 
 
@@ -184,9 +185,9 @@ namespace Nez.Spatial
 		///<param name="arrayIndex">The zero-based index in <paramref name="array" /> at which copying begins.</param>
 		///<exception cref="T:System.ArgumentNullException"><paramref name="array" /> is null.</exception>
 		///<exception cref="T:System.ArgumentOutOfRangeException"><paramref name="arrayIndex" /> is less than 0.</exception>
-		public void CopyTo( T[] array, int arrayIndex )
+		public void CopyTo(T[] array, int arrayIndex)
 		{
-			_wrappedDictionary.Keys.CopyTo( array, arrayIndex );
+			_wrappedDictionary.Keys.CopyTo(array, arrayIndex);
 		}
 
 
@@ -224,12 +225,12 @@ namespace Nez.Spatial
 		///</returns>
 		///<param name="item">The object to remove from the <see cref="T:System.Collections.Generic.ICollection`1" />.</param>
 		///<exception cref="T:System.NotSupportedException">The <see cref="T:System.Collections.Generic.ICollection`1" /> is read-only.</exception>
-		public bool Remove( T item )
+		public bool Remove(T item)
 		{
-			if( Contains( item ) )
+			if (Contains(item))
 			{
-				_quadTreeRoot.Delete( _wrappedDictionary[item], true );
-				_wrappedDictionary.Remove( item );
+				_quadTreeRoot.Delete(_wrappedDictionary[item], true);
+				_wrappedDictionary.Remove(item);
 				return true;
 			}
 			else
@@ -271,7 +272,5 @@ namespace Nez.Spatial
 		}
 
 		#endregion
-	
 	}
-
 }

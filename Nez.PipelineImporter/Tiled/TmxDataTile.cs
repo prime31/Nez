@@ -7,17 +7,15 @@ namespace Nez.TiledMaps
 	{
 		public TmxDataTile()
 		{
-			
 		}
-		
-		public TmxDataTile( uint gid )
+
+		public TmxDataTile(uint gid)
 		{
 			this.Gid = gid;
 		}
 
 
-		[XmlAttribute( AttributeName = "gid" )]
-		public uint Gid;
+		[XmlAttribute(AttributeName = "gid")] public uint Gid;
 		public bool FlippedHorizontally;
 		public bool FlippedVertically;
 		public bool FlippedDiagonally;

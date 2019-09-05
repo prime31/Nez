@@ -23,13 +23,14 @@ namespace FarseerPhysics.Controllers
 		public List<Vector2> Points = new List<Vector2>();
 
 
-		public GravityController( float strength ) : base( ControllerType.GravityController )
+		public GravityController(float strength) : base(ControllerType.GravityController)
 		{
 			this.Strength = strength;
 			MaxRadius = float.MaxValue;
 		}
 
-		public GravityController( float strength, float maxRadius, float minRadius ) : base( ControllerType.GravityController )
+		public GravityController(float strength, float maxRadius, float minRadius) : base(ControllerType
+			.GravityController)
 		{
 			this.MinRadius = minRadius;
 			this.MaxRadius = maxRadius;
@@ -39,71 +40,71 @@ namespace FarseerPhysics.Controllers
 			this.Bodies = new List<Body>();
 		}
 
-		public override void Update( float dt )
+		public override void Update(float dt)
 		{
 			var f = Vector2.Zero;
 
-			foreach( var worldBody in World.BodyList )
+			foreach (var worldBody in World.BodyList)
 			{
-				if( !IsActiveOn( worldBody ) )
+				if (!IsActiveOn(worldBody))
 					continue;
 
-				foreach( Body controllerBody in Bodies )
+				foreach (Body controllerBody in Bodies)
 				{
-					if( worldBody == controllerBody || ( worldBody.IsStatic && controllerBody.IsStatic ) || !controllerBody.Enabled )
+					if (worldBody == controllerBody || (worldBody.IsStatic && controllerBody.IsStatic) ||
+					    !controllerBody.Enabled)
 						continue;
 
 					var d = controllerBody.Position - worldBody.Position;
 					var r2 = d.LengthSquared();
 
-					if( r2 <= Settings.Epsilon || r2 > MaxRadius * MaxRadius || r2 < MinRadius * MinRadius )
+					if (r2 <= Settings.Epsilon || r2 > MaxRadius * MaxRadius || r2 < MinRadius * MinRadius)
 						continue;
 
-					switch( GravityType )
+					switch (GravityType)
 					{
 						case GravityType.DistanceSquared:
 							f = Strength / r2 * worldBody.Mass * controllerBody.Mass * d;
 							break;
 						case GravityType.Linear:
-							f = Strength / (float)Math.Sqrt( r2 ) * worldBody.Mass * controllerBody.Mass * d;
+							f = Strength / (float) Math.Sqrt(r2) * worldBody.Mass * controllerBody.Mass * d;
 							break;
 					}
 
-					worldBody.ApplyForce( ref f );
+					worldBody.ApplyForce(ref f);
 				}
 
-				foreach( Vector2 point in Points )
+				foreach (Vector2 point in Points)
 				{
 					var d = point - worldBody.Position;
 					var r2 = d.LengthSquared();
 
-					if( r2 <= Settings.Epsilon || r2 > MaxRadius * MaxRadius || r2 < MinRadius * MinRadius )
+					if (r2 <= Settings.Epsilon || r2 > MaxRadius * MaxRadius || r2 < MinRadius * MinRadius)
 						continue;
 
-					switch( GravityType )
+					switch (GravityType)
 					{
 						case GravityType.DistanceSquared:
 							f = Strength / r2 * worldBody.Mass * d;
 							break;
 						case GravityType.Linear:
-							f = Strength / (float)Math.Sqrt( r2 ) * worldBody.Mass * d;
+							f = Strength / (float) Math.Sqrt(r2) * worldBody.Mass * d;
 							break;
 					}
 
-					worldBody.ApplyForce( ref f );
+					worldBody.ApplyForce(ref f);
 				}
 			}
 		}
 
-		public void AddBody( Body body )
+		public void AddBody(Body body)
 		{
-			Bodies.Add( body );
+			Bodies.Add(body);
 		}
 
-		public void AddPoint( Vector2 point )
+		public void AddPoint(Vector2 point)
 		{
-			Points.Add( point );
+			Points.Add(point);
 		}
-
 	}
 }

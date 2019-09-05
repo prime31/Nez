@@ -49,7 +49,7 @@ namespace Nez
 		public static uint FrameCount;
 
 
-		internal static void Update( float dt )
+		internal static void Update(float dt)
 		{
 			TotalTime += dt;
 			DeltaTime = dt * TimeScale;
@@ -70,13 +70,11 @@ namespace Nez
 		/// Allows to check in intervals. Should only be used with interval values above deltaTime,
 		/// otherwise it will always return true.
 		/// </summary>
-		[MethodImpl( MethodImplOptions.AggressiveInlining )]
-		public static bool CheckEvery( float interval )
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public static bool CheckEvery(float interval)
 		{
 			// we subtract deltaTime since timeSinceSceneLoad already includes this update ticks deltaTime
-			return (int)( TimeSinceSceneLoad / interval ) > (int)( ( TimeSinceSceneLoad - DeltaTime ) / interval );
+			return (int) (TimeSinceSceneLoad / interval) > (int) ((TimeSinceSceneLoad - DeltaTime) / interval);
 		}
-
 	}
 }
-

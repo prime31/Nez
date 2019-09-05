@@ -11,24 +11,24 @@ namespace Nez.AI.Pathfinding
 	/// </summary>
 	public class WeightedGridGraph : IWeightedGraph<Point>
 	{
-		public static readonly Point[] CARDINAL_DIRS = new []
+		public static readonly Point[] CARDINAL_DIRS = new[]
 		{
-			new Point( 1, 0 ),
-			new Point( 0, -1 ),
-			new Point( -1, 0 ),
-			new Point( 0, 1 )
+			new Point(1, 0),
+			new Point(0, -1),
+			new Point(-1, 0),
+			new Point(0, 1)
 		};
 
-		static readonly Point[] COMPASS_DIRS = new []
+		static readonly Point[] COMPASS_DIRS = new[]
 		{
-			new Point( 1, 0 ),
-			new Point( 1, -1 ),
-			new Point( 0, -1 ),
-			new Point( -1, -1 ),
-			new Point( -1, 0 ),
-			new Point( -1, 1 ),
-			new Point( 0, 1 ),
-			new Point( 1, 1 ),
+			new Point(1, 0),
+			new Point(1, -1),
+			new Point(0, -1),
+			new Point(-1, -1),
+			new Point(-1, 0),
+			new Point(-1, 1),
+			new Point(0, 1),
+			new Point(1, 1),
 		};
 
 		public HashSet<Point> Walls = new HashSet<Point>();
@@ -38,10 +38,10 @@ namespace Nez.AI.Pathfinding
 
 		int _width, _height;
 		Point[] _dirs;
-		List<Point> _neighbors = new List<Point>( 4 );
+		List<Point> _neighbors = new List<Point>(4);
 
 
-		public WeightedGridGraph( int width, int height, bool allowDiagonalSearch = false )
+		public WeightedGridGraph(int width, int height, bool allowDiagonalSearch = false)
 		{
 			_width = width;
 			_height = height;
@@ -53,18 +53,18 @@ namespace Nez.AI.Pathfinding
 		/// creates a WeightedGridGraph from a TiledTileLayer. Present tile are walls and empty tiles are passable.
 		/// </summary>
 		/// <param name="tiledLayer">Tiled layer.</param>
-		public WeightedGridGraph( TiledTileLayer tiledLayer )
+		public WeightedGridGraph(TiledTileLayer tiledLayer)
 		{
 			_width = tiledLayer.Width;
 			_height = tiledLayer.Height;
 			_dirs = CARDINAL_DIRS;
 
-			for( var y = 0; y < tiledLayer.TiledMap.Height; y++ )
+			for (var y = 0; y < tiledLayer.TiledMap.Height; y++)
 			{
-				for( var x = 0; x < tiledLayer.TiledMap.Width; x++ )
+				for (var x = 0; x < tiledLayer.TiledMap.Width; x++)
 				{
-					if( tiledLayer.GetTile( x, y ) != null )
-						Walls.Add( new Point( x, y ) );
+					if (tiledLayer.GetTile(x, y) != null)
+						Walls.Add(new Point(x, y));
 				}
 			}
 		}
@@ -75,7 +75,7 @@ namespace Nez.AI.Pathfinding
 		/// </summary>
 		/// <returns><c>true</c>, if node in bounds was ised, <c>false</c> otherwise.</returns>
 		/// <param name="node">Node.</param>
-		bool IsNodeInBounds( Point node )
+		bool IsNodeInBounds(Point node)
 		{
 			return 0 <= node.X && node.X < _width && 0 <= node.Y && node.Y < _height;
 		}
@@ -86,9 +86,9 @@ namespace Nez.AI.Pathfinding
 		/// </summary>
 		/// <returns><c>true</c>, if node passable was ised, <c>false</c> otherwise.</returns>
 		/// <param name="node">Node.</param>
-		public bool IsNodePassable( Point node )
+		public bool IsNodePassable(Point node)
 		{
-			return !Walls.Contains( node );
+			return !Walls.Contains(node);
 		}
 
 
@@ -97,36 +97,34 @@ namespace Nez.AI.Pathfinding
 		/// </summary>
 		/// <param name="start">Start.</param>
 		/// <param name="goal">Goal.</param>
-		public List<Point> Search( Point start, Point goal )
+		public List<Point> Search(Point start, Point goal)
 		{
-			return WeightedPathfinder.Search( this, start, goal );
+			return WeightedPathfinder.Search(this, start, goal);
 		}
 
 
 		#region IWeightedGraph implementation
 
-		IEnumerable<Point> IWeightedGraph<Point>.GetNeighbors( Point node )
+		IEnumerable<Point> IWeightedGraph<Point>.GetNeighbors(Point node)
 		{
 			_neighbors.Clear();
 
-			foreach( var dir in _dirs )
+			foreach (var dir in _dirs)
 			{
-				var next = new Point( node.X + dir.X, node.Y + dir.Y );
-				if( IsNodeInBounds( next ) && IsNodePassable( next ) )
-					_neighbors.Add( next );
+				var next = new Point(node.X + dir.X, node.Y + dir.Y);
+				if (IsNodeInBounds(next) && IsNodePassable(next))
+					_neighbors.Add(next);
 			}
 
 			return _neighbors;
 		}
 
 
-		int IWeightedGraph<Point>.Cost( Point from, Point to )
+		int IWeightedGraph<Point>.Cost(Point from, Point to)
 		{
-			return WeightedNodes.Contains( to ) ? WeightedNodeWeight : DefaultWeight;
+			return WeightedNodes.Contains(to) ? WeightedNodeWeight : DefaultWeight;
 		}
 
 		#endregion
-
 	}
 }
-

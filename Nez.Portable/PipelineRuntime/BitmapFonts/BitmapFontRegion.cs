@@ -22,7 +22,7 @@ namespace Nez.BitmapFonts
 		}
 
 
-		public BitmapFontRegion( Subtexture textureRegion, char character, int xOffset, int yOffset, int xAdvance )
+		public BitmapFontRegion(Subtexture textureRegion, char character, int xOffset, int yOffset, int xAdvance)
 		{
 			this.Subtexture = textureRegion;
 			this.Character = character;
@@ -30,6 +30,5 @@ namespace Nez.BitmapFonts
 			this.YOffset = yOffset;
 			this.XAdvance = xAdvance;
 		}
-
 	}
 }

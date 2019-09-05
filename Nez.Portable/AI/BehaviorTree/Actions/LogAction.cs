@@ -19,21 +19,20 @@ namespace Nez.AI.BehaviorTrees
 		public bool IsError;
 
 
-		public LogAction( string text )
+		public LogAction(string text)
 		{
 			this.Text = text;
 		}
 
 
-		public override TaskStatus Update( T context )
+		public override TaskStatus Update(T context)
 		{
-			if( IsError )
-				Debug.Error( Text );
+			if (IsError)
+				Debug.Error(Text);
 			else
-				Debug.Log( Text );
+				Debug.Log(Text);
 
 			return TaskStatus.Success;
 		}
 	}
 }
-

@@ -41,7 +41,7 @@ namespace Nez
 		internal DebugDrawType drawType;
 
 
-		public DebugDrawItem( Vector2 start, Vector2 end, Color color, float duration )
+		public DebugDrawItem(Vector2 start, Vector2 end, Color color, float duration)
 		{
 			this.Start = start;
 			this.End = end;
@@ -51,7 +51,7 @@ namespace Nez
 		}
 
 
-		public DebugDrawItem( Rectangle rectangle, Color color, float duration )
+		public DebugDrawItem(Rectangle rectangle, Color color, float duration)
 		{
 			this.Rectangle = rectangle;
 			this.Color = color;
@@ -60,7 +60,7 @@ namespace Nez
 		}
 
 
-		public DebugDrawItem( float x, float y, int size, Color color, float duration )
+		public DebugDrawItem(float x, float y, int size, Color color, float duration)
 		{
 			this.X = x;
 			this.Y = y;
@@ -71,7 +71,8 @@ namespace Nez
 		}
 
 
-		public DebugDrawItem( BitmapFont bitmapFont, String text, Vector2 position, Color color, float duration, float scale )
+		public DebugDrawItem(BitmapFont bitmapFont, String text, Vector2 position, Color color, float duration,
+		                     float scale)
 		{
 			this.BitmapFont = bitmapFont;
 			this.Text = text;
@@ -83,7 +84,8 @@ namespace Nez
 		}
 
 
-		public DebugDrawItem( NezSpriteFont spriteFont, String text, Vector2 position, Color color, float duration, float scale )
+		public DebugDrawItem(NezSpriteFont spriteFont, String text, Vector2 position, Color color, float duration,
+		                     float scale)
 		{
 			this.SpriteFont = spriteFont;
 			this.Text = text;
@@ -95,7 +97,7 @@ namespace Nez
 		}
 
 
-		public DebugDrawItem( string text, Color color, float duration, float scale )
+		public DebugDrawItem(string text, Color color, float duration, float scale)
 		{
 			BitmapFont = Graphics.Instance.BitmapFont;
 			this.Text = text;
@@ -109,27 +111,30 @@ namespace Nez
 		/// <summary>
 		/// returns true if we are done with this debug draw item
 		/// </summary>
-		public bool Draw( Graphics graphics )
+		public bool Draw(Graphics graphics)
 		{
-			switch( drawType )
+			switch (drawType)
 			{
 				case DebugDrawType.Line:
-					graphics.Batcher.DrawLine( Start, End, Color );
+					graphics.Batcher.DrawLine(Start, End, Color);
 					break;
 				case DebugDrawType.HollowRectangle:
-					graphics.Batcher.DrawHollowRect( Rectangle, Color );
+					graphics.Batcher.DrawHollowRect(Rectangle, Color);
 					break;
 				case DebugDrawType.Pixel:
-					graphics.Batcher.DrawPixel( X, Y, Color, Size );
+					graphics.Batcher.DrawPixel(X, Y, Color, Size);
 					break;
 				case DebugDrawType.BitmapFontText:
-					graphics.Batcher.DrawString( BitmapFont, Text, Position, Color, 0f, Vector2.Zero, Scale, SpriteEffects.None, 0f );
+					graphics.Batcher.DrawString(BitmapFont, Text, Position, Color, 0f, Vector2.Zero, Scale,
+						SpriteEffects.None, 0f);
 					break;
 				case DebugDrawType.SpriteFontText:
-					graphics.Batcher.DrawString( SpriteFont, Text, Position, Color, 0f, Vector2.Zero, new Vector2( Scale ), SpriteEffects.None, 0f );
+					graphics.Batcher.DrawString(SpriteFont, Text, Position, Color, 0f, Vector2.Zero, new Vector2(Scale),
+						SpriteEffects.None, 0f);
 					break;
 				case DebugDrawType.ConsoleText:
-					graphics.Batcher.DrawString( BitmapFont, Text, Position, Color, 0f, Vector2.Zero, Scale, SpriteEffects.None, 0f );
+					graphics.Batcher.DrawString(BitmapFont, Text, Position, Color, 0f, Vector2.Zero, Scale,
+						SpriteEffects.None, 0f);
 					break;
 			}
 
@@ -141,24 +146,22 @@ namespace Nez
 
 		public float GetHeight()
 		{
-			switch( drawType )
+			switch (drawType)
 			{
 				case DebugDrawType.Line:
-					return ( End - Start ).Y;
+					return (End - Start).Y;
 				case DebugDrawType.HollowRectangle:
 					return Rectangle.Height;
 				case DebugDrawType.Pixel:
 					return Size;
 				case DebugDrawType.BitmapFontText:
 				case DebugDrawType.ConsoleText:
-					return BitmapFont.MeasureString( Text ).Y * Scale;
+					return BitmapFont.MeasureString(Text).Y * Scale;
 				case DebugDrawType.SpriteFontText:
-					return SpriteFont.MeasureString( Text ).Y * Scale;
+					return SpriteFont.MeasureString(Text).Y * Scale;
 			}
 
 			return 0;
 		}
-
 	}
 }
-

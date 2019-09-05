@@ -16,41 +16,44 @@ namespace Nez.UI
 		ImageButtonStyle style;
 
 
-		public ImageButton( ImageButtonStyle style ) : base( style )
+		public ImageButton(ImageButtonStyle style) : base(style)
 		{
 			image = new Image();
-			image.SetScaling( Scaling.Fit );
-			Add( image );
-			SetStyle( style );
-			SetSize( PreferredWidth, PreferredHeight );
+			image.SetScaling(Scaling.Fit);
+			Add(image);
+			SetStyle(style);
+			SetSize(PreferredWidth, PreferredHeight);
 		}
 
-		public ImageButton( Skin skin, string styleName = null ) : this( skin.Get<ImageButtonStyle>( styleName ) )
-		{}
-
-
-		public ImageButton( IDrawable imageUp ) : this( new ImageButtonStyle( null, null, null, imageUp, null, null ) )
+		public ImageButton(Skin skin, string styleName = null) : this(skin.Get<ImageButtonStyle>(styleName))
 		{
 		}
 
 
-		public ImageButton( IDrawable imageUp, IDrawable imageDown ) : this( new ImageButtonStyle( null, null, null, imageUp, imageDown, null ) )
+		public ImageButton(IDrawable imageUp) : this(new ImageButtonStyle(null, null, null, imageUp, null, null))
 		{
 		}
 
 
-		public ImageButton( IDrawable imageUp, IDrawable imageDown, IDrawable imageOver ) : this( new ImageButtonStyle( null, null, null, imageUp, imageDown, imageOver ) )
+		public ImageButton(IDrawable imageUp, IDrawable imageDown) : this(new ImageButtonStyle(null, null, null,
+			imageUp, imageDown, null))
 		{
 		}
 
 
-		public override void SetStyle( ButtonStyle style )
+		public ImageButton(IDrawable imageUp, IDrawable imageDown, IDrawable imageOver) : this(
+			new ImageButtonStyle(null, null, null, imageUp, imageDown, imageOver))
 		{
-			Insist.IsTrue( style is ImageButtonStyle, "style must be a ImageButtonStyle" );
+		}
 
-			base.SetStyle( style );
-			this.style = (ImageButtonStyle)style;
-			if( image != null )
+
+		public override void SetStyle(ButtonStyle style)
+		{
+			Insist.IsTrue(style is ImageButtonStyle, "style must be a ImageButtonStyle");
+
+			base.SetStyle(style);
+			this.style = (ImageButtonStyle) style;
+			if (image != null)
 				UpdateImage();
 		}
 
@@ -69,34 +72,33 @@ namespace Nez.UI
 
 		public Cell GetImageCell()
 		{
-			return GetCell( image );
+			return GetCell(image);
 		}
 
 
 		private void UpdateImage()
 		{
 			IDrawable drawable = null;
-			if( _isDisabled && style.ImageDisabled != null )
+			if (_isDisabled && style.ImageDisabled != null)
 				drawable = style.ImageDisabled;
-			else if( _mouseDown && style.ImageDown != null )
+			else if (_mouseDown && style.ImageDown != null)
 				drawable = style.ImageDown;
-			else if( IsChecked && style.ImageChecked != null )
-				drawable = ( style.ImageCheckedOver != null && _mouseOver ) ? style.ImageCheckedOver : style.ImageChecked;
-			else if( _mouseOver && style.ImageOver != null )
+			else if (IsChecked && style.ImageChecked != null)
+				drawable = (style.ImageCheckedOver != null && _mouseOver) ? style.ImageCheckedOver : style.ImageChecked;
+			else if (_mouseOver && style.ImageOver != null)
 				drawable = style.ImageOver;
-			else if( style.ImageUp != null ) //
+			else if (style.ImageUp != null) //
 				drawable = style.ImageUp;
 
-			image.SetDrawable( drawable );
+			image.SetDrawable(drawable);
 		}
 
 
-		public override void Draw( Graphics graphics, float parentAlpha )
+		public override void Draw(Graphics graphics, float parentAlpha)
 		{
 			UpdateImage();
-			base.Draw( graphics, parentAlpha );
+			base.Draw(graphics, parentAlpha);
 		}
-
 	}
 
 
@@ -107,10 +109,12 @@ namespace Nez.UI
 
 
 		public ImageButtonStyle()
-		{}
+		{
+		}
 
 
-		public ImageButtonStyle( IDrawable up, IDrawable down, IDrawable checkked, IDrawable imageUp, IDrawable imageDown, IDrawable imageChecked ) : base( up, down, checkked )
+		public ImageButtonStyle(IDrawable up, IDrawable down, IDrawable checkked, IDrawable imageUp,
+		                        IDrawable imageDown, IDrawable imageChecked) : base(up, down, checkked)
 		{
 			this.ImageUp = imageUp;
 			this.ImageDown = imageDown;
@@ -120,7 +124,8 @@ namespace Nez.UI
 
 		public new ImageButtonStyle Clone()
 		{
-			return new ImageButtonStyle {
+			return new ImageButtonStyle
+			{
 				Up = Up,
 				Down = Down,
 				Over = Over,
@@ -138,4 +143,3 @@ namespace Nez.UI
 		}
 	}
 }
-

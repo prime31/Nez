@@ -23,12 +23,12 @@
 		}
 
 
-		public override bool Equals( object obj )
+		public override bool Equals(object obj)
 		{
-			if( obj is Segment )
+			if (obj is Segment)
 			{
 				var other = obj as Segment;
-				return p1.Equals( other.p1 ) && p2.Equals( other.p2 );
+				return p1.Equals(other.p1) && p2.Equals(other.p2);
 			}
 
 			return false;

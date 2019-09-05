@@ -32,7 +32,7 @@ namespace Nez
 		/// the same direction.
 		/// </summary>
 		/// <param name="deltaMovement">the original movement that caused the collision</param>
-		public void RemoveHorizontalTranslation( Vector2 deltaMovement )
+		public void RemoveHorizontalTranslation(Vector2 deltaMovement)
 		{
 			// http://dev.yuanworks.com/2013/03/19/little-ninja-physics-and-collision-detection/
 			// fix is the vector that is only in the y-direction that we want. Projecting it on the normal gives us the
@@ -40,16 +40,16 @@ namespace Nez
 			// fix dot normal = responseDistance
 
 			// check if the lateral motion is undesirable and if so remove it and fix the response
-			if( Math.Sign( Normal.X ) != Math.Sign( deltaMovement.X ) || ( deltaMovement.X == 0f && Normal.X != 0f ) )
+			if (Math.Sign(Normal.X) != Math.Sign(deltaMovement.X) || (deltaMovement.X == 0f && Normal.X != 0f))
 			{
 				var responseDistance = MinimumTranslationVector.Length();
 				var fix = responseDistance / Normal.Y;
 
 				// check some edge cases. make sure we dont have normal.x == 1 and a super small y which will result in a huge
 				// fix value since we divide by normal
-				if( Math.Abs( Normal.X ) != 1f && Math.Abs( fix ) < Math.Abs( deltaMovement.Y * 3f ) )
+				if (Math.Abs(Normal.X) != 1f && Math.Abs(fix) < Math.Abs(deltaMovement.Y * 3f))
 				{
-					MinimumTranslationVector = new Vector2( 0f, -fix );
+					MinimumTranslationVector = new Vector2(0f, -fix);
 				}
 			}
 		}
@@ -60,16 +60,15 @@ namespace Nez
 		/// </summary>
 		public void InvertResult()
 		{
-			Vector2.Negate( ref MinimumTranslationVector, out MinimumTranslationVector );
-			Vector2.Negate( ref Normal, out Normal );
+			Vector2.Negate(ref MinimumTranslationVector, out MinimumTranslationVector);
+			Vector2.Negate(ref Normal, out Normal);
 		}
 
 
 		public override string ToString()
 		{
-			return string.Format( "[CollisionResult] normal: {0}, minimumTranslationVector: {1}", Normal, MinimumTranslationVector );
+			return string.Format("[CollisionResult] normal: {0}, minimumTranslationVector: {1}", Normal,
+				MinimumTranslationVector);
 		}
-
 	}
 }
-

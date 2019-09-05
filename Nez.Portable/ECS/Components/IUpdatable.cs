@@ -21,10 +21,9 @@ namespace Nez
 	/// </summary>
 	public class IUpdatableComparer : IComparer<IUpdatable>
 	{
-		public int Compare( IUpdatable a, IUpdatable b )
+		public int Compare(IUpdatable a, IUpdatable b)
 		{
-			return a.UpdateOrder.CompareTo( b.UpdateOrder );
+			return a.UpdateOrder.CompareTo(b.UpdateOrder);
 		}
 	}
 }
-

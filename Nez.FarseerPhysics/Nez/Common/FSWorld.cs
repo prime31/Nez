@@ -3,6 +3,7 @@ using FarseerPhysics.Dynamics.Joints;
 using Microsoft.Xna.Framework;
 using Nez.Analysis;
 
+
 namespace Nez.Farseer
 {
 	public class FSWorld : SceneComponent
@@ -22,17 +23,18 @@ namespace Nez.Farseer
 		FixedMouseJoint _mouseJoint;
 
 
-		public FSWorld() : this( new Vector2( 0, 9.82f ) )
-		{}
-
-
-		public FSWorld( Vector2 gravity )
+		public FSWorld() : this(new Vector2(0, 9.82f))
 		{
-			World = new World( gravity );
 		}
 
 
-		public FSWorld SetEnableMousePicking( bool enableMousePicking )
+		public FSWorld(Vector2 gravity)
+		{
+			World = new World(gravity);
+		}
+
+
+		public FSWorld SetEnableMousePicking(bool enableMousePicking)
 		{
 			this.EnableMousePicking = enableMousePicking;
 			return this;
@@ -62,36 +64,36 @@ namespace Nez.Farseer
 
 		public override void Update()
 		{
-			if( EnableMousePicking )
+			if (EnableMousePicking)
 			{
-				if( Input.LeftMouseButtonPressed )
+				if (Input.LeftMouseButtonPressed)
 				{
-					var pos = Core.Scene.Camera.ScreenToWorldPoint( Input.MousePosition );
-					var fixture = World.TestPoint( FSConvert.DisplayToSim * pos );
-					if( fixture != null && !fixture.Body.IsStatic && !fixture.Body.IsKinematic )
-						_mouseJoint = fixture.Body.CreateFixedMouseJoint( pos );
+					var pos = Core.Scene.Camera.ScreenToWorldPoint(Input.MousePosition);
+					var fixture = World.TestPoint(FSConvert.DisplayToSim * pos);
+					if (fixture != null && !fixture.Body.IsStatic && !fixture.Body.IsKinematic)
+						_mouseJoint = fixture.Body.CreateFixedMouseJoint(pos);
 				}
 
-				if( Input.LeftMouseButtonDown && _mouseJoint != null )
+				if (Input.LeftMouseButtonDown && _mouseJoint != null)
 				{
-					var pos = Core.Scene.Camera.ScreenToWorldPoint( Input.MousePosition );
+					var pos = Core.Scene.Camera.ScreenToWorldPoint(Input.MousePosition);
 					_mouseJoint.WorldAnchorB = FSConvert.DisplayToSim * pos;
 				}
 
-				if( Input.LeftMouseButtonReleased && _mouseJoint != null )
+				if (Input.LeftMouseButtonReleased && _mouseJoint != null)
 				{
-					World.RemoveJoint( _mouseJoint );
+					World.RemoveJoint(_mouseJoint);
 					_mouseJoint = null;
 				}
 			}
 
-			#if DEBUG
-			TimeRuler.Instance.BeginMark( "physics", Color.Blue );
-			#endif
-			World.Step( MathHelper.Min( Time.DeltaTime, MinimumUpdateDeltaTime ) );
-			#if DEBUG
-			TimeRuler.Instance.EndMark( "physics" );
-			#endif
+#if DEBUG
+			TimeRuler.Instance.BeginMark("physics", Color.Blue);
+#endif
+			World.Step(MathHelper.Min(Time.DeltaTime, MinimumUpdateDeltaTime));
+#if DEBUG
+			TimeRuler.Instance.EndMark("physics");
+#endif
 		}
 
 		#endregion
@@ -99,15 +101,12 @@ namespace Nez.Farseer
 
 		#region World Querying
 
-
-
 		#endregion
 
 
-		public static implicit operator World( FSWorld self )
+		public static implicit operator World(FSWorld self)
 		{
 			return self.World;
 		}
-
 	}
 }

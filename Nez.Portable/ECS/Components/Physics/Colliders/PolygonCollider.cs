@@ -14,35 +14,38 @@ namespace Nez
 		/// If the points are not centered they will be centered with the difference being applied to the localOffset.
 		/// </summary>
 		/// <param name="points">Points.</param>
-		public PolygonCollider( Vector2[] points )
+		public PolygonCollider(Vector2[] points)
 		{
 			// first and last point must not be the same. we want an open polygon
 			var isPolygonClosed = points[0] == points[points.Length - 1];
 
-			if( isPolygonClosed )
-				Array.Resize( ref points, points.Length - 1 );
+			if (isPolygonClosed)
+				Array.Resize(ref points, points.Length - 1);
 
-			var center = Polygon.FindPolygonCenter( points );
-			SetLocalOffset( center );
-			Polygon.RecenterPolygonVerts( points );
-			Shape = new Polygon( points );
+			var center = Polygon.FindPolygonCenter(points);
+			SetLocalOffset(center);
+			Polygon.RecenterPolygonVerts(points);
+			Shape = new Polygon(points);
 		}
 
-		public PolygonCollider( int vertCount, float radius )
+		public PolygonCollider(int vertCount, float radius)
 		{
-			Shape = new Polygon( vertCount, radius );
+			Shape = new Polygon(vertCount, radius);
 		}
 
-		public PolygonCollider() : this( 6, 40 )
-		{}
+		public PolygonCollider() : this(6, 40)
+		{
+		}
 
-		public override void DebugRender( Graphics graphics )
+		public override void DebugRender(Graphics graphics)
 		{
 			var poly = Shape as Polygon;
-			graphics.Batcher.DrawHollowRect( Bounds, Debug.Colors.ColliderBounds, Debug.Size.LineSizeMultiplier );
-			graphics.Batcher.DrawPolygon( Shape.position, poly.Points, Debug.Colors.ColliderEdge, true, Debug.Size.LineSizeMultiplier );
-			graphics.Batcher.DrawPixel( Entity.Transform.Position, Debug.Colors.ColliderPosition, 4 * Debug.Size.LineSizeMultiplier );
-			graphics.Batcher.DrawPixel( Shape.position, Debug.Colors.ColliderCenter, 2 * Debug.Size.LineSizeMultiplier );
+			graphics.Batcher.DrawHollowRect(Bounds, Debug.Colors.ColliderBounds, Debug.Size.LineSizeMultiplier);
+			graphics.Batcher.DrawPolygon(Shape.position, poly.Points, Debug.Colors.ColliderEdge, true,
+				Debug.Size.LineSizeMultiplier);
+			graphics.Batcher.DrawPixel(Entity.Transform.Position, Debug.Colors.ColliderPosition,
+				4 * Debug.Size.LineSizeMultiplier);
+			graphics.Batcher.DrawPixel(Shape.position, Debug.Colors.ColliderCenter, 2 * Debug.Size.LineSizeMultiplier);
 
 			// Normal debug code
 			//for( var i = 0; i < poly.points.Length; i++ )
@@ -59,7 +62,5 @@ namespace Nez
 			//	graphics.batcher.drawLine( mp, mp + perp * 10, Color.White );
 			//}
 		}
-
 	}
 }
-

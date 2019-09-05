@@ -24,7 +24,8 @@ namespace Nez.Farseer
 
 		public override Joint CreateJoint()
 		{
-			var joint = new DistanceJoint( BodyA, BodyB, OwnerBodyAnchor * FSConvert.DisplayToSim, OtherBodyAnchor * FSConvert.DisplayToSim );
+			var joint = new DistanceJoint(BodyA, BodyB, OwnerBodyAnchor * FSConvert.DisplayToSim,
+				OtherBodyAnchor * FSConvert.DisplayToSim);
 			joint.CollideConnected = CollideConnected;
 			joint.Frequency = Frequency;
 			joint.DampingRatio = DampingRatio;
@@ -41,7 +42,7 @@ namespace Nez.Farseer
 
 		public override Joint CreateJoint()
 		{
-			var joint = new FrictionJoint( BodyA, BodyB, Anchor );
+			var joint = new FrictionJoint(BodyA, BodyB, Anchor);
 			joint.CollideConnected = CollideConnected;
 			joint.MaxForce = MaxForce;
 			joint.MaxTorque = MaxTorque;
@@ -59,7 +60,8 @@ namespace Nez.Farseer
 
 		public override Joint CreateJoint()
 		{
-			var joint = new WeldJoint( BodyA, BodyB, OwnerBodyAnchor * FSConvert.DisplayToSim, OtherBodyAnchor * FSConvert.DisplayToSim );
+			var joint = new WeldJoint(BodyA, BodyB, OwnerBodyAnchor * FSConvert.DisplayToSim,
+				OtherBodyAnchor * FSConvert.DisplayToSim);
 			joint.CollideConnected = CollideConnected;
 			joint.DampingRatio = DampingRatio;
 			joint.FrequencyHz = FrequencyHz;
@@ -76,7 +78,7 @@ namespace Nez.Farseer
 
 		public override Joint CreateJoint()
 		{
-			var joint = new AngleJoint( BodyA, BodyB );
+			var joint = new AngleJoint(BodyA, BodyB);
 			joint.CollideConnected = CollideConnected;
 			joint.MaxImpulse = MaxImpulse;
 			joint.BiasFactor = BiasFactor;
@@ -100,7 +102,8 @@ namespace Nez.Farseer
 
 		public override Joint CreateJoint()
 		{
-			var joint = new RevoluteJoint( BodyA, BodyB, OwnerBodyAnchor * FSConvert.DisplayToSim, OtherBodyAnchor * FSConvert.DisplayToSim );
+			var joint = new RevoluteJoint(BodyA, BodyB, OwnerBodyAnchor * FSConvert.DisplayToSim,
+				OtherBodyAnchor * FSConvert.DisplayToSim);
 			joint.CollideConnected = CollideConnected;
 			joint.LimitEnabled = LimitEnabled;
 			joint.LowerLimit = LowerLimit;
@@ -129,7 +132,8 @@ namespace Nez.Farseer
 
 		public override Joint CreateJoint()
 		{
-			var joint = new PrismaticJoint( BodyA, BodyB, OwnerBodyAnchor * FSConvert.DisplayToSim, OtherBodyAnchor * FSConvert.DisplayToSim );
+			var joint = new PrismaticJoint(BodyA, BodyB, OwnerBodyAnchor * FSConvert.DisplayToSim,
+				OtherBodyAnchor * FSConvert.DisplayToSim);
 			joint.CollideConnected = CollideConnected;
 			joint.Axis = Axis;
 			joint.LimitEnabled = LimitEnabled;
@@ -152,7 +156,8 @@ namespace Nez.Farseer
 
 		public override Joint CreateJoint()
 		{
-			var joint = new RopeJoint( BodyA, BodyB, OwnerBodyAnchor * FSConvert.DisplayToSim, OtherBodyAnchor * FSConvert.DisplayToSim );
+			var joint = new RopeJoint(BodyA, BodyB, OwnerBodyAnchor * FSConvert.DisplayToSim,
+				OtherBodyAnchor * FSConvert.DisplayToSim);
 			joint.CollideConnected = CollideConnected;
 			joint.MaxLength = MaxLength * FSConvert.DisplayToSim;
 			return joint;
@@ -169,7 +174,7 @@ namespace Nez.Farseer
 
 		public override Joint CreateJoint()
 		{
-			var joint = new MotorJoint( BodyA, BodyB );
+			var joint = new MotorJoint(BodyA, BodyB);
 			joint.CollideConnected = CollideConnected;
 			joint.LinearOffset = LinearOffset * FSConvert.DisplayToSim;
 			joint.MaxForce = MaxForce;
@@ -192,7 +197,7 @@ namespace Nez.Farseer
 
 		public override Joint CreateJoint()
 		{
-			var joint = new WheelJoint( BodyA, BodyB, Anchor * FSConvert.DisplayToSim, Axis );
+			var joint = new WheelJoint(BodyA, BodyB, Anchor * FSConvert.DisplayToSim, Axis);
 			joint.CollideConnected = CollideConnected;
 			joint.Axis = Axis;
 			joint.MotorEnabled = MotorEnabled;
@@ -215,8 +220,9 @@ namespace Nez.Farseer
 
 		public override Joint CreateJoint()
 		{
-			var joint = new PulleyJoint( BodyA, BodyB, OwnerBodyAnchor * FSConvert.DisplayToSim, OtherBodyGroundAnchor * FSConvert.DisplayToSim,
-										OwnerBodyGroundAnchor * FSConvert.DisplayToSim, OtherBodyGroundAnchor * FSConvert.DisplayToSim, Ratio );
+			var joint = new PulleyJoint(BodyA, BodyB, OwnerBodyAnchor * FSConvert.DisplayToSim,
+				OtherBodyGroundAnchor * FSConvert.DisplayToSim,
+				OwnerBodyGroundAnchor * FSConvert.DisplayToSim, OtherBodyGroundAnchor * FSConvert.DisplayToSim, Ratio);
 			joint.CollideConnected = CollideConnected;
 			return joint;
 		}
@@ -231,7 +237,7 @@ namespace Nez.Farseer
 
 		public override Joint CreateJoint()
 		{
-			var joint = new GearJoint( BodyA, BodyB, OwnerJoint, OtherJoint, Ratio );
+			var joint = new GearJoint(BodyA, BodyB, OwnerJoint, OtherJoint, Ratio);
 			joint.CollideConnected = CollideConnected;
 			return joint;
 		}
@@ -247,17 +253,16 @@ namespace Nez.Farseer
 
 		public override Joint CreateJoint()
 		{
-			var joint = new FixedMouseJoint( BodyA, WorldAnchor * FSConvert.DisplayToSim );
+			var joint = new FixedMouseJoint(BodyA, WorldAnchor * FSConvert.DisplayToSim);
 			joint.CollideConnected = CollideConnected;
 
 			// conditionally set the maxForce
-			if( MaxForce > 0 )
+			if (MaxForce > 0)
 				joint.MaxForce = MaxForce;
-			
+
 			joint.Frequency = Frequency;
 			joint.DampingRatio = DampingRatio;
 			return joint;
 		}
 	}
-
 }

@@ -15,18 +15,18 @@ namespace Nez.AI.BehaviorTrees
 		int _successProbability;
 
 
-		public RandomProbability( int successProbability )
+		public RandomProbability(int successProbability)
 		{
 			_successProbability = successProbability;
 		}
 
 
-		public override TaskStatus Update( T context )
+		public override TaskStatus Update(T context)
 		{
-			if( Nez.Random.NextFloat() > _successProbability )
+			if (Nez.Random.NextFloat() > _successProbability)
 				return TaskStatus.Success;
+
 			return TaskStatus.Failure;
 		}
 	}
 }
-

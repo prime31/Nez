@@ -9,32 +9,32 @@ namespace Nez.Svg
 	/// handles parsing out groups, paths, rects, lines, circles, ellipses, polygons, polylines and images. This is just a small subset of the SVG
 	/// spec! Only the basics are parsed out since this is not designed to be an image viewer.
 	/// </summary>
-	[XmlRoot( ElementName = "svg", Namespace = "http://www.w3.org/2000/svg" )]
+	[XmlRoot(ElementName = "svg", Namespace = "http://www.w3.org/2000/svg")]
 	public class SvgDocument : SvgGroup
 	{
-		[XmlAttribute( "width" )]
+		[XmlAttribute("width")]
 		public string WidthAttribute
 		{
 			get { return null; }
-			set { Width = int.Parse( Regex.Replace( value, @"[^\d]", string.Empty ) ); }
+			set { Width = int.Parse(Regex.Replace(value, @"[^\d]", string.Empty)); }
 		}
+
 		public int Width;
 
-		[XmlAttribute( "height" )]
+		[XmlAttribute("height")]
 		public string HeightAttribute
 		{
 			get { return null; }
-			set { Height = int.Parse( Regex.Replace( value, @"[^\d]", string.Empty ) ); }
+			set { Height = int.Parse(Regex.Replace(value, @"[^\d]", string.Empty)); }
 		}
+
 		public int Height;
 
 
-
-		public static SvgDocument Open( Stream stream )
+		public static SvgDocument Open(Stream stream)
 		{
-			var serializer = new XmlSerializer( typeof( SvgDocument ) );
-			return (SvgDocument)serializer.Deserialize( stream );
+			var serializer = new XmlSerializer(typeof(SvgDocument));
+			return (SvgDocument) serializer.Deserialize(stream);
 		}
-
 	}
 }

@@ -18,12 +18,12 @@ namespace Nez
 			get { return _color; }
 			set
 			{
-				if( _color != value )
+				if (_color != value)
 				{
 					_color = value;
 
-					if( Effect != null )
-						_colorParam.SetValue( _color.ToVector4() );
+					if (Effect != null)
+						_colorParam.SetValue(_color.ToVector4());
 				}
 			}
 		}
@@ -37,12 +37,12 @@ namespace Nez
 			get { return _letterboxSize; }
 			set
 			{
-				if( _letterboxSize != value )
+				if (_letterboxSize != value)
 				{
 					_letterboxSize = value;
 
-					if( Effect != null )
-						_letterboxSizeParam.SetValue( _letterboxSize );
+					if (Effect != null)
+						_letterboxSizeParam.SetValue(_letterboxSize);
 				}
 			}
 		}
@@ -54,23 +54,24 @@ namespace Nez
 		bool _isAnimating;
 
 
-		public CinematicLetterboxPostProcessor( int executionOrder ) : base( executionOrder )
-		{}
-
-		public override void OnAddedToScene( Scene scene )
+		public CinematicLetterboxPostProcessor(int executionOrder) : base(executionOrder)
 		{
-			base.OnAddedToScene( scene );
-			Effect = _scene.Content.LoadEffect<Effect>( "vignette", EffectResource.LetterboxBytes );
+		}
+
+		public override void OnAddedToScene(Scene scene)
+		{
+			base.OnAddedToScene(scene);
+			Effect = _scene.Content.LoadEffect<Effect>("vignette", EffectResource.LetterboxBytes);
 
 			_colorParam = Effect.Parameters["_color"];
 			_letterboxSizeParam = Effect.Parameters["_letterboxSize"];
-			_colorParam.SetValue( _color.ToVector4() );
-			_letterboxSizeParam.SetValue( _letterboxSize );
+			_colorParam.SetValue(_color.ToVector4());
+			_letterboxSizeParam.SetValue(_letterboxSize);
 		}
 
 		public override void Unload()
 		{
-			_scene.Content.UnloadEffect( Effect );
+			_scene.Content.UnloadEffect(Effect);
 			base.Unload();
 		}
 
@@ -81,20 +82,21 @@ namespace Nez
 		/// <param name="letterboxSize">Letterbox size.</param>
 		/// <param name="duration">Duration.</param>
 		/// <param name="easeType">Ease type.</param>
-		public IEnumerator AnimateIn( float letterboxSize, float duration = 2, EaseType easeType = EaseType.ExpoOut )
+		public IEnumerator AnimateIn(float letterboxSize, float duration = 2, EaseType easeType = EaseType.ExpoOut)
 		{
 			// wait for any current animations to complete
-			while( _isAnimating )
+			while (_isAnimating)
 				yield return null;
-			
+
 			_isAnimating = true;
 			var elapsedTime = 0f;
-			while( elapsedTime < duration )
+			while (elapsedTime < duration)
 			{
 				elapsedTime += Time.DeltaTime;
-				this.LetterboxSize = Lerps.Ease( easeType, 0, letterboxSize, elapsedTime, duration );
+				this.LetterboxSize = Lerps.Ease(easeType, 0, letterboxSize, elapsedTime, duration);
 				yield return null;
 			}
+
 			_isAnimating = false;
 		}
 
@@ -104,23 +106,23 @@ namespace Nez
 		/// <returns>The out.</returns>
 		/// <param name="duration">Duration.</param>
 		/// <param name="easeType">Ease type.</param>
-		public IEnumerator AnimateOut( float duration = 2, EaseType easeType = EaseType.ExpoIn )
+		public IEnumerator AnimateOut(float duration = 2, EaseType easeType = EaseType.ExpoIn)
 		{
 			// wait for any current animations to complete
-			while( _isAnimating )
+			while (_isAnimating)
 				yield return null;
-			
+
 			_isAnimating = true;
 			var startSize = LetterboxSize;
 			var elapsedTime = 0f;
-			while( elapsedTime < duration )
+			while (elapsedTime < duration)
 			{
 				elapsedTime += Time.DeltaTime;
-				this.LetterboxSize = Lerps.Ease( easeType, startSize, 0, elapsedTime, duration );
+				this.LetterboxSize = Lerps.Ease(easeType, startSize, 0, elapsedTime, duration);
 				yield return null;
 			}
+
 			_isAnimating = false;
 		}
 	}
 }
-

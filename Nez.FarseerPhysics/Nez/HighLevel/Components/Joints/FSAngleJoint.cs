@@ -5,10 +5,9 @@
 		FSAngleJointDef _jointDef = new FSAngleJointDef();
 
 
-
 		#region Configuration
 
-		public FSAngleJoint SetMaxImpulse( float maxImpulse )
+		public FSAngleJoint SetMaxImpulse(float maxImpulse)
 		{
 			_jointDef.MaxImpulse = maxImpulse;
 			RecreateJoint();
@@ -16,7 +15,7 @@
 		}
 
 
-		public FSAngleJoint SetBiasFactor( float biasFactor )
+		public FSAngleJoint SetBiasFactor(float biasFactor)
 		{
 			_jointDef.BiasFactor = biasFactor;
 			RecreateJoint();
@@ -24,7 +23,7 @@
 		}
 
 
-		public FSAngleJoint SetSoftness( float softness )
+		public FSAngleJoint SetSoftness(float softness)
 		{
 			_jointDef.Softness = softness;
 			RecreateJoint();
@@ -36,12 +35,11 @@
 
 		internal override FSJointDef GetJointDef()
 		{
-			InitializeJointDef( _jointDef );
-			if( _jointDef.BodyA == null || _jointDef.BodyB == null )
+			InitializeJointDef(_jointDef);
+			if (_jointDef.BodyA == null || _jointDef.BodyB == null)
 				return null;
 
 			return _jointDef;
 		}
-
 	}
 }

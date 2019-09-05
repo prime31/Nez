@@ -15,6 +15,7 @@ namespace Nez
 	{
 		public override float Width => _width;
 		public override float Height => _height;
+
 		public override Material Material
 		{
 			get => _waterReflectionMaterial;
@@ -27,13 +28,14 @@ namespace Nez
 		WaterReflectionMaterial _waterReflectionMaterial;
 
 
-		public WaterReflectionPlane() : this( Screen.Width, Screen.Height )
-		{}
-		
-		public WaterReflectionPlane( float width, float height )
+		public WaterReflectionPlane() : this(Screen.Width, Screen.Height)
+		{
+		}
+
+		public WaterReflectionPlane(float width, float height)
 		{
 			// we need a separate texture (not part of an atlas) so that we get uvs in the 0 - 1 range that the Effect requires
-			_texture = Graphics.CreateSingleColorTexture( 1, 1, Color.Bisque );
+			_texture = Graphics.CreateSingleColorTexture(1, 1, Color.Bisque);
 			_width = width;
 			_height = height;
 
@@ -45,15 +47,14 @@ namespace Nez
 			_texture.Dispose();
 		}
 
-		public override void Render( Graphics graphics, Camera camera )
+		public override void Render(Graphics graphics, Camera camera)
 		{
 			// we need to send the top of of the plane to the Effect
-			var screenSpaceTop = Entity.Scene.Camera.WorldToScreenPoint( Entity.Transform.Position );
-			_waterReflectionMaterial.Effect.ScreenSpaceVerticalOffset = screenSpaceTop.Y / Entity.Scene.SceneRenderTargetSize.Y;
+			var screenSpaceTop = Entity.Scene.Camera.WorldToScreenPoint(Entity.Transform.Position);
+			_waterReflectionMaterial.Effect.ScreenSpaceVerticalOffset =
+				screenSpaceTop.Y / Entity.Scene.SceneRenderTargetSize.Y;
 
-			graphics.Batcher.Draw( _texture, Bounds, new Rectangle( 0, 0, 1, 1 ), Color );
+			graphics.Batcher.Draw(_texture, Bounds, new Rectangle(0, 0, 1, 1), Color);
 		}
-
 	}
 }
-

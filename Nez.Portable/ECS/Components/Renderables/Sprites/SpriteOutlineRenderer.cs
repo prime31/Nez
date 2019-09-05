@@ -32,28 +32,27 @@ namespace Nez
 		/// the Sprite passed in will be disabled. The SpriteOutlineRenderer will handle manually calling its render method.
 		/// </summary>
 		/// <param name="sprite">Sprite.</param>
-		public SpriteOutlineRenderer( Sprite sprite )
+		public SpriteOutlineRenderer(Sprite sprite)
 		{
 			_sprite = sprite;
+
 			// RenderableComponent doesnt have an origin so we copy over the Sprite.origin to our localOffset
 			_localOffset = sprite.Origin;
 			_sprite.Enabled = false;
 		}
 
-		public override void OnEntityTransformChanged( Transform.Component comp )
+		public override void OnEntityTransformChanged(Transform.Component comp)
 		{
-			base.OnEntityTransformChanged( comp );
+			base.OnEntityTransformChanged(comp);
 
 			// our sprite is disabled so we need to forward the call over to it so it can update its bounds for rendering
-			_sprite.OnEntityTransformChanged( comp );
+			_sprite.OnEntityTransformChanged(comp);
 		}
 
-		public override void Render( Graphics graphics, Camera camera )
+		public override void Render(Graphics graphics, Camera camera)
 		{
-			_sprite.DrawOutline( graphics, camera, OutlineColor, OutlineWidth );
-			_sprite.Render( graphics, camera );
+			_sprite.DrawOutline(graphics, camera, OutlineColor, OutlineWidth);
+			_sprite.Render(graphics, camera);
 		}
-
 	}
 }
-

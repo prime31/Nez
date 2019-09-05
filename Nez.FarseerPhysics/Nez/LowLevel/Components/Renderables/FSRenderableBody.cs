@@ -11,9 +11,10 @@ namespace Nez.Farseer
 		{
 			get
 			{
-				if( _areBoundsDirty )
+				if (_areBoundsDirty)
 				{
-					_bounds.CalculateBounds( Transform.Position, _localOffset, _subtexture.Center, Transform.Scale, Transform.Rotation, _subtexture.SourceRect.Width, _subtexture.SourceRect.Height );
+					_bounds.CalculateBounds(Transform.Position, _localOffset, _subtexture.Center, Transform.Scale,
+						Transform.Rotation, _subtexture.SourceRect.Width, _subtexture.SourceRect.Height);
 					_areBoundsDirty = false;
 				}
 
@@ -27,7 +28,7 @@ namespace Nez.Farseer
 		protected Subtexture _subtexture;
 
 
-		protected FSRenderableBody( Subtexture subtexture )
+		protected FSRenderableBody(Subtexture subtexture)
 		{
 			_subtexture = subtexture;
 		}
@@ -38,28 +39,28 @@ namespace Nez.Farseer
 		public override void Initialize()
 		{
 			var world = Entity.Scene.GetOrCreateSceneComponent<FSWorld>();
-			Body = new Body( world, Transform.Position * FSConvert.DisplayToSim, Transform.Rotation );
+			Body = new Body(world, Transform.Position * FSConvert.DisplayToSim, Transform.Rotation);
 		}
 
 
-		public override void OnEntityTransformChanged( Transform.Component comp )
+		public override void OnEntityTransformChanged(Transform.Component comp)
 		{
 			_areBoundsDirty = true;
-			if( _ignoreTransformChanges )
+			if (_ignoreTransformChanges)
 				return;
 
-			if( comp == Transform.Component.Position )
+			if (comp == Transform.Component.Position)
 				Body.Position = Transform.Position * FSConvert.DisplayToSim;
-			else if( comp == Transform.Component.Rotation )
+			else if (comp == Transform.Component.Rotation)
 				Body.Rotation = Transform.Rotation;
 		}
 
 
 		public override void OnRemovedFromEntity()
 		{
-			if( Body != null )
+			if (Body != null)
 			{
-				Body.World.RemoveBody( Body );
+				Body.World.RemoveBody(Body);
 				Body = null;
 			}
 		}
@@ -67,7 +68,7 @@ namespace Nez.Farseer
 
 		void IUpdatable.Update()
 		{
-			if( !Body.IsAwake )
+			if (!Body.IsAwake)
 				return;
 
 			_ignoreTransformChanges = true;
@@ -77,25 +78,25 @@ namespace Nez.Farseer
 		}
 
 
-		public override void Render( Graphics graphics, Camera camera )
+		public override void Render(Graphics graphics, Camera camera)
 		{
-			graphics.Batcher.Draw( _subtexture, Transform.Position, _subtexture.SourceRect, Color, Transform.Rotation, _subtexture.Center, Transform.Scale, SpriteEffects.None, _layerDepth );
+			graphics.Batcher.Draw(_subtexture, Transform.Position, _subtexture.SourceRect, Color, Transform.Rotation,
+				_subtexture.Center, Transform.Scale, SpriteEffects.None, _layerDepth);
 		}
 
 		#endregion
 
 
-		public FSRenderableBody SetBodyType( BodyType bodyType )
+		public FSRenderableBody SetBodyType(BodyType bodyType)
 		{
 			Body.BodyType = bodyType;
 			return this;
 		}
 
 
-		public static implicit operator Body( FSRenderableBody self )
+		public static implicit operator Body(FSRenderableBody self)
 		{
 			return self.Body;
 		}
-
 	}
 }

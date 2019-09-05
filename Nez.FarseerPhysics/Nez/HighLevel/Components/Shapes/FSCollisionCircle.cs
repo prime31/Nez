@@ -16,7 +16,7 @@ namespace Nez.Farseer
 		}
 
 
-		public FSCollisionCircle( float radius ) : this()
+		public FSCollisionCircle(float radius) : this()
 		{
 			_radius = radius;
 			_fixtureDef.Shape.Radius = _radius * FSConvert.DisplayToSim;
@@ -25,7 +25,7 @@ namespace Nez.Farseer
 
 		#region Configuration
 
-		public FSCollisionCircle SetRadius( float radius )
+		public FSCollisionCircle SetRadius(float radius)
 		{
 			_radius = radius;
 			RecreateFixture();
@@ -33,7 +33,7 @@ namespace Nez.Farseer
 		}
 
 
-		public FSCollisionCircle SetCenter( Vector2 center )
+		public FSCollisionCircle SetCenter(Vector2 center)
 		{
 			_center = center;
 			RecreateFixture();
@@ -43,9 +43,9 @@ namespace Nez.Farseer
 		#endregion
 
 
-		public override void OnEntityTransformChanged( Transform.Component comp )
+		public override void OnEntityTransformChanged(Transform.Component comp)
 		{
-			if( comp == Transform.Component.Scale )
+			if (comp == Transform.Component.Scale)
 				RecreateFixture();
 		}
 
@@ -53,9 +53,9 @@ namespace Nez.Farseer
 		void RecreateFixture()
 		{
 			_fixtureDef.Shape.Radius = _radius * Transform.Scale.X * FSConvert.DisplayToSim;
-			( _fixtureDef.Shape as CircleShape ).Position = FSConvert.DisplayToSim * _center;
+			(_fixtureDef.Shape as CircleShape).Position = FSConvert.DisplayToSim * _center;
 
-			if( _fixture != null )
+			if (_fixture != null)
 			{
 				var circleShape = _fixture.Shape as CircleShape;
 				circleShape.Radius = _fixtureDef.Shape.Radius;
@@ -65,6 +65,5 @@ namespace Nez.Farseer
 				WakeAnyContactingBodies();
 			}
 		}
-
 	}
 }

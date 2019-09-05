@@ -70,29 +70,28 @@ namespace Nez
 		}
 
 
-
 		void IUpdatable.Update()
 		{
 			var color = _spriteRenderer.Color;
 
-			switch( ColorChannel )
+			switch (ColorChannel)
 			{
 				case Colorchannels.All:
 					color = originalColor * EvaluateWaveFunction();
 					break;
 				case Colorchannels.Red:
-					color = new Color( (int)(originalColor.R * EvaluateWaveFunction()), color.G, color.B, color.A );
+					color = new Color((int) (originalColor.R * EvaluateWaveFunction()), color.G, color.B, color.A);
 					break;
 				case Colorchannels.Green:
-					color = new Color( color.R, (int)(originalColor.G * EvaluateWaveFunction()), color.B, color.A );
+					color = new Color(color.R, (int) (originalColor.G * EvaluateWaveFunction()), color.B, color.A);
 					break;
 				case Colorchannels.Blue:
-					color = new Color( color.R, color.G, (int)(originalColor.B * EvaluateWaveFunction()), color.A );
+					color = new Color(color.R, color.G, (int) (originalColor.B * EvaluateWaveFunction()), color.A);
 					break;
 			}
 
-			if( AffectsIntensity )
-				color.A = (byte)(originalIntensity * EvaluateWaveFunction());
+			if (AffectsIntensity)
+				color.A = (byte) (originalIntensity * EvaluateWaveFunction());
 			else
 				color.A = originalColor.A;
 
@@ -102,26 +101,26 @@ namespace Nez
 
 		float EvaluateWaveFunction()
 		{
-			var t = ( Time.TotalTime + Phase ) * Frequency;
-			t = t - Mathf.Floor( t ); // normalized value (0..1)
+			var t = (Time.TotalTime + Phase) * Frequency;
+			t = t - Mathf.Floor(t); // normalized value (0..1)
 			var y = 1f;
 
-			switch( WaveFunction )
+			switch (WaveFunction)
 			{
 				case WaveFunctions.Sin:
-					y = Mathf.Sin( 1f * t * MathHelper.Pi );
+					y = Mathf.Sin(1f * t * MathHelper.Pi);
 					break;
 				case WaveFunctions.Triangle:
-					if( t < 0.5f )
+					if (t < 0.5f)
 						y = 4.0f * t - 1.0f;
 					else
-						y = -4.0f * t + 3.0f; 
+						y = -4.0f * t + 3.0f;
 					break;
 				case WaveFunctions.Square:
-					if( t < 0.5f )
+					if (t < 0.5f)
 						y = 1.0f;
 					else
-						y = -1.0f; 
+						y = -1.0f;
 					break;
 				case WaveFunctions.SawTooth:
 					y = t;
@@ -130,12 +129,11 @@ namespace Nez
 					y = 1.0f - t;
 					break;
 				case WaveFunctions.Random:
-					y = 1f - ( Random.NextFloat() * 2f );
+					y = 1f - (Random.NextFloat() * 2f);
 					break;
 			}
 
-			return ( y * Amplitude ) + Offset;
+			return (y * Amplitude) + Offset;
 		}
-	
 	}
 }

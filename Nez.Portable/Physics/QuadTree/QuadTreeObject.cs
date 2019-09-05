@@ -20,10 +20,9 @@
 		/// Wraps the data value
 		/// </summary>
 		/// <param name="data">The data value to wrap</param>
-		public QuadTreeObject( T data )
+		public QuadTreeObject(T data)
 		{
 			this.Data = data;
 		}
 	}
 }
-

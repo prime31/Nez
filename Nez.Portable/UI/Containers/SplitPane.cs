@@ -10,11 +10,16 @@ namespace Nez.UI
 		{
 			get
 			{
-				var first = _firstWidget == null ? 0 : ( _firstWidget is ILayout ? ( (ILayout)_firstWidget ).PreferredWidth : _firstWidget.width );
-				var second = _secondWidget == null ? 0 : ( _secondWidget is ILayout ? ( (ILayout)_secondWidget ).PreferredWidth : _secondWidget.width );
+				var first = _firstWidget == null
+					? 0
+					: (_firstWidget is ILayout ? ((ILayout) _firstWidget).PreferredWidth : _firstWidget.width);
+				var second = _secondWidget == null
+					? 0
+					: (_secondWidget is ILayout ? ((ILayout) _secondWidget).PreferredWidth : _secondWidget.width);
 
-				if( _vertical )
-					return Math.Max( first, second );
+				if (_vertical)
+					return Math.Max(first, second);
+
 				return first + _style.Handle.MinWidth + second;
 			}
 		}
@@ -23,11 +28,16 @@ namespace Nez.UI
 		{
 			get
 			{
-				var first = _firstWidget == null ? 0 : ( _firstWidget is ILayout ? ( (ILayout)_firstWidget ).PreferredHeight : _firstWidget.height );
-				var second = _secondWidget == null ? 0 : ( _secondWidget is ILayout ? ( (ILayout)_secondWidget ).PreferredHeight : _secondWidget.height );
+				var first = _firstWidget == null
+					? 0
+					: (_firstWidget is ILayout ? ((ILayout) _firstWidget).PreferredHeight : _firstWidget.height);
+				var second = _secondWidget == null
+					? 0
+					: (_secondWidget is ILayout ? ((ILayout) _secondWidget).PreferredHeight : _secondWidget.height);
 
-				if( !_vertical )
-					return Math.Max( first, second );
+				if (!_vertical)
+					return Math.Max(first, second);
+
 				return first + _style.Handle.MinHeight + second;
 			}
 		}
@@ -49,23 +59,26 @@ namespace Nez.UI
 		Vector2 _handlePosition;
 
 
-		public SplitPane( Element firstWidget, Element secondWidget, SplitPaneStyle style, bool vertical = false )
+		public SplitPane(Element firstWidget, Element secondWidget, SplitPaneStyle style, bool vertical = false)
 		{
-			SetStyle( style );
-			SetFirstWidget( firstWidget );
-			SetSecondWidget( secondWidget );
+			SetStyle(style);
+			SetFirstWidget(firstWidget);
+			SetSecondWidget(secondWidget);
 
 			_vertical = vertical;
-			SetSize( PreferredWidth, PreferredHeight );
+			SetSize(PreferredWidth, PreferredHeight);
 		}
 
 
-		public SplitPane( Element firstWidget, Element secondWidget, IDrawable handle, bool vertical = false ) : this( firstWidget, secondWidget, new SplitPaneStyle( handle ), vertical )
-		{}
+		public SplitPane(Element firstWidget, Element secondWidget, IDrawable handle, bool vertical = false) : this(
+			firstWidget, secondWidget, new SplitPaneStyle(handle), vertical)
+		{
+		}
 
 
-		public SplitPane( SplitPaneStyle style, bool vertical = false ) : this( null, null, style, vertical )
-		{}
+		public SplitPane(SplitPaneStyle style, bool vertical = false) : this(null, null, style, vertical)
+		{
+		}
 
 
 		#region IInputListener
@@ -80,30 +93,31 @@ namespace Nez.UI
 		}
 
 
-		bool IInputListener.OnMousePressed( Vector2 mousePos )
+		bool IInputListener.OnMousePressed(Vector2 mousePos)
 		{
-			if( _handleBounds.Contains( mousePos ) )
+			if (_handleBounds.Contains(mousePos))
 			{
 				_lastPoint = mousePos;
 				_handlePosition = _handleBounds.Location;
 				return true;
 			}
+
 			return false;
 		}
 
 
-		void IInputListener.OnMouseMoved( Vector2 mousePos )
+		void IInputListener.OnMouseMoved(Vector2 mousePos)
 		{
-			if( _vertical )
+			if (_vertical)
 			{
 				var delta = mousePos.Y - _lastPoint.Y;
 				var availHeight = height - _style.Handle.MinHeight;
 				var dragY = _handlePosition.Y + delta;
 				_handlePosition.Y = dragY;
-				dragY = Math.Max( 0, dragY );
-				dragY = Math.Min( availHeight, dragY );
-				_splitAmount = 1 - ( dragY / availHeight );
-				_splitAmount = Mathf.Clamp( _splitAmount, _minAmount, _maxAmount );
+				dragY = Math.Max(0, dragY);
+				dragY = Math.Min(availHeight, dragY);
+				_splitAmount = 1 - (dragY / availHeight);
+				_splitAmount = Mathf.Clamp(_splitAmount, _minAmount, _maxAmount);
 
 				_lastPoint = mousePos;
 			}
@@ -113,23 +127,24 @@ namespace Nez.UI
 				var availWidth = width - _style.Handle.MinWidth;
 				var dragX = _handlePosition.X + delta;
 				_handlePosition.X = dragX;
-				dragX = Math.Max( 0, dragX );
-				dragX = Math.Min( availWidth, dragX );
+				dragX = Math.Max(0, dragX);
+				dragX = Math.Min(availWidth, dragX);
 				_splitAmount = dragX / availWidth;
-				_splitAmount = Mathf.Clamp( _splitAmount, _minAmount, _maxAmount );
+				_splitAmount = Mathf.Clamp(_splitAmount, _minAmount, _maxAmount);
 
 				_lastPoint = mousePos;
 			}
+
 			Invalidate();
 		}
 
 
-		void IInputListener.OnMouseUp( Vector2 mousePos )
+		void IInputListener.OnMouseUp(Vector2 mousePos)
 		{
 		}
 
 
-		bool IInputListener.OnMouseScrolled( int mouseWheelDelta )
+		bool IInputListener.OnMouseScrolled(int mouseWheelDelta)
 		{
 			return false;
 		}
@@ -139,99 +154,104 @@ namespace Nez.UI
 
 		public override void Layout()
 		{
-			if( _vertical )
+			if (_vertical)
 				CalculateVertBoundsAndPositions();
 			else
 				CalculateHorizBoundsAndPositions();
 
-			if( _firstWidget != null )
+			if (_firstWidget != null)
 			{
 				var firstWidgetBounds = this._firstWidgetBounds;
-				_firstWidget.SetBounds( firstWidgetBounds.X, firstWidgetBounds.Y, firstWidgetBounds.Width, firstWidgetBounds.Height );
+				_firstWidget.SetBounds(firstWidgetBounds.X, firstWidgetBounds.Y, firstWidgetBounds.Width,
+					firstWidgetBounds.Height);
 
-				if( _firstWidget is ILayout )
-					( (ILayout)_firstWidget ).Validate();
+				if (_firstWidget is ILayout)
+					((ILayout) _firstWidget).Validate();
 			}
-				
-			if( _secondWidget != null )
+
+			if (_secondWidget != null)
 			{
 				var secondWidgetBounds = this._secondWidgetBounds;
-				_secondWidget.SetBounds( secondWidgetBounds.X, secondWidgetBounds.Y, secondWidgetBounds.Width, secondWidgetBounds.Height );
+				_secondWidget.SetBounds(secondWidgetBounds.X, secondWidgetBounds.Y, secondWidgetBounds.Width,
+					secondWidgetBounds.Height);
 
-				if( _secondWidget is ILayout )
-					( (ILayout)_secondWidget ).Validate();
+				if (_secondWidget is ILayout)
+					((ILayout) _secondWidget).Validate();
 			}
 		}
 
 
-		public override void Draw( Graphics graphics, float parentAlpha )
+		public override void Draw(Graphics graphics, float parentAlpha)
 		{
 			Validate();
 
-			if( transform )
-				ApplyTransform( graphics, ComputeTransform() );
-			if( _firstWidget != null && _firstWidget.IsVisible() )
+			if (transform)
+				ApplyTransform(graphics, ComputeTransform());
+			if (_firstWidget != null && _firstWidget.IsVisible())
 			{
-				var scissor = ScissorStack.CalculateScissors( stage?.Camera, graphics.Batcher.TransformMatrix, _firstWidgetBounds );
-				if( ScissorStack.PushScissors( scissor ) )
+				var scissor = ScissorStack.CalculateScissors(stage?.Camera, graphics.Batcher.TransformMatrix,
+					_firstWidgetBounds);
+				if (ScissorStack.PushScissors(scissor))
 				{
-					graphics.Batcher.EnableScissorTest( true );
-					_firstWidget.Draw( graphics, parentAlpha * color.A );
-					graphics.Batcher.EnableScissorTest( false );
+					graphics.Batcher.EnableScissorTest(true);
+					_firstWidget.Draw(graphics, parentAlpha * color.A);
+					graphics.Batcher.EnableScissorTest(false);
 					ScissorStack.PopScissors();
 				}
 			}
 
-			if( _secondWidget != null && _secondWidget.IsVisible() )
+			if (_secondWidget != null && _secondWidget.IsVisible())
 			{
-				var scissor = ScissorStack.CalculateScissors( stage?.Camera, graphics.Batcher.TransformMatrix, _secondWidgetBounds );
-				if( ScissorStack.PushScissors( scissor ) )
+				var scissor = ScissorStack.CalculateScissors(stage?.Camera, graphics.Batcher.TransformMatrix,
+					_secondWidgetBounds);
+				if (ScissorStack.PushScissors(scissor))
 				{
-					graphics.Batcher.EnableScissorTest( true );
-					_secondWidget.Draw( graphics, parentAlpha * color.A );
-					graphics.Batcher.EnableScissorTest( false );
+					graphics.Batcher.EnableScissorTest(true);
+					_secondWidget.Draw(graphics, parentAlpha * color.A);
+					graphics.Batcher.EnableScissorTest(false);
 					ScissorStack.PopScissors();
 				}
 			}
-				
-			_style.Handle.Draw( graphics, _handleBounds.X, _handleBounds.Y, _handleBounds.Width, _handleBounds.Height, new Color( color, (int)(color.A * parentAlpha) ) );
 
-			if( transform )
-				ResetTransform( graphics );
+			_style.Handle.Draw(graphics, _handleBounds.X, _handleBounds.Y, _handleBounds.Width, _handleBounds.Height,
+				new Color(color, (int) (color.A * parentAlpha)));
+
+			if (transform)
+				ResetTransform(graphics);
 		}
 
 
 		void CalculateHorizBoundsAndPositions()
 		{
 			var availWidth = width - _style.Handle.MinWidth;
-			var leftAreaWidth = (int)( availWidth * _splitAmount );
+			var leftAreaWidth = (int) (availWidth * _splitAmount);
 			var rightAreaWidth = availWidth - leftAreaWidth;
 			var handleWidth = _style.Handle.MinWidth;
 
-			_firstWidgetBounds = new RectangleF( 0, 0, leftAreaWidth, height );
-			_secondWidgetBounds = new RectangleF( leftAreaWidth + handleWidth, 0, rightAreaWidth, height );
-			_handleBounds = new RectangleF( leftAreaWidth, 0, handleWidth, height );
+			_firstWidgetBounds = new RectangleF(0, 0, leftAreaWidth, height);
+			_secondWidgetBounds = new RectangleF(leftAreaWidth + handleWidth, 0, rightAreaWidth, height);
+			_handleBounds = new RectangleF(leftAreaWidth, 0, handleWidth, height);
 		}
 
 
 		void CalculateVertBoundsAndPositions()
 		{
 			var availHeight = height - _style.Handle.MinHeight;
-			var topAreaHeight = (int)( availHeight * _splitAmount );
+			var topAreaHeight = (int) (availHeight * _splitAmount);
 			var bottomAreaHeight = availHeight - topAreaHeight;
 
-			_firstWidgetBounds = new RectangleF( 0, height - topAreaHeight, width, topAreaHeight );
-			_secondWidgetBounds = new RectangleF( 0, 0, width, bottomAreaHeight );
-			_handleBounds = new RectangleF( 0, bottomAreaHeight, width, _style.Handle.MinHeight );
+			_firstWidgetBounds = new RectangleF(0, height - topAreaHeight, width, topAreaHeight);
+			_secondWidgetBounds = new RectangleF(0, 0, width, bottomAreaHeight);
+			_handleBounds = new RectangleF(0, bottomAreaHeight, width, _style.Handle.MinHeight);
 		}
 
 
 		#region Configuration
 
-		public SplitPane SetStyle( SplitPaneStyle style )
+		public SplitPane SetStyle(SplitPaneStyle style)
 		{
 			_style = style;
-			SetHandle( _style.Handle );
+			SetHandle(_style.Handle);
 			return this;
 		}
 
@@ -242,7 +262,7 @@ namespace Nez.UI
 		}
 
 
-		public SplitPane SetHandle( IDrawable handle )
+		public SplitPane SetHandle(IDrawable handle)
 		{
 			_style.Handle = handle;
 			Invalidate();
@@ -251,28 +271,28 @@ namespace Nez.UI
 		}
 
 
-		public SplitPane SetFirstWidget( Element firstWidget )
+		public SplitPane SetFirstWidget(Element firstWidget)
 		{
-			if( _firstWidget != null )
-				RemoveElement( _firstWidget );
+			if (_firstWidget != null)
+				RemoveElement(_firstWidget);
 
 			_firstWidget = firstWidget;
-			if( _firstWidget != null )
-				AddElement( _firstWidget );
+			if (_firstWidget != null)
+				AddElement(_firstWidget);
 			Invalidate();
 
 			return this;
 		}
 
 
-		public SplitPane SetSecondWidget( Element secondWidget )
+		public SplitPane SetSecondWidget(Element secondWidget)
 		{
-			if( _secondWidget != null )
-				RemoveElement( _secondWidget );
+			if (_secondWidget != null)
+				RemoveElement(_secondWidget);
 
 			_secondWidget = secondWidget;
-			if( _secondWidget != null )
-				AddElement( _secondWidget );
+			if (_secondWidget != null)
+				AddElement(_secondWidget);
 			Invalidate();
 
 			return this;
@@ -283,30 +303,29 @@ namespace Nez.UI
 		/// The split amount between the min and max amount
 		/// </summary>
 		/// <param name="amount">Amount.</param>
-		public SplitPane SetSplitAmount( float amount )
+		public SplitPane SetSplitAmount(float amount)
 		{
-			_splitAmount = Mathf.Clamp( amount, _minAmount, _maxAmount );
+			_splitAmount = Mathf.Clamp(amount, _minAmount, _maxAmount);
 			return this;
 		}
 
 
-		public SplitPane SetMinSplitAmount( float amount )
+		public SplitPane SetMinSplitAmount(float amount)
 		{
-			Insist.IsTrue( amount < 0, "minAmount has to be >= 0" );
+			Insist.IsTrue(amount < 0, "minAmount has to be >= 0");
 			_minAmount = amount;
 			return this;
 		}
 
 
-		public SplitPane SetMaxSplitAmount( float amount )
+		public SplitPane SetMaxSplitAmount(float amount)
 		{
-			Insist.IsTrue( amount > 0, "maxAmount has to be <= 1" );
+			Insist.IsTrue(amount > 0, "maxAmount has to be <= 1");
 			_maxAmount = amount;
 			return this;
 		}
 
 		#endregion
-
 	}
 
 
@@ -316,10 +335,11 @@ namespace Nez.UI
 
 
 		public SplitPaneStyle()
-		{}
+		{
+		}
 
 
-		public SplitPaneStyle( IDrawable handle )
+		public SplitPaneStyle(IDrawable handle)
 		{
 			this.Handle = handle;
 		}
@@ -327,10 +347,10 @@ namespace Nez.UI
 
 		public SplitPaneStyle Clone()
 		{
-			return new SplitPaneStyle {
+			return new SplitPaneStyle
+			{
 				Handle = Handle
 			};
 		}
 	}
 }
-

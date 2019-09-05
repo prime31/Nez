@@ -9,7 +9,7 @@
 		public bool Enabled
 		{
 			get => _enabled;
-			set => SetEnabled( value );
+			set => SetEnabled(value);
 		}
 
 		/// <summary>
@@ -17,13 +17,13 @@
 		/// </summary>
 		/// <returns>The enabled.</returns>
 		/// <param name="isEnabled">If set to <c>true</c> is enabled.</param>
-		public void SetEnabled( bool isEnabled )
+		public void SetEnabled(bool isEnabled)
 		{
-			if( _enabled != isEnabled )
+			if (_enabled != isEnabled)
 			{
 				_enabled = isEnabled;
 
-				if( _enabled )
+				if (_enabled)
 					OnEnabled();
 				else
 					OnDisabled();
@@ -39,22 +39,23 @@
 		/// called when this GlobalManager is enabled
 		/// </summary>
 		public virtual void OnEnabled()
-		{ }
+		{
+		}
 
 		/// <summary>
 		/// called when the this GlobalManager is disabled
 		/// </summary>
 		public virtual void OnDisabled()
-		{ }
+		{
+		}
 
 		/// <summary>
 		/// called each frame before Scene.update
 		/// </summary>
 		public virtual void Update()
-		{ }
+		{
+		}
 
 		#endregion
-
-
 	}
 }

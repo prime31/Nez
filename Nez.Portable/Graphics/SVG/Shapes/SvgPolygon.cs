@@ -6,35 +6,32 @@ namespace Nez.Svg
 {
 	public class SvgPolygon : SvgElement
 	{
-		[XmlAttribute( "cx" )]
-		public float CenterX;
+		[XmlAttribute("cx")] public float CenterX;
 
-		[XmlAttribute( "cy" )]
-		public float CenterY;
+		[XmlAttribute("cy")] public float CenterY;
 
-		[XmlAttribute( "sides" )]
-		public int Sides;
+		[XmlAttribute("sides")] public int Sides;
 
-		[XmlAttribute( "points" )]
+		[XmlAttribute("points")]
 		public string PointsAttribute
 		{
 			get { return null; }
-			set { ParsePoints( value ); }
+			set { ParsePoints(value); }
 		}
 
 		public Vector2[] Points;
 
 
-		void ParsePoints( string str )
+		void ParsePoints(string str)
 		{
 			var format = System.Globalization.CultureInfo.InvariantCulture.NumberFormat;
-			var pairs = str.Split( new char[] { ' ' }, System.StringSplitOptions.RemoveEmptyEntries );
+			var pairs = str.Split(new char[] {' '}, System.StringSplitOptions.RemoveEmptyEntries);
 			Points = new Vector2[pairs.Length];
 
-			for( var i = 0; i < pairs.Length; i++ )
+			for (var i = 0; i < pairs.Length; i++)
 			{
-				var parts = pairs[i].Split( new char[] { ',' }, System.StringSplitOptions.RemoveEmptyEntries );
-				Points[i] = new Vector2( float.Parse( parts[0], format ), float.Parse( parts[1], format ) );
+				var parts = pairs[i].Split(new char[] {','}, System.StringSplitOptions.RemoveEmptyEntries);
+				Points[i] = new Vector2(float.Parse(parts[0], format), float.Parse(parts[1], format));
 			}
 		}
 
@@ -43,7 +40,7 @@ namespace Nez.Svg
 		{
 			var pts = new Vector2[Points.Length];
 			var mat = GetCombinedMatrix();
-			Vector2Ext.Transform( Points, ref mat, pts );
+			Vector2Ext.Transform(Points, ref mat, pts);
 
 			return pts;
 		}
@@ -57,12 +54,11 @@ namespace Nez.Svg
 		{
 			var pts = new Vector2[Points.Length];
 
-			var center = new Vector2( CenterX, CenterY );
-			for( var i = 0; i < Points.Length; i++ )
+			var center = new Vector2(CenterX, CenterY);
+			for (var i = 0; i < Points.Length; i++)
 				pts[i] = Points[i] - center;
 
 			return pts;
 		}
-
 	}
 }

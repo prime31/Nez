@@ -20,23 +20,24 @@ namespace Nez.AI.GOAP
 		}
 
 
-		public bool Plan( bool debugPlan = false )
+		public bool Plan(bool debugPlan = false)
 		{
 			List<AStarNode> nodes = null;
-			if( debugPlan )
+			if (debugPlan)
 				nodes = new List<AStarNode>();
-			
-			Actions = _planner.Plan( GetWorldState(), GetGoalState(), nodes );
 
-			if( nodes != null && nodes.Count > 0 )
+			Actions = _planner.Plan(GetWorldState(), GetGoalState(), nodes);
+
+			if (nodes != null && nodes.Count > 0)
 			{
-				Debug.Log( "---- ActionPlanner plan ----" );
-				Debug.Log( "plan cost = {0}\n", nodes[nodes.Count - 1].CostSoFar );
-				Debug.Log( "{0}\t{1}", "start".PadRight( 15 ), GetWorldState().Describe( _planner ) );
-				for( var i = 0; i < nodes.Count; i++ )
+				Debug.Log("---- ActionPlanner plan ----");
+				Debug.Log("plan cost = {0}\n", nodes[nodes.Count - 1].CostSoFar);
+				Debug.Log("{0}\t{1}", "start".PadRight(15), GetWorldState().Describe(_planner));
+				for (var i = 0; i < nodes.Count; i++)
 				{
-					Debug.Log( "{0}: {1}\t{2}", i, nodes[i].Action.GetType().Name.PadRight( 15 ), nodes[i].WorldState.Describe( _planner ) );
-					Pool<AStarNode>.Free( nodes[i] );
+					Debug.Log("{0}: {1}\t{2}", i, nodes[i].Action.GetType().Name.PadRight(15),
+						nodes[i].WorldState.Describe(_planner));
+					Pool<AStarNode>.Free(nodes[i]);
 				}
 			}
 
@@ -62,7 +63,5 @@ namespace Nez.AI.GOAP
 		/// </summary>
 		/// <returns>The goal state.</returns>
 		abstract public WorldState GetGoalState();
-
 	}
 }
-

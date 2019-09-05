@@ -9,4 +9,3 @@ namespace Nez.Tiled
 		Image
 	}
 }
-

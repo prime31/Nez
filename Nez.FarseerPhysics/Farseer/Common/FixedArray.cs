@@ -34,7 +34,7 @@ namespace FarseerPhysics.Common
 		{
 			get
 			{
-				switch( index )
+				switch (index)
 				{
 					case 0:
 						return _value0;
@@ -46,7 +46,7 @@ namespace FarseerPhysics.Common
 			}
 			set
 			{
-				switch( index )
+				switch (index)
 				{
 					case 0:
 						_value0 = value;
@@ -71,7 +71,7 @@ namespace FarseerPhysics.Common
 		{
 			get
 			{
-				switch( index )
+				switch (index)
 				{
 					case 0:
 						return _value0;
@@ -85,7 +85,7 @@ namespace FarseerPhysics.Common
 			}
 			set
 			{
-				switch( index )
+				switch (index)
 				{
 					case 0:
 						_value0 = value;
@@ -114,7 +114,7 @@ namespace FarseerPhysics.Common
 		{
 			get
 			{
-				switch( index )
+				switch (index)
 				{
 					case 0:
 						return _value0;
@@ -130,7 +130,7 @@ namespace FarseerPhysics.Common
 			}
 			set
 			{
-				switch( index )
+				switch (index)
 				{
 					case 0:
 						_value0 = value;
@@ -166,7 +166,7 @@ namespace FarseerPhysics.Common
 		{
 			get
 			{
-				switch( index )
+				switch (index)
 				{
 					case 0:
 						return _value0;
@@ -190,7 +190,7 @@ namespace FarseerPhysics.Common
 			}
 			set
 			{
-				switch( index )
+				switch (index)
 				{
 					case 0:
 						_value0 = value;
@@ -221,6 +221,5 @@ namespace FarseerPhysics.Common
 				}
 			}
 		}
-
 	}
 }

@@ -12,7 +12,7 @@ namespace Nez.Persistence
 	/// </summary>
 	public sealed class JsonEncoder : IJsonEncoder
 	{
-		static readonly StringBuilder _builder = new StringBuilder( 2000 );
+		static readonly StringBuilder _builder = new StringBuilder(2000);
 		readonly CacheResolver _cacheResolver = new CacheResolver();
 		readonly JsonSettings _settings;
 		readonly Dictionary<object, int> _referenceTracker = new Dictionary<object, int>();
@@ -26,28 +26,28 @@ namespace Nez.Persistence
 		Stack<bool> _isFirstItemWrittenStack = new Stack<bool>();
 
 
-		public static string ToJson( object obj, JsonSettings settings )
+		public static string ToJson(object obj, JsonSettings settings)
 		{
-			var encoder = new JsonEncoder( settings );
-			encoder.EncodeValue( obj, false );
+			var encoder = new JsonEncoder(settings);
+			encoder.EncodeValue(obj, false);
 
 			var json = _builder.ToString();
 			_builder.Length = 0;
 			return json;
 		}
 
-		JsonEncoder( JsonSettings settings )
+		JsonEncoder(JsonSettings settings)
 		{
 			_settings = settings;
 			indent = 0;
 		}
 
-		public void EncodeKeyValuePair( string key, object value )
+		public void EncodeKeyValuePair(string key, object value)
 		{
 			WriteValueDelimiter();
-			EncodeString( key );
+			EncodeString(key);
 			AppendColon();
-			EncodeValue( value );
+			EncodeValue(value);
 		}
 
 		/// <summary>
@@ -55,172 +55,172 @@ namespace Nez.Persistence
 		/// </summary>
 		/// <param name="value">Value.</param>
 		/// <param name="forceTypeHint">If set to <c>true</c> force type hint.</param>
-		void EncodeValue( object value, bool forceTypeHint = false )
+		void EncodeValue(object value, bool forceTypeHint = false)
 		{
-			if( value == null )
+			if (value == null)
 			{
-				_builder.Append( "null" );
+				_builder.Append("null");
 			}
-			else if( value is string )
+			else if (value is string)
 			{
-				EncodeString( (string)value );
+				EncodeString((string) value);
 			}
-			else if( value is char )
+			else if (value is char)
 			{
-				EncodeString( value.ToString() );
+				EncodeString(value.ToString());
 			}
-			else if( value is bool )
+			else if (value is bool)
 			{
-				_builder.Append( (bool)value ? "true" : "false" );
+				_builder.Append((bool) value ? "true" : "false");
 			}
-			else if( value is DateTime )
+			else if (value is DateTime)
 			{
-				var output = ( (DateTime)value ).ToString( JsonConstants.iso8601Format[0], CultureInfo.InvariantCulture );
-				EncodeString( output );
+				var output = ((DateTime) value).ToString(JsonConstants.iso8601Format[0], CultureInfo.InvariantCulture);
+				EncodeString(output);
 			}
-			else if( value is Enum )
+			else if (value is Enum)
 			{
-				EncodeString( value.ToString() );
+				EncodeString(value.ToString());
 			}
-			else if( value is Array )
+			else if (value is Array)
 			{
-				EncodeArray( (Array)value );
+				EncodeArray((Array) value);
 			}
-			else if( value is IList )
+			else if (value is IList)
 			{
-				EncodeList( (IList)value );
+				EncodeList((IList) value);
 			}
-			else if( value is IDictionary )
+			else if (value is IDictionary)
 			{
-				EncodeDictionary( (IDictionary)value );
+				EncodeDictionary((IDictionary) value);
 			}
-			else if( value is float ||
-				value is double ||
-				value is int ||
-				value is uint ||
-				value is long ||
-				value is sbyte ||
-				value is byte ||
-				value is short ||
-				value is ushort ||
-				value is ulong ||
-				value is decimal )
+			else if (value is float ||
+			         value is double ||
+			         value is int ||
+			         value is uint ||
+			         value is long ||
+			         value is sbyte ||
+			         value is byte ||
+			         value is short ||
+			         value is ushort ||
+			         value is ulong ||
+			         value is decimal)
 			{
-				_builder.Append( Convert.ToString( value, CultureInfo.InvariantCulture ) );
+				_builder.Append(Convert.ToString(value, CultureInfo.InvariantCulture));
 				return;
 			}
 			else
 			{
-				EncodeObject( value, forceTypeHint );
+				EncodeObject(value, forceTypeHint);
 			}
 		}
 
-		void EncodeString( string value )
+		void EncodeString(string value)
 		{
-			_builder.Append( '\"' );
+			_builder.Append('\"');
 
 			var charArray = value.ToCharArray();
-			foreach( var c in charArray )
+			foreach (var c in charArray)
 			{
-				switch( c )
+				switch (c)
 				{
 					case '"':
-						_builder.Append( "\\\"" );
+						_builder.Append("\\\"");
 						break;
 
 					case '\\':
-						_builder.Append( "\\\\" );
+						_builder.Append("\\\\");
 						break;
 
 					case '\b':
-						_builder.Append( "\\b" );
+						_builder.Append("\\b");
 						break;
 
 					case '\f':
-						_builder.Append( "\\f" );
+						_builder.Append("\\f");
 						break;
 
 					case '\n':
-						_builder.Append( "\\n" );
+						_builder.Append("\\n");
 						break;
 
 					case '\r':
-						_builder.Append( "\\r" );
+						_builder.Append("\\r");
 						break;
 
 					case '\t':
-						_builder.Append( "\\t" );
+						_builder.Append("\\t");
 						break;
 
 					default:
-						var codepoint = Convert.ToInt32( c );
-						if( ( codepoint >= 32 ) && ( codepoint <= 126 ) )
+						var codepoint = Convert.ToInt32(c);
+						if ((codepoint >= 32) && (codepoint <= 126))
 						{
-							_builder.Append( c );
+							_builder.Append(c);
 						}
 						else
 						{
-							_builder.Append( "\\u" + Convert.ToString( codepoint, 16 ).PadLeft( 4, '0' ) );
+							_builder.Append("\\u" + Convert.ToString(codepoint, 16).PadLeft(4, '0'));
 						}
 
 						break;
 				}
 			}
 
-			_builder.Append( '\"' );
+			_builder.Append('\"');
 		}
 
-		void EncodeObject( object value, bool forceTypeHint )
+		void EncodeObject(object value, bool forceTypeHint)
 		{
 			var type = value.GetType();
 
 			WriteStartObject();
 
 			// if this returns true, we have a reference so we are done
-			if( WriteOptionalReferenceData( value ) )
+			if (WriteOptionalReferenceData(value))
 			{
 				WriteEndObject();
 				return;
 			}
 
-			WriteOptionalTypeHint( type, forceTypeHint );
+			WriteOptionalTypeHint(type, forceTypeHint);
 
 			// check for an override converter and use it if present
-			var converter = _settings.GetTypeConverterForType( type );
-			if( converter != null && converter.CanWrite )
+			var converter = _settings.GetTypeConverterForType(type);
+			if (converter != null && converter.CanWrite)
 			{
-				converter.WriteJson( this, value );
-				if( converter.WantsExclusiveWrite )
+				converter.WriteJson(this, value);
+				if (converter.WantsExclusiveWrite)
 				{
 					WriteEndObject();
 					return;
 				}
 			}
 
-			foreach( var field in _cacheResolver.GetEncodableFieldsForType( type ) )
+			foreach (var field in _cacheResolver.GetEncodableFieldsForType(type))
 			{
 				WriteValueDelimiter();
-				EncodeString( field.Name );
+				EncodeString(field.Name);
 				AppendColon();
-				EncodeValue( field.GetValue( value ) );
+				EncodeValue(field.GetValue(value));
 			}
 
-			foreach( var property in _cacheResolver.GetEncodablePropertiesForType( type ) )
+			foreach (var property in _cacheResolver.GetEncodablePropertiesForType(type))
 			{
-				if( property.CanRead )
+				if (property.CanRead)
 				{
 					WriteValueDelimiter();
-					EncodeString( property.Name );
+					EncodeString(property.Name);
 					AppendColon();
 					try
 					{
-						EncodeValue( property.GetValue( value, null ) );
+						EncodeValue(property.GetValue(value, null));
 					}
-					catch( Exception e )
+					catch (Exception e)
 					{
 						// encode failed. stick a default value in there
-						EncodeValue( type.IsValueType ? Activator.CreateInstance( type ) : null );
-						System.Console.WriteLine( $"Failed to write property {property.Name} for type {type.Name}. {e}" );
+						EncodeValue(type.IsValueType ? Activator.CreateInstance(type) : null);
+						System.Console.WriteLine($"Failed to write property {property.Name} for type {type.Name}. {e}");
 					}
 				}
 			}
@@ -228,34 +228,36 @@ namespace Nez.Persistence
 			WriteEndObject();
 		}
 
-		void EncodeDictionary( IDictionary value )
+		void EncodeDictionary(IDictionary value)
 		{
 			WriteStartObject();
 
-			foreach( var e in value.Keys )
+			foreach (var e in value.Keys)
 			{
 				WriteValueDelimiter();
-				EncodeString( e.ToString() );
+				EncodeString(e.ToString());
 				AppendColon();
-				EncodeValue( value[e] );
+				EncodeValue(value[e]);
 			}
 
 			WriteEndObject();
 		}
 
-		void EncodeList( IList value )
+		void EncodeList(IList value)
 		{
-			var forceTypeHint = _settings.TypeNameHandling == TypeNameHandling.All || _settings.TypeNameHandling == TypeNameHandling.Arrays;
+			var forceTypeHint = _settings.TypeNameHandling == TypeNameHandling.All ||
+			                    _settings.TypeNameHandling == TypeNameHandling.Arrays;
 
 			Type listItemType = null;
+
 			// auto means we need to know the item type of the list. If our object is not the same as the list type
 			// then we need to put the type hint in.
-			if( !forceTypeHint && _settings.TypeNameHandling == TypeNameHandling.Auto )
+			if (!forceTypeHint && _settings.TypeNameHandling == TypeNameHandling.Auto)
 			{
 				var listType = value.GetType();
-				foreach( Type interfaceType in listType.GetInterfaces() )
+				foreach (Type interfaceType in listType.GetInterfaces())
 				{
-					if( interfaceType.IsGenericType && interfaceType.GetGenericTypeDefinition() == typeof( IList<> ) )
+					if (interfaceType.IsGenericType && interfaceType.GetGenericTypeDefinition() == typeof(IList<>))
 					{
 						listItemType = listType.GetGenericArguments()[0];
 						break;
@@ -265,62 +267,64 @@ namespace Nez.Persistence
 
 			WriteStartArray();
 
-			foreach( var obj in value )
+			foreach (var obj in value)
 			{
 				WriteValueDelimiter();
-				forceTypeHint = forceTypeHint || ( listItemType != null && listItemType != obj.GetType() );
-				EncodeValue( obj, forceTypeHint );
+				forceTypeHint = forceTypeHint || (listItemType != null && listItemType != obj.GetType());
+				EncodeValue(obj, forceTypeHint);
 			}
 
 			WriteEndArray();
 		}
 
-		void EncodeArray( Array value )
+		void EncodeArray(Array value)
 		{
-			if( value.Rank == 1 )
+			if (value.Rank == 1)
 			{
-				EncodeList( value );
+				EncodeList(value);
 			}
 			else
 			{
 				var indices = new int[value.Rank];
-				EncodeArrayRank( value, 0, indices );
+				EncodeArrayRank(value, 0, indices);
 			}
 		}
 
-		void EncodeArrayRank( Array value, int rank, int[] indices )
+		void EncodeArrayRank(Array value, int rank, int[] indices)
 		{
 			WriteStartArray();
 
-			var min = value.GetLowerBound( rank );
-			var max = value.GetUpperBound( rank );
+			var min = value.GetLowerBound(rank);
+			var max = value.GetUpperBound(rank);
 
-			if( rank == value.Rank - 1 )
+			if (rank == value.Rank - 1)
 			{
-				var forceTypeHint = _settings.TypeNameHandling == TypeNameHandling.All || _settings.TypeNameHandling == TypeNameHandling.Arrays;
+				var forceTypeHint = _settings.TypeNameHandling == TypeNameHandling.All ||
+				                    _settings.TypeNameHandling == TypeNameHandling.Arrays;
 
 				Type arrayItemType = null;
-				if( _settings.TypeNameHandling == TypeNameHandling.Auto || _settings.TypeNameHandling == TypeNameHandling.Arrays )
+				if (_settings.TypeNameHandling == TypeNameHandling.Auto ||
+				    _settings.TypeNameHandling == TypeNameHandling.Arrays)
 				{
 					arrayItemType = value.GetType().GetElementType();
 				}
 
-				for( var i = min; i <= max; i++ )
+				for (var i = min; i <= max; i++)
 				{
 					indices[rank] = i;
 					WriteValueDelimiter();
-					var val = value.GetValue( indices );
-					forceTypeHint = forceTypeHint || ( arrayItemType != null && arrayItemType != val.GetType() );
-					EncodeValue( val, forceTypeHint );
+					var val = value.GetValue(indices);
+					forceTypeHint = forceTypeHint || (arrayItemType != null && arrayItemType != val.GetType());
+					EncodeValue(val, forceTypeHint);
 				}
 			}
 			else
 			{
-				for( var i = min; i <= max; i++ )
+				for (var i = min; i <= max; i++)
 				{
 					indices[rank] = i;
 					WriteValueDelimiter();
-					EncodeArrayRank( value, rank + 1, indices );
+					EncodeArrayRank(value, rank + 1, indices);
 				}
 			}
 
@@ -332,19 +336,19 @@ namespace Nez.Persistence
 
 		void AppendIndent()
 		{
-			for( var i = 0; i < indent; i++ )
+			for (var i = 0; i < indent; i++)
 			{
-				_builder.Append( '\t' );
+				_builder.Append('\t');
 			}
 		}
 
 		void AppendColon()
 		{
-			_builder.Append( ':' );
+			_builder.Append(':');
 
-			if( _settings.PrettyPrint )
+			if (_settings.PrettyPrint)
 			{
-				_builder.Append( ' ' );
+				_builder.Append(' ');
 			}
 		}
 
@@ -353,31 +357,32 @@ namespace Nez.Persistence
 		/// to the JSON stream it will return true and the rest of the object data should not be written.
 		/// </summary>
 		/// <param name="value">Value.</param>
-		bool WriteOptionalReferenceData( object value )
+		bool WriteOptionalReferenceData(object value)
 		{
-			if( _settings.PreserveReferencesHandling )
+			if (_settings.PreserveReferencesHandling)
 			{
-				if( !_referenceTracker.ContainsKey( value ) )
+				if (!_referenceTracker.ContainsKey(value))
 				{
 					_referenceTracker[value] = ++_referenceCounter;
 
 					WriteValueDelimiter();
-					EncodeString( JsonConstants.IdPropertyName );
+					EncodeString(JsonConstants.IdPropertyName);
 					AppendColon();
-					EncodeString( _referenceCounter.ToString() );
+					EncodeString(_referenceCounter.ToString());
 				}
 				else
 				{
 					var id = _referenceTracker[value];
 
 					WriteValueDelimiter();
-					EncodeString( JsonConstants.RefPropertyName );
+					EncodeString(JsonConstants.RefPropertyName);
 					AppendColon();
-					EncodeString( id.ToString() );
+					EncodeString(id.ToString());
 
 					return true;
 				}
 			}
+
 			return false;
 		}
 
@@ -386,15 +391,16 @@ namespace Nez.Persistence
 		/// </summary>
 		/// <param name="type">Type.</param>
 		/// <param name="forceTypeHint">If set to <c>true</c> force type hint.</param>
-		void WriteOptionalTypeHint( Type type, bool forceTypeHint )
+		void WriteOptionalTypeHint(Type type, bool forceTypeHint)
 		{
-			forceTypeHint = forceTypeHint || _settings.TypeNameHandling == TypeNameHandling.All || _settings.TypeNameHandling == TypeNameHandling.Objects;
-			if( forceTypeHint )
+			forceTypeHint = forceTypeHint || _settings.TypeNameHandling == TypeNameHandling.All ||
+			                _settings.TypeNameHandling == TypeNameHandling.Objects;
+			if (forceTypeHint)
 			{
 				WriteValueDelimiter();
-				EncodeString( JsonConstants.TypeHintPropertyName );
+				EncodeString(JsonConstants.TypeHintPropertyName);
 				AppendColon();
-				EncodeString( type.FullName );
+				EncodeString(type.FullName);
 			}
 		}
 
@@ -403,22 +409,22 @@ namespace Nez.Persistence
 		/// </summary>
 		void WriteValueDelimiter()
 		{
-			if( _isFirstItemWrittenStack.Peek() )
+			if (_isFirstItemWrittenStack.Peek())
 			{
-				_builder.Append( ',' );
+				_builder.Append(',');
 
-				if( _settings.PrettyPrint )
+				if (_settings.PrettyPrint)
 				{
-					_builder.Append( '\n' );
+					_builder.Append('\n');
 				}
 			}
 			else
 			{
 				_isFirstItemWrittenStack.Pop();
-				_isFirstItemWrittenStack.Push( true );
+				_isFirstItemWrittenStack.Push(true);
 			}
 
-			if( _settings.PrettyPrint )
+			if (_settings.PrettyPrint)
 			{
 				AppendIndent();
 			}
@@ -426,12 +432,12 @@ namespace Nez.Persistence
 
 		void WriteStartObject()
 		{
-			_isFirstItemWrittenStack.Push( false );
-			_builder.Append( '{' );
+			_isFirstItemWrittenStack.Push(false);
+			_builder.Append('{');
 
-			if( _settings.PrettyPrint )
+			if (_settings.PrettyPrint)
 			{
-				_builder.Append( '\n' );
+				_builder.Append('\n');
 				indent++;
 			}
 		}
@@ -439,24 +445,24 @@ namespace Nez.Persistence
 		void WriteEndObject()
 		{
 			_isFirstItemWrittenStack.Pop();
-			if( _settings.PrettyPrint )
+			if (_settings.PrettyPrint)
 			{
-				_builder.Append( '\n' );
+				_builder.Append('\n');
 				indent--;
 				AppendIndent();
 			}
 
-			_builder.Append( '}' );
+			_builder.Append('}');
 		}
 
 		void WriteStartArray()
 		{
-			_isFirstItemWrittenStack.Push( false );
-			_builder.Append( '[' );
+			_isFirstItemWrittenStack.Push(false);
+			_builder.Append('[');
 
-			if( _settings.PrettyPrint )
+			if (_settings.PrettyPrint)
 			{
-				_builder.Append( '\n' );
+				_builder.Append('\n');
 				indent++;
 			}
 		}
@@ -464,17 +470,16 @@ namespace Nez.Persistence
 		void WriteEndArray()
 		{
 			_isFirstItemWrittenStack.Pop();
-			if( _settings.PrettyPrint )
+			if (_settings.PrettyPrint)
 			{
-				_builder.Append( '\n' );
+				_builder.Append('\n');
 				indent--;
 				AppendIndent();
 			}
 
-			_builder.Append( ']' );
+			_builder.Append(']');
 		}
 
 		#endregion
-
 	}
 }

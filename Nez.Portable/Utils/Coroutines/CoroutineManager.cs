@@ -20,10 +20,12 @@ namespace Nez.Systems
 		class CoroutineImpl : ICoroutine, IPoolable
 		{
 			public IEnumerator Enumerator;
+
 			/// <summary>
 			/// anytime a delay is yielded it is added to the waitTimer which tracks the delays
 			/// </summary>
 			public float WaitTimer;
+
 			public bool IsDone;
 			public CoroutineImpl WaitForCoroutine;
 			public bool UseUnscaledDeltaTime = false;
@@ -35,7 +37,7 @@ namespace Nez.Systems
 			}
 
 
-			public ICoroutine SetUseUnscaledDeltaTime( bool useUnscaledDeltaTime )
+			public ICoroutine SetUseUnscaledDeltaTime(bool useUnscaledDeltaTime)
 			{
 				this.UseUnscaledDeltaTime = useUnscaledDeltaTime;
 				return this;
@@ -64,6 +66,7 @@ namespace Nez.Systems
 		/// it in the shouldRunNextFrame List to avoid modifying a List while we iterate.
 		/// </summary>
 		bool _isInUpdate;
+
 		List<CoroutineImpl> _unblockedCoroutines = new List<CoroutineImpl>();
 		List<CoroutineImpl> _shouldRunNextFrame = new List<CoroutineImpl>();
 
@@ -73,7 +76,7 @@ namespace Nez.Systems
 		/// </summary>
 		/// <returns>The coroutine.</returns>
 		/// <param name="enumerator">Enumerator.</param>
-		public ICoroutine StartCoroutine( IEnumerator enumerator )
+		public ICoroutine StartCoroutine(IEnumerator enumerator)
 		{
 			// find or create a CoroutineImpl
 			var coroutine = Pool<CoroutineImpl>.Obtain();
@@ -81,16 +84,16 @@ namespace Nez.Systems
 
 			// setup the coroutine and add it
 			coroutine.Enumerator = enumerator;
-			var shouldContinueCoroutine = TickCoroutine( coroutine );
+			var shouldContinueCoroutine = TickCoroutine(coroutine);
 
 			// guard against empty coroutines
-			if( !shouldContinueCoroutine )
+			if (!shouldContinueCoroutine)
 				return null;
 
-			if( _isInUpdate )
-				_shouldRunNextFrame.Add( coroutine );
+			if (_isInUpdate)
+				_shouldRunNextFrame.Add(coroutine);
 			else
-				_unblockedCoroutines.Add( coroutine );
+				_unblockedCoroutines.Add(coroutine);
 
 			return coroutine;
 		}
@@ -98,46 +101,46 @@ namespace Nez.Systems
 		public override void Update()
 		{
 			_isInUpdate = true;
-			for( var i = 0; i < _unblockedCoroutines.Count; i++ )
+			for (var i = 0; i < _unblockedCoroutines.Count; i++)
 			{
 				var coroutine = _unblockedCoroutines[i];
 
 				// check for stopped coroutines
-				if( coroutine.IsDone )
+				if (coroutine.IsDone)
 				{
-					Pool<CoroutineImpl>.Free( coroutine );
+					Pool<CoroutineImpl>.Free(coroutine);
 					continue;
 				}
 
 				// are we waiting for any other coroutines to finish?
-				if( coroutine.WaitForCoroutine != null )
+				if (coroutine.WaitForCoroutine != null)
 				{
-					if( coroutine.WaitForCoroutine.IsDone )
+					if (coroutine.WaitForCoroutine.IsDone)
 					{
 						coroutine.WaitForCoroutine = null;
 					}
 					else
 					{
-						_shouldRunNextFrame.Add( coroutine );
+						_shouldRunNextFrame.Add(coroutine);
 						continue;
 					}
 				}
 
 				// deal with timers if we have them
-				if( coroutine.WaitTimer > 0 )
+				if (coroutine.WaitTimer > 0)
 				{
 					// still has time left. decrement and run again next frame being sure to decrement with the appropriate deltaTime.
 					coroutine.WaitTimer -= coroutine.UseUnscaledDeltaTime ? Time.UnscaledDeltaTime : Time.DeltaTime;
-					_shouldRunNextFrame.Add( coroutine );
+					_shouldRunNextFrame.Add(coroutine);
 					continue;
 				}
 
-				if( TickCoroutine( coroutine ) )
-					_shouldRunNextFrame.Add( coroutine );
+				if (TickCoroutine(coroutine))
+					_shouldRunNextFrame.Add(coroutine);
 			}
 
 			_unblockedCoroutines.Clear();
-			_unblockedCoroutines.AddRange( _shouldRunNextFrame );
+			_unblockedCoroutines.AddRange(_shouldRunNextFrame);
 			_shouldRunNextFrame.Clear();
 
 			_isInUpdate = false;
@@ -149,45 +152,48 @@ namespace Nez.Systems
 		/// </summary>
 		/// <returns><c>true</c>, if coroutine was ticked, <c>false</c> otherwise.</returns>
 		/// <param name="coroutine">Coroutine.</param>
-		bool TickCoroutine( CoroutineImpl coroutine )
+		bool TickCoroutine(CoroutineImpl coroutine)
 		{
 			// This coroutine has finished
-			if( !coroutine.Enumerator.MoveNext() || coroutine.IsDone )
+			if (!coroutine.Enumerator.MoveNext() || coroutine.IsDone)
 			{
-				Pool<CoroutineImpl>.Free( coroutine );
+				Pool<CoroutineImpl>.Free(coroutine);
 				return false;
 			}
 
-			if( coroutine.Enumerator.Current == null )
+			if (coroutine.Enumerator.Current == null)
 			{
 				// yielded null. run again next frame
 				return true;
 			}
 
-			if( coroutine.Enumerator.Current is WaitForSeconds )
+			if (coroutine.Enumerator.Current is WaitForSeconds)
 			{
-				coroutine.WaitTimer = ( coroutine.Enumerator.Current as WaitForSeconds ).waitTime;
+				coroutine.WaitTimer = (coroutine.Enumerator.Current as WaitForSeconds).waitTime;
 				return true;
 			}
 
-			#if DEBUG
+#if DEBUG
+
 			// deprecation warning for yielding an int/float
-			if( coroutine.Enumerator.Current is int )
+			if (coroutine.Enumerator.Current is int)
 			{
-				Debug.Error( "yield Coroutine.waitForSeconds instead of an int. Yielding an int will not work in a release build." );
-				coroutine.WaitTimer = (int)coroutine.Enumerator.Current;
+				Debug.Error(
+					"yield Coroutine.waitForSeconds instead of an int. Yielding an int will not work in a release build.");
+				coroutine.WaitTimer = (int) coroutine.Enumerator.Current;
 				return true;
 			}
 
-			if( coroutine.Enumerator.Current is float )
+			if (coroutine.Enumerator.Current is float)
 			{
-				Debug.Error( "yield Coroutine.waitForSeconds instead of a float. Yielding a float will not work in a release build." );
-				coroutine.WaitTimer = (float)coroutine.Enumerator.Current;
+				Debug.Error(
+					"yield Coroutine.waitForSeconds instead of a float. Yielding a float will not work in a release build.");
+				coroutine.WaitTimer = (float) coroutine.Enumerator.Current;
 				return true;
 			}
-			#endif
+#endif
 
-			if( coroutine.Enumerator.Current is CoroutineImpl )
+			if (coroutine.Enumerator.Current is CoroutineImpl)
 			{
 				coroutine.WaitForCoroutine = coroutine.Enumerator.Current as CoroutineImpl;
 				return true;
@@ -198,7 +204,5 @@ namespace Nez.Systems
 				return true;
 			}
 		}
-	
 	}
 }
-

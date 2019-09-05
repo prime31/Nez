@@ -17,40 +17,43 @@ namespace Nez.XmlTemplateMaker
 	/// Lots of attributes are available for dealing with the XML parsing. You can find a great document on the attributes available
 	/// here: http://blogs.msdn.com/b/shawnhar/archive/2008/08/12/everything-you-ever-wanted-to-know-about-intermediateserializer.aspx
 	/// </summary>
-	[ContentProcessor( DisplayName = "XML Template Maker Processor" )]
-	public class XmlTemplateMakerProcessor : ContentProcessor<string,object>
+	[ContentProcessor(DisplayName = "XML Template Maker Processor")]
+	public class XmlTemplateMakerProcessor : ContentProcessor<string, object>
 	{
-		public override object Process( string inputClass, ContentProcessorContext context )
+		public override object Process(string inputClass, ContentProcessorContext context)
 		{
-			var inputType = FindTypeForClass( inputClass, context );
+			var inputType = FindTypeForClass(inputClass, context);
 
 			var xmlSettings = new XmlWriterSettings();
 			xmlSettings.Indent = true;
-			var obj = Activator.CreateInstance( inputType );
+			var obj = Activator.CreateInstance(inputType);
 
 			var outputString = new StringBuilder();
-			using( var xmlWriter = XmlWriter.Create( outputString, xmlSettings ) )
-				IntermediateSerializer.Serialize( xmlWriter, obj, null );
+			using (var xmlWriter = XmlWriter.Create(outputString, xmlSettings))
+				IntermediateSerializer.Serialize(xmlWriter, obj, null);
 
-			context.Logger.LogMessage( "\n------- BEGIN XML TEMPLATE -------\n{0}\n------- END XML TEMPLATE -------\n", outputString );
+			context.Logger.LogMessage("\n------- BEGIN XML TEMPLATE -------\n{0}\n------- END XML TEMPLATE -------\n",
+				outputString);
 
-			throw new Exception( "------ DISREGARD THIS EXCEPTION. IT IS THROWN ONLY SO THE XNB DOESNT GET WRITTEN TO THE PROJECT FILE" );
+			throw new Exception(
+				"------ DISREGARD THIS EXCEPTION. IT IS THROWN ONLY SO THE XNB DOESNT GET WRITTEN TO THE PROJECT FILE");
 		}
 
 
-		Type FindTypeForClass( string inputClass, ContentProcessorContext context )
+		Type FindTypeForClass(string inputClass, ContentProcessorContext context)
 		{
-			foreach( var assembly in AppDomain.CurrentDomain.GetAssemblies() )
+			foreach (var assembly in AppDomain.CurrentDomain.GetAssemblies())
 			{
-				context.Logger.LogMessage( "checking assembly: {0}...", assembly.GetName().Name );
-				foreach( var type in assembly.GetTypes() )
+				context.Logger.LogMessage("checking assembly: {0}...", assembly.GetName().Name);
+				foreach (var type in assembly.GetTypes())
 				{
-					if( type.FullName == inputClass )
+					if (type.FullName == inputClass)
 						return type;
 				}
 			}
 
-			throw new Exception( "Could not locate the Type for the class " + inputClass + ". Did you add a reference to the DLL that contains the class in the Pipeline References?" );
+			throw new Exception("Could not locate the Type for the class " + inputClass +
+			                    ". Did you add a reference to the DLL that contains the class in the Pipeline References?");
 		}
 	}
 }

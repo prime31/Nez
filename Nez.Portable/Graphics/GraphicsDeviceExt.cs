@@ -13,18 +13,17 @@ namespace Nez
 		/// </summary>
 		/// <param name="self">Self.</param>
 		/// <param name="renderTarget">Render target.</param>
-		public static void SetRenderTarget( this GraphicsDevice self, RenderTarget2D renderTarget )
+		public static void SetRenderTarget(this GraphicsDevice self, RenderTarget2D renderTarget)
 		{
-			if( renderTarget == null )
+			if (renderTarget == null)
 			{
-				self.SetRenderTargets( null );
+				self.SetRenderTargets(null);
 			}
 			else
 			{
 				_renderTargetBinding[0] = renderTarget;
-				self.SetRenderTargets( _renderTargetBinding );
+				self.SetRenderTargets(_renderTargetBinding);
 			}
 		}
 	}
 }
-

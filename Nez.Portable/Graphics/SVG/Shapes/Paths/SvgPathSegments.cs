@@ -12,26 +12,27 @@ namespace Nez.Svg
 
 
 		protected SvgPathSegment()
-		{}
+		{
+		}
 
 
-		protected SvgPathSegment( Vector2 start, Vector2 end )
+		protected SvgPathSegment(Vector2 start, Vector2 end)
 		{
 			this.Start = start;
 			this.End = end;
 		}
 
 
-		protected string ToSvgString( Vector2 point )
+		protected string ToSvgString(Vector2 point)
 		{
-			return string.Format( "{0} {1}", point.X, point.Y );
+			return string.Format("{0} {1}", point.X, point.Y);
 		}
 	}
 
 
 	public sealed class SvgMoveToSegment : SvgPathSegment
 	{
-		public SvgMoveToSegment( Vector2 position )
+		public SvgMoveToSegment(Vector2 position)
 		{
 			Start = position;
 			End = position;
@@ -40,14 +41,14 @@ namespace Nez.Svg
 
 		public override string ToString()
 		{
-			return "M" + ToSvgString( Start );
+			return "M" + ToSvgString(Start);
 		}
 	}
 
 
 	public sealed class SvgLineSegment : SvgPathSegment
 	{
-		public SvgLineSegment( Vector2 start, Vector2 end )
+		public SvgLineSegment(Vector2 start, Vector2 end)
 		{
 			this.Start = start;
 			this.End = end;
@@ -56,9 +57,8 @@ namespace Nez.Svg
 
 		public override string ToString()
 		{
-			return "L" + ToSvgString( End );
+			return "L" + ToSvgString(End);
 		}
-
 	}
 
 
@@ -79,10 +79,10 @@ namespace Nez.Svg
 		{
 			get
 			{
-				var x1 = Start.X + ( ControlPoint.X - Start.X ) * 2 / 3;
-				var y1 = Start.Y + ( ControlPoint.Y - Start.Y ) * 2 / 3;
+				var x1 = Start.X + (ControlPoint.X - Start.X) * 2 / 3;
+				var y1 = Start.Y + (ControlPoint.Y - Start.Y) * 2 / 3;
 
-				return new Vector2( x1, y1 );
+				return new Vector2(x1, y1);
 			}
 		}
 
@@ -90,14 +90,14 @@ namespace Nez.Svg
 		{
 			get
 			{
-				var x2 = ControlPoint.X + ( End.X - ControlPoint.X ) / 3;
-				var y2 = ControlPoint.Y + ( End.Y - ControlPoint.Y ) / 3;
+				var x2 = ControlPoint.X + (End.X - ControlPoint.X) / 3;
+				var y2 = ControlPoint.Y + (End.Y - ControlPoint.Y) / 3;
 
-				return new Vector2( x2, y2 );
+				return new Vector2(x2, y2);
 			}
 		}
 
-		public SvgQuadraticCurveSegment( Vector2 start, Vector2 controlPoint, Vector2 end )
+		public SvgQuadraticCurveSegment(Vector2 start, Vector2 controlPoint, Vector2 end)
 		{
 			this.Start = start;
 			this.ControlPoint = controlPoint;
@@ -107,9 +107,8 @@ namespace Nez.Svg
 
 		public override string ToString()
 		{
-			return "Q" + ToSvgString( ControlPoint ) + " " + ToSvgString( End );
+			return "Q" + ToSvgString(ControlPoint) + " " + ToSvgString(End);
 		}
-
 	}
 
 
@@ -119,7 +118,7 @@ namespace Nez.Svg
 		public Vector2 SecondCtrlPoint;
 
 
-		public SvgCubicCurveSegment( Vector2 start, Vector2 firstCtrlPoint, Vector2 secondCtrlPoint, Vector2 end )
+		public SvgCubicCurveSegment(Vector2 start, Vector2 firstCtrlPoint, Vector2 secondCtrlPoint, Vector2 end)
 		{
 			this.Start = start;
 			this.End = end;
@@ -130,8 +129,7 @@ namespace Nez.Svg
 
 		public override string ToString()
 		{
-			return "C" + ToSvgString( FirstCtrlPoint ) + " " + ToSvgString( SecondCtrlPoint ) + " " + ToSvgString( End );
+			return "C" + ToSvgString(FirstCtrlPoint) + " " + ToSvgString(SecondCtrlPoint) + " " + ToSvgString(End);
 		}
 	}
-
 }

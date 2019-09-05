@@ -11,10 +11,7 @@ namespace Nez.DeferredLighting
 		/// </summary>
 		public Vector2 Direction
 		{
-			get
-			{
-				return new Vector2( Mathf.Cos( Entity.Transform.Rotation ), Mathf.Sin( Entity.Transform.Rotation ) );
-			}
+			get { return new Vector2(Mathf.Cos(Entity.Transform.Rotation), Mathf.Sin(Entity.Transform.Rotation)); }
 		}
 
 		/// <summary>
@@ -24,9 +21,10 @@ namespace Nez.DeferredLighting
 
 
 		public SpotLight() : base()
-		{}
+		{
+		}
 
-		public SpotLight( Color color )
+		public SpotLight(Color color)
 		{
 			this.Color = color;
 		}
@@ -34,7 +32,7 @@ namespace Nez.DeferredLighting
 
 		#region Point light setters
 
-		public new SpotLight SetZPosition( float z )
+		public new SpotLight SetZPosition(float z)
 		{
 			ZPosition = z;
 			return this;
@@ -45,9 +43,9 @@ namespace Nez.DeferredLighting
 		/// </summary>
 		/// <returns>The radius.</returns>
 		/// <param name="radius">Radius.</param>
-		public new SpotLight SetRadius( float radius )
+		public new SpotLight SetRadius(float radius)
 		{
-			base.SetRadius( radius );
+			base.SetRadius(radius);
 			return this;
 		}
 
@@ -56,7 +54,7 @@ namespace Nez.DeferredLighting
 		/// </summary>
 		/// <returns>The intensity.</returns>
 		/// <param name="intensity">Intensity.</param>
-		public new SpotLight SetIntensity( float intensity )
+		public new SpotLight SetIntensity(float intensity)
 		{
 			this.Intensity = intensity;
 			return this;
@@ -65,7 +63,7 @@ namespace Nez.DeferredLighting
 		#endregion
 
 
-		public SpotLight SetConeAngle( float coneAngle )
+		public SpotLight SetConeAngle(float coneAngle)
 		{
 			this.ConeAngle = coneAngle;
 			return this;
@@ -76,12 +74,10 @@ namespace Nez.DeferredLighting
 		/// </summary>
 		/// <returns>The direction.</returns>
 		/// <param name="direction">Direction.</param>
-		public SpotLight SetDirection( Vector2 direction )
+		public SpotLight SetDirection(Vector2 direction)
 		{
-			Entity.Transform.Rotation = (float)Math.Atan2( direction.Y, direction.X );
+			Entity.Transform.Rotation = (float) Math.Atan2(direction.Y, direction.X);
 			return this;
 		}
-		
 	}
 }
-

@@ -45,42 +45,44 @@ namespace Nez
 		Rectangle _destinationRect;
 
 
-		public FadeTransition( Func<Scene> sceneLoadAction ) : base( sceneLoadAction, true )
+		public FadeTransition(Func<Scene> sceneLoadAction) : base(sceneLoadAction, true)
 		{
 			_destinationRect = PreviousSceneRender.Bounds;
 		}
 
-		public FadeTransition() : this( null )
-		{}
+		public FadeTransition() : this(null)
+		{
+		}
 
 		public override IEnumerator OnBeginTransition()
 		{
 			// create a single pixel texture of our fadeToColor
-			_overlayTexture = Graphics.CreateSingleColorTexture( 1, 1, FadeToColor );
+			_overlayTexture = Graphics.CreateSingleColorTexture(1, 1, FadeToColor);
 
 			var elapsed = 0f;
-			while( elapsed < FadeOutDuration )
+			while (elapsed < FadeOutDuration)
 			{
 				elapsed += Time.DeltaTime;
-				_color = Lerps.Ease( FadeEaseType, ref _toColor, ref _fromColor, elapsed, FadeOutDuration );
+				_color = Lerps.Ease(FadeEaseType, ref _toColor, ref _fromColor, elapsed, FadeOutDuration);
 
 				yield return null;
 			}
 
 			// load up the new Scene
-			yield return Core.StartCoroutine( LoadNextScene() );
+			yield return Core.StartCoroutine(LoadNextScene());
 
 			// dispose of our previousSceneRender. We dont need it anymore.
 			PreviousSceneRender.Dispose();
 			PreviousSceneRender = null;
 
-			yield return Coroutine.WaitForSeconds( DelayBeforeFadeInDuration );
+			yield return Coroutine.WaitForSeconds(DelayBeforeFadeInDuration);
 
 			elapsed = 0f;
-			while( elapsed < FadeInDuration )
+			while (elapsed < FadeInDuration)
 			{
 				elapsed += Time.DeltaTime;
-				_color = Lerps.Ease( EaseHelper.OppositeEaseType( FadeEaseType ), ref _fromColor, ref _toColor, elapsed, FadeInDuration );
+				_color = Lerps.Ease(EaseHelper.OppositeEaseType(FadeEaseType), ref _fromColor, ref _toColor, elapsed,
+					FadeInDuration);
 
 				yield return null;
 			}
@@ -89,20 +91,18 @@ namespace Nez
 			_overlayTexture.Dispose();
 		}
 
-		public override void Render( Graphics graphics )
+		public override void Render(Graphics graphics)
 		{
-            GraphicsDeviceExt.SetRenderTarget(Core.GraphicsDevice, null);
-			graphics.Batcher.Begin( BlendState.NonPremultiplied, Core.DefaultSamplerState, DepthStencilState.None, null );
+			GraphicsDeviceExt.SetRenderTarget(Core.GraphicsDevice, null);
+			graphics.Batcher.Begin(BlendState.NonPremultiplied, Core.DefaultSamplerState, DepthStencilState.None, null);
 
 			// we only render the previousSceneRender while fading to _color. It will be null after that.
-			if( !_isNewSceneLoaded )
-				graphics.Batcher.Draw( PreviousSceneRender, _destinationRect, Color.White );
-			
-			graphics.Batcher.Draw( _overlayTexture, new Rectangle( 0, 0, Screen.Width, Screen.Height ), _color );
-			
+			if (!_isNewSceneLoaded)
+				graphics.Batcher.Draw(PreviousSceneRender, _destinationRect, Color.White);
+
+			graphics.Batcher.Draw(_overlayTexture, new Rectangle(0, 0, Screen.Width, Screen.Height), _color);
+
 			graphics.Batcher.End();
 		}
-
 	}
 }
-

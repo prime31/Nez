@@ -13,7 +13,7 @@ namespace Nez.Verlet
 		/// <summary>
 		/// gravity for the simulation
 		/// </summary>
-		public Vector2 Gravity = new Vector2( 0, 980f );
+		public Vector2 Gravity = new Vector2(0, 980f);
 
 		/// <summary>
 		/// number of iterations that will be used for Constraint solving
@@ -46,7 +46,7 @@ namespace Nez.Verlet
 
 		// collision helpers
 		internal static Collider[] _colliders = new Collider[4];
-		Circle _tempCircle = new Circle( 1 );
+		Circle _tempCircle = new Circle(1);
 
 		// timing
 		float _leftOverTime;
@@ -55,10 +55,10 @@ namespace Nez.Verlet
 		float _fixedDeltaTimeSq;
 
 
-		public VerletWorld( Rectangle? simulationBounds = null )
+		public VerletWorld(Rectangle? simulationBounds = null)
 		{
 			this.SimulationBounds = simulationBounds;
-			_fixedDeltaTimeSq = Mathf.Pow( _fixedDeltaTime, 2 );
+			_fixedDeltaTimeSq = Mathf.Pow(_fixedDeltaTime, 2);
 		}
 
 
@@ -68,93 +68,93 @@ namespace Nez.Verlet
 		{
 			UpdateTiming();
 
-			if( AllowDragging )
+			if (AllowDragging)
 				HandleDragging();
 
-			for( var iteration = 1; iteration <= _iterationSteps; iteration++ )
+			for (var iteration = 1; iteration <= _iterationSteps; iteration++)
 			{
-				for( var i = _composites.Length - 1; i >= 0; i-- )
+				for (var i = _composites.Length - 1; i >= 0; i--)
 				{
 					var composite = _composites.Buffer[i];
 
 					// solve constraints
-					for( var s = 0; s < ConstraintIterations; s++ )
+					for (var s = 0; s < ConstraintIterations; s++)
 						composite.SolveConstraints();
 
 					// do the verlet integration
-					composite.UpdateParticles( _fixedDeltaTimeSq, Gravity );
+					composite.UpdateParticles(_fixedDeltaTimeSq, Gravity);
 
 					// handle collisions with Nez Colliders
 					composite.HandleConstraintCollisions();
 
-					for( var j = 0; j < composite.Particles.Length; j++ )
+					for (var j = 0; j < composite.Particles.Length; j++)
 					{
 						var p = composite.Particles.Buffer[j];
 
 						// optinally constrain to bounds
-						if( SimulationBounds.HasValue )
-							ConstrainParticleToBounds( p );
+						if (SimulationBounds.HasValue)
+							ConstrainParticleToBounds(p);
 
 						// optionally handle collisions with Nez Colliders
-						if( p.CollidesWithColliders )
-							HandleCollisions( p, composite.CollidesWithLayers );
+						if (p.CollidesWithColliders)
+							HandleCollisions(p, composite.CollidesWithLayers);
 					}
 				}
 			}
 		}
 
 
-		[MethodImpl( MethodImplOptions.AggressiveInlining )]
-		void ConstrainParticleToBounds( Particle p )
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		void ConstrainParticleToBounds(Particle p)
 		{
 			var tempPos = p.Position;
 			var bounds = SimulationBounds.Value;
 
-			if( p.Radius == 0 )
+			if (p.Radius == 0)
 			{
-				if( tempPos.Y > bounds.Height )
+				if (tempPos.Y > bounds.Height)
 					tempPos.Y = bounds.Height;
-				else if( tempPos.Y < bounds.Y )
+				else if (tempPos.Y < bounds.Y)
 					tempPos.Y = bounds.Y;
 
-				if( tempPos.X < bounds.X )
+				if (tempPos.X < bounds.X)
 					tempPos.X = bounds.X;
-				else if( tempPos.X > bounds.Width )
+				else if (tempPos.X > bounds.Width)
 					tempPos.X = bounds.Width;
 			}
 			else
 			{
 				// special care for larger particles
-				if( tempPos.Y < bounds.Y + p.Radius )
-					tempPos.Y = 2f * ( bounds.Y + p.Radius ) - tempPos.Y;
-				if( tempPos.Y > bounds.Height - p.Radius )
-					tempPos.Y = 2f * ( bounds.Height - p.Radius ) - tempPos.Y;
-				if( tempPos.X > bounds.Width - p.Radius )
-					tempPos.X = 2f * ( bounds.Width - p.Radius ) - tempPos.X;
-				if( tempPos.X < bounds.X + p.Radius )
-					tempPos.X = 2f * ( bounds.X + p.Radius ) - tempPos.X;
+				if (tempPos.Y < bounds.Y + p.Radius)
+					tempPos.Y = 2f * (bounds.Y + p.Radius) - tempPos.Y;
+				if (tempPos.Y > bounds.Height - p.Radius)
+					tempPos.Y = 2f * (bounds.Height - p.Radius) - tempPos.Y;
+				if (tempPos.X > bounds.Width - p.Radius)
+					tempPos.X = 2f * (bounds.Width - p.Radius) - tempPos.X;
+				if (tempPos.X < bounds.X + p.Radius)
+					tempPos.X = 2f * (bounds.X + p.Radius) - tempPos.X;
 			}
 
 			p.Position = tempPos;
 		}
 
 
-		[MethodImpl( MethodImplOptions.AggressiveInlining )]
-		void HandleCollisions( Particle p, int collidesWithLayers )
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		void HandleCollisions(Particle p, int collidesWithLayers)
 		{
-			var collidedCount = Physics.OverlapCircleAll( p.Position, p.Radius, _colliders, collidesWithLayers );
-			for( var i = 0; i < collidedCount; i++ )
+			var collidedCount = Physics.OverlapCircleAll(p.Position, p.Radius, _colliders, collidesWithLayers);
+			for (var i = 0; i < collidedCount; i++)
 			{
 				var collider = _colliders[i];
-				if( collider.IsTrigger )
+				if (collider.IsTrigger)
 					continue;
-				
+
 				CollisionResult collisionResult;
 
 				// if we have a large enough Particle radius use a Circle for the collision check else fall back to a point
-				if( p.Radius < 2 )
+				if (p.Radius < 2)
 				{
-					if( collider.Shape.PointCollidesWithShape( p.Position, out collisionResult ) )
+					if (collider.Shape.PointCollidesWithShape(p.Position, out collisionResult))
 					{
 						// TODO: add a Dictionary of Collider,float that lets Colliders be setup as force volumes. The float can then be
 						// multiplied by the mtv here. It should be very small values, like 0.002f for example.
@@ -166,7 +166,7 @@ namespace Nez.Verlet
 					_tempCircle.Radius = p.Radius;
 					_tempCircle.position = p.Position;
 
-					if( _tempCircle.CollidesWithShape( collider.Shape, out collisionResult ) )
+					if (_tempCircle.CollidesWithShape(collider.Shape, out collisionResult))
 					{
 						p.Position -= collisionResult.MinimumTranslationVector;
 					}
@@ -175,14 +175,14 @@ namespace Nez.Verlet
 		}
 
 
-		[MethodImpl( MethodImplOptions.AggressiveInlining )]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		void UpdateTiming()
 		{
 			_leftOverTime += Time.DeltaTime;
-			_iterationSteps = Mathf.TruncateToInt( _leftOverTime / _fixedDeltaTime );
-			_leftOverTime -= (float)_iterationSteps * _fixedDeltaTime;
+			_iterationSteps = Mathf.TruncateToInt(_leftOverTime / _fixedDeltaTime);
+			_leftOverTime -= (float) _iterationSteps * _fixedDeltaTime;
 
-			_iterationSteps = System.Math.Min( _iterationSteps, MaximumStepIterations );
+			_iterationSteps = System.Math.Min(_iterationSteps, MaximumStepIterations);
 		}
 
 		#endregion
@@ -196,9 +196,9 @@ namespace Nez.Verlet
 		/// <returns>The composite.</returns>
 		/// <param name="composite">Composite.</param>
 		/// <typeparam name="T">The 1st type parameter.</typeparam>
-		public T AddComposite<T>( T composite ) where T : Composite
+		public T AddComposite<T>(T composite) where T : Composite
 		{
-			_composites.Add( composite );
+			_composites.Add(composite);
 			return composite;
 		}
 
@@ -207,29 +207,29 @@ namespace Nez.Verlet
 		/// removes a Composite from the simulation
 		/// </summary>
 		/// <param name="composite">Composite.</param>
-		public void RemoveComposite( Composite composite )
+		public void RemoveComposite(Composite composite)
 		{
-			_composites.Remove( composite );
+			_composites.Remove(composite);
 		}
 
 		#endregion
 
 
-		[MethodImpl( MethodImplOptions.AggressiveInlining )]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		void HandleDragging()
 		{
-			if( Input.LeftMouseButtonPressed )
+			if (Input.LeftMouseButtonPressed)
 			{
-				_draggedParticle = GetNearestParticle( Input.MousePosition );
+				_draggedParticle = GetNearestParticle(Input.MousePosition);
 			}
-			else if( Input.LeftMouseButtonDown )
+			else if (Input.LeftMouseButtonDown)
 			{
-				if( _draggedParticle != null )
+				if (_draggedParticle != null)
 					_draggedParticle.Position = Input.MousePosition;
 			}
-			else if( Input.LeftMouseButtonReleased )
+			else if (Input.LeftMouseButtonReleased)
 			{
-				if( _draggedParticle != null )
+				if (_draggedParticle != null)
 					_draggedParticle.Position = Input.MousePosition;
 				_draggedParticle = null;
 			}
@@ -241,22 +241,23 @@ namespace Nez.Verlet
 		/// </summary>
 		/// <returns>The nearest particle.</returns>
 		/// <param name="position">Position.</param>
-		[MethodImpl( MethodImplOptions.AggressiveInlining )]
-		public Particle GetNearestParticle( Vector2 position )
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public Particle GetNearestParticle(Vector2 position)
 		{
 			// less than 64 and we count it
 			var nearestSquaredDistance = SelectionRadiusSquared;
 			Particle particle = null;
 
 			// find nearest point
-			for( var j = 0; j < _composites.Length; j++ )
+			for (var j = 0; j < _composites.Length; j++)
 			{
 				var particles = _composites.Buffer[j].Particles;
-				for( var i = 0; i < particles.Length; i++ )
+				for (var i = 0; i < particles.Length; i++)
 				{
 					var p = particles.Buffer[i];
-					var squaredDistanceToParticle = Vector2.DistanceSquared( p.Position, position );
-					if( squaredDistanceToParticle <= SelectionRadiusSquared && ( particle == null || squaredDistanceToParticle < nearestSquaredDistance ) )
+					var squaredDistanceToParticle = Vector2.DistanceSquared(p.Position, position);
+					if (squaredDistanceToParticle <= SelectionRadiusSquared &&
+					    (particle == null || squaredDistanceToParticle < nearestSquaredDistance))
 					{
 						particle = p;
 						nearestSquaredDistance = squaredDistanceToParticle;
@@ -268,26 +269,25 @@ namespace Nez.Verlet
 		}
 
 
-		public void DebugRender( Batcher batcher )
+		public void DebugRender(Batcher batcher)
 		{
-			for( var i = 0; i < _composites.Length; i++ )
-				_composites.Buffer[i].DebugRender( batcher );
+			for (var i = 0; i < _composites.Length; i++)
+				_composites.Buffer[i].DebugRender(batcher);
 
-			if( AllowDragging )
+			if (AllowDragging)
 			{
-				if( _draggedParticle != null )
+				if (_draggedParticle != null)
 				{
-					batcher.DrawCircle( _draggedParticle.Position, 8, Color.White );
+					batcher.DrawCircle(_draggedParticle.Position, 8, Color.White);
 				}
 				else
 				{
 					// Highlight the nearest particle within the selection radius
-					var particle = GetNearestParticle( Input.MousePosition );
-					if( particle != null )
-						batcher.DrawCircle( particle.Position, 8, Color.White * 0.4f );
+					var particle = GetNearestParticle(Input.MousePosition);
+					if (particle != null)
+						batcher.DrawCircle(particle.Position, 8, Color.White * 0.4f);
 				}
 			}
 		}
-
 	}
 }

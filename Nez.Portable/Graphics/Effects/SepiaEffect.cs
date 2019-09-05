@@ -17,20 +17,19 @@ namespace Nez
 			set
 			{
 				_sepiaTone = value;
-				_sepiaToneParam.SetValue( _sepiaTone );
+				_sepiaToneParam.SetValue(_sepiaTone);
 			}
 		}
 
 
-		Vector3 _sepiaTone = new Vector3( 1.2f, 1.0f, 0.8f );
+		Vector3 _sepiaTone = new Vector3(1.2f, 1.0f, 0.8f);
 		EffectParameter _sepiaToneParam;
 
-		
-		public SepiaEffect() : base( Core.GraphicsDevice, EffectResource.SepiaBytes )
+
+		public SepiaEffect() : base(Core.GraphicsDevice, EffectResource.SepiaBytes)
 		{
 			_sepiaToneParam = Parameters["_sepiaTone"];
-			_sepiaToneParam.SetValue( _sepiaTone );
+			_sepiaToneParam.SetValue(_sepiaTone);
 		}
 	}
 }
-

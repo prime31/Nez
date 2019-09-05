@@ -16,20 +16,21 @@ namespace Nez.AI.UtilityAI
 		List<IAppraisal<T>> _appraisals = new List<IAppraisal<T>>();
 
 
-		public ThresholdConsideration( float threshold )
+		public ThresholdConsideration(float threshold)
 		{
 			this.Threshold = threshold;
 		}
 
 
-		float IConsideration<T>.GetScore( T context )
+		float IConsideration<T>.GetScore(T context)
 		{
 			var sum = 0f;
-			for( var i = 0; i < _appraisals.Count; i++ )
+			for (var i = 0; i < _appraisals.Count; i++)
 			{
-				var score = _appraisals[i].GetScore( context );
-				if( score < Threshold )
+				var score = _appraisals[i].GetScore(context);
+				if (score < Threshold)
 					return sum;
+
 				sum += score;
 			}
 
@@ -37,4 +38,3 @@ namespace Nez.AI.UtilityAI
 		}
 	}
 }
-

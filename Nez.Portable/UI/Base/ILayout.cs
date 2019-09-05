@@ -80,7 +80,5 @@ namespace Nez.UI
 		/// convenient use with groups that do not layout their children.
 		/// </summary>
 		void Pack();
-
 	}
 }
-

@@ -35,22 +35,23 @@ namespace Nez.Verlet
 		internal Vector2 pinnedPosition;
 
 
-		public Particle( Vector2 position )
+		public Particle(Vector2 position)
 		{
 			this.Position = position;
 			LastPosition = position;
 		}
 
 
-		public Particle( float x, float y ) : this( new Vector2( x, y ) )
-		{}
+		public Particle(float x, float y) : this(new Vector2(x, y))
+		{
+		}
 
 
 		/// <summary>
 		/// applies a force taking mass into account to the Particle
 		/// </summary>
 		/// <param name="force">Force.</param>
-		public void ApplyForce( Vector2 force )
+		public void ApplyForce(Vector2 force)
 		{
 			// acceleration = (1 / mass) * force
 			acceleration += force / Mass;
@@ -72,7 +73,7 @@ namespace Nez.Verlet
 		/// pins the particle to the specified position
 		/// </summary>
 		/// <param name="position">Position.</param>
-		public Particle PinTo( Vector2 position )
+		public Particle PinTo(Vector2 position)
 		{
 			isPinned = true;
 			pinnedPosition = position;
@@ -89,6 +90,5 @@ namespace Nez.Verlet
 			isPinned = false;
 			return this;
 		}
-
 	}
 }

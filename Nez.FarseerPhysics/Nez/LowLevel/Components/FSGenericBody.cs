@@ -15,14 +15,15 @@ namespace Nez.Farseer
 
 
 		public FSGenericBody()
-		{ }
+		{
+		}
 
 
 		/// <summary>
 		/// creates with a preexisting Body. Be aware that the Transform.position will be updated to match the Body.position.
 		/// </summary>
 		/// <param name="body">Body.</param>
-		public FSGenericBody( Body body )
+		public FSGenericBody(Body body)
 		{
 			this.Body = body;
 		}
@@ -33,30 +34,30 @@ namespace Nez.Farseer
 			var world = Entity.Scene.GetOrCreateSceneComponent<FSWorld>();
 
 			// always sync position ASAP in case any joints are added without global constraints
-			if( Body != null )
-				( (IUpdatable)this ).Update();
+			if (Body != null)
+				((IUpdatable) this).Update();
 			else
-				Body = new Body( world, Transform.Position * FSConvert.DisplayToSim, Transform.Rotation );
+				Body = new Body(world, Transform.Position * FSConvert.DisplayToSim, Transform.Rotation);
 		}
 
 
-		public override void OnEntityTransformChanged( Transform.Component comp )
+		public override void OnEntityTransformChanged(Transform.Component comp)
 		{
-			if( _ignoreTransformChanges )
+			if (_ignoreTransformChanges)
 				return;
 
-			if( comp == Transform.Component.Position )
+			if (comp == Transform.Component.Position)
 				Body.Position = Transform.Position * FSConvert.DisplayToSim;
-			else if( comp == Transform.Component.Rotation )
+			else if (comp == Transform.Component.Rotation)
 				Body.Rotation = Transform.Rotation;
 		}
 
 
 		public override void OnRemovedFromEntity()
 		{
-			if( Body != null )
+			if (Body != null)
 			{
-				Body.World.RemoveBody( Body );
+				Body.World.RemoveBody(Body);
 				Body = null;
 			}
 		}
@@ -64,7 +65,7 @@ namespace Nez.Farseer
 
 		void IUpdatable.Update()
 		{
-			if( !Body.IsAwake )
+			if (!Body.IsAwake)
 				return;
 
 			_ignoreTransformChanges = true;
@@ -74,17 +75,16 @@ namespace Nez.Farseer
 		}
 
 
-		public FSGenericBody SetBodyType( BodyType bodyType )
+		public FSGenericBody SetBodyType(BodyType bodyType)
 		{
 			Body.BodyType = bodyType;
 			return this;
 		}
 
 
-		public static implicit operator Body( FSGenericBody self )
+		public static implicit operator Body(FSGenericBody self)
 		{
 			return self.Body;
 		}
-
 	}
 }

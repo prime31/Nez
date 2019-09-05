@@ -1,5 +1,6 @@
 using Microsoft.Xna.Framework;
 
+
 namespace Nez
 {
 	public static class GameServiceContainerExt
@@ -11,10 +12,10 @@ namespace Nez
 		/// <param name="self">Self.</param>
 		/// <param name="provider">Provider.</param>
 		/// <typeparam name="T">The 1st type parameter.</typeparam>
-		public static T AddService<T>( this GameServiceContainer self, T provider )
+		public static T AddService<T>(this GameServiceContainer self, T provider)
 		{
-			self.AddService( typeof( T ), provider );
-            return provider;
+			self.AddService(typeof(T), provider);
+			return provider;
 		}
 
 		/// <summary>
@@ -23,14 +24,14 @@ namespace Nez
 		/// <returns>The service.</returns>
 		/// <param name="self">Self.</param>
 		/// <typeparam name="T">The 1st type parameter.</typeparam>
-		public static T GetService<T>( this GameServiceContainer self ) where T : class
+		public static T GetService<T>(this GameServiceContainer self) where T : class
 		{
-			var service = self.GetService( typeof( T ) );
+			var service = self.GetService(typeof(T));
 
-			if( service == null )
+			if (service == null)
 				return null;
 
-			return (T)service;
+			return (T) service;
 		}
 
 		/// <summary>
@@ -40,14 +41,14 @@ namespace Nez
 		/// <returns>The or add service.</returns>
 		/// <param name="self">Self.</param>
 		/// <typeparam name="T">The 1st type parameter.</typeparam>
-		public static T GetOrAddService<T>( this GameServiceContainer self ) where T : class, new()
+		public static T GetOrAddService<T>(this GameServiceContainer self) where T : class, new()
 		{
-			var service = self.GetService( typeof( T ) );
+			var service = self.GetService(typeof(T));
 
-			if( service == null )
-				return AddService( self, new T() );
+			if (service == null)
+				return AddService(self, new T());
 
-			return (T)service;
+			return (T) service;
 		}
 	}
 }

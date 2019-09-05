@@ -17,37 +17,38 @@ namespace Nez.ImGuiTools.TypeInspectors
 			base.Initialize();
 
 			// figure out which fields and properties are useful to add to the inspector
-			var fields = ReflectionUtils.GetFields( _valueType );
-			foreach( var field in fields )
+			var fields = ReflectionUtils.GetFields(_valueType);
+			foreach (var field in fields)
 			{
-				if( !field.IsPublic && !field.IsDefined( typeof( InspectableAttribute ) ) )
+				if (!field.IsPublic && !field.IsDefined(typeof(InspectableAttribute)))
 					continue;
 
-				var inspector = TypeInspectorUtils.GetInspectorForType( field.FieldType, _target, field );
-				if( inspector != null )
+				var inspector = TypeInspectorUtils.GetInspectorForType(field.FieldType, _target, field);
+				if (inspector != null)
 				{
-					inspector.SetStructTarget( _target, this, field );
+					inspector.SetStructTarget(_target, this, field);
 					inspector.Initialize();
-					_inspectors.Add( inspector );
+					_inspectors.Add(inspector);
 				}
 			}
 
-			var properties = ReflectionUtils.GetProperties( _valueType );
-			foreach( var prop in properties )
+			var properties = ReflectionUtils.GetProperties(_valueType);
+			foreach (var prop in properties)
 			{
-				if( !prop.CanRead || !prop.CanWrite )
+				if (!prop.CanRead || !prop.CanWrite)
 					continue;
 
-				var isPropertyUndefinedOrPublic = !prop.CanWrite || ( prop.CanWrite && prop.SetMethod.IsPublic );
-				if( ( !prop.GetMethod.IsPublic || !isPropertyUndefinedOrPublic ) && !prop.IsDefined( typeof( InspectableAttribute ) ) )
+				var isPropertyUndefinedOrPublic = !prop.CanWrite || (prop.CanWrite && prop.SetMethod.IsPublic);
+				if ((!prop.GetMethod.IsPublic || !isPropertyUndefinedOrPublic) &&
+				    !prop.IsDefined(typeof(InspectableAttribute)))
 					continue;
 
-				var inspector = TypeInspectorUtils.GetInspectorForType( prop.PropertyType, _target, prop );
-				if( inspector != null )
+				var inspector = TypeInspectorUtils.GetInspectorForType(prop.PropertyType, _target, prop);
+				if (inspector != null)
 				{
-					inspector.SetStructTarget( _target, this, prop );
+					inspector.SetStructTarget(_target, this, prop);
 					inspector.Initialize();
-					_inspectors.Add( inspector );
+					_inspectors.Add(inspector);
 				}
 			}
 		}
@@ -56,14 +57,15 @@ namespace Nez.ImGuiTools.TypeInspectors
 		{
 			ImGui.Indent();
 			NezImGui.BeginBorderedGroup();
-			
-			_isHeaderOpen = ImGui.CollapsingHeader( $"{_name}" );
-			if( _isHeaderOpen )
+
+			_isHeaderOpen = ImGui.CollapsingHeader($"{_name}");
+			if (_isHeaderOpen)
 			{
-				foreach( var i in _inspectors )
+				foreach (var i in _inspectors)
 					i.Draw();
 			}
-			NezImGui.EndBorderedGroup( new System.Numerics.Vector2( 4, 1 ), new System.Numerics.Vector2( 4, 2 ) );
+
+			NezImGui.EndBorderedGroup(new System.Numerics.Vector2(4, 1), new System.Numerics.Vector2(4, 2));
 			ImGui.Unindent();
 		}
 
@@ -74,6 +76,5 @@ namespace Nez.ImGuiTools.TypeInspectors
 		{
 			DrawMutable();
 		}
-
 	}
 }

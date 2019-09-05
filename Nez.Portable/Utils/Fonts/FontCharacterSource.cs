@@ -14,7 +14,7 @@ namespace Nez
 		public readonly int Length;
 
 
-		public FontCharacterSource( string s )
+		public FontCharacterSource(string s)
 		{
 			_string = s;
 			_builder = null;
@@ -22,7 +22,7 @@ namespace Nez
 		}
 
 
-		public FontCharacterSource( StringBuilder builder )
+		public FontCharacterSource(StringBuilder builder)
 		{
 			_builder = builder;
 			_string = null;
@@ -34,11 +34,11 @@ namespace Nez
 		{
 			get
 			{
-				if( _string != null )
+				if (_string != null)
 					return _string[index];
+
 				return _builder[index];
 			}
 		}
 	}
 }
-

@@ -17,11 +17,11 @@ namespace Nez
 		{
 			get
 			{
-				for( var i = 0; i < Nodes.Count; i++ )
+				for (var i = 0; i < Nodes.Count; i++)
 				{
 					var val = Nodes[i].Value;
-					if( val != 0 )
-						return Math.Sign( val );
+					if (val != 0)
+						return Math.Sign(val);
 				}
 
 				return 0;
@@ -29,18 +29,20 @@ namespace Nez
 		}
 
 
-		public VirtualIntegerAxis() { }
-
-
-		public VirtualIntegerAxis( params VirtualAxis.Node[] nodes )
+		public VirtualIntegerAxis()
 		{
-			this.Nodes.AddRange( nodes );
+		}
+
+
+		public VirtualIntegerAxis(params VirtualAxis.Node[] nodes)
+		{
+			this.Nodes.AddRange(nodes);
 		}
 
 
 		public override void Update()
 		{
-			for( var i = 0; i < Nodes.Count; i++ )
+			for (var i = 0; i < Nodes.Count; i++)
 				Nodes[i].Update();
 		}
 
@@ -53,9 +55,9 @@ namespace Nez
 		/// <returns>The game pad left stick x.</returns>
 		/// <param name="gamepadIndex">Gamepad index.</param>
 		/// <param name="deadzone">Deadzone.</param>
-		public VirtualIntegerAxis AddGamePadLeftStickX( int gamepadIndex = 0, float deadzone = Input.DEFAULT_DEADZONE )
+		public VirtualIntegerAxis AddGamePadLeftStickX(int gamepadIndex = 0, float deadzone = Input.DEFAULT_DEADZONE)
 		{
-			Nodes.Add( new VirtualAxis.GamePadLeftStickX( gamepadIndex, deadzone ) );
+			Nodes.Add(new VirtualAxis.GamePadLeftStickX(gamepadIndex, deadzone));
 			return this;
 		}
 
@@ -66,9 +68,9 @@ namespace Nez
 		/// <returns>The game pad left stick y.</returns>
 		/// <param name="gamepadIndex">Gamepad index.</param>
 		/// <param name="deadzone">Deadzone.</param>
-		public VirtualIntegerAxis AddGamePadLeftStickY( int gamepadIndex = 0, float deadzone = Input.DEFAULT_DEADZONE )
+		public VirtualIntegerAxis AddGamePadLeftStickY(int gamepadIndex = 0, float deadzone = Input.DEFAULT_DEADZONE)
 		{
-			Nodes.Add( new VirtualAxis.GamePadLeftStickY( gamepadIndex, deadzone ) );
+			Nodes.Add(new VirtualAxis.GamePadLeftStickY(gamepadIndex, deadzone));
 			return this;
 		}
 
@@ -79,9 +81,9 @@ namespace Nez
 		/// <returns>The game pad right stick x.</returns>
 		/// <param name="gamepadIndex">Gamepad index.</param>
 		/// <param name="deadzone">Deadzone.</param>
-		public VirtualIntegerAxis AddGamePadRightStickX( int gamepadIndex = 0, float deadzone = Input.DEFAULT_DEADZONE )
+		public VirtualIntegerAxis AddGamePadRightStickX(int gamepadIndex = 0, float deadzone = Input.DEFAULT_DEADZONE)
 		{
-			Nodes.Add( new VirtualAxis.GamePadRightStickX( gamepadIndex, deadzone ) );
+			Nodes.Add(new VirtualAxis.GamePadRightStickX(gamepadIndex, deadzone));
 			return this;
 		}
 
@@ -92,9 +94,9 @@ namespace Nez
 		/// <returns>The game pad right stick y.</returns>
 		/// <param name="gamepadIndex">Gamepad index.</param>
 		/// <param name="deadzone">Deadzone.</param>
-		public VirtualIntegerAxis AddGamePadRightStickY( int gamepadIndex = 0, float deadzone = Input.DEFAULT_DEADZONE )
+		public VirtualIntegerAxis AddGamePadRightStickY(int gamepadIndex = 0, float deadzone = Input.DEFAULT_DEADZONE)
 		{
-			Nodes.Add( new VirtualAxis.GamePadRightStickY( gamepadIndex, deadzone ) );
+			Nodes.Add(new VirtualAxis.GamePadRightStickY(gamepadIndex, deadzone));
 			return this;
 		}
 
@@ -104,9 +106,9 @@ namespace Nez
 		/// </summary>
 		/// <returns>The game pad DP ad up down.</returns>
 		/// <param name="gamepadIndex">Gamepad index.</param>
-		public VirtualIntegerAxis AddGamePadDPadUpDown( int gamepadIndex = 0 )
+		public VirtualIntegerAxis AddGamePadDPadUpDown(int gamepadIndex = 0)
 		{
-			Nodes.Add( new VirtualAxis.GamePadDpadUpDown( gamepadIndex ) );
+			Nodes.Add(new VirtualAxis.GamePadDpadUpDown(gamepadIndex));
 			return this;
 		}
 
@@ -116,9 +118,9 @@ namespace Nez
 		/// </summary>
 		/// <returns>The game pad DP ad left right.</returns>
 		/// <param name="gamepadIndex">Gamepad index.</param>
-		public VirtualIntegerAxis AddGamePadDPadLeftRight( int gamepadIndex = 0 )
+		public VirtualIntegerAxis AddGamePadDPadLeftRight(int gamepadIndex = 0)
 		{
-			Nodes.Add( new VirtualAxis.GamePadDpadLeftRight( gamepadIndex ) );
+			Nodes.Add(new VirtualAxis.GamePadDpadLeftRight(gamepadIndex));
 			return this;
 		}
 
@@ -130,20 +132,18 @@ namespace Nez
 		/// <param name="overlapBehavior">Overlap behavior.</param>
 		/// <param name="negative">Negative.</param>
 		/// <param name="positive">Positive.</param>
-		public VirtualIntegerAxis AddKeyboardKeys( OverlapBehavior overlapBehavior, Keys negative, Keys positive )
+		public VirtualIntegerAxis AddKeyboardKeys(OverlapBehavior overlapBehavior, Keys negative, Keys positive)
 		{
-			Nodes.Add( new VirtualAxis.KeyboardKeys( overlapBehavior, negative, positive ) );
+			Nodes.Add(new VirtualAxis.KeyboardKeys(overlapBehavior, negative, positive));
 			return this;
 		}
 
 		#endregion
 
 
-		static public implicit operator int( VirtualIntegerAxis axis )
+		static public implicit operator int(VirtualIntegerAxis axis)
 		{
 			return axis.Value;
 		}
-
 	}
 }
-

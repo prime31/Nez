@@ -47,4 +47,3 @@ namespace Nez
 		public float MinKillSpeedSquared;
 	}
 }
-

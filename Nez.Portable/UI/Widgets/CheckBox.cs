@@ -15,27 +15,29 @@ namespace Nez.UI
 		private CheckBoxStyle style;
 
 
-		public CheckBox( string text, CheckBoxStyle style ) : base( text, style )
+		public CheckBox(string text, CheckBoxStyle style) : base(text, style)
 		{
 			ClearChildren();
 			var label = GetLabel();
-			imageCell = Add( image = new Image( style.CheckboxOff ) );
-			Add( label );
-			label.SetAlignment(UI.Align.Left );
-			GetLabelCell().SetPadLeft( 10 );
-			SetSize( PreferredWidth, PreferredHeight );
+			imageCell = Add(image = new Image(style.CheckboxOff));
+			Add(label);
+			label.SetAlignment(UI.Align.Left);
+			GetLabelCell().SetPadLeft(10);
+			SetSize(PreferredWidth, PreferredHeight);
 		}
 
 
-		public CheckBox( string text, Skin skin, string styleName = null ) : this( text, skin.Get<CheckBoxStyle>( styleName ) )
-		{}
-
-
-		public override void SetStyle( ButtonStyle style )
+		public CheckBox(string text, Skin skin, string styleName = null) : this(text,
+			skin.Get<CheckBoxStyle>(styleName))
 		{
-			Insist.IsTrue( style is CheckBoxStyle, "style must be a CheckBoxStyle" );
-			base.SetStyle( style );
-			this.style = (CheckBoxStyle)style;
+		}
+
+
+		public override void SetStyle(ButtonStyle style)
+		{
+			Insist.IsTrue(style is CheckBoxStyle, "style must be a CheckBoxStyle");
+			base.SetStyle(style);
+			this.style = (CheckBoxStyle) style;
 		}
 
 
@@ -49,29 +51,29 @@ namespace Nez.UI
 		}
 
 
-		public override void Draw( Graphics graphics, float parentAlpha )
+		public override void Draw(Graphics graphics, float parentAlpha)
 		{
 			IDrawable checkbox = null;
-			if( _isDisabled )
+			if (_isDisabled)
 			{
-				if( IsChecked && style.CheckboxOnDisabled != null )
+				if (IsChecked && style.CheckboxOnDisabled != null)
 					checkbox = style.CheckboxOnDisabled;
 				else
 					checkbox = style.CheckboxOffDisabled;
 			}
 
-			if( checkbox == null )
+			if (checkbox == null)
 			{
-				if( IsChecked && style.CheckboxOn != null )
+				if (IsChecked && style.CheckboxOn != null)
 					checkbox = style.CheckboxOn;
-				else if( _mouseOver && style.CheckboxOver != null && !_isDisabled )
+				else if (_mouseOver && style.CheckboxOver != null && !_isDisabled)
 					checkbox = style.CheckboxOver;
 				else
 					checkbox = style.CheckboxOff;
 			}
 
-			image.SetDrawable( checkbox );
-			base.Draw( graphics, parentAlpha );
+			image.SetDrawable(checkbox);
+			base.Draw(graphics, parentAlpha);
 		}
 
 
@@ -85,7 +87,6 @@ namespace Nez.UI
 		{
 			return imageCell;
 		}
-	
 	}
 
 
@@ -95,6 +96,7 @@ namespace Nez.UI
 	public class CheckBoxStyle : TextButtonStyle
 	{
 		public IDrawable CheckboxOn, CheckboxOff;
+
 		/** Optional. */
 		public IDrawable CheckboxOver, CheckboxOnDisabled, CheckboxOffDisabled;
 
@@ -105,7 +107,7 @@ namespace Nez.UI
 		}
 
 
-		public CheckBoxStyle( IDrawable checkboxOff, IDrawable checkboxOn, BitmapFont font, Color fontColor )
+		public CheckBoxStyle(IDrawable checkboxOff, IDrawable checkboxOn, BitmapFont font, Color fontColor)
 		{
 			this.CheckboxOff = checkboxOff;
 			this.CheckboxOn = checkboxOn;
@@ -114,4 +116,3 @@ namespace Nez.UI
 		}
 	}
 }
-

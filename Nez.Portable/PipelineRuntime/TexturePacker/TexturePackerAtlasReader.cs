@@ -8,14 +8,14 @@ namespace Nez.TextureAtlases
 {
 	public class TexturePackerAtlasReader : ContentTypeReader<TexturePackerAtlas>
 	{
-		protected override TexturePackerAtlas Read( ContentReader reader, TexturePackerAtlas existingInstance )
+		protected override TexturePackerAtlas Read(ContentReader reader, TexturePackerAtlas existingInstance)
 		{
-			var assetName = reader.GetRelativeAssetPath( reader.ReadString() );
-			var texture = reader.ContentManager.Load<Texture2D>( assetName );
-			var atlas = new TexturePackerAtlas( texture );
+			var assetName = reader.GetRelativeAssetPath(reader.ReadString());
+			var texture = reader.ContentManager.Load<Texture2D>(assetName);
+			var atlas = new TexturePackerAtlas(texture);
 
 			var regionCount = reader.ReadInt32();
-			for( var i = 0; i < regionCount; i++ )
+			for (var i = 0; i < regionCount; i++)
 			{
 				atlas.CreateRegion
 				(
@@ -27,10 +27,9 @@ namespace Nez.TextureAtlases
 					pivotX: reader.ReadSingle(),
 					pivotY: reader.ReadSingle()
 				);
-
 			}
 
-			atlas.SpriteAnimationDetails = reader.ReadObject<Dictionary<string,List<int>>>();
+			atlas.SpriteAnimationDetails = reader.ReadObject<Dictionary<string, List<int>>>();
 
 			return atlas;
 		}

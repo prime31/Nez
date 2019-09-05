@@ -13,16 +13,17 @@ namespace Nez.AI.BehaviorTrees
 		TaskStatus _conditionalStatus;
 
 
-		public ConditionalDecorator( IConditional<T> conditional, bool shouldReevalute )
+		public ConditionalDecorator(IConditional<T> conditional, bool shouldReevalute)
 		{
-			Insist.IsTrue( conditional is IConditional<T>, "conditional must implment IConditional" );
+			Insist.IsTrue(conditional is IConditional<T>, "conditional must implment IConditional");
 			_conditional = conditional;
 			_shouldReevaluate = shouldReevalute;
 		}
 
 
-		public ConditionalDecorator( IConditional<T> conditional ) : this( conditional, true )
-		{}
+		public ConditionalDecorator(IConditional<T> conditional) : this(conditional, true)
+		{
+		}
 
 
 		public override void Invalidate()
@@ -37,16 +38,16 @@ namespace Nez.AI.BehaviorTrees
 			_conditionalStatus = TaskStatus.Invalid;
 		}
 
-		
-		public override TaskStatus Update( T context )
+
+		public override TaskStatus Update(T context)
 		{
-			Insist.IsNotNull( Child, "child must not be null" );
+			Insist.IsNotNull(Child, "child must not be null");
 
 			// evalute the condition if we need to
-			_conditionalStatus = ExecuteConditional( context );
-			
-			if( _conditionalStatus == TaskStatus.Success )
-				return Child.Tick( context );
+			_conditionalStatus = ExecuteConditional(context);
+
+			if (_conditionalStatus == TaskStatus.Success)
+				return Child.Tick(context);
 
 			return TaskStatus.Failure;
 		}
@@ -59,13 +60,11 @@ namespace Nez.AI.BehaviorTrees
 		/// <returns>The conditional.</returns>
 		/// <param name="context">Context.</param>
 		/// <param name="forceUpdate">If set to <c>true</c> force update.</param>
-		internal TaskStatus ExecuteConditional( T context, bool forceUpdate = false )
+		internal TaskStatus ExecuteConditional(T context, bool forceUpdate = false)
 		{
-			if( forceUpdate || _shouldReevaluate || _conditionalStatus == TaskStatus.Invalid )
-				_conditionalStatus = _conditional.Update( context );
+			if (forceUpdate || _shouldReevaluate || _conditionalStatus == TaskStatus.Invalid)
+				_conditionalStatus = _conditional.Update(context);
 			return _conditionalStatus;
 		}
-
 	}
 }
-

@@ -28,46 +28,45 @@ namespace FarseerPhysics.Controllers
 		public bool IgnorePosition;
 
 
-		public override void ApplyForce( float dt, float strength )
+		public override void ApplyForce(float dt, float strength)
 		{
-			foreach( var body in World.BodyList )
+			foreach (var body in World.BodyList)
 			{
 				//TODO: Consider Force Type
-				float decayMultiplier = GetDecayMultiplier( body );
-				if( decayMultiplier != 0 )
+				float decayMultiplier = GetDecayMultiplier(body);
+				if (decayMultiplier != 0)
 				{
 					Vector2 forceVector;
-					if( ForceType == ForceTypes.Point )
+					if (ForceType == ForceTypes.Point)
 					{
 						forceVector = body.Position - Position;
 					}
 					else
 					{
-						Nez.Vector2Ext.Normalize( ref Direction );
+						Nez.Vector2Ext.Normalize(ref Direction);
 						forceVector = Direction;
 
-						if( forceVector.Length() == 0 )
-							forceVector = new Vector2( 0, 1 );
+						if (forceVector.Length() == 0)
+							forceVector = new Vector2(0, 1);
 					}
 
 					//TODO: Consider Divergence:
 					//forceVector = Vector2.Transform(forceVector, Matrix.CreateRotationZ((MathHelper.Pi - MathHelper.Pi/2) * (float)Randomize.NextDouble()));
 
 					// Calculate random Variation
-					if( Variation != 0 )
+					if (Variation != 0)
 					{
-						var strengthVariation = (float)randomize.NextDouble() * MathHelper.Clamp( Variation, 0, 1 );
-						Nez.Vector2Ext.Normalize( ref forceVector );
-						body.ApplyForce( forceVector * strength * decayMultiplier * strengthVariation );
+						var strengthVariation = (float) randomize.NextDouble() * MathHelper.Clamp(Variation, 0, 1);
+						Nez.Vector2Ext.Normalize(ref forceVector);
+						body.ApplyForce(forceVector * strength * decayMultiplier * strengthVariation);
 					}
 					else
 					{
-						Nez.Vector2Ext.Normalize( ref forceVector );
-						body.ApplyForce( forceVector * strength * decayMultiplier );
+						Nez.Vector2Ext.Normalize(ref forceVector);
+						body.ApplyForce(forceVector * strength * decayMultiplier);
 					}
 				}
 			}
 		}
-
 	}
 }

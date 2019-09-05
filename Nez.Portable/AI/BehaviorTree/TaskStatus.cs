@@ -11,4 +11,3 @@ namespace Nez.AI.BehaviorTrees
 		Running
 	}
 }
-

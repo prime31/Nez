@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 
+
 namespace Nez.Persistence
 {
 	public abstract class JsonObjectFactory : JsonTypeConverter
@@ -8,16 +9,17 @@ namespace Nez.Persistence
 		public override bool CanWrite => false;
 		public override bool CanRead => false;
 
-		public abstract object CreateObject( Type objectType, IDictionary objectData );
+		public abstract object CreateObject(Type objectType, IDictionary objectData);
 
-		public override void WriteJson( IJsonEncoder encoder, object value )
+		public override void WriteJson(IJsonEncoder encoder, object value)
 		{
-			throw new NotSupportedException( "JsonObjectFactory should only be used while decoding unless you overwrite WriteJson" );
+			throw new NotSupportedException(
+				"JsonObjectFactory should only be used while decoding unless you overwrite WriteJson");
 		}
 
-		public override void OnFoundCustomData( object instance, string key, object value )
+		public override void OnFoundCustomData(object instance, string key, object value)
 		{
-			throw new NotSupportedException( "This should never happen" );
+			throw new NotSupportedException("This should never happen");
 		}
 	}
 
@@ -26,14 +28,13 @@ namespace Nez.Persistence
 	/// </summary>
 	public abstract class JsonObjectFactory<T> : JsonObjectFactory
 	{
-		public override bool CanConvertType( Type objectType ) => typeof( T ).IsAssignableFrom( objectType );
+		public override bool CanConvertType(Type objectType) => typeof(T).IsAssignableFrom(objectType);
 
-		public override object CreateObject( Type objectType, IDictionary objectData )
+		public override object CreateObject(Type objectType, IDictionary objectData)
 		{
-			return Create( objectType, objectData );
+			return Create(objectType, objectData);
 		}
 
-		public abstract T Create( Type objectType, IDictionary objectData );
-
+		public abstract T Create(Type objectType, IDictionary objectData);
 	}
 }

@@ -13,7 +13,7 @@ namespace Nez
 		public T Second;
 
 
-		public Pair( T first, T second )
+		public Pair(T first, T second)
 		{
 			this.First = first;
 			this.Second = second;
@@ -26,7 +26,7 @@ namespace Nez
 		}
 
 
-		public bool Equals( Pair<T> other )
+		public bool Equals(Pair<T> other)
 		{
 			// these two ways should be functionaly equivalent
 			return First == other.First && Second == other.Second;
@@ -38,9 +38,8 @@ namespace Nez
 
 		public override int GetHashCode()
 		{
-			return EqualityComparer<T>.Default.GetHashCode( First ) * 37 + EqualityComparer<T>.Default.GetHashCode( Second );
+			return EqualityComparer<T>.Default.GetHashCode(First) * 37 +
+			       EqualityComparer<T>.Default.GetHashCode(Second);
 		}
-	
 	}
 }
-

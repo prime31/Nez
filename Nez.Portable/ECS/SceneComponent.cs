@@ -9,7 +9,7 @@ namespace Nez
 		/// the scene this SceneComponent is attached to
 		/// </summary>
 		public Scene Scene;
-	    
+
 		/// <summary>
 		/// true if the SceneComponent is enabled. Changes in state result in onEnabled/onDisable being called.
 		/// </summary>
@@ -17,7 +17,7 @@ namespace Nez
 		public bool Enabled
 		{
 			get { return _enabled; }
-			set { SetEnabled( value ); }
+			set { SetEnabled(value); }
 		}
 
 		/// <summary>
@@ -35,28 +35,32 @@ namespace Nez
 		/// called when this SceneComponent is enabled
 		/// </summary>
 		public virtual void OnEnabled()
-		{ }
+		{
+		}
 
 
 		/// <summary>
 		/// called when the this SceneComponent is disabled
 		/// </summary>
 		public virtual void OnDisabled()
-		{ }
+		{
+		}
 
 
 		/// <summary>
 		/// called when this SceneComponent is removed from the Scene
 		/// </summary>
 		public virtual void OnRemovedFromScene()
-		{}
+		{
+		}
 
 
 		/// <summary>
 		/// called each frame before the Entities are updated
 		/// </summary>
 		public virtual void Update()
-		{}
+		{
+		}
 
 		#endregion
 
@@ -68,17 +72,18 @@ namespace Nez
 		/// </summary>
 		/// <returns>The enabled.</returns>
 		/// <param name="isEnabled">If set to <c>true</c> is enabled.</param>
-		public SceneComponent SetEnabled( bool isEnabled )
+		public SceneComponent SetEnabled(bool isEnabled)
 		{
-			if( _enabled != isEnabled )
+			if (_enabled != isEnabled)
 			{
 				_enabled = isEnabled;
 
-				if( _enabled )
+				if (_enabled)
 					OnEnabled();
 				else
 					OnDisabled();
 			}
+
 			return this;
 		}
 
@@ -88,23 +93,23 @@ namespace Nez
 		/// </summary>
 		/// <returns>The update order.</returns>
 		/// <param name="updateOrder">Update order.</param>
-		public SceneComponent SetUpdateOrder( int updateOrder )
+		public SceneComponent SetUpdateOrder(int updateOrder)
 		{
-			if( this.UpdateOrder != updateOrder )
+			if (this.UpdateOrder != updateOrder)
 			{
 				this.UpdateOrder = updateOrder;
 				Core.Scene._sceneComponents.Sort();
 			}
+
 			return this;
 		}
 
 		#endregion
 
 
-		int IComparable<SceneComponent>.CompareTo( SceneComponent other )
+		int IComparable<SceneComponent>.CompareTo(SceneComponent other)
 		{
-			return UpdateOrder.CompareTo( other.UpdateOrder );
+			return UpdateOrder.CompareTo(other.UpdateOrder);
 		}
-
 	}
 }

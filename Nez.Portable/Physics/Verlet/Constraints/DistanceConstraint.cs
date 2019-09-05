@@ -52,19 +52,19 @@ namespace Nez.Verlet
 		/// <summary>
 		/// Polygon shared amongst all DistanceConstraints. Used for collision detection.
 		/// </summary>
-		static Polygon _polygon = new Polygon( 2, 1 );
+		static Polygon _polygon = new Polygon(2, 1);
 
 
-		public DistanceConstraint( Particle first, Particle second, float stiffness, float distance = -1 )
+		public DistanceConstraint(Particle first, Particle second, float stiffness, float distance = -1)
 		{
 			_particleOne = first;
 			_particleTwo = second;
 			this.Stiffness = stiffness;
 
-			if( distance > -1 )
+			if (distance > -1)
 				RestingDistance = distance;
 			else
-				RestingDistance = Vector2.Distance( first.Position, second.Position );
+				RestingDistance = Vector2.Distance(first.Position, second.Position);
 		}
 
 
@@ -76,13 +76,15 @@ namespace Nez.Verlet
 		/// <param name="c">C.</param>
 		/// <param name="stiffness">Stiffness.</param>
 		/// <param name="angleInDegrees">Angle in degrees.</param>
-		public static DistanceConstraint Create( Particle a, Particle center, Particle c, float stiffness, float angleInDegrees )
+		public static DistanceConstraint Create(Particle a, Particle center, Particle c, float stiffness,
+		                                        float angleInDegrees)
 		{
-			var aToCenter = Vector2.Distance( a.Position, center.Position );
-			var cToCenter = Vector2.Distance( c.Position, center.Position );
-			var distance = Mathf.Sqrt( aToCenter * aToCenter + cToCenter * cToCenter - ( 2 * aToCenter * cToCenter * Mathf.Cos( angleInDegrees * Mathf.Deg2Rad ) ) );
+			var aToCenter = Vector2.Distance(a.Position, center.Position);
+			var cToCenter = Vector2.Distance(c.Position, center.Position);
+			var distance = Mathf.Sqrt(aToCenter * aToCenter + cToCenter * cToCenter -
+			                          (2 * aToCenter * cToCenter * Mathf.Cos(angleInDegrees * Mathf.Deg2Rad)));
 
-			return new DistanceConstraint( a, c, stiffness, distance );
+			return new DistanceConstraint(a, c, stiffness, distance);
 		}
 
 
@@ -92,7 +94,7 @@ namespace Nez.Verlet
 		/// </summary>
 		/// <returns>The tear sensitvity.</returns>
 		/// <param name="tearSensitivity">Tear sensitivity.</param>
-		public DistanceConstraint SetTearSensitivity( float tearSensitivity )
+		public DistanceConstraint SetTearSensitivity(float tearSensitivity)
 		{
 			this.TearSensitivity = tearSensitivity;
 			return this;
@@ -104,7 +106,7 @@ namespace Nez.Verlet
 		/// </summary>
 		/// <returns>The collides with colliders.</returns>
 		/// <param name="collidesWithColliders">If set to <c>true</c> collides with colliders.</param>
-		public DistanceConstraint SetCollidesWithColliders( bool collidesWithColliders )
+		public DistanceConstraint SetCollidesWithColliders(bool collidesWithColliders)
 		{
 			this.CollidesWithColliders = collidesWithColliders;
 			return this;
@@ -117,7 +119,7 @@ namespace Nez.Verlet
 		/// </summary>
 		/// <returns>The should approximate collisions with points.</returns>
 		/// <param name="shouldApproximateCollisionsWithPoints">If set to <c>true</c> should approximate collisions with points.</param>
-		public DistanceConstraint SetShouldApproximateCollisionsWithPoints( bool shouldApproximateCollisionsWithPoints )
+		public DistanceConstraint SetShouldApproximateCollisionsWithPoints(bool shouldApproximateCollisionsWithPoints)
 		{
 			this.ShouldApproximateCollisionsWithPoints = shouldApproximateCollisionsWithPoints;
 			return this;
@@ -131,19 +133,19 @@ namespace Nez.Verlet
 			var d = diff.Length();
 
 			// find the difference, or the ratio of how far along the restingDistance the actual distance is.
-			var difference = ( RestingDistance - d ) / d;
+			var difference = (RestingDistance - d) / d;
 
 			// if the distance is more than tearSensitivity we remove the Constraint
-			if( d / RestingDistance > TearSensitivity )
+			if (d / RestingDistance > TearSensitivity)
 			{
-				composite.RemoveConstraint( this );
+				composite.RemoveConstraint(this);
 				return;
 			}
 
 			// inverse the mass quantities
 			var im1 = 1f / _particleOne.Mass;
 			var im2 = 1f / _particleTwo.Mass;
-			var scalarP1 = ( im1 / ( im1 + im2 ) ) * Stiffness;
+			var scalarP1 = (im1 / (im1 + im2)) * Stiffness;
 			var scalarP2 = Stiffness - scalarP1;
 
 			// push/pull based on mass
@@ -153,30 +155,30 @@ namespace Nez.Verlet
 		}
 
 
-		[MethodImpl( MethodImplOptions.AggressiveInlining )]
-		public override void HandleCollisions( int collidesWithLayers )
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public override void HandleCollisions(int collidesWithLayers)
 		{
-			if( ShouldApproximateCollisionsWithPoints )
+			if (ShouldApproximateCollisionsWithPoints)
 			{
-				ApproximateCollisionsWithPoints( collidesWithLayers );
+				ApproximateCollisionsWithPoints(collidesWithLayers);
 				return;
 			}
 
 			// get a proper bounds for our line and update the Polygons bounds
-			var minX = Math.Min( _particleOne.Position.X, _particleTwo.Position.X );
-			var maxX = Math.Max( _particleOne.Position.X, _particleTwo.Position.X );
-			var minY = Math.Min( _particleOne.Position.Y, _particleTwo.Position.Y );
-			var maxY = Math.Max( _particleOne.Position.Y, _particleTwo.Position.Y );
-			_polygon.bounds = RectangleF.FromMinMax( minX, minY, maxX, maxY );
+			var minX = Math.Min(_particleOne.Position.X, _particleTwo.Position.X);
+			var maxX = Math.Max(_particleOne.Position.X, _particleTwo.Position.X);
+			var minY = Math.Min(_particleOne.Position.Y, _particleTwo.Position.Y);
+			var maxY = Math.Max(_particleOne.Position.Y, _particleTwo.Position.Y);
+			_polygon.bounds = RectangleF.FromMinMax(minX, minY, maxX, maxY);
 
 			Vector2 midPoint;
-			PreparePolygonForCollisionChecks( out midPoint );
+			PreparePolygonForCollisionChecks(out midPoint);
 
-			var colliders = Physics.BoxcastBroadphase( ref _polygon.bounds, collidesWithLayers );
-			foreach( var collider in colliders )
+			var colliders = Physics.BoxcastBroadphase(ref _polygon.bounds, collidesWithLayers);
+			foreach (var collider in colliders)
 			{
 				CollisionResult result;
-				if( _polygon.CollidesWithShape( collider.Shape, out result ) )
+				if (_polygon.CollidesWithShape(collider.Shape, out result))
 				{
 					// TODO: do we need this?
 					// special care needs to be taken for a Circle. Since our Polygon is only a single segment with a normal off both edges
@@ -196,19 +198,20 @@ namespace Nez.Verlet
 		}
 
 
-		[MethodImpl( MethodImplOptions.AggressiveInlining )]
-		void ApproximateCollisionsWithPoints( int collidesWithLayers )
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		void ApproximateCollisionsWithPoints(int collidesWithLayers)
 		{
 			Vector2 pt;
-			for( var j = 0; j < TotalPointsToApproximateCollisionsWith - 1; j++ )
+			for (var j = 0; j < TotalPointsToApproximateCollisionsWith - 1; j++)
 			{
-				pt = Vector2.Lerp( _particleOne.Position, _particleTwo.Position, ( j + 1 ) / (float)TotalPointsToApproximateCollisionsWith );
-				var collidedCount = Physics.OverlapCircleAll( pt, 3, VerletWorld._colliders, collidesWithLayers );
-				for( var i = 0; i < collidedCount; i++ )
+				pt = Vector2.Lerp(_particleOne.Position, _particleTwo.Position,
+					(j + 1) / (float) TotalPointsToApproximateCollisionsWith);
+				var collidedCount = Physics.OverlapCircleAll(pt, 3, VerletWorld._colliders, collidesWithLayers);
+				for (var i = 0; i < collidedCount; i++)
 				{
 					var collider = VerletWorld._colliders[i];
 					CollisionResult collisionResult;
-					if( collider.Shape.PointCollidesWithShape( pt, out collisionResult ) )
+					if (collider.Shape.PointCollidesWithShape(pt, out collisionResult))
 					{
 						_particleOne.Position -= collisionResult.MinimumTranslationVector;
 						_particleTwo.Position -= collisionResult.MinimumTranslationVector;
@@ -218,11 +221,11 @@ namespace Nez.Verlet
 		}
 
 
-		[MethodImpl( MethodImplOptions.AggressiveInlining )]
-		void PreparePolygonForCollisionChecks( out Vector2 midPoint )
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		void PreparePolygonForCollisionChecks(out Vector2 midPoint)
 		{
 			// set our Polygon points
-			midPoint = Vector2.Lerp( _particleOne.Position, _particleTwo.Position, 0.5f );
+			midPoint = Vector2.Lerp(_particleOne.Position, _particleTwo.Position, 0.5f);
 			_polygon.position = midPoint;
 			_polygon.Points[0] = _particleOne.Position - _polygon.position;
 			_polygon.Points[1] = _particleTwo.Position - _polygon.position;
@@ -230,10 +233,9 @@ namespace Nez.Verlet
 		}
 
 
-		public override void DebugRender( Batcher batcher )
+		public override void DebugRender(Batcher batcher)
 		{
-			batcher.DrawLine( _particleOne.Position, _particleTwo.Position, Debug.Colors.VerletConstraintEdge );
+			batcher.DrawLine(_particleOne.Position, _particleTwo.Position, Debug.Colors.VerletConstraintEdge);
 		}
-
 	}
 }

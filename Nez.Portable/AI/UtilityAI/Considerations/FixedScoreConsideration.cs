@@ -13,17 +13,15 @@ namespace Nez.AI.UtilityAI
 		public IAction<T> Action { get; set; }
 
 
-		public FixedScoreConsideration( float score = 1 )
+		public FixedScoreConsideration(float score = 1)
 		{
 			this.Score = score;
 		}
 
 
-		float IConsideration<T>.GetScore( T context )
+		float IConsideration<T>.GetScore(T context)
 		{
 			return Score;
 		}
-
 	}
 }
-

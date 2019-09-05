@@ -18,14 +18,14 @@ namespace Nez
 
 		#region Initialization and configuration
 
-		protected void AddVertex( Vector3 position, Color color, Vector3 normal )
+		protected void AddVertex(Vector3 position, Color color, Vector3 normal)
 		{
-			_vertices.Add( new VertexPositionColorNormal( position, color, normal ) );
+			_vertices.Add(new VertexPositionColorNormal(position, color, normal));
 		}
 
-		protected void AddIndex( int index )
+		protected void AddIndex(int index)
 		{
-			_indices.Add( (ushort)index );
+			_indices.Add((ushort) index);
 		}
 
 		/// <summary>
@@ -34,19 +34,20 @@ namespace Nez
 		/// </summary>
 		protected void InitializePrimitive()
 		{
-			if( _vertexBuffer != null )
+			if (_vertexBuffer != null)
 				_vertexBuffer.Dispose();
-			
-			if( _indexBuffer != null )
+
+			if (_indexBuffer != null)
 				_indexBuffer.Dispose();
 
 			// create a vertex buffer, and copy our vertex data into it.
-			_vertexBuffer = new VertexBuffer( Core.GraphicsDevice, typeof( VertexPositionColorNormal ), _vertices.Count, BufferUsage.None );
-			_vertexBuffer.SetData( _vertices.ToArray() );
+			_vertexBuffer = new VertexBuffer(Core.GraphicsDevice, typeof(VertexPositionColorNormal), _vertices.Count,
+				BufferUsage.None);
+			_vertexBuffer.SetData(_vertices.ToArray());
 
 			// create an index buffer, and copy our index data into it.
-			_indexBuffer = new IndexBuffer( Core.GraphicsDevice, typeof( ushort ), _indices.Count, BufferUsage.None );
-			_indexBuffer.SetData( _indices.ToArray() );
+			_indexBuffer = new IndexBuffer(Core.GraphicsDevice, typeof(ushort), _indices.Count, BufferUsage.None);
+			_indexBuffer.SetData(_indices.ToArray());
 		}
 
 		public override void OnAddedToEntity()
@@ -65,7 +66,7 @@ namespace Nez
 
 		~GeometricPrimitive3D()
 		{
-			Dispose( false );
+			Dispose(false);
 		}
 
 		/// <summary>
@@ -73,24 +74,24 @@ namespace Nez
 		/// </summary>
 		public void Dispose()
 		{
-			Dispose( true );
-			GC.SuppressFinalize( this );
+			Dispose(true);
+			GC.SuppressFinalize(this);
 		}
 
 		/// <summary>
 		/// frees resources used by this object.
 		/// </summary>
-		protected virtual void Dispose( bool disposing )
+		protected virtual void Dispose(bool disposing)
 		{
-			if( disposing )
+			if (disposing)
 			{
-				if( _vertexBuffer != null )
+				if (_vertexBuffer != null)
 					_vertexBuffer.Dispose();
 
-				if( _indexBuffer != null )
+				if (_indexBuffer != null)
 					_indexBuffer.Dispose();
 
-				if( _basicEffect != null )
+				if (_basicEffect != null)
 					_basicEffect.Dispose();
 			}
 		}
@@ -98,7 +99,7 @@ namespace Nez
 		#endregion
 
 
-		public override void Render( Graphics graphics, Camera camera )
+		public override void Render(Graphics graphics, Camera camera)
 		{
 			// flush the 2D batch so we render appropriately depth-wise
 			graphics.Batcher.FlushBatch();
@@ -113,13 +114,12 @@ namespace Nez
 			_basicEffect.DiffuseColor = Color.ToVector3();
 
 			// Set our vertex declaration, vertex buffer, and index buffer.
-			Core.GraphicsDevice.SetVertexBuffer( _vertexBuffer );
+			Core.GraphicsDevice.SetVertexBuffer(_vertexBuffer);
 			Core.GraphicsDevice.Indices = _indexBuffer;
 
 			_basicEffect.CurrentTechnique.Passes[0].Apply();
 			var primitiveCount = _indices.Count / 3;
-			Core.GraphicsDevice.DrawIndexedPrimitives( PrimitiveType.TriangleList, 0, 0, primitiveCount );
+			Core.GraphicsDevice.DrawIndexedPrimitives(PrimitiveType.TriangleList, 0, 0, primitiveCount);
 		}
-
 	}
 }

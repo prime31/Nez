@@ -7,55 +7,50 @@ using Nez.PipelineImporter;
 
 namespace Nez.TiledMaps
 {
-	[XmlRoot( ElementName = "tileset" )]
+	[XmlRoot(ElementName = "tileset")]
 	public class TmxTileset
 	{
 		// we need this for tilesets that have no image. they use image collections and we need the path to save the new atlas we generate.
 		public string MapFolder;
 		public bool IsStandardTileset = true;
 
-		[XmlAttribute( AttributeName = "firstgid" )]
+		[XmlAttribute(AttributeName = "firstgid")]
 		public int FirstGid;
 
-		[XmlAttribute( AttributeName = "source" )]
+		[XmlAttribute(AttributeName = "source")]
 		public string Source;
 
-		[XmlAttribute( AttributeName = "name" )]
-		public string Name;
+		[XmlAttribute(AttributeName = "name")] public string Name;
 
-		[XmlAttribute( AttributeName = "tilewidth" )]
+		[XmlAttribute(AttributeName = "tilewidth")]
 		public int TileWidth;
 
-		[XmlAttribute( AttributeName = "tileheight" )]
+		[XmlAttribute(AttributeName = "tileheight")]
 		public int TileHeight;
 
-		[XmlAttribute( AttributeName = "spacing" )]
+		[XmlAttribute(AttributeName = "spacing")]
 		public int Spacing;
 
-		[XmlAttribute( AttributeName = "margin" )]
+		[XmlAttribute(AttributeName = "margin")]
 		public int Margin;
 
-		[XmlAttribute( AttributeName = "tilecount" )]
+		[XmlAttribute(AttributeName = "tilecount")]
 		public int TileCount;
 
-		[XmlAttribute( AttributeName = "columns" )]
+		[XmlAttribute(AttributeName = "columns")]
 		public int Columns;
 
-		[XmlElement( ElementName = "tileoffset" )]
+		[XmlElement(ElementName = "tileoffset")]
 		public TmxTileOffset TileOffset;
 
-		[XmlElement( ElementName = "tile" )]
-		public List<TmxTilesetTile> Tiles;
+		[XmlElement(ElementName = "tile")] public List<TmxTilesetTile> Tiles;
 
-		[XmlArray( "properties" )]
-		[XmlArrayItem( "property" )]
+		[XmlArray("properties")] [XmlArrayItem("property")]
 		public List<TmxProperty> Properties;
 
-		[XmlElement( ElementName = "image" )]
-		public TmxImage Image;
+		[XmlElement(ElementName = "image")] public TmxImage Image;
 
-		[XmlArray( "terraintypes" )]
-		[XmlArrayItem( "terrain" )]
+		[XmlArray("terraintypes")] [XmlArrayItem("terrain")]
 		public List<TmxTerrain> TerrainTypes;
 
 
@@ -68,22 +63,21 @@ namespace Nez.TiledMaps
 		}
 
 
-		public void FixImagePath( string mapPath, string tilesetSource )
+		public void FixImagePath(string mapPath, string tilesetSource)
 		{
-			var mapDirectory = Path.GetDirectoryName( mapPath );
-			var tilesetDirectory = Path.GetDirectoryName( tilesetSource );
-			var imageDirectory = Path.GetDirectoryName( this.Image.Source );
-			var imageFile = Path.GetFileName( this.Image.Source );
-            
-			var newPath = Path.GetFullPath( Path.Combine( mapDirectory, tilesetDirectory, imageDirectory, imageFile ) );                        
-			Image.Source = Path.Combine( PathHelper.MakeRelativePath( mapPath, newPath ) );
+			var mapDirectory = Path.GetDirectoryName(mapPath);
+			var tilesetDirectory = Path.GetDirectoryName(tilesetSource);
+			var imageDirectory = Path.GetDirectoryName(this.Image.Source);
+			var imageFile = Path.GetFileName(this.Image.Source);
+
+			var newPath = Path.GetFullPath(Path.Combine(mapDirectory, tilesetDirectory, imageDirectory, imageFile));
+			Image.Source = Path.Combine(PathHelper.MakeRelativePath(mapPath, newPath));
 		}
 
 
 		public override string ToString()
 		{
-			return string.Format( "{0}: {1}", Name, Image );
+			return string.Format("{0}: {1}", Name, Image);
 		}
-
 	}
 }

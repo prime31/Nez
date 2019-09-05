@@ -3,7 +3,6 @@
 
 namespace Nez.Tweens
 {
-
 	public interface ITweenable
 	{
 		/// <summary>
@@ -42,7 +41,6 @@ namespace Nez.Tweens
 		/// stops the tween optionally bringing it to completion
 		/// </summary>
 		/// <param name="bringToCompletion">If set to <c>true</c> bring to completion.</param>
-		void Stop( bool bringToCompletion = false );
+		void Stop(bool bringToCompletion = false);
 	}
-
 }

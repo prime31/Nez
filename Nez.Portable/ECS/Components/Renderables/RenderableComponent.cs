@@ -33,9 +33,10 @@ namespace Nez
 		{
 			get
 			{
-				if( _areBoundsDirty )
+				if (_areBoundsDirty)
 				{
-					_bounds.CalculateBounds( Entity.Transform.Position, _localOffset, Vector2.Zero, Entity.Transform.Scale, Entity.Transform.Rotation, Width, Height );
+					_bounds.CalculateBounds(Entity.Transform.Position, _localOffset, Vector2.Zero,
+						Entity.Transform.Scale, Entity.Transform.Rotation, Width, Height);
 					_areBoundsDirty = false;
 				}
 
@@ -47,11 +48,11 @@ namespace Nez
 		/// standard Batcher layerdepth. 0 is in front and 1 is in back. Changing this value will trigger a sort of the renderableComponents
 		/// list on the scene.
 		/// </summary>
-		[Range( 0, 1 )]
+		[Range(0, 1)]
 		public float LayerDepth
 		{
 			get => _layerDepth;
-			set => SetLayerDepth( value );
+			set => SetLayerDepth(value);
 		}
 
 		/// <summary>
@@ -62,7 +63,7 @@ namespace Nez
 		public int RenderLayer
 		{
 			get => _renderLayer;
-			set => SetRenderLayer( value );
+			set => SetRenderLayer(value);
 		}
 
 		/// <summary>
@@ -82,7 +83,7 @@ namespace Nez
 		public Vector2 LocalOffset
 		{
 			get => _localOffset;
-			set => SetLocalOffset( value );
+			set => SetLocalOffset(value);
 		}
 
 		/// <summary>
@@ -94,11 +95,11 @@ namespace Nez
 			get => _isVisible;
 			private set
 			{
-				if( _isVisible != value )
+				if (_isVisible != value)
 				{
 					_isVisible = value;
 
-					if( _isVisible )
+					if (_isVisible)
 						OnBecameVisible();
 					else
 						OnBecameInvisible();
@@ -120,7 +121,7 @@ namespace Nez
 
 		#region Component overrides and IRenderable
 
-		public override void OnEntityTransformChanged( Transform.Component comp )
+		public override void OnEntityTransformChanged(Transform.Component comp)
 		{
 			_areBoundsDirty = true;
 		}
@@ -130,23 +131,23 @@ namespace Nez
 		/// </summary>
 		/// <param name="graphics">Graphics.</param>
 		/// <param name="camera">Camera.</param>
-		public abstract void Render( Graphics graphics, Camera camera );
+		public abstract void Render(Graphics graphics, Camera camera);
 
 		/// <summary>
 		/// renders the bounds only if there is no collider. Always renders a square on the origin.
 		/// </summary>
 		/// <param name="graphics">Graphics.</param>
-		public override void DebugRender( Graphics graphics )
+		public override void DebugRender(Graphics graphics)
 		{
-			if( !DebugRenderEnabled )
+			if (!DebugRenderEnabled)
 				return;
 
 			// if we have no collider draw our bounds
-			if( Entity.GetComponent<Collider>() == null )
-				graphics.Batcher.DrawHollowRect( Bounds, Debug.Colors.RenderableBounds );
+			if (Entity.GetComponent<Collider>() == null)
+				graphics.Batcher.DrawHollowRect(Bounds, Debug.Colors.RenderableBounds);
 
 			// draw a square for our pivot/origin
-			graphics.Batcher.DrawPixel( Entity.Transform.Position + _localOffset, Debug.Colors.RenderableCenter, 4 );
+			graphics.Batcher.DrawPixel(Entity.Transform.Position + _localOffset, Debug.Colors.RenderableCenter, 4);
 		}
 
 		/// <summary>
@@ -154,17 +155,20 @@ namespace Nez
 		/// isVisibleFromCamera for its culling check. All default Renderers do.
 		/// </summary>
 		protected virtual void OnBecameVisible()
-		{ }
+		{
+		}
 
 		/// <summary>
 		/// called when the renderable exits the camera frame. Note that these methods will not be called if your Renderer does not use
 		/// isVisibleFromCamera for its culling check. All default Renderers do.
 		/// </summary>
 		protected virtual void OnBecameInvisible()
-		{ }
+		{
+		}
 
 		public override void OnRemovedFromEntity()
-		{ }
+		{
+		}
 
 		/// <summary>
 		/// returns true if the Renderables bounds intersects the Camera.bounds. Handles state switches for the isVisible flag. Use this method
@@ -172,9 +176,9 @@ namespace Nez
 		/// </summary>
 		/// <returns><c>true</c>, if visible from camera was ised, <c>false</c> otherwise.</returns>
 		/// <param name="camera">Camera.</param>
-		public virtual bool IsVisibleFromCamera( Camera camera )
+		public virtual bool IsVisibleFromCamera(Camera camera)
 		{
-			IsVisible = camera.Bounds.Intersects( Bounds );
+			IsVisible = camera.Bounds.Intersects(Bounds);
 			return IsVisible;
 		}
 
@@ -183,11 +187,11 @@ namespace Nez
 
 		#region Fluent setters
 
-		public RenderableComponent SetMaterial( Material material )
+		public RenderableComponent SetMaterial(Material material)
 		{
 			this.Material = material;
-			if( Entity != null && Entity.Scene != null )
-				Entity.Scene.RenderableComponents.SetRenderLayerNeedsComponentSort( RenderLayer );
+			if (Entity != null && Entity.Scene != null)
+				Entity.Scene.RenderableComponents.SetRenderLayerNeedsComponentSort(RenderLayer);
 			return this;
 		}
 
@@ -196,12 +200,12 @@ namespace Nez
 		/// </summary>
 		/// <returns>The layer depth.</returns>
 		/// <param name="layerDepth">Value.</param>
-		public RenderableComponent SetLayerDepth( float layerDepth )
+		public RenderableComponent SetLayerDepth(float layerDepth)
 		{
-			_layerDepth = Mathf.Clamp01( layerDepth );
+			_layerDepth = Mathf.Clamp01(layerDepth);
 
-			if( Entity != null && Entity.Scene != null )
-				Entity.Scene.RenderableComponents.SetRenderLayerNeedsComponentSort( RenderLayer );
+			if (Entity != null && Entity.Scene != null)
+				Entity.Scene.RenderableComponents.SetRenderLayerNeedsComponentSort(RenderLayer);
 			return this;
 		}
 
@@ -211,17 +215,18 @@ namespace Nez
 		/// </summary>
 		/// <returns>The render layer.</returns>
 		/// <param name="renderLayer">Render layer.</param>
-		public RenderableComponent SetRenderLayer( int renderLayer )
+		public RenderableComponent SetRenderLayer(int renderLayer)
 		{
-			if( renderLayer != _renderLayer )
+			if (renderLayer != _renderLayer)
 			{
 				var oldRenderLayer = _renderLayer;
 				_renderLayer = renderLayer;
 
 				// if we have an entity then we are being managed by a ComponentList so we need to let it know that we changed renderLayers
-				if( Entity != null && Entity.Scene != null )
-					Entity.Scene.RenderableComponents.UpdateRenderableRenderLayer( this, oldRenderLayer, _renderLayer );
+				if (Entity != null && Entity.Scene != null)
+					Entity.Scene.RenderableComponents.UpdateRenderableRenderLayer(this, oldRenderLayer, _renderLayer);
 			}
+
 			return this;
 		}
 
@@ -230,7 +235,7 @@ namespace Nez
 		/// </summary>
 		/// <returns>The color.</returns>
 		/// <param name="color">Color.</param>
-		public RenderableComponent SetColor( Color color )
+		public RenderableComponent SetColor(Color color)
 		{
 			this.Color = color;
 			return this;
@@ -241,13 +246,14 @@ namespace Nez
 		/// </summary>
 		/// <returns>The local offset.</returns>
 		/// <param name="offset">Offset.</param>
-		public RenderableComponent SetLocalOffset( Vector2 offset )
+		public RenderableComponent SetLocalOffset(Vector2 offset)
 		{
-			if( _localOffset != offset )
+			if (_localOffset != offset)
 			{
 				_localOffset = offset;
 				_areBoundsDirty = true;
 			}
+
 			return this;
 		}
 
@@ -276,33 +282,32 @@ namespace Nez
 		/// </summary>
 		/// <returns>The to.</returns>
 		/// <param name="other">Other.</param>
-		public int CompareTo( RenderableComponent other )
+		public int CompareTo(RenderableComponent other)
 		{
-			var res = other.RenderLayer.CompareTo( RenderLayer );
-			if( res == 0 )
+			var res = other.RenderLayer.CompareTo(RenderLayer);
+			if (res == 0)
 			{
-				res = other.LayerDepth.CompareTo( LayerDepth );
-				if( res == 0 )
+				res = other.LayerDepth.CompareTo(LayerDepth);
+				if (res == 0)
 				{
 					// both null or equal
-					if( ReferenceEquals( Material, other.Material ) )
+					if (ReferenceEquals(Material, other.Material))
 						return 0;
 
-					if( other.Material == null )
+					if (other.Material == null)
 						return -1;
 
 					return 1;
 				}
 			}
+
 			return res;
 		}
 
 
 		public override string ToString()
 		{
-			return string.Format( "[RenderableComponent] {0}, renderLayer: {1}]", this.GetType(), RenderLayer );
+			return string.Format("[RenderableComponent] {0}, renderLayer: {1}]", this.GetType(), RenderLayer);
 		}
-
 	}
 }
-

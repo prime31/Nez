@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
 
+
 namespace Nez.Sprites
 {
 	/// <summary>
@@ -32,7 +33,7 @@ namespace Nez.Sprites
 				_textureScale = value;
 
 				// recalulcate our inverseTextureScale and the source rect size
-				_inverseTexScale = new Vector2( 1f / _textureScale.X, 1f / _textureScale.Y );
+				_inverseTexScale = new Vector2(1f / _textureScale.X, 1f / _textureScale.Y);
 			}
 		}
 
@@ -41,22 +42,23 @@ namespace Nez.Sprites
 
 
 		public ScrollingSprite()
-		{}
+		{
+		}
 
-		public ScrollingSprite( Subtexture subtexture ) : base( subtexture )
-		{}
+		public ScrollingSprite(Subtexture subtexture) : base(subtexture)
+		{
+		}
 
-		public ScrollingSprite( Texture2D texture ) : this( new Subtexture( texture ) )
-		{}
+		public ScrollingSprite(Texture2D texture) : this(new Subtexture(texture))
+		{
+		}
 
 		void IUpdatable.Update()
 		{
 			_scrollX += ScrollSpeedX * Time.DeltaTime;
 			_scrollY += ScrollSpeedY * Time.DeltaTime;
-			_sourceRect.X = (int)_scrollX;
-			_sourceRect.Y = (int)_scrollY;
+			_sourceRect.X = (int) _scrollX;
+			_sourceRect.Y = (int) _scrollY;
 		}
-
 	}
 }
-

@@ -16,9 +16,9 @@ namespace Nez.Farseer
 
 		#region Configuration
 
-		public FSRigidBody SetBodyType( BodyType bodyType )
+		public FSRigidBody SetBodyType(BodyType bodyType)
 		{
-			if( Body != null )
+			if (Body != null)
 				Body.BodyType = bodyType;
 			else
 				_bodyDef.BodyType = bodyType;
@@ -26,9 +26,9 @@ namespace Nez.Farseer
 		}
 
 
-		public FSRigidBody SetLinearVelocity( Vector2 linearVelocity )
+		public FSRigidBody SetLinearVelocity(Vector2 linearVelocity)
 		{
-			if( Body != null )
+			if (Body != null)
 				Body.LinearVelocity = linearVelocity;
 			else
 				_bodyDef.LinearVelocity = linearVelocity;
@@ -36,9 +36,9 @@ namespace Nez.Farseer
 		}
 
 
-		public FSRigidBody SetAngularVelocity( float angularVelocity )
+		public FSRigidBody SetAngularVelocity(float angularVelocity)
 		{
-			if( Body != null )
+			if (Body != null)
 				Body.AngularVelocity = angularVelocity;
 			else
 				_bodyDef.AngularVelocity = angularVelocity;
@@ -46,9 +46,9 @@ namespace Nez.Farseer
 		}
 
 
-		public FSRigidBody SetLinearDamping( float linearDamping )
+		public FSRigidBody SetLinearDamping(float linearDamping)
 		{
-			if( Body != null )
+			if (Body != null)
 				Body.LinearDamping = linearDamping;
 			else
 				_bodyDef.LinearDamping = linearDamping;
@@ -56,9 +56,9 @@ namespace Nez.Farseer
 		}
 
 
-		public FSRigidBody SetAngularDamping( float angularDamping )
+		public FSRigidBody SetAngularDamping(float angularDamping)
 		{
-			if( Body != null )
+			if (Body != null)
 				Body.AngularDamping = angularDamping;
 			else
 				_bodyDef.AngularDamping = angularDamping;
@@ -66,9 +66,9 @@ namespace Nez.Farseer
 		}
 
 
-		public FSRigidBody SetIsBullet( bool isBullet )
+		public FSRigidBody SetIsBullet(bool isBullet)
 		{
-			if( Body != null )
+			if (Body != null)
 				Body.IsBullet = isBullet;
 			else
 				_bodyDef.IsBullet = isBullet;
@@ -76,9 +76,9 @@ namespace Nez.Farseer
 		}
 
 
-		public FSRigidBody SetIsSleepingAllowed( bool isSleepingAllowed )
+		public FSRigidBody SetIsSleepingAllowed(bool isSleepingAllowed)
 		{
-			if( Body != null )
+			if (Body != null)
 				Body.IsSleepingAllowed = isSleepingAllowed;
 			else
 				_bodyDef.IsSleepingAllowed = isSleepingAllowed;
@@ -86,9 +86,9 @@ namespace Nez.Farseer
 		}
 
 
-		public FSRigidBody SetIsAwake( bool isAwake )
+		public FSRigidBody SetIsAwake(bool isAwake)
 		{
-			if( Body != null )
+			if (Body != null)
 				Body.IsAwake = isAwake;
 			else
 				_bodyDef.IsAwake = isAwake;
@@ -96,9 +96,9 @@ namespace Nez.Farseer
 		}
 
 
-		public FSRigidBody SetFixedRotation( bool fixedRotation )
+		public FSRigidBody SetFixedRotation(bool fixedRotation)
 		{
-			if( Body != null )
+			if (Body != null)
 				Body.FixedRotation = fixedRotation;
 			else
 				_bodyDef.FixedRotation = fixedRotation;
@@ -106,9 +106,9 @@ namespace Nez.Farseer
 		}
 
 
-		public FSRigidBody SetIgnoreGravity( bool ignoreGravity )
+		public FSRigidBody SetIgnoreGravity(bool ignoreGravity)
 		{
-			if( Body != null )
+			if (Body != null)
 				Body.IgnoreGravity = ignoreGravity;
 			else
 				_bodyDef.IgnoreGravity = ignoreGravity;
@@ -116,9 +116,9 @@ namespace Nez.Farseer
 		}
 
 
-		public FSRigidBody SetGravityScale( float gravityScale )
+		public FSRigidBody SetGravityScale(float gravityScale)
 		{
-			if( Body != null )
+			if (Body != null)
 				Body.GravityScale = gravityScale;
 			else
 				_bodyDef.GravityScale = gravityScale;
@@ -126,9 +126,9 @@ namespace Nez.Farseer
 		}
 
 
-		public FSRigidBody SetMass( float mass )
+		public FSRigidBody SetMass(float mass)
 		{
-			if( Body != null )
+			if (Body != null)
 				Body.Mass = mass;
 			else
 				_bodyDef.Mass = mass;
@@ -136,9 +136,9 @@ namespace Nez.Farseer
 		}
 
 
-		public FSRigidBody SetInertia( float inertia )
+		public FSRigidBody SetInertia(float inertia)
 		{
-			if( Body != null )
+			if (Body != null)
 				Body.Inertia = inertia;
 			else
 				_bodyDef.Inertia = inertia;
@@ -170,26 +170,26 @@ namespace Nez.Farseer
 
 		public override void OnEnabled()
 		{
-			if( Body != null )
+			if (Body != null)
 				Body.Enabled = true;
 		}
 
 
 		public override void OnDisabled()
 		{
-			if( Body != null )
+			if (Body != null)
 				Body.Enabled = false;
 		}
 
 
-		public override void OnEntityTransformChanged( Transform.Component comp )
+		public override void OnEntityTransformChanged(Transform.Component comp)
 		{
-			if( _ignoreTransformChanges || Body == null )
+			if (_ignoreTransformChanges || Body == null)
 				return;
 
-			if( comp == Transform.Component.Position )
+			if (comp == Transform.Component.Position)
 				Body.Position = Transform.Position * FSConvert.DisplayToSim;
-			else if( comp == Transform.Component.Rotation )
+			else if (comp == Transform.Component.Rotation)
 				Body.Rotation = Transform.Rotation;
 		}
 
@@ -198,7 +198,7 @@ namespace Nez.Farseer
 
 		void IUpdatable.Update()
 		{
-			if( Body == null || !Body.IsAwake )
+			if (Body == null || !Body.IsAwake)
 				return;
 
 			_ignoreTransformChanges = true;
@@ -210,11 +210,12 @@ namespace Nez.Farseer
 
 		void CreateBody()
 		{
-			if( Body != null )
+			if (Body != null)
 				return;
-			
+
 			var world = Entity.Scene.GetOrCreateSceneComponent<FSWorld>();
-			Body = new Body( world, Transform.Position * FSConvert.DisplayToSim, Transform.Rotation, _bodyDef.BodyType, this );
+			Body = new Body(world, Transform.Position * FSConvert.DisplayToSim, Transform.Rotation, _bodyDef.BodyType,
+				this);
 			Body.LinearVelocity = _bodyDef.LinearVelocity;
 			Body.AngularVelocity = _bodyDef.AngularVelocity;
 			Body.LinearDamping = _bodyDef.LinearDamping;
@@ -230,29 +231,28 @@ namespace Nez.Farseer
 			Body.Inertia = _bodyDef.Inertia;
 
 			var collisionShapes = Entity.GetComponents<FSCollisionShape>();
-			for( var i = 0; i < collisionShapes.Count; i++ )
+			for (var i = 0; i < collisionShapes.Count; i++)
 				collisionShapes[i].CreateFixture();
-			ListPool<FSCollisionShape>.Free( collisionShapes );
+			ListPool<FSCollisionShape>.Free(collisionShapes);
 
-			for( var i = 0; i < _joints.Count; i++ )
+			for (var i = 0; i < _joints.Count; i++)
 				_joints[i].CreateJoint();
 		}
 
 
 		void DestroyBody()
 		{
-			for( var i = 0; i < _joints.Count; i++ )
+			for (var i = 0; i < _joints.Count; i++)
 				_joints[i].DestroyJoint();
 			_joints.Clear();
 
 			var collisionShapes = Entity.GetComponents<FSCollisionShape>();
-			for( var i = 0; i < collisionShapes.Count; i++ )
+			for (var i = 0; i < collisionShapes.Count; i++)
 				collisionShapes[i].DestroyFixture();
-			ListPool<FSCollisionShape>.Free( collisionShapes );
+			ListPool<FSCollisionShape>.Free(collisionShapes);
 
-			Body.World.RemoveBody( Body );
+			Body.World.RemoveBody(Body);
 			Body = null;
 		}
-
 	}
 }

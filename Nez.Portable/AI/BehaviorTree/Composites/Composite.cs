@@ -20,7 +20,7 @@ namespace Nez.AI.BehaviorTrees
 		{
 			base.Invalidate();
 
-			for( var i = 0; i < _children.Count; i++ )
+			for (var i = 0; i < _children.Count; i++)
 				_children[i].Invalidate();
 		}
 
@@ -36,7 +36,7 @@ namespace Nez.AI.BehaviorTrees
 		public override void OnEnd()
 		{
 			// we are done so invalidate our children so they are ready for the next tick
-			for( var i = 0; i < _children.Count; i++ )
+			for (var i = 0; i < _children.Count; i++)
 				_children[i].Invalidate();
 		}
 
@@ -45,9 +45,9 @@ namespace Nez.AI.BehaviorTrees
 		/// adds a child to this Composite
 		/// </summary>
 		/// <param name="child">Child.</param>
-		public void AddChild( Behavior<T> child )
+		public void AddChild(Behavior<T> child)
 		{
-			_children.Add( child );
+			_children.Add(child);
 		}
 
 
@@ -67,14 +67,14 @@ namespace Nez.AI.BehaviorTrees
 		/// <returns><c>true</c>, if lower priority conditional abort in children was hased, <c>false</c> otherwise.</returns>
 		bool HasLowerPriorityConditionalAbortInChildren()
 		{
-			for( var i = 0; i < _children.Count; i++ )
+			for (var i = 0; i < _children.Count; i++)
 			{
 				// check for a Composite with an abortType set
 				var composite = _children[i] as Composite<T>;
-				if( composite != null && composite.AbortType.Has( AbortTypes.LowerPriority ) )
+				if (composite != null && composite.AbortType.Has(AbortTypes.LowerPriority))
 				{
 					// now make sure the first child is a Conditional
-					if( composite.IsFirstChildConditional() )
+					if (composite.IsFirstChildConditional())
 						return true;
 				}
 			}
@@ -90,23 +90,23 @@ namespace Nez.AI.BehaviorTrees
 		/// </summary>
 		/// <param name="context">Context.</param>
 		/// <param name="statusCheck">Status check.</param>
-		protected void UpdateLowerPriorityAbortConditional( T context, TaskStatus statusCheck )
+		protected void UpdateLowerPriorityAbortConditional(T context, TaskStatus statusCheck)
 		{
 			// check any lower priority tasks to see if they changed status
-			for( var i = 0; i < _currentChildIndex; i++ )
+			for (var i = 0; i < _currentChildIndex; i++)
 			{
 				var composite = _children[i] as Composite<T>;
-				if( composite != null && composite.AbortType.Has( AbortTypes.LowerPriority ) )
+				if (composite != null && composite.AbortType.Has(AbortTypes.LowerPriority))
 				{
 					// now we get the status of only the Conditional (update instead of tick) to see if it changed taking care with ConditionalDecorators
 					var child = composite._children[0];
-					var status = UpdateConditionalNode( context, child );
-					if( status != statusCheck )
+					var status = UpdateConditionalNode(context, child);
+					if (status != statusCheck)
 					{
 						_currentChildIndex = i;
 
 						// we have an abort so we invalidate the children so they get reevaluated
-						for( var j = i; j < _children.Count; j++ )
+						for (var j = i; j < _children.Count; j++)
 							_children[j].Invalidate();
 						break;
 					}
@@ -120,22 +120,22 @@ namespace Nez.AI.BehaviorTrees
 		/// </summary>
 		/// <param name="context">Context.</param>
 		/// <param name="statusCheck">Status check.</param>
-		protected void UpdateSelfAbortConditional( T context, TaskStatus statusCheck )
+		protected void UpdateSelfAbortConditional(T context, TaskStatus statusCheck)
 		{
 			// check any IConditional child tasks to see if they changed status
-			for( var i = 0; i < _currentChildIndex; i++ )
+			for (var i = 0; i < _currentChildIndex; i++)
 			{
 				var child = _children[i];
-				if( !( child is IConditional<T> ) )
+				if (!(child is IConditional<T>))
 					continue;
-				
-				var status = UpdateConditionalNode( context, child );
-				if( status != statusCheck )
+
+				var status = UpdateConditionalNode(context, child);
+				if (status != statusCheck)
 				{
 					_currentChildIndex = i;
 
 					// we have an abort so we invalidate the children so they get reevaluated
-					for( var j = i; j < _children.Count; j++ )
+					for (var j = i; j < _children.Count; j++)
 						_children[j].Invalidate();
 					break;
 				}
@@ -149,14 +149,12 @@ namespace Nez.AI.BehaviorTrees
 		/// <returns>The conditional node.</returns>
 		/// <param name="context">Context.</param>
 		/// <param name="node">Node.</param>
-		TaskStatus UpdateConditionalNode( T context, Behavior<T> node )
+		TaskStatus UpdateConditionalNode(T context, Behavior<T> node)
 		{
-			if( node is ConditionalDecorator<T> )
-				return ( node as ConditionalDecorator<T> ).ExecuteConditional( context, true );
+			if (node is ConditionalDecorator<T>)
+				return (node as ConditionalDecorator<T>).ExecuteConditional(context, true);
 			else
-				return node.Update( context );
+				return node.Update(context);
 		}
-
 	}
 }
-

@@ -14,14 +14,13 @@ namespace Nez.AI.UtilityAI
 		List<IAppraisal<T>> _appraisals = new List<IAppraisal<T>>();
 
 
-		float IConsideration<T>.GetScore( T context )
+		float IConsideration<T>.GetScore(T context)
 		{
 			var score = 0f;
-			for( var i = 0; i < _appraisals.Count; i++ )
-				score += _appraisals[i].GetScore( context );
+			for (var i = 0; i < _appraisals.Count; i++)
+				score += _appraisals[i].GetScore(context);
 
 			return score;
 		}
 	}
 }
-

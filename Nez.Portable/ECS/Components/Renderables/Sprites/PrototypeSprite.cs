@@ -17,9 +17,10 @@ namespace Nez
 		{
 			get
 			{
-				if( _areBoundsDirty )
+				if (_areBoundsDirty)
 				{
-					_bounds.CalculateBounds( Entity.Transform.Position, _localOffset, _origin, Entity.Transform.Scale, Entity.Transform.Rotation, _width, _height );
+					_bounds.CalculateBounds(Entity.Transform.Position, _localOffset, _origin, Entity.Transform.Scale,
+						Entity.Transform.Rotation, _width, _height);
 					_areBoundsDirty = false;
 				}
 
@@ -35,10 +36,11 @@ namespace Nez
 		float _width, _height;
 
 
-		public PrototypeSprite() : this( 50, 50 )
-		{}
+		public PrototypeSprite() : this(50, 50)
+		{
+		}
 
-		public PrototypeSprite( float width, float height ) : base( Graphics.Instance.PixelTexture )
+		public PrototypeSprite(float width, float height) : base(Graphics.Instance.PixelTexture)
 		{
 			_width = width;
 			_height = height;
@@ -49,7 +51,7 @@ namespace Nez
 		/// </summary>
 		/// <returns>The width.</returns>
 		/// <param name="width">Width.</param>
-		public PrototypeSprite SetWidth( float width )
+		public PrototypeSprite SetWidth(float width)
 		{
 			_width = width;
 			return this;
@@ -60,7 +62,7 @@ namespace Nez
 		/// </summary>
 		/// <returns>The height.</returns>
 		/// <param name="height">Height.</param>
-		public PrototypeSprite SetHeight( float height )
+		public PrototypeSprite SetHeight(float height)
 		{
 			_height = height;
 			return this;
@@ -74,7 +76,7 @@ namespace Nez
 		/// <param name="skewBottomX">Skew bottom x.</param>
 		/// <param name="skewLeftY">Skew left y.</param>
 		/// <param name="skewRightY">Skew right y.</param>
-		public PrototypeSprite SetSkew( float skewTopX, float skewBottomX, float skewLeftY, float skewRightY )
+		public PrototypeSprite SetSkew(float skewTopX, float skewBottomX, float skewLeftY, float skewRightY)
 		{
 			this.SkewTopX = skewTopX;
 			this.SkewBottomX = skewBottomX;
@@ -82,20 +84,19 @@ namespace Nez
 			this.SkewRightY = skewRightY;
 			return this;
 		}
-       
-	    public override void OnAddedToEntity()
-        {
-            OriginNormalized = Vector2Ext.HalfVector();
-        }
 
-        public override void Render( Graphics graphics, Camera camera )
+		public override void OnAddedToEntity()
 		{
-			var pos = ( Entity.Transform.Position - ( Origin * Entity.Transform.Scale ) + LocalOffset );
-			var size = new Point( (int)( _width * Entity.Transform.Scale.X ), (int)( _height * Entity.Transform.Scale.Y ) );
-			var destRect = new Rectangle( (int)pos.X, (int)pos.Y, size.X, size.Y );
-			graphics.Batcher.Draw( Subtexture, destRect, Subtexture.SourceRect, Color, Entity.Transform.Rotation, SpriteEffects.None, LayerDepth, SkewTopX, SkewBottomX, SkewLeftY, SkewRightY );
+			OriginNormalized = Vector2Ext.HalfVector();
 		}
 
+		public override void Render(Graphics graphics, Camera camera)
+		{
+			var pos = (Entity.Transform.Position - (Origin * Entity.Transform.Scale) + LocalOffset);
+			var size = new Point((int) (_width * Entity.Transform.Scale.X), (int) (_height * Entity.Transform.Scale.Y));
+			var destRect = new Rectangle((int) pos.X, (int) pos.Y, size.X, size.Y);
+			graphics.Batcher.Draw(Subtexture, destRect, Subtexture.SourceRect, Color, Entity.Transform.Rotation,
+				SpriteEffects.None, LayerDepth, SkewTopX, SkewBottomX, SkewLeftY, SkewRightY);
+		}
 	}
 }
-

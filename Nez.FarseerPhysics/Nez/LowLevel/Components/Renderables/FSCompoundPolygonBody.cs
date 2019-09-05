@@ -16,8 +16,9 @@ namespace Nez.Farseer
 		protected List<Vertices> _verts = new List<Vertices>();
 
 
-		public FSCompoundPolygonBody( Subtexture subtexture ) : base( subtexture )
-		{ }
+		public FSCompoundPolygonBody(Subtexture subtexture) : base(subtexture)
+		{
+		}
 
 
 		public override void Initialize()
@@ -25,48 +26,47 @@ namespace Nez.Farseer
 			base.Initialize();
 
 			var data = new uint[_subtexture.SourceRect.Width * _subtexture.SourceRect.Height];
-			_subtexture.Texture2D.GetData( 0, _subtexture.SourceRect, data, 0, data.Length );
+			_subtexture.Texture2D.GetData(0, _subtexture.SourceRect, data, 0, data.Length);
 
-			var verts = PolygonTools.CreatePolygonFromTextureData( data, _subtexture.SourceRect.Width );
-			verts = SimplifyTools.DouglasPeuckerSimplify( verts, 2 );
+			var verts = PolygonTools.CreatePolygonFromTextureData(data, _subtexture.SourceRect.Width);
+			verts = SimplifyTools.DouglasPeuckerSimplify(verts, 2);
 
-			var decomposedVerts = Triangulate.ConvexPartition( verts, TriangulationAlgorithm.Bayazit );
-			for( var i = 0; i < decomposedVerts.Count; i++ )
+			var decomposedVerts = Triangulate.ConvexPartition(verts, TriangulationAlgorithm.Bayazit);
+			for (var i = 0; i < decomposedVerts.Count; i++)
 			{
 				var polygon = decomposedVerts[i];
-				polygon.Translate( -_subtexture.Center );
+				polygon.Translate(-_subtexture.Center);
 			}
 
 			// add the fixtures
-			var fixtures = Body.AttachCompoundPolygon( decomposedVerts, 1 );
+			var fixtures = Body.AttachCompoundPolygon(decomposedVerts, 1);
 
 			// fetch all the Vertices and save a copy in case we need to scale them later
-			foreach( var fixture in fixtures )
-				_verts.Add( new Vertices( ( fixture.Shape as PolygonShape ).Vertices ) );
+			foreach (var fixture in fixtures)
+				_verts.Add(new Vertices((fixture.Shape as PolygonShape).Vertices));
 		}
 
 
-		public override void OnEntityTransformChanged( Transform.Component comp )
+		public override void OnEntityTransformChanged(Transform.Component comp)
 		{
-			base.OnEntityTransformChanged( comp );
-			if( _ignoreTransformChanges )
+			base.OnEntityTransformChanged(comp);
+			if (_ignoreTransformChanges)
 				return;
 
 			// we only care about scale. base handles pos/rot
-			if( comp == Transform.Component.Scale )
+			if (comp == Transform.Component.Scale)
 			{
 				// fetch the Vertices, clear them, add our originals and scale them
-				for( var i = 0; i < Body.FixtureList.Count; i++ )
+				for (var i = 0; i < Body.FixtureList.Count; i++)
 				{
 					var poly = Body.FixtureList[i].Shape as PolygonShape;
 					var verts = poly.Vertices;
 					verts.Clear();
-					verts.AddRange( _verts[i] );
-					verts.Scale( Transform.Scale );
+					verts.AddRange(_verts[i]);
+					verts.Scale(Transform.Scale);
 					poly.Vertices = verts;
 				}
 			}
 		}
-
 	}
 }

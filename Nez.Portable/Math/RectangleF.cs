@@ -8,7 +8,7 @@ namespace Nez
 	/// <summary>
 	/// Describes a 2D-rectangle. 
 	/// </summary>
-	[DebuggerDisplay( "{DebugDisplayString,nq}" )]
+	[DebuggerDisplay("{DebugDisplayString,nq}")]
 	public struct RectangleF : IEquatable<RectangleF>
 	{
 		static RectangleF emptyRectangle = new RectangleF();
@@ -48,7 +48,10 @@ namespace Nez
 		/// returns a RectangleF of float.Min/Max values
 		/// </summary>
 		/// <value>The max rect.</value>
-		public static RectangleF MaxRect { get { return new RectangleF( float.MinValue / 2, float.MinValue / 2, float.MaxValue, float.MaxValue ); } }
+		public static RectangleF MaxRect
+		{
+			get { return new RectangleF(float.MinValue / 2, float.MinValue / 2, float.MaxValue, float.MaxValue); }
+		}
 
 		/// <summary>
 		/// Returns the x coordinate of the left edge of this <see cref="RectangleF"/>.
@@ -63,7 +66,7 @@ namespace Nez
 		/// </summary>
 		public float Right
 		{
-			get { return ( this.X + this.Width ); }
+			get { return (this.X + this.Width); }
 		}
 
 		/// <summary>
@@ -79,14 +82,17 @@ namespace Nez
 		/// </summary>
 		public float Bottom
 		{
-			get { return ( this.Y + this.Height ); }
+			get { return (this.Y + this.Height); }
 		}
 
 		/// <summary>
 		/// gets the max point of the rectangle, the bottom-right corner
 		/// </summary>
 		/// <value>The max.</value>
-		public Vector2 Max { get { return new Vector2( Right, Bottom ); } }
+		public Vector2 Max
+		{
+			get { return new Vector2(Right, Bottom); }
+		}
 
 		/// <summary>
 		/// Whether or not this <see cref="RectangleF"/> has a <see cref="Width"/> and
@@ -94,10 +100,7 @@ namespace Nez
 		/// </summary>
 		public bool IsEmpty
 		{
-			get
-			{
-				return ( ( ( ( this.Width == 0 ) && ( this.Height == 0 ) ) && ( this.X == 0 ) ) && ( this.Y == 0 ) );
-			}
+			get { return ((((this.Width == 0) && (this.Height == 0)) && (this.X == 0)) && (this.Y == 0)); }
 		}
 
 		/// <summary>
@@ -105,10 +108,7 @@ namespace Nez
 		/// </summary>
 		public Vector2 Location
 		{
-			get
-			{
-				return new Vector2( this.X, this.Y );
-			}
+			get { return new Vector2(this.X, this.Y); }
 			set
 			{
 				X = value.X;
@@ -121,10 +121,7 @@ namespace Nez
 		/// </summary>
 		public Vector2 Size
 		{
-			get
-			{
-				return new Vector2( this.Width, this.Height );
-			}
+			get { return new Vector2(this.Width, this.Height); }
 			set
 			{
 				Width = value.X;
@@ -141,7 +138,7 @@ namespace Nez
 		/// </remarks>
 		public Vector2 Center
 		{
-			get { return new Vector2( this.X + ( this.Width / 2 ), this.Y + ( this.Height / 2 ) ); }
+			get { return new Vector2(this.X + (this.Width / 2), this.Y + (this.Height / 2)); }
 		}
 
 		#endregion
@@ -172,7 +169,7 @@ namespace Nez
 		/// <param name="y">The y coordinate of the top-left corner of the created <see cref="RectangleF"/>.</param>
 		/// <param name="width">The width of the created <see cref="RectangleF"/>.</param>
 		/// <param name="height">The height of the created <see cref="RectangleF"/>.</param>
-		public RectangleF( float x, float y, float width, float height )
+		public RectangleF(float x, float y, float width, float height)
 		{
 			this.X = x;
 			this.Y = y;
@@ -187,7 +184,7 @@ namespace Nez
 		/// </summary>
 		/// <param name="location">The x and y coordinates of the top-left corner of the created <see cref="RectangleF"/>.</param>
 		/// <param name="size">The width and height of the created <see cref="RectangleF"/>.</param>
-		public RectangleF( Vector2 location, Vector2 size )
+		public RectangleF(Vector2 location, Vector2 size)
 		{
 			this.X = location.X;
 			this.Y = location.Y;
@@ -202,9 +199,9 @@ namespace Nez
 		/// <returns>The minimum max points.</returns>
 		/// <param name="min">Minimum.</param>
 		/// <param name="max">Max.</param>
-		public static RectangleF FromMinMax( Vector2 min, Vector2 max )
+		public static RectangleF FromMinMax(Vector2 min, Vector2 max)
 		{
-			return new RectangleF( min.X, min.Y, max.X - min.X, max.Y - min.Y );
+			return new RectangleF(min.X, min.Y, max.X - min.X, max.Y - min.Y);
 		}
 
 
@@ -214,9 +211,9 @@ namespace Nez
 		/// <returns>The minimum max points.</returns>
 		/// <param name="min">Minimum.</param>
 		/// <param name="max">Max.</param>
-		public static RectangleF FromMinMax( float minX, float minY, float maxX, float maxY )
+		public static RectangleF FromMinMax(float minX, float minY, float maxX, float maxY)
 		{
-			return new RectangleF( minX, minY, maxX - minX, maxY - minY );
+			return new RectangleF(minX, minY, maxX - minX, maxY - minY);
 		}
 
 
@@ -225,7 +222,7 @@ namespace Nez
 		/// </summary>
 		/// <returns>The from polygon points.</returns>
 		/// <param name="points">Points.</param>
-		public static RectangleF RectEncompassingPoints( Vector2[] points )
+		public static RectangleF RectEncompassingPoints(Vector2[] points)
 		{
 			// we need to find the min/max x/y values
 			var minX = float.PositiveInfinity;
@@ -233,22 +230,22 @@ namespace Nez
 			var maxX = float.NegativeInfinity;
 			var maxY = float.NegativeInfinity;
 
-			for( var i = 0; i < points.Length; i++ )
+			for (var i = 0; i < points.Length; i++)
 			{
 				var pt = points[i];
 
-				if( pt.X < minX )
+				if (pt.X < minX)
 					minX = pt.X;
-				if( pt.X > maxX )
+				if (pt.X > maxX)
 					maxX = pt.X;
 
-				if( pt.Y < minY )
+				if (pt.Y < minY)
 					minY = pt.Y;
-				if( pt.Y > maxY )
+				if (pt.Y > maxY)
 					maxY = pt.Y;
 			}
 
-			return RectangleF.FromMinMax( minX, minY, maxX, maxY );
+			return RectangleF.FromMinMax(minX, minY, maxX, maxY);
 		}
 
 
@@ -259,9 +256,9 @@ namespace Nez
 		/// </summary>
 		/// <returns>The side.</returns>
 		/// <param name="edge">Side.</param>
-		public float GetSide( Edge edge )
+		public float GetSide(Edge edge)
 		{
-			switch( edge )
+			switch (edge)
 			{
 				case Edge.Top:
 					return Top;
@@ -283,9 +280,9 @@ namespace Nez
 		/// <param name="x">The x coordinate of the point to check for containment.</param>
 		/// <param name="y">The y coordinate of the point to check for containment.</param>
 		/// <returns><c>true</c> if the provided coordinates lie inside this <see cref="RectangleF"/>; <c>false</c> otherwise.</returns>
-		public bool Contains( int x, int y )
+		public bool Contains(int x, int y)
 		{
-			return ( ( ( ( this.X <= x ) && ( x < ( this.X + this.Width ) ) ) && ( this.Y <= y ) ) && ( y < ( this.Y + this.Height ) ) );
+			return ((((this.X <= x) && (x < (this.X + this.Width))) && (this.Y <= y)) && (y < (this.Y + this.Height)));
 		}
 
 
@@ -295,9 +292,9 @@ namespace Nez
 		/// <param name="x">The x coordinate of the point to check for containment.</param>
 		/// <param name="y">The y coordinate of the point to check for containment.</param>
 		/// <returns><c>true</c> if the provided coordinates lie inside this <see cref="RectangleF"/>; <c>false</c> otherwise.</returns>
-		public bool Contains( float x, float y )
+		public bool Contains(float x, float y)
 		{
-			return ( ( ( ( this.X <= x ) && ( x < ( this.X + this.Width ) ) ) && ( this.Y <= y ) ) && ( y < ( this.Y + this.Height ) ) );
+			return ((((this.X <= x) && (x < (this.X + this.Width))) && (this.Y <= y)) && (y < (this.Y + this.Height)));
 		}
 
 
@@ -306,9 +303,10 @@ namespace Nez
 		/// </summary>
 		/// <param name="value">The coordinates to check for inclusion in this <see cref="RectangleF"/>.</param>
 		/// <returns><c>true</c> if the provided <see cref="Point"/> lies inside this <see cref="RectangleF"/>; <c>false</c> otherwise.</returns>
-		public bool Contains( Point value )
+		public bool Contains(Point value)
 		{
-			return ( ( ( ( this.X <= value.X ) && ( value.X < ( this.X + this.Width ) ) ) && ( this.Y <= value.Y ) ) && ( value.Y < ( this.Y + this.Height ) ) );
+			return ((((this.X <= value.X) && (value.X < (this.X + this.Width))) && (this.Y <= value.Y)) &&
+			        (value.Y < (this.Y + this.Height)));
 		}
 
 
@@ -317,9 +315,10 @@ namespace Nez
 		/// </summary>
 		/// <param name="value">The coordinates to check for inclusion in this <see cref="RectangleF"/>.</param>
 		/// <param name="result"><c>true</c> if the provided <see cref="Point"/> lies inside this <see cref="RectangleF"/>; <c>false</c> otherwise. As an output parameter.</param>
-		public void Contains( ref Point value, out bool result )
+		public void Contains(ref Point value, out bool result)
 		{
-			result = ( ( ( ( this.X <= value.X ) && ( value.X < ( this.X + this.Width ) ) ) && ( this.Y <= value.Y ) ) && ( value.Y < ( this.Y + this.Height ) ) );
+			result = ((((this.X <= value.X) && (value.X < (this.X + this.Width))) && (this.Y <= value.Y)) &&
+			          (value.Y < (this.Y + this.Height)));
 		}
 
 
@@ -328,9 +327,10 @@ namespace Nez
 		/// </summary>
 		/// <param name="value">The coordinates to check for inclusion in this <see cref="RectangleF"/>.</param>
 		/// <returns><c>true</c> if the provided <see cref="Vector2"/> lies inside this <see cref="RectangleF"/>; <c>false</c> otherwise.</returns>
-		public bool Contains( Vector2 value )
+		public bool Contains(Vector2 value)
 		{
-			return ( ( ( ( this.X <= value.X ) && ( value.X < ( this.X + this.Width ) ) ) && ( this.Y <= value.Y ) ) && ( value.Y < ( this.Y + this.Height ) ) );
+			return ((((this.X <= value.X) && (value.X < (this.X + this.Width))) && (this.Y <= value.Y)) &&
+			        (value.Y < (this.Y + this.Height)));
 		}
 
 
@@ -339,9 +339,10 @@ namespace Nez
 		/// </summary>
 		/// <param name="value">The coordinates to check for inclusion in this <see cref="RectangleF"/>.</param>
 		/// <param name="result"><c>true</c> if the provided <see cref="Vector2"/> lies inside this <see cref="RectangleF"/>; <c>false</c> otherwise. As an output parameter.</param>
-		public void Contains( ref Vector2 value, out bool result )
+		public void Contains(ref Vector2 value, out bool result)
 		{
-			result = ( ( ( ( this.X <= value.X ) && ( value.X < ( this.X + this.Width ) ) ) && ( this.Y <= value.Y ) ) && ( value.Y < ( this.Y + this.Height ) ) );
+			result = ((((this.X <= value.X) && (value.X < (this.X + this.Width))) && (this.Y <= value.Y)) &&
+			          (value.Y < (this.Y + this.Height)));
 		}
 
 
@@ -350,9 +351,10 @@ namespace Nez
 		/// </summary>
 		/// <param name="value">The <see cref="RectangleF"/> to check for inclusion in this <see cref="RectangleF"/>.</param>
 		/// <returns><c>true</c> if the provided <see cref="RectangleF"/>'s bounds lie entirely inside this <see cref="RectangleF"/>; <c>false</c> otherwise.</returns>
-		public bool Contains( RectangleF value )
+		public bool Contains(RectangleF value)
 		{
-			return ( ( ( ( this.X <= value.X ) && ( ( value.X + value.Width ) <= ( this.X + this.Width ) ) ) && ( this.Y <= value.Y ) ) && ( ( value.Y + value.Height ) <= ( this.Y + this.Height ) ) );
+			return ((((this.X <= value.X) && ((value.X + value.Width) <= (this.X + this.Width))) &&
+			         (this.Y <= value.Y)) && ((value.Y + value.Height) <= (this.Y + this.Height)));
 		}
 
 
@@ -361,9 +363,10 @@ namespace Nez
 		/// </summary>
 		/// <param name="value">The <see cref="RectangleF"/> to check for inclusion in this <see cref="RectangleF"/>.</param>
 		/// <param name="result"><c>true</c> if the provided <see cref="RectangleF"/>'s bounds lie entirely inside this <see cref="RectangleF"/>; <c>false</c> otherwise. As an output parameter.</param>
-		public void Contains( ref RectangleF value, out bool result )
+		public void Contains(ref RectangleF value, out bool result)
 		{
-			result = ( ( ( ( this.X <= value.X ) && ( ( value.X + value.Width ) <= ( this.X + this.Width ) ) ) && ( this.Y <= value.Y ) ) && ( ( value.Y + value.Height ) <= ( this.Y + this.Height ) ) );
+			result = ((((this.X <= value.X) && ((value.X + value.Width) <= (this.X + this.Width))) &&
+			           (this.Y <= value.Y)) && ((value.Y + value.Height) <= (this.Y + this.Height)));
 		}
 
 
@@ -372,7 +375,7 @@ namespace Nez
 		/// </summary>
 		/// <param name="horizontalAmount">Value to adjust the left and right edges.</param>
 		/// <param name="verticalAmount">Value to adjust the top and bottom edges.</param>
-		public void Inflate( int horizontalAmount, int verticalAmount )
+		public void Inflate(int horizontalAmount, int verticalAmount)
 		{
 			X -= horizontalAmount;
 			Y -= verticalAmount;
@@ -386,7 +389,7 @@ namespace Nez
 		/// </summary>
 		/// <param name="horizontalAmount">Value to adjust the left and right edges.</param>
 		/// <param name="verticalAmount">Value to adjust the top and bottom edges.</param>
-		public void Inflate( float horizontalAmount, float verticalAmount )
+		public void Inflate(float horizontalAmount, float verticalAmount)
 		{
 			X -= horizontalAmount;
 			Y -= verticalAmount;
@@ -400,12 +403,12 @@ namespace Nez
 		/// </summary>
 		/// <param name="value">The other rectangle for testing.</param>
 		/// <returns><c>true</c> if other <see cref="RectangleF"/> intersects with this rectangle; <c>false</c> otherwise.</returns>
-		public bool Intersects( RectangleF value )
+		public bool Intersects(RectangleF value)
 		{
 			return value.Left < Right &&
-			Left < value.Right &&
-			value.Top < Bottom &&
-			Top < value.Bottom;
+			       Left < value.Right &&
+			       value.Top < Bottom &&
+			       Top < value.Bottom;
 		}
 
 
@@ -414,12 +417,12 @@ namespace Nez
 		/// </summary>
 		/// <param name="value">The other rectangle for testing.</param>
 		/// <param name="result"><c>true</c> if other <see cref="RectangleF"/> intersects with this rectangle; <c>false</c> otherwise. As an output parameter.</param>
-		public void Intersects( ref RectangleF value, out bool result )
+		public void Intersects(ref RectangleF value, out bool result)
 		{
 			result = value.Left < Right &&
-			Left < value.Right &&
-			value.Top < Bottom &&
-			Top < value.Bottom;
+			         Left < value.Right &&
+			         value.Top < Bottom &&
+			         Top < value.Bottom;
 		}
 
 
@@ -427,45 +430,45 @@ namespace Nez
 		/// returns true if other intersects rect
 		/// </summary>
 		/// <param name="other">other.</param>
-		public bool Intersects( ref RectangleF other )
+		public bool Intersects(ref RectangleF other)
 		{
 			bool result;
-			Intersects( ref other, out result );
+			Intersects(ref other, out result);
 			return result;
 		}
 
 
-		public bool RayIntersects( ref Ray2D ray, out float distance )
+		public bool RayIntersects(ref Ray2D ray, out float distance)
 		{
 			distance = 0f;
 			var maxValue = float.MaxValue;
 
-			if( Math.Abs( ray.Direction.X ) < 1E-06f )
+			if (Math.Abs(ray.Direction.X) < 1E-06f)
 			{
-				if( ( ray.Start.X < X ) || ( ray.Start.X > X + Width ) )
+				if ((ray.Start.X < X) || (ray.Start.X > X + Width))
 					return false;
 			}
 			else
 			{
 				var num11 = 1f / ray.Direction.X;
-				var num8 = ( X - ray.Start.X ) * num11;
-				var num7 = ( X + Width - ray.Start.X ) * num11;
-				if( num8 > num7 )
+				var num8 = (X - ray.Start.X) * num11;
+				var num7 = (X + Width - ray.Start.X) * num11;
+				if (num8 > num7)
 				{
 					var num14 = num8;
 					num8 = num7;
 					num7 = num14;
 				}
 
-				distance = MathHelper.Max( num8, distance );
-				maxValue = MathHelper.Min( num7, maxValue );
-				if( distance > maxValue )
+				distance = MathHelper.Max(num8, distance);
+				maxValue = MathHelper.Min(num7, maxValue);
+				if (distance > maxValue)
 					return false;
 			}
 
-			if( Math.Abs( ray.Direction.Y ) < 1E-06f )
+			if (Math.Abs(ray.Direction.Y) < 1E-06f)
 			{
-				if( ( ray.Start.Y < Y ) || ( ray.Start.Y > Y + Height ) )
+				if ((ray.Start.Y < Y) || (ray.Start.Y > Y + Height))
 				{
 					return false;
 				}
@@ -473,18 +476,18 @@ namespace Nez
 			else
 			{
 				var num10 = 1f / ray.Direction.Y;
-				var num6 = ( Y - ray.Start.Y ) * num10;
-				var num5 = ( Y + Height - ray.Start.Y ) * num10;
-				if( num6 > num5 )
+				var num6 = (Y - ray.Start.Y) * num10;
+				var num5 = (Y + Height - ray.Start.Y) * num10;
+				if (num6 > num5)
 				{
 					var num13 = num6;
 					num6 = num5;
 					num5 = num13;
 				}
 
-				distance = MathHelper.Max( num6, distance );
-				maxValue = MathHelper.Min( num5, maxValue );
-				if( distance > maxValue )
+				distance = MathHelper.Max(num6, distance);
+				maxValue = MathHelper.Min(num5, maxValue);
+				if (distance > maxValue)
 					return false;
 			}
 
@@ -492,84 +495,84 @@ namespace Nez
 		}
 
 
-		public float? RayIntersects( Ray ray )
+		public float? RayIntersects(Ray ray)
 		{
 			var num = 0f;
 			var maxValue = float.MaxValue;
 
-			if( Math.Abs( ray.Direction.X ) < 1E-06f )
+			if (Math.Abs(ray.Direction.X) < 1E-06f)
 			{
-				if( ( ray.Position.X < Left ) || ( ray.Position.X > Right ) )
+				if ((ray.Position.X < Left) || (ray.Position.X > Right))
 					return null;
 			}
 			else
 			{
 				float num11 = 1f / ray.Direction.X;
-				float num8 = ( Left - ray.Position.X ) * num11;
-				float num7 = ( Right - ray.Position.X ) * num11;
-				if( num8 > num7 )
+				float num8 = (Left - ray.Position.X) * num11;
+				float num7 = (Right - ray.Position.X) * num11;
+				if (num8 > num7)
 				{
 					float num14 = num8;
 					num8 = num7;
 					num7 = num14;
 				}
 
-				num = MathHelper.Max( num8, num );
-				maxValue = MathHelper.Min( num7, maxValue );
-				if( num > maxValue )
+				num = MathHelper.Max(num8, num);
+				maxValue = MathHelper.Min(num7, maxValue);
+				if (num > maxValue)
 					return null;
 			}
 
-			if( Math.Abs( ray.Direction.Y ) < 1E-06f )
+			if (Math.Abs(ray.Direction.Y) < 1E-06f)
 			{
-				if( ( ray.Position.Y < Top ) || ( ray.Position.Y > Bottom ) )
+				if ((ray.Position.Y < Top) || (ray.Position.Y > Bottom))
 					return null;
 			}
 			else
 			{
 				float num10 = 1f / ray.Direction.Y;
-				float num6 = ( Top - ray.Position.Y ) * num10;
-				float num5 = ( Bottom - ray.Position.Y ) * num10;
-				if( num6 > num5 )
+				float num6 = (Top - ray.Position.Y) * num10;
+				float num5 = (Bottom - ray.Position.Y) * num10;
+				if (num6 > num5)
 				{
 					float num13 = num6;
 					num6 = num5;
 					num5 = num13;
 				}
 
-				num = MathHelper.Max( num6, num );
-				maxValue = MathHelper.Min( num5, maxValue );
-				if( num > maxValue )
+				num = MathHelper.Max(num6, num);
+				maxValue = MathHelper.Min(num5, maxValue);
+				if (num > maxValue)
 					return null;
 			}
 
-			return new float?( num );
+			return new float?(num);
 		}
 
 
 		public Vector2 GetClosestPointOnBoundsToOrigin()
 		{
 			var max = this.Max;
-			var minDist = Math.Abs( Location.X );
-			var boundsPoint = new Vector2( Location.X, 0 );
+			var minDist = Math.Abs(Location.X);
+			var boundsPoint = new Vector2(Location.X, 0);
 
-			if( Math.Abs( max.X ) < minDist )
+			if (Math.Abs(max.X) < minDist)
 			{
-				minDist = Math.Abs( max.X );
+				minDist = Math.Abs(max.X);
 				boundsPoint.X = max.X;
 				boundsPoint.Y = 0f;
 			}
 
-			if( Math.Abs( max.Y ) < minDist )
+			if (Math.Abs(max.Y) < minDist)
 			{
-				minDist = Math.Abs( max.Y );
+				minDist = Math.Abs(max.Y);
 				boundsPoint.X = 0f;
 				boundsPoint.Y = max.Y;
 			}
 
-			if( Math.Abs( Location.Y ) < minDist )
+			if (Math.Abs(Location.Y) < minDist)
 			{
-				minDist = Math.Abs( Location.Y );
+				minDist = Math.Abs(Location.Y);
 				boundsPoint.X = 0;
 				boundsPoint.Y = Location.Y;
 			}
@@ -583,12 +586,12 @@ namespace Nez
 		/// </summary>
 		/// <returns>The closest point on rectangle to point.</returns>
 		/// <param name="point">Point.</param>
-		public Vector2 GetClosestPointOnRectangleFToPoint( Vector2 point )
+		public Vector2 GetClosestPointOnRectangleFToPoint(Vector2 point)
 		{
 			// for each axis, if the point is outside the box clamp it to the box else leave it alone
 			var res = new Vector2();
-			res.X = MathHelper.Clamp( point.X, Left, Right );
-			res.Y = MathHelper.Clamp( point.Y, Top, Bottom );
+			res.X = MathHelper.Clamp(point.X, Left, Right);
+			res.Y = MathHelper.Clamp(point.Y, Top, Bottom);
 
 			return res;
 		}
@@ -599,35 +602,35 @@ namespace Nez
 		/// </summary>
 		/// <returns>The closest point on rectangle border to point.</returns>
 		/// <param name="point">Point.</param>
-		public Vector2 GetClosestPointOnRectangleBorderToPoint( Vector2 point, out Vector2 edgeNormal )
+		public Vector2 GetClosestPointOnRectangleBorderToPoint(Vector2 point, out Vector2 edgeNormal)
 		{
 			edgeNormal = Vector2.Zero;
 
 			// for each axis, if the point is outside the box clamp it to the box else leave it alone
 			var res = new Vector2();
-			res.X = MathHelper.Clamp( point.X, Left, Right );
-			res.Y = MathHelper.Clamp( point.Y, Top, Bottom );
+			res.X = MathHelper.Clamp(point.X, Left, Right);
+			res.Y = MathHelper.Clamp(point.Y, Top, Bottom);
 
 			// if point is inside the rectangle we need to push res to the border since it will be inside the rect
-			if( Contains( res ) )
+			if (Contains(res))
 			{
 				var dl = res.X - Left;
 				var dr = Right - res.X;
 				var dt = res.Y - Top;
 				var db = Bottom - res.Y;
 
-				var min = Mathf.MinOf( dl, dr, dt, db );
-				if( min == dt )
+				var min = Mathf.MinOf(dl, dr, dt, db);
+				if (min == dt)
 				{
 					res.Y = Top;
 					edgeNormal.Y = -1;
 				}
-				else if( min == db )
+				else if (min == db)
 				{
 					res.Y = Bottom;
 					edgeNormal.Y = 1;
 				}
-				else if( min == dl )
+				else if (min == dl)
 				{
 					res.X = Left;
 					edgeNormal.X = -1;
@@ -640,13 +643,13 @@ namespace Nez
 			}
 			else
 			{
-				if( res.X == Left )
+				if (res.X == Left)
 					edgeNormal.X = -1;
-				if( res.X == Right )
+				if (res.X == Right)
 					edgeNormal.X = 1;
-				if( res.Y == Top )
+				if (res.Y == Top)
 					edgeNormal.Y = -1;
-				if( res.Y == Bottom )
+				if (res.Y == Bottom)
 					edgeNormal.Y = 1;
 			}
 
@@ -660,10 +663,10 @@ namespace Nez
 		/// <param name="value1">The first <see cref="RectangleF"/>.</param>
 		/// <param name="value2">The second <see cref="RectangleF"/>.</param>
 		/// <returns>Overlapping region of the two rectangles.</returns>
-		public static RectangleF Intersect( RectangleF value1, RectangleF value2 )
+		public static RectangleF Intersect(RectangleF value1, RectangleF value2)
 		{
 			RectangleF rectangle;
-			Intersect( ref value1, ref value2, out rectangle );
+			Intersect(ref value1, ref value2, out rectangle);
 			return rectangle;
 		}
 
@@ -674,19 +677,19 @@ namespace Nez
 		/// <param name="value1">The first <see cref="RectangleF"/>.</param>
 		/// <param name="value2">The second <see cref="RectangleF"/>.</param>
 		/// <param name="result">Overlapping region of the two rectangles as an output parameter.</param>
-		public static void Intersect( ref RectangleF value1, ref RectangleF value2, out RectangleF result )
+		public static void Intersect(ref RectangleF value1, ref RectangleF value2, out RectangleF result)
 		{
-			if( value1.Intersects( value2 ) )
+			if (value1.Intersects(value2))
 			{
-				var right_side = Math.Min( value1.X + value1.Width, value2.X + value2.Width );
-				var left_side = Math.Max( value1.X, value2.X );
-				var top_side = Math.Max( value1.Y, value2.Y );
-				var bottom_side = Math.Min( value1.Y + value1.Height, value2.Y + value2.Height );
-				result = new RectangleF( left_side, top_side, right_side - left_side, bottom_side - top_side );
+				var right_side = Math.Min(value1.X + value1.Width, value2.X + value2.Width);
+				var left_side = Math.Max(value1.X, value2.X);
+				var top_side = Math.Max(value1.Y, value2.Y);
+				var bottom_side = Math.Min(value1.Y + value1.Height, value2.Y + value2.Height);
+				result = new RectangleF(left_side, top_side, right_side - left_side, bottom_side - top_side);
 			}
 			else
 			{
-				result = new RectangleF( 0, 0, 0, 0 );
+				result = new RectangleF(0, 0, 0, 0);
 			}
 		}
 
@@ -696,7 +699,7 @@ namespace Nez
 		/// </summary>
 		/// <param name="offsetX">The x coordinate to add to this <see cref="RectangleF"/>.</param>
 		/// <param name="offsetY">The y coordinate to add to this <see cref="RectangleF"/>.</param>
-		public void Offset( int offsetX, int offsetY )
+		public void Offset(int offsetX, int offsetY)
 		{
 			X += offsetX;
 			Y += offsetY;
@@ -708,7 +711,7 @@ namespace Nez
 		/// </summary>
 		/// <param name="offsetX">The x coordinate to add to this <see cref="RectangleF"/>.</param>
 		/// <param name="offsetY">The y coordinate to add to this <see cref="RectangleF"/>.</param>
-		public void Offset( float offsetX, float offsetY )
+		public void Offset(float offsetX, float offsetY)
 		{
 			X += offsetX;
 			Y += offsetY;
@@ -719,7 +722,7 @@ namespace Nez
 		/// Changes the <see cref="Location"/> of this <see cref="RectangleF"/>.
 		/// </summary>
 		/// <param name="amount">The x and y components to add to this <see cref="RectangleF"/>.</param>
-		public void Offset( Point amount )
+		public void Offset(Point amount)
 		{
 			X += amount.X;
 			Y += amount.Y;
@@ -730,7 +733,7 @@ namespace Nez
 		/// Changes the <see cref="Location"/> of this <see cref="RectangleF"/>.
 		/// </summary>
 		/// <param name="amount">The x and y components to add to this <see cref="RectangleF"/>.</param>
-		public void Offset( Vector2 amount )
+		public void Offset(Vector2 amount)
 		{
 			X += amount.X;
 			Y += amount.Y;
@@ -743,13 +746,13 @@ namespace Nez
 		/// <param name="value1">The first <see cref="RectangleF"/>.</param>
 		/// <param name="value2">The second <see cref="RectangleF"/>.</param>
 		/// <returns>The union of the two rectangles.</returns>
-		public static RectangleF Union( RectangleF value1, RectangleF value2 )
+		public static RectangleF Union(RectangleF value1, RectangleF value2)
 		{
-			var x = Math.Min( value1.X, value2.X );
-			var y = Math.Min( value1.Y, value2.Y );
-			return new RectangleF( x, y,
-				Math.Max( value1.Right, value2.Right ) - x,
-				Math.Max( value1.Bottom, value2.Bottom ) - y );
+			var x = Math.Min(value1.X, value2.X);
+			var y = Math.Min(value1.Y, value2.Y);
+			return new RectangleF(x, y,
+				Math.Max(value1.Right, value2.Right) - x,
+				Math.Max(value1.Bottom, value2.Bottom) - y);
 		}
 
 
@@ -759,12 +762,12 @@ namespace Nez
 		/// <param name="value1">The first <see cref="RectangleF"/>.</param>
 		/// <param name="value2">The second <see cref="RectangleF"/>.</param>
 		/// <param name="result">The union of the two rectangles as an output parameter.</param>
-		public static void Union( ref RectangleF value1, ref RectangleF value2, out RectangleF result )
+		public static void Union(ref RectangleF value1, ref RectangleF value2, out RectangleF result)
 		{
-			result.X = Math.Min( value1.X, value2.X );
-			result.Y = Math.Min( value1.Y, value2.Y );
-			result.Width = Math.Max( value1.Right, value2.Right ) - result.X;
-			result.Height = Math.Max( value1.Bottom, value2.Bottom ) - result.Y;
+			result.X = Math.Min(value1.X, value2.X);
+			result.Y = Math.Min(value1.Y, value2.Y);
+			result.Width = Math.Max(value1.Right, value2.Right) - result.X;
+			result.Height = Math.Max(value1.Bottom, value2.Bottom) - result.Y;
 		}
 
 
@@ -774,13 +777,13 @@ namespace Nez
 		/// <param name="value1">The first <see cref="RectangleF"/>.</param>
 		/// <param name="value2">The second <see cref="RectangleF"/>.</param>
 		/// <returns>The overlap of the two rectangles.</returns>
-		public static RectangleF Overlap( RectangleF value1, RectangleF value2 )
+		public static RectangleF Overlap(RectangleF value1, RectangleF value2)
 		{
-			var x = Math.Max( Math.Max( value1.X, value2.X ), 0 );
-			var y = Math.Max( Math.Max( value1.Y, value2.Y ), 0 );
-			return new RectangleF( x, y,
-				Math.Max( Math.Min( value1.Right, value2.Right ) - x, 0 ),
-				Math.Max( Math.Min( value1.Bottom, value2.Bottom ) - y, 0 ) );
+			var x = Math.Max(Math.Max(value1.X, value2.X), 0);
+			var y = Math.Max(Math.Max(value1.Y, value2.Y), 0);
+			return new RectangleF(x, y,
+				Math.Max(Math.Min(value1.Right, value2.Right) - x, 0),
+				Math.Max(Math.Min(value1.Bottom, value2.Bottom) - y, 0));
 		}
 
 
@@ -790,18 +793,19 @@ namespace Nez
 		/// <param name="value1">The first <see cref="RectangleF"/>.</param>
 		/// <param name="value2">The second <see cref="RectangleF"/>.</param>
 		/// <param name="result">The overlap of the two rectangles as an output parameter.</param>
-		public static void Overlap( ref RectangleF value1, ref RectangleF value2, out RectangleF result )
+		public static void Overlap(ref RectangleF value1, ref RectangleF value2, out RectangleF result)
 		{
-			result.X = Math.Max( Math.Max( value1.X, value2.X ), 0 );
-			result.Y = Math.Max( Math.Max( value1.Y, value2.Y ), 0 );
-			result.Width = Math.Max( Math.Min( value1.Right, value2.Right ) - result.X, 0 );
-			result.Height = Math.Max( Math.Min( value1.Bottom, value2.Bottom ) - result.Y, 0 );
+			result.X = Math.Max(Math.Max(value1.X, value2.X), 0);
+			result.Y = Math.Max(Math.Max(value1.Y, value2.Y), 0);
+			result.Width = Math.Max(Math.Min(value1.Right, value2.Right) - result.X, 0);
+			result.Height = Math.Max(Math.Min(value1.Bottom, value2.Bottom) - result.Y, 0);
 		}
 
 
-		public void CalculateBounds( Vector2 parentPosition, Vector2 position, Vector2 origin, Vector2 scale, float rotation, float width, float height )
+		public void CalculateBounds(Vector2 parentPosition, Vector2 position, Vector2 origin, Vector2 scale,
+		                            float rotation, float width, float height)
 		{
-			if( rotation == 0f )
+			if (rotation == 0f)
 			{
 				X = parentPosition.X + position.X - origin.X * scale.X;
 				Y = parentPosition.Y + position.Y - origin.Y * scale.Y;
@@ -815,34 +819,34 @@ namespace Nez
 				var worldPosY = parentPosition.Y + position.Y;
 
 				// set the reference point to world reference taking origin into account
-				Matrix2D.CreateTranslation( -worldPosX - origin.X, -worldPosY - origin.Y, out _transformMat );
-				Matrix2D.CreateScale( scale.X, scale.Y, out _tempMat ); // scale ->
-				Matrix2D.Multiply( ref _transformMat, ref _tempMat, out _transformMat );
-				Matrix2D.CreateRotation( rotation, out _tempMat ); // rotate ->
-				Matrix2D.Multiply( ref _transformMat, ref _tempMat, out _transformMat );
-				Matrix2D.CreateTranslation( worldPosX, worldPosY, out _tempMat ); // translate back
-				Matrix2D.Multiply( ref _transformMat, ref _tempMat, out _transformMat );
+				Matrix2D.CreateTranslation(-worldPosX - origin.X, -worldPosY - origin.Y, out _transformMat);
+				Matrix2D.CreateScale(scale.X, scale.Y, out _tempMat); // scale ->
+				Matrix2D.Multiply(ref _transformMat, ref _tempMat, out _transformMat);
+				Matrix2D.CreateRotation(rotation, out _tempMat); // rotate ->
+				Matrix2D.Multiply(ref _transformMat, ref _tempMat, out _transformMat);
+				Matrix2D.CreateTranslation(worldPosX, worldPosY, out _tempMat); // translate back
+				Matrix2D.Multiply(ref _transformMat, ref _tempMat, out _transformMat);
 
 				// TODO: this is a bit silly. we can just leave the worldPos translation in the Matrix and avoid this
 				// get all four corners in world space
-				var topLeft = new Vector2( worldPosX, worldPosY );
-				var topRight = new Vector2( worldPosX + width, worldPosY );
-				var bottomLeft = new Vector2( worldPosX, worldPosY + height );
-				var bottomRight = new Vector2( worldPosX + width, worldPosY + height );
+				var topLeft = new Vector2(worldPosX, worldPosY);
+				var topRight = new Vector2(worldPosX + width, worldPosY);
+				var bottomLeft = new Vector2(worldPosX, worldPosY + height);
+				var bottomRight = new Vector2(worldPosX + width, worldPosY + height);
 
 				// transform the corners into our work space
-				Vector2Ext.Transform( ref topLeft, ref _transformMat, out topLeft );
-				Vector2Ext.Transform( ref topRight, ref _transformMat, out topRight );
-				Vector2Ext.Transform( ref bottomLeft, ref _transformMat, out bottomLeft );
-				Vector2Ext.Transform( ref bottomRight, ref _transformMat, out bottomRight );
+				Vector2Ext.Transform(ref topLeft, ref _transformMat, out topLeft);
+				Vector2Ext.Transform(ref topRight, ref _transformMat, out topRight);
+				Vector2Ext.Transform(ref bottomLeft, ref _transformMat, out bottomLeft);
+				Vector2Ext.Transform(ref bottomRight, ref _transformMat, out bottomRight);
 
 				// find the min and max values so we can concoct our bounding box
-				var minX = Mathf.MinOf( topLeft.X, bottomRight.X, topRight.X, bottomLeft.X );
-				var maxX = Mathf.MaxOf( topLeft.X, bottomRight.X, topRight.X, bottomLeft.X );
-				var minY = Mathf.MinOf( topLeft.Y, bottomRight.Y, topRight.Y, bottomLeft.Y );
-				var maxY = Mathf.MaxOf( topLeft.Y, bottomRight.Y, topRight.Y, bottomLeft.Y );
+				var minX = Mathf.MinOf(topLeft.X, bottomRight.X, topRight.X, bottomLeft.X);
+				var maxX = Mathf.MaxOf(topLeft.X, bottomRight.X, topRight.X, bottomLeft.X);
+				var minY = Mathf.MinOf(topLeft.Y, bottomRight.Y, topRight.Y, bottomLeft.Y);
+				var maxY = Mathf.MaxOf(topLeft.Y, bottomRight.Y, topRight.Y, bottomLeft.Y);
 
-				Location = new Vector2( minX, minY );
+				Location = new Vector2(minX, minY);
 				this.Width = maxX - minX;
 				this.Height = maxY - minY;
 			}
@@ -855,7 +859,7 @@ namespace Nez
 		/// <returns>The swept broadphase box.</returns>
 		/// <param name="velocityX">Velocity x.</param>
 		/// <param name="velocityY">Velocity y.</param>
-		public RectangleF GetSweptBroadphaseBounds( float deltaX, float deltaY )
+		public RectangleF GetSweptBroadphaseBounds(float deltaX, float deltaY)
 		{
 			var broadphasebox = RectangleF.Empty;
 
@@ -875,25 +879,25 @@ namespace Nez
 		/// <param name="other">Other.</param>
 		/// <param name="moveX">Move x.</param>
 		/// <param name="moveY">Move y.</param>
-		public bool CollisionCheck( ref RectangleF other, out float moveX, out float moveY )
+		public bool CollisionCheck(ref RectangleF other, out float moveX, out float moveY)
 		{
 			moveX = moveY = 0.0f;
 
-			var l = other.X - ( X + Width );
-			var r = ( other.X + other.Width ) - X;
-			var t = other.Y - ( Y + Height );
-			var b = ( other.Y + other.Height ) - Y;
+			var l = other.X - (X + Width);
+			var r = (other.X + other.Width) - X;
+			var t = other.Y - (Y + Height);
+			var b = (other.Y + other.Height) - Y;
 
 			// check that there was a collision
-			if( l > 0 || r < 0 || t > 0 || b < 0 )
+			if (l > 0 || r < 0 || t > 0 || b < 0)
 				return false;
 
 			// find the offset of both sides
-			moveX = Math.Abs( l ) < r ? l : r;
-			moveY = Math.Abs( t ) < b ? t : b;
+			moveX = Math.Abs(l) < r ? l : r;
+			moveY = Math.Abs(t) < b ? t : b;
 
 			// only use whichever offset is the smallest
-			if( Math.Abs( moveX ) < Math.Abs( moveY ) )
+			if (Math.Abs(moveX) < Math.Abs(moveY))
 				moveY = 0.0f;
 			else
 				moveX = 0.0f;
@@ -910,7 +914,7 @@ namespace Nez
 		/// intersect. This allows callers to determine the correct direction to push objects in order to resolve collisions.
 		/// If the rectangles are not intersecting, Vector2.Zero is returned.
 		/// </returns>
-		public static Vector2 GetIntersectionDepth( ref RectangleF rectA, ref RectangleF rectB )
+		public static Vector2 GetIntersectionDepth(ref RectangleF rectA, ref RectangleF rectB)
 		{
 			// calculate half sizes
 			var halfWidthA = rectA.Width / 2.0f;
@@ -919,8 +923,8 @@ namespace Nez
 			var halfHeightB = rectB.Height / 2.0f;
 
 			// calculate centers
-			var centerA = new Vector2( rectA.Left + halfWidthA, rectA.Top + halfHeightA );
-			var centerB = new Vector2( rectB.Left + halfWidthB, rectB.Top + halfHeightB );
+			var centerA = new Vector2(rectA.Left + halfWidthA, rectA.Top + halfHeightA);
+			var centerB = new Vector2(rectB.Left + halfWidthB, rectB.Top + halfHeightB);
 
 			// calculate current and minimum-non-intersecting distances between centers
 			var distanceX = centerA.X - centerB.X;
@@ -929,14 +933,14 @@ namespace Nez
 			var minDistanceY = halfHeightA + halfHeightB;
 
 			// if we are not intersecting at all, return (0, 0)
-			if( Math.Abs( distanceX ) >= minDistanceX || Math.Abs( distanceY ) >= minDistanceY )
+			if (Math.Abs(distanceX) >= minDistanceX || Math.Abs(distanceY) >= minDistanceY)
 				return Vector2.Zero;
 
 			// calculate and return intersection depths
 			var depthX = distanceX > 0 ? minDistanceX - distanceX : -minDistanceX - distanceX;
 			var depthY = distanceY > 0 ? minDistanceY - distanceY : -minDistanceY - distanceY;
 
-			return new Vector2( depthX, depthY );
+			return new Vector2(depthX, depthY);
 		}
 
 
@@ -945,9 +949,9 @@ namespace Nez
 		/// </summary>
 		/// <param name="obj">The <see cref="Object"/> to compare.</param>
 		/// <returns><c>true</c> if the instances are equal; <c>false</c> otherwise.</returns>
-		public override bool Equals( object obj )
+		public override bool Equals(object obj)
 		{
-			return ( obj is RectangleF ) && this == ( (RectangleF)obj );
+			return (obj is RectangleF) && this == ((RectangleF) obj);
 		}
 
 
@@ -956,7 +960,7 @@ namespace Nez
 		/// </summary>
 		/// <param name="other">The <see cref="RectangleF"/> to compare.</param>
 		/// <returns><c>true</c> if the instances are equal; <c>false</c> otherwise.</returns>
-		public bool Equals( RectangleF other )
+		public bool Equals(RectangleF other)
 		{
 			return this == other;
 		}
@@ -968,7 +972,7 @@ namespace Nez
 		/// <returns>Hash code of this <see cref="RectangleF"/>.</returns>
 		public override int GetHashCode()
 		{
-			return ( (int)X ^ (int)Y ^ (int)Width ^ (int)Height );
+			return ((int) X ^ (int) Y ^ (int) Width ^ (int) Height);
 		}
 
 
@@ -979,7 +983,7 @@ namespace Nez
 		/// <returns><see cref="String"/> representation of this <see cref="RectangleF"/>.</returns>
 		public override string ToString()
 		{
-			return string.Format( "X:{0}, Y:{1}, Width: {2}, Height: {3}", X, Y, Width, Height );
+			return string.Format("X:{0}, Y:{1}, Width: {2}, Height: {3}", X, Y, Width, Height);
 		}
 
 		#endregion
@@ -993,9 +997,9 @@ namespace Nez
 		/// <param name="a"><see cref="RectangleF"/> instance on the left of the equal sign.</param>
 		/// <param name="b"><see cref="RectangleF"/> instance on the right of the equal sign.</param>
 		/// <returns><c>true</c> if the instances are equal; <c>false</c> otherwise.</returns>
-		public static bool operator ==( RectangleF a, RectangleF b )
+		public static bool operator ==(RectangleF a, RectangleF b)
 		{
-			return ( ( a.X == b.X ) && ( a.Y == b.Y ) && ( a.Width == b.Width ) && ( a.Height == b.Height ) );
+			return ((a.X == b.X) && (a.Y == b.Y) && (a.Width == b.Width) && (a.Height == b.Height));
 		}
 
 
@@ -1005,18 +1009,17 @@ namespace Nez
 		/// <param name="a"><see cref="RectangleF"/> instance on the left of the not equal sign.</param>
 		/// <param name="b"><see cref="RectangleF"/> instance on the right of the not equal sign.</param>
 		/// <returns><c>true</c> if the instances are not equal; <c>false</c> otherwise.</returns>
-		public static bool operator !=( RectangleF a, RectangleF b )
+		public static bool operator !=(RectangleF a, RectangleF b)
 		{
-			return !( a == b );
+			return !(a == b);
 		}
 
 
-		public static implicit operator Rectangle( RectangleF self )
+		public static implicit operator Rectangle(RectangleF self)
 		{
-			return RectangleExt.FromFloats( self.X, self.Y, self.Width, self.Height );
+			return RectangleExt.FromFloats(self.X, self.Y, self.Width, self.Height);
 		}
 
 		#endregion
-
 	}
 }

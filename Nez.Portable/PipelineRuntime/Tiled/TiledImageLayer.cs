@@ -11,7 +11,7 @@ namespace Nez.Tiled
 		RectangleF _bounds;
 
 
-		public TiledImageLayer( string name, Texture2D texture ) : base( name )
+		public TiledImageLayer(string name, Texture2D texture) : base(name)
 		{
 			this.Texture = texture;
 			_bounds.Width = texture.Width;
@@ -19,22 +19,23 @@ namespace Nez.Tiled
 		}
 
 
-		public void Draw( Batcher batcher )
+		public void Draw(Batcher batcher)
 		{
-			batcher.Draw( Texture, Offset, Color.White );
+			batcher.Draw(Texture, Offset, Color.White);
 		}
 
 
-		public override void Draw( Batcher batcher, Vector2 position, float layerDepth, RectangleF cameraClipBounds )
+		public override void Draw(Batcher batcher, Vector2 position, float layerDepth, RectangleF cameraClipBounds)
 		{
-			Draw( batcher, position, Vector2.One, layerDepth, cameraClipBounds );
+			Draw(batcher, position, Vector2.One, layerDepth, cameraClipBounds);
 		}
 
 
-		public override void Draw( Batcher batcher, Vector2 position, Vector2 scale, float layerDepth, RectangleF cameraClipBounds )
+		public override void Draw(Batcher batcher, Vector2 position, Vector2 scale, float layerDepth,
+		                          RectangleF cameraClipBounds)
 		{
-			batcher.Draw( Texture, position + Offset, null, Color.White, 0, Vector2.Zero, scale, SpriteEffects.None, layerDepth );
+			batcher.Draw(Texture, position + Offset, null, Color.White, 0, Vector2.Zero, scale, SpriteEffects.None,
+				layerDepth);
 		}
-
 	}
 }

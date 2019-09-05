@@ -23,24 +23,24 @@ namespace Nez
 		#region Logging
 
 		[DebuggerHidden]
-		static void Log( LogType type, string format, params object[] args )
+		static void Log(LogType type, string format, params object[] args)
 		{
-			switch( type )
+			switch (type)
 			{
 				case LogType.Error:
-					System.Diagnostics.Debug.WriteLine( type.ToString() + ": " + format, args );
+					System.Diagnostics.Debug.WriteLine(type.ToString() + ": " + format, args);
 					break;
 				case LogType.Warn:
-					System.Diagnostics.Debug.WriteLine( type.ToString() + ": " + format, args );
+					System.Diagnostics.Debug.WriteLine(type.ToString() + ": " + format, args);
 					break;
 				case LogType.Log:
-					System.Diagnostics.Debug.WriteLine( type.ToString() + ": " + format, args );
+					System.Diagnostics.Debug.WriteLine(type.ToString() + ": " + format, args);
 					break;
 				case LogType.Info:
-					System.Diagnostics.Debug.WriteLine( type.ToString() + ": " + format, args );
+					System.Diagnostics.Debug.WriteLine(type.ToString() + ": " + format, args);
 					break;
 				case LogType.Trace:
-					System.Diagnostics.Debug.WriteLine( type.ToString() + ": " + format, args );
+					System.Diagnostics.Debug.WriteLine(type.ToString() + ": " + format, args);
 					break;
 				default:
 					throw new ArgumentOutOfRangeException();
@@ -49,73 +49,73 @@ namespace Nez
 
 
 		[DebuggerHidden]
-		public static void Error( string format, params object[] args )
+		public static void Error(string format, params object[] args)
 		{
-			Log( LogType.Error, format, args );
+			Log(LogType.Error, format, args);
 		}
 
 
 		[DebuggerHidden]
-		public static void ErrorIf( bool condition, string format, params object[] args )
+		public static void ErrorIf(bool condition, string format, params object[] args)
 		{
-			if( condition )
-				Log( LogType.Error, format, args );
+			if (condition)
+				Log(LogType.Error, format, args);
 		}
 
 
 		[DebuggerHidden]
-		public static void Warn( string format, params object[] args )
+		public static void Warn(string format, params object[] args)
 		{
-			Log( LogType.Warn, format, args );
+			Log(LogType.Warn, format, args);
 		}
 
 
 		[DebuggerHidden]
-		public static void WarnIf( bool condition, string format, params object[] args )
+		public static void WarnIf(bool condition, string format, params object[] args)
 		{
-			if( condition )
-				Log( LogType.Warn, format, args );
+			if (condition)
+				Log(LogType.Warn, format, args);
 		}
 
 
-		[Conditional( "DEBUG" )]
+		[Conditional("DEBUG")]
 		[DebuggerHidden]
-		public static void Log( object obj )
+		public static void Log(object obj)
 		{
-			Log( LogType.Log, "{0}", obj );
+			Log(LogType.Log, "{0}", obj);
 		}
 
 
-		[Conditional( "DEBUG" )]
+		[Conditional("DEBUG")]
 		[DebuggerHidden]
-		public static void Log( string format, params object[] args )
+		public static void Log(string format, params object[] args)
 		{
-			Log( LogType.Log, format, args );
+			Log(LogType.Log, format, args);
 		}
 
 
-		[Conditional( "DEBUG" )]
+		[Conditional("DEBUG")]
 		[DebuggerHidden]
-		public static void LogIf( bool condition, string format, params object[] args )
+		public static void LogIf(bool condition, string format, params object[] args)
 		{
-			if( condition )
-				Log( LogType.Log, format, args );
+			if (condition)
+				Log(LogType.Log, format, args);
 		}
 
 
-		[Conditional( "DEBUG" )]
+		[Conditional("DEBUG")]
 		[DebuggerHidden]
-		public static void Info( string format, params object[] args )
+		public static void Info(string format, params object[] args)
 		{
-			Log( LogType.Info, format, args );
+			Log(LogType.Info, format, args);
 		}
 
 
-		[Conditional( "DEBUG" )]
+		[Conditional("DEBUG")]
 		[DebuggerHidden]
-		public static void Trace( string format, params object[] args )
+		public static void Trace(string format, params object[] args)
 		{
-			Log( LogType.Trace, format, args );
+			Log(LogType.Trace, format, args);
 		}
 
 		#endregion
@@ -128,45 +128,45 @@ namespace Nez
 		static List<DebugDrawItem> _debugDrawItems = new List<DebugDrawItem>();
 		static List<DebugDrawItem> _screenSpaceDebugDrawItems = new List<DebugDrawItem>();
 
-		[Conditional( "DEBUG" )]
+		[Conditional("DEBUG")]
 		internal static void Render()
 		{
-			if( _debugDrawItems.Count > 0 )
+			if (_debugDrawItems.Count > 0)
 			{
-				if( Core.Scene != null && Core.Scene.Camera != null )
-					Graphics.Instance.Batcher.Begin( Core.Scene.Camera.TransformMatrix );
+				if (Core.Scene != null && Core.Scene.Camera != null)
+					Graphics.Instance.Batcher.Begin(Core.Scene.Camera.TransformMatrix);
 				else
 					Graphics.Instance.Batcher.Begin();
 
-				for( var i = _debugDrawItems.Count - 1; i >= 0; i-- )
+				for (var i = _debugDrawItems.Count - 1; i >= 0; i--)
 				{
 					var item = _debugDrawItems[i];
-					if( item.Draw( Graphics.Instance ) )
-						_debugDrawItems.RemoveAt( i );
+					if (item.Draw(Graphics.Instance))
+						_debugDrawItems.RemoveAt(i);
 				}
 
 				Graphics.Instance.Batcher.End();
 			}
 
-			if( _screenSpaceDebugDrawItems.Count > 0 )
+			if (_screenSpaceDebugDrawItems.Count > 0)
 			{
-				var pos = DrawTextFromBottom ? new Vector2( 0, Core.Scene.SceneRenderTargetSize.Y ) : Vector2.Zero;
+				var pos = DrawTextFromBottom ? new Vector2(0, Core.Scene.SceneRenderTargetSize.Y) : Vector2.Zero;
 				Graphics.Instance.Batcher.Begin();
 
-				for( var i = _screenSpaceDebugDrawItems.Count - 1; i >= 0; i-- )
+				for (var i = _screenSpaceDebugDrawItems.Count - 1; i >= 0; i--)
 				{
 					var item = _screenSpaceDebugDrawItems[i];
 					var itemHeight = item.GetHeight();
 
-					if( DrawTextFromBottom )
-						item.Position = pos - new Vector2( 0, itemHeight );
+					if (DrawTextFromBottom)
+						item.Position = pos - new Vector2(0, itemHeight);
 					else
 						item.Position = pos;
 
-					if( item.Draw( Graphics.Instance ) )
-						_screenSpaceDebugDrawItems.RemoveAt( i );
+					if (item.Draw(Graphics.Instance))
+						_screenSpaceDebugDrawItems.RemoveAt(i);
 
-					if( DrawTextFromBottom )
+					if (DrawTextFromBottom)
 						pos.Y -= itemHeight;
 					else
 						pos.Y += itemHeight;
@@ -177,105 +177,116 @@ namespace Nez
 		}
 
 
-		[Conditional( "DEBUG" )]
-		public static void DrawLine( Vector2 start, Vector2 end, Color color, float duration = 0f )
+		[Conditional("DEBUG")]
+		public static void DrawLine(Vector2 start, Vector2 end, Color color, float duration = 0f)
 		{
-			if( !Core.DebugRenderEnabled )
+			if (!Core.DebugRenderEnabled)
 				return;
-			_debugDrawItems.Add( new DebugDrawItem( start, end, color, duration ) );
+
+			_debugDrawItems.Add(new DebugDrawItem(start, end, color, duration));
 		}
 
 
-		[Conditional( "DEBUG" )]
-		public static void DrawPixel( float x, float y, int size, Color color, float duration = 0f )
+		[Conditional("DEBUG")]
+		public static void DrawPixel(float x, float y, int size, Color color, float duration = 0f)
 		{
-			if( !Core.DebugRenderEnabled )
+			if (!Core.DebugRenderEnabled)
 				return;
-			_debugDrawItems.Add( new DebugDrawItem( x, y, size, color, duration ) );
+
+			_debugDrawItems.Add(new DebugDrawItem(x, y, size, color, duration));
 		}
 
 
-		[Conditional( "DEBUG" )]
-		public static void DrawPixel( Vector2 position, int size, Color color, float duration = 0f )
+		[Conditional("DEBUG")]
+		public static void DrawPixel(Vector2 position, int size, Color color, float duration = 0f)
 		{
-			if( !Core.DebugRenderEnabled )
+			if (!Core.DebugRenderEnabled)
 				return;
-			_debugDrawItems.Add( new DebugDrawItem( position.X, position.Y, size, color, duration ) );
+
+			_debugDrawItems.Add(new DebugDrawItem(position.X, position.Y, size, color, duration));
 		}
 
 
-		[Conditional( "DEBUG" )]
-		public static void DrawHollowRect( Rectangle rectangle, Color color, float duration = 0f )
+		[Conditional("DEBUG")]
+		public static void DrawHollowRect(Rectangle rectangle, Color color, float duration = 0f)
 		{
-			if( !Core.DebugRenderEnabled )
+			if (!Core.DebugRenderEnabled)
 				return;
-			_debugDrawItems.Add( new DebugDrawItem( rectangle, color, duration ) );
+
+			_debugDrawItems.Add(new DebugDrawItem(rectangle, color, duration));
 		}
 
 
-		[Conditional( "DEBUG" )]
-		public static void DrawHollowBox( Vector2 center, int size, Color color, float duration = 0f )
+		[Conditional("DEBUG")]
+		public static void DrawHollowBox(Vector2 center, int size, Color color, float duration = 0f)
 		{
-			if( !Core.DebugRenderEnabled )
+			if (!Core.DebugRenderEnabled)
 				return;
+
 			var halfSize = size * 0.5f;
-			_debugDrawItems.Add( new DebugDrawItem( new Rectangle( (int)( center.X - halfSize ), (int)( center.Y - halfSize ), size, size ), color, duration ) );
+			_debugDrawItems.Add(new DebugDrawItem(
+				new Rectangle((int) (center.X - halfSize), (int) (center.Y - halfSize), size, size), color, duration));
 		}
 
 
-		[Conditional( "DEBUG" )]
-		public static void DrawText( BitmapFont font, string text, Vector2 position, Color color, float duration = 0f, float scale = 1f )
+		[Conditional("DEBUG")]
+		public static void DrawText(BitmapFont font, string text, Vector2 position, Color color, float duration = 0f,
+		                            float scale = 1f)
 		{
-			if( !Core.DebugRenderEnabled )
+			if (!Core.DebugRenderEnabled)
 				return;
-			_debugDrawItems.Add( new DebugDrawItem( font, text, position, color, duration, scale ) );
+
+			_debugDrawItems.Add(new DebugDrawItem(font, text, position, color, duration, scale));
 		}
 
 
-		[Conditional( "DEBUG" )]
-		public static void DrawText( NezSpriteFont font, string text, Vector2 position, Color color, float duration = 0f, float scale = 1f )
+		[Conditional("DEBUG")]
+		public static void DrawText(NezSpriteFont font, string text, Vector2 position, Color color, float duration = 0f,
+		                            float scale = 1f)
 		{
-			if( !Core.DebugRenderEnabled )
+			if (!Core.DebugRenderEnabled)
 				return;
-			_debugDrawItems.Add( new DebugDrawItem( font, text, position, color, duration, scale ) );
+
+			_debugDrawItems.Add(new DebugDrawItem(font, text, position, color, duration, scale));
 		}
 
 
-		[Conditional( "DEBUG" )]
-		public static void DrawText( string text, float duration = 0 )
+		[Conditional("DEBUG")]
+		public static void DrawText(string text, float duration = 0)
 		{
-			DrawText( text, Colors.DebugText, duration );
+			DrawText(text, Colors.DebugText, duration);
 		}
 
 
-		[Conditional( "DEBUG" )]
-		public static void DrawText( string format, params object[] args )
+		[Conditional("DEBUG")]
+		public static void DrawText(string format, params object[] args)
 		{
-			var text = string.Format( format, args );
-			DrawText( text, Colors.DebugText );
+			var text = string.Format(format, args);
+			DrawText(text, Colors.DebugText);
 		}
 
 
-		[Conditional( "DEBUG" )]
-		public static void DrawText( string text, Color color, float duration = 1f, float scale = 1f )
+		[Conditional("DEBUG")]
+		public static void DrawText(string text, Color color, float duration = 1f, float scale = 1f)
 		{
-			if( !Core.DebugRenderEnabled )
+			if (!Core.DebugRenderEnabled)
 				return;
-			_screenSpaceDebugDrawItems.Add( new DebugDrawItem( text, color, duration, scale ) );
+
+			_screenSpaceDebugDrawItems.Add(new DebugDrawItem(text, color, duration, scale));
 		}
 
 		#endregion
 
 
-		[Conditional( "DEBUG" )]
-		public static void BreakIf( bool condition )
+		[Conditional("DEBUG")]
+		public static void BreakIf(bool condition)
 		{
-			if( condition )
+			if (condition)
 				System.Diagnostics.Debugger.Break();
 		}
 
 
-		[Conditional( "DEBUG" )]
+		[Conditional("DEBUG")]
 		public static void Break_()
 		{
 			System.Diagnostics.Debugger.Break();
@@ -287,21 +298,19 @@ namespace Nez
 		/// </summary>
 		/// <returns>The action.</returns>
 		/// <param name="action">Action.</param>
-		public static TimeSpan TimeAction( Action action, uint numberOfIterations = 1 )
+		public static TimeSpan TimeAction(Action action, uint numberOfIterations = 1)
 		{
 			var stopwatch = new Stopwatch();
 			stopwatch.Start();
 
-			for( var i = 0; i < numberOfIterations; i++ )
+			for (var i = 0; i < numberOfIterations; i++)
 				action();
 			stopwatch.Stop();
 
-			if( numberOfIterations > 1 )
-				return TimeSpan.FromTicks( stopwatch.Elapsed.Ticks / numberOfIterations );
+			if (numberOfIterations > 1)
+				return TimeSpan.FromTicks(stopwatch.Elapsed.Ticks / numberOfIterations);
 
 			return stopwatch.Elapsed;
 		}
-
 	}
 }
-

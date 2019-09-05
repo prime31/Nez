@@ -9,11 +9,10 @@ namespace Nez.Tiled
 		public string ImageSource;
 
 
-		public TiledImageTile( int id, TiledTilesetTile tilesetTile, string imageSource ) : base( id )
+		public TiledImageTile(int id, TiledTilesetTile tilesetTile, string imageSource) : base(id)
 		{
 			this.TilesetTile = tilesetTile;
 			this.ImageSource = imageSource;
 		}
 	}
 }
-

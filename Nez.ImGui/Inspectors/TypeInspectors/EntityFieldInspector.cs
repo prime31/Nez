@@ -1,6 +1,7 @@
 ﻿using ImGuiNET;
 using System.Text;
 
+
 namespace Nez.ImGuiTools.TypeInspectors
 {
 	/// <summary>
@@ -12,8 +13,8 @@ namespace Nez.ImGuiTools.TypeInspectors
 		{
 			var entity = GetValue<Entity>();
 
-			if( NezImGui.LabelButton( _name, entity.Name ) )
-				Core.GetGlobalManager<ImGuiManager>().StartInspectingEntity( entity );
+			if (NezImGui.LabelButton(_name, entity.Name))
+				Core.GetGlobalManager<ImGuiManager>().StartInspectingEntity(entity);
 			HandleTooltip();
 		}
 	}

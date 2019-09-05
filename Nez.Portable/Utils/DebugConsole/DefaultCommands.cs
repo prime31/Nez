@@ -3,20 +3,19 @@ using System.Text;
 using System.Collections.Generic;
 
 
-
 namespace Nez.Console
 {
 	/// <summary>
 	/// add this attribute to any static method
 	/// </summary>
-	[AttributeUsage( AttributeTargets.Method, AllowMultiple = false )]
+	[AttributeUsage(AttributeTargets.Method, AllowMultiple = false)]
 	public class CommandAttribute : Attribute
 	{
 		public string Name;
 		public string Help;
 
 
-		public CommandAttribute( string name, string help )
+		public CommandAttribute(string name, string help)
 		{
 			this.Name = name;
 			this.Help = help;
@@ -30,256 +29,264 @@ namespace Nez.Console
 {
 	public partial class DebugConsole
 	{
-		[Command( "clear", "Clears the terminal" )]
+		[Command("clear", "Clears the terminal")]
 		static void Clear()
 		{
 			Instance._drawCommands.Clear();
 		}
 
 
-		[Command( "exit", "Exits the game" )]
+		[Command("exit", "Exits the game")]
 		static void Exit()
 		{
 			Core.Exit();
 		}
 
 
-		[Command( "inspect", "Inspects the Entity with the passed in name, or pass in 'pp' or 'postprocessors' to inspect all PostProccessors in the Scene. Pass in no name to close the inspector." )]
-		static void InspectEntity( string entityName = "" )
+		[Command("inspect",
+			"Inspects the Entity with the passed in name, or pass in 'pp' or 'postprocessors' to inspect all PostProccessors in the Scene. Pass in no name to close the inspector.")]
+		static void InspectEntity(string entityName = "")
 		{
 			// clean up no matter what
-			if( Instance._runtimeInspector != null )
+			if (Instance._runtimeInspector != null)
 			{
 				Instance._runtimeInspector.Dispose();
 				Instance._runtimeInspector = null;
 			}
 
-			if( entityName == "pp" || entityName == "postprocessors" )
+			if (entityName == "pp" || entityName == "postprocessors")
 			{
 				Instance._runtimeInspector = new RuntimeInspector();
 				Instance.isOpen = false;
 			}
-			else if( entityName != "" )
+			else if (entityName != "")
 			{
-				var entity = Core.Scene.FindEntity( entityName );
-				if( entity == null )
+				var entity = Core.Scene.FindEntity(entityName);
+				if (entity == null)
 				{
-					Instance.Log( "could not find entity named " + entityName );
+					Instance.Log("could not find entity named " + entityName);
 					return;
 				}
 
-				Instance._runtimeInspector = new RuntimeInspector( entity );
+				Instance._runtimeInspector = new RuntimeInspector(entity);
 				Instance.isOpen = false;
 			}
 		}
 
 
-		[Command( "console-scale", "Sets the scale that the console is rendered. Defaults to 1 and has a max of 5." )]
-		static void SetScale( float scale = 1f )
+		[Command("console-scale", "Sets the scale that the console is rendered. Defaults to 1 and has a max of 5.")]
+		static void SetScale(float scale = 1f)
 		{
-			RenderScale = Mathf.Clamp( scale, 0.2f, 5f );
+			RenderScale = Mathf.Clamp(scale, 0.2f, 5f);
 		}
 
 
-		[Command( "assets", "Logs all loaded assets. Pass 's' for scene assets or 'g' for global assets" )]
-		static void LogLoadedAssets( string whichAssets = "s" )
+		[Command("assets", "Logs all loaded assets. Pass 's' for scene assets or 'g' for global assets")]
+		static void LogLoadedAssets(string whichAssets = "s")
 		{
-			if( whichAssets == "s" )
-				DebugConsole.Instance.Log( Core.Scene.Content.LogLoadedAssets() );
-			else if( whichAssets == "g" )
-				DebugConsole.Instance.Log( Core.Content.LogLoadedAssets() );
+			if (whichAssets == "s")
+				DebugConsole.Instance.Log(Core.Scene.Content.LogLoadedAssets());
+			else if (whichAssets == "g")
+				DebugConsole.Instance.Log(Core.Content.LogLoadedAssets());
 			else
-				DebugConsole.Instance.Log( "Invalid parameter" );
+				DebugConsole.Instance.Log("Invalid parameter");
 		}
 
 
-		[Command( "vsync", "Enables or disables vertical sync" )]
-		static void Vsync( bool enabled = true )
+		[Command("vsync", "Enables or disables vertical sync")]
+		static void Vsync(bool enabled = true)
 		{
 			Screen.SynchronizeWithVerticalRetrace = enabled;
-			DebugConsole.Instance.Log( "Vertical Sync " + ( enabled ? "Enabled" : "Disabled" ) );
+			DebugConsole.Instance.Log("Vertical Sync " + (enabled ? "Enabled" : "Disabled"));
 		}
 
 
-		[Command( "fixed", "Enables or disables fixed time step" )]
-		static void FixedTimestep( bool enabled = true )
+		[Command("fixed", "Enables or disables fixed time step")]
+		static void FixedTimestep(bool enabled = true)
 		{
 			Core._instance.IsFixedTimeStep = enabled;
-			DebugConsole.Instance.Log( "Fixed Time Step " + ( enabled ? "Enabled" : "Disabled" ) );
+			DebugConsole.Instance.Log("Fixed Time Step " + (enabled ? "Enabled" : "Disabled"));
 		}
 
 
-		[Command( "framerate", "Sets the target framerate. Defaults to 60." )]
-		static void Framerate( float target = 60f )
+		[Command("framerate", "Sets the target framerate. Defaults to 60.")]
+		static void Framerate(float target = 60f)
 		{
-			Core._instance.TargetElapsedTime = TimeSpan.FromSeconds( 1.0 / target );
+			Core._instance.TargetElapsedTime = TimeSpan.FromSeconds(1.0 / target);
 		}
 
 
 		static ITimer _drawCallTimer;
-		[Command( "log-drawcalls", "Enables/disables logging of draw calls in the standard console. Call once to enable and again to disable. delay is how often they should be logged and defaults to 1s." )]
-		static void LogDrawCalls( float delay = 1f )
+
+		[Command("log-drawcalls",
+			"Enables/disables logging of draw calls in the standard console. Call once to enable and again to disable. delay is how often they should be logged and defaults to 1s.")]
+		static void LogDrawCalls(float delay = 1f)
 		{
-			if( _drawCallTimer != null )
+			if (_drawCallTimer != null)
 			{
 				_drawCallTimer.Stop();
 				_drawCallTimer = null;
-				Debug.Log( "Draw call logging stopped" );
+				Debug.Log("Draw call logging stopped");
 			}
 			else
 			{
-				_drawCallTimer = Core.Schedule( delay, true, timer =>
-				{
-					Debug.Log( "Draw Calls: {0}", Core.drawCalls );
-				} );
+				_drawCallTimer = Core.Schedule(delay, true, timer => { Debug.Log("Draw Calls: {0}", Core.drawCalls); });
 			}
 		}
 
 
-		[Command( "entity-count", "Logs amount of Entities in the Scene. Pass a tagIndex to count only Entities with that tag" )]
-		static void EntityCount( int tagIndex = -1 )
+		[Command("entity-count",
+			"Logs amount of Entities in the Scene. Pass a tagIndex to count only Entities with that tag")]
+		static void EntityCount(int tagIndex = -1)
 		{
-			if( Core.Scene == null )
+			if (Core.Scene == null)
 			{
-				DebugConsole.Instance.Log( "Current Scene is null!" );
+				DebugConsole.Instance.Log("Current Scene is null!");
 				return;
 			}
 
-			if( tagIndex < 0 )
-				DebugConsole.Instance.Log( "Total entities: " + Core.Scene.Entities.Count.ToString() );
+			if (tagIndex < 0)
+				DebugConsole.Instance.Log("Total entities: " + Core.Scene.Entities.Count.ToString());
 			else
-				DebugConsole.Instance.Log( "Total entities with tag [" + tagIndex + "] " + Core.Scene.FindEntitiesWithTag( tagIndex ).Count.ToString() );
+				DebugConsole.Instance.Log("Total entities with tag [" + tagIndex + "] " +
+				                          Core.Scene.FindEntitiesWithTag(tagIndex).Count.ToString());
 		}
 
 
-		[Command( "renderable-count", "Logs amount of Renderables in the Scene. Pass a renderLayer to count only Renderables in that layer" )]
-		static void RenderableCount( int renderLayer = int.MinValue )
+		[Command("renderable-count",
+			"Logs amount of Renderables in the Scene. Pass a renderLayer to count only Renderables in that layer")]
+		static void RenderableCount(int renderLayer = int.MinValue)
 		{
-			if( Core.Scene == null )
+			if (Core.Scene == null)
 			{
-				DebugConsole.Instance.Log( "Current Scene is null!" );
+				DebugConsole.Instance.Log("Current Scene is null!");
 				return;
 			}
 
-			if( renderLayer != int.MinValue )
-				DebugConsole.Instance.Log( "Total renderables with tag [" + renderLayer + "] " + Core.Scene.RenderableComponents.ComponentsWithRenderLayer( renderLayer ).Length.ToString() );
+			if (renderLayer != int.MinValue)
+				DebugConsole.Instance.Log("Total renderables with tag [" + renderLayer + "] " +
+				                          Core.Scene.RenderableComponents.ComponentsWithRenderLayer(renderLayer).Length
+					                          .ToString());
 			else
-				DebugConsole.Instance.Log( "Total renderables: " + Core.Scene.RenderableComponents.Count.ToString() );
+				DebugConsole.Instance.Log("Total renderables: " + Core.Scene.RenderableComponents.Count.ToString());
 		}
 
 
-		[Command( "renderable-log", "Logs the Renderables in the Scene. Pass a renderLayer to log only Renderables in that layer" )]
-		static void RenderableLog( int renderLayer = int.MinValue )
+		[Command("renderable-log",
+			"Logs the Renderables in the Scene. Pass a renderLayer to log only Renderables in that layer")]
+		static void RenderableLog(int renderLayer = int.MinValue)
 		{
-			if( Core.Scene == null )
+			if (Core.Scene == null)
 			{
-				DebugConsole.Instance.Log( "Current Scene is null!" );
+				DebugConsole.Instance.Log("Current Scene is null!");
 				return;
 			}
 
 			var builder = new StringBuilder();
-			for( var i = 0; i < Core.Scene.RenderableComponents.Count; i++ )
+			for (var i = 0; i < Core.Scene.RenderableComponents.Count; i++)
 			{
 				var renderable = Core.Scene.RenderableComponents[i];
-				if( renderLayer == int.MinValue || renderable.RenderLayer == renderLayer )
-					builder.AppendFormat( "{0}\n", renderable );
+				if (renderLayer == int.MinValue || renderable.RenderLayer == renderLayer)
+					builder.AppendFormat("{0}\n", renderable);
 			}
 
-			DebugConsole.Instance.Log( builder.ToString() );
+			DebugConsole.Instance.Log(builder.ToString());
 		}
 
 
-		[Command( "entity-list", "Logs all entities" )]
-		static void LogEntities( string whichAssets = "s" )
+		[Command("entity-list", "Logs all entities")]
+		static void LogEntities(string whichAssets = "s")
 		{
-			if( Core.Scene == null )
+			if (Core.Scene == null)
 			{
-				DebugConsole.Instance.Log( "Current Scene is null!" );
+				DebugConsole.Instance.Log("Current Scene is null!");
 				return;
 			}
 
 			var builder = new StringBuilder();
-			for( var i = 0; i < Core.Scene.Entities.Count; i++ )
-				builder.AppendLine( Core.Scene.Entities[i].ToString() );
+			for (var i = 0; i < Core.Scene.Entities.Count; i++)
+				builder.AppendLine(Core.Scene.Entities[i].ToString());
 
-			DebugConsole.Instance.Log( builder.ToString() );
+			DebugConsole.Instance.Log(builder.ToString());
 		}
 
 
-		[Command( "timescale", "Sets the timescale. Defaults to 1" )]
-		static void Tilescale( float timeScale = 1 )
+		[Command("timescale", "Sets the timescale. Defaults to 1")]
+		static void Tilescale(float timeScale = 1)
 		{
 			Time.TimeScale = timeScale;
 		}
 
 
-		[Command( "physics", "Logs the total Collider count in the spatial hash" )]
-		static void Physics( float secondsToDisplay = 5f )
+		[Command("physics", "Logs the total Collider count in the spatial hash")]
+		static void Physics(float secondsToDisplay = 5f)
 		{
 			// store off the current state so we can reset it when we are done
 			var debugRenderState = Core.DebugRenderEnabled;
 			Core.DebugRenderEnabled = true;
 
 			var ticker = 0f;
-            Core.Schedule( 0f, true, null, timer =>
+			Core.Schedule(0f, true, null, timer =>
 			{
-                Nez.Physics.DebugDraw( 0f );
+				Nez.Physics.DebugDraw(0f);
 				ticker += Time.DeltaTime;
-				if( ticker >= secondsToDisplay )
+				if (ticker >= secondsToDisplay)
 				{
 					timer.Stop();
-                    Core.DebugRenderEnabled = debugRenderState;
+					Core.DebugRenderEnabled = debugRenderState;
 				}
 			});
 
-            DebugConsole.Instance.Log( "Physics system collider count: " + ((HashSet<Collider>)Nez.Physics.GetAllColliders()).Count );
+			DebugConsole.Instance.Log("Physics system collider count: " +
+			                          ((HashSet<Collider>) Nez.Physics.GetAllColliders()).Count);
 		}
 
 
-		[Command( "debug-render", "enables/disables debug rendering" )]
+		[Command("debug-render", "enables/disables debug rendering")]
 		static void DebugRender()
 		{
 			Core.DebugRenderEnabled = !Core.DebugRenderEnabled;
-			DebugConsole.Instance.Log( string.Format( "Debug rendering {0}", Core.DebugRenderEnabled ? "enabled" : "disabled" ) );
+			DebugConsole.Instance.Log(string.Format("Debug rendering {0}",
+				Core.DebugRenderEnabled ? "enabled" : "disabled"));
 		}
 
 
-		[Command( "help", "Shows usage help for a given command" )]
-		static void Help( string command )
+		[Command("help", "Shows usage help for a given command")]
+		static void Help(string command)
 		{
-			if( Instance._sorted.Contains( command ) )
+			if (Instance._sorted.Contains(command))
 			{
 				var c = Instance._commands[command];
 				StringBuilder str = new StringBuilder();
 
 				//Title
-				str.Append( ":: " );
-				str.Append( command );
+				str.Append(":: ");
+				str.Append(command);
 
 				//Usage
-				if( !string.IsNullOrEmpty( c.Usage ) )
+				if (!string.IsNullOrEmpty(c.Usage))
 				{
-					str.Append( " " );
-					str.Append( c.Usage );
+					str.Append(" ");
+					str.Append(c.Usage);
 				}
-				DebugConsole.Instance.Log( str.ToString() );
+
+				DebugConsole.Instance.Log(str.ToString());
 
 				//Help
-				if( string.IsNullOrEmpty( c.Help ) )
-					DebugConsole.Instance.Log( "No help info set" );
+				if (string.IsNullOrEmpty(c.Help))
+					DebugConsole.Instance.Log("No help info set");
 				else
-					DebugConsole.Instance.Log( c.Help );
+					DebugConsole.Instance.Log(c.Help);
 			}
 			else
 			{
 				StringBuilder str = new StringBuilder();
-				str.Append( "Commands list: " );
-				str.Append( string.Join( ", ", Instance._sorted ) );
-				DebugConsole.Instance.Log( str.ToString() );
-				DebugConsole.Instance.Log( "Type 'help command' for more info on that command!" );
+				str.Append("Commands list: ");
+				str.Append(string.Join(", ", Instance._sorted));
+				DebugConsole.Instance.Log(str.ToString());
+				DebugConsole.Instance.Log("Type 'help command' for more info on that command!");
 			}
 		}
-
 	}
 }
 #endif

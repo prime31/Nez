@@ -20,9 +20,10 @@ namespace Nez.Shadows
 		{
 			get
 			{
-				if( _areBoundsDirty )
+				if (_areBoundsDirty)
 				{
-					_bounds.CalculateBounds( Entity.Transform.Position, _localOffset, new Vector2( _radius, _radius ), Vector2.One, 0, _radius * 2f, _radius * 2f );
+					_bounds.CalculateBounds(Entity.Transform.Position, _localOffset, new Vector2(_radius, _radius),
+						Vector2.One, 0, _radius * 2f, _radius * 2f);
 					_areBoundsDirty = false;
 				}
 
@@ -33,40 +34,42 @@ namespace Nez.Shadows
 		/// <summary>
 		/// Radius of influence of the light
 		/// </summary>
-		[Range( 0, 2000 )]
+		[Range(0, 2000)]
 		public float Radius
 		{
 			get => _radius;
-			set => SetRadius( value );
+			set => SetRadius(value);
 		}
 
 		/// <summary>
 		/// Power of the light, from 0 (turned off) to 1 for maximum brightness        
 		/// </summary>
-		[Range( 0, 50 )]
-		public float Power;
+		[Range(0, 50)] public float Power;
 
 		protected float _radius;
 		protected VisibilityComputer _visibility;
 
 		Effect _lightEffect;
-		FastList<short> _indices = new FastList<short>( 50 );
-		FastList<VertexPositionTexture> _vertices = new FastList<VertexPositionTexture>( 20 );
+		FastList<short> _indices = new FastList<short>(50);
+		FastList<VertexPositionTexture> _vertices = new FastList<VertexPositionTexture>(20);
 
 		// shared Collider cache used for querying for nearby geometry. Maxes out at 10 Colliders.
 		static protected Collider[] _colliderCache = new Collider[10];
 
 
-		public PolyLight() : this( 400 )
-		{}
+		public PolyLight() : this(400)
+		{
+		}
 
-		public PolyLight( float radius ) : this( radius, Color.White )
-		{ }
+		public PolyLight(float radius) : this(radius, Color.White)
+		{
+		}
 
-		public PolyLight( float radius, Color color ) : this( radius, color, 1.0f )
-		{ }
+		public PolyLight(float radius, Color color) : this(radius, color, 1.0f)
+		{
+		}
 
-		public PolyLight( float radius, Color color, float power )
+		public PolyLight(float radius, Color color, float power)
 		{
 			this.Radius = radius;
 			this.Power = power;
@@ -76,21 +79,21 @@ namespace Nez.Shadows
 
 		#region Fluent setters
 
-		public virtual PolyLight SetRadius( float radius )
+		public virtual PolyLight SetRadius(float radius)
 		{
-			if( radius != _radius )
+			if (radius != _radius)
 			{
 				_radius = radius;
 				_areBoundsDirty = true;
 
-				if( _lightEffect != null )
-					_lightEffect.Parameters["lightRadius"].SetValue( radius );
+				if (_lightEffect != null)
+					_lightEffect.Parameters["lightRadius"].SetValue(radius);
 			}
 
 			return this;
 		}
 
-		public PolyLight SetPower( float power )
+		public PolyLight SetPower(float power)
 		{
 			this.Power = power;
 			return this;
@@ -105,7 +108,8 @@ namespace Nez.Shadows
 		/// <returns>The overlapped components.</returns>
 		protected virtual int GetOverlappedColliders()
 		{
-			return Physics.OverlapCircleAll( Entity.Position + _localOffset, _radius, _colliderCache, CollidesWithLayers );
+			return Physics.OverlapCircleAll(Entity.Position + _localOffset, _radius, _colliderCache,
+				CollidesWithLayers);
 		}
 
 		/// <summary>
@@ -122,52 +126,53 @@ namespace Nez.Shadows
 
 		public override void OnAddedToEntity()
 		{
-			_lightEffect = Entity.Scene.Content.LoadEffect<Effect>( "polygonLight", EffectResource.PolygonLightBytes );
-			_lightEffect.Parameters["lightRadius"].SetValue( Radius );
+			_lightEffect = Entity.Scene.Content.LoadEffect<Effect>("polygonLight", EffectResource.PolygonLightBytes);
+			_lightEffect.Parameters["lightRadius"].SetValue(Radius);
 			_visibility = new VisibilityComputer();
 		}
 
-		public override void Render( Graphics graphics, Camera camera ) => RenderImpl( graphics, camera, false );
+		public override void Render(Graphics graphics, Camera camera) => RenderImpl(graphics, camera, false);
 
-		public override void DebugRender( Graphics graphics )
+		public override void DebugRender(Graphics graphics)
 		{
 			// here, we just assume the Camera being used by the Renderer is the standard Scene Camera
-			RenderImpl( Graphics.Instance, Entity.Scene.Camera, true );
+			RenderImpl(Graphics.Instance, Entity.Scene.Camera, true);
 
 			// draw a square for our pivot/origin and draw our bounds
-			graphics.Batcher.DrawPixel( Entity.Transform.Position + _localOffset, Debug.Colors.RenderableCenter, 4 );
-			graphics.Batcher.DrawHollowRect( Bounds, Debug.Colors.RenderableBounds );
+			graphics.Batcher.DrawPixel(Entity.Transform.Position + _localOffset, Debug.Colors.RenderableCenter, 4);
+			graphics.Batcher.DrawHollowRect(Bounds, Debug.Colors.RenderableBounds);
 		}
 
-		void RenderImpl( Graphics graphics, Camera camera, bool debugDraw )
+		void RenderImpl(Graphics graphics, Camera camera, bool debugDraw)
 		{
-			if( Power > 0 && IsVisibleFromCamera( camera ) )
+			if (Power > 0 && IsVisibleFromCamera(camera))
 			{
 				var totalOverlaps = GetOverlappedColliders();
 
 				// compute the visibility mesh
-				_visibility.Begin( Entity.Transform.Position + _localOffset, _radius );
+				_visibility.Begin(Entity.Transform.Position + _localOffset, _radius);
 				LoadVisibilityBoundaries();
-				for( var i = 0; i < totalOverlaps; i++ )
+				for (var i = 0; i < totalOverlaps; i++)
 				{
-					if( !_colliderCache[i].IsTrigger )
-						_visibility.AddColliderOccluder( _colliderCache[i] );
+					if (!_colliderCache[i].IsTrigger)
+						_visibility.AddColliderOccluder(_colliderCache[i]);
 				}
-				System.Array.Clear( _colliderCache, 0, totalOverlaps );
+
+				System.Array.Clear(_colliderCache, 0, totalOverlaps);
 
 				// generate a triangle list from the encounter points
 				var encounters = _visibility.End();
-				GenerateVertsFromEncounters( encounters );
-				ListPool<Vector2>.Free( encounters );
+				GenerateVertsFromEncounters(encounters);
+				ListPool<Vector2>.Free(encounters);
 
 				var primitiveCount = _vertices.Length / 2;
-				if( primitiveCount == 0 )
+				if (primitiveCount == 0)
 					return;
 
 				Core.GraphicsDevice.BlendState = BlendState.Additive;
 				Core.GraphicsDevice.RasterizerState = RasterizerState.CullNone;
 
-				if( debugDraw )
+				if (debugDraw)
 				{
 					var rasterizerState = new RasterizerState();
 					rasterizerState.FillMode = FillMode.WireFrame;
@@ -176,12 +181,13 @@ namespace Nez.Shadows
 				}
 
 				// Apply the effect
-				_lightEffect.Parameters["viewProjectionMatrix"].SetValue( camera.ViewProjectionMatrix );
-				_lightEffect.Parameters["lightSource"].SetValue( Entity.Transform.Position );
-				_lightEffect.Parameters["lightColor"].SetValue( Color.ToVector3() * Power );
+				_lightEffect.Parameters["viewProjectionMatrix"].SetValue(camera.ViewProjectionMatrix);
+				_lightEffect.Parameters["lightSource"].SetValue(Entity.Transform.Position);
+				_lightEffect.Parameters["lightColor"].SetValue(Color.ToVector3() * Power);
 				_lightEffect.Techniques[0].Passes[0].Apply();
 
-				Core.GraphicsDevice.DrawUserIndexedPrimitives( PrimitiveType.TriangleList, _vertices.Buffer, 0, _vertices.Length, _indices.Buffer, 0, primitiveCount );
+				Core.GraphicsDevice.DrawUserIndexedPrimitives(PrimitiveType.TriangleList, _vertices.Buffer, 0,
+					_vertices.Length, _indices.Buffer, 0, primitiveCount);
 			}
 		}
 
@@ -193,8 +199,8 @@ namespace Nez.Shadows
 		/// </summary>
 		/// <param name="position">Position.</param>
 		/// <param name="texCoord">Tex coordinate.</param>
-		[MethodImpl( MethodImplOptions.AggressiveInlining )]
-		void AddVert( Vector2 position )
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		void AddVert(Vector2 position)
 		{
 			var index = _vertices.Length;
 			_vertices.EnsureCapacity();
@@ -203,35 +209,34 @@ namespace Nez.Shadows
 			_vertices.Length++;
 		}
 
-		void ComputeTriangleIndices( int totalTris = 20 )
+		void ComputeTriangleIndices(int totalTris = 20)
 		{
 			_indices.Reset();
 
 			// compute the indices to form triangles
-			for( var i = 0; i < totalTris; i += 2 )
+			for (var i = 0; i < totalTris; i += 2)
 			{
-				_indices.Add( 0 );
-				_indices.Add( (short)( i + 2 ) );
-				_indices.Add( (short)( i + 1 ) );
+				_indices.Add(0);
+				_indices.Add((short) (i + 2));
+				_indices.Add((short) (i + 1));
 			}
 		}
 
-		void GenerateVertsFromEncounters( List<Vector2> encounters )
+		void GenerateVertsFromEncounters(List<Vector2> encounters)
 		{
 			_vertices.Reset();
 
 			// add a vertex for the center of the mesh
-			AddVert( Entity.Transform.Position );
+			AddVert(Entity.Transform.Position);
 
 			// add all the other encounter points as vertices storing their world position as UV coordinates
-			for( var i = 0; i < encounters.Count; i++ )
-				AddVert( encounters[i] );
+			for (var i = 0; i < encounters.Count; i++)
+				AddVert(encounters[i]);
 
 			// if we dont have enough tri indices add enough for our encounter list
 			var triIndices = _indices.Length / 3;
-			if( encounters.Count > triIndices )
-				ComputeTriangleIndices( encounters.Count );
+			if (encounters.Count > triIndices)
+				ComputeTriangleIndices(encounters.Count);
 		}
-
 	}
 }

@@ -20,12 +20,12 @@ namespace Nez
 			get => _verticalSize;
 			set
 			{
-				if( _verticalSize != value )
+				if (_verticalSize != value)
 				{
 					_verticalSize = value;
 
-					if( Effect != null )
-						_verticalSizeParam.SetValue( _verticalSize );
+					if (Effect != null)
+						_verticalSizeParam.SetValue(_verticalSize);
 				}
 			}
 		}
@@ -39,12 +39,12 @@ namespace Nez
 			get => _horizontalOffset;
 			set
 			{
-				if( _horizontalOffset != value )
+				if (_horizontalOffset != value)
 				{
 					_horizontalOffset = value;
 
-					if( Effect != null )
-						_horizontalOffsetParam.SetValue( _horizontalOffset );
+					if (Effect != null)
+						_horizontalOffsetParam.SetValue(_horizontalOffset);
 				}
 			}
 		}
@@ -56,33 +56,33 @@ namespace Nez
 		EffectParameter _screenSizeParam;
 
 
-		public PixelGlitchPostProcessor( int executionOrder ) : base( executionOrder )
-		{}
-
-		public override void OnAddedToScene( Scene scene )
+		public PixelGlitchPostProcessor(int executionOrder) : base(executionOrder)
 		{
-			base.OnAddedToScene( scene );
-			Effect = scene.Content.LoadEffect<Effect>( "pixelGlitch", EffectResource.PixelGlitchBytes );
+		}
+
+		public override void OnAddedToScene(Scene scene)
+		{
+			base.OnAddedToScene(scene);
+			Effect = scene.Content.LoadEffect<Effect>("pixelGlitch", EffectResource.PixelGlitchBytes);
 
 			_verticalSizeParam = Effect.Parameters["_verticalSize"];
 			_horizontalOffsetParam = Effect.Parameters["_horizontalOffset"];
 			_screenSizeParam = Effect.Parameters["_screenSize"];
 
-			_verticalSizeParam.SetValue( _verticalSize );
-			_horizontalOffsetParam.SetValue( _horizontalOffset );
-			_screenSizeParam.SetValue( new Vector2( Screen.Width, Screen.Height ) );
+			_verticalSizeParam.SetValue(_verticalSize);
+			_horizontalOffsetParam.SetValue(_horizontalOffset);
+			_screenSizeParam.SetValue(new Vector2(Screen.Width, Screen.Height));
 		}
 
 		public override void Unload()
 		{
-			_scene.Content.UnloadEffect( Effect );
+			_scene.Content.UnloadEffect(Effect);
 			base.Unload();
 		}
 
-		public override void OnSceneBackBufferSizeChanged( int newWidth, int newHeight )
+		public override void OnSceneBackBufferSizeChanged(int newWidth, int newHeight)
 		{
-			_screenSizeParam.SetValue( new Vector2( newWidth, newHeight ) );
+			_screenSizeParam.SetValue(new Vector2(newWidth, newHeight));
 		}
 	}
 }
-

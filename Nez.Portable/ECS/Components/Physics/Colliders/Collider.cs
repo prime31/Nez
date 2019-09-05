@@ -19,7 +19,7 @@ namespace Nez
 		public Vector2 LocalOffset
 		{
 			get { return _localOffset; }
-			set { SetLocalOffset( value ); }
+			set { SetLocalOffset(value); }
 		}
 
 		/// <summary>
@@ -39,8 +39,9 @@ namespace Nez
 		{
 			get
 			{
-				if( ShouldColliderScaleAndRotateWithTransform && Entity != null )
+				if (ShouldColliderScaleAndRotateWithTransform && Entity != null)
 					return Entity.Transform.Rotation;
+
 				return 0;
 			}
 		}
@@ -69,9 +70,9 @@ namespace Nez
 		{
 			get
 			{
-				if( _isPositionDirty || _isRotationDirty )
+				if (_isPositionDirty || _isRotationDirty)
 				{
-					Shape.RecalculateBounds( this );
+					Shape.RecalculateBounds(this);
 					_isPositionDirty = _isRotationDirty = false;
 				}
 
@@ -84,6 +85,7 @@ namespace Nez
 		/// safely remove the Collider from the Physics system even if it was moved before attempting to remove it.
 		/// </summary>
 		internal RectangleF registeredPhysicsBounds;
+
 		protected bool _colliderRequiresAutoSizing;
 
 		protected Vector2 _localOffset;
@@ -98,6 +100,7 @@ namespace Nez
 		/// flag to keep track of if we registered ourself with the Physics system
 		/// </summary>
 		protected bool _isColliderRegistered;
+
 		internal bool _isPositionDirty = true;
 		internal bool _isRotationDirty = true;
 
@@ -110,9 +113,9 @@ namespace Nez
 		/// </summary>
 		/// <returns>The local offset.</returns>
 		/// <param name="offset">Offset.</param>
-		public Collider SetLocalOffset( Vector2 offset )
+		public Collider SetLocalOffset(Vector2 offset)
 		{
-			if( _localOffset != offset )
+			if (_localOffset != offset)
 			{
 				UnregisterColliderWithPhysicsSystem();
 				_localOffset = offset;
@@ -120,6 +123,7 @@ namespace Nez
 				_isPositionDirty = true;
 				RegisterColliderWithPhysicsSystem();
 			}
+
 			return this;
 		}
 
@@ -129,7 +133,7 @@ namespace Nez
 		/// </summary>
 		/// <returns>The should collider scale and rotate with transform.</returns>
 		/// <param name="shouldColliderScaleAndRotateWithTransform">If set to <c>true</c> should collider scale and rotate with transform.</param>
-		public Collider SetShouldColliderScaleAndRotateWithTransform( bool shouldColliderScaleAndRotateWithTransform )
+		public Collider SetShouldColliderScaleAndRotateWithTransform(bool shouldColliderScaleAndRotateWithTransform)
 		{
 			this.ShouldColliderScaleAndRotateWithTransform = shouldColliderScaleAndRotateWithTransform;
 			_isPositionDirty = _isRotationDirty = true;
@@ -143,14 +147,16 @@ namespace Nez
 
 		public override void OnAddedToEntity()
 		{
-			if( _colliderRequiresAutoSizing )
+			if (_colliderRequiresAutoSizing)
 			{
 				// we only deal with boxes and circles here
-				Insist.IsTrue( this is BoxCollider || this is CircleCollider, "Only box and circle colliders can be created automatically" );
+				Insist.IsTrue(this is BoxCollider || this is CircleCollider,
+					"Only box and circle colliders can be created automatically");
 
 				var renderable = Entity.GetComponent<RenderableComponent>();
-				Debug.WarnIf( renderable == null, "Collider has no shape and no RenderableComponent. Can't figure out how to size it." );
-				if( renderable != null )
+				Debug.WarnIf(renderable == null,
+					"Collider has no shape and no RenderableComponent. Can't figure out how to size it.");
+				if (renderable != null)
 				{
 					var renderableBounds = renderable.Bounds;
 
@@ -159,10 +165,10 @@ namespace Nez
 					var height = renderableBounds.Height / Entity.Transform.Scale.Y;
 
 					// circle colliders need special care with the origin
-					if( this is CircleCollider )
+					if (this is CircleCollider)
 					{
 						var circleCollider = this as CircleCollider;
-						circleCollider.Radius = Math.Max( width, height ) * 0.5f;
+						circleCollider.Radius = Math.Max(width, height) * 0.5f;
 
 						// fetch the Renderable's center, transfer it to local coordinates and use that as the localOffset of our collider
 						LocalOffset = renderableBounds.Center - Entity.Transform.Position;
@@ -178,6 +184,7 @@ namespace Nez
 					}
 				}
 			}
+
 			_isParentEntityAddedToScene = true;
 			RegisterColliderWithPhysicsSystem();
 		}
@@ -190,10 +197,10 @@ namespace Nez
 		}
 
 
-		public override void OnEntityTransformChanged( Transform.Component comp )
+		public override void OnEntityTransformChanged(Transform.Component comp)
 		{
 			// set the appropriate dirty flags
-			switch( comp )
+			switch (comp)
 			{
 				case Transform.Component.Position:
 					_isPositionDirty = true;
@@ -206,8 +213,8 @@ namespace Nez
 					break;
 			}
 
-			if( _isColliderRegistered )
-				Physics.UpdateCollider( this );
+			if (_isColliderRegistered)
+				Physics.UpdateCollider(this);
 		}
 
 
@@ -232,9 +239,9 @@ namespace Nez
 		public virtual void RegisterColliderWithPhysicsSystem()
 		{
 			// entity could be null if properties such as origin are changed before we are added to an Entity
-			if( _isParentEntityAddedToScene && !_isColliderRegistered )
+			if (_isParentEntityAddedToScene && !_isColliderRegistered)
 			{
-				Physics.AddCollider( this );
+				Physics.AddCollider(this);
 				_isColliderRegistered = true;
 			}
 		}
@@ -245,8 +252,8 @@ namespace Nez
 		/// </summary>
 		public virtual void UnregisterColliderWithPhysicsSystem()
 		{
-			if( _isParentEntityAddedToScene && _isColliderRegistered )
-				Physics.RemoveCollider( this );
+			if (_isParentEntityAddedToScene && _isColliderRegistered)
+				Physics.RemoveCollider(this);
 			_isColliderRegistered = false;
 		}
 
@@ -257,9 +264,9 @@ namespace Nez
 		/// checks to see if this shape overlaps any other Colliders in the Physics system
 		/// </summary>
 		/// <param name="collider">Collider.</param>
-		public bool Overlaps( Collider other )
+		public bool Overlaps(Collider other)
 		{
-			return Shape.Overlaps( other.Shape );
+			return Shape.Overlaps(other.Shape);
 		}
 
 
@@ -270,13 +277,14 @@ namespace Nez
 		/// <returns><c>true</c>, if with was collidesed, <c>false</c> otherwise.</returns>
 		/// <param name="collider">Collider.</param>
 		/// <param name="result">Result.</param>
-		public bool CollidesWith( Collider collider, out CollisionResult result )
+		public bool CollidesWith(Collider collider, out CollisionResult result)
 		{
-			if( Shape.CollidesWithShape( collider.Shape, out result ) )
+			if (Shape.CollidesWithShape(collider.Shape, out result))
 			{
 				result.Collider = collider;
 				return true;
 			}
+
 			return false;
 		}
 
@@ -289,14 +297,14 @@ namespace Nez
 		/// <param name="collider">Collider.</param>
 		/// <param name="motion">Motion.</param>
 		/// <param name="result">Result.</param>
-		public bool CollidesWith( Collider collider, Vector2 motion, out CollisionResult result )
+		public bool CollidesWith(Collider collider, Vector2 motion, out CollisionResult result)
 		{
 			// alter the shapes position so that it is in the place it would be after movement so we can check for overlaps
 			var oldPosition = Shape.position;
 			Shape.position += motion;
 
-			var didCollide = Shape.CollidesWithShape( collider.Shape, out result );
-			if( didCollide )
+			var didCollide = Shape.CollidesWithShape(collider.Shape, out result);
+			if (didCollide)
 				result.Collider = collider;
 
 			// return the shapes position to where it was before the check
@@ -312,20 +320,20 @@ namespace Nez
 		/// </summary>
 		/// <returns><c>true</c>, if with was collidesed, <c>false</c> otherwise.</returns>
 		/// <param name="result">Result.</param>
-		public bool CollidesWithAny( out CollisionResult result )
+		public bool CollidesWithAny(out CollisionResult result)
 		{
 			result = new CollisionResult();
 
 			// fetch anything that we might collide with at our new position
-			var neighbors = Physics.BoxcastBroadphaseExcludingSelf( this, CollidesWithLayers );
+			var neighbors = Physics.BoxcastBroadphaseExcludingSelf(this, CollidesWithLayers);
 
-			foreach( var neighbor in neighbors )
+			foreach (var neighbor in neighbors)
 			{
 				// skip triggers
-				if( neighbor.IsTrigger )
+				if (neighbor.IsTrigger)
 					continue;
 
-				if( CollidesWith( neighbor, out result ) )
+				if (CollidesWith(neighbor, out result))
 					return true;
 			}
 
@@ -341,7 +349,7 @@ namespace Nez
 		/// <returns><c>true</c>, if with was collidesed, <c>false</c> otherwise.</returns>
 		/// <param name="motion">Motion.</param>
 		/// <param name="result">Result.</param>
-		public bool CollidesWithAny( ref Vector2 motion, out CollisionResult result )
+		public bool CollidesWithAny(ref Vector2 motion, out CollisionResult result)
 		{
 			result = new CollisionResult();
 
@@ -349,20 +357,20 @@ namespace Nez
 			var colliderBounds = Bounds;
 			colliderBounds.X += motion.X;
 			colliderBounds.Y += motion.Y;
-			var neighbors = Physics.BoxcastBroadphaseExcludingSelf( this, ref colliderBounds, CollidesWithLayers );
+			var neighbors = Physics.BoxcastBroadphaseExcludingSelf(this, ref colliderBounds, CollidesWithLayers);
 
 			// alter the shapes position so that it is in the place it would be after movement so we can check for overlaps
 			var oldPosition = Shape.position;
 			Shape.position += motion;
 
 			var didCollide = false;
-			foreach( var neighbor in neighbors )
+			foreach (var neighbor in neighbors)
 			{
 				// skip triggers
-				if( neighbor.IsTrigger )
+				if (neighbor.IsTrigger)
 					continue;
 
-				if( CollidesWith( neighbor, out result ) )
+				if (CollidesWith(neighbor, out result))
 				{
 					// hit. back off our motion and our Shape.position
 					motion -= result.MinimumTranslationVector;
@@ -385,12 +393,10 @@ namespace Nez
 			var collider = MemberwiseClone() as Collider;
 			collider.Entity = null;
 
-			if( Shape != null )
+			if (Shape != null)
 				collider.Shape = Shape.Clone();
 
 			return collider;
 		}
-
 	}
 }
-

@@ -34,32 +34,30 @@ namespace Nez
 
 		internal void Update()
 		{
-			if( !_isConnected )
+			if (!_isConnected)
 				return;
 
 			_previousTouches = _currentTouches;
 			_currentTouches = TouchPanel.GetState();
 
 			_previousGestures.Clear();
-			_previousGestures.AddRange( _currentGestures );
+			_previousGestures.AddRange(_currentGestures);
 			_currentGestures.Clear();
-			while( TouchPanel.IsGestureAvailable )
-				_currentGestures.Add( TouchPanel.ReadGesture() );
+			while (TouchPanel.IsGestureAvailable)
+				_currentGestures.Add(TouchPanel.ReadGesture());
 		}
 
 
 		public void EnableTouchSupport()
 		{
-            _isConnected = TouchPanel.GetCapabilities().IsConnected;
+			_isConnected = TouchPanel.GetCapabilities().IsConnected;
 
-			if( _isConnected )
+			if (_isConnected)
 			{
-				Core.Emitter.AddObserver( CoreEvents.GraphicsDeviceReset, OnGraphicsDeviceReset );
-				Core.Emitter.AddObserver( CoreEvents.OrientationChanged, OnGraphicsDeviceReset );
+				Core.Emitter.AddObserver(CoreEvents.GraphicsDeviceReset, OnGraphicsDeviceReset);
+				Core.Emitter.AddObserver(CoreEvents.OrientationChanged, OnGraphicsDeviceReset);
 				OnGraphicsDeviceReset();
 			}
 		}
-
 	}
 }
-

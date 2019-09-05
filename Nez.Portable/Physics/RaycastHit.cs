@@ -37,7 +37,7 @@ namespace Nez
 		public Vector2 Centroid;
 
 
-		public RaycastHit( Collider collider, float fraction, float distance, Vector2 point, Vector2 normal )
+		public RaycastHit(Collider collider, float fraction, float distance, Vector2 point, Vector2 normal)
 		{
 			this.Collider = collider;
 			this.Fraction = fraction;
@@ -48,7 +48,7 @@ namespace Nez
 		}
 
 
-		internal void SetValues( Collider collider, float fraction, float distance, Vector2 point )
+		internal void SetValues(Collider collider, float fraction, float distance, Vector2 point)
 		{
 			this.Collider = collider;
 			this.Fraction = fraction;
@@ -57,7 +57,7 @@ namespace Nez
 		}
 
 
-		internal void SetValues( float fraction, float distance, Vector2 point, Vector2 normal )
+		internal void SetValues(float fraction, float distance, Vector2 point, Vector2 normal)
 		{
 			this.Fraction = fraction;
 			this.Distance = distance;
@@ -75,9 +75,8 @@ namespace Nez
 
 		public override string ToString()
 		{
-			return string.Format( "[RaycastHit] fraction: {0}, distance: {1}, normal: {2}, centroid: {3}, point: {4}", Fraction, Distance, Normal, Centroid, Point );
+			return string.Format("[RaycastHit] fraction: {0}, distance: {1}, normal: {2}, centroid: {3}, point: {4}",
+				Fraction, Distance, Normal, Centroid, Point);
 		}
-
 	}
 }
-

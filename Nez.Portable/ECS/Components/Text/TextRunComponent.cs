@@ -22,9 +22,10 @@
 		TextRun _textRun;
 
 		public TextRunComponent()
-		{}
+		{
+		}
 
-		public TextRunComponent( TextRun textRun )
+		public TextRunComponent(TextRun textRun)
 		{
 			_textRun = textRun;
 			Compile();
@@ -40,12 +41,10 @@
 			_textRun.Compile();
 		}
 
-		public override void Render( Graphics graphics, Camera camera )
+		public override void Render(Graphics graphics, Camera camera)
 		{
-			if( _textRun != null )
-				_textRun.Render( graphics );
+			if (_textRun != null)
+				_textRun.Render(graphics);
 		}
-
 	}
 }
-

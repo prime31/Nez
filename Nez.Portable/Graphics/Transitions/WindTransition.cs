@@ -18,7 +18,7 @@ namespace Nez
 		/// <value>The wind segments.</value>
 		public float WindSegments
 		{
-			set { _windEffect.Parameters["_windSegments"].SetValue( value ); }
+			set { _windEffect.Parameters["_windSegments"].SetValue(value); }
 		}
 
 		/// <summary>
@@ -27,7 +27,7 @@ namespace Nez
 		/// <value>The size.</value>
 		public float Size
 		{
-			set { _windEffect.Parameters["_size"].SetValue( value ); }
+			set { _windEffect.Parameters["_size"].SetValue(value); }
 		}
 
 		/// <summary>
@@ -44,43 +44,44 @@ namespace Nez
 		Rectangle _destinationRect;
 
 
-		public WindTransition( Func<Scene> sceneLoadAction ) : base( sceneLoadAction, true )
+		public WindTransition(Func<Scene> sceneLoadAction) : base(sceneLoadAction, true)
 		{
 			_destinationRect = PreviousSceneRender.Bounds;
 
 			// load Effect and set defaults
-			_windEffect = Core.Content.LoadEffect( "Content/nez/effects/transitions/Wind.mgfxo" );
+			_windEffect = Core.Content.LoadEffect("Content/nez/effects/transitions/Wind.mgfxo");
 			Size = 0.3f;
 			WindSegments = 100;
 		}
 
 
-		public WindTransition() : this( null )
-		{}
+		public WindTransition() : this(null)
+		{
+		}
 
 
 		public override IEnumerator OnBeginTransition()
 		{
 			// load up the new Scene
-			yield return Core.StartCoroutine( LoadNextScene() );
+			yield return Core.StartCoroutine(LoadNextScene());
 
 			// wind to the new Scene
-			yield return Core.StartCoroutine( TickEffectProgressProperty( _windEffect, Duration, EaseType ) );
+			yield return Core.StartCoroutine(TickEffectProgressProperty(_windEffect, Duration, EaseType));
 
 			TransitionComplete();
 
 			// cleanup
-			Core.Content.UnloadEffect( _windEffect.Name );
+			Core.Content.UnloadEffect(_windEffect.Name);
 		}
 
 
-		public override void Render( Graphics graphics )
+		public override void Render(Graphics graphics)
 		{
-            GraphicsDeviceExt.SetRenderTarget(Core.GraphicsDevice, null);
-			graphics.Batcher.Begin( BlendState.NonPremultiplied, Core.DefaultSamplerState, DepthStencilState.None, null, _windEffect );
-			graphics.Batcher.Draw( PreviousSceneRender, _destinationRect, Color.White );
+			GraphicsDeviceExt.SetRenderTarget(Core.GraphicsDevice, null);
+			graphics.Batcher.Begin(BlendState.NonPremultiplied, Core.DefaultSamplerState, DepthStencilState.None, null,
+				_windEffect);
+			graphics.Batcher.Draw(PreviousSceneRender, _destinationRect, Color.White);
 			graphics.Batcher.End();
 		}
 	}
 }
-

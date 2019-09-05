@@ -32,7 +32,7 @@ namespace FarseerPhysics.Dynamics
 	{
 		public DynamicTreeBroadPhase BroadPhase;
 
-		public List<Contact> ContactList = new List<Contact>( 128 );
+		public List<Contact> ContactList = new List<Contact>(128);
 
 #if USE_ACTIVE_CONTACT_SET
         /// <summary>
@@ -79,14 +79,14 @@ namespace FarseerPhysics.Dynamics
 		public PreSolveDelegate OnPreSolve;
 
 
-		internal ContactManager( DynamicTreeBroadPhase broadPhase )
+		internal ContactManager(DynamicTreeBroadPhase broadPhase)
 		{
 			this.BroadPhase = broadPhase;
 			OnBroadphaseCollision = AddPair;
 		}
 
 		// Broad-phase callback.
-		void AddPair( ref FixtureProxy proxyA, ref FixtureProxy proxyB )
+		void AddPair(ref FixtureProxy proxyA, ref FixtureProxy proxyB)
 		{
 			var fixtureA = proxyA.Fixture;
 			var fixtureB = proxyB.Fixture;
@@ -98,27 +98,27 @@ namespace FarseerPhysics.Dynamics
 			var bodyB = fixtureB.Body;
 
 			// Are the fixtures on the same body?
-			if( bodyA == bodyB )
+			if (bodyA == bodyB)
 				return;
 
 			// Does a contact already exist?
 			var edge = bodyB.ContactList;
-			while( edge != null )
+			while (edge != null)
 			{
-				if( edge.Other == bodyA )
+				if (edge.Other == bodyA)
 				{
 					var fA = edge.Contact.FixtureA;
 					var fB = edge.Contact.FixtureB;
 					int iA = edge.Contact.ChildIndexA;
 					int iB = edge.Contact.ChildIndexB;
 
-					if( fA == fixtureA && fB == fixtureB && iA == indexA && iB == indexB )
+					if (fA == fixtureA && fB == fixtureB && iA == indexA && iB == indexB)
 					{
 						// A contact already exists.
 						return;
 					}
 
-					if( fA == fixtureB && fB == fixtureA && iA == indexB && iB == indexA )
+					if (fA == fixtureB && fB == fixtureA && iA == indexB && iB == indexA)
 					{
 						// A contact already exists.
 						return;
@@ -129,28 +129,28 @@ namespace FarseerPhysics.Dynamics
 			}
 
 			// Does a joint override collision? Is at least one body dynamic?
-			if( bodyB.ShouldCollide( bodyA ) == false )
+			if (bodyB.ShouldCollide(bodyA) == false)
 				return;
 
 			// Check default filter
-			if( ShouldCollide( fixtureA, fixtureB ) == false )
+			if (ShouldCollide(fixtureA, fixtureB) == false)
 				return;
 
 			// Check user filtering.
-			if( OnContactFilter != null && OnContactFilter( fixtureA, fixtureB ) == false )
+			if (OnContactFilter != null && OnContactFilter(fixtureA, fixtureB) == false)
 				return;
 
 			// FPE feature: BeforeCollision delegate
-			if( fixtureA.BeforeCollision != null && fixtureA.BeforeCollision( fixtureA, fixtureB ) == false )
+			if (fixtureA.BeforeCollision != null && fixtureA.BeforeCollision(fixtureA, fixtureB) == false)
 				return;
 
-			if( fixtureB.BeforeCollision != null && fixtureB.BeforeCollision( fixtureB, fixtureA ) == false )
+			if (fixtureB.BeforeCollision != null && fixtureB.BeforeCollision(fixtureB, fixtureA) == false)
 				return;
 
 			// Call the factory.
-			var c = Contact.Create( fixtureA, indexA, fixtureB, indexB );
+			var c = Contact.Create(fixtureA, indexA, fixtureB, indexB);
 
-			if( c == null )
+			if (c == null)
 				return;
 
 			// Contact creation may swap fixtures.
@@ -160,11 +160,12 @@ namespace FarseerPhysics.Dynamics
 			bodyB = fixtureB.Body;
 
 			// Insert into the world.
-			ContactList.Add( c );
+			ContactList.Add(c);
 
 #if USE_ACTIVE_CONTACT_SET
 			ActiveContacts.Add(c);
 #endif
+
 			// Connect to island graph.
 
 			// Connect to body A
@@ -173,7 +174,7 @@ namespace FarseerPhysics.Dynamics
 
 			c._nodeA.Prev = null;
 			c._nodeA.Next = bodyA.ContactList;
-			if( bodyA.ContactList != null )
+			if (bodyA.ContactList != null)
 				bodyA.ContactList.Prev = c._nodeA;
 
 			bodyA.ContactList = c._nodeA;
@@ -184,13 +185,13 @@ namespace FarseerPhysics.Dynamics
 
 			c._nodeB.Prev = null;
 			c._nodeB.Next = bodyB.ContactList;
-			if( bodyB.ContactList != null )
+			if (bodyB.ContactList != null)
 				bodyB.ContactList.Prev = c._nodeB;
 
 			bodyB.ContactList = c._nodeB;
 
 			// Wake up the bodies
-			if( fixtureA.IsSensor == false && fixtureB.IsSensor == false )
+			if (fixtureA.IsSensor == false && fixtureB.IsSensor == false)
 			{
 				bodyA.IsAwake = true;
 				bodyB.IsAwake = true;
@@ -199,52 +200,52 @@ namespace FarseerPhysics.Dynamics
 
 		internal void FindNewContacts()
 		{
-			BroadPhase.UpdatePairs( OnBroadphaseCollision );
+			BroadPhase.UpdatePairs(OnBroadphaseCollision);
 		}
 
-		internal void Destroy( Contact contact )
+		internal void Destroy(Contact contact)
 		{
 			var fixtureA = contact.FixtureA;
 			var fixtureB = contact.FixtureB;
 			var bodyA = fixtureA.Body;
 			var bodyB = fixtureB.Body;
 
-			if( contact.IsTouching )
+			if (contact.IsTouching)
 			{
 				//Report the separation to both participants:
-				if( fixtureA != null && fixtureA.OnSeparation != null )
-					fixtureA.OnSeparation( fixtureA, fixtureB );
+				if (fixtureA != null && fixtureA.OnSeparation != null)
+					fixtureA.OnSeparation(fixtureA, fixtureB);
 
 				//Reverse the order of the reported fixtures. The first fixture is always the one that the
 				//user subscribed to.
-				if( fixtureB != null && fixtureB.OnSeparation != null )
-					fixtureB.OnSeparation( fixtureB, fixtureA );
+				if (fixtureB != null && fixtureB.OnSeparation != null)
+					fixtureB.OnSeparation(fixtureB, fixtureA);
 
-				if( OnEndContact != null )
-					OnEndContact( contact );
+				if (OnEndContact != null)
+					OnEndContact(contact);
 			}
 
 			// Remove from the world.
-			ContactList.Remove( contact );
+			ContactList.Remove(contact);
 
 			// Remove from body 1
-			if( contact._nodeA.Prev != null )
+			if (contact._nodeA.Prev != null)
 				contact._nodeA.Prev.Next = contact._nodeA.Next;
 
-			if( contact._nodeA.Next != null )
+			if (contact._nodeA.Next != null)
 				contact._nodeA.Next.Prev = contact._nodeA.Prev;
 
-			if( contact._nodeA == bodyA.ContactList )
+			if (contact._nodeA == bodyA.ContactList)
 				bodyA.ContactList = contact._nodeA.Next;
 
 			// Remove from body 2
-			if( contact._nodeB.Prev != null )
+			if (contact._nodeB.Prev != null)
 				contact._nodeB.Prev.Next = contact._nodeB.Next;
 
-			if( contact._nodeB.Next != null )
+			if (contact._nodeB.Next != null)
 				contact._nodeB.Next.Prev = contact._nodeB.Prev;
 
-			if( contact._nodeB == bodyB.ContactList )
+			if (contact._nodeB == bodyB.ContactList)
 				bodyB.ContactList = contact._nodeB.Next;
 
 #if USE_ACTIVE_CONTACT_SET
@@ -265,7 +266,7 @@ namespace FarseerPhysics.Dynamics
 			foreach (var c in ActiveList)
 			{
 #else
-			for( var i = 0; i < ContactList.Count; i++ )
+			for (var i = 0; i < ContactList.Count; i++)
 			{
 				var c = ContactList[i];
 #endif
@@ -277,33 +278,33 @@ namespace FarseerPhysics.Dynamics
 				var bodyB = fixtureB.Body;
 
 				// Do no try to collide disabled bodies
-				if( !bodyA.Enabled || !bodyB.Enabled )
+				if (!bodyA.Enabled || !bodyB.Enabled)
 					continue;
 
 				// Is this contact flagged for filtering?
-				if( c.filterFlag )
+				if (c.filterFlag)
 				{
 					// Should these bodies collide?
-					if( bodyB.ShouldCollide( bodyA ) == false )
+					if (bodyB.ShouldCollide(bodyA) == false)
 					{
 						var cNuke = c;
-						Destroy( cNuke );
+						Destroy(cNuke);
 						continue;
 					}
 
 					// Check default filtering
-					if( ShouldCollide( fixtureA, fixtureB ) == false )
+					if (ShouldCollide(fixtureA, fixtureB) == false)
 					{
 						var cNuke = c;
-						Destroy( cNuke );
+						Destroy(cNuke);
 						continue;
 					}
 
 					// Check user filtering.
-					if( OnContactFilter != null && OnContactFilter( fixtureA, fixtureB ) == false )
+					if (OnContactFilter != null && OnContactFilter(fixtureA, fixtureB) == false)
 					{
 						var cNuke = c;
-						Destroy( cNuke );
+						Destroy(cNuke);
 						continue;
 					}
 
@@ -315,7 +316,7 @@ namespace FarseerPhysics.Dynamics
 				var activeB = bodyB.IsAwake && bodyB.BodyType != BodyType.Static;
 
 				// At least one body must be awake and it must be dynamic or kinematic.
-				if( activeA == false && activeB == false )
+				if (activeA == false && activeB == false)
 				{
 #if USE_ACTIVE_CONTACT_SET
 					ActiveContacts.Remove(c);
@@ -326,18 +327,18 @@ namespace FarseerPhysics.Dynamics
 				var proxyIdA = fixtureA.Proxies[indexA].ProxyId;
 				var proxyIdB = fixtureB.Proxies[indexB].ProxyId;
 
-				var overlap = BroadPhase.TestOverlap( proxyIdA, proxyIdB );
+				var overlap = BroadPhase.TestOverlap(proxyIdA, proxyIdB);
 
 				// Here we destroy contacts that cease to overlap in the broad-phase.
-				if( overlap == false )
+				if (overlap == false)
 				{
 					var cNuke = c;
-					Destroy( cNuke );
+					Destroy(cNuke);
 					continue;
 				}
 
 				// The contact persists.
-				c.Update( this );
+				c.Update(this);
 			}
 
 #if USE_ACTIVE_CONTACT_SET
@@ -345,39 +346,40 @@ namespace FarseerPhysics.Dynamics
 #endif
 		}
 
-		public static bool ShouldCollide( Fixture fixtureA, Fixture fixtureB )
+		public static bool ShouldCollide(Fixture fixtureA, Fixture fixtureB)
 		{
-			if( Settings.UseFPECollisionCategories )
+			if (Settings.UseFPECollisionCategories)
 			{
-				if( ( fixtureA.CollisionGroup == fixtureB.CollisionGroup ) && fixtureA.CollisionGroup != 0 && fixtureB.CollisionGroup != 0 )
+				if ((fixtureA.CollisionGroup == fixtureB.CollisionGroup) && fixtureA.CollisionGroup != 0 &&
+				    fixtureB.CollisionGroup != 0)
 					return false;
 
-				if( ( ( fixtureA.CollisionCategories & fixtureB.CollidesWith ) == Category.None ) &
-					( ( fixtureB.CollisionCategories & fixtureA.CollidesWith ) == Category.None ) )
+				if (((fixtureA.CollisionCategories & fixtureB.CollidesWith) == Category.None) &
+				    ((fixtureB.CollisionCategories & fixtureA.CollidesWith) == Category.None))
 					return false;
 
-				if( fixtureA.IsFixtureIgnored( fixtureB ) || fixtureB.IsFixtureIgnored( fixtureA ) )
+				if (fixtureA.IsFixtureIgnored(fixtureB) || fixtureB.IsFixtureIgnored(fixtureA))
 					return false;
 
 				return true;
 			}
 
-			if( fixtureA.CollisionGroup == fixtureB.CollisionGroup && fixtureA.CollisionGroup != 0 )
+			if (fixtureA.CollisionGroup == fixtureB.CollisionGroup && fixtureA.CollisionGroup != 0)
 				return fixtureA.CollisionGroup > 0;
 
-			bool collide = ( fixtureA.CollidesWith & fixtureB.CollisionCategories ) != 0 &&
-						   ( fixtureA.CollisionCategories & fixtureB.CollidesWith ) != 0;
+			bool collide = (fixtureA.CollidesWith & fixtureB.CollisionCategories) != 0 &&
+			               (fixtureA.CollisionCategories & fixtureB.CollidesWith) != 0;
 
-			if( collide )
+			if (collide)
 			{
-				if( fixtureA.IsFixtureIgnored( fixtureB ) || fixtureB.IsFixtureIgnored( fixtureA ) )
+				if (fixtureA.IsFixtureIgnored(fixtureB) || fixtureB.IsFixtureIgnored(fixtureA))
 					return false;
 			}
 
 			return collide;
 		}
 
-		internal void UpdateContacts( ContactEdge contactEdge, bool value )
+		internal void UpdateContacts(ContactEdge contactEdge, bool value)
 		{
 #if USE_ACTIVE_CONTACT_SET
 			if(value)

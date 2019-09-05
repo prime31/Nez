@@ -10,14 +10,14 @@ namespace Nez.LibGdxAtlases
 
 
 		public LibGdxAtlasPoint()
-		{}
+		{
+		}
 
 
-		public LibGdxAtlasPoint( float x, float y )
+		public LibGdxAtlasPoint(float x, float y)
 		{
 			this.X = x;
 			this.Y = y;
 		}
 	}
 }
-

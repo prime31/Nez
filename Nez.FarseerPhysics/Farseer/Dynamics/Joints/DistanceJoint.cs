@@ -25,6 +25,7 @@ using System.Diagnostics;
 using FarseerPhysics.Common;
 using Microsoft.Xna.Framework;
 
+
 namespace FarseerPhysics.Dynamics.Joints
 {
 	// 1-D rained system
@@ -63,14 +64,14 @@ namespace FarseerPhysics.Dynamics.Joints
 
 		public override sealed Vector2 WorldAnchorA
 		{
-			get { return BodyA.GetWorldPoint( LocalAnchorA ); }
-			set { Debug.Assert( false, "You can't set the world anchor on this joint type." ); }
+			get { return BodyA.GetWorldPoint(LocalAnchorA); }
+			set { Debug.Assert(false, "You can't set the world anchor on this joint type."); }
 		}
 
 		public override sealed Vector2 WorldAnchorB
 		{
-			get { return BodyB.GetWorldPoint( LocalAnchorB ); }
-			set { Debug.Assert( false, "You can't set the world anchor on this joint type." ); }
+			get { return BodyB.GetWorldPoint(LocalAnchorB); }
+			set { Debug.Assert(false, "You can't set the world anchor on this joint type."); }
 		}
 
 		/// <summary>
@@ -130,21 +131,22 @@ namespace FarseerPhysics.Dynamics.Joints
 		/// <param name="anchorA">The first body anchor</param>
 		/// <param name="anchorB">The second body anchor</param>
 		/// <param name="useWorldCoordinates">Set to true if you are using world coordinates as anchors.</param>
-		public DistanceJoint( Body bodyA, Body bodyB, Vector2 anchorA, Vector2 anchorB, bool useWorldCoordinates = false ) : base( bodyA, bodyB )
+		public DistanceJoint(Body bodyA, Body bodyB, Vector2 anchorA, Vector2 anchorB, bool useWorldCoordinates = false)
+			: base(bodyA, bodyB)
 		{
 			JointType = JointType.Distance;
 
-			if( useWorldCoordinates )
+			if (useWorldCoordinates)
 			{
-				LocalAnchorA = bodyA.GetLocalPoint( ref anchorA );
-				LocalAnchorB = bodyB.GetLocalPoint( ref anchorB );
-				Length = ( anchorB - anchorA ).Length();
+				LocalAnchorA = bodyA.GetLocalPoint(ref anchorA);
+				LocalAnchorB = bodyB.GetLocalPoint(ref anchorB);
+				Length = (anchorB - anchorA).Length();
 			}
 			else
 			{
 				LocalAnchorA = anchorA;
 				LocalAnchorB = anchorB;
-				Length = ( base.BodyB.GetWorldPoint( ref anchorB ) - base.BodyA.GetWorldPoint( ref anchorA ) ).Length();
+				Length = (base.BodyB.GetWorldPoint(ref anchorB) - base.BodyA.GetWorldPoint(ref anchorA)).Length();
 			}
 		}
 
@@ -153,9 +155,9 @@ namespace FarseerPhysics.Dynamics.Joints
 		/// </summary>
 		/// <param name="invDt"></param>
 		/// <returns></returns>
-		public override Vector2 GetReactionForce( float invDt )
+		public override Vector2 GetReactionForce(float invDt)
 		{
-			Vector2 F = ( invDt * _impulse ) * _u;
+			Vector2 F = (invDt * _impulse) * _u;
 			return F;
 		}
 
@@ -165,12 +167,12 @@ namespace FarseerPhysics.Dynamics.Joints
 		/// </summary>
 		/// <param name="invDt"></param>
 		/// <returns></returns>
-		public override float GetReactionTorque( float invDt )
+		public override float GetReactionTorque(float invDt)
 		{
 			return 0.0f;
 		}
 
-		internal override void InitVelocityConstraints( ref SolverData data )
+		internal override void InitVelocityConstraints(ref SolverData data)
 		{
 			_indexA = BodyA.IslandIndex;
 			_indexB = BodyB.IslandIndex;
@@ -191,15 +193,15 @@ namespace FarseerPhysics.Dynamics.Joints
 			Vector2 vB = data.Velocities[_indexB].V;
 			float wB = data.Velocities[_indexB].W;
 
-			Rot qA = new Rot( aA ), qB = new Rot( aB );
+			Rot qA = new Rot(aA), qB = new Rot(aB);
 
-			_rA = MathUtils.Mul( qA, LocalAnchorA - _localCenterA );
-			_rB = MathUtils.Mul( qB, LocalAnchorB - _localCenterB );
+			_rA = MathUtils.Mul(qA, LocalAnchorA - _localCenterA);
+			_rB = MathUtils.Mul(qB, LocalAnchorB - _localCenterB);
 			_u = cB + _rB - cA - _rA;
 
 			// Handle singularity.
 			float length = _u.Length();
-			if( length > Settings.LinearSlop )
+			if (length > Settings.LinearSlop)
 			{
 				_u *= 1.0f / length;
 			}
@@ -208,14 +210,14 @@ namespace FarseerPhysics.Dynamics.Joints
 				_u = Vector2.Zero;
 			}
 
-			float crAu = MathUtils.Cross( _rA, _u );
-			float crBu = MathUtils.Cross( _rB, _u );
+			float crAu = MathUtils.Cross(_rA, _u);
+			float crBu = MathUtils.Cross(_rB, _u);
 			float invMass = _invMassA + _invIA * crAu * crAu + _invMassB + _invIB * crBu * crBu;
 
 			// Compute the effective mass matrix.
 			_mass = invMass != 0.0f ? 1.0f / invMass : 0.0f;
 
-			if( Frequency > 0.0f )
+			if (Frequency > 0.0f)
 			{
 				float C = length - this.Length;
 
@@ -230,7 +232,7 @@ namespace FarseerPhysics.Dynamics.Joints
 
 				// magic formulas
 				float h = data.Step.Dt;
-				_gamma = h * ( d + h * k );
+				_gamma = h * (d + h * k);
 				_gamma = _gamma != 0.0f ? 1.0f / _gamma : 0.0f;
 				_bias = C * h * k * _gamma;
 
@@ -243,16 +245,16 @@ namespace FarseerPhysics.Dynamics.Joints
 				_bias = 0.0f;
 			}
 
-			if( Settings.EnableWarmstarting )
+			if (Settings.EnableWarmstarting)
 			{
 				// Scale the impulse to support a variable time step.
 				_impulse *= data.Step.DtRatio;
 
 				Vector2 P = _impulse * _u;
 				vA -= _invMassA * P;
-				wA -= _invIA * MathUtils.Cross( _rA, P );
+				wA -= _invIA * MathUtils.Cross(_rA, P);
 				vB += _invMassB * P;
-				wB += _invIB * MathUtils.Cross( _rB, P );
+				wB += _invIB * MathUtils.Cross(_rB, P);
 			}
 			else
 			{
@@ -265,7 +267,7 @@ namespace FarseerPhysics.Dynamics.Joints
 			data.Velocities[_indexB].W = wB;
 		}
 
-		internal override void SolveVelocityConstraints( ref SolverData data )
+		internal override void SolveVelocityConstraints(ref SolverData data)
 		{
 			Vector2 vA = data.Velocities[_indexA].V;
 			float wA = data.Velocities[_indexA].W;
@@ -273,29 +275,28 @@ namespace FarseerPhysics.Dynamics.Joints
 			float wB = data.Velocities[_indexB].W;
 
 			// Cdot = dot(u, v + cross(w, r))
-			Vector2 vpA = vA + MathUtils.Cross( wA, _rA );
-			Vector2 vpB = vB + MathUtils.Cross( wB, _rB );
-			float Cdot = Vector2.Dot( _u, vpB - vpA );
+			Vector2 vpA = vA + MathUtils.Cross(wA, _rA);
+			Vector2 vpB = vB + MathUtils.Cross(wB, _rB);
+			float Cdot = Vector2.Dot(_u, vpB - vpA);
 
-			float impulse = -_mass * ( Cdot + _bias + _gamma * _impulse );
+			float impulse = -_mass * (Cdot + _bias + _gamma * _impulse);
 			_impulse += impulse;
 
 			Vector2 P = impulse * _u;
 			vA -= _invMassA * P;
-			wA -= _invIA * MathUtils.Cross( _rA, P );
+			wA -= _invIA * MathUtils.Cross(_rA, P);
 			vB += _invMassB * P;
-			wB += _invIB * MathUtils.Cross( _rB, P );
+			wB += _invIB * MathUtils.Cross(_rB, P);
 
 			data.Velocities[_indexA].V = vA;
 			data.Velocities[_indexA].W = wA;
 			data.Velocities[_indexB].V = vB;
 			data.Velocities[_indexB].W = wB;
-
 		}
 
-		internal override bool SolvePositionConstraints( ref SolverData data )
+		internal override bool SolvePositionConstraints(ref SolverData data)
 		{
-			if( Frequency > 0.0f )
+			if (Frequency > 0.0f)
 			{
 				// There is no position correction for soft distance constraints.
 				return true;
@@ -306,32 +307,31 @@ namespace FarseerPhysics.Dynamics.Joints
 			var cB = data.Positions[_indexB].C;
 			var aB = data.Positions[_indexB].A;
 
-			Rot qA = new Rot( aA ), qB = new Rot( aB );
+			Rot qA = new Rot(aA), qB = new Rot(aB);
 
-			var rA = MathUtils.Mul( qA, LocalAnchorA - _localCenterA );
-			var rB = MathUtils.Mul( qB, LocalAnchorB - _localCenterB );
+			var rA = MathUtils.Mul(qA, LocalAnchorA - _localCenterA);
+			var rB = MathUtils.Mul(qB, LocalAnchorB - _localCenterB);
 			var u = cB + rB - cA - rA;
 
 			var length = u.Length();
-			Nez.Vector2Ext.Normalize( ref u );
+			Nez.Vector2Ext.Normalize(ref u);
 			var C = length - this.Length;
-			C = MathUtils.Clamp( C, -Settings.MaxLinearCorrection, Settings.MaxLinearCorrection );
+			C = MathUtils.Clamp(C, -Settings.MaxLinearCorrection, Settings.MaxLinearCorrection);
 
 			var impulse = -_mass * C;
 			var P = impulse * u;
 
 			cA -= _invMassA * P;
-			aA -= _invIA * MathUtils.Cross( rA, P );
+			aA -= _invIA * MathUtils.Cross(rA, P);
 			cB += _invMassB * P;
-			aB += _invIB * MathUtils.Cross( rB, P );
+			aB += _invIB * MathUtils.Cross(rB, P);
 
 			data.Positions[_indexA].C = cA;
 			data.Positions[_indexA].A = aA;
 			data.Positions[_indexB].C = cB;
 			data.Positions[_indexB].A = aB;
 
-			return Math.Abs( C ) < Settings.LinearSlop;
+			return Math.Abs(C) < Settings.LinearSlop;
 		}
-	
 	}
 }

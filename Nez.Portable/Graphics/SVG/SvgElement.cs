@@ -10,49 +10,48 @@ namespace Nez.Svg
 	/// </summary>
 	public abstract class SvgElement
 	{
-		[XmlAttribute( "id" )]
-		public string Id;
+		[XmlAttribute("id")] public string Id;
 
-		[XmlAttribute( "stroke" )]
+		[XmlAttribute("stroke")]
 		public string StrokeAttribute
 		{
 			get { return null; }
 			set
 			{
-				if( value.StartsWith( "#" ) )
-					StrokeColor = ColorExt.HexToColor( value.Substring( 1 ) );
+				if (value.StartsWith("#"))
+					StrokeColor = ColorExt.HexToColor(value.Substring(1));
 			}
 		}
 
 		public Color StrokeColor = Color.Red;
 
-		[XmlAttribute( "fill" )]
+		[XmlAttribute("fill")]
 		public string FillAttribute
 		{
 			get { return null; }
 			set
 			{
-				if( value.StartsWith( "#" ) )
-					FillColor = ColorExt.HexToColor( value.Substring( 1 ) );
+				if (value.StartsWith("#"))
+					FillColor = ColorExt.HexToColor(value.Substring(1));
 			}
 		}
 
 		public Color FillColor;
 
-		[XmlAttribute( "stroke-width" )]
+		[XmlAttribute("stroke-width")]
 		public string StrokeWidthAttribute
 		{
 			get { return null; }
-			set { float.TryParse( value, out StrokeWidth ); }
+			set { float.TryParse(value, out StrokeWidth); }
 		}
 
 		public float StrokeWidth = 1;
 
-		[XmlAttribute( "transform" )]
+		[XmlAttribute("transform")]
 		public string TransformAttribute
 		{
 			get { return null; }
-			set { _transforms = SvgTransformConverter.ParseTransforms( value ); }
+			set { _transforms = SvgTransformConverter.ParseTransforms(value); }
 		}
 
 		protected List<SvgTransform> _transforms;
@@ -61,10 +60,10 @@ namespace Nez.Svg
 		public Matrix2D GetCombinedMatrix()
 		{
 			var m = Matrix2D.Identity;
-			if( _transforms != null && _transforms.Count > 0 )
+			if (_transforms != null && _transforms.Count > 0)
 			{
-				foreach( var trans in _transforms )
-					m = Matrix2D.Multiply( m, trans.Matrix );
+				foreach (var trans in _transforms)
+					m = Matrix2D.Multiply(m, trans.Matrix);
 			}
 
 			return m;
@@ -78,18 +77,17 @@ namespace Nez.Svg
 		{
 			get
 			{
-				if( _transforms == null )
+				if (_transforms == null)
 					return 0;
 
-				for( var i = 0; i < _transforms.Count; i++ )
+				for (var i = 0; i < _transforms.Count; i++)
 				{
-					if( _transforms[i] is SvgRotate )
-						return ( _transforms[i] as SvgRotate ).Angle;
+					if (_transforms[i] is SvgRotate)
+						return (_transforms[i] as SvgRotate).Angle;
 				}
 
 				return 0;
 			}
 		}
-
 	}
 }

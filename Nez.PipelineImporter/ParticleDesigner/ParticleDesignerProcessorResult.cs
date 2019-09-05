@@ -13,7 +13,7 @@ namespace Nez.ParticleDesignerImporter
 
 
 		public ParticleDesignerProcessorResult()
-		{}
+		{
+		}
 	}
 }
-

@@ -6,6 +6,7 @@ using ImGuiNET;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+
 namespace Nez.ImGuiTools.TypeInspectors
 {
 	/// <summary>
@@ -78,53 +79,53 @@ namespace Nez.ImGuiTools.TypeInspectors
 				BlendFactor = tmpBlendState.BlendFactor,
 				MultiSampleMask = tmpBlendState.MultiSampleMask
 			};
-			SetValue( _blendState );
-			
+			SetValue(_blendState);
+
 			var props = GetType().GetRuntimeProperties();
 
 			AbstractTypeInspector inspector = new EnumInspector();
-			inspector.SetTarget( this, props.Where( p => p.Name == "AlphaBlendFunction" ).First() );
+			inspector.SetTarget(this, props.Where(p => p.Name == "AlphaBlendFunction").First());
 			inspector.Initialize();
-			_inspectors.Add( inspector );
+			_inspectors.Add(inspector);
 
 			inspector = new EnumInspector();
-			inspector.SetTarget( this, props.Where( p => p.Name == "AlphaDestinationBlend" ).First() );
+			inspector.SetTarget(this, props.Where(p => p.Name == "AlphaDestinationBlend").First());
 			inspector.Initialize();
-			_inspectors.Add( inspector );
+			_inspectors.Add(inspector);
 
 			inspector = new EnumInspector();
-			inspector.SetTarget( this, props.Where( p => p.Name == "AlphaSourceBlend" ).First() );
+			inspector.SetTarget(this, props.Where(p => p.Name == "AlphaSourceBlend").First());
 			inspector.Initialize();
-			_inspectors.Add( inspector );
+			_inspectors.Add(inspector);
 
 			inspector = new EnumInspector();
-			inspector.SetTarget( this, props.Where( p => p.Name == "ColorBlendFunction" ).First() );
+			inspector.SetTarget(this, props.Where(p => p.Name == "ColorBlendFunction").First());
 			inspector.Initialize();
-			_inspectors.Add( inspector );
+			_inspectors.Add(inspector);
 
 			inspector = new EnumInspector();
-			inspector.SetTarget( this, props.Where( p => p.Name == "ColorDestinationBlend" ).First() );
+			inspector.SetTarget(this, props.Where(p => p.Name == "ColorDestinationBlend").First());
 			inspector.Initialize();
-			_inspectors.Add( inspector );
+			_inspectors.Add(inspector);
 
 			inspector = new EnumInspector();
-			inspector.SetTarget( this, props.Where( p => p.Name == "ColorSourceBlend" ).First() );
+			inspector.SetTarget(this, props.Where(p => p.Name == "ColorSourceBlend").First());
 			inspector.Initialize();
-			_inspectors.Add( inspector );
+			_inspectors.Add(inspector);
 
 			inspector = new SimpleTypeInspector();
-			inspector.SetTarget( this, props.Where( p => p.Name == "BlendFactor" ).First() );
+			inspector.SetTarget(this, props.Where(p => p.Name == "BlendFactor").First());
 			inspector.Initialize();
-			_inspectors.Add( inspector );
+			_inspectors.Add(inspector);
 		}
 
 		public override void DrawMutable()
 		{
-			if( ImGui.CollapsingHeader( _name ) )
+			if (ImGui.CollapsingHeader(_name))
 			{
 				// this is the amount of space the labels on the right require. The rest goes to the widgets
-				ImGui.PushItemWidth( -125 );
-				foreach( var i in _inspectors )
+				ImGui.PushItemWidth(-125);
+				foreach (var i in _inspectors)
 					i.Draw();
 				ImGui.PopItemWidth();
 			}

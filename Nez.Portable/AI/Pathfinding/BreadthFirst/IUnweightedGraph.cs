@@ -14,7 +14,6 @@ namespace Nez.AI.Pathfinding
 		/// </summary>
 		/// <returns>The neighbors.</returns>
 		/// <param name="node">Node.</param>
-		IEnumerable<T> GetNeighbors( T node );
+		IEnumerable<T> GetNeighbors(T node);
 	}
 }
-

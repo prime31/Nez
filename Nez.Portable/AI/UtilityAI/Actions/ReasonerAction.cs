@@ -11,18 +11,17 @@ namespace Nez.AI.UtilityAI
 		Reasoner<T> _reasoner;
 
 
-		public ReasonerAction( Reasoner<T> reasoner )
+		public ReasonerAction(Reasoner<T> reasoner)
 		{
 			_reasoner = reasoner;
 		}
 
 
-		void IAction<T>.Execute( T context )
+		void IAction<T>.Execute(T context)
 		{
-			var action = _reasoner.Select( context );
-			if( action != null )
-				action.Execute( context );
+			var action = _reasoner.Select(context);
+			if (action != null)
+				action.Execute(context);
 		}
 	}
 }
-

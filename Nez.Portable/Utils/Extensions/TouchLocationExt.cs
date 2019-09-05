@@ -6,9 +6,9 @@ namespace Nez
 {
 	public static class TouchLocationExt
 	{
-		public static Vector2 ScaledPosition( this TouchLocation touchLocation )
+		public static Vector2 ScaledPosition(this TouchLocation touchLocation)
 		{
-			return Input.ScaledPosition( touchLocation.Position );
+			return Input.ScaledPosition(touchLocation.Position);
 		}
 	}
 }

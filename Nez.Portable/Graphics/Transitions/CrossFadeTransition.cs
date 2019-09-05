@@ -27,24 +27,26 @@ namespace Nez
 		Color _color = Color.White;
 
 
-		public CrossFadeTransition( Func<Scene> sceneLoadAction ) : base( sceneLoadAction, true )
-		{}
+		public CrossFadeTransition(Func<Scene> sceneLoadAction) : base(sceneLoadAction, true)
+		{
+		}
 
-		public CrossFadeTransition() : this( null )
-		{}
+		public CrossFadeTransition() : this(null)
+		{
+		}
 
 		public override IEnumerator OnBeginTransition()
 		{
 			yield return null;
 
 			// load up the new Scene
-			yield return Core.StartCoroutine( LoadNextScene() );
+			yield return Core.StartCoroutine(LoadNextScene());
 
 			var elapsed = 0f;
-			while( elapsed < FadeDuration )
+			while (elapsed < FadeDuration)
 			{
 				elapsed += Time.DeltaTime;
-				_color = Lerps.Ease( FadeEaseType, ref _fromColor, ref _toColor, elapsed, FadeDuration );
+				_color = Lerps.Ease(FadeEaseType, ref _fromColor, ref _toColor, elapsed, FadeDuration);
 
 				yield return null;
 			}
@@ -52,13 +54,12 @@ namespace Nez
 			TransitionComplete();
 		}
 
-		public override void Render( Graphics graphics )
+		public override void Render(Graphics graphics)
 		{
-            GraphicsDeviceExt.SetRenderTarget(Core.GraphicsDevice, null);
-			graphics.Batcher.Begin( BlendState.NonPremultiplied, Core.DefaultSamplerState, DepthStencilState.None, null );
-			graphics.Batcher.Draw( PreviousSceneRender, Vector2.Zero, _color );
+			GraphicsDeviceExt.SetRenderTarget(Core.GraphicsDevice, null);
+			graphics.Batcher.Begin(BlendState.NonPremultiplied, Core.DefaultSamplerState, DepthStencilState.None, null);
+			graphics.Batcher.Draw(PreviousSceneRender, Vector2.Zero, _color);
 			graphics.Batcher.End();
 		}
 	}
 }
-

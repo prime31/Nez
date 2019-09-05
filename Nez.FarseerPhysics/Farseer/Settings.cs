@@ -165,14 +165,14 @@ namespace FarseerPhysics
 		/// A small angle used as a collision and constraint tolerance. Usually it is
 		/// chosen to be numerically significant, but visually insignificant.
 		/// </summary>
-		public const float AngularSlop = ( 2.0f / 180.0f * Pi );
+		public const float AngularSlop = (2.0f / 180.0f * Pi);
 
 		/// <summary>
 		/// The radius of the polygon/edge shape skin. This should not be modified. Making
 		/// this smaller means polygons will have an insufficient buffer for continuous collision.
 		/// Making it larger may create artifacts for vertex collision.
 		/// </summary>
-		public const float PolygonRadius = ( 2.0f * LinearSlop );
+		public const float PolygonRadius = (2.0f * LinearSlop);
 
 		// Dynamics
 
@@ -197,7 +197,7 @@ namespace FarseerPhysics
 		/// The maximum angular position correction used when solving constraints. This helps to
 		/// prevent overshoot.
 		/// </summary>
-		public const float MaxAngularCorrection = ( 8.0f / 180.0f * Pi );
+		public const float MaxAngularCorrection = (8.0f / 180.0f * Pi);
 
 		/// <summary>
 		/// This scale factor controls how fast overlap is resolved. Ideally this would be 1 so
@@ -220,7 +220,7 @@ namespace FarseerPhysics
 		/// <summary>
 		/// A body cannot sleep if its angular velocity is above this tolerance.
 		/// </summary>
-		public const float AngularSleepTolerance = ( 2.0f / 180.0f * Pi );
+		public const float AngularSleepTolerance = (2.0f / 180.0f * Pi);
 
 		/// <summary>
 		/// The maximum linear velocity of a body. This limit is very large and is used
@@ -228,15 +228,15 @@ namespace FarseerPhysics
 		/// </summary>
 		public const float MaxTranslation = 2.0f;
 
-		public const float MaxTranslationSquared = ( MaxTranslation * MaxTranslation );
+		public const float MaxTranslationSquared = (MaxTranslation * MaxTranslation);
 
 		/// <summary>
 		/// The maximum angular velocity of a body. This limit is very large and is used
 		/// to prevent numerical problems. You shouldn't need to adjust this.
 		/// </summary>
-		public const float MaxRotation = ( 0.5f * Pi );
+		public const float MaxRotation = (0.5f * Pi);
 
-		public const float MaxRotationSquared = ( MaxRotation * MaxRotation );
+		public const float MaxRotationSquared = (MaxRotation * MaxRotation);
 
 		/// <summary>
 		/// Defines the maximum number of iterations made by the GJK algorithm.
@@ -264,9 +264,9 @@ namespace FarseerPhysics
 		/// <param name="friction1">The friction1.</param>
 		/// <param name="friction2">The friction2.</param>
 		/// <returns></returns>
-		public static float MixFriction( float friction1, float friction2 )
+		public static float MixFriction(float friction1, float friction2)
 		{
-			return (float)Math.Sqrt( friction1 * friction2 );
+			return (float) Math.Sqrt(friction1 * friction2);
 		}
 
 		/// <summary>
@@ -275,10 +275,9 @@ namespace FarseerPhysics
 		/// <param name="restitution1">The restitution1.</param>
 		/// <param name="restitution2">The restitution2.</param>
 		/// <returns></returns>
-		public static float MixRestitution( float restitution1, float restitution2 )
+		public static float MixRestitution(float restitution1, float restitution2)
 		{
 			return restitution1 > restitution2 ? restitution1 : restitution2;
 		}
-	
 	}
 }

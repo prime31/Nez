@@ -1,5 +1,3 @@
-
-
 namespace Nez.Verlet
 {
 	public abstract class Constraint
@@ -23,15 +21,16 @@ namespace Nez.Verlet
 		/// <summary>
 		/// if collidesWithColliders is true this will be called
 		/// </summary>
-		public virtual void HandleCollisions( int collidesWithLayers )
-		{}
+		public virtual void HandleCollisions(int collidesWithLayers)
+		{
+		}
 
 		/// <summary>
 		/// debug renders the Constraint
 		/// </summary>
 		/// <param name="batcher">Batcher.</param>
-		public virtual void DebugRender( Batcher batcher )
-		{}
-
+		public virtual void DebugRender(Batcher batcher)
+		{
+		}
 	}
 }

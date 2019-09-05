@@ -22,16 +22,17 @@ namespace Nez
 		RenderTargetBinding[] _renderTargetBinding = new RenderTargetBinding[1];
 
 
-		public WaterReflectionMaterial() : base( new WaterReflectionEffect() )
-		{}
-
-		public override void OnPreRender( Camera camera )
+		public WaterReflectionMaterial() : base(new WaterReflectionEffect())
 		{
-			Core.GraphicsDevice.GetRenderTargets( _renderTargetBinding );
+		}
+
+		public override void OnPreRender(Camera camera)
+		{
+			Core.GraphicsDevice.GetRenderTargets(_renderTargetBinding);
 			var boundRenderTarget = _renderTargetBinding[0].RenderTarget as RenderTarget2D;
 
 			// only update the Shader when the renderTarget changes. it will be swapped out whenever the GraphicsDevice resets.
-			if( _renderTarget == null || _renderTarget != boundRenderTarget )
+			if (_renderTarget == null || _renderTarget != boundRenderTarget)
 			{
 				_renderTarget = boundRenderTarget;
 				Effect.RenderTexture = boundRenderTarget;
@@ -41,4 +42,3 @@ namespace Nez
 		}
 	}
 }
-

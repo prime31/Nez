@@ -7,30 +7,28 @@ namespace Nez.PipelineImporter
 {
 	public static class PixelBitmapContentExt
 	{
-		public static Color[] GetData( this PixelBitmapContent<Color> self )
+		public static Color[] GetData(this PixelBitmapContent<Color> self)
 		{
 			var data = new Color[self.Width * self.Height];
 			var i = 0;
-			for( var y = 0; y < self.Height; y++ )
+			for (var y = 0; y < self.Height; y++)
 			{
-				for( var x = 0; x < self.Width; x++ )
-					data[i++] = self.GetPixel( x, y );
+				for (var x = 0; x < self.Width; x++)
+					data[i++] = self.GetPixel(x, y);
 			}
 
 			return data;
 		}
 
 
-		public static void SetData( this PixelBitmapContent<Color> self, Color[] data )
+		public static void SetData(this PixelBitmapContent<Color> self, Color[] data)
 		{
 			var i = 0;
-			for( var y = 0; y < self.Height; y++ )
+			for (var y = 0; y < self.Height; y++)
 			{
-				for( var x = 0; x < self.Width; x++ )
-					self.SetPixel( x, y, data[i++] );
+				for (var x = 0; x < self.Width; x++)
+					self.SetPixel(x, y, data[i++]);
 			}
 		}
-
 	}
 }
-

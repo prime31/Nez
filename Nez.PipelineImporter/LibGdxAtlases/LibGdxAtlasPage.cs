@@ -16,7 +16,8 @@ namespace Nez.LibGdxAtlases
 		public bool VWrap;
 
 
-		public LibGdxAtlasPage( string textureFile, float width, float height, bool useMipMaps, string format, string minFilter, string magFilter, bool uWrap, bool vWrap )
+		public LibGdxAtlasPage(string textureFile, float width, float height, bool useMipMaps, string format,
+		                       string minFilter, string magFilter, bool uWrap, bool vWrap)
 		{
 			this.TextureFile = textureFile;
 			this.Width = width;
@@ -30,4 +31,3 @@ namespace Nez.LibGdxAtlases
 		}
 	}
 }
-

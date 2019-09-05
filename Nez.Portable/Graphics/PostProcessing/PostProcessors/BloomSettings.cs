@@ -29,7 +29,8 @@ namespace Nez
 		/// <summary>
 		/// Constructs a new bloom settings descriptor.
 		/// </summary>
-		public BloomSettings( float bloomThreshold, float blurAmount, float bloomIntensity, float baseIntensity, float bloomSaturation, float baseSaturation )
+		public BloomSettings(float bloomThreshold, float blurAmount, float bloomIntensity, float baseIntensity,
+		                     float bloomSaturation, float baseSaturation)
 		{
 			Threshold = bloomThreshold;
 			this.BlurAmount = blurAmount;
@@ -42,14 +43,15 @@ namespace Nez
 		/// <summary>
 		/// Table of preset bloom settings. Note that BaseSat needs to be near 0 if the final render needs transparency!
 		/// </summary>
-		public static BloomSettings[] PresetSettings = {
-            //                Thresh  Blur Bloom  Base  BloomSat BaseSat
-			new BloomSettings( 0.1f,  0.6f,  2f,    1f,  1,    0 ), // Default
-			new BloomSettings( 0,      3,   1,     1,    1,    1 ), // Soft
-			new BloomSettings( 0.5f,   8,   2,     1,    0,    1 ), // Desaturated
-			new BloomSettings( 0.25f,  8,   1.3f,  1,    1,    0 ), // Saturated
-			new BloomSettings( 0,      2,   1,     0.1f, 1,    1 ), // Blurry
-			new BloomSettings( 0.5f,   2,   1,     1,    1,    1 ), // Subtle
-        };
-    }
+		public static BloomSettings[] PresetSettings =
+		{
+			//                Thresh  Blur Bloom  Base  BloomSat BaseSat
+			new BloomSettings(0.1f, 0.6f, 2f, 1f, 1, 0), // Default
+			new BloomSettings(0, 3, 1, 1, 1, 1), // Soft
+			new BloomSettings(0.5f, 8, 2, 1, 0, 1), // Desaturated
+			new BloomSettings(0.25f, 8, 1.3f, 1, 1, 0), // Saturated
+			new BloomSettings(0, 2, 1, 0.1f, 1, 1), // Blurry
+			new BloomSettings(0.5f, 2, 1, 1, 1, 1), // Subtle
+		};
+	}
 }

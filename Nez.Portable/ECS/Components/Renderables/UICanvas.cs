@@ -10,9 +10,15 @@ namespace Nez
 	/// </summary>
 	public class UICanvas : RenderableComponent, IUpdatable
 	{
-		public override float Width { get { return Stage.GetWidth(); } }
+		public override float Width
+		{
+			get { return Stage.GetWidth(); }
+		}
 
-		public override float Height { get { return Stage.GetHeight(); } }
+		public override float Height
+		{
+			get { return Stage.GetHeight(); }
+		}
 
 		public Stage Stage;
 
@@ -37,10 +43,10 @@ namespace Nez
 		{
 			Stage.Entity = Entity;
 
-			foreach( var child in Stage.GetRoot().children )
+			foreach (var child in Stage.GetRoot().children)
 			{
-				if( child is Window )
-					( child as Window ).KeepWithinStage();
+				if (child is Window)
+					(child as Window).KeepWithinStage();
 			}
 		}
 
@@ -58,15 +64,15 @@ namespace Nez
 		}
 
 
-		public override void Render( Graphics graphics, Camera camera )
+		public override void Render(Graphics graphics, Camera camera)
 		{
-			Stage.Render( graphics, camera );
+			Stage.Render(graphics, camera);
 		}
 
 
-		public override void DebugRender( Graphics graphics )
+		public override void DebugRender(Graphics graphics)
 		{
-			Stage.GetRoot().DebugRender( graphics );
+			Stage.GetRoot().DebugRender(graphics);
 		}
 
 
@@ -77,25 +83,24 @@ namespace Nez
 		/// <param name="title">Title.</param>
 		/// <param name="messageText">Message text.</param>
 		/// <param name="closeButtonText">Close button text.</param>
-		public Dialog ShowDialog( string title, string messageText, string closeButtonText )
+		public Dialog ShowDialog(string title, string messageText, string closeButtonText)
 		{
 			var skin = Skin.CreateDefaultSkin();
 
 			var style = new WindowStyle
 			{
-				Background = new PrimitiveDrawable( new Color( 50, 50, 50 ) ),
-				StageBackground = new PrimitiveDrawable( new Color( 0, 0, 0, 150 ) )
+				Background = new PrimitiveDrawable(new Color(50, 50, 50)),
+				StageBackground = new PrimitiveDrawable(new Color(0, 0, 0, 150))
 			};
 
-			var dialog = new Dialog( title, style );
-			dialog.GetTitleLabel().GetStyle().Background = new PrimitiveDrawable( new Color( 55, 100, 100 ) );
-			dialog.Pad( 20, 5, 5, 5 );
-			dialog.AddText( messageText );
-			dialog.AddButton( new TextButton( closeButtonText, skin ) ).OnClicked += butt => dialog.Hide();
-			dialog.Show( Stage );
+			var dialog = new Dialog(title, style);
+			dialog.GetTitleLabel().GetStyle().Background = new PrimitiveDrawable(new Color(55, 100, 100));
+			dialog.Pad(20, 5, 5, 5);
+			dialog.AddText(messageText);
+			dialog.AddButton(new TextButton(closeButtonText, skin)).OnClicked += butt => dialog.Hide();
+			dialog.Show(Stage);
 
 			return dialog;
 		}
 	}
 }
-

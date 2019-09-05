@@ -15,13 +15,13 @@ namespace FarseerPhysics.Dynamics.Joints
 		public override Vector2 WorldAnchorA
 		{
 			get { return BodyA.Position; }
-			set { Debug.Assert( false, "You can't set the world anchor on this joint type." ); }
+			set { Debug.Assert(false, "You can't set the world anchor on this joint type."); }
 		}
 
 		public override Vector2 WorldAnchorB
 		{
 			get { return BodyB.Position; }
-			set { Debug.Assert( false, "You can't set the world anchor on this joint type." ); }
+			set { Debug.Assert(false, "You can't set the world anchor on this joint type."); }
 		}
 
 		/// <summary>
@@ -32,7 +32,7 @@ namespace FarseerPhysics.Dynamics.Joints
 			get { return _targetAngle; }
 			set
 			{
-				if( value != _targetAngle )
+				if (value != _targetAngle)
 				{
 					_targetAngle = value;
 					WakeBodies();
@@ -76,24 +76,24 @@ namespace FarseerPhysics.Dynamics.Joints
 		/// </summary>
 		/// <param name="bodyA">The first body</param>
 		/// <param name="bodyB">The second body</param>
-		public AngleJoint( Body bodyA, Body bodyB ) : base( bodyA, bodyB )
+		public AngleJoint(Body bodyA, Body bodyB) : base(bodyA, bodyB)
 		{
 			JointType = JointType.Angle;
 		}
 
-		public override Vector2 GetReactionForce( float invDt )
+		public override Vector2 GetReactionForce(float invDt)
 		{
 			//TODO
 			//return _inv_dt * _impulse;
 			return Vector2.Zero;
 		}
 
-		public override float GetReactionTorque( float invDt )
+		public override float GetReactionTorque(float invDt)
 		{
 			return 0;
 		}
 
-		internal override void InitVelocityConstraints( ref SolverData data )
+		internal override void InitVelocityConstraints(ref SolverData data)
 		{
 			int indexA = BodyA.IslandIndex;
 			int indexB = BodyB.IslandIndex;
@@ -101,30 +101,29 @@ namespace FarseerPhysics.Dynamics.Joints
 			float aW = data.Positions[indexA].A;
 			float bW = data.Positions[indexB].A;
 
-			_jointError = ( bW - aW - TargetAngle );
+			_jointError = (bW - aW - TargetAngle);
 			_bias = -BiasFactor * data.Step.Inv_dt * _jointError;
-			_massFactor = ( 1 - Softness ) / ( BodyA._invI + BodyB._invI );
+			_massFactor = (1 - Softness) / (BodyA._invI + BodyB._invI);
 
-			if( float.IsInfinity( _massFactor ) )
+			if (float.IsInfinity(_massFactor))
 				_massFactor = float.MaxValue;
 		}
 
-		internal override void SolveVelocityConstraints( ref SolverData data )
+		internal override void SolveVelocityConstraints(ref SolverData data)
 		{
 			int indexA = BodyA.IslandIndex;
 			int indexB = BodyB.IslandIndex;
 
-			var p = ( _bias - data.Velocities[indexB].W + data.Velocities[indexA].W ) * _massFactor;
+			var p = (_bias - data.Velocities[indexB].W + data.Velocities[indexA].W) * _massFactor;
 
-			data.Velocities[indexA].W -= BodyA._invI * Math.Sign( p ) * Math.Min( Math.Abs( p ), MaxImpulse );
-			data.Velocities[indexB].W += BodyB._invI * Math.Sign( p ) * Math.Min( Math.Abs( p ), MaxImpulse );
+			data.Velocities[indexA].W -= BodyA._invI * Math.Sign(p) * Math.Min(Math.Abs(p), MaxImpulse);
+			data.Velocities[indexB].W += BodyB._invI * Math.Sign(p) * Math.Min(Math.Abs(p), MaxImpulse);
 		}
 
-		internal override bool SolvePositionConstraints( ref SolverData data )
+		internal override bool SolvePositionConstraints(ref SolverData data)
 		{
 			// no position solving for this joint
 			return true;
 		}
-	
 	}
 }

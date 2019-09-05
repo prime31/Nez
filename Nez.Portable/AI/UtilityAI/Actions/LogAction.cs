@@ -11,17 +11,15 @@ namespace Nez.AI.UtilityAI
 		string _text;
 
 
-		public LogAction( string text )
+		public LogAction(string text)
 		{
 			_text = text;
 		}
 
 
-		void IAction<T>.Execute( T context )
+		void IAction<T>.Execute(T context)
 		{
-			Debug.Log( _text );
+			Debug.Log(_text);
 		}
-
 	}
 }
-

@@ -29,18 +29,18 @@ namespace Nez.Timers
 
 		public T GetContext<T>()
 		{
-			return (T)Context;
+			return (T) Context;
 		}
 
 		internal bool Tick()
 		{
 			// if stop was called before the tick then isDone will be true and we should not tick again no matter what
-			if( !_isDone && _elapsedTime > _timeInSeconds )
+			if (!_isDone && _elapsedTime > _timeInSeconds)
 			{
 				_elapsedTime -= _timeInSeconds;
-				_onTime( this );
+				_onTime(this);
 
-				if( !_isDone && !_repeats )
+				if (!_isDone && !_repeats)
 					_isDone = true;
 			}
 
@@ -49,7 +49,7 @@ namespace Nez.Timers
 			return _isDone;
 		}
 
-		internal void Initialize( float timeInSeconds, bool repeats, object context, Action<ITimer> onTime )
+		internal void Initialize(float timeInSeconds, bool repeats, object context, Action<ITimer> onTime)
 		{
 			_timeInSeconds = timeInSeconds;
 			_repeats = repeats;
@@ -65,7 +65,5 @@ namespace Nez.Timers
 			Context = null;
 			_onTime = null;
 		}
-
 	}
 }
-

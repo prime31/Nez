@@ -14,7 +14,7 @@ namespace Nez.BitmapFontImporter
 		public bool PackTexturesIntoXnb;
 
 
-		public BitmapFontProcessorResult( BitmapFontFile fontFile )
+		public BitmapFontProcessorResult(BitmapFontFile fontFile)
 		{
 			this.FontFile = fontFile;
 		}

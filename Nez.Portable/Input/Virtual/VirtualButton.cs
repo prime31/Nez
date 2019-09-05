@@ -22,40 +22,42 @@ namespace Nez
 		bool _willRepeat;
 
 
-		public VirtualButton( float bufferTime )
+		public VirtualButton(float bufferTime)
 		{
 			Nodes = new List<Node>();
 			this.BufferTime = bufferTime;
 		}
 
 
-		public VirtualButton() : this( 0 )
-		{ }
-
-
-		public VirtualButton( float bufferTime, params Node[] nodes )
+		public VirtualButton() : this(0)
 		{
-			this.Nodes = new List<Node>( nodes );
+		}
+
+
+		public VirtualButton(float bufferTime, params Node[] nodes)
+		{
+			this.Nodes = new List<Node>(nodes);
 			this.BufferTime = bufferTime;
 		}
 
 
-		public VirtualButton( params Node[] nodes ) : this( 0, nodes )
-		{ }
-
-
-		public void SetRepeat( float repeatTime )
+		public VirtualButton(params Node[] nodes) : this(0, nodes)
 		{
-			SetRepeat( repeatTime, repeatTime );
 		}
 
 
-		public void SetRepeat( float firstRepeatTime, float multiRepeatTime )
+		public void SetRepeat(float repeatTime)
+		{
+			SetRepeat(repeatTime, repeatTime);
+		}
+
+
+		public void SetRepeat(float firstRepeatTime, float multiRepeatTime)
 		{
 			this.FirstRepeatTime = firstRepeatTime;
 			this.MultiRepeatTime = multiRepeatTime;
 			_willRepeat = firstRepeatTime > 0;
-			if( !_willRepeat )
+			if (!_willRepeat)
 				IsRepeating = false;
 		}
 
@@ -66,35 +68,35 @@ namespace Nez
 			IsRepeating = false;
 
 			var check = false;
-			for( var i = 0; i < Nodes.Count; i++ )
+			for (var i = 0; i < Nodes.Count; i++)
 			{
 				Nodes[i].Update();
-				if( Nodes[i].IsPressed )
+				if (Nodes[i].IsPressed)
 				{
 					_bufferCounter = BufferTime;
 					check = true;
 				}
-				else if( Nodes[i].IsDown )
+				else if (Nodes[i].IsDown)
 				{
 					check = true;
 				}
 			}
 
-			if( !check )
+			if (!check)
 			{
 				_repeatCounter = 0;
 				_bufferCounter = 0;
 			}
-			else if( _willRepeat )
+			else if (_willRepeat)
 			{
-				if( _repeatCounter == 0 )
+				if (_repeatCounter == 0)
 				{
 					_repeatCounter = FirstRepeatTime;
 				}
 				else
 				{
 					_repeatCounter -= Time.UnscaledDeltaTime;
-					if( _repeatCounter <= 0 )
+					if (_repeatCounter <= 0)
 					{
 						IsRepeating = true;
 						_repeatCounter = MultiRepeatTime;
@@ -108,9 +110,10 @@ namespace Nez
 		{
 			get
 			{
-				foreach( var node in Nodes )
-					if( node.IsDown )
+				foreach (var node in Nodes)
+					if (node.IsDown)
 						return true;
+
 				return false;
 			}
 		}
@@ -120,12 +123,13 @@ namespace Nez
 		{
 			get
 			{
-				if( _bufferCounter > 0 || IsRepeating )
+				if (_bufferCounter > 0 || IsRepeating)
 					return true;
 
-				foreach( var node in Nodes )
-					if( node.IsPressed )
+				foreach (var node in Nodes)
+					if (node.IsPressed)
 						return true;
+
 				return false;
 			}
 		}
@@ -135,9 +139,10 @@ namespace Nez
 		{
 			get
 			{
-				foreach( var node in Nodes )
-					if( node.IsReleased )
+				foreach (var node in Nodes)
+					if (node.IsReleased)
 						return true;
+
 				return false;
 			}
 		}
@@ -156,9 +161,9 @@ namespace Nez
 		/// </summary>
 		/// <returns>The keyboard key.</returns>
 		/// <param name="key">Key.</param>
-		public VirtualButton AddKeyboardKey( Keys key )
+		public VirtualButton AddKeyboardKey(Keys key)
 		{
-			Nodes.Add( new KeyboardKey( key ) );
+			Nodes.Add(new KeyboardKey(key));
 			return this;
 		}
 
@@ -169,9 +174,9 @@ namespace Nez
 		/// <returns>The keyboard key.</returns>
 		/// <param name="key">Key.</param>
 		/// <param name="modifier">Modifier.</param>
-		public VirtualButton AddKeyboardKey( Keys key, Keys modifier )
+		public VirtualButton AddKeyboardKey(Keys key, Keys modifier)
 		{
-			Nodes.Add( new KeyboardModifiedKey( key, modifier ) );
+			Nodes.Add(new KeyboardModifiedKey(key, modifier));
 			return this;
 		}
 
@@ -182,9 +187,9 @@ namespace Nez
 		/// <returns>The game pad button.</returns>
 		/// <param name="gamepadIndex">Gamepad index.</param>
 		/// <param name="button">Button.</param>
-		public VirtualButton AddGamePadButton( int gamepadIndex, Buttons button )
+		public VirtualButton AddGamePadButton(int gamepadIndex, Buttons button)
 		{
-			Nodes.Add( new GamePadButton( gamepadIndex, button ) );
+			Nodes.Add(new GamePadButton(gamepadIndex, button));
 			return this;
 		}
 
@@ -195,9 +200,9 @@ namespace Nez
 		/// <returns>The game pad left trigger.</returns>
 		/// <param name="gamepadIndex">Gamepad index.</param>
 		/// <param name="threshold">Threshold.</param>
-		public VirtualButton AddGamePadLeftTrigger( int gamepadIndex, float threshold )
+		public VirtualButton AddGamePadLeftTrigger(int gamepadIndex, float threshold)
 		{
-			Nodes.Add( new GamePadLeftTrigger( gamepadIndex, threshold ) );
+			Nodes.Add(new GamePadLeftTrigger(gamepadIndex, threshold));
 			return this;
 		}
 
@@ -208,9 +213,9 @@ namespace Nez
 		/// <returns>The game pad right trigger.</returns>
 		/// <param name="gamepadIndex">Gamepad index.</param>
 		/// <param name="threshold">Threshold.</param>
-		public VirtualButton AddGamePadRightTrigger( int gamepadIndex, float threshold )
+		public VirtualButton AddGamePadRightTrigger(int gamepadIndex, float threshold)
 		{
-			Nodes.Add( new GamePadRightTrigger( gamepadIndex, threshold ) );
+			Nodes.Add(new GamePadRightTrigger(gamepadIndex, threshold));
 			return this;
 		}
 
@@ -221,21 +226,21 @@ namespace Nez
 		/// <returns>The game pad DP ad.</returns>
 		/// <param name="gamepadIndex">Gamepad index.</param>
 		/// <param name="direction">Direction.</param>
-		public VirtualButton AddGamePadDPad( int gamepadIndex, Direction direction )
+		public VirtualButton AddGamePadDPad(int gamepadIndex, Direction direction)
 		{
-			switch( direction )
+			switch (direction)
 			{
 				case Direction.Up:
-					Nodes.Add( new GamePadDPadUp( gamepadIndex ) );
+					Nodes.Add(new GamePadDPadUp(gamepadIndex));
 					break;
 				case Direction.Down:
-					Nodes.Add( new GamePadDPadDown( gamepadIndex ) );
+					Nodes.Add(new GamePadDPadDown(gamepadIndex));
 					break;
 				case Direction.Left:
-					Nodes.Add( new GamePadDPadLeft( gamepadIndex ) );
+					Nodes.Add(new GamePadDPadLeft(gamepadIndex));
 					break;
 				case Direction.Right:
-					Nodes.Add( new GamePadDPadRight( gamepadIndex ) );
+					Nodes.Add(new GamePadDPadRight(gamepadIndex));
 					break;
 			}
 
@@ -249,7 +254,7 @@ namespace Nez
 		/// <returns>The mouse left button.</returns>
 		public VirtualButton AddMouseLeftButton()
 		{
-			Nodes.Add( new MouseLeftButton() );
+			Nodes.Add(new MouseLeftButton());
 			return this;
 		}
 
@@ -260,7 +265,7 @@ namespace Nez
 		/// <returns>The mouse right button.</returns>
 		public VirtualButton AddMouseRightButton()
 		{
-			Nodes.Add( new MouseRightButton() );
+			Nodes.Add(new MouseRightButton());
 			return this;
 		}
 
@@ -271,7 +276,7 @@ namespace Nez
 		/// <returns>The mouse right button.</returns>
 		public VirtualButton AddMouseMiddleButton()
 		{
-			Nodes.Add( new MouseMiddleButton() );
+			Nodes.Add(new MouseMiddleButton());
 			return this;
 		}
 
@@ -282,7 +287,7 @@ namespace Nez
 		/// <returns>The mouse right button.</returns>
 		public VirtualButton AddMouseFirstExtendedButton()
 		{
-			Nodes.Add( new MouseFirstExtendedButton() );
+			Nodes.Add(new MouseFirstExtendedButton());
 			return this;
 		}
 
@@ -293,14 +298,14 @@ namespace Nez
 		/// <returns>The mouse right button.</returns>
 		public VirtualButton AddMouseSecondExtendedButton()
 		{
-			Nodes.Add( new MouseSecondExtendedButton() );
+			Nodes.Add(new MouseSecondExtendedButton());
 			return this;
 		}
 
 		#endregion
 
 
-		static public implicit operator bool( VirtualButton button )
+		static public implicit operator bool(VirtualButton button)
 		{
 			return button.IsDown;
 		}
@@ -323,7 +328,7 @@ namespace Nez
 			public Keys Key;
 
 
-			public KeyboardKey( Keys key )
+			public KeyboardKey(Keys key)
 			{
 				this.Key = key;
 			}
@@ -331,19 +336,19 @@ namespace Nez
 
 			public override bool IsDown
 			{
-				get { return Input.IsKeyDown( Key ); }
+				get { return Input.IsKeyDown(Key); }
 			}
 
 
 			public override bool IsPressed
 			{
-				get { return Input.IsKeyPressed( Key ); }
+				get { return Input.IsKeyPressed(Key); }
 			}
 
 
 			public override bool IsReleased
 			{
-				get { return Input.IsKeyReleased( Key ); }
+				get { return Input.IsKeyReleased(Key); }
 			}
 		}
 
@@ -357,7 +362,7 @@ namespace Nez
 			public Keys Modifier;
 
 
-			public KeyboardModifiedKey( Keys key, Keys modifier )
+			public KeyboardModifiedKey(Keys key, Keys modifier)
 			{
 				this.Key = key;
 				this.Modifier = modifier;
@@ -366,19 +371,19 @@ namespace Nez
 
 			public override bool IsDown
 			{
-				get { return Input.IsKeyDown( Modifier ) && Input.IsKeyDown( Key ); }
+				get { return Input.IsKeyDown(Modifier) && Input.IsKeyDown(Key); }
 			}
 
 
 			public override bool IsPressed
 			{
-				get { return Input.IsKeyDown( Modifier ) && Input.IsKeyPressed( Key ); }
+				get { return Input.IsKeyDown(Modifier) && Input.IsKeyPressed(Key); }
 			}
 
 
 			public override bool IsReleased
 			{
-				get { return Input.IsKeyReleased( Key ); }
+				get { return Input.IsKeyReleased(Key); }
 			}
 		}
 
@@ -393,7 +398,7 @@ namespace Nez
 			public Buttons Button;
 
 
-			public GamePadButton( int gamepadIndex, Buttons button )
+			public GamePadButton(int gamepadIndex, Buttons button)
 			{
 				this.GamepadIndex = gamepadIndex;
 				this.Button = button;
@@ -402,19 +407,19 @@ namespace Nez
 
 			public override bool IsDown
 			{
-				get { return Input.GamePads[GamepadIndex].IsButtonDown( Button ); }
+				get { return Input.GamePads[GamepadIndex].IsButtonDown(Button); }
 			}
 
 
 			public override bool IsPressed
 			{
-				get { return Input.GamePads[GamepadIndex].IsButtonPressed( Button ); }
+				get { return Input.GamePads[GamepadIndex].IsButtonPressed(Button); }
 			}
 
 
 			public override bool IsReleased
 			{
-				get { return Input.GamePads[GamepadIndex].IsButtonReleased( Button ); }
+				get { return Input.GamePads[GamepadIndex].IsButtonReleased(Button); }
 			}
 		}
 
@@ -425,7 +430,7 @@ namespace Nez
 			public float Threshold;
 
 
-			public GamePadLeftTrigger( int gamepadIndex, float threshold )
+			public GamePadLeftTrigger(int gamepadIndex, float threshold)
 			{
 				this.GamepadIndex = gamepadIndex;
 				this.Threshold = threshold;
@@ -434,17 +439,17 @@ namespace Nez
 
 			public override bool IsDown
 			{
-				get { return Input.GamePads[GamepadIndex].IsLeftTriggerDown( Threshold ); }
+				get { return Input.GamePads[GamepadIndex].IsLeftTriggerDown(Threshold); }
 			}
 
 			public override bool IsPressed
 			{
-				get { return Input.GamePads[GamepadIndex].IsLeftTriggerPressed( Threshold ); }
+				get { return Input.GamePads[GamepadIndex].IsLeftTriggerPressed(Threshold); }
 			}
 
 			public override bool IsReleased
 			{
-				get { return Input.GamePads[GamepadIndex].IsLeftTriggerReleased( Threshold ); }
+				get { return Input.GamePads[GamepadIndex].IsLeftTriggerReleased(Threshold); }
 			}
 		}
 
@@ -455,7 +460,7 @@ namespace Nez
 			public float Threshold;
 
 
-			public GamePadRightTrigger( int gamepadIndex, float threshold )
+			public GamePadRightTrigger(int gamepadIndex, float threshold)
 			{
 				this.GamepadIndex = gamepadIndex;
 				this.Threshold = threshold;
@@ -464,17 +469,17 @@ namespace Nez
 
 			public override bool IsDown
 			{
-				get { return Input.GamePads[GamepadIndex].IsRightTriggerDown( Threshold ); }
+				get { return Input.GamePads[GamepadIndex].IsRightTriggerDown(Threshold); }
 			}
 
 			public override bool IsPressed
 			{
-				get { return Input.GamePads[GamepadIndex].IsRightTriggerPressed( Threshold ); }
+				get { return Input.GamePads[GamepadIndex].IsRightTriggerPressed(Threshold); }
 			}
 
 			public override bool IsReleased
 			{
-				get { return Input.GamePads[GamepadIndex].IsRightTriggerReleased( Threshold ); }
+				get { return Input.GamePads[GamepadIndex].IsRightTriggerReleased(Threshold); }
 			}
 		}
 
@@ -488,7 +493,7 @@ namespace Nez
 			public int GamepadIndex;
 
 
-			public GamePadDPadRight( int gamepadIndex )
+			public GamePadDPadRight(int gamepadIndex)
 			{
 				this.GamepadIndex = gamepadIndex;
 			}
@@ -516,7 +521,7 @@ namespace Nez
 			public int GamepadIndex;
 
 
-			public GamePadDPadLeft( int gamepadIndex )
+			public GamePadDPadLeft(int gamepadIndex)
 			{
 				this.GamepadIndex = gamepadIndex;
 			}
@@ -544,7 +549,7 @@ namespace Nez
 			public int GamepadIndex;
 
 
-			public GamePadDPadUp( int gamepadIndex )
+			public GamePadDPadUp(int gamepadIndex)
 			{
 				this.GamepadIndex = gamepadIndex;
 			}
@@ -572,7 +577,7 @@ namespace Nez
 			public int GamepadIndex;
 
 
-			public GamePadDPadDown( int gamepadIndex )
+			public GamePadDPadDown(int gamepadIndex)
 			{
 				this.GamepadIndex = gamepadIndex;
 			}
@@ -696,7 +701,5 @@ namespace Nez
 		#endregion
 
 		#endregion
-
 	}
 }
-

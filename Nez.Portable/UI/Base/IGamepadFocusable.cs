@@ -25,7 +25,8 @@ namespace Nez.UI
 		/// <param name="downEle">Down ele.</param>
 		/// <param name="leftEle">Left ele.</param>
 		/// <param name="rightEle">Right ele.</param>
-		void EnableExplicitFocusableControl( IGamepadFocusable upEle, IGamepadFocusable downEle, IGamepadFocusable leftEle, IGamepadFocusable rightEle );
+		void EnableExplicitFocusableControl(IGamepadFocusable upEle, IGamepadFocusable downEle,
+		                                    IGamepadFocusable leftEle, IGamepadFocusable rightEle);
 
 		/// <summary>
 		/// called only when the following conditions are met:
@@ -34,7 +35,7 @@ namespace Nez.UI
 		/// - a gamepad direction was pressed with a null gamepadDIRECTIONElement
 		/// </summary>
 		/// <param name="direction">Direction.</param>
-		void OnUnhandledDirectionPressed( Direction direction );
+		void OnUnhandledDirectionPressed(Direction direction);
 
 		/// <summary>
 		/// called when gamepad focuses on the Element
@@ -57,4 +58,3 @@ namespace Nez.UI
 		void OnActionButtonReleased();
 	}
 }
-

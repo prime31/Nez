@@ -10,8 +10,15 @@ namespace Nez
 	/// </summary>
 	public class GooCursor : RenderableComponent, IUpdatable
 	{
-		public override float Width { get { return _cursorTexture.Width; } }
-		public override float Height { get { return _cursorTexture.Height; } }
+		public override float Width
+		{
+			get { return _cursorTexture.Width; }
+		}
+
+		public override float Height
+		{
+			get { return _cursorTexture.Height; }
+		}
 
 		/// <summary>
 		/// Gets of Sets the stiffness of the trail A lower number means the trail will be longer
@@ -68,23 +75,24 @@ namespace Nez
 		TrailNode[] _trailNodes;
 
 
-		public GooCursor() : this( 50 )
-		{}
+		public GooCursor() : this(50)
+		{
+		}
 
-		public GooCursor( int trailNodeCount )
+		public GooCursor(int trailNodeCount)
 		{
 			_trailNodeCount = trailNodeCount;
 			_trailNodes = new TrailNode[_trailNodeCount];
 
 			// initialize all positions to the current mouse position to avoid jankiness
-			for( var i = 0; i < _trailNodeCount; i++ )
+			for (var i = 0; i < _trailNodeCount; i++)
 				_trailNodes[i].Position = Input.ScaledMousePosition;
 		}
 
 		public override void OnAddedToEntity()
 		{
-			_cursorTexture = Entity.Scene.Content.Load<Texture2D>( "nez/textures/gooCursor" );
-			_textureCenter = new Vector2( _cursorTexture.Width / 2, _cursorTexture.Height / 2 );
+			_cursorTexture = Entity.Scene.Content.Load<Texture2D>("nez/textures/gooCursor");
+			_textureCenter = new Vector2(_cursorTexture.Width / 2, _cursorTexture.Height / 2);
 		}
 
 		void IUpdatable.Update()
@@ -93,7 +101,7 @@ namespace Nez
 			_trailNodes[0].Position = Input.RawMousePosition.ToVector2();
 
 			// update the trails
-			for( var i = 1; i < _trailNodeCount; i++ )
+			for (var i = 1; i < _trailNodeCount; i++)
 			{
 				var node = _trailNodes[i];
 
@@ -111,7 +119,7 @@ namespace Nez
 			}
 		}
 
-		public override void Render( Graphics graphics, Camera camera )
+		public override void Render(Graphics graphics, Camera camera)
 		{
 			// First we draw all the trail nodes using the border color. we need to draw them slightly larger, so the border is left visible
 			// when we draw the actual nodes
@@ -121,28 +129,30 @@ namespace Nez
 			var borderEndScale = EndScale + BorderSize / _cursorTexture.Width;
 
 			// draw all nodes with the new scales
-			for( var i = 0; i < _trailNodeCount; i++ )
+			for (var i = 0; i < _trailNodeCount; i++)
 			{
 				var node = _trailNodes[i];
-				var lerpFactor = (float)i / (float)( _trailNodeCount - 1 );
-				lerpFactor = Mathf.Pow( lerpFactor, LerpExponent );
-				var scale = MathHelper.Lerp( borderStartScale, borderEndScale, lerpFactor );
+				var lerpFactor = (float) i / (float) (_trailNodeCount - 1);
+				lerpFactor = Mathf.Pow(lerpFactor, LerpExponent);
+				var scale = MathHelper.Lerp(borderStartScale, borderEndScale, lerpFactor);
 
 				// draw using the border Color
-				graphics.Batcher.Draw( _cursorTexture, node.Position, null, BorderColor, 0.0f, _textureCenter, scale, SpriteEffects.None, 0.0f );
+				graphics.Batcher.Draw(_cursorTexture, node.Position, null, BorderColor, 0.0f, _textureCenter, scale,
+					SpriteEffects.None, 0.0f);
 			}
 
 			// Next, we draw all the nodes normally, using the fill Color because before we drew them larger, after we draw them at
 			// their normal size, a border will remain visible.
-			for( var i = 0; i < _trailNodeCount; i++ )
+			for (var i = 0; i < _trailNodeCount; i++)
 			{
 				var node = _trailNodes[i];
-				var lerpFactor = (float)i / (float)( _trailNodeCount - 1 );
-				lerpFactor = Mathf.Pow( lerpFactor, LerpExponent );
-				var scale = MathHelper.Lerp( StartScale, EndScale, lerpFactor );
+				var lerpFactor = (float) i / (float) (_trailNodeCount - 1);
+				lerpFactor = Mathf.Pow(lerpFactor, LerpExponent);
+				var scale = MathHelper.Lerp(StartScale, EndScale, lerpFactor);
 
 				// draw using the fill color
-				graphics.Batcher.Draw( _cursorTexture, node.Position, null, FillColor, 0.0f, _textureCenter, scale, SpriteEffects.None, 0.0f );
+				graphics.Batcher.Draw(_cursorTexture, node.Position, null, FillColor, 0.0f, _textureCenter, scale,
+					SpriteEffects.None, 0.0f);
 			}
 		}
 
@@ -152,7 +162,5 @@ namespace Nez
 			public Vector2 Position;
 			public Vector2 Velocity;
 		}
-
 	}
 }
-
