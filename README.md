@@ -23,7 +23,7 @@ Nez aims to be a lightweight 2D framework that sits on top of MonoGame/FNA. It p
 - tween system. Tween any int/float/Vector/quaternion/color/rectangle field or property.
 - sprites with sprite animations, scrolling sprites, repeating sprites and sprite trails
 - flexible line renderer with configurable end caps including super smooth rounded edges or lightning bolt-like sharp edges
-- kick-ass particle system with added support for importing [Particle Designer](https://71squared.com/particledesigner) files
+- kick-ass particle system with added support for importing Particle Designer files
 - optimized event emitter for core events that you can also add to any class of your own
 - scheduler for delayed and repeating tasks (`Core.schedule` method)
 - per-scene content managers. Load your scene-specific content then forget about it. Nez will unload it for you when you change scenes.
@@ -80,6 +80,8 @@ Note: if you get compile errors referencing a missing `project.assets.json` file
 
 ### Install through NuGet:
 
+Note that NuGet packages are compiled release DLLs! They will not contain any debug code such as the DebugConsole or debug visualization classes!
+
 Add [Nez](https://www.nuget.org/packages/Nez/) and [Nez.PipelineImporter](https://www.nuget.org/packages/Nez.PipelineImporter/) to your project's NuGet packages.
 
 The latter will not add any references to your projects, installing it this way fetches the necessary `dll` files that your `Content.mgcb` needs to reference. Given the version of Nez that you installed, edit `Content.mgcb` so it looks like this:
@@ -102,8 +104,6 @@ The latter will not add any references to your projects, installing it this way 
 ```
 
 Installing through NuGet, the contents of the `DefaultContent` content folder are also included in the package. You will find them under `packages/Nez.{VERSION}/tools`.
-
-Note that NuGet packages are compiled release DLLs! They will not contain any debug code such as the DebugConsole or debug visualization classes!
 
 ---
 
