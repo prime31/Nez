@@ -250,16 +250,14 @@ namespace Nez
 
 		public static void DrawPixel(this Batcher batcher, Vector2 position, Color color, int size = 1)
 		{
-			var sourceRect = Graphics.Instance.PixelTexture.SourceRect;
-			if (size != 1)
+			var destRect = new Rectangle((int)position.X, (int)position.Y, size, size);
+            if (size != 1)
 			{
-				position.X -= size * 0.5f;
-				position.Y -= size * 0.5f;
-				sourceRect.Width *= size;
-				sourceRect.Height *= size;
+                destRect.X -= (int)(size * 0.5f);
+                destRect.Y -= (int)(size * 0.5f);
 			}
 
-			batcher.Draw(Graphics.Instance.PixelTexture, position, sourceRect, color);
+            batcher.Draw(Graphics.Instance.PixelTexture, destRect, Graphics.Instance.PixelTexture.SourceRect, color);
 		}
 
 		#endregion

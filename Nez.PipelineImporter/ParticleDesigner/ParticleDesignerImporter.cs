@@ -1,5 +1,4 @@
-﻿using System;
-using Microsoft.Xna.Framework.Content.Pipeline;
+﻿using Microsoft.Xna.Framework.Content.Pipeline;
 using System.IO;
 using System.Xml.Serialization;
 
@@ -19,7 +18,7 @@ namespace Nez.ParticleDesignerImporter
 				var deserializer = new XmlSerializer(typeof(ParticleDesignerEmitterConfig));
 				var emitterConfig = (ParticleDesignerEmitterConfig) deserializer.Deserialize(streamReader);
 
-				return new ParticleDesignerContent(context, emitterConfig, filename);
+                return new ParticleDesignerContent(context, emitterConfig, filename);
 			}
 		}
 	}

@@ -3,15 +3,12 @@ using Microsoft.Xna.Framework.Content.Pipeline;
 using Microsoft.Xna.Framework.Content.Pipeline.Graphics;
 using System.IO;
 using Ionic.Zlib;
-using System.Collections.Generic;
-using Microsoft.Xna.Framework.Graphics;
-using Nez.Particles;
 using Microsoft.Xna.Framework.Content.Pipeline.Processors;
 
 
 namespace Nez.ParticleDesignerImporter
 {
-	[ContentProcessor(DisplayName = "Particle Designer Processor")]
+    [ContentProcessor(DisplayName = "Particle Designer Processor")]
 	public class ParticleDesignerProcessor : ContentProcessor<ParticleDesignerContent, ParticleDesignerProcessorResult>
 	{
 		public static ContentBuildLogger Logger;
@@ -73,8 +70,12 @@ namespace Nez.ParticleDesignerImporter
 			}
 			else // no tiff data, so let's try loading the texture with the texture name, from the same directory as the particle file
 			{
-				string fileDirectory = Path.GetDirectoryName(input.Path);
-				string fullPath = Path.Combine(fileDirectory, input.EmitterConfig.Texture.Name);
+                context.Logger.LogMessage("pex file has no embedded image. Checking for an image in the same dir as pex file.");
+                if (input.EmitterConfig.Texture?.Name == null)
+                    throw new Exception("No image Name present in the Texture XML element");
+
+                var fileDirectory = Path.GetDirectoryName(input.Path);
+				var fullPath = Path.Combine(fileDirectory, input.EmitterConfig.Texture.Name);
 				context.Logger.LogMessage("Looking for texture file at {0}", fullPath);
 				result.Texture =
 					context.BuildAndLoadAsset<string, Texture2DContent>(new ExternalReference<string>(fullPath),
