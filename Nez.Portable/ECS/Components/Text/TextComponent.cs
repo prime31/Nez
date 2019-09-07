@@ -4,7 +4,7 @@ using Nez.Sprites;
 
 namespace Nez
 {
-	public class TextField : Sprite
+	public class TextComponent : Sprite
 	{
 		public override RectangleF Bounds
 		{
@@ -59,11 +59,11 @@ namespace Nez
 		Vector2 _size;
 
 
-		public TextField() : this(Graphics.Instance.BitmapFont, "", Vector2.Zero, Color.White)
+		public TextComponent() : this(Graphics.Instance.BitmapFont, "", Vector2.Zero, Color.White)
 		{
 		}
 
-		public TextField(IFont font, string text, Vector2 localOffset, Color color)
+		public TextComponent(IFont font, string text, Vector2 localOffset, Color color)
 		{
 			_font = font;
 			_text = text;
@@ -78,7 +78,7 @@ namespace Nez
 
 		#region Fluent setters
 
-		public TextField SetFont(IFont font)
+		public TextComponent SetFont(IFont font)
 		{
 			_font = font;
 			UpdateSize();
@@ -86,7 +86,7 @@ namespace Nez
 			return this;
 		}
 
-		public TextField SetText(string text)
+		public TextComponent SetText(string text)
 		{
 			_text = text;
 			UpdateSize();
@@ -95,7 +95,7 @@ namespace Nez
 			return this;
 		}
 
-		public TextField SetHorizontalAlign(HorizontalAlign hAlign)
+		public TextComponent SetHorizontalAlign(HorizontalAlign hAlign)
 		{
 			_horizontalAlign = hAlign;
 			UpdateCentering();
@@ -103,7 +103,7 @@ namespace Nez
 			return this;
 		}
 
-		public TextField SetVerticalAlign(VerticalAlign vAlign)
+		public TextComponent SetVerticalAlign(VerticalAlign vAlign)
 		{
 			_verticalAlign = vAlign;
 			UpdateCentering();
