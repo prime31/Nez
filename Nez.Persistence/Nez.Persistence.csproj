@@ -13,7 +13,6 @@
         <RootNamespace>Nez.Persistence</RootNamespace>
         <AssemblyName>Nez.Persistence</AssemblyName>
         <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
-        <IntermediateOutputPath>obj\Nez.Persistence\$(Configuration)</IntermediateOutputPath>
         <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
     </PropertyGroup>
 

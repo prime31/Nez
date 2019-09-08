@@ -14,7 +14,6 @@
 		<AllowUnsafeBlocks>True</AllowUnsafeBlocks>
 		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
 		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
-		<IntermediateOutputPath>obj\Nez.FNA.Persistence\$(Configuration)</IntermediateOutputPath>
 		<OutputPath>bin\$(Configuration)\FNA</OutputPath>
 	</PropertyGroup>
 
