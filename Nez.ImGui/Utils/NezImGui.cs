@@ -78,7 +78,7 @@ namespace Nez.ImGuiTools
 		{
 			var origCursorPos = ImGui.GetCursorPos();
 			var widgetSize = new Num.Vector2(ImGui.GetContentRegionAvail().X,
-                widgetCustomHeight > 0 ? GetDefaultWidgetHeight() : GetDefaultWidgetHeight());
+                widgetCustomHeight > 0 ? widgetCustomHeight : GetDefaultWidgetHeight());
 			ImGui.InvisibleButton("##disabled", widgetSize);
 			ImGui.SetCursorPos(origCursorPos);
 		}
