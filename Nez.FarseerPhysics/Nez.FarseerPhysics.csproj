@@ -1,23 +1,26 @@
 ﻿<Project>
-    <PropertyGroup>
-        <BaseIntermediateOutputPath>obj\$(MSBuildProjectName)</BaseIntermediateOutputPath>
-    </PropertyGroup>
-    <Import Sdk="Microsoft.NET.Sdk" Project="Sdk.props" />
-
-    <PropertyGroup>
-        <RootNamespace>Nez.Farseer</RootNamespace>
-        <AssemblyName>Nez.FarseerPhysics</AssemblyName>
-        <OutputType>Library</OutputType>
-        <TargetFramework>net471</TargetFramework>
-        <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-        <IntermediateOutputPath>obj\Nez.FarseerPhysics\$(Configuration)</IntermediateOutputPath>
-        <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
-    </PropertyGroup>
-
-    <ItemGroup>
-        <ProjectReference Include="..\Nez.Portable\Nez.csproj" />
-        <PackageReference Include="MonoGame.Framework.Portable" Version="3.7.1.189" />
-    </ItemGroup>
-
-    <Import Sdk="Microsoft.NET.Sdk" Project="Sdk.targets" />
+  <PropertyGroup>
+    <BaseIntermediateOutputPath>obj\$(MSBuildProjectName)</BaseIntermediateOutputPath>
+  </PropertyGroup>
+  <Import Sdk="Microsoft.NET.Sdk" Project="Sdk.props" />
+  <PropertyGroup>
+    <RootNamespace>Nez.Farseer</RootNamespace>
+    <AssemblyName>Nez.FarseerPhysics</AssemblyName>
+    <OutputType>Library</OutputType>
+    <TargetFramework>net471</TargetFramework>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <IntermediateOutputPath>obj\Nez.FarseerPhysics\$(Configuration)</IntermediateOutputPath>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <OutputPath>bin\Debug\</OutputPath>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <OutputPath>bin\Release\</OutputPath>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Nez.Portable\Nez.csproj" />
+    <PackageReference Include="MonoGame.Framework.Portable" Version="3.7.1.189" />
+  </ItemGroup>
+  <Import Sdk="Microsoft.NET.Sdk" Project="Sdk.targets" />
 </Project>
