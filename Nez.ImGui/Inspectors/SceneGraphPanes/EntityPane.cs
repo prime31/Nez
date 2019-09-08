@@ -91,7 +91,7 @@ namespace Nez.ImGuiTools.SceneGraphPanes
 						ImGui.CloseCurrentPopup();
 					}
 
-					ImGui.SameLine(ImGui.GetContentRegionAvailWidth() - ImGui.GetItemRectSize().X);
+					ImGui.SameLine(ImGui.GetContentRegionAvail().X - ImGui.GetItemRectSize().X);
 
 					ImGui.PushStyleColor(ImGuiCol.Button, Microsoft.Xna.Framework.Color.Green.PackedValue);
 					if (ImGui.Button("Create"))
@@ -127,7 +127,7 @@ namespace Nez.ImGuiTools.SceneGraphPanes
 					ImGui.CloseCurrentPopup();
 				}
 
-				ImGui.SameLine(ImGui.GetContentRegionAvailWidth() - ImGui.GetItemRectSize().X);
+				ImGui.SameLine(ImGui.GetContentRegionAvail().X - ImGui.GetItemRectSize().X);
 
 				ImGui.PushStyleColor(ImGuiCol.Button, Microsoft.Xna.Framework.Color.Green.PackedValue);
 				if (ImGui.Button("Create"))

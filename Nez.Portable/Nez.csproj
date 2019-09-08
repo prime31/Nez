@@ -4,8 +4,7 @@
     </PropertyGroup>
     <Import Sdk="Microsoft.NET.Sdk" Project="Sdk.props" />
 
-    <Import Project="$(MSBuildExtensionsPath)\MonoGame\v3.0\MonoGame.Common.props"
-            Condition="Exists('$(MSBuildExtensionsPath)\MonoGame\v3.0\MonoGame.Common.props')" />
+    <Import Project="$(MSBuildExtensionsPath)\MonoGame\v3.0\MonoGame.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\MonoGame\v3.0\MonoGame.Common.props')" />
 
     <PropertyGroup>
         <OutputType>Library</OutputType>

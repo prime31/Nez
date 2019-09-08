@@ -39,7 +39,7 @@ namespace Nez.ImGuiTools
 
 			var min = ImGui.GetItemRectMin();
 			var max = ImGui.GetItemRectMax();
-			max.X = min.X + ImGui.GetContentRegionAvailWidth();
+			max.X = min.X + ImGui.GetContentRegionAvail().X;
 			ImGui.GetWindowDrawList().AddRect(min - minPadding, max + maxPadding, ImGui.ColorConvertFloat4ToU32(color));
 
 			// this fits just the content, not the full width
@@ -77,8 +77,8 @@ namespace Nez.ImGuiTools
 		public static void DisableNextWidget(float widgetCustomHeight = 0)
 		{
 			var origCursorPos = ImGui.GetCursorPos();
-			var widgetSize = new Num.Vector2(ImGui.GetContentRegionAvailWidth(),
-				widgetCustomHeight > 0 ? GetDefaultWidgetHeight() : GetDefaultWidgetHeight());
+			var widgetSize = new Num.Vector2(ImGui.GetContentRegionAvail().X,
+                widgetCustomHeight > 0 ? GetDefaultWidgetHeight() : GetDefaultWidgetHeight());
 			ImGui.InvisibleButton("##disabled", widgetSize);
 			ImGui.SetCursorPos(origCursorPos);
 		}
