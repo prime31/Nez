@@ -24,10 +24,10 @@ namespace Nez.BitmapFonts
 		public void Load(Stream stream)
 		{
 			if (stream == null)
-				throw new ArgumentNullException("stream");
+				throw new ArgumentNullException(nameof(stream));
 
 			if (!stream.CanSeek)
-				throw new ArgumentException("Stream must be seekable in order to determine file format.", "stream");
+				throw new ArgumentException("Stream must be seekable in order to determine file format.", nameof(stream));
 
 			// read the first five bytes so we can try and work out what the format is
 			// then reset the position so the format loaders can work
@@ -39,10 +39,10 @@ namespace Nez.BitmapFonts
 			switch (header)
 			{
 				case "info ":
-					this.LoadText(stream);
+					LoadText(stream);
 					break;
 				case "<?xml":
-					this.LoadXml(stream);
+					LoadXml(stream);
 					break;
 				default:
 					throw new InvalidDataException("Unknown file format.");
@@ -58,13 +58,13 @@ namespace Nez.BitmapFonts
 		public void Load(string filename)
 		{
 			if (string.IsNullOrEmpty(filename))
-				throw new ArgumentNullException("fileName");
+				throw new ArgumentNullException(nameof(filename));
 
 			if (!File.Exists(filename))
 				throw new FileNotFoundException(string.Format("Cannot find file '{0}'.", filename), filename);
 
 			using (var stream = File.OpenRead(filename))
-				this.Load(stream);
+				Load(stream);
 
 			BitmapFontLoader.QualifyResourcePaths(this, Path.GetDirectoryName(filename));
 		}
@@ -91,7 +91,7 @@ namespace Nez.BitmapFonts
 		public void LoadText(Stream stream)
 		{
 			if (stream == null)
-				throw new ArgumentNullException("stream");
+				throw new ArgumentNullException(nameof(stream));
 
 			using (var reader = new StreamReader(stream))
 				LoadText(reader);
@@ -108,7 +108,7 @@ namespace Nez.BitmapFonts
 		public void LoadText(TextReader reader)
 		{
 			if (reader == null)
-				throw new ArgumentNullException("reader");
+				throw new ArgumentNullException(nameof(reader));
 
 			var pageData = new SortedDictionary<int, Page>();
 			var kerningDictionary = new Dictionary<Kerning, int>();
@@ -199,7 +199,7 @@ namespace Nez.BitmapFonts
 		public void LoadXml(string xml)
 		{
 			using (var reader = new StringReader(xml))
-				this.LoadXml(reader);
+				LoadXml(reader);
 		}
 
 		/// <summary>
@@ -211,7 +211,7 @@ namespace Nez.BitmapFonts
 				throw new ArgumentNullException("stream");
 
 			using (var reader = new StreamReader(stream))
-				this.LoadXml(reader);
+				LoadXml(reader);
 		}
 
 		/// <summary>

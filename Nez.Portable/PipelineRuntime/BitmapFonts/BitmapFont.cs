@@ -13,10 +13,10 @@ namespace Nez.BitmapFonts
 {
 	public partial class BitmapFont : IDisposable, IFont
 	{
-		/// <summary>
-		/// When used with <see cref="MeasureFont(string,double)"/>, specifies that no wrapping should occur.
-		/// </summary>
-		const int kNoMaxWidth = -1;
+        /// <summary>
+        /// When used with <see cref="MeasureString(string,double)"/>, specifies that no wrapping should occur.
+        /// </summary>
+        const int kNoMaxWidth = -1;
 
 		#region Properties
 

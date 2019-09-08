@@ -14,11 +14,11 @@ namespace Nez.BitmapFonts
 		public Texture2D Texture;
 	}
 
-	/// <summary>
-	/// returned by <seealso cref="BitmapFont.GetGlyphs"/>, provding a way to iterate over a string. Can be drawn with
-	/// <seealso cref="BatcherBitmapFontExt"/> or by iterating and drawing each glyph.
-	/// </summary>
-	public struct BitmapFontEnumerator : IEnumerator<BitmapFontGlyph>
+    /// <summary>
+    /// returned by <seealso cref="BitmapFont.GetGlyphs"/>, providing a way to iterate over a string. Can be drawn with
+    /// <seealso cref="BatcherBitmapFontExt"/> or by iterating and drawing each glyph.
+    /// </summary>
+    public struct BitmapFontEnumerator : IEnumerator<BitmapFontGlyph>
 	{
 		BitmapFont _font;
 		FontCharacterSource _text;
