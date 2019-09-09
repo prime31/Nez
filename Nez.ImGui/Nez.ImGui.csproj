@@ -14,7 +14,6 @@
         <AssemblyName>Nez.ImGui</AssemblyName>
         <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
         <IntermediateOutputPath>obj\Nez.ImGui\$(Configuration)</IntermediateOutputPath>
-        <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
     </PropertyGroup>
 
     <ItemGroup>

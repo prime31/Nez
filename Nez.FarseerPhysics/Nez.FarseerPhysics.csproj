@@ -23,7 +23,7 @@
   
   <ItemGroup>
     <ProjectReference Include="..\Nez.Portable\Nez.csproj" />
-    <PackageReference Include="MonoGame.Framework.Portable" Version="3.7.1.189" />
+    <PackageReference Include="MonoGame.Framework.DesktopGL" Version="3.7.1.189" />
   </ItemGroup>
   <Import Sdk="Microsoft.NET.Sdk" Project="Sdk.targets" />
 </Project>
