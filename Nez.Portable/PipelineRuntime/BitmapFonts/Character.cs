@@ -1,15 +1,13 @@
 ﻿using Microsoft.Xna.Framework;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 
 namespace Nez.BitmapFonts
 {
-	/// <summary>
-	/// Represents the definition of a single character in a <see cref="BitmapFont"/>
-	/// </summary>
-	public class Character
+    /// <summary>
+    /// Represents the definition of a single character in a <see cref="BitmapFont"/>
+    /// </summary>
+    public class Character
 	{
 		/// <summary>
 		/// bounds of the character image in the source texture.

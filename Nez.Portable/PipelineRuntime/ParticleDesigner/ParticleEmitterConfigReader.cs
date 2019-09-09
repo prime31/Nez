@@ -2,7 +2,6 @@
 using Nez.Particles;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
-using System.IO;
 using Nez.Textures;
 
 
@@ -13,51 +12,52 @@ namespace Nez.ParticleDesigner
 		protected override ParticleEmitterConfig Read(ContentReader reader, ParticleEmitterConfig existingInstance)
 		{
 			// Create a fresh TextureAtlas instance
-			var emitterConfig = new ParticleEmitterConfig();
+			var emitterConfig = new ParticleEmitterConfig
+			{
+				SourcePosition = reader.ReadVector2(),
+				SourcePositionVariance = reader.ReadVector2(),
+				Speed = reader.ReadSingle(),
+				SpeedVariance = reader.ReadSingle(),
+				ParticleLifespan = reader.ReadSingle(),
+				ParticleLifespanVariance = reader.ReadSingle(),
+				Angle = reader.ReadSingle(),
+				AngleVariance = reader.ReadSingle(),
+				Gravity = reader.ReadVector2(),
+				RadialAcceleration = reader.ReadSingle(),
+				RadialAccelVariance = reader.ReadSingle(),
+				TangentialAcceleration = reader.ReadSingle(),
+				TangentialAccelVariance = reader.ReadSingle(),
+				StartColor = reader.ReadColor(),
+				StartColorVariance = reader.ReadColor(),
+				FinishColor = reader.ReadColor(),
+				FinishColorVariance = reader.ReadColor(),
+				MaxParticles = reader.ReadUInt32(),
+				StartParticleSize = reader.ReadSingle(),
+				StartParticleSizeVariance = reader.ReadSingle(),
+				FinishParticleSize = reader.ReadSingle(),
+				FinishParticleSizeVariance = reader.ReadSingle(),
+				Duration = reader.ReadSingle(),
+				EmitterType = (ParticleEmitterType)reader.ReadInt32(),
 
-			emitterConfig.SourcePosition = reader.ReadVector2();
-			emitterConfig.SourcePositionVariance = reader.ReadVector2();
-			emitterConfig.Speed = reader.ReadSingle();
-			emitterConfig.SpeedVariance = reader.ReadSingle();
-			emitterConfig.ParticleLifespan = reader.ReadSingle();
-			emitterConfig.ParticleLifespanVariance = reader.ReadSingle();
-			emitterConfig.Angle = reader.ReadSingle();
-			emitterConfig.AngleVariance = reader.ReadSingle();
-			emitterConfig.Gravity = reader.ReadVector2();
-			emitterConfig.RadialAcceleration = reader.ReadSingle();
-			emitterConfig.RadialAccelVariance = reader.ReadSingle();
-			emitterConfig.TangentialAcceleration = reader.ReadSingle();
-			emitterConfig.TangentialAccelVariance = reader.ReadSingle();
-			emitterConfig.StartColor = reader.ReadColor();
-			emitterConfig.StartColorVariance = reader.ReadColor();
-			emitterConfig.FinishColor = reader.ReadColor();
-			emitterConfig.FinishColorVariance = reader.ReadColor();
-			emitterConfig.MaxParticles = reader.ReadUInt32();
-			emitterConfig.StartParticleSize = reader.ReadSingle();
-			emitterConfig.StartParticleSizeVariance = reader.ReadSingle();
-			emitterConfig.FinishParticleSize = reader.ReadSingle();
-			emitterConfig.FinishParticleSizeVariance = reader.ReadSingle();
-			emitterConfig.Duration = reader.ReadSingle();
-			emitterConfig.EmitterType = (ParticleEmitterType) reader.ReadInt32();
+				MaxRadius = reader.ReadSingle(),
+				MaxRadiusVariance = reader.ReadSingle(),
+				MinRadius = reader.ReadSingle(),
+				MinRadiusVariance = reader.ReadSingle(),
+				RotatePerSecond = reader.ReadSingle(),
+				RotatePerSecondVariance = reader.ReadSingle(),
 
-			emitterConfig.MaxRadius = reader.ReadSingle();
-			emitterConfig.MaxRadiusVariance = reader.ReadSingle();
-			emitterConfig.MinRadius = reader.ReadSingle();
-			emitterConfig.MinRadiusVariance = reader.ReadSingle();
-			emitterConfig.RotatePerSecond = reader.ReadSingle();
-			emitterConfig.RotatePerSecondVariance = reader.ReadSingle();
-
-			emitterConfig.RotationStart = reader.ReadSingle();
-			emitterConfig.RotationStartVariance = reader.ReadSingle();
-			emitterConfig.RotationEnd = reader.ReadSingle();
-			emitterConfig.RotationEndVariance = reader.ReadSingle();
-			emitterConfig.EmissionRate = reader.ReadSingle();
-			emitterConfig.BlendFuncSource = (Blend) reader.ReadInt32();
-			emitterConfig.BlendFuncDestination = (Blend) reader.ReadInt32();
+				RotationStart = reader.ReadSingle(),
+				RotationStartVariance = reader.ReadSingle(),
+				RotationEnd = reader.ReadSingle(),
+				RotationEndVariance = reader.ReadSingle(),
+				EmissionRate = reader.ReadSingle(),
+				BlendFuncSource = (Blend)reader.ReadInt32(),
+				BlendFuncDestination = (Blend)reader.ReadInt32()
+			};
 
 
 			var texture = reader.ReadObject<Texture2D>();
-			emitterConfig.Subtexture = new Nez.Textures.Subtexture(texture);
+			emitterConfig.Subtexture = new Subtexture(texture);
 
 #if USE_RAW_TIFFS
 			// raw tiffs from a byte[] were originally used. Leaving this here for now just in case textures dont end up working

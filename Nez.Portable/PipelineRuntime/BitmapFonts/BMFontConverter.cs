@@ -5,13 +5,11 @@ using System.Linq;
 using System.Reflection;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Nez.Textures;
-using Nez;
 
 
 namespace Nez.BitmapFonts
 {
-	public class BMFontConverter
+    public static class BMFontConverter
 	{
 		/// <summary>
 		/// Converts a BitmapFont to a SriteFont

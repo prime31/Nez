@@ -13,8 +13,8 @@ namespace Nez.BitmapFonts
 
 		public Page(int id, string filename)
 		{
-			this.Filename = filename;
-			this.Id = id;
+			Filename = filename;
+			Id = id;
 		}
 
 		public override string ToString() => string.Format("{0} ({1})", Id, Path.GetFileName(Filename));

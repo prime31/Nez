@@ -19,21 +19,71 @@ namespace Nez.Systems
 	{
 		Dictionary<string, Effect> _loadedEffects = new Dictionary<string, Effect>();
 
-
-		public NezContentManager(IServiceProvider serviceProvider, string rootDirectory) : base(serviceProvider,
-			rootDirectory)
+		List<IDisposable> _disposableAssets;
+		List<IDisposable> DisposableAssets
 		{
+			get
+			{
+				if (_disposableAssets == null)
+				{
+					var fieldInfo = ReflectionUtils.GetFieldInfo(typeof(ContentManager), "disposableAssets");
+					_disposableAssets = fieldInfo.GetValue(this) as List<IDisposable>;
+				}
+				return _disposableAssets;
+			}
 		}
+
+#if FNA
+		Dictionary<string, object> _loadedAssets;
+		Dictionary<string, object> LoadedAssets
+		{
+			get
+			{
+				if (_loadedAssets == null)
+				{
+					var fieldInfo = ReflectionUtils.GetFieldInfo(typeof(ContentManager), "loadedAssets");
+					_loadedAssets = fieldInfo.GetValue(this) as Dictionary<string, object>;
+				}
+				return _loadedAssets;
+			}
+		}
+#endif
+
+
+		public NezContentManager(IServiceProvider serviceProvider, string rootDirectory) : base(serviceProvider, rootDirectory)
+		{}
 
 		public NezContentManager(IServiceProvider serviceProvider) : base(serviceProvider)
-		{
-		}
+		{}
 
-		public NezContentManager() : base(((Game) Core._instance).Services,
-			((Game) Core._instance).Content.RootDirectory)
-		{
-		}
+		public NezContentManager() : base(((Game)Core._instance).Services, ((Game)Core._instance).Content.RootDirectory)
+		{}
 
+		/// <summary>
+		/// loads a Texture2D either from xnb or directly from a png/jpg. Note that xnb files should not contain the .xnb file
+		/// extension or be preceded by "Content" in the path. png/jpg files should have the file extension and have an absolute
+		/// path or a path starting with "Content".
+		/// </summary>
+		public Texture2D LoadTexture(string name)
+		{
+			// no file extension. Assumed to be an xnb so let ContentManager load it
+			if (string.IsNullOrEmpty(Path.GetExtension(name)))
+				return Load<Texture2D>(name);
+
+			if (LoadedAssets.TryGetValue(name, out var asset))
+			{
+				if (asset is Texture2D tex)
+					return tex;
+			}
+
+			var graphicsDeviceService = ServiceProvider.GetService(typeof(IGraphicsDeviceService)) as IGraphicsDeviceService;
+			var texture = Texture2D.FromStream(graphicsDeviceService.GraphicsDevice, TitleContainer.OpenStream(name));
+			texture.Name = name;
+			LoadedAssets[name] = texture;
+			DisposableAssets.Add(texture);
+
+			return texture;
+		}
 
 		/// <summary>
 		/// loads an ogl effect directly from file and handles disposing of it when the ContentManager is disposed. Name should be the path
@@ -41,10 +91,7 @@ namespace Nez.Systems
 		/// </summary>
 		/// <returns>The effect.</returns>
 		/// <param name="name">Name.</param>
-		public Effect LoadEffect(string name)
-		{
-			return LoadEffect<Effect>(name);
-		}
+		public Effect LoadEffect(string name) => LoadEffect<Effect>(name);
 
 		/// <summary>
 		/// loads an embedded Nez effect. These are any of the Effect subclasses in the Nez/Graphics/Effects folder.
@@ -158,7 +205,7 @@ namespace Nez.Systems
 		/// <summary>
 		/// loads a group of assets on a background thread with optional callback for when it is loaded
 		/// </summary>
-		/// <param name="assetName">Asset name.</param>
+		/// <param name="assetNames">Asset names.</param>
 		/// <param name="onLoaded">On loaded.</param>
 		/// <typeparam name="T">The 1st type parameter.</typeparam>
 		public void LoadAsync<T>(string[] assetNames, Action onLoaded = null)
@@ -178,7 +225,7 @@ namespace Nez.Systems
 		}
 
 		/// <summary>
-		/// removes assetName from LoadedAssets and Disposes of it. Note that this method uses reflection to get at the private ContentManager
+		/// removes assetName from LoadedAssets and Disposes of it
 		/// disposeableAssets List.
 		/// </summary>
 		/// <param name="assetName">Asset name.</param>
@@ -189,34 +236,16 @@ namespace Nez.Systems
 			{
 				try
 				{
-					FieldInfo fieldInfo = null;
-					var fields = typeof(ContentManager).GetRuntimeFields();
-					foreach (var field in fields)
-					{
-						if (field.Name == "disposableAssets")
-						{
-							fieldInfo = field;
-							break;
-						}
-					}
-
 					// first fetch the actual asset. we already know its loaded so we'll grab it directly
-#if FNA
-					fieldInfo = ReflectionUtils.GetFieldInfo( typeof( ContentManager ), "loadedAssets" );
-					var LoadedAssets = fieldInfo.GetValue( this ) as Dictionary<string, object>;
-#endif
-
 					var assetToRemove = LoadedAssets[assetName];
-
-					var assets = fieldInfo.GetValue(this) as List<IDisposable>;
-					for (var i = 0; i < assets.Count; i++)
+					for (var i = 0; i < DisposableAssets.Count; i++)
 					{
 						// see if the asset is disposeable. If so, find and dispose of it.
-						var typedAsset = assets[i] as T;
+						var typedAsset = DisposableAssets[i] as T;
 						if (typedAsset != null && typedAsset == assetToRemove)
 						{
 							typedAsset.Dispose();
-							assets.RemoveAt(i);
+							DisposableAssets.RemoveAt(i);
 							break;
 						}
 					}
@@ -249,26 +278,14 @@ namespace Nez.Systems
 		/// <summary>
 		/// unloads an Effect that was loaded via loadEffect, loadNezEffect or loadMonoGameEffect
 		/// </summary>
-		/// <param name="effectName">Effect.name</param>
-		public bool UnloadEffect(Effect effect)
-		{
-			return UnloadEffect(effect.Name);
-		}
+		public bool UnloadEffect(Effect effect) => UnloadEffect(effect.Name);
 
 		/// <summary>
 		/// checks to see if an asset with assetName is loaded
 		/// </summary>
 		/// <returns><c>true</c> if this instance is asset loaded the specified assetName; otherwise, <c>false</c>.</returns>
 		/// <param name="assetName">Asset name.</param>
-		public bool IsAssetLoaded(string assetName)
-		{
-#if FNA
-			var fieldInfo = ReflectionUtils.GetFieldInfo( typeof( ContentManager ), "loadedAssets" );
-			var LoadedAssets = fieldInfo.GetValue( this ) as Dictionary<string, object>;
-#endif
-
-			return LoadedAssets.ContainsKey(assetName);
-		}
+		public bool IsAssetLoaded(string assetName) => LoadedAssets.ContainsKey(assetName);
 
 		/// <summary>
 		/// provides a string suitable for logging with all the currently loaded assets and effects
@@ -276,21 +293,12 @@ namespace Nez.Systems
 		/// <returns>The loaded assets.</returns>
 		internal string LogLoadedAssets()
 		{
-#if FNA
-			var fieldInfo = ReflectionUtils.GetFieldInfo( typeof( ContentManager ), "loadedAssets" );
-			var LoadedAssets = fieldInfo.GetValue( this ) as Dictionary<string, object>;
-#endif
-
 			var builder = new StringBuilder();
 			foreach (var asset in LoadedAssets.Keys)
-			{
 				builder.AppendFormat("{0}: ({1})\n", asset, LoadedAssets[asset].GetType().Name);
-			}
 
 			foreach (var asset in _loadedEffects.Keys)
-			{
 				builder.AppendFormat("{0}: ({1})\n", asset, _loadedEffects[asset].GetType().Name);
-			}
 
 			return builder.ToString();
 		}
@@ -302,11 +310,6 @@ namespace Nez.Systems
 		/// <returns></returns>
 		public string GetPathForLoadedAsset(object asset)
 		{
-#if FNA
-			var fieldInfo = ReflectionUtils.GetFieldInfo( typeof( ContentManager ), "loadedAssets" );
-			var LoadedAssets = fieldInfo.GetValue( this ) as Dictionary<string, object>;
-#endif
-
 			if (LoadedAssets.ContainsValue(asset))
 			{
 				foreach (var kv in LoadedAssets)
@@ -315,7 +318,6 @@ namespace Nez.Systems
 						return kv.Key;
 				}
 			}
-
 			return null;
 		}
 

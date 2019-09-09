@@ -29,7 +29,7 @@ namespace Nez.Timers
 
 		public T GetContext<T>()
 		{
-			return (T) Context;
+			return (T)Context;
 		}
 
 		internal bool Tick()
@@ -53,7 +53,7 @@ namespace Nez.Timers
 		{
 			_timeInSeconds = timeInSeconds;
 			_repeats = repeats;
-			this.Context = context;
+			Context = context;
 			_onTime = onTime;
 		}
 

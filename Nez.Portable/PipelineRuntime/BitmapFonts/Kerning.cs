@@ -15,14 +15,14 @@ namespace Nez.BitmapFonts
 		/// </summary>
 		public int Amount;
 
-		public char FirstCharacter;
-		public char SecondCharacter;
+		public readonly char FirstCharacter;
+		public readonly char SecondCharacter;
 
 		public Kerning(char firstCharacter, char secondCharacter, int amount)
 		{
-			this.FirstCharacter = firstCharacter;
-			this.SecondCharacter = secondCharacter;
-			this.Amount = amount;
+			FirstCharacter = firstCharacter;
+			SecondCharacter = secondCharacter;
+			Amount = amount;
 		}
 
 		public override bool Equals(object obj)
@@ -35,8 +35,7 @@ namespace Nez.BitmapFonts
 			return Equals((Kerning) obj);
 		}
 
-		public bool Equals(Kerning other) =>
-			FirstCharacter == other.FirstCharacter && SecondCharacter == other.SecondCharacter;
+		public bool Equals(Kerning other) => FirstCharacter == other.FirstCharacter && SecondCharacter == other.SecondCharacter;
 
 		public override int GetHashCode() => (FirstCharacter << 16) | SecondCharacter;
 

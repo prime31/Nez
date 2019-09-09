@@ -14,7 +14,7 @@ namespace Nez.BitmapFonts
 	public partial class BitmapFont : IDisposable, IFont
 	{
         /// <summary>
-        /// When used with <see cref="MeasureString(string,double)"/>, specifies that no wrapping should occur.
+        /// When used with MeasureString, specifies that no wrapping should occur.
         /// </summary>
         const int kNoMaxWidth = -1;
 
@@ -321,7 +321,7 @@ namespace Nez.BitmapFonts
 		/// <param name="text">The text to measure.</param>
 		/// <param name="maxWidth">The maximum width.</param>
 		/// <returns>
-		/// The <see cref="Size"/>, in pixels, of <paramref name="text"/> drawn with this font.
+		/// The size, in pixels, of <paramref name="text"/> drawn with this font.
 		/// </returns>
 		/// <remarks>The MeasureString method uses the <paramref name="maxWidth"/> parameter to automatically wrap when determining text size.</remarks>
 		public Point MeasureString(ref FontCharacterSource text, float maxWidth = kNoMaxWidth)

@@ -8,12 +8,9 @@ namespace Nez.Pipeline.Content
 {
 	public static class ContentManagerExtensions
 	{
-		public const string DirectorySeparatorChar = "/";
-
-
 		public static Stream OpenStream(this ContentManager contentManager, string path)
 		{
-			return TitleContainer.OpenStream(contentManager.RootDirectory + DirectorySeparatorChar + path);
+			return TitleContainer.OpenStream(Path.Combine(contentManager.RootDirectory, path));
 		}
 
 
