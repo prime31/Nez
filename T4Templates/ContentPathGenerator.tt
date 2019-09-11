@@ -118,13 +118,11 @@ namespace Nez
 
 
 	// attempts to generate a proper path name
-	string GenerateClassName( string className, bool uppercaseFirstChar )
+	string GenerateClassName( string className )
 	{
 		// handle upper or lower casing the first char in the className
-	    if( uppercaseFirstChar && char.IsLower( className[0] ) )
+	    if( char.IsLower( className[0] ) )
 	    	className = char.ToUpper( className[0] ) + className.Substring( 1 );
-	    else if( !uppercaseFirstChar && char.IsUpper( className[0] ) )
-	    	className = char.ToLower( className[0] ) + className.Substring( 1 );
 
         // remove invalid characters
         var regex = new Regex( @"[^\p{Ll}\p{Lu}\p{Lt}\p{Lo}\p{Nd}\p{Nl}\p{Mn}\p{Mc}\p{Cf}\p{Pc}\p{Lm}]" );
