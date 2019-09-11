@@ -44,8 +44,8 @@ namespace Nez
 		public PostProcessor(int executionOrder, Effect effect = null)
 		{
 			Enabled = true;
-			this.ExecutionOrder = executionOrder;
-			this.Effect = effect;
+			ExecutionOrder = executionOrder;
+			Effect = effect;
 		}
 
 		/// <summary>

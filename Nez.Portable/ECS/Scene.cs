@@ -905,8 +905,6 @@ namespace Nez
 		/// gets the first Renderer of Type T
 		/// </summary>
 		/// <returns>The renderer.</returns>
-		/// <param name="renderer">Renderer.</param>
-		/// <typeparam name="T">The 1st type parameter.</typeparam>
 		public T GetRenderer<T>() where T : Renderer
 		{
 			for (var i = 0; i < _renderers.Length; i++)
