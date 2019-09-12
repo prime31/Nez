@@ -59,6 +59,8 @@ namespace Nez
 						renderable.DebugRender(Graphics.Instance);
 				}
 			}
+
+			base.DebugRender(scene, cam);
 		}
 	}
 }

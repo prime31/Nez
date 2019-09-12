@@ -78,8 +78,8 @@ namespace Nez
 
 		protected Renderer(int renderOrder, Camera camera)
 		{
-			this.Camera = camera;
-			this.RenderOrder = renderOrder;
+			Camera = camera;
+			RenderOrder = renderOrder;
 		}
 
 		/// <summary>
@@ -93,11 +93,7 @@ namespace Nez
 		/// <summary>
 		/// called when a scene is ended or this Renderer is removed from the Scene. use this for cleanup.
 		/// </summary>
-		public virtual void Unload()
-		{
-			if (RenderTexture != null)
-				RenderTexture.Dispose();
-		}
+		public virtual void Unload() => RenderTexture?.Dispose();
 
 		/// <summary>
 		/// if a RenderTarget is used this will set it up. The Batcher is also started. The passed in Camera will be used to set the ViewPort
@@ -156,10 +152,7 @@ namespace Nez
 		/// <summary>
 		/// ends the Batcher and clears the RenderTarget if it had a RenderTarget
 		/// </summary>
-		protected virtual void EndRender()
-		{
-			Graphics.Instance.Batcher.End();
-		}
+		protected virtual void EndRender() => Graphics.Instance.Batcher.End();
 
 		/// <summary>
 		/// default debugRender method just loops through all entities and calls entity.debugRender. Note that you are in the middle of a batch
@@ -186,11 +179,7 @@ namespace Nez
 		/// </summary>
 		/// <param name="newWidth">New width.</param>
 		/// <param name="newHeight">New height.</param>
-		public virtual void OnSceneBackBufferSizeChanged(int newWidth, int newHeight)
-		{
-			if (RenderTexture != null)
-				RenderTexture.OnSceneBackBufferSizeChanged(newWidth, newHeight);
-		}
+		public virtual void OnSceneBackBufferSizeChanged(int newWidth, int newHeight) => RenderTexture?.OnSceneBackBufferSizeChanged(newWidth, newHeight);
 
 		public int CompareTo(Renderer other) => RenderOrder.CompareTo(other.RenderOrder);
 	}

@@ -46,6 +46,8 @@
 				    renderable.IsVisibleFromCamera(cam))
 					renderable.DebugRender(Graphics.Instance);
 			}
+
+			base.DebugRender(scene, cam);
 		}
 	}
 }
