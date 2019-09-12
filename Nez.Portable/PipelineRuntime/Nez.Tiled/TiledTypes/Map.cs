@@ -8,7 +8,7 @@ using Microsoft.Xna.Framework;
 
 namespace Nez.Tiled
 {
-	public partial class TmxMap : TmxDocument
+	public partial class TmxMap : TmxDocument, IDisposable
     {
         public string Version {get; private set;}
         public string TiledVersion { get; private set; }
@@ -49,16 +49,17 @@ namespace Nez.Tiled
         public bool RequiresLargeTileCulling => MaxTileWidth > TileWidth || MaxTileHeight > TileHeight;
 
         /// <summary>
-        /// contains all of the ITmxLayers, regardless of theri specific type. Note that layers in a TmxGroup will not
+        /// contains all of the ITmxLayers, regardless of their specific type. Note that layers in a TmxGroup will not
         /// be in this list. TmxGroup manages its own layers list.
         /// </summary>
         public TmxList<ITmxLayer> Layers;
 
         public TmxMap(string filename) => Load(ReadXml(filename));
 
-        public TmxMap(Stream inputStream)
+        public TmxMap(Stream inputStream, string tmxDirectory)
         {
-            using (var xmlReader = XmlReader.Create(inputStream))
+			TmxDirectory = tmxDirectory;
+			using (var xmlReader = XmlReader.Create(inputStream))
             {
                 Load(XDocument.Load(xmlReader));
             }
@@ -199,7 +200,39 @@ namespace Nez.Tiled
             foreach (var tileset in Tilesets)
                 tileset.Update();
         }
-    }
+
+		#region IDisposable Support
+
+		bool _isDisposed;
+
+		void Dispose(bool disposing)
+		{
+			if (!_isDisposed)
+			{
+				if (disposing)
+				{
+					foreach (var tileset in Tilesets)
+						tileset.Image.Dispose();
+
+					foreach (var layer in ImageLayers)
+						layer.Image.Dispose();
+				}
+
+				_isDisposed = true;
+			}
+		}
+
+		// TODO: override a finalizer only if Dispose(bool disposing) above has code to free unmanaged resources.
+		// ~TmxMap()
+		// {
+		//   // Do not change this code. Put cleanup code in Dispose(bool disposing) above.
+		//   Dispose(false);
+		// }
+
+		void IDisposable.Dispose() => Dispose(true);
+
+		#endregion
+	}
 
     public enum OrientationType
     {

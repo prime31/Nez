@@ -77,12 +77,34 @@ namespace Nez.Systems
 			}
 
 			var graphicsDeviceService = ServiceProvider.GetService(typeof(IGraphicsDeviceService)) as IGraphicsDeviceService;
-			var texture = Texture2D.FromStream(graphicsDeviceService.GraphicsDevice, TitleContainer.OpenStream(name));
-			texture.Name = name;
-			LoadedAssets[name] = texture;
-			DisposableAssets.Add(texture);
+			using (var stream = TitleContainer.OpenStream(name))
+			{
+				var texture = Texture2D.FromStream(graphicsDeviceService.GraphicsDevice, stream);
+				texture.Name = name;
+				LoadedAssets[name] = texture;
+				DisposableAssets.Add(texture);
 
-			return texture;
+				return texture;
+			}
+		}
+
+		/// <summary>
+		/// loads a Tiled map
+		/// </summary>
+		public Tiled.TmxMap LoadTiledMap(string name)
+		{
+			if (LoadedAssets.TryGetValue(name, out var asset))
+			{
+				if (asset is Tiled.TmxMap map)
+					return map;
+			}
+			
+			var tiledMap = new Tiled.TmxMap(name);
+
+			LoadedAssets[name] = tiledMap;
+			DisposableAssets.Add(tiledMap);
+
+			return tiledMap;
 		}
 
 		/// <summary>

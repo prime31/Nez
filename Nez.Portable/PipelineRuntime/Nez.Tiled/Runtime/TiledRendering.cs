@@ -22,16 +22,28 @@ namespace Nez.Tiled
 			{
 				if (layer is TmxLayer tmxLayer && tmxLayer.Visible)
 					RenderLayer(tmxLayer, batcher, position, scale, layerDepth);
-
-				if (layer is TmxImageLayer tmxImageLayer && tmxImageLayer.Visible)
+				else if (layer is TmxImageLayer tmxImageLayer && tmxImageLayer.Visible)
 					RenderImageLayer(tmxImageLayer, batcher, position, scale, layerDepth);
-
-				if (layer is TmxGroup tmxGroup && tmxGroup.Visible)
+				else if (layer is TmxGroup tmxGroup && tmxGroup.Visible)
 					RenderGroup(tmxGroup, batcher, position, scale, layerDepth);
-
-				if (layer is TmxObjectGroup tmxObjGroup && tmxObjGroup.Visible)
+				else if (layer is TmxObjectGroup tmxObjGroup && tmxObjGroup.Visible)
 					RenderObjectGroup(tmxObjGroup, batcher, position, scale, layerDepth);
 			}
+		}
+
+		/// <summary>
+		/// renders the ITmxLayer by calling through to the concrete type's render method
+		/// </summary>
+		public static void RenderLayer(ITmxLayer layer, Batcher batcher, Vector2 position, Vector2 scale, float layerDepth, RectangleF cameraClipBounds)
+		{
+			if (layer is TmxLayer tmxLayer && tmxLayer.Visible)
+				RenderLayer(tmxLayer, batcher, position, scale, layerDepth, cameraClipBounds);
+			else if (layer is TmxImageLayer tmxImageLayer && tmxImageLayer.Visible)
+				RenderImageLayer(tmxImageLayer, batcher, position, scale, layerDepth);
+			else if (layer is TmxGroup tmxGroup && tmxGroup.Visible)
+				RenderGroup(tmxGroup, batcher, position, scale, layerDepth);
+			else if (layer is TmxObjectGroup tmxObjGroup && tmxObjGroup.Visible)
+				RenderObjectGroup(tmxObjGroup, batcher, position, scale, layerDepth);
 		}
 
 		/// <summary>
