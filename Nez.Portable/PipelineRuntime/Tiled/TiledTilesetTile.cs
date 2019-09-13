@@ -48,8 +48,8 @@ namespace Nez.Tiled
 
 		public TiledTilesetTile(int id, TiledMap tiledMap)
 		{
-			this.Id = id;
-			this.TiledMap = tiledMap;
+			Id = id;
+			TiledMap = tiledMap;
 		}
 
 

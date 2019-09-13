@@ -256,7 +256,6 @@ namespace Nez.Tiled
 		/// <summary>
 		/// Returns a list of rectangles in tile space, where any non-null tile is combined into bounding regions
 		/// </summary>
-		/// <param name="layer">Layer.</param>
 		public List<Rectangle> GetCollisionRectangles()
 		{
 			var checkedIndexes = new bool?[Tiles.Length];

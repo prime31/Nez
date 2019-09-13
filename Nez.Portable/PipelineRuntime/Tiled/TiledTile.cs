@@ -10,16 +10,12 @@ namespace Nez.Tiled
 		/// returns the Subtexture that maps to this particular tile
 		/// </summary>
 		/// <value>The texture region.</value>
-		public Subtexture TextureRegion
-		{
-			get { return Tileset.GetTileTextureRegion(Id); }
-		}
+		public Subtexture TextureRegion => Tileset.GetTileTextureRegion(Id);
 
 		/// <summary>
 		/// gets the TiledtilesetTile for this TiledTile if it exists. TiledtilesetTile only exist for animated tiles and tiles with attached
 		/// properties.
 		/// </summary>
-		/// <value>The tileset tile.</value>
 		public TiledTilesetTile TilesetTile
 		{
 			get
@@ -59,7 +55,7 @@ namespace Nez.Tiled
 
 		public TiledTile(int id)
 		{
-			this.Id = id;
+			Id = id;
 		}
 
 

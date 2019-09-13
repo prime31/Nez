@@ -368,7 +368,7 @@ namespace FarseerPhysics.Common
 			using (IEnumerator<T> en = values.GetEnumerator())
 			{
 				if (!en.MoveNext())
-					return String.Empty;
+					return string.Empty;
 
 				var result = new StringBuilder();
 				if (en.Current != null)

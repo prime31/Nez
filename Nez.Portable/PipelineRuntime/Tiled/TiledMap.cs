@@ -344,6 +344,7 @@ namespace Nez.Tiled
 			return new Point(Mathf.Clamp(tileX, 0, Width - 1), Mathf.Clamp(tileY, 0, Height - 1));
 		}
 
+		/// <summary>
 		/// converts from isometric tile to world position
 		/// </summary>
 		/// <returns>The to world position.</returns>
