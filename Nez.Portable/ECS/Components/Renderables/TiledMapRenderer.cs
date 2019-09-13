@@ -81,9 +81,8 @@ namespace Nez
 
 			// offset the passed in world position to compensate for the entity position
 			worldPos -= Entity.Transform.Position + _localOffset;
-			return CollisionLayer.GetTile(0, 0);
-#warning NOT DONE
-			//return CollisionLayer.GetTileAtWorldPosition(worldPos);
+
+			return CollisionLayer.GetTileAtWorldPosition(worldPos);
 		}
 
 		/// <summary>
@@ -92,15 +91,13 @@ namespace Nez
 		/// </summary>
 		/// <returns>The tiles intersecting bounds.</returns>
 		/// <param name="bounds">Bounds.</param>
-		public List<TiledTile> GetTilesIntersectingBounds(Rectangle bounds)
+		public List<TmxLayerTile> GetTilesIntersectingBounds(Rectangle bounds)
 		{
 			Insist.IsNotNull(CollisionLayer, "collisionLayer must not be null!");
 
 			// offset the passed in world position to compensate for the entity position
 			bounds.Location -= (Entity.Transform.Position + _localOffset).ToPoint();
-			return null;
-#warning NOT DONE
-			//return CollisionLayer.GetTilesIntersectingBounds(bounds);
+			return CollisionLayer.GetTilesIntersectingBounds(bounds);
 		}
 
 		#endregion
@@ -118,20 +115,11 @@ namespace Nez
 			}
 		}
 
-		public override void OnAddedToEntity()
-		{
-			AddColliders();
-		}
+		public override void OnAddedToEntity() => AddColliders();
 
-		public override void OnRemovedFromEntity()
-		{
-			RemoveColliders();
-		}
+		public override void OnRemovedFromEntity() => RemoveColliders();
 
-		void IUpdatable.Update()
-		{
-			TiledMap.Update();
-		}
+		void IUpdatable.Update() => TiledMap.Update();
 
 		public override void Render(Graphics graphics, Camera camera)
 		{
@@ -172,21 +160,20 @@ namespace Nez
 				return;
 
 			// fetch the collision layer and its rects for collision
-			//var collisionRects = CollisionLayer.GetCollisionRectangles();
+			var collisionRects = CollisionLayer.GetCollisionRectangles();
 
-			//// create colliders for the rects we received
-			//_colliders = new Collider[collisionRects.Count];
-			//for (var i = 0; i < collisionRects.Count; i++)
-			//{
-			//	var collider = new BoxCollider(collisionRects[i].X + _localOffset.X,
-			//		collisionRects[i].Y + _localOffset.Y, collisionRects[i].Width, collisionRects[i].Height);
-			//	collider.PhysicsLayer = PhysicsLayer;
-			//	collider.Entity = Entity;
-			//	_colliders[i] = collider;
+			// create colliders for the rects we received
+			_colliders = new Collider[collisionRects.Count];
+			for (var i = 0; i < collisionRects.Count; i++)
+			{
+				var collider = new BoxCollider(collisionRects[i].X + _localOffset.X,
+					collisionRects[i].Y + _localOffset.Y, collisionRects[i].Width, collisionRects[i].Height);
+				collider.PhysicsLayer = PhysicsLayer;
+				collider.Entity = Entity;
+				_colliders[i] = collider;
 
-			//	Physics.AddCollider(collider);
-			//}
-#warning NOT DONE
+				Physics.AddCollider(collider);
+			}
 		}
 
 		public void RemoveColliders()
@@ -197,45 +184,6 @@ namespace Nez
 			foreach (var collider in _colliders)
 				Physics.RemoveCollider(collider);
 			_colliders = null;
-		}
-
-		#endregion
-
-
-		#region Rendering helpers
-
-		void RenderObjectGroup(TiledObjectGroup group, Graphics graphics)
-		{
-			var renderPosition = Entity.Transform.Position + _localOffset;
-
-			foreach (var obj in group.Objects)
-			{
-				if (!obj.Visible)
-					continue;
-
-				switch (obj.TiledObjectType)
-				{
-					case TiledObjectType.Ellipse:
-						graphics.Batcher.DrawCircle(
-							new Vector2(renderPosition.X + obj.X + obj.Width * 0.5f,
-								renderPosition.Y + obj.Y + obj.Height * 0.5f), obj.Width * 0.5f, group.Color);
-						break;
-					case TiledObjectType.Image:
-						throw new NotImplementedException("Image layers are not yet supported");
-					case TiledObjectType.Polygon:
-						graphics.Batcher.DrawPoints(renderPosition, obj.PolyPoints, group.Color, true);
-						break;
-					case TiledObjectType.Polyline:
-						graphics.Batcher.DrawPoints(renderPosition, obj.PolyPoints, group.Color, false);
-						break;
-					case TiledObjectType.None:
-						graphics.Batcher.DrawHollowRect(renderPosition.X + obj.X, renderPosition.Y + obj.Y, obj.Width,
-							obj.Height, group.Color);
-						break;
-					default:
-						throw new ArgumentOutOfRangeException();
-				}
-			}
 		}
 
 		#endregion

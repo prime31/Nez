@@ -71,12 +71,12 @@ namespace Nez.Tiled
 		public TmxObject(TmxMap map, XElement xObject)
 		{
 			Id = (int?)xObject.Attribute("id") ?? 0;
-			Name = (string)xObject.Attribute("name") ?? String.Empty;
+			Name = (string)xObject.Attribute("name") ?? string.Empty;
 			X = (float)xObject.Attribute("x");
 			Y = (float)xObject.Attribute("y");
 			Width = (float?)xObject.Attribute("width") ?? 0.0f;
 			Height = (float?)xObject.Attribute("height") ?? 0.0f;
-			Type = (string)xObject.Attribute("type") ?? String.Empty;
+			Type = (string)xObject.Attribute("type") ?? string.Empty;
 			Visible = (bool?)xObject.Attribute("visible") ?? true;
 			Rotation = (float?)xObject.Attribute("rotation") ?? 0.0f;
 

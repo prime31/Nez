@@ -41,8 +41,8 @@ namespace Nez.Tiled
 			{
 				if (Tilesets[i].FirstGid <= gid)
 				{
-					if (Tilesets[i].Tiles.ContainsKey(gid - Tilesets[i].FirstGid))
-						return Tilesets[i].Tiles[gid - Tilesets[i].FirstGid];
+					if (Tilesets[i].Tiles.TryGetValue(gid - Tilesets[i].FirstGid, out var tilesetTile))
+						return tilesetTile;
 				}
 			}
 

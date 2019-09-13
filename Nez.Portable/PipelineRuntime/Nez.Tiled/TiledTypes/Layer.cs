@@ -121,10 +121,39 @@ namespace Nez.Tiled
 		public bool VerticalFlip;
 		public bool DiagonalFlip;
 
+		int? _tilesetTileIndex;
+
+		/// <summary>
+		/// gets the TmxTilesetTile for this TmxLayerTile if it exists. TmxTilesetTile only exist for animated tiles and tiles with attached
+		/// properties.
+		/// </summary>
+		public TmxTilesetTile TilesetTile
+		{
+			get
+			{
+				if (!_tilesetTileIndex.HasValue)
+				{
+					_tilesetTileIndex = -1;
+					if (Tileset.FirstGid <= Gid)
+					{
+						if (Tileset.Tiles.TryGetValue(Gid - Tileset.FirstGid, out var tilesetTile))
+						{
+							_tilesetTileIndex = Gid - Tileset.FirstGid;
+						}
+					}
+				}
+
+				if (_tilesetTileIndex.Value < 0)
+					return null;
+
+				return Tileset.Tiles[_tilesetTileIndex.Value];
+			}
+		}
+
 		public TmxLayerTile(TmxMap map, uint id, int x, int y)
 		{
-			this.X = x;
-			this.Y = y;
+			X = x;
+			Y = y;
 			var rawGid = id;
 
 			// Scan for tile flip bit flags
@@ -145,7 +174,6 @@ namespace Nez.Tiled
 			Gid = (int)rawGid;
 			Tileset = map.GetTilesetForTileGid(Gid);
 		}
-
 	}
 
 }

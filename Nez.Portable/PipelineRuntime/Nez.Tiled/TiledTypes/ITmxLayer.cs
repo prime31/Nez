@@ -2,7 +2,7 @@
 
 namespace Nez.Tiled
 {
-	public interface ITmxLayer: ITmxElement
+	public interface ITmxLayer : ITmxElement
 	{
 		float OffsetX { get; }
 		float OffsetY { get; }

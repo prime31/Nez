@@ -139,7 +139,7 @@ namespace Nez.Tiled
 
 			// animated tiles (and tiles from image tilesets) will be inside the Tileset itself, in separate TmxTilesetTile
 			// objects, not to be confused with TmxLayerTiles which we are dealing with in this loop
-			var tilesetTile = tile.Tileset.Map.GetTilesetTile(gid);
+			var tilesetTile = tile.TilesetTile;
 			if (tilesetTile != null && tilesetTile.AnimationFrames.Count > 0)
 				gid = tilesetTile.currentAnimationFrameGid;
 
