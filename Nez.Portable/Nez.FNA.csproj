@@ -25,10 +25,6 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<Reference Include="System.Net.Http" />
-	</ItemGroup>
-
-	<ItemGroup>
 		<EmbeddedResource Include="Content\NezDefaultBMFont.xnb">
 			<Link>Content\NezDefaultBMFont.xnb</Link>
 		</EmbeddedResource>
