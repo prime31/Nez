@@ -7,7 +7,7 @@ using Nez.Textures;
 namespace Nez.Particles
 {
 	[Serializable]
-	public class ParticleEmitterConfig
+	public class ParticleEmitterConfig : IDisposable
 	{
 		public Subtexture Subtexture;
 
@@ -44,8 +44,8 @@ namespace Nez.Particles
 		public float EmissionRate;
 
 
-		/////// Particle ivars only used when a maxRadius value is provided.  These values are used for
-		/////// the special purpose of creating the spinning portal emitter
+		// Particle ivars only used when a maxRadius value is provided. These values are used for
+		// the special purpose of creating the spinning portal emitter
 		// Max radius at which particles are drawn when rotating
 		public float MaxRadius;
 
@@ -65,8 +65,14 @@ namespace Nez.Particles
 		public float RotatePerSecondVariance;
 
 
-		public ParticleEmitterConfig()
+		void IDisposable.Dispose()
 		{
+			if (Subtexture != null)
+			{
+				Subtexture.Texture2D.Dispose();
+				Subtexture.Texture2D = null;
+				Subtexture = null;
+			}
 		}
 	}
 }

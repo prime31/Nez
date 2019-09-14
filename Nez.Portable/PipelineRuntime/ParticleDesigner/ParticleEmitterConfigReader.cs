@@ -59,21 +59,6 @@ namespace Nez.ParticleDesigner
 			var texture = reader.ReadObject<Texture2D>();
 			emitterConfig.Subtexture = new Subtexture(texture);
 
-#if USE_RAW_TIFFS
-			// raw tiffs from a byte[] were originally used. Leaving this here for now just in case textures dont end up working
-			var tiffSize = reader.ReadInt32();
-			if( tiffSize > 0 )
-			{
-				var bytes = reader.ReadBytes( tiffSize );
-				using( var stream = new MemoryStream( bytes ) )
-				{
-					var tex = Texture2D.FromStream( Core.graphicsDevice, stream );
-					emitterConfig.subtexture = new Subtexture( tex );
-				}
-			}
-#endif
-
-
 			return emitterConfig;
 		}
 	}

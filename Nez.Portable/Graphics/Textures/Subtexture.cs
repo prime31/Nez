@@ -53,22 +53,15 @@ namespace Nez.Textures
 			Uvs.Height = sourceRect.Height * inverseTexH;
 		}
 
-
 		public Subtexture(Texture2D texture, Rectangle sourceRect) : this(texture, sourceRect, sourceRect.GetHalfSize())
-		{
-		}
-
+		{}
 
 		public Subtexture(Texture2D texture) : this(texture, new Rectangle(0, 0, texture.Width, texture.Height))
-		{
-		}
-
+		{}
 
 		public Subtexture(Texture2D texture, int x, int y, int width, int height) : this(texture,
 			new Rectangle(x, y, width, height))
-		{
-		}
-
+		{}
 
 		/// <summary>
 		/// convenience constructor that casts floats to ints for the sourceRect
@@ -80,9 +73,7 @@ namespace Nez.Textures
 		/// <param name="height">Height.</param>
 		public Subtexture(Texture2D texture, float x, float y, float width, float height) : this(texture, (int) x,
 			(int) y, (int) width, (int) height)
-		{
-		}
-
+		{}
 
 		/// <summary>
 		/// generates nine patch Rectangles. destArray should have 9 elements. renderRect is the final area in which the nine patch will be rendered.
@@ -120,7 +111,6 @@ namespace Nez.Textures
 			destArray[8] = new Rectangle(rightX, bottomY, marginRight, marginBottom); // bottom-right
 		}
 
-
 		/// <summary>
 		/// clones the Subtexture
 		/// </summary>
@@ -131,7 +121,6 @@ namespace Nez.Textures
 				Origin = Origin
 			};
 		}
-
 
 		/// <summary>
 		/// provides a List of subtextures given an atlas with equally spaced rows/columns of sprites
@@ -171,16 +160,8 @@ namespace Nez.Textures
 			return subtextures;
 		}
 
+		public static implicit operator Texture2D(Subtexture tex) => tex.Texture2D;
 
-		public static implicit operator Texture2D(Subtexture tex)
-		{
-			return tex.Texture2D;
-		}
-
-
-		public override string ToString()
-		{
-			return string.Format("{0}", SourceRect);
-		}
+		public override string ToString() => string.Format("{0}", SourceRect);
 	}
 }

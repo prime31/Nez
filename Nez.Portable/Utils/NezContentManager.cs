@@ -8,7 +8,7 @@ using Microsoft.Xna.Framework.Content;
 using System.Threading.Tasks;
 using System.IO;
 using Microsoft.Xna.Framework;
-
+using Nez.ParticleDesigner;
 
 namespace Nez.Systems
 {
@@ -59,6 +59,8 @@ namespace Nez.Systems
 		public NezContentManager() : base(((Game)Core._instance).Services, ((Game)Core._instance).Content.RootDirectory)
 		{}
 
+		#region Strongly Typed Loaders
+
 		/// <summary>
 		/// loads a Texture2D either from xnb or directly from a png/jpg. Note that xnb files should not contain the .xnb file
 		/// extension or be preceded by "Content" in the path. png/jpg files should have the file extension and have an absolute
@@ -105,6 +107,25 @@ namespace Nez.Systems
 			DisposableAssets.Add(tiledMap);
 
 			return tiledMap;
+		}
+
+		/// <summary>
+		/// Loads a ParticleDesigner pex file
+		/// </summary>
+		public Particles.ParticleEmitterConfig LoadParticleEmitterConfig(string name)
+		{
+			if (LoadedAssets.TryGetValue(name, out var asset))
+			{
+				if (asset is Particles.ParticleEmitterConfig config)
+					return config;
+			}
+
+			var emitterConfig = ParticleEmitterConfigLoader.Load(name);
+
+			LoadedAssets[name] = emitterConfig;
+			DisposableAssets.Add(emitterConfig);
+
+			return emitterConfig;
 		}
 
 		/// <summary>
@@ -180,6 +201,8 @@ namespace Nez.Systems
 
 			return effect;
 		}
+
+		#endregion
 
 		/// <summary>
 		/// loads an asset on a background thread with optional callback for when it is loaded. The callback will occur on the main thread.
