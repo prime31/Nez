@@ -10,16 +10,14 @@ namespace Nez.AI.Pathfinding
 	/// </summary>
 	public class UnweightedGridGraph : IUnweightedGraph<Point>
 	{
-		static readonly Point[] CARDINAL_DIRS = new[]
-		{
+		static readonly Point[] CARDINAL_DIRS = {
 			new Point(1, 0),
 			new Point(0, -1),
 			new Point(-1, 0),
 			new Point(0, 1),
 		};
 
-		static readonly Point[] COMPASS_DIRS = new[]
-		{
+		static readonly Point[] COMPASS_DIRS = {
 			new Point(1, 0),
 			new Point(1, -1),
 			new Point(0, -1),
@@ -39,21 +37,20 @@ namespace Nez.AI.Pathfinding
 
 		public UnweightedGridGraph(int width, int height, bool allowDiagonalSearch = false)
 		{
-			this._width = width;
-			this._height = height;
-			this._dirs = allowDiagonalSearch ? COMPASS_DIRS : CARDINAL_DIRS;
+			_width = width;
+			_height = height;
+			_dirs = allowDiagonalSearch ? COMPASS_DIRS : CARDINAL_DIRS;
 		}
 
-
-		public UnweightedGridGraph(TiledTileLayer tiledLayer)
+		public UnweightedGridGraph(TmxLayer tiledLayer)
 		{
 			_width = tiledLayer.Width;
 			_height = tiledLayer.Height;
 			_dirs = CARDINAL_DIRS;
 
-			for (var y = 0; y < tiledLayer.TiledMap.Height; y++)
+			for (var y = 0; y < tiledLayer.Map.Height; y++)
 			{
-				for (var x = 0; x < tiledLayer.TiledMap.Width; x++)
+				for (var x = 0; x < tiledLayer.Map.Width; x++)
 				{
 					if (tiledLayer.GetTile(x, y) != null)
 						Walls.Add(new Point(x, y));
@@ -61,18 +58,12 @@ namespace Nez.AI.Pathfinding
 			}
 		}
 
-
 		public bool IsNodeInBounds(Point node)
 		{
 			return 0 <= node.X && node.X < _width && 0 <= node.Y && node.Y < _height;
 		}
 
-
-		public bool IsNodePassable(Point node)
-		{
-			return !Walls.Contains(node);
-		}
-
+		public bool IsNodePassable(Point node) => !Walls.Contains(node);
 
 		IEnumerable<Point> IUnweightedGraph<Point>.GetNeighbors(Point node)
 		{
@@ -88,15 +79,9 @@ namespace Nez.AI.Pathfinding
 			return _neighbors;
 		}
 
-
 		/// <summary>
-		/// convenience shortcut for clling BreadthFirstPathfinder.search
+		/// convenience shortcut for calling BreadthFirstPathfinder.search
 		/// </summary>
-		/// <param name="start">Start.</param>
-		/// <param name="goal">Goal.</param>
-		public List<Point> Search(Point start, Point goal)
-		{
-			return BreadthFirstPathfinder.Search(this, start, goal);
-		}
+		public List<Point> Search(Point start, Point goal) => BreadthFirstPathfinder.Search(this, start, goal);
 	}
 }

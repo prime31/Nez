@@ -35,19 +35,18 @@ namespace Nez.AI.Pathfinding
 			_height = height;
 		}
 
-
 		/// <summary>
 		/// creates a WeightedGridGraph from a TiledTileLayer. Present tile are walls and empty tiles are passable.
 		/// </summary>
 		/// <param name="tiledLayer">Tiled layer.</param>
-		public AstarGridGraph(TiledTileLayer tiledLayer)
+		public AstarGridGraph(TmxLayer tiledLayer)
 		{
 			_width = tiledLayer.Width;
 			_height = tiledLayer.Height;
 
-			for (var y = 0; y < tiledLayer.TiledMap.Height; y++)
+			for (var y = 0; y < tiledLayer.Map.Height; y++)
 			{
-				for (var x = 0; x < tiledLayer.TiledMap.Width; x++)
+				for (var x = 0; x < tiledLayer.Map.Width; x++)
 				{
 					if (tiledLayer.GetTile(x, y) != null)
 						Walls.Add(new Point(x, y));
@@ -55,39 +54,25 @@ namespace Nez.AI.Pathfinding
 			}
 		}
 
-
 		/// <summary>
 		/// ensures the node is in the bounds of the grid graph
 		/// </summary>
 		/// <returns><c>true</c>, if node in bounds was ised, <c>false</c> otherwise.</returns>
-		/// <param name="node">Node.</param>
 		bool IsNodeInBounds(Point node)
 		{
 			return 0 <= node.X && node.X < _width && 0 <= node.Y && node.Y < _height;
 		}
 
-
 		/// <summary>
 		/// checks if the node is passable. Walls are impassable.
 		/// </summary>
 		/// <returns><c>true</c>, if node passable was ised, <c>false</c> otherwise.</returns>
-		/// <param name="node">Node.</param>
-		bool IsNodePassable(Point node)
-		{
-			return !Walls.Contains(node);
-		}
-
+		bool IsNodePassable(Point node) => !Walls.Contains(node);
 
 		/// <summary>
 		/// convenience shortcut for calling AStarPathfinder.search
 		/// </summary>
-		/// <param name="start">Start.</param>
-		/// <param name="goal">Goal.</param>
-		public List<Point> Search(Point start, Point goal)
-		{
-			return AStarPathfinder.Search(this, start, goal);
-		}
-
+		public List<Point> Search(Point start, Point goal) => AStarPathfinder.Search(this, start, goal);
 
 		#region IAstarGraph implementation
 
@@ -105,12 +90,10 @@ namespace Nez.AI.Pathfinding
 			return _neighbors;
 		}
 
-
 		int IAstarGraph<Point>.Cost(Point from, Point to)
 		{
 			return WeightedNodes.Contains(to) ? WeightedNodeWeight : DefaultWeight;
 		}
-
 
 		int IAstarGraph<Point>.Heuristic(Point node, Point goal)
 		{
