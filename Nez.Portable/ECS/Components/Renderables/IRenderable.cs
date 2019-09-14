@@ -80,7 +80,8 @@ namespace Nez
 
 
 	/// <summary>
-	/// Comparer for sorting IRenderables
+	/// Comparer for sorting IRenderables. Sorts first by RenderLayer, then LayerDepth. If there is a tie Materials
+	/// are used for the tie-breaker to avoid render state changes.
 	/// </summary>
 	public class IRenderableComparer : IComparer<IRenderable>
 	{

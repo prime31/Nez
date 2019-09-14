@@ -163,7 +163,7 @@ namespace Nez
 				if (_finalRenderDelegate != null)
 					_finalRenderDelegate.OnAddedToScene(this);
 			}
-			get { return _finalRenderDelegate; }
+			get => _finalRenderDelegate;
 		}
 
 		IFinalRenderDelegate _finalRenderDelegate;
