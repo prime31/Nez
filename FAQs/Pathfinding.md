@@ -55,8 +55,6 @@ var path = graph.Search( new Point( 3, 4 ), new Point( 15, 17 ) );
 ```
 
 
-
-
 ## Astar
 Astar is probably the most well known of all pathfinding algorithms. It differs from Dijkstra in that it introduces a heuristic for each edge that the algorithm takes into account when pathfinding. This lets you add some interesting elements such as edges with higher costs (moving along a road vs moving through a mud bog for example.) The algorithm will ask you for a cost to get from one node to another and you can choose to return any value that makes sense. It will then use the information to find not a only a path to the goal but the lowest cost path.
 

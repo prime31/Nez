@@ -36,7 +36,7 @@ table.Add( button ).SetMinWidth( 100 ).SetMinHeight( 30 );
 
 
 ## Skins
-Nez UI supports a skin system similar to [libGDX skins](https://github.com/libgdx/libgdx/wiki/Skin). Skins are optional but highly recommended. They act as a container to hold all of your UI resources and offer a bunch of automatic conversions. Nez includes a simple, default skin (accessible via `Skin.createDefaultSkin`) that you can use to mock up UIs quickly. You can create a skin programatically or via a JSON file that is run through the UI Skin Importer in the Pipeline tool. This gets the JSON parsed at build time so the data is ready to use at runtime. Below is example JSON with some comments added explaining the different elements.
+Nez UI supports a skin system similar to [libGDX skins](https://github.com/libgdx/libgdx/wiki/Skin). Skins are optional but highly recommended. They act as a container to hold all of your UI resources and offer a bunch of automatic conversions. Nez includes a simple, default skin (accessible via `Skin.CreateDefaultSkin`) that you can use to mock up UIs quickly. You can create a skin programatically or via a JSON file that is run through the UI Skin Importer in the Pipeline tool. This gets the JSON parsed at build time so the data is ready to use at runtime. Below is example JSON with some comments added explaining the different elements.
 
 ```javascript
 {

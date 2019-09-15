@@ -4,19 +4,19 @@ The root class in the Nez world is the Core class which is a subclass of the Gam
 
 
 ## Graphics
-Nez will create an instance of the Graphics class (available via Graphics.instance) for you at startup. It includes a default BitmapFont so you can be up and running right away with good looking text (MonoGames SpriteFont has some terrible compression going on) and should cover most of your rendering needs. Graphics provides direct access to a SpriteBatch and there is a SpriteBatch extension class with a bunch of helpers for drawing rectangles, circles, lines, etc.
+Nez will create an instance of the Graphics class (available via `Graphics.Instance``) for you at startup. It includes a default BitmapFont so you can be up and running right away with good looking text (MonoGames SpriteFont has some terrible compression going on) and should cover most of your rendering needs. Graphics provides direct access to a SpriteBatch and there is a SpriteBatch extension class with a bunch of helpers for drawing rectangles, circles, lines, etc.
 
 
 ## Scene
-When you set Core.scene to a new Scene, Nez will finish rendering the current Scene, fire off the CoreEvents.SceneChanged event and then start rendering the new Scene. For more information on Scenes see the [Scene-Entity-Component](Scene-Entity-Component.md) FAQ.
+When you set Core.scene to a new Scene, Nez will finish rendering the current Scene, fire off the `CoreEvents.SceneChanged` event and then start rendering the new Scene. For more information on Scenes see the [Scene-Entity-Component](Scene-Entity-Component.md) FAQ.
 
 
 ## Physics
-Be careful not to confuse the Nez Physics system with realistic physics simulations (such as Box2D, Chipmunk, etc)! That is not at all its purpose. The Physics system is here only to provide spatial and collision information. It does not attempt to handle a full, real-world physics simulation. At the core of the Physics system is a SpatialHash that gets populated and updated automatically as you add/remove/move Colliders. You can access the various Physics-related methods via the **Physics** class which provides methods (boxcast, raycast, etc) to handle broadphase collision detection in a performant way. Internally, Nez uses the Physics systems for collision detection with various shapes such as rectangles, circles and polygons. The Entity class provides move methods that handle all this for you or you could opt to just query the Physics system and handle the narrow phase collision detection yourself.
+Be careful not to confuse the Nez Physics system with realistic physics simulations (such as Box2D, Farseer, Chipmunk, etc)! That is not at all its purpose. The Physics system is here only to provide spatial and collision information. It does not attempt to handle a full, real-world physics simulation. At the core of the Physics system is a SpatialHash that gets populated and updated automatically as you add/remove/move Colliders. You can access the various Physics-related methods via the **Physics** class which provides methods (boxcast, raycast, etc) to handle broadphase collision detection in a performant way. Internally, Nez uses the Physics systems for collision detection with various shapes such as rectangles, circles and polygons. The Entity class provides move methods that handle all this for you or you could opt to just query the Physics system and handle the narrow phase collision detection yourself.
 
 
 ## TimerManager
-The TimerManager is a simple helper that lets you pass in an Action that can be called once or repeately with or without a delay. The **Core.Schedule** method provides easy access to the TimerManager. When you call **schedule** you get back an ITimer object that has a **stop** method that can be used to stop the timer from firing again. Timers are automatically cached and reused so fire up as many as you need.
+The TimerManager is a simple helper that lets you pass in an Action that can be called once or repeately with or without a delay. The **Core.Schedule** method provides easy access to the TimerManager. When you call **Schedule** you get back an ITimer object that has a **Stop** method that can be used to stop the timer from firing again.
 
 
 ## CoroutineManager

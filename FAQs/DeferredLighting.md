@@ -19,16 +19,16 @@ Below are the three most common Material setups: normal mapped lit, normal mappe
 var standardMaterial = new DeferredSpriteMaterial( normalMapTexture );
 
 
-// diffuse lit Material. The nullNormalMapTexture is used
-var diffuseOnlylMaterial = new DeferredSpriteMaterial( deferredRenderer.nullNormalMapTexture );
+// diffuse lit Material. The NullNormalMapTexture is used
+var diffuseOnlylMaterial = new DeferredSpriteMaterial( deferredRenderer.NullNormalMapTexture );
 
 
 // lit, normal mapped and self illuminated Material.
-// first we create the Material with our normal map. Note that our normal map should have an alpha channel for the self illumination and it
+// first we create the Material with our normal map. Note that your normal map should have an alpha channel for the self illumination and it
 // needs to have premultiplied alpha disabled in the Pipeline Tool
 var selfLitMaterial = new DeferredSpriteMaterial( selfLitNormalMapTexture );
 
-// we can access the Effect on a Material<T> via the typedEffect property. We need to tell the Effect that we want self illumination and
+// we can access the Effect on a Material<T> via the `TypedEffect` property. We need to tell the Effect that we want self illumination and
 // optionally set the self illumination power.
 selfLitMaterial.effect.SetUseNormalAlphaChannelForSelfIllumination( true )
 	.SetSelfIlluminationPower( 0.5f );
@@ -37,7 +37,7 @@ selfLitMaterial.effect.SetUseNormalAlphaChannelForSelfIllumination( true )
 
 
 ## Scene Setup
-There isn't much that needs to be done for our Scene setup. All we have to do is add a `DeferredLightingRenderer`. The values you pass to the constructor of this Renderer are very important though! You have to specify which renderLayer it should use for lights and which renderLayers contain your normal sprites.
+There isn't much that needs to be done for your Scene setup. All you have to do is add a `DeferredLightingRenderer`. The values you pass to the constructor of this Renderer are very important though! You have to specify which RenderLayer it should use for lights and which RenderLayers contain your normal sprites.
 
 ```cs
 // define your renderLayers somewhere easy to access
@@ -54,11 +54,11 @@ deferredRenderer.SetAmbientColor( Color.Black );
 
 
 ## Entity Setup
-Now we just have to make sure that we use the proper renderLayers (easy to do since we were smart and made them const int) and Materials when creating our Renderables:
+Now we just have to make sure that we use the proper RenderLayers (easy to do since we were smart and made them `const int`) and Materials when creating our Renderables:
 
 ```cs
 // create an Entity to house our sprite
-var entity = scene.CreateEntity( "sprite" );
+var entity = Scene.CreateEntity( "sprite" );
 
 // add a Sprite and here is the important part: be sure to set the renderLayer and material
 entity.AddComponent( new Sprite( spriteTexture ) )
