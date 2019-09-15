@@ -8,14 +8,10 @@ namespace Nez.UI
 	{
 		public Dictionary<string, Color> Colors;
 		public string[] TextureAtlases;
-		public string[] LibGdxAtlases;
 		public UISkinStyleConfig Styles;
 
 
-		public bool ContainsColor(string name)
-		{
-			return Colors.ContainsKey(name);
-		}
+		public bool ContainsColor(string name) => Colors.ContainsKey(name);
 	}
 
 

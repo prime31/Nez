@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using Nez.LibGdxAtlases;
 using Nez.Textures;
 using Microsoft.Xna.Framework;
 using Nez.BitmapFonts;
@@ -196,10 +195,6 @@ namespace Nez.UI
 					AddSprites(contentManager.Load<TextureAtlas>(atlas));
 			}
 
-			if (config.LibGdxAtlases != null)
-				foreach (var atlas in config.LibGdxAtlases)
-					AddSprites(contentManager.Load<LibGdxAtlas>(atlas));
-
 			if (config.Styles != null)
 			{
 				var styleClasses = config.Styles.GetStyleClasses();
@@ -321,16 +316,6 @@ namespace Nez.UI
 			return styleClass;
 		}
 
-		/// <summary>
-		/// Adds all named sprites from the atlas. If NinePatchSprites are found they will be explicitly added as such.
-		/// </summary>
-		/// <param name="atlas">Atlas.</param>
-		public void AddSprites(LibGdxAtlas atlas)
-		{
-			for (int i = 0, n = atlas.Atlases.Count; i < n; i++)
-				AddSprites(atlas.Atlases[i]);
-		}
-
 
 		/// <summary>
 		/// Adds all named Sprites from the atlas
@@ -352,9 +337,6 @@ namespace Nez.UI
 		/// <summary>
 		/// adds the typed resource to this skin
 		/// </summary>
-		/// <param name="name">Name.</param>
-		/// <param name="resource">Resource.</param>
-		/// <typeparam name="T">The 1st type parameter.</typeparam>
 		public T Add<T>(string name, T resource)
 		{
 			Dictionary<string, object> typedResources;

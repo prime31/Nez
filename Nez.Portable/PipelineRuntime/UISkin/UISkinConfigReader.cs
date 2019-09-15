@@ -19,7 +19,7 @@ namespace Nez.UI
 				skinConfig.TextureAtlases = reader.ReadObject<string[]>();
 
 			if (reader.ReadBoolean())
-				skinConfig.LibGdxAtlases = reader.ReadObject<string[]>();
+				reader.ReadObject<string[]>();
 
 			if (reader.ReadBoolean())
 				skinConfig.Styles = reader.ReadObject<UISkinStyleConfig>();
