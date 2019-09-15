@@ -10,7 +10,8 @@ namespace Nez.Sprites
 	/// prefer). If you do use an Enum it is recommended to pass in a IEqualityComparer when using an enum like CoreEvents does. See also
 	/// the EnumEqualityComparerGenerator.tt T4 template for automatically generating the IEqualityComparer.
 	/// </summary>
-	public class Sprite<TEnum> : Sprite, IUpdatable where TEnum : struct, IComparable, IFormattable
+	[Obsolete("")]
+	public class Sprite<TEnum> : SpriteRenderer, IUpdatable where TEnum : struct, IComparable, IFormattable
 	{
 		public event Action<TEnum> OnAnimationCompletedEvent;
 		public bool IsPlaying { get; private set; }
@@ -243,20 +244,11 @@ namespace Nez.Sprites
 			return _currentAnimation != null && _currentAnimationKey.Equals(animationKey);
 		}
 
-		public void Pause()
-		{
-			IsPlaying = false;
-		}
+		public void Pause() => IsPlaying = false;
 
-		public void UnPause()
-		{
-			IsPlaying = true;
-		}
+		public void UnPause() => IsPlaying = true;
 
-		public void ReverseAnimation()
-		{
-			_isReversed = !_isReversed;
-		}
+		public void ReverseAnimation() => _isReversed = !_isReversed;
 
 		public void Stop()
 		{

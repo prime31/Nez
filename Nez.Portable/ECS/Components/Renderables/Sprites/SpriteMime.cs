@@ -11,7 +11,7 @@
 		public override float Height => _spriteToMime.Height;
 		public override RectangleF Bounds => _spriteToMime.Bounds;
 
-		Sprite _spriteToMime;
+		SpriteRenderer _spriteToMime;
 
 
 		public SpriteMime()
@@ -19,7 +19,7 @@
 			Enabled = false;
 		}
 
-		public SpriteMime(Sprite spriteToMime)
+		public SpriteMime(SpriteRenderer spriteToMime)
 		{
 			_spriteToMime = spriteToMime;
 		}
@@ -27,7 +27,7 @@
 		public override void OnAddedToEntity()
 		{
 			if (_spriteToMime == null)
-				_spriteToMime = this.GetComponent<Sprite>();
+				_spriteToMime = this.GetComponent<SpriteRenderer>();
 		}
 
 		public override void Render(Graphics graphics, Camera camera)

@@ -8,7 +8,7 @@ namespace Nez
 	/// <summary>
 	/// skewable rectangle sprite for prototyping
 	/// </summary>
-	public class PrototypeSprite : Sprite
+	public class PrototypeSprite : SpriteRenderer
 	{
 		public override float Width => _width;
 		public override float Height => _height;

@@ -6,7 +6,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Nez
 {
-	public class NineSliceSprite : Sprite
+	public class NineSliceSprite : SpriteRenderer
 	{
 		public new float Width
 		{

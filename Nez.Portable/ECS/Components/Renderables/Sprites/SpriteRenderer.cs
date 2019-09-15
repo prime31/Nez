@@ -8,7 +8,7 @@ namespace Nez.Sprites
 	/// <summary>
 	/// the most basic and common Renderable. Renders a Subtexture/Texture.
 	/// </summary>
-	public class Sprite : RenderableComponent
+	public class SpriteRenderer : RenderableComponent
 	{
 		public override RectangleF Bounds
 		{
@@ -92,17 +92,17 @@ namespace Nez.Sprites
 		protected Subtexture _subtexture;
 
 
-		public Sprite()
+		public SpriteRenderer()
 		{
 		}
 
-		public Sprite(Subtexture subtexture)
+		public SpriteRenderer(Subtexture subtexture)
 		{
 			_subtexture = subtexture;
 			_origin = subtexture.Center;
 		}
 
-		public Sprite(Texture2D texture) : this(new Subtexture(texture))
+		public SpriteRenderer(Texture2D texture) : this(new Subtexture(texture))
 		{
 		}
 
@@ -115,7 +115,7 @@ namespace Nez.Sprites
 		/// </summary>
 		/// <returns>The subtexture.</returns>
 		/// <param name="subtexture">Subtexture.</param>
-		public Sprite SetSubtexture(Subtexture subtexture)
+		public SpriteRenderer SetSubtexture(Subtexture subtexture)
 		{
 			_subtexture = subtexture;
 
@@ -129,7 +129,7 @@ namespace Nez.Sprites
 		/// </summary>
 		/// <returns>The origin.</returns>
 		/// <param name="origin">Origin.</param>
-		public Sprite SetOrigin(Vector2 origin)
+		public SpriteRenderer SetOrigin(Vector2 origin)
 		{
 			if (_origin != origin)
 			{
@@ -145,7 +145,7 @@ namespace Nez.Sprites
 		/// </summary>
 		/// <returns>The origin normalized.</returns>
 		/// <param name="origin">Origin.</param>
-		public Sprite SetOriginNormalized(Vector2 value)
+		public SpriteRenderer SetOriginNormalized(Vector2 value)
 		{
 			SetOrigin(new Vector2(value.X * Width / Entity.Transform.Scale.X,
 				value.Y * Height / Entity.Transform.Scale.Y));

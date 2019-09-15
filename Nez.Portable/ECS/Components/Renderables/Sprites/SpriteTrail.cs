@@ -36,7 +36,7 @@ namespace Nez.Sprites
 
 
 			public void Spawn(Vector2 position, Subtexture subtexture, float fadeDuration, float fadeDelay,
-			                  Color initialColor, Color targetColor)
+							  Color initialColor, Color targetColor)
 			{
 				this.Position = position;
 				_subtexture = subtexture;
@@ -52,7 +52,7 @@ namespace Nez.Sprites
 
 
 			public void SetSpriteRenderOptions(float rotation, Vector2 origin, Vector2 scale,
-			                                   SpriteEffects spriteEffects, float layerDepth)
+											   SpriteEffects spriteEffects, float layerDepth)
 			{
 				_rotation = rotation;
 				_origin = origin;
@@ -134,7 +134,7 @@ namespace Nez.Sprites
 		Stack<SpriteTrailInstance> _availableSpriteTrailInstances = new Stack<SpriteTrailInstance>();
 		List<SpriteTrailInstance> _liveSpriteTrailInstances = new List<SpriteTrailInstance>(5);
 		Vector2 _lastPosition;
-		Sprite _sprite;
+		SpriteRenderer _sprite;
 
 		/// <summary>
 		/// flag when true it will always add a new instance regardless of the distance check
@@ -151,7 +151,7 @@ namespace Nez.Sprites
 		{
 		}
 
-		public SpriteTrail(Sprite sprite)
+		public SpriteTrail(SpriteRenderer sprite)
 		{
 			_sprite = sprite;
 		}
@@ -256,7 +256,7 @@ namespace Nez.Sprites
 		public override void OnAddedToEntity()
 		{
 			if (_sprite == null)
-				_sprite = this.GetComponent<Sprite>();
+				_sprite = this.GetComponent<SpriteRenderer>();
 
 			if (_sprite == null)
 			{

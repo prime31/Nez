@@ -4,7 +4,7 @@ using Nez.Sprites;
 
 namespace Nez
 {
-	public class TextComponent : Sprite
+	public class TextComponent : SpriteRenderer
 	{
 		public override RectangleF Bounds
 		{

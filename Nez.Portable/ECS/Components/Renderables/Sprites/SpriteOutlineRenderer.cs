@@ -25,14 +25,14 @@ namespace Nez
 		/// </summary>
 		public Color OutlineColor = Color.Black;
 
-		Sprite _sprite;
+		SpriteRenderer _sprite;
 
 
 		/// <summary>
 		/// the Sprite passed in will be disabled. The SpriteOutlineRenderer will handle manually calling its render method.
 		/// </summary>
 		/// <param name="sprite">Sprite.</param>
-		public SpriteOutlineRenderer(Sprite sprite)
+		public SpriteOutlineRenderer(SpriteRenderer sprite)
 		{
 			_sprite = sprite;
 
