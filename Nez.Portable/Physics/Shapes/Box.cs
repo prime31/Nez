@@ -15,8 +15,8 @@ namespace Nez.PhysicsShapes
 		public Box(float width, float height) : base(BuildBox(width, height), true)
 		{
 			isBox = true;
-			this.Width = width;
-			this.Height = height;
+			Width = width;
+			Height = height;
 		}
 
 
@@ -49,8 +49,8 @@ namespace Nez.PhysicsShapes
 		/// <param name="height">Height.</param>
 		public void UpdateBox(float width, float height)
 		{
-			this.Width = width;
-			this.Height = height;
+			Width = width;
+			Height = height;
 
 			// we create our points around a center of 0,0
 			var halfWidth = width / 2;

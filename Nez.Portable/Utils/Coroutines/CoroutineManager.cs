@@ -39,7 +39,7 @@ namespace Nez.Systems
 
 			public ICoroutine SetUseUnscaledDeltaTime(bool useUnscaledDeltaTime)
 			{
-				this.UseUnscaledDeltaTime = useUnscaledDeltaTime;
+				UseUnscaledDeltaTime = useUnscaledDeltaTime;
 				return this;
 			}
 

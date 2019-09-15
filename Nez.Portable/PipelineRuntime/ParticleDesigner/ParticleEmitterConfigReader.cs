@@ -57,7 +57,7 @@ namespace Nez.ParticleDesigner
 
 
 			var texture = reader.ReadObject<Texture2D>();
-			emitterConfig.Subtexture = new Subtexture(texture);
+			emitterConfig.Sprite = new Sprite(texture);
 
 			return emitterConfig;
 		}

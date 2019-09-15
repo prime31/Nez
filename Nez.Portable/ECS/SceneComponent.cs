@@ -95,9 +95,9 @@ namespace Nez
 		/// <param name="updateOrder">Update order.</param>
 		public SceneComponent SetUpdateOrder(int updateOrder)
 		{
-			if (this.UpdateOrder != updateOrder)
+			if (UpdateOrder != updateOrder)
 			{
-				this.UpdateOrder = updateOrder;
+				UpdateOrder = updateOrder;
 				Core.Scene._sceneComponents.Sort();
 			}
 

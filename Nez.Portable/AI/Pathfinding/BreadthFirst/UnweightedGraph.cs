@@ -15,7 +15,7 @@ namespace Nez.AI.Pathfinding
 
 		public UnweightedGraph<T> AddEdgesForNode(T node, T[] edges)
 		{
-			this.Edges[node] = edges;
+			Edges[node] = edges;
 			return this;
 		}
 

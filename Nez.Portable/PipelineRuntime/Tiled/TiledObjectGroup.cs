@@ -17,10 +17,10 @@ namespace Nez.Tiled
 
 		public TiledObjectGroup(string name, Color color, bool visible, float opacity)
 		{
-			this.Name = name;
-			this.Color = color;
-			this.Visible = visible;
-			this.Opacity = opacity;
+			Name = name;
+			Color = color;
+			Visible = visible;
+			Opacity = opacity;
 		}
 
 

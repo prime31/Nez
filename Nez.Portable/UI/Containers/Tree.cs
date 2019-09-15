@@ -353,8 +353,8 @@ namespace Nez.UI.Containers
 
 		public void SetIconSpacing(float left, float right)
 		{
-			this.iconSpacingLeft = left;
-			this.iconSpacingRight = right;
+			iconSpacingLeft = left;
+			iconSpacingRight = right;
 		}
 
 		public void FindExpandedObjects(List<object> objects)

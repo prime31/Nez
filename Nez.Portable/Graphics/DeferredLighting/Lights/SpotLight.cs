@@ -26,7 +26,7 @@ namespace Nez.DeferredLighting
 
 		public SpotLight(Color color)
 		{
-			this.Color = color;
+			Color = color;
 		}
 
 
@@ -56,7 +56,7 @@ namespace Nez.DeferredLighting
 		/// <param name="intensity">Intensity.</param>
 		public new SpotLight SetIntensity(float intensity)
 		{
-			this.Intensity = intensity;
+			Intensity = intensity;
 			return this;
 		}
 
@@ -65,7 +65,7 @@ namespace Nez.DeferredLighting
 
 		public SpotLight SetConeAngle(float coneAngle)
 		{
-			this.ConeAngle = coneAngle;
+			ConeAngle = coneAngle;
 			return this;
 		}
 

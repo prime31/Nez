@@ -23,7 +23,7 @@ namespace Nez.AI.BehaviorTrees
 
 		public override TaskStatus Update(T context)
 		{
-			if (Nez.Random.NextFloat() > _successProbability)
+			if (Random.NextFloat() > _successProbability)
 				return TaskStatus.Success;
 
 			return TaskStatus.Failure;

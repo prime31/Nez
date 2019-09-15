@@ -39,33 +39,33 @@ namespace Nez.DeferredLighting
 
 		public DirLight(Color color) : this()
 		{
-			this.Color = color;
+			Color = color;
 		}
 
 
 		public DirLight(Color color, Vector3 lightDirection) : this(color)
 		{
-			this.Direction = lightDirection;
+			Direction = lightDirection;
 		}
 
 
 		public DirLight SetDirection(Vector3 direction)
 		{
-			this.Direction = direction;
+			Direction = direction;
 			return this;
 		}
 
 
 		public DirLight SetSpecularIntensity(float specularIntensity)
 		{
-			this.SpecularIntensity = specularIntensity;
+			SpecularIntensity = specularIntensity;
 			return this;
 		}
 
 
 		public DirLight SetSpecularPower(float specularPower)
 		{
-			this.SpecularPower = specularPower;
+			SpecularPower = specularPower;
 			return this;
 		}
 

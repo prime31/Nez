@@ -13,7 +13,7 @@ namespace Nez.UI
 		public DebugRectangleF(float x, float y, float width, float height, Color color)
 		{
 			Rect = new RectangleF(x, y, width, height);
-			this.Color = color;
+			Color = color;
 		}
 
 
@@ -23,7 +23,7 @@ namespace Nez.UI
 			Rect.Y = y;
 			Rect.Width = width;
 			Rect.Height = height;
-			this.Color = color;
+			Color = color;
 		}
 	}
 }

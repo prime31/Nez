@@ -18,7 +18,7 @@ namespace Nez.AI.UtilityAI
 
 		public AllOrNothingConsideration(float threshold = 0)
 		{
-			this.Threshold = threshold;
+			Threshold = threshold;
 		}
 
 

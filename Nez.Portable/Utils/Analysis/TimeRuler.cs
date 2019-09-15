@@ -161,7 +161,7 @@ namespace Nez.Analysis
 
 			public MarkerInfo(string name)
 			{
-				this.Name = name;
+				Name = name;
 			}
 		}
 

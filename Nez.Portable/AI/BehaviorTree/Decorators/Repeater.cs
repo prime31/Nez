@@ -29,15 +29,15 @@ namespace Nez.AI.BehaviorTrees
 
 		public Repeater(int count, bool endOnFailure = false)
 		{
-			this.Count = count;
-			this.EndOnFailure = endOnFailure;
+			Count = count;
+			EndOnFailure = endOnFailure;
 		}
 
 
 		public Repeater(bool repeatForever, bool endOnFailure = false)
 		{
-			this.RepeatForever = repeatForever;
-			this.EndOnFailure = endOnFailure;
+			RepeatForever = repeatForever;
+			EndOnFailure = endOnFailure;
 		}
 
 

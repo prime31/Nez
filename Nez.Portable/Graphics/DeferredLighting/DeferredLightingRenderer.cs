@@ -92,7 +92,7 @@ namespace Nez.DeferredLighting
 			_lightLayer = lightLayer;
 			Array.Sort(renderLayers);
 			Array.Reverse(renderLayers);
-			this.RenderLayers = renderLayers;
+			RenderLayers = renderLayers;
 
 			_lightEffect = new DeferredLightEffect();
 

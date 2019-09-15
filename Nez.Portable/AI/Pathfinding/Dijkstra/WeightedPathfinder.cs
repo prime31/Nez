@@ -17,7 +17,7 @@ namespace Nez.AI.Pathfinding
 
 			public WeightedNode(T data)
 			{
-				this.Data = data;
+				Data = data;
 			}
 		}
 

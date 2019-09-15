@@ -179,7 +179,7 @@ namespace Nez
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static void CreateRotation(float radians, out Matrix2D result)
 		{
-			result = Matrix2D.Identity;
+			result = Identity;
 
 			var val1 = (float) Math.Cos(radians);
 			var val2 = (float) Math.Sin(radians);

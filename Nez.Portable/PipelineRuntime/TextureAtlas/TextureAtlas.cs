@@ -15,7 +15,7 @@ namespace Nez.TextureAtlases
 		/// <summary>
 		/// array of all subtextures from the atlas
 		/// </summary>
-		public readonly Subtexture[] Subtextures;
+		public readonly Sprite[] Subtextures;
 
 		/// <summary>
 		/// image names for the subtextures. maps directly to the subtextures array
@@ -32,7 +32,7 @@ namespace Nez.TextureAtlases
 		Dictionary<string, SpriteAnimation> _spriteAnimations;
 
 
-		public TextureAtlas(string[] regionNames, Subtexture[] subtextures,
+		public TextureAtlas(string[] regionNames, Sprite[] subtextures,
 		                    Dictionary<string, Point> spriteAnimationDetails, int animationFPS = 15)
 		{
 			RegionNames = regionNames;
@@ -41,20 +41,20 @@ namespace Nez.TextureAtlases
 			_animationFPS = animationFPS;
 		}
 
-		public TextureAtlas(string[] regionNames, Subtexture[] subtextures) : this(regionNames, subtextures, null)
+		public TextureAtlas(string[] regionNames, Sprite[] subtextures) : this(regionNames, subtextures, null)
 		{}
 
 		/// <summary>
-		/// gets the Subtexture for the passed in image name
+		/// gets the Sprite for the passed in image name
 		/// </summary>
-		/// <returns>The subtexture.</returns>
+		/// <returns>The sprite.</returns>
 		/// <param name="name">Name.</param>
-		public Subtexture GetSubtexture(string name) => Subtextures[Array.IndexOf(RegionNames, name)];
+		public Sprite GetSubtexture(string name) => Subtextures[Array.IndexOf(RegionNames, name)];
 
 		/// <summary>
-		/// checks whether the subtexture is contained in this atlas.
+		/// checks whether the sprite is contained in this atlas.
 		/// </summary>
-		/// <returns><c>true</c>, if subtexture is containsed, <c>false</c> otherwise.</returns>
+		/// <returns><c>true</c>, if sprite is containsed, <c>false</c> otherwise.</returns>
 		/// <param name="name">the image name</param>
 		public bool ContainsSubtexture(string name) => RegionNames.Contains(name);
 
@@ -89,6 +89,6 @@ namespace Nez.TextureAtlases
 			throw new KeyNotFoundException(animationName);
 		}
 
-		public Subtexture this[string name] => GetSubtexture(name);
+		public Sprite this[string name] => GetSubtexture(name);
 	}
 }

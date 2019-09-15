@@ -58,7 +58,7 @@ namespace Nez
 		/// </summary>
 		public float Left
 		{
-			get { return this.X; }
+			get { return X; }
 		}
 
 		/// <summary>
@@ -66,7 +66,7 @@ namespace Nez
 		/// </summary>
 		public float Right
 		{
-			get { return (this.X + this.Width); }
+			get { return (X + Width); }
 		}
 
 		/// <summary>
@@ -74,7 +74,7 @@ namespace Nez
 		/// </summary>
 		public float Top
 		{
-			get { return this.Y; }
+			get { return Y; }
 		}
 
 		/// <summary>
@@ -82,7 +82,7 @@ namespace Nez
 		/// </summary>
 		public float Bottom
 		{
-			get { return (this.Y + this.Height); }
+			get { return (Y + Height); }
 		}
 
 		/// <summary>
@@ -100,7 +100,7 @@ namespace Nez
 		/// </summary>
 		public bool IsEmpty
 		{
-			get { return ((((this.Width == 0) && (this.Height == 0)) && (this.X == 0)) && (this.Y == 0)); }
+			get { return ((((Width == 0) && (Height == 0)) && (X == 0)) && (Y == 0)); }
 		}
 
 		/// <summary>
@@ -108,7 +108,7 @@ namespace Nez
 		/// </summary>
 		public Vector2 Location
 		{
-			get { return new Vector2(this.X, this.Y); }
+			get { return new Vector2(X, Y); }
 			set
 			{
 				X = value.X;
@@ -121,7 +121,7 @@ namespace Nez
 		/// </summary>
 		public Vector2 Size
 		{
-			get { return new Vector2(this.Width, this.Height); }
+			get { return new Vector2(Width, Height); }
 			set
 			{
 				Width = value.X;
@@ -138,7 +138,7 @@ namespace Nez
 		/// </remarks>
 		public Vector2 Center
 		{
-			get { return new Vector2(this.X + (this.Width / 2), this.Y + (this.Height / 2)); }
+			get { return new Vector2(X + (Width / 2), Y + (Height / 2)); }
 		}
 
 		#endregion
@@ -152,10 +152,10 @@ namespace Nez
 			get
 			{
 				return string.Concat(
-					this.X, "  ",
-					this.Y, "  ",
-					this.Width, "  ",
-					this.Height
+					X, "  ",
+					Y, "  ",
+					Width, "  ",
+					Height
 				);
 			}
 		}
@@ -171,10 +171,10 @@ namespace Nez
 		/// <param name="height">The height of the created <see cref="RectangleF"/>.</param>
 		public RectangleF(float x, float y, float width, float height)
 		{
-			this.X = x;
-			this.Y = y;
-			this.Width = width;
-			this.Height = height;
+			X = x;
+			Y = y;
+			Width = width;
+			Height = height;
 		}
 
 
@@ -186,10 +186,10 @@ namespace Nez
 		/// <param name="size">The width and height of the created <see cref="RectangleF"/>.</param>
 		public RectangleF(Vector2 location, Vector2 size)
 		{
-			this.X = location.X;
-			this.Y = location.Y;
-			this.Width = size.X;
-			this.Height = size.Y;
+			X = location.X;
+			Y = location.Y;
+			Width = size.X;
+			Height = size.Y;
 		}
 
 
@@ -245,7 +245,7 @@ namespace Nez
 					maxY = pt.Y;
 			}
 
-			return RectangleF.FromMinMax(minX, minY, maxX, maxY);
+			return FromMinMax(minX, minY, maxX, maxY);
 		}
 
 
@@ -282,7 +282,7 @@ namespace Nez
 		/// <returns><c>true</c> if the provided coordinates lie inside this <see cref="RectangleF"/>; <c>false</c> otherwise.</returns>
 		public bool Contains(int x, int y)
 		{
-			return ((((this.X <= x) && (x < (this.X + this.Width))) && (this.Y <= y)) && (y < (this.Y + this.Height)));
+			return ((((X <= x) && (x < (X + Width))) && (Y <= y)) && (y < (Y + Height)));
 		}
 
 
@@ -294,7 +294,7 @@ namespace Nez
 		/// <returns><c>true</c> if the provided coordinates lie inside this <see cref="RectangleF"/>; <c>false</c> otherwise.</returns>
 		public bool Contains(float x, float y)
 		{
-			return ((((this.X <= x) && (x < (this.X + this.Width))) && (this.Y <= y)) && (y < (this.Y + this.Height)));
+			return ((((X <= x) && (x < (X + Width))) && (Y <= y)) && (y < (Y + Height)));
 		}
 
 
@@ -305,8 +305,8 @@ namespace Nez
 		/// <returns><c>true</c> if the provided <see cref="Point"/> lies inside this <see cref="RectangleF"/>; <c>false</c> otherwise.</returns>
 		public bool Contains(Point value)
 		{
-			return ((((this.X <= value.X) && (value.X < (this.X + this.Width))) && (this.Y <= value.Y)) &&
-			        (value.Y < (this.Y + this.Height)));
+			return ((((X <= value.X) && (value.X < (X + Width))) && (Y <= value.Y)) &&
+			        (value.Y < (Y + Height)));
 		}
 
 
@@ -317,8 +317,8 @@ namespace Nez
 		/// <param name="result"><c>true</c> if the provided <see cref="Point"/> lies inside this <see cref="RectangleF"/>; <c>false</c> otherwise. As an output parameter.</param>
 		public void Contains(ref Point value, out bool result)
 		{
-			result = ((((this.X <= value.X) && (value.X < (this.X + this.Width))) && (this.Y <= value.Y)) &&
-			          (value.Y < (this.Y + this.Height)));
+			result = ((((X <= value.X) && (value.X < (X + Width))) && (Y <= value.Y)) &&
+			          (value.Y < (Y + Height)));
 		}
 
 
@@ -329,8 +329,8 @@ namespace Nez
 		/// <returns><c>true</c> if the provided <see cref="Vector2"/> lies inside this <see cref="RectangleF"/>; <c>false</c> otherwise.</returns>
 		public bool Contains(Vector2 value)
 		{
-			return ((((this.X <= value.X) && (value.X < (this.X + this.Width))) && (this.Y <= value.Y)) &&
-			        (value.Y < (this.Y + this.Height)));
+			return ((((X <= value.X) && (value.X < (X + Width))) && (Y <= value.Y)) &&
+			        (value.Y < (Y + Height)));
 		}
 
 
@@ -341,8 +341,8 @@ namespace Nez
 		/// <param name="result"><c>true</c> if the provided <see cref="Vector2"/> lies inside this <see cref="RectangleF"/>; <c>false</c> otherwise. As an output parameter.</param>
 		public void Contains(ref Vector2 value, out bool result)
 		{
-			result = ((((this.X <= value.X) && (value.X < (this.X + this.Width))) && (this.Y <= value.Y)) &&
-			          (value.Y < (this.Y + this.Height)));
+			result = ((((X <= value.X) && (value.X < (X + Width))) && (Y <= value.Y)) &&
+			          (value.Y < (Y + Height)));
 		}
 
 
@@ -353,8 +353,8 @@ namespace Nez
 		/// <returns><c>true</c> if the provided <see cref="RectangleF"/>'s bounds lie entirely inside this <see cref="RectangleF"/>; <c>false</c> otherwise.</returns>
 		public bool Contains(RectangleF value)
 		{
-			return ((((this.X <= value.X) && ((value.X + value.Width) <= (this.X + this.Width))) &&
-			         (this.Y <= value.Y)) && ((value.Y + value.Height) <= (this.Y + this.Height)));
+			return ((((X <= value.X) && ((value.X + value.Width) <= (X + Width))) &&
+			         (Y <= value.Y)) && ((value.Y + value.Height) <= (Y + Height)));
 		}
 
 
@@ -365,8 +365,8 @@ namespace Nez
 		/// <param name="result"><c>true</c> if the provided <see cref="RectangleF"/>'s bounds lie entirely inside this <see cref="RectangleF"/>; <c>false</c> otherwise. As an output parameter.</param>
 		public void Contains(ref RectangleF value, out bool result)
 		{
-			result = ((((this.X <= value.X) && ((value.X + value.Width) <= (this.X + this.Width))) &&
-			           (this.Y <= value.Y)) && ((value.Y + value.Height) <= (this.Y + this.Height)));
+			result = ((((X <= value.X) && ((value.X + value.Width) <= (X + Width))) &&
+			           (Y <= value.Y)) && ((value.Y + value.Height) <= (Y + Height)));
 		}
 
 
@@ -552,7 +552,7 @@ namespace Nez
 
 		public Vector2 GetClosestPointOnBoundsToOrigin()
 		{
-			var max = this.Max;
+			var max = Max;
 			var minDist = Math.Abs(Location.X);
 			var boundsPoint = new Vector2(Location.X, 0);
 
@@ -809,8 +809,8 @@ namespace Nez
 			{
 				X = parentPosition.X + position.X - origin.X * scale.X;
 				Y = parentPosition.Y + position.Y - origin.Y * scale.Y;
-				this.Width = width * scale.X;
-				this.Height = height * scale.Y;
+				Width = width * scale.X;
+				Height = height * scale.Y;
 			}
 			else
 			{
@@ -847,8 +847,8 @@ namespace Nez
 				var maxY = Mathf.MaxOf(topLeft.Y, bottomRight.Y, topRight.Y, bottomLeft.Y);
 
 				Location = new Vector2(minX, minY);
-				this.Width = maxX - minX;
-				this.Height = maxY - minY;
+				Width = maxX - minX;
+				Height = maxY - minY;
 			}
 		}
 
@@ -861,7 +861,7 @@ namespace Nez
 		/// <param name="velocityY">Velocity y.</param>
 		public RectangleF GetSweptBroadphaseBounds(float deltaX, float deltaY)
 		{
-			var broadphasebox = RectangleF.Empty;
+			var broadphasebox = Empty;
 
 			broadphasebox.X = deltaX > 0 ? X : X + deltaX;
 			broadphasebox.Y = deltaY > 0 ? Y : Y + deltaY;

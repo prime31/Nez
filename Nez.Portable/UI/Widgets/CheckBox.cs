@@ -109,10 +109,10 @@ namespace Nez.UI
 
 		public CheckBoxStyle(IDrawable checkboxOff, IDrawable checkboxOn, BitmapFont font, Color fontColor)
 		{
-			this.CheckboxOff = checkboxOff;
-			this.CheckboxOn = checkboxOn;
-			this.Font = font ?? Graphics.Instance.BitmapFont;
-			this.FontColor = fontColor;
+			CheckboxOff = checkboxOff;
+			CheckboxOn = checkboxOn;
+			Font = font ?? Graphics.Instance.BitmapFont;
+			FontColor = fontColor;
 		}
 	}
 }

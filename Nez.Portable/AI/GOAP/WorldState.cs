@@ -32,8 +32,8 @@ namespace Nez.AI.GOAP
 		public WorldState(ActionPlanner planner, long values, long dontcare)
 		{
 			this.planner = planner;
-			this.Values = values;
-			this.DontCare = dontcare;
+			Values = values;
+			DontCare = dontcare;
 		}
 
 

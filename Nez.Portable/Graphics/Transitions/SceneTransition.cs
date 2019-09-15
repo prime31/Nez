@@ -93,7 +93,7 @@ namespace Nez
 		protected SceneTransition(Func<Scene> sceneLoadAction, bool wantsPreviousSceneRender = true)
 		{
 			this.sceneLoadAction = sceneLoadAction;
-			this.WantsPreviousSceneRender = wantsPreviousSceneRender;
+			WantsPreviousSceneRender = wantsPreviousSceneRender;
 			_loadsNewScene = sceneLoadAction != null;
 
 			// create a RenderTarget if we need to for later

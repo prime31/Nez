@@ -28,7 +28,7 @@ namespace Nez.Verlet
 			_particleA = a;
 			_centerParticle = center;
 			_particleC = c;
-			this.Stiffness = stiffness;
+			Stiffness = stiffness;
 
 			// not need for this Constraint to collide. There will be DistanceConstraints to do that if necessary
 			CollidesWithColliders = false;

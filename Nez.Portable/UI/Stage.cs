@@ -74,7 +74,7 @@ namespace Nez.UI
 			if (!root.IsVisible())
 				return;
 
-			this.Camera = camera;
+			Camera = camera;
 			root.Draw(graphics, 1f);
 
 			if (Debug)

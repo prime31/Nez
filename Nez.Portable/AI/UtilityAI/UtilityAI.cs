@@ -24,7 +24,7 @@ namespace Nez.AI.UtilityAI
 		{
 			_rootReasoner = rootSelector;
 			_context = context;
-			this.UpdatePeriod = _elapsedTime = updatePeriod;
+			UpdatePeriod = _elapsedTime = updatePeriod;
 		}
 
 

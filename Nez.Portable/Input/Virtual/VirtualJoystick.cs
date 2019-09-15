@@ -35,14 +35,14 @@ namespace Nez
 
 		public VirtualJoystick(bool normalized) : base()
 		{
-			this.Normalized = normalized;
+			Normalized = normalized;
 		}
 
 
 		public VirtualJoystick(bool normalized, params Node[] nodes) : base()
 		{
-			this.Normalized = normalized;
-			this.Nodes.AddRange(nodes);
+			Normalized = normalized;
+			Nodes.AddRange(nodes);
 		}
 
 
@@ -135,8 +135,8 @@ namespace Nez
 
 			public GamePadLeftStick(int gamepadIndex = 0, float deadzone = Input.DEFAULT_DEADZONE)
 			{
-				this.GamepadIndex = gamepadIndex;
-				this.Deadzone = deadzone;
+				GamepadIndex = gamepadIndex;
+				Deadzone = deadzone;
 			}
 
 
@@ -155,8 +155,8 @@ namespace Nez
 
 			public GamePadRightStick(int gamepadIndex = 0, float deadzone = Input.DEFAULT_DEADZONE)
 			{
-				this.GamepadIndex = gamepadIndex;
-				this.Deadzone = deadzone;
+				GamepadIndex = gamepadIndex;
+				Deadzone = deadzone;
 			}
 
 			public override Vector2 Value
@@ -173,7 +173,7 @@ namespace Nez
 
 			public GamePadDpad(int gamepadIndex = 0)
 			{
-				this.GamepadIndex = gamepadIndex;
+				GamepadIndex = gamepadIndex;
 			}
 
 
@@ -214,11 +214,11 @@ namespace Nez
 
 			public KeyboardKeys(OverlapBehavior overlapBehavior, Keys left, Keys right, Keys up, Keys down)
 			{
-				this.OverlapBehavior = overlapBehavior;
-				this.Left = left;
-				this.Right = right;
-				this.Up = up;
-				this.Down = down;
+				OverlapBehavior = overlapBehavior;
+				Left = left;
+				Right = right;
+				Up = up;
+				Down = down;
 			}
 
 

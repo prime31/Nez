@@ -39,19 +39,19 @@ namespace Nez.TextureAtlases
 				var animationFPS = input.ReadInt32();
 
 				// create subtextures
-				var subtextures = new Subtexture[spriteNames.Length];
+				var subtextures = new Sprite[spriteNames.Length];
 				for (var i = 0; i < spriteNames.Length; i++)
 				{
 					// check to see if this is a nine patch
 					if (splits.ContainsKey(spriteNames[i]))
 					{
 						var split = splits[spriteNames[i]];
-						subtextures[i] = new NinePatchSubtexture(texture, spriteRectangles[i], split[0], split[1],
+						subtextures[i] = new NinePatchSprite(texture, spriteRectangles[i], split[0], split[1],
 							split[2], split[3]);
 					}
 					else
 					{
-						subtextures[i] = new Subtexture(texture, spriteRectangles[i]);
+						subtextures[i] = new Sprite(texture, spriteRectangles[i]);
 					}
 				}
 

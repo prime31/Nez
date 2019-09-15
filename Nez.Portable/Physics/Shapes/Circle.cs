@@ -12,7 +12,7 @@ namespace Nez.PhysicsShapes
 
 		public Circle(float radius)
 		{
-			this.Radius = radius;
+			Radius = radius;
 			_originalRadius = radius;
 		}
 
@@ -27,7 +27,7 @@ namespace Nez.PhysicsShapes
 		internal void RecalculateBounds(float radius, Vector2 position)
 		{
 			_originalRadius = radius;
-			this.Radius = radius;
+			Radius = radius;
 			this.position = position;
 			bounds = new RectangleF(position.X - radius, position.Y - radius, radius * 2f, radius * 2f);
 		}

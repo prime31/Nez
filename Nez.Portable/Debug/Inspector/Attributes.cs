@@ -38,7 +38,7 @@ namespace Nez
 
 		public TooltipAttribute(string tooltip)
 		{
-			this.Tooltip = tooltip;
+			Tooltip = tooltip;
 		}
 	}
 
@@ -56,7 +56,7 @@ namespace Nez
 
 		public RangeAttribute(float minValue)
 		{
-			this.MinValue = minValue;
+			MinValue = minValue;
 
 			// magic number! This is the highest number ImGui functions properly with for some reason.
 			MaxValue = int.MaxValue - 100;
@@ -65,16 +65,16 @@ namespace Nez
 
 		public RangeAttribute(float minValue, float maxValue, float stepSize)
 		{
-			this.MinValue = minValue;
-			this.MaxValue = maxValue;
-			this.StepSize = stepSize;
+			MinValue = minValue;
+			MaxValue = maxValue;
+			StepSize = stepSize;
 		}
 
 		public RangeAttribute(float minValue, float maxValue, bool useDragFloat)
 		{
-			this.MinValue = minValue;
-			this.MaxValue = maxValue;
-			this.UseDragVersion = useDragFloat;
+			MinValue = minValue;
+			MaxValue = maxValue;
+			UseDragVersion = useDragFloat;
 		}
 
 
@@ -96,7 +96,7 @@ namespace Nez
 
 		public CustomInspectorAttribute(Type inspectorType)
 		{
-			this.InspectorType = inspectorType;
+			InspectorType = inspectorType;
 		}
 	}
 }

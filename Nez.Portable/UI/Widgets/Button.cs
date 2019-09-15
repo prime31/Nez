@@ -391,9 +391,9 @@ namespace Nez.UI
 
 		public ButtonStyle(IDrawable up, IDrawable down, IDrawable over)
 		{
-			this.Up = up;
-			this.Down = down;
-			this.Over = over;
+			Up = up;
+			Down = down;
+			Over = over;
 		}
 
 

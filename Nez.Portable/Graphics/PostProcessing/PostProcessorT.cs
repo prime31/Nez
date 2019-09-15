@@ -17,7 +17,7 @@ namespace Nez
 
 		public PostProcessor(int executionOrder, T effect = null) : base(executionOrder, effect)
 		{
-			this.Effect = effect;
+			Effect = effect;
 		}
 
 		/// <summary>

@@ -98,7 +98,7 @@ namespace Nez.Svg
 			for (var i = 0; i < pathPoints.Length; i++)
 			{
 				var obj = pathPoints.GetValue(i);
-				pts[i] = new Microsoft.Xna.Framework.Vector2((float) getX.GetValue(obj), (float) getY.GetValue(obj));
+				pts[i] = new Vector2((float) getX.GetValue(obj), (float) getY.GetValue(obj));
 			}
 
 			return pts;

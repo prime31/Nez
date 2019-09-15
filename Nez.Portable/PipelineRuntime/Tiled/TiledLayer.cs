@@ -15,7 +15,7 @@ namespace Nez.Tiled
 
 		protected TiledLayer(string name)
 		{
-			this.Name = name;
+			Name = name;
 			Properties = new Dictionary<string, string>();
 		}
 

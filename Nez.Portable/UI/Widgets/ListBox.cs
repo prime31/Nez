@@ -411,10 +411,10 @@ namespace Nez.UI
 
 		public ListBoxStyle(BitmapFont font, Color fontColorSelected, Color fontColorUnselected, IDrawable selection)
 		{
-			this.Font = font;
-			this.FontColorSelected = fontColorSelected;
-			this.FontColorUnselected = fontColorUnselected;
-			this.Selection = selection;
+			Font = font;
+			FontColorSelected = fontColorSelected;
+			FontColorUnselected = fontColorUnselected;
+			Selection = selection;
 		}
 
 

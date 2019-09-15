@@ -31,7 +31,7 @@ namespace Nez.AI.BehaviorTrees
 			_context = context;
 			_root = rootNode;
 
-			this.UpdatePeriod = _elapsedTime = updatePeriod;
+			UpdatePeriod = _elapsedTime = updatePeriod;
 		}
 
 

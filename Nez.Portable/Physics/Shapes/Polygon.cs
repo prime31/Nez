@@ -68,7 +68,7 @@ namespace Nez.PhysicsShapes
 		/// <param name="points"></param>
 		public void SetPoints(Vector2[] points)
 		{
-			this.Points = points;
+			Points = points;
 			RecalculateCenterAndEdgeNormals();
 
 			_originalPoints = new Vector2[points.Length];

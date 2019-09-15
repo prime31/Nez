@@ -19,7 +19,7 @@ namespace Nez.AI.BehaviorTrees
 
 		public WaitAction(float waitTime)
 		{
-			this.WaitTime = waitTime;
+			WaitTime = waitTime;
 		}
 
 

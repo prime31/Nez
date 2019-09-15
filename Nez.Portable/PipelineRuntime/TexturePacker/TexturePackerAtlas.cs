@@ -10,7 +10,7 @@ namespace Nez.TextureAtlases
 	public class TexturePackerAtlas
 	{
 		public Texture2D Texture;
-		public readonly List<Subtexture> Subtextures;
+		public readonly List<Sprite> Subtextures;
 
 		/// <summary>
 		/// maps actual image names to the index in the subtextures list
@@ -19,7 +19,7 @@ namespace Nez.TextureAtlases
 
 		/// <summary>
 		/// stores a map of the name of the sprite animation (derived from texturepacker filename metadata) to an array. 
-		/// each entry in the list refers to index of the corresponding subtexture
+		/// each entry in the list refers to index of the corresponding sprite
 		/// </summary>
 		public Dictionary<string, List<int>> SpriteAnimationDetails;
 
@@ -29,8 +29,8 @@ namespace Nez.TextureAtlases
 
 		public TexturePackerAtlas(Texture2D texture)
 		{
-			this.Texture = texture;
-			Subtextures = new List<Subtexture>();
+			Texture = texture;
+			Subtextures = new List<Sprite>();
 			_subtextureMap = new Dictionary<string, int>();
 		}
 
@@ -62,12 +62,12 @@ namespace Nez.TextureAtlases
 		}
 
 
-		public Subtexture CreateRegion(string name, int x, int y, int width, int height, float pivotX = 0.5f,
+		public Sprite CreateRegion(string name, int x, int y, int width, int height, float pivotX = 0.5f,
 		                               float pivotY = 0.5f)
 		{
 			Insist.IsFalse(_subtextureMap.ContainsKey(name), "Region {0} already exists in the texture atlas", name);
 
-			var region = new Subtexture(Texture, new Rectangle(x, y, width, height),
+			var region = new Sprite(Texture, new Rectangle(x, y, width, height),
 				new Vector2(pivotX * width, pivotY * height));
 			var index = Subtextures.Count;
 			Subtextures.Add(region);
@@ -128,14 +128,14 @@ namespace Nez.TextureAtlases
 		}
 
 
-		public Subtexture GetSubtexture(int index)
+		public Sprite GetSubtexture(int index)
 		{
 			Insist.IsFalse(index < 0 || index >= Subtextures.Count, "index out of range");
 			return Subtextures[index];
 		}
 
 
-		public Subtexture GetSubtexture(string name)
+		public Sprite GetSubtexture(string name)
 		{
 			int index;
 			if (_subtextureMap.TryGetValue(name, out index))
@@ -145,13 +145,13 @@ namespace Nez.TextureAtlases
 		}
 
 
-		public Subtexture this[string name]
+		public Sprite this[string name]
 		{
 			get { return GetSubtexture(name); }
 		}
 
 
-		public Subtexture this[int index]
+		public Sprite this[int index]
 		{
 			get { return GetSubtexture(index); }
 		}

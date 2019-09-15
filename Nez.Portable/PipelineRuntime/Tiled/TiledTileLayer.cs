@@ -28,9 +28,9 @@ namespace Nez.Tiled
 
 		public TiledTileLayer(TiledMap map, string name, int width, int height, TiledTile[] tiles) : base(name)
 		{
-			this.Width = width;
-			this.Height = height;
-			this.Tiles = tiles;
+			Width = width;
+			Height = height;
+			Tiles = tiles;
 
 			TiledMap = map;
 			tiles = PopulateTilePositions();

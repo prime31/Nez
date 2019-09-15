@@ -18,8 +18,8 @@ namespace Nez.Tiled
 
 		public TiledTileAnimationFrame(int tileId, float duration)
 		{
-			this.TileId = tileId;
-			this.Duration = duration / 1000;
+			TileId = tileId;
+			Duration = duration / 1000;
 		}
 	}
 }

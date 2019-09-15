@@ -33,11 +33,11 @@ namespace Nez
 		                     float bloomSaturation, float baseSaturation)
 		{
 			Threshold = bloomThreshold;
-			this.BlurAmount = blurAmount;
+			BlurAmount = blurAmount;
 			Intensity = bloomIntensity;
-			this.BaseIntensity = baseIntensity;
+			BaseIntensity = baseIntensity;
 			Saturation = bloomSaturation;
-			this.BaseSaturation = baseSaturation;
+			BaseSaturation = baseSaturation;
 		}
 
 		/// <summary>

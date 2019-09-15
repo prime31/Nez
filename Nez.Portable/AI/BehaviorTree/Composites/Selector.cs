@@ -11,7 +11,7 @@ namespace Nez.AI.BehaviorTrees
 	{
 		public Selector(AbortTypes abortType = AbortTypes.None)
 		{
-			this.AbortType = abortType;
+			AbortType = abortType;
 		}
 
 

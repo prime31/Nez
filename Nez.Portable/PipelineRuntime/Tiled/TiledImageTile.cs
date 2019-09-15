@@ -11,8 +11,8 @@ namespace Nez.Tiled
 
 		public TiledImageTile(int id, TiledTilesetTile tilesetTile, string imageSource) : base(id)
 		{
-			this.TilesetTile = tilesetTile;
-			this.ImageSource = imageSource;
+			TilesetTile = tilesetTile;
+			ImageSource = imageSource;
 		}
 	}
 }

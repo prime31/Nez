@@ -268,7 +268,7 @@ namespace Nez
 
 		public Transform(Entity entity)
 		{
-			this.Entity = entity;
+			Entity = entity;
 			_scale = _localScale = Vector2.One;
 		}
 

@@ -21,7 +21,7 @@ namespace Nez.LibGdxAtlases
 				var texture = reader.ContentManager.Load<Texture2D>(assetName);
 
 				var regionCount = reader.ReadInt32();
-				var subtextures = new Subtexture[regionCount];
+				var subtextures = new Sprite[regionCount];
 				var regionNames = new string[regionCount];
 
 				for (var i = 0; i < regionCount; i++)
@@ -35,19 +35,19 @@ namespace Nez.LibGdxAtlases
 
 					var hasSplits = reader.ReadBoolean();
 					if (hasSplits)
-						subtextures[i] = new NinePatchSubtexture(texture, rect, reader.ReadInt32(), reader.ReadInt32(),
+						subtextures[i] = new NinePatchSprite(texture, rect, reader.ReadInt32(), reader.ReadInt32(),
 							reader.ReadInt32(), reader.ReadInt32());
 					else
-						subtextures[i] = new Subtexture(texture, rect);
+						subtextures[i] = new Sprite(texture, rect);
 
 					var hasPads = reader.ReadBoolean();
 					if (hasPads)
 					{
-						((NinePatchSubtexture) subtextures[i]).HasPadding = true;
-						((NinePatchSubtexture) subtextures[i]).PadLeft = reader.ReadInt32();
-						((NinePatchSubtexture) subtextures[i]).PadRight = reader.ReadInt32();
-						((NinePatchSubtexture) subtextures[i]).PadTop = reader.ReadInt32();
-						((NinePatchSubtexture) subtextures[i]).PadBottom = reader.ReadInt32();
+						((NinePatchSprite) subtextures[i]).HasPadding = true;
+						((NinePatchSprite) subtextures[i]).PadLeft = reader.ReadInt32();
+						((NinePatchSprite) subtextures[i]).PadRight = reader.ReadInt32();
+						((NinePatchSprite) subtextures[i]).PadTop = reader.ReadInt32();
+						((NinePatchSprite) subtextures[i]).PadBottom = reader.ReadInt32();
 					}
 
 					var index = reader.ReadInt32();
@@ -55,10 +55,10 @@ namespace Nez.LibGdxAtlases
 					// animation
 					if (index != -1)
 					{
-						List<Subtexture> frames;
+						List<Sprite> frames;
 						if (!atlasContainer.Animations.TryGetValue(name, out frames))
 						{
-							frames = new List<Subtexture>();
+							frames = new List<Sprite>();
 							atlasContainer.Animations[name] = frames;
 						}
 

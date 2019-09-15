@@ -13,7 +13,7 @@ namespace Nez.Tiled
 
 		public TiledImageLayer(string name, Texture2D texture) : base(name)
 		{
-			this.Texture = texture;
+			Texture = texture;
 			_bounds.Width = texture.Width;
 			_bounds.Height = texture.Height;
 		}

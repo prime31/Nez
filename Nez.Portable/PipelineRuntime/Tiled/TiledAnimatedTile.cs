@@ -13,7 +13,7 @@ namespace Nez.Tiled
 
 		public TiledAnimatedTile(int id, TiledTilesetTile tilesetTile) : base(id)
 		{
-			this.TilesetTile = tilesetTile;
+			TilesetTile = tilesetTile;
 		}
 
 

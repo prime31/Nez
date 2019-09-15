@@ -18,8 +18,8 @@ namespace Nez.Svg
 
 		protected SvgPathSegment(Vector2 start, Vector2 end)
 		{
-			this.Start = start;
-			this.End = end;
+			Start = start;
+			End = end;
 		}
 
 
@@ -50,8 +50,8 @@ namespace Nez.Svg
 	{
 		public SvgLineSegment(Vector2 start, Vector2 end)
 		{
-			this.Start = start;
-			this.End = end;
+			Start = start;
+			End = end;
 		}
 
 
@@ -99,9 +99,9 @@ namespace Nez.Svg
 
 		public SvgQuadraticCurveSegment(Vector2 start, Vector2 controlPoint, Vector2 end)
 		{
-			this.Start = start;
-			this.ControlPoint = controlPoint;
-			this.End = end;
+			Start = start;
+			ControlPoint = controlPoint;
+			End = end;
 		}
 
 
@@ -120,10 +120,10 @@ namespace Nez.Svg
 
 		public SvgCubicCurveSegment(Vector2 start, Vector2 firstCtrlPoint, Vector2 secondCtrlPoint, Vector2 end)
 		{
-			this.Start = start;
-			this.End = end;
-			this.FirstCtrlPoint = firstCtrlPoint;
-			this.SecondCtrlPoint = secondCtrlPoint;
+			Start = start;
+			End = end;
+			FirstCtrlPoint = firstCtrlPoint;
+			SecondCtrlPoint = secondCtrlPoint;
 		}
 
 

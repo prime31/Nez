@@ -140,7 +140,7 @@ namespace Nez
 		/// <param name="velocity">Velocity.</param>
 		public ArcadeRigidbody SetVelocity(Vector2 velocity)
 		{
-			this.Velocity = velocity;
+			Velocity = velocity;
 			return this;
 		}
 

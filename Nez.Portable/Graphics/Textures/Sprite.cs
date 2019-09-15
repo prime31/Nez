@@ -8,7 +8,7 @@ namespace Nez.Textures
 	/// <summary>
 	/// represents a single element in a texture atlas consisting of a texture and the source rectangle for the frame
 	/// </summary>
-	public class Subtexture
+	public class Sprite
 	{
 		/// <summary>
 		/// the actual Texture2D
@@ -32,17 +32,17 @@ namespace Nez.Textures
 		public readonly Vector2 Center;
 
 		/// <summary>
-		/// the origin that a RenderableComponent should use when using this Subtexture. Defaults to the center.
+		/// the origin that a RenderableComponent should use when using this Sprite. Defaults to the center.
 		/// </summary>
 		public Vector2 Origin;
 
 
-		public Subtexture(Texture2D texture, Rectangle sourceRect, Vector2 origin)
+		public Sprite(Texture2D texture, Rectangle sourceRect, Vector2 origin)
 		{
 			Texture2D = texture;
-			this.SourceRect = sourceRect;
+			SourceRect = sourceRect;
 			Center = new Vector2(sourceRect.Width * 0.5f, sourceRect.Height * 0.5f);
-			this.Origin = origin;
+			Origin = origin;
 
 			var inverseTexW = 1.0f / Texture2D.Width;
 			var inverseTexH = 1.0f / Texture2D.Height;
@@ -53,13 +53,13 @@ namespace Nez.Textures
 			Uvs.Height = sourceRect.Height * inverseTexH;
 		}
 
-		public Subtexture(Texture2D texture, Rectangle sourceRect) : this(texture, sourceRect, sourceRect.GetHalfSize())
+		public Sprite(Texture2D texture, Rectangle sourceRect) : this(texture, sourceRect, sourceRect.GetHalfSize())
 		{}
 
-		public Subtexture(Texture2D texture) : this(texture, new Rectangle(0, 0, texture.Width, texture.Height))
+		public Sprite(Texture2D texture) : this(texture, new Rectangle(0, 0, texture.Width, texture.Height))
 		{}
 
-		public Subtexture(Texture2D texture, int x, int y, int width, int height) : this(texture,
+		public Sprite(Texture2D texture, int x, int y, int width, int height) : this(texture,
 			new Rectangle(x, y, width, height))
 		{}
 
@@ -71,13 +71,13 @@ namespace Nez.Textures
 		/// <param name="y">The y coordinate.</param>
 		/// <param name="width">Width.</param>
 		/// <param name="height">Height.</param>
-		public Subtexture(Texture2D texture, float x, float y, float width, float height) : this(texture, (int) x,
+		public Sprite(Texture2D texture, float x, float y, float width, float height) : this(texture, (int) x,
 			(int) y, (int) width, (int) height)
 		{}
 
 		/// <summary>
 		/// generates nine patch Rectangles. destArray should have 9 elements. renderRect is the final area in which the nine patch will be rendered.
-		/// To just get the source rects for rendering pass in the Subtexture.sourceRect. Pass in a larger Rectangle to get final destination
+		/// To just get the source rects for rendering pass in the Sprite.sourceRect. Pass in a larger Rectangle to get final destination
 		/// rendering Rectangles.
 		/// </summary>
 		/// <param name="renderRect">Render rect.</param>
@@ -112,11 +112,11 @@ namespace Nez.Textures
 		}
 
 		/// <summary>
-		/// clones the Subtexture
+		/// clones the Sprite
 		/// </summary>
-		public Subtexture Clone()
+		public Sprite Clone()
 		{
-			return new Subtexture(Texture2D, SourceRect)
+			return new Sprite(Texture2D, SourceRect)
 			{
 				Origin = Origin
 			};
@@ -131,10 +131,10 @@ namespace Nez.Textures
 		/// <param name="cellHeight">Cell height.</param>
 		/// <param name="cellOffset">the first cell to include while processing. 0 based indexing.</param>
 		/// <param name="maxCellsToInclude">Max cells to included.</param>
-		public static List<Subtexture> SubtexturesFromAtlas(Texture2D texture, int cellWidth, int cellHeight,
+		public static List<Sprite> SubtexturesFromAtlas(Texture2D texture, int cellWidth, int cellHeight,
 		                                                    int cellOffset = 0, int maxCellsToInclude = int.MaxValue)
 		{
-			var subtextures = new List<Subtexture>();
+			var subtextures = new List<Sprite>();
 
 			var cols = texture.Width / cellWidth;
 			var rows = texture.Height / cellHeight;
@@ -148,7 +148,7 @@ namespace Nez.Textures
 					if (i++ < cellOffset)
 						continue;
 
-					subtextures.Add(new Subtexture(texture,
+					subtextures.Add(new Sprite(texture,
 						new Rectangle(x * cellWidth, y * cellHeight, cellWidth, cellHeight)));
 
 					// once we hit the max number of cells to include bail out. were done.
@@ -160,7 +160,7 @@ namespace Nez.Textures
 			return subtextures;
 		}
 
-		public static implicit operator Texture2D(Subtexture tex) => tex.Texture2D;
+		public static implicit operator Texture2D(Sprite tex) => tex.Texture2D;
 
 		public override string ToString() => string.Format("{0}", SourceRect);
 	}

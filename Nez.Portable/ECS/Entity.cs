@@ -194,7 +194,7 @@ namespace Nez
 		{
 			Components = new ComponentList(this);
 			Transform = new Transform(this);
-			this.Name = name;
+			Name = name;
 			Id = _idGenerator++;
 
 			if (Core.entitySystemsEnabled)

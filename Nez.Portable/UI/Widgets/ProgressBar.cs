@@ -70,11 +70,11 @@ namespace Nez.UI
 			Insist.IsTrue(stepSize > 0, "stepSize must be greater than 0");
 
 			SetStyle(style);
-			this.Min = min;
-			this.Max = max;
-			this.StepSize = stepSize;
+			Min = min;
+			Max = max;
+			StepSize = stepSize;
 			_vertical = vertical;
-			_value = this.Min;
+			_value = Min;
 
 			SetSize(PreferredWidth, PreferredHeight);
 		}
@@ -154,9 +154,9 @@ namespace Nez.UI
 		public ProgressBar SetMinMax(float min, float max)
 		{
 			Insist.IsTrue(min < max, "min must be less than max");
-			this.Min = min;
-			this.Max = max;
-			_value = Mathf.Clamp(_value, this.Min, this.Max);
+			Min = min;
+			Max = max;
+			_value = Mathf.Clamp(_value, Min, Max);
 
 			return this;
 		}
@@ -363,8 +363,8 @@ namespace Nez.UI
 
 		public ProgressBarStyle(IDrawable background, IDrawable knob)
 		{
-			this.Background = background;
-			this.Knob = knob;
+			Background = background;
+			Knob = knob;
 		}
 
 

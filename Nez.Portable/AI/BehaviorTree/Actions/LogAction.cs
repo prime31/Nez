@@ -21,7 +21,7 @@ namespace Nez.AI.BehaviorTrees
 
 		public LogAction(string text)
 		{
-			this.Text = text;
+			Text = text;
 		}
 
 

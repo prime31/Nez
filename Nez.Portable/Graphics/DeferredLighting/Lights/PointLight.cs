@@ -56,7 +56,7 @@ namespace Nez.DeferredLighting
 
 		public PointLight(Color color) : this()
 		{
-			this.Color = color;
+			Color = color;
 		}
 
 
@@ -87,7 +87,7 @@ namespace Nez.DeferredLighting
 		/// <param name="intensity">Intensity.</param>
 		public PointLight SetIntensity(float intensity)
 		{
-			this.Intensity = intensity;
+			Intensity = intensity;
 			return this;
 		}
 

@@ -47,10 +47,10 @@ namespace Nez.Textures
 				}
 			}
 
-			matrixR = GaussianBlur.GaussianConvolution(matrixR, deviation);
-			matrixG = GaussianBlur.GaussianConvolution(matrixG, deviation);
-			matrixB = GaussianBlur.GaussianConvolution(matrixB, deviation);
-			matrixA = GaussianBlur.GaussianConvolution(matrixA, deviation);
+			matrixR = GaussianConvolution(matrixR, deviation);
+			matrixG = GaussianConvolution(matrixG, deviation);
+			matrixB = GaussianConvolution(matrixB, deviation);
+			matrixA = GaussianConvolution(matrixA, deviation);
 
 			for (var i = 0; i < width; i++)
 			{
@@ -100,7 +100,7 @@ namespace Nez.Textures
 					matrix[i, j] = srcData[i + j * width].Grayscale().R;
 			}
 
-			matrix = GaussianBlur.GaussianConvolution(matrix, deviation);
+			matrix = GaussianConvolution(matrix, deviation);
 			for (var i = 0; i < width; i++)
 			{
 				for (var j = 0; j < height; j++)

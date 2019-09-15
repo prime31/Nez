@@ -464,7 +464,7 @@ namespace Nez.UI
 
 		public Table SetFillParent(bool fillParent)
 		{
-			this.FillParent = fillParent;
+			FillParent = fillParent;
 			return this;
 		}
 
@@ -475,14 +475,14 @@ namespace Nez.UI
 		/// <param name="background">Background.</param>
 		public Table SetBackground(IDrawable background)
 		{
-			if (this._background == background)
+			if (_background == background)
 				return this;
 
 			float padTopOld = GetPadTop(),
 				padLeftOld = GetPadLeft(),
 				padBottomOld = GetPadBottom(),
 				padRightOld = GetPadRight();
-			this._background = background;
+			_background = background;
 			float padTopNew = GetPadTop(),
 				padLeftNew = GetPadLeft(),
 				padBottomNew = GetPadBottom(),
@@ -616,7 +616,7 @@ namespace Nez.UI
 		/// <param name="pad">Pad.</param>
 		public Table Pad(float pad)
 		{
-			this.Pad(new Value.Fixed(pad));
+			Pad(new Value.Fixed(pad));
 			return this;
 		}
 
@@ -687,7 +687,7 @@ namespace Nez.UI
 		/// <param name="align">Align.</param>
 		public Table Align(int align)
 		{
-			this._align = align;
+			_align = align;
 			return this;
 		}
 
@@ -1094,7 +1094,7 @@ namespace Nez.UI
 			else
 			{
 				var extraWidth = Math.Min(totalGrowWidth, Math.Max(0, layoutWidth - _tableMinWidth));
-				columnWeightedWidth = Table._columnWeightedWidth = EnsureSize(Table._columnWeightedWidth, columns);
+				columnWeightedWidth = _columnWeightedWidth = EnsureSize(_columnWeightedWidth, columns);
 				float[] columnMinWidth = _columnMinWidth, columnPrefWidth = _columnPrefWidth;
 				for (var i = 0; i < columns; i++)
 				{
@@ -1112,7 +1112,7 @@ namespace Nez.UI
 			}
 			else
 			{
-				rowWeightedHeight = Table._rowWeightedHeight = EnsureSize(Table._rowWeightedHeight, rows);
+				rowWeightedHeight = _rowWeightedHeight = EnsureSize(_rowWeightedHeight, rows);
 				var extraHeight = Math.Min(totalGrowHeight, Math.Max(0, layoutHeight - _tableMinHeight));
 				float[] rowMinHeight = _rowMinHeight, rowPrefHeight = _rowPrefHeight;
 				for (int i = 0; i < rows; i++)

@@ -157,7 +157,7 @@ namespace Nez.UI
 		/// <param name="visible">Visible.</param>
 		public void SetVisible(bool visible)
 		{
-			this._visible = visible;
+			_visible = visible;
 		}
 
 
@@ -474,8 +474,8 @@ namespace Nez.UI
 		/// <param name="scaleXY">Scale X.</param>
 		public void SetScale(float scaleXY)
 		{
-			this.scaleX = scaleXY;
-			this.scaleY = scaleXY;
+			scaleX = scaleXY;
+			scaleY = scaleXY;
 		}
 
 
@@ -522,9 +522,9 @@ namespace Nez.UI
 
 		public void SetRotation(float degrees)
 		{
-			if (this.rotation != degrees)
+			if (rotation != degrees)
 			{
-				this.rotation = degrees;
+				rotation = degrees;
 				RotationChanged();
 			}
 		}

@@ -12,7 +12,7 @@ namespace Nez.Svg
 
 		public SvgRotate(float angle)
 		{
-			this.Angle = angle;
+			Angle = angle;
 
 			CalculateMatrix();
 		}
@@ -20,9 +20,9 @@ namespace Nez.Svg
 
 		public SvgRotate(float angle, float centerX, float centerY)
 		{
-			this.Angle = angle;
-			this.CenterX = centerX;
-			this.CenterY = centerY;
+			Angle = angle;
+			CenterX = centerX;
+			CenterY = centerY;
 
 			CalculateMatrix();
 		}

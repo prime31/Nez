@@ -7,7 +7,7 @@ namespace Nez
 {
 	public class FloatInspector : Inspector
 	{
-		UI.TextField _textField;
+		TextField _textField;
 		Slider _slider;
 
 
@@ -25,7 +25,7 @@ namespace Nez
 		void SetupTextField(Table table, Skin skin, float leftCellWidth)
 		{
 			var label = CreateNameLabel(table, skin, leftCellWidth);
-			_textField = new UI.TextField(GetValue<float>().ToString(CultureInfo.InvariantCulture), skin);
+			_textField = new TextField(GetValue<float>().ToString(CultureInfo.InvariantCulture), skin);
 			_textField.SetTextFieldFilter(new FloatFilter());
 			_textField.OnTextChanged += (field, str) =>
 			{

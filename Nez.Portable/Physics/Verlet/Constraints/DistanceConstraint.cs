@@ -59,7 +59,7 @@ namespace Nez.Verlet
 		{
 			_particleOne = first;
 			_particleTwo = second;
-			this.Stiffness = stiffness;
+			Stiffness = stiffness;
 
 			if (distance > -1)
 				RestingDistance = distance;
@@ -96,7 +96,7 @@ namespace Nez.Verlet
 		/// <param name="tearSensitivity">Tear sensitivity.</param>
 		public DistanceConstraint SetTearSensitivity(float tearSensitivity)
 		{
-			this.TearSensitivity = tearSensitivity;
+			TearSensitivity = tearSensitivity;
 			return this;
 		}
 
@@ -108,7 +108,7 @@ namespace Nez.Verlet
 		/// <param name="collidesWithColliders">If set to <c>true</c> collides with colliders.</param>
 		public DistanceConstraint SetCollidesWithColliders(bool collidesWithColliders)
 		{
-			this.CollidesWithColliders = collidesWithColliders;
+			CollidesWithColliders = collidesWithColliders;
 			return this;
 		}
 
@@ -121,7 +121,7 @@ namespace Nez.Verlet
 		/// <param name="shouldApproximateCollisionsWithPoints">If set to <c>true</c> should approximate collisions with points.</param>
 		public DistanceConstraint SetShouldApproximateCollisionsWithPoints(bool shouldApproximateCollisionsWithPoints)
 		{
-			this.ShouldApproximateCollisionsWithPoints = shouldApproximateCollisionsWithPoints;
+			ShouldApproximateCollisionsWithPoints = shouldApproximateCollisionsWithPoints;
 			return this;
 		}
 

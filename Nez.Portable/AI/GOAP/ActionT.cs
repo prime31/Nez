@@ -15,13 +15,13 @@ namespace Nez.AI.GOAP
 		public Action(T context, string name) : base(name)
 		{
 			_context = context;
-			this.Name = name;
+			Name = name;
 		}
 
 
 		public Action(T context, string name, int cost) : this(context, name)
 		{
-			this.Cost = cost;
+			Cost = cost;
 		}
 
 

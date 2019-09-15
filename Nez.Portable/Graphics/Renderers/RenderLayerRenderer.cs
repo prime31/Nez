@@ -19,7 +19,7 @@ namespace Nez
 		{
 			Array.Sort(renderLayers);
 			Array.Reverse(renderLayers);
-			this.RenderLayers = renderLayers;
+			RenderLayers = renderLayers;
 		}
 
 		public override void Render(Scene scene)

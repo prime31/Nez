@@ -40,8 +40,8 @@
 
 		public TextTooltipStyle(LabelStyle label, IDrawable background)
 		{
-			this.LabelStyle = label;
-			this.Background = background;
+			LabelStyle = label;
+			Background = background;
 		}
 	}
 }

@@ -12,7 +12,7 @@
 
 		public RenderLayerExcludeRenderer(int renderOrder, params int[] excludedRenderLayers) : base(renderOrder, null)
 		{
-			this.ExcludedRenderLayers = excludedRenderLayers;
+			ExcludedRenderLayers = excludedRenderLayers;
 		}
 
 		public override void Render(Scene scene)

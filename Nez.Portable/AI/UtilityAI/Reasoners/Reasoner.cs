@@ -36,7 +36,7 @@ namespace Nez.AI.UtilityAI
 
 		public Reasoner<T> SetDefaultConsideration(IConsideration<T> defaultConsideration)
 		{
-			this.DefaultConsideration = defaultConsideration;
+			DefaultConsideration = defaultConsideration;
 			return this;
 		}
 	}

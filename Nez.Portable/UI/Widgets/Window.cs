@@ -391,9 +391,9 @@ namespace Nez.UI
 
 		public WindowStyle(BitmapFont titleFont, Color titleFontColor, IDrawable background)
 		{
-			this.TitleFont = titleFont ?? Graphics.Instance.BitmapFont;
-			this.Background = background;
-			this.TitleFontColor = titleFontColor;
+			TitleFont = titleFont ?? Graphics.Instance.BitmapFont;
+			Background = background;
+			TitleFontColor = titleFontColor;
 		}
 
 

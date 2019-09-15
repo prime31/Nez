@@ -162,7 +162,7 @@ namespace Nez
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static float Lerp(float from, float to, float t)
 		{
-			return from + (to - from) * Mathf.Clamp01(t);
+			return from + (to - from) * Clamp01(t);
 		}
 
 
@@ -205,7 +205,7 @@ namespace Nez
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static float LerpAngle(float a, float b, float t)
 		{
-			float num = Mathf.Repeat(b - a, 360f);
+			float num = Repeat(b - a, 360f);
 			if (num > 180f)
 				num -= 360f;
 
@@ -223,7 +223,7 @@ namespace Nez
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static float LerpAngleRadians(float a, float b, float t)
 		{
-			float num = Mathf.Repeat(b - a, MathHelper.TwoPi);
+			float num = Repeat(b - a, MathHelper.TwoPi);
 			if (num > MathHelper.Pi)
 				num -= MathHelper.TwoPi;
 
@@ -239,7 +239,7 @@ namespace Nez
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static float Repeat(float t, float length)
 		{
-			return t - Mathf.Floor(t / length) * length;
+			return t - Floor(t / length) * length;
 		}
 
 
@@ -285,7 +285,7 @@ namespace Nez
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static float PingPong(float t, float length)
 		{
-			t = Mathf.Repeat(t, length * 2f);
+			t = Repeat(t, length * 2f);
 			return length - Math.Abs(t - length);
 		}
 
@@ -315,7 +315,7 @@ namespace Nez
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static float DeltaAngle(float current, float target)
 		{
-			var num = Mathf.Repeat(target - current, 360f);
+			var num = Repeat(target - current, 360f);
 			if (num > 180f)
 				num -= 360f;
 
@@ -367,7 +367,7 @@ namespace Nez
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static float ApproachAngle(float start, float end, float shift)
 		{
-			float deltaAngle = Mathf.DeltaAngle(start, end);
+			float deltaAngle = DeltaAngle(start, end);
 			if (-shift < deltaAngle && deltaAngle < shift)
 				return end;
 
@@ -384,7 +384,7 @@ namespace Nez
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static float ApproachAngleRadians(float start, float end, float shift)
 		{
-			float deltaAngleRadians = Mathf.DeltaAngleRadians(start, end);
+			float deltaAngleRadians = DeltaAngleRadians(start, end);
 			if (-shift < deltaAngleRadians && deltaAngleRadians < shift)
 				return end;
 
@@ -552,8 +552,8 @@ namespace Nez
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static float RoundWithRoundedAmount(float value, out float roundedAmount)
 		{
-			var rounded = Mathf.Round(value);
-			roundedAmount = value - (rounded * Mathf.Round(value / rounded));
+			var rounded = Round(value);
+			roundedAmount = value - (rounded * Round(value / rounded));
 			return rounded;
 		}
 
@@ -724,7 +724,7 @@ namespace Nez
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		static public float AngleBetweenVectors(Vector2 from, Vector2 to)
 		{
-			return Mathf.Atan2(to.Y - from.Y, to.X - from.X);
+			return Atan2(to.Y - from.Y, to.X - from.X);
 		}
 
 
@@ -762,8 +762,8 @@ namespace Nez
 		public static Vector2 RotateAround(Vector2 point, Vector2 center, float angleInDegrees)
 		{
 			angleInDegrees = MathHelper.ToRadians(angleInDegrees);
-			var cos = Mathf.Cos(angleInDegrees);
-			var sin = Mathf.Sin(angleInDegrees);
+			var cos = Cos(angleInDegrees);
+			var sin = Sin(angleInDegrees);
 			var rotatedX = cos * (point.X - center.X) - sin * (point.Y - center.Y) + center.X;
 			var rotatedY = sin * (point.X - center.X) + cos * (point.Y - center.Y) + center.Y;
 
@@ -782,8 +782,8 @@ namespace Nez
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static Vector2 RotateAroundRadians(Vector2 point, Vector2 center, float angleInRadians)
 		{
-			var cos = Mathf.Cos(angleInRadians);
-			var sin = Mathf.Sin(angleInRadians);
+			var cos = Cos(angleInRadians);
+			var sin = Sin(angleInRadians);
 			var rotatedX = cos * (point.X - center.X) - sin * (point.Y - center.Y) + center.X;
 			var rotatedY = sin * (point.X - center.X) + cos * (point.Y - center.Y) + center.Y;
 
@@ -840,8 +840,8 @@ namespace Nez
 		public static Vector2 Lissajou(float xFrequency = 2f, float yFrequency = 3f, float xMagnitude = 1,
 									   float yMagnitude = 1, float phase = 0)
 		{
-			var x = Mathf.Sin(Time.TotalTime * xFrequency + phase) * xMagnitude;
-			var y = Mathf.Cos(Time.TotalTime * yFrequency) * yMagnitude;
+			var x = Sin(Time.TotalTime * xFrequency + phase) * xMagnitude;
+			var y = Cos(Time.TotalTime * yFrequency) * yMagnitude;
 
 			return new Vector2(x, y);
 		}
@@ -864,11 +864,11 @@ namespace Nez
 											 float yMagnitude = 1, float phase = 0.5f, float damping = 0f,
 											 float oscillationInterval = 5f)
 		{
-			var wrappedTime = Mathf.PingPong(Time.TotalTime, oscillationInterval);
-			var damped = Mathf.Pow(MathHelper.E, -damping * wrappedTime);
+			var wrappedTime = PingPong(Time.TotalTime, oscillationInterval);
+			var damped = Pow(MathHelper.E, -damping * wrappedTime);
 
-			var x = damped * Mathf.Sin(Time.TotalTime * xFrequency + phase) * xMagnitude;
-			var y = damped * Mathf.Cos(Time.TotalTime * yFrequency) * yMagnitude;
+			var x = damped * Sin(Time.TotalTime * xFrequency + phase) * xMagnitude;
+			var y = damped * Cos(Time.TotalTime * yFrequency) * yMagnitude;
 
 			return new Vector2(x, y);
 		}

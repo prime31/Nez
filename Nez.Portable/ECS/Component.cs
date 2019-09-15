@@ -170,7 +170,7 @@ namespace Nez
 
 		public override string ToString()
 		{
-			return string.Format("[Component: type: {0}, updateOrder: {1}]", this.GetType(), UpdateOrder);
+			return string.Format("[Component: type: {0}, updateOrder: {1}]", GetType(), UpdateOrder);
 		}
 	}
 }

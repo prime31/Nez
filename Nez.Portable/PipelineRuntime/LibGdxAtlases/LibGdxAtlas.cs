@@ -11,14 +11,14 @@ namespace Nez.LibGdxAtlases
 	public class LibGdxAtlas
 	{
 		public List<TextureAtlas> Atlases = new List<TextureAtlas>();
-		public Dictionary<string, List<Subtexture>> Animations = new Dictionary<string, List<Subtexture>>();
+		public Dictionary<string, List<Sprite>> Animations = new Dictionary<string, List<Sprite>>();
 
 
 		/// <summary>
-		/// gets the Subtexture with name or returns null if it cant be found
+		/// gets the Sprite with name or returns null if it cant be found
 		/// </summary>
 		/// <param name="name">Name.</param>
-		public Subtexture Get(string name)
+		public Sprite Get(string name)
 		{
 			for (var i = 0; i < Atlases.Count; i++)
 			{
@@ -31,15 +31,15 @@ namespace Nez.LibGdxAtlases
 
 
 		/// <summary>
-		/// gets the Subtexture with name or returns null if it cant be found
+		/// gets the Sprite with name or returns null if it cant be found
 		/// </summary>
 		/// <param name="name">Name.</param>
-		public NinePatchSubtexture GetNinePatch(string name)
+		public NinePatchSprite GetNinePatch(string name)
 		{
 			for (var i = 0; i < Atlases.Count; i++)
 			{
 				if (Atlases[i].ContainsSubtexture(name))
-					return Atlases[i].GetSubtexture(name) as NinePatchSubtexture;
+					return Atlases[i].GetSubtexture(name) as NinePatchSprite;
 			}
 
 			return null;
@@ -49,9 +49,9 @@ namespace Nez.LibGdxAtlases
 		/// <summary>
 		/// alias for LibGdxAtlas.get
 		/// </summary>
-		/// <returns>The subtexture.</returns>
+		/// <returns>The sprite.</returns>
 		/// <param name="name">Name.</param>
-		public Subtexture GetSubtexture(string name)
+		public Sprite GetSubtexture(string name)
 		{
 			return Get(name);
 		}
@@ -61,7 +61,7 @@ namespace Nez.LibGdxAtlases
 		/// </summary>
 		/// <param name="name">name of the anmation</param>
 		/// <returns></returns>
-		public List<Subtexture> GetAnimation(string name)
+		public List<Sprite> GetAnimation(string name)
 		{
 			return Animations[name];
 		}

@@ -93,7 +93,7 @@ namespace Nez
 			while (elapsedTime < duration)
 			{
 				elapsedTime += Time.DeltaTime;
-				this.LetterboxSize = Lerps.Ease(easeType, 0, letterboxSize, elapsedTime, duration);
+				LetterboxSize = Lerps.Ease(easeType, 0, letterboxSize, elapsedTime, duration);
 				yield return null;
 			}
 
@@ -118,7 +118,7 @@ namespace Nez
 			while (elapsedTime < duration)
 			{
 				elapsedTime += Time.DeltaTime;
-				this.LetterboxSize = Lerps.Ease(easeType, startSize, 0, elapsedTime, duration);
+				LetterboxSize = Lerps.Ease(easeType, startSize, 0, elapsedTime, duration);
 				yield return null;
 			}
 

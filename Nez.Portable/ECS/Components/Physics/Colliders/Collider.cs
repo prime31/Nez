@@ -135,7 +135,7 @@ namespace Nez
 		/// <param name="shouldColliderScaleAndRotateWithTransform">If set to <c>true</c> should collider scale and rotate with transform.</param>
 		public Collider SetShouldColliderScaleAndRotateWithTransform(bool shouldColliderScaleAndRotateWithTransform)
 		{
-			this.ShouldColliderScaleAndRotateWithTransform = shouldColliderScaleAndRotateWithTransform;
+			ShouldColliderScaleAndRotateWithTransform = shouldColliderScaleAndRotateWithTransform;
 			_isPositionDirty = _isRotationDirty = true;
 			return this;
 		}

@@ -15,7 +15,7 @@ namespace Nez.AI.UtilityAI
 
 		public FixedScoreConsideration(float score = 1)
 		{
-			this.Score = score;
+			Score = score;
 		}
 
 

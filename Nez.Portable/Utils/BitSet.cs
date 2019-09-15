@@ -524,9 +524,9 @@ namespace Nez
 		public void Set(int index, bool value)
 		{
 			if (value)
-				this.Set(index);
+				Set(index);
 			else
-				this.Clear(index);
+				Clear(index);
 		}
 
 
@@ -570,9 +570,9 @@ namespace Nez
 		public void Set(int from, int to, bool value)
 		{
 			if (value)
-				this.Set(from, to);
+				Set(from, to);
 			else
-				this.Clear(from, to);
+				Clear(from, to);
 		}
 
 

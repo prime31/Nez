@@ -20,7 +20,7 @@ namespace Nez
 
 		public InspectorList(object target)
 		{
-			this.Target = target;
+			Target = target;
 			Name = target.GetType().Name;
 			_inspectors = Inspector.GetInspectableProperties(target);
 		}

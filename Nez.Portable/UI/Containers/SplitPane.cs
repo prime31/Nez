@@ -161,7 +161,7 @@ namespace Nez.UI
 
 			if (_firstWidget != null)
 			{
-				var firstWidgetBounds = this._firstWidgetBounds;
+				var firstWidgetBounds = _firstWidgetBounds;
 				_firstWidget.SetBounds(firstWidgetBounds.X, firstWidgetBounds.Y, firstWidgetBounds.Width,
 					firstWidgetBounds.Height);
 
@@ -171,7 +171,7 @@ namespace Nez.UI
 
 			if (_secondWidget != null)
 			{
-				var secondWidgetBounds = this._secondWidgetBounds;
+				var secondWidgetBounds = _secondWidgetBounds;
 				_secondWidget.SetBounds(secondWidgetBounds.X, secondWidgetBounds.Y, secondWidgetBounds.Width,
 					secondWidgetBounds.Height);
 
@@ -341,7 +341,7 @@ namespace Nez.UI
 
 		public SplitPaneStyle(IDrawable handle)
 		{
-			this.Handle = handle;
+			Handle = handle;
 		}
 
 

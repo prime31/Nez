@@ -1373,11 +1373,11 @@ namespace Nez.UI
 		public ScrollPaneStyle(IDrawable background, IDrawable hScroll, IDrawable hScrollKnob, IDrawable vScroll,
 		                       IDrawable vScrollKnob)
 		{
-			this.Background = background;
-			this.HScroll = hScroll;
-			this.HScrollKnob = hScrollKnob;
-			this.VScroll = vScroll;
-			this.VScrollKnob = vScrollKnob;
+			Background = background;
+			HScroll = hScroll;
+			HScrollKnob = hScrollKnob;
+			VScroll = vScroll;
+			VScrollKnob = vScrollKnob;
 		}
 
 

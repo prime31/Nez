@@ -25,7 +25,7 @@ namespace Nez
 		public VirtualButton(float bufferTime)
 		{
 			Nodes = new List<Node>();
-			this.BufferTime = bufferTime;
+			BufferTime = bufferTime;
 		}
 
 
@@ -36,8 +36,8 @@ namespace Nez
 
 		public VirtualButton(float bufferTime, params Node[] nodes)
 		{
-			this.Nodes = new List<Node>(nodes);
-			this.BufferTime = bufferTime;
+			Nodes = new List<Node>(nodes);
+			BufferTime = bufferTime;
 		}
 
 
@@ -54,8 +54,8 @@ namespace Nez
 
 		public void SetRepeat(float firstRepeatTime, float multiRepeatTime)
 		{
-			this.FirstRepeatTime = firstRepeatTime;
-			this.MultiRepeatTime = multiRepeatTime;
+			FirstRepeatTime = firstRepeatTime;
+			MultiRepeatTime = multiRepeatTime;
 			_willRepeat = firstRepeatTime > 0;
 			if (!_willRepeat)
 				IsRepeating = false;
@@ -330,7 +330,7 @@ namespace Nez
 
 			public KeyboardKey(Keys key)
 			{
-				this.Key = key;
+				Key = key;
 			}
 
 
@@ -364,8 +364,8 @@ namespace Nez
 
 			public KeyboardModifiedKey(Keys key, Keys modifier)
 			{
-				this.Key = key;
-				this.Modifier = modifier;
+				Key = key;
+				Modifier = modifier;
 			}
 
 
@@ -400,8 +400,8 @@ namespace Nez
 
 			public GamePadButton(int gamepadIndex, Buttons button)
 			{
-				this.GamepadIndex = gamepadIndex;
-				this.Button = button;
+				GamepadIndex = gamepadIndex;
+				Button = button;
 			}
 
 
@@ -432,8 +432,8 @@ namespace Nez
 
 			public GamePadLeftTrigger(int gamepadIndex, float threshold)
 			{
-				this.GamepadIndex = gamepadIndex;
-				this.Threshold = threshold;
+				GamepadIndex = gamepadIndex;
+				Threshold = threshold;
 			}
 
 
@@ -462,8 +462,8 @@ namespace Nez
 
 			public GamePadRightTrigger(int gamepadIndex, float threshold)
 			{
-				this.GamepadIndex = gamepadIndex;
-				this.Threshold = threshold;
+				GamepadIndex = gamepadIndex;
+				Threshold = threshold;
 			}
 
 
@@ -495,7 +495,7 @@ namespace Nez
 
 			public GamePadDPadRight(int gamepadIndex)
 			{
-				this.GamepadIndex = gamepadIndex;
+				GamepadIndex = gamepadIndex;
 			}
 
 
@@ -523,7 +523,7 @@ namespace Nez
 
 			public GamePadDPadLeft(int gamepadIndex)
 			{
-				this.GamepadIndex = gamepadIndex;
+				GamepadIndex = gamepadIndex;
 			}
 
 
@@ -551,7 +551,7 @@ namespace Nez
 
 			public GamePadDPadUp(int gamepadIndex)
 			{
-				this.GamepadIndex = gamepadIndex;
+				GamepadIndex = gamepadIndex;
 			}
 
 
@@ -579,7 +579,7 @@ namespace Nez
 
 			public GamePadDPadDown(int gamepadIndex)
 			{
-				this.GamepadIndex = gamepadIndex;
+				GamepadIndex = gamepadIndex;
 			}
 
 

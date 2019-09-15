@@ -17,7 +17,7 @@ namespace Nez.AI.Pathfinding
 
 			public AStarNode(T data)
 			{
-				this.Data = data;
+				Data = data;
 			}
 		}
 

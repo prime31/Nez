@@ -101,7 +101,7 @@ namespace Nez.Tweens
 					_transform.LocalRotationDegrees = value.X;
 					break;
 				default:
-					throw new System.ArgumentOutOfRangeException();
+					throw new ArgumentOutOfRangeException();
 			}
 		}
 

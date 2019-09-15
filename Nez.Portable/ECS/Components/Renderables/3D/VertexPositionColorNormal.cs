@@ -28,9 +28,9 @@ namespace Nez
 
 		public VertexPositionColorNormal(Vector3 position, Color color, Vector3 normal)
 		{
-			this.Position = position;
-			this.Color = color;
-			this.Normal = normal;
+			Position = position;
+			Color = color;
+			Normal = normal;
 		}
 	}
 }

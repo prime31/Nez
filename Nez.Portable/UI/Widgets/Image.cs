@@ -30,14 +30,14 @@ namespace Nez.UI
 		}
 
 
-		public Image(Subtexture subtexture, Scaling scaling = Scaling.Stretch, int align = AlignInternal.Center) : this(
-			new SubtextureDrawable(subtexture), scaling, align)
+		public Image(Sprite sprite, Scaling scaling = Scaling.Stretch, int align = AlignInternal.Center) : this(
+			new SpriteDrawable(sprite), scaling, align)
 		{
 		}
 
 
 		public Image(Texture2D texture, Scaling scaling = Scaling.Stretch, int align = AlignInternal.Center) : this(
-			new Subtexture(texture), scaling, align)
+			new Sprite(texture), scaling, align)
 		{
 		}
 

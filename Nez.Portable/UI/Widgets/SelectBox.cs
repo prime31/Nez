@@ -363,9 +363,9 @@ namespace Nez.UI
 
 		public void SetDisabled(bool disabled)
 		{
-			if (disabled && !this._isDisabled)
+			if (disabled && !_isDisabled)
 				HideList();
-			this._isDisabled = disabled;
+			_isDisabled = disabled;
 		}
 
 
@@ -467,11 +467,11 @@ namespace Nez.UI
 		public SelectBoxStyle(BitmapFont font, Color fontColor, IDrawable background, ScrollPaneStyle scrollStyle,
 		                      ListBoxStyle listStyle)
 		{
-			this.Font = font;
-			this.FontColor = fontColor;
-			this.Background = background;
-			this.ScrollStyle = scrollStyle;
-			this.ListStyle = listStyle;
+			Font = font;
+			FontColor = fontColor;
+			Background = background;
+			ScrollStyle = scrollStyle;
+			ListStyle = listStyle;
 		}
 	}
 }

@@ -16,7 +16,7 @@ namespace Nez.Tiled
 
 		public void SetTileTextureRegion(int tileId, Rectangle sourceRect)
 		{
-			_regions[tileId] = new Subtexture(Texture, sourceRect);
+			_regions[tileId] = new Sprite(Texture, sourceRect);
 		}
 	}
 }

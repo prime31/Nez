@@ -57,7 +57,7 @@ namespace Nez.Verlet
 
 		public VerletWorld(Rectangle? simulationBounds = null)
 		{
-			this.SimulationBounds = simulationBounds;
+			SimulationBounds = simulationBounds;
 			_fixedDeltaTimeSq = Mathf.Pow(_fixedDeltaTime, 2);
 		}
 

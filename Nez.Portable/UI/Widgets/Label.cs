@@ -388,8 +388,8 @@ namespace Nez.UI
 
 		public LabelStyle(BitmapFont font, Color fontColor)
 		{
-			this.Font = font ?? Graphics.Instance.BitmapFont;
-			this.FontColor = fontColor;
+			Font = font ?? Graphics.Instance.BitmapFont;
+			FontColor = fontColor;
 		}
 
 

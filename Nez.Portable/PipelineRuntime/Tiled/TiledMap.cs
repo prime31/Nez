@@ -51,12 +51,12 @@ namespace Nez.Tiled
 			int tileHeight,
 			TiledMapOrientation orientation = TiledMapOrientation.Orthogonal)
 		{
-			this.FirstGid = firstGid;
-			this.Width = width;
-			this.Height = height;
-			this.TileWidth = tileWidth;
-			this.TileHeight = tileHeight;
-			this.Orientation = orientation;
+			FirstGid = firstGid;
+			Width = width;
+			Height = height;
+			TileWidth = tileWidth;
+			TileHeight = tileHeight;
+			Orientation = orientation;
 		}
 
 

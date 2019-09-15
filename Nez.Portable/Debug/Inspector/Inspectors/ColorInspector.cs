@@ -7,7 +7,7 @@ namespace Nez
 {
 	public class ColorInspector : Inspector
 	{
-		UI.TextField _textFieldR, _textFieldG, _textFieldB, _textFieldA;
+		TextField _textFieldR, _textFieldG, _textFieldB, _textFieldA;
 
 
 		public override void Initialize(Table table, Skin skin, float leftCellWidth)
@@ -16,7 +16,7 @@ namespace Nez
 			var label = CreateNameLabel(table, skin, leftCellWidth);
 
 			var labelR = new Label("r", skin);
-			_textFieldR = new UI.TextField(value.R.ToString(), skin);
+			_textFieldR = new TextField(value.R.ToString(), skin);
 			_textFieldR.SetMaxLength(3);
 			_textFieldR.SetTextFieldFilter(new DigitsOnlyFilter()).SetPreferredWidth(28);
 			_textFieldR.OnTextChanged += (field, str) =>
@@ -31,7 +31,7 @@ namespace Nez
 			};
 
 			var labelG = new Label("g", skin);
-			_textFieldG = new UI.TextField(value.G.ToString(), skin);
+			_textFieldG = new TextField(value.G.ToString(), skin);
 			_textFieldG.SetMaxLength(3);
 			_textFieldG.SetTextFieldFilter(new DigitsOnlyFilter()).SetPreferredWidth(28);
 			_textFieldG.OnTextChanged += (field, str) =>
@@ -46,7 +46,7 @@ namespace Nez
 			};
 
 			var labelB = new Label("b", skin);
-			_textFieldB = new UI.TextField(value.B.ToString(), skin);
+			_textFieldB = new TextField(value.B.ToString(), skin);
 			_textFieldB.SetMaxLength(3);
 			_textFieldB.SetTextFieldFilter(new DigitsOnlyFilter()).SetPreferredWidth(28);
 			_textFieldB.OnTextChanged += (field, str) =>
@@ -61,7 +61,7 @@ namespace Nez
 			};
 
 			var labelA = new Label("a", skin);
-			_textFieldA = new UI.TextField(value.A.ToString(), skin);
+			_textFieldA = new TextField(value.A.ToString(), skin);
 			_textFieldA.SetMaxLength(3);
 			_textFieldA.SetTextFieldFilter(new DigitsOnlyFilter()).SetPreferredWidth(28);
 			_textFieldA.OnTextChanged += (field, str) =>

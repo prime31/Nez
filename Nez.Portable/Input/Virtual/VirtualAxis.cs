@@ -34,7 +34,7 @@ namespace Nez
 
 		public VirtualAxis(params Node[] nodes)
 		{
-			this.Nodes.AddRange(nodes);
+			Nodes.AddRange(nodes);
 		}
 
 
@@ -67,8 +67,8 @@ namespace Nez
 
 			public GamePadLeftStickX(int gamepadIndex = 0, float deadzone = Input.DEFAULT_DEADZONE)
 			{
-				this.GamepadIndex = gamepadIndex;
-				this.Deadzone = deadzone;
+				GamepadIndex = gamepadIndex;
+				Deadzone = deadzone;
 			}
 
 			public override float Value
@@ -91,8 +91,8 @@ namespace Nez
 
 			public GamePadLeftStickY(int gamepadIndex = 0, float deadzone = Input.DEFAULT_DEADZONE)
 			{
-				this.GamepadIndex = gamepadIndex;
-				this.Deadzone = deadzone;
+				GamepadIndex = gamepadIndex;
+				Deadzone = deadzone;
 			}
 
 			public override float Value
@@ -115,8 +115,8 @@ namespace Nez
 
 			public GamePadRightStickX(int gamepadIndex = 0, float deadzone = Input.DEFAULT_DEADZONE)
 			{
-				this.GamepadIndex = gamepadIndex;
-				this.Deadzone = deadzone;
+				GamepadIndex = gamepadIndex;
+				Deadzone = deadzone;
 			}
 
 			public override float Value
@@ -134,8 +134,8 @@ namespace Nez
 
 			public GamePadRightStickY(int gamepadIndex = 0, float deadzone = Input.DEFAULT_DEADZONE)
 			{
-				this.GamepadIndex = gamepadIndex;
-				this.Deadzone = deadzone;
+				GamepadIndex = gamepadIndex;
+				Deadzone = deadzone;
 			}
 
 			public override float Value
@@ -152,7 +152,7 @@ namespace Nez
 
 			public GamePadDpadLeftRight(int gamepadIndex = 0)
 			{
-				this.GamepadIndex = gamepadIndex;
+				GamepadIndex = gamepadIndex;
 			}
 
 
@@ -178,7 +178,7 @@ namespace Nez
 
 			public GamePadDpadUpDown(int gamepadIndex = 0)
 			{
-				this.GamepadIndex = gamepadIndex;
+				GamepadIndex = gamepadIndex;
 			}
 
 
@@ -209,9 +209,9 @@ namespace Nez
 
 			public KeyboardKeys(OverlapBehavior overlapBehavior, Keys negative, Keys positive)
 			{
-				this.OverlapBehavior = overlapBehavior;
-				this.Negative = negative;
-				this.Positive = positive;
+				OverlapBehavior = overlapBehavior;
+				Negative = negative;
+				Positive = positive;
 			}
 
 

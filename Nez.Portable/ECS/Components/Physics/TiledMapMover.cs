@@ -137,7 +137,7 @@ namespace Nez.Tiled
 		public TiledMapMover(TiledTileLayer collisionLayer)
 		{
 			Insist.IsNotNull(collisionLayer, nameof(collisionLayer) + " is required");
-			this.CollisionLayer = collisionLayer;
+			CollisionLayer = collisionLayer;
 			TiledMap = collisionLayer.TiledMap;
 		}
 

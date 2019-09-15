@@ -76,7 +76,7 @@ namespace Nez
 			_textureWipeEffect = Core.Content.LoadEffect("Content/nez/effects/transitions/TextureWipe.mgfxo");
 			Opacity = 1f;
 			Color = Color.Black;
-			this.TransitionTexture = transitionTexture;
+			TransitionTexture = transitionTexture;
 		}
 
 		public TextureWipeTransition(Func<Scene> sceneLoadAction) : this(sceneLoadAction,

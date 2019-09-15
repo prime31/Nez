@@ -8,7 +8,7 @@ namespace Nez
 {
 	public class Vector2Inspector : Inspector
 	{
-		UI.TextField _textFieldX, _textFieldY;
+		TextField _textFieldX, _textFieldY;
 
 
 		public override void Initialize(Table table, Skin skin, float leftCellWidth)
@@ -17,7 +17,7 @@ namespace Nez
 			var label = CreateNameLabel(table, skin, leftCellWidth);
 
 			var labelX = new Label("x", skin);
-			_textFieldX = new UI.TextField(value.X.ToString(CultureInfo.InvariantCulture), skin);
+			_textFieldX = new TextField(value.X.ToString(CultureInfo.InvariantCulture), skin);
 			_textFieldX.SetTextFieldFilter(new FloatFilter()).SetPreferredWidth(50);
 			_textFieldX.OnTextChanged += (field, str) =>
 			{
@@ -31,7 +31,7 @@ namespace Nez
 			};
 
 			var labelY = new Label("y", skin);
-			_textFieldY = new UI.TextField(value.Y.ToString(CultureInfo.InvariantCulture), skin);
+			_textFieldY = new TextField(value.Y.ToString(CultureInfo.InvariantCulture), skin);
 			_textFieldY.SetTextFieldFilter(new FloatFilter()).SetPreferredWidth(50);
 			_textFieldY.OnTextChanged += (field, str) =>
 			{

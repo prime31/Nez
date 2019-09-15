@@ -37,7 +37,7 @@ namespace Nez.Verlet
 
 		public Particle(Vector2 position)
 		{
-			this.Position = position;
+			Position = position;
 			LastPosition = position;
 		}
 
@@ -77,7 +77,7 @@ namespace Nez.Verlet
 		{
 			isPinned = true;
 			pinnedPosition = position;
-			this.Position = pinnedPosition;
+			Position = pinnedPosition;
 			return this;
 		}
 

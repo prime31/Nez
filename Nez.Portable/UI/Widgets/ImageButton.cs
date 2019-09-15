@@ -116,9 +116,9 @@ namespace Nez.UI
 		public ImageButtonStyle(IDrawable up, IDrawable down, IDrawable checkked, IDrawable imageUp,
 		                        IDrawable imageDown, IDrawable imageChecked) : base(up, down, checkked)
 		{
-			this.ImageUp = imageUp;
-			this.ImageDown = imageDown;
-			this.ImageChecked = imageChecked;
+			ImageUp = imageUp;
+			ImageDown = imageDown;
+			ImageChecked = imageChecked;
 		}
 
 

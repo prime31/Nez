@@ -465,7 +465,7 @@ namespace Nez.UI
 
 		public int GetMaxLength()
 		{
-			return this.maxLength;
+			return maxLength;
 		}
 
 
@@ -1221,7 +1221,7 @@ namespace Nez.UI
 		/// <param name="alignment">Alignment.</param>
 		public TextField SetAlignment(Align alignment)
 		{
-			this.textHAlign = (int) alignment;
+			textHAlign = (int) alignment;
 			return this;
 		}
 
@@ -1317,11 +1317,11 @@ namespace Nez.UI
 		public TextFieldStyle(BitmapFont font, Color fontColor, IDrawable cursor, IDrawable selection,
 		                      IDrawable background)
 		{
-			this.Background = background;
-			this.Cursor = cursor;
-			this.Font = font ?? Graphics.Instance.BitmapFont;
-			this.FontColor = fontColor;
-			this.Selection = selection;
+			Background = background;
+			Cursor = cursor;
+			Font = font ?? Graphics.Instance.BitmapFont;
+			FontColor = fontColor;
+			Selection = selection;
 		}
 
 
