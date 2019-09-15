@@ -3,7 +3,7 @@
 	public class GlobalManager
 	{
 		/// <summary>
-		/// true if the GlobalManager is enabled. Changes in state result in onEnabled/onDisable being called.
+		/// true if the GlobalManager is enabled. Changes in state result in OnEnabled/OnDisable being called.
 		/// </summary>
 		/// <value><c>true</c> if enabled; otherwise, <c>false</c>.</value>
 		public bool Enabled

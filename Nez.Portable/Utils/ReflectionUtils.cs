@@ -1,112 +1,53 @@
-﻿#define NETFX_CORE
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Reflection;
-
 
 namespace Nez
 {
 	/// <summary>
 	/// helper class to fetch property delegates
 	/// </summary>
-	public class ReflectionUtils
+	public static class ReflectionUtils
 	{
-		public static Assembly GetAssembly(Type type)
-		{
-#if NETFX_CORE
-			return type.GetTypeInfo().Assembly;
-#else
-			return type.Assembly;
-#endif
-		}
+		public static Assembly GetAssembly(Type type) => type.GetTypeInfo().Assembly;
 
 		#region Fields
 
-		public static FieldInfo GetFieldInfo(object targetObject, string fieldName) =>
-			GetFieldInfo(targetObject.GetType(), fieldName);
+		public static FieldInfo GetFieldInfo(object targetObject, string fieldName) => GetFieldInfo(targetObject.GetType(), fieldName);
 
 		public static FieldInfo GetFieldInfo(Type type, string fieldName)
 		{
 			FieldInfo fieldInfo = null;
-
-#if NETFX_CORE
-			foreach (var fi in type.GetRuntimeFields())
-			{
-				if (fi.Name == fieldName)
-				{
-					fieldInfo = fi;
-					break;
-				}
-			}
-#else
 			do
 			{
-				fieldInfo =
- type.GetField( fieldName, BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic );
+				fieldInfo = type.GetField(fieldName, BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
 				type = type.BaseType;
-			} while ( fieldInfo == null && type != null );
-#endif
+			} while (fieldInfo == null && type != null);
 
 			return fieldInfo;
 		}
 
-		public static IEnumerable<FieldInfo> GetFields(Type type)
-		{
-#if NETFX_CORE
-			return type.GetRuntimeFields();
-#else
-			return type.GetFields( BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic );
-#endif
-		}
+		public static IEnumerable<FieldInfo> GetFields(Type type) => type.GetFields(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
 
-		public static object GetFieldValue(object targetObject, string fieldName)
-		{
-			var fieldInfo = GetFieldInfo(targetObject, fieldName);
-			return fieldInfo.GetValue(targetObject);
-		}
+		public static object GetFieldValue(object targetObject, string fieldName) => GetFieldInfo(targetObject, fieldName).GetValue(targetObject);
 
 		#endregion
 
 		#region Properties
 
-		public static PropertyInfo GetPropertyInfo(object targetObject, string propertyName) =>
-			GetPropertyInfo(targetObject.GetType(), propertyName);
+		public static PropertyInfo GetPropertyInfo(object targetObject, string propertyName) => GetPropertyInfo(targetObject.GetType(), propertyName);
 
 		public static PropertyInfo GetPropertyInfo(Type type, string propertyName)
 		{
-#if NETFX_CORE
-			return type.GetRuntimeProperty(propertyName);
-#else
-			return type.GetProperty( propertyName, BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public );
-#endif
+			return type.GetProperty(propertyName, BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public);
 		}
 
 		public static IEnumerable<PropertyInfo> GetProperties(Type type)
-		{
-#if NETFX_CORE
-			return type.GetRuntimeProperties();
-#else
-			return type.GetProperties( BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic );
-#endif
-		}
+			=> type.GetProperties(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
 
-		public static MethodInfo GetPropertyGetter(PropertyInfo prop)
-		{
-#if NETFX_CORE
-			return prop.GetMethod;
-#else
-			return prop.GetGetMethod( true );
-#endif
-		}
+		public static MethodInfo GetPropertyGetter(PropertyInfo prop) => prop.GetGetMethod(true);
 
-		public static MethodInfo GetPropertySetter(PropertyInfo prop)
-		{
-#if NETFX_CORE
-			return prop.SetMethod;
-#else
-			return prop.GetSetMethod( true );
-#endif
-		}
+		public static MethodInfo GetPropertySetter(PropertyInfo prop) => prop.GetSetMethod(true);
 
 		public static object GetPropertyValue(object targetObject, string propertyName)
 		{
@@ -147,49 +88,24 @@ namespace Nez
 
 		#region Methods
 
-		public static IEnumerable<MethodInfo> GetMethods(Type type)
-		{
-#if NETFX_CORE
-			return type.GetRuntimeMethods();
-#else
-			return type.GetMethods( BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic );
-#endif
-		}
+		public static IEnumerable<MethodInfo> GetMethods(Type type) =>
+			type.GetMethods(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
 
-		public static MethodInfo GetMethodInfo(object targetObject, string methodName) =>
-			GetMethodInfo(targetObject.GetType(), methodName);
+		public static MethodInfo GetMethodInfo(object targetObject, string methodName) => GetMethodInfo(targetObject.GetType(), methodName);
 
-		public static MethodInfo GetMethodInfo(object targetObject, string methodName, Type[] parameters) =>
-			GetMethodInfo(targetObject.GetType(), methodName, parameters);
+		public static MethodInfo GetMethodInfo(object targetObject, string methodName, Type[] parameters) => GetMethodInfo(targetObject.GetType(), methodName, parameters);
 
 		public static MethodInfo GetMethodInfo(Type type, string methodName, Type[] parameters = null)
 		{
-#if NETFX_CORE
-			if (parameters != null)
-				return type.GetRuntimeMethod(methodName, parameters);
-
-			foreach (var method in type.GetRuntimeMethods())
-				if (method.Name == methodName)
-					return method;
-
-			return null;
-#else
-			if( parameters == null )
-				return type.GetMethod( methodName, BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public );
-			return type.GetMethod( methodName, BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public, Type.DefaultBinder, parameters, null );
-#endif
+			if (parameters == null)
+				return type.GetMethod(methodName, BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public);
+			return type.GetMethod(methodName, BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public, Type.DefaultBinder, parameters, null);
 		}
 
 		#endregion
 
-		public static T CreateDelegate<T>(object targetObject, MethodInfo methodInfo)
-		{
-#if NETFX_CORE
-			return (T) (object) methodInfo.CreateDelegate(typeof(T), targetObject);
-#else
-			return (T)(object)Delegate.CreateDelegate( typeof( T ), targetObject, methodInfo );
-#endif
-		}
+		public static T CreateDelegate<T>(object targetObject, MethodInfo methodInfo) =>
+			(T)(object)Delegate.CreateDelegate(typeof(T), targetObject, methodInfo);
 
 		/// <summary>
 		/// gets all subclasses of <paramref name="baseClassType"> optionally filtering only for those with
@@ -272,6 +188,20 @@ namespace Nez
 			}
 
 			return false;
+		}
+
+		public static List<Type> GetAllTypesWithAttribute<T>() where T : Attribute
+		{
+			var typeList = new List<Type>();
+			foreach (var assembly in AppDomain.CurrentDomain.GetAssemblies())
+			{
+				foreach (var type in assembly.GetTypes())
+				{
+					if (type.GetCustomAttribute<T>() != null)
+						typeList.Add(type);
+				}
+			}
+			return typeList;
 		}
 	}
 }

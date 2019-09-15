@@ -15,8 +15,8 @@ namespace Nez
 
 		public Pair(T first, T second)
 		{
-			this.First = first;
-			this.Second = second;
+			First = first;
+			Second = second;
 		}
 
 
