@@ -14,7 +14,7 @@
         <copyright>Copyright 2018</copyright>
         <tags>nez monogame xna fna</tags>
         <dependencies>
-            <dependency id="Nez" version="0.9.4" />
+            <dependency id="Nez" version="0.9.5" />
         </dependencies>
     </metadata>
     <files>
