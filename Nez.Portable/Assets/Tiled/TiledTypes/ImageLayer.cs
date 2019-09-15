@@ -21,7 +21,7 @@ namespace Nez.Tiled
 
 		public TmxImageLayer(TmxMap map, XElement xImageLayer, string tmxDir = "")
 		{
-			this.Map = map;
+			Map = map;
 			Name = (string)xImageLayer.Attribute("name");
 
 			Width = (int?)xImageLayer.Attribute("width");

@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.IO;
 using Microsoft.Xna.Framework;
 using Nez.ParticleDesigner;
+using Nez.SpriteAtlases;
 
 namespace Nez.Systems
 {
@@ -126,6 +127,25 @@ namespace Nez.Systems
 			DisposableAssets.Add(emitterConfig);
 
 			return emitterConfig;
+		}
+
+		/// <summary>
+		/// Loads a SpriteAtlas
+		/// </summary>
+		public SpriteAtlas LoadSpriteAtlas(string name)
+		{
+			if (LoadedAssets.TryGetValue(name, out var asset))
+			{
+				if (asset is SpriteAtlas spriteAtlas)
+					return spriteAtlas;
+			}
+
+			var atlas = SpriteAtlasLoader.ParseSpriteAtlas(name);
+
+			LoadedAssets.Add(name, atlas);
+			DisposableAssets.Add(atlas);
+
+			return atlas;
 		}
 
 		/// <summary>

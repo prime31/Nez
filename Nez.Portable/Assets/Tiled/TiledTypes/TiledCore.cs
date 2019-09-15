@@ -118,7 +118,9 @@ namespace Nez.Tiled
 			{
 				// Append directory if present
 				Source = Path.Combine(tmxDir, (string)xSource);
-				Texture = Texture2D.FromStream(Core.GraphicsDevice, TitleContainer.OpenStream(Source));
+
+				using (var stream = TitleContainer.OpenStream(Source))
+					Texture = Texture2D.FromStream(Core.GraphicsDevice, stream);
 			}
 			else
 			{
@@ -126,6 +128,7 @@ namespace Nez.Tiled
 				var xData = xImage.Element("data");
 				var decodedStream = new TmxBase64Data(xData);
 				Data = decodedStream.Data;
+				throw new NotSupportedException("Stream Data loading is not yet supported");
 			}
 
 			Trans = TmxColor.ParseColor(xImage.Attribute("trans"));
