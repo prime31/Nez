@@ -9,11 +9,11 @@ namespace Nez.Tiled
 {
 	/// <summary>
 	/// WIP
-	/// The TmxMapMover is a helper for moving objects around in a gravity-based Tiled map. It requires that the Entity it is on has a BoxCollider. The
-	/// BoxCollider will be used in conjuntion with colliderHorizontal/VerticalInset for all collision detection.
-	/// 
+	/// The TiledMapMover is a helper for moving objects around in a gravity-based Tiled map. It requires that the Entity it is on has a BoxCollider. The
+	/// BoxCollider will be used in conjunction with colliderHorizontal/VerticalInset for all collision detection.
+	///
 	/// One way platforms can be jumped down through by moving your Transform down 1 pixel and calling CollisionState.clearLastGroundTile.
-	/// 
+	///
 	/// If you plan to use slopes/one way platforms with the TiledMapMover some extra properties need to be added to your tiles in Tiled.
 	/// They are listed below:
 	/// - nez:isOneWayPlatform (bool): one way platforms will ignore all collisions except from above
@@ -22,7 +22,7 @@ namespace Nez.Tiled
 	/// tile |\ would have a slopeTopLeft of 0 and slopeTopRight of 15
 	/// - nez:slopeTopRight (int): distance in pixels from the tiles top to the slope on the right side
 	/// </summary>
-	public class TmxMapMover :
+	public class TiledMapMover :
 #if DEBUG_MOVER
 	RenderableComponent
 #else
@@ -123,10 +123,10 @@ namespace Nez.Tiled
 		Rectangle _boxColliderBounds;
 
 
-		public TmxMapMover()
+		public TiledMapMover()
 		{}
 
-		public TmxMapMover(TmxLayer collisionLayer)
+		public TiledMapMover(TmxLayer collisionLayer)
 		{
 			Insist.IsNotNull(collisionLayer, nameof(collisionLayer) + " is required");
 			CollisionLayer = collisionLayer;
