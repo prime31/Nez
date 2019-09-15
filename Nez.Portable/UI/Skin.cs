@@ -307,7 +307,7 @@ namespace Nez.UI
 				}
 				else
 				{
-					// we have an IDrawable. first we'll try to find a Subtexture and if we cant find one we will see if
+					// we have an IDrawable. first we'll try to find a Sprite and if we cant find one we will see if
 					// identifier is a color
 					var drawable = GetDrawable(identifier);
 					if (drawable != null)
@@ -341,10 +341,10 @@ namespace Nez.UI
 			for (int i = 0, n = atlas.Subtextures.Length; i < n; i++)
 			{
 				var subtexture = atlas.Subtextures[i];
-				if (subtexture is NinePatchSubtexture)
-					Add<NinePatchSubtexture>(atlas.RegionNames[i], subtexture as NinePatchSubtexture);
+				if (subtexture is NinePatchSprite)
+					Add<NinePatchSprite>(atlas.RegionNames[i], subtexture as NinePatchSprite);
 				else
-					Add<Subtexture>(atlas.RegionNames[i], subtexture);
+					Add<Sprite>(atlas.RegionNames[i], subtexture);
 			}
 		}
 
@@ -466,35 +466,35 @@ namespace Nez.UI
 		}
 
 
-		public Subtexture GetSubtexture(string name)
+		public Sprite GetSubtexture(string name)
 		{
-			return Get<Subtexture>(name);
+			return Get<Sprite>(name);
 		}
 
 
-		public NinePatchSubtexture GetNinePatchSubtexture(string name)
+		public NinePatchSprite GetNinePatchSubtexture(string name)
 		{
-			return Get<NinePatchSubtexture>(name);
+			return Get<NinePatchSprite>(name);
 		}
 
 
 		/// <summary>
-		/// Returns a registered subtexture drawable. If no subtexture drawable is found but a Subtexture exists with the name, a
-		/// subtexture drawable is created from the Subtexture and stored in the skin
+		/// Returns a registered sprite drawable. If no sprite drawable is found but a Sprite exists with the name, a
+		/// sprite drawable is created from the Sprite and stored in the skin
 		/// </summary>
-		/// <returns>The subtexture drawable.</returns>
+		/// <returns>The sprite drawable.</returns>
 		/// <param name="name">Name.</param>
-		public SubtextureDrawable GetSubtextureDrawable(string name)
+		public SpriteDrawable GetSubtextureDrawable(string name)
 		{
-			var subtextureDrawable = Get<SubtextureDrawable>(name);
+			var subtextureDrawable = Get<SpriteDrawable>(name);
 			if (subtextureDrawable != null)
 				return subtextureDrawable;
 
-			var subtexture = Get<Subtexture>(name);
+			var subtexture = Get<Sprite>(name);
 			if (subtexture != null)
 			{
-				subtextureDrawable = new SubtextureDrawable(subtexture);
-				Add<SubtextureDrawable>(name, subtextureDrawable);
+				subtextureDrawable = new SpriteDrawable(subtexture);
+				Add<SpriteDrawable>(name, subtextureDrawable);
 			}
 
 			return subtextureDrawable;
@@ -502,7 +502,7 @@ namespace Nez.UI
 
 
 		/// <summary>
-		/// Returns a registered drawable. If no drawable is found but a Subtexture/NinePatchSubtexture exists with the name, then the
+		/// Returns a registered drawable. If no drawable is found but a Sprite/NinePatchSprite exists with the name, then the
 		/// appropriate drawable is created and stored in the skin. If name is a color a PrimitiveDrawable will be created and stored.
 		/// </summary>
 		/// <returns>The drawable.</returns>
@@ -513,8 +513,8 @@ namespace Nez.UI
 			if (drawable != null)
 				return drawable;
 
-			// Check for explicit registration of ninepatch, subtexture or tiled drawable
-			drawable = Get<SubtextureDrawable>(name);
+			// Check for explicit registration of ninepatch, sprite or tiled drawable
+			drawable = Get<SpriteDrawable>(name);
 			if (drawable != null)
 				return drawable;
 
@@ -530,8 +530,8 @@ namespace Nez.UI
 			if (drawable != null)
 				return drawable;
 
-			// still nothing. check for a NinePatchSubtexture or a Subtexture and create a new drawable if we find one
-			var ninePatchSubtexture = Get<NinePatchSubtexture>(name);
+			// still nothing. check for a NinePatchSprite or a Sprite and create a new drawable if we find one
+			var ninePatchSubtexture = Get<NinePatchSprite>(name);
 			if (ninePatchSubtexture != null)
 			{
 				drawable = new NinePatchDrawable(ninePatchSubtexture);
@@ -539,11 +539,11 @@ namespace Nez.UI
 				return drawable;
 			}
 
-			var subtexture = Get<Subtexture>(name);
+			var subtexture = Get<Sprite>(name);
 			if (subtexture != null)
 			{
-				drawable = new SubtextureDrawable(subtexture);
-				Add<SubtextureDrawable>(name, drawable as SubtextureDrawable);
+				drawable = new SpriteDrawable(subtexture);
+				Add<SpriteDrawable>(name, drawable as SpriteDrawable);
 				return drawable;
 			}
 
@@ -561,8 +561,8 @@ namespace Nez.UI
 
 
 		/// <summary>
-		/// Returns a registered tiled drawable. If no tiled drawable is found but a Subtexture exists with the name, a tiled drawable is
-		/// created from the Subtexture and stored in the skin
+		/// Returns a registered tiled drawable. If no tiled drawable is found but a Sprite exists with the name, a tiled drawable is
+		/// created from the Sprite and stored in the skin
 		/// </summary>
 		/// <returns>The tiled drawable.</returns>
 		/// <param name="name">Name.</param>
@@ -572,7 +572,7 @@ namespace Nez.UI
 			if (tiledDrawable != null)
 				return tiledDrawable;
 
-			var subtexture = Get<Subtexture>(name);
+			var subtexture = Get<Sprite>(name);
 			if (subtexture != null)
 			{
 				tiledDrawable = new TiledDrawable(subtexture);
@@ -584,8 +584,8 @@ namespace Nez.UI
 
 
 		/// <summary>
-		/// Returns a registered ninepatch. If no ninepatch is found but a Subtexture exists with the name, a ninepatch is created from the
-		/// Subtexture and stored in the skin.
+		/// Returns a registered ninepatch. If no ninepatch is found but a Sprite exists with the name, a ninepatch is created from the
+		/// Sprite and stored in the skin.
 		/// </summary>
 		/// <returns>The nine patch.</returns>
 		/// <param name="name">Name.</param>
@@ -595,7 +595,7 @@ namespace Nez.UI
 			if (ninePatchDrawable != null)
 				return ninePatchDrawable;
 
-			var ninePatchSubtexture = Get<NinePatchSubtexture>(name);
+			var ninePatchSubtexture = Get<NinePatchSprite>(name);
 			if (ninePatchSubtexture != null)
 			{
 				ninePatchDrawable = new NinePatchDrawable(ninePatchSubtexture);
@@ -603,7 +603,7 @@ namespace Nez.UI
 				return ninePatchDrawable;
 			}
 
-			var subtexture = Get<NinePatchSubtexture>(name);
+			var subtexture = Get<NinePatchSprite>(name);
 			if (subtexture != null)
 			{
 				ninePatchDrawable = new NinePatchDrawable(subtexture, 0, 0, 0, 0);
@@ -624,8 +624,8 @@ namespace Nez.UI
 		public IDrawable NewTintedDrawable(string name, Color tint)
 		{
 			var drawable = GetDrawable(name);
-			if (drawable is SubtextureDrawable)
-				return (drawable as SubtextureDrawable).NewTintedDrawable(tint);
+			if (drawable is SpriteDrawable)
+				return (drawable as SpriteDrawable).NewTintedDrawable(tint);
 
 			if (drawable is NinePatchDrawable)
 				return (drawable as NinePatchDrawable).NewTintedDrawable(tint);

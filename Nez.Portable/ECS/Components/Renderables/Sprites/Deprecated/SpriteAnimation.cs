@@ -51,7 +51,7 @@ namespace Nez.Sprites
 		public float Delay = 0f;
 		public float TotalDuration;
 		public AnimationCompletionBehavior CompletionBehavior;
-		public List<Subtexture> Frames = new List<Subtexture>();
+		public List<Sprite> Frames = new List<Sprite>();
 
 		// calculated values used by SpriteT
 		public float SecondsPerFrame;
@@ -68,13 +68,13 @@ namespace Nez.Sprites
 		}
 
 
-		public SpriteAnimation(Subtexture frame)
+		public SpriteAnimation(Sprite frame)
 		{
 			AddFrame(frame);
 		}
 
 
-		public SpriteAnimation(List<Subtexture> frames)
+		public SpriteAnimation(List<Sprite> frames)
 		{
 			AddFrames(frames);
 		}
@@ -142,10 +142,10 @@ namespace Nez.Sprites
 		/// <summary>
 		/// adds a frame to this animation
 		/// </summary>
-		/// <param name="subtexture">Subtexture.</param>
-		public SpriteAnimation AddFrame(Subtexture subtexture)
+		/// <param name="sprite">Sprite.</param>
+		public SpriteAnimation AddFrame(Sprite sprite)
 		{
-			Frames.Add(subtexture);
+			Frames.Add(sprite);
 			return this;
 		}
 
@@ -155,7 +155,7 @@ namespace Nez.Sprites
 		/// </summary>
 		/// <returns>The frames.</returns>
 		/// <param name="subtextures">Subtextures.</param>
-		public SpriteAnimation AddFrames(List<Subtexture> subtextures)
+		public SpriteAnimation AddFrames(List<Sprite> subtextures)
 		{
 			for (var i = 0; i < subtextures.Count; i++)
 				AddFrame(subtextures[i]);

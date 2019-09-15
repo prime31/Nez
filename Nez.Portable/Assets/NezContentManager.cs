@@ -421,7 +421,7 @@ namespace Nez.Systems
 		{
 			if (assetName.StartsWith("nez://"))
 			{
-				var assembly = ReflectionUtils.GetAssembly(this.GetType());
+				var assembly = ReflectionUtils.GetAssembly(GetType());
 
 #if FNA
 				// for FNA, we will just search for the file by name since the assembly name will not be known at runtime

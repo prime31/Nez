@@ -87,7 +87,7 @@ namespace Nez.Tiled
 				{
 					pval = p.Attribute("value").Value;
 				}
-				catch (System.NullReferenceException)
+				catch (NullReferenceException)
 				{
 					// Fallback to element value if no "value"
 					pval = p.Value;

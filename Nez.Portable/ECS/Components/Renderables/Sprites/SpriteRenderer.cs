@@ -6,7 +6,7 @@ using Microsoft.Xna.Framework;
 namespace Nez.Sprites
 {
 	/// <summary>
-	/// the most basic and common Renderable. Renders a Subtexture/Texture.
+	/// the most basic and common Renderable. Renders a Sprite/Texture.
 	/// </summary>
 	public class SpriteRenderer : RenderableComponent
 	{
@@ -16,10 +16,10 @@ namespace Nez.Sprites
 			{
 				if (_areBoundsDirty)
 				{
-					if (Subtexture != null)
+					if (_sprite != null)
 						_bounds.CalculateBounds(Entity.Transform.Position, _localOffset, _origin,
-							Entity.Transform.Scale, Entity.Transform.Rotation, Subtexture.SourceRect.Width,
-							Subtexture.SourceRect.Height);
+							Entity.Transform.Scale, Entity.Transform.Rotation, _sprite.SourceRect.Width,
+							_sprite.SourceRect.Height);
 					_areBoundsDirty = false;
 				}
 
@@ -28,7 +28,7 @@ namespace Nez.Sprites
 		}
 
 		/// <summary>
-		/// the origin of the Sprite. This is set automatically when setting a Subtexture.
+		/// the origin of the Sprite. This is set automatically when setting a Sprite.
 		/// </summary>
 		/// <value>The origin.</value>
 		public Vector2 Origin
@@ -79,30 +79,30 @@ namespace Nez.Sprites
 		public SpriteEffects SpriteEffects = SpriteEffects.None;
 
 		/// <summary>
-		/// the Subtexture that should be displayed by this Sprite. When set, the origin of the Sprite is also set to match Subtexture.origin.
+		/// the Sprite that should be displayed by this Sprite. When set, the origin of the Sprite is also set to match Sprite.origin.
 		/// </summary>
-		/// <value>The subtexture.</value>
-		public Subtexture Subtexture
+		/// <value>The sprite.</value>
+		public Sprite Sprite
 		{
-			get => _subtexture;
+			get => _sprite;
 			set => SetSubtexture(value);
 		}
 
 		protected Vector2 _origin;
-		protected Subtexture _subtexture;
+		protected Sprite _sprite;
 
 
 		public SpriteRenderer()
 		{
 		}
 
-		public SpriteRenderer(Subtexture subtexture)
+		public SpriteRenderer(Sprite sprite)
 		{
-			_subtexture = subtexture;
-			_origin = subtexture.Center;
+			SetSubtexture(sprite);
+			_origin = sprite.Center;
 		}
 
-		public SpriteRenderer(Texture2D texture) : this(new Subtexture(texture))
+		public SpriteRenderer(Texture2D texture) : this(new Sprite(texture))
 		{
 		}
 
@@ -110,17 +110,16 @@ namespace Nez.Sprites
 		#region fluent setters
 
 		/// <summary>
-		/// sets the Subtexture and updates the origin of the Sprite to match Subtexture.origin. If for whatever reason you need
-		/// an origin different from the Subtexture either clone it or set the origin AFTER setting the Subtexture here.
+		/// sets the Sprite and updates the origin of the Sprite to match Sprite.origin. If for whatever reason you need
+		/// an origin different from the Sprite either clone it or set the origin AFTER setting the Sprite here.
 		/// </summary>
-		/// <returns>The subtexture.</returns>
-		/// <param name="subtexture">Subtexture.</param>
-		public SpriteRenderer SetSubtexture(Subtexture subtexture)
+		/// <returns>The sprite.</returns>
+		/// <param name="sprite">Sprite.</param>
+		public SpriteRenderer SetSubtexture(Sprite sprite)
 		{
-			_subtexture = subtexture;
-
-			if (_subtexture != null)
-				_origin = subtexture.Origin;
+			_sprite = sprite;
+			if (_sprite != null)
+				_origin = _sprite.Origin;
 			return this;
 		}
 
@@ -198,7 +197,7 @@ namespace Nez.Sprites
 
 		public override void Render(Graphics graphics, Camera camera)
 		{
-			graphics.Batcher.Draw(_subtexture, Entity.Transform.Position + LocalOffset, Color,
+			graphics.Batcher.Draw(Sprite, Entity.Transform.Position + LocalOffset, Color,
 				Entity.Transform.Rotation, Origin, Entity.Transform.Scale, SpriteEffects, _layerDepth);
 		}
 	}

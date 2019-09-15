@@ -68,7 +68,7 @@ namespace Nez
 			_font = font;
 			_text = text;
 			_localOffset = localOffset;
-			this.Color = color;
+			Color = color;
 			_horizontalAlign = HorizontalAlign.Left;
 			_verticalAlign = VerticalAlign.Top;
 

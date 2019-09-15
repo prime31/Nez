@@ -26,7 +26,7 @@ namespace Nez.TexturePackerImporter
 				writer.Write(region.Frame.Width);
 				writer.Write(region.Frame.Height);
 
-				// no use to write as double, since Subtexture.center holds floats
+				// no use to write as double, since Sprite.center holds floats
 				writer.Write((float) region.PivotPoint.X);
 				writer.Write((float) region.PivotPoint.Y);
 			}

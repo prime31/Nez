@@ -105,7 +105,7 @@ namespace Nez.ParticleDesigner
 
 							var texture = new Texture2D(Core.GraphicsDevice, bitmap.Width, bitmap.Height);
 							texture.SetData(colors);
-							config.Subtexture = new Textures.Subtexture(texture);
+							config.Sprite = new Textures.Sprite(texture);
 						}
 					}
 				}
@@ -116,7 +116,7 @@ namespace Nez.ParticleDesigner
 				using (var stream = TitleContainer.OpenStream(path))
 				{
 					var texture = Texture2D.FromStream(Core.GraphicsDevice, stream);
-					config.Subtexture = new Textures.Subtexture(texture);
+					config.Sprite = new Textures.Sprite(texture);
 				}
 			}
 

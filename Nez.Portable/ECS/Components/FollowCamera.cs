@@ -55,7 +55,7 @@ namespace Nez
 		{
 			_targetEntity = targetEntity;
 			_cameraStyle = cameraStyle;
-			this.Camera = camera;
+			Camera = camera;
 		}
 
 		public FollowCamera(Entity targetEntity, CameraStyle cameraStyle = CameraStyle.LockOn) : this(targetEntity,

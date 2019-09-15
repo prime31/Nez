@@ -10,8 +10,8 @@ namespace Nez.Sprites
 	/// prefer). If you do use an Enum it is recommended to pass in a IEqualityComparer when using an enum like CoreEvents does. See also
 	/// the EnumEqualityComparerGenerator.tt T4 template for automatically generating the IEqualityComparer.
 	/// </summary>
-	[Obsolete("")]
-	public class Sprite<TEnum> : SpriteRenderer, IUpdatable where TEnum : struct, IComparable, IFormattable
+	[Obsolete()]
+	public class SpriteAnimationRenderer<TEnum> : SpriteRenderer, IUpdatable where TEnum : struct, IComparable, IFormattable
 	{
 		public event Action<TEnum> OnAnimationCompletedEvent;
 		public bool IsPlaying { get; private set; }
@@ -40,39 +40,39 @@ namespace Nez.Sprites
 		bool _isLoopingBackOnPingPong;
 
 
-		public Sprite() : this(default(IEqualityComparer<TEnum>))
+		public SpriteAnimationRenderer() : this(default(IEqualityComparer<TEnum>))
 		{
 		}
 
 		/// <summary>
-		/// beware the beast man! If you use this constructor you must set the subtexture or set animations so that this sprite has proper bounds
+		/// beware the beast man! If you use this constructor you must set the sprite or set animations so that this sprite has proper bounds
 		/// when the Scene is running.
 		/// </summary>
 		/// <param name="customComparer">Custom comparer.</param>
-		public Sprite(IEqualityComparer<TEnum> customComparer = null) : base(Graphics.Instance.PixelTexture)
+		public SpriteAnimationRenderer(IEqualityComparer<TEnum> customComparer = null) : base(Graphics.Instance.PixelTexture)
 		{
 			_animations = new Dictionary<TEnum, SpriteAnimation>(customComparer);
 		}
 
-		public Sprite(IEqualityComparer<TEnum> customComparer, Subtexture subtexture) : base(subtexture)
+		public SpriteAnimationRenderer(IEqualityComparer<TEnum> customComparer, Sprite sprite) : base(sprite)
 		{
 			_animations = new Dictionary<TEnum, SpriteAnimation>(customComparer);
 		}
 
 		/// <summary>
-		/// Sprite needs a Subtexture at constructor time so that it knows how to size itself
+		/// Sprite needs a Sprite at constructor time so that it knows how to size itself
 		/// </summary>
-		/// <param name="subtexture">Subtexture.</param>
-		public Sprite(Subtexture subtexture) : this(null, subtexture)
+		/// <param name="sprite">Sprite.</param>
+		public SpriteAnimationRenderer(Sprite sprite) : this(null, sprite)
 		{
 		}
 
 		/// <summary>
-		/// Sprite needs a Subtexture at constructor time so the first frame of the passed in animation will be used for this constructor
+		/// Sprite needs a Sprite at constructor time so the first frame of the passed in animation will be used for this constructor
 		/// </summary>
 		/// <param name="animationKey">Animation key.</param>
 		/// <param name="animation">Animation.</param>
-		public Sprite(TEnum animationKey, SpriteAnimation animation) : this(null, animation.Frames[0])
+		public SpriteAnimationRenderer(TEnum animationKey, SpriteAnimation animation) : this(null, animation.Frames[0])
 		{
 			AddAnimation(animationKey, animation);
 		}
@@ -141,7 +141,7 @@ namespace Nez.Sprites
 							SetSubtexture(_currentAnimation.Frames[0]);
 							return;
 						case AnimationCompletionBehavior.HideSprite:
-							_subtexture = null;
+							Sprite = null;
 							_currentAnimation = null;
 							return;
 					}
@@ -197,10 +197,10 @@ namespace Nez.Sprites
 		#endregion
 
 
-		public Sprite<TEnum> AddAnimation(TEnum key, SpriteAnimation animation)
+		public SpriteAnimationRenderer<TEnum> AddAnimation(TEnum key, SpriteAnimation animation)
 		{
-			// if we have no subtexture use the first frame we find
-			if (_subtexture == null && animation.Frames.Count > 0)
+			// if we have no sprite use the first frame we find
+			if (Sprite == null && animation.Frames.Count > 0)
 				SetSubtexture(animation.Frames[0]);
 			_animations[key] = animation;
 

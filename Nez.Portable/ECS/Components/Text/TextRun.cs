@@ -219,7 +219,7 @@ namespace Nez
 					currentCharacter.Bounds.Height * _scale.Y);
 				_charDetails[i].Texture = _font.Textures[_font[currentCharacter.Char].TexturePage];
 
-				//_charDetails[i].texture = currentCharacter.subtexture.texture2D;
+				//_charDetails[i].texture = currentCharacter.sprite.texture2D;
 
 
 				// Batcher calculations

@@ -6,12 +6,12 @@ namespace Nez.Farseer
 {
 	public class FSCircleBody : FSRenderableBody
 	{
-		public FSCircleBody(Subtexture subtexture) : base(subtexture)
+		public FSCircleBody(Sprite sprite) : base(sprite)
 		{
 		}
 
 
-		public FSCircleBody(Texture2D texture) : this(new Subtexture(texture))
+		public FSCircleBody(Texture2D texture) : this(new Sprite(texture))
 		{
 		}
 
@@ -19,7 +19,7 @@ namespace Nez.Farseer
 		public override void Initialize()
 		{
 			base.Initialize();
-			Body.AttachCircle(_subtexture.SourceRect.Width / 2, 1);
+			Body.AttachCircle(Sprite.SourceRect.Width / 2, 1);
 		}
 
 
@@ -32,7 +32,7 @@ namespace Nez.Farseer
 			// we only care about scale. base handles pos/rot
 			if (comp == Transform.Component.Scale)
 				Body.FixtureList[0].Shape.Radius =
-					_subtexture.SourceRect.Width * Transform.Scale.X * 0.5f * FSConvert.DisplayToSim;
+					Sprite.SourceRect.Width * Transform.Scale.X * 0.5f * FSConvert.DisplayToSim;
 		}
 	}
 }

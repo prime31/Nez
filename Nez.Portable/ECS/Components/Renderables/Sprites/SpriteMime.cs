@@ -32,7 +32,7 @@
 
 		public override void Render(Graphics graphics, Camera camera)
 		{
-			graphics.Batcher.Draw(_spriteToMime.Subtexture, Entity.Transform.Position + _localOffset, Color,
+			graphics.Batcher.Draw(_spriteToMime.Sprite, Entity.Transform.Position + _localOffset, Color,
 				Entity.Transform.Rotation, _spriteToMime.Origin, Entity.Transform.Scale, _spriteToMime.SpriteEffects,
 				_layerDepth);
 		}

@@ -4,12 +4,12 @@ namespace Nez.SpriteAtlases
 {
 	public class SpriteAnimation
 	{
-		public Subtexture[] Subtextures;
+		public Sprite[] Sprites;
 		public float FrameRate;
 
-		public SpriteAnimation(Subtexture[] subtextures, float frameRate)
+		public SpriteAnimation(Sprite[] sprites, float frameRate)
 		{
-			Subtextures = subtextures;
+			Sprites = sprites;
 			FrameRate = frameRate;
 		}
 	}

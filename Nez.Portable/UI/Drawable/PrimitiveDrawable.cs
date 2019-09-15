@@ -32,7 +32,7 @@ namespace Nez.UI
 
 		public PrimitiveDrawable(Color? color = null)
 		{
-			this.Color = color;
+			Color = color;
 		}
 
 
@@ -51,8 +51,8 @@ namespace Nez.UI
 
 		public PrimitiveDrawable(float minWidth, float minHeight, Color? color = null) : this(color)
 		{
-			this.MinWidth = minWidth;
-			this.MinHeight = minHeight;
+			MinWidth = minWidth;
+			MinHeight = minHeight;
 		}
 
 
@@ -68,7 +68,7 @@ namespace Nez.UI
 
 		public virtual void Draw(Graphics graphics, float x, float y, float width, float height, Color color)
 		{
-			var col = this.Color.HasValue ? this.Color.Value : color;
+			var col = Color.HasValue ? Color.Value : color;
 			if (color.A != 255)
 				col *= (color.A / 255f);
 			if (col.A != 255)

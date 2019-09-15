@@ -41,7 +41,7 @@ namespace Nez
 
 		public EntityList(Scene scene)
 		{
-			this.Scene = scene;
+			Scene = scene;
 		}
 
 		#region array access

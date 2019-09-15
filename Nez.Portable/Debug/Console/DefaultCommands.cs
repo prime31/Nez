@@ -17,8 +17,8 @@ namespace Nez.Console
 
 		public CommandAttribute(string name, string help)
 		{
-			this.Name = name;
-			this.Help = help;
+			Name = name;
+			Help = help;
 		}
 	}
 }
@@ -85,11 +85,11 @@ namespace Nez.Console
 		static void LogLoadedAssets(string whichAssets = "s")
 		{
 			if (whichAssets == "s")
-				DebugConsole.Instance.Log(Core.Scene.Content.LogLoadedAssets());
+				Instance.Log(Core.Scene.Content.LogLoadedAssets());
 			else if (whichAssets == "g")
-				DebugConsole.Instance.Log(Core.Content.LogLoadedAssets());
+				Instance.Log(Core.Content.LogLoadedAssets());
 			else
-				DebugConsole.Instance.Log("Invalid parameter");
+				Instance.Log("Invalid parameter");
 		}
 
 
@@ -97,7 +97,7 @@ namespace Nez.Console
 		static void Vsync(bool enabled = true)
 		{
 			Screen.SynchronizeWithVerticalRetrace = enabled;
-			DebugConsole.Instance.Log("Vertical Sync " + (enabled ? "Enabled" : "Disabled"));
+			Instance.Log("Vertical Sync " + (enabled ? "Enabled" : "Disabled"));
 		}
 
 
@@ -105,7 +105,7 @@ namespace Nez.Console
 		static void FixedTimestep(bool enabled = true)
 		{
 			Core._instance.IsFixedTimeStep = enabled;
-			DebugConsole.Instance.Log("Fixed Time Step " + (enabled ? "Enabled" : "Disabled"));
+			Instance.Log("Fixed Time Step " + (enabled ? "Enabled" : "Disabled"));
 		}
 
 
@@ -141,14 +141,14 @@ namespace Nez.Console
 		{
 			if (Core.Scene == null)
 			{
-				DebugConsole.Instance.Log("Current Scene is null!");
+				Instance.Log("Current Scene is null!");
 				return;
 			}
 
 			if (tagIndex < 0)
-				DebugConsole.Instance.Log("Total entities: " + Core.Scene.Entities.Count.ToString());
+				Instance.Log("Total entities: " + Core.Scene.Entities.Count.ToString());
 			else
-				DebugConsole.Instance.Log("Total entities with tag [" + tagIndex + "] " +
+				Instance.Log("Total entities with tag [" + tagIndex + "] " +
 				                          Core.Scene.FindEntitiesWithTag(tagIndex).Count.ToString());
 		}
 
@@ -159,16 +159,16 @@ namespace Nez.Console
 		{
 			if (Core.Scene == null)
 			{
-				DebugConsole.Instance.Log("Current Scene is null!");
+				Instance.Log("Current Scene is null!");
 				return;
 			}
 
 			if (renderLayer != int.MinValue)
-				DebugConsole.Instance.Log("Total renderables with tag [" + renderLayer + "] " +
+				Instance.Log("Total renderables with tag [" + renderLayer + "] " +
 				                          Core.Scene.RenderableComponents.ComponentsWithRenderLayer(renderLayer).Length
 					                          .ToString());
 			else
-				DebugConsole.Instance.Log("Total renderables: " + Core.Scene.RenderableComponents.Count.ToString());
+				Instance.Log("Total renderables: " + Core.Scene.RenderableComponents.Count.ToString());
 		}
 
 
@@ -178,7 +178,7 @@ namespace Nez.Console
 		{
 			if (Core.Scene == null)
 			{
-				DebugConsole.Instance.Log("Current Scene is null!");
+				Instance.Log("Current Scene is null!");
 				return;
 			}
 
@@ -190,7 +190,7 @@ namespace Nez.Console
 					builder.AppendFormat("{0}\n", renderable);
 			}
 
-			DebugConsole.Instance.Log(builder.ToString());
+			Instance.Log(builder.ToString());
 		}
 
 
@@ -199,7 +199,7 @@ namespace Nez.Console
 		{
 			if (Core.Scene == null)
 			{
-				DebugConsole.Instance.Log("Current Scene is null!");
+				Instance.Log("Current Scene is null!");
 				return;
 			}
 
@@ -207,7 +207,7 @@ namespace Nez.Console
 			for (var i = 0; i < Core.Scene.Entities.Count; i++)
 				builder.AppendLine(Core.Scene.Entities[i].ToString());
 
-			DebugConsole.Instance.Log(builder.ToString());
+			Instance.Log(builder.ToString());
 		}
 
 
@@ -237,7 +237,7 @@ namespace Nez.Console
 				}
 			});
 
-			DebugConsole.Instance.Log("Physics system collider count: " +
+			Instance.Log("Physics system collider count: " +
 			                          ((HashSet<Collider>) Nez.Physics.GetAllColliders()).Count);
 		}
 
@@ -246,7 +246,7 @@ namespace Nez.Console
 		static void DebugRender()
 		{
 			Core.DebugRenderEnabled = !Core.DebugRenderEnabled;
-			DebugConsole.Instance.Log(string.Format("Debug rendering {0}",
+			Instance.Log(string.Format("Debug rendering {0}",
 				Core.DebugRenderEnabled ? "enabled" : "disabled"));
 		}
 
@@ -270,21 +270,21 @@ namespace Nez.Console
 					str.Append(c.Usage);
 				}
 
-				DebugConsole.Instance.Log(str.ToString());
+				Instance.Log(str.ToString());
 
 				//Help
 				if (string.IsNullOrEmpty(c.Help))
-					DebugConsole.Instance.Log("No help info set");
+					Instance.Log("No help info set");
 				else
-					DebugConsole.Instance.Log(c.Help);
+					Instance.Log(c.Help);
 			}
 			else
 			{
 				StringBuilder str = new StringBuilder();
 				str.Append("Commands list: ");
 				str.Append(string.Join(", ", Instance._sorted));
-				DebugConsole.Instance.Log(str.ToString());
-				DebugConsole.Instance.Log("Type 'help command' for more info on that command!");
+				Instance.Log(str.ToString());
+				Instance.Log("Type 'help command' for more info on that command!");
 			}
 		}
 	}

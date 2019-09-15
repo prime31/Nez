@@ -25,8 +25,8 @@ namespace Nez
 
 			public PointMass(Vector3 position, float invMass)
 			{
-				this.Position = position;
-				this.InverseMass = invMass;
+				Position = position;
+				InverseMass = invMass;
 			}
 
 
@@ -67,10 +67,10 @@ namespace Nez
 
 			public Spring(PointMass end1, PointMass end2, float stiffness, float damping)
 			{
-				this.End1 = end1;
-				this.End2 = end2;
-				this.Stiffness = stiffness;
-				this.Damping = damping;
+				End1 = end1;
+				End2 = end2;
+				Stiffness = stiffness;
+				Damping = damping;
 				TargetLength = Vector3.Distance(end1.Position, end2.Position) * 0.95f;
 			}
 

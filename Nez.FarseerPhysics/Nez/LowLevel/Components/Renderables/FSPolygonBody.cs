@@ -15,18 +15,16 @@ namespace Nez.Farseer
 		protected Vertices _verts;
 
 
-		public FSPolygonBody(Subtexture subtexture, List<Vector2> verts) : base(subtexture)
+		public FSPolygonBody(Sprite sprite, List<Vector2> verts) : base(sprite)
 		{
 			_verts = new Vertices(verts);
 		}
-
 
 		public override void Initialize()
 		{
 			base.Initialize();
 			Body.AttachPolygon(_verts, 1);
 		}
-
 
 		public override void OnEntityTransformChanged(Transform.Component comp)
 		{

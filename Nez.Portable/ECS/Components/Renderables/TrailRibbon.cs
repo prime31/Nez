@@ -243,8 +243,8 @@ namespace Nez
 
 			public RibbonSegment(Vector2 position, float radius)
 			{
-				this.Position = position;
-				this.Radius = radius;
+				Position = position;
+				Radius = radius;
 			}
 		}
 	}

@@ -44,7 +44,7 @@ namespace Nez
 			}
 		}
 
-		public new NinePatchSubtexture Subtexture;
+		public new NinePatchSprite Sprite;
 
 
 		/// <summary>
@@ -56,18 +56,18 @@ namespace Nez
 		bool _destRectsDirty = true;
 
 
-		public NineSliceSprite(NinePatchSubtexture subtexture) : base(subtexture)
+		public NineSliceSprite(NinePatchSprite sprite) : base(sprite)
 		{
-			this.Subtexture = subtexture;
+			Sprite = sprite;
 		}
 
-		public NineSliceSprite(Subtexture subtexture, int top, int bottom, int left, int right) : this(
-			new NinePatchSubtexture(subtexture, left, right, top, bottom))
+		public NineSliceSprite(Sprite sprite, int top, int bottom, int left, int right) : this(
+			new NinePatchSprite(sprite, left, right, top, bottom))
 		{
 		}
 
 		public NineSliceSprite(Texture2D texture, int top, int bottom, int left, int right) : this(
-			new NinePatchSubtexture(texture, left, right, top, bottom))
+			new NinePatchSprite(texture, left, right, top, bottom))
 		{
 		}
 
@@ -75,8 +75,8 @@ namespace Nez
 		{
 			if (_destRectsDirty)
 			{
-				Subtexture.GenerateNinePatchRects(_finalRenderRect, _destRects, Subtexture.Left, Subtexture.Right,
-					Subtexture.Top, Subtexture.Bottom);
+				Sprite.GenerateNinePatchRects(_finalRenderRect, _destRects, Sprite.Left, Sprite.Right,
+					Sprite.Top, Sprite.Bottom);
 				_destRectsDirty = false;
 			}
 
@@ -88,7 +88,7 @@ namespace Nez
 				var dest = _destRects[i];
 				dest.X += pos.X;
 				dest.Y += pos.Y;
-				graphics.Batcher.Draw(Subtexture, dest, Subtexture.NinePatchRects[i], Color);
+				graphics.Batcher.Draw(Sprite, dest, Sprite.NinePatchRects[i], Color);
 			}
 		}
 	}

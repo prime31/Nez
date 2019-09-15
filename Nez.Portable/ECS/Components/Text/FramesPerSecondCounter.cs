@@ -67,8 +67,8 @@ namespace Nez
 									  FPSDockPosition dockPosition = FPSDockPosition.TopRight, int maximumSamples = 100 )
 			: base( font, string.Empty, Vector2.Zero, color )
 		{
-			this.MaximumSamples = maximumSamples;
-			this.DockPosition = dockPosition;
+			MaximumSamples = maximumSamples;
+			DockPosition = dockPosition;
 			Init();
 		}
 
@@ -76,8 +76,8 @@ namespace Nez
 									  FPSDockPosition dockPosition = FPSDockPosition.TopRight, int maximumSamples = 100 )
 			: base( font, string.Empty, Vector2.Zero, color )
 		{
-			this.MaximumSamples = maximumSamples;
-			this.DockPosition = dockPosition;
+			MaximumSamples = maximumSamples;
+			DockPosition = dockPosition;
 			Init();
 		}
 
@@ -169,7 +169,7 @@ namespace Nez
 		/// <param name="dockOffset">Offset from screen edges</param>
 		public FramesPerSecondCounter SetDockOffset( Vector2 dockOffset )
 		{
-			this.DockOffset = dockOffset;
+			DockOffset = dockOffset;
 			return this;
 		}
 
@@ -179,7 +179,7 @@ namespace Nez
 		/// <param name="dockPosition">Corner of the screen</param>
 		public FramesPerSecondCounter SetDockPosition( FPSDockPosition dockPosition )
 		{
-			this.DockPosition = dockPosition;
+			DockPosition = dockPosition;
 			return this;
 		}
 

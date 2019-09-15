@@ -71,9 +71,9 @@ namespace Nez.Shadows
 
 		public PolyLight(float radius, Color color, float power)
 		{
-			this.Radius = radius;
-			this.Power = power;
-			this.Color = color;
+			Radius = radius;
+			Power = power;
+			Color = color;
 			ComputeTriangleIndices();
 		}
 
@@ -95,7 +95,7 @@ namespace Nez.Shadows
 
 		public PolyLight SetPower(float power)
 		{
-			this.Power = power;
+			Power = power;
 			return this;
 		}
 

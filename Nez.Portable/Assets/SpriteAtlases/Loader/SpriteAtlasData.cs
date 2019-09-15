@@ -23,18 +23,18 @@ namespace Nez.SpriteAtlases
 		{
 			var atlas = new SpriteAtlas();
 			atlas.Names = Names.ToArray();
-			atlas.Subtextures = new Subtexture[atlas.Names.Length];
+			atlas.Sprites = new Sprite[atlas.Names.Length];
 
-			for (var i = 0; i < atlas.Subtextures.Length; i++)
-				atlas.Subtextures[i] = new Subtexture(texture, SourceRects[i], Origins[i]);
+			for (var i = 0; i < atlas.Sprites.Length; i++)
+				atlas.Sprites[i] = new Sprite(texture, SourceRects[i], Origins[i]);
 
-			atlas.AnimationNames = this.AnimationNames.ToArray();
+			atlas.AnimationNames = AnimationNames.ToArray();
 			atlas.SpriteAnimations = new SpriteAnimation[atlas.AnimationNames.Length];
 			for (var i = 0; i < atlas.SpriteAnimations.Length; i++)
 			{
-				var sprites = new Subtexture[AnimationFrames.Count];
+				var sprites = new Sprite[AnimationFrames.Count];
 				for (var j = 0; j < sprites.Length; j++)
-					sprites[j] = atlas.Subtextures[AnimationFrames[i][j]];
+					sprites[j] = atlas.Sprites[AnimationFrames[i][j]];
 				atlas.SpriteAnimations[i] = new SpriteAnimation(sprites, (float)AnimationFps[i]);
 			}
 

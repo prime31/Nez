@@ -508,9 +508,9 @@ namespace Nez
 
 		public FormatInstruction(IFont font, Color color, Vector2 scale)
 		{
-			this.Font = font;
-			this.Color = color;
-			this.Scale = scale;
+			Font = font;
+			Color = color;
+			Scale = scale;
 		}
 	}
 
@@ -535,7 +535,7 @@ namespace Nez
 		public CompiledTextElement(string text, Vector2 position, FormatInstruction formatInstruction)
 		{
 			_text = text;
-			this.Position = position;
+			Position = position;
 			_formatInstruction = formatInstruction;
 			Size = formatInstruction.Font.MeasureString(text) * formatInstruction.Scale;
 		}
@@ -563,7 +563,7 @@ namespace Nez
 		public CompiledImageElement(Texture2D image, Color color, Vector2 position, Vector2 scale)
 		{
 			_image = image;
-			this.Position = position;
+			Position = position;
 			_color = color;
 			_scale = scale;
 			Size = new Vector2(image.Width, image.Height) * scale;

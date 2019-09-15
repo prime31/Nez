@@ -37,8 +37,7 @@ namespace Nez
 
 
 		public PrototypeSprite() : this(50, 50)
-		{
-		}
+		{ }
 
 		public PrototypeSprite(float width, float height) : base(Graphics.Instance.PixelTexture)
 		{
@@ -78,10 +77,10 @@ namespace Nez
 		/// <param name="skewRightY">Skew right y.</param>
 		public PrototypeSprite SetSkew(float skewTopX, float skewBottomX, float skewLeftY, float skewRightY)
 		{
-			this.SkewTopX = skewTopX;
-			this.SkewBottomX = skewBottomX;
-			this.SkewLeftY = skewLeftY;
-			this.SkewRightY = skewRightY;
+			SkewTopX = skewTopX;
+			SkewBottomX = skewBottomX;
+			SkewLeftY = skewLeftY;
+			SkewRightY = skewRightY;
 			return this;
 		}
 
@@ -95,7 +94,7 @@ namespace Nez
 			var pos = (Entity.Transform.Position - (Origin * Entity.Transform.Scale) + LocalOffset);
 			var size = new Point((int) (_width * Entity.Transform.Scale.X), (int) (_height * Entity.Transform.Scale.Y));
 			var destRect = new Rectangle((int) pos.X, (int) pos.Y, size.X, size.Y);
-			graphics.Batcher.Draw(Subtexture, destRect, Subtexture.SourceRect, Color, Entity.Transform.Rotation,
+			graphics.Batcher.Draw(_sprite, destRect, _sprite.SourceRect, Color, Entity.Transform.Rotation,
 				SpriteEffects.None, LayerDepth, SkewTopX, SkewBottomX, SkewLeftY, SkewRightY);
 		}
 	}

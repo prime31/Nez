@@ -6,15 +6,15 @@ namespace Nez.SpriteAtlases
 	public class SpriteAtlas : IDisposable
 	{
 		public string[] Names;
-		public Subtexture[] Subtextures;
+		public Sprite[] Sprites;
 
 		public string[] AnimationNames;
 		public SpriteAnimation[] SpriteAnimations;
 
-		public Subtexture GetSprite(string name)
+		public Sprite GetSprite(string name)
 		{
 			var index = Array.IndexOf(Names, name);
-			return Subtextures[index];
+			return Sprites[index];
 		}
 
 		public SpriteAnimation GetAnimation(string name)
@@ -25,11 +25,11 @@ namespace Nez.SpriteAtlases
 
 		void IDisposable.Dispose()
 		{
-			// all our Subtextures use the same Texture so we only need to dispose one of them
-			if (Subtextures != null)
+			// all our Sprites use the same Texture so we only need to dispose one of them
+			if (Sprites != null)
 			{
-				Subtextures[0].Texture2D.Dispose();
-				Subtextures = null;
+				Sprites[0].Texture2D.Dispose();
+				Sprites = null;
 			}
 		}
 	}

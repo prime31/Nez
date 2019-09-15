@@ -20,7 +20,7 @@ namespace Nez.Sprites
 		class SpriteTrailInstance
 		{
 			public Vector2 Position;
-			Subtexture _subtexture;
+			Sprite _sprite;
 			float _fadeDuration;
 			float _fadeDelay;
 			float _elapsedTime;
@@ -35,11 +35,11 @@ namespace Nez.Sprites
 			float _layerDepth;
 
 
-			public void Spawn(Vector2 position, Subtexture subtexture, float fadeDuration, float fadeDelay,
+			public void Spawn(Vector2 position, Sprite sprite, float fadeDuration, float fadeDelay,
 							  Color initialColor, Color targetColor)
 			{
-				this.Position = position;
-				_subtexture = subtexture;
+				Position = position;
+				_sprite = sprite;
 
 				_initialColor = initialColor;
 				_elapsedTime = 0f;
@@ -88,7 +88,7 @@ namespace Nez.Sprites
 			[MethodImpl(MethodImplOptions.AggressiveInlining)]
 			public void Render(Graphics graphics, Camera camera)
 			{
-				graphics.Batcher.Draw(_subtexture, Position, _renderColor, _rotation, _origin, _scale, _spriteEffects,
+				graphics.Batcher.Draw(_sprite, Position, _renderColor, _rotation, _origin, _scale, _spriteEffects,
 					_layerDepth);
 			}
 		}
@@ -186,35 +186,35 @@ namespace Nez.Sprites
 
 		public SpriteTrail SetMinDistanceBetweenInstances(float minDistanceBetweenInstances)
 		{
-			this.MinDistanceBetweenInstances = minDistanceBetweenInstances;
+			MinDistanceBetweenInstances = minDistanceBetweenInstances;
 			return this;
 		}
 
 
 		public SpriteTrail SetFadeDuration(float fadeDuration)
 		{
-			this.FadeDuration = fadeDuration;
+			FadeDuration = fadeDuration;
 			return this;
 		}
 
 
 		public SpriteTrail SetFadeDelay(float fadeDelay)
 		{
-			this.FadeDelay = fadeDelay;
+			FadeDelay = fadeDelay;
 			return this;
 		}
 
 
 		public SpriteTrail SetInitialColor(Color initialColor)
 		{
-			this.InitialColor = initialColor;
+			InitialColor = initialColor;
 			return this;
 		}
 
 
 		public SpriteTrail SetFadeToColor(Color fadeToColor)
 		{
-			this.FadeToColor = fadeToColor;
+			FadeToColor = fadeToColor;
 			return this;
 		}
 
@@ -329,7 +329,7 @@ namespace Nez.Sprites
 				return;
 
 			var instance = _availableSpriteTrailInstances.Pop();
-			instance.Spawn(_lastPosition, _sprite.Subtexture, FadeDuration, FadeDelay, InitialColor, FadeToColor);
+			instance.Spawn(_lastPosition, _sprite.Sprite, FadeDuration, FadeDelay, InitialColor, FadeToColor);
 			instance.SetSpriteRenderOptions(_sprite.Entity.Transform.Rotation, _sprite.Origin,
 				_sprite.Entity.Transform.Scale, _sprite.SpriteEffects, LayerDepth);
 			_liveSpriteTrailInstances.Add(instance);

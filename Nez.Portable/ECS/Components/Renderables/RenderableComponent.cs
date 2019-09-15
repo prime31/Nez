@@ -189,7 +189,7 @@ namespace Nez
 
 		public RenderableComponent SetMaterial(Material material)
 		{
-			this.Material = material;
+			Material = material;
 			if (Entity != null && Entity.Scene != null)
 				Entity.Scene.RenderableComponents.SetRenderLayerNeedsComponentSort(RenderLayer);
 			return this;
@@ -237,7 +237,7 @@ namespace Nez
 		/// <param name="color">Color.</param>
 		public RenderableComponent SetColor(Color color)
 		{
-			this.Color = color;
+			Color = color;
 			return this;
 		}
 
@@ -307,7 +307,7 @@ namespace Nez
 
 		public override string ToString()
 		{
-			return string.Format("[RenderableComponent] {0}, renderLayer: {1}]", this.GetType(), RenderLayer);
+			return string.Format("[RenderableComponent] {0}, renderLayer: {1}]", GetType(), RenderLayer);
 		}
 	}
 }

@@ -28,7 +28,7 @@ namespace Nez
 
 		public TiledMapComponent(TiledMap tiledMap, string collisionLayerName = null, bool shouldCreateColliders = true)
 		{
-			this.TiledMap = tiledMap;
+			TiledMap = tiledMap;
 			_shouldCreateColliders = shouldCreateColliders;
 
 			if (collisionLayerName != null)

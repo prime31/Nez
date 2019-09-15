@@ -12,7 +12,7 @@ namespace Nez.TexturePackerImporter
 
 		/// <summary>
 		/// stores a map of the name of the sprite animation (derived from texturepacker filename metadata) to an array. 
-		/// Each entry in the list refers to index of the corresponding subtexture
+		/// Each entry in the list refers to index of the corresponding sprite
 		/// </summary>
 		public Dictionary<string, List<int>> SpriteAnimationDetails;
 	}
