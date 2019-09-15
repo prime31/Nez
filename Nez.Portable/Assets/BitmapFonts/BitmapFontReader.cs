@@ -7,7 +7,7 @@ using System.Collections.Generic;
 namespace Nez.BitmapFonts
 {
     /// <summary>
-    /// Legacy MonoGame Pipeline reader. This only exists as legacy support to load the embedded Nez default font into the
+    /// Legacy MonoGame Pipeline reader. This exists as legacy support to load the embedded Nez default font into the
     /// new runtime BitmapFont class
     /// </summary>
     public class BitmapFontReader : ContentTypeReader<BitmapFont>
