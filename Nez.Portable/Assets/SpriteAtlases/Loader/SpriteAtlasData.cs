@@ -9,7 +9,7 @@ namespace Nez.SpriteAtlases
 	/// <summary>
 	/// temporary class used when loading a SpriteAtlas and by the sprite atlas editor
 	/// </summary>
-	public class SpriteAtlasData
+	internal class SpriteAtlasData
 	{
 		public List<string> Names = new List<string>();
 		public List<Rectangle> SourceRects = new List<Rectangle>();
