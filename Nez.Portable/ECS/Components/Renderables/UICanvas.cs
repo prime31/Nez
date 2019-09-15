@@ -1,5 +1,4 @@
-﻿using System;
-using Nez.UI;
+﻿using Nez.UI;
 using Microsoft.Xna.Framework;
 
 

@@ -1,7 +1,4 @@
-﻿using System;
-
-
-namespace Nez.AI.BehaviorTrees
+﻿namespace Nez.AI.BehaviorTrees
 {
 	/// <summary>
 	/// simple task which will output the specified text and return success. It can be used for debugging.

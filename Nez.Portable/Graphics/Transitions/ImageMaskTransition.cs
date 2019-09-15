@@ -3,7 +3,6 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Nez.Tweens;
 using System.Collections;
-using Nez.Textures;
 
 
 namespace Nez

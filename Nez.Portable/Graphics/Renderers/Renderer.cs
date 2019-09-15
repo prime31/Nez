@@ -1,5 +1,4 @@
 ﻿using System;
-using Microsoft.Xna.Framework.Graphics;
 using Nez.Textures;
 using Microsoft.Xna.Framework;
 using System.Runtime.CompilerServices;

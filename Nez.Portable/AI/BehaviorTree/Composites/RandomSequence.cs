@@ -1,7 +1,4 @@
-﻿using System;
-
-
-namespace Nez.AI.BehaviorTrees
+﻿namespace Nez.AI.BehaviorTrees
 {
 	/// <summary>
 	/// Same as Sequence except it shuffles the children when started

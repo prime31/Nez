@@ -42,9 +42,7 @@
 // Source ported to C# from: http://fuseyism.com/classpath/doc/java/util/BitSet-source.html
 
 using System;
-using System.Collections.Generic;
 using System.Text;
-using System.Runtime.Serialization;
 
 
 namespace Nez

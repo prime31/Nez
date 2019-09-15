@@ -1,7 +1,4 @@
-﻿using System.Collections;
-
-
-namespace Nez.Tweens
+﻿namespace Nez.Tweens
 {
 	public enum EaseType
 	{

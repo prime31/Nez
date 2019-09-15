@@ -1,5 +1,4 @@
-﻿using System;
-using Microsoft.Xna.Framework.Content;
+﻿using Microsoft.Xna.Framework.Content;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 

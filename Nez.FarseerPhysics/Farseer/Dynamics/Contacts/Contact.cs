@@ -21,7 +21,6 @@
 */
 //#define USE_ACTIVE_CONTACT_SET
 
-using System.Collections.Generic;
 using System.Diagnostics;
 using FarseerPhysics.Collision;
 using FarseerPhysics.Collision.Shapes;

@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using FarseerPhysics.Collision;
+﻿using FarseerPhysics.Collision;
 using FarseerPhysics.Dynamics;
 using Microsoft.Xna.Framework;
 using FSTransform = FarseerPhysics.Common.Transform;

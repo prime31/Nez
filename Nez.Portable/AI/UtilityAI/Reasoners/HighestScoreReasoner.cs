@@ -1,7 +1,4 @@
-﻿using System;
-
-
-namespace Nez.AI.UtilityAI
+﻿namespace Nez.AI.UtilityAI
 {
 	/// <summary>
 	/// The Consideration with the highest score is selected

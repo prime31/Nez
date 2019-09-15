@@ -1,5 +1,4 @@
-﻿using Microsoft.Xna.Framework;
-using Nez.PhysicsShapes;
+﻿using Nez.PhysicsShapes;
 
 
 namespace Nez

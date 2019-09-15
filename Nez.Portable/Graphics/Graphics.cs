@@ -1,9 +1,6 @@
-﻿using System;
-using Microsoft.Xna.Framework.Graphics;
+﻿using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
-using System.Collections.Generic;
 using Nez.Textures;
-using System.Diagnostics;
 using Nez.BitmapFonts;
 
 

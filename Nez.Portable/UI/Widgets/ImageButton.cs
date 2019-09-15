@@ -1,8 +1,4 @@
-﻿using System;
-using Microsoft.Xna.Framework;
-
-
-namespace Nez.UI
+﻿namespace Nez.UI
 {
 	/// <summary>
 	/// A button with a child {@link Image} to display an image. This is useful when the button must be larger than the image and the

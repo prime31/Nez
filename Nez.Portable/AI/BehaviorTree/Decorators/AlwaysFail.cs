@@ -1,7 +1,4 @@
-﻿using System;
-
-
-namespace Nez.AI.BehaviorTrees
+﻿namespace Nez.AI.BehaviorTrees
 {
 	/// <summary>
 	/// will always return failure except when the child task is running

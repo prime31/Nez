@@ -1,5 +1,4 @@
-﻿using System;
-using Nez.BitmapFonts;
+﻿using Nez.BitmapFonts;
 using Microsoft.Xna.Framework;
 
 

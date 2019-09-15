@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using Nez.Textures;
 using Microsoft.Xna.Framework;
 using Nez.BitmapFonts;
-using Nez.TextureAtlases;
 using Nez.Systems;
 using System.Linq;
+using Nez.SpriteAtlases;
 
 
 namespace Nez.UI
@@ -192,7 +192,7 @@ namespace Nez.UI
 			if (config.TextureAtlases != null)
 			{
 				foreach (var atlas in config.TextureAtlases)
-					AddSprites(contentManager.Load<TextureAtlas>(atlas));
+					AddSprites(contentManager.LoadSpriteAtlas(atlas));
 			}
 
 			if (config.Styles != null)
@@ -321,15 +321,15 @@ namespace Nez.UI
 		/// Adds all named Sprites from the atlas
 		/// </summary>
 		/// <param name="atlas">Atlas.</param>
-		public void AddSprites(TextureAtlas atlas)
+		public void AddSprites(SpriteAtlas atlas)
 		{
 			for (int i = 0, n = atlas.Sprites.Length; i < n; i++)
 			{
 				var sprite = atlas.Sprites[i];
 				if (sprite is NinePatchSprite)
-					Add(atlas.RegionNames[i], sprite as NinePatchSprite);
+					Add(atlas.Names[i], sprite as NinePatchSprite);
 				else
-					Add(atlas.RegionNames[i], sprite);
+					Add(atlas.Names[i], sprite);
 			}
 		}
 

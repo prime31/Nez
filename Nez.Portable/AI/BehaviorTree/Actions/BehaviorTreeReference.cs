@@ -1,7 +1,4 @@
-﻿using System;
-
-
-namespace Nez.AI.BehaviorTrees
+﻿namespace Nez.AI.BehaviorTrees
 {
 	/// <summary>
 	/// runs an entire BehaviorTree as a child and returns success

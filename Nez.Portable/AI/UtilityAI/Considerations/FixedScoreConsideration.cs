@@ -1,7 +1,4 @@
-﻿using System;
-
-
-namespace Nez.AI.UtilityAI
+﻿namespace Nez.AI.UtilityAI
 {
 	/// <summary>
 	/// always returns a fixed score. Serves double duty as a default Consideration.

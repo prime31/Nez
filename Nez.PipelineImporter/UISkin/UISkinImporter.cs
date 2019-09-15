@@ -1,6 +1,4 @@
-﻿using System;
-using Microsoft.Xna.Framework.Content.Pipeline;
-using Nez.UI;
+﻿using Microsoft.Xna.Framework.Content.Pipeline;
 using System.IO;
 using Newtonsoft.Json;
 using System.Collections.Generic;

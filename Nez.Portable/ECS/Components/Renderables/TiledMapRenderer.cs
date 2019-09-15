@@ -1,5 +1,4 @@
-﻿using System;
-using Nez.Tiled;
+﻿using Nez.Tiled;
 using Microsoft.Xna.Framework;
 using System.Collections.Generic;
 

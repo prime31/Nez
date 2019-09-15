@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-
-namespace Nez.AI.UtilityAI
+﻿namespace Nez.AI.UtilityAI
 {
 	public class UtilityAI<T>
 	{

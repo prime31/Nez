@@ -1,9 +1,6 @@
-﻿using System;
-using Nez.Systems;
-using Nez.Textures;
+﻿using Nez.Textures;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Nez;
 
 
 namespace Nez

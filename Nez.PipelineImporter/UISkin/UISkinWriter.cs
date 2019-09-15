@@ -1,5 +1,4 @@
-﻿using System;
-using Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler;
+﻿using Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler;
 using Nez.UI;
 using Microsoft.Xna.Framework.Content.Pipeline;
 

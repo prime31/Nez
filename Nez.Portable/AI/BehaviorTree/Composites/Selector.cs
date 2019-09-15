@@ -1,7 +1,4 @@
-﻿using System;
-
-
-namespace Nez.AI.BehaviorTrees
+﻿namespace Nez.AI.BehaviorTrees
 {
 	/// <summary>
 	/// The selector task is similar to an "or" operation. It will return success as soon as one of its child tasks return success. If a

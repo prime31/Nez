@@ -1,7 +1,4 @@
-﻿using System;
-
-
-namespace Nez
+﻿namespace Nez
 {
 	public interface ITimer
 	{
