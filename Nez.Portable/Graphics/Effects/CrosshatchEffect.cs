@@ -13,7 +13,7 @@ namespace Nez
 		[Range(8, 80, false)]
 		public int CrosshatchSize
 		{
-			get { return _crosshatchSize; }
+			get => _crosshatchSize;
 			set
 			{
 				// ensure we have an even number

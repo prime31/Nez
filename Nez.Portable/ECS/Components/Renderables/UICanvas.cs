@@ -10,15 +10,9 @@ namespace Nez
 	/// </summary>
 	public class UICanvas : RenderableComponent, IUpdatable
 	{
-		public override float Width
-		{
-			get { return Stage.GetWidth(); }
-		}
+		public override float Width => Stage.GetWidth();
 
-		public override float Height
-		{
-			get { return Stage.GetHeight(); }
-		}
+		public override float Height => Stage.GetHeight();
 
 		public Stage Stage;
 
@@ -28,8 +22,8 @@ namespace Nez
 		/// </summary>
 		public bool IsFullScreen
 		{
-			get { return Stage.IsFullScreen; }
-			set { Stage.IsFullScreen = value; }
+			get => Stage.IsFullScreen;
+			set => Stage.IsFullScreen = value;
 		}
 
 

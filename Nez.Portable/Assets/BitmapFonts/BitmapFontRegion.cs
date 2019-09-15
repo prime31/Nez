@@ -11,15 +11,9 @@ namespace Nez.BitmapFonts
 		public int YOffset;
 		public int XAdvance;
 
-		public int Width
-		{
-			get { return Sprite.SourceRect.Width; }
-		}
+		public int Width => Sprite.SourceRect.Width;
 
-		public int Height
-		{
-			get { return Sprite.SourceRect.Height; }
-		}
+		public int Height => Sprite.SourceRect.Height;
 
 
 		public BitmapFontRegion(Sprite textureRegion, char character, int xOffset, int yOffset, int xAdvance)

@@ -17,10 +17,7 @@ namespace Nez.DeferredLighting
 		/// </summary>
 		/// <value>true</value>
 		/// <c>false</c>
-		public override bool WantsToRenderToSceneRenderTarget
-		{
-			get { return false; }
-		}
+		public override bool WantsToRenderToSceneRenderTarget => false;
 
 		/// <summary>
 		/// the renderLayers this Renderer will render

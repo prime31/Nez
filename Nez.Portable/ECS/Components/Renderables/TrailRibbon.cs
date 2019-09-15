@@ -12,11 +12,7 @@ namespace Nez
 	/// </summary>
 	public class TrailRibbon : RenderableComponent, IUpdatable
 	{
-		public override RectangleF Bounds
-		{
-			// we calculate bounds in update so no need to mess with anything here
-			get { return _bounds; }
-		}
+		public override RectangleF Bounds => _bounds;
 
 		/// <summary>
 		/// starting color of the ribbon

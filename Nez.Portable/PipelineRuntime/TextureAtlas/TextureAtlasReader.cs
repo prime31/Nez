@@ -16,8 +16,8 @@ namespace Nez.TextureAtlases
 				// read the texture
 				var texture = input.ReadObject<Texture2D>();
 
-				foreach (var subtexture in existingInstance.Subtextures)
-					subtexture.Texture2D = texture;
+				foreach (var sprite in existingInstance.Sprites)
+					sprite.Texture2D = texture;
 
 				// discard the rest of the SpriteSheet data as we are only reloading GPU resources for now
 				input.ReadObject<List<Rectangle>>();
@@ -38,24 +38,24 @@ namespace Nez.TextureAtlases
 				var splits = input.ReadObject<Dictionary<string, int[]>>();
 				var animationFPS = input.ReadInt32();
 
-				// create subtextures
-				var subtextures = new Sprite[spriteNames.Length];
+				// create sprites
+				var sprites = new Sprite[spriteNames.Length];
 				for (var i = 0; i < spriteNames.Length; i++)
 				{
 					// check to see if this is a nine patch
 					if (splits.ContainsKey(spriteNames[i]))
 					{
 						var split = splits[spriteNames[i]];
-						subtextures[i] = new NinePatchSprite(texture, spriteRectangles[i], split[0], split[1],
+						sprites[i] = new NinePatchSprite(texture, spriteRectangles[i], split[0], split[1],
 							split[2], split[3]);
 					}
 					else
 					{
-						subtextures[i] = new Sprite(texture, spriteRectangles[i]);
+						sprites[i] = new Sprite(texture, spriteRectangles[i]);
 					}
 				}
 
-				return new TextureAtlas(spriteNames, subtextures, spriteAnimationDetails, animationFPS);
+				return new TextureAtlas(spriteNames, sprites, spriteAnimationDetails, animationFPS);
 			}
 		}
 	}

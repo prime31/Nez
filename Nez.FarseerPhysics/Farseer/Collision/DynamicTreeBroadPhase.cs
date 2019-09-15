@@ -76,34 +76,22 @@ namespace FarseerPhysics.Collision
 		/// Get the number of proxies.
 		/// </summary>
 		/// <value>The proxy count.</value>
-		public int ProxyCount
-		{
-			get { return _proxyCount; }
-		}
+		public int ProxyCount => _proxyCount;
 
 		/// <summary>
 		/// Get the tree quality based on the area of the tree.
 		/// </summary>
-		public float TreeQuality
-		{
-			get { return _tree.AreaRatio; }
-		}
+		public float TreeQuality => _tree.AreaRatio;
 
 		/// <summary>
 		/// Gets the balance of the tree.
 		/// </summary>
-		public int TreeBalance
-		{
-			get { return _tree.MaxBalance; }
-		}
+		public int TreeBalance => _tree.MaxBalance;
 
 		/// <summary>
 		/// Gets the height of the tree.
 		/// </summary>
-		public int TreeHeight
-		{
-			get { return _tree.Height; }
-		}
+		public int TreeHeight => _tree.Height;
 
 		const int nullProxy = -1;
 		int[] _moveBuffer;

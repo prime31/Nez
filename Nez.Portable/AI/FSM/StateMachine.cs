@@ -8,10 +8,7 @@ namespace Nez.AI.FSM
 	{
 		public event Action OnStateChanged;
 
-		public State<T> CurrentState
-		{
-			get { return _currentState; }
-		}
+		public State<T> CurrentState => _currentState;
 
 		public State<T> PreviousState;
 		public float ElapsedTimeInState = 0f;

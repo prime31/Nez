@@ -46,15 +46,9 @@ namespace Nez
 
 		#region array access
 
-		public int Count
-		{
-			get { return _components.Length; }
-		}
+		public int Count => _components.Length;
 
-		public Component this[int index]
-		{
-			get { return _components.Buffer[index]; }
-		}
+		public Component this[int index] => _components.Buffer[index];
 
 		#endregion
 

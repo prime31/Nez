@@ -14,10 +14,7 @@ namespace Nez.Svg
 
 		[XmlAttribute("height")] public float Height;
 
-		public Vector2 Center
-		{
-			get { return new Vector2(X + Width / 2, Y + Height / 2); }
-		}
+		public Vector2 Center => new Vector2(X + Width / 2, Y + Height / 2);
 
 
 		/// <summary>

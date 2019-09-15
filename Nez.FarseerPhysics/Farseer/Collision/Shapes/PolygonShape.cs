@@ -42,19 +42,13 @@ namespace FarseerPhysics.Collision.Shapes
 		/// </summary>
 		public Vertices Vertices
 		{
-			get { return _vertices; }
-			set { SetVerticesNoCopy(new Vertices(value)); }
+			get => _vertices;
+			set => SetVerticesNoCopy(new Vertices(value));
 		}
 
-		public Vertices Normals
-		{
-			get { return _normals; }
-		}
+		public Vertices Normals => _normals;
 
-		public override int ChildCount
-		{
-			get { return 1; }
-		}
+		public override int ChildCount => 1;
 
 		Vertices _vertices;
 		Vertices _normals;

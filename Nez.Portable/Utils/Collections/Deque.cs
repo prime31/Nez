@@ -76,7 +76,7 @@ namespace System.Collections.Generic
 		/// </summary>
 		public int Capacity
 		{
-			get { return buffer.Length; }
+			get => buffer.Length;
 
 			set
 			{
@@ -114,18 +114,12 @@ namespace System.Collections.Generic
 		/// <summary>
 		/// Gets whether or not the Deque is filled to capacity.
 		/// </summary>
-		public bool IsFull
-		{
-			get { return Count == Capacity; }
-		}
+		public bool IsFull => Count == Capacity;
 
 		/// <summary>
 		/// Gets whether or not the Deque is empty.
 		/// </summary>
-		public bool IsEmpty
-		{
-			get { return 0 == Count; }
-		}
+		public bool IsEmpty => 0 == Count;
 
 		void EnsureCapacityFor(int numElements)
 		{
@@ -252,10 +246,7 @@ namespace System.Collections.Generic
 		/// <summary>
 		/// Gets a value indicating whether the Deque is read-only.
 		/// </summary>
-		bool ICollection<T>.IsReadOnly
-		{
-			get { return false; }
-		}
+		bool ICollection<T>.IsReadOnly => false;
 
 		/// <summary>
 		/// Gets the number of elements contained in the Deque.
@@ -423,9 +414,9 @@ namespace System.Collections.Generic
 		/// </exception>
 		public T this[int index]
 		{
-			get { return Get(index); }
+			get => Get(index);
 
-			set { Set(index, value); }
+			set => Set(index, value);
 		}
 
 		/// <summary>

@@ -39,76 +39,52 @@ namespace Nez
 		/// <summary>
 		/// Returns a <see cref="RectangleF"/> with X=0, Y=0, Width=0, Height=0.
 		/// </summary>
-		public static RectangleF Empty
-		{
-			get { return emptyRectangle; }
-		}
+		public static RectangleF Empty => emptyRectangle;
 
 		/// <summary>
 		/// returns a RectangleF of float.Min/Max values
 		/// </summary>
 		/// <value>The max rect.</value>
-		public static RectangleF MaxRect
-		{
-			get { return new RectangleF(float.MinValue / 2, float.MinValue / 2, float.MaxValue, float.MaxValue); }
-		}
+		public static RectangleF MaxRect => new RectangleF(float.MinValue / 2, float.MinValue / 2, float.MaxValue, float.MaxValue);
 
 		/// <summary>
 		/// Returns the x coordinate of the left edge of this <see cref="RectangleF"/>.
 		/// </summary>
-		public float Left
-		{
-			get { return X; }
-		}
+		public float Left => X;
 
 		/// <summary>
 		/// Returns the x coordinate of the right edge of this <see cref="RectangleF"/>.
 		/// </summary>
-		public float Right
-		{
-			get { return (X + Width); }
-		}
+		public float Right => (X + Width);
 
 		/// <summary>
 		/// Returns the y coordinate of the top edge of this <see cref="RectangleF"/>.
 		/// </summary>
-		public float Top
-		{
-			get { return Y; }
-		}
+		public float Top => Y;
 
 		/// <summary>
 		/// Returns the y coordinate of the bottom edge of this <see cref="RectangleF"/>.
 		/// </summary>
-		public float Bottom
-		{
-			get { return (Y + Height); }
-		}
+		public float Bottom => (Y + Height);
 
 		/// <summary>
 		/// gets the max point of the rectangle, the bottom-right corner
 		/// </summary>
 		/// <value>The max.</value>
-		public Vector2 Max
-		{
-			get { return new Vector2(Right, Bottom); }
-		}
+		public Vector2 Max => new Vector2(Right, Bottom);
 
 		/// <summary>
 		/// Whether or not this <see cref="RectangleF"/> has a <see cref="Width"/> and
 		/// <see cref="Height"/> of 0, and a <see cref="Location"/> of (0, 0).
 		/// </summary>
-		public bool IsEmpty
-		{
-			get { return ((((Width == 0) && (Height == 0)) && (X == 0)) && (Y == 0)); }
-		}
+		public bool IsEmpty => ((((Width == 0) && (Height == 0)) && (X == 0)) && (Y == 0));
 
 		/// <summary>
 		/// The top-left coordinates of this <see cref="RectangleF"/>.
 		/// </summary>
 		public Vector2 Location
 		{
-			get { return new Vector2(X, Y); }
+			get => new Vector2(X, Y);
 			set
 			{
 				X = value.X;
@@ -121,7 +97,7 @@ namespace Nez
 		/// </summary>
 		public Vector2 Size
 		{
-			get { return new Vector2(Width, Height); }
+			get => new Vector2(Width, Height);
 			set
 			{
 				Width = value.X;
@@ -136,10 +112,7 @@ namespace Nez
 		/// If <see cref="Width"/> or <see cref="Height"/> is an odd number,
 		/// the center point will be rounded down.
 		/// </remarks>
-		public Vector2 Center
-		{
-			get { return new Vector2(X + (Width / 2), Y + (Height / 2)); }
-		}
+		public Vector2 Center => new Vector2(X + (Width / 2), Y + (Height / 2));
 
 		#endregion
 
@@ -147,18 +120,13 @@ namespace Nez
 		static Matrix2D _tempMat, _transformMat;
 
 
-		internal string DebugDisplayString
-		{
-			get
-			{
-				return string.Concat(
-					X, "  ",
-					Y, "  ",
-					Width, "  ",
-					Height
-				);
-			}
-		}
+		internal string DebugDisplayString =>
+			string.Concat(
+				X, "  ",
+				Y, "  ",
+				Width, "  ",
+				Height
+			);
 
 
 		/// <summary>

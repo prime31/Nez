@@ -13,10 +13,7 @@ namespace Nez.UI
 		/// true if the widget's layout has been {@link #invalidate() invalidated}.
 		/// </summary>
 		/// <value><c>true</c> if needs layout; otherwise, <c>false</c>.</value>
-		public bool NeedsLayout
-		{
-			get { return _needsLayout; }
-		}
+		public bool NeedsLayout => _needsLayout;
 
 		internal float x, y;
 		internal float width, height;
@@ -878,7 +875,7 @@ namespace Nez.UI
 
 		public virtual bool LayoutEnabled
 		{
-			get { return _layoutEnabled; }
+			get => _layoutEnabled;
 			set
 			{
 				if (_layoutEnabled != value)
@@ -891,35 +888,17 @@ namespace Nez.UI
 			}
 		}
 
-		public virtual float MinWidth
-		{
-			get { return PreferredWidth; }
-		}
+		public virtual float MinWidth => PreferredWidth;
 
-		public virtual float MinHeight
-		{
-			get { return PreferredHeight; }
-		}
+		public virtual float MinHeight => PreferredHeight;
 
-		public virtual float PreferredWidth
-		{
-			get { return 0; }
-		}
+		public virtual float PreferredWidth => 0;
 
-		public virtual float PreferredHeight
-		{
-			get { return 0; }
-		}
+		public virtual float PreferredHeight => 0;
 
-		public virtual float MaxWidth
-		{
-			get { return 0; }
-		}
+		public virtual float MaxWidth => 0;
 
-		public virtual float MaxHeight
-		{
-			get { return 0; }
-		}
+		public virtual float MaxHeight => 0;
 
 
 		public virtual void Layout()

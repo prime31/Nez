@@ -12,35 +12,17 @@ namespace Nez.UI
 	{
 		#region ILayout
 
-		public override float MinWidth
-		{
-			get { return GetMinWidth(); }
-		}
+		public override float MinWidth => GetMinWidth();
 
-		public override float MinHeight
-		{
-			get { return GetPrefHeight(); }
-		}
+		public override float MinHeight => GetPrefHeight();
 
-		public override float PreferredWidth
-		{
-			get { return GetPrefWidth(); }
-		}
+		public override float PreferredWidth => GetPrefWidth();
 
-		public override float PreferredHeight
-		{
-			get { return GetPrefHeight(); }
-		}
+		public override float PreferredHeight => GetPrefHeight();
 
-		public override float MaxWidth
-		{
-			get { return GetMaxWidth(); }
-		}
+		public override float MaxWidth => GetMaxWidth();
 
-		public override float MaxHeight
-		{
-			get { return GetMaxHeight(); }
-		}
+		public override float MaxHeight => GetMaxHeight();
 
 		#endregion
 

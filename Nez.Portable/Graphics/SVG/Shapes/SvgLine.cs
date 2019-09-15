@@ -14,15 +14,9 @@ namespace Nez.Svg
 
 		[XmlAttribute("y2")] public float Y2;
 
-		public Vector2 Start
-		{
-			get { return new Vector2(X1, Y1); }
-		}
+		public Vector2 Start => new Vector2(X1, Y1);
 
-		public Vector2 End
-		{
-			get { return new Vector2(X2, Y2); }
-		}
+		public Vector2 End => new Vector2(X2, Y2);
 
 
 		public Vector2[] GetTransformedPoints()

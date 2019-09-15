@@ -223,216 +223,131 @@ namespace Nez
 		/// <summary>
 		/// only true if down this frame
 		/// </summary>
-		public static bool LeftMouseButtonPressed
-		{
-			get
-			{
-				return _currentMouseState.LeftButton == ButtonState.Pressed &&
-				       _previousMouseState.LeftButton == ButtonState.Released;
-			}
-		}
+		public static bool LeftMouseButtonPressed =>
+			_currentMouseState.LeftButton == ButtonState.Pressed &&
+			_previousMouseState.LeftButton == ButtonState.Released;
 
 		/// <summary>
 		/// true while the button is down
 		/// </summary>
-		public static bool LeftMouseButtonDown
-		{
-			get { return _currentMouseState.LeftButton == ButtonState.Pressed; }
-		}
+		public static bool LeftMouseButtonDown => _currentMouseState.LeftButton == ButtonState.Pressed;
 
 		/// <summary>
 		/// true only the frame the button is released
 		/// </summary>
-		public static bool LeftMouseButtonReleased
-		{
-			get
-			{
-				return _currentMouseState.LeftButton == ButtonState.Released &&
-				       _previousMouseState.LeftButton == ButtonState.Pressed;
-			}
-		}
+		public static bool LeftMouseButtonReleased =>
+			_currentMouseState.LeftButton == ButtonState.Released &&
+			_previousMouseState.LeftButton == ButtonState.Pressed;
 
 		/// <summary>
 		/// only true if pressed this frame
 		/// </summary>
-		public static bool RightMouseButtonPressed
-		{
-			get
-			{
-				return _currentMouseState.RightButton == ButtonState.Pressed &&
-				       _previousMouseState.RightButton == ButtonState.Released;
-			}
-		}
+		public static bool RightMouseButtonPressed =>
+			_currentMouseState.RightButton == ButtonState.Pressed &&
+			_previousMouseState.RightButton == ButtonState.Released;
 
 		/// <summary>
 		/// true while the button is down
 		/// </summary>
-		public static bool RightMouseButtonDown
-		{
-			get { return _currentMouseState.RightButton == ButtonState.Pressed; }
-		}
+		public static bool RightMouseButtonDown => _currentMouseState.RightButton == ButtonState.Pressed;
 
 		/// <summary>
 		/// true only the frame the button is released
 		/// </summary>
-		public static bool RightMouseButtonReleased
-		{
-			get
-			{
-				return _currentMouseState.RightButton == ButtonState.Released &&
-				       _previousMouseState.RightButton == ButtonState.Pressed;
-			}
-		}
+		public static bool RightMouseButtonReleased =>
+			_currentMouseState.RightButton == ButtonState.Released &&
+			_previousMouseState.RightButton == ButtonState.Pressed;
 
 		/// <summary>
 		/// only true if down this frame
 		/// </summary>
-		public static bool MiddleMouseButtonPressed
-		{
-			get
-			{
-				return _currentMouseState.MiddleButton == ButtonState.Pressed &&
-				       _previousMouseState.MiddleButton == ButtonState.Released;
-			}
-		}
+		public static bool MiddleMouseButtonPressed =>
+			_currentMouseState.MiddleButton == ButtonState.Pressed &&
+			_previousMouseState.MiddleButton == ButtonState.Released;
 
 		/// <summary>
 		/// true while the button is down
 		/// </summary>
-		public static bool MiddleMouseButtonDown
-		{
-			get { return _currentMouseState.MiddleButton == ButtonState.Pressed; }
-		}
+		public static bool MiddleMouseButtonDown => _currentMouseState.MiddleButton == ButtonState.Pressed;
 
 		/// <summary>
 		/// true only the frame the button is released
 		/// </summary>
-		public static bool MiddleMouseButtonReleased
-		{
-			get
-			{
-				return _currentMouseState.MiddleButton == ButtonState.Released &&
-				       _previousMouseState.MiddleButton == ButtonState.Pressed;
-			}
-		}
+		public static bool MiddleMouseButtonReleased =>
+			_currentMouseState.MiddleButton == ButtonState.Released &&
+			_previousMouseState.MiddleButton == ButtonState.Pressed;
 
 		/// <summary>
 		/// only true if down this frame
 		/// </summary>
-		public static bool FirstExtendedMouseButtonPressed
-		{
-			get
-			{
-				return _currentMouseState.XButton1 == ButtonState.Pressed &&
-				       _previousMouseState.XButton1 == ButtonState.Released;
-			}
-		}
+		public static bool FirstExtendedMouseButtonPressed =>
+			_currentMouseState.XButton1 == ButtonState.Pressed &&
+			_previousMouseState.XButton1 == ButtonState.Released;
 
 		/// <summary>
 		/// true while the button is down
 		/// </summary>
-		public static bool FirstExtendedMouseButtonDown
-		{
-			get { return _currentMouseState.XButton1 == ButtonState.Pressed; }
-		}
+		public static bool FirstExtendedMouseButtonDown => _currentMouseState.XButton1 == ButtonState.Pressed;
 
 		/// <summary>
 		/// true only the frame the button is released
 		/// </summary>
-		public static bool FirstExtendedMouseButtonReleased
-		{
-			get
-			{
-				return _currentMouseState.XButton1 == ButtonState.Released &&
-				       _previousMouseState.XButton1 == ButtonState.Pressed;
-			}
-		}
+		public static bool FirstExtendedMouseButtonReleased =>
+			_currentMouseState.XButton1 == ButtonState.Released &&
+			_previousMouseState.XButton1 == ButtonState.Pressed;
 
 		/// <summary>
 		/// only true if down this frame
 		/// </summary>
-		public static bool SecondExtendedMouseButtonPressed
-		{
-			get
-			{
-				return _currentMouseState.XButton2 == ButtonState.Pressed &&
-				       _previousMouseState.XButton2 == ButtonState.Released;
-			}
-		}
+		public static bool SecondExtendedMouseButtonPressed =>
+			_currentMouseState.XButton2 == ButtonState.Pressed &&
+			_previousMouseState.XButton2 == ButtonState.Released;
 
 		/// <summary>
 		/// true while the button is down
 		/// </summary>
-		public static bool SecondExtendedMouseButtonDown
-		{
-			get { return _currentMouseState.XButton2 == ButtonState.Pressed; }
-		}
+		public static bool SecondExtendedMouseButtonDown => _currentMouseState.XButton2 == ButtonState.Pressed;
 
 		/// <summary>
 		/// true only the frame the button is released
 		/// </summary>
-		public static bool SecondExtendedMouseButtonReleased
-		{
-			get
-			{
-				return _currentMouseState.XButton2 == ButtonState.Released &&
-				       _previousMouseState.XButton2 == ButtonState.Pressed;
-			}
-		}
+		public static bool SecondExtendedMouseButtonReleased =>
+			_currentMouseState.XButton2 == ButtonState.Released &&
+			_previousMouseState.XButton2 == ButtonState.Pressed;
 
 		/// <summary>
 		/// gets the raw ScrollWheelValue
 		/// </summary>
 		/// <value>The mouse wheel.</value>
-		public static int MouseWheel
-		{
-			get { return _currentMouseState.ScrollWheelValue; }
-		}
+		public static int MouseWheel => _currentMouseState.ScrollWheelValue;
 
 		/// <summary>
 		/// gets the delta ScrollWheelValue
 		/// </summary>
 		/// <value>The mouse wheel delta.</value>
-		public static int MouseWheelDelta
-		{
-			get { return _currentMouseState.ScrollWheelValue - _previousMouseState.ScrollWheelValue; }
-		}
+		public static int MouseWheelDelta => _currentMouseState.ScrollWheelValue - _previousMouseState.ScrollWheelValue;
 
 		/// <summary>
 		/// unscaled mouse position. This is the actual screen space value
 		/// </summary>
 		/// <value>The raw mouse position.</value>
-		public static Point RawMousePosition
-		{
-			get { return new Point(_currentMouseState.X, _currentMouseState.Y); }
-		}
+		public static Point RawMousePosition => new Point(_currentMouseState.X, _currentMouseState.Y);
 
 		/// <summary>
 		/// alias for scaledMousePosition
 		/// </summary>
 		/// <value>The mouse position.</value>
-		public static Vector2 MousePosition
-		{
-			get { return ScaledMousePosition; }
-		}
+		public static Vector2 MousePosition => ScaledMousePosition;
 
 		/// <summary>
 		/// this takes into account the SceneResolutionPolicy and returns the value scaled to the RenderTargets coordinates
 		/// </summary>
 		/// <value>The scaled mouse position.</value>
-		public static Vector2 ScaledMousePosition
-		{
-			get { return ScaledPosition(new Vector2(_currentMouseState.X, _currentMouseState.Y)); }
-		}
+		public static Vector2 ScaledMousePosition => ScaledPosition(new Vector2(_currentMouseState.X, _currentMouseState.Y));
 
-		public static Point MousePositionDelta
-		{
-			get
-			{
-				return new Point(_currentMouseState.X, _currentMouseState.Y) -
-				       new Point(_previousMouseState.X, _previousMouseState.Y);
-			}
-		}
+		public static Point MousePositionDelta =>
+			new Point(_currentMouseState.X, _currentMouseState.Y) -
+			new Point(_previousMouseState.X, _previousMouseState.Y);
 
 		public static Vector2 ScaledMousePositionDelta
 		{

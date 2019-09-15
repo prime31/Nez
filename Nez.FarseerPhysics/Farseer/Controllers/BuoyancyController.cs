@@ -65,7 +65,7 @@ namespace FarseerPhysics.Controllers
 
 		public AABB Container
 		{
-			get { return _container; }
+			get => _container;
 			set
 			{
 				_container = value;

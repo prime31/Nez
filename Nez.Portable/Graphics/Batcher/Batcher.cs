@@ -16,10 +16,7 @@ namespace Nez
 		/// Matrix to be used when creating the projection matrix
 		/// </summary>
 		/// <value>The transform matrix.</value>
-		public Matrix TransformMatrix
-		{
-			get { return _transformMatrix; }
-		}
+		public Matrix TransformMatrix => _transformMatrix;
 
 		/// <summary>
 		/// If true, destination positions will be rounded before being drawn.
@@ -1133,10 +1130,7 @@ namespace Nez
 		{
 			public const int RealStride = 96;
 
-			VertexDeclaration IVertexType.VertexDeclaration
-			{
-				get { throw new NotImplementedException(); }
-			}
+			VertexDeclaration IVertexType.VertexDeclaration => throw new NotImplementedException();
 
 			public Vector3 Position0;
 			public Color Color0;

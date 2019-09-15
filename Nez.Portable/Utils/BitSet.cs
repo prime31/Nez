@@ -427,10 +427,7 @@ namespace Nez
 		/// 
 		/// Returns the number of bits currently used.
 		/// </summary>
-		public int Size
-		{
-			get { return bits.Length * 64; }
-		}
+		public int Size => bits.Length * 64;
 
 
 		/// <summary>

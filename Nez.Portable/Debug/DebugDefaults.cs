@@ -28,14 +28,9 @@ namespace Nez
 
 		public static class Size
 		{
-			public static int LineSizeMultiplier
-			{
-				get
-				{
-					return System.Math.Max(Mathf.CeilToInt((float) Core.Scene.SceneRenderTargetSize.X / Screen.Width),
-						1);
-				}
-			}
+			public static int LineSizeMultiplier =>
+				System.Math.Max(Mathf.CeilToInt((float) Core.Scene.SceneRenderTargetSize.X / Screen.Width),
+					1);
 		}
 	}
 }

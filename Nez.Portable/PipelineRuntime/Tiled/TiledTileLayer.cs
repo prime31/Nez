@@ -15,15 +15,9 @@ namespace Nez.Tiled
 		public Color Color = Color.White;
 
 
-		public int TileWidth
-		{
-			get { return TiledMap.TileWidth; }
-		}
+		public int TileWidth => TiledMap.TileWidth;
 
-		public int TileHeight
-		{
-			get { return TiledMap.TileHeight; }
-		}
+		public int TileHeight => TiledMap.TileHeight;
 
 
 		public TiledTileLayer(TiledMap map, string name, int width, int height, TiledTile[] tiles) : base(name)

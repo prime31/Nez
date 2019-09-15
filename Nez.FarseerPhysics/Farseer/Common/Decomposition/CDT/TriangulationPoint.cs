@@ -51,20 +51,17 @@ namespace FarseerPhysics.Common.Decomposition.CDT
 
 		public float Xf
 		{
-			get { return (float) X; }
-			set { X = value; }
+			get => (float) X;
+			set => X = value;
 		}
 
 		public float Yf
 		{
-			get { return (float) Y; }
-			set { Y = value; }
+			get => (float) Y;
+			set => Y = value;
 		}
 
-		public bool HasEdges
-		{
-			get { return Edges != null; }
-		}
+		public bool HasEdges => Edges != null;
 
 		public override string ToString()
 		{

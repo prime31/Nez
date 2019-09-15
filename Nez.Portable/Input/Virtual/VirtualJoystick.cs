@@ -140,10 +140,7 @@ namespace Nez
 			}
 
 
-			public override Vector2 Value
-			{
-				get { return Input.GamePads[GamepadIndex].GetLeftStick(Deadzone); }
-			}
+			public override Vector2 Value => Input.GamePads[GamepadIndex].GetLeftStick(Deadzone);
 		}
 
 
@@ -159,10 +156,7 @@ namespace Nez
 				Deadzone = deadzone;
 			}
 
-			public override Vector2 Value
-			{
-				get { return Input.GamePads[GamepadIndex].GetRightStick(Deadzone); }
-			}
+			public override Vector2 Value => Input.GamePads[GamepadIndex].GetRightStick(Deadzone);
 		}
 
 
@@ -308,10 +302,7 @@ namespace Nez
 			}
 
 
-			public override Vector2 Value
-			{
-				get { return _value; }
-			}
+			public override Vector2 Value => _value;
 		}
 
 		#endregion

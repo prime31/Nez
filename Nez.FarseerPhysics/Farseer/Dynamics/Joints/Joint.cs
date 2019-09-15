@@ -142,7 +142,7 @@ namespace FarseerPhysics.Dynamics.Joints
 		/// </summary>
 		public float Breakpoint
 		{
-			get { return _breakpoint; }
+			get => _breakpoint;
 			set
 			{
 				_breakpoint = value;

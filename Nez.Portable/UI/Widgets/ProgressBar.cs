@@ -42,14 +42,14 @@ namespace Nez.UI
 
 		public float StepSize
 		{
-			get { return _stepSize; }
-			set { SetStepSize(value); }
+			get => _stepSize;
+			set => SetStepSize(value);
 		}
 
 		public float Value
 		{
-			get { return _value; }
-			set { SetValue(value); }
+			get => _value;
+			set => SetValue(value);
 		}
 
 		public float[] SnapValues;

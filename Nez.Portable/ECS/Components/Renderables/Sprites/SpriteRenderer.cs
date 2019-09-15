@@ -85,7 +85,7 @@ namespace Nez.Sprites
 		public Sprite Sprite
 		{
 			get => _sprite;
-			set => SetSubtexture(value);
+			set => SetSprite(value);
 		}
 
 		protected Vector2 _origin;
@@ -98,7 +98,7 @@ namespace Nez.Sprites
 
 		public SpriteRenderer(Sprite sprite)
 		{
-			SetSubtexture(sprite);
+			SetSprite(sprite);
 			_origin = sprite.Center;
 		}
 
@@ -115,7 +115,7 @@ namespace Nez.Sprites
 		/// </summary>
 		/// <returns>The sprite.</returns>
 		/// <param name="sprite">Sprite.</param>
-		public SpriteRenderer SetSubtexture(Sprite sprite)
+		public SpriteRenderer SetSprite(Sprite sprite)
 		{
 			_sprite = sprite;
 			if (_sprite != null)

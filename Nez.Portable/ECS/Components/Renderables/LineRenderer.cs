@@ -35,11 +35,7 @@ namespace Nez
 	/// </summary>
 	public class LineRenderer : RenderableComponent
 	{
-		public override RectangleF Bounds
-		{
-			// we calculate bounds in update so no need to mess with anything here
-			get { return _bounds; }
-		}
+		public override RectangleF Bounds => _bounds;
 
 		/// <summary>
 		/// controls whether the lines are defined in world space or local

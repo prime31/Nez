@@ -806,7 +806,7 @@ namespace Nez.UI
 		public List<T> FindAllElementsOfType<T>() where T : class
 		{
 			var eles = new List<T>();
-			FindAllElementsOfType<T>(root.children, eles);
+			FindAllElementsOfType(root.children, eles);
 			return eles;
 		}
 
@@ -818,7 +818,7 @@ namespace Nez.UI
 				if (elements[i] is T)
 					foundElements.Add(elements[i] as T);
 				else if (elements[i] is Group)
-					FindAllElementsOfType<T>(((Group) elements[i]).children, foundElements);
+					FindAllElementsOfType(((Group) elements[i]).children, foundElements);
 			}
 		}
 	}

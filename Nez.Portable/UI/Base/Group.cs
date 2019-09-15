@@ -410,7 +410,7 @@ namespace Nez.UI
 
 		public override bool LayoutEnabled
 		{
-			get { return _layoutEnabled; }
+			get => _layoutEnabled;
 			set
 			{
 				if (_layoutEnabled != value)

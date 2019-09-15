@@ -22,10 +22,7 @@ namespace Nez.Farseer
 	/// </summary>
 	public class FSDebugView : RenderableComponent, IDisposable
 	{
-		public override RectangleF Bounds
-		{
-			get { return _bounds; }
-		}
+		public override RectangleF Bounds => _bounds;
 
 		/// <summary>
 		/// Gets or sets the debug view flags

@@ -44,8 +44,8 @@ namespace Nez
 		/// <value>The position.</value>
 		public Vector2 Position
 		{
-			get { return Entity.Transform.Position; }
-			set { Entity.Transform.Position = value; }
+			get => Entity.Transform.Position;
+			set => Entity.Transform.Position = value;
 		}
 
 		/// <summary>
@@ -54,8 +54,8 @@ namespace Nez
 		/// <value>The rotation.</value>
 		public float Rotation
 		{
-			get { return Entity.Transform.Rotation; }
-			set { Entity.Transform.Rotation = value; }
+			get => Entity.Transform.Rotation;
+			set => Entity.Transform.Rotation = value;
 		}
 
 		/// <summary>
@@ -65,7 +65,7 @@ namespace Nez
 		[Range(0, 30)]
 		public float RawZoom
 		{
-			get { return _zoom; }
+			get => _zoom;
 			set
 			{
 				if (value != _zoom)
@@ -94,7 +94,7 @@ namespace Nez
 
 				return Mathf.Map(_zoom, 1, _maximumZoom, 0, 1);
 			}
-			set { SetZoom(value); }
+			set => SetZoom(value);
 		}
 
 		/// <summary>
@@ -104,8 +104,8 @@ namespace Nez
 		[Range(0, 30)]
 		public float MinimumZoom
 		{
-			get { return _minimumZoom; }
-			set { SetMinimumZoom(value); }
+			get => _minimumZoom;
+			set => SetMinimumZoom(value);
 		}
 
 		/// <summary>
@@ -115,8 +115,8 @@ namespace Nez
 		[Range(0, 30)]
 		public float MaximumZoom
 		{
-			get { return _maximumZoom; }
-			set { SetMaximumZoom(value); }
+			get => _maximumZoom;
+			set => SetMaximumZoom(value);
 		}
 
 		/// <summary>
@@ -222,10 +222,7 @@ namespace Nez
 		/// gets the view-projection matrix which is the transformMatrix * the projection matrix
 		/// </summary>
 		/// <value>The view projection matrix.</value>
-		public Matrix ViewProjectionMatrix
-		{
-			get { return TransformMatrix * ProjectionMatrix; }
-		}
+		public Matrix ViewProjectionMatrix => TransformMatrix * ProjectionMatrix;
 
 		#region 3D Camera Matrixes
 
@@ -262,7 +259,7 @@ namespace Nez
 
 		public Vector2 Origin
 		{
-			get { return _origin; }
+			get => _origin;
 			internal set
 			{
 				if (_origin != value)

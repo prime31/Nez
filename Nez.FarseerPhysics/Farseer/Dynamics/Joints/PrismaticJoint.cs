@@ -113,14 +113,14 @@ namespace FarseerPhysics.Dynamics.Joints
 
 		public override Vector2 WorldAnchorA
 		{
-			get { return BodyA.GetWorldPoint(LocalAnchorA); }
-			set { LocalAnchorA = BodyA.GetLocalPoint(value); }
+			get => BodyA.GetWorldPoint(LocalAnchorA);
+			set => LocalAnchorA = BodyA.GetLocalPoint(value);
 		}
 
 		public override Vector2 WorldAnchorB
 		{
-			get { return BodyB.GetWorldPoint(LocalAnchorB); }
-			set { LocalAnchorB = BodyB.GetLocalPoint(value); }
+			get => BodyB.GetWorldPoint(LocalAnchorB);
+			set => LocalAnchorB = BodyB.GetLocalPoint(value);
 		}
 
 		/// <summary>
@@ -174,7 +174,7 @@ namespace FarseerPhysics.Dynamics.Joints
 		/// <value><c>true</c> if [limit enabled]; otherwise, <c>false</c>.</value>
 		public bool LimitEnabled
 		{
-			get { return _enableLimit; }
+			get => _enableLimit;
 			set
 			{
 				Debug.Assert(BodyA.FixedRotation == false || BodyB.FixedRotation == false,
@@ -195,7 +195,7 @@ namespace FarseerPhysics.Dynamics.Joints
 		/// <value></value>
 		public float LowerLimit
 		{
-			get { return _lowerTranslation; }
+			get => _lowerTranslation;
 			set
 			{
 				if (value != _lowerTranslation)
@@ -213,7 +213,7 @@ namespace FarseerPhysics.Dynamics.Joints
 		/// <value></value>
 		public float UpperLimit
 		{
-			get { return _upperTranslation; }
+			get => _upperTranslation;
 			set
 			{
 				if (value != _upperTranslation)
@@ -231,7 +231,7 @@ namespace FarseerPhysics.Dynamics.Joints
 		/// <value><c>true</c> if [motor enabled]; otherwise, <c>false</c>.</value>
 		public bool MotorEnabled
 		{
-			get { return _enableMotor; }
+			get => _enableMotor;
 			set
 			{
 				WakeBodies();
@@ -250,7 +250,7 @@ namespace FarseerPhysics.Dynamics.Joints
 				WakeBodies();
 				_motorSpeed = value;
 			}
-			get { return _motorSpeed; }
+			get => _motorSpeed;
 		}
 
 		/// <summary>
@@ -259,7 +259,7 @@ namespace FarseerPhysics.Dynamics.Joints
 		/// <value>The force.</value>
 		public float MaxMotorForce
 		{
-			get { return _maxMotorForce; }
+			get => _maxMotorForce;
 			set
 			{
 				WakeBodies();
@@ -278,7 +278,7 @@ namespace FarseerPhysics.Dynamics.Joints
 		/// </summary>
 		public Vector2 Axis
 		{
-			get { return _axis1; }
+			get => _axis1;
 			set
 			{
 				_axis1 = value;

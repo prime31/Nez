@@ -33,17 +33,14 @@ namespace FarseerPhysics.Collision.Shapes
 	/// </summary>
 	public class CircleShape : Shape
 	{
-		public override int ChildCount
-		{
-			get { return 1; }
-		}
+		public override int ChildCount => 1;
 
 		/// <summary>
 		/// Get or set the position of the circle
 		/// </summary>
 		public Vector2 Position
 		{
-			get { return _position; }
+			get => _position;
 			set
 			{
 				_position = value;

@@ -21,7 +21,7 @@ namespace Nez.LibGdxAtlases
 				var texture = reader.ContentManager.Load<Texture2D>(assetName);
 
 				var regionCount = reader.ReadInt32();
-				var subtextures = new Sprite[regionCount];
+				var sprites = new Sprite[regionCount];
 				var regionNames = new string[regionCount];
 
 				for (var i = 0; i < regionCount; i++)
@@ -35,19 +35,19 @@ namespace Nez.LibGdxAtlases
 
 					var hasSplits = reader.ReadBoolean();
 					if (hasSplits)
-						subtextures[i] = new NinePatchSprite(texture, rect, reader.ReadInt32(), reader.ReadInt32(),
+						sprites[i] = new NinePatchSprite(texture, rect, reader.ReadInt32(), reader.ReadInt32(),
 							reader.ReadInt32(), reader.ReadInt32());
 					else
-						subtextures[i] = new Sprite(texture, rect);
+						sprites[i] = new Sprite(texture, rect);
 
 					var hasPads = reader.ReadBoolean();
 					if (hasPads)
 					{
-						((NinePatchSprite) subtextures[i]).HasPadding = true;
-						((NinePatchSprite) subtextures[i]).PadLeft = reader.ReadInt32();
-						((NinePatchSprite) subtextures[i]).PadRight = reader.ReadInt32();
-						((NinePatchSprite) subtextures[i]).PadTop = reader.ReadInt32();
-						((NinePatchSprite) subtextures[i]).PadBottom = reader.ReadInt32();
+						((NinePatchSprite) sprites[i]).HasPadding = true;
+						((NinePatchSprite) sprites[i]).PadLeft = reader.ReadInt32();
+						((NinePatchSprite) sprites[i]).PadRight = reader.ReadInt32();
+						((NinePatchSprite) sprites[i]).PadTop = reader.ReadInt32();
+						((NinePatchSprite) sprites[i]).PadBottom = reader.ReadInt32();
 					}
 
 					var index = reader.ReadInt32();
@@ -62,13 +62,13 @@ namespace Nez.LibGdxAtlases
 							atlasContainer.Animations[name] = frames;
 						}
 
-						frames.Insert(index, subtextures[i]);
+						frames.Insert(index, sprites[i]);
 					}
 
 					regionNames[i] = name;
 				}
 
-				var atlas = new TextureAtlas(regionNames, subtextures);
+				var atlas = new TextureAtlas(regionNames, sprites);
 				atlasContainer.Atlases.Add(atlas);
 			}
 

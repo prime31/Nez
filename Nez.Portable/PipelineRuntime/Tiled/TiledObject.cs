@@ -36,7 +36,7 @@ namespace Nez.Tiled
 		/// </summary>
 		public Vector2 Position
 		{
-			get { return new Vector2(X, Y); }
+			get => new Vector2(X, Y);
 			set
 			{
 				X = (int) value.X;

@@ -123,7 +123,7 @@ namespace Nez.Textures
 		}
 
 		/// <summary>
-		/// provides a List of subtextures given an atlas with equally spaced rows/columns of sprites
+		/// provides a List of Sprites given an atlas with equally spaced rows/columns of sprites
 		/// </summary>
 		/// <returns>The from atlas.</returns>
 		/// <param name="texture">Texture.</param>
@@ -131,10 +131,10 @@ namespace Nez.Textures
 		/// <param name="cellHeight">Cell height.</param>
 		/// <param name="cellOffset">the first cell to include while processing. 0 based indexing.</param>
 		/// <param name="maxCellsToInclude">Max cells to included.</param>
-		public static List<Sprite> SubtexturesFromAtlas(Texture2D texture, int cellWidth, int cellHeight,
+		public static List<Sprite> SpritesFromAtlas(Texture2D texture, int cellWidth, int cellHeight,
 		                                                    int cellOffset = 0, int maxCellsToInclude = int.MaxValue)
 		{
-			var subtextures = new List<Sprite>();
+			var sprites = new List<Sprite>();
 
 			var cols = texture.Width / cellWidth;
 			var rows = texture.Height / cellHeight;
@@ -148,16 +148,16 @@ namespace Nez.Textures
 					if (i++ < cellOffset)
 						continue;
 
-					subtextures.Add(new Sprite(texture,
+					sprites.Add(new Sprite(texture,
 						new Rectangle(x * cellWidth, y * cellHeight, cellWidth, cellHeight)));
 
 					// once we hit the max number of cells to include bail out. were done.
-					if (subtextures.Count == maxCellsToInclude)
+					if (sprites.Count == maxCellsToInclude)
 						break;
 				}
 			}
 
-			return subtextures;
+			return sprites;
 		}
 
 		public static implicit operator Texture2D(Sprite tex) => tex.Texture2D;

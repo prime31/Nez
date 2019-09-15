@@ -15,7 +15,7 @@ namespace Nez
 		/// <value>The palette texture.</value>
 		public Texture2D PaletteTexture
 		{
-			set { _paletteTextureParam.SetValue(value); }
+			set => _paletteTextureParam.SetValue(value);
 		}
 
 		/// <summary>
@@ -24,7 +24,7 @@ namespace Nez
 		/// <value>The cycle speed.</value>
 		public float CycleSpeed
 		{
-			get { return _cycleSpeed; }
+			get => _cycleSpeed;
 			set
 			{
 				_cycleSpeedParam.SetValue(value);

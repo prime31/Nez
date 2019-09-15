@@ -137,15 +137,9 @@ namespace Nez.UI
 
 		#region ILayout
 
-		public override float PreferredWidth
-		{
-			get { return _drawable != null ? _drawable.MinWidth : 0; }
-		}
+		public override float PreferredWidth => _drawable != null ? _drawable.MinWidth : 0;
 
-		public override float PreferredHeight
-		{
-			get { return _drawable != null ? _drawable.MinHeight : 0; }
-		}
+		public override float PreferredHeight => _drawable != null ? _drawable.MinHeight : 0;
 
 		#endregion
 	}

@@ -10,10 +10,7 @@ namespace Nez
 #if !FNA
 	public class NezSpriteFont : IFont
 	{
-		public float LineSpacing
-		{
-			get { return _font.LineSpacing; }
-		}
+		public float LineSpacing => _font.LineSpacing;
 
 		SpriteFont _font;
 		readonly Dictionary<char, SpriteFont.Glyph> _glyphs;

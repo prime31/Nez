@@ -9,10 +9,7 @@ namespace Nez.DeferredLighting
 		/// <summary>
 		/// wrapper for entity.transform.rotation to ease in setting up direction of spots to point at specific locations
 		/// </summary>
-		public Vector2 Direction
-		{
-			get { return new Vector2(Mathf.Cos(Entity.Transform.Rotation), Mathf.Sin(Entity.Transform.Rotation)); }
-		}
+		public Vector2 Direction => new Vector2(Mathf.Cos(Entity.Transform.Rotation), Mathf.Sin(Entity.Transform.Rotation));
 
 		/// <summary>
 		/// angle in degrees of the cone

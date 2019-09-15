@@ -12,7 +12,7 @@ namespace Nez
 		/// <value>The reflection intensity.</value>
 		public float ReflectionIntensity
 		{
-			set { _reflectionIntensityParam.SetValue(value); }
+			set => _reflectionIntensityParam.SetValue(value);
 		}
 
 		/// <summary>
@@ -21,7 +21,7 @@ namespace Nez
 		/// <value>The normal magnitude.</value>
 		public float NormalMagnitude
 		{
-			set { _normalMagnitudeParam.SetValue(value); }
+			set => _normalMagnitudeParam.SetValue(value);
 		}
 
 		/// <summary>
@@ -30,7 +30,7 @@ namespace Nez
 		/// <value>The normal map.</value>
 		public Texture2D NormalMap
 		{
-			set { _normalMapParam.SetValue(value); }
+			set => _normalMapParam.SetValue(value);
 		}
 
 		/// <summary>
@@ -39,12 +39,12 @@ namespace Nez
 		/// <value>The render texture.</value>
 		internal RenderTarget2D RenderTexture
 		{
-			set { _renderTextureParam.SetValue(value); }
+			set => _renderTextureParam.SetValue(value);
 		}
 
 		internal Matrix MatrixTransform
 		{
-			set { _matrixTransformParam.SetValue(value); }
+			set => _matrixTransformParam.SetValue(value);
 		}
 
 

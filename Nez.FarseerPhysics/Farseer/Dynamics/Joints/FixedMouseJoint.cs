@@ -55,13 +55,13 @@ namespace FarseerPhysics.Dynamics.Joints
 
 		public override Vector2 WorldAnchorA
 		{
-			get { return BodyA.GetWorldPoint(LocalAnchorA); }
-			set { LocalAnchorA = BodyA.GetLocalPoint(value); }
+			get => BodyA.GetWorldPoint(LocalAnchorA);
+			set => LocalAnchorA = BodyA.GetLocalPoint(value);
 		}
 
 		public override Vector2 WorldAnchorB
 		{
-			get { return _worldAnchor; }
+			get => _worldAnchor;
 			set
 			{
 				WakeBodies();
@@ -75,7 +75,7 @@ namespace FarseerPhysics.Dynamics.Joints
 		/// </summary>
 		public float MaxForce
 		{
-			get { return _maxForce; }
+			get => _maxForce;
 			set
 			{
 				Debug.Assert(MathUtils.IsValid(value) && value >= 0.0f);
@@ -88,7 +88,7 @@ namespace FarseerPhysics.Dynamics.Joints
 		/// </summary>
 		public float Frequency
 		{
-			get { return _frequency; }
+			get => _frequency;
 			set
 			{
 				Debug.Assert(MathUtils.IsValid(value) && value >= 0.0f);
@@ -101,7 +101,7 @@ namespace FarseerPhysics.Dynamics.Joints
 		/// </summary>
 		public float DampingRatio
 		{
-			get { return _dampingRatio; }
+			get => _dampingRatio;
 			set
 			{
 				Debug.Assert(MathUtils.IsValid(value) && value >= 0.0f);

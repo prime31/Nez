@@ -10,10 +10,7 @@ namespace Nez.DeferredLighting
 	public class DirLight : DeferredLight
 	{
 		// dir lights are infinite so bounds should be as well
-		public override RectangleF Bounds
-		{
-			get { return _bounds; }
-		}
+		public override RectangleF Bounds => _bounds;
 
 		/// <summary>
 		/// direction of the light

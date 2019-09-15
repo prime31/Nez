@@ -24,8 +24,8 @@ namespace Nez.Sprites
 		/// <value>The fps.</value>
 		public float Fps
 		{
-			get { return _fps; }
-			set { SetFps(value); }
+			get => _fps;
+			set => SetFps(value);
 		}
 
 		/// <summary>
@@ -34,8 +34,8 @@ namespace Nez.Sprites
 		/// <value>The loop.</value>
 		public bool Loop
 		{
-			get { return _loop; }
-			set { SetLoop(value); }
+			get => _loop;
+			set => SetLoop(value);
 		}
 
 		/// <summary>
@@ -44,8 +44,8 @@ namespace Nez.Sprites
 		/// <value>The ping pong.</value>
 		public bool PingPong
 		{
-			get { return _pingPong; }
-			set { SetPingPong(value); }
+			get => _pingPong;
+			set => SetPingPong(value);
 		}
 
 		public float Delay = 0f;
@@ -153,12 +153,10 @@ namespace Nez.Sprites
 		/// <summary>
 		/// adds multiple frames to this animation
 		/// </summary>
-		/// <returns>The frames.</returns>
-		/// <param name="subtextures">Subtextures.</param>
-		public SpriteAnimation AddFrames(List<Sprite> subtextures)
+		public SpriteAnimation AddFrames(List<Sprite> sprites)
 		{
-			for (var i = 0; i < subtextures.Count; i++)
-				AddFrame(subtextures[i]);
+			for (var i = 0; i < sprites.Count; i++)
+				AddFrame(sprites[i]);
 			return this;
 		}
 	}

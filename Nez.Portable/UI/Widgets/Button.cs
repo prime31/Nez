@@ -39,20 +39,14 @@ namespace Nez.UI
 			}
 		}
 
-		public override float MinWidth
-		{
-			get { return PreferredWidth; }
-		}
+		public override float MinWidth => PreferredWidth;
 
-		public override float MinHeight
-		{
-			get { return PreferredHeight; }
-		}
+		public override float MinHeight => PreferredHeight;
 
 		public bool IsChecked
 		{
-			get { return _isChecked; }
-			set { SetChecked(value, ProgrammaticChangeEvents); }
+			get => _isChecked;
+			set => SetChecked(value, ProgrammaticChangeEvents);
 		}
 
 		public bool ProgrammaticChangeEvents;

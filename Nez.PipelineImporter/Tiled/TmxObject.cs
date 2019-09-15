@@ -60,7 +60,7 @@ namespace Nez.TiledMaps
 		[XmlAttribute(DataType = "string", AttributeName = "points")]
 		public string TempPoints
 		{
-			get { return string.Empty; }
+			get => string.Empty;
 			set
 			{
 				var parts = value.Split(new char[] {' '});

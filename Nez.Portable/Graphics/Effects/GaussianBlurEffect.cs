@@ -18,7 +18,7 @@ namespace Nez
 		[Range(0f, 6f, 0.2f)]
 		public float BlurAmount
 		{
-			get { return _blurAmount; }
+			get => _blurAmount;
 			set
 			{
 				if (_blurAmount != value)
@@ -40,7 +40,7 @@ namespace Nez
 		[Range(0.0001f, 0.005f, true)]
 		public float HorizontalBlurDelta
 		{
-			get { return _horizontalBlurDelta; }
+			get => _horizontalBlurDelta;
 			set
 			{
 				if (value != _horizontalBlurDelta)
@@ -58,7 +58,7 @@ namespace Nez
 		[Range(0.0001f, 0.005f, true)]
 		public float VerticalBlurDelta
 		{
-			get { return _verticalBlurDelta; }
+			get => _verticalBlurDelta;
 			set
 			{
 				if (value != _verticalBlurDelta)

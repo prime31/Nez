@@ -13,18 +13,18 @@ namespace Nez.TextureAtlases
 	public class TextureAtlas
 	{
 		/// <summary>
-		/// array of all subtextures from the atlas
+		/// array of all sprites from the atlas
 		/// </summary>
-		public readonly Sprite[] Subtextures;
+		public readonly Sprite[] Sprites;
 
 		/// <summary>
-		/// image names for the subtextures. maps directly to the subtextures array
+		/// image names for the sprites. maps directly to the sprites array
 		/// </summary>
 		public readonly string[] RegionNames;
 
 		/// <summary>
 		/// stores a map of the name of the sprite animation (derived from the folder name) to a Point. The Point x/y values are the
-		/// start/end indexes of the subtextures for the animation frames.
+		/// start/end indexes of the sprites for the animation frames.
 		/// </summary>
 		readonly Dictionary<string, Point> _spriteAnimationDetails;
 
@@ -32,16 +32,16 @@ namespace Nez.TextureAtlases
 		Dictionary<string, SpriteAnimation> _spriteAnimations;
 
 
-		public TextureAtlas(string[] regionNames, Sprite[] subtextures,
+		public TextureAtlas(string[] regionNames, Sprite[] sprites,
 		                    Dictionary<string, Point> spriteAnimationDetails, int animationFPS = 15)
 		{
 			RegionNames = regionNames;
-			Subtextures = subtextures;
+			Sprites = sprites;
 			_spriteAnimationDetails = spriteAnimationDetails;
 			_animationFPS = animationFPS;
 		}
 
-		public TextureAtlas(string[] regionNames, Sprite[] subtextures) : this(regionNames, subtextures, null)
+		public TextureAtlas(string[] regionNames, Sprite[] sprites) : this(regionNames, sprites, null)
 		{}
 
 		/// <summary>
@@ -49,14 +49,14 @@ namespace Nez.TextureAtlases
 		/// </summary>
 		/// <returns>The sprite.</returns>
 		/// <param name="name">Name.</param>
-		public Sprite GetSubtexture(string name) => Subtextures[Array.IndexOf(RegionNames, name)];
+		public Sprite GetSprite(string name) => Sprites[Array.IndexOf(RegionNames, name)];
 
 		/// <summary>
 		/// checks whether the sprite is contained in this atlas.
 		/// </summary>
 		/// <returns><c>true</c>, if sprite is containsed, <c>false</c> otherwise.</returns>
 		/// <param name="name">the image name</param>
-		public bool ContainsSubtexture(string name) => RegionNames.Contains(name);
+		public bool ContainsSprite(string name) => RegionNames.Contains(name);
 
 		/// <summary>
 		/// returns a SpriteAnimation given an animationName where the animationName is the folder that contains the images
@@ -79,7 +79,7 @@ namespace Nez.TextureAtlases
 				};
 
 				for (var i = point.X; i <= point.Y; i++)
-					animation.AddFrame(Subtextures[i]);
+					animation.AddFrame(Sprites[i]);
 
 				_spriteAnimations[animationName] = animation;
 
@@ -89,6 +89,6 @@ namespace Nez.TextureAtlases
 			throw new KeyNotFoundException(animationName);
 		}
 
-		public Sprite this[string name] => GetSubtexture(name);
+		public Sprite this[string name] => GetSprite(name);
 	}
 }

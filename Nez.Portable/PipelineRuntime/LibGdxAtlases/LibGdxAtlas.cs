@@ -22,8 +22,8 @@ namespace Nez.LibGdxAtlases
 		{
 			for (var i = 0; i < Atlases.Count; i++)
 			{
-				if (Atlases[i].ContainsSubtexture(name))
-					return Atlases[i].GetSubtexture(name);
+				if (Atlases[i].ContainsSprite(name))
+					return Atlases[i].GetSprite(name);
 			}
 
 			return null;
@@ -38,8 +38,8 @@ namespace Nez.LibGdxAtlases
 		{
 			for (var i = 0; i < Atlases.Count; i++)
 			{
-				if (Atlases[i].ContainsSubtexture(name))
-					return Atlases[i].GetSubtexture(name) as NinePatchSprite;
+				if (Atlases[i].ContainsSprite(name))
+					return Atlases[i].GetSprite(name) as NinePatchSprite;
 			}
 
 			return null;
@@ -51,19 +51,13 @@ namespace Nez.LibGdxAtlases
 		/// </summary>
 		/// <returns>The sprite.</returns>
 		/// <param name="name">Name.</param>
-		public Sprite GetSubtexture(string name)
-		{
-			return Get(name);
-		}
+		public Sprite GetSprite(string name) => Get(name);
 
 		/// <summary>
 		/// gets the sprite animation frames for a given name
 		/// </summary>
 		/// <param name="name">name of the anmation</param>
 		/// <returns></returns>
-		public List<Sprite> GetAnimation(string name)
-		{
-			return Animations[name];
-		}
+		public List<Sprite> GetAnimation(string name) => Animations[name];
 	}
 }

@@ -81,27 +81,15 @@ namespace FarseerPhysics.Common.Decomposition.CDT.Polygon
 		{
 		}
 
-		public IList<Polygon> Holes
-		{
-			get { return _holes; }
-		}
+		public IList<Polygon> Holes => _holes;
 
 		#region Triangulatable Members
 
-		public TriangulationMode TriangulationMode
-		{
-			get { return TriangulationMode.Polygon; }
-		}
+		public TriangulationMode TriangulationMode => TriangulationMode.Polygon;
 
-		public IList<TriangulationPoint> Points
-		{
-			get { return _points; }
-		}
+		public IList<TriangulationPoint> Points => _points;
 
-		public IList<DelaunayTriangle> Triangles
-		{
-			get { return _triangles; }
-		}
+		public IList<DelaunayTriangle> Triangles => _triangles;
 
 		public void AddTriangle(DelaunayTriangle t)
 		{

@@ -7,7 +7,7 @@ namespace Nez
 	{
 		public float Scale
 		{
-			get { return _scale; }
+			get => _scale;
 			set
 			{
 				if (_scale != value)
@@ -20,7 +20,7 @@ namespace Nez
 
 		public float Angle
 		{
-			get { return _angle; }
+			get => _angle;
 			set
 			{
 				if (_angle != value)

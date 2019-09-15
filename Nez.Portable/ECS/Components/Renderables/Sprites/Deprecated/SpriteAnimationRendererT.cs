@@ -138,7 +138,7 @@ namespace Nez.Sprites
 						case AnimationCompletionBehavior.RemainOnFinalFrame:
 							return;
 						case AnimationCompletionBehavior.RevertToFirstFrame:
-							SetSubtexture(_currentAnimation.Frames[0]);
+							SetSprite(_currentAnimation.Frames[0]);
 							return;
 						case AnimationCompletionBehavior.HideSprite:
 							Sprite = null;
@@ -179,7 +179,7 @@ namespace Nez.Sprites
 			if (desiredFrame != CurrentFrame)
 			{
 				CurrentFrame = desiredFrame;
-				SetSubtexture(_currentAnimation.Frames[CurrentFrame]);
+				SetSprite(_currentAnimation.Frames[CurrentFrame]);
 				HandleFrameChanged();
 
 				// ping-pong needs special care. we don't want to double the frame time when wrapping so we man-handle the totalElapsedTime
@@ -201,7 +201,7 @@ namespace Nez.Sprites
 		{
 			// if we have no sprite use the first frame we find
 			if (Sprite == null && animation.Frames.Count > 0)
-				SetSubtexture(animation.Frames[0]);
+				SetSprite(animation.Frames[0]);
 			_animations[key] = animation;
 
 			return this;
@@ -233,7 +233,7 @@ namespace Nez.Sprites
 			IsPlaying = true;
 			_isReversed = false;
 			CurrentFrame = startFrame;
-			SetSubtexture(_currentAnimation.Frames[CurrentFrame]);
+			SetSprite(_currentAnimation.Frames[CurrentFrame]);
 
 			_totalElapsedTime = (float) startFrame * _currentAnimation.SecondsPerFrame;
 			return animation;

@@ -58,8 +58,8 @@ namespace FarseerPhysics.Common.TextureTools
 		/// </summary>
 		public byte AlphaTolerance
 		{
-			get { return (byte) (_alphaTolerance >> 24); }
-			set { _alphaTolerance = (uint) value << 24; }
+			get => (byte) (_alphaTolerance >> 24);
+			set => _alphaTolerance = (uint) value << 24;
 		}
 
 		/// <summary>
@@ -67,7 +67,7 @@ namespace FarseerPhysics.Common.TextureTools
 		/// </summary>
 		public float HullTolerance
 		{
-			get { return _hullTolerance; }
+			get => _hullTolerance;
 			set
 			{
 				if (value > 4f)

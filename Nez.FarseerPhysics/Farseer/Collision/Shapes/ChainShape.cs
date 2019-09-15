@@ -41,11 +41,7 @@ namespace FarseerPhysics.Collision.Shapes
 		/// </summary>
 		public Vertices Vertices;
 
-		public override int ChildCount
-		{
-			// edge count = vertex count - 1
-			get { return Vertices.Count - 1; }
-		}
+		public override int ChildCount => Vertices.Count - 1;
 
 		/// <summary>
 		/// Establish connectivity to a vertex that precedes the first vertex.
@@ -53,7 +49,7 @@ namespace FarseerPhysics.Collision.Shapes
 		/// </summary>
 		public Vector2 PrevVertex
 		{
-			get { return _prevVertex; }
+			get => _prevVertex;
 			set
 			{
 				_prevVertex = value;
@@ -67,7 +63,7 @@ namespace FarseerPhysics.Collision.Shapes
 		/// </summary>
 		public Vector2 NextVertex
 		{
-			get { return _nextVertex; }
+			get => _nextVertex;
 			set
 			{
 				_nextVertex = value;

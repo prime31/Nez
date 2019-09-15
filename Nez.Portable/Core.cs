@@ -64,15 +64,10 @@ namespace Nez
 		/// default wrapped SamplerState. Determined by the Filter of the defaultSamplerState.
 		/// </summary>
 		/// <value>The default state of the wraped sampler.</value>
-		public static SamplerState DefaultWrappedSamplerState
-		{
-			get
-			{
-				return DefaultSamplerState.Filter == TextureFilter.Point
-					? SamplerState.PointWrap
-					: SamplerState.LinearWrap;
-			}
-		}
+		public static SamplerState DefaultWrappedSamplerState =>
+			DefaultSamplerState.Filter == TextureFilter.Point
+				? SamplerState.PointWrap
+				: SamplerState.LinearWrap;
 
 		/// <summary>
 		/// default GameServiceContainer access

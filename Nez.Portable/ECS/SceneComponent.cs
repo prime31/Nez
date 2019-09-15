@@ -16,8 +16,8 @@ namespace Nez
 		/// <value><c>true</c> if enabled; otherwise, <c>false</c>.</value>
 		public bool Enabled
 		{
-			get { return _enabled; }
-			set { SetEnabled(value); }
+			get => _enabled;
+			set => SetEnabled(value);
 		}
 
 		/// <summary>

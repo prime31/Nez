@@ -18,12 +18,12 @@ namespace Nez
 		/// <value>The color of the square.</value>
 		public Color SquareColor
 		{
-			set { _squaresEffect.Parameters["_color"].SetValue(value.ToVector4()); }
+			set => _squaresEffect.Parameters["_color"].SetValue(value.ToVector4());
 		}
 
 		public float Smoothness
 		{
-			set { _squaresEffect.Parameters["_smoothness"].SetValue(value); }
+			set => _squaresEffect.Parameters["_smoothness"].SetValue(value);
 		}
 
 		/// <summary>
@@ -32,7 +32,7 @@ namespace Nez
 		/// <value>The size.</value>
 		public Vector2 Size
 		{
-			set { _squaresEffect.Parameters["_size"].SetValue(value); }
+			set => _squaresEffect.Parameters["_size"].SetValue(value);
 		}
 
 		/// <summary>

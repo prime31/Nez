@@ -24,15 +24,9 @@ namespace Nez.Tiled
 		public readonly List<TiledObjectGroup> ObjectGroups = new List<TiledObjectGroup>();
 		public readonly List<TiledTileset> Tilesets = new List<TiledTileset>();
 
-		public int WidthInPixels
-		{
-			get { return Width * TileWidth; }
-		}
+		public int WidthInPixels => Width * TileWidth;
 
-		public int HeightInPixels
-		{
-			get { return Height * TileHeight; }
-		}
+		public int HeightInPixels => Height * TileHeight;
 
 		public int LargestTileWidth;
 		public int LargestTileHeight;

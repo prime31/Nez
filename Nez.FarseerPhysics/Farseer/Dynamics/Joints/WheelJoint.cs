@@ -66,14 +66,14 @@ namespace FarseerPhysics.Dynamics.Joints
 
 		public override Vector2 WorldAnchorA
 		{
-			get { return BodyA.GetWorldPoint(LocalAnchorA); }
-			set { LocalAnchorA = BodyA.GetLocalPoint(value); }
+			get => BodyA.GetWorldPoint(LocalAnchorA);
+			set => LocalAnchorA = BodyA.GetLocalPoint(value);
 		}
 
 		public override Vector2 WorldAnchorB
 		{
-			get { return BodyB.GetWorldPoint(LocalAnchorB); }
-			set { LocalAnchorB = BodyB.GetLocalPoint(value); }
+			get => BodyB.GetWorldPoint(LocalAnchorB);
+			set => LocalAnchorB = BodyB.GetLocalPoint(value);
 		}
 
 		/// <summary>
@@ -81,7 +81,7 @@ namespace FarseerPhysics.Dynamics.Joints
 		/// </summary>
 		public Vector2 Axis
 		{
-			get { return _axis; }
+			get => _axis;
 			set
 			{
 				_axis = value;
@@ -100,7 +100,7 @@ namespace FarseerPhysics.Dynamics.Joints
 		/// </summary>
 		public float MotorSpeed
 		{
-			get { return _motorSpeed; }
+			get => _motorSpeed;
 			set
 			{
 				WakeBodies();
@@ -113,7 +113,7 @@ namespace FarseerPhysics.Dynamics.Joints
 		/// </summary>
 		public float MaxMotorTorque
 		{
-			get { return _maxMotorTorque; }
+			get => _maxMotorTorque;
 			set
 			{
 				WakeBodies();
@@ -169,7 +169,7 @@ namespace FarseerPhysics.Dynamics.Joints
 		/// </summary>
 		public bool MotorEnabled
 		{
-			get { return _enableMotor; }
+			get => _enableMotor;
 			set
 			{
 				WakeBodies();

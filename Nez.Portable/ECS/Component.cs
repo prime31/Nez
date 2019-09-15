@@ -28,7 +28,7 @@ namespace Nez
 		public Transform Transform
 		{
 			[MethodImpl(MethodImplOptions.AggressiveInlining)]
-			get { return Entity.Transform; }
+			get => Entity.Transform;
 		}
 
 		/// <summary>
@@ -38,8 +38,8 @@ namespace Nez
 		/// <value><c>true</c> if enabled; otherwise, <c>false</c>.</value>
 		public bool Enabled
 		{
-			get { return Entity != null ? Entity.Enabled && _enabled : _enabled; }
-			set { SetEnabled(value); }
+			get => Entity != null ? Entity.Enabled && _enabled : _enabled;
+			set => SetEnabled(value);
 		}
 
 		/// <summary>

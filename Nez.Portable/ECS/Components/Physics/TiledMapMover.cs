@@ -40,10 +40,7 @@ namespace Nez.Tiled
 			public bool IsGroundedOnOneWayPlatform;
 			public float SlopeAngle;
 
-			public bool HasCollision
-			{
-				get { return Below || Right || Left || Above; }
-			}
+			public bool HasCollision => Below || Right || Left || Above;
 
 			// state used by the TiledMapMover
 			internal SubpixelFloat _movementRemainderX, _movementRemainderY;

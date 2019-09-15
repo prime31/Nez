@@ -94,15 +94,12 @@ namespace Nez.Sprites
 		}
 
 
-		public override RectangleF Bounds
-		{
-			get { return _bounds; }
-		}
+		public override RectangleF Bounds => _bounds;
 
 		public int MaxSpriteInstances
 		{
-			get { return _maxSpriteInstances; }
-			set { SetMaxSpriteInstances(value); }
+			get => _maxSpriteInstances;
+			set => SetMaxSpriteInstances(value);
 		}
 
 		/// <summary>

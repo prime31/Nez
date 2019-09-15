@@ -20,13 +20,11 @@ namespace Nez.UI
 		/// <value><c>true</c> if flip x; otherwise, <c>false</c>.</value>
 		public bool FlipX
 		{
-			get { return (SpriteEffects & SpriteEffects.FlipHorizontally) == SpriteEffects.FlipHorizontally; }
-			set
-			{
+			get => (SpriteEffects & SpriteEffects.FlipHorizontally) == SpriteEffects.FlipHorizontally;
+			set =>
 				SpriteEffects = value
 					? (SpriteEffects | SpriteEffects.FlipHorizontally)
 					: (SpriteEffects & ~SpriteEffects.FlipHorizontally);
-			}
 		}
 
 		/// <summary>
@@ -35,13 +33,11 @@ namespace Nez.UI
 		/// <value><c>true</c> if flip y; otherwise, <c>false</c>.</value>
 		public bool FlipY
 		{
-			get { return (SpriteEffects & SpriteEffects.FlipVertically) == SpriteEffects.FlipVertically; }
-			set
-			{
+			get => (SpriteEffects & SpriteEffects.FlipVertically) == SpriteEffects.FlipVertically;
+			set =>
 				SpriteEffects = value
 					? (SpriteEffects | SpriteEffects.FlipVertically)
 					: (SpriteEffects & ~SpriteEffects.FlipVertically);
-			}
 		}
 
 		public Sprite Sprite

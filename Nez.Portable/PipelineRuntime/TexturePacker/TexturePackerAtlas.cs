@@ -10,15 +10,15 @@ namespace Nez.TextureAtlases
 	public class TexturePackerAtlas
 	{
 		public Texture2D Texture;
-		public readonly List<Sprite> Subtextures;
+		public readonly List<Sprite> Sprites;
 
 		/// <summary>
-		/// maps actual image names to the index in the subtextures list
+		/// maps actual image names to the index in the Sprites list
 		/// </summary>
-		readonly Dictionary<string, int> _subtextureMap;
+		readonly Dictionary<string, int> _spriteMap;
 
 		/// <summary>
-		/// stores a map of the name of the sprite animation (derived from texturepacker filename metadata) to an array. 
+		/// stores a map of the name of the sprite animation (derived from texturepacker filename metadata) to an array.
 		/// each entry in the list refers to index of the corresponding sprite
 		/// </summary>
 		public Dictionary<string, List<int>> SpriteAnimationDetails;
@@ -30,8 +30,8 @@ namespace Nez.TextureAtlases
 		public TexturePackerAtlas(Texture2D texture)
 		{
 			Texture = texture;
-			Subtextures = new List<Sprite>();
-			_subtextureMap = new Dictionary<string, int>();
+			Sprites = new List<Sprite>();
+			_spriteMap = new Dictionary<string, int>();
 		}
 
 
@@ -65,20 +65,20 @@ namespace Nez.TextureAtlases
 		public Sprite CreateRegion(string name, int x, int y, int width, int height, float pivotX = 0.5f,
 		                               float pivotY = 0.5f)
 		{
-			Insist.IsFalse(_subtextureMap.ContainsKey(name), "Region {0} already exists in the texture atlas", name);
+			Insist.IsFalse(_spriteMap.ContainsKey(name), "Region {0} already exists in the texture atlas", name);
 
 			var region = new Sprite(Texture, new Rectangle(x, y, width, height),
 				new Vector2(pivotX * width, pivotY * height));
-			var index = Subtextures.Count;
-			Subtextures.Add(region);
-			_subtextureMap.Add(name, index);
+			var index = Sprites.Count;
+			Sprites.Add(region);
+			_spriteMap.Add(name, index);
 
 			return region;
 		}
 
 
 		/// <summary>
-		/// returns a SpriteAnimation given an animationName where the animationName is the region's "filename" metadata 
+		/// returns a SpriteAnimation given an animationName where the animationName is the region's "filename" metadata
 		/// in the TexturePacker atlas minus the framenumbers at the end
 		/// </summary>
 		/// <returns>The sprite animation.</returns>
@@ -100,7 +100,7 @@ namespace Nez.TextureAtlases
 				};
 
 				for (var i = 0; i < frames.Count; i++)
-					animation.AddFrame(Subtextures[frames[i]]);
+					animation.AddFrame(Sprites[frames[i]]);
 
 				_spriteAnimations[animationName] = animation;
 
@@ -111,49 +111,43 @@ namespace Nez.TextureAtlases
 		}
 
 
-		public void RemoveSubtexture(int index)
+		public void RemoveSprite(int index)
 		{
-			Subtextures.RemoveAt(index);
+			Sprites.RemoveAt(index);
 		}
 
 
-		public void RemoveSubtexture(string name)
+		public void RemoveSprite(string name)
 		{
 			int index;
-			if (_subtextureMap.TryGetValue(name, out index))
+			if (_spriteMap.TryGetValue(name, out index))
 			{
-				RemoveSubtexture(index);
-				_subtextureMap.Remove(name);
+				RemoveSprite(index);
+				_spriteMap.Remove(name);
 			}
 		}
 
 
-		public Sprite GetSubtexture(int index)
+		public Sprite GetSprite(int index)
 		{
-			Insist.IsFalse(index < 0 || index >= Subtextures.Count, "index out of range");
-			return Subtextures[index];
+			Insist.IsFalse(index < 0 || index >= Sprites.Count, "index out of range");
+			return Sprites[index];
 		}
 
 
-		public Sprite GetSubtexture(string name)
+		public Sprite GetSprite(string name)
 		{
 			int index;
-			if (_subtextureMap.TryGetValue(name, out index))
-				return GetSubtexture(index);
+			if (_spriteMap.TryGetValue(name, out index))
+				return GetSprite(index);
 
 			throw new KeyNotFoundException(name);
 		}
 
 
-		public Sprite this[string name]
-		{
-			get { return GetSubtexture(name); }
-		}
+		public Sprite this[string name] => GetSprite(name);
 
 
-		public Sprite this[int index]
-		{
-			get { return GetSubtexture(index); }
-		}
+		public Sprite this[int index] => GetSprite(index);
 	}
 }

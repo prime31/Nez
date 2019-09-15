@@ -18,7 +18,7 @@ namespace Nez
 		/// <value>The wind segments.</value>
 		public float WindSegments
 		{
-			set { _windEffect.Parameters["_windSegments"].SetValue(value); }
+			set => _windEffect.Parameters["_windSegments"].SetValue(value);
 		}
 
 		/// <summary>
@@ -27,7 +27,7 @@ namespace Nez
 		/// <value>The size.</value>
 		public float Size
 		{
-			set { _windEffect.Parameters["_size"].SetValue(value); }
+			set => _windEffect.Parameters["_size"].SetValue(value);
 		}
 
 		/// <summary>

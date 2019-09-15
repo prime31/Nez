@@ -47,10 +47,7 @@ namespace FarseerPhysics.Common.Decomposition.CDT.Sets
 		public IList<TriangulationPoint> Points { get; private set; }
 		public IList<DelaunayTriangle> Triangles { get; private set; }
 
-		public virtual TriangulationMode TriangulationMode
-		{
-			get { return TriangulationMode.Unconstrained; }
-		}
+		public virtual TriangulationMode TriangulationMode => TriangulationMode.Unconstrained;
 
 		public void AddTriangle(DelaunayTriangle t)
 		{

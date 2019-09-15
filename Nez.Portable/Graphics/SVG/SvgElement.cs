@@ -15,7 +15,7 @@ namespace Nez.Svg
 		[XmlAttribute("stroke")]
 		public string StrokeAttribute
 		{
-			get { return null; }
+			get => null;
 			set
 			{
 				if (value.StartsWith("#"))
@@ -28,7 +28,7 @@ namespace Nez.Svg
 		[XmlAttribute("fill")]
 		public string FillAttribute
 		{
-			get { return null; }
+			get => null;
 			set
 			{
 				if (value.StartsWith("#"))
@@ -41,8 +41,8 @@ namespace Nez.Svg
 		[XmlAttribute("stroke-width")]
 		public string StrokeWidthAttribute
 		{
-			get { return null; }
-			set { float.TryParse(value, out StrokeWidth); }
+			get => null;
+			set => float.TryParse(value, out StrokeWidth);
 		}
 
 		public float StrokeWidth = 1;
@@ -50,8 +50,8 @@ namespace Nez.Svg
 		[XmlAttribute("transform")]
 		public string TransformAttribute
 		{
-			get { return null; }
-			set { _transforms = SvgTransformConverter.ParseTransforms(value); }
+			get => null;
+			set => _transforms = SvgTransformConverter.ParseTransforms(value);
 		}
 
 		protected List<SvgTransform> _transforms;

@@ -26,10 +26,7 @@ namespace Nez.UI
 	{
 		public event Action<TextField, string> OnTextChanged;
 
-		public override float PreferredWidth
-		{
-			get { return _preferredWidth; }
-		}
+		public override float PreferredWidth => _preferredWidth;
 
 		public override float PreferredHeight
 		{

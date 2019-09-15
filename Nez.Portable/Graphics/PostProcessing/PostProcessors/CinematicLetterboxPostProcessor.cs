@@ -15,7 +15,7 @@ namespace Nez
 		/// <value>The color.</value>
 		public Color Color
 		{
-			get { return _color; }
+			get => _color;
 			set
 			{
 				if (_color != value)
@@ -34,7 +34,7 @@ namespace Nez
 		/// <value>The size of the letterbox.</value>
 		public float LetterboxSize
 		{
-			get { return _letterboxSize; }
+			get => _letterboxSize;
 			set
 			{
 				if (_letterboxSize != value)

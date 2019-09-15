@@ -27,25 +27,13 @@ namespace Nez
 	/// </summary>
 	public class MarkupText : RenderableComponent
 	{
-		public override float Width
-		{
-			get { return _textWidth; }
-		}
+		public override float Width => _textWidth;
 
-		public override float Height
-		{
-			get { return _textHeight; }
-		}
+		public override float Height => _textHeight;
 
-		public string Text
-		{
-			get { return _text; }
-		}
+		public string Text => _text;
 
-		public float TextWidth
-		{
-			get { return _textWidth; }
-		}
+		public float TextWidth => _textWidth;
 
 		string _text;
 		float _textWidth, _textHeight;

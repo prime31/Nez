@@ -131,10 +131,10 @@ You do not have to use the JSON config file and pipeline importer to get the ben
 var skin = new Skin();
 
 // add a texture atlas so we have some images to work with
-skin.AddSubtextures( Content.Load<LibGdxAtlas>( "skins/UIAtlas" ) );
+skin.AddSprites( Content.Load<LibGdxAtlas>( "skins/UIAtlas" ) );
 
 // add a bunch of styles for our elements. Note that the getDrawable method is very flexible. The name passed to it can be any type of
-// IDrawable or it can be a Subtexture, NinePatchSubtexture or Color. In the latter case Skin will create and manage the IDrawable
+// IDrawable or it can be a Sprite, NinePatchSprite or Color. In the latter case Skin will create and manage the IDrawable
 // for you automatically.
 skin.Add( "button", new ButtonStyle( skin.GetDrawable( "default-round" ), skin.GetDrawable( "default-round-down" ), null ) );
 
