@@ -609,7 +609,7 @@ namespace Nez.Console
 				// hit in a release build.
 				var appDomainType = typeof(string).GetTypeInfo().Assembly.GetType("System.AppDomain");
 				var domain = appDomainType.GetRuntimeProperty("CurrentDomain").GetMethod.Invoke(null, new object[] { });
-				var assembliesMethod = ReflectionUtils.GetMethodInfo(domain, "GetAssemblies");
+				var assembliesMethod = ReflectionUtils.GetMethodInfo(domain, "GetAssemblies", new Type[] {});
 
 				// not sure about arguments, detect in runtime
 				var methodCallParams = assembliesMethod.GetParameters().Length == 0
