@@ -12,7 +12,7 @@ namespace Nez.BitmapFonts
     public static class BMFontConverter
 	{
 		/// <summary>
-		/// Converts a BitmapFont to a SriteFont
+		/// Converts a BitmapFont to a SpriteFont
 		/// </summary>
 		/// <param name="filename"></param>
 		/// <returns></returns>

@@ -27,6 +27,7 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Content\NezDefaultBMFont.xnb" />
+	<Compile Remove="Graphics\SVG\Shapes\Paths\SvgPathBuilder.cs" />
   </ItemGroup>
   <Import Sdk="Microsoft.NET.Sdk" Project="Sdk.targets" />
 </Project>
