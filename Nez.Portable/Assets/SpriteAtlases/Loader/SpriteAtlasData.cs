@@ -4,7 +4,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Nez.Textures;
 
-namespace Nez.SpriteAtlases
+namespace Nez.Sprites
 {
 	/// <summary>
 	/// temporary class used when loading a SpriteAtlas and by the sprite atlas editor

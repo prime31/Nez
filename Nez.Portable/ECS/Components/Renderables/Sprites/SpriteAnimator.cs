@@ -1,12 +1,12 @@
 using System;
 using System.Collections.Generic;
-using Nez.SpriteAtlases;
+using Nez.Sprites;
 using Nez.Textures;
 
 
 namespace Nez.Sprites
 {
-	public class SpriteAnimator : Component, IUpdatable
+	public class SpriteAnimator : SpriteRenderer, IUpdatable
 	{
 		public enum LoopMode
 		{
@@ -36,22 +36,37 @@ namespace Nez.Sprites
 			PingPongOnce
 		}
 
+		/// <summary>
+		/// animation playback speed
+		/// </summary>
 		public float Speed = 1;
+
+		/// <summary>
+		/// is the current animatiomn paused
+		/// </summary>
 		public bool IsPaused { get; private set; }
-		public SpriteAtlases.SpriteAnimation CurrentAnimation => _currentAnimation;
+
+		/// <summary>
+		/// the current animation
+		/// </summary>
+		public SpriteAnimation CurrentAnimation => _currentAnimation;
+
+		/// <summary>
+		/// the name of the current animation
+		/// </summary>
 		public string CurrentAnimationName => _currentAnimationName;
 
-		SpriteRenderer _spriteRenderer;
-		Dictionary<string, SpriteAtlases.SpriteAnimation> _animations = new Dictionary<string, SpriteAtlases.SpriteAnimation>();
-		SpriteAtlases.SpriteAnimation _currentAnimation;
+		readonly Dictionary<string, SpriteAnimation> _animations = new Dictionary<string, SpriteAnimation>();
+		SpriteAnimation _currentAnimation;
 		string _currentAnimationName;
 		float _time;
 		LoopMode _loopMode;
 
-		public override void OnAddedToEntity()
-		{
-			_spriteRenderer = Entity.GetComponent<SpriteRenderer>();
-		}
+
+		public SpriteAnimator()
+		{ }
+
+		public SpriteAnimator(Sprite sprite) => SetSprite(sprite);
 
 		void IUpdatable.Update()
 		{
@@ -70,13 +85,13 @@ namespace Nez.Sprites
 			{
 				IsPaused = true;
 				_time = 0;
-				_spriteRenderer.Sprite = _currentAnimation.Sprites[0];
+				Sprite = _currentAnimation.Sprites[0];
 				return;
 			}
 
 			if (_loopMode == LoopMode.ClampForever && time > iterationDuration)
 			{
-				_spriteRenderer.Sprite = _currentAnimation.Sprites.LastItem();
+				Sprite = _currentAnimation.Sprites.LastItem();
 				return;
 			}
 
@@ -89,7 +104,7 @@ namespace Nez.Sprites
 				currentElapsed = iterationDuration - currentElapsed;
 
 			var desiredFrame = Mathf.FloorToInt(currentElapsed / secondsPerFrame);
-			_spriteRenderer.Sprite = _currentAnimation.Sprites[desiredFrame];
+			Sprite = _currentAnimation.Sprites[desiredFrame];
 		}
 
 		/// <summary>
@@ -104,17 +119,22 @@ namespace Nez.Sprites
 		/// <summary>
 		/// Adds a SpriteAnimation
 		/// </summary>
-		public void AddAnimation(string name, SpriteAtlases.SpriteAnimation animation)
+		public void AddAnimation(string name, SpriteAnimation animation)
 		{
-			// make a best effort to have a Sprite set. If we have no SpriteRenderer this is being called before the Scene ticked
-			if (_spriteRenderer == null)
-				Entity.GetComponent<SpriteRenderer>()?.SetSprite(animation.Sprites[0]);
+			// if we have no sprite use the first frame we find
+			if (Sprite == null && animation.Sprites.Length > 0)
+				SetSprite(animation.Sprites[0]);
 			_animations[name] = animation;
 		}
 
 		public void AddAnimation(string name, Sprite[] frames, float fps = 10)
 		{
-			AddAnimation(name, new SpriteAtlases.SpriteAnimation(frames, 10));
+			AddAnimation(name, new SpriteAnimation(frames, fps));
+		}
+
+		public void AddAnimation(string name, float fps, params Sprite[] sprites)
+		{
+			AddAnimation(name, new SpriteAnimation(sprites, fps));
 		}
 
 		#region Playback
@@ -127,7 +147,7 @@ namespace Nez.Sprites
 			_currentAnimation = _animations[name];
 			_currentAnimationName = name;
 
-			_spriteRenderer?.SetSprite(_currentAnimation.Sprites[0]);
+			Sprite = _currentAnimation.Sprites[0];
 			IsPaused = false;
 
 			if (loopMode.HasValue)

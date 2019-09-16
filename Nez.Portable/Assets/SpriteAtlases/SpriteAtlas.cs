@@ -1,7 +1,7 @@
 ﻿using System;
 using Nez.Textures;
 
-namespace Nez.SpriteAtlases
+namespace Nez.Sprites
 {
 	public class SpriteAtlas : IDisposable
 	{

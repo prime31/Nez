@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 using System.IO;
 using Microsoft.Xna.Framework;
 using Nez.ParticleDesigner;
-using Nez.SpriteAtlases;
+using Nez.Sprites;
 
 namespace Nez.Systems
 {
@@ -100,7 +100,7 @@ namespace Nez.Systems
 				if (asset is Tiled.TmxMap map)
 					return map;
 			}
-			
+
 			var tiledMap = new Tiled.TmxMap(name);
 
 			LoadedAssets[name] = tiledMap;

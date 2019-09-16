@@ -5,7 +5,7 @@ using Microsoft.Xna.Framework;
 using Nez.BitmapFonts;
 using Nez.Systems;
 using System.Linq;
-using Nez.SpriteAtlases;
+using Nez.Sprites;
 
 
 namespace Nez.UI
