@@ -10,7 +10,7 @@ namespace Nez.Sprites
 	/// prefer). If you do use an Enum it is recommended to pass in a IEqualityComparer when using an enum like CoreEvents does. See also
 	/// the EnumEqualityComparerGenerator.tt T4 template for automatically generating the IEqualityComparer.
 	/// </summary>
-	[Obsolete()]
+	[Obsolete("Use SpriteAnimator instead")]
 	public class SpriteAnimationRenderer<TEnum> : SpriteRenderer, IUpdatable where TEnum : struct, IComparable, IFormattable
 	{
 		public event Action<TEnum> OnAnimationCompletedEvent;
@@ -20,7 +20,6 @@ namespace Nez.Sprites
 		/// <summary>
 		/// gets/sets the currently playing animation
 		/// </summary>
-		/// <value>The current animation.</value>
 		public TEnum CurrentAnimation
 		{
 			get => _currentAnimationKey;
@@ -41,8 +40,7 @@ namespace Nez.Sprites
 
 
 		public SpriteAnimationRenderer() : this(default(IEqualityComparer<TEnum>))
-		{
-		}
+		{ }
 
 		/// <summary>
 		/// beware the beast man! If you use this constructor you must set the sprite or set animations so that this sprite has proper bounds
@@ -64,8 +62,7 @@ namespace Nez.Sprites
 		/// </summary>
 		/// <param name="sprite">Sprite.</param>
 		public SpriteAnimationRenderer(Sprite sprite) : this(null, sprite)
-		{
-		}
+		{ }
 
 		/// <summary>
 		/// Sprite needs a Sprite at constructor time so the first frame of the passed in animation will be used for this constructor

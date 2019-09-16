@@ -6,12 +6,12 @@ namespace Nez
 {
 	/// <summary>
 	/// concrete implementation of IRenderable. Contains convenience methods.
-	/// 
+	///
 	/// VERY IMPORTANT! Subclasses MUST either override width/height or bounds!
 	/// </summary>
 	public abstract class RenderableComponent : Component, IRenderable, IComparable<RenderableComponent>
 	{
-		#region properties and fields
+		#region Properties and fields
 
 		/// <summary>
 		/// width of the RenderableComponent. subclasses that do not override the bounds property must implement this!
@@ -118,7 +118,6 @@ namespace Nez
 
 		#endregion
 
-
 		#region Component overrides and IRenderable
 
 		public override void OnEntityTransformChanged(Transform.Component comp)
@@ -183,7 +182,6 @@ namespace Nez
 		}
 
 		#endregion
-
 
 		#region Fluent setters
 
@@ -259,7 +257,6 @@ namespace Nez
 
 		#endregion
 
-
 		#region public API
 
 		/// <summary>
@@ -273,7 +270,6 @@ namespace Nez
 		}
 
 		#endregion
-
 
 		/// <Docs>To be added.</Docs>
 		/// <para>Returns the sort order of the current instance compared to the specified object.</para>
@@ -304,10 +300,9 @@ namespace Nez
 			return res;
 		}
 
-
 		public override string ToString()
 		{
-			return string.Format("[RenderableComponent] {0}, renderLayer: {1}]", GetType(), RenderLayer);
+			return $"[RenderableComponent] {GetType()}, renderLayer: {RenderLayer}]";
 		}
 	}
 }

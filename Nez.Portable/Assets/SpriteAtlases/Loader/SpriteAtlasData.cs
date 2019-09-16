@@ -32,7 +32,7 @@ namespace Nez.SpriteAtlases
 			atlas.SpriteAnimations = new SpriteAnimation[atlas.AnimationNames.Length];
 			for (var i = 0; i < atlas.SpriteAnimations.Length; i++)
 			{
-				var sprites = new Sprite[AnimationFrames.Count];
+				var sprites = new Sprite[AnimationFrames[i].Count];
 				for (var j = 0; j < sprites.Length; j++)
 					sprites[j] = atlas.Sprites[AnimationFrames[i][j]];
 				atlas.SpriteAnimations[i] = new SpriteAnimation(sprites, (float)AnimationFps[i]);

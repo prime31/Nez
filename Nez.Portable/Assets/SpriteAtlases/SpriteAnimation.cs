@@ -4,8 +4,8 @@ namespace Nez.SpriteAtlases
 {
 	public class SpriteAnimation
 	{
-		public Sprite[] Sprites;
-		public float FrameRate;
+		public readonly Sprite[] Sprites;
+		public readonly float FrameRate;
 
 		public SpriteAnimation(Sprite[] sprites, float frameRate)
 		{
