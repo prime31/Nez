@@ -4,7 +4,7 @@ skip_non_tags: false
 
 image: Visual Studio 2017
 
-configuration: Release
+configuration: Debug
 
 shallow_clone: true
 
@@ -32,8 +32,6 @@ after_build:
     nuget pack %NUGET_FLAGS% ./Nez.Portable/Nez.nuspec
 
     nuget pack %NUGET_FLAGS% ./Nez.FarseerPhysics/Nez.FarseerPhysics.nuspec
-
-    nuget pack %NUGET_FLAGS% ./Nez.PipelineImporter/Nez.PipelineImporter.nuspec
 
 artifacts:
 - path: dist\*.nupkg

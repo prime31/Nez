@@ -53,7 +53,6 @@ Nez Systems
 - [SVG Support](FAQs/SVG.md)
 - [AI (FSM, Behavior Tree, GOAP, Utility AI)](FAQs/AI.md)
 - [Deferred Lighting](FAQs/DeferredLighting.md)
-- [Pipeline Importers](FAQs/PipelineImporters.md)
 - [Samples](FAQs/Samples.md)
 
 
@@ -76,25 +75,7 @@ Note: if you get compile errors referencing a missing `project.assets.json` file
 
 Note that NuGet packages are compiled release DLLs! They will not contain any debug code such as the DebugConsole or debug visualization classes!
 
-Add [Nez](https://www.nuget.org/packages/Nez/) and [Nez.PipelineImporter](https://www.nuget.org/packages/Nez.PipelineImporter/) to your project's NuGet packages.
-
-The latter will not add any references to your projects, installing it this way fetches the necessary `DLL` files that your `Content.mgcb` needs to reference. Given the version of Nez that you installed, edit `Content.mgcb` so it looks like this:
-
-```bash
-#----------------------------- Global Properties ---------------------------#
-
-...
-
-#-------------------------------- References -------------------------------#
-
-/reference:../../packages/Nez.PipelineImporter.{VERSION}/tools/Nez.dll
-/reference:../../packages/Nez.PipelineImporter.{VERSION}/tools/Nez.PipelineImporter.dll
-/reference:../../packages/Nez.PipelineImporter.{VERSION}/tools/Newtonsoft.Json.dll
-/reference:../../packages/Nez.PipelineImporter.{VERSION}/tools/Ionic.ZLib.dll
-
-#---------------------------------- Content --------------------------------#
-...
-```
+Add [Nez](https://www.nuget.org/packages/Nez/) to your project's NuGet packages.
 
 Installing through NuGet, the contents of the `DefaultContent` content folder are also included in the package. You will find them under `packages/Nez.{VERSION}/tools`.
 

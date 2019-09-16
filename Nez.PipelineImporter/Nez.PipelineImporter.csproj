@@ -21,7 +21,6 @@
     <ProjectReference Include="..\Nez.Portable\Nez.csproj" />
     <PackageReference Include="MonoGame.Framework.Content.Pipeline.Portable" Version="3.7.1.189" />
     <PackageReference Include="Newtonsoft.json" Version="12.0.1" />
-    <PackageReference Include="MarkerMetro.Unity.Ionic.Zlib" Version="2.0.0.14" />
   </ItemGroup>
   <Import Sdk="Microsoft.NET.Sdk" Project="Sdk.targets" />
 </Project>
