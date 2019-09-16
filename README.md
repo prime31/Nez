@@ -73,11 +73,9 @@ Note: if you get compile errors referencing a missing `project.assets.json` file
 
 ### Install through NuGet:
 
-Note that NuGet packages are compiled release DLLs! They will not contain any debug code such as the DebugConsole or debug visualization classes!
+Add [Nez](https://www.nuget.org/packages/Nez/) to your project's NuGet packages. Optionally add the Nez.FarseerPhysics and Nez.Persistence NuGet packages.
 
-Add [Nez](https://www.nuget.org/packages/Nez/) to your project's NuGet packages.
-
-Installing through NuGet, the contents of the `DefaultContent` content folder are also included in the package. You will find them under `packages/Nez.{VERSION}/tools`.
+Installing through NuGet, the contents of the `DefaultContent` content folder is also included in the package. You will find them under `packages/Nez.{VERSION}/tools`.
 
 ---
 
