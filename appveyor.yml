@@ -9,7 +9,7 @@ configuration: Debug
 shallow_clone: true
 
 environment:
-  NUGET_FLAGS: "-Verbosity quiet -Prop Configuration=Release -OutputDirectory dist"
+  NUGET_FLAGS: "-Verbosity quiet -Prop Configuration=Debug -OutputDirectory dist"
 
 # Install MonoGame 3.6
 init:
