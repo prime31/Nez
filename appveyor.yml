@@ -32,6 +32,8 @@ after_build:
     nuget pack %NUGET_FLAGS% ./Nez.Portable/Nez.nuspec
 
     nuget pack %NUGET_FLAGS% ./Nez.FarseerPhysics/Nez.FarseerPhysics.nuspec
+    
+    nuget pack %NUGET_FLAGS% ./Nez.Persistence/Nez.Persistence.nuspec
 
 artifacts:
 - path: dist\*.nupkg
