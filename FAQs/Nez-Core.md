@@ -12,7 +12,33 @@ When you set Core.scene to a new Scene, Nez will finish rendering the current Sc
 
 
 ## Sprites
-You can't make a 2D game without sprites. Nez provides 
+You can't make a 2D game without sprites. Nez provides a variety of ways to render sprites from basic single texture rendering to sprite atlas support to nine patch sprites. Some of the common sprite Components to get to know are `SpriteRenderer`, `SpriteAnimator`, `SpriteTrail`, `TiledSprite`, `ScrollingSprite` and `PrototypeSprite`. The two most common things in a 2D game are static sprites and animated sprites. Examples are below:
+
+```csharp
+// load a single image texture into a static SpriteRenderer
+var texture = Content.Load<Texture2D>("SomeTex");
+
+var entity = CreateEntity("SpriteExample");
+entity.AddComponent(new SpriteRenderer(texture));
+```
+
+```csharp
+// load up a texture that is an atlas of 16x16 animation frames
+var texture = Content.Load<Texture2D>("SomeCharacterTex");
+var sprites = Sprite.SpritesFromAtlas(texture, 16, 16);
+			
+var entity = CreateEntity("SpriteExample");
+
+// add a SpriteAnimator, which renders the current frame of the currently playing animation
+var animator = entity.AddComponent<SpriteAnimator>();
+
+// add some animations
+animator.AddAnimation("Run", sprites[0], sprites[1], sprites[2]);
+animator.AddAnimation("Idle", sprites[3], sprites[4]);
+
+// some time later, play an animation
+animator.Play("Run");
+```
 
 
 ## Physics

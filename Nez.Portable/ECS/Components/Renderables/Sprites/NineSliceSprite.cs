@@ -13,7 +13,7 @@ namespace Nez
 			get => _finalRenderRect.Width;
 			set
 			{
-				_finalRenderRect.Width = (int) value;
+				_finalRenderRect.Width = (int)value;
 				_destRectsDirty = true;
 			}
 		}
@@ -23,7 +23,7 @@ namespace Nez
 			get => _finalRenderRect.Height;
 			set
 			{
-				_finalRenderRect.Height = (int) value;
+				_finalRenderRect.Height = (int)value;
 				_destRectsDirty = true;
 			}
 		}
@@ -63,20 +63,17 @@ namespace Nez
 
 		public NineSliceSprite(Sprite sprite, int top, int bottom, int left, int right) : this(
 			new NinePatchSprite(sprite, left, right, top, bottom))
-		{
-		}
+		{ }
 
 		public NineSliceSprite(Texture2D texture, int top, int bottom, int left, int right) : this(
 			new NinePatchSprite(texture, left, right, top, bottom))
-		{
-		}
+		{ }
 
 		public override void Render(Batcher batcher, Camera camera)
 		{
 			if (_destRectsDirty)
 			{
-				Sprite.GenerateNinePatchRects(_finalRenderRect, _destRects, Sprite.Left, Sprite.Right,
-					Sprite.Top, Sprite.Bottom);
+				Sprite.GenerateNinePatchRects(_finalRenderRect, _destRects, Sprite.Left, Sprite.Right, Sprite.Top, Sprite.Bottom);
 				_destRectsDirty = false;
 			}
 

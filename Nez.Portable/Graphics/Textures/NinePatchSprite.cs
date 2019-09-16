@@ -37,13 +37,11 @@ namespace Nez.Textures
 
 		public NinePatchSprite(Texture2D texture, int left, int right, int top, int bottom) : this(texture,
 			texture.Bounds, left, right, top, bottom)
-		{
-		}
+		{ }
 
 
 		public NinePatchSprite(Sprite sprite, int left, int right, int top, int bottom) : this(sprite,
 			sprite.SourceRect, left, right, top, bottom)
-		{
-		}
+		{ }
 	}
 }
