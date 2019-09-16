@@ -294,7 +294,7 @@ namespace Nez
 			StartDebugDraw(gameTime.ElapsedGameTime);
 
 			if (_sceneTransition != null)
-				_sceneTransition.PreRender(Graphics.Instance);
+				_sceneTransition.PreRender(Graphics.Instance.Batcher);
 
 			// special handling of SceneTransition if we have one. We either render the SceneTransition or the Scene
 			if (_sceneTransition != null)
@@ -312,7 +312,7 @@ namespace Nez
 					_scene.PostRender();
 				}
 
-				_sceneTransition.Render(Graphics.Instance);
+				_sceneTransition.Render(Graphics.Instance.Batcher);
 			}
 			else if (_scene != null)
 			{

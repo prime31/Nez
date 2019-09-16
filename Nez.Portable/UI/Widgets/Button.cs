@@ -74,23 +74,19 @@ namespace Nez.UI
 
 
 		public Button(Skin skin, string styleName = null) : this(skin.Get<ButtonStyle>(styleName))
-		{
-		}
+		{ }
 
 
 		public Button(IDrawable up) : this(new ButtonStyle(up, null, null))
-		{
-		}
+		{ }
 
 
 		public Button(IDrawable up, IDrawable down) : this(new ButtonStyle(up, down, null))
-		{
-		}
+		{ }
 
 
 		public Button(IDrawable up, IDrawable down, IDrawable checked_) : this(new ButtonStyle(up, down, checked_))
-		{
-		}
+		{ }
 
 		#endregion
 
@@ -170,8 +166,7 @@ namespace Nez.UI
 
 
 		void IGamepadFocusable.OnUnhandledDirectionPressed(Direction direction)
-		{
-		}
+		{ }
 
 
 		void IGamepadFocusable.OnFocused()
@@ -304,19 +299,13 @@ namespace Nez.UI
 		}
 
 
-		public void SetDisabled(bool disabled)
-		{
-			_isDisabled = disabled;
-		}
+		public void SetDisabled(bool disabled) => _isDisabled = disabled;
 
 
-		public bool GetDisabled()
-		{
-			return _isDisabled;
-		}
+		public bool GetDisabled() => _isDisabled;
 
 
-		public override void Draw(Graphics graphics, float parentAlpha)
+		public override void Draw(Batcher batcher, float parentAlpha)
 		{
 			Validate();
 
@@ -352,7 +341,7 @@ namespace Nez.UI
 			for (var i = 0; i < children.Count; i++)
 				children[i].MoveBy(offsetX, offsetY);
 
-			base.Draw(graphics, parentAlpha);
+			base.Draw(batcher, parentAlpha);
 
 			for (int i = 0; i < children.Count; i++)
 				children[i].MoveBy(-offsetX, -offsetY);
@@ -379,8 +368,7 @@ namespace Nez.UI
 
 
 		public ButtonStyle()
-		{
-		}
+		{ }
 
 
 		public ButtonStyle(IDrawable up, IDrawable down, IDrawable over)

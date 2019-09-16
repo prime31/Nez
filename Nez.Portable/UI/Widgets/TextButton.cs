@@ -52,7 +52,7 @@ namespace Nez.UI
 		}
 
 
-		public override void Draw(Graphics graphics, float parentAlpha)
+		public override void Draw(Batcher batcher, float parentAlpha)
 		{
 			Color? fontColor = null;
 			if (_isDisabled && style.DisabledFontColor.HasValue)
@@ -73,7 +73,7 @@ namespace Nez.UI
 			if (fontColor != null)
 				label.GetStyle().FontColor = fontColor.Value;
 
-			base.Draw(graphics, parentAlpha);
+			base.Draw(batcher, parentAlpha);
 		}
 
 

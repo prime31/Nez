@@ -9,7 +9,7 @@ namespace Nez.UI
 	/// <summary>
 	/// A group that sizes and positions children using table constraints. By default, {@link #getTouchable()} is
 	/// {@link Touchable#childrenOnly}.
-	/// 
+	///
 	/// The preferred and minimum sizes are that of the chdebugn when laid out in columns and rows.
 	/// </summary>
 	public class Table : Group
@@ -125,36 +125,36 @@ namespace Nez.UI
 		}
 
 
-		public override void Draw(Graphics graphics, float parentAlpha)
+		public override void Draw(Batcher batcher, float parentAlpha)
 		{
 			Validate();
 			if (transform)
 			{
-				ApplyTransform(graphics, ComputeTransform());
-				DrawBackground(graphics, parentAlpha, 0, 0);
+				ApplyTransform(batcher, ComputeTransform());
+				DrawBackground(batcher, parentAlpha, 0, 0);
 
 				if (Clip)
 				{
-					graphics.Batcher.FlushBatch();
+					batcher.FlushBatch();
 					float padLeft = _padLeft.Get(this), padBottom = _padBottom.Get(this);
-					if (ClipBegin(graphics.Batcher, padLeft, padBottom, GetWidth() - padLeft - _padRight.Get(this),
+					if (ClipBegin(batcher, padLeft, padBottom, GetWidth() - padLeft - _padRight.Get(this),
 						GetHeight() - padBottom - _padTop.Get(this)))
 					{
-						DrawChildren(graphics, parentAlpha);
-						ClipEnd(graphics.Batcher);
+						DrawChildren(batcher, parentAlpha);
+						ClipEnd(batcher);
 					}
 				}
 				else
 				{
-					DrawChildren(graphics, parentAlpha);
+					DrawChildren(batcher, parentAlpha);
 				}
 
-				ResetTransform(graphics);
+				ResetTransform(batcher);
 			}
 			else
 			{
-				DrawBackground(graphics, parentAlpha, x, y);
-				base.Draw(graphics, parentAlpha);
+				DrawBackground(batcher, parentAlpha, x, y);
+				base.Draw(batcher, parentAlpha);
 			}
 		}
 
@@ -163,16 +163,12 @@ namespace Nez.UI
 		/// Called to draw the background, before clipping is applied (if enabled). Default implementation draws the background
 		/// drawable.
 		/// </summary>
-		/// <param name="graphics">Graphics.</param>
-		/// <param name="parentAlpha">Parent alpha.</param>
-		/// <param name="x">The x coordinate.</param>
-		/// <param name="y">The y coordinate.</param>
-		protected virtual void DrawBackground(Graphics graphics, float parentAlpha, float x, float y)
+		protected virtual void DrawBackground(Batcher batcher, float parentAlpha, float x, float y)
 		{
 			if (_background == null)
 				return;
 
-			_background.Draw(graphics, x, y, width, height, new Color(color, (int) (color.A * parentAlpha)));
+			_background.Draw(batcher, x, y, width, height, new Color(color, (int) (color.A * parentAlpha)));
 		}
 
 
@@ -1527,15 +1523,15 @@ namespace Nez.UI
 
 		#region Debug
 
-		public override void DebugRender(Graphics graphics)
+		public override void DebugRender(Batcher batcher)
 		{
 			if (_debugRects != null)
 			{
 				foreach (var d in _debugRects)
-					graphics.Batcher.DrawHollowRect(x + d.Rect.X, y + d.Rect.Y, d.Rect.Width, d.Rect.Height, d.Color);
+					batcher.DrawHollowRect(x + d.Rect.X, y + d.Rect.Y, d.Rect.Width, d.Rect.Height, d.Color);
 			}
 
-			base.DebugRender(graphics);
+			base.DebugRender(batcher);
 		}
 
 

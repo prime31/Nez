@@ -118,13 +118,13 @@ namespace Nez
 			return Vector2.Clamp(position, halfScreen, cameraMax);
 		}
 
-		public override void DebugRender(Graphics graphics)
+		public override void DebugRender(Batcher batcher)
 		{
 			if (_cameraStyle == CameraStyle.LockOn)
-				graphics.Batcher.DrawHollowRect(_worldSpaceDeadzone.X - 5, _worldSpaceDeadzone.Y - 5,
+				batcher.DrawHollowRect(_worldSpaceDeadzone.X - 5, _worldSpaceDeadzone.Y - 5,
 					_worldSpaceDeadzone.Width, _worldSpaceDeadzone.Height, Color.DarkRed);
 			else
-				graphics.Batcher.DrawHollowRect(_worldSpaceDeadzone, Color.DarkRed);
+				batcher.DrawHollowRect(_worldSpaceDeadzone, Color.DarkRed);
 		}
 
 		void OnGraphicsDeviceReset()

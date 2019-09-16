@@ -74,7 +74,7 @@ namespace Nez.UI
 		}
 
 
-		public override void Draw(Graphics graphics, float parentAlpha)
+		public override void Draw(Batcher batcher, float parentAlpha)
 		{
 			Validate();
 
@@ -101,7 +101,7 @@ namespace Nez.UI
 			float height = GetHeight();
 
 			if (background != null)
-				background.Draw(graphics, x, y, width, height, color);
+				background.Draw(batcher, x, y, width, height, color);
 
 			var selected = _selection.First();
 			if (selected != null)
@@ -120,7 +120,7 @@ namespace Nez.UI
 				}
 
 				fontColor = new Color(fontColor, (int) (fontColor.A * parentAlpha));
-				graphics.Batcher.DrawString(font, str, new Vector2(x, y), fontColor);
+				batcher.DrawString(font, str, new Vector2(x, y), fontColor);
 			}
 		}
 

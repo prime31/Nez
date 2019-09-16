@@ -52,7 +52,7 @@ namespace Nez
 				{
 					var entity = renderables.Buffer[j];
 					if (entity.Enabled)
-						entity.DebugRender(Graphics.Instance);
+						entity.DebugRender(Graphics.Instance.Batcher);
 				}
 			}
 		}

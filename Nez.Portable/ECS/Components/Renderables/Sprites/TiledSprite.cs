@@ -120,7 +120,7 @@ namespace Nez
 		{
 		}
 
-		public override void Render(Graphics graphics, Camera camera)
+		public override void Render(Batcher batcher, Camera camera)
 		{
 			if (_sprite == null)
 				return;
@@ -130,7 +130,7 @@ namespace Nez
 				_sourceRect.Width * Entity.Transform.Scale.X * TextureScale.X,
 				_sourceRect.Height * Entity.Transform.Scale.Y * TextureScale.Y);
 
-			graphics.Batcher.Draw(_sprite, destinationRect, _sourceRect, Color, Entity.Transform.Rotation,
+			batcher.Draw(_sprite, destinationRect, _sourceRect, Color, Entity.Transform.Rotation,
 				Origin * _inverseTexScale, SpriteEffects, _layerDepth);
 		}
 	}

@@ -70,8 +70,8 @@ namespace Nez.DeferredLighting
 		/// <summary>
 		/// we dont want to render our bounds so we just render a direction
 		/// </summary>
-		/// <param name="graphics">Graphics.</param>
-		public override void DebugRender(Graphics graphics)
+		/// <param name="batcher">Batcher.</param>
+		public override void DebugRender(Batcher batcher)
 		{
 			// figure out a starting corner for the line
 			var root = Vector2.Zero;
@@ -86,7 +86,7 @@ namespace Nez.DeferredLighting
 				root.X = Screen.Width - 10;
 
 			var angle = Mathf.Atan2(Direction.Y, Direction.X);
-			graphics.Batcher.DrawLineAngle(root, angle, 100, Color.Red, 3);
+			batcher.DrawLineAngle(root, angle, 100, Color.Red, 3);
 		}
 	}
 }

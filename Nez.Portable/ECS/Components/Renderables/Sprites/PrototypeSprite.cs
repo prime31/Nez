@@ -89,12 +89,12 @@ namespace Nez
 			OriginNormalized = Vector2Ext.HalfVector();
 		}
 
-		public override void Render(Graphics graphics, Camera camera)
+		public override void Render(Batcher batcher, Camera camera)
 		{
 			var pos = (Entity.Transform.Position - (Origin * Entity.Transform.Scale) + LocalOffset);
 			var size = new Point((int) (_width * Entity.Transform.Scale.X), (int) (_height * Entity.Transform.Scale.Y));
 			var destRect = new Rectangle((int) pos.X, (int) pos.Y, size.X, size.Y);
-			graphics.Batcher.Draw(_sprite, destRect, _sprite.SourceRect, Color, Entity.Transform.Rotation,
+			batcher.Draw(_sprite, destRect, _sprite.SourceRect, Color, Entity.Transform.Rotation,
 				SpriteEffects.None, LayerDepth, SkewTopX, SkewBottomX, SkewLeftY, SkewRightY);
 		}
 	}

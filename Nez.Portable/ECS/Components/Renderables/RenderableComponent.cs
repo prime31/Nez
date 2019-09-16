@@ -126,27 +126,27 @@ namespace Nez
 		}
 
 		/// <summary>
-		/// called by a Renderer. The Camera can be used for culling and the Graphics instance to draw with.
+		/// called by a Renderer. The Camera can be used for culling and the Batcher instance to draw with.
 		/// </summary>
-		/// <param name="graphics">Graphics.</param>
+		/// <param name="batcher">Batcher.</param>
 		/// <param name="camera">Camera.</param>
-		public abstract void Render(Graphics graphics, Camera camera);
+		public abstract void Render(Batcher batcher, Camera camera);
 
 		/// <summary>
 		/// renders the bounds only if there is no collider. Always renders a square on the origin.
 		/// </summary>
-		/// <param name="graphics">Graphics.</param>
-		public override void DebugRender(Graphics graphics)
+		/// <param name="batcher">Batcher.</param>
+		public override void DebugRender(Batcher batcher)
 		{
 			if (!DebugRenderEnabled)
 				return;
 
 			// if we have no collider draw our bounds
 			if (Entity.GetComponent<Collider>() == null)
-				graphics.Batcher.DrawHollowRect(Bounds, Debug.Colors.RenderableBounds);
+				batcher.DrawHollowRect(Bounds, Debug.Colors.RenderableBounds);
 
 			// draw a square for our pivot/origin
-			graphics.Batcher.DrawPixel(Entity.Transform.Position + _localOffset, Debug.Colors.RenderableCenter, 4);
+			batcher.DrawPixel(Entity.Transform.Position + _localOffset, Debug.Colors.RenderableCenter, 4);
 		}
 
 		/// <summary>

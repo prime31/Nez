@@ -179,7 +179,7 @@ namespace Nez.UI
 		}
 
 
-		public override void Draw(Graphics graphics, float parentAlpha)
+		public override void Draw(Batcher batcher, float parentAlpha)
 		{
 			var knob = GetKnobDrawable();
 			var bg = (Disabled && style.DisabledBackground != null) ? style.DisabledBackground : style.Background;
@@ -204,7 +204,7 @@ namespace Nez.UI
 				float bgTopHeight = 0;
 				if (bg != null)
 				{
-					bg.Draw(graphics, x + (int) ((width - bg.MinWidth) * 0.5f), y, bg.MinWidth, height, color);
+					bg.Draw(batcher, x + (int) ((width - bg.MinWidth) * 0.5f), y, bg.MinWidth, height, color);
 					bgTopHeight = bg.TopHeight;
 					positionHeight -= bgTopHeight + bg.BottomHeight;
 				}
@@ -234,19 +234,19 @@ namespace Nez.UI
 					float offset = 0;
 					if (bg != null)
 						offset = bgTopHeight;
-					knobBefore.Draw(graphics, x + ((width - knobBefore.MinWidth) * 0.5f), y + offset,
+					knobBefore.Draw(batcher, x + ((width - knobBefore.MinWidth) * 0.5f), y + offset,
 						knobBefore.MinWidth,
 						(int) (position + knobHeightHalf), color);
 				}
 
 				if (knobAfter != null)
 				{
-					knobAfter.Draw(graphics, x + ((width - knobAfter.MinWidth) * 0.5f), y + position + knobHeightHalf,
+					knobAfter.Draw(batcher, x + ((width - knobAfter.MinWidth) * 0.5f), y + position + knobHeightHalf,
 						knobAfter.MinWidth, height - position - knobHeightHalf, color);
 				}
 
 				if (knob != null)
-					knob.Draw(graphics, x + (int) ((width - knobWidth) * 0.5f), (int) (y + position), knobWidth,
+					knob.Draw(batcher, x + (int) ((width - knobWidth) * 0.5f), (int) (y + position), knobWidth,
 						knobHeight, color);
 			}
 			else
@@ -256,7 +256,7 @@ namespace Nez.UI
 				float bgLeftWidth = 0;
 				if (bg != null)
 				{
-					bg.Draw(graphics, x, y + (int) ((height - bg.MinHeight) * 0.5f), width, bg.MinHeight, color);
+					bg.Draw(batcher, x, y + (int) ((height - bg.MinHeight) * 0.5f), width, bg.MinHeight, color);
 					bgLeftWidth = bg.LeftWidth;
 					positionWidth -= bgLeftWidth + bg.RightWidth;
 				}
@@ -285,19 +285,19 @@ namespace Nez.UI
 					float offset = 0;
 					if (bg != null)
 						offset = bgLeftWidth;
-					knobBefore.Draw(graphics, x + offset, y + (int) ((height - knobBefore.MinHeight) * 0.5f),
+					knobBefore.Draw(batcher, x + offset, y + (int) ((height - knobBefore.MinHeight) * 0.5f),
 						(int) (position + knobWidthHalf), knobBefore.MinHeight, color);
 				}
 
 				if (knobAfter != null)
 				{
-					knobAfter.Draw(graphics, x + (int) (position + knobWidthHalf),
+					knobAfter.Draw(batcher, x + (int) (position + knobWidthHalf),
 						y + (int) ((height - knobAfter.MinHeight) * 0.5f),
 						width - (int) (position + knobWidthHalf), knobAfter.MinHeight, color);
 				}
 
 				if (knob != null)
-					knob.Draw(graphics, (int) (x + position), (int) (y + (height - knobHeight) * 0.5f), knobWidth,
+					knob.Draw(batcher, (int) (x + position), (int) (y + (height - knobHeight) * 0.5f), knobWidth,
 						knobHeight, color);
 			}
 		}

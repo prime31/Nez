@@ -401,10 +401,10 @@ namespace Nez
 		/// <summary>
 		/// called if Core.debugRenderEnabled is true by the default renderers. Custom renderers can choose to call it or not.
 		/// </summary>
-		/// <param name="graphics">Graphics.</param>
-		public virtual void DebugRender(Graphics graphics)
+		/// <param name="batcher">Batcher.</param>
+		public virtual void DebugRender(Batcher batcher)
 		{
-			Components.DebugRender(graphics);
+			Components.DebugRender(batcher);
 		}
 
 		#endregion

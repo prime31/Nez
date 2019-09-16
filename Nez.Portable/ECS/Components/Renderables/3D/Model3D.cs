@@ -54,10 +54,10 @@ namespace Nez3D
 			return this;
 		}
 
-		public override void Render(Graphics graphics, Camera camera)
+		public override void Render(Batcher batcher, Camera camera)
 		{
 			// flush the 2D batch so we render appropriately depth-wise
-			graphics.Batcher.FlushBatch();
+			batcher.FlushBatch();
 
 			Core.GraphicsDevice.BlendState = BlendState.Opaque;
 			Core.GraphicsDevice.DepthStencilState = DepthStencilState.Default;

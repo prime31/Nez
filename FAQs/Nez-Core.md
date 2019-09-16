@@ -4,11 +4,15 @@ The root class in the Nez world is the Core class which is a subclass of the Gam
 
 
 ## Graphics
-Nez will create an instance of the Graphics class (available via `Graphics.Instance``) for you at startup. It includes a default BitmapFont so you can be up and running right away with good looking text (MonoGames SpriteFont has some terrible compression going on) and should cover most of your rendering needs. Graphics provides direct access to a SpriteBatch and there is a SpriteBatch extension class with a bunch of helpers for drawing rectangles, circles, lines, etc.
+Nez will create an instance of the Graphics class (available via `Graphics.Instance`) for you at startup. It includes a default BitmapFont so you can be up and running right away with good looking text (MonoGames SpriteFont has some terrible compression going on) and should cover most of your rendering needs. Graphics provides direct access to a SpriteBatch and there is a SpriteBatch extension class with a bunch of helpers for drawing rectangles, circles, lines, etc.
 
 
 ## Scene
 When you set Core.scene to a new Scene, Nez will finish rendering the current Scene, fire off the `CoreEvents.SceneChanged` event and then start rendering the new Scene. For more information on Scenes see the [Scene-Entity-Component](Scene-Entity-Component.md) FAQ.
+
+
+## Sprites
+You can't make a 2D game without sprites. Nez provides 
 
 
 ## Physics

@@ -56,7 +56,7 @@ namespace Nez
 				{
 					var renderable = renderables.Buffer[j];
 					if (renderable.Enabled && renderable.IsVisibleFromCamera(cam))
-						renderable.DebugRender(Graphics.Instance);
+						renderable.DebugRender(Graphics.Instance.Batcher);
 				}
 			}
 

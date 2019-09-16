@@ -5,7 +5,7 @@ namespace Nez
 	public class RenderableComponentList
 	{
 		// global updateOrder sort for the IRenderable lists
-		public static IComparer<IRenderable> CompareUpdatableOrder = new IRenderableComparer();
+		public static IComparer<IRenderable> CompareUpdatableOrder = new RenderableComparer();
 
 		/// <summary>
 		/// list of components added to the entity

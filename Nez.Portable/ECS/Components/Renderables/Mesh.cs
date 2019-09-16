@@ -230,7 +230,7 @@ namespace Nez
 			_basicEffect = null;
 		}
 
-		public override void Render(Graphics graphics, Camera camera)
+		public override void Render(Batcher batcher, Camera camera)
 		{
 			if (_verts == null)
 				return;

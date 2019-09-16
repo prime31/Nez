@@ -57,15 +57,15 @@ namespace Nez
 		}
 
 
-		public override void Render(Graphics graphics, Camera camera)
+		public override void Render(Batcher batcher, Camera camera)
 		{
-			Stage.Render(graphics, camera);
+			Stage.Render(batcher, camera);
 		}
 
 
-		public override void DebugRender(Graphics graphics)
+		public override void DebugRender(Batcher batcher)
 		{
-			Stage.GetRoot().DebugRender(graphics);
+			Stage.GetRoot().DebugRender(batcher);
 		}
 
 

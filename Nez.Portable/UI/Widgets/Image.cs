@@ -64,7 +64,7 @@ namespace Nez.UI
 
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		/// <param name="alignment">Alignment.</param>
 		public Image SetAlignment(Align alignment)
@@ -83,7 +83,7 @@ namespace Nez.UI
 		#endregion
 
 
-		public override void Draw(Graphics graphics, float parentAlpha)
+		public override void Draw(Batcher batcher, float parentAlpha)
 		{
 			Validate();
 
@@ -100,8 +100,7 @@ namespace Nez.UI
 			//				}
 			//			}
 
-			if (_drawable != null)
-				_drawable.Draw(graphics, x + imageX, y + imageY, imageWidth * scaleX, imageHeight * scaleY, col);
+			_drawable?.Draw(batcher, x + imageX, y + imageY, imageWidth * scaleX, imageHeight * scaleY, col);
 		}
 
 

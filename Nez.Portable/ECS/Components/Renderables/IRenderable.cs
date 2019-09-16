@@ -18,28 +18,24 @@ namespace Nez
 		/// <summary>
 		/// whether this IRenderable should be rendered or not
 		/// </summary>
-		/// <value><c>true</c> if enabled; otherwise, <c>false</c>.</value>
 		bool Enabled { get; set; }
 
 		/// <summary>
 		/// standard Batcher layerdepth. 0 is in front and 1 is in back. Changing this value will trigger a sort of the renderableComponents
-		/// list on the scene. 
+		/// list on the scene.
 		/// </summary>
-		/// <value>The layer depth.</value>
 		float LayerDepth { get; set; }
 
 		/// <summary>
 		/// lower renderLayers are in the front and higher are in the back, just like layerDepth but not clamped to 0-1. Note that this means
 		/// higher renderLayers are sent to the Batcher first. An important fact when using the stencil buffer.
 		/// </summary>
-		/// <value>The render layer.</value>
 		int RenderLayer { get; set; }
 
 		/// <summary>
 		/// used by Renderers to specify how this sprite should be rendered. If non-null, it is automatically disposed of when the Component
 		/// is removed from the Entity.
 		/// </summary>
-		/// <value>The material.</value>
 		Material Material { get; set; }
 
 		/// <summary>
@@ -52,8 +48,6 @@ namespace Nez
 		/// <summary>
 		/// helper for retrieving a Material subclass already casted
 		/// </summary>
-		/// <returns>The material.</returns>
-		/// <typeparam name="T">The 1st type parameter.</typeparam>
 		T GetMaterial<T>() where T : Material;
 
 		/// <summary>
@@ -61,21 +55,17 @@ namespace Nez
 		/// in your render method to see decide if you should render or not.
 		/// </summary>
 		/// <returns><c>true</c>, if visible from camera was ised, <c>false</c> otherwise.</returns>
-		/// <param name="camera">Camera.</param>
 		bool IsVisibleFromCamera(Camera camera);
 
 		/// <summary>
-		/// called by a Renderer. The Camera can be used for culling and the Graphics instance to draw with.
+		/// called by a Renderer. The Camera can be used for culling and the Batcher instance to draw with.
 		/// </summary>
-		/// <param name="graphics">Graphics.</param>
-		/// <param name="camera">Camera.</param>
-		void Render(Graphics graphics, Camera camera);
+		void Render(Batcher batcher, Camera camera);
 
 		/// <summary>
 		/// renders the bounds only if there is no collider. Always renders a square on the origin.
 		/// </summary>
-		/// <param name="graphics">Graphics.</param>
-		void DebugRender(Graphics graphics);
+		void DebugRender(Batcher batcher);
 	}
 
 
@@ -83,7 +73,7 @@ namespace Nez
 	/// Comparer for sorting IRenderables. Sorts first by RenderLayer, then LayerDepth. If there is a tie Materials
 	/// are used for the tie-breaker to avoid render state changes.
 	/// </summary>
-	public class IRenderableComparer : IComparer<IRenderable>
+	public class RenderableComparer : IComparer<IRenderable>
 	{
 		public int Compare(IRenderable self, IRenderable other)
 		{

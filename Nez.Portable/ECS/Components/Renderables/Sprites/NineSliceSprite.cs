@@ -71,7 +71,7 @@ namespace Nez
 		{
 		}
 
-		public override void Render(Graphics graphics, Camera camera)
+		public override void Render(Batcher batcher, Camera camera)
 		{
 			if (_destRectsDirty)
 			{
@@ -88,7 +88,7 @@ namespace Nez
 				var dest = _destRects[i];
 				dest.X += pos.X;
 				dest.Y += pos.Y;
-				graphics.Batcher.Draw(Sprite, dest, Sprite.NinePatchRects[i], Color);
+				batcher.Draw(Sprite, dest, Sprite.NinePatchRects[i], Color);
 			}
 		}
 	}

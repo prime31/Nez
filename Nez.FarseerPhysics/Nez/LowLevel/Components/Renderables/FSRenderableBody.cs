@@ -78,9 +78,9 @@ namespace Nez.Farseer
 		}
 
 
-		public override void Render(Graphics graphics, Camera camera)
+		public override void Render(Batcher batcher, Camera camera)
 		{
-			graphics.Batcher.Draw(Sprite, Transform.Position, Sprite.SourceRect, Color, Transform.Rotation,
+			batcher.Draw(Sprite, Transform.Position, Sprite.SourceRect, Color, Transform.Rotation,
 				Sprite.Center, Transform.Scale, SpriteEffects.None, _layerDepth);
 		}
 

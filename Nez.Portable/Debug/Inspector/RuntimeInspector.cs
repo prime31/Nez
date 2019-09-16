@@ -90,7 +90,7 @@ namespace Nez
 			// manually start a fresh batch and call the UICanvas Component lifecycle methods since it isnt attached to the Scene
 			Graphics.Instance.Batcher.Begin();
 			(ui as IUpdatable).Update();
-			ui.Render(Graphics.Instance, _camera);
+			ui.Render(Graphics.Instance.Batcher, _camera);
 			Graphics.Instance.Batcher.End();
 		}
 
@@ -102,7 +102,7 @@ namespace Nez
 		/// <param name="comp">Comp.</param>
 		InspectorList GetOrCreateInspectorList(object comp)
 		{
-			var inspector = _inspectors.Where(i => i.Target == comp).FirstOrDefault();
+			var inspector = _inspectors.FirstOrDefault(i => i.Target == comp);
 			if (inspector == null)
 			{
 				inspector = new InspectorList(comp);

@@ -326,12 +326,12 @@ namespace Nez
 				_components.Buffer[i].OnDisabled();
 		}
 
-		internal void DebugRender(Graphics graphics)
+		internal void DebugRender(Batcher batcher)
 		{
 			for (var i = 0; i < _components.Length; i++)
 			{
 				if (_components.Buffer[i].Enabled)
-					_components.Buffer[i].DebugRender(graphics);
+					_components.Buffer[i].DebugRender(batcher);
 			}
 		}
 	}

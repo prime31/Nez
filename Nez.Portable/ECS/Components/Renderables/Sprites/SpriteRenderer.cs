@@ -158,15 +158,15 @@ namespace Nez.Sprites
 		/// Draws the Renderable with an outline. Note that this should be called on disabled Renderables since they shouldnt take part in default
 		/// rendering if they need an ouline.
 		/// </summary>
-		/// <param name="graphics">Graphics.</param>
+		/// <param name="batcher">Batcher.</param>
 		/// <param name="camera">Camera.</param>
 		/// <param name="offset">Offset.</param>
-		public void DrawOutline(Graphics graphics, Camera camera, int offset = 1)
+		public void DrawOutline(Batcher batcher, Camera camera, int offset = 1)
 		{
-			DrawOutline(graphics, camera, Color.Black, offset);
+			DrawOutline(batcher, camera, Color.Black, offset);
 		}
 
-		public void DrawOutline(Graphics graphics, Camera camera, Color outlineColor, int offset = 1)
+		public void DrawOutline(Batcher batcher, Camera camera, Color outlineColor, int offset = 1)
 		{
 			// save the stuff we are going to modify so we can restore it later
 			var originalPosition = _localOffset;
@@ -184,7 +184,7 @@ namespace Nez.Sprites
 					if (i != 0 || j != 0)
 					{
 						_localOffset = originalPosition + new Vector2(i * offset, j * offset);
-						Render(graphics, camera);
+						Render(batcher, camera);
 					}
 				}
 			}
@@ -195,9 +195,9 @@ namespace Nez.Sprites
 			_layerDepth = originalLayerDepth;
 		}
 
-		public override void Render(Graphics graphics, Camera camera)
+		public override void Render(Batcher batcher, Camera camera)
 		{
-			graphics.Batcher.Draw(Sprite, Entity.Transform.Position + LocalOffset, Color,
+			batcher.Draw(Sprite, Entity.Transform.Position + LocalOffset, Color,
 				Entity.Transform.Rotation, Origin, Entity.Transform.Scale, SpriteEffects, _layerDepth);
 		}
 	}

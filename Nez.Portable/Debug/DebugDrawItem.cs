@@ -111,29 +111,29 @@ namespace Nez
 		/// <summary>
 		/// returns true if we are done with this debug draw item
 		/// </summary>
-		public bool Draw(Graphics graphics)
+		public bool Draw(Batcher batcher)
 		{
 			switch (drawType)
 			{
 				case DebugDrawType.Line:
-					graphics.Batcher.DrawLine(Start, End, Color);
+					batcher.DrawLine(Start, End, Color);
 					break;
 				case DebugDrawType.HollowRectangle:
-					graphics.Batcher.DrawHollowRect(Rectangle, Color);
+					batcher.DrawHollowRect(Rectangle, Color);
 					break;
 				case DebugDrawType.Pixel:
-					graphics.Batcher.DrawPixel(X, Y, Color, Size);
+					batcher.DrawPixel(X, Y, Color, Size);
 					break;
 				case DebugDrawType.BitmapFontText:
-					graphics.Batcher.DrawString(BitmapFont, Text, Position, Color, 0f, Vector2.Zero, Scale,
+					batcher.DrawString(BitmapFont, Text, Position, Color, 0f, Vector2.Zero, Scale,
 						SpriteEffects.None, 0f);
 					break;
 				case DebugDrawType.SpriteFontText:
-					graphics.Batcher.DrawString(SpriteFont, Text, Position, Color, 0f, Vector2.Zero, new Vector2(Scale),
+					batcher.DrawString(SpriteFont, Text, Position, Color, 0f, Vector2.Zero, new Vector2(Scale),
 						SpriteEffects.None, 0f);
 					break;
 				case DebugDrawType.ConsoleText:
-					graphics.Batcher.DrawString(BitmapFont, Text, Position, Color, 0f, Vector2.Zero, Scale,
+					batcher.DrawString(BitmapFont, Text, Position, Color, 0f, Vector2.Zero, Scale,
 						SpriteEffects.None, 0f);
 					break;
 			}

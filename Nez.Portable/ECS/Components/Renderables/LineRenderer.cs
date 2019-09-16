@@ -826,7 +826,7 @@ namespace Nez
 		}
 
 
-		public override void Render(Graphics graphics, Camera camera)
+		public override void Render(Batcher batcher, Camera camera)
 		{
 			if (_points.Length < 2)
 				return;
@@ -845,15 +845,15 @@ namespace Nez
 		}
 
 
-		public override void DebugRender(Graphics graphics)
+		public override void DebugRender(Batcher batcher)
 		{
 			for (var i = 0; i < _vertices.Length; i++)
 			{
 				var v = _vertices[i];
-				graphics.Batcher.DrawPixel(v.Position.X, v.Position.Y, Color.GhostWhite, 4);
+				batcher.DrawPixel(v.Position.X, v.Position.Y, Color.GhostWhite, 4);
 			}
 
-			graphics.Batcher.DrawHollowRect(_bounds, Debug.Colors.ColliderBounds);
+			batcher.DrawHollowRect(_bounds, Debug.Colors.ColliderBounds);
 		}
 
 		#endregion

@@ -83,12 +83,12 @@ namespace Nez.UI
 		public SpriteDrawable(Texture2D texture) : this(new Sprite(texture))
 		{ }
 
-		public virtual void Draw(Graphics graphics, float x, float y, float width, float height, Color color)
+		public virtual void Draw(Batcher batcher, float x, float y, float width, float height, Color color)
 		{
 			if (TintColor.HasValue)
 				color = color.Multiply(TintColor.Value);
 
-			graphics.Batcher.Draw(Sprite, new Rectangle((int) x, (int) y, (int) width, (int) height),
+			batcher.Draw(Sprite, new Rectangle((int) x, (int) y, (int) width, (int) height),
 				Sprite.SourceRect, color, SpriteEffects);
 		}
 

@@ -203,7 +203,7 @@ namespace Nez.Particles
 		}
 
 
-		public override void Render(Graphics graphics, Camera camera)
+		public override void Render(Batcher batcher, Camera camera)
 		{
 			// we still render when we are paused
 			if (!_active && !_isPaused)
@@ -218,11 +218,11 @@ namespace Nez.Particles
 				var pos = _emitterConfig.SimulateInWorldSpace ? currentParticle.spawnPosition : rootPosition;
 
 				if (_emitterConfig.Sprite == null)
-					graphics.Batcher.Draw(graphics.PixelTexture, pos + currentParticle.position, currentParticle.color,
+					batcher.Draw(Graphics.Instance.PixelTexture, pos + currentParticle.position, currentParticle.color,
 						currentParticle.rotation, Vector2.One, currentParticle.particleSize * 0.5f, SpriteEffects.None,
 						LayerDepth);
 				else
-					graphics.Batcher.Draw(_emitterConfig.Sprite, pos + currentParticle.position,
+					batcher.Draw(_emitterConfig.Sprite, pos + currentParticle.position,
 						currentParticle.color, currentParticle.rotation, _emitterConfig.Sprite.Center,
 						currentParticle.particleSize / _emitterConfig.Sprite.SourceRect.Width, SpriteEffects.None,
 						LayerDepth);

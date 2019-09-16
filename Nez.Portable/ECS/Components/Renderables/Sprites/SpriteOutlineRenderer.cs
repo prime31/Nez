@@ -49,10 +49,10 @@ namespace Nez
 			_sprite.OnEntityTransformChanged(comp);
 		}
 
-		public override void Render(Graphics graphics, Camera camera)
+		public override void Render(Batcher batcher, Camera camera)
 		{
-			_sprite.DrawOutline(graphics, camera, OutlineColor, OutlineWidth);
-			_sprite.Render(graphics, camera);
+			_sprite.DrawOutline(batcher, camera, OutlineColor, OutlineWidth);
+			_sprite.Render(batcher, camera);
 		}
 	}
 }

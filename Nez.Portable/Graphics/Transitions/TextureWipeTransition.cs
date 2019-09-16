@@ -115,20 +115,20 @@ namespace Nez
 			Core.Content.UnloadEffect(_textureWipeEffect);
 		}
 
-		public override void Render(Graphics graphics)
+		public override void Render(Batcher batcher)
 		{
 			GraphicsDeviceExt.SetRenderTarget(Core.GraphicsDevice, null);
-			graphics.Batcher.Begin(BlendState.AlphaBlend, Core.DefaultSamplerState, DepthStencilState.None, null,
+			batcher.Begin(BlendState.AlphaBlend, Core.DefaultSamplerState, DepthStencilState.None, null,
 				_textureWipeEffect);
 
 			// we only render the previousSceneRender until we load up the new Scene
 			if (!_isNewSceneLoaded)
-				graphics.Batcher.Draw(PreviousSceneRender, _destinationRect, Color.White);
+				batcher.Draw(PreviousSceneRender, _destinationRect, Color.White);
 			else
-				graphics.Batcher.Draw(_overlayTexture, new Rectangle(0, 0, Screen.Width, Screen.Height),
+				batcher.Draw(_overlayTexture, new Rectangle(0, 0, Screen.Width, Screen.Height),
 					Color.Transparent);
 
-			graphics.Batcher.End();
+			batcher.End();
 		}
 	}
 }

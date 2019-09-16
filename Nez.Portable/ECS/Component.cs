@@ -84,7 +84,7 @@ namespace Nez
 		public virtual void OnEntityTransformChanged(Transform.Component comp)
 		{ }
 
-		public virtual void DebugRender(Graphics graphics)
+		public virtual void DebugRender(Batcher batcher)
 		{ }
 
 		/// <summary>

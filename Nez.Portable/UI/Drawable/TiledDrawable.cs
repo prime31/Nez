@@ -11,16 +11,14 @@ namespace Nez.UI
 	public class TiledDrawable : SpriteDrawable
 	{
 		public TiledDrawable(Sprite sprite) : base(sprite)
-		{
-		}
+		{ }
 
 
 		public TiledDrawable(Texture2D texture) : base(new Sprite(texture))
-		{
-		}
+		{ }
 
 
-		public override void Draw(Graphics graphics, float x, float y, float width, float height, Color color)
+		public override void Draw(Batcher batcher, float x, float y, float width, float height, Color color)
 		{
 			float regionWidth = Sprite.SourceRect.Width, regionHeight = Sprite.SourceRect.Height;
 			int fullX = (int) (width / regionWidth), fullY = (int) (height / regionHeight);
@@ -33,7 +31,7 @@ namespace Nez.UI
 				y = startY;
 				for (var j = 0; j < fullY; j++)
 				{
-					graphics.Batcher.Draw(Sprite, new Vector2(x, y), Sprite.SourceRect, color);
+					batcher.Draw(Sprite, new Vector2(x, y), Sprite.SourceRect, color);
 					y += regionHeight;
 				}
 
@@ -48,14 +46,14 @@ namespace Nez.UI
 				y = startY;
 				for (var ii = 0; ii < fullY; ii++)
 				{
-					graphics.Batcher.Draw(Sprite, new Vector2(x, y), tempSourceRect, color);
+					batcher.Draw(Sprite, new Vector2(x, y), tempSourceRect, color);
 					y += regionHeight;
 				}
 
 				// lower right corner.
 				tempSourceRect.Height = (int) remainingY;
 				if (remainingY > 0)
-					graphics.Batcher.Draw(Sprite, new Vector2(x, y), tempSourceRect, color);
+					batcher.Draw(Sprite, new Vector2(x, y), tempSourceRect, color);
 			}
 
 			tempSourceRect.Width = Sprite.SourceRect.Width;
@@ -66,7 +64,7 @@ namespace Nez.UI
 				x = startX;
 				for (var i = 0; i < fullX; i++)
 				{
-					graphics.Batcher.Draw(Sprite, new Vector2(x, y), tempSourceRect, color);
+					batcher.Draw(Sprite, new Vector2(x, y), tempSourceRect, color);
 					x += regionWidth;
 				}
 			}

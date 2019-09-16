@@ -30,9 +30,9 @@
 				_spriteToMime = this.GetComponent<SpriteRenderer>();
 		}
 
-		public override void Render(Graphics graphics, Camera camera)
+		public override void Render(Batcher batcher, Camera camera)
 		{
-			graphics.Batcher.Draw(_spriteToMime.Sprite, Entity.Transform.Position + _localOffset, Color,
+			batcher.Draw(_spriteToMime.Sprite, Entity.Transform.Position + _localOffset, Color,
 				Entity.Transform.Rotation, _spriteToMime.Origin, Entity.Transform.Scale, _spriteToMime.SpriteEffects,
 				_layerDepth);
 		}

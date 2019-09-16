@@ -536,7 +536,7 @@ namespace Nez.Analysis
 			if (!ShowLog)
 				return;
 
-			// Gets Batcher, SpriteFont, and WhiteTexture from Graphics.
+			// Gets Batcher, SpriteFont, and WhiteTexture from Batcher.
 			var batcher = Graphics.Instance.Batcher;
 			var font = Graphics.Instance.BitmapFont;
 

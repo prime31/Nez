@@ -195,7 +195,7 @@ namespace Nez
 		}
 
 
-		public override void Render(Graphics graphics, Camera camera)
+		public override void Render(Batcher batcher, Camera camera)
 		{
 			CalculateVertices();
 			_basicEffect.Projection = camera.ProjectionMatrix;

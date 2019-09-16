@@ -130,15 +130,15 @@ namespace Nez
 		#endregion
 
 
-		public override void DebugRender(Graphics graphics)
+		public override void DebugRender(Batcher batcher)
 		{
 			var poly = Shape as Polygon;
-			graphics.Batcher.DrawHollowRect(Bounds, Debug.Colors.ColliderBounds, Debug.Size.LineSizeMultiplier);
-			graphics.Batcher.DrawPolygon(Shape.position, poly.Points, Debug.Colors.ColliderEdge, true,
+			batcher.DrawHollowRect(Bounds, Debug.Colors.ColliderBounds, Debug.Size.LineSizeMultiplier);
+			batcher.DrawPolygon(Shape.position, poly.Points, Debug.Colors.ColliderEdge, true,
 				Debug.Size.LineSizeMultiplier);
-			graphics.Batcher.DrawPixel(Entity.Transform.Position, Debug.Colors.ColliderPosition,
+			batcher.DrawPixel(Entity.Transform.Position, Debug.Colors.ColliderPosition,
 				4 * Debug.Size.LineSizeMultiplier);
-			graphics.Batcher.DrawPixel(Entity.Transform.Position + Shape.center, Debug.Colors.ColliderCenter,
+			batcher.DrawPixel(Entity.Transform.Position + Shape.center, Debug.Colors.ColliderCenter,
 				2 * Debug.Size.LineSizeMultiplier);
 		}
 

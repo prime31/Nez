@@ -50,7 +50,7 @@ namespace Nez.UI
 		}
 
 
-		public override void Draw(Graphics graphics, float parentAlpha)
+		public override void Draw(Batcher batcher, float parentAlpha)
 		{
 			IDrawable checkbox = null;
 			if (_isDisabled)
@@ -72,7 +72,7 @@ namespace Nez.UI
 			}
 
 			image.SetDrawable(checkbox);
-			base.Draw(graphics, parentAlpha);
+			base.Draw(batcher, parentAlpha);
 		}
 
 

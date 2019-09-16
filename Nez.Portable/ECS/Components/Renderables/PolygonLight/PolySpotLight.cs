@@ -120,10 +120,10 @@ namespace Nez.Shadows
 			RecalculatePolyPoints();
 		}
 
-		public override void DebugRender(Graphics graphics)
+		public override void DebugRender(Batcher batcher)
 		{
-			base.DebugRender(graphics);
-			graphics.Batcher.DrawPolygon(_polygon.position, _polygon.Points, Debug.Colors.ColliderEdge, true,
+			base.DebugRender(batcher);
+			batcher.DrawPolygon(_polygon.position, _polygon.Points, Debug.Colors.ColliderEdge, true,
 				Debug.Size.LineSizeMultiplier);
 		}
 

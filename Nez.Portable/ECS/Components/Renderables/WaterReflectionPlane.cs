@@ -47,14 +47,14 @@ namespace Nez
 			_texture.Dispose();
 		}
 
-		public override void Render(Graphics graphics, Camera camera)
+		public override void Render(Batcher batcher, Camera camera)
 		{
 			// we need to send the top of of the plane to the Effect
 			var screenSpaceTop = Entity.Scene.Camera.WorldToScreenPoint(Entity.Transform.Position);
 			_waterReflectionMaterial.Effect.ScreenSpaceVerticalOffset =
 				screenSpaceTop.Y / Entity.Scene.SceneRenderTargetSize.Y;
 
-			graphics.Batcher.Draw(_texture, Bounds, new Rectangle(0, 0, 1, 1), Color);
+			batcher.Draw(_texture, Bounds, new Rectangle(0, 0, 1, 1), Color);
 		}
 	}
 }

@@ -65,7 +65,7 @@ namespace Nez.UI
 		}
 
 
-		public virtual void Draw(Graphics graphics, float x, float y, float width, float height, Color color)
+		public virtual void Draw(Batcher batcher, float x, float y, float width, float height, Color color)
 		{
 			var col = Color.HasValue ? Color.Value : color;
 			if (color.A != 255)
@@ -74,9 +74,9 @@ namespace Nez.UI
 				col *= (col.A / 255f);
 
 			if (UseFilledRect)
-				graphics.Batcher.DrawRect(x, y, width, height, col);
+				batcher.DrawRect(x, y, width, height, col);
 			else
-				graphics.Batcher.DrawHollowRect(x, y, width, height, col);
+				batcher.DrawHollowRect(x, y, width, height, col);
 		}
 	}
 }

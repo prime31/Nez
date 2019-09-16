@@ -9,7 +9,7 @@ namespace Nez.UI
 	/// The drawable sizes are set when the ninepatch is set, but they are separate values. Eg, {@link Drawable#getLeftWidth()} could
 	/// be set to more than {@link NinePatch#getLeftWidth()} in order to provide more space on the left than actually exists in the
 	/// ninepatch.
-	/// 
+	///
 	/// The min size is set to the ninepatch total size by default. It could be set to the left+right and top+bottom, excluding the
 	/// middle size, to allow the drawable to be sized down as small as possible.
 	/// </summary>
@@ -94,14 +94,12 @@ namespace Nez.UI
 		/// <param name="bottom">Bottom.</param>
 		public NinePatchDrawable(Texture2D texture, int left, int right, int top, int bottom) : this(
 			new NinePatchSprite(texture, left, right, top, bottom))
-		{
-		}
+		{ }
 
 
 		public NinePatchDrawable(Sprite sprite, int left, int right, int top, int bottom) : this(
 			new NinePatchSprite(sprite.Texture2D, sprite.SourceRect, left, right, top, bottom))
-		{
-		}
+		{ }
 
 
 		/// <summary>
@@ -120,7 +118,7 @@ namespace Nez.UI
 		}
 
 
-		public void Draw(Graphics graphics, float x, float y, float width, float height, Color color)
+		public void Draw(Batcher batcher, float x, float y, float width, float height, Color color)
 		{
 			if (TintColor.HasValue)
 				color = color.Multiply(TintColor.Value);
@@ -143,7 +141,7 @@ namespace Nez.UI
 				var dest = _destRects[i];
 				dest.X += (int) x;
 				dest.Y += (int) y;
-				graphics.Batcher.Draw(_sprite, dest, _sprite.NinePatchRects[i], color);
+				batcher.Draw(_sprite, dest, _sprite.NinePatchRects[i], color);
 			}
 		}
 

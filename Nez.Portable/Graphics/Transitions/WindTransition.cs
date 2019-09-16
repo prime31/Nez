@@ -75,13 +75,13 @@ namespace Nez
 		}
 
 
-		public override void Render(Graphics graphics)
+		public override void Render(Batcher batcher)
 		{
 			GraphicsDeviceExt.SetRenderTarget(Core.GraphicsDevice, null);
-			graphics.Batcher.Begin(BlendState.NonPremultiplied, Core.DefaultSamplerState, DepthStencilState.None, null,
+			batcher.Begin(BlendState.NonPremultiplied, Core.DefaultSamplerState, DepthStencilState.None, null,
 				_windEffect);
-			graphics.Batcher.Draw(PreviousSceneRender, _destinationRect, Color.White);
-			graphics.Batcher.End();
+			batcher.Draw(PreviousSceneRender, _destinationRect, Color.White);
+			batcher.End();
 		}
 	}
 }

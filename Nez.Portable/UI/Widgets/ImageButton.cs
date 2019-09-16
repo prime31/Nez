@@ -22,25 +22,21 @@
 		}
 
 		public ImageButton(Skin skin, string styleName = null) : this(skin.Get<ImageButtonStyle>(styleName))
-		{
-		}
+		{ }
 
 
 		public ImageButton(IDrawable imageUp) : this(new ImageButtonStyle(null, null, null, imageUp, null, null))
-		{
-		}
+		{ }
 
 
 		public ImageButton(IDrawable imageUp, IDrawable imageDown) : this(new ImageButtonStyle(null, null, null,
 			imageUp, imageDown, null))
-		{
-		}
+		{ }
 
 
 		public ImageButton(IDrawable imageUp, IDrawable imageDown, IDrawable imageOver) : this(
 			new ImageButtonStyle(null, null, null, imageUp, imageDown, imageOver))
-		{
-		}
+		{ }
 
 
 		public override void SetStyle(ButtonStyle style)
@@ -90,10 +86,10 @@
 		}
 
 
-		public override void Draw(Graphics graphics, float parentAlpha)
+		public override void Draw(Batcher batcher, float parentAlpha)
 		{
 			UpdateImage();
-			base.Draw(graphics, parentAlpha);
+			base.Draw(batcher, parentAlpha);
 		}
 	}
 
@@ -105,8 +101,7 @@
 
 
 		public ImageButtonStyle()
-		{
-		}
+		{ }
 
 
 		public ImageButtonStyle(IDrawable up, IDrawable down, IDrawable checkked, IDrawable imageUp,

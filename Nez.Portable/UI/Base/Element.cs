@@ -33,9 +33,9 @@ namespace Nez.UI
 		/// <summary>
 		/// If this method is overridden, the super method or {@link #validate()} should be called to ensure the widget is laid out.
 		/// </summary>
-		/// <param name="graphics">Graphics.</param>
+		/// <param name="batcher">Batcher.</param>
 		/// <param name="parentAlpha">Parent alpha.</param>
-		public virtual void Draw(Graphics graphics, float parentAlpha)
+		public virtual void Draw(Batcher batcher, float parentAlpha)
 		{
 			Validate();
 		}
@@ -48,13 +48,11 @@ namespace Nez.UI
 
 
 		protected virtual void PositionChanged()
-		{
-		}
+		{ }
 
 
 		protected virtual void RotationChanged()
-		{
-		}
+		{ }
 
 
 		#region Getters/Setters
@@ -820,11 +818,11 @@ namespace Nez.UI
 		/// <summary>
 		/// Draws this element's debug lines
 		/// </summary>
-		/// <param name="graphics">Graphics.</param>
-		public virtual void DebugRender(Graphics graphics)
+		/// <param name="batcher">Batcher.</param>
+		public virtual void DebugRender(Batcher batcher)
 		{
 			if (_debug)
-				graphics.Batcher.DrawHollowRect(x, y, width, height, Color.Red);
+				batcher.DrawHollowRect(x, y, width, height, Color.Red);
 		}
 
 
@@ -902,8 +900,7 @@ namespace Nez.UI
 
 
 		public virtual void Layout()
-		{
-		}
+		{ }
 
 
 		public virtual void Invalidate()

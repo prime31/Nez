@@ -123,15 +123,15 @@ namespace Nez
 		/// <summary>
 		/// renders the MarkupText
 		/// </summary>
-		/// <param name="graphics">Graphics.</param>
+		/// <param name="batcher">Batcher.</param>
 		/// <param name="camera">Camera.</param>
-		public override void Render(Graphics graphics, Camera camera)
+		public override void Render(Batcher batcher, Camera camera)
 		{
 			if (_compiledMarkup == null)
 				return;
 
 			for (var i = 0; i < _compiledMarkup.Count; i++)
-				_compiledMarkup[i].Render(graphics, Transform.Position + _localOffset);
+				_compiledMarkup[i].Render(batcher, Transform.Position + _localOffset);
 		}
 
 
@@ -507,7 +507,7 @@ namespace Nez
 	{
 		Vector2 Size { get; }
 		Vector2 Position { get; set; }
-		void Render(Graphics graphics, Vector2 offset);
+		void Render(Batcher batcher, Vector2 offset);
 	}
 
 
@@ -529,10 +529,10 @@ namespace Nez
 		}
 
 
-		public void Render(Graphics graphics, Vector2 offset)
+		public void Render(Batcher batcher, Vector2 offset)
 		{
 			var origin = new Vector2(0, Size.Y / (2 * _formatInstruction.Scale.Y));
-			graphics.Batcher.DrawString(_formatInstruction.Font, _text, offset + Position, _formatInstruction.Color, 0,
+			batcher.DrawString(_formatInstruction.Font, _text, offset + Position, _formatInstruction.Color, 0,
 				origin, _formatInstruction.Scale, SpriteEffects.None, 0);
 		}
 	}
@@ -558,10 +558,10 @@ namespace Nez
 		}
 
 
-		public void Render(Graphics graphics, Vector2 offset)
+		public void Render(Batcher batcher, Vector2 offset)
 		{
 			var origin = new Vector2(0, _image.Height / 2f);
-			graphics.Batcher.Draw(_image, offset + Position, null, _color, 0, origin, _scale, SpriteEffects.None, 0);
+			batcher.Draw(_image, offset + Position, null, _color, 0, origin, _scale, SpriteEffects.None, 0);
 		}
 	}
 

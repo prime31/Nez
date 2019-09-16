@@ -86,9 +86,9 @@ namespace Nez.Sprites
 
 
 			[MethodImpl(MethodImplOptions.AggressiveInlining)]
-			public void Render(Graphics graphics, Camera camera)
+			public void Render(Batcher batcher, Camera camera)
 			{
-				graphics.Batcher.Draw(_sprite, Position, _renderColor, _rotation, _origin, _scale, _spriteEffects,
+				batcher.Draw(_sprite, Position, _renderColor, _rotation, _origin, _scale, _spriteEffects,
 					_layerDepth);
 			}
 		}
@@ -332,10 +332,10 @@ namespace Nez.Sprites
 			_liveSpriteTrailInstances.Add(instance);
 		}
 
-		public override void Render(Graphics graphics, Camera camera)
+		public override void Render(Batcher batcher, Camera camera)
 		{
 			for (var i = 0; i < _liveSpriteTrailInstances.Count; i++)
-				_liveSpriteTrailInstances[i].Render(graphics, camera);
+				_liveSpriteTrailInstances[i].Render(batcher, camera);
 		}
 	}
 }

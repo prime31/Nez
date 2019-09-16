@@ -109,20 +109,20 @@ namespace Nez
 		}
 
 
-		public override void Render(Graphics graphics)
+		public override void Render(Batcher batcher)
 		{
 			GraphicsDeviceExt.SetRenderTarget(Core.GraphicsDevice, null);
-			graphics.Batcher.Begin(BlendState.NonPremultiplied, Core.DefaultSamplerState, DepthStencilState.None, null,
+			batcher.Begin(BlendState.NonPremultiplied, Core.DefaultSamplerState, DepthStencilState.None, null,
 				_squaresEffect);
 
 			// we only render the previousSceneRender while populating the squares
 			if (!_isNewSceneLoaded)
-				graphics.Batcher.Draw(PreviousSceneRender, _destinationRect, Color.White);
+				batcher.Draw(PreviousSceneRender, _destinationRect, Color.White);
 			else
-				graphics.Batcher.Draw(_overlayTexture, new Rectangle(0, 0, Screen.Width, Screen.Height),
+				batcher.Draw(_overlayTexture, new Rectangle(0, 0, Screen.Width, Screen.Height),
 					Color.Transparent);
 
-			graphics.Batcher.End();
+			batcher.End();
 		}
 	}
 }

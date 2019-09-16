@@ -62,25 +62,24 @@ namespace Nez.UI
 		/// <summary>
 		/// Adds an element to the root of the stage
 		/// </summary>
-		/// <param name="element">element.</param>
 		public T AddElement<T>(T element) where T : Element
 		{
 			return root.AddElement(element);
 		}
 
 
-		public void Render(Graphics graphics, Camera camera)
+		public void Render(Batcher batcher, Camera camera)
 		{
 			if (!root.IsVisible())
 				return;
 
 			Camera = camera;
-			root.Draw(graphics, 1f);
+			root.Draw(batcher, 1f);
 
 			if (Debug)
 			{
 				DrawDebug();
-				root.DebugRender(graphics);
+				root.DebugRender(batcher);
 			}
 		}
 
@@ -721,7 +720,7 @@ namespace Nez.UI
 
 		IGamepadFocusable FindNextGamepadFocusable(IGamepadFocusable relativeToFocusable, Direction direction)
 		{
-			// first, we check to see if the IGamepadFocusable has hard-wired control. 
+			// first, we check to see if the IGamepadFocusable has hard-wired control.
 			if (relativeToFocusable.ShouldUseExplicitFocusableControl)
 			{
 				switch (direction)

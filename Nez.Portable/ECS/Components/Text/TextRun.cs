@@ -311,10 +311,10 @@ namespace Nez
 		}
 
 
-		public void Render(Graphics graphics)
+		public void Render(Batcher batcher)
 		{
 			for (var i = 0; i < _charDetails.Length; i++)
-				graphics.Batcher.DrawRaw(_charDetails[i].Texture, _charDetails[i].Verts, _charDetails[i].TexCoords,
+				batcher.DrawRaw(_charDetails[i].Texture, _charDetails[i].Verts, _charDetails[i].TexCoords,
 					_charDetails[i].Color);
 		}
 	}
