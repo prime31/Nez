@@ -17,9 +17,6 @@ namespace Nez.Persistence.Binary
 		ReuseableBinaryWriter _writer;
 		ReuseableBinaryReader _reader;
 
-		public FileDataStore() : this(null, FileFormat.Binary)
-		{
-		}
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="T:Nez.Persistence.Binary.FileDataStore"/> class. If <paramref name="persistentDataPath"/>
@@ -27,10 +24,8 @@ namespace Nez.Persistence.Binary
 		/// </summary>
 		/// <param name="persistentDataPath">Persistent data path.</param>
 		/// <param name="fileFormat">File format.</param>
-		public FileDataStore(string persistentDataPath = null, FileFormat fileFormat = FileFormat.Binary)
+		public FileDataStore(string persistentDataPath, FileFormat fileFormat = FileFormat.Binary)
 		{
-			persistentDataPath = persistentDataPath ?? Utils.GetStorageRoot();
-
 			// ensure directory exists
 			Directory.CreateDirectory(persistentDataPath);
 			_persistentDataPath = persistentDataPath;

@@ -1,11 +1,11 @@
-﻿using System;
+using System;
 using System.IO;
 using System.Runtime.InteropServices;
 
 
-namespace Nez.Persistence
+namespace Nez
 {
-	public static class Utils
+	public static class Storage
 	{
 		/// <summary>
 		/// attempts to come up with a root folder you can use to save your data accross all (non-console) platforms
@@ -21,9 +21,7 @@ namespace Nez.Persistence
 			{
 				var osConfigDir = Environment.GetEnvironmentVariable("HOME");
 				if (string.IsNullOrEmpty(osConfigDir))
-				{
 					return "."; // Oh well.
-				}
 
 				return Path.Combine(osConfigDir, "Library/Application Support", exeName);
 			}
@@ -40,9 +38,7 @@ namespace Nez.Persistence
 				{
 					osConfigDir = Environment.GetEnvironmentVariable("HOME");
 					if (string.IsNullOrEmpty(osConfigDir))
-					{
 						return "."; // Oh well.
-					}
 
 					osConfigDir += "/.local/share";
 				}

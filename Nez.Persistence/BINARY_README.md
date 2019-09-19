@@ -21,8 +21,7 @@ namespace Nez.Persistence
 {
 	public class FileDataStore
 	{
-		public FileDataStore() : this( null, FileFormat.Binary )
-		public FileDataStore( string persistentDataPath = null, FileFormat fileFormat = FileFormat.Binary )
+		public FileDataStore( string persistentDataPath, FileFormat fileFormat = FileFormat.Binary )
 		public void Save( string filename, IPersistable persistable )
 		public void Load( string filename, IPersistable persistable )
 		public void Clear()
