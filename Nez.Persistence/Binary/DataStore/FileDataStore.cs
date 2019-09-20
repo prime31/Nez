@@ -16,6 +16,9 @@ namespace Nez.Persistence.Binary
 
 		ReuseableBinaryWriter _writer;
 		ReuseableBinaryReader _reader;
+		
+		public FileDataStore() : this(null)
+		{}
 
 
 		/// <summary>
@@ -26,6 +29,12 @@ namespace Nez.Persistence.Binary
 		/// <param name="fileFormat">File format.</param>
 		public FileDataStore(string persistentDataPath, FileFormat fileFormat = FileFormat.Binary)
 		{
+			if (persistentDataPath == null)
+			{
+				var exeName = Path.GetFileNameWithoutExtension(AppDomain.CurrentDomain.FriendlyName).Replace(".vshost", "");
+				persistentDataPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), exeName);
+			}
+
 			// ensure directory exists
 			Directory.CreateDirectory(persistentDataPath);
 			_persistentDataPath = persistentDataPath;
