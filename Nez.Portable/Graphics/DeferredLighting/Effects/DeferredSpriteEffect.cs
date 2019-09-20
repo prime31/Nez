@@ -1,5 +1,4 @@
-﻿using System;
-using Microsoft.Xna.Framework.Graphics;
+﻿using Microsoft.Xna.Framework.Graphics;
 
 
 namespace Nez.DeferredLighting
@@ -15,29 +14,20 @@ namespace Nez.DeferredLighting
 		/// alpha cutoff for the alpha test. defaults to 0.3
 		/// </summary>
 		/// <value>The alpha cutoff.</value>
-		public float AlphaCutoff
-		{
-			get { return _alphaCutoff; }
-		}
+		public float AlphaCutoff => _alphaCutoff;
 
 		/// <summary>
 		/// if true, the normal map alpha channel will be used for self illumination. Note that you need to turn off premultiplied
 		/// alpha in the Pipeline tool when using the alpha for self illumination!
 		/// </summary>
 		/// <value><c>true</c> if use normal alpha channel for self illumination; otherwise, <c>false</c>.</value>
-		public bool UseNormalAlphaChannelForSelfIllumination
-		{
-			get { return _useNormalAlphaChannelForSelfIllumination; }
-		}
+		public bool UseNormalAlphaChannelForSelfIllumination => _useNormalAlphaChannelForSelfIllumination;
 
 		/// <summary>
 		/// controls the power of the self illumination where 0 is no contribution and 1 is fully self illuminated
 		/// </summary>
 		/// <value>The self illumination power parameter.</value>
-		public float SelfIlluminationPower
-		{
-			get { return _selfIlluminationPower; }
-		}
+		public float SelfIlluminationPower => _selfIlluminationPower;
 
 
 		float _alphaCutoff;

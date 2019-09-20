@@ -25,8 +25,8 @@ namespace Nez
 
 			public PointMass(Vector3 position, float invMass)
 			{
-				this.Position = position;
-				this.InverseMass = invMass;
+				Position = position;
+				InverseMass = invMass;
 			}
 
 
@@ -67,10 +67,10 @@ namespace Nez
 
 			public Spring(PointMass end1, PointMass end2, float stiffness, float damping)
 			{
-				this.End1 = end1;
-				this.End2 = end2;
-				this.Stiffness = stiffness;
-				this.Damping = damping;
+				End1 = end1;
+				End2 = end2;
+				Stiffness = stiffness;
+				Damping = damping;
 				TargetLength = Vector3.Distance(end1.Position, end2.Position) * 0.95f;
 			}
 
@@ -145,8 +145,7 @@ namespace Nez
 
 
 		public SpringGrid() : this(new Rectangle(0, 0, Screen.Width, Screen.Height), new Vector2(30))
-		{
-		}
+		{ }
 
 		public SpringGrid(Rectangle gridSize, Vector2 spacing)
 		{
@@ -322,7 +321,7 @@ namespace Nez
 				mass.Update();
 		}
 
-		public override void Render(Graphics graphics, Camera camera)
+		public override void Render(Batcher batcher, Camera camera)
 		{
 			// TODO: make culling smarter and only render the lines that are actually on the screen rather than all or nothing
 			var width = _points.GetLength(0);
@@ -361,12 +360,12 @@ namespace Nez
 						// If the grid is very straight here, draw a single straight line. Otherwise, draw lines to our new interpolated midpoint
 						if (Vector2.DistanceSquared(mid, (left + p) / 2) > 1)
 						{
-							DrawLine(graphics.Batcher, left, mid, gridColor, thickness);
-							DrawLine(graphics.Batcher, mid, p, gridColor, thickness);
+							DrawLine(batcher, left, mid, gridColor, thickness);
+							DrawLine(batcher, mid, p, gridColor, thickness);
 						}
 						else
 						{
-							DrawLine(graphics.Batcher, left, p, gridColor, thickness);
+							DrawLine(batcher, left, p, gridColor, thickness);
 						}
 					}
 
@@ -392,12 +391,12 @@ namespace Nez
 
 						if (Vector2.DistanceSquared(mid, (up + p) / 2) > 1)
 						{
-							DrawLine(graphics.Batcher, up, mid, gridColor, thickness);
-							DrawLine(graphics.Batcher, mid, p, gridColor, thickness);
+							DrawLine(batcher, up, mid, gridColor, thickness);
+							DrawLine(batcher, mid, p, gridColor, thickness);
 						}
 						else
 						{
-							DrawLine(graphics.Batcher, up, p, gridColor, thickness);
+							DrawLine(batcher, up, p, gridColor, thickness);
 						}
 					}
 
@@ -406,9 +405,9 @@ namespace Nez
 					if (x > 1 && y > 1)
 					{
 						var upLeft = ProjectToVector2(_points[x - 1, y - 1].Position);
-						DrawLine(graphics.Batcher, 0.5f * (upLeft + up), 0.5f * (left + p), GridMinorColor,
+						DrawLine(batcher, 0.5f * (upLeft + up), 0.5f * (left + p), GridMinorColor,
 							GridMinorThickness); // vertical line
-						DrawLine(graphics.Batcher, 0.5f * (upLeft + left), 0.5f * (up + p), GridMinorColor,
+						DrawLine(batcher, 0.5f * (upLeft + left), 0.5f * (up + p), GridMinorColor,
 							GridMinorThickness); // horizontal line
 					}
 				}

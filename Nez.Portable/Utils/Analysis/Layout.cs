@@ -91,8 +91,8 @@ namespace Nez.Analysis
 		/// <param name="safeArea">safe area</param>
 		public Layout(Rectangle clientArea, Rectangle safeArea)
 		{
-			this.ClientArea = clientArea;
-			this.SafeArea = safeArea;
+			ClientArea = clientArea;
+			SafeArea = safeArea;
 		}
 
 		/// <summary>

@@ -1,5 +1,4 @@
-﻿using System;
-using Microsoft.Xna.Framework.Graphics;
+﻿using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
 
 
@@ -14,7 +13,7 @@ namespace Nez
 		/// <value>The color of the blink.</value>
 		public Color BlinkColor
 		{
-			get { return new Color(_blinkColor); }
+			get => new Color(_blinkColor);
 			set
 			{
 				var blinkVec = value.ToVector4();

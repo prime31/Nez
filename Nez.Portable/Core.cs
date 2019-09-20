@@ -64,15 +64,10 @@ namespace Nez
 		/// default wrapped SamplerState. Determined by the Filter of the defaultSamplerState.
 		/// </summary>
 		/// <value>The default state of the wraped sampler.</value>
-		public static SamplerState DefaultWrappedSamplerState
-		{
-			get
-			{
-				return DefaultSamplerState.Filter == TextureFilter.Point
-					? SamplerState.PointWrap
-					: SamplerState.LinearWrap;
-			}
-		}
+		public static SamplerState DefaultWrappedSamplerState =>
+			DefaultSamplerState.Filter == TextureFilter.Point
+				? SamplerState.PointWrap
+				: SamplerState.LinearWrap;
 
 		/// <summary>
 		/// default GameServiceContainer access
@@ -299,7 +294,7 @@ namespace Nez
 			StartDebugDraw(gameTime.ElapsedGameTime);
 
 			if (_sceneTransition != null)
-				_sceneTransition.PreRender(Graphics.Instance);
+				_sceneTransition.PreRender(Graphics.Instance.Batcher);
 
 			// special handling of SceneTransition if we have one. We either render the SceneTransition or the Scene
 			if (_sceneTransition != null)
@@ -317,7 +312,7 @@ namespace Nez
 					_scene.PostRender();
 				}
 
-				_sceneTransition.Render(Graphics.Instance);
+				_sceneTransition.Render(Graphics.Instance.Batcher);
 			}
 			else if (_scene != null)
 			{

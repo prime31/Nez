@@ -1,5 +1,4 @@
-﻿using System;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Nez.BitmapFonts;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -69,23 +68,19 @@ namespace Nez.UI
 
 
 		public Label(string text, Skin skin, string styleName = null) : this(text, skin.Get<LabelStyle>(styleName))
-		{
-		}
+		{ }
 
 
 		public Label(string text, BitmapFont font, Color fontColor) : this(text, new LabelStyle(font, fontColor))
-		{
-		}
+		{ }
 
 
 		public Label(string text, BitmapFont font) : this(text, font, Color.White)
-		{
-		}
+		{ }
 
 
 		public Label(string text) : this(text, Graphics.Instance.BitmapFont)
-		{
-		}
+		{ }
 
 
 		public virtual Label SetStyle(LabelStyle style)
@@ -356,15 +351,14 @@ namespace Nez.UI
 		}
 
 
-		public override void Draw(Graphics graphics, float parentAlpha)
+		public override void Draw(Batcher batcher, float parentAlpha)
 		{
 			Validate();
 
 			var color = new Color(this.color, (int) (this.color.A * parentAlpha));
-			if (_style.Background != null)
-				_style.Background.Draw(graphics, x, y, width == 0 ? _prefSize.X : width, height, color);
+			_style.Background?.Draw(batcher, x, y, width == 0 ? _prefSize.X : width, height, color);
 
-			graphics.Batcher.DrawString(_style.Font, _wrappedString, new Vector2(x, y) + _textPosition,
+			batcher.DrawString(_style.Font, _wrappedString, new Vector2(x, y) + _textPosition,
 				_style.FontColor, 0, Vector2.Zero, new Vector2(_fontScaleX, _fontScaleY), SpriteEffects.None, 0);
 		}
 	}
@@ -388,14 +382,13 @@ namespace Nez.UI
 
 		public LabelStyle(BitmapFont font, Color fontColor)
 		{
-			this.Font = font ?? Graphics.Instance.BitmapFont;
-			this.FontColor = fontColor;
+			Font = font ?? Graphics.Instance.BitmapFont;
+			FontColor = fontColor;
 		}
 
 
 		public LabelStyle(Color fontColor) : this(null, fontColor)
-		{
-		}
+		{ }
 
 
 		public LabelStyle Clone()

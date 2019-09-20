@@ -1,5 +1,4 @@
-﻿using System;
-using Microsoft.Xna.Framework.Graphics;
+﻿using Microsoft.Xna.Framework.Graphics;
 
 
 namespace Nez
@@ -9,7 +8,7 @@ namespace Nez
 		[Range(0.001f, 10f, 0.001f)]
 		public float Power
 		{
-			get { return _power; }
+			get => _power;
 			set
 			{
 				if (_power != value)
@@ -25,7 +24,7 @@ namespace Nez
 		[Range(0.001f, 10f, 0.001f)]
 		public float Radius
 		{
-			get { return _radius; }
+			get => _radius;
 			set
 			{
 				if (_radius != value)

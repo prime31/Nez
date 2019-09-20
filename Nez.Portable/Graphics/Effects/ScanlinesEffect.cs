@@ -1,5 +1,4 @@
-﻿using System;
-using Microsoft.Xna.Framework.Graphics;
+﻿using Microsoft.Xna.Framework.Graphics;
 
 
 namespace Nez
@@ -9,7 +8,7 @@ namespace Nez
 		[Range(0.001f, 1f, 0.001f)]
 		public float Attenuation
 		{
-			get { return _attenuation; }
+			get => _attenuation;
 			set
 			{
 				if (_attenuation != value)
@@ -23,7 +22,7 @@ namespace Nez
 		[Range(10, 1000, 1)]
 		public float LinesFactor
 		{
-			get { return _linesFactor; }
+			get => _linesFactor;
 			set
 			{
 				if (_linesFactor != value)

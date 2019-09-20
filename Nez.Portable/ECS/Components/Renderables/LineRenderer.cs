@@ -35,11 +35,7 @@ namespace Nez
 	/// </summary>
 	public class LineRenderer : RenderableComponent
 	{
-		public override RectangleF Bounds
-		{
-			// we calculate bounds in update so no need to mess with anything here
-			get { return _bounds; }
-		}
+		public override RectangleF Bounds => _bounds;
 
 		/// <summary>
 		/// controls whether the lines are defined in world space or local
@@ -98,7 +94,7 @@ namespace Nez
 		/// <param name="useWorldSpace">If set to <c>true</c> use world space.</param>
 		public LineRenderer SetUseWorldSpace(bool useWorldSpace)
 		{
-			this.UseWorldSpace = useWorldSpace;
+			UseWorldSpace = useWorldSpace;
 			return this;
 		}
 
@@ -132,7 +128,7 @@ namespace Nez
 		/// <param name="endCapType">End cap type.</param>
 		public LineRenderer SetEndCapType(EndCapType endCapType)
 		{
-			this.EndCapType = endCapType;
+			EndCapType = endCapType;
 			_areVertsDirty = true;
 			return this;
 		}
@@ -146,7 +142,7 @@ namespace Nez
 		/// <param name="cutoffAngleForEndCapSubdivision">Cutoff angle for end cap subdivision.</param>
 		public LineRenderer SetCutoffAngleForEndCapSubdivision(float cutoffAngleForEndCapSubdivision)
 		{
-			this.CutoffAngleForEndCapSubdivision = cutoffAngleForEndCapSubdivision;
+			CutoffAngleForEndCapSubdivision = cutoffAngleForEndCapSubdivision;
 			_areVertsDirty = true;
 			return this;
 		}
@@ -160,7 +156,7 @@ namespace Nez
 		public LineRenderer SetDegreesPerSubdivision(float degreesPerSubdivision)
 		{
 			Insist.IsTrue(degreesPerSubdivision > 0, "degreesPerSubdivision must be greater than 0");
-			this.DegreesPerSubdivision = degreesPerSubdivision;
+			DegreesPerSubdivision = degreesPerSubdivision;
 			return this;
 		}
 
@@ -830,7 +826,7 @@ namespace Nez
 		}
 
 
-		public override void Render(Graphics graphics, Camera camera)
+		public override void Render(Batcher batcher, Camera camera)
 		{
 			if (_points.Length < 2)
 				return;
@@ -849,15 +845,15 @@ namespace Nez
 		}
 
 
-		public override void DebugRender(Graphics graphics)
+		public override void DebugRender(Batcher batcher)
 		{
 			for (var i = 0; i < _vertices.Length; i++)
 			{
 				var v = _vertices[i];
-				graphics.Batcher.DrawPixel(v.Position.X, v.Position.Y, Color.GhostWhite, 4);
+				batcher.DrawPixel(v.Position.X, v.Position.Y, Color.GhostWhite, 4);
 			}
 
-			graphics.Batcher.DrawHollowRect(_bounds, Debug.Colors.ColliderBounds);
+			batcher.DrawHollowRect(_bounds, Debug.Colors.ColliderBounds);
 		}
 
 		#endregion
@@ -891,8 +887,8 @@ namespace Nez
 			public void SetPoints(ref SegmentPoint point, ref SegmentPoint nextPoint)
 			{
 				Angle = 0;
-				this.Point = point;
-				this.NextPoint = nextPoint;
+				Point = point;
+				NextPoint = nextPoint;
 
 				// rotate 90 degrees before calculating and cache cos/sin
 				var radians = Mathf.Atan2(nextPoint.Position.Y - point.Position.Y,
@@ -912,7 +908,7 @@ namespace Nez
 			{
 				// store the angle off for later. For extreme angles we add extra verts to smooth the joint
 				Angle = Vector2Ext.Angle(segment.Point.Position - Point.Position, NextPoint.Position - Point.Position);
-				this.ShouldFuseBottom = shouldFuseBottom;
+				ShouldFuseBottom = shouldFuseBottom;
 
 				if (shouldFuseBottom)
 					HasFusedPoint = ShapeCollisions.LineToLine(segment.Bl, segment.Br, Bl, Br, out FusedPoint);

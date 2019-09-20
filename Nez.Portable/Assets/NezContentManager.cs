@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Threading;
-using System.Reflection;
 using System.Text;
 using Microsoft.Xna.Framework.Graphics;
 using System.Collections.Generic;
@@ -9,6 +8,7 @@ using System.Threading.Tasks;
 using System.IO;
 using Microsoft.Xna.Framework;
 using Nez.ParticleDesigner;
+using Nez.Sprites;
 
 namespace Nez.Systems
 {
@@ -100,7 +100,7 @@ namespace Nez.Systems
 				if (asset is Tiled.TmxMap map)
 					return map;
 			}
-			
+
 			var tiledMap = new Tiled.TmxMap(name);
 
 			LoadedAssets[name] = tiledMap;
@@ -126,6 +126,25 @@ namespace Nez.Systems
 			DisposableAssets.Add(emitterConfig);
 
 			return emitterConfig;
+		}
+
+		/// <summary>
+		/// Loads a SpriteAtlas
+		/// </summary>
+		public SpriteAtlas LoadSpriteAtlas(string name)
+		{
+			if (LoadedAssets.TryGetValue(name, out var asset))
+			{
+				if (asset is SpriteAtlas spriteAtlas)
+					return spriteAtlas;
+			}
+
+			var atlas = SpriteAtlasLoader.ParseSpriteAtlas(name);
+
+			LoadedAssets.Add(name, atlas);
+			DisposableAssets.Add(atlas);
+
+			return atlas;
 		}
 
 		/// <summary>
@@ -401,7 +420,7 @@ namespace Nez.Systems
 		{
 			if (assetName.StartsWith("nez://"))
 			{
-				var assembly = ReflectionUtils.GetAssembly(this.GetType());
+				var assembly = ReflectionUtils.GetAssembly(GetType());
 
 #if FNA
 				// for FNA, we will just search for the file by name since the assembly name will not be known at runtime

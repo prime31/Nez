@@ -10,10 +10,10 @@ namespace Nez.Tiled
 	/// <summary>
 	/// WIP
 	/// The TiledMapMover is a helper for moving objects around in a gravity-based Tiled map. It requires that the Entity it is on has a BoxCollider. The
-	/// BoxCollider will be used in conjuntion with colliderHorizontal/VerticalInset for all collision detection.
-	/// 
+	/// BoxCollider will be used in conjunction with colliderHorizontal/VerticalInset for all collision detection.
+	///
 	/// One way platforms can be jumped down through by moving your Transform down 1 pixel and calling CollisionState.clearLastGroundTile.
-	/// 
+	///
 	/// If you plan to use slopes/one way platforms with the TiledMapMover some extra properties need to be added to your tiles in Tiled.
 	/// They are listed below:
 	/// - nez:isOneWayPlatform (bool): one way platforms will ignore all collisions except from above
@@ -40,20 +40,14 @@ namespace Nez.Tiled
 			public bool IsGroundedOnOneWayPlatform;
 			public float SlopeAngle;
 
-			public bool HasCollision
-			{
-				get { return Below || Right || Left || Above; }
-			}
+			public bool HasCollision => Below || Right || Left || Above;
 
 			// state used by the TiledMapMover
 			internal SubpixelFloat _movementRemainderX, _movementRemainderY;
-			internal TiledTile _lastGroundTile;
+			internal TmxLayerTile _lastGroundTile;
 
 
-			public void ClearLastGroundTile()
-			{
-				_lastGroundTile = null;
-			}
+			public void ClearLastGroundTile() => _lastGroundTile = null;
 
 
 			public void Reset()
@@ -61,7 +55,6 @@ namespace Nez.Tiled
 				BecameGroundedThisFrame = IsGroundedOnOneWayPlatform = Right = Left = Above = Below = false;
 				SlopeAngle = 0f;
 			}
-
 
 			/// <summary>
 			/// resets collision state and does sub-pixel movement calculations
@@ -112,17 +105,17 @@ namespace Nez.Tiled
 		/// <summary>
 		/// the TiledTileLayer used for collision checks
 		/// </summary>
-		public readonly TiledTileLayer CollisionLayer;
+		public readonly TmxLayer CollisionLayer;
 
 		/// <summary>
 		/// the TiledMap that contains collisionLayer
 		/// </summary>
-		public readonly TiledMap TiledMap;
+		public readonly TmxMap TiledMap;
 
 		/// <summary>
 		/// temporary storage for all the tiles that intersect the bounds being checked
 		/// </summary>
-		List<TiledTile> _collidingTiles = new List<TiledTile>();
+		List<TmxLayerTile> _collidingTiles = new List<TmxLayerTile>();
 
 		/// <summary>
 		/// temporary storage to avoid having to pass it around
@@ -131,14 +124,13 @@ namespace Nez.Tiled
 
 
 		public TiledMapMover()
-		{
-		}
+		{}
 
-		public TiledMapMover(TiledTileLayer collisionLayer)
+		public TiledMapMover(TmxLayer collisionLayer)
 		{
 			Insist.IsNotNull(collisionLayer, nameof(collisionLayer) + " is required");
-			this.CollisionLayer = collisionLayer;
-			TiledMap = collisionLayer.TiledMap;
+			CollisionLayer = collisionLayer;
+			TiledMap = collisionLayer.Map;
 		}
 
 		/// <summary>
@@ -332,7 +324,7 @@ namespace Nez.Tiled
 		/// <param name="leadingPosition">Leading position.</param>
 		/// <param name="shouldTestSlopes">Should test slopes.</param>
 		/// <param name="collisionResponse">Collision response.</param>
-		bool TestTileCollision(TiledTile tile, Edge edgeToTest, int perpindicularPosition, int leadingPosition,
+		bool TestTileCollision(TmxLayerTile tile, Edge edgeToTest, int perpindicularPosition, int leadingPosition,
 		                       bool shouldTestSlopes, out int collisionResponse)
 		{
 			collisionResponse = leadingPosition;

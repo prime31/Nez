@@ -59,25 +59,24 @@ namespace Nez
 		readonly Queue<float> _sampleBuffer = new Queue<float>();
 
 
-		public FramesPerSecondCounter() : this( Graphics.Instance.BitmapFont, Color.White )
-		{
-		}
+		public FramesPerSecondCounter() : this(Graphics.Instance.BitmapFont, Color.White)
+		{ }
 
-		public FramesPerSecondCounter( BitmapFont font, Color color,
-									  FPSDockPosition dockPosition = FPSDockPosition.TopRight, int maximumSamples = 100 )
-			: base( font, string.Empty, Vector2.Zero, color )
+		public FramesPerSecondCounter(BitmapFont font, Color color,
+		                              FPSDockPosition dockPosition = FPSDockPosition.TopRight, int maximumSamples = 100)
+			: base(font, string.Empty, Vector2.Zero, color)
 		{
-			this.MaximumSamples = maximumSamples;
-			this.DockPosition = dockPosition;
+			MaximumSamples = maximumSamples;
+			DockPosition = dockPosition;
 			Init();
 		}
 
-		public FramesPerSecondCounter( NezSpriteFont font, Color color,
-									  FPSDockPosition dockPosition = FPSDockPosition.TopRight, int maximumSamples = 100 )
-			: base( font, string.Empty, Vector2.Zero, color )
+		public FramesPerSecondCounter(NezSpriteFont font, Color color,
+		                              FPSDockPosition dockPosition = FPSDockPosition.TopRight, int maximumSamples = 100)
+			: base(font, string.Empty, Vector2.Zero, color)
 		{
-			this.MaximumSamples = maximumSamples;
-			this.DockPosition = dockPosition;
+			MaximumSamples = maximumSamples;
+			DockPosition = dockPosition;
 			Init();
 		}
 
@@ -88,7 +87,7 @@ namespace Nez
 
 		void UpdateTextPosition()
 		{
-			switch( DockPosition )
+			switch (DockPosition)
 			{
 				case FPSDockPosition.TopLeft:
 					_horizontalAlign = HorizontalAlign.Left;
@@ -98,18 +97,18 @@ namespace Nez
 				case FPSDockPosition.TopRight:
 					_horizontalAlign = HorizontalAlign.Right;
 					_verticalAlign = VerticalAlign.Top;
-					LocalOffset = new Vector2( Core.GraphicsDevice.Viewport.Width - DockOffset.X, DockOffset.Y );
+					LocalOffset = new Vector2(Core.GraphicsDevice.Viewport.Width - DockOffset.X, DockOffset.Y);
 					break;
 				case FPSDockPosition.BottomLeft:
 					_horizontalAlign = HorizontalAlign.Left;
 					_verticalAlign = VerticalAlign.Bottom;
-					LocalOffset = new Vector2( DockOffset.X, Core.GraphicsDevice.Viewport.Height - DockOffset.Y );
+					LocalOffset = new Vector2(DockOffset.X, Core.GraphicsDevice.Viewport.Height - DockOffset.Y);
 					break;
 				case FPSDockPosition.BottomRight:
 					_horizontalAlign = HorizontalAlign.Right;
 					_verticalAlign = VerticalAlign.Bottom;
-					LocalOffset = new Vector2( Core.GraphicsDevice.Viewport.Width - DockOffset.X,
-						Core.GraphicsDevice.Viewport.Height - DockOffset.Y );
+					LocalOffset = new Vector2(Core.GraphicsDevice.Viewport.Width - DockOffset.X,
+						Core.GraphicsDevice.Viewport.Height - DockOffset.Y);
 					break;
 			}
 		}
@@ -123,12 +122,12 @@ namespace Nez
 		void IUpdatable.Update()
 		{
 			CurrentFramesPerSecond = 1.0f / Time.UnscaledDeltaTime;
-			_sampleBuffer.Enqueue( CurrentFramesPerSecond );
+			_sampleBuffer.Enqueue(CurrentFramesPerSecond);
 
-			if( _sampleBuffer.Count > MaximumSamples )
+			if (_sampleBuffer.Count > MaximumSamples)
 			{
 				_sampleBuffer.Dequeue();
-				AverageFramesPerSecond = _sampleBuffer.Average( i => i );
+				AverageFramesPerSecond = _sampleBuffer.Average(i => i);
 			}
 			else
 			{
@@ -137,27 +136,27 @@ namespace Nez
 
 			TotalFrames++;
 
-			Text = string.Format( "FPS: {0:0.00}", AverageFramesPerSecond );
+			Text = string.Format("FPS: {0:0.00}", AverageFramesPerSecond);
 		}
 
-		public override bool IsVisibleFromCamera( Camera camera )
+		public override bool IsVisibleFromCamera(Camera camera)
 		{
 			return true;
 		}
 
-		public override void Render( Graphics graphics, Camera camera )
+		public override void Render(Batcher batcher, Camera camera)
 		{
 			// we override render and use position instead of entityPosition. this keeps the text in place even if the entity moves
-			graphics.Batcher.DrawString( _font, _text, LocalOffset, Color, Entity.Transform.Rotation, Origin,
-				Entity.Transform.Scale, SpriteEffects, LayerDepth );
+			batcher.DrawString(_font, _text, LocalOffset, Color, Entity.Transform.Rotation, Origin,
+				Entity.Transform.Scale, SpriteEffects, LayerDepth);
 		}
 
-		public override void DebugRender( Graphics graphics )
+		public override void DebugRender(Batcher batcher)
 		{
 			// due to the override of position in render we have to do the same here
 			var rect = Bounds;
 			rect.Location = LocalOffset;
-			graphics.Batcher.DrawHollowRect( rect, Color.Yellow );
+			batcher.DrawHollowRect(rect, Color.Yellow);
 		}
 
 
@@ -167,9 +166,9 @@ namespace Nez
 		/// Sets how far the fps text will appear from the edges of the screen.
 		/// </summary>
 		/// <param name="dockOffset">Offset from screen edges</param>
-		public FramesPerSecondCounter SetDockOffset( Vector2 dockOffset )
+		public FramesPerSecondCounter SetDockOffset(Vector2 dockOffset)
 		{
-			this.DockOffset = dockOffset;
+			DockOffset = dockOffset;
 			return this;
 		}
 
@@ -177,9 +176,9 @@ namespace Nez
 		/// Sets which corner of the screen the fps text will show.
 		/// </summary>
 		/// <param name="dockPosition">Corner of the screen</param>
-		public FramesPerSecondCounter SetDockPosition( FPSDockPosition dockPosition )
+		public FramesPerSecondCounter SetDockPosition(FPSDockPosition dockPosition)
 		{
-			this.DockPosition = dockPosition;
+			DockPosition = dockPosition;
 			return this;
 		}
 

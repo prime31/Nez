@@ -1,5 +1,4 @@
-﻿using System;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 
 
 namespace Nez.UI
@@ -20,6 +19,6 @@ namespace Nez.UI
 
 		void SetPadding(float top, float bottom, float left, float right);
 
-		void Draw(Graphics graphics, float x, float y, float width, float height, Color color);
+		void Draw(Batcher batcher, float x, float y, float width, float height, Color color);
 	}
 }

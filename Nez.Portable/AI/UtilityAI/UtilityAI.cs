@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-
-namespace Nez.AI.UtilityAI
+﻿namespace Nez.AI.UtilityAI
 {
 	public class UtilityAI<T>
 	{
@@ -24,7 +20,7 @@ namespace Nez.AI.UtilityAI
 		{
 			_rootReasoner = rootSelector;
 			_context = context;
-			this.UpdatePeriod = _elapsedTime = updatePeriod;
+			UpdatePeriod = _elapsedTime = updatePeriod;
 		}
 
 

@@ -1,7 +1,4 @@
-﻿using System;
-
-
-namespace Nez.AI.BehaviorTrees
+﻿namespace Nez.AI.BehaviorTrees
 {
 	/// <summary>
 	/// returns success when the random probability is above the successProbability probability. It will otherwise return failure.
@@ -23,7 +20,7 @@ namespace Nez.AI.BehaviorTrees
 
 		public override TaskStatus Update(T context)
 		{
-			if (Nez.Random.NextFloat() > _successProbability)
+			if (Random.NextFloat() > _successProbability)
 				return TaskStatus.Success;
 
 			return TaskStatus.Failure;

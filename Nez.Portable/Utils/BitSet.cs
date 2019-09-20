@@ -42,9 +42,7 @@
 // Source ported to C# from: http://fuseyism.com/classpath/doc/java/util/BitSet-source.html
 
 using System;
-using System.Collections.Generic;
 using System.Text;
-using System.Runtime.Serialization;
 
 
 namespace Nez
@@ -427,10 +425,7 @@ namespace Nez
 		/// 
 		/// Returns the number of bits currently used.
 		/// </summary>
-		public int Size
-		{
-			get { return bits.Length * 64; }
-		}
+		public int Size => bits.Length * 64;
 
 
 		/// <summary>
@@ -524,9 +519,9 @@ namespace Nez
 		public void Set(int index, bool value)
 		{
 			if (value)
-				this.Set(index);
+				Set(index);
 			else
-				this.Clear(index);
+				Clear(index);
 		}
 
 
@@ -570,9 +565,9 @@ namespace Nez
 		public void Set(int from, int to, bool value)
 		{
 			if (value)
-				this.Set(from, to);
+				Set(from, to);
 			else
-				this.Clear(from, to);
+				Clear(from, to);
 		}
 
 

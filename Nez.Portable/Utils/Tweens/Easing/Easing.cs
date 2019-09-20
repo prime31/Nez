@@ -1,5 +1,3 @@
-using System.Collections;
-using System;
 using Microsoft.Xna.Framework;
 
 

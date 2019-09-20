@@ -9,8 +9,8 @@ namespace Nez.Svg
 		[XmlAttribute("points")]
 		public string PointsAttribute
 		{
-			get { return null; }
-			set { ParsePoints(value); }
+			get => null;
+			set => ParsePoints(value);
 		}
 
 		public Vector2[] Points;

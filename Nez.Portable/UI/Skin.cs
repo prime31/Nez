@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using Nez.LibGdxAtlases;
 using Nez.Textures;
 using Microsoft.Xna.Framework;
 using Nez.BitmapFonts;
-using Nez.TextureAtlases;
 using Nez.Systems;
 using System.Linq;
+using Nez.Sprites;
 
 
 namespace Nez.UI
@@ -187,18 +186,14 @@ namespace Nez.UI
 			if (config.Colors != null)
 			{
 				foreach (var entry in config.Colors)
-					Add<Color>(entry.Key, config.Colors[entry.Key]);
+					Add(entry.Key, config.Colors[entry.Key]);
 			}
 
 			if (config.TextureAtlases != null)
 			{
 				foreach (var atlas in config.TextureAtlases)
-					AddSubtextures(contentManager.Load<TextureAtlas>(atlas));
+					AddSprites(contentManager.LoadSpriteAtlas(atlas));
 			}
-
-			if (config.LibGdxAtlases != null)
-				foreach (var atlas in config.LibGdxAtlases)
-					AddSubtextures(contentManager.Load<LibGdxAtlas>(atlas));
 
 			if (config.Styles != null)
 			{
@@ -238,9 +233,9 @@ namespace Nez.UI
 
 
 		/// <summary>
-		/// Recursively finds and sets all styles for a specific style config class that are within 
+		/// Recursively finds and sets all styles for a specific style config class that are within
 		/// the dictionary passed in. This allows skins to contain nested, dynamic style declarations.
-		///	For example, it allows a SelectBoxStyle to contain a listStyle that is declared inline 
+		///	For example, it allows a SelectBoxStyle to contain a listStyle that is declared inline
 		///	(and not a reference).
 		/// </summary>
 		/// <param name="styleClass">The style config class instance that needs to be "filled out"</param>
@@ -272,7 +267,7 @@ namespace Nez.UI
 					var styleField = ReflectionUtils.GetFieldInfo(styleClass, name);
 
 					// Check to see if valueObject is a Dictionary object instead of a string. If so, it is an 'inline' style
-					//	and needs to be recursively parsed like any other style. Otherwise, it is assumed to be a string and 
+					//	and needs to be recursively parsed like any other style. Otherwise, it is assumed to be a string and
 					//	represents an existing style that has been previously parsed.
 					if (valueObject is Dictionary<string, object>)
 					{
@@ -307,7 +302,7 @@ namespace Nez.UI
 				}
 				else
 				{
-					// we have an IDrawable. first we'll try to find a Subtexture and if we cant find one we will see if
+					// we have an IDrawable. first we'll try to find a Sprite and if we cant find one we will see if
 					// identifier is a color
 					var drawable = GetDrawable(identifier);
 					if (drawable != null)
@@ -321,30 +316,20 @@ namespace Nez.UI
 			return styleClass;
 		}
 
-		/// <summary>
-		/// Adds all named subtextures from the atlas. If NinePatchSubtextures are found they will be explicitly added as such.
-		/// </summary>
-		/// <param name="atlas">Atlas.</param>
-		public void AddSubtextures(LibGdxAtlas atlas)
-		{
-			for (int i = 0, n = atlas.Atlases.Count; i < n; i++)
-				AddSubtextures(atlas.Atlases[i]);
-		}
-
 
 		/// <summary>
-		/// Adds all named subtextures from the atlas
+		/// Adds all named Sprites from the atlas
 		/// </summary>
 		/// <param name="atlas">Atlas.</param>
-		public void AddSubtextures(TextureAtlas atlas)
+		public void AddSprites(SpriteAtlas atlas)
 		{
-			for (int i = 0, n = atlas.Subtextures.Length; i < n; i++)
+			for (int i = 0, n = atlas.Sprites.Length; i < n; i++)
 			{
-				var subtexture = atlas.Subtextures[i];
-				if (subtexture is NinePatchSubtexture)
-					Add<NinePatchSubtexture>(atlas.RegionNames[i], subtexture as NinePatchSubtexture);
+				var sprite = atlas.Sprites[i];
+				if (sprite is NinePatchSprite)
+					Add(atlas.Names[i], sprite as NinePatchSprite);
 				else
-					Add<Subtexture>(atlas.RegionNames[i], subtexture);
+					Add(atlas.Names[i], sprite);
 			}
 		}
 
@@ -352,9 +337,6 @@ namespace Nez.UI
 		/// <summary>
 		/// adds the typed resource to this skin
 		/// </summary>
-		/// <param name="name">Name.</param>
-		/// <param name="resource">Resource.</param>
-		/// <typeparam name="T">The 1st type parameter.</typeparam>
 		public T Add<T>(string name, T resource)
 		{
 			Dictionary<string, object> typedResources;
@@ -454,55 +436,43 @@ namespace Nez.UI
 		}
 
 
-		public Color GetColor(string name)
-		{
-			return Get<Color>(name);
-		}
+		public Color GetColor(string name) => Get<Color>(name);
 
 
-		public BitmapFont GetFont(string name)
-		{
-			return Get<BitmapFont>(name);
-		}
+		public BitmapFont GetFont(string name) => Get<BitmapFont>(name);
 
 
-		public Subtexture GetSubtexture(string name)
-		{
-			return Get<Subtexture>(name);
-		}
+		public Sprite GetSprite(string name) => Get<Sprite>(name);
 
 
-		public NinePatchSubtexture GetNinePatchSubtexture(string name)
-		{
-			return Get<NinePatchSubtexture>(name);
-		}
+		public NinePatchSprite GetNinePatchSprite(string name) => Get<NinePatchSprite>(name);
 
 
 		/// <summary>
-		/// Returns a registered subtexture drawable. If no subtexture drawable is found but a Subtexture exists with the name, a
-		/// subtexture drawable is created from the Subtexture and stored in the skin
+		/// Returns a registered sprite drawable. If no sprite drawable is found but a Sprite exists with the name, a
+		/// sprite drawable is created from the Sprite and stored in the skin
 		/// </summary>
-		/// <returns>The subtexture drawable.</returns>
+		/// <returns>The sprite drawable.</returns>
 		/// <param name="name">Name.</param>
-		public SubtextureDrawable GetSubtextureDrawable(string name)
+		public SpriteDrawable GetSpriteDrawable(string name)
 		{
-			var subtextureDrawable = Get<SubtextureDrawable>(name);
-			if (subtextureDrawable != null)
-				return subtextureDrawable;
+			var spriteDrawable = Get<SpriteDrawable>(name);
+			if (spriteDrawable != null)
+				return spriteDrawable;
 
-			var subtexture = Get<Subtexture>(name);
-			if (subtexture != null)
+			var sprite = Get<Sprite>(name);
+			if (sprite != null)
 			{
-				subtextureDrawable = new SubtextureDrawable(subtexture);
-				Add<SubtextureDrawable>(name, subtextureDrawable);
+				spriteDrawable = new SpriteDrawable(sprite);
+				Add(name, spriteDrawable);
 			}
 
-			return subtextureDrawable;
+			return spriteDrawable;
 		}
 
 
 		/// <summary>
-		/// Returns a registered drawable. If no drawable is found but a Subtexture/NinePatchSubtexture exists with the name, then the
+		/// Returns a registered drawable. If no drawable is found but a Sprite/NinePatchSprite exists with the name, then the
 		/// appropriate drawable is created and stored in the skin. If name is a color a PrimitiveDrawable will be created and stored.
 		/// </summary>
 		/// <returns>The drawable.</returns>
@@ -513,8 +483,8 @@ namespace Nez.UI
 			if (drawable != null)
 				return drawable;
 
-			// Check for explicit registration of ninepatch, subtexture or tiled drawable
-			drawable = Get<SubtextureDrawable>(name);
+			// Check for explicit registration of ninepatch, sprite or tiled drawable
+			drawable = Get<SpriteDrawable>(name);
 			if (drawable != null)
 				return drawable;
 
@@ -530,20 +500,20 @@ namespace Nez.UI
 			if (drawable != null)
 				return drawable;
 
-			// still nothing. check for a NinePatchSubtexture or a Subtexture and create a new drawable if we find one
-			var ninePatchSubtexture = Get<NinePatchSubtexture>(name);
-			if (ninePatchSubtexture != null)
+			// still nothing. check for a NinePatchSprite or a Sprite and create a new drawable if we find one
+			var ninePatchSprite = Get<NinePatchSprite>(name);
+			if (ninePatchSprite != null)
 			{
-				drawable = new NinePatchDrawable(ninePatchSubtexture);
-				Add<NinePatchDrawable>(name, drawable as NinePatchDrawable);
+				drawable = new NinePatchDrawable(ninePatchSprite);
+				Add(name, drawable as NinePatchDrawable);
 				return drawable;
 			}
 
-			var subtexture = Get<Subtexture>(name);
-			if (subtexture != null)
+			var sprite = Get<Sprite>(name);
+			if (sprite != null)
 			{
-				drawable = new SubtextureDrawable(subtexture);
-				Add<SubtextureDrawable>(name, drawable as SubtextureDrawable);
+				drawable = new SpriteDrawable(sprite);
+				Add(name, drawable as SpriteDrawable);
 				return drawable;
 			}
 
@@ -552,7 +522,7 @@ namespace Nez.UI
 			{
 				var color = Get<Color>(name);
 				drawable = new PrimitiveDrawable(color);
-				Add<PrimitiveDrawable>(name, drawable as PrimitiveDrawable);
+				Add(name, drawable as PrimitiveDrawable);
 				return drawable;
 			}
 
@@ -561,8 +531,8 @@ namespace Nez.UI
 
 
 		/// <summary>
-		/// Returns a registered tiled drawable. If no tiled drawable is found but a Subtexture exists with the name, a tiled drawable is
-		/// created from the Subtexture and stored in the skin
+		/// Returns a registered tiled drawable. If no tiled drawable is found but a Sprite exists with the name, a tiled drawable is
+		/// created from the Sprite and stored in the skin
 		/// </summary>
 		/// <returns>The tiled drawable.</returns>
 		/// <param name="name">Name.</param>
@@ -572,11 +542,11 @@ namespace Nez.UI
 			if (tiledDrawable != null)
 				return tiledDrawable;
 
-			var subtexture = Get<Subtexture>(name);
-			if (subtexture != null)
+			var sprite = Get<Sprite>(name);
+			if (sprite != null)
 			{
-				tiledDrawable = new TiledDrawable(subtexture);
-				Add<TiledDrawable>(name, tiledDrawable);
+				tiledDrawable = new TiledDrawable(sprite);
+				Add(name, tiledDrawable);
 			}
 
 			return tiledDrawable;
@@ -584,8 +554,8 @@ namespace Nez.UI
 
 
 		/// <summary>
-		/// Returns a registered ninepatch. If no ninepatch is found but a Subtexture exists with the name, a ninepatch is created from the
-		/// Subtexture and stored in the skin.
+		/// Returns a registered ninepatch. If no ninepatch is found but a Sprite exists with the name, a ninepatch is created from the
+		/// Sprite and stored in the skin.
 		/// </summary>
 		/// <returns>The nine patch.</returns>
 		/// <param name="name">Name.</param>
@@ -595,19 +565,19 @@ namespace Nez.UI
 			if (ninePatchDrawable != null)
 				return ninePatchDrawable;
 
-			var ninePatchSubtexture = Get<NinePatchSubtexture>(name);
-			if (ninePatchSubtexture != null)
+			var ninePatchSprite = Get<NinePatchSprite>(name);
+			if (ninePatchSprite != null)
 			{
-				ninePatchDrawable = new NinePatchDrawable(ninePatchSubtexture);
-				Add<NinePatchDrawable>(name, ninePatchDrawable);
+				ninePatchDrawable = new NinePatchDrawable(ninePatchSprite);
+				Add(name, ninePatchDrawable);
 				return ninePatchDrawable;
 			}
 
-			var subtexture = Get<NinePatchSubtexture>(name);
-			if (subtexture != null)
+			var sprite = Get<NinePatchSprite>(name);
+			if (sprite != null)
 			{
-				ninePatchDrawable = new NinePatchDrawable(subtexture, 0, 0, 0, 0);
-				Add<NinePatchDrawable>(name, ninePatchDrawable);
+				ninePatchDrawable = new NinePatchDrawable(sprite, 0, 0, 0, 0);
+				Add(name, ninePatchDrawable);
 			}
 
 			return ninePatchDrawable;
@@ -616,7 +586,7 @@ namespace Nez.UI
 
 		/// <summary>
 		/// Returns a tinted copy of a drawable found in the skin via getDrawable. Note that the new drawable is NOT
-		/// added to the skin! Tinting is only supported on SubtextureDrawables and NinePatchDrawables.
+		/// added to the skin! Tinting is only supported on SpriteDrawables and NinePatchDrawables.
 		/// </summary>
 		/// <returns>The tinted drawable.</returns>
 		/// <param name="name">Name.</param>
@@ -624,8 +594,8 @@ namespace Nez.UI
 		public IDrawable NewTintedDrawable(string name, Color tint)
 		{
 			var drawable = GetDrawable(name);
-			if (drawable is SubtextureDrawable)
-				return (drawable as SubtextureDrawable).NewTintedDrawable(tint);
+			if (drawable is SpriteDrawable)
+				return (drawable as SpriteDrawable).NewTintedDrawable(tint);
 
 			if (drawable is NinePatchDrawable)
 				return (drawable as NinePatchDrawable).NewTintedDrawable(tint);

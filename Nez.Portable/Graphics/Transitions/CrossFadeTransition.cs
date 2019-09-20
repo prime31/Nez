@@ -54,12 +54,12 @@ namespace Nez
 			TransitionComplete();
 		}
 
-		public override void Render(Graphics graphics)
+		public override void Render(Batcher batcher)
 		{
 			GraphicsDeviceExt.SetRenderTarget(Core.GraphicsDevice, null);
-			graphics.Batcher.Begin(BlendState.NonPremultiplied, Core.DefaultSamplerState, DepthStencilState.None, null);
-			graphics.Batcher.Draw(PreviousSceneRender, Vector2.Zero, _color);
-			graphics.Batcher.End();
+			batcher.Begin(BlendState.NonPremultiplied, Core.DefaultSamplerState, DepthStencilState.None, null);
+			batcher.Draw(PreviousSceneRender, Vector2.Zero, _color);
+			batcher.End();
 		}
 	}
 }

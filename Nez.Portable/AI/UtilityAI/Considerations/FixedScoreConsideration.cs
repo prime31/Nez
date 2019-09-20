@@ -1,7 +1,4 @@
-﻿using System;
-
-
-namespace Nez.AI.UtilityAI
+﻿namespace Nez.AI.UtilityAI
 {
 	/// <summary>
 	/// always returns a fixed score. Serves double duty as a default Consideration.
@@ -15,7 +12,7 @@ namespace Nez.AI.UtilityAI
 
 		public FixedScoreConsideration(float score = 1)
 		{
-			this.Score = score;
+			Score = score;
 		}
 
 

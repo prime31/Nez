@@ -63,14 +63,14 @@ namespace FarseerPhysics.Dynamics.Joints
 
 		public override Vector2 WorldAnchorA
 		{
-			get { return _bodyA.GetWorldPoint(_localAnchorA); }
-			set { Debug.Assert(false, "You can't set the world anchor on this joint type."); }
+			get => _bodyA.GetWorldPoint(_localAnchorA);
+			set => Debug.Assert(false, "You can't set the world anchor on this joint type.");
 		}
 
 		public override Vector2 WorldAnchorB
 		{
-			get { return _bodyB.GetWorldPoint(_localAnchorB); }
-			set { Debug.Assert(false, "You can't set the world anchor on this joint type."); }
+			get => _bodyB.GetWorldPoint(_localAnchorB);
+			set => Debug.Assert(false, "You can't set the world anchor on this joint type.");
 		}
 
 		/// <summary>
@@ -78,7 +78,7 @@ namespace FarseerPhysics.Dynamics.Joints
 		/// </summary>
 		public float Ratio
 		{
-			get { return _ratio; }
+			get => _ratio;
 			set
 			{
 				Debug.Assert(MathUtils.IsValid(value));

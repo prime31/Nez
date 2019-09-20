@@ -118,13 +118,13 @@ namespace Nez.UI
 		}
 
 
-		public override void Draw(Graphics graphics, float parentAlpha)
+		public override void Draw(Batcher batcher, float parentAlpha)
 		{
 			var temp = _selectBox.LocalToStageCoordinates(Vector2.Zero);
 			if (temp != _screenPosition)
 				Core.Schedule(0f, false, this, t => ((SelectBoxList<T>) t.Context).Hide());
 
-			base.Draw(graphics, parentAlpha);
+			base.Draw(batcher, parentAlpha);
 		}
 
 

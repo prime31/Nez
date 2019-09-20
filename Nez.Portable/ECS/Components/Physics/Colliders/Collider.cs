@@ -18,18 +18,15 @@ namespace Nez
 		/// </summary>
 		public Vector2 LocalOffset
 		{
-			get { return _localOffset; }
-			set { SetLocalOffset(value); }
+			get => _localOffset;
+			set => SetLocalOffset(value);
 		}
 
 		/// <summary>
 		/// represents the absolute position to this Collider. It is entity.transform.position + localPosition - origin.
 		/// </summary>
 		/// <value>The absolute position.</value>
-		public Vector2 AbsolutePosition
-		{
-			get { return Entity.Transform.Position + _localOffset; }
-		}
+		public Vector2 AbsolutePosition => Entity.Transform.Position + _localOffset;
 
 		/// <summary>
 		/// wraps Transform.rotation and returns 0 if this Collider does not rotate with the Entity else it returns Transform.rotation
@@ -135,7 +132,7 @@ namespace Nez
 		/// <param name="shouldColliderScaleAndRotateWithTransform">If set to <c>true</c> should collider scale and rotate with transform.</param>
 		public Collider SetShouldColliderScaleAndRotateWithTransform(bool shouldColliderScaleAndRotateWithTransform)
 		{
-			this.ShouldColliderScaleAndRotateWithTransform = shouldColliderScaleAndRotateWithTransform;
+			ShouldColliderScaleAndRotateWithTransform = shouldColliderScaleAndRotateWithTransform;
 			_isPositionDirty = _isRotationDirty = true;
 			return this;
 		}

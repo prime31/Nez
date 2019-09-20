@@ -129,7 +129,7 @@ namespace Nez
 		                                Vector2 circleCenter, float radius)
 		{
 			//Check if the rectangle contains the circle's center-point
-			if (Collisions.RectToPoint(rectX, rectY, rectWidth, rectHeight, circleCenter))
+			if (RectToPoint(rectX, rectY, rectWidth, rectHeight, circleCenter))
 				return true;
 
 			// Check the circle against the relevant edges
@@ -188,8 +188,8 @@ namespace Nez
 		static public bool RectToLine(float rectX, float rectY, float rectWidth, float rectHeight, Vector2 lineFrom,
 		                              Vector2 lineTo)
 		{
-			var fromSector = Collisions.GetSector(rectX, rectY, rectWidth, rectHeight, lineFrom);
-			var toSector = Collisions.GetSector(rectX, rectY, rectWidth, rectHeight, lineTo);
+			var fromSector = GetSector(rectX, rectY, rectWidth, rectHeight, lineFrom);
+			var toSector = GetSector(rectX, rectY, rectWidth, rectHeight, lineTo);
 
 			if (fromSector == PointSectors.Center || toSector == PointSectors.Center)
 				return true;
@@ -207,7 +207,7 @@ namespace Nez
 				{
 					edgeFrom = new Vector2(rectX, rectY);
 					edgeTo = new Vector2(rectX + rectWidth, rectY);
-					if (Collisions.LineToLine(edgeFrom, edgeTo, lineFrom, lineTo))
+					if (LineToLine(edgeFrom, edgeTo, lineFrom, lineTo))
 						return true;
 				}
 
@@ -215,7 +215,7 @@ namespace Nez
 				{
 					edgeFrom = new Vector2(rectX, rectY + rectHeight);
 					edgeTo = new Vector2(rectX + rectWidth, rectY + rectHeight);
-					if (Collisions.LineToLine(edgeFrom, edgeTo, lineFrom, lineTo))
+					if (LineToLine(edgeFrom, edgeTo, lineFrom, lineTo))
 						return true;
 				}
 
@@ -223,7 +223,7 @@ namespace Nez
 				{
 					edgeFrom = new Vector2(rectX, rectY);
 					edgeTo = new Vector2(rectX, rectY + rectHeight);
-					if (Collisions.LineToLine(edgeFrom, edgeTo, lineFrom, lineTo))
+					if (LineToLine(edgeFrom, edgeTo, lineFrom, lineTo))
 						return true;
 				}
 
@@ -231,7 +231,7 @@ namespace Nez
 				{
 					edgeFrom = new Vector2(rectX + rectWidth, rectY);
 					edgeTo = new Vector2(rectX + rectWidth, rectY + rectHeight);
-					if (Collisions.LineToLine(edgeFrom, edgeTo, lineFrom, lineTo))
+					if (LineToLine(edgeFrom, edgeTo, lineFrom, lineTo))
 						return true;
 				}
 			}

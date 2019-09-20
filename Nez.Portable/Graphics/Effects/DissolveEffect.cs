@@ -12,7 +12,7 @@ namespace Nez
 		/// <value>The progress.</value>
 		public float Progress
 		{
-			get { return _progress; }
+			get => _progress;
 			set
 			{
 				_progressParam.SetValue(value);
@@ -26,7 +26,7 @@ namespace Nez
 		/// <value>The dissolve threshold.</value>
 		public float DissolveThreshold
 		{
-			get { return _dissolveThreshold; }
+			get => _dissolveThreshold;
 			set
 			{
 				_dissolveThresholdParam.SetValue(value);
@@ -40,7 +40,7 @@ namespace Nez
 		/// <value>The color of the dissolve threshold.</value>
 		public Color DissolveThresholdColor
 		{
-			get { return _dissolveThresholdColor; }
+			get => _dissolveThresholdColor;
 			set
 			{
 				_dissolveThresholdColorParam.SetValue(value.ToVector4());
@@ -54,7 +54,7 @@ namespace Nez
 		/// <value>The dissolve texture.</value>
 		public Texture2D DissolveTexture
 		{
-			set { _dissolveTexParam.SetValue(value); }
+			set => _dissolveTexParam.SetValue(value);
 		}
 
 		float _progress = 0f;

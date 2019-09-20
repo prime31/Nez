@@ -2,9 +2,6 @@
 using Microsoft.Xna.Framework.Input;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 
 namespace Nez.UI.Containers
@@ -179,26 +176,26 @@ namespace Nez.UI.Containers
 			return y;
 		}
 
-		public override void Draw(Graphics graphics, float parentAlpha)
+		public override void Draw(Batcher batcher, float parentAlpha)
 		{
-			DrawBackground(graphics, parentAlpha);
+			DrawBackground(batcher, parentAlpha);
 			var color = GetColor();
 			color = new Color(color.R, color.G, color.B, color.A * parentAlpha);
-			Draw(graphics, rootNodes, leftColumnWidth, color);
-			base.Draw(graphics, parentAlpha);
+			Draw(batcher, rootNodes, leftColumnWidth, color);
+			base.Draw(batcher, parentAlpha);
 		}
 
-		protected void DrawBackground(Graphics Graphics, float parentAlpha)
+		protected void DrawBackground(Batcher batcher, float parentAlpha)
 		{
 			if (style.Background != null)
 			{
 				var color = GetColor();
 				color = new Color(color.R, color.G, color.B, color.A * parentAlpha);
-				style.Background.Draw(Graphics, GetX(), GetY(), GetWidth(), GetHeight(), color);
+				style.Background.Draw(batcher, GetX(), GetY(), GetWidth(), GetHeight(), color);
 			}
 		}
 
-		private void Draw(Graphics batch, List<Node> nodes, float indent, Color color)
+		private void Draw(Batcher batch, List<Node> nodes, float indent, Color color)
 		{
 			var plus = style.Plus;
 			var minus = style.Minus;
@@ -353,8 +350,8 @@ namespace Nez.UI.Containers
 
 		public void SetIconSpacing(float left, float right)
 		{
-			this.iconSpacingLeft = left;
-			this.iconSpacingRight = right;
+			iconSpacingLeft = left;
+			iconSpacingRight = right;
 		}
 
 		public void FindExpandedObjects(List<object> objects)

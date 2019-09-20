@@ -190,7 +190,7 @@ namespace Nez
 					maxY = pt.Y;
 			}
 
-			return RectangleExt.FromMinMaxPoints(new Point((int) minX, (int) minY), new Point((int) maxX, (int) maxY));
+			return FromMinMaxPoints(new Point((int) minX, (int) minY), new Point((int) maxX, (int) maxY));
 		}
 
 
@@ -511,7 +511,7 @@ namespace Nez
 
 		public static Vector2 GetClosestPointOnBoundsToOrigin(ref Rectangle rect)
 		{
-			var max = RectangleExt.GetMax(ref rect);
+			var max = GetMax(ref rect);
 			var minDist = Math.Abs(rect.Location.X);
 			var boundsPoint = new Vector2(rect.Location.X, 0);
 

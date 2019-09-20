@@ -4,11 +4,41 @@ The root class in the Nez world is the Core class which is a subclass of the Gam
 
 
 ## Graphics
-Nez will create an instance of the Graphics class (available via `Graphics.Instance``) for you at startup. It includes a default BitmapFont so you can be up and running right away with good looking text (MonoGames SpriteFont has some terrible compression going on) and should cover most of your rendering needs. Graphics provides direct access to a SpriteBatch and there is a SpriteBatch extension class with a bunch of helpers for drawing rectangles, circles, lines, etc.
+Nez will create an instance of the Graphics class (available via `Graphics.Instance`) for you at startup. It includes a default BitmapFont so you can be up and running right away with good looking text (MonoGames SpriteFont has some terrible compression going on) and should cover most of your rendering needs. Graphics provides direct access to a SpriteBatch and there is a SpriteBatch extension class with a bunch of helpers for drawing rectangles, circles, lines, etc.
 
 
 ## Scene
 When you set Core.scene to a new Scene, Nez will finish rendering the current Scene, fire off the `CoreEvents.SceneChanged` event and then start rendering the new Scene. For more information on Scenes see the [Scene-Entity-Component](Scene-Entity-Component.md) FAQ.
+
+
+## Sprites
+You can't make a 2D game without sprites. Nez provides a variety of ways to render sprites from basic single texture rendering to sprite atlas support to nine patch sprites. Some of the common sprite Components to get to know are `SpriteRenderer`, `SpriteAnimator`, `SpriteTrail`, `TiledSprite`, `ScrollingSprite` and `PrototypeSprite`. The two most common things in a 2D game are static sprites and animated sprites. Examples are below:
+
+```csharp
+// load a single image texture into a static SpriteRenderer
+var texture = Content.Load<Texture2D>("SomeTex");
+
+var entity = CreateEntity("SpriteExample");
+entity.AddComponent(new SpriteRenderer(texture));
+```
+
+```csharp
+// load up a texture that is an atlas of 16x16 animation frames
+var texture = Content.Load<Texture2D>("SomeCharacterTex");
+var sprites = Sprite.SpritesFromAtlas(texture, 16, 16);
+			
+var entity = CreateEntity("SpriteExample");
+
+// add a SpriteAnimator, which renders the current frame of the currently playing animation
+var animator = entity.AddComponent<SpriteAnimator>();
+
+// add some animations
+animator.AddAnimation("Run", sprites[0], sprites[1], sprites[2]);
+animator.AddAnimation("Idle", sprites[3], sprites[4]);
+
+// some time later, play an animation
+animator.Play("Run");
+```
 
 
 ## Physics

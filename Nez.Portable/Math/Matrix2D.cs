@@ -31,17 +31,14 @@ namespace Nez
 		/// <summary>
 		/// Returns the identity matrix.
 		/// </summary>
-		public static Matrix2D Identity
-		{
-			get { return _identity; }
-		}
+		public static Matrix2D Identity => _identity;
 
 		/// <summary>
 		/// Position stored in this matrix.
 		/// </summary>
 		public Vector2 Translation
 		{
-			get { return new Vector2(M31, M32); }
+			get => new Vector2(M31, M32);
 			set
 			{
 				M31 = value.X;
@@ -55,7 +52,7 @@ namespace Nez
 		/// <value>The rotation.</value>
 		public float Rotation
 		{
-			get { return Mathf.Atan2(M21, M11); }
+			get => Mathf.Atan2(M21, M11);
 			set
 			{
 				var val1 = Mathf.Cos(value);
@@ -74,8 +71,8 @@ namespace Nez
 		/// <value>The rotation degrees.</value>
 		public float RotationDegrees
 		{
-			get { return MathHelper.ToDegrees(Rotation); }
-			set { Rotation = MathHelper.ToRadians(value); }
+			get => MathHelper.ToDegrees(Rotation);
+			set => Rotation = MathHelper.ToRadians(value);
 		}
 
 		/// <summary>
@@ -83,7 +80,7 @@ namespace Nez
 		/// </summary>
 		public Vector2 Scale
 		{
-			get { return new Vector2(M11, M22); }
+			get => new Vector2(M11, M22);
 			set
 			{
 				M11 = value.X;
@@ -179,7 +176,7 @@ namespace Nez
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static void CreateRotation(float radians, out Matrix2D result)
 		{
-			result = Matrix2D.Identity;
+			result = Identity;
 
 			var val1 = (float) Math.Cos(radians);
 			var val2 = (float) Math.Sin(radians);

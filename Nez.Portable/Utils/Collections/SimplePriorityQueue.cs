@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-
-
-namespace System.Collections.Generic
+﻿namespace System.Collections.Generic
 {
 	public sealed class SimplePriorityQueue<T> : IPriorityQueue<T>
 	{

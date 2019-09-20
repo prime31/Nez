@@ -95,14 +95,14 @@ public class SuperTransition : SceneTransition
 	}
 
 
-	public override void Render( Graphics graphics )
+	public override void Render( Batcher batcher )
 	{
 		// here, we are just going to render directly to the back buffer using our Effect. We render the previousSceneRender which
 		// SceneTransition gets for us. It contains the last render of the previous Scene.
 		Core.graphicsDevice.SetRenderTarget( null );
-		graphics.Batcher.Begin( BlendState.NonPremultiplied, Core.DefaultSamplerState, DepthStencilState.None, null, _effect );
-		graphics.Batcher.Draw( previousSceneRender, _destinationRect, Color.White );
-		graphics.Batcher.End();
+		batcher.Begin( BlendState.NonPremultiplied, Core.DefaultSamplerState, DepthStencilState.None, null, _effect );
+		batcher.Draw( previousSceneRender, _destinationRect, Color.White );
+		bbatcher.End();
 	}
 }
 ```

@@ -1,7 +1,4 @@
-﻿using System;
-
-
-namespace Nez.UI
+﻿namespace Nez.UI
 {
 	/// <summary>
 	/// interface applied to any Element that wants to take part in gamepad focus. By default, the Button class implements this which cascades

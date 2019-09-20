@@ -43,28 +43,28 @@ namespace Nez.Svg
 				_pathBuilder = new SvgReflectionPathBuilder();
 		}
 
-		public override void Render(Graphics graphics, Camera camera)
+		public override void Render(Batcher batcher, Camera camera)
 		{
 			// in some rare cases, there are SVG elements outside of a group so we'll render those cases first
-			RenderRects(graphics.Batcher, SvgDoc.Rectangles);
-			RenderPaths(graphics.Batcher, SvgDoc.Paths);
-			RenderLines(graphics.Batcher, SvgDoc.Lines);
-			RenderCircles(graphics.Batcher, SvgDoc.Circles);
-			RenderPolygons(graphics.Batcher, SvgDoc.Polygons);
-			RenderPolylines(graphics.Batcher, SvgDoc.Polylines);
-			RenderImages(graphics.Batcher, SvgDoc.Images);
+			RenderRects(batcher, SvgDoc.Rectangles);
+			RenderPaths(batcher, SvgDoc.Paths);
+			RenderLines(batcher, SvgDoc.Lines);
+			RenderCircles(batcher, SvgDoc.Circles);
+			RenderPolygons(batcher, SvgDoc.Polygons);
+			RenderPolylines(batcher, SvgDoc.Polylines);
+			RenderImages(batcher, SvgDoc.Images);
 
 			if (SvgDoc.Groups != null)
 			{
 				foreach (var g in SvgDoc.Groups)
 				{
-					RenderRects(graphics.Batcher, g.Rectangles);
-					RenderPaths(graphics.Batcher, g.Paths);
-					RenderLines(graphics.Batcher, g.Lines);
-					RenderCircles(graphics.Batcher, g.Circles);
-					RenderPolygons(graphics.Batcher, g.Polygons);
-					RenderPolylines(graphics.Batcher, g.Polylines);
-					RenderImages(graphics.Batcher, g.Images);
+					RenderRects(batcher, g.Rectangles);
+					RenderPaths(batcher, g.Paths);
+					RenderLines(batcher, g.Lines);
+					RenderCircles(batcher, g.Circles);
+					RenderPolygons(batcher, g.Polygons);
+					RenderPolylines(batcher, g.Polylines);
+					RenderImages(batcher, g.Images);
 				}
 			}
 		}

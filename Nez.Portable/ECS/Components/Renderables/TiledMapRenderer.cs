@@ -1,5 +1,4 @@
-﻿using System;
-using Nez.Tiled;
+﻿using Nez.Tiled;
 using Microsoft.Xna.Framework;
 using System.Collections.Generic;
 
@@ -121,31 +120,31 @@ namespace Nez
 
 		void IUpdatable.Update() => TiledMap.Update();
 
-		public override void Render(Graphics graphics, Camera camera)
+		public override void Render(Batcher batcher, Camera camera)
 		{
 			if (LayerIndicesToRender == null)
 			{
-				TiledRendering.RenderMap(TiledMap, graphics.Batcher, Entity.Transform.Position + _localOffset, Transform.Scale, LayerDepth);
+				TiledRendering.RenderMap(TiledMap, batcher, Entity.Transform.Position + _localOffset, Transform.Scale, LayerDepth);
 			}
 			else
 			{
 				for (var i = 0; i < TiledMap.Layers.Count; i++)
 				{
 					if (TiledMap.Layers[i].Visible && LayerIndicesToRender.Contains(i))
-						TiledRendering.RenderLayer(TiledMap.Layers[i], graphics.Batcher, Entity.Transform.Position + _localOffset, Transform.Scale, LayerDepth, camera.Bounds);
+						TiledRendering.RenderLayer(TiledMap.Layers[i], batcher, Entity.Transform.Position + _localOffset, Transform.Scale, LayerDepth, camera.Bounds);
 				}
 			}
 		}
 
-		public override void DebugRender(Graphics graphics)
+		public override void DebugRender(Batcher batcher)
 		{
 			foreach (var group in TiledMap.ObjectGroups)
-				TiledRendering.RenderObjectGroup(group, graphics.Batcher, Entity.Transform.Position + _localOffset, Transform.Scale, LayerDepth);
+				TiledRendering.RenderObjectGroup(group, batcher, Entity.Transform.Position + _localOffset, Transform.Scale, LayerDepth);
 
 			if (_colliders != null)
 			{
 				foreach (var collider in _colliders)
-					collider.DebugRender(graphics);
+					collider.DebugRender(batcher);
 			}
 		}
 

@@ -39,6 +39,7 @@ Nez Systems
 - [Scene-Entity-Component](FAQs/Scene-Entity-Component.md)
 - [Rendering](FAQs/Rendering.md)
 - [Content Management](FAQs/ContentManagement.md)
+- [Dear IMGUI](FAQs/DearImGui.md)
 - [Nez Physics/Collisions](FAQs/Physics.md)
 - [Farseer Physics](FAQs/FarseerPhysics.md)
 - [Scene Transitions](FAQs/SceneTransitions.md)
@@ -52,7 +53,6 @@ Nez Systems
 - [SVG Support](FAQs/SVG.md)
 - [AI (FSM, Behavior Tree, GOAP, Utility AI)](FAQs/AI.md)
 - [Deferred Lighting](FAQs/DeferredLighting.md)
-- [Pipeline Importers](FAQs/PipelineImporters.md)
 - [Samples](FAQs/Samples.md)
 
 
@@ -71,42 +71,11 @@ If you intend to use any of the built in Effects or PostProcessors you should al
 Note: if you get compile errors referencing a missing `project.assets.json` file run `msbuild Nez.sln /t:restore` in the root Nez folder to restore them.
 
 
-#### (optional) Pipeline Tool setup for access to the Nez Pipeline importers
-
-Note: all Pipeline importers are being deprecated in favor of runtime loading of all asset types.
-
-- add the `Nez.PipelineImporter/Nez.PipelineImporter.csproj` project to your solution
-- open the `Nez.PipelineImporter` references dialog and add a reference to the Nez project
-- build the `Nez.PipelineImporter` project to generate the DLLs
-- open the Pipeline Tool by double-clicking your `Content.mgcb` file, select `Content` and under Settings add `PipelineImporter.dll`, `Ionic.ZLib.dll`, `Newtonsoft.Json.dll` and `Nez.dll` to the References collection.
-
-
 ### Install through NuGet:
 
-Note that NuGet packages are compiled release DLLs! They will not contain any debug code such as the DebugConsole or debug visualization classes!
+Add [Nez](https://www.nuget.org/packages/Nez/) to your project's NuGet packages. Optionally add the Nez.FarseerPhysics and Nez.Persistence NuGet packages.
 
-Add [Nez](https://www.nuget.org/packages/Nez/) and [Nez.PipelineImporter](https://www.nuget.org/packages/Nez.PipelineImporter/) to your project's NuGet packages.
-
-The latter will not add any references to your projects, installing it this way fetches the necessary `DLL` files that your `Content.mgcb` needs to reference. Given the version of Nez that you installed, edit `Content.mgcb` so it looks like this:
-
-```bash
-#----------------------------- Global Properties ---------------------------#
-
-...
-
-#-------------------------------- References -------------------------------#
-
-/reference:../../packages/Nez.PipelineImporter.{VERSION}/tools/Nez.dll
-/reference:../../packages/Nez.PipelineImporter.{VERSION}/tools/Nez.PipelineImporter.dll
-/reference:../../packages/Nez.PipelineImporter.{VERSION}/tools/Newtonsoft.Json.dll
-/reference:../../packages/Nez.PipelineImporter.{VERSION}/tools/Ionic.ZLib.dll
-
-#---------------------------------- Content --------------------------------#
-
-...
-```
-
-Installing through NuGet, the contents of the `DefaultContent` content folder are also included in the package. You will find them under `packages/Nez.{VERSION}/tools`.
+Installing through NuGet, the contents of the `DefaultContent` content folder is also included in the package. You will find them under `packages/Nez.{VERSION}/tools`.
 
 ---
 
@@ -114,20 +83,6 @@ All Nez shaders are compiled for OpenGL so be sure to use the DesktopGL template
 
 If you are developing a mobile application you will need to enable touch input by calling `Input.Touch.EnableTouchSupport()`.
 
-
-Pipeline Importers
-==========
-Pipeline importers are deprecated. They will soon be removed so if you need them version 0.9.5 is the last version to contain them.
-
-- **Texture Atlas Generator**: give it a directory or a list of files and it will combine them all into a single atlas and provide easy access to the source images at runtime. Supports nine patch sprites as well in the [Android style](http://developer.android.com/tools/help/draw9patch.html) (single pixel border with black lines representing the patches). See also [this generator](https://romannurik.github.io/AndroidAssetStudio/nine-patches.html). The Texture Atlas Generator also includes a per-folder sprite animation generation. The atlas generator uses an XML file as input with an Asset Type of System.String[]. The string array should specify the folder or folders where the source images are located.
-- **Tiled**: import [Tiled](http://www.mapeditor.org/) maps. Covers tile, image and object layers and rendering with full culling support built-in along with optimized collider generation.
-- **Bitmap Fonts**: imports BMFont files (from programs like [Glyph Designer](https://71squared.com/glyphdesigner), [Littera](http://kvazars.com/littera/), etc). Outputs a single xnb file and includes SpriteBatch extension methods to display text the directly match the SpriteFont methods.
-- **Particle Designer Importer**: imports [Particle Designer](https://71squared.com/particledesigner) particle systems for use with the Nez particle system
-- **LibGdxAtlases**: imports libGDX texture atlases including nine patch support
-- **Texture Packer**: imports a [TexturePacker](https://www.codeandweb.com/texturepacker) atlas and JSON file
-- **UISkin Importer**: imports uiskin files (JSON format) that are converted to UISkins. See the [UI page](FAQs/UI.md) for an example and details of the JSON format.
-- **Normal Map Generator**: generates normal maps from standard textures
-- **XMLTemplateMaker**: this isn't so much an importer as a helper to make your own importer. Pass it a class and it spits out an XML template that you can use for your own custom XML-to-object importers.
 
 
 Samples Repository

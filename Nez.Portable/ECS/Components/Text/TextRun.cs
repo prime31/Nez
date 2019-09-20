@@ -26,20 +26,11 @@ namespace Nez
 			}
 		}
 
-		public float Width
-		{
-			get { return _size.X; }
-		}
+		public float Width => _size.X;
 
-		public float Height
-		{
-			get { return _size.Y; }
-		}
+		public float Height => _size.Y;
 
-		public Vector2 Origin
-		{
-			get { return _origin; }
-		}
+		public Vector2 Origin => _origin;
 
 		public float Rotation;
 		public Vector2 Position;
@@ -50,8 +41,8 @@ namespace Nez
 		/// <value>The text.</value>
 		public string Text
 		{
-			get { return _text; }
-			set { SetText(value); }
+			get => _text;
+			set => SetText(value);
 		}
 
 		/// <summary>
@@ -60,8 +51,8 @@ namespace Nez
 		/// <value>The horizontal origin.</value>
 		public HorizontalAlign HorizontalOrigin
 		{
-			get { return _horizontalAlign; }
-			set { SetHorizontalAlign(value); }
+			get => _horizontalAlign;
+			set => SetHorizontalAlign(value);
 		}
 
 		/// <summary>
@@ -70,8 +61,8 @@ namespace Nez
 		/// <value>The vertical origin.</value>
 		public VerticalAlign VerticalOrigin
 		{
-			get { return _verticalAlign; }
-			set { SetVerticalAlign(value); }
+			get => _verticalAlign;
+			set => SetVerticalAlign(value);
 		}
 
 
@@ -219,7 +210,7 @@ namespace Nez
 					currentCharacter.Bounds.Height * _scale.Y);
 				_charDetails[i].Texture = _font.Textures[_font[currentCharacter.Char].TexturePage];
 
-				//_charDetails[i].texture = currentCharacter.subtexture.texture2D;
+				//_charDetails[i].texture = currentCharacter.sprite.texture2D;
 
 
 				// Batcher calculations
@@ -320,10 +311,10 @@ namespace Nez
 		}
 
 
-		public void Render(Graphics graphics)
+		public void Render(Batcher batcher)
 		{
 			for (var i = 0; i < _charDetails.Length; i++)
-				graphics.Batcher.DrawRaw(_charDetails[i].Texture, _charDetails[i].Verts, _charDetails[i].TexCoords,
+				batcher.DrawRaw(_charDetails[i].Texture, _charDetails[i].Verts, _charDetails[i].TexCoords,
 					_charDetails[i].Color);
 		}
 	}

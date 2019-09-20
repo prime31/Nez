@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 
 namespace Nez.AI.UtilityAI
@@ -18,7 +17,7 @@ namespace Nez.AI.UtilityAI
 
 		public AllOrNothingConsideration(float threshold = 0)
 		{
-			this.Threshold = threshold;
+			Threshold = threshold;
 		}
 
 

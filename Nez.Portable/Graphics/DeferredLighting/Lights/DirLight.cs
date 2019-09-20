@@ -10,10 +10,7 @@ namespace Nez.DeferredLighting
 	public class DirLight : DeferredLight
 	{
 		// dir lights are infinite so bounds should be as well
-		public override RectangleF Bounds
-		{
-			get { return _bounds; }
-		}
+		public override RectangleF Bounds => _bounds;
 
 		/// <summary>
 		/// direction of the light
@@ -39,33 +36,33 @@ namespace Nez.DeferredLighting
 
 		public DirLight(Color color) : this()
 		{
-			this.Color = color;
+			Color = color;
 		}
 
 
 		public DirLight(Color color, Vector3 lightDirection) : this(color)
 		{
-			this.Direction = lightDirection;
+			Direction = lightDirection;
 		}
 
 
 		public DirLight SetDirection(Vector3 direction)
 		{
-			this.Direction = direction;
+			Direction = direction;
 			return this;
 		}
 
 
 		public DirLight SetSpecularIntensity(float specularIntensity)
 		{
-			this.SpecularIntensity = specularIntensity;
+			SpecularIntensity = specularIntensity;
 			return this;
 		}
 
 
 		public DirLight SetSpecularPower(float specularPower)
 		{
-			this.SpecularPower = specularPower;
+			SpecularPower = specularPower;
 			return this;
 		}
 
@@ -73,8 +70,8 @@ namespace Nez.DeferredLighting
 		/// <summary>
 		/// we dont want to render our bounds so we just render a direction
 		/// </summary>
-		/// <param name="graphics">Graphics.</param>
-		public override void DebugRender(Graphics graphics)
+		/// <param name="batcher">Batcher.</param>
+		public override void DebugRender(Batcher batcher)
 		{
 			// figure out a starting corner for the line
 			var root = Vector2.Zero;
@@ -89,7 +86,7 @@ namespace Nez.DeferredLighting
 				root.X = Screen.Width - 10;
 
 			var angle = Mathf.Atan2(Direction.Y, Direction.X);
-			graphics.Batcher.DrawLineAngle(root, angle, 100, Color.Red, 3);
+			batcher.DrawLineAngle(root, angle, 100, Color.Red, 3);
 		}
 	}
 }

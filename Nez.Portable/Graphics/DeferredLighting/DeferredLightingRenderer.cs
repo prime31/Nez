@@ -17,10 +17,7 @@ namespace Nez.DeferredLighting
 		/// </summary>
 		/// <value>true</value>
 		/// <c>false</c>
-		public override bool WantsToRenderToSceneRenderTarget
-		{
-			get { return false; }
-		}
+		public override bool WantsToRenderToSceneRenderTarget => false;
 
 		/// <summary>
 		/// the renderLayers this Renderer will render
@@ -92,7 +89,7 @@ namespace Nez.DeferredLighting
 			_lightLayer = lightLayer;
 			Array.Sort(renderLayers);
 			Array.Reverse(renderLayers);
-			this.RenderLayers = renderLayers;
+			RenderLayers = renderLayers;
 
 			_lightEffect = new DeferredLightEffect();
 
@@ -130,7 +127,7 @@ namespace Nez.DeferredLighting
 				{
 					var renderable = renderables.Buffer[j];
 					if (renderable.Enabled && renderable.IsVisibleFromCamera(cam))
-						renderable.DebugRender(Graphics.Instance);
+						renderable.DebugRender(Graphics.Instance.Batcher);
 				}
 			}
 
@@ -139,7 +136,7 @@ namespace Nez.DeferredLighting
 			{
 				var renderable = lightRenderables.Buffer[j];
 				if (renderable.Enabled && renderable.IsVisibleFromCamera(cam))
-					renderable.DebugRender(Graphics.Instance);
+					renderable.DebugRender(Graphics.Instance.Batcher);
 			}
 		}
 

@@ -45,11 +45,11 @@ namespace Nez.Sprites
 		{
 		}
 
-		public ScrollingSprite(Subtexture subtexture) : base(subtexture)
+		public ScrollingSprite(Sprite sprite) : base(sprite)
 		{
 		}
 
-		public ScrollingSprite(Texture2D texture) : this(new Subtexture(texture))
+		public ScrollingSprite(Texture2D texture) : this(new Sprite(texture))
 		{
 		}
 

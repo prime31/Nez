@@ -327,11 +327,11 @@ namespace FarseerPhysics.Common
 		}
 
 
-		public static Vertices CreatePolygonFromTextureData(Nez.Textures.Subtexture subtexture)
+		public static Vertices CreatePolygonFromTextureData(Nez.Textures.Sprite sprite)
 		{
-			var data = new uint[subtexture.SourceRect.Width * subtexture.SourceRect.Height];
-			subtexture.Texture2D.GetData(0, subtexture.SourceRect, data, 0, data.Length);
-			return TextureConverter.DetectVertices(data, subtexture.Texture2D.Width);
+			var data = new uint[sprite.SourceRect.Width * sprite.SourceRect.Height];
+			sprite.Texture2D.GetData(0, sprite.SourceRect, data, 0, data.Length);
+			return TextureConverter.DetectVertices(data, sprite.Texture2D.Width);
 		}
 
 		/// <summary>

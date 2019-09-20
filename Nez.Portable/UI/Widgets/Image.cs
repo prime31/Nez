@@ -1,6 +1,4 @@
-﻿using System;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
+﻿using Microsoft.Xna.Framework.Graphics;
 using Nez.Textures;
 
 
@@ -30,14 +28,14 @@ namespace Nez.UI
 		}
 
 
-		public Image(Subtexture subtexture, Scaling scaling = Scaling.Stretch, int align = AlignInternal.Center) : this(
-			new SubtextureDrawable(subtexture), scaling, align)
+		public Image(Sprite sprite, Scaling scaling = Scaling.Stretch, int align = AlignInternal.Center) : this(
+			new SpriteDrawable(sprite), scaling, align)
 		{
 		}
 
 
 		public Image(Texture2D texture, Scaling scaling = Scaling.Stretch, int align = AlignInternal.Center) : this(
-			new Subtexture(texture), scaling, align)
+			new Sprite(texture), scaling, align)
 		{
 		}
 
@@ -66,7 +64,7 @@ namespace Nez.UI
 
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		/// <param name="alignment">Alignment.</param>
 		public Image SetAlignment(Align alignment)
@@ -85,7 +83,7 @@ namespace Nez.UI
 		#endregion
 
 
-		public override void Draw(Graphics graphics, float parentAlpha)
+		public override void Draw(Batcher batcher, float parentAlpha)
 		{
 			Validate();
 
@@ -102,8 +100,7 @@ namespace Nez.UI
 			//				}
 			//			}
 
-			if (_drawable != null)
-				_drawable.Draw(graphics, x + imageX, y + imageY, imageWidth * scaleX, imageHeight * scaleY, col);
+			_drawable?.Draw(batcher, x + imageX, y + imageY, imageWidth * scaleX, imageHeight * scaleY, col);
 		}
 
 
@@ -137,15 +134,9 @@ namespace Nez.UI
 
 		#region ILayout
 
-		public override float PreferredWidth
-		{
-			get { return _drawable != null ? _drawable.MinWidth : 0; }
-		}
+		public override float PreferredWidth => _drawable != null ? _drawable.MinWidth : 0;
 
-		public override float PreferredHeight
-		{
-			get { return _drawable != null ? _drawable.MinHeight : 0; }
-		}
+		public override float PreferredHeight => _drawable != null ? _drawable.MinHeight : 0;
 
 		#endregion
 	}

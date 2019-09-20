@@ -1,7 +1,4 @@
-﻿using System;
-
-
-namespace Nez.AI.UtilityAI
+﻿namespace Nez.AI.UtilityAI
 {
 	/// <summary>
 	/// The first Consideration to score above the score of the Default Consideration is selected

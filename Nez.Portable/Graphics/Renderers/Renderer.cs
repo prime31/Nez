@@ -1,5 +1,4 @@
 ﻿using System;
-using Microsoft.Xna.Framework.Graphics;
 using Nez.Textures;
 using Microsoft.Xna.Framework;
 using System.Runtime.CompilerServices;
@@ -9,9 +8,9 @@ namespace Nez
 {
 	/// <summary>
 	/// Renderers are added to a Scene and handle all of the actual calls to RenderableComponent.render and Entity.debugRender.
-	/// A simple Renderer could just start the Graphics.instanceGraphics.batcher or it could create its own local Graphics instance
+	/// A simple Renderer could just start the Batcher.instanceGraphics.batcher or it could create its own local Batcher instance
 	/// if it needs it for some kind of custom rendering.
-	/// 
+	///
 	/// Note that it is a best practice to ensure all Renderers that render to a RenderTarget have lower renderOrders to avoid issues
 	/// with clearing the back buffer (http://gamedev.stackexchange.com/questions/90396/monogame-setrendertarget-is-wiping-the-backbuffer).
 	/// Giving them a negative renderOrder is a good strategy to deal with this.
@@ -137,7 +136,7 @@ namespace Nez
 				FlushBatch(cam);
 			}
 
-			renderable.Render(Graphics.Instance, cam);
+			renderable.Render(Graphics.Instance.Batcher, cam);
 		}
 
 		/// <summary>
@@ -168,7 +167,7 @@ namespace Nez
 			{
 				var entity = scene.Entities[i];
 				if (entity.Enabled)
-					entity.DebugRender(Graphics.Instance);
+					entity.DebugRender(Graphics.Instance.Batcher);
 			}
 		}
 

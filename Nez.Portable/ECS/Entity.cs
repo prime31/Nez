@@ -42,8 +42,8 @@ namespace Nez
 		/// </summary>
 		public int Tag
 		{
-			get { return _tag; }
-			set { SetTag(value); }
+			get => _tag;
+			set => SetTag(value);
 		}
 
 		/// <summary>
@@ -56,8 +56,8 @@ namespace Nez
 		/// </summary>
 		public bool Enabled
 		{
-			get { return _enabled; }
-			set { SetEnabled(value); }
+			get => _enabled;
+			set => SetEnabled(value);
 		}
 
 		/// <summary>
@@ -66,8 +66,8 @@ namespace Nez
 		/// <value>The order.</value>
 		public int UpdateOrder
 		{
-			get { return _updateOrder; }
-			set { SetUpdateOrder(value); }
+			get => _updateOrder;
+			set => SetUpdateOrder(value);
 		}
 
 		/// <summary>
@@ -94,97 +94,97 @@ namespace Nez
 		public Transform Parent
 		{
 			[MethodImpl(MethodImplOptions.AggressiveInlining)]
-			get { return Transform.Parent; }
+			get => Transform.Parent;
 			[MethodImpl(MethodImplOptions.AggressiveInlining)]
-			set { Transform.SetParent(value); }
+			set => Transform.SetParent(value);
 		}
 
 		public int ChildCount
 		{
 			[MethodImpl(MethodImplOptions.AggressiveInlining)]
-			get { return Transform.ChildCount; }
+			get => Transform.ChildCount;
 		}
 
 		public Vector2 Position
 		{
 			[MethodImpl(MethodImplOptions.AggressiveInlining)]
-			get { return Transform.Position; }
+			get => Transform.Position;
 			[MethodImpl(MethodImplOptions.AggressiveInlining)]
-			set { Transform.SetPosition(value); }
+			set => Transform.SetPosition(value);
 		}
 
 		public Vector2 LocalPosition
 		{
 			[MethodImpl(MethodImplOptions.AggressiveInlining)]
-			get { return Transform.LocalPosition; }
+			get => Transform.LocalPosition;
 			[MethodImpl(MethodImplOptions.AggressiveInlining)]
-			set { Transform.SetLocalPosition(value); }
+			set => Transform.SetLocalPosition(value);
 		}
 
 		public float Rotation
 		{
 			[MethodImpl(MethodImplOptions.AggressiveInlining)]
-			get { return Transform.Rotation; }
+			get => Transform.Rotation;
 			[MethodImpl(MethodImplOptions.AggressiveInlining)]
-			set { Transform.SetRotation(value); }
+			set => Transform.SetRotation(value);
 		}
 
 		public float RotationDegrees
 		{
 			[MethodImpl(MethodImplOptions.AggressiveInlining)]
-			get { return Transform.RotationDegrees; }
+			get => Transform.RotationDegrees;
 			[MethodImpl(MethodImplOptions.AggressiveInlining)]
-			set { Transform.SetRotationDegrees(value); }
+			set => Transform.SetRotationDegrees(value);
 		}
 
 		public float LocalRotation
 		{
 			[MethodImpl(MethodImplOptions.AggressiveInlining)]
-			get { return Transform.LocalRotation; }
+			get => Transform.LocalRotation;
 			[MethodImpl(MethodImplOptions.AggressiveInlining)]
-			set { Transform.SetLocalRotation(value); }
+			set => Transform.SetLocalRotation(value);
 		}
 
 		public float LocalRotationDegrees
 		{
 			[MethodImpl(MethodImplOptions.AggressiveInlining)]
-			get { return Transform.LocalRotationDegrees; }
+			get => Transform.LocalRotationDegrees;
 			[MethodImpl(MethodImplOptions.AggressiveInlining)]
-			set { Transform.SetLocalRotationDegrees(value); }
+			set => Transform.SetLocalRotationDegrees(value);
 		}
 
 		public Vector2 Scale
 		{
 			[MethodImpl(MethodImplOptions.AggressiveInlining)]
-			get { return Transform.Scale; }
+			get => Transform.Scale;
 			[MethodImpl(MethodImplOptions.AggressiveInlining)]
-			set { Transform.SetScale(value); }
+			set => Transform.SetScale(value);
 		}
 
 		public Vector2 LocalScale
 		{
 			[MethodImpl(MethodImplOptions.AggressiveInlining)]
-			get { return Transform.LocalScale; }
+			get => Transform.LocalScale;
 			[MethodImpl(MethodImplOptions.AggressiveInlining)]
-			set { Transform.SetLocalScale(value); }
+			set => Transform.SetLocalScale(value);
 		}
 
 		public Matrix2D WorldInverseTransform
 		{
 			[MethodImpl(MethodImplOptions.AggressiveInlining)]
-			get { return Transform.WorldInverseTransform; }
+			get => Transform.WorldInverseTransform;
 		}
 
 		public Matrix2D LocalToWorldTransform
 		{
 			[MethodImpl(MethodImplOptions.AggressiveInlining)]
-			get { return Transform.LocalToWorldTransform; }
+			get => Transform.LocalToWorldTransform;
 		}
 
 		public Matrix2D WorldToLocalTransform
 		{
 			[MethodImpl(MethodImplOptions.AggressiveInlining)]
-			get { return Transform.WorldToLocalTransform; }
+			get => Transform.WorldToLocalTransform;
 		}
 
 		#endregion
@@ -194,7 +194,7 @@ namespace Nez
 		{
 			Components = new ComponentList(this);
 			Transform = new Transform(this);
-			this.Name = name;
+			Name = name;
 			Id = _idGenerator++;
 
 			if (Core.entitySystemsEnabled)
@@ -401,10 +401,10 @@ namespace Nez
 		/// <summary>
 		/// called if Core.debugRenderEnabled is true by the default renderers. Custom renderers can choose to call it or not.
 		/// </summary>
-		/// <param name="graphics">Graphics.</param>
-		public virtual void DebugRender(Graphics graphics)
+		/// <param name="batcher">Batcher.</param>
+		public virtual void DebugRender(Batcher batcher)
 		{
-			Components.DebugRender(graphics);
+			Components.DebugRender(batcher);
 		}
 
 		#endregion

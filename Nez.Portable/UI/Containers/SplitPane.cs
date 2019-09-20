@@ -72,25 +72,21 @@ namespace Nez.UI
 
 		public SplitPane(Element firstWidget, Element secondWidget, IDrawable handle, bool vertical = false) : this(
 			firstWidget, secondWidget, new SplitPaneStyle(handle), vertical)
-		{
-		}
+		{ }
 
 
 		public SplitPane(SplitPaneStyle style, bool vertical = false) : this(null, null, style, vertical)
-		{
-		}
+		{ }
 
 
 		#region IInputListener
 
 		void IInputListener.OnMouseEnter()
-		{
-		}
+		{ }
 
 
 		void IInputListener.OnMouseExit()
-		{
-		}
+		{ }
 
 
 		bool IInputListener.OnMousePressed(Vector2 mousePos)
@@ -140,8 +136,7 @@ namespace Nez.UI
 
 
 		void IInputListener.OnMouseUp(Vector2 mousePos)
-		{
-		}
+		{ }
 
 
 		bool IInputListener.OnMouseScrolled(int mouseWheelDelta)
@@ -161,7 +156,7 @@ namespace Nez.UI
 
 			if (_firstWidget != null)
 			{
-				var firstWidgetBounds = this._firstWidgetBounds;
+				var firstWidgetBounds = _firstWidgetBounds;
 				_firstWidget.SetBounds(firstWidgetBounds.X, firstWidgetBounds.Y, firstWidgetBounds.Width,
 					firstWidgetBounds.Height);
 
@@ -171,53 +166,52 @@ namespace Nez.UI
 
 			if (_secondWidget != null)
 			{
-				var secondWidgetBounds = this._secondWidgetBounds;
+				var secondWidgetBounds = _secondWidgetBounds;
 				_secondWidget.SetBounds(secondWidgetBounds.X, secondWidgetBounds.Y, secondWidgetBounds.Width,
 					secondWidgetBounds.Height);
 
-				if (_secondWidget is ILayout)
-					((ILayout) _secondWidget).Validate();
+				if (_secondWidget is ILayout layout)
+					layout.Validate();
 			}
 		}
 
 
-		public override void Draw(Graphics graphics, float parentAlpha)
+		public override void Draw(Batcher batcher, float parentAlpha)
 		{
 			Validate();
 
 			if (transform)
-				ApplyTransform(graphics, ComputeTransform());
+				ApplyTransform(batcher, ComputeTransform());
 			if (_firstWidget != null && _firstWidget.IsVisible())
 			{
-				var scissor = ScissorStack.CalculateScissors(stage?.Camera, graphics.Batcher.TransformMatrix,
-					_firstWidgetBounds);
+				var scissor = ScissorStack.CalculateScissors(stage?.Camera, batcher.TransformMatrix, _firstWidgetBounds);
 				if (ScissorStack.PushScissors(scissor))
 				{
-					graphics.Batcher.EnableScissorTest(true);
-					_firstWidget.Draw(graphics, parentAlpha * color.A);
-					graphics.Batcher.EnableScissorTest(false);
+					batcher.EnableScissorTest(true);
+					_firstWidget.Draw(batcher, parentAlpha * color.A);
+					batcher.EnableScissorTest(false);
 					ScissorStack.PopScissors();
 				}
 			}
 
 			if (_secondWidget != null && _secondWidget.IsVisible())
 			{
-				var scissor = ScissorStack.CalculateScissors(stage?.Camera, graphics.Batcher.TransformMatrix,
+				var scissor = ScissorStack.CalculateScissors(stage?.Camera, batcher.TransformMatrix,
 					_secondWidgetBounds);
 				if (ScissorStack.PushScissors(scissor))
 				{
-					graphics.Batcher.EnableScissorTest(true);
-					_secondWidget.Draw(graphics, parentAlpha * color.A);
-					graphics.Batcher.EnableScissorTest(false);
+					batcher.EnableScissorTest(true);
+					_secondWidget.Draw(batcher, parentAlpha * color.A);
+					batcher.EnableScissorTest(false);
 					ScissorStack.PopScissors();
 				}
 			}
 
-			_style.Handle.Draw(graphics, _handleBounds.X, _handleBounds.Y, _handleBounds.Width, _handleBounds.Height,
+			_style.Handle.Draw(batcher, _handleBounds.X, _handleBounds.Y, _handleBounds.Width, _handleBounds.Height,
 				new Color(color, (int) (color.A * parentAlpha)));
 
 			if (transform)
-				ResetTransform(graphics);
+				ResetTransform(batcher);
 		}
 
 
@@ -335,13 +329,12 @@ namespace Nez.UI
 
 
 		public SplitPaneStyle()
-		{
-		}
+		{ }
 
 
 		public SplitPaneStyle(IDrawable handle)
 		{
-			this.Handle = handle;
+			Handle = handle;
 		}
 
 

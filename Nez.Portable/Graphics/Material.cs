@@ -251,19 +251,19 @@ namespace Nez
 
 		public Material(Effect effect)
 		{
-			this.Effect = effect;
+			Effect = effect;
 		}
 
 		public Material(BlendState blendState, Effect effect = null)
 		{
-			this.BlendState = blendState;
-			this.Effect = effect;
+			BlendState = blendState;
+			Effect = effect;
 		}
 
 		public Material(DepthStencilState depthStencilState, Effect effect = null)
 		{
-			this.DepthStencilState = depthStencilState;
-			this.Effect = effect;
+			DepthStencilState = depthStencilState;
+			Effect = effect;
 		}
 
 		~Material()
@@ -316,10 +316,10 @@ namespace Nez
 		/// <param name="other">Other.</param>
 		public int CompareTo(Material other)
 		{
-			if (object.ReferenceEquals(other, null))
+			if (ReferenceEquals(other, null))
 				return 1;
 
-			if (object.ReferenceEquals(this, other))
+			if (ReferenceEquals(this, other))
 				return 0;
 
 			return -1;

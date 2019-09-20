@@ -38,14 +38,14 @@ namespace FarseerPhysics.Dynamics.Joints
 
 		public override Vector2 WorldAnchorA
 		{
-			get { return BodyA.Position; }
-			set { Debug.Assert(false, "You can't set the world anchor on this joint type."); }
+			get => BodyA.Position;
+			set => Debug.Assert(false, "You can't set the world anchor on this joint type.");
 		}
 
 		public override Vector2 WorldAnchorB
 		{
-			get { return BodyB.Position; }
-			set { Debug.Assert(false, "You can't set the world anchor on this joint type."); }
+			get => BodyB.Position;
+			set => Debug.Assert(false, "You can't set the world anchor on this joint type.");
 		}
 
 		/// <summary>
@@ -58,7 +58,7 @@ namespace FarseerPhysics.Dynamics.Joints
 				Debug.Assert(MathUtils.IsValid(value) && value >= 0.0f);
 				_maxForce = value;
 			}
-			get { return _maxForce; }
+			get => _maxForce;
 		}
 
 		/// <summary>
@@ -71,7 +71,7 @@ namespace FarseerPhysics.Dynamics.Joints
 				Debug.Assert(MathUtils.IsValid(value) && value >= 0.0f);
 				_maxTorque = value;
 			}
-			get { return _maxTorque; }
+			get => _maxTorque;
 		}
 
 		/// <summary>
@@ -87,7 +87,7 @@ namespace FarseerPhysics.Dynamics.Joints
 					_linearOffset = value;
 				}
 			}
-			get { return _linearOffset; }
+			get => _linearOffset;
 		}
 
 		/// <summary>
@@ -103,7 +103,7 @@ namespace FarseerPhysics.Dynamics.Joints
 					_angularOffset = value;
 				}
 			}
-			get { return _angularOffset; }
+			get => _angularOffset;
 		}
 
 		// FPE note: Used for serialization.

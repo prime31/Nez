@@ -20,17 +20,14 @@ namespace Nez
 			new VertexElement(16, VertexElementFormat.Vector3, VertexElementUsage.Normal, 0)
 		);
 
-		VertexDeclaration IVertexType.VertexDeclaration
-		{
-			get { return _vertexDeclaration; }
-		}
+		VertexDeclaration IVertexType.VertexDeclaration => _vertexDeclaration;
 
 
 		public VertexPositionColorNormal(Vector3 position, Color color, Vector3 normal)
 		{
-			this.Position = position;
-			this.Color = color;
-			this.Normal = normal;
+			Position = position;
+			Color = color;
+			Normal = normal;
 		}
 	}
 }

@@ -1,7 +1,4 @@
-﻿using System;
-
-
-namespace Nez.UI
+﻿namespace Nez.UI
 {
 	public enum Touchable
 	{

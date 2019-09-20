@@ -1,7 +1,4 @@
-﻿using System;
-
-
-namespace Nez.Tweens
+﻿namespace Nez.Tweens
 {
 	public interface ITweenable
 	{

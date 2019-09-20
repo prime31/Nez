@@ -1,5 +1,4 @@
-﻿using System;
-using Nez.UI;
+﻿using Nez.UI;
 using Microsoft.Xna.Framework;
 
 
@@ -10,15 +9,9 @@ namespace Nez
 	/// </summary>
 	public class UICanvas : RenderableComponent, IUpdatable
 	{
-		public override float Width
-		{
-			get { return Stage.GetWidth(); }
-		}
+		public override float Width => Stage.GetWidth();
 
-		public override float Height
-		{
-			get { return Stage.GetHeight(); }
-		}
+		public override float Height => Stage.GetHeight();
 
 		public Stage Stage;
 
@@ -28,8 +21,8 @@ namespace Nez
 		/// </summary>
 		public bool IsFullScreen
 		{
-			get { return Stage.IsFullScreen; }
-			set { Stage.IsFullScreen = value; }
+			get => Stage.IsFullScreen;
+			set => Stage.IsFullScreen = value;
 		}
 
 
@@ -64,15 +57,15 @@ namespace Nez
 		}
 
 
-		public override void Render(Graphics graphics, Camera camera)
+		public override void Render(Batcher batcher, Camera camera)
 		{
-			Stage.Render(graphics, camera);
+			Stage.Render(batcher, camera);
 		}
 
 
-		public override void DebugRender(Graphics graphics)
+		public override void DebugRender(Batcher batcher)
 		{
-			Stage.GetRoot().DebugRender(graphics);
+			Stage.GetRoot().DebugRender(batcher);
 		}
 
 

@@ -25,7 +25,7 @@ namespace Nez
 				for (var i = _debugDrawItems.Count - 1; i >= 0; i--)
 				{
 					var item = _debugDrawItems[i];
-					if (item.Draw(Graphics.Instance))
+					if (item.Draw(Graphics.Instance.Batcher))
 						_debugDrawItems.RemoveAt(i);
 				}
 
@@ -47,7 +47,7 @@ namespace Nez
 					else
 						item.Position = pos;
 
-					if (item.Draw(Graphics.Instance))
+					if (item.Draw(Graphics.Instance.Batcher))
 						_screenSpaceDebugDrawItems.RemoveAt(i);
 
 					if (DrawTextFromBottom)

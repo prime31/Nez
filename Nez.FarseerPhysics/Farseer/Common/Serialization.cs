@@ -1170,15 +1170,9 @@ namespace FarseerPhysics.Common
 		List<XMLFragmentAttribute> _attributes = new List<XMLFragmentAttribute>();
 		List<XMLFragmentElement> _elements = new List<XMLFragmentElement>();
 
-		public IList<XMLFragmentElement> Elements
-		{
-			get { return _elements; }
-		}
+		public IList<XMLFragmentElement> Elements => _elements;
 
-		public IList<XMLFragmentAttribute> Attributes
-		{
-			get { return _attributes; }
-		}
+		public IList<XMLFragmentAttribute> Attributes => _attributes;
 
 		public string Name { get; set; }
 		public string Value { get; set; }
@@ -1208,10 +1202,7 @@ namespace FarseerPhysics.Common
 
 		public int Position { get; set; }
 
-		int Length
-		{
-			get { return Buffer.Length; }
-		}
+		int Length => Buffer.Length;
 
 		public char Next
 		{
@@ -1223,10 +1214,7 @@ namespace FarseerPhysics.Common
 			}
 		}
 
-		public bool EndOfBuffer
-		{
-			get { return Position == Length; }
-		}
+		public bool EndOfBuffer => Position == Length;
 	}
 
 
@@ -1241,10 +1229,7 @@ namespace FarseerPhysics.Common
 			Load(stream);
 		}
 
-		public XMLFragmentElement RootNode
-		{
-			get { return _rootNode; }
-		}
+		public XMLFragmentElement RootNode => _rootNode;
 
 		public void Load(Stream stream)
 		{

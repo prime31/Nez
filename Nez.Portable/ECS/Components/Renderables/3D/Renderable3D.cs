@@ -36,7 +36,7 @@ namespace Nez
 		/// <value>The position.</value>
 		public Vector3 Position
 		{
-			get { return new Vector3(Transform.Position, _positionZ); }
+			get => new Vector3(Transform.Position, _positionZ);
 			set
 			{
 				_positionZ = value.Z;
@@ -55,7 +55,7 @@ namespace Nez
 		/// <value>The rotation.</value>
 		public Vector3 Rotation
 		{
-			get { return new Vector3(_rotationXY, Transform.Rotation); }
+			get => new Vector3(_rotationXY, Transform.Rotation);
 			set
 			{
 				_rotationXY.X = value.X;
@@ -70,8 +70,8 @@ namespace Nez
 		/// <value>The rotation degrees.</value>
 		public Vector3 RotationDegrees
 		{
-			get { return new Vector3(_rotationXY, Transform.Rotation) * Mathf.Rad2Deg; }
-			set { Rotation = value *= Mathf.Deg2Rad; }
+			get => new Vector3(_rotationXY, Transform.Rotation) * Mathf.Rad2Deg;
+			set => Rotation = value *= Mathf.Deg2Rad;
 		}
 
 		/// <summary>

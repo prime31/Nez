@@ -144,7 +144,7 @@ namespace Nez.Tweens
 
 		public ITween<T> SetContext(object context)
 		{
-			this.Context = context;
+			Context = context;
 			return this;
 		}
 

@@ -14,14 +14,14 @@ namespace FarseerPhysics.Dynamics.Joints
 
 		public override Vector2 WorldAnchorA
 		{
-			get { return BodyA.Position; }
-			set { Debug.Assert(false, "You can't set the world anchor on this joint type."); }
+			get => BodyA.Position;
+			set => Debug.Assert(false, "You can't set the world anchor on this joint type.");
 		}
 
 		public override Vector2 WorldAnchorB
 		{
-			get { return BodyB.Position; }
-			set { Debug.Assert(false, "You can't set the world anchor on this joint type."); }
+			get => BodyB.Position;
+			set => Debug.Assert(false, "You can't set the world anchor on this joint type.");
 		}
 
 		/// <summary>
@@ -29,7 +29,7 @@ namespace FarseerPhysics.Dynamics.Joints
 		/// </summary>
 		public float TargetAngle
 		{
-			get { return _targetAngle; }
+			get => _targetAngle;
 			set
 			{
 				if (value != _targetAngle)

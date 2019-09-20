@@ -1,5 +1,4 @@
-﻿using System;
-using Microsoft.Xna.Framework.Graphics;
+﻿using Microsoft.Xna.Framework.Graphics;
 
 
 namespace Nez
@@ -38,7 +37,7 @@ namespace Nez
 
 		public Texture2D DistortionTexture
 		{
-			set { Effect.Parameters["_distortionTexture"].SetValue(value); }
+			set => Effect.Parameters["_distortionTexture"].SetValue(value);
 		}
 
 		float _distortionFactor = 0.005f;

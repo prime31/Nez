@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using Microsoft.Xna.Framework;
 using Nez.BitmapFonts;
 
@@ -162,7 +161,7 @@ namespace Nez.UI
 		}
 
 
-		public override void Draw(Graphics graphics, float parentAlpha)
+		public override void Draw(Batcher batcher, float parentAlpha)
 		{
 			// update our hoved item if the mouse is over the list
 			if (_isMouseOverList)
@@ -185,7 +184,7 @@ namespace Nez.UI
 			var background = _style.Background;
 			if (background != null)
 			{
-				background.Draw(graphics, x, y, width, height, color);
+				background.Draw(batcher, x, y, width, height, color);
 				var leftWidth = background.LeftWidth;
 				x += leftWidth;
 				itemY += background.TopHeight;
@@ -208,12 +207,12 @@ namespace Nez.UI
 					var selected = _selection.Contains(item);
 					if (selected)
 					{
-						selectedDrawable.Draw(graphics, x, y + itemY, width, _itemHeight, color);
+						selectedDrawable.Draw(batcher, x, y + itemY, width, _itemHeight, color);
 						fontColor = selectedFontColor;
 					}
 					else if (i == _hoveredItemIndex && _style.HoverSelection != null)
 					{
-						_style.HoverSelection.Draw(graphics, x, y + itemY, width, _itemHeight, color);
+						_style.HoverSelection.Draw(batcher, x, y + itemY, width, _itemHeight, color);
 						fontColor = hoveredFontColor;
 					}
 					else
@@ -222,7 +221,7 @@ namespace Nez.UI
 					}
 
 					var textPos = new Vector2(x + _textOffsetX, y + itemY + _textOffsetY);
-					graphics.Batcher.DrawString(font, item.ToString(), textPos, fontColor);
+					batcher.DrawString(font, item.ToString(), textPos, fontColor);
 				}
 				else if (itemY < _cullingArea.Value.Y)
 				{
@@ -411,10 +410,10 @@ namespace Nez.UI
 
 		public ListBoxStyle(BitmapFont font, Color fontColorSelected, Color fontColorUnselected, IDrawable selection)
 		{
-			this.Font = font;
-			this.FontColorSelected = fontColorSelected;
-			this.FontColorUnselected = fontColorUnselected;
-			this.Selection = selection;
+			Font = font;
+			FontColorSelected = fontColorSelected;
+			FontColorUnselected = fontColorUnselected;
+			Selection = selection;
 		}
 
 

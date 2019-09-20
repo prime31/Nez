@@ -16,8 +16,8 @@ namespace Nez
 		/// <value><c>true</c> if enabled; otherwise, <c>false</c>.</value>
 		public bool Enabled
 		{
-			get { return _enabled; }
-			set { SetEnabled(value); }
+			get => _enabled;
+			set => SetEnabled(value);
 		}
 
 		/// <summary>
@@ -95,9 +95,9 @@ namespace Nez
 		/// <param name="updateOrder">Update order.</param>
 		public SceneComponent SetUpdateOrder(int updateOrder)
 		{
-			if (this.UpdateOrder != updateOrder)
+			if (UpdateOrder != updateOrder)
 			{
-				this.UpdateOrder = updateOrder;
+				UpdateOrder = updateOrder;
 				Core.Scene._sceneComponents.Sort();
 			}
 

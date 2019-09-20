@@ -10,7 +10,7 @@ namespace Nez
 	/// Tiled sprite. Note that TiledSprite overrides the Material so that it can wrap the UVs. This class requires the texture
 	/// to not be part of an atlas so that wrapping can work.
 	/// </summary>
-	public class TiledSprite : Sprite
+	public class TiledSprite : SpriteRenderer
 	{
 		public override RectangleF Bounds
 		{
@@ -18,7 +18,7 @@ namespace Nez
 			{
 				if (_areBoundsDirty)
 				{
-					if (Subtexture != null)
+					if (_sprite != null)
 						_bounds.CalculateBounds(Entity.Transform.Position, _localOffset, _origin,
 							Entity.Transform.Scale, Entity.Transform.Rotation, Width, Height);
 					_areBoundsDirty = false;
@@ -61,8 +61,8 @@ namespace Nez
 
 				// recalulcate our inverseTextureScale and the source rect size
 				_inverseTexScale = new Vector2(1f / _textureScale.X, 1f / _textureScale.Y);
-				_sourceRect.Width = (int) (Subtexture.SourceRect.Width * _inverseTexScale.X);
-				_sourceRect.Height = (int) (Subtexture.SourceRect.Height * _inverseTexScale.Y);
+				_sourceRect.Width = (int) (_sprite.SourceRect.Width * _inverseTexScale.X);
+				_sourceRect.Height = (int) (_sprite.SourceRect.Height * _inverseTexScale.Y);
 			}
 		}
 
@@ -95,7 +95,7 @@ namespace Nez
 		}
 
 		/// <summary>
-		/// we keep a copy of the sourceRect so that we dont change the Subtexture in case it is used elsewhere
+		/// we keep a copy of the sourceRect so that we dont change the Sprite in case it is used elsewhere
 		/// </summary>
 		protected Rectangle _sourceRect;
 
@@ -107,22 +107,22 @@ namespace Nez
 		{
 		}
 
-		public TiledSprite(Subtexture subtexture) : base(subtexture)
+		public TiledSprite(Sprite sprite) : base(sprite)
 		{
-			_sourceRect = subtexture.SourceRect;
+			_sourceRect = sprite.SourceRect;
 			Material = new Material
 			{
 				SamplerState = Core.DefaultWrappedSamplerState
 			};
 		}
 
-		public TiledSprite(Texture2D texture) : this(new Subtexture(texture))
+		public TiledSprite(Texture2D texture) : this(new Sprite(texture))
 		{
 		}
 
-		public override void Render(Graphics graphics, Camera camera)
+		public override void Render(Batcher batcher, Camera camera)
 		{
-			if (Subtexture == null)
+			if (_sprite == null)
 				return;
 
 			var topLeft = Entity.Transform.Position + _localOffset;
@@ -130,7 +130,7 @@ namespace Nez
 				_sourceRect.Width * Entity.Transform.Scale.X * TextureScale.X,
 				_sourceRect.Height * Entity.Transform.Scale.Y * TextureScale.Y);
 
-			graphics.Batcher.Draw(Subtexture, destinationRect, _sourceRect, Color, Entity.Transform.Rotation,
+			batcher.Draw(_sprite, destinationRect, _sourceRect, Color, Entity.Transform.Rotation,
 				Origin * _inverseTexScale, SpriteEffects, _layerDepth);
 		}
 	}

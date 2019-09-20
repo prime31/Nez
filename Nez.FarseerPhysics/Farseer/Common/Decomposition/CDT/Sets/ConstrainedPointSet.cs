@@ -69,10 +69,7 @@ namespace FarseerPhysics.Common.Decomposition.CDT.Sets
 
 		public int[] EdgeIndex { get; private set; }
 
-		public override TriangulationMode TriangulationMode
-		{
-			get { return TriangulationMode.Constrained; }
-		}
+		public override TriangulationMode TriangulationMode => TriangulationMode.Constrained;
 
 		public override void PrepareTriangulation(TriangulationContext tcx)
 		{

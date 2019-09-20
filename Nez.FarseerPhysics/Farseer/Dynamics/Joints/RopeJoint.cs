@@ -59,14 +59,14 @@ namespace FarseerPhysics.Dynamics.Joints
 
 		public override sealed Vector2 WorldAnchorA
 		{
-			get { return BodyA.GetWorldPoint(LocalAnchorA); }
-			set { LocalAnchorA = BodyA.GetLocalPoint(value); }
+			get => BodyA.GetWorldPoint(LocalAnchorA);
+			set => LocalAnchorA = BodyA.GetLocalPoint(value);
 		}
 
 		public override sealed Vector2 WorldAnchorB
 		{
-			get { return BodyB.GetWorldPoint(LocalAnchorB); }
-			set { LocalAnchorB = BodyB.GetLocalPoint(value); }
+			get => BodyB.GetWorldPoint(LocalAnchorB);
+			set => LocalAnchorB = BodyB.GetLocalPoint(value);
 		}
 
 		/// <summary>

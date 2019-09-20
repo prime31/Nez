@@ -16,7 +16,6 @@ public class VerletDemo : RenderableComponent, IUpdatable
 
 	World _world;
 
-
 	public override void OnAddedToEntity()
 	{
 		// create the verlet world which handles simulation
@@ -27,16 +26,14 @@ public class VerletDemo : RenderableComponent, IUpdatable
 		_world.AddComposite( new Cloth( new Vector2( 10, 10 ), 200, 100 ) );
 	}
 
-
 	public void Update()
 	{
 		_world.Update();
 	}
 
-
-	public override void Render( Graphics graphics, Camera camera )
+	public override void Render( Batcher batcher, Camera camera )
 	{
-		_world.DebugRender( graphics.batcher );
+		_world.DebugRender( batcher );
 	}
 }
 ```

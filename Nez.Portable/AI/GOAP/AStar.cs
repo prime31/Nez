@@ -48,7 +48,7 @@ namespace Nez.AI.GOAP
 
 		public int CompareTo(AStarNode other)
 		{
-			return this.CostSoFarAndHeuristicCost.CompareTo(other.CostSoFarAndHeuristicCost);
+			return CostSoFarAndHeuristicCost.CompareTo(other.CostSoFarAndHeuristicCost);
 		}
 
 		#endregion

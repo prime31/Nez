@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using Microsoft.Xna.Framework;
-
-
-namespace Nez.UI
+﻿namespace Nez.UI
 {
 	/// <summary>
 	/// Displays a dialog, which is a modal window containing a content table with a button table underneath it. Methods are provided

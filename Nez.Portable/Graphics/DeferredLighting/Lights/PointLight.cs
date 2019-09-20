@@ -34,10 +34,7 @@ namespace Nez.DeferredLighting
 		/// <summary>
 		/// how far does this light reaches
 		/// </summary>
-		public float Radius
-		{
-			get { return _radius; }
-		}
+		public float Radius => _radius;
 
 		/// <summary>
 		/// brightness of the light
@@ -56,7 +53,7 @@ namespace Nez.DeferredLighting
 
 		public PointLight(Color color) : this()
 		{
-			this.Color = color;
+			Color = color;
 		}
 
 
@@ -87,7 +84,7 @@ namespace Nez.DeferredLighting
 		/// <param name="intensity">Intensity.</param>
 		public PointLight SetIntensity(float intensity)
 		{
-			this.Intensity = intensity;
+			Intensity = intensity;
 			return this;
 		}
 
@@ -95,10 +92,10 @@ namespace Nez.DeferredLighting
 		/// <summary>
 		/// renders the bounds only if there is no collider. Always renders a square on the origin.
 		/// </summary>
-		/// <param name="graphics">Graphics.</param>
-		public override void DebugRender(Graphics graphics)
+		/// <param name="batcher">Batcher.</param>
+		public override void DebugRender(Batcher batcher)
 		{
-			graphics.Batcher.DrawCircle(Entity.Transform.Position + _localOffset, Radius * Entity.Transform.Scale.X,
+			batcher.DrawCircle(Entity.Transform.Position + _localOffset, Radius * Entity.Transform.Scale.X,
 				Color.DarkOrchid, 2);
 		}
 	}

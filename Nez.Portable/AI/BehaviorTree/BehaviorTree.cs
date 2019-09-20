@@ -1,7 +1,4 @@
-﻿using System;
-
-
-namespace Nez.AI.BehaviorTrees
+﻿namespace Nez.AI.BehaviorTrees
 {
 	/// <summary>
 	/// root class used to control a BehaviorTree. Handles storing the context
@@ -31,7 +28,7 @@ namespace Nez.AI.BehaviorTrees
 			_context = context;
 			_root = rootNode;
 
-			this.UpdatePeriod = _elapsedTime = updatePeriod;
+			UpdatePeriod = _elapsedTime = updatePeriod;
 		}
 
 

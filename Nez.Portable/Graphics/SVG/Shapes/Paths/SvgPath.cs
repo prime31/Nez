@@ -18,8 +18,8 @@ namespace Nez.Svg
 		[XmlAttribute("d")]
 		public string D
 		{
-			get { return null; }
-			set { Segments = SvgPathParser.Parse(value); }
+			get => null;
+			set => Segments = SvgPathParser.Parse(value);
 		}
 
 		public List<SvgPathSegment> Segments;

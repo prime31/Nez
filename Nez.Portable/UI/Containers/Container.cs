@@ -12,35 +12,17 @@ namespace Nez.UI
 	{
 		#region ILayout
 
-		public override float MinWidth
-		{
-			get { return GetMinWidth(); }
-		}
+		public override float MinWidth => GetMinWidth();
 
-		public override float MinHeight
-		{
-			get { return GetPrefHeight(); }
-		}
+		public override float MinHeight => GetPrefHeight();
 
-		public override float PreferredWidth
-		{
-			get { return GetPrefWidth(); }
-		}
+		public override float PreferredWidth => GetPrefWidth();
 
-		public override float PreferredHeight
-		{
-			get { return GetPrefHeight(); }
-		}
+		public override float PreferredHeight => GetPrefHeight();
 
-		public override float MaxWidth
-		{
-			get { return GetMaxWidth(); }
-		}
+		public override float MaxWidth => GetMaxWidth();
 
-		public override float MaxHeight
-		{
-			get { return GetMaxHeight(); }
-		}
+		public override float MaxHeight => GetMaxHeight();
 
 		#endregion
 
@@ -73,36 +55,36 @@ namespace Nez.UI
 		}
 
 
-		public override void Draw(Graphics graphics, float parentAlpha)
+		public override void Draw(Batcher batcher, float parentAlpha)
 		{
 			Validate();
 			if (transform)
 			{
-				ApplyTransform(graphics, ComputeTransform());
-				DrawBackground(graphics, parentAlpha, 0, 0);
+				ApplyTransform(batcher, ComputeTransform());
+				DrawBackground(batcher, parentAlpha, 0, 0);
 				if (_clip)
 				{
-					//graphics.flush();
+					//batcher.flush();
 					//float padLeft = this.padLeft.get( this ), padBottom = this.padBottom.get( this );
 					//if( clipBegin( padLeft, padBottom,minWidthValueh() - padLeft - padRight.get( tmaxWidth				//	     getHeight() - padBottom - padTop.get( this ) ) )
 					{
-						DrawChildren(graphics, parentAlpha);
+						DrawChildren(batcher, parentAlpha);
 
-						//graphics.flush();
+						//batcher.flush();
 						//clipEnd();
 					}
 				}
 				else
 				{
-					DrawChildren(graphics, parentAlpha);
+					DrawChildren(batcher, parentAlpha);
 				}
 
-				ResetTransform(graphics);
+				ResetTransform(batcher);
 			}
 			else
 			{
-				DrawBackground(graphics, parentAlpha, GetX(), GetY());
-				base.Draw(graphics, parentAlpha);
+				DrawBackground(batcher, parentAlpha, GetX(), GetY());
+				base.Draw(batcher, parentAlpha);
 			}
 		}
 
@@ -110,16 +92,16 @@ namespace Nez.UI
 		/// <summary>
 		/// Called to draw the background, before clipping is applied (if enabled). Default implementation draws the background drawable.
 		/// </summary>
-		/// <param name="graphics">Graphics.</param>
+		/// <param name="batcher">Batcher.</param>
 		/// <param name="parentAlpha">Parent alpha.</param>
 		/// <param name="x">The x coordinate.</param>
 		/// <param name="y">The y coordinate.</param>
-		protected void DrawBackground(Graphics graphics, float parentAlpha, float x, float y)
+		protected void DrawBackground(Batcher batcher, float parentAlpha, float x, float y)
 		{
 			if (_background == null)
 				return;
 
-			_background.Draw(graphics, x, y, GetWidth(), GetHeight(), new Color(color, (int) (color.A * parentAlpha)));
+			_background.Draw(batcher, x, y, GetWidth(), GetHeight(), new Color(color, (int) (color.A * parentAlpha)));
 		}
 
 
@@ -1148,12 +1130,12 @@ namespace Nez.UI
 		}
 
 
-		public override void DebugRender(Graphics graphics)
+		public override void DebugRender(Batcher batcher)
 		{
 			Validate();
 			if (transform)
 			{
-				ApplyTransform(graphics, ComputeTransform());
+				ApplyTransform(batcher, ComputeTransform());
 				if (_clip)
 				{
 					//shapes.flush();
@@ -1163,21 +1145,21 @@ namespace Nez.UI
 					var draw = true;
 					if (draw)
 					{
-						DebugRenderChildren(graphics, 1f);
+						DebugRenderChildren(batcher, 1f);
 
 						//clipEnd();
 					}
 				}
 				else
 				{
-					DebugRenderChildren(graphics, 1f);
+					DebugRenderChildren(batcher, 1f);
 				}
 
-				ResetTransform(graphics);
+				ResetTransform(batcher);
 			}
 			else
 			{
-				base.DebugRender(graphics);
+				base.DebugRender(batcher);
 			}
 		}
 	}

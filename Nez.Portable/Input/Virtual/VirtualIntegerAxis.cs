@@ -36,7 +36,7 @@ namespace Nez
 
 		public VirtualIntegerAxis(params VirtualAxis.Node[] nodes)
 		{
-			this.Nodes.AddRange(nodes);
+			Nodes.AddRange(nodes);
 		}
 
 

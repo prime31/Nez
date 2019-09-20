@@ -1,5 +1,4 @@
-﻿using System;
-using Microsoft.Xna.Framework.Graphics;
+﻿using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
 
 
@@ -13,7 +12,7 @@ namespace Nez
 		/// <value>The sepia tone.</value>
 		public Vector3 SepiaTone
 		{
-			get { return _sepiaTone; }
+			get => _sepiaTone;
 			set
 			{
 				_sepiaTone = value;

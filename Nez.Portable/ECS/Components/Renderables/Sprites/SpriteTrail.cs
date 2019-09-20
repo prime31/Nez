@@ -20,7 +20,7 @@ namespace Nez.Sprites
 		class SpriteTrailInstance
 		{
 			public Vector2 Position;
-			Subtexture _subtexture;
+			Sprite _sprite;
 			float _fadeDuration;
 			float _fadeDelay;
 			float _elapsedTime;
@@ -35,11 +35,11 @@ namespace Nez.Sprites
 			float _layerDepth;
 
 
-			public void Spawn(Vector2 position, Subtexture subtexture, float fadeDuration, float fadeDelay,
-			                  Color initialColor, Color targetColor)
+			public void Spawn(Vector2 position, Sprite sprite, float fadeDuration, float fadeDelay,
+							  Color initialColor, Color targetColor)
 			{
-				this.Position = position;
-				_subtexture = subtexture;
+				Position = position;
+				_sprite = sprite;
 
 				_initialColor = initialColor;
 				_elapsedTime = 0f;
@@ -52,7 +52,7 @@ namespace Nez.Sprites
 
 
 			public void SetSpriteRenderOptions(float rotation, Vector2 origin, Vector2 scale,
-			                                   SpriteEffects spriteEffects, float layerDepth)
+											   SpriteEffects spriteEffects, float layerDepth)
 			{
 				_rotation = rotation;
 				_origin = origin;
@@ -86,23 +86,20 @@ namespace Nez.Sprites
 
 
 			[MethodImpl(MethodImplOptions.AggressiveInlining)]
-			public void Render(Graphics graphics, Camera camera)
+			public void Render(Batcher batcher, Camera camera)
 			{
-				graphics.Batcher.Draw(_subtexture, Position, _renderColor, _rotation, _origin, _scale, _spriteEffects,
+				batcher.Draw(_sprite, Position, _renderColor, _rotation, _origin, _scale, _spriteEffects,
 					_layerDepth);
 			}
 		}
 
 
-		public override RectangleF Bounds
-		{
-			get { return _bounds; }
-		}
+		public override RectangleF Bounds => _bounds;
 
 		public int MaxSpriteInstances
 		{
-			get { return _maxSpriteInstances; }
-			set { SetMaxSpriteInstances(value); }
+			get => _maxSpriteInstances;
+			set => SetMaxSpriteInstances(value);
 		}
 
 		/// <summary>
@@ -134,7 +131,7 @@ namespace Nez.Sprites
 		Stack<SpriteTrailInstance> _availableSpriteTrailInstances = new Stack<SpriteTrailInstance>();
 		List<SpriteTrailInstance> _liveSpriteTrailInstances = new List<SpriteTrailInstance>(5);
 		Vector2 _lastPosition;
-		Sprite _sprite;
+		SpriteRenderer _sprite;
 
 		/// <summary>
 		/// flag when true it will always add a new instance regardless of the distance check
@@ -151,7 +148,7 @@ namespace Nez.Sprites
 		{
 		}
 
-		public SpriteTrail(Sprite sprite)
+		public SpriteTrail(SpriteRenderer sprite)
 		{
 			_sprite = sprite;
 		}
@@ -186,35 +183,35 @@ namespace Nez.Sprites
 
 		public SpriteTrail SetMinDistanceBetweenInstances(float minDistanceBetweenInstances)
 		{
-			this.MinDistanceBetweenInstances = minDistanceBetweenInstances;
+			MinDistanceBetweenInstances = minDistanceBetweenInstances;
 			return this;
 		}
 
 
 		public SpriteTrail SetFadeDuration(float fadeDuration)
 		{
-			this.FadeDuration = fadeDuration;
+			FadeDuration = fadeDuration;
 			return this;
 		}
 
 
 		public SpriteTrail SetFadeDelay(float fadeDelay)
 		{
-			this.FadeDelay = fadeDelay;
+			FadeDelay = fadeDelay;
 			return this;
 		}
 
 
 		public SpriteTrail SetInitialColor(Color initialColor)
 		{
-			this.InitialColor = initialColor;
+			InitialColor = initialColor;
 			return this;
 		}
 
 
 		public SpriteTrail SetFadeToColor(Color fadeToColor)
 		{
-			this.FadeToColor = fadeToColor;
+			FadeToColor = fadeToColor;
 			return this;
 		}
 
@@ -256,7 +253,7 @@ namespace Nez.Sprites
 		public override void OnAddedToEntity()
 		{
 			if (_sprite == null)
-				_sprite = this.GetComponent<Sprite>();
+				_sprite = this.GetComponent<SpriteRenderer>();
 
 			if (_sprite == null)
 			{
@@ -329,16 +326,16 @@ namespace Nez.Sprites
 				return;
 
 			var instance = _availableSpriteTrailInstances.Pop();
-			instance.Spawn(_lastPosition, _sprite.Subtexture, FadeDuration, FadeDelay, InitialColor, FadeToColor);
+			instance.Spawn(_lastPosition, _sprite.Sprite, FadeDuration, FadeDelay, InitialColor, FadeToColor);
 			instance.SetSpriteRenderOptions(_sprite.Entity.Transform.Rotation, _sprite.Origin,
 				_sprite.Entity.Transform.Scale, _sprite.SpriteEffects, LayerDepth);
 			_liveSpriteTrailInstances.Add(instance);
 		}
 
-		public override void Render(Graphics graphics, Camera camera)
+		public override void Render(Batcher batcher, Camera camera)
 		{
 			for (var i = 0; i < _liveSpriteTrailInstances.Count; i++)
-				_liveSpriteTrailInstances[i].Render(graphics, camera);
+				_liveSpriteTrailInstances[i].Render(batcher, camera);
 		}
 	}
 }

@@ -51,14 +51,14 @@ namespace FarseerPhysics.Dynamics.Joints
 
 		public override Vector2 WorldAnchorA
 		{
-			get { return BodyA.GetWorldPoint(LocalAnchorA); }
-			set { LocalAnchorA = BodyA.GetLocalPoint(value); }
+			get => BodyA.GetWorldPoint(LocalAnchorA);
+			set => LocalAnchorA = BodyA.GetLocalPoint(value);
 		}
 
 		public override Vector2 WorldAnchorB
 		{
-			get { return BodyB.GetWorldPoint(LocalAnchorB); }
-			set { LocalAnchorB = BodyB.GetLocalPoint(value); }
+			get => BodyB.GetWorldPoint(LocalAnchorB);
+			set => LocalAnchorB = BodyB.GetLocalPoint(value);
 		}
 
 		/// <summary>
@@ -66,7 +66,7 @@ namespace FarseerPhysics.Dynamics.Joints
 		/// </summary>
 		public float ReferenceAngle
 		{
-			get { return _referenceAngle; }
+			get => _referenceAngle;
 			set
 			{
 				WakeBodies();
@@ -77,18 +77,12 @@ namespace FarseerPhysics.Dynamics.Joints
 		/// <summary>
 		/// Get the current joint angle in radians.
 		/// </summary>
-		public float JointAngle
-		{
-			get { return BodyB._sweep.A - BodyA._sweep.A - ReferenceAngle; }
-		}
+		public float JointAngle => BodyB._sweep.A - BodyA._sweep.A - ReferenceAngle;
 
 		/// <summary>
 		/// Get the current joint angle speed in radians per second.
 		/// </summary>
-		public float JointSpeed
-		{
-			get { return BodyB._angularVelocity - BodyA._angularVelocity; }
-		}
+		public float JointSpeed => BodyB._angularVelocity - BodyA._angularVelocity;
 
 		/// <summary>
 		/// Is the joint limit enabled?
@@ -96,7 +90,7 @@ namespace FarseerPhysics.Dynamics.Joints
 		/// <value><c>true</c> if [limit enabled]; otherwise, <c>false</c>.</value>
 		public bool LimitEnabled
 		{
-			get { return _enableLimit; }
+			get => _enableLimit;
 			set
 			{
 				if (_enableLimit != value)
@@ -113,7 +107,7 @@ namespace FarseerPhysics.Dynamics.Joints
 		/// </summary>
 		public float LowerLimit
 		{
-			get { return _lowerAngle; }
+			get => _lowerAngle;
 			set
 			{
 				if (_lowerAngle != value)
@@ -130,7 +124,7 @@ namespace FarseerPhysics.Dynamics.Joints
 		/// </summary>
 		public float UpperLimit
 		{
-			get { return _upperAngle; }
+			get => _upperAngle;
 			set
 			{
 				if (_upperAngle != value)
@@ -148,7 +142,7 @@ namespace FarseerPhysics.Dynamics.Joints
 		/// <value><c>true</c> if [motor enabled]; otherwise, <c>false</c>.</value>
 		public bool MotorEnabled
 		{
-			get { return _enableMotor; }
+			get => _enableMotor;
 			set
 			{
 				WakeBodies();
@@ -166,7 +160,7 @@ namespace FarseerPhysics.Dynamics.Joints
 				WakeBodies();
 				_motorSpeed = value;
 			}
-			get { return _motorSpeed; }
+			get => _motorSpeed;
 		}
 
 		/// <summary>
@@ -179,7 +173,7 @@ namespace FarseerPhysics.Dynamics.Joints
 				WakeBodies();
 				_maxMotorTorque = value;
 			}
-			get { return _maxMotorTorque; }
+			get => _maxMotorTorque;
 		}
 
 		/// <summary>
@@ -187,7 +181,7 @@ namespace FarseerPhysics.Dynamics.Joints
 		/// </summary>
 		public float MotorImpulse
 		{
-			get { return _motorImpulse; }
+			get => _motorImpulse;
 			set
 			{
 				WakeBodies();

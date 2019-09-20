@@ -26,10 +26,7 @@ namespace Nez.Svg
 		/// the rect encompassing this image. Note that the rect is with no transforms applied.
 		/// </summary>
 		/// <value>The rect.</value>
-		public RectangleF Rect
-		{
-			get { return new RectangleF(X, Y, Width, Height); }
-		}
+		public RectangleF Rect => new RectangleF(X, Y, Width, Height);
 
 		[XmlAttribute("href", Namespace = "http://www.w3.org/1999/xlink")]
 		public string Href;

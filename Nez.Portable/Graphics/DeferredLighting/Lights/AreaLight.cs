@@ -50,13 +50,13 @@ namespace Nez.DeferredLighting
 
 		public AreaLight SetDirection(Vector3 direction)
 		{
-			this.Direction = direction;
+			Direction = direction;
 			return this;
 		}
 
 		public AreaLight SetIntensity(float intensity)
 		{
-			this.Intensity = intensity;
+			Intensity = intensity;
 			return this;
 		}
 	}

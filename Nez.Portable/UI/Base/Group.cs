@@ -146,7 +146,7 @@ namespace Nez.UI
 		}
 
 
-		public override void Draw(Graphics graphics, float parentAlpha)
+		public override void Draw(Batcher batcher, float parentAlpha)
 		{
 			if (!IsVisible())
 				return;
@@ -154,16 +154,16 @@ namespace Nez.UI
 			Validate();
 
 			if (transform)
-				ApplyTransform(graphics, ComputeTransform());
+				ApplyTransform(batcher, ComputeTransform());
 
-			DrawChildren(graphics, parentAlpha);
+			DrawChildren(batcher, parentAlpha);
 
 			if (transform)
-				ResetTransform(graphics);
+				ResetTransform(batcher);
 		}
 
 
-		public void DrawChildren(Graphics graphics, float parentAlpha)
+		public void DrawChildren(Batcher batcher, float parentAlpha)
 		{
 			parentAlpha *= color.A / 255.0f;
 
@@ -185,7 +185,7 @@ namespace Nez.UI
 						if (cx <= cullRight && cy <= cullTop && cx + child.width >= cullLeft &&
 						    cy + child.height >= cullBottom)
 						{
-							child.Draw(graphics, parentAlpha);
+							child.Draw(batcher, parentAlpha);
 						}
 					}
 				}
@@ -205,7 +205,7 @@ namespace Nez.UI
 						{
 							child.x = cx + offsetX;
 							child.y = cy + offsetY;
-							child.Draw(graphics, parentAlpha);
+							child.Draw(batcher, parentAlpha);
 							child.x = cx;
 							child.y = cy;
 						}
@@ -225,7 +225,7 @@ namespace Nez.UI
 						var child = children[i];
 						if (!child.IsVisible()) continue;
 
-						child.Draw(graphics, parentAlpha);
+						child.Draw(batcher, parentAlpha);
 					}
 				}
 				else
@@ -242,7 +242,7 @@ namespace Nez.UI
 						float cx = child.x, cy = child.y;
 						child.x = cx + offsetX;
 						child.y = cy + offsetY;
-						child.Draw(graphics, parentAlpha);
+						child.Draw(batcher, parentAlpha);
 						child.x = cx;
 						child.y = cy;
 					}
@@ -254,22 +254,22 @@ namespace Nez.UI
 		}
 
 
-		public override void DebugRender(Graphics graphics)
+		public override void DebugRender(Batcher batcher)
 		{
 			if (transform)
-				ApplyTransform(graphics, ComputeTransform());
+				ApplyTransform(batcher, ComputeTransform());
 
-			DebugRenderChildren(graphics, 1f);
+			DebugRenderChildren(batcher, 1f);
 
 			if (transform)
-				ResetTransform(graphics);
+				ResetTransform(batcher);
 
 			if (this is Button)
-				base.DebugRender(graphics);
+				base.DebugRender(batcher);
 		}
 
 
-		public void DebugRenderChildren(Graphics graphics, float parentAlpha)
+		public void DebugRenderChildren(Batcher batcher, float parentAlpha)
 		{
 			parentAlpha *= color.A / 255.0f;
 			if (transform)
@@ -282,7 +282,7 @@ namespace Nez.UI
 					if (!children[i].GetDebug() && !(children[i] is Group))
 						continue;
 
-					children[i].DebugRender(graphics);
+					children[i].DebugRender(batcher);
 				}
 			}
 			else
@@ -301,7 +301,7 @@ namespace Nez.UI
 
 					children[i].x += offsetX;
 					children[i].y += offsetY;
-					children[i].DebugRender(graphics);
+					children[i].DebugRender(batcher);
 					children[i].x -= offsetX;
 					children[i].y -= offsetY;
 				}
@@ -349,16 +349,16 @@ namespace Nez.UI
 
 
 		/// <summary>
-		/// Set the batch's transformation matrix, often with the result of {@link #computeTransform()}. Note this causes the batch to 
+		/// Set the batch's transformation matrix, often with the result of {@link #computeTransform()}. Note this causes the batch to
 		/// be flushed. {@link #resetTransform(Batch)} will restore the transform to what it was before this call.
 		/// </summary>
-		/// <param name="graphics">Graphics.</param>
+		/// <param name="batcher">Batcher.</param>
 		/// <param name="transform">Transform.</param>
-		protected void ApplyTransform(Graphics graphics, Matrix transform)
+		protected void ApplyTransform(Batcher batcher, Matrix transform)
 		{
-			_previousBatcherTransform = graphics.Batcher.TransformMatrix;
-			graphics.Batcher.End();
-			graphics.Batcher.Begin(transform);
+			_previousBatcherTransform = batcher.TransformMatrix;
+			batcher.End();
+			batcher.Begin(transform);
 		}
 
 
@@ -367,10 +367,10 @@ namespace Nez.UI
 		/// be flushed
 		/// </summary>
 		/// <param name="batch">Batch.</param>
-		protected void ResetTransform(Graphics graphics)
+		protected void ResetTransform(Batcher batcher)
 		{
-			graphics.Batcher.End();
-			graphics.Batcher.Begin(_previousBatcherTransform);
+			batcher.End();
+			batcher.Begin(_previousBatcherTransform);
 		}
 
 
@@ -410,7 +410,7 @@ namespace Nez.UI
 
 		public override bool LayoutEnabled
 		{
-			get { return _layoutEnabled; }
+			get => _layoutEnabled;
 			set
 			{
 				if (_layoutEnabled != value)

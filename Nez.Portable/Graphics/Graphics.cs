@@ -1,9 +1,6 @@
-﻿using System;
-using Microsoft.Xna.Framework.Graphics;
+﻿using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
-using System.Collections.Generic;
 using Nez.Textures;
-using System.Diagnostics;
 using Nez.BitmapFonts;
 
 
@@ -27,11 +24,11 @@ namespace Nez
 		public BitmapFont BitmapFont;
 
 		/// <summary>
-		/// A subtexture used to draw rectangles, lines, circles, etc. 
-		/// Will be generated at startup, but you can replace this with a subtexture from your atlas to reduce texture swaps.
+		/// A sprite used to draw rectangles, lines, circles, etc. 
+		/// Will be generated at startup, but you can replace this with a sprite from your atlas to reduce texture swaps.
 		/// Should be a 1x1 white pixel
 		/// </summary>
-		public Subtexture PixelTexture;
+		public Sprite PixelTexture;
 
 
 		public Graphics()
@@ -47,8 +44,8 @@ namespace Nez
 			// the bottom/right pixel is white on the default font so we'll use that for the pixelTexture
 			var fontTex =
 				BitmapFont.Textures[
-					BitmapFont.DefaultCharacter.TexturePage]; // bitmapFont.defaultCharacterRegion.subtexture.texture2D;
-			PixelTexture = new Subtexture(fontTex, fontTex.Width - 1, fontTex.Height - 1, 1, 1);
+					BitmapFont.DefaultCharacter.TexturePage]; // bitmapFont.defaultCharacterRegion.sprite.texture2D;
+			PixelTexture = new Sprite(fontTex, fontTex.Width - 1, fontTex.Height - 1, 1, 1);
 		}
 
 

@@ -6,12 +6,12 @@ namespace Nez
 {
 	/// <summary>
 	/// concrete implementation of IRenderable. Contains convenience methods.
-	/// 
+	///
 	/// VERY IMPORTANT! Subclasses MUST either override width/height or bounds!
 	/// </summary>
 	public abstract class RenderableComponent : Component, IRenderable, IComparable<RenderableComponent>
 	{
-		#region properties and fields
+		#region Properties and fields
 
 		/// <summary>
 		/// width of the RenderableComponent. subclasses that do not override the bounds property must implement this!
@@ -118,7 +118,6 @@ namespace Nez
 
 		#endregion
 
-
 		#region Component overrides and IRenderable
 
 		public override void OnEntityTransformChanged(Transform.Component comp)
@@ -127,27 +126,27 @@ namespace Nez
 		}
 
 		/// <summary>
-		/// called by a Renderer. The Camera can be used for culling and the Graphics instance to draw with.
+		/// called by a Renderer. The Camera can be used for culling and the Batcher instance to draw with.
 		/// </summary>
-		/// <param name="graphics">Graphics.</param>
+		/// <param name="batcher">Batcher.</param>
 		/// <param name="camera">Camera.</param>
-		public abstract void Render(Graphics graphics, Camera camera);
+		public abstract void Render(Batcher batcher, Camera camera);
 
 		/// <summary>
 		/// renders the bounds only if there is no collider. Always renders a square on the origin.
 		/// </summary>
-		/// <param name="graphics">Graphics.</param>
-		public override void DebugRender(Graphics graphics)
+		/// <param name="batcher">Batcher.</param>
+		public override void DebugRender(Batcher batcher)
 		{
 			if (!DebugRenderEnabled)
 				return;
 
 			// if we have no collider draw our bounds
 			if (Entity.GetComponent<Collider>() == null)
-				graphics.Batcher.DrawHollowRect(Bounds, Debug.Colors.RenderableBounds);
+				batcher.DrawHollowRect(Bounds, Debug.Colors.RenderableBounds);
 
 			// draw a square for our pivot/origin
-			graphics.Batcher.DrawPixel(Entity.Transform.Position + _localOffset, Debug.Colors.RenderableCenter, 4);
+			batcher.DrawPixel(Entity.Transform.Position + _localOffset, Debug.Colors.RenderableCenter, 4);
 		}
 
 		/// <summary>
@@ -184,12 +183,11 @@ namespace Nez
 
 		#endregion
 
-
 		#region Fluent setters
 
 		public RenderableComponent SetMaterial(Material material)
 		{
-			this.Material = material;
+			Material = material;
 			if (Entity != null && Entity.Scene != null)
 				Entity.Scene.RenderableComponents.SetRenderLayerNeedsComponentSort(RenderLayer);
 			return this;
@@ -237,7 +235,7 @@ namespace Nez
 		/// <param name="color">Color.</param>
 		public RenderableComponent SetColor(Color color)
 		{
-			this.Color = color;
+			Color = color;
 			return this;
 		}
 
@@ -259,7 +257,6 @@ namespace Nez
 
 		#endregion
 
-
 		#region public API
 
 		/// <summary>
@@ -273,7 +270,6 @@ namespace Nez
 		}
 
 		#endregion
-
 
 		/// <Docs>To be added.</Docs>
 		/// <para>Returns the sort order of the current instance compared to the specified object.</para>
@@ -304,10 +300,9 @@ namespace Nez
 			return res;
 		}
 
-
 		public override string ToString()
 		{
-			return string.Format("[RenderableComponent] {0}, renderLayer: {1}]", this.GetType(), RenderLayer);
+			return $"[RenderableComponent] {GetType()}, renderLayer: {RenderLayer}]";
 		}
 	}
 }

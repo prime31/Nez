@@ -1,5 +1,4 @@
-﻿using System;
-using Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler;
+﻿using Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler;
 using Nez.UI;
 using Microsoft.Xna.Framework.Content.Pipeline;
 
@@ -31,15 +30,7 @@ namespace Nez.UISkinImporter
 				writer.Write(false);
 			}
 
-			if (data.LibGdxAtlases != null)
-			{
-				writer.Write(true);
-				writer.WriteObject(data.LibGdxAtlases);
-			}
-			else
-			{
-				writer.Write(false);
-			}
+			writer.Write(false);
 
 			if (data.Styles != null)
 			{

@@ -33,7 +33,7 @@ namespace Nez.ImGuiTools
 
 		void LoadSettings()
 		{
-			var fileDataStore = Core.Services.GetOrAddService<FileDataStore>();
+			var fileDataStore = Core.Services.GetService<FileDataStore>() ?? new FileDataStore(Nez.Storage.GetStorageRoot());
 			KeyValueDataStore.Default.Load(fileDataStore);
 
 			ShowStyleEditor = KeyValueDataStore.Default.GetBool(kShowStyleEditor, ShowStyleEditor);

@@ -25,7 +25,7 @@ namespace Nez
 		public VirtualButton(float bufferTime)
 		{
 			Nodes = new List<Node>();
-			this.BufferTime = bufferTime;
+			BufferTime = bufferTime;
 		}
 
 
@@ -36,8 +36,8 @@ namespace Nez
 
 		public VirtualButton(float bufferTime, params Node[] nodes)
 		{
-			this.Nodes = new List<Node>(nodes);
-			this.BufferTime = bufferTime;
+			Nodes = new List<Node>(nodes);
+			BufferTime = bufferTime;
 		}
 
 
@@ -54,8 +54,8 @@ namespace Nez
 
 		public void SetRepeat(float firstRepeatTime, float multiRepeatTime)
 		{
-			this.FirstRepeatTime = firstRepeatTime;
-			this.MultiRepeatTime = multiRepeatTime;
+			FirstRepeatTime = firstRepeatTime;
+			MultiRepeatTime = multiRepeatTime;
 			_willRepeat = firstRepeatTime > 0;
 			if (!_willRepeat)
 				IsRepeating = false;
@@ -330,26 +330,17 @@ namespace Nez
 
 			public KeyboardKey(Keys key)
 			{
-				this.Key = key;
+				Key = key;
 			}
 
 
-			public override bool IsDown
-			{
-				get { return Input.IsKeyDown(Key); }
-			}
+			public override bool IsDown => Input.IsKeyDown(Key);
 
 
-			public override bool IsPressed
-			{
-				get { return Input.IsKeyPressed(Key); }
-			}
+			public override bool IsPressed => Input.IsKeyPressed(Key);
 
 
-			public override bool IsReleased
-			{
-				get { return Input.IsKeyReleased(Key); }
-			}
+			public override bool IsReleased => Input.IsKeyReleased(Key);
 		}
 
 
@@ -364,27 +355,18 @@ namespace Nez
 
 			public KeyboardModifiedKey(Keys key, Keys modifier)
 			{
-				this.Key = key;
-				this.Modifier = modifier;
+				Key = key;
+				Modifier = modifier;
 			}
 
 
-			public override bool IsDown
-			{
-				get { return Input.IsKeyDown(Modifier) && Input.IsKeyDown(Key); }
-			}
+			public override bool IsDown => Input.IsKeyDown(Modifier) && Input.IsKeyDown(Key);
 
 
-			public override bool IsPressed
-			{
-				get { return Input.IsKeyDown(Modifier) && Input.IsKeyPressed(Key); }
-			}
+			public override bool IsPressed => Input.IsKeyDown(Modifier) && Input.IsKeyPressed(Key);
 
 
-			public override bool IsReleased
-			{
-				get { return Input.IsKeyReleased(Key); }
-			}
+			public override bool IsReleased => Input.IsKeyReleased(Key);
 		}
 
 		#endregion
@@ -400,27 +382,18 @@ namespace Nez
 
 			public GamePadButton(int gamepadIndex, Buttons button)
 			{
-				this.GamepadIndex = gamepadIndex;
-				this.Button = button;
+				GamepadIndex = gamepadIndex;
+				Button = button;
 			}
 
 
-			public override bool IsDown
-			{
-				get { return Input.GamePads[GamepadIndex].IsButtonDown(Button); }
-			}
+			public override bool IsDown => Input.GamePads[GamepadIndex].IsButtonDown(Button);
 
 
-			public override bool IsPressed
-			{
-				get { return Input.GamePads[GamepadIndex].IsButtonPressed(Button); }
-			}
+			public override bool IsPressed => Input.GamePads[GamepadIndex].IsButtonPressed(Button);
 
 
-			public override bool IsReleased
-			{
-				get { return Input.GamePads[GamepadIndex].IsButtonReleased(Button); }
-			}
+			public override bool IsReleased => Input.GamePads[GamepadIndex].IsButtonReleased(Button);
 		}
 
 
@@ -432,25 +405,16 @@ namespace Nez
 
 			public GamePadLeftTrigger(int gamepadIndex, float threshold)
 			{
-				this.GamepadIndex = gamepadIndex;
-				this.Threshold = threshold;
+				GamepadIndex = gamepadIndex;
+				Threshold = threshold;
 			}
 
 
-			public override bool IsDown
-			{
-				get { return Input.GamePads[GamepadIndex].IsLeftTriggerDown(Threshold); }
-			}
+			public override bool IsDown => Input.GamePads[GamepadIndex].IsLeftTriggerDown(Threshold);
 
-			public override bool IsPressed
-			{
-				get { return Input.GamePads[GamepadIndex].IsLeftTriggerPressed(Threshold); }
-			}
+			public override bool IsPressed => Input.GamePads[GamepadIndex].IsLeftTriggerPressed(Threshold);
 
-			public override bool IsReleased
-			{
-				get { return Input.GamePads[GamepadIndex].IsLeftTriggerReleased(Threshold); }
-			}
+			public override bool IsReleased => Input.GamePads[GamepadIndex].IsLeftTriggerReleased(Threshold);
 		}
 
 
@@ -462,25 +426,16 @@ namespace Nez
 
 			public GamePadRightTrigger(int gamepadIndex, float threshold)
 			{
-				this.GamepadIndex = gamepadIndex;
-				this.Threshold = threshold;
+				GamepadIndex = gamepadIndex;
+				Threshold = threshold;
 			}
 
 
-			public override bool IsDown
-			{
-				get { return Input.GamePads[GamepadIndex].IsRightTriggerDown(Threshold); }
-			}
+			public override bool IsDown => Input.GamePads[GamepadIndex].IsRightTriggerDown(Threshold);
 
-			public override bool IsPressed
-			{
-				get { return Input.GamePads[GamepadIndex].IsRightTriggerPressed(Threshold); }
-			}
+			public override bool IsPressed => Input.GamePads[GamepadIndex].IsRightTriggerPressed(Threshold);
 
-			public override bool IsReleased
-			{
-				get { return Input.GamePads[GamepadIndex].IsRightTriggerReleased(Threshold); }
-			}
+			public override bool IsReleased => Input.GamePads[GamepadIndex].IsRightTriggerReleased(Threshold);
 		}
 
 		#endregion
@@ -495,24 +450,15 @@ namespace Nez
 
 			public GamePadDPadRight(int gamepadIndex)
 			{
-				this.GamepadIndex = gamepadIndex;
+				GamepadIndex = gamepadIndex;
 			}
 
 
-			public override bool IsDown
-			{
-				get { return Input.GamePads[GamepadIndex].DpadRightDown; }
-			}
+			public override bool IsDown => Input.GamePads[GamepadIndex].DpadRightDown;
 
-			public override bool IsPressed
-			{
-				get { return Input.GamePads[GamepadIndex].DpadRightPressed; }
-			}
+			public override bool IsPressed => Input.GamePads[GamepadIndex].DpadRightPressed;
 
-			public override bool IsReleased
-			{
-				get { return Input.GamePads[GamepadIndex].DpadRightReleased; }
-			}
+			public override bool IsReleased => Input.GamePads[GamepadIndex].DpadRightReleased;
 		}
 
 
@@ -523,24 +469,15 @@ namespace Nez
 
 			public GamePadDPadLeft(int gamepadIndex)
 			{
-				this.GamepadIndex = gamepadIndex;
+				GamepadIndex = gamepadIndex;
 			}
 
 
-			public override bool IsDown
-			{
-				get { return Input.GamePads[GamepadIndex].DpadLeftDown; }
-			}
+			public override bool IsDown => Input.GamePads[GamepadIndex].DpadLeftDown;
 
-			public override bool IsPressed
-			{
-				get { return Input.GamePads[GamepadIndex].DpadLeftPressed; }
-			}
+			public override bool IsPressed => Input.GamePads[GamepadIndex].DpadLeftPressed;
 
-			public override bool IsReleased
-			{
-				get { return Input.GamePads[GamepadIndex].DpadLeftReleased; }
-			}
+			public override bool IsReleased => Input.GamePads[GamepadIndex].DpadLeftReleased;
 		}
 
 
@@ -551,24 +488,15 @@ namespace Nez
 
 			public GamePadDPadUp(int gamepadIndex)
 			{
-				this.GamepadIndex = gamepadIndex;
+				GamepadIndex = gamepadIndex;
 			}
 
 
-			public override bool IsDown
-			{
-				get { return Input.GamePads[GamepadIndex].DpadUpDown; }
-			}
+			public override bool IsDown => Input.GamePads[GamepadIndex].DpadUpDown;
 
-			public override bool IsPressed
-			{
-				get { return Input.GamePads[GamepadIndex].DpadUpPressed; }
-			}
+			public override bool IsPressed => Input.GamePads[GamepadIndex].DpadUpPressed;
 
-			public override bool IsReleased
-			{
-				get { return Input.GamePads[GamepadIndex].DpadUpReleased; }
-			}
+			public override bool IsReleased => Input.GamePads[GamepadIndex].DpadUpReleased;
 		}
 
 
@@ -579,24 +507,15 @@ namespace Nez
 
 			public GamePadDPadDown(int gamepadIndex)
 			{
-				this.GamepadIndex = gamepadIndex;
+				GamepadIndex = gamepadIndex;
 			}
 
 
-			public override bool IsDown
-			{
-				get { return Input.GamePads[GamepadIndex].DpadDownDown; }
-			}
+			public override bool IsDown => Input.GamePads[GamepadIndex].DpadDownDown;
 
-			public override bool IsPressed
-			{
-				get { return Input.GamePads[GamepadIndex].DpadDownPressed; }
-			}
+			public override bool IsPressed => Input.GamePads[GamepadIndex].DpadDownPressed;
 
-			public override bool IsReleased
-			{
-				get { return Input.GamePads[GamepadIndex].DpadDownReleased; }
-			}
+			public override bool IsReleased => Input.GamePads[GamepadIndex].DpadDownReleased;
 		}
 
 		#endregion
@@ -606,96 +525,51 @@ namespace Nez
 
 		public class MouseLeftButton : Node
 		{
-			public override bool IsDown
-			{
-				get { return Input.LeftMouseButtonDown; }
-			}
+			public override bool IsDown => Input.LeftMouseButtonDown;
 
-			public override bool IsPressed
-			{
-				get { return Input.LeftMouseButtonPressed; }
-			}
+			public override bool IsPressed => Input.LeftMouseButtonPressed;
 
-			public override bool IsReleased
-			{
-				get { return Input.LeftMouseButtonReleased; }
-			}
+			public override bool IsReleased => Input.LeftMouseButtonReleased;
 		}
 
 
 		public class MouseRightButton : Node
 		{
-			public override bool IsDown
-			{
-				get { return Input.RightMouseButtonDown; }
-			}
+			public override bool IsDown => Input.RightMouseButtonDown;
 
-			public override bool IsPressed
-			{
-				get { return Input.RightMouseButtonPressed; }
-			}
+			public override bool IsPressed => Input.RightMouseButtonPressed;
 
-			public override bool IsReleased
-			{
-				get { return Input.RightMouseButtonReleased; }
-			}
+			public override bool IsReleased => Input.RightMouseButtonReleased;
 		}
 
 
 		public class MouseMiddleButton : Node
 		{
-			public override bool IsDown
-			{
-				get { return Input.MiddleMouseButtonDown; }
-			}
+			public override bool IsDown => Input.MiddleMouseButtonDown;
 
-			public override bool IsPressed
-			{
-				get { return Input.MiddleMouseButtonPressed; }
-			}
+			public override bool IsPressed => Input.MiddleMouseButtonPressed;
 
-			public override bool IsReleased
-			{
-				get { return Input.MiddleMouseButtonReleased; }
-			}
+			public override bool IsReleased => Input.MiddleMouseButtonReleased;
 		}
 
 
 		public class MouseFirstExtendedButton : Node
 		{
-			public override bool IsDown
-			{
-				get { return Input.FirstExtendedMouseButtonDown; }
-			}
+			public override bool IsDown => Input.FirstExtendedMouseButtonDown;
 
-			public override bool IsPressed
-			{
-				get { return Input.FirstExtendedMouseButtonPressed; }
-			}
+			public override bool IsPressed => Input.FirstExtendedMouseButtonPressed;
 
-			public override bool IsReleased
-			{
-				get { return Input.FirstExtendedMouseButtonReleased; }
-			}
+			public override bool IsReleased => Input.FirstExtendedMouseButtonReleased;
 		}
 
 
 		public class MouseSecondExtendedButton : Node
 		{
-			public override bool IsDown
-			{
-				get { return Input.SecondExtendedMouseButtonDown; }
-			}
+			public override bool IsDown => Input.SecondExtendedMouseButtonDown;
 
-			public override bool IsPressed
-			{
-				get { return Input.SecondExtendedMouseButtonPressed; }
-			}
+			public override bool IsPressed => Input.SecondExtendedMouseButtonPressed;
 
-			public override bool IsReleased
-			{
-				get { return Input.SecondExtendedMouseButtonReleased; }
-			}
+			public override bool IsReleased => Input.SecondExtendedMouseButtonReleased;
 		}
 
 		#endregion

@@ -9,7 +9,7 @@ namespace Nez.Particles
 	[Serializable]
 	public class ParticleEmitterConfig : IDisposable
 	{
-		public Subtexture Subtexture;
+		public Sprite Sprite;
 
 		/// <summary>
 		/// If true, particles will simulate in world space. ie when the parent Transform moves it will have no effect on any already active Particles.
@@ -67,11 +67,11 @@ namespace Nez.Particles
 
 		void IDisposable.Dispose()
 		{
-			if (Subtexture != null)
+			if (Sprite != null)
 			{
-				Subtexture.Texture2D.Dispose();
-				Subtexture.Texture2D = null;
-				Subtexture = null;
+				Sprite.Texture2D.Dispose();
+				Sprite.Texture2D = null;
+				Sprite = null;
 			}
 		}
 	}

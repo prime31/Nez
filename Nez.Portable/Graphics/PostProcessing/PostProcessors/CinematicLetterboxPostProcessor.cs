@@ -1,5 +1,4 @@
-﻿using System;
-using Microsoft.Xna.Framework.Graphics;
+﻿using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
 using System.Collections;
 using Nez.Tweens;
@@ -15,7 +14,7 @@ namespace Nez
 		/// <value>The color.</value>
 		public Color Color
 		{
-			get { return _color; }
+			get => _color;
 			set
 			{
 				if (_color != value)
@@ -34,7 +33,7 @@ namespace Nez
 		/// <value>The size of the letterbox.</value>
 		public float LetterboxSize
 		{
-			get { return _letterboxSize; }
+			get => _letterboxSize;
 			set
 			{
 				if (_letterboxSize != value)
@@ -93,7 +92,7 @@ namespace Nez
 			while (elapsedTime < duration)
 			{
 				elapsedTime += Time.DeltaTime;
-				this.LetterboxSize = Lerps.Ease(easeType, 0, letterboxSize, elapsedTime, duration);
+				LetterboxSize = Lerps.Ease(easeType, 0, letterboxSize, elapsedTime, duration);
 				yield return null;
 			}
 
@@ -118,7 +117,7 @@ namespace Nez
 			while (elapsedTime < duration)
 			{
 				elapsedTime += Time.DeltaTime;
-				this.LetterboxSize = Lerps.Ease(easeType, startSize, 0, elapsedTime, duration);
+				LetterboxSize = Lerps.Ease(easeType, startSize, 0, elapsedTime, duration);
 				yield return null;
 			}
 

@@ -62,10 +62,7 @@ namespace FarseerPhysics.Dynamics
 		/// Get the number of broad-phase proxies.
 		/// </summary>
 		/// <value>The proxy count.</value>
-		public int ProxyCount
-		{
-			get { return ContactManager.BroadPhase.ProxyCount; }
-		}
+		public int ProxyCount => ContactManager.BroadPhase.ProxyCount;
 
 		/// <summary>
 		/// Change the global gravity vector.
@@ -107,10 +104,7 @@ namespace FarseerPhysics.Dynamics
 		/// the next contact in the world list. A null contact indicates the end of the list.
 		/// </summary>
 		/// <value>The head of the world contact list.</value>
-		public List<Contact> ContactList
-		{
-			get { return ContactManager.ContactList; }
-		}
+		public List<Contact> ContactList => ContactManager.ContactList;
 
 		/// <summary>
 		/// If false, the whole simulation stops. It still processes added and removed geometries.

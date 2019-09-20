@@ -6,7 +6,7 @@ namespace Nez
 {
 	public class IntInspector : Inspector
 	{
-		UI.TextField _textField;
+		TextField _textField;
 		Slider _slider;
 
 
@@ -24,7 +24,7 @@ namespace Nez
 		void SetupTextField(Table table, Skin skin, float leftCellWidth)
 		{
 			var label = CreateNameLabel(table, skin, leftCellWidth);
-			_textField = new UI.TextField(GetValue<int>().ToString(), skin);
+			_textField = new TextField(GetValue<int>().ToString(), skin);
 			_textField.SetTextFieldFilter(new FloatFilter());
 			_textField.OnTextChanged += (field, str) =>
 			{

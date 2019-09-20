@@ -57,7 +57,7 @@ namespace FarseerPhysics.Controllers
 		/// <value>The max angular velocity.</value>
 		public float MaxAngularVelocity
 		{
-			get { return _maxAngularVelocity; }
+			get => _maxAngularVelocity;
 			set
 			{
 				_maxAngularVelocity = value;
@@ -71,7 +71,7 @@ namespace FarseerPhysics.Controllers
 		/// <value>The max linear velocity.</value>
 		public float MaxLinearVelocity
 		{
-			get { return _maxLinearVelocity; }
+			get => _maxLinearVelocity;
 			set
 			{
 				_maxLinearVelocity = value;

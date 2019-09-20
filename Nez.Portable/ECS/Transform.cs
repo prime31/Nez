@@ -38,8 +38,8 @@ namespace Nez
 		/// <value>The parent.</value>
 		public Transform Parent
 		{
-			get { return _parent; }
-			set { SetParent(value); }
+			get => _parent;
+			set => SetParent(value);
 		}
 
 
@@ -47,10 +47,7 @@ namespace Nez
 		/// total children of this Transform
 		/// </summary>
 		/// <value>The child count.</value>
-		public int ChildCount
-		{
-			get { return _children.Count; }
-		}
+		public int ChildCount => _children.Count;
 
 
 		/// <summary>
@@ -79,7 +76,7 @@ namespace Nez
 
 				return _position;
 			}
-			set { SetPosition(value); }
+			set => SetPosition(value);
 		}
 
 
@@ -94,7 +91,7 @@ namespace Nez
 				UpdateTransform();
 				return _localPosition;
 			}
-			set { SetLocalPosition(value); }
+			set => SetLocalPosition(value);
 		}
 
 
@@ -109,7 +106,7 @@ namespace Nez
 				UpdateTransform();
 				return _rotation;
 			}
-			set { SetRotation(value); }
+			set => SetRotation(value);
 		}
 
 
@@ -119,8 +116,8 @@ namespace Nez
 		/// <value>The rotation degrees.</value>
 		public float RotationDegrees
 		{
-			get { return MathHelper.ToDegrees(_rotation); }
-			set { SetRotation(MathHelper.ToRadians(value)); }
+			get => MathHelper.ToDegrees(_rotation);
+			set => SetRotation(MathHelper.ToRadians(value));
 		}
 
 
@@ -135,7 +132,7 @@ namespace Nez
 				UpdateTransform();
 				return _localRotation;
 			}
-			set { SetLocalRotation(value); }
+			set => SetLocalRotation(value);
 		}
 
 
@@ -145,8 +142,8 @@ namespace Nez
 		/// <value>The rotation degrees.</value>
 		public float LocalRotationDegrees
 		{
-			get { return MathHelper.ToDegrees(_localRotation); }
-			set { LocalRotation = MathHelper.ToRadians(value); }
+			get => MathHelper.ToDegrees(_localRotation);
+			set => LocalRotation = MathHelper.ToRadians(value);
 		}
 
 
@@ -161,7 +158,7 @@ namespace Nez
 				UpdateTransform();
 				return _scale;
 			}
-			set { SetScale(value); }
+			set => SetScale(value);
 		}
 
 
@@ -176,7 +173,7 @@ namespace Nez
 				UpdateTransform();
 				return _localScale;
 			}
-			set { SetLocalScale(value); }
+			set => SetLocalScale(value);
 		}
 
 
@@ -268,7 +265,7 @@ namespace Nez
 
 		public Transform(Entity entity)
 		{
-			this.Entity = entity;
+			Entity = entity;
 			_scale = _localScale = Vector2.One;
 		}
 

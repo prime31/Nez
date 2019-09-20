@@ -13,8 +13,8 @@ namespace Nez.Farseer
 			{
 				if (_areBoundsDirty)
 				{
-					_bounds.CalculateBounds(Transform.Position, _localOffset, _subtexture.Center, Transform.Scale,
-						Transform.Rotation, _subtexture.SourceRect.Width, _subtexture.SourceRect.Height);
+					_bounds.CalculateBounds(Transform.Position, _localOffset, Sprite.Center, Transform.Scale,
+						Transform.Rotation, Sprite.SourceRect.Width, Sprite.SourceRect.Height);
 					_areBoundsDirty = false;
 				}
 
@@ -25,12 +25,12 @@ namespace Nez.Farseer
 		public Body Body;
 
 		protected bool _ignoreTransformChanges;
-		protected Subtexture _subtexture;
+		protected Sprite Sprite;
 
 
-		protected FSRenderableBody(Subtexture subtexture)
+		protected FSRenderableBody(Sprite sprite)
 		{
-			_subtexture = subtexture;
+			Sprite = sprite;
 		}
 
 
@@ -78,10 +78,10 @@ namespace Nez.Farseer
 		}
 
 
-		public override void Render(Graphics graphics, Camera camera)
+		public override void Render(Batcher batcher, Camera camera)
 		{
-			graphics.Batcher.Draw(_subtexture, Transform.Position, _subtexture.SourceRect, Color, Transform.Rotation,
-				_subtexture.Center, Transform.Scale, SpriteEffects.None, _layerDepth);
+			batcher.Draw(Sprite, Transform.Position, Sprite.SourceRect, Color, Transform.Rotation,
+				Sprite.Center, Transform.Scale, SpriteEffects.None, _layerDepth);
 		}
 
 		#endregion

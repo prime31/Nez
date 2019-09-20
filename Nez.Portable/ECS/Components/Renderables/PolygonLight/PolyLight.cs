@@ -42,7 +42,7 @@ namespace Nez.Shadows
 		}
 
 		/// <summary>
-		/// Power of the light, from 0 (turned off) to 1 for maximum brightness        
+		/// Power of the light, from 0 (turned off) to 1 for maximum brightness
 		/// </summary>
 		[Range(0, 50)] public float Power;
 
@@ -71,9 +71,9 @@ namespace Nez.Shadows
 
 		public PolyLight(float radius, Color color, float power)
 		{
-			this.Radius = radius;
-			this.Power = power;
-			this.Color = color;
+			Radius = radius;
+			Power = power;
+			Color = color;
 			ComputeTriangleIndices();
 		}
 
@@ -95,7 +95,7 @@ namespace Nez.Shadows
 
 		public PolyLight SetPower(float power)
 		{
-			this.Power = power;
+			Power = power;
 			return this;
 		}
 
@@ -131,19 +131,19 @@ namespace Nez.Shadows
 			_visibility = new VisibilityComputer();
 		}
 
-		public override void Render(Graphics graphics, Camera camera) => RenderImpl(graphics, camera, false);
+		public override void Render(Batcher batcher, Camera camera) => RenderImpl(batcher, camera, false);
 
-		public override void DebugRender(Graphics graphics)
+		public override void DebugRender(Batcher batcher)
 		{
 			// here, we just assume the Camera being used by the Renderer is the standard Scene Camera
-			RenderImpl(Graphics.Instance, Entity.Scene.Camera, true);
+			RenderImpl(batcher, Entity.Scene.Camera, true);
 
 			// draw a square for our pivot/origin and draw our bounds
-			graphics.Batcher.DrawPixel(Entity.Transform.Position + _localOffset, Debug.Colors.RenderableCenter, 4);
-			graphics.Batcher.DrawHollowRect(Bounds, Debug.Colors.RenderableBounds);
+			batcher.DrawPixel(Entity.Transform.Position + _localOffset, Debug.Colors.RenderableCenter, 4);
+			batcher.DrawHollowRect(Bounds, Debug.Colors.RenderableBounds);
 		}
 
-		void RenderImpl(Graphics graphics, Camera camera, bool debugDraw)
+		void RenderImpl(Batcher batcher, Camera camera, bool debugDraw)
 		{
 			if (Power > 0 && IsVisibleFromCamera(camera))
 			{

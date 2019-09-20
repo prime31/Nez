@@ -6,10 +6,7 @@ namespace Nez.Tweens
 {
 	public class TransformSpringTween : AbstractTweenable
 	{
-		public TransformTargetType TargetType
-		{
-			get { return _targetType; }
-		}
+		public TransformTargetType TargetType => _targetType;
 
 		Transform _transform;
 		TransformTargetType _targetType;
@@ -101,7 +98,7 @@ namespace Nez.Tweens
 					_transform.LocalRotationDegrees = value.X;
 					break;
 				default:
-					throw new System.ArgumentOutOfRangeException();
+					throw new ArgumentOutOfRangeException();
 			}
 		}
 

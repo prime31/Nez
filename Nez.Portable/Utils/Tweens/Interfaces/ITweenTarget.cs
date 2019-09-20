@@ -1,7 +1,4 @@
-﻿using System;
-
-
-namespace Nez.Tweens
+﻿namespace Nez.Tweens
 {
 	/// <summary>
 	/// any object that wants to be tweened needs to implement this. TweenManager internally likes to make a simple object

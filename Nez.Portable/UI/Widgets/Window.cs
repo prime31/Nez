@@ -7,7 +7,7 @@ namespace Nez.UI
 {
 	/// <summary>
 	/// A table that can be dragged and resized. The top padding is used as the window's title height.
-	/// 
+	///
 	/// The preferred size of a window is the preferred size of the title text and the children as laid out by the table. After adding
 	/// children to the window, it can be convenient to call {@link #pack()} to size the window to the size of the children.
 	/// </summary>
@@ -45,8 +45,7 @@ namespace Nez.UI
 
 
 		public Window(string title, Skin skin, string styleName = null) : this(title, skin.Get<WindowStyle>(styleName))
-		{
-		}
+		{ }
 
 
 		#region IInputListener
@@ -55,13 +54,11 @@ namespace Nez.UI
 		float startX, startY, lastX, lastY;
 
 		void IInputListener.OnMouseEnter()
-		{
-		}
+		{ }
 
 
 		void IInputListener.OnMouseExit()
-		{
-		}
+		{ }
 
 
 		bool IInputListener.OnMousePressed(Vector2 mousePos)
@@ -248,7 +245,7 @@ namespace Nez.UI
 		}
 
 
-		public override void Draw(Graphics graphics, float parentAlpha)
+		public override void Draw(Batcher batcher, float parentAlpha)
 		{
 			KeepWithinStage();
 
@@ -256,24 +253,23 @@ namespace Nez.UI
 			{
 				var stagePos = StageToLocalCoordinates(Vector2.Zero);
 				var stageSize = StageToLocalCoordinates(new Vector2(stage.GetWidth(), stage.GetHeight()));
-				DrawStageBackground(graphics, parentAlpha, GetX() + stagePos.X, GetY() + stagePos.Y,
+				DrawStageBackground(batcher, parentAlpha, GetX() + stagePos.X, GetY() + stagePos.Y,
 					GetX() + stageSize.X, GetY() + stageSize.Y);
 			}
 
-			base.Draw(graphics, parentAlpha);
+			base.Draw(batcher, parentAlpha);
 		}
 
 
-		protected void DrawStageBackground(Graphics graphics, float parentAlpha, float x, float y, float width,
-		                                   float height)
+		protected void DrawStageBackground(Batcher batcher, float parentAlpha, float x, float y, float width, float height)
 		{
-			style.StageBackground.Draw(graphics, x, y, width, height, new Color(color, (int) (color.A * parentAlpha)));
+			style.StageBackground.Draw(batcher, x, y, width, height, new Color(color, (int) (color.A * parentAlpha)));
 		}
 
 
-		protected override void DrawBackground(Graphics graphics, float parentAlpha, float x, float y)
+		protected override void DrawBackground(Batcher batcher, float parentAlpha, float x, float y)
 		{
-			base.DrawBackground(graphics, parentAlpha, x, y);
+			base.DrawBackground(batcher, parentAlpha, x, y);
 
 			// Manually draw the title table before clipping is done.
 			titleTable.color.A = color.A;
@@ -304,10 +300,7 @@ namespace Nez.UI
 		}
 
 
-		public bool IsMovable()
-		{
-			return _isMovable;
-		}
+		public bool IsMovable() => _isMovable;
 
 
 		public Window SetMovable(bool isMovable)
@@ -324,10 +317,7 @@ namespace Nez.UI
 		}
 
 
-		public bool IsResizable()
-		{
-			return _isResizable;
-		}
+		public bool IsResizable() => _isResizable;
 
 
 		public Window SetResizable(bool isResizable)
@@ -344,10 +334,7 @@ namespace Nez.UI
 		}
 
 
-		public bool IsDragging()
-		{
-			return _dragging;
-		}
+		public bool IsDragging() => _dragging;
 
 
 		public float GetPrefWidth()
@@ -356,16 +343,10 @@ namespace Nez.UI
 		}
 
 
-		public Table GetTitleTable()
-		{
-			return titleTable;
-		}
+		public Table GetTitleTable() => titleTable;
 
 
-		public Label GetTitleLabel()
-		{
-			return titleLabel;
-		}
+		public Label GetTitleLabel() => titleLabel;
 	}
 
 
@@ -391,9 +372,9 @@ namespace Nez.UI
 
 		public WindowStyle(BitmapFont titleFont, Color titleFontColor, IDrawable background)
 		{
-			this.TitleFont = titleFont ?? Graphics.Instance.BitmapFont;
-			this.Background = background;
-			this.TitleFontColor = titleFontColor;
+			TitleFont = titleFont ?? Graphics.Instance.BitmapFont;
+			Background = background;
+			TitleFontColor = titleFontColor;
 		}
 
 

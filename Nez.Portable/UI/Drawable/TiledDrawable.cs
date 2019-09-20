@@ -1,5 +1,4 @@
-﻿using System;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Nez.Textures;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -7,23 +6,21 @@ using Microsoft.Xna.Framework.Graphics;
 namespace Nez.UI
 {
 	/// <summary>
-	/// Draws a {@link Subtexture} repeatedly to fill the area, instead of stretching it
+	/// Draws a {@link Sprite} repeatedly to fill the area, instead of stretching it
 	/// </summary>
-	public class TiledDrawable : SubtextureDrawable
+	public class TiledDrawable : SpriteDrawable
 	{
-		public TiledDrawable(Subtexture subtexture) : base(subtexture)
+		public TiledDrawable(Sprite sprite) : base(sprite)
+		{ }
+
+
+		public TiledDrawable(Texture2D texture) : base(new Sprite(texture))
+		{ }
+
+
+		public override void Draw(Batcher batcher, float x, float y, float width, float height, Color color)
 		{
-		}
-
-
-		public TiledDrawable(Texture2D texture) : base(new Subtexture(texture))
-		{
-		}
-
-
-		public override void Draw(Graphics graphics, float x, float y, float width, float height, Color color)
-		{
-			float regionWidth = _subtexture.SourceRect.Width, regionHeight = _subtexture.SourceRect.Height;
+			float regionWidth = Sprite.SourceRect.Width, regionHeight = Sprite.SourceRect.Height;
 			int fullX = (int) (width / regionWidth), fullY = (int) (height / regionHeight);
 			float remainingX = width - regionWidth * fullX, remainingY = height - regionHeight * fullY;
 			float startX = x, startY = y;
@@ -34,14 +31,14 @@ namespace Nez.UI
 				y = startY;
 				for (var j = 0; j < fullY; j++)
 				{
-					graphics.Batcher.Draw(_subtexture, new Vector2(x, y), _subtexture.SourceRect, color);
+					batcher.Draw(Sprite, new Vector2(x, y), Sprite.SourceRect, color);
 					y += regionHeight;
 				}
 
 				x += regionWidth;
 			}
 
-			var tempSourceRect = _subtexture.SourceRect;
+			var tempSourceRect = Sprite.SourceRect;
 			if (remainingX > 0)
 			{
 				// right edge
@@ -49,17 +46,17 @@ namespace Nez.UI
 				y = startY;
 				for (var ii = 0; ii < fullY; ii++)
 				{
-					graphics.Batcher.Draw(_subtexture, new Vector2(x, y), tempSourceRect, color);
+					batcher.Draw(Sprite, new Vector2(x, y), tempSourceRect, color);
 					y += regionHeight;
 				}
 
 				// lower right corner.
 				tempSourceRect.Height = (int) remainingY;
 				if (remainingY > 0)
-					graphics.Batcher.Draw(_subtexture, new Vector2(x, y), tempSourceRect, color);
+					batcher.Draw(Sprite, new Vector2(x, y), tempSourceRect, color);
 			}
 
-			tempSourceRect.Width = _subtexture.SourceRect.Width;
+			tempSourceRect.Width = Sprite.SourceRect.Width;
 			if (remainingY > 0)
 			{
 				// bottom edge
@@ -67,7 +64,7 @@ namespace Nez.UI
 				x = startX;
 				for (var i = 0; i < fullX; i++)
 				{
-					graphics.Batcher.Draw(_subtexture, new Vector2(x, y), tempSourceRect, color);
+					batcher.Draw(Sprite, new Vector2(x, y), tempSourceRect, color);
 					x += regionWidth;
 				}
 			}

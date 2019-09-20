@@ -9,7 +9,7 @@ namespace Nez
 	public class MethodInspector : Inspector
 	{
 		// the TextField for our parameter if we have one
-		UI.TextField _textField;
+		TextField _textField;
 		Type _parameterType;
 
 
@@ -54,7 +54,7 @@ namespace Nez
 			_parameterType = parameter.ParameterType;
 
 			_textField =
-				new UI.TextField(
+				new TextField(
 					_parameterType.GetTypeInfo().IsValueType ? Activator.CreateInstance(_parameterType).ToString() : "",
 					skin);
 			_textField.ShouldIgnoreTextUpdatesWhileFocused = false;

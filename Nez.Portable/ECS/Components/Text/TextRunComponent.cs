@@ -41,10 +41,10 @@
 			_textRun.Compile();
 		}
 
-		public override void Render(Graphics graphics, Camera camera)
+		public override void Render(Batcher batcher, Camera camera)
 		{
 			if (_textRun != null)
-				_textRun.Render(graphics);
+				_textRun.Render(batcher);
 		}
 	}
 }

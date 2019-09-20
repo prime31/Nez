@@ -40,10 +40,7 @@ namespace Nez
 		/// provided for ease of access though it is recommended to just access the buffer directly.
 		/// </summary>
 		/// <param name="index">Index.</param>
-		public T this[int index]
-		{
-			get { return Buffer[index]; }
-		}
+		public T this[int index] => Buffer[index];
 
 
 		/// <summary>

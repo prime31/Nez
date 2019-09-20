@@ -74,7 +74,7 @@ namespace Nez.UI
 		}
 
 
-		public override void Draw(Graphics graphics, float parentAlpha)
+		public override void Draw(Batcher batcher, float parentAlpha)
 		{
 			Validate();
 
@@ -101,7 +101,7 @@ namespace Nez.UI
 			float height = GetHeight();
 
 			if (background != null)
-				background.Draw(graphics, x, y, width, height, color);
+				background.Draw(batcher, x, y, width, height, color);
 
 			var selected = _selection.First();
 			if (selected != null)
@@ -120,7 +120,7 @@ namespace Nez.UI
 				}
 
 				fontColor = new Color(fontColor, (int) (fontColor.A * parentAlpha));
-				graphics.Batcher.DrawString(font, str, new Vector2(x, y), fontColor);
+				batcher.DrawString(font, str, new Vector2(x, y), fontColor);
 			}
 		}
 
@@ -363,9 +363,9 @@ namespace Nez.UI
 
 		public void SetDisabled(bool disabled)
 		{
-			if (disabled && !this._isDisabled)
+			if (disabled && !_isDisabled)
 				HideList();
-			this._isDisabled = disabled;
+			_isDisabled = disabled;
 		}
 
 
@@ -467,11 +467,11 @@ namespace Nez.UI
 		public SelectBoxStyle(BitmapFont font, Color fontColor, IDrawable background, ScrollPaneStyle scrollStyle,
 		                      ListBoxStyle listStyle)
 		{
-			this.Font = font;
-			this.FontColor = fontColor;
-			this.Background = background;
-			this.ScrollStyle = scrollStyle;
-			this.ListStyle = listStyle;
+			Font = font;
+			FontColor = fontColor;
+			Background = background;
+			ScrollStyle = scrollStyle;
+			ListStyle = listStyle;
 		}
 	}
 }

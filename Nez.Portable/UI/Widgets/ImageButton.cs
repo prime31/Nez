@@ -1,8 +1,4 @@
-﻿using System;
-using Microsoft.Xna.Framework;
-
-
-namespace Nez.UI
+﻿namespace Nez.UI
 {
 	/// <summary>
 	/// A button with a child {@link Image} to display an image. This is useful when the button must be larger than the image and the
@@ -26,25 +22,21 @@ namespace Nez.UI
 		}
 
 		public ImageButton(Skin skin, string styleName = null) : this(skin.Get<ImageButtonStyle>(styleName))
-		{
-		}
+		{ }
 
 
 		public ImageButton(IDrawable imageUp) : this(new ImageButtonStyle(null, null, null, imageUp, null, null))
-		{
-		}
+		{ }
 
 
 		public ImageButton(IDrawable imageUp, IDrawable imageDown) : this(new ImageButtonStyle(null, null, null,
 			imageUp, imageDown, null))
-		{
-		}
+		{ }
 
 
 		public ImageButton(IDrawable imageUp, IDrawable imageDown, IDrawable imageOver) : this(
 			new ImageButtonStyle(null, null, null, imageUp, imageDown, imageOver))
-		{
-		}
+		{ }
 
 
 		public override void SetStyle(ButtonStyle style)
@@ -94,10 +86,10 @@ namespace Nez.UI
 		}
 
 
-		public override void Draw(Graphics graphics, float parentAlpha)
+		public override void Draw(Batcher batcher, float parentAlpha)
 		{
 			UpdateImage();
-			base.Draw(graphics, parentAlpha);
+			base.Draw(batcher, parentAlpha);
 		}
 	}
 
@@ -109,16 +101,15 @@ namespace Nez.UI
 
 
 		public ImageButtonStyle()
-		{
-		}
+		{ }
 
 
 		public ImageButtonStyle(IDrawable up, IDrawable down, IDrawable checkked, IDrawable imageUp,
 		                        IDrawable imageDown, IDrawable imageChecked) : base(up, down, checkked)
 		{
-			this.ImageUp = imageUp;
-			this.ImageDown = imageDown;
-			this.ImageChecked = imageChecked;
+			ImageUp = imageUp;
+			ImageDown = imageDown;
+			ImageChecked = imageChecked;
 		}
 
 

@@ -13,10 +13,7 @@ namespace Nez.UI
 		/// true if the widget's layout has been {@link #invalidate() invalidated}.
 		/// </summary>
 		/// <value><c>true</c> if needs layout; otherwise, <c>false</c>.</value>
-		public bool NeedsLayout
-		{
-			get { return _needsLayout; }
-		}
+		public bool NeedsLayout => _needsLayout;
 
 		internal float x, y;
 		internal float width, height;
@@ -36,9 +33,9 @@ namespace Nez.UI
 		/// <summary>
 		/// If this method is overridden, the super method or {@link #validate()} should be called to ensure the widget is laid out.
 		/// </summary>
-		/// <param name="graphics">Graphics.</param>
+		/// <param name="batcher">Batcher.</param>
 		/// <param name="parentAlpha">Parent alpha.</param>
-		public virtual void Draw(Graphics graphics, float parentAlpha)
+		public virtual void Draw(Batcher batcher, float parentAlpha)
 		{
 			Validate();
 		}
@@ -51,13 +48,11 @@ namespace Nez.UI
 
 
 		protected virtual void PositionChanged()
-		{
-		}
+		{ }
 
 
 		protected virtual void RotationChanged()
-		{
-		}
+		{ }
 
 
 		#region Getters/Setters
@@ -157,7 +152,7 @@ namespace Nez.UI
 		/// <param name="visible">Visible.</param>
 		public void SetVisible(bool visible)
 		{
-			this._visible = visible;
+			_visible = visible;
 		}
 
 
@@ -474,8 +469,8 @@ namespace Nez.UI
 		/// <param name="scaleXY">Scale X.</param>
 		public void SetScale(float scaleXY)
 		{
-			this.scaleX = scaleXY;
-			this.scaleY = scaleXY;
+			scaleX = scaleXY;
+			scaleY = scaleXY;
 		}
 
 
@@ -522,9 +517,9 @@ namespace Nez.UI
 
 		public void SetRotation(float degrees)
 		{
-			if (this.rotation != degrees)
+			if (rotation != degrees)
 			{
-				this.rotation = degrees;
+				rotation = degrees;
 				RotationChanged();
 			}
 		}
@@ -823,11 +818,11 @@ namespace Nez.UI
 		/// <summary>
 		/// Draws this element's debug lines
 		/// </summary>
-		/// <param name="graphics">Graphics.</param>
-		public virtual void DebugRender(Graphics graphics)
+		/// <param name="batcher">Batcher.</param>
+		public virtual void DebugRender(Batcher batcher)
 		{
 			if (_debug)
-				graphics.Batcher.DrawHollowRect(x, y, width, height, Color.Red);
+				batcher.DrawHollowRect(x, y, width, height, Color.Red);
 		}
 
 
@@ -878,7 +873,7 @@ namespace Nez.UI
 
 		public virtual bool LayoutEnabled
 		{
-			get { return _layoutEnabled; }
+			get => _layoutEnabled;
 			set
 			{
 				if (_layoutEnabled != value)
@@ -891,40 +886,21 @@ namespace Nez.UI
 			}
 		}
 
-		public virtual float MinWidth
-		{
-			get { return PreferredWidth; }
-		}
+		public virtual float MinWidth => PreferredWidth;
 
-		public virtual float MinHeight
-		{
-			get { return PreferredHeight; }
-		}
+		public virtual float MinHeight => PreferredHeight;
 
-		public virtual float PreferredWidth
-		{
-			get { return 0; }
-		}
+		public virtual float PreferredWidth => 0;
 
-		public virtual float PreferredHeight
-		{
-			get { return 0; }
-		}
+		public virtual float PreferredHeight => 0;
 
-		public virtual float MaxWidth
-		{
-			get { return 0; }
-		}
+		public virtual float MaxWidth => 0;
 
-		public virtual float MaxHeight
-		{
-			get { return 0; }
-		}
+		public virtual float MaxHeight => 0;
 
 
 		public virtual void Layout()
-		{
-		}
+		{ }
 
 
 		public virtual void Invalidate()

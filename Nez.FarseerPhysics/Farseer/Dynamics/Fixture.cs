@@ -120,7 +120,7 @@ namespace FarseerPhysics.Dynamics
 				_collisionGroup = value;
 				Refilter();
 			}
-			get { return _collisionGroup; }
+			get => _collisionGroup;
 		}
 
 		/// <summary>
@@ -132,7 +132,7 @@ namespace FarseerPhysics.Dynamics
 		/// </summary>
 		public Category CollidesWith
 		{
-			get { return _collidesWith; }
+			get => _collidesWith;
 
 			set
 			{
@@ -155,7 +155,7 @@ namespace FarseerPhysics.Dynamics
 		/// </summary>
 		public Category CollisionCategories
 		{
-			get { return _collisionCategories; }
+			get => _collisionCategories;
 
 			set
 			{
@@ -180,7 +180,7 @@ namespace FarseerPhysics.Dynamics
 		/// <value><c>true</c> if this instance is a sensor; otherwise, <c>false</c>.</value>
 		public bool IsSensor
 		{
-			get { return _isSensor; }
+			get => _isSensor;
 			set
 			{
 				if (Body != null)
@@ -208,7 +208,7 @@ namespace FarseerPhysics.Dynamics
 		/// <value>The friction.</value>
 		public float Friction
 		{
-			get { return _friction; }
+			get => _friction;
 			set
 			{
 				Debug.Assert(!float.IsNaN(value));
@@ -222,7 +222,7 @@ namespace FarseerPhysics.Dynamics
 		/// <value>The restitution.</value>
 		public float Restitution
 		{
-			get { return _restitution; }
+			get => _restitution;
 			set
 			{
 				Debug.Assert(!float.IsNaN(value));

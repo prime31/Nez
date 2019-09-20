@@ -267,31 +267,19 @@ namespace FarseerPhysics.Collision
 		/// </summary>
 		public Vector2 UpperBound;
 
-		public float Width
-		{
-			get { return UpperBound.X - LowerBound.X; }
-		}
+		public float Width => UpperBound.X - LowerBound.X;
 
-		public float Height
-		{
-			get { return UpperBound.Y - LowerBound.Y; }
-		}
+		public float Height => UpperBound.Y - LowerBound.Y;
 
 		/// <summary>
 		/// Get the center of the AABB.
 		/// </summary>
-		public Vector2 Center
-		{
-			get { return 0.5f * (LowerBound + UpperBound); }
-		}
+		public Vector2 Center => 0.5f * (LowerBound + UpperBound);
 
 		/// <summary>
 		/// Get the extents of the AABB (half-widths).
 		/// </summary>
-		public Vector2 Extents
-		{
-			get { return 0.5f * (UpperBound - LowerBound); }
-		}
+		public Vector2 Extents => 0.5f * (UpperBound - LowerBound);
 
 		/// <summary>
 		/// Get the perimeter length
@@ -326,34 +314,22 @@ namespace FarseerPhysics.Collision
 		/// <summary>
 		/// First quadrant
 		/// </summary>
-		public AABB Q1
-		{
-			get { return new AABB(Center, UpperBound); }
-		}
+		public AABB Q1 => new AABB(Center, UpperBound);
 
 		/// <summary>
 		/// Second quadrant
 		/// </summary>
-		public AABB Q2
-		{
-			get { return new AABB(new Vector2(LowerBound.X, Center.Y), new Vector2(Center.X, UpperBound.Y)); }
-		}
+		public AABB Q2 => new AABB(new Vector2(LowerBound.X, Center.Y), new Vector2(Center.X, UpperBound.Y));
 
 		/// <summary>
 		/// Third quadrant
 		/// </summary>
-		public AABB Q3
-		{
-			get { return new AABB(LowerBound, Center); }
-		}
+		public AABB Q3 => new AABB(LowerBound, Center);
 
 		/// <summary>
 		/// Forth quadrant
 		/// </summary>
-		public AABB Q4
-		{
-			get { return new AABB(new Vector2(Center.X, LowerBound.Y), new Vector2(UpperBound.X, Center.Y)); }
-		}
+		public AABB Q4 => new AABB(new Vector2(Center.X, LowerBound.Y), new Vector2(UpperBound.X, Center.Y));
 
 		#endregion
 

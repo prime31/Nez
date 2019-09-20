@@ -9,7 +9,7 @@ namespace Nez.UI
 	/// The drawable sizes are set when the ninepatch is set, but they are separate values. Eg, {@link Drawable#getLeftWidth()} could
 	/// be set to more than {@link NinePatch#getLeftWidth()} in order to provide more space on the left than actually exists in the
 	/// ninepatch.
-	/// 
+	///
 	/// The min size is set to the ninepatch total size by default. It could be set to the left+right and top+bottom, excluding the
 	/// middle size, to allow the drawable to be sized down as small as possible.
 	/// </summary>
@@ -54,32 +54,32 @@ namespace Nez.UI
 
 		Rectangle[] _destRects = new Rectangle[9];
 
-		NinePatchSubtexture _subtexture;
+		NinePatchSprite _sprite;
 
 
-		public NinePatchDrawable(NinePatchSubtexture subtexture)
+		public NinePatchDrawable(NinePatchSprite sprite)
 		{
-			_subtexture = subtexture;
-			MinWidth = _subtexture.NinePatchRects[MIDDLE_LEFT].Width + _subtexture.NinePatchRects[MIDDLE_CENTER].Width +
-			           _subtexture.NinePatchRects[MIDDLE_RIGHT].Width;
-			MinHeight = _subtexture.NinePatchRects[TOP_CENTER].Height +
-			            _subtexture.NinePatchRects[MIDDLE_CENTER].Height +
-			            _subtexture.NinePatchRects[BOTTOM_CENTER].Height;
+			_sprite = sprite;
+			MinWidth = _sprite.NinePatchRects[MIDDLE_LEFT].Width + _sprite.NinePatchRects[MIDDLE_CENTER].Width +
+			           _sprite.NinePatchRects[MIDDLE_RIGHT].Width;
+			MinHeight = _sprite.NinePatchRects[TOP_CENTER].Height +
+			            _sprite.NinePatchRects[MIDDLE_CENTER].Height +
+			            _sprite.NinePatchRects[BOTTOM_CENTER].Height;
 
 			// by default, if padding isn't given, we will pad the content by the nine patch margins
-			if (_subtexture.HasPadding)
+			if (_sprite.HasPadding)
 			{
-				LeftWidth = _subtexture.PadLeft;
-				RightWidth = _subtexture.PadRight;
-				TopHeight = _subtexture.PadTop;
-				BottomHeight = _subtexture.PadBottom;
+				LeftWidth = _sprite.PadLeft;
+				RightWidth = _sprite.PadRight;
+				TopHeight = _sprite.PadTop;
+				BottomHeight = _sprite.PadBottom;
 			}
 			else
 			{
-				LeftWidth = _subtexture.Left;
-				RightWidth = _subtexture.Right;
-				TopHeight = _subtexture.Top;
-				BottomHeight = _subtexture.Bottom;
+				LeftWidth = _sprite.Left;
+				RightWidth = _sprite.Right;
+				TopHeight = _sprite.Top;
+				BottomHeight = _sprite.Bottom;
 			}
 		}
 
@@ -93,19 +93,17 @@ namespace Nez.UI
 		/// <param name="top">Top.</param>
 		/// <param name="bottom">Bottom.</param>
 		public NinePatchDrawable(Texture2D texture, int left, int right, int top, int bottom) : this(
-			new NinePatchSubtexture(texture, left, right, top, bottom))
-		{
-		}
+			new NinePatchSprite(texture, left, right, top, bottom))
+		{ }
 
 
-		public NinePatchDrawable(Subtexture subtexture, int left, int right, int top, int bottom) : this(
-			new NinePatchSubtexture(subtexture.Texture2D, subtexture.SourceRect, left, right, top, bottom))
-		{
-		}
+		public NinePatchDrawable(Sprite sprite, int left, int right, int top, int bottom) : this(
+			new NinePatchSprite(sprite.Texture2D, sprite.SourceRect, left, right, top, bottom))
+		{ }
 
 
 		/// <summary>
-		/// sets the padding on the NinePatchSubtexture
+		/// sets the padding on the NinePatchSprite
 		/// </summary>
 		/// <param name="left">Left.</param>
 		/// <param name="right">Right.</param>
@@ -113,14 +111,14 @@ namespace Nez.UI
 		/// <param name="bottom">Bottom.</param>
 		public void SetPadding(int left, int right, int top, int bottom)
 		{
-			_subtexture.Left = left;
-			_subtexture.Right = right;
-			_subtexture.Top = top;
-			_subtexture.Bottom = bottom;
+			_sprite.Left = left;
+			_sprite.Right = right;
+			_sprite.Top = top;
+			_sprite.Bottom = bottom;
 		}
 
 
-		public void Draw(Graphics graphics, float x, float y, float width, float height, Color color)
+		public void Draw(Batcher batcher, float x, float y, float width, float height, Color color)
 		{
 			if (TintColor.HasValue)
 				color = color.Multiply(TintColor.Value);
@@ -129,8 +127,8 @@ namespace Nez.UI
 			{
 				_finalRenderRect.Height = (int) height;
 				_finalRenderRect.Width = (int) width;
-				_subtexture.GenerateNinePatchRects(_finalRenderRect, _destRects, _subtexture.Left, _subtexture.Right,
-					_subtexture.Top, _subtexture.Bottom);
+				_sprite.GenerateNinePatchRects(_finalRenderRect, _destRects, _sprite.Left, _sprite.Right,
+					_sprite.Top, _sprite.Bottom);
 			}
 
 			for (var i = 0; i < 9; i++)
@@ -143,7 +141,7 @@ namespace Nez.UI
 				var dest = _destRects[i];
 				dest.X += (int) x;
 				dest.Y += (int) y;
-				graphics.Batcher.Draw(_subtexture, dest, _subtexture.NinePatchRects[i], color);
+				batcher.Draw(_sprite, dest, _sprite.NinePatchRects[i], color);
 			}
 		}
 
@@ -155,7 +153,7 @@ namespace Nez.UI
 		/// <param name="tint">Tint.</param>
 		public NinePatchDrawable NewTintedDrawable(Color tint)
 		{
-			return new NinePatchDrawable(_subtexture)
+			return new NinePatchDrawable(_sprite)
 			{
 				LeftWidth = LeftWidth,
 				RightWidth = RightWidth,

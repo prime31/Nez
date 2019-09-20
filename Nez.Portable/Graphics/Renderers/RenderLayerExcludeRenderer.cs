@@ -12,7 +12,7 @@
 
 		public RenderLayerExcludeRenderer(int renderOrder, params int[] excludedRenderLayers) : base(renderOrder, null)
 		{
-			this.ExcludedRenderLayers = excludedRenderLayers;
+			ExcludedRenderLayers = excludedRenderLayers;
 		}
 
 		public override void Render(Scene scene)
@@ -44,7 +44,7 @@
 				var renderable = scene.RenderableComponents[i];
 				if (!ExcludedRenderLayers.Contains(renderable.RenderLayer) && renderable.Enabled &&
 				    renderable.IsVisibleFromCamera(cam))
-					renderable.DebugRender(Graphics.Instance);
+					renderable.DebugRender(Graphics.Instance.Batcher);
 			}
 
 			base.DebugRender(scene, cam);

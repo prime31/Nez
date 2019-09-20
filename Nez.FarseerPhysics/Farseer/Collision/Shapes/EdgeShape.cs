@@ -33,10 +33,7 @@ namespace FarseerPhysics.Collision.Shapes
 	/// </summary>
 	public class EdgeShape : Shape
 	{
-		public override int ChildCount
-		{
-			get { return 1; }
-		}
+		public override int ChildCount => 1;
 
 		/// <summary>
 		/// Is true if the edge is connected to an adjacent vertex before vertex 1.
@@ -63,7 +60,7 @@ namespace FarseerPhysics.Collision.Shapes
 		/// </summary>
 		public Vector2 Vertex1
 		{
-			get { return _vertex1; }
+			get => _vertex1;
 			set
 			{
 				_vertex1 = value;
@@ -76,7 +73,7 @@ namespace FarseerPhysics.Collision.Shapes
 		/// </summary>
 		public Vector2 Vertex2
 		{
-			get { return _vertex2; }
+			get => _vertex2;
 			set
 			{
 				_vertex2 = value;

@@ -1,5 +1,4 @@
-﻿using System;
-using Microsoft.Xna.Framework.Graphics;
+﻿using Microsoft.Xna.Framework.Graphics;
 
 
 namespace Nez
@@ -13,7 +12,7 @@ namespace Nez
 		[Range(8, 80, false)]
 		public int CrosshatchSize
 		{
-			get { return _crosshatchSize; }
+			get => _crosshatchSize;
 			set
 			{
 				// ensure we have an even number

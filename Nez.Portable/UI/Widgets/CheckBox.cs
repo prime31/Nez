@@ -1,5 +1,4 @@
-﻿using System;
-using Nez.BitmapFonts;
+﻿using Nez.BitmapFonts;
 using Microsoft.Xna.Framework;
 
 
@@ -51,7 +50,7 @@ namespace Nez.UI
 		}
 
 
-		public override void Draw(Graphics graphics, float parentAlpha)
+		public override void Draw(Batcher batcher, float parentAlpha)
 		{
 			IDrawable checkbox = null;
 			if (_isDisabled)
@@ -73,7 +72,7 @@ namespace Nez.UI
 			}
 
 			image.SetDrawable(checkbox);
-			base.Draw(graphics, parentAlpha);
+			base.Draw(batcher, parentAlpha);
 		}
 
 
@@ -109,10 +108,10 @@ namespace Nez.UI
 
 		public CheckBoxStyle(IDrawable checkboxOff, IDrawable checkboxOn, BitmapFont font, Color fontColor)
 		{
-			this.CheckboxOff = checkboxOff;
-			this.CheckboxOn = checkboxOn;
-			this.Font = font ?? Graphics.Instance.BitmapFont;
-			this.FontColor = fontColor;
+			CheckboxOff = checkboxOff;
+			CheckboxOn = checkboxOn;
+			Font = font ?? Graphics.Instance.BitmapFont;
+			FontColor = fontColor;
 		}
 	}
 }

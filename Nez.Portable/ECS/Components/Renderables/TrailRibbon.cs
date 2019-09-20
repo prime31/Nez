@@ -1,5 +1,4 @@
-﻿using System;
-using Microsoft.Xna.Framework.Graphics;
+﻿using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
 using System.Collections.Generic;
 
@@ -12,11 +11,7 @@ namespace Nez
 	/// </summary>
 	public class TrailRibbon : RenderableComponent, IUpdatable
 	{
-		public override RectangleF Bounds
-		{
-			// we calculate bounds in update so no need to mess with anything here
-			get { return _bounds; }
-		}
+		public override RectangleF Bounds => _bounds;
 
 		/// <summary>
 		/// starting color of the ribbon
@@ -200,7 +195,7 @@ namespace Nez
 		}
 
 
-		public override void Render(Graphics graphics, Camera camera)
+		public override void Render(Batcher batcher, Camera camera)
 		{
 			CalculateVertices();
 			_basicEffect.Projection = camera.ProjectionMatrix;
@@ -243,8 +238,8 @@ namespace Nez
 
 			public RibbonSegment(Vector2 position, float radius)
 			{
-				this.Position = position;
-				this.Radius = radius;
+				Position = position;
+				Radius = radius;
 			}
 		}
 	}

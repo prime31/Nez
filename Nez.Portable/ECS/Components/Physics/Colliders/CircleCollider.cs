@@ -1,5 +1,4 @@
-﻿using Microsoft.Xna.Framework;
-using Nez.PhysicsShapes;
+﻿using Nez.PhysicsShapes;
 
 
 namespace Nez
@@ -70,14 +69,14 @@ namespace Nez
 		#endregion
 
 
-		public override void DebugRender(Graphics graphics)
+		public override void DebugRender(Batcher batcher)
 		{
-			graphics.Batcher.DrawHollowRect(Bounds, Debug.Colors.ColliderBounds, Debug.Size.LineSizeMultiplier);
-			graphics.Batcher.DrawCircle(Shape.position, ((Circle) Shape).Radius, Debug.Colors.ColliderEdge,
+			batcher.DrawHollowRect(Bounds, Debug.Colors.ColliderBounds, Debug.Size.LineSizeMultiplier);
+			batcher.DrawCircle(Shape.position, ((Circle) Shape).Radius, Debug.Colors.ColliderEdge,
 				Debug.Size.LineSizeMultiplier);
-			graphics.Batcher.DrawPixel(Entity.Transform.Position, Debug.Colors.ColliderPosition,
+			batcher.DrawPixel(Entity.Transform.Position, Debug.Colors.ColliderPosition,
 				4 * Debug.Size.LineSizeMultiplier);
-			graphics.Batcher.DrawPixel(Shape.position, Debug.Colors.ColliderCenter, 2 * Debug.Size.LineSizeMultiplier);
+			batcher.DrawPixel(Shape.position, Debug.Colors.ColliderCenter, 2 * Debug.Size.LineSizeMultiplier);
 		}
 
 		public override string ToString()

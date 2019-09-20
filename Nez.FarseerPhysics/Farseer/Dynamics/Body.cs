@@ -24,7 +24,6 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using FarseerPhysics.Collision;
 using FarseerPhysics.Collision.Shapes;
 using FarseerPhysics.Common;
 using FarseerPhysics.Common.PhysicsLogic;
@@ -78,10 +77,7 @@ namespace FarseerPhysics.Dynamics
 		/// </summary>
 		public float GravityScale;
 
-		public World World
-		{
-			get { return _world; }
-		}
+		public World World => _world;
 
 		/// <summary>
 		/// Set the user data. Use this to store your application specific data.
@@ -93,10 +89,7 @@ namespace FarseerPhysics.Dynamics
 		/// Gets the total number revolutions the body has made.
 		/// </summary>
 		/// <value>The revolutions.</value>
-		public float Revolutions
-		{
-			get { return Rotation / (float) Math.PI; }
-		}
+		public float Revolutions => Rotation / (float) Math.PI;
 
 		/// <summary>
 		/// Gets or sets the body type.
@@ -105,7 +98,7 @@ namespace FarseerPhysics.Dynamics
 		/// <value>The type of body.</value>
 		public BodyType BodyType
 		{
-			get { return _bodyType; }
+			get => _bodyType;
 			set
 			{
 				if (_bodyType == value)
@@ -169,7 +162,7 @@ namespace FarseerPhysics.Dynamics
 
 				_linearVelocity = value;
 			}
-			get { return _linearVelocity; }
+			get => _linearVelocity;
 		}
 
 		/// <summary>
@@ -190,7 +183,7 @@ namespace FarseerPhysics.Dynamics
 
 				_angularVelocity = value;
 			}
-			get { return _angularVelocity; }
+			get => _angularVelocity;
 		}
 
 		/// <summary>
@@ -199,7 +192,7 @@ namespace FarseerPhysics.Dynamics
 		/// <value>The linear damping.</value>
 		public float LinearDamping
 		{
-			get { return _linearDamping; }
+			get => _linearDamping;
 			set
 			{
 				Debug.Assert(!float.IsNaN(value));
@@ -213,7 +206,7 @@ namespace FarseerPhysics.Dynamics
 		/// <value>The angular damping.</value>
 		public float AngularDamping
 		{
-			get { return _angularDamping; }
+			get => _angularDamping;
 			set
 			{
 				Debug.Assert(!float.IsNaN(value));
@@ -241,7 +234,7 @@ namespace FarseerPhysics.Dynamics
 
 				_sleepingAllowed = value;
 			}
-			get { return _sleepingAllowed; }
+			get => _sleepingAllowed;
 		}
 
 		/// <summary>
@@ -335,7 +328,7 @@ namespace FarseerPhysics.Dynamics
 
 				_enabled = value;
 			}
-			get { return _enabled; }
+			get => _enabled;
 		}
 
 		/// <summary>
@@ -355,7 +348,7 @@ namespace FarseerPhysics.Dynamics
 				_angularVelocity = 0f;
 				ResetMassData();
 			}
-			get { return _fixedRotation; }
+			get => _fixedRotation;
 		}
 
 		/// <summary>
@@ -384,7 +377,7 @@ namespace FarseerPhysics.Dynamics
 		/// <returns>Return the world position of the body's origin.</returns>
 		public Vector2 Position
 		{
-			get { return _xf.P; }
+			get => _xf.P;
 			set
 			{
 				Debug.Assert(!float.IsNaN(value.X) && !float.IsNaN(value.Y));
@@ -398,8 +391,8 @@ namespace FarseerPhysics.Dynamics
 		/// <returns>Return the world position of the body's origin.</returns>
 		public Vector2 DisplayPosition
 		{
-			get { return _xf.P * FSConvert.SimToDisplay; }
-			set { Position = value * FSConvert.DisplayToSim; }
+			get => _xf.P * FSConvert.SimToDisplay;
+			set => Position = value * FSConvert.DisplayToSim;
 		}
 
 		/// <summary>
@@ -408,7 +401,7 @@ namespace FarseerPhysics.Dynamics
 		/// <returns>Return the current world rotation angle in radians.</returns>
 		public float Rotation
 		{
-			get { return _sweep.A; }
+			get => _sweep.A;
 			set
 			{
 				Debug.Assert(!float.IsNaN(value));
@@ -422,8 +415,8 @@ namespace FarseerPhysics.Dynamics
 		/// <value><c>true</c> if this instance is static; otherwise, <c>false</c>.</value>
 		public bool IsStatic
 		{
-			get { return _bodyType == BodyType.Static; }
-			set { BodyType = value ? BodyType.Static : BodyType.Dynamic; }
+			get => _bodyType == BodyType.Static;
+			set => BodyType = value ? BodyType.Static : BodyType.Dynamic;
 		}
 
 		/// <summary>
@@ -432,8 +425,8 @@ namespace FarseerPhysics.Dynamics
 		/// <value><c>true</c> if this instance is kinematic; otherwise, <c>false</c>.</value>
 		public bool IsKinematic
 		{
-			get { return _bodyType == BodyType.Kinematic; }
-			set { BodyType = value ? BodyType.Kinematic : BodyType.Dynamic; }
+			get => _bodyType == BodyType.Kinematic;
+			set => BodyType = value ? BodyType.Kinematic : BodyType.Dynamic;
 		}
 
 		/// <summary>
@@ -442,8 +435,8 @@ namespace FarseerPhysics.Dynamics
 		/// <value><c>true</c> if this instance is dynamic; otherwise, <c>false</c>.</value>
 		public bool IsDynamic
 		{
-			get { return _bodyType == BodyType.Dynamic; }
-			set { BodyType = value ? BodyType.Dynamic : BodyType.Kinematic; }
+			get => _bodyType == BodyType.Dynamic;
+			set => BodyType = value ? BodyType.Dynamic : BodyType.Kinematic;
 		}
 
 		/// <summary>
@@ -456,10 +449,7 @@ namespace FarseerPhysics.Dynamics
 		/// Get the world position of the center of mass.
 		/// </summary>
 		/// <value>The world position.</value>
-		public Vector2 WorldCenter
-		{
-			get { return _sweep.C; }
-		}
+		public Vector2 WorldCenter => _sweep.C;
 
 		/// <summary>
 		/// Get the local position of the center of mass.
@@ -467,7 +457,7 @@ namespace FarseerPhysics.Dynamics
 		/// <value>The local position.</value>
 		public Vector2 LocalCenter
 		{
-			get { return _sweep.LocalCenter; }
+			get => _sweep.LocalCenter;
 			set
 			{
 				if (_bodyType != BodyType.Dynamic)
@@ -490,7 +480,7 @@ namespace FarseerPhysics.Dynamics
 		/// <value>The mass.</value>
 		public float Mass
 		{
-			get { return _mass; }
+			get => _mass;
 			set
 			{
 				Debug.Assert(!float.IsNaN(value));
@@ -513,7 +503,7 @@ namespace FarseerPhysics.Dynamics
 		/// <value>The inertia.</value>
 		public float Inertia
 		{
-			get { return _inertia + Mass * Vector2.Dot(_sweep.LocalCenter, _sweep.LocalCenter); }
+			get => _inertia + Mass * Vector2.Dot(_sweep.LocalCenter, _sweep.LocalCenter);
 			set
 			{
 				Debug.Assert(!float.IsNaN(value));

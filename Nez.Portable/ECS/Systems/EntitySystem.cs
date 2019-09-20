@@ -1,19 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 
 namespace Nez
 {
 	public class EntitySystem
 	{
-		public Matcher Matcher
-		{
-			get { return _matcher; }
-		}
+		public Matcher Matcher => _matcher;
 
 		public Scene Scene
 		{
-			get { return _scene; }
+			get => _scene;
 			set
 			{
 				_scene = value;

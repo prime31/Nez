@@ -1,4 +1,3 @@
-using System;
 using Microsoft.Xna.Framework;
 
 
@@ -16,8 +15,8 @@ namespace Nez
 		/// <value>The mass.</value>
 		public float Mass
 		{
-			get { return _mass; }
-			set { SetMass(value); }
+			get => _mass;
+			set => SetMass(value);
 		}
 
 		/// <summary>
@@ -25,8 +24,8 @@ namespace Nez
 		/// </summary>
 		public float Elasticity
 		{
-			get { return _elasticity; }
-			set { SetElasticity(value); }
+			get => _elasticity;
+			set => SetElasticity(value);
 		}
 
 		/// <summary>
@@ -34,8 +33,8 @@ namespace Nez
 		/// </summary>
 		public float Friction
 		{
-			get { return _friction; }
-			set { SetFriction(value); }
+			get => _friction;
+			set => SetFriction(value);
 		}
 
 		/// <summary>
@@ -44,8 +43,8 @@ namespace Nez
 		/// </summary>
 		public float Glue
 		{
-			get { return _glue; }
-			set { SetGlue(value); }
+			get => _glue;
+			set => SetGlue(value);
 		}
 
 		/// <summary>
@@ -62,10 +61,7 @@ namespace Nez
 		/// rigidbodies with a mass of 0 are considered immovable. Changing velocity and collisions will have no effect on them.
 		/// </summary>
 		/// <value><c>true</c> if is immovable; otherwise, <c>false</c>.</value>
-		public bool IsImmovable
-		{
-			get { return _mass < 0.0001f; }
-		}
+		public bool IsImmovable => _mass < 0.0001f;
 
 		float _mass = 10f;
 		float _elasticity = 0.5f;
@@ -140,7 +136,7 @@ namespace Nez
 		/// <param name="velocity">Velocity.</param>
 		public ArcadeRigidbody SetVelocity(Vector2 velocity)
 		{
-			this.Velocity = velocity;
+			Velocity = velocity;
 			return this;
 		}
 

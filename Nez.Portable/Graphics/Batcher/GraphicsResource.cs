@@ -1,7 +1,5 @@
 using System;
-using System.Diagnostics;
 using Microsoft.Xna.Framework.Graphics;
-using System.Reflection;
 
 
 namespace Nez
@@ -13,7 +11,7 @@ namespace Nez
 	{
 		public GraphicsDevice GraphicsDevice
 		{
-			get { return _graphicsDevice; }
+			get => _graphicsDevice;
 			internal set
 			{
 				Insist.IsTrue(value != null);

@@ -86,9 +86,9 @@ namespace Nez.BitmapFonts
 				var bounds = new Rectangle(character.X, character.Y,
 					character.Width,
 					character.Height);
-				var subtexture = new Subtexture(texture, bounds);
+				var sprite = new Sprite(texture, bounds);
 				var region =
- new BitmapFonts.BitmapFontRegion(subtexture, (char)key, character.XOffset, character.YOffset, character.XAdvance);
+ new BitmapFonts.BitmapFontRegion(sprite, (char)key, character.XOffset, character.YOffset, character.XAdvance);
 				regions[index++] = region;
 			}
 

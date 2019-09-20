@@ -182,7 +182,7 @@ namespace Nez.Particles
 					pos += currentParticle.position;
 					Vector2.Min(ref min, ref pos, out min);
 					Vector2.Max(ref max, ref pos, out max);
-					maxParticleSize = System.Math.Max(maxParticleSize, currentParticle.particleSize);
+					maxParticleSize = Math.Max(maxParticleSize, currentParticle.particleSize);
 				}
 			}
 
@@ -190,20 +190,20 @@ namespace Nez.Particles
 			_bounds.Width = max.X - min.X;
 			_bounds.Height = max.Y - min.Y;
 
-			if (_emitterConfig.Subtexture == null)
+			if (_emitterConfig.Sprite == null)
 			{
 				_bounds.Inflate(1 * maxParticleSize, 1 * maxParticleSize);
 			}
 			else
 			{
-				maxParticleSize /= _emitterConfig.Subtexture.SourceRect.Width;
-				_bounds.Inflate(_emitterConfig.Subtexture.SourceRect.Width * maxParticleSize,
-					_emitterConfig.Subtexture.SourceRect.Height * maxParticleSize);
+				maxParticleSize /= _emitterConfig.Sprite.SourceRect.Width;
+				_bounds.Inflate(_emitterConfig.Sprite.SourceRect.Width * maxParticleSize,
+					_emitterConfig.Sprite.SourceRect.Height * maxParticleSize);
 			}
 		}
 
 
-		public override void Render(Graphics graphics, Camera camera)
+		public override void Render(Batcher batcher, Camera camera)
 		{
 			// we still render when we are paused
 			if (!_active && !_isPaused)
@@ -217,14 +217,14 @@ namespace Nez.Particles
 				var currentParticle = _particles[i];
 				var pos = _emitterConfig.SimulateInWorldSpace ? currentParticle.spawnPosition : rootPosition;
 
-				if (_emitterConfig.Subtexture == null)
-					graphics.Batcher.Draw(graphics.PixelTexture, pos + currentParticle.position, currentParticle.color,
+				if (_emitterConfig.Sprite == null)
+					batcher.Draw(Graphics.Instance.PixelTexture, pos + currentParticle.position, currentParticle.color,
 						currentParticle.rotation, Vector2.One, currentParticle.particleSize * 0.5f, SpriteEffects.None,
 						LayerDepth);
 				else
-					graphics.Batcher.Draw(_emitterConfig.Subtexture, pos + currentParticle.position,
-						currentParticle.color, currentParticle.rotation, _emitterConfig.Subtexture.Center,
-						currentParticle.particleSize / _emitterConfig.Subtexture.SourceRect.Width, SpriteEffects.None,
+					batcher.Draw(_emitterConfig.Sprite, pos + currentParticle.position,
+						currentParticle.color, currentParticle.rotation, _emitterConfig.Sprite.Center,
+						currentParticle.particleSize / _emitterConfig.Sprite.SourceRect.Width, SpriteEffects.None,
 						LayerDepth);
 			}
 		}

@@ -1,7 +1,4 @@
-﻿using System;
-
-
-namespace Nez.AI.BehaviorTrees
+﻿namespace Nez.AI.BehaviorTrees
 {
 	/// <summary>
 	/// Wait a specified amount of time. The task will return running until the task is done waiting. It will return success after the wait
@@ -19,7 +16,7 @@ namespace Nez.AI.BehaviorTrees
 
 		public WaitAction(float waitTime)
 		{
-			this.WaitTime = waitTime;
+			WaitTime = waitTime;
 		}
 
 

@@ -1,5 +1,4 @@
-﻿using System;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 
 
 namespace Nez
@@ -39,30 +38,30 @@ namespace Nez
 
 		public RaycastHit(Collider collider, float fraction, float distance, Vector2 point, Vector2 normal)
 		{
-			this.Collider = collider;
-			this.Fraction = fraction;
-			this.Distance = distance;
-			this.Point = point;
-			this.Normal = normal;
-			this.Centroid = Vector2.Zero;
+			Collider = collider;
+			Fraction = fraction;
+			Distance = distance;
+			Point = point;
+			Normal = normal;
+			Centroid = Vector2.Zero;
 		}
 
 
 		internal void SetValues(Collider collider, float fraction, float distance, Vector2 point)
 		{
-			this.Collider = collider;
-			this.Fraction = fraction;
-			this.Distance = distance;
-			this.Point = point;
+			Collider = collider;
+			Fraction = fraction;
+			Distance = distance;
+			Point = point;
 		}
 
 
 		internal void SetValues(float fraction, float distance, Vector2 point, Vector2 normal)
 		{
-			this.Fraction = fraction;
-			this.Distance = distance;
-			this.Point = point;
-			this.Normal = normal;
+			Fraction = fraction;
+			Distance = distance;
+			Point = point;
+			Normal = normal;
 		}
 
 

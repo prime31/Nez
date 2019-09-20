@@ -22,10 +22,7 @@ namespace Nez.Farseer
 	/// </summary>
 	public class FSDebugView : RenderableComponent, IDisposable
 	{
-		public override RectangleF Bounds
-		{
-			get { return _bounds; }
-		}
+		public override RectangleF Bounds => _bounds;
 
 		/// <summary>
 		/// Gets or sets the debug view flags
@@ -801,7 +798,7 @@ namespace Nez.Farseer
 		}
 
 
-		public override void Render(Graphics graphics, Camera camera)
+		public override void Render(Batcher batcher, Camera camera)
 		{
 			// nothing is enabled - don't draw the debug view.
 			if (Flags == 0)
@@ -823,7 +820,7 @@ namespace Nez.Farseer
 
 			// draw any strings we have
 			for (int i = 0; i < _stringData.Count; i++)
-				graphics.Batcher.DrawString(graphics.BitmapFont, _stringData[i].Text, _stringData[i].Position,
+				batcher.DrawString(Graphics.Instance.BitmapFont, _stringData[i].Text, _stringData[i].Position,
 					_stringData[i].Color);
 
 			_stringData.Clear();

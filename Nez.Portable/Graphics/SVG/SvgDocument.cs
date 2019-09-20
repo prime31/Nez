@@ -15,8 +15,8 @@ namespace Nez.Svg
 		[XmlAttribute("width")]
 		public string WidthAttribute
 		{
-			get { return null; }
-			set { Width = int.Parse(Regex.Replace(value, @"[^\d]", string.Empty)); }
+			get => null;
+			set => Width = int.Parse(Regex.Replace(value, @"[^\d]", string.Empty));
 		}
 
 		public int Width;
@@ -24,8 +24,8 @@ namespace Nez.Svg
 		[XmlAttribute("height")]
 		public string HeightAttribute
 		{
-			get { return null; }
-			set { Height = int.Parse(Regex.Replace(value, @"[^\d]", string.Empty)); }
+			get => null;
+			set => Height = int.Parse(Regex.Replace(value, @"[^\d]", string.Empty));
 		}
 
 		public int Height;

@@ -153,7 +153,7 @@ namespace FarseerPhysics.Collision.Shapes
 		/// <value>The density.</value>
 		public float Density
 		{
-			get { return _density; }
+			get => _density;
 			set
 			{
 				Debug.Assert(value >= 0);
@@ -168,7 +168,7 @@ namespace FarseerPhysics.Collision.Shapes
 		/// </summary>
 		public float Radius
 		{
-			get { return _radius; }
+			get => _radius;
 			set
 			{
 				Debug.Assert(value >= 0);

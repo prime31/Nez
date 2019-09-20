@@ -25,9 +25,7 @@ namespace Nez.UISkinImporter
 				}
 				else if (key == "LibGdxAtlases")
 				{
-					var jArr = input[key] as JArray;
-					skinConfig.LibGdxAtlases = jArr.ToObject<string[]>();
-					UISkinImporter.Logger.LogMessage("added {0} LibGdxAtlases\n", jArr.Count);
+					throw new NotSupportedException();
 				}
 				else if (key == "TextureAtlases")
 				{

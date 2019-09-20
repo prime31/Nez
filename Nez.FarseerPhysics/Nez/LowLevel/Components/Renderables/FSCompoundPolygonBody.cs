@@ -16,7 +16,7 @@ namespace Nez.Farseer
 		protected List<Vertices> _verts = new List<Vertices>();
 
 
-		public FSCompoundPolygonBody(Subtexture subtexture) : base(subtexture)
+		public FSCompoundPolygonBody(Sprite sprite) : base(sprite)
 		{
 		}
 
@@ -25,17 +25,17 @@ namespace Nez.Farseer
 		{
 			base.Initialize();
 
-			var data = new uint[_subtexture.SourceRect.Width * _subtexture.SourceRect.Height];
-			_subtexture.Texture2D.GetData(0, _subtexture.SourceRect, data, 0, data.Length);
+			var data = new uint[Sprite.SourceRect.Width * Sprite.SourceRect.Height];
+			Sprite.Texture2D.GetData(0, Sprite.SourceRect, data, 0, data.Length);
 
-			var verts = PolygonTools.CreatePolygonFromTextureData(data, _subtexture.SourceRect.Width);
+			var verts = PolygonTools.CreatePolygonFromTextureData(data, Sprite.SourceRect.Width);
 			verts = SimplifyTools.DouglasPeuckerSimplify(verts, 2);
 
 			var decomposedVerts = Triangulate.ConvexPartition(verts, TriangulationAlgorithm.Bayazit);
 			for (var i = 0; i < decomposedVerts.Count; i++)
 			{
 				var polygon = decomposedVerts[i];
-				polygon.Translate(-_subtexture.Center);
+				polygon.Translate(-Sprite.Center);
 			}
 
 			// add the fixtures

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 
 namespace Nez.AI.Pathfinding
@@ -15,7 +14,7 @@ namespace Nez.AI.Pathfinding
 
 		public UnweightedGraph<T> AddEdgesForNode(T node, T[] edges)
 		{
-			this.Edges[node] = edges;
+			Edges[node] = edges;
 			return this;
 		}
 

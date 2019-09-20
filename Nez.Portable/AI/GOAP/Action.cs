@@ -30,13 +30,13 @@ namespace Nez.AI.GOAP
 
 		public Action(string name)
 		{
-			this.Name = name;
+			Name = name;
 		}
 
 
 		public Action(string name, int cost) : this(name)
 		{
-			this.Cost = cost;
+			Cost = cost;
 		}
 
 

@@ -158,7 +158,7 @@ namespace Nez.BitmapFonts
 			}
 			else
 			{
-				Debug.Log($"Font {this.FamilyName} has no space character!");
+				Debug.Log($"Font {FamilyName} has no space character!");
 				DefaultCharacter = this['a'];
 			}
 

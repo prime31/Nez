@@ -1,3 +1,4 @@
+using System;
 using System.IO;
 
 
@@ -17,9 +18,9 @@ namespace Nez.Persistence.Binary
 		ReuseableBinaryWriter _writer;
 		ReuseableBinaryReader _reader;
 
-		public FileDataStore() : this(null, FileFormat.Binary)
-		{
-		}
+		public FileDataStore() : this(null)
+		{}
+
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="T:Nez.Persistence.Binary.FileDataStore"/> class. If <paramref name="persistentDataPath"/>
@@ -27,9 +28,13 @@ namespace Nez.Persistence.Binary
 		/// </summary>
 		/// <param name="persistentDataPath">Persistent data path.</param>
 		/// <param name="fileFormat">File format.</param>
-		public FileDataStore(string persistentDataPath = null, FileFormat fileFormat = FileFormat.Binary)
+		public FileDataStore(string persistentDataPath, FileFormat fileFormat = FileFormat.Binary)
 		{
-			persistentDataPath = persistentDataPath ?? Utils.GetStorageRoot();
+			if (persistentDataPath == null)
+			{
+				var exeName = Path.GetFileNameWithoutExtension(AppDomain.CurrentDomain.FriendlyName).Replace(".vshost", "");
+				persistentDataPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), exeName);
+			}
 
 			// ensure directory exists
 			Directory.CreateDirectory(persistentDataPath);

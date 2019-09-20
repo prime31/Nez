@@ -1,5 +1,4 @@
-﻿using System;
-using Microsoft.Xna.Framework.Graphics;
+﻿using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
 
 
@@ -14,7 +13,7 @@ namespace Nez
 		/// <value>The sparkle intensity.</value>
 		public float SparkleIntensity
 		{
-			set { _sparkleIntensityParam.SetValue(value); }
+			set => _sparkleIntensityParam.SetValue(value);
 		}
 
 		/// <summary>
@@ -23,7 +22,7 @@ namespace Nez
 		/// <value>The color of the sparkle.</value>
 		public Vector3 SparkleColor
 		{
-			set { _sparkleColorParam.SetValue(value); }
+			set => _sparkleColorParam.SetValue(value);
 		}
 
 		/// <summary>
@@ -32,7 +31,7 @@ namespace Nez
 		/// <value>The screen space vertical offset.</value>
 		public float ScreenSpaceVerticalOffset
 		{
-			set { _screenSpaceVerticalOffsetParam.SetValue(Mathf.Map(value, 0, 1, -1, 1)); }
+			set => _screenSpaceVerticalOffsetParam.SetValue(Mathf.Map(value, 0, 1, -1, 1));
 		}
 
 		/// <summary>
@@ -41,7 +40,7 @@ namespace Nez
 		/// <value>The perspective correction intensity.</value>
 		public float PerspectiveCorrectionIntensity
 		{
-			set { _perspectiveCorrectionIntensityParam.SetValue(value); }
+			set => _perspectiveCorrectionIntensityParam.SetValue(value);
 		}
 
 		/// <summary>
@@ -50,7 +49,7 @@ namespace Nez
 		/// <value>The first displacement speed.</value>
 		public float FirstDisplacementSpeed
 		{
-			set { _firstDisplacementSpeedParam.SetValue(value / 100); }
+			set => _firstDisplacementSpeedParam.SetValue(value / 100);
 		}
 
 		/// <summary>
@@ -59,7 +58,7 @@ namespace Nez
 		/// <value>The second displacement speed.</value>
 		public float SecondDisplacementSpeed
 		{
-			set { _secondDisplacementSpeedParam.SetValue(value / 100); }
+			set => _secondDisplacementSpeedParam.SetValue(value / 100);
 		}
 
 		/// <summary>
@@ -68,7 +67,7 @@ namespace Nez
 		/// <value>The second displacement scale.</value>
 		public float SecondDisplacementScale
 		{
-			set { _secondDisplacementScaleParam.SetValue(value); }
+			set => _secondDisplacementScaleParam.SetValue(value);
 		}
 
 		const float _sparkleIntensity = 0.015f;

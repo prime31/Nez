@@ -37,15 +37,15 @@ namespace Nez
 		{
 		}
 
-		public override void DebugRender(Graphics graphics)
+		public override void DebugRender(Batcher batcher)
 		{
 			var poly = Shape as Polygon;
-			graphics.Batcher.DrawHollowRect(Bounds, Debug.Colors.ColliderBounds, Debug.Size.LineSizeMultiplier);
-			graphics.Batcher.DrawPolygon(Shape.position, poly.Points, Debug.Colors.ColliderEdge, true,
+			batcher.DrawHollowRect(Bounds, Debug.Colors.ColliderBounds, Debug.Size.LineSizeMultiplier);
+			batcher.DrawPolygon(Shape.position, poly.Points, Debug.Colors.ColliderEdge, true,
 				Debug.Size.LineSizeMultiplier);
-			graphics.Batcher.DrawPixel(Entity.Transform.Position, Debug.Colors.ColliderPosition,
+			batcher.DrawPixel(Entity.Transform.Position, Debug.Colors.ColliderPosition,
 				4 * Debug.Size.LineSizeMultiplier);
-			graphics.Batcher.DrawPixel(Shape.position, Debug.Colors.ColliderCenter, 2 * Debug.Size.LineSizeMultiplier);
+			batcher.DrawPixel(Shape.position, Debug.Colors.ColliderCenter, 2 * Debug.Size.LineSizeMultiplier);
 
 			// Normal debug code
 			//for( var i = 0; i < poly.points.Length; i++ )
@@ -59,7 +59,7 @@ namespace Nez
 			//	var perp = Vector2Ext.perpendicular( ref p1, ref p2 );
 			//	Vector2Ext.normalize( ref perp );
 			//	var mp = Vector2.Lerp( p1, p2, 0.5f ) + poly.position;
-			//	graphics.batcher.drawLine( mp, mp + perp * 10, Color.White );
+			//	batcher.drawLine( mp, mp + perp * 10, Color.White );
 			//}
 		}
 	}

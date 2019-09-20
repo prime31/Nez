@@ -145,7 +145,7 @@ namespace Nez.UI
 		/// <param name="size">Size.</param>
 		public Cell Size(float size)
 		{
-			return this.Size(new Value.Fixed(size));
+			return Size(new Value.Fixed(size));
 		}
 
 
@@ -182,7 +182,7 @@ namespace Nez.UI
 		/// <param name="width">Width.</param>
 		public Cell Width(float width)
 		{
-			return this.Width(new Value.Fixed(width));
+			return Width(new Value.Fixed(width));
 		}
 
 
@@ -209,7 +209,7 @@ namespace Nez.UI
 		/// <param name="height">Height.</param>
 		public Cell Height(float height)
 		{
-			return this.Height(new Value.Fixed(height));
+			return Height(new Value.Fixed(height));
 		}
 
 
@@ -580,7 +580,7 @@ namespace Nez.UI
 			if (space < 0)
 				throw new Exception("space cannot be < 0.");
 
-			return this.Space(new Value.Fixed(space));
+			return Space(new Value.Fixed(space));
 		}
 
 
@@ -722,7 +722,7 @@ namespace Nez.UI
 		/// <param name="pad">Pad.</param>
 		public Cell Pad(float pad)
 		{
-			return this.Pad(new Value.Fixed(pad));
+			return Pad(new Value.Fixed(pad));
 		}
 
 

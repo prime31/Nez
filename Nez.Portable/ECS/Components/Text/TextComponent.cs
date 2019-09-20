@@ -4,7 +4,7 @@ using Nez.Sprites;
 
 namespace Nez
 {
-	public class TextComponent : Sprite
+	public class TextComponent : SpriteRenderer
 	{
 		public override RectangleF Bounds
 		{
@@ -68,7 +68,7 @@ namespace Nez
 			_font = font;
 			_text = text;
 			_localOffset = localOffset;
-			this.Color = color;
+			Color = color;
 			_horizontalAlign = HorizontalAlign.Left;
 			_verticalAlign = VerticalAlign.Top;
 
@@ -141,9 +141,9 @@ namespace Nez
 			Origin = new Vector2((int) oldOrigin.X, (int) oldOrigin.Y);
 		}
 
-		public override void Render(Graphics graphics, Camera camera)
+		public override void Render(Batcher batcher, Camera camera)
 		{
-			graphics.Batcher.DrawString(_font, _text, Entity.Transform.Position + _localOffset, Color,
+			batcher.DrawString(_font, _text, Entity.Transform.Position + _localOffset, Color,
 				Entity.Transform.Rotation, Origin, Entity.Transform.Scale, SpriteEffects, LayerDepth);
 		}
 	}

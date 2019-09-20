@@ -6,13 +6,12 @@ namespace Nez
 {
 	/// <summary>
 	/// Execution order:
-	/// - onAddedToEntity
-	/// - onAwake (all other components added this frame will have been added to the Entity at this point
-	/// - onEnabled
-	/// 
+	/// - OnAddedToEntity
+	/// - OnEnabled
+	///
 	/// Removal:
-	/// - onRemovedFromEntity
-	/// 
+	/// - OnRemovedFromEntity
+	///
 	/// </summary>
 	public class Component : IComparable<Component>
 	{
@@ -28,7 +27,7 @@ namespace Nez
 		public Transform Transform
 		{
 			[MethodImpl(MethodImplOptions.AggressiveInlining)]
-			get { return Entity.Transform; }
+			get => Entity.Transform;
 		}
 
 		/// <summary>
@@ -38,8 +37,8 @@ namespace Nez
 		/// <value><c>true</c> if enabled; otherwise, <c>false</c>.</value>
 		public bool Enabled
 		{
-			get { return Entity != null ? Entity.Enabled && _enabled : _enabled; }
-			set { SetEnabled(value); }
+			get => Entity != null ? Entity.Enabled && _enabled : _enabled;
+			set => SetEnabled(value);
 		}
 
 		/// <summary>
@@ -63,58 +62,44 @@ namespace Nez
 		/// for things like physics Components that need to access the Transform to modify collision body properties.
 		/// </summary>
 		public virtual void Initialize()
-		{
-		}
-
+		{ }
 
 		/// <summary>
-		/// Called when this component is added to a scene after all pending component changes are committed. At this point, the entity field
-		/// is set and the entity.scene is also set.
+		/// Called when this component is added to a scene after all pending component changes are committed. At this point, the Entity field
+		/// is set and the Entity.Scene is also set.
 		/// </summary>
 		public virtual void OnAddedToEntity()
-		{
-		}
-
+		{ }
 
 		/// <summary>
 		/// Called when this component is removed from its entity. Do all cleanup here.
 		/// </summary>
 		public virtual void OnRemovedFromEntity()
-		{
-		}
-
+		{ }
 
 		/// <summary>
 		/// called when the entity's position changes. This allows components to be aware that they have moved due to the parent
 		/// entity moving.
 		/// </summary>
 		public virtual void OnEntityTransformChanged(Transform.Component comp)
-		{
-		}
+		{ }
 
-
-		public virtual void DebugRender(Graphics graphics)
-		{
-		}
-
+		public virtual void DebugRender(Batcher batcher)
+		{ }
 
 		/// <summary>
 		/// called when the parent Entity or this Component is enabled
 		/// </summary>
 		public virtual void OnEnabled()
-		{
-		}
-
+		{ }
 
 		/// <summary>
 		/// called when the parent Entity or this Component is disabled
 		/// </summary>
 		public virtual void OnDisabled()
-		{
-		}
+		{ }
 
 		#endregion
-
 
 		#region Fluent setters
 
@@ -133,7 +118,6 @@ namespace Nez
 			return this;
 		}
 
-
 		public Component SetUpdateOrder(int updateOrder)
 		{
 			if (_updateOrder != updateOrder)
@@ -148,7 +132,6 @@ namespace Nez
 
 		#endregion
 
-
 		/// <summary>
 		/// creates a clone of this Component. The default implementation is just a MemberwiseClone so if a Component has object references
 		/// that need to be cloned this method should be overriden.
@@ -161,16 +144,9 @@ namespace Nez
 			return component;
 		}
 
-
-		public int CompareTo(Component other)
-		{
-			return _updateOrder.CompareTo(other._updateOrder);
-		}
+		public int CompareTo(Component other) => _updateOrder.CompareTo(other._updateOrder);
 
 
-		public override string ToString()
-		{
-			return string.Format("[Component: type: {0}, updateOrder: {1}]", this.GetType(), UpdateOrder);
-		}
+		public override string ToString() => $"[Component: type: {GetType()}, updateOrder: {UpdateOrder}]";
 	}
 }

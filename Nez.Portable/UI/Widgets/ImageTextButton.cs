@@ -1,5 +1,4 @@
-﻿using System;
-using Nez.BitmapFonts;
+﻿using Nez.BitmapFonts;
 using Microsoft.Xna.Framework;
 
 
@@ -81,7 +80,7 @@ namespace Nez.UI
 		}
 
 
-		public override void Draw(Graphics graphics, float parentAlpha)
+		public override void Draw(Batcher batcher, float parentAlpha)
 		{
 			UpdateImage();
 
@@ -102,7 +101,7 @@ namespace Nez.UI
 			if (fontColor.HasValue)
 				label.GetStyle().FontColor = fontColor.Value;
 
-			base.Draw(graphics, parentAlpha);
+			base.Draw(batcher, parentAlpha);
 		}
 
 
