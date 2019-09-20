@@ -1,4 +1,4 @@
-using System
+using System;
 using System.IO;
 
 
@@ -17,7 +17,7 @@ namespace Nez.Persistence.Binary
 
 		ReuseableBinaryWriter _writer;
 		ReuseableBinaryReader _reader;
-		
+
 		public FileDataStore() : this(null)
 		{}
 
