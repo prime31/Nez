@@ -611,11 +611,16 @@ namespace Nez
 			return Round(value / roundToNearest) * roundToNearest;
 		}
 
-
+        /// <summary>
+        /// Checks if the value passed falls under a certain threshold.
+        /// Useful for small, precise comparisons.
+        /// </summary>
+        /// <param name="value">The value to check.</param>
+        /// <param name="ep">The threshold to check the value with. <see cref="Epsilon"/> is used by default.</param>
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public static bool WithinEpsilon(float floatA, float floatB)
+		public static bool WithinEpsilon(float value, float ep = Epsilon)
 		{
-			return Math.Abs(floatA - floatB) < Epsilon;
+			return Math.Abs(value) < ep;
 		}
 
 

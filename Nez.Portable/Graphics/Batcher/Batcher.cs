@@ -742,7 +742,7 @@ namespace Nez
 			float rotationMatrix1Y;
 			float rotationMatrix2X;
 			float rotationMatrix2Y;
-			if (!Mathf.WithinEpsilon(rotation, 0))
+			if (!Mathf.WithinEpsilon(rotation))
 			{
 				var sin = Mathf.Sin(rotation);
 				var cos = Mathf.Cos(rotation);
@@ -881,7 +881,7 @@ namespace Nez
 			float rotationMatrix1Y;
 			float rotationMatrix2X;
 			float rotationMatrix2Y;
-			if (!Mathf.WithinEpsilon(rotation, 0))
+			if (!Mathf.WithinEpsilon(rotation))
 			{
 				var sin = Mathf.Sin(rotation);
 				var cos = Mathf.Cos(rotation);
