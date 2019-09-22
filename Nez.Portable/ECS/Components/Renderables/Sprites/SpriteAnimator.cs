@@ -60,13 +60,14 @@ namespace Nez.Sprites
 		/// the name of the current animation
 		/// </summary>
 		public string CurrentAnimationName => _currentAnimationName;
-       
-        /// <summary>
-        /// index of the current frame
-        /// </summary>
-        public int CurrentFrame { get; private set; }
 
-        readonly Dictionary<string, SpriteAnimation> _animations = new Dictionary<string, SpriteAnimation>();
+		/// <summary>
+		/// index of the current frame in sprite array of the current animation
+		/// </summary>
+		public int CurrentFrame { get; private set; }
+
+		readonly Dictionary<string, SpriteAnimation> _animations = new Dictionary<string, SpriteAnimation>();
+    
 		SpriteAnimation _currentAnimation;
 		string _currentAnimationName;
 		float _time;
@@ -113,7 +114,7 @@ namespace Nez.Sprites
 			if ((_loopMode == LoopMode.PingPong || _loopMode == LoopMode.PingPongOnce) && completedIterations % 2 != 0)
 				currentElapsed = iterationDuration - currentElapsed;
 
-            CurrentFrame = Mathf.FloorToInt(currentElapsed / secondsPerFrame);
+			CurrentFrame = Mathf.FloorToInt(currentElapsed / secondsPerFrame);
 			Sprite = _currentAnimation.Sprites[CurrentFrame];
 		}
 
