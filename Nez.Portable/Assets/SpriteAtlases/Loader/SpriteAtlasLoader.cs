@@ -54,7 +54,7 @@ namespace Nez.Sprites
 						line = stream.ReadLine();
 						lineParts = line.Split(commaSplitter, StringSplitOptions.RemoveEmptyEntries);
 						var origin = new Vector2(float.Parse(lineParts[0], System.Globalization.CultureInfo.InvariantCulture), float.Parse(lineParts[1], System.Globalization.CultureInfo.InvariantCulture));
-						spriteAtlas.Origins.Add(origin * rect.Size.ToVector2());
+						spriteAtlas.Origins.Add(origin * new Vector2(rect.Width, rect.Height));
 					}
 					else
 					{
