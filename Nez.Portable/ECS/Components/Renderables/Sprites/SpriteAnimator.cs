@@ -46,17 +46,27 @@ namespace Nez.Sprites
 		/// </summary>
 		public bool IsPaused { get; private set; }
 
-		/// <summary>
-		/// the current animation
-		/// </summary>
-		public SpriteAnimation CurrentAnimation => _currentAnimation;
+        /// <summary>
+        /// is the current animation completed
+        /// </summary>
+        public bool IsCompleted { get; private set; }
+
+        /// <summary>
+        /// the current animation
+        /// </summary>
+        public SpriteAnimation CurrentAnimation => _currentAnimation;
 
 		/// <summary>
 		/// the name of the current animation
 		/// </summary>
 		public string CurrentAnimationName => _currentAnimationName;
+       
+        /// <summary>
+        /// index of the current frame
+        /// </summary>
+        public int CurrentFrame { get; private set; }
 
-		readonly Dictionary<string, SpriteAnimation> _animations = new Dictionary<string, SpriteAnimation>();
+        readonly Dictionary<string, SpriteAnimation> _animations = new Dictionary<string, SpriteAnimation>();
 		SpriteAnimation _currentAnimation;
 		string _currentAnimationName;
 		float _time;
@@ -70,7 +80,7 @@ namespace Nez.Sprites
 
 		void IUpdatable.Update()
 		{
-			if (IsPaused || _currentAnimation == null)
+			if (IsPaused || IsCompleted || _currentAnimation == null)
 				return;
 
 			var secondsPerFrame = 1 / (_currentAnimation.FrameRate * Speed);
@@ -83,8 +93,8 @@ namespace Nez.Sprites
 			if (_loopMode == LoopMode.Once && time > iterationDuration ||
 			    _loopMode == LoopMode.PingPongOnce && time > iterationDuration * 2)
 			{
-				IsPaused = true;
-				_time = 0;
+                IsCompleted = true;
+                _time = 0;
 				Sprite = _currentAnimation.Sprites[0];
 				return;
 			}
@@ -103,8 +113,8 @@ namespace Nez.Sprites
 			if ((_loopMode == LoopMode.PingPong || _loopMode == LoopMode.PingPongOnce) && completedIterations % 2 != 0)
 				currentElapsed = iterationDuration - currentElapsed;
 
-			var desiredFrame = Mathf.FloorToInt(currentElapsed / secondsPerFrame);
-			Sprite = _currentAnimation.Sprites[desiredFrame];
+            CurrentFrame = Mathf.FloorToInt(currentElapsed / secondsPerFrame);
+			Sprite = _currentAnimation.Sprites[CurrentFrame];
 		}
 
 		/// <summary>
@@ -149,8 +159,10 @@ namespace Nez.Sprites
 
 			Sprite = _currentAnimation.Sprites[0];
 			IsPaused = false;
+            IsCompleted = false;
+            _time = 0;
 
-			if (loopMode.HasValue)
+            if (loopMode.HasValue)
 				_loopMode = loopMode.Value;
 		}
 
