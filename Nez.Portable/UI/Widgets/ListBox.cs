@@ -124,7 +124,7 @@ namespace Nez.UI
 				mousePos.Y += _style.Background.BottomHeight;
 			}
 
-			var index = (int) ((top + mousePos.Y) / _itemHeight);
+			var index = (int)((top + mousePos.Y) / _itemHeight);
 			if (index < 0 || index > _items.Count - 1)
 				return -1;
 
@@ -166,7 +166,7 @@ namespace Nez.UI
 			// update our hoved item if the mouse is over the list
 			if (_isMouseOverList)
 			{
-				var mousePos = ScreenToLocalCoordinates(stage.GetMousePosition());
+				var mousePos = ScreenToLocalCoordinates(_stage.GetMousePosition());
 				_hoveredItemIndex = GetItemIndexUnderMousePosition(mousePos);
 			}
 
@@ -176,7 +176,7 @@ namespace Nez.UI
 			var selectedDrawable = _style.Selection;
 
 			var color = GetColor();
-			color = new Color(color, (int) (color.A * parentAlpha));
+			color = new Color(color, (int)(color.A * parentAlpha));
 
 			float x = GetX(), y = GetY(), width = GetWidth(), height = GetHeight();
 			var itemY = 0f;
@@ -192,16 +192,16 @@ namespace Nez.UI
 			}
 
 			var unselectedFontColor =
-				new Color(_style.FontColorUnselected, (int) (_style.FontColorUnselected.A * parentAlpha));
+				new Color(_style.FontColorUnselected, (int)(_style.FontColorUnselected.A * parentAlpha));
 			var selectedFontColor =
-				new Color(_style.FontColorSelected, (int) (_style.FontColorSelected.A * parentAlpha));
-			var hoveredFontColor = new Color(_style.FontColorHovered, (int) (_style.FontColorHovered.A * parentAlpha));
+				new Color(_style.FontColorSelected, (int)(_style.FontColorSelected.A * parentAlpha));
+			var hoveredFontColor = new Color(_style.FontColorHovered, (int)(_style.FontColorHovered.A * parentAlpha));
 			Color fontColor;
 			for (var i = 0; i < _items.Count; i++)
 			{
 				if (!_cullingArea.HasValue ||
-				    (itemY - _itemHeight <= _cullingArea.Value.Y + _cullingArea.Value.Height &&
-				     itemY >= _cullingArea.Value.Y))
+					(itemY - _itemHeight <= _cullingArea.Value.Y + _cullingArea.Value.Height &&
+					 itemY >= _cullingArea.Value.Y))
 				{
 					var item = _items[i];
 					var selected = _selection.Contains(item);

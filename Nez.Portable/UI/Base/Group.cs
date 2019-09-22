@@ -18,7 +18,7 @@ namespace Nez.UI
 
 			children.Add(element);
 			element.SetParent(this);
-			element.SetStage(stage);
+			element.SetStage(_stage);
 			OnChildrenChanged();
 
 			return element;
@@ -35,7 +35,7 @@ namespace Nez.UI
 
 			children.Insert(index, element);
 			element.SetParent(this);
-			element.SetStage(stage);
+			element.SetStage(_stage);
 			OnChildrenChanged();
 
 			return element;
@@ -76,7 +76,7 @@ namespace Nez.UI
 		/// <param name="stage">Stage.</param>
 		internal override void SetStage(Stage stage)
 		{
-			this.stage = stage;
+			this._stage = stage;
 			for (var i = 0; i < children.Count; i++)
 				children[i].SetStage(stage);
 		}
@@ -87,7 +87,7 @@ namespace Nez.UI
 			for (var i = 0; i < parent.children.Count; i++)
 			{
 				if (parent.children[i] is ILayout)
-					((ILayout) parent.children[i]).LayoutEnabled = enabled;
+					((ILayout)parent.children[i]).LayoutEnabled = enabled;
 				else if (parent.children[i] is Group)
 					SetLayoutEnabled(parent.children[i] as Group, enabled);
 			}
@@ -183,7 +183,7 @@ namespace Nez.UI
 
 						float cx = child.x, cy = child.y;
 						if (cx <= cullRight && cy <= cullTop && cx + child.width >= cullLeft &&
-						    cy + child.height >= cullBottom)
+							cy + child.height >= cullBottom)
 						{
 							child.Draw(batcher, parentAlpha);
 						}
@@ -201,7 +201,7 @@ namespace Nez.UI
 
 						float cx = child.x, cy = child.y;
 						if (cx <= cullRight && cy <= cullTop && cx + child.width >= cullLeft &&
-						    cy + child.height >= cullBottom)
+							cy + child.height >= cullBottom)
 						{
 							child.x = cx + offsetX;
 							child.y = cy + offsetY;
@@ -387,7 +387,7 @@ namespace Nez.UI
 				foreach (var child in children)
 				{
 					if (child is Group)
-						((Group) child).SetDebug(enabled, recursively);
+						((Group)child).SetDebug(enabled, recursively);
 					else
 						child.SetDebug(enabled);
 				}

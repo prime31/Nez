@@ -6,7 +6,7 @@ namespace Nez.UI
 {
 	public class Element : ILayout
 	{
-		protected Stage stage;
+		protected Stage _stage;
 		internal Group parent;
 
 		/// <summary>
@@ -14,6 +14,11 @@ namespace Nez.UI
 		/// </summary>
 		/// <value><c>true</c> if needs layout; otherwise, <c>false</c>.</value>
 		public bool NeedsLayout => _needsLayout;
+
+		/// <summary>
+		/// use this to stuff any relevant data required for your UI setup
+		/// </summary>
+		public object UserData;
 
 		internal float x, y;
 		internal float width, height;
@@ -35,21 +40,12 @@ namespace Nez.UI
 		/// </summary>
 		/// <param name="batcher">Batcher.</param>
 		/// <param name="parentAlpha">Parent alpha.</param>
-		public virtual void Draw(Batcher batcher, float parentAlpha)
-		{
-			Validate();
-		}
+		public virtual void Draw(Batcher batcher, float parentAlpha) => Validate();
 
-
-		protected virtual void SizeChanged()
-		{
-			Invalidate();
-		}
-
+		protected virtual void SizeChanged() => Invalidate();
 
 		protected virtual void PositionChanged()
 		{ }
-
 
 		protected virtual void RotationChanged()
 		{ }
@@ -61,110 +57,62 @@ namespace Nez.UI
 		/// Returns the stage that this element is currently in, or null if not in a stage.
 		/// </summary>
 		/// <returns>The stage.</returns>
-		public Stage GetStage()
-		{
-			return stage;
-		}
-
+		public Stage GetStage() => _stage;
 
 		/// <summary>
 		/// Called by the framework when this element or any parent is added to a group that is in the stage.
 		/// stage May be null if the element or any parent is no longer in a stage
 		/// </summary>
 		/// <param name="stage">Stage.</param>
-		internal virtual void SetStage(Stage stage)
-		{
-			this.stage = stage;
-		}
-
+		internal virtual void SetStage(Stage stage) => _stage = stage;
 
 		/// <summary>
 		/// Returns true if the element's parent is not null
 		/// </summary>
 		/// <returns><c>true</c>, if parent was hased, <c>false</c> otherwise.</returns>
-		public bool HasParent()
-		{
-			return parent != null;
-		}
-
+		public bool HasParent() => parent != null;
 
 		/// <summary>
 		/// Returns the parent element, or null if not in a group
 		/// </summary>
 		/// <returns>The parent.</returns>
-		public Group GetParent()
-		{
-			return parent;
-		}
-
+		public Group GetParent() => parent;
 
 		/// <summary>
 		/// Called by the framework when an element is added to or removed from a group.
 		/// </summary>
-		/// <param name="parent">parent May be null if the element has been removed from the parent</param>
-		internal void SetParent(Group parent)
-		{
-			this.parent = parent;
-		}
-
+		/// <param name="newParent">parent May be null if the element has been removed from the parent</param>
+		internal void SetParent(Group newParent) => parent = newParent;
 
 		/// <summary>
 		/// Returns true if input events are processed by this element.
 		/// </summary>
 		/// <returns>The touchable.</returns>
-		public bool IsTouchable()
-		{
-			return touchable == Touchable.Enabled;
-		}
+		public bool IsTouchable() => touchable == Touchable.Enabled;
 
-
-		public Touchable GetTouchable()
-		{
-			return touchable;
-		}
-
+		public Touchable GetTouchable() => touchable;
 
 		/// <summary>
 		/// Determines how touch events are distributed to this element. Default is {@link Touchable#enabled}.
 		/// </summary>
 		/// <param name="touchable">Touchable.</param>
-		public void SetTouchable(Touchable touchable)
-		{
-			this.touchable = touchable;
-		}
+		public void SetTouchable(Touchable touchable) => this.touchable = touchable;
 
+		public void SetIsVisible(bool visible) => _visible = visible;
 
-		public void SetIsVisible(bool visible)
-		{
-			_visible = visible;
-		}
-
-
-		public bool IsVisible()
-		{
-			return _visible;
-		}
-
+		public bool IsVisible() => _visible;
 
 		/// <summary>
 		/// If false, the element will not be drawn and will not receive touch events. Default is true.
 		/// </summary>
 		/// <param name="visible">Visible.</param>
-		public void SetVisible(bool visible)
-		{
-			_visible = visible;
-		}
-
+		public void SetVisible(bool visible) => _visible = visible;
 
 		/// <summary>
 		/// Returns the X position of the element's left edge
 		/// </summary>
 		/// <returns>The x.</returns>
-		public float GetX()
-		{
-			return x;
-		}
-
+		public float GetX() => x;
 
 		/// <summary>
 		/// Returns the X position of the specified {@link Align alignment}.
@@ -181,7 +129,6 @@ namespace Nez.UI
 			return x;
 		}
 
-
 		public Element SetX(float x)
 		{
 			if (this.x != x)
@@ -193,16 +140,11 @@ namespace Nez.UI
 			return this;
 		}
 
-
 		/// <summary>
 		/// Returns the Y position of the element's bottom edge
 		/// </summary>
 		/// <returns>The y.</returns>
-		public float GetY()
-		{
-			return y;
-		}
-
+		public float GetY() => y;
 
 		/// <summary>
 		/// Returns the Y position of the specified {@link Align alignment}
@@ -219,7 +161,6 @@ namespace Nez.UI
 			return y;
 		}
 
-
 		public Element SetY(float y)
 		{
 			if (this.y != y)
@@ -230,7 +171,6 @@ namespace Nez.UI
 
 			return this;
 		}
-
 
 		/// <summary>
 		/// Sets the position of the element's bottom left corner
@@ -248,7 +188,6 @@ namespace Nez.UI
 
 			return this;
 		}
-
 
 		/// <summary>
 		/// Sets the position using the specified {@link Align alignment}. Note this may set the position to non-integer coordinates
@@ -276,7 +215,6 @@ namespace Nez.UI
 			}
 		}
 
-
 		/// <summary>
 		/// Add x and y to current position
 		/// </summary>
@@ -292,11 +230,7 @@ namespace Nez.UI
 			}
 		}
 
-
-		public float GetWidth()
-		{
-			return width;
-		}
+		public float GetWidth() => width;
 
 
 		public void SetWidth(float width)
@@ -308,12 +242,7 @@ namespace Nez.UI
 			}
 		}
 
-
-		public float GetHeight()
-		{
-			return height;
-		}
-
+		public float GetHeight() => height;
 
 		public void SetHeight(float height)
 		{
@@ -323,7 +252,6 @@ namespace Nez.UI
 				SizeChanged();
 			}
 		}
-
 
 		public void SetSize(float width, float height)
 		{
@@ -340,21 +268,14 @@ namespace Nez.UI
 		/// Returns y plus height
 		/// </summary>
 		/// <returns>The top.</returns>
-		public float GetBottom()
-		{
-			return y + height;
-		}
+		public float GetBottom() => y + height;
 
 
 		/// <summary>
 		/// Returns x plus width
 		/// </summary>
 		/// <returns>The right.</returns>
-		public float GetRight()
-		{
-			return x + width;
-		}
-
+		public float GetRight() => x + width;
 
 		/// <summary>
 		/// Sets the x, y, width, and height.
@@ -380,30 +301,13 @@ namespace Nez.UI
 			}
 		}
 
+		public float GetOriginX() => originX;
 
-		public float GetOriginX()
-		{
-			return originX;
-		}
+		public void SetOriginX(float originX) => this.originX = originX;
 
+		public float GetOriginY() => originY;
 
-		public void SetOriginX(float originX)
-		{
-			this.originX = originX;
-		}
-
-
-		public float GetOriginY()
-		{
-			return originY;
-		}
-
-
-		public void SetOriginY(float originY)
-		{
-			this.originY = originY;
-		}
-
+		public void SetOriginY(float originY) => this.originY = originY;
 
 		/// <summary>
 		/// Sets the origin position which is relative to the element's bottom left corner
@@ -415,7 +319,6 @@ namespace Nez.UI
 			this.originX = originX;
 			this.originY = originY;
 		}
-
 
 		/// <summary>
 		/// Sets the origin position to the specified {@link Align alignment}.
@@ -438,30 +341,13 @@ namespace Nez.UI
 				originY = height / 2;
 		}
 
+		public float GetScaleX() => scaleX;
 
-		public float GetScaleX()
-		{
-			return scaleX;
-		}
+		public void SetScaleX(float scaleX) => this.scaleX = scaleX;
 
+		public float GetScaleY() => scaleY;
 
-		public void SetScaleX(float scaleX)
-		{
-			this.scaleX = scaleX;
-		}
-
-
-		public float GetScaleY()
-		{
-			return scaleY;
-		}
-
-
-		public void SetScaleY(float scaleY)
-		{
-			this.scaleY = scaleY;
-		}
-
+		public void SetScaleY(float scaleY) => this.scaleY = scaleY;
 
 		/// <summary>
 		/// Sets the scale for both X and Y
@@ -472,7 +358,6 @@ namespace Nez.UI
 			scaleX = scaleXY;
 			scaleY = scaleXY;
 		}
-
 
 		/// <summary>
 		/// Sets the scale X and scale Y
@@ -485,7 +370,6 @@ namespace Nez.UI
 			this.scaleY = scaleY;
 		}
 
-
 		/// <summary>
 		/// Adds the specified scale to the current scale
 		/// </summary>
@@ -495,7 +379,6 @@ namespace Nez.UI
 			scaleX += scale;
 			scaleY += scale;
 		}
-
 
 		/// <summary>
 		/// Adds the specified scale to the current scale
@@ -508,12 +391,7 @@ namespace Nez.UI
 			this.scaleY += scaleY;
 		}
 
-
-		public float GetRotation()
-		{
-			return rotation;
-		}
-
+		public float GetRotation() => rotation;
 
 		public void SetRotation(float degrees)
 		{
@@ -523,7 +401,6 @@ namespace Nez.UI
 				RotationChanged();
 			}
 		}
-
 
 		/// <summary>
 		/// Adds the specified rotation to the current rotation
@@ -538,40 +415,23 @@ namespace Nez.UI
 			}
 		}
 
-
-		public void SetColor(Color color)
-		{
-			this.color = color;
-		}
-
+		public void SetColor(Color color) => this.color = color;
 
 		/// <summary>
 		/// Returns the color the element will be tinted when drawn
 		/// </summary>
 		/// <returns>The color.</returns>
-		public Color GetColor()
-		{
-			return color;
-		}
-
+		public Color GetColor() => color;
 
 		/// <summary>
 		/// Changes the z-order for this element so it is in front of all siblings
 		/// </summary>
-		public void ToFront()
-		{
-			SetZIndex(int.MaxValue);
-		}
-
+		public void ToFront() => SetZIndex(int.MaxValue);
 
 		/// <summary>
 		/// Changes the z-order for this element so it is in back of all siblings
 		/// </summary>
-		public void ToBack()
-		{
-			SetZIndex(0);
-		}
-
+		public void ToBack() => SetZIndex(0);
 
 		/// <summary>
 		/// Sets the z-index of this element. The z-index is the index into the parent's {@link Group#getChildren() children}, where a
@@ -599,16 +459,11 @@ namespace Nez.UI
 			children.Insert(index, this);
 		}
 
-
 		/// <summary>
 		/// Calls clipBegin(Batcher, float, float, float, float) to clip this actor's bounds
 		/// </summary>
 		/// <returns>The begin.</returns>
-		public bool ClipBegin(Batcher batcher)
-		{
-			return ClipBegin(batcher, x, y, width, height);
-		}
-
+		public bool ClipBegin(Batcher batcher) => ClipBegin(batcher, x, y, width, height);
 
 		/// <summary>
 		/// Clips the specified screen aligned rectangle, specified relative to the transform matrix of the stage's Batch. The
@@ -622,7 +477,7 @@ namespace Nez.UI
 
 			var tableBounds = RectangleExt.FromFloats(x, y, width, height);
 			var scissorBounds =
-				ScissorStack.CalculateScissors(stage?.Entity?.Scene?.Camera, batcher.TransformMatrix, tableBounds);
+				ScissorStack.CalculateScissors(_stage?.Entity?.Scene?.Camera, batcher.TransformMatrix, tableBounds);
 			if (ScissorStack.PushScissors(scissorBounds))
 			{
 				batcher.EnableScissorTest(true);
@@ -631,7 +486,6 @@ namespace Nez.UI
 
 			return false;
 		}
-
 
 		/// <summary>
 		/// Ends clipping begun by clipBegin(Batcher, float, float, float, float)
@@ -642,7 +496,6 @@ namespace Nez.UI
 			batcher.EnableScissorTest(false);
 			ScissorStack.PopScissors();
 		}
-
 
 		/// <summary>
 		/// If true, {@link #debugDraw} will be called for this element
@@ -655,11 +508,7 @@ namespace Nez.UI
 				Stage.Debug = true;
 		}
 
-
-		public bool GetDebug()
-		{
-			return _debug;
-		}
+		public bool GetDebug() => _debug;
 
 		#endregion
 
@@ -673,12 +522,11 @@ namespace Nez.UI
 		/// <param name="screenCoords">Screen coords.</param>
 		public Vector2 ScreenToLocalCoordinates(Vector2 screenCoords)
 		{
-			if (stage == null)
+			if (_stage == null)
 				return screenCoords;
 
-			return StageToLocalCoordinates(stage.ScreenToStageCoordinates(screenCoords));
+			return StageToLocalCoordinates(_stage.ScreenToStageCoordinates(screenCoords));
 		}
-
 
 		/// <summary>
 		/// Transforms the specified point in the stage's coordinates to the element's local coordinate system.
@@ -694,17 +542,12 @@ namespace Nez.UI
 			return stageCoords;
 		}
 
-
 		/// <summary>
 		/// Transforms the specified point in the element's coordinates to be in the stage's coordinates
 		/// </summary>
 		/// <returns>The to stage coordinates.</returns>
 		/// <param name="localCoords">Local coords.</param>
-		public Vector2 LocalToStageCoordinates(Vector2 localCoords)
-		{
-			return LocalToAscendantCoordinates(null, localCoords);
-		}
-
+		public Vector2 LocalToStageCoordinates(Vector2 localCoords) => LocalToAscendantCoordinates(null, localCoords);
 
 		/// <summary>
 		/// Converts coordinates for this element to those of a parent element. The ascendant does not need to be a direct parent
@@ -725,7 +568,6 @@ namespace Nez.UI
 
 			return localCoords;
 		}
-
 
 		/// <summary>
 		/// Converts the coordinates given in the parent's coordinate system to this element's coordinate system.
@@ -759,7 +601,6 @@ namespace Nez.UI
 
 			return parentCoords;
 		}
-
 
 		/// <summary>
 		/// Transforms the specified point in the element's coordinates to be in the parent's coordinates.
@@ -814,7 +655,6 @@ namespace Nez.UI
 			return Math.Max(offsetX, offsetY);
 		}
 
-
 		/// <summary>
 		/// Draws this element's debug lines
 		/// </summary>
@@ -824,7 +664,6 @@ namespace Nez.UI
 			if (_debug)
 				batcher.DrawHollowRect(x, y, width, height, Color.Red);
 		}
-
 
 		/// <summary>
 		/// returns true if this Element and all parent Elements are visible
@@ -841,7 +680,6 @@ namespace Nez.UI
 			return _visible;
 		}
 
-
 		public virtual Element Hit(Vector2 point)
 		{
 			// if we are not Touchable or us or any parent is not visible bail out
@@ -853,7 +691,6 @@ namespace Nez.UI
 
 			return null;
 		}
-
 
 		/// <summary>
 		/// Removes this element from its parent, if it has a parent
@@ -898,16 +735,10 @@ namespace Nez.UI
 
 		public virtual float MaxHeight => 0;
 
-
 		public virtual void Layout()
 		{ }
 
-
-		public virtual void Invalidate()
-		{
-			_needsLayout = true;
-		}
-
+		public virtual void Invalidate() => _needsLayout = true;
 
 		public virtual void InvalidateHierarchy()
 		{
@@ -917,9 +748,8 @@ namespace Nez.UI
 			Invalidate();
 
 			if (parent is ILayout)
-				((ILayout) parent).InvalidateHierarchy();
+				((ILayout)parent).InvalidateHierarchy();
 		}
-
 
 		public void Validate()
 		{
@@ -955,7 +785,6 @@ namespace Nez.UI
 			_needsLayout = false;
 			Layout();
 		}
-
 
 		public virtual void Pack()
 		{

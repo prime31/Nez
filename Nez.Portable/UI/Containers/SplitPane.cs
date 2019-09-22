@@ -12,10 +12,10 @@ namespace Nez.UI
 			{
 				var first = _firstWidget == null
 					? 0
-					: (_firstWidget is ILayout ? ((ILayout) _firstWidget).PreferredWidth : _firstWidget.width);
+					: (_firstWidget is ILayout ? ((ILayout)_firstWidget).PreferredWidth : _firstWidget.width);
 				var second = _secondWidget == null
 					? 0
-					: (_secondWidget is ILayout ? ((ILayout) _secondWidget).PreferredWidth : _secondWidget.width);
+					: (_secondWidget is ILayout ? ((ILayout)_secondWidget).PreferredWidth : _secondWidget.width);
 
 				if (_vertical)
 					return Math.Max(first, second);
@@ -30,10 +30,10 @@ namespace Nez.UI
 			{
 				var first = _firstWidget == null
 					? 0
-					: (_firstWidget is ILayout ? ((ILayout) _firstWidget).PreferredHeight : _firstWidget.height);
+					: (_firstWidget is ILayout ? ((ILayout)_firstWidget).PreferredHeight : _firstWidget.height);
 				var second = _secondWidget == null
 					? 0
-					: (_secondWidget is ILayout ? ((ILayout) _secondWidget).PreferredHeight : _secondWidget.height);
+					: (_secondWidget is ILayout ? ((ILayout)_secondWidget).PreferredHeight : _secondWidget.height);
 
 				if (!_vertical)
 					return Math.Max(first, second);
@@ -161,7 +161,7 @@ namespace Nez.UI
 					firstWidgetBounds.Height);
 
 				if (_firstWidget is ILayout)
-					((ILayout) _firstWidget).Validate();
+					((ILayout)_firstWidget).Validate();
 			}
 
 			if (_secondWidget != null)
@@ -184,7 +184,7 @@ namespace Nez.UI
 				ApplyTransform(batcher, ComputeTransform());
 			if (_firstWidget != null && _firstWidget.IsVisible())
 			{
-				var scissor = ScissorStack.CalculateScissors(stage?.Camera, batcher.TransformMatrix, _firstWidgetBounds);
+				var scissor = ScissorStack.CalculateScissors(_stage?.Camera, batcher.TransformMatrix, _firstWidgetBounds);
 				if (ScissorStack.PushScissors(scissor))
 				{
 					batcher.EnableScissorTest(true);
@@ -196,7 +196,7 @@ namespace Nez.UI
 
 			if (_secondWidget != null && _secondWidget.IsVisible())
 			{
-				var scissor = ScissorStack.CalculateScissors(stage?.Camera, batcher.TransformMatrix,
+				var scissor = ScissorStack.CalculateScissors(_stage?.Camera, batcher.TransformMatrix,
 					_secondWidgetBounds);
 				if (ScissorStack.PushScissors(scissor))
 				{
@@ -208,7 +208,7 @@ namespace Nez.UI
 			}
 
 			_style.Handle.Draw(batcher, _handleBounds.X, _handleBounds.Y, _handleBounds.Width, _handleBounds.Height,
-				new Color(color, (int) (color.A * parentAlpha)));
+				new Color(color, (int)(color.A * parentAlpha)));
 
 			if (transform)
 				ResetTransform(batcher);
@@ -218,7 +218,7 @@ namespace Nez.UI
 		void CalculateHorizBoundsAndPositions()
 		{
 			var availWidth = width - _style.Handle.MinWidth;
-			var leftAreaWidth = (int) (availWidth * _splitAmount);
+			var leftAreaWidth = (int)(availWidth * _splitAmount);
 			var rightAreaWidth = availWidth - leftAreaWidth;
 			var handleWidth = _style.Handle.MinWidth;
 
@@ -231,7 +231,7 @@ namespace Nez.UI
 		void CalculateVertBoundsAndPositions()
 		{
 			var availHeight = height - _style.Handle.MinHeight;
-			var topAreaHeight = (int) (availHeight * _splitAmount);
+			var topAreaHeight = (int)(availHeight * _splitAmount);
 			var bottomAreaHeight = availHeight - topAreaHeight;
 
 			_firstWidgetBounds = new RectangleF(0, height - topAreaHeight, width, topAreaHeight);

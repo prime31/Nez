@@ -68,29 +68,29 @@ namespace Nez.UI
 			if (_isResizable && mousePos.X >= 0 && mousePos.X < width && mousePos.Y >= 0 && mousePos.Y < height)
 			{
 				if (mousePos.X < resizeBorderSize)
-					edge |= (int) AlignInternal.Left;
+					edge |= (int)AlignInternal.Left;
 				if (mousePos.X > width - resizeBorderSize)
-					edge |= (int) AlignInternal.Right;
+					edge |= (int)AlignInternal.Right;
 				if (mousePos.Y < resizeBorderSize)
-					edge |= (int) AlignInternal.Top;
+					edge |= (int)AlignInternal.Top;
 				if (mousePos.Y > height - resizeBorderSize)
-					edge |= (int) AlignInternal.Bottom;
+					edge |= (int)AlignInternal.Bottom;
 
 				int tempResizeBorderSize = resizeBorderSize;
 				if (edge != 0)
 					tempResizeBorderSize += 25;
 				if (mousePos.X < tempResizeBorderSize)
-					edge |= (int) AlignInternal.Left;
+					edge |= (int)AlignInternal.Left;
 				if (mousePos.X > width - tempResizeBorderSize)
-					edge |= (int) AlignInternal.Right;
+					edge |= (int)AlignInternal.Right;
 				if (mousePos.Y < tempResizeBorderSize)
-					edge |= (int) AlignInternal.Top;
+					edge |= (int)AlignInternal.Top;
 				if (mousePos.Y > height - tempResizeBorderSize)
-					edge |= (int) AlignInternal.Bottom;
+					edge |= (int)AlignInternal.Bottom;
 			}
 
 			if (_isMovable && edge == 0 && mousePos.Y >= 0 && mousePos.Y <= GetPadTop() && mousePos.X >= 0 &&
-			    mousePos.X <= width)
+				mousePos.X <= width)
 				edge = MOVE;
 
 			_dragging = edge != 0;
@@ -138,7 +138,7 @@ namespace Nez.UI
 				windowY += amountY;
 			}
 
-			if ((edge & (int) AlignInternal.Left) != 0)
+			if ((edge & (int)AlignInternal.Left) != 0)
 			{
 				float amountX = mousePos.X - startX;
 				if (width - amountX < MinWidth)
@@ -149,7 +149,7 @@ namespace Nez.UI
 				windowX += amountX;
 			}
 
-			if ((edge & (int) AlignInternal.Top) != 0)
+			if ((edge & (int)AlignInternal.Top) != 0)
 			{
 				float amountY = mousePos.Y - startY;
 				if (height - amountY < MinHeight)
@@ -160,7 +160,7 @@ namespace Nez.UI
 				windowY += amountY;
 			}
 
-			if ((edge & (int) AlignInternal.Right) != 0)
+			if ((edge & (int)AlignInternal.Right) != 0)
 			{
 				float amountX = mousePos.X - lastX;
 				if (width + amountX < MinWidth)
@@ -170,7 +170,7 @@ namespace Nez.UI
 				width += amountX;
 			}
 
-			if ((edge & (int) AlignInternal.Bottom) != 0)
+			if ((edge & (int)AlignInternal.Bottom) != 0)
 			{
 				float amountY = mousePos.Y - lastY;
 				if (height + amountY < MinHeight)
@@ -252,7 +252,7 @@ namespace Nez.UI
 			if (style.StageBackground != null)
 			{
 				var stagePos = StageToLocalCoordinates(Vector2.Zero);
-				var stageSize = StageToLocalCoordinates(new Vector2(stage.GetWidth(), stage.GetHeight()));
+				var stageSize = StageToLocalCoordinates(new Vector2(_stage.GetWidth(), _stage.GetHeight()));
 				DrawStageBackground(batcher, parentAlpha, GetX() + stagePos.X, GetY() + stagePos.Y,
 					GetX() + stageSize.X, GetY() + stageSize.Y);
 			}
@@ -263,7 +263,7 @@ namespace Nez.UI
 
 		protected void DrawStageBackground(Batcher batcher, float parentAlpha, float x, float y, float width, float height)
 		{
-			style.StageBackground.Draw(batcher, x, y, width, height, new Color(color, (int) (color.A * parentAlpha)));
+			style.StageBackground.Draw(batcher, x, y, width, height, new Color(color, (int)(color.A * parentAlpha)));
 		}
 
 
