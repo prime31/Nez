@@ -25,7 +25,7 @@ namespace Nez.Tools.Atlases
 	                 	destination.Y, 
 	                 	destination.Width, 
 	                 	destination.Height,
-						arguments.OriginX, arguments.OriginY );
+                        arguments.OriginX.ToString(System.Globalization.CultureInfo.InvariantCulture), arguments.OriginY.ToString(System.Globalization.CultureInfo.InvariantCulture));
 				}
 
 				if ( animations.Count > 0)
