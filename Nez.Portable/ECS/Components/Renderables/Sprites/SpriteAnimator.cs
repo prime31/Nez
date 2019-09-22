@@ -1,11 +1,13 @@
 using System;
 using System.Collections.Generic;
-using Nez.Sprites;
 using Nez.Textures;
 
 
 namespace Nez.Sprites
 {
+	/// <summary>
+	/// SpriteAnimator handles the display and animation of a sprite
+	/// </summary>
 	public class SpriteAnimator : SpriteRenderer, IUpdatable
 	{
 		public enum LoopMode
@@ -36,25 +38,38 @@ namespace Nez.Sprites
 			PingPongOnce
 		}
 
+		public enum State
+		{
+			None,
+			Running,
+			Paused,
+			Completed
+		}
+
+		/// <summary>
+		/// fired when an animation completes, includes the animation name;
+		/// </summary>
+		public event Action<string> OnAnimationCompletedEvent;
+
 		/// <summary>
 		/// animation playback speed
 		/// </summary>
 		public float Speed = 1;
 
 		/// <summary>
-		/// is the current animatiomn paused
+		/// the current state of the animation
 		/// </summary>
-		public bool IsPaused { get; private set; }
+		public State AnimationState { get; private set; } = State.None;
 
 		/// <summary>
 		/// the current animation
 		/// </summary>
-		public SpriteAnimation CurrentAnimation => _currentAnimation;
+		public SpriteAnimation CurrentAnimation { get; private set; }
 
 		/// <summary>
 		/// the name of the current animation
 		/// </summary>
-		public string CurrentAnimationName => _currentAnimationName;
+		public string CurrentAnimationName { get; private set; }
 
 		/// <summary>
 		/// index of the current frame in sprite array of the current animation
@@ -62,9 +77,8 @@ namespace Nez.Sprites
 		public int CurrentFrame { get; private set; }
 
 		readonly Dictionary<string, SpriteAnimation> _animations = new Dictionary<string, SpriteAnimation>();
-		SpriteAnimation _currentAnimation;
-		string _currentAnimationName;
-		float _time;
+
+		float _elapsedTime;
 		LoopMode _loopMode;
 
 
@@ -75,28 +89,34 @@ namespace Nez.Sprites
 
 		void IUpdatable.Update()
 		{
-			if (IsPaused || _currentAnimation == null)
+			if (AnimationState != State.Running || CurrentAnimation == null)
 				return;
 
-			var secondsPerFrame = 1 / (_currentAnimation.FrameRate * Speed);
-			var iterationDuration = secondsPerFrame * _currentAnimation.Sprites.Length;
+			var animation = CurrentAnimation;
+			var secondsPerFrame = 1 / (animation.FrameRate * Speed);
+			var iterationDuration = secondsPerFrame * animation.Sprites.Length;
 
-			_time += Time.DeltaTime;
-			var time = Math.Abs(_time);
+			_elapsedTime += Time.DeltaTime;
+			var time = Math.Abs(_elapsedTime);
 
 			// Once and PingPongOnce reset back to Time = 0 once they complete
 			if (_loopMode == LoopMode.Once && time > iterationDuration ||
 			    _loopMode == LoopMode.PingPongOnce && time > iterationDuration * 2)
 			{
-				IsPaused = true;
-				_time = 0;
-				Sprite = _currentAnimation.Sprites[0];
+				AnimationState = State.Completed;
+				_elapsedTime = 0;
+				CurrentFrame = 0;
+				Sprite = animation.Sprites[0];
+				OnAnimationCompletedEvent?.Invoke(CurrentAnimationName);
 				return;
 			}
 
 			if (_loopMode == LoopMode.ClampForever && time > iterationDuration)
 			{
-				Sprite = _currentAnimation.Sprites.LastItem();
+				AnimationState = State.Completed;
+				CurrentFrame = animation.Sprites.Length - 1;
+				Sprite = animation.Sprites[CurrentFrame];
+				OnAnimationCompletedEvent?.Invoke(CurrentAnimationName);
 				return;
 			}
 
@@ -109,13 +129,13 @@ namespace Nez.Sprites
 				currentElapsed = iterationDuration - currentElapsed;
 
 			CurrentFrame = Mathf.FloorToInt(currentElapsed / secondsPerFrame);
-			Sprite = _currentAnimation.Sprites[CurrentFrame];
+			Sprite = animation.Sprites[CurrentFrame];
 		}
 
 		/// <summary>
 		/// adds all the animations from the SpriteAtlas
 		/// </summary>
-		public void AddAnimations(SpriteAtlas atlas)
+		public void AddAnimationsFromAtlas(SpriteAtlas atlas)
 		{
 			for (var i = 0; i < atlas.AnimationNames.Length; i++)
 				_animations.Add(atlas.AnimationNames[i], atlas.SpriteAnimations[i]);
@@ -132,10 +152,7 @@ namespace Nez.Sprites
 			_animations[name] = animation;
 		}
 
-		public void AddAnimation(string name, Sprite[] frames, float fps = 10)
-		{
-			AddAnimation(name, new SpriteAnimation(frames, fps));
-		}
+		public void AddAnimation(string name, Sprite[] sprites, float fps = 10) => AddAnimation(name, fps, sprites);
 
 		public void AddAnimation(string name, float fps, params Sprite[] sprites)
 		{
@@ -145,46 +162,44 @@ namespace Nez.Sprites
 		#region Playback
 
 		/// <summary>
-		/// plays the animation at the given index. You can cache the indices by calling animationIndexForAnimationName.
+		/// plays the animation with the given name. If no loopMode is specified it is defaults to Loop
 		/// </summary>
 		public void Play(string name, LoopMode? loopMode = null)
 		{
-			_currentAnimation = _animations[name];
-			_currentAnimationName = name;
+			CurrentAnimation = _animations[name];
+			CurrentAnimationName = name;
+			CurrentFrame = 0;
+			AnimationState = State.Running;
 
-			Sprite = _currentAnimation.Sprites[0];
-			IsPaused = false;
-
-			if (loopMode.HasValue)
-				_loopMode = loopMode.Value;
+			Sprite = CurrentAnimation.Sprites[0];
+			_elapsedTime = 0;
+			_loopMode = loopMode ?? LoopMode.Loop;
 		}
 
 		/// <summary>
-		/// checks to see if the animation is playing
+		/// checks to see if the animation is playing (i.e. the animation is active. it may still be in the paused state)
 		/// </summary>
-		public bool IsAnimationPlaying(string name)
-		{
-			return _currentAnimation != null && _currentAnimationName.Equals(name);
-		}
+		public bool IsAnimationActive(string name) => CurrentAnimation != null && CurrentAnimationName.Equals(name);
 
 		/// <summary>
 		/// pauses the animator
 		/// </summary>
-		public void Pause() => IsPaused = true;
+		public void Pause() => AnimationState = State.Paused;
 
 		/// <summary>
 		/// unpauses the animator
 		/// </summary>
-		public void UnPause() => IsPaused = false;
+		public void UnPause() => AnimationState = State.Running;
 
 		/// <summary>
 		/// stops the current animation and nulls it out
 		/// </summary>
 		public void Stop()
 		{
-			IsPaused = true;
-			_currentAnimation = null;
-			_currentAnimationName = null;
+			CurrentAnimation = null;
+			CurrentAnimationName = null;
+			CurrentFrame = 0;
+			AnimationState = State.None;
 		}
 
 		#endregion

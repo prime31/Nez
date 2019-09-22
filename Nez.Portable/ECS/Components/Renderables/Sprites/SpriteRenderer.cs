@@ -93,8 +93,10 @@ namespace Nez.Sprites
 
 
 		public SpriteRenderer()
-		{
-		}
+		{ }
+
+		public SpriteRenderer(Texture2D texture) : this(new Sprite(texture))
+		{ }
 
 		public SpriteRenderer(Sprite sprite)
 		{
@@ -102,19 +104,12 @@ namespace Nez.Sprites
 			_origin = sprite.Center;
 		}
 
-		public SpriteRenderer(Texture2D texture) : this(new Sprite(texture))
-		{
-		}
-
-
 		#region fluent setters
 
 		/// <summary>
 		/// sets the Sprite and updates the origin of the Sprite to match Sprite.origin. If for whatever reason you need
 		/// an origin different from the Sprite either clone it or set the origin AFTER setting the Sprite here.
 		/// </summary>
-		/// <returns>The sprite.</returns>
-		/// <param name="sprite">Sprite.</param>
 		public SpriteRenderer SetSprite(Sprite sprite)
 		{
 			_sprite = sprite;
@@ -126,8 +121,6 @@ namespace Nez.Sprites
 		/// <summary>
 		/// sets the origin for the Renderable
 		/// </summary>
-		/// <returns>The origin.</returns>
-		/// <param name="origin">Origin.</param>
 		public SpriteRenderer SetOrigin(Vector2 origin)
 		{
 			if (_origin != origin)
@@ -142,8 +135,6 @@ namespace Nez.Sprites
 		/// <summary>
 		/// helper for setting the origin in normalized fashion (0-1 for x and y)
 		/// </summary>
-		/// <returns>The origin normalized.</returns>
-		/// <param name="origin">Origin.</param>
 		public SpriteRenderer SetOriginNormalized(Vector2 value)
 		{
 			SetOrigin(new Vector2(value.X * Width / Entity.Transform.Scale.X,
@@ -158,13 +149,7 @@ namespace Nez.Sprites
 		/// Draws the Renderable with an outline. Note that this should be called on disabled Renderables since they shouldnt take part in default
 		/// rendering if they need an ouline.
 		/// </summary>
-		/// <param name="batcher">Batcher.</param>
-		/// <param name="camera">Camera.</param>
-		/// <param name="offset">Offset.</param>
-		public void DrawOutline(Batcher batcher, Camera camera, int offset = 1)
-		{
-			DrawOutline(batcher, camera, Color.Black, offset);
-		}
+		public void DrawOutline(Batcher batcher, Camera camera, int offset = 1) => DrawOutline(batcher, camera, Color.Black, offset);
 
 		public void DrawOutline(Batcher batcher, Camera camera, Color outlineColor, int offset = 1)
 		{
