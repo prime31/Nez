@@ -500,8 +500,8 @@ namespace Nez
 				if (i == 0)
 				{
 					// we need to set the proper RenderTarget here. We want the last one that was the destination of our PostProcessors
-					GraphicsDeviceExt.SetRenderTarget(Core.GraphicsDevice,
-						Mathf.IsEven(enabledCounter) ? _sceneRenderTarget : _destinationRenderTarget);
+					var currentRenderTarget = Mathf.IsEven(enabledCounter) ? _sceneRenderTarget : _destinationRenderTarget;
+					GraphicsDeviceExt.SetRenderTarget(Core.GraphicsDevice, currentRenderTarget);
 				}
 
 				// force a Camera matrix update to account for the new Viewport size
@@ -515,8 +515,10 @@ namespace Nez
 			{
 				var tex = new Texture2D(Core.GraphicsDevice, _sceneRenderTarget.Width, _sceneRenderTarget.Height);
 				var data = new int[tex.Bounds.Width * tex.Bounds.Height];
-				(Mathf.IsEven(enabledCounter) ? _sceneRenderTarget : _destinationRenderTarget).GetData<int>(data);
-				tex.SetData<int>(data);
+
+				var currentRenderTarget = Mathf.IsEven(enabledCounter) ? _sceneRenderTarget : _destinationRenderTarget;
+				currentRenderTarget.GetData<int>(data);
+				tex.SetData(data);
 				_screenshotRequestCallback(tex);
 
 				_screenshotRequestCallback = null;
@@ -525,18 +527,17 @@ namespace Nez
 			// render our final result to the backbuffer or let our delegate do so
 			if (_finalRenderDelegate != null)
 			{
-				_finalRenderDelegate.HandleFinalRender(finalRenderTarget, LetterboxColor,
-					Mathf.IsEven(enabledCounter) ? _sceneRenderTarget : _destinationRenderTarget,
-					_finalRenderDestinationRect, SamplerState);
+				var currentRenderTarget = Mathf.IsEven(enabledCounter) ? _sceneRenderTarget : _destinationRenderTarget;
+				_finalRenderDelegate.HandleFinalRender(finalRenderTarget, LetterboxColor, currentRenderTarget, _finalRenderDestinationRect, SamplerState);
 			}
 			else
 			{
+				var currentRenderTarget = Mathf.IsEven(enabledCounter) ? _sceneRenderTarget : _destinationRenderTarget;
 				GraphicsDeviceExt.SetRenderTarget(Core.GraphicsDevice, finalRenderTarget);
 				Core.GraphicsDevice.Clear(LetterboxColor);
+
 				Graphics.Instance.Batcher.Begin(BlendState.Opaque, SamplerState, null, null);
-				Graphics.Instance.Batcher.Draw(
-					Mathf.IsEven(enabledCounter) ? _sceneRenderTarget : _destinationRenderTarget,
-					_finalRenderDestinationRect, Color.White);
+				Graphics.Instance.Batcher.Draw(currentRenderTarget, _finalRenderDestinationRect, Color.White);
 				Graphics.Instance.Batcher.End();
 			}
 		}
