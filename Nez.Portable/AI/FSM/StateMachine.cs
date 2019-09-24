@@ -49,6 +49,20 @@ namespace Nez.AI.FSM
 			_currentState.Update(deltaTime);
 		}
 
+        /// <summary>
+        /// Gets a specific state from the machine without having to
+        /// change to it.
+        /// </summary>
+        public virtual R GetState<R>() where R : State<T>
+        {
+            var type = typeof(R);
+
+            if (_states.ContainsKey(type))
+                return (R)_states[type];
+
+            throw new KeyNotFoundException("State "+type.Name + " not found on StateMachine");
+        }
+
 
 		/// <summary>
 		/// changes the current state
