@@ -453,7 +453,7 @@ namespace Nez
 			var lastRendererHadRenderTarget = false;
 			for (var i = 0; i < _renderers.Length; i++)
 			{
-				// MonoGame follows the XNA bullshit implementation so it will clear the entire buffer if we change the render target even if null.
+				// MonoGame follows the XNA implementation so it will clear the entire buffer if we change the render target even if null.
 				// Because of that, we track when we are done with our RenderTargets and clear the scene at that time.
 				if (lastRendererHadRenderTarget && _renderers.Buffer[i].WantsToRenderToSceneRenderTarget)
 				{
@@ -488,8 +488,10 @@ namespace Nez
 					{
 						var isEven = Mathf.IsEven(enabledCounter);
 						enabledCounter++;
-						_postProcessors.Buffer[i].Process(isEven ? _sceneRenderTarget : _destinationRenderTarget,
-							isEven ? _destinationRenderTarget : _sceneRenderTarget);
+
+						var source = Mathf.IsEven(enabledCounter) ? _sceneRenderTarget : _destinationRenderTarget;
+						var destination = Mathf.IsOdd(enabledCounter) ? _sceneRenderTarget : _destinationRenderTarget;
+						_postProcessors.Buffer[i].Process(source, destination);
 					}
 				}
 			}
@@ -517,7 +519,7 @@ namespace Nez
 				var data = new int[tex.Bounds.Width * tex.Bounds.Height];
 
 				var currentRenderTarget = Mathf.IsEven(enabledCounter) ? _sceneRenderTarget : _destinationRenderTarget;
-				currentRenderTarget.GetData<int>(data);
+				currentRenderTarget.GetData(data);
 				tex.SetData(data);
 				_screenshotRequestCallback(tex);
 
@@ -542,10 +544,7 @@ namespace Nez
 			}
 		}
 
-		void OnGraphicsDeviceReset()
-		{
-			UpdateResolutionScaler();
-		}
+		void OnGraphicsDeviceReset() => UpdateResolutionScaler();
 
 		#endregion
 
@@ -777,10 +776,7 @@ namespace Nez
 		/// Texture2D when done with it!
 		/// </summary>
 		/// <param name="callback">Callback.</param>
-		public void RequestScreenshot(Action<Texture2D> callback)
-		{
-			_screenshotRequestCallback = callback;
-		}
+		public void RequestScreenshot(Action<Texture2D> callback) => _screenshotRequestCallback = callback;
 
 		#endregion
 
@@ -792,10 +788,7 @@ namespace Nez
 		/// </summary>
 		/// <returns>Scene.</returns>
 		/// <typeparam name="T">The 1st type parameter.</typeparam>
-		public T AddSceneComponent<T>() where T : SceneComponent, new()
-		{
-			return AddSceneComponent(new T());
-		}
+		public T AddSceneComponent<T>() where T : SceneComponent, new() => AddSceneComponent(new T());
 
 		/// <summary>
 		/// Adds and returns a SceneComponent to the components list
@@ -864,8 +857,7 @@ namespace Nez
 		/// </summary>
 		public void RemoveSceneComponent(SceneComponent component)
 		{
-			Insist.IsTrue(_sceneComponents.Contains(component),
-				"SceneComponent {0} is not in the SceneComponents list!", component);
+			Insist.IsTrue(_sceneComponents.Contains(component), "SceneComponent {0} is not in the SceneComponents list!", component);
 			_sceneComponents.Remove(component);
 			component.OnRemovedFromScene();
 		}
@@ -1028,8 +1020,7 @@ namespace Nez
 		/// <param name="entity">The Entity to add</param>
 		public Entity AddEntity(Entity entity)
 		{
-			Insist.IsFalse(Entities.Contains(entity), "You are attempting to add the same entity to a scene twice: {0}",
-				entity);
+			Insist.IsFalse(Entities.Contains(entity), "You are attempting to add the same entity to a scene twice: {0}", entity);
 			Entities.Add(entity);
 			entity.Scene = this;
 
@@ -1045,8 +1036,7 @@ namespace Nez
 		/// <param name="entity">The Entity to add</param>
 		public T AddEntity<T>(T entity) where T : Entity
 		{
-			Insist.IsFalse(Entities.Contains(entity), "You are attempting to add the same entity to a scene twice: {0}",
-				entity);
+			Insist.IsFalse(Entities.Contains(entity), "You are attempting to add the same entity to a scene twice: {0}", entity);
 			Entities.Add(entity);
 			entity.Scene = this;
 			return entity;
@@ -1066,50 +1056,35 @@ namespace Nez
 		/// </summary>
 		/// <returns>The entity.</returns>
 		/// <param name="name">Name.</param>
-		public Entity FindEntity(string name)
-		{
-			return Entities.FindEntity(name);
-		}
+		public Entity FindEntity(string name) => Entities.FindEntity(name);
 
 		/// <summary>
 		/// returns all entities with the given tag
 		/// </summary>
 		/// <returns>The entities by tag.</returns>
 		/// <param name="tag">Tag.</param>
-		public List<Entity> FindEntitiesWithTag(int tag)
-		{
-			return Entities.EntitiesWithTag(tag);
-		}
+		public List<Entity> FindEntitiesWithTag(int tag) => Entities.EntitiesWithTag(tag);
 
 		/// <summary>
 		/// returns all entities of Type T
 		/// </summary>
 		/// <returns>The of type.</returns>
 		/// <typeparam name="T">The 1st type parameter.</typeparam>
-		public List<Entity> EntitiesOfType<T>() where T : Entity
-		{
-			return Entities.EntitiesOfType<T>();
-		}
+		public List<Entity> EntitiesOfType<T>() where T : Entity => Entities.EntitiesOfType<T>();
 
 		/// <summary>
 		/// returns the first enabled loaded component of Type T
 		/// </summary>
 		/// <returns>The component of type.</returns>
 		/// <typeparam name="T">The 1st type parameter.</typeparam>
-		public T FindComponentOfType<T>() where T : Component
-		{
-			return Entities.FindComponentOfType<T>();
-		}
+		public T FindComponentOfType<T>() where T : Component => Entities.FindComponentOfType<T>();
 
 		/// <summary>
 		/// returns a list of all enabled loaded components of Type T
 		/// </summary>
 		/// <returns>The components of type.</returns>
 		/// <typeparam name="T">The 1st type parameter.</typeparam>
-		public List<T> FindComponentsOfType<T>() where T : Component
-		{
-			return Entities.FindComponentsOfType<T>();
-		}
+		public List<T> FindComponentsOfType<T>() where T : Component => Entities.FindComponentsOfType<T>();
 
 		#endregion
 
@@ -1132,20 +1107,14 @@ namespace Nez
 		/// removes an EntitySystem processor from the scene
 		/// </summary>
 		/// <param name="processor">Processor.</param>
-		public void RemoveEntityProcessor(EntitySystem processor)
-		{
-			EntityProcessors.Remove(processor);
-		}
+		public void RemoveEntityProcessor(EntitySystem processor) => EntityProcessors.Remove(processor);
 
 		/// <summary>
 		/// gets an EntitySystem processor
 		/// </summary>
 		/// <returns>The processor.</returns>
 		/// <typeparam name="T">The 1st type parameter.</typeparam>
-		public T GetEntityProcessor<T>() where T : EntitySystem
-		{
-			return EntityProcessors.GetProcessor<T>();
-		}
+		public T GetEntityProcessor<T>() where T : EntitySystem => EntityProcessors.GetProcessor<T>();
 
 		#endregion
 	}
