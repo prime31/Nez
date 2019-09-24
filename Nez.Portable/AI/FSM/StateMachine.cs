@@ -56,11 +56,10 @@ namespace Nez.AI.FSM
         public virtual R GetState<R>() where R : State<T>
         {
             var type = typeof(R);
+            Insist.IsTrue(_states.ContainsKey(type),
+                "{0}: state {1} does not exist. Did you forget to add it by calling addState?", GetType(), type);
 
-            if (_states.ContainsKey(type))
-                return (R)_states[type];
-
-            throw new KeyNotFoundException("State "+type.Name + " not found on StateMachine");
+            return (R)_states[type];
         }
 
 
