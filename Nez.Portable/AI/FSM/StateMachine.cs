@@ -49,18 +49,18 @@ namespace Nez.AI.FSM
 			_currentState.Update(deltaTime);
 		}
 
-        /// <summary>
-        /// Gets a specific state from the machine without having to
-        /// change to it.
-        /// </summary>
-        public virtual R GetState<R>() where R : State<T>
-        {
-            var type = typeof(R);
-            Insist.IsTrue(_states.ContainsKey(type),
-                "{0}: state {1} does not exist. Did you forget to add it by calling addState?", GetType(), type);
+		/// <summary>
+		/// Gets a specific state from the machine without having to
+		/// change to it.
+		/// </summary>
+		public virtual R GetState<R>() where R : State<T>
+		{
+			var type = typeof(R);
+			Insist.IsTrue(_states.ContainsKey(type),
+				"{0}: state {1} does not exist. Did you forget to add it by calling addState?", GetType(), type);
 
-            return (R)_states[type];
-        }
+			return (R)_states[type];
+		}
 
 
 		/// <summary>
