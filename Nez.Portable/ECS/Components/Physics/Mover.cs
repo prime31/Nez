@@ -1,5 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
-
+using System.Collections.Generic;
 
 namespace Nez
 {
@@ -18,62 +18,120 @@ namespace Nez
 			_triggerHelper = new ColliderTriggerHelper(Entity);
 		}
 
-		/// <summary>
-		/// caculates the movement modifying the motion vector to take into account any collisions that will
-		/// occur when moving
-		/// </summary>
-		/// <returns><c>true</c>, if movement was calculated, <c>false</c> otherwise.</returns>
-		/// <param name="motion">Motion.</param>
-		/// <param name="collisionResult">Collision result.</param>
-		public bool CalculateMovement(ref Vector2 motion, out CollisionResult collisionResult)
-		{
-			collisionResult = new CollisionResult();
+        /// <summary>
+        /// caculates the movement modifying the motion vector to take into account any collisions that will
+        /// occur when moving
+        /// </summary>
+        /// <returns><c>true</c>, if movement was calculated, <c>false</c> otherwise.</returns>
+        /// <param name="motion">Motion.</param>
+        /// <param name="collisionResult">Collision result.</param>
+        public bool CalculateMovement(ref Vector2 motion, out CollisionResult collisionResult)
+        {
+            collisionResult = new CollisionResult();
 
-			// no collider? just move and forget about it
-			if (Entity.GetComponent<Collider>() == null || _triggerHelper == null)
-				return false;
+            // no collider? just move and forget about it
+            if (Entity.GetComponent<Collider>() == null || _triggerHelper == null)
+                return false;
 
-			// 1. move all non-trigger Colliders and get closest collision
-			var colliders = Entity.GetComponents<Collider>();
-			for (var i = 0; i < colliders.Count; i++)
-			{
-				var collider = colliders[i];
+            // 1. move all non-trigger Colliders and get closest collision
+            var colliders = Entity.GetComponents<Collider>();
+            for (var i = 0; i < colliders.Count; i++)
+            {
+                var collider = colliders[i];
 
-				// skip triggers for now. we will revisit them after we move.
-				if (collider.IsTrigger)
-					continue;
+                // skip triggers for now. we will revisit them after we move.
+                if (collider.IsTrigger)
+                    continue;
 
-				// fetch anything that we might collide with at our new position
-				var bounds = collider.Bounds;
-				bounds.X += motion.X;
-				bounds.Y += motion.Y;
-				var neighbors =
-					Physics.BoxcastBroadphaseExcludingSelf(collider, ref bounds, collider.CollidesWithLayers);
+                // fetch anything that we might collide with at our new position
+                var bounds = collider.Bounds;
+                bounds.X += motion.X;
+                bounds.Y += motion.Y;
+                var neighbors =
+                    Physics.BoxcastBroadphaseExcludingSelf(collider, ref bounds, collider.CollidesWithLayers);
 
-				foreach (var neighbor in neighbors)
-				{
-					// skip triggers for now. we will revisit them after we move.
-					if (neighbor.IsTrigger)
-						continue;
+                foreach (var neighbor in neighbors)
+                {
+                    // skip triggers for now. we will revisit them after we move.
+                    if (neighbor.IsTrigger)
+                        continue;
 
-					if (collider.CollidesWith(neighbor, motion, out collisionResult))
-					{
-						// hit. back off our motion
-						motion -= collisionResult.MinimumTranslationVector;
-					}
-				}
-			}
+                    if (collider.CollidesWith(neighbor, motion, out CollisionResult _InternalcollisionResult))
+                    {
+                        // hit. back off our motion
+                        motion -= _InternalcollisionResult.MinimumTranslationVector;
 
-			ListPool<Collider>.Free(colliders);
+                        // If we hit multiple objects, only take on the first for simplicity sake.
+                        if (_InternalcollisionResult.Collider != null)
+                            collisionResult = _InternalcollisionResult;
+                    }
+                }
+            }
 
-			return collisionResult.Collider != null;
-		}
+            ListPool<Collider>.Free(colliders);
 
-		/// <summary>
-		/// applies the movement from calculateMovement to the entity and updates the triggerHelper
-		/// </summary>
-		/// <param name="motion">Motion.</param>
-		public void ApplyMovement(Vector2 motion)
+            return collisionResult.Collider != null;
+        }
+
+        /// <summary>
+        /// Calculates the movement modifying the motion vector to take into account any collisions that will
+        /// occur when moving. This version is modified to output through a given collection to show every
+        /// collision that occured.
+        /// </summary>
+        /// <returns>The amount of collisions that occured.</returns>
+        /// <param name="motion">Motion.</param>
+        /// <param name="collisionResult">Collision result.</param>
+        public int AdvancedCalculateMovement(ref Vector2 motion, ICollection<CollisionResult> collisionResults)
+        {
+            int Collisions = 0;
+            // no collider? just move and forget about it
+            if (Entity.GetComponent<Collider>() == null || _triggerHelper == null)
+                return Collisions;
+
+            // 1. move all non-trigger Colliders and get closest collision
+            var colliders = Entity.GetComponents<Collider>();
+            for (var i = 0; i < colliders.Count; i++)
+            {
+                var collider = colliders[i];
+
+                // skip triggers for now. we will revisit them after we move.
+                if (collider.IsTrigger)
+                    continue;
+
+                // fetch anything that we might collide with at our new position
+                var bounds = collider.Bounds;
+                bounds.X += motion.X;
+                bounds.Y += motion.Y;
+                var neighbors =
+                    Physics.BoxcastBroadphaseExcludingSelf(collider, ref bounds, collider.CollidesWithLayers);
+
+                foreach (var neighbor in neighbors)
+                {
+                    // skip triggers for now. we will revisit them after we move.
+                    if (neighbor.IsTrigger)
+                        continue;
+
+                    if (collider.CollidesWith(neighbor, motion, out CollisionResult _InternalcollisionResult))
+                    {
+                        // hit. back off our motion
+                        motion -= _InternalcollisionResult.MinimumTranslationVector;
+                        collisionResults.Add(_InternalcollisionResult);
+
+                        Collisions++;
+                    }
+                }
+            }
+
+            ListPool<Collider>.Free(colliders);
+
+            return Collisions;
+        }
+
+        /// <summary>
+        /// applies the movement from calculateMovement to the entity and updates the triggerHelper
+        /// </summary>
+        /// <param name="motion">Motion.</param>
+        public void ApplyMovement(Vector2 motion)
 		{
 			// 2. move entity to its new position if we have a collision else move the full amount. motion is updated when a collision occurs
 			Entity.Transform.Position += motion;
