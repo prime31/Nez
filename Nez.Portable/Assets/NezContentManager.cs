@@ -129,7 +129,7 @@ namespace Nez.Systems
 		}
 
 		/// <summary>
-		/// Loads a SpriteAtlas
+		/// Loads a SpriteAtlas created with the Sprite Atlas Packer tool
 		/// </summary>
 		public SpriteAtlas LoadSpriteAtlas(string name)
 		{

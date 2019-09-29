@@ -4,7 +4,7 @@ Sprite Atlas Packer supports reading PNG, JPG, BMP, and GIF images and produces 
 
 Nez includes runtime classes to load the output of Sprite Atlas Packer. When using with the Nez runtime loader make sure the output image and atlas have the same name.
 
-Sprite Atlas Packer will also handle animations. Any subdirectories that contain images will be setup as animations when packing the sprites into an atlas. In the example folder structure below the tool will generate the animations "player", "enemy1" and "enemy2" with any images present in those folders.
+Sprite Atlas Packer also handles animations. Any subdirectories that contain images will be setup as animations when packing the sprites into an atlas. In the example folder structure below the tool will generate the animations "player", "enemy1" and "enemy2" with any images present in those folders.
 
 - root-dir
 	- player

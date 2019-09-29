@@ -41,6 +41,37 @@ animator.Play("Run");
 ```
 
 
+## Sprite Atlases
+Far and away, the most common way to optimize a 2D game is to use sprite atlases. Nez comes with a sprite atlas packer tool and a runtime atlas loader. See [this README](../Nez.SpriteAtlasPacker/README.md) for more details. Here is a quick usage example. We will be using the folder hierarchy below for the example. Textures can be present in any of the folder. Those in `root-dir` will not be part of a sprite animation. Any sprites in subfolders will be part of sprite animations with the animation name being the folder name (`player`, `enemy1` and `enemy2` would all be valid animations).
+
+- root-dir
+	- player
+	- enemy1
+	- enemy2
+
+To generate the sprite atlas and data file Nez needs to load the atlas use the following command:
+
+`mono SpriteAtlasPacker.exe -image:roots.png -map:roots.atlas -r -fps:7 path/to/root-dir`
+
+Copy the generated `roots.png` and `roots.atlas` files into your project's Content folder. Note that the .png and .atlas files must have the same name. Now we can load and use the atlas using the following code:
+
+`csharp
+var atlas = Content.LoadSpriteAtlas("Content/roots.atlas");
+
+
+// get a sprite from the atlas
+var sprite = atlas.GetSprite("sprite-name.png");
+
+// get a sprite animation
+var animation = atlas.GetAnimation("enemy1");
+
+// atlases can also easily be used by the SpriteAnimator via a convenience method
+// animator is assumed to be loaded elsewhere
+animator.AddAnimationsFromAtlas(atlas);
+animator.Play("enemy2");
+`
+
+
 ## Physics
 Be careful not to confuse the Nez Physics system with realistic physics simulations (such as Box2D, Farseer, Chipmunk, etc)! That is not at all its purpose. The Physics system is here only to provide spatial and collision information. It does not attempt to handle a full, real-world physics simulation. At the core of the Physics system is a SpatialHash that gets populated and updated automatically as you add/remove/move Colliders. You can access the various Physics-related methods via the **Physics** class which provides methods (boxcast, raycast, etc) to handle broadphase collision detection in a performant way. Internally, Nez uses the Physics systems for collision detection with various shapes such as rectangles, circles and polygons. The Entity class provides move methods that handle all this for you or you could opt to just query the Physics system and handle the narrow phase collision detection yourself.
 
