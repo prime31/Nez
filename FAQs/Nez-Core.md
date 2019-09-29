@@ -55,9 +55,8 @@ To generate the sprite atlas and data file Nez needs to load the atlas use the f
 
 Copy the generated `roots.png` and `roots.atlas` files into your project's Content folder. Note that the .png and .atlas files must have the same name. Now we can load and use the atlas using the following code:
 
-`csharp
+```csharp
 var atlas = Content.LoadSpriteAtlas("Content/roots.atlas");
-
 
 // get a sprite from the atlas
 var sprite = atlas.GetSprite("sprite-name.png");
@@ -69,7 +68,7 @@ var animation = atlas.GetAnimation("enemy1");
 // animator is assumed to be loaded elsewhere
 animator.AddAnimationsFromAtlas(atlas);
 animator.Play("enemy2");
-`
+```
 
 
 ## Physics
