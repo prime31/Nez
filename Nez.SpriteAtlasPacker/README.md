@@ -14,7 +14,7 @@ Sprite Atlas Packer also handles animations. Any subdirectories that contain ima
 
 ## Usage
 
-`mono SpriteAtlasPacker.exe -image:out.png -map:out.atlas -r -fps:7 folder/with/images`
+`mono SpriteAtlasPacker.exe -image:out.png -map:out.atlas -fps:7 folder/with/images`
 
 
 ## Options
@@ -28,7 +28,6 @@ Sprite Atlas Packer also handles animations. Any subdirectories that contain ima
 /pad:int          Padding between images. Default:'1'
 /pow2             Ensures output dimensions are powers of two.
 /sqr              Ensures output is square.
-/r                Searches subdirectories of any input directories.
 /originX:float    Origin X for the images Default:'0.5'
 /originY:float    Origin Y for the images Default:'0.5'
 /fps:int          Framerate for any animations Default:'8'

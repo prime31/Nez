@@ -51,7 +51,7 @@ Far and away, the most common way to optimize a 2D game is to use sprite atlases
 
 To generate the sprite atlas and data file Nez needs to load the atlas use the following command:
 
-`mono SpriteAtlasPacker.exe -image:roots.png -map:roots.atlas -r -fps:7 path/to/root-dir`
+`mono SpriteAtlasPacker.exe -image:roots.png -map:roots.atlas path/to/root-dir`
 
 Copy the generated `roots.png` and `roots.atlas` files into your project's Content folder. Note that the .png and .atlas files must have the same name. Now we can load and use the atlas using the following code:
 

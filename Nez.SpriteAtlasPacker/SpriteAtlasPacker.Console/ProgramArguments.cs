@@ -31,9 +31,6 @@ namespace Nez.Tools.Atlases.Console
 		[Argument(ArgumentType.AtMostOnce, ShortName = "", HelpText = "Ensures output is square.")]
 		public bool sqr;
 
-		[Argument(ArgumentType.AtMostOnce, ShortName = "", HelpText = "Searches subdirectories of any input directories.")]
-		public bool r;
-
 		[Argument(ArgumentType.AtMostOnce, ShortName = "", HelpText = "Origin X for the images", DefaultValue = Constants.DefaultOrigin)]
 		public float originX = Constants.DefaultOrigin;
 
@@ -70,7 +67,6 @@ namespace Nez.Tools.Atlases.Console
 				Padding = pad,
 				IsPowerOfTwo = pow2,
 				IsSquare = sqr,
-				RecurseSubdirectories = r,
 				OriginX = originX,
 				OriginY = originY,
 				FrameRate = fps,
