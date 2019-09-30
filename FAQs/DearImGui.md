@@ -15,5 +15,7 @@ Core.RegisterGlobalManager( imGuiManager );
 imGuiManager.SetEnabled(false);
 ```
 
+![Dear ImGui](images/ImGuiSample.png)
+
 
 More coming soon...
