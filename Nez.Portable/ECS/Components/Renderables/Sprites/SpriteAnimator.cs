@@ -135,28 +135,31 @@ namespace Nez.Sprites
 		/// <summary>
 		/// adds all the animations from the SpriteAtlas
 		/// </summary>
-		public void AddAnimationsFromAtlas(SpriteAtlas atlas)
+		public SpriteAnimator AddAnimationsFromAtlas(SpriteAtlas atlas)
 		{
 			for (var i = 0; i < atlas.AnimationNames.Length; i++)
 				_animations.Add(atlas.AnimationNames[i], atlas.SpriteAnimations[i]);
+			return this;
 		}
 
 		/// <summary>
 		/// Adds a SpriteAnimation
 		/// </summary>
-		public void AddAnimation(string name, SpriteAnimation animation)
+		public SpriteAnimator AddAnimation(string name, SpriteAnimation animation)
 		{
 			// if we have no sprite use the first frame we find
 			if (Sprite == null && animation.Sprites.Length > 0)
 				SetSprite(animation.Sprites[0]);
 			_animations[name] = animation;
+			return this;
 		}
 
-		public void AddAnimation(string name, Sprite[] sprites, float fps = 10) => AddAnimation(name, fps, sprites);
+		public SpriteAnimator AddAnimation(string name, Sprite[] sprites, float fps = 10) => AddAnimation(name, fps, sprites);
 
-		public void AddAnimation(string name, float fps, params Sprite[] sprites)
+		public SpriteAnimator AddAnimation(string name, float fps, params Sprite[] sprites)
 		{
 			AddAnimation(name, new SpriteAnimation(sprites, fps));
+			return this;
 		}
 
 		#region Playback
