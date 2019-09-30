@@ -489,8 +489,8 @@ namespace Nez
 						var isEven = Mathf.IsEven(enabledCounter);
 						enabledCounter++;
 
-						var source = Mathf.IsEven(enabledCounter) ? _sceneRenderTarget : _destinationRenderTarget;
-						var destination = Mathf.IsOdd(enabledCounter) ? _sceneRenderTarget : _destinationRenderTarget;
+						var source = isEven ? _sceneRenderTarget : _destinationRenderTarget;
+						var destination = !isEven ? _sceneRenderTarget : _destinationRenderTarget;
 						_postProcessors.Buffer[i].Process(source, destination);
 					}
 				}
