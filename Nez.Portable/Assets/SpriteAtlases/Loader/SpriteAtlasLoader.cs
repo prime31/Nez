@@ -30,7 +30,7 @@ namespace Nez.Sprites
 
 			string line = null;
 			var streamFile = TitleContainer.OpenStream(dataFile);
-			using (var stream = File.OpenText(streamFile))
+			using (var stream = new StreamReader(levelfile))
 			{
 				while ((line = stream.ReadLine()) != null)
 				{
