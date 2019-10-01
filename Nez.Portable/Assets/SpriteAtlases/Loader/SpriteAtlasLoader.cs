@@ -29,7 +29,8 @@ namespace Nez.Sprites
 			var commaSplitter = new char[] { ',' };
 
 			string line = null;
-			using (var stream = File.OpenText(dataFile))
+			var streamFile = TitleContainer.OpenStream(dataFile);
+			using (var stream = File.OpenText(streamFile))
 			{
 				while ((line = stream.ReadLine()) != null)
 				{
