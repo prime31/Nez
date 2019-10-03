@@ -10,11 +10,11 @@ namespace Nez.UI
 {
     public class NumberField : Table, IInputListener
     {
-        public event Action<NumberField, float> onNumberChanged = delegate { };
-        TextButton decrease;
-        TextButton increase;
-        TextField field;
-        NumberFieldStyle style;
+        public event Action<NumberField, float> OnNumberChanged = delegate { };
+        private TextButton decrease;
+        private TextButton increase;
+        private TextField field;
+        private NumberFieldStyle style;
         private float minimum;
         private float maximum;
         private float number;
@@ -31,6 +31,7 @@ namespace Nez.UI
             field = new TextField(initial.ToString(), this.style);
             field.SetAlignment(Nez.UI.Align.Center);
             SetNumber(initial);
+
             if (showButtons)
             {
                 decrease = new TextButton("", style.DecreaseButtonStyle);
@@ -131,7 +132,7 @@ namespace Nez.UI
             field.SetTextForced(value.ToString());
             number = value;
 
-            onNumberChanged(this, value);
+            OnNumberChanged(this, value);
         }
 
         public float GetNumber()
@@ -195,7 +196,6 @@ namespace Nez.UI
 
     public class NumberFieldStyle : TextFieldStyle
     {
-        /** Optional. */
         public IDrawable ImageUp, ImageDown, ImageOver, ImageChecked, ImageCheckedOver, ImageDisabled;
 
         public TextButtonStyle DecreaseButtonStyle;
