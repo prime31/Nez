@@ -57,7 +57,7 @@ namespace Nez.Console
 			if (entityName == "pp" || entityName == "postprocessors")
 			{
 				Instance._runtimeInspector = new RuntimeInspector();
-				Instance.isOpen = false;
+				Instance.IsOpen = false;
 			}
 			else if (entityName != "")
 			{
@@ -69,7 +69,7 @@ namespace Nez.Console
 				}
 
 				Instance._runtimeInspector = new RuntimeInspector(entity);
-				Instance.isOpen = false;
+				Instance.IsOpen = false;
 			}
 		}
 
