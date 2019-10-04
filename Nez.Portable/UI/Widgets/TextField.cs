@@ -22,8 +22,8 @@ namespace Nez.UI
 	/// The desktop keyboard is a stub, as a softkeyboard is not needed on the desktop. The Android {@link OnscreenKeyboard}
 	/// implementation will bring up the default IME.
 	/// </summary>
-    public class TextField : Element, IInputListener, IKeyboardListener
-    {
+	public class TextField : Element, IInputListener, IKeyboardListener
+	{
 		public event Action<TextField, string> OnTextChanged;
 		public event Action<TextField> OnEnterPressed = delegate {};
 		public event Action<TextField> OnTabPressed = delegate {};
@@ -327,7 +327,7 @@ namespace Nez.UI
 				if (enterPressed)
 					OnEnterPressed(this);
 
-                if (add || remove)
+				if (add || remove)
 				{
 					var oldText = text;
 					if (hasSelection)
