@@ -37,7 +37,7 @@ namespace Nez.Tools.Atlases.Console
 		[Argument(ArgumentType.AtMostOnce, ShortName = "", HelpText = "Origin Y for the images", DefaultValue = Constants.DefaultOrigin)]
 		public float originY = Constants.DefaultOrigin;
 
-        [Argument(ArgumentType.AtMostOnce, ShortName = "", HelpText = "Don't create animations based on folders.")]
+        [Argument(ArgumentType.AtMostOnce, ShortName = "", HelpText = "Create animations based on folders. Default: true")]
         public bool createAnimations = true;
 
         [Argument(ArgumentType.AtMostOnce, ShortName = "", HelpText = "Framerate for any animations", DefaultValue = Constants.DefaultFrameRate)]
