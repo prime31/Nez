@@ -258,7 +258,7 @@ namespace Nez.Analysis
 		{
 			Instance.ShowLog = !Instance.ShowLog;
 			DebugConsole.Instance.Log("TimeRuler enabled: " + (Instance.ShowLog ? "yes" : "no"));
-			DebugConsole.Instance.isOpen = false;
+			DebugConsole.Instance.IsOpen = false;
 		}
 
 		#endregion

@@ -386,7 +386,7 @@ namespace Nez
 			DebugConsole.Instance.Render();
 
 			// the TimeRuler only needs to render when the DebugConsole is not open
-			if (!DebugConsole.Instance.isOpen)
+			if (!DebugConsole.Instance.IsOpen)
 				TimeRuler.Instance.Render();
 
 #if !FNA

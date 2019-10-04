@@ -46,7 +46,7 @@ namespace Nez.Console
 		const int HORIZONTAL_PADDING = 10;
 
 		bool enabled = true;
-		internal bool isOpen;
+		public bool IsOpen;
 		Dictionary<string, CommandInfo> _commands;
 		List<string> _sorted;
 
@@ -160,7 +160,7 @@ namespace Nez.Console
 
 		internal void Update()
 		{
-			if (isOpen)
+			if (IsOpen)
 				UpdateOpen();
 			else if (enabled)
 				UpdateClosed();
@@ -175,7 +175,7 @@ namespace Nez.Console
 			}
 			else if (Input.IsKeyPressed(ConsoleKey, Keys.Oem8))
 			{
-				isOpen = true;
+				IsOpen = true;
 			}
 
 			for (var i = 0; i < _functionKeyActions.Length; i++)
@@ -459,7 +459,7 @@ namespace Nez.Console
 
 			if (key == ConsoleKey)
 			{
-				isOpen = _canOpen = false;
+				IsOpen = _canOpen = false;
 			}
 		}
 
@@ -511,7 +511,7 @@ namespace Nez.Console
 			}
 #endif
 
-			if (!isOpen)
+			if (!IsOpen)
 				return;
 
 			var screenWidth = Screen.Width;
