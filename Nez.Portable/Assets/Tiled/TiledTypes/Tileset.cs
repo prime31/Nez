@@ -76,15 +76,15 @@ namespace Nez.Tiled
 
 			var xImage = xTileset.Element("image");
 			if (xImage != null)
-            {
-                if (Map.Atlas != null)
-                {
-                    //Sprite spriteFromAtlas = Map.Atlas.GetSprite(Path.GetFileName(tile.Image.Source));
-                    Image = new TmxImage(Map.Atlas, xImage);
-                    //TileRegions.Add(id++, new RectangleF(spriteFromAtlas.SourceRect.X, spriteFromAtlas.SourceRect.Y, tile.Image.Width, tile.Image.Height));
-                } else
-                    Image = new TmxImage(xImage, tmxDir);
-            }
+			{
+				if (Map.Atlas != null)
+				{
+					//Sprite spriteFromAtlas = Map.Atlas.GetSprite(Path.GetFileName(tile.Image.Source));
+					Image = new TmxImage(Map.Atlas, xImage);
+					//TileRegions.Add(id++, new RectangleF(spriteFromAtlas.SourceRect.X, spriteFromAtlas.SourceRect.Y, tile.Image.Width, tile.Image.Height));
+				} else
+					Image = new TmxImage(xImage, tmxDir);
+			}
 				
 
 			var xTerrainType = xTileset.Element("terraintypes");
@@ -109,14 +109,14 @@ namespace Nez.Tiled
 			TileRegions = new Dictionary<int, RectangleF>();
 			if (Image != null)
 			{
-                int offsetX = 0, offsetY = 0;
+				int offsetX = 0, offsetY = 0;
 
-                if (Map.Atlas != null)
-                {
-                    Sprite tilesetFromAtlas = Map.Atlas.GetSprite(Image.Source);
-                    offsetX = tilesetFromAtlas.SourceRect.X;
-                    offsetY = tilesetFromAtlas.SourceRect.Y;
-                }
+				if (Map.Atlas != null)
+				{
+					Sprite tilesetFromAtlas = Map.Atlas.GetSprite(Image.Source);
+					offsetX = tilesetFromAtlas.SourceRect.X;
+					offsetY = tilesetFromAtlas.SourceRect.Y;
+				}
 
 				var id = firstGid;
 				for (var y = Margin + offsetY; y < TileCount*TileHeight - Margin - offsetY; y += TileHeight + Spacing)
