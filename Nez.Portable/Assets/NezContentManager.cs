@@ -9,6 +9,7 @@ using System.IO;
 using Microsoft.Xna.Framework;
 using Nez.ParticleDesigner;
 using Nez.Sprites;
+using Nez.Textures;
 
 namespace Nez.Systems
 {
@@ -66,7 +67,7 @@ namespace Nez.Systems
 		/// extension or be preceded by "Content" in the path. png/jpg files should have the file extension and have an absolute
 		/// path or a path starting with "Content".
 		/// </summary>
-		public Texture2D LoadTexture(string name)
+		public Texture2D LoadTexture(string name, bool premultiplyAlpha = false)
 		{
 			// no file extension. Assumed to be an xnb so let ContentManager load it
 			if (string.IsNullOrEmpty(Path.GetExtension(name)))
@@ -78,10 +79,9 @@ namespace Nez.Systems
 					return tex;
 			}
 
-			var graphicsDeviceService = ServiceProvider.GetService(typeof(IGraphicsDeviceService)) as IGraphicsDeviceService;
-			using (var stream = TitleContainer.OpenStream(name))
+			using (var stream = Path.IsPathRooted(name) ? File.OpenRead(name) : TitleContainer.OpenStream(name))
 			{
-				var texture = Texture2D.FromStream(graphicsDeviceService.GraphicsDevice, stream);
+				var texture = premultiplyAlpha ? TextureUtils.TextureFromStreamPreMultiplied(stream) : Texture2D.FromStream(Core.GraphicsDevice, stream);
 				texture.Name = name;
 				LoadedAssets[name] = texture;
 				DisposableAssets.Add(texture);
@@ -405,11 +405,8 @@ namespace Nez.Systems
 	/// </summary>
 	sealed class NezGlobalContentManager : NezContentManager
 	{
-		public NezGlobalContentManager(IServiceProvider serviceProvider, string rootDirectory) : base(serviceProvider,
-			rootDirectory)
-		{
-		}
-
+		public NezGlobalContentManager(IServiceProvider serviceProvider, string rootDirectory) : base(serviceProvider, rootDirectory)
+		{}
 
 		/// <summary>
 		/// override that will load embedded resources if they have the "nez://" prefix

@@ -12,6 +12,7 @@
 		<AssemblyName>Nez</AssemblyName>
 		<TargetFrameworks>netstandard2.0;net471</TargetFrameworks>
 		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
 		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
 		<IntermediateOutputPath>obj\Nez.FNA\$(Configuration)</IntermediateOutputPath>
 		<OutputPath>bin\$(Configuration)\FNA</OutputPath>

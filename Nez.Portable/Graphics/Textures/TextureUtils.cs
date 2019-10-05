@@ -1,6 +1,6 @@
 ﻿using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
-
+using System.IO;
 
 namespace Nez.Textures
 {
@@ -16,6 +16,55 @@ namespace Nez.Textures
 			FiveTap
 		}
 
+#if FNA
+		/// <summary>
+		/// loads a Texture2D and premultiplies the alpha
+		/// </summary>
+		public static Texture2D TextureFromStreamPreMultiplied(Stream stream)
+		{
+			if (stream.CanSeek && stream.Position == stream.Length)
+				stream.Seek(0, SeekOrigin.Begin);
+
+			Texture2D.TextureDataFromStreamEXT(stream, out int width, out int height, out var pixels);
+			PremultiplyAlpha(pixels);
+
+			var result = new Texture2D(Core.GraphicsDevice, width, height);
+			result.SetData(pixels);
+			return result;
+		}
+#else
+		/// <summary>
+		/// loads a Texture2D and premultiplies the alpha
+		/// </summary>
+		public static Texture2D TextureFromStreamPreMultiplied(Stream stream)
+		{
+			var texture = Texture2D.FromStream(Core.GraphicsDevice, stream);
+
+			var pixels = new byte[texture.Width * texture.Height * 4];
+			texture.GetData(pixels);
+			PremultiplyAlpha(pixels);
+			texture.SetData(pixels);
+
+			return texture;
+		}
+#endif
+
+		static unsafe void PremultiplyAlpha(byte[] pixels)
+		{
+			fixed (byte* b = &pixels[0])
+			{
+				for (var i = 0; i < pixels.Length; i += 4)
+				{
+					if (b[i + 3] != 255)
+					{
+						var alpha = b[i + 3] / 255f;
+						b[i + 0] = (byte)(b[i + 0] * alpha);
+						b[i + 1] = (byte)(b[i + 1] * alpha);
+						b[i + 2] = (byte)(b[i + 2] * alpha);
+					}
+				}
+			}
+		}
 
 		/// <summary>
 		/// processes each pixel of the passed in Texture and in the output texture transparent pixels will be transparentColor and opaque pixels
@@ -43,7 +92,6 @@ namespace Nez.Textures
 			return resultTex;
 		}
 
-
 		public static Color[] CreateFlatHeightmap(Color[] srcData, Color opaqueColor, Color transparentColor)
 		{
 			var destData = new Color[srcData.Length];
@@ -61,7 +109,6 @@ namespace Nez.Textures
 			return destData;
 		}
 
-
 		/// <summary>
 		/// creates a new texture that is a gaussian blurred version of the original in grayscale
 		/// </summary>
@@ -73,12 +120,10 @@ namespace Nez.Textures
 			return GaussianBlur.CreateBlurredGrayscaleTexture(image, deviation);
 		}
 
-
 		public static Color[] CreateBlurredTexture(Color[] srcData, int width, int height, double deviation = 1)
 		{
 			return GaussianBlur.CreateBlurredTexture(srcData, width, height, deviation);
 		}
-
 
 		/// <summary>
 		/// creates a new texture that is a gaussian blurred version of the original
@@ -91,13 +136,11 @@ namespace Nez.Textures
 			return GaussianBlur.CreateBlurredTexture(image, deviation);
 		}
 
-
 		public static Color[] CreateBlurredGrayscaleTexture(Color[] srcData, int width, int height,
 		                                                    double deviation = 1)
 		{
 			return GaussianBlur.CreateBlurredGrayscaleTexture(srcData, width, height, deviation);
 		}
-
 
 		/// <summary>
 		/// generates a normal map from a height map calculating it with a sobel filter
@@ -113,13 +156,11 @@ namespace Nez.Textures
 			var srcData = new Color[image.Width * image.Height];
 			image.GetData<Color>(srcData);
 
-			var destData = CreateNormalMap(srcData, filter, image.Width, image.Height, normalStrength, invertX,
-				invertY);
+			var destData = CreateNormalMap(srcData, filter, image.Width, image.Height, normalStrength, invertX, invertY);
 			resultTex.SetData(destData);
 
 			return resultTex;
 		}
-
 
 		public static Color[] CreateNormalMap(Color[] srcData, EdgeDetectionFilter filter, int width, int height,
 		                                      float normalStrength = 1f, bool invertX = false, bool invertY = false)
