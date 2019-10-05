@@ -19,8 +19,6 @@ namespace Nez.Tiled
         public int WorldHeight => Height * TileHeight;
         public int TileWidth;
         public int TileHeight;
-        public int LargestTileWidth;
-        public int LargestTileHeight;
         public int? HexSideLength;
         public OrientationType Orientation;
         public StaggerAxisType StaggerAxis;
