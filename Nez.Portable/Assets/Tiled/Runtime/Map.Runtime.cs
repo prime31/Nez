@@ -1,5 +1,6 @@
 using System;
 using Microsoft.Xna.Framework;
+using Nez.Sprites;
 
 namespace Nez.Tiled
 {
@@ -8,6 +9,8 @@ namespace Nez.Tiled
 	/// </summary>
 	public partial class TmxMap : TmxDocument
 	{
+        public SpriteAtlas Atlas { get; private set; }
+
 		#region Tileset and Layer getters
 
 		/// <summary>

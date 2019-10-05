@@ -93,7 +93,7 @@ namespace Nez.Systems
 		/// <summary>
 		/// loads a Tiled map
 		/// </summary>
-		public Tiled.TmxMap LoadTiledMap(string name)
+		public Tiled.TmxMap LoadTiledMap(string name, SpriteAtlas atlas = null)
 		{
 			if (LoadedAssets.TryGetValue(name, out var asset))
 			{
@@ -101,7 +101,7 @@ namespace Nez.Systems
 					return map;
 			}
 
-			var tiledMap = new Tiled.TmxMap(name);
+			var tiledMap = new Tiled.TmxMap(name, atlas);
 
 			LoadedAssets[name] = tiledMap;
 			DisposableAssets.Add(tiledMap);

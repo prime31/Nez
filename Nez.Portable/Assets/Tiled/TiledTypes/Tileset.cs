@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Xml.Linq;
 using Microsoft.Xna.Framework;
+using Nez.Textures;
 
 namespace Nez.Tiled
 {
@@ -75,7 +76,16 @@ namespace Nez.Tiled
 
 			var xImage = xTileset.Element("image");
 			if (xImage != null)
-				Image = new TmxImage(xImage, tmxDir);
+            {
+                if (Map.Atlas != null)
+                {
+                    //Sprite spriteFromAtlas = Map.Atlas.GetSprite(Path.GetFileName(tile.Image.Source));
+                    Image = new TmxImage(Map.Atlas, xImage);
+                    //TileRegions.Add(id++, new RectangleF(spriteFromAtlas.SourceRect.X, spriteFromAtlas.SourceRect.Y, tile.Image.Width, tile.Image.Height));
+                } else
+                    Image = new TmxImage(xImage, tmxDir);
+            }
+				
 
 			var xTerrainType = xTileset.Element("terraintypes");
 			if (xTerrainType != null)
@@ -99,11 +109,20 @@ namespace Nez.Tiled
 			TileRegions = new Dictionary<int, RectangleF>();
 			if (Image != null)
 			{
-				var id = firstGid;
-				for (var y = Margin; y < Image.Height - Margin; y += TileHeight + Spacing)
+                int offsetX = 0, offsetY = 0;
+
+                if (Map.Atlas != null)
+                {
+                    Sprite tilesetFromAtlas = Map.Atlas.GetSprite(Image.Source);
+                    offsetX = tilesetFromAtlas.SourceRect.X;
+                    offsetY = tilesetFromAtlas.SourceRect.Y;
+                }
+
+                var id = firstGid;
+				for (var y = Margin + offsetY; y < TileCount*TileHeight - Margin - offsetY; y += TileHeight + Spacing)
 				{
 					var column = 0;
-					for (var x = Margin; x < Image.Width - Margin; x += TileWidth + Spacing)
+					for (var x = Margin + offsetX; x < TileCount*TileWidth - Margin - offsetX; x += TileWidth + Spacing)
 					{
 						TileRegions.Add(id++, new RectangleF(x, y, TileWidth, TileHeight));
 
@@ -119,7 +138,14 @@ namespace Nez.Tiled
 				for (var i = 0; i < Tiles.Count; i++)
 				{
 					var tile = Tiles[i];
-					TileRegions.Add(id++, new RectangleF(0, 0, tile.Image.Width, tile.Image.Height));
+
+                    if(Map.Atlas != null)
+                    {
+                        Sprite spriteFromAtlas = Map.Atlas.GetSprite(tile.Image.Source);
+                        TileRegions.Add(id++, new RectangleF(spriteFromAtlas.SourceRect.X, spriteFromAtlas.SourceRect.Y, tile.Image.Width, tile.Image.Height));
+                    }
+                    else
+                        TileRegions.Add(id++, new RectangleF(0, 0, tile.Image.Width, tile.Image.Height));
 				}
 			}
 		}

@@ -7,6 +7,8 @@ using System.Linq;
 using System.Xml.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Nez.Sprites;
+using Nez.Textures;
 
 namespace Nez.Tiled
 {
@@ -103,13 +105,36 @@ namespace Nez.Tiled
 
 	public class TmxImage : IDisposable
 	{
-		public Texture2D Texture;
+		public Sprite Texture;
 		public string Source;
 		public string Format;
 		public Stream Data;
 		public Color Trans;
 		public int Width;
 		public int Height;
+
+        public TmxImage(SpriteAtlas atlas, XElement xImage)
+        {
+            var xSource = xImage.Attribute("source");
+            if (xSource != null)
+            {
+                Texture = new Sprite(atlas.Sprites[0].Texture2D);
+                // Append directory if present
+                Source = Path.GetFileName((string)xSource);
+            }
+            else
+            {
+                Format = (string)xImage.Attribute("format");
+                var xData = xImage.Element("data");
+                var decodedStream = new TmxBase64Data(xData);
+                Data = decodedStream.Data;
+                throw new NotSupportedException("Stream Data loading is not yet supported");
+            }
+
+            Trans = TmxColor.ParseColor(xImage.Attribute("trans"));
+            Width = (int?)xImage.Attribute("width") ?? 0;
+            Height = (int?)xImage.Attribute("height") ?? 0;
+        }
 
 		public TmxImage(XElement xImage, string tmxDir = "")
 		{
@@ -120,7 +145,7 @@ namespace Nez.Tiled
 				Source = Path.Combine(tmxDir, (string)xSource);
 
 				using (var stream = TitleContainer.OpenStream(Source))
-					Texture = Texture2D.FromStream(Core.GraphicsDevice, stream);
+					Texture = new Sprite(Texture2D.FromStream(Core.GraphicsDevice, stream));
 			}
 			else
 			{
@@ -140,7 +165,7 @@ namespace Nez.Tiled
 		{
 			if (Texture != null)
 			{
-				Texture.Dispose();
+				Texture.Texture2D.Dispose();
 				Texture = null;
 			}
 		}

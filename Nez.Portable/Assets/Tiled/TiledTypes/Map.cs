@@ -5,6 +5,7 @@ using System.IO;
 using System.Xml;
 using System.Linq;
 using Microsoft.Xna.Framework;
+using Nez.Sprites;
 
 namespace Nez.Tiled
 {
@@ -18,6 +19,8 @@ namespace Nez.Tiled
         public int WorldHeight => Height * TileHeight;
         public int TileWidth;
         public int TileHeight;
+        public int LargestTileWidth;
+        public int LargestTileHeight;
         public int? HexSideLength;
         public OrientationType Orientation;
         public StaggerAxisType StaggerAxis;
@@ -55,6 +58,12 @@ namespace Nez.Tiled
         public TmxList<ITmxLayer> Layers;
 
         public TmxMap(string filename) => Load(ReadXml(filename));
+
+        public TmxMap(string filename, SpriteAtlas atlas)
+        {
+            Atlas = atlas;
+            Load(ReadXml(filename));
+        }
 
         public TmxMap(Stream inputStream, string tmxDirectory)
         {
