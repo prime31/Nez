@@ -118,7 +118,7 @@ namespace Nez.Tiled
                     offsetY = tilesetFromAtlas.SourceRect.Y;
                 }
 
-                var id = firstGid;
+				var id = firstGid;
 				for (var y = Margin + offsetY; y < TileCount*TileHeight - Margin - offsetY; y += TileHeight + Spacing)
 				{
 					var column = 0;
@@ -139,13 +139,13 @@ namespace Nez.Tiled
 				{
 					var tile = Tiles[i];
 
-                    if(Map.Atlas != null)
-                    {
-                        Sprite spriteFromAtlas = Map.Atlas.GetSprite(tile.Image.Source);
-                        TileRegions.Add(id++, new RectangleF(spriteFromAtlas.SourceRect.X, spriteFromAtlas.SourceRect.Y, tile.Image.Width, tile.Image.Height));
-                    }
-                    else
-                        TileRegions.Add(id++, new RectangleF(0, 0, tile.Image.Width, tile.Image.Height));
+					if(Map.Atlas != null)
+					{
+						Sprite spriteFromAtlas = Map.Atlas.GetSprite(tile.Image.Source);
+						TileRegions.Add(id++, new RectangleF(spriteFromAtlas.SourceRect.X, spriteFromAtlas.SourceRect.Y, tile.Image.Width, tile.Image.Height));
+					}
+					else
+						TileRegions.Add(id++, new RectangleF(0, 0, tile.Image.Width, tile.Image.Height));
 				}
 			}
 		}

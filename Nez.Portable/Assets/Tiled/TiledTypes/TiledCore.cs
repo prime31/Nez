@@ -113,28 +113,28 @@ namespace Nez.Tiled
 		public int Width;
 		public int Height;
 
-        public TmxImage(SpriteAtlas atlas, XElement xImage)
-        {
-            var xSource = xImage.Attribute("source");
-            if (xSource != null)
-            {
-                Texture = new Sprite(atlas.Sprites[0].Texture2D);
-                // Append directory if present
-                Source = Path.GetFileName((string)xSource);
-            }
-            else
-            {
-                Format = (string)xImage.Attribute("format");
-                var xData = xImage.Element("data");
-                var decodedStream = new TmxBase64Data(xData);
-                Data = decodedStream.Data;
-                throw new NotSupportedException("Stream Data loading is not yet supported");
-            }
+		public TmxImage(SpriteAtlas atlas, XElement xImage)
+		{
+			var xSource = xImage.Attribute("source");
+			if (xSource != null)
+			{
+				Texture = new Sprite(atlas.Sprites[0].Texture2D);
+				// Append directory if present
+				Source = Path.GetFileName((string)xSource);
+			}
+			else
+			{
+				Format = (string)xImage.Attribute("format");
+				var xData = xImage.Element("data");
+				var decodedStream = new TmxBase64Data(xData);
+				Data = decodedStream.Data;
+				throw new NotSupportedException("Stream Data loading is not yet supported");
+			}
 
-            Trans = TmxColor.ParseColor(xImage.Attribute("trans"));
-            Width = (int?)xImage.Attribute("width") ?? 0;
-            Height = (int?)xImage.Attribute("height") ?? 0;
-        }
+			Trans = TmxColor.ParseColor(xImage.Attribute("trans"));
+			Width = (int?)xImage.Attribute("width") ?? 0;
+			Height = (int?)xImage.Attribute("height") ?? 0;
+		}
 
 		public TmxImage(XElement xImage, string tmxDir = "")
 		{
