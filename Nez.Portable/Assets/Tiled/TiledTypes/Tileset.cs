@@ -116,7 +116,7 @@ namespace Nez.Tiled
 			{
 				foreach (var tile in Tiles.Values)
 				{
-					TileRegions.Add(tile.Id, new RectangleF(0, 0, tile.Image.Width, tile.Image.Height));
+					TileRegions.Add(firstGid + tile.Id, new RectangleF(0, 0, tile.Image.Width, tile.Image.Height));
 				}
 			}
 		}
