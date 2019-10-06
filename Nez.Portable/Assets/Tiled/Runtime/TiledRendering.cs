@@ -233,7 +233,7 @@ namespace Nez.Tiled
 						pos.Y -= obj.Tile.TilesetTile.Image.Height;
 						batcher.Draw(obj.Tile.TilesetTile.Image.Texture, pos, sourceRect, Color.White, 0, Vector2.Zero, scale, spriteEffects, layerDepth);
 						goto default;
-                    case TmxObjectType.Ellipse:
+					case TmxObjectType.Ellipse:
 						pos = new Vector2(obj.X + obj.Width * 0.5f, obj.Y + obj.Height * 0.5f) * scale;
 						batcher.DrawCircle(pos, obj.Width * 0.5f, objGroup.Color);
 						goto default;
