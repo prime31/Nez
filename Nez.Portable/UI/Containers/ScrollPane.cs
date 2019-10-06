@@ -1321,7 +1321,7 @@ namespace Nez.UI
 		public override void DebugRender(Batcher batcher)
 		{
 			if (transform)
-                ApplyTransform(batcher, ComputeTransform() * _stage.Camera.TransformMatrix);
+				ApplyTransform(batcher, ComputeTransform() * _stage.Camera.TransformMatrix);
 
 			var scissor =
 				ScissorStack.CalculateScissors(_stage?.Camera, batcher.TransformMatrix, _widgetAreaBounds);
