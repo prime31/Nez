@@ -221,21 +221,19 @@ namespace Nez.Tiled
 						pos.Y -= size * 0.5f;
 						batcher.DrawPixel(pos, objGroup.Color, (int)size);
 						goto default;
-					case TmxObjectType.Tile:
-						var tx = obj.Tile.X * objGroup.Map.TileWidth * scale.X;
-						var ty = obj.Tile.Y * objGroup.Map.TileHeight * scale.Y;
+                    case TmxObjectType.Tile:
+                        var spriteEffects = SpriteEffects.None;
+                        if (obj.Tile.HorizontalFlip)
+                            spriteEffects |= SpriteEffects.FlipHorizontally;
+                        if (obj.Tile.VerticalFlip)
+                            spriteEffects |= SpriteEffects.FlipVertically;
 
-						var spriteEffects = SpriteEffects.None;
-						if (obj.Tile.HorizontalFlip)
-							spriteEffects |= SpriteEffects.FlipHorizontally;
-						if (obj.Tile.VerticalFlip)
-							spriteEffects |= SpriteEffects.FlipVertically;
-
-						var tileset = objGroup.Map.GetTilesetForTileGid(obj.Tile.Gid);
-						var sourceRect = tileset.TileRegions[obj.Tile.Gid];
-						batcher.Draw(tileset.Image.Texture, pos, sourceRect, Color.White, 0, Vector2.Zero, scale, spriteEffects, layerDepth);
-						goto default;
-					case TmxObjectType.Ellipse:
+                        var tileset = objGroup.Map.GetTilesetForTileGid(obj.Tile.Gid);
+                        var sourceRect = tileset.TileRegions[obj.Tile.Gid];
+                        pos.Y -= obj.Tile.TilesetTile.Image.Height;
+                        batcher.Draw(obj.Tile.TilesetTile.Image.Texture, pos, sourceRect, Color.White, 0, Vector2.Zero, scale, spriteEffects, layerDepth);
+                        goto default;
+                    case TmxObjectType.Ellipse:
 						pos = new Vector2(obj.X + obj.Width * 0.5f, obj.Y + obj.Height * 0.5f) * scale;
 						batcher.DrawCircle(pos, obj.Width * 0.5f, objGroup.Color);
 						goto default;
