@@ -119,9 +119,9 @@ namespace Nez.Tiled
 					TileRegions.Add(tile.Id, new RectangleF(0, 0, tile.Image.Width, tile.Image.Height));
 				}
 			}
-        }
+		}
 
-        public void Update()
+		public void Update()
 		{
 			foreach (var kvPair in Tiles)
 				kvPair.Value.UpdateAnimatedTiles();
