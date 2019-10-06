@@ -120,7 +120,7 @@ namespace Nez.Tiled
 			{
 				Texture = new Sprite(atlas.Sprites[0].Texture2D);
 				// Append directory if present
-				Source = Path.GetFileName((string)xSource);
+				Source = Path.GetFileNameWithoutExtension((string)xSource);
 			}
 			else
 			{

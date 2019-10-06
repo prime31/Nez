@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Xml.Linq;
 using Microsoft.Xna.Framework;
+using Nez.Sprites;
 using Nez.Textures;
 
 namespace Nez.Tiled
@@ -98,7 +99,7 @@ namespace Nez.Tiled
 			Tiles = new Dictionary<int, TmxTilesetTile>();
 			foreach (var xTile in xTileset.Elements("tile"))
 			{
-				var tile = new TmxTilesetTile(this, xTile, Terrains, tmxDir);
+				var tile = new TmxTilesetTile(this, xTile, Terrains, tmxDir, Map.Atlas);
 				Tiles[tile.Id] = tile;
 			}
 
@@ -243,7 +244,7 @@ namespace Nez.Tiled
 		public int SlopeTopRight;
 
 
-		public TmxTilesetTile(TmxTileset tileset, XElement xTile, TmxList<TmxTerrain> Terrains, string tmxDir = "")
+		public TmxTilesetTile(TmxTileset tileset, XElement xTile, TmxList<TmxTerrain> Terrains, string tmxDir = "", SpriteAtlas atlas = null)
 		{
 			Tileset = tileset;
 			Id = (int)xTile.Attribute("id");
@@ -270,7 +271,12 @@ namespace Nez.Tiled
 			Type = (string)xTile.Attribute("type");
 			var xImage = xTile.Element("image");
 			if (xImage != null)
-				Image = new TmxImage(xImage, tmxDir);
+			{
+				if (atlas != null)
+					Image = new TmxImage(atlas, xImage);
+				else
+					Image = new TmxImage(xImage, tmxDir);
+			}
 
 			ObjectGroups = new TmxList<TmxObjectGroup>();
 			foreach (var e in xTile.Elements("objectgroup"))
