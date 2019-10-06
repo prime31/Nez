@@ -7,7 +7,7 @@
     <RootNamespace>Nez.Farseer</RootNamespace>
     <AssemblyName>Nez.FarseerPhysics</AssemblyName>
     <OutputType>Library</OutputType>
-    <TargetFrameworks>netstandard2.0;net471</TargetFrameworks>
+    <TargetFramework>net471</TargetFramework>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <IntermediateOutputPath>obj\Nez.FarseerPhysics\$(Configuration)</IntermediateOutputPath>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>

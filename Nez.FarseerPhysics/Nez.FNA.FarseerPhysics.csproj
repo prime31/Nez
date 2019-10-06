@@ -10,7 +10,7 @@
 		<OutputType>Library</OutputType>
 		<RootNamespace>Nez.Farseer</RootNamespace>
 		<AssemblyName>Nez.FarseerPhysics</AssemblyName>
-		<TargetFrameworks>netstandard2.0;net471</TargetFrameworks>
+		<TargetFramework>net471</TargetFramework>
 		<AllowUnsafeBlocks>True</AllowUnsafeBlocks>
 		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
 		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
