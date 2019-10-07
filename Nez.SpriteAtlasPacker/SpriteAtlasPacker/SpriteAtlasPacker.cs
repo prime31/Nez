@@ -30,6 +30,7 @@ namespace Nez.Tools.Atlases
 			public bool RecurseSubdirectories;
 			public float OriginX = Constants.DefaultOrigin;
 			public float OriginY = Constants.DefaultOrigin;
+			public bool DontCreateAnimations = false;
 			public int FrameRate = Constants.DefaultFrameRate;
 			public string[] InputPaths;
 			public bool OutputLua;
@@ -122,7 +123,7 @@ namespace Nez.Tools.Atlases
 					}
 
 					foreach (var dir in Directory.GetDirectories(str))
-						FindImagesRecursively(dir, images, animations);
+						FindImagesRecursively(dir, images, animations, !arguments.DontCreateAnimations);
 				}
 				else if (MiscHelper.IsImageFile(str))
 				{
@@ -131,7 +132,7 @@ namespace Nez.Tools.Atlases
 			}
 		}
 
-		static void FindImagesRecursively(string dir, List<string> images, Dictionary<string, List<string>> animations)
+		static void FindImagesRecursively(string dir, List<string> images, Dictionary<string, List<string>> animations, bool createAnimations)
 		{
 			var animationFrames = new List<string>();
 			foreach (var file in Directory.GetFiles(dir))
@@ -143,11 +144,11 @@ namespace Nez.Tools.Atlases
 				}
 			}
 
-			if (animationFrames.Count > 0)
+			if (createAnimations && animationFrames.Count > 0)
 				animations.Add( Path.GetFileName( dir ), animationFrames );
 
 			foreach (var subdir in Directory.GetDirectories(dir))
-				FindImagesRecursively(subdir, images, animations);
+				FindImagesRecursively(subdir, images, animations, createAnimations);
 		}
 
 	}

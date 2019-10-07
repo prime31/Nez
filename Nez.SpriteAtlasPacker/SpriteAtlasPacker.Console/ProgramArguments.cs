@@ -37,6 +37,9 @@ namespace Nez.Tools.Atlases.Console
 		[Argument(ArgumentType.AtMostOnce, ShortName = "", HelpText = "Origin Y for the images", DefaultValue = Constants.DefaultOrigin)]
 		public float originY = Constants.DefaultOrigin;
 
+		[Argument(ArgumentType.AtMostOnce, ShortName = "", HelpText = "Don't create animations based on folders. Default: false")]
+		public bool dontCreateAnimations = false;
+
 		[Argument(ArgumentType.AtMostOnce, ShortName = "", HelpText = "Framerate for any animations", DefaultValue = Constants.DefaultFrameRate)]
 		public int fps = Constants.DefaultFrameRate;
 
@@ -67,6 +70,7 @@ namespace Nez.Tools.Atlases.Console
 				Padding = pad,
 				IsPowerOfTwo = pow2,
 				IsSquare = sqr,
+				DontCreateAnimations = dontCreateAnimations,
 				OriginX = originX,
 				OriginY = originY,
 				FrameRate = fps,
