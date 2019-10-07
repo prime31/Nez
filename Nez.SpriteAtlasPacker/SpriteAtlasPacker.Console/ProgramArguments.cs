@@ -40,7 +40,7 @@ namespace Nez.Tools.Atlases.Console
 		[Argument(ArgumentType.AtMostOnce, ShortName = "", HelpText = "Don't create animations based on folders. Default: false")]
 		public bool dontCreateAnimations = false;
 
-        [Argument(ArgumentType.AtMostOnce, ShortName = "", HelpText = "Framerate for any animations", DefaultValue = Constants.DefaultFrameRate)]
+		[Argument(ArgumentType.AtMostOnce, ShortName = "", HelpText = "Framerate for any animations", DefaultValue = Constants.DefaultFrameRate)]
 		public int fps = Constants.DefaultFrameRate;
 
 		[DefaultArgument(ArgumentType.Multiple, HelpText = "Images to pack.", DefaultValue = new string[] { })]
