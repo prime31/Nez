@@ -111,8 +111,7 @@ namespace Nez.ImGuiTools
 			}
 
 			ImGui.SetNextWindowPos(_gameWindowFirstPosition, ImGuiCond.FirstUseEver);
-			ImGui.SetNextWindowSize(new Num.Vector2(Screen.Width / 2, (Screen.Width / 2) / rtAspectRatio),
-				ImGuiCond.FirstUseEver);
+			ImGui.SetNextWindowSize(new Num.Vector2(Screen.Width / 2, (Screen.Width / 2) / rtAspectRatio), ImGuiCond.FirstUseEver);
 
 			HandleForcedGameViewParams();
 
@@ -123,7 +122,10 @@ namespace Nez.ImGuiTools
 			OverrideMouseInput();
 
 			if (!ImGui.IsWindowFocused())
+			{
 				Input.SetCurrentKeyboardState(new KeyboardState());
+				Input.SetCurrentMouseState(new MouseState());
+			}
 
 			ImGui.End();
 
