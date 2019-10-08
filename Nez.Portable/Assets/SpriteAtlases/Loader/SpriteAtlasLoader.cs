@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Nez.Textures;
 
 namespace Nez.Sprites
 {
@@ -11,11 +12,11 @@ namespace Nez.Sprites
 		/// <summary>
 		/// parses a .atlas file and loads up a SpriteAtlas with it's associated Texture
 		/// </summary>
-		public static SpriteAtlas ParseSpriteAtlas(string dataFile)
+		public static SpriteAtlas ParseSpriteAtlas(string dataFile, bool premultiplyAlpha = false)
 		{
 			var spriteAtlas = ParseSpriteAtlasData(dataFile);
 			using (var stream = TitleContainer.OpenStream(dataFile.Replace(".atlas", ".png")))
-				return spriteAtlas.AsSpriteAtlas(Texture2D.FromStream(Core.GraphicsDevice, stream));
+				return spriteAtlas.AsSpriteAtlas(premultiplyAlpha ? TextureUtils.TextureFromStreamPreMultiplied(stream) : Texture2D.FromStream(Core.GraphicsDevice, stream));
 		}
 
 		/// <summary>
