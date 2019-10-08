@@ -8,6 +8,7 @@
     <TargetFrameworks>netstandard2.0</TargetFrameworks>
     <AssemblyName>Nez</AssemblyName>
     <RootNamespace>Nez</RootNamespace>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
 
     <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
