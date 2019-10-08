@@ -169,68 +169,8 @@ namespace Nez.UI
 			return skin;
 		}
 
-
 		public Skin()
-		{
-		}
-
-
-		/// <summary>
-		/// creates a UISkin from a UISkinConfig
-		/// </summary>
-		/// <param name="configName">the path of the UISkinConfig xnb</param>
-		/// <param name="contentManager">Content manager.</param>
-		public Skin(string configName, NezContentManager contentManager)
-		{
-			var config = contentManager.Load<UISkinConfig>(configName);
-			if (config.Colors != null)
-			{
-				foreach (var entry in config.Colors)
-					Add(entry.Key, config.Colors[entry.Key]);
-			}
-
-			if (config.TextureAtlases != null)
-			{
-				foreach (var atlas in config.TextureAtlases)
-					AddSprites(contentManager.LoadSpriteAtlas(atlas));
-			}
-
-			if (config.Styles != null)
-			{
-				var styleClasses = config.Styles.GetStyleClasses();
-				for (var i = 0; i < styleClasses.Count; i++)
-				{
-					var styleType = styleClasses[i];
-					try
-					{
-						var type = Type.GetType("Nez.UI." + styleType, true);
-						var styleNames = config.Styles.GetStyleNames(styleType);
-
-						for (var j = 0; j < styleNames.Count; j++)
-						{
-							var style = Activator.CreateInstance(type);
-							var styleDict = config.Styles.GetStyleDict(styleType, styleNames[j]);
-
-							// Get the method by simple name check since we know it's the only one
-							var setStylesForStyleClassMethod =
-								ReflectionUtils.GetMethodInfo(this, "SetStylesForStyleClass");
-							setStylesForStyleClassMethod = setStylesForStyleClassMethod.MakeGenericMethod(type);
-
-							// Return not nec., but it shows that the style is being modified
-							style = setStylesForStyleClassMethod.Invoke(this,
-								new object[] {style, styleDict, contentManager, styleNames[j]});
-
-							Add(styleNames[j], style, type);
-						}
-					}
-					catch (Exception e)
-					{
-						Debug.Error("Error creating style from UISkin: {0}", e);
-					}
-				}
-			}
-		}
-
+		{ }
 
 		/// <summary>
 		/// Recursively finds and sets all styles for a specific style config class that are within
@@ -242,8 +182,7 @@ namespace Nez.UI
 		/// <param name="styleDict">A dictionary that represents one style name within the style config class (i.e. 'default').</param>
 		/// <param name="styleName">The style name that the dictionary represents (i.e. 'default').</param>
 		/// <typeparam name="T">The style config class type (i.e. SelectBoxStyle)</typeparam>
-		public T SetStylesForStyleClass<T>(T styleClass, Dictionary<string, object> styleDict,
-		                                   NezContentManager contentManager, string styleName)
+		public T SetStylesForStyleClass<T>(T styleClass, Dictionary<string, object> styleDict, NezContentManager contentManager, string styleName)
 		{
 			foreach (var styleConfig in styleDict)
 			{
@@ -288,11 +227,11 @@ namespace Nez.UI
 					{
 						// We have a style reference. First we need to find out what type of style name refers to from the field.
 						// Then we need to fetch the "get" method and properly type it.
-						var getStyleMethod = ReflectionUtils.GetMethodInfo(this, "Get", new Type[] {typeof(string)});
+						var getStyleMethod = ReflectionUtils.GetMethodInfo(this, "Get", new Type[] { typeof(string) });
 						getStyleMethod = getStyleMethod.MakeGenericMethod(styleField.FieldType);
 
 						// now we look up the style and finally set it
-						var theStyle = getStyleMethod.Invoke(this, new object[] {identifier});
+						var theStyle = getStyleMethod.Invoke(this, new object[] { identifier });
 						styleField.SetValue(styleClass, theStyle);
 
 						if (theStyle == null)
@@ -316,7 +255,6 @@ namespace Nez.UI
 			return styleClass;
 		}
 
-
 		/// <summary>
 		/// Adds all named Sprites from the atlas
 		/// </summary>
@@ -332,7 +270,6 @@ namespace Nez.UI
 					Add(atlas.Names[i], sprite);
 			}
 		}
-
 
 		/// <summary>
 		/// adds the typed resource to this skin
@@ -350,7 +287,6 @@ namespace Nez.UI
 			return resource;
 		}
 
-
 		/// <summary>
 		/// adds the typed resource to this skin
 		/// </summary>
@@ -358,8 +294,7 @@ namespace Nez.UI
 		/// <param name="resource">Resource.</param>
 		public void Add(string name, object resource, Type type)
 		{
-			Dictionary<string, object> typedResources;
-			if (!_resources.TryGetValue(type, out typedResources))
+			if (!_resources.TryGetValue(type, out Dictionary<string, object> typedResources))
 			{
 				typedResources = new Dictionary<string, object>();
 				_resources.Add(type, typedResources);
@@ -368,7 +303,6 @@ namespace Nez.UI
 			typedResources[name] = resource;
 		}
 
-
 		/// <summary>
 		/// removes the typed resource from this skin
 		/// </summary>
@@ -376,11 +310,9 @@ namespace Nez.UI
 		/// <typeparam name="T">The 1st type parameter.</typeparam>
 		public void Remove<T>(string name)
 		{
-			Dictionary<string, object> typedResources;
-			if (_resources.TryGetValue(typeof(T), out typedResources))
+			if (_resources.TryGetValue(typeof(T), out Dictionary<string, object> typedResources))
 				typedResources.Remove(name);
 		}
-
 
 		/// <summary>
 		/// checks to see if a typed resource exists with the given name
@@ -389,13 +321,11 @@ namespace Nez.UI
 		/// <typeparam name="T">The 1st type parameter.</typeparam>
 		public bool Has<T>(string name)
 		{
-			Dictionary<string, object> typedResources;
-			if (_resources.TryGetValue(typeof(T), out typedResources))
+			if (_resources.TryGetValue(typeof(T), out Dictionary<string, object> typedResources))
 				return typedResources.ContainsKey(name);
 
 			return false;
 		}
-
 
 		/// <summary>
 		/// First checks for a resource named "default". If it cant find default it will return either the first resource of type T
@@ -407,13 +337,11 @@ namespace Nez.UI
 			if (Has<T>("default"))
 				return Get<T>("default");
 
-			Dictionary<string, object> typedResources;
-			if (_resources.TryGetValue(typeof(T), out typedResources))
-				return (T) typedResources[typedResources.First().Key];
+			if (_resources.TryGetValue(typeof(T), out Dictionary<string, object> typedResources))
+				return (T)typedResources[typedResources.First().Key];
 
 			return default(T);
 		}
-
 
 		/// <summary>
 		/// Returns a named resource of the specified type or default(T) if it couldnt be found
@@ -425,28 +353,22 @@ namespace Nez.UI
 			if (name == null)
 				return Get<T>();
 
-			Dictionary<string, object> typedResources;
-			if (!_resources.TryGetValue(typeof(T), out typedResources))
+			if (!_resources.TryGetValue(typeof(T), out Dictionary<string, object> typedResources))
 				return default(T);
 
 			if (!typedResources.ContainsKey(name))
 				return default(T);
 
-			return (T) typedResources[name];
+			return (T)typedResources[name];
 		}
-
 
 		public Color GetColor(string name) => Get<Color>(name);
 
-
 		public BitmapFont GetFont(string name) => Get<BitmapFont>(name);
-
 
 		public Sprite GetSprite(string name) => Get<Sprite>(name);
 
-
 		public NinePatchSprite GetNinePatchSprite(string name) => Get<NinePatchSprite>(name);
-
 
 		/// <summary>
 		/// Returns a registered sprite drawable. If no sprite drawable is found but a Sprite exists with the name, a
@@ -469,7 +391,6 @@ namespace Nez.UI
 
 			return spriteDrawable;
 		}
-
 
 		/// <summary>
 		/// Returns a registered drawable. If no drawable is found but a Sprite/NinePatchSprite exists with the name, then the
@@ -529,7 +450,6 @@ namespace Nez.UI
 			return null;
 		}
 
-
 		/// <summary>
 		/// Returns a registered tiled drawable. If no tiled drawable is found but a Sprite exists with the name, a tiled drawable is
 		/// created from the Sprite and stored in the skin
@@ -551,7 +471,6 @@ namespace Nez.UI
 
 			return tiledDrawable;
 		}
-
 
 		/// <summary>
 		/// Returns a registered ninepatch. If no ninepatch is found but a Sprite exists with the name, a ninepatch is created from the
@@ -582,7 +501,6 @@ namespace Nez.UI
 
 			return ninePatchDrawable;
 		}
-
 
 		/// <summary>
 		/// Returns a tinted copy of a drawable found in the skin via getDrawable. Note that the new drawable is NOT
