@@ -114,12 +114,9 @@ namespace Nez.Tiled
 			}
 			else
 			{
-				// it seems that firstGid is always 0 for image tilesets so we can access them like an array here
-				var id = firstGid;
-				for (var i = 0; i < Tiles.Count; i++)
+				foreach (var tile in Tiles.Values)
 				{
-					var tile = Tiles[i];
-					TileRegions.Add(id++, new RectangleF(0, 0, tile.Image.Width, tile.Image.Height));
+					TileRegions.Add(firstGid + tile.Id, new RectangleF(0, 0, tile.Image.Width, tile.Image.Height));
 				}
 			}
 		}
