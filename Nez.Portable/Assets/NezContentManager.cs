@@ -196,7 +196,7 @@ namespace Nez.Systems
 		/// </summary>
 		/// <returns>The effect.</returns>
 		/// <param name="name">Name.</param>
-		internal T LoadEffect<T>(string name, byte[] effectCode) where T : Effect
+		public T LoadEffect<T>(string name, byte[] effectCode) where T : Effect
 		{
 			var effect = Activator.CreateInstance(typeof(T), Core.GraphicsDevice, effectCode) as T;
 			effect.Name = name + "-" + Utils.RandomString(5);

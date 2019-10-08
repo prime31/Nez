@@ -34,12 +34,7 @@ namespace Nez
 			_basicEffect.VertexColorEnabled = true;
 		}
 
-
-		public void Dispose()
-		{
-			Dispose(true);
-		}
-
+		public void Dispose() => Dispose(true);
 
 		protected virtual void Dispose(bool disposing)
 		{
@@ -52,7 +47,6 @@ namespace Nez
 			}
 		}
 
-
 		/// <summary>
 		/// draws directly in screen space at full viewport size
 		/// </summary>
@@ -64,7 +58,6 @@ namespace Nez
 
 			Begin(ref projection, ref view);
 		}
-
 
 		/// <summary>
 		/// Begin is called to tell the PrimitiveBatch what kind of primitives will be drawn, and to prepare the graphics card to render those primitives.
@@ -85,18 +78,13 @@ namespace Nez
 			_hasBegun = true;
 		}
 
-
 		/// <summary>
 		/// Begin is called to tell the PrimitiveBatch what kind of primitives will be drawn, and to prepare the graphics card to render those primitives.
 		/// Use camera.projectionMatrix and camera.transformMatrix if the batch should be in camera space.
 		/// </summary>
 		/// <param name="projection">The projection.</param>
 		/// <param name="view">The view.</param>
-		public void Begin(Matrix projection, Matrix view)
-		{
-			Begin(ref projection, ref view);
-		}
-
+		public void Begin(Matrix projection, Matrix view) => Begin(ref projection, ref view);
 
 		/// <summary>
 		/// End is called once all the primitives have been drawn using AddVertex.
@@ -113,7 +101,6 @@ namespace Nez
 			FlushLines();
 			_hasBegun = false;
 		}
-
 
 		public void AddVertex(Vector2 vertex, Color color, PrimitiveType primitiveType)
 		{
@@ -142,7 +129,6 @@ namespace Nez
 			}
 		}
 
-
 		void FlushTriangles()
 		{
 			if (!_hasBegun)
@@ -154,12 +140,10 @@ namespace Nez
 
 				// submit the draw call to the graphics card
 				Core.GraphicsDevice.SamplerStates[0] = SamplerState.AnisotropicClamp;
-				Core.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, _triangleVertices, 0,
-					primitiveCount);
+				Core.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, _triangleVertices, 0, primitiveCount);
 				_triangleVertsCount -= primitiveCount * 3;
 			}
 		}
-
 
 		void FlushLines()
 		{
@@ -177,7 +161,6 @@ namespace Nez
 			}
 		}
 
-
 		#region Drawing methods
 
 		public void DrawRectangle(float x, float y, float width, float height, Color color)
@@ -191,7 +174,6 @@ namespace Nez
 			DrawPolygon(verts, 4, color);
 		}
 
-
 		public void DrawRectangle(ref Rectangle rect, Color color)
 		{
 			var verts = new Vector2[4];
@@ -203,7 +185,6 @@ namespace Nez
 			DrawPolygon(verts, 4, color);
 		}
 
-
 		public void DrawPolygon(Vector2[] vertices, int count, Color color)
 		{
 			for (int i = 1; i < count - 1; i++)
@@ -213,7 +194,6 @@ namespace Nez
 				AddVertex(vertices[i + 1], color, PrimitiveType.TriangleList);
 			}
 		}
-
 
 		public void DrawPolygon(Vector2 position, Vector2[] vertices, Color color)
 		{
@@ -235,7 +215,6 @@ namespace Nez
 			AddVertex(position + v0, color, PrimitiveType.TriangleList);
 			AddVertex(position, color, PrimitiveType.TriangleList);
 		}
-
 
 		public void DrawCircle(Vector2 center, float radius, Color color, int circleSegments = 32)
 		{
@@ -259,9 +238,7 @@ namespace Nez
 			}
 		}
 
-
-		public void DrawArrow(Vector2 start, Vector2 end, float length, float width, bool drawStartIndicator,
-		                      Color color)
+		public void DrawArrow(Vector2 start, Vector2 end, float length, float width, bool drawStartIndicator, Color color)
 		{
 			// Draw connection segment between start- and end-point
 			//drawLine( start, end, color );

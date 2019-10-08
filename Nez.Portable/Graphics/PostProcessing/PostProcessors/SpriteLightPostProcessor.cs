@@ -24,8 +24,7 @@ namespace Nez
 			{
 				if (Effect != null)
 					Effect.Parameters["_multiplicativeFactor"].SetValue(value);
-				else
-					_multiplicativeFactor = value;
+				_multiplicativeFactor = value;
 			}
 		}
 
@@ -60,8 +59,7 @@ namespace Nez
 		{
 			GraphicsDeviceExt.SetRenderTarget(Core.GraphicsDevice, destination);
 			Graphics.Instance.Batcher.Begin(effect: Effect);
-			Graphics.Instance.Batcher.Draw(source, new Rectangle(0, 0, destination.Width, destination.Height),
-				Color.White);
+			Graphics.Instance.Batcher.Draw(source, new Rectangle(0, 0, destination.Width, destination.Height), Color.White);
 			Graphics.Instance.Batcher.End();
 		}
 

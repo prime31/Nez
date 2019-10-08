@@ -108,19 +108,14 @@ namespace Nez.Shadows
 		/// <returns>The overlapped components.</returns>
 		protected virtual int GetOverlappedColliders()
 		{
-			return Physics.OverlapCircleAll(Entity.Position + _localOffset, _radius, _colliderCache,
-				CollidesWithLayers);
+			return Physics.OverlapCircleAll(Entity.Position + _localOffset, _radius, _colliderCache, CollidesWithLayers);
 		}
 
 		/// <summary>
 		/// override point for calling through to VisibilityComputer that allows subclasses to setup their visibility boundaries for
 		/// different shaped lights.
 		/// </summary>
-		protected virtual void LoadVisibilityBoundaries()
-		{
-			_visibility.LoadRectangleBoundaries();
-		}
-
+		protected virtual void LoadVisibilityBoundaries() => _visibility.LoadRectangleBoundaries();
 
 		#region Component and RenderableComponent
 
@@ -198,7 +193,6 @@ namespace Nez.Shadows
 		/// adds a vert to the list
 		/// </summary>
 		/// <param name="position">Position.</param>
-		/// <param name="texCoord">Tex coordinate.</param>
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		void AddVert(Vector2 position)
 		{
