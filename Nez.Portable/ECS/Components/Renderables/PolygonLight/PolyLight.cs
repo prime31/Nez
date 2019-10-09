@@ -49,7 +49,7 @@ namespace Nez.Shadows
 		protected float _radius;
 		protected VisibilityComputer _visibility;
 
-		Effect _lightEffect;
+		PolygonLightEffect _lightEffect;
 		FastList<short> _indices = new FastList<short>(50);
 		FastList<VertexPositionTexture> _vertices = new FastList<VertexPositionTexture>(20);
 
@@ -87,7 +87,7 @@ namespace Nez.Shadows
 				_areBoundsDirty = true;
 
 				if (_lightEffect != null)
-					_lightEffect.Parameters["lightRadius"].SetValue(radius);
+					_lightEffect.LightRadius = radius;
 			}
 
 			return this;
@@ -121,8 +121,8 @@ namespace Nez.Shadows
 
 		public override void OnAddedToEntity()
 		{
-			_lightEffect = Entity.Scene.Content.LoadEffect<Effect>("polygonLight", EffectResource.PolygonLightBytes);
-			_lightEffect.Parameters["lightRadius"].SetValue(Radius);
+			_lightEffect = Entity.Scene.Content.LoadNezEffect<PolygonLightEffect>();
+			_lightEffect.LightRadius = Radius;
 			_visibility = new VisibilityComputer();
 		}
 
@@ -176,9 +176,9 @@ namespace Nez.Shadows
 				}
 
 				// Apply the effect
-				_lightEffect.Parameters["viewProjectionMatrix"].SetValue(camera.ViewProjectionMatrix);
-				_lightEffect.Parameters["lightSource"].SetValue(Entity.Transform.Position);
-				_lightEffect.Parameters["lightColor"].SetValue(Color.ToVector3() * Power);
+				_lightEffect.ViewProjectionMatrix = camera.ViewProjectionMatrix;
+				_lightEffect.LightSource = Entity.Transform.Position;
+				_lightEffect.LightColor = Color.ToVector3() * Power;
 				_lightEffect.Techniques[0].Passes[0].Apply();
 
 				Core.GraphicsDevice.DrawUserIndexedPrimitives(PrimitiveType.TriangleList, _vertices.Buffer, 0,
