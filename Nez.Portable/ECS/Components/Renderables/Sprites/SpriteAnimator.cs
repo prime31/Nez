@@ -76,6 +76,11 @@ namespace Nez.Sprites
 		/// </summary>
 		public int CurrentFrame { get; private set; }
 
+        /// <summary>
+        /// checks to see if the CurrentAnimation is running
+        /// </summary>
+        public bool IsRunning => AnimationState == State.Running;
+
 		readonly Dictionary<string, SpriteAnimation> _animations = new Dictionary<string, SpriteAnimation>();
 
 		float _elapsedTime;
