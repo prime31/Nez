@@ -53,7 +53,7 @@ namespace Nez.ImGuiTools.TypeInspectors
 					continue;
 
 				// skip enabled and entity which is handled elsewhere if this is a Component
-				if (isComponentSubclass && (field.Name == "enabled" || field.Name == "entity"))
+				if (isComponentSubclass && (field.Name == "Enabled" || field.Name == "Entity"))
 					continue;
 
 				var inspector = GetInspectorForType(field.FieldType, target, field);
@@ -89,7 +89,7 @@ namespace Nez.ImGuiTools.TypeInspectors
 					continue;
 
 				// skip Component.enabled  and entity which is handled elsewhere
-				if (isComponentSubclass && (prop.Name == "enabled" || prop.Name == "entity"))
+				if (isComponentSubclass && (prop.Name == "Enabled" || prop.Name == "Entity"))
 					continue;
 
 				var inspector = GetInspectorForType(prop.PropertyType, target, prop);

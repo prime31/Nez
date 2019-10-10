@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Reflection;
 using ImGuiNET;
 using Nez.ImGuiTools.TypeInspectors;
 
@@ -31,15 +30,12 @@ namespace Nez.ImGuiTools.ObjectInspectors
 				_name = _component.GetType().Name;
 			}
 
-			var methods =
-				TypeInspectorUtils.GetAllMethodsWithAttribute<InspectorDelegateAttribute>(_component.GetType());
+			var methods = TypeInspectorUtils.GetAllMethodsWithAttribute<InspectorDelegateAttribute>(_component.GetType());
 			foreach (var method in methods)
 			{
 				// only allow zero param methods
 				if (method.GetParameters().Length == 0)
-				{
 					_componentDelegateMethods.Add((Action) Delegate.CreateDelegate(typeof(Action), _component, method));
-				}
 			}
 		}
 
@@ -63,9 +59,7 @@ namespace Nez.ImGuiTools.ObjectInspectors
 			{
 				var enabled = _component.Enabled;
 				if (ImGui.Checkbox("Enabled", ref enabled))
-				{
 					_component.SetEnabled(enabled);
-				}
 
 				for (var i = _inspectors.Count - 1; i >= 0; i--)
 				{

@@ -10,9 +10,8 @@ namespace Nez.ImGuiTools
 {
 	public class EntityInspector
 	{
-		public Entity Entity => _entity;
+		public Entity Entity { get; }
 
-		Entity _entity;
 		string _entityWindowId = "entity-" + NezImGui.GetScopeId().ToString();
 		bool _shouldFocusWindow;
 		string _componentNameFilter;
@@ -21,8 +20,8 @@ namespace Nez.ImGuiTools
 
 		public EntityInspector(Entity entity)
 		{
-			_entity = entity;
-			_transformInspector = new TransformInspector(_entity.Transform);
+			Entity = entity;
+			_transformInspector = new TransformInspector(Entity.Transform);
 
 			for (var i = 0; i < entity.Components.Count; i++)
 				_componentInspectors.Add(new ComponentInspector(entity.Components[i]));
@@ -47,12 +46,12 @@ namespace Nez.ImGuiTools
 			// every 60 frames we check for newly added Components and add them
 			if (Time.FrameCount % 60 == 0)
 			{
-				for (var i = 0; i < _entity.Components.Count; i++)
+				for (var i = 0; i < Entity.Components.Count; i++)
 				{
-					var component = _entity.Components[i];
+					var component = Entity.Components[i];
 					if (_componentInspectors
-						    .Where(inspector => inspector.Component != null && inspector.Component == component)
-						    .Count() == 0)
+							.Where(inspector => inspector.Component != null && inspector.Component == component)
+							.Count() == 0)
 						_componentInspectors.Insert(0, new ComponentInspector(component));
 				}
 			}
@@ -67,11 +66,11 @@ namespace Nez.ImGuiTools
 				if (ImGui.Checkbox("Enabled", ref enabled))
 					Entity.Enabled = enabled;
 
-				ImGui.InputText("Name", ref _entity.Name, 25);
+				ImGui.InputText("Name", ref Entity.Name, 25);
 
-				var updateInterval = (int) Entity.UpdateInterval;
+				var updateInterval = (int)Entity.UpdateInterval;
 				if (ImGui.SliderInt("Update Interval", ref updateInterval, 1, 100))
-					Entity.UpdateInterval = (uint) updateInterval;
+					Entity.UpdateInterval = (uint)updateInterval;
 
 				var tag = Entity.Tag;
 				if (ImGui.InputInt("Tag", ref tag))
@@ -121,7 +120,7 @@ namespace Nez.ImGuiTools
 				foreach (var subclassType in InspectorCache.GetAllComponentSubclassTypes())
 				{
 					if (string.IsNullOrEmpty(_componentNameFilter) ||
-					    subclassType.Name.ToLower().Contains(_componentNameFilter.ToLower()))
+						subclassType.Name.ToLower().Contains(_componentNameFilter.ToLower()))
 					{
 						// stick a seperator in after custom Components and before Colliders
 						if (!isNezType && subclassType.Namespace.StartsWith("Nez"))
