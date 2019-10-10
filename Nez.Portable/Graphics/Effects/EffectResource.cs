@@ -41,6 +41,8 @@ namespace Nez
 
 		internal static byte[] PixelGlitchBytes => GetFileResourceBytes("Content/nez/effects/PixelGlitch.mgfxo");
 
+		internal static byte[] StencilLightBytes => GetFileResourceBytes("Content/nez/effects/StencilLight.mgfxo");
+
 		// deferred lighting
 		internal static byte[] DeferredSpriteBytes => GetFileResourceBytes("Content/nez/effects/DeferredSprite.mgfxo");
 

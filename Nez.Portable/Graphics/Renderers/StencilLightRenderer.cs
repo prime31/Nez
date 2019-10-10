@@ -6,16 +6,17 @@ using Nez.PhysicsShapes;
 namespace Nez
 {
 	/// <summary>
-	/// wip: not ready for use!
+	/// wip
+	/// StencilLightRenderer is used for 2d lights and shadows.
+	/// 
 	/// TODO: circle could use optimzation
-	/// TODO: combine circle and polygon code
-	/// TODO: expose blend states
 	/// </summary>
 	public class StencilLightRenderer : Renderer
 	{
 		public int RenderLayer;
 
 		const int CIRCLE_APPROXIMATION_VERTS = 12;
+		Vector2[] _bbuffer = new Vector2[4];
 		PrimitiveBatch _primitiveBatch;
 		DepthStencilState _depthStencilState;
 		BlendState _stencilOnlyBlendState;
@@ -86,6 +87,8 @@ namespace Nez
 						RenderPolygon(shape, renderable.Bounds.Center);
 					else if (collider.Shape is Circle circle)
 						RenderCircle(circle, renderable.Bounds.Center);
+					else
+						throw new System.NotImplementedException();
 				}
 				_primitiveBatch.End();
 			}
@@ -95,43 +98,23 @@ namespace Nez
 		}
 
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		void RenderPolygon(Polygon polygon, Vector2 lightPos)
-		{
-			var totalVerts = polygon.Points.Length;
-			for (var i = 0; i < totalVerts; i++)
-			{
-				var vertex = polygon.Points[i] + polygon.position;
-				var nextVertex = polygon.Points[(i + 1) % totalVerts] + polygon.position;
-				var startToEnd = nextVertex - vertex;
-				var normal = new Vector2(startToEnd.Y, -startToEnd.X);
-				normal.Normalize();
-				var lightToStart = lightPos - vertex;
-
-				Vector2.Dot(ref normal, ref lightToStart, out var nDotL);
-				if (nDotL > 0)
-				{
-					var midpoint = (nextVertex + vertex) * 0.5f;
-					Debug.DrawLine(vertex, nextVertex, Color.Green);
-					Debug.DrawLine(midpoint, midpoint + normal * 20, Color.Green);
-
-					var point1 = vertex + (Vector2.Normalize(vertex - lightPos) * Screen.Width);
-					var point2 = nextVertex + (Vector2.Normalize(nextVertex - lightPos) * Screen.Width);
-
-					var poly = new Vector2[] { nextVertex, point2, point1, vertex };
-					_primitiveBatch.DrawPolygon(poly, 4, Color.Black);
-				}
-			}
-		}
+		void RenderPolygon(Polygon polygon, Vector2 lightPos) => RenderVerts(polygon.position, lightPos, polygon.Points);
 
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		void RenderCircle(Circle circle, Vector2 lightPos)
 		{
 			var points = Polygon.BuildSymmetricalPolygon(CIRCLE_APPROXIMATION_VERTS, circle.Radius);
-			var totalVerts = points.Length;
-			for (var i = 0; i < totalVerts; i++)
+			RenderVerts(circle.position, lightPos, points);
+		}
+
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		void RenderVerts(Vector2 position, Vector2 lightPos, Vector2[] verts)
+		{
+			// TODO: should we check to see if the light is inside the verts and early out?
+			for (var i = 0; i < verts.Length; i++)
 			{
-				var vertex = points[i] + circle.position;
-				var nextVertex = points[(i + 1) % totalVerts] + circle.position;
+				var vertex = verts[i] + position;
+				var nextVertex = verts[(i + 1) % verts.Length] + position;
 				var startToEnd = nextVertex - vertex;
 				var normal = new Vector2(startToEnd.Y, -startToEnd.X);
 				normal.Normalize();
@@ -144,10 +127,14 @@ namespace Nez
 					Debug.DrawLine(vertex, nextVertex, Color.Green);
 					Debug.DrawLine(midpoint, midpoint + normal * 20, Color.Green);
 
-					var point1 = vertex + (Vector2.Normalize(vertex - lightPos) * Screen.Width);
-					var point2 = nextVertex + (Vector2.Normalize(nextVertex - lightPos) * Screen.Width);
+					var point1 = nextVertex + (Vector2.Normalize(nextVertex - lightPos) * Screen.Width);
+					var point2 = vertex + (Vector2.Normalize(vertex - lightPos) * Screen.Width);
 
-					var poly = new Vector2[] { nextVertex, point2, point1, vertex };
+					var poly = new Vector2[] { nextVertex, point1, point2, vertex };
+					_bbuffer[0] = nextVertex;
+					_bbuffer[1] = point1;
+					_bbuffer[2] = point2;
+					_bbuffer[3] = vertex;
 					_primitiveBatch.DrawPolygon(poly, 4, Color.Black);
 				}
 			}

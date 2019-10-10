@@ -42,20 +42,14 @@ namespace Nez.PhysicsShapes
 		/// they should be centered around 0,0.
 		/// </summary>
 		/// <param name="points">Points.</param>
-		public Polygon(Vector2[] points)
-		{
-			SetPoints(points);
-		}
+		public Polygon(Vector2[] points) => SetPoints(points);
 
 		/// <summary>
 		/// creates a symmetrical polygon based on the radius and vertCount passed in
 		/// </summary>
 		/// <param name="vertCount">Vert count.</param>
 		/// <param name="radius">Radius.</param>
-		public Polygon(int vertCount, float radius)
-		{
-			SetPoints(BuildSymmetricalPolygon(vertCount, radius));
-		}
+		public Polygon(int vertCount, float radius) => SetPoints(BuildSymmetricalPolygon(vertCount, radius));
 
 		internal Polygon(Vector2[] points, bool isBox) : this(points)
 		{
@@ -167,13 +161,11 @@ namespace Nez.PhysicsShapes
 		public static Vector2 GetFarthestPointInDirection(Vector2[] points, Vector2 direction)
 		{
 			var index = 0;
-			float dot;
-			float maxDot;
-			Vector2.Dot(ref points[index], ref direction, out maxDot);
+			Vector2.Dot(ref points[index], ref direction, out float maxDot);
 
 			for (var i = 1; i < points.Length; i++)
 			{
-				Vector2.Dot(ref points[i], ref direction, out dot);
+				Vector2.Dot(ref points[i], ref direction, out float dot);
 				if (dot > maxDot)
 				{
 					maxDot = dot;
@@ -356,8 +348,6 @@ namespace Nez.PhysicsShapes
 		/// essentially what the algorithm is doing is shooting a ray from point out. If it intersects an odd number of polygon sides
 		/// we know it is inside the polygon.
 		/// </summary>
-		/// <returns>The point.</returns>
-		/// <param name="point">Point.</param>
 		public override bool ContainsPoint(Vector2 point)
 		{
 			// normalize the point to be in our Polygon coordinate space
