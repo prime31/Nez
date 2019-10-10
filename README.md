@@ -114,6 +114,8 @@ The folder structure the cscproj files expect is something like this:
 	- Nez
 
 
+Alternatively, you can use the Nez + FNA template which works for Visual Studio and VS Code available [here](https://github.com/prime31/FNA-VSCode-Template).
+
 
 ### Acknowledgements/Attributions
 Bits and pieces of Nez were cherry-picked from various places around the internet. If you see something in Nez that looks familiar open an issue with the details so that we can properly attribute the code.
