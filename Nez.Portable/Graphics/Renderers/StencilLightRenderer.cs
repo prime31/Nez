@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Nez.PhysicsShapes;
+using Nez.Textures;
 
 namespace Nez
 {
@@ -13,7 +14,15 @@ namespace Nez
 	/// </summary>
 	public class StencilLightRenderer : Renderer
 	{
+		/// <summary>
+		/// the layer we will use for our lights
+		/// </summary>
 		public int RenderLayer;
+
+		/// <summary>
+		/// layer mask of all the layers this light should interact with. defaults to all layers.
+		/// </summary>
+		public int CollidesWithLayers = Physics.AllLayers;
 
 		const int CIRCLE_APPROXIMATION_VERTS = 12;
 		Vector2[] _bbuffer = new Vector2[4];
@@ -21,11 +30,13 @@ namespace Nez
 		DepthStencilState _depthStencilState;
 		BlendState _stencilOnlyBlendState;
 
-		public StencilLightRenderer(int renderOrder, int renderLayer) : base(renderOrder, null)
+		public StencilLightRenderer(int renderOrder, int renderLayer, RenderTexture renderTexture) : base(renderOrder, null)
 		{
 			RenderLayer = renderLayer;
+			RenderTexture = renderTexture;
 			_primitiveBatch = new PrimitiveBatch();
 
+			// create our material used for texture lights that only writes where the stencil is 0 and is additive
 			Material = Material.StencilRead(0);
 			Material.BlendState = new BlendState
 			{
@@ -35,6 +46,7 @@ namespace Nez
 				AlphaDestinationBlend = Blend.One
 			};
 
+			// create our stencil for writing our occluders, only writing to the stencil buffer
 			_depthStencilState = new DepthStencilState
 			{
 				StencilEnable = true,
@@ -51,6 +63,8 @@ namespace Nez
 
 		public override void Render(Scene scene)
 		{
+			Insist.IsNotNull(RenderTexture, $"{nameof(StencilLightRenderer)} requires a RenderTexture!");
+
 			var cam = Camera ?? scene.Camera;
 			BeginRender(cam);
 
@@ -71,7 +85,8 @@ namespace Nez
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		void RenderLight(IRenderable renderable, Camera cam)
 		{
-			var colliders = Physics.BoxcastBroadphase(renderable.Bounds);
+			// fetch all the Colliders in range
+			var colliders = Physics.BoxcastBroadphase(renderable.Bounds, CollidesWithLayers);
 			var colliderCount = IEnumerableExtensions.IEnumerableExt.Count(colliders);
 
 			if (colliderCount > 0)

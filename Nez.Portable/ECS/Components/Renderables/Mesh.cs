@@ -135,6 +135,7 @@ namespace Nez
 		/// <param name="color">Color.</param>
 		public new Mesh SetColor(Color color)
 		{
+			Color = color;
 			SetColorForAllVerts(color);
 			return this;
 		}
@@ -157,11 +158,16 @@ namespace Nez
 		/// <param name="positions">Positions.</param>
 		public Mesh SetVertPositions(Vector2[] positions)
 		{
-			if (_verts == null || _verts.Length != positions.Length)
+			var createVerts = _verts == null || _verts.Length != positions.Length;
+			if (createVerts)
 				_verts = new VertexPositionColorTexture[positions.Length];
 
 			for (var i = 0; i < _verts.Length; i++)
+			{
 				_verts[i].Position = positions[i].ToVector3();
+				if (createVerts)
+					_verts[i].Color = Color;
+			}
 			return this;
 		}
 
@@ -235,20 +241,17 @@ namespace Nez
 			if (_verts == null)
 				return;
 
+			batcher.FlushBatch();
+
 			_basicEffect.Projection = camera.ProjectionMatrix;
 			_basicEffect.View = camera.TransformMatrix;
 			_basicEffect.World = Entity.Transform.LocalToWorldTransform;
 			_basicEffect.CurrentTechnique.Passes[0].Apply();
 
 			if (_primitiveType == PrimitiveType.TriangleList)
-			{
-				Core.GraphicsDevice.DrawUserIndexedPrimitives(_primitiveType, _verts, 0, _verts.Length, _triangles, 0,
-					_primitiveCount);
-			}
+				Core.GraphicsDevice.DrawUserIndexedPrimitives(_primitiveType, _verts, 0, _verts.Length, _triangles, 0, _primitiveCount);
 			else if (_primitiveType == PrimitiveType.TriangleStrip)
-			{
 				Core.GraphicsDevice.DrawUserPrimitives(_primitiveType, _verts, 0, _verts.Length - 2);
-			}
 		}
 
 		#endregion

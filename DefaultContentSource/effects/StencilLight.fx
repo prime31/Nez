@@ -31,9 +31,8 @@ float4 Pixel(VertexShaderOutput input, in float2 screenPos:VPOS) : COLOR0
 {   
 	// compute the relative position of the pixel and the distance towards the light
 	float2 position = _lightSource - input.WorldPos;
-	float distance = sqrt(dot(position, position));
+	float distance = length(_lightSource - screenPos.xy);
 	
-	distance = length(_lightSource - screenPos.xy);
 	float attenuation = saturate(1.0f - distance/_lightRadius);
 	
 	return float4(attenuation, attenuation, attenuation, attenuation) * float4(_lightColor, 1);

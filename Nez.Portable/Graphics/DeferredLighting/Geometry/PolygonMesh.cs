@@ -86,11 +86,9 @@ namespace Nez.DeferredLighting
 
 			indices[(points.Length * 3) - 1] = 1;
 
-			_vertexBuffer = new VertexBuffer(Core.GraphicsDevice, VertexPosition.VertexDeclaration, verts.Length,
-				BufferUsage.WriteOnly);
+			_vertexBuffer = new VertexBuffer(Core.GraphicsDevice, VertexPosition.VertexDeclaration, verts.Length, BufferUsage.WriteOnly);
 			_vertexBuffer.SetData(verts);
-			_indexBuffer = new IndexBuffer(Core.GraphicsDevice, IndexElementSize.SixteenBits, indices.Length,
-				BufferUsage.WriteOnly);
+			_indexBuffer = new IndexBuffer(Core.GraphicsDevice, IndexElementSize.SixteenBits, indices.Length, BufferUsage.WriteOnly);
 			_indexBuffer.SetData(indices);
 			_primitiveCount = points.Length;
 		}
