@@ -32,7 +32,7 @@ namespace Nez
 		public int CollidesWithLayers = Physics.AllLayers;
 
 		const int CIRCLE_APPROXIMATION_VERTS = 12;
-		Vector2[] _bbuffer = new Vector2[4];
+		Vector2[] _vertBuffer = new Vector2[4];
 		PrimitiveBatch _primitiveBatch;
 		DepthStencilState _depthStencilState;
 		BlendState _stencilOnlyBlendState;
@@ -153,10 +153,10 @@ namespace Nez
 					var point2 = vertex + (Vector2.Normalize(vertex - lightPos) * Screen.Width);
 
 					var poly = new Vector2[] { nextVertex, point1, point2, vertex };
-					_bbuffer[0] = nextVertex;
-					_bbuffer[1] = point1;
-					_bbuffer[2] = point2;
-					_bbuffer[3] = vertex;
+					_vertBuffer[0] = nextVertex;
+					_vertBuffer[1] = point1;
+					_vertBuffer[2] = point2;
+					_vertBuffer[3] = vertex;
 					_primitiveBatch.DrawPolygon(poly, 4, Color.Black);
 				}
 			}
