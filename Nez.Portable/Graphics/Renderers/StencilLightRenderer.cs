@@ -7,10 +7,17 @@ using Nez.Textures;
 namespace Nez
 {
 	/// <summary>
-	/// wip
-	/// StencilLightRenderer is used for 2d lights and shadows.
+	/// StencilLightRenderer is used for 2d lights and shadows. This works by taking each light and doing the following:
+	/// - clear the stencil buffer
+	/// - project from the light position to create the shadow projection of the light
+	/// - render the shadow project only to the stencil buffer writing a 1 for each touched pixel
+	/// - render the lights additively only where the stencil is 0 (where the shadow projection did not hit)
 	/// 
-	/// TODO: circle could use optimzation
+	/// Setup:
+	/// - add the StencilLightRenderer and have it render before other renderers
+	/// - add all your StencilLights or textured lights to the StencilLightRenderer RenderLayer
+	/// - you will then have access to StencilLightRenderer.RenderTexture which will contain your lightmap. You can then render it whenever you want
+	///		either via a normal SpriteRenderer with multiplicative blending or via a PostProcessor
 	/// </summary>
 	public class StencilLightRenderer : Renderer
 	{
