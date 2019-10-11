@@ -1,6 +1,3 @@
-using System;
-using System.Xml.Linq;
-using System.IO;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 
@@ -8,14 +5,14 @@ namespace Nez.Tiled
 {
 	public partial class TmxLayer : ITmxLayer
 	{
-		public readonly TmxMap Map;
-		public string Name { get; private set; }
-		public float Opacity { get; private set; }
-		public bool Visible { get; private set; }
-		public float OffsetX { get; private set; }
-		public float OffsetY { get; private set; }
+		public TmxMap Map;
+		public string Name { get; set; }
+		public float Opacity { get; set; }
+		public bool Visible { get; set; }
+		public float OffsetX { get; set; }
+		public float OffsetY { get; set; }
 		public Vector2 Offset => new Vector2(OffsetX, OffsetY);
-		public Dictionary<string, string> Properties { get; private set; }
+		public Dictionary<string, string> Properties { get; set; }
 
 		/// <summary>
 		/// width in tiles for this layer. Always the same as the map width for fixed-size maps.
@@ -27,67 +24,6 @@ namespace Nez.Tiled
 		/// </summary>
 		public int Height;
 		public TmxLayerTile[] Tiles;
-
-		public TmxLayer(TmxMap map, XElement xLayer, int width, int height)
-		{
-			Map = map;
-			Name = (string)xLayer.Attribute("name");
-			Opacity = (float?)xLayer.Attribute("opacity") ?? 1.0f;
-			Visible = (bool?)xLayer.Attribute("visible") ?? true;
-			OffsetX = (float?)xLayer.Attribute("offsetx") ?? 0.0f;
-			OffsetY = (float?)xLayer.Attribute("offsety") ?? 0.0f;
-			// TODO: does the width/height passed in ever differ from the TMX layer XML?
-			Width = (int)xLayer.Attribute("width");
-			Height = (int)xLayer.Attribute("height");
-
-			var xData = xLayer.Element("data");
-			var encoding = (string)xData.Attribute("encoding");
-
-			Tiles = new TmxLayerTile[width * height];
-			if (encoding == "base64")
-			{
-				var decodedStream = new TmxBase64Data(xData);
-				var stream = decodedStream.Data;
-
-				var index = 0;
-				using (var br = new BinaryReader(stream))
-					for (int j = 0; j < height; j++)
-						for (int i = 0; i < width; i++)
-						{
-							var gid = br.ReadUInt32();
-							Tiles[index++] = gid != 0 ? new TmxLayerTile(map, gid, i, j) : null;
-						}
-			}
-			else if (encoding == "csv")
-			{
-				var csvData = (string)xData.Value;
-				int k = 0;
-				foreach (var s in csvData.Split(','))
-				{
-					var gid = uint.Parse(s.Trim());
-					var x = k % width;
-					var y = k / width;
-
-					Tiles[k++] = gid != 0 ? new TmxLayerTile(map, gid, x, y) : null;
-				}
-			}
-			else if (encoding == null)
-			{
-				int k = 0;
-				foreach (var e in xData.Elements("tile"))
-				{
-					var gid = (uint?)e.Attribute("gid") ?? 0;
-
-					var x = k % width;
-					var y = k / width;
-
-					Tiles[k++] = gid != 0 ? new TmxLayerTile(map, gid, x, y) : null;
-				}
-			}
-			else throw new Exception("TmxLayer: Unknown encoding.");
-
-			Properties = PropertyDict.ParsePropertyDict(xLayer.Element("properties"));
-		}
 
 		/// <summary>
 		/// returns the TmxLayerTile with gid. This is a slow lookup so cache it!
@@ -104,7 +40,6 @@ namespace Nez.Tiled
 			return null;
 		}
 	}
-
 
 	public class TmxLayerTile
 	{

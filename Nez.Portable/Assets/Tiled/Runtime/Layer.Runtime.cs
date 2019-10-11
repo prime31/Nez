@@ -147,6 +147,5 @@ namespace Nez.Tiled
 		/// <param name="x">The x coordinate.</param>
 		/// <param name="y">The y coordinate.</param>
 		public void RemoveTile(int x, int y) => Tiles[x + y * Width] = null;
-
     }
 }

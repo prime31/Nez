@@ -274,7 +274,7 @@ namespace Nez.Tiled
 			if (!group.Visible)
 				return;
 
-			foreach (var layer in group.layers)
+			foreach (var layer in group.Layers)
 			{
 				if (layer is TmxGroup tmxSubGroup)
 					RenderGroup(tmxSubGroup, batcher, position, scale, layerDepth);

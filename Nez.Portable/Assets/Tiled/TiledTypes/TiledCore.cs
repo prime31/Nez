@@ -12,20 +12,9 @@ namespace Nez.Tiled
 {
 	public class TmxDocument
 	{
-		public string TmxDirectory { get; protected set; }
+		public string TmxDirectory;
 
 		public TmxDocument() => TmxDirectory = string.Empty;
-
-		protected XDocument ReadXml(string filepath)
-		{
-			using (var stream = TitleContainer.OpenStream(filepath))
-			{
-				var xDoc = XDocument.Load(stream);
-				TmxDirectory = Path.GetDirectoryName(filepath);
-
-				return xDoc;
-			}
-		}
 	}
 
 
@@ -69,38 +58,6 @@ namespace Nez.Tiled
 		}
 	}
 
-
-	public static class PropertyDict
-	{
-		public static Dictionary<string, string> ParsePropertyDict(XContainer xmlProp)
-		{
-			if (xmlProp == null)
-				return null;
-
-			var dict = new Dictionary<string, string>();
-			foreach (var p in xmlProp.Elements("property"))
-			{
-				string pname, pval;
-
-				pname = p.Attribute("name").Value;
-				try
-				{
-					pval = p.Attribute("value").Value;
-				}
-				catch (NullReferenceException)
-				{
-					// Fallback to element value if no "value"
-					pval = p.Value;
-				}
-
-				dict.Add(pname, pval);
-			}
-			return dict;
-		}
-
-	}
-
-
 	public class TmxImage : IDisposable
 	{
 		public Texture2D Texture;
@@ -111,31 +68,6 @@ namespace Nez.Tiled
 		public int Width;
 		public int Height;
 
-		public TmxImage(XElement xImage, string tmxDir = "")
-		{
-			var xSource = xImage.Attribute("source");
-			if (xSource != null)
-			{
-				// Append directory if present
-				Source = Path.Combine(tmxDir, (string)xSource);
-
-				using (var stream = TitleContainer.OpenStream(Source))
-					Texture = Texture2D.FromStream(Core.GraphicsDevice, stream);
-			}
-			else
-			{
-				Format = (string)xImage.Attribute("format");
-				var xData = xImage.Element("data");
-				var decodedStream = new TmxBase64Data(xData);
-				Data = decodedStream.Data;
-				throw new NotSupportedException("Stream Data loading is not yet supported");
-			}
-
-			Trans = TmxColor.ParseColor(xImage.Attribute("trans"));
-			Width = (int?)xImage.Attribute("width") ?? 0;
-			Height = (int?)xImage.Attribute("height") ?? 0;
-		}
-
 		public void Dispose()
 		{
 			if (Texture != null)
@@ -143,19 +75,6 @@ namespace Nez.Tiled
 				Texture.Dispose();
 				Texture = null;
 			}
-		}
-	}
-
-
-	public static class TmxColor
-	{
-		public static Color ParseColor(XAttribute xColor)
-		{
-			if (xColor == null)
-				return Color.White;
-
-			var colorStr = ((string)xColor).TrimStart("#".ToCharArray());
-			return ColorExt.HexToColor(colorStr);
 		}
 	}
 

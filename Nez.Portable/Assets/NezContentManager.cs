@@ -10,6 +10,7 @@ using Microsoft.Xna.Framework;
 using Nez.ParticleDesigner;
 using Nez.Sprites;
 using Nez.Textures;
+using Nez.Tiled;
 
 namespace Nez.Systems
 {
@@ -93,15 +94,15 @@ namespace Nez.Systems
 		/// <summary>
 		/// loads a Tiled map
 		/// </summary>
-		public Tiled.TmxMap LoadTiledMap(string name)
+		public TmxMap LoadTiledMap(string name)
 		{
 			if (LoadedAssets.TryGetValue(name, out var asset))
 			{
-				if (asset is Tiled.TmxMap map)
+				if (asset is TmxMap map)
 					return map;
 			}
 
-			var tiledMap = new Tiled.TmxMap(name);
+			var tiledMap = new TmxMap().LoadTmxMap(name);
 
 			LoadedAssets[name] = tiledMap;
 			DisposableAssets.Add(tiledMap);
