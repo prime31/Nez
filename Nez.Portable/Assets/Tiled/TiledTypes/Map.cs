@@ -71,10 +71,10 @@ namespace Nez.Tiled
 				if (disposing)
 				{
 					foreach (var tileset in Tilesets)
-						tileset.Image.Dispose();
+						tileset.Image?.Dispose();
 
 					foreach (var layer in ImageLayers)
-						layer.Image.Dispose();
+						layer.Image?.Dispose();
 				}
 
 				_isDisposed = true;
