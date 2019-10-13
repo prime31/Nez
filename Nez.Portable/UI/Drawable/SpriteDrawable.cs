@@ -77,7 +77,7 @@ namespace Nez.UI
 
 		public SpriteDrawable(Sprite sprite)
 		{
-			_sprite = sprite;
+			Sprite = sprite;
 		}
 
 		public SpriteDrawable(Texture2D texture) : this(new Sprite(texture))
