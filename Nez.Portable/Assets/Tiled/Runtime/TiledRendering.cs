@@ -209,7 +209,14 @@ namespace Nez.Tiled
 				if (!obj.Visible)
 					continue;
 
-				var pos = position + new Vector2(obj.X, obj.Y) * scale;
+                // if we are not debug rendering, we only render Tile and Text types
+                if (!Core.DebugRenderEnabled)
+                {
+                    if (obj.ObjectType != TmxObjectType.Tile || obj.ObjectType != TmxObjectType.Text)
+                        continue;
+                }
+
+                var pos = position + new Vector2(obj.X, obj.Y) * scale;
 				switch (obj.ObjectType)
 				{
 					case TmxObjectType.Basic:
@@ -251,7 +258,8 @@ namespace Nez.Tiled
 						batcher.DrawString(Graphics.Instance.BitmapFont, obj.Text.Value, pos, obj.Text.Color, Mathf.Radians(obj.Rotation), Vector2.Zero, fontScale, SpriteEffects.None, layerDepth);
 						goto default;
 					default:
-						batcher.DrawString(Graphics.Instance.BitmapFont, $"{obj.Name} ({obj.Type})", pos - new Vector2(0, 15), Color.Black);
+                        if (Core.DebugRenderEnabled)
+                            batcher.DrawString(Graphics.Instance.BitmapFont, $"{obj.Name} ({obj.Type})", pos - new Vector2(0, 15), Color.Black);
 						break;
 				}
 			}
