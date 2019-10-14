@@ -209,7 +209,7 @@ namespace Nez.Tiled
 				if (!obj.Visible || ((obj.ObjectType != TmxObjectType.Tile && obj.ObjectType != TmxObjectType.Text) && !Core.DebugRenderEnabled))
 					continue;
 
-                var pos = position + new Vector2(obj.X, obj.Y) * scale;
+				var pos = position + new Vector2(obj.X, obj.Y) * scale;
 				switch (obj.ObjectType)
 				{
 					case TmxObjectType.Basic:
