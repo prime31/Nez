@@ -23,6 +23,7 @@ namespace Nez.ImGuiTools
 
 		CoreWindow _coreWindow = new CoreWindow();
 		SceneGraphWindow _sceneGraphWindow = new SceneGraphWindow();
+		SpriteAtlasEditorWindow _spriteAtlasEditorWindow;
 
 		List<EntityInspector> _entityInspectors = new List<EntityInspector>();
 		List<Action> _drawCommands = new List<Action>();
@@ -59,6 +60,7 @@ namespace Nez.ImGuiTools
 
 			// tone down indent
 			ImGui.GetStyle().IndentSpacing = 12;
+			ImGui.GetIO().ConfigWindowsMoveFromTitleBarOnly = true;
 
 			// find all themes
 			_themes = typeof(NezImGuiThemes).GetMethods(System.Reflection.BindingFlags.Static |
@@ -83,6 +85,12 @@ namespace Nez.ImGuiTools
 			_sceneGraphWindow.Show(ref ShowSceneGraphWindow);
 			_coreWindow.Show(ref ShowCoreWindow);
 
+			if (_spriteAtlasEditorWindow != null)
+			{
+				if (!_spriteAtlasEditorWindow.Show())
+					_spriteAtlasEditorWindow = null;
+			}
+
 			if (ShowDemoWindow)
 				ImGui.ShowDemoWindow(ref ShowDemoWindow);
 
@@ -104,6 +112,9 @@ namespace Nez.ImGuiTools
 				_mainMenuBarHeight = ImGui.GetWindowHeight();
 				if (ImGui.BeginMenu("File"))
 				{
+					if (ImGui.MenuItem("Open Sprite Atlas Editor"))
+						_spriteAtlasEditorWindow = _spriteAtlasEditorWindow ?? new SpriteAtlasEditorWindow();
+
 					if (ImGui.MenuItem("Quit ImGui"))
 						SetEnabled(false);
 					ImGui.EndMenu();
