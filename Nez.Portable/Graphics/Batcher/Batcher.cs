@@ -81,7 +81,6 @@ namespace Nez
 
 		#endregion
 
-
 		public Batcher(GraphicsDevice graphicsDevice)
 		{
 			Insist.IsTrue(graphicsDevice != null);
@@ -119,7 +118,6 @@ namespace Nez
 			);
 		}
 
-
 		protected override void Dispose(bool disposing)
 		{
 			if (!IsDisposed && disposing)
@@ -132,7 +130,6 @@ namespace Nez
 			base.Dispose(disposing);
 		}
 
-
 		/// <summary>
 		/// sets if position rounding should be ignored. Useful when you are drawing primitives for debugging.
 		/// </summary>
@@ -142,7 +139,6 @@ namespace Nez
 			_shouldIgnoreRoundingDestinations = shouldIgnore;
 		}
 
-
 		#region Public begin/end methods
 
 		public void Begin()
@@ -151,13 +147,11 @@ namespace Nez
 				RasterizerState.CullCounterClockwise, null, Matrix.Identity, false);
 		}
 
-
 		public void Begin(Effect effect)
 		{
 			Begin(BlendState.AlphaBlend, Core.DefaultSamplerState, DepthStencilState.None,
 				RasterizerState.CullCounterClockwise, effect, Matrix.Identity, false);
 		}
-
 
 		public void Begin(Material material)
 		{
@@ -165,13 +159,11 @@ namespace Nez
 				RasterizerState.CullCounterClockwise, material.Effect);
 		}
 
-
 		public void Begin(Matrix transformationMatrix)
 		{
 			Begin(BlendState.AlphaBlend, Core.DefaultSamplerState, DepthStencilState.None,
 				RasterizerState.CullCounterClockwise, null, transformationMatrix, false);
 		}
-
 
 		public void Begin(BlendState blendState)
 		{
@@ -179,13 +171,11 @@ namespace Nez
 				null, Matrix.Identity, false);
 		}
 
-
 		public void Begin(Material material, Matrix transformationMatrix)
 		{
 			Begin(material.BlendState, material.SamplerState, material.DepthStencilState,
 				RasterizerState.CullCounterClockwise, material.Effect, transformationMatrix, false);
 		}
-
 
 		public void Begin(BlendState blendState, SamplerState samplerState, DepthStencilState depthStencilState,
 		                  RasterizerState rasterizerState)
@@ -201,7 +191,6 @@ namespace Nez
 			);
 		}
 
-
 		public void Begin(BlendState blendState, SamplerState samplerState, DepthStencilState depthStencilState,
 		                  RasterizerState rasterizerState, Effect effect)
 		{
@@ -215,7 +204,6 @@ namespace Nez
 				false
 			);
 		}
-
 
 		public void Begin(BlendState blendState, SamplerState samplerState, DepthStencilState depthStencilState,
 		                  RasterizerState rasterizerState,
@@ -231,7 +219,6 @@ namespace Nez
 				false
 			);
 		}
-
 
 		public void Begin(BlendState blendState, SamplerState samplerState, DepthStencilState depthStencilState,
 		                  RasterizerState rasterizerState,
@@ -254,7 +241,6 @@ namespace Nez
 				PrepRenderState();
 		}
 
-
 		public void End()
 		{
 			Insist.IsTrue(_beginCalled,
@@ -269,7 +255,6 @@ namespace Nez
 
 		#endregion
 
-
 		#region Public draw methods
 
 		public void Draw(Texture2D texture, Vector2 position)
@@ -279,14 +264,12 @@ namespace Nez
 				Color.White, Vector2.Zero, 0.0f, 0.0f, 0, false, 0, 0, 0, 0);
 		}
 
-
 		public void Draw(Texture2D texture, Vector2 position, Color color)
 		{
 			CheckBegin();
 			PushSprite(texture, null, position.X, position.Y, 1.0f, 1.0f,
 				color, Vector2.Zero, 0.0f, 0.0f, 0, false, 0, 0, 0, 0);
 		}
-
 
 		public void Draw(Texture2D texture, Rectangle destinationRectangle)
 		{
@@ -295,7 +278,6 @@ namespace Nez
 				destinationRectangle.Height,
 				Color.White, Vector2.Zero, 0.0f, 0.0f, 0, true, 0, 0, 0, 0);
 		}
-
 
 		public void Draw(Texture2D texture, Rectangle destinationRectangle, Color color)
 		{
@@ -314,7 +296,6 @@ namespace Nez
 				color, Vector2.Zero, 0.0f, 0.0f, 0, true, 0, 0, 0, 0);
 		}
 
-
 		public void Draw(Texture2D texture, Rectangle destinationRectangle, Rectangle? sourceRectangle, Color color,
 		                 SpriteEffects effects)
 		{
@@ -323,7 +304,6 @@ namespace Nez
 				destinationRectangle.Width, destinationRectangle.Height,
 				color, Vector2.Zero, 0.0f, 0.0f, (byte) (effects & (SpriteEffects) 0x03), true, 0, 0, 0, 0);
 		}
-
 
 		public void Draw(
 			Texture2D texture,
@@ -353,7 +333,6 @@ namespace Nez
 				skewTopX, skewBottomX, skewLeftY, skewRightY
 			);
 		}
-
 
 		public void Draw(Texture2D texture, Vector2 position, Rectangle? sourceRectangle, Color color)
 		{
@@ -375,7 +354,6 @@ namespace Nez
 			);
 		}
 
-
 		public void Draw(
 			Texture2D texture,
 			Vector2 position,
@@ -406,7 +384,6 @@ namespace Nez
 			);
 		}
 
-
 		public void Draw(
 			Sprite sprite,
 			Vector2 position,
@@ -433,7 +410,6 @@ namespace Nez
 				0, 0, 0, 0
 			);
 		}
-
 
 		public void Draw(
 			Texture2D texture,
@@ -465,7 +441,6 @@ namespace Nez
 			);
 		}
 
-
 		public void Draw(
 			Sprite sprite,
 			Vector2 position,
@@ -492,7 +467,6 @@ namespace Nez
 				0, 0, 0, 0
 			);
 		}
-
 
 		public void Draw(
 			Texture2D texture,
@@ -525,7 +499,6 @@ namespace Nez
 			);
 		}
 
-
 		public void Draw(
 			Texture2D texture,
 			Rectangle destinationRectangle,
@@ -555,7 +528,6 @@ namespace Nez
 			);
 		}
 
-
 		/// <summary>
 		/// direct access to setting vert positions, UVs and colors. The order of elements is top-left, top-right, bottom-left, bottom-right
 		/// </summary>
@@ -564,7 +536,7 @@ namespace Nez
 		/// <param name="verts">Verts.</param>
 		/// <param name="textureCoords">Texture coords.</param>
 		/// <param name="colors">Colors.</param>
-		public void DrawRaw(Texture2D texture, Vector3[] verts, Vector2[] textureCoords, Color[] colors)
+		public unsafe void DrawRaw(Texture2D texture, Vector3[] verts, Vector2[] textureCoords, Color[] colors)
 		{
 			Insist.IsTrue(verts.Length == 4, "there must be only 4 verts");
 			Insist.IsTrue(textureCoords.Length == 4, "there must be only 4 texture coordinates");
@@ -574,25 +546,27 @@ namespace Nez
 			if (_numSprites >= MAX_SPRITES)
 				FlushBatch();
 
-			_vertexInfo[_numSprites].Position0 = verts[0];
-			_vertexInfo[_numSprites].Position1 = verts[1];
-			_vertexInfo[_numSprites].Position2 = verts[2];
-			_vertexInfo[_numSprites].Position3 = verts[3];
+			fixed (VertexPositionColorTexture4* vertexInfo = &_vertexInfo[_numSprites])
+			{
+				vertexInfo->Position0 = verts[0];
+				vertexInfo->Position1 = verts[1];
+				vertexInfo->Position2 = verts[2];
+				vertexInfo->Position3 = verts[3];
 
-			_vertexInfo[_numSprites].TextureCoordinate0 = textureCoords[0];
-			_vertexInfo[_numSprites].TextureCoordinate1 = textureCoords[1];
-			_vertexInfo[_numSprites].TextureCoordinate2 = textureCoords[2];
-			_vertexInfo[_numSprites].TextureCoordinate3 = textureCoords[3];
+				vertexInfo->TextureCoordinate0 = textureCoords[0];
+				vertexInfo->TextureCoordinate1 = textureCoords[1];
+				vertexInfo->TextureCoordinate2 = textureCoords[2];
+				vertexInfo->TextureCoordinate3 = textureCoords[3];
 
-			_vertexInfo[_numSprites].Color0 = colors[0];
-			_vertexInfo[_numSprites].Color1 = colors[1];
-			_vertexInfo[_numSprites].Color2 = colors[2];
-			_vertexInfo[_numSprites].Color3 = colors[3];
+				vertexInfo->Color0 = colors[0];
+				vertexInfo->Color1 = colors[1];
+				vertexInfo->Color2 = colors[2];
+				vertexInfo->Color3 = colors[3];
+			}
 
 			if (_disableBatching)
 			{
-				_vertexBuffer.SetData(0, _vertexInfo, 0, 1, VertexPositionColorTexture4.RealStride,
-					SetDataOptions.None);
+				_vertexBuffer.SetData(0, _vertexInfo, 0, 1, VertexPositionColorTexture4.RealStride, SetDataOptions.None);
 				DrawPrimitives(texture, 0, 1);
 			}
 			else
@@ -602,7 +576,6 @@ namespace Nez
 			}
 		}
 
-
 		/// <summary>
 		/// direct access to setting vert positions, UVs and colors. The order of elements is top-left, top-right, bottom-left, bottom-right
 		/// </summary>
@@ -611,7 +584,7 @@ namespace Nez
 		/// <param name="verts">Verts.</param>
 		/// <param name="textureCoords">Texture coords.</param>
 		/// <param name="color">Color.</param>
-		public void DrawRaw(Texture2D texture, Vector3[] verts, Vector2[] textureCoords, Color color)
+		public unsafe void DrawRaw(Texture2D texture, Vector3[] verts, Vector2[] textureCoords, Color color)
 		{
 			Insist.IsTrue(verts.Length == 4, "there must be only 4 verts");
 			Insist.IsTrue(textureCoords.Length == 4, "there must be only 4 texture coordinates");
@@ -620,20 +593,23 @@ namespace Nez
 			if (_numSprites >= MAX_SPRITES)
 				FlushBatch();
 
-			_vertexInfo[_numSprites].Position0 = verts[0];
-			_vertexInfo[_numSprites].Position1 = verts[1];
-			_vertexInfo[_numSprites].Position2 = verts[2];
-			_vertexInfo[_numSprites].Position3 = verts[3];
+			fixed (VertexPositionColorTexture4* vertexInfo = &_vertexInfo[_numSprites])
+			{
+				vertexInfo->Position0 = verts[0];
+				vertexInfo->Position1 = verts[1];
+				vertexInfo->Position2 = verts[2];
+				vertexInfo->Position3 = verts[3];
 
-			_vertexInfo[_numSprites].TextureCoordinate0 = textureCoords[0];
-			_vertexInfo[_numSprites].TextureCoordinate1 = textureCoords[1];
-			_vertexInfo[_numSprites].TextureCoordinate2 = textureCoords[2];
-			_vertexInfo[_numSprites].TextureCoordinate3 = textureCoords[3];
+				vertexInfo->TextureCoordinate0 = textureCoords[0];
+				vertexInfo->TextureCoordinate1 = textureCoords[1];
+				vertexInfo->TextureCoordinate2 = textureCoords[2];
+				vertexInfo->TextureCoordinate3 = textureCoords[3];
 
-			_vertexInfo[_numSprites].Color0 = color;
-			_vertexInfo[_numSprites].Color1 = color;
-			_vertexInfo[_numSprites].Color2 = color;
-			_vertexInfo[_numSprites].Color3 = color;
+				vertexInfo->Color0 = color;
+				vertexInfo->Color1 = color;
+				vertexInfo->Color2 = color;
+				vertexInfo->Color3 = color;
+			}
 
 			if (_disableBatching)
 			{
@@ -655,10 +631,8 @@ namespace Nez
 		public void DrawString(SpriteFont spriteFont, string text, Vector2 position, Color color, float rotation,
 		                       Vector2 origin, Vector2 scale, SpriteEffects effects, float layerDepth)
 		{
-			throw new NotImplementedException(
-				"SpriteFont is too locked down to use directly. Wrap it in a NezSpriteFont");
+			throw new NotImplementedException("SpriteFont is too locked down to use directly. Wrap it in a NezSpriteFont");
 		}
-
 
 		static short[] GenerateIndexArray()
 		{
@@ -683,7 +657,7 @@ namespace Nez
 		/// the meat of the Batcher. This is where it all goes down
 		/// </summary>
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		void PushSprite(Texture2D texture, Rectangle? sourceRectangle, float destinationX, float destinationY,
+		unsafe void PushSprite(Texture2D texture, Rectangle? sourceRectangle, float destinationX, float destinationY,
 		                float destinationW, float destinationH, Color color, Vector2 origin,
 		                float rotation, float depth, byte effects, bool destSizeInPixels, float skewTopX,
 		                float skewBottomX, float skewLeftY, float skewRightY)
@@ -769,84 +743,86 @@ namespace Nez
 				skewRightY *= -1;
 			}
 
-			// calculate vertices
-			// top-left
-			var cornerX = (_cornerOffsetX[0] - originX) * destinationW + skewTopX;
-			var cornerY = (_cornerOffsetY[0] - originY) * destinationH - skewLeftY;
-			_vertexInfo[_numSprites].Position0.X = (
-				(rotationMatrix2X * cornerY) +
-				(rotationMatrix1X * cornerX) +
-				destinationX
-			);
-			_vertexInfo[_numSprites].Position0.Y = (
-				(rotationMatrix2Y * cornerY) +
-				(rotationMatrix1Y * cornerX) +
-				destinationY
-			);
+			fixed (VertexPositionColorTexture4* vertexInfo = &_vertexInfo[_numSprites])
+			{
+				// calculate vertices
+				// top-left
+				var cornerX = (_cornerOffsetX[0] - originX) * destinationW + skewTopX;
+				var cornerY = (_cornerOffsetY[0] - originY) * destinationH - skewLeftY;
+				vertexInfo->Position0.X = (
+					(rotationMatrix2X * cornerY) +
+					(rotationMatrix1X * cornerX) +
+					destinationX
+				);
+				vertexInfo->Position0.Y = (
+					(rotationMatrix2Y * cornerY) +
+					(rotationMatrix1Y * cornerX) +
+					destinationY
+				);
 
-			// top-right
-			cornerX = (_cornerOffsetX[1] - originX) * destinationW + skewTopX;
-			cornerY = (_cornerOffsetY[1] - originY) * destinationH - skewRightY;
-			_vertexInfo[_numSprites].Position1.X = (
-				(rotationMatrix2X * cornerY) +
-				(rotationMatrix1X * cornerX) +
-				destinationX
-			);
-			_vertexInfo[_numSprites].Position1.Y = (
-				(rotationMatrix2Y * cornerY) +
-				(rotationMatrix1Y * cornerX) +
-				destinationY
-			);
+				// top-right
+				cornerX = (_cornerOffsetX[1] - originX) * destinationW + skewTopX;
+				cornerY = (_cornerOffsetY[1] - originY) * destinationH - skewRightY;
+				vertexInfo->Position1.X = (
+					(rotationMatrix2X * cornerY) +
+					(rotationMatrix1X * cornerX) +
+					destinationX
+				);
+				vertexInfo->Position1.Y = (
+					(rotationMatrix2Y * cornerY) +
+					(rotationMatrix1Y * cornerX) +
+					destinationY
+				);
 
-			// bottom-left
-			cornerX = (_cornerOffsetX[2] - originX) * destinationW + skewBottomX;
-			cornerY = (_cornerOffsetY[2] - originY) * destinationH - skewLeftY;
-			_vertexInfo[_numSprites].Position2.X = (
-				(rotationMatrix2X * cornerY) +
-				(rotationMatrix1X * cornerX) +
-				destinationX
-			);
-			_vertexInfo[_numSprites].Position2.Y = (
-				(rotationMatrix2Y * cornerY) +
-				(rotationMatrix1Y * cornerX) +
-				destinationY
-			);
+				// bottom-left
+				cornerX = (_cornerOffsetX[2] - originX) * destinationW + skewBottomX;
+				cornerY = (_cornerOffsetY[2] - originY) * destinationH - skewLeftY;
+				vertexInfo->Position2.X = (
+					(rotationMatrix2X * cornerY) +
+					(rotationMatrix1X * cornerX) +
+					destinationX
+				);
+				vertexInfo->Position2.Y = (
+					(rotationMatrix2Y * cornerY) +
+					(rotationMatrix1Y * cornerX) +
+					destinationY
+				);
 
-			// bottom-right
-			cornerX = (_cornerOffsetX[3] - originX) * destinationW + skewBottomX;
-			cornerY = (_cornerOffsetY[3] - originY) * destinationH - skewRightY;
-			_vertexInfo[_numSprites].Position3.X = (
-				(rotationMatrix2X * cornerY) +
-				(rotationMatrix1X * cornerX) +
-				destinationX
-			);
-			_vertexInfo[_numSprites].Position3.Y = (
-				(rotationMatrix2Y * cornerY) +
-				(rotationMatrix1Y * cornerX) +
-				destinationY
-			);
+				// bottom-right
+				cornerX = (_cornerOffsetX[3] - originX) * destinationW + skewBottomX;
+				cornerY = (_cornerOffsetY[3] - originY) * destinationH - skewRightY;
+				vertexInfo->Position3.X = (
+					(rotationMatrix2X * cornerY) +
+					(rotationMatrix1X * cornerX) +
+					destinationX
+				);
+				vertexInfo->Position3.Y = (
+					(rotationMatrix2Y * cornerY) +
+					(rotationMatrix1Y * cornerX) +
+					destinationY
+				);
 
-			_vertexInfo[_numSprites].TextureCoordinate0.X = (_cornerOffsetX[0 ^ effects] * sourceW) + sourceX;
-			_vertexInfo[_numSprites].TextureCoordinate0.Y = (_cornerOffsetY[0 ^ effects] * sourceH) + sourceY;
-			_vertexInfo[_numSprites].TextureCoordinate1.X = (_cornerOffsetX[1 ^ effects] * sourceW) + sourceX;
-			_vertexInfo[_numSprites].TextureCoordinate1.Y = (_cornerOffsetY[1 ^ effects] * sourceH) + sourceY;
-			_vertexInfo[_numSprites].TextureCoordinate2.X = (_cornerOffsetX[2 ^ effects] * sourceW) + sourceX;
-			_vertexInfo[_numSprites].TextureCoordinate2.Y = (_cornerOffsetY[2 ^ effects] * sourceH) + sourceY;
-			_vertexInfo[_numSprites].TextureCoordinate3.X = (_cornerOffsetX[3 ^ effects] * sourceW) + sourceX;
-			_vertexInfo[_numSprites].TextureCoordinate3.Y = (_cornerOffsetY[3 ^ effects] * sourceH) + sourceY;
-			_vertexInfo[_numSprites].Position0.Z = depth;
-			_vertexInfo[_numSprites].Position1.Z = depth;
-			_vertexInfo[_numSprites].Position2.Z = depth;
-			_vertexInfo[_numSprites].Position3.Z = depth;
-			_vertexInfo[_numSprites].Color0 = color;
-			_vertexInfo[_numSprites].Color1 = color;
-			_vertexInfo[_numSprites].Color2 = color;
-			_vertexInfo[_numSprites].Color3 = color;
+				vertexInfo->TextureCoordinate0.X = (_cornerOffsetX[0 ^ effects] * sourceW) + sourceX;
+				vertexInfo->TextureCoordinate0.Y = (_cornerOffsetY[0 ^ effects] * sourceH) + sourceY;
+				vertexInfo->TextureCoordinate1.X = (_cornerOffsetX[1 ^ effects] * sourceW) + sourceX;
+				vertexInfo->TextureCoordinate1.Y = (_cornerOffsetY[1 ^ effects] * sourceH) + sourceY;
+				vertexInfo->TextureCoordinate2.X = (_cornerOffsetX[2 ^ effects] * sourceW) + sourceX;
+				vertexInfo->TextureCoordinate2.Y = (_cornerOffsetY[2 ^ effects] * sourceH) + sourceY;
+				vertexInfo->TextureCoordinate3.X = (_cornerOffsetX[3 ^ effects] * sourceW) + sourceX;
+				vertexInfo->TextureCoordinate3.Y = (_cornerOffsetY[3 ^ effects] * sourceH) + sourceY;
+				vertexInfo->Position0.Z = depth;
+				vertexInfo->Position1.Z = depth;
+				vertexInfo->Position2.Z = depth;
+				vertexInfo->Position3.Z = depth;
+				vertexInfo->Color0 = color;
+				vertexInfo->Color1 = color;
+				vertexInfo->Color2 = color;
+				vertexInfo->Color3 = color;
+			}
 
 			if (_disableBatching)
 			{
-				_vertexBuffer.SetData(0, _vertexInfo, 0, 1, VertexPositionColorTexture4.RealStride,
-					SetDataOptions.None);
+				_vertexBuffer.SetData(0, _vertexInfo, 0, 1, VertexPositionColorTexture4.RealStride, SetDataOptions.None);
 				DrawPrimitives(texture, 0, 1);
 			}
 			else
@@ -856,12 +832,11 @@ namespace Nez
 			}
 		}
 
-
 		/// <summary>
 		/// Sprite alternative to the old SpriteBatch pushSprite
 		/// </summary>
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		void PushSprite(Sprite sprite, float destinationX, float destinationY, float destinationW,
+		unsafe void PushSprite(Sprite sprite, float destinationX, float destinationY, float destinationW,
 		                float destinationH, Color color, Vector2 origin,
 		                float rotation, float depth, byte effects, float skewTopX, float skewBottomX, float skewLeftY,
 		                float skewRightY)
@@ -908,92 +883,94 @@ namespace Nez
 				skewRightY *= -1;
 			}
 
-			// calculate vertices
-			// top-left
-			var cornerX = (_cornerOffsetX[0] - originX) * destinationW + skewTopX;
-			var cornerY = (_cornerOffsetY[0] - originY) * destinationH - skewLeftY;
-			_vertexInfo[_numSprites].Position0.X = (
-				(rotationMatrix2X * cornerY) +
-				(rotationMatrix1X * cornerX) +
-				destinationX
-			);
-			_vertexInfo[_numSprites].Position0.Y = (
-				(rotationMatrix2Y * cornerY) +
-				(rotationMatrix1Y * cornerX) +
-				destinationY
-			);
+			fixed (VertexPositionColorTexture4* vertexInfo = &_vertexInfo[_numSprites])
+			{
+				// calculate vertices
+				// top-left
+				var cornerX = (_cornerOffsetX[0] - originX) * destinationW + skewTopX;
+				var cornerY = (_cornerOffsetY[0] - originY) * destinationH - skewLeftY;
+				vertexInfo->Position0.X = (
+					(rotationMatrix2X * cornerY) +
+					(rotationMatrix1X * cornerX) +
+					destinationX
+				);
+				vertexInfo->Position0.Y = (
+					(rotationMatrix2Y * cornerY) +
+					(rotationMatrix1Y * cornerX) +
+					destinationY
+				);
 
-			// top-right
-			cornerX = (_cornerOffsetX[1] - originX) * destinationW + skewTopX;
-			cornerY = (_cornerOffsetY[1] - originY) * destinationH - skewRightY;
-			_vertexInfo[_numSprites].Position1.X = (
-				(rotationMatrix2X * cornerY) +
-				(rotationMatrix1X * cornerX) +
-				destinationX
-			);
-			_vertexInfo[_numSprites].Position1.Y = (
-				(rotationMatrix2Y * cornerY) +
-				(rotationMatrix1Y * cornerX) +
-				destinationY
-			);
+				// top-right
+				cornerX = (_cornerOffsetX[1] - originX) * destinationW + skewTopX;
+				cornerY = (_cornerOffsetY[1] - originY) * destinationH - skewRightY;
+				vertexInfo->Position1.X = (
+					(rotationMatrix2X * cornerY) +
+					(rotationMatrix1X * cornerX) +
+					destinationX
+				);
+				vertexInfo->Position1.Y = (
+					(rotationMatrix2Y * cornerY) +
+					(rotationMatrix1Y * cornerX) +
+					destinationY
+				);
 
-			// bottom-left
-			cornerX = (_cornerOffsetX[2] - originX) * destinationW + skewBottomX;
-			cornerY = (_cornerOffsetY[2] - originY) * destinationH - skewLeftY;
-			_vertexInfo[_numSprites].Position2.X = (
-				(rotationMatrix2X * cornerY) +
-				(rotationMatrix1X * cornerX) +
-				destinationX
-			);
-			_vertexInfo[_numSprites].Position2.Y = (
-				(rotationMatrix2Y * cornerY) +
-				(rotationMatrix1Y * cornerX) +
-				destinationY
-			);
+				// bottom-left
+				cornerX = (_cornerOffsetX[2] - originX) * destinationW + skewBottomX;
+				cornerY = (_cornerOffsetY[2] - originY) * destinationH - skewLeftY;
+				vertexInfo->Position2.X = (
+					(rotationMatrix2X * cornerY) +
+					(rotationMatrix1X * cornerX) +
+					destinationX
+				);
+				vertexInfo->Position2.Y = (
+					(rotationMatrix2Y * cornerY) +
+					(rotationMatrix1Y * cornerX) +
+					destinationY
+				);
 
-			// bottom-right
-			cornerX = (_cornerOffsetX[3] - originX) * destinationW + skewBottomX;
-			cornerY = (_cornerOffsetY[3] - originY) * destinationH - skewRightY;
-			_vertexInfo[_numSprites].Position3.X = (
-				(rotationMatrix2X * cornerY) +
-				(rotationMatrix1X * cornerX) +
-				destinationX
-			);
-			_vertexInfo[_numSprites].Position3.Y = (
-				(rotationMatrix2Y * cornerY) +
-				(rotationMatrix1Y * cornerX) +
-				destinationY
-			);
+				// bottom-right
+				cornerX = (_cornerOffsetX[3] - originX) * destinationW + skewBottomX;
+				cornerY = (_cornerOffsetY[3] - originY) * destinationH - skewRightY;
+				vertexInfo->Position3.X = (
+					(rotationMatrix2X * cornerY) +
+					(rotationMatrix1X * cornerX) +
+					destinationX
+				);
+				vertexInfo->Position3.Y = (
+					(rotationMatrix2Y * cornerY) +
+					(rotationMatrix1Y * cornerX) +
+					destinationY
+				);
 
-			_vertexInfo[_numSprites].TextureCoordinate0.X =
-				(_cornerOffsetX[0 ^ effects] * sprite.Uvs.Width) + sprite.Uvs.X;
-			_vertexInfo[_numSprites].TextureCoordinate0.Y =
-				(_cornerOffsetY[0 ^ effects] * sprite.Uvs.Height) + sprite.Uvs.Y;
-			_vertexInfo[_numSprites].TextureCoordinate1.X =
-				(_cornerOffsetX[1 ^ effects] * sprite.Uvs.Width) + sprite.Uvs.X;
-			_vertexInfo[_numSprites].TextureCoordinate1.Y =
-				(_cornerOffsetY[1 ^ effects] * sprite.Uvs.Height) + sprite.Uvs.Y;
-			_vertexInfo[_numSprites].TextureCoordinate2.X =
-				(_cornerOffsetX[2 ^ effects] * sprite.Uvs.Width) + sprite.Uvs.X;
-			_vertexInfo[_numSprites].TextureCoordinate2.Y =
-				(_cornerOffsetY[2 ^ effects] * sprite.Uvs.Height) + sprite.Uvs.Y;
-			_vertexInfo[_numSprites].TextureCoordinate3.X =
-				(_cornerOffsetX[3 ^ effects] * sprite.Uvs.Width) + sprite.Uvs.X;
-			_vertexInfo[_numSprites].TextureCoordinate3.Y =
-				(_cornerOffsetY[3 ^ effects] * sprite.Uvs.Height) + sprite.Uvs.Y;
-			_vertexInfo[_numSprites].Position0.Z = depth;
-			_vertexInfo[_numSprites].Position1.Z = depth;
-			_vertexInfo[_numSprites].Position2.Z = depth;
-			_vertexInfo[_numSprites].Position3.Z = depth;
-			_vertexInfo[_numSprites].Color0 = color;
-			_vertexInfo[_numSprites].Color1 = color;
-			_vertexInfo[_numSprites].Color2 = color;
-			_vertexInfo[_numSprites].Color3 = color;
+				vertexInfo->TextureCoordinate0.X =
+					(_cornerOffsetX[0 ^ effects] * sprite.Uvs.Width) + sprite.Uvs.X;
+				vertexInfo->TextureCoordinate0.Y =
+					(_cornerOffsetY[0 ^ effects] * sprite.Uvs.Height) + sprite.Uvs.Y;
+				vertexInfo->TextureCoordinate1.X =
+					(_cornerOffsetX[1 ^ effects] * sprite.Uvs.Width) + sprite.Uvs.X;
+				vertexInfo->TextureCoordinate1.Y =
+					(_cornerOffsetY[1 ^ effects] * sprite.Uvs.Height) + sprite.Uvs.Y;
+				vertexInfo->TextureCoordinate2.X =
+					(_cornerOffsetX[2 ^ effects] * sprite.Uvs.Width) + sprite.Uvs.X;
+				vertexInfo->TextureCoordinate2.Y =
+					(_cornerOffsetY[2 ^ effects] * sprite.Uvs.Height) + sprite.Uvs.Y;
+				vertexInfo->TextureCoordinate3.X =
+					(_cornerOffsetX[3 ^ effects] * sprite.Uvs.Width) + sprite.Uvs.X;
+				vertexInfo->TextureCoordinate3.Y =
+					(_cornerOffsetY[3 ^ effects] * sprite.Uvs.Height) + sprite.Uvs.Y;
+				vertexInfo->Position0.Z = depth;
+				vertexInfo->Position1.Z = depth;
+				vertexInfo->Position2.Z = depth;
+				vertexInfo->Position3.Z = depth;
+				vertexInfo->Color0 = color;
+				vertexInfo->Color1 = color;
+				vertexInfo->Color2 = color;
+				vertexInfo->Color3 = color;
+			}
 
 			if (_disableBatching)
 			{
-				_vertexBuffer.SetData(0, _vertexInfo, 0, 1, VertexPositionColorTexture4.RealStride,
-					SetDataOptions.None);
+				_vertexBuffer.SetData(0, _vertexInfo, 0, 1, VertexPositionColorTexture4.RealStride, SetDataOptions.None);
 				DrawPrimitives(sprite, 0, 1);
 			}
 			else
@@ -1003,8 +980,7 @@ namespace Nez
 			}
 		}
 
-
-		public void FlushBatch()
+		public unsafe void FlushBatch()
 		{
 			if (_numSprites == 0)
 				return;
@@ -1014,8 +990,14 @@ namespace Nez
 
 			PrepRenderState();
 
-			_vertexBuffer.SetData(0, _vertexInfo, 0, _numSprites, VertexPositionColorTexture4.RealStride,
-				SetDataOptions.None);
+			#if FNA
+			fixed (VertexPositionColorTexture4* p = &_vertexInfo[0])
+			{
+				_vertexBuffer.SetDataPointerEXT(0, (IntPtr)p, _numSprites * VertexPositionColorTexture4.RealStride, SetDataOptions.Discard);
+			}
+			#else
+			_vertexBuffer.SetData(0, _vertexInfo, 0, _numSprites, VertexPositionColorTexture4.RealStride, SetDataOptions.Discard);
+			#endif
 
 			curTexture = _textureInfo[0];
 			for (var i = 1; i < _numSprites; i += 1)
@@ -1032,7 +1014,6 @@ namespace Nez
 
 			_numSprites = 0;
 		}
-
 
 		/// <summary>
 		/// enables/disables scissor testing. If the RasterizerState changes it will cause a batch flush.
@@ -1057,7 +1038,6 @@ namespace Nez
 				ScissorTestEnable = shouldEnable
 			};
 		}
-
 
 		void PrepRenderState()
 		{
@@ -1090,7 +1070,6 @@ namespace Nez
 			_spriteEffectPass.Apply();
 		}
 
-
 		void DrawPrimitives(Texture texture, int baseSprite, int batchSize)
 		{
 			if (_customEffect != null)
@@ -1098,8 +1077,6 @@ namespace Nez
 				foreach (var pass in _customEffect.CurrentTechnique.Passes)
 				{
 					pass.Apply();
-
-					// Whatever happens in pass.Apply, make sure the texture being drawn ends up in Textures[0].
 					GraphicsDevice.Textures[0] = texture;
 					GraphicsDevice.DrawIndexedPrimitives(PrimitiveType.TriangleList, baseSprite * 4, 0, batchSize * 2);
 				}
@@ -1111,13 +1088,11 @@ namespace Nez
 			}
 		}
 
-
 		[System.Diagnostics.Conditional("DEBUG")]
 		void CheckBegin()
 		{
 			if (!_beginCalled)
-				throw new InvalidOperationException(
-					"Begin has not been called. Begin must be called before you can draw");
+				throw new InvalidOperationException("Begin has not been called. Begin must be called before you can draw");
 		}
 
 		#endregion
