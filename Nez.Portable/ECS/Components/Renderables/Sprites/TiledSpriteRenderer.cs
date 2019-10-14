@@ -10,7 +10,7 @@ namespace Nez
 	/// Tiled sprite. Note that TiledSprite overrides the Material so that it can wrap the UVs. This class requires the texture
 	/// to not be part of an atlas so that wrapping can work.
 	/// </summary>
-	public class TiledSprite : SpriteRenderer
+	public class TiledSpriteRenderer : SpriteRenderer
 	{
 		public override RectangleF Bounds
 		{
@@ -103,11 +103,11 @@ namespace Nez
 		protected Vector2 _inverseTexScale = Vector2.One;
 
 
-		public TiledSprite()
+		public TiledSpriteRenderer()
 		{
 		}
 
-		public TiledSprite(Sprite sprite) : base(sprite)
+		public TiledSpriteRenderer(Sprite sprite) : base(sprite)
 		{
 			_sourceRect = sprite.SourceRect;
 			Material = new Material
@@ -116,7 +116,7 @@ namespace Nez
 			};
 		}
 
-		public TiledSprite(Texture2D texture) : this(new Sprite(texture))
+		public TiledSpriteRenderer(Texture2D texture) : this(new Sprite(texture))
 		{
 		}
 

@@ -6,7 +6,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Nez
 {
-	public class NineSliceSprite : SpriteRenderer
+	public class NineSliceSpriteRenderer : SpriteRenderer
 	{
 		public new float Width
 		{
@@ -56,16 +56,16 @@ namespace Nez
 		bool _destRectsDirty = true;
 
 
-		public NineSliceSprite(NinePatchSprite sprite) : base(sprite)
+		public NineSliceSpriteRenderer(NinePatchSprite sprite) : base(sprite)
 		{
 			Sprite = sprite;
 		}
 
-		public NineSliceSprite(Sprite sprite, int top, int bottom, int left, int right) : this(
+		public NineSliceSpriteRenderer(Sprite sprite, int top, int bottom, int left, int right) : this(
 			new NinePatchSprite(sprite, left, right, top, bottom))
 		{ }
 
-		public NineSliceSprite(Texture2D texture, int top, int bottom, int left, int right) : this(
+		public NineSliceSpriteRenderer(Texture2D texture, int top, int bottom, int left, int right) : this(
 			new NinePatchSprite(texture, left, right, top, bottom))
 		{ }
 

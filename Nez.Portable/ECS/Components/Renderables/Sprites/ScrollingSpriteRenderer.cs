@@ -9,7 +9,7 @@ namespace Nez.Sprites
 	/// Scrolling sprite. Note that ScrollingSprite overrides the Material so that it can wrap the UVs. This class requires the texture
 	/// to not be part of an atlas so that wrapping can work.
 	/// </summary>
-	public class ScrollingSprite : TiledSprite, IUpdatable
+	public class ScrollingSpriteRenderer : TiledSpriteRenderer, IUpdatable
 	{
 		/// <summary>
 		/// x speed of automatic scrolling in pixels/s
@@ -41,15 +41,15 @@ namespace Nez.Sprites
 		float _scrollX, _scrollY;
 
 
-		public ScrollingSprite()
+		public ScrollingSpriteRenderer()
 		{
 		}
 
-		public ScrollingSprite(Sprite sprite) : base(sprite)
+		public ScrollingSpriteRenderer(Sprite sprite) : base(sprite)
 		{
 		}
 
-		public ScrollingSprite(Texture2D texture) : this(new Sprite(texture))
+		public ScrollingSpriteRenderer(Texture2D texture) : this(new Sprite(texture))
 		{
 		}
 

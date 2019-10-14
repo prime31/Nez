@@ -8,7 +8,7 @@ namespace Nez
 	/// <summary>
 	/// skewable rectangle sprite for prototyping
 	/// </summary>
-	public class PrototypeSprite : SpriteRenderer
+	public class PrototypeSpriteRenderer : SpriteRenderer
 	{
 		public override float Width => _width;
 		public override float Height => _height;
@@ -36,10 +36,10 @@ namespace Nez
 		float _width, _height;
 
 
-		public PrototypeSprite() : this(50, 50)
+		public PrototypeSpriteRenderer() : this(50, 50)
 		{ }
 
-		public PrototypeSprite(float width, float height) : base(Graphics.Instance.PixelTexture)
+		public PrototypeSpriteRenderer(float width, float height) : base(Graphics.Instance.PixelTexture)
 		{
 			_width = width;
 			_height = height;
@@ -50,7 +50,7 @@ namespace Nez
 		/// </summary>
 		/// <returns>The width.</returns>
 		/// <param name="width">Width.</param>
-		public PrototypeSprite SetWidth(float width)
+		public PrototypeSpriteRenderer SetWidth(float width)
 		{
 			_width = width;
 			return this;
@@ -61,7 +61,7 @@ namespace Nez
 		/// </summary>
 		/// <returns>The height.</returns>
 		/// <param name="height">Height.</param>
-		public PrototypeSprite SetHeight(float height)
+		public PrototypeSpriteRenderer SetHeight(float height)
 		{
 			_height = height;
 			return this;
@@ -75,7 +75,7 @@ namespace Nez
 		/// <param name="skewBottomX">Skew bottom x.</param>
 		/// <param name="skewLeftY">Skew left y.</param>
 		/// <param name="skewRightY">Skew right y.</param>
-		public PrototypeSprite SetSkew(float skewTopX, float skewBottomX, float skewLeftY, float skewRightY)
+		public PrototypeSpriteRenderer SetSkew(float skewTopX, float skewBottomX, float skewLeftY, float skewRightY)
 		{
 			SkewTopX = skewTopX;
 			SkewBottomX = skewBottomX;
