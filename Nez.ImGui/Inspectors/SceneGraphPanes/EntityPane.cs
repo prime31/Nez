@@ -1,17 +1,33 @@
-using System;
 using ImGuiNET;
-
 
 namespace Nez.ImGuiTools.SceneGraphPanes
 {
 	public class EntityPane
 	{
+		/// <summary>
+		/// if this number of entites is exceeded we switch to a list clipper to keep things fast
+		/// </summary>
+		const int MIN_ENTITIES_FOR_CLIPPER = 100;
 		string _newEntityName = "";
 
-		public void Draw()
+		unsafe public void Draw()
 		{
-			for (var i = 0; i < Core.Scene.Entities.Count; i++)
-				DrawEntity(Core.Scene.Entities[i]);
+			if (Core.Scene.Entities.Count > MIN_ENTITIES_FOR_CLIPPER)
+			{
+				var clipperPtr = ImGuiNative.ImGuiListClipper_ImGuiListClipper(Core.Scene.Entities.Count, -1);
+				var clipper = new ImGuiListClipperPtr(clipperPtr);
+
+				while (clipper.Step())
+					for (var i = clipper.DisplayStart; i < clipper.DisplayEnd; i++)
+						DrawEntity(Core.Scene.Entities[i]);
+
+				ImGuiNative.ImGuiListClipper_destroy(clipperPtr);
+			}
+			else
+			{
+				for (var i = 0; i < Core.Scene.Entities.Count; i++)
+					DrawEntity(Core.Scene.Entities[i]);
+			}
 
 			NezImGui.MediumVerticalSpace();
 			if (NezImGui.CenteredButton("Create Entity", 0.6f))
@@ -28,7 +44,7 @@ namespace Nez.ImGuiTools.SceneGraphPanes
 				return;
 
 			ImGui.PushID((int) entity.Id);
-			var treeNodeOpened = false;
+			bool treeNodeOpened;
 			if (entity.Transform.ChildCount > 0)
 			{
 				treeNodeOpened = ImGui.TreeNodeEx($"{entity.Name} ({entity.Transform.ChildCount})###{entity.Id}",
