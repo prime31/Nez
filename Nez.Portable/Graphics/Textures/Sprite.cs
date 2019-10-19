@@ -54,14 +54,14 @@ namespace Nez.Textures
 		}
 
 		public Sprite(Texture2D texture, Rectangle sourceRect) : this(texture, sourceRect, sourceRect.GetHalfSize())
-		{}
+		{ }
 
 		public Sprite(Texture2D texture) : this(texture, new Rectangle(0, 0, texture.Width, texture.Height))
-		{}
+		{ }
 
 		public Sprite(Texture2D texture, int x, int y, int width, int height) : this(texture,
 			new Rectangle(x, y, width, height))
-		{}
+		{ }
 
 		/// <summary>
 		/// convenience constructor that casts floats to ints for the sourceRect
@@ -71,9 +71,9 @@ namespace Nez.Textures
 		/// <param name="y">The y coordinate.</param>
 		/// <param name="width">Width.</param>
 		/// <param name="height">Height.</param>
-		public Sprite(Texture2D texture, float x, float y, float width, float height) : this(texture, (int) x,
-			(int) y, (int) width, (int) height)
-		{}
+		public Sprite(Texture2D texture, float x, float y, float width, float height) : this(texture, (int)x,
+			(int)y, (int)width, (int)height)
+		{ }
 
 		/// <summary>
 		/// generates nine patch Rectangles. destArray should have 9 elements. renderRect is the final area in which the nine patch will be rendered.
@@ -87,7 +87,7 @@ namespace Nez.Textures
 		/// <param name="marginLeft">Margin left.</param>
 		/// <param name="marginRight">Margin right.</param>
 		public void GenerateNinePatchRects(Rectangle renderRect, Rectangle[] destArray, int marginLeft, int marginRight,
-		                                   int marginTop, int marginBottom)
+										   int marginTop, int marginBottom)
 		{
 			Insist.IsTrue(destArray.Length == 9, "destArray does not have a length of 9");
 
@@ -129,10 +129,11 @@ namespace Nez.Textures
 		/// <param name="texture">Texture.</param>
 		/// <param name="cellWidth">Cell width.</param>
 		/// <param name="cellHeight">Cell height.</param>
+		/// <param name="origin">the origin that a RenderableComponent should use when using this Sprites.</param>
 		/// <param name="cellOffset">the first cell to include while processing. 0 based indexing.</param>
 		/// <param name="maxCellsToInclude">Max cells to included.</param>
-		public static List<Sprite> SpritesFromAtlas(Texture2D texture, int cellWidth, int cellHeight,
-		                                                    int cellOffset = 0, int maxCellsToInclude = int.MaxValue)
+		public static List<Sprite> SpritesFromAtlas(Texture2D texture, int cellWidth, int cellHeight, Vector2 origin,
+															int cellOffset = 0, int maxCellsToInclude = int.MaxValue)
 		{
 			var sprites = new List<Sprite>();
 
@@ -149,7 +150,7 @@ namespace Nez.Textures
 						continue;
 
 					sprites.Add(new Sprite(texture,
-						new Rectangle(x * cellWidth, y * cellHeight, cellWidth, cellHeight)));
+						new Rectangle(x * cellWidth, y * cellHeight, cellWidth, cellHeight), origin));
 
 					// once we hit the max number of cells to include bail out. were done.
 					if (sprites.Count == maxCellsToInclude)
@@ -158,6 +159,20 @@ namespace Nez.Textures
 			}
 
 			return sprites;
+		}
+
+		/// <summary>
+		/// provides a List of Sprites given an atlas with equally spaced rows/columns of sprites
+		/// </summary>
+		/// <returns>The from atlas.</returns>
+		/// <param name="texture">Texture.</param>
+		/// <param name="cellWidth">Cell width.</param>
+		/// <param name="cellHeight">Cell height.</param>
+		/// <param name="cellOffset">the first cell to include while processing. 0 based indexing.</param>
+		/// <param name="maxCellsToInclude">Max cells to included.</param>
+		public static List<Sprite> SpritesFromAtlas(Texture2D texture, int cellWidth, int cellHeight, int cellOffset = 0, int maxCellsToInclude = int.MaxValue)
+		{
+			return SpritesFromAtlas(texture, cellWidth, cellHeight, new Vector2(cellWidth * 0.5f, cellHeight * 0.5f), cellOffset, maxCellsToInclude);
 		}
 
 		public static implicit operator Texture2D(Sprite tex) => tex.Texture2D;
