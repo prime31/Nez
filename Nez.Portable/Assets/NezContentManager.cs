@@ -92,37 +92,37 @@ namespace Nez.Systems
 			}
 		}
 
-        /// <summary>
-        /// loads a SoundEffect either from xnb or directly from a wav. Note that xnb files should not contain the .xnb file
-        /// extension or be preceded by "Content" in the path. wav files should have the file extension and have an absolute
-        /// path or a path starting with "Content".
-        /// </summary>
-        public SoundEffect LoadSoundEffect(string name)
-        {
-            // no file extension. Assumed to be an xnb so let ContentManager load it
-            if (string.IsNullOrEmpty(Path.GetExtension(name)))
-                return Load<SoundEffect>(name);
+		/// <summary>
+		/// loads a SoundEffect either from xnb or directly from a wav. Note that xnb files should not contain the .xnb file
+		/// extension or be preceded by "Content" in the path. wav files should have the file extension and have an absolute
+		/// path or a path starting with "Content".
+		/// </summary>
+		public SoundEffect LoadSoundEffect(string name)
+		{
+			// no file extension. Assumed to be an xnb so let ContentManager load it
+			if (string.IsNullOrEmpty(Path.GetExtension(name)))
+				return Load<SoundEffect>(name);
 
-            if (LoadedAssets.TryGetValue(name, out var asset))
-            {
-                if (asset is SoundEffect sfx)
-                {
-                    return sfx;
-                }
-            }
-            using (var stream = Path.IsPathRooted(name) ? File.OpenRead(name) : TitleContainer.OpenStream(name))
-            {
-                var sfx = SoundEffect.FromStream(stream);
-                LoadedAssets[name] = sfx;
-                DisposableAssets.Add(sfx);
-                return sfx;
-            }
-        }
+			if (LoadedAssets.TryGetValue(name, out var asset))
+			{
+				if (asset is SoundEffect sfx)
+				{
+					return sfx;
+				}
+			}
+			using (var stream = Path.IsPathRooted(name) ? File.OpenRead(name) : TitleContainer.OpenStream(name))
+			{
+				var sfx = SoundEffect.FromStream(stream);
+				LoadedAssets[name] = sfx;
+				DisposableAssets.Add(sfx);
+				return sfx;
+			}
+		}
 
-        /// <summary>
-        /// loads a Tiled map
-        /// </summary>
-        public TmxMap LoadTiledMap(string name)
+		/// <summary>
+		/// loads a Tiled map
+		/// </summary>
+		public TmxMap LoadTiledMap(string name)
 		{
 			if (LoadedAssets.TryGetValue(name, out var asset))
 			{
