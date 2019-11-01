@@ -34,15 +34,24 @@ namespace Nez
 		public static Color Create(Color color, int alpha)
 		{
 			var newColor = new Color();
-			if ((alpha & 0xFFFFFF00) != 0)
-			{
-				var clampedA = (uint)MathHelper.Clamp(alpha, Byte.MinValue, Byte.MaxValue);
-				newColor.PackedValue= (color.PackedValue & 0x00FFFFFF) | (clampedA << 24);
-			}
-			else
-			{
-				newColor.PackedValue = (color.PackedValue & 0x00FFFFFF) | ((uint)alpha << 24);
-			}
+			newColor.PackedValue = 0;
+
+			newColor.R = color.R;
+			newColor.G = color.G;
+			newColor.B = color.B;
+			newColor.A = (byte)MathHelper.Clamp(alpha, Byte.MinValue, Byte.MaxValue);
+			return newColor;
+		}
+
+		public static Color Create(Color color, float alpha)
+		{
+			var newColor = new Color();
+			newColor.PackedValue = 0;
+
+			newColor.R = color.R;
+			newColor.G = color.G;
+			newColor.B = color.B;
+			newColor.A = (byte)MathHelper.Clamp(alpha * 255, Byte.MinValue, Byte.MaxValue);
 			return newColor;
 		}
 
