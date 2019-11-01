@@ -305,7 +305,7 @@ namespace Nez
 		#endregion
 
 
-		static public implicit operator bool(VirtualButton button)
+		public static implicit operator bool(VirtualButton button)
 		{
 			return button.IsDown;
 		}

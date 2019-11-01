@@ -25,8 +25,8 @@ namespace Nez.UI
 	public class TextField : Element, IInputListener, IKeyboardListener
 	{
 		public event Action<TextField, string> OnTextChanged;
-		public event Action<TextField> OnEnterPressed = delegate {};
-		public event Action<TextField> OnTabPressed = delegate {};
+		public event Action<TextField> OnEnterPressed = delegate { };
+		public event Action<TextField> OnTabPressed = delegate { };
 
 		public override float PreferredWidth => _preferredWidth;
 
@@ -300,12 +300,12 @@ namespace Nez.UI
 				case Keys.Enter:
 					break;
 				default:
-				{
-					if ((int) character < 32)
-						return;
+					{
+						if ((int)character < 32)
+							return;
 
-					break;
-				}
+						break;
+					}
 			}
 
 			if (key == Keys.Tab && focusTraversal)
@@ -401,7 +401,7 @@ namespace Nez.UI
 		{
 			var halfSpaceSize = style.Font.DefaultCharacter.Bounds.Width + style.Font.DefaultCharacter.XAdvance;
 			x -= textOffset + fontOffset + halfSpaceSize /*- style.font.getData().cursorX*/ -
-			     glyphPositions[visibleTextStart];
+				 glyphPositions[visibleTextStart];
 			var n = glyphPositions.Count;
 			for (var i = 0; i < n; i++)
 			{
@@ -445,7 +445,7 @@ namespace Nez.UI
 				}
 			}
 
-			return new int[] {left, right};
+			return new int[] { left, right };
 		}
 
 
@@ -602,7 +602,7 @@ namespace Nez.UI
 			float bgLeftWidth = 0, bgRightWidth = 0;
 			if (background != null)
 			{
-				background.Draw(batcher, x, y, width, height, new Color(color, (int) (color.A * parentAlpha)));
+				background.Draw(batcher, x, y, width, height, ColorExt.Create(color, (int)(color.A * parentAlpha)));
 				bgLeftWidth = background.LeftWidth;
 				bgRightWidth = background.RightWidth;
 			}
@@ -620,7 +620,7 @@ namespace Nez.UI
 				{
 					var messageFontColor = style.MessageFontColor.HasValue
 						? style.MessageFontColor.Value
-						: new Color(180, 180, 180, (int) (color.A * parentAlpha));
+						: new Color(180, 180, 180, (int)(color.A * parentAlpha));
 					var messageFont = style.MessageFont != null ? style.MessageFont : font;
 					batcher.DrawString(messageFont, messageText,
 						new Vector2(x + bgLeftWidth, y + textY + yOffset), messageFontColor);
@@ -631,7 +631,7 @@ namespace Nez.UI
 			}
 			else
 			{
-				var col = new Color(fontColor, (int) (fontColor.A * parentAlpha));
+				var col = ColorExt.Create(fontColor, (int)(fontColor.A * parentAlpha));
 				var t = displayText.Substring(visibleTextStart, visibleTextEnd - visibleTextStart);
 				batcher.DrawString(font, t, new Vector2(x + bgLeftWidth + textOffset, y + textY + yOffset),
 					col);
@@ -860,7 +860,7 @@ namespace Nez.UI
 			var minIndex = Math.Min(from, to);
 			var maxIndex = Math.Max(from, to);
 			var newText = (minIndex > 0 ? text.Substring(0, minIndex) : "")
-			              + (maxIndex < text.Length ? text.Substring(maxIndex, text.Length - maxIndex) : "");
+						  + (maxIndex < text.Length ? text.Substring(maxIndex, text.Length - maxIndex) : "");
 
 			if (fireChangeEvent)
 				ChangeText(text, newText);
@@ -902,7 +902,7 @@ namespace Nez.UI
 
 
 		TextField FindNextTextField(List<Element> elements, TextField best, Vector2 bestCoords, Vector2 currentCoords,
-		                            bool up)
+									bool up)
 		{
 			bestCoords = Vector2.Zero;
 			for (int i = 0, n = elements.Count; i < n; i++)
@@ -913,27 +913,27 @@ namespace Nez.UI
 
 				if (element is TextField)
 				{
-					var textField = (TextField) element;
+					var textField = (TextField)element;
 					if (textField.IsDisabled() || !textField.focusTraversal)
 						continue;
 
 					var elementCoords = element.GetParent()
 						.LocalToStageCoordinates(new Vector2(element.GetX(), element.GetY()));
 					if ((elementCoords.Y < currentCoords.Y ||
-					     (elementCoords.Y == currentCoords.Y && elementCoords.X > currentCoords.X)) ^ up)
+						 (elementCoords.Y == currentCoords.Y && elementCoords.X > currentCoords.X)) ^ up)
 					{
 						if (best == null
-						    || (elementCoords.Y > bestCoords.Y ||
-						        (elementCoords.Y == bestCoords.Y && elementCoords.X < bestCoords.X)) ^ up)
+							|| (elementCoords.Y > bestCoords.Y ||
+								(elementCoords.Y == bestCoords.Y && elementCoords.X < bestCoords.X)) ^ up)
 						{
-							best = (TextField) element;
+							best = (TextField)element;
 							bestCoords = elementCoords;
 						}
 					}
 				}
 				else if (element is Group)
 				{
-					best = FindNextTextField(((Group) element).GetChildren(), best, bestCoords, currentCoords, up);
+					best = FindNextTextField(((Group)element).GetChildren(), best, bestCoords, currentCoords, up);
 				}
 			}
 
@@ -1226,7 +1226,7 @@ namespace Nez.UI
 		/// <param name="alignment">Alignment.</param>
 		public TextField SetAlignment(Align alignment)
 		{
-			textHAlign = (int) alignment;
+			textHAlign = (int)alignment;
 			return this;
 		}
 
@@ -1320,7 +1320,7 @@ namespace Nez.UI
 
 
 		public TextFieldStyle(BitmapFont font, Color fontColor, IDrawable cursor, IDrawable selection,
-		                      IDrawable background)
+							  IDrawable background)
 		{
 			Background = background;
 			Cursor = cursor;
@@ -1331,7 +1331,7 @@ namespace Nez.UI
 
 
 		public static TextFieldStyle Create(Color fontColor, Color cursorColor, Color selectionColor,
-		                                    Color backgroundColor)
+											Color backgroundColor)
 		{
 			var cursor = new PrimitiveDrawable(cursorColor);
 			cursor.MinWidth = 1;

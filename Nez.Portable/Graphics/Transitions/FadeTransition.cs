@@ -51,8 +51,7 @@ namespace Nez
 		}
 
 		public FadeTransition() : this(null)
-		{
-		}
+		{ }
 
 		public override IEnumerator OnBeginTransition()
 		{
@@ -81,8 +80,7 @@ namespace Nez
 			while (elapsed < FadeInDuration)
 			{
 				elapsed += Time.DeltaTime;
-				_color = Lerps.Ease(EaseHelper.OppositeEaseType(FadeEaseType), ref _fromColor, ref _toColor, elapsed,
-					FadeInDuration);
+				_color = Lerps.Ease(EaseHelper.OppositeEaseType(FadeEaseType), ref _fromColor, ref _toColor, elapsed, FadeInDuration);
 
 				yield return null;
 			}

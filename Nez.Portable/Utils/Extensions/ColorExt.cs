@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System;
+using Microsoft.Xna.Framework;
 
 
 namespace Nez
@@ -8,11 +9,11 @@ namespace Nez
 		private const string HEX = "0123456789ABCDEF";
 
 
-		static public byte HexToByte(char c) => (byte)HEX.IndexOf(char.ToUpper(c));
+		public static byte HexToByte(char c) => (byte)HEX.IndexOf(char.ToUpper(c));
 
-		static public Color Invert(this Color color) => new Color(255 - color.R, 255 - color.G, 255 - color.B, color.A);
+		public static Color Invert(this Color color) => new Color(255 - color.R, 255 - color.G, 255 - color.B, color.A);
 
-		static public Color HexToColor(string hex)
+		public static Color HexToColor(string hex)
 		{
 			float r = (HexToByte(hex[0]) * 16 + HexToByte(hex[1])) / 255.0f;
 			float g = (HexToByte(hex[2]) * 16 + HexToByte(hex[3])) / 255.0f;
@@ -30,7 +31,22 @@ namespace Nez
 			return new Color(r, g, b);
 		}
 
-		static public Color Grayscale(this Color color)
+		public static Color Create(Color color, int alpha)
+		{
+			var newColor = new Color();
+			if ((alpha & 0xFFFFFF00) != 0)
+			{
+				var clampedA = (uint)MathHelper.Clamp(alpha, Byte.MinValue, Byte.MaxValue);
+				newColor.PackedValue= (color.PackedValue & 0x00FFFFFF) | (clampedA << 24);
+			}
+			else
+			{
+				newColor.PackedValue = (color.PackedValue & 0x00FFFFFF) | ((uint)alpha << 24);
+			}
+			return newColor;
+		}
+
+		public static Color Grayscale(this Color color)
 		{
 			return new Color((int)(color.R * 0.3 + color.G * 0.59 + color.B * 0.11),
 				(int)(color.R * 0.3 + color.G * 0.59 + color.B * 0.11),

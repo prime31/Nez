@@ -101,7 +101,7 @@ namespace Nez.UI
 			if (_background == null)
 				return;
 
-			_background.Draw(batcher, x, y, GetWidth(), GetHeight(), new Color(color, (int) (color.A * parentAlpha)));
+			_background.Draw(batcher, x, y, GetWidth(), GetHeight(), ColorExt.Create(color, (int) (color.A * parentAlpha)));
 		}
 
 

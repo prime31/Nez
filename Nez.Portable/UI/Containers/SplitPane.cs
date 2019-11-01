@@ -208,7 +208,7 @@ namespace Nez.UI
 			}
 
 			_style.Handle.Draw(batcher, _handleBounds.X, _handleBounds.Y, _handleBounds.Width, _handleBounds.Height,
-				new Color(color, (int)(color.A * parentAlpha)));
+				ColorExt.Create(color, (int)(color.A * parentAlpha)));
 
 			if (transform)
 				ResetTransform(batcher);

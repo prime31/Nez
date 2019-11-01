@@ -23,7 +23,7 @@ namespace Nez
 
 		#region Line
 
-		static public bool LineToLine(Vector2 a1, Vector2 a2, Vector2 b1, Vector2 b2)
+		public static bool LineToLine(Vector2 a1, Vector2 a2, Vector2 b1, Vector2 b2)
 		{
 			Vector2 b = a2 - a1;
 			Vector2 d = b2 - b1;
@@ -46,7 +46,7 @@ namespace Nez
 		}
 
 
-		static public bool LineToLine(Vector2 a1, Vector2 a2, Vector2 b1, Vector2 b2, out Vector2 intersection)
+		public static bool LineToLine(Vector2 a1, Vector2 a2, Vector2 b1, Vector2 b2, out Vector2 intersection)
 		{
 			intersection = Vector2.Zero;
 
@@ -73,7 +73,7 @@ namespace Nez
 		}
 
 
-		static public Vector2 ClosestPointOnLine(Vector2 lineA, Vector2 lineB, Vector2 closestTo)
+		public static Vector2 ClosestPointOnLine(Vector2 lineA, Vector2 lineB, Vector2 closestTo)
 		{
 			var v = lineB - lineA;
 			var w = closestTo - lineA;
@@ -88,7 +88,7 @@ namespace Nez
 
 		#region Circle
 
-		static public bool CircleToCircle(Vector2 circleCenter1, float circleRadius1, Vector2 circleCenter2,
+		public static bool CircleToCircle(Vector2 circleCenter1, float circleRadius1, Vector2 circleCenter2,
 		                                  float circleRadius2)
 		{
 			return Vector2.DistanceSquared(circleCenter1, circleCenter2) <
@@ -96,14 +96,14 @@ namespace Nez
 		}
 
 
-		static public bool CircleToLine(Vector2 circleCenter, float radius, Vector2 lineFrom, Vector2 lineTo)
+		public static bool CircleToLine(Vector2 circleCenter, float radius, Vector2 lineFrom, Vector2 lineTo)
 		{
 			return Vector2.DistanceSquared(circleCenter, ClosestPointOnLine(lineFrom, lineTo, circleCenter)) <
 			       radius * radius;
 		}
 
 
-		static public bool CircleToPoint(Vector2 circleCenter, float radius, Vector2 point)
+		public static bool CircleToPoint(Vector2 circleCenter, float radius, Vector2 point)
 		{
 			return Vector2.DistanceSquared(circleCenter, point) < radius * radius;
 		}
@@ -113,19 +113,19 @@ namespace Nez
 
 		#region Bounds/Rect
 
-		static public bool RectToCircle(RectangleF rect, Vector2 cPosition, float cRadius)
+		public static bool RectToCircle(RectangleF rect, Vector2 cPosition, float cRadius)
 		{
 			return RectToCircle(rect.X, rect.Y, rect.Width, rect.Height, cPosition, cRadius);
 		}
 
 
-		static public bool RectToCircle(ref RectangleF rect, Vector2 cPosition, float cRadius)
+		public static bool RectToCircle(ref RectangleF rect, Vector2 cPosition, float cRadius)
 		{
 			return RectToCircle(rect.X, rect.Y, rect.Width, rect.Height, cPosition, cRadius);
 		}
 
 
-		static public bool RectToCircle(float rectX, float rectY, float rectWidth, float rectHeight,
+		public static bool RectToCircle(float rectX, float rectY, float rectWidth, float rectHeight,
 		                                Vector2 circleCenter, float radius)
 		{
 			//Check if the rectangle contains the circle's center-point
@@ -173,19 +173,19 @@ namespace Nez
 		}
 
 
-		static public bool RectToLine(ref RectangleF rect, Vector2 lineFrom, Vector2 lineTo)
+		public static bool RectToLine(ref RectangleF rect, Vector2 lineFrom, Vector2 lineTo)
 		{
 			return RectToLine(rect.X, rect.Y, rect.Width, rect.Height, lineFrom, lineTo);
 		}
 
 
-		static public bool RectToLine(RectangleF rect, Vector2 lineFrom, Vector2 lineTo)
+		public static bool RectToLine(RectangleF rect, Vector2 lineFrom, Vector2 lineTo)
 		{
 			return RectToLine(rect.X, rect.Y, rect.Width, rect.Height, lineFrom, lineTo);
 		}
 
 
-		static public bool RectToLine(float rectX, float rectY, float rectWidth, float rectHeight, Vector2 lineFrom,
+		public static bool RectToLine(float rectX, float rectY, float rectWidth, float rectHeight, Vector2 lineFrom,
 		                              Vector2 lineTo)
 		{
 			var fromSector = GetSector(rectX, rectY, rectWidth, rectHeight, lineFrom);
@@ -240,13 +240,13 @@ namespace Nez
 		}
 
 
-		static public bool RectToPoint(float rX, float rY, float rW, float rH, Vector2 point)
+		public static bool RectToPoint(float rX, float rY, float rW, float rH, Vector2 point)
 		{
 			return point.X >= rX && point.Y >= rY && point.X < rX + rW && point.Y < rY + rH;
 		}
 
 
-		static public bool RectToPoint(RectangleF rect, Vector2 point)
+		public static bool RectToPoint(RectangleF rect, Vector2 point)
 		{
 			return RectToPoint(rect.X, rect.Y, rect.Width, rect.Height, point);
 		}
@@ -266,7 +266,7 @@ namespace Nez
          *      0101  0100  0110
          */
 
-		static public PointSectors GetSector(RectangleF rect, Vector2 point)
+		public static PointSectors GetSector(RectangleF rect, Vector2 point)
 		{
 			PointSectors sector = PointSectors.Center;
 
@@ -284,7 +284,7 @@ namespace Nez
 		}
 
 
-		static public PointSectors GetSector(float rX, float rY, float rW, float rH, Vector2 point)
+		public static PointSectors GetSector(float rX, float rY, float rW, float rH, Vector2 point)
 		{
 			PointSectors sector = PointSectors.Center;
 

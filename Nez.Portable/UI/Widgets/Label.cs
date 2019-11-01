@@ -191,7 +191,7 @@ namespace Nez.UI
 		/// <param name="lineAlign">Line align.</param>
 		public Label SetAlignment(Align labelAlign, Align lineAlign)
 		{
-			this.labelAlign = (int) labelAlign;
+			this.labelAlign = (int)labelAlign;
 
 			// TODO
 			//			var tempLineAlign = (int)lineAlign;
@@ -355,7 +355,7 @@ namespace Nez.UI
 		{
 			Validate();
 
-			var color = new Color(this.color, (int) (this.color.A * parentAlpha));
+			var color = ColorExt.Create(this.color, (int)(this.color.A * parentAlpha));
 			_style.Background?.Draw(batcher, x, y, width == 0 ? _prefSize.X : width, height, color);
 
 			batcher.DrawString(_style.Font, _wrappedString, new Vector2(x, y) + _textPosition,

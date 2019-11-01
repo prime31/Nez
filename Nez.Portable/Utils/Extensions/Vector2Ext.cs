@@ -62,7 +62,7 @@ namespace Nez
 
 
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		static public void Floor(ref Vector2 val)
+		public static void Floor(ref Vector2 val)
 		{
 			val.X = (int) val.X;
 			val.Y = (int) val.Y;
@@ -70,7 +70,7 @@ namespace Nez
 
 
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		static public Vector2 Floor(Vector2 val)
+		public static Vector2 Floor(Vector2 val)
 		{
 			return new Vector2((int) val.X, (int) val.Y);
 		}

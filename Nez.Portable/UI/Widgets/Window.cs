@@ -263,7 +263,7 @@ namespace Nez.UI
 
 		protected void DrawStageBackground(Batcher batcher, float parentAlpha, float x, float y, float width, float height)
 		{
-			style.StageBackground.Draw(batcher, x, y, width, height, new Color(color, (int)(color.A * parentAlpha)));
+			style.StageBackground.Draw(batcher, x, y, width, height, ColorExt.Create(color, (int)(color.A * parentAlpha)));
 		}
 
 

@@ -141,7 +141,7 @@ namespace Nez
 		#endregion
 
 
-		static public implicit operator int(VirtualIntegerAxis axis)
+		public static implicit operator int(VirtualIntegerAxis axis)
 		{
 			return axis.Value;
 		}

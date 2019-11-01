@@ -146,14 +146,14 @@ namespace Nez
 
 
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		static public float Snap(float value, float increment)
+		public static float Snap(float value, float increment)
 		{
 			return Round(value / increment) * increment;
 		}
 
 
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		static public float Snap(float value, float increment, float offset)
+		public static float Snap(float value, float increment, float offset)
 		{
 			return (Round((value - offset) / increment) * increment) + offset;
 		}
@@ -297,7 +297,7 @@ namespace Nez
 		/// <param name="value">Value.</param>
 		/// <param name="threshold">Threshold.</param>
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		static public float SignThreshold(float value, float threshold)
+		public static float SignThreshold(float value, float threshold)
 		{
 			if (Math.Abs(value) >= threshold)
 				return Math.Sign(value);
@@ -727,14 +727,14 @@ namespace Nez
 		#region Vector2
 
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		static public float AngleBetweenVectors(Vector2 from, Vector2 to)
+		public static float AngleBetweenVectors(Vector2 from, Vector2 to)
 		{
 			return Atan2(to.Y - from.Y, to.X - from.X);
 		}
 
 
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		static public Vector2 AngleToVector(float angleRadians, float length)
+		public static Vector2 AngleToVector(float angleRadians, float length)
 		{
 			return new Vector2(Cos(angleRadians) * length, Sin(angleRadians) * length);
 		}
@@ -744,7 +744,7 @@ namespace Nez
 		/// helper for moving a value around in a circle.
 		/// </summary>
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		static public Vector2 RotateAround(Vector2 position, float speed)
+		public static Vector2 RotateAround(Vector2 position, float speed)
 		{
 			var time = Time.TotalTime * speed;
 

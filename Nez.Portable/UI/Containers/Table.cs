@@ -23,9 +23,9 @@ namespace Nez.UI
 			Element
 		}
 
-		static public Color DebugTableColor = new Color(0, 0, 255, 255);
-		static public Color DebugCellColor = new Color(255, 0, 0, 255);
-		static public Color DebugElementColor = new Color(0, 255, 0, 255);
+		public static Color DebugTableColor = new Color(0, 0, 255, 255);
+		public static Color DebugCellColor = new Color(255, 0, 0, 255);
+		public static Color DebugElementColor = new Color(0, 255, 0, 255);
 		static float[] _columnWeightedWidth, _rowWeightedHeight;
 
 		public override float MinWidth
@@ -168,7 +168,7 @@ namespace Nez.UI
 			if (_background == null)
 				return;
 
-			_background.Draw(batcher, x, y, width, height, new Color(color, (int) (color.A * parentAlpha)));
+			_background.Draw(batcher, x, y, width, height, ColorExt.Create(color, (int) (color.A * parentAlpha)));
 		}
 
 
@@ -1598,7 +1598,7 @@ namespace Nez.UI
 
 		#region Value types
 
-		static public Value BackgroundTop = new BackgroundTopValue();
+		public static Value BackgroundTop = new BackgroundTopValue();
 
 		/// <summary>
 		/// Value that is the top padding of the table's background
@@ -1613,7 +1613,7 @@ namespace Nez.UI
 		}
 
 
-		static public Value BackgroundLeft = new BackgroundLeftValue();
+		public static Value BackgroundLeft = new BackgroundLeftValue();
 
 		/// <summary>
 		/// Value that is the left padding of the table's background
@@ -1628,7 +1628,7 @@ namespace Nez.UI
 		}
 
 
-		static public Value BackgroundBottom = new BackgroundBottomValue();
+		public static Value BackgroundBottom = new BackgroundBottomValue();
 
 		/// <summary>
 		/// Value that is the bottom padding of the table's background
@@ -1643,7 +1643,7 @@ namespace Nez.UI
 		}
 
 
-		static public Value BackgroundRight = new BackgroundRightValue();
+		public static Value BackgroundRight = new BackgroundRightValue();
 
 		/// <summary>
 		/// Value that is the right padding of the table's background

@@ -1501,7 +1501,7 @@ namespace Nez.UI
 		/// for spacing).
 		/// </summary>
 		/// <returns>The defaults.</returns>
-		static public Cell GetDefaults()
+		public static Cell GetDefaults()
 		{
 			if (!files)
 			{

@@ -195,7 +195,7 @@ namespace Nez.UI
 			var knobHeight = knob == null ? 0 : knob.MinHeight;
 			var knobWidth = knob == null ? 0 : knob.MinWidth;
 			var percent = GetVisualPercent();
-			var color = new Color(this.color, (int) (this.color.A * parentAlpha));
+			var color = ColorExt.Create(this.color, (int) (this.color.A * parentAlpha));
 
 			if (_vertical)
 			{

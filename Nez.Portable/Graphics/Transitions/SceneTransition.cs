@@ -14,9 +14,9 @@ namespace Nez
 	///
 	/// The general gist of a transition is the following:
 	/// - onBeginTransition will be called allowing you to yield for multipart transitions
-	/// - for two part transitions with Effects you can yield on a call to tickEffectProgressProperty for part one to obscure the screen
+	/// - for two part transitions with Effects you can yield on a call to TickEffectProgressProperty for part one to obscure the screen
 	/// - next, yield a call to loadNextScene to load up the new Scene
-	/// - finally, yield again on tickEffectProgressProperty to un-obscure the screen and show the new Scene
+	/// - finally, yield again on TickEffectProgressProperty to un-obscure the screen and show the new Scene
 	/// </summary>
 	public abstract class SceneTransition
 	{
@@ -103,8 +103,7 @@ namespace Nez
 		protected IEnumerator LoadNextScene()
 		{
 			// let the listener know the screen is obscured if we have one
-			if (OnScreenObscured != null)
-				OnScreenObscured();
+			OnScreenObscured?.Invoke();
 
 			// if we arent loading a new scene we just set the flag as if we did so that the 2 phase transitions complete
 			if (!_loadsNewScene)

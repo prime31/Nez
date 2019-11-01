@@ -94,7 +94,7 @@ namespace Nez.UI
 			var fontColor = _isDisabled ? style.DisabledFontColor : style.FontColor;
 
 			var color = GetColor();
-			color = new Color(color, (int) (color.A * parentAlpha));
+			color = ColorExt.Create(color, (int)(color.A * parentAlpha));
 			float x = GetX();
 			float y = GetY();
 			float width = GetWidth();
@@ -112,14 +112,14 @@ namespace Nez.UI
 					width -= background.LeftWidth + background.RightWidth;
 					height -= background.BottomHeight + background.TopHeight;
 					x += background.LeftWidth;
-					y += (int) (height / 2 + background.BottomHeight - font.LineHeight / 2);
+					y += (int)(height / 2 + background.BottomHeight - font.LineHeight / 2);
 				}
 				else
 				{
-					y += (int) (height / 2 + font.LineHeight / 2);
+					y += (int)(height / 2 + font.LineHeight / 2);
 				}
 
-				fontColor = new Color(fontColor, (int) (fontColor.A * parentAlpha));
+				fontColor = ColorExt.Create(fontColor, (int)(fontColor.A * parentAlpha));
 				batcher.DrawString(font, str, new Vector2(x, y), fontColor);
 			}
 		}
@@ -465,7 +465,7 @@ namespace Nez.UI
 		}
 
 		public SelectBoxStyle(BitmapFont font, Color fontColor, IDrawable background, ScrollPaneStyle scrollStyle,
-		                      ListBoxStyle listStyle)
+							  ListBoxStyle listStyle)
 		{
 			Font = font;
 			FontColor = fontColor;

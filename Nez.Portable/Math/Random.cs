@@ -14,7 +14,7 @@ namespace Nez
 		/// returns current seed value
 		/// </summary>
 		/// <returns>Seed.</returns>
-		static public int GetSeed()
+		public static int GetSeed()
 		{
 			return _seed;
 		}
@@ -24,7 +24,7 @@ namespace Nez
 		/// resets rng with new seed
 		/// </summary>
 		/// <param name="seed">Seed.</param>
-		static public void SetSeed(int seed)
+		public static void SetSeed(int seed)
 		{
 			_seed = seed;
 			RNG = new System.Random(_seed);
@@ -35,7 +35,7 @@ namespace Nez
 		/// returns a random float between 0 (inclusive) and 1 (exclusive)
 		/// </summary>
 		/// <returns>The float.</returns>
-		static public float NextFloat()
+		public static float NextFloat()
 		{
 			return (float) RNG.NextDouble();
 		}
@@ -46,7 +46,7 @@ namespace Nez
 		/// </summary>
 		/// <returns>The float.</returns>
 		/// <param name="max">Max.</param>
-		static public float NextFloat(float max)
+		public static float NextFloat(float max)
 		{
 			return (float) RNG.NextDouble() * max;
 		}
@@ -57,7 +57,7 @@ namespace Nez
 		/// </summary>
 		/// <returns>The float.</returns>
 		/// <param name="max">Max.</param>
-		static public int NextInt(int max)
+		public static int NextInt(int max)
 		{
 			return RNG.Next(max);
 		}
@@ -67,7 +67,7 @@ namespace Nez
 		/// returns a random float between 0 and 2 * PI
 		/// </summary>
 		/// <returns>The angle.</returns>
-		static public float NextAngle()
+		public static float NextAngle()
 		{
 			return (float) RNG.NextDouble() * MathHelper.TwoPi;
 		}
@@ -89,7 +89,7 @@ namespace Nez
 		/// <param name="min"></param>
 		/// <param name="max"></param>
 		/// <returns></returns>
-		static public int Range(int min, int max)
+		public static int Range(int min, int max)
 		{
 			return RNG.Next(min, max);
 		}
@@ -101,7 +101,7 @@ namespace Nez
 		/// <param name="min"></param>
 		/// <param name="max"></param>
 		/// <returns></returns>
-		static public float Range(float min, float max)
+		public static float Range(float min, float max)
 		{
 			return min + NextFloat(max - min);
 		}
@@ -113,7 +113,7 @@ namespace Nez
 		/// <param name="min"></param>
 		/// <param name="max"></param>
 		/// <returns></returns>
-		static public Vector2 Range(Vector2 min, Vector2 max)
+		public static Vector2 Range(Vector2 min, Vector2 max)
 		{
 			return min + new Vector2(NextFloat(max.X - min.X), NextFloat(max.Y - min.Y));
 		}
@@ -123,7 +123,7 @@ namespace Nez
 		/// returns a random float between -1 and 1
 		/// </summary>
 		/// <returns>The one to one.</returns>
-		static public float MinusOneToOne()
+		public static float MinusOneToOne()
 		{
 			return NextFloat(2f) - 1f;
 		}
