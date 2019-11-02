@@ -166,7 +166,7 @@ namespace Nez
 		/// <param name="batcher">Batcher.</param>
 		public virtual void Render(Batcher batcher)
 		{
-			GraphicsDeviceExt.SetRenderTarget(Core.GraphicsDevice, null);
+			Core.GraphicsDevice.SetRenderTarget(null);
 			batcher.Begin(BlendState.Opaque, Core.DefaultSamplerState, DepthStencilState.None, null);
 			batcher.Draw(PreviousSceneRender, Vector2.Zero, Color.White);
 			batcher.End();

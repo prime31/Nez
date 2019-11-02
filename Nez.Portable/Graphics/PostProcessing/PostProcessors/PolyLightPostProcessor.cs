@@ -180,7 +180,7 @@ namespace Nez
 				RenderTarget.ReleaseTemporary(tempRenderTarget);
 			}
 
-			GraphicsDeviceExt.SetRenderTarget(Core.GraphicsDevice, destination);
+			Core.GraphicsDevice.SetRenderTarget(destination);
 			Graphics.Instance.Batcher.Begin(Effect);
 			Graphics.Instance.Batcher.Draw(source, new Rectangle(0, 0, destination.Width, destination.Height),
 				Color.White);

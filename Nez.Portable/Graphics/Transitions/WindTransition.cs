@@ -77,9 +77,8 @@ namespace Nez
 
 		public override void Render(Batcher batcher)
 		{
-			GraphicsDeviceExt.SetRenderTarget(Core.GraphicsDevice, null);
-			batcher.Begin(BlendState.NonPremultiplied, Core.DefaultSamplerState, DepthStencilState.None, null,
-				_windEffect);
+			Core.GraphicsDevice.SetRenderTarget(null);
+			batcher.Begin(BlendState.NonPremultiplied, Core.DefaultSamplerState, DepthStencilState.None, null, _windEffect);
 			batcher.Draw(PreviousSceneRender, _destinationRect, Color.White);
 			batcher.End();
 		}

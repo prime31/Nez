@@ -290,12 +290,12 @@ namespace Nez.ImGuiTools
 				ImGui.End();
 
 				Core.GraphicsDevice.SamplerStates[0] = samplerState;
-				GraphicsDeviceExt.SetRenderTarget(Core.GraphicsDevice, finalRenderTarget);
+				Core.GraphicsDevice.SetRenderTarget(finalRenderTarget);
 				Core.GraphicsDevice.Clear(letterboxColor);
 			}
 			else
 			{
-				GraphicsDeviceExt.SetRenderTarget(Core.GraphicsDevice, finalRenderTarget);
+				Core.GraphicsDevice.SetRenderTarget(finalRenderTarget);
 				Core.GraphicsDevice.Clear(letterboxColor);
 				Graphics.Instance.Batcher.Begin(BlendState.Opaque, samplerState, null, null);
 				Graphics.Instance.Batcher.Draw(source, finalRenderDestinationRect, Color.White);

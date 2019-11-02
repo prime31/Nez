@@ -147,12 +147,12 @@ namespace Nez
 
 		public override void PreRender(Batcher batcher)
 		{
-			GraphicsDeviceExt.SetRenderTarget(Core.GraphicsDevice, _maskRenderTarget);
+			Core.GraphicsDevice.SetRenderTarget(_maskRenderTarget);
 			batcher.Begin(BlendState.AlphaBlend, Core.DefaultSamplerState, DepthStencilState.None, null);
 			batcher.Draw(_maskTexture, _maskPosition, null, Color.White, _renderRotation, _maskOrigin,
 				_renderScale, SpriteEffects.None, 0);
 			batcher.End();
-			GraphicsDeviceExt.SetRenderTarget(Core.GraphicsDevice, null);
+			Core.GraphicsDevice.SetRenderTarget(null);
 		}
 
 
@@ -168,7 +168,7 @@ namespace Nez
 
 		public override void Render(Batcher batcher)
 		{
-			GraphicsDeviceExt.SetRenderTarget(Core.GraphicsDevice, null);
+			Core.GraphicsDevice.SetRenderTarget(null);
 
 			// if we are scaling out we dont need to render the previous scene anymore since we want the new scene to be visible
 			if (!_isNewSceneLoaded)

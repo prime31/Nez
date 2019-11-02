@@ -57,7 +57,7 @@ namespace Nez
 
 		public override void Process(RenderTarget2D source, RenderTarget2D destination)
 		{
-			GraphicsDeviceExt.SetRenderTarget(Core.GraphicsDevice, destination);
+			Core.GraphicsDevice.SetRenderTarget(destination);
 			Graphics.Instance.Batcher.Begin(effect: Effect);
 			Graphics.Instance.Batcher.Draw(source, new Rectangle(0, 0, destination.Width, destination.Height), Color.White);
 			Graphics.Instance.Batcher.End();

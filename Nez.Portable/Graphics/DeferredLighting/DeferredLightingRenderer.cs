@@ -214,7 +214,7 @@ namespace Nez.DeferredLighting
 			_lightEffect.SetNormalMap(NormalRT);
 			_lightEffect.UpdateForCamera(scene.Camera);
 
-			GraphicsDeviceExt.SetRenderTarget(Core.GraphicsDevice, LightRT);
+			Core.GraphicsDevice.SetRenderTarget(LightRT);
 			Core.GraphicsDevice.Clear(Color.Transparent);
 			Core.GraphicsDevice.BlendState = BlendState.Additive;
 			Core.GraphicsDevice.DepthStencilState = DepthStencilState.None;
@@ -222,8 +222,7 @@ namespace Nez.DeferredLighting
 			var renderables = scene.RenderableComponents.ComponentsWithRenderLayer(_lightLayer);
 			for (var i = 0; i < renderables.Length; i++)
 			{
-				Insist.IsTrue(renderables.Buffer[i] is DeferredLight,
-					"Found a Renderable in the lightLayer that is not a DeferredLight!");
+				Insist.IsTrue(renderables.Buffer[i] is DeferredLight, "Found a Renderable in the lightLayer that is not a DeferredLight!");
 				var renderable = renderables.Buffer[i];
 				if (renderable.Enabled)
 				{

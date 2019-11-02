@@ -102,7 +102,7 @@ namespace Nez
 			// if we have a renderTarget render into it
 			if (RenderTexture != null)
 			{
-				GraphicsDeviceExt.SetRenderTarget(Core.GraphicsDevice, RenderTexture);
+				Core.GraphicsDevice.SetRenderTarget(RenderTexture);
 				Core.GraphicsDevice.Clear(RenderTargetClearColor);
 			}
 

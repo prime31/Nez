@@ -103,7 +103,7 @@ namespace Nez
 		/// </summary>
 		protected void DrawFullscreenQuad(Texture2D texture, RenderTarget2D renderTarget, Effect effect = null)
 		{
-			GraphicsDeviceExt.SetRenderTarget(Core.GraphicsDevice, renderTarget);
+			Core.GraphicsDevice.SetRenderTarget(renderTarget);
 			DrawFullscreenQuad(texture, renderTarget.Width, renderTarget.Height, effect);
 		}
 
