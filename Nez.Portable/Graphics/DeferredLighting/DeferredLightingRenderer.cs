@@ -236,7 +236,7 @@ namespace Nez.DeferredLighting
 
 		void RenderFinalCombine(Scene scene)
 		{
-			GraphicsDeviceExt.SetRenderTarget(Core.GraphicsDevice, scene.SceneRenderTarget);
+			Core.GraphicsDevice.SetRenderTarget(scene.SceneRenderTarget);
 			Core.GraphicsDevice.BlendState = BlendState.Opaque;
 			Core.GraphicsDevice.DepthStencilState = DepthStencilState.None;
 
@@ -249,7 +249,7 @@ namespace Nez.DeferredLighting
 		{
 			var tempRT = RenderTarget.GetTemporary(scene.SceneRenderTarget.Width, scene.SceneRenderTarget.Height);
 
-			GraphicsDeviceExt.SetRenderTarget(Core.GraphicsDevice, tempRT);
+			Core.GraphicsDevice.SetRenderTarget(tempRT);
 
 			var halfWidth = tempRT.Width / 2;
 			var halfHeight = tempRT.Height / 2;
@@ -262,7 +262,7 @@ namespace Nez.DeferredLighting
 				new Rectangle(halfWidth, halfHeight, halfWidth, halfHeight));
 			Graphics.Instance.Batcher.End();
 
-			GraphicsDeviceExt.SetRenderTarget(Core.GraphicsDevice, scene.SceneRenderTarget);
+			Core.GraphicsDevice.SetRenderTarget(scene.SceneRenderTarget);
 			Graphics.Instance.Batcher.Begin(BlendState.Opaque);
 			Graphics.Instance.Batcher.Draw(tempRT, Vector2.Zero);
 			Graphics.Instance.Batcher.End();
