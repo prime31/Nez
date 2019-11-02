@@ -95,8 +95,7 @@ namespace Nez.DeferredLighting
 		/// <param name="batcher">Batcher.</param>
 		public override void DebugRender(Batcher batcher)
 		{
-			batcher.DrawCircle(Entity.Transform.Position + _localOffset, Radius * Entity.Transform.Scale.X,
-				Color.DarkOrchid, 2);
+			batcher.DrawCircle(Entity.Transform.Position + _localOffset, Radius * Entity.Transform.Scale.X, Color.DarkOrchid, 2);
 		}
 	}
 }

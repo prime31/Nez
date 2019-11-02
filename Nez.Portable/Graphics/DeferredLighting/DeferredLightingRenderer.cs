@@ -61,7 +61,7 @@ namespace Nez.DeferredLighting
 		/// <summary>
 		/// if true, all stages of the deferred pipeline are rendered after the final combine
 		/// </summary>
-		public bool EnableDebugBufferRender = false;
+		public bool EnableDebugBufferRender;
 
 
 		int _lightLayer;
@@ -218,6 +218,7 @@ namespace Nez.DeferredLighting
 			Core.GraphicsDevice.Clear(Color.Transparent);
 			Core.GraphicsDevice.BlendState = BlendState.Additive;
 			Core.GraphicsDevice.DepthStencilState = DepthStencilState.None;
+			Core.GraphicsDevice.RasterizerState = RasterizerState.CullNone;
 
 			var renderables = scene.RenderableComponents.ComponentsWithRenderLayer(_lightLayer);
 			for (var i = 0; i < renderables.Length; i++)
@@ -257,8 +258,7 @@ namespace Nez.DeferredLighting
 			Graphics.Instance.Batcher.Draw(LightRT, new Rectangle(0, 0, halfWidth, halfHeight));
 			Graphics.Instance.Batcher.Draw(DiffuseRT, new Rectangle(halfWidth, 0, halfWidth, halfHeight));
 			Graphics.Instance.Batcher.Draw(NormalRT, new Rectangle(0, halfHeight, halfWidth, halfHeight));
-			Graphics.Instance.Batcher.Draw(scene.SceneRenderTarget,
-				new Rectangle(halfWidth, halfHeight, halfWidth, halfHeight));
+			Graphics.Instance.Batcher.Draw(scene.SceneRenderTarget, new Rectangle(halfWidth, halfHeight, halfWidth, halfHeight));
 			Graphics.Instance.Batcher.End();
 
 			Core.GraphicsDevice.SetRenderTarget(scene.SceneRenderTarget);
