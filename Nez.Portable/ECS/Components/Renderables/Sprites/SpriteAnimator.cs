@@ -125,22 +125,22 @@ namespace Nez.Sprites
 				return;
 			}
 
-            // figure out which frame we are on
-            int i = Mathf.FloorToInt(time / secondsPerFrame);
+			// figure out which frame we are on
+			int i = Mathf.FloorToInt(time / secondsPerFrame);
 			int n = animation.Sprites.Length;
-            if (n > 2 && (_loopMode == LoopMode.PingPong || _loopMode == LoopMode.PingPongOnce))
-                // create a pingpong frame. for example, when (n == 3):
-                //   0  1  2  3  |  4  5  6  7  |  8  ..  :: i
-                //   0  1  2  3  |  0  1  2  3  |  0  ..  :: i % 4
-                //  -1  0  1  2  | -1  0  1  2  | -1  ..  :: i % 4 - 1
-                //  -1  0  1  0  | -1  0  1  0  | -1  ..  :: (i % 4 - 1) % 2
-                //   0  1  2  1  |  0  1  2  1  |  0  ..  :: (i % 4 - 1) % 2 + 1
-                CurrentFrame = (i % ((n - 1) * 2) - 1) % (n - 1) + 1;
-            else
-                // create a looping frame
-                CurrentFrame = i % n;
+			if (n > 2 && (_loopMode == LoopMode.PingPong || _loopMode == LoopMode.PingPongOnce))
+				// create a pingpong frame. for example, when (n == 3):
+				//   0  1  2  3  |  4  5  6  7  |  8  ..  :: i
+				//   0  1  2  3  |  0  1  2  3  |  0  ..  :: i % 4
+				//  -1  0  1  2  | -1  0  1  2  | -1  ..  :: i % 4 - 1
+				//  -1  0  1  0  | -1  0  1  0  | -1  ..  :: (i % 4 - 1) % 2
+				//   0  1  2  1  |  0  1  2  1  |  0  ..  :: (i % 4 - 1) % 2 + 1
+				CurrentFrame = (i % ((n - 1) * 2) - 1) % (n - 1) + 1;
+			else
+				// create a looping frame
+				CurrentFrame = i % n;
 
-            Sprite = animation.Sprites[CurrentFrame];
+			Sprite = animation.Sprites[CurrentFrame];
 		}
 
 
