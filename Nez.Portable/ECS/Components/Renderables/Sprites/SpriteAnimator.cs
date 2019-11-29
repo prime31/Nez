@@ -138,7 +138,7 @@ namespace Nez.Sprites
 				// create a looping frame
 				CurrentFrame = i % n;
 
-            Sprite = animation.Sprites[CurrentFrame];
+			Sprite = animation.Sprites[CurrentFrame];
 		}
 
 		/// <summary>
