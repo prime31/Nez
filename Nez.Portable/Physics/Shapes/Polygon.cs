@@ -273,7 +273,7 @@ namespace Nez.PhysicsShapes
 
 					// to deal with rotation with an offset origin we just move our center in a circle around 0,0 with our offset making the 0 angle
 					// we have to deal with scale here as well so we scale our offset to get the proper length first.
-					var offsetAngle = Mathf.Atan2(collider.LocalOffset.Y, collider.LocalOffset.X) * Mathf.Rad2Deg;
+					var offsetAngle = Mathf.Atan2(collider.LocalOffset.Y * collider.Entity.Transform.Scale.Y, collider.LocalOffset.X * collider.Entity.Transform.Scale.X) * Mathf.Rad2Deg;
 					var offsetLength = hasUnitScale
 						? collider._localOffsetLength
 						: (collider.LocalOffset * collider.Entity.Transform.Scale).Length();
