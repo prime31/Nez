@@ -106,7 +106,7 @@ namespace Nez.Sprites
 
 			// Once and PingPongOnce reset back to Time = 0 once they complete
 			if (_loopMode == LoopMode.Once && time > iterationDuration ||
-			    _loopMode == LoopMode.PingPongOnce && time > iterationDuration * 2)
+			    _loopMode == LoopMode.PingPongOnce && time > iterationDuration * 2 - secondsPerFrame)
 			{
 				AnimationState = State.Completed;
 				_elapsedTime = 0;
