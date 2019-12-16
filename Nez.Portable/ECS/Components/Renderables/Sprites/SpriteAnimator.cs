@@ -76,10 +76,10 @@ namespace Nez.Sprites
 		/// </summary>
 		public int CurrentFrame { get; private set; }
 
-        /// <summary>
-        /// checks to see if the CurrentAnimation is running
-        /// </summary>
-        public bool IsRunning => AnimationState == State.Running;
+		/// <summary>
+		/// checks to see if the CurrentAnimation is running
+		/// </summary>
+		public bool IsRunning => AnimationState == State.Running;
 
 		readonly Dictionary<string, SpriteAnimation> _animations = new Dictionary<string, SpriteAnimation>();
 
@@ -100,14 +100,14 @@ namespace Nez.Sprites
 			var animation = CurrentAnimation;
 			var secondsPerFrame = 1 / (animation.FrameRate * Speed);
 			var iterationDuration = secondsPerFrame * animation.Sprites.Length;
-			var pingPongIterationDuration = secondsPerFrame * (animation.Sprites.Length * 2 - 2);
+			var pingPongIterationDuration = animation.Sprites.Length < 3 ? iterationDuration : secondsPerFrame * (animation.Sprites.Length * 2 - 2);
 
 			_elapsedTime += Time.DeltaTime;
 			var time = Math.Abs(_elapsedTime);
 
 			// Once and PingPongOnce reset back to Time = 0 once they complete
 			if (_loopMode == LoopMode.Once && time > iterationDuration ||
-			    _loopMode == LoopMode.PingPongOnce && time > pingPongIterationDuration)
+				_loopMode == LoopMode.PingPongOnce && time > pingPongIterationDuration)
 			{
 				AnimationState = State.Completed;
 				_elapsedTime = 0;
