@@ -367,11 +367,12 @@ namespace Nez
 				if (neighbor.IsTrigger)
 					continue;
 
-				if (CollidesWith(neighbor, out result))
+				if (CollidesWith(neighbor, out CollisionResult neighborResult))
 				{
 					// hit. back off our motion and our Shape.position
-					motion -= result.MinimumTranslationVector;
-					Shape.position -= result.MinimumTranslationVector;
+					result = neighborResult;
+					motion -= neighborResult.MinimumTranslationVector;
+					Shape.position -= neighborResult.MinimumTranslationVector;
 					didCollide = true;
 				}
 			}
