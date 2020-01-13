@@ -63,7 +63,7 @@ namespace Nez
 	{
 		var dirInfo = new DirectoryInfo( dir );
 		var firstIndent = new string( '\t', depth );
-		var className = GenerateClassName( dirInfo.Name, true );
+		var className = GenerateClassName( dirInfo.Name );
 		WriteLine( "{0}public static class {1}\n{2}{{", firstIndent, className, firstIndent );
 
 		// handle subdirectories
@@ -89,7 +89,7 @@ namespace Nez
 				.Replace( ".xnb", string.Empty );
 			var fileInfo = new FileInfo( file );
 			var fileName = fileInfo.Name.Replace( ".xnb", string.Empty );
-			var className = GenerateClassName( fileName, false );
+			var className = GenerateClassName( fileName );
 
 			if( finalPath[0] == '/' || finalPath[0] == '\\' )
 				finalPath = finalPath.Substring( 1 );
