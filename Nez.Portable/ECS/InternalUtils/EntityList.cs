@@ -279,20 +279,20 @@ namespace Nez
 		/// </summary>
 		/// <returns>The of type.</returns>
 		/// <typeparam name="T">The 1st type parameter.</typeparam>
-		public List<Entity> EntitiesOfType<T>() where T : Entity
+		public List<T> EntitiesOfType<T>() where T : Entity
 		{
-			var list = ListPool<Entity>.Obtain();
+			var list = ListPool<T>.Obtain();
 			for (var i = 0; i < _entities.Length; i++)
 			{
 				if (_entities.Buffer[i] is T)
-					list.Add(_entities.Buffer[i]);
+					list.Add((T)_entities.Buffer[i]);
 			}
 
 			foreach (var entity in _entitiesToAdd)
 			{
 				if (entity is T)
 				{
-					list.Add(entity);
+					list.Add((T)entity);
 				}
 			}
 

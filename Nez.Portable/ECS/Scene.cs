@@ -1070,7 +1070,7 @@ namespace Nez
 		/// </summary>
 		/// <returns>The of type.</returns>
 		/// <typeparam name="T">The 1st type parameter.</typeparam>
-		public List<Entity> EntitiesOfType<T>() where T : Entity => Entities.EntitiesOfType<T>();
+		public List<T> EntitiesOfType<T>() where T : Entity => Entities.EntitiesOfType<T>();
 
 		/// <summary>
 		/// returns the first enabled loaded component of Type T
