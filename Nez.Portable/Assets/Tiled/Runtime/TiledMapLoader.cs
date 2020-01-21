@@ -1,11 +1,12 @@
-﻿using System;
+﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using Nez.Textures;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Xml.Linq;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 
 namespace Nez.Tiled
 {
@@ -642,7 +643,7 @@ namespace Nez.Tiled
 			return frame;
 		}
 
-		public static TmxImage LoadTmxImage(this TmxImage image, XElement xImage, string tmxDir = "")
+		public static TmxImage LoadTmxImage(this TmxImage image, XElement xImage, string tmxDir = "", bool premultiplyAlpha = true)
 		{
 			var xSource = xImage.Attribute("source");
 			if (xSource != null)
@@ -651,7 +652,7 @@ namespace Nez.Tiled
 				image.Source = Path.Combine(tmxDir, (string)xSource);
 
 				using (var stream = TitleContainer.OpenStream(image.Source))
-					image.Texture = Texture2D.FromStream(Core.GraphicsDevice, stream);
+					image.Texture = premultiplyAlpha ? TextureUtils.TextureFromStreamPreMultiplied(stream) : Texture2D.FromStream(Core.GraphicsDevice, stream);
 			}
 			else
 			{
