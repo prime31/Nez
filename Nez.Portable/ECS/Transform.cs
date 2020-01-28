@@ -51,6 +51,50 @@ namespace Nez
 
 
 		/// <summary>
+		/// a vector that points up according to the transform's rotation
+		/// </summary>
+		public Vector2 Up
+		{
+			get
+			{
+				UpdateTransform();
+				return _up;
+			}
+		}
+		/// <summary>
+		/// a vector that points right according to the transform's rotation
+		/// </summary>
+		public Vector2 Down
+		{
+			get
+			{
+				return -Up;
+			}
+		}
+
+		/// <summary>
+		/// a vector that points up according to the transform's rotation
+		/// </summary>
+		public Vector2 Left
+		{
+			get
+			{
+				UpdateTransform();
+				return _left;
+			}
+		}
+		/// <summary>
+		/// a vector that points right according to the transform's rotation
+		/// </summary>
+		public Vector2 Right
+		{
+			get
+			{
+				return -Left;
+			}
+		}
+
+		/// <summary>
 		/// position of the transform in world space
 		/// </summary>
 		/// <value>The position.</value>
@@ -250,6 +294,8 @@ namespace Nez
 		Matrix2D _translationMatrix;
 		Matrix2D _scaleMatrix;
 
+		Vector2 _up;
+		Vector2 _left;
 		Vector2 _position;
 		Vector2 _scale;
 		float _rotation;
@@ -504,6 +550,12 @@ namespace Nez
 					if (_localRotationDirty)
 					{
 						Matrix2D.CreateRotation(_localRotation, out _rotationMatrix);
+
+						// Work out the directional vectors
+						_up.X = _left.Y = Mathf.Sin(_localRotation);
+						_up.Y = _left.X = Mathf.Cos(_localRotation);
+						_left.X = -_left.X;
+
 						_localRotationDirty = false;
 					}
 
