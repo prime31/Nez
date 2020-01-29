@@ -62,7 +62,7 @@ namespace Nez
 			}
 		}
 		/// <summary>
-		/// a vector that points right according to the transform's rotation
+		/// a vector that points down according to the transform's rotation
 		/// </summary>
 		public Vector2 Down
 		{
@@ -73,7 +73,7 @@ namespace Nez
 		}
 
 		/// <summary>
-		/// a vector that points up according to the transform's rotation
+		/// a vector that points left according to the transform's rotation
 		/// </summary>
 		public Vector2 Left
 		{
