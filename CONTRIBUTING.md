@@ -1,7 +1,7 @@
 Guidelines
 ==========
 
-When contributing to Nez, please follow the coding guidelines set forth in the code. If you are using Xamarin there is a policy file (Nez.Xamarin.Policy.mdpolicy) in the root of the repository that you can use to format your code. It will work for *almost* all code except enum declarations (due to a bug in Xamarin). You can apply the policy by using the Project -> Apply Policy menu item.
+When contributing to Nez, please follow the coding guidelines set forth in the code.
 
 
 Submitting Patches

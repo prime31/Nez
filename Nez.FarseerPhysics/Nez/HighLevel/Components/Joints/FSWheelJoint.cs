@@ -10,72 +10,71 @@ namespace Nez.Farseer
 
 		#region Configuration
 
-		public FSWheelJoint setAnchor( Vector2 anchor )
+		public FSWheelJoint SetAnchor(Vector2 anchor)
 		{
-			_jointDef.anchor = anchor;
-			recreateJoint();
+			_jointDef.Anchor = anchor;
+			RecreateJoint();
 			return this;
 		}
 
 
-		public FSWheelJoint setAxis( Vector2 axis )
+		public FSWheelJoint SetAxis(Vector2 axis)
 		{
-			_jointDef.axis = axis;
-			recreateJoint();
+			_jointDef.Axis = axis;
+			RecreateJoint();
 			return this;
 		}
 
 
-		public FSWheelJoint setMotorEnabled( bool motorEnabled )
+		public FSWheelJoint SetMotorEnabled(bool motorEnabled)
 		{
-			_jointDef.motorEnabled = motorEnabled;
-			recreateJoint();
+			_jointDef.MotorEnabled = motorEnabled;
+			RecreateJoint();
 			return this;
 		}
 
 
-		public FSWheelJoint setMotorSpeed( float motorSpeed )
+		public FSWheelJoint SetMotorSpeed(float motorSpeed)
 		{
-			_jointDef.motorSpeed = motorSpeed;
-			recreateJoint();
+			_jointDef.MotorSpeed = motorSpeed;
+			RecreateJoint();
 			return this;
 		}
 
 
-		public FSWheelJoint setMaxMotorTorque( float maxMotorTorque )
+		public FSWheelJoint SetMaxMotorTorque(float maxMotorTorque)
 		{
-			_jointDef.maxMotorTorque = maxMotorTorque;
-			recreateJoint();
+			_jointDef.MaxMotorTorque = maxMotorTorque;
+			RecreateJoint();
 			return this;
 		}
 
 
-		public FSWheelJoint setFrequency( float frequency )
+		public FSWheelJoint SetFrequency(float frequency)
 		{
-			_jointDef.frequency = frequency;
-			recreateJoint();
+			_jointDef.Frequency = frequency;
+			RecreateJoint();
 			return this;
 		}
 
 
-		public FSWheelJoint setDampingRatio( float damping )
+		public FSWheelJoint SetDampingRatio(float damping)
 		{
-			_jointDef.dampingRatio = damping;
-			recreateJoint();
+			_jointDef.DampingRatio = damping;
+			RecreateJoint();
 			return this;
 		}
 
 		#endregion
 
 
-		internal override FSJointDef getJointDef()
+		internal override FSJointDef GetJointDef()
 		{
-			initializeJointDef( _jointDef );
-			if( _jointDef.bodyA == null || _jointDef.bodyB == null )
+			InitializeJointDef(_jointDef);
+			if (_jointDef.BodyA == null || _jointDef.BodyB == null)
 				return null;
 
 			return _jointDef;
 		}
-
 	}
 }

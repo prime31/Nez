@@ -1,5 +1,4 @@
-﻿using System;
-using Microsoft.Xna.Framework.Input;
+﻿using Microsoft.Xna.Framework.Input;
 
 
 namespace Nez.UI
@@ -10,29 +9,28 @@ namespace Nez.UI
 		/// called when a key is first pressed
 		/// </summary>
 		/// <param name="key">Key.</param>
-		void keyDown( Keys key );
+		void KeyDown(Keys key);
 
 		/// <summary>
 		/// called the same frame as keyDown and for repeating keys (key held down). This is only called for non-modifier keys.
 		/// </summary>
 		/// <param name="key">Key.</param>
-		void keyPressed( Keys key, char character );
+		void KeyPressed(Keys key, char character);
 
 		/// <summary>
 		/// called when a key is released
 		/// </summary>
 		/// <param name="key">Key.</param>
-		void keyReleased( Keys key );
+		void KeyReleased(Keys key);
 
 		/// <summary>
 		/// called when keyboard focus is gained
 		/// </summary>
-		void gainedFocus();
+		void GainedFocus();
 
 		/// <summary>
 		/// called when keyboard focus is lost
 		/// </summary>
-		void lostFocus();
+		void LostFocus();
 	}
 }
-

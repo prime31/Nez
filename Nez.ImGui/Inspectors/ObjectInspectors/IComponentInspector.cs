@@ -1,10 +1,10 @@
 namespace Nez.ImGuiTools.ObjectInspectors
 {
-    public interface IComponentInspector
-    {
-        Entity entity { get; }
-        Component component { get; }
+	public interface IComponentInspector
+	{
+		Entity Entity { get; }
+		Component Component { get; }
 
-        void draw();
-    }
+		void Draw();
+	}
 }

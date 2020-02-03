@@ -1,14 +1,12 @@
-﻿using System;
-using Microsoft.Xna.Framework.Graphics;
+﻿using Microsoft.Xna.Framework.Graphics;
 
 
 namespace Nez
 {
 	public class GrayscaleEffect : Effect
 	{
-		public GrayscaleEffect() : base( Core.graphicsDevice, EffectResource.grayscaleBytes )
+		public GrayscaleEffect() : base(Core.GraphicsDevice, EffectResource.GrayscaleBytes)
 		{
 		}
 	}
 }
-

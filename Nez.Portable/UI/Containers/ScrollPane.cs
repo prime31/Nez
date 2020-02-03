@@ -1,15 +1,16 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
 
+
 namespace Nez.UI
 {
 	/// <summary>
 	/// A group that scrolls a child widget using scrollbars and/or mouse or touch dragging.
-	/// 
+	///
 	/// The widget is sized to its preferred size.If the widget's preferred width or height is less than the size of this scroll pane,
 	/// it is set to the size of this scroll pane. Scrollbars appear when the widget is larger than the scroll pane.
-	/// 
-	/// The scroll pane's preferred size is that of the child widget. At this size, the child widget will not need to scroll, so 
+	///
+	/// The scroll pane's preferred size is that of the child widget. At this size, the child widget will not need to scroll, so
 	/// scroll pane is typically sized by ignoring the preferred size in one or both directions.
 	/// </summary>
 	public class ScrollPane : Group, IInputListener
@@ -52,29 +53,33 @@ namespace Nez.UI
 		float _lastHandlePosition;
 
 
-		public ScrollPane( Element widget ) : this( widget, new ScrollPaneStyle() )
-		{ }
-
-
-		public ScrollPane( Element widget, Skin skin ) : this( widget, skin.get<ScrollPaneStyle>() )
-		{ }
-
-
-		public ScrollPane( Element widget, Skin skin, string styleName ) : this( widget, skin.get<ScrollPaneStyle>( styleName ) )
-		{ }
-
-
-		public ScrollPane( Element widget, ScrollPaneStyle style )
+		public ScrollPane(Element widget) : this(widget, new ScrollPaneStyle())
 		{
-			Insist.isNotNull( style, "style cannot be null" );
-			transform = true;
-			_style = style;
-			setWidget( widget );
-			setSize( 150, 150 );
 		}
 
 
-		void resetFade()
+		public ScrollPane(Element widget, Skin skin) : this(widget, skin.Get<ScrollPaneStyle>())
+		{
+		}
+
+
+		public ScrollPane(Element widget, Skin skin, string styleName) : this(widget,
+			skin.Get<ScrollPaneStyle>(styleName))
+		{
+		}
+
+
+		public ScrollPane(Element widget, ScrollPaneStyle style)
+		{
+			Insist.IsNotNull(style, "style cannot be null");
+			transform = true;
+			_style = style;
+			SetWidget(widget);
+			SetSize(150, 150);
+		}
+
+
+		void ResetFade()
 		{
 			_fadeAlpha = _fadeAlphaSeconds;
 			_fadeDelay = _fadeDelaySeconds;
@@ -84,136 +89,145 @@ namespace Nez.UI
 		/// <summary>
 		/// If currently scrolling by tracking a touch down, stop scrolling.
 		/// </summary>
-		public void cancel()
+		public void Cancel()
 		{
 			_touchScrollH = false;
 			_touchScrollV = false;
 		}
 
 
-		void clamp()
+		void Clamp()
 		{
-			if( !_clamp )
+			if (!_clamp)
 				return;
 
-			setScrollX( _overscrollX ? Mathf.clamp( _amountX, -_overscrollDistance, _maxX + _overscrollDistance )
-				: Mathf.clamp( _amountX, 0, _maxX ) );
-			setScrollY( _overscrollY ? Mathf.clamp( _amountY, -_overscrollDistance, _maxY + _overscrollDistance )
-				: Mathf.clamp( _amountY, 0, _maxY ) );
+			SetScrollX(_overscrollX
+				? Mathf.Clamp(_amountX, -_overscrollDistance, _maxX + _overscrollDistance)
+				: Mathf.Clamp(_amountX, 0, _maxX));
+			SetScrollY(_overscrollY
+				? Mathf.Clamp(_amountY, -_overscrollDistance, _maxY + _overscrollDistance)
+				: Mathf.Clamp(_amountY, 0, _maxY));
 		}
 
 
 		#region ILayout
 
-		public override float minWidth { get; } = 0;
+		public override float MinWidth { get; } = 0;
 
-		public override float minHeight { get; } = 0;
+		public override float MinHeight { get; } = 0;
 
-		public override float preferredWidth
+		public override float PreferredWidth
 		{
 			get
 			{
-				if( _widget is ILayout )
+				if (_widget is ILayout)
 				{
-					var width = ( (ILayout)_widget ).preferredWidth;
-					if( _style.background != null ) width += _style.background.leftWidth + _style.background.rightWidth;
-					if( _forceScrollY )
+					var width = ((ILayout)_widget).PreferredWidth;
+					if (_style.Background != null) width += _style.Background.LeftWidth + _style.Background.RightWidth;
+					if (_forceScrollY)
 					{
 						var scrollbarWidth = 0f;
-						if( _style.vScrollKnob != null ) scrollbarWidth = _style.vScrollKnob.minWidth;
-						if( _style.vScroll != null ) scrollbarWidth = Math.Max( scrollbarWidth, _style.vScroll.minWidth );
+						if (_style.VScrollKnob != null) scrollbarWidth = _style.VScrollKnob.MinWidth;
+						if (_style.VScroll != null) scrollbarWidth = Math.Max(scrollbarWidth, _style.VScroll.MinWidth);
 						width += scrollbarWidth;
 					}
+
 					return width;
 				}
+
 				return 150;
 			}
 		}
 
-		public override float preferredHeight
+		public override float PreferredHeight
 		{
 			get
 			{
-				if( _widget is ILayout )
+				if (_widget is ILayout)
 				{
-					var height = ( (ILayout)_widget ).preferredHeight;
-					if( _style.background != null ) height += _style.background.topHeight + _style.background.bottomHeight;
-					if( _forceScrollX )
+					var height = ((ILayout)_widget).PreferredHeight;
+					if (_style.Background != null)
+						height += _style.Background.TopHeight + _style.Background.BottomHeight;
+					if (_forceScrollX)
 					{
 						var scrollbarHeight = 0f;
-						if( _style.hScrollKnob != null ) scrollbarHeight = _style.hScrollKnob.minHeight;
-						if( _style.hScroll != null ) scrollbarHeight = Math.Max( scrollbarHeight, _style.hScroll.minHeight );
+						if (_style.HScrollKnob != null) scrollbarHeight = _style.HScrollKnob.MinHeight;
+						if (_style.HScroll != null)
+							scrollbarHeight = Math.Max(scrollbarHeight, _style.HScroll.MinHeight);
 						height += scrollbarHeight;
 					}
+
 					return height;
 				}
+
 				return 150;
 			}
 		}
 
-		public override void layout()
+		public override void Layout()
 		{
-			var bg = _style.background;
-			var hScrollKnob = _style.hScrollKnob;
-			var vScrollKnob = _style.vScrollKnob;
+			var bg = _style.Background;
+			var hScrollKnob = _style.HScrollKnob;
+			var vScrollKnob = _style.VScrollKnob;
 
 			float bgLeftWidth = 0, bgRightWidth = 0, bgTopHeight = 0, bgBottomHeight = 0;
-			if( bg != null )
+			if (bg != null)
 			{
-				bgLeftWidth = bg.leftWidth;
-				bgRightWidth = bg.rightWidth;
-				bgTopHeight = bg.topHeight;
-				bgBottomHeight = bg.bottomHeight;
+				bgLeftWidth = bg.LeftWidth;
+				bgRightWidth = bg.RightWidth;
+				bgTopHeight = bg.TopHeight;
+				bgBottomHeight = bg.BottomHeight;
 			}
 
-			var width = getWidth();
-			var height = getHeight();
+			var width = GetWidth();
+			var height = GetHeight();
 
 			var scrollbarHeight = 0f;
-			if( hScrollKnob != null ) scrollbarHeight = hScrollKnob.minHeight;
-			if( _style.hScroll != null ) scrollbarHeight = Math.Max( scrollbarHeight, _style.hScroll.minHeight );
+			if (hScrollKnob != null) scrollbarHeight = hScrollKnob.MinHeight;
+			if (_style.HScroll != null) scrollbarHeight = Math.Max(scrollbarHeight, _style.HScroll.MinHeight);
 			var scrollbarWidth = 0f;
-			if( vScrollKnob != null ) scrollbarWidth = vScrollKnob.minWidth;
-			if( _style.vScroll != null ) scrollbarWidth = Math.Max( scrollbarWidth, _style.vScroll.minWidth );
+			if (vScrollKnob != null) scrollbarWidth = vScrollKnob.MinWidth;
+			if (_style.VScroll != null) scrollbarWidth = Math.Max(scrollbarWidth, _style.VScroll.MinWidth);
 
 			// Get available space size by subtracting background's padded area.
 			_areaWidth = width - bgLeftWidth - bgRightWidth;
 			_areaHeight = height - bgTopHeight - bgBottomHeight;
 
-			if( _widget == null )
+			if (_widget == null)
 				return;
 
 			// Get widget's desired width.
 			float widgetWidth, widgetHeight;
-			if( _widget is ILayout )
+			if (_widget is ILayout)
 			{
 				var layout = _widget as ILayout;
-				widgetWidth = layout.preferredWidth;
-				widgetHeight = layout.preferredHeight;
+				widgetWidth = layout.PreferredWidth;
+				widgetHeight = layout.PreferredHeight;
 			}
 			else
 			{
-				widgetWidth = _widget.getWidth();
-				widgetHeight = _widget.getHeight();
+				widgetWidth = _widget.GetWidth();
+				widgetHeight = _widget.GetHeight();
 			}
 
 			// Determine if horizontal/vertical scrollbars are needed.
-			_scrollX = _forceScrollX || ( widgetWidth > _areaWidth && !_disableX );
-			_scrollY = _forceScrollY || ( widgetHeight > _areaHeight && !_disableY );
+			_scrollX = _forceScrollX || (widgetWidth > _areaWidth && !_disableX);
+			_scrollY = _forceScrollY || (widgetHeight > _areaHeight && !_disableY);
 
 			var fade = _fadeScrollBars;
-			if( !fade )
+			if (!fade)
 			{
 				// Check again, now taking into account the area that's taken up by any enabled scrollbars.
-				if( _scrollY )
+				if (_scrollY)
 				{
 					_areaWidth -= scrollbarWidth;
-					if( !_scrollX && widgetWidth > _areaWidth && !_disableX ) _scrollX = true;
+					if (!_scrollX && widgetWidth > _areaWidth && !_disableX) _scrollX = true;
 				}
-				if( _scrollX )
+
+				if (_scrollX)
 				{
 					_areaHeight -= scrollbarHeight;
-					if( !_scrollY && widgetHeight > _areaHeight && !_disableY )
+					if (!_scrollY && widgetHeight > _areaHeight && !_disableY)
 					{
 						_scrollY = true;
 						_areaWidth -= scrollbarWidth;
@@ -222,12 +236,12 @@ namespace Nez.UI
 			}
 
 			// the bounds of the scrollable area for the widget.
-			_widgetAreaBounds = RectangleExt.fromFloats( bgLeftWidth, bgBottomHeight, _areaWidth, _areaHeight );
+			_widgetAreaBounds = RectangleExt.FromFloats(bgLeftWidth, bgBottomHeight, _areaWidth, _areaHeight);
 
-			if( fade )
+			if (fade)
 			{
 				// Make sure widget is drawn under fading scrollbars.
-				if( _scrollX && _scrollY )
+				if (_scrollX && _scrollY)
 				{
 					_areaHeight -= scrollbarHeight;
 					_areaWidth -= scrollbarWidth;
@@ -235,58 +249,64 @@ namespace Nez.UI
 			}
 			else
 			{
-				if( _scrollbarsOnTop )
+				if (_scrollbarsOnTop)
 				{
 					// Make sure widget is drawn under non-fading scrollbars.
-					if( _scrollX ) _widgetAreaBounds.Height += (int)scrollbarHeight;
-					if( _scrollY ) _widgetAreaBounds.Width += (int)scrollbarWidth;
+					if (_scrollX) _widgetAreaBounds.Height += (int)scrollbarHeight;
+					if (_scrollY) _widgetAreaBounds.Width += (int)scrollbarWidth;
 				}
 				else
 				{
 					// Offset widget area y for horizontal scrollbar at bottom.
-					if( _scrollX && _hScrollOnBottom ) _widgetAreaBounds.Y += (int)scrollbarHeight;
+					if (_scrollX && _hScrollOnBottom) _widgetAreaBounds.Y += (int)scrollbarHeight;
+
 					// Offset widget area x for vertical scrollbar at left.
-					if( _scrollY && !_vScrollOnRight ) _widgetAreaBounds.X += (int)scrollbarWidth;
+					if (_scrollY && !_vScrollOnRight) _widgetAreaBounds.X += (int)scrollbarWidth;
 				}
 			}
 
 			// If the widget is smaller than the available space, make it take up the available space.
-			widgetWidth = _disableX ? _areaWidth : Math.Max( _areaWidth, widgetWidth );
-			widgetHeight = _disableY ? _areaHeight : Math.Max( _areaHeight, widgetHeight );
+			widgetWidth = _disableX ? _areaWidth : Math.Max(_areaWidth, widgetWidth);
+			widgetHeight = _disableY ? _areaHeight : Math.Max(_areaHeight, widgetHeight);
 
 			_maxX = widgetWidth - _areaWidth;
 			_maxY = widgetHeight - _areaHeight;
-			if( fade )
+			if (fade)
 			{
 				// Make sure widget is drawn under fading scrollbars.
-				if( _scrollX && _scrollY )
+				if (_scrollX && _scrollY)
 				{
 					_maxY -= scrollbarHeight;
 					_maxX -= scrollbarWidth;
 				}
 			}
-			setScrollX( Mathf.clamp( _amountX, 0, _maxX ) );
-			setScrollY( Mathf.clamp( _amountY, 0, _maxY ) );
+
+			SetScrollX(Mathf.Clamp(_amountX, 0, _maxX));
+			SetScrollY(Mathf.Clamp(_amountY, 0, _maxY));
 
 			// Set the bounds and scroll knob sizes if scrollbars are needed.
-			if( _scrollX )
+			if (_scrollX)
 			{
-				if( hScrollKnob != null )
+				if (hScrollKnob != null)
 				{
-					var hScrollHeight = _style.hScroll != null ? _style.hScroll.minHeight : hScrollKnob.minHeight;
+					var hScrollHeight = _style.HScroll != null ? _style.HScroll.MinHeight : hScrollKnob.MinHeight;
+
 					// The corner gap where the two scroll bars intersect might have to flip from right to left.
 					var boundsX = _vScrollOnRight ? bgLeftWidth : bgLeftWidth + scrollbarWidth;
+
 					// Scrollbar on the top or bottom.
 					var boundsY = _hScrollOnBottom ? bgBottomHeight : height - bgTopHeight - hScrollHeight;
-					_hScrollBounds = RectangleExt.fromFloats( boundsX, boundsY, _areaWidth, hScrollHeight );
-					if( _variableSizeKnobs )
-						_hKnobBounds.Width = (int)Math.Max( hScrollKnob.minWidth, (int)( _hScrollBounds.Width * _areaWidth / widgetWidth ) );
+					_hScrollBounds = RectangleExt.FromFloats(boundsX, boundsY, _areaWidth, hScrollHeight);
+					if (_variableSizeKnobs)
+						_hKnobBounds.Width = (int)Math.Max(hScrollKnob.MinWidth,
+							(int)(_hScrollBounds.Width * _areaWidth / widgetWidth));
 					else
-						_hKnobBounds.Width = (int)hScrollKnob.minWidth;
+						_hKnobBounds.Width = (int)hScrollKnob.MinWidth;
 
-					_hKnobBounds.Height = (int)hScrollKnob.minHeight;
+					_hKnobBounds.Height = (int)hScrollKnob.MinHeight;
 
-					_hKnobBounds.X = _hScrollBounds.X + (int)( ( _hScrollBounds.Width - _hKnobBounds.Width ) * getScrollPercentX() );
+					_hKnobBounds.X = _hScrollBounds.X +
+									 (int)((_hScrollBounds.Width - _hKnobBounds.Width) * GetScrollPercentX());
 					_hKnobBounds.Y = _hScrollBounds.Y;
 				}
 				else
@@ -296,36 +316,39 @@ namespace Nez.UI
 				}
 			}
 
-			if( _scrollY )
+			if (_scrollY)
 			{
-				if( vScrollKnob != null )
+				if (vScrollKnob != null)
 				{
-					var vScrollWidth = _style.vScroll != null ? _style.vScroll.minWidth : vScrollKnob.minWidth;
+					var vScrollWidth = _style.VScroll != null ? _style.VScroll.MinWidth : vScrollKnob.MinWidth;
+
 					// the small gap where the two scroll bars intersect might have to flip from bottom to top
 					float boundsX, boundsY;
-					if( _hScrollOnBottom )
+					if (_hScrollOnBottom)
 						boundsY = height - bgTopHeight - _areaHeight;
 					else
 						boundsY = bgBottomHeight;
 
 					// bar on the left or right
-					if( _vScrollOnRight )
+					if (_vScrollOnRight)
 						boundsX = width - bgRightWidth - vScrollWidth;
 					else
 						boundsX = bgLeftWidth;
 
-					_vScrollBounds = RectangleExt.fromFloats( boundsX, boundsY, vScrollWidth, _areaHeight );
-					_vKnobBounds.Width = (int)vScrollKnob.minWidth;
-					if( _variableSizeKnobs )
-						_vKnobBounds.Height = (int)Math.Max( vScrollKnob.minHeight, (int)( _vScrollBounds.Height * _areaHeight / widgetHeight ) );
+					_vScrollBounds = RectangleExt.FromFloats(boundsX, boundsY, vScrollWidth, _areaHeight);
+					_vKnobBounds.Width = (int)vScrollKnob.MinWidth;
+					if (_variableSizeKnobs)
+						_vKnobBounds.Height = (int)Math.Max(vScrollKnob.MinHeight,
+							(int)(_vScrollBounds.Height * _areaHeight / widgetHeight));
 					else
-						_vKnobBounds.Height = (int)vScrollKnob.minHeight;
+						_vKnobBounds.Height = (int)vScrollKnob.MinHeight;
 
-					if( _vScrollOnRight )
-						_vKnobBounds.X = (int)( width - bgRightWidth - vScrollKnob.minWidth );
+					if (_vScrollOnRight)
+						_vKnobBounds.X = (int)(width - bgRightWidth - vScrollKnob.MinWidth);
 					else
 						_vKnobBounds.X = (int)bgLeftWidth;
-					_vKnobBounds.Y = _vScrollBounds.Y + (int)( ( _vScrollBounds.Height - _vKnobBounds.Height ) * ( 1 - getScrollPercentY() ) );
+					_vKnobBounds.Y = _vScrollBounds.Y +
+									 (int)((_vScrollBounds.Height - _vKnobBounds.Height) * (1 - GetScrollPercentY()));
 				}
 				else
 				{
@@ -334,9 +357,9 @@ namespace Nez.UI
 				}
 			}
 
-			_widget.setSize( widgetWidth, widgetHeight );
-			if( _widget is ILayout )
-				( (ILayout)_widget ).validate();
+			_widget.SetSize(widgetWidth, widgetHeight);
+			if (_widget is ILayout)
+				((ILayout)_widget).Validate();
 		}
 
 		#endregion
@@ -344,102 +367,106 @@ namespace Nez.UI
 
 		#region IInputListener
 
-		void IInputListener.onMouseEnter()
+		void IInputListener.OnMouseEnter()
 		{
-			resetFade();
+			ResetFade();
 		}
 
 
-		void IInputListener.onMouseExit()
+		void IInputListener.OnMouseExit()
 		{
-			resetFade();
+			ResetFade();
 		}
 
 
-		bool IInputListener.onMousePressed( Vector2 mousePos )
+		bool IInputListener.OnMousePressed(Vector2 mousePos)
 		{
-			if( _scrollX && _hScrollBounds.Contains( mousePos ) )
+			if (_scrollX && _hScrollBounds.Contains(mousePos))
 			{
-				resetFade();
-				if( _hKnobBounds.Contains( mousePos ) )
+				ResetFade();
+				if (_hKnobBounds.Contains(mousePos))
 				{
 					_lastMousePos = mousePos;
 					_lastHandlePosition = _hKnobBounds.X;
 					_touchScrollH = true;
 					return true;
 				}
-				setScrollX( _amountX + _areaWidth * ( mousePos.X < _hKnobBounds.X ? -1 : 1 ) );
+
+				SetScrollX(_amountX + _areaWidth * (mousePos.X < _hKnobBounds.X ? -1 : 1));
 				return true;
 			}
 
-			if( _scrollY && _vScrollBounds.Contains( mousePos ) )
+			if (_scrollY && _vScrollBounds.Contains(mousePos))
 			{
-				resetFade();
-				if( _vKnobBounds.Contains( mousePos ) )
+				ResetFade();
+				if (_vKnobBounds.Contains(mousePos))
 				{
 					_lastMousePos = mousePos;
 					_lastHandlePosition = _vKnobBounds.Y;
 					_touchScrollV = true;
 					return true;
 				}
-				setScrollY( _amountY + _areaHeight * ( mousePos.Y > _vKnobBounds.Y ? 1 : -1 ) );
+
+				SetScrollY(_amountY + _areaHeight * (mousePos.Y > _vKnobBounds.Y ? 1 : -1));
 				return true;
 			}
+
 			return true;
 		}
 
 
-		void IInputListener.onMouseMoved( Vector2 mousePos )
+		void IInputListener.OnMouseMoved(Vector2 mousePos)
 		{
-			resetFade();
+			ResetFade();
 
-			if( _touchScrollH )
+			if (_touchScrollH)
 			{
 				var delta = mousePos.X - _lastMousePos.X;
 				var scrollH = _lastHandlePosition + delta;
 				_lastHandlePosition = scrollH;
-				scrollH = Math.Max( _hScrollBounds.X, scrollH );
-				scrollH = Math.Min( _hScrollBounds.X + _hScrollBounds.Width - _hKnobBounds.Width, scrollH );
+				scrollH = Math.Max(_hScrollBounds.X, scrollH);
+				scrollH = Math.Min(_hScrollBounds.X + _hScrollBounds.Width - _hKnobBounds.Width, scrollH);
 				var total = _hScrollBounds.Width - _hKnobBounds.Width;
-				if( total != 0 )
-					setScrollPercentX( ( scrollH - _hScrollBounds.X ) / total );
+				if (total != 0)
+					SetScrollPercentX((scrollH - _hScrollBounds.X) / total);
 				_lastMousePos = mousePos;
 			}
-			else if( _touchScrollV )
+			else if (_touchScrollV)
 			{
 				var delta = mousePos.Y - _lastMousePos.Y;
 				var scrollV = _lastHandlePosition + delta;
 				_lastHandlePosition = scrollV;
-				scrollV = Math.Max( _vScrollBounds.Y, scrollV );
-				scrollV = Math.Min( _vScrollBounds.Y + _vScrollBounds.Height - _vKnobBounds.Height, scrollV );
+				scrollV = Math.Max(_vScrollBounds.Y, scrollV);
+				scrollV = Math.Min(_vScrollBounds.Y + _vScrollBounds.Height - _vKnobBounds.Height, scrollV);
 				float total = _vScrollBounds.Height - _vKnobBounds.Height;
-				if( total != 0 )
+				if (total != 0)
 				{
-					var scrollAmount = ( scrollV - _vScrollBounds.Y ) / total;
-					if( _useNaturalScrolling )
-						setScrollPercentY( scrollAmount );
+					var scrollAmount = (scrollV - _vScrollBounds.Y) / total;
+					if (_useNaturalScrolling)
+						SetScrollPercentY(scrollAmount);
 					else
-						setScrollPercentY( 1 - scrollAmount );
+						SetScrollPercentY(1 - scrollAmount);
 				}
+
 				_lastMousePos = mousePos;
 			}
 		}
 
 
-		void IInputListener.onMouseUp( Vector2 mousePos )
+		void IInputListener.OnMouseUp(Vector2 mousePos)
 		{
-			cancel();
+			Cancel();
 		}
 
 
-		bool IInputListener.onMouseScrolled( int mouseWheelDelta )
+		bool IInputListener.OnMouseScrolled(int mouseWheelDelta)
 		{
-			resetFade();
+			ResetFade();
 			var scrollDirectionMultiplier = _useNaturalScrolling ? -1 : 1;
-			if( _scrollY )
-				setScrollY( _amountY + mouseWheelDelta * _scrollSpeed * scrollDirectionMultiplier );
-			else if( _scrollX )
-				setScrollX( _amountX + mouseWheelDelta * _scrollSpeed * scrollDirectionMultiplier );
+			if (_scrollY)
+				SetScrollY(_amountY + mouseWheelDelta * _scrollSpeed * scrollDirectionMultiplier);
+			else if (_scrollX)
+				SetScrollX(_amountX + mouseWheelDelta * _scrollSpeed * scrollDirectionMultiplier);
 
 			return true;
 		}
@@ -449,11 +476,11 @@ namespace Nez.UI
 
 		#region config
 
-		public ScrollPane setStyle( ScrollPaneStyle style )
+		public ScrollPane SetStyle(ScrollPaneStyle style)
 		{
-			Insist.isNotNull( style, "style cannot be null" );
+			Insist.IsNotNull(style, "style cannot be null");
 			_style = style;
-			invalidateHierarchy();
+			InvalidateHierarchy();
 
 			return this;
 		}
@@ -463,7 +490,7 @@ namespace Nez.UI
 		/// Returns the scroll pane's style. Modifying the returned style may not have an effect until {@link #setStyle(ScrollPaneStyle)} is called.
 		/// </summary>
 		/// <returns>The style.</returns>
-		public ScrollPaneStyle getStyle()
+		public ScrollPaneStyle GetStyle()
 		{
 			return _style;
 		}
@@ -473,11 +500,11 @@ namespace Nez.UI
 		/// Sets the {@link Element} embedded in this scroll pane
 		/// </summary>
 		/// <param name="widget">Widget.</param>
-		public ScrollPane setWidget( Element widget )
+		public ScrollPane SetWidget(Element widget)
 		{
-			if( _widget != null ) removeElement( _widget );
+			if (_widget != null) RemoveElement(_widget);
 			_widget = widget;
-			if( widget != null ) addElement( widget );
+			if (widget != null) AddElement(widget);
 
 			return this;
 		}
@@ -487,7 +514,7 @@ namespace Nez.UI
 		/// Returns the Element embedded in this scroll pane, or null
 		/// </summary>
 		/// <returns>The widget.</returns>
-		public Element getWidget()
+		public Element GetWidget()
 		{
 			return _widget;
 		}
@@ -497,7 +524,7 @@ namespace Nez.UI
 		/// sets the scroll speed when the mouse wheel is used to scroll the ScrollPane
 		/// </summary>
 		/// <param name="scrollSpeed">Scroll speed.</param>
-		public ScrollPane setScrollSpeed( float scrollSpeed )
+		public ScrollPane SetScrollSpeed(float scrollSpeed)
 		{
 			_scrollSpeed = scrollSpeed;
 			return this;
@@ -508,7 +535,7 @@ namespace Nez.UI
 		/// Returns the x scroll speed
 		/// </summary>
 		/// <returns>The scroll x.</returns>
-		public float getScrollSpeed()
+		public float GetScrollSpeed()
 		{
 			return _scrollSpeed;
 		}
@@ -518,9 +545,9 @@ namespace Nez.UI
 		/// sets x scroll amount
 		/// </summary>
 		/// <param name="pixelsX">Pixels x.</param>
-		public ScrollPane setScrollX( float pixelsX )
+		public ScrollPane SetScrollX(float pixelsX)
 		{
-			_amountX = Mathf.clamp( pixelsX, 0, _maxX );
+			_amountX = Mathf.Clamp(pixelsX, 0, _maxX);
 			return this;
 		}
 
@@ -529,7 +556,7 @@ namespace Nez.UI
 		/// Returns the x scroll position in pixels, where 0 is the left of the scroll pane.
 		/// </summary>
 		/// <returns>The scroll x.</returns>
-		public float getScrollX()
+		public float GetScrollX()
 		{
 			return _amountX;
 		}
@@ -539,9 +566,9 @@ namespace Nez.UI
 		/// Called whenever the y scroll amount is changed
 		/// </summary>
 		/// <param name="pixelsY">Pixels y.</param>
-		public ScrollPane setScrollY( float pixelsY )
+		public ScrollPane SetScrollY(float pixelsY)
 		{
-			_amountY = Mathf.clamp( pixelsY, 0, _maxY );
+			_amountY = Mathf.Clamp(pixelsY, 0, _maxY);
 			return this;
 		}
 
@@ -550,7 +577,7 @@ namespace Nez.UI
 		/// Returns the y scroll position in pixels, where 0 is the top of the scroll pane.
 		/// </summary>
 		/// <returns>The scroll y.</returns>
-		public float getScrollY()
+		public float GetScrollY()
 		{
 			return _amountY;
 		}
@@ -561,14 +588,14 @@ namespace Nez.UI
 		/// your fingers.
 		/// </summary>
 		/// <param name="useNaturalScrolling">Use natural scrolling.</param>
-		public ScrollPane setUseNaturalScrolling( bool useNaturalScrolling )
+		public ScrollPane SetUseNaturalScrolling(bool useNaturalScrolling)
 		{
 			_useNaturalScrolling = useNaturalScrolling;
 			return this;
 		}
 
 
-		public bool getUseNaturalScrolling()
+		public bool GetUseNaturalScrolling()
 		{
 			return _useNaturalScrolling;
 		}
@@ -578,7 +605,7 @@ namespace Nez.UI
 		/// Sets the visual scroll amount equal to the scroll amount. This can be used when setting the scroll amount without animating.
 		/// </summary>
 		/// <returns>The visual scroll.</returns>
-		public ScrollPane updateVisualScroll()
+		public ScrollPane UpdateVisualScroll()
 		{
 			_visualAmountX = _amountX;
 			_visualAmountY = _amountY;
@@ -586,51 +613,51 @@ namespace Nez.UI
 		}
 
 
-		public float getVisualScrollX()
+		public float GetVisualScrollX()
 		{
 			return !_scrollX ? 0 : _visualAmountX;
 		}
 
 
-		public float getVisualScrollY()
+		public float GetVisualScrollY()
 		{
 			return !_scrollY ? 0 : _visualAmountY;
 		}
 
 
-		public float getVisualScrollPercentX()
+		public float GetVisualScrollPercentX()
 		{
-			return Mathf.clamp( _visualAmountX / _maxX, 0, 1 );
+			return Mathf.Clamp(_visualAmountX / _maxX, 0, 1);
 		}
 
 
-		public float getVisualScrollPercentY()
+		public float GetVisualScrollPercentY()
 		{
-			return Mathf.clamp( _visualAmountY / _maxY, 0, 1 );
+			return Mathf.Clamp(_visualAmountY / _maxY, 0, 1);
 		}
 
 
-		public float getScrollPercentX()
+		public float GetScrollPercentX()
 		{
-			return Mathf.clamp( _amountX / _maxX, 0, 1 );
+			return Mathf.Clamp(_amountX / _maxX, 0, 1);
 		}
 
 
-		public void setScrollPercentX( float percentX )
+		public void SetScrollPercentX(float percentX)
 		{
-			setScrollX( _maxX * Mathf.clamp( percentX, 0, 1 ) );
+			SetScrollX(_maxX * Mathf.Clamp(percentX, 0, 1));
 		}
 
 
-		public float getScrollPercentY()
+		public float GetScrollPercentY()
 		{
-			return Mathf.clamp( _amountY / _maxY, 0, 1 );
+			return Mathf.Clamp(_amountY / _maxY, 0, 1);
 		}
 
 
-		public void setScrollPercentY( float percentY )
+		public void SetScrollPercentY(float percentY)
 		{
-			setScrollY( _maxY * Mathf.clamp( percentY, 0, 1 ) );
+			SetScrollY(_maxY * Mathf.Clamp(percentY, 0, 1));
 		}
 
 
@@ -638,7 +665,7 @@ namespace Nez.UI
 		/// Returns the maximum scroll value in the x direction.
 		/// </summary>
 		/// <returns>The max x.</returns>
-		public float getMaxX()
+		public float GetMaxX()
 		{
 			return _maxX;
 		}
@@ -648,30 +675,32 @@ namespace Nez.UI
 		/// Returns the maximum scroll value in the y direction.
 		/// </summary>
 		/// <returns>The max y.</returns>
-		public float getMaxY()
+		public float GetMaxY()
 		{
 			return _maxY;
 		}
 
 
-		public float getScrollBarHeight()
+		public float GetScrollBarHeight()
 		{
-			if( !_scrollX )
+			if (!_scrollX)
 				return 0;
+
 			var barheight = 0f;
-			if( _style.hScrollKnob != null ) barheight = _style.hScrollKnob.minHeight;
-			if( _style.hScroll != null ) barheight = Math.Max( barheight, _style.hScroll.minHeight );
+			if (_style.HScrollKnob != null) barheight = _style.HScrollKnob.MinHeight;
+			if (_style.HScroll != null) barheight = Math.Max(barheight, _style.HScroll.MinHeight);
 			return barheight;
 		}
 
 
-		public float getScrollBarWidth()
+		public float GetScrollBarWidth()
 		{
-			if( !_scrollY )
+			if (!_scrollY)
 				return 0;
+
 			var barWidth = 0f;
-			if( _style.vScrollKnob != null ) barWidth = _style.vScrollKnob.minWidth;
-			if( _style.vScroll != null ) barWidth = Math.Max( barWidth, _style.vScroll.minWidth );
+			if (_style.VScrollKnob != null) barWidth = _style.VScrollKnob.MinWidth;
+			if (_style.VScroll != null) barWidth = Math.Max(barWidth, _style.VScroll.MinWidth);
 			return barWidth;
 		}
 
@@ -680,7 +709,7 @@ namespace Nez.UI
 		/// Returns the width of the scrolled viewport.
 		/// </summary>
 		/// <returns>The scroll width.</returns>
-		public float getScrollWidth()
+		public float GetScrollWidth()
 		{
 			return _areaWidth;
 		}
@@ -690,7 +719,7 @@ namespace Nez.UI
 		/// Returns the height of the scrolled viewport.
 		/// </summary>
 		/// <returns>The scroll height.</returns>
-		public float getScrollHeight()
+		public float GetScrollHeight()
 		{
 			return _areaHeight;
 		}
@@ -700,7 +729,7 @@ namespace Nez.UI
 		/// Returns true if the widget is larger than the scroll pane horizontally.
 		/// </summary>
 		/// <returns>The scroll x.</returns>
-		public bool isScrollX()
+		public bool IsScrollX()
 		{
 			return _scrollX;
 		}
@@ -710,7 +739,7 @@ namespace Nez.UI
 		/// Returns true if the widget is larger than the scroll pane vertically.
 		/// </summary>
 		/// <returns>The scroll y.</returns>
-		public bool isScrollY()
+		public bool IsScrollY()
 		{
 			return _scrollY;
 		}
@@ -721,7 +750,7 @@ namespace Nez.UI
 		/// </summary>
 		/// <param name="x">The x coordinate.</param>
 		/// <param name="y">The y coordinate.</param>
-		public ScrollPane setScrollingDisabled( bool x, bool y )
+		public ScrollPane SetScrollingDisabled(bool x, bool y)
 		{
 			_disableX = x;
 			_disableY = y;
@@ -729,49 +758,49 @@ namespace Nez.UI
 		}
 
 
-		public bool isScrollingDisabledX()
+		public bool IsScrollingDisabledX()
 		{
 			return _disableX;
 		}
 
 
-		public bool isScrollingDisabledY()
+		public bool IsScrollingDisabledY()
 		{
 			return _disableY;
 		}
 
 
-		public bool isLeftEdge()
+		public bool IsLeftEdge()
 		{
 			return !_scrollX || _amountX <= 0;
 		}
 
 
-		public bool isRightEdge()
+		public bool IsRightEdge()
 		{
 			return !_scrollX || _amountX >= _maxX;
 		}
 
 
-		public bool isTopEdge()
+		public bool IsTopEdge()
 		{
 			return !_scrollY || _amountY <= 0;
 		}
 
 
-		public bool isBottomEdge()
+		public bool IsBottomEdge()
 		{
 			return !_scrollY || _amountY >= _maxY;
 		}
 
 
-		public bool isFlinging()
+		public bool IsFlinging()
 		{
 			return _flingTimer > 0;
 		}
 
 
-		public void setVelocityX( float velocityX )
+		public void SetVelocityX(float velocityX)
 		{
 			_velocityX = velocityX;
 		}
@@ -781,13 +810,13 @@ namespace Nez.UI
 		/// Gets the flick scroll x velocity
 		/// </summary>
 		/// <returns>The velocity x.</returns>
-		public float getVelocityX()
+		public float GetVelocityX()
 		{
 			return _velocityX;
 		}
 
 
-		public ScrollPane setVelocityY( float velocityY )
+		public ScrollPane SetVelocityY(float velocityY)
 		{
 			_velocityY = velocityY;
 			return this;
@@ -798,7 +827,7 @@ namespace Nez.UI
 		/// Gets the flick scroll y velocity
 		/// </summary>
 		/// <returns>The velocity y.</returns>
-		public float getVelocityY()
+		public float GetVelocityY()
 		{
 			return _velocityY;
 		}
@@ -810,7 +839,7 @@ namespace Nez.UI
 		/// </summary>
 		/// <param name="overscrollX">Overscroll x.</param>
 		/// <param name="overscrollY">Overscroll y.</param>
-		public ScrollPane setOverscroll( bool overscrollX, bool overscrollY )
+		public ScrollPane SetOverscroll(bool overscrollX, bool overscrollY)
 		{
 			_overscrollX = overscrollX;
 			_overscrollY = overscrollY;
@@ -825,7 +854,7 @@ namespace Nez.UI
 		/// <param name="distance">Distance.</param>
 		/// <param name="speedMin">Speed minimum.</param>
 		/// <param name="speedMax">Speed max.</param>
-		public ScrollPane setupOverscroll( float distance, float speedMin, float speedMax )
+		public ScrollPane SetupOverscroll(float distance, float speedMin, float speedMax)
 		{
 			_overscrollDistance = distance;
 			_overscrollSpeedMin = speedMin;
@@ -841,7 +870,7 @@ namespace Nez.UI
 		/// <returns>The force scroll.</returns>
 		/// <param name="x">The x coordinate.</param>
 		/// <param name="y">The y coordinate.</param>
-		public ScrollPane setForceScroll( bool x, bool y )
+		public ScrollPane SetForceScroll(bool x, bool y)
 		{
 			_forceScrollX = x;
 			_forceScrollY = y;
@@ -849,13 +878,13 @@ namespace Nez.UI
 		}
 
 
-		public bool isForceScrollX()
+		public bool IsForceScrollX()
 		{
 			return _forceScrollX;
 		}
 
 
-		public bool isForceScrollY()
+		public bool IsForceScrollY()
 		{
 			return _forceScrollY;
 		}
@@ -865,7 +894,7 @@ namespace Nez.UI
 		/// For flick scroll, sets the amount of time in seconds that a fling will continue to scroll. Default is 1.
 		/// </summary>
 		/// <param name="flingTime">Fling time.</param>
-		public ScrollPane setFlingTime( float flingTime )
+		public ScrollPane SetFlingTime(float flingTime)
 		{
 			_flingTime = flingTime;
 			return this;
@@ -876,7 +905,7 @@ namespace Nez.UI
 		/// For flick scroll, prevents scrolling out of the widget's bounds. Default is true.
 		/// </summary>
 		/// <param name="clamp">Clamp.</param>
-		public ScrollPane setClamp( bool clamp )
+		public ScrollPane SetClamp(bool clamp)
 		{
 			_clamp = clamp;
 			return this;
@@ -888,7 +917,7 @@ namespace Nez.UI
 		/// </summary>
 		/// <param name="bottom">Bottom.</param>
 		/// <param name="right">Right.</param>
-		public ScrollPane setScrollBarPositions( bool bottom, bool right )
+		public ScrollPane SetScrollBarPositions(bool bottom, bool right)
 		{
 			_hScrollOnBottom = bottom;
 			_vScrollOnRight = right;
@@ -900,18 +929,19 @@ namespace Nez.UI
 		/// When true the scrollbars don't reduce the scrollable size and fade out after some time of not being used.
 		/// </summary>
 		/// <param name="fadeScrollBars">Fade scroll bars.</param>
-		public ScrollPane setFadeScrollBars( bool fadeScrollBars )
+		public ScrollPane SetFadeScrollBars(bool fadeScrollBars)
 		{
-			if( _fadeScrollBars == fadeScrollBars ) return this;
+			if (_fadeScrollBars == fadeScrollBars) return this;
+
 			_fadeScrollBars = fadeScrollBars;
-			if( !fadeScrollBars )
+			if (!fadeScrollBars)
 				_fadeAlpha = _fadeAlphaSeconds;
-			invalidate();
+			Invalidate();
 			return this;
 		}
 
 
-		public ScrollPane setupFadeScrollBars( float fadeAlphaSeconds, float fadeDelaySeconds )
+		public ScrollPane SetupFadeScrollBars(float fadeAlphaSeconds, float fadeDelaySeconds)
 		{
 			_fadeAlphaSeconds = fadeAlphaSeconds;
 			_fadeDelaySeconds = fadeDelaySeconds;
@@ -919,7 +949,7 @@ namespace Nez.UI
 		}
 
 
-		public ScrollPane setSmoothScrolling( bool smoothScrolling )
+		public ScrollPane SetSmoothScrolling(bool smoothScrolling)
 		{
 			_smoothScrolling = smoothScrolling;
 			return this;
@@ -932,15 +962,15 @@ namespace Nez.UI
 		/// is true, the scroll bars are always drawn on top.
 		/// </summary>
 		/// <param name="scrollbarsOnTop">Scrollbars on top.</param>
-		public ScrollPane setScrollbarsOnTop( bool scrollbarsOnTop )
+		public ScrollPane SetScrollbarsOnTop(bool scrollbarsOnTop)
 		{
 			_scrollbarsOnTop = scrollbarsOnTop;
-			invalidate();
+			Invalidate();
 			return this;
 		}
 
 
-		public bool getVariableSizeKnobs()
+		public bool GetVariableSizeKnobs()
 		{
 			return _variableSizeKnobs;
 		}
@@ -951,7 +981,7 @@ namespace Nez.UI
 		/// based on Drawable#getMinWidth() or Drawable#getMinHeight(). Default is true.
 		/// </summary>
 		/// <param name="variableSizeKnobs">Variable size knobs.</param>
-		public ScrollPane setVariableSizeKnobs( bool variableSizeKnobs )
+		public ScrollPane SetVariableSizeKnobs(bool variableSizeKnobs)
 		{
 			_variableSizeKnobs = variableSizeKnobs;
 			return this;
@@ -969,9 +999,9 @@ namespace Nez.UI
 		/// <param name="y">The y coordinate.</param>
 		/// <param name="width">Width.</param>
 		/// <param name="height">Height.</param>
-		public void scrollTo( float x, float y, float width, float height )
+		public void ScrollTo(float x, float y, float width, float height)
 		{
-			scrollTo( x, y, width, height, false, false );
+			ScrollTo(x, y, width, height, false, false);
 		}
 
 
@@ -986,45 +1016,47 @@ namespace Nez.UI
 		/// <param name="height">Height.</param>
 		/// <param name="centerHorizontal">Center horizontal.</param>
 		/// <param name="centerVertical">Center vertical.</param>
-		public void scrollTo( float x, float y, float width, float height, bool centerHorizontal, bool centerVertical )
+		public void ScrollTo(float x, float y, float width, float height, bool centerHorizontal, bool centerVertical)
 		{
 			var amountX = _amountX;
-			if( centerHorizontal )
+			if (centerHorizontal)
 			{
 				amountX = x - _areaWidth / 2 + width / 2;
 			}
 			else
 			{
-				if( x + width > amountX + _areaWidth ) amountX = x + width - _areaWidth;
-				if( x < amountX ) amountX = x;
+				if (x + width > amountX + _areaWidth) amountX = x + width - _areaWidth;
+				if (x < amountX) amountX = x;
 			}
-			setScrollX( amountX );
+
+			SetScrollX(amountX);
 
 			var amountY = _amountY;
-			if( centerVertical )
+			if (centerVertical)
 			{
 				amountY = _maxY - y + _areaHeight / 2 - height / 2;
 			}
 			else
 			{
-				if( amountY > _maxY - y - height + _areaHeight ) amountY = _maxY - y - height + _areaHeight;
-				if( amountY < _maxY - y ) amountY = _maxY - y;
+				if (amountY > _maxY - y - height + _areaHeight) amountY = _maxY - y - height + _areaHeight;
+				if (amountY < _maxY - y) amountY = _maxY - y;
 			}
-			setScrollY( amountY );
+
+			SetScrollY(amountY);
 		}
 
 
-		public override Element hit( Vector2 point )
+		public override Element Hit(Vector2 point)
 		{
 			// first we do a bounds check, then check our x and y scroll bars
-			if( point.X < 0 || point.X >= getWidth() || point.Y < 0 || point.Y >= getHeight() )
+			if (point.X < 0 || point.X >= GetWidth() || point.Y < 0 || point.Y >= GetHeight())
 				return null;
-			if( _scrollX && _hScrollBounds.Contains( point ) )
+			if (_scrollX && _hScrollBounds.Contains(point))
 				return this;
-			if( _scrollY && _vScrollBounds.Contains( point ) )
+			if (_scrollY && _vScrollBounds.Contains(point))
 				return this;
 
-			return base.hit( point );
+			return base.Hit(point);
 		}
 
 
@@ -1035,7 +1067,7 @@ namespace Nez.UI
 		/// </summary>
 		/// <returns>The visual scroll x.</returns>
 		/// <param name="pixelsX">Pixels x.</param>
-		protected void setVisualScrollX( float pixelsX )
+		protected void SetVisualScrollX(float pixelsX)
 		{
 			_visualAmountX = pixelsX;
 		}
@@ -1046,7 +1078,7 @@ namespace Nez.UI
 		/// </summary>
 		/// <returns>The visual scroll y.</returns>
 		/// <param name="pixelsY">Pixels y.</param>
-		protected void setVisualScrollY( float pixelsY )
+		protected void SetVisualScrollY(float pixelsY)
 		{
 			_visualAmountY = pixelsY;
 		}
@@ -1054,224 +1086,255 @@ namespace Nez.UI
 		#endregion
 
 
-		protected virtual void update()
+		protected virtual void Update()
 		{
-			if( _fadeAlpha > 0 && _fadeScrollBars && !_touchScrollH && !_touchScrollV )
+			if (_fadeAlpha > 0 && _fadeScrollBars && !_touchScrollH && !_touchScrollV)
 			{
-				_fadeDelay -= Time.unscaledDeltaTime;
-				if( _fadeDelay <= 0 )
-					_fadeAlpha = Math.Max( 0, _fadeAlpha - Time.unscaledDeltaTime );
+				_fadeDelay -= Time.UnscaledDeltaTime;
+				if (_fadeDelay <= 0)
+					_fadeAlpha = Math.Max(0, _fadeAlpha - Time.UnscaledDeltaTime);
 			}
 
-			if( _flingTimer > 0 )
+			if (_flingTimer > 0)
 			{
-				resetFade();
+				ResetFade();
 
 				var alpha = _flingTimer / _flingTime;
-				_amountX -= _velocityX * alpha * Time.unscaledDeltaTime;
-				_amountY -= _velocityY * alpha * Time.unscaledDeltaTime;
-				clamp();
+				_amountX -= _velocityX * alpha * Time.UnscaledDeltaTime;
+				_amountY -= _velocityY * alpha * Time.UnscaledDeltaTime;
+				Clamp();
 
 				// Stop fling if hit overscroll distance.
-				if( _amountX == -_overscrollDistance ) _velocityX = 0;
-				if( _amountX >= _maxX + _overscrollDistance ) _velocityX = 0;
-				if( _amountY == -_overscrollDistance ) _velocityY = 0;
-				if( _amountY >= _maxY + _overscrollDistance ) _velocityY = 0;
+				if (_amountX == -_overscrollDistance) _velocityX = 0;
+				if (_amountX >= _maxX + _overscrollDistance) _velocityX = 0;
+				if (_amountY == -_overscrollDistance) _velocityY = 0;
+				if (_amountY >= _maxY + _overscrollDistance) _velocityY = 0;
 
-				_flingTimer -= Time.unscaledDeltaTime;
-				if( _flingTimer <= 0 )
+				_flingTimer -= Time.UnscaledDeltaTime;
+				if (_flingTimer <= 0)
 				{
 					_velocityX = 0;
 					_velocityY = 0;
 				}
 			}
 
-			if( _smoothScrolling && _flingTimer <= 0 &&
-			   // Scroll smoothly when grabbing the scrollbar if one pixel of scrollbar movement is > 10% of the scroll area.
-			   ( ( !_touchScrollH || ( _scrollX && _maxX / ( _hScrollBounds.Width - _hKnobBounds.Width ) > _areaWidth * 0.1f ) )
-				&& ( !_touchScrollV || ( _scrollY && _maxY / ( _vScrollBounds.Height - _vKnobBounds.Height ) > _areaHeight * 0.1f ) ) )
+			if (_smoothScrolling && _flingTimer <= 0 &&
+
+				// Scroll smoothly when grabbing the scrollbar if one pixel of scrollbar movement is > 10% of the scroll area.
+				((!_touchScrollH ||
+				  (_scrollX && _maxX / (_hScrollBounds.Width - _hKnobBounds.Width) > _areaWidth * 0.1f))
+				 && (!_touchScrollV ||
+					 (_scrollY && _maxY / (_vScrollBounds.Height - _vKnobBounds.Height) > _areaHeight * 0.1f)))
 			)
 			{
-				if( _visualAmountX != _amountX )
+				if (_visualAmountX != _amountX)
 				{
-					resetFade();
-					if( _visualAmountX < _amountX )
-						setVisualScrollX( Math.Min( _amountX, _visualAmountX + Math.Max( 2000 * Time.unscaledDeltaTime, ( _amountX - _visualAmountX ) * 7 * Time.unscaledDeltaTime ) ) );
+					ResetFade();
+					if (_visualAmountX < _amountX)
+						SetVisualScrollX(Math.Min(_amountX,
+							_visualAmountX + Math.Max(2000 * Time.UnscaledDeltaTime,
+								(_amountX - _visualAmountX) * 7 * Time.UnscaledDeltaTime)));
 					else
-						setVisualScrollX( Math.Max( _amountX, _visualAmountX - Math.Max( 2000 * Time.unscaledDeltaTime, ( _visualAmountX - _amountX ) * 7 * Time.unscaledDeltaTime ) ) );
+						SetVisualScrollX(Math.Max(_amountX,
+							_visualAmountX - Math.Max(2000 * Time.UnscaledDeltaTime,
+								(_visualAmountX - _amountX) * 7 * Time.UnscaledDeltaTime)));
 				}
-				if( _visualAmountY != _amountY )
+
+				if (_visualAmountY != _amountY)
 				{
-					resetFade();
-					if( _visualAmountY < _amountY )
-						setVisualScrollY( Math.Min( _amountY, _visualAmountY + Math.Max( 2000 * Time.unscaledDeltaTime, ( _amountY - _visualAmountY ) * 7 * Time.unscaledDeltaTime ) ) );
+					ResetFade();
+					if (_visualAmountY < _amountY)
+						SetVisualScrollY(Math.Min(_amountY,
+							_visualAmountY + Math.Max(2000 * Time.UnscaledDeltaTime,
+								(_amountY - _visualAmountY) * 7 * Time.UnscaledDeltaTime)));
 					else
-						setVisualScrollY( Math.Max( _amountY, _visualAmountY - Math.Max( 2000 * Time.unscaledDeltaTime, ( _visualAmountY - _amountY ) * 7 * Time.unscaledDeltaTime ) ) );
+						SetVisualScrollY(Math.Max(_amountY,
+							_visualAmountY - Math.Max(2000 * Time.UnscaledDeltaTime,
+								(_visualAmountY - _amountY) * 7 * Time.UnscaledDeltaTime)));
 				}
 			}
 			else
 			{
-				if( _visualAmountX != _amountX )
-					setVisualScrollX( _amountX );
-				if( _visualAmountY != _amountY )
-					setVisualScrollY( _amountY );
+				if (_visualAmountX != _amountX)
+					SetVisualScrollX(_amountX);
+				if (_visualAmountY != _amountY)
+					SetVisualScrollY(_amountY);
 			}
 
-			if( _overscrollX && _scrollX )
+			if (_overscrollX && _scrollX)
 			{
-				if( _amountX < 0 )
+				if (_amountX < 0)
 				{
-					resetFade();
-					_amountX += ( _overscrollSpeedMin + ( _overscrollSpeedMax - _overscrollSpeedMin ) * -_amountX / _overscrollDistance ) * Time.unscaledDeltaTime;
-					if( _amountX > 0 ) setScrollX( 0 );
+					ResetFade();
+					_amountX += (_overscrollSpeedMin +
+								 (_overscrollSpeedMax - _overscrollSpeedMin) * -_amountX / _overscrollDistance) *
+								Time.UnscaledDeltaTime;
+					if (_amountX > 0) SetScrollX(0);
 				}
-				else if( _amountX > _maxX )
+				else if (_amountX > _maxX)
 				{
-					resetFade();
-					_amountX -= ( _overscrollSpeedMin
-						+ ( _overscrollSpeedMax - _overscrollSpeedMin ) * -( _maxX - _amountX ) / _overscrollDistance ) * Time.unscaledDeltaTime;
-					if( _amountX < _maxX ) setScrollX( _maxX );
+					ResetFade();
+					_amountX -= (_overscrollSpeedMin
+								 + (_overscrollSpeedMax - _overscrollSpeedMin) * -(_maxX - _amountX) /
+								 _overscrollDistance) * Time.UnscaledDeltaTime;
+					if (_amountX < _maxX) SetScrollX(_maxX);
 				}
 			}
-			if( _overscrollY && _scrollY )
+
+			if (_overscrollY && _scrollY)
 			{
-				if( _amountY < 0 )
+				if (_amountY < 0)
 				{
-					resetFade();
-					_amountY += ( _overscrollSpeedMin + ( _overscrollSpeedMax - _overscrollSpeedMin ) * -_amountY / _overscrollDistance ) * Time.unscaledDeltaTime;
-					if( _amountY > 0 )
-						setScrollY( 0 );
+					ResetFade();
+					_amountY += (_overscrollSpeedMin +
+								 (_overscrollSpeedMax - _overscrollSpeedMin) * -_amountY / _overscrollDistance) *
+								Time.UnscaledDeltaTime;
+					if (_amountY > 0)
+						SetScrollY(0);
 				}
-				else if( _amountY > _maxY )
+				else if (_amountY > _maxY)
 				{
-					resetFade();
-					_amountY -= ( _overscrollSpeedMin + ( _overscrollSpeedMax - _overscrollSpeedMin ) * -( _maxY - _amountY ) / _overscrollDistance ) * Time.unscaledDeltaTime;
-					if( _amountY < _maxY )
-						setScrollY( _maxY );
+					ResetFade();
+					_amountY -= (_overscrollSpeedMin + (_overscrollSpeedMax - _overscrollSpeedMin) *
+								 -(_maxY - _amountY) / _overscrollDistance) * Time.UnscaledDeltaTime;
+					if (_amountY < _maxY)
+						SetScrollY(_maxY);
 				}
 			}
 		}
 
 
-		public override void draw( Graphics graphics, float parentAlpha )
+		public override void Draw(Batcher batcher, float parentAlpha)
 		{
-			if( _widget == null )
+			if (_widget == null)
 				return;
 
-			update();
-			validate();
+			Update();
+			Validate();
 
 			// setup transform for this group.
-			if( transform )
-				applyTransform( graphics, computeTransform() );
+			if (transform)
+				ApplyTransform(batcher, ComputeTransform());
 
-			if( _scrollX )
-				_hKnobBounds.X = _hScrollBounds.X + (int)( ( _hScrollBounds.Width - _hKnobBounds.Width ) * getVisualScrollPercentX() );
-			if( _scrollY )
-				_vKnobBounds.Y = _vScrollBounds.Y + (int)( ( _vScrollBounds.Height - _vKnobBounds.Height ) * getVisualScrollPercentY() );
+			if (_scrollX)
+				_hKnobBounds.X = _hScrollBounds.X +
+								 (int)((_hScrollBounds.Width - _hKnobBounds.Width) * GetVisualScrollPercentX());
+			if (_scrollY)
+				_vKnobBounds.Y = _vScrollBounds.Y +
+								 (int)((_vScrollBounds.Height - _vKnobBounds.Height) * GetVisualScrollPercentY());
 
 			// calculate the widget's position depending on the scroll state and available widget area.
 			float eleY = _widgetAreaBounds.Y;
-			if( !_scrollY )
+			if (!_scrollY)
 				eleY -= _maxY;
 			else
 				eleY -= _visualAmountY;
 
 			float eleX = _widgetAreaBounds.Y;
-			if( _scrollX )
+			if (_scrollX)
 				eleX -= (int)_visualAmountX;
 
-			if( !_fadeScrollBars && _scrollbarsOnTop )
+			if (!_fadeScrollBars && _scrollbarsOnTop)
 			{
-				if( _scrollX && _hScrollOnBottom )
+				if (_scrollX && _hScrollOnBottom)
 				{
 					var scrollbarHeight = 0f;
-					if( _style.hScrollKnob != null ) scrollbarHeight = _style.hScrollKnob.minHeight;
-					if( _style.hScroll != null ) scrollbarHeight = Math.Max( scrollbarHeight, _style.hScroll.minHeight );
+					if (_style.HScrollKnob != null) scrollbarHeight = _style.HScrollKnob.MinHeight;
+					if (_style.HScroll != null) scrollbarHeight = Math.Max(scrollbarHeight, _style.HScroll.MinHeight);
 					eleY += scrollbarHeight;
 				}
-				if( _scrollY && !_vScrollOnRight )
+
+				if (_scrollY && !_vScrollOnRight)
 				{
 					var scrollbarWidth = 0f;
-					if( _style.hScrollKnob != null ) scrollbarWidth = _style.hScrollKnob.minWidth;
-					if( _style.hScroll != null ) scrollbarWidth = Math.Max( scrollbarWidth, _style.hScroll.minWidth );
+					if (_style.HScrollKnob != null) scrollbarWidth = _style.HScrollKnob.MinWidth;
+					if (_style.HScroll != null) scrollbarWidth = Math.Max(scrollbarWidth, _style.HScroll.MinWidth);
 					eleX += scrollbarWidth;
 				}
 			}
 
-			_widget.setPosition( eleX, eleY );
+			_widget.SetPosition(eleX, eleY);
 
-			if( _widget is ICullable )
+			if (_widget is ICullable)
 			{
 				var cull = new Rectangle(
-					(int) (-_widget.getX() + _widgetAreaBounds.X),
-					(int) (-_widget.getY() + _widgetAreaBounds.Y),
+					(int)(-_widget.GetX() + _widgetAreaBounds.X),
+					(int)(-_widget.GetY() + _widgetAreaBounds.Y),
 					_widgetAreaBounds.Width,
 					_widgetAreaBounds.Height);
-				((ICullable) _widget).setCullingArea(cull);
+				((ICullable)_widget).SetCullingArea(cull);
 			}
-			
+
 			// draw the background
-			var color = getColor();
-			color = new Color( color, (int)(color.A * parentAlpha) );
-			if( _style.background != null )
-				_style.background.draw( graphics, 0, 0, getWidth(), getHeight(), color );
+			var color = GetColor();
+			color = ColorExt.Create(color, (int)(color.A * parentAlpha));
+			if (_style.Background != null)
+				_style.Background.Draw(batcher, 0, 0, GetWidth(), GetHeight(), color);
 
 			// caculate the scissor bounds based on the batch transform, the available widget area and the camera transform. We need to
 			// project those to screen coordinates for OpenGL to consume.
-			var scissor = ScissorStack.calculateScissors( stage?.camera, graphics.batcher.transformMatrix, _widgetAreaBounds );
-			if( ScissorStack.pushScissors( scissor ) )
+			var scissor =
+				ScissorStack.CalculateScissors(_stage?.Camera, batcher.TransformMatrix, _widgetAreaBounds);
+			if (ScissorStack.PushScissors(scissor))
 			{
-				graphics.batcher.enableScissorTest( true );
-				drawChildren( graphics, parentAlpha );
-				graphics.batcher.enableScissorTest( false );
-				ScissorStack.popScissors();
+				batcher.EnableScissorTest(true);
+				DrawChildren(batcher, parentAlpha);
+				batcher.EnableScissorTest(false);
+				ScissorStack.PopScissors();
 			}
 
 			// render scrollbars and knobs on top
 			var alpha = (float)color.A;
-			color.A = (byte)( alpha * ( _fadeAlpha / _fadeAlphaSeconds ) );
-			if( _scrollX && _scrollY )
+			color.A = (byte)(alpha * (_fadeAlpha / _fadeAlphaSeconds));
+			if (_scrollX && _scrollY)
 			{
-				if( _style.corner != null )
-					_style.corner.draw( graphics, _hScrollBounds.X + _hScrollBounds.Width, _hScrollBounds.Y, _vScrollBounds.Width, _vScrollBounds.Y, color );
-			}
-			if( _scrollX )
-			{
-				if( _style.hScroll != null )
-					_style.hScroll.draw( graphics, _hScrollBounds.X, _hScrollBounds.Y, _hScrollBounds.Width, _hScrollBounds.Height, color );
-				if( _style.hScrollKnob != null )
-					_style.hScrollKnob.draw( graphics, _hKnobBounds.X, _hKnobBounds.Y, _hKnobBounds.Width, _hKnobBounds.Height, color );
-			}
-			if( _scrollY )
-			{
-				if( _style.vScroll != null )
-					_style.vScroll.draw( graphics, _vScrollBounds.X, _vScrollBounds.Y, _vScrollBounds.Width, _vScrollBounds.Height, color );
-				if( _style.vScrollKnob != null )
-					_style.vScrollKnob.draw( graphics, _vKnobBounds.X, _vKnobBounds.Y, _vKnobBounds.Width, _vKnobBounds.Height, color );
+				if (_style.Corner != null)
+					_style.Corner.Draw(batcher, _hScrollBounds.X + _hScrollBounds.Width, _hScrollBounds.Y,
+						_vScrollBounds.Width, _vScrollBounds.Y, color);
 			}
 
-			if( transform )
-				resetTransform( graphics );
+			if (_scrollX)
+			{
+				if (_style.HScroll != null)
+					_style.HScroll.Draw(batcher, _hScrollBounds.X, _hScrollBounds.Y, _hScrollBounds.Width,
+						_hScrollBounds.Height, color);
+				if (_style.HScrollKnob != null)
+					_style.HScrollKnob.Draw(batcher, _hKnobBounds.X, _hKnobBounds.Y, _hKnobBounds.Width,
+						_hKnobBounds.Height, color);
+			}
+
+			if (_scrollY)
+			{
+				if (_style.VScroll != null)
+					_style.VScroll.Draw(batcher, _vScrollBounds.X, _vScrollBounds.Y, _vScrollBounds.Width,
+						_vScrollBounds.Height, color);
+				if (_style.VScrollKnob != null)
+					_style.VScrollKnob.Draw(batcher, _vKnobBounds.X, _vKnobBounds.Y, _vKnobBounds.Width,
+						_vKnobBounds.Height, color);
+			}
+
+			if (transform)
+				ResetTransform(batcher);
 		}
 
 
-		public override void debugRender( Graphics graphics )
+		public override void DebugRender(Batcher batcher)
 		{
-			if( transform )
-				applyTransform( graphics, computeTransform() );
+			if (transform)
+				ApplyTransform(batcher, ComputeTransform());
 
-			var scissor = ScissorStack.calculateScissors( stage?.camera, graphics.batcher.transformMatrix, _widgetAreaBounds );
-			if( ScissorStack.pushScissors( scissor ) )
+			var scissor =
+				ScissorStack.CalculateScissors(_stage?.Camera, batcher.TransformMatrix, _widgetAreaBounds);
+			if (ScissorStack.PushScissors(scissor))
 			{
-				graphics.batcher.enableScissorTest( true );
-				debugRenderChildren( graphics, 1f );
-				graphics.batcher.enableScissorTest( false );
-				ScissorStack.popScissors();
+				batcher.EnableScissorTest(true);
+				DebugRenderChildren(batcher, 1f);
+				batcher.EnableScissorTest(false);
+				ScissorStack.PopScissors();
 			}
 
-			if( transform )
-				resetTransform( graphics );
+			if (transform)
+				ResetTransform(batcher);
 		}
 
 
@@ -1281,64 +1344,64 @@ namespace Nez.UI
 		/// <param name="flingTime">Fling time.</param>
 		/// <param name="velocityX">Velocity x.</param>
 		/// <param name="velocityY">Velocity y.</param>
-		public void fling( float flingTime, float velocityX, float velocityY )
+		public void Fling(float flingTime, float velocityX, float velocityY)
 		{
 			_flingTimer = flingTime;
 			_velocityX = velocityX;
 			_velocityY = velocityY;
 		}
-
 	}
 
 
 	public class ScrollPaneStyle
 	{
 		/** Optional. */
-		public IDrawable background, corner;
+		public IDrawable Background, Corner;
+
 		/** Optional. */
-		public IDrawable hScroll, hScrollKnob;
+		public IDrawable HScroll, HScrollKnob;
+
 		/** Optional. */
-		public IDrawable vScroll, vScrollKnob;
+		public IDrawable VScroll, VScrollKnob;
 
 
 		public ScrollPaneStyle()
-		{ }
-
-
-		public ScrollPaneStyle( IDrawable background, IDrawable hScroll, IDrawable hScrollKnob, IDrawable vScroll, IDrawable vScrollKnob )
 		{
-			this.background = background;
-			this.hScroll = hScroll;
-			this.hScrollKnob = hScrollKnob;
-			this.vScroll = vScroll;
-			this.vScrollKnob = vScrollKnob;
 		}
 
 
-		public ScrollPaneStyle( ScrollPaneStyle style )
+		public ScrollPaneStyle(IDrawable background, IDrawable hScroll, IDrawable hScrollKnob, IDrawable vScroll,
+							   IDrawable vScrollKnob)
 		{
-			background = style.background;
-			hScroll = style.hScroll;
-			hScrollKnob = style.hScrollKnob;
-			vScroll = style.vScroll;
-			vScrollKnob = style.vScrollKnob;
+			Background = background;
+			HScroll = hScroll;
+			HScrollKnob = hScrollKnob;
+			VScroll = vScroll;
+			VScrollKnob = vScrollKnob;
 		}
 
 
-		public ScrollPaneStyle clone()
+		public ScrollPaneStyle(ScrollPaneStyle style)
+		{
+			Background = style.Background;
+			HScroll = style.HScroll;
+			HScrollKnob = style.HScrollKnob;
+			VScroll = style.VScroll;
+			VScrollKnob = style.VScrollKnob;
+		}
+
+
+		public ScrollPaneStyle Clone()
 		{
 			return new ScrollPaneStyle
 			{
-				background = background,
-				corner = corner,
-				hScroll = hScroll,
-				hScrollKnob = hScrollKnob,
-				vScroll = vScroll,
-				vScrollKnob = vScrollKnob
+				Background = Background,
+				Corner = Corner,
+				HScroll = HScroll,
+				HScrollKnob = HScrollKnob,
+				VScroll = VScroll,
+				VScrollKnob = VScrollKnob
 			};
 		}
-
 	}
-
 }
-

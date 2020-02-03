@@ -11,103 +11,102 @@ namespace Nez.Farseer
 		/// <summary>
 		/// converts simulation (meters) to display (pixels)
 		/// </summary>
-		public static float simToDisplay = 100f;
+		public static float SimToDisplay = 100f;
 
 		/// <summary>
 		/// converts display (pixels) to simulation (meters)
 		/// </summary>
-		public static float displayToSim = 1 / simToDisplay;
+		public static float DisplayToSim = 1 / SimToDisplay;
 
 
-		public static void setDisplayUnitToSimUnitRatio( float displayUnitsPerSimUnit )
+		public static void SetDisplayUnitToSimUnitRatio(float displayUnitsPerSimUnit)
 		{
-			simToDisplay = displayUnitsPerSimUnit;
-			displayToSim = 1 / displayUnitsPerSimUnit;
+			SimToDisplay = displayUnitsPerSimUnit;
+			DisplayToSim = 1 / displayUnitsPerSimUnit;
 		}
 
-		public static float toDisplayUnits( float simUnits )
+		public static float ToDisplayUnits(float simUnits)
 		{
-			return simUnits * simToDisplay;
+			return simUnits * SimToDisplay;
 		}
 
-		public static float toDisplayUnits( int simUnits )
+		public static float ToDisplayUnits(int simUnits)
 		{
-			return simUnits * simToDisplay;
+			return simUnits * SimToDisplay;
 		}
 
-		public static Vector2 toDisplayUnits( Vector2 simUnits )
+		public static Vector2 ToDisplayUnits(Vector2 simUnits)
 		{
-			return simUnits * simToDisplay;
+			return simUnits * SimToDisplay;
 		}
 
-		public static void toDisplayUnits( ref Vector2 simUnits, out Vector2 displayUnits )
+		public static void ToDisplayUnits(ref Vector2 simUnits, out Vector2 displayUnits)
 		{
-			Vector2.Multiply( ref simUnits, simToDisplay, out displayUnits );
+			Vector2.Multiply(ref simUnits, SimToDisplay, out displayUnits);
 		}
 
-		public static Vector3 toDisplayUnits( Vector3 simUnits )
+		public static Vector3 ToDisplayUnits(Vector3 simUnits)
 		{
-			return simUnits * simToDisplay;
+			return simUnits * SimToDisplay;
 		}
 
-		public static Vector2 toDisplayUnits( float x, float y )
+		public static Vector2 ToDisplayUnits(float x, float y)
 		{
-			return new Vector2( x, y ) * simToDisplay;
+			return new Vector2(x, y) * SimToDisplay;
 		}
 
-		public static void toDisplayUnits( float x, float y, out Vector2 displayUnits )
+		public static void ToDisplayUnits(float x, float y, out Vector2 displayUnits)
 		{
 			displayUnits = Vector2.Zero;
-			displayUnits.X = x * simToDisplay;
-			displayUnits.Y = y * simToDisplay;
+			displayUnits.X = x * SimToDisplay;
+			displayUnits.Y = y * SimToDisplay;
 		}
 
-		public static float toSimUnits( float displayUnits )
+		public static float ToSimUnits(float displayUnits)
 		{
-			return displayUnits * displayToSim;
+			return displayUnits * DisplayToSim;
 		}
 
-		public static float toSimUnits( double displayUnits )
+		public static float ToSimUnits(double displayUnits)
 		{
-			return (float)displayUnits * displayToSim;
+			return (float) displayUnits * DisplayToSim;
 		}
 
-		public static float toSimUnits( int displayUnits )
+		public static float ToSimUnits(int displayUnits)
 		{
-			return displayUnits * displayToSim;
+			return displayUnits * DisplayToSim;
 		}
 
-		public static Vector2 toSimUnits( Vector2 displayUnits )
+		public static Vector2 ToSimUnits(Vector2 displayUnits)
 		{
-			return displayUnits * displayToSim;
+			return displayUnits * DisplayToSim;
 		}
 
-		public static Vector3 toSimUnits( Vector3 displayUnits )
+		public static Vector3 ToSimUnits(Vector3 displayUnits)
 		{
-			return displayUnits * displayToSim;
+			return displayUnits * DisplayToSim;
 		}
 
-		public static void toSimUnits( ref Vector2 displayUnits, out Vector2 simUnits )
+		public static void ToSimUnits(ref Vector2 displayUnits, out Vector2 simUnits)
 		{
-			Vector2.Multiply( ref displayUnits, displayToSim, out simUnits );
+			Vector2.Multiply(ref displayUnits, DisplayToSim, out simUnits);
 		}
 
-		public static Vector2 toSimUnits( float x, float y )
+		public static Vector2 ToSimUnits(float x, float y)
 		{
-			return new Vector2( x, y ) * displayToSim;
+			return new Vector2(x, y) * DisplayToSim;
 		}
 
-		public static Vector2 toSimUnits( double x, double y )
+		public static Vector2 ToSimUnits(double x, double y)
 		{
-			return new Vector2( (float)x, (float)y ) * displayToSim;
+			return new Vector2((float) x, (float) y) * DisplayToSim;
 		}
 
-		public static void toSimUnits( float x, float y, out Vector2 simUnits )
+		public static void ToSimUnits(float x, float y, out Vector2 simUnits)
 		{
 			simUnits = Vector2.Zero;
-			simUnits.X = x * displayToSim;
-			simUnits.Y = y * displayToSim;
+			simUnits.X = x * DisplayToSim;
+			simUnits.Y = y * DisplayToSim;
 		}
-
 	}
 }

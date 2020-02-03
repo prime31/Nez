@@ -1,7 +1,4 @@
-﻿using System;
-
-
-namespace Nez.UI
+﻿namespace Nez.UI
 {
 	/// <summary>
 	/// interface applied to any Element that wants to take part in gamepad focus. By default, the Button class implements this which cascades
@@ -11,11 +8,11 @@ namespace Nez.UI
 	/// </summary>
 	public interface IGamepadFocusable
 	{
-		bool shouldUseExplicitFocusableControl { get; set; }
-		IGamepadFocusable gamepadUpElement { get; set; }
-		IGamepadFocusable gamepadDownElement { get; set; }
-		IGamepadFocusable gamepadLeftElement { get; set; }
-		IGamepadFocusable gamepadRightElement { get; set; }
+		bool ShouldUseExplicitFocusableControl { get; set; }
+		IGamepadFocusable GamepadUpElement { get; set; }
+		IGamepadFocusable GamepadDownElement { get; set; }
+		IGamepadFocusable GamepadLeftElement { get; set; }
+		IGamepadFocusable GamepadRightElement { get; set; }
 
 
 		/// <summary>
@@ -25,7 +22,8 @@ namespace Nez.UI
 		/// <param name="downEle">Down ele.</param>
 		/// <param name="leftEle">Left ele.</param>
 		/// <param name="rightEle">Right ele.</param>
-		void enableExplicitFocusableControl( IGamepadFocusable upEle, IGamepadFocusable downEle, IGamepadFocusable leftEle, IGamepadFocusable rightEle );
+		void EnableExplicitFocusableControl(IGamepadFocusable upEle, IGamepadFocusable downEle,
+		                                    IGamepadFocusable leftEle, IGamepadFocusable rightEle);
 
 		/// <summary>
 		/// called only when the following conditions are met:
@@ -34,27 +32,26 @@ namespace Nez.UI
 		/// - a gamepad direction was pressed with a null gamepadDIRECTIONElement
 		/// </summary>
 		/// <param name="direction">Direction.</param>
-		void onUnhandledDirectionPressed( Direction direction );
+		void OnUnhandledDirectionPressed(Direction direction);
 
 		/// <summary>
 		/// called when gamepad focuses on the Element
 		/// </summary>
-		void onFocused();
+		void OnFocused();
 
 		/// <summary>
 		/// called when gamepad focus is removed from the Element
 		/// </summary>
-		void onUnfocused();
+		void OnUnfocused();
 
 		/// <summary>
 		/// called when the action button is pressed while the Element is focused
 		/// </summary>
-		void onActionButtonPressed();
+		void OnActionButtonPressed();
 
 		/// <summary>
 		/// called when the action button is released while the Element is focused
 		/// </summary>
-		void onActionButtonReleased();
+		void OnActionButtonReleased();
 	}
 }
-

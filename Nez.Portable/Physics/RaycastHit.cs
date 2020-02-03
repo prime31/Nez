@@ -1,5 +1,4 @@
-﻿using System;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 
 
 namespace Nez
@@ -9,75 +8,74 @@ namespace Nez
 		/// <summary>
 		/// The collider hit by the ray
 		/// </summary>
-		public Collider collider;
+		public Collider Collider;
 
 		/// <summary>
 		/// Fraction of the distance along the ray that the hit occurred.
 		/// </summary>
-		public float fraction;
+		public float Fraction;
 
 		/// <summary>
 		/// The distance from the ray origin to the impact point
 		/// </summary>
-		public float distance;
+		public float Distance;
 
 		/// <summary>
 		/// The point in world space where the ray hit the collider's surface
 		/// </summary>
-		public Vector2 point;
+		public Vector2 Point;
 
 		/// <summary>
 		/// The normal vector of the surface hit by the ray
 		/// </summary>
-		public Vector2 normal;
+		public Vector2 Normal;
 
 		/// <summary>
 		/// The centroid of the primitive used to perform the cast. Where the shape would be positioned for it to contact.
 		/// </summary>
-		public Vector2 centroid;
+		public Vector2 Centroid;
 
 
-		public RaycastHit( Collider collider, float fraction, float distance, Vector2 point, Vector2 normal )
+		public RaycastHit(Collider collider, float fraction, float distance, Vector2 point, Vector2 normal)
 		{
-			this.collider = collider;
-			this.fraction = fraction;
-			this.distance = distance;
-			this.point = point;
-			this.normal = normal;
-			this.centroid = Vector2.Zero;
+			Collider = collider;
+			Fraction = fraction;
+			Distance = distance;
+			Point = point;
+			Normal = normal;
+			Centroid = Vector2.Zero;
 		}
 
 
-		internal void setValues( Collider collider, float fraction, float distance, Vector2 point )
+		internal void SetValues(Collider collider, float fraction, float distance, Vector2 point)
 		{
-			this.collider = collider;
-			this.fraction = fraction;
-			this.distance = distance;
-			this.point = point;
+			Collider = collider;
+			Fraction = fraction;
+			Distance = distance;
+			Point = point;
 		}
 
 
-		internal void setValues( float fraction, float distance, Vector2 point, Vector2 normal )
+		internal void SetValues(float fraction, float distance, Vector2 point, Vector2 normal)
 		{
-			this.fraction = fraction;
-			this.distance = distance;
-			this.point = point;
-			this.normal = normal;
+			Fraction = fraction;
+			Distance = distance;
+			Point = point;
+			Normal = normal;
 		}
 
 
-		internal void reset()
+		internal void Reset()
 		{
-			collider = null;
-			fraction = distance = 0f;
+			Collider = null;
+			Fraction = Distance = 0f;
 		}
 
 
 		public override string ToString()
 		{
-			return string.Format( "[RaycastHit] fraction: {0}, distance: {1}, normal: {2}, centroid: {3}, point: {4}", fraction, distance, normal, centroid, point );
+			return string.Format("[RaycastHit] fraction: {0}, distance: {1}, normal: {2}, centroid: {3}, point: {4}",
+				Fraction, Distance, Normal, Centroid, Point);
 		}
-
 	}
 }
-

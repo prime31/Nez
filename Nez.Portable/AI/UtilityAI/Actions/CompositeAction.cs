@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 
 namespace Nez.AI.UtilityAI
@@ -12,19 +11,17 @@ namespace Nez.AI.UtilityAI
 		List<IAction<T>> _actions = new List<IAction<T>>();
 
 
-		void IAction<T>.execute( T context )
+		void IAction<T>.Execute(T context)
 		{
-			for( var i = 0; i < _actions.Count; i++ )
-				_actions[i].execute( context );
+			for (var i = 0; i < _actions.Count; i++)
+				_actions[i].Execute(context);
 		}
 
 
-		public CompositeAction<T> addAction( IAction<T> action )
+		public CompositeAction<T> AddAction(IAction<T> action)
 		{
-			_actions.Add( action );
+			_actions.Add(action);
 			return this;
 		}
-
 	}
 }
-

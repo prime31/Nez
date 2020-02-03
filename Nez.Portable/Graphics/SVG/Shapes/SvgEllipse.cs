@@ -5,16 +5,12 @@ namespace Nez.Svg
 {
 	public class SvgEllipse : SvgElement
 	{
-		[XmlAttribute( "rx" )]
-		public float radiusX;
+		[XmlAttribute("rx")] public float RadiusX;
 
-		[XmlAttribute( "ry" )]
-		public float radiusY;
+		[XmlAttribute("ry")] public float RadiusY;
 
-		[XmlAttribute( "cy" )]
-		public float centerY;
+		[XmlAttribute("cy")] public float CenterY;
 
-		[XmlAttribute( "cx" )]
-		public float centerX;
+		[XmlAttribute("cx")] public float CenterX;
 	}
 }

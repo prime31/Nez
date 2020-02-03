@@ -1,7 +1,4 @@
-﻿using System.Collections.Generic;
-
-
-namespace System.Collections.Generic
+﻿namespace System.Collections.Generic
 {
 	/// <summary>
 	/// The IPriorityQueue interface.  This is mainly here for purists, and in case I decide to add more implementations later.
@@ -14,7 +11,7 @@ namespace System.Collections.Generic
 		/// Enqueue a node to the priority queue.  Lower values are placed in front. Ties are broken by first-in-first-out.
 		/// See implementation for how duplicates are handled.
 		/// </summary>
-		void Enqueue( T node, int priority );
+		void Enqueue(T node, int priority);
 
 		/// <summary>
 		/// Removes the head of the queue (node with minimum priority; ties are broken by order of insertion), and returns it.
@@ -29,17 +26,17 @@ namespace System.Collections.Generic
 		/// <summary>
 		/// Returns whether the given node is in the queue.
 		/// </summary>
-		bool Contains( T node );
+		bool Contains(T node);
 
 		/// <summary>
 		/// Removes a node from the queue.  The node does not need to be the head of the queue.  
 		/// </summary>
-		void Remove( T node );
+		void Remove(T node);
 
 		/// <summary>
 		/// Call this method to change the priority of a node.  
 		/// </summary>
-		void UpdatePriority( T node, int priority );
+		void UpdatePriority(T node, int priority);
 
 		/// <summary>
 		/// Returns the head of the queue, without removing it (use Dequeue() for that).

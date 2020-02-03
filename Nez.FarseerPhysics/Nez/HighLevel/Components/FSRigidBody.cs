@@ -7,7 +7,7 @@ namespace Nez.Farseer
 {
 	public class FSRigidBody : Component, IUpdatable
 	{
-		public Body body;
+		public Body Body;
 
 		FSBodyDef _bodyDef = new FSBodyDef();
 		bool _ignoreTransformChanges;
@@ -16,132 +16,132 @@ namespace Nez.Farseer
 
 		#region Configuration
 
-		public FSRigidBody setBodyType( BodyType bodyType )
+		public FSRigidBody SetBodyType(BodyType bodyType)
 		{
-			if( body != null )
-				body.bodyType = bodyType;
+			if (Body != null)
+				Body.BodyType = bodyType;
 			else
-				_bodyDef.bodyType = bodyType;
+				_bodyDef.BodyType = bodyType;
 			return this;
 		}
 
 
-		public FSRigidBody setLinearVelocity( Vector2 linearVelocity )
+		public FSRigidBody SetLinearVelocity(Vector2 linearVelocity)
 		{
-			if( body != null )
-				body.linearVelocity = linearVelocity;
+			if (Body != null)
+				Body.LinearVelocity = linearVelocity;
 			else
-				_bodyDef.linearVelocity = linearVelocity;
+				_bodyDef.LinearVelocity = linearVelocity;
 			return this;
 		}
 
 
-		public FSRigidBody setAngularVelocity( float angularVelocity )
+		public FSRigidBody SetAngularVelocity(float angularVelocity)
 		{
-			if( body != null )
-				body.angularVelocity = angularVelocity;
+			if (Body != null)
+				Body.AngularVelocity = angularVelocity;
 			else
-				_bodyDef.angularVelocity = angularVelocity;
+				_bodyDef.AngularVelocity = angularVelocity;
 			return this;
 		}
 
 
-		public FSRigidBody setLinearDamping( float linearDamping )
+		public FSRigidBody SetLinearDamping(float linearDamping)
 		{
-			if( body != null )
-				body.linearDamping = linearDamping;
+			if (Body != null)
+				Body.LinearDamping = linearDamping;
 			else
-				_bodyDef.linearDamping = linearDamping;
+				_bodyDef.LinearDamping = linearDamping;
 			return this;
 		}
 
 
-		public FSRigidBody setAngularDamping( float angularDamping )
+		public FSRigidBody SetAngularDamping(float angularDamping)
 		{
-			if( body != null )
-				body.angularDamping = angularDamping;
+			if (Body != null)
+				Body.AngularDamping = angularDamping;
 			else
-				_bodyDef.angularDamping = angularDamping;
+				_bodyDef.AngularDamping = angularDamping;
 			return this;
 		}
 
 
-		public FSRigidBody setIsBullet( bool isBullet )
+		public FSRigidBody SetIsBullet(bool isBullet)
 		{
-			if( body != null )
-				body.isBullet = isBullet;
+			if (Body != null)
+				Body.IsBullet = isBullet;
 			else
-				_bodyDef.isBullet = isBullet;
+				_bodyDef.IsBullet = isBullet;
 			return this;
 		}
 
 
-		public FSRigidBody setIsSleepingAllowed( bool isSleepingAllowed )
+		public FSRigidBody SetIsSleepingAllowed(bool isSleepingAllowed)
 		{
-			if( body != null )
-				body.isSleepingAllowed = isSleepingAllowed;
+			if (Body != null)
+				Body.IsSleepingAllowed = isSleepingAllowed;
 			else
-				_bodyDef.isSleepingAllowed = isSleepingAllowed;
+				_bodyDef.IsSleepingAllowed = isSleepingAllowed;
 			return this;
 		}
 
 
-		public FSRigidBody setIsAwake( bool isAwake )
+		public FSRigidBody SetIsAwake(bool isAwake)
 		{
-			if( body != null )
-				body.isAwake = isAwake;
+			if (Body != null)
+				Body.IsAwake = isAwake;
 			else
-				_bodyDef.isAwake = isAwake;
+				_bodyDef.IsAwake = isAwake;
 			return this;
 		}
 
 
-		public FSRigidBody setFixedRotation( bool fixedRotation )
+		public FSRigidBody SetFixedRotation(bool fixedRotation)
 		{
-			if( body != null )
-				body.fixedRotation = fixedRotation;
+			if (Body != null)
+				Body.FixedRotation = fixedRotation;
 			else
-				_bodyDef.fixedRotation = fixedRotation;
+				_bodyDef.FixedRotation = fixedRotation;
 			return this;
 		}
 
 
-		public FSRigidBody setIgnoreGravity( bool ignoreGravity )
+		public FSRigidBody SetIgnoreGravity(bool ignoreGravity)
 		{
-			if( body != null )
-				body.ignoreGravity = ignoreGravity;
+			if (Body != null)
+				Body.IgnoreGravity = ignoreGravity;
 			else
-				_bodyDef.ignoreGravity = ignoreGravity;
+				_bodyDef.IgnoreGravity = ignoreGravity;
 			return this;
 		}
 
 
-		public FSRigidBody setGravityScale( float gravityScale )
+		public FSRigidBody SetGravityScale(float gravityScale)
 		{
-			if( body != null )
-				body.gravityScale = gravityScale;
+			if (Body != null)
+				Body.GravityScale = gravityScale;
 			else
-				_bodyDef.gravityScale = gravityScale;
+				_bodyDef.GravityScale = gravityScale;
 			return this;
 		}
 
 
-		public FSRigidBody setMass( float mass )
+		public FSRigidBody SetMass(float mass)
 		{
-			if( body != null )
-				body.mass = mass;
+			if (Body != null)
+				Body.Mass = mass;
 			else
-				_bodyDef.mass = mass;
+				_bodyDef.Mass = mass;
 			return this;
 		}
 
 
-		public FSRigidBody setInertia( float inertia )
+		public FSRigidBody SetInertia(float inertia)
 		{
-			if( body != null )
-				body.inertia = inertia;
+			if (Body != null)
+				Body.Inertia = inertia;
 			else
-				_bodyDef.inertia = inertia;
+				_bodyDef.Inertia = inertia;
 			return this;
 		}
 
@@ -150,109 +150,109 @@ namespace Nez.Farseer
 
 		#region Component lifecycle
 
-		public override void initialize()
+		public override void Initialize()
 		{
-			createBody();
+			CreateBody();
 		}
 
 
-		public override void onAddedToEntity()
+		public override void OnAddedToEntity()
 		{
-			createBody();
+			CreateBody();
 		}
 
 
-		public override void onRemovedFromEntity()
+		public override void OnRemovedFromEntity()
 		{
-			destroyBody();
+			DestroyBody();
 		}
 
 
-		public override void onEnabled()
+		public override void OnEnabled()
 		{
-			if( body != null )
-				body.enabled = true;
+			if (Body != null)
+				Body.Enabled = true;
 		}
 
 
-		public override void onDisabled()
+		public override void OnDisabled()
 		{
-			if( body != null )
-				body.enabled = false;
+			if (Body != null)
+				Body.Enabled = false;
 		}
 
 
-		public override void onEntityTransformChanged( Transform.Component comp )
+		public override void OnEntityTransformChanged(Transform.Component comp)
 		{
-			if( _ignoreTransformChanges || body == null )
+			if (_ignoreTransformChanges || Body == null)
 				return;
 
-			if( comp == Transform.Component.Position )
-				body.position = transform.position * FSConvert.displayToSim;
-			else if( comp == Transform.Component.Rotation )
-				body.rotation = transform.rotation;
+			if (comp == Transform.Component.Position)
+				Body.Position = Transform.Position * FSConvert.DisplayToSim;
+			else if (comp == Transform.Component.Rotation)
+				Body.Rotation = Transform.Rotation;
 		}
 
 		#endregion
 
 
-		void IUpdatable.update()
+		void IUpdatable.Update()
 		{
-			if( body == null || !body.isAwake )
+			if (Body == null || !Body.IsAwake)
 				return;
 
 			_ignoreTransformChanges = true;
-			transform.position = FSConvert.simToDisplay * body.position;
-			transform.rotation = body.rotation;
+			Transform.Position = FSConvert.SimToDisplay * Body.Position;
+			Transform.Rotation = Body.Rotation;
 			_ignoreTransformChanges = false;
 		}
 
 
-		void createBody()
+		void CreateBody()
 		{
-			if( body != null )
+			if (Body != null)
 				return;
-			
-			var world = entity.scene.getOrCreateSceneComponent<FSWorld>();
-			body = new Body( world, transform.position * FSConvert.displayToSim, transform.rotation, _bodyDef.bodyType, this );
-			body.linearVelocity = _bodyDef.linearVelocity;
-			body.angularVelocity = _bodyDef.angularVelocity;
-			body.linearDamping = _bodyDef.linearDamping;
-			body.angularDamping = _bodyDef.angularDamping;
 
-			body.isBullet = _bodyDef.isBullet;
-			body.isSleepingAllowed = _bodyDef.isSleepingAllowed;
-			body.isAwake = _bodyDef.isAwake;
-			body.enabled = enabled;
-			body.fixedRotation = _bodyDef.fixedRotation;
-			body.ignoreGravity = _bodyDef.ignoreGravity;
-			body.mass = _bodyDef.mass;
-			body.inertia = _bodyDef.inertia;
+			var world = Entity.Scene.GetOrCreateSceneComponent<FSWorld>();
+			Body = new Body(world, Transform.Position * FSConvert.DisplayToSim, Transform.Rotation, _bodyDef.BodyType,
+				this);
+			Body.LinearVelocity = _bodyDef.LinearVelocity;
+			Body.AngularVelocity = _bodyDef.AngularVelocity;
+			Body.LinearDamping = _bodyDef.LinearDamping;
+			Body.AngularDamping = _bodyDef.AngularDamping;
 
-			var collisionShapes = entity.getComponents<FSCollisionShape>();
-			for( var i = 0; i < collisionShapes.Count; i++ )
-				collisionShapes[i].createFixture();
-			ListPool<FSCollisionShape>.free( collisionShapes );
+			Body.IsBullet = _bodyDef.IsBullet;
+			Body.IsSleepingAllowed = _bodyDef.IsSleepingAllowed;
+			Body.IsAwake = _bodyDef.IsAwake;
+			Body.Enabled = Enabled;
+			Body.FixedRotation = _bodyDef.FixedRotation;
+			Body.IgnoreGravity = _bodyDef.IgnoreGravity;
+			Body.Mass = _bodyDef.Mass;
+			Body.Inertia = _bodyDef.Inertia;
 
-			for( var i = 0; i < _joints.Count; i++ )
-				_joints[i].createJoint();
+			var collisionShapes = Entity.GetComponents<FSCollisionShape>();
+			for (var i = 0; i < collisionShapes.Count; i++)
+				collisionShapes[i].CreateFixture();
+			ListPool<FSCollisionShape>.Free(collisionShapes);
+
+			for (var i = 0; i < _joints.Count; i++)
+				_joints[i].CreateJoint();
 		}
 
 
-		void destroyBody()
+		void DestroyBody()
 		{
-			for( var i = 0; i < _joints.Count; i++ )
-				_joints[i].destroyJoint();
+			for (var i = 0; i < _joints.Count; i++)
+				_joints[i].DestroyJoint();
 			_joints.Clear();
 
-			var collisionShapes = entity.getComponents<FSCollisionShape>();
-			for( var i = 0; i < collisionShapes.Count; i++ )
-				collisionShapes[i].destroyFixture();
-			ListPool<FSCollisionShape>.free( collisionShapes );
+			var collisionShapes = Entity.GetComponents<FSCollisionShape>();
+			for (var i = 0; i < collisionShapes.Count; i++)
+				collisionShapes[i].DestroyFixture();
+			ListPool<FSCollisionShape>.Free(collisionShapes);
 
-			body.world.removeBody( body );
-			body = null;
+			Body.World.RemoveBody(Body);
+			Body = null;
 		}
-
 	}
 }

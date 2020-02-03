@@ -10,11 +10,10 @@
 		<OutputType>Library</OutputType>
 		<RootNamespace>Nez.ImGuiTools</RootNamespace>
 		<AssemblyName>Nez.ImGui</AssemblyName>
-		<TargetFrameworks>net471</TargetFrameworks>
+        <TargetFramework>net471</TargetFramework>
 		<AllowUnsafeBlocks>True</AllowUnsafeBlocks>
 		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
 		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
-		<IntermediateOutputPath>obj\Nez.FNA.ImGui\$(Configuration)</IntermediateOutputPath>
 		<OutputPath>bin\$(Configuration)\FNA</OutputPath>
 	</PropertyGroup>
 
@@ -25,6 +24,7 @@
 	<PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
 		<DefineConstants>FNA</DefineConstants>
 	</PropertyGroup>
+
 
 	<ItemGroup>
 		<ProjectReference Include="../../FNA/FNA.csproj" />
@@ -44,26 +44,26 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<Content Include="$(ImGuiRuntimes)win-x86\native\cimgui.dll" Condition="'$(OS)' == 'Windows_NT' AND '$(Platform)' != 'x64'">
+		<Content Include="$(ImGuiRuntimes)win-x86\native\*.dll" Condition="'$(OS)' == 'Windows_NT' AND '$(Platform)' != 'x64'">
 			<Link>%(Filename)%(Extension)</Link>
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</Content>
-		<Content Include="$(ImGuiRuntimes)win-x64\native\cimgui.dll" Condition="'$(OS)' == 'Windows_NT' AND '$(Platform)' != 'x86'">
+		<Content Include="$(ImGuiRuntimes)win-x64\native\*.dll" Condition="'$(OS)' == 'Windows_NT' AND '$(Platform)' != 'x86'">
 			<Link>%(Filename)%(Extension)</Link>
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</Content>
-		<Content Include="$(ImGuiRuntimes)osx-x64\native\cimgui.dylib" Condition="'$(OS)' != 'Windows_NT' AND $(IsOSX) == 'true'">
+		<Content Include="$(ImGuiRuntimes)osx-x64\native\*.dylib" Condition="'$(OS)' != 'Windows_NT' AND $(IsOSX) == 'true'">
 			<Link>libcimgui.dylib</Link>
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</Content>
-		<Content Include=".$(ImGuiRuntimes)linux-x64\native\cimgui.so" Condition="'$(OS)' != 'Windows_NT' AND $(IsLinux) == 'true'">
+		<Content Include=".$(ImGuiRuntimes)linux-x64\native\*.so" Condition="'$(OS)' != 'Windows_NT' AND $(IsLinux) == 'true'">
 			<Link>%(Filename)%(Extension)</Link>
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</Content>
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="ImGui.NET" Version="1.67.0" />
+		<PackageReference Include="ImGui.NET" Version="1.71.0" />
 	</ItemGroup>
 	
 	<Import Sdk="Microsoft.NET.Sdk" Project="Sdk.targets" />

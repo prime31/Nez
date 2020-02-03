@@ -1,27 +1,23 @@
-﻿using System;
-
-
-namespace Nez.AI.BehaviorTrees
+﻿namespace Nez.AI.BehaviorTrees
 {
 	/// <summary>
 	/// inverts the result of the child node
 	/// </summary>
 	public class Inverter<T> : Decorator<T>
 	{
-		public override TaskStatus update( T context )
+		public override TaskStatus Update(T context)
 		{
-			Insist.isNotNull( child, "child must not be null" );
+			Insist.IsNotNull(Child, "child must not be null");
 
-			var status = child.tick( context );
+			var status = Child.Tick(context);
 
-			if( status == TaskStatus.Success )
+			if (status == TaskStatus.Success)
 				return TaskStatus.Failure;
-			
-			if( status == TaskStatus.Failure )
+
+			if (status == TaskStatus.Failure)
 				return TaskStatus.Success;
-			
+
 			return TaskStatus.Running;
 		}
 	}
 }
-

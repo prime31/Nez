@@ -1,19 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 
 namespace Nez
 {
 	public class EntitySystem
 	{
-		public Matcher matcher
-		{
-			get { return _matcher; }
-		}
+		public Matcher Matcher => _matcher;
 
-		public Scene scene
+		public Scene Scene
 		{
-			get { return _scene; }
+			get => _scene;
 			set
 			{
 				_scene = value;
@@ -28,79 +24,83 @@ namespace Nez
 
 		public EntitySystem()
 		{
-			_matcher = Matcher.empty();
+			_matcher = Matcher.Empty();
 		}
 
 
-		public EntitySystem( Matcher matcher )
+		public EntitySystem(Matcher matcher)
 		{
 			_matcher = matcher;
 		}
 
 
-		public virtual void onChange( Entity entity )
+		public virtual void OnChange(Entity entity)
 		{
-			var contains = _entities.Contains( entity );
-			var interest = _matcher.isInterested( entity );
+			var contains = _entities.Contains(entity);
+			var interest = _matcher.IsInterested(entity);
 
-			if( interest && !contains )
-				add( entity );
-			else if( !interest && contains )
-				remove( entity );
+			if (interest && !contains)
+				Add(entity);
+			else if (!interest && contains)
+				Remove(entity);
 		}
 
 
-		public virtual void add( Entity entity )
+		public virtual void Add(Entity entity)
 		{
-			_entities.Add( entity );
-			onAdded( entity );
+			_entities.Add(entity);
+			OnAdded(entity);
 		}
 
 
-		public virtual void remove( Entity entity )
+		public virtual void Remove(Entity entity)
 		{
-			_entities.Remove( entity );
-			onRemoved( entity );
+			_entities.Remove(entity);
+			OnRemoved(entity);
 		}
 
 
-		public virtual void onAdded( Entity entity )
-		{}
-
-
-		public virtual void onRemoved( Entity entity )
-		{}
-
-
-		protected virtual void process( List<Entity> entities )
-		{}
-
-
-        protected virtual void lateProcess( List<Entity> entities )
-        {}
-
-
-        protected virtual void begin()
-		{}
-
-
-		public void update()
+		public virtual void OnAdded(Entity entity)
 		{
-			begin();
-			process( _entities );
 		}
 
 
-        public void lateUpdate()
-        {
-            lateProcess( _entities );
-            end();
-        }
+		public virtual void OnRemoved(Entity entity)
+		{
+		}
 
 
-        protected virtual void end()
-		{}
+		protected virtual void Process(List<Entity> entities)
+		{
+		}
 
+
+		protected virtual void LateProcess(List<Entity> entities)
+		{
+		}
+
+
+		protected virtual void Begin()
+		{
+		}
+
+
+		public void Update()
+		{
+			Begin();
+			Process(_entities);
+		}
+
+
+		public void LateUpdate()
+		{
+			LateProcess(_entities);
+			End();
+		}
+
+
+		protected virtual void End()
+		{
+		}
 	}
 }
-

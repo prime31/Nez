@@ -7,14 +7,14 @@ namespace Nez.Farseer
 {
 	internal class FSFixtureDef
 	{
-		public Shape shape;
-		public float friction = 0.2f;
-		public float restitution;
-		public float density = 1f;
-		public bool isSensor;
-		public Category collidesWith = Settings.defaultFixtureCollidesWith;
-		public Category collisionCategories = Settings.defaultFixtureCollisionCategories;
-		public Category ignoreCCDWith = Settings.defaultFixtureIgnoreCCDWith;
-		public short collisionGroup;
+		public Shape Shape;
+		public float Friction = 0.2f;
+		public float Restitution;
+		public float Density = 1f;
+		public bool IsSensor;
+		public Category CollidesWith = Settings.DefaultFixtureCollidesWith;
+		public Category CollisionCategories = Settings.DefaultFixtureCollisionCategories;
+		public Category IgnoreCCDWith = Settings.DefaultFixtureIgnoreCCDWith;
+		public short CollisionGroup;
 	}
 }

@@ -1,5 +1,4 @@
-﻿using System;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Nez.BitmapFonts;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -8,33 +7,33 @@ namespace Nez.UI
 {
 	public class Label : Element
 	{
-		public override float preferredWidth
+		public override float PreferredWidth
 		{
 			get
 			{
-				if( _wrapText )
+				if (_wrapText)
 					return 0;
 
-				if( _prefSizeInvalid )
-					computePrefSize();
+				if (_prefSizeInvalid)
+					ComputePrefSize();
 
 				var w = _prefSize.X;
-				if( _style.background != null )
-					w += _style.background.leftWidth + _style.background.rightWidth;
+				if (_style.Background != null)
+					w += _style.Background.LeftWidth + _style.Background.RightWidth;
 				return w;
 			}
 		}
 
-		public override float preferredHeight
+		public override float PreferredHeight
 		{
 			get
 			{
-				if( _prefSizeInvalid )
-					computePrefSize();
+				if (_prefSizeInvalid)
+					ComputePrefSize();
 
 				var h = _prefSize.Y;
-				if( _style.background != null )
-					h += _style.background.topHeight + _style.background.bottomHeight;
+				if (_style.Background != null)
+					h += _style.Background.TopHeight + _style.Background.BottomHeight;
 				return h;
 			}
 		}
@@ -45,7 +44,9 @@ namespace Nez.UI
 		string _text;
 		float _fontScaleX = 1;
 		float _fontScaleY = 1;
-		int labelAlign = AlignInternal.left;
+
+		int labelAlign = AlignInternal.Left;
+
 		//int lineAlign = AlignInternal.left;
 		string _ellipsis;
 		bool _wrapText;
@@ -58,34 +59,34 @@ namespace Nez.UI
 		Vector2 _textPosition;
 
 
-		public Label( string text, LabelStyle style )
+		public Label(string text, LabelStyle style)
 		{
-			setStyle( style );
-			setText( text );
+			SetStyle(style);
+			SetText(text);
 			touchable = Touchable.Disabled;
 		}
 
 
-		public Label( string text, Skin skin, string styleName = null ) : this( text, skin.get<LabelStyle>( styleName ) )
-		{}
+		public Label(string text, Skin skin, string styleName = null) : this(text, skin.Get<LabelStyle>(styleName))
+		{ }
 
 
-		public Label( string text, BitmapFont font, Color fontColor ) : this( text, new LabelStyle( font, fontColor ) )
-		{}
+		public Label(string text, BitmapFont font, Color fontColor) : this(text, new LabelStyle(font, fontColor))
+		{ }
 
 
-		public Label( string text, BitmapFont font ) : this( text, font, Color.White )
-		{}
+		public Label(string text, BitmapFont font) : this(text, font, Color.White)
+		{ }
 
 
-		public Label( string text ) : this( text, Graphics.instance.bitmapFont )
-		{}
+		public Label(string text) : this(text, Graphics.Instance.BitmapFont)
+		{ }
 
 
-		public virtual Label setStyle( LabelStyle style )
+		public virtual Label SetStyle(LabelStyle style)
 		{
 			_style = style;
-			invalidateHierarchy();
+			InvalidateHierarchy();
 			return this;
 		}
 
@@ -94,65 +95,66 @@ namespace Nez.UI
 		/// Returns the button's style. Modifying the returned style may not have an effect until {@link #setStyle(ButtonStyle)} is called.
 		/// </summary>
 		/// <returns>The style.</returns>
-		public virtual LabelStyle getStyle()
+		public virtual LabelStyle GetStyle()
 		{
 			return _style;
 		}
 
 
-		public override void invalidate()
+		public override void Invalidate()
 		{
-			base.invalidate();
+			base.Invalidate();
 			_prefSizeInvalid = true;
 		}
 
 
-		void computePrefSize()
+		void ComputePrefSize()
 		{
 			_prefSizeInvalid = false;
 
-			if( _wrapText && _ellipsis == null && width > 0 )
+			if (_wrapText && _ellipsis == null && width > 0)
 			{
 				var widthCalc = width;
-				if( _style.background != null )
-					widthCalc -= _style.background.leftWidth + _style.background.rightWidth;
+				if (_style.Background != null)
+					widthCalc -= _style.Background.LeftWidth + _style.Background.RightWidth;
 
-				_wrappedString = _style.font.wrapText( _text, widthCalc / _fontScaleX );
+				_wrappedString = _style.Font.WrapText(_text, widthCalc / _fontScaleX);
 			}
-			else if( _ellipsis != null && width > 0 )
+			else if (_ellipsis != null && width > 0)
 			{
 				// we have a max width and an ellipsis so we will truncate the text
 				var widthCalc = width;
-				if( _style.background != null )
-					widthCalc -= _style.background.leftWidth + _style.background.rightWidth;
-				
-				_wrappedString = _style.font.truncateText( _text, _ellipsis, widthCalc / _fontScaleX );
+				if (_style.Background != null)
+					widthCalc -= _style.Background.LeftWidth + _style.Background.RightWidth;
+
+				_wrappedString = _style.Font.TruncateText(_text, _ellipsis, widthCalc / _fontScaleX);
 			}
 			else
 			{
 				_wrappedString = _text;
 			}
 
-			_prefSize = _style.font.measureString( _wrappedString ) * new Vector2( _fontScaleX, _fontScaleY );
+			_prefSize = _style.Font.MeasureString(_wrappedString) * new Vector2(_fontScaleX, _fontScaleY);
 		}
 
 
 		#region Configuration
 
-		public Label setText( string text )
+		public Label SetText(string text)
 		{
-			if( _text != text )
+			if (_text != text)
 			{
 				_wrappedString = null;
 				_text = text;
 				_prefSizeInvalid = true;
-				invalidateHierarchy();
+				InvalidateHierarchy();
 			}
+
 			return this;
 		}
 
 
-		public string getText()
+		public string GetText()
 		{
 			return _text;
 		}
@@ -163,10 +165,10 @@ namespace Nez.UI
 		/// </summary>
 		/// <returns>this</returns>
 		/// <param name="background">Background.</param>
-		public Label setBackground( IDrawable background )
+		public Label SetBackground(IDrawable background)
 		{
-			_style.background = background;
-			invalidate();
+			_style.Background = background;
+			Invalidate();
 			return this;
 		}
 
@@ -175,9 +177,9 @@ namespace Nez.UI
 		/// alignment Aligns all the text within the label (default left center) and each line of text horizontally (default left)
 		/// </summary>
 		/// <param name="alignment">Alignment.</param>
-		public Label setAlignment( Align alignment )
+		public Label SetAlignment(Align alignment)
 		{
-			return setAlignment( alignment, alignment );
+			return SetAlignment(alignment, alignment);
 		}
 
 
@@ -187,45 +189,45 @@ namespace Nez.UI
 		/// </summary>
 		/// <param name="labelAlign">Label align.</param>
 		/// <param name="lineAlign">Line align.</param>
-		public Label setAlignment( Align labelAlign, Align lineAlign )
+		public Label SetAlignment(Align labelAlign, Align lineAlign)
 		{
 			this.labelAlign = (int)labelAlign;
 
 			// TODO
-//			var tempLineAlign = (int)lineAlign;
-//			if( ( tempLineAlign & AlignInternal.left ) != 0 )
-//				this.lineAlign = AlignInternal.left;
-//			else if( ( tempLineAlign & AlignInternal.right ) != 0 )
-//				this.lineAlign = AlignInternal.right;
-//			else
-//				this.lineAlign = AlignInternal.center;
+			//			var tempLineAlign = (int)lineAlign;
+			//			if( ( tempLineAlign & AlignInternal.left ) != 0 )
+			//				this.lineAlign = AlignInternal.left;
+			//			else if( ( tempLineAlign & AlignInternal.right ) != 0 )
+			//				this.lineAlign = AlignInternal.right;
+			//			else
+			//				this.lineAlign = AlignInternal.center;
 
-			invalidate();
+			Invalidate();
 			return this;
 		}
 
 
-		public Label setFontColor( Color color )
+		public Label SetFontColor(Color color)
 		{
-			_style.fontColor = color;
+			_style.FontColor = color;
 			return this;
 		}
 
 
-		public Label setFontScale( float fontScale )
+		public Label SetFontScale(float fontScale)
 		{
 			_fontScaleX = fontScale;
 			_fontScaleY = fontScale;
-			invalidateHierarchy();
+			InvalidateHierarchy();
 			return this;
 		}
 
 
-		public Label setFontScale( float fontScaleX, float fontScaleY )
+		public Label SetFontScale(float fontScaleX, float fontScaleY)
 		{
 			_fontScaleX = fontScaleX;
 			_fontScaleY = fontScaleY;
-			invalidateHierarchy();
+			InvalidateHierarchy();
 			return this;
 		}
 
@@ -235,7 +237,7 @@ namespace Nez.UI
 		/// when ellipsis is enabled. Default is null.
 		/// </summary>
 		/// <param name="ellipsis">Ellipsis.</param>
-		public Label setEllipsis( string ellipsis )
+		public Label SetEllipsis(string ellipsis)
 		{
 			_ellipsis = ellipsis;
 			return this;
@@ -247,9 +249,9 @@ namespace Nez.UI
 		/// ellipsis is true. Default is false.
 		/// </summary>
 		/// <param name="ellipsis">Ellipsis.</param>
-		public Label setEllipsis( bool ellipsis )
+		public Label SetEllipsis(bool ellipsis)
 		{
-			if( ellipsis )
+			if (ellipsis)
 				_ellipsis = "...";
 			else
 				_ellipsis = null;
@@ -261,28 +263,28 @@ namespace Nez.UI
 		/// should the text be wrapped?
 		/// </summary>
 		/// <param name="shouldWrap">If set to <c>true</c> should wrap.</param>
-		public Label setWrap( bool shouldWrap )
+		public Label SetWrap(bool shouldWrap)
 		{
 			_wrapText = shouldWrap;
-			invalidateHierarchy();
+			InvalidateHierarchy();
 			return this;
 		}
 
 		#endregion
 
 
-		public override void layout()
+		public override void Layout()
 		{
-			if( _prefSizeInvalid )
-				computePrefSize();
+			if (_prefSizeInvalid)
+				ComputePrefSize();
 
 			var isWrapped = _wrapText && _ellipsis == null;
-			if( isWrapped )
+			if (isWrapped)
 			{
-				if( _lastPrefHeight != preferredHeight )
+				if (_lastPrefHeight != PreferredHeight)
 				{
-					_lastPrefHeight = preferredHeight;
-					invalidateHierarchy();
+					_lastPrefHeight = PreferredHeight;
+					InvalidateHierarchy();
 				}
 			}
 
@@ -290,75 +292,75 @@ namespace Nez.UI
 			var height = this.height;
 			_textPosition.X = 0;
 			_textPosition.Y = 0;
+
 			// TODO: explore why descent causes mis-alignment
 			//_textPosition.Y =_style.font.descent;
-			if( _style.background != null )
+			if (_style.Background != null)
 			{
-				_textPosition.X = _style.background.leftWidth;
-				_textPosition.Y = _style.background.topHeight;
-				width -= _style.background.leftWidth + _style.background.rightWidth;
-				height -= _style.background.topHeight + _style.background.bottomHeight;
+				_textPosition.X = _style.Background.LeftWidth;
+				_textPosition.Y = _style.Background.TopHeight;
+				width -= _style.Background.LeftWidth + _style.Background.RightWidth;
+				height -= _style.Background.TopHeight + _style.Background.BottomHeight;
 			}
 
 			float textWidth, textHeight;
-			if( isWrapped || _wrappedString.IndexOf( '\n' ) != -1 )
+			if (isWrapped || _wrappedString.IndexOf('\n') != -1)
 			{
 				// If the text can span multiple lines, determine the text's actual size so it can be aligned within the label.
 				textWidth = _prefSize.X;
 				textHeight = _prefSize.Y;
 
-				if( ( labelAlign & AlignInternal.left ) == 0 )
+				if ((labelAlign & AlignInternal.Left) == 0)
 				{
-					if( ( labelAlign & AlignInternal.right ) != 0 )
+					if ((labelAlign & AlignInternal.Right) != 0)
 						_textPosition.X += width - textWidth;
 					else
-						_textPosition.X += ( width - textWidth ) / 2;
+						_textPosition.X += (width - textWidth) / 2;
 				}
 			}
 			else
 			{
 				textWidth = width;
-				textHeight = _style.font.lineHeight * _fontScaleY;
+				textHeight = _style.Font.LineHeight * _fontScaleY;
 			}
-				
-			if( ( labelAlign & AlignInternal.bottom ) != 0 )
+
+			if ((labelAlign & AlignInternal.Bottom) != 0)
 			{
 				_textPosition.Y += height - textHeight;
-				y += _style.font.padding.bottom;
+				y += _style.Font.Padding.Bottom;
 			}
-			else if( ( labelAlign & AlignInternal.top ) != 0 )
+			else if ((labelAlign & AlignInternal.Top) != 0)
 			{
 				_textPosition.Y += 0;
-				y -= _style.font.padding.bottom;
+				y -= _style.Font.Padding.Bottom;
 			}
 			else
 			{
-				_textPosition.Y += ( height - textHeight ) / 2;
+				_textPosition.Y += (height - textHeight) / 2;
 			}
 
 			//_textPosition.Y += textHeight;
 
 			// if we have GlyphLayout this code is redundant
-			if( ( labelAlign & AlignInternal.left ) != 0 )
+			if ((labelAlign & AlignInternal.Left) != 0)
 				_textPosition.X = 0;
-			else if( labelAlign == AlignInternal.center )
-				_textPosition.X = width / 2 - ( _prefSize.X / 2 ); // center of width - center of text size
+			else if (labelAlign == AlignInternal.Center)
+				_textPosition.X = width / 2 - (_prefSize.X / 2); // center of width - center of text size
 			else
 				_textPosition.X = width - _prefSize.X; // full width - our text size
 		}
 
 
-		public override void draw( Graphics graphics, float parentAlpha )
+		public override void Draw(Batcher batcher, float parentAlpha)
 		{
-			validate();
+			Validate();
 
-			var color = new Color( this.color, (int)(this.color.A * parentAlpha) );
-			if( _style.background != null )
-				_style.background.draw( graphics, x, y, width == 0 ? _prefSize.X : width, height, color );
+			var color = ColorExt.Create(this.color, (int)(this.color.A * parentAlpha));
+			_style.Background?.Draw(batcher, x, y, width == 0 ? _prefSize.X : width, height, color);
 
-			graphics.batcher.drawString( _style.font, _wrappedString, new Vector2( x, y ) + _textPosition, _style.fontColor, 0, Vector2.Zero, new Vector2( _fontScaleX, _fontScaleY ), SpriteEffects.None, 0 );
+			batcher.DrawString(_style.Font, _wrappedString, new Vector2(x, y) + _textPosition,
+				_style.FontColor, 0, Vector2.Zero, new Vector2(_fontScaleX, _fontScaleY), SpriteEffects.None, 0);
 		}
-
 	}
 
 
@@ -367,36 +369,36 @@ namespace Nez.UI
 	/// </summary>
 	public class LabelStyle
 	{
-		public Color fontColor = Color.White;
-		public BitmapFont font;
-		public IDrawable background;
+		public Color FontColor = Color.White;
+		public BitmapFont Font;
+		public IDrawable Background;
 
 
 		public LabelStyle()
 		{
-			font = Graphics.instance.bitmapFont;
+			Font = Graphics.Instance.BitmapFont;
 		}
 
 
-		public LabelStyle( BitmapFont font, Color fontColor )
+		public LabelStyle(BitmapFont font, Color fontColor)
 		{
-			this.font = font ?? Graphics.instance.bitmapFont;
-			this.fontColor = fontColor;
+			Font = font ?? Graphics.Instance.BitmapFont;
+			FontColor = fontColor;
 		}
 
 
-		public LabelStyle( Color fontColor ) : this( null, fontColor )
-		{}
+		public LabelStyle(Color fontColor) : this(null, fontColor)
+		{ }
 
 
-		public LabelStyle clone()
+		public LabelStyle Clone()
 		{
-			return new LabelStyle {
-				fontColor = fontColor,
-				font = font,
-				background = background
+			return new LabelStyle
+			{
+				FontColor = FontColor,
+				Font = Font,
+				Background = Background
 			};
 		}
 	}
 }
-

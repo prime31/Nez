@@ -11,62 +11,61 @@ namespace Nez.Farseer
 
 		#region Configuration
 
-		public FSMouseJoint setWorldAnchor( Vector2 worldAnchor )
+		public FSMouseJoint SetWorldAnchor(Vector2 worldAnchor)
 		{
-			_jointDef.worldAnchor = worldAnchor;
-			if( _joint != null )
-				_joint.worldAnchorB = worldAnchor * FSConvert.displayToSim;
+			_jointDef.WorldAnchor = worldAnchor;
+			if (_joint != null)
+				_joint.WorldAnchorB = worldAnchor * FSConvert.DisplayToSim;
 			return this;
 		}
 
 
-		public FSMouseJoint setFrequency( float frequency )
+		public FSMouseJoint SetFrequency(float frequency)
 		{
-			_jointDef.frequency = frequency;
-			if( _joint != null )
-				( _joint as FixedMouseJoint ).frequency = frequency;
+			_jointDef.Frequency = frequency;
+			if (_joint != null)
+				(_joint as FixedMouseJoint).Frequency = frequency;
 			return this;
 		}
 
 
-		public FSMouseJoint setDampingRatio( float dampingRatio )
+		public FSMouseJoint SetDampingRatio(float dampingRatio)
 		{
-			_jointDef.dampingRatio = dampingRatio;
-			if( _joint != null )
-				( _joint as FixedMouseJoint ).dampingRatio = dampingRatio;
+			_jointDef.DampingRatio = dampingRatio;
+			if (_joint != null)
+				(_joint as FixedMouseJoint).DampingRatio = dampingRatio;
 			return this;
 		}
 
 
-		public FSMouseJoint setMaxForce( float maxForce )
+		public FSMouseJoint SetMaxForce(float maxForce)
 		{
-			_jointDef.maxForce = maxForce;
-			if( _joint != null )
-				( _joint as FixedMouseJoint ).maxForce = maxForce;
+			_jointDef.MaxForce = maxForce;
+			if (_joint != null)
+				(_joint as FixedMouseJoint).MaxForce = maxForce;
 			return this;
 		}
 
 		#endregion
 
 
-		void IUpdatable.update()
+		void IUpdatable.Update()
 		{
-			if( _joint != null )
+			if (_joint != null)
 			{
-				var pos = Core.scene.camera.screenToWorldPoint( Input.mousePosition );
-				setWorldAnchor( pos );
+				var pos = Core.Scene.Camera.ScreenToWorldPoint(Input.MousePosition);
+				SetWorldAnchor(pos);
 			}
 		}
 
 
-		internal override FSJointDef getJointDef()
+		internal override FSJointDef GetJointDef()
 		{
-			initializeJointDef( _jointDef );
-			if( _jointDef.bodyA == null )
+			InitializeJointDef(_jointDef);
+			if (_jointDef.BodyA == null)
 				return null;
 
 			return _jointDef;
 		}
-
 	}
 }

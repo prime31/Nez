@@ -10,11 +10,10 @@
 		<OutputType>Library</OutputType>
 		<RootNamespace>Nez.Persistence</RootNamespace>
 		<AssemblyName>Nez.Persistence</AssemblyName>
-		<TargetFrameworks>net471</TargetFrameworks>
+		<TargetFramework>net471</TargetFramework>
 		<AllowUnsafeBlocks>True</AllowUnsafeBlocks>
 		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
 		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
-		<IntermediateOutputPath>obj\Nez.FNA.Persistence\$(Configuration)</IntermediateOutputPath>
 		<OutputPath>bin\$(Configuration)\FNA</OutputPath>
 	</PropertyGroup>
 
@@ -30,10 +29,5 @@
         <DefaultItemExcludes>$(DefaultItemExcludes);Tests\**\*.*</DefaultItemExcludes>
     </PropertyGroup>
 
-	<ItemGroup>
-		<ProjectReference Include="..\..\FNA\FNA.csproj" />
-		<ProjectReference Include="..\Nez.Portable\Nez.FNA.csproj" />
-	</ItemGroup>
-	
 	<Import Sdk="Microsoft.NET.Sdk" Project="Sdk.targets" />
 </Project>

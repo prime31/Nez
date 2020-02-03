@@ -13,43 +13,46 @@ namespace Nez.PhysicsShapes
 		/// <returns>The collision.</returns>
 		/// <param name="first">Polygon a.</param>
 		/// <param name="second">Polygon b.</param>
-		public static bool polygonToPolygon( Polygon first, Polygon second, out CollisionResult result )
+		public static bool PolygonToPolygon(Polygon first, Polygon second, out CollisionResult result)
 		{
 			result = new CollisionResult();
 			var isIntersecting = true;
 
-			var firstEdges = first.edgeNormals;
-			var secondEdges = second.edgeNormals;
+			var firstEdges = first.EdgeNormals;
+			var secondEdges = second.EdgeNormals;
 			var minIntervalDistance = float.PositiveInfinity;
 			var translationAxis = new Vector2();
 			var polygonOffset = first.position - second.position;
 			Vector2 axis;
 
 			// Loop through all the edges of both polygons
-			for( var edgeIndex = 0; edgeIndex < firstEdges.Length + secondEdges.Length; edgeIndex++ )
+			for (var edgeIndex = 0; edgeIndex < firstEdges.Length + secondEdges.Length; edgeIndex++)
 			{
 				// 1. Find if the polygons are currently intersecting
 				// Polygons have the normalized axis perpendicular to the current edge cached for us
-				if( edgeIndex < firstEdges.Length )
+				if (edgeIndex < firstEdges.Length)
 					axis = firstEdges[edgeIndex];
 				else
 					axis = secondEdges[edgeIndex - firstEdges.Length];
 
 				// Find the projection of the polygon on the current axis
-				float minA = 0; float minB = 0; float maxA = 0; float maxB = 0;
+				float minA = 0;
+				float minB = 0;
+				float maxA = 0;
+				float maxB = 0;
 				var intervalDist = 0f;
-				getInterval( axis, first, ref minA, ref maxA );
-				getInterval( axis, second, ref minB, ref maxB );
+				GetInterval(axis, first, ref minA, ref maxA);
+				GetInterval(axis, second, ref minB, ref maxB);
 
 				// get our interval to be space of the second Polygon. Offset by the difference in position projected on the axis.
 				float relativeIntervalOffset;
-				Vector2.Dot( ref polygonOffset, ref axis, out relativeIntervalOffset );
+				Vector2.Dot(ref polygonOffset, ref axis, out relativeIntervalOffset);
 				minA += relativeIntervalOffset;
 				maxA += relativeIntervalOffset;
 
 				// check if the polygon projections are currentlty intersecting
-				intervalDist = intervalDistance( minA, maxA, minB, maxB );
-				if( intervalDist > 0 )
+				intervalDist = IntervalDistance(minA, maxA, minB, maxB);
+				if (intervalDist > 0)
 					isIntersecting = false;
 
 
@@ -74,25 +77,25 @@ namespace Nez.PhysicsShapes
 
 
 				// If the polygons are not intersecting and won't intersect, exit the loop
-				if( !isIntersecting )
+				if (!isIntersecting)
 					return false;
 
 				// Check if the current interval distance is the minimum one. If so store the interval distance and the current distance.
 				// This will be used to calculate the minimum translation vector
-				intervalDist = Math.Abs( intervalDist );
-				if( intervalDist < minIntervalDistance )
+				intervalDist = Math.Abs(intervalDist);
+				if (intervalDist < minIntervalDistance)
 				{
 					minIntervalDistance = intervalDist;
 					translationAxis = axis;
 
-					if( Vector2.Dot( translationAxis, polygonOffset ) < 0 )
+					if (Vector2.Dot(translationAxis, polygonOffset) < 0)
 						translationAxis = -translationAxis;
 				}
 			}
 
 			// The minimum translation vector can be used to push the polygons appart.
-			result.normal = translationAxis;
-			result.minimumTranslationVector = -translationAxis * minIntervalDistance;
+			result.Normal = translationAxis;
+			result.MinimumTranslationVector = -translationAxis * minIntervalDistance;
 
 			return true;
 		}
@@ -106,11 +109,12 @@ namespace Nez.PhysicsShapes
 		/// <param name="maxA">Max a.</param>
 		/// <param name="minB">Minimum b.</param>
 		/// <param name="maxB">Max b.</param>
-		[MethodImpl( MethodImplOptions.AggressiveInlining )]
-		static float intervalDistance( float minA, float maxA, float minB, float maxB )
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		static float IntervalDistance(float minA, float maxA, float minB, float maxB)
 		{
-			if( minA < minB )
+			if (minA < minB)
 				return minB - maxA;
+
 			return minA - maxB;
 		}
 
@@ -122,23 +126,22 @@ namespace Nez.PhysicsShapes
 		/// <param name="polygon">Polygon.</param>
 		/// <param name="min">Minimum.</param>
 		/// <param name="max">Max.</param>
-		[MethodImpl( MethodImplOptions.AggressiveInlining )]
-		static void getInterval( Vector2 axis, Polygon polygon, ref float min, ref float max )
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		static void GetInterval(Vector2 axis, Polygon polygon, ref float min, ref float max)
 		{
 			// To project a point on an axis use the dot product
 			float dot;
-			Vector2.Dot( ref polygon.points[0], ref axis, out dot );
+			Vector2.Dot(ref polygon.Points[0], ref axis, out dot);
 			min = max = dot;
 
-			for( var i = 1; i < polygon.points.Length; i++ )
+			for (var i = 1; i < polygon.Points.Length; i++)
 			{
-				Vector2.Dot( ref polygon.points[i], ref axis, out dot );
-				if( dot < min )
+				Vector2.Dot(ref polygon.Points[i], ref axis, out dot);
+				if (dot < min)
 					min = dot;
-				else if( dot > max )
+				else if (dot > max)
 					max = dot;
 			}
 		}
-
 	}
 }

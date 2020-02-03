@@ -11,16 +11,16 @@ namespace Nez.Timers
 	{
 		List<Timer> _timers = new List<Timer>();
 
-		
-		public override void update()
+
+		public override void Update()
 		{
-			for( var i = _timers.Count - 1; i >= 0; i-- )
+			for (var i = _timers.Count - 1; i >= 0; i--)
 			{
 				// tick our timer. if it returns true it is done so we remove it
-				if( _timers[i].tick() )
+				if (_timers[i].Tick())
 				{
-					_timers[i].unload();
-					_timers.RemoveAt( i );
+					_timers[i].Unload();
+					_timers.RemoveAt(i);
 				}
 			}
 		}
@@ -32,14 +32,13 @@ namespace Nez.Timers
 		/// <param name="repeats">If set to <c>true</c> repeats.</param>
 		/// <param name="context">Context.</param>
 		/// <param name="onTime">On time.</param>
-		internal ITimer schedule( float timeInSeconds, bool repeats, object context, Action<ITimer> onTime )
+		internal ITimer Schedule(float timeInSeconds, bool repeats, object context, Action<ITimer> onTime)
 		{
 			var timer = new Timer();
-			timer.initialize( timeInSeconds, repeats, context, onTime );
-			_timers.Add( timer );
+			timer.Initialize(timeInSeconds, repeats, context, onTime);
+			_timers.Add(timer);
 
 			return timer;
 		}
 	}
 }
-

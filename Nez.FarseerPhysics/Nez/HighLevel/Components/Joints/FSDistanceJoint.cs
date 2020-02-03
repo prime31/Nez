@@ -10,48 +10,47 @@ namespace Nez.Farseer
 
 		#region Configuration
 
-		public FSDistanceJoint setFrequency( float frequency )
+		public FSDistanceJoint SetFrequency(float frequency)
 		{
-			_jointDef.frequency = frequency;
-			recreateJoint();
+			_jointDef.Frequency = frequency;
+			RecreateJoint();
 			return this;
 		}
 
 
-		public FSDistanceJoint setDampingRatio( float damping )
+		public FSDistanceJoint SetDampingRatio(float damping)
 		{
-			_jointDef.dampingRatio = damping;
-			recreateJoint();
+			_jointDef.DampingRatio = damping;
+			RecreateJoint();
 			return this;
 		}
 
 
-		public FSDistanceJoint setOwnerBodyAnchor( Vector2 ownerBodyAnchor )
+		public FSDistanceJoint SetOwnerBodyAnchor(Vector2 ownerBodyAnchor)
 		{
-			_jointDef.ownerBodyAnchor = ownerBodyAnchor;
-			recreateJoint();
+			_jointDef.OwnerBodyAnchor = ownerBodyAnchor;
+			RecreateJoint();
 			return this;
 		}
 
 
-		public FSDistanceJoint setOtherBodyAnchor( Vector2 otherBodyAnchor )
+		public FSDistanceJoint SetOtherBodyAnchor(Vector2 otherBodyAnchor)
 		{
-			_jointDef.otherBodyAnchor = otherBodyAnchor;
-			recreateJoint();
+			_jointDef.OtherBodyAnchor = otherBodyAnchor;
+			RecreateJoint();
 			return this;
 		}
 
 		#endregion
 
 
-		internal override FSJointDef getJointDef()
+		internal override FSJointDef GetJointDef()
 		{
-			initializeJointDef( _jointDef );
-			if( _jointDef.bodyA == null || _jointDef.bodyB == null )
+			InitializeJointDef(_jointDef);
+			if (_jointDef.BodyA == null || _jointDef.BodyB == null)
 				return null;
 
 			return _jointDef;
 		}
-
 	}
 }

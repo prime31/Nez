@@ -17,13 +17,14 @@ namespace Nez
 		/// the AABB that wraps this object
 		/// </summary>
 		/// <value>The bounds.</value>
-		public override RectangleF bounds
+		public override RectangleF Bounds
 		{
 			get
 			{
-				if( _areBoundsDirty )
+				if (_areBoundsDirty)
 				{
-					_bounds.calculateBounds( entity.transform.position + _topLeftVertPosition, Vector2.Zero, Vector2.Zero, entity.transform.scale, entity.transform.rotation, _width, _height );
+					_bounds.CalculateBounds(Entity.Transform.Position + _topLeftVertPosition, Vector2.Zero,
+						Vector2.Zero, Entity.Transform.Scale, Entity.Transform.Rotation, _width, _height);
 					_areBoundsDirty = false;
 				}
 
@@ -50,17 +51,17 @@ namespace Nez
 		/// recalculates the bounds and optionally sets the UVs. The UVs are setup to map the texture in a best fit fashion.
 		/// </summary>
 		/// <param name="recalculateUVs">If set to <c>true</c> recalculate U vs.</param>
-		public Mesh recalculateBounds( bool recalculateUVs )
+		public Mesh RecalculateBounds(bool recalculateUVs)
 		{
-			_topLeftVertPosition = new Vector2( float.MaxValue, float.MaxValue );
-			var max = new Vector2( float.MinValue, float.MinValue );
+			_topLeftVertPosition = new Vector2(float.MaxValue, float.MaxValue);
+			var max = new Vector2(float.MinValue, float.MinValue);
 
-			for( var i = 0; i < _verts.Length; i++ )
+			for (var i = 0; i < _verts.Length; i++)
 			{
-				_topLeftVertPosition.X = MathHelper.Min( _topLeftVertPosition.X, _verts[i].Position.X );
-				_topLeftVertPosition.Y = MathHelper.Min( _topLeftVertPosition.Y, _verts[i].Position.Y );
-				max.X = MathHelper.Max( max.X, _verts[i].Position.X );
-				max.Y = MathHelper.Max( max.Y, _verts[i].Position.Y );
+				_topLeftVertPosition.X = MathHelper.Min(_topLeftVertPosition.X, _verts[i].Position.X);
+				_topLeftVertPosition.Y = MathHelper.Min(_topLeftVertPosition.Y, _verts[i].Position.Y);
+				max.X = MathHelper.Max(max.X, _verts[i].Position.X);
+				max.Y = MathHelper.Max(max.Y, _verts[i].Position.Y);
 			}
 
 			_width = max.X - _topLeftVertPosition.X;
@@ -68,12 +69,12 @@ namespace Nez
 			_areBoundsDirty = true;
 
 			// handle UVs if need be
-			if( recalculateUVs )
+			if (recalculateUVs)
 			{
-				for( var i = 0; i < _verts.Length; i++ )
+				for (var i = 0; i < _verts.Length; i++)
 				{
-					_verts[i].TextureCoordinate.X = ( _verts[i].Position.X - _topLeftVertPosition.X ) / _width;
-					_verts[i].TextureCoordinate.Y = ( _verts[i].Position.Y - _topLeftVertPosition.Y ) / _height;
+					_verts[i].TextureCoordinate.X = (_verts[i].Position.X - _topLeftVertPosition.X) / _width;
+					_verts[i].TextureCoordinate.Y = (_verts[i].Position.Y - _topLeftVertPosition.Y) / _height;
 				}
 			}
 
@@ -85,9 +86,9 @@ namespace Nez
 		/// </summary>
 		/// <returns>The enable vertex colors.</returns>
 		/// <param name="shouldEnableVertexColors">If set to <c>true</c> should enable vertex colors.</param>
-		public Mesh setVertexColorEnabled( bool shouldEnableVertexColors )
+		public Mesh SetVertexColorEnabled(bool shouldEnableVertexColors)
 		{
-			if( _basicEffect != null )
+			if (_basicEffect != null)
 				_basicEffect.VertexColorEnabled = shouldEnableVertexColors;
 			else
 				_vertexColorEnabled = shouldEnableVertexColors;
@@ -100,9 +101,9 @@ namespace Nez
 		/// </summary>
 		/// <returns>The texture.</returns>
 		/// <param name="texture">Texture.</param>
-		public Mesh setTexture( Texture2D texture )
+		public Mesh SetTexture(Texture2D texture)
 		{
-			if( _basicEffect != null )
+			if (_basicEffect != null)
 			{
 				_basicEffect.Texture = texture;
 				_basicEffect.TextureEnabled = texture != null;
@@ -120,9 +121,9 @@ namespace Nez
 		/// helper that sets the color for all verts
 		/// </summary>
 		/// <param name="color">Color.</param>
-		public Mesh setColorForAllVerts( Color color )
+		public Mesh SetColorForAllVerts(Color color)
 		{
-			for( var i = 0; i < _verts.Length; i++ )
+			for (var i = 0; i < _verts.Length; i++)
 				_verts[i].Color = color;
 			return this;
 		}
@@ -132,9 +133,10 @@ namespace Nez
 		/// </summary>
 		/// <returns>The color.</returns>
 		/// <param name="color">Color.</param>
-		public new Mesh setColor( Color color )
+		public new Mesh SetColor(Color color)
 		{
-			setColorForAllVerts( color );
+			Color = color;
+			SetColorForAllVerts(color);
 			return this;
 		}
 
@@ -144,7 +146,7 @@ namespace Nez
 		/// <returns>The color for vert.</returns>
 		/// <param name="vertIndex">Vert index.</param>
 		/// <param name="color">Color.</param>
-		public Mesh setColorForVert( int vertIndex, Color color )
+		public Mesh SetColorForVert(int vertIndex, Color color)
 		{
 			_verts[vertIndex].Color = color;
 			return this;
@@ -154,13 +156,18 @@ namespace Nez
 		/// sets the vert positions. If the positions array does not match the verts array size the verts array will be recreated.
 		/// </summary>
 		/// <param name="positions">Positions.</param>
-		public Mesh setVertPositions( Vector2[] positions )
+		public Mesh SetVertPositions(Vector2[] positions)
 		{
-			if( _verts == null || _verts.Length != positions.Length )
+			var createVerts = _verts == null || _verts.Length != positions.Length;
+			if (createVerts)
 				_verts = new VertexPositionColorTexture[positions.Length];
 
-			for( var i = 0; i < _verts.Length; i++ )
-				_verts[i].Position = positions[i].toVector3();
+			for (var i = 0; i < _verts.Length; i++)
+			{
+				_verts[i].Position = positions[i].ToVector3();
+				if (createVerts)
+					_verts[i].Color = Color;
+			}
 			return this;
 		}
 
@@ -168,12 +175,12 @@ namespace Nez
 		/// sets the vert positions. If the positions array does not match the verts array size the verts array will be recreated.
 		/// </summary>
 		/// <param name="positions">Positions.</param>
-		public Mesh setVertPositions( Vector3[] positions )
+		public Mesh SetVertPositions(Vector3[] positions)
 		{
-			if( _verts == null || _verts.Length != positions.Length )
+			if (_verts == null || _verts.Length != positions.Length)
 				_verts = new VertexPositionColorTexture[positions.Length];
 
-			for( var i = 0; i < _verts.Length; i++ )
+			for (var i = 0; i < _verts.Length; i++)
 				_verts[i].Position = positions[i];
 			return this;
 		}
@@ -183,9 +190,9 @@ namespace Nez
 		/// </summary>
 		/// <returns>The triangles.</returns>
 		/// <param name="triangles">Triangles.</param>
-		public Mesh setTriangles( int[] triangles )
+		public Mesh SetTriangles(int[] triangles)
 		{
-			Insist.isTrue( triangles.Length % 3 == 0, "triangles must be a multiple of 3" );
+			Insist.IsTrue(triangles.Length % 3 == 0, "triangles must be a multiple of 3");
 			_primitiveCount = triangles.Length / 3;
 			_triangles = triangles;
 			return this;
@@ -197,9 +204,10 @@ namespace Nez
 		/// </summary>
 		/// <param name="primitiveType">The ordering of the verticies.</param>
 		/// <returns>The mesh.</returns>
-		public Mesh setPrimitiveType( PrimitiveType primitiveType )
+		public Mesh SetPrimitiveType(PrimitiveType primitiveType)
 		{
-			Insist.isTrue( primitiveType == PrimitiveType.TriangleList || primitiveType == PrimitiveType.TriangleStrip, "Only triangles are supported." );
+			Insist.IsTrue(primitiveType == PrimitiveType.TriangleList || primitiveType == PrimitiveType.TriangleStrip,
+				"Only triangles are supported.");
 			_primitiveType = primitiveType;
 			return this;
 		}
@@ -209,12 +217,12 @@ namespace Nez
 
 		#region Component/RenderableComponent overrides
 
-		public override void onAddedToEntity()
+		public override void OnAddedToEntity()
 		{
-			_basicEffect = entity.scene.content.loadMonoGameEffect<BasicEffect>();
+			_basicEffect = Entity.Scene.Content.LoadMonoGameEffect<BasicEffect>();
 			_basicEffect.VertexColorEnabled = _vertexColorEnabled;
 
-			if( _texture != null )
+			if (_texture != null)
 			{
 				_basicEffect.Texture = _texture;
 				_basicEffect.TextureEnabled = true;
@@ -222,34 +230,30 @@ namespace Nez
 			}
 		}
 
-		public override void onRemovedFromEntity()
+		public override void OnRemovedFromEntity()
 		{
-			entity.scene.content.unloadEffect( _basicEffect );
+			Entity.Scene.Content.UnloadEffect(_basicEffect);
 			_basicEffect = null;
 		}
 
-		public override void render( Graphics graphics, Camera camera )
+		public override void Render(Batcher batcher, Camera camera)
 		{
-			if( _verts == null )
+			if (_verts == null)
 				return;
 
-			_basicEffect.Projection = camera.projectionMatrix;
-			_basicEffect.View = camera.transformMatrix;
-			_basicEffect.World = entity.transform.localToWorldTransform;
+			batcher.FlushBatch();
+
+			_basicEffect.Projection = camera.ProjectionMatrix;
+			_basicEffect.View = camera.TransformMatrix;
+			_basicEffect.World = Entity.Transform.LocalToWorldTransform;
 			_basicEffect.CurrentTechnique.Passes[0].Apply();
 
-			if( _primitiveType == PrimitiveType.TriangleList )
-			{
-				Core.graphicsDevice.DrawUserIndexedPrimitives( _primitiveType, _verts, 0, _verts.Length, _triangles, 0, _primitiveCount );
-			}
-			else if( _primitiveType == PrimitiveType.TriangleStrip )
-			{
-				Core.graphicsDevice.DrawUserPrimitives( _primitiveType, _verts, 0, _verts.Length - 2 );
-			}
+			if (_primitiveType == PrimitiveType.TriangleList)
+				Core.GraphicsDevice.DrawUserIndexedPrimitives(_primitiveType, _verts, 0, _verts.Length, _triangles, 0, _primitiveCount);
+			else if (_primitiveType == PrimitiveType.TriangleStrip)
+				Core.GraphicsDevice.DrawUserPrimitives(_primitiveType, _verts, 0, _verts.Length - 2);
 		}
 
 		#endregion
-
 	}
 }
-

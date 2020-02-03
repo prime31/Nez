@@ -14,15 +14,15 @@ namespace FarseerPhysics.Dynamics
 	/// </summary>
 	public class BreakableBody
 	{
-		public bool isBroken;
-		public Body mainBody;
-		public List<Fixture> parts = new List<Fixture>( 8 );
+		public bool IsBroken;
+		public Body MainBody;
+		public List<Fixture> Parts = new List<Fixture>(8);
 
 		/// <summary>
 		/// The force needed to break the body apart.
 		/// Default: 500
 		/// </summary>
-		public float strength = 500.0f;
+		public float Strength = 500.0f;
 
 		float[] _angularVelocitiesCache = new float[8];
 		bool _break;
@@ -30,48 +30,50 @@ namespace FarseerPhysics.Dynamics
 		World _world;
 
 
-		public BreakableBody( World world, IEnumerable<Vertices> vertices, float density, Vector2 position = new Vector2(), float rotation = 0 )
+		public BreakableBody(World world, IEnumerable<Vertices> vertices, float density,
+		                     Vector2 position = new Vector2(), float rotation = 0)
 		{
 			_world = world;
-			_world.contactManager.onPostSolve += onPostSolve;
-			mainBody = new Body( _world, position, rotation, BodyType.Dynamic );
+			_world.ContactManager.OnPostSolve += OnPostSolve;
+			MainBody = new Body(_world, position, rotation, BodyType.Dynamic);
 
-			foreach( Vertices part in vertices )
+			foreach (Vertices part in vertices)
 			{
-				var polygonShape = new PolygonShape( part, density );
-				Fixture fixture = mainBody.createFixture( polygonShape );
-				parts.Add( fixture );
+				var polygonShape = new PolygonShape(part, density);
+				Fixture fixture = MainBody.CreateFixture(polygonShape);
+				Parts.Add(fixture);
 			}
 		}
 
-		public BreakableBody( World world, IEnumerable<Shape> shapes, Vector2 position = new Vector2(), float rotation = 0 )
+		public BreakableBody(World world, IEnumerable<Shape> shapes, Vector2 position = new Vector2(),
+		                     float rotation = 0)
 		{
 			_world = world;
-			_world.contactManager.onPostSolve += onPostSolve;
-			mainBody = new Body( _world, position, rotation, BodyType.Dynamic );
+			_world.ContactManager.OnPostSolve += OnPostSolve;
+			MainBody = new Body(_world, position, rotation, BodyType.Dynamic);
 
-			foreach( Shape part in shapes )
+			foreach (Shape part in shapes)
 			{
-				Fixture fixture = mainBody.createFixture( part );
-				parts.Add( fixture );
+				Fixture fixture = MainBody.CreateFixture(part);
+				Parts.Add(fixture);
 			}
 		}
 
-		void onPostSolve( Contact contact, ContactVelocityConstraint impulse )
+		void OnPostSolve(Contact contact, ContactVelocityConstraint impulse)
 		{
-			if( !isBroken )
+			if (!IsBroken)
 			{
-				if( parts.Contains( contact.fixtureA ) || parts.Contains( contact.fixtureB ) )
+				if (Parts.Contains(contact.FixtureA) || Parts.Contains(contact.FixtureB))
 				{
 					float maxImpulse = 0.0f;
-					int count = contact.manifold.pointCount;
+					int count = contact.Manifold.PointCount;
 
-					for( int i = 0; i < count; ++i )
+					for (int i = 0; i < count; ++i)
 					{
-						maxImpulse = Math.Max( maxImpulse, impulse.points[i].normalImpulse );
+						maxImpulse = Math.Max(maxImpulse, impulse.Points[i].NormalImpulse);
 					}
 
-					if( maxImpulse > strength )
+					if (maxImpulse > Strength)
 					{
 						// Flag the body for breaking.
 						_break = true;
@@ -80,66 +82,66 @@ namespace FarseerPhysics.Dynamics
 			}
 		}
 
-		public void update()
+		public void Update()
 		{
-			if( _break )
+			if (_break)
 			{
-				decompose();
-				isBroken = true;
+				Decompose();
+				IsBroken = true;
 				_break = false;
 			}
 
 			// Cache velocities to improve movement on breakage.
-			if( isBroken == false )
+			if (IsBroken == false)
 			{
 				//Enlarge the cache if needed
-				if( parts.Count > _angularVelocitiesCache.Length )
+				if (Parts.Count > _angularVelocitiesCache.Length)
 				{
-					_velocitiesCache = new Vector2[parts.Count];
-					_angularVelocitiesCache = new float[parts.Count];
+					_velocitiesCache = new Vector2[Parts.Count];
+					_angularVelocitiesCache = new float[Parts.Count];
 				}
 
 				//Cache the linear and angular velocities.
-				for( int i = 0; i < parts.Count; i++ )
+				for (int i = 0; i < Parts.Count; i++)
 				{
-					_velocitiesCache[i] = parts[i].body.linearVelocity;
-					_angularVelocitiesCache[i] = parts[i].body.angularVelocity;
+					_velocitiesCache[i] = Parts[i].Body.LinearVelocity;
+					_angularVelocitiesCache[i] = Parts[i].Body.AngularVelocity;
 				}
 			}
 		}
 
-		void decompose()
+		void Decompose()
 		{
 			// Unsubsribe from the PostSolve delegate
-			_world.contactManager.onPostSolve -= onPostSolve;
+			_world.ContactManager.OnPostSolve -= OnPostSolve;
 
-			for( int i = 0; i < parts.Count; i++ )
+			for (int i = 0; i < Parts.Count; i++)
 			{
-				var oldFixture = parts[i];
+				var oldFixture = Parts[i];
 
-				var shape = oldFixture.shape.clone();
-				object userData = oldFixture.userData;
+				var shape = oldFixture.Shape.Clone();
+				object userData = oldFixture.UserData;
 
-				mainBody.destroyFixture( oldFixture );
+				MainBody.DestroyFixture(oldFixture);
 
-				var body = BodyFactory.createBody( _world, mainBody.position, mainBody.rotation, BodyType.Dynamic, mainBody.userData );
+				var body = BodyFactory.CreateBody(_world, MainBody.Position, MainBody.Rotation, BodyType.Dynamic,
+					MainBody.UserData);
 
-				var newFixture = body.createFixture( shape );
-				newFixture.userData = userData;
-				parts[i] = newFixture;
+				var newFixture = body.CreateFixture(shape);
+				newFixture.UserData = userData;
+				Parts[i] = newFixture;
 
-				body.angularVelocity = _angularVelocitiesCache[i];
-				body.linearVelocity = _velocitiesCache[i];
+				body.AngularVelocity = _angularVelocitiesCache[i];
+				body.LinearVelocity = _velocitiesCache[i];
 			}
 
-			_world.removeBody( mainBody );
-			_world.removeBreakableBody( this );
+			_world.RemoveBody(MainBody);
+			_world.RemoveBreakableBody(this);
 		}
 
-		public void breakBody()
+		public void BreakBody()
 		{
 			_break = true;
 		}
-	
 	}
 }

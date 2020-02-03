@@ -13,121 +13,130 @@ namespace Nez.Farseer
 	{
 		#region Fixtures/Shapes
 
-		public static Fixture attachEdge( this Body body, Vector2 start, Vector2 end )
+		public static Fixture AttachEdge(this Body body, Vector2 start, Vector2 end)
 		{
-			return FixtureFactory.attachEdge( FSConvert.displayToSim * start, FSConvert.displayToSim * end, body );
+			return FixtureFactory.AttachEdge(FSConvert.DisplayToSim * start, FSConvert.DisplayToSim * end, body);
 		}
 
 
-		public static Fixture attachChainShape( this Body body, List<Vector2> vertices )
+		public static Fixture AttachChainShape(this Body body, List<Vector2> vertices)
 		{
-			for( var i = 0; i < vertices.Count; i++ )
-				vertices[i] = FSConvert.toSimUnits( vertices[i] );
+			for (var i = 0; i < vertices.Count; i++)
+				vertices[i] = FSConvert.ToSimUnits(vertices[i]);
 
-			return FixtureFactory.attachChainShape( new Vertices( vertices ), body, null );
+			return FixtureFactory.AttachChainShape(new Vertices(vertices), body, null);
 		}
 
 
-		public static Fixture attachLoopShape( this Body body, List<Vector2> vertices )
+		public static Fixture AttachLoopShape(this Body body, List<Vector2> vertices)
 		{
-			for( var i = 0; i < vertices.Count; i++ )
-				vertices[i] = FSConvert.toSimUnits( vertices[i] );
+			for (var i = 0; i < vertices.Count; i++)
+				vertices[i] = FSConvert.ToSimUnits(vertices[i]);
 
-			return FixtureFactory.attachLoopShape( new Vertices( vertices ), body, null );
+			return FixtureFactory.AttachLoopShape(new Vertices(vertices), body, null);
 		}
 
 
-		public static Fixture attachCircle( this Body body, float radius, float density, Vector2 offset = default( Vector2 ) )
+		public static Fixture AttachCircle(this Body body, float radius, float density,
+		                                   Vector2 offset = default(Vector2))
 		{
-			return FixtureFactory.attachCircle( FSConvert.displayToSim * radius, density, body, offset * FSConvert.displayToSim, null );
+			return FixtureFactory.AttachCircle(FSConvert.DisplayToSim * radius, density, body,
+				offset * FSConvert.DisplayToSim, null);
 		}
 
 
-		public static Fixture attachRectangle( this Body body, float width, float height, float density, Vector2 offset = default( Vector2 ) )
+		public static Fixture AttachRectangle(this Body body, float width, float height, float density,
+		                                      Vector2 offset = default(Vector2))
 		{
-			return FixtureFactory.attachRectangle( FSConvert.displayToSim * width, FSConvert.displayToSim * height, density, FSConvert.displayToSim * offset, body );
+			return FixtureFactory.AttachRectangle(FSConvert.DisplayToSim * width, FSConvert.DisplayToSim * height,
+				density, FSConvert.DisplayToSim * offset, body);
 		}
 
 
-		public static List<Fixture> attachRoundedRectangle( this Body body, float width, float height, float xRadius, float yRadius, int segments, float density, Vector2 position = new Vector2() )
+		public static List<Fixture> AttachRoundedRectangle(this Body body, float width, float height, float xRadius,
+		                                                   float yRadius, int segments, float density,
+		                                                   Vector2 position = new Vector2())
 		{
-			width *= FSConvert.displayToSim;
-			height *= FSConvert.displayToSim;
-			xRadius *= FSConvert.displayToSim;
-			yRadius *= FSConvert.displayToSim;
-			position *= FSConvert.displayToSim;
+			width *= FSConvert.DisplayToSim;
+			height *= FSConvert.DisplayToSim;
+			xRadius *= FSConvert.DisplayToSim;
+			yRadius *= FSConvert.DisplayToSim;
+			position *= FSConvert.DisplayToSim;
 
-			return FixtureFactory.attachRoundedRectangle( width, height, xRadius, yRadius, segments, density, body );
+			return FixtureFactory.AttachRoundedRectangle(width, height, xRadius, yRadius, segments, density, body);
 		}
 
 
-		public static Fixture attachPolygon( this Body body, List<Vector2> vertices, float density )
+		public static Fixture AttachPolygon(this Body body, List<Vector2> vertices, float density)
 		{
-			for( var i = 0; i < vertices.Count; i++ )
-				vertices[i] = FSConvert.displayToSim * vertices[i];
+			for (var i = 0; i < vertices.Count; i++)
+				vertices[i] = FSConvert.DisplayToSim * vertices[i];
 
-			return FixtureFactory.attachPolygon( new Vertices( vertices ), density, body );
+			return FixtureFactory.AttachPolygon(new Vertices(vertices), density, body);
 		}
 
 
-		public static Fixture attachEllipse( this Body body, float xRadius, float yRadius, int edges, float density )
+		public static Fixture AttachEllipse(this Body body, float xRadius, float yRadius, int edges, float density)
 		{
-			return FixtureFactory.attachEllipse( FSConvert.displayToSim * xRadius, FSConvert.displayToSim * yRadius, edges, density, body );
+			return FixtureFactory.AttachEllipse(FSConvert.DisplayToSim * xRadius, FSConvert.DisplayToSim * yRadius,
+				edges, density, body);
 		}
 
 
-		public static List<Fixture> attachCompoundPolygon( this Body body, List<Vertices> list, float density )
+		public static List<Fixture> AttachCompoundPolygon(this Body body, List<Vertices> list, float density)
 		{
-			for( var i = 0; i < list.Count; i++ )
+			for (var i = 0; i < list.Count; i++)
 			{
 				var vertices = list[i];
-				for( var j = 0; j < vertices.Count; j++ )
-					vertices[j] = FSConvert.displayToSim * vertices[j];
-
+				for (var j = 0; j < vertices.Count; j++)
+					vertices[j] = FSConvert.DisplayToSim * vertices[j];
 			}
 
-			return FixtureFactory.attachCompoundPolygon( list, density, body );
+			return FixtureFactory.AttachCompoundPolygon(list, density, body);
 		}
 
 
-		public static Fixture attachLineArc( this Body body, float radians, int sides, float radius, bool closed )
+		public static Fixture AttachLineArc(this Body body, float radians, int sides, float radius, bool closed)
 		{
-			return FixtureFactory.attachLineArc( radians, sides, FSConvert.displayToSim * radius, closed, body );
+			return FixtureFactory.AttachLineArc(radians, sides, FSConvert.DisplayToSim * radius, closed, body);
 		}
 
 
-		public static List<Fixture> attachSolidArc( this Body body, float density, float radians, int sides, float radius )
+		public static List<Fixture> AttachSolidArc(this Body body, float density, float radians, int sides,
+		                                           float radius)
 		{
-			return FixtureFactory.attachSolidArc( density, radians, sides, FSConvert.displayToSim * radius, body );
+			return FixtureFactory.AttachSolidArc(density, radians, sides, FSConvert.DisplayToSim * radius, body);
 		}
 
 
-		public static List<Fixture> attachGear( this Body body, float radius, int numberOfTeeth, float tipPercentage, float toothHeight, float density )
+		public static List<Fixture> AttachGear(this Body body, float radius, int numberOfTeeth, float tipPercentage,
+		                                       float toothHeight, float density)
 		{
-			var gearPolygon = PolygonTools.createGear( FSConvert.displayToSim * radius, numberOfTeeth, tipPercentage, FSConvert.displayToSim * toothHeight );
+			var gearPolygon = PolygonTools.CreateGear(FSConvert.DisplayToSim * radius, numberOfTeeth, tipPercentage,
+				FSConvert.DisplayToSim * toothHeight);
 
 			// Gears can in some cases be convex
-			if( !gearPolygon.isConvex() )
+			if (!gearPolygon.IsConvex())
 			{
 				//Decompose the gear:
-				var list = Triangulate.convexPartition( gearPolygon, TriangulationAlgorithm.Earclip );
-				return body.attachCompoundPolygon( list, density );
+				var list = Triangulate.ConvexPartition(gearPolygon, TriangulationAlgorithm.Earclip);
+				return body.AttachCompoundPolygon(list, density);
 			}
 
 			var fixtures = new List<Fixture>();
-			fixtures.Add( body.attachPolygon( gearPolygon, density ) );
+			fixtures.Add(body.AttachPolygon(gearPolygon, density));
 			return fixtures;
 		}
 
 
-		public static void attachCapsule( this Body body, float height, float endRadius, float density )
+		public static void AttachCapsule(this Body body, float height, float endRadius, float density)
 		{
 			// Create the middle rectangle
-			body.attachRectangle( endRadius, height / 2, density );
+			body.AttachRectangle(endRadius, height / 2, density);
 
 			// create the two circles
-			body.attachCircle( endRadius, density, new Vector2( 0, height / 2 ) );
-			body.attachCircle( endRadius, density, new Vector2( 0, -height / 2 ) );
+			body.AttachCircle(endRadius, density, new Vector2(0, height / 2));
+			body.AttachCircle(endRadius, density, new Vector2(0, -height / 2));
 		}
 
 		#endregion
@@ -135,102 +144,119 @@ namespace Nez.Farseer
 
 		#region Joints
 
-		public static MotorJoint createMotorJoint( this Body body, Body bodyB, bool useWorldCoordinates = false )
+		public static MotorJoint CreateMotorJoint(this Body body, Body bodyB, bool useWorldCoordinates = false)
 		{
-			return JointFactory.createMotorJoint( body.world, body, bodyB, useWorldCoordinates );
+			return JointFactory.CreateMotorJoint(body.World, body, bodyB, useWorldCoordinates);
 		}
 
 
-		public static RevoluteJoint createRevoluteJoint( this Body body, Body bodyB, Vector2 anchorA, Vector2 anchorB, bool useWorldCoordinates = false )
+		public static RevoluteJoint CreateRevoluteJoint(this Body body, Body bodyB, Vector2 anchorA, Vector2 anchorB,
+		                                                bool useWorldCoordinates = false)
 		{
-			return JointFactory.createRevoluteJoint( body.world, body, bodyB, FSConvert.displayToSim * anchorA, FSConvert.displayToSim * anchorB, useWorldCoordinates );
+			return JointFactory.CreateRevoluteJoint(body.World, body, bodyB, FSConvert.DisplayToSim * anchorA,
+				FSConvert.DisplayToSim * anchorB, useWorldCoordinates);
 		}
 
 
-		public static RevoluteJoint createRevoluteJoint( this Body body, Body bodyB, Vector2 anchor )
+		public static RevoluteJoint CreateRevoluteJoint(this Body body, Body bodyB, Vector2 anchor)
 		{
-			return JointFactory.createRevoluteJoint( body.world, body, bodyB, FSConvert.displayToSim * anchor );
+			return JointFactory.CreateRevoluteJoint(body.World, body, bodyB, FSConvert.DisplayToSim * anchor);
 		}
 
 
-		public static RopeJoint createRopeJoint( this Body body, Body bodyB, Vector2 anchorA, Vector2 anchorB, bool useWorldCoordinates = false )
+		public static RopeJoint CreateRopeJoint(this Body body, Body bodyB, Vector2 anchorA, Vector2 anchorB,
+		                                        bool useWorldCoordinates = false)
 		{
-			return JointFactory.createRopeJoint( body.world, body, bodyB, FSConvert.displayToSim * anchorA, FSConvert.displayToSim * anchorB, useWorldCoordinates );
+			return JointFactory.CreateRopeJoint(body.World, body, bodyB, FSConvert.DisplayToSim * anchorA,
+				FSConvert.DisplayToSim * anchorB, useWorldCoordinates);
 		}
 
 
-		public static WeldJoint createWeldJoint( this Body body, Body bodyB, Vector2 anchorA, Vector2 anchorB, bool useWorldCoordinates = false )
+		public static WeldJoint CreateWeldJoint(this Body body, Body bodyB, Vector2 anchorA, Vector2 anchorB,
+		                                        bool useWorldCoordinates = false)
 		{
-			return JointFactory.createWeldJoint( body.world, body, bodyB, FSConvert.displayToSim * anchorA, FSConvert.displayToSim * anchorB, useWorldCoordinates );
+			return JointFactory.CreateWeldJoint(body.World, body, bodyB, FSConvert.DisplayToSim * anchorA,
+				FSConvert.DisplayToSim * anchorB, useWorldCoordinates);
 		}
 
 
-		public static PrismaticJoint createPrismaticJoint( this Body body, Body bodyB, Vector2 anchor, Vector2 axis, bool useWorldCoordinates = false )
+		public static PrismaticJoint CreatePrismaticJoint(this Body body, Body bodyB, Vector2 anchor, Vector2 axis,
+		                                                  bool useWorldCoordinates = false)
 		{
-			return JointFactory.createPrismaticJoint( body.world, body, bodyB, FSConvert.displayToSim * anchor, axis, useWorldCoordinates );
+			return JointFactory.CreatePrismaticJoint(body.World, body, bodyB, FSConvert.DisplayToSim * anchor, axis,
+				useWorldCoordinates);
 		}
 
 
-		public static WheelJoint createWheelJoint( this Body body, Body bodyB, Vector2 anchor, Vector2 axis, bool useWorldCoordinates = false )
+		public static WheelJoint CreateWheelJoint(this Body body, Body bodyB, Vector2 anchor, Vector2 axis,
+		                                          bool useWorldCoordinates = false)
 		{
-			return JointFactory.createWheelJoint( body.world, body, bodyB, FSConvert.displayToSim * anchor, axis, useWorldCoordinates );
+			return JointFactory.CreateWheelJoint(body.World, body, bodyB, FSConvert.DisplayToSim * anchor, axis,
+				useWorldCoordinates);
 		}
 
 
-		public static WheelJoint createWheelJoint( this Body body, Body bodyB, Vector2 axis )
+		public static WheelJoint CreateWheelJoint(this Body body, Body bodyB, Vector2 axis)
 		{
-			return createWheelJoint( body, bodyB, Vector2.Zero, axis );
+			return CreateWheelJoint(body, bodyB, Vector2.Zero, axis);
 		}
 
 
-		public static AngleJoint createAngleJoint( this Body body, Body bodyB )
+		public static AngleJoint CreateAngleJoint(this Body body, Body bodyB)
 		{
-			return JointFactory.createAngleJoint( body.world, body, bodyB );
+			return JointFactory.CreateAngleJoint(body.World, body, bodyB);
 		}
 
 
-		public static DistanceJoint createDistanceJoint( this Body body, Body bodyB, Vector2 anchorA, Vector2 anchorB, bool useWorldCoordinates = false )
+		public static DistanceJoint CreateDistanceJoint(this Body body, Body bodyB, Vector2 anchorA, Vector2 anchorB,
+		                                                bool useWorldCoordinates = false)
 		{
-			return JointFactory.createDistanceJoint( body.world, body, bodyB, FSConvert.displayToSim * anchorA, FSConvert.displayToSim * anchorB, useWorldCoordinates );
+			return JointFactory.CreateDistanceJoint(body.World, body, bodyB, FSConvert.DisplayToSim * anchorA,
+				FSConvert.DisplayToSim * anchorB, useWorldCoordinates);
 		}
 
 
-		public static DistanceJoint createDistanceJoint( this Body body, Body bodyB )
+		public static DistanceJoint CreateDistanceJoint(this Body body, Body bodyB)
 		{
-			return createDistanceJoint( body, bodyB, Vector2.Zero, Vector2.Zero );
+			return CreateDistanceJoint(body, bodyB, Vector2.Zero, Vector2.Zero);
 		}
 
 
-		public static FrictionJoint createFrictionJoint( this Body body, Body bodyB, Vector2 anchor, bool useWorldCoordinates = false )
+		public static FrictionJoint CreateFrictionJoint(this Body body, Body bodyB, Vector2 anchor,
+		                                                bool useWorldCoordinates = false)
 		{
-			return JointFactory.createFrictionJoint( body.world, body, bodyB, FSConvert.displayToSim * anchor, useWorldCoordinates );
+			return JointFactory.CreateFrictionJoint(body.World, body, bodyB, FSConvert.DisplayToSim * anchor,
+				useWorldCoordinates);
 		}
 
 
-		public static FrictionJoint createFrictionJoint( this Body body, Body bodyB )
+		public static FrictionJoint CreateFrictionJoint(this Body body, Body bodyB)
 		{
-			return createFrictionJoint( body, bodyB, Vector2.Zero );
+			return CreateFrictionJoint(body, bodyB, Vector2.Zero);
 		}
 
 
-		public static GearJoint createGearJoint( this Body body, Body bodyB, Joint jointA, Joint jointB, float ratio )
+		public static GearJoint CreateGearJoint(this Body body, Body bodyB, Joint jointA, Joint jointB, float ratio)
 		{
-			return JointFactory.createGearJoint( body.world, body, bodyB, jointA, jointB, ratio );
+			return JointFactory.CreateGearJoint(body.World, body, bodyB, jointA, jointB, ratio);
 		}
 
 
-		public static PulleyJoint createPulleyJoint( this Body body, Body bodyB, Vector2 anchorA, Vector2 anchorB, Vector2 worldAnchorA, Vector2 worldAnchorB, float ratio, bool useWorldCoordinates = false )
+		public static PulleyJoint CreatePulleyJoint(this Body body, Body bodyB, Vector2 anchorA, Vector2 anchorB,
+		                                            Vector2 worldAnchorA, Vector2 worldAnchorB, float ratio,
+		                                            bool useWorldCoordinates = false)
 		{
-			return JointFactory.createPulleyJoint( body.world, body, bodyB, FSConvert.displayToSim * anchorA, FSConvert.displayToSim * anchorB, FSConvert.displayToSim * worldAnchorA, FSConvert.displayToSim * worldAnchorB, ratio, useWorldCoordinates );
+			return JointFactory.CreatePulleyJoint(body.World, body, bodyB, FSConvert.DisplayToSim * anchorA,
+				FSConvert.DisplayToSim * anchorB, FSConvert.DisplayToSim * worldAnchorA,
+				FSConvert.DisplayToSim * worldAnchorB, ratio, useWorldCoordinates);
 		}
 
 
-		public static FixedMouseJoint createFixedMouseJoint( this Body body, Vector2 worldAnchor )
+		public static FixedMouseJoint CreateFixedMouseJoint(this Body body, Vector2 worldAnchor)
 		{
-			return JointFactory.createFixedMouseJoint( body.world, body, FSConvert.displayToSim * worldAnchor );
+			return JointFactory.CreateFixedMouseJoint(body.World, body, FSConvert.DisplayToSim * worldAnchor);
 		}
 
 		#endregion
-
 	}
 }

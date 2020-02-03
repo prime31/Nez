@@ -9,82 +9,82 @@ namespace Nez.Farseer
 	/// </summary>
 	public class FSGenericBody : Component, IUpdatable
 	{
-		public Body body;
+		public Body Body;
 
 		bool _ignoreTransformChanges;
 
 
 		public FSGenericBody()
-		{ }
+		{
+		}
 
 
 		/// <summary>
 		/// creates with a preexisting Body. Be aware that the Transform.position will be updated to match the Body.position.
 		/// </summary>
 		/// <param name="body">Body.</param>
-		public FSGenericBody( Body body )
+		public FSGenericBody(Body body)
 		{
-			this.body = body;
+			this.Body = body;
 		}
 
 
-		public override void initialize()
+		public override void Initialize()
 		{
-			var world = entity.scene.getOrCreateSceneComponent<FSWorld>();
+			var world = Entity.Scene.GetOrCreateSceneComponent<FSWorld>();
 
 			// always sync position ASAP in case any joints are added without global constraints
-			if( body != null )
-				( (IUpdatable)this ).update();
+			if (Body != null)
+				((IUpdatable) this).Update();
 			else
-				body = new Body( world, transform.position * FSConvert.displayToSim, transform.rotation );
+				Body = new Body(world, Transform.Position * FSConvert.DisplayToSim, Transform.Rotation);
 		}
 
 
-		public override void onEntityTransformChanged( Transform.Component comp )
+		public override void OnEntityTransformChanged(Transform.Component comp)
 		{
-			if( _ignoreTransformChanges )
+			if (_ignoreTransformChanges)
 				return;
 
-			if( comp == Transform.Component.Position )
-				body.position = transform.position * FSConvert.displayToSim;
-			else if( comp == Transform.Component.Rotation )
-				body.rotation = transform.rotation;
+			if (comp == Transform.Component.Position)
+				Body.Position = Transform.Position * FSConvert.DisplayToSim;
+			else if (comp == Transform.Component.Rotation)
+				Body.Rotation = Transform.Rotation;
 		}
 
 
-		public override void onRemovedFromEntity()
+		public override void OnRemovedFromEntity()
 		{
-			if( body != null )
+			if (Body != null)
 			{
-				body.world.removeBody( body );
-				body = null;
+				Body.World.RemoveBody(Body);
+				Body = null;
 			}
 		}
 
 
-		void IUpdatable.update()
+		void IUpdatable.Update()
 		{
-			if( !body.isAwake )
+			if (!Body.IsAwake)
 				return;
 
 			_ignoreTransformChanges = true;
-			transform.position = FSConvert.simToDisplay * body.position;
-			transform.rotation = body.rotation;
+			Transform.Position = FSConvert.SimToDisplay * Body.Position;
+			Transform.Rotation = Body.Rotation;
 			_ignoreTransformChanges = false;
 		}
 
 
-		public FSGenericBody setBodyType( BodyType bodyType )
+		public FSGenericBody SetBodyType(BodyType bodyType)
 		{
-			body.bodyType = bodyType;
+			Body.BodyType = bodyType;
 			return this;
 		}
 
 
-		public static implicit operator Body( FSGenericBody self )
+		public static implicit operator Body(FSGenericBody self)
 		{
-			return self.body;
+			return self.Body;
 		}
-
 	}
 }

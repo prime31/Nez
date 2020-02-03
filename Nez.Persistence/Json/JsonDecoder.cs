@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using System.Globalization;
 
+
 namespace Nez.Persistence
 {
 	/// <summary>
@@ -15,8 +16,8 @@ namespace Nez.Persistence
 	{
 		#region Fields and Props
 
-		static readonly char[] floatingPointCharacters = { '.', 'e' };
-		static readonly Type afterDecodeAttrType = typeof( AfterDecodeAttribute );
+		static readonly char[] floatingPointCharacters = {'.', 'e'};
+		static readonly Type afterDecodeAttrType = typeof(AfterDecodeAttribute);
 
 		const string kWhiteSpace = " \t\n\r";
 		const string kWordBreak = " \t\n\r{}[],:\"";
@@ -54,11 +55,11 @@ namespace Nez.Persistence
 			get
 			{
 				var peek = _json.Peek();
-				return peek == -1 ? '\0' : Convert.ToChar( peek );
+				return peek == -1 ? '\0' : Convert.ToChar(peek);
 			}
 		}
 
-		char NextChar => Convert.ToChar( _json.Read() );
+		char NextChar => Convert.ToChar(_json.Read());
 
 		#endregion
 
@@ -72,9 +73,9 @@ namespace Nez.Persistence
 		/// <param name="jsonString">Json string.</param>
 		/// <param name="settings">Settings.</param>
 		/// <typeparam name="T">The 1st type parameter.</typeparam>
-		public static T FromJson<T>( string jsonString, JsonSettings settings = null )
+		public static T FromJson<T>(string jsonString, JsonSettings settings = null)
 		{
-			return (T)FromJson( jsonString, typeof( T ), settings );
+			return (T) FromJson(jsonString, typeof(T), settings);
 		}
 
 		/// <summary>
@@ -83,11 +84,11 @@ namespace Nez.Persistence
 		/// <returns>The json.</returns>
 		/// <param name="jsonString">Json string.</param>
 		/// <param name="settings">Settings.</param>
-		public static object FromJson( string jsonString, JsonSettings settings = null )
+		public static object FromJson(string jsonString, JsonSettings settings = null)
 		{
-			using( var instance = new JsonDecoder( jsonString, settings ) )
+			using (var instance = new JsonDecoder(jsonString, settings))
 			{
-				return instance.DecodeValueUntyped( instance.GetNextToken() );
+				return instance.DecodeValueUntyped(instance.GetNextToken());
 			}
 		}
 
@@ -98,11 +99,11 @@ namespace Nez.Persistence
 		/// <param name="jsonString">Json string.</param>
 		/// <param name="type">Type.</param>
 		/// <param name="settings">Settings.</param>
-		public static object FromJson( string jsonString, Type type, JsonSettings settings = null )
+		public static object FromJson(string jsonString, Type type, JsonSettings settings = null)
 		{
-			using( var instance = new JsonDecoder( jsonString, settings ) )
+			using (var instance = new JsonDecoder(jsonString, settings))
 			{
-				return instance.DecodeValue( instance.GetNextToken(), type );
+				return instance.DecodeValue(instance.GetNextToken(), type);
 			}
 		}
 
@@ -113,28 +114,30 @@ namespace Nez.Persistence
 		/// <param name="jsonString">Json string.</param>
 		/// <param name="obj">Object.</param>
 		/// <param name="settings">Settings.</param>
-		public static void FromJsonOverwrite( string jsonString, object obj, JsonSettings settings = null )
+		public static void FromJsonOverwrite(string jsonString, object obj, JsonSettings settings = null)
 		{
-			using( var instance = new JsonDecoder( jsonString, settings ) )
+			using (var instance = new JsonDecoder(jsonString, settings))
 			{
 				var type = obj.GetType();
-				if( obj is IDictionary )
+				if (obj is IDictionary)
 				{
-					instance.DecodeDictionary( type, obj );
+					instance.DecodeDictionary(type, obj);
 				}
-				else if( obj is ICollection )
+				else if (obj is ICollection)
 				{
-					instance.DecodeList( type, obj );
+					instance.DecodeList(type, obj);
 				}
 				else
 				{
 					try
 					{
-						instance.DecodeObject( type, obj );
+						instance.DecodeObject(type, obj);
 					}
-					catch( Exception e )
+					catch (Exception e)
 					{
-						throw new DecodeException( $"{nameof( FromJsonOverwrite )} only support Dictionary, List and custom objects. Use {nameof( FromJson )} for other types", e );
+						throw new DecodeException(
+							$"{nameof(FromJsonOverwrite)} only support Dictionary, List and custom objects. Use {nameof(FromJson)} for other types",
+							e);
 					}
 				}
 			}
@@ -145,24 +148,24 @@ namespace Nez.Persistence
 		/// </summary>
 		/// <returns>The type.</returns>
 		/// <param name="fullName">Full name.</param>
-		static Type FindType( string fullName )
+		static Type FindType(string fullName)
 		{
-			if( fullName == null )
+			if (fullName == null)
 			{
 				return null;
 			}
 
-			if( _typeCache.TryGetValue( fullName, out var type ) )
+			if (_typeCache.TryGetValue(fullName, out var type))
 			{
 				return type;
 			}
 
-			foreach( var assembly in AppDomain.CurrentDomain.GetAssemblies() )
+			foreach (var assembly in AppDomain.CurrentDomain.GetAssemblies())
 			{
-				type = assembly.GetType( fullName );
-				if( type != null )
+				type = assembly.GetType(fullName);
+				if (type != null)
 				{
-					_typeCache.Add( fullName, type );
+					_typeCache.Add(fullName, type);
 					return type;
 				}
 			}
@@ -173,9 +176,9 @@ namespace Nez.Persistence
 		#endregion
 
 
-		JsonDecoder( string jsonString, JsonSettings settings = null )
+		JsonDecoder(string jsonString, JsonSettings settings = null)
 		{
-			_json = new StringReader( jsonString );
+			_json = new StringReader(jsonString);
 			_settings = settings;
 		}
 
@@ -190,11 +193,11 @@ namespace Nez.Persistence
 
 		void ConsumeWhiteSpace()
 		{
-			while( kWhiteSpace.IndexOf( PeekChar ) != -1 )
+			while (kWhiteSpace.IndexOf(PeekChar) != -1)
 			{
 				_json.Read();
 
-				if( _json.Peek() == -1 )
+				if (_json.Peek() == -1)
 				{
 					break;
 				}
@@ -203,11 +206,11 @@ namespace Nez.Persistence
 
 		string GetNextWord()
 		{
-			while( kWordBreak.IndexOf( PeekChar ) == -1 )
+			while (kWordBreak.IndexOf(PeekChar) == -1)
 			{
-				_builder.Append( NextChar );
+				_builder.Append(NextChar);
 
-				if( _json.Peek() == -1 )
+				if (_json.Peek() == -1)
 				{
 					break;
 				}
@@ -222,12 +225,12 @@ namespace Nez.Persistence
 		{
 			ConsumeWhiteSpace();
 
-			if( _json.Peek() == -1 )
+			if (_json.Peek() == -1)
 			{
 				return Token.None;
 			}
 
-			switch( PeekChar )
+			switch (PeekChar)
 			{
 				case '{':
 					return Token.OpenBrace;
@@ -267,7 +270,7 @@ namespace Nez.Persistence
 					return Token.Number;
 			}
 
-			switch( GetNextWord() )
+			switch (GetNextWord())
 			{
 				case "false":
 					return Token.False;
@@ -287,34 +290,37 @@ namespace Nez.Persistence
 		/// </summary>
 		/// <returns>The number.</returns>
 		/// <param name="value">Value.</param>
-		IConvertible ParseNumber( string value )
+		IConvertible ParseNumber(string value)
 		{
-			if( value.IndexOfAny( floatingPointCharacters ) == -1 )
+			if (value.IndexOfAny(floatingPointCharacters) == -1)
 			{
-				if( value[0] == '-' )
+				if (value[0] == '-')
 				{
-					if( long.TryParse( value, NumberStyles.Integer, NumberFormatInfo.InvariantInfo, out long parsedValue ) )
+					if (long.TryParse(value, NumberStyles.Integer, NumberFormatInfo.InvariantInfo,
+						out long parsedValue))
 					{
 						return parsedValue;
 					}
 				}
 				else
 				{
-					if( ulong.TryParse( value, NumberStyles.Integer, NumberFormatInfo.InvariantInfo, out ulong parsedValue ) )
+					if (ulong.TryParse(value, NumberStyles.Integer, NumberFormatInfo.InvariantInfo,
+						out ulong parsedValue))
 					{
 						return parsedValue;
 					}
 				}
 			}
 
-			if( decimal.TryParse( value, NumberStyles.Float, NumberFormatInfo.InvariantInfo, out decimal decimalValue ) )
+			if (decimal.TryParse(value, NumberStyles.Float, NumberFormatInfo.InvariantInfo, out decimal decimalValue))
 			{
 				// Check for decimal underflow.
-				if( decimalValue == decimal.Zero )
+				if (decimalValue == decimal.Zero)
 				{
-					if( double.TryParse( value, NumberStyles.Float, NumberFormatInfo.InvariantInfo, out double parsedValue ) )
+					if (double.TryParse(value, NumberStyles.Float, NumberFormatInfo.InvariantInfo,
+						out double parsedValue))
 					{
-						if( Math.Abs( parsedValue ) > double.Epsilon )
+						if (Math.Abs(parsedValue) > double.Epsilon)
 						{
 							return parsedValue;
 						}
@@ -324,7 +330,7 @@ namespace Nez.Persistence
 				return decimalValue;
 			}
 
-			if( double.TryParse( value, NumberStyles.Float, NumberFormatInfo.InvariantInfo, out double doubleValue ) )
+			if (double.TryParse(value, NumberStyles.Float, NumberFormatInfo.InvariantInfo, out double doubleValue))
 			{
 				return doubleValue;
 			}
@@ -337,16 +343,17 @@ namespace Nez.Persistence
 		/// </summary>
 		/// <returns>The time from epoch time.</returns>
 		/// <param name="number">Number.</param>
-		DateTime DateTimeFromEpochTime( long number )
+		DateTime DateTimeFromEpochTime(long number)
 		{
 			const long minSeconds = -62135596800;
 			const long maxSeconds = 253402300799;
 
-			if( number < minSeconds || number > maxSeconds )
+			if (number < minSeconds || number > maxSeconds)
 			{
-				return DateTimeOffset.FromUnixTimeMilliseconds( number ).UtcDateTime;
+				return DateTimeOffset.FromUnixTimeMilliseconds(number).UtcDateTime;
 			}
-			return DateTimeOffset.FromUnixTimeSeconds( number ).UtcDateTime;
+
+			return DateTimeOffset.FromUnixTimeSeconds(number).UtcDateTime;
 		}
 
 		#endregion
@@ -357,23 +364,23 @@ namespace Nez.Persistence
 			_json.Read();
 
 			var parsing = true;
-			while( parsing )
+			while (parsing)
 			{
-				if( _json.Peek() == -1 )
+				if (_json.Peek() == -1)
 				{
 					parsing = false;
 					break;
 				}
 
 				var c = NextChar;
-				switch( c )
+				switch (c)
 				{
 					case '"':
 						parsing = false;
 						break;
 
 					case '\\':
-						if( _json.Peek() == -1 )
+						if (_json.Peek() == -1)
 						{
 							parsing = false;
 							break;
@@ -381,47 +388,47 @@ namespace Nez.Persistence
 
 						c = NextChar;
 
-						switch( c )
+						switch (c)
 						{
 							case '"':
 							case '\\':
 							case '/':
-								_builder.Append( c );
+								_builder.Append(c);
 								break;
 							case 'b':
-								_builder.Append( '\b' );
+								_builder.Append('\b');
 								break;
 							case 'f':
-								_builder.Append( '\f' );
+								_builder.Append('\f');
 								break;
 							case 'n':
-								_builder.Append( '\n' );
+								_builder.Append('\n');
 								break;
 							case 'r':
-								_builder.Append( '\r' );
+								_builder.Append('\r');
 								break;
 							case 't':
-								_builder.Append( '\t' );
+								_builder.Append('\t');
 								break;
 							case 'u':
 								var hex = new StringBuilder();
 
-								for( var i = 0; i < 4; i++ )
+								for (var i = 0; i < 4; i++)
 								{
-									hex.Append( NextChar );
+									hex.Append(NextChar);
 								}
 
-								_builder.Append( (char)Convert.ToInt32( hex.ToString(), 16 ) );
+								_builder.Append((char) Convert.ToInt32(hex.ToString(), 16));
 								break;
 
-								//default:
-								//	throw new DecodeException( @"Illegal character following escape character: " + c );
+							//default:
+							//	throw new DecodeException( @"Illegal character following escape character: " + c );
 						}
 
 						break;
 
 					default:
-						_builder.Append( c );
+						_builder.Append(c);
 						break;
 				}
 			}
@@ -437,34 +444,39 @@ namespace Nez.Persistence
 		/// <returns>The value.</returns>
 		/// <param name="token">Token.</param>
 		/// <param name="type">Type.</param>
-		object DecodeValue( Token token, Type type )
+		object DecodeValue(Token token, Type type)
 		{
 			// handle Nullables. If the type is Nullable use the underlying type
-			type = Nullable.GetUnderlyingType( type ) ?? type;
+			type = Nullable.GetUnderlyingType(type) ?? type;
 
-			switch( token )
+			switch (token)
 			{
 				case Token.String:
 					var str = DecodeString();
-					if( type == typeof( DateTime ) )
+					if (type == typeof(DateTime))
 					{
-						return DateTime.ParseExact( str, JsonConstants.iso8601Format, CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal | DateTimeStyles.AdjustToUniversal );
+						return DateTime.ParseExact(str, JsonConstants.iso8601Format, CultureInfo.InvariantCulture,
+							DateTimeStyles.AssumeUniversal | DateTimeStyles.AdjustToUniversal);
 					}
-					return type.IsEnum ? Enum.Parse( type, str ) : str;
+
+					return type.IsEnum ? Enum.Parse(type, str) : str;
 				case Token.Number:
-					if( type == typeof( DateTime ) )
+					if (type == typeof(DateTime))
 					{
-						return DateTimeFromEpochTime( (long)Convert.ChangeType( ParseNumber( GetNextWord() ), typeof( long ) ) );
+						return DateTimeFromEpochTime(
+							(long) Convert.ChangeType(ParseNumber(GetNextWord()), typeof(long)));
 					}
-					return Convert.ChangeType( ParseNumber( GetNextWord() ), type );
+
+					return Convert.ChangeType(ParseNumber(GetNextWord()), type);
 				case Token.OpenBrace:
 					// either a Dictionary or an object
-					if( typeof( IDictionary ).IsAssignableFrom( type ) )
-						return DecodeDictionary( type );
-					return DecodeObject( type );
+					if (typeof(IDictionary).IsAssignableFrom(type))
+						return DecodeDictionary(type);
+
+					return DecodeObject(type);
 				case Token.OpenBracket:
 					// Array, MultiRank Array or a List
-					return DecodeArrayOrList( type );
+					return DecodeArrayOrList(type);
 				case Token.True:
 					return true;
 				case Token.False:
@@ -482,18 +494,18 @@ namespace Nez.Persistence
 		/// </summary>
 		/// <returns>The value untyped.</returns>
 		/// <param name="token">Token.</param>
-		object DecodeValueUntyped( Token token )
+		object DecodeValueUntyped(Token token)
 		{
-			switch( token )
+			switch (token)
 			{
 				case Token.String:
 					return DecodeString();
 				case Token.Number:
-					return ParseNumber( GetNextWord() );
+					return ParseNumber(GetNextWord());
 				case Token.OpenBrace:
-					return DecodeDictionary( typeof( Dictionary<string,object> ) );
+					return DecodeDictionary(typeof(Dictionary<string, object>));
 				case Token.OpenBracket:
-					return DecodeArrayOrList( typeof( List<object> ) );
+					return DecodeArrayOrList(typeof(List<object>));
 				case Token.True:
 					return true;
 				case Token.False:
@@ -511,174 +523,178 @@ namespace Nez.Persistence
 		/// </summary>
 		/// <param name="obj">Object.</param>
 		/// <param name="key">Key.</param>
-		void SetNextValueOnObject( ref object obj, string key )
+		void SetNextValueOnObject(ref object obj, string key)
 		{
-			var field = _cacheResolver.GetField( obj.GetType(), key );
-			if( field != null )
+			var field = _cacheResolver.GetField(obj.GetType(), key);
+			if (field != null)
 			{
-				if( _cacheResolver.IsMemberInfoEncodeableOrDecodeable( field, field.IsPublic ) )
+				if (_cacheResolver.IsMemberInfoEncodeableOrDecodeable(field, field.IsPublic))
 				{
-					var value = DecodeValue( GetNextToken(), field.FieldType );
-					if( obj.GetType().IsValueType )
+					var value = DecodeValue(GetNextToken(), field.FieldType);
+					if (obj.GetType().IsValueType)
 					{
 						// obj is a struct.
 						var instanceRef = obj;
-						field.SetValue( instanceRef, value );
+						field.SetValue(instanceRef, value);
 						obj = instanceRef;
 						return;
 					}
 
 					// obj is a class.
-					field.SetValue( obj, value );
+					field.SetValue(obj, value);
 					return;
 				}
 			}
 
-			var property = _cacheResolver.GetProperty( obj.GetType(), key );
-			if( property != null )
+			var property = _cacheResolver.GetProperty(obj.GetType(), key);
+			if (property != null)
 			{
-				if( property != null && property.CanWrite && property.IsDefined( JsonConstants.includeAttrType ) )
+				if (property != null && property.CanWrite && property.IsDefined(JsonConstants.includeAttrType))
 				{
-					var value = DecodeValue( GetNextToken(), property.PropertyType );
-					if( obj.GetType().IsValueType )
+					var value = DecodeValue(GetNextToken(), property.PropertyType);
+					if (obj.GetType().IsValueType)
 					{
 						// obj is a struct.
 						var instanceRef = obj;
-						property.SetValue( instanceRef, value );
+						property.SetValue(instanceRef, value);
 						obj = instanceRef;
 						return;
 					}
 
 					// obj is a class.
-					property.SetValue( obj, value );
+					property.SetValue(obj, value);
 					return;
 				}
 			}
 
 			// we still need to eat the value even if we didnt set it so the parser is in the right spot
-			var orhpanedValue = DecodeValueUntyped( GetNextToken() );
+			var orhpanedValue = DecodeValueUntyped(GetNextToken());
 
 			// check for a JsonConverter and use it if we have one
-			var converter = _settings?.GetTypeConverterForType( obj.GetType() );
-			if( converter != null && converter.CanRead )
+			var converter = _settings?.GetTypeConverterForType(obj.GetType());
+			if (converter != null && converter.CanRead)
 			{
-				converter.OnFoundCustomData( obj, key, orhpanedValue );
+				converter.OnFoundCustomData(obj, key, orhpanedValue);
 			}
 		}
 
 
-		object DecodeArrayOrList( Type type, object obj = null )
+		object DecodeArrayOrList(Type type, object obj = null)
 		{
-			if( type.IsArray )
+			if (type.IsArray)
 			{
-				if( type.GetArrayRank() == 1 )
+				if (type.GetArrayRank() == 1)
 				{
-					return DecodeArray( type );
+					return DecodeArray(type);
 				}
 
 				// we have no idea how many elements are in the array so we have to use a List
 				var elementType = type.GetElementType();
-				var listType = typeof( List<> );
-				var constructedListType = listType.MakeGenericType( elementType );
+				var listType = typeof(List<>);
+				var constructedListType = listType.MakeGenericType(elementType);
 
 				// weeeeeee! Nest lists of lists for the array rank - 1
-				for( var i = 0; i < type.GetArrayRank() - 1; i++ )
+				for (var i = 0; i < type.GetArrayRank() - 1; i++)
 				{
-					constructedListType = listType.MakeGenericType( constructedListType );
+					constructedListType = listType.MakeGenericType(constructedListType);
 				}
 
-				var arrayData = DecodeList( constructedListType );
+				var arrayData = DecodeList(constructedListType);
 
 				var arrayRank = type.GetArrayRank();
 				var rankLengths = new int[arrayRank];
-				if( CanBeMultiRankArray( arrayData, 0, rankLengths ) )
+				if (CanBeMultiRankArray(arrayData, 0, rankLengths))
 				{
-					var array = Array.CreateInstance( elementType, rankLengths );
+					var array = Array.CreateInstance(elementType, rankLengths);
 					try
 					{
-						DecodeMultiRankArray( elementType, arrayData, array, 1, rankLengths );
+						DecodeMultiRankArray(elementType, arrayData, array, 1, rankLengths);
 					}
-					catch( Exception e )
+					catch (Exception e)
 					{
-						throw new DecodeException( "Error decoding multidimensional array. Did you try to decode into an array of incompatible rank or element type?", e );
+						throw new DecodeException(
+							"Error decoding multidimensional array. Did you try to decode into an array of incompatible rank or element type?",
+							e);
 					}
 
-					return Convert.ChangeType( array, type );
+					return Convert.ChangeType(array, type);
 				}
-				throw new DecodeException( "Error decoding multidimensional array; JSON data doesn't seem fit this structure." );
+
+				throw new DecodeException(
+					"Error decoding multidimensional array; JSON data doesn't seem fit this structure.");
 			}
 
-			if( typeof( IList ).IsAssignableFrom( type ) )
+			if (typeof(IList).IsAssignableFrom(type))
 			{
-				return DecodeList( type );
+				return DecodeList(type);
 			}
 
-			throw new DecodeException( "Error decoding array. Could not figure out what to do. Gave up." );
+			throw new DecodeException("Error decoding array. Could not figure out what to do. Gave up.");
 		}
 
-		IList DecodeArray( Type type, object obj = null )
+		IList DecodeArray(Type type, object obj = null)
 		{
 			// we have no idea how many elements are in the array so we have to use a List temporarily
 			var elementType = type.GetElementType();
-			var listType = typeof( List<> );
-			var constructedListType = listType.MakeGenericType( elementType );
+			var listType = typeof(List<>);
+			var constructedListType = listType.MakeGenericType(elementType);
 
-			var list = DecodeList( constructedListType );
-			var array = Array.CreateInstance( elementType, list.Count );
-			list.CopyTo( array, 0 );
+			var list = DecodeList(constructedListType);
+			var array = Array.CreateInstance(elementType, list.Count);
+			list.CopyTo(array, 0);
 
 			return array;
 		}
 
-		void DecodeMultiRankArray( Type elementType, IList arrayData, Array array, int arrayRank, int[] rankLengths )
+		void DecodeMultiRankArray(Type elementType, IList arrayData, Array array, int arrayRank, int[] rankLengths)
 		{
 			var count = arrayData.Count;
-			for( var i = 0; i < count; i++ )
+			for (var i = 0; i < count; i++)
 			{
 				rankLengths[arrayRank - 1] = i;
-				if( arrayRank < array.Rank )
+				if (arrayRank < array.Rank)
 				{
-					DecodeMultiRankArray( elementType, arrayData[i] as IList, array, arrayRank + 1, rankLengths );
+					DecodeMultiRankArray(elementType, arrayData[i] as IList, array, arrayRank + 1, rankLengths);
 				}
 				else
 				{
-					array.SetValue( arrayData[i], rankLengths );
+					array.SetValue(arrayData[i], rankLengths);
 				}
 			}
 		}
 
-		bool CanBeMultiRankArray( IList list, int rank, int[] rankLengths )
+		bool CanBeMultiRankArray(IList list, int rank, int[] rankLengths)
 		{
 			var count = list.Count;
 			rankLengths[rank] = count;
 
-			if( rank == rankLengths.Length - 1 )
+			if (rank == rankLengths.Length - 1)
 			{
 				return true;
 			}
 
 			var firstItem = list[0] as IList;
-			if( firstItem == null )
+			if (firstItem == null)
 			{
 				return false;
 			}
 
 			var firstItemCount = firstItem.Count;
 
-			for( var i = 1; i < count; i++ )
+			for (var i = 1; i < count; i++)
 			{
 				var item = list[i] as IList;
-				if( item == null )
+				if (item == null)
 				{
 					return false;
 				}
 
-				if( item.Count != firstItemCount )
+				if (item.Count != firstItemCount)
 				{
 					return false;
 				}
 
-				if( !CanBeMultiRankArray( item, rank + 1, rankLengths ) )
+				if (!CanBeMultiRankArray(item, rank + 1, rankLengths))
 				{
 					return false;
 				}
@@ -687,14 +703,14 @@ namespace Nez.Persistence
 			return true;
 		}
 
-		IList DecodeList( Type type, object obj = null )
+		IList DecodeList(Type type, object obj = null)
 		{
 			var innerType = type.GetGenericArguments()[0];
 
 			var list = obj as IList;
-			if( list == null )
+			if (list == null)
 			{
-				list = (IList)_cacheResolver.CreateInstance( typeof( List<> ).MakeGenericType( innerType ) );
+				list = (IList) _cacheResolver.CreateInstance(typeof(List<>).MakeGenericType(innerType));
 			}
 
 			// Ditch opening bracket.
@@ -702,10 +718,10 @@ namespace Nez.Persistence
 
 			// [
 			var parsing = true;
-			while( parsing )
+			while (parsing)
 			{
 				var nextToken = GetNextToken();
-				switch( nextToken )
+				switch (nextToken)
 				{
 					case Token.None:
 						return null;
@@ -713,13 +729,13 @@ namespace Nez.Persistence
 						continue;
 					case Token.OpenBracket:
 						// Array, MultiRank Array or a List
-						list.Add( DecodeArrayOrList( innerType ) );
+						list.Add(DecodeArrayOrList(innerType));
 						break;
 					case Token.CloseBracket:
 						parsing = false;
 						break;
 					default:
-						list.Add( DecodeValue( nextToken, innerType ) );
+						list.Add(DecodeValue(nextToken, innerType));
 						break;
 				}
 			}
@@ -727,23 +743,24 @@ namespace Nez.Persistence
 			return list;
 		}
 
-		IDictionary DecodeDictionary( Type type, object obj = null )
+		IDictionary DecodeDictionary(Type type, object obj = null)
 		{
 			var keyType = type.GetGenericArguments()[0];
 			var valueType = type.GetGenericArguments()[1];
 
 			var dict = obj as IDictionary;
-			if( dict == null )
+			if (dict == null)
 			{
-				dict = (IDictionary)_cacheResolver.CreateInstance( typeof( Dictionary<,> ).MakeGenericType( keyType, valueType ) );
+				dict = (IDictionary) _cacheResolver.CreateInstance(
+					typeof(Dictionary<,>).MakeGenericType(keyType, valueType));
 			}
 
 			// Ditch opening bracket.
 			_json.Read();
 
-			while( true )
+			while (true)
 			{
-				switch( GetNextToken() )
+				switch (GetNextToken())
 				{
 					case Token.None:
 						return null;
@@ -752,30 +769,33 @@ namespace Nez.Persistence
 					case Token.CloseBrace:
 						return dict;
 					default:
+					{
+						// Key
+						var key = DecodeString();
+						if (key == null)
 						{
-							// Key
-							var key = DecodeString();
-							if( key == null )
-							{
-								return null;
-							}
-							// :
-							if( GetNextToken() != Token.Colon )
-							{
-								return null;
-							}
-
-							_json.Read();
-
-							var k = keyType.IsEnum ? Enum.Parse( keyType, key ) : Convert.ChangeType( key, keyType );
-							dict[k] = valueType == typeof( object ) ? DecodeValueUntyped( GetNextToken() ) : dict[k] = DecodeValue( GetNextToken(), valueType );
-							break;
+							return null;
 						}
+
+						// :
+						if (GetNextToken() != Token.Colon)
+						{
+							return null;
+						}
+
+						_json.Read();
+
+						var k = keyType.IsEnum ? Enum.Parse(keyType, key) : Convert.ChangeType(key, keyType);
+						dict[k] = valueType == typeof(object)
+							? DecodeValueUntyped(GetNextToken())
+							: dict[k] = DecodeValue(GetNextToken(), valueType);
+						break;
+					}
 				}
 			}
 		}
 
-		object DecodeObject( Type type, object obj = null )
+		object DecodeObject(Type type, object obj = null)
 		{
 			// Ditch opening brace.
 			_json.Read();
@@ -783,9 +803,9 @@ namespace Nez.Persistence
 			string id = null;
 
 			// {
-			while( true )
+			while (true)
 			{
-				switch( GetNextToken() )
+				switch (GetNextToken())
 				{
 					case Token.None:
 					case Token.Null:
@@ -794,107 +814,110 @@ namespace Nez.Persistence
 						continue;
 					case Token.CloseBrace:
 						// Invoke methods tagged with [AfterDecode] attribute.
-						foreach( var method in type.GetMethods( JsonConstants.instanceBindingFlags ) )
+						foreach (var method in type.GetMethods(JsonConstants.instanceBindingFlags))
 						{
-							if( method.IsDefined( afterDecodeAttrType ) && method.GetParameters().Length == 0 )
+							if (method.IsDefined(afterDecodeAttrType) && method.GetParameters().Length == 0)
 							{
-								method.Invoke( obj, null );
+								method.Invoke(obj, null);
 							}
 						}
+
 						return obj;
 					default:
+					{
+						// Key
+						var key = DecodeString();
+						if (key == null)
 						{
-							// Key
-							var key = DecodeString();
-							if( key == null )
-							{
-								return null;
-							}
-							// :
-							if( GetNextToken() != Token.Colon )
-							{
-								return null;
-							}
+							return null;
+						}
 
-							_json.Read();
+						// :
+						if (GetNextToken() != Token.Colon)
+						{
+							return null;
+						}
 
-							// check for @id or @ref
-							if( key == JsonConstants.IdPropertyName )
-							{
-								var dump = GetNextToken();
-								id = DecodeString();
-								break;
-							}
+						_json.Read();
 
-							if( key == JsonConstants.RefPropertyName )
-							{
-								var dump = GetNextToken();
-								var refObj = _cacheResolver.ResolveReference( DecodeString() );
-
-								// we could break and let the next iteration catch the } but then the AfterDecode method
-								// will be called multiple times so instead we eat the token.
-								dump = GetNextToken();
-								return refObj;
-							}
-
-							if( key == JsonConstants.TypeHintPropertyName )
-							{
-								var dump = GetNextToken();
-								var typeHint = DecodeString();
-								var makeType = FindType( typeHint );
-								if( makeType == null )
-								{
-									throw new TypeLoadException( $"Could not find type '{typeHint}' in any loaded assemblies" );
-								}
-
-								// handle the JsonObjectFactory if we have one
-								var converter = _settings?.GetObjectFactoryForType( makeType );
-								if( converter != null )
-								{
-									// fetch the remaining data into a Dictionary and pass it off to the factory
-									var dict = new Dictionary<string, object>();
-									DecodeDictionary( dict.GetType(), dict );
-									obj = converter.CreateObject( type, dict );
-									return obj;
-								}
-
-								obj = _cacheResolver.CreateInstance( makeType );
-								break;
-							}
-
-							// if obj is still null we need to create it
-							if( obj == null )
-							{
-								// handle the JsonObjectFactory if we have one
-								var converter = _settings?.GetObjectFactoryForType( type );
-								if( converter != null )
-								{
-									// we have to do a little bit of hacking the JSON here. We need to popuplate an untyped
-									// Dictionary with the object data but we have already read in the first key. We read the
-									// next value in untyped fashion before passing off the Dictionary to finish decoding.
-									var dict = new Dictionary<string, object>();
-									dict[key] = DecodeValueUntyped( GetNextToken() );
-
-									DecodeDictionary( dict.GetType(), dict );
-									obj = converter.CreateObject( type, dict );
-									return obj;
-								}
-								obj = _cacheResolver.CreateInstance( type );
-							}
-
-							if( id != null )
-							{
-								_cacheResolver.TrackReference( id, obj );
-								id = null;
-							}
-
-							SetNextValueOnObject( ref obj, key );
-
+						// check for @id or @ref
+						if (key == JsonConstants.IdPropertyName)
+						{
+							var dump = GetNextToken();
+							id = DecodeString();
 							break;
-						} // end default
+						}
+
+						if (key == JsonConstants.RefPropertyName)
+						{
+							var dump = GetNextToken();
+							var refObj = _cacheResolver.ResolveReference(DecodeString());
+
+							// we could break and let the next iteration catch the } but then the AfterDecode method
+							// will be called multiple times so instead we eat the token.
+							dump = GetNextToken();
+							return refObj;
+						}
+
+						if (key == JsonConstants.TypeHintPropertyName)
+						{
+							var dump = GetNextToken();
+							var typeHint = DecodeString();
+							var makeType = FindType(typeHint);
+							if (makeType == null)
+							{
+								throw new TypeLoadException(
+									$"Could not find type '{typeHint}' in any loaded assemblies");
+							}
+
+							// handle the JsonObjectFactory if we have one
+							var converter = _settings?.GetObjectFactoryForType(makeType);
+							if (converter != null)
+							{
+								// fetch the remaining data into a Dictionary and pass it off to the factory
+								var dict = new Dictionary<string, object>();
+								DecodeDictionary(dict.GetType(), dict);
+								obj = converter.CreateObject(type, dict);
+								return obj;
+							}
+
+							obj = _cacheResolver.CreateInstance(makeType);
+							break;
+						}
+
+						// if obj is still null we need to create it
+						if (obj == null)
+						{
+							// handle the JsonObjectFactory if we have one
+							var converter = _settings?.GetObjectFactoryForType(type);
+							if (converter != null)
+							{
+								// we have to do a little bit of hacking the JSON here. We need to popuplate an untyped
+								// Dictionary with the object data but we have already read in the first key. We read the
+								// next value in untyped fashion before passing off the Dictionary to finish decoding.
+								var dict = new Dictionary<string, object>();
+								dict[key] = DecodeValueUntyped(GetNextToken());
+
+								DecodeDictionary(dict.GetType(), dict);
+								obj = converter.CreateObject(type, dict);
+								return obj;
+							}
+
+							obj = _cacheResolver.CreateInstance(type);
+						}
+
+						if (id != null)
+						{
+							_cacheResolver.TrackReference(id, obj);
+							id = null;
+						}
+
+						SetNextValueOnObject(ref obj, key);
+
+						break;
+					} // end default
 				} // end switch
 			}
 		}
-
 	}
 }

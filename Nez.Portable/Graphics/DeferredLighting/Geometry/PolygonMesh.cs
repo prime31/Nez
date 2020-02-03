@@ -19,15 +19,16 @@ namespace Nez.DeferredLighting
 
 		#region static creation helpers
 
-		public static PolygonMesh createRectangle()
+		public static PolygonMesh CreateRectangle()
 		{
-			var points = new Vector2[] {
-				new Vector2( 1, 1 ),
-				new Vector2( 0, 1 ),
-				new Vector2( 0, 0 ),
-				new Vector2( 1, 0 )
+			var points = new Vector2[]
+			{
+				new Vector2(1, 1),
+				new Vector2(0, 1),
+				new Vector2(0, 0),
+				new Vector2(1, 0)
 			};
-			return new PolygonMesh( points );
+			return new PolygonMesh(points);
 		}
 
 
@@ -37,10 +38,9 @@ namespace Nez.DeferredLighting
 		/// <returns>The symmetrical polygon.</returns>
 		/// <param name="vertCount">Vert count.</param>
 		/// <param name="radius">Radius.</param>
-		public static PolygonMesh createSymmetricalPolygon( int vertCount, float radius )
+		public static PolygonMesh CreateSymmetricalPolygon(int vertCount, float radius)
 		{
-			// TODO: change this code to use Polygon.createSymmetricalPolygon to avoid duplication
-			return new PolygonMesh( buildSymmetricalPolygon( vertCount, radius ) );
+			return new PolygonMesh(PhysicsShapes.Polygon.BuildSymmetricalPolygon(vertCount, radius));
 		}
 
 
@@ -49,56 +49,41 @@ namespace Nez.DeferredLighting
 		/// </summary>
 		/// <returns>The symmetrical polygon.</returns>
 		/// <param name="vertCount">Vert count.</param>
-		public static PolygonMesh createSymmetricalPolygon( int vertCount )
-		{
-			return createSymmetricalPolygon( vertCount, 1 );
-		}
-
-
-		static Vector2[] buildSymmetricalPolygon( int vertCount, float radius )
-		{
-			var points = new Vector2[vertCount];
-			for( var i = 0; i < vertCount; i++ )
-			{
-				var a = 2.0f * MathHelper.Pi * ( i / (float)vertCount );
-				points[i] = new Vector2( (float)Math.Cos( a ) * radius, (float)Math.Sin( a ) * radius );
-			}
-
-			return points;
-		}
+		public static PolygonMesh CreateSymmetricalPolygon(int vertCount) => CreateSymmetricalPolygon(vertCount, 1);
 
 		#endregion
 
 
-		public PolygonMesh( Vector2[] points )
+		public PolygonMesh(Vector2[] points)
 		{
-			var verts = generateVerts( points );
+			var verts = GenerateVerts(points);
 
 			// each point needs 3 verts
 			var indices = new short[points.Length * 3];
-			for( short i = 0; i < points.Length; i++ )
+			for (short i = 0; i < points.Length; i++)
 			{
 				indices[i * 3] = 0;
-				indices[(i * 3) + 1] = (short)( i + 1 );
-				indices[(i * 3) + 2] = (short)( i + 2 );
+				indices[(i * 3) + 1] = (short) (i + 1);
+				indices[(i * 3) + 2] = (short) (i + 2);
 			}
-			indices[( points.Length * 3 ) - 1] = 1;
 
-			_vertexBuffer = new VertexBuffer( Core.graphicsDevice, VertexPosition.VertexDeclaration, verts.Length, BufferUsage.WriteOnly );
-			_vertexBuffer.SetData( verts );
-			_indexBuffer = new IndexBuffer( Core.graphicsDevice, IndexElementSize.SixteenBits, indices.Length, BufferUsage.WriteOnly );
-			_indexBuffer.SetData( indices );
+			indices[(points.Length * 3) - 1] = 1;
+
+			_vertexBuffer = new VertexBuffer(Core.GraphicsDevice, VertexPosition.VertexDeclaration, verts.Length, BufferUsage.WriteOnly);
+			_vertexBuffer.SetData(verts);
+			_indexBuffer = new IndexBuffer(Core.GraphicsDevice, IndexElementSize.SixteenBits, indices.Length, BufferUsage.WriteOnly);
+			_indexBuffer.SetData(indices);
 			_primitiveCount = points.Length;
 		}
 
 
-		VertexPosition[] generateVerts( Vector2[] points )
+		VertexPosition[] GenerateVerts(Vector2[] points)
 		{
 			// we need to make tris from the points. all points will be shared with the center (0,0)
 			var verts = new VertexPosition[points.Length + 1];
 
 			// the first point is the center so we start at 1
-			for( var i = 1; i <= points.Length; i++ )
+			for (var i = 1; i <= points.Length; i++)
 			{
 				verts[i].Position.X = points[i - 1].X;
 				verts[i].Position.Y = points[i - 1].Y;
@@ -108,11 +93,11 @@ namespace Nez.DeferredLighting
 		}
 
 
-		public void render()
+		public void Render()
 		{
-			Core.graphicsDevice.SetVertexBuffer( _vertexBuffer );
-			Core.graphicsDevice.Indices = _indexBuffer;
-			Core.graphicsDevice.DrawIndexedPrimitives( PrimitiveType.TriangleList, 0, 0, _primitiveCount );
+			Core.GraphicsDevice.SetVertexBuffer(_vertexBuffer);
+			Core.GraphicsDevice.Indices = _indexBuffer;
+			Core.GraphicsDevice.DrawIndexedPrimitives(PrimitiveType.TriangleList, 0, 0, _primitiveCount);
 		}
 
 
@@ -121,7 +106,5 @@ namespace Nez.DeferredLighting
 			_vertexBuffer.Dispose();
 			_indexBuffer.Dispose();
 		}
-
 	}
 }
-

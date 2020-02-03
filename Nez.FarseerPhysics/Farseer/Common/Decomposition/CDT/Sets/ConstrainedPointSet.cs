@@ -31,87 +31,85 @@
 
 using System.Collections.Generic;
 
+
 namespace FarseerPhysics.Common.Decomposition.CDT.Sets
 {
-    /*
-     * Extends the PointSet by adding some Constraints on how it will be triangulated<br>
-     * A constraint defines an edge between two points in the set, these edges can not
-     * be crossed. They will be enforced triangle edges after a triangulation.
-     * <p>
-     * 
-     * 
-     * @author Thomas Åhlén, thahlen@gmail.com
-     */
+	/*
+	 * Extends the PointSet by adding some Constraints on how it will be triangulated<br>
+	 * A constraint defines an edge between two points in the set, these edges can not
+	 * be crossed. They will be enforced triangle edges after a triangulation.
+	 * <p>
+	 * 
+	 * 
+	 * @author Thomas Åhlén, thahlen@gmail.com
+	 */
 
-    internal class ConstrainedPointSet : PointSet
-    {
-        private List<TriangulationPoint> _constrainedPointList;
+	internal class ConstrainedPointSet : PointSet
+	{
+		private List<TriangulationPoint> _constrainedPointList;
 
-        public ConstrainedPointSet(List<TriangulationPoint> points, int[] index)
-            : base(points)
-        {
-            EdgeIndex = index;
-        }
+		public ConstrainedPointSet(List<TriangulationPoint> points, int[] index)
+			: base(points)
+		{
+			EdgeIndex = index;
+		}
 
-        /**
-         * 
-         * @param points - A list of all points in PointSet
-         * @param constraints - Pairs of two points defining a constraint, all points <b>must</b> be part of given PointSet!
-         */
+		/**
+		 * 
+		 * @param points - A list of all points in PointSet
+		 * @param constraints - Pairs of two points defining a constraint, all points <b>must</b> be part of given PointSet!
+		 */
 
-        public ConstrainedPointSet(List<TriangulationPoint> points, IEnumerable<TriangulationPoint> constraints)
-            : base(points)
-        {
-            _constrainedPointList = new List<TriangulationPoint>();
-            _constrainedPointList.AddRange(constraints);
-        }
+		public ConstrainedPointSet(List<TriangulationPoint> points, IEnumerable<TriangulationPoint> constraints)
+			: base(points)
+		{
+			_constrainedPointList = new List<TriangulationPoint>();
+			_constrainedPointList.AddRange(constraints);
+		}
 
-        public int[] EdgeIndex { get; private set; }
+		public int[] EdgeIndex { get; private set; }
 
-        public override TriangulationMode TriangulationMode
-        {
-            get { return TriangulationMode.Constrained; }
-        }
+		public override TriangulationMode TriangulationMode => TriangulationMode.Constrained;
 
-        public override void PrepareTriangulation(TriangulationContext tcx)
-        {
-            base.PrepareTriangulation(tcx);
-            if (_constrainedPointList != null)
-            {
-                TriangulationPoint p1, p2;
-                List<TriangulationPoint>.Enumerator iterator = _constrainedPointList.GetEnumerator();
-                while (iterator.MoveNext())
-                {
-                    p1 = iterator.Current;
-                    iterator.MoveNext();
-                    p2 = iterator.Current;
-                    tcx.NewConstraint(p1, p2);
-                }
-            }
-            else
-            {
-                for (int i = 0; i < EdgeIndex.Length; i += 2)
-                {
-                    // XXX: must change!!
-                    tcx.NewConstraint(Points[EdgeIndex[i]], Points[EdgeIndex[i + 1]]);
-                }
-            }
-        }
+		public override void PrepareTriangulation(TriangulationContext tcx)
+		{
+			base.PrepareTriangulation(tcx);
+			if (_constrainedPointList != null)
+			{
+				TriangulationPoint p1, p2;
+				List<TriangulationPoint>.Enumerator iterator = _constrainedPointList.GetEnumerator();
+				while (iterator.MoveNext())
+				{
+					p1 = iterator.Current;
+					iterator.MoveNext();
+					p2 = iterator.Current;
+					tcx.NewConstraint(p1, p2);
+				}
+			}
+			else
+			{
+				for (int i = 0; i < EdgeIndex.Length; i += 2)
+				{
+					// XXX: must change!!
+					tcx.NewConstraint(Points[EdgeIndex[i]], Points[EdgeIndex[i + 1]]);
+				}
+			}
+		}
 
-        /**
-         * TODO: TO BE IMPLEMENTED!
-         * Peforms a validation on given input
-         * 1. Check's if there any constraint edges are crossing or collinear
-         * @return
-         */
+		/**
+		 * TODO: TO BE IMPLEMENTED!
+		 * Peforms a validation on given input
+		 * 1. Check's if there any constraint edges are crossing or collinear
+		 * @return
+		 */
 
 		/// <summary>
 		/// Ises the valid.
 		/// </summary>
 		/// <returns><c>true</c>, if valid was ised, <c>false</c> otherwise.</returns>
-        public bool isValid()
-        {
-            return true;
-        }
-    }
+		public bool IsValid()
+		{
+			return true;
+		}
+	}
 }

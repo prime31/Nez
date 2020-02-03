@@ -4,12 +4,12 @@ skip_non_tags: false
 
 image: Visual Studio 2017
 
-configuration: Release
+configuration: Debug
 
 shallow_clone: true
 
 environment:
-  NUGET_FLAGS: "-Verbosity quiet -Prop Configuration=Release -OutputDirectory dist"
+  NUGET_FLAGS: "-Verbosity quiet -Prop Configuration=Debug -OutputDirectory dist"
 
 # Install MonoGame 3.6
 init:
@@ -32,8 +32,8 @@ after_build:
     nuget pack %NUGET_FLAGS% ./Nez.Portable/Nez.nuspec
 
     nuget pack %NUGET_FLAGS% ./Nez.FarseerPhysics/Nez.FarseerPhysics.nuspec
-
-    nuget pack %NUGET_FLAGS% ./Nez.PipelineImporter/Nez.PipelineImporter.nuspec
+    
+    nuget pack %NUGET_FLAGS% ./Nez.Persistence/Nez.Persistence.nuspec
 
 artifacts:
 - path: dist\*.nupkg
@@ -44,4 +44,4 @@ deploy:
   on:
     appveyor_repo_tag: true
   api_key:
-    secure: "RKBT0c+TQ77H48syafSTzgyYeYIDBuZcnj+wg00dVIkLPNwuutPTniO9BOz/jM72"
+    secure: "GYHI+InIaDkq+/cWnyxKsCB+aeZCEQEhSNF4sp+ZnDY="

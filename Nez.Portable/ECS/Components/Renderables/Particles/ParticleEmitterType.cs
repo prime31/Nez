@@ -1,7 +1,4 @@
-﻿using System;
-
-
-namespace Nez.Particles
+﻿namespace Nez.Particles
 {
 	public enum ParticleEmitterType
 	{
@@ -9,4 +6,3 @@ namespace Nez.Particles
 		Radial
 	}
 }
-

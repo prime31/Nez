@@ -8,19 +8,18 @@ namespace Nez.AI.UtilityAI
 	/// </summary>
 	public class ActionAppraisal<T> : IAppraisal<T>
 	{
-		Func<T,float> _appraisalAction;
+		Func<T, float> _appraisalAction;
 
 
-		public ActionAppraisal( Func<T,float> appraisalAction )
+		public ActionAppraisal(Func<T, float> appraisalAction)
 		{
 			_appraisalAction = appraisalAction;
 		}
 
 
-		float IAppraisal<T>.getScore( T context )
+		float IAppraisal<T>.GetScore(T context)
 		{
-			return _appraisalAction( context );
+			return _appraisalAction(context);
 		}
 	}
 }
-

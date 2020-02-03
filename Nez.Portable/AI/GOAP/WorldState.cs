@@ -9,13 +9,13 @@ namespace Nez.AI.GOAP
 		/// <summary>
 		/// we use a bitmask shifting on the condition index to flip bits
 		/// </summary>
-		public long values;
+		public long Values;
 
 		/// <summary>
 		/// bitmask used to explicitly state false. We need a separate store for negatives because the absense of a value doesnt necessarily mean
 		/// it is false.
 		/// </summary>
-		public long dontCare;
+		public long DontCare;
 
 		/// <summary>
 		/// required so that we can get the condition index from the string name
@@ -23,38 +23,38 @@ namespace Nez.AI.GOAP
 		internal ActionPlanner planner;
 
 
-		public static WorldState create( ActionPlanner planner )
+		public static WorldState Create(ActionPlanner planner)
 		{
-			return new WorldState( planner, 0, -1 );
+			return new WorldState(planner, 0, -1);
 		}
 
 
-		public WorldState( ActionPlanner planner, long values, long dontcare )
+		public WorldState(ActionPlanner planner, long values, long dontcare)
 		{
 			this.planner = planner;
-			this.values = values;
-			this.dontCare = dontcare;
+			Values = values;
+			DontCare = dontcare;
 		}
 
 
-		public bool set( string conditionName, bool value )
+		public bool Set(string conditionName, bool value)
 		{
-			return set( planner.findConditionNameIndex( conditionName ), value );
+			return Set(planner.FindConditionNameIndex(conditionName), value);
 		}
 
 
-		internal bool set( int conditionId, bool value )
+		internal bool Set(int conditionId, bool value)
 		{
-			values = value ? ( values | ( 1L << conditionId ) ) : ( values & ~( 1L << conditionId ) );
-			dontCare ^= ( 1 << conditionId );
+			Values = value ? (Values | (1L << conditionId)) : (Values & ~(1L << conditionId));
+			DontCare ^= (1 << conditionId);
 			return true;
 		}
 
 
-		public bool Equals( WorldState other )
+		public bool Equals(WorldState other)
 		{
-			var care = dontCare ^ -1L;
-			return ( values & care ) == ( other.values & care );
+			var care = DontCare ^ -1L;
+			return (Values & care) == (other.Values & care);
 		}
 
 
@@ -62,27 +62,26 @@ namespace Nez.AI.GOAP
 		/// for debugging purposes. Provides a human readable string of all the preconditions.
 		/// </summary>
 		/// <param name="planner">Planner.</param>
-		public string describe( ActionPlanner planner )
+		public string Describe(ActionPlanner planner)
 		{
 			var sb = new StringBuilder();
-			for( var i = 0; i < ActionPlanner.MAX_CONDITIONS; i++ )
+			for (var i = 0; i < ActionPlanner.MAX_CONDITIONS; i++)
 			{
-				if( ( dontCare & ( 1L << i ) ) == 0 )
+				if ((DontCare & (1L << i)) == 0)
 				{
-					var val = planner.conditionNames[i];
-					if( val == null )
+					var val = planner.ConditionNames[i];
+					if (val == null)
 						continue;
 
-					bool set = ( ( values & ( 1L << i ) ) != 0L );
+					bool set = ((Values & (1L << i)) != 0L);
 
-					if( sb.Length > 0 )
-						sb.Append( ", " );
-					sb.Append( set ? val.ToUpper() : val );
+					if (sb.Length > 0)
+						sb.Append(", ");
+					sb.Append(set ? val.ToUpper() : val);
 				}
 			}
+
 			return sb.ToString();
 		}
-
 	}
 }
-

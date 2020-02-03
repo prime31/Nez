@@ -10,40 +10,39 @@ namespace Nez.Farseer
 
 		#region Configuration
 
-		public FSRopeJoint setOwnerBodyAnchor( Vector2 ownerBodyAnchor )
+		public FSRopeJoint SetOwnerBodyAnchor(Vector2 ownerBodyAnchor)
 		{
-			_jointDef.ownerBodyAnchor = ownerBodyAnchor;
-			recreateJoint();
+			_jointDef.OwnerBodyAnchor = ownerBodyAnchor;
+			RecreateJoint();
 			return this;
 		}
 
 
-		public FSRopeJoint setOtherBodyAnchor( Vector2 otherBodyAnchor )
+		public FSRopeJoint SetOtherBodyAnchor(Vector2 otherBodyAnchor)
 		{
-			_jointDef.otherBodyAnchor = otherBodyAnchor;
-			recreateJoint();
+			_jointDef.OtherBodyAnchor = otherBodyAnchor;
+			RecreateJoint();
 			return this;
 		}
 
 
-		public FSRopeJoint setMaxLength( float maxLength )
+		public FSRopeJoint SetMaxLength(float maxLength)
 		{
-			_jointDef.maxLength = maxLength;
-			recreateJoint();
+			_jointDef.MaxLength = maxLength;
+			RecreateJoint();
 			return this;
 		}
 
 		#endregion
 
 
-		internal override FSJointDef getJointDef()
+		internal override FSJointDef GetJointDef()
 		{
-			initializeJointDef( _jointDef );
-			if( _jointDef.bodyA == null || _jointDef.bodyB == null )
+			InitializeJointDef(_jointDef);
+			if (_jointDef.BodyA == null || _jointDef.BodyB == null)
 				return null;
 
 			return _jointDef;
 		}
-
 	}
 }

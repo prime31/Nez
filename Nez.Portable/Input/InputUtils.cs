@@ -5,36 +5,35 @@ namespace Nez
 {
 	public static class InputUtils
 	{
-		public static bool isMac;
-		public static bool isWindows;
-		public static bool isLinux;
+		public static bool IsMac;
+		public static bool IsWindows;
+		public static bool IsLinux;
 
 
 		static InputUtils()
 		{
-			isMac = true;
+			IsMac = true;
 		}
 
 
-		public static bool isShiftDown()
+		public static bool IsShiftDown()
 		{
-			return Input.isKeyDown( Keys.LeftShift ) || Input.isKeyDown( Keys.RightShift );
+			return Input.IsKeyDown(Keys.LeftShift) || Input.IsKeyDown(Keys.RightShift);
 		}
 
 
-		public static bool isAltDown()
+		public static bool IsAltDown()
 		{
-			return Input.isKeyDown( Keys.LeftAlt ) || Input.isKeyDown( Keys.RightAlt );
+			return Input.IsKeyDown(Keys.LeftAlt) || Input.IsKeyDown(Keys.RightAlt);
 		}
 
 
-		public static bool isControlDown()
+		public static bool IsControlDown()
 		{
-			if( isMac )
-				return Input.isKeyDown( Keys.LeftWindows ) || Input.isKeyDown( Keys.RightWindows );
+			if (IsMac)
+				return Input.IsKeyDown(Keys.LeftWindows) || Input.IsKeyDown(Keys.RightWindows);
 
-			return Input.isKeyDown( Keys.LeftControl ) || Input.isKeyDown( Keys.RightControl );
+			return Input.IsKeyDown(Keys.LeftControl) || Input.IsKeyDown(Keys.RightControl);
 		}
 	}
 }
-

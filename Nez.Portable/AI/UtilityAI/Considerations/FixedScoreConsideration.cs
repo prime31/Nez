@@ -1,29 +1,24 @@
-﻿using System;
-
-
-namespace Nez.AI.UtilityAI
+﻿namespace Nez.AI.UtilityAI
 {
 	/// <summary>
 	/// always returns a fixed score. Serves double duty as a default Consideration.
 	/// </summary>
 	public class FixedScoreConsideration<T> : IConsideration<T>
 	{
-		public float score;
+		public float Score;
 
-		public IAction<T> action { get; set; }
+		public IAction<T> Action { get; set; }
 
 
-		public FixedScoreConsideration( float score = 1 )
+		public FixedScoreConsideration(float score = 1)
 		{
-			this.score = score;
+			Score = score;
 		}
 
 
-		float IConsideration<T>.getScore( T context )
+		float IConsideration<T>.GetScore(T context)
 		{
-			return score;
+			return Score;
 		}
-
 	}
 }
-

@@ -30,31 +30,31 @@ namespace Nez
 	/// </summary>
 	public class ColorCycler : Component, IUpdatable
 	{
-		public Colorchannels colorChannel = Colorchannels.All;
-		public WaveFunctions waveFunction = WaveFunctions.Sin;
+		public Colorchannels ColorChannel = Colorchannels.All;
+		public WaveFunctions WaveFunction = WaveFunctions.Sin;
 
 		/// <summary>
 		/// This value is added to the final result. 0 - 1 range.
 		/// </summary>
-		public float offset = 0.0f;
+		public float Offset = 0.0f;
 
 		/// <summary>
 		/// this value is multiplied by the calculated value
 		/// </summary>
-		public float amplitude = 1.0f;
+		public float Amplitude = 1.0f;
 
 		/// <summary>
 		/// start point in wave function. 0 - 1 range.
 		/// </summary>
-		public float phase = 0.0f;
+		public float Phase = 0.0f;
 
 		/// <summary>
 		/// cycles per second
 		/// </summary>
-		public float frequency = 0.5f;
+		public float Frequency = 0.5f;
 
 		// should the alpha be changed as well as colors
-		public bool affectsIntensity = true;
+		public bool AffectsIntensity = true;
 
 		// cache original values
 		RenderableComponent _spriteRenderer;
@@ -62,66 +62,65 @@ namespace Nez
 		float originalIntensity;
 
 
-		public override void onAddedToEntity()
+		public override void OnAddedToEntity()
 		{
-			_spriteRenderer = entity.getComponent<RenderableComponent>();
-			originalColor = _spriteRenderer.color;
+			_spriteRenderer = Entity.GetComponent<RenderableComponent>();
+			originalColor = _spriteRenderer.Color;
 			originalIntensity = originalColor.A;
 		}
 
 
-
-		void IUpdatable.update()
+		void IUpdatable.Update()
 		{
-			var color = _spriteRenderer.color;
+			var color = _spriteRenderer.Color;
 
-			switch( colorChannel )
+			switch (ColorChannel)
 			{
 				case Colorchannels.All:
-					color = originalColor * evaluateWaveFunction();
+					color = originalColor * EvaluateWaveFunction();
 					break;
 				case Colorchannels.Red:
-					color = new Color( (int)(originalColor.R * evaluateWaveFunction()), color.G, color.B, color.A );
+					color = new Color((int) (originalColor.R * EvaluateWaveFunction()), color.G, color.B, color.A);
 					break;
 				case Colorchannels.Green:
-					color = new Color( color.R, (int)(originalColor.G * evaluateWaveFunction()), color.B, color.A );
+					color = new Color(color.R, (int) (originalColor.G * EvaluateWaveFunction()), color.B, color.A);
 					break;
 				case Colorchannels.Blue:
-					color = new Color( color.R, color.G, (int)(originalColor.B * evaluateWaveFunction()), color.A );
+					color = new Color(color.R, color.G, (int) (originalColor.B * EvaluateWaveFunction()), color.A);
 					break;
 			}
 
-			if( affectsIntensity )
-				color.A = (byte)(originalIntensity * evaluateWaveFunction());
+			if (AffectsIntensity)
+				color.A = (byte) (originalIntensity * EvaluateWaveFunction());
 			else
 				color.A = originalColor.A;
 
-			_spriteRenderer.color = color;
+			_spriteRenderer.Color = color;
 		}
 
 
-		float evaluateWaveFunction()
+		float EvaluateWaveFunction()
 		{
-			var t = ( Time.time + phase ) * frequency;
-			t = t - Mathf.floor( t ); // normalized value (0..1)
+			var t = (Time.TotalTime + Phase) * Frequency;
+			t = t - Mathf.Floor(t); // normalized value (0..1)
 			var y = 1f;
 
-			switch( waveFunction )
+			switch (WaveFunction)
 			{
 				case WaveFunctions.Sin:
-					y = Mathf.sin( 1f * t * MathHelper.Pi );
+					y = Mathf.Sin(1f * t * MathHelper.Pi);
 					break;
 				case WaveFunctions.Triangle:
-					if( t < 0.5f )
+					if (t < 0.5f)
 						y = 4.0f * t - 1.0f;
 					else
-						y = -4.0f * t + 3.0f; 
+						y = -4.0f * t + 3.0f;
 					break;
 				case WaveFunctions.Square:
-					if( t < 0.5f )
+					if (t < 0.5f)
 						y = 1.0f;
 					else
-						y = -1.0f; 
+						y = -1.0f;
 					break;
 				case WaveFunctions.SawTooth:
 					y = t;
@@ -130,12 +129,11 @@ namespace Nez
 					y = 1.0f - t;
 					break;
 				case WaveFunctions.Random:
-					y = 1f - ( Random.nextFloat() * 2f );
+					y = 1f - (Random.NextFloat() * 2f);
 					break;
 			}
 
-			return ( y * amplitude ) + offset;
+			return (y * Amplitude) + Offset;
 		}
-	
 	}
 }

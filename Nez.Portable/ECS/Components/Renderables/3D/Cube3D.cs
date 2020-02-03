@@ -9,12 +9,12 @@ namespace Nez
 		{
 			Vector3[] normals =
 			{
-				new Vector3( 0, 0, 1 ),
-				new Vector3( 0, 0, -1 ),
-				new Vector3( 1, 0, 0 ),
-				new Vector3( -1, 0, 0 ),
-				new Vector3( 0, 1, 0 ),
-				new Vector3( 0, -1, 0 ),
+				new Vector3(0, 0, 1),
+				new Vector3(0, 0, -1),
+				new Vector3(1, 0, 0),
+				new Vector3(-1, 0, 0),
+				new Vector3(0, 1, 0),
+				new Vector3(0, -1, 0),
 			};
 
 			Color[] colors =
@@ -27,28 +27,28 @@ namespace Nez
 				Color.Orange
 			};
 
-			for( var i = 0; i < normals.Length; i++ )
+			for (var i = 0; i < normals.Length; i++)
 			{
 				var vertColor = colors[i];
 				var normal = normals[i];
-				var side1 = new Vector3( normal.Y, normal.Z, normal.X );
-				var side2 = Vector3.Cross( normal, side1 );
+				var side1 = new Vector3(normal.Y, normal.Z, normal.X);
+				var side2 = Vector3.Cross(normal, side1);
 
-				addIndex( _vertices.Count + 0 );
-				addIndex( _vertices.Count + 1 );
-				addIndex( _vertices.Count + 2 );
+				AddIndex(_vertices.Count + 0);
+				AddIndex(_vertices.Count + 1);
+				AddIndex(_vertices.Count + 2);
 
-				addIndex( _vertices.Count + 0 );
-				addIndex( _vertices.Count + 2 );
-               	addIndex( _vertices.Count + 3 );
+				AddIndex(_vertices.Count + 0);
+				AddIndex(_vertices.Count + 2);
+				AddIndex(_vertices.Count + 3);
 
-				addVertex( ( normal - side1 - side2 ) / 2, vertColor, normal );
-				addVertex( ( normal - side1 + side2 ) / 2, vertColor, normal );
-				addVertex( ( normal + side1 + side2 ) / 2, vertColor, normal );
-				addVertex( ( normal + side1 - side2 ) / 2, vertColor, normal );
+				AddVertex((normal - side1 - side2) / 2, vertColor, normal);
+				AddVertex((normal - side1 + side2) / 2, vertColor, normal);
+				AddVertex((normal + side1 + side2) / 2, vertColor, normal);
+				AddVertex((normal + side1 - side2) / 2, vertColor, normal);
 			}
 
-			initializePrimitive();
+			InitializePrimitive();
 		}
 	}
 }

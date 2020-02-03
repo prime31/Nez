@@ -6,14 +6,19 @@ namespace Nez.UI
 {
 	public class Element : ILayout
 	{
-		protected Stage stage;
+		protected Stage _stage;
 		internal Group parent;
 
 		/// <summary>
 		/// true if the widget's layout has been {@link #invalidate() invalidated}.
 		/// </summary>
 		/// <value><c>true</c> if needs layout; otherwise, <c>false</c>.</value>
-		public bool needsLayout { get { return _needsLayout; } }
+		public bool NeedsLayout => _needsLayout;
+
+		/// <summary>
+		/// use this to stuff any relevant data required for your UI setup
+		/// </summary>
+		public object UserData;
 
 		internal float x, y;
 		internal float width, height;
@@ -33,28 +38,17 @@ namespace Nez.UI
 		/// <summary>
 		/// If this method is overridden, the super method or {@link #validate()} should be called to ensure the widget is laid out.
 		/// </summary>
-		/// <param name="graphics">Graphics.</param>
+		/// <param name="batcher">Batcher.</param>
 		/// <param name="parentAlpha">Parent alpha.</param>
-		public virtual void draw( Graphics graphics, float parentAlpha )
-		{
-			validate();
-		}
+		public virtual void Draw(Batcher batcher, float parentAlpha) => Validate();
 
+		protected virtual void SizeChanged() => Invalidate();
 
-		protected virtual void sizeChanged()
-		{
-			invalidate();
-		}
+		protected virtual void PositionChanged()
+		{ }
 
-
-		protected virtual void positionChanged()
-		{
-		}
-
-
-		protected virtual void rotationChanged()
-		{
-		}
+		protected virtual void RotationChanged()
+		{ }
 
 
 		#region Getters/Setters
@@ -63,191 +57,137 @@ namespace Nez.UI
 		/// Returns the stage that this element is currently in, or null if not in a stage.
 		/// </summary>
 		/// <returns>The stage.</returns>
-		public Stage getStage()
-		{
-			return stage;
-		}
-
+		public Stage GetStage() => _stage;
 
 		/// <summary>
 		/// Called by the framework when this element or any parent is added to a group that is in the stage.
 		/// stage May be null if the element or any parent is no longer in a stage
 		/// </summary>
 		/// <param name="stage">Stage.</param>
-		internal virtual void setStage( Stage stage )
-		{
-			this.stage = stage;
-		}
-
+		internal virtual void SetStage(Stage stage) => _stage = stage;
 
 		/// <summary>
 		/// Returns true if the element's parent is not null
 		/// </summary>
 		/// <returns><c>true</c>, if parent was hased, <c>false</c> otherwise.</returns>
-		public bool hasParent()
-		{
-			return parent != null;
-		}
-
+		public bool HasParent() => parent != null;
 
 		/// <summary>
 		/// Returns the parent element, or null if not in a group
 		/// </summary>
 		/// <returns>The parent.</returns>
-		public Group getParent()
-		{
-			return parent;
-		}
-
+		public Group GetParent() => parent;
 
 		/// <summary>
 		/// Called by the framework when an element is added to or removed from a group.
 		/// </summary>
-		/// <param name="parent">parent May be null if the element has been removed from the parent</param>
-		internal void setParent( Group parent )
-		{
-			this.parent = parent;
-		}
-
+		/// <param name="newParent">parent May be null if the element has been removed from the parent</param>
+		internal void SetParent(Group newParent) => parent = newParent;
 
 		/// <summary>
 		/// Returns true if input events are processed by this element.
 		/// </summary>
 		/// <returns>The touchable.</returns>
-		public bool isTouchable()
-		{
-			return touchable == Touchable.Enabled;
-		}
+		public bool IsTouchable() => touchable == Touchable.Enabled;
 
-
-		public Touchable getTouchable()
-		{
-			return touchable;
-		}
-
+		public Touchable GetTouchable() => touchable;
 
 		/// <summary>
 		/// Determines how touch events are distributed to this element. Default is {@link Touchable#enabled}.
 		/// </summary>
 		/// <param name="touchable">Touchable.</param>
-		public void setTouchable( Touchable touchable )
-		{
-			this.touchable = touchable;
-		}
+		public void SetTouchable(Touchable touchable) => this.touchable = touchable;
 
+		public void SetIsVisible(bool visible) => _visible = visible;
 
-		public void setIsVisible( bool visible )
-		{
-			_visible = visible;
-		}
-
-
-		public bool isVisible()
-		{
-			return _visible;
-		}
-
+		public bool IsVisible() => _visible;
 
 		/// <summary>
 		/// If false, the element will not be drawn and will not receive touch events. Default is true.
 		/// </summary>
 		/// <param name="visible">Visible.</param>
-		public void setVisible( bool visible )
-		{
-			this._visible = visible;
-		}
-
+		public void SetVisible(bool visible) => _visible = visible;
 
 		/// <summary>
 		/// Returns the X position of the element's left edge
 		/// </summary>
 		/// <returns>The x.</returns>
-		public float getX()
-		{
-			return x;
-		}
-
+		public float GetX() => x;
 
 		/// <summary>
 		/// Returns the X position of the specified {@link Align alignment}.
 		/// </summary>
 		/// <returns>The x.</returns>
 		/// <param name="alignment">Alignment.</param>
-		public float getX( int alignment )
+		public float GetX(int alignment)
 		{
 			float x = this.x;
-			if( ( alignment & AlignInternal.right ) != 0 )
+			if ((alignment & AlignInternal.Right) != 0)
 				x += width;
-			else if( ( alignment & AlignInternal.left ) == 0 )
+			else if ((alignment & AlignInternal.Left) == 0)
 				x += width / 2;
 			return x;
 		}
 
-
-		public Element setX( float x )
+		public Element SetX(float x)
 		{
-			if( this.x != x )
+			if (this.x != x)
 			{
 				this.x = x;
-				positionChanged();
+				PositionChanged();
 			}
+
 			return this;
 		}
-
 
 		/// <summary>
 		/// Returns the Y position of the element's bottom edge
 		/// </summary>
 		/// <returns>The y.</returns>
-		public float getY()
-		{
-			return y;
-		}
-
+		public float GetY() => y;
 
 		/// <summary>
 		/// Returns the Y position of the specified {@link Align alignment}
 		/// </summary>
 		/// <returns>The y.</returns>
 		/// <param name="alignment">Alignment.</param>
-		public float getY( int alignment )
+		public float GetY(int alignment)
 		{
 			float y = this.y;
-			if( ( alignment & AlignInternal.bottom ) != 0 )
+			if ((alignment & AlignInternal.Bottom) != 0)
 				y += height;
-			else if( ( alignment & AlignInternal.top ) == 0 )
+			else if ((alignment & AlignInternal.Top) == 0)
 				y += height / 2;
 			return y;
 		}
 
-
-		public Element setY( float y )
+		public Element SetY(float y)
 		{
-			if( this.y != y )
+			if (this.y != y)
 			{
 				this.y = y;
-				positionChanged();
+				PositionChanged();
 			}
+
 			return this;
 		}
-
 
 		/// <summary>
 		/// Sets the position of the element's bottom left corner
 		/// </summary>
 		/// <param name="x">The x coordinate.</param>
 		/// <param name="y">The y coordinate.</param>
-		public Element setPosition( float x, float y )
+		public Element SetPosition(float x, float y)
 		{
-			if( this.x != x || this.y != y )
+			if (this.x != x || this.y != y)
 			{
 				this.x = x;
 				this.y = y;
-				positionChanged();
+				PositionChanged();
 			}
+
 			return this;
 		}
-
 
 		/// <summary>
 		/// Sets the position using the specified {@link Align alignment}. Note this may set the position to non-integer coordinates
@@ -255,83 +195,72 @@ namespace Nez.UI
 		/// <param name="x">The x coordinate.</param>
 		/// <param name="y">The y coordinate.</param>
 		/// <param name="alignment">Alignment.</param>
-		public void setPosition( float x, float y, int alignment )
+		public void SetPosition(float x, float y, int alignment)
 		{
-			if( ( alignment & AlignInternal.right ) != 0 )
+			if ((alignment & AlignInternal.Right) != 0)
 				x -= width;
-			else if( ( alignment & AlignInternal.left ) == 0 ) //
+			else if ((alignment & AlignInternal.Left) == 0) //
 				x -= width / 2;
 
-			if( ( alignment & AlignInternal.top ) != 0 )
+			if ((alignment & AlignInternal.Top) != 0)
 				y -= height;
-			else if( ( alignment & AlignInternal.bottom ) == 0 ) //
+			else if ((alignment & AlignInternal.Bottom) == 0) //
 				y -= height / 2;
 
-			if( this.x != x || this.y != y )
+			if (this.x != x || this.y != y)
 			{
 				this.x = x;
 				this.y = y;
-				positionChanged();
+				PositionChanged();
 			}
 		}
-
 
 		/// <summary>
 		/// Add x and y to current position
 		/// </summary>
 		/// <param name="x">The x coordinate.</param>
 		/// <param name="y">The y coordinate.</param>
-		public void moveBy( float x, float y )
+		public void MoveBy(float x, float y)
 		{
-			if( x != 0 || y != 0 )
+			if (x != 0 || y != 0)
 			{
 				this.x += x;
 				this.y += y;
-				positionChanged();
+				PositionChanged();
 			}
 		}
 
+		public float GetWidth() => width;
 
-		public float getWidth()
+
+		public void SetWidth(float width)
 		{
-			return width;
-		}
-
-
-		public void setWidth( float width )
-		{
-			if( this.width != width )
+			if (this.width != width)
 			{
 				this.width = width;
-				sizeChanged();
+				SizeChanged();
 			}
 		}
 
+		public float GetHeight() => height;
 
-		public float getHeight()
+		public void SetHeight(float height)
 		{
-			return height;
-		}
-
-
-		public void setHeight( float height )
-		{
-			if( this.height != height )
+			if (this.height != height)
 			{
 				this.height = height;
-				sizeChanged();
+				SizeChanged();
 			}
 		}
 
-
-		public void setSize( float width, float height )
+		public void SetSize(float width, float height)
 		{
-			if( this.width == width && this.height == height )
+			if (this.width == width && this.height == height)
 				return;
 
 			this.width = width;
 			this.height = height;
-			sizeChanged();
+			SizeChanged();
 		}
 
 
@@ -339,21 +268,14 @@ namespace Nez.UI
 		/// Returns y plus height
 		/// </summary>
 		/// <returns>The top.</returns>
-		public float getBottom()
-		{
-			return y + height;
-		}
+		public float GetBottom() => y + height;
 
 
 		/// <summary>
 		/// Returns x plus width
 		/// </summary>
 		/// <returns>The right.</returns>
-		public float getRight()
-		{
-			return x + width;
-		}
-
+		public float GetRight() => x + width;
 
 		/// <summary>
 		/// Sets the x, y, width, and height.
@@ -362,215 +284,154 @@ namespace Nez.UI
 		/// <param name="y">The y coordinate.</param>
 		/// <param name="width">Width.</param>
 		/// <param name="height">Height.</param>
-		public void setBounds( float x, float y, float width, float height )
+		public void SetBounds(float x, float y, float width, float height)
 		{
-			if( this.x != x || this.y != y )
+			if (this.x != x || this.y != y)
 			{
 				this.x = x;
 				this.y = y;
-				positionChanged();
+				PositionChanged();
 			}
 
-			if( this.width != width || this.height != height )
+			if (this.width != width || this.height != height)
 			{
 				this.width = width;
 				this.height = height;
-				sizeChanged();
+				SizeChanged();
 			}
 		}
 
+		public float GetOriginX() => originX;
 
-		public float getOriginX()
-		{
-			return originX;
-		}
+		public void SetOriginX(float originX) => this.originX = originX;
 
+		public float GetOriginY() => originY;
 
-		public void setOriginX( float originX )
-		{
-			this.originX = originX;
-		}
-
-
-		public float getOriginY()
-		{
-			return originY;
-		}
-
-
-		public void setOriginY( float originY )
-		{
-			this.originY = originY;
-		}
-
+		public void SetOriginY(float originY) => this.originY = originY;
 
 		/// <summary>
 		/// Sets the origin position which is relative to the element's bottom left corner
 		/// </summary>
 		/// <param name="originX">Origin x.</param>
 		/// <param name="originY">Origin y.</param>
-		public void setOrigin( float originX, float originY )
+		public void SetOrigin(float originX, float originY)
 		{
 			this.originX = originX;
 			this.originY = originY;
 		}
 
-
 		/// <summary>
 		/// Sets the origin position to the specified {@link Align alignment}.
 		/// </summary>
 		/// <param name="alignment">Alignment.</param>
-		public void setOrigin( int alignment )
+		public void SetOrigin(int alignment)
 		{
-			if( ( alignment & AlignInternal.left ) != 0 )
+			if ((alignment & AlignInternal.Left) != 0)
 				originX = 0;
-			else if( ( alignment & AlignInternal.right ) != 0 )
+			else if ((alignment & AlignInternal.Right) != 0)
 				originX = width;
 			else
 				originX = width / 2;
 
-			if( ( alignment & AlignInternal.top ) != 0 )
+			if ((alignment & AlignInternal.Top) != 0)
 				originY = 0;
-			else if( ( alignment & AlignInternal.bottom ) != 0 )
+			else if ((alignment & AlignInternal.Bottom) != 0)
 				originY = height;
 			else
 				originY = height / 2;
 		}
 
+		public float GetScaleX() => scaleX;
 
-		public float getScaleX()
-		{
-			return scaleX;
-		}
+		public void SetScaleX(float scaleX) => this.scaleX = scaleX;
 
+		public float GetScaleY() => scaleY;
 
-		public void setScaleX( float scaleX )
-		{
-			this.scaleX = scaleX;
-		}
-
-
-		public float getScaleY()
-		{
-			return scaleY;
-		}
-
-
-		public void setScaleY( float scaleY )
-		{
-			this.scaleY = scaleY;
-		}
-
+		public void SetScaleY(float scaleY) => this.scaleY = scaleY;
 
 		/// <summary>
 		/// Sets the scale for both X and Y
 		/// </summary>
 		/// <param name="scaleXY">Scale X.</param>
-		public void setScale( float scaleXY )
+		public void SetScale(float scaleXY)
 		{
-			this.scaleX = scaleXY;
-			this.scaleY = scaleXY;
+			scaleX = scaleXY;
+			scaleY = scaleXY;
 		}
-
 
 		/// <summary>
 		/// Sets the scale X and scale Y
 		/// </summary>
 		/// <param name="scaleX">Scale x.</param>
 		/// <param name="scaleY">Scale y.</param>
-		public void setScale( float scaleX, float scaleY )
+		public void SetScale(float scaleX, float scaleY)
 		{
 			this.scaleX = scaleX;
 			this.scaleY = scaleY;
 		}
 
-
 		/// <summary>
 		/// Adds the specified scale to the current scale
 		/// </summary>
 		/// <param name="scale">Scale.</param>
-		public void scaleBy( float scale )
+		public void ScaleBy(float scale)
 		{
 			scaleX += scale;
 			scaleY += scale;
 		}
-
 
 		/// <summary>
 		/// Adds the specified scale to the current scale
 		/// </summary>
 		/// <param name="scaleX">Scale x.</param>
 		/// <param name="scaleY">Scale y.</param>
-		public void scaleBy( float scaleX, float scaleY )
+		public void ScaleBy(float scaleX, float scaleY)
 		{
 			this.scaleX += scaleX;
 			this.scaleY += scaleY;
 		}
 
+		public float GetRotation() => rotation;
 
-		public float getRotation()
+		public void SetRotation(float degrees)
 		{
-			return rotation;
-		}
-
-
-		public void setRotation( float degrees )
-		{
-			if( this.rotation != degrees )
+			if (rotation != degrees)
 			{
-				this.rotation = degrees;
-				rotationChanged();
+				rotation = degrees;
+				RotationChanged();
 			}
 		}
-
 
 		/// <summary>
 		/// Adds the specified rotation to the current rotation
 		/// </summary>
 		/// <param name="amountInDegrees">Amount in degrees.</param>
-		public void rotateBy( float amountInDegrees )
+		public void RotateBy(float amountInDegrees)
 		{
-			if( amountInDegrees != 0 )
+			if (amountInDegrees != 0)
 			{
 				rotation += amountInDegrees;
-				rotationChanged();
+				RotationChanged();
 			}
 		}
 
-
-		public void setColor( Color color )
-		{
-			this.color = color;
-		}
-
+		public void SetColor(Color color) => this.color = color;
 
 		/// <summary>
 		/// Returns the color the element will be tinted when drawn
 		/// </summary>
 		/// <returns>The color.</returns>
-		public Color getColor()
-		{
-			return color;
-		}
-
+		public Color GetColor() => color;
 
 		/// <summary>
 		/// Changes the z-order for this element so it is in front of all siblings
 		/// </summary>
-		public void toFront()
-		{
-			setZIndex( int.MaxValue );
-		}
-
+		public void ToFront() => SetZIndex(int.MaxValue);
 
 		/// <summary>
 		/// Changes the z-order for this element so it is in back of all siblings
 		/// </summary>
-		public void toBack()
-		{
-			setZIndex( 0 );
-		}
-
+		public void ToBack() => SetZIndex(0);
 
 		/// <summary>
 		/// Sets the z-index of this element. The z-index is the index into the parent's {@link Group#getChildren() children}, where a
@@ -578,86 +439,76 @@ namespace Nez.UI
 		/// Setting a z-index less than zero is invalid.
 		/// </summary>
 		/// <param name="index">Index.</param>
-		public void setZIndex( int index )
+		public void SetZIndex(int index)
 		{
 			var parent = this.parent;
-			if( parent == null )
+			if (parent == null)
 				return;
 
 			var children = parent.children;
-			if( children.Count == 1 )
+			if (children.Count == 1)
 				return;
 
-			index = Math.Min( index, children.Count - 1 );
-			if( index == children.IndexOf( this ) )
+			index = Math.Min(index, children.Count - 1);
+			if (index == children.IndexOf(this))
 				return;
 
-			if( !children.Remove( this ) )
+			if (!children.Remove(this))
 				return;
 
-			children.Insert( index, this );
+			children.Insert(index, this);
 		}
-
 
 		/// <summary>
 		/// Calls clipBegin(Batcher, float, float, float, float) to clip this actor's bounds
 		/// </summary>
 		/// <returns>The begin.</returns>
-		public bool clipBegin( Batcher batcher )
-		{
-			return clipBegin( batcher, x, y, width, height );
-		}
-
+		public bool ClipBegin(Batcher batcher) => ClipBegin(batcher, x, y, width, height);
 
 		/// <summary>
 		/// Clips the specified screen aligned rectangle, specified relative to the transform matrix of the stage's Batch. The
 		/// transform matrix and the stage's camera must not have rotational components. Calling this method must be followed by a call
 		/// to clipEnd() if true is returned.
 		/// </summary>
-		public bool clipBegin( Batcher batcher, float x, float y, float width, float height )
+		public bool ClipBegin(Batcher batcher, float x, float y, float width, float height)
 		{
-			if( width <= 0 || height <= 0 )
+			if (width <= 0 || height <= 0)
 				return false;
 
-			var tableBounds = RectangleExt.fromFloats( x, y, width, height );
-			var scissorBounds = ScissorStack.calculateScissors( stage?.entity?.scene?.camera, batcher.transformMatrix, tableBounds );
-			if( ScissorStack.pushScissors( scissorBounds ) )
+			var tableBounds = RectangleExt.FromFloats(x, y, width, height);
+			var scissorBounds =
+				ScissorStack.CalculateScissors(_stage?.Entity?.Scene?.Camera, batcher.TransformMatrix, tableBounds);
+			if (ScissorStack.PushScissors(scissorBounds))
 			{
-				batcher.enableScissorTest( true );
+				batcher.EnableScissorTest(true);
 				return true;
 			}
 
 			return false;
 		}
 
-
 		/// <summary>
 		/// Ends clipping begun by clipBegin(Batcher, float, float, float, float)
 		/// </summary>
 		/// <returns>The end.</returns>
-		public void clipEnd( Batcher batcher )
+		public void ClipEnd(Batcher batcher)
 		{
-			batcher.enableScissorTest( false );
-			ScissorStack.popScissors();
+			batcher.EnableScissorTest(false);
+			ScissorStack.PopScissors();
 		}
-
 
 		/// <summary>
 		/// If true, {@link #debugDraw} will be called for this element
 		/// </summary>
 		/// <param name="enabled">Enabled.</param>
-		public virtual void setDebug( bool enabled )
+		public virtual void SetDebug(bool enabled)
 		{
 			_debug = enabled;
-			if( enabled )
-				Stage.debug = true;
+			if (enabled)
+				Stage.Debug = true;
 		}
 
-
-		public bool getDebug()
-		{
-			return _debug;
-		}
+		public bool GetDebug() => _debug;
 
 		#endregion
 
@@ -669,39 +520,34 @@ namespace Nez.UI
 		/// </summary>
 		/// <returns>The to local coordinates.</returns>
 		/// <param name="screenCoords">Screen coords.</param>
-		public Vector2 screenToLocalCoordinates( Vector2 screenCoords )
+		public Vector2 ScreenToLocalCoordinates(Vector2 screenCoords)
 		{
-			if( stage == null )
+			if (_stage == null)
 				return screenCoords;
-			return stageToLocalCoordinates( stage.screenToStageCoordinates( screenCoords ) );
-		}
 
+			return StageToLocalCoordinates(_stage.ScreenToStageCoordinates(screenCoords));
+		}
 
 		/// <summary>
 		/// Transforms the specified point in the stage's coordinates to the element's local coordinate system.
 		/// </summary>
 		/// <returns>The to local coordinates.</returns>
 		/// <param name="stageCoords">Stage coords.</param>
-		public Vector2 stageToLocalCoordinates( Vector2 stageCoords )
+		public Vector2 StageToLocalCoordinates(Vector2 stageCoords)
 		{
-			if( parent != null )
-				stageCoords = parent.stageToLocalCoordinates( stageCoords );
+			if (parent != null)
+				stageCoords = parent.StageToLocalCoordinates(stageCoords);
 
-			stageCoords = parentToLocalCoordinates( stageCoords );
+			stageCoords = ParentToLocalCoordinates(stageCoords);
 			return stageCoords;
 		}
-
 
 		/// <summary>
 		/// Transforms the specified point in the element's coordinates to be in the stage's coordinates
 		/// </summary>
 		/// <returns>The to stage coordinates.</returns>
 		/// <param name="localCoords">Local coords.</param>
-		public Vector2 localToStageCoordinates( Vector2 localCoords )
-		{
-			return localToAscendantCoordinates( null, localCoords );
-		}
-
+		public Vector2 LocalToStageCoordinates(Vector2 localCoords) => LocalToAscendantCoordinates(null, localCoords);
 
 		/// <summary>
 		/// Converts coordinates for this element to those of a parent element. The ascendant does not need to be a direct parent
@@ -709,85 +555,84 @@ namespace Nez.UI
 		/// <returns>The to ascendant coordinates.</returns>
 		/// <param name="ascendant">Ascendant.</param>
 		/// <param name="localCoords">Local coords.</param>
-		public Vector2 localToAscendantCoordinates( Element ascendant, Vector2 localCoords )
+		public Vector2 LocalToAscendantCoordinates(Element ascendant, Vector2 localCoords)
 		{
 			Element element = this;
-			while( element != null )
+			while (element != null)
 			{
-				localCoords = element.localToParentCoordinates( localCoords );
+				localCoords = element.LocalToParentCoordinates(localCoords);
 				element = element.parent;
-				if( element == ascendant )
+				if (element == ascendant)
 					break;
 			}
+
 			return localCoords;
 		}
-
 
 		/// <summary>
 		/// Converts the coordinates given in the parent's coordinate system to this element's coordinate system.
 		/// </summary>
 		/// <returns>The to local coordinates.</returns>
 		/// <param name="parentCoords">Parent coords.</param>
-		public Vector2 parentToLocalCoordinates( Vector2 parentCoords )
+		public Vector2 ParentToLocalCoordinates(Vector2 parentCoords)
 		{
-			if( rotation == 0 )
+			if (rotation == 0)
 			{
-				if( scaleX == 1 && scaleY == 1 )
+				if (scaleX == 1 && scaleY == 1)
 				{
 					parentCoords.X -= x;
 					parentCoords.Y -= y;
 				}
 				else
 				{
-					parentCoords.X = ( parentCoords.X - x - originX ) / scaleX + originX;
-					parentCoords.Y = ( parentCoords.Y - y - originY ) / scaleY + originY;
+					parentCoords.X = (parentCoords.X - x - originX) / scaleX + originX;
+					parentCoords.Y = (parentCoords.Y - y - originY) / scaleY + originY;
 				}
 			}
 			else
 			{
-				var cos = Mathf.cos( MathHelper.ToRadians( rotation ) );
-				var sin = Mathf.sin( MathHelper.ToRadians( rotation ) );
+				var cos = Mathf.Cos(MathHelper.ToRadians(rotation));
+				var sin = Mathf.Sin(MathHelper.ToRadians(rotation));
 				var tox = parentCoords.X - x - originX;
 				var toy = parentCoords.Y - y - originY;
-				parentCoords.X = ( tox * cos + toy * sin ) / scaleX + originX;
-				parentCoords.Y = ( tox * -sin + toy * cos ) / scaleY + originY;
+				parentCoords.X = (tox * cos + toy * sin) / scaleX + originX;
+				parentCoords.Y = (tox * -sin + toy * cos) / scaleY + originY;
 			}
 
 			return parentCoords;
 		}
-
 
 		/// <summary>
 		/// Transforms the specified point in the element's coordinates to be in the parent's coordinates.
 		/// </summary>
 		/// <returns>The to parent coordinates.</returns>
 		/// <param name="localCoords">Local coords.</param>
-		public Vector2 localToParentCoordinates( Vector2 localCoords )
+		public Vector2 LocalToParentCoordinates(Vector2 localCoords)
 		{
 			var rotation = -this.rotation;
 
-			if( rotation == 0 )
+			if (rotation == 0)
 			{
-				if( scaleX == 1 && scaleY == 1 )
+				if (scaleX == 1 && scaleY == 1)
 				{
 					localCoords.X += x;
 					localCoords.Y += y;
 				}
 				else
 				{
-					localCoords.X = ( localCoords.X - originX ) * scaleX + originX + x;
-					localCoords.Y = ( localCoords.Y - originY ) * scaleY + originY + y;
+					localCoords.X = (localCoords.X - originX) * scaleX + originX + x;
+					localCoords.Y = (localCoords.Y - originY) * scaleY + originY + y;
 				}
 			}
 			else
 			{
-				var cos = Mathf.cos( MathHelper.ToRadians( rotation ) );
-				var sin = Mathf.sin( MathHelper.ToRadians( rotation ) );
+				var cos = Mathf.Cos(MathHelper.ToRadians(rotation));
+				var sin = Mathf.Sin(MathHelper.ToRadians(rotation));
 
-				var tox = ( localCoords.X - originX ) * scaleX;
-				var toy = ( localCoords.Y - originY ) * scaleY;
-				localCoords.X = ( tox * cos + toy * sin ) + originX + x;
-				localCoords.Y = ( tox * -sin + toy * cos ) + originY + y;
+				var tox = (localCoords.X - originX) * scaleX;
+				var toy = (localCoords.Y - originY) * scaleY;
+				localCoords.X = (tox * cos + toy * sin) + originX + x;
+				localCoords.Y = (tox * -sin + toy * cos) + originY + y;
 			}
 
 			return localCoords;
@@ -802,181 +647,151 @@ namespace Nez.UI
 		/// </summary>
 		/// <returns>The outside bounds to point.</returns>
 		/// <param name="Point">Point.</param>
-		protected float distanceOutsideBoundsToPoint( Vector2 point )
+		protected float DistanceOutsideBoundsToPoint(Vector2 point)
 		{
-			var offsetX = Math.Max( -point.X, point.X - width );
-			var offsetY = Math.Max( -point.Y, point.Y - height );
+			var offsetX = Math.Max(-point.X, point.X - width);
+			var offsetY = Math.Max(-point.Y, point.Y - height);
 
-			return Math.Max( offsetX, offsetY );
+			return Math.Max(offsetX, offsetY);
 		}
-
 
 		/// <summary>
 		/// Draws this element's debug lines
 		/// </summary>
-		/// <param name="graphics">Graphics.</param>
-		public virtual void debugRender( Graphics graphics )
+		/// <param name="batcher">Batcher.</param>
+		public virtual void DebugRender(Batcher batcher)
 		{
-			if( _debug )
-				graphics.batcher.drawHollowRect( x, y, width, height, Color.Red );
+			if (_debug)
+				batcher.DrawHollowRect(x, y, width, height, Color.Red);
 		}
-
 
 		/// <summary>
 		/// returns true if this Element and all parent Elements are visible
 		/// </summary>
 		/// <returns><c>true</c>, if parents visible was ared, <c>false</c> otherwise.</returns>
-		bool areParentsVisible()
+		bool AreParentsVisible()
 		{
-			if( !_visible )
+			if (!_visible)
 				return false;
-			
-			if( parent != null )
-				return parent.areParentsVisible();
-			
+
+			if (parent != null)
+				return parent.AreParentsVisible();
+
 			return _visible;
 		}
 
-
-		public virtual Element hit( Vector2 point )
+		public virtual Element Hit(Vector2 point)
 		{
 			// if we are not Touchable or us or any parent is not visible bail out
-			if( touchable != Touchable.Enabled || !areParentsVisible() )
+			if (touchable != Touchable.Enabled || !AreParentsVisible())
 				return null;
 
-			if( point.X >= 0 && point.X < width && point.Y >= 0 && point.Y < height )
+			if (point.X >= 0 && point.X < width && point.Y >= 0 && point.Y < height)
 				return this;
+
 			return null;
 		}
-
 
 		/// <summary>
 		/// Removes this element from its parent, if it has a parent
 		/// </summary>
-		public bool remove()
+		public bool Remove()
 		{
-			if( parent != null )
-				return parent.removeElement( this );
+			if (parent != null)
+				return parent.RemoveElement(this);
+
 			return false;
 		}
 
 
 		#region ILayout
 
-		public bool fillParent { get; set; }
+		public bool FillParent { get; set; }
 
-		public virtual bool layoutEnabled
+		public virtual bool LayoutEnabled
 		{
-			get { return _layoutEnabled; }
+			get => _layoutEnabled;
 			set
 			{
-				if( _layoutEnabled != value )
+				if (_layoutEnabled != value)
 				{
 					_layoutEnabled = value;
 
-					if( _layoutEnabled )
-						invalidateHierarchy();
+					if (_layoutEnabled)
+						InvalidateHierarchy();
 				}
 			}
 		}
 
-		public virtual float minWidth
-		{
-			get { return preferredWidth; }
-		}
+		public virtual float MinWidth => PreferredWidth;
 
-		public virtual float minHeight
-		{
-			get { return preferredHeight; }
-		}
+		public virtual float MinHeight => PreferredHeight;
 
-		public virtual float preferredWidth
-		{
-			get { return 0; }
-		}
+		public virtual float PreferredWidth => 0;
 
-		public virtual float preferredHeight
-		{
-			get { return 0; }
-		}
+		public virtual float PreferredHeight => 0;
 
-		public virtual float maxWidth
-		{
-			get { return 0; }
-		}
+		public virtual float MaxWidth => 0;
 
-		public virtual float maxHeight
-		{
-			get { return 0; }
-		}
+		public virtual float MaxHeight => 0;
 
-
-		public virtual void layout()
+		public virtual void Layout()
 		{ }
 
+		public virtual void Invalidate() => _needsLayout = true;
 
-		public virtual void invalidate()
+		public virtual void InvalidateHierarchy()
 		{
-			_needsLayout = true;
-		}
-
-
-		public virtual void invalidateHierarchy()
-		{
-			if( !_layoutEnabled )
+			if (!_layoutEnabled)
 				return;
 
-			invalidate();
+			Invalidate();
 
-			if( parent is ILayout )
-				( (ILayout)parent ).invalidateHierarchy();
+			if (parent is ILayout)
+				((ILayout)parent).InvalidateHierarchy();
 		}
 
-
-		public void validate()
+		public void Validate()
 		{
-			if( !_layoutEnabled )
+			if (!_layoutEnabled)
 				return;
 
-			if( fillParent && parent != null )
+			if (FillParent && parent != null)
 			{
-				var stage = getStage();
+				var stage = GetStage();
 				float parentWidth, parentHeight;
 
-				if( stage != null && parent == stage.getRoot() )
+				if (stage != null && parent == stage.GetRoot())
 				{
-					parentWidth = stage.getWidth();
-					parentHeight = stage.getHeight();
+					parentWidth = stage.GetWidth();
+					parentHeight = stage.GetHeight();
 				}
 				else
 				{
-					parentWidth = parent.getWidth();
-					parentHeight = parent.getHeight();
+					parentWidth = parent.GetWidth();
+					parentHeight = parent.GetHeight();
 				}
 
-				if( width != parentWidth || height != parentHeight )
+				if (width != parentWidth || height != parentHeight)
 				{
-					setSize( parentWidth, parentHeight );
-					invalidate();
+					SetSize(parentWidth, parentHeight);
+					Invalidate();
 				}
 			}
 
-			if( !_needsLayout )
+			if (!_needsLayout)
 				return;
 
 			_needsLayout = false;
-			layout();
+			Layout();
 		}
 
-
-		public virtual void pack()
+		public virtual void Pack()
 		{
-			setSize( preferredWidth, preferredHeight );
-			validate();
+			SetSize(PreferredWidth, PreferredHeight);
+			Validate();
 		}
 
 		#endregion
-
 	}
 }
-

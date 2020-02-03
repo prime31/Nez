@@ -8,64 +8,62 @@ namespace Nez
 	/// </summary>
 	public class ScreenSpaceRenderer : Renderer
 	{
-		public int[] renderLayers;
+		public int[] RenderLayers;
 
 
-		public ScreenSpaceRenderer( int renderOrder, params int[] renderLayers ) : base( renderOrder, null )
+		public ScreenSpaceRenderer(int renderOrder, params int[] renderLayers) : base(renderOrder, null)
 		{
-			Array.Sort( renderLayers );
-			Array.Reverse( renderLayers );
-			this.renderLayers = renderLayers;
-			wantsToRenderAfterPostProcessors = true;
+			Array.Sort(renderLayers);
+			Array.Reverse(renderLayers);
+			RenderLayers = renderLayers;
+			WantsToRenderAfterPostProcessors = true;
 		}
 
-		public override void render( Scene scene )
+		public override void Render(Scene scene)
 		{
-			beginRender( camera );
+			BeginRender(Camera);
 
-			for( var i = 0; i < renderLayers.Length; i++ )
+			for (var i = 0; i < RenderLayers.Length; i++)
 			{
-				var renderables = scene.renderableComponents.componentsWithRenderLayer( renderLayers[i] );
-				for( var j = 0; j < renderables.length; j++ )
+				var renderables = scene.RenderableComponents.ComponentsWithRenderLayer(RenderLayers[i]);
+				for (var j = 0; j < renderables.Length; j++)
 				{
-					var renderable = renderables.buffer[j];
-					if( renderable.enabled && renderable.isVisibleFromCamera( camera ) )
-						renderAfterStateCheck( renderable, camera );
+					var renderable = renderables.Buffer[j];
+					if (renderable.Enabled && renderable.IsVisibleFromCamera(Camera))
+						RenderAfterStateCheck(renderable, Camera);
 				}
 			}
 
-			if( shouldDebugRender && Core.debugRenderEnabled )
-				debugRender( scene, camera );
+			if (ShouldDebugRender && Core.DebugRenderEnabled)
+				DebugRender(scene, Camera);
 
-			endRender();
+			EndRender();
 		}
 
-		protected override void debugRender( Scene scene, Camera cam )
+		protected override void DebugRender(Scene scene, Camera cam)
 		{
-			Graphics.instance.batcher.end();
-			Graphics.instance.batcher.begin( cam.transformMatrix );
+			Graphics.Instance.Batcher.End();
+			Graphics.Instance.Batcher.Begin(cam.TransformMatrix);
 
-			for( var i = 0; i < renderLayers.Length; i++ )
+			for (var i = 0; i < RenderLayers.Length; i++)
 			{
-				var renderables = scene.renderableComponents.componentsWithRenderLayer( renderLayers[i] );
-				for( var j = 0; j < renderables.length; j++ )
+				var renderables = scene.RenderableComponents.ComponentsWithRenderLayer(RenderLayers[i]);
+				for (var j = 0; j < renderables.Length; j++)
 				{
-					var entity = renderables.buffer[j];
-					if( entity.enabled )
-						entity.debugRender( Graphics.instance );
+					var entity = renderables.Buffer[j];
+					if (entity.Enabled)
+						entity.DebugRender(Graphics.Instance.Batcher);
 				}
 			}
 		}
 
-		public override void onSceneBackBufferSizeChanged( int newWidth, int newHeight )
+		public override void OnSceneBackBufferSizeChanged(int newWidth, int newHeight)
 		{
-			base.onSceneBackBufferSizeChanged( newWidth, newHeight );
+			base.OnSceneBackBufferSizeChanged(newWidth, newHeight);
 
 			// this is a bit of a hack. we maybe should take the Camera in the constructor
-			if( camera == null )
-				camera = Core.scene.createEntity( "screenspace camera" ).addComponent<Camera>();
+			if (Camera == null)
+				Camera = Core.Scene.CreateEntity("screenspace camera").AddComponent<Camera>();
 		}
-
 	}
 }
-

@@ -1,24 +1,21 @@
-﻿
-
-namespace Nez
+﻿namespace Nez
 {
 	public class ScanlinesPostProcessor : PostProcessor<ScanlinesEffect>
 	{
-		public ScanlinesPostProcessor( int executionOrder ) : base( executionOrder )
-		{}
-		
-		public override void onAddedToScene(Scene scene)
+		public ScanlinesPostProcessor(int executionOrder) : base(executionOrder)
 		{
-			base.onAddedToScene( scene );
-			effect = _scene.content.loadNezEffect<ScanlinesEffect>();
 		}
 
-		public override void unload()
+		public override void OnAddedToScene(Scene scene)
 		{
-			_scene.content.unloadEffect( effect );
-			base.unload();
+			base.OnAddedToScene(scene);
+			Effect = _scene.Content.LoadNezEffect<ScanlinesEffect>();
 		}
 
+		public override void Unload()
+		{
+			_scene.Content.UnloadEffect(Effect);
+			base.Unload();
+		}
 	}
 }
-

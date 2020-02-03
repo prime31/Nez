@@ -9,15 +9,15 @@ namespace Nez
 	/// </summary>
 	public static class Utils
 	{
-		public static string randomString( int size = 38 )
+		public static string RandomString(int size = 38)
 		{
 			var builder = new StringBuilder();
 
 			char ch;
-			for( int i = 0; i < size; i++ )
+			for (int i = 0; i < size; i++)
 			{
-				ch = Convert.ToChar( Convert.ToInt32( Math.Floor( 26 * Random.nextFloat() + 65 ) ) );
-				builder.Append( ch );
+				ch = Convert.ToChar(Convert.ToInt32(Math.Floor(26 * Random.NextFloat() + 65)));
+				builder.Append(ch);
 			}
 
 			return builder.ToString();
@@ -30,13 +30,11 @@ namespace Nez
 		/// <param name="first">First.</param>
 		/// <param name="second">Second.</param>
 		/// <typeparam name="T">The 1st type parameter.</typeparam>
-		public static void swap<T>( ref T first, ref T second )
+		public static void Swap<T>(ref T first, ref T second)
 		{
 			T temp = first;
 			first = second;
 			second = temp;
 		}
-
 	}
 }
-

@@ -6,6 +6,7 @@ using Nez.ImGuiTools.ObjectInspectors;
 using Nez.ImGuiTools.SceneGraphPanes;
 using Num = System.Numerics;
 
+
 namespace Nez.ImGuiTools
 {
 	class SceneGraphWindow
@@ -14,34 +15,33 @@ namespace Nez.ImGuiTools
 		RenderersPane _renderersPane = new RenderersPane();
 		EntityPane _entityPane = new EntityPane();
 
-		public void onSceneChanged()
+		public void OnSceneChanged()
 		{
-			_postProcessorsPane.onSceneChanged();
-			_renderersPane.onSceneChanged();
+			_postProcessorsPane.OnSceneChanged();
+			_renderersPane.OnSceneChanged();
 		}
 
-		public void show( ref bool isOpen )
+		public void Show(ref bool isOpen)
 		{
-			if( Core.scene == null || !isOpen )
+			if (Core.Scene == null || !isOpen)
 				return;
 
-			ImGui.SetNextWindowPos( new Num.Vector2( 0, 25 ), ImGuiCond.FirstUseEver );
-			ImGui.SetNextWindowSize( new Num.Vector2( 300, Screen.height / 2 ), ImGuiCond.FirstUseEver );
+			ImGui.SetNextWindowPos(new Num.Vector2(0, 25), ImGuiCond.FirstUseEver);
+			ImGui.SetNextWindowSize(new Num.Vector2(300, Screen.Height / 2), ImGuiCond.FirstUseEver);
 
-			if( ImGui.Begin( "Scene Graph", ref isOpen ) )
+			if (ImGui.Begin("Scene Graph", ref isOpen))
 			{
-				if( ImGui.CollapsingHeader( "Post Processors" ) )
-					_postProcessorsPane.draw();
+				if (ImGui.CollapsingHeader("Post Processors"))
+					_postProcessorsPane.Draw();
 
-				if( ImGui.CollapsingHeader( "Renderers" ) )
-					_renderersPane.draw();
+				if (ImGui.CollapsingHeader("Renderers"))
+					_renderersPane.Draw();
 
-				if( ImGui.CollapsingHeader( "Entities (double-click label to inspect)", ImGuiTreeNodeFlags.DefaultOpen ) )
-					_entityPane.draw();
+				if (ImGui.CollapsingHeader("Entities (double-click label to inspect)", ImGuiTreeNodeFlags.DefaultOpen))
+					_entityPane.Draw();
 
 				ImGui.End();
 			}
 		}
-
 	}
 }

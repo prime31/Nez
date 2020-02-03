@@ -5,42 +5,42 @@ namespace Nez.Svg
 {
 	public class SvgRotate : SvgTransform
 	{
-		public float angle;
-		public float centerX;
-		public float centerY;
+		public float Angle;
+		public float CenterX;
+		public float CenterY;
 
 
-		public SvgRotate( float angle )
+		public SvgRotate(float angle)
 		{
-			this.angle = angle;
+			Angle = angle;
 
-			calculateMatrix();
+			CalculateMatrix();
 		}
 
 
-		public SvgRotate( float angle, float centerX, float centerY )
+		public SvgRotate(float angle, float centerX, float centerY)
 		{
-			this.angle = angle;
-			this.centerX = centerX;
-			this.centerY = centerY;
+			Angle = angle;
+			CenterX = centerX;
+			CenterY = centerY;
 
-			calculateMatrix();
+			CalculateMatrix();
 		}
 
 
-		void calculateMatrix()
+		void CalculateMatrix()
 		{
-			var mat = Matrix2D.createTranslation( -centerX, -centerY );
-			mat.multiplyRotation( angle * Mathf.deg2Rad );
-			mat.multiplyTranslation( centerX, centerY );
+			var mat = Matrix2D.CreateTranslation(-CenterX, -CenterY);
+			mat.MultiplyRotation(Angle * Mathf.Deg2Rad);
+			mat.MultiplyTranslation(CenterX, CenterY);
 
-			matrix = mat;
+			Matrix = mat;
 		}
 
 
 		public override string ToString()
 		{
-			return string.Format( CultureInfo.InvariantCulture, "rotate({0}, {1}, {2})", angle, centerX, centerY );
+			return string.Format(CultureInfo.InvariantCulture, "rotate({0}, {1}, {2})", Angle, CenterX, CenterY);
 		}
 	}
 }

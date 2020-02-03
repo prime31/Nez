@@ -16,18 +16,18 @@
 	/// </summary>
 	public struct SubpixelFloat
 	{
-		public float remainder;
+		public float Remainder;
 
 
 		/// <summary>
 		/// increments remainder by amount, truncates the value to an int, stores off the new remainder and sets amount to the current value.
 		/// </summary>
 		/// <param name="amount">Amount.</param>
-		public void update( ref float amount )
+		public void Update(ref float amount)
 		{
-			remainder += amount;
-			var motion = Mathf.truncateToInt( remainder );
-			remainder -= motion;
+			Remainder += amount;
+			var motion = Mathf.TruncateToInt(Remainder);
+			Remainder -= motion;
 			amount = motion;
 		}
 
@@ -36,10 +36,9 @@
 		/// resets the remainder to 0. Useful when an object collides with an immovable object. In that case you will want to zero out the
 		/// subpixel remainder since it is null and void due to the collision.
 		/// </summary>
-		public void reset()
+		public void Reset()
 		{
-			remainder = 0;
+			Remainder = 0;
 		}
-
 	}
 }

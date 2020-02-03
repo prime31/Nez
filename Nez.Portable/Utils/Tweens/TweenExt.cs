@@ -15,11 +15,11 @@ namespace Nez
 		/// <param name="self">Self.</param>
 		/// <param name="to">To.</param>
 		/// <param name="duration">Duration.</param>
-		public static ITween<Vector2> tweenPositionTo( this Transform self, Vector2 to, float duration = 0.3f )
+		public static ITween<Vector2> TweenPositionTo(this Transform self, Vector2 to, float duration = 0.3f)
 		{
-			var tween = Pool<TransformVector2Tween>.obtain();
-			tween.setTargetAndType( self, TransformTargetType.Position );
-			tween.initialize( tween, to, duration );
+			var tween = Pool<TransformVector2Tween>.Obtain();
+			tween.SetTargetAndType(self, TransformTargetType.Position);
+			tween.Initialize(tween, to, duration);
 
 			return tween;
 		}
@@ -32,11 +32,11 @@ namespace Nez
 		/// <param name="self">Self.</param>
 		/// <param name="to">To.</param>
 		/// <param name="duration">Duration.</param>
-		public static ITween<Vector2> tweenLocalPositionTo( this Transform self, Vector2 to, float duration = 0.3f )
+		public static ITween<Vector2> TweenLocalPositionTo(this Transform self, Vector2 to, float duration = 0.3f)
 		{
-			var tween = Pool<TransformVector2Tween>.obtain();
-			tween.setTargetAndType( self, TransformTargetType.LocalPosition );
-			tween.initialize( tween, to, duration );
+			var tween = Pool<TransformVector2Tween>.Obtain();
+			tween.SetTargetAndType(self, TransformTargetType.LocalPosition);
+			tween.Initialize(tween, to, duration);
 
 			return tween;
 		}
@@ -49,9 +49,9 @@ namespace Nez
 		/// <param name="self">Self.</param>
 		/// <param name="to">To.</param>
 		/// <param name="duration">Duration.</param>
-		public static ITween<Vector2> tweenScaleTo( this Transform self, float to, float duration = 0.3f )
+		public static ITween<Vector2> TweenScaleTo(this Transform self, float to, float duration = 0.3f)
 		{
-			return self.tweenScaleTo( new Vector2( to ), duration );
+			return self.TweenScaleTo(new Vector2(to), duration);
 		}
 
 
@@ -62,11 +62,11 @@ namespace Nez
 		/// <param name="self">Self.</param>
 		/// <param name="to">To.</param>
 		/// <param name="duration">Duration.</param>
-		public static ITween<Vector2> tweenScaleTo( this Transform self, Vector2 to, float duration = 0.3f )
+		public static ITween<Vector2> TweenScaleTo(this Transform self, Vector2 to, float duration = 0.3f)
 		{
-			var tween = Pool<TransformVector2Tween>.obtain();
-			tween.setTargetAndType( self, TransformTargetType.Scale );
-			tween.initialize( tween, to, duration );
+			var tween = Pool<TransformVector2Tween>.Obtain();
+			tween.SetTargetAndType(self, TransformTargetType.Scale);
+			tween.Initialize(tween, to, duration);
 
 			return tween;
 		}
@@ -79,9 +79,9 @@ namespace Nez
 		/// <param name="self">Self.</param>
 		/// <param name="to">To.</param>
 		/// <param name="duration">Duration.</param>
-		public static ITween<Vector2> tweenLocalScaleTo( this Transform self, float to, float duration = 0.3f )
+		public static ITween<Vector2> TweenLocalScaleTo(this Transform self, float to, float duration = 0.3f)
 		{
-			return self.tweenLocalScaleTo( new Vector2( to ), duration );
+			return self.TweenLocalScaleTo(new Vector2(to), duration);
 		}
 
 
@@ -92,11 +92,11 @@ namespace Nez
 		/// <param name="self">Self.</param>
 		/// <param name="to">To.</param>
 		/// <param name="duration">Duration.</param>
-		public static ITween<Vector2> tweenLocalScaleTo( this Transform self, Vector2 to, float duration = 0.3f )
+		public static ITween<Vector2> TweenLocalScaleTo(this Transform self, Vector2 to, float duration = 0.3f)
 		{
-			var tween = Pool<TransformVector2Tween>.obtain();
-			tween.setTargetAndType( self, TransformTargetType.LocalScale );
-			tween.initialize( tween, to, duration );
+			var tween = Pool<TransformVector2Tween>.Obtain();
+			tween.SetTargetAndType(self, TransformTargetType.LocalScale);
+			tween.Initialize(tween, to, duration);
 
 			return tween;
 		}
@@ -109,11 +109,11 @@ namespace Nez
 		/// <param name="self">Self.</param>
 		/// <param name="to">To.</param>
 		/// <param name="duration">Duration.</param>
-		public static ITween<Vector2> tweenRotationDegreesTo( this Transform self, float to, float duration = 0.3f )
+		public static ITween<Vector2> TweenRotationDegreesTo(this Transform self, float to, float duration = 0.3f)
 		{
-			var tween = Pool<TransformVector2Tween>.obtain();
-			tween.setTargetAndType( self, TransformTargetType.RotationDegrees );
-			tween.initialize( tween, new Vector2( to ), duration );
+			var tween = Pool<TransformVector2Tween>.Obtain();
+			tween.SetTargetAndType(self, TransformTargetType.RotationDegrees);
+			tween.Initialize(tween, new Vector2(to), duration);
 
 			return tween;
 		}
@@ -126,11 +126,11 @@ namespace Nez
 		/// <param name="self">Self.</param>
 		/// <param name="to">To.</param>
 		/// <param name="duration">Duration.</param>
-		public static ITween<Vector2> tweenLocalRotationDegreesTo( this Transform self, float to, float duration = 0.3f )
+		public static ITween<Vector2> TweenLocalRotationDegreesTo(this Transform self, float to, float duration = 0.3f)
 		{
-			var tween = Pool<TransformVector2Tween>.obtain();
-			tween.setTargetAndType( self, TransformTargetType.LocalRotationDegrees );
-			tween.initialize( tween, new Vector2( to ), duration );
+			var tween = Pool<TransformVector2Tween>.Obtain();
+			tween.SetTargetAndType(self, TransformTargetType.LocalRotationDegrees);
+			tween.Initialize(tween, new Vector2(to), duration);
 
 			return tween;
 		}
@@ -147,11 +147,11 @@ namespace Nez
 		/// <param name="self">Self.</param>
 		/// <param name="to">To.</param>
 		/// <param name="duration">Duration.</param>
-		public static ITween<Vector2> tweenPositionTo( this Entity self, Vector2 to, float duration = 0.3f )
+		public static ITween<Vector2> TweenPositionTo(this Entity self, Vector2 to, float duration = 0.3f)
 		{
-			var tween = Pool<TransformVector2Tween>.obtain();
-			tween.setTargetAndType( self.transform, TransformTargetType.Position );
-			tween.initialize( tween, to, duration );
+			var tween = Pool<TransformVector2Tween>.Obtain();
+			tween.SetTargetAndType(self.Transform, TransformTargetType.Position);
+			tween.Initialize(tween, to, duration);
 
 			return tween;
 		}
@@ -164,11 +164,11 @@ namespace Nez
 		/// <param name="self">Self.</param>
 		/// <param name="to">To.</param>
 		/// <param name="duration">Duration.</param>
-		public static ITween<Vector2> tweenLocalPositionTo( this Entity self, Vector2 to, float duration = 0.3f )
+		public static ITween<Vector2> TweenLocalPositionTo(this Entity self, Vector2 to, float duration = 0.3f)
 		{
-			var tween = Pool<TransformVector2Tween>.obtain();
-			tween.setTargetAndType( self.transform, TransformTargetType.LocalPosition );
-			tween.initialize( tween, to, duration );
+			var tween = Pool<TransformVector2Tween>.Obtain();
+			tween.SetTargetAndType(self.Transform, TransformTargetType.LocalPosition);
+			tween.Initialize(tween, to, duration);
 
 			return tween;
 		}
@@ -181,9 +181,9 @@ namespace Nez
 		/// <param name="self">Self.</param>
 		/// <param name="to">To.</param>
 		/// <param name="duration">Duration.</param>
-		public static ITween<Vector2> tweenScaleTo( this Entity self, float to, float duration = 0.3f )
+		public static ITween<Vector2> TweenScaleTo(this Entity self, float to, float duration = 0.3f)
 		{
-			return self.tweenScaleTo( new Vector2( to ), duration );
+			return self.TweenScaleTo(new Vector2(to), duration);
 		}
 
 
@@ -194,11 +194,11 @@ namespace Nez
 		/// <param name="self">Self.</param>
 		/// <param name="to">To.</param>
 		/// <param name="duration">Duration.</param>
-		public static ITween<Vector2> tweenScaleTo( this Entity self, Vector2 to, float duration = 0.3f )
+		public static ITween<Vector2> TweenScaleTo(this Entity self, Vector2 to, float duration = 0.3f)
 		{
-			var tween = Pool<TransformVector2Tween>.obtain();
-			tween.setTargetAndType( self.transform, TransformTargetType.Scale );
-			tween.initialize( tween, to, duration );
+			var tween = Pool<TransformVector2Tween>.Obtain();
+			tween.SetTargetAndType(self.Transform, TransformTargetType.Scale);
+			tween.Initialize(tween, to, duration);
 
 			return tween;
 		}
@@ -211,9 +211,9 @@ namespace Nez
 		/// <param name="self">Self.</param>
 		/// <param name="to">To.</param>
 		/// <param name="duration">Duration.</param>
-		public static ITween<Vector2> tweenLocalScaleTo( this Entity self, float to, float duration = 0.3f )
+		public static ITween<Vector2> TweenLocalScaleTo(this Entity self, float to, float duration = 0.3f)
 		{
-			return self.tweenLocalScaleTo( new Vector2( to ), duration );
+			return self.TweenLocalScaleTo(new Vector2(to), duration);
 		}
 
 
@@ -224,11 +224,11 @@ namespace Nez
 		/// <param name="self">Self.</param>
 		/// <param name="to">To.</param>
 		/// <param name="duration">Duration.</param>
-		public static ITween<Vector2> tweenLocalScaleTo( this Entity self, Vector2 to, float duration = 0.3f )
+		public static ITween<Vector2> TweenLocalScaleTo(this Entity self, Vector2 to, float duration = 0.3f)
 		{
-			var tween = Pool<TransformVector2Tween>.obtain();
-			tween.setTargetAndType( self.transform, TransformTargetType.LocalScale );
-			tween.initialize( tween, to, duration );
+			var tween = Pool<TransformVector2Tween>.Obtain();
+			tween.SetTargetAndType(self.Transform, TransformTargetType.LocalScale);
+			tween.Initialize(tween, to, duration);
 
 			return tween;
 		}
@@ -241,11 +241,11 @@ namespace Nez
 		/// <param name="self">Self.</param>
 		/// <param name="to">To.</param>
 		/// <param name="duration">Duration.</param>
-		public static ITween<Vector2> tweenRotationDegreesTo( this Entity self, float to, float duration = 0.3f )
+		public static ITween<Vector2> TweenRotationDegreesTo(this Entity self, float to, float duration = 0.3f)
 		{
-			var tween = Pool<TransformVector2Tween>.obtain();
-			tween.setTargetAndType( self.transform, TransformTargetType.RotationDegrees );
-			tween.initialize( tween, new Vector2( to ), duration );
+			var tween = Pool<TransformVector2Tween>.Obtain();
+			tween.SetTargetAndType(self.Transform, TransformTargetType.RotationDegrees);
+			tween.Initialize(tween, new Vector2(to), duration);
 
 			return tween;
 		}
@@ -258,17 +258,16 @@ namespace Nez
 		/// <param name="self">Self.</param>
 		/// <param name="to">To.</param>
 		/// <param name="duration">Duration.</param>
-		public static ITween<Vector2> tweenLocalRotationDegreesTo( this Entity self, float to, float duration = 0.3f )
+		public static ITween<Vector2> TweenLocalRotationDegreesTo(this Entity self, float to, float duration = 0.3f)
 		{
-			var tween = Pool<TransformVector2Tween>.obtain();
-			tween.setTargetAndType( self.transform, TransformTargetType.LocalRotationDegrees );
-			tween.initialize( tween, new Vector2( to ), duration );
+			var tween = Pool<TransformVector2Tween>.Obtain();
+			tween.SetTargetAndType(self.Transform, TransformTargetType.LocalRotationDegrees);
+			tween.Initialize(tween, new Vector2(to), duration);
 
 			return tween;
 		}
 
 		#endregion
-
 
 
 		#region RenderableComponent tweens
@@ -280,16 +279,14 @@ namespace Nez
 		/// <param name="self">Self.</param>
 		/// <param name="to">To.</param>
 		/// <param name="duration">Duration.</param>
-		public static ITween<Color> tweenColorTo( this RenderableComponent self, Color to, float duration = 0.3f )
+		public static ITween<Color> TweenColorTo(this RenderableComponent self, Color to, float duration = 0.3f)
 		{
-			var tween = Pool<RenderableColorTween>.obtain();
-			tween.setTarget( self );
-			tween.initialize( tween, to, duration );
+			var tween = Pool<RenderableColorTween>.Obtain();
+			tween.SetTarget(self);
+			tween.Initialize(tween, to, duration);
 			return tween;
 		}
 
 		#endregion
-
 	}
 }
-

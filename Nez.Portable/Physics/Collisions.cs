@@ -23,30 +23,30 @@ namespace Nez
 
 		#region Line
 
-		static public bool lineToLine( Vector2 a1, Vector2 a2, Vector2 b1, Vector2 b2 )
+		public static bool LineToLine(Vector2 a1, Vector2 a2, Vector2 b1, Vector2 b2)
 		{
 			Vector2 b = a2 - a1;
 			Vector2 d = b2 - b1;
 			float bDotDPerp = b.X * d.Y - b.Y * d.X;
 
 			// if b dot d == 0, it means the lines are parallel so have infinite intersection points
-			if( bDotDPerp == 0 )
+			if (bDotDPerp == 0)
 				return false;
 
 			Vector2 c = b1 - a1;
-			float t = ( c.X * d.Y - c.Y * d.X ) / bDotDPerp;
-			if( t < 0 || t > 1 )
+			float t = (c.X * d.Y - c.Y * d.X) / bDotDPerp;
+			if (t < 0 || t > 1)
 				return false;
 
-			float u = ( c.X * b.Y - c.Y * b.X ) / bDotDPerp;
-			if( u < 0 || u > 1 )
+			float u = (c.X * b.Y - c.Y * b.X) / bDotDPerp;
+			if (u < 0 || u > 1)
 				return false;
 
 			return true;
 		}
 
 
-		static public bool lineToLine( Vector2 a1, Vector2 a2, Vector2 b1, Vector2 b2, out Vector2 intersection )
+		public static bool LineToLine(Vector2 a1, Vector2 a2, Vector2 b1, Vector2 b2, out Vector2 intersection)
 		{
 			intersection = Vector2.Zero;
 
@@ -55,16 +55,16 @@ namespace Nez
 			var bDotDPerp = b.X * d.Y - b.Y * d.X;
 
 			// if b dot d == 0, it means the lines are parallel so have infinite intersection points
-			if( bDotDPerp == 0 )
+			if (bDotDPerp == 0)
 				return false;
 
 			var c = b1 - a1;
-			var t = ( c.X * d.Y - c.Y * d.X ) / bDotDPerp;
-			if( t < 0 || t > 1 )
+			var t = (c.X * d.Y - c.Y * d.X) / bDotDPerp;
+			if (t < 0 || t > 1)
 				return false;
 
-			var u = ( c.X * b.Y - c.Y * b.X ) / bDotDPerp;
-			if( u < 0 || u > 1 )
+			var u = (c.X * b.Y - c.Y * b.X) / bDotDPerp;
+			if (u < 0 || u > 1)
 				return false;
 
 			intersection = a1 + t * b;
@@ -73,12 +73,12 @@ namespace Nez
 		}
 
 
-		static public Vector2 closestPointOnLine( Vector2 lineA, Vector2 lineB, Vector2 closestTo )
+		public static Vector2 ClosestPointOnLine(Vector2 lineA, Vector2 lineB, Vector2 closestTo)
 		{
 			var v = lineB - lineA;
 			var w = closestTo - lineA;
-			var t = Vector2.Dot( w, v ) / Vector2.Dot( v, v );
-			t = MathHelper.Clamp( t, 0, 1 );
+			var t = Vector2.Dot(w, v) / Vector2.Dot(v, v);
+			t = MathHelper.Clamp(t, 0, 1);
 
 			return lineA + v * t;
 		}
@@ -88,21 +88,24 @@ namespace Nez
 
 		#region Circle
 
-		static public bool circleToCircle( Vector2 circleCenter1, float circleRadius1, Vector2 circleCenter2, float circleRadius2 )
+		public static bool CircleToCircle(Vector2 circleCenter1, float circleRadius1, Vector2 circleCenter2,
+		                                  float circleRadius2)
 		{
-			return Vector2.DistanceSquared( circleCenter1, circleCenter2 ) < ( circleRadius1 + circleRadius2 ) * ( circleRadius1 + circleRadius2 );
+			return Vector2.DistanceSquared(circleCenter1, circleCenter2) <
+			       (circleRadius1 + circleRadius2) * (circleRadius1 + circleRadius2);
 		}
 
 
-		static public bool circleToLine( Vector2 circleCenter, float radius, Vector2 lineFrom, Vector2 lineTo )
+		public static bool CircleToLine(Vector2 circleCenter, float radius, Vector2 lineFrom, Vector2 lineTo)
 		{
-			return Vector2.DistanceSquared( circleCenter, closestPointOnLine( lineFrom, lineTo, circleCenter ) ) < radius * radius;
+			return Vector2.DistanceSquared(circleCenter, ClosestPointOnLine(lineFrom, lineTo, circleCenter)) <
+			       radius * radius;
 		}
 
 
-		static public bool circleToPoint( Vector2 circleCenter, float radius, Vector2 point )
+		public static bool CircleToPoint(Vector2 circleCenter, float radius, Vector2 point)
 		{
-			return Vector2.DistanceSquared( circleCenter, point ) < radius * radius;
+			return Vector2.DistanceSquared(circleCenter, point) < radius * radius;
 		}
 
 		#endregion
@@ -110,58 +113,59 @@ namespace Nez
 
 		#region Bounds/Rect
 
-		static public bool rectToCircle( RectangleF rect, Vector2 cPosition, float cRadius )
+		public static bool RectToCircle(RectangleF rect, Vector2 cPosition, float cRadius)
 		{
-			return rectToCircle( rect.x, rect.y, rect.width, rect.height, cPosition, cRadius );
+			return RectToCircle(rect.X, rect.Y, rect.Width, rect.Height, cPosition, cRadius);
 		}
 
 
-		static public bool rectToCircle( ref RectangleF rect, Vector2 cPosition, float cRadius )
+		public static bool RectToCircle(ref RectangleF rect, Vector2 cPosition, float cRadius)
 		{
-			return rectToCircle( rect.x, rect.y, rect.width, rect.height, cPosition, cRadius );
+			return RectToCircle(rect.X, rect.Y, rect.Width, rect.Height, cPosition, cRadius);
 		}
 
 
-		static public bool rectToCircle( float rectX, float rectY, float rectWidth, float rectHeight, Vector2 circleCenter, float radius )
+		public static bool RectToCircle(float rectX, float rectY, float rectWidth, float rectHeight,
+		                                Vector2 circleCenter, float radius)
 		{
-		    //Check if the rectangle contains the circle's center-point
-		    if (Collisions.rectToPoint(rectX, rectY, rectWidth, rectHeight, circleCenter))
-		        return true;
+			//Check if the rectangle contains the circle's center-point
+			if (RectToPoint(rectX, rectY, rectWidth, rectHeight, circleCenter))
+				return true;
 
 			// Check the circle against the relevant edges
 			Vector2 edgeFrom;
 			Vector2 edgeTo;
-			var sector = getSector( rectX, rectY, rectWidth, rectHeight, circleCenter );
+			var sector = GetSector(rectX, rectY, rectWidth, rectHeight, circleCenter);
 
-			if( ( sector & PointSectors.Top ) != 0 )
+			if ((sector & PointSectors.Top) != 0)
 			{
-				edgeFrom = new Vector2( rectX, rectY );
-				edgeTo = new Vector2( rectX + rectWidth, rectY );
-				if( circleToLine( circleCenter, radius, edgeFrom, edgeTo ) )
+				edgeFrom = new Vector2(rectX, rectY);
+				edgeTo = new Vector2(rectX + rectWidth, rectY);
+				if (CircleToLine(circleCenter, radius, edgeFrom, edgeTo))
 					return true;
 			}
 
-			if( ( sector & PointSectors.Bottom ) != 0 )
+			if ((sector & PointSectors.Bottom) != 0)
 			{
-				edgeFrom = new Vector2( rectX, rectY + rectHeight );
-				edgeTo = new Vector2( rectX + rectWidth, rectY + rectHeight );
-				if( circleToLine( circleCenter, radius, edgeFrom, edgeTo ) )
+				edgeFrom = new Vector2(rectX, rectY + rectHeight);
+				edgeTo = new Vector2(rectX + rectWidth, rectY + rectHeight);
+				if (CircleToLine(circleCenter, radius, edgeFrom, edgeTo))
 					return true;
 			}
 
-			if( ( sector & PointSectors.Left ) != 0 )
+			if ((sector & PointSectors.Left) != 0)
 			{
-				edgeFrom = new Vector2( rectX, rectY );
-				edgeTo = new Vector2( rectX, rectY + rectHeight );
-				if( circleToLine( circleCenter, radius, edgeFrom, edgeTo ) )
+				edgeFrom = new Vector2(rectX, rectY);
+				edgeTo = new Vector2(rectX, rectY + rectHeight);
+				if (CircleToLine(circleCenter, radius, edgeFrom, edgeTo))
 					return true;
 			}
 
-			if( ( sector & PointSectors.Right ) != 0 )
+			if ((sector & PointSectors.Right) != 0)
 			{
-				edgeFrom = new Vector2( rectX + rectWidth, rectY );
-				edgeTo = new Vector2( rectX + rectWidth, rectY + rectHeight );
-				if( circleToLine( circleCenter, radius, edgeFrom, edgeTo ) )
+				edgeFrom = new Vector2(rectX + rectWidth, rectY);
+				edgeTo = new Vector2(rectX + rectWidth, rectY + rectHeight);
+				if (CircleToLine(circleCenter, radius, edgeFrom, edgeTo))
 					return true;
 			}
 
@@ -169,26 +173,27 @@ namespace Nez
 		}
 
 
-		static public bool rectToLine( ref RectangleF rect, Vector2 lineFrom, Vector2 lineTo )
+		public static bool RectToLine(ref RectangleF rect, Vector2 lineFrom, Vector2 lineTo)
 		{
-			return rectToLine( rect.x, rect.y, rect.width, rect.height, lineFrom, lineTo );
+			return RectToLine(rect.X, rect.Y, rect.Width, rect.Height, lineFrom, lineTo);
 		}
 
 
-		static public bool rectToLine( RectangleF rect, Vector2 lineFrom, Vector2 lineTo )
+		public static bool RectToLine(RectangleF rect, Vector2 lineFrom, Vector2 lineTo)
 		{
-			return rectToLine( rect.x, rect.y, rect.width, rect.height, lineFrom, lineTo );
+			return RectToLine(rect.X, rect.Y, rect.Width, rect.Height, lineFrom, lineTo);
 		}
 
 
-		static public bool rectToLine( float rectX, float rectY, float rectWidth, float rectHeight, Vector2 lineFrom, Vector2 lineTo )
+		public static bool RectToLine(float rectX, float rectY, float rectWidth, float rectHeight, Vector2 lineFrom,
+		                              Vector2 lineTo)
 		{
-			var fromSector = Collisions.getSector( rectX, rectY, rectWidth, rectHeight, lineFrom );
-			var toSector = Collisions.getSector( rectX, rectY, rectWidth, rectHeight, lineTo );
+			var fromSector = GetSector(rectX, rectY, rectWidth, rectHeight, lineFrom);
+			var toSector = GetSector(rectX, rectY, rectWidth, rectHeight, lineTo);
 
-			if( fromSector == PointSectors.Center || toSector == PointSectors.Center )
+			if (fromSector == PointSectors.Center || toSector == PointSectors.Center)
 				return true;
-			else if( ( fromSector & toSector ) != 0 )
+			else if ((fromSector & toSector) != 0)
 				return false;
 			else
 			{
@@ -198,35 +203,35 @@ namespace Nez
 				Vector2 edgeFrom;
 				Vector2 edgeTo;
 
-				if( ( both & PointSectors.Top ) != 0 )
+				if ((both & PointSectors.Top) != 0)
 				{
-					edgeFrom = new Vector2( rectX, rectY );
-					edgeTo = new Vector2( rectX + rectWidth, rectY );
-					if( Collisions.lineToLine( edgeFrom, edgeTo, lineFrom, lineTo ) )
+					edgeFrom = new Vector2(rectX, rectY);
+					edgeTo = new Vector2(rectX + rectWidth, rectY);
+					if (LineToLine(edgeFrom, edgeTo, lineFrom, lineTo))
 						return true;
 				}
 
-				if( ( both & PointSectors.Bottom ) != 0 )
+				if ((both & PointSectors.Bottom) != 0)
 				{
-					edgeFrom = new Vector2( rectX, rectY + rectHeight );
-					edgeTo = new Vector2( rectX + rectWidth, rectY + rectHeight );
-					if( Collisions.lineToLine( edgeFrom, edgeTo, lineFrom, lineTo ) )
+					edgeFrom = new Vector2(rectX, rectY + rectHeight);
+					edgeTo = new Vector2(rectX + rectWidth, rectY + rectHeight);
+					if (LineToLine(edgeFrom, edgeTo, lineFrom, lineTo))
 						return true;
 				}
 
-				if( ( both & PointSectors.Left ) != 0 )
+				if ((both & PointSectors.Left) != 0)
 				{
-					edgeFrom = new Vector2( rectX, rectY );
-					edgeTo = new Vector2( rectX, rectY + rectHeight );
-					if( Collisions.lineToLine( edgeFrom, edgeTo, lineFrom, lineTo ) )
+					edgeFrom = new Vector2(rectX, rectY);
+					edgeTo = new Vector2(rectX, rectY + rectHeight);
+					if (LineToLine(edgeFrom, edgeTo, lineFrom, lineTo))
 						return true;
 				}
 
-				if( ( both & PointSectors.Right ) != 0 )
+				if ((both & PointSectors.Right) != 0)
 				{
-					edgeFrom = new Vector2( rectX + rectWidth, rectY );
-					edgeTo = new Vector2( rectX + rectWidth, rectY + rectHeight );
-					if( Collisions.lineToLine( edgeFrom, edgeTo, lineFrom, lineTo ) )
+					edgeFrom = new Vector2(rectX + rectWidth, rectY);
+					edgeTo = new Vector2(rectX + rectWidth, rectY + rectHeight);
+					if (LineToLine(edgeFrom, edgeTo, lineFrom, lineTo))
 						return true;
 				}
 			}
@@ -235,15 +240,15 @@ namespace Nez
 		}
 
 
-		static public bool rectToPoint( float rX, float rY, float rW, float rH, Vector2 point )
+		public static bool RectToPoint(float rX, float rY, float rW, float rH, Vector2 point)
 		{
 			return point.X >= rX && point.Y >= rY && point.X < rX + rW && point.Y < rY + rH;
 		}
 
 
-		static public bool rectToPoint( RectangleF rect, Vector2 point )
+		public static bool RectToPoint(RectangleF rect, Vector2 point)
 		{
-			return rectToPoint( rect.x, rect.y, rect.width, rect.height, point );
+			return RectToPoint(rect.X, rect.Y, rect.Width, rect.Height, point);
 		}
 
 		#endregion
@@ -261,43 +266,41 @@ namespace Nez
          *      0101  0100  0110
          */
 
-		static public PointSectors getSector( RectangleF rect, Vector2 point )
+		public static PointSectors GetSector(RectangleF rect, Vector2 point)
 		{
 			PointSectors sector = PointSectors.Center;
 
-			if( point.X < rect.left )
+			if (point.X < rect.Left)
 				sector |= PointSectors.Left;
-			else if( point.X >= rect.right )
+			else if (point.X >= rect.Right)
 				sector |= PointSectors.Right;
 
-			if( point.Y < rect.top )
+			if (point.Y < rect.Top)
 				sector |= PointSectors.Top;
-			else if( point.Y >= rect.bottom )
+			else if (point.Y >= rect.Bottom)
 				sector |= PointSectors.Bottom;
 
 			return sector;
 		}
 
 
-		static public PointSectors getSector( float rX, float rY, float rW, float rH, Vector2 point )
+		public static PointSectors GetSector(float rX, float rY, float rW, float rH, Vector2 point)
 		{
 			PointSectors sector = PointSectors.Center;
 
-			if( point.X < rX )
+			if (point.X < rX)
 				sector |= PointSectors.Left;
-			else if( point.X >= rX + rW )
+			else if (point.X >= rX + rW)
 				sector |= PointSectors.Right;
 
-			if( point.Y < rY )
+			if (point.Y < rY)
 				sector |= PointSectors.Top;
-			else if( point.Y >= rY + rH )
+			else if (point.Y >= rY + rH)
 				sector |= PointSectors.Bottom;
 
 			return sector;
 		}
 
 		#endregion
-	
 	}
 }
-

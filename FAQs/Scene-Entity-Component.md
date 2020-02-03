@@ -6,13 +6,13 @@ Most of Nez revolves around an Entity-Component system (ECS). The Nez ECS is not
 
 
 ## Scene
-The root of the ECS. Scenes can be thought of as the different parts of your game such as the menu, levels, credits, etc. Scenes manage a list of Entities, Renderers and PostProcessors (via add/remove methods) and call their methods at the appropriate times. You can also use the Scene to locate Entities via the **findEntity** and **findEntitiesByTag** methods. Scenes are also created with a Camera that you can choose to use or not.
+The root of the ECS. Scenes can be thought of as the different parts of your game such as the menu, levels, credits, etc. Scenes manage a list of Entities, Renderers and PostProcessors (via add/remove methods) and call their methods at the appropriate times. You can also use the Scene to locate Entities via the **FindEntity** and **FindEntitiesByTag** methods. Scenes are also created with a Camera that you can choose to use or not.
 
 Scene's provide a NezContentManager (Scene.contentManager) that you can use to load up scene-specific content. When the scene is finished the content will be unloaded automatically for you. If you need to load global content (anything that would be used by several scenes) you can use the Core.contentManager which is not ever explicitly unloaded.
 
 A Scene can contain a special kind of Component called a `SceneComponent`. SceneComponents are managed via the add/get/getOrCreate/removeSceneComponent methods. A SceneComponent can be thought of as a simplified Component. It contains a small amount of lifecycle methods that are overrideable (onEnabled/onDisabled/update/onRemovedFromScene). These can be used when you need an object that lives at the Scene level but does not require an Entity container. One example included with Nez is the Farseer world object which manages the physics simulation.
 
-Nez provides several different ways to get your final scene rendered flexibly and efficiently. It uses a concept called `SceneResolutionPolicy` to manage how things are rendered. The `SceneResolutionPolicy` along with the design time width/height that you set decides what size the RenderTarget2D should be and how it changes when the window size changes. Several SceneResolutionPolicys also include pixel perfect variants for use with pixal art games. Pixel perfect variants may end up with letter/pillar boxing which you can control via the **Scene.letterboxColor**. You can set the default `SceneResolutionPolicy` used for all scenes by calling **Scene.setDefaultDesignResolution**. The included SceneResolutionPolicys are below:
+Nez provides several different ways to get your final scene rendered flexibly and efficiently. It uses a concept called `SceneResolutionPolicy` to manage how things are rendered. The `SceneResolutionPolicy` along with the design time width/height that you set decides what size the RenderTarget2D should be and how it changes when the window size changes. Several SceneResolutionPolicys also include pixel perfect variants for use with pixal art games. Pixel perfect variants may end up with letter/pillar boxing which you can control via the **Scene.LetterboxColor**. You can set the default `SceneResolutionPolicy` used for all scenes by calling **Scene.SetDefaultDesignResolution**. The included SceneResolutionPolicys are below:
 
 - **None**: Default. RenderTarget2D matches the sceen size
 - **ExactFit**: The entire application is visible in the specified area without trying to preserve the original aspect ratio. Distortion can occur, and the application may appear stretched or compressed.
@@ -29,21 +29,21 @@ Nez provides several different ways to get your final scene rendered flexibly an
 
 
 ## Entity
-Entities are added/removed to/from the Scene and managed by it. You can either subclass Entity or just create an Entity instance and add any required Components to it (via **addComponent** and later retrieved via **getComponent**). On their most basic level Entities can be thought of as a container for Components. Entities have a series of methods that are called by the Scene at various times throughout their lifetime.
+Entities are added/removed to/from the Scene and managed by it. You can either subclass Entity or just create an Entity instance and add any required Components to it (via **AddComponent** and later retrieved via **GetComponent**). On their most basic level Entities can be thought of as a container for Components. Entities have a series of methods that are called by the Scene at various times throughout their lifetime.
 
 Entity Lifecycle methods:
 
-- **onAddedToScene**: called when the entity is added to a scene after all pending entity changes are committed
-- **onRemovedFromScene**: called when the entity is removed from a scene
-- **update**: called each frame as long as the Entity is enabled
-- **debugRender**: called if Core.debugRenderEnabled is true by the default renderers. Custom renderers can choose to call it or not. The default implementation calls debugRender on all Components and the attached Colliders if there are any
+- **OnAddedToScene**: called when the entity is added to a scene after all pending entity changes are committed
+- **OnRemovedFromScene**: called when the entity is removed from a scene
+- **Update**: called each frame as long as the Entity is enabled
+- **DebugRender**: called if Core.debugRenderEnabled is true by the default renderers. Custom renderers can choose to call it or not. The default implementation calls debugRender on all Components and the attached Colliders if there are any
 
 Some of the key/important properties on an Entity are the following:
 
-- **updateOrder**: controls the order of Entities. This affects the order in which update is called on each Entity as well as the order of the tag lists.
-- **tag**: use this however you want to. It can later be used to query the scene for all Entities with a specific tag (**Scene.findEntitiesByTag**).
-- **colliders**:  the Colliders managed by this Entity. Adding any Colliders automatically registers the Collider with the Physics system.
-- **updateInterval**: specifies how often this Entities update method should be called. 1 means every frame, 2 is every other, etc
+- **UpdateOrder**: controls the order of Entities. This affects the order in which update is called on each Entity as well as the order of the tag lists.
+- **Tag**: use this however you want to. It can later be used to query the scene for all Entities with a specific tag (**Scene.FindEntitiesByTag**).
+- **Colliders**:  the Colliders managed by this Entity. Adding any Colliders automatically registers the Collider with the Physics system.
+- **UpdateInterval**: specifies how often this Entities update method should be called. 1 means every frame, 2 is every other, etc
 
 
 
@@ -52,16 +52,16 @@ Components are added to and managed by an Entity. They make up the meat of your 
 
 Component Lifecycle methods:
 
-- **initialize**: called when the Component is created and the Entity field is assigned but before onAddedToEntity
-- **onAddedToEntity**: called when the Component is added to an entity after all pending component changes are committed
-- **onRemovedFromEntity**:  called when the component is removed from its entity. Do all cleanup here.
-- **onEntityPositionChanged**: called when the entity's position changes. This allows components to be aware that they have moved due to the parent entity moving.
-- **update**: called each frame as long as the Entity and Component are enabled and the Component implements IUpdatable
-- **debugRender**: conditionally called. See Entity section for details. It can be disabled by setting `debugRenderEnabled` to false for something that should be excluded from debug render
-- **onEnabled**: called when the parent Entity or the Component is enabled
-- **onDisabled**: called when the parent Entity or the Component is disabled
+- **Initialize**: called when the Component is created and the Entity field is assigned but before onAddedToEntity
+- **OnAddedToEntity**: called when the Component is added to an entity after all pending component changes are committed
+- **OnRemovedFromEntity**:  called when the component is removed from its entity. Do all cleanup here.
+- **OnEntityPositionChanged**: called when the entity's position changes. This allows components to be aware that they have moved due to the parent entity moving.
+- **Update**: called each frame as long as the Entity and Component are enabled and the Component implements IUpdatable
+- **DebugRender**: conditionally called. See Entity section for details. It can be disabled by setting `debugRenderEnabled` to false for something that should be excluded from debug render
+- **OnEnabled**: called when the parent Entity or the Component is enabled
+- **OnDisabled**: called when the parent Entity or the Component is disabled
 
-It is worth mentioning the `RenderableComponent` abstract Component subclass here. `RenderableComponent` is a special kind of component that has a `render` method that is called by a Renderer. RenderableComponent handles a lot of dirtywork automatically (such as managing the bounds for culling) and includes a bunch of handy methods and properties pertaining to display. Have a look at the included RenderableComponent subclasses for examples of how they work.
+It is worth mentioning the `RenderableComponent` abstract Component subclass here. `RenderableComponent` is a special kind of component that has a `Render` method that is called by a Renderer. RenderableComponent handles a lot of dirtywork automatically (such as managing the bounds for culling) and includes a bunch of handy methods and properties pertaining to display. Have a look at the included RenderableComponent subclasses for examples of how they work.
 
 
 

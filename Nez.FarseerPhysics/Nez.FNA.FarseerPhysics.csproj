@@ -10,11 +10,10 @@
 		<OutputType>Library</OutputType>
 		<RootNamespace>Nez.Farseer</RootNamespace>
 		<AssemblyName>Nez.FarseerPhysics</AssemblyName>
-		<TargetFrameworks>net471</TargetFrameworks>
+		<TargetFramework>net471</TargetFramework>
 		<AllowUnsafeBlocks>True</AllowUnsafeBlocks>
 		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
 		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
-		<IntermediateOutputPath>obj\Nez.FNA.FarseerPhysics\$(Configuration)</IntermediateOutputPath>
 		<OutputPath>bin\$(Configuration)\FNA</OutputPath>
 	</PropertyGroup>
 

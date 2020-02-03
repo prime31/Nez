@@ -1,58 +1,78 @@
-using System;
 using ImGuiNET;
 
 namespace Nez.ImGuiTools.SceneGraphPanes
 {
-    public class EntityPane
-    {
-        string _newEntityName = "";
+	public class EntityPane
+	{
+		/// <summary>
+		/// if this number of entites is exceeded we switch to a list clipper to keep things fast
+		/// </summary>
+		const int MIN_ENTITIES_FOR_CLIPPER = 100;
+		string _newEntityName = "";
 
-        public void draw()
-        {
-            for( var i = 0; i < Core.scene.entities.count; i++ )
-                drawEntity( Core.scene.entities[i] );
-
-			NezImGui.MediumVerticalSpace();
-			if( NezImGui.CenteredButton( "Create Entity", 0.6f ) )
-			{
-				ImGui.OpenPopup( "create-entity" );
-			}
-
-			drawCreateEntityPopup();
-        }
-
-		void drawEntity( Entity entity, bool onlyDrawRoots = true )
+		unsafe public void Draw()
 		{
-			if( onlyDrawRoots && entity.transform.parent != null )
-				return;
-
-			ImGui.PushID( (int)entity.id );
-			var treeNodeOpened = false;
-			if( entity.transform.childCount > 0 )
+			if (Core.Scene.Entities.Count > MIN_ENTITIES_FOR_CLIPPER)
 			{
-				treeNodeOpened = ImGui.TreeNodeEx( $"{entity.name} ({entity.transform.childCount})###{entity.id}", ImGuiTreeNodeFlags.OpenOnArrow );
+				var clipperPtr = ImGuiNative.ImGuiListClipper_ImGuiListClipper(Core.Scene.Entities.Count, -1);
+				var clipper = new ImGuiListClipperPtr(clipperPtr);
+
+				while (clipper.Step())
+					for (var i = clipper.DisplayStart; i < clipper.DisplayEnd; i++)
+						DrawEntity(Core.Scene.Entities[i]);
+
+				ImGuiNative.ImGuiListClipper_destroy(clipperPtr);
 			}
 			else
 			{
-				treeNodeOpened = ImGui.TreeNodeEx( $"{entity.name} ({entity.transform.childCount})###{entity.id}", ImGuiTreeNodeFlags.Leaf | ImGuiTreeNodeFlags.OpenOnArrow );
+				for (var i = 0; i < Core.Scene.Entities.Count; i++)
+					DrawEntity(Core.Scene.Entities[i]);
+			}
+
+			NezImGui.MediumVerticalSpace();
+			if (NezImGui.CenteredButton("Create Entity", 0.6f))
+			{
+				ImGui.OpenPopup("create-entity");
+			}
+
+			DrawCreateEntityPopup();
+		}
+
+		void DrawEntity(Entity entity, bool onlyDrawRoots = true)
+		{
+			if (onlyDrawRoots && entity.Transform.Parent != null)
+				return;
+
+			ImGui.PushID((int) entity.Id);
+			bool treeNodeOpened;
+			if (entity.Transform.ChildCount > 0)
+			{
+				treeNodeOpened = ImGui.TreeNodeEx($"{entity.Name} ({entity.Transform.ChildCount})###{entity.Id}",
+					ImGuiTreeNodeFlags.OpenOnArrow);
+			}
+			else
+			{
+				treeNodeOpened = ImGui.TreeNodeEx($"{entity.Name} ({entity.Transform.ChildCount})###{entity.Id}",
+					ImGuiTreeNodeFlags.Leaf | ImGuiTreeNodeFlags.OpenOnArrow);
 			}
 
 			NezImGui.ShowContextMenuTooltip();
 
 			// context menu for entity commands
-			ImGui.OpenPopupOnItemClick( "entityContextMenu", 1 );
-			drawEntityContextMenuPopup( entity );
+			ImGui.OpenPopupOnItemClick("entityContextMenu", 1);
+			DrawEntityContextMenuPopup(entity);
 
 			// we are looking for a double-click that is not on the arrow
-			if( ImGui.IsMouseDoubleClicked( 0 ) && ImGui.IsItemClicked() && ( ImGui.GetMousePos().X - ImGui.GetItemRectMin().X ) > ImGui.GetTreeNodeToLabelSpacing() )
+			if (ImGui.IsMouseDoubleClicked(0) && ImGui.IsItemClicked() &&
+			    (ImGui.GetMousePos().X - ImGui.GetItemRectMin().X) > ImGui.GetTreeNodeToLabelSpacing())
 			{
-				Core.getGlobalManager<ImGuiManager>().startInspectingEntity( entity );
+				Core.GetGlobalManager<ImGuiManager>().StartInspectingEntity(entity);
 			}
 
-			if( treeNodeOpened )
+			if (treeNodeOpened)
 			{
-				for( var i = 0; i < entity.transform.childCount; i++ )
-					drawEntity( entity.transform.getChild( i ).entity, false );
+				for (var i = 0; i < entity.Transform.ChildCount; i++)
+					DrawEntity(entity.Transform.GetChild(i).Entity, false);
 
 				ImGui.TreePop();
 			}
@@ -60,46 +80,47 @@ namespace Nez.ImGuiTools.SceneGraphPanes
 			ImGui.PopID();
 		}
 
-		void drawEntityContextMenuPopup( Entity entity )
+		void DrawEntityContextMenuPopup(Entity entity)
 		{
-			if( ImGui.BeginPopup( "entityContextMenu" ) )
+			if (ImGui.BeginPopup("entityContextMenu"))
 			{
-				if( ImGui.Selectable( "Clone Entity " + entity.name ) )
+				if (ImGui.Selectable("Clone Entity " + entity.Name))
 				{
-					var clone = entity.clone( Core.scene.camera.position );
-					entity.scene.addEntity( clone );
+					var clone = entity.Clone(Core.Scene.Camera.Position);
+					entity.Scene.AddEntity(clone);
 				}
 
-				if( ImGui.Selectable( "Destroy Entity" ) )
-					entity.destroy();
+				if (ImGui.Selectable("Destroy Entity"))
+					entity.Destroy();
 
-				if( ImGui.Selectable( "Create Child Entity", false, ImGuiSelectableFlags.DontClosePopups ) )
-					ImGui.OpenPopup( "create-new-entity" );
+				if (ImGui.Selectable("Create Child Entity", false, ImGuiSelectableFlags.DontClosePopups))
+					ImGui.OpenPopup("create-new-entity");
 
-				if( ImGui.BeginPopup( "create-new-entity" ) )
+				if (ImGui.BeginPopup("create-new-entity"))
 				{
-					ImGui.Text( "New Entity Name:" );
-					ImGui.InputText( "##newChildEntityName", ref _newEntityName, 25 );
+					ImGui.Text("New Entity Name:");
+					ImGui.InputText("##newChildEntityName", ref _newEntityName, 25);
 
-					if( ImGui.Button( "Cancel") )
+					if (ImGui.Button("Cancel"))
 					{
 						_newEntityName = "";
 						ImGui.CloseCurrentPopup();
 					}
-					
-					ImGui.SameLine( ImGui.GetContentRegionAvailWidth() - ImGui.GetItemRectSize().X );
 
-					ImGui.PushStyleColor( ImGuiCol.Button, Microsoft.Xna.Framework.Color.Green.PackedValue );
-					if( ImGui.Button( "Create" ) )
+					ImGui.SameLine(ImGui.GetContentRegionAvail().X - ImGui.GetItemRectSize().X);
+
+					ImGui.PushStyleColor(ImGuiCol.Button, Microsoft.Xna.Framework.Color.Green.PackedValue);
+					if (ImGui.Button("Create"))
 					{
-						_newEntityName = _newEntityName.Length > 0 ? _newEntityName : Utils.randomString( 8 );
-						var newEntity = new Entity( _newEntityName );
-						newEntity.transform.setParent( entity.transform );
-						entity.scene.addEntity( newEntity );
+						_newEntityName = _newEntityName.Length > 0 ? _newEntityName : Utils.RandomString(8);
+						var newEntity = new Entity(_newEntityName);
+						newEntity.Transform.SetParent(entity.Transform);
+						entity.Scene.AddEntity(newEntity);
 
 						_newEntityName = "";
 						ImGui.CloseCurrentPopup();
 					}
+
 					ImGui.PopStyleColor();
 
 					ImGui.EndPopup();
@@ -109,35 +130,35 @@ namespace Nez.ImGuiTools.SceneGraphPanes
 			}
 		}
 
-		void drawCreateEntityPopup()
+		void DrawCreateEntityPopup()
 		{
-			if( ImGui.BeginPopup( "create-entity" ) )
+			if (ImGui.BeginPopup("create-entity"))
 			{
-					ImGui.Text( "New Entity Name:" );
-					ImGui.InputText( "##newEntityName", ref _newEntityName, 25 );
+				ImGui.Text("New Entity Name:");
+				ImGui.InputText("##newEntityName", ref _newEntityName, 25);
 
-					if( ImGui.Button( "Cancel") )
-					{
-						_newEntityName = "";
-						ImGui.CloseCurrentPopup();
-					}
-					
-					ImGui.SameLine( ImGui.GetContentRegionAvailWidth() - ImGui.GetItemRectSize().X );
+				if (ImGui.Button("Cancel"))
+				{
+					_newEntityName = "";
+					ImGui.CloseCurrentPopup();
+				}
 
-					ImGui.PushStyleColor( ImGuiCol.Button, Microsoft.Xna.Framework.Color.Green.PackedValue );
-					if( ImGui.Button( "Create" ) )
-					{
-						_newEntityName = _newEntityName.Length > 0 ? _newEntityName : Utils.randomString( 8 );
-						var newEntity = new Entity( _newEntityName );
-						newEntity.transform.position = Core.scene.camera.transform.position;
-						Core.scene.addEntity( newEntity );
+				ImGui.SameLine(ImGui.GetContentRegionAvail().X - ImGui.GetItemRectSize().X);
 
-						_newEntityName = "";
-						ImGui.CloseCurrentPopup();
-					}
-					ImGui.PopStyleColor();
+				ImGui.PushStyleColor(ImGuiCol.Button, Microsoft.Xna.Framework.Color.Green.PackedValue);
+				if (ImGui.Button("Create"))
+				{
+					_newEntityName = _newEntityName.Length > 0 ? _newEntityName : Utils.RandomString(8);
+					var newEntity = new Entity(_newEntityName);
+					newEntity.Transform.Position = Core.Scene.Camera.Transform.Position;
+					Core.Scene.AddEntity(newEntity);
+
+					_newEntityName = "";
+					ImGui.CloseCurrentPopup();
+				}
+
+				ImGui.PopStyleColor();
 			}
 		}
-
-    }
+	}
 }

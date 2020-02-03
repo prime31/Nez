@@ -15,9 +15,9 @@ namespace Nez
 		/// <returns><c>true</c>, if flag set was ised, <c>false</c> otherwise.</returns>
 		/// <param name="self">Self.</param>
 		/// <param name="flag">Flag.</param>
-		public static bool isFlagSet( this int self, int flag )
+		public static bool IsFlagSet(this int self, int flag)
 		{
-			return ( self & flag ) != 0;
+			return (self & flag) != 0;
 		}
 
 
@@ -27,10 +27,10 @@ namespace Nez
 		/// <returns><c>true</c>, if flag set was ised, <c>false</c> otherwise.</returns>
 		/// <param name="self">Self.</param>
 		/// <param name="flag">Flag.</param>
-		public static bool isUnshiftedFlagSet( this int self, int flag )
+		public static bool IsUnshiftedFlagSet(this int self, int flag)
 		{
 			flag = 1 << flag;
-			return ( self & flag ) != 0;
+			return (self & flag) != 0;
 		}
 
 
@@ -39,7 +39,7 @@ namespace Nez
 		/// </summary>
 		/// <param name="self">Self.</param>
 		/// <param name="flag">Flag.</param>
-		public static void setFlagExclusive( ref int self, int flag )
+		public static void SetFlagExclusive(ref int self, int flag)
 		{
 			self = 1 << flag;
 		}
@@ -50,9 +50,9 @@ namespace Nez
 		/// </summary>
 		/// <param name="self">Self.</param>
 		/// <param name="flag">Flag.</param>
-		public static void setFlag( ref int self, int flag )
+		public static void SetFlag(ref int self, int flag)
 		{
-			self = ( self | 1 << flag );
+			self = (self | 1 << flag);
 		}
 
 
@@ -61,19 +61,18 @@ namespace Nez
 		/// </summary>
 		/// <param name="self">Self.</param>
 		/// <param name="flag">Flag.</param>
-		public static void unsetFlag( ref int self, int flag )
+		public static void UnsetFlag(ref int self, int flag)
 		{
 			flag = 1 << flag;
-			self = ( self & ( ~flag ) );
+			self = (self & (~flag));
 		}
-
 
 
 		/// <summary>
 		/// inverts the set bits of the int
 		/// </summary>
 		/// <param name="self">Self.</param>
-		public static void invertFlags( ref int self )
+		public static void InvertFlags(ref int self)
 		{
 			self = ~self;
 		}
@@ -85,11 +84,9 @@ namespace Nez
 		/// <returns>The string representation.</returns>
 		/// <param name="self">Self.</param>
 		/// <param name="leftPadWidth">Left pad width.</param>
-		public static string binaryStringRepresentation( this int self, int leftPadWidth = 10 )
+		public static string BinaryStringRepresentation(this int self, int leftPadWidth = 10)
 		{
-			return Convert.ToString( self, 2 ).PadLeft( leftPadWidth, '0' );
+			return Convert.ToString(self, 2).PadLeft(leftPadWidth, '0');
 		}
-
 	}
 }
-

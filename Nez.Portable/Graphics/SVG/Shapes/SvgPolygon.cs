@@ -6,44 +6,41 @@ namespace Nez.Svg
 {
 	public class SvgPolygon : SvgElement
 	{
-		[XmlAttribute( "cx" )]
-		public float centerX;
+		[XmlAttribute("cx")] public float CenterX;
 
-		[XmlAttribute( "cy" )]
-		public float centerY;
+		[XmlAttribute("cy")] public float CenterY;
 
-		[XmlAttribute( "sides" )]
-		public int sides;
+		[XmlAttribute("sides")] public int Sides;
 
-		[XmlAttribute( "points" )]
-		public string pointsAttribute
+		[XmlAttribute("points")]
+		public string PointsAttribute
 		{
-			get { return null; }
-			set { parsePoints( value ); }
+			get => null;
+			set => ParsePoints(value);
 		}
 
-		public Vector2[] points;
+		public Vector2[] Points;
 
 
-		void parsePoints( string str )
+		void ParsePoints(string str)
 		{
 			var format = System.Globalization.CultureInfo.InvariantCulture.NumberFormat;
-			var pairs = str.Split( new char[] { ' ' }, System.StringSplitOptions.RemoveEmptyEntries );
-			points = new Vector2[pairs.Length];
+			var pairs = str.Split(new char[] {' '}, System.StringSplitOptions.RemoveEmptyEntries);
+			Points = new Vector2[pairs.Length];
 
-			for( var i = 0; i < pairs.Length; i++ )
+			for (var i = 0; i < pairs.Length; i++)
 			{
-				var parts = pairs[i].Split( new char[] { ',' }, System.StringSplitOptions.RemoveEmptyEntries );
-				points[i] = new Vector2( float.Parse( parts[0], format ), float.Parse( parts[1], format ) );
+				var parts = pairs[i].Split(new char[] {','}, System.StringSplitOptions.RemoveEmptyEntries);
+				Points[i] = new Vector2(float.Parse(parts[0], format), float.Parse(parts[1], format));
 			}
 		}
 
 
-		public Vector2[] getTransformedPoints()
+		public Vector2[] GetTransformedPoints()
 		{
-			var pts = new Vector2[points.Length];
-			var mat = getCombinedMatrix();
-			Vector2Ext.transform( points, ref mat, pts );
+			var pts = new Vector2[Points.Length];
+			var mat = GetCombinedMatrix();
+			Vector2Ext.Transform(Points, ref mat, pts);
 
 			return pts;
 		}
@@ -53,16 +50,15 @@ namespace Nez.Svg
 		/// gets the points relative to the center. SVG by default uses absolute positions for points.
 		/// </summary>
 		/// <returns>The relative points.</returns>
-		public Vector2[] getRelativePoints()
+		public Vector2[] GetRelativePoints()
 		{
-			var pts = new Vector2[points.Length];
+			var pts = new Vector2[Points.Length];
 
-			var center = new Vector2( centerX, centerY );
-			for( var i = 0; i < points.Length; i++ )
-				pts[i] = points[i] - center;
+			var center = new Vector2(CenterX, CenterY);
+			for (var i = 0; i < Points.Length; i++)
+				pts[i] = Points[i] - center;
 
 			return pts;
 		}
-
 	}
 }

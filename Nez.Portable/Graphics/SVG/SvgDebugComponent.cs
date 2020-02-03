@@ -9,20 +9,21 @@ namespace Nez.Svg
 	/// </summary>
 	public class SvgDebugComponent : RenderableComponent
 	{
-		public override RectangleF bounds
+		public override RectangleF Bounds
 		{
 			get
 			{
-				if( _areBoundsDirty )
+				if (_areBoundsDirty)
 				{
-					_bounds.location = entity.transform.position;
+					_bounds.Location = Entity.Transform.Position;
 					_areBoundsDirty = false;
 				}
+
 				return _bounds;
 			}
 		}
 
-		public SvgDocument svgDoc;
+		public SvgDocument SvgDoc;
 
 		ISvgPathBuilder _pathBuilder;
 
@@ -32,38 +33,38 @@ namespace Nez.Svg
 		/// </summary>
 		/// <param name="pathToSvgFile">Path to svg file relative to the Content folder</param>
 		/// <param name="pathBuilder">Path builder.</param>
-		public SvgDebugComponent( string pathToSvgFile, ISvgPathBuilder pathBuilder = null )
+		public SvgDebugComponent(string pathToSvgFile, ISvgPathBuilder pathBuilder = null)
 		{
-			svgDoc = SvgDocument.open( TitleContainer.OpenStream( "Content/" + pathToSvgFile ) );
+			SvgDoc = SvgDocument.Open(TitleContainer.OpenStream("Content/" + pathToSvgFile));
 			_pathBuilder = pathBuilder;
-			_bounds = new RectangleF( 0, 0, svgDoc.width, svgDoc.height );
+			_bounds = new RectangleF(0, 0, SvgDoc.Width, SvgDoc.Height);
 
-			if( _pathBuilder == null )
+			if (_pathBuilder == null)
 				_pathBuilder = new SvgReflectionPathBuilder();
 		}
 
-		public override void render( Graphics graphics, Camera camera )
+		public override void Render(Batcher batcher, Camera camera)
 		{
 			// in some rare cases, there are SVG elements outside of a group so we'll render those cases first
-			renderRects( graphics.batcher, svgDoc.rectangles );
-			renderPaths( graphics.batcher, svgDoc.paths );
-			renderLines( graphics.batcher, svgDoc.lines );
-			renderCircles( graphics.batcher, svgDoc.circles );
-			renderPolygons( graphics.batcher, svgDoc.polygons );
-			renderPolylines( graphics.batcher, svgDoc.polylines );
-			renderImages( graphics.batcher, svgDoc.images );
+			RenderRects(batcher, SvgDoc.Rectangles);
+			RenderPaths(batcher, SvgDoc.Paths);
+			RenderLines(batcher, SvgDoc.Lines);
+			RenderCircles(batcher, SvgDoc.Circles);
+			RenderPolygons(batcher, SvgDoc.Polygons);
+			RenderPolylines(batcher, SvgDoc.Polylines);
+			RenderImages(batcher, SvgDoc.Images);
 
-			if( svgDoc.groups != null )
+			if (SvgDoc.Groups != null)
 			{
-				foreach( var g in svgDoc.groups )
+				foreach (var g in SvgDoc.Groups)
 				{
-					renderRects( graphics.batcher, g.rectangles );
-					renderPaths( graphics.batcher, g.paths );
-					renderLines( graphics.batcher, g.lines );
-					renderCircles( graphics.batcher, g.circles );
-					renderPolygons( graphics.batcher, g.polygons );
-					renderPolylines( graphics.batcher, g.polylines );
-					renderImages( graphics.batcher, g.images );
+					RenderRects(batcher, g.Rectangles);
+					RenderPaths(batcher, g.Paths);
+					RenderLines(batcher, g.Lines);
+					RenderCircles(batcher, g.Circles);
+					RenderPolygons(batcher, g.Polygons);
+					RenderPolylines(batcher, g.Polylines);
+					RenderImages(batcher, g.Images);
 				}
 			}
 		}
@@ -71,80 +72,80 @@ namespace Nez.Svg
 
 		#region SVG part renderers
 
-		void renderRects( Batcher batcher, SvgRectangle[] rects )
+		void RenderRects(Batcher batcher, SvgRectangle[] rects)
 		{
-			if( rects == null )
+			if (rects == null)
 				return;
 
-			foreach( var rect in rects )
+			foreach (var rect in rects)
 			{
-				var fixedPts = rect.getTransformedPoints();
-				for( var i = 0; i < fixedPts.Length - 1; i++ )
-					batcher.drawLine( fixedPts[i], fixedPts[i + 1], rect.strokeColor, rect.strokeWidth );
-				batcher.drawLine( fixedPts[3], fixedPts[0], rect.strokeColor, rect.strokeWidth );
+				var fixedPts = rect.GetTransformedPoints();
+				for (var i = 0; i < fixedPts.Length - 1; i++)
+					batcher.DrawLine(fixedPts[i], fixedPts[i + 1], rect.StrokeColor, rect.StrokeWidth);
+				batcher.DrawLine(fixedPts[3], fixedPts[0], rect.StrokeColor, rect.StrokeWidth);
 			}
 		}
 
-		void renderPaths( Batcher batcher, SvgPath[] paths )
+		void RenderPaths(Batcher batcher, SvgPath[] paths)
 		{
-			if( paths == null && _pathBuilder != null )
+			if (paths == null && _pathBuilder != null)
 				return;
 
-			foreach( var path in paths )
+			foreach (var path in paths)
 			{
-				var points = path.getTransformedDrawingPoints( _pathBuilder, 3 );
-				for( var i = 0; i < points.Length - 1; i++ )
+				var points = path.GetTransformedDrawingPoints(_pathBuilder, 3);
+				for (var i = 0; i < points.Length - 1; i++)
 				{
-					batcher.drawLine( points[i], points[i + 1], path.strokeColor, path.strokeWidth );
-					batcher.drawPixel( points[i], Color.Yellow, 3 );
+					batcher.DrawLine(points[i], points[i + 1], path.StrokeColor, path.StrokeWidth);
+					batcher.DrawPixel(points[i], Color.Yellow, 3);
 				}
 			}
 		}
 
-		void renderLines( Batcher batcher, SvgLine[] lines )
+		void RenderLines(Batcher batcher, SvgLine[] lines)
 		{
-			if( lines == null )
+			if (lines == null)
 				return;
 
-			foreach( var line in lines )
+			foreach (var line in lines)
 			{
-				var fixedPts = line.getTransformedPoints();
-				batcher.drawLine( fixedPts[0], fixedPts[1], line.strokeColor, line.strokeWidth );
+				var fixedPts = line.GetTransformedPoints();
+				batcher.DrawLine(fixedPts[0], fixedPts[1], line.StrokeColor, line.StrokeWidth);
 			}
 		}
 
-		void renderCircles( Batcher batcher, SvgCircle[] circles )
+		void RenderCircles(Batcher batcher, SvgCircle[] circles)
 		{
-			if( circles == null )
+			if (circles == null)
 				return;
 
-			foreach( var circ in circles )
-				batcher.drawCircle( circ.centerX, circ.centerY, circ.radius, circ.strokeColor, (int)circ.strokeWidth );
+			foreach (var circ in circles)
+				batcher.DrawCircle(circ.CenterX, circ.CenterY, circ.Radius, circ.StrokeColor, (int) circ.StrokeWidth);
 		}
 
-		void renderPolygons( Batcher batcher, SvgPolygon[] polygons )
+		void RenderPolygons(Batcher batcher, SvgPolygon[] polygons)
 		{
-			if( polygons == null )
+			if (polygons == null)
 				return;
 
-			foreach( var poly in polygons )
+			foreach (var poly in polygons)
 			{
-				var fixedPts = poly.getTransformedPoints();
-				for( var i = 0; i < fixedPts.Length - 1; i++ )
-					batcher.drawLine( fixedPts[i], fixedPts[i + 1], poly.strokeColor, poly.strokeWidth );
+				var fixedPts = poly.GetTransformedPoints();
+				for (var i = 0; i < fixedPts.Length - 1; i++)
+					batcher.DrawLine(fixedPts[i], fixedPts[i + 1], poly.StrokeColor, poly.StrokeWidth);
 			}
 		}
 
-		void renderPolylines( Batcher batcher, SvgPolyline[] polylines )
+		void RenderPolylines(Batcher batcher, SvgPolyline[] polylines)
 		{
-			if( polylines == null )
+			if (polylines == null)
 				return;
 
-			foreach( var poly in polylines )
+			foreach (var poly in polylines)
 			{
-				var fixedPts = poly.getTransformedPoints();
-				for( var i = 0; i < fixedPts.Length - 1; i++ )
-					batcher.drawLine( fixedPts[i], fixedPts[i + 1], poly.strokeColor, poly.strokeWidth );
+				var fixedPts = poly.GetTransformedPoints();
+				for (var i = 0; i < fixedPts.Length - 1; i++)
+					batcher.DrawLine(fixedPts[i], fixedPts[i + 1], poly.StrokeColor, poly.StrokeWidth);
 			}
 		}
 
@@ -153,38 +154,37 @@ namespace Nez.Svg
 		/// </summary>
 		/// <param name="batcher">Batcher.</param>
 		/// <param name="images">Images.</param>
-		void renderImages( Batcher batcher, SvgImage[] images )
+		void RenderImages(Batcher batcher, SvgImage[] images)
 		{
-			if( images == null )
+			if (images == null)
 				return;
 
-			foreach( var image in images )
+			foreach (var image in images)
 			{
-				var tex = image.getTexture( entity.scene.content );
-				if( tex != null )
+				var tex = image.GetTexture(Entity.Scene.Content);
+				if (tex != null)
 				{
-					var rotation = image.rotationDegrees * Mathf.deg2Rad;
-					if( rotation == 0 )
+					var rotation = image.RotationDegrees * Mathf.Deg2Rad;
+					if (rotation == 0)
 					{
-						batcher.draw( tex, image.rect );
+						batcher.Draw(tex, image.Rect);
 					}
 					else
 					{
-						var rect = image.rect;
-						var origin = new Vector2( 0.5f * rect.width, 0.5f * rect.height );
-						rect.location += origin;
+						var rect = image.Rect;
+						var origin = new Vector2(0.5f * rect.Width, 0.5f * rect.Height);
+						rect.Location += origin;
 
-						batcher.draw( tex, rect, null, Color.White, rotation, origin, SpriteEffects.None, layerDepth );
+						batcher.Draw(tex, rect, null, Color.White, rotation, origin, SpriteEffects.None, LayerDepth);
 					}
 				}
 				else
 				{
-					batcher.drawRect( image.x, image.y, image.width, image.height, Color.DarkRed );
+					batcher.DrawRect(image.X, image.Y, image.Width, image.Height, Color.DarkRed);
 				}
 			}
 		}
 
 		#endregion
-
 	}
 }

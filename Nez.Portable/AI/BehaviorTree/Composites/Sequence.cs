@@ -1,7 +1,4 @@
-﻿using System;
-
-
-namespace Nez.AI.BehaviorTrees
+﻿namespace Nez.AI.BehaviorTrees
 {
 	/// <summary>
 	/// The sequence task is similar to an "and" operation. It will return failure as soon as one of its child tasks return failure. If a
@@ -9,29 +6,29 @@ namespace Nez.AI.BehaviorTrees
 	/// </summary>
 	public class Sequence<T> : Composite<T>
 	{
-		public Sequence( AbortTypes abortType = AbortTypes.None )
+		public Sequence(AbortTypes abortType = AbortTypes.None)
 		{
-			this.abortType = abortType;
+			AbortType = abortType;
 		}
 
 
-		public override TaskStatus update( T context )
+		public override TaskStatus Update(T context)
 		{
 			// first, we handle conditional aborts if we are not already on the first child
-			if( _currentChildIndex != 0 )
-				handleConditionalAborts( context );
-			
+			if (_currentChildIndex != 0)
+				HandleConditionalAborts(context);
+
 			var current = _children[_currentChildIndex];
-			var status = current.tick( context );
+			var status = current.Tick(context);
 
 			// if the child failed or is still running, early return
-			if( status != TaskStatus.Success )
+			if (status != TaskStatus.Success)
 				return status;
 
 			_currentChildIndex++;
 
 			// if the end of the children is hit the whole sequence suceeded
-			if( _currentChildIndex == _children.Count )
+			if (_currentChildIndex == _children.Count)
 			{
 				// reset index for next run
 				_currentChildIndex = 0;
@@ -42,15 +39,13 @@ namespace Nez.AI.BehaviorTrees
 		}
 
 
-		void handleConditionalAborts( T context )
+		void HandleConditionalAborts(T context)
 		{
-			if( _hasLowerPriorityConditionalAbort )
-				updateLowerPriorityAbortConditional( context, TaskStatus.Success );
+			if (_hasLowerPriorityConditionalAbort)
+				UpdateLowerPriorityAbortConditional(context, TaskStatus.Success);
 
-			if( abortType.has( AbortTypes.Self ) )
-				updateSelfAbortConditional( context, TaskStatus.Success );
+			if (AbortType.Has(AbortTypes.Self))
+				UpdateSelfAbortConditional(context, TaskStatus.Success);
 		}
-
 	}
 }
-

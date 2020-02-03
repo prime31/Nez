@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+
+<package>
+    <metadata>
+        <id>Nez.Persistence</id>
+        <version>0.10.0</version>
+        <title>Nez.Persistence</title>
+        <authors>prime31</authors>
+        <iconUrl>https://raw.githubusercontent.com/prime31/Nez/master/FAQs/images/nez-logo-black.png</iconUrl>
+        <projectUrl>https://github.com/prime31/Nez</projectUrl>
+        <requireLicenseAcceptance>false</requireLicenseAcceptance>
+        <description>Custom binary, JSON and NSON parsing. NSON is a strongly typed, human readable JSON-like syntax. JSON/NSON includes the ability to automatically resolve references and deal with polymorphic classes. Great for game dev serialization.</description>
+        <releaseNotes>Initial release.</releaseNotes>
+        <copyright>Copyright 2019</copyright>
+        <tags>nez monogame xna fna</tags>
+        <dependencies>
+            <dependency id="Nez" version="0.10.8" />
+        </dependencies>
+    </metadata>
+    <files>
+        <file src="bin\$configuration$\Nez.Persistence.*" target="lib" />
+    </files>
+</package>

@@ -16,10 +16,10 @@ namespace Nez.Svg
 		/// </summary>
 		/// <returns>The draw point.</returns>
 		/// <param name="vec">Vec.</param>
-		static object toDrawPoint( Vector2 vec )
+		static object ToDrawPoint(Vector2 vec)
 		{
-			var args = new object[] { (int)vec.X, (int)vec.Y };
-			return System.Activator.CreateInstance( System.Type.GetType( "System.Drawing.Point, System.Drawing" ), args );
+			var args = new object[] {(int) vec.X, (int) vec.Y};
+			return System.Activator.CreateInstance(System.Type.GetType("System.Drawing.Point, System.Drawing"), args);
 		}
 
 
@@ -28,56 +28,59 @@ namespace Nez.Svg
 		/// </summary>
 		/// <returns>The drawing points.</returns>
 		/// <param name="segments">Segments.</param>
-		public Vector2[] getDrawingPoints( List<SvgPathSegment> segments, float flatness = 3 )
+		public Vector2[] GetDrawingPoints(List<SvgPathSegment> segments, float flatness = 3)
 		{
 			var path = new FauxGraphicsPath();
-			for( var j = 0; j < segments.Count; j++ )
+			for (var j = 0; j < segments.Count; j++)
 			{
 				var segment = segments[j];
-				if( segment is SvgMoveToSegment )
+				if (segment is SvgMoveToSegment)
 				{
 					path.StartFigure();
 				}
-				else if( segment is SvgCubicCurveSegment )
+				else if (segment is SvgCubicCurveSegment)
 				{
 					var cubicSegment = segment as SvgCubicCurveSegment;
-					path.AddBezier( toDrawPoint( segment.start ), toDrawPoint( cubicSegment.firstCtrlPoint ), toDrawPoint( cubicSegment.secondCtrlPoint ), toDrawPoint( segment.end ) );
+					path.AddBezier(ToDrawPoint(segment.Start), ToDrawPoint(cubicSegment.FirstCtrlPoint),
+						ToDrawPoint(cubicSegment.SecondCtrlPoint), ToDrawPoint(segment.End));
 				}
-				else if( segment is SvgClosePathSegment )
+				else if (segment is SvgClosePathSegment)
 				{
 					// important for custom line caps. Force the path the close with an explicit line, not just an implicit close of the figure.
-					if( path.PointCount > 0 && !path.PathPoints.GetValue( 0 ).Equals( path.PathPoints.GetValue( path.PathPoints.Length - 1 ) ) )
+					if (path.PointCount > 0 && !path.PathPoints.GetValue(0)
+						    .Equals(path.PathPoints.GetValue(path.PathPoints.Length - 1)))
 					{
 						var i = path.PathTypes.Length - 1;
-						while( i >= 0 && path.PathTypes[i] > 0 )
+						while (i >= 0 && path.PathTypes[i] > 0)
 							i--;
-						if( i < 0 )
+						if (i < 0)
 							i = 0;
-						path.AddLine( path.PathPoints.GetValue( path.PathPoints.Length - 1 ), path.PathPoints.GetValue( i ) );
+						path.AddLine(path.PathPoints.GetValue(path.PathPoints.Length - 1), path.PathPoints.GetValue(i));
 					}
+
 					path.CloseFigure();
 				}
-				else if( segment is SvgLineSegment )
+				else if (segment is SvgLineSegment)
 				{
-					path.AddLine( toDrawPoint( segment.start ), toDrawPoint( segment.end ) );
+					path.AddLine(ToDrawPoint(segment.Start), ToDrawPoint(segment.End));
 				}
-				else if( segment is SvgQuadraticCurveSegment )
+				else if (segment is SvgQuadraticCurveSegment)
 				{
 					var quadSegment = segment as SvgQuadraticCurveSegment;
-					path.AddBezier( toDrawPoint( segment.start ), toDrawPoint( quadSegment.firstCtrlPoint ), toDrawPoint( quadSegment.secondCtrlPoint ), toDrawPoint( segment.end ) );
+					path.AddBezier(ToDrawPoint(segment.Start), ToDrawPoint(quadSegment.FirstCtrlPoint),
+						ToDrawPoint(quadSegment.SecondCtrlPoint), ToDrawPoint(segment.End));
 				}
 				else
 				{
-					Debug.warn( "unknown type in getDrawingPoints" );
+					Debug.Warn("unknown type in getDrawingPoints");
 				}
 			}
 
-			var matrix = System.Activator.CreateInstance( System.Type.GetType( "System.Drawing.Drawing2D.Matrix, System.Drawing" ) );
-			path.Flatten( matrix, flatness );
+			var matrix =
+				System.Activator.CreateInstance(System.Type.GetType("System.Drawing.Drawing2D.Matrix, System.Drawing"));
+			path.Flatten(matrix, flatness);
 
-			return path.pathPointsAsVectors();
+			return path.PathPointsAsVectors();
 		}
-
 	}
-
 }

@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using Microsoft.Xna.Framework;
-
-
-namespace Nez.UI
+﻿namespace Nez.UI
 {
 	/// <summary>
 	/// Displays a dialog, which is a modal window containing a content table with a button table underneath it. Methods are provided
@@ -15,35 +10,36 @@ namespace Nez.UI
 		Table contentTable, buttonTable;
 
 
-		public Dialog( string title, WindowStyle windowStyle ) : base( title, windowStyle )
+		public Dialog(string title, WindowStyle windowStyle) : base(title, windowStyle)
 		{
-			initialize();
+			Initialize();
 		}
 
 
-		public Dialog( string title, Skin skin, string styleName = null ) : this( title, skin.get<WindowStyle>( styleName ) )
-		{}
-
-
-		private void initialize()
+		public Dialog(string title, Skin skin, string styleName = null) : this(title, skin.Get<WindowStyle>(styleName))
 		{
-			defaults().space( 16 );
-			add( contentTable = new Table() ).expand().fill();
-			row();
-			add( buttonTable = new Table() );
-
-			contentTable.defaults().space( 16 );
-			buttonTable.defaults().space( 16 );
 		}
 
 
-		public Table getContentTable()
+		private void Initialize()
+		{
+			Defaults().Space(16);
+			Add(contentTable = new Table()).Expand().Fill();
+			Row();
+			Add(buttonTable = new Table());
+
+			contentTable.Defaults().Space(16);
+			buttonTable.Defaults().Space(16);
+		}
+
+
+		public Table GetContentTable()
 		{
 			return contentTable;
 		}
 
 
-		public Table getButtonTable()
+		public Table GetButtonTable()
 		{
 			return buttonTable;
 		}
@@ -54,9 +50,9 @@ namespace Nez.UI
 		/// </summary>
 		/// <returns>The text.</returns>
 		/// <param name="text">Text.</param>
-		public Dialog addText( string text )
+		public Dialog AddText(string text)
 		{
-			return addText( new Label( text ) );
+			return AddText(new Label(text));
 		}
 
 
@@ -64,26 +60,26 @@ namespace Nez.UI
 		/// Adds the given Label to the content table
 		/// </summary>
 		/// <param name="label">Label.</param>
-		public Dialog addText( Label label )
+		public Dialog AddText(Label label)
 		{
-			contentTable.add( label );
+			contentTable.Add(label);
 			return this;
 		}
 
 
 		/** Adds a text button to the button table.
 	 * @param object The object that will be passed to {@link #result(Object)} if this button is clicked. May be null. */
-		public Button addButton( string text, TextButtonStyle buttonStyle )
+		public Button AddButton(string text, TextButtonStyle buttonStyle)
 		{
-			return addButton( new TextButton( text, buttonStyle ) );
+			return AddButton(new TextButton(text, buttonStyle));
 		}
 
 
 		/** Adds the given button to the button table.
 	 * @param object The object that will be passed to {@link #result(Object)} if this button is clicked. May be null. */
-		public Button addButton( Button button )
+		public Button AddButton(Button button)
 		{
-			buttonTable.add( button );
+			buttonTable.Add(button);
 			return button;
 		}
 
@@ -92,12 +88,13 @@ namespace Nez.UI
 		/// {@link #pack() Packs} the dialog and adds it to the stage
 		/// </summary>
 		/// <param name="stage">Stage.</param>
-		public Dialog show( Stage stage )
+		public Dialog Show(Stage stage)
 		{
-			stage.addElement( this );
-			setPosition( Mathf.round( ( stage.getWidth() - getWidth() ) / 2 ), Mathf.round( ( stage.getHeight() - getHeight() ) / 2 ) );
+			stage.AddElement(this);
+			SetPosition(Mathf.Round((stage.GetWidth() - GetWidth()) / 2),
+				Mathf.Round((stage.GetHeight() - GetHeight()) / 2));
 
-			pack();
+			Pack();
 
 			return this;
 		}
@@ -106,11 +103,9 @@ namespace Nez.UI
 		/// <summary>
 		/// Hides the dialog
 		/// </summary>
-		public void hide()
+		public void Hide()
 		{
-			remove();
+			Remove();
 		}
-
 	}
 }
-

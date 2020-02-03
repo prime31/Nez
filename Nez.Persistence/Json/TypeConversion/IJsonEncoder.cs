@@ -7,6 +7,6 @@
 		/// </summary>
 		/// <param name="key">Key.</param>
 		/// <param name="value">Value.</param>
-		void EncodeKeyValuePair( string key, object value );
+		void EncodeKeyValuePair(string key, object value);
 	}
 }

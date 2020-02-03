@@ -17,16 +17,16 @@ namespace Nez
 		/// Any other odd sizes should override this appropriately.
 		/// </summary>
 		/// <value>The bounds.</value>
-		public override RectangleF bounds
+		public override RectangleF Bounds
 		{
 			get
 			{
-				var sizeX = 1.5f * scale.X;
-				var sizeY = 1.5f * scale.Y;
-				var x = ( position.X - sizeX / 2 );
-				var y = ( position.Y - sizeY / 2 );
+				var sizeX = 1.5f * Scale.X;
+				var sizeY = 1.5f * Scale.Y;
+				var x = (Position.X - sizeX / 2);
+				var y = (Position.Y - sizeY / 2);
 
-				return new RectangleF( x, y, sizeX, sizeY );
+				return new RectangleF(x, y, sizeX, sizeY);
 			}
 		}
 
@@ -34,33 +34,33 @@ namespace Nez
 		/// wraps Transform.position along with a private Z position
 		/// </summary>
 		/// <value>The position.</value>
-		public Vector3 position
+		public Vector3 Position
 		{
-			get { return new Vector3( transform.position, _positionZ ); }
+			get => new Vector3(Transform.Position, _positionZ);
 			set
 			{
 				_positionZ = value.Z;
-				transform.setPosition( value.X, value.Y );
+				Transform.SetPosition(value.X, value.Y);
 			}
 		}
 
 		/// <summary>
 		/// the scale of the object. 80 by default. You will need to adjust this depending on your Scene's backbuffer size.
 		/// </summary>
-		public Vector3 scale = new Vector3( 80f );
+		public Vector3 Scale = new Vector3(80f);
 
 		/// <summary>
 		/// wraps Transform.rotation for the Z rotation along with a private X and Y rotation.
 		/// </summary>
 		/// <value>The rotation.</value>
-		public Vector3 rotation
+		public Vector3 Rotation
 		{
-			get { return new Vector3( _rotationXY, transform.rotation ); }
+			get => new Vector3(_rotationXY, Transform.Rotation);
 			set
 			{
 				_rotationXY.X = value.X;
 				_rotationXY.Y = value.Y;
-				transform.setRotation( value.Z );
+				Transform.SetRotation(value.Z);
 			}
 		}
 
@@ -68,29 +68,29 @@ namespace Nez
 		/// rotation in degrees
 		/// </summary>
 		/// <value>The rotation degrees.</value>
-		public Vector3 rotationDegrees
+		public Vector3 RotationDegrees
 		{
-			get { return new Vector3( _rotationXY, transform.rotation ) * Mathf.rad2Deg; }
-			set { rotation = value *= Mathf.deg2Rad; }
+			get => new Vector3(_rotationXY, Transform.Rotation) * Mathf.Rad2Deg;
+			set => Rotation = value *= Mathf.Deg2Rad;
 		}
 
 		/// <summary>
 		/// Matrix that represents the world transform. Useful for rendering.
 		/// </summary>
 		/// <value>The world matrix.</value>
-		public Matrix worldMatrix
+		public Matrix WorldMatrix
 		{
 			get
 			{
 				// prep our rotations
-				var rot = rotation;
-				var rotationMatrix = Matrix.CreateRotationX( rot.X );
-				rotationMatrix *= Matrix.CreateRotationY( rot.Y );
-				rotationMatrix *= Matrix.CreateRotationZ( rot.Z );
+				var rot = Rotation;
+				var rotationMatrix = Matrix.CreateRotationX(rot.X);
+				rotationMatrix *= Matrix.CreateRotationY(rot.Y);
+				rotationMatrix *= Matrix.CreateRotationZ(rot.Z);
 
 				// remember to invert the sign of the y position!
-				var pos = position;
-				return rotationMatrix * Matrix.CreateScale( scale ) * Matrix.CreateTranslation( pos.X, -pos.Y, pos.Z );
+				var pos = Position;
+				return rotationMatrix * Matrix.CreateScale(Scale) * Matrix.CreateTranslation(pos.X, -pos.Y, pos.Z);
 			}
 		}
 	}

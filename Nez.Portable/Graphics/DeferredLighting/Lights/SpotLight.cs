@@ -9,34 +9,29 @@ namespace Nez.DeferredLighting
 		/// <summary>
 		/// wrapper for entity.transform.rotation to ease in setting up direction of spots to point at specific locations
 		/// </summary>
-		public Vector2 direction
-		{
-			get
-			{
-				return new Vector2( Mathf.cos( entity.transform.rotation ), Mathf.sin( entity.transform.rotation ) );
-			}
-		}
+		public Vector2 Direction => new Vector2(Mathf.Cos(Entity.Transform.Rotation), Mathf.Sin(Entity.Transform.Rotation));
 
 		/// <summary>
 		/// angle in degrees of the cone
 		/// </summary>
-		public float coneAngle = 90f;
+		public float ConeAngle = 90f;
 
 
 		public SpotLight() : base()
-		{}
-
-		public SpotLight( Color color )
 		{
-			this.color = color;
+		}
+
+		public SpotLight(Color color)
+		{
+			Color = color;
 		}
 
 
 		#region Point light setters
 
-		public new SpotLight setZPosition( float z )
+		public new SpotLight SetZPosition(float z)
 		{
-			zPosition = z;
+			ZPosition = z;
 			return this;
 		}
 
@@ -45,9 +40,9 @@ namespace Nez.DeferredLighting
 		/// </summary>
 		/// <returns>The radius.</returns>
 		/// <param name="radius">Radius.</param>
-		public new SpotLight setRadius( float radius )
+		public new SpotLight SetRadius(float radius)
 		{
-			base.setRadius( radius );
+			base.SetRadius(radius);
 			return this;
 		}
 
@@ -56,18 +51,18 @@ namespace Nez.DeferredLighting
 		/// </summary>
 		/// <returns>The intensity.</returns>
 		/// <param name="intensity">Intensity.</param>
-		public new SpotLight setIntensity( float intensity )
+		public new SpotLight SetIntensity(float intensity)
 		{
-			this.intensity = intensity;
+			Intensity = intensity;
 			return this;
 		}
 
 		#endregion
 
 
-		public SpotLight setConeAngle( float coneAngle )
+		public SpotLight SetConeAngle(float coneAngle)
 		{
-			this.coneAngle = coneAngle;
+			ConeAngle = coneAngle;
 			return this;
 		}
 
@@ -76,12 +71,10 @@ namespace Nez.DeferredLighting
 		/// </summary>
 		/// <returns>The direction.</returns>
 		/// <param name="direction">Direction.</param>
-		public SpotLight setDirection( Vector2 direction )
+		public SpotLight SetDirection(Vector2 direction)
 		{
-			entity.transform.rotation = (float)Math.Atan2( direction.Y, direction.X );
+			Entity.Transform.Rotation = (float) Math.Atan2(direction.Y, direction.X);
 			return this;
 		}
-		
 	}
 }
-

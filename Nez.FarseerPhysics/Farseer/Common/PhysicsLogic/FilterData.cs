@@ -12,54 +12,55 @@ namespace FarseerPhysics.Common.PhysicsLogic
 		/// Disable the logic on specific categories.
 		/// Category.None by default.
 		/// </summary>
-		public Category disabledOnCategories = Category.None;
+		public Category DisabledOnCategories = Category.None;
 
 		/// <summary>
 		/// Disable the logic on specific groups
 		/// </summary>
-		public int disabledOnGroup;
+		public int DisabledOnGroup;
 
 		/// <summary>
 		/// Enable the logic on specific categories
 		/// Category.All by default.
 		/// </summary>
-		public Category enabledOnCategories = Category.All;
+		public Category EnabledOnCategories = Category.All;
 
 		/// <summary>
 		/// Enable the logic on specific groups.
 		/// </summary>
-		public int enabledOnGroup;
+		public int EnabledOnGroup;
 
 		/// <summary>
 		/// 
 		/// </summary>
 		/// <param name="body"></param>
 		/// <returns></returns>
-		public virtual bool isActiveOn( Body body )
+		public virtual bool IsActiveOn(Body body)
 		{
-			if( body == null || !body.enabled || body.isStatic )
+			if (body == null || !body.Enabled || body.IsStatic)
 				return false;
 
-			if( body.fixtureList == null )
+			if (body.FixtureList == null)
 				return false;
 
-			foreach( var fixture in body.fixtureList )
+			foreach (var fixture in body.FixtureList)
 			{
 				//Disable
-				if( ( fixture.collisionGroup == disabledOnGroup ) && fixture.collisionGroup != 0 && disabledOnGroup != 0 )
+				if ((fixture.CollisionGroup == DisabledOnGroup) && fixture.CollisionGroup != 0 && DisabledOnGroup != 0)
 					return false;
 
-				if( ( fixture.collisionCategories & disabledOnCategories ) != Category.None )
+				if ((fixture.CollisionCategories & DisabledOnCategories) != Category.None)
 					return false;
 
-				if( enabledOnGroup != 0 || enabledOnCategories != Category.All )
+				if (EnabledOnGroup != 0 || EnabledOnCategories != Category.All)
 				{
 					//Enable
-					if( ( fixture.collisionGroup == enabledOnGroup ) && fixture.collisionGroup != 0 && enabledOnGroup != 0 )
+					if ((fixture.CollisionGroup == EnabledOnGroup) && fixture.CollisionGroup != 0 &&
+					    EnabledOnGroup != 0)
 						return true;
 
-					if( ( fixture.collisionCategories & enabledOnCategories ) != Category.None &&
-						enabledOnCategories != Category.All )
+					if ((fixture.CollisionCategories & EnabledOnCategories) != Category.None &&
+					    EnabledOnCategories != Category.All)
 						return true;
 				}
 				else
@@ -75,18 +76,18 @@ namespace FarseerPhysics.Common.PhysicsLogic
 		/// Adds the category.
 		/// </summary>
 		/// <param name="category">The category.</param>
-		public void addDisabledCategory( Category category )
+		public void AddDisabledCategory(Category category)
 		{
-			disabledOnCategories |= category;
+			DisabledOnCategories |= category;
 		}
 
 		/// <summary>
 		/// Removes the category.
 		/// </summary>
 		/// <param name="category">The category.</param>
-		public void removeDisabledCategory( Category category )
+		public void RemoveDisabledCategory(Category category)
 		{
-			disabledOnCategories &= ~category;
+			DisabledOnCategories &= ~category;
 		}
 
 		/// <summary>
@@ -96,27 +97,27 @@ namespace FarseerPhysics.Common.PhysicsLogic
 		/// <returns>
 		/// 	<c>true</c> if the object has the specified category; otherwise, <c>false</c>.
 		/// </returns>
-		public bool isInDisabledCategory( Category category )
+		public bool IsInDisabledCategory(Category category)
 		{
-			return ( disabledOnCategories & category ) == category;
+			return (DisabledOnCategories & category) == category;
 		}
 
 		/// <summary>
 		/// Adds the category.
 		/// </summary>
 		/// <param name="category">The category.</param>
-		public void addEnabledCategory( Category category )
+		public void AddEnabledCategory(Category category)
 		{
-			enabledOnCategories |= category;
+			EnabledOnCategories |= category;
 		}
 
 		/// <summary>
 		/// Removes the category.
 		/// </summary>
 		/// <param name="category">The category.</param>
-		public void removeEnabledCategory( Category category )
+		public void RemoveEnabledCategory(Category category)
 		{
-			enabledOnCategories &= ~category;
+			EnabledOnCategories &= ~category;
 		}
 
 		/// <summary>
@@ -126,10 +127,9 @@ namespace FarseerPhysics.Common.PhysicsLogic
 		/// <returns>
 		/// 	<c>true</c> if the object has the specified category; otherwise, <c>false</c>.
 		/// </returns>
-		public bool isInEnabledInCategory( Category category )
+		public bool IsInEnabledInCategory(Category category)
 		{
-			return ( enabledOnCategories & category ) == category;
+			return (EnabledOnCategories & category) == category;
 		}
-
 	}
 }

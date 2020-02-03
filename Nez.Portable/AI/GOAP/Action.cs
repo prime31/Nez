@@ -9,45 +9,46 @@ namespace Nez.AI.GOAP
 		/// <summary>
 		/// optional name for the Action. Used for debugging purposes
 		/// </summary>
-		public string name;
+		public string Name;
 
 		/// <summary>
 		/// The cost of performing the action.  Figure out a weight that suits the action.  Changing it will affect what actions are
 		/// chosen during planning
 		/// </summary>
-		public int cost = 1;
+		public int Cost = 1;
 
 
-		internal HashSet<Tuple<string,bool>> _preConditions = new HashSet<Tuple<string,bool>>();
+		internal HashSet<Tuple<string, bool>> _preConditions = new HashSet<Tuple<string, bool>>();
 
-		internal HashSet<Tuple<string,bool>> _postConditions = new HashSet<Tuple<string,bool>>();
+		internal HashSet<Tuple<string, bool>> _postConditions = new HashSet<Tuple<string, bool>>();
 
 
 		public Action()
-		{}
-
-
-		public Action( string name )
 		{
-			this.name = name;
 		}
 
 
-		public Action( string name, int cost ) : this( name )
+		public Action(string name)
 		{
-			this.cost = cost;
+			Name = name;
 		}
 
 
-		public void setPrecondition( string conditionName, bool value )
+		public Action(string name, int cost) : this(name)
 		{
-			_preConditions.Add( new Tuple<string,bool>( conditionName, value ) );
+			Cost = cost;
 		}
 
 
-		public void setPostcondition( string conditionName, bool value )
+		public void SetPrecondition(string conditionName, bool value)
 		{
-			_postConditions.Add( new Tuple<string,bool>( conditionName, value ) );
+			_preConditions.Add(new Tuple<string, bool>(conditionName, value));
+		}
+
+
+		public void SetPostcondition(string conditionName, bool value)
+		{
+			_postConditions.Add(new Tuple<string, bool>(conditionName, value));
 		}
 
 
@@ -56,7 +57,7 @@ namespace Nez.AI.GOAP
 		/// For example, if the Action is to pick up a gun but there are no guns in the world returning false would keep the Action from being
 		/// considered by the ActionPlanner.
 		/// </summary>
-		public virtual bool validate()
+		public virtual bool Validate()
 		{
 			return true;
 		}
@@ -64,9 +65,7 @@ namespace Nez.AI.GOAP
 
 		public override string ToString()
 		{
-			return string.Format( "[Action] {0} - cost: {1}", name, cost );
+			return string.Format("[Action] {0} - cost: {1}", Name, Cost);
 		}
-
 	}
 }
-

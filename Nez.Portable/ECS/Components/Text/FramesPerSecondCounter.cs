@@ -6,7 +6,7 @@ using Nez.BitmapFonts;
 
 namespace Nez
 {
-	public class FramesPerSecondCounter : Text, IUpdatable
+	public class FramesPerSecondCounter : TextComponent, IUpdatable
 	{
 		public enum FPSDockPosition
 		{
@@ -16,27 +16,27 @@ namespace Nez
 			BottomRight
 		}
 
-		public long totalFrames;
-		public float averageFramesPerSecond;
-		public float currentFramesPerSecond;
+		public long TotalFrames;
+		public float AverageFramesPerSecond;
+		public float CurrentFramesPerSecond;
 
 		/// <summary>
 		/// total number of samples that should be stored and averaged for calculating the FPS
 		/// </summary>
-		public int maximumSamples;
+		public int MaximumSamples;
 
 
 		/// <summary>
 		/// position the FPS counter should be docked
 		/// </summary>
 		/// <value>The dock position.</value>
-		public FPSDockPosition dockPosition
+		public FPSDockPosition DockPosition
 		{
 			get => _dockPosition;
 			set
 			{
 				_dockPosition = value;
-				updateTextPosition();
+				UpdateTextPosition();
 			}
 		}
 
@@ -44,13 +44,13 @@ namespace Nez
 		/// offset from dockPosition the FPS counter should be drawn
 		/// </summary>
 		/// <value>The dock offset.</value>
-		public Vector2 dockOffset
+		public Vector2 DockOffset
 		{
 			get => _dockOffset;
 			set
 			{
 				_dockOffset = value;
-				updateTextPosition();
+				UpdateTextPosition();
 			}
 		}
 
@@ -59,98 +59,104 @@ namespace Nez
 		readonly Queue<float> _sampleBuffer = new Queue<float>();
 
 
-		public FramesPerSecondCounter() : this( Graphics.instance.bitmapFont, Color.White )
-		{}
+		public FramesPerSecondCounter() : this(Graphics.Instance.BitmapFont, Color.White)
+		{ }
 
-		public FramesPerSecondCounter( BitmapFont font, Color color, FPSDockPosition dockPosition = FPSDockPosition.TopRight, int maximumSamples = 100 ) : base( font, string.Empty, Vector2.Zero, color )
+		public FramesPerSecondCounter(BitmapFont font, Color color,
+		                              FPSDockPosition dockPosition = FPSDockPosition.TopRight, int maximumSamples = 100)
+			: base(font, string.Empty, Vector2.Zero, color)
 		{
-			this.maximumSamples = maximumSamples;
-			this.dockPosition = dockPosition;
-			init();
+			MaximumSamples = maximumSamples;
+			DockPosition = dockPosition;
+			Init();
 		}
 
-		public FramesPerSecondCounter( NezSpriteFont font, Color color, FPSDockPosition dockPosition = FPSDockPosition.TopRight, int maximumSamples = 100 ) : base( font, string.Empty, Vector2.Zero, color )
+		public FramesPerSecondCounter(NezSpriteFont font, Color color,
+		                              FPSDockPosition dockPosition = FPSDockPosition.TopRight, int maximumSamples = 100)
+			: base(font, string.Empty, Vector2.Zero, color)
 		{
-			this.maximumSamples = maximumSamples;
-			this.dockPosition = dockPosition;
-			init();
+			MaximumSamples = maximumSamples;
+			DockPosition = dockPosition;
+			Init();
 		}
 
-		void init()
+		void Init()
 		{
-			updateTextPosition();
+			UpdateTextPosition();
 		}
 
-		void updateTextPosition()
+		void UpdateTextPosition()
 		{
-			switch( dockPosition )
+			switch (DockPosition)
 			{
 				case FPSDockPosition.TopLeft:
 					_horizontalAlign = HorizontalAlign.Left;
 					_verticalAlign = VerticalAlign.Top;
-					localOffset = dockOffset;
+					LocalOffset = DockOffset;
 					break;
 				case FPSDockPosition.TopRight:
 					_horizontalAlign = HorizontalAlign.Right;
 					_verticalAlign = VerticalAlign.Top;
-					localOffset = new Vector2( Core.graphicsDevice.Viewport.Width - dockOffset.X, dockOffset.Y );
+					LocalOffset = new Vector2(Core.GraphicsDevice.Viewport.Width - DockOffset.X, DockOffset.Y);
 					break;
 				case FPSDockPosition.BottomLeft:
 					_horizontalAlign = HorizontalAlign.Left;
 					_verticalAlign = VerticalAlign.Bottom;
-					localOffset = new Vector2( dockOffset.X, Core.graphicsDevice.Viewport.Height - dockOffset.Y );
+					LocalOffset = new Vector2(DockOffset.X, Core.GraphicsDevice.Viewport.Height - DockOffset.Y);
 					break;
 				case FPSDockPosition.BottomRight:
 					_horizontalAlign = HorizontalAlign.Right;
 					_verticalAlign = VerticalAlign.Bottom;
-					localOffset = new Vector2( Core.graphicsDevice.Viewport.Width - dockOffset.X, Core.graphicsDevice.Viewport.Height - dockOffset.Y );
+					LocalOffset = new Vector2(Core.GraphicsDevice.Viewport.Width - DockOffset.X,
+						Core.GraphicsDevice.Viewport.Height - DockOffset.Y);
 					break;
 			}
 		}
 
-		public void reset()
+		public void Reset()
 		{
-			totalFrames = 0;
+			TotalFrames = 0;
 			_sampleBuffer.Clear();
 		}
 
-		void IUpdatable.update()
+		void IUpdatable.Update()
 		{
-			currentFramesPerSecond = 1.0f / Time.unscaledDeltaTime;
-			_sampleBuffer.Enqueue( currentFramesPerSecond );
+			CurrentFramesPerSecond = 1.0f / Time.UnscaledDeltaTime;
+			_sampleBuffer.Enqueue(CurrentFramesPerSecond);
 
-			if( _sampleBuffer.Count > maximumSamples )
+			if (_sampleBuffer.Count > MaximumSamples)
 			{
 				_sampleBuffer.Dequeue();
-				averageFramesPerSecond = _sampleBuffer.Average( i => i );
+				AverageFramesPerSecond = _sampleBuffer.Average(i => i);
 			}
 			else
 			{
-				averageFramesPerSecond = currentFramesPerSecond;
+				AverageFramesPerSecond = CurrentFramesPerSecond;
 			}
 
-			totalFrames++;
+			TotalFrames++;
 
-			text = string.Format( "FPS: {0:0.00}", averageFramesPerSecond );
+			Text = string.Format("FPS: {0:0.00}", AverageFramesPerSecond);
 		}
 
-		public override bool isVisibleFromCamera( Camera camera )
+		public override bool IsVisibleFromCamera(Camera camera)
 		{
 			return true;
 		}
 
-		public override void render( Graphics graphics, Camera camera )
+		public override void Render(Batcher batcher, Camera camera)
 		{
 			// we override render and use position instead of entityPosition. this keeps the text in place even if the entity moves
-			graphics.batcher.drawString( _font, _text, localOffset, color, entity.transform.rotation, origin, entity.transform.scale, spriteEffects, layerDepth );
+			batcher.DrawString(_font, _text, LocalOffset, Color, Entity.Transform.Rotation, Origin,
+				Entity.Transform.Scale, SpriteEffects, LayerDepth);
 		}
 
-		public override void debugRender( Graphics graphics )
+		public override void DebugRender(Batcher batcher)
 		{
 			// due to the override of position in render we have to do the same here
-			var rect = bounds;
-			rect.location = localOffset;
-			graphics.batcher.drawHollowRect( rect, Color.Yellow );
+			var rect = Bounds;
+			rect.Location = LocalOffset;
+			batcher.DrawHollowRect(rect, Color.Yellow);
 		}
 
 
@@ -160,9 +166,9 @@ namespace Nez
 		/// Sets how far the fps text will appear from the edges of the screen.
 		/// </summary>
 		/// <param name="dockOffset">Offset from screen edges</param>
-		public FramesPerSecondCounter setDockOffset( Vector2 dockOffset )
+		public FramesPerSecondCounter SetDockOffset(Vector2 dockOffset)
 		{
-			this.dockOffset = dockOffset;
+			DockOffset = dockOffset;
 			return this;
 		}
 
@@ -170,13 +176,12 @@ namespace Nez
 		/// Sets which corner of the screen the fps text will show.
 		/// </summary>
 		/// <param name="dockPosition">Corner of the screen</param>
-		public FramesPerSecondCounter setDockPosition( FPSDockPosition dockPosition )
+		public FramesPerSecondCounter SetDockPosition(FPSDockPosition dockPosition)
 		{
-			this.dockPosition = dockPosition;
+			DockPosition = dockPosition;
 			return this;
 		}
 
 		#endregion
-
 	}
 }

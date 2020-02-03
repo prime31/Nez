@@ -1,5 +1,4 @@
-﻿using System;
-using Microsoft.Xna.Framework.Graphics;
+﻿using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
 using System.Collections.Generic;
 
@@ -12,26 +11,22 @@ namespace Nez
 	/// </summary>
 	public class TrailRibbon : RenderableComponent, IUpdatable
 	{
-		public override RectangleF bounds
-		{
-			// we calculate bounds in update so no need to mess with anything here
-			get { return _bounds; }
-		}
+		public override RectangleF Bounds => _bounds;
 
 		/// <summary>
 		/// starting color of the ribbon
 		/// </summary>
-		public Color startColor = Color.OrangeRed;
+		public Color StartColor = Color.OrangeRed;
 
 		/// <summary>
 		/// end (tail) color of the ribbon
 		/// </summary>
-		public Color endColor = new Color( 255, 255, 0, 0 );
+		public Color EndColor = new Color(255, 255, 0, 0);
 
 		/// <summary>
 		/// max pixel radius of the ribbon
 		/// </summary>
-		public float ribbonRadius = 20;
+		public float RibbonRadius = 20;
 
 		// number of max segments
 		readonly int _ribbonLength = 50;
@@ -42,11 +37,12 @@ namespace Nez
 		bool _areVertsDirty = true;
 
 
-		public TrailRibbon() : this( 50 )
-		{}
+		public TrailRibbon() : this(50)
+		{
+		}
 
 
-		public TrailRibbon( int ribbonLength )
+		public TrailRibbon(int ribbonLength)
 		{
 			_ribbonLength = ribbonLength;
 		}
@@ -55,43 +51,43 @@ namespace Nez
 		/// <summary>
 		/// builds the intialial ribbon segments
 		/// </summary>
-		void initializeVertices()
+		void InitializeVertices()
 		{
-			var radiusVec = new Vector3( 0, -ribbonRadius, 0 );
+			var radiusVec = new Vector3(0, -RibbonRadius, 0);
 			_vertices = new VertexPositionColor[_ribbonLength * 2 + 3];
 
 			// head of ribbon
-			_vertices[0].Position = new Vector3( entity.transform.position, 0f ) + radiusVec;
+			_vertices[0].Position = new Vector3(Entity.Transform.Position, 0f) + radiusVec;
 			_vertices[0].Color = Color.Red;
-			_vertices[1].Position = new Vector3( entity.transform.position, 0f ) + radiusVec;
+			_vertices[1].Position = new Vector3(Entity.Transform.Position, 0f) + radiusVec;
 			_vertices[1].Color = Color.Yellow;
-			_vertices[2].Position = new Vector3( entity.transform.position, 0f ) + radiusVec;
+			_vertices[2].Position = new Vector3(Entity.Transform.Position, 0f) + radiusVec;
 			_vertices[2].Color = Color.Green;
 
-			var pos = entity.transform.position;
-			for( var i = 0; i < _ribbonLength; i++ )
+			var pos = Entity.Transform.Position;
+			for (var i = 0; i < _ribbonLength; i++)
 			{
-				var distanceRatio = 1 - ( 1 / (float)_ribbonLength * ( i + 1 ) );
-				var segRadius = distanceRatio * ribbonRadius; // the radius size of this current segment
-				var seg = new RibbonSegment( pos, segRadius );
-				_segments.AddLast( seg );
-
+				var distanceRatio = 1 - (1 / (float) _ribbonLength * (i + 1));
+				var segRadius = distanceRatio * RibbonRadius; // the radius size of this current segment
+				var seg = new RibbonSegment(pos, segRadius);
+				_segments.AddLast(seg);
 			}
-			calculateVertices();
+
+			CalculateVertices();
 		}
 
 
 		/// <summary>
 		/// transfers the data from our segments to the vertices for display
 		/// </summary>
-		void calculateVertices()
+		void CalculateVertices()
 		{
-			if( !_areVertsDirty )
+			if (!_areVertsDirty)
 				return;
-			
-			var center = new Vector3( entity.transform.position, 0f );
-			var radVec = new Vector3( 0, -ribbonRadius, 0 );
-			
+
+			var center = new Vector3(Entity.Transform.Position, 0f);
+			var radVec = new Vector3(0, -RibbonRadius, 0);
+
 			// starting triangle, the head
 			_vertices[0].Position = center + radVec;
 			_vertices[0].Color = Color.Red;
@@ -107,31 +103,31 @@ namespace Nez
 
 			var index = 3;
 			var segCount = 1;
-			foreach( var seg in _segments )
+			foreach (var seg in _segments)
 			{
-				var ratio = 1 - ( 1 / (float)_ribbonLength * segCount );
-				seg.radius = ratio * ribbonRadius;
+				var ratio = 1 - (1 / (float) _ribbonLength * segCount);
+				seg.Radius = ratio * RibbonRadius;
 
-				ColorExt.lerp( ref startColor, ref endColor, out _vertices[index].Color, 1 - ratio );
-				_vertices[index].Position = seg.topPoint;
-				_vertices[index + 1].Position = seg.bottomPoint;
+				ColorExt.Lerp(ref StartColor, ref EndColor, out _vertices[index].Color, 1 - ratio);
+				_vertices[index].Position = seg.TopPoint;
+				_vertices[index + 1].Position = seg.BottomPoint;
 				_vertices[index + 1].Color = _vertices[index].Color;
 
 				// update min/max for any visible verts
-				maxX = Mathf.maxOf( maxX, _vertices[index].Position.X, _vertices[index + 1].Position.X );
-				minX = Mathf.minOf( minX, _vertices[index].Position.X, _vertices[index + 1].Position.X );
-				maxY = Mathf.maxOf( maxY, _vertices[index].Position.Y, _vertices[index + 1].Position.Y );
-				minY = Mathf.minOf( minY, _vertices[index].Position.Y, _vertices[index + 1].Position.Y );
+				maxX = Mathf.MaxOf(maxX, _vertices[index].Position.X, _vertices[index + 1].Position.X);
+				minX = Mathf.MinOf(minX, _vertices[index].Position.X, _vertices[index + 1].Position.X);
+				maxY = Mathf.MaxOf(maxY, _vertices[index].Position.Y, _vertices[index + 1].Position.Y);
+				minY = Mathf.MinOf(minY, _vertices[index].Position.Y, _vertices[index + 1].Position.Y);
 
 				// increment counters
 				index += 2;
 				segCount++;
 			}
 
-			_bounds.x = minX;
-			_bounds.y = minY;
-			_bounds.width = maxX - minX;
-			_bounds.height = maxY - minY;
+			_bounds.X = minX;
+			_bounds.Y = minY;
+			_bounds.Width = maxX - minX;
+			_bounds.Height = maxY - minY;
 
 			_areVertsDirty = false;
 		}
@@ -139,74 +135,74 @@ namespace Nez
 
 		#region Component/RenderableComponent/IUpdatable
 
-		public override void onEnabled()
+		public override void OnEnabled()
 		{
-			base.onEnabled();
+			base.OnEnabled();
 
 			_segments.Clear();
-			initializeVertices();
+			InitializeVertices();
 		}
 
 
-		public override void onAddedToEntity()
+		public override void OnAddedToEntity()
 		{
-			initializeVertices();
+			InitializeVertices();
 
-			_basicEffect = entity.scene.content.loadMonoGameEffect<BasicEffect>();
+			_basicEffect = Entity.Scene.Content.LoadMonoGameEffect<BasicEffect>();
 			_basicEffect.World = Matrix.Identity;
 			_basicEffect.VertexColorEnabled = true;
 		}
 
 
-		public override void onRemovedFromEntity()
+		public override void OnRemovedFromEntity()
 		{
-			entity.scene.content.unloadEffect( _basicEffect );
+			Entity.Scene.Content.UnloadEffect(_basicEffect);
 			_basicEffect = null;
 		}
 
 
-		void IUpdatable.update()
+		void IUpdatable.Update()
 		{
 			// remove last node and put it at the front with new settings
 			var seg = _segments.Last.Value;
 			_segments.RemoveLast();
-			var velocity = entity.transform.position - _segments.First.Value.position;
+			var velocity = Entity.Transform.Position - _segments.First.Value.Position;
 
 			// if the distance between the last segment and the current position is too tiny then just copy over the current head value
-			if( velocity.LengthSquared() > float.Epsilon * float.Epsilon )
+			if (velocity.LengthSquared() > float.Epsilon * float.Epsilon)
 			{
-				seg.position = entity.transform.position;
-				seg.radius = ribbonRadius;
-				seg.radiusDirection = new Vector2( -velocity.Y, velocity.X );
-				seg.radiusDirection.Normalize();
+				seg.Position = Entity.Transform.Position;
+				seg.Radius = RibbonRadius;
+				seg.RadiusDirection = new Vector2(-velocity.Y, velocity.X);
+				seg.RadiusDirection.Normalize();
 			}
 			else
 			{
-				seg.position = _segments.First.Value.position;
-				seg.radius = _segments.First.Value.radius;
-				seg.radiusDirection = _segments.First.Value.radiusDirection;
+				seg.Position = _segments.First.Value.Position;
+				seg.Radius = _segments.First.Value.Radius;
+				seg.RadiusDirection = _segments.First.Value.RadiusDirection;
 			}
 
-			_segments.AddFirst( seg );
+			_segments.AddFirst(seg);
 			_areVertsDirty = true;
 		}
 
 
-		public override bool isVisibleFromCamera( Camera camera )
+		public override bool IsVisibleFromCamera(Camera camera)
 		{
-			calculateVertices();
-			return base.isVisibleFromCamera( camera );
+			CalculateVertices();
+			return base.IsVisibleFromCamera(camera);
 		}
 
 
-		public override void render( Graphics graphics, Camera camera )
+		public override void Render(Batcher batcher, Camera camera)
 		{
-			calculateVertices();
-			_basicEffect.Projection = camera.projectionMatrix;
-			_basicEffect.View = camera.transformMatrix;
+			CalculateVertices();
+			_basicEffect.Projection = camera.ProjectionMatrix;
+			_basicEffect.View = camera.TransformMatrix;
 			_basicEffect.CurrentTechnique.Passes[0].Apply();
 
-			Core.graphicsDevice.DrawUserPrimitives( PrimitiveType.TriangleStrip, _vertices, 0, _ribbonLength * 2 + 1 );
+			Core.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, _vertices, 0, _ribbonLength * 2 + 1);
 		}
 
 		#endregion
@@ -214,37 +210,37 @@ namespace Nez
 
 		class RibbonSegment
 		{
-			public Vector2 position;
-			public Vector2 radiusDirection;
+			public Vector2 Position;
+
+			public Vector2 RadiusDirection;
+
 			// normalized
-			public float radius;
+			public float Radius;
 
-			public Vector3 topPoint
+			public Vector3 TopPoint
 			{
 				get
 				{
-					var tp = ( position + radiusDirection * radius );
-					return new Vector3( tp.X, tp.Y, 1 );
+					var tp = (Position + RadiusDirection * Radius);
+					return new Vector3(tp.X, tp.Y, 1);
 				}
 			}
 
-			public Vector3 bottomPoint
+			public Vector3 BottomPoint
 			{
 				get
 				{
-					var bp = position - radiusDirection * radius;
-					return new Vector3( bp.X, bp.Y, 1 );
+					var bp = Position - RadiusDirection * Radius;
+					return new Vector3(bp.X, bp.Y, 1);
 				}
 			}
 
 
-			public RibbonSegment( Vector2 position, float radius )
+			public RibbonSegment(Vector2 position, float radius)
 			{
-				this.position = position;
-				this.radius = radius;
+				Position = position;
+				Radius = radius;
 			}
 		}
-
 	}
 }
-

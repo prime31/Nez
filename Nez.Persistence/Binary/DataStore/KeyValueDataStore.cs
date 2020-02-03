@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 
+
 namespace Nez.Persistence.Binary
 {
 	/// <summary>
@@ -10,7 +11,8 @@ namespace Nez.Persistence.Binary
 		/// <summary>
 		/// default instance of the data store for easy access
 		/// </summary>
-		public static KeyValueDataStore Default = new KeyValueDataStore( kDefaultFileName );
+		public static KeyValueDataStore Default = new KeyValueDataStore(kDefaultFileName);
+
 		const string kDefaultFileName = "KeyValueData.bin";
 
 		public bool IsDirty => _isDirty;
@@ -28,7 +30,7 @@ namespace Nez.Persistence.Binary
 		/// manually call Load to do the initial data loading.
 		/// </summary>
 		/// <param name="filename">Filename.</param>
-		public KeyValueDataStore( string filename )
+		public KeyValueDataStore(string filename)
 		{
 			_filename = filename;
 		}
@@ -46,89 +48,89 @@ namespace Nez.Persistence.Binary
 		/// flushes the data to disk
 		/// </summary>
 		/// <param name="dataStore">Data store.</param>
-		public void Flush( FileDataStore dataStore )
+		public void Flush(FileDataStore dataStore)
 		{
-			dataStore.Save( _filename, this );
+			dataStore.Save(_filename, this);
 		}
 
 		/// <summary>
 		/// restores the data from disk if it is available
 		/// </summary>
 		/// <param name="dataStore">Data store.</param>
-		public void Load( FileDataStore dataStore )
+		public void Load(FileDataStore dataStore)
 		{
-			dataStore.Load( _filename, this );
+			dataStore.Load(_filename, this);
 		}
 
 		#region IPersistable
 
-		void IPersistable.Persist( IPersistableWriter writer )
+		void IPersistable.Persist(IPersistableWriter writer)
 		{
-			if( !_isDirty )
+			if (!_isDirty)
 				return;
 
 			var cnt = _boolDict.Count;
-			writer.Write( cnt );
-			foreach( var kv in _boolDict )
+			writer.Write(cnt);
+			foreach (var kv in _boolDict)
 			{
-				writer.Write( kv.Key );
-				writer.Write( kv.Value );
+				writer.Write(kv.Key);
+				writer.Write(kv.Value);
 			}
 
 			cnt = _intDict.Count;
-			writer.Write( cnt );
-			foreach( var kv in _intDict )
+			writer.Write(cnt);
+			foreach (var kv in _intDict)
 			{
-				writer.Write( kv.Key );
-				writer.Write( kv.Value );
+				writer.Write(kv.Key);
+				writer.Write(kv.Value);
 			}
 
 			cnt = _floatDict.Count;
-			writer.Write( cnt );
-			foreach( var kv in _floatDict )
+			writer.Write(cnt);
+			foreach (var kv in _floatDict)
 			{
-				writer.Write( kv.Key );
-				writer.Write( kv.Value );
+				writer.Write(kv.Key);
+				writer.Write(kv.Value);
 			}
 
 			cnt = _stringDict.Count;
-			writer.Write( cnt );
-			foreach( var kv in _stringDict )
+			writer.Write(cnt);
+			foreach (var kv in _stringDict)
 			{
-				writer.Write( kv.Key );
-				writer.Write( kv.Value );
+				writer.Write(kv.Key);
+				writer.Write(kv.Value);
 			}
 
 			_isDirty = false;
 		}
 
-		void IPersistable.Recover( IPersistableReader reader )
+		void IPersistable.Recover(IPersistableReader reader)
 		{
 			DeleteAll();
 
 			var cnt = reader.ReadInt();
-			for( var i = 0; i < cnt; i++ )
+			for (var i = 0; i < cnt; i++)
 			{
 				var key = reader.ReadString();
 				_boolDict[key] = reader.ReadBool();
 			}
 
 			cnt = reader.ReadInt();
-			for( var i = 0; i < cnt; i++ )
+			for (var i = 0; i < cnt; i++)
 			{
 				var key = reader.ReadString();
 				_intDict[key] = reader.ReadInt();
 			}
 
 			cnt = reader.ReadInt();
-			for( var i = 0; i < cnt; i++ )
+			for (var i = 0; i < cnt; i++)
 			{
 				var key = reader.ReadString();
 				_floatDict[key] = reader.ReadFloat();
 			}
 
 			cnt = reader.ReadInt();
-			for( var i = 0; i < cnt; i++ )
+			for (var i = 0; i < cnt; i++)
 			{
 				var key = reader.ReadString();
 				_stringDict[key] = reader.ReadString();
@@ -139,25 +141,25 @@ namespace Nez.Persistence.Binary
 
 		#region Setters
 
-		public void Set( string key, bool value )
+		public void Set(string key, bool value)
 		{
 			_isDirty = true;
 			_boolDict[key] = value;
 		}
 
-		public void Set( string key, int value )
+		public void Set(string key, int value)
 		{
 			_isDirty = true;
 			_intDict[key] = value;
 		}
 
-		public void Set( string key, float value )
+		public void Set(string key, float value)
 		{
 			_isDirty = true;
 			_floatDict[key] = value;
 		}
 
-		public void Set( string key, string value )
+		public void Set(string key, string value)
 		{
 			_isDirty = true;
 			_stringDict[key] = value;
@@ -167,31 +169,35 @@ namespace Nez.Persistence.Binary
 
 		#region Getters
 
-		public bool GetBool( string key, bool defaultValue = default( bool ) )
+		public bool GetBool(string key, bool defaultValue = default(bool))
 		{
-			if( _boolDict.TryGetValue( key, out var val ) )
+			if (_boolDict.TryGetValue(key, out var val))
 				return val;
+
 			return defaultValue;
 		}
 
-		public int GetInt( string key, int defaultValue = default( int ) )
+		public int GetInt(string key, int defaultValue = default(int))
 		{
-			if( _intDict.TryGetValue( key, out var val ) )
+			if (_intDict.TryGetValue(key, out var val))
 				return val;
+
 			return defaultValue;
 		}
 
-		public float GetFloat( string key, float defaultValue = default( float ) )
+		public float GetFloat(string key, float defaultValue = default(float))
 		{
-			if( _floatDict.TryGetValue( key, out var val ) )
+			if (_floatDict.TryGetValue(key, out var val))
 				return val;
+
 			return defaultValue;
 		}
 
-		public string GetString( string key, string defaultValue = null )
+		public string GetString(string key, string defaultValue = null)
 		{
-			if( _stringDict.TryGetValue( key, out var val ) )
+			if (_stringDict.TryGetValue(key, out var val))
 				return val;
+
 			return defaultValue;
 		}
 
@@ -199,55 +205,54 @@ namespace Nez.Persistence.Binary
 
 		#region Checkers
 
-		public bool ContainsBoolKey( string key ) => _boolDict.ContainsKey( key );
+		public bool ContainsBoolKey(string key) => _boolDict.ContainsKey(key);
 
-		public bool ContainsIntKey( string key ) => _intDict.ContainsKey( key );
+		public bool ContainsIntKey(string key) => _intDict.ContainsKey(key);
 
-		public bool ContainsFloatKey( string key ) => _floatDict.ContainsKey( key );
+		public bool ContainsFloatKey(string key) => _floatDict.ContainsKey(key);
 
-		public bool ContainsStringKey( string key ) => _stringDict.ContainsKey( key );
+		public bool ContainsStringKey(string key) => _stringDict.ContainsKey(key);
 
 		#endregion
 
 		#region Deleters
 
-		public void DeleteBoolKey( string key )
+		public void DeleteBoolKey(string key)
 		{
-			if( _boolDict.ContainsKey( key ) )
+			if (_boolDict.ContainsKey(key))
 			{
 				_isDirty = true;
-				_boolDict.Remove( key );
+				_boolDict.Remove(key);
 			}
 		}
 
-		public void DeleteIntKey( string key )
+		public void DeleteIntKey(string key)
 		{
-			if( _intDict.ContainsKey( key ) )
+			if (_intDict.ContainsKey(key))
 			{
 				_isDirty = true;
-				_intDict.Remove( key );
+				_intDict.Remove(key);
 			}
 		}
 
-		public void DeleteFloatKey( string key )
+		public void DeleteFloatKey(string key)
 		{
-			if( _floatDict.ContainsKey( key ) )
+			if (_floatDict.ContainsKey(key))
 			{
 				_isDirty = true;
-				_floatDict.Remove( key );
+				_floatDict.Remove(key);
 			}
 		}
 
-		public void DeleteStringKey( string key )
+		public void DeleteStringKey(string key)
 		{
-			if( _stringDict.ContainsKey( key ) )
+			if (_stringDict.ContainsKey(key))
 			{
 				_isDirty = true;
-				_stringDict.Remove( key );
+				_stringDict.Remove(key);
 			}
 		}
 
 		#endregion
-
 	}
 }
