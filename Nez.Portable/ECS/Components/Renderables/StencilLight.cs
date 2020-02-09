@@ -117,7 +117,7 @@ namespace Nez
 			if (Power > 0 && IsVisibleFromCamera(camera))
 			{
 				_lightEffect.ViewProjectionMatrix = camera.ViewProjectionMatrix;
-				_lightEffect.LightPosition = Entity.Transform.Position;
+				_lightEffect.LightPosition = camera.WorldToScreenPoint(Entity.Transform.Position);
 				_lightEffect.Color = Color * Power;
 
 				batcher.DrawRect(Bounds, Color.White);
