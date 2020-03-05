@@ -61,5 +61,12 @@ namespace Nez.Persistence.Binary
 			for (var i = 0; i < arr.Length; i++)
 				self.Write(arr[i]);
 		}
+		
+		public static void Write(this IPersistableWriter self, IPersistable[] arr)
+		{
+			self.Write(arr.Length);
+			for (var i = 0; i < arr.Length; i++)
+				self.Write(arr[i]);
+		}
 	}
 }
