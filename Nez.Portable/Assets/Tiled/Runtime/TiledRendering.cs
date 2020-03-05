@@ -212,7 +212,7 @@ namespace Nez.Tiled
                 // if we are not debug rendering, we only render Tile and Text types
                 if (!Core.DebugRenderEnabled)
                 {
-                    if (obj.ObjectType != TmxObjectType.Tile || obj.ObjectType != TmxObjectType.Text)
+                    if (obj.ObjectType != TmxObjectType.Tile && obj.ObjectType != TmxObjectType.Text)
                         continue;
                 }
 
