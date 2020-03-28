@@ -57,7 +57,7 @@ namespace Nez
 		internal static byte[] SquaresTransitionBytes => GetFileResourceBytes("Content/nez/effects/transitions/Squares.mgfxo");
 
 		// sprite or post processor effects
-		internal static byte[] SpriteEffectBytes => GetMonoGameEmbeddedResourceBytes("Microsoft.Xna.Framework.Graphics.Effect.Resources.SpriteEffect.ogl.mgfxo");
+		internal static byte[] SpriteEffectBytes => GetMonoGameEmbeddedResourceBytes("Microsoft.Xna.Framework.Platform.Graphics.Effect.Resources.SpriteEffect.ogl.mgfxo");
 
 		internal static byte[] MultiTextureOverlayBytes => GetFileResourceBytes("Content/nez/effects/MultiTextureOverlay.mgfxo");
 
