@@ -366,6 +366,7 @@ namespace Nez
 			if (EntityProcessors != null)
 				EntityProcessors.Begin();
 			Core.Emitter.AddObserver(CoreEvents.GraphicsDeviceReset, OnGraphicsDeviceReset);
+			Core.Emitter.AddObserver(CoreEvents.OrientationChanged, OnOrientationChanged);
 
 			_didSceneBegin = true;
 			OnStart();
@@ -545,6 +546,7 @@ namespace Nez
 		}
 
 		void OnGraphicsDeviceReset() => UpdateResolutionScaler();
+		void OnOrientationChanged() => UpdateResolutionScaler();
 
 		#endregion
 
