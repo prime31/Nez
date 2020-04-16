@@ -98,6 +98,7 @@ namespace Nez.DeferredLighting
 
 		public void PrepareClearGBuffer()
 		{
+			CurrentTechnique = Techniques["ClearGBuffer"];
 			clearGBufferPass.Apply();
 		}
 
@@ -148,6 +149,7 @@ namespace Nez.DeferredLighting
 				                 light.Entity.Transform.Position.Y + light.LocalOffset.Y, 0);
 			SetObjectToWorldMatrix(objToWorld);
 
+			CurrentTechnique = Techniques["DeferredPointLight"];
 			pointLightPass.Apply();
 		}
 
@@ -162,6 +164,7 @@ namespace Nez.DeferredLighting
 			SetSpotLightDirection(light.Direction);
 			SetSpotConeAngle(light.ConeAngle);
 
+			CurrentTechnique = Techniques["DeferredSpotLight"];
 			spotLightPass.Apply();
 		}
 
@@ -197,6 +200,7 @@ namespace Nez.DeferredLighting
 			SetSpecularPower(light.SpecularPower);
 			SetSpecularIntensity(light.SpecularIntensity);
 
+			CurrentTechnique = Techniques["DeferredDirectionalLight"];
 			directionalLightPass.Apply();
 		}
 
@@ -346,6 +350,7 @@ namespace Nez.DeferredLighting
 			_lightMapParam.SetValue(lightMap);
 			_normalMapParam.SetValue(normalMap);
 
+			CurrentTechnique = Techniques["FinalCombine"];
 			finalCombinePass.Apply();
 		}
 
