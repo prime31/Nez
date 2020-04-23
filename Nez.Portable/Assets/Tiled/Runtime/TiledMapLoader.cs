@@ -58,18 +58,7 @@ namespace Nez.Tiled
 				var tileset = ParseTmxTileset(map, e, map.TmxDirectory);
 				map.Tilesets.Add(tileset);
 
-				// we have to iterate the dictionary because tile.gid (the key) could be any number in any order
-				foreach (var kvPair in tileset.Tiles)
-				{
-					var tile = kvPair.Value;
-					if (tile.Image != null)
-					{
-						if (tile.Image.Width > map.MaxTileWidth)
-							map.MaxTileWidth = tile.Image.Width;
-						if (tile.Image.Height > map.MaxTileHeight)
-							map.MaxTileHeight = tile.Image.Height;
-					}
-				}
+				UpdateMaxTileSizes(tileset);
 			}
 
 			map.Layers = new TmxList<ITmxLayer>();
@@ -81,6 +70,29 @@ namespace Nez.Tiled
 			ParseLayers(map, xMap, map, map.Width, map.Height, map.TmxDirectory);
 
 			return map;
+		}
+
+		private static void UpdateMaxTileSizes(TmxTileset tileset)
+		{
+			// we have to iterate the dictionary because tile.gid (the key) could be any number in any order
+			foreach(var kvPair in tileset.Tiles)
+			{
+				var tile = kvPair.Value;
+				if (tile.Image != null)
+				{
+					if (tile.Image.Width > tileset.Map.MaxTileWidth) tileset.Map.MaxTileWidth = tile.Image.Width;
+					if (tile.Image.Height > tileset.Map.MaxTileHeight) tileset.Map.MaxTileHeight = tile.Image.Height;
+				}
+			}
+
+			foreach(var kvPair in tileset.TileRegions)
+			{
+				var region = kvPair.Value;
+				var width = (int) region.Width;
+				var height = (int) region.Height;
+				if (width > tileset.Map.MaxTileWidth) tileset.Map.MaxTileWidth = width;
+				if (width > tileset.Map.MaxTileHeight) tileset.Map.MaxTileHeight = height;
+			}
 		}
 
 		static OrientationType ParseOrientationType(string type)
