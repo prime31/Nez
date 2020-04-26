@@ -440,6 +440,11 @@ namespace Nez
 		public T GetComponent<T>() where T : Component => Components.GetComponent<T>(false);
 
 		/// <summary>
+		/// checks to see if the Entity has the component
+		/// </summary>
+		public bool HasComponent<T>() where T : Component => Components.GetComponent<T>(false) != null;
+
+		/// <summary>
 		/// Gets the first Component of type T and returns it. If no Component is found the Component will be created.
 		/// </summary>
 		/// <returns>The component.</returns>
