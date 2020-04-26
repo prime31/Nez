@@ -25,11 +25,6 @@ namespace Nez
 		{
 			return self.Entity.GetComponent<T>();
 		}
-		        
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool HasComponent<T>(this Component self) where T : Component {
-	        return self.Entity.HasComponent<T>();
-        }
 
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static void GetComponents<T>(this Component self, List<T> componentList) where T : class
