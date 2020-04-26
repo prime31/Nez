@@ -383,60 +383,59 @@ namespace Nez
 
 			return didCollide;
 		}
-		
-		
-        /// <summary>
-        ///     checks to see if this Collider with motion applied (delta movement vector) collides with any collider. If it does,
-        ///     true will be
-        ///     returned and result will be populated with collision data. Motion will be set to the maximum distance the Collider
-        ///     can travel
-        ///     before colliding.
-        /// </summary>
-        /// <returns><c>true</c>, if with was collidesed, <c>false</c> otherwise.</returns>
-        /// <param name="motion">Motion.</param>
-        /// <param name="results">Results.</param>
-        public bool CollidesWithAnyMultiple(Vector2 motion, List<CollisionResult> results)
-        {
-            // fetch anything that we might collide with at our new position
-            var colliderBounds = Bounds;
-            colliderBounds.X += motion.X;
-            colliderBounds.Y += motion.Y;
-            var neighbors = Physics.BoxcastBroadphaseExcludingSelf(this, ref colliderBounds, CollidesWithLayers);
 
-            // alter the shapes position so that it is in the place it would be after movement so we can check for overlaps
-            var oldPosition = Shape.position;
+		/// <summary>
+		///     checks to see if this Collider with motion applied (delta movement vector) collides with any collider. If it does,
+		///     true will be
+		///     returned and result will be populated with collision data. Motion will be set to the maximum distance the Collider
+		///     can travel
+		///     before colliding.
+		/// </summary>
+		/// <returns><c>true</c>, if with was collidesed, <c>false</c> otherwise.</returns>
+		/// <param name="motion">Motion.</param>
+		/// <param name="results">Results.</param>
+		public bool CollidesWithAnyMultiple(Vector2 motion, List<CollisionResult> results)
+		{
+			// fetch anything that we might collide with at our new position
+			var colliderBounds = Bounds;
+			colliderBounds.X += motion.X;
+			colliderBounds.Y += motion.Y;
+			var neighbors = Physics.BoxcastBroadphaseExcludingSelf(this, ref colliderBounds, CollidesWithLayers);
 
-            var didCollide = false;
-            foreach (var neighbor in neighbors)
-            {
-                // skip triggers
-                if (neighbor.IsTrigger)
-                    continue;
+			// alter the shapes position so that it is in the place it would be after movement so we can check for overlaps
+			var oldPosition = Shape.position;
 
-                // apply motion to shape
-                Shape.position += motion;
+			var didCollide = false;
+			foreach (var neighbor in neighbors)
+			{
+				// skip triggers
+				if (neighbor.IsTrigger)
+					continue;
 
-                if (CollidesWith(neighbor, out var neighborResult))
-                {
-                    // hit. back off our Shape.position
-                    Shape.position -= neighborResult.MinimumTranslationVector;
-                    didCollide = true;
-                }
+				// apply motion to shape
+				Shape.position += motion;
 
-                results.Add(neighborResult);
+				if (CollidesWith(neighbor, out var neighborResult))
+				{
+					// hit. back off our Shape.position
+					Shape.position -= neighborResult.MinimumTranslationVector;
+					didCollide = true;
+				}
 
-                // return the shapes position to where it was before the check
-                Shape.position = oldPosition;
-            }
+				results.Add(neighborResult);
 
-            return didCollide;
-        }
+				// return the shapes position to where it was before the check
+				Shape.position = oldPosition;
+			}
 
-        public bool CollidesWithAnyMultiple(Vector2 motion, out List<CollisionResult> results)
-        {
-            results = new List<CollisionResult>();
-            return CollidesWithAnyMultiple(motion, results);
-        }
+			return didCollide;
+		}
+
+		public bool CollidesWithAnyMultiple(Vector2 motion, out List<CollisionResult> results)
+		{
+			results = new List<CollisionResult>();
+			return CollidesWithAnyMultiple(motion, results);
+		}
 
 		#endregion
 
