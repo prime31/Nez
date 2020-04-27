@@ -57,7 +57,7 @@
 
     <ItemGroup>
         <PackageReference Include="ImGui.NET" Version="1.71.0" />
-        <PackageReference Include="MonoGame.Framework.Portable" Version="3.7.1.189" PrivateAssets="all" />
+        <PackageReference Include="MonoGame.Framework.DesktopGL.Core" Version="3.8.0.13" />
     </ItemGroup>
 
     <Import Sdk="Microsoft.NET.Sdk" Project="Sdk.targets" />
