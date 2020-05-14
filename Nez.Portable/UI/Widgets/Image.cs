@@ -46,7 +46,7 @@ namespace Nez.UI
 		{
 			if (_drawable != drawable)
 			{
-				if (_drawable != null)
+				if (drawable != null)
 				{
 					if (PreferredWidth != drawable.MinWidth || PreferredHeight != drawable.MinHeight)
 						InvalidateHierarchy();
