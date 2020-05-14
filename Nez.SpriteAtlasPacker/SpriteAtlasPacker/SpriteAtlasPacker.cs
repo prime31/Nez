@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
+using System.Linq;
 
 namespace Nez.Tools.Atlases
 {
@@ -135,7 +136,7 @@ namespace Nez.Tools.Atlases
 		static void FindImagesRecursively(string dir, List<string> images, Dictionary<string, List<string>> animations, bool createAnimations)
 		{
 			var animationFrames = new List<string>();
-			foreach (var file in Directory.GetFiles(dir))
+			foreach (var file in Directory.GetFiles(dir).OrderBy(_ => _))
 			{
 				if (MiscHelper.IsImageFile(file))
 				{
