@@ -105,12 +105,12 @@ namespace Nez.Tiled
 		/// <summary>
 		/// the TiledTileLayer used for collision checks
 		/// </summary>
-		public readonly TmxLayer CollisionLayer;
+		public TmxLayer CollisionLayer;
 
 		/// <summary>
 		/// the TiledMap that contains collisionLayer
 		/// </summary>
-		public readonly TmxMap TiledMap;
+		public TmxMap TiledMap;
 
 		/// <summary>
 		/// temporary storage for all the tiles that intersect the bounds being checked
