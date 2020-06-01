@@ -16,6 +16,7 @@ namespace Nez.Tiled
 		/// <param name="batcher"></param>
 		/// <param name="scale"></param>
 		/// <param name="layerDepth"></param>
+		/// <param name="cameraClipBounds"></param>
 		public static void RenderMap(TmxMap map, Batcher batcher, Vector2 position, Vector2 scale, float layerDepth, RectangleF cameraClipBounds)
 		{
 			foreach (var layer in map.Layers)
