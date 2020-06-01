@@ -158,9 +158,8 @@ namespace Nez.Tiled
 				{
 					var xDocTileset = XDocument.Load(stream);
 
-					string tsxDir = Path.GetDirectoryName(source);
-					var tileset = new TmxTileset().LoadTmxTileset(map, xDocTileset.Element("tileset"), firstGid, tsxDir);
-					tileset.TmxDirectory = tsxDir;
+					var tileset = new TmxTileset().LoadTmxTileset(map, xDocTileset.Element("tileset"), firstGid, tmxDir);
+					tileset.TmxDirectory = Path.GetDirectoryName(source);
 
 					return tileset;
 				}
@@ -537,7 +536,7 @@ namespace Nez.Tiled
 			return group;
 		}
 
-		public static TmxTileset LoadTmxTileset(this TmxTileset tileset, TmxMap map, XElement xTileset, int firstGid, string tsxDir)
+		public static TmxTileset LoadTmxTileset(this TmxTileset tileset, TmxMap map, XElement xTileset, int firstGid, string tmxDir)
 		{
 			tileset.Map = map;
 			tileset.FirstGid = firstGid;
@@ -553,7 +552,7 @@ namespace Nez.Tiled
 
 			var xImage = xTileset.Element("image");
 			if (xImage != null)
-				tileset.Image = new TmxImage().LoadTmxImage(xImage, tsxDir);
+				tileset.Image = new TmxImage().LoadTmxImage(xImage, tmxDir);
 
 			var xTerrainType = xTileset.Element("terraintypes");
 			if (xTerrainType != null)
@@ -566,7 +565,7 @@ namespace Nez.Tiled
 			tileset.Tiles = new Dictionary<int, TmxTilesetTile>();
 			foreach (var xTile in xTileset.Elements("tile"))
 			{
-				var tile = new TmxTilesetTile().LoadTmxTilesetTile(tileset, xTile, tileset.Terrains, tsxDir);
+				var tile = new TmxTilesetTile().LoadTmxTilesetTile(tileset, xTile, tileset.Terrains, tmxDir);
 				tileset.Tiles[tile.Id] = tile;
 			}
 
