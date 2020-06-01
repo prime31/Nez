@@ -16,12 +16,13 @@ namespace Nez.Tiled
 		/// <param name="batcher"></param>
 		/// <param name="scale"></param>
 		/// <param name="layerDepth"></param>
-		public static void RenderMap(TmxMap map, Batcher batcher, Vector2 position, Vector2 scale, float layerDepth)
+		/// <param name="cameraClipBounds"></param>
+		public static void RenderMap(TmxMap map, Batcher batcher, Vector2 position, Vector2 scale, float layerDepth, RectangleF cameraClipBounds)
 		{
 			foreach (var layer in map.Layers)
 			{
 				if (layer is TmxLayer tmxLayer && tmxLayer.Visible)
-					RenderLayer(tmxLayer, batcher, position, scale, layerDepth);
+					RenderLayer(tmxLayer, batcher, position, scale, layerDepth, cameraClipBounds);
 				else if (layer is TmxImageLayer tmxImageLayer && tmxImageLayer.Visible)
 					RenderImageLayer(tmxImageLayer, batcher, position, scale, layerDepth);
 				else if (layer is TmxGroup tmxGroup && tmxGroup.Visible)
