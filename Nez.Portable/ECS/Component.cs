@@ -51,6 +51,13 @@ namespace Nez
 			set => SetUpdateOrder(value);
 		}
 
+        /// <summary>
+        /// 	update interval of this component if it is IUpdatable.
+        /// 	otherwise, this is ignored.
+        /// 	this is independent of the Entity's update interval.
+        /// </summary>
+        public int UpdateInterval { get; set; } = 1;
+
 		bool _enabled = true;
 		internal int _updateOrder = 0;
 
