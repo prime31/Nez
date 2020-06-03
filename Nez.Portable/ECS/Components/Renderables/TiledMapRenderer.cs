@@ -124,7 +124,7 @@ namespace Nez
 		{
 			if (LayerIndicesToRender == null)
 			{
-				TiledRendering.RenderMap(TiledMap, batcher, Entity.Transform.Position + _localOffset, Transform.Scale, LayerDepth);
+				TiledRendering.RenderMap(TiledMap, batcher, Entity.Transform.Position + _localOffset, Transform.Scale, LayerDepth, camera.Bounds);
 			}
 			else
 			{
