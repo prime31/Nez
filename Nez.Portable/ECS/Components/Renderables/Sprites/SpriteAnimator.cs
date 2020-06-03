@@ -92,7 +92,7 @@ namespace Nez.Sprites
 
 		public SpriteAnimator(Sprite sprite) => SetSprite(sprite);
 
-		void IUpdatable.Update()
+		public virtual void Update()
 		{
 			if (AnimationState != State.Running || CurrentAnimation == null)
 				return;

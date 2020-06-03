@@ -119,7 +119,7 @@ namespace Nez
 			_sampleBuffer.Clear();
 		}
 
-		void IUpdatable.Update()
+		public virtual void Update()
 		{
 			CurrentFramesPerSecond = 1.0f / Time.UnscaledDeltaTime;
 			_sampleBuffer.Enqueue(CurrentFramesPerSecond);

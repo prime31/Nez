@@ -36,7 +36,7 @@ namespace Nez
 		}
 
 
-		void IUpdatable.Update()
+		public virtual void Update()
 		{
 			if (Math.Abs(_shakeIntensity) > 0f)
 			{

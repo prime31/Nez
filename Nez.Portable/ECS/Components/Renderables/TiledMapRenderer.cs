@@ -118,7 +118,7 @@ namespace Nez
 
 		public override void OnRemovedFromEntity() => RemoveColliders();
 
-		void IUpdatable.Update() => TiledMap.Update();
+		public virtual void Update() => TiledMap.Update();
 
 		public override void Render(Batcher batcher, Camera camera)
 		{

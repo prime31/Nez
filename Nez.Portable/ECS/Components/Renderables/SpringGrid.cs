@@ -309,7 +309,7 @@ namespace Nez
 		#endregion
 
 
-		void IUpdatable.Update()
+		public virtual void Update()
 		{
 			_screenSize.X = Screen.Width;
 			_screenSize.Y = Screen.Height;
