@@ -92,8 +92,8 @@ namespace Nez
 		string _windowTitle;
 #endif
 
-		Scene _scene;
-		Scene _nextScene;
+        IScene _scene;
+		IScene _nextScene;
 		internal SceneTransition _sceneTransition;
 
 		/// <summary>
@@ -110,7 +110,7 @@ namespace Nez
 		/// <summary>
 		/// The currently active Scene. Note that if set, the Scene will not actually change until the end of the Update
 		/// </summary>
-		public static Scene Scene
+		public static IScene Scene
 		{
 			get => _instance._scene;
 			set
@@ -194,7 +194,6 @@ namespace Nez
 			}
 		}
 
-
 		#region Passthroughs to Game
 
 		public new static void Exit()
@@ -203,7 +202,6 @@ namespace Nez
 		}
 
 		#endregion
-
 
 		#region Game overides
 

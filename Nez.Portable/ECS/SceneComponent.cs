@@ -98,7 +98,8 @@ namespace Nez
 			if (UpdateOrder != updateOrder)
 			{
 				UpdateOrder = updateOrder;
-				Core.Scene._sceneComponents.Sort();
+				if (Core.Scene is Scene scene)
+					scene._sceneComponents.Sort();
 			}
 
 			return this;

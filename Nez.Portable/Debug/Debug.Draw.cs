@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Nez.BitmapFonts;
 using System.Diagnostics;
+using Nez.AI.UtilityAI;
 
 namespace Nez
 {
@@ -17,8 +18,8 @@ namespace Nez
 		{
 			if (_debugDrawItems.Count > 0)
 			{
-				if (Core.Scene != null && Core.Scene.Camera != null)
-					Graphics.Instance.Batcher.Begin(Core.Scene.Camera.TransformMatrix);
+				if (Core.Scene != null && Core.Scene is Scene scene && scene.Camera != null)
+					Graphics.Instance.Batcher.Begin(scene.Camera.TransformMatrix);
 				else
 					Graphics.Instance.Batcher.Begin();
 
@@ -34,7 +35,8 @@ namespace Nez
 
 			if (_screenSpaceDebugDrawItems.Count > 0)
 			{
-				var pos = DrawTextFromBottom ? new Vector2(0, Core.Scene.SceneRenderTargetSize.Y) : Vector2.Zero;
+				var rtSize = (Core.Scene is Scene scene) ? scene.SceneRenderTargetSize.Y : Screen.Size.Y;
+				var pos = DrawTextFromBottom ? new Vector2(0, rtSize) : Vector2.Zero;
 				Graphics.Instance.Batcher.Begin();
 
 				for (var i = _screenSpaceDebugDrawItems.Count - 1; i >= 0; i--)

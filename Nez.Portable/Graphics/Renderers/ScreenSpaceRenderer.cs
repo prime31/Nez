@@ -63,7 +63,9 @@ namespace Nez
 
 			// this is a bit of a hack. we maybe should take the Camera in the constructor
 			if (Camera == null)
+			{
 				Camera = Core.Scene.CreateEntity("screenspace camera").AddComponent<Camera>();
+			}
 		}
 	}
 }

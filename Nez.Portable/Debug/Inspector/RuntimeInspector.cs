@@ -79,8 +79,11 @@ namespace Nez
 			}
 			else
 			{
-				for (var i = 0; i < Core.Scene._postProcessors.Length; i++)
-					GetOrCreateInspectorList(Core.Scene._postProcessors.Buffer[i]).Update();
+				if (Core.Scene is Scene scene)
+				{
+					for (var i = 0; i < scene._postProcessors.Length; i++)
+						GetOrCreateInspectorList(scene._postProcessors.Buffer[i]).Update();
+				}
 			}
 		}
 

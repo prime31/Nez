@@ -5,10 +5,9 @@ using Nez.Systems;
 using Nez.Textures;
 using Microsoft.Xna.Framework.Graphics;
 
-
 namespace Nez
 {
-	public class Scene
+	public class Scene : IScene
 	{
 		public enum SceneResolutionPolicy
 		{
@@ -340,7 +339,7 @@ namespace Nez
 		{
 		}
 
-		internal void Begin()
+		public void Begin()
 		{
 			if (_renderers.Length == 0)
 			{
@@ -361,7 +360,7 @@ namespace Nez
 			OnStart();
 		}
 
-		internal void End()
+		public void End()
 		{
 			_didSceneBegin = false;
 
@@ -413,7 +412,7 @@ namespace Nez
 			RenderableComponents.UpdateLists();
 		}
 
-		internal void Render()
+		public void Render()
 		{
 			if (_renderers.Length == 0)
 			{
@@ -457,7 +456,7 @@ namespace Nez
 		/// SceneTransition if the transition is requesting the render.
 		/// </summary>
 		/// <returns>The render.</returns>
-		internal void PostRender(RenderTarget2D finalRenderTarget = null)
+		public void PostRender(RenderTarget2D finalRenderTarget = null)
 		{
 			var enabledCounter = 0;
 			if (EnablePostProcessing)
