@@ -66,7 +66,7 @@ namespace Nez.Farseer
 		}
 
 
-		void IUpdatable.Update()
+		public virtual void Update()
 		{
 			if (!Body.IsAwake)
 				return;

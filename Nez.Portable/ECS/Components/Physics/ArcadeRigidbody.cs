@@ -160,7 +160,7 @@ namespace Nez
 			Debug.WarnIf(_collider == null, "ArcadeRigidbody has no Collider. ArcadeRigidbody requires a Collider!");
 		}
 
-		void IUpdatable.Update()
+		public virtual void Update()
 		{
 			if (IsImmovable || _collider == null)
 			{

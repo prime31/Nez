@@ -51,7 +51,7 @@ namespace Nez
 		}
 
 
-		void IUpdatable.Update()
+		public virtual void Update()
 		{
 			Stage.Update();
 		}

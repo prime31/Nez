@@ -83,7 +83,7 @@ namespace Nez
 			Core.Emitter.RemoveObserver(CoreEvents.GraphicsDeviceReset, OnGraphicsDeviceReset);
 		}
 
-		void IUpdatable.Update()
+		public virtual void Update()
 		{
 			// translate the deadzone to be in world space
 			var halfScreen = Camera.Bounds.Size * 0.5f;

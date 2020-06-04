@@ -53,7 +53,7 @@ namespace Nez.Sprites
 		{
 		}
 
-		void IUpdatable.Update()
+		public virtual void Update()
 		{
 			_scrollX += ScrollSpeedX * Time.DeltaTime;
 			_scrollY += ScrollSpeedY * Time.DeltaTime;
