@@ -36,9 +36,12 @@ namespace Nez.ImGuiTools.ObjectInspectors
 			{
 				if (ImGui.Selectable("Remove Renderer"))
 				{
-					isOpen = false;
-					Core.Scene.RemoveRenderer(_renderer);
-					ImGui.CloseCurrentPopup();
+					if(Core.Scene is Scene s)
+					{
+						isOpen = false;
+						s.RemoveRenderer(_renderer);
+						ImGui.CloseCurrentPopup();
+					}
 				}
 
 				ImGui.EndPopup();

@@ -10,23 +10,28 @@ namespace Nez.ImGuiTools.SceneGraphPanes
 		const int MIN_ENTITIES_FOR_CLIPPER = 100;
 		string _newEntityName = "";
 
+		Scene CastScene;
 		unsafe public void Draw()
 		{
-			if (Core.Scene.Entities.Count > MIN_ENTITIES_FOR_CLIPPER)
+			CastScene = Core.Scene as Scene;
+			if (CastScene == null)
+				return;
+
+			if (CastScene.Entities.Count > MIN_ENTITIES_FOR_CLIPPER)
 			{
-				var clipperPtr = ImGuiNative.ImGuiListClipper_ImGuiListClipper(Core.Scene.Entities.Count, -1);
+				var clipperPtr = ImGuiNative.ImGuiListClipper_ImGuiListClipper(CastScene.Entities.Count, -1);
 				var clipper = new ImGuiListClipperPtr(clipperPtr);
 
 				while (clipper.Step())
 					for (var i = clipper.DisplayStart; i < clipper.DisplayEnd; i++)
-						DrawEntity(Core.Scene.Entities[i]);
+						DrawEntity(CastScene.Entities[i]);
 
 				ImGuiNative.ImGuiListClipper_destroy(clipperPtr);
 			}
 			else
 			{
-				for (var i = 0; i < Core.Scene.Entities.Count; i++)
-					DrawEntity(Core.Scene.Entities[i]);
+				for (var i = 0; i < CastScene.Entities.Count; i++)
+					DrawEntity(CastScene.Entities[i]);
 			}
 
 			NezImGui.MediumVerticalSpace();
@@ -86,7 +91,7 @@ namespace Nez.ImGuiTools.SceneGraphPanes
 			{
 				if (ImGui.Selectable("Clone Entity " + entity.Name))
 				{
-					var clone = entity.Clone(Core.Scene.Camera.Position);
+					var clone = entity.Clone(CastScene.Camera.Position);
 					entity.Scene.AddEntity(clone);
 				}
 
@@ -150,8 +155,8 @@ namespace Nez.ImGuiTools.SceneGraphPanes
 				{
 					_newEntityName = _newEntityName.Length > 0 ? _newEntityName : Utils.RandomString(8);
 					var newEntity = new Entity(_newEntityName);
-					newEntity.Transform.Position = Core.Scene.Camera.Transform.Position;
-					Core.Scene.AddEntity(newEntity);
+					newEntity.Transform.Position = CastScene.Camera.Transform.Position;
+					CastScene.AddEntity(newEntity);
 
 					_newEntityName = "";
 					ImGui.CloseCurrentPopup();
