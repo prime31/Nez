@@ -47,6 +47,12 @@ namespace Nez.Console
 			"Inspects the Entity with the passed in name, or pass in 'pp' or 'postprocessors' to inspect all PostProccessors in the Scene. Pass in no name to close the inspector.")]
 		static void InspectEntity(string entityName = "")
 		{
+			var CastScene = Core.Scene as Scene;
+			if(CastScene == null)
+			{
+				Debug.Warn("Attempted to use inspect in a scene that does not inherit `Scene`");
+				return;
+			}
 			// clean up no matter what
 			if (Instance._runtimeInspector != null)
 			{
@@ -61,7 +67,7 @@ namespace Nez.Console
 			}
 			else if (entityName != "")
 			{
-				var entity = Core.Scene.FindEntity(entityName);
+				var entity = CastScene.FindEntity(entityName);
 				if (entity == null)
 				{
 					Instance.Log("could not find entity named " + entityName);
@@ -84,8 +90,15 @@ namespace Nez.Console
 		[Command("assets", "Logs all loaded assets. Pass 's' for scene assets or 'g' for global assets")]
 		static void LogLoadedAssets(string whichAssets = "s")
 		{
+			var CastScene = Core.Scene as Scene;
+			if (CastScene == null)
+			{
+				Debug.Warn("Attempted to use assets in a scene that does not inherit `Scene`");
+				return;
+			}
+
 			if (whichAssets == "s")
-				Instance.Log(Core.Scene.Content.LogLoadedAssets());
+				Instance.Log(CastScene.Content.LogLoadedAssets());
 			else if (whichAssets == "g")
 				Instance.Log(Core.Content.LogLoadedAssets());
 			else
@@ -139,6 +152,13 @@ namespace Nez.Console
 			"Logs amount of Entities in the Scene. Pass a tagIndex to count only Entities with that tag")]
 		static void EntityCount(int tagIndex = -1)
 		{
+			var CastScene = Core.Scene as Scene;
+			if (CastScene == null)
+			{
+				Debug.Warn("Attempted to use entity-count in a scene that does not inherit `Scene`");
+				return;
+			}
+
 			if (Core.Scene == null)
 			{
 				Instance.Log("Current Scene is null!");
@@ -146,10 +166,10 @@ namespace Nez.Console
 			}
 
 			if (tagIndex < 0)
-				Instance.Log("Total entities: " + Core.Scene.Entities.Count.ToString());
+				Instance.Log("Total entities: " + CastScene.Entities.Count.ToString());
 			else
 				Instance.Log("Total entities with tag [" + tagIndex + "] " +
-				                          Core.Scene.FindEntitiesWithTag(tagIndex).Count.ToString());
+				                          CastScene.FindEntitiesWithTag(tagIndex).Count.ToString());
 		}
 
 
@@ -157,6 +177,13 @@ namespace Nez.Console
 			"Logs amount of Renderables in the Scene. Pass a renderLayer to count only Renderables in that layer")]
 		static void RenderableCount(int renderLayer = int.MinValue)
 		{
+			var CastScene = Core.Scene as Scene;
+			if (CastScene == null)
+			{
+				Debug.Warn("Attempted to use renderable-count in a scene that does not inherit `Scene`");
+				return;
+			}
+
 			if (Core.Scene == null)
 			{
 				Instance.Log("Current Scene is null!");
@@ -165,10 +192,10 @@ namespace Nez.Console
 
 			if (renderLayer != int.MinValue)
 				Instance.Log("Total renderables with tag [" + renderLayer + "] " +
-				                          Core.Scene.RenderableComponents.ComponentsWithRenderLayer(renderLayer).Length
+				                          CastScene.RenderableComponents.ComponentsWithRenderLayer(renderLayer).Length
 					                          .ToString());
 			else
-				Instance.Log("Total renderables: " + Core.Scene.RenderableComponents.Count.ToString());
+				Instance.Log("Total renderables: " + CastScene.RenderableComponents.Count.ToString());
 		}
 
 
@@ -176,6 +203,13 @@ namespace Nez.Console
 			"Logs the Renderables in the Scene. Pass a renderLayer to log only Renderables in that layer")]
 		static void RenderableLog(int renderLayer = int.MinValue)
 		{
+			var CastScene = Core.Scene as Scene;
+			if (CastScene == null)
+			{
+				Debug.Warn("Attempted to use renderable-log in a scene that does not inherit `Scene`");
+				return;
+			}
+
 			if (Core.Scene == null)
 			{
 				Instance.Log("Current Scene is null!");
@@ -183,9 +217,9 @@ namespace Nez.Console
 			}
 
 			var builder = new StringBuilder();
-			for (var i = 0; i < Core.Scene.RenderableComponents.Count; i++)
+			for (var i = 0; i < CastScene.RenderableComponents.Count; i++)
 			{
-				var renderable = Core.Scene.RenderableComponents[i];
+				var renderable = CastScene.RenderableComponents[i];
 				if (renderLayer == int.MinValue || renderable.RenderLayer == renderLayer)
 					builder.AppendFormat("{0}\n", renderable);
 			}
@@ -197,6 +231,13 @@ namespace Nez.Console
 		[Command("entity-list", "Logs all entities")]
 		static void LogEntities(string whichAssets = "s")
 		{
+			var CastScene = Core.Scene as Scene;
+			if (CastScene == null)
+			{
+				Debug.Warn("Attempted to use entity-list in a scene that does not inherit `Scene`");
+				return;
+			}
+
 			if (Core.Scene == null)
 			{
 				Instance.Log("Current Scene is null!");
@@ -204,8 +245,8 @@ namespace Nez.Console
 			}
 
 			var builder = new StringBuilder();
-			for (var i = 0; i < Core.Scene.Entities.Count; i++)
-				builder.AppendLine(Core.Scene.Entities[i].ToString());
+			for (var i = 0; i < CastScene.Entities.Count; i++)
+				builder.AppendLine(CastScene.Entities[i].ToString());
 
 			Instance.Log(builder.ToString());
 		}
