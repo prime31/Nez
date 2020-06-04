@@ -105,12 +105,6 @@ namespace Nez
 				// deal with IUpdatable
 				if (component is IUpdatable)
 					_updatableComponents.Remove(component as IUpdatable);
-
-				if (Core.entitySystemsEnabled)
-				{
-					_entity.componentBits.Set(ComponentTypeManager.GetIndexFor(component.GetType()), false);
-					_entity.Scene.EntityProcessors.OnComponentRemoved(_entity);
-				}
 			}
 		}
 
@@ -124,12 +118,6 @@ namespace Nez
 
 				if (component is IUpdatable)
 					_updatableComponents.Add(component as IUpdatable);
-
-				if (Core.entitySystemsEnabled)
-				{
-					_entity.componentBits.Set(ComponentTypeManager.GetIndexFor(component.GetType()));
-					_entity.Scene.EntityProcessors.OnComponentAdded(_entity);
-				}
 			}
 		}
 
@@ -162,12 +150,6 @@ namespace Nez
 
 					if (component is IUpdatable)
 						_updatableComponents.Add(component as IUpdatable);
-
-					if (Core.entitySystemsEnabled)
-					{
-						_entity.componentBits.Set(ComponentTypeManager.GetIndexFor(component.GetType()));
-						_entity.Scene.EntityProcessors.OnComponentAdded(_entity);
-					}
 
 					_components.Add(component);
 					_tempBufferList.Add(component);
@@ -207,12 +189,6 @@ namespace Nez
 			// deal with IUpdatable
 			if (component is IUpdatable)
 				_updatableComponents.Remove(component as IUpdatable);
-
-			if (Core.entitySystemsEnabled)
-			{
-				_entity.componentBits.Set(ComponentTypeManager.GetIndexFor(component.GetType()), false);
-				_entity.Scene.EntityProcessors.OnComponentRemoved(_entity);
-			}
 
 			component.OnRemovedFromEntity();
 			component.Entity = null;

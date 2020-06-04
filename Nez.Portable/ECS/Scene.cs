@@ -123,11 +123,6 @@ namespace Nez
 		public readonly RenderableComponentList RenderableComponents;
 
 		/// <summary>
-		/// Stoes and manages all entity processors
-		/// </summary>
-		public readonly EntityProcessorList EntityProcessors;
-
-		/// <summary>
 		/// gets the size of the sceneRenderTarget
 		/// </summary>
 		/// <value>The size of the scene render texture.</value>
@@ -312,9 +307,6 @@ namespace Nez
 			var cameraEntity = CreateEntity("camera");
 			Camera = cameraEntity.AddComponent(new Camera());
 
-			if (Core.entitySystemsEnabled)
-				EntityProcessors = new EntityProcessorList();
-
 			// setup our resolution policy. we'll commit it in begin
 			_resolutionPolicy = _defaultSceneResolutionPolicy;
 			_designResolutionSize = _defaultDesignResolutionSize;
@@ -362,9 +354,6 @@ namespace Nez
 			// prep our render textures
 			UpdateResolutionScaler();
 			Core.GraphicsDevice.SetRenderTarget(_sceneRenderTarget);
-
-			if (EntityProcessors != null)
-				EntityProcessors.Begin();
 			Core.Emitter.AddObserver(CoreEvents.GraphicsDeviceReset, OnGraphicsDeviceReset);
 			Core.Emitter.AddObserver(CoreEvents.OrientationChanged, OnOrientationChanged);
 
@@ -399,9 +388,6 @@ namespace Nez
 			if (_destinationRenderTarget != null)
 				_destinationRenderTarget.Dispose();
 
-			if (EntityProcessors != null)
-				EntityProcessors.End();
-
 			Unload();
 		}
 
@@ -420,15 +406,8 @@ namespace Nez
 					_sceneComponents.Buffer[i].Update();
 			}
 
-			// update our EntityProcessors
-			if (EntityProcessors != null)
-				EntityProcessors.Update();
-
 			// update our Entities
 			Entities.Update();
-
-			if (EntityProcessors != null)
-				EntityProcessors.LateUpdate();
 
 			// we update our renderables after entity.update in case any new Renderables were added
 			RenderableComponents.UpdateLists();
@@ -1090,34 +1069,5 @@ namespace Nez
 
 		#endregion
 
-
-		#region Entity System Processors
-
-		/// <summary>
-		/// adds an EntitySystem processor to the scene
-		/// </summary>
-		/// <returns>The processor.</returns>
-		/// <param name="processor">Processor.</param>
-		public EntitySystem AddEntityProcessor(EntitySystem processor)
-		{
-			processor.Scene = this;
-			EntityProcessors.Add(processor);
-			return processor;
-		}
-
-		/// <summary>
-		/// removes an EntitySystem processor from the scene
-		/// </summary>
-		/// <param name="processor">Processor.</param>
-		public void RemoveEntityProcessor(EntitySystem processor) => EntityProcessors.Remove(processor);
-
-		/// <summary>
-		/// gets an EntitySystem processor
-		/// </summary>
-		/// <returns>The processor.</returns>
-		/// <typeparam name="T">The 1st type parameter.</typeparam>
-		public T GetEntityProcessor<T>() where T : EntitySystem => EntityProcessors.GetProcessor<T>();
-
-		#endregion
 	}
 }

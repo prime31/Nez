@@ -80,8 +80,6 @@ namespace Nez
 		/// </summary>
 		internal bool _isDestroyed;
 
-		internal BitSet componentBits;
-
 		int _tag = 0;
 		bool _enabled = true;
 		internal int _updateOrder = 0;
@@ -196,9 +194,6 @@ namespace Nez
 			Transform = new Transform(this);
 			Name = name;
 			Id = _idGenerator++;
-
-			if (Core.entitySystemsEnabled)
-				componentBits = new BitSet();
 		}
 
 		public Entity() : this(Utils.RandomString(8))
