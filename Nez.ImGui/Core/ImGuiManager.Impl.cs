@@ -16,6 +16,9 @@ namespace Nez.ImGuiTools
 		const string kShowCoreWindow = "ImGui_ShowCoreWindow";
 		const string kShowSeperateGameWindow = "ImGui_ShowSeperateGameWindow";
 
+		// Used to hold a reference to the Cast scene, if it derives from `Scene`
+		Scene CastScene;
+
 		[Flags]
 		enum WindowPosition
 		{
@@ -232,12 +235,12 @@ namespace Nez.ImGuiTools
 
 
 		#region GlobalManager Lifecycle
-
 		public override void OnEnabled()
 		{
-			if (Core.Scene != null)
+			if (Core.Scene != null && Core.Scene is Scene scene)
 			{
-				Core.Scene.FinalRenderDelegate = this;
+				CastScene = scene;
+				CastScene.FinalRenderDelegate = this;
 
 				// why call beforeLayout here? If added from the DebugConsole we missed the GlobalManger.update call and ImGui needs NextFrame
 				// called or it fails. Calling NextFrame twice in a frame causes no harm, just missed input.
@@ -248,8 +251,8 @@ namespace Nez.ImGuiTools
 		public override void OnDisabled()
 		{
 			Unload();
-			if (Core.Scene != null)
-				Core.Scene.FinalRenderDelegate = null;
+			if (CastScene != null)
+				CastScene.FinalRenderDelegate = null;
 		}
 
 		public override void Update()

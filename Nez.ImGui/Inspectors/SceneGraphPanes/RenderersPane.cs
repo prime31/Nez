@@ -15,6 +15,9 @@ namespace Nez.ImGuiTools.SceneGraphPanes
 		List<RendererInspector> _renderers = new List<RendererInspector>();
 		bool _isRendererListInitialized;
 
+		// Used to hold a reference to the Cast scene, if it derives from `Scene`
+		Scene CastScene;
+
 		void UpdateRenderersPaneList()
 		{
 			// first, we check our list of inspectors and sync it up with the current list of PostProcessors in the Scene.
@@ -22,9 +25,9 @@ namespace Nez.ImGuiTools.SceneGraphPanes
 			if (!_isRendererListInitialized || Time.FrameCount % 60 == 0)
 			{
 				_isRendererListInitialized = true;
-				for (var i = 0; i < Core.Scene._renderers.Length; i++)
+				for (var i = 0; i < CastScene._renderers.Length; i++)
 				{
-					var renderer = Core.Scene._renderers.Buffer[i];
+					var renderer = CastScene._renderers.Buffer[i];
 					if (_renderers.Where(inspector => inspector.Renderer == renderer).Count() == 0)
 						_renderers.Add(new RendererInspector(renderer));
 				}
@@ -33,6 +36,10 @@ namespace Nez.ImGuiTools.SceneGraphPanes
 
 		public void OnSceneChanged()
 		{
+			CastScene = Core.Scene as Scene;
+			if (CastScene == null)
+				throw new InvalidOperationException("You cannot use Post Processors if you are not inheriting the base Scene implementation.");
+
 			_renderers.Clear();
 			_isRendererListInitialized = false;
 			UpdateRenderersPaneList();

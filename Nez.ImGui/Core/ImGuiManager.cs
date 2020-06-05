@@ -147,7 +147,8 @@ namespace Nez.ImGuiTools
 
 				if (ImGui.BeginMenu("Game View"))
 				{
-					var rtSize = Core.Scene.SceneRenderTargetSize;
+					var s = Core.Scene as Scene;
+					var rtSize = s.SceneRenderTargetSize;
 
 					if (ImGui.BeginMenu("Resize"))
 					{

@@ -15,6 +15,9 @@ namespace Nez.ImGuiTools.SceneGraphPanes
 		List<PostProcessorInspector> _postProcessorInspectors = new List<PostProcessorInspector>();
 		bool _isPostProcessorListInitialized;
 
+		// Used to hold a reference to the Cast scene, if it derives from `Scene`
+		Scene CastScene;
+
 		void UpdatePostProcessorInspectorList()
 		{
 			// first, we check our list of inspectors and sync it up with the current list of PostProcessors in the Scene.
@@ -22,9 +25,9 @@ namespace Nez.ImGuiTools.SceneGraphPanes
 			if (!_isPostProcessorListInitialized || Time.FrameCount % 60 == 0)
 			{
 				_isPostProcessorListInitialized = true;
-				for (var i = 0; i < Core.Scene._postProcessors.Length; i++)
+				for (var i = 0; i < CastScene._postProcessors.Length; i++)
 				{
-					var postProcessor = Core.Scene._postProcessors.Buffer[i];
+					var postProcessor = CastScene._postProcessors.Buffer[i];
 					if (_postProcessorInspectors.Where(inspector => inspector.PostProcessor == postProcessor).Count() ==
 					    0)
 						_postProcessorInspectors.Add(new PostProcessorInspector(postProcessor));
@@ -34,6 +37,10 @@ namespace Nez.ImGuiTools.SceneGraphPanes
 
 		public void OnSceneChanged()
 		{
+			CastScene = Core.Scene as Scene;
+			if (CastScene == null)
+				throw new InvalidOperationException("You cannot use Post Processors if you are not inheriting the base Scene implementation.");
+
 			_postProcessorInspectors.Clear();
 			_isPostProcessorListInitialized = false;
 			UpdatePostProcessorInspectorList();
@@ -77,7 +84,7 @@ namespace Nez.ImGuiTools.SceneGraphPanes
 					{
 						var postprocessor = (PostProcessor) Activator.CreateInstance(subclassType,
 							new object[] {_postProcessorInspectors.Count});
-						Core.Scene.AddPostProcessor(postprocessor);
+						CastScene.AddPostProcessor(postprocessor);
 						_isPostProcessorListInitialized = false;
 					}
 				}
