@@ -1,3 +1,4 @@
+using System;
 using System.Runtime.CompilerServices;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -17,34 +18,33 @@ namespace Nez.Tiled
 		/// <param name="scale"></param>
 		/// <param name="layerDepth"></param>
 		/// <param name="cameraClipBounds"></param>
-		public static void RenderMap(TmxMap map, Batcher batcher, Vector2 position, Vector2 scale, float layerDepth, RectangleF cameraClipBounds)
+		public static void RenderMap(TmxMap map, Batcher batcher, Vector2 rendererOffset, Transform rendererTransform, float layerDepth, RectangleF cameraClipBounds)
 		{
-			foreach (var layer in map.Layers)
-			{
+			foreach (var layer in map.Layers) {
 				if (layer is TmxLayer tmxLayer && tmxLayer.Visible)
-					RenderLayer(tmxLayer, batcher, position, scale, layerDepth, cameraClipBounds);
+					RenderLayer(tmxLayer, batcher, rendererOffset, rendererTransform, layerDepth, cameraClipBounds);
 				else if (layer is TmxImageLayer tmxImageLayer && tmxImageLayer.Visible)
-					RenderImageLayer(tmxImageLayer, batcher, position, scale, layerDepth);
+					RenderImageLayer(tmxImageLayer, batcher, rendererOffset, rendererTransform, layerDepth);
 				else if (layer is TmxGroup tmxGroup && tmxGroup.Visible)
-					RenderGroup(tmxGroup, batcher, position, scale, layerDepth);
+					RenderGroup(tmxGroup, batcher, rendererOffset, rendererTransform, layerDepth);
 				else if (layer is TmxObjectGroup tmxObjGroup && tmxObjGroup.Visible)
-					RenderObjectGroup(tmxObjGroup, batcher, position, scale, layerDepth);
+					RenderObjectGroup(tmxObjGroup, batcher, rendererOffset, rendererTransform, layerDepth);
 			}
 		}
 
 		/// <summary>
 		/// renders the ITmxLayer by calling through to the concrete type's render method
 		/// </summary>
-		public static void RenderLayer(ITmxLayer layer, Batcher batcher, Vector2 position, Vector2 scale, float layerDepth, RectangleF cameraClipBounds)
+		public static void RenderLayer(ITmxLayer layer, Batcher batcher, Vector2 rendererOffset, Transform rendererTransform, float layerDepth, RectangleF cameraClipBounds)
 		{
 			if (layer is TmxLayer tmxLayer && tmxLayer.Visible)
-				RenderLayer(tmxLayer, batcher, position, scale, layerDepth, cameraClipBounds);
+				RenderLayer(tmxLayer, batcher, rendererOffset, rendererTransform, layerDepth, cameraClipBounds);
 			else if (layer is TmxImageLayer tmxImageLayer && tmxImageLayer.Visible)
-				RenderImageLayer(tmxImageLayer, batcher, position, scale, layerDepth);
+				RenderImageLayer(tmxImageLayer, batcher, rendererOffset, rendererTransform, layerDepth);
 			else if (layer is TmxGroup tmxGroup && tmxGroup.Visible)
-				RenderGroup(tmxGroup, batcher, position, scale, layerDepth);
+				RenderGroup(tmxGroup, batcher, rendererOffset, rendererTransform, layerDepth);
 			else if (layer is TmxObjectGroup tmxObjGroup && tmxObjGroup.Visible)
-				RenderObjectGroup(tmxObjGroup, batcher, position, scale, layerDepth);
+				RenderObjectGroup(tmxObjGroup, batcher, rendererOffset, rendererTransform, layerDepth);
 		}
 
 		/// <summary>
@@ -55,24 +55,23 @@ namespace Nez.Tiled
 		/// <param name="position"></param>
 		/// <param name="scale"></param>
 		/// <param name="layerDepth"></param>
-		public static void RenderLayer(TmxLayer layer, Batcher batcher, Vector2 position, Vector2 scale, float layerDepth)
+		public static void RenderLayer(TmxLayer layer, Batcher batcher, Vector2 position, Transform transform, float layerDepth)
 		{
 			if (!layer.Visible)
 				return;
 
-			var tileWidth = layer.Map.TileWidth * scale.X;
-			var tileHeight = layer.Map.TileHeight * scale.Y;
+			var tileWidth = layer.Map.TileWidth;
+			var tileHeight = layer.Map.TileHeight;
 
 			var color = Color.White;
 			color.A = (byte)(layer.Opacity * 255);
 
-			for (var i = 0; i < layer.Tiles.Length; i++)
-			{
+			for (var i = 0; i < layer.Tiles.Length; i++) {
 				var tile = layer.Tiles[i];
 				if (tile == null)
 					continue;
 
-				RenderTile(tile, batcher, position, scale, tileWidth, tileHeight, color, layerDepth);
+				RenderTile(tile, batcher, position, transform, tileWidth, tileHeight, color, layerDepth);
 			}
 		}
 
@@ -81,35 +80,28 @@ namespace Nez.Tiled
 		/// </summary>
 		/// <param name="layer"></param>
 		/// <param name="batcher"></param>
-		/// <param name="position"></param>
-		/// <param name="scale"></param>
+		/// <param name="rendererOffset"></param>
+		/// <param name="rendererTransform"></param>
 		/// <param name="layerDepth"></param>
 		/// <param name="cameraClipBounds"></param>
-		public static void RenderLayer(TmxLayer layer, Batcher batcher, Vector2 position, Vector2 scale, float layerDepth, RectangleF cameraClipBounds)
+		public static void RenderLayer(TmxLayer layer, Batcher batcher, Vector2 rendererOffset, Transform rendererTransform, float layerDepth, RectangleF cameraClipBounds)
 		{
 			if (!layer.Visible)
 				return;
 
-			position += layer.Offset;
-
-			// offset it by the entity position since the tilemap will always expect positions in its own coordinate space
-			cameraClipBounds.Location -= position;
-
-			var tileWidth = layer.Map.TileWidth * scale.X;
-			var tileHeight = layer.Map.TileHeight * scale.Y;
-
+			var tileWidth = layer.Map.TileWidth;
+			var tileHeight = layer.Map.TileHeight;
 			int minX, minY, maxX, maxY;
-			if (layer.Map.RequiresLargeTileCulling)
-			{
+			cameraClipBounds.Location -= (layer.Offset + rendererOffset);
+
+			if (layer.Map.RequiresLargeTileCulling) {
 				// we expand our cameraClipBounds by the excess tile width/height of the largest tiles to ensure we include tiles whose
 				// origin might be outside of the cameraClipBounds
-				minX = layer.Map.WorldToTilePositionX(cameraClipBounds.Left - (layer.Map.MaxTileWidth * scale.X - tileWidth));
-				minY = layer.Map.WorldToTilePositionY(cameraClipBounds.Top - (layer.Map.MaxTileHeight * scale.Y - tileHeight));
-				maxX = layer.Map.WorldToTilePositionX(cameraClipBounds.Right + (layer.Map.MaxTileWidth * scale.X - tileWidth));
-				maxY = layer.Map.WorldToTilePositionY(cameraClipBounds.Bottom + (layer.Map.MaxTileHeight * scale.Y - tileHeight));
-			}
-			else
-			{
+				minX = layer.Map.WorldToTilePositionX(cameraClipBounds.Left - (layer.Map.MaxTileWidth - tileWidth));
+				minY = layer.Map.WorldToTilePositionY(cameraClipBounds.Top - (layer.Map.MaxTileHeight - tileHeight));
+				maxX = layer.Map.WorldToTilePositionX(cameraClipBounds.Right + (layer.Map.MaxTileWidth - tileWidth));
+				maxY = layer.Map.WorldToTilePositionY(cameraClipBounds.Bottom + (layer.Map.MaxTileHeight - tileHeight));
+			} else {
 				minX = layer.Map.WorldToTilePositionX(cameraClipBounds.Left);
 				minY = layer.Map.WorldToTilePositionY(cameraClipBounds.Top);
 				maxX = layer.Map.WorldToTilePositionX(cameraClipBounds.Right);
@@ -117,24 +109,21 @@ namespace Nez.Tiled
 			}
 
 
-
 			var color = Color.White;
 			color.A = (byte)(layer.Opacity * 255);
 
 			// loop through and draw all the non-culled tiles
-			for (var y = minY; y <= maxY; y++)
-			{
-				for (var x = minX; x <= maxX; x++)
-				{
+			for (var y = minY; y <= maxY; y++) {
+				for (var x = minX; x <= maxX; x++) {
 					var tile = layer.GetTile(x, y);
 					if (tile != null)
-						RenderTile(tile, batcher, position, scale, tileWidth, tileHeight, color, layerDepth);
+						RenderTile(tile, batcher, rendererOffset, rendererTransform, tileWidth, tileHeight, color, layerDepth);
 				}
 			}
 		}
 
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public static void RenderTile(TmxLayerTile tile, Batcher batcher, Vector2 position, Vector2 scale, float tileWidth, float tileHeight, Color color, float layerDepth)
+		public static void RenderTile(TmxLayerTile tile, Batcher batcher, Vector2 rendererOffset, Transform rendererTransform, float tileWidth, float tileHeight, Color color, float layerDepth)
 		{
 			var gid = tile.Gid;
 
@@ -157,30 +146,22 @@ namespace Nez.Tiled
 				spriteEffects |= SpriteEffects.FlipHorizontally;
 			if (tile.VerticalFlip)
 				spriteEffects |= SpriteEffects.FlipVertically;
-			if (tile.DiagonalFlip)
-			{
-				if (tile.HorizontalFlip && tile.VerticalFlip)
-				{
+			if (tile.DiagonalFlip) {
+				if (tile.HorizontalFlip && tile.VerticalFlip) {
 					spriteEffects ^= SpriteEffects.FlipVertically;
 					rotation = MathHelper.PiOver2;
-					tx += tileHeight + (sourceRect.Height * scale.Y - tileHeight);
-					ty -= (sourceRect.Width * scale.X - tileWidth);
-				}
-				else if (tile.HorizontalFlip)
-				{
+					tx += tileHeight + (sourceRect.Height - tileHeight);
+					ty -= (sourceRect.Width - tileWidth);
+				} else if (tile.HorizontalFlip) {
 					spriteEffects ^= SpriteEffects.FlipVertically;
 					rotation = -MathHelper.PiOver2;
 					ty += tileHeight;
-				}
-				else if (tile.VerticalFlip)
-				{
+				} else if (tile.VerticalFlip) {
 					spriteEffects ^= SpriteEffects.FlipHorizontally;
 					rotation = MathHelper.PiOver2;
-					tx += tileWidth + (sourceRect.Height * scale.Y - tileHeight);
-					ty += (tileWidth - sourceRect.Width * scale.X);
-				}
-				else
-				{
+					tx += tileWidth + (sourceRect.Height - tileHeight);
+					ty += (tileWidth - sourceRect.Width);
+				} else {
 					spriteEffects ^= SpriteEffects.FlipHorizontally;
 					rotation = -MathHelper.PiOver2;
 					ty += tileHeight;
@@ -190,17 +171,19 @@ namespace Nez.Tiled
 			// if we had no rotations (diagonal flipping) shift our y-coord to account for any non map.tileSize tiles due to
 			// Tiled being bottom-left origin
 			if (rotation == 0)
-				ty += (tileHeight - sourceRect.Height * scale.Y);
+				ty += (tileHeight - sourceRect.Height);
+			rotation += rendererTransform.Rotation;
 
-			var pos = new Vector2(tx, ty) + position;
+			//var pos = new Vector2(tx, ty) + position;
+			var pos = Vector2.Transform(new Vector2(tx, ty), rendererTransform.LocalToWorldTransform) + rendererOffset;
 
 			if (tile.Tileset.Image != null)
-				batcher.Draw(tile.Tileset.Image.Texture, pos, sourceRect, color, rotation, Vector2.Zero, scale, spriteEffects, layerDepth);
+				batcher.Draw(tile.Tileset.Image.Texture, pos, sourceRect, color, rotation, Vector2.Zero, rendererTransform.Scale, spriteEffects, layerDepth);
 			else
-				batcher.Draw(tilesetTile.Image.Texture, pos, sourceRect, color, rotation, Vector2.Zero, scale, spriteEffects, layerDepth);
+				batcher.Draw(tilesetTile.Image.Texture, pos, sourceRect, color, rotation, Vector2.Zero, rendererTransform.Scale, spriteEffects, layerDepth);
 		}
 
-		public static void RenderObjectGroup(TmxObjectGroup objGroup, Batcher batcher, Vector2 position, Vector2 scale, float layerDepth)
+		public static void RenderObjectGroup(TmxObjectGroup objGroup, Batcher batcher, Vector2 rendererOffset, Transform transform, float layerDepth)
 		{
 			if (!objGroup.Visible)
 				return;
@@ -210,18 +193,18 @@ namespace Nez.Tiled
 				if (!obj.Visible)
 					continue;
 
-                // if we are not debug rendering, we only render Tile and Text types
-                if (!Core.DebugRenderEnabled)
-                {
-                    if (obj.ObjectType != TmxObjectType.Tile && obj.ObjectType != TmxObjectType.Text)
-                        continue;
-                }
-
-                var pos = position + new Vector2(obj.X, obj.Y) * scale;
-				switch (obj.ObjectType)
+				// if we are not debug rendering, we only render Tile and Text types
+				if (!Core.DebugRenderEnabled)
 				{
+					if (obj.ObjectType != TmxObjectType.Tile && obj.ObjectType != TmxObjectType.Text)
+						continue;
+				}
+
+				var pos = rendererOffset + Vector2.Transform( new Vector2(obj.X, obj.Y), transform.LocalToWorldTransform);
+
+				switch (obj.ObjectType) {
 					case TmxObjectType.Basic:
-						batcher.DrawHollowRect(pos, obj.Width * scale.X, obj.Height * scale.Y, objGroup.Color);
+						batcher.DrawHollowRect(pos, obj.Width * transform.Scale.X, obj.Height * transform.Scale.Y, objGroup.Color);
 						goto default;
 					case TmxObjectType.Point:
 						var size = objGroup.Map.TileWidth * 0.5f;
@@ -230,8 +213,8 @@ namespace Nez.Tiled
 						batcher.DrawPixel(pos, objGroup.Color, (int)size);
 						goto default;
 					case TmxObjectType.Tile:
-						var tx = obj.Tile.X * objGroup.Map.TileWidth * scale.X;
-						var ty = obj.Tile.Y * objGroup.Map.TileHeight * scale.Y;
+						var tx = obj.Tile.X * objGroup.Map.TileWidth * transform.Scale.X;
+						var ty = obj.Tile.Y * objGroup.Map.TileHeight * transform.Scale.Y;
 
 						var spriteEffects = SpriteEffects.None;
 						if (obj.Tile.HorizontalFlip)
@@ -241,17 +224,17 @@ namespace Nez.Tiled
 
 						var tileset = objGroup.Map.GetTilesetForTileGid(obj.Tile.Gid);
 						var sourceRect = tileset.TileRegions[obj.Tile.Gid];
-						batcher.Draw(tileset.Image.Texture, pos, sourceRect, Color.White, 0, Vector2.Zero, scale, spriteEffects, layerDepth);
+						batcher.Draw(tileset.Image.Texture, pos, sourceRect, Color.White, 0, Vector2.Zero, transform.Scale, spriteEffects, layerDepth);
 						goto default;
 					case TmxObjectType.Ellipse:
-						pos = new Vector2(obj.X + obj.Width * 0.5f, obj.Y + obj.Height * 0.5f) * scale;
+						pos = new Vector2(obj.X + obj.Width * 0.5f, obj.Y + obj.Height * 0.5f) * transform.Scale;
 						batcher.DrawCircle(pos, obj.Width * 0.5f, objGroup.Color);
 						goto default;
 					case TmxObjectType.Polygon:
 					case TmxObjectType.Polyline:
 						var points = new Vector2[obj.Points.Length];
 						for (var i = 0; i < obj.Points.Length; i++)
-							points[i] = obj.Points[i] * scale;
+							points[i] = obj.Points[i] * transform.Scale;
 						batcher.DrawPoints(pos, points, objGroup.Color, obj.ObjectType == TmxObjectType.Polygon);
 						goto default;
 					case TmxObjectType.Text:
@@ -259,14 +242,14 @@ namespace Nez.Tiled
 						batcher.DrawString(Graphics.Instance.BitmapFont, obj.Text.Value, pos, obj.Text.Color, Mathf.Radians(obj.Rotation), Vector2.Zero, fontScale, SpriteEffects.None, layerDepth);
 						goto default;
 					default:
-                        if (Core.DebugRenderEnabled)
-                            batcher.DrawString(Graphics.Instance.BitmapFont, $"{obj.Name} ({obj.Type})", pos - new Vector2(0, 15), Color.Black);
+						if (Core.DebugRenderEnabled)
+							batcher.DrawString(Graphics.Instance.BitmapFont, $"{obj.Name} ({obj.Type})", pos - new Vector2(0, 15), Color.Black);
 						break;
 				}
 			}
 		}
 
-		public static void RenderImageLayer(TmxImageLayer layer, Batcher batcher, Vector2 position, Vector2 scale, float layerDepth)
+		public static void RenderImageLayer(TmxImageLayer layer, Batcher batcher, Vector2 rendererOffset, Transform rendererTransform, float layerDepth)
 		{
 			if (!layer.Visible)
 				return;
@@ -274,28 +257,27 @@ namespace Nez.Tiled
 			var color = Color.White;
 			color.A = (byte)(layer.Opacity * 255);
 
-			var pos = position + new Vector2(layer.OffsetX, layer.OffsetY) * scale;
-			batcher.Draw(layer.Image.Texture, pos, null, color, 0, Vector2.Zero, scale, SpriteEffects.None, layerDepth);
+			var pos = rendererOffset + Vector2.Transform( new Vector2(layer.OffsetX, layer.OffsetY),rendererTransform.LocalToWorldTransform);
+			batcher.Draw(layer.Image.Texture, pos, null, color, 0, Vector2.Zero, rendererTransform.Scale, SpriteEffects.None, layerDepth);
 		}
 
-		public static void RenderGroup(TmxGroup group, Batcher batcher, Vector2 position, Vector2 scale, float layerDepth)
+		public static void RenderGroup(TmxGroup group, Batcher batcher, Vector2 rendererOffset, Transform rendererTransform, float layerDepth)
 		{
 			if (!group.Visible)
 				return;
 
-			foreach (var layer in group.Layers)
-			{
+			foreach (var layer in group.Layers) {
 				if (layer is TmxGroup tmxSubGroup)
-					RenderGroup(tmxSubGroup, batcher, position, scale, layerDepth);
+					RenderGroup(tmxSubGroup, batcher, rendererOffset, rendererTransform, layerDepth);
 
 				if (layer is TmxObjectGroup tmxObjGroup)
-					RenderObjectGroup(tmxObjGroup, batcher, position, scale, layerDepth);
+					RenderObjectGroup(tmxObjGroup, batcher, rendererOffset, rendererTransform, layerDepth);
 
 				if (layer is TmxLayer tmxLayer)
-					RenderLayer(tmxLayer, batcher, position, scale, layerDepth);
+					RenderLayer(tmxLayer, batcher, rendererOffset, rendererTransform, layerDepth);
 
 				if (layer is TmxImageLayer tmxImageLayer)
-					RenderImageLayer(tmxImageLayer, batcher, position, scale, layerDepth);
+					RenderImageLayer(tmxImageLayer, batcher, rendererOffset, rendererTransform, layerDepth);
 			}
 		}
 

@@ -107,10 +107,10 @@ namespace Nez.Tiled
 		/// </summary>
 		public List<TmxLayerTile> GetTilesIntersectingBounds(Rectangle bounds)
 		{
-			var minX = Map.WorldToTilePositionX(bounds.X);
-			var minY = Map.WorldToTilePositionY(bounds.Y);
-			var maxX = Map.WorldToTilePositionX(bounds.Right);
-			var maxY = Map.WorldToTilePositionY(bounds.Bottom);
+			var minX = Map.WorldToTilePositionX(bounds.X-Offset.X);
+			var minY = Map.WorldToTilePositionY(bounds.Y-Offset.Y);
+			var maxX = Map.WorldToTilePositionX(bounds.X+ bounds.Right-Offset.Y);
+			var maxY = Map.WorldToTilePositionY(bounds.Y+bounds.Bottom-Offset.Y);
 
 			var tilelist = ListPool<TmxLayerTile>.Obtain();
 

@@ -28,6 +28,7 @@ namespace Nez
 		public TiledMapRenderer(TmxMap tiledMap, string collisionLayerName = null, bool shouldCreateColliders = true)
 		{
 			TiledMap = tiledMap;
+			tiledMap.GetTransform = ()=>Transform;
 			_shouldCreateColliders = shouldCreateColliders;
 
 			if (collisionLayerName != null)
@@ -61,13 +62,13 @@ namespace Nez
 
 		public int GetRowAtWorldPosition(float yPos)
 		{
-			yPos -= Entity.Transform.Position.Y + _localOffset.Y;
+			yPos -= _localOffset.Y;
 			return TiledMap.WorldToTilePositionY(yPos);
 		}
 
 		public int GetColumnAtWorldPosition(float xPos)
 		{
-			xPos -= Entity.Transform.Position.X + _localOffset.X;
+			xPos -= _localOffset.X;
 			return TiledMap.WorldToTilePositionY(xPos);
 		}
 
@@ -78,10 +79,7 @@ namespace Nez
 		{
 			Insist.IsNotNull(CollisionLayer, "collisionLayer must not be null!");
 
-			// offset the passed in world position to compensate for the entity position
-			worldPos -= Entity.Transform.Position + _localOffset;
-
-			return CollisionLayer.GetTileAtWorldPosition(worldPos);
+			return CollisionLayer.GetTileAtWorldPosition(worldPos - _localOffset);
 		}
 
 		/// <summary>
@@ -122,16 +120,12 @@ namespace Nez
 
 		public override void Render(Batcher batcher, Camera camera)
 		{
-			if (LayerIndicesToRender == null)
-			{
-				TiledRendering.RenderMap(TiledMap, batcher, Entity.Transform.Position + _localOffset, Transform.Scale, LayerDepth, camera.Bounds);
-			}
-			else
-			{
-				for (var i = 0; i < TiledMap.Layers.Count; i++)
-				{
+			if (LayerIndicesToRender == null) {
+				TiledRendering.RenderMap(TiledMap, batcher, _localOffset, Transform, LayerDepth, camera.Bounds);
+			} else {
+				for (var i = 0; i < TiledMap.Layers.Count; i++) {
 					if (TiledMap.Layers[i].Visible && LayerIndicesToRender.Contains(i))
-						TiledRendering.RenderLayer(TiledMap.Layers[i], batcher, Entity.Transform.Position + _localOffset, Transform.Scale, LayerDepth, camera.Bounds);
+						TiledRendering.RenderLayer(TiledMap.Layers[i], batcher, _localOffset, Transform, LayerDepth, camera.Bounds);
 				}
 			}
 		}
@@ -139,7 +133,7 @@ namespace Nez
 		public override void DebugRender(Batcher batcher)
 		{
 			foreach (var group in TiledMap.ObjectGroups)
-				TiledRendering.RenderObjectGroup(group, batcher, Entity.Transform.Position + _localOffset, Transform.Scale, LayerDepth);
+				TiledRendering.RenderObjectGroup(group, batcher, _localOffset, Transform, LayerDepth);
 
 			if (_colliders != null)
 			{

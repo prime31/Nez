@@ -83,6 +83,13 @@ namespace Nez.Tiled
 
 		#region world/local conversion
 
+		//gets attached to the transform of a TiledMapRenderer when its added.
+		public Func<Transform> GetTransform = () => { return new Transform(null); };
+
+		public Transform RendererTransform
+		{
+			get { return GetTransform(); }
+		}
 		/// <summary>
 		/// converts from world to tile position clamping to the tilemap bounds
 		/// </summary>
@@ -90,7 +97,8 @@ namespace Nez.Tiled
 		/// <param name="pos">Position.</param>
 		public Point WorldToTilePosition(Vector2 pos, bool clampToTilemapBounds = true)
 		{
-			return new Point(WorldToTilePositionX(pos.X, clampToTilemapBounds), WorldToTilePositionY(pos.Y, clampToTilemapBounds));
+			return new Point(WorldToTilePositionX(pos.X, clampToTilemapBounds),
+				WorldToTilePositionY(pos.Y, clampToTilemapBounds));
 		}
 
 		/// <summary>
@@ -100,7 +108,7 @@ namespace Nez.Tiled
 		/// <param name="x">The x coordinate.</param>
 		public int WorldToTilePositionX(float x, bool clampToTilemapBounds = true)
 		{
-			var tileX = Mathf.FastFloorToInt(x / TileWidth);
+			var tileX = Mathf.FastFloorToInt(((x - RendererTransform.LocalPosition.X) / RendererTransform.Scale.X) / TileWidth);
 			if (!clampToTilemapBounds)
 				return tileX;
 			return Mathf.Clamp(tileX, 0, Width - 1);
@@ -113,7 +121,7 @@ namespace Nez.Tiled
 		/// <param name="y">The y coordinate.</param>
 		public int WorldToTilePositionY(float y, bool clampToTilemapBounds = true)
 		{
-			var tileY = Mathf.FloorToInt(y / TileHeight);
+			var tileY = Mathf.FastFloorToInt(((y - RendererTransform.LocalPosition.Y) / RendererTransform.Scale.Y) / TileWidth);
 			if (!clampToTilemapBounds)
 				return tileY;
 			return Mathf.Clamp(tileY, 0, Height - 1);
@@ -131,14 +139,14 @@ namespace Nez.Tiled
 		/// </summary>
 		/// <returns>The to world position x.</returns>
 		/// <param name="x">The x coordinate.</param>
-		public int TileToWorldPositionX(int x) => x * TileWidth;
+		public int TileToWorldPositionX(int x) => (int)(x * TileWidth * RendererTransform.Scale.X + RendererTransform.LocalPosition.X);
 
 		/// <summary>
 		/// converts from tile to world position
 		/// </summary>
 		/// <returns>The to world position y.</returns>
 		/// <param name="y">The y coordinate.</param>
-		public int TileToWorldPositionY(int y) => y * TileHeight;
+		public int TileToWorldPositionY(int y) => (int)(y * TileHeight * RendererTransform.Scale.Y + RendererTransform.LocalPosition.Y);
 
 		#endregion
 

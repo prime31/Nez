@@ -246,9 +246,9 @@ namespace Nez
 		Matrix2D _worldToLocalTransform = Matrix2D.Identity;
 		Matrix2D _worldInverseTransform = Matrix2D.Identity;
 
-		Matrix2D _rotationMatrix;
-		Matrix2D _translationMatrix;
-		Matrix2D _scaleMatrix;
+		Matrix2D _rotationMatrix = Matrix2D.Identity;
+		Matrix2D _translationMatrix = Matrix2D.Identity;
+		Matrix2D _scaleMatrix = Matrix2D.Identity;
 
 		Vector2 _position;
 		Vector2 _scale;
