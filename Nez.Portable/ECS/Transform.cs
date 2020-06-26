@@ -491,7 +491,7 @@ namespace Nez
 		/// </summary>
 		public void RoundPosition()
 		{
-			Position = _position.Round();
+			Position = Vector2Ext.Round(_position);
 		}
 
 
