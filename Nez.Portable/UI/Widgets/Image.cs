@@ -46,7 +46,7 @@ namespace Nez.UI
 		{
 			if (_drawable != drawable)
 			{
-				if (_drawable != null)
+				if (drawable != null)
 				{
 					if (PreferredWidth != drawable.MinWidth || PreferredHeight != drawable.MinHeight)
 						InvalidateHierarchy();
@@ -100,7 +100,7 @@ namespace Nez.UI
 			//				}
 			//			}
 
-			_drawable?.Draw(batcher, x + imageX, y + imageY, imageWidth * scaleX, imageHeight * scaleY, col);
+			_drawable?.Draw(batcher, x + imageX, y + imageY, imageWidth, imageHeight, col);
 		}
 
 
@@ -134,9 +134,9 @@ namespace Nez.UI
 
 		#region ILayout
 
-		public override float PreferredWidth => _drawable != null ? _drawable.MinWidth : 0;
+		public override float PreferredWidth => _drawable != null ? scaleX * _drawable.MinWidth : 0;
 
-		public override float PreferredHeight => _drawable != null ? _drawable.MinHeight : 0;
+		public override float PreferredHeight => _drawable != null ? scaleY * _drawable.MinHeight : 0;
 
 		#endregion
 	}

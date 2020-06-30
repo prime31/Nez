@@ -76,10 +76,10 @@ namespace Nez.Sprites
 		/// </summary>
 		public int CurrentFrame { get; private set; }
 
-        /// <summary>
-        /// checks to see if the CurrentAnimation is running
-        /// </summary>
-        public bool IsRunning => AnimationState == State.Running;
+		/// <summary>
+		/// checks to see if the CurrentAnimation is running
+		/// </summary>
+		public bool IsRunning => AnimationState == State.Running;
 
 		readonly Dictionary<string, SpriteAnimation> _animations = new Dictionary<string, SpriteAnimation>();
 
@@ -92,7 +92,7 @@ namespace Nez.Sprites
 
 		public SpriteAnimator(Sprite sprite) => SetSprite(sprite);
 
-		void IUpdatable.Update()
+		public virtual void Update()
 		{
 			if (AnimationState != State.Running || CurrentAnimation == null)
 				return;
@@ -100,13 +100,14 @@ namespace Nez.Sprites
 			var animation = CurrentAnimation;
 			var secondsPerFrame = 1 / (animation.FrameRate * Speed);
 			var iterationDuration = secondsPerFrame * animation.Sprites.Length;
+			var pingPongIterationDuration = animation.Sprites.Length < 3 ? iterationDuration : secondsPerFrame * (animation.Sprites.Length * 2 - 2);
 
 			_elapsedTime += Time.DeltaTime;
 			var time = Math.Abs(_elapsedTime);
 
 			// Once and PingPongOnce reset back to Time = 0 once they complete
 			if (_loopMode == LoopMode.Once && time > iterationDuration ||
-			    _loopMode == LoopMode.PingPongOnce && time > iterationDuration * 2)
+				_loopMode == LoopMode.PingPongOnce && time > pingPongIterationDuration)
 			{
 				AnimationState = State.Completed;
 				_elapsedTime = 0;
@@ -125,15 +126,19 @@ namespace Nez.Sprites
 				return;
 			}
 
-			// figure out what iteration we are on
-			var completedIterations = Mathf.FloorToInt(time / iterationDuration);
-			var currentElapsed = time % iterationDuration;
+			// figure out which frame we are on
+			int i = Mathf.FloorToInt(time / secondsPerFrame);
+			int n = animation.Sprites.Length;
+			if (n > 2 && (_loopMode == LoopMode.PingPong || _loopMode == LoopMode.PingPongOnce))
+			{
+				// create a pingpong frame
+				int maxIndex = n - 1;
+				CurrentFrame = maxIndex - Math.Abs(maxIndex - i % (maxIndex * 2));
+			}
+			else
+				// create a looping frame
+				CurrentFrame = i % n;
 
-			// if we are coming backwards on a PingPong we need to reverse elapsed
-			if ((_loopMode == LoopMode.PingPong || _loopMode == LoopMode.PingPongOnce) && completedIterations % 2 != 0)
-				currentElapsed = iterationDuration - currentElapsed;
-
-			CurrentFrame = Mathf.FloorToInt(currentElapsed / secondsPerFrame);
 			Sprite = animation.Sprites[CurrentFrame];
 		}
 

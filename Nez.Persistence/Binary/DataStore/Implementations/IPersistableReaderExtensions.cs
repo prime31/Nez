@@ -73,6 +73,21 @@ namespace Nez.Persistence.Binary
 				arr[i] = self.ReadFloat();
 			return arr;
 		}
+		
+		public static T[] ReadPersistableArray<T>(this IPersistableReader self) where T : IPersistable, new()
+		{
+			var cnt = self.ReadInt();
+			var arr = new T[cnt];
+
+			for (var i = 0; i < cnt; i++)
+			{
+				var persisted = new T();
+				self.ReadPersistableInto(persisted);
+				arr[i] = persisted;
+			}
+				
+			return arr;
+		}
 
 		public static void ReadPersistableInto(this IPersistableReader self, IPersistable persistable)
 		{

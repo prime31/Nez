@@ -1,5 +1,5 @@
-﻿using Microsoft.Xna.Framework.Input;
-
+﻿using System;
+using Microsoft.Xna.Framework.Input;
 
 namespace Nez
 {
@@ -12,7 +12,9 @@ namespace Nez
 
 		static InputUtils()
 		{
-			IsMac = true;
+			IsWindows = Environment.OSVersion.Platform == PlatformID.Win32NT;
+			IsLinux = Environment.OSVersion.Platform == PlatformID.Unix;
+			IsMac = Environment.OSVersion.Platform == PlatformID.MacOSX;
 		}
 
 

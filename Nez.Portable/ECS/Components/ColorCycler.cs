@@ -70,7 +70,7 @@ namespace Nez
 		}
 
 
-		void IUpdatable.Update()
+		public virtual void Update()
 		{
 			var color = _spriteRenderer.Color;
 

@@ -153,7 +153,7 @@ namespace Nez.Textures
 
 					// once we hit the max number of cells to include bail out. were done.
 					if (sprites.Count == maxCellsToInclude)
-						break;
+						return sprites;
 				}
 			}
 

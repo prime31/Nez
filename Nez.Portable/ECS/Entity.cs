@@ -80,8 +80,6 @@ namespace Nez
 		/// </summary>
 		internal bool _isDestroyed;
 
-		internal BitSet componentBits;
-
 		int _tag = 0;
 		bool _enabled = true;
 		internal int _updateOrder = 0;
@@ -196,9 +194,6 @@ namespace Nez
 			Transform = new Transform(this);
 			Name = name;
 			Id = _idGenerator++;
-
-			if (Core.entitySystemsEnabled)
-				componentBits = new BitSet();
 		}
 
 		public Entity() : this(Utils.RandomString(8))
@@ -438,6 +433,11 @@ namespace Nez
 		/// <returns>The component.</returns>
 		/// <typeparam name="T">The 1st type parameter.</typeparam>
 		public T GetComponent<T>() where T : Component => Components.GetComponent<T>(false);
+
+		/// <summary>
+		/// checks to see if the Entity has the component
+		/// </summary>
+		public bool HasComponent<T>() where T : Component => Components.GetComponent<T>(false) != null;
 
 		/// <summary>
 		/// Gets the first Component of type T and returns it. If no Component is found the Component will be created.

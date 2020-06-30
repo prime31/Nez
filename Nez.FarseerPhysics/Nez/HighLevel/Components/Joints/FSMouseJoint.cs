@@ -49,7 +49,7 @@ namespace Nez.Farseer
 		#endregion
 
 
-		void IUpdatable.Update()
+		public virtual void Update()
 		{
 			if (_joint != null)
 			{
