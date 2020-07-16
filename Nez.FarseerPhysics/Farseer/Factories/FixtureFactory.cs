@@ -14,130 +14,135 @@ namespace FarseerPhysics.Factories
 	/// </summary>
 	public static class FixtureFactory
 	{
-		public static Fixture attachEdge( Vector2 start, Vector2 end, Body body, object userData = null )
+		public static Fixture AttachEdge(Vector2 start, Vector2 end, Body body, object userData = null)
 		{
-			var edgeShape = new EdgeShape( start, end );
-			return body.createFixture( edgeShape, userData );
+			var edgeShape = new EdgeShape(start, end);
+			return body.CreateFixture(edgeShape, userData);
 		}
 
-		public static Fixture attachChainShape( Vertices vertices, Body body, object userData = null )
+		public static Fixture AttachChainShape(Vertices vertices, Body body, object userData = null)
 		{
-			var shape = new ChainShape( vertices );
-			return body.createFixture( shape, userData );
+			var shape = new ChainShape(vertices);
+			return body.CreateFixture(shape, userData);
 		}
 
-		public static Fixture attachLoopShape( Vertices vertices, Body body, object userData = null )
+		public static Fixture AttachLoopShape(Vertices vertices, Body body, object userData = null)
 		{
-			var shape = new ChainShape( vertices, true );
-			return body.createFixture( shape, userData );
+			var shape = new ChainShape(vertices, true);
+			return body.CreateFixture(shape, userData);
 		}
 
-		public static Fixture attachRectangle( float width, float height, float density, Vector2 offset, Body body, object userData = null )
+		public static Fixture AttachRectangle(float width, float height, float density, Vector2 offset, Body body,
+		                                      object userData = null)
 		{
-			var rectangleVertices = PolygonTools.createRectangle( width / 2, height / 2 );
-			rectangleVertices.translate( ref offset );
-			var rectangleShape = new PolygonShape( rectangleVertices, density );
-			return body.createFixture( rectangleShape, userData );
+			var rectangleVertices = PolygonTools.CreateRectangle(width / 2, height / 2);
+			rectangleVertices.Translate(ref offset);
+			var rectangleShape = new PolygonShape(rectangleVertices, density);
+			return body.CreateFixture(rectangleShape, userData);
 		}
 
-		public static List<Fixture> attachRoundedRectangle( float width, float height, float xRadius, float yRadius, int segments, float density, Body body, object userData = null )
+		public static List<Fixture> AttachRoundedRectangle(float width, float height, float xRadius, float yRadius,
+		                                                   int segments, float density, Body body,
+		                                                   object userData = null)
 		{
-			var verts = PolygonTools.createRoundedRectangle( width, height, xRadius, yRadius, segments );
+			var verts = PolygonTools.CreateRoundedRectangle(width, height, xRadius, yRadius, segments);
 
 			//There are too many vertices in the capsule. We decompose it.
-			if( verts.Count >= Settings.maxPolygonVertices )
+			if (verts.Count >= Settings.MaxPolygonVertices)
 			{
-				var vertList = Triangulate.convexPartition( verts, TriangulationAlgorithm.Earclip );
-				return attachCompoundPolygon( vertList, density, body, userData );
+				var vertList = Triangulate.ConvexPartition(verts, TriangulationAlgorithm.Earclip);
+				return AttachCompoundPolygon(vertList, density, body, userData);
 			}
 
-			var fixtures = new List<Fixture>( 1 );
-			fixtures.Add( attachPolygon( verts, density, body, userData ) );
+			var fixtures = new List<Fixture>(1);
+			fixtures.Add(AttachPolygon(verts, density, body, userData));
 			return fixtures;
 		}
 
-		public static Fixture attachCircle( float radius, float density, Body body, object userData = null )
+		public static Fixture AttachCircle(float radius, float density, Body body, object userData = null)
 		{
-			if( radius <= 0 )
-				throw new ArgumentOutOfRangeException( nameof( radius ), "Radius must be more than 0 meters" );
+			if (radius <= 0)
+				throw new ArgumentOutOfRangeException(nameof(radius), "Radius must be more than 0 meters");
 
-			var circleShape = new CircleShape( radius, density );
-			return body.createFixture( circleShape, userData );
+			var circleShape = new CircleShape(radius, density);
+			return body.CreateFixture(circleShape, userData);
 		}
 
-		public static Fixture attachCircle( float radius, float density, Body body, Vector2 offset, object userData = null )
+		public static Fixture AttachCircle(float radius, float density, Body body, Vector2 offset,
+		                                   object userData = null)
 		{
-			if( radius <= 0 )
-				throw new ArgumentOutOfRangeException( nameof( radius ), "Radius must be more than 0 meters" );
+			if (radius <= 0)
+				throw new ArgumentOutOfRangeException(nameof(radius), "Radius must be more than 0 meters");
 
-			var circleShape = new CircleShape( radius, density );
-			circleShape.position = offset;
-			return body.createFixture( circleShape, userData );
+			var circleShape = new CircleShape(radius, density);
+			circleShape.Position = offset;
+			return body.CreateFixture(circleShape, userData);
 		}
 
-		public static Fixture attachPolygon( Vertices vertices, float density, Body body, object userData = null )
+		public static Fixture AttachPolygon(Vertices vertices, float density, Body body, object userData = null)
 		{
-			if( vertices.Count <= 1 )
-				throw new ArgumentOutOfRangeException( nameof( vertices ), "Too few points to be a polygon" );
+			if (vertices.Count <= 1)
+				throw new ArgumentOutOfRangeException(nameof(vertices), "Too few points to be a polygon");
 
-			var polygon = new PolygonShape( vertices, density );
-			return body.createFixture( polygon, userData );
+			var polygon = new PolygonShape(vertices, density);
+			return body.CreateFixture(polygon, userData);
 		}
 
-		public static Fixture attachEllipse( float xRadius, float yRadius, int edges, float density, Body body, object userData = null )
+		public static Fixture AttachEllipse(float xRadius, float yRadius, int edges, float density, Body body,
+		                                    object userData = null)
 		{
-			if( xRadius <= 0 )
-				throw new ArgumentOutOfRangeException( nameof( xRadius ), "X-radius must be more than 0" );
+			if (xRadius <= 0)
+				throw new ArgumentOutOfRangeException(nameof(xRadius), "X-radius must be more than 0");
 
-			if( yRadius <= 0 )
-				throw new ArgumentOutOfRangeException( nameof( yRadius ), "Y-radius must be more than 0" );
+			if (yRadius <= 0)
+				throw new ArgumentOutOfRangeException(nameof(yRadius), "Y-radius must be more than 0");
 
-			var ellipseVertices = PolygonTools.createEllipse( xRadius, yRadius, edges );
-			var polygonShape = new PolygonShape( ellipseVertices, density );
-			return body.createFixture( polygonShape, userData );
+			var ellipseVertices = PolygonTools.CreateEllipse(xRadius, yRadius, edges);
+			var polygonShape = new PolygonShape(ellipseVertices, density);
+			return body.CreateFixture(polygonShape, userData);
 		}
 
-		public static List<Fixture> attachCompoundPolygon( List<Vertices> list, float density, Body body, object userData = null )
+		public static List<Fixture> AttachCompoundPolygon(List<Vertices> list, float density, Body body,
+		                                                  object userData = null)
 		{
-			var res = new List<Fixture>( list.Count );
+			var res = new List<Fixture>(list.Count);
 
 			// Then we create several fixtures using the body
-			foreach( var vertices in list )
+			foreach (var vertices in list)
 			{
-				if( vertices.Count == 2 )
+				if (vertices.Count == 2)
 				{
-					var shape = new EdgeShape( vertices[0], vertices[1] );
-					res.Add( body.createFixture( shape, userData ) );
+					var shape = new EdgeShape(vertices[0], vertices[1]);
+					res.Add(body.CreateFixture(shape, userData));
 				}
 				else
 				{
-					var shape = new PolygonShape( vertices, density );
-					res.Add( body.createFixture( shape, userData ) );
+					var shape = new PolygonShape(vertices, density);
+					res.Add(body.CreateFixture(shape, userData));
 				}
 			}
 
 			return res;
 		}
 
-		public static Fixture attachLineArc( float radians, int sides, float radius, bool closed, Body body )
+		public static Fixture AttachLineArc(float radians, int sides, float radius, bool closed, Body body)
 		{
-			var arc = PolygonTools.createArc( radians, sides, radius );
-			arc.rotate( ( MathHelper.Pi - radians ) / 2 );
-			return closed ? attachLoopShape( arc, body ) : attachChainShape( arc, body );
+			var arc = PolygonTools.CreateArc(radians, sides, radius);
+			arc.Rotate((MathHelper.Pi - radians) / 2);
+			return closed ? AttachLoopShape(arc, body) : AttachChainShape(arc, body);
 		}
 
-		public static List<Fixture> attachSolidArc( float density, float radians, int sides, float radius, Body body )
+		public static List<Fixture> AttachSolidArc(float density, float radians, int sides, float radius, Body body)
 		{
-			var arc = PolygonTools.createArc( radians, sides, radius );
-			arc.rotate( ( MathHelper.Pi - radians ) / 2 );
+			var arc = PolygonTools.CreateArc(radians, sides, radius);
+			arc.Rotate((MathHelper.Pi - radians) / 2);
 
 			// Close the arc
-			arc.Add( arc[0] );
+			arc.Add(arc[0]);
 
-			var triangles = Triangulate.convexPartition( arc, TriangulationAlgorithm.Earclip );
+			var triangles = Triangulate.ConvexPartition(arc, TriangulationAlgorithm.Earclip);
 
-			return attachCompoundPolygon( triangles, density, body );
+			return AttachCompoundPolygon(triangles, density, body);
 		}
-	
 	}
 }

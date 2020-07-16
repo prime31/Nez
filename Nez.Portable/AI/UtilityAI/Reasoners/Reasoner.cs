@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 
 namespace Nez.AI.UtilityAI
@@ -9,37 +8,35 @@ namespace Nez.AI.UtilityAI
 	/// </summary>
 	public abstract class Reasoner<T>
 	{
-		public IConsideration<T> defaultConsideration = new FixedScoreConsideration<T>();
+		public IConsideration<T> DefaultConsideration = new FixedScoreConsideration<T>();
 
 		protected List<IConsideration<T>> _considerations = new List<IConsideration<T>>();
 
 
-		public IAction<T> select( T context )
+		public IAction<T> Select(T context)
 		{
-			var consideration = selectBestConsideration( context );
-			if( consideration != null )
-				return consideration.action;
-			
+			var consideration = SelectBestConsideration(context);
+			if (consideration != null)
+				return consideration.Action;
+
 			return null;
 		}
 
 
-		protected abstract IConsideration<T> selectBestConsideration( T context );
+		protected abstract IConsideration<T> SelectBestConsideration(T context);
 
 
-		public Reasoner<T> addConsideration( IConsideration<T> consideration )
+		public Reasoner<T> AddConsideration(IConsideration<T> consideration)
 		{
-			_considerations.Add( consideration );
+			_considerations.Add(consideration);
 			return this;
 		}
 
 
-		public Reasoner<T> setDefaultConsideration( IConsideration<T> defaultConsideration )
+		public Reasoner<T> SetDefaultConsideration(IConsideration<T> defaultConsideration)
 		{
-			this.defaultConsideration = defaultConsideration;
+			DefaultConsideration = defaultConsideration;
 			return this;
 		}
-
 	}
 }
-

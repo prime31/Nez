@@ -24,44 +24,50 @@ namespace FarseerPhysics.Factories
 		/// <param name="attachRopeJoint">Creates a rope joint between start and end. This enforces the length of the rope. Said in another way: it makes the rope less bouncy.</param>
 		/// <param name="fixStart">If set to <c>true</c> fix start.</param>
 		/// <param name="fixEnd">If set to <c>true</c> fix end.</param>
-		public static List<Body> createChain( World world, Vector2 start, Vector2 end, float linkWidth, float linkHeight, int numberOfLinks, float linkDensity, bool attachRopeJoint, bool fixStart = false, bool fixEnd = false )
+		public static List<Body> CreateChain(World world, Vector2 start, Vector2 end, float linkWidth, float linkHeight,
+		                                     int numberOfLinks, float linkDensity, bool attachRopeJoint,
+		                                     bool fixStart = false, bool fixEnd = false)
 		{
-			Debug.Assert( numberOfLinks >= 2 );
+			Debug.Assert(numberOfLinks >= 2);
 
 			// Chain start / end
 			var path = new Path();
-			path.add( start );
-			path.add( end );
+			path.Add(start);
+			path.Add(end);
 
 			// A single chainlink
-			var shape = new PolygonShape( PolygonTools.createRectangle( linkWidth, linkHeight ), linkDensity );
+			var shape = new PolygonShape(PolygonTools.CreateRectangle(linkWidth, linkHeight), linkDensity);
 
 			// Use PathManager to create all the chainlinks based on the chainlink created before.
-			var chainLinks = PathManager.evenlyDistributeShapesAlongPath( world, path, shape, BodyType.Dynamic, numberOfLinks );
+			var chainLinks =
+				PathManager.EvenlyDistributeShapesAlongPath(world, path, shape, BodyType.Dynamic, numberOfLinks);
 
-			if( fixStart )
+			if (fixStart)
 			{
 				// Fix the first chainlink to the world
-				var axle = BodyFactory.createCircle( world, 0.1f, 1, chainLinks[0].position );
-				JointFactory.createRevoluteJoint( world, chainLinks[0], axle, new Vector2( 0, -( linkHeight / 2 ) ), Vector2.Zero );
+				var axle = BodyFactory.CreateCircle(world, 0.1f, 1, chainLinks[0].Position);
+				JointFactory.CreateRevoluteJoint(world, chainLinks[0], axle, new Vector2(0, -(linkHeight / 2)),
+					Vector2.Zero);
 			}
 
-			if( fixEnd )
+			if (fixEnd)
 			{
 				// Fix the last chainlink to the world
 				var lastIndex = chainLinks.Count - 1;
-				var axle = BodyFactory.createCircle( world, 0.1f, 1, chainLinks[lastIndex].position );
-				JointFactory.createRevoluteJoint( world, chainLinks[lastIndex], axle, new Vector2( 0, -( linkHeight / 2 ) ), Vector2.Zero );
+				var axle = BodyFactory.CreateCircle(world, 0.1f, 1, chainLinks[lastIndex].Position);
+				JointFactory.CreateRevoluteJoint(world, chainLinks[lastIndex], axle, new Vector2(0, -(linkHeight / 2)),
+					Vector2.Zero);
 			}
 
 			// Attach all the chainlinks together with a revolute joint
-			PathManager.attachBodiesWithRevoluteJoint( world, chainLinks, new Vector2( 0, -linkHeight ), new Vector2( 0, linkHeight ), false, false );
+			PathManager.AttachBodiesWithRevoluteJoint(world, chainLinks, new Vector2(0, -linkHeight),
+				new Vector2(0, linkHeight), false, false);
 
-			if( attachRopeJoint )
-				JointFactory.createRopeJoint( world, chainLinks[0], chainLinks[chainLinks.Count - 1], Vector2.Zero, Vector2.Zero );
+			if (attachRopeJoint)
+				JointFactory.CreateRopeJoint(world, chainLinks[0], chainLinks[chainLinks.Count - 1], Vector2.Zero,
+					Vector2.Zero);
 
 			return chainLinks;
 		}
-	
 	}
 }

@@ -1,8 +1,5 @@
-﻿using System;
-using Nez;
-using Nez.Textures;
+﻿using Nez.Textures;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework;
 
 
 namespace Nez
@@ -12,25 +9,25 @@ namespace Nez
 		/// <summary>
 		/// the settings used by the bloom and blur shaders. If changed, you must call setBloomSettings for the changes to take effect.
 		/// </summary>
-		public BloomSettings settings
+		public BloomSettings Settings
 		{
 			get => _settings;
-			set => setBloomSettings( value );
+			set => SetBloomSettings(value);
 		}
 
 		/// <summary>
 		/// scale of the internal RenderTargets. For high resolution renders a half sized RT is usually more than enough. Defaults to 1.
 		/// </summary>
-		[Range( 0.25f, 1 )]
-		public float renderTargetScale
+		[Range(0.25f, 1)]
+		public float RenderTargetScale
 		{
 			get => _renderTargetScale;
 			set
 			{
-				if( _renderTargetScale != value )
+				if (_renderTargetScale != value)
 				{
 					_renderTargetScale = value;
-					updateBlurEffectDeltas();
+					UpdateBlurEffectDeltas();
 				}
 			}
 		}
@@ -44,22 +41,27 @@ namespace Nez
 
 		// extract params
 		EffectParameter _bloomExtractThresholdParam;
-		// combine params
-		EffectParameter _bloomIntensityParam, _bloomBaseIntensityParam, _bloomSaturationParam, _bloomBaseSaturationParam, _bloomBaseMapParm;
 
-		
-		public BloomPostProcessor( int executionOrder ) : base( executionOrder )
+		// combine params
+		EffectParameter _bloomIntensityParam,
+			_bloomBaseIntensityParam,
+			_bloomSaturationParam,
+			_bloomBaseSaturationParam,
+			_bloomBaseMapParm;
+
+
+		public BloomPostProcessor(int executionOrder) : base(executionOrder)
 		{
-			_settings = BloomSettings.presetSettings[3];
+			_settings = BloomSettings.PresetSettings[3];
 		}
 
-		public override void onAddedToScene( Scene scene )
+		public override void OnAddedToScene(Scene scene)
 		{
-			base.onAddedToScene( scene );
+			base.OnAddedToScene(scene);
 
-			_bloomExtractEffect = scene.content.loadEffect<Effect>( "bloomExtract", EffectResource.bloomExtractBytes );
-			_bloomCombineEffect = scene.content.loadEffect<Effect>( "bloomCombine", EffectResource.bloomCombineBytes );
-			_gaussianBlurEffect = scene.content.loadNezEffect<GaussianBlurEffect>();
+			_bloomExtractEffect = scene.Content.LoadEffect<Effect>("bloomExtract", EffectResource.BloomExtractBytes);
+			_bloomCombineEffect = scene.Content.LoadEffect<Effect>("bloomCombine", EffectResource.BloomCombineBytes);
+			_gaussianBlurEffect = scene.Content.LoadNezEffect<GaussianBlurEffect>();
 
 			_bloomExtractThresholdParam = _bloomExtractEffect.Parameters["_bloomThreshold"];
 
@@ -69,81 +71,81 @@ namespace Nez
 			_bloomBaseSaturationParam = _bloomCombineEffect.Parameters["_baseSaturation"];
 			_bloomBaseMapParm = _bloomCombineEffect.Parameters["_baseMap"];
 
-			setBloomSettings( _settings );
+			SetBloomSettings(_settings);
 		}
 
-		public override void unload()
+		public override void Unload()
 		{
-			_scene.content.unloadEffect( _bloomExtractEffect );
-			_scene.content.unloadEffect( _bloomCombineEffect );
-			_scene.content.unloadEffect( _gaussianBlurEffect );
+			_scene.Content.UnloadEffect(_bloomExtractEffect);
+			_scene.Content.UnloadEffect(_bloomCombineEffect);
+			_scene.Content.UnloadEffect(_gaussianBlurEffect);
 
-			base.unload();
+			base.Unload();
 		}
 
 		/// <summary>
 		/// sets the settings used by the bloom and blur shaders
 		/// </summary>
 		/// <param name="settings">Settings.</param>
-		public void setBloomSettings( BloomSettings settings )
+		public void SetBloomSettings(BloomSettings settings)
 		{
 			_settings = settings;
 
-			_bloomExtractThresholdParam.SetValue( _settings.threshold );
+			_bloomExtractThresholdParam.SetValue(_settings.Threshold);
 
-			_bloomIntensityParam.SetValue( _settings.intensity );
-			_bloomBaseIntensityParam.SetValue( _settings.baseIntensity );
-			_bloomSaturationParam.SetValue( _settings.saturation );
-			_bloomBaseSaturationParam.SetValue( _settings.baseSaturation );
+			_bloomIntensityParam.SetValue(_settings.Intensity);
+			_bloomBaseIntensityParam.SetValue(_settings.BaseIntensity);
+			_bloomSaturationParam.SetValue(_settings.Saturation);
+			_bloomBaseSaturationParam.SetValue(_settings.BaseSaturation);
 
-			_gaussianBlurEffect.blurAmount = _settings.blurAmount;
+			_gaussianBlurEffect.BlurAmount = _settings.BlurAmount;
 		}
 
-		public override void onSceneBackBufferSizeChanged( int newWidth, int newHeight )
+		public override void OnSceneBackBufferSizeChanged(int newWidth, int newHeight)
 		{
-			updateBlurEffectDeltas();
+			UpdateBlurEffectDeltas();
 		}
 
 		/// <summary>
 		/// updates the Effect with the new vertical and horizontal deltas
 		/// </summary>
-		void updateBlurEffectDeltas()
+		void UpdateBlurEffectDeltas()
 		{
-			var sceneRenderTargetSize = _scene.sceneRenderTargetSize;
-			_gaussianBlurEffect.horizontalBlurDelta = 1f / ( sceneRenderTargetSize.X * _renderTargetScale );
-			_gaussianBlurEffect.verticalBlurDelta = 1f / ( sceneRenderTargetSize.Y * _renderTargetScale );
+			var sceneRenderTargetSize = _scene.SceneRenderTargetSize;
+			_gaussianBlurEffect.HorizontalBlurDelta = 1f / (sceneRenderTargetSize.X * _renderTargetScale);
+			_gaussianBlurEffect.VerticalBlurDelta = 1f / (sceneRenderTargetSize.Y * _renderTargetScale);
 		}
 
-		public override void process( RenderTarget2D source, RenderTarget2D destination )
+		public override void Process(RenderTarget2D source, RenderTarget2D destination)
 		{
 			// aquire two rendertargets for the bloom processing. These can be scaled via renderTargetScale in order to minimize fillrate costs. Reducing
 			// the resolution in this way doesn't hurt quality, because we are going to be blurring the bloom images in any case.
-			var sceneRenderTargetSize = _scene.sceneRenderTargetSize;
-			var renderTarget1 = RenderTarget.getTemporary( (int)( sceneRenderTargetSize.X * renderTargetScale ), (int)( sceneRenderTargetSize.Y * renderTargetScale ), DepthFormat.None );
-			var renderTarget2 = RenderTarget.getTemporary( (int)( sceneRenderTargetSize.X * renderTargetScale ), (int)( sceneRenderTargetSize.Y * renderTargetScale ), DepthFormat.None );
+			var sceneRenderTargetSize = _scene.SceneRenderTargetSize;
+			var renderTarget1 = RenderTarget.GetTemporary((int) (sceneRenderTargetSize.X * RenderTargetScale),
+				(int) (sceneRenderTargetSize.Y * RenderTargetScale), DepthFormat.None);
+			var renderTarget2 = RenderTarget.GetTemporary((int) (sceneRenderTargetSize.X * RenderTargetScale),
+				(int) (sceneRenderTargetSize.Y * RenderTargetScale), DepthFormat.None);
 
 			// Pass 1: draw the scene into rendertarget 1, using a shader that extracts only the brightest parts of the image.
-			drawFullscreenQuad( source, renderTarget1, _bloomExtractEffect );
+			DrawFullscreenQuad(source, renderTarget1, _bloomExtractEffect);
 
 			// Pass 2: draw from rendertarget 1 into rendertarget 2, using a shader to apply a horizontal gaussian blur filter.
-			_gaussianBlurEffect.prepareForHorizontalBlur();
-			drawFullscreenQuad( renderTarget1, renderTarget2, _gaussianBlurEffect );
+			_gaussianBlurEffect.PrepareForHorizontalBlur();
+			DrawFullscreenQuad(renderTarget1, renderTarget2, _gaussianBlurEffect);
 
 			// Pass 3: draw from rendertarget 2 back into rendertarget 1, using a shader to apply a vertical gaussian blur filter.
-			_gaussianBlurEffect.prepareForVerticalBlur();
-			drawFullscreenQuad( renderTarget2, renderTarget1, _gaussianBlurEffect );
+			_gaussianBlurEffect.PrepareForVerticalBlur();
+			DrawFullscreenQuad(renderTarget2, renderTarget1, _gaussianBlurEffect);
 
 			// Pass 4: draw both rendertarget 1 and the original scene image back into the main backbuffer, using a shader that
 			// combines them to produce the final bloomed result.
-			Core.graphicsDevice.SamplerStates[1] = SamplerState.LinearClamp;
-			_bloomBaseMapParm.SetValue( source );
+			Core.GraphicsDevice.SamplerStates[1] = SamplerState.LinearClamp;
+			_bloomBaseMapParm.SetValue(source);
 
-			drawFullscreenQuad( renderTarget1, destination, _bloomCombineEffect );
+			DrawFullscreenQuad(renderTarget1, destination, _bloomCombineEffect);
 
-			RenderTarget.releaseTemporary( renderTarget1 );
-			RenderTarget.releaseTemporary( renderTarget2 );
+			RenderTarget.ReleaseTemporary(renderTarget1);
+			RenderTarget.ReleaseTemporary(renderTarget2);
 		}
-
 	}
 }
-

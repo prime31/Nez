@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Reflection;
 
+
 namespace Nez.Persistence
 {
 	/// <summary>
@@ -12,11 +13,12 @@ namespace Nez.Persistence
 		internal const string IdPropertyName = "@id";
 		internal const string RefPropertyName = "@ref";
 
-		internal static readonly Type includeAttrType = typeof( JsonIncludeAttribute );
-		internal static readonly Type excludeAttrType = typeof( JsonExcludeAttribute );
-		internal static readonly Type beforeEncodeAttrType = typeof( BeforeEncodeAttribute );
+		internal static readonly Type includeAttrType = typeof(JsonIncludeAttribute);
+		internal static readonly Type excludeAttrType = typeof(JsonExcludeAttribute);
+		internal static readonly Type beforeEncodeAttrType = typeof(BeforeEncodeAttribute);
 
-		internal const BindingFlags instanceBindingFlags = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance;
+		internal const BindingFlags instanceBindingFlags =
+			BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance;
 
 		internal static readonly string[] iso8601Format =
 		{

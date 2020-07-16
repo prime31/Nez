@@ -9,69 +9,68 @@ namespace Nez.AI.GOAP
 		/// <summary>
 		/// The state of the world at this node.
 		/// </summary>
-		public WorldState worldState;
+		public WorldState WorldState;
 
 		/// <summary>
 		/// The cost so far.
 		/// </summary>
-		public int costSoFar;
+		public int CostSoFar;
 
 		/// <summary>
 		/// The heuristic for remaining cost (don't overestimate!)
 		/// </summary>
-		public int heuristicCost;
+		public int HeuristicCost;
 
 		/// <summary>
 		/// costSoFar + heuristicCost (g+h) combined.
 		/// </summary>
-		public int costSoFarAndHeuristicCost;
+		public int CostSoFarAndHeuristicCost;
 
 		/// <summary>
 		/// the Action associated with this node
 		/// </summary>
-		public Action action;
+		public Action Action;
 
 		// Where did we come from?
-		public AStarNode parent;
-		public WorldState parentWorldState;
-		public int depth;
+		public AStarNode Parent;
+		public WorldState ParentWorldState;
+		public int Depth;
 
 
 		#region IEquatable and IComparable
 
-		public bool Equals( AStarNode other )
+		public bool Equals(AStarNode other)
 		{
-			long care = worldState.dontCare ^ -1L;
-			return ( worldState.values & care ) == ( other.worldState.values & care );
+			long care = WorldState.DontCare ^ -1L;
+			return (WorldState.Values & care) == (other.WorldState.Values & care);
 		}
 
 
-		public int CompareTo( AStarNode other )
+		public int CompareTo(AStarNode other)
 		{
-			return this.costSoFarAndHeuristicCost.CompareTo( other.costSoFarAndHeuristicCost );
+			return CostSoFarAndHeuristicCost.CompareTo(other.CostSoFarAndHeuristicCost);
 		}
 
 		#endregion
 
 
-		public void reset()
+		public void Reset()
 		{
-			action = null;
-			parent = null;
+			Action = null;
+			Parent = null;
 		}
 
 
-		public AStarNode clone()
+		public AStarNode Clone()
 		{
-			return (AStarNode)MemberwiseClone();
+			return (AStarNode) MemberwiseClone();
 		}
 
 
 		public override string ToString()
 		{
-			return string.Format( "[cost: {0} | heuristic: {1}]: {2}", costSoFar, heuristicCost, action );
+			return string.Format("[cost: {0} | heuristic: {1}]: {2}", CostSoFar, HeuristicCost, Action);
 		}
-
 	}
 
 
@@ -105,82 +104,83 @@ namespace Nez.AI.GOAP
 		/// <param name="start">Start.</param>
 		/// <param name="goal">Goal.</param>
 		/// <param name="storage">Storage.</param>
-		public static Stack<Action> plan( ActionPlanner ap, WorldState start, WorldState goal, List<AStarNode> selectedNodes = null )
+		public static Stack<Action> Plan(ActionPlanner ap, WorldState start, WorldState goal,
+		                                 List<AStarNode> selectedNodes = null)
 		{
-			storage.clear();
+			storage.Clear();
 
-			var currentNode = Pool<AStarNode>.obtain();
-			currentNode.worldState = start;
-			currentNode.parentWorldState = start;
-			currentNode.costSoFar = 0; // g
-			currentNode.heuristicCost = calculateHeuristic( start, goal ); // h
-			currentNode.costSoFarAndHeuristicCost = currentNode.costSoFar + currentNode.heuristicCost; // f
-			currentNode.depth = 1;
+			var currentNode = Pool<AStarNode>.Obtain();
+			currentNode.WorldState = start;
+			currentNode.ParentWorldState = start;
+			currentNode.CostSoFar = 0; // g
+			currentNode.HeuristicCost = CalculateHeuristic(start, goal); // h
+			currentNode.CostSoFarAndHeuristicCost = currentNode.CostSoFar + currentNode.HeuristicCost; // f
+			currentNode.Depth = 1;
 
-			storage.addToOpenList( currentNode );
+			storage.AddToOpenList(currentNode);
 
-			while( true )
+			while (true)
 			{
 				// nothing left open so we failed to find a path
-				if( !storage.hasOpened() )
+				if (!storage.HasOpened())
 				{
-					storage.clear();
+					storage.Clear();
 					return null;
 				}
 
-				currentNode = storage.removeCheapestOpenNode();
+				currentNode = storage.RemoveCheapestOpenNode();
 
-				storage.addToClosedList( currentNode );
+				storage.AddToClosedList(currentNode);
 
 				// all done. we reached our goal
-				if( goal.Equals( currentNode.worldState ) )
+				if (goal.Equals(currentNode.WorldState))
 				{
-					var plan = reconstructPlan( currentNode, selectedNodes );
-					storage.clear();
+					var plan = ReconstructPlan(currentNode, selectedNodes);
+					storage.Clear();
 					return plan;
 				}
 
-				var neighbors = ap.getPossibleTransitions( currentNode.worldState );
-				for( var i = 0; i < neighbors.Count; i++ )
+				var neighbors = ap.GetPossibleTransitions(currentNode.WorldState);
+				for (var i = 0; i < neighbors.Count; i++)
 				{
 					var cur = neighbors[i];
-					var opened = storage.findOpened( cur );
-					var closed = storage.findClosed( cur );
-					var cost = currentNode.costSoFar + cur.costSoFar;
+					var opened = storage.FindOpened(cur);
+					var closed = storage.FindClosed(cur);
+					var cost = currentNode.CostSoFar + cur.CostSoFar;
 
 					// if neighbor in OPEN and cost less than g(neighbor):
-					if( opened != null && cost < opened.costSoFar )
+					if (opened != null && cost < opened.CostSoFar)
 					{
 						// remove neighbor from OPEN, because new path is better
-						storage.removeOpened( opened );
+						storage.RemoveOpened(opened);
 						opened = null;
 					}
 
 					// if neighbor in CLOSED and cost less than g(neighbor):
-					if( closed != null && cost < closed.costSoFar )
+					if (closed != null && cost < closed.CostSoFar)
 					{
 						// remove neighbor from CLOSED
-						storage.removeClosed( closed );
+						storage.RemoveClosed(closed);
 					}
 
 					// if neighbor not in OPEN and neighbor not in CLOSED:
-					if( opened == null && closed == null )
+					if (opened == null && closed == null)
 					{
-						var nb = Pool<AStarNode>.obtain();
-						nb.worldState = cur.worldState;
-						nb.costSoFar = cost;
-						nb.heuristicCost = calculateHeuristic( cur.worldState, goal );
-						nb.costSoFarAndHeuristicCost = nb.costSoFar + nb.heuristicCost;
-						nb.action = cur.action;
-						nb.parentWorldState = currentNode.worldState;
-						nb.parent = currentNode;
-						nb.depth = currentNode.depth + 1;
-						storage.addToOpenList( nb );
+						var nb = Pool<AStarNode>.Obtain();
+						nb.WorldState = cur.WorldState;
+						nb.CostSoFar = cost;
+						nb.HeuristicCost = CalculateHeuristic(cur.WorldState, goal);
+						nb.CostSoFarAndHeuristicCost = nb.CostSoFar + nb.HeuristicCost;
+						nb.Action = cur.Action;
+						nb.ParentWorldState = currentNode.WorldState;
+						nb.Parent = currentNode;
+						nb.Depth = currentNode.Depth + 1;
+						storage.AddToOpenList(nb);
 					}
 				}
 
 				// done with neighbors so release it back to the pool
-				ListPool<AStarNode>.free( neighbors );
+				ListPool<AStarNode>.Free(neighbors);
 			}
 		}
 
@@ -190,23 +190,23 @@ namespace Nez.AI.GOAP
 		/// </summary>
 		/// <returns>The plan.</returns>
 		/// <param name="goalnode">Goalnode.</param>
-		static Stack<Action> reconstructPlan( AStarNode goalNode, List<AStarNode> selectedNodes )
+		static Stack<Action> ReconstructPlan(AStarNode goalNode, List<AStarNode> selectedNodes)
 		{
-			var totalActionsInPlan = goalNode.depth - 1;
-			var plan = new Stack<Action>( totalActionsInPlan );
+			var totalActionsInPlan = goalNode.Depth - 1;
+			var plan = new Stack<Action>(totalActionsInPlan);
 
 			var curnode = goalNode;
-			for( var i = 0; i <= totalActionsInPlan - 1; i++ )
+			for (var i = 0; i <= totalActionsInPlan - 1; i++)
 			{
 				// optionally add the node to the List if we have been passed one
-				if( selectedNodes != null )
-					selectedNodes.Add( curnode.clone() );
-				plan.Push( curnode.action );
-				curnode = curnode.parent;
+				if (selectedNodes != null)
+					selectedNodes.Add(curnode.Clone());
+				plan.Push(curnode.Action);
+				curnode = curnode.Parent;
 			}
 
 			// our nodes went from the goal back to the start so reverse them
-			if( selectedNodes != null )
+			if (selectedNodes != null)
 				selectedNodes.Reverse();
 
 			return plan;
@@ -219,18 +219,16 @@ namespace Nez.AI.GOAP
 		/// <returns>The heuristic.</returns>
 		/// <param name="fr">Fr.</param>
 		/// <param name="to">To.</param>
-		static int calculateHeuristic( WorldState fr, WorldState to )
+		static int CalculateHeuristic(WorldState fr, WorldState to)
 		{
-			long care = ( to.dontCare ^ -1L );
-			long diff = ( fr.values & care ) ^ ( to.values & care );
+			long care = (to.DontCare ^ -1L);
+			long diff = (fr.Values & care) ^ (to.Values & care);
 			int dist = 0;
 
-			for( var i = 0; i < ActionPlanner.MAX_CONDITIONS; ++i )
-				if( ( diff & ( 1L << i ) ) != 0 )
+			for (var i = 0; i < ActionPlanner.MAX_CONDITIONS; ++i)
+				if ((diff & (1L << i)) != 0)
 					dist++;
 			return dist;
 		}
-
 	}
 }
-

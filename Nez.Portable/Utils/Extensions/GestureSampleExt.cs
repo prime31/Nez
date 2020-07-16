@@ -6,14 +6,14 @@ namespace Nez
 {
 	public static class GestureSampleExt
 	{
-		public static Vector2 scaledPosition( this GestureSample gestureSample )
+		public static Vector2 ScaledPosition(this GestureSample gestureSample)
 		{
-			return Input.scaledPosition( gestureSample.Position );
+			return Input.ScaledPosition(gestureSample.Position);
 		}
 
-		public static Vector2 scaledPosition2( this GestureSample gestureSample )
+		public static Vector2 ScaledPosition2(this GestureSample gestureSample)
 		{
-			return Input.scaledPosition( gestureSample.Position2 );
+			return Input.ScaledPosition(gestureSample.Position2);
 		}
 	}
 }

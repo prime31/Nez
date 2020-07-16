@@ -5,20 +5,20 @@ namespace Nez.PhysicsShapes
 {
 	public static partial class ShapeCollisions
 	{
-		public static bool pointToCircle( Vector2 point, Circle circle, out CollisionResult result )
+		public static bool PointToCircle(Vector2 point, Circle circle, out CollisionResult result)
 		{
 			result = new CollisionResult();
 
 			// avoid the square root until we actually need it
-			var distanceSquared = Vector2.DistanceSquared( point, circle.position );
-			var sumOfRadii = 1 + circle.radius;
+			var distanceSquared = Vector2.DistanceSquared(point, circle.position);
+			var sumOfRadii = 1 + circle.Radius;
 			var collided = distanceSquared < sumOfRadii * sumOfRadii;
-			if( collided )
+			if (collided)
 			{
-				result.normal = Vector2.Normalize( point - circle.position );
-				var depth = sumOfRadii - Mathf.sqrt( distanceSquared );
-				result.minimumTranslationVector = -depth * result.normal;
-				result.point = circle.position + result.normal * circle.radius;
+				result.Normal = Vector2.Normalize(point - circle.position);
+				var depth = sumOfRadii - Mathf.Sqrt(distanceSquared);
+				result.MinimumTranslationVector = -depth * result.Normal;
+				result.Point = circle.position + result.Normal * circle.Radius;
 
 				return true;
 			}
@@ -27,15 +27,15 @@ namespace Nez.PhysicsShapes
 		}
 
 
-		public static bool pointToBox( Vector2 point, Box box, out CollisionResult result )
+		public static bool PointToBox(Vector2 point, Box box, out CollisionResult result)
 		{
 			result = new CollisionResult();
 
-			if( box.containsPoint( point ) )
+			if (box.ContainsPoint(point))
 			{
 				// get the point in the space of the Box
-				result.point = box.bounds.getClosestPointOnRectangleBorderToPoint( point, out result.normal );
-				result.minimumTranslationVector = point - result.point;
+				result.Point = box.bounds.GetClosestPointOnRectangleBorderToPoint(point, out result.Normal);
+				result.MinimumTranslationVector = point - result.Point;
 
 				return true;
 			}
@@ -44,23 +44,23 @@ namespace Nez.PhysicsShapes
 		}
 
 
-		public static bool pointToPoly( Vector2 point, Polygon poly, out CollisionResult result )
+		public static bool PointToPoly(Vector2 point, Polygon poly, out CollisionResult result)
 		{
 			result = new CollisionResult();
 
-			if( poly.containsPoint( point ) )
+			if (poly.ContainsPoint(point))
 			{
 				float distanceSquared;
-				var closestPoint = Polygon.getClosestPointOnPolygonToPoint( poly.points, point - poly.position, out distanceSquared, out result.normal );
+				var closestPoint = Polygon.GetClosestPointOnPolygonToPoint(poly.Points, point - poly.position,
+					out distanceSquared, out result.Normal);
 
-				result.minimumTranslationVector = result.normal * Mathf.sqrt( distanceSquared );
-				result.point = closestPoint + poly.position;
+				result.MinimumTranslationVector = result.Normal * Mathf.Sqrt(distanceSquared);
+				result.Point = closestPoint + poly.position;
 
 				return true;
 			}
 
 			return false;
 		}
-
 	}
 }

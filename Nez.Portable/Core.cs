@@ -12,8 +12,10 @@ using Nez.Analysis;
 using Nez.Textures;
 using System.Diagnostics;
 
-[assembly: System.Runtime.CompilerServices.InternalsVisibleTo( "Nez.ImGui" )]
-[assembly: System.Runtime.CompilerServices.InternalsVisibleTo( "Nez.Persistence" )]
+
+[assembly: System.Runtime.CompilerServices.InternalsVisibleTo("Nez.ImGui")]
+[assembly: System.Runtime.CompilerServices.InternalsVisibleTo("Nez.Persistence")]
+
 
 namespace Nez
 {
@@ -22,38 +24,38 @@ namespace Nez
 		/// <summary>
 		/// core emitter. emits only Core level events.
 		/// </summary>
-		public static Emitter<CoreEvents> emitter;
+		public static Emitter<CoreEvents> Emitter;
 
 		/// <summary>
 		/// enables/disables if we should quit the app when escape is pressed
 		/// </summary>
-		public static bool exitOnEscapeKeypress = true;
+		public static bool ExitOnEscapeKeypress = true;
 
 		/// <summary>
 		/// enables/disables pausing when focus is lost. No update or render methods will be called if true when not in focus.
 		/// </summary>
-		public static bool pauseOnFocusLost = true;
+		public static bool PauseOnFocusLost = true;
 
 		/// <summary>
 		/// enables/disables debug rendering
 		/// </summary>
-		public static bool debugRenderEnabled = false;
+		public static bool DebugRenderEnabled = false;
 
 		/// <summary>
 		/// global access to the graphicsDevice
 		/// </summary>
-		public static GraphicsDevice graphicsDevice;
+		public new static GraphicsDevice GraphicsDevice;
 
 		/// <summary>
 		/// global content manager for loading any assets that should stick around between scenes
 		/// </summary>
-		public static NezContentManager content;
+		public new static NezContentManager Content;
 
 		/// <summary>
 		/// default SamplerState used by Materials. Note that this must be set at launch! Changing it after that time will result in only
 		/// Materials created after it was set having the new SamplerState
 		/// </summary>
-		public static SamplerState defaultSamplerState = new SamplerState
+		public static SamplerState DefaultSamplerState = new SamplerState
 		{
 			Filter = TextureFilter.Point
 		};
@@ -62,28 +64,26 @@ namespace Nez
 		/// default wrapped SamplerState. Determined by the Filter of the defaultSamplerState.
 		/// </summary>
 		/// <value>The default state of the wraped sampler.</value>
-		public static SamplerState defaultWrappedSamplerState { get { return defaultSamplerState.Filter == TextureFilter.Point ? SamplerState.PointWrap : SamplerState.LinearWrap; } }
+		public static SamplerState DefaultWrappedSamplerState =>
+			DefaultSamplerState.Filter == TextureFilter.Point
+				? SamplerState.PointWrap
+				: SamplerState.LinearWrap;
 
 		/// <summary>
 		/// default GameServiceContainer access
 		/// </summary>
 		/// <value>The services.</value>
-		public static GameServiceContainer services => _instance.Services;
+		public new static GameServiceContainer Services => ((Game) _instance).Services;
 
 		/// <summary>
 		/// provides access to the single Core/Game instance
 		/// </summary>
-		public static Core instance => _instance;
+		public static Core Instance => _instance;
 
 		/// <summary>
 		/// facilitates easy access to the global Content instance for internal classes
 		/// </summary>
 		internal static Core _instance;
-
-		/// <summary>
-		/// internal flag used to determine if EntitySystems should be used or not
-		/// </summary>
-		internal static bool entitySystemsEnabled;
 
 #if DEBUG
 		internal static long drawCalls;
@@ -110,19 +110,19 @@ namespace Nez
 		/// <summary>
 		/// The currently active Scene. Note that if set, the Scene will not actually change until the end of the Update
 		/// </summary>
-		public static Scene scene
+		public static Scene Scene
 		{
 			get => _instance._scene;
 			set
 			{
-				Insist.isNotNull( value, "Scene cannot be null!" );
+				Insist.IsNotNull(value, "Scene cannot be null!");
 
 				// handle our initial Scene. If we have no Scene and one is assigned directly wire it up
-				if( _instance._scene == null )
+				if (_instance._scene == null)
 				{
 					_instance._scene = value;
-					_instance._scene.begin();
-					_instance.onSceneChanged();
+					_instance._scene.Begin();
+					_instance.OnSceneChanged();
 				}
 				else
 				{
@@ -132,46 +132,44 @@ namespace Nez
 		}
 
 
-		public Core( int width = 1280, int height = 720, bool isFullScreen = false, bool enableEntitySystems = true, string windowTitle = "Nez", string contentDirectory = "Content" )
+		public Core(int width = 1280, int height = 720, bool isFullScreen = false, string windowTitle = "Nez", string contentDirectory = "Content")
 		{
 #if DEBUG
 			_windowTitle = windowTitle;
 #endif
 
 			_instance = this;
-			emitter = new Emitter<CoreEvents>( new CoreEventsComparer() );
+			Emitter = new Emitter<CoreEvents>(new CoreEventsComparer());
 
-			var graphicsManager = new GraphicsDeviceManager( this )
+			var graphicsManager = new GraphicsDeviceManager(this)
 			{
 				PreferredBackBufferWidth = width,
 				PreferredBackBufferHeight = height,
 				IsFullScreen = isFullScreen,
 				SynchronizeWithVerticalRetrace = true
 			};
-			graphicsManager.DeviceReset += onGraphicsDeviceReset;
+			graphicsManager.DeviceReset += OnGraphicsDeviceReset;
 			graphicsManager.PreferredDepthStencilFormat = DepthFormat.Depth24Stencil8;
 
-			Screen.initialize( graphicsManager );
-			Window.ClientSizeChanged += onGraphicsDeviceReset;
-			Window.OrientationChanged += onOrientationChanged;
+			Screen.Initialize(graphicsManager);
+			Window.ClientSizeChanged += OnGraphicsDeviceReset;
+			Window.OrientationChanged += OnOrientationChanged;
 
-			Content.RootDirectory = contentDirectory;
-			content = new NezGlobalContentManager( Services, Content.RootDirectory );
+			base.Content.RootDirectory = contentDirectory;
+			Content = new NezGlobalContentManager(Services, base.Content.RootDirectory);
 			IsMouseVisible = true;
 			IsFixedTimeStep = false;
 
-			entitySystemsEnabled = enableEntitySystems;
-
 			// setup systems
-			registerGlobalManager( _coroutineManager );
-			registerGlobalManager( new TweenManager() );
-			registerGlobalManager( _timerManager );
-			registerGlobalManager( new RenderTarget() );
+			RegisterGlobalManager(_coroutineManager);
+			RegisterGlobalManager(new TweenManager());
+			RegisterGlobalManager(_timerManager);
+			RegisterGlobalManager(new RenderTarget());
 		}
 
-		void onOrientationChanged( object sender, EventArgs e )
+		void OnOrientationChanged(object sender, EventArgs e)
 		{
-			emitter.emit( CoreEvents.OrientationChanged );
+			Emitter.Emit(CoreEvents.OrientationChanged);
 		}
 
 		/// <summary>
@@ -179,29 +177,29 @@ namespace Nez
 		/// </summary>
 		/// <param name="sender">Sender.</param>
 		/// <param name="e">E.</param>
-		protected void onGraphicsDeviceReset( object sender, EventArgs e )
+		protected void OnGraphicsDeviceReset(object sender, EventArgs e)
 		{
 			// we coalese these to avoid spamming events
-			if( _graphicsDeviceChangeTimer != null )
+			if (_graphicsDeviceChangeTimer != null)
 			{
-				_graphicsDeviceChangeTimer.reset();
+				_graphicsDeviceChangeTimer.Reset();
 			}
 			else
 			{
-				_graphicsDeviceChangeTimer = schedule( 0.05f, false, this, t =>
+				_graphicsDeviceChangeTimer = Schedule(0.05f, false, this, t =>
 				{
-					( t.context as Core )._graphicsDeviceChangeTimer = null;
-					emitter.emit( CoreEvents.GraphicsDeviceReset );
-				} );
+					(t.Context as Core)._graphicsDeviceChangeTimer = null;
+					Emitter.Emit(CoreEvents.GraphicsDeviceReset);
+				});
 			}
 		}
 
 
 		#region Passthroughs to Game
 
-		public static void exit()
+		public new static void Exit()
 		{
-			_instance.Exit();
+			((Game) _instance).Exit();
 		}
 
 		#endregion
@@ -214,62 +212,64 @@ namespace Nez
 			base.Initialize();
 
 			// prep the default Graphics system
-			graphicsDevice = GraphicsDevice;
-			var font = content.Load<BitmapFont>( "nez://Nez.Content.NezDefaultBMFont.xnb" );
-			Graphics.instance = new Graphics( font );
+			GraphicsDevice = base.GraphicsDevice;
+			var font = Content.Load<BitmapFont>("nez://Nez.Content.NezDefaultBMFont.xnb");
+			Graphics.Instance = new Graphics(font);
 		}
 
-		protected override void Update( GameTime gameTime )
+		protected override void Update(GameTime gameTime)
 		{
-			if( pauseOnFocusLost && !IsActive )
+			if (PauseOnFocusLost && !IsActive)
 			{
 				SuppressDraw();
 				return;
 			}
 
-			startDebugUpdate();
+			StartDebugUpdate();
 
 			// update all our systems and global managers
-			Time.update( (float)gameTime.ElapsedGameTime.TotalSeconds );
-			Input.update();
+			Time.Update((float) gameTime.ElapsedGameTime.TotalSeconds);
+			Input.Update();
 
-			if( exitOnEscapeKeypress && ( Input.isKeyDown( Keys.Escape ) || Input.gamePads[0].isButtonReleased( Buttons.Back ) ) )
+			if (ExitOnEscapeKeypress &&
+			    (Input.IsKeyDown(Keys.Escape) || Input.GamePads[0].IsButtonReleased(Buttons.Back)))
 			{
-				Exit();
+				base.Exit();
 				return;
 			}
 
-			if( _scene != null )
+			if (_scene != null)
 			{
-				for( var i = _globalManagers.length - 1; i >= 0; i-- )
+				for (var i = _globalManagers.Length - 1; i >= 0; i--)
 				{
-					if( _globalManagers.buffer[i].enabled )
-						_globalManagers.buffer[i].update();
+					if (_globalManagers.Buffer[i].Enabled)
+						_globalManagers.Buffer[i].Update();
 				}
 
 				// read carefully:
 				// - we do not update the Scene while a SceneTransition is happening
 				// 		- unless it is SceneTransition that doesn't change Scenes (no reason not to update)
 				//		- or it is a SceneTransition that has already switched to the new Scene (the new Scene needs to do its thing)
-				if( _sceneTransition == null ||
-					( _sceneTransition != null && ( !_sceneTransition._loadsNewScene || _sceneTransition._isNewSceneLoaded ) ) )
+				if (_sceneTransition == null ||
+				    (_sceneTransition != null &&
+				     (!_sceneTransition._loadsNewScene || _sceneTransition._isNewSceneLoaded)))
 				{
-					_scene.update();
+					_scene.Update();
 				}
 
-				if( _nextScene != null )
+				if (_nextScene != null)
 				{
-					_scene.end();
+					_scene.End();
 
 					_scene = _nextScene;
 					_nextScene = null;
-					onSceneChanged();
+					OnSceneChanged();
 
-					_scene.begin();
+					_scene.Begin();
 				}
 			}
 
-			endDebugUpdate();
+			EndDebugUpdate();
 
 #if FNA
 			// MonoGame only updates old-school XNA Components in Update which we dont care about. FNA's core FrameworkDispatcher needs
@@ -278,110 +278,111 @@ namespace Nez
 #endif
 		}
 
-		protected override void Draw( GameTime gameTime )
+		protected override void Draw(GameTime gameTime)
 		{
-			if( pauseOnFocusLost && !IsActive )
+			if (PauseOnFocusLost && !IsActive)
 				return;
 
-			startDebugDraw( gameTime.ElapsedGameTime );
+			StartDebugDraw(gameTime.ElapsedGameTime);
 
-			if( _sceneTransition != null )
-				_sceneTransition.preRender( Graphics.instance );
+			if (_sceneTransition != null)
+				_sceneTransition.PreRender(Graphics.Instance.Batcher);
 
 			// special handling of SceneTransition if we have one. We either render the SceneTransition or the Scene
-			if( _sceneTransition != null )
+			if (_sceneTransition != null)
 			{
-				if( _scene != null && _sceneTransition.wantsPreviousSceneRender && !_sceneTransition.hasPreviousSceneRender )
+				if (_scene != null && _sceneTransition.WantsPreviousSceneRender &&
+				    !_sceneTransition.HasPreviousSceneRender)
 				{
-					_scene.render();
-					_scene.postRender( _sceneTransition.previousSceneRender );
-					startCoroutine( _sceneTransition.onBeginTransition() );
+					_scene.Render();
+					_scene.PostRender(_sceneTransition.PreviousSceneRender);
+					StartCoroutine(_sceneTransition.OnBeginTransition());
 				}
-				else if( _scene != null && _sceneTransition._isNewSceneLoaded )
+				else if (_scene != null && _sceneTransition._isNewSceneLoaded)
 				{
-					_scene.render();
-					_scene.postRender();
+					_scene.Render();
+					_scene.PostRender();
 				}
 
-				_sceneTransition.render( Graphics.instance );
+				_sceneTransition.Render(Graphics.Instance.Batcher);
 			}
-			else if( _scene != null )
+			else if (_scene != null)
 			{
-				_scene.render();
+				_scene.Render();
 
 #if DEBUG
-				if( debugRenderEnabled )
-					Debug.render();
+				if (DebugRenderEnabled)
+					Debug.Render();
 #endif
 
 				// render as usual if we dont have an active SceneTransition
-				_scene.postRender();
+				_scene.PostRender();
 			}
 
-			endDebugDraw();
+			EndDebugDraw();
 		}
 
-		protected override void OnExiting( object sender, EventArgs args )
+		protected override void OnExiting(object sender, EventArgs args)
 		{
-			base.OnExiting( sender, args );
-			emitter.emit( CoreEvents.Exiting );
+			base.OnExiting(sender, args);
+			Emitter.Emit(CoreEvents.Exiting);
 		}
 
 		#endregion
 
 		#region Debug Injection
 
-		[Conditional( "DEBUG" )]
-		void startDebugUpdate()
+		[Conditional("DEBUG")]
+		void StartDebugUpdate()
 		{
 #if DEBUG
-			TimeRuler.instance.startFrame();
-			TimeRuler.instance.beginMark( "update", Color.Green );
+			TimeRuler.Instance.StartFrame();
+			TimeRuler.Instance.BeginMark("update", Color.Green);
 #endif
 		}
 
-		[Conditional( "DEBUG" )]
-		void endDebugUpdate()
+		[Conditional("DEBUG")]
+		void EndDebugUpdate()
 		{
 #if DEBUG
-			TimeRuler.instance.endMark( "update" );
-			DebugConsole.instance.update();
+			TimeRuler.Instance.EndMark("update");
+			DebugConsole.Instance.Update();
 			drawCalls = 0;
 #endif
 		}
 
-		[Conditional( "DEBUG" )]
-		void startDebugDraw( TimeSpan elapsedGameTime )
+		[Conditional("DEBUG")]
+		void StartDebugDraw(TimeSpan elapsedGameTime)
 		{
 #if DEBUG
-			TimeRuler.instance.beginMark( "draw", Color.Gold );
+			TimeRuler.Instance.BeginMark("draw", Color.Gold);
 
 			// fps counter
 			_frameCounter++;
 			_frameCounterElapsedTime += elapsedGameTime;
-			if( _frameCounterElapsedTime >= TimeSpan.FromSeconds( 1 ) )
+			if (_frameCounterElapsedTime >= TimeSpan.FromSeconds(1))
 			{
-				var totalMemory = ( GC.GetTotalMemory( false ) / 1048576f ).ToString( "F" );
-				Window.Title = string.Format( "{0} {1} fps - {2} MB", _windowTitle, _frameCounter, totalMemory );
+				var totalMemory = (GC.GetTotalMemory(false) / 1048576f).ToString("F");
+				Window.Title = string.Format("{0} {1} fps - {2} MB", _windowTitle, _frameCounter, totalMemory);
 				_frameCounter = 0;
-				_frameCounterElapsedTime -= TimeSpan.FromSeconds( 1 );
+				_frameCounterElapsedTime -= TimeSpan.FromSeconds(1);
 			}
 #endif
 		}
 
-		[Conditional( "DEBUG" )]
-		void endDebugDraw()
+		[Conditional("DEBUG")]
+		void EndDebugDraw()
 		{
 #if DEBUG
-			TimeRuler.instance.endMark( "draw" );
-			DebugConsole.instance.render();
+			TimeRuler.Instance.EndMark("draw");
+			DebugConsole.Instance.Render();
 
 			// the TimeRuler only needs to render when the DebugConsole is not open
-			if( !DebugConsole.instance.isOpen )
-				TimeRuler.instance.render();
+			if (!DebugConsole.Instance.IsOpen)
+				TimeRuler.Instance.Render();
 
 #if !FNA
-			drawCalls = graphicsDevice.Metrics.DrawCount;
+			drawCalls = GraphicsDevice.Metrics.DrawCount;
 #endif
 #endif
 		}
@@ -391,10 +392,10 @@ namespace Nez
 		/// <summary>
 		/// Called after a Scene ends, before the next Scene begins
 		/// </summary>
-		void onSceneChanged()
+		void OnSceneChanged()
 		{
-			emitter.emit( CoreEvents.SceneChanged );
-			Time.sceneChanged();
+			Emitter.Emit(CoreEvents.SceneChanged);
+			Time.SceneChanged();
 			GC.Collect();
 		}
 
@@ -402,9 +403,10 @@ namespace Nez
 		/// temporarily runs SceneTransition allowing one Scene to transition to another smoothly with custom effects.
 		/// </summary>
 		/// <param name="sceneTransition">Scene transition.</param>
-		public static T startSceneTransition<T>( T sceneTransition ) where T : SceneTransition
+		public static T StartSceneTransition<T>(T sceneTransition) where T : SceneTransition
 		{
-			Insist.isNull( _instance._sceneTransition, "You cannot start a new SceneTransition until the previous one has completed" );
+			Insist.IsNull(_instance._sceneTransition,
+				"You cannot start a new SceneTransition until the previous one has completed");
 			_instance._sceneTransition = sceneTransition;
 			return sceneTransition;
 		}
@@ -417,10 +419,10 @@ namespace Nez
 		/// </summary>
 		/// <returns>The global manager.</returns>
 		/// <param name="manager">Manager.</param>
-		public static void registerGlobalManager( GlobalManager manager )
+		public static void RegisterGlobalManager(GlobalManager manager)
 		{
-			_instance._globalManagers.add( manager );
-			manager.enabled = true;
+			_instance._globalManagers.Add(manager);
+			manager.Enabled = true;
 		}
 
 		/// <summary>
@@ -428,10 +430,10 @@ namespace Nez
 		/// </summary>
 		/// <returns>The global manager.</returns>
 		/// <param name="manager">Manager.</param>
-		public static void unregisterGlobalManager( GlobalManager manager )
+		public static void UnregisterGlobalManager(GlobalManager manager)
 		{
-			_instance._globalManagers.remove( manager );
-			manager.enabled = false;
+			_instance._globalManagers.Remove(manager);
+			manager.Enabled = false;
 		}
 
 		/// <summary>
@@ -439,13 +441,14 @@ namespace Nez
 		/// </summary>
 		/// <returns>The global manager.</returns>
 		/// <typeparam name="T">The 1st type parameter.</typeparam>
-		public static T getGlobalManager<T>() where T : GlobalManager
+		public static T GetGlobalManager<T>() where T : GlobalManager
 		{
-			for( var i = 0; i < _instance._globalManagers.length; i++ )
+			for (var i = 0; i < _instance._globalManagers.Length; i++)
 			{
-				if( _instance._globalManagers.buffer[i] is T )
-					return _instance._globalManagers.buffer[i] as T;
+				if (_instance._globalManagers.Buffer[i] is T)
+					return _instance._globalManagers.Buffer[i] as T;
 			}
+
 			return null;
 		}
 
@@ -460,9 +463,9 @@ namespace Nez
 		/// </summary>
 		/// <returns>The coroutine.</returns>
 		/// <param name="enumerator">Enumerator.</param>
-		public static ICoroutine startCoroutine( IEnumerator enumerator )
+		public static ICoroutine StartCoroutine(IEnumerator enumerator)
 		{
-			return _instance._coroutineManager.startCoroutine( enumerator );
+			return _instance._coroutineManager.StartCoroutine(enumerator);
 		}
 
 		/// <summary>
@@ -472,9 +475,9 @@ namespace Nez
 		/// <param name="repeats">If set to <c>true</c> repeats.</param>
 		/// <param name="context">Context.</param>
 		/// <param name="onTime">On time.</param>
-		public static ITimer schedule( float timeInSeconds, bool repeats, object context, Action<ITimer> onTime )
+		public static ITimer Schedule(float timeInSeconds, bool repeats, object context, Action<ITimer> onTime)
 		{
-			return _instance._timerManager.schedule( timeInSeconds, repeats, context, onTime );
+			return _instance._timerManager.Schedule(timeInSeconds, repeats, context, onTime);
 		}
 
 		/// <summary>
@@ -483,9 +486,9 @@ namespace Nez
 		/// <param name="timeInSeconds">Time in seconds.</param>
 		/// <param name="context">Context.</param>
 		/// <param name="onTime">On time.</param>
-		public static ITimer schedule( float timeInSeconds, object context, Action<ITimer> onTime )
+		public static ITimer Schedule(float timeInSeconds, object context, Action<ITimer> onTime)
 		{
-			return _instance._timerManager.schedule( timeInSeconds, false, context, onTime );
+			return _instance._timerManager.Schedule(timeInSeconds, false, context, onTime);
 		}
 
 		/// <summary>
@@ -494,9 +497,9 @@ namespace Nez
 		/// <param name="timeInSeconds">Time in seconds.</param>
 		/// <param name="repeats">If set to <c>true</c> repeats.</param>
 		/// <param name="onTime">On time.</param>
-		public static ITimer schedule( float timeInSeconds, bool repeats, Action<ITimer> onTime )
+		public static ITimer Schedule(float timeInSeconds, bool repeats, Action<ITimer> onTime)
 		{
-			return _instance._timerManager.schedule( timeInSeconds, repeats, null, onTime );
+			return _instance._timerManager.Schedule(timeInSeconds, repeats, null, onTime);
 		}
 
 		/// <summary>
@@ -504,13 +507,11 @@ namespace Nez
 		/// </summary>
 		/// <param name="timeInSeconds">Time in seconds.</param>
 		/// <param name="onTime">On time.</param>
-		public static ITimer schedule( float timeInSeconds, Action<ITimer> onTime )
+		public static ITimer Schedule(float timeInSeconds, Action<ITimer> onTime)
 		{
-			return _instance._timerManager.schedule( timeInSeconds, false, null, onTime );
+			return _instance._timerManager.Schedule(timeInSeconds, false, null, onTime);
 		}
 
 		#endregion
-
 	}
 }
-

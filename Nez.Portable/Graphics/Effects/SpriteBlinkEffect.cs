@@ -1,5 +1,4 @@
-﻿using System;
-using Microsoft.Xna.Framework.Graphics;
+﻿using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
 
 
@@ -12,29 +11,28 @@ namespace Nez
 		/// just the sprite being displayed. Any value in between 0 and 1 will interpolate between the two colors.
 		/// </summary>
 		/// <value>The color of the blink.</value>
-		public Color blinkColor
+		public Color BlinkColor
 		{
-			get { return new Color( _blinkColor ); }
+			get => new Color(_blinkColor);
 			set
 			{
 				var blinkVec = value.ToVector4();
-				if( _blinkColor != blinkVec )
+				if (_blinkColor != blinkVec)
 				{
 					_blinkColor = blinkVec;
-					_blinkColorParam.SetValue( _blinkColor );
+					_blinkColorParam.SetValue(_blinkColor);
 				}
 			}
 		}
 
-		Vector4 _blinkColor = new Vector4( 1, 1, 1, 0 );
+		Vector4 _blinkColor = new Vector4(1, 1, 1, 0);
 		EffectParameter _blinkColorParam;
 
 
-		public SpriteBlinkEffect() : base( Core.graphicsDevice, EffectResource.spriteBlinkEffectBytes )
+		public SpriteBlinkEffect() : base(Core.GraphicsDevice, EffectResource.SpriteBlinkEffectBytes)
 		{
 			_blinkColorParam = Parameters["_blinkColor"];
-			_blinkColorParam.SetValue( _blinkColor );
+			_blinkColorParam.SetValue(_blinkColor);
 		}
 	}
 }
-

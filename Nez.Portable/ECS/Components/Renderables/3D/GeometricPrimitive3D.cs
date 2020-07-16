@@ -18,42 +18,43 @@ namespace Nez
 
 		#region Initialization and configuration
 
-		protected void addVertex( Vector3 position, Color color, Vector3 normal )
+		protected void AddVertex(Vector3 position, Color color, Vector3 normal)
 		{
-			_vertices.Add( new VertexPositionColorNormal( position, color, normal ) );
+			_vertices.Add(new VertexPositionColorNormal(position, color, normal));
 		}
 
-		protected void addIndex( int index )
+		protected void AddIndex(int index)
 		{
-			_indices.Add( (ushort)index );
+			_indices.Add((ushort) index);
 		}
 
 		/// <summary>
 		/// Once all the geometry has been specified by calling addVertex and addIndex, this method copies the vertex and index data into
 		/// GPU format buffers, ready for efficient rendering.
 		/// </summary>
-		protected void initializePrimitive()
+		protected void InitializePrimitive()
 		{
-			if( _vertexBuffer != null )
+			if (_vertexBuffer != null)
 				_vertexBuffer.Dispose();
-			
-			if( _indexBuffer != null )
+
+			if (_indexBuffer != null)
 				_indexBuffer.Dispose();
 
 			// create a vertex buffer, and copy our vertex data into it.
-			_vertexBuffer = new VertexBuffer( Core.graphicsDevice, typeof( VertexPositionColorNormal ), _vertices.Count, BufferUsage.None );
-			_vertexBuffer.SetData( _vertices.ToArray() );
+			_vertexBuffer = new VertexBuffer(Core.GraphicsDevice, typeof(VertexPositionColorNormal), _vertices.Count,
+				BufferUsage.None);
+			_vertexBuffer.SetData(_vertices.ToArray());
 
 			// create an index buffer, and copy our index data into it.
-			_indexBuffer = new IndexBuffer( Core.graphicsDevice, typeof( ushort ), _indices.Count, BufferUsage.None );
-			_indexBuffer.SetData( _indices.ToArray() );
+			_indexBuffer = new IndexBuffer(Core.GraphicsDevice, typeof(ushort), _indices.Count, BufferUsage.None);
+			_indexBuffer.SetData(_indices.ToArray());
 		}
 
-		public override void onAddedToEntity()
+		public override void OnAddedToEntity()
 		{
-			base.onAddedToEntity();
+			base.OnAddedToEntity();
 
-			_basicEffect = entity.scene.content.loadMonoGameEffect<BasicEffect>();
+			_basicEffect = Entity.Scene.Content.LoadMonoGameEffect<BasicEffect>();
 			_basicEffect.VertexColorEnabled = true;
 			_basicEffect.EnableDefaultLighting();
 		}
@@ -65,7 +66,7 @@ namespace Nez
 
 		~GeometricPrimitive3D()
 		{
-			Dispose( false );
+			Dispose(false);
 		}
 
 		/// <summary>
@@ -73,24 +74,24 @@ namespace Nez
 		/// </summary>
 		public void Dispose()
 		{
-			Dispose( true );
-			GC.SuppressFinalize( this );
+			Dispose(true);
+			GC.SuppressFinalize(this);
 		}
 
 		/// <summary>
 		/// frees resources used by this object.
 		/// </summary>
-		protected virtual void Dispose( bool disposing )
+		protected virtual void Dispose(bool disposing)
 		{
-			if( disposing )
+			if (disposing)
 			{
-				if( _vertexBuffer != null )
+				if (_vertexBuffer != null)
 					_vertexBuffer.Dispose();
 
-				if( _indexBuffer != null )
+				if (_indexBuffer != null)
 					_indexBuffer.Dispose();
 
-				if( _basicEffect != null )
+				if (_basicEffect != null)
 					_basicEffect.Dispose();
 			}
 		}
@@ -98,28 +99,27 @@ namespace Nez
 		#endregion
 
 
-		public override void render( Graphics graphics, Camera camera )
+		public override void Render(Batcher batcher, Camera camera)
 		{
 			// flush the 2D batch so we render appropriately depth-wise
-			graphics.batcher.flushBatch();
+			batcher.FlushBatch();
 
-			Core.graphicsDevice.BlendState = BlendState.Opaque;
-			Core.graphicsDevice.DepthStencilState = DepthStencilState.Default;
+			Core.GraphicsDevice.BlendState = BlendState.Opaque;
+			Core.GraphicsDevice.DepthStencilState = DepthStencilState.Default;
 
 			// Set BasicEffect parameters.
-			_basicEffect.World = worldMatrix;
-			_basicEffect.View = camera.viewMatrix3D;
-			_basicEffect.Projection = camera.projectionMatrix3D;
-			_basicEffect.DiffuseColor = color.ToVector3();
+			_basicEffect.World = WorldMatrix;
+			_basicEffect.View = camera.ViewMatrix3D;
+			_basicEffect.Projection = camera.ProjectionMatrix3D;
+			_basicEffect.DiffuseColor = Color.ToVector3();
 
 			// Set our vertex declaration, vertex buffer, and index buffer.
-			Core.graphicsDevice.SetVertexBuffer( _vertexBuffer );
-			Core.graphicsDevice.Indices = _indexBuffer;
+			Core.GraphicsDevice.SetVertexBuffer(_vertexBuffer);
+			Core.GraphicsDevice.Indices = _indexBuffer;
 
 			_basicEffect.CurrentTechnique.Passes[0].Apply();
 			var primitiveCount = _indices.Count / 3;
-			Core.graphicsDevice.DrawIndexedPrimitives( PrimitiveType.TriangleList, 0, 0, primitiveCount );
+			Core.GraphicsDevice.DrawIndexedPrimitives(PrimitiveType.TriangleList, 0, 0, primitiveCount);
 		}
-
 	}
 }

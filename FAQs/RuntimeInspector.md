@@ -30,17 +30,17 @@ The inspector also has the ability to expose a button to call methods. Methods m
 
 ```csharp
 [InspectorCallable]
-public void doSomething()
+public void DoSomething()
 {}
 
 
 [InspectorCallable]
-public void doSomethingWithParameter( bool isDone )
+public void DoSomethingWithParameter( bool isDone )
 {}
 
 
 [InspectorCallable]
-public void thisWontWorkBecauseItHasTwoParameters( bool isDone, int stuff )
+public void ThisWontWorkBecauseItHasTwoParameters( bool isDone, int stuff )
 {}
 ```
 
@@ -58,7 +58,7 @@ float groundAccel = 1.0f;
 ## Extending the Inspector
 You can display any custom types in the inspector as well by writing your own custom inspectors. You can do this by adding the `CustomInspector` attribute on the class that you want to make a custom inspector for (YourClass in the example below). The attribute takes in a single parameter which is the Type of the `Inspector` subclass that manages the UI for the class (YourClassInspector in the example). Note that the `Inspector` subclass is wrapped in *#*if/*#*endif so that it is only compiled into debug builds.
 
-The `Inspector` class provides several helpers to assist with making custom inspectors. It will cache access to the getter/setter for the field/property for easy access. It wraps access to the getter/setter via the `getValue` and `setValue` methods which are generic and take care of casting for you. If you want to add your own custom attributes on the field/property they are accessible via the `getFieldOrPropertyAttribute` generic method.
+The `Inspector` class provides several helpers to assist with making custom inspectors. It will cache access to the getter/setter for the field/property for easy access. It wraps access to the getter/setter via the `GetValue` and `SetValue` methods which are generic and take care of casting for you. If you want to add your own custom attributes on the field/property they are accessible via the `GetFieldOrPropertyAttribute` generic method.
 
 
 ```csharp
@@ -75,11 +75,11 @@ public class YourClass
 public class YourClassInspector : Inspector
 {
 	// this is where you setup your UI and add it to the table
-	public override void initialize( Table table, Skin skin )
+	public override void Initialize( Table table, Skin skin )
 	{}
 
 	// this is where you update the UI
-	public override void update()
+	public override void Update()
 	{}
 }
 #endif

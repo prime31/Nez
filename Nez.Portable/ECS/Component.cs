@@ -6,29 +6,28 @@ namespace Nez
 {
 	/// <summary>
 	/// Execution order:
-	/// - onAddedToEntity
-	/// - onAwake (all other components added this frame will have been added to the Entity at this point
-	/// - onEnabled
-	/// 
+	/// - OnAddedToEntity
+	/// - OnEnabled
+	///
 	/// Removal:
-	/// - onRemovedFromEntity
-	/// 
+	/// - OnRemovedFromEntity
+	///
 	/// </summary>
 	public class Component : IComparable<Component>
 	{
 		/// <summary>
 		/// the Entity this Component is attached to
 		/// </summary>
-		public Entity entity;
+		public Entity Entity;
 
 		/// <summary>
 		/// shortcut to entity.transform
 		/// </summary>
 		/// <value>The transform.</value>
-		public Transform transform
+		public Transform Transform
 		{
-			[MethodImpl( MethodImplOptions.AggressiveInlining )]
-			get { return entity.transform; }
+			[MethodImpl(MethodImplOptions.AggressiveInlining)]
+			get => Entity.Transform;
 		}
 
 		/// <summary>
@@ -36,20 +35,20 @@ namespace Nez
 		/// Changes in state result in onEnabled/onDisable being called.
 		/// </summary>
 		/// <value><c>true</c> if enabled; otherwise, <c>false</c>.</value>
-		public bool enabled
+		public bool Enabled
 		{
-			get { return entity != null ? entity.enabled && _enabled : _enabled; }
-			set { setEnabled( value ); }
+			get => Entity != null ? Entity.Enabled && _enabled : _enabled;
+			set => SetEnabled(value);
 		}
 
 		/// <summary>
 		/// update order of the Components on this Entity
 		/// </summary>
 		/// <value>The order.</value>
-		public int updateOrder
+		public int UpdateOrder
 		{
 			get => _updateOrder;
-			set => setUpdateOrder( value );
+			set => SetUpdateOrder(value);
 		}
 
 		bool _enabled = true;
@@ -62,108 +61,92 @@ namespace Nez
 		/// called when this Component has had its Entity assigned but it is NOT yet added to the live Components list of the Entity yet. Useful
 		/// for things like physics Components that need to access the Transform to modify collision body properties.
 		/// </summary>
-		public virtual void initialize()
-		{}
-
+		public virtual void Initialize()
+		{ }
 
 		/// <summary>
-		/// Called when this component is added to a scene after all pending component changes are committed. At this point, the entity field
-		/// is set and the entity.scene is also set.
+		/// Called when this component is added to a scene after all pending component changes are committed. At this point, the Entity field
+		/// is set and the Entity.Scene is also set.
 		/// </summary>
-		public virtual void onAddedToEntity()
-		{}
-
+		public virtual void OnAddedToEntity()
+		{ }
 
 		/// <summary>
 		/// Called when this component is removed from its entity. Do all cleanup here.
 		/// </summary>
-		public virtual void onRemovedFromEntity()
-		{}
-
+		public virtual void OnRemovedFromEntity()
+		{ }
 
 		/// <summary>
 		/// called when the entity's position changes. This allows components to be aware that they have moved due to the parent
 		/// entity moving.
 		/// </summary>
-		public virtual void onEntityTransformChanged( Transform.Component comp )
-		{}
+		public virtual void OnEntityTransformChanged(Transform.Component comp)
+		{ }
 
-
-		public virtual void debugRender( Graphics graphics )
-		{}
-
+		public virtual void DebugRender(Batcher batcher)
+		{ }
 
 		/// <summary>
 		/// called when the parent Entity or this Component is enabled
 		/// </summary>
-		public virtual void onEnabled()
-		{}
-
+		public virtual void OnEnabled()
+		{ }
 
 		/// <summary>
 		/// called when the parent Entity or this Component is disabled
 		/// </summary>
-		public virtual void onDisabled()
-		{}
+		public virtual void OnDisabled()
+		{ }
 
 		#endregion
-
 
 		#region Fluent setters
 
-		public Component setEnabled( bool isEnabled )
+		public Component SetEnabled(bool isEnabled)
 		{
-			if( _enabled != isEnabled )
+			if (_enabled != isEnabled)
 			{
 				_enabled = isEnabled;
 
-				if( _enabled )
-					onEnabled();
+				if (_enabled)
+					OnEnabled();
 				else
-					onDisabled();
+					OnDisabled();
 			}
+
 			return this;
 		}
 
-
-		public Component setUpdateOrder( int updateOrder )
+		public Component SetUpdateOrder(int updateOrder)
 		{
-			if( _updateOrder != updateOrder )
+			if (_updateOrder != updateOrder)
 			{
 				_updateOrder = updateOrder;
-				if( entity != null )
-					entity.components.markEntityListUnsorted();
+				if (Entity != null)
+					Entity.Components.MarkEntityListUnsorted();
 			}
+
 			return this;
 		}
 
 		#endregion
-
 
 		/// <summary>
 		/// creates a clone of this Component. The default implementation is just a MemberwiseClone so if a Component has object references
 		/// that need to be cloned this method should be overriden.
 		/// </summary>
-		public virtual Component clone()
+		public virtual Component Clone()
 		{
 			var component = MemberwiseClone() as Component;
-			component.entity = null;
+			component.Entity = null;
 
 			return component;
 		}
 
-
-		public int CompareTo( Component other )
-		{
-			return _updateOrder.CompareTo( other._updateOrder );
-		}
+		public int CompareTo(Component other) => _updateOrder.CompareTo(other._updateOrder);
 
 
-		public override string ToString()
-		{
-			return string.Format( "[Component: type: {0}, updateOrder: {1}]", this.GetType(), updateOrder );
-		}
-
+		public override string ToString() => $"[Component: type: {GetType()}, updateOrder: {UpdateOrder}]";
 	}
 }
-

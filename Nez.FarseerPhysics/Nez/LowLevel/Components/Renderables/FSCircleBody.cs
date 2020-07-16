@@ -6,31 +6,33 @@ namespace Nez.Farseer
 {
 	public class FSCircleBody : FSRenderableBody
 	{
-		public FSCircleBody( Subtexture subtexture ) : base( subtexture )
-		{ }
-
-
-		public FSCircleBody( Texture2D texture ) : this( new Subtexture( texture ) )
-		{ }
-
-
-		public override void initialize()
+		public FSCircleBody(Sprite sprite) : base(sprite)
 		{
-			base.initialize();
-			body.attachCircle( _subtexture.sourceRect.Width / 2, 1 );
 		}
 
 
-		public override void onEntityTransformChanged( Transform.Component comp )
+		public FSCircleBody(Texture2D texture) : this(new Sprite(texture))
 		{
-			base.onEntityTransformChanged( comp );
-			if( _ignoreTransformChanges )
+		}
+
+
+		public override void Initialize()
+		{
+			base.Initialize();
+			Body.AttachCircle(Sprite.SourceRect.Width / 2, 1);
+		}
+
+
+		public override void OnEntityTransformChanged(Transform.Component comp)
+		{
+			base.OnEntityTransformChanged(comp);
+			if (_ignoreTransformChanges)
 				return;
 
 			// we only care about scale. base handles pos/rot
-			if( comp == Transform.Component.Scale )
-				body.fixtureList[0].shape.radius = _subtexture.sourceRect.Width * transform.scale.X * 0.5f * FSConvert.displayToSim;
+			if (comp == Transform.Component.Scale)
+				Body.FixtureList[0].Shape.Radius =
+					Sprite.SourceRect.Width * Transform.Scale.X * 0.5f * FSConvert.DisplayToSim;
 		}
-
 	}
 }

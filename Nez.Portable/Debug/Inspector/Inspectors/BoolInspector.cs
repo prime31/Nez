@@ -9,26 +9,23 @@ namespace Nez
 		CheckBox _checkbox;
 
 
-		public override void initialize( Table table, Skin skin, float leftCellWidth )
+		public override void Initialize(Table table, Skin skin, float leftCellWidth)
 		{
-			var label = createNameLabel( table, skin, leftCellWidth );
+			var label = CreateNameLabel(table, skin, leftCellWidth);
 
-			_checkbox = new CheckBox( string.Empty, skin );
-			_checkbox.programmaticChangeEvents = false;
-			_checkbox.isChecked = getValue<bool>();
-			_checkbox.onChanged += newValue =>
-			{
-				setValue( newValue );
-			};
+			_checkbox = new CheckBox(string.Empty, skin);
+			_checkbox.ProgrammaticChangeEvents = false;
+			_checkbox.IsChecked = GetValue<bool>();
+			_checkbox.OnChanged += newValue => { SetValue(newValue); };
 
-			table.add( label ).width( 135 );
-			table.add( _checkbox );
+			table.Add(label).Width(135);
+			table.Add(_checkbox);
 		}
 
 
-		public override void update()
+		public override void Update()
 		{
-			_checkbox.isChecked = getValue<bool>();
+			_checkbox.IsChecked = GetValue<bool>();
 		}
 	}
 }

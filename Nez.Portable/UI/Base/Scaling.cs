@@ -1,5 +1,4 @@
-﻿using System;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 
 
 namespace Nez.UI
@@ -64,10 +63,11 @@ namespace Nez.UI
 		/// <param name="sourceHeight">Source height.</param>
 		/// <param name="targetWidth">Target width.</param>
 		/// <param name="targetHeight">Target height.</param>
-		public static Vector2 apply( this Scaling self, float sourceWidth, float sourceHeight, float targetWidth, float targetHeight )
+		public static Vector2 Apply(this Scaling self, float sourceWidth, float sourceHeight, float targetWidth,
+		                            float targetHeight)
 		{
 			var temp = new Vector2();
-			switch ( self )
+			switch (self)
 			{
 				case Scaling.Fit:
 				{
@@ -104,23 +104,22 @@ namespace Nez.UI
 				case Scaling.Stretch:
 					temp.X = targetWidth;
 					temp.Y = targetHeight;
-				break;
+					break;
 				case Scaling.StretchX:
 					temp.X = targetWidth;
 					temp.Y = sourceHeight;
-				break;
+					break;
 				case Scaling.StretchY:
 					temp.X = sourceWidth;
 					temp.Y = targetHeight;
-				break;
+					break;
 				case Scaling.None:
 					temp.X = sourceWidth;
 					temp.Y = sourceHeight;
-				break;
+					break;
 			}
 
 			return temp;
 		}
 	}
 }
-

@@ -13,46 +13,46 @@ namespace Nez.AI.Pathfinding
 		/// </summary>
 		class WeightedNode<T> : PriorityQueueNode
 		{
-			public T data;
+			public T Data;
 
-			public WeightedNode( T data )
+			public WeightedNode(T data)
 			{
-				this.data = data;
+				Data = data;
 			}
 		}
 
 
-		public static bool search<T>( IWeightedGraph<T> graph, T start, T goal, out Dictionary<T,T> cameFrom )
+		public static bool Search<T>(IWeightedGraph<T> graph, T start, T goal, out Dictionary<T, T> cameFrom)
 		{
 			var foundPath = false;
-			cameFrom = new Dictionary<T,T>();
-			cameFrom.Add( start, start );
+			cameFrom = new Dictionary<T, T>();
+			cameFrom.Add(start, start);
 
 			var costSoFar = new Dictionary<T, int>();
-			var frontier = new PriorityQueue<WeightedNode<T>>( 1000 );
-			frontier.Enqueue( new WeightedNode<T>( start ), 0 );
+			var frontier = new PriorityQueue<WeightedNode<T>>(1000);
+			frontier.Enqueue(new WeightedNode<T>(start), 0);
 
 			costSoFar[start] = 0;
 
-			while( frontier.Count > 0 )
+			while (frontier.Count > 0)
 			{
 				var current = frontier.Dequeue();
 
-				if( current.data.Equals( goal ) )
+				if (current.Data.Equals(goal))
 				{
 					foundPath = true;
 					break;
 				}
 
-				foreach( var next in graph.getNeighbors( current.data ) )
+				foreach (var next in graph.GetNeighbors(current.Data))
 				{
-					var newCost = costSoFar[current.data] + graph.cost( current.data, next );
-					if( !costSoFar.ContainsKey( next ) || newCost < costSoFar[next] )
+					var newCost = costSoFar[current.Data] + graph.Cost(current.Data, next);
+					if (!costSoFar.ContainsKey(next) || newCost < costSoFar[next])
 					{
 						costSoFar[next] = newCost;
 						var priority = newCost;
-						frontier.Enqueue( new WeightedNode<T>( next ), priority );
-						cameFrom[next] = current.data;
+						frontier.Enqueue(new WeightedNode<T>(next), priority);
+						cameFrom[next] = current.Data;
 					}
 				}
 			}
@@ -68,12 +68,12 @@ namespace Nez.AI.Pathfinding
 		/// <param name="start">Start.</param>
 		/// <param name="goal">Goal.</param>
 		/// <typeparam name="T">The 1st type parameter.</typeparam>
-		public static List<T> search<T>( IWeightedGraph<T> graph, T start, T goal )
+		public static List<T> Search<T>(IWeightedGraph<T> graph, T start, T goal)
 		{
-			Dictionary<T,T> cameFrom;
-			var foundPath = search( graph, start, goal, out cameFrom );
+			Dictionary<T, T> cameFrom;
+			var foundPath = Search(graph, start, goal, out cameFrom);
 
-			return foundPath ? recontructPath( cameFrom, start, goal ) : null;
+			return foundPath ? RecontructPath(cameFrom, start, goal) : null;
 		}
 
 
@@ -85,22 +85,21 @@ namespace Nez.AI.Pathfinding
 		/// <param name="start">Start.</param>
 		/// <param name="goal">Goal.</param>
 		/// <typeparam name="T">The 1st type parameter.</typeparam>
-		public static List<T> recontructPath<T>( Dictionary<T,T> cameFrom, T start, T goal )
+		public static List<T> RecontructPath<T>(Dictionary<T, T> cameFrom, T start, T goal)
 		{
 			var path = new List<T>();
 			var current = goal;
-			path.Add( goal );
+			path.Add(goal);
 
-			while( !current.Equals( start ) )
+			while (!current.Equals(start))
 			{
 				current = cameFrom[current];
-				path.Add( current );
+				path.Add(current);
 			}
+
 			path.Reverse();
 
 			return path;
 		}
-
 	}
 }
-

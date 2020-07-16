@@ -1,5 +1,4 @@
-﻿using System;
-using Microsoft.Xna.Framework.Graphics;
+﻿using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
 using Nez.Textures;
 
@@ -18,15 +17,14 @@ namespace Nez
 		/// multiplicative factor for the blend of the base and light render targets. Defaults to 1.
 		/// </summary>
 		/// <value>The multiplicative factor.</value>
-		public float multiplicativeFactor
+		public float MultiplicativeFactor
 		{
 			get => _multiplicativeFactor;
 			set
 			{
-				if( effect != null )
-					effect.Parameters["_multiplicativeFactor"].SetValue( value );
-				else
-					_multiplicativeFactor = value;
+				if (Effect != null)
+					Effect.Parameters["_multiplicativeFactor"].SetValue(value);
+				_multiplicativeFactor = value;
 			}
 		}
 
@@ -34,43 +32,41 @@ namespace Nez
 		RenderTexture _lightsRenderTexture;
 
 
-		public SpriteLightPostProcessor( int executionOrder, RenderTexture lightsRenderTexture ) : base( executionOrder )
+		public SpriteLightPostProcessor(int executionOrder, RenderTexture lightsRenderTexture) : base(executionOrder)
 		{
 			_lightsRenderTexture = lightsRenderTexture;
 		}
 
-		public override void onAddedToScene( Scene scene )
+		public override void OnAddedToScene(Scene scene)
 		{
-			base.onAddedToScene( scene );
+			base.OnAddedToScene(scene);
 
-			effect = scene.content.loadEffect<Effect>( "spriteLightMultiply", EffectResource.spriteLightMultiplyBytes );
-			effect.Parameters["_lightTexture"].SetValue( _lightsRenderTexture );
-			effect.Parameters["_multiplicativeFactor"].SetValue( _multiplicativeFactor );
+			Effect = scene.Content.LoadEffect<Effect>("spriteLightMultiply", EffectResource.SpriteLightMultiplyBytes);
+			Effect.Parameters["_lightTexture"].SetValue(_lightsRenderTexture);
+			Effect.Parameters["_multiplicativeFactor"].SetValue(_multiplicativeFactor);
 		}
 
-		public override void unload()
+		public override void Unload()
 		{
-			_scene.content.unloadEffect( effect );
-			effect = null;
+			_scene.Content.UnloadEffect(Effect);
+			Effect = null;
 			_lightsRenderTexture.Dispose();
 
-			base.unload();
+			base.Unload();
 		}
 
-		public override void process( RenderTarget2D source, RenderTarget2D destination )
+		public override void Process(RenderTarget2D source, RenderTarget2D destination)
 		{
-			Core.graphicsDevice.setRenderTarget( destination );
-			Graphics.instance.batcher.begin( effect: effect );
-			Graphics.instance.batcher.draw( source, new Rectangle( 0, 0, destination.Width, destination.Height ), Color.White );
-			Graphics.instance.batcher.end();
+			Core.GraphicsDevice.SetRenderTarget(destination);
+			Graphics.Instance.Batcher.Begin(effect: Effect);
+			Graphics.Instance.Batcher.Draw(source, new Rectangle(0, 0, destination.Width, destination.Height), Color.White);
+			Graphics.Instance.Batcher.End();
 		}
 
-		public override void onSceneBackBufferSizeChanged( int newWidth, int newHeight )
+		public override void OnSceneBackBufferSizeChanged(int newWidth, int newHeight)
 		{
 			// when the RenderTexture changes we have to reset the shader param since the underlying RenderTarget will be different
-			effect.Parameters["_lightTexture"].SetValue( _lightsRenderTexture );
+			Effect.Parameters["_lightTexture"].SetValue(_lightsRenderTexture);
 		}
-
 	}
 }
-

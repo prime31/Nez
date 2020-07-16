@@ -17,88 +17,92 @@ namespace Nez
 		int _lastMosaicScale = -1;
 
 
-		public void onAddedToScene( Scene scene )
+		public void OnAddedToScene(Scene scene)
 		{
 			_scene = scene;
-			_effect = scene.content.loadEffect<Effect>( "multiTextureOverlay", EffectResource.multiTextureOverlayBytes );
+			_effect = scene.Content.LoadEffect<Effect>("multiTextureOverlay", EffectResource.MultiTextureOverlayBytes);
 		}
 
-		void createMosaicTexture( int size )
+		void CreateMosaicTexture(int size)
 		{
-			if( _mosaicTexture != null )
+			if (_mosaicTexture != null)
 				_mosaicTexture.Dispose();
-			
-			_mosaicTexture = new Texture2D( Core.graphicsDevice, size, size );
+
+			_mosaicTexture = new Texture2D(Core.GraphicsDevice, size, size);
 			var colors = new uint[size * size];
 
-			for( var i = 0; i < colors.Length; i++ )
+			for (var i = 0; i < colors.Length; i++)
 				colors[i] = 0x808080;
-			
+
 			colors[0] = 0xffffffff;
 			colors[size * size - 1] = 0xff000000;
 
-			for( var x = 1; x < size - 1; x++ )
+			for (var x = 1; x < size - 1; x++)
 			{
 				colors[x * size] = 0xffE0E0E0;
 				colors[x * size + 1] = 0xffffffff;
 				colors[x * size + size - 1] = 0xff000000;
 			}
 
-			for( var y = 1; y < size - 1; y++ )
+			for (var y = 1; y < size - 1; y++)
 			{
 				colors[y] = 0xffffffff;
-				colors[( size - 1 ) * size + y] = 0xff000000;
+				colors[(size - 1) * size + y] = 0xff000000;
 			}
 
-			_mosaicTexture.SetData<uint>( colors );
-			_effect.Parameters["_secondTexture"].SetValue( _mosaicTexture );
+			_mosaicTexture.SetData<uint>(colors);
+			_effect.Parameters["_secondTexture"].SetValue(_mosaicTexture);
 		}
 
-		public void onSceneBackBufferSizeChanged( int newWidth, int newHeight )
+		public void OnSceneBackBufferSizeChanged(int newWidth, int newHeight)
 		{
 			// dont recreate the mosaic unless we really need to
-			if( _lastMosaicScale != _scene.pixelPerfectScale )
+			if (_lastMosaicScale != _scene.PixelPerfectScale)
 			{
-				createMosaicTexture( _scene.pixelPerfectScale );
-				_lastMosaicScale = _scene.pixelPerfectScale;
+				CreateMosaicTexture(_scene.PixelPerfectScale);
+				_lastMosaicScale = _scene.PixelPerfectScale;
 			}
 
-			if( _mosaicRenderTex != null )
+			if (_mosaicRenderTex != null)
 			{
 				_mosaicRenderTex.Dispose();
-				_mosaicRenderTex = RenderTarget.create( newWidth * _scene.pixelPerfectScale, newHeight * _scene.pixelPerfectScale, DepthFormat.None );
+				_mosaicRenderTex = RenderTarget.Create(newWidth * _scene.PixelPerfectScale,
+					newHeight * _scene.PixelPerfectScale, DepthFormat.None);
 			}
 			else
 			{
-				_mosaicRenderTex = RenderTarget.create( newWidth * _scene.pixelPerfectScale, newHeight * _scene.pixelPerfectScale, DepthFormat.None );
+				_mosaicRenderTex = RenderTarget.Create(newWidth * _scene.PixelPerfectScale,
+					newHeight * _scene.PixelPerfectScale, DepthFormat.None);
 			}
 
 			// based on the look of games by: http://deepnight.net/games/strike-of-rage/
 			// use the mosaic to render to a full sized RenderTarget repeating the mosaic
-			Core.graphicsDevice.setRenderTarget( _mosaicRenderTex );
-			Graphics.instance.batcher.begin( BlendState.Opaque, SamplerState.PointWrap, DepthStencilState.None, RasterizerState.CullNone );
-			Graphics.instance.batcher.draw( _mosaicTexture, Vector2.Zero, new Rectangle( 0, 0, _mosaicRenderTex.Width, _mosaicRenderTex.Height ), Color.White );
-			Graphics.instance.batcher.end();
+			Core.GraphicsDevice.SetRenderTarget(_mosaicRenderTex);
+			Graphics.Instance.Batcher.Begin(BlendState.Opaque, SamplerState.PointWrap, DepthStencilState.None,
+				RasterizerState.CullNone);
+			Graphics.Instance.Batcher.Draw(_mosaicTexture, Vector2.Zero,
+				new Rectangle(0, 0, _mosaicRenderTex.Width, _mosaicRenderTex.Height), Color.White);
+			Graphics.Instance.Batcher.End();
 
 			// let our Effect know about our rendered, full screen mosaic
-			_effect.Parameters["_secondTexture"].SetValue( _mosaicRenderTex );
+			_effect.Parameters["_secondTexture"].SetValue(_mosaicRenderTex);
 		}
 
-		public void handleFinalRender( RenderTarget2D finalRenderTarget, Color letterboxColor, RenderTarget2D source, Rectangle finalRenderDestinationRect, SamplerState samplerState )
+		public void HandleFinalRender(RenderTarget2D finalRenderTarget, Color letterboxColor, RenderTarget2D source,
+		                              Rectangle finalRenderDestinationRect, SamplerState samplerState)
 		{
-			Core.graphicsDevice.setRenderTarget( finalRenderTarget );
-			Core.graphicsDevice.Clear( letterboxColor );
-			Graphics.instance.batcher.begin( BlendState.Opaque, samplerState, DepthStencilState.None, RasterizerState.CullNone, _effect );
-			Graphics.instance.batcher.draw( source, finalRenderDestinationRect, Color.White );
-			Graphics.instance.batcher.end();
+			Core.GraphicsDevice.SetRenderTarget(finalRenderTarget);
+			Core.GraphicsDevice.Clear(letterboxColor);
+			Graphics.Instance.Batcher.Begin(BlendState.Opaque, samplerState, DepthStencilState.None,
+				RasterizerState.CullNone, _effect);
+			Graphics.Instance.Batcher.Draw(source, finalRenderDestinationRect, Color.White);
+			Graphics.Instance.Batcher.End();
 		}
 
-		public void unload()
+		public void Unload()
 		{
 			_mosaicTexture.Dispose();
 			_mosaicRenderTex.Dispose();
 		}
-
 	}
 }
-

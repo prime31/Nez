@@ -11,58 +11,58 @@ namespace Nez
 		/// <summary>
 		/// total time the game has been running
 		/// </summary>
-		public static float time;
+		public static float TotalTime;
 
 		/// <summary>
 		/// delta time from the previous frame to the current, scaled by timeScale
 		/// </summary>
-		public static float deltaTime;
+		public static float DeltaTime;
 
 		/// <summary>
 		/// unscaled version of deltaTime. Not affected by timeScale
 		/// </summary>
-		public static float unscaledDeltaTime;
+		public static float UnscaledDeltaTime;
 
 		/// <summary>
 		/// secondary deltaTime for use when you need to scale two different deltas simultaneously
 		/// </summary>
-		public static float altDeltaTime;
+		public static float AltDeltaTime;
 
 		/// <summary>
 		/// total time since the Scene was loaded
 		/// </summary>
-		public static float timeSinceSceneLoad;
+		public static float TimeSinceSceneLoad;
 
 		/// <summary>
 		/// time scale of deltaTime
 		/// </summary>
-		public static float timeScale = 1f;
+		public static float TimeScale = 1f;
 
 		/// <summary>
 		/// time scale of altDeltaTime
 		/// </summary>
-		public static float altTimeScale = 1f;
+		public static float AltTimeScale = 1f;
 
 		/// <summary>
 		/// total number of frames that have passed
 		/// </summary>
-		public static uint frameCount;
+		public static uint FrameCount;
 
 
-		internal static void update( float dt )
+		internal static void Update(float dt)
 		{
-			time += dt;
-			deltaTime = dt * timeScale;
-			altDeltaTime = dt * altTimeScale;
-			unscaledDeltaTime = dt;
-			timeSinceSceneLoad += dt;
-			frameCount++;
+			TotalTime += dt;
+			DeltaTime = dt * TimeScale;
+			AltDeltaTime = dt * AltTimeScale;
+			UnscaledDeltaTime = dt;
+			TimeSinceSceneLoad += dt;
+			FrameCount++;
 		}
 
 
-		internal static void sceneChanged()
+		internal static void SceneChanged()
 		{
-			timeSinceSceneLoad = 0f;
+			TimeSinceSceneLoad = 0f;
 		}
 
 
@@ -70,13 +70,11 @@ namespace Nez
 		/// Allows to check in intervals. Should only be used with interval values above deltaTime,
 		/// otherwise it will always return true.
 		/// </summary>
-		[MethodImpl( MethodImplOptions.AggressiveInlining )]
-		public static bool checkEvery( float interval )
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public static bool CheckEvery(float interval)
 		{
 			// we subtract deltaTime since timeSinceSceneLoad already includes this update ticks deltaTime
-			return (int)( timeSinceSceneLoad / interval ) > (int)( ( timeSinceSceneLoad - deltaTime ) / interval );
+			return (int) (TimeSinceSceneLoad / interval) > (int) ((TimeSinceSceneLoad - DeltaTime) / interval);
 		}
-
 	}
 }
-

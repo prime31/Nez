@@ -13,21 +13,20 @@ namespace Nez.AI.Pathfinding
 		/// </summary>
 		/// <returns>The neighbors.</returns>
 		/// <param name="node">Node.</param>
-		IEnumerable<T> getNeighbors( T node );
+		IEnumerable<T> GetNeighbors(T node);
 
 		/// <summary>
 		/// calculates the cost to get from 'from' to 'to'
 		/// </summary>
 		/// <param name="from">From.</param>
 		/// <param name="to">To.</param>
-		int cost( T from, T to );
+		int Cost(T from, T to);
 
 		/// <summary>
 		/// calculates the heuristic (estimate) to get from 'node' to 'goal'. See WeightedGridGraph for the common Manhatten method.
 		/// </summary>
 		/// <param name="node">Node.</param>
 		/// <param name="goal">Goal.</param>
-		int heuristic( T node, T goal );
+		int Heuristic(T node, T goal);
 	}
 }
-

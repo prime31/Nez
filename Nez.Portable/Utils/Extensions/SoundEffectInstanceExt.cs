@@ -23,7 +23,8 @@ namespace Nez
 		public static void applyLowPassFilter( this SoundEffectInstance self, float hfGain )
 		{
 			if( _applyLowPassFilterMethod == null )
-				_applyLowPassFilterMethod = self.GetType().GetMethod( "INTERNAL_applyLowPassFilter", BindingFlags.NonPublic | BindingFlags.Instance );
+				_applyLowPassFilterMethod =
+ self.GetType().GetMethod( "INTERNAL_applyLowPassFilter", BindingFlags.NonPublic | BindingFlags.Instance );
 
 			_gainContainer[0] = hfGain;
 			_applyLowPassFilterMethod.Invoke( self, _gainContainer );
@@ -39,7 +40,8 @@ namespace Nez
 		public static void applyHighPassFilter( this SoundEffectInstance self, float lfGain )
 		{
 			if( _applyHighPassFilterMethod == null )
-				_applyHighPassFilterMethod = self.GetType().GetMethod( "INTERNAL_applyHighPassFilter", BindingFlags.NonPublic | BindingFlags.Instance );
+				_applyHighPassFilterMethod =
+ self.GetType().GetMethod( "INTERNAL_applyHighPassFilter", BindingFlags.NonPublic | BindingFlags.Instance );
 
 			_gainContainer[0] = lfGain;
 			_applyHighPassFilterMethod.Invoke( self, _gainContainer );
@@ -56,7 +58,8 @@ namespace Nez
 		public static void applyBandPassFilter( this SoundEffectInstance self, float hfGain, float lfGain )
 		{
 			if( _applyBandPassFilterMethod == null )
-				_applyBandPassFilterMethod = self.GetType().GetMethod( "INTERNAL_applyBandPassFilter", BindingFlags.NonPublic | BindingFlags.Instance );
+				_applyBandPassFilterMethod =
+ self.GetType().GetMethod( "INTERNAL_applyBandPassFilter", BindingFlags.NonPublic | BindingFlags.Instance );
 
 			_bandPassContainer[0] = hfGain;
 			_bandPassContainer[1] = lfGain;

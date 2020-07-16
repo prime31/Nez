@@ -8,8 +8,8 @@ namespace Nez.AI.BehaviorTrees
 	/// </summary>
 	public class ExecuteActionConditional<T> : ExecuteAction<T>, IConditional<T>
 	{
-		public ExecuteActionConditional( Func<T,TaskStatus> action ) : base( action )
-		{}
+		public ExecuteActionConditional(Func<T, TaskStatus> action) : base(action)
+		{
+		}
 	}
 }
-

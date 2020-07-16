@@ -7,45 +7,47 @@
 	/// </summary>
 	public class RenderLayerExcludeRenderer : Renderer
 	{
-		public int[] excludedRenderLayers;
+		public int[] ExcludedRenderLayers;
 
 
-		public RenderLayerExcludeRenderer( int renderOrder, params int[] excludedRenderLayers ) : base( renderOrder, null )
+		public RenderLayerExcludeRenderer(int renderOrder, params int[] excludedRenderLayers) : base(renderOrder, null)
 		{
-			this.excludedRenderLayers = excludedRenderLayers;
+			ExcludedRenderLayers = excludedRenderLayers;
 		}
 
-		public override void render( Scene scene )
+		public override void Render(Scene scene)
 		{
-			var cam = camera ?? scene.camera;
-			beginRender( cam );
+			var cam = Camera ?? scene.Camera;
+			BeginRender(cam);
 
-			for( var i = 0; i < scene.renderableComponents.count; i++ )
+			for (var i = 0; i < scene.RenderableComponents.Count; i++)
 			{
-				var renderable = scene.renderableComponents[i];
-				if( !excludedRenderLayers.contains( renderable.renderLayer ) && renderable.enabled && renderable.isVisibleFromCamera( cam ) )
-					renderAfterStateCheck( renderable, cam );
+				var renderable = scene.RenderableComponents[i];
+				if (!ExcludedRenderLayers.Contains(renderable.RenderLayer) && renderable.Enabled &&
+				    renderable.IsVisibleFromCamera(cam))
+					RenderAfterStateCheck(renderable, cam);
 			}
 
-			if( shouldDebugRender && Core.debugRenderEnabled )
-				debugRender( scene, cam );
+			if (ShouldDebugRender && Core.DebugRenderEnabled)
+				DebugRender(scene, cam);
 
-			endRender();
+			EndRender();
 		}
 
-		protected override void debugRender( Scene scene, Camera cam )
+		protected override void DebugRender(Scene scene, Camera cam)
 		{
-			Graphics.instance.batcher.end();
-			Graphics.instance.batcher.begin( cam.transformMatrix );
+			Graphics.Instance.Batcher.End();
+			Graphics.Instance.Batcher.Begin(cam.TransformMatrix);
 
-			for( var i = 0; i < scene.renderableComponents.count; i++ )
+			for (var i = 0; i < scene.RenderableComponents.Count; i++)
 			{
-				var renderable = scene.renderableComponents[i];
-				if( !excludedRenderLayers.contains( renderable.renderLayer ) && renderable.enabled && renderable.isVisibleFromCamera( cam ) )
-					renderable.debugRender( Graphics.instance );
+				var renderable = scene.RenderableComponents[i];
+				if (!ExcludedRenderLayers.Contains(renderable.RenderLayer) && renderable.Enabled &&
+				    renderable.IsVisibleFromCamera(cam))
+					renderable.DebugRender(Graphics.Instance.Batcher);
 			}
-		}
 
+			base.DebugRender(scene, cam);
+		}
 	}
 }
-

@@ -33,11 +33,11 @@ namespace FarseerPhysics.Collision
 	/// </summary>
 	public class TOIInput
 	{
-		public DistanceProxy proxyA = new DistanceProxy();
-		public DistanceProxy proxyB = new DistanceProxy();
-		public Sweep sweepA;
-		public Sweep sweepB;
-		public float tMax; // defines sweep interval [0, tMax]
+		public DistanceProxy ProxyA = new DistanceProxy();
+		public DistanceProxy ProxyB = new DistanceProxy();
+		public Sweep SweepA;
+		public Sweep SweepB;
+		public float TMax; // defines sweep interval [0, tMax]
 	}
 
 	public enum TOIOutputState
@@ -51,8 +51,8 @@ namespace FarseerPhysics.Collision
 
 	public struct TOIOutput
 	{
-		public TOIOutputState state;
-		public float t;
+		public TOIOutputState State;
+		public float T;
 	}
 
 	public enum SeparationFunctionType
@@ -65,46 +65,41 @@ namespace FarseerPhysics.Collision
 
 	public static class SeparationFunction
 	{
-		[ThreadStatic]
-		static Vector2 _axis;
-		[ThreadStatic]
-		static Vector2 _localPoint;
-		[ThreadStatic]
-		static DistanceProxy _proxyA;
-		[ThreadStatic]
-		static DistanceProxy _proxyB;
-		[ThreadStatic]
-		static Sweep _sweepA, _sweepB;
-		[ThreadStatic]
-		static SeparationFunctionType _type;
+		[ThreadStatic] static Vector2 _axis;
+		[ThreadStatic] static Vector2 _localPoint;
+		[ThreadStatic] static DistanceProxy _proxyA;
+		[ThreadStatic] static DistanceProxy _proxyB;
+		[ThreadStatic] static Sweep _sweepA, _sweepB;
+		[ThreadStatic] static SeparationFunctionType _type;
 
 
-		public static void set( ref SimplexCache cache, DistanceProxy proxyA, ref Sweep sweepA, DistanceProxy proxyB, ref Sweep sweepB, float t1 )
+		public static void Set(ref SimplexCache cache, DistanceProxy proxyA, ref Sweep sweepA, DistanceProxy proxyB,
+		                       ref Sweep sweepB, float t1)
 		{
 			_localPoint = Vector2.Zero;
 			_proxyA = proxyA;
 			_proxyB = proxyB;
 			var count = cache.Count;
-			Debug.Assert( 0 < count && count < 3 );
+			Debug.Assert(0 < count && count < 3);
 
 			_sweepA = sweepA;
 			_sweepB = sweepB;
 
 			Transform xfA, xfB;
-			_sweepA.getTransform( out xfA, t1 );
-			_sweepB.getTransform( out xfB, t1 );
+			_sweepA.GetTransform(out xfA, t1);
+			_sweepB.GetTransform(out xfB, t1);
 
-			if( count == 1 )
+			if (count == 1)
 			{
 				_type = SeparationFunctionType.Points;
 				var localPointA = _proxyA.vertices[cache.IndexA[0]];
 				var localPointB = _proxyB.vertices[cache.IndexB[0]];
-				var pointA = MathUtils.mul( ref xfA, localPointA );
-				var pointB = MathUtils.mul( ref xfB, localPointB );
+				var pointA = MathUtils.Mul(ref xfA, localPointA);
+				var pointB = MathUtils.Mul(ref xfB, localPointB);
 				_axis = pointB - pointA;
-				Nez.Vector2Ext.normalize( ref _axis );
+				Nez.Vector2Ext.Normalize(ref _axis);
 			}
-			else if( cache.IndexA[0] == cache.IndexA[1] )
+			else if (cache.IndexA[0] == cache.IndexA[1])
 			{
 				// Two points on B and one on A.
 				_type = SeparationFunctionType.FaceB;
@@ -112,18 +107,18 @@ namespace FarseerPhysics.Collision
 				var localPointB2 = proxyB.vertices[cache.IndexB[1]];
 
 				var a = localPointB2 - localPointB1;
-				_axis = new Vector2( a.Y, -a.X );
-				Nez.Vector2Ext.normalize( ref _axis );
-				var normal = MathUtils.mul( ref xfB.q, _axis );
+				_axis = new Vector2(a.Y, -a.X);
+				Nez.Vector2Ext.Normalize(ref _axis);
+				var normal = MathUtils.Mul(ref xfB.Q, _axis);
 
-				_localPoint = 0.5f * ( localPointB1 + localPointB2 );
-				var pointB = MathUtils.mul( ref xfB, _localPoint );
+				_localPoint = 0.5f * (localPointB1 + localPointB2);
+				var pointB = MathUtils.Mul(ref xfB, _localPoint);
 
 				var localPointA = proxyA.vertices[cache.IndexA[0]];
-				var pointA = MathUtils.mul( ref xfA, localPointA );
+				var pointA = MathUtils.Mul(ref xfA, localPointA);
 
-				var s = Vector2.Dot( pointA - pointB, normal );
-				if( s < 0.0f )
+				var s = Vector2.Dot(pointA - pointB, normal);
+				if (s < 0.0f)
 					_axis = -_axis;
 			}
 			else
@@ -134,139 +129,138 @@ namespace FarseerPhysics.Collision
 				var localPointA2 = _proxyA.vertices[cache.IndexA[1]];
 
 				var a = localPointA2 - localPointA1;
-				_axis = new Vector2( a.Y, -a.X );
-				Nez.Vector2Ext.normalize( ref _axis );
-				var normal = MathUtils.mul( ref xfA.q, _axis );
+				_axis = new Vector2(a.Y, -a.X);
+				Nez.Vector2Ext.Normalize(ref _axis);
+				var normal = MathUtils.Mul(ref xfA.Q, _axis);
 
-				_localPoint = 0.5f * ( localPointA1 + localPointA2 );
-				var pointA = MathUtils.mul( ref xfA, _localPoint );
+				_localPoint = 0.5f * (localPointA1 + localPointA2);
+				var pointA = MathUtils.Mul(ref xfA, _localPoint);
 
 				var localPointB = _proxyB.vertices[cache.IndexB[0]];
-				var pointB = MathUtils.mul( ref xfB, localPointB );
+				var pointB = MathUtils.Mul(ref xfB, localPointB);
 
-				var s = Vector2.Dot( pointB - pointA, normal );
-				if( s < 0.0f )
+				var s = Vector2.Dot(pointB - pointA, normal);
+				if (s < 0.0f)
 					_axis = -_axis;
 			}
 
 			//FPE note: the returned value that used to be here has been removed, as it was not used.
 		}
 
-		public static float findMinSeparation( out int indexA, out int indexB, float t )
+		public static float FindMinSeparation(out int indexA, out int indexB, float t)
 		{
 			Transform xfA, xfB;
-			_sweepA.getTransform( out xfA, t );
-			_sweepB.getTransform( out xfB, t );
+			_sweepA.GetTransform(out xfA, t);
+			_sweepB.GetTransform(out xfB, t);
 
-			switch( _type )
+			switch (_type)
 			{
 				case SeparationFunctionType.Points:
 				{
-					var axisA = MathUtils.mulT( ref xfA.q, _axis );
-					var axisB = MathUtils.mulT( ref xfB.q, -_axis );
+					var axisA = MathUtils.MulT(ref xfA.Q, _axis);
+					var axisB = MathUtils.MulT(ref xfB.Q, -_axis);
 
-					indexA = _proxyA.getSupport( axisA );
-					indexB = _proxyB.getSupport( axisB );
+					indexA = _proxyA.GetSupport(axisA);
+					indexB = _proxyB.GetSupport(axisB);
 
 					var localPointA = _proxyA.vertices[indexA];
 					var localPointB = _proxyB.vertices[indexB];
 
-					var pointA = MathUtils.mul( ref xfA, localPointA );
-					var pointB = MathUtils.mul( ref xfB, localPointB );
+					var pointA = MathUtils.Mul(ref xfA, localPointA);
+					var pointB = MathUtils.Mul(ref xfB, localPointB);
 
-					var separation = Vector2.Dot( pointB - pointA, _axis );
+					var separation = Vector2.Dot(pointB - pointA, _axis);
 					return separation;
 				}
 
 				case SeparationFunctionType.FaceA:
 				{
-					var normal = MathUtils.mul( ref xfA.q, _axis );
-					var pointA = MathUtils.mul( ref xfA, _localPoint );
+					var normal = MathUtils.Mul(ref xfA.Q, _axis);
+					var pointA = MathUtils.Mul(ref xfA, _localPoint);
 
-					var axisB = MathUtils.mulT( ref xfB.q, -normal );
+					var axisB = MathUtils.MulT(ref xfB.Q, -normal);
 
 					indexA = -1;
-					indexB = _proxyB.getSupport( axisB );
+					indexB = _proxyB.GetSupport(axisB);
 
 					var localPointB = _proxyB.vertices[indexB];
-					var pointB = MathUtils.mul( ref xfB, localPointB );
+					var pointB = MathUtils.Mul(ref xfB, localPointB);
 
-					var separation = Vector2.Dot( pointB - pointA, normal );
+					var separation = Vector2.Dot(pointB - pointA, normal);
 					return separation;
 				}
 
 				case SeparationFunctionType.FaceB:
 				{
-					var normal = MathUtils.mul( ref xfB.q, _axis );
-					var pointB = MathUtils.mul( ref xfB, _localPoint );
+					var normal = MathUtils.Mul(ref xfB.Q, _axis);
+					var pointB = MathUtils.Mul(ref xfB, _localPoint);
 
-					var axisA = MathUtils.mulT( ref xfA.q, -normal );
+					var axisA = MathUtils.MulT(ref xfA.Q, -normal);
 
 					indexB = -1;
-					indexA = _proxyA.getSupport( axisA );
+					indexA = _proxyA.GetSupport(axisA);
 
 					var localPointA = _proxyA.vertices[indexA];
-					var pointA = MathUtils.mul( ref xfA, localPointA );
+					var pointA = MathUtils.Mul(ref xfA, localPointA);
 
-					var separation = Vector2.Dot( pointA - pointB, normal );
+					var separation = Vector2.Dot(pointA - pointB, normal);
 					return separation;
 				}
 
 				default:
-					Debug.Assert( false );
+					Debug.Assert(false);
 					indexA = -1;
 					indexB = -1;
 					return 0.0f;
 			}
 		}
 
-		public static float evaluate( int indexA, int indexB, float t )
+		public static float Evaluate(int indexA, int indexB, float t)
 		{
 			Transform xfA, xfB;
-			_sweepA.getTransform( out xfA, t );
-			_sweepB.getTransform( out xfB, t );
+			_sweepA.GetTransform(out xfA, t);
+			_sweepB.GetTransform(out xfB, t);
 
-			switch( _type )
+			switch (_type)
 			{
 				case SeparationFunctionType.Points:
 				{
 					var localPointA = _proxyA.vertices[indexA];
 					var localPointB = _proxyB.vertices[indexB];
 
-					var pointA = MathUtils.mul( ref xfA, localPointA );
-					var pointB = MathUtils.mul( ref xfB, localPointB );
-					var separation = Vector2.Dot( pointB - pointA, _axis );
+					var pointA = MathUtils.Mul(ref xfA, localPointA);
+					var pointB = MathUtils.Mul(ref xfB, localPointB);
+					var separation = Vector2.Dot(pointB - pointA, _axis);
 
 					return separation;
 				}
 				case SeparationFunctionType.FaceA:
 				{
-					var normal = MathUtils.mul( ref xfA.q, _axis );
-					var pointA = MathUtils.mul( ref xfA, _localPoint );
+					var normal = MathUtils.Mul(ref xfA.Q, _axis);
+					var pointA = MathUtils.Mul(ref xfA, _localPoint);
 
 					var localPointB = _proxyB.vertices[indexB];
-					var pointB = MathUtils.mul( ref xfB, localPointB );
+					var pointB = MathUtils.Mul(ref xfB, localPointB);
 
-					var separation = Vector2.Dot( pointB - pointA, normal );
+					var separation = Vector2.Dot(pointB - pointA, normal);
 					return separation;
 				}
 				case SeparationFunctionType.FaceB:
 				{
-					var normal = MathUtils.mul( ref xfB.q, _axis );
-					var pointB = MathUtils.mul( ref xfB, _localPoint );
+					var normal = MathUtils.Mul(ref xfB.Q, _axis);
+					var pointB = MathUtils.Mul(ref xfB, _localPoint);
 
 					var localPointA = _proxyA.vertices[indexA];
-					var pointA = MathUtils.mul( ref xfA, localPointA );
+					var pointA = MathUtils.Mul(ref xfA, localPointA);
 
-					var separation = Vector2.Dot( pointA - pointB, normal );
+					var separation = Vector2.Dot(pointA - pointB, normal);
 					return separation;
 				}
 				default:
-					Debug.Assert( false );
+					Debug.Assert(false);
 					return 0.0f;
 			}
 		}
-	
 	}
 
 
@@ -275,12 +269,9 @@ namespace FarseerPhysics.Collision
 		// CCD via the local separating axis method. This seeks progression
 		// by computing the largest time at which separation is maintained.
 
-		[ThreadStatic]
-		public static int TOICalls, TOIIters, TOIMaxIters;
-		[ThreadStatic]
-		public static int TOIRootIters, TOIMaxRootIters;
-		[ThreadStatic]
-		static DistanceInput _distanceInput;
+		[ThreadStatic] public static int TOICalls, TOIIters, TOIMaxIters;
+		[ThreadStatic] public static int TOIRootIters, TOIMaxRootIters;
+		[ThreadStatic] static DistanceInput _distanceInput;
 
 		/// <summary>
 		/// Compute the upper bound on time before two shapes penetrate. Time is represented as
@@ -291,28 +282,28 @@ namespace FarseerPhysics.Collision
 		/// </summary>
 		/// <param name="output">The output.</param>
 		/// <param name="input">The input.</param>
-		public static void calculateTimeOfImpact( out TOIOutput output, TOIInput input )
+		public static void CalculateTimeOfImpact(out TOIOutput output, TOIInput input)
 		{
-			if( Settings.enableDiagnostics ) //FPE: We only gather diagnostics when enabled
+			if (Settings.EnableDiagnostics) //FPE: We only gather diagnostics when enabled
 				++TOICalls;
 
 			output = new TOIOutput();
-			output.state = TOIOutputState.Unknown;
-			output.t = input.tMax;
+			output.State = TOIOutputState.Unknown;
+			output.T = input.TMax;
 
-			var sweepA = input.sweepA;
-			var sweepB = input.sweepB;
+			var sweepA = input.SweepA;
+			var sweepB = input.SweepB;
 
 			// Large rotations can make the root finder fail, so we normalize the sweep angles.
-			sweepA.normalize();
-			sweepB.normalize();
+			sweepA.Normalize();
+			sweepB.Normalize();
 
-			var tMax = input.tMax;
+			var tMax = input.TMax;
 
-			var totalRadius = input.proxyA.radius + input.proxyB.radius;
-			var target = Math.Max( Settings.linearSlop, totalRadius - 3.0f * Settings.linearSlop );
-			const float tolerance = 0.25f * Settings.linearSlop;
-			Debug.Assert( target > tolerance );
+			var totalRadius = input.ProxyA.radius + input.ProxyB.radius;
+			var target = Math.Max(Settings.LinearSlop, totalRadius - 3.0f * Settings.LinearSlop);
+			const float tolerance = 0.25f * Settings.LinearSlop;
+			Debug.Assert(target > tolerance);
 
 			var t1 = 0.0f;
 			const int k_maxIterations = 20;
@@ -320,17 +311,17 @@ namespace FarseerPhysics.Collision
 
 			// Prepare input for distance query.
 			_distanceInput = _distanceInput ?? new DistanceInput();
-			_distanceInput.ProxyA = input.proxyA;
-			_distanceInput.ProxyB = input.proxyB;
+			_distanceInput.ProxyA = input.ProxyA;
+			_distanceInput.ProxyB = input.ProxyB;
 			_distanceInput.UseRadii = false;
 
 			// The outer loop progressively attempts to compute new separating axes.
 			// This loop terminates when an axis is repeated (no progress is made).
-			for( ;; )
+			for (;;)
 			{
 				Transform xfA, xfB;
-				sweepA.getTransform( out xfA, t1 );
-				sweepB.getTransform( out xfB, t1 );
+				sweepA.GetTransform(out xfA, t1);
+				sweepB.GetTransform(out xfB, t1);
 
 				// Get the distance between shapes. We can also use the results
 				// to get a separating axis.
@@ -338,50 +329,50 @@ namespace FarseerPhysics.Collision
 				_distanceInput.TransformB = xfB;
 				DistanceOutput distanceOutput;
 				SimplexCache cache;
-				Distance.computeDistance( out distanceOutput, out cache, _distanceInput );
+				Distance.ComputeDistance(out distanceOutput, out cache, _distanceInput);
 
 				// If the shapes are overlapped, we give up on continuous collision.
-				if( distanceOutput.Distance <= 0.0f )
+				if (distanceOutput.Distance <= 0.0f)
 				{
 					// Failure!
-					output.state = TOIOutputState.Overlapped;
-					output.t = 0.0f;
+					output.State = TOIOutputState.Overlapped;
+					output.T = 0.0f;
 					break;
 				}
 
-				if( distanceOutput.Distance < target + tolerance )
+				if (distanceOutput.Distance < target + tolerance)
 				{
 					// Victory!
-					output.state = TOIOutputState.Touching;
-					output.t = t1;
+					output.State = TOIOutputState.Touching;
+					output.T = t1;
 					break;
 				}
 
-				SeparationFunction.set( ref cache, input.proxyA, ref sweepA, input.proxyB, ref sweepB, t1 );
+				SeparationFunction.Set(ref cache, input.ProxyA, ref sweepA, input.ProxyB, ref sweepB, t1);
 
 				// Compute the TOI on the separating axis. We do this by successively
 				// resolving the deepest point. This loop is bounded by the number of vertices.
 				var done = false;
 				var t2 = tMax;
 				var pushBackIter = 0;
-				for( ;; )
+				for (;;)
 				{
 					// Find the deepest point at t2. Store the witness point indices.
 					int indexA, indexB;
-					var s2 = SeparationFunction.findMinSeparation( out indexA, out indexB, t2 );
+					var s2 = SeparationFunction.FindMinSeparation(out indexA, out indexB, t2);
 
 					// Is the final configuration separated?
-					if( s2 > target + tolerance )
+					if (s2 > target + tolerance)
 					{
 						// Victory!
-						output.state = TOIOutputState.Seperated;
-						output.t = tMax;
+						output.State = TOIOutputState.Seperated;
+						output.T = tMax;
 						done = true;
 						break;
 					}
 
 					// Has the separation reached tolerance?
-					if( s2 > target - tolerance )
+					if (s2 > target - tolerance)
 					{
 						// Advance the sweeps
 						t1 = t2;
@@ -389,24 +380,24 @@ namespace FarseerPhysics.Collision
 					}
 
 					// Compute the initial separation of the witness points.
-					float s1 = SeparationFunction.evaluate( indexA, indexB, t1 );
+					float s1 = SeparationFunction.Evaluate(indexA, indexB, t1);
 
 					// Check for initial overlap. This might happen if the root finder
 					// runs out of iterations.
-					if( s1 < target - tolerance )
+					if (s1 < target - tolerance)
 					{
-						output.state = TOIOutputState.Failed;
-						output.t = t1;
+						output.State = TOIOutputState.Failed;
+						output.T = t1;
 						done = true;
 						break;
 					}
 
 					// Check for touching
-					if( s1 <= target + tolerance )
+					if (s1 <= target + tolerance)
 					{
 						// Victory! t1 should hold the TOI (could be 0.0).
-						output.state = TOIOutputState.Touching;
-						output.t = t1;
+						output.State = TOIOutputState.Touching;
+						output.T = t1;
 						done = true;
 						break;
 					}
@@ -414,29 +405,29 @@ namespace FarseerPhysics.Collision
 					// Compute 1D root of: f(x) - target = 0
 					int rootIterCount = 0;
 					float a1 = t1, a2 = t2;
-					for( ;; )
+					for (;;)
 					{
 						// Use a mix of the secant rule and bisection.
 						float t;
-						if( ( rootIterCount & 1 ) != 0 )
+						if ((rootIterCount & 1) != 0)
 						{
 							// Secant rule to improve convergence.
-							t = a1 + ( target - s1 ) * ( a2 - a1 ) / ( s2 - s1 );
+							t = a1 + (target - s1) * (a2 - a1) / (s2 - s1);
 						}
 						else
 						{
 							// Bisection to guarantee progress.
-							t = 0.5f * ( a1 + a2 );
+							t = 0.5f * (a1 + a2);
 						}
 
 						++rootIterCount;
 
-						if( Settings.enableDiagnostics ) //FPE: We only gather diagnostics when enabled
+						if (Settings.EnableDiagnostics) //FPE: We only gather diagnostics when enabled
 							++TOIRootIters;
 
-						var s = SeparationFunction.evaluate( indexA, indexB, t );
+						var s = SeparationFunction.Evaluate(indexA, indexB, t);
 
-						if( Math.Abs( s - target ) < tolerance )
+						if (Math.Abs(s - target) < tolerance)
 						{
 							// t2 holds a tentative value for t1
 							t2 = t;
@@ -444,7 +435,7 @@ namespace FarseerPhysics.Collision
 						}
 
 						// Ensure we continue to bracket the root.
-						if( s > target )
+						if (s > target)
 						{
 							a1 = t;
 							s1 = s;
@@ -455,41 +446,40 @@ namespace FarseerPhysics.Collision
 							s2 = s;
 						}
 
-						if( rootIterCount == 50 )
+						if (rootIterCount == 50)
 						{
 							break;
 						}
 					}
 
-					if( Settings.enableDiagnostics ) //FPE: We only gather diagnostics when enabled
-						TOIMaxRootIters = Math.Max( TOIMaxRootIters, rootIterCount );
+					if (Settings.EnableDiagnostics) //FPE: We only gather diagnostics when enabled
+						TOIMaxRootIters = Math.Max(TOIMaxRootIters, rootIterCount);
 
 					++pushBackIter;
 
-					if( pushBackIter == Settings.maxPolygonVertices )
+					if (pushBackIter == Settings.MaxPolygonVertices)
 						break;
 				}
 
 				++iter;
 
-				if( Settings.enableDiagnostics ) //FPE: We only gather diagnostics when enabled
+				if (Settings.EnableDiagnostics) //FPE: We only gather diagnostics when enabled
 					++TOIIters;
 
-				if( done )
+				if (done)
 					break;
 
-				if( iter == k_maxIterations )
+				if (iter == k_maxIterations)
 				{
 					// Root finder got stuck. Semi-victory.
-					output.state = TOIOutputState.Failed;
-					output.t = t1;
+					output.State = TOIOutputState.Failed;
+					output.T = t1;
 					break;
 				}
 			}
 
-			if( Settings.enableDiagnostics ) //FPE: We only gather diagnostics when enabled
-				TOIMaxIters = Math.Max( TOIMaxIters, iter );
+			if (Settings.EnableDiagnostics) //FPE: We only gather diagnostics when enabled
+				TOIMaxIters = Math.Max(TOIMaxIters, iter);
 		}
-	
 	}
 }

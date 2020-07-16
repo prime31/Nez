@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
+
 namespace Nez.Persistence
 {
 	public enum TypeNameHandling
@@ -9,18 +10,22 @@ namespace Nez.Persistence
 		/// Do not include the .NET type name when serializing types
 		/// </summary>
 		None,
+
 		/// <summary>
 		/// Include the .NET type name when serializing into a JSON object structure
 		/// </summary>
 		Objects,
+
 		/// <summary>
 		/// Include the .NET type name when serializing into a JSON array structure
 		/// </summary>
 		Arrays,
+
 		/// <summary>
 		/// Always include the .NET type name when serializing
 		/// </summary>
 		All,
+
 		/// <summary>
 		/// Include the .NET type name when the type of the object being serialized is not the same as its declared type
 		/// </summary>
@@ -49,17 +54,19 @@ namespace Nez.Persistence
 		/// </summary>
 		/// <returns>The type converter for type.</returns>
 		/// <param name="objectType">Object type.</param>
-		internal JsonTypeConverter GetTypeConverterForType( Type objectType )
+		internal JsonTypeConverter GetTypeConverterForType(Type objectType)
 		{
-			if( TypeConverters == null )
+			if (TypeConverters == null)
 				return null;
-			foreach( var converter in TypeConverters )
+
+			foreach (var converter in TypeConverters)
 			{
-				if( converter.CanConvertType( objectType ) )
+				if (converter.CanConvertType(objectType))
 				{
 					return converter;
 				}
 			}
+
 			return null;
 		}
 
@@ -68,19 +75,20 @@ namespace Nez.Persistence
 		/// </summary>
 		/// <returns>The object factory for type.</returns>
 		/// <param name="objectType">Object type.</param>
-		internal JsonObjectFactory GetObjectFactoryForType( Type objectType )
+		internal JsonObjectFactory GetObjectFactoryForType(Type objectType)
 		{
-			if( TypeConverters == null )
+			if (TypeConverters == null)
 				return null;
-			foreach( var converter in TypeConverters )
+
+			foreach (var converter in TypeConverters)
 			{
-				if( converter.CanConvertType( objectType ) && converter is JsonObjectFactory )
+				if (converter.CanConvertType(objectType) && converter is JsonObjectFactory)
 				{
 					return converter as JsonObjectFactory;
 				}
 			}
+
 			return null;
 		}
 	}
-
 }

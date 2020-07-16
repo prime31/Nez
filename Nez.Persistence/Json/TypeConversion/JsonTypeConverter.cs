@@ -1,5 +1,6 @@
 ﻿using System;
 
+
 namespace Nez.Persistence
 {
 	/// <summary>
@@ -34,11 +35,11 @@ namespace Nez.Persistence
 		/// </summary>
 		/// <returns><c>true</c>, if convert type was caned, <c>false</c> otherwise.</returns>
 		/// <param name="objectType">Object type.</param>
-		public abstract bool CanConvertType( Type objectType );
+		public abstract bool CanConvertType(Type objectType);
 
-		public abstract void WriteJson( IJsonEncoder encoder, object value );
+		public abstract void WriteJson(IJsonEncoder encoder, object value);
 
-		public abstract void OnFoundCustomData( object instance, string key, object value );
+		public abstract void OnFoundCustomData(object instance, string key, object value);
 	}
 
 
@@ -47,11 +48,11 @@ namespace Nez.Persistence
 	/// </summary>
 	public abstract class JsonTypeConverter<T> : JsonTypeConverter
 	{
-		public override bool CanConvertType( Type objectType ) => typeof( T ).IsAssignableFrom( objectType );
+		public override bool CanConvertType(Type objectType) => typeof(T).IsAssignableFrom(objectType);
 
-		public override void WriteJson( IJsonEncoder encoder, object value )
+		public override void WriteJson(IJsonEncoder encoder, object value)
 		{
-			WriteJson( encoder, (T)value );
+			WriteJson(encoder, (T) value);
 		}
 
 		/// <summary>
@@ -59,11 +60,11 @@ namespace Nez.Persistence
 		/// </summary>
 		/// <param name="encoder">Encoder.</param>
 		/// <param name="value">Value.</param>
-		public abstract void WriteJson( IJsonEncoder encoder, T value );
+		public abstract void WriteJson(IJsonEncoder encoder, T value);
 
-		public override void OnFoundCustomData( object instance, string key, object value )
+		public override void OnFoundCustomData(object instance, string key, object value)
 		{
-			OnFoundCustomData( (T)instance, key, value );
+			OnFoundCustomData((T) instance, key, value);
 		}
 
 		/// <summary>
@@ -74,7 +75,6 @@ namespace Nez.Persistence
 		/// <param name="instance">Instance.</param>
 		/// <param name="key">Key.</param>
 		/// <param name="value">Value.</param>
-		public abstract void OnFoundCustomData( T instance, string key, object value );
-	
+		public abstract void OnFoundCustomData(T instance, string key, object value);
 	}
 }

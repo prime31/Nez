@@ -11,42 +11,41 @@ namespace Nez.Farseer
 
 		#region Configuration
 
-		public FSFrictionJoint setAnchor( Vector2 anchor )
+		public FSFrictionJoint SetAnchor(Vector2 anchor)
 		{
 			_anchor = anchor;
-			recreateJoint();
+			RecreateJoint();
 			return this;
 		}
 
 
-		public FSFrictionJoint setMaxForce( float maxForce )
+		public FSFrictionJoint SetMaxForce(float maxForce)
 		{
-			_jointDef.maxForce = maxForce;
-			recreateJoint();
+			_jointDef.MaxForce = maxForce;
+			RecreateJoint();
 			return this;
 		}
 
 
-		public FSFrictionJoint setMaxTorque( float maxTorque )
+		public FSFrictionJoint SetMaxTorque(float maxTorque)
 		{
-			_jointDef.maxTorque = maxTorque;
-			recreateJoint();
+			_jointDef.MaxTorque = maxTorque;
+			RecreateJoint();
 			return this;
 		}
 
 		#endregion
 
 
-		internal override FSJointDef getJointDef()
+		internal override FSJointDef GetJointDef()
 		{
-			initializeJointDef( _jointDef );
-			if( _jointDef.bodyA == null || _jointDef.bodyB == null )
+			InitializeJointDef(_jointDef);
+			if (_jointDef.BodyA == null || _jointDef.BodyB == null)
 				return null;
 
-			_jointDef.anchor = FSConvert.displayToSim * _anchor;
+			_jointDef.Anchor = FSConvert.DisplayToSim * _anchor;
 
 			return _jointDef;
 		}
-
 	}
 }

@@ -10,88 +10,87 @@ namespace Nez.Farseer
 
 		#region Configuration
 
-		public FSRevoluteJoint setOwnerBodyAnchor( Vector2 ownerBodyAnchor )
+		public FSRevoluteJoint SetOwnerBodyAnchor(Vector2 ownerBodyAnchor)
 		{
-			_jointDef.ownerBodyAnchor = ownerBodyAnchor;
-			recreateJoint();
+			_jointDef.OwnerBodyAnchor = ownerBodyAnchor;
+			RecreateJoint();
 			return this;
 		}
 
 
-		public FSRevoluteJoint setOtherBodyAnchor( Vector2 otherBodyAnchor )
+		public FSRevoluteJoint SetOtherBodyAnchor(Vector2 otherBodyAnchor)
 		{
-			_jointDef.otherBodyAnchor = otherBodyAnchor;
-			recreateJoint();
+			_jointDef.OtherBodyAnchor = otherBodyAnchor;
+			RecreateJoint();
 			return this;
 		}
 
 
-		public FSRevoluteJoint setLimitEnabled( bool limitEnabled )
+		public FSRevoluteJoint SetLimitEnabled(bool limitEnabled)
 		{
-			_jointDef.limitEnabled = limitEnabled;
-			recreateJoint();
+			_jointDef.LimitEnabled = limitEnabled;
+			RecreateJoint();
 			return this;
 		}
 
 
-		public FSRevoluteJoint setLowerLimit( float lowerLimit )
+		public FSRevoluteJoint SetLowerLimit(float lowerLimit)
 		{
-			_jointDef.lowerLimit = lowerLimit;
-			recreateJoint();
+			_jointDef.LowerLimit = lowerLimit;
+			RecreateJoint();
 			return this;
 		}
 
 
-		public FSRevoluteJoint setUpperLimit( float upperLimit )
+		public FSRevoluteJoint SetUpperLimit(float upperLimit)
 		{
-			_jointDef.upperLimit = upperLimit;
-			recreateJoint();
+			_jointDef.UpperLimit = upperLimit;
+			RecreateJoint();
 			return this;
 		}
 
 
-		public FSRevoluteJoint setMotorEnabled( bool motorEnabled )
+		public FSRevoluteJoint SetMotorEnabled(bool motorEnabled)
 		{
-			_jointDef.motorEnabled = motorEnabled;
-			recreateJoint();
+			_jointDef.MotorEnabled = motorEnabled;
+			RecreateJoint();
 			return this;
 		}
 
 
-		public FSRevoluteJoint setMotorSpeed( float motorSpeed )
+		public FSRevoluteJoint SetMotorSpeed(float motorSpeed)
 		{
-			_jointDef.motorSpeed = motorSpeed;
-			recreateJoint();
+			_jointDef.MotorSpeed = motorSpeed;
+			RecreateJoint();
 			return this;
 		}
 
 
-		public FSRevoluteJoint setMaxMotorTorque( float maxMotorTorque )
+		public FSRevoluteJoint SetMaxMotorTorque(float maxMotorTorque)
 		{
-			_jointDef.maxMotorTorque = maxMotorTorque;
-			recreateJoint();
+			_jointDef.MaxMotorTorque = maxMotorTorque;
+			RecreateJoint();
 			return this;
 		}
 
 
-		public FSRevoluteJoint setMotorImpulse( float motorImpulse )
+		public FSRevoluteJoint SetMotorImpulse(float motorImpulse)
 		{
-			_jointDef.motorImpulse = motorImpulse;
-			recreateJoint();
+			_jointDef.MotorImpulse = motorImpulse;
+			RecreateJoint();
 			return this;
 		}
 
 		#endregion
 
 
-		internal override FSJointDef getJointDef()
+		internal override FSJointDef GetJointDef()
 		{
-			initializeJointDef( _jointDef );
-			if( _jointDef.bodyA == null || _jointDef.bodyB == null )
+			InitializeJointDef(_jointDef);
+			if (_jointDef.BodyA == null || _jointDef.BodyB == null)
 				return null;
 
 			return _jointDef;
 		}
-
 	}
 }

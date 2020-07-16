@@ -23,9 +23,13 @@ namespace Nez.Farseer
 			/// <param name="fixStart"></param>
 			/// <param name="fixEnd"></param>
 			/// <returns></returns>
-			public static List<Body> createChain( World world, Vector2 start, Vector2 end, float linkWidth, float linkHeight, int numberOfLinks, float linkDensity, bool attachRopeJoint, bool fixStart = false, bool fixEnd = false )
+			public static List<Body> CreateChain(World world, Vector2 start, Vector2 end, float linkWidth,
+			                                     float linkHeight, int numberOfLinks, float linkDensity,
+			                                     bool attachRopeJoint, bool fixStart = false, bool fixEnd = false)
 			{
-				return FarseerPhysics.Factories.LinkFactory.createChain( world, FSConvert.displayToSim * start, FSConvert.toSimUnits( end ), FSConvert.displayToSim * linkWidth, FSConvert.displayToSim * linkHeight, numberOfLinks, linkDensity, attachRopeJoint, fixStart, fixEnd );
+				return FarseerPhysics.Factories.LinkFactory.CreateChain(world, FSConvert.DisplayToSim * start,
+					FSConvert.ToSimUnits(end), FSConvert.DisplayToSim * linkWidth, FSConvert.DisplayToSim * linkHeight,
+					numberOfLinks, linkDensity, attachRopeJoint, fixStart, fixEnd);
 			}
 		}
 	}

@@ -19,89 +19,91 @@ namespace Nez
 		}
 
 		// used for Line items
-		public Vector2 start;
-		public Vector2 end;
-		public Rectangle rectangle;
+		public Vector2 Start;
+		public Vector2 End;
+		public Rectangle Rectangle;
 
 		// used for Text items
-		public string text;
-		public BitmapFont bitmapFont;
-		public NezSpriteFont spriteFont;
-		public Vector2 position;
-		public float scale;
+		public string Text;
+		public BitmapFont BitmapFont;
+		public NezSpriteFont SpriteFont;
+		public Vector2 Position;
+		public float Scale;
 
 		// used for Pixel items
-		public float x, y;
-		public int size;
+		public float X, Y;
+		public int Size;
 
 		// shared by multiple items
-		public Color color;
-		public float duration;
+		public Color Color;
+		public float Duration;
 
 		internal DebugDrawType drawType;
 
 
-		public DebugDrawItem( Vector2 start, Vector2 end, Color color, float duration )
+		public DebugDrawItem(Vector2 start, Vector2 end, Color color, float duration)
 		{
-			this.start = start;
-			this.end = end;
-			this.color = color;
-			this.duration = duration;
+			Start = start;
+			End = end;
+			Color = color;
+			Duration = duration;
 			drawType = DebugDrawType.Line;
 		}
 
 
-		public DebugDrawItem( Rectangle rectangle, Color color, float duration )
+		public DebugDrawItem(Rectangle rectangle, Color color, float duration)
 		{
-			this.rectangle = rectangle;
-			this.color = color;
-			this.duration = duration;
+			Rectangle = rectangle;
+			Color = color;
+			Duration = duration;
 			drawType = DebugDrawType.HollowRectangle;
 		}
 
 
-		public DebugDrawItem( float x, float y, int size, Color color, float duration )
+		public DebugDrawItem(float x, float y, int size, Color color, float duration)
 		{
-			this.x = x;
-			this.y = y;
-			this.size = size;
-			this.color = color;
-			this.duration = duration;
+			X = x;
+			Y = y;
+			Size = size;
+			Color = color;
+			Duration = duration;
 			drawType = DebugDrawType.Pixel;
 		}
 
 
-		public DebugDrawItem( BitmapFont bitmapFont, String text, Vector2 position, Color color, float duration, float scale )
+		public DebugDrawItem(BitmapFont bitmapFont, String text, Vector2 position, Color color, float duration,
+		                     float scale)
 		{
-			this.bitmapFont = bitmapFont;
-			this.text = text;
-			this.position = position;
-			this.color = color;
-			this.scale = scale;
-			this.duration = duration;
+			BitmapFont = bitmapFont;
+			Text = text;
+			Position = position;
+			Color = color;
+			Scale = scale;
+			Duration = duration;
 			drawType = DebugDrawType.BitmapFontText;
 		}
 
 
-		public DebugDrawItem( NezSpriteFont spriteFont, String text, Vector2 position, Color color, float duration, float scale )
+		public DebugDrawItem(NezSpriteFont spriteFont, String text, Vector2 position, Color color, float duration,
+		                     float scale)
 		{
-			this.spriteFont = spriteFont;
-			this.text = text;
-			this.position = position;
-			this.color = color;
-			this.scale = scale;
-			this.duration = duration;
+			SpriteFont = spriteFont;
+			Text = text;
+			Position = position;
+			Color = color;
+			Scale = scale;
+			Duration = duration;
 			drawType = DebugDrawType.SpriteFontText;
 		}
 
 
-		public DebugDrawItem( string text, Color color, float duration, float scale )
+		public DebugDrawItem(string text, Color color, float duration, float scale)
 		{
-			bitmapFont = Graphics.instance.bitmapFont;
-			this.text = text;
-			this.color = color;
-			this.scale = scale;
-			this.duration = duration;
+			BitmapFont = Graphics.Instance.BitmapFont;
+			Text = text;
+			Color = color;
+			Scale = scale;
+			Duration = duration;
 			drawType = DebugDrawType.ConsoleText;
 		}
 
@@ -109,56 +111,57 @@ namespace Nez
 		/// <summary>
 		/// returns true if we are done with this debug draw item
 		/// </summary>
-		public bool draw( Graphics graphics )
+		public bool Draw(Batcher batcher)
 		{
-			switch( drawType )
+			switch (drawType)
 			{
 				case DebugDrawType.Line:
-					graphics.batcher.drawLine( start, end, color );
+					batcher.DrawLine(Start, End, Color);
 					break;
 				case DebugDrawType.HollowRectangle:
-					graphics.batcher.drawHollowRect( rectangle, color );
+					batcher.DrawHollowRect(Rectangle, Color);
 					break;
 				case DebugDrawType.Pixel:
-					graphics.batcher.drawPixel( x, y, color, size );
+					batcher.DrawPixel(X, Y, Color, Size);
 					break;
 				case DebugDrawType.BitmapFontText:
-					graphics.batcher.drawString( bitmapFont, text, position, color, 0f, Vector2.Zero, scale, SpriteEffects.None, 0f );
+					batcher.DrawString(BitmapFont, Text, Position, Color, 0f, Vector2.Zero, Scale,
+						SpriteEffects.None, 0f);
 					break;
 				case DebugDrawType.SpriteFontText:
-					graphics.batcher.drawString( spriteFont, text, position, color, 0f, Vector2.Zero, new Vector2( scale ), SpriteEffects.None, 0f );
+					batcher.DrawString(SpriteFont, Text, Position, Color, 0f, Vector2.Zero, new Vector2(Scale),
+						SpriteEffects.None, 0f);
 					break;
 				case DebugDrawType.ConsoleText:
-					graphics.batcher.drawString( bitmapFont, text, position, color, 0f, Vector2.Zero, scale, SpriteEffects.None, 0f );
+					batcher.DrawString(BitmapFont, Text, Position, Color, 0f, Vector2.Zero, Scale,
+						SpriteEffects.None, 0f);
 					break;
 			}
 
-			duration -= Time.deltaTime;
+			Duration -= Time.DeltaTime;
 
-			return duration < 0f;
+			return Duration < 0f;
 		}
 
 
-		public float getHeight()
+		public float GetHeight()
 		{
-			switch( drawType )
+			switch (drawType)
 			{
 				case DebugDrawType.Line:
-					return ( end - start ).Y;
+					return (End - Start).Y;
 				case DebugDrawType.HollowRectangle:
-					return rectangle.Height;
+					return Rectangle.Height;
 				case DebugDrawType.Pixel:
-					return size;
+					return Size;
 				case DebugDrawType.BitmapFontText:
 				case DebugDrawType.ConsoleText:
-					return bitmapFont.measureString( text ).Y * scale;
+					return BitmapFont.MeasureString(Text).Y * Scale;
 				case DebugDrawType.SpriteFontText:
-					return spriteFont.measureString( text ).Y * scale;
+					return SpriteFont.MeasureString(Text).Y * Scale;
 			}
 
 			return 0;
 		}
-
 	}
 }
-

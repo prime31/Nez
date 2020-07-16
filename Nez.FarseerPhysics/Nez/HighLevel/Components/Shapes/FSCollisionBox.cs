@@ -10,30 +10,32 @@ namespace Nez.Farseer
 
 
 		public FSCollisionBox()
-		{}
+		{
+		}
 
 
-		public FSCollisionBox( float width, float height )
+		public FSCollisionBox(float width, float height)
 		{
 			_width = width;
 			_height = height;
-			_verts = PolygonTools.createRectangle( FSConvert.displayToSim * _width / 2, FSConvert.displayToSim * _height / 2 );
+			_verts = PolygonTools.CreateRectangle(FSConvert.DisplayToSim * _width / 2,
+				FSConvert.DisplayToSim * _height / 2);
 		}
 
 
 		#region Configuration
 
-		public FSCollisionBox setSize( float width, float height )
+		public FSCollisionBox SetSize(float width, float height)
 		{
 			_width = width;
 			_height = height;
-			_verts = PolygonTools.createRectangle( FSConvert.displayToSim * _width / 2, FSConvert.displayToSim * _height / 2 );
+			_verts = PolygonTools.CreateRectangle(FSConvert.DisplayToSim * _width / 2,
+				FSConvert.DisplayToSim * _height / 2);
 			_areVertsDirty = true;
-			recreateFixture();
+			RecreateFixture();
 			return this;
 		}
 
 		#endregion
-
 	}
 }

@@ -11,138 +11,142 @@ namespace Nez.ImGuiTools.TypeInspectors
 {
 	public class MaterialInspector : AbstractTypeInspector
 	{
-		public bool allowsMaterialRemoval = true;
+		public bool AllowsMaterialRemoval = true;
 		List<AbstractTypeInspector> _inspectors = new List<AbstractTypeInspector>();
 
-		public override void initialize()
+		public override void Initialize()
 		{
-			base.initialize();
+			base.Initialize();
 
 			_wantsIndentWhenDrawn = true;
 
-			var material = getValue<Material>();
-			if( material == null )
+			var material = GetValue<Material>();
+			if (material == null)
 				return;
 
 			// fetch our inspectors and let them know who their parent is
-			_inspectors = TypeInspectorUtils.getInspectableProperties( material );
+			_inspectors = TypeInspectorUtils.GetInspectableProperties(material);
 
 			// if we are a Material<T>, we need to fix the duplicate Effect due to the "new T effect"
-			if( ReflectionUtils.isGenericTypeOrSubclassOfGenericType( material.GetType() ) )
+			if (ReflectionUtils.IsGenericTypeOrSubclassOfGenericType(material.GetType()))
 			{
 				var didFindEffectInspector = false;
-				for( var i = 0; i < _inspectors.Count; i++ )
+				for (var i = 0; i < _inspectors.Count; i++)
 				{
 					var isEffectInspector = _inspectors[i] is EffectInspector;
-					if( isEffectInspector )
+					if (isEffectInspector)
 					{
-						if( didFindEffectInspector )
+						if (didFindEffectInspector)
 						{
-							_inspectors.RemoveAt( i );
+							_inspectors.RemoveAt(i);
 							break;
 						}
+
 						didFindEffectInspector = true;
 					}
 				}
 			}
 		}
 
-		public override void drawMutable()
+		public override void DrawMutable()
 		{
-			var isOpen = ImGui.CollapsingHeader( $"{_name}", ImGuiTreeNodeFlags.FramePadding );
+			var isOpen = ImGui.CollapsingHeader($"{_name}", ImGuiTreeNodeFlags.FramePadding);
 
-			if( getValue() == null )
+			if (GetValue() == null)
 			{
-				if( isOpen )
-					drawNullMaterial();
+				if (isOpen)
+					DrawNullMaterial();
 				return;
 			}
 
 			NezImGui.ShowContextMenuTooltip();
 
-			if( ImGui.BeginPopupContextItem() )
+			if (ImGui.BeginPopupContextItem())
 			{
-				if( allowsMaterialRemoval && ImGui.Selectable( "Remove Material" ) )
+				if (AllowsMaterialRemoval && ImGui.Selectable("Remove Material"))
 				{
-					setValue( null );
+					SetValue(null);
 					_inspectors.Clear();
 					ImGui.CloseCurrentPopup();
 				}
 
-				if( ImGui.Selectable( "Set Effect", false, ImGuiSelectableFlags.DontClosePopups ) )
-					ImGui.OpenPopup( "effect-chooser" );
+				if (ImGui.Selectable("Set Effect", false, ImGuiSelectableFlags.DontClosePopups))
+					ImGui.OpenPopup("effect-chooser");
 
 				ImGui.EndPopup();
 			}
 
-			if( isOpen )
+			if (isOpen)
 			{
 				ImGui.Indent();
 
-				if( _inspectors.Count == 0 )
+				if (_inspectors.Count == 0)
 				{
-					if( NezImGui.CenteredButton( "Set Effect", 0.6f ) )
-						ImGui.OpenPopup( "effect-chooser" );
+					if (NezImGui.CenteredButton("Set Effect", 0.6f))
+						ImGui.OpenPopup("effect-chooser");
 				}
 
-				for( var i = _inspectors.Count - 1; i >= 0; i-- )
+				for (var i = _inspectors.Count - 1; i >= 0; i--)
 				{
-					if( _inspectors[i].isTargetDestroyed )
+					if (_inspectors[i].IsTargetDestroyed)
 					{
-						_inspectors.RemoveAt( i );
+						_inspectors.RemoveAt(i);
 						continue;
 					}
-					_inspectors[i].draw();
+
+					_inspectors[i].Draw();
 				}
+
 				ImGui.Unindent();
 			}
 
-			if( drawEffectChooserPopup() )
+			if (DrawEffectChooserPopup())
 				ImGui.CloseCurrentPopup();
 		}
 
-		void drawNullMaterial()
+		void DrawNullMaterial()
 		{
-			if( NezImGui.CenteredButton( "Create Material", 0.5f, ImGui.GetStyle().IndentSpacing * 0.5f ) )
+			if (NezImGui.CenteredButton("Create Material", 0.5f, ImGui.GetStyle().IndentSpacing * 0.5f))
 			{
 				var material = new Material();
-				setValue( material );
-				_inspectors = TypeInspectorUtils.getInspectableProperties( material );
+				SetValue(material);
+				_inspectors = TypeInspectorUtils.GetInspectableProperties(material);
 			}
 		}
 
-		bool drawEffectChooserPopup()
+		bool DrawEffectChooserPopup()
 		{
 			var createdEffect = false;
-			if( ImGui.BeginPopup( "effect-chooser" ) )
+			if (ImGui.BeginPopup("effect-chooser"))
 			{
-				foreach( var subclassType in InspectorCache.getAllEffectSubclassTypes() )
+				foreach (var subclassType in InspectorCache.GetAllEffectSubclassTypes())
 				{
-					if( ImGui.Selectable( subclassType.Name ) )
+					if (ImGui.Selectable(subclassType.Name))
 					{
 						// create the Effect, remove the existing EffectInspector and create a new one
-						var effect = Activator.CreateInstance( subclassType ) as Effect;
-						var material = getValue<Material>();
-						material.effect = effect;
+						var effect = Activator.CreateInstance(subclassType) as Effect;
+						var material = GetValue<Material>();
+						material.Effect = effect;
 
-						for( var i = _inspectors.Count - 1; i >= 0; i-- )
+						for (var i = _inspectors.Count - 1; i >= 0; i--)
 						{
-							if( _inspectors[i].GetType() == typeof( EffectInspector ) )
-								_inspectors.RemoveAt( i );
+							if (_inspectors[i].GetType() == typeof(EffectInspector))
+								_inspectors.RemoveAt(i);
 						}
 
 						var inspector = new EffectInspector();
-						inspector.setTarget( material, ReflectionUtils.getFieldInfo( material, "effect" ) );
-						inspector.initialize();
-						_inspectors.Add( inspector );
+						inspector.SetTarget(material, ReflectionUtils.GetFieldInfo(material, "Effect"));
+						inspector.Initialize();
+						_inspectors.Add(inspector);
 
 						createdEffect = true;
 					}
 				}
+
 				ImGui.EndPopup();
 			}
+
 			return createdEffect;
 		}
-
 	}
 }

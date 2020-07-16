@@ -9,22 +9,22 @@ namespace Nez
 		/// <summary>
 		/// the collider that was collided with
 		/// </summary>
-		public Collider collider;
+		public Collider Collider;
 
 		/// <summary>
 		/// The normal vector of the surface hit by the shape
 		/// </summary>
-		public Vector2 normal;
+		public Vector2 Normal;
 
 		/// <summary>
 		/// The translation to apply to the first shape to push the shapes appart
 		/// </summary>
-		public Vector2 minimumTranslationVector;
+		public Vector2 MinimumTranslationVector;
 
 		/// <summary>
 		/// not used for all collisions types! Check the ShapeCollisions class before relying on this field!
 		/// </summary>
-		public Vector2 point;
+		public Vector2 Point;
 
 
 		/// <summary>
@@ -32,7 +32,7 @@ namespace Nez
 		/// the same direction.
 		/// </summary>
 		/// <param name="deltaMovement">the original movement that caused the collision</param>
-		public void removeHorizontalTranslation( Vector2 deltaMovement )
+		public void RemoveHorizontalTranslation(Vector2 deltaMovement)
 		{
 			// http://dev.yuanworks.com/2013/03/19/little-ninja-physics-and-collision-detection/
 			// fix is the vector that is only in the y-direction that we want. Projecting it on the normal gives us the
@@ -40,16 +40,16 @@ namespace Nez
 			// fix dot normal = responseDistance
 
 			// check if the lateral motion is undesirable and if so remove it and fix the response
-			if( Math.Sign( normal.X ) != Math.Sign( deltaMovement.X ) || ( deltaMovement.X == 0f && normal.X != 0f ) )
+			if (Math.Sign(Normal.X) != Math.Sign(deltaMovement.X) || (deltaMovement.X == 0f && Normal.X != 0f))
 			{
-				var responseDistance = minimumTranslationVector.Length();
-				var fix = responseDistance / normal.Y;
+				var responseDistance = MinimumTranslationVector.Length();
+				var fix = responseDistance / Normal.Y;
 
 				// check some edge cases. make sure we dont have normal.x == 1 and a super small y which will result in a huge
 				// fix value since we divide by normal
-				if( Math.Abs( normal.X ) != 1f && Math.Abs( fix ) < Math.Abs( deltaMovement.Y * 3f ) )
+				if (Math.Abs(Normal.X) != 1f && Math.Abs(fix) < Math.Abs(deltaMovement.Y * 3f))
 				{
-					minimumTranslationVector = new Vector2( 0f, -fix );
+					MinimumTranslationVector = new Vector2(0f, -fix);
 				}
 			}
 		}
@@ -58,18 +58,17 @@ namespace Nez
 		/// <summary>
 		/// inverts the normal and MTV
 		/// </summary>
-		public void invertResult()
+		public void InvertResult()
 		{
-			Vector2.Negate( ref minimumTranslationVector, out minimumTranslationVector );
-			Vector2.Negate( ref normal, out normal );
+			Vector2.Negate(ref MinimumTranslationVector, out MinimumTranslationVector);
+			Vector2.Negate(ref Normal, out Normal);
 		}
 
 
 		public override string ToString()
 		{
-			return string.Format( "[CollisionResult] normal: {0}, minimumTranslationVector: {1}", normal, minimumTranslationVector );
+			return string.Format("[CollisionResult] normal: {0}, minimumTranslationVector: {1}", Normal,
+				MinimumTranslationVector);
 		}
-
 	}
 }
-

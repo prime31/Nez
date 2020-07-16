@@ -11,32 +11,29 @@ namespace Nez
 		SelectBox<string> _selectBox;
 
 
-		public override void initialize( Table table, Skin skin, float leftCellWidth )
+		public override void Initialize(Table table, Skin skin, float leftCellWidth)
 		{
-			var label = createNameLabel( table, skin, leftCellWidth );
+			var label = CreateNameLabel(table, skin, leftCellWidth);
 
 			// gotta get ugly here
-			_selectBox = new SelectBox<string>( skin );
+			_selectBox = new SelectBox<string>(skin);
 
-			var enumValues = Enum.GetValues( _valueType );
+			var enumValues = Enum.GetValues(_valueType);
 			var enumStringValues = new List<string>();
-			foreach( var e in enumValues )
-				enumStringValues.Add( e.ToString() );
-			_selectBox.setItems( enumStringValues );
+			foreach (var e in enumValues)
+				enumStringValues.Add(e.ToString());
+			_selectBox.SetItems(enumStringValues);
 
-			_selectBox.onChanged += selectedItem =>
-			{
-				setValue( Enum.Parse( _valueType, selectedItem ) );
-			};
+			_selectBox.OnChanged += selectedItem => { SetValue(Enum.Parse(_valueType, selectedItem)); };
 
-			table.add( label );
-			table.add( _selectBox ).setFillX();
+			table.Add(label);
+			table.Add(_selectBox).SetFillX();
 		}
 
 
-		public override void update()
+		public override void Update()
 		{
-			_selectBox.setSelected( getValue<object>().ToString() );
+			_selectBox.SetSelected(GetValue<object>().ToString());
 		}
 	}
 }

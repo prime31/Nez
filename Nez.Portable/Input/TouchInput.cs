@@ -9,12 +9,12 @@ namespace Nez
 	/// </summary>
 	public class TouchInput
 	{
-		public bool isConnected => _isConnected;
-		public TouchCollection currentTouches => _currentTouches;
+		public bool IsConnected => _isConnected;
+		public TouchCollection CurrentTouches => _currentTouches;
 
-		public TouchCollection previousTouches => _previousTouches;
-		public List<GestureSample> previousGestures => _previousGestures;
-		public List<GestureSample> currentGestures => _currentGestures;
+		public TouchCollection PreviousTouches => _previousTouches;
+		public List<GestureSample> PreviousGestures => _previousGestures;
+		public List<GestureSample> CurrentGestures => _currentGestures;
 
 		TouchCollection _previousTouches;
 		TouchCollection _currentTouches;
@@ -24,42 +24,40 @@ namespace Nez
 		bool _isConnected;
 
 
-		void onGraphicsDeviceReset()
+		void OnGraphicsDeviceReset()
 		{
-			TouchPanel.DisplayWidth = Core.graphicsDevice.Viewport.Width;
-			TouchPanel.DisplayHeight = Core.graphicsDevice.Viewport.Height;
-			TouchPanel.DisplayOrientation = Core.graphicsDevice.PresentationParameters.DisplayOrientation;
+			TouchPanel.DisplayWidth = Core.GraphicsDevice.Viewport.Width;
+			TouchPanel.DisplayHeight = Core.GraphicsDevice.Viewport.Height;
+			TouchPanel.DisplayOrientation = Core.GraphicsDevice.PresentationParameters.DisplayOrientation;
 		}
 
 
-		internal void update()
+		internal void Update()
 		{
-			if( !_isConnected )
+			if (!_isConnected)
 				return;
 
 			_previousTouches = _currentTouches;
 			_currentTouches = TouchPanel.GetState();
 
 			_previousGestures.Clear();
-			_previousGestures.AddRange( _currentGestures );
+			_previousGestures.AddRange(_currentGestures);
 			_currentGestures.Clear();
-			while( TouchPanel.IsGestureAvailable )
-				_currentGestures.Add( TouchPanel.ReadGesture() );
+			while (TouchPanel.IsGestureAvailable)
+				_currentGestures.Add(TouchPanel.ReadGesture());
 		}
 
 
-		public void enableTouchSupport()
+		public void EnableTouchSupport()
 		{
-            _isConnected = TouchPanel.GetCapabilities().IsConnected;
+			_isConnected = TouchPanel.GetCapabilities().IsConnected;
 
-			if( _isConnected )
+			if (_isConnected)
 			{
-				Core.emitter.addObserver( CoreEvents.GraphicsDeviceReset, onGraphicsDeviceReset );
-				Core.emitter.addObserver( CoreEvents.OrientationChanged, onGraphicsDeviceReset );
-				onGraphicsDeviceReset();
+				Core.Emitter.AddObserver(CoreEvents.GraphicsDeviceReset, OnGraphicsDeviceReset);
+				Core.Emitter.AddObserver(CoreEvents.OrientationChanged, OnGraphicsDeviceReset);
+				OnGraphicsDeviceReset();
 			}
 		}
-
 	}
 }
-

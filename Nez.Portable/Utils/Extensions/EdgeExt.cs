@@ -6,10 +6,10 @@ namespace Nez
 {
 	public static class EdgeExt
 	{
-		[MethodImpl( MethodImplOptions.AggressiveInlining )]
-		public static Edge oppositeEdge( this Edge self )
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public static Edge OppositeEdge(this Edge self)
 		{
-			switch( self )
+			switch (self)
 			{
 				case Edge.Bottom:
 					return Edge.Top;
@@ -30,8 +30,8 @@ namespace Nez
 		/// </summary>
 		/// <returns>The max.</returns>
 		/// <param name="self">Self.</param>
-		[MethodImpl( MethodImplOptions.AggressiveInlining )]
-		public static bool isMax( this Edge self )
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public static bool IsMax(this Edge self)
 		{
 			return self == Edge.Right || self == Edge.Bottom;
 		}
@@ -42,8 +42,8 @@ namespace Nez
 		/// </summary>
 		/// <returns>The minimum.</returns>
 		/// <param name="self">Self.</param>
-		[MethodImpl( MethodImplOptions.AggressiveInlining )]
-		public static bool isMin( this Edge self )
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public static bool IsMin(this Edge self)
 		{
 			return self == Edge.Left || self == Edge.Top;
 		}
@@ -54,8 +54,8 @@ namespace Nez
 		/// </summary>
 		/// <returns>The horizontal.</returns>
 		/// <param name="self">Self.</param>
-		[MethodImpl( MethodImplOptions.AggressiveInlining )]
-		public static bool isHorizontal( this Edge self )
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public static bool IsHorizontal(this Edge self)
 		{
 			return self == Edge.Right || self == Edge.Left;
 		}
@@ -66,12 +66,10 @@ namespace Nez
 		/// </summary>
 		/// <returns>The vertical.</returns>
 		/// <param name="self">Self.</param>
-		[MethodImpl( MethodImplOptions.AggressiveInlining )]
-		public static bool isVertical( this Edge self )
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public static bool IsVertical(this Edge self)
 		{
 			return self == Edge.Top || self == Edge.Bottom;
 		}
-
 	}
 }
-

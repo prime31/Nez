@@ -6,16 +6,16 @@ namespace Nez.UI
 	[Flags]
 	public enum Align
 	{
-		center = 1 << 0,
-		top = 1 << 1,
-		bottom = 1 << 2,
-		left = 1 << 3,
-		right = 1 << 4,
+		Center = 1 << 0,
+		Top = 1 << 1,
+		Bottom = 1 << 2,
+		Left = 1 << 3,
+		Right = 1 << 4,
 
-		topLeft = top | left,
-		topRight = top | right,
-		bottomLeft = bottom | left,
-		bottomRight = bottom | right
+		TopLeft = Top | Left,
+		TopRight = Top | Right,
+		BottomLeft = Bottom | Left,
+		BottomRight = Bottom | Right
 	}
 
 
@@ -25,16 +25,15 @@ namespace Nez.UI
 	/// </summary>
 	internal class AlignInternal
 	{
-		public const int center = 1 << 0;
-		public const int top = 1 << 1;
-		public const int bottom = 1 << 2;
-		public const int left = 1 << 3;
-		public const int right = 1 << 4;
+		public const int Center = 1 << 0;
+		public const int Top = 1 << 1;
+		public const int Bottom = 1 << 2;
+		public const int Left = 1 << 3;
+		public const int Right = 1 << 4;
 
-		public const int topLeft = top | left;
-		public const int topRight = top | right;
-		public const int bottomLeft = bottom | left;
-		public const int bottomRight = bottom | right;
+		public const int TopLeft = Top | Left;
+		public const int TopRight = Top | Right;
+		public const int BottomLeft = Bottom | Left;
+		public const int BottomRight = Bottom | Right;
 	}
 }
-

@@ -1,7 +1,4 @@
-﻿using System;
-
-
-namespace Nez.AI.UtilityAI
+﻿namespace Nez.AI.UtilityAI
 {
 	/// <summary>
 	/// Action that logs text
@@ -11,17 +8,15 @@ namespace Nez.AI.UtilityAI
 		string _text;
 
 
-		public LogAction( string text )
+		public LogAction(string text)
 		{
 			_text = text;
 		}
 
 
-		void IAction<T>.execute( T context )
+		void IAction<T>.Execute(T context)
 		{
-			Debug.log( _text );
+			Debug.Log(_text);
 		}
-
 	}
 }
-

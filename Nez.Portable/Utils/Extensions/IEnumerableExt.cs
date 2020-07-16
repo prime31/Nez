@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Collections;
 
 
@@ -13,32 +12,32 @@ namespace Nez.IEnumerableExtensions
 		/// <typeparam name="TSource">The source type.</typeparam>
 		/// <param name="source">The source IEnumerable.</param>
 		/// <returns>The number of items in the source.</returns>
-		public static int count<TSource>( this IEnumerable<TSource> source )
+		public static int Count<TSource>(this IEnumerable<TSource> source)
 		{
-			Insist.isNotNull( source, "source cannot be null" );
+			Insist.IsNotNull(source, "source cannot be null");
 
 			// Optimization for ICollection<T> 
 			var genericCollection = source as ICollection<TSource>;
-			if( genericCollection != null )
+			if (genericCollection != null)
 				return genericCollection.Count;
 
 			// Optimization for ICollection 
 			var nonGenericCollection = source as ICollection;
-			if( nonGenericCollection != null )
+			if (nonGenericCollection != null)
 				return nonGenericCollection.Count;
 
 			// Do it the slow way - and make sure we overflow appropriately 
 			checked
 			{
 				int count = 0;
-				using( var iterator = source.GetEnumerator() )
+				using (var iterator = source.GetEnumerator())
 				{
-					while( iterator.MoveNext() )
+					while (iterator.MoveNext())
 						count++;
 				}
+
 				return count;
 			}
 		}
 	}
 }
-

@@ -12,22 +12,22 @@ namespace Nez.UI
 	/// </summary>
 	public class VerticalGroup : Group
 	{
-		public override float preferredWidth
+		public override float PreferredWidth
 		{
 			get
 			{
-				if( _sizeInvalid )
-					computeSize();
+				if (_sizeInvalid)
+					ComputeSize();
 				return _prefWidth;
 			}
 		}
 
-		public override float preferredHeight
+		public override float PreferredHeight
 		{
 			get
 			{
-				if( _sizeInvalid )
-					computeSize();
+				if (_sizeInvalid)
+					ComputeSize();
 				return _prefHeight;
 			}
 		}
@@ -49,105 +49,105 @@ namespace Nez.UI
 		}
 
 
-		public VerticalGroup( float spacing ) : this()
+		public VerticalGroup(float spacing) : this()
 		{
-			setSpacing( spacing );
+			SetSpacing(spacing);
 		}
 
 
-		public override void invalidate()
+		public override void Invalidate()
 		{
 			_sizeInvalid = true;
-			base.invalidate();
+			base.Invalidate();
 		}
 
 
-		void computeSize()
+		void ComputeSize()
 		{
 			_sizeInvalid = false;
 			_prefWidth = 0;
-			_prefHeight = _padTop + _padBottom + _spacing * ( children.Count - 1 );
-			for( var i = 0; i < children.Count; i++ )
+			_prefHeight = _padTop + _padBottom + _spacing * (children.Count - 1);
+			for (var i = 0; i < children.Count; i++)
 			{
 				var child = children[i];
-				if( child is ILayout )
+				if (child is ILayout)
 				{
-					var layout = (ILayout)child;
-					_prefWidth = Math.Max( _prefWidth, layout.preferredWidth );
-					_prefHeight += layout.preferredHeight;
+					var layout = (ILayout) child;
+					_prefWidth = Math.Max(_prefWidth, layout.PreferredWidth);
+					_prefHeight += layout.PreferredHeight;
 				}
 				else
 				{
-					_prefWidth = Math.Max( _prefWidth, child.width );
+					_prefWidth = Math.Max(_prefWidth, child.width);
 					_prefHeight += child.height;
 				}
 			}
 
 			_prefWidth += _padLeft + _padRight;
-			if( _round )
+			if (_round)
 			{
-				_prefWidth = Mathf.round( _prefWidth );
-				_prefHeight = Mathf.round( _prefHeight );
+				_prefWidth = Mathf.Round(_prefWidth);
+				_prefHeight = Mathf.Round(_prefHeight);
 			}
 		}
 
 
-		public override void layout()
+		public override void Layout()
 		{
 			var groupWidth = width - _padLeft - _padRight;
 			var y = _reverse ? height - _padBottom + _spacing : _padTop;
 
-			for( var i = 0; i < children.Count; i++ )
+			for (var i = 0; i < children.Count; i++)
 			{
 				var child = children[i];
 				float width, height;
 
 				ILayout layout = null;
-				if( child is ILayout )
+				if (child is ILayout)
 				{
-					layout = (ILayout)child;
-					if( _fill > 0 )
+					layout = (ILayout) child;
+					if (_fill > 0)
 						width = groupWidth * _fill;
 					else
-						width = Math.Min( layout.preferredWidth, groupWidth );
-					width = Math.Max( width, layout.minWidth );
+						width = Math.Min(layout.PreferredWidth, groupWidth);
+					width = Math.Max(width, layout.MinWidth);
 
-					if( layout.maxWidth > 0 && width > layout.maxWidth )
-						width = layout.maxWidth;
-					height = layout.preferredHeight;
+					if (layout.MaxWidth > 0 && width > layout.MaxWidth)
+						width = layout.MaxWidth;
+					height = layout.PreferredHeight;
 				}
 				else
 				{
 					width = child.width;
 					height = child.height;
 
-					if( _fill > 0 )
+					if (_fill > 0)
 						width *= _fill;
 				}
 
 				var x = _padLeft;
-				if( ( _align & AlignInternal.right ) != 0 )
+				if ((_align & AlignInternal.Right) != 0)
 					x += groupWidth - width;
-				else if( ( _align & AlignInternal.left ) == 0 ) // center
-					x += ( groupWidth - width ) / 2;
-				
-				if( _reverse )
-					y -= ( height + _spacing );
-				
-				if( _round )
-					child.setBounds( Mathf.round( x ), Mathf.round( y ), Mathf.round( width ), Mathf.round( height ) );
-				else
-					child.setBounds( x, y, width, height );
-				
-				if( !_reverse )
-					y += ( height + _spacing );
+				else if ((_align & AlignInternal.Left) == 0) // center
+					x += (groupWidth - width) / 2;
 
-				if( layout != null )
-					layout.validate();
+				if (_reverse)
+					y -= (height + _spacing);
+
+				if (_round)
+					child.SetBounds(Mathf.Round(x), Mathf.Round(y), Mathf.Round(width), Mathf.Round(height));
+				else
+					child.SetBounds(x, y, width, height);
+
+				if (!_reverse)
+					y += (height + _spacing);
+
+				if (layout != null)
+					layout.Validate();
 			}
 		}
 
-	
+
 		#region Configuration
 
 		/// <summary>
@@ -155,9 +155,9 @@ namespace Nez.UI
 		/// {@link Align#bottom}, {@link Align#left}, {@link Align#right}, or any combination of those
 		/// </summary>
 		/// <param name="align">Align.</param>
-		public VerticalGroup setAlignment( Align align )
+		public VerticalGroup SetAlignment(Align align)
 		{
-			_align = (int)align;
+			_align = (int) align;
 			return this;
 		}
 
@@ -166,7 +166,7 @@ namespace Nez.UI
 		/// If true, the children will be ordered from bottom to top rather than the default top to bottom.
 		/// </summary>
 		/// <param name="reverse">If set to <c>true</c> reverse.</param>
-		public VerticalGroup setReverse( bool reverse )
+		public VerticalGroup SetReverse(bool reverse)
 		{
 			_reverse = reverse;
 			return this;
@@ -177,7 +177,7 @@ namespace Nez.UI
 		/// Sets the space between children
 		/// </summary>
 		/// <param name="spacing">Spacing.</param>
-		public VerticalGroup setSpacing( float spacing )
+		public VerticalGroup SetSpacing(float spacing)
 		{
 			_spacing = spacing;
 			return this;
@@ -188,7 +188,7 @@ namespace Nez.UI
 		/// Sets the padTop, padLeft, padBottom, and padRight to the specified value
 		/// </summary>
 		/// <param name="pad">Pad.</param>
-		public VerticalGroup setPad( float pad )
+		public VerticalGroup SetPad(float pad)
 		{
 			_padTop = pad;
 			_padLeft = pad;
@@ -198,7 +198,7 @@ namespace Nez.UI
 		}
 
 
-		public VerticalGroup setPad( float top, float left, float bottom, float right )
+		public VerticalGroup SetPad(float top, float left, float bottom, float right)
 		{
 			_padTop = top;
 			_padLeft = left;
@@ -208,28 +208,28 @@ namespace Nez.UI
 		}
 
 
-		public VerticalGroup setPadTop( float padTop )
+		public VerticalGroup SetPadTop(float padTop)
 		{
 			_padTop = padTop;
 			return this;
 		}
 
 
-		public VerticalGroup setPadLeft( float padLeft )
+		public VerticalGroup SetPadLeft(float padLeft)
 		{
 			_padLeft = padLeft;
 			return this;
 		}
 
 
-		public VerticalGroup setPadBottom( float padBottom )
+		public VerticalGroup SetPadBottom(float padBottom)
 		{
 			_padBottom = padBottom;
 			return this;
 		}
 
 
-		public VerticalGroup setPadRight( float padRight )
+		public VerticalGroup SetPadRight(float padRight)
 		{
 			_padRight = padRight;
 			return this;
@@ -240,7 +240,7 @@ namespace Nez.UI
 		/// If true (the default), positions and sizes are rounded to integers.
 		/// </summary>
 		/// <param name="round">If set to <c>true</c> round.</param>
-		public VerticalGroup setRound( bool round )
+		public VerticalGroup SetRound(bool round)
 		{
 			_round = round;
 			return this;
@@ -251,14 +251,12 @@ namespace Nez.UI
 		/// fill 0 will use pref width
 		/// </summary>
 		/// <param name="fill">Fill.</param>
-		public VerticalGroup setFill( float fill )
+		public VerticalGroup SetFill(float fill)
 		{
 			_fill = fill;
 			return this;
 		}
 
 		#endregion
-
 	}
 }
-

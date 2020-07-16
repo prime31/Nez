@@ -2,77 +2,79 @@ using System.Collections.Generic;
 using ImGuiNET;
 using Nez.ImGuiTools.TypeInspectors;
 
+
 namespace Nez.ImGuiTools.ObjectInspectors
 {
-    public class PostProcessorInspector
-    {
-        public PostProcessor postProcessor => _postProcessor;
+	public class PostProcessorInspector
+	{
+		public PostProcessor PostProcessor => _postProcessor;
 
-        protected List<AbstractTypeInspector> _inspectors;
+		protected List<AbstractTypeInspector> _inspectors;
 		protected int _scopeId = NezImGui.GetScopeId();
 
-        PostProcessor _postProcessor;
+		PostProcessor _postProcessor;
 
-        public PostProcessorInspector( PostProcessor postProcessor )
-        {
-            _postProcessor = postProcessor;
-            _inspectors = TypeInspectorUtils.getInspectableProperties( postProcessor );
+		public PostProcessorInspector(PostProcessor postProcessor)
+		{
+			_postProcessor = postProcessor;
+			_inspectors = TypeInspectorUtils.GetInspectableProperties(postProcessor);
 
 			// if we are a Material<T>, we need to fix the duplicate Effect due to the "new T effect"
-			if( ReflectionUtils.isGenericTypeOrSubclassOfGenericType( _postProcessor.GetType() ) )
+			if (ReflectionUtils.IsGenericTypeOrSubclassOfGenericType(_postProcessor.GetType()))
 			{
 				var didFindEffectInspector = false;
-				for( var i = 0; i < _inspectors.Count; i++ )
+				for (var i = 0; i < _inspectors.Count; i++)
 				{
 					var isEffectInspector = _inspectors[i] is Nez.ImGuiTools.TypeInspectors.EffectInspector;
-					if( isEffectInspector )
+					if (isEffectInspector)
 					{
-						if( didFindEffectInspector )
+						if (didFindEffectInspector)
 						{
-							_inspectors.RemoveAt( i );
+							_inspectors.RemoveAt(i);
 							break;
 						}
+
 						didFindEffectInspector = true;
 					}
 				}
 			}
 
-            for( var i = 0; i < _inspectors.Count; i++ )
-            {
-                var effectInspector = _inspectors[i] as Nez.ImGuiTools.TypeInspectors.EffectInspector;
-                if( effectInspector != null )
-                    effectInspector.allowsEffectRemoval = false;
-            }
-        }
-
-        public void draw()
-        {
-            ImGui.PushID( _scopeId );
-            var isOpen = ImGui.CollapsingHeader( _postProcessor.GetType().Name.Replace( "PostProcessor", string.Empty ) );
-            
-            NezImGui.ShowContextMenuTooltip();
-
-			if( ImGui.BeginPopupContextItem() )
+			for (var i = 0; i < _inspectors.Count; i++)
 			{
-				if( ImGui.Selectable( "Remove PostProcessor" ) )
+				var effectInspector = _inspectors[i] as Nez.ImGuiTools.TypeInspectors.EffectInspector;
+				if (effectInspector != null)
+					effectInspector.AllowsEffectRemoval = false;
+			}
+		}
+
+		public void Draw()
+		{
+			ImGui.PushID(_scopeId);
+			var isOpen = ImGui.CollapsingHeader(_postProcessor.GetType().Name.Replace("PostProcessor", string.Empty));
+
+			NezImGui.ShowContextMenuTooltip();
+
+			if (ImGui.BeginPopupContextItem())
+			{
+				if (ImGui.Selectable("Remove PostProcessor"))
 				{
-                    isOpen = false;
-                    Core.scene.removePostProcessor( _postProcessor );
+					isOpen = false;
+					Core.Scene.RemovePostProcessor(_postProcessor);
 					ImGui.CloseCurrentPopup();
 				}
 
 				ImGui.EndPopup();
 			}
 
-            if( isOpen )
-            {
-                ImGui.Indent();
-                foreach( var inspector in _inspectors )
-                    inspector.draw();
-                ImGui.Unindent();
-            }
+			if (isOpen)
+			{
+				ImGui.Indent();
+				foreach (var inspector in _inspectors)
+					inspector.Draw();
+				ImGui.Unindent();
+			}
 
-            ImGui.PopID();
-        }
-    }
+			ImGui.PopID();
+		}
+	}
 }

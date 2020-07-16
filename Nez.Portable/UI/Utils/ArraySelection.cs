@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 
 
@@ -12,43 +11,45 @@ namespace Nez.UI
 		int rangeStart;
 
 
-		public ArraySelection( List<T> array )
+		public ArraySelection(List<T> array)
 		{
 			this.array = array;
 		}
 
 
-		public override void choose( T item )
+		public override void Choose(T item)
 		{
-			Insist.isNotNull( item, "item cannot be null" );
-			if( _isDisabled )
+			Insist.IsNotNull(item, "item cannot be null");
+			if (_isDisabled)
 				return;
-			
-			var index = array.IndexOf( item );
-			if( selected.Count > 0 && rangeSelect && multiple && InputUtils.isShiftDown() )
+
+			var index = array.IndexOf(item);
+			if (selected.Count > 0 && rangeSelect && multiple && InputUtils.IsShiftDown())
 			{
 				int oldRangeState = rangeStart;
-				snapshot();
+				Snapshot();
+
 				// Select new range.
 				int start = rangeStart, end = index;
-				if( start > end )
+				if (start > end)
 				{
 					var temp = end;
 					end = start;
 					start = temp;
 				}
 
-				if( !InputUtils.isControlDown() )
+				if (!InputUtils.IsControlDown())
 					selected.Clear();
-				for( int i = start; i <= end; i++ )
-					selected.Add( array[i] );
+				for (int i = start; i <= end; i++)
+					selected.Add(array[i]);
 
-				if( fireChangeEvent() )
+				if (FireChangeEvent())
 				{
 					rangeStart = oldRangeState;
-					revert();
+					Revert();
 				}
-				cleanup();
+
+				Cleanup();
 				return;
 			}
 			else
@@ -56,17 +57,17 @@ namespace Nez.UI
 				rangeStart = index;
 			}
 
-			base.choose( item );
+			base.Choose(item);
 		}
 
 
-		public bool getRangeSelect()
+		public bool GetRangeSelect()
 		{
 			return rangeSelect;
 		}
 
 
-		public void setRangeSelect( bool rangeSelect )
+		public void SetRangeSelect(bool rangeSelect)
 		{
 			this.rangeSelect = rangeSelect;
 		}
@@ -76,24 +77,23 @@ namespace Nez.UI
 		/// Removes objects from the selection that are no longer in the items array. If getRequired() is true and there is
 		/// no selected item, the first item is selected.
 		/// </summary>
-		public void validate()
+		public void Validate()
 		{
-			if( array.Count == 0 )
+			if (array.Count == 0)
 			{
-				clear();
+				Clear();
 				return;
 			}
 
-			for( var i = selected.Count - 1; i >= 0; i-- )
+			for (var i = selected.Count - 1; i >= 0; i--)
 			{
 				var item = selected[i];
-				if( !array.Contains( item ) )
-					selected.Remove( item );
+				if (!array.Contains(item))
+					selected.Remove(item);
 			}
 
-			if( required && selected.Count == 0 )
-				set( array.First() );
+			if (required && selected.Count == 0)
+				Set(array.First());
 		}
 	}
 }
-

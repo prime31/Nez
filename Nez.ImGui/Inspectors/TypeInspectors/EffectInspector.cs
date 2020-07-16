@@ -10,50 +10,49 @@ namespace Nez.ImGuiTools.TypeInspectors
 {
 	public class EffectInspector : AbstractTypeInspector
 	{
-		public bool allowsEffectRemoval = true;
+		public bool AllowsEffectRemoval = true;
 
 		List<AbstractTypeInspector> _inspectors = new List<AbstractTypeInspector>();
 
-		public override void initialize()
+		public override void Initialize()
 		{
-			base.initialize();
+			base.Initialize();
 
-			var effect = getValue<Effect>();
+			var effect = GetValue<Effect>();
 			_name += $" ({effect.GetType().Name})";
 
-			var inspectors = TypeInspectorUtils.getInspectableProperties( effect );
-			foreach( var inspector in inspectors )
+			var inspectors = TypeInspectorUtils.GetInspectableProperties(effect);
+			foreach (var inspector in inspectors)
 			{
 				// we dont need the Name field. It serves no purpose.
-				if( inspector.name != "Name" )
-					_inspectors.Add( inspector );
+				if (inspector.Name != "Name")
+					_inspectors.Add(inspector);
 			}
 		}
 
-		public override void drawMutable()
+		public override void DrawMutable()
 		{
-			var isOpen = ImGui.CollapsingHeader( $"{_name}", ImGuiTreeNodeFlags.FramePadding );
+			var isOpen = ImGui.CollapsingHeader($"{_name}", ImGuiTreeNodeFlags.FramePadding);
 
-			if( allowsEffectRemoval )
+			if (AllowsEffectRemoval)
 				NezImGui.ShowContextMenuTooltip();
 
-			if( allowsEffectRemoval && ImGui.BeginPopupContextItem() )
+			if (AllowsEffectRemoval && ImGui.BeginPopupContextItem())
 			{
-				if( ImGui.Selectable( "Remove Effect" ) )
+				if (ImGui.Selectable("Remove Effect"))
 				{
-					setValue( null );
+					SetValue(null);
 					_isTargetDestroyed = true;
 				}
 
 				ImGui.EndPopup();
 			}
 
-			if( isOpen && !_isTargetDestroyed )
+			if (isOpen && !_isTargetDestroyed)
 			{
-				foreach( var i in _inspectors )
-					i.draw();
+				foreach (var i in _inspectors)
+					i.Draw();
 			}
 		}
-	
 	}
 }

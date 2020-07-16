@@ -31,35 +31,35 @@ namespace FarseerPhysics.Dynamics
 	/// <summary>
 	/// This delegate is called when a contact is deleted
 	/// </summary>
-	public delegate void EndContactDelegate( Contact contact );
+	public delegate void EndContactDelegate(Contact contact);
 
 	/// <summary>
 	/// This delegate is called when a contact is created
 	/// </summary>
-	public delegate bool BeginContactDelegate( Contact contact );
+	public delegate bool BeginContactDelegate(Contact contact);
 
-	public delegate void PreSolveDelegate( Contact contact, ref Manifold oldManifold );
+	public delegate void PreSolveDelegate(Contact contact, ref Manifold oldManifold);
 
-	public delegate void PostSolveDelegate( Contact contact, ContactVelocityConstraint impulse );
+	public delegate void PostSolveDelegate(Contact contact, ContactVelocityConstraint impulse);
 
-	public delegate void FixtureDelegate( Fixture fixture );
+	public delegate void FixtureDelegate(Fixture fixture);
 
-	public delegate void JointDelegate( Joint joint );
+	public delegate void JointDelegate(Joint joint);
 
-	public delegate void BodyDelegate( Body body );
+	public delegate void BodyDelegate(Body body);
 
-	public delegate void ControllerDelegate( Controller controller );
+	public delegate void ControllerDelegate(Controller controller);
 
-	public delegate bool CollisionFilterDelegate( Fixture fixtureA, Fixture fixtureB );
+	public delegate bool CollisionFilterDelegate(Fixture fixtureA, Fixture fixtureB);
 
-	public delegate void BroadphaseDelegate( ref FixtureProxy proxyA, ref FixtureProxy proxyB );
+	public delegate void BroadphaseDelegate(ref FixtureProxy proxyA, ref FixtureProxy proxyB);
 
-	public delegate bool BeforeCollisionEventHandler( Fixture fixtureA, Fixture fixtureB );
+	public delegate bool BeforeCollisionEventHandler(Fixture fixtureA, Fixture fixtureB);
 
-	public delegate bool OnCollisionEventHandler( Fixture fixtureA, Fixture fixtureB, Contact contact );
+	public delegate bool OnCollisionEventHandler(Fixture fixtureA, Fixture fixtureB, Contact contact);
 
-	public delegate void AfterCollisionEventHandler( Fixture fixtureA, Fixture fixtureB, Contact contact, ContactVelocityConstraint impulse );
+	public delegate void AfterCollisionEventHandler(Fixture fixtureA, Fixture fixtureB, Contact contact,
+	                                                ContactVelocityConstraint impulse);
 
-	public delegate void OnSeparationEventHandler( Fixture fixtureA, Fixture fixtureB );
-
+	public delegate void OnSeparationEventHandler(Fixture fixtureA, Fixture fixtureB);
 }

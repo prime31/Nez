@@ -1,5 +1,4 @@
-﻿using System;
-using Microsoft.Xna.Framework.Graphics;
+﻿using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
 
 
@@ -19,29 +18,29 @@ namespace Nez
 		/// alpha value used for the comparison. Should be in the 0 - 1 range. Defaults to 0.5f.
 		/// </summary>
 		/// <value>The reference alpha.</value>
-		[Range( 0, 1 )]
-		public float referenceAlpha
+		[Range(0, 1)]
+		public float ReferenceAlpha
 		{
 			get => _referenceAlpha;
 			set
 			{
-				if( _referenceAlpha != value )
+				if (_referenceAlpha != value)
 				{
 					_referenceAlpha = value;
-					updateEffectParameter();
+					UpdateEffectParameter();
 				}
 			}
 		}
 
-		public AlphaTestCompareFunction compareFunction
+		public AlphaTestCompareFunction CompareFunction
 		{
 			get => _compareFunction;
 			set
 			{
-				if( _compareFunction != value )
+				if (_compareFunction != value)
 				{
 					_compareFunction = value;
-					updateEffectParameter();
+					UpdateEffectParameter();
 				}
 			}
 		}
@@ -52,21 +51,21 @@ namespace Nez
 		EffectParameter _alphaTestParam;
 
 
-		public SpriteAlphaTestEffect() : base( Core.graphicsDevice, EffectResource.spriteAlphaTestBytes )
+		public SpriteAlphaTestEffect() : base(Core.GraphicsDevice, EffectResource.SpriteAlphaTestBytes)
 		{
 			_alphaTestParam = Parameters["_alphaTest"];
-			updateEffectParameter();
+			UpdateEffectParameter();
 		}
 
 
-		void updateEffectParameter()
+		void UpdateEffectParameter()
 		{
 			var value = new Vector3();
 
 			// reference alpha is packed in the x param
 			value.X = _referenceAlpha;
 
-			switch( _compareFunction )
+			switch (_compareFunction)
 			{
 				case AlphaTestCompareFunction.Greater:
 					value.Y = -1;
@@ -86,8 +85,7 @@ namespace Nez
 					break;
 			}
 
-			_alphaTestParam.SetValue( value );
+			_alphaTestParam.SetValue(value);
 		}
 	}
 }
-

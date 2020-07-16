@@ -10,12 +10,12 @@ namespace Nez
 		/// value from 0 - 1 that determines how much the dissolve effect will encompass
 		/// </summary>
 		/// <value>The progress.</value>
-		public float progress
+		public float Progress
 		{
-			get { return _progress; }
+			get => _progress;
 			set
 			{
-				_progressParam.SetValue( value );
+				_progressParam.SetValue(value);
 				_progress = value;
 			}
 		}
@@ -24,12 +24,12 @@ namespace Nez
 		/// determines how much area around the current dissolve threshold will be colored with dissolveThresholdColor
 		/// </summary>
 		/// <value>The dissolve threshold.</value>
-		public float dissolveThreshold
+		public float DissolveThreshold
 		{
-			get { return _dissolveThreshold; }
+			get => _dissolveThreshold;
 			set
 			{
-				_dissolveThresholdParam.SetValue( value );
+				_dissolveThresholdParam.SetValue(value);
 				_dissolveThreshold = value;
 			}
 		}
@@ -38,12 +38,12 @@ namespace Nez
 		/// the Color that will appear on the threshold of the dissolve effect
 		/// </summary>
 		/// <value>The color of the dissolve threshold.</value>
-		public Color dissolveThresholdColor
+		public Color DissolveThresholdColor
 		{
-			get { return _dissolveThresholdColor; }
+			get => _dissolveThresholdColor;
 			set
 			{
-				_dissolveThresholdColorParam.SetValue( value.ToVector4() );
+				_dissolveThresholdColorParam.SetValue(value.ToVector4());
 				_dissolveThresholdColor = value;
 			}
 		}
@@ -52,9 +52,9 @@ namespace Nez
 		/// the grayscale texture used to determine what is disolved
 		/// </summary>
 		/// <value>The dissolve texture.</value>
-		public Texture2D dissolveTexture
+		public Texture2D DissolveTexture
 		{
-			set { _dissolveTexParam.SetValue( value ); }
+			set => _dissolveTexParam.SetValue(value);
 		}
 
 		float _progress = 0f;
@@ -68,18 +68,17 @@ namespace Nez
 		EffectParameter _dissolveTexParam;
 
 
-		public DissolveEffect( Texture2D dissolveTexture ) : base( Core.graphicsDevice, EffectResource.dissolveBytes )
+		public DissolveEffect(Texture2D dissolveTexture) : base(Core.GraphicsDevice, EffectResource.DissolveBytes)
 		{
 			_progressParam = Parameters["_progress"];
 			_dissolveThresholdParam = Parameters["_dissolveThreshold"];
 			_dissolveThresholdColorParam = Parameters["_dissolveThresholdColor"];
 			_dissolveTexParam = Parameters["_dissolveTex"];
 
-			_progressParam.SetValue( _progress );
-			_dissolveThresholdParam.SetValue( _dissolveThreshold );
-			_dissolveThresholdColorParam.SetValue( _dissolveThresholdColor.ToVector4() );
-			_dissolveTexParam.SetValue( dissolveTexture );
+			_progressParam.SetValue(_progress);
+			_dissolveThresholdParam.SetValue(_dissolveThreshold);
+			_dissolveThresholdColorParam.SetValue(_dissolveThresholdColor.ToVector4());
+			_dissolveTexParam.SetValue(dissolveTexture);
 		}
 	}
 }
-

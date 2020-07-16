@@ -6,8 +6,8 @@ namespace Nez.Tweens
 {
 	public class TransformSpringTween : AbstractTweenable
 	{
-		public TransformTargetType targetType { get { return _targetType; } }
-		
+		public TransformTargetType TargetType => _targetType;
+
 		Transform _transform;
 		TransformTargetType _targetType;
 		Vector2 _targetValue;
@@ -19,23 +19,23 @@ namespace Nez.Tweens
 		/// lower values are less damped and higher values are more damped resulting in less springiness.
 		/// should be between 0.01f, 1f to avoid unstable systems.
 		/// </summary>
-		public float dampingRatio = 0.23f;
+		public float DampingRatio = 0.23f;
 
 		/// <summary>
 		/// An angular frequency of 2pi (radians per second) means the oscillation completes one
 		/// full period over one second, i.e. 1Hz. should be less than 35 or so to remain stableThe angular frequency.
 		/// </summary>
-		public float angularFrequency = 25;
+		public float AngularFrequency = 25;
 
 
 		/// <summary>
 		/// Initializes a new instance of the TransformSpringTween class.
 		/// </summary>
-		public TransformSpringTween( Transform transform, TransformTargetType targetType, Vector2 targetValue )
+		public TransformSpringTween(Transform transform, TransformTargetType targetType, Vector2 targetValue)
 		{
 			_transform = transform;
 			_targetType = targetType;
-			setTargetValue( targetValue );
+			SetTargetValue(targetValue);
 		}
 
 
@@ -44,13 +44,13 @@ namespace Nez.Tweens
 		/// spring tween it will be called for you.
 		/// </summary>
 		/// <param name="targetValue">Target value.</param>
-		public void setTargetValue( Vector2 targetValue )
+		public void SetTargetValue(Vector2 targetValue)
 		{
 			_velocity = Vector2.Zero;
 			_targetValue = targetValue;
 
-			if( !_isCurrentlyManagedByTweenManager )
-				start();
+			if (!_isCurrentlyManagedByTweenManager)
+				Start();
 		}
 
 
@@ -58,18 +58,19 @@ namespace Nez.Tweens
 		/// lambda should be the desired duration when the oscillation magnitude is reduced by 50%
 		/// </summary>
 		/// <param name="lambda">Lambda.</param>
-		public void updateDampingRatioWithHalfLife( float lambda )
+		public void UpdateDampingRatioWithHalfLife(float lambda)
 		{
-			dampingRatio = ( -lambda / angularFrequency ) * (float)Math.Log( 0.5f );
+			DampingRatio = (-lambda / AngularFrequency) * (float) Math.Log(0.5f);
 		}
 
 
 		#region AbstractTweenable
 
-		public override bool tick()
+		public override bool Tick()
 		{
-			if( !_isPaused )
-				setTweenedValue( Lerps.fastSpring( getCurrentValueOfTweenedTargetType(), _targetValue, ref _velocity, dampingRatio, angularFrequency ) );
+			if (!_isPaused)
+				SetTweenedValue(Lerps.FastSpring(GetCurrentValueOfTweenedTargetType(), _targetValue, ref _velocity,
+					DampingRatio, AngularFrequency));
 
 			return false;
 		}
@@ -77,49 +78,48 @@ namespace Nez.Tweens
 		#endregion
 
 
-		void setTweenedValue( Vector2 value )
+		void SetTweenedValue(Vector2 value)
 		{
-			switch( _targetType )
+			switch (_targetType)
 			{
 				case TransformTargetType.Position:
-					_transform.position = value;
+					_transform.Position = value;
 					break;
 				case TransformTargetType.LocalPosition:
-					_transform.localPosition = value;
+					_transform.LocalPosition = value;
 					break;
 				case TransformTargetType.LocalScale:
-					_transform.localScale = value;
+					_transform.LocalScale = value;
 					break;
 				case TransformTargetType.RotationDegrees:
-					_transform.rotationDegrees = value.X;
+					_transform.RotationDegrees = value.X;
 					break;
 				case TransformTargetType.LocalRotationDegrees:
-					_transform.localRotationDegrees = value.X;
+					_transform.LocalRotationDegrees = value.X;
 					break;
 				default:
-					throw new System.ArgumentOutOfRangeException();
+					throw new ArgumentOutOfRangeException();
 			}
 		}
 
 
-		Vector2 getCurrentValueOfTweenedTargetType()
+		Vector2 GetCurrentValueOfTweenedTargetType()
 		{
-			switch( _targetType )
+			switch (_targetType)
 			{
 				case TransformTargetType.Position:
-					return _transform.position;
+					return _transform.Position;
 				case TransformTargetType.LocalPosition:
-					return _transform.localPosition;
+					return _transform.LocalPosition;
 				case TransformTargetType.LocalScale:
-					return _transform.localScale;
+					return _transform.LocalScale;
 				case TransformTargetType.RotationDegrees:
-					return new Vector2( _transform.rotationDegrees, 0 );
+					return new Vector2(_transform.RotationDegrees, 0);
 				case TransformTargetType.LocalRotationDegrees:
-					return new Vector2( _transform.localRotationDegrees, 0 );
+					return new Vector2(_transform.LocalRotationDegrees, 0);
 			}
 
 			return Vector2.Zero;
 		}
-
 	}
 }

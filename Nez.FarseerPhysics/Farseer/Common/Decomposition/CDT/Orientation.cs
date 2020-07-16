@@ -31,10 +31,10 @@
 
 namespace FarseerPhysics.Common.Decomposition.CDT
 {
-    internal enum Orientation
-    {
-        CW,
-        CCW,
-        Collinear
-    }
+	internal enum Orientation
+	{
+		CW,
+		CCW,
+		Collinear
+	}
 }

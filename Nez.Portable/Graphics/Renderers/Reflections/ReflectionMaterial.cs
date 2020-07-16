@@ -1,6 +1,4 @@
-﻿using System;
-using Nez;
-using Microsoft.Xna.Framework.Graphics;
+﻿using Microsoft.Xna.Framework.Graphics;
 using Nez.Textures;
 
 
@@ -11,28 +9,27 @@ namespace Nez
 	/// </summary>
 	public class ReflectionMaterial : Material<ReflectionEffect>
 	{
-		public RenderTexture renderTexture;
+		public RenderTexture RenderTexture;
 
 		RenderTarget2D _renderTarget;
 
 
-		public ReflectionMaterial( ReflectionRenderer reflectionRenderer ) : base( new ReflectionEffect() )
+		public ReflectionMaterial(ReflectionRenderer reflectionRenderer) : base(new ReflectionEffect())
 		{
-			renderTexture = reflectionRenderer.renderTexture;
+			RenderTexture = reflectionRenderer.RenderTexture;
 		}
 
 
-		public override void onPreRender( Camera camera )
+		public override void OnPreRender(Camera camera)
 		{
 			// only update the Shader when the renderTarget changes. it will be swapped out whenever the GraphicsDevice resets.
-			if( _renderTarget == null || _renderTarget != renderTexture.renderTarget )
+			if (_renderTarget == null || _renderTarget != RenderTexture.RenderTarget)
 			{
-				_renderTarget = renderTexture.renderTarget;
-				effect.renderTexture = renderTexture.renderTarget;
+				_renderTarget = RenderTexture.RenderTarget;
+				Effect.RenderTexture = RenderTexture.RenderTarget;
 			}
 
-			effect.matrixTransform = camera.viewProjectionMatrix;
+			Effect.MatrixTransform = camera.ViewProjectionMatrix;
 		}
 	}
 }
-

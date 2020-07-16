@@ -6,23 +6,24 @@ namespace Nez.Tweens
 {
 	public class IntTween : Tween<int>
 	{
-		public static IntTween create()
+		public static IntTween Create()
 		{
-			return TweenManager.cacheIntTweens ? Pool<IntTween>.obtain() : new IntTween();
+			return TweenManager.CacheIntTweens ? Pool<IntTween>.Obtain() : new IntTween();
 		}
 
 
 		public IntTween()
-		{ }
-
-
-		public IntTween( ITweenTarget<int> target, int to, float duration )
 		{
-			initialize( target, to, duration );
 		}
 
 
-		public override ITween<int> setIsRelative()
+		public IntTween(ITweenTarget<int> target, int to, float duration)
+		{
+			Initialize(target, to, duration);
+		}
+
+
+		public override ITween<int> SetIsRelative()
 		{
 			_isRelative = true;
 			_toValue += _fromValue;
@@ -30,41 +31,42 @@ namespace Nez.Tweens
 		}
 
 
-		protected override void updateValue()
+		protected override void UpdateValue()
 		{
-			_target.setTweenedValue( (int)Lerps.ease( _easeType, _fromValue, _toValue, _elapsedTime, _duration ) );
+			_target.SetTweenedValue((int) Lerps.Ease(_easeType, _fromValue, _toValue, _elapsedTime, _duration));
 		}
 
 
-		public override void recycleSelf()
+		public override void RecycleSelf()
 		{
-			base.recycleSelf();
+			base.RecycleSelf();
 
-			if( _shouldRecycleTween && TweenManager.cacheIntTweens )
-				Pool<IntTween>.free( this );
+			if (_shouldRecycleTween && TweenManager.CacheIntTweens)
+				Pool<IntTween>.Free(this);
 		}
 	}
 
 
 	public class FloatTween : Tween<float>
 	{
-		public static FloatTween create()
+		public static FloatTween Create()
 		{
-			return TweenManager.cacheFloatTweens ? Pool<FloatTween>.obtain() : new FloatTween();
+			return TweenManager.CacheFloatTweens ? Pool<FloatTween>.Obtain() : new FloatTween();
 		}
 
 
 		public FloatTween()
-		{ }
-
-
-		public FloatTween( ITweenTarget<float> target, float to, float duration )
 		{
-			initialize( target, to, duration );
 		}
 
 
-		public override ITween<float> setIsRelative()
+		public FloatTween(ITweenTarget<float> target, float to, float duration)
+		{
+			Initialize(target, to, duration);
+		}
+
+
+		public override ITween<float> SetIsRelative()
 		{
 			_isRelative = true;
 			_toValue += _fromValue;
@@ -72,41 +74,42 @@ namespace Nez.Tweens
 		}
 
 
-		protected override void updateValue()
+		protected override void UpdateValue()
 		{
-			_target.setTweenedValue( Lerps.ease( _easeType, _fromValue, _toValue, _elapsedTime, _duration ) );
+			_target.SetTweenedValue(Lerps.Ease(_easeType, _fromValue, _toValue, _elapsedTime, _duration));
 		}
 
 
-		public override void recycleSelf()
+		public override void RecycleSelf()
 		{
-			base.recycleSelf();
+			base.RecycleSelf();
 
-			if( _shouldRecycleTween && TweenManager.cacheFloatTweens )
-				Pool<FloatTween>.free( this );
+			if (_shouldRecycleTween && TweenManager.CacheFloatTweens)
+				Pool<FloatTween>.Free(this);
 		}
 	}
 
 
 	public class Vector2Tween : Tween<Vector2>
 	{
-		public static Vector2Tween create()
+		public static Vector2Tween Create()
 		{
-			return TweenManager.cacheVector2Tweens ? Pool<Vector2Tween>.obtain() : new Vector2Tween();
+			return TweenManager.CacheVector2Tweens ? Pool<Vector2Tween>.Obtain() : new Vector2Tween();
 		}
 
 
 		public Vector2Tween()
-		{ }
-
-
-		public Vector2Tween( ITweenTarget<Vector2> target, Vector2 to, float duration )
 		{
-			initialize( target, to, duration );
 		}
 
 
-		public override ITween<Vector2> setIsRelative()
+		public Vector2Tween(ITweenTarget<Vector2> target, Vector2 to, float duration)
+		{
+			Initialize(target, to, duration);
+		}
+
+
+		public override ITween<Vector2> SetIsRelative()
 		{
 			_isRelative = true;
 			_toValue += _fromValue;
@@ -114,41 +117,42 @@ namespace Nez.Tweens
 		}
 
 
-		protected override void updateValue()
+		protected override void UpdateValue()
 		{
-			_target.setTweenedValue( Lerps.ease( _easeType, _fromValue, _toValue, _elapsedTime, _duration ) );
+			_target.SetTweenedValue(Lerps.Ease(_easeType, _fromValue, _toValue, _elapsedTime, _duration));
 		}
 
 
-		public override void recycleSelf()
+		public override void RecycleSelf()
 		{
-			base.recycleSelf();
+			base.RecycleSelf();
 
-			if( _shouldRecycleTween && TweenManager.cacheVector2Tweens )
-				Pool<Vector2Tween>.free( this );
+			if (_shouldRecycleTween && TweenManager.CacheVector2Tweens)
+				Pool<Vector2Tween>.Free(this);
 		}
 	}
 
 
 	public class Vector3Tween : Tween<Vector3>
 	{
-		public static Vector3Tween create()
+		public static Vector3Tween Create()
 		{
-			return TweenManager.cacheVector3Tweens ? Pool<Vector3Tween>.obtain() : new Vector3Tween();
+			return TweenManager.CacheVector3Tweens ? Pool<Vector3Tween>.Obtain() : new Vector3Tween();
 		}
 
 
 		public Vector3Tween()
-		{ }
-
-
-		public Vector3Tween( ITweenTarget<Vector3> target, Vector3 to, float duration )
 		{
-			initialize( target, to, duration );
 		}
 
 
-		public override ITween<Vector3> setIsRelative()
+		public Vector3Tween(ITweenTarget<Vector3> target, Vector3 to, float duration)
+		{
+			Initialize(target, to, duration);
+		}
+
+
+		public override ITween<Vector3> SetIsRelative()
 		{
 			_isRelative = true;
 			_toValue += _fromValue;
@@ -156,41 +160,42 @@ namespace Nez.Tweens
 		}
 
 
-		protected override void updateValue()
+		protected override void UpdateValue()
 		{
-			_target.setTweenedValue( Lerps.ease( _easeType, _fromValue, _toValue, _elapsedTime, _duration ) );
+			_target.SetTweenedValue(Lerps.Ease(_easeType, _fromValue, _toValue, _elapsedTime, _duration));
 		}
 
 
-		public override void recycleSelf()
+		public override void RecycleSelf()
 		{
-			base.recycleSelf();
+			base.RecycleSelf();
 
-			if( _shouldRecycleTween && TweenManager.cacheVector3Tweens )
-				Pool<Vector3Tween>.free( this );
+			if (_shouldRecycleTween && TweenManager.CacheVector3Tweens)
+				Pool<Vector3Tween>.Free(this);
 		}
 	}
 
 
 	public class Vector4Tween : Tween<Vector4>
 	{
-		public static Vector4Tween create()
+		public static Vector4Tween Create()
 		{
-			return TweenManager.cacheVector4Tweens ? Pool<Vector4Tween>.obtain() : new Vector4Tween();
+			return TweenManager.CacheVector4Tweens ? Pool<Vector4Tween>.Obtain() : new Vector4Tween();
 		}
 
 
 		public Vector4Tween()
-		{ }
-
-
-		public Vector4Tween( ITweenTarget<Vector4> target, Vector4 to, float duration )
 		{
-			initialize( target, to, duration );
 		}
 
 
-		public override ITween<Vector4> setIsRelative()
+		public Vector4Tween(ITweenTarget<Vector4> target, Vector4 to, float duration)
+		{
+			Initialize(target, to, duration);
+		}
+
+
+		public override ITween<Vector4> SetIsRelative()
 		{
 			_isRelative = true;
 			_toValue += _fromValue;
@@ -198,41 +203,42 @@ namespace Nez.Tweens
 		}
 
 
-		protected override void updateValue()
+		protected override void UpdateValue()
 		{
-			_target.setTweenedValue( Lerps.ease( _easeType, _fromValue, _toValue, _elapsedTime, _duration ) );
+			_target.SetTweenedValue(Lerps.Ease(_easeType, _fromValue, _toValue, _elapsedTime, _duration));
 		}
 
 
-		public override void recycleSelf()
+		public override void RecycleSelf()
 		{
-			base.recycleSelf();
+			base.RecycleSelf();
 
-			if( _shouldRecycleTween && TweenManager.cacheVector4Tweens )
-				Pool<Vector4Tween>.free( this );
+			if (_shouldRecycleTween && TweenManager.CacheVector4Tweens)
+				Pool<Vector4Tween>.Free(this);
 		}
 	}
 
 
 	public class QuaternionTween : Tween<Quaternion>
 	{
-		public static QuaternionTween create()
+		public static QuaternionTween Create()
 		{
-			return TweenManager.cacheQuaternionTweens ? Pool<QuaternionTween>.obtain() : new QuaternionTween();
+			return TweenManager.CacheQuaternionTweens ? Pool<QuaternionTween>.Obtain() : new QuaternionTween();
 		}
 
 
 		public QuaternionTween()
-		{ }
-
-
-		public QuaternionTween( ITweenTarget<Quaternion> target, Quaternion to, float duration )
 		{
-			initialize( target, to, duration );
 		}
 
 
-		public override ITween<Quaternion> setIsRelative()
+		public QuaternionTween(ITweenTarget<Quaternion> target, Quaternion to, float duration)
+		{
+			Initialize(target, to, duration);
+		}
+
+
+		public override ITween<Quaternion> SetIsRelative()
 		{
 			_isRelative = true;
 			_toValue *= _fromValue;
@@ -240,41 +246,42 @@ namespace Nez.Tweens
 		}
 
 
-		protected override void updateValue()
+		protected override void UpdateValue()
 		{
-			_target.setTweenedValue( Lerps.ease( _easeType, _fromValue, _toValue, _elapsedTime, _duration ) );
+			_target.SetTweenedValue(Lerps.Ease(_easeType, _fromValue, _toValue, _elapsedTime, _duration));
 		}
 
 
-		public override void recycleSelf()
+		public override void RecycleSelf()
 		{
-			base.recycleSelf();
+			base.RecycleSelf();
 
-			if( _shouldRecycleTween && TweenManager.cacheQuaternionTweens )
-				Pool<QuaternionTween>.free( this );
+			if (_shouldRecycleTween && TweenManager.CacheQuaternionTweens)
+				Pool<QuaternionTween>.Free(this);
 		}
 	}
 
 
 	public class ColorTween : Tween<Color>
 	{
-		public static ColorTween create()
+		public static ColorTween Create()
 		{
-			return TweenManager.cacheColorTweens ? Pool<ColorTween>.obtain() : new ColorTween();
+			return TweenManager.CacheColorTweens ? Pool<ColorTween>.Obtain() : new ColorTween();
 		}
 
 
 		public ColorTween()
-		{ }
-
-
-		public ColorTween( ITweenTarget<Color> target, Color to, float duration )
 		{
-			initialize( target, to, duration );
 		}
 
 
-		public override ITween<Color> setIsRelative()
+		public ColorTween(ITweenTarget<Color> target, Color to, float duration)
+		{
+			Initialize(target, to, duration);
+		}
+
+
+		public override ITween<Color> SetIsRelative()
 		{
 			_isRelative = true;
 			_toValue.R += _fromValue.R;
@@ -285,41 +292,42 @@ namespace Nez.Tweens
 		}
 
 
-		protected override void updateValue()
+		protected override void UpdateValue()
 		{
-			_target.setTweenedValue( Lerps.ease( _easeType, _fromValue, _toValue, _elapsedTime, _duration ) );
+			_target.SetTweenedValue(Lerps.Ease(_easeType, _fromValue, _toValue, _elapsedTime, _duration));
 		}
 
 
-		public override void recycleSelf()
+		public override void RecycleSelf()
 		{
-			base.recycleSelf();
+			base.RecycleSelf();
 
-			if( _shouldRecycleTween && TweenManager.cacheColorTweens )
-				Pool<ColorTween>.free( this );
+			if (_shouldRecycleTween && TweenManager.CacheColorTweens)
+				Pool<ColorTween>.Free(this);
 		}
 	}
 
 
 	public class RectangleTween : Tween<Rectangle>
 	{
-		public static RectangleTween create()
+		public static RectangleTween Create()
 		{
-			return TweenManager.cacheRectTweens ? Pool<RectangleTween>.obtain() : new RectangleTween();
+			return TweenManager.CacheRectTweens ? Pool<RectangleTween>.Obtain() : new RectangleTween();
 		}
 
 
 		public RectangleTween()
-		{ }
-
-
-		public RectangleTween( ITweenTarget<Rectangle> target, Rectangle to, float duration )
 		{
-			initialize( target, to, duration );
 		}
 
 
-		public override ITween<Rectangle> setIsRelative()
+		public RectangleTween(ITweenTarget<Rectangle> target, Rectangle to, float duration)
+		{
+			Initialize(target, to, duration);
+		}
+
+
+		public override ITween<Rectangle> SetIsRelative()
 		{
 			_isRelative = true;
 			_toValue = new Rectangle
@@ -334,19 +342,18 @@ namespace Nez.Tweens
 		}
 
 
-		protected override void updateValue()
+		protected override void UpdateValue()
 		{
-			_target.setTweenedValue( Lerps.ease( _easeType, _fromValue, _toValue, _elapsedTime, _duration ) );
+			_target.SetTweenedValue(Lerps.Ease(_easeType, _fromValue, _toValue, _elapsedTime, _duration));
 		}
 
 
-		public override void recycleSelf()
+		public override void RecycleSelf()
 		{
-			base.recycleSelf();
+			base.RecycleSelf();
 
-			if( _shouldRecycleTween && TweenManager.cacheRectTweens )
-				Pool<RectangleTween>.free( this );
+			if (_shouldRecycleTween && TweenManager.CacheRectTweens)
+				Pool<RectangleTween>.Free(this);
 		}
 	}
-
 }

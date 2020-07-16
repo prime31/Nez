@@ -8,33 +8,33 @@ namespace FarseerPhysics.Controllers
 	[Flags]
 	public enum ControllerType
 	{
-		GravityController = ( 1 << 0 ),
-		VelocityLimitController = ( 1 << 1 ),
-		AbstractForceController = ( 1 << 2 ),
-		BuoyancyController = ( 1 << 3 ),
+		GravityController = (1 << 0),
+		VelocityLimitController = (1 << 1),
+		AbstractForceController = (1 << 2),
+		BuoyancyController = (1 << 3),
 	}
 
 
 	public struct ControllerFilter
 	{
-		public ControllerType controllerFlags;
+		public ControllerType ControllerFlags;
 
 		/// <summary>
 		/// Ignores the controller. The controller has no effect on this body.
 		/// </summary>
 		/// <param name="controller">The controller type.</param>
-		public void ignoreController( ControllerType controller )
+		public void IgnoreController(ControllerType controller)
 		{
-			controllerFlags |= controller;
+			ControllerFlags |= controller;
 		}
 
 		/// <summary>
 		/// Restore the controller. The controller affects this body.
 		/// </summary>
 		/// <param name="controller">The controller type.</param>
-		public void restoreController( ControllerType controller )
+		public void RestoreController(ControllerType controller)
 		{
-			controllerFlags &= ~controller;
+			ControllerFlags &= ~controller;
 		}
 
 		/// <summary>
@@ -44,35 +44,33 @@ namespace FarseerPhysics.Controllers
 		/// <returns>
 		/// 	<c>true</c> if the body has the specified flag; otherwise, <c>false</c>.
 		/// </returns>
-		public bool isControllerIgnored( ControllerType controller )
+		public bool IsControllerIgnored(ControllerType controller)
 		{
-			return ( controllerFlags & controller ) == controller;
+			return (ControllerFlags & controller) == controller;
 		}
 	}
 
 
 	public abstract class Controller : FilterData
 	{
-		public bool enabled;
-		public World world;
+		public bool Enabled;
+		public World World;
 
 		ControllerType _type;
 
-		protected Controller( ControllerType controllerType )
+		protected Controller(ControllerType controllerType)
 		{
 			_type = controllerType;
 		}
 
-		public override bool isActiveOn( Body body )
+		public override bool IsActiveOn(Body body)
 		{
-			if( body.controllerFilter.isControllerIgnored( _type ) )
+			if (body.ControllerFilter.IsControllerIgnored(_type))
 				return false;
 
-			return base.isActiveOn( body );
+			return base.IsActiveOn(body);
 		}
 
-		public abstract void update( float dt );
-
+		public abstract void Update(float dt);
 	}
-
 }

@@ -18,18 +18,18 @@ namespace Nez
 		/// opacity of the wipe
 		/// </summary>
 		/// <value>The opacity.</value>
-		public float opacity
+		public float Opacity
 		{
-			set => _textureWipeEffect.Parameters["_opacity"].SetValue( value );
+			set => _textureWipeEffect.Parameters["_opacity"].SetValue(value);
 		}
 
 		/// <summary>
 		/// color to wipe to
 		/// </summary>
 		/// <value>The color.</value>
-		public Color color
+		public Color Color
 		{
-			set => _textureWipeEffect.Parameters["_color"].SetValue( value.ToVector4() );
+			set => _textureWipeEffect.Parameters["_color"].SetValue(value.ToVector4());
 		}
 
 		/// <summary>
@@ -37,90 +37,98 @@ namespace Nez
 		/// from 0 - 1) the color will be used else the previous scene render will be used
 		/// </summary>
 		/// <value>The transition texture.</value>
-		public Texture2D transitionTexture
+		public Texture2D TransitionTexture
 		{
-			set => _textureWipeEffect.Parameters["_transitionTex"].SetValue( value );
+			set => _textureWipeEffect.Parameters["_transitionTex"].SetValue(value);
 		}
 
 		/// <summary>
 		/// if true, the red and green channels of the transitionTexture will be used to offset the texture lookup during the transition
 		/// </summary>
 		/// <value><c>true</c> if use red green channels for distortion; otherwise, <c>false</c>.</value>
-		public bool useRedGreenChannelsForDistortion
+		public bool UseRedGreenChannelsForDistortion
 		{
-			set => _textureWipeEffect.CurrentTechnique = _textureWipeEffect.Techniques[value ? "TextureWipeWithDistort" : "TextureWipe"];
+			set => _textureWipeEffect.CurrentTechnique =
+				_textureWipeEffect.Techniques[value ? "TextureWipeWithDistort" : "TextureWipe"];
 		}
 
 		/// <summary>
 		/// duration for the wind transition
 		/// </summary>
-		public float duration = 1f;
+		public float Duration = 1f;
 
 		/// <summary>
 		/// ease equation to use for the animation
 		/// </summary>
-		public EaseType easeType = EaseType.Linear;
+		public EaseType EaseType = EaseType.Linear;
 
 		Effect _textureWipeEffect;
 		Rectangle _destinationRect;
 		Texture2D _overlayTexture;
 
 
-		public TextureWipeTransition( Func<Scene> sceneLoadAction, Texture2D transitionTexture ) : base( sceneLoadAction, true )
+		public TextureWipeTransition(Func<Scene> sceneLoadAction, Texture2D transitionTexture) : base(sceneLoadAction,
+			true)
 		{
-			_destinationRect = previousSceneRender.Bounds;
+			_destinationRect = PreviousSceneRender.Bounds;
 
 			// load Effect and set defaults
-			_textureWipeEffect = Core.content.loadEffect( "Content/nez/effects/transitions/TextureWipe.mgfxo" );
-			opacity = 1f;
-			color = Color.Black;
-			this.transitionTexture = transitionTexture;
+			_textureWipeEffect = Core.Content.LoadEffect("Content/nez/effects/transitions/TextureWipe.mgfxo");
+			Opacity = 1f;
+			Color = Color.Black;
+			TransitionTexture = transitionTexture;
 		}
 
-		public TextureWipeTransition( Func<Scene> sceneLoadAction ) : this( sceneLoadAction, Core.content.Load<Texture2D>( "nez/textures/textureWipeTransition/angular" ) )
-		{}
+		public TextureWipeTransition(Func<Scene> sceneLoadAction) : this(sceneLoadAction,
+			Core.Content.Load<Texture2D>("nez/textures/textureWipeTransition/angular"))
+		{
+		}
 
-		public TextureWipeTransition() : this( null, Core.content.Load<Texture2D>( "nez/textures/textureWipeTransition/angular" ) )
-		{}
+		public TextureWipeTransition() : this(null,
+			Core.Content.Load<Texture2D>("nez/textures/textureWipeTransition/angular"))
+		{
+		}
 
-		public TextureWipeTransition( Texture2D transitionTexture ) : this( null, transitionTexture )
-		{}
+		public TextureWipeTransition(Texture2D transitionTexture) : this(null, transitionTexture)
+		{
+		}
 
-		public override IEnumerator onBeginTransition()
+		public override IEnumerator OnBeginTransition()
 		{
 			// create a single pixel transparent texture. Our shader handles the rest.
-			_overlayTexture = Graphics.createSingleColorTexture( 1, 1, Color.Transparent );
+			_overlayTexture = Graphics.CreateSingleColorTexture(1, 1, Color.Transparent);
 
 			// obscure the screen
-			yield return Core.startCoroutine( tickEffectProgressProperty( _textureWipeEffect, duration, easeType ) );
+			yield return Core.StartCoroutine(TickEffectProgressProperty(_textureWipeEffect, Duration, EaseType));
 
 			// load up the new Scene
-			yield return Core.startCoroutine( loadNextScene() );
+			yield return Core.StartCoroutine(LoadNextScene());
 
 			// undo the effect
-			yield return Core.startCoroutine( tickEffectProgressProperty( _textureWipeEffect, duration, EaseHelper.oppositeEaseType( easeType ), true ) );
+			yield return Core.StartCoroutine(TickEffectProgressProperty(_textureWipeEffect, Duration,
+				EaseHelper.OppositeEaseType(EaseType), true));
 
-			transitionComplete();
+			TransitionComplete();
 
 			// cleanup
 			_overlayTexture.Dispose();
-			Core.content.unloadEffect( _textureWipeEffect );
+			Core.Content.UnloadEffect(_textureWipeEffect);
 		}
 
-		public override void render( Graphics graphics )
+		public override void Render(Batcher batcher)
 		{
-			Core.graphicsDevice.setRenderTarget( null );
-			graphics.batcher.begin( BlendState.AlphaBlend, Core.defaultSamplerState, DepthStencilState.None, null, _textureWipeEffect );
+			Core.GraphicsDevice.SetRenderTarget(null);
+			batcher.Begin(BlendState.AlphaBlend, Core.DefaultSamplerState, DepthStencilState.None, null,
+				_textureWipeEffect);
 
 			// we only render the previousSceneRender until we load up the new Scene
-			if( !_isNewSceneLoaded )
-				graphics.batcher.draw( previousSceneRender, _destinationRect, Color.White );
+			if (!_isNewSceneLoaded)
+				batcher.Draw(PreviousSceneRender, _destinationRect, Color.White);
 			else
-				graphics.batcher.draw( _overlayTexture, new Rectangle( 0, 0, Screen.width, Screen.height ), Color.Transparent );
+				batcher.Draw(_overlayTexture, new Rectangle(0, 0, Screen.Width, Screen.Height),
+					Color.Transparent);
 
-			graphics.batcher.end();
+			batcher.End();
 		}
-	
 	}
 }
-

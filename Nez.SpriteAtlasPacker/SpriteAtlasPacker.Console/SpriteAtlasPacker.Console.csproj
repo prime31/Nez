@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  	<PropertyGroup>
+    	<OutputType>Exe</OutputType>
+    	<TargetFramework>net471</TargetFramework>
+    	<RootNamespace>Nez.Tools.Atlases</RootNamespace>
+    	<AssemblyName>SpriteAtlasPacker</AssemblyName>
+  	</PropertyGroup>
+  
+  	<PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' " />
+  	<PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' " />
+  	<ItemGroup>
+  		<Compile Include="..\SpriteAtlasPacker\*.cs;..\SpriteAtlasPacker\Packing\*.cs;..\SpriteAtlasPacker\Exporters\*.cs;" Link="SpriteAtlasPacker\%(Filename)%(Extension)" />
+	</ItemGroup>
+	
+</Project>

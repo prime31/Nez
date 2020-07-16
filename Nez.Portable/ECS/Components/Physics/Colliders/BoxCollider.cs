@@ -7,19 +7,19 @@ namespace Nez
 	public class BoxCollider : Collider
 	{
 		[Inspectable]
-		[Range( 1, float.MaxValue, true )]
-		public float width
+		[Range(1, float.MaxValue, true)]
+		public float Width
 		{
-			get => ((Box)shape).width;
-			set => setWidth( value );
+			get => ((Box) Shape).Width;
+			set => SetWidth(value);
 		}
 
 		[Inspectable]
-		[Range( 1, float.MaxValue, true )]
-		public float height
+		[Range(1, float.MaxValue, true)]
+		public float Height
 		{
-			get => ((Box)shape).height;
-			set => setHeight( value );
+			get => ((Box) Shape).Height;
+			set => SetHeight(value);
 		}
 
 
@@ -31,7 +31,7 @@ namespace Nez
 		{
 			// we stick a 1x1 box in here as a placeholder until the next frame when the Collider is added to the Entity and can get more
 			// accurate auto-sizing data
-			shape = new Box( 1, 1 );
+			Shape = new Box(1, 1);
 			_colliderRequiresAutoSizing = true;
 		}
 
@@ -42,21 +42,23 @@ namespace Nez
 		/// <param name="y">The y coordinate.</param>
 		/// <param name="width">Width.</param>
 		/// <param name="height">Height.</param>
-		public BoxCollider( float x, float y, float width, float height )
+		public BoxCollider(float x, float y, float width, float height)
 		{
-			_localOffset = new Vector2( x + width / 2, y + height / 2 );
-			shape = new Box( width, height );
+			_localOffset = new Vector2(x + width / 2, y + height / 2);
+			Shape = new Box(width, height);
 		}
 
-		public BoxCollider( float width, float height ) : this( -width / 2, -height / 2, width, height )
-		{}
+		public BoxCollider(float width, float height) : this(-width / 2, -height / 2, width, height)
+		{
+		}
 
 		/// <summary>
 		/// creates a BoxCollider and uses the x/y components of the Rect as the localOffset
 		/// </summary>
 		/// <param name="rect">Rect.</param>
-		public BoxCollider( Rectangle rect ) : this( rect.X, rect.Y, rect.Width, rect.Height )
-		{}
+		public BoxCollider(Rectangle rect) : this(rect.X, rect.Y, rect.Width, rect.Height)
+		{
+		}
 
 
 		#region Fluent setters
@@ -67,17 +69,17 @@ namespace Nez
 		/// <returns>The size.</returns>
 		/// <param name="width">Width.</param>
 		/// <param name="height">Height.</param>
-		public BoxCollider setSize( float width, float height )
+		public BoxCollider SetSize(float width, float height)
 		{
 			_colliderRequiresAutoSizing = false;
-			var box = shape as Box;
-			if( width != box.width || height != box.height )
+			var box = Shape as Box;
+			if (width != box.Width || height != box.Height)
 			{
 				// update the box, dirty our bounds and if we need to update our bounds in the Physics system
-				box.updateBox( width, height );
+				box.UpdateBox(width, height);
 				_isPositionDirty = true;
-				if( entity != null && _isParentEntityAddedToScene )
-					Physics.updateCollider( this );
+				if (Entity != null && _isParentEntityAddedToScene)
+					Physics.UpdateCollider(this);
 			}
 
 			return this;
@@ -88,17 +90,17 @@ namespace Nez
 		/// </summary>
 		/// <returns>The width.</returns>
 		/// <param name="width">Width.</param>
-		public BoxCollider setWidth( float width )
+		public BoxCollider SetWidth(float width)
 		{
 			_colliderRequiresAutoSizing = false;
-			var box = shape as Box;
-			if( width != box.width )
+			var box = Shape as Box;
+			if (width != box.Width)
 			{
 				// update the box, dirty our bounds and if we need to update our bounds in the Physics system
-				box.updateBox( width, box.height );
+				box.UpdateBox(width, box.Height);
 				_isPositionDirty = true;
-				if( entity != null && _isParentEntityAddedToScene )
-					Physics.updateCollider( this );
+				if (Entity != null && _isParentEntityAddedToScene)
+					Physics.UpdateCollider(this);
 			}
 
 			return this;
@@ -109,17 +111,17 @@ namespace Nez
 		/// </summary>
 		/// <returns>The height.</returns>
 		/// <param name="height">Height.</param>
-		public BoxCollider setHeight( float height )
+		public BoxCollider SetHeight(float height)
 		{
 			_colliderRequiresAutoSizing = false;
-			var box = shape as Box;
-			if( height != box.height )
+			var box = Shape as Box;
+			if (height != box.Height)
 			{
 				// update the box, dirty our bounds and if we need to update our bounds in the Physics system
-				box.updateBox( box.width, height );
+				box.UpdateBox(box.Width, height);
 				_isPositionDirty = true;
-				if( entity != null && _isParentEntityAddedToScene )
-					Physics.updateCollider( this );
+				if (Entity != null && _isParentEntityAddedToScene)
+					Physics.UpdateCollider(this);
 			}
 
 			return this;
@@ -128,20 +130,21 @@ namespace Nez
 		#endregion
 
 
-		public override void debugRender( Graphics graphics )
+		public override void DebugRender(Batcher batcher)
 		{
-			var poly = shape as Polygon;
-			graphics.batcher.drawHollowRect( bounds, Debug.Colors.colliderBounds, Debug.Size.lineSizeMultiplier );
-			graphics.batcher.drawPolygon( shape.position, poly.points, Debug.Colors.colliderEdge, true, Debug.Size.lineSizeMultiplier );
-			graphics.batcher.drawPixel( entity.transform.position, Debug.Colors.colliderPosition, 4 * Debug.Size.lineSizeMultiplier );
-			graphics.batcher.drawPixel( entity.transform.position + shape.center, Debug.Colors.colliderCenter, 2 * Debug.Size.lineSizeMultiplier );
+			var poly = Shape as Polygon;
+			batcher.DrawHollowRect(Bounds, Debug.Colors.ColliderBounds, Debug.Size.LineSizeMultiplier);
+			batcher.DrawPolygon(Shape.position, poly.Points, Debug.Colors.ColliderEdge, true,
+				Debug.Size.LineSizeMultiplier);
+			batcher.DrawPixel(Entity.Transform.Position, Debug.Colors.ColliderPosition,
+				4 * Debug.Size.LineSizeMultiplier);
+			batcher.DrawPixel(Entity.Transform.Position + Shape.center, Debug.Colors.ColliderCenter,
+				2 * Debug.Size.LineSizeMultiplier);
 		}
 
 		public override string ToString()
 		{
-			return string.Format( "[BoxCollider: bounds: {0}", bounds );
+			return string.Format("[BoxCollider: bounds: {0}", Bounds);
 		}
-
 	}
 }
-

@@ -27,28 +27,30 @@ namespace Nez
 	/// </summary>
 	public class MarkupText : RenderableComponent
 	{
-		public override float width { get { return _textWidth; } }
-		public override float height { get { return _textHeight; } }
+		public override float Width => _textWidth;
 
-		public string text { get { return _text; } }
-		public float textWidth { get { return _textWidth; } }
+		public override float Height => _textHeight;
+
+		public string Text => _text;
+
+		public float TextWidth => _textWidth;
 
 		string _text;
 		float _textWidth, _textHeight;
 
 		List<ICompiledElement> _compiledMarkup;
-		Dictionary<string,IFont> _fontDict = new Dictionary<string,IFont>();
-		Dictionary<string,Texture2D> _textureDict = new Dictionary<string,Texture2D>();
-		Dictionary<string,bool> _conditionalDict = new Dictionary<string,bool>();
+		Dictionary<string, IFont> _fontDict = new Dictionary<string, IFont>();
+		Dictionary<string, Texture2D> _textureDict = new Dictionary<string, Texture2D>();
+		Dictionary<string, bool> _conditionalDict = new Dictionary<string, bool>();
 
 
 		public MarkupText()
 		{
-			setFont( "default", Graphics.instance.bitmapFont );
+			SetFont("default", Graphics.Instance.BitmapFont);
 		}
 
 
-		public MarkupText( float textWidth ) : this()
+		public MarkupText(float textWidth) : this()
 		{
 			_textWidth = textWidth;
 		}
@@ -59,7 +61,7 @@ namespace Nez
 		/// </summary>
 		/// <returns>The text.</returns>
 		/// <param name="text">Text.</param>
-		public MarkupText setText( string text )
+		public MarkupText SetText(string text)
 		{
 			_text = text;
 			return this;
@@ -71,7 +73,7 @@ namespace Nez
 		/// </summary>
 		/// <returns>The width.</returns>
 		/// <param name="textWidth">Width.</param>
-		public MarkupText setTextWidth( float textWidth )
+		public MarkupText SetTextWidth(float textWidth)
 		{
 			_textWidth = textWidth;
 			return this;
@@ -84,7 +86,7 @@ namespace Nez
 		/// <returns>The font.</returns>
 		/// <param name="name">Name.</param>
 		/// <param name="font">Font.</param>
-		public MarkupText setFont( string name, IFont font )
+		public MarkupText SetFont(string name, IFont font)
 		{
 			_fontDict[name] = font;
 			return this;
@@ -97,7 +99,7 @@ namespace Nez
 		/// <returns>The texture.</returns>
 		/// <param name="name">Name.</param>
 		/// <param name="texture">Texture.</param>
-		public MarkupText setTexture( string name, Texture2D texture )
+		public MarkupText SetTexture(string name, Texture2D texture)
 		{
 			_textureDict[name] = texture;
 			return this;
@@ -111,7 +113,7 @@ namespace Nez
 		/// <returns>The conditional.</returns>
 		/// <param name="name">Name.</param>
 		/// <param name="conditional">Conditional.</param>
-		public MarkupText setConditional( string name, bool conditional )
+		public MarkupText SetConditional(string name, bool conditional)
 		{
 			_conditionalDict[name] = conditional;
 			return this;
@@ -121,29 +123,29 @@ namespace Nez
 		/// <summary>
 		/// renders the MarkupText
 		/// </summary>
-		/// <param name="graphics">Graphics.</param>
+		/// <param name="batcher">Batcher.</param>
 		/// <param name="camera">Camera.</param>
-		public override void render( Graphics graphics, Camera camera )
+		public override void Render(Batcher batcher, Camera camera)
 		{
-			if( _compiledMarkup == null )
+			if (_compiledMarkup == null)
 				return;
-			
-			for( var i = 0; i < _compiledMarkup.Count; i++ )
-				_compiledMarkup[i].render( graphics, transform.position + _localOffset );
+
+			for (var i = 0; i < _compiledMarkup.Count; i++)
+				_compiledMarkup[i].Render(batcher, Transform.Position + _localOffset);
 		}
 
 
 		/// <summary>
 		/// compiles the current text to prepare it for rendering
 		/// </summary>
-		public void compile()
+		public void Compile()
 		{
-			if( _compiledMarkup == null )
+			if (_compiledMarkup == null)
 				_compiledMarkup = new List<ICompiledElement>();
 			else
 				_compiledMarkup.Clear();
 
-			var reader = XmlReader.Create( new StringReader( _text ) );
+			var reader = XmlReader.Create(new StringReader(_text));
 			var position = Vector2.Zero;
 			var formatingStack = new Stack<FormatInstruction>();
 			var conditionalsStack = new Stack<bool>();
@@ -153,124 +155,126 @@ namespace Nez
 			var currentTotalHeight = 0f;
 			var currentLineWidth = 0f;
 
-			while( reader.Read() )
+			while (reader.Read())
 			{
-				if( reader.NodeType == XmlNodeType.Element )
+				if (reader.NodeType == XmlNodeType.Element)
 				{
-					switch( reader.Name )
+					switch (reader.Name)
 					{
 						case "font":
 						case "markuptext":
 						{
 							IFont font;
-							var s = reader.GetAttribute( "face" );
-							if( !string.IsNullOrEmpty( s ) )
+							var s = reader.GetAttribute("face");
+							if (!string.IsNullOrEmpty(s))
 								font = _fontDict[s];
-							else if( formatingStack.Count > 0 )
-								font = formatingStack.Peek().font;
+							else if (formatingStack.Count > 0)
+								font = formatingStack.Peek().Font;
 							else
 								font = _fontDict["default"];
 
 							var color = Color.White;
-							s = reader.GetAttribute( "color" );
-							if( !string.IsNullOrEmpty( s ) )
-								color = parseColor( s );
-							else if( formatingStack.Count > 0 )
-								color = formatingStack.Peek().color;
+							s = reader.GetAttribute("color");
+							if (!string.IsNullOrEmpty(s))
+								color = ParseColor(s);
+							else if (formatingStack.Count > 0)
+								color = formatingStack.Peek().Color;
 
 							var scale = Vector2.One;
-							s = reader.GetAttribute( "scale" );
-							if( !string.IsNullOrEmpty( s ) )
-								scale = parseVector2( s );
+							s = reader.GetAttribute("scale");
+							if (!string.IsNullOrEmpty(s))
+								scale = ParseVector2(s);
 
-							if( reader.Name == "markuptext" )
+							if (reader.Name == "markuptext")
 							{
-								var value = reader.GetAttribute( "align" );
+								var value = reader.GetAttribute("align");
 								var align = HorizontalAlign.Left;
-								Enum.TryParse( value, out align );
-								alignStack.Push( align );
+								Enum.TryParse(value, out align);
+								alignStack.Push(align);
 							}
 
-							formatingStack.Push( new FormatInstruction( font, color, scale ) );
+							formatingStack.Push(new FormatInstruction(font, color, scale));
 							break;
 						}
 
 						case "if":
 						{
-							var condition = reader.GetAttribute( "condition" );
+							var condition = reader.GetAttribute("condition");
 							var negateCondition = condition[0] == '!';
-							if( negateCondition )
-								condition = condition.Substring( 1 );
+							if (negateCondition)
+								condition = condition.Substring(1);
 
 							var value = _conditionalDict[condition];
-							conditionalsStack.Push( negateCondition ? !value : value );
+							conditionalsStack.Push(negateCondition ? !value : value);
 							break;
 						}
 
 						case "else":
 						{
 							var value = conditionalsStack.Pop();
-							conditionalsStack.Push( !value );
+							conditionalsStack.Push(!value);
 							break;
 						}
 
 						case "p":
 						case "br":
 						{
-							if( lineBuffer.Count > 0 )
+							if (lineBuffer.Count > 0)
 							{
-								position = wrapLine( position, lineBuffer, alignStack.Peek(), out currentLineHeight );
+								position = WrapLine(position, lineBuffer, alignStack.Peek(), out currentLineHeight);
 								currentTotalHeight += currentLineHeight;
 							}
 							else
 							{
 								var currentFormatting = formatingStack.Peek();
-								position.Y += currentFormatting.font.lineSpacing * currentFormatting.scale.Y;
-								currentTotalHeight += currentFormatting.font.lineSpacing * currentFormatting.scale.Y;
+								position.Y += currentFormatting.Font.LineSpacing * currentFormatting.Scale.Y;
+								currentTotalHeight += currentFormatting.Font.LineSpacing * currentFormatting.Scale.Y;
 							}
+
 							currentLineWidth = 0;
 
-							if( reader.Name == "p" )
+							if (reader.Name == "p")
 							{
-								var value = reader.GetAttribute( "align" );
-								if( string.IsNullOrEmpty( value ) )
+								var value = reader.GetAttribute("align");
+								if (string.IsNullOrEmpty(value))
 									value = "Left";
-								value = char.ToUpper( value[0] ) + value.Substring( 1 );
+								value = char.ToUpper(value[0]) + value.Substring(1);
 
 								HorizontalAlign align;
-								if( Enum.TryParse( value, out align ) )
-									alignStack.Push( align );
+								if (Enum.TryParse(value, out align))
+									alignStack.Push(align);
 								else
-									throw new InvalidOperationException( "Invalid alignemnt: " + value );
+									throw new InvalidOperationException("Invalid alignemnt: " + value);
 							}
+
 							break;
 						}
 
 						case "img":
 						{
-							if( conditionalsStack.Count != 0 && !conditionalsStack.Peek() )
+							if (conditionalsStack.Count != 0 && !conditionalsStack.Peek())
 								continue;
 
-							var imgSrc = reader.GetAttribute( "src" );
+							var imgSrc = reader.GetAttribute("src");
 							var color = Color.White;
-							var s = reader.GetAttribute( "color" );
-							if( !string.IsNullOrEmpty( s ) )
-								color = parseColor( s );
+							var s = reader.GetAttribute("color");
+							if (!string.IsNullOrEmpty(s))
+								color = ParseColor(s);
 
 							var scale = Vector2.One;
-							s = reader.GetAttribute( "scale" );
-							if( !string.IsNullOrEmpty( s ) )
-								scale = parseVector2( s );
+							s = reader.GetAttribute("scale");
+							if (!string.IsNullOrEmpty(s))
+								scale = ParseVector2(s);
 
 							var image = _textureDict[imgSrc];
 							var imageWidth = image.Width * scale.X;
-							if( position.X + imageWidth > _textWidth )
+							if (position.X + imageWidth > _textWidth)
 							{
-								position = wrapLine( position, lineBuffer, alignStack.Peek(), out currentLineHeight );
+								position = WrapLine(position, lineBuffer, alignStack.Peek(), out currentLineHeight);
 								currentTotalHeight += currentLineHeight;
 							}
 
-							lineBuffer.Add( new CompiledImageElement( image, color, position, scale ) );
+							lineBuffer.Add(new CompiledImageElement(image, color, position, scale));
 							position.X += imageWidth;
 							currentLineWidth += imageWidth;
 							break;
@@ -279,59 +283,60 @@ namespace Nez
 						case "nbsp":
 						{
 							var currentFormatting = formatingStack.Peek();
-							var spaceX = currentFormatting.font.measureString( " " ).X * currentFormatting.scale.X;
-							if( position.X + spaceX < _textWidth )
+							var spaceX = currentFormatting.Font.MeasureString(" ").X * currentFormatting.Scale.X;
+							if (position.X + spaceX < _textWidth)
 							{
 								position.X += spaceX;
 								currentLineWidth += spaceX;
 							}
+
 							break;
 						}
 					}
 				}
-				else if( reader.NodeType == XmlNodeType.Text )
+				else if (reader.NodeType == XmlNodeType.Text)
 				{
-					if( conditionalsStack.Count != 0 && !conditionalsStack.Peek() )
+					if (conditionalsStack.Count != 0 && !conditionalsStack.Peek())
 						continue;
 
 					var currentFormatting = formatingStack.Peek();
-					var re = new Regex( @"\s+" );
-					var words = re.Split( reader.Value );
-					var spaceX = currentFormatting.font.measureString( " " ).X * currentFormatting.scale.X;
+					var re = new Regex(@"\s+");
+					var words = re.Split(reader.Value);
+					var spaceX = currentFormatting.Font.MeasureString(" ").X * currentFormatting.Scale.X;
 
 					var wordIndex = 0;
 					var wordRunSize = 0f;
 					var textRun = new StringBuilder();
 
 					// figure out how many words we can fit on the line and compile them
-					while( words.Length > wordIndex )
+					while (words.Length > wordIndex)
 					{
 						var isLastWord = wordIndex == words.Length - 1;
 						var word = words[wordIndex];
-						var wordSize = currentFormatting.font.measureString( word ) * currentFormatting.scale;
+						var wordSize = currentFormatting.Font.MeasureString(word) * currentFormatting.Scale;
 
 						// make sure the word fits
 						var currentWordFits = position.X + wordRunSize + wordSize.X <= _textWidth;
 
 						// if there is only one word and it doesnt fit we are gonna add it anyway else we will have nothing to show
-						if( words.Length == 0 && !currentWordFits )
+						if (words.Length == 0 && !currentWordFits)
 							currentWordFits = true;
 
-						if( currentWordFits )
+						if (currentWordFits)
 						{
-							textRun.Append( word ).Append( " " );
+							textRun.Append(word).Append(" ");
 							wordRunSize += wordSize.X + spaceX;
 							wordIndex++;
 						}
 
 						// if this is the last word or the current word doesnt fit dump our text run
-						if( ( isLastWord || !currentWordFits ) && textRun.Length > 0 )
+						if ((isLastWord || !currentWordFits) && textRun.Length > 0)
 						{
 							// back off and add any words we accrued and remove the last space
 							textRun.Length--;
 							wordRunSize -= spaceX;
 
-							lineBuffer.Add( new CompiledTextElement( textRun.ToString(), position, currentFormatting ) );
+							lineBuffer.Add(new CompiledTextElement(textRun.ToString(), position, currentFormatting));
 							textRun.Clear();
 
 							position.X += wordRunSize;
@@ -340,17 +345,17 @@ namespace Nez
 						}
 
 						// if the current word doesnt fit we need a newline
-						if( !currentWordFits )
+						if (!currentWordFits)
 						{
-							position = wrapLine( position, lineBuffer, alignStack.Peek(), out currentLineHeight );
+							position = WrapLine(position, lineBuffer, alignStack.Peek(), out currentLineHeight);
 							currentTotalHeight += currentLineHeight;
 							currentLineWidth = 0;
 						}
 					}
 				}
-				else if( reader.NodeType == XmlNodeType.EndElement )
+				else if (reader.NodeType == XmlNodeType.EndElement)
 				{
-					switch( reader.Name )
+					switch (reader.Name)
 					{
 						case "font":
 						case "markuptext":
@@ -365,17 +370,18 @@ namespace Nez
 						}
 						case "p":
 						{
-							if( lineBuffer.Count > 0 )
+							if (lineBuffer.Count > 0)
 							{
-								position = wrapLine( position, lineBuffer, alignStack.Peek(), out currentLineHeight );
+								position = WrapLine(position, lineBuffer, alignStack.Peek(), out currentLineHeight);
 								currentTotalHeight += currentLineHeight;
 							}
 							else
 							{
 								var currentFormatting = formatingStack.Peek();
-								position.Y += currentFormatting.font.lineSpacing * currentFormatting.scale.Y;
-								currentTotalHeight += currentFormatting.font.lineSpacing * currentFormatting.scale.Y;
+								position.Y += currentFormatting.Font.LineSpacing * currentFormatting.Scale.Y;
+								currentTotalHeight += currentFormatting.Font.LineSpacing * currentFormatting.Scale.Y;
 							}
+
 							currentLineWidth = 0;
 							alignStack.Pop();
 							break;
@@ -384,16 +390,17 @@ namespace Nez
 				}
 			}
 
-			if( lineBuffer.Count > 0 )
+			if (lineBuffer.Count > 0)
 			{
-				wrapLine( position, lineBuffer, alignStack.Peek(), out currentLineHeight );
-				for( var i = 0; i < lineBuffer.Count; i++ )
+				WrapLine(position, lineBuffer, alignStack.Peek(), out currentLineHeight);
+				for (var i = 0; i < lineBuffer.Count; i++)
 				{
 					var element = lineBuffer[i];
-					element.position = new Vector2( element.position.X, position.Y + currentLineHeight / 2f );
+					element.Position = new Vector2(element.Position.X, position.Y + currentLineHeight / 2f);
 				}
+
 				currentTotalHeight += currentLineHeight;
-				_compiledMarkup.AddRange( lineBuffer );
+				_compiledMarkup.AddRange(lineBuffer);
 				lineBuffer.Clear();
 			}
 
@@ -401,35 +408,37 @@ namespace Nez
 		}
 
 
-		Vector2 wrapLine( Vector2 position, List<ICompiledElement> lineBuffer, HorizontalAlign alignment, out float currentLineHeight )
+		Vector2 WrapLine(Vector2 position, List<ICompiledElement> lineBuffer, HorizontalAlign alignment,
+		                 out float currentLineHeight)
 		{
 			currentLineHeight = 0;
 			var lineWidth = 0f;
 
 			// figure out the max height for anything in the line
-			for( var i = 0; i < lineBuffer.Count; i++ )
+			for (var i = 0; i < lineBuffer.Count; i++)
 			{
-				currentLineHeight = Math.Max( currentLineHeight, lineBuffer[i].size.Y );
-				lineWidth += lineBuffer[i].size.X;
+				currentLineHeight = Math.Max(currentLineHeight, lineBuffer[i].Size.Y);
+				lineWidth += lineBuffer[i].Size.X;
 			}
 
 			// calculate the offset that we will shift each line
 			var xOffset = 0f;
-			switch( alignment )
+			switch (alignment)
 			{
 				case HorizontalAlign.Right:
 					xOffset = _textWidth - lineWidth;
 					break;
 				case HorizontalAlign.Center:
-					xOffset = ( _textWidth - lineWidth ) / 2f;
+					xOffset = (_textWidth - lineWidth) / 2f;
 					break;
 			}
 
 			// run back through and reset the y position of all the items to match the currentLineHeight and apply the xOffset
-			for( var i = 0; i < lineBuffer.Count; i++ )
-				lineBuffer[i].position = new Vector2( lineBuffer[i].position.X + xOffset, position.Y + currentLineHeight / 2f );
+			for (var i = 0; i < lineBuffer.Count; i++)
+				lineBuffer[i].Position =
+					new Vector2(lineBuffer[i].Position.X + xOffset, position.Y + currentLineHeight / 2f);
 
-			_compiledMarkup.AddRange( lineBuffer );
+			_compiledMarkup.AddRange(lineBuffer);
 			lineBuffer.Clear();
 			position.X = 0;
 			position.Y += currentLineHeight;
@@ -438,40 +447,41 @@ namespace Nez
 		}
 
 
-		static Color parseColor( string hexString )
+		static Color ParseColor(string hexString)
 		{
-			if( hexString.StartsWith( "#" ) )
-				hexString = hexString.Substring( 1 );
+			if (hexString.StartsWith("#"))
+				hexString = hexString.Substring(1);
 
-			var hex = uint.Parse( hexString, NumberStyles.HexNumber, CultureInfo.InvariantCulture );
+			var hex = uint.Parse(hexString, NumberStyles.HexNumber, CultureInfo.InvariantCulture);
 			var color = Color.White;
-			if( hexString.Length == 8 )
+			if (hexString.Length == 8)
 			{
-				color.A = (byte)( hex >> 24 );
-				color.R = (byte)( hex >> 16 );
-				color.G = (byte)( hex >> 8 );
-				color.B = (byte)( hex );
+				color.A = (byte) (hex >> 24);
+				color.R = (byte) (hex >> 16);
+				color.G = (byte) (hex >> 8);
+				color.B = (byte) (hex);
 			}
-			else if( hexString.Length == 6 )
+			else if (hexString.Length == 6)
 			{
-				color.R = (byte)( hex >> 16 );
-				color.G = (byte)( hex >> 8 );
-				color.B = (byte)( hex );
+				color.R = (byte) (hex >> 16);
+				color.G = (byte) (hex >> 8);
+				color.B = (byte) (hex);
 			}
 			else
 			{
 				throw new InvalidOperationException();
 			}
+
 			return color;
 		}
 
 
-		static Vector2 parseVector2( string vectorString )
+		static Vector2 ParseVector2(string vectorString)
 		{
-			var split = Regex.Split( vectorString, @"[\\s,]+" );
-			return new Vector2( float.Parse( split[0], CultureInfo.InvariantCulture ), float.Parse( split[1], CultureInfo.InvariantCulture ) );
+			var split = Regex.Split(vectorString, @"[\\s,]+");
+			return new Vector2(float.Parse(split[0], CultureInfo.InvariantCulture),
+				float.Parse(split[1], CultureInfo.InvariantCulture));
 		}
-
 	}
 
 
@@ -479,83 +489,81 @@ namespace Nez
 
 	struct FormatInstruction
 	{
-		public readonly Color color;
-		public readonly IFont font;
-		public readonly Vector2 scale;
+		public readonly Color Color;
+		public readonly IFont Font;
+		public readonly Vector2 Scale;
 
 
-		public FormatInstruction( IFont font, Color color, Vector2 scale )
+		public FormatInstruction(IFont font, Color color, Vector2 scale)
 		{
-			this.font = font;
-			this.color = color;
-			this.scale = scale;
+			Font = font;
+			Color = color;
+			Scale = scale;
 		}
 	}
 
 
 	interface ICompiledElement
 	{
-		Vector2 size { get; }
-		Vector2 position { get; set; }
-		void render( Graphics graphics, Vector2 offset );
+		Vector2 Size { get; }
+		Vector2 Position { get; set; }
+		void Render(Batcher batcher, Vector2 offset);
 	}
 
 
 	struct CompiledTextElement : ICompiledElement
 	{
-		public Vector2 position { get; set; }
-		public Vector2 size { get; set; }
+		public Vector2 Position { get; set; }
+		public Vector2 Size { get; set; }
 
 		readonly FormatInstruction _formatInstruction;
 		readonly string _text;
 
 
-		public CompiledTextElement( string text, Vector2 position, FormatInstruction formatInstruction )
+		public CompiledTextElement(string text, Vector2 position, FormatInstruction formatInstruction)
 		{
 			_text = text;
-			this.position = position;
+			Position = position;
 			_formatInstruction = formatInstruction;
-			size = formatInstruction.font.measureString( text ) * formatInstruction.scale;
+			Size = formatInstruction.Font.MeasureString(text) * formatInstruction.Scale;
 		}
 
 
-		public void render( Graphics graphics, Vector2 offset )
+		public void Render(Batcher batcher, Vector2 offset)
 		{
-			var origin = new Vector2( 0, size.Y / ( 2 * _formatInstruction.scale.Y ) );
-			graphics.batcher.drawString( _formatInstruction.font, _text, offset + position, _formatInstruction.color, 0, origin, _formatInstruction.scale, SpriteEffects.None, 0 );
+			var origin = new Vector2(0, Size.Y / (2 * _formatInstruction.Scale.Y));
+			batcher.DrawString(_formatInstruction.Font, _text, offset + Position, _formatInstruction.Color, 0,
+				origin, _formatInstruction.Scale, SpriteEffects.None, 0);
 		}
-
 	}
 
 
 	struct CompiledImageElement : ICompiledElement
 	{
-		public Vector2 position { get; set; }
-		public Vector2 size { get; set; }
+		public Vector2 Position { get; set; }
+		public Vector2 Size { get; set; }
 
 		readonly Color _color;
 		readonly Texture2D _image;
 		readonly Vector2 _scale;
 
 
-		public CompiledImageElement( Texture2D image, Color color, Vector2 position, Vector2 scale )
+		public CompiledImageElement(Texture2D image, Color color, Vector2 position, Vector2 scale)
 		{
 			_image = image;
-			this.position = position;
+			Position = position;
 			_color = color;
 			_scale = scale;
-			size = new Vector2( image.Width, image.Height ) * scale;
+			Size = new Vector2(image.Width, image.Height) * scale;
 		}
 
 
-		public void render( Graphics graphics, Vector2 offset )
+		public void Render(Batcher batcher, Vector2 offset)
 		{
-			var origin = new Vector2( 0, _image.Height / 2f );
-			graphics.batcher.draw( _image, offset + position, null, _color, 0, origin, _scale, SpriteEffects.None, 0 );
+			var origin = new Vector2(0, _image.Height / 2f);
+			batcher.Draw(_image, offset + Position, null, _color, 0, origin, _scale, SpriteEffects.None, 0);
 		}
-
 	}
 
 	#endregion
-
 }

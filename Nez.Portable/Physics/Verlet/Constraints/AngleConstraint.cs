@@ -11,58 +11,57 @@ namespace Nez.Verlet
 		/// <summary>
 		/// [0-1]. the stiffness of the Constraint. Lower values are more springy and higher are more rigid.
 		/// </summary>
-		public float stiffness;
+		public float Stiffness;
 
 		/// <summary>
 		/// the angle in radians that the Constraint will attempt to maintain
 		/// </summary>
-		public float angleInRadians;
+		public float AngleInRadians;
 
 		Particle _particleA;
 		Particle _centerParticle;
 		Particle _particleC;
 
 
-		public AngleConstraint( Particle a, Particle center, Particle c, float stiffness )
+		public AngleConstraint(Particle a, Particle center, Particle c, float stiffness)
 		{
 			_particleA = a;
 			_centerParticle = center;
 			_particleC = c;
-			this.stiffness = stiffness;
+			Stiffness = stiffness;
 
 			// not need for this Constraint to collide. There will be DistanceConstraints to do that if necessary
-			collidesWithColliders = false;
+			CollidesWithColliders = false;
 
-			angleInRadians = angleBetweenParticles();
+			AngleInRadians = AngleBetweenParticles();
 		}
 
 
-		float angleBetweenParticles()
+		float AngleBetweenParticles()
 		{
-			var first = _particleA.position - _centerParticle.position;
-			var second = _particleC.position - _centerParticle.position;
+			var first = _particleA.Position - _centerParticle.Position;
+			var second = _particleC.Position - _centerParticle.Position;
 
-			return Mathf.atan2( first.X * second.Y - first.Y * second.X, first.X * second.X + first.Y * second.Y );
+			return Mathf.Atan2(first.X * second.Y - first.Y * second.X, first.X * second.X + first.Y * second.Y);
 		}
 
 
-		public override void solve()
+		public override void Solve()
 		{
-			var angleBetween = angleBetweenParticles();
-			var diff = angleBetween - angleInRadians;
+			var angleBetween = AngleBetweenParticles();
+			var diff = angleBetween - AngleInRadians;
 
-			if( diff <= -MathHelper.Pi )
+			if (diff <= -MathHelper.Pi)
 				diff += 2 * MathHelper.Pi;
-			else if( diff >= MathHelper.Pi )
+			else if (diff >= MathHelper.Pi)
 				diff -= 2 * MathHelper.Pi;
 
-			diff *= stiffness;
+			diff *= Stiffness;
 
-			_particleA.position = Mathf.rotateAround( _particleA.position, _centerParticle.position, diff );
-			_particleC.position = Mathf.rotateAround( _particleC.position, _centerParticle.position, -diff );
-			_centerParticle.position = Mathf.rotateAround( _centerParticle.position, _particleA.position, diff );
-			_centerParticle.position = Mathf.rotateAround( _centerParticle.position, _particleC.position, -diff );
+			_particleA.Position = Mathf.RotateAround(_particleA.Position, _centerParticle.Position, diff);
+			_particleC.Position = Mathf.RotateAround(_particleC.Position, _centerParticle.Position, -diff);
+			_centerParticle.Position = Mathf.RotateAround(_centerParticle.Position, _particleA.Position, diff);
+			_centerParticle.Position = Mathf.RotateAround(_centerParticle.Position, _particleC.Position, -diff);
 		}
-
 	}
 }

@@ -1,15 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-
-
-namespace Nez.AI.UtilityAI
+﻿namespace Nez.AI.UtilityAI
 {
 	public class UtilityAI<T>
 	{
 		/// <summary>
 		/// how often the behavior tree should update. An updatePeriod of 0.2 will make the tree update 5 times a second.
 		/// </summary>
-		public float updatePeriod;
+		public float UpdatePeriod;
 
 		/// <summary>
 		/// The context should contain all the data needed to run the tree
@@ -20,25 +16,24 @@ namespace Nez.AI.UtilityAI
 		float _elapsedTime;
 
 
-		public UtilityAI( T context, Reasoner<T> rootSelector, float updatePeriod = 0.2f )
+		public UtilityAI(T context, Reasoner<T> rootSelector, float updatePeriod = 0.2f)
 		{
 			_rootReasoner = rootSelector;
 			_context = context;
-			this.updatePeriod = _elapsedTime = updatePeriod;
+			UpdatePeriod = _elapsedTime = updatePeriod;
 		}
 
 
-		public void tick()
+		public void Tick()
 		{
-			_elapsedTime -= Time.deltaTime;
-			while( _elapsedTime <= 0 )
+			_elapsedTime -= Time.DeltaTime;
+			while (_elapsedTime <= 0)
 			{
-				_elapsedTime += updatePeriod;
-				var action = _rootReasoner.select( _context );
-				if( action != null )
-					action.execute( _context );
+				_elapsedTime += UpdatePeriod;
+				var action = _rootReasoner.Select(_context);
+				if (action != null)
+					action.Execute(_context);
 			}
 		}
 	}
 }
-

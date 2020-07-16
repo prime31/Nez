@@ -10,61 +10,60 @@ namespace Nez.Svg
 	/// </summary>
 	public abstract class SvgElement
 	{
-		[XmlAttribute( "id" )]
-		public string id;
+		[XmlAttribute("id")] public string Id;
 
-		[XmlAttribute( "stroke" )]
-		public string strokeAttribute
+		[XmlAttribute("stroke")]
+		public string StrokeAttribute
 		{
-			get { return null; }
+			get => null;
 			set
 			{
-				if( value.StartsWith( "#" ) )
-					strokeColor = ColorExt.hexToColor( value.Substring( 1 ) );
+				if (value.StartsWith("#"))
+					StrokeColor = ColorExt.HexToColor(value.Substring(1));
 			}
 		}
 
-		public Color strokeColor = Color.Red;
+		public Color StrokeColor = Color.Red;
 
-		[XmlAttribute( "fill" )]
-		public string fillAttribute
+		[XmlAttribute("fill")]
+		public string FillAttribute
 		{
-			get { return null; }
+			get => null;
 			set
 			{
-				if( value.StartsWith( "#" ) )
-					fillColor = ColorExt.hexToColor( value.Substring( 1 ) );
+				if (value.StartsWith("#"))
+					FillColor = ColorExt.HexToColor(value.Substring(1));
 			}
 		}
 
-		public Color fillColor;
+		public Color FillColor;
 
-		[XmlAttribute( "stroke-width" )]
-		public string strokeWidthAttribute
+		[XmlAttribute("stroke-width")]
+		public string StrokeWidthAttribute
 		{
-			get { return null; }
-			set { float.TryParse( value, out strokeWidth ); }
+			get => null;
+			set => float.TryParse(value, out StrokeWidth);
 		}
 
-		public float strokeWidth = 1;
+		public float StrokeWidth = 1;
 
-		[XmlAttribute( "transform" )]
-		public string transformAttribute
+		[XmlAttribute("transform")]
+		public string TransformAttribute
 		{
-			get { return null; }
-			set { _transforms = SvgTransformConverter.parseTransforms( value ); }
+			get => null;
+			set => _transforms = SvgTransformConverter.ParseTransforms(value);
 		}
 
 		protected List<SvgTransform> _transforms;
 
 
-		public Matrix2D getCombinedMatrix()
+		public Matrix2D GetCombinedMatrix()
 		{
-			var m = Matrix2D.identity;
-			if( _transforms != null && _transforms.Count > 0 )
+			var m = Matrix2D.Identity;
+			if (_transforms != null && _transforms.Count > 0)
 			{
-				foreach( var trans in _transforms )
-					m = Matrix2D.multiply( m, trans.matrix );
+				foreach (var trans in _transforms)
+					m = Matrix2D.Multiply(m, trans.Matrix);
 			}
 
 			return m;
@@ -74,22 +73,21 @@ namespace Nez.Svg
 		/// helper property that just loops through all the transforms and if there is an SvgRotate transform it will return that angle
 		/// </summary>
 		/// <value>The rotation degrees.</value>
-		public float rotationDegrees
+		public float RotationDegrees
 		{
 			get
 			{
-				if( _transforms == null )
+				if (_transforms == null)
 					return 0;
 
-				for( var i = 0; i < _transforms.Count; i++ )
+				for (var i = 0; i < _transforms.Count; i++)
 				{
-					if( _transforms[i] is SvgRotate )
-						return ( _transforms[i] as SvgRotate ).angle;
+					if (_transforms[i] is SvgRotate)
+						return (_transforms[i] as SvgRotate).Angle;
 				}
 
 				return 0;
 			}
 		}
-
 	}
 }

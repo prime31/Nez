@@ -28,9 +28,9 @@ namespace FarseerPhysics
 {
 	public static class Settings
 	{
-		public const float maxFloat = 3.402823466e+38f;
-		public const float epsilon = 1.192092896e-07f;
-		public const float pi = 3.14159265359f;
+		public const float MaxFloat = 3.402823466e+38f;
+		public const float Epsilon = 1.192092896e-07f;
+		public const float Pi = 3.14159265359f;
 
 		// Common
 
@@ -39,7 +39,7 @@ namespace FarseerPhysics
 		/// if there was a collision or not. Swtich this to false to revert to the 
 		/// collision agreement used in FPE 3.3.x
 		/// </summary>
-		public static bool allCollisionCallbacksAgree = true;
+		public static bool AllCollisionCallbacksAgree = true;
 
 		/// <summary>
 		/// Enabling diagnistics causes the engine to gather timing information.
@@ -48,65 +48,65 @@ namespace FarseerPhysics
 		/// NOTE: If you are using a debug view that shows performance counters,
 		/// you might want to enable this.
 		/// </summary>
-		public static bool enableDiagnostics = true;
+		public static bool EnableDiagnostics = true;
 
 		/// <summary>
 		/// Set this to true to skip sanity checks in the engine. This will speed up the
 		/// tools by removing the overhead of the checks, but you will need to handle checks
 		/// yourself where it is needed.
 		/// </summary>
-		public static bool skipSanityChecks = false;
+		public static bool SkipSanityChecks = false;
 
 		/// <summary>
 		/// The number of velocity iterations used in the solver.
 		/// </summary>
-		public static int velocityIterations = 8;
+		public static int VelocityIterations = 8;
 
 		/// <summary>
 		/// The number of position iterations used in the solver.
 		/// </summary>
-		public static int positionIterations = 3;
+		public static int PositionIterations = 3;
 
 		/// <summary>
 		/// Enable/Disable Continuous Collision Detection (CCD)
 		/// </summary>
-		public static bool continuousPhysics = true;
+		public static bool ContinuousPhysics = true;
 
 		/// <summary>
 		/// If true, it will run a GiftWrap convex hull on all polygon inputs. This makes for a more stable engine when given random input,
 		/// but if speed of the creation of polygons are more important, you might want to set this to false.
 		/// </summary>
-		public static bool useConvexHullPolygons = true;
+		public static bool UseConvexHullPolygons = true;
 
 		/// <summary>
 		/// The number of velocity iterations in the TOI solver
 		/// </summary>
-		public static int toiVelocityIterations = velocityIterations;
+		public static int ToiVelocityIterations = VelocityIterations;
 
 		/// <summary>
 		/// The number of position iterations in the TOI solver
 		/// </summary>
-		public static int toiPositionIterations = 20;
+		public static int ToiPositionIterations = 20;
 
 		/// <summary>
 		/// Maximum number of sub-steps per contact in continuous physics simulation.
 		/// </summary>
-		public static int maxSubSteps = 8;
+		public static int MaxSubSteps = 8;
 
 		/// <summary>
 		/// Enable/Disable warmstarting
 		/// </summary>
-		public static bool enableWarmstarting = true;
+		public static bool EnableWarmstarting = true;
 
 		/// <summary>
 		/// Enable/Disable sleeping
 		/// </summary>
-		public static bool allowSleep = true;
+		public static bool AllowSleep = true;
 
 		/// <summary>
 		/// The maximum number of vertices on a convex polygon.
 		/// </summary>
-		public static int maxPolygonVertices = 8;
+		public static int MaxPolygonVertices = 8;
 
 		/// <summary>
 		/// Farseer Physics Engine has a different way of filtering fixtures than Box2d.
@@ -114,139 +114,139 @@ namespace FarseerPhysics
 		/// from earlier versions of FPE, set this to true and defaultFixtureCollisionCategories
 		/// to Category.All.
 		/// </summary>
-		public static bool useFPECollisionCategories;
+		public static bool UseFPECollisionCategories;
 
 		/// <summary>
 		/// This is used by the Fixture constructor as the default value 
 		/// for Fixture.collisionCategories member. Note that you may need to change this depending
 		/// on the setting of UseFPECollisionCategories, above.
 		/// </summary>
-		public static Category defaultFixtureCollisionCategories = Category.Cat1;
+		public static Category DefaultFixtureCollisionCategories = Category.Cat1;
 
 		/// <summary>
 		/// This is used by the Fixture constructor as the default value 
 		/// for Fixture.collidesWith member.
 		/// </summary>
-		public static Category defaultFixtureCollidesWith = Category.All;
+		public static Category DefaultFixtureCollidesWith = Category.All;
 
 		/// <summary>
 		/// This is used by the Fixture constructor as the default value 
 		/// for Fixture.ignoreCCDWith member.
 		/// </summary>
-		public static Category defaultFixtureIgnoreCCDWith = Category.None;
+		public static Category DefaultFixtureIgnoreCCDWith = Category.None;
 
 		/// <summary>
 		/// The maximum number of contact points between two convex shapes.
 		/// DO NOT CHANGE THIS VALUE!
 		/// </summary>
-		public const int maxManifoldPoints = 2;
+		public const int MaxManifoldPoints = 2;
 
 		/// <summary>
 		/// This is used to fatten AABBs in the dynamic tree. This allows proxies
 		/// to move by a small amount without triggering a tree adjustment.
 		/// This is in meters.
 		/// </summary>
-		public const float aabbExtension = 0.1f;
+		public const float AabbExtension = 0.1f;
 
 		/// <summary>
 		/// This is used to fatten AABBs in the dynamic tree. This is used to predict
 		/// the future position based on the current displacement.
 		/// This is a dimensionless multiplier.
 		/// </summary>
-		public const float aabbMultiplier = 2.0f;
+		public const float AabbMultiplier = 2.0f;
 
 		/// <summary>
 		/// A small length used as a collision and constraint tolerance. Usually it is
 		/// chosen to be numerically significant, but visually insignificant.
 		/// </summary>
-		public const float linearSlop = 0.005f;
+		public const float LinearSlop = 0.005f;
 
 		/// <summary>
 		/// A small angle used as a collision and constraint tolerance. Usually it is
 		/// chosen to be numerically significant, but visually insignificant.
 		/// </summary>
-		public const float angularSlop = ( 2.0f / 180.0f * pi );
+		public const float AngularSlop = (2.0f / 180.0f * Pi);
 
 		/// <summary>
 		/// The radius of the polygon/edge shape skin. This should not be modified. Making
 		/// this smaller means polygons will have an insufficient buffer for continuous collision.
 		/// Making it larger may create artifacts for vertex collision.
 		/// </summary>
-		public const float polygonRadius = ( 2.0f * linearSlop );
+		public const float PolygonRadius = (2.0f * LinearSlop);
 
 		// Dynamics
 
 		/// <summary>
 		/// Maximum number of contacts to be handled to solve a TOI impact.
 		/// </summary>
-		public const int maxTOIContacts = 32;
+		public const int MaxTOIContacts = 32;
 
 		/// <summary>
 		/// A velocity threshold for elastic collisions. Any collision with a relative linear
 		/// velocity below this threshold will be treated as inelastic.
 		/// </summary>
-		public const float velocityThreshold = 1.0f;
+		public const float VelocityThreshold = 1.0f;
 
 		/// <summary>
 		/// The maximum linear position correction used when solving constraints. This helps to
 		/// prevent overshoot.
 		/// </summary>
-		public const float maxLinearCorrection = 0.2f;
+		public const float MaxLinearCorrection = 0.2f;
 
 		/// <summary>
 		/// The maximum angular position correction used when solving constraints. This helps to
 		/// prevent overshoot.
 		/// </summary>
-		public const float maxAngularCorrection = ( 8.0f / 180.0f * pi );
+		public const float MaxAngularCorrection = (8.0f / 180.0f * Pi);
 
 		/// <summary>
 		/// This scale factor controls how fast overlap is resolved. Ideally this would be 1 so
 		/// that overlap is removed in one time step. However using values close to 1 often lead
 		/// to overshoot.
 		/// </summary>
-		public const float baumgarte = 0.2f;
+		public const float Baumgarte = 0.2f;
 
 		// Sleep
 		/// <summary>
 		/// The time that a body must be still before it will go to sleep.
 		/// </summary>
-		public const float timeToSleep = 0.5f;
+		public const float TimeToSleep = 0.5f;
 
 		/// <summary>
 		/// A body cannot sleep if its linear velocity is above this tolerance.
 		/// </summary>
-		public const float linearSleepTolerance = 0.01f;
+		public const float LinearSleepTolerance = 0.01f;
 
 		/// <summary>
 		/// A body cannot sleep if its angular velocity is above this tolerance.
 		/// </summary>
-		public const float angularSleepTolerance = ( 2.0f / 180.0f * pi );
+		public const float AngularSleepTolerance = (2.0f / 180.0f * Pi);
 
 		/// <summary>
 		/// The maximum linear velocity of a body. This limit is very large and is used
 		/// to prevent numerical problems. You shouldn't need to adjust this.
 		/// </summary>
-		public const float maxTranslation = 2.0f;
+		public const float MaxTranslation = 2.0f;
 
-		public const float maxTranslationSquared = ( maxTranslation * maxTranslation );
+		public const float MaxTranslationSquared = (MaxTranslation * MaxTranslation);
 
 		/// <summary>
 		/// The maximum angular velocity of a body. This limit is very large and is used
 		/// to prevent numerical problems. You shouldn't need to adjust this.
 		/// </summary>
-		public const float maxRotation = ( 0.5f * pi );
+		public const float MaxRotation = (0.5f * Pi);
 
-		public const float maxRotationSquared = ( maxRotation * maxRotation );
+		public const float MaxRotationSquared = (MaxRotation * MaxRotation);
 
 		/// <summary>
 		/// Defines the maximum number of iterations made by the GJK algorithm.
 		/// </summary>
-		public const int maxGJKIterations = 20;
+		public const int MaxGJKIterations = 20;
 
 		/// <summary>
 		/// This is only for debugging the solver
 		/// </summary>
-		public const bool enableSubStepping = false;
+		public const bool EnableSubStepping = false;
 
 		/// <summary>
 		/// By default, forces are cleared automatically after each call to Step.
@@ -256,7 +256,7 @@ namespace FarseerPhysics
 		/// When you perform sub-stepping you should disable auto clearing of forces and instead call
 		/// ClearForces after all sub-steps are complete in one pass of your game loop.
 		/// </summary>
-		public const bool autoClearForces = true;
+		public const bool AutoClearForces = true;
 
 		/// <summary>
 		/// Friction mixing law. Feel free to customize this.
@@ -264,9 +264,9 @@ namespace FarseerPhysics
 		/// <param name="friction1">The friction1.</param>
 		/// <param name="friction2">The friction2.</param>
 		/// <returns></returns>
-		public static float mixFriction( float friction1, float friction2 )
+		public static float MixFriction(float friction1, float friction2)
 		{
-			return (float)Math.Sqrt( friction1 * friction2 );
+			return (float) Math.Sqrt(friction1 * friction2);
 		}
 
 		/// <summary>
@@ -275,10 +275,9 @@ namespace FarseerPhysics
 		/// <param name="restitution1">The restitution1.</param>
 		/// <param name="restitution2">The restitution2.</param>
 		/// <returns></returns>
-		public static float mixRestitution( float restitution1, float restitution2 )
+		public static float MixRestitution(float restitution1, float restitution2)
 		{
 			return restitution1 > restitution2 ? restitution1 : restitution2;
 		}
-	
 	}
 }
