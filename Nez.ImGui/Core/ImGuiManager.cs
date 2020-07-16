@@ -18,6 +18,11 @@ namespace Nez.ImGuiTools
 		public bool ShowSeperateGameWindow = true;
 		public bool ShowMenuBar = true;
 
+		public bool FocusGameWindowOnMiddleClick = false;
+		public bool FocusGameWindowOnRightClick = false;
+		public bool DisableKeyboardInputWhenGameWindowUnfocused = true;
+		public bool DisableMouseWheelWhenGameWindowUnfocused = true;
+
 		List<Type> _sceneSubclasses = new List<Type>();
 		System.Reflection.MethodInfo[] _themes;
 

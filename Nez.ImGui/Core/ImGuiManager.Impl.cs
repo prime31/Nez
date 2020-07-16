@@ -122,8 +122,40 @@ namespace Nez.ImGuiTools
 
 			if (!ImGui.IsWindowFocused())
 			{
-				Input.SetCurrentKeyboardState(new KeyboardState());
-				Input.SetCurrentMouseState(new MouseState());
+				bool focusedWindow = false;
+
+				// if the window's being hovered and we click on it with any mouse button, optionally focus the window.
+				if (ImGui.IsWindowHovered())
+				{
+					if (ImGui.IsMouseClicked(0)
+					|| (ImGui.IsMouseClicked(1) && FocusGameWindowOnRightClick)
+					|| (ImGui.IsMouseClicked(2) && FocusGameWindowOnMiddleClick))
+					{
+						ImGui.SetWindowFocus();
+						focusedWindow = true;
+					}
+				}
+
+				// if we failed to focus the window in the previous step, intercept mouse and keyboard input.
+				if (!focusedWindow)
+				{
+					var mouseState = new MouseState(
+						Input.CurrentMouseState.X,
+						Input.CurrentMouseState.Y,
+						DisableMouseWheelWhenGameWindowUnfocused ? 0 : Input.MouseWheel,
+						ButtonState.Released,
+						ButtonState.Released,
+						ButtonState.Released,
+						ButtonState.Released,
+						ButtonState.Released
+					);
+					Input.SetCurrentMouseState(mouseState);
+
+					if (DisableKeyboardInputWhenGameWindowUnfocused)
+					{
+						Input.SetCurrentKeyboardState(new KeyboardState());
+					}
+				}
 			}
 
 			ImGui.End();
