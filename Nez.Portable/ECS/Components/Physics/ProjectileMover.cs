@@ -40,7 +40,7 @@ namespace Nez
 			var neighbors = Physics.BoxcastBroadphase(_collider.Bounds, _collider.CollidesWithLayers);
 			foreach (var neighbor in neighbors)
 			{
-				if (_collider.Overlaps(neighbor))
+				if (_collider.Overlaps(neighbor) && neighbor.Enabled)
 				{
 					didCollide = true;
 					NotifyTriggerListeners(_collider, neighbor);
