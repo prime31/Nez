@@ -229,7 +229,7 @@ namespace Nez
 		/// </summary>
 		/// <param name="bounds">Bounds.</param>
 		/// <param name="layerMask">Layer mask.</param>
-		public static IEnumerable<Collider> BoxcastBroadphase(RectangleF rect, int layerMask = AllLayers)
+		public static HashSet<Collider> BoxcastBroadphase(RectangleF rect, int layerMask = AllLayers)
 		{
 			return _spatialHash.AabbBroadphase(ref rect, null, layerMask);
 		}
@@ -241,7 +241,7 @@ namespace Nez
 		/// </summary>
 		/// <param name="bounds">Bounds.</param>
 		/// <param name="layerMask">Layer mask.</param>
-		public static IEnumerable<Collider> BoxcastBroadphase(ref RectangleF rect, int layerMask = AllLayers)
+		public static HashSet<Collider> BoxcastBroadphase(ref RectangleF rect, int layerMask = AllLayers)
 		{
 			return _spatialHash.AabbBroadphase(ref rect, null, layerMask);
 		}
@@ -252,7 +252,7 @@ namespace Nez
 		/// </summary>
 		/// <returns>The neighbors excluding self.</returns>
 		/// <param name="collider">Collider.</param>
-		public static IEnumerable<Collider> BoxcastBroadphaseExcludingSelf(Collider collider, int layerMask = AllLayers)
+		public static HashSet<Collider> BoxcastBroadphaseExcludingSelf(Collider collider, int layerMask = AllLayers)
 		{
 			var bounds = collider.Bounds;
 			return _spatialHash.AabbBroadphase(ref bounds, collider, layerMask);
@@ -266,7 +266,7 @@ namespace Nez
 		/// <returns>The excluding self.</returns>
 		/// <param name="collider">Collider.</param>
 		/// <param name="bounds">Bounds.</param>
-		public static IEnumerable<Collider> BoxcastBroadphaseExcludingSelf(
+		public static HashSet<Collider> BoxcastBroadphaseExcludingSelf(
 			Collider collider, ref RectangleF rect, int layerMask = AllLayers)
 		{
 			return _spatialHash.AabbBroadphase(ref rect, collider, layerMask);
@@ -279,7 +279,7 @@ namespace Nez
 		/// </summary>
 		/// <returns>The neighbors excluding self.</returns>
 		/// <param name="collider">Collider.</param>
-		public static IEnumerable<Collider> BoxcastBroadphaseExcludingSelf(
+		public static HashSet<Collider> BoxcastBroadphaseExcludingSelf(
 			Collider collider, float deltaX, float deltaY, int layerMask = AllLayers)
 		{
 			var colliderBounds = collider.Bounds;
