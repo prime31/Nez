@@ -74,12 +74,17 @@ namespace Nez.Sprites
 		/// <summary>
 		/// index of the current frame in sprite array of the current animation
 		/// </summary>
-		public int CurrentFrame { get; private set; }
+		public int CurrentFrame { get; set; }
 
 		/// <summary>
 		/// checks to see if the CurrentAnimation is running
 		/// </summary>
 		public bool IsRunning => AnimationState == State.Running;
+
+		/// <summary>
+		/// Provides access to list of available animations
+		/// </summary>
+		public Dictionary<string, SpriteAnimation> Animations { get { return _animations; } }
 
 		readonly Dictionary<string, SpriteAnimation> _animations = new Dictionary<string, SpriteAnimation>();
 
