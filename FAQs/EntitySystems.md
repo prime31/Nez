@@ -1,6 +1,6 @@
 Entity Systems
 ============
-Nez no longer packages its own systems because "the nez ecs was always optional, and it was Shitty AF™️"
+Nez no longer packages its own entity systems because "the nez ECS was always optional, and it was Shitty AF™️"
 
 If you want to use a full ECS implementation look for:
 
