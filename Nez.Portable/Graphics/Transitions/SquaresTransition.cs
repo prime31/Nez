@@ -98,7 +98,7 @@ namespace Nez
 			yield return Coroutine.WaitForSeconds(DelayBeforeSquaresInDuration);
 
 			// unpopulate squares
-			yield return Core.StartCoroutine(TickEffectProgressProperty(_squaresEffect, SquaresInDuration,
+			yield return Core.StartCoroutine(TickEffectProgressProperty(_squaresEffect, SquaresOutDuration,
 				EaseHelper.OppositeEaseType(EaseType), true));
 
 			TransitionComplete();
