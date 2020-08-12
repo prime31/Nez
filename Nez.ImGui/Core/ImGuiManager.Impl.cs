@@ -377,7 +377,7 @@ namespace Nez.ImGuiTools
 		#endregion
 
 		[Console.Command("toggle-imgui", "Toggles the Dear ImGui renderer")]
-		static void ToggleImGui()
+		public static void ToggleImGui()
 		{
 			// install the service if it isnt already there
 			var service = Core.GetGlobalManager<ImGuiManager>();
