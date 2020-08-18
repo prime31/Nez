@@ -194,7 +194,9 @@ namespace Nez.ImGuiTools
 					ImGui.MenuItem("Style Editor", null, ref ShowStyleEditor);
 					if (ImGui.MenuItem("Open imgui_demo.cpp on GitHub"))
 					{
-						System.Diagnostics.Process.Start("https://github.com/ocornut/imgui/blob/master/imgui_demo.cpp");
+						var url = "https://github.com/ocornut/imgui/blob/master/imgui_demo.cpp";
+						var startInfo = new System.Diagnostics.ProcessStartInfo(url) { UseShellExecute = true };
+						System.Diagnostics.Process.Start(startInfo);
 					}
 
 					ImGui.Separator();
