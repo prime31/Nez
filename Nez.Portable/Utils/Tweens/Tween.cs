@@ -101,9 +101,14 @@ namespace Nez.Tweens
 			_loopType = loopType;
 			_delayBetweenLoops = delayBetweenLoops;
 
+			// negative for infinite loop, force -1
+			if (loops < 0)
+				loops = -1;
+
 			// double the loop count for ping-pong
 			if (loopType == LoopType.PingPong)
 				loops = loops * 2;
+
 			_loops = loops;
 
 			return this;
@@ -187,7 +192,7 @@ namespace Nez.Tweens
 			// if we have a loopType and we are Complete (meaning we reached 0 or duration) handle the loop.
 			// handleLooping will take any excess elapsedTime and factor it in and call udpateValue if necessary to keep
 			// the tween perfectly accurate.
-			if (_loopType != LoopType.None && _tweenState == TweenState.Complete && _loops > 0)
+			if (_loopType != LoopType.None && _tweenState == TweenState.Complete && _loops != 0)
 				HandleLooping(elapsedTimeExcess);
 
 			var deltaTime = _isTimeScaleIndependent ? Time.UnscaledDeltaTime : Time.DeltaTime;
@@ -385,7 +390,7 @@ namespace Nez.Tweens
 			}
 
 			// if we have loops left to process reset our state back to Running so we can continue processing them
-			if (_loops > 0)
+			if (_loops != 0)
 			{
 				_tweenState = TweenState.Running;
 
