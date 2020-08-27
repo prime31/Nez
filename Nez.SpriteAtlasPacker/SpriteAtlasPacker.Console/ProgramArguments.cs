@@ -1112,6 +1112,11 @@ namespace Nez.Tools.Atlases.Console
 							value = int.Parse(stringData);
 							return true;
 						}
+						else if (type == typeof(float))
+						{
+							value = float.Parse(stringData);
+							return true;
+						}
 						else
 						{
 							Debug.Assert(type.IsEnum);
