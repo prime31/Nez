@@ -589,6 +589,17 @@ namespace Nez.Console
 			Instance._functionKeyActions[functionKey - 1] = action;
 		}
 
+		/// <summary>
+		/// binds a debug console command to a function key
+		/// </summary>
+		/// <param name="functionKey">The function (e.g. 1 for F1).</param>
+		/// <param name="command">The name of the command.</param>
+		/// <param name="args">Optional list of arguments.</param>
+		public static void BindCommandToFunctionKey(int functionKey, string command, params string[] args)
+		{
+			Instance._functionKeyActions[functionKey - 1] = () => Instance.ExecuteCommand(command, args);
+		}
+
 		#endregion
 
 
