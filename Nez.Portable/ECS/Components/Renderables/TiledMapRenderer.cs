@@ -68,7 +68,7 @@ namespace Nez
 		public int GetColumnAtWorldPosition(float xPos)
 		{
 			xPos -= Entity.Transform.Position.X + _localOffset.X;
-			return TiledMap.WorldToTilePositionY(xPos);
+			return TiledMap.WorldToTilePositionX(xPos);
 		}
 
 		/// <summary>
