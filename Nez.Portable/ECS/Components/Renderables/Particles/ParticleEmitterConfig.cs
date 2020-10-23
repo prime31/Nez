@@ -31,8 +31,8 @@ namespace Nez.Particles
 		public Vector2 Gravity;
 		public float RadialAcceleration, RadialAccelVariance;
 		public float TangentialAcceleration, TangentialAccelVariance;
-		public Color StartColor = Color.White, StartColorVariance = Color.White;
-		public Color FinishColor = Color.Black, FinishColorVariance = Color.Black;
+		public Color StartColor = Color.White, StartColorVariance = Color.Transparent;
+		public Color FinishColor = Color.White, FinishColorVariance = Color.Transparent;
 		public uint MaxParticles;
 		public float StartParticleSize, StartParticleSizeVariance;
 		public float FinishParticleSize, FinishParticleSizeVariance;
