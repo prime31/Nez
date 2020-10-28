@@ -1053,15 +1053,15 @@ namespace Nez
 
 			// inlined CreateOrthographicOffCenter
 #if FNA
-			_projectionMatrix.M11 = (float)( 2.0 / (double) ( viewport.Width / 2 * 2 - 1 ) );
-			_projectionMatrix.M22 = (float)( -2.0 / (double) ( viewport.Height / 2 * 2 - 1 ) );
+			_projectionMatrix.M11 = (float)(2.0 / (double)viewport.Width);
+			_projectionMatrix.M22 = (float)(2.0 / (-1 * (double)viewport.Height));
+			_projectionMatrix.M41 = (float)((double)viewport.Width / (-1 * (double)viewport.Width));
 #else
 			_projectionMatrix.M11 = (float) (2.0 / (double) viewport.Width);
 			_projectionMatrix.M22 = (float) (-2.0 / (double) viewport.Height);
-#endif
-
 			_projectionMatrix.M41 = -1 - 0.5f * _projectionMatrix.M11;
 			_projectionMatrix.M42 = 1 - 0.5f * _projectionMatrix.M22;
+#endif
 
 			Matrix.Multiply(ref _transformMatrix, ref _projectionMatrix, out _matrixTransformMatrix);
 			_spriteEffect.SetMatrixTransform(ref _matrixTransformMatrix);
