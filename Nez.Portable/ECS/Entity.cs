@@ -435,6 +435,17 @@ namespace Nez
 		public T GetComponent<T>() where T : Component => Components.GetComponent<T>(false);
 
 		/// <summary>
+		/// Tries to get the component of type T. If no components are found returns false.
+		/// </summary>
+		/// <returns>true if a component has been found.</returns>
+		/// <typeparam name="T">The 1st type parameter.</typeparam>
+		public bool TryGetComponent<T>(out T component) where T : Component
+		{
+			component = Components.GetComponent<T>(false);
+			return component != null;
+		}
+
+		/// <summary>
 		/// checks to see if the Entity has the component
 		/// </summary>
 		public bool HasComponent<T>() where T : Component => Components.GetComponent<T>(false) != null;
