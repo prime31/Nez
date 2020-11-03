@@ -1,16 +1,16 @@
-<Project>	
+<Project>
 	<PropertyGroup>
 		<BaseIntermediateOutputPath>obj\$(MSBuildProjectName)</BaseIntermediateOutputPath>
 	</PropertyGroup>
 	<Import Sdk="Microsoft.NET.Sdk" Project="Sdk.props" />
-	
+
 	<PropertyGroup>
 		<Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
 		<Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
 		<OutputType>Library</OutputType>
 		<RootNamespace>Nez.ImGuiTools</RootNamespace>
 		<AssemblyName>Nez.ImGui</AssemblyName>
-        <TargetFramework>net471</TargetFramework>
+        <TargetFramework>netstandard2.0</TargetFramework>
 		<AllowUnsafeBlocks>True</AllowUnsafeBlocks>
 		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
 		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
@@ -27,8 +27,8 @@
 
 
 	<ItemGroup>
-		<ProjectReference Include="../../FNA/FNA.csproj" />
-		<ProjectReference Include="../Nez.Portable/Nez.FNA.csproj" />
+		<ProjectReference Include="../../FNA/FNA.Core.csproj" />
+		<ProjectReference Include="../Nez.Portable/Nez.FNA.Standard.csproj" />
 		<ProjectReference Include="../Nez.Persistence/Nez.FNA.Persistence.csproj" />
 	</ItemGroup>
 
@@ -65,6 +65,6 @@
 	<ItemGroup>
 		<PackageReference Include="ImGui.NET" Version="1.71.0" />
 	</ItemGroup>
-	
+
 	<Import Sdk="Microsoft.NET.Sdk" Project="Sdk.targets" />
 </Project>
