@@ -121,8 +121,8 @@ namespace Nez
 				if (_instance._scene == null)
 				{
 					_instance._scene = value;
-					_instance._scene.Begin();
 					_instance.OnSceneChanged();
+					_instance._scene.Begin();
 				}
 				else
 				{
