@@ -161,7 +161,10 @@ namespace Nez.Console
 
 		private void OnKeyTyped(object sender, TextInputEventArgs e)
 		{
-			this.HandleKey(e.Key, e.Character);
+			if (IsOpen)
+				this.HandleKey(e.Key, e.Character);
+			else if (e.Key == ConsoleKey)
+				IsOpen = true;
 		}
 
 		internal void Update()
