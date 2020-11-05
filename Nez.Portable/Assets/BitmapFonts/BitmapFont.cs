@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using Microsoft.Xna.Framework;
@@ -145,24 +145,35 @@ namespace Nez.BitmapFonts
 		#endregion
 
 		/// <summary>
-		/// Index to get items within thsi collection using array index syntax.
+		/// Index to get items within this collection using array index syntax.
 		/// </summary>
-		public Character this[char character] => Characters[character];
+		public Character this[char character]
+		{
+			get
+			{
+				if (Characters.TryGetValue(character, out var found))
+					return found;
+
+				//Debug.Warn("Failed to find character for '{0}'. Returning '{1}' instead.", character, DefaultCharacter?.Char.ToString() ?? "<null>");
+				return DefaultCharacter;
+			}
+		}
 
 		public void Initialize()
 		{
 			LoadTextures();
-			if (Characters.TryGetValue(' ', out var defaultChar))
+			if (Characters.TryGetValue('?', out var defaultChar))
 			{
 				DefaultCharacter = defaultChar;
 			}
 			else
 			{
-				Debug.Log($"Font {FamilyName} has no space character!");
+				Debug.Log($"Font {FamilyName} has no question mark character! Using 'a' as default character.");
 				DefaultCharacter = this['a'];
 			}
 
-			_spaceWidth = DefaultCharacter.Bounds.Width + DefaultCharacter.XAdvance;
+			var spaceCharacter = Characters[' '];
+			_spaceWidth = spaceCharacter.Bounds.Width + spaceCharacter.XAdvance;
 		}
 
 		/// <summary>

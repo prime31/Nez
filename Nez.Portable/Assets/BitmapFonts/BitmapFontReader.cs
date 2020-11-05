@@ -71,9 +71,20 @@ namespace Nez.BitmapFonts
                 Padding = new Padding(padLeft, padTop, padRight, padBottom),
                 Characters = characters
             };
-            font.DefaultCharacter = font[' '];
-			font._spaceWidth = font.DefaultCharacter.Bounds.Width + font.DefaultCharacter.XAdvance;
+			
 
+			if (font.Characters.TryGetValue('?', out var defaultChar))
+			{
+				font.DefaultCharacter = defaultChar;
+			}
+			else
+			{
+				Debug.Log($"Font {font.FamilyName} has no question mark character! Using 'a' as default character.");
+				font.DefaultCharacter = font['a'];
+			}
+
+			var spaceCharacter = font.Characters[' '];
+			font._spaceWidth = spaceCharacter.Bounds.Width + spaceCharacter.XAdvance;
 			return font;
 		}
 	}

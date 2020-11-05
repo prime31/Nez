@@ -21,6 +21,7 @@ namespace Nez
 		[DebuggerHidden]
 		static void Log(LogType type, string format, params object[] args)
 		{
+			System.Console.WriteLine($"{type}: {string.Format(format, args)}");
 			switch (type)
 			{
 				case LogType.Error:
