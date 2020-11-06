@@ -1,0 +1,42 @@
+﻿<Project>	
+	<PropertyGroup>
+		<BaseIntermediateOutputPath>obj\$(MSBuildProjectName)</BaseIntermediateOutputPath>
+	</PropertyGroup>
+	<Import Sdk="Microsoft.NET.Sdk" Project="Sdk.props" />
+
+  <PropertyGroup>
+    <TargetFrameworks>netstandard2.0</TargetFrameworks>
+    <AssemblyName>Nez</AssemblyName>
+    <RootNamespace>Nez</RootNamespace>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+
+    <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+        <DefineConstants>TRACE;DEBUG</DefineConstants>
+    </PropertyGroup>
+
+    <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+        <DefineConstants></DefineConstants>
+    </PropertyGroup>
+
+    <ItemGroup>
+      	<Compile Remove="Graphics\SVG\Shapes\Paths\SvgPathBuilder.cs" />
+    </ItemGroup>
+
+    <ItemGroup>
+      	<None Remove="Content\NezDefaultBMFont.xnb" />
+    </ItemGroup>
+
+    <ItemGroup>
+      	<EmbeddedResource Include="Content\NezDefaultBMFont.xnb">
+        	<CopyToOutputDirectory>Never</CopyToOutputDirectory>
+      	</EmbeddedResource>
+    </ItemGroup>
+	
+	<ItemGroup>
+		<PackageReference Include="MonoGame.Framework.DesktopGL" Version="3.8.0.1641" />
+		<PackageReference Include="System.Drawing.Common" Version="4.5.1" />
+	</ItemGroup>
+
+	<Import Sdk="Microsoft.NET.Sdk" Project="Sdk.targets" />
+</Project>
