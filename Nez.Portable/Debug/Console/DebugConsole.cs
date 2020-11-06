@@ -253,7 +253,12 @@ namespace Nez.Console
 		void HandleKey(Keys key, char typed)
 		{
 			if (typed == '\t')
+			{
+#if !FNA
+				HandleKey(Keys.Tab, (char) 0);
+#endif
 				return;
+			}
 			
 			if (key != Keys.Tab && key != Keys.LeftShift && key != Keys.RightShift && key != Keys.RightAlt &&
 			    key != Keys.LeftAlt && key != Keys.RightControl && key != Keys.LeftControl)
