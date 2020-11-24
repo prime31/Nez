@@ -82,12 +82,12 @@ We can take the above example a step further using the previously mentioned `Phy
 
 ```cs
 // fetch anything that we might overlap with at our position excluding ourself. We don't care about ourself here.
-var neighborColliders = Physics.BoxcastBroadphaseExcludingSelf( entity.GetComponent<Collider> );
+var neighborColliders = Physics.BoxcastBroadphaseExcludingSelf( entity.GetComponent<Collider>() );
 
 // loop through and check each Collider for an overlap
 foreach( var collider in neighborColliders )
 {
-	if( entity.GetComponent<Collider>.Overlaps( collider )
+	if( entity.GetComponent<Collider>().Overlaps( collider ) )
 		Debug.Log( "We are overlapping a Collider: {0}", collider );
 }
 ```
