@@ -12,6 +12,38 @@ namespace Nez.BitmapFonts
 	public partial class BitmapFont
 	{
 		/// <summary>
+		/// Causes the next font that is loaded from file to have it's textures be
+		/// pre-multiplied with it's alpha.
+		/// This allows for the font to be rendered correctly using <see cref="BlendState"/>'s other than
+		/// <see cref="BlendState.NonPremultiplied"/>.
+		/// This method should be called before calling <see cref="Nez.Systems.NezContentManager.LoadBitmapFont(string)"/>.
+		/// This will only affect the next font loaded.
+		/// Also see <see cref="SetPremultiplyAll(bool)"/>.
+		/// </summary>
+		public static void PremultiplyNext()
+		{
+			premultiplyNext = true;
+		}
+
+		/// <summary>
+		/// Causes all fonts that are loaded from file to have their textures be
+		/// pre-multiplied with it's alpha.
+		/// This allows for the fonts to be rendered correctly using <see cref="BlendState"/>'s other than
+		/// <see cref="BlendState.NonPremultiplied"/>.
+		/// This method should be called before calling <see cref="Nez.Systems.NezContentManager.LoadBitmapFont(string)"/>.
+		/// This will affect all fonts loaded in the future, but will not affect fonts that have already been
+		/// loaded.
+		/// Also see <see cref="PremultiplyNext()"/>.
+		/// </summary>
+		public static void SetPremultiplyAll(bool premultiply)
+		{
+			premultiplyAll = premultiply;
+		}
+
+		private static bool premultiplyNext;
+		private static bool premultiplyAll;
+
+		/// <summary>
 		/// Load font information from the specified <see cref="Stream"/>.
 		/// </summary>
 		/// <exception cref="ArgumentNullException">Thrown when one or more required arguments are null.</exception>
@@ -316,7 +348,29 @@ namespace Nez.BitmapFonts
 		{
 			Textures = new Texture2D[Pages.Length];
 			for (var i = 0; i < Textures.Length; i++)
-				Textures[i] = Texture2D.FromStream(Core.GraphicsDevice, TitleContainer.OpenStream(Pages[i].Filename));
+			{
+				var loaded = Texture2D.FromStream(Core.GraphicsDevice, TitleContainer.OpenStream(Pages[i].Filename));
+
+				if (premultiplyNext || premultiplyAll)
+				{
+					// Pre-multiply the texture's rgb channels with the alpha chanel.
+					// This prevents incorrect rendering when NOT using BlendState.NonPremultiplied.
+					Color[] data = new Color[loaded.Width * loaded.Height];
+					loaded.GetData(data);
+					for (int j = 0; j < data.Length; j++)
+					{
+						var cIn = data[j];
+						var cOut = Color.FromNonPremultiplied(cIn.ToVector4());
+
+						data[j] = cOut;
+					}
+					loaded.SetData(data);
+				}
+				
+
+				Textures[i] = loaded;
+			}
+			premultiplyNext = false;
 		}
 	}
 }
