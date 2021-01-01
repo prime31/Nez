@@ -184,7 +184,7 @@ namespace Nez.Systems
 		/// <summary>
 		/// Loads a BitmapFont
 		/// </summary>
-		public BitmapFont LoadBitmapFont(string name)
+		public BitmapFont LoadBitmapFont(string name, bool premultiplyAlpha = false)
 		{
 			if (LoadedAssets.TryGetValue(name, out var asset))
 			{
@@ -192,7 +192,7 @@ namespace Nez.Systems
 					return bmFont;
 			}
 
-			var font = BitmapFontLoader.LoadFontFromFile(name);
+			var font = BitmapFontLoader.LoadFontFromFile(name, premultiplyAlpha);
 
 			LoadedAssets.Add(name, font);
 			DisposableAssets.Add(font);
