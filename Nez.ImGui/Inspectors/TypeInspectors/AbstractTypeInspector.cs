@@ -39,7 +39,7 @@ namespace Nez.ImGuiTools.TypeInspectors
 		/// </summary>
 		public virtual void Initialize()
 		{
-			_tooltip = _memberInfo.GetCustomAttribute<TooltipAttribute>()?.Tooltip;
+			_tooltip = _memberInfo.GetAttribute<TooltipAttribute>()?.Tooltip;
 		}
 
 		/// <summary>
