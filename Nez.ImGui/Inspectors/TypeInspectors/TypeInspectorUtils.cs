@@ -121,7 +121,7 @@ namespace Nez.ImGuiTools.TypeInspectors
 			var methods = ReflectionUtils.GetMethods(type);
 			foreach (var method in methods)
 			{
-				var attr = method.GetCustomAttribute<T>();
+				var attr = method.GetAttribute<T>();
 				if (attr == null)
 					continue;
 
@@ -160,7 +160,7 @@ namespace Nez.ImGuiTools.TypeInspectors
 				return new TI.ListInspector();
 
 			// check for custom inspectors before checking Nez types in case a subclass implemented one
-			var customInspectorType = valueType.GetTypeInfo().GetCustomAttribute<CustomInspectorAttribute>();
+			var customInspectorType = valueType.GetTypeInfo().GetAttribute<CustomInspectorAttribute>();
 			if (customInspectorType != null)
 			{
 				if (customInspectorType.InspectorType.GetTypeInfo().IsSubclassOf(abstractTypeInspectorType))

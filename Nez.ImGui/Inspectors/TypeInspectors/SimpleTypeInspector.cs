@@ -25,7 +25,7 @@ namespace Nez.ImGuiTools.TypeInspectors
 		public override void Initialize()
 		{
 			base.Initialize();
-			_rangeAttribute = _memberInfo.GetCustomAttribute<RangeAttribute>();
+			_rangeAttribute = _memberInfo.GetAttribute<RangeAttribute>();
 
 			// the inspect method name matters! We use reflection to feth it.
 			var valueTypeName = _valueType.Name.ToString();
