@@ -12,6 +12,10 @@ namespace Nez.Tiled
 		public float OffsetX { get; set; }
 		public float OffsetY { get; set; }
 		public Vector2 Offset => new Vector2(OffsetX, OffsetY);
+		public float ParallaxFactorX { get; set; }
+		public float ParallaxFactorY { get; set; }
+		public Vector2 ParallaxFactor => new Vector2(ParallaxFactorX, ParallaxFactorY);
+
 		public Dictionary<string, string> Properties { get; set; }
 
 		/// <summary>
