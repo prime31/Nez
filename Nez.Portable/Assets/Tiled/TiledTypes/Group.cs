@@ -10,6 +10,8 @@ namespace Nez.Tiled
 		public bool Visible { get; set; }
 		public float OffsetX { get; set; }
 		public float OffsetY { get; set; }
+		public float ParallaxFactorX { get; set; }
+		public float ParallaxFactorY { get; set; }
 
 		public TmxList<ITmxLayer> Layers;
 

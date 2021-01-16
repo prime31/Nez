@@ -313,6 +313,9 @@ namespace Nez.Tiled
 			layer.Visible = (bool?)xLayer.Attribute("visible") ?? true;
 			layer.OffsetX = (float?)xLayer.Attribute("offsetx") ?? 0.0f;
 			layer.OffsetY = (float?)xLayer.Attribute("offsety") ?? 0.0f;
+			layer.ParallaxFactorX = (float?)xLayer.Attribute("parallaxx") ?? 1.0f;
+			layer.ParallaxFactorY = (float?)xLayer.Attribute("parallaxy") ?? 1.0f;
+
 			// TODO: does the width/height passed in ever differ from the TMX layer XML?
 			layer.Width = (int)xLayer.Attribute("width");
 			layer.Height = (int)xLayer.Attribute("height");
@@ -381,6 +384,8 @@ namespace Nez.Tiled
 			group.Visible = (bool?)xObjectGroup.Attribute("visible") ?? true;
 			group.OffsetX = (float?)xObjectGroup.Attribute("offsetx") ?? 0.0f;
 			group.OffsetY = (float?)xObjectGroup.Attribute("offsety") ?? 0.0f;
+			group.ParallaxFactorX = (float?)xObjectGroup.Attribute("parallaxx") ?? 1.0f;
+			group.ParallaxFactorY = (float?)xObjectGroup.Attribute("parallaxy") ?? 1.0f;
 
 			var drawOrderDict = new Dictionary<string, DrawOrderType> {
 				{"unknown", DrawOrderType.UnknownOrder},
@@ -505,6 +510,8 @@ namespace Nez.Tiled
 			layer.Opacity = (float?)xImageLayer.Attribute("opacity") ?? 1.0f;
 			layer.OffsetX = (float?)xImageLayer.Attribute("offsetx") ?? 0.0f;
 			layer.OffsetY = (float?)xImageLayer.Attribute("offsety") ?? 0.0f;
+			layer.ParallaxFactorX = (float?)xImageLayer.Attribute("parallaxx") ?? 1.0f;
+			layer.ParallaxFactorY = (float?)xImageLayer.Attribute("parallaxy") ?? 1.0f;
 
 			var xImage = xImageLayer.Element("image");
 			if (xImage != null)
@@ -523,6 +530,8 @@ namespace Nez.Tiled
 			group.Visible = (bool?)xGroup.Attribute("visible") ?? true;
 			group.OffsetX = (float?)xGroup.Attribute("offsetx") ?? 0.0f;
 			group.OffsetY = (float?)xGroup.Attribute("offsety") ?? 0.0f;
+			group.ParallaxFactorX = (float?)xGroup.Attribute("parallaxx") ?? 1.0f;
+			group.ParallaxFactorY = (float?)xGroup.Attribute("parallaxy") ?? 1.0f;
 
 			group.Properties = ParsePropertyDict(xGroup.Element("properties"));
 
