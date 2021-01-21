@@ -35,6 +35,9 @@ namespace Nez.Tools.Atlases
 			public int FrameRate = Constants.DefaultFrameRate;
 			public string[] InputPaths;
 			public bool OutputLua;
+			public bool WritePaths;
+			public bool LF;
+			public bool NoOrigins;
 		}
 
 		public static int PackSprites(Config config)
@@ -51,19 +54,11 @@ namespace Nez.Tools.Atlases
 				return (int)FailCode.NoImages;
 			}
 
-			// make sure no images have the same name if we're building a map
-			for (int i = 0; i < images.Count; i++)
+			// make sure no images have the same name or path if we're building a map
+			if ((!config.WritePaths && CheckDuplicateImagesNames(images))
+				|| (config.WritePaths && CheckDuplicateImagesPaths(images)))
 			{
-				var str1 = Path.GetFileNameWithoutExtension(images[i]);
-				for (int j = i + 1; j < images.Count; j++)
-				{
-					var str2 = Path.GetFileNameWithoutExtension(images[j]);
-					if (str1 == str2)
-					{
-						System.Console.WriteLine("Two images have the same name: {0} = {1}", images[i], images[j]);
-						return (int)FailCode.ImageNameCollision;
-					}
-				}
+				return (int)FailCode.ImageNameCollision;
 			}
 
 			// generate our output
@@ -94,17 +89,17 @@ namespace Nez.Tools.Atlases
 					outputImage.Save(config.AtlasOutputFile, ImageFormat.Bmp);
 					break;
 				default:
-					throw new Exception("Invalid image format for output image");
+					throw new Exception("Invalid image format for output image.");
 			}
 
-			if(config.OutputLua)
-				config.MapOutputFile = config.MapOutputFile.Replace( ".atlas", ".lua" );
+			if (config.OutputLua)
+				config.MapOutputFile = config.MapOutputFile.Replace(".atlas", ".lua");
 
 			if (File.Exists(config.MapOutputFile))
 				File.Delete(config.MapOutputFile);
 
 			if (config.OutputLua)
-				LuaMapExporter.Save(config.MapOutputFile, outputMap, animations, outputImage.Width, outputImage.Height, config );
+				LuaMapExporter.Save(config.MapOutputFile, outputMap, animations, outputImage.Width, outputImage.Height, config);
 			else
 				AtlasMapExporter.Save(config.MapOutputFile, outputMap, animations, config);
 
@@ -146,11 +141,46 @@ namespace Nez.Tools.Atlases
 			}
 
 			if (createAnimations && animationFrames.Count > 0)
-				animations.Add( Path.GetFileName( dir ), animationFrames );
+				animations.Add(Path.GetFileName(dir), animationFrames);
 
 			foreach (var subdir in Directory.GetDirectories(dir))
 				FindImagesRecursively(subdir, images, animations, createAnimations);
 		}
 
+		static bool CheckDuplicateImagesNames(IList<string> images)
+		{
+			for (int i = 0; i < images.Count; i++)
+			{
+				var str1 = Path.GetFileNameWithoutExtension(images[i]);
+				for (int j = i + 1; j < images.Count; j++)
+				{
+					var str2 = Path.GetFileNameWithoutExtension(images[j]);
+					if (str1 == str2)
+					{
+						System.Console.WriteLine("Two images have the same name: {0} = {1}.", images[i], images[j]);
+						return true;
+					}
+				}
+			}
+			return false;
+		}
+
+		static bool CheckDuplicateImagesPaths(IList<string> images)
+		{
+			for(int i = 0; i < images.Count; i++)
+			{
+				string str1 = images[i];
+				for(int j = i + 1; j < images.Count; j++)
+				{
+					string str2 = images[j];
+					if (str1 == str2)
+					{
+						System.Console.WriteLine("Two images have the same path: {0}.", images[i]);
+						return true;
+					}
+				}
+			}
+			return false;
+		}
 	}
 }

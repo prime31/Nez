@@ -1,4 +1,7 @@
-﻿using System.IO;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 
 namespace Nez.Tools.Atlases
 {
@@ -30,6 +33,33 @@ namespace Nez.Tools.Atlases
 			for (int i = 1; i < sizeof(int) * 8; i <<= 1)
 				k = k | k >> i;
 			return k + 1;
+		}
+
+		// common prefix path for all the given files, e.g. for
+		// C:\dir1\file1.png
+		// C:\dir1\file2.jpg
+		// will return "C:\dir1\"
+		public static string GetCommonPath(IEnumerable<string> files)
+		{
+			if (files == null || !files.Any())
+				throw new ArgumentNullException(nameof(files),
+					"No file is given. Provide at least one.");
+
+			var orderedFiles = files.OrderBy(file => file.Length);
+			var shortestFile = orderedFiles.First();
+			int lastCommonDirectoryNameStart = 0;
+			for (int i = 0; i < shortestFile.Length; i++)
+			{
+				char currentChar = shortestFile[i];
+				bool isThisCharInOtherFiles = files.All(file => file[i] == currentChar);
+				if (!isThisCharInOtherFiles)
+					break;
+
+				bool isPathSeparator = currentChar == '\\';
+				if (isPathSeparator)
+					lastCommonDirectoryNameStart = i;
+			}
+			return shortestFile.Substring(0, lastCommonDirectoryNameStart + 1);
 		}
 	}
 }

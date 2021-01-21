@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
+using System.Linq;
 
 namespace Nez.Tools.Atlases
 {
@@ -16,8 +17,22 @@ namespace Nez.Tools.Atlases
 			List<string> outputFiles = new List<string>(keys);
 			outputFiles.Sort();
 
+			// compute the names of images to write
+			IDictionary<string, string> imagesNames;
+			if (arguments.WritePaths)
+			{
+				string commonPath = MiscHelper.GetCommonPath(outputFiles);
+				imagesNames = outputFiles.ToDictionary(k => k, v => v.Substring(commonPath.Length));
+			}
+			else
+			{
+				imagesNames = outputFiles.ToDictionary(k => k, v => Path.GetFileNameWithoutExtension(v));
+			}
+
 			using (StreamWriter writer = new StreamWriter(filename))
 			{
+				writer.NewLine = arguments.LF ? "\n" : "\r\n";
+
 				foreach (var image in outputFiles)
 				{
 					// get the destination rectangle
@@ -26,7 +41,7 @@ namespace Nez.Tools.Atlases
 					// write out the destination rectangle for this bitmap
 					writer.WriteLine(string.Format(
 	                 	"{0} = {1} {2} {3} {4}", 
-	                 	Path.GetFileNameWithoutExtension(image), 
+	                 	imagesNames[image], 
 	                 	destination.X, 
 	                 	destination.Y, 
 	                 	destination.Width, 
