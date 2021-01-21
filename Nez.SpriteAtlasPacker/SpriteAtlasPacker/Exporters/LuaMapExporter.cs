@@ -14,6 +14,8 @@ namespace Nez.Tools.Atlases
 			var images = ImagesNotInAnimations(map.Keys.ToArray(), animations);
 			using (var writer = new StreamWriter(filename))
 			{
+				writer.NewLine = arguments.LF ? "\n" : "\r\n";
+
 				writer.WriteLine("return {");
 
 				writer.WriteLine($"\ttexture = love.graphics.newImage('{arguments.AtlasOutputFile}'),");
