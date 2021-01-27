@@ -665,10 +665,7 @@ namespace Nez.Console
 				foreach (var method in type.DeclaredMethods)
 				{
 					CommandAttribute attr = null;
-					var attrs = method.GetCustomAttributes(typeof(CommandAttribute), false)
-						.Where(a => a is CommandAttribute);
-					if (IEnumerableExt.Count(attrs) > 0)
-						attr = attrs.First() as CommandAttribute;
+					attr = method.GetCustomAttribute<CommandAttribute>(false);
 
 					if (attr != null)
 						ProcessMethod(method, attr);
