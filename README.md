@@ -1,4 +1,4 @@
-![Nez](FAQs/images/nez-logo-black.png)
+![Nez](Nez.github.io/static/img/logo.svg)
 
 [![Build status](https://ci.appveyor.com/api/projects/status/github/prime31/Nez?branch=master&svg=true)](https://ci.appveyor.com/project/prime31/nez/branch/master)
 [![NuGet version](https://img.shields.io/nuget/v/Nez.svg)](https://www.nuget.org/packages/Nez)
