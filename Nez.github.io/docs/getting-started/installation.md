@@ -5,8 +5,8 @@ title: Installation
 
 ### Install as a submodule:
 
-- create a `Monogame Cross Platform Desktop Project`
-- clone or download the Nez repository
+- create a [`Monogame Cross Platform Desktop Project`](https://docs.monogame.net/articles/getting_started/2_creating_a_new_project_netcore.html)
+- clone or download the Nez repository: `git clone https://github.com/prime31/Nez.git`
 - add the `Nez.Portable/Nez.csproj` project to your solution and add a reference to it in your main project
 - make your main Game class (`Game1.cs` in a default project) subclass `Nez.Core`
 
