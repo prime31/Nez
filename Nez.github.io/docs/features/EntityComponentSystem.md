@@ -1,5 +1,5 @@
 ---
-id: entity-component-system
+id: EntityComponentSystem
 title: Entity Component System
 ---
 

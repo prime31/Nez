@@ -1,5 +1,5 @@
 ---
-id: rendering
+id: Rendering
 title: Rendering
 ---
 

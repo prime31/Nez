@@ -1,7 +1,25 @@
 module.exports = {
   someSidebar: {
-    'Docusaurus': ['about/introduction'],
+    'Docusaurus': ['about/introduction','about/Samples'],
     'Getting Started': ['getting-started/installation'],
-    'Features': ['features/core', 'features/entity-component-system', 'features/rendering'],
+    'Features': [
+      'features/AI',
+      'features/DeferredLighting',
+      'features/FarseerPhysics',
+      'features/RuntimeInspector',
+      'features/UI',
+      'features/ContentManagement',
+      'features/EntityComponentSystem',
+      'features/Pathfinding',
+      'features/SVG',
+      'features/Verlet',
+      'features/Core',
+      'features/EntitySystems',
+      'features/Physics',
+      'features/DearImGui',
+      'features/FNACompat',
+      'features/Rendering',
+      'features/SceneTransitions'
+    ]
   },
 };

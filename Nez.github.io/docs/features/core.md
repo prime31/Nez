@@ -1,5 +1,5 @@
 ---
-id: core
+id: Core
 title: Nez Core
 ---
 
