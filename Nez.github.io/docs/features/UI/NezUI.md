@@ -1,5 +1,5 @@
 ---
-id: UI
+id: NezUI
 title: Nez UI
 ---
 

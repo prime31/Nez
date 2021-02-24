@@ -1,6 +1,6 @@
 ---
-id: EntityComponentSystem
-title: Entity Component System
+id: SceneEntityComponentSystem
+title: Scene/Entity/Component System
 ---
 
 Most of Nez revolves around an Entity-Component system (ECS). The Nez ECS is not unlike any other ECS you may have worked with so it should be instantly familiar.

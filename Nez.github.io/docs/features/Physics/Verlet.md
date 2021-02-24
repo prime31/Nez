@@ -11,7 +11,7 @@ A few things should be noted up front: the verlet physics system is not a render
 ## Basic Example
 Getting started using the verlet physics is pretty simple. All you have to do is create a World object and call it's `Update` method. An example Component that does this is below. The verlet system has a built-in debug visual system. It is being used here so that you have something to visualize.
 
-```cs
+```csharp
 public class VerletDemo : RenderableComponent, IUpdatable
 {
 	public override float Width { get { return 800; } }
@@ -51,7 +51,7 @@ Also included is `AngleConstraint` which will keep a specific angle between any 
 
 In the example above, we used two of the built-in `Composites`, Tire and Cloth (both classes are simple subclasses of Composite). Composites are just a container for Particles and Constraints so that managing them is easier. Whenever you have an object that you will be creating multiple times you can just subclass Composite to encapsulate it. You can also create Composites on the fly. Lets take a look at how to do that:
 
-```cs
+```csharp
 // create the Composite object
 var composite = new Composite();
 

@@ -10,7 +10,7 @@ Every game needs transition effects to have a polished look and feel. With Nez, 
 ## Using Included Transitions
 All of the included transitions can be used intra-Scene (within the same Scene) and between two different Scenes. Some of them have configuration options that control how the transition occurs. Below are a couple examples:
 
-```cs
+```csharp
 // loads up a new Scene with a WindTransition. Note that you provide a `Func<Scene>` to provide the Scene to transition to.
 Core.StartSceneTransition( new WindTransition( () => new YourNextScene() ) );
 
@@ -51,7 +51,7 @@ The `SceneTransition` class has a handy little helper method that you can use if
 
 Let's take a look at an example of a transition that uses an Effect. The comments break down exactly what is happening.
 
-```cs
+```csharp
 public class SuperTransition : SceneTransition
 {
 	/// <summary>

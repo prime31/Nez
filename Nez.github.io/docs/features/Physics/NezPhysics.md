@@ -1,5 +1,5 @@
 ---
-id: Physics
+id: NezPhysics
 title: Nez Physics/Collisions
 ---
 
@@ -36,7 +36,7 @@ Astute readers will have noticed the *layerMask* mentioned above. The layerMask 
 ## Putting the Physics System to Use
 Linecasts are extremely useful for various things like checking line-of-sight for enemies, detecting the spatial surroundings of an Entity, fast-moving bullets, etc. Here is an example of casting a line from start to end that just logs the data if it hits something:
 
-```cs
+```csharp
 var hit = Physics.Linecast( start, end );
 if( hit.Collider != null )
 	Debug.Log( "ray hit {0}, entity: {1}", hit, hit.collider.entity );
@@ -46,7 +46,7 @@ Nez has some more advanced collision/overlap checks using methods such as Minkow
 
 This first example is the easiest way to deal with collisions. `deltaMovement` is the amount that you would like to move the Entity, typically `velocity * Time.DeltaTime`. The `CollidesWithAny` method will check all collisons and adjust deltaMovement to resolve any collisions.
 
-```cs
+```csharp
 // CollisionResult will contain some really useful information such as the Collider that was hit,
 // the normal of the surface hit and the minimum translation vector (MTV). The MTV can be used to
 // move the colliding Entity directly adjacent to the hit Collider.
@@ -67,7 +67,7 @@ entity.Position += deltaMovement;
 
 If you need a bit more control over what happens when a collision occurs you can manually check for collisions with other Colliders as well. This next snippet checks for a collision with a specific Collider. Note that when doing this deltaMovement is not adjust for you. It is up to you to take into account the `MinimumTranslationVector` when resolving the collision.
 
-```cs
+```csharp
 // declare the CollisionResult
 CollisionResult collisionResult;
 
@@ -82,7 +82,7 @@ if( entity.GetComponent<Collider>().CollidesWith( someOtherCollider, deltaMoveme
 
 We can take the above example a step further using the previously mentioned `Physics.BoxcastBroadphase` method, or more specifically a version of it that excludes ourself from the query. That method will give us all the colliders in the Scene that are in our vicinity which we can then use to do our actual collision checks on.
 
-```cs
+```csharp
 // fetch anything that we might overlap with at our position excluding ourself. We don't care about ourself here.
 var neighborColliders = Physics.BoxcastBroadphaseExcludingSelf( entity.GetComponent<Collider>() );
 
