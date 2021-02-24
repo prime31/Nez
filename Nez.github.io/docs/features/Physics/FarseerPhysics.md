@@ -41,7 +41,7 @@ The high level API wraps up the Farseer API in standard Nez Components. Farseer 
 Lets take a look at some basic examples of using the API.
 
 Creates a Sprite and a dynamic Farseer rigid body with a circle collider
-```cs
+```csharp
 // create an Entity and set the position and scale
 CreateEntity( "circle-sprite" )
 	.SetPosition( pos )
@@ -60,7 +60,7 @@ CreateEntity( "circle-sprite" )
 ```
 
 Creates a static Farseer rigid body and an edge collider that goes from vert1 to vert2
-```cs
+```csharp
 CreateEntity( "edge" )
 	.SetPosition( pos )
 
@@ -73,7 +73,7 @@ CreateEntity( "edge" )
 ```
 
 Creates a static Farseer rigid body with a chain collider. Chains are essentially a free form sequence of line segments that can be collided with from either side.
-```cs
+```csharp
 // define the verts. The Vertices class has the sme API as List<Vector2>.
 var verts = new Vertices();
 verts.Add( new Vector2( 500, 10 ) );
@@ -91,7 +91,7 @@ createEntity( "chain" )
 ```
 
 This example shows how to use a joint to connect two FSRigidBodies. It is assumed that rigidBody1 and rigidBody2 exist and are FSRigidBodies.
-```cs
+```csharp
 // add the weld joint to the first rigid body. Weld joints essentially glues two bodies together.
 rigidBody1.AddComponent<FSWeldJoint>()
 		 // configure the anchors for the two bodies. Anchors are relative to the position of each body.
@@ -107,7 +107,7 @@ rigidBody1.AddComponent<FSWeldJoint>()
 ```
 
 Finally lets take a look at creating a slightly more complex collision shape.
-```cs
+```csharp
 var vertList = new List<Vertices>();
 // fill vertList with some polygon vertices
 

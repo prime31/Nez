@@ -25,7 +25,7 @@ Much like Renderers, you can add one or more PostProcessors to the Scene via the
 
 A basic example of a PostProcessor is below. It takes a RenderTexture that a Renderer rendered into and composites that with the rest of the scene with an Effect.
 
-```cs
+```csharp
 public class SimplePostProcessor : PostProcessor
 {
 	RenderTexture _renderTexture;

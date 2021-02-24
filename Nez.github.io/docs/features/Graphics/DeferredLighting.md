@@ -17,7 +17,7 @@ There are going to be times that you don't want your objects normal mapped or ma
 
 Below are the three most common Material setups: normal mapped lit, normal mapped lit self illuminated and only diffuse (no normal map).
 
-```cs
+```csharp
 // lit, normal mapped Material. normalMapTexture is a reference to the Texture2D that contains your normal map.
 var standardMaterial = new DeferredSpriteMaterial( normalMapTexture );
 
@@ -42,7 +42,7 @@ selfLitMaterial.effect.SetUseNormalAlphaChannelForSelfIllumination( true )
 ## Scene Setup
 There isn't much that needs to be done for your Scene setup. All you have to do is add a `DeferredLightingRenderer`. The values you pass to the constructor of this Renderer are very important though! You have to specify which RenderLayer it should use for lights and which RenderLayers contain your normal sprites.
 
-```cs
+```csharp
 // define your renderLayers somewhere easy to access
 const int LIGHT_LAYER = 1;
 const int OBJECT_LAYER1 = 10;
@@ -59,7 +59,7 @@ deferredRenderer.SetAmbientColor( Color.Black );
 ## Entity Setup
 Now we just have to make sure that we use the proper RenderLayers (easy to do since we were smart and made them `const int`) and Materials when creating our Renderables:
 
-```cs
+```csharp
 // create an Entity to house our sprite
 var entity = Scene.CreateEntity( "sprite" );
 

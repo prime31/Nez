@@ -17,7 +17,7 @@ Core.RegisterGlobalManager( imGuiManager );
 imGuiManager.SetEnabled(false);
 ```
 
-![Dear ImGui](images/ImGuiSample.png)
+![Dear ImGui](../images/ImGuiSample.png)
 
 
-See the [Nez.ImGui README](../Nez.ImGui/README.md) for more information and examples.
+See the [Nez.ImGui README](https://github.com/prime31/Nez/blob/master/Nez.ImGui/README.md) for more information and examples.

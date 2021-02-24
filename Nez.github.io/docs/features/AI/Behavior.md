@@ -1,6 +1,6 @@
 ---
-id: AI
-title: AI
+id: Behavior
+title: Behavior
 ---
 
 Nez includes several different options for setting up AI ranging from a super simple transitionless finite state machine (FSM) to extendable behavior trees to ultra-flexible Utility Based AI. You can mix and match them as you see fit.
