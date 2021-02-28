@@ -87,13 +87,7 @@ namespace Nez.Farseer
 				}
 			}
 
-#if DEBUG
-			TimeRuler.Instance.BeginMark("physics", Color.Blue);
-#endif
 			World.Step(MathHelper.Min(Time.DeltaTime, MinimumUpdateDeltaTime));
-#if DEBUG
-			TimeRuler.Instance.EndMark("physics");
-#endif
 		}
 
 		#endregion
