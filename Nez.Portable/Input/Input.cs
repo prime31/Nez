@@ -118,7 +118,15 @@ namespace Nez
 			_currentMouseState = state;
 		}
 
-
+		/// <summary>
+		/// useful for simulating mouse input
+		/// </summary>
+		/// <param name="state"></param>
+		public static void SetPreviousMouseState(MouseState state)
+		{
+			_previousMouseState = state;
+		}
+		
 		/// <summary>
 		/// useful for simulating keyboard input
 		/// </summary>
@@ -126,6 +134,15 @@ namespace Nez
 		public static void SetCurrentKeyboardState(KeyboardState state)
 		{
 			_currentKbState = state;
+		}
+		
+		/// <summary>
+		/// useful for simulating keyboard input
+		/// </summary>
+		/// <param name="state">State.</param>
+		public static void SetPreviousKeyboardState(KeyboardState state)
+		{
+			_previousKbState = state;
 		}
 
 		#region Keyboard
