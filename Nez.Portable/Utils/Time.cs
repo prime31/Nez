@@ -48,9 +48,16 @@ namespace Nez
 		/// </summary>
 		public static uint FrameCount;
 
+		/// <summary>
+		/// Maximum value that DeltaTime can be. This can be useful to prevent physics from breaking when dragging
+		/// the game window or if your game hitches.
+		/// </summary>
+		public static float MaxDeltaTime = float.MaxValue;
 
 		internal static void Update(float dt)
 		{
+			if(dt > MaxDeltaTime)
+				dt = MaxDeltaTime;
 			TotalTime += dt;
 			DeltaTime = dt * TimeScale;
 			AltDeltaTime = dt * AltTimeScale;
