@@ -32,14 +32,9 @@ If you are using FNA you should replace `MG3.8Effects` with `FNAEffects`
 </ItemGroup>
 ```
 
-
 Note: if you get compile errors referencing a missing `project.assets.json` file run `msbuild Nez.sln /t:restore` in the root Nez folder to restore them.
 
 If you are using a .NET Core main application and want to switch the Nez projects over to .NET Standard 2.0, run the following command in a terminal. On Windows it will require the linux subsystem terminal: `find . -path Tests -prune -o -name 'Nez*.csproj' | grep -v Tests | grep -v Pipeline | xargs perl -pi -e 's/net471/netstandard2.0/g'`  You will also need to update the NuGet references in the Nez csproj files to point at the MonoGame dotnet Core versions. 
-
-
-
-
 
 ### Install through NuGet:
 
