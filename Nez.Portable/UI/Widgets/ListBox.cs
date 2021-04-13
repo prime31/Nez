@@ -1,7 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Nez.BitmapFonts;
+using System;
+using System.Collections.Generic;
 
 
 namespace Nez.UI
@@ -78,7 +78,7 @@ namespace Nez.UI
 		}
 
 
-		bool IInputListener.OnMousePressed(Vector2 mousePos)
+		bool IInputListener.OnLeftMousePressed(Vector2 mousePos)
 		{
 			if (_selection.IsDisabled() || _items.Count == 0)
 				return false;
@@ -95,16 +95,22 @@ namespace Nez.UI
 			return true;
 		}
 
+		bool IInputListener.OnRightMousePressed(Vector2 mousePos)
+		{
+			return false;
+		}
 
 		void IInputListener.OnMouseMoved(Vector2 mousePos)
 		{
 		}
 
-
-		void IInputListener.OnMouseUp(Vector2 mousePos)
+		void IInputListener.OnLeftMouseUp(Vector2 mousePos)
 		{
 		}
 
+		void IInputListener.OnRightMouseUp(Vector2 mousePos)
+		{
+		}
 
 		bool IInputListener.OnMouseScrolled(int mouseWheelDelta)
 		{
