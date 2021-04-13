@@ -1,235 +1,240 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Nez.BitmapFonts;
+using System;
 
 namespace Nez.UI
 {
-    public class NumberField : Table, IInputListener
-    {
-        public event Action<NumberField, float> OnNumberChanged = delegate { };
-        private TextButton decrease;
-        private TextButton increase;
-        private TextField field;
-        private NumberFieldStyle style;
-        private float minimum;
-        private float maximum;
-        private float number;
-        private float step = 0.1f;
+	public class NumberField : Table, IInputListener
+	{
+		public event Action<NumberField, float> OnNumberChanged = delegate { };
+		private TextButton decrease;
+		private TextButton increase;
+		private TextField field;
+		private NumberFieldStyle style;
+		private float minimum;
+		private float maximum;
+		private float number;
+		private float step = 0.1f;
 
-        public NumberField(float initial, float min, float max, float step, bool showButtons, NumberFieldStyle style)
-        {
-            this.style = style;
-            Defaults().Space(0);
-            SetMin(min);
-            SetMax(max);
-            SetStep(step);
+		public NumberField(float initial, float min, float max, float step, bool showButtons, NumberFieldStyle style)
+		{
+			this.style = style;
+			Defaults().Space(0);
+			SetMin(min);
+			SetMax(max);
+			SetStep(step);
 
-            field = new TextField(initial.ToString(), this.style);
-            field.SetAlignment(Nez.UI.Align.Center);
-            SetNumber(initial);
+			field = new TextField(initial.ToString(), this.style);
+			field.SetAlignment(Nez.UI.Align.Center);
+			SetNumber(initial);
 
-            if (showButtons)
-            {
-                decrease = new TextButton("", style.DecreaseButtonStyle);
+			if (showButtons)
+			{
+				decrease = new TextButton("", style.DecreaseButtonStyle);
 
-                increase = new TextButton("", style.IncreaseButtonStyle);
-                increase.OnClicked += button =>
-                {
-                    IncreaseNumber();
-                };
+				increase = new TextButton("", style.IncreaseButtonStyle);
+				increase.OnClicked += button =>
+				{
+					IncreaseNumber();
+				};
 
-                decrease.OnClicked += button =>
-                {
-                    DecreaseNumber();
-                };
+				decrease.OnClicked += button =>
+				{
+					DecreaseNumber();
+				};
 
-            }
+			}
 
-            field.OnTextChanged += (field, s) =>
-            {
-                if (float.TryParse(s, out float n))
-                {
-                    SetNumber(n >= maximum ? maximum : n);
-                }
-                else
-                {
-                    SetNumber(minimum);
-                }
+			field.OnTextChanged += (field, s) =>
+			{
+				if (float.TryParse(s, out float n))
+				{
+					SetNumber(n >= maximum ? maximum : n);
+				}
+				else
+				{
+					SetNumber(minimum);
+				}
 
-            };
+			};
 
-            if (showButtons)
-                Add(decrease);
+			if (showButtons)
+				Add(decrease);
 
-            Add(field).Fill().Expand();
+			Add(field).Fill().Expand();
 
-            if (showButtons)
-                Add(increase);
+			if (showButtons)
+				Add(increase);
 
-            //setSize(preferredWidth, preferredHeight);
-        }
+			//setSize(preferredWidth, preferredHeight);
+		}
 
-        private void IncreaseNumber()
-        {
-            if (number + step > maximum)
-            {
-                SetNumber(maximum);
-            }
-            else
-            {
-                SetNumber(Mathf.RoundToNearest(number + step, step));
-            }
-        }
+		private void IncreaseNumber()
+		{
+			if (number + step > maximum)
+			{
+				SetNumber(maximum);
+			}
+			else
+			{
+				SetNumber(Mathf.RoundToNearest(number + step, step));
+			}
+		}
 
-        private void DecreaseNumber()
-        {
-            if (number - step < minimum)
-            {
-                SetNumber(minimum);
-            }
-            else
-            {
-                SetNumber(Mathf.RoundToNearest(number - step, step));
-            }
-        }
+		private void DecreaseNumber()
+		{
+			if (number - step < minimum)
+			{
+				SetNumber(minimum);
+			}
+			else
+			{
+				SetNumber(Mathf.RoundToNearest(number - step, step));
+			}
+		}
 
-        public TextButton GetDecreaseButton()
-        {
-            return decrease;
-        }
+		public TextButton GetDecreaseButton()
+		{
+			return decrease;
+		}
 
-        public TextButton GetIncreaseButton()
-        {
-            return increase;
-        }
+		public TextButton GetIncreaseButton()
+		{
+			return increase;
+		}
 
-        public TextField GetTextField()
-        {
-            return field;
-        }
+		public TextField GetTextField()
+		{
+			return field;
+		}
 
-        public Cell GetDecreaseButtonCell()
-        {
-            return GetCell(decrease);
-        }
+		public Cell GetDecreaseButtonCell()
+		{
+			return GetCell(decrease);
+		}
 
-        public Cell GetIncreaseButtonCell()
-        {
-            return GetCell(increase);
-        }
+		public Cell GetIncreaseButtonCell()
+		{
+			return GetCell(increase);
+		}
 
-        public Cell GetNumberFieldCell()
-        {
-            return GetCell(field);
-        }
+		public Cell GetNumberFieldCell()
+		{
+			return GetCell(field);
+		}
 
-        public void SetNumber(float value)
-        {
-            field.SetTextForced(value.ToString());
-            number = value;
+		public void SetNumber(float value)
+		{
+			field.SetTextForced(value.ToString());
+			number = value;
 
-            OnNumberChanged(this, value);
-        }
+			OnNumberChanged(this, value);
+		}
 
-        public float GetNumber()
-        {
-            return number;
-        }
+		public float GetNumber()
+		{
+			return number;
+		}
 
-        public NumberField(float initial, float min, float max, float step, bool showButtons, Skin skin, string styleName = null) : this(initial, min, max, step, showButtons, skin.Get<NumberFieldStyle>(styleName))
-        {
-        }
+		public NumberField(float initial, float min, float max, float step, bool showButtons, Skin skin, string styleName = null) : this(initial, min, max, step, showButtons, skin.Get<NumberFieldStyle>(styleName))
+		{
+		}
 
-        public void SetMax(float max)
-        {
-            maximum = max;
-        }
-        public void SetStep(float value)
-        {
-            step = value;
-        }
-        public void SetMin(float min)
-        {
-            minimum = min;
-        }
+		public void SetMax(float max)
+		{
+			maximum = max;
+		}
+		public void SetStep(float value)
+		{
+			step = value;
+		}
+		public void SetMin(float min)
+		{
+			minimum = min;
+		}
 
-        public void OnMouseEnter()
-        {
+		public void OnMouseEnter()
+		{
 
-        }
+		}
 
-        public void OnMouseExit()
-        {
+		public void OnMouseExit()
+		{
 
-        }
+		}
 
-        public bool OnMousePressed(Vector2 mousePos)
-        {
-            return false;
-        }
+		public bool OnLeftMousePressed(Vector2 mousePos)
+		{
+			return false;
+		}
 
-        public void OnMouseMoved(Vector2 mousePos)
-        {
+		public bool OnRightMousePressed(Vector2 mousePos)
+		{
+			return false;
+		}
 
-        }
+		public void OnMouseMoved(Vector2 mousePos)
+		{
 
-        public void OnMouseUp(Vector2 mousePos)
-        {
+		}
 
-        }
+		public void OnLeftMouseUp(Vector2 mousePos)
+		{
 
-        public bool OnMouseScrolled(int mouseWheelDelta)
-        {
+		}
+		public void OnRightMouseUp(Vector2 mousePos)
+		{
 
-            if (mouseWheelDelta > 0)
-                IncreaseNumber();
-            else
-                DecreaseNumber();
+		}
 
-            return true;
-        }
-    }
+		public bool OnMouseScrolled(int mouseWheelDelta)
+		{
 
-    public class NumberFieldStyle : TextFieldStyle
-    {
-        public IDrawable ImageUp, ImageDown, ImageOver, ImageChecked, ImageCheckedOver, ImageDisabled;
+			if (mouseWheelDelta > 0)
+				IncreaseNumber();
+			else
+				DecreaseNumber();
 
-        public TextButtonStyle DecreaseButtonStyle;
-        public TextButtonStyle IncreaseButtonStyle;
+			return true;
+		}
+	}
 
-        public NumberFieldStyle()
-        {
-            Font = Graphics.Instance.BitmapFont;
-        }
+	public class NumberFieldStyle : TextFieldStyle
+	{
+		public IDrawable ImageUp, ImageDown, ImageOver, ImageChecked, ImageCheckedOver, ImageDisabled;
 
+		public TextButtonStyle DecreaseButtonStyle;
+		public TextButtonStyle IncreaseButtonStyle;
 
-        public NumberFieldStyle(BitmapFont font, Color fontColor, IDrawable cursor, IDrawable selection, IDrawable background, TextButtonStyle decreaseButtonStyle, TextButtonStyle increaseButtonStyle) : base(font, fontColor, cursor, selection, background)
-        {
-            this.DecreaseButtonStyle = decreaseButtonStyle;
-            this.IncreaseButtonStyle = increaseButtonStyle;
-        }
+		public NumberFieldStyle()
+		{
+			Font = Graphics.Instance.BitmapFont;
+		}
 
 
-        public new TextFieldStyle Clone()
-        {
-            return new TextFieldStyle
-            {
-                Font = Font,
-                FontColor = FontColor,
-                FocusedFontColor = FocusedFontColor,
-                DisabledFontColor = DisabledFontColor,
-                Background = Background,
-                FocusedBackground = FocusedBackground,
-                DisabledBackground = DisabledBackground,
-                Cursor = Cursor,
-                Selection = Selection,
-                MessageFont = MessageFont,
-                MessageFontColor = MessageFontColor
-            };
-        }
-    }
+		public NumberFieldStyle(BitmapFont font, Color fontColor, IDrawable cursor, IDrawable selection, IDrawable background, TextButtonStyle decreaseButtonStyle, TextButtonStyle increaseButtonStyle) : base(font, fontColor, cursor, selection, background)
+		{
+			this.DecreaseButtonStyle = decreaseButtonStyle;
+			this.IncreaseButtonStyle = increaseButtonStyle;
+		}
+
+
+		public new TextFieldStyle Clone()
+		{
+			return new TextFieldStyle
+			{
+				Font = Font,
+				FontColor = FontColor,
+				FocusedFontColor = FocusedFontColor,
+				DisabledFontColor = DisabledFontColor,
+				Background = Background,
+				FocusedBackground = FocusedBackground,
+				DisabledBackground = DisabledBackground,
+				Cursor = Cursor,
+				Selection = Selection,
+				MessageFont = MessageFont,
+				MessageFontColor = MessageFontColor
+			};
+		}
+	}
 }

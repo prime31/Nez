@@ -1,6 +1,6 @@
-﻿using System;
+﻿using Nez.UI;
+using System;
 using System.Reflection;
-using Nez.UI;
 
 
 #if DEBUG
@@ -27,7 +27,7 @@ namespace Nez
 
 			var paramType = parameters[0].ParameterType;
 			if (paramType == typeof(int) || paramType == typeof(float) || paramType == typeof(string) ||
-			    paramType == typeof(bool))
+				paramType == typeof(bool))
 				return true;
 
 			Debug.Warn(
@@ -41,6 +41,7 @@ namespace Nez
 		{
 			var button = new TextButton(_name, skin);
 			button.OnClicked += OnButtonClicked;
+			button.OnRightClicked += OnButtonClicked;
 
 			// we could have zero or 1 param
 			var parameters = (_memberInfo as MethodInfo).GetParameters();
