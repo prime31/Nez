@@ -1,6 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
-using System.Collections.Generic;
 using Microsoft.Xna.Framework.Input;
+using System.Collections.Generic;
 
 
 namespace Nez.UI
@@ -116,11 +116,11 @@ namespace Nez.UI
 					if (element == null)
 						return;
 
-					((Table) element).SetTableDebug(debugTableUnderMouse);
+					((Table)element).SetTableDebug(debugTableUnderMouse);
 				}
 
 				if (debugAll && element is Group)
-					((Group) element).DebugAll();
+					((Group)element).DebugAll();
 
 				DisableDebug(root, element);
 			}
@@ -146,7 +146,7 @@ namespace Nez.UI
 
 			if (element is Group)
 			{
-				var children = ((Group) element).children;
+				var children = ((Group)element).children;
 				for (int i = 0, n = children.Count; i < n; i++)
 					DisableDebug(children[i], except);
 			}
@@ -196,7 +196,7 @@ namespace Nez.UI
 
 			var inputPos = ScreenToStageCoordinates(currentMousePosition);
 
-			UpdateInputPoint(inputPos, Input.LeftMouseButtonPressed, Input.LeftMouseButtonReleased,
+			UpdateInputPoint(inputPos, Input.LeftMouseButtonPressed, Input.RightMouseButtonPressed, Input.LeftMouseButtonReleased, Input.RightMouseButtonReleased,
 				mouseMoved, ref _mouseOverElement);
 		}
 
@@ -211,7 +211,7 @@ namespace Nez.UI
 				var inputPos = ScreenToStageCoordinates(touch.Position);
 				var inputPressed = touch.State == Microsoft.Xna.Framework.Input.Touch.TouchLocationState.Pressed;
 				var inputReleased = touch.State == Microsoft.Xna.Framework.Input.Touch.TouchLocationState.Released ||
-				                    touch.State == Microsoft.Xna.Framework.Input.Touch.TouchLocationState.Invalid;
+									touch.State == Microsoft.Xna.Framework.Input.Touch.TouchLocationState.Invalid;
 				var inputMoved = false;
 				Microsoft.Xna.Framework.Input.Touch.TouchLocation prevTouch;
 				if (touch.TryGetPreviousLocation(out prevTouch))
@@ -226,7 +226,7 @@ namespace Nez.UI
 				if (Entity != null && !IsFullScreen)
 					inputPos = Input.ScaledPosition(inputPos);
 
-				UpdateInputPoint(inputPos, inputPressed, inputReleased, inputMoved, ref lastOver);
+				UpdateInputPoint(inputPos, inputPressed, inputPressed, inputReleased, inputReleased, inputMoved, ref lastOver);
 
 				if (inputReleased)
 					_touchOverElement.Remove(touch.Id);
@@ -241,11 +241,13 @@ namespace Nez.UI
 		/// </summary>
 		/// <param name="inputPos">location of cursor</param>
 		/// <param name="inputPressed">down this frame</param>
+		/// <param name="secondaryInputPressed">down this frame</param>
 		/// <param name="inputReleased">up this frame</param>
+		/// <param name="secondaryInputReleased">up this frame</param>
 		/// <param name="inputMoved">cursor in a different location</param>
 		/// <param name="lastOver">last element that the cursor was over, ref is saved here for next update</param>
-		void UpdateInputPoint(Vector2 inputPos, bool inputPressed, bool inputReleased, bool inputMoved,
-		                      ref Element lastOver)
+		void UpdateInputPoint(Vector2 inputPos, bool inputPressed, bool secondaryInputPressed, bool inputReleased, bool secondaryInputReleased, bool inputMoved,
+							  ref Element lastOver)
 		{
 			var over = Hit(inputPos);
 			if (over != null)
@@ -253,7 +255,12 @@ namespace Nez.UI
 
 			if (inputPressed)
 			{
-				UpdateInputDown(inputPos, over);
+				UpdatePrimaryInputDown(inputPos, over);
+			}
+
+			if (secondaryInputPressed)
+			{
+				UpdatePrimaryInputDown(inputPos, over);
 			}
 
 			if (inputMoved)
@@ -263,7 +270,12 @@ namespace Nez.UI
 
 			if (inputReleased)
 			{
-				UpdateInputReleased(inputPos);
+				UpdatePrimaryInputReleased(inputPos);
+			}
+
+			if (secondaryInputReleased)
+			{
+				UpdateSecondaryInputReleased(inputPos);
 			}
 
 			lastOver = over;
@@ -275,7 +287,7 @@ namespace Nez.UI
 		/// </summary>
 		/// <param name="inputPos">location of cursor</param>
 		/// <param name="over">element under cursor</param>
-		void UpdateInputDown(Vector2 inputPos, Element over)
+		void UpdatePrimaryInputDown(Vector2 inputPos, Element over)
 		{
 			// lose keyboard focus if we click outside of the keyboardFocusElement
 			if (_keyboardFocusElement != null && over != _keyboardFocusElement)
@@ -288,7 +300,7 @@ namespace Nez.UI
 				var listener = over as IInputListener;
 
 				// add the listener to be notified for all onMouseDown and onMouseUp events
-				if (listener.OnMousePressed(elementLocal))
+				if (listener.OnLeftMousePressed(elementLocal))
 					_inputFocusListeners.Add(over);
 			}
 		}
@@ -303,7 +315,7 @@ namespace Nez.UI
 		void UpdateInputMoved(Vector2 inputPos, Element over, Element lastOver)
 		{
 			for (var i = _inputFocusListeners.Count - 1; i >= 0; i--)
-				((IInputListener) _inputFocusListeners[i]).OnMouseMoved(_inputFocusListeners[i]
+				((IInputListener)_inputFocusListeners[i]).OnMouseMoved(_inputFocusListeners[i]
 					.StageToLocalCoordinates(inputPos));
 
 			if (over != lastOver)
@@ -318,10 +330,22 @@ namespace Nez.UI
 		/// Mouse or touch is being released this frame.
 		/// </summary>
 		/// <param name="inputPos">location under cursor</param>
-		void UpdateInputReleased(Vector2 inputPos)
+		void UpdatePrimaryInputReleased(Vector2 inputPos)
 		{
 			for (var i = _inputFocusListeners.Count - 1; i >= 0; i--)
-				((IInputListener) _inputFocusListeners[i]).OnMouseUp(_inputFocusListeners[i]
+				((IInputListener)_inputFocusListeners[i]).OnLeftMouseUp(_inputFocusListeners[i]
+					.StageToLocalCoordinates(inputPos));
+			_inputFocusListeners.Clear();
+		}
+
+		/// <summary>
+		/// Right mouse click or touch is being released this frame.
+		/// </summary>
+		/// <param name="inputPos">location under cursor</param>
+		void UpdateSecondaryInputReleased(Vector2 inputPos)
+		{
+			for (var i = _inputFocusListeners.Count - 1; i >= 0; i--)
+				((IInputListener)_inputFocusListeners[i]).OnRightMouseUp(_inputFocusListeners[i]
 					.StageToLocalCoordinates(inputPos));
 			_inputFocusListeners.Clear();
 		}
@@ -414,26 +438,26 @@ namespace Nez.UI
 			if (_gamepadFocusElement != null)
 			{
 				if (Input.GamePads[0].IsButtonPressed(GamepadActionButton) ||
-				    (KeyboardEmulatesGamepad && Input.IsKeyPressed(KeyboardActionKey)))
+					(KeyboardEmulatesGamepad && Input.IsKeyPressed(KeyboardActionKey)))
 					_gamepadFocusElement.OnActionButtonPressed();
 				else if (Input.GamePads[0].IsButtonReleased(GamepadActionButton) ||
-				         (KeyboardEmulatesGamepad && Input.IsKeyReleased(KeyboardActionKey)))
+						 (KeyboardEmulatesGamepad && Input.IsKeyReleased(KeyboardActionKey)))
 					_gamepadFocusElement.OnActionButtonReleased();
 			}
 
 			IGamepadFocusable nextElement = null;
 			var direction = Direction.None;
 			if (Input.GamePads[0].DpadLeftPressed || Input.GamePads[0].IsLeftStickLeftPressed() ||
-			    (KeyboardEmulatesGamepad && Input.IsKeyPressed(Keys.Left)))
+				(KeyboardEmulatesGamepad && Input.IsKeyPressed(Keys.Left)))
 				direction = Direction.Left;
 			else if (Input.GamePads[0].DpadRightPressed || Input.GamePads[0].IsLeftStickRightPressed() ||
-			         (KeyboardEmulatesGamepad && Input.IsKeyPressed(Keys.Right)))
+					 (KeyboardEmulatesGamepad && Input.IsKeyPressed(Keys.Right)))
 				direction = Direction.Right;
 			else if (Input.GamePads[0].DpadUpPressed || Input.GamePads[0].IsLeftStickUpPressed() ||
-			         (KeyboardEmulatesGamepad && Input.IsKeyPressed(Keys.Up)))
+					 (KeyboardEmulatesGamepad && Input.IsKeyPressed(Keys.Up)))
 				direction = Direction.Up;
 			else if (Input.GamePads[0].DpadDownPressed || Input.GamePads[0].IsLeftStickDownPressed() ||
-			         (KeyboardEmulatesGamepad && Input.IsKeyPressed(Keys.Down)))
+					 (KeyboardEmulatesGamepad && Input.IsKeyPressed(Keys.Down)))
 				direction = Direction.Down;
 
 			// make sure we have a valid direction
@@ -817,7 +841,7 @@ namespace Nez.UI
 				if (elements[i] is T)
 					foundElements.Add(elements[i] as T);
 				else if (elements[i] is Group)
-					FindAllElementsOfType(((Group) elements[i]).children, foundElements);
+					FindAllElementsOfType(((Group)elements[i]).children, foundElements);
 			}
 		}
 	}

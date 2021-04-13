@@ -1,4 +1,4 @@
-﻿
+
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Nez.FNA", "Nez.Portable\Nez.FNA.csproj", "{60B7197D-D0D5-405C-90A2-A56903E9B039}"
