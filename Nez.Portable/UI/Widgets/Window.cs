@@ -1,6 +1,6 @@
+using System;
 using Microsoft.Xna.Framework;
 using Nez.BitmapFonts;
-using System;
 
 
 namespace Nez.UI
@@ -61,7 +61,7 @@ namespace Nez.UI
 		{ }
 
 
-		bool IInputListener.OnLeftMousePressed(Vector2 mousePos)
+		bool IInputListener.OnMousePressed(Vector2 mousePos)
 		{
 			float width = GetWidth(), height = GetHeight();
 			edge = 0;
@@ -103,10 +103,6 @@ namespace Nez.UI
 			return true;
 		}
 
-		bool IInputListener.OnRightMousePressed(Vector2 mousePos)
-		{
-			return false;
-		}
 
 		void IInputListener.OnMouseMoved(Vector2 mousePos)
 		{
@@ -190,13 +186,9 @@ namespace Nez.UI
 		}
 
 
-		void IInputListener.OnLeftMouseUp(Vector2 mousePos)
+		void IInputListener.OnMouseUp(Vector2 mousePos)
 		{
 			_dragging = false;
-		}
-		void IInputListener.OnRightMouseUp(Vector2 mousePos)
-		{
-
 		}
 
 

@@ -1,9 +1,9 @@
-﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Input;
+﻿using System;
 using Nez.BitmapFonts;
-using System;
-using System.Collections.Generic;
+using Microsoft.Xna.Framework;
 using System.Text;
+using System.Collections.Generic;
+using Microsoft.Xna.Framework.Input;
 
 
 namespace Nez.UI
@@ -120,7 +120,7 @@ namespace Nez.UI
 		}
 
 
-		bool IInputListener.OnLeftMousePressed(Vector2 mousePos)
+		bool IInputListener.OnMousePressed(Vector2 mousePos)
 		{
 			if (disabled)
 				return false;
@@ -134,11 +134,6 @@ namespace Nez.UI
 				stage.SetKeyboardFocus(this as IKeyboardListener);
 
 			return true;
-		}
-
-		bool IInputListener.OnRightMousePressed(Vector2 mousePos)
-		{
-			return false;
 		}
 
 
@@ -156,7 +151,7 @@ namespace Nez.UI
 		}
 
 
-		void IInputListener.OnLeftMouseUp(Vector2 mousePos)
+		void IInputListener.OnMouseUp(Vector2 mousePos)
 		{
 			if (selectionStart == cursor)
 				hasSelection = false;
@@ -168,10 +163,6 @@ namespace Nez.UI
 			_isPressed = _isOver = false;
 		}
 
-		void IInputListener.OnRightMouseUp(Vector2 mousePos)
-		{
-
-		}
 
 		bool IInputListener.OnMouseScrolled(int mouseWheelDelta)
 		{

@@ -1,5 +1,5 @@
-﻿using Microsoft.Xna.Framework;
-using System;
+﻿using System;
+using Microsoft.Xna.Framework;
 
 
 namespace Nez.UI
@@ -62,17 +62,11 @@ namespace Nez.UI
 		}
 
 
-		bool IInputListener.OnLeftMousePressed(Vector2 mousePos)
+		bool IInputListener.OnMousePressed(Vector2 mousePos)
 		{
 			CalculatePositionAndValue(mousePos);
 			_mouseDown = true;
 			return true;
-		}
-
-
-		bool IInputListener.OnRightMousePressed(Vector2 mousePos)
-		{
-			return false;
 		}
 
 
@@ -90,13 +84,7 @@ namespace Nez.UI
 		}
 
 
-		void IInputListener.OnLeftMouseUp(Vector2 mousePos)
-		{
-			_mouseDown = false;
-		}
-
-
-		void IInputListener.OnRightMouseUp(Vector2 mousePos)
+		void IInputListener.OnMouseUp(Vector2 mousePos)
 		{
 			_mouseDown = false;
 		}
@@ -120,7 +108,7 @@ namespace Nez.UI
 
 
 		public void EnableExplicitFocusableControl(IGamepadFocusable upEle, IGamepadFocusable downEle,
-												   IGamepadFocusable leftEle, IGamepadFocusable rightEle)
+		                                           IGamepadFocusable leftEle, IGamepadFocusable rightEle)
 		{
 			ShouldUseExplicitFocusableControl = true;
 			GamepadUpElement = upEle;

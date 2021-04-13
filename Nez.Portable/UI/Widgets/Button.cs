@@ -1,5 +1,5 @@
-﻿using Microsoft.Xna.Framework;
-using System;
+﻿using System;
+using Microsoft.Xna.Framework;
 
 
 namespace Nez.UI
@@ -7,7 +7,7 @@ namespace Nez.UI
 	public class Button : Table, IInputListener, IGamepadFocusable
 	{
 		public event Action<bool> OnChanged;
-		public event Action<Button> OnClicked, OnRightClicked;
+		public event Action<Button> OnClicked;
 
 		public override float PreferredWidth
 		{
@@ -105,16 +105,7 @@ namespace Nez.UI
 		}
 
 
-		bool IInputListener.OnLeftMousePressed(Vector2 mousePos)
-		{
-			if (_isDisabled)
-				return false;
-
-			_mouseDown = true;
-			return true;
-		}
-
-		bool IInputListener.OnRightMousePressed(Vector2 mousePos)
+		bool IInputListener.OnMousePressed(Vector2 mousePos)
 		{
 			if (_isDisabled)
 				return false;
@@ -135,7 +126,7 @@ namespace Nez.UI
 		}
 
 
-		void IInputListener.OnLeftMouseUp(Vector2 mousePos)
+		void IInputListener.OnMouseUp(Vector2 mousePos)
 		{
 			_mouseDown = false;
 
@@ -143,16 +134,6 @@ namespace Nez.UI
 
 			if (OnClicked != null)
 				OnClicked(this);
-		}
-
-		void IInputListener.OnRightMouseUp(Vector2 mousePos)
-		{
-			_mouseDown = false;
-
-			SetChecked(!_isChecked, true);
-
-			if (OnRightClicked != null)
-				OnRightClicked(this);
 		}
 
 
@@ -174,7 +155,7 @@ namespace Nez.UI
 
 
 		public void EnableExplicitFocusableControl(IGamepadFocusable upEle, IGamepadFocusable downEle,
-												   IGamepadFocusable leftEle, IGamepadFocusable rightEle)
+		                                           IGamepadFocusable leftEle, IGamepadFocusable rightEle)
 		{
 			ShouldUseExplicitFocusableControl = true;
 			GamepadUpElement = upEle;
