@@ -4,14 +4,14 @@
         <title>Nez Blog</title>
         <link>https://prime31.github.io/blog</link>
         <description>Nez Blog</description>
-        <lastBuildDate>Mon, 08 Feb 2021 06:59:03 GMT</lastBuildDate>
+        <lastBuildDate>Wed, 31 Mar 2021 05:50:43 GMT</lastBuildDate>
         <docs>https://validator.w3.org/feed/docs/rss2.html</docs>
         <generator>https://github.com/jpmonette/feed</generator>
         <item>
             <title><![CDATA[Welcome]]></title>
             <link>https://prime31.github.io/Nez/blog/welcome</link>
             <guid>welcome</guid>
-            <pubDate>Mon, 08 Feb 2021 06:59:03 GMT</pubDate>
+            <pubDate>Wed, 31 Mar 2021 05:50:43 GMT</pubDate>
             <description><![CDATA[Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.]]></description>
         </item>
     </channel>
