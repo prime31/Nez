@@ -8,6 +8,7 @@ module.exports = {
     'Features': [
       'features/Core',
       'features/ContentManagement',
+      'features/Tweening',
       'features/RuntimeInspector',
       {'Graphics': [
         'features/Graphics/Rendering',
