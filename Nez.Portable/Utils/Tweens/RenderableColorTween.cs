@@ -36,5 +36,18 @@ namespace Nez.Tweens
 		{
 			_renderable = renderable;
 		}
+		
+		public override void RecycleSelf()
+		{
+			if (_shouldRecycleTween)
+			{
+				_renderable = null;
+				_target = null;
+				_nextTween = null;
+			}
+
+			if (_shouldRecycleTween && TweenManager.CacheColorTweens)
+				Pool<RenderableColorTween>.Free(this);
+		}			
 	}
 }
