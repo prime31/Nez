@@ -70,7 +70,7 @@ tweenTargetEntity
 
 Here you can see the effect of each `EaseType`
 
-![Tweening](Assets/tweening.gif)
+![Tweening](Images/tweening.gif)
 
 ### Repeating loops
 
