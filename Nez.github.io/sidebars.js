@@ -13,6 +13,7 @@ module.exports = {
       {'Utils': [
         'features/Utils/Tweening',
         'features/Utils/Collections',
+        'features/Utils/Pooling',
       ]},
       {'Graphics': [
         'features/Graphics/Rendering',

@@ -77,6 +77,7 @@ deque.AddBack('c');
 ```
 
 Result in the following buffer
+
 | Index | 0 | 1 | 2 | 3 | 4 | 5 | .. | 15 |
 |-------|---|---|---|---|---|---|----|----|
 | Value | a | b | c |   |   |   |    |    |
@@ -87,6 +88,7 @@ deque.RemoveFront();
 ```
 
 The buffer will look like this
+
 | Index | 0 | 1 | 2 | 3 | 4 | 5 | .. | 15 |
 |-------|---|---|---|---|---|---|----|----|
 | Value |   | b | c |   |   |   |    |    |
@@ -231,6 +233,7 @@ SomeFunction(ref twoNumbersValueTuple);
 ```
 
 Overview for each situation
+
 |                   | Mutable      | Immutable |
 |-------------------|--------------|-----------|
 | **ReferenceType** | `Pair`       | `Tuple`   |
