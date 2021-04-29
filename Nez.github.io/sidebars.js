@@ -16,8 +16,13 @@ module.exports = {
         'features/Utils/Pooling',
       ]},
       {'Graphics': [
+        {
+          'Lighting': [
+            'features/Graphics/Lighting/DeferredLighting',
+            'features/Graphics/Lighting/SpriteLights',
+          ]
+        },
         'features/Graphics/Rendering',
-        'features/Graphics/DeferredLighting',
         'features/Graphics/SVG'
       ]},
       {'UI': [
