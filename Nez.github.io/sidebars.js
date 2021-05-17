@@ -23,7 +23,8 @@ module.exports = {
           ]
         },
         'features/Graphics/Rendering',
-        'features/Graphics/SVG'
+        'features/Graphics/SVG',
+        'features/Graphics/Stencil'
       ]},
       {'UI': [
         'features/UI/NezUI',
