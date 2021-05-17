@@ -25,13 +25,13 @@ The assets from this example can be downloaded [here](../../assets/stencil_asset
 
 For this example, I used the shadow mechanism from  [NinjaAdventure](https://github.com/prime31/Nez-Samples/tree/master/Nez.Samples/Scenes/Samples/Ninja%20Adventure).
 
-In this example, I'll show you here how to draw a shadow when a player is behind an object, so you can still see where the player is.
+In this example, I'll show you how to draw a shadow when a player is hidden behind an object, so you can still see where the player is.
 
 We achieve this by rendering a shadow sprite over the column. We use the stencil buffer to ensure that the player sprite is not rendered in the places where the player can be seen. We do this by filling the stencil buffer in the places where the player sprite is hidden.
 
 ![Shadow example](../images/stencil_shadow.png)
 
-We begin by creating the floor entity. We give assign it `RenderLayer` 1, so that it will be rendered at the back.
+We begin by creating the floor entity. We assign it `RenderLayer` 1, so that it will be rendered at the back.
 
 ```cs
 Entity floor = CreateEntity("floor");
@@ -40,8 +40,8 @@ var floorSprite = floor.AddComponent(new SpriteRenderer(floorTexture));
 floorSprite.RenderLayer = 2;
 ```
 
-Then we create the column.
-We give this `RenderLayer` 0 so that it is rendered before the player (`RenderLayer` 1)
+Next we create the column.
+We assign this `RenderLayer` 0 so that it is rendered before the player (`RenderLayer` 1)
 We also set the `Material` to `StencilWrite`, this ensures that the stencil buffer is filled at the location where the column sprite is rendered. We do this so that we can make sure the shadow sprite is only rendered at that location
 ```cs
 Entity column = CreateEntity("column");
@@ -51,7 +51,7 @@ columnSprite.Material = Material.StencilWrite();
 columnSprite.RenderLayer = 0;
 ```
 
-Next, we add the player. We render it on layer 1, so it will render behind the column.
+Next, we add the player. We render it on `RenderLayer` 1, so it will render behind the column.
 ```cs
 var player = CreateEntity("player");
 var offset = new Vector2(50,0);
@@ -87,7 +87,6 @@ earth.Transform.Position = Screen.Center;
 earth.Transform.Scale = new Vector2(6, 6);
 ```
 
-
 Next, we add a sprite to our entity with a `StencilRead(0)` Material.
 This material ensures that the Pixels of the sprite are only drawn if the data at that position in the stenicl buffer is 0.
 
@@ -110,8 +109,8 @@ var coreSprite = earthCore.AddComponent(new SpriteRenderer(earthCoreTexture));
 coreSprite.RenderLayer = 1;
 ```
 
-Now we add the x-ray component. This is just a square that is render under all other sprites and follows the mouse.
-We give this square the StencilWrite Material, this ensures that the data in the stencil buffer is set to 1 where the pixels are rendered.
+Now we add the x-ray component. This is just a square that is rendered under the other sprites and follows the mouse.
+We give this square the `StencilWrite` `Material`, this ensures that the data in the stencil buffer is set to 1 where the pixels are rendered.
 ```cs
 var xray = CreateEntity("x-ray");
 xray.AddComponent(new MouseFollow());
@@ -120,8 +119,10 @@ xray.AddComponent(new PrototypeSpriteRenderer(150, 150))
     .SetMaterial(Material.StencilWrite());
 ```
 
-Because the stencil buffer is now 1 at the location of the x-ray component, the earth is not rendered there because it uses Stencil read 0.
-That's why in that place you see the coreSprite.
+Because the stencil buffer is now 1 at the location of the x-ray component, the earth is not rendered there because it uses `StencilRead` 0.
+That's why in that place you see the core sprite.
+
+You could also have achieved this effect by only rendering the core over the earth where the xray sprite is.
 
 ![Shadow example](../images/stencil_xray_result.png)
 
