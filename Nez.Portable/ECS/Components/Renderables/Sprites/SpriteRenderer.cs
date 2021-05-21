@@ -115,6 +115,15 @@ namespace Nez.Sprites
 		}
 
 		/// <summary>
+		/// sets the Texture by creating a new sprite. See SetSprite() for details.
+		/// </summary>
+		public SpriteRenderer SetTexture(Texture2D texture)
+		{
+			SetSprite(new Sprite(texture));
+			return this;
+		}
+
+		/// <summary>
 		/// sets the origin for the Renderable
 		/// </summary>
 		public SpriteRenderer SetOrigin(Vector2 origin)
