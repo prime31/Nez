@@ -420,8 +420,11 @@ namespace Nez.Spatial
 			{
 				if (collider is BoxCollider)
 				{
-					results[resultCounter] = collider;
-					resultCounter++;
+					if (collider.Shape.Overlaps(_overlapTestCirce))
+					{
+						results[resultCounter] = collider;
+						resultCounter++;
+					}
 				}
 				else if (collider is CircleCollider)
 				{
