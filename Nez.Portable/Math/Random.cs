@@ -74,6 +74,17 @@ namespace Nez
 
 
 		/// <summary>
+		/// Returns a random unit vector with direction between 0 and 2 * PI
+		/// </summary>
+		/// <returns></returns>
+		public static Vector2 NextUnitVector()
+		{
+			float angle = NextAngle();
+			return new Vector2(Mathf.Cos(angle), Mathf.Sin(angle));
+		}
+
+
+		/// <summary>
 		/// returns a random color
 		/// </summary>
 		/// <returns>The color.</returns>
