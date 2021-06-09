@@ -8,8 +8,8 @@ module.exports = {
     'Features': [
       'features/Core',
       'features/ContentManagement',
-      
       'features/RuntimeInspector',
+      'features/Tiled',
       {'Utils': [
         'features/Utils/Tweening',
         'features/Utils/Collections',
