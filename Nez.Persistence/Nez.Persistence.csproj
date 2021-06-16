@@ -14,6 +14,7 @@
         <AssemblyName>Nez.Persistence</AssemblyName>
         <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
         <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+		<GenerateTargetFrameworkAttribute>false</GenerateTargetFrameworkAttribute>
     </PropertyGroup>
 
     <PropertyGroup>
