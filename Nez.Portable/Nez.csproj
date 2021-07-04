@@ -1,6 +1,6 @@
 ﻿<Project>
 	<PropertyGroup>
-		<BaseIntermediateOutputPath>obj\$(MSBuildProjectName)</BaseIntermediateOutputPath>
+		<BaseIntermediateOutputPath>obj\Nez</BaseIntermediateOutputPath>
 	</PropertyGroup>
 	<Import Sdk="Microsoft.NET.Sdk" Project="Sdk.props" />
 

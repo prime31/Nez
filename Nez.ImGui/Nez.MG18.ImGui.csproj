@@ -15,6 +15,7 @@
 		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
 		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
 		<OutputPath>bin\Release\Monogame</OutputPath>
+		<GenerateTargetFrameworkAttribute>false</GenerateTargetFrameworkAttribute>
 	</PropertyGroup>
 
 	<PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -60,8 +61,8 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <ProjectReference Include="..\Nez.Persistence\Nez.Monogame.Standard.Persistence.csproj" />
-	  <ProjectReference Include="..\Nez.Portable\Nez.Monogame.Standard.csproj" />
+	  <ProjectReference Include="..\Nez.Persistence\Nez.MG18.Persistence.csproj" />
+	  <ProjectReference Include="..\Nez.Portable\Nez.MG18.csproj" />
 	</ItemGroup>
 
 	<Import Sdk="Microsoft.NET.Sdk" Project="Sdk.targets" />

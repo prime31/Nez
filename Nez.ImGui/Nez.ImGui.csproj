@@ -1,6 +1,6 @@
 <Project ToolsVersion="15.0">
     <PropertyGroup>
-        <BaseIntermediateOutputPath>obj\$(MSBuildProjectName)</BaseIntermediateOutputPath>
+        <BaseIntermediateOutputPath>obj\Nez.ImGui</BaseIntermediateOutputPath>
     </PropertyGroup>
     <Import Sdk="Microsoft.NET.Sdk" Project="Sdk.props" />
 
