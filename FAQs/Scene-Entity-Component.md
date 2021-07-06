@@ -1,12 +1,12 @@
-Scene/Entity/Component System
+Scene/Entity/Component
 ==========
 
-Most of Nez revolves around an Entity-Component system (ECS). The Nez ECS is not unlike any other ECS you may have worked with so it should be instantly familiar.
+Most of Nez revolves around an Entity-Component setup (EC). The Nez EC is not unlike any other EC you may have worked with so it should be instantly familiar.
 
 
 
 ## Scene
-The root of the ECS. Scenes can be thought of as the different parts of your game such as the menu, levels, credits, etc. Scenes manage a list of Entities, Renderers and PostProcessors (via add/remove methods) and call their methods at the appropriate times. You can also use the Scene to locate Entities via the **FindEntity** and **FindEntitiesByTag** methods. Scenes are also created with a Camera that you can choose to use or not.
+The root of the EC. Scenes can be thought of as the different parts of your game such as the menu, levels, credits, etc. Scenes manage a list of Entities, Renderers and PostProcessors (via add/remove methods) and call their methods at the appropriate times. You can also use the Scene to locate Entities via the **FindEntity** and **FindEntitiesByTag** methods. Scenes are also created with a Camera that you can choose to use or not.
 
 Scene's provide a NezContentManager (Scene.contentManager) that you can use to load up scene-specific content. When the scene is finished the content will be unloaded automatically for you. If you need to load global content (anything that would be used by several scenes) you can use the Core.contentManager which is not ever explicitly unloaded.
 
