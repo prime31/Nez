@@ -146,7 +146,7 @@ namespace Nez
 				PreferredBackBufferHeight = height,
 				IsFullScreen = isFullScreen,
 				SynchronizeWithVerticalRetrace = true,
-#if MONOGAME_18
+#if MONOGAME_38
 				PreferHalfPixelOffset = true
 #endif
 			};

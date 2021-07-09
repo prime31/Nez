@@ -61,8 +61,8 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <ProjectReference Include="..\Nez.Persistence\Nez.MG18.Persistence.csproj" />
-	  <ProjectReference Include="..\Nez.Portable\Nez.MG18.csproj" />
+	  <ProjectReference Include="..\Nez.Persistence\Nez.MG38.Persistence.csproj" />
+	  <ProjectReference Include="..\Nez.Portable\Nez.MG38.csproj" />
 	</ItemGroup>
 
 	<Import Sdk="Microsoft.NET.Sdk" Project="Sdk.targets" />

@@ -1,6 +1,6 @@
 ﻿<Project>	
 	<PropertyGroup>
-		<BaseIntermediateOutputPath>obj\Nez.MG18</BaseIntermediateOutputPath>
+		<BaseIntermediateOutputPath>obj\Nez.MG38</BaseIntermediateOutputPath>
 	</PropertyGroup>
 	<Import Sdk="Microsoft.NET.Sdk" Project="Sdk.props" />
 
@@ -13,11 +13,11 @@
   </PropertyGroup>
 
     <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-        <DefineConstants>TRACE;DEBUG;MONOGAME_18</DefineConstants>
+        <DefineConstants>TRACE;DEBUG;MONOGAME_38</DefineConstants>
     </PropertyGroup>
 
     <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-        <DefineConstants>MONOGAME_18</DefineConstants>
+        <DefineConstants>MONOGAME_38</DefineConstants>
     </PropertyGroup>
 
     <ItemGroup>
