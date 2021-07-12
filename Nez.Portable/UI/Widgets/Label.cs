@@ -42,8 +42,6 @@ namespace Nez.UI
 		// configuration
 		LabelStyle _style;
 		string _text;
-		float _fontScaleX = 1;
-		float _fontScaleY = 1;
 
 		int labelAlign = AlignInternal.Left;
 
@@ -73,6 +71,15 @@ namespace Nez.UI
 
 		public Label(string text, BitmapFont font, Color fontColor) : this(text, new LabelStyle(font, fontColor))
 		{ }
+
+
+		public Label(string text, BitmapFont font, Color fontColor, float fontScale) : this(text, font, fontColor, fontScale, fontScale)
+        { }
+
+
+        public Label(string text, BitmapFont font, Color fontColor, float fontScaleX, float fontScaleY) : this(text, new LabelStyle(font, fontColor, fontScaleX, fontScaleY))
+        { }
+
 
 
 		public Label(string text, BitmapFont font) : this(text, font, Color.White)
@@ -118,7 +125,7 @@ namespace Nez.UI
 				if (_style.Background != null)
 					widthCalc -= _style.Background.LeftWidth + _style.Background.RightWidth;
 
-				_wrappedString = _style.Font.WrapText(_text, widthCalc / _fontScaleX);
+				_wrappedString = _style.Font.WrapText(_text, widthCalc / _style.FontScaleX);
 			}
 			else if (_ellipsis != null && width > 0)
 			{
@@ -127,14 +134,14 @@ namespace Nez.UI
 				if (_style.Background != null)
 					widthCalc -= _style.Background.LeftWidth + _style.Background.RightWidth;
 
-				_wrappedString = _style.Font.TruncateText(_text, _ellipsis, widthCalc / _fontScaleX);
+				_wrappedString = _style.Font.TruncateText(_text, _ellipsis, widthCalc / _style.FontScaleX);
 			}
 			else
 			{
 				_wrappedString = _text;
 			}
 
-			_prefSize = _style.Font.MeasureString(_wrappedString) * new Vector2(_fontScaleX, _fontScaleY);
+			_prefSize = _style.Font.MeasureString(_wrappedString) * new Vector2(_style.FontScaleX, _style.FontScaleY);
 		}
 
 
@@ -216,8 +223,8 @@ namespace Nez.UI
 
 		public Label SetFontScale(float fontScale)
 		{
-			_fontScaleX = fontScale;
-			_fontScaleY = fontScale;
+			_style.FontScaleX = fontScale;
+			_style.FontScaleY = fontScale;
 			InvalidateHierarchy();
 			return this;
 		}
@@ -225,8 +232,8 @@ namespace Nez.UI
 
 		public Label SetFontScale(float fontScaleX, float fontScaleY)
 		{
-			_fontScaleX = fontScaleX;
-			_fontScaleY = fontScaleY;
+			_style.FontScaleX = fontScaleX;
+			_style.FontScaleY = fontScaleY;
 			InvalidateHierarchy();
 			return this;
 		}
@@ -321,7 +328,7 @@ namespace Nez.UI
 			else
 			{
 				textWidth = width;
-				textHeight = _style.Font.LineHeight * _fontScaleY;
+				textHeight = _style.Font.LineHeight * _style.FontScaleY;
 			}
 
 			if ((labelAlign & AlignInternal.Bottom) != 0)
@@ -359,7 +366,7 @@ namespace Nez.UI
 			_style.Background?.Draw(batcher, x, y, width == 0 ? _prefSize.X : width, height, color);
 
 			batcher.DrawString(_style.Font, _wrappedString, new Vector2(x, y) + _textPosition,
-				_style.FontColor, 0, Vector2.Zero, new Vector2(_fontScaleX, _fontScaleY), SpriteEffects.None, 0);
+				_style.FontColor, 0, Vector2.Zero, new Vector2(_style.FontScaleX, _style.FontScaleY), SpriteEffects.None, 0);
 		}
 	}
 
@@ -372,6 +379,9 @@ namespace Nez.UI
 		public Color FontColor = Color.White;
 		public BitmapFont Font;
 		public IDrawable Background;
+		public float FontScaleX = 1f;
+		public float FontScaleY = 1f;
+		public float FontScale { set { FontScaleX = value; FontScaleY = value; } }
 
 
 		public LabelStyle()
@@ -380,11 +390,23 @@ namespace Nez.UI
 		}
 
 
-		public LabelStyle(BitmapFont font, Color fontColor)
+		public LabelStyle(BitmapFont font, Color fontColor) : this(font, fontColor, 1f)
+        { }
+
+
+        public LabelStyle(BitmapFont font, Color fontColor, float fontScaleX, float fontScaleY)
 		{
 			Font = font ?? Graphics.Instance.BitmapFont;
 			FontColor = fontColor;
+			FontScaleX = fontScaleX;
+			FontScaleY = fontScaleY;
 		}
+
+
+		public LabelStyle(BitmapFont font, Color fontColor, float fontScale) : this(font, fontColor, fontScale, fontScale)
+        {
+
+        }
 
 
 		public LabelStyle(Color fontColor) : this(null, fontColor)
@@ -397,7 +419,9 @@ namespace Nez.UI
 			{
 				FontColor = FontColor,
 				Font = Font,
-				Background = Background
+				Background = Background,
+				FontScaleX = FontScaleX,
+				FontScaleY = FontScaleY
 			};
 		}
 	}
