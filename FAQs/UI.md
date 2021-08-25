@@ -51,7 +51,7 @@ Nez UI supports a skin system similar to [libGDX skins](https://github.com/libgd
 		blue: [116, 139, 167, 255],
 		dialogDim: [50, 50, 50, 50]
 	},
-	// array of any LibGdxAtlases. The path should be the same one you would use to load it via the content system.
+	// array of any SpriteAtlases. The path should be the same one you would use to load it via the content system.
 	LibGdxAtlases: [ 'bin/skin/uiskinatlas' ],
 
 	// array of any TextureAtlases. The path should be the same one you would use to load it via the content system.
@@ -131,7 +131,7 @@ You do not have to use the JSON config file and pipeline importer to get the ben
 var skin = new Skin();
 
 // add a texture atlas so we have some images to work with
-skin.AddSprites( Content.Load<LibGdxAtlas>( "skins/UIAtlas" ) );
+skin.AddSprites( Content.Load<SpriteAtlas>( "skins/UIAtlas" ) );
 
 // add a bunch of styles for our elements. Note that the getDrawable method is very flexible. The name passed to it can be any type of
 // IDrawable or it can be a Sprite, NinePatchSprite or Color. In the latter case Skin will create and manage the IDrawable
