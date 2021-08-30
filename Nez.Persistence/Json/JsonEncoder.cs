@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
@@ -255,12 +255,19 @@ namespace Nez.Persistence
 			if (!forceTypeHint && _settings.TypeNameHandling == TypeNameHandling.Auto)
 			{
 				var listType = value.GetType();
-				foreach (Type interfaceType in listType.GetInterfaces())
+				if(listType.IsArray)
 				{
-					if (interfaceType.IsGenericType && interfaceType.GetGenericTypeDefinition() == typeof(IList<>))
+					listItemType = listType.GetElementType();
+				}
+				else
+				{
+					foreach (Type interfaceType in listType.GetInterfaces())
 					{
-						listItemType = listType.GetGenericArguments()[0];
-						break;
+						if (interfaceType.IsGenericType && interfaceType.GetGenericTypeDefinition() == typeof(IList<>))
+						{
+							listItemType = listType.GetGenericArguments()[0];
+							break;
+						}
 					}
 				}
 			}
@@ -270,7 +277,7 @@ namespace Nez.Persistence
 			foreach (var obj in value)
 			{
 				WriteValueDelimiter();
-				forceTypeHint = forceTypeHint || (listItemType != null && listItemType != obj.GetType());
+				forceTypeHint = forceTypeHint || (listItemType != null && listItemType != obj?.GetType());
 				EncodeValue(obj, forceTypeHint);
 			}
 
