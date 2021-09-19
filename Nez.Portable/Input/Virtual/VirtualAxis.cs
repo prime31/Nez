@@ -10,6 +10,9 @@ namespace Nez
 	public class VirtualAxis : VirtualInput
 	{
 		public List<Node> Nodes = new List<Node>();
+		
+		float _simulatedValue;
+		int _simulationStep;
 
 		public float Value
 		{
@@ -22,7 +25,7 @@ namespace Nez
 						return val;
 				}
 
-				return 0;
+				return _simulatedValue;
 			}
 		}
 
@@ -38,10 +41,28 @@ namespace Nez
 		}
 
 
+		public void Simulate(float value)
+		{
+			_simulatedValue = value;
+			_simulationStep = 1;
+		}
+		
+
 		public override void Update()
 		{
 			for (var i = 0; i < Nodes.Count; i++)
 				Nodes[i].Update();
+
+			switch (_simulationStep)
+			{
+				case 1:
+					_simulationStep++;
+					break;
+				case 2:
+					_simulatedValue = 0;
+					_simulationStep = 0;
+					break;
+			}
 		}
 
 

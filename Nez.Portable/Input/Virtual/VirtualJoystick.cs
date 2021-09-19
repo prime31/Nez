@@ -13,6 +13,9 @@ namespace Nez
 		public List<Node> Nodes = new List<Node>();
 		public bool Normalized;
 
+		Vector2 _simulatedValue = Vector2.Zero;
+		int _simulationStep;
+
 		public Vector2 Value
 		{
 			get
@@ -28,7 +31,7 @@ namespace Nez
 					}
 				}
 
-				return Vector2.Zero;
+				return _simulatedValue;
 			}
 		}
 
@@ -46,10 +49,29 @@ namespace Nez
 		}
 
 
+		public void Simulate(Vector2 value)
+		{
+			_simulatedValue = value;
+			_simulationStep = 1;
+		}
+		
+
 		public override void Update()
 		{
 			for (int i = 0; i < Nodes.Count; i++)
 				Nodes[i].Update();
+			
+			
+			switch (_simulationStep)
+			{
+				case 1:
+					_simulationStep++;
+					break;
+				case 2:
+					_simulatedValue = Vector2.Zero;
+					_simulationStep = 0;
+					break;
+			}
 		}
 
 
