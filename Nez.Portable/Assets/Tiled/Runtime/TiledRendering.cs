@@ -1,3 +1,4 @@
+using System;
 using System.Runtime.CompilerServices;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -72,7 +73,10 @@ namespace Nez.Tiled
 				if (tile == null)
 					continue;
 
-				RenderTile(tile, batcher, position, scale, tileWidth, tileHeight, color, layerDepth);
+				RenderTile(tile, batcher, position,
+					scale, tileWidth, tileHeight,
+					color, layerDepth, layer.Map.Orientation,
+					layer.Map.Width, layer.Map.Height);
 			}
 		}
 
@@ -98,43 +102,81 @@ namespace Nez.Tiled
 			var tileWidth = layer.Map.TileWidth * scale.X;
 			var tileHeight = layer.Map.TileHeight * scale.Y;
 
-			int minX, minY, maxX, maxY;
-			if (layer.Map.RequiresLargeTileCulling)
-			{
-				// we expand our cameraClipBounds by the excess tile width/height of the largest tiles to ensure we include tiles whose
-				// origin might be outside of the cameraClipBounds
-				minX = layer.Map.WorldToTilePositionX(cameraClipBounds.Left - (layer.Map.MaxTileWidth * scale.X - tileWidth));
-				minY = layer.Map.WorldToTilePositionY(cameraClipBounds.Top - (layer.Map.MaxTileHeight * scale.Y - tileHeight));
-				maxX = layer.Map.WorldToTilePositionX(cameraClipBounds.Right + (layer.Map.MaxTileWidth * scale.X - tileWidth));
-				maxY = layer.Map.WorldToTilePositionY(cameraClipBounds.Bottom + (layer.Map.MaxTileHeight * scale.Y - tileHeight));
-			}
-			else
-			{
-				minX = layer.Map.WorldToTilePositionX(cameraClipBounds.Left);
-				minY = layer.Map.WorldToTilePositionY(cameraClipBounds.Top);
-				maxX = layer.Map.WorldToTilePositionX(cameraClipBounds.Right);
-				maxY = layer.Map.WorldToTilePositionY(cameraClipBounds.Bottom);
-			}
+			Point min, max;
 
-
+			(min, max, cameraClipBounds) = GetLayerCullBounds(layer, scale, cameraClipBounds, tileWidth, tileHeight);
 
 			var color = Color.White;
 			color.A = (byte)(layer.Opacity * 255);
 
 			// loop through and draw all the non-culled tiles
-			for (var y = minY; y <= maxY; y++)
+			for (var y = min.Y; y <= max.Y; y++)
 			{
-				for (var x = minX; x <= maxX; x++)
+				for (var x = min.X; x <= max.X; x++)
 				{
 					var tile = layer.GetTile(x, y);
 					if (tile != null)
-						RenderTile(tile, batcher, position, scale, tileWidth, tileHeight, color, layerDepth);
+						RenderTile(tile, batcher, position,
+							scale, tileWidth, tileHeight,
+							color, layerDepth, layer.Map.Orientation,
+							layer.Map.Width, layer.Map.Height);
 				}
 			}
 		}
 
+		private static (Point, Point, RectangleF) GetLayerCullBounds(TmxLayer layer, Vector2 scale, RectangleF cameraClipBounds, float tileWidth, float tileHeight)
+		{
+			var min = Point.Zero;
+			var max = Point.Zero;
+
+			// we expand our cameraClipBounds by the excess tile width/height of the largest tiles to ensure we include tiles whose
+			// origin might be outside of the cameraClipBounds
+			switch (layer.Map.Orientation)
+			{
+				case OrientationType.Isometric:
+					if (layer.Map.RequiresLargeTileCulling)
+					{
+						cameraClipBounds.Location -= new Vector2(layer.Map.MaxTileWidth, layer.Map.MaxTileHeight - layer.Map.TileWidth);
+						cameraClipBounds.Size += new Vector2(layer.Map.MaxTileWidth, layer.Map.MaxTileHeight - layer.Map.TileHeight);
+					}
+
+					max = new Point(layer.Map.Width - 1, layer.Map.Height - 1);
+
+					break;
+				case OrientationType.Staggered:
+					throw new NotImplementedException("Staggered Tiled maps are not yet supported.");
+					break;
+				case OrientationType.Hexagonal:
+					throw new NotImplementedException("Hexagonal Tiled maps are not yet supported.");
+					break;
+				case OrientationType.Unknown:
+				case OrientationType.Orthogonal:
+				default:
+					if (layer.Map.RequiresLargeTileCulling)
+					{
+						min.X = layer.Map.WorldToTilePositionX(cameraClipBounds.Left - (layer.Map.MaxTileWidth * scale.X - tileWidth));
+						min.Y = layer.Map.WorldToTilePositionY(cameraClipBounds.Top - (layer.Map.MaxTileHeight * scale.Y - tileHeight));
+						max.X = layer.Map.WorldToTilePositionX(cameraClipBounds.Right + (layer.Map.MaxTileWidth * scale.X - tileWidth));
+						max.Y = layer.Map.WorldToTilePositionY(cameraClipBounds.Bottom + (layer.Map.MaxTileHeight * scale.Y - tileHeight));
+					}
+					else
+					{
+						min.X = layer.Map.WorldToTilePositionX(cameraClipBounds.Left);
+						min.Y = layer.Map.WorldToTilePositionY(cameraClipBounds.Top);
+						max.X = layer.Map.WorldToTilePositionX(cameraClipBounds.Right);
+						max.Y = layer.Map.WorldToTilePositionY(cameraClipBounds.Bottom);
+					}
+					break;
+			}
+
+			return (min, max, cameraClipBounds);
+		}
+
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public static void RenderTile(TmxLayerTile tile, Batcher batcher, Vector2 position, Vector2 scale, float tileWidth, float tileHeight, Color color, float layerDepth)
+		public static void RenderTile(TmxLayerTile tile, Batcher batcher, Vector2 position,
+				Vector2 scale, float tileWidth, float tileHeight,
+				Color color, float layerDepth, OrientationType orientation,
+				int mapWidth, int mapHeight)
 		{
 			var gid = tile.Gid;
 
@@ -148,8 +190,28 @@ namespace Nez.Tiled
 
 			// for the y position, we need to take into account if the tile is larger than the tileHeight and shift. Tiled uses
 			// a bottom-left coordinate system and MonoGame a top-left
-			var tx = tile.X * tileWidth;
-			var ty = tile.Y * tileHeight;
+			float tx, ty;
+
+			switch (orientation)
+			{
+				case OrientationType.Isometric:
+					tx = tile.X * tileWidth / 2 - tile.Y * tileWidth / 2 + (mapHeight - 1) * tileWidth / 2;
+					ty = tile.Y * tileHeight / 2 + tile.X * tileHeight / 2;
+					break;
+				case OrientationType.Staggered:
+					throw new NotImplementedException("Staggered Tiled maps are not yet supported.");
+					break;
+				case OrientationType.Hexagonal:
+					throw new NotImplementedException("Hexagonal Tiled maps are not yet supported.");
+					break;
+				case OrientationType.Unknown:
+				case OrientationType.Orthogonal:
+				default:
+					tx = tile.X * tileWidth;
+					ty = tile.Y * tileHeight;
+					break;
+			}
+
 			var rotation = 0f;
 
 			var spriteEffects = SpriteEffects.None;
@@ -210,14 +272,14 @@ namespace Nez.Tiled
 				if (!obj.Visible)
 					continue;
 
-                // if we are not debug rendering, we only render Tile and Text types
-                if (!Core.DebugRenderEnabled)
-                {
-                    if (obj.ObjectType != TmxObjectType.Tile && obj.ObjectType != TmxObjectType.Text)
-                        continue;
-                }
+				// if we are not debug rendering, we only render Tile and Text types
+				if (!Core.DebugRenderEnabled)
+				{
+					if (obj.ObjectType != TmxObjectType.Tile && obj.ObjectType != TmxObjectType.Text)
+						continue;
+				}
 
-                var pos = position + new Vector2(obj.X, obj.Y) * scale;
+				var pos = position + new Vector2(obj.X, obj.Y) * scale;
 				switch (obj.ObjectType)
 				{
 					case TmxObjectType.Basic:
@@ -259,8 +321,8 @@ namespace Nez.Tiled
 						batcher.DrawString(Graphics.Instance.BitmapFont, obj.Text.Value, pos, obj.Text.Color, Mathf.Radians(obj.Rotation), Vector2.Zero, fontScale, SpriteEffects.None, layerDepth);
 						goto default;
 					default:
-                        if (Core.DebugRenderEnabled)
-                            batcher.DrawString(Graphics.Instance.BitmapFont, $"{obj.Name} ({obj.Type})", pos - new Vector2(0, 15), Color.Black);
+						if (Core.DebugRenderEnabled)
+							batcher.DrawString(Graphics.Instance.BitmapFont, $"{obj.Name} ({obj.Type})", pos - new Vector2(0, 15), Color.Black);
 						break;
 				}
 			}

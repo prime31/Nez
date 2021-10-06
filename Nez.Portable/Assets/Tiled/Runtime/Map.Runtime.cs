@@ -90,6 +90,11 @@ namespace Nez.Tiled
 		/// <param name="pos">Position.</param>
 		public Point WorldToTilePosition(Vector2 pos, bool clampToTilemapBounds = true)
 		{
+			if (Orientation == OrientationType.Isometric)
+			{
+				return IsometricWorldToTilePosition(pos, clampToTilemapBounds);
+			}
+
 			return new Point(WorldToTilePositionX(pos.X, clampToTilemapBounds), WorldToTilePositionY(pos.Y, clampToTilemapBounds));
 		}
 
@@ -124,7 +129,15 @@ namespace Nez.Tiled
 		/// </summary>
 		/// <returns>The to world position.</returns>
 		/// <param name="pos">Position.</param>
-		public Vector2 TileToWorldPosition(Vector2 pos) => new Vector2(TileToWorldPositionX((int)pos.X), TileToWorldPositionY((int)pos.Y));
+		public Vector2 TileToWorldPosition(Point pos)
+		{
+			if (Orientation == OrientationType.Isometric)
+			{
+				return IsometricTileToWorldPosition(pos);
+			}
+
+			return new Vector2(TileToWorldPositionX((int)pos.X), TileToWorldPositionY((int)pos.Y));
+		}
 
 		/// <summary>
 		/// converts from tile to world position
@@ -139,6 +152,56 @@ namespace Nez.Tiled
 		/// <returns>The to world position y.</returns>
 		/// <param name="y">The y coordinate.</param>
 		public int TileToWorldPositionY(int y) => y * TileHeight;
+
+
+
+		/// <summary>
+		/// converts from world to tile position for isometric map clamping to the tilemap bounds
+		/// </summary>
+		/// <returns>The to tile position.</returns>
+		/// <param name="pos">Position.</param>
+		private Point IsometricWorldToTilePosition(Vector2 pos, bool clampToTilemapBounds = true)
+		{
+			return IsometricWorldToTilePosition(pos.X, pos.Y, clampToTilemapBounds);
+		}
+
+		/// <summary>
+		/// converts from world to tile position for isometric map clamping to the tilemap bounds
+		/// </summary>
+		/// <returns>The to tile position.</returns>
+		/// <param name="x">The x coordinate.</param>
+		/// <param name="y">The y coordinate.</param>
+		private Point IsometricWorldToTilePosition(float x, float y, bool clampToTilemapBounds = true)
+		{
+			x -= (Height - 1) * TileWidth / 2;
+			var tileX = Mathf.FastFloorToInt((y / TileHeight) + (x / TileWidth));
+			var tileY = Mathf.FastFloorToInt((-x / TileWidth) + (y / TileHeight));
+			if (!clampToTilemapBounds)
+				return new Point(tileX, tileY);
+			return new Point(Mathf.Clamp(tileX, 0, Width - 1), Mathf.Clamp(tileY, 0, Height - 1));
+		}
+
+		/// converts from isometric tile to world position
+		/// </summary>
+		/// <returns>The to world position.</returns>
+		/// <param name="pos">Position.</param>
+		private Vector2 IsometricTileToWorldPosition(Point pos)
+		{
+			return IsometricTileToWorldPosition(pos.X, pos.Y);
+		}
+
+		/// <summary>
+		/// converts from isometric tile to world position
+		/// </summary>
+		/// <returns>The to world position.</returns>
+		/// <param name="x">The x coordinate.</param>
+		/// <param name="y">The y coordinate.</param>
+		private Vector2 IsometricTileToWorldPosition(int x, int y)
+		{
+			var worldX = x * TileWidth / 2 - y * TileWidth / 2 + (Height - 1) * TileWidth / 2;
+			var worldY = y * TileHeight / 2 + x * TileHeight / 2;
+			return new Vector2(worldX, worldY);
+		}
 
 		#endregion
 
