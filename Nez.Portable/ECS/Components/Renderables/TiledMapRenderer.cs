@@ -28,6 +28,7 @@ namespace Nez
 		public TiledMapRenderer(TmxMap tiledMap, string collisionLayerName = null, bool shouldCreateColliders = true)
 		{
 			TiledMap = tiledMap;
+
 			_shouldCreateColliders = shouldCreateColliders;
 
 			if (collisionLayerName != null)
