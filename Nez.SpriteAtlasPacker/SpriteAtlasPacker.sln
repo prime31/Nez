@@ -1,13 +1,16 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.27703.2026
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31624.102
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpriteAtlasPacker", "SpriteAtlasPacker\SpriteAtlasPacker.csproj", "{1AC0A15F-98D2-477D-A620-A8F7B79935F4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SpriteAtlasPacker", "SpriteAtlasPacker\SpriteAtlasPacker.csproj", "{1AC0A15F-98D2-477D-A620-A8F7B79935F4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpriteAtlasPacker.Tester", "SpriteAtlasPacker.Tester\SpriteAtlasPacker.Tester.csproj", "{8FE22E8A-BF39-49A9-829F-1F8C7D41B838}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SpriteAtlasPacker.Tester", "SpriteAtlasPacker.Tester\SpriteAtlasPacker.Tester.csproj", "{8FE22E8A-BF39-49A9-829F-1F8C7D41B838}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpriteAtlasPacker.Console", "SpriteAtlasPacker.Console\SpriteAtlasPacker.Console.csproj", "{76FB74CD-5CCF-4D81-9652-A0D82EB9B36C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SpriteAtlasPacker.Console", "SpriteAtlasPacker.Console\SpriteAtlasPacker.Console.csproj", "{76FB74CD-5CCF-4D81-9652-A0D82EB9B36C}"
+	ProjectSection(ProjectDependencies) = postProject
+		{1AC0A15F-98D2-477D-A620-A8F7B79935F4} = {1AC0A15F-98D2-477D-A620-A8F7B79935F4}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -32,7 +35,7 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		VisualSVNWorkingCopyRoot = .
 		SolutionGuid = {49ABCC90-34F4-4DAD-9E9C-EDA06292431F}
+		VisualSVNWorkingCopyRoot = .
 	EndGlobalSection
 EndGlobal

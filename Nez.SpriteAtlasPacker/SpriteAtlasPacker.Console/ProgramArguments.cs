@@ -31,6 +31,9 @@ namespace Nez.Tools.Atlases.Console
 		[Argument(ArgumentType.AtMostOnce, ShortName = "", HelpText = "Ensures output is square.")]
 		public bool sqr;
 
+		[Argument(ArgumentType.AtMostOnce, ShortName = "", HelpText = "Input map file name with Origins to use (you can use existing Output map file to keep origins)")]
+		public string originsMap;
+
 		[Argument(ArgumentType.AtMostOnce, ShortName = "", HelpText = "Origin X for the images", DefaultValue = Constants.DefaultOrigin)]
 		public float originX = Constants.DefaultOrigin;
 
@@ -74,6 +77,7 @@ namespace Nez.Tools.Atlases.Console
 			{
 				AtlasOutputFile = image,
 				MapOutputFile = map,
+				MapInputFile = originsMap,
 				AtlasMaxWidth = mw,
 				AtlasMaxHeight = mh,
 				Padding = pad,
