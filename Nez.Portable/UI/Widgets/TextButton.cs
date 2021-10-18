@@ -121,7 +121,8 @@ namespace Nez.UI
 		/** Optional. */
 		public Color FontColor = Color.White;
 		public Color? DownFontColor, OverFontColor, CheckedFontColor, CheckedOverFontColor, DisabledFontColor;
-		public float FontScaleX, FontScaleY = 1;
+		public float FontScaleX = 1;
+		public float FontScaleY = 1;
 		public float FontScale { set { FontScaleX = value; FontScaleY = value; } }
 
 
