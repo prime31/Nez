@@ -43,7 +43,7 @@ The big advantage to using it is that you will never have a reference to content
    - right click the file and choose "Tools" -> "Process T4 Template" to generate the Content class
 - For Visual Studio Code
    - Install the mono [dotnet-t4](https://github.com/mono/t4) tool.
-	  - can be globally installed with: ```dotnet tool install -g dotnet-t4```
+      - can be globally installed with: ```dotnet tool install -g dotnet-t4```
    - Invoke dotnet-t4 via command line: ```t4 -o ContentPathGenerator.cs ContentPathGenerator.tt```
 - For JetBrains Rider:
    - right click the file and choose "Run Template"
