@@ -71,7 +71,12 @@ namespace Nez
 		#region static variables and constants
 
 		/// <summary>if true, the older FNA half-pixel offset will be used when creating the ortho matrix</summary>
-		public static bool UseFnaHalfPixelMatrix = false;
+		public static bool UseFnaHalfPixelMatrix =
+#if FNA
+			true;
+#else
+			false;
+#endif
 
 		const int MAX_SPRITES = 2048;
 		const int MAX_VERTICES = MAX_SPRITES * 4;
