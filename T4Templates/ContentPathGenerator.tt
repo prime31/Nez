@@ -92,7 +92,7 @@ namespace Nez
 				continue;
 			
 			// clear out all of the path up to the sourceFolder so we get just the relative path to the Content folder
-			var finalPath = file.Substring( file.IndexOf( sourceFolder ) + 3 );
+			var finalPath = file.Substring( file.IndexOf( sourceFolder ) );
 			var fileInfo = new FileInfo( file );
 			var className = GenerateClassName( fileInfo.Name.Replace(Path.GetExtension(fileInfo.Name), "") );
 
