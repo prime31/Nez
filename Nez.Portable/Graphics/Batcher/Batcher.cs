@@ -70,7 +70,7 @@ namespace Nez
 
 		#region static variables and constants
 
-		/// <summary>if true, the older FNA half-pixel offset will be used when creating the ortho matrix</summary>
+		/// if true, the older FNA half-pixel offset will be used when creating the ortho matrix. Autoset to true for FNA.
 		public static bool UseFnaHalfPixelMatrix = false;
 
 		const int MAX_SPRITES = 2048;
@@ -83,6 +83,10 @@ namespace Nez
 		static readonly short[] _indexData = GenerateIndexArray();
 
 		#endregion
+		
+		#if FNA
+		static Batcher() => UseFnaHalfPixelMatrix = true;
+		#endif
 
 		public Batcher(GraphicsDevice graphicsDevice)
 		{
