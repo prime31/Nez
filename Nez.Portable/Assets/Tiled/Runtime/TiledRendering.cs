@@ -145,10 +145,8 @@ namespace Nez.Tiled
 					break;
 				case OrientationType.Staggered:
 					throw new NotImplementedException("Staggered Tiled maps are not yet supported.");
-					break;
 				case OrientationType.Hexagonal:
 					throw new NotImplementedException("Hexagonal Tiled maps are not yet supported.");
-					break;
 				case OrientationType.Unknown:
 				case OrientationType.Orthogonal:
 				default:
@@ -200,10 +198,8 @@ namespace Nez.Tiled
 					break;
 				case OrientationType.Staggered:
 					throw new NotImplementedException("Staggered Tiled maps are not yet supported.");
-					break;
 				case OrientationType.Hexagonal:
 					throw new NotImplementedException("Hexagonal Tiled maps are not yet supported.");
-					break;
 				case OrientationType.Unknown:
 				case OrientationType.Orthogonal:
 				default:
