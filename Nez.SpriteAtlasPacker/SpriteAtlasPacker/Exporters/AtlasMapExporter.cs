@@ -48,7 +48,8 @@ namespace Nez.Tools.Atlases
 						if (origins != null)
 						{
 							var name = imagesNames[image];
-							origins.TryGetValue(name, out origin);
+							if (origins.ContainsKey(name))
+								origin = origins[name];
 						}
 						writer.WriteLine("\t{0},{1}",
 							origin.X.ToString(System.Globalization.CultureInfo.InvariantCulture),

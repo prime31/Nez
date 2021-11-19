@@ -94,7 +94,12 @@ namespace Nez.Tools.Atlases
 			}
 
 			// load origins if atlas file is passed in config
-			var origins = AtlasMapOriginsImporter.ImportFromFile(config.MapInputFile);
+			Dictionary<string, System.Numerics.Vector2> origins = null;
+
+			if (File.Exists(config.MapInputFile))
+				origins = AtlasMapOriginsImporter.ImportFromFile(config.MapInputFile);
+			else
+				System.Console.WriteLine("Input map file does not exist, using default origins.");
 
 			if (config.OutputLua)
 				config.MapOutputFile = config.MapOutputFile.Replace(".atlas", ".lua");
