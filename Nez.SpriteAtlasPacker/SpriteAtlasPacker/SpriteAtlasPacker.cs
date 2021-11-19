@@ -22,6 +22,7 @@ namespace Nez.Tools.Atlases
 		public class Config
 		{
 			public string AtlasOutputFile;
+			public string MapInputFile;
 			public string MapOutputFile;
 			public int AtlasMaxWidth = Constants.DefaultMaximumSheetWidth;
 			public int AtlasMaxHeight = Constants.DefaultMaximumSheetHeight;
@@ -92,6 +93,14 @@ namespace Nez.Tools.Atlases
 					throw new Exception("Invalid image format for output image.");
 			}
 
+			// load origins if atlas file is passed in config
+			Dictionary<string, System.Numerics.Vector2> origins = null;
+
+			if (File.Exists(config.MapInputFile))
+				origins = AtlasMapOriginsImporter.ImportFromFile(config.MapInputFile);
+			else
+				System.Console.WriteLine("Input map file does not exist, using default origins.");
+
 			if (config.OutputLua)
 				config.MapOutputFile = config.MapOutputFile.Replace(".atlas", ".lua");
 
@@ -101,7 +110,7 @@ namespace Nez.Tools.Atlases
 			if (config.OutputLua)
 				LuaMapExporter.Save(config.MapOutputFile, outputMap, animations, outputImage.Width, outputImage.Height, config);
 			else
-				AtlasMapExporter.Save(config.MapOutputFile, outputMap, animations, config);
+				AtlasMapExporter.Save(config.MapOutputFile, outputMap, animations, origins, config);
 
 			return 0;
 		}

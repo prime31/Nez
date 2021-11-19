@@ -20,18 +20,19 @@ Sprite Atlas Packer also handles animations. Any subdirectories that contain ima
 ## Options
 
 ```
-<input>           Images to pack. Default:''
-/image:string     Output file name for the image.
-/map:string       Output file name for the map.
-/mw:int           Maximum ouput width. Default:'4096'
-/mh:int           Maximum ouput height. Default:'4096'
-/pad:int          Padding between images. Default:'1'
-/pow2             Ensures output dimensions are powers of two.
-/sqr              Ensures output is square.
-/originX:float    Origin X for the images Default:'0.5'
-/originY:float    Origin Y for the images Default:'0.5'
-/fps:int          Framerate for any animations Default:'8'
-/lua              Output LOVE2D lua file
+<input>            Images to pack. Default:''
+/image:string      Output file name for the image.
+/map:string        Output file name for the map.
+/originsMap:string Input map file name with Origins to use (you can use existing Output map file to keep origins)
+/mw:int            Maximum ouput width. Default:'4096'
+/mh:int            Maximum ouput height. Default:'4096'
+/pad:int           Padding between images. Default:'1'
+/pow2              Ensures output dimensions are powers of two.
+/sqr               Ensures output is square.
+/originX:float     Origin X for the images Default:'0.5'
+/originY:float     Origin Y for the images Default:'0.5'
+/fps:int           Framerate for any animations Default:'8'
+/lua               Output LOVE2D lua file
 ```
 
 

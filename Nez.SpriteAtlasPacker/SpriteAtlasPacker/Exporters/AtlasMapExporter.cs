@@ -2,6 +2,7 @@
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Numerics;
 
 namespace Nez.Tools.Atlases
 {
@@ -9,7 +10,7 @@ namespace Nez.Tools.Atlases
 	{
 		public static string MapExtension => "lua";
 
-		public static void Save(string filename, Dictionary<string, Rectangle> map, Dictionary<string, List<string>> animations, SpriteAtlasPacker.Config arguments)
+		public static void Save(string filename, Dictionary<string, Rectangle> map, Dictionary<string, List<string>> animations, Dictionary<string, Vector2> origins, SpriteAtlasPacker.Config arguments)
 		{
 			var images = new List<string>(map.Keys);
 
@@ -43,9 +44,16 @@ namespace Nez.Tools.Atlases
 					// write images origins
 					if (!arguments.NoOrigins)
 					{
+						Vector2 origin = new Vector2(arguments.OriginX, arguments.OriginY);
+						if (origins != null)
+						{
+							var name = imagesNames[image];
+							if (origins.ContainsKey(name))
+								origin = origins[name];
+						}
 						writer.WriteLine("\t{0},{1}",
-							arguments.OriginX.ToString(System.Globalization.CultureInfo.InvariantCulture),
-							arguments.OriginY.ToString(System.Globalization.CultureInfo.InvariantCulture));
+							origin.X.ToString(System.Globalization.CultureInfo.InvariantCulture),
+							origin.Y.ToString(System.Globalization.CultureInfo.InvariantCulture));
 					}
 				}
 
@@ -68,6 +76,5 @@ namespace Nez.Tools.Atlases
 				}
 			}
 		}
-
 	}
 }
