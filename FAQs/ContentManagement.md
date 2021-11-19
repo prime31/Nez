@@ -39,7 +39,15 @@ The big advantage to using it is that you will never have a reference to content
 
 - copy the ContentPathGenerator.tt file into the root of your project (you could place it elsewhere and then modify the `sourceFolder` variable in the file. For example, if using only precompiled XNB files in an FNA project you would set `sourceFolder = "Content/"`)
 - in the properties pane for the file set the "Custom Tool" to "TextTemplatingFileGenerator"
-- right click the file and choose Tools -> Process T4 Template to generate the Content class
+- For Visual Studio:   
+   - right click the file and choose "Tools" -> "Process T4 Template" to generate the Content class
+- For Visual Studio Code
+   - Install the mono [dotnet-t4](https://github.com/mono/t4) tool.
+      - can be globally installed with: ```dotnet tool install -g dotnet-t4```
+   - Invoke dotnet-t4 via command line: ```t4 -o ContentPathGenerator.cs ContentPathGenerator.tt```
+- For JetBrains Rider:
+   - right click the file and choose "Run Template"
+
 
 
 ## Async Loading

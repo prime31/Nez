@@ -7,29 +7,35 @@
 <#@ import namespace="System.Globalization" #>
 <#@ import namespace="System.Text.RegularExpressions" #>
 
-<# var sourceFolders = new string[] { "Content/bin/DesktopGL", "Content" }; #>
-
+<#
+    // Paths to the content folders, relative to the .tt file
+	string[] sourceFolders = new string[] { "Content" }; 
+#>
 
 namespace Nez
 {
+    /// <summary>
+    /// class that contains the names of all of the files processed by the Pipeline Tool
+    /// </summary>
+    /// <remarks>
+    /// Nez includes a T4 template that will auto-generate the content of this file.
+    /// See: https://github.com/prime31/Nez/blob/master/FAQs/ContentManagement.md#auto-generating-content-paths"
+    /// </remarks>
     class Content
     {
 <#
-
-	// loop through all of our sourceFolders
+    // loop through all of our sourceFolders
 	foreach( var sourceFolder in sourceFolders )
 	{
-		var directories = Directory.GetDirectories( Host.ResolvePath( sourceFolder ) );
+	    List<string> directories = Directory.GetDirectories(Host.ResolvePath(sourceFolder))
+			.OrderBy(s => s)
+			.ToList();
+
 		// loop through all the directories in our sourceFolder
-		foreach( var dir in directories )
+		foreach(var dir in directories)
 		{
 			var dirName = new DirectoryInfo( dir ).Name.ToLower();
 			if( dirName == "bin" || dirName == "obj" || dirName == "content" )
-				continue;
-
-			// dont delve into directories that don't contan xnb files
-			var xnbFiles = Directory.GetFiles( dir, "*.xnb", SearchOption.AllDirectories );
-			if( xnbFiles.Length == 0 )
 				continue;
 
 			// start off the recursive directory printing
@@ -45,8 +51,6 @@ namespace Nez
     }
 }
 
-
-
 <#+
 	// C# reserved keywords
 	private System.Collections.Generic.HashSet<string> Keywords = new System.Collections.Generic.HashSet<string>
@@ -57,7 +61,7 @@ namespace Nez
 		"protected", "public", "readonly", "ref", "return", "sbyte", "sealed", "short", "sizeof", "stackalloc", "static", "string", "struct", "switch", "this",
 		"throw", "true", "try", "typeof", "uint", "ulong", "unchecked", "unsafe", "ushort", "using", "virtual", "void", "volatile", "while"
 	};
-
+	
 	// recursively creates a class for each directory
 	void PrintDirectoryClass( string dir, int depth, string sourceFolder )
 	{
@@ -67,7 +71,7 @@ namespace Nez
 		WriteLine( "{0}public static class {1}\n{2}{{", firstIndent, className, firstIndent );
 
 		// handle subdirectories
-		foreach( var subdir in Directory.GetDirectories( dir ) )
+		foreach(var subdir in Directory.GetDirectories(dir).OrderBy(s => s))
 			PrintDirectoryClass( subdir, depth + 1, sourceFolder );
 
 		// handle files
@@ -81,42 +85,28 @@ namespace Nez
 	void PrintContentFiles( string dir, int depth, string sourceFolder )
 	{
 		var firstIndent = new string( '\t', depth );
-
-		foreach( var file in Directory.GetFiles( dir, "*.xnb" ) )
+        
+		foreach(var file in Directory.GetFiles( dir ).OrderBy(s => s))
 		{
+			if (file.Contains("DS_Store") || file.EndsWith("mgfxo"))
+				continue;
+			
 			// clear out all of the path up to the sourceFolder so we get just the relative path to the Content folder
-			var finalPath = file.Substring( file.IndexOf( sourceFolder ) + sourceFolder.Length )
-				.Replace( ".xnb", string.Empty );
+			var finalPath = file.Substring( file.IndexOf( sourceFolder ) );
 			var fileInfo = new FileInfo( file );
-			var fileName = fileInfo.Name.Replace( ".xnb", string.Empty );
-			var className = GenerateClassName( fileName );
+			var className = GenerateClassName( fileInfo.Name.Replace(Path.GetExtension(fileInfo.Name), "") );
 
 			if( finalPath[0] == '/' || finalPath[0] == '\\' )
 				finalPath = finalPath.Substring( 1 );
 
             // if file name is reserved insert a leading '@'
-			if( Keywords.Contains( className ) )
+			if( Keywords.Contains( fileInfo.Name ) )
 				className = className.Insert( 0, "@" );
 
 			WriteLine( "{0}public const string {1} = @\"{2}\";", firstIndent, className, finalPath );
 		}
 	}
-
-
-	string StripInvalidPathChars( string input )
-	{
-		var invalidChars = Path.GetInvalidPathChars();
-    	return new string( input.Where( m => !invalidChars.Contains( m ) ).ToArray<char>() );
-	}
-
-
-	string StripInvalidFilenameChars( string input )
-	{
-		var invalidChars = Path.GetInvalidFileNameChars();
-    	return new string( input.Where( m => !invalidChars.Contains( m ) ).ToArray<char>() );
-	}
-
-
+    
 	// attempts to generate a proper path name
 	string GenerateClassName( string className )
 	{
