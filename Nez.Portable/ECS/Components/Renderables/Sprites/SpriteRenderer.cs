@@ -110,7 +110,7 @@ namespace Nez.Sprites
 		{
 			_sprite = sprite;
 			if (_sprite != null)
-				_origin = _sprite.Origin;
+				SetOrigin(_sprite.Origin); // set origin with setting _areBoundsDirty
 			return this;
 		}
 
