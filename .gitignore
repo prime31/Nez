@@ -65,3 +65,4 @@ bld/
 Nez.Portable/project.lock.json
 Nez.Portable/Nez.FNA.csproj.nuget.cache
 .idea
+.DS_Store
