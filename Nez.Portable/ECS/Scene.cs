@@ -340,7 +340,7 @@ namespace Nez
 		{
 		}
 
-		internal void Begin()
+		public virtual void Begin()
 		{
 			if (_renderers.Length == 0)
 			{
