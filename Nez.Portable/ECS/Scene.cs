@@ -361,7 +361,7 @@ namespace Nez
 			OnStart();
 		}
 
-		internal void End()
+		public virtual void End()
 		{
 			_didSceneBegin = false;
 
