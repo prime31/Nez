@@ -21,12 +21,13 @@ namespace Nez
 		int _lineVertsCount;
 		VertexPositionColor[] _triangleVertices;
 		int _triangleVertsCount;
-
+		Vector2[] _rectangleVerts;
 
 		public PrimitiveBatch(int bufferSize = 500)
 		{
 			_triangleVertices = new VertexPositionColor[bufferSize - bufferSize % 3];
 			_lineVertices = new VertexPositionColor[bufferSize - bufferSize % 2];
+			_rectangleVerts = new Vector2[4];
 
 			// set up a new basic effect, and enable vertex colors.
 			_basicEffect = new BasicEffect(Core.GraphicsDevice);
@@ -165,24 +166,22 @@ namespace Nez
 
 		public void DrawRectangle(float x, float y, float width, float height, Color color)
 		{
-			var verts = new Vector2[4];
-			verts[2] = new Vector2(x + width, y + height);
-			verts[1] = new Vector2(x + width, y);
-			verts[0] = new Vector2(x, y);
-			verts[3] = new Vector2(x, y + height);
+			_rectangleVerts[2] = new Vector2(x + width, y + height);
+			_rectangleVerts[1] = new Vector2(x + width, y);
+			_rectangleVerts[0] = new Vector2(x, y);
+			_rectangleVerts[3] = new Vector2(x, y + height);
 
-			DrawPolygon(verts, 4, color);
+			DrawPolygon(_rectangleVerts, 4, color);
 		}
 
 		public void DrawRectangle(ref Rectangle rect, Color color)
 		{
-			var verts = new Vector2[4];
-			verts[0] = new Vector2(rect.Left, rect.Top);
-			verts[1] = new Vector2(rect.Right, rect.Top);
-			verts[2] = new Vector2(rect.Right, rect.Bottom);
-			verts[3] = new Vector2(rect.Left, rect.Bottom);
+			_rectangleVerts[0] = new Vector2(rect.Left, rect.Top);
+			_rectangleVerts[1] = new Vector2(rect.Right, rect.Top);
+			_rectangleVerts[2] = new Vector2(rect.Right, rect.Bottom);
+			_rectangleVerts[3] = new Vector2(rect.Left, rect.Bottom);
 
-			DrawPolygon(verts, 4, color);
+			DrawPolygon(_rectangleVerts, 4, color);
 		}
 
 		public void DrawPolygon(Vector2[] vertices, int count, Color color)
