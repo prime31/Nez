@@ -90,8 +90,8 @@ namespace Nez.ImGuiTools
 		/// <returns></returns>
 		public static bool CenteredButton(string label, float percentWidth, float xIndent = 0)
 		{
-			var buttonWidth = ImGui.GetWindowContentRegionWidth() * percentWidth;
-			ImGui.SetCursorPosX(xIndent + (ImGui.GetWindowContentRegionWidth() - buttonWidth) / 2f);
+			var buttonWidth = ImGui.GetWindowContentRegionMax().X * percentWidth;
+			ImGui.SetCursorPosX(xIndent + (ImGui.GetWindowContentRegionMax().X - buttonWidth) / 2f);
 			return ImGui.Button(label, new System.Numerics.Vector2(buttonWidth, GetDefaultWidgetHeight()));
 		}
 

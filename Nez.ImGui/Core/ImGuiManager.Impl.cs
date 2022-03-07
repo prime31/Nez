@@ -128,8 +128,8 @@ namespace Nez.ImGuiTools
 				if (ImGui.IsWindowHovered())
 				{
 					if (ImGui.IsMouseClicked(0)
-					|| (ImGui.IsMouseClicked(1) && FocusGameWindowOnRightClick)
-					|| (ImGui.IsMouseClicked(2) && FocusGameWindowOnMiddleClick))
+					|| (ImGui.IsMouseClicked(ImGuiMouseButton.Left) && FocusGameWindowOnRightClick)
+					|| (ImGui.IsMouseClicked(ImGuiMouseButton.Right) && FocusGameWindowOnMiddleClick))
 					{
 						ImGui.SetWindowFocus();
 						focusedWindow = true;
