@@ -524,7 +524,7 @@ namespace Nez.ImGuiTools
 						var uv1 = rect.GetSize().ToNumerics() / _textureSize;
 
 						var size = CalcBestFitRegion(new Num.Vector2(_animationPreviewSize), rect.GetSize().ToNumerics());
-						ImGui.SetCursorPosX((ImGui.GetWindowContentRegionWidth() - size.X) / 2f);
+						ImGui.SetCursorPosX((ImGui.GetWindowContentRegionMax().X - size.X) / 2f);
 						ImGui.Image(_texturePtr, size, uv0, uv0 + uv1);
 					}
 
