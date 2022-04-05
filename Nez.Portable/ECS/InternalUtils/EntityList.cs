@@ -128,7 +128,7 @@ namespace Nez
 
 		FastList<Entity> GetTagList(int tag)
 		{
-			FastList<Entity> list = null;
+			FastList<Entity> list;
 			if (!_entityDict.TryGetValue(tag, out list))
 			{
 				list = new FastList<Entity>();
@@ -150,11 +150,9 @@ namespace Nez
 
 		internal void RemoveFromTagList(Entity entity)
 		{
-			FastList<Entity> list = null;
+			FastList<Entity> list;
 			if (_entityDict.TryGetValue(entity.Tag, out list))
-			{
 				list.Remove(entity);
-			}
 		}
 
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -340,9 +338,7 @@ namespace Nez
 			foreach (var entity in _entitiesToAdd)
 			{
 				if (entity.Enabled)
-				{
 					entity.GetComponents<T>(comps);
-				}
 			}
 
 			return comps;
