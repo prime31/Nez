@@ -16,7 +16,7 @@ namespace Nez
 		/// </summary>
 		public int[] LayerIndicesToRender;
 
-		public bool autoUpdateTilesets = true;
+		public bool AutoUpdateTilesets = true;
 
 		public override float Width => TiledMap.Width * TiledMap.TileWidth;
 		public override float Height => TiledMap.Height * TiledMap.TileHeight;
@@ -123,7 +123,7 @@ namespace Nez
 
 		public virtual void Update()
 		{
-			if (autoUpdateTilesets)
+			if (AutoUpdateTilesets)
 				TiledMap.Update();
 		}
 
