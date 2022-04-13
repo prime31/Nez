@@ -20,9 +20,9 @@ namespace Nez.UI
 		/// </summary>
 		public object UserData;
 
-		internal float x, y;
-		internal float width, height;
-		internal Color color = Color.White;
+		public float x, y;
+		public float width, height;
+		public Color color = Color.White;
 
 		protected float originX, originY;
 		protected float scaleX = 1, scaleY = 1;
