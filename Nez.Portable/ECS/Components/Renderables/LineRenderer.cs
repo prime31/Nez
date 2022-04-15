@@ -830,6 +830,8 @@ namespace Nez
 		{
 			if (_points.Length < 2)
 				return;
+			
+			batcher.FlushBatch();
 
 			_basicEffect.Projection = camera.ProjectionMatrix;
 			_basicEffect.View = camera.TransformMatrix;
