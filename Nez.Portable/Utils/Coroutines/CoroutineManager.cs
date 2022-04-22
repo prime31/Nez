@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Collections;
 
 
@@ -69,6 +69,20 @@ namespace Nez.Systems
 		List<CoroutineImpl> _unblockedCoroutines = new List<CoroutineImpl>();
 		List<CoroutineImpl> _shouldRunNextFrame = new List<CoroutineImpl>();
 
+
+		/// <summary>
+		/// Immediately stops and clears all coroutines. Do not to call this from inside one of the manager's coroutines.
+		/// </summary>
+		public void ClearAllCoroutines()
+		{
+			for (var i = 0; i < _unblockedCoroutines.Count; i++)
+				Pool<CoroutineImpl>.Free(_unblockedCoroutines[i]);
+			for (var i = 0; i < _shouldRunNextFrame.Count; i++)
+				Pool<CoroutineImpl>.Free(_shouldRunNextFrame[i]);
+			
+			_unblockedCoroutines.Clear();
+			_shouldRunNextFrame.Clear();
+		}
 
 		/// <summary>
 		/// adds the IEnumerator to the CoroutineManager. Coroutines get ticked before Update is called each frame.
@@ -169,6 +183,12 @@ namespace Nez.Systems
 			if (coroutine.Enumerator.Current is WaitForSeconds)
 			{
 				coroutine.WaitTimer = (coroutine.Enumerator.Current as WaitForSeconds).waitTime;
+				return true;
+			}
+
+			if (coroutine.Enumerator.Current is IEnumerator enumerator)
+			{
+				coroutine.WaitForCoroutine = StartCoroutine(enumerator) as CoroutineImpl;
 				return true;
 			}
 
