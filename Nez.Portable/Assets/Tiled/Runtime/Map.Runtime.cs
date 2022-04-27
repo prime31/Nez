@@ -95,7 +95,15 @@ namespace Nez.Tiled
 				return IsometricWorldToTilePosition(pos, clampToTilemapBounds);
 			}
 
-			return new Point(WorldToTilePositionX(pos.X, clampToTilemapBounds), WorldToTilePositionY(pos.Y, clampToTilemapBounds));
+			if (Orientation == OrientationType.Hexagonal)
+			{
+				return HexagonalWorldToTilePosition(pos, clampToTilemapBounds);
+			}
+
+			return new Point(
+				WorldToTilePositionX(pos.X, clampToTilemapBounds),
+				WorldToTilePositionY(pos.Y, clampToTilemapBounds)
+			);
 		}
 
 		/// <summary>
@@ -136,6 +144,11 @@ namespace Nez.Tiled
 				return IsometricTileToWorldPosition(pos);
 			}
 
+			if (Orientation == OrientationType.Hexagonal)
+			{
+				return HexagonalTileToWorldPosition(pos);
+			}
+
 			return new Vector2(TileToWorldPositionX((int)pos.X), TileToWorldPositionY((int)pos.Y));
 		}
 
@@ -146,9 +159,12 @@ namespace Nez.Tiled
 		/// <param name="x">The x coordinate.</param>
 		public int TileToWorldPositionX(int x)
 		{
-			if (Orientation == OrientationType.Isometric)
+			if (Orientation == OrientationType.Isometric ||
+			    Orientation == OrientationType.Hexagonal)
 			{
-				throw new InvalidOperationException("Cannot convert tile position to world position for isometric maps with just an X coordinate.");
+				throw new InvalidOperationException(
+					"Cannot convert tile position to world position for isometric or hexagonal maps with just an X coordinate."
+				);
 			}
 
 			return x * TileWidth;
@@ -161,12 +177,182 @@ namespace Nez.Tiled
 		/// <param name="y">The y coordinate.</param>
 		public int TileToWorldPositionY(int y)
 		{
-			if (Orientation == OrientationType.Isometric)
+			if (Orientation == OrientationType.Isometric ||
+			    Orientation == OrientationType.Hexagonal)
 			{
-				throw new InvalidOperationException("Cannot convert tile position to world position for isometric maps with just an Y coordinate.");
+				throw new InvalidOperationException(
+					"Cannot convert tile position to world position for isometric or hexagonal maps with just an Y coordinate."
+				);
 			}
 
 			return y * TileHeight;
+		}
+		
+		struct OffsetHex
+		{
+			public int q;
+			public int r;
+
+			public OffsetHex(int q, int r)
+			{
+				this.q = q;
+				this.r = r;
+			}
+		}
+
+		struct FractionalCubeHex
+		{
+			public readonly double q;
+			public readonly double r;
+			public readonly double s;
+
+			public FractionalCubeHex(double q, double r, double s)
+			{
+				this.q = q;
+				this.r = r;
+				this.s = s;
+			}
+
+			public CubeHex FractionalCubeHexRound()
+			{
+				int qi = (int)(Math.Round(q));
+				int ri = (int)(Math.Round(r));
+				int si = (int)(Math.Round(s));
+
+				double q_diff = Math.Abs(qi - q);
+				double r_diff = Math.Abs(ri - r);
+				double s_diff = Math.Abs(si - s);
+
+				if (q_diff > r_diff && q_diff > s_diff)
+				{
+					qi = -ri - si;
+				}
+				else if (r_diff > s_diff)
+				{
+					ri = -qi - si;
+				}
+				else
+				{
+					si = -qi - ri;
+				}
+
+				return new CubeHex(qi, ri, si);
+			}
+		}
+
+		struct CubeHex
+		{
+			public int q;
+			public int r;
+			public int s;
+
+			public CubeHex(int q, int r, int s)
+			{
+				this.q = q;
+				this.r = r;
+				this.s = s;
+			}
+		}
+
+		private FractionalCubeHex ScreenPointToFractionalCubeHexCoordinates(float x, float y)
+		{
+			var newx = (x - TileWidth / 2) / TileWidth;
+
+			double t1 = y / (TileHeight / 2);
+			double t2 = Math.Floor(newx + t1);
+			double r = Math.Floor((Math.Floor(t1 - newx) + t2) / 3);
+			double q = Math.Floor((Math.Floor(2 * newx + 1) + t2) / 3) - r;
+			double s = -q - r;
+
+			var fractionalCubeHex = new FractionalCubeHex(q, r, s);
+
+			return fractionalCubeHex;
+		}
+
+		private Vector2 OffsetHexCoordinatesToScreenPoint(OffsetHex offsetHex)
+		{
+			var sizex = TileWidth / Mathf.Sqrt(3);
+			var sizey = TileHeight / 2;
+
+			var x = sizex * Mathf.Sqrt(3) * (offsetHex.q + 0.5 * (offsetHex.r & 1));
+			var y = sizey * (0.0f * offsetHex.q + 3.0f / 2.0f * offsetHex.r);
+			return new Vector2((float)x + (TileWidth / 2), y + (TileHeight / 2));
+		}
+
+		private OffsetHex ConvertCubeCoordinatesToOffset(CubeHex cubeHex)
+		{
+			var row = cubeHex.r;
+			var col = cubeHex.q + (cubeHex.r - 1 * (cubeHex.r & 1)) / 2;
+			return new OffsetHex(row, col);
+		}
+
+		private CubeHex ConvertOffsetCoordinatesToCube(OffsetHex offsetHex)
+		{
+			var q = offsetHex.q - (offsetHex.r - (offsetHex.r & 1)) / 2;
+			var r = offsetHex.r;
+			var s = -q - r;
+			return new CubeHex(q, r, s);
+		}
+
+		/// <summary>
+		/// converts from world to tile position for hexagonal map clamping to the tilemap bounds
+		/// </summary>
+		/// <returns>The to tile position.</returns>
+		/// <param name="pos">Position.</param>
+		private Point HexagonalWorldToTilePosition(Vector2 pos, bool clampToTilemapBounds = true)
+		{
+			return HexagonalWorldToTilePosition(pos.X, pos.Y, clampToTilemapBounds);
+		}
+
+		/// <summary>
+		/// converts from world to tile position for hexagonal map clamping to the tilemap bounds
+		/// </summary>
+		/// <returns>The to tile position.</returns>
+		/// <param name="x">The x coordinate.</param>
+		/// <param name="y">The y coordinate.</param>
+		private Point HexagonalWorldToTilePosition(
+			float x,
+			float y,
+			bool clampToTilemapBounds = true
+		)
+		{
+			// Implementation of odd, pointy-top hexagons using https://www.redblobgames.com/grids/hexagons/
+			var fractionalCubeHex = ScreenPointToFractionalCubeHexCoordinates(x, y);
+			var cubeHex = fractionalCubeHex.FractionalCubeHexRound();
+			var offsetHex = ConvertCubeCoordinatesToOffset(cubeHex);
+
+			if (!clampToTilemapBounds)
+			{
+				return new Point(offsetHex.r, offsetHex.q);
+			}
+
+			return new Point(
+				Mathf.Clamp(offsetHex.r, 0, Width - 1),
+				Mathf.Clamp(offsetHex.q, 0, Height - 1)
+			);
+		}
+
+		/// converts from hexagonal tile to world position
+		/// </summary>
+		/// <returns>The to world position.</returns>
+		/// <param name="pos">Position.</param>
+		private Vector2 HexagonalTileToWorldPosition(Point pos)
+		{
+			return HexagonalTileToWorldPosition(pos.X, pos.Y);
+		}
+
+		/// <summary>
+		/// converts from hexagonal tile to world position
+		/// </summary>
+		/// <returns>The to world position.</returns>
+		/// <param name="x">The x coordinate.</param>
+		/// <param name="y">The y coordinate.</param>
+		private Vector2 HexagonalTileToWorldPosition(int x, int y)
+		{
+			var offsetHex = new OffsetHex(x, y);
+			var worldPosition = OffsetHexCoordinatesToScreenPoint(offsetHex);
+
+			return worldPosition;
 		}
 
 		/// <summary>
@@ -246,6 +432,12 @@ namespace Nez.Tiled
 				worldPos.Y -= TileHeight / 2;
 
 				return worldPos;
+			}
+			else if (Orientation == OrientationType.Hexagonal)
+			{
+				throw new NotImplementedException(
+					"Hexagonal map orientation not yet supported for conversion of position to world coordinates."
+				);
 			}
 
 			throw new NotImplementedException("Map orientation not supported for conversion of position to world coordinates.");

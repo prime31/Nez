@@ -133,20 +133,27 @@ namespace Nez.Tiled
 			// origin might be outside of the cameraClipBounds
 			switch (layer.Map.Orientation)
 			{
+				case OrientationType.Hexagonal:
 				case OrientationType.Isometric:
 					if (layer.Map.RequiresLargeTileCulling)
 					{
-						cameraClipBounds.Location -= new Vector2(layer.Map.MaxTileWidth, layer.Map.MaxTileHeight - layer.Map.TileWidth);
-						cameraClipBounds.Size += new Vector2(layer.Map.MaxTileWidth, layer.Map.MaxTileHeight - layer.Map.TileHeight);
+						cameraClipBounds.Location -= new Vector2(
+							layer.Map.MaxTileWidth,
+							layer.Map.MaxTileHeight - layer.Map.TileWidth
+						);
+						cameraClipBounds.Size += new Vector2(
+							layer.Map.MaxTileWidth,
+							layer.Map.MaxTileHeight - layer.Map.TileHeight
+						);
 					}
 
 					max = new Point(layer.Map.Width - 1, layer.Map.Height - 1);
 
 					break;
 				case OrientationType.Staggered:
-					throw new NotImplementedException("Staggered Tiled maps are not yet supported.");
-				case OrientationType.Hexagonal:
-					throw new NotImplementedException("Hexagonal Tiled maps are not yet supported.");
+					throw new NotImplementedException(
+						"Staggered Tiled maps are not yet supported."
+					);
 				case OrientationType.Unknown:
 				case OrientationType.Orthogonal:
 				default:
@@ -192,14 +199,30 @@ namespace Nez.Tiled
 
 			switch (orientation)
 			{
+				case OrientationType.Hexagonal:
+					bool isEvenRow = tile.Y % 2 == 0;
+
+					if (isEvenRow)
+					{
+						tx = tile.X * tileWidth;
+						ty = tile.Y * tileHeight * 0.75f;
+					}
+					else
+					{
+						tx = (tileWidth / 2) + (tile.X * tileWidth);
+						ty = tile.Y * tileHeight * 0.75f;
+					}
+
+					break;
 				case OrientationType.Isometric:
 					tx = tile.X * tileWidth / 2 - tile.Y * tileWidth / 2 + (mapHeight - 1) * tileWidth / 2;
 					ty = tile.Y * tileHeight / 2 + tile.X * tileHeight / 2;
 					break;
 				case OrientationType.Staggered:
-					throw new NotImplementedException("Staggered Tiled maps are not yet supported.");
-				case OrientationType.Hexagonal:
-					throw new NotImplementedException("Hexagonal Tiled maps are not yet supported.");
+					throw new NotImplementedException(
+						"Staggered Tiled maps are not yet supported."
+					);
+
 				case OrientationType.Unknown:
 				case OrientationType.Orthogonal:
 				default:
