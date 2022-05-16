@@ -37,6 +37,7 @@ namespace Nez.Tweens
 		/// internal list of all the currently active tweens
 		/// </summary>
 		FastList<ITweenable> _activeTweens = new FastList<ITweenable>();
+		public IReadOnlyList<ITweenable> ActiveTweens => _activeTweens.Buffer;
 
 		/// <summary>
 		/// stores tweens marked for removal
@@ -180,7 +181,6 @@ namespace Nez.Tweens
 					var tweenControl = _instance._activeTweens.Buffer[i] as ITweenControl;
 					if (tweenControl.GetTargetObject() == target)
 						foundTweens.Add(_instance._activeTweens[i] as ITweenable);
-				}
 			}
 
 			return foundTweens;
