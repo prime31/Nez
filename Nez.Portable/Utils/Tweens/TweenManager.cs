@@ -163,27 +163,6 @@ namespace Nez.Tweens
 			}
 		}
 
-
-		/// <summary>
-		/// returns all the tweens that are owned by a specific entity. Tweens are returned as ITweenable since that is all
-		/// that TweenManager knows about.
-		/// </summary>
-		/// <returns>The tweens with context.</returns>
-		/// <param name="context">Context.</param>
-		public static List<ITweenable> AllTweensWithEntity(Entity entity) {
-			var foundTweens = new List<ITweenable>();
-
-			for (var i = 0; i < _instance._activeTweens.Length; i++) {
-				if (
-					_instance._activeTweens.Buffer[i] is ITweenable tween
-				) {
-					// foundTweens.Add(_instance._activeTweens.Buffer[i]);
-				}
-			}
-
-			return foundTweens;
-		}
-
 		/// <summary>
 		/// returns all the tweens that have a specific target. Tweens are returned as ITweenControl since that is all
 		/// that TweenManager knows about.
@@ -207,6 +186,30 @@ namespace Nez.Tweens
 			return foundTweens;
 		}
 
+		/// <summary>
+		/// returns all the tweens that target a specific entity. Tweens are returned as ITweenControl since that is all
+		/// that TweenManager knows about.
+		/// </summary>
+		/// <returns>The tweens that target entity.</returns>
+		/// <param name="target">target.</param>
+		public static List<ITweenable> AllTweensWithTargetEntity(Entity target)
+		{
+			var foundTweens = new List<ITweenable>();
+
+			for (var i = 0; i < _instance._activeTweens.Length; i++)
+			{
+				if (
+					_instance._activeTweens[i] is ITweenControl tweenControl && (
+						tweenControl.GetTargetObject() is Entity entity && entity == target ||
+						tweenControl.GetTargetObject() is Component component && component.Entity == target ||
+						tweenControl.GetTargetObject() is Transform transform && transform.Entity == target
+					)
+				)
+					foundTweens.Add(_instance._activeTweens[i] as ITweenable);
+			}
+
+			return foundTweens;
+		}
 
 		/// <summary>
 		/// stops all the tweens that have a specific target
