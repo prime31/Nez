@@ -37,7 +37,7 @@ namespace Nez.Tweens
 		/// internal list of all the currently active tweens
 		/// </summary>
 		FastList<ITweenable> _activeTweens = new FastList<ITweenable>();
-		public IReadOnlyList<ITweenable> ActiveTweens => _activeTweens.Buffer;
+		public static IReadOnlyList<ITweenable> ActiveTweens => _instance._activeTweens.Buffer;
 
 		/// <summary>
 		/// stores tweens marked for removal
@@ -165,6 +165,26 @@ namespace Nez.Tweens
 
 
 		/// <summary>
+		/// returns all the tweens that are owned by a specific entity. Tweens are returned as ITweenable since that is all
+		/// that TweenManager knows about.
+		/// </summary>
+		/// <returns>The tweens with context.</returns>
+		/// <param name="context">Context.</param>
+		public static List<ITweenable> AllTweensWithEntity(Entity entity) {
+			var foundTweens = new List<ITweenable>();
+
+			for (var i = 0; i < _instance._activeTweens.Length; i++) {
+				if (
+					_instance._activeTweens.Buffer[i] is ITweenable tween
+				) {
+					// foundTweens.Add(_instance._activeTweens.Buffer[i]);
+				}
+			}
+
+			return foundTweens;
+		}
+
+		/// <summary>
 		/// returns all the tweens that have a specific target. Tweens are returned as ITweenControl since that is all
 		/// that TweenManager knows about.
 		/// </summary>
@@ -181,6 +201,7 @@ namespace Nez.Tweens
 					var tweenControl = _instance._activeTweens.Buffer[i] as ITweenControl;
 					if (tweenControl.GetTargetObject() == target)
 						foundTweens.Add(_instance._activeTweens[i] as ITweenable);
+				}
 			}
 
 			return foundTweens;
