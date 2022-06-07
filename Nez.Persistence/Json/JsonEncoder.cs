@@ -202,7 +202,14 @@ namespace Nez.Persistence
 				WriteValueDelimiter();
 				EncodeString(field.Name);
 				AppendColon();
-				EncodeValue(field.GetValue(value));
+
+				var fieldValue = field.GetValue(value);
+				bool forceTypeHintForField = false;
+				if(fieldValue != null && _settings.TypeNameHandling == TypeNameHandling.Auto)
+					if(field.FieldType != fieldValue.GetType())
+						forceTypeHintForField = true;
+				
+				EncodeValue(fieldValue, forceTypeHintForField);
 			}
 
 			foreach (var property in _cacheResolver.GetEncodablePropertiesForType(type))
