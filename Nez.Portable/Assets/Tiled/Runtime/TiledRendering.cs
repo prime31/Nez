@@ -72,8 +72,8 @@ namespace Nez.Tiled
 				var tile = layer.Tiles[i];
 				if (tile == null)
 					continue;
-
-				RenderTile(tile, batcher, position,
+				
+				RenderTile(tile, batcher, position  + new Vector2(tile.Tileset.TileOffset.X, tile.Tileset.TileOffset.Y),
 					scale, tileWidth, tileHeight,
 					color, layerDepth, layer.Map.Orientation,
 					layer.Map.Width, layer.Map.Height);
@@ -115,8 +115,9 @@ namespace Nez.Tiled
 				for (var x = min.X; x <= max.X; x++)
 				{
 					var tile = layer.GetTile(x, y);
+					
 					if (tile != null)
-						RenderTile(tile, batcher, position,
+						RenderTile(tile, batcher, position + new Vector2(tile.Tileset.TileOffset.X, tile.Tileset.TileOffset.Y),
 							scale, tileWidth, tileHeight,
 							color, layerDepth, layer.Map.Orientation,
 							layer.Map.Width, layer.Map.Height);
