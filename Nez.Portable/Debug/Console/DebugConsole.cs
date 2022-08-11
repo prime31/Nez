@@ -186,7 +186,7 @@ namespace Nez.Console
 
 		void UpdateOpen()
 		{
-			_underscoreCounter += Time.DeltaTime;
+			_underscoreCounter += Time.UnscaledDeltaTime;
 			while (_underscoreCounter >= UNDERSCORE_TIME)
 			{
 				_underscoreCounter -= UNDERSCORE_TIME;
@@ -197,7 +197,7 @@ namespace Nez.Console
 			{
 				if (Input.IsKeyDown(_repeatKey.Value))
 				{
-					_repeatCounter += Time.DeltaTime;
+					_repeatCounter += Time.UnscaledDeltaTime;
 
 					while (_repeatCounter >= REPEAT_DELAY)
 					{
