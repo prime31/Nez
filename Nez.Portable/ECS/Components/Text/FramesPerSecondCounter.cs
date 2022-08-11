@@ -121,6 +121,8 @@ namespace Nez
 
 		public virtual void Update()
 		{
+			if (Time.UnscaledDeltaTime == 0.0f)
+				return;
 			CurrentFramesPerSecond = 1.0f / Time.UnscaledDeltaTime;
 			_sampleBuffer.Enqueue(CurrentFramesPerSecond);
 
