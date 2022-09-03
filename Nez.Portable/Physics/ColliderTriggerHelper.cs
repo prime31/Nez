@@ -40,6 +40,8 @@ namespace Nez
 			for (var i = 0; i < colliders.Count; i++)
 			{
 				var collider = colliders[i];
+				if(!collider.Enabled)
+					continue;
 
 				// fetch anything that we might collide with us at our new position
 				var neighbors = Physics.BoxcastBroadphase(collider.Bounds, collider.CollidesWithLayers);
