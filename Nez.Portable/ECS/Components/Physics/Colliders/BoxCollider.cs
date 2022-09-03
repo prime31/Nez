@@ -78,7 +78,7 @@ namespace Nez
 				// update the box, dirty our bounds and if we need to update our bounds in the Physics system
 				box.UpdateBox(width, height);
 				_isPositionDirty = true;
-				if (Entity != null && _isParentEntityAddedToScene)
+				if (Entity != null && _isParentEntityAddedToScene && Enabled)
 					Physics.UpdateCollider(this);
 			}
 
@@ -99,7 +99,7 @@ namespace Nez
 				// update the box, dirty our bounds and if we need to update our bounds in the Physics system
 				box.UpdateBox(width, box.Height);
 				_isPositionDirty = true;
-				if (Entity != null && _isParentEntityAddedToScene)
+				if (Entity != null && _isParentEntityAddedToScene && Enabled)
 					Physics.UpdateCollider(this);
 			}
 
@@ -120,7 +120,7 @@ namespace Nez
 				// update the box, dirty our bounds and if we need to update our bounds in the Physics system
 				box.UpdateBox(box.Width, height);
 				_isPositionDirty = true;
-				if (Entity != null && _isParentEntityAddedToScene)
+				if (Entity != null && _isParentEntityAddedToScene && Enabled)
 					Physics.UpdateCollider(this);
 			}
 

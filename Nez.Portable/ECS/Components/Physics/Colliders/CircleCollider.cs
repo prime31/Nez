@@ -59,7 +59,7 @@ namespace Nez
 				circle._originalRadius = radius;
 				_isPositionDirty = true;
 
-				if (Entity != null && _isParentEntityAddedToScene)
+				if (Entity != null && _isParentEntityAddedToScene && Enabled)
 					Physics.UpdateCollider(this);
 			}
 
