@@ -293,7 +293,8 @@ namespace Nez
 		internal void OnEntityEnabled()
 		{
 			for (var i = 0; i < _components.Length; i++)
-				_components.Buffer[i].OnEnabled();
+				if(_components.Buffer[i].Enabled)
+					_components.Buffer[i].OnEnabled();
 		}
 
 		internal void OnEntityDisabled()
