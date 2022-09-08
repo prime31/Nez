@@ -153,6 +153,17 @@ namespace Nez.UI
 
 		public void Hide(Tooltip tooltip)
 		{
+			if (HideWithoutRemoving(tooltip))
+				_shownTooltips.Remove(tooltip);
+		}
+
+		/// <summary>
+		/// Hide the passed in tooltip without removing it from the _shownTooltips collection.
+		/// </summary>
+		/// <param name="tooltip">Tooltip to hide.</param>
+		/// <returns>True if the tooltip was hidden; false otherwise.</returns>
+		private bool HideWithoutRemoving(Tooltip tooltip)
+		{
 			// dont go messing with the current tooltip unless it is actually us
 			if (_shownTooltip == tooltip)
 			{
@@ -162,13 +173,14 @@ namespace Nez.UI
 
 			if (tooltip.GetContainer().HasParent())
 			{
-				_shownTooltips.Remove(tooltip);
 				HideAction(tooltip);
 				StopResetTask();
 				StartResetTask();
+				return true;
 			}
-		}
 
+			return false;
+		}
 
 		/// <summary>
 		/// Called when tooltip is shown. Default implementation sets actions to animate showing.
@@ -226,7 +238,7 @@ namespace Nez.UI
 			_shownTooltip = null;
 
 			foreach (var tooltip in _shownTooltips)
-				Hide(tooltip);
+				HideWithoutRemoving(tooltip);
 			_shownTooltips.Clear();
 		}
 
