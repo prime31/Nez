@@ -36,7 +36,7 @@ namespace Nez.UI
 			}
 		}
 
-		public float PreferredLength { get; set; }
+		public float PreferredLength { get; set; } = 140;
 
 		public float Min { get; protected set; }
 		public float Max { get; protected set; }
