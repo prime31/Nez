@@ -20,7 +20,7 @@ namespace Nez.UI
 					return Math.Max(style.Knob == null ? 0 : style.Knob.MinWidth,
 						style.Background != null ? style.Background.MinWidth : 0);
 				else
-					return 140;
+					return PreferredLength;
 			}
 		}
 
@@ -29,12 +29,14 @@ namespace Nez.UI
 			get
 			{
 				if (_vertical)
-					return 140;
+					return PreferredLength;
 				else
 					return Math.Max(style.Knob == null ? 0 : style.Knob.MinHeight,
 						style.Background != null ? style.Background.MinHeight : 0);
 			}
 		}
+
+		public float PreferredLength { get; set; }
 
 		public float Min { get; protected set; }
 		public float Max { get; protected set; }
