@@ -230,12 +230,18 @@ namespace Nez.UI
 
 		protected virtual void OnActionButtonPressed()
 		{
+			if (_isDisabled)
+				return;
+
 			_mouseDown = true;
 		}
 
 
 		protected virtual void OnActionButtonReleased()
 		{
+			if (_isDisabled)
+				return;
+
 			_mouseDown = false;
 
 			SetChecked(!_isChecked, true);
