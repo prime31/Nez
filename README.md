@@ -64,6 +64,7 @@ Setup
 - create a `Monogame Cross Platform Desktop Project`
 - clone or download the Nez repository
 - add the `Nez.Portable/Nez.csproj` project to your solution and add a reference to it in your main project
+  - if you are working with MonoGame 3.8, use `Nez.Portable/Nez.MG38.csproj` instead
 - make your main Game class (`Game1.cs` in a default project) subclass `Nez.Core`
 
 If you intend to use any of the built in Effects or PostProcessors you should also copy or link the `DefaultContent/effects` folder into your projects `Content/nez/effects` folder and the `DefaultContent/textures` folder into `Content/nez/textures`. Be sure to set the Build Action to Content and enable the "Copy to output directory" property so they get copied into your compiled game. See the Nez.Samples csproj for an example on how to do this.
