@@ -43,7 +43,7 @@ namespace Nez
 		}
 
 		// handle any files in the root sourceFolder
-		PrintContentFiles( Host.ResolvePath( sourceFolder ), 2, Host.ResolvePath( sourceFolder ) );
+		PrintContentFiles( Host.ResolvePath( sourceFolder ), 2, sourceFolder );
 	}
 
 #>
