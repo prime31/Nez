@@ -21,6 +21,11 @@ namespace Nez
 		float _repeatCounter;
 		bool _willRepeat;
 
+		bool _simulatePress;
+		bool _simulateDown;
+		bool _simulateRelease;
+		int _simulationStep;
+
 
 		public VirtualButton(float bufferTime)
 		{
@@ -59,6 +64,12 @@ namespace Nez
 			_willRepeat = firstRepeatTime > 0;
 			if (!_willRepeat)
 				IsRepeating = false;
+		}
+
+
+		public void Simulate()
+		{
+			_simulationStep = 1;
 		}
 
 
@@ -103,6 +114,29 @@ namespace Nez
 					}
 				}
 			}
+
+			switch (_simulationStep)
+			{
+				case 1:
+					_simulatePress = true;
+					_simulateDown = true;
+					_simulationStep++;
+					break;
+				case 2:
+					_simulatePress = false;
+					_simulationStep++;
+					break;
+				case 3:
+					_simulateDown = false;
+					_simulateRelease = true;
+					_simulationStep++;
+					break;
+				case 4:
+					_simulateRelease = false;
+					_simulationStep = -1;
+					break;
+			}
+
 		}
 
 
@@ -114,7 +148,7 @@ namespace Nez
 					if (node.IsDown)
 						return true;
 
-				return false;
+				return _simulateDown;
 			}
 		}
 
@@ -130,7 +164,7 @@ namespace Nez
 					if (node.IsPressed)
 						return true;
 
-				return false;
+				return _simulatePress;
 			}
 		}
 
@@ -143,7 +177,7 @@ namespace Nez
 					if (node.IsReleased)
 						return true;
 
-				return false;
+				return _simulateRelease;
 			}
 		}
 
