@@ -251,7 +251,9 @@ namespace Nez
 			{
 				// we need to always invert the y-values to match the way Batcher/SpriteBatch does things
 				var position3D = new Vector3(Position.X, -Position.Y, PositionZ3D);
-				return Matrix.CreateLookAt(position3D, position3D + Vector3.Forward, Vector3.Up);
+				var lookAtMtx = Matrix.CreateLookAt(position3D, position3D + Vector3.Forward, Vector3.Up);
+				var rotMtx = Matrix.CreateRotationZ(-Entity.Transform.Rotation);
+				return lookAtMtx * rotMtx;
 			}
 		}
 
