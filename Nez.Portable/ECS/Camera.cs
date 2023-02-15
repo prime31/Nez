@@ -230,7 +230,7 @@ namespace Nez
 		/// returns a perspective projection for this camera for use when rendering 3D objects
 		/// </summary>
 		/// <value>The projection matrix3 d.</value>
-		public Matrix ProjectionMatrix3D
+		public virtual Matrix ProjectionMatrix3D
 		{
 			get
 			{
@@ -245,7 +245,7 @@ namespace Nez
 		/// returns a view Matrix via CreateLookAt for this camera for use when rendering 3D objects
 		/// </summary>
 		/// <value>The view matrix3 d.</value>
-		public Matrix ViewMatrix3D
+		public virtual Matrix ViewMatrix3D
 		{
 			get
 			{
