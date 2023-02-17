@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using Microsoft.Xna.Framework.Input;
 
 
@@ -56,6 +56,25 @@ namespace Nez
 		public abstract class Node : VirtualInputNode
 		{
 			public abstract float Value { get; }
+
+			protected float _previousValue = 0;
+			protected bool _justPushed = false;
+
+			public int DirectionJustPushed => _justPushed ? System.Math.Sign(Value) : 0;
+
+			public bool JustPushed(int direction)
+			{
+				return Value == direction && _justPushed;
+			}
+
+			public override void Update()
+			{
+				_justPushed = false;
+				if(Value != 0 && _previousValue == 0)
+					_justPushed = true;
+
+				_previousValue = Value;
+			}
 		}
 
 
@@ -248,6 +267,13 @@ namespace Nez
 					_turned = false;
 					_value = 0;
 				}
+
+				_justPushed = false;
+				if(_value != 0 && _previousValue == 0)
+				{
+					_justPushed = true;
+				}
+				_previousValue = Value;
 			}
 
 

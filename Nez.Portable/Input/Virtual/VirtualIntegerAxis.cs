@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework.Input;
 
@@ -12,6 +12,14 @@ namespace Nez
 	public class VirtualIntegerAxis : VirtualInput
 	{
 		public List<VirtualAxis.Node> Nodes = new List<VirtualAxis.Node>();
+
+		public float FirstRepeatTime;
+		public float MultiRepeatTime;
+		public bool IsRepeating { get; private set; }
+
+		float _repeatCounter;
+		bool _willRepeat;
+		int _repeatingDirection = 0;
 
 		public int Value
 		{
@@ -29,6 +37,30 @@ namespace Nez
 		}
 
 
+		/// <summary>
+		/// The direction that this axis was pushed (or repeated, if repeating is enabled) this frame.
+		/// </summary>
+		/// <value>-1 or 1 if it was just pushed in that direction, or 0 if it was not.</value>
+		public int DirectionJustPushed
+		{
+			get
+			{
+				if (IsRepeating)
+					return _repeatingDirection;
+				
+				foreach (var node in Nodes)
+				{
+					if (node.JustPushed(-1))
+						return -1;
+					else if(node.JustPushed(1))
+						return 1;
+				}
+					
+				return 0;
+			}
+		}
+
+
 		public VirtualIntegerAxis()
 		{
 		}
@@ -39,11 +71,85 @@ namespace Nez
 			Nodes.AddRange(nodes);
 		}
 
+		/// <summary>
+		/// Returns true if this input was pushed in a direction (from 0) this frame. If SetRepeat() is used, this will
+		/// repeatedly return true after the provided intervals.
+		/// </summary>
+		/// <param name="direction">The direction to check, should be -1 or 1.</param>
+		/// <returns></returns>
+		public bool JustPushed(int direction)
+		{
+			if (IsRepeating && _repeatingDirection == direction)
+				return true;
+
+			foreach (var node in Nodes)
+				if (node.JustPushed(direction))
+					return true;
+
+			return false;
+		}
+
+
+		/// <summary>
+		/// Set the repeat interval used for JustPushed().
+		/// </summary>
+		/// <param name="repeatTime">Interval between repetitions.</param>
+		public void SetRepeat(float repeatTime)
+		{
+			SetRepeat(repeatTime, repeatTime);
+		}
+
+
+		/// <summary>
+		/// Set the repeat interval used for JustPushed().
+		/// </summary>
+		/// <param name="firstRepeatTime">Delay after the initial push.</param>
+		/// <param name="multiRepeatTime">Delay after subsequent repetitions.</param>
+		public void SetRepeat(float firstRepeatTime, float multiRepeatTime)
+		{
+			FirstRepeatTime = firstRepeatTime;
+			MultiRepeatTime = multiRepeatTime;
+			_willRepeat = firstRepeatTime > 0;
+			if (!_willRepeat)
+				IsRepeating = false;
+		}
+
 
 		public override void Update()
 		{
+			IsRepeating = false;
+
+			bool check = false;
 			for (var i = 0; i < Nodes.Count; i++)
+			{
 				Nodes[i].Update();
+
+				int direction = Nodes[i].DirectionJustPushed;
+				if (direction != 0)
+				{
+					_repeatCounter = FirstRepeatTime;
+					_repeatingDirection = direction;
+					check = true;
+				}
+				else if (Nodes[i].Value == _repeatingDirection)
+				{
+					check = true;
+				}
+			}
+
+			if(check && _willRepeat)
+			{
+				_repeatCounter -= Time.UnscaledDeltaTime;
+				if (_repeatCounter <= 0)
+				{
+					IsRepeating = true;
+					_repeatCounter = MultiRepeatTime;
+				}
+			}
+			if(!check)
+			{
+				_repeatingDirection = 0;
+			}
 		}
 
 
