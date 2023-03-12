@@ -398,8 +398,8 @@ namespace Nez.Tiled
 		/// <param name="y">The y coordinate.</param>
 		private Vector2 IsometricTileToWorldPosition(int x, int y)
 		{
-			var worldX = x * TileWidth / 2 - y * TileWidth / 2 + (Height - 1) * TileWidth / 2;
-			var worldY = y * TileHeight / 2 + x * TileHeight / 2;
+			var worldX = (x - y + Height) * TileWidth / 2;
+			var worldY = (y + x) * TileHeight / 2 + TileHeight / 2;
 			return new Vector2(worldX, worldY);
 		}
 
