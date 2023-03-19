@@ -25,7 +25,7 @@ namespace Nez
 			// We may have additional chracters for the color alpha
 			if (trimmedHex.Length > 7) {
 				float a = (HexToByte(trimmedHex[6]) * 16 + HexToByte(trimmedHex[7])) / 255.0f;
-
+				return new Color(r, g, b, a);
 			}
 
 			return new Color(r, g, b);
