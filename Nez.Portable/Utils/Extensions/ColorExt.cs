@@ -15,9 +15,18 @@ namespace Nez
 
 		public static Color HexToColor(string hex)
 		{
-			float r = (HexToByte(hex[0]) * 16 + HexToByte(hex[1])) / 255.0f;
-			float g = (HexToByte(hex[2]) * 16 + HexToByte(hex[3])) / 255.0f;
-			float b = (HexToByte(hex[4]) * 16 + HexToByte(hex[5])) / 255.0f;
+			// Trim any hash sign, if the string starts with it
+			var trimmedHex = hex.Replace("#", "");
+
+			float r = (HexToByte(trimmedHex[0]) * 16 + HexToByte(trimmedHex[1])) / 255.0f;
+			float g = (HexToByte(trimmedHex[2]) * 16 + HexToByte(trimmedHex[3])) / 255.0f;
+			float b = (HexToByte(trimmedHex[4]) * 16 + HexToByte(trimmedHex[5])) / 255.0f;
+
+			// We may have additional chracters for the color alpha
+			if (trimmedHex.Length > 7) {
+				float a = (HexToByte(trimmedHex[6]) * 16 + HexToByte(trimmedHex[7])) / 255.0f;
+				return new Color(r, g, b, a);
+			}
 
 			return new Color(r, g, b);
 		}
