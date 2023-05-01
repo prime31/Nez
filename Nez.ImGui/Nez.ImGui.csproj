@@ -57,7 +57,7 @@
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="ImGui.NET" Version="1.71.0" />
+		<PackageReference Include="ImGui.NET" Version="1.89.5" />
         <PackageReference Include="MonoGame.Framework.Portable" Version="3.7.1.189" PrivateAssets="all" />
     </ItemGroup>
 
