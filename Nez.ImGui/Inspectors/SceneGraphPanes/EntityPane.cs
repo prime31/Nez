@@ -14,26 +14,16 @@ namespace Nez.ImGuiTools.SceneGraphPanes
 		{
 			if (Core.Scene.Entities.Count > MIN_ENTITIES_FOR_CLIPPER)
 			{
-
-				// @TODO Complete this edit - made in Github directly while away from dev environment.
-				// Use ListClipper as per https://github.com/ocornut/imgui/blob/master/imgui.h#L2312
-				// Another EG: https://github.com/ocornut/imgui/blob/master/imgui_demo.cpp
-				// Another EG: https://github.com/ocornut/imgui_club/blob/main/imgui_memory_editor/imgui_memory_editor.h#L236
-				// @TODO Check if this is suitable given cimgui and ImGUI.NET
-				
-
-				// var clipperPtr = ImGuiNative.ImGuiListClipper_ImGuiListClipper(Core.Scene.Entities.Count, -1);
 				var clipperPtr = ImGuiNative.ImGuiListClipper_ImGuiListClipper();
-				ImGuiNative.ImGuiListClipper_Begin(clipperPtr, Core.Scene.Entities.Count, -1);
 				var clipper = new ImGuiListClipperPtr(clipperPtr);
+				
+				clipper.Begin(Core.Scene.Entities.Count, -1);
 
 				while (clipper.Step())
 					for (var i = clipper.DisplayStart; i < clipper.DisplayEnd; i++)
 						DrawEntity(Core.Scene.Entities[i]);
 
-				// ListClipper is automatically ended when clipper.Step() returns false;
-				// ImGuiNative.ImGuiListClipper_destroy(clipperPtr);
-				// ImGuiNative.ImGuiListClipper_End(clipperPtr);
+				ImGuiNative.ImGuiListClipper_destroy(clipperPtr);
 			}
 			else
 			{
