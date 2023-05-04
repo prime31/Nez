@@ -14,8 +14,10 @@ namespace Nez.ImGuiTools.SceneGraphPanes
 		{
 			if (Core.Scene.Entities.Count > MIN_ENTITIES_FOR_CLIPPER)
 			{
-				var clipperPtr = ImGuiNative.ImGuiListClipper_ImGuiListClipper(Core.Scene.Entities.Count, -1);
+				var clipperPtr = ImGuiNative.ImGuiListClipper_ImGuiListClipper();
 				var clipper = new ImGuiListClipperPtr(clipperPtr);
+				
+				clipper.Begin(Core.Scene.Entities.Count, -1);
 
 				while (clipper.Step())
 					for (var i = clipper.DisplayStart; i < clipper.DisplayEnd; i++)
@@ -59,7 +61,7 @@ namespace Nez.ImGuiTools.SceneGraphPanes
 			NezImGui.ShowContextMenuTooltip();
 
 			// context menu for entity commands
-			ImGui.OpenPopupOnItemClick("entityContextMenu", 1);
+			ImGui.OpenPopupOnItemClick("entityContextMenu", ImGuiPopupFlags.MouseButtonRight);
 			DrawEntityContextMenuPopup(entity);
 
 			// we are looking for a double-click that is not on the arrow

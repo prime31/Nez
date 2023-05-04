@@ -127,9 +127,9 @@ namespace Nez.ImGuiTools
 				// if the window's being hovered and we click on it with any mouse button, optionally focus the window.
 				if (ImGui.IsWindowHovered())
 				{
-					if (ImGui.IsMouseClicked(0)
-					|| (ImGui.IsMouseClicked(1) && FocusGameWindowOnRightClick)
-					|| (ImGui.IsMouseClicked(2) && FocusGameWindowOnMiddleClick))
+					if (ImGui.IsMouseClicked(ImGuiMouseButton.Left)
+					|| (ImGui.IsMouseClicked(ImGuiMouseButton.Right) && FocusGameWindowOnRightClick)
+					|| (ImGui.IsMouseClicked(ImGuiMouseButton.Middle) && FocusGameWindowOnMiddleClick))
 					{
 						ImGui.SetWindowFocus();
 						focusedWindow = true;
@@ -317,7 +317,7 @@ namespace Nez.ImGuiTools
 				// we cant draw the game window until we have the texture bound so we append it here
 				ImGui.Begin(_gameWindowTitle, _gameWindowFlags);
 				ImGui.PushStyleVar(ImGuiStyleVar.FramePadding, Num.Vector2.Zero);
-				ImGui.ImageButton(_renderTargetId, ImGui.GetContentRegionAvail());
+				ImGui.ImageButton("SeparateGameWindowImageButton", _renderTargetId, ImGui.GetContentRegionAvail());
 				ImGui.PopStyleVar();
 				ImGui.End();
 
