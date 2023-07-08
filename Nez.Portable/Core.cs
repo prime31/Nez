@@ -72,7 +72,7 @@ namespace Nez
 		/// default GameServiceContainer access
 		/// </summary>
 		/// <value>The services.</value>
-		public new static GameServiceContainer Services => ((Game) _instance).Services;
+		public new static GameServiceContainer Services => ((Game)_instance).Services;
 
 		/// <summary>
 		/// provides access to the single Core/Game instance
@@ -131,7 +131,7 @@ namespace Nez
 		}
 
 
-		public Core(int width = 1280, int height = 720, bool isFullScreen = false, string windowTitle = "Nez", string contentDirectory = "Content")
+		public Core(int width = 1280, int height = 720, bool isFullScreen = false, string windowTitle = "Nez", string contentDirectory = "Content", bool hardwareModeSwitch = true)
 		{
 #if DEBUG
 			_windowTitle = windowTitle;
@@ -146,6 +146,7 @@ namespace Nez
 				PreferredBackBufferHeight = height,
 				IsFullScreen = isFullScreen,
 				SynchronizeWithVerticalRetrace = true,
+				HardwareModeSwitch = hardwareModeSwitch,
 #if MONOGAME_38
 				PreferHalfPixelOffset = true
 #endif
@@ -201,7 +202,7 @@ namespace Nez
 
 		public new static void Exit()
 		{
-			((Game) _instance).Exit();
+			((Game)_instance).Exit();
 		}
 
 		#endregion
@@ -228,11 +229,11 @@ namespace Nez
 			}
 
 			// update all our systems and global managers
-			Time.Update((float) gameTime.ElapsedGameTime.TotalSeconds);
+			Time.Update((float)gameTime.ElapsedGameTime.TotalSeconds);
 			Input.Update();
 
 			if (ExitOnEscapeKeypress &&
-			    (Input.IsKeyDown(Keys.Escape) || Input.GamePads[0].IsButtonReleased(Buttons.Back)))
+				(Input.IsKeyDown(Keys.Escape) || Input.GamePads[0].IsButtonReleased(Buttons.Back)))
 			{
 				base.Exit();
 				return;
@@ -251,8 +252,8 @@ namespace Nez
 				// 		- unless it is SceneTransition that doesn't change Scenes (no reason not to update)
 				//		- or it is a SceneTransition that has already switched to the new Scene (the new Scene needs to do its thing)
 				if (_sceneTransition == null ||
-				    (_sceneTransition != null &&
-				     (!_sceneTransition._loadsNewScene || _sceneTransition._isNewSceneLoaded)))
+					(_sceneTransition != null &&
+					 (!_sceneTransition._loadsNewScene || _sceneTransition._isNewSceneLoaded)))
 				{
 					_scene.Update();
 				}
@@ -292,7 +293,7 @@ namespace Nez
 			if (_sceneTransition != null)
 			{
 				if (_scene != null && _sceneTransition.WantsPreviousSceneRender &&
-				    !_sceneTransition.HasPreviousSceneRender)
+					!_sceneTransition.HasPreviousSceneRender)
 				{
 					_scene.Render();
 					_scene.PostRender(_sceneTransition.PreviousSceneRender);
