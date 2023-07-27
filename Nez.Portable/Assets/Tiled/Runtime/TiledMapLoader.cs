@@ -75,7 +75,7 @@ namespace Nez.Tiled
 		private static void UpdateMaxTileSizes(TmxTileset tileset)
 		{
 			// we have to iterate the dictionary because tile.gid (the key) could be any number in any order
-			foreach(var kvPair in tileset.Tiles)
+			foreach (var kvPair in tileset.Tiles)
 			{
 				var tile = kvPair.Value;
 				if (tile.Image != null)
@@ -85,11 +85,11 @@ namespace Nez.Tiled
 				}
 			}
 
-			foreach(var kvPair in tileset.TileRegions)
+			foreach (var kvPair in tileset.TileRegions)
 			{
 				var region = kvPair.Value;
-				var width = (int) region.Width;
-				var height = (int) region.Height;
+				var width = (int)region.Width;
+				var height = (int)region.Height;
 				if (width > tileset.Map.MaxTileWidth) tileset.Map.MaxTileWidth = width;
 				if (width > tileset.Map.MaxTileHeight) tileset.Map.MaxTileHeight = height;
 			}
@@ -408,14 +408,85 @@ namespace Nez.Tiled
 
 		public static TmxObject LoadTmxObject(this TmxObject obj, TmxMap map, XElement xObject)
 		{
-			obj.Id = (int?)xObject.Attribute("id") ?? 0;
-			obj.Name = (string)xObject.Attribute("name") ?? string.Empty;
+			// Check for template
+			string template = (string)xObject.Attribute("template");
+			if (template != null)
+			{
+				// Prepend the parent TMX directory
+				template = Path.Combine(map.TmxDirectory, template);
+
+				// Everything else is in the TX file
+				using (var stream = TitleContainer.OpenStream(template))
+				{
+					var xDocTemplate = XDocument.Load(stream);
+
+					string tsxDir = Path.GetDirectoryName(template);
+					obj = new TmxObject().LoadTmxObjectFromTemplate(map, xDocTemplate.Element("template").Element("object"));
+				}
+			}
+
+			obj.Id = (int?)xObject.Attribute("id") ?? (int?)obj.Id ?? 0;
+			obj.Name = (string)xObject.Attribute("name") ?? obj.Name ?? string.Empty;
 			obj.X = (float)xObject.Attribute("x");
 			obj.Y = (float)xObject.Attribute("y");
+			obj.Width = (float?)xObject.Attribute("width") ?? (float?)obj.Width ?? 0.0f;
+			obj.Height = (float?)xObject.Attribute("height") ?? (float?)obj.Height ?? 0.0f;
+			obj.Type = (string)xObject.Attribute("type") ?? (string)xObject.Attribute("class") ?? string.Empty;
+			obj.Visible = (bool?)xObject.Attribute("visible") ?? true;
+			obj.Rotation = (float?)xObject.Attribute("rotation") ?? (float?)obj.Rotation ?? 0.0f;
+
+			// Assess object type and assign appropriate content
+			var xGid = xObject.Attribute("gid");
+			var xEllipse = xObject.Element("ellipse");
+			var xPolygon = xObject.Element("polygon");
+			var xPolyline = xObject.Element("polyline");
+			var xText = xObject.Element("text");
+			var xPoint = xObject.Element("point");
+
+			if (xGid != null)
+			{
+				obj.Tile = new TmxLayerTile(map, (uint)xGid, Convert.ToInt32(Math.Round(obj.X)), Convert.ToInt32(Math.Round(obj.Y)));
+				obj.ObjectType = TmxObjectType.Tile;
+			}
+			else if (xEllipse != null)
+			{
+				obj.ObjectType = TmxObjectType.Ellipse;
+			}
+			else if (xPolygon != null)
+			{
+				obj.Points = ParsePoints(xPolygon);
+				obj.ObjectType = TmxObjectType.Polygon;
+			}
+			else if (xPolyline != null)
+			{
+				obj.Points = ParsePoints(xPolyline);
+				obj.ObjectType = TmxObjectType.Polyline;
+			}
+			else if (xText != null)
+			{
+				obj.Text = new TmxText().LoadTmxText(xText);
+				obj.ObjectType = TmxObjectType.Text;
+			}
+			else if (xPoint != null)
+			{
+				obj.ObjectType = TmxObjectType.Point;
+			}
+			else if (template != null) // If it had a template attribute it must have been an object
+			{
+				obj.ObjectType = TmxObjectType.Basic;
+			}
+
+			obj.Properties = ParsePropertyDict(xObject.Element("properties"));
+
+			return obj;
+		}
+
+		public static TmxObject LoadTmxObjectFromTemplate(this TmxObject obj, TmxMap map, XElement xObject)
+		{
+			obj.Name = (string)xObject.Attribute("name") ?? string.Empty;
 			obj.Width = (float?)xObject.Attribute("width") ?? 0.0f;
 			obj.Height = (float?)xObject.Attribute("height") ?? 0.0f;
 			obj.Type = (string)xObject.Attribute("type") ?? (string)xObject.Attribute("class") ?? string.Empty;
-			obj.Visible = (bool?)xObject.Attribute("visible") ?? true;
 			obj.Rotation = (float?)xObject.Attribute("rotation") ?? 0.0f;
 
 			// Assess object type and assign appropriate content
