@@ -71,18 +71,40 @@ namespace Nez.Systems
 
 
 		/// <summary>
-		/// Immediately stops and clears all coroutines. Do not to call this from inside one of the manager's coroutines.
+		/// Stops all active coroutines. Can be safely called from inside a coroutine, though the coroutine will continue executing
+		/// until the next yield. Some coroutines might not be returned to the pool for reuse until the next Update() cycle.
+		/// </summary>
+		public void StopAllCoroutines()
+		{
+			for (var i = 0; i < _unblockedCoroutines.Count; i++)
+				_unblockedCoroutines[i].IsDone = true;
+			for (var i = 0; i < _shouldRunNextFrame.Count; i++)
+				_shouldRunNextFrame[i].IsDone = true;
+		}
+
+
+		/// <summary>
+		/// Immediately clears all coroutines and returns them to the pool for reuse. Do not to call this from inside one of 
+		/// the manager's coroutines.
 		/// </summary>
 		public void ClearAllCoroutines()
 		{
-			for (var i = 0; i < _unblockedCoroutines.Count; i++)
-				Pool<CoroutineImpl>.Free(_unblockedCoroutines[i]);
-			for (var i = 0; i < _shouldRunNextFrame.Count; i++)
-				Pool<CoroutineImpl>.Free(_shouldRunNextFrame[i]);
-			
-			_unblockedCoroutines.Clear();
-			_shouldRunNextFrame.Clear();
+			if(_isInUpdate)
+			{
+				throw new System.Exception("Cannot call ClearAllCoroutines() while CoroutineManager is updating.");
+			}
+			else
+			{
+				for (var i = 0; i < _unblockedCoroutines.Count; i++)
+					Pool<CoroutineImpl>.Free(_unblockedCoroutines[i]);
+				for (var i = 0; i < _shouldRunNextFrame.Count; i++)
+					Pool<CoroutineImpl>.Free(_shouldRunNextFrame[i]);
+				
+				_unblockedCoroutines.Clear();
+				_shouldRunNextFrame.Clear();
+			}
 		}
+
 
 		/// <summary>
 		/// adds the IEnumerator to the CoroutineManager. Coroutines get ticked before Update is called each frame.
