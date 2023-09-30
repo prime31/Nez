@@ -8,7 +8,7 @@ var imGuiManager = new ImGuiManager();
 Core.RegisterGlobalManager( imGuiManager );
 
 // toggle ImGui rendering on/off. It starts out enabled.
-imGuiManager.setEnabled( false );
+imGuiManager.SetEnabled( false );
 ```
 
 
