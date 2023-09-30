@@ -5,10 +5,10 @@ Dear ImGui is available via the Nez.ImGui project. The API is a wip and will be 
 
 ```csharp
 var imGuiManager = new ImGuiManager();
-Core.registerGlobalManager( imGuiManager );
+Core.RegisterGlobalManager( imGuiManager );
 
 // toggle ImGui rendering on/off. It starts out enabled.
-imGuiManager.setEnabled( false );
+imGuiManager.SetEnabled( false );
 ```
 
 
