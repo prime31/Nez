@@ -74,6 +74,7 @@ function Home() {
               to={useBaseUrl('docs/')}>
               Get Started
             </Link>
+            <a class="button button--outline button--secondary button--lg" href="https://abanjo12.github.io/NezDocs" target="_blank">API Docs (External)</a>
           </div>
         </div>
       </header>
