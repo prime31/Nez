@@ -103,7 +103,7 @@ namespace Nez.Sprites
 				return;
 
 			var animation = CurrentAnimation;
-			var secondsPerFrame = 1 / (animation.FrameRate * Speed);
+			var secondsPerFrame = 1 / (animation.FrameRates[CurrentFrame] * Speed);
 			var iterationDuration = secondsPerFrame * animation.Sprites.Length;
 			var pingPongIterationDuration = animation.Sprites.Length < 3 ? iterationDuration : secondsPerFrame * (animation.Sprites.Length * 2 - 2);
 
