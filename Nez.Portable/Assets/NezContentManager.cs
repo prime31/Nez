@@ -59,13 +59,13 @@ namespace Nez.Systems
 
 
 		public NezContentManager(IServiceProvider serviceProvider, string rootDirectory) : base(serviceProvider, rootDirectory)
-		{ }
+		{}
 
 		public NezContentManager(IServiceProvider serviceProvider) : base(serviceProvider)
-		{ }
+		{}
 
 		public NezContentManager() : base(((Game)Core._instance).Services, ((Game)Core._instance).Content.RootDirectory)
-		{ }
+		{}
 
 		#region Strongly Typed Loaders
 
