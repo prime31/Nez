@@ -482,7 +482,7 @@ namespace Nez.Systems
 	sealed class NezGlobalContentManager : NezContentManager
 	{
 		public NezGlobalContentManager(IServiceProvider serviceProvider, string rootDirectory) : base(serviceProvider, rootDirectory)
-		{ }
+		{}
 
 		/// <summary>
 		/// override that will load embedded resources if they have the "nez://" prefix
