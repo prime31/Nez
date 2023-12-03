@@ -13,6 +13,7 @@ using Nez.Textures;
 using Nez.Tiled;
 using Microsoft.Xna.Framework.Audio;
 using Nez.BitmapFonts;
+using Nez.Aseprite;
 
 
 namespace Nez.Systems
@@ -198,6 +199,27 @@ namespace Nez.Systems
 			DisposableAssets.Add(font);
 
 			return font;
+		}
+
+		/// <summary>
+		/// Loads the contents of an Aseprite (.ase/.aseprite) file.
+		/// </summary>
+		/// <param name="name">The content path name of the Aseprite file to load.</param>
+		/// <returns>
+		/// A new instance of the <see cref="AsepriteFile"/> class initialized with the data read from the Aseprite
+		/// file.
+		/// </returns>
+		public AsepriteFile LoadAsepriteFile(string name)
+		{
+			if (LoadedAssets.TryGetValue(name, out var asset))
+			{
+				if (asset is AsepriteFile aseFile)
+					return aseFile;
+			}
+
+			var asepriteFile = AsepriteFileLoader.Load(name);
+			LoadedAssets.Add(name, asepriteFile);
+			return asepriteFile;
 		}
 
 		/// <summary>
