@@ -302,7 +302,14 @@ namespace Nez.Tiled
 				switch (obj.ObjectType)
 				{
 					case TmxObjectType.Basic:
-						batcher.DrawHollowRect(pos, obj.Width * scale.X, obj.Height * scale.Y, objGroup.Color);
+						if(obj.Rotation != 0)
+						{
+							batcher.DrawHollowRect(pos, obj.Width * scale.X, obj.Height * scale.Y, objGroup.Color, Mathf.Radians(obj.Rotation), pos);
+						}
+						else
+						{
+							batcher.DrawHollowRect(pos, obj.Width * scale.X, obj.Height * scale.Y, objGroup.Color);
+						}
 						goto default;
 					case TmxObjectType.Point:
 						var size = objGroup.Map.TileWidth * 0.5f;

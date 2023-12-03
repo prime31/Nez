@@ -197,6 +197,42 @@ namespace Nez
 			batcher.Draw(Graphics.Instance.PixelTexture, rect, Graphics.Instance.PixelTexture.SourceRect, color);
 		}
 
+		public static void DrawHollowRect(this Batcher batcher, float x, float y, float width, float height,
+		                                  Color color, float rotation, Vector2 origin, float thickness = 1)
+		{
+			var rotor = Matrix2D.CreateTranslation(-origin);
+			rotor *= Matrix2D.CreateRotation(rotation);
+			rotor *= Matrix2D.CreateTranslation(origin);
+
+			var tl = Vector2Ext.Round(new Vector2(x, y));
+			var tr = Vector2Ext.Round(Vector2.Transform(new Vector2(x + width, y), rotor));
+			var br = Vector2Ext.Round(Vector2.Transform(new Vector2(x + width, y + height), rotor));
+			var bl = Vector2Ext.Round(Vector2.Transform(new Vector2(x, y + height), rotor));
+
+			batcher.SetIgnoreRoundingDestinations(true);
+			batcher.DrawLine(tl, tr, color, thickness);
+			batcher.DrawLine(tr, br, color, thickness);
+			batcher.DrawLine(br, bl, color, thickness);
+			batcher.DrawLine(bl, tl, color, thickness);
+			batcher.SetIgnoreRoundingDestinations(false);
+		}
+
+		public static void DrawHollowRect(this Batcher batcher, Vector2 position, float width, float height,
+		                                  Color color, float rotation, Vector2 origin, float thickness = 1)
+		{
+			DrawHollowRect(batcher, position.X, position.Y, width, height, color, rotation, origin, thickness);
+		}
+
+		public static void DrawHollowRect(this Batcher batcher, Rectangle rect, Color color, float rotation, Vector2 origin, float thickness = 1)
+		{
+			DrawHollowRect(batcher, rect.X, rect.Y, rect.Width, rect.Height, color, rotation, origin, thickness);
+		}
+
+		public static void DrawHollowRect(this Batcher batcher, RectangleF rect, Color color, float rotation, Vector2 origin, float thickness = 1)
+		{
+			DrawHollowRect(batcher, rect.X, rect.Y, rect.Width, rect.Height, color, rotation, origin, thickness);
+		}
+
 		#endregion
 
 
