@@ -151,6 +151,8 @@ namespace Nez.BitmapFonts
 		/// <returns></returns>
 		internal static Padding ParsePadding(string s)
 		{
+			if (string.IsNullOrEmpty(s))
+				return new Padding();
 			var parts = s.Split(',');
 			return new Padding()
 			{
@@ -230,7 +232,7 @@ namespace Nez.BitmapFonts
 				return parts.ToArray();
 			}
 
-			return s.Split(new char[] {delimiter}, StringSplitOptions.RemoveEmptyEntries);
+			return s.Split(new char[] { delimiter }, StringSplitOptions.RemoveEmptyEntries);
 		}
 
 		/// <summary>
