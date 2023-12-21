@@ -686,6 +686,9 @@ namespace Nez.UI
 		{
 			_isGamepadFocusEnabled = true;
 
+			if (_gamepadFocusElement == focusable)
+				return;
+
 			if (focusable != null)
 				focusable.OnFocused();
 
