@@ -90,6 +90,7 @@ Samples Repository
 ==========
 You can find the samples repo [here](https://github.com/prime31/Nez-Samples). It contains a variety of sample scenes that demonstrate the basics of getting stuff done with Nez. [This YouTube playlist](https://www.youtube.com/playlist?list=PLb8LPjN5zpx0ZerxdoVarLKlWJ1_-YD9M) also has a few relevant videos.
 
+For reference, you can also access Nez's documentation at [here](https://prime31.github.io/Nez/).
 
 
 Using Nez with FNA
