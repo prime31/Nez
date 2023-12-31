@@ -33,7 +33,7 @@ namespace Nez
 		public Camera Camera;
 
 		/// <summary>
-		/// how fast the camera closes the distance to the target position
+		/// 0 - 1 range where 0 is the camera never closes the target position and 1 is the camera immediately closes the target position
 		/// </summary>
 		public float FollowLerp = 0.1f;
 
