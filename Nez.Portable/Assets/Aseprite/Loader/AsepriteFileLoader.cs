@@ -300,9 +300,7 @@ namespace Nez.Aseprite
 									{
 										ushort linkedFrameIndex = reader.ReadWord();
 
-										//  Base off of layer index not cel index ensure that it doesn't go below zero
-										int celIndex = celLayerIndex > 0 ? celLayerIndex - 1 : 0;
-										AsepriteCel otherCel = frames[linkedFrameIndex].Cels[celIndex];
+										AsepriteCel otherCel = frames[linkedFrameIndex].Cels[cels.Count];
 										cel = new AsepriteLinkedCel(otherCel, celLayer, celPosition, celOpacity);
 									}
 									break;
