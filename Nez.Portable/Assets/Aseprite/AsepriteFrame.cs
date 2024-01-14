@@ -78,7 +78,14 @@ namespace Nez.Aseprite
 				//	Note: Will look into adding tilemap cels in a future PR if it is requested enough or if someone
 				//	else wants to add it in.  You can see how I do it in my MonoGame.Aseprite library for reference if
 				//	needed.
-				if (cel is AsepriteImageCel imageCel)
+			CheckCelType:
+				if(cel is AsepriteLinkedCel linkedCel)
+				{
+					cel = linkedCel.Cel;
+					goto CheckCelType;
+				}
+
+				if(cel is AsepriteImageCel imageCel)
 				{
 					BlendCel(backdrop: result,
 							 source: imageCel.Pixels,
