@@ -202,7 +202,7 @@ namespace Nez
 		/// <param name="onlyReturnInitializedComponents">If set to <c>true</c> only return initialized components.</param>
 		/// <typeparam name="T">The 1st type parameter.</typeparam>
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public T GetComponent<T>(bool onlyReturnInitializedComponents) where T : Component
+		public T GetComponent<T>(bool onlyReturnInitializedComponents) where T : class
 		{
 			for (var i = 0; i < _components.Length; i++)
 			{

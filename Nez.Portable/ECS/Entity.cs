@@ -435,14 +435,14 @@ namespace Nez
 		/// </summary>
 		/// <returns>The component.</returns>
 		/// <typeparam name="T">The 1st type parameter.</typeparam>
-		public T GetComponent<T>() where T : Component => Components.GetComponent<T>(false);
+		public T GetComponent<T>() where T : class => Components.GetComponent<T>(false);
 
 		/// <summary>
 		/// Tries to get the component of type T. If no components are found returns false.
 		/// </summary>
 		/// <returns>true if a component has been found.</returns>
 		/// <typeparam name="T">The 1st type parameter.</typeparam>
-		public bool TryGetComponent<T>(out T component) where T : Component
+		public bool TryGetComponent<T>(out T component) where T : class
 		{
 			component = Components.GetComponent<T>(false);
 			return component != null;
@@ -474,7 +474,7 @@ namespace Nez
 		/// <returns>The component.</returns>
 		/// <param name="onlyReturnInitializedComponents">If set to <c>true</c> only return initialized components.</param>
 		/// <typeparam name="T">The 1st type parameter.</typeparam>
-		public T GetComponent<T>(bool onlyReturnInitializedComponents) where T : Component
+		public T GetComponent<T>(bool onlyReturnInitializedComponents) where T : class
 		{
 			return Components.GetComponent<T>(onlyReturnInitializedComponents);
 		}
@@ -491,7 +491,7 @@ namespace Nez
 		/// </summary>
 		/// <returns>The component.</returns>
 		/// <typeparam name="T">The 1st type parameter.</typeparam>
-		public List<T> GetComponents<T>() where T : Component => Components.GetComponents<T>();
+		public List<T> GetComponents<T>() where T : class => Components.GetComponents<T>();
 
 		/// <summary>
 		/// removes the first Component of type T from the components list
