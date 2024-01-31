@@ -28,7 +28,7 @@ namespace Nez.Tiled
 			if (self.HorizontalFlip)
 				return self.TilesetTile.SlopeTopRight;
 			if (self.VerticalFlip)
-				return self.Tileset.Map.TileWidth - self.TilesetTile.SlopeTopLeft;
+				return (self.Tileset.Map.TileWidth - 1) - self.TilesetTile.SlopeTopLeft;
 
 			return self.TilesetTile.SlopeTopLeft;
 		}
@@ -44,7 +44,7 @@ namespace Nez.Tiled
 			if (self.HorizontalFlip)
 				return self.TilesetTile.SlopeTopLeft;
 			if (self.VerticalFlip)
-				return self.Tileset.Map.TileWidth - self.TilesetTile.SlopeTopRight;
+				return (self.Tileset.Map.TileWidth - 1) - self.TilesetTile.SlopeTopRight;
 
 			return self.TilesetTile.SlopeTopRight;
 		}
@@ -65,7 +65,7 @@ namespace Nez.Tiled
 				tileSize *= -1;
 
 			// rise over run
-			return (self.TilesetTile.SlopeTopRight - (float)self.TilesetTile.SlopeTopLeft) / tileSize;
+			return (self.TilesetTile.SlopeTopRight - (float)self.TilesetTile.SlopeTopLeft) / (tileSize - 1);
 		}
 
 		/// <summary>
