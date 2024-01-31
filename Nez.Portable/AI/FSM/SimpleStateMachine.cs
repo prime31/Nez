@@ -29,7 +29,7 @@ namespace Nez.AI.FSM
 
 		TEnum _currentState;
 
-		protected TEnum CurrentState
+		public TEnum CurrentState
 		{
 			get => _currentState;
 			set
