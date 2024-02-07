@@ -21,13 +21,13 @@ namespace Nez
 		}
 
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public static T GetComponent<T>(this Component self) where T : Component
+		public static T GetComponent<T>(this Component self) where T : class
 		{
 			return self.Entity.GetComponent<T>();
 		}
 
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public static bool HasComponent<T>(this Component self) where T : Component => self.Entity.HasComponent<T>();
+		public static bool HasComponent<T>(this Component self) where T : class => self.Entity.HasComponent<T>();
 
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static void GetComponents<T>(this Component self, List<T> componentList) where T : class
@@ -36,7 +36,7 @@ namespace Nez
 		}
 
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public static List<T> GetComponents<T>(this Component self) where T : Component
+		public static List<T> GetComponents<T>(this Component self) where T : class
 		{
 			return self.Entity.GetComponents<T>();
 		}
