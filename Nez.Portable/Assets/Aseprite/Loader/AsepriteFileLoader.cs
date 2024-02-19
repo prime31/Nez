@@ -75,6 +75,7 @@ namespace Nez.Aseprite
 		/// <param name="premultiplyAlpha">
 		/// Indicates whether color data generated while reading the content of this Aseprite file should be
 		/// premultipled.  Default is false.
+		/// </param>
 		/// <returns>
 		/// A new instance of the <see cref="AsepriteFile"/> class initialized with the contents read from the Aseprite
 		/// file.
