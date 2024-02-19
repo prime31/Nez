@@ -80,6 +80,9 @@ namespace Nez.Aseprite
 		/// A new instance of the <see cref="AsepriteFile"/> class initialized with the contents read from the Aseprite
 		/// file.
 		/// </returns>
+		/// <exception cref="InvalidOperationException">
+		/// Thrown if an error occurs while attempting to read the Aseprite file. See exception message for details.
+		/// </exception>
 		public static AsepriteFile Load(string name, bool premultiplyAlpha = false)
 		{
 			using (var stream = TitleContainer.OpenStream(name))
