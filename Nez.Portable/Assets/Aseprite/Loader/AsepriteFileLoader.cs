@@ -90,7 +90,7 @@ namespace Nez.Aseprite
 			}
 		}
 
-		private static AsepriteFile ReadAsepriteFile(this BinaryReader reader, string name, bool premultiplyAlpha)
+		public static AsepriteFile ReadAsepriteFile(this BinaryReader reader, string name, bool premultiplyAlpha)
 		{
 			reader.BaseStream.Seek(0, SeekOrigin.Begin);
 
