@@ -54,10 +54,11 @@ namespace Nez.Tiled
         /// <summary>
         /// currently only used to tick all the Tilesets so they can update their animated tiles
         /// </summary>
-        public void Update()
-        {
-            foreach (var tileset in Tilesets)
-                tileset.Update();
+        public void Update() {
+	        for (var i = 0; i < Tilesets.Count; i++) {
+		        var tileset = Tilesets[i];
+		        tileset.Update();
+	        }
         }
 
 		#region IDisposable Support
@@ -68,13 +69,16 @@ namespace Nez.Tiled
 		{
 			if (!_isDisposed)
 			{
-				if (disposing)
-				{
-					foreach (var tileset in Tilesets)
+				if (disposing) {
+					for (var i = 0; i < Tilesets.Count; i++) {
+						var tileset = Tilesets[i];
 						tileset.Image?.Dispose();
+					}
 
-					foreach (var layer in ImageLayers)
+					for (var i = 0; i < ImageLayers.Count; i++) {
+						var layer = ImageLayers[i];
 						layer.Image?.Dispose();
+					}
 				}
 
 				_isDisposed = true;
