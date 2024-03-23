@@ -56,8 +56,7 @@ namespace Nez.Tiled
         /// </summary>
         public void Update() {
 	        for (var i = 0; i < Tilesets.Count; i++) {
-		        var tileset = Tilesets[i];
-		        tileset.Update();
+		        Tilesets[i].Update();
 	        }
         }
 
@@ -71,13 +70,11 @@ namespace Nez.Tiled
 			{
 				if (disposing) {
 					for (var i = 0; i < Tilesets.Count; i++) {
-						var tileset = Tilesets[i];
-						tileset.Image?.Dispose();
+						Tilesets[i].Image?.Dispose();
 					}
 
 					for (var i = 0; i < ImageLayers.Count; i++) {
-						var layer = ImageLayers[i];
-						layer.Image?.Dispose();
+						ImageLayers[i].Image?.Dispose();
 					}
 				}
 
