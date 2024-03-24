@@ -366,6 +366,7 @@ namespace Nez
 
 			// now we can remove the Entities and finally the SceneComponents
 			Core.Emitter.RemoveObserver(CoreEvents.GraphicsDeviceReset, OnGraphicsDeviceReset);
+			Core.Emitter.RemoveObserver(CoreEvents.OrientationChanged, OnOrientationChanged);
 			Entities.RemoveAllEntities();
 
 			for (var i = 0; i < _sceneComponents.Length; i++)
