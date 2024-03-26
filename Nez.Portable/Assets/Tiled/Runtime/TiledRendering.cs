@@ -20,8 +20,10 @@ namespace Nez.Tiled
 		/// <param name="cameraClipBounds"></param>
 		public static void RenderMap(TmxMap map, Batcher batcher, Vector2 position, Vector2 scale, float layerDepth, RectangleF cameraClipBounds)
 		{
-			foreach (var layer in map.Layers)
+			for (var index = 0; index < map.Layers.Count; index++)
 			{
+				var layer = map.Layers[index];
+				
 				if (layer is TmxLayer tmxLayer && tmxLayer.Visible)
 					RenderLayer(tmxLayer, batcher, position, scale, layerDepth, cameraClipBounds);
 				else if (layer is TmxImageLayer tmxImageLayer && tmxImageLayer.Visible)
@@ -286,8 +288,10 @@ namespace Nez.Tiled
 			if (!objGroup.Visible)
 				return;
 
-			foreach (var obj in objGroup.Objects)
+			for (var index = 0; index < objGroup.Objects.Count; index++)
 			{
+				var obj = objGroup.Objects[index];
+				
 				if (!obj.Visible)
 					continue;
 
@@ -371,8 +375,10 @@ namespace Nez.Tiled
 			if (!group.Visible)
 				return;
 
-			foreach (var layer in group.Layers)
+			for (var index = 0; index < group.Layers.Count; index++)
 			{
+				var layer = group.Layers[index];
+				
 				if (layer is TmxGroup tmxSubGroup)
 					RenderGroup(tmxSubGroup, batcher, position, scale, layerDepth);
 
