@@ -295,20 +295,21 @@ namespace Nez.UI
 				}
 			}
 
-			var width = this.width;
-			var height = this.height;
-			_textPosition.X = 0;
-			_textPosition.Y = 0;
+			float paddingLeft = 0;
+			float paddingRight = 0;
+			float paddingTop = 0;
+			float paddingBottom = 0;
 
-			// TODO: explore why descent causes mis-alignment
-			//_textPosition.Y =_style.font.descent;
 			if (_style.Background != null)
 			{
-				_textPosition.X = _style.Background.LeftWidth;
-				_textPosition.Y = _style.Background.TopHeight;
-				width -= _style.Background.LeftWidth + _style.Background.RightWidth;
-				height -= _style.Background.TopHeight + _style.Background.BottomHeight;
+				paddingLeft = _style.Background.LeftWidth;
+				paddingRight = _style.Background.RightWidth;
+				paddingTop = _style.Background.TopHeight;
+				paddingBottom = _style.Background.BottomHeight;
 			}
+			
+			// TODO: explore why descent causes mis-alignment
+			//_textPosition.Y =_style.font.descent;
 
 			float textWidth, textHeight;
 			if (isWrapped || _wrappedString.IndexOf('\n') != -1)
@@ -316,45 +317,44 @@ namespace Nez.UI
 				// If the text can span multiple lines, determine the text's actual size so it can be aligned within the label.
 				textWidth = _prefSize.X;
 				textHeight = _prefSize.Y;
-
-				if ((labelAlign & AlignInternal.Left) == 0)
-				{
-					if ((labelAlign & AlignInternal.Right) != 0)
-						_textPosition.X += width - textWidth;
-					else
-						_textPosition.X += (width - textWidth) / 2;
-				}
 			}
 			else
 			{
-				textWidth = width;
+				textWidth = width - (paddingLeft + paddingRight);
 				textHeight = _style.Font.LineHeight * _style.FontScaleY;
 			}
+			
+			_textPosition.Y = 0;
 
+			// Bottom | BottomLeft | BottomRight
 			if ((labelAlign & AlignInternal.Bottom) != 0)
 			{
-				_textPosition.Y += height - textHeight;
+				_textPosition.Y = height - paddingBottom - textHeight;
 				y += _style.Font.Padding.Bottom;
 			}
+			// Top | TopLeft | TopRight
 			else if ((labelAlign & AlignInternal.Top) != 0)
 			{
-				_textPosition.Y += 0;
+				_textPosition.Y = paddingTop;
 				y -= _style.Font.Padding.Bottom;
 			}
+			// Center | Left | Right
 			else
 			{
-				_textPosition.Y += (height - textHeight) / 2;
+				_textPosition.Y = paddingTop + (height - (paddingTop + paddingBottom) - textHeight) / 2;
 			}
 
-			//_textPosition.Y += textHeight;
+			_textPosition.X = 0;
 
-			// if we have GlyphLayout this code is redundant
+			// Left | TopLeft | BottomLeft
 			if ((labelAlign & AlignInternal.Left) != 0)
-				_textPosition.X = 0;
-			else if (labelAlign == AlignInternal.Center)
-				_textPosition.X = width / 2 - (_prefSize.X / 2); // center of width - center of text size
+				_textPosition.X = paddingLeft;
+			// Right | TopRight | BottomRight
+			else if ((labelAlign & AlignInternal.Right) != 0)
+				_textPosition.X = width - paddingRight - textWidth;
+			// Center | Top | Bottom
 			else
-				_textPosition.X = width - _prefSize.X; // full width - our text size
+				_textPosition.X = paddingLeft + (width - (paddingLeft + paddingRight) - textWidth) / 2;
 		}
 
 
