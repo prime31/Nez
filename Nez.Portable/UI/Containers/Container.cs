@@ -153,9 +153,9 @@ namespace Nez.UI
 			if (_element == null)
 				return;
 
-			float padLeft = _padLeft.Get(this), padBottom = _padBottom.Get(this);
+			float padLeft = _padLeft.Get(this), padBottom = _padBottom.Get(this), padTop = _padTop.Get(this);
 			float containerWidth = GetWidth() - padLeft - _padRight.Get(this);
-			float containerHeight = GetHeight() - padBottom - _padTop.Get(this);
+			float containerHeight = GetHeight() - padBottom - padTop;
 			float minWidth = _minWidthValue.Get(_element), minHeight = _minHeightValue.Get(_element);
 			float prefWidth = _prefWidthValue.Get(_element), prefHeight = _prefHeightValue.Get(_element);
 			float maxWidth = _maxWidthValue.Get(_element), maxHeight = _maxHeightValue.Get(_element);
@@ -187,10 +187,10 @@ namespace Nez.UI
 			else if ((_align & AlignInternal.Left) == 0) // center
 				x += (containerWidth - width) / 2;
 
-			var y = padBottom;
-			if ((_align & AlignInternal.Top) != 0)
+			var y = padTop;
+			if ((_align & AlignInternal.Bottom) != 0)
 				y += containerHeight - height;
-			else if ((_align & AlignInternal.Bottom) == 0) // center
+			else if ((_align & AlignInternal.Top) == 0) // center
 				y += (containerHeight - height) / 2;
 
 			if (_round)
