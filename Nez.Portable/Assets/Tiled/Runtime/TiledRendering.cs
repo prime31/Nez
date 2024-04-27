@@ -322,9 +322,6 @@ namespace Nez.Tiled
 						batcher.DrawPixel(pos, objGroup.Color, (int)size);
 						goto default;
 					case TmxObjectType.Tile:
-						var tx = obj.Tile.X * objGroup.Map.TileWidth * scale.X;
-						var ty = obj.Tile.Y * objGroup.Map.TileHeight * scale.Y;
-
 						var spriteEffects = SpriteEffects.None;
 						if (obj.Tile.HorizontalFlip)
 							spriteEffects |= SpriteEffects.FlipHorizontally;
@@ -333,7 +330,8 @@ namespace Nez.Tiled
 
 						var tileset = objGroup.Map.GetTilesetForTileGid(obj.Tile.Gid);
 						var sourceRect = tileset.TileRegions[obj.Tile.Gid];
-						batcher.Draw(tileset.Image.Texture, pos, sourceRect, Color.White, 0, Vector2.Zero, scale, spriteEffects, layerDepth);
+						pos.Y -= obj.Tile.TilesetTile.Image.Height;
+						batcher.Draw(obj.Tile.TilesetTile.Image.Texture, pos, sourceRect, Color.White, 0, Vector2.Zero, scale, spriteEffects, layerDepth);
 						goto default;
 					case TmxObjectType.Ellipse:
 						pos = new Vector2(obj.X + obj.Width * 0.5f, obj.Y + obj.Height * 0.5f) * scale;
