@@ -5,13 +5,26 @@ namespace Nez.Tiled
 {
     public partial class TmxLayer : ITmxLayer
     {
-        /// <summary>
-		/// gets the TmxLayerTile at the x/y coordinates. Note that these are tile coordinates not world coordinates!
-		/// </summary>
-		/// <returns>The tile.</returns>
-		/// <param name="x">The x coordinate.</param>
-		/// <param name="y">The y coordinate.</param>
-		public TmxLayerTile GetTile(int x, int y) => Tiles[x + y * Width];
+
+	    /// <summary>
+	    /// gets the TmxLayerTile at the x/y coordinates. Note that these are tile coordinates not world coordinates!
+	    /// </summary>
+	    /// <returns>The tile.</returns>
+	    /// <param name="x">The x coordinate.</param>
+	    /// <param name="y">The y coordinate.</param>
+	    public TmxLayerTile GetTile(int x, int y) 
+	    {
+		    Tiles.TryGetValue(Grid[x + y * Width], out var tmxLayerTile);
+
+		    return tmxLayerTile;
+	    }
+	    
+	    public TmxLayerTile GetTile(int index) 
+	    {
+		    Tiles.TryGetValue(Grid[index], out var tmxLayerTile);
+
+		    return tmxLayerTile;
+	    }
 
 		/// <summary>
 		/// gets the TmxLayerTile at the given world position
@@ -27,7 +40,7 @@ namespace Nez.Tiled
 		/// </summary>
 		public List<Rectangle> GetCollisionRectangles()
 		{
-			var checkedIndexes = new bool?[Tiles.Length];
+			var checkedIndexes = new bool?[Grid.Length];
 			var rectangles = new List<Rectangle>();
 			var startCol = -1;
 			var index = -1;
@@ -132,10 +145,13 @@ namespace Nez.Tiled
 		/// call this method or update the TmxLayerTile.tileset manually!
 		/// </summary>
 		/// <returns>The tile.</returns>
+		/// <param name="x">The x coordinate.</param>
+		/// <param name="y">The y coordinate.</param>
 		/// <param name="tile">Tile.</param>
-		public TmxLayerTile SetTile(TmxLayerTile tile)
+		public TmxLayerTile SetTile(int x, int y, TmxLayerTile tile)
 		{
-			Tiles[tile.X + tile.Y * Width] = tile;
+			Grid[x + y * Width] = tile.RawGid;
+			Tiles.Add(tile.RawGid, tile);
 			tile.Tileset = Map.GetTilesetForTileGid(tile.Gid);
 
 			return tile;
@@ -146,6 +162,8 @@ namespace Nez.Tiled
 		/// </summary>
 		/// <param name="x">The x coordinate.</param>
 		/// <param name="y">The y coordinate.</param>
-		public void RemoveTile(int x, int y) => Tiles[x + y * Width] = null;
+		public void RemoveTile(int x, int y) {
+			Grid[x + y * Width] = 0;
+		}
     }
 }

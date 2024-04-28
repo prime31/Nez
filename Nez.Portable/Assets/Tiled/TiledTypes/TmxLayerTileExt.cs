@@ -91,10 +91,10 @@ namespace Nez.Tiled
 		/// returns the nearest edge to worldPosition
 		/// </summary>
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public static Edge GetNearestEdge(this TmxLayerTile self, int worldPosition)
+		public static Edge GetNearestEdge(this TmxLayerTile self, int x, int worldPosition)
 		{
 			var tileWidth = self.Tileset.Map.TileWidth;
-			var tileMiddleWorldPosition = self.X * tileWidth + tileWidth / 2;
+			var tileMiddleWorldPosition = x * tileWidth + tileWidth / 2;
 			return worldPosition < tileMiddleWorldPosition ? Edge.Left : Edge.Right;
 		}
 	}
