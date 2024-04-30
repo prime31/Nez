@@ -329,20 +329,23 @@ namespace Nez.Tiled
 			if (encoding == "base64")
 			{
 				var decodedStream = new TmxBase64Data(xData);
-				var stream = decodedStream.Data;
-
+				
 				var index = 0;
-				using (var br = new BinaryReader(stream))
-				{
-					for (var j = 0; j < height; j++)
-					{
-						for (var i = 0; i < width; i++)
-						{
-							var gid = br.ReadUInt32();
-							
-							AddTile(layer, map, gid);
-							layer.Grid[index++] = gid;
+				using (var stream = decodedStream.Data) {
+					using (var br = new BinaryReader(stream)) {
+						const int uintSizeInBytes = sizeof(uint);
+						
+						var buffer = new byte[uintSizeInBytes * 1024];
+						int bytesRead;
 
+						while ((bytesRead = br.Read(buffer, 0, buffer.Length)) > 0) {
+							var numberOfUIntValuesRead = bytesRead / uintSizeInBytes;
+							
+							for (var i = 0; i < numberOfUIntValuesRead; i++) {
+								var gid = BitConverter.ToUInt32(buffer, i * uintSizeInBytes);
+								AddTile(layer, map, gid);
+								layer.Grid[index++] = gid;
+							}
 						}
 					}
 				}
