@@ -39,6 +39,7 @@ namespace Nez.Aseprite
 			HasPivot = hasPivot;
 			Name = name;
 			Keys = new List<AsepriteSliceKey>();
+            UserData = new AsepriteUserData();
 		}
 	}
 }
