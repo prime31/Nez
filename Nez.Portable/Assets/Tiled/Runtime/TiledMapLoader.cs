@@ -322,22 +322,30 @@ namespace Nez.Tiled
 
 			var xData = xLayer.Element("data");
 			var encoding = (string)xData.Attribute("encoding");
-
-			layer.Tiles = new TmxLayerTile[width * height];
+			
+			layer.Grid = new uint[width * height];
+			layer.Tiles = new Dictionary<uint, TmxLayerTile>();
+			
 			if (encoding == "base64")
 			{
 				var decodedStream = new TmxBase64Data(xData);
-				var stream = decodedStream.Data;
-
+				
 				var index = 0;
-				using (var br = new BinaryReader(stream))
-				{
-					for (var j = 0; j < height; j++)
-					{
-						for (var i = 0; i < width; i++)
-						{
-							var gid = br.ReadUInt32();
-							layer.Tiles[index++] = gid != 0 ? new TmxLayerTile(map, gid, i, j) : null;
+				using (var stream = decodedStream.Data) {
+					using (var br = new BinaryReader(stream)) {
+						const int uintSizeInBytes = sizeof(uint);
+						
+						var buffer = new byte[uintSizeInBytes * 1024];
+						int bytesRead;
+
+						while ((bytesRead = br.Read(buffer, 0, buffer.Length)) > 0) {
+							var numberOfUIntValuesRead = bytesRead / uintSizeInBytes;
+							
+							for (var i = 0; i < numberOfUIntValuesRead; i++) {
+								var gid = BitConverter.ToUInt32(buffer, i * uintSizeInBytes);
+								AddTile(layer, map, gid);
+								layer.Grid[index++] = gid;
+							}
 						}
 					}
 				}
@@ -346,13 +354,19 @@ namespace Nez.Tiled
 			{
 				var csvData = xData.Value;
 				int k = 0;
-				foreach (var s in csvData.Split(','))
+				
+				int startIndex = 0;
+				for (var i = 0; i < csvData.Length; i++) 
 				{
-					var gid = uint.Parse(s.Trim());
-					var x = k % width;
-					var y = k / width;
-
-					layer.Tiles[k++] = gid != 0 ? new TmxLayerTile(map, gid, x, y) : null;
+					if (csvData[i] == ',')
+					{
+						var gid = ParseString(csvData, startIndex, i - startIndex);
+						
+						AddTile(layer, map, gid);
+						layer.Grid[k++] = gid;	
+						
+						startIndex = i + 1;
+					}
 				}
 			}
 			else if (encoding == null)
@@ -361,11 +375,9 @@ namespace Nez.Tiled
 				foreach (var e in xData.Elements("tile"))
 				{
 					var gid = (uint?)e.Attribute("gid") ?? 0;
-
-					var x = k % width;
-					var y = k / width;
-
-					layer.Tiles[k++] = gid != 0 ? new TmxLayerTile(map, gid, x, y) : null;
+					
+					AddTile(layer, map, gid);
+					layer.Grid[k++] = gid;	
 				}
 			}
 			else throw new Exception("TmxLayer: Unknown encoding.");
@@ -375,6 +387,24 @@ namespace Nez.Tiled
 			return layer;
 		}
 
+		private static void AddTile(TmxLayer layer, TmxMap map, uint gid) {
+			if (gid != 0 && !layer.Tiles.ContainsKey(gid)) 
+			{
+				layer.Tiles.Add(gid, new TmxLayerTile(map, gid));
+			}
+		}
+
+		private static uint ParseString(string str, int startIndex, int length) 
+		{
+			uint result = 0;
+			for (int i = startIndex; i < startIndex + length; i++)
+			{
+				if(char.IsDigit(str[i]))
+					result = result * 10u + (uint)(str[i] - '0');
+			}
+			return result;
+		}
+		
 		public static TmxObjectGroup LoadTmxObjectGroup(this TmxObjectGroup group, TmxMap map, XElement xObjectGroup)
 		{
 			group.Map = map;
@@ -445,7 +475,7 @@ namespace Nez.Tiled
 
 			if (xGid != null)
 			{
-				obj.Tile = new TmxLayerTile(map, (uint)xGid, Convert.ToInt32(Math.Round(obj.X)), Convert.ToInt32(Math.Round(obj.Y)));
+				obj.Tile = new TmxLayerTile(map, (uint)xGid);
 				obj.ObjectType = TmxObjectType.Tile;
 			}
 			else if (xEllipse != null)
@@ -499,7 +529,7 @@ namespace Nez.Tiled
 
 			if (xGid != null)
 			{
-				obj.Tile = new TmxLayerTile(map, (uint)xGid, Convert.ToInt32(Math.Round(obj.X)), Convert.ToInt32(Math.Round(obj.Y)));
+				obj.Tile = new TmxLayerTile(map, (uint)xGid);
 				obj.ObjectType = TmxObjectType.Tile;
 			}
 			else if (xEllipse != null)
