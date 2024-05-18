@@ -353,21 +353,28 @@ namespace Nez.Tiled
 			else if (encoding == "csv")
 			{
 				var csvData = xData.Value;
-				int k = 0;
-				
-				int startIndex = 0;
+				var k = 0;
+				var startIndex = 0;
+				uint gid;
+
 				for (var i = 0; i < csvData.Length; i++) 
 				{
 					if (csvData[i] == ',')
 					{
-						var gid = ParseString(csvData, startIndex, i - startIndex);
+						gid = ParseString(csvData, startIndex, i - startIndex);
 						
 						AddTile(layer, map, gid);
-						layer.Grid[k++] = gid;	
+						layer.Grid[k++] = gid;
 						
 						startIndex = i + 1;
 					}
 				}
+
+				// Add remaining uid
+				gid = ParseString(csvData, startIndex, csvData.Length - 1 - startIndex);
+				
+				AddTile(layer, map, gid);
+				layer.Grid[k] = gid;
 			}
 			else if (encoding == null)
 			{
