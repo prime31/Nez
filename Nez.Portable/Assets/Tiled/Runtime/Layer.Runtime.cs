@@ -15,9 +15,7 @@ namespace Nez.Tiled
 	    /// <param name="y">The y coordinate.</param>
 	    public TmxLayerTile GetTile(int x, int y) 
 	    {
-		    Tiles.TryGetValue(Grid[x + y * Width], out var tmxLayerTile);
-
-		    return tmxLayerTile;
+		    return GetTile(x + y * Width);
 	    }
 	    
 	    public TmxLayerTile GetTile(int index) 
@@ -166,11 +164,11 @@ namespace Nez.Tiled
 		/// <returns>The tile.</returns>
 		public TmxLayerTile SetTile(int x, int y, int gid, bool flipHorizontally = false, bool flipVertically = false, bool flipDiagonally = false)
 		{
+			if (gid == 0) return null;
+			
 			uint rawGid = TmxLayerTile.GetRawGid(gid, flipHorizontally, flipVertically, flipDiagonally);
 			
 			Grid[x + y * Width] = rawGid;
-
-			if (rawGid == 0) return null;
 
 			TmxLayerTile tileToSet;
 
