@@ -185,25 +185,26 @@ namespace Nez
 					continue;
 				}
 
-				if (_collider.CollidesWith(neighbor, out collisionResult))
-				{
-					// if the neighbor has an ArcadeRigidbody we handle full collision response. If not, we calculate things based on the
-					// neighbor being immovable.
-					var neighborRigidbody = neighbor.Entity.GetComponent<ArcadeRigidbody>();
-					if (neighborRigidbody != null)
+				if (!_collider.IsTrigger && !neighbor.IsTrigger)
+					if (_collider.CollidesWith(neighbor, out collisionResult))
 					{
-						ProcessOverlap(neighborRigidbody, ref collisionResult.MinimumTranslationVector);
-						ProcessCollision(neighborRigidbody, ref collisionResult.MinimumTranslationVector);
-					}
-					else
-					{
-						// neighbor has no ArcadeRigidbody so we assume its immovable and only move ourself
-						Entity.Transform.Position -= collisionResult.MinimumTranslationVector;
-						var relativeVelocity = Velocity;
-						CalculateResponseVelocity(ref relativeVelocity, ref collisionResult.MinimumTranslationVector,
-							out relativeVelocity);
-						Velocity += relativeVelocity;
-					}
+						// if the neighbor has an ArcadeRigidbody we handle full collision response. If not, we calculate things based on the
+						// neighbor being immovable.
+						var neighborRigidbody = neighbor.Entity.GetComponent<ArcadeRigidbody>();
+						if (neighborRigidbody != null)
+						{
+							ProcessOverlap(neighborRigidbody, ref collisionResult.MinimumTranslationVector);
+							ProcessCollision(neighborRigidbody, ref collisionResult.MinimumTranslationVector);
+						}
+						else
+						{
+							// neighbor has no ArcadeRigidbody so we assume its immovable and only move ourself
+							Entity.Transform.Position -= collisionResult.MinimumTranslationVector;
+							var relativeVelocity = Velocity;
+							CalculateResponseVelocity(ref relativeVelocity, ref collisionResult.MinimumTranslationVector,
+								out relativeVelocity);
+							Velocity += relativeVelocity;
+						}
 				}
 			}
 		}
@@ -259,7 +260,7 @@ namespace Nez
 		/// <param name="relativeVelocity">Relative velocity.</param>
 		/// <param name="minimumTranslationVector">Minimum translation vector.</param>
 		void CalculateResponseVelocity(ref Vector2 relativeVelocity, ref Vector2 minimumTranslationVector,
-		                               out Vector2 responseVelocity)
+									   out Vector2 responseVelocity)
 		{
 			// first, we get the normalized MTV in the opposite direction: the surface normal
 			var inverseMTV = minimumTranslationVector * -1f;
@@ -285,7 +286,7 @@ namespace Nez
 
 			// elasticity affects the normal component of the velocity and friction affects the tangential component
 			responseVelocity = -(1.0f + _elasticity) * normalVelocityComponent -
-			                   coefficientOfFriction * tangentialVelocityComponent;
+							   coefficientOfFriction * tangentialVelocityComponent;
 		}
 	}
 }
