@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 
@@ -141,20 +142,47 @@ namespace Nez.Tiled
 		}
 
 		/// <summary>
-		/// sets the tile and updates its tileset. If you change a tiles gid to one in a different Tileset you must
-		/// call this method or update the TmxLayerTile.tileset manually!
+		/// sets the tile.
 		/// </summary>
 		/// <returns>The tile.</returns>
 		/// <param name="x">The x coordinate.</param>
 		/// <param name="y">The y coordinate.</param>
 		/// <param name="tile">Tile.</param>
+		[Obsolete("Please use SetTile with gid instead.")]
 		public TmxLayerTile SetTile(int x, int y, TmxLayerTile tile)
 		{
-			Grid[x + y * Width] = tile.RawGid;
-			Tiles.Add(tile.RawGid, tile);
-			tile.Tileset = Map.GetTilesetForTileGid(tile.Gid);
+			return SetTile(x, y, tile.Gid, tile.HorizontalFlip, tile.VerticalFlip, tile.DiagonalFlip);
+		}
+		
+		/// <summary>
+		/// Sets the tile at position x, y.
+		/// </summary>
+		/// <param name="x">The x coordinate.</param>
+		/// <param name="y">The y coordinate.</param>
+		/// <param name="gid">Global Tile ID (without the flip flags)</param>
+		/// <param name="flipHorizontally">Should the tile be flipped horizontally?</param>
+		/// <param name="flipVertically">Should the tile be flipped vertically?</param>
+		/// <param name="flipDiagonally">Should the tile be flipped diagonally?</param>
+		/// <returns>The tile.</returns>
+		public TmxLayerTile SetTile(int x, int y, int gid, bool flipHorizontally = false, bool flipVertically = false, bool flipDiagonally = false)
+		{
+			uint rawGid = TmxLayerTile.GetRawGid(gid, flipHorizontally, flipVertically, flipDiagonally);
+			
+			Grid[x + y * Width] = rawGid;
 
-			return tile;
+			if (rawGid == 0) return null;
+
+			TmxLayerTile tileToSet;
+
+			if (!Tiles.TryGetValue(rawGid, out var tmxLayerTile)) 
+			{
+				tileToSet = new TmxLayerTile(Map, rawGid);
+				Tiles.Add(rawGid, tileToSet);
+			}
+			else
+				tileToSet = tmxLayerTile;
+			
+			return tileToSet;
 		}
 
 		/// <summary>
