@@ -136,7 +136,7 @@ namespace Nez.Systems
 					return map;
 			}
 
-			var tiledMap = new TmxMap().LoadTmxMap(name);
+			var tiledMap = new TmxMap().LoadTmxMap(name, this);
 
 			LoadedAssets[name] = tiledMap;
 			DisposableAssets.Add(tiledMap);
