@@ -6,6 +6,7 @@ using System.Linq;
 using System.Xml.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Nez.Systems;
 
 namespace Nez.Tiled
 {
@@ -13,19 +14,19 @@ namespace Nez.Tiled
 	{
 		#region TmxMap Loader
 
-		public static TmxMap LoadTmxMap(this TmxMap map, string filepath)
+		public static TmxMap LoadTmxMap(this TmxMap map, string filepath, NezContentManager contentManager = null)
 		{
 			using (var stream = TitleContainer.OpenStream(filepath))
 			{
 				var xDoc = XDocument.Load(stream);
 				map.TmxDirectory = Path.GetDirectoryName(filepath);
-				map.LoadTmxMap(xDoc);
+				map.LoadTmxMap(xDoc, contentManager);
 
 				return map;
 			}
 		}
 
-		public static TmxMap LoadTmxMap(this TmxMap map, XDocument xDoc)
+		public static TmxMap LoadTmxMap(this TmxMap map, XDocument xDoc, NezContentManager contentManager = null)
 		{
 			var xMap = xDoc.Element("map");
 			map.Version = (string)xMap.Attribute("version");
@@ -55,7 +56,7 @@ namespace Nez.Tiled
 			map.Tilesets = new TmxList<TmxTileset>();
 			foreach (var e in xMap.Elements("tileset"))
 			{
-				var tileset = ParseTmxTileset(map, e, map.TmxDirectory);
+				var tileset = ParseTmxTileset(map, e, map.TmxDirectory, contentManager);
 				map.Tilesets.Add(tileset);
 
 				UpdateMaxTileSizes(tileset);
@@ -67,7 +68,7 @@ namespace Nez.Tiled
 			map.ImageLayers = new TmxList<TmxImageLayer>();
 			map.Groups = new TmxList<TmxGroup>();
 
-			ParseLayers(map, xMap, map, map.Width, map.Height, map.TmxDirectory);
+			ParseLayers(map, xMap, map, map.Width, map.Height, map.TmxDirectory, contentManager);
 
 			return map;
 		}
@@ -140,7 +141,7 @@ namespace Nez.Tiled
 
 		#region Parsers
 
-		public static TmxTileset ParseTmxTileset(TmxMap map, XElement xTileset, string tmxDir)
+		public static TmxTileset ParseTmxTileset(TmxMap map, XElement xTileset, string tmxDir, NezContentManager contentManager = null)
 		{
 			// firstgid is always in TMX, but not TSX
 			var xFirstGid = xTileset.Attribute("firstgid");
@@ -159,7 +160,7 @@ namespace Nez.Tiled
 					var xDocTileset = XDocument.Load(stream);
 
 					string tsxDir = Path.GetDirectoryName(source);
-					var tileset = new TmxTileset().LoadTmxTileset(map, xDocTileset.Element("tileset"), firstGid, tsxDir);
+					var tileset = new TmxTileset().LoadTmxTileset(map, xDocTileset.Element("tileset"), firstGid, tsxDir, contentManager);
 					tileset.TmxDirectory = tsxDir;
 
 					return tileset;
@@ -249,7 +250,7 @@ namespace Nez.Tiled
 		/// <summary>
 		/// parses all the layers in xEle putting them in the container
 		/// </summary>
-		public static void ParseLayers(object container, XElement xEle, TmxMap map, int width, int height, string tmxDirectory)
+		public static void ParseLayers(object container, XElement xEle, TmxMap map, int width, int height, string tmxDirectory, NezContentManager contentManager = null)
 		{
 			foreach (var e in xEle.Elements().Where(x => x.Name == "layer" || x.Name == "objectgroup" || x.Name == "imagelayer" || x.Name == "group"))
 			{
@@ -275,7 +276,7 @@ namespace Nez.Tiled
 							gg.ObjectGroups.Add(objectgroup);
 						break;
 					case "imagelayer":
-						var imagelayer = new TmxImageLayer().LoadTmxImageLayer(map, e, tmxDirectory);
+						var imagelayer = new TmxImageLayer().LoadTmxImageLayer(map, e, tmxDirectory, contentManager);
 						layer = imagelayer;
 
 						if (container is TmxMap mmm)
@@ -322,26 +323,30 @@ namespace Nez.Tiled
 
 			var xData = xLayer.Element("data");
 			var encoding = (string)xData.Attribute("encoding");
-			
+
 			layer.Grid = new uint[width * height];
 			layer.Tiles = new Dictionary<uint, TmxLayerTile>();
-			
+
 			if (encoding == "base64")
 			{
 				var decodedStream = new TmxBase64Data(xData);
-				
+
 				var index = 0;
-				using (var stream = decodedStream.Data) {
-					using (var br = new BinaryReader(stream)) {
+				using (var stream = decodedStream.Data)
+				{
+					using (var br = new BinaryReader(stream))
+					{
 						const int uintSizeInBytes = sizeof(uint);
-						
+
 						var buffer = new byte[uintSizeInBytes * 1024];
 						int bytesRead;
 
-						while ((bytesRead = br.Read(buffer, 0, buffer.Length)) > 0) {
+						while ((bytesRead = br.Read(buffer, 0, buffer.Length)) > 0)
+						{
 							var numberOfUIntValuesRead = bytesRead / uintSizeInBytes;
-							
-							for (var i = 0; i < numberOfUIntValuesRead; i++) {
+
+							for (var i = 0; i < numberOfUIntValuesRead; i++)
+							{
 								var gid = BitConverter.ToUInt32(buffer, i * uintSizeInBytes);
 								AddTile(layer, map, gid);
 								layer.Grid[index++] = gid;
@@ -357,22 +362,22 @@ namespace Nez.Tiled
 				var startIndex = 0;
 				uint gid;
 
-				for (var i = 0; i < csvData.Length; i++) 
+				for (var i = 0; i < csvData.Length; i++)
 				{
 					if (csvData[i] == ',')
 					{
 						gid = ParseString(csvData, startIndex, i - startIndex);
-						
+
 						AddTile(layer, map, gid);
 						layer.Grid[k++] = gid;
-						
+
 						startIndex = i + 1;
 					}
 				}
 
 				// Add remaining uid
 				gid = ParseString(csvData, startIndex, csvData.Length - 1 - startIndex);
-				
+
 				AddTile(layer, map, gid);
 				layer.Grid[k] = gid;
 			}
@@ -382,9 +387,9 @@ namespace Nez.Tiled
 				foreach (var e in xData.Elements("tile"))
 				{
 					var gid = (uint?)e.Attribute("gid") ?? 0;
-					
+
 					AddTile(layer, map, gid);
-					layer.Grid[k++] = gid;	
+					layer.Grid[k++] = gid;
 				}
 			}
 			else throw new Exception("TmxLayer: Unknown encoding.");
@@ -394,24 +399,25 @@ namespace Nez.Tiled
 			return layer;
 		}
 
-		private static void AddTile(TmxLayer layer, TmxMap map, uint gid) {
-			if (gid != 0 && !layer.Tiles.ContainsKey(gid)) 
+		private static void AddTile(TmxLayer layer, TmxMap map, uint gid)
+		{
+			if (gid != 0 && !layer.Tiles.ContainsKey(gid))
 			{
 				layer.Tiles.Add(gid, new TmxLayerTile(map, gid));
 			}
 		}
 
-		private static uint ParseString(string str, int startIndex, int length) 
+		private static uint ParseString(string str, int startIndex, int length)
 		{
 			uint result = 0;
 			for (int i = startIndex; i < startIndex + length; i++)
 			{
-				if(char.IsDigit(str[i]))
+				if (char.IsDigit(str[i]))
 					result = result * 10u + (uint)(str[i] - '0');
 			}
 			return result;
 		}
-		
+
 		public static TmxObjectGroup LoadTmxObjectGroup(this TmxObjectGroup group, TmxMap map, XElement xObjectGroup)
 		{
 			group.Map = map;
@@ -607,7 +613,7 @@ namespace Nez.Tiled
 			return alignment;
 		}
 
-		public static TmxImageLayer LoadTmxImageLayer(this TmxImageLayer layer, TmxMap map, XElement xImageLayer, string tmxDir = "")
+		public static TmxImageLayer LoadTmxImageLayer(this TmxImageLayer layer, TmxMap map, XElement xImageLayer, string tmxDir = "", NezContentManager contentManager = null)
 		{
 			layer.Map = map;
 			layer.Name = (string)xImageLayer.Attribute("name");
@@ -623,14 +629,14 @@ namespace Nez.Tiled
 
 			var xImage = xImageLayer.Element("image");
 			if (xImage != null)
-				layer.Image = new TmxImage().LoadTmxImage(xImage, tmxDir);
+				layer.Image = new TmxImage().LoadTmxImage(xImage, tmxDir, contentManager);
 
 			layer.Properties = ParsePropertyDict(xImageLayer.Element("properties"));
 
 			return layer;
 		}
 
-		public static TmxGroup LoadTmxGroup(this TmxGroup group, TmxMap map, XElement xGroup, int width, int height, string tmxDirectory)
+		public static TmxGroup LoadTmxGroup(this TmxGroup group, TmxMap map, XElement xGroup, int width, int height, string tmxDirectory, NezContentManager contentManager = null)
 		{
 			group.map = map;
 			group.Name = (string)xGroup.Attribute("name") ?? string.Empty;
@@ -649,12 +655,12 @@ namespace Nez.Tiled
 			group.ImageLayers = new TmxList<TmxImageLayer>();
 			group.Groups = new TmxList<TmxGroup>();
 
-			ParseLayers(group, xGroup, map, width, height, tmxDirectory);
+			ParseLayers(group, xGroup, map, width, height, tmxDirectory, contentManager);
 
 			return group;
 		}
 
-		public static TmxTileset LoadTmxTileset(this TmxTileset tileset, TmxMap map, XElement xTileset, int firstGid, string tsxDir)
+		public static TmxTileset LoadTmxTileset(this TmxTileset tileset, TmxMap map, XElement xTileset, int firstGid, string tsxDir, NezContentManager contentManager = null)
 		{
 			tileset.Map = map;
 			tileset.FirstGid = firstGid;
@@ -670,7 +676,7 @@ namespace Nez.Tiled
 
 			var xImage = xTileset.Element("image");
 			if (xImage != null)
-				tileset.Image = new TmxImage().LoadTmxImage(xImage, tsxDir);
+				tileset.Image = new TmxImage().LoadTmxImage(xImage, tsxDir, contentManager);
 
 			var xTerrainType = xTileset.Element("terraintypes");
 			if (xTerrainType != null)
@@ -716,7 +722,7 @@ namespace Nez.Tiled
 			return tileset;
 		}
 
-		public static TmxTilesetTile LoadTmxTilesetTile(this TmxTilesetTile tile, TmxTileset tileset, XElement xTile, TmxList<TmxTerrain> Terrains, string tmxDir = "")
+		public static TmxTilesetTile LoadTmxTilesetTile(this TmxTilesetTile tile, TmxTileset tileset, XElement xTile, TmxList<TmxTerrain> Terrains, string tmxDir = "", NezContentManager contentManager = null)
 		{
 			tile.Tileset = tileset;
 			tile.Id = (int)xTile.Attribute("id");
@@ -743,7 +749,7 @@ namespace Nez.Tiled
 			tile.Type = (string)xTile.Attribute("type");
 			var xImage = xTile.Element("image");
 			if (xImage != null)
-				tile.Image = new TmxImage().LoadTmxImage(xImage, tmxDir);
+				tile.Image = new TmxImage().LoadTmxImage(xImage, tmxDir, contentManager);
 
 			tile.ObjectGroups = new TmxList<TmxObjectGroup>();
 			foreach (var e in xTile.Elements("objectgroup"))
@@ -772,7 +778,7 @@ namespace Nez.Tiled
 			return frame;
 		}
 
-		public static TmxImage LoadTmxImage(this TmxImage image, XElement xImage, string tmxDir = "")
+		public static TmxImage LoadTmxImage(this TmxImage image, XElement xImage, string tmxDir = "", NezContentManager contentManager = null)
 		{
 			var xSource = xImage.Attribute("source");
 			if (xSource != null)
@@ -780,8 +786,15 @@ namespace Nez.Tiled
 				// Append directory if present
 				image.Source = Path.Combine(tmxDir, (string)xSource);
 
-				using (var stream = TitleContainer.OpenStream(image.Source))
-					image.Texture = Texture2D.FromStream(Core.GraphicsDevice, stream);
+				if (contentManager != null)
+				{
+					image.Texture = contentManager.LoadTexture(image.Source);
+				}
+				else
+				{
+					using (var stream = TitleContainer.OpenStream(image.Source))
+						image.Texture = Texture2D.FromStream(Core.GraphicsDevice, stream);
+				}
 			}
 			else
 			{
