@@ -1,0 +1,49 @@
+<Project>	
+	<PropertyGroup>
+		<BaseIntermediateOutputPath>obj\$(MSBuildProjectName)</BaseIntermediateOutputPath>
+	</PropertyGroup>
+	<Import Sdk="Microsoft.NET.Sdk" Project="Sdk.props" />
+
+	<PropertyGroup>
+		<Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+		<Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+		<OutputType>Library</OutputType>
+		<RootNamespace>Nez</RootNamespace>
+		<AssemblyName>Nez</AssemblyName>
+		<TargetFramework>net7.0</TargetFramework>
+		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+		<IntermediateOutputPath>obj\Nez.FNA\$(Configuration)</IntermediateOutputPath>
+		<OutputPath>bin\$(Configuration)\FNA</OutputPath>
+	</PropertyGroup>
+
+	<PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+		<DefineConstants>TRACE;DEBUG;FNA;FNA_GCHANDLE</DefineConstants>
+	</PropertyGroup>
+
+	<PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+		<DefineConstants>FNA;FNA_GCHANDLE</DefineConstants>
+	</PropertyGroup>
+
+    <ItemGroup>
+      	<Compile Remove="Graphics\SVG\Shapes\Paths\SvgPathBuilder.cs" />
+    </ItemGroup>
+
+	<ItemGroup>
+		<EmbeddedResource Include="Content\NezDefaultBMFont.xnb">
+			<Link>Content\NezDefaultBMFont.xnb</Link>
+		</EmbeddedResource>
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\..\FNA\FNA.Core.csproj">
+		</ProjectReference>
+	</ItemGroup>
+	
+	<ItemGroup>
+		<PackageReference Include="System.Drawing.Common" Version="8.0.5" />
+	</ItemGroup>
+	
+	<Import Sdk="Microsoft.NET.Sdk" Project="Sdk.targets" />
+</Project>

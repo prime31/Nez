@@ -1,0 +1,70 @@
+<Project>	
+	<PropertyGroup>
+		<BaseIntermediateOutputPath>obj\$(MSBuildProjectName)</BaseIntermediateOutputPath>
+	</PropertyGroup>
+	<Import Sdk="Microsoft.NET.Sdk" Project="Sdk.props" />
+	
+	<PropertyGroup>
+		<Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+		<Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+		<OutputType>Library</OutputType>
+		<RootNamespace>Nez.ImGuiTools</RootNamespace>
+		<AssemblyName>Nez.ImGui</AssemblyName>
+        <TargetFramework>net7.0</TargetFramework>
+		<AllowUnsafeBlocks>True</AllowUnsafeBlocks>
+		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+		<OutputPath>bin\$(Configuration)\FNA</OutputPath>
+	</PropertyGroup>
+
+	<PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+		<DefineConstants>TRACE;DEBUG;FNA</DefineConstants>
+	</PropertyGroup>
+
+	<PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+		<DefineConstants>FNA</DefineConstants>
+	</PropertyGroup>
+
+
+	<ItemGroup>
+		<ProjectReference Include="../../FNA/FNA.Core.csproj" />
+		<ProjectReference Include="../Nez.Portable/Nez.FNA.Core.csproj" />
+		<ProjectReference Include="../Nez.Persistence/Nez.FNA.Core.Persistence.csproj" />
+	</ItemGroup>
+
+	<PropertyGroup>
+		<IsOSX Condition="'$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::OSX)))' == 'true'">true</IsOSX>
+		<IsLinux Condition="'$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Linux)))' == 'true'">true</IsLinux>
+	</PropertyGroup>
+
+
+	<!-- Copy ImGui native code to output -->
+	<PropertyGroup>
+		<ImGuiRuntimes>$(NuGetPackageRoot)\imgui.net\**\runtimes\</ImGuiRuntimes>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<Content Include="$(ImGuiRuntimes)win-x86\native\*.dll" Condition="'$(OS)' == 'Windows_NT' AND '$(Platform)' != 'x64'">
+			<Link>%(Filename)%(Extension)</Link>
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Content>
+		<Content Include="$(ImGuiRuntimes)win-x64\native\*.dll" Condition="'$(OS)' == 'Windows_NT' AND '$(Platform)' != 'x86'">
+			<Link>%(Filename)%(Extension)</Link>
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Content>
+		<Content Include="$(ImGuiRuntimes)osx-x64\native\*.dylib" Condition="'$(OS)' != 'Windows_NT' AND $(IsOSX) == 'true'">
+			<Link>libcimgui.dylib</Link>
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Content>
+		<Content Include=".$(ImGuiRuntimes)linux-x64\native\*.so" Condition="'$(OS)' != 'Windows_NT' AND $(IsLinux) == 'true'">
+			<Link>%(Filename)%(Extension)</Link>
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Content>
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="ImGui.NET" Version="1.89.5" />
+	</ItemGroup>
+	
+	<Import Sdk="Microsoft.NET.Sdk" Project="Sdk.targets" />
+</Project>
