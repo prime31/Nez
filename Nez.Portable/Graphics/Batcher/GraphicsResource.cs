@@ -19,6 +19,9 @@ namespace Nez
 				if (_graphicsDevice == value)
 					return;
 
+#if FNA_GCHANDLE
+				_selfReference?.Free();
+#endif
 				// VertexDeclaration objects can be bound to multiple GraphicsDevice objects
 				// during their lifetime. But only one GraphicsDevice should retain ownership.
 				if (_graphicsDevice != null)
@@ -29,7 +32,11 @@ namespace Nez
 
 				_graphicsDevice = value;
 
+#if FNA_GCHANDLE
+				_selfReference = System.Runtime.InteropServices.GCHandle.Alloc(this, System.Runtime.InteropServices.GCHandleType.Weak);
+#else
 				_selfReference = new WeakReference(this);
+#endif
 				UpdateResourceReference(true);
 			}
 		}
@@ -40,7 +47,11 @@ namespace Nez
 		// parameter is true. If disposing is false, the GraphicsDevice may or may not be disposed yet.
 		GraphicsDevice _graphicsDevice;
 
+#if FNA_GCHANDLE
+		System.Runtime.InteropServices.GCHandle? _selfReference;
+#else
 		WeakReference _selfReference;
+#endif
 
 
 		internal GraphicsResource()
@@ -83,6 +94,9 @@ namespace Nez
 				if (GraphicsDevice != null)
 					UpdateResourceReference(false);
 
+#if FNA_GCHANDLE
+				_selfReference?.Free();
+#endif
 				_selfReference = null;
 				_graphicsDevice = null;
 				IsDisposed = true;
@@ -94,7 +108,7 @@ namespace Nez
 		{
 			var method = shouldAdd ? "AddResourceReference" : "RemoveResourceReference";
 			var methodInfo = ReflectionUtils.GetMethodInfo(GraphicsDevice, method);
-			methodInfo.Invoke(GraphicsDevice, new object[] {_selfReference});
+			methodInfo.Invoke(GraphicsDevice, new object[] { _selfReference });
 		}
 	}
 }

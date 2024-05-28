@@ -1,0 +1,33 @@
+<Project>	
+	<PropertyGroup>
+		<BaseIntermediateOutputPath>obj\$(MSBuildProjectName)</BaseIntermediateOutputPath>
+	</PropertyGroup>
+	<Import Sdk="Microsoft.NET.Sdk" Project="Sdk.props" />
+	
+	<PropertyGroup>
+		<Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+		<Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+		<OutputType>Library</OutputType>
+		<RootNamespace>Nez.Persistence</RootNamespace>
+		<AssemblyName>Nez.Persistence</AssemblyName>
+		<TargetFramework>net7.0</TargetFramework>
+		<AllowUnsafeBlocks>True</AllowUnsafeBlocks>
+		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+		<OutputPath>bin\$(Configuration)\FNA</OutputPath>
+	</PropertyGroup>
+
+	<PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+		<DefineConstants>TRACE;DEBUG;FNA</DefineConstants>
+	</PropertyGroup>
+
+	<PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+		<DefineConstants>FNA</DefineConstants>
+	</PropertyGroup>
+
+    <PropertyGroup>
+        <DefaultItemExcludes>$(DefaultItemExcludes);Tests\**\*.*</DefaultItemExcludes>
+    </PropertyGroup>
+
+	<Import Sdk="Microsoft.NET.Sdk" Project="Sdk.targets" />
+</Project>
