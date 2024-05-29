@@ -161,6 +161,10 @@ namespace Nez
 			for (var i = 0; i < _entities.Length; i++)
 			{
 				var entity = _entities.Buffer[i];
+				
+				if (entity.UpdateInterval == 0)
+					continue;
+
 				if (entity.Enabled && (entity.UpdateInterval == 1 || Time.FrameCount % entity.UpdateInterval == 0))
 					entity.Update();
 			}
