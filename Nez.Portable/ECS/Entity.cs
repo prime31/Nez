@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using Microsoft.Xna.Framework;
@@ -45,6 +45,8 @@ namespace Nez
 			get => _tag;
 			set => SetTag(value);
 		}
+
+		public bool IsPaused;
 
 		/// <summary>
 		/// specifies how often this entitys update method should be called. 1 means every frame, 2 is every other, etc
