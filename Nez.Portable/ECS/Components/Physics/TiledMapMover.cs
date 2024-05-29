@@ -1,4 +1,4 @@
-﻿//#define DEBUG_MOVER
+// #define DEBUG_MOVER
 
 using System;
 using Microsoft.Xna.Framework;
@@ -256,7 +256,7 @@ namespace Nez.Tiled
 			for (var i = 0; i < _collidingTilesCoordinates.Count; i++)
 			{
 				var collidingTile = CollisionLayer.GetTile(_collidingTilesCoordinates[i].X, _collidingTilesCoordinates[i].Y);
-				
+
 				if (collidingTile == null)
 					continue;
 
@@ -266,7 +266,7 @@ namespace Nez.Tiled
 					collisionState._lastGroundTile.IsSlope() && IsSlopeCollisionRow(_collidingTilesCoordinates[i].Y))
 					continue;
 
-				if (TestTileCollision(collidingTile, _collidingTilesCoordinates[i].X, _collidingTilesCoordinates[i].Y,side, perpindicularPosition, leadingPosition,
+				if (TestTileCollision(collidingTile, _collidingTilesCoordinates[i].X, _collidingTilesCoordinates[i].Y, side, perpindicularPosition, leadingPosition,
 					shouldTestSlopes, out collisionResponse))
 				{
 					// store off our last ground tile if we collided below
@@ -285,8 +285,8 @@ namespace Nez.Tiled
 					// if grounded on a slope and intersecting a slope or if grounded on a wall and intersecting a tall slope we go sticky.
 					// tall slope here means one where the the slopeTopLeft/Right is 0, i.e. it connects to a wall
 					var isHighSlopeNearest = collidingTile.IsSlope() &&
-					                         collidingTile.GetNearestEdge(perpindicularPosition, _collidingTilesCoordinates[i].X) ==
-					                         collidingTile.GetHighestSlopeEdge();
+											 collidingTile.GetNearestEdge(perpindicularPosition, _collidingTilesCoordinates[i].X) ==
+											 collidingTile.GetHighestSlopeEdge();
 					if ((collisionState._lastGroundTile.IsSlope() && collidingTile.IsSlope()) ||
 						(!collisionState._lastGroundTile.IsSlope() && isHighSlopeNearest))
 					{
@@ -310,7 +310,7 @@ namespace Nez.Tiled
 			for (var i = 0; i < _collidingTilesCoordinates.Count; i++)
 			{
 				var collidingTile = CollisionLayer.GetTile(_collidingTilesCoordinates[i].X, _collidingTilesCoordinates[i].Y);
-				
+
 				if (collidingTile != null && collidingTile.IsSlope() && _collidingTilesCoordinates[i].Y == rowY)
 					return true;
 			}
@@ -460,10 +460,10 @@ namespace Nez.Tiled
 					_collidingTilesCoordinates.Add(new Point(col, row));
 
 #if DEBUG_MOVER
-					if( direction.isHorizontal() )
+					if(direction.IsHorizontal())
 					{
-						var pos = tiledMap.tileToWorldPosition( new Point( col, row ) );
-						_debugTiles.Add( new Rectangle( (int)pos.X, (int)pos.Y, 16, 16 ) );
+						var pos = TiledMap.TileToWorldPosition(new Point(col, row));
+						_debugTiles.Add(new Rectangle((int)pos.X, (int)pos.Y, 16, 16));
 					}
 #endif
 				}
@@ -515,32 +515,32 @@ namespace Nez.Tiled
 
 
 #if DEBUG_MOVER
-		public override float width { get { return 10000; } }
-		public override float height { get { return 10000; } }
+		public override float Width { get { return 10000; } }
+		public override float Height { get { return 10000; } }
 		List<Rectangle> _debugTiles = new List<Rectangle>();
 
-		public override void render( Graphics graphics, Camera camera )
+		public override void Render(Batcher batcher, Camera camera)
 		{
-			for( var i = 0; i < _debugTiles.Count; i++ )
+			for (var i = 0; i < _debugTiles.Count; i++)
 			{
 				var t = _debugTiles[i];
-				graphics.batcher.drawHollowRect( t, Color.Yellow );
+				batcher.DrawHollowRect(t, Color.Yellow);
 
-				Debug.drawText( Graphics.instance.bitmapFont, i.ToString(), t.Center.ToVector2(), Color.White );
+				Debug.DrawText(Graphics.Instance.BitmapFont, i.ToString(), t.Center.ToVector2(), Color.White);
 			}
 			_debugTiles.Clear();
 
-			var bounds = collisionRectForSide( Edge.Top, 0 );
-			graphics.batcher.drawHollowRect( bounds, Color.Orchid );
+			var bounds = CollisionRectForSide(Edge.Top, 0);
+			batcher.DrawHollowRect(bounds, Color.Orchid);
 
-			bounds = collisionRectForSide( Edge.Bottom, 0 );
-			graphics.batcher.drawHollowRect( bounds, Color.Orange );
+			bounds = CollisionRectForSide(Edge.Bottom, 0);
+			batcher.DrawHollowRect(bounds, Color.Orange);
 
-			bounds = collisionRectForSide( Edge.Right, 0 );
-			graphics.batcher.drawHollowRect( bounds, Color.Blue );
+			bounds = CollisionRectForSide(Edge.Right, 0);
+			batcher.DrawHollowRect(bounds, Color.Blue);
 
-			bounds = collisionRectForSide( Edge.Left, 0 );
-			graphics.batcher.drawHollowRect( bounds, Color.Green );
+			bounds = CollisionRectForSide(Edge.Left, 0);
+			batcher.DrawHollowRect(bounds, Color.Green);
 		}
 
 #endif
