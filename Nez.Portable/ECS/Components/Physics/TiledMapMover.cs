@@ -1,4 +1,4 @@
-//#define DEBUG_MOVER
+// #define DEBUG_MOVER
 
 using System;
 using Microsoft.Xna.Framework;
@@ -24,7 +24,7 @@ namespace Nez.Tiled
     /// </summary>
     public class TiledMapMover :
 #if DEBUG_MOVER
-	RenderableComponent
+    RenderableComponent
 #else
         Component
 #endif
@@ -460,11 +460,11 @@ namespace Nez.Tiled
                     _collidingTilesCoordinates.Add(new Point(col, row));
 
 #if DEBUG_MOVER
-					if(direction.IsHorizontal())
-					{
-						var pos = TiledMap.TileToWorldPosition(new Point(col, row));
-						_debugTiles.Add(new Rectangle((int)pos.X, (int)pos.Y, 16, 16));
-					}
+                    if(direction.IsHorizontal())
+                    {
+                        var pos = TiledMap.TileToWorldPosition(new Point(col, row));
+                        _debugTiles.Add(new Rectangle((int)pos.X, (int)pos.Y, 16, 16));
+                    }
 #endif
                 }
             }
@@ -515,33 +515,33 @@ namespace Nez.Tiled
 
 
 #if DEBUG_MOVER
-		public override float Width { get { return 10000; } }
-		public override float Height { get { return 10000; } }
-		List<Rectangle> _debugTiles = new List<Rectangle>();
+        public override float Width { get { return 10000; } }
+        public override float Height { get { return 10000; } }
+        List<Rectangle> _debugTiles = new List<Rectangle>();
 
-		public override void Render(Batcher batcher, Camera camera)
-		{
-			for (var i = 0; i < _debugTiles.Count; i++)
-			{
-				var t = _debugTiles[i];
-				batcher.DrawHollowRect(t, Color.Yellow);
+        public override void Render(Batcher batcher, Camera camera)
+        {
+            for (var i = 0; i < _debugTiles.Count; i++)
+            {
+                var t = _debugTiles[i];
+                batcher.DrawHollowRect(t, Color.Yellow);
 
-				Debug.DrawText(Graphics.Instance.BitmapFont, i.ToString(), t.Center.ToVector2(), Color.White);
-			}
-			_debugTiles.Clear();
+                Debug.DrawText(Graphics.Instance.BitmapFont, i.ToString(), t.Center.ToVector2(), Color.White);
+            }
+            _debugTiles.Clear();
 
-			var bounds = CollisionRectForSide(Edge.Top, 0);
-			batcher.DrawHollowRect(bounds, Color.Orchid);
+            var bounds = CollisionRectForSide(Edge.Top, 0);
+            batcher.DrawHollowRect(bounds, Color.Orchid);
 
-			bounds = CollisionRectForSide(Edge.Bottom, 0);
-			batcher.DrawHollowRect(bounds, Color.Orange);
+            bounds = CollisionRectForSide(Edge.Bottom, 0);
+            batcher.DrawHollowRect(bounds, Color.Orange);
 
-			bounds = CollisionRectForSide(Edge.Right, 0);
-			batcher.DrawHollowRect(bounds, Color.Blue);
+            bounds = CollisionRectForSide(Edge.Right, 0);
+            batcher.DrawHollowRect(bounds, Color.Blue);
 
-			bounds = CollisionRectForSide(Edge.Left, 0);
-			batcher.DrawHollowRect(bounds, Color.Green);
-		}
+            bounds = CollisionRectForSide(Edge.Left, 0);
+            batcher.DrawHollowRect(bounds, Color.Green);
+        }
 
 #endif
     }
