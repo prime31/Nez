@@ -73,7 +73,7 @@ namespace Nez
 				defaultGlyph = _glyphs[_font.DefaultCharacter.Value];
 
 			var width = 0.0f;
-			var finalLineHeight = (float) _font.LineSpacing;
+			var finalLineHeight = (float)_font.LineSpacing;
 
 			var currentGlyph = SpriteFont.Glyph.Empty;
 			var offset = Vector2.Zero;
@@ -142,7 +142,7 @@ namespace Nez
 		/// <param name="fontRegion">Font region.</param>
 		/// <param name="useDefaultRegionIfNotPresent">If set to <c>true</c> use default region if not present.</param>
 		public bool TryGetFontRegionForChar(char c, out SpriteFont.Glyph fontGlyph,
-		                                    bool useDefaultRegionIfNotPresent = false)
+											bool useDefaultRegionIfNotPresent = false)
 		{
 			if (!_glyphs.TryGetValue(c, out fontGlyph))
 			{
@@ -174,7 +174,7 @@ namespace Nez
 		#region drawing
 
 		void IFont.DrawInto(Batcher batcher, string text, Vector2 position, Color color,
-		                    float rotation, Vector2 origin, Vector2 scale, SpriteEffects effect, float depth)
+							float rotation, Vector2 origin, Vector2 scale, SpriteEffects effect, float depth)
 		{
 			var source = new FontCharacterSource(text);
 			DrawInto(batcher, ref source, position, color, rotation, origin, scale, effect, depth);
@@ -182,7 +182,7 @@ namespace Nez
 
 
 		void IFont.DrawInto(Batcher batcher, StringBuilder text, Vector2 position, Color color,
-		                    float rotation, Vector2 origin, Vector2 scale, SpriteEffects effect, float depth)
+							float rotation, Vector2 origin, Vector2 scale, SpriteEffects effect, float depth)
 		{
 			var source = new FontCharacterSource(text);
 			DrawInto(batcher, ref source, position, color, rotation, origin, scale, effect, depth);
@@ -190,7 +190,7 @@ namespace Nez
 
 
 		public void DrawInto(Batcher batcher, ref FontCharacterSource text, Vector2 position, Color color,
-		                     float rotation, Vector2 origin, Vector2 scale, SpriteEffects effect, float depth)
+							 float rotation, Vector2 origin, Vector2 scale, SpriteEffects effect, float depth)
 		{
 			var flipAdjustment = Vector2.Zero;
 
@@ -314,9 +314,9 @@ namespace Nez
 		/// <summary>
 		/// this sucker gets used a lot so we cache it to avoid having to create it every frame
 		/// </summary>
-		#pragma warning disable 0414
+#pragma warning disable 0414
 		Matrix _transformationMatrix = Matrix.Identity;
-		#pragma warning restore 0414
+#pragma warning restore 0414
 
 
 		public NezSpriteFont( SpriteFont font )
@@ -341,13 +341,13 @@ namespace Nez
 
 		public void DrawInto( Batcher batcher, ref FontCharacterSource text, Vector2 position, Color color, float rotation, Vector2 origin, Vector2 scale, SpriteEffects effect, float depth )
 		{
-			throw new NotImplementedException();
+			throw new NotImplementedException("NezSpriteFont is not implemented on FNA, we recommend using BitmapFont instead.");
 		}
 
 
 		bool IFont.HasCharacter( char c )
 		{
-			throw new NotImplementedException();
+			throw new NotImplementedException("NezSpriteFont is not implemented on FNA, we recommend using BitmapFont instead.");
 		}
 
 
