@@ -16,6 +16,8 @@ namespace Nez
 
 		internal static byte[] CrosshatchBytes => GetFileResourceBytes("Content/nez/effects/Crosshatch.mgfxo");
 
+		internal static byte[] InvertBytes => GetFileResourceBytes("Content/nez/effects/Invert.mgfxo");
+
 		internal static byte[] NoiseBytes => GetFileResourceBytes("Content/nez/effects/Noise.mgfxo");
 
 		internal static byte[] TwistBytes => GetFileResourceBytes("Content/nez/effects/Twist.mgfxo");
