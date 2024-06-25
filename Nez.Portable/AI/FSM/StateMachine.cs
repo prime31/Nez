@@ -98,5 +98,16 @@ namespace Nez.AI.FSM
 		{
 			return ChangeState(typeof(R)) as R;
 		}
+
+		/// <summary>
+		/// changes to the previous state if one exists
+		/// </summary>
+		public State<T> ChangeToPreviousState()
+		{
+			if (PreviousState == null)
+				return _currentState as State<T>;
+
+			return ChangeState(PreviousState.GetType());
+		}
 	}
 }
