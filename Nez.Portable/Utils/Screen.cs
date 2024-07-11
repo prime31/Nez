@@ -10,6 +10,8 @@ namespace Nez
 
 		internal static void Initialize(GraphicsDeviceManager graphicsManager) => _graphicsManager = graphicsManager;
 
+		public static GraphicsDeviceManager GraphicsDeviceManager => _graphicsManager;
+
 		/// <summary>
 		/// width of the GraphicsDevice back buffer
 		/// </summary>
