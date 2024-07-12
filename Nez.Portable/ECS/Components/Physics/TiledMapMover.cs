@@ -285,7 +285,7 @@ namespace Nez.Tiled
 					// if grounded on a slope and intersecting a slope or if grounded on a wall and intersecting a tall slope we go sticky.
 					// tall slope here means one where the the slopeTopLeft/Right is 0, i.e. it connects to a wall
 					var isHighSlopeNearest = collidingTile.IsSlope() &&
-											 collidingTile.GetNearestEdge(perpindicularPosition, _collidingTilesCoordinates[i].X) ==
+											 collidingTile.GetNearestEdge(_collidingTilesCoordinates[i].X, perpindicularPosition) ==
 											 collidingTile.GetHighestSlopeEdge();
 					if ((collisionState._lastGroundTile.IsSlope() && collidingTile.IsSlope()) ||
 						(!collisionState._lastGroundTile.IsSlope() && isHighSlopeNearest))
@@ -353,7 +353,7 @@ namespace Nez.Tiled
 			// and we were not intesecting the tile before moving.
 			// this prevents clipping through a tile when hitting its edge: -> |\
 			if (edgeToTest.IsHorizontal() && tile.IsSlope() &&
-				tile.GetNearestEdge(leadingPosition, x) == tile.GetHighestSlopeEdge())
+				tile.GetNearestEdge(x, leadingPosition) == tile.GetHighestSlopeEdge())
 			{
 				var moveDir = edgeToTest.OppositeEdge();
 				var leadingPositionPreMovement = _boxColliderBounds.GetSide(moveDir);
