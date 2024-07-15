@@ -131,7 +131,7 @@ namespace Nez.BitmapFonts
 			foreach (var glyph in glyphs)
 			{
 				var characterOrigin = origin - glyph.Position;
-				Graphics.Instance.Batcher.Draw(glyph.Texture, position, glyph.Character.Bounds, color, rotation,
+				batcher.Draw(glyph.Texture, position, glyph.Character.Bounds, color, rotation,
 					characterOrigin, scale, SpriteEffects.None, layerDepth);
 			}
 		}
