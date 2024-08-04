@@ -184,7 +184,7 @@ namespace Nez.Sprites
 			Color = originalColor;
 			_layerDepth = originalLayerDepth;
 		}
-		
+
 		public override void Render(Batcher batcher, Camera camera)
 		{
 			Vector2 isFlippedVector = new Vector2(FlipX ? -1 : 1, FlipY ? -1 : 1);
