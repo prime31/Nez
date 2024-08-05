@@ -40,7 +40,9 @@ namespace Nez.ImGuiTools
 		// Input
 		int _scrollWheelValue;
 
+
 		List<int> _keys = new List<int>();
+
 
 		public ImGuiRenderer(Game game)
 		{
@@ -163,9 +165,9 @@ namespace Nez.ImGuiTools
 
 #if FNA
 		delegate string GetClipboardTextDelegate();
-		delegate void SetClipboardTextDelegate( IntPtr userData, string txt );
+		delegate void SetClipboardTextDelegate(IntPtr userData, string txt);
 
-		static void SetClipboardText( IntPtr userData, string txt ) => SDL2.SDL.SDL_SetClipboardText( txt );
+		static void SetClipboardText(IntPtr userData, string txt) => SDL2.SDL.SDL_SetClipboardText(txt);
 
 		static string GetClipboardText() => SDL2.SDL.SDL_GetClipboardText();
 #endif
@@ -179,30 +181,30 @@ namespace Nez.ImGuiTools
 
 #if FNA
 			// forward clipboard methods to SDL
-			io.SetClipboardTextFn = Marshal.GetFunctionPointerForDelegate<SetClipboardTextDelegate>( SetClipboardText );
-			io.GetClipboardTextFn =
- Marshal.GetFunctionPointerForDelegate<GetClipboardTextDelegate>( SDL2.SDL.SDL_GetClipboardText );
+			io.SetClipboardTextFn = Marshal.GetFunctionPointerForDelegate<SetClipboardTextDelegate>(SetClipboardText);
+			io.GetClipboardTextFn = Marshal.GetFunctionPointerForDelegate<GetClipboardTextDelegate>(SDL2.SDL.SDL_GetClipboardText);
 #endif
 
-			_keys.Add(io.KeyMap[(int) ImGuiKey.Tab] = (int) Keys.Tab);
-			_keys.Add(io.KeyMap[(int) ImGuiKey.LeftArrow] = (int) Keys.Left);
-			_keys.Add(io.KeyMap[(int) ImGuiKey.RightArrow] = (int) Keys.Right);
-			_keys.Add(io.KeyMap[(int) ImGuiKey.UpArrow] = (int) Keys.Up);
-			_keys.Add(io.KeyMap[(int) ImGuiKey.DownArrow] = (int) Keys.Down);
-			_keys.Add(io.KeyMap[(int) ImGuiKey.PageUp] = (int) Keys.PageUp);
-			_keys.Add(io.KeyMap[(int) ImGuiKey.PageDown] = (int) Keys.PageDown);
-			_keys.Add(io.KeyMap[(int) ImGuiKey.Home] = (int) Keys.Home);
-			_keys.Add(io.KeyMap[(int) ImGuiKey.End] = (int) Keys.End);
-			_keys.Add(io.KeyMap[(int) ImGuiKey.Delete] = (int) Keys.Delete);
-			_keys.Add(io.KeyMap[(int) ImGuiKey.Backspace] = (int) Keys.Back);
-			_keys.Add(io.KeyMap[(int) ImGuiKey.Enter] = (int) Keys.Enter);
-			_keys.Add(io.KeyMap[(int) ImGuiKey.Escape] = (int) Keys.Escape);
-			_keys.Add(io.KeyMap[(int) ImGuiKey.A] = (int) Keys.A);
-			_keys.Add(io.KeyMap[(int) ImGuiKey.C] = (int) Keys.C);
-			_keys.Add(io.KeyMap[(int) ImGuiKey.V] = (int) Keys.V);
-			_keys.Add(io.KeyMap[(int) ImGuiKey.X] = (int) Keys.X);
-			_keys.Add(io.KeyMap[(int) ImGuiKey.Y] = (int) Keys.Y);
-			_keys.Add(io.KeyMap[(int) ImGuiKey.Z] = (int) Keys.Z);
+			_keys.Add(io.KeyMap[(int)ImGuiKey.Tab] = (int)Keys.Tab);
+			_keys.Add(io.KeyMap[(int)ImGuiKey.LeftArrow] = (int)Keys.Left);
+			_keys.Add(io.KeyMap[(int)ImGuiKey.RightArrow] = (int)Keys.Right);
+			_keys.Add(io.KeyMap[(int)ImGuiKey.UpArrow] = (int)Keys.Up);
+			_keys.Add(io.KeyMap[(int)ImGuiKey.DownArrow] = (int)Keys.Down);
+			_keys.Add(io.KeyMap[(int)ImGuiKey.PageUp] = (int)Keys.PageUp);
+			_keys.Add(io.KeyMap[(int)ImGuiKey.PageDown] = (int)Keys.PageDown);
+			_keys.Add(io.KeyMap[(int)ImGuiKey.Home] = (int)Keys.Home);
+			_keys.Add(io.KeyMap[(int)ImGuiKey.End] = (int)Keys.End);
+			_keys.Add(io.KeyMap[(int)ImGuiKey.Delete] = (int)Keys.Delete);
+			_keys.Add(io.KeyMap[(int)ImGuiKey.Backspace] = (int)Keys.Back);
+			_keys.Add(io.KeyMap[(int)ImGuiKey.Enter] = (int)Keys.Enter);
+			_keys.Add(io.KeyMap[(int)ImGuiKey.Escape] = (int)Keys.Escape);
+			_keys.Add(io.KeyMap[(int)ImGuiKey.LeftCtrl] = (int)Keys.LeftControl);
+			_keys.Add(io.KeyMap[(int)ImGuiKey.A] = (int)Keys.A);
+			_keys.Add(io.KeyMap[(int)ImGuiKey.C] = (int)Keys.C);
+			_keys.Add(io.KeyMap[(int)ImGuiKey.V] = (int)Keys.V);
+			_keys.Add(io.KeyMap[(int)ImGuiKey.X] = (int)Keys.X);
+			_keys.Add(io.KeyMap[(int)ImGuiKey.Y] = (int)Keys.Y);
+			_keys.Add(io.KeyMap[(int)ImGuiKey.Z] = (int)Keys.Z);
 
 
 #if !FNA
@@ -216,9 +218,9 @@ namespace Nez.ImGuiTools
 #else
 			TextInputEXT.TextInput += c =>
 			{
-				if( c == '\t' )
+				if (c == '\t')
 					return;
-				ImGui.GetIO().AddInputCharacter( c );
+				ImGui.GetIO().AddInputCharacter(c);
 			};
 #endif
 		}
@@ -254,7 +256,7 @@ namespace Nez.ImGuiTools
 
 			for (int i = 0; i < _keys.Count; i++)
 			{
-				io.KeysDown[_keys[i]] = keyboard.IsKeyDown((Keys) _keys[i]);
+				io.KeysDown[_keys[i]] = keyboard.IsKeyDown((Keys)_keys[i]);
 			}
 
 			io.KeyShift = keyboard.IsKeyDown(Keys.LeftShift) || keyboard.IsKeyDown(Keys.RightShift);
@@ -324,7 +326,7 @@ namespace Nez.ImGuiTools
 			{
 				_vertexBuffer?.Dispose();
 
-				_vertexBufferSize = (int) (drawData.TotalVtxCount * 1.5f);
+				_vertexBufferSize = (int)(drawData.TotalVtxCount * 1.5f);
 				_vertexBuffer = new VertexBuffer(Core.GraphicsDevice, _vertexDeclaration, _vertexBufferSize,
 					BufferUsage.None);
 				_vertexData = new byte[_vertexBufferSize * _vertexDeclarationSize];
@@ -334,7 +336,7 @@ namespace Nez.ImGuiTools
 			{
 				_indexBuffer?.Dispose();
 
-				_indexBufferSize = (int) (drawData.TotalIdxCount * 1.5f);
+				_indexBufferSize = (int)(drawData.TotalIdxCount * 1.5f);
 				_indexBuffer = new IndexBuffer(Core.GraphicsDevice, IndexElementSize.SixteenBits, _indexBufferSize,
 					BufferUsage.None);
 				_indexData = new byte[_indexBufferSize * sizeof(ushort)];
@@ -351,9 +353,9 @@ namespace Nez.ImGuiTools
 				fixed (void* vtxDstPtr = &_vertexData[vtxOffset * _vertexDeclarationSize])
 				fixed (void* idxDstPtr = &_indexData[idxOffset * sizeof(ushort)])
 				{
-					Buffer.MemoryCopy((void*) cmdList.VtxBuffer.Data, vtxDstPtr, _vertexData.Length,
+					Buffer.MemoryCopy((void*)cmdList.VtxBuffer.Data, vtxDstPtr, _vertexData.Length,
 						cmdList.VtxBuffer.Size * _vertexDeclarationSize);
-					Buffer.MemoryCopy((void*) cmdList.IdxBuffer.Data, idxDstPtr, _indexData.Length,
+					Buffer.MemoryCopy((void*)cmdList.IdxBuffer.Data, idxDstPtr, _indexData.Length,
 						cmdList.IdxBuffer.Size * sizeof(ushort));
 				}
 
@@ -387,10 +389,10 @@ namespace Nez.ImGuiTools
 					}
 
 					Core.GraphicsDevice.ScissorRectangle = new Rectangle(
-						(int) drawCmd.ClipRect.X,
-						(int) drawCmd.ClipRect.Y,
-						(int) (drawCmd.ClipRect.Z - drawCmd.ClipRect.X),
-						(int) (drawCmd.ClipRect.W - drawCmd.ClipRect.Y)
+						(int)drawCmd.ClipRect.X,
+						(int)drawCmd.ClipRect.Y,
+						(int)(drawCmd.ClipRect.Z - drawCmd.ClipRect.X),
+						(int)(drawCmd.ClipRect.W - drawCmd.ClipRect.Y)
 					);
 
 					var effect = UpdateEffect(_loadedTextures[drawCmd.TextureId]);
@@ -398,19 +400,19 @@ namespace Nez.ImGuiTools
 					{
 						pass.Apply();
 
-						#pragma warning disable CS0618 // FNA does not expose an alternative method.
+#pragma warning disable CS0618 // FNA does not expose an alternative method.
 						Core.GraphicsDevice.DrawIndexedPrimitives(
 							primitiveType: PrimitiveType.TriangleList,
 							baseVertex: vtxOffset,
 							minVertexIndex: 0,
 							numVertices: cmdList.VtxBuffer.Size,
 							startIndex: idxOffset,
-							primitiveCount: (int) drawCmd.ElemCount / 3
+							primitiveCount: (int)drawCmd.ElemCount / 3
 						);
-						#pragma warning restore CS0618
+#pragma warning restore CS0618
 					}
 
-					idxOffset += (int) drawCmd.ElemCount;
+					idxOffset += (int)drawCmd.ElemCount;
 				}
 
 				vtxOffset += cmdList.VtxBuffer.Size;
