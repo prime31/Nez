@@ -179,13 +179,12 @@ namespace Nez.ImGuiTools
 		{
 			var io = ImGui.GetIO();
 
-			/*
 #if FNA
 			// forward clipboard methods to SDL
-//			io.SetClipboardTextFn = Marshal.GetFunctionPointerForDelegate<SetClipboardTextDelegate>( SetClipboardText );
-//			io.GetClipboardTextFn = Marshal.GetFunctionPointerForDelegate<GetClipboardTextDelegate>(SDL2.SDL.SDL_GetClipboardText );
+			io.SetClipboardTextFn = Marshal.GetFunctionPointerForDelegate<SetClipboardTextDelegate>(SetClipboardText);
+			io.GetClipboardTextFn = Marshal.GetFunctionPointerForDelegate<GetClipboardTextDelegate>(SDL2.SDL.SDL_GetClipboardText);
 #endif
-*/
+
 			_keys.Add(io.KeyMap[(int)ImGuiKey.Tab] = (int)Keys.Tab);
 			_keys.Add(io.KeyMap[(int)ImGuiKey.LeftArrow] = (int)Keys.Left);
 			_keys.Add(io.KeyMap[(int)ImGuiKey.RightArrow] = (int)Keys.Right);
