@@ -16,6 +16,11 @@
 		void Reset();
 
 		/// <summary>
+		/// Returns time reamaing on the timer
+		/// </summary>
+		float RemainingTime();
+
+		/// <summary>
 		/// returns the context casted to T as a convenience
 		/// </summary>
 		/// <returns>The context.</returns>
