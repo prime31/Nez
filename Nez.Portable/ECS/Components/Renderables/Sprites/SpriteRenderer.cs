@@ -74,6 +74,38 @@ namespace Nez.Sprites
 		}
 
 		/// <summary>
+		/// Set the FlipX but also adjust the LocalOffset to account for the flip.  
+		/// This multiplies the x value of your LocalOffset by -1 so the sprite will appear in the expected place relative to your entity 
+		/// </summary>
+		/// <param name="isFlippedX"></param>
+		public void SetFlipXAndAdjustLocalOffset(bool isFlippedX)
+		{
+			if (FlipX == isFlippedX)
+			{
+				return;
+			}
+
+			FlipX = isFlippedX;
+			LocalOffset *= new Vector2(-1, 1);
+		}
+
+		/// <summary>
+		///Set the FlipY but also adjust the LocalOffset to account for the flip.  
+		/// This multiplies the y value of your LocalOffset by -1 so the sprite will appear in the expected place relative to your entity 
+		/// </summary>
+		/// <param name="isFlippedY"></param>
+		public void SetFlipYAndAdjustLocalOffset(bool isFlippedY)
+		{
+			if (FlipY == isFlippedY)
+			{
+				return;
+			}
+
+			FlipX = isFlippedY;
+			LocalOffset *= new Vector2(1, -1);
+		}
+
+		/// <summary>
 		/// Batchers passed along to the Batcher when rendering. flipX/flipY are helpers for setting this.
 		/// </summary>
 		public SpriteEffects SpriteEffects = SpriteEffects.None;
