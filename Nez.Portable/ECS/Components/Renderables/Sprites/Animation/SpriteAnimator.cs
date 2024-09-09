@@ -44,6 +44,11 @@ namespace Nez.Sprites
 		/// amount of frames in the current animation
 		/// </summary>
 		public int FrameCount { get; private set; }
+
+		/// <summary>
+		/// returns the total elapsed time of the animation.
+		/// </summary>
+		public float CurrentElapsedTime { get; private set; }
 		
 		/// <summary>
 		/// Provides access to list of available animations
@@ -55,7 +60,12 @@ namespace Nez.Sprites
 		/// Mode of looping the animation.
 		/// It can have 5 different values: Loop, Once, ClampForever, PingPong and PingPongOnce. Defaults to Loop.
 		/// </summary>
-		public ILoopModeController CurrentLoopMode { get; private set; }
+		public LoopMode CurrentLoopMode { get; private set; }
+		
+		/// <summary>
+		/// Loop Mode Controller responsible for getting the next frame and checking end of animation.
+		/// </summary>
+		public ILoopModeController LoopModeController { get; private set; }
 		
 		/// <summary>
 		/// The amount of seconds remaining in the current frame
@@ -72,10 +82,11 @@ namespace Nez.Sprites
 			if (AnimationState != State.Running || CurrentAnimation == null)
 				return;
 
+			CurrentElapsedTime += Time.DeltaTime;
 			FrameTimeLeft -= Time.DeltaTime;
 			if (ShouldChangeFrame())
 			{
-				CurrentLoopMode.NextFrame(this);
+				LoopModeController.NextFrame(this);
 			}
 		}
 
@@ -129,8 +140,9 @@ namespace Nez.Sprites
 			FrameCount = CurrentAnimation.FrameRates.Length;
 			
 			SetFrame(0);
-			
-			CurrentLoopMode = GetNewController(loopMode);
+
+			CurrentLoopMode = loopMode;
+			LoopModeController = GetNewController(loopMode);
 			AnimationState = State.Running;
 		}
 		
@@ -152,6 +164,7 @@ namespace Nez.Sprites
 			CurrentAnimation = null;
 			CurrentAnimationName = null;
 			CurrentFrame = 0;
+			CurrentElapsedTime = 0;
 			AnimationState = State.None;
 		}
 
@@ -177,6 +190,7 @@ namespace Nez.Sprites
 				SetFrame(0);
 			}
 			
+			CurrentElapsedTime = 0;
 			AnimationState = State.Completed;
 			OnAnimationCompletedEvent?.Invoke(CurrentAnimationName);
 		}
