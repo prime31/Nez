@@ -1,6 +1,6 @@
 ﻿namespace Nez.Sprites
 {
-	public interface ISpriteAnimationLoopMode
+	public interface ILoopModeController
 	{
 		void NextFrame(SpriteAnimator animator);
 	}
