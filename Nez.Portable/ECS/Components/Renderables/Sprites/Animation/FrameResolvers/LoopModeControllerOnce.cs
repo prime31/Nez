@@ -1,16 +1,16 @@
 ﻿namespace Nez.Sprites
 {
-	public class LoopModeClampForever : ISpriteAnimationLoopMode
+	public class LoopModeControllerOnce : ILoopModeController
 	{
 		/// <summary>
-		/// Plays back the animation once, [A][B][C]. When it reaches the end, it will keep playing the last frame and never stop playing
+		/// Play the sequence once [A][B][C] then pause and set time to 0 [A]
 		/// </summary>
 		public void NextFrame(SpriteAnimator animator)
 		{
 			var newFrame = animator.CurrentFrame + 1;
 			if (newFrame >= animator.FrameCount)
 			{
-				animator.SetCompleted();
+				animator.SetCompleted(true);
 			}
 			else
 			{

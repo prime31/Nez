@@ -1,6 +1,6 @@
 ﻿namespace Nez.Sprites
 {
-	public class LoopModeLoop : ISpriteAnimationLoopMode
+	public class LoopModeControllerLoop : ILoopModeController
 	{
 		/// <summary>
 		/// Play the sequence in a loop forever [A][B][C][A][B][C][A][B][C]...

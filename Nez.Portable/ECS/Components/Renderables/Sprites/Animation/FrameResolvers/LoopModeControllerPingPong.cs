@@ -1,6 +1,6 @@
 ﻿namespace Nez.Sprites
 {
-	public class LoopModePingPongOnce : ISpriteAnimationLoopMode
+	public class LoopModeControllerPingPong : ILoopModeController
 	{
 		private enum State
 		{
@@ -9,24 +9,14 @@
 		}
 
 		private State _currentState = State.Ping;
-		private bool _started = false;
 		
 		/// <summary>
-		/// Play the sequence once forward then back to the start [A][B][C][B][A] then pause and set time to 0
+		/// Play the sequence in a ping pong loop forever [A][B][C][B][A][B][C][B]...
 		/// </summary>
 		public void NextFrame(SpriteAnimator animator)
 		{
 			// If there's only one frame, no need to change it.
-			if (animator.FrameCount == 1 || animator.CurrentFrame == 0)
-			{
-				if (_started)
-				{
-					animator.SetCompleted(true);
-					return;
-				}
-
-				_started = true;
-			}
+			if (animator.FrameCount == 1) return;
 			
 			switch (_currentState)
 			{
