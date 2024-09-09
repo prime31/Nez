@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Nez.Sprites
+﻿namespace Nez.Sprites
 {
 	public partial class SpriteAnimator
 	{
