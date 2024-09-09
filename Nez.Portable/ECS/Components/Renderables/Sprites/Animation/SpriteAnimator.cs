@@ -58,7 +58,7 @@ namespace Nez.Sprites
 		public ILoopModeController CurrentLoopMode { get; private set; }
 		
 		/// <summary>
-		/// The amount of milliseconds remaining in the current frame
+		/// The amount of seconds remaining in the current frame
 		/// </summary>
 		public float FrameTimeLeft { get; private set; }
 
@@ -72,7 +72,7 @@ namespace Nez.Sprites
 			if (AnimationState != State.Running || CurrentAnimation == null)
 				return;
 
-			FrameTimeLeft += Time.DeltaTime;
+			FrameTimeLeft -= Time.DeltaTime;
 			if (ShouldChangeFrame())
 			{
 				CurrentLoopMode.NextFrame(this);
@@ -126,7 +126,7 @@ namespace Nez.Sprites
 		{
 			CurrentAnimation = Animations[name];
 			CurrentAnimationName = name;
-			FrameCount = Animations.Count;
+			FrameCount = CurrentAnimation.FrameRates.Length;
 			
 			SetFrame(0);
 			
@@ -163,7 +163,7 @@ namespace Nez.Sprites
 		{
 			CurrentFrame = frameIndex;
 			Sprite = CurrentAnimation.Sprites[frameIndex];
-			FrameTimeLeft = ConvertFrameRateToMilliseconds(CurrentAnimation.FrameRates[frameIndex]);
+			FrameTimeLeft = ConvertFrameRateToSeconds(CurrentAnimation.FrameRates[frameIndex]);
 		}
 
 		/// <summary>
@@ -191,13 +191,13 @@ namespace Nez.Sprites
 		}
 		
 		/// <summary>
-		/// Converts an animation frame rate (1/60s) to milliseconds
+		/// Converts an animation frame rate (1/60s) to seconds
 		/// </summary>
 		/// <param name="frameRate"></param>
-		/// <returns>The number of milliseconds as a float</returns>
-		private float ConvertFrameRateToMilliseconds(float frameRate)
+		/// <returns>The number of seconds as a float</returns>
+		private float ConvertFrameRateToSeconds(float frameRate)
 		{
-			return 1 / (frameRate * 60f * Speed);
+			return 1 / (frameRate * Speed);
 		}
 	}
 }
