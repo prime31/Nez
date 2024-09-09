@@ -38,7 +38,7 @@ namespace Nez.Sprites
 		/// <summary>
 		/// index of the current frame in sprite array of the current animation
 		/// </summary>
-		public int CurrentFrame { get; private set; }
+		public int CurrentFrame { get; set; }
 		
 		/// <summary>
 		/// amount of frames in the current animation
