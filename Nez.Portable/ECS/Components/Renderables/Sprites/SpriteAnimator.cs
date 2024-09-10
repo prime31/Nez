@@ -8,7 +8,7 @@ namespace Nez.Sprites
 	/// <summary>
 	/// SpriteAnimator handles the display and animation of a sprite
 	/// </summary>
-	public partial class SpriteAnimator : SpriteRenderer, IUpdatable
+	public class SpriteAnimator : SpriteRenderer, IUpdatable
 	{
 		public enum LoopMode
 		{
