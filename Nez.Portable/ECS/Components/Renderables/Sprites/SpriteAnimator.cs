@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Microsoft.Xna.Framework.Input;
 using Nez.Textures;
 
 
@@ -10,6 +11,48 @@ namespace Nez.Sprites
 	/// </summary>
 	public partial class SpriteAnimator : SpriteRenderer, IUpdatable
 	{
+		public enum LoopMode
+		{
+			/// <summary>
+			/// Play the sequence in a loop forever [A][B][C][A][B][C][A][B][C]...
+			/// </summary>
+			Loop,
+
+			/// <summary>
+			/// Play the sequence once [A][B][C] then pause and set time to 0 [A]
+			/// </summary>
+			Once,
+
+			/// <summary>
+			/// Plays back the animation once, [A][B][C]. When it reaches the end, it will keep playing the last frame and never stop playing
+			/// </summary>
+			ClampForever,
+
+			/// <summary>
+			/// Play the sequence in a ping pong loop forever [A][B][C][B][A][B][C][B]...
+			/// </summary>
+			PingPong,
+
+			/// <summary>
+			/// Play the sequence once forward then back to the start [A][B][C][B][A] then pause and set time to 0
+			/// </summary>
+			PingPongOnce
+		}
+		
+		public enum State
+		{
+			None,
+			Running,
+			Paused,
+			Completed
+		}
+
+		public enum PingPongLoopStates
+		{
+			Ping,
+			Pong
+		}
+		
 		/// <summary>
 		/// fired when an animation completes, includes the animation name;
 		/// </summary>
@@ -63,15 +106,14 @@ namespace Nez.Sprites
 		public LoopMode CurrentLoopMode { get; private set; }
 		
 		/// <summary>
-		/// Loop Mode Controller responsible for getting the next frame and checking end of animation.
-		/// </summary>
-		public ILoopModeController LoopModeController { get; private set; }
-		
-		/// <summary>
 		/// The amount of seconds remaining in the current frame
 		/// </summary>
 		public float FrameTimeLeft { get; private set; }
 
+		public PingPongLoopStates PingPongLoopState { get; set; }
+		
+		private bool _pingPongOnceAnimationStarted = false;
+		
 		public SpriteAnimator()
 		{ }
 
@@ -86,10 +128,66 @@ namespace Nez.Sprites
 			FrameTimeLeft -= Time.DeltaTime;
 			if (ShouldChangeFrame())
 			{
-				LoopModeController.NextFrame(this);
+				NextFrame();
 			}
 		}
 
+		public virtual void NextFrame()
+		{
+			switch (CurrentLoopMode)
+			{
+				case LoopMode.Loop:
+					SetFrame((CurrentFrame + 1) % FrameCount);
+					break;
+				
+				case LoopMode.Once:
+				case LoopMode.ClampForever:
+					var newFrame = CurrentFrame + 1;
+					if (newFrame >= FrameCount)
+					{
+						SetCompleted(CurrentLoopMode == LoopMode.Once);
+					}
+					else
+					{
+						SetFrame(newFrame);
+					}
+					break;
+				
+				case LoopMode.PingPong:
+					if (FrameCount == 1)
+					{
+						break;
+					}
+					
+					switch (PingPongLoopState)
+					{
+						case PingPongLoopStates.Ping:
+							ParsePingLoop();
+							break;
+						case PingPongLoopStates.Pong:
+							ParsePongLoop();
+							break;
+					}
+
+					ParsePingPongLoop();
+					break;
+				case LoopMode.PingPongOnce:
+					if (CurrentFrame == 0)
+					{
+						if (_pingPongOnceAnimationStarted)
+						{
+							SetCompleted(true);
+							break;
+						}
+
+						_pingPongOnceAnimationStarted = true;
+					}
+
+					ParsePingPongLoop();
+					break;
+			}
+		}
+		
 		/// <summary>
 		/// adds all the animations from the SpriteAtlas
 		/// </summary>
@@ -142,7 +240,6 @@ namespace Nez.Sprites
 			SetFrame(0);
 
 			CurrentLoopMode = loopMode;
-			LoopModeController = GetNewController(loopMode);
 			AnimationState = State.Running;
 		}
 		
@@ -189,6 +286,9 @@ namespace Nez.Sprites
 			{
 				SetFrame(0);
 			}
+
+			PingPongLoopState = PingPongLoopStates.Ping;
+			_pingPongOnceAnimationStarted = false;
 			
 			CurrentElapsedTime = 0;
 			AnimationState = State.Completed;
@@ -212,6 +312,47 @@ namespace Nez.Sprites
 		private float ConvertFrameRateToSeconds(float frameRate)
 		{
 			return 1 / (frameRate * Speed);
+		}
+
+		private void ParsePingPongLoop()
+		{
+			switch (PingPongLoopState)
+			{
+				case PingPongLoopStates.Ping:
+					ParsePingLoop();
+					break;
+				case PingPongLoopStates.Pong:
+					ParsePongLoop();
+					break;
+			}
+		}
+		
+		private void ParsePingLoop()
+		{
+			var newFrame = CurrentFrame + 1;
+			if (newFrame >= FrameCount)
+			{
+				PingPongLoopState = PingPongLoopStates.Pong;
+				ParsePongLoop();
+			}
+			else
+			{
+				SetFrame(newFrame);
+			}
+		}
+		
+		private void ParsePongLoop()
+		{
+			var newFrame = CurrentFrame - 1;
+			if (newFrame < 0)
+			{
+				PingPongLoopState = PingPongLoopStates.Ping;
+				ParsePingLoop();
+			}
+			else
+			{
+				SetFrame(newFrame);
+			}
 		}
 	}
 }
