@@ -219,6 +219,15 @@ namespace Nez
 			return IsKeyReleased(keyA) || IsKeyReleased(keyB);
 		}
 
+		/// <summary>
+		/// returns true if the keyboard state changed
+		/// </summary>
+		/// <returns><c>true</c>, if previous keyboard state does not equal current keyboard state, <c>false</c> otherwise.</returns>
+		public static bool HasKeyboardStateChanged()
+		{
+			return PreviousKeyboardState != CurrentKeyboardState;
+		}
+
 		#endregion
 
 
@@ -375,6 +384,15 @@ namespace Nez
 				pastPos *= _resolutionScale;
 				return ScaledMousePosition - pastPos;
 			}
+		}
+
+		/// <summary>
+		/// returns true if the mouse state changed
+		/// </summary>
+		/// <returns><c>true</c>, if previous mouse state does not equal current mouse state, <c>false</c> otherwise.</returns>
+		public static bool HasMouseStateChanged()
+		{
+			return PreviousMouseState != CurrentMouseState;
 		}
 
 		#endregion
