@@ -25,15 +25,15 @@ namespace Nez.PhysicsShapes
 			}
 		}
 
-		bool _areEdgeNormalsDirty = true;
+		public bool _areEdgeNormalsDirty = true;
 		public Vector2[] _edgeNormals;
 
 		// we cache the original details of our polygon
-		internal Vector2[] _originalPoints;
-		internal Vector2 _polygonCenter;
+		public Vector2[] _originalPoints;
+		public Vector2 _polygonCenter;
 
 		// used as an optimization for unrotated Box collisions
-		internal bool isBox;
+		public bool isBox;
 		public bool IsUnrotated = true;
 
 
@@ -51,7 +51,7 @@ namespace Nez.PhysicsShapes
 		/// <param name="radius">Radius.</param>
 		public Polygon(int vertCount, float radius) => SetPoints(BuildSymmetricalPolygon(vertCount, radius));
 
-		internal Polygon(Vector2[] points, bool isBox) : this(points)
+		public Polygon(Vector2[] points, bool isBox) : this(points)
 		{
 			this.isBox = isBox;
 		}
@@ -242,7 +242,7 @@ namespace Nez.PhysicsShapes
 
 		#region Shape abstract methods
 
-		internal override void RecalculateBounds(Collider collider)
+		public override void RecalculateBounds(Collider collider)
 		{
 			// if we dont have rotation or dont care about TRS we use localOffset as the center so we'll start with that
 			center = collider.LocalOffset;
