@@ -7,7 +7,7 @@ namespace Nez.PhysicsShapes
 	public class Circle : Shape
 	{
 		public float Radius;
-		internal float _originalRadius;
+		public float _originalRadius;
 
 
 		public Circle(float radius)
@@ -24,7 +24,7 @@ namespace Nez.PhysicsShapes
 		/// </summary>
 		/// <param name="radius">Radius.</param>
 		/// <param name="position">Position.</param>
-		internal void RecalculateBounds(float radius, Vector2 position)
+		public void RecalculateBounds(float radius, Vector2 position)
 		{
 			_originalRadius = radius;
 			Radius = radius;
@@ -33,7 +33,7 @@ namespace Nez.PhysicsShapes
 		}
 
 
-		internal override void RecalculateBounds(Collider collider)
+		public override void RecalculateBounds(Collider collider)
 		{
 			// if we dont have rotation or dont care about TRS we use localOffset as the center so we'll start with that
 			center = collider.LocalOffset;
