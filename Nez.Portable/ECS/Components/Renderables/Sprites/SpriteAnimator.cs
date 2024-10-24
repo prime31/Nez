@@ -209,7 +209,7 @@ namespace Nez.Sprites
 			return this;
 		}
 
-		public SpriteAnimator AddAnimation(string name, Sprite[] sprites, float fps = 10) => AddAnimation(name, fps, sprites);
+		public SpriteAnimator AddAnimation(string name, Sprite[] sprites, float fps = 10) => AddAnimation(name, _sprite, fps, sprites);
 
 		public SpriteAnimator AddAnimation(string name, float fps, params Sprite[] sprites)
 		{
