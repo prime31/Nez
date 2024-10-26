@@ -51,6 +51,11 @@ namespace Nez.Tiled
         /// </summary>
         public bool RequiresLargeTileCulling => MaxTileWidth > TileWidth || MaxTileHeight > TileHeight;
 
+		/// <summary>
+		/// preserves cached tileset images
+		/// </summary>
+		public bool PreserveTileSetImages = true;
+
         /// <summary>
         /// currently only used to tick all the Tilesets so they can update their animated tiles
         /// </summary>
@@ -69,8 +74,12 @@ namespace Nez.Tiled
 			if (!_isDisposed)
 			{
 				if (disposing) {
-					for (var i = 0; i < Tilesets.Count; i++) {
-						Tilesets[i].Image?.Dispose();
+					if (!PreserveTileSetImages)
+					{
+						for (var i = 0; i < Tilesets.Count; i++)
+						{
+							Tilesets[i].Image?.Dispose();
+						}
 					}
 
 					for (var i = 0; i < ImageLayers.Count; i++) {
