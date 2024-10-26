@@ -23,6 +23,9 @@ namespace Nez.ImGuiTools
 		public bool DisableKeyboardInputWhenGameWindowUnfocused = true;
 		public bool DisableMouseWheelWhenGameWindowUnfocused = true;
 
+		public Num.Vector2 GameWindowPos = new Num.Vector2();
+		public Num.Vector2 GameWindowSize = new Num.Vector2();
+
 		List<Type> _sceneSubclasses = new List<Type>();
 		System.Reflection.MethodInfo[] _themes;
 

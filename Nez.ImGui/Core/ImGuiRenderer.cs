@@ -384,6 +384,7 @@ namespace Nez.ImGuiTools
 					var drawCmd = cmdList.CmdBuffer[cmdi];
 					if (!_loadedTextures.ContainsKey(drawCmd.TextureId))
 					{
+						continue;
 						throw new InvalidOperationException(
 							$"Could not find a texture with id '{drawCmd.TextureId}', please check your bindings");
 					}

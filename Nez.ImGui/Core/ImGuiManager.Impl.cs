@@ -157,7 +157,9 @@ namespace Nez.ImGuiTools
 					}
 				}
 			}
-
+			//Copy window size/position info
+			GameWindowPos = ImGui.GetWindowPos();
+			GameWindowSize = ImGui.GetWindowSize();
 			ImGui.End();
 
 			ImGui.PopStyleVar();

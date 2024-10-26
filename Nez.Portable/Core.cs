@@ -14,7 +14,7 @@ using System.Diagnostics;
 
 [assembly: System.Runtime.CompilerServices.InternalsVisibleTo("Nez.ImGui")]
 [assembly: System.Runtime.CompilerServices.InternalsVisibleTo("Nez.Persistence")]
-
+[assembly: System.Runtime.CompilerServices.InternalsVisibleTo("StickBoy")]
 
 namespace Nez
 {
