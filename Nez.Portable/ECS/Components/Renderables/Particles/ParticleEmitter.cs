@@ -219,11 +219,11 @@ namespace Nez.Particles
 
 				if (_emitterConfig.Sprite == null)
 					batcher.Draw(Graphics.Instance.PixelTexture, pos + currentParticle.Position, currentParticle.Color,
-						currentParticle.rotation, Vector2.One, currentParticle.ParticleSize * 0.5f, SpriteEffects.None,
+						currentParticle.Rotation, Vector2.One, currentParticle.ParticleSize * 0.5f, SpriteEffects.None,
 						LayerDepth);
 				else
 					batcher.Draw(_emitterConfig.Sprite, pos + currentParticle.Position,
-						currentParticle.Color, currentParticle.rotation, _emitterConfig.Sprite.Center,
+						currentParticle.Color, currentParticle.Rotation, _emitterConfig.Sprite.Center,
 						currentParticle.ParticleSize / _emitterConfig.Sprite.SourceRect.Width, SpriteEffects.None,
 						LayerDepth);
 			}

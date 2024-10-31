@@ -25,7 +25,7 @@ namespace Nez.Particles
 
 		// stored at particle creation time and used for lerping the color
 		Color _finishColor;
-		internal float rotation;
+		public float Rotation;
 		float _rotationDelta;
 		float _radialAcceleration;
 		float _tangentialAcceleration;
@@ -131,7 +131,7 @@ namespace Nez.Particles
 			                                  emitterConfig.RotationStartVariance * Random.MinusOneToOne());
 			var endA = MathHelper.ToRadians(emitterConfig.RotationEnd +
 			                                emitterConfig.RotationEndVariance * Random.MinusOneToOne());
-			rotation = startA;
+			Rotation = startA;
 			_rotationDelta = (endA - startA) / _timeToLive;
 		}
 
@@ -201,7 +201,7 @@ namespace Nez.Particles
 				ParticleSize = MathHelper.Max(0, ParticleSize);
 
 				// update the rotation of the particle
-				rotation += _rotationDelta * Time.DeltaTime;
+				Rotation += _rotationDelta * Time.DeltaTime;
 
 
 				if (collisionConfig.Enabled)
