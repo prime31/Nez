@@ -73,7 +73,7 @@ namespace Nez
 					_isPositionDirty = _isRotationDirty = false;
 				}
 
-				return Shape.bounds;
+				return Shape.Bounds;
 			}
 		}
 
@@ -300,15 +300,15 @@ namespace Nez
 		public bool CollidesWith(Collider collider, Vector2 motion, out CollisionResult result)
 		{
 			// alter the shapes position so that it is in the place it would be after movement so we can check for overlaps
-			var oldPosition = Shape.position;
-			Shape.position += motion;
+			var oldPosition = Shape.Position;
+			Shape.Position += motion;
 
 			var didCollide = Shape.CollidesWithShape(collider.Shape, out result);
 			if (didCollide)
 				result.Collider = collider;
 
 			// return the shapes position to where it was before the check
-			Shape.position = oldPosition;
+			Shape.Position = oldPosition;
 
 			return didCollide;
 		}
@@ -360,8 +360,8 @@ namespace Nez
 			var neighbors = Physics.BoxcastBroadphaseExcludingSelf(this, ref colliderBounds, CollidesWithLayers);
 
 			// alter the shapes position so that it is in the place it would be after movement so we can check for overlaps
-			var oldPosition = Shape.position;
-			Shape.position += motion;
+			var oldPosition = Shape.Position;
+			Shape.Position += motion;
 
 			var didCollide = false;
 			foreach (var neighbor in neighbors)
@@ -375,13 +375,13 @@ namespace Nez
 					// hit. back off our motion and our Shape.position
 					result = neighborResult;
 					motion -= neighborResult.MinimumTranslationVector;
-					Shape.position -= neighborResult.MinimumTranslationVector;
+					Shape.Position -= neighborResult.MinimumTranslationVector;
 					didCollide = true;
 				}
 			}
 
 			// return the shapes position to where it was before the check
-			Shape.position = oldPosition;
+			Shape.Position = oldPosition;
 
 			return didCollide;
 		}

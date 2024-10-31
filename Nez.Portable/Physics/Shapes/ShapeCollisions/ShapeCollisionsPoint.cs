@@ -10,15 +10,15 @@ namespace Nez.PhysicsShapes
 			result = new CollisionResult();
 
 			// avoid the square root until we actually need it
-			var distanceSquared = Vector2.DistanceSquared(point, circle.position);
+			var distanceSquared = Vector2.DistanceSquared(point, circle.Position);
 			var sumOfRadii = 1 + circle.Radius;
 			var collided = distanceSquared < sumOfRadii * sumOfRadii;
 			if (collided)
 			{
-				result.Normal = Vector2.Normalize(point - circle.position);
+				result.Normal = Vector2.Normalize(point - circle.Position);
 				var depth = sumOfRadii - Mathf.Sqrt(distanceSquared);
 				result.MinimumTranslationVector = -depth * result.Normal;
-				result.Point = circle.position + result.Normal * circle.Radius;
+				result.Point = circle.Position + result.Normal * circle.Radius;
 
 				return true;
 			}
@@ -34,7 +34,7 @@ namespace Nez.PhysicsShapes
 			if (box.ContainsPoint(point))
 			{
 				// get the point in the space of the Box
-				result.Point = box.bounds.GetClosestPointOnRectangleBorderToPoint(point, out result.Normal);
+				result.Point = box.Bounds.GetClosestPointOnRectangleBorderToPoint(point, out result.Normal);
 				result.MinimumTranslationVector = point - result.Point;
 
 				return true;
@@ -51,11 +51,11 @@ namespace Nez.PhysicsShapes
 			if (poly.ContainsPoint(point))
 			{
 				float distanceSquared;
-				var closestPoint = Polygon.GetClosestPointOnPolygonToPoint(poly.Points, point - poly.position,
+				var closestPoint = Polygon.GetClosestPointOnPolygonToPoint(poly.Points, point - poly.Position,
 					out distanceSquared, out result.Normal);
 
 				result.MinimumTranslationVector = result.Normal * Mathf.Sqrt(distanceSquared);
-				result.Point = closestPoint + poly.position;
+				result.Point = closestPoint + poly.Position;
 
 				return true;
 			}

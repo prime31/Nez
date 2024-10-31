@@ -66,7 +66,7 @@ namespace Nez.PhysicsShapes
 					hit.Distance = movement.Length() * fraction;
 					hit.Normal = -movement;
 					hit.Normal.Normalize();
-					hit.Centroid = first.bounds.Center + movement * fraction;
+					hit.Centroid = first.Bounds.Center + movement * fraction;
 
 					return true;
 				}
@@ -104,9 +104,9 @@ namespace Nez.PhysicsShapes
 		{
 			// we need the top-left of our first box but it must include our motion. Collider only modifies position with the motion so we
 			// need to figure out what the motion was using just the position.
-			var positionOffset = first.position - (first.bounds.Location + first.bounds.Size / 2f);
-			var topLeft = first.bounds.Location + positionOffset - second.bounds.Max;
-			var fullSize = first.bounds.Size + second.bounds.Size;
+			var positionOffset = first.Position - (first.Bounds.Location + first.Bounds.Size / 2f);
+			var topLeft = first.Bounds.Location + positionOffset - second.Bounds.Max;
+			var fullSize = first.Bounds.Size + second.Bounds.Size;
 
 			return new RectangleF(topLeft.X, topLeft.Y, fullSize.X, fullSize.Y);
 		}
@@ -131,11 +131,11 @@ namespace Nez.PhysicsShapes
 				// if timeOfCollision is less than 0 this is an overlap
 				if (timeOfCollision < 0f)
 				{
-					hit.Centroid = first.position - hit.Normal * timeOfCollision;
+					hit.Centroid = first.Position - hit.Normal * timeOfCollision;
 				}
 				else
 				{
-					hit.Centroid = first.position + deltaMovement * timeOfCollision;
+					hit.Centroid = first.Position + deltaMovement * timeOfCollision;
 				}
 
 				return true;
@@ -170,7 +170,7 @@ namespace Nez.PhysicsShapes
 
 			// polygon verts are in local space so we need to convert one of the polys to be in the space of the other. We use the distance
 			// between them to do so.
-			var polygonOffset = first.position - second.position;
+			var polygonOffset = first.Position - second.Position;
 
 			// All the separation axes
 			var iNumAxes = 0;
@@ -194,7 +194,7 @@ namespace Nez.PhysicsShapes
 			for (int j = first.Points.Length - 1, i = 0; i < first.Points.Length; j = i, i++)
 			{
 				// we only need to check 2 axis for boxes
-				if (second.isBox && i == 2)
+				if (second.IsBox && i == 2)
 					break;
 
 				var point0 = first.Points[j];
@@ -213,7 +213,7 @@ namespace Nez.PhysicsShapes
 			for (int j = second.Points.Length - 1, i = 0; i < second.Points.Length; j = i, i++)
 			{
 				// we only need to check 2 axis for boxes
-				if (second.isBox && i == 2)
+				if (second.IsBox && i == 2)
 					break;
 
 				var point0 = second.Points[j];

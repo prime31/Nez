@@ -12,11 +12,11 @@ namespace Nez.PhysicsShapes
 
 			//http://ericleong.me/research/circle-circle/
 			// Find the closest point on the movement vector of the moving circle (first) to the center of the non-moving circle
-			var endPointOfCast = first.position + deltaMovement;
-			var d = ClosestPointOnLine(first.position, endPointOfCast, second.position);
+			var endPointOfCast = first.Position + deltaMovement;
+			var d = ClosestPointOnLine(first.Position, endPointOfCast, second.Position);
 
 			// Then find the distance between the closest point and the center of the non-moving circle
-			var closestDistanceSquared = Vector2.DistanceSquared(second.position, d);
+			var closestDistanceSquared = Vector2.DistanceSquared(second.Position, d);
 			var sumOfRadiiSquared = (first.Radius + second.Radius) * (first.Radius + second.Radius);
 
 			// If it is smaller than the sum of the sum of the radii, then a collision has occurred
@@ -29,18 +29,18 @@ namespace Nez.PhysicsShapes
 				if (d == endPointOfCast)
 				{
 					// extend the end point of the cast radius distance so we get a point that is perpindicular and recalc everything
-					endPointOfCast = first.position + deltaMovement + normalizedDeltaMovement * second.Radius;
-					d = ClosestPointOnLine(first.position, endPointOfCast, second.position);
-					closestDistanceSquared = Vector2.DistanceSquared(second.position, d);
+					endPointOfCast = first.Position + deltaMovement + normalizedDeltaMovement * second.Radius;
+					d = ClosestPointOnLine(first.Position, endPointOfCast, second.Position);
+					closestDistanceSquared = Vector2.DistanceSquared(second.Position, d);
 				}
 
 				var backDist = Mathf.Sqrt(sumOfRadiiSquared - closestDistanceSquared);
 
 				hit.Centroid = d - backDist * normalizedDeltaMovement;
-				hit.Normal = Vector2.Normalize(hit.Centroid - second.position);
-				hit.Fraction = (hit.Centroid.X - first.position.X) / deltaMovement.X;
-				Vector2.Distance(ref first.position, ref hit.Centroid, out hit.Distance);
-				hit.Point = second.position + hit.Normal * second.Radius;
+				hit.Normal = Vector2.Normalize(hit.Centroid - second.Position);
+				hit.Fraction = (hit.Centroid.X - first.Position.X) / deltaMovement.X;
+				Vector2.Distance(ref first.Position, ref hit.Centroid, out hit.Distance);
+				hit.Point = second.Position + hit.Normal * second.Radius;
 
 				return true;
 			}
@@ -54,15 +54,15 @@ namespace Nez.PhysicsShapes
 			result = new CollisionResult();
 
 			// avoid the square root until we actually need it
-			var distanceSquared = Vector2.DistanceSquared(first.position, second.position);
+			var distanceSquared = Vector2.DistanceSquared(first.Position, second.Position);
 			var sumOfRadii = first.Radius + second.Radius;
 			var collided = distanceSquared < sumOfRadii * sumOfRadii;
 			if (collided)
 			{
-				result.Normal = Vector2.Normalize(first.position - second.position);
+				result.Normal = Vector2.Normalize(first.Position - second.Position);
 				var depth = sumOfRadii - Mathf.Sqrt(distanceSquared);
 				result.MinimumTranslationVector = -depth * result.Normal;
-				result.Point = second.position + result.Normal * second.Radius;
+				result.Point = second.Position + result.Normal * second.Radius;
 
 				// this gets the actual point of collision which may or may not be useful so we'll leave it here for now
 				//var collisionPointX = ( ( first.position.X * second.radius ) + ( second.position.X * first.radius ) ) / sumOfRadii;
@@ -88,22 +88,22 @@ namespace Nez.PhysicsShapes
 			result = new CollisionResult();
 
 			var closestPointOnBounds =
-				box.bounds.GetClosestPointOnRectangleBorderToPoint(circle.position, out result.Normal);
+				box.Bounds.GetClosestPointOnRectangleBorderToPoint(circle.Position, out result.Normal);
 
 			// deal with circles whos center is in the box first since its cheaper to see if we are contained
-			if (box.ContainsPoint(circle.position))
+			if (box.ContainsPoint(circle.Position))
 			{
 				result.Point = closestPointOnBounds;
 
 				// calculate mtv. Find the safe, non-collided position and get the mtv from that.
 				var safePlace = closestPointOnBounds + result.Normal * circle.Radius;
-				result.MinimumTranslationVector = circle.position - safePlace;
+				result.MinimumTranslationVector = circle.Position - safePlace;
 
 				return true;
 			}
 
 			float sqrDistance;
-			Vector2.DistanceSquared(ref closestPointOnBounds, ref circle.position, out sqrDistance);
+			Vector2.DistanceSquared(ref closestPointOnBounds, ref circle.Position, out sqrDistance);
 
 			// see if the point on the box is less than radius from the circle
 			if (sqrDistance == 0)
@@ -112,7 +112,7 @@ namespace Nez.PhysicsShapes
 			}
 			else if (sqrDistance <= circle.Radius * circle.Radius)
 			{
-				result.Normal = circle.position - closestPointOnBounds;
+				result.Normal = circle.Position - closestPointOnBounds;
 				var depth = result.Normal.Length() - circle.Radius;
 
 				result.Point = closestPointOnBounds;
@@ -131,7 +131,7 @@ namespace Nez.PhysicsShapes
 			result = new CollisionResult();
 
 			// circle position in the polygons coordinates
-			var poly2Circle = circle.position - polygon.position;
+			var poly2Circle = circle.Position - polygon.Position;
 
 			// first, we need to find the closest distance from the circle to the polygon
 			float distanceSquared;
@@ -141,7 +141,7 @@ namespace Nez.PhysicsShapes
 			// make sure the squared distance is less than our radius squared else we are not colliding. Note that if the Circle is fully
 			// contained in the Polygon the distance could be larger than the radius. Because of that we also  make sure the circle position
 			// is not inside the poly.
-			var circleCenterInsidePoly = polygon.ContainsPoint(circle.position);
+			var circleCenterInsidePoly = polygon.ContainsPoint(circle.Position);
 			if (distanceSquared > circle.Radius * circle.Radius && !circleCenterInsidePoly)
 				return false;
 
@@ -166,7 +166,7 @@ namespace Nez.PhysicsShapes
 			}
 
 			result.MinimumTranslationVector = mtv;
-			result.Point = closestPoint + polygon.position;
+			result.Point = closestPoint + polygon.Position;
 
 			return true;
 		}
@@ -178,7 +178,7 @@ namespace Nez.PhysicsShapes
 			result = new CollisionResult();
 
 			var closestPointIndex = -1;
-			var poly2Circle = circle.position - polygon.position;
+			var poly2Circle = circle.Position - polygon.Position;
 			var poly2CircleNormalized = Vector2.Normalize(poly2Circle);
 			var max = float.MinValue;
 
@@ -208,7 +208,7 @@ namespace Nez.PhysicsShapes
 			if (postPointIndex == polygon.Points.Length)
 				postPointIndex = 0;
 
-			var circleCenter = circle.position - polygon.position;
+			var circleCenter = circle.Position - polygon.Position;
 			var closest1 = ClosestPointOnLine(polygon.Points[prePointIndex], polygon.Points[closestPointIndex],
 				circleCenter);
 			var closest2 = ClosestPointOnLine(polygon.Points[closestPointIndex], polygon.Points[postPointIndex],
@@ -229,7 +229,7 @@ namespace Nez.PhysicsShapes
 				seperationDistance = circle.Radius - Mathf.Sqrt(distance1);
 				var edge = polygon.Points[closestPointIndex] - polygon.Points[prePointIndex];
 				result.Normal = new Vector2(edge.Y, -edge.X);
-				result.Point = polygon.position + closest1;
+				result.Point = polygon.Position + closest1;
 			}
 			else
 			{
@@ -240,7 +240,7 @@ namespace Nez.PhysicsShapes
 				seperationDistance = circle.Radius - Mathf.Sqrt(distance2);
 				var edge = polygon.Points[postPointIndex] - polygon.Points[closestPointIndex];
 				result.Normal = new Vector2(edge.Y, -edge.X);
-				result.Point = polygon.position + closest2;
+				result.Point = polygon.Position + closest2;
 			}
 
 			result.Normal.Normalize();

@@ -7,13 +7,13 @@ namespace Nez.PhysicsShapes
 	public class Circle : Shape
 	{
 		public float Radius;
-		internal float _originalRadius;
+		public float OriginalRadius;
 
 
 		public Circle(float radius)
 		{
 			Radius = radius;
-			_originalRadius = radius;
+			OriginalRadius = radius;
 		}
 
 
@@ -23,28 +23,28 @@ namespace Nez.PhysicsShapes
 		/// internal hack used by Particles so they can reuse a Circle for all collision checks
 		/// </summary>
 		/// <param name="radius">Radius.</param>
-		/// <param name="position">Position.</param>
-		internal void RecalculateBounds(float radius, Vector2 position)
+		/// <param name="pos">Position.</param>
+		public void RecalculateBounds(float radius, Vector2 pos)
 		{
-			_originalRadius = radius;
+			OriginalRadius = radius;
 			Radius = radius;
-			this.position = position;
-			bounds = new RectangleF(position.X - radius, position.Y - radius, radius * 2f, radius * 2f);
+			Position = pos;
+			Bounds = new RectangleF(pos.X - radius, pos.Y - radius, radius * 2f, radius * 2f);
 		}
 
 
-		internal override void RecalculateBounds(Collider collider)
+		public override void RecalculateBounds(Collider collider)
 		{
 			// if we dont have rotation or dont care about TRS we use localOffset as the center so we'll start with that
-			center = collider.LocalOffset;
+			Center = collider.LocalOffset;
 
 			if (collider.ShouldColliderScaleAndRotateWithTransform)
 			{
-				// we only scale lineraly being a circle so we'll use the max value
+				// we only scale linearly being a circle so we'll use the max value
 				var scale = collider.Entity.Transform.Scale;
 				var hasUnitScale = scale.X == 1 && scale.Y == 1;
 				var maxScale = Math.Max(scale.X, scale.Y);
-				Radius = _originalRadius * maxScale;
+				Radius = OriginalRadius * maxScale;
 
 				if (collider.Entity.Transform.Rotation != 0)
 				{
@@ -53,13 +53,13 @@ namespace Nez.PhysicsShapes
 					var offsetLength = hasUnitScale
 						? collider._localOffsetLength
 						: (collider.LocalOffset * collider.Entity.Transform.Scale).Length();
-					center = Mathf.PointOnCircle(Vector2.Zero, offsetLength,
+					Center = Mathf.PointOnCircle(Vector2.Zero, offsetLength,
 						collider.Entity.Transform.RotationDegrees + offsetAngle);
 				}
 			}
 
-			position = collider.Entity.Transform.Position + center;
-			bounds = new RectangleF(position.X - Radius, position.Y - Radius, Radius * 2f, Radius * 2f);
+			Position = collider.Entity.Transform.Position + Center;
+			Bounds = new RectangleF(Position.X - Radius, Position.Y - Radius, Radius * 2f, Radius * 2f);
 		}
 
 
@@ -69,10 +69,10 @@ namespace Nez.PhysicsShapes
 
 			// Box is only optimized for unrotated
 			if (other is Box && (other as Box).IsUnrotated)
-				return Collisions.RectToCircle(ref other.bounds, position, Radius);
+				return Collisions.RectToCircle(ref other.Bounds, Position, Radius);
 
 			if (other is Circle)
-				return Collisions.CircleToCircle(position, Radius, other.position, (other as Circle).Radius);
+				return Collisions.CircleToCircle(Position, Radius, other.Position, (other as Circle).Radius);
 
 			if (other is Polygon)
 				return ShapeCollisions.CircleToPolygon(this, other as Polygon, out result);
@@ -110,7 +110,7 @@ namespace Nez.PhysicsShapes
 		/// <returns><c>true</c> if the provided coordinates lie inside this <see cref="Circle"/>; <c>false</c> otherwise.</returns>
 		public override bool ContainsPoint(Vector2 point)
 		{
-			return ((point - position).LengthSquared() <= Radius * Radius);
+			return ((point - Position).LengthSquared() <= Radius * Radius);
 		}
 
 		#endregion
@@ -123,7 +123,7 @@ namespace Nez.PhysicsShapes
 		/// <returns><see cref="Vector2"/> representing the point on this <see cref="Circle"/>'s surface at the specified angle</returns>
 		public Vector2 GetPointAlongEdge(float angle)
 		{
-			return new Vector2(position.X + (Radius * Mathf.Cos(angle)), position.Y + (Radius * Mathf.Sin(angle)));
+			return new Vector2(Position.X + (Radius * Mathf.Cos(angle)), Position.Y + (Radius * Mathf.Sin(angle)));
 		}
 
 
@@ -145,7 +145,7 @@ namespace Nez.PhysicsShapes
 		/// <param name="point">Point.</param>
 		public bool ContainsPoint(ref Vector2 point)
 		{
-			return (point - position).LengthSquared() <= Radius * Radius;
+			return (point - Position).LengthSquared() <= Radius * Radius;
 		}
 
 

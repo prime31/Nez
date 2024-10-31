@@ -19,21 +19,21 @@ namespace Nez.PhysicsShapes
 		{
 			get
 			{
-				if (_areEdgeNormalsDirty)
+				if (AreEdgeNormalsDirty)
 					BuildEdgeNormals();
 				return _edgeNormals;
 			}
 		}
 
-		bool _areEdgeNormalsDirty = true;
+		public bool AreEdgeNormalsDirty = true;
 		public Vector2[] _edgeNormals;
 
 		// we cache the original details of our polygon
-		internal Vector2[] _originalPoints;
-		internal Vector2 _polygonCenter;
+		public Vector2[] OriginalPoints;
+		public Vector2 PolygonCenter;
 
 		// used as an optimization for unrotated Box collisions
-		internal bool isBox;
+		public bool IsBox;
 		public bool IsUnrotated = true;
 
 
@@ -51,10 +51,7 @@ namespace Nez.PhysicsShapes
 		/// <param name="radius">Radius.</param>
 		public Polygon(int vertCount, float radius) => SetPoints(BuildSymmetricalPolygon(vertCount, radius));
 
-		internal Polygon(Vector2[] points, bool isBox) : this(points)
-		{
-			this.isBox = isBox;
-		}
+		public Polygon(Vector2[] points, bool isBox) : this(points) => this.IsBox = isBox;
 
 		/// <summary>
 		/// resets the points and recalculates center and edge normals
@@ -65,8 +62,8 @@ namespace Nez.PhysicsShapes
 			Points = points;
 			RecalculateCenterAndEdgeNormals();
 
-			_originalPoints = new Vector2[points.Length];
-			Array.Copy(points, _originalPoints, points.Length);
+			OriginalPoints = new Vector2[points.Length];
+			Array.Copy(points, OriginalPoints, points.Length);
 		}
 
 		/// <summary>
@@ -74,8 +71,8 @@ namespace Nez.PhysicsShapes
 		/// </summary>
 		public void RecalculateCenterAndEdgeNormals()
 		{
-			_polygonCenter = FindPolygonCenter(Points);
-			_areEdgeNormalsDirty = true;
+			PolygonCenter = FindPolygonCenter(Points);
+			AreEdgeNormalsDirty = true;
 		}
 
 		/// <summary>
@@ -84,7 +81,7 @@ namespace Nez.PhysicsShapes
 		void BuildEdgeNormals()
 		{
 			// for boxes we only require 2 edges since the other 2 are parallel
-			var totalEdges = isBox ? 2 : Points.Length;
+			var totalEdges = IsBox ? 2 : Points.Length;
 			if (_edgeNormals == null || _edgeNormals.Length != totalEdges)
 				_edgeNormals = new Vector2[totalEdges];
 
@@ -242,16 +239,16 @@ namespace Nez.PhysicsShapes
 
 		#region Shape abstract methods
 
-		internal override void RecalculateBounds(Collider collider)
+		public override void RecalculateBounds(Collider collider)
 		{
 			// if we dont have rotation or dont care about TRS we use localOffset as the center so we'll start with that
-			center = collider.LocalOffset;
+			Center = collider.LocalOffset;
 
 			if (collider.ShouldColliderScaleAndRotateWithTransform)
 			{
 				var hasUnitScale = true;
 				Matrix2D tempMat;
-				var combinedMatrix = Matrix2D.CreateTranslation(-_polygonCenter);
+				var combinedMatrix = Matrix2D.CreateTranslation(-PolygonCenter);
 
 				if (collider.Entity.Transform.Scale != Vector2.One)
 				{
@@ -263,7 +260,7 @@ namespace Nez.PhysicsShapes
 
 					// scale our offset and set it as center. If we have rotation also it will be reset below
 					var scaledOffset = collider.LocalOffset * collider.Entity.Transform.Scale;
-					center = scaledOffset;
+					Center = scaledOffset;
 				}
 
 				if (collider.Entity.Transform.Rotation != 0)
@@ -277,26 +274,26 @@ namespace Nez.PhysicsShapes
 					var offsetLength = hasUnitScale
 						? collider._localOffsetLength
 						: (collider.LocalOffset * collider.Entity.Transform.Scale).Length();
-					center = Mathf.PointOnCircle(Vector2.Zero, offsetLength,
+					Center = Mathf.PointOnCircle(Vector2.Zero, offsetLength,
 						collider.Entity.Transform.RotationDegrees + offsetAngle);
 				}
 
-				Matrix2D.CreateTranslation(ref _polygonCenter, out tempMat); // translate back center
+				Matrix2D.CreateTranslation(ref PolygonCenter, out tempMat); // translate back center
 				Matrix2D.Multiply(ref combinedMatrix, ref tempMat, out combinedMatrix);
 
 				// finaly transform our original points
-				Vector2Ext.Transform(_originalPoints, ref combinedMatrix, Points);
+				Vector2Ext.Transform(OriginalPoints, ref combinedMatrix, Points);
 
 				IsUnrotated = collider.Entity.Transform.Rotation == 0;
 
 				// we only need to rebuild our edge normals if we rotated
 				if (collider._isRotationDirty)
-					_areEdgeNormalsDirty = true;
+					AreEdgeNormalsDirty = true;
 			}
 
-			position = collider.Entity.Transform.Position + center;
-			bounds = RectangleF.RectEncompassingPoints(Points);
-			bounds.Location += position;
+			Position = collider.Entity.Transform.Position + Center;
+			Bounds = RectangleF.RectEncompassingPoints(Points);
+			Bounds.Location += Position;
 		}
 
 		public override bool Overlaps(Shape other)
@@ -351,7 +348,7 @@ namespace Nez.PhysicsShapes
 		public override bool ContainsPoint(Vector2 point)
 		{
 			// normalize the point to be in our Polygon coordinate space
-			point -= position;
+			point -= Position;
 
 			var isInside = false;
 			for (int i = 0, j = Points.Length - 1; i < Points.Length; j = i++)

@@ -120,13 +120,13 @@ namespace Nez
 		}
 
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		void RenderPolygon(Polygon polygon, Vector2 lightPos) => RenderVerts(polygon.position, lightPos, polygon.Points);
+		void RenderPolygon(Polygon polygon, Vector2 lightPos) => RenderVerts(polygon.Position, lightPos, polygon.Points);
 
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		void RenderCircle(Circle circle, Vector2 lightPos)
 		{
 			var points = Polygon.BuildSymmetricalPolygon(CIRCLE_APPROXIMATION_VERTS, circle.Radius);
-			RenderVerts(circle.position, lightPos, points);
+			RenderVerts(circle.Position, lightPos, points);
 		}
 
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]

@@ -8,12 +8,12 @@ namespace Nez.PhysicsShapes.BETA
 		public static bool IntersectMovingCircleBox(Circle s, Box b, Vector2 movement, out float time)
 		{
 			// compute the AABB resulting from expanding b by sphere radius r
-			var e = b.bounds;
+			var e = b.Bounds;
 			e.Inflate(s.Radius, s.Radius);
 
 			// Intersect ray against expanded expanded Rectangle e. Exit with no intersection if ray
 			// misses e, else get intersection point p and time t as result
-			var ray = new Ray2D(s.position - movement, s.position);
+			var ray = new Ray2D(s.Position - movement, s.Position);
 			if (!e.RayIntersects(ref ray, out time) && time > 1.0f)
 				return false;
 
@@ -23,13 +23,13 @@ namespace Nez.PhysicsShapes.BETA
 			// compute which min and max faces of b the intersection point p lies outside of. Note, u and v cannot have the
 			// same bits set and they must have at least one bit set among them.
 			int u = 0, v = 0;
-			if (point.X < b.bounds.Left)
+			if (point.X < b.Bounds.Left)
 				u |= 1;
-			if (point.X > b.bounds.Right)
+			if (point.X > b.Bounds.Right)
 				v |= 1;
-			if (point.Y < b.bounds.Top)
+			if (point.Y < b.Bounds.Top)
 				u |= 2;
-			if (point.Y > b.bounds.Bottom)
+			if (point.Y > b.Bounds.Bottom)
 				v |= 2;
 
 			// 'or' all set bits together into a bitmask (note u + v == u | v)
@@ -78,7 +78,7 @@ namespace Nez.PhysicsShapes.BETA
 		public static bool IntersectMovingCircleCircle(Circle s0, Circle s1, Vector2 movement, out float time)
 		{
 			time = -1;
-			var s = s1.position - s0.position; // vector between circles
+			var s = s1.Position - s0.Position; // vector between circles
 			var r = s1.Radius + s0.Radius; // sum of radii
 
 			float c;
@@ -117,7 +117,7 @@ namespace Nez.PhysicsShapes.BETA
 			second.Radius += first.Radius;
 
 			RaycastHit hit;
-			var result = ShapeCollisions.LineToCircle(first.position, first.position + movement, second, out hit);
+			var result = ShapeCollisions.LineToCircle(first.Position, first.Position + movement, second, out hit);
 			time = hit.Fraction;
 
 			// undo the radius addition
@@ -137,10 +137,10 @@ namespace Nez.PhysicsShapes.BETA
 		public static bool TestCircleBox(Circle circle, Box box, out Vector2 point)
 		{
 			// find the point closest to the sphere center
-			point = box.bounds.GetClosestPointOnRectangleFToPoint(circle.position);
+			point = box.Bounds.GetClosestPointOnRectangleFToPoint(circle.Position);
 
 			// circle and box intersect if sqr distance from circle center to point is less than the circle sqr radius
-			var v = point - circle.position;
+			var v = point - circle.Position;
 			float dist;
 			Vector2.Dot(ref v, ref v, out dist);
 

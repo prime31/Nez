@@ -56,7 +56,7 @@ namespace Nez
 			if (radius != circle.Radius)
 			{
 				circle.Radius = radius;
-				circle._originalRadius = radius;
+				circle.OriginalRadius = radius;
 				_isPositionDirty = true;
 
 				if (Entity != null && _isParentEntityAddedToScene && Enabled)
@@ -72,11 +72,11 @@ namespace Nez
 		public override void DebugRender(Batcher batcher)
 		{
 			batcher.DrawHollowRect(Bounds, Debug.Colors.ColliderBounds, Debug.Size.LineSizeMultiplier);
-			batcher.DrawCircle(Shape.position, ((Circle) Shape).Radius, Debug.Colors.ColliderEdge,
+			batcher.DrawCircle(Shape.Position, ((Circle) Shape).Radius, Debug.Colors.ColliderEdge,
 				Debug.Size.LineSizeMultiplier);
 			batcher.DrawPixel(Entity.Transform.Position, Debug.Colors.ColliderPosition,
 				4 * Debug.Size.LineSizeMultiplier);
-			batcher.DrawPixel(Shape.position, Debug.Colors.ColliderCenter, 2 * Debug.Size.LineSizeMultiplier);
+			batcher.DrawPixel(Shape.Position, Debug.Colors.ColliderCenter, 2 * Debug.Size.LineSizeMultiplier);
 		}
 
 		public override string ToString()

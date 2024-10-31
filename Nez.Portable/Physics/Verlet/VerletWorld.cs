@@ -164,7 +164,7 @@ namespace Nez.Verlet
 				else
 				{
 					_tempCircle.Radius = p.Radius;
-					_tempCircle.position = p.Position;
+					_tempCircle.Position = p.Position;
 
 					if (_tempCircle.CollidesWithShape(collider.Shape, out collisionResult))
 					{

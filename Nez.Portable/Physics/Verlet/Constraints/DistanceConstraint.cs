@@ -169,12 +169,12 @@ namespace Nez.Verlet
 			var maxX = Math.Max(_particleOne.Position.X, _particleTwo.Position.X);
 			var minY = Math.Min(_particleOne.Position.Y, _particleTwo.Position.Y);
 			var maxY = Math.Max(_particleOne.Position.Y, _particleTwo.Position.Y);
-			_polygon.bounds = RectangleF.FromMinMax(minX, minY, maxX, maxY);
+			_polygon.Bounds = RectangleF.FromMinMax(minX, minY, maxX, maxY);
 
 			Vector2 midPoint;
 			PreparePolygonForCollisionChecks(out midPoint);
 
-			var colliders = Physics.BoxcastBroadphase(ref _polygon.bounds, collidesWithLayers);
+			var colliders = Physics.BoxcastBroadphase(ref _polygon.Bounds, collidesWithLayers);
 			foreach (var collider in colliders)
 			{
 				CollisionResult result;
@@ -226,9 +226,9 @@ namespace Nez.Verlet
 		{
 			// set our Polygon points
 			midPoint = Vector2.Lerp(_particleOne.Position, _particleTwo.Position, 0.5f);
-			_polygon.position = midPoint;
-			_polygon.Points[0] = _particleOne.Position - _polygon.position;
-			_polygon.Points[1] = _particleTwo.Position - _polygon.position;
+			_polygon.Position = midPoint;
+			_polygon.Points[0] = _particleOne.Position - _polygon.Position;
+			_polygon.Points[1] = _particleTwo.Position - _polygon.Position;
 			_polygon.RecalculateCenterAndEdgeNormals();
 		}
 
