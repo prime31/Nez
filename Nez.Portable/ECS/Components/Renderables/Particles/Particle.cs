@@ -14,18 +14,18 @@ namespace Nez.Particles
 		/// </summary>
 		static Circle _circleCollisionShape = new Circle(0);
 
-		internal Vector2 position;
-		internal Vector2 spawnPosition;
+		public Vector2 position;
+		public Vector2 spawnPosition;
 		Vector2 _direction;
 
-		internal Color color;
+		public Color color;
 
 		// stored at particle creation time and used for lerping the color
 		Color _startColor;
 
 		// stored at particle creation time and used for lerping the color
 		Color _finishColor;
-		internal float rotation;
+		public float rotation;
 		float _rotationDelta;
 		float _radialAcceleration;
 		float _tangentialAcceleration;
@@ -33,7 +33,7 @@ namespace Nez.Particles
 		float _radiusDelta;
 		float _angle;
 		float _degreesPerSecond;
-		internal float particleSize;
+		public float particleSize;
 		float _particleSizeDelta;
 
 		float _timeToLive;
