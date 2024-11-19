@@ -10,7 +10,7 @@
 		<OutputType>Library</OutputType>
 		<RootNamespace>Nez</RootNamespace>
 		<AssemblyName>Nez</AssemblyName>
-		<TargetFramework>net7.0</TargetFramework>
+		<TargetFramework>net8.0</TargetFramework>
 		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
 		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
 		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
