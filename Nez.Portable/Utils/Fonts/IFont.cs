@@ -27,6 +27,15 @@ namespace Nez
 		/// <param name="text">Text.</param>
 		Vector2 MeasureString(StringBuilder text);
 
+
+		/// <summary>
+		/// Wrap text within max line width
+		/// </summary>
+		/// <param name="text">The text to wrap</param>
+		/// <param name="maxLineWidth">Max line width to wrap</param>
+		/// <returns></returns>
+		string WrapText(string text, float maxLineWidth);
+
 		/// <summary>
 		/// returns true if the character exists in the font or false if it does not
 		/// </summary>

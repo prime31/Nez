@@ -362,6 +362,10 @@ namespace Nez
 			return _font.MeasureString( text );
 		}
 
+		string IFont.WrapText(string text, float maxLineWidth)
+		{
+			return text;
+		}
 	}
 
 #endif
