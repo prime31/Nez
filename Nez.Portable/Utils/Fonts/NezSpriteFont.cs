@@ -27,6 +27,10 @@ namespace Nez
 			_glyphs = font.GetGlyphs();
 		}
 
+		public string WrapText(string text, float maxLineWidth) 
+		{
+			return text;
+		}
 
 		/// <summary>
 		/// Returns the size of a string when rendered in this font.

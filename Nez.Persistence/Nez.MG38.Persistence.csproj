@@ -8,7 +8,7 @@
 		<OutputType>Library</OutputType>
 		<RootNamespace>Nez.Persistence</RootNamespace>
 		<AssemblyName>Nez.Persistence</AssemblyName>
-		<TargetFramework>netstandard2.0</TargetFramework>
+		<TargetFramework>net8.0</TargetFramework>
 		<AllowUnsafeBlocks>True</AllowUnsafeBlocks>
 		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
 		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>

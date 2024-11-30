@@ -61,7 +61,11 @@ namespace Nez
 				}
 			}
 
+#if FNA
 			_shakeOffset = _shakeOffset.Round(); //Without this, you get artifacts in FNA on pixel games
+#else
+			_shakeOffset.Round();
+#endif
 			Entity.Scene.Camera.Position += _shakeOffset;
 		}
 	}
