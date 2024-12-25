@@ -9,27 +9,36 @@ using Nez.Tweens;
 namespace Nez
 {
 	/// <summary>
-	/// A cascade of opening vertical blinds
-	/// based on: https://gl-transitions.com/editor/windowslice
+	/// Dissolve using a generated Perlin noise pattern
+	/// based on: https://gl-transitions.com/editor/perlin
 	/// </summary>
-	public class WindowSliceTransition : SceneTransition
+	public class PerlinTransition : SceneTransition
 	{
 		/// <summary>
-		/// Number of window slices. Defaults to 10. (1 - 100)
+		/// Scale of the noise. Defaults to 4.0
 		/// </summary>
-		/// <value>The number of slices.</value>
-		public float Count
+		/// <value>The scale of the Perlin noise.</value>
+		public float Scale
 		{
-			set => _effect.Parameters["_count"].SetValue(value);
+			set => _effect.Parameters["_scale"].SetValue(value);
 		}
 
 		/// <summary>
-		/// Duration and speed of each slice. Defaults to 0.5. (0.0 - 1.0) 
+		/// Smoothness of the noise. Defaults to 0.01. (0.0 - 1.0)
 		/// </summary>
-		/// <value>The smoothness amount.</value>
+		/// <value>The smoothness of the noise pattern</value>
 		public float Smoothness
 		{
 			set => _effect.Parameters["_smoothness"].SetValue(value);
+		}
+
+		/// <summary>
+		/// Seed for the Perlin noise. Defaults to 12.9898
+		/// </summary>
+		/// <value>The seed for the noise generator</value>
+		public float Seed
+		{
+			set => _effect.Parameters["_seed"].SetValue(value);
 		}
 
 		/// <summary>
@@ -45,18 +54,18 @@ namespace Nez
 		Effect _effect;
 		Rectangle _destinationRect;
 
-
-		public WindowSliceTransition(Func<Scene> sceneLoadAction) : base(sceneLoadAction, true)
+		public PerlinTransition(Func<Scene> sceneLoadAction) : base(sceneLoadAction, true)
 		{
 			_destinationRect = PreviousSceneRender.Bounds;
 
 			// load Effect and set defaults
-			_effect = Core.Content.LoadEffect("Content/nez/effects/transitions/WindowSlice.mgfxo");
-			Count = 10;
-			Smoothness = 0.5f;
+			_effect = Core.Content.LoadEffect("Content/nez/effects/transitions/Perlin.mgfxo");
+			Scale = 4.0f;
+			Smoothness = 0.01f;
+			Seed = 12.9898f;
 		}
 
-		public WindowSliceTransition() : this(null)
+		public PerlinTransition() : this(null)
 		{ }
 
 		public override IEnumerator OnBeginTransition()

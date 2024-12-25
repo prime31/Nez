@@ -45,6 +45,9 @@ namespace Nez
 			ZoomQuickness = 0.8f;
 		}
 
+		public SimpleZoomTransition() : this(null)
+		{ }
+
 		public override IEnumerator OnBeginTransition()
 		{
 			yield return null;

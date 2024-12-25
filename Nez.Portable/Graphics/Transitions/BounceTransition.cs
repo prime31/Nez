@@ -9,27 +9,36 @@ using Nez.Tweens;
 namespace Nez
 {
 	/// <summary>
-	/// A cascade of opening vertical blinds
-	/// based on: https://gl-transitions.com/editor/windowslice
+	/// Screen falls down and bounces at the bottom
+	/// based on: https://gl-transitions.com/editor/Bounce
 	/// </summary>
-	public class WindowSliceTransition : SceneTransition
+	public class BounceTransition : SceneTransition
 	{
 		/// <summary>
-		/// Number of window slices. Defaults to 10. (1 - 100)
+		/// Color of the dropshadow. Uses alpha. Defaults to Color.FromNonPremultiplied(0, 0, 0, 153).
 		/// </summary>
-		/// <value>The number of slices.</value>
-		public float Count
+		/// <value>The color of the dropshadow.</value>
+		public Vector4 ShadowColor
 		{
-			set => _effect.Parameters["_count"].SetValue(value);
+			set => _effect.Parameters["_shadowColor"].SetValue(value);
 		}
 
 		/// <summary>
-		/// Duration and speed of each slice. Defaults to 0.5. (0.0 - 1.0) 
+		/// The height of the dropshadow. Defaults to 0.075 (0.0 - 1.0)
 		/// </summary>
-		/// <value>The smoothness amount.</value>
-		public float Smoothness
+		/// <value>The height of the dropshadow.</value>
+		public float ShadowHeight
 		{
-			set => _effect.Parameters["_smoothness"].SetValue(value);
+			set => _effect.Parameters["_shadowHeight"].SetValue(value);
+		}
+
+		/// <summary>
+		/// Number of times to bounce. Defaults to 3.
+		/// </summary>
+		/// <value>The number of bounces</value>
+		public float Bounces
+		{
+			set => _effect.Parameters["_bounces"].SetValue(value);
 		}
 
 		/// <summary>
@@ -45,18 +54,18 @@ namespace Nez
 		Effect _effect;
 		Rectangle _destinationRect;
 
-
-		public WindowSliceTransition(Func<Scene> sceneLoadAction) : base(sceneLoadAction, true)
+		public BounceTransition(Func<Scene> sceneLoadAction) : base(sceneLoadAction, true)
 		{
 			_destinationRect = PreviousSceneRender.Bounds;
 
 			// load Effect and set defaults
-			_effect = Core.Content.LoadEffect("Content/nez/effects/transitions/WindowSlice.mgfxo");
-			Count = 10;
-			Smoothness = 0.5f;
+			_effect = Core.Content.LoadEffect("Content/nez/effects/transitions/Bounce.mgfxo");
+			ShadowColor = new Vector4(0, 0, 0, 0.6f);
+			ShadowHeight = 0.075f;
+			Bounces = 3;
 		}
 
-		public WindowSliceTransition() : this(null)
+		public BounceTransition() : this(null)
 		{ }
 
 		public override IEnumerator OnBeginTransition()

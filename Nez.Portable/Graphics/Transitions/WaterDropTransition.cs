@@ -9,27 +9,27 @@ using Nez.Tweens;
 namespace Nez
 {
 	/// <summary>
-	/// A cascade of opening vertical blinds
-	/// based on: https://gl-transitions.com/editor/windowslice
+	/// Ripples on water surface
+	/// based on: https://gl-transitions.com/editor/WaterDrop
 	/// </summary>
-	public class WindowSliceTransition : SceneTransition
+	public class WaterDropTransition : SceneTransition
 	{
 		/// <summary>
-		/// Number of window slices. Defaults to 10. (1 - 100)
+		/// Amplitude of the ripples. Defaults to 30.
 		/// </summary>
-		/// <value>The number of slices.</value>
-		public float Count
+		/// <value>The amplitude of the ripples.</value>
+		public float Amplitude
 		{
-			set => _effect.Parameters["_count"].SetValue(value);
+			set => _effect.Parameters["_amplitude"].SetValue(value);
 		}
 
 		/// <summary>
-		/// Duration and speed of each slice. Defaults to 0.5. (0.0 - 1.0) 
+		/// Speed of ripple propagation. Defaults to 30.
 		/// </summary>
-		/// <value>The smoothness amount.</value>
-		public float Smoothness
+		/// <value>The speed of the ripples.</value>
+		public float Speed
 		{
-			set => _effect.Parameters["_smoothness"].SetValue(value);
+			set => _effect.Parameters["_speed"].SetValue(value);
 		}
 
 		/// <summary>
@@ -45,18 +45,17 @@ namespace Nez
 		Effect _effect;
 		Rectangle _destinationRect;
 
-
-		public WindowSliceTransition(Func<Scene> sceneLoadAction) : base(sceneLoadAction, true)
+		public WaterDropTransition(Func<Scene> sceneLoadAction) : base(sceneLoadAction, true)
 		{
 			_destinationRect = PreviousSceneRender.Bounds;
 
 			// load Effect and set defaults
-			_effect = Core.Content.LoadEffect("Content/nez/effects/transitions/WindowSlice.mgfxo");
-			Count = 10;
-			Smoothness = 0.5f;
+			_effect = Core.Content.LoadEffect("Content/nez/effects/transitions/WaterDrop.mgfxo");
+			Amplitude = 30f;
+			Speed = 30f;
 		}
 
-		public WindowSliceTransition() : this(null)
+		public WaterDropTransition() : this(null)
 		{ }
 
 		public override IEnumerator OnBeginTransition()

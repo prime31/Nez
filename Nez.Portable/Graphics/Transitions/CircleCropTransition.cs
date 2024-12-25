@@ -9,27 +9,27 @@ using Nez.Tweens;
 namespace Nez
 {
 	/// <summary>
-	/// A cascade of opening vertical blinds
-	/// based on: https://gl-transitions.com/editor/windowslice
+	/// Circle collapsing to black wipe.
+	/// based on: https://gl-transitions.com/editor/CircleCrop
 	/// </summary>
-	public class WindowSliceTransition : SceneTransition
+	public class CircleCropTransition : SceneTransition
 	{
 		/// <summary>
-		/// Number of window slices. Defaults to 10. (1 - 100)
+		/// Aspect ratio of the screen. Defaults to Screen.Width/Height
 		/// </summary>
-		/// <value>The number of slices.</value>
-		public float Count
+		/// <value>Ratio of the screen.</value>
+		public float Ratio
 		{
-			set => _effect.Parameters["_count"].SetValue(value);
+			set => _effect.Parameters["_ratio"].SetValue(value);
 		}
 
 		/// <summary>
-		/// Duration and speed of each slice. Defaults to 0.5. (0.0 - 1.0) 
+		/// Background color. Defaults to Black
 		/// </summary>
-		/// <value>The smoothness amount.</value>
-		public float Smoothness
+		/// <value>The color for the background.</value>
+		public Color BgColor
 		{
-			set => _effect.Parameters["_smoothness"].SetValue(value);
+			set => _effect.Parameters["_bgcolor"].SetValue(value.ToVector4());
 		}
 
 		/// <summary>
@@ -45,24 +45,21 @@ namespace Nez
 		Effect _effect;
 		Rectangle _destinationRect;
 
-
-		public WindowSliceTransition(Func<Scene> sceneLoadAction) : base(sceneLoadAction, true)
+		public CircleCropTransition(Func<Scene> sceneLoadAction) : base(sceneLoadAction, true)
 		{
 			_destinationRect = PreviousSceneRender.Bounds;
 
 			// load Effect and set defaults
-			_effect = Core.Content.LoadEffect("Content/nez/effects/transitions/WindowSlice.mgfxo");
-			Count = 10;
-			Smoothness = 0.5f;
+			_effect = Core.Content.LoadEffect("Content/nez/effects/transitions/CircleCrop.mgfxo");
+			Ratio = (float)Screen.Width / Screen.Height;
+			BgColor = Color.Black;
 		}
 
-		public WindowSliceTransition() : this(null)
+		public CircleCropTransition() : this(null)
 		{ }
 
 		public override IEnumerator OnBeginTransition()
 		{
-			yield return null;
-
 			// load up the new Scene
 			yield return Core.StartCoroutine(LoadNextScene());
 

@@ -56,6 +56,9 @@ namespace Nez
 			Smoothness = 0.5f;
 		}
 
+		public DirectionalWipeTransition() : this(null)
+		{ }
+
 		public override IEnumerator OnBeginTransition()
 		{
 			yield return null;

@@ -55,6 +55,9 @@ namespace Nez
 			Dots = 20f;
 		}
 
+		public PolkaDotsCurtainTransition() : this(null)
+		{ }
+
 		public override IEnumerator OnBeginTransition()
 		{
 			yield return null;
