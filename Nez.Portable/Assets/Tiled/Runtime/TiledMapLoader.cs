@@ -179,12 +179,33 @@ namespace Nez.Tiled
 			foreach (var p in xmlProp.Elements("property"))
 			{
 				var pname = p.Attribute("name").Value;
+				var isClass = p.Attribute("type") != null && p.Attribute("type").Value == "class";
+				XAttribute valueAttr;
+				var pval = string.Empty;
+				if (isClass)
+				{
+					// Loop through sub elements and pull name/value for dict
+					foreach (var subP in p.Elements("properties").DescendantNodes())
+					{
+						if (subP is XElement element)
+						{
+							pname = element.Attribute("name")?.Value;
+							pval = element.Attribute("value")?.Value ?? element.Value;
 
-				// Fallback to element value if no "value"
-				var valueAttr = p.Attribute("value");
-				var pval = valueAttr?.Value ?? p.Value;
+							dict.Add(pname, pval);
+						}
 
-				dict.Add(pname, pval);
+					}
+				}
+				else
+				{
+					// Fallback to element value if no "value"
+					valueAttr = p.Attribute("value");
+					pval = valueAttr?.Value ?? p.Value;
+
+					dict.Add(pname, pval);
+				}
+
 			}
 			return dict;
 		}
