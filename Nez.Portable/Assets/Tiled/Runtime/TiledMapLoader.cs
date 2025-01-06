@@ -194,7 +194,6 @@ namespace Nez.Tiled
 
 							dict.Add(pname, pval);
 						}
-
 					}
 				}
 				else
@@ -205,7 +204,6 @@ namespace Nez.Tiled
 
 					dict.Add(pname, pval);
 				}
-
 			}
 			return dict;
 		}
