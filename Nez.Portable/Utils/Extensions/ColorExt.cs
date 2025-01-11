@@ -13,22 +13,33 @@ namespace Nez
 
 		public static Color Invert(this Color color) => new Color(255 - color.R, 255 - color.G, 255 - color.B, color.A);
 
-		public static Color HexToColor(string hex)
+		public static Color HexToColor(string hex, bool isArgb = false)
 		{
 			// Trim any hash sign, if the string starts with it
 			var trimmedHex = hex.Replace("#", "");
+			float r;
+			float g;
+			float b;
+			float a = 255;
 
-			float r = (HexToByte(trimmedHex[0]) * 16 + HexToByte(trimmedHex[1])) / 255.0f;
-			float g = (HexToByte(trimmedHex[2]) * 16 + HexToByte(trimmedHex[3])) / 255.0f;
-			float b = (HexToByte(trimmedHex[4]) * 16 + HexToByte(trimmedHex[5])) / 255.0f;
-
-			// We may have additional chracters for the color alpha
-			if (trimmedHex.Length > 7) {
-				float a = (HexToByte(trimmedHex[6]) * 16 + HexToByte(trimmedHex[7])) / 255.0f;
-				return new Color(r, g, b, a);
+			if (isArgb)
+			{
+				a = (HexToByte(trimmedHex[0]) * 16 + HexToByte(trimmedHex[1])) / 255.0f;
+				r = (HexToByte(trimmedHex[2]) * 16 + HexToByte(trimmedHex[3])) / 255.0f;
+				g = (HexToByte(trimmedHex[4]) * 16 + HexToByte(trimmedHex[5])) / 255.0f;
+				b = (HexToByte(trimmedHex[6]) * 16 + HexToByte(trimmedHex[7])) / 255.0f;
+			}
+			else
+			{
+				r = (HexToByte(trimmedHex[0]) * 16 + HexToByte(trimmedHex[1])) / 255.0f;
+				g = (HexToByte(trimmedHex[2]) * 16 + HexToByte(trimmedHex[3])) / 255.0f;
+				b = (HexToByte(trimmedHex[4]) * 16 + HexToByte(trimmedHex[5])) / 255.0f;
+				// We may have additional chracters for the color alpha
+				if (trimmedHex.Length > 7)
+					a = (HexToByte(trimmedHex[6]) * 16 + HexToByte(trimmedHex[7])) / 255.0f;
 			}
 
-			return new Color(r, g, b);
+			return new Color(r, g, b, a);
 		}
 
 		public static Color HexToColor(int hex)
