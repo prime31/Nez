@@ -538,6 +538,20 @@ namespace System.Collections.Generic
 		}
 
 		/// <summary>
+		/// Peeks item at the front of the Deque and returns it.
+		/// </summary>
+		/// <returns>The item at the front of the Deque.</returns>
+		public T PeekFront()
+		{
+			if (IsEmpty)
+			{
+				throw new InvalidOperationException("The Deque is empty");
+			}
+
+			return buffer[startOffset];
+		}
+
+		/// <summary>
 		/// Removes an item from the back of the Deque and returns it.
 		/// </summary>
 		/// <returns>The item in the back of the Deque.</returns>

@@ -1,5 +1,6 @@
-﻿using System.Runtime.CompilerServices;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
+using System;
+using System.Runtime.CompilerServices;
 
 
 namespace Nez
@@ -295,6 +296,19 @@ namespace Nez
 		public static void Transform(Vector2[] sourceArray, ref Matrix2D matrix, Vector2[] destinationArray)
 		{
 			Transform(sourceArray, 0, ref matrix, destinationArray, 0, sourceArray.Length);
+		}
+
+		/// <summary>
+		/// Fast snap Vector to 45 degrees
+		/// From https://x.com/iquilezles/status/1879398098436538614
+		/// </summary>
+		/// <param name="v">input vector</param>
+		/// <returns>snapped vector</returns>
+		public static Vector2 SnapTo45Degrees(this Vector2 v)
+		{
+			Vector2 w = Round(v * Mathf.Sqrt(2.0f));
+			float s = (Math.Abs(v.X) + Math.Abs(v.Y) > 1.5f ? Mathf.Sqrt(0.5f) : 1.0f);
+			return w * s;
 		}
 	}
 }
