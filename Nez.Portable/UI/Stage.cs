@@ -51,6 +51,7 @@ namespace Nez.UI
 		bool _isGamepadFocusEnabled;
 		IGamepadFocusable _gamepadFocusElement;
 
+		public IGamepadFocusable GamepadFocusElement => _gamepadFocusElement;
 
 		public Stage()
 		{
