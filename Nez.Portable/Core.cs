@@ -148,7 +148,7 @@ namespace Nez
 				SynchronizeWithVerticalRetrace = true,
 #if MONOGAME_38
 				HardwareModeSwitch = hardwareModeSwitch,
-				PreferHalfPixelOffset = true
+				PreferHalfPixelOffset = false
 #endif
 			};
 			graphicsManager.DeviceReset += OnGraphicsDeviceReset;
