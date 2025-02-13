@@ -223,6 +223,30 @@ namespace Nez.Systems
 		}
 
 		/// <summary>
+		/// loads a json file into a string.
+		/// </summary>
+		/// <returns>The json string.</returns>
+		/// <param name="name">The json filename.</param>
+		public string LoadJson(string name)
+		{
+			if (LoadedAssets.TryGetValue(name, out var asset))
+			{
+				if (asset is string json)
+					return json;
+			}
+
+			using (var stream = Path.IsPathRooted(name) ? File.OpenRead(name) : TitleContainer.OpenStream(name))
+			{
+				using (var reader = new StreamReader(stream))
+				{
+					var jsonString = reader.ReadToEnd();
+					LoadedAssets.Add(name, jsonString);
+					return jsonString;
+				}
+			}
+		}
+
+		/// <summary>
 		/// loads an ogl effect directly from file and handles disposing of it when the ContentManager is disposed. Name should be the path
 		/// relative to the Content folder or including the Content folder.
 		/// </summary>
