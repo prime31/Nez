@@ -214,7 +214,7 @@ namespace Nez.Aseprite
 			// frameNumber is base-one in the aseprite app,
 			// but Frames array is base-zero, so we subtract 1
 			AsepriteFrame frame = Frames[frameNumber - 1];
-			Color[] pixels = frame.FlattenFrame();
+			Color[] pixels = frame.FlattenFrame(true, true);
 			Texture2D texture = new Texture2D(Core.GraphicsDevice, frame.Width, frame.Height);
 			texture.SetData<Color>(pixels);
 			return texture;
