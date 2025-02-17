@@ -106,14 +106,14 @@ namespace Nez.Aseprite
 		/// indicates the amount of padding, in transparent pixels, to add around the edges of each frame in the
 		/// generated texture.
 		/// </param>
-		/// <param name="customOrigin">
+		/// <param name="spriteOrigin">
 		/// make the sprite origin something other than sourceRect.GetHalfSize()
 		/// </param>
 		/// <returns>
 		/// A new instance of hte <see cref="SpriteAtlas"/> class initialized with the data generated from this Aseprite
 		/// file.
 		/// </returns>
-		public SpriteAtlas ToSpriteAtlas(bool onlyVisibleLayers = true, int borderPadding = 0, int spacing = 0, int innerPadding = 0, Vector2? customOrigin = null)
+		public SpriteAtlas ToSpriteAtlas(bool onlyVisibleLayers = true, int borderPadding = 0, int spacing = 0, int innerPadding = 0, Vector2? spriteOrigin = null)
 		{
 			SpriteAtlas atlas = new SpriteAtlas
 			{
@@ -181,7 +181,7 @@ namespace Nez.Aseprite
 
 			for (int i = 0; i < Frames.Count; i++)
 			{
-				atlas.Sprites[i] = new Sprite(texture, regions[i], customOrigin ?? regions[i].GetHalfSize());
+				atlas.Sprites[i] = new Sprite(texture, regions[i], spriteOrigin ?? regions[i].GetHalfSize());
 			}
 
 			for (int tagNum = 0; tagNum < Tags.Count; tagNum++)
@@ -206,16 +206,16 @@ namespace Nez.Aseprite
 		/// <summary>
 		/// Translates the data in this aseprite file to a sprite atlas that can be used in a sprite animator component.
 		/// </summary>
-		/// <param name="customOrigin">
+		/// <param name="spriteOrigin">
 		/// make the sprite origin something other than sourceRect.GetHalfSize()
 		/// </param>
 		/// <returns>
 		/// A new instance of hte <see cref="SpriteAtlas"/> class initialized with the data generated from this Aseprite
 		/// file.
 		/// </returns>
-		public SpriteAtlas ToSpriteAtlasWithOrigin(Vector2 customOrigin)
+		public SpriteAtlas ToSpriteAtlasWithOrigin(Vector2 spriteOrigin)
 		{
-			return ToSpriteAtlas(true, 0, 0, 0, customOrigin);
+			return ToSpriteAtlas(true, 0, 0, 0, spriteOrigin);
 		}
 
 		/// <summary>
