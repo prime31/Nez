@@ -60,31 +60,36 @@ namespace Nez.ImGuiTools
 		{
 			// when the Scene changes we need to rewire ourselves up as the IFinalRenderDelegate in the new Scene
 			// if we were previously enabled and do some cleanup
-			Unload();
+			ResetRenderTarget();
 			_sceneGraphWindow.OnSceneChanged();
+
+			ClearLists();
 
 			if (Enabled)
 				OnEnabled();
 		}
 
-		void Unload()
-		{
-			_drawCommands.Clear();
-			_entityInspectors.Clear();
+		void ResetRenderTarget()
+        {
+            if (_renderTargetId != IntPtr.Zero)
+            {
+                _renderer.UnbindTexture(_renderTargetId);
+                _renderTargetId = IntPtr.Zero;
+            }
 
-			if (_renderTargetId != IntPtr.Zero)
-			{
-				_renderer.UnbindTexture(_renderTargetId);
-				_renderTargetId = IntPtr.Zero;
-			}
+            _lastRenderTarget = null;
+        }
 
-			_lastRenderTarget = null;
-		}
+        void ClearLists()
+        {
+            _drawCommands.Clear();
+            _entityInspectors.Clear();
+        }
 
-		/// <summary>
-		/// draws the game window and deals with overriding Nez.Input when appropriate
-		/// </summary>
-		void DrawGameWindow()
+        /// <summary>
+        /// draws the game window and deals with overriding Nez.Input when appropriate
+        /// </summary>
+        void DrawGameWindow()
 		{
 			if (_lastRenderTarget == null)
 				return;
@@ -279,7 +284,7 @@ namespace Nez.ImGuiTools
 
 		public override void OnDisabled()
 		{
-			Unload();
+			ResetRenderTarget();
 			if (Core.Scene != null)
 				Core.Scene.FinalRenderDelegate = null;
 		}
