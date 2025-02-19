@@ -70,26 +70,26 @@ namespace Nez.ImGuiTools
 		}
 
 		void ResetRenderTarget()
-        {
-            if (_renderTargetId != IntPtr.Zero)
-            {
-                _renderer.UnbindTexture(_renderTargetId);
-                _renderTargetId = IntPtr.Zero;
-            }
+		{
+			if (_renderTargetId != IntPtr.Zero)
+			{
+				_renderer.UnbindTexture(_renderTargetId);
+				_renderTargetId = IntPtr.Zero;
+			}
 
-            _lastRenderTarget = null;
-        }
+			_lastRenderTarget = null;
+		}
 
-        void ClearLists()
-        {
-            _drawCommands.Clear();
-            _entityInspectors.Clear();
-        }
+		void ClearLists()
+		{
+			_drawCommands.Clear();
+			_entityInspectors.Clear();
+		}
 
-        /// <summary>
-        /// draws the game window and deals with overriding Nez.Input when appropriate
-        /// </summary>
-        void DrawGameWindow()
+		/// <summary>
+		/// draws the game window and deals with overriding Nez.Input when appropriate
+		/// </summary>
+		void DrawGameWindow()
 		{
 			if (_lastRenderTarget == null)
 				return;
@@ -303,8 +303,8 @@ namespace Nez.ImGuiTools
 		#region IFinalRenderDelegate
 
 		void IFinalRenderDelegate.HandleFinalRender(RenderTarget2D finalRenderTarget, Color letterboxColor,
-		                                            RenderTarget2D source, Rectangle finalRenderDestinationRect,
-		                                            SamplerState samplerState)
+													RenderTarget2D source, Rectangle finalRenderDestinationRect,
+													SamplerState samplerState)
 		{
 			if (ShowSeperateGameWindow)
 			{
