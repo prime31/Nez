@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System.Collections.Generic;
+using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -24,8 +25,10 @@ namespace Nez.BitmapFonts
 		}
 
 		public void DrawInto(Batcher batcher, ref FontCharacterSource text, Vector2 position, Color color,
-		                     float rotation, Vector2 origin, Vector2 scale, SpriteEffects effect, float depth)
+		                     float rotation, Vector2 origin, Vector2 scale, SpriteEffects effect, float depth, IDictionary<int, Color> colorMap = null)
 		{
+			Color currentColor = color;
+			
 			var flipAdjustment = Vector2.Zero;
 
 			var flippedVert = (effect & SpriteEffects.FlipVertically) == SpriteEffects.FlipVertically;
@@ -108,7 +111,11 @@ namespace Nez.BitmapFonts
 					currentChar.Bounds.Height * scale.Y
 				);
 
-				batcher.Draw(Textures[currentChar.TexturePage], destRect, currentChar.Bounds, color, rotation,
+				if (colorMap != null && colorMap.TryGetValue(i, out Color newColor)) {
+					currentColor = newColor;
+				}
+				
+				batcher.Draw(Textures[currentChar.TexturePage], destRect, currentChar.Bounds, currentColor, rotation,
 					Vector2.Zero, effect, depth);
 				previousCharacter = c;
 			}
