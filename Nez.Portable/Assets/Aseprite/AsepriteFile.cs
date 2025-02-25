@@ -219,5 +219,33 @@ namespace Nez.Aseprite
 			texture.SetData<Color>(pixels);
 			return texture;
 		}
+
+		/// <summary>
+		/// generate a Texture2D from the first frame in a tagged animation sequence.
+		/// </summary>
+		/// <param name="tagName">
+		/// the tag/name of the animation sequence as show in Aseprite app.
+		/// </param>
+		/// <returns>
+		/// A <see cref="Texture2D"/> instance with the flattened contents of the single animation frame
+		/// </returns>
+		public Texture2D GetTextureFromFrameTagged(string tagName)
+		{
+			int tagNum = -1;
+			for (int i = 0; i < Tags.Count; i++)
+			{
+				if (Tags[i].Name == tagName)
+				{
+					// .From is the index for the Frames array
+					tagNum = Tags[i].From;
+					break;
+				}
+			}
+			if (tagNum == -1) throw new Exception($"Frame tagged '{tagName}' not found");
+
+			// frameNumber is base-one in the aseprite app,
+			// but Frames array is base-zero, so we add 1
+			return GetTextureFromFrameNumber(tagNum + 1);
+		}
 	}
 }
