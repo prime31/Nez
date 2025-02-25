@@ -22,11 +22,11 @@ namespace Nez.ImGuiTools.SceneGraphPanes
 			if (!_isPostProcessorListInitialized || Time.FrameCount % 60 == 0)
 			{
 				_isPostProcessorListInitialized = true;
+
 				for (var i = 0; i < Core.Scene._postProcessors.Length; i++)
 				{
 					var postProcessor = Core.Scene._postProcessors.Buffer[i];
-					if (_postProcessorInspectors.Where(inspector => inspector.PostProcessor == postProcessor).Count() ==
-					    0)
+					if (_postProcessorInspectors.Where(inspector => inspector.PostProcessor == postProcessor).Count() == 0)
 						_postProcessorInspectors.Add(new PostProcessorInspector(postProcessor));
 				}
 			}
@@ -44,13 +44,18 @@ namespace Nez.ImGuiTools.SceneGraphPanes
 			UpdatePostProcessorInspectorList();
 
 			ImGui.Indent();
+
 			for (var i = 0; i < _postProcessorInspectors.Count; i++)
 			{
-				if (_postProcessorInspectors[i].PostProcessor._scene != null)
+				// watch out for removed PostProcessors
+				if (_postProcessorInspectors[i].PostProcessor._scene == null)
 				{
-					_postProcessorInspectors[i].Draw();
-					NezImGui.SmallVerticalSpace();
+					_postProcessorInspectors.RemoveAt(i);
+					continue;
 				}
+				
+				_postProcessorInspectors[i].Draw();
+				NezImGui.SmallVerticalSpace();
 			}
 
 			if (_postProcessorInspectors.Count == 0)
@@ -75,8 +80,7 @@ namespace Nez.ImGuiTools.SceneGraphPanes
 				{
 					if (ImGui.Selectable(subclassType.Name))
 					{
-						var postprocessor = (PostProcessor) Activator.CreateInstance(subclassType,
-							new object[] {_postProcessorInspectors.Count});
+						var postprocessor = (PostProcessor)Activator.CreateInstance(subclassType, new object[] { _postProcessorInspectors.Count });
 						Core.Scene.AddPostProcessor(postprocessor);
 						_isPostProcessorListInitialized = false;
 					}
