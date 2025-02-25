@@ -13,12 +13,14 @@ namespace Nez.ImGuiTools
 	{
 		PostProcessorsPane _postProcessorsPane = new PostProcessorsPane();
 		RenderersPane _renderersPane = new RenderersPane();
+		SceneComponentsPane _sceneComponentsPane = new SceneComponentsPane();
 		EntityPane _entityPane = new EntityPane();
 
 		public void OnSceneChanged()
 		{
 			_postProcessorsPane.OnSceneChanged();
 			_renderersPane.OnSceneChanged();
+			_sceneComponentsPane.OnSceneChanged();
 		}
 
 		public void Show(ref bool isOpen)
@@ -36,6 +38,9 @@ namespace Nez.ImGuiTools
 
 				if (ImGui.CollapsingHeader("Renderers"))
 					_renderersPane.Draw();
+
+				if (ImGui.CollapsingHeader("Scene Components"))
+					_sceneComponentsPane.Draw();
 
 				if (ImGui.CollapsingHeader("Entities (double-click label to inspect)", ImGuiTreeNodeFlags.DefaultOpen))
 					_entityPane.Draw();
