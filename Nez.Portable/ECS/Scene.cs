@@ -833,6 +833,7 @@ namespace Nez
 		{
 			Insist.IsTrue(_sceneComponents.Contains(component), "SceneComponent {0} is not in the SceneComponents list!", component);
 			_sceneComponents.Remove(component);
+			component.Scene = null;
 			component.OnRemovedFromScene();
 		}
 
@@ -859,6 +860,7 @@ namespace Nez
 				_renderers.Sort();
 			}
 
+			renderer.Scene = this;
 			renderer.OnAddedToScene(this);
 
 			// if we already began let the PostProcessor know what size our RenderTarget is
@@ -901,6 +903,7 @@ namespace Nez
 				_afterPostProcessorRenderers.Remove(renderer);
 			else
 				_renderers.Remove(renderer);
+			renderer.Scene = null;
 			renderer.Unload();
 		}
 
