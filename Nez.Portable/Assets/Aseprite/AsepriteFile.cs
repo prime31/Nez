@@ -106,11 +106,14 @@ namespace Nez.Aseprite
 		/// indicates the amount of padding, in transparent pixels, to add around the edges of each frame in the
 		/// generated texture.
 		/// </param>
+		/// <param name="spriteOrigin">
+		/// make the sprite origin something other than sourceRect.GetHalfSize()
+		/// </param>
 		/// <returns>
 		/// A new instance of hte <see cref="SpriteAtlas"/> class initialized with the data generated from this Aseprite
 		/// file.
 		/// </returns>
-		public SpriteAtlas ToSpriteAtlas(bool onlyVisibleLayers = true, int borderPadding = 0, int spacing = 0, int innerPadding = 0)
+		public SpriteAtlas ToSpriteAtlas(bool onlyVisibleLayers = true, int borderPadding = 0, int spacing = 0, int innerPadding = 0, Vector2? spriteOrigin = null)
 		{
 			SpriteAtlas atlas = new SpriteAtlas
 			{
@@ -178,7 +181,7 @@ namespace Nez.Aseprite
 
 			for (int i = 0; i < Frames.Count; i++)
 			{
-				atlas.Sprites[i] = new Sprite(texture, regions[i]);
+				atlas.Sprites[i] = new Sprite(texture, regions[i], spriteOrigin ?? regions[i].GetHalfSize());
 			}
 
 			for (int tagNum = 0; tagNum < Tags.Count; tagNum++)
@@ -201,6 +204,21 @@ namespace Nez.Aseprite
 		}
 
 		/// <summary>
+		/// Translates the data in this aseprite file to a sprite atlas that can be used in a sprite animator component.
+		/// </summary>
+		/// <param name="spriteOrigin">
+		/// make the sprite origin something other than sourceRect.GetHalfSize()
+		/// </param>
+		/// <returns>
+		/// A new instance of hte <see cref="SpriteAtlas"/> class initialized with the data generated from this Aseprite
+		/// file.
+		/// </returns>
+		public SpriteAtlas ToSpriteAtlasWithOrigin(Vector2 spriteOrigin)
+		{
+			return ToSpriteAtlas(true, 0, 0, 0, spriteOrigin);
+		}
+
+		/// <summary>
 		/// generate a Texture2D from a single aseprite frame.
 		/// </summary>
 		/// <param name="frameNumber">
@@ -218,6 +236,34 @@ namespace Nez.Aseprite
 			Texture2D texture = new Texture2D(Core.GraphicsDevice, frame.Width, frame.Height);
 			texture.SetData<Color>(pixels);
 			return texture;
+		}
+
+		/// <summary>
+		/// generate a Texture2D from the first frame in a tagged animation sequence.
+		/// </summary>
+		/// <param name="tagName">
+		/// the tag/name of the animation sequence as show in Aseprite app.
+		/// </param>
+		/// <returns>
+		/// A <see cref="Texture2D"/> instance with the flattened contents of the single animation frame
+		/// </returns>
+		public Texture2D GetTextureFromFrameTagged(string tagName)
+		{
+			int tagNum = -1;
+			for (int i = 0; i < Tags.Count; i++)
+			{
+				if (Tags[i].Name == tagName)
+				{
+					// .From is the index for the Frames array
+					tagNum = Tags[i].From;
+					break;
+				}
+			}
+			if (tagNum == -1) throw new Exception($"Frame tagged '{tagName}' not found");
+
+			// frameNumber is base-one in the aseprite app,
+			// but Frames array is base-zero, so we add 1
+			return GetTextureFromFrameNumber(tagNum + 1);
 		}
 	}
 }

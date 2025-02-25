@@ -70,6 +70,11 @@ namespace Nez
 		/// </summary>
 		protected Material _currentMaterial;
 
+		/// <summary>
+		/// the scene this Renderer is attached to
+		/// </summary>
+		public Scene Scene;
+
 
 		protected Renderer(int renderOrder) : this(renderOrder, null)
 		{}

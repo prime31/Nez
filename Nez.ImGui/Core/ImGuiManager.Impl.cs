@@ -60,18 +60,17 @@ namespace Nez.ImGuiTools
 		{
 			// when the Scene changes we need to rewire ourselves up as the IFinalRenderDelegate in the new Scene
 			// if we were previously enabled and do some cleanup
-			Unload();
+			ResetRenderTarget();
 			_sceneGraphWindow.OnSceneChanged();
+
+			ClearLists();
 
 			if (Enabled)
 				OnEnabled();
 		}
 
-		void Unload()
+		void ResetRenderTarget()
 		{
-			_drawCommands.Clear();
-			_entityInspectors.Clear();
-
 			if (_renderTargetId != IntPtr.Zero)
 			{
 				_renderer.UnbindTexture(_renderTargetId);
@@ -79,6 +78,12 @@ namespace Nez.ImGuiTools
 			}
 
 			_lastRenderTarget = null;
+		}
+
+		void ClearLists()
+		{
+			_drawCommands.Clear();
+			_entityInspectors.Clear();
 		}
 
 		/// <summary>
@@ -279,7 +284,7 @@ namespace Nez.ImGuiTools
 
 		public override void OnDisabled()
 		{
-			Unload();
+			ResetRenderTarget();
 			if (Core.Scene != null)
 				Core.Scene.FinalRenderDelegate = null;
 		}
@@ -298,8 +303,8 @@ namespace Nez.ImGuiTools
 		#region IFinalRenderDelegate
 
 		void IFinalRenderDelegate.HandleFinalRender(RenderTarget2D finalRenderTarget, Color letterboxColor,
-		                                            RenderTarget2D source, Rectangle finalRenderDestinationRect,
-		                                            SamplerState samplerState)
+													RenderTarget2D source, Rectangle finalRenderDestinationRect,
+													SamplerState samplerState)
 		{
 			if (ShowSeperateGameWindow)
 			{
