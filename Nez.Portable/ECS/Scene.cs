@@ -903,6 +903,7 @@ namespace Nez
 				_afterPostProcessorRenderers.Remove(renderer);
 			else
 				_renderers.Remove(renderer);
+				
 			renderer.Scene = null;
 			renderer.Unload();
 		}
