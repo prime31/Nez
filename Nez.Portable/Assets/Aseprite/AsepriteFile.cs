@@ -113,7 +113,7 @@ namespace Nez.Aseprite
 		/// A new instance of hte <see cref="SpriteAtlas"/> class initialized with the data generated from this Aseprite
 		/// file.
 		/// </returns>
-		public SpriteAtlas ToSpriteAtlas(bool onlyVisibleLayers = true, int borderPadding = 0, int spacing = 0, int innerPadding = 0, Vector2? spriteOrigin = null)
+		public SpriteAtlas ToSpriteAtlas(string layerName = null, bool onlyVisibleLayers = true, int borderPadding = 0, int spacing = 0, int innerPadding = 0, Vector2? spriteOrigin = null) 
 		{
 			SpriteAtlas atlas = new SpriteAtlas
 			{
@@ -125,9 +125,9 @@ namespace Nez.Aseprite
 
 			Color[][] flattenedFrames = new Color[Frames.Count][];
 
-			for (int i = 0; i < Frames.Count; i++)
+			for (var i = 0; i < Frames.Count; i++) 
 			{
-				flattenedFrames[i] = Frames[i].FlattenFrame(onlyVisibleLayers);
+				flattenedFrames[i] = Frames[i].FlattenFrame(onlyVisibleLayers, false, layerName);
 			}
 
 			double sqrt = Math.Sqrt(Frames.Count);
@@ -215,7 +215,7 @@ namespace Nez.Aseprite
 		/// </returns>
 		public SpriteAtlas ToSpriteAtlasWithOrigin(Vector2 spriteOrigin)
 		{
-			return ToSpriteAtlas(true, 0, 0, 0, spriteOrigin);
+			return ToSpriteAtlas(null, true, 0, 0, 0, spriteOrigin);
 		}
 
 		/// <summary>
