@@ -60,7 +60,7 @@ namespace Nez.Aseprite
 		/// A new array of color elements where each element represents the final pixels for this frame once flattened.
 		/// Order of color element starts with the top-left most pixel and is read left-to-right from top-to-bottom.
 		/// </returns>
-		public Color[] FlattenFrame(bool onlyVisibleLayers = true, bool includeBackgroundLayer = false)
+		public Color[] FlattenFrame(bool onlyVisibleLayers = true, bool includeBackgroundLayer = false, string layerName = null)
 		{
 			Color[] result = new Color[Width * Height];
 
@@ -73,6 +73,9 @@ namespace Nez.Aseprite
 
 				//  Are we processing cels on background layers?
 				if (cel.Layer.IsBackgroundLayer && !includeBackgroundLayer) { continue; }
+
+				//	If layer is specified, only select frame cels on that layer
+				if (layerName != null && !cel.Layer.Name.ToLower().Equals(layerName.ToLower())) {continue;}
 
 				//	Only process image cels for now.  
 				//	Note: Will look into adding tilemap cels in a future PR if it is requested enough or if someone
