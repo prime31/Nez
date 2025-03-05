@@ -203,6 +203,97 @@ namespace Nez.Aseprite
 			return atlas;
 		}
 
+		public SpriteAtlas ToSpriteAtlasFromLayers(string[] layers = null, bool onlyVisibleLayers = true, int borderPadding = 0, int spacing = 0, int innerPadding = 0, Vector2? spriteOrigin = null)
+	{
+		var atlas = new SpriteAtlas
+		{
+			Names = new string[Frames.Count],
+			Sprites = new Sprite[Frames.Count],
+			SpriteAnimations = new SpriteAnimation[Tags.Count],
+			AnimationNames = new string[Tags.Count]
+		};
+
+		var flattenedFrames = new Color[Frames.Count][];
+
+		for (var i = 0; i < Frames.Count; i++)
+		{
+			flattenedFrames[i] = Frames[i].FlattenFrameOnLayers(onlyVisibleLayers, false, layers);
+		}
+
+		var sqrt = Math.Sqrt(Frames.Count);
+		var columns = (int)Math.Ceiling(sqrt);
+		var rows = (Frames.Count + columns - 1) / columns;
+
+		var imageWidth = columns * CanvasWidth
+						 + borderPadding * 2
+						 + spacing * (columns - 1)
+						 + innerPadding * 2 * columns;
+
+		var imageHeight = rows * CanvasHeight
+						  + borderPadding * 2
+						  + spacing * (rows - 1)
+						  + innerPadding * 2 * rows;
+
+		var imagePixels = new Color[imageWidth * imageHeight];
+		var regions = new Rectangle[Frames.Count];
+
+		for (var i = 0; i < flattenedFrames.GetLength(0); i++)
+		{
+			var column = i % columns;
+			var row = i / columns;
+			var frame = flattenedFrames[i];
+
+			var x = column * CanvasWidth
+					+ borderPadding
+					+ spacing * column
+					+ innerPadding * (column + column + 1);
+
+			var y = row * CanvasHeight
+					+ borderPadding
+					+ spacing * row
+					+ innerPadding * (row + row + 1);
+
+			for (var p = 0; p < frame.Length; p++)
+			{
+				var px = p % CanvasWidth + x;
+				var py = p / CanvasWidth + y;
+
+				var index = py * imageWidth + px;
+				imagePixels[index] = frame[p];
+			}
+
+			regions[i] = new Rectangle(x, y, CanvasWidth, CanvasHeight);
+		}
+
+		var texture = new Texture2D(Core.GraphicsDevice, imageWidth, imageHeight);
+		texture.SetData<Color>(imagePixels);
+
+		for (var i = 0; i < Frames.Count; i++)
+		{
+			atlas.Sprites[i] = new Sprite(texture, regions[i], spriteOrigin ?? regions[i].GetHalfSize());
+		}
+
+		for (var tagNum = 0; tagNum < Tags.Count; tagNum++)
+		{
+			var tag = Tags[tagNum];
+			var sprites = new Sprite[tag.To - tag.From + 1];
+			var durations = new float[sprites.Length];
+
+			for (int spriteIndex = 0, lookupIndex = tag.From;
+				 spriteIndex < sprites.Length;
+				 spriteIndex++, lookupIndex++)
+			{
+				sprites[spriteIndex] = atlas.Sprites[lookupIndex];
+				durations[spriteIndex] = 1.0f / (Frames[lookupIndex].Duration / 1000.0f);
+			}
+
+			atlas.SpriteAnimations[tagNum] = new SpriteAnimation(sprites, durations);
+			atlas.AnimationNames[tagNum] = tag.Name;
+		}
+
+		return atlas;
+	}
+
 		/// <summary>
 		/// Translates the data in this aseprite file to a sprite atlas that can be used in a sprite animator component.
 		/// </summary>
