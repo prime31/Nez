@@ -113,7 +113,7 @@ namespace Nez.Aseprite
 		/// A new instance of hte <see cref="SpriteAtlas"/> class initialized with the data generated from this Aseprite
 		/// file.
 		/// </returns>
-		public SpriteAtlas ToSpriteAtlas(string layerName = null, bool onlyVisibleLayers = true, int borderPadding = 0, int spacing = 0, int innerPadding = 0, Vector2? spriteOrigin = null) 
+		public SpriteAtlas ToSpriteAtlas(bool onlyVisibleLayers = true, int borderPadding = 0, int spacing = 0, int innerPadding = 0, Vector2? spriteOrigin = null, string layerName = null) 
 		{
 			SpriteAtlas atlas = new SpriteAtlas
 			{
