@@ -306,7 +306,7 @@ namespace Nez.Aseprite
 		/// </returns>
 		public SpriteAtlas ToSpriteAtlasWithOrigin(Vector2 spriteOrigin)
 		{
-			return ToSpriteAtlas(null, true, 0, 0, 0, spriteOrigin);
+			return ToSpriteAtlas(true, 0, 0, 0, spriteOrigin);
 		}
 
 		/// <summary>
