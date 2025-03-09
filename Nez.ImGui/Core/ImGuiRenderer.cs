@@ -84,7 +84,7 @@ namespace Nez.ImGuiTools
 			}
 			catch (DllNotFoundException)
 			{
-				return;
+				_isSdl3 = false;
 			}
 
 			SetupInput();
