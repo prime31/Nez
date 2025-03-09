@@ -43,6 +43,7 @@ namespace Nez.ImGuiTools
 
 		List<int> _keys = new List<int>();
 
+		private readonly bool _isSdl3 = false;
 
 		public ImGuiRenderer(Game game)
 		{
@@ -75,6 +76,16 @@ namespace Nez.ImGuiTools
 				ScissorTestEnable = true,
 				SlopeScaleDepthBias = 0
 			};
+
+			try
+			{
+				_ = SDL3.SDL.SDL_GetVersion();
+				_isSdl3 = true;
+			}
+			catch (DllNotFoundException)
+			{
+				_isSdl3 = false;
+			}
 
 			SetupInput();
 		}
@@ -143,6 +154,7 @@ namespace Nez.ImGuiTools
 		{
 			ImGui.GetIO().DeltaTime = deltaTime;
 			UpdateInput();
+			CheckForTextInput();
 			ImGui.NewFrame();
 		}
 
@@ -167,9 +179,29 @@ namespace Nez.ImGuiTools
 		delegate string GetClipboardTextDelegate();
 		delegate void SetClipboardTextDelegate(IntPtr userData, string txt);
 
-		static void SetClipboardText(IntPtr userData, string txt) => SDL2.SDL.SDL_SetClipboardText(txt);
+		static void SetClipboardText(IntPtr userData, string txt)
+		{
+			try
+			{
+				SDL3.SDL.SDL_SetClipboardText(txt);
+			}
+			catch (DllNotFoundException)
+			{
+				SDL2.SDL.SDL_SetClipboardText(txt);
+			}
+		}
 
-		static string GetClipboardText() => SDL2.SDL.SDL_GetClipboardText();
+		static string GetClipboardText()
+		{
+			try
+			{
+				return SDL3.SDL.SDL_GetClipboardText();
+			}
+			catch (DllNotFoundException)
+			{
+				return SDL2.SDL.SDL_GetClipboardText();
+			}
+		}
 #endif
 
 		/// <summary>
@@ -182,7 +214,8 @@ namespace Nez.ImGuiTools
 #if FNA
 			// forward clipboard methods to SDL
 			io.SetClipboardTextFn = Marshal.GetFunctionPointerForDelegate<SetClipboardTextDelegate>(SetClipboardText);
-			io.GetClipboardTextFn = Marshal.GetFunctionPointerForDelegate<GetClipboardTextDelegate>(SDL2.SDL.SDL_GetClipboardText);
+			io.GetClipboardTextFn = _isSdl3 ? Marshal.GetFunctionPointerForDelegate<GetClipboardTextDelegate>(SDL3.SDL.SDL_GetClipboardText) :
+												Marshal.GetFunctionPointerForDelegate<GetClipboardTextDelegate>(SDL2.SDL.SDL_GetClipboardText);
 #endif
 
 			_keys.Add(io.KeyMap[(int)ImGuiKey.Tab] = (int)Keys.Tab);
@@ -417,6 +450,19 @@ namespace Nez.ImGuiTools
 
 				vtxOffset += cmdList.VtxBuffer.Size;
 			}
+		}
+
+		/// <summary>
+		/// SDL3 requires you to manually start/stop text input, SDL2 does not
+		/// </summary>
+		void CheckForTextInput()
+		{
+			if (!_isSdl3) return;
+
+			if (ImGui.GetIO().WantTextInput && !TextInputEXT.IsTextInputActive())
+				TextInputEXT.StartTextInput();
+			else if (!ImGui.GetIO().WantTextInput && TextInputEXT.IsTextInputActive())
+				TextInputEXT.StopTextInput();
 		}
 
 		#endregion
