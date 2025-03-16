@@ -340,21 +340,22 @@ namespace Nez.Aseprite
 		/// </returns>
 		public Texture2D GetTextureFromFrameTagged(string tagName)
 		{
-			int tagNum = -1;
+			int frameIndex = -1;
 			for (int i = 0; i < Tags.Count; i++)
 			{
 				if (Tags[i].Name == tagName)
 				{
 					// .From is the index for the Frames array
-					tagNum = Tags[i].From;
+					frameIndex = Tags[i].From;
 					break;
 				}
 			}
-			if (tagNum == -1) throw new Exception($"Frame tagged '{tagName}' not found");
+			if (frameIndex == -1)
+				throw new Exception($"Frame tagged '{tagName}' not found");
 
 			// frameNumber is base-one in the aseprite app,
 			// but Frames array is base-zero, so we add 1
-			return GetTextureFromFrameNumber(tagNum + 1);
+			return GetTextureFromFrameNumber(frameIndex + 1);
 		}
 	}
 }
