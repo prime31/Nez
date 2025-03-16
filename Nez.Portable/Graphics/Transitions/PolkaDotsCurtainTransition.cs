@@ -24,6 +24,15 @@ namespace Nez
 		}
 
 		/// <summary>
+		/// Aspect ratio of the screen. Defaults to Screen.Width/Height
+		/// </summary>
+		/// <value>Ratio of the screen.</value>
+		public float Ratio
+		{
+			set => _effect.Parameters["_ratio"].SetValue(value);
+		}
+
+		/// <summary>
 		/// Origin of dots animating. Defaults to Vector2(0, 0). "Top-Left"
 		/// </summary>
 		/// <value>The center origin.</value>
@@ -51,6 +60,7 @@ namespace Nez
 
 			// load Effect and set defaults
 			_effect = Core.Content.LoadEffect("Content/nez/effects/transitions/PolkaDotsCurtain.mgfxo");
+			Ratio = (float)Screen.Width / Screen.Height;
 			Center = new Vector2(0, 0);
 			Dots = 20f;
 		}
