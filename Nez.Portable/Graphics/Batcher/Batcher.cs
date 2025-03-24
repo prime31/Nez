@@ -48,6 +48,7 @@ namespace Nez
 		SamplerState _samplerState;
 		DepthStencilState _depthStencilState;
 		RasterizerState _rasterizerState;
+		RasterizerState _scissorTestRasterizerState = new RasterizerState();
 		bool _disableBatching;
 
 		// How many sprites are in the current batch?
@@ -1041,15 +1042,14 @@ namespace Nez
 
 			FlushBatch();
 
-			_rasterizerState = new RasterizerState
-			{
-				CullMode = _rasterizerState.CullMode,
-				DepthBias = _rasterizerState.DepthBias,
-				FillMode = _rasterizerState.FillMode,
-				MultiSampleAntiAlias = _rasterizerState.MultiSampleAntiAlias,
-				SlopeScaleDepthBias = _rasterizerState.SlopeScaleDepthBias,
-				ScissorTestEnable = shouldEnable
-			};
+			_scissorTestRasterizerState.CullMode = _rasterizerState.CullMode;
+			_scissorTestRasterizerState.DepthBias = _rasterizerState.DepthBias;
+			_scissorTestRasterizerState.FillMode = _rasterizerState.FillMode;
+			_scissorTestRasterizerState.MultiSampleAntiAlias = _rasterizerState.MultiSampleAntiAlias;
+			_scissorTestRasterizerState.SlopeScaleDepthBias = _rasterizerState.SlopeScaleDepthBias;
+			_scissorTestRasterizerState.ScissorTestEnable = shouldEnable;
+			
+			_rasterizerState = _scissorTestRasterizerState;
 		}
 
 		void PrepRenderState()
