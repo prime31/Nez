@@ -57,7 +57,6 @@ namespace Nez
             MultiSampleAntiAlias = true,
             ScissorTestEnable = true,
             SlopeScaleDepthBias = 0,
-            DepthClipEnable = true,
         };
 		bool _disableBatching;
 
