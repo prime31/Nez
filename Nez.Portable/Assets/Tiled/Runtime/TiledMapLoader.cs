@@ -487,6 +487,19 @@ namespace Nez.Tiled
 				}
 			}
 
+			// obj.Properties might already have data from the above template, 
+			// so merge-in xObject's properties dict with the values from template
+			var properties = ParsePropertyDict(xObject.Element("properties"));
+			if (properties != null)
+			{
+				if (obj.Properties == null)
+					obj.Properties = new Dictionary<string, string>();
+
+				foreach (KeyValuePair<string, string> property in properties)
+					obj.Properties[property.Key] = property.Value;
+			}
+
+
 			obj.Id = (int?)xObject.Attribute("id") ?? (int?)obj.Id ?? 0;
 			obj.Name = (string)xObject.Attribute("name") ?? obj.Name ?? string.Empty;
 			obj.X = (float)xObject.Attribute("x");
@@ -538,7 +551,6 @@ namespace Nez.Tiled
 				obj.ObjectType = TmxObjectType.Basic;
 			}
 
-			obj.Properties = ParsePropertyDict(xObject.Element("properties"));
 
 			return obj;
 		}
