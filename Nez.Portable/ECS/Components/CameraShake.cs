@@ -17,7 +17,7 @@ namespace Nez
 		/// if the shake is not currently active it will be started.
 		/// </summary>
 		/// <param name="shakeIntensity">how much should we shake it</param>
-		/// <param name="shakeDegredation">higher values cause faster degradation</param>
+		/// <param name="shakeDegredation">lower values cause faster degradation</param>
 		/// <param name="shakeDirection">Vector3.zero will result in a shake on just the x/y axis. any other values will result in the passed
 		/// in shakeDirection * intensity being the offset the camera is moved</param>
 		public void Shake(float shakeIntensity = 15f, float shakeDegredation = 0.9f,

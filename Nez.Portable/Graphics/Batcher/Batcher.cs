@@ -48,6 +48,16 @@ namespace Nez
 		SamplerState _samplerState;
 		DepthStencilState _depthStencilState;
 		RasterizerState _rasterizerState;
+
+        RasterizerState _scissorTestRasterizerState = new RasterizerState
+        {
+            CullMode = CullMode.CullCounterClockwiseFace,
+            FillMode = FillMode.Solid,
+            DepthBias = 0,
+            MultiSampleAntiAlias = true,
+            ScissorTestEnable = true,
+            SlopeScaleDepthBias = 0,
+        };
 		bool _disableBatching;
 
 		// How many sprites are in the current batch?
@@ -83,7 +93,7 @@ namespace Nez
 		static readonly short[] _indexData = GenerateIndexArray();
 
 		#endregion
-		
+
 		#if FNA
 		static Batcher() => UseFnaHalfPixelMatrix = true;
 		#endif
@@ -995,10 +1005,10 @@ namespace Nez
 
 		public unsafe void FlushBatch()
 		{
-			if (_numSprites == 0)
-				return;
+            if (_numSprites == 0)
+                return;
 
-			var offset = 0;
+            var offset = 0;
 			Texture2D curTexture = null;
 
 			PrepRenderState();
@@ -1041,16 +1051,9 @@ namespace Nez
 
 			FlushBatch();
 
-			_rasterizerState = new RasterizerState
-			{
-				CullMode = _rasterizerState.CullMode,
-				DepthBias = _rasterizerState.DepthBias,
-				FillMode = _rasterizerState.FillMode,
-				MultiSampleAntiAlias = _rasterizerState.MultiSampleAntiAlias,
-				SlopeScaleDepthBias = _rasterizerState.SlopeScaleDepthBias,
-				ScissorTestEnable = shouldEnable
-			};
-		}
+            // reset to whatever Begin was called with
+            _rasterizerState = shouldEnable ? _scissorTestRasterizerState : _rasterizerState;
+        }
 
 		void PrepRenderState()
 		{

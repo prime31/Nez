@@ -22,12 +22,21 @@ namespace Nez.ImGuiTools.SceneGraphPanes
 			if (!_isRendererListInitialized || Time.FrameCount % 60 == 0)
 			{
 				_isRendererListInitialized = true;
+
 				for (var i = 0; i < Core.Scene._renderers.Length; i++)
 				{
 					var renderer = Core.Scene._renderers.Buffer[i];
 					if (_renderers.Where(inspector => inspector.Renderer == renderer).Count() == 0)
 						_renderers.Add(new RendererInspector(renderer));
 				}
+
+				for (var i = 0; i < Core.Scene._afterPostProcessorRenderers.Length; i++)
+				{
+					var renderer = Core.Scene._afterPostProcessorRenderers.Buffer[i];
+					if (_renderers.Where(inspector => inspector.Renderer == renderer).Count() == 0)
+						_renderers.Add(new RendererInspector(renderer));
+				}
+
 			}
 		}
 
@@ -45,6 +54,13 @@ namespace Nez.ImGuiTools.SceneGraphPanes
 			ImGui.Indent();
 			for (var i = 0; i < _renderers.Count; i++)
 			{
+				// watch out for removed Renderers
+				if (_renderers[i].Renderer.Scene == null)
+				{
+					_renderers.RemoveAt(i);
+					continue;
+				}
+
 				_renderers[i].Draw();
 				NezImGui.SmallVerticalSpace();
 			}
