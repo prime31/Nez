@@ -30,6 +30,26 @@ namespace Nez.UI
 		/// the key that activates the focused control
 		/// </summary>
 		public Keys KeyboardActionKey = Keys.Enter;
+		/// <summary>
+		/// the key(s) that activates the focused control
+		/// </summary>
+		public Keys[] KeyboardActionKeys = [];
+		/// <summary>
+		/// the key(s) that triggers "direction down" on the element with focus
+		/// </summary>
+		public Keys[] KeyboardDownKey = [Keys.Down];
+		/// <summary>
+		/// the key(s) that triggers "direction up" on the element with focus
+		/// </summary>
+		public Keys[] KeyboardUpKey = [Keys.Up];
+		/// <summary>
+		/// the key(s) that triggers "direction left" on the element with focus
+		/// </summary>
+		public Keys[] KeyboardLeftKey = [Keys.Left];
+		/// <summary>
+		/// the key(s) that triggers "direction right" on the element with focus
+		/// </summary>
+		public Keys[] KeyboardRightKey = [Keys.Right];
 
 		Group root;
 		public Camera Camera;
@@ -438,26 +458,26 @@ namespace Nez.UI
 			if (_gamepadFocusElement != null)
 			{
 				if (Input.GamePads[0].IsButtonPressed(GamepadActionButton) ||
-					(KeyboardEmulatesGamepad && Input.IsKeyPressed(KeyboardActionKey)))
+					(KeyboardEmulatesGamepad && IsKeyboardActionKeyPressed()))
 					_gamepadFocusElement.OnActionButtonPressed();
 				else if (Input.GamePads[0].IsButtonReleased(GamepadActionButton) ||
-						 (KeyboardEmulatesGamepad && Input.IsKeyReleased(KeyboardActionKey)))
+						 (KeyboardEmulatesGamepad && IsKeyboardActionKeyReleased()))
 					_gamepadFocusElement.OnActionButtonReleased();
 			}
 
 			IGamepadFocusable nextElement = null;
 			var direction = Direction.None;
 			if (Input.GamePads[0].DpadLeftPressed || Input.GamePads[0].IsLeftStickLeftPressed() ||
-				(KeyboardEmulatesGamepad && Input.IsKeyPressed(Keys.Left)))
+				(KeyboardEmulatesGamepad && Input.IsKeyPressed(KeyboardLeftKey)))
 				direction = Direction.Left;
 			else if (Input.GamePads[0].DpadRightPressed || Input.GamePads[0].IsLeftStickRightPressed() ||
-					 (KeyboardEmulatesGamepad && Input.IsKeyPressed(Keys.Right)))
+					 (KeyboardEmulatesGamepad && Input.IsKeyPressed(KeyboardRightKey)))
 				direction = Direction.Right;
 			else if (Input.GamePads[0].DpadUpPressed || Input.GamePads[0].IsLeftStickUpPressed() ||
-					 (KeyboardEmulatesGamepad && Input.IsKeyPressed(Keys.Up)))
+					 (KeyboardEmulatesGamepad && Input.IsKeyPressed(KeyboardUpKey)))
 				direction = Direction.Up;
 			else if (Input.GamePads[0].DpadDownPressed || Input.GamePads[0].IsLeftStickDownPressed() ||
-					 (KeyboardEmulatesGamepad && Input.IsKeyPressed(Keys.Down)))
+					 (KeyboardEmulatesGamepad && Input.IsKeyPressed(KeyboardDownKey)))
 				direction = Direction.Down;
 
 			// make sure we have a valid direction
@@ -485,6 +505,32 @@ namespace Nez.UI
 		public void RemoveInputFocusListener(Element element)
 		{
 			_inputFocusListeners.Remove(element);
+		}
+
+
+		/// <summary>
+		/// Compares Keys[] first, then compares Keys 
+		/// </summary>
+		/// <returns><c>true</c>, if keys[] is not empty and any of the keys are pressed, otherwise if the KeyboardActionKey is pressed, <c>false</c> otherwise.</returns>
+		bool IsKeyboardActionKeyPressed()
+		{
+			if (KeyboardActionKeys.Length == 0)
+				return Input.IsKeyPressed(KeyboardActionKey);
+			else
+				return Input.IsKeyPressed(KeyboardActionKeys);
+		}
+
+
+		/// <summary>
+		/// Compares Keys[] first, then compares Keys 
+		/// </summary>
+		/// <returns><c>true</c>, if keys[] is not empty and any of the keys are released, otherwise if the KeyboardActionKey is released, <c>false</c> otherwise.</returns>
+		bool IsKeyboardActionKeyReleased()
+		{
+			if (KeyboardActionKeys.Length == 0)
+				return Input.IsKeyReleased(KeyboardActionKey);
+			else
+				return Input.IsKeyReleased(KeyboardActionKeys);
 		}
 
 		#endregion
