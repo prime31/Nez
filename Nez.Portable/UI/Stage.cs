@@ -37,19 +37,19 @@ namespace Nez.UI
 		/// <summary>
 		/// the key(s) that triggers "direction down" on the element with focus
 		/// </summary>
-		public Keys[] KeyboardDownKey = [Keys.Down];
+		public Keys[] KeyboardDownKeys = [Keys.Down];
 		/// <summary>
 		/// the key(s) that triggers "direction up" on the element with focus
 		/// </summary>
-		public Keys[] KeyboardUpKey = [Keys.Up];
+		public Keys[] KeyboardUpKeys = [Keys.Up];
 		/// <summary>
 		/// the key(s) that triggers "direction left" on the element with focus
 		/// </summary>
-		public Keys[] KeyboardLeftKey = [Keys.Left];
+		public Keys[] KeyboardLeftKeys = [Keys.Left];
 		/// <summary>
 		/// the key(s) that triggers "direction right" on the element with focus
 		/// </summary>
-		public Keys[] KeyboardRightKey = [Keys.Right];
+		public Keys[] KeyboardRightKeys = [Keys.Right];
 
 		Group root;
 		public Camera Camera;
@@ -468,16 +468,16 @@ namespace Nez.UI
 			IGamepadFocusable nextElement = null;
 			var direction = Direction.None;
 			if (Input.GamePads[0].DpadLeftPressed || Input.GamePads[0].IsLeftStickLeftPressed() ||
-				(KeyboardEmulatesGamepad && Input.IsKeyPressed(KeyboardLeftKey)))
+				(KeyboardEmulatesGamepad && Input.IsKeyPressed(KeyboardLeftKeys)))
 				direction = Direction.Left;
 			else if (Input.GamePads[0].DpadRightPressed || Input.GamePads[0].IsLeftStickRightPressed() ||
-					 (KeyboardEmulatesGamepad && Input.IsKeyPressed(KeyboardRightKey)))
+					 (KeyboardEmulatesGamepad && Input.IsKeyPressed(KeyboardRightKeys)))
 				direction = Direction.Right;
 			else if (Input.GamePads[0].DpadUpPressed || Input.GamePads[0].IsLeftStickUpPressed() ||
-					 (KeyboardEmulatesGamepad && Input.IsKeyPressed(KeyboardUpKey)))
+					 (KeyboardEmulatesGamepad && Input.IsKeyPressed(KeyboardUpKeys)))
 				direction = Direction.Up;
 			else if (Input.GamePads[0].DpadDownPressed || Input.GamePads[0].IsLeftStickDownPressed() ||
-					 (KeyboardEmulatesGamepad && Input.IsKeyPressed(KeyboardDownKey)))
+					 (KeyboardEmulatesGamepad && Input.IsKeyPressed(KeyboardDownKeys)))
 				direction = Direction.Down;
 
 			// make sure we have a valid direction
