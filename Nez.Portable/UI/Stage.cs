@@ -280,7 +280,7 @@ namespace Nez.UI
 
 			if (secondaryInputPressed)
 			{
-				UpdatePrimaryInputDown(inputPos, over);
+				UpdateSecondaryInputDown(inputPos, over);
 			}
 
 			if (inputMoved)
@@ -321,6 +321,29 @@ namespace Nez.UI
 
 				// add the listener to be notified for all onMouseDown and onMouseUp events
 				if (listener.OnLeftMousePressed(elementLocal))
+					_inputFocusListeners.Add(over);
+			}
+		}
+		
+		/// <summary>
+		/// Right Mouse or touch is down this frame.
+		/// </summary>
+		/// <param name="inputPos">location of cursor</param>
+		/// <param name="over">element under cursor</param>
+		void UpdateSecondaryInputDown(Vector2 inputPos, Element over)
+		{
+			// lose keyboard focus if we click outside of the keyboardFocusElement
+			if (_keyboardFocusElement != null && over != _keyboardFocusElement)
+				SetKeyboardFocus(null);
+
+			// if we are over an element and the left button was pressed we notify our listener
+			if (over is IInputListener)
+			{
+				var elementLocal = over.StageToLocalCoordinates(inputPos);
+				var listener = over as IInputListener;
+
+				// add the listener to be notified for all onMouseDown and onMouseUp events
+				if (listener.OnRightMousePressed(elementLocal))
 					_inputFocusListeners.Add(over);
 			}
 		}
