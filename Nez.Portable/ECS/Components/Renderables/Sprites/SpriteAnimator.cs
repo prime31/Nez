@@ -158,16 +158,6 @@ namespace Nez.Sprites
 						break;
 					}
 					
-					switch (PingPongLoopState)
-					{
-						case PingPongLoopStates.Ping:
-							ParsePingLoop();
-							break;
-						case PingPongLoopStates.Pong:
-							ParsePongLoop();
-							break;
-					}
-
 					ParsePingPongLoop();
 					break;
 				case LoopMode.PingPongOnce:
