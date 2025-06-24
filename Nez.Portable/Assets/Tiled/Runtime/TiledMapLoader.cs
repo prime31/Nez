@@ -506,7 +506,7 @@ namespace Nez.Tiled
 			obj.Y = (float)xObject.Attribute("y");
 			obj.Width = (float?)xObject.Attribute("width") ?? (float?)obj.Width ?? 0.0f;
 			obj.Height = (float?)xObject.Attribute("height") ?? (float?)obj.Height ?? 0.0f;
-			obj.Type = (string)xObject.Attribute("type") ?? (string)xObject.Attribute("class") ?? string.Empty;
+			obj.Type = (string)xObject.Attribute("type") ?? (string)xObject.Attribute("class") ?? (string)obj.Type ?? string.Empty;
 			obj.Visible = (bool?)xObject.Attribute("visible") ?? true;
 			obj.Rotation = (float?)xObject.Attribute("rotation") ?? (float?)obj.Rotation ?? 0.0f;
 
