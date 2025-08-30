@@ -30,26 +30,42 @@ namespace Nez.UI
 		/// the key that activates the focused control
 		/// </summary>
 		public Keys KeyboardActionKey = Keys.Enter;
+
 		/// <summary>
 		/// the key(s) that activates the focused control
 		/// </summary>
-		public Keys[] KeyboardActionKeys = [];
+		public Keys[] KeyboardActionKeys = new Keys[0];
 		/// <summary>
 		/// the key(s) that triggers "direction down" on the element with focus
 		/// </summary>
-		public Keys[] KeyboardDownKeys = [Keys.Down];
+		public Keys[] KeyboardDownKeys = new Keys[]
+		{
+			Keys.Down
+		};
+
 		/// <summary>
 		/// the key(s) that triggers "direction up" on the element with focus
 		/// </summary>
-		public Keys[] KeyboardUpKeys = [Keys.Up];
+		public Keys[] KeyboardUpKeys = new Keys[]
+		{
+			Keys.Up
+		};
+
 		/// <summary>
 		/// the key(s) that triggers "direction left" on the element with focus
 		/// </summary>
-		public Keys[] KeyboardLeftKeys = [Keys.Left];
+		public Keys[] KeyboardLeftKeys = new Keys[]
+		{
+			Keys.Left
+		};
+
 		/// <summary>
 		/// the key(s) that triggers "direction right" on the element with focus
 		/// </summary>
-		public Keys[] KeyboardRightKeys = [Keys.Right];
+		public Keys[] KeyboardRightKeys = new Keys[]
+		{
+			Keys.Right
+		};
 
 		Group root;
 		public Camera Camera;
