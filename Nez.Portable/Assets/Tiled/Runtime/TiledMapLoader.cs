@@ -184,16 +184,18 @@ namespace Nez.Tiled
 				var pval = string.Empty;
 				if (isClass)
 				{
-					// Loop through sub elements and pull name/value for dict
-					foreach (var subP in p.Elements("properties").DescendantNodes())
+					// Loop through all descendant properties
+					foreach (var descendantProperty in p.Descendants())
 					{
-						if (subP is XElement element)
+						// If the property has no attributes or is a class skip it
+						if (!descendantProperty.HasAttributes || descendantProperty.Attribute("type")?.Value == "class")
 						{
-							pname = element.Attribute("name")?.Value;
-							pval = element.Attribute("value")?.Value ?? element.Value;
-
-							dict.Add(pname, pval);
+							continue;
 						}
+
+						pname = descendantProperty.Attribute("name")?.Value;
+						pval = descendantProperty.Attribute("value")?.Value;
+						dict.Add(pname, pval);
 					}
 				}
 				else
