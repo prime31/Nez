@@ -375,6 +375,7 @@ namespace Nez
 
 			Camera = null;
 			Content.Dispose();
+			Core.GraphicsDevice.SetRenderTarget(null);
 			_sceneRenderTarget.Dispose();
 			Physics.Clear();
 
