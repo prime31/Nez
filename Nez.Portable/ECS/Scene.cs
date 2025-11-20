@@ -348,7 +348,8 @@ namespace Nez
 			Core.GraphicsDevice.SetRenderTarget(_sceneRenderTarget);
 			Core.Emitter.AddObserver(CoreEvents.GraphicsDeviceReset, OnGraphicsDeviceReset);
 			Core.Emitter.AddObserver(CoreEvents.OrientationChanged, OnOrientationChanged);
-
+			Core.Emitter.AddObserver(CoreEvents.Exiting, OnExiting);
+			
 			_didSceneBegin = true;
 			OnStart();
 		}
@@ -367,6 +368,7 @@ namespace Nez
 			// now we can remove the Entities and finally the SceneComponents
 			Core.Emitter.RemoveObserver(CoreEvents.GraphicsDeviceReset, OnGraphicsDeviceReset);
 			Core.Emitter.RemoveObserver(CoreEvents.OrientationChanged, OnOrientationChanged);
+			Core.Emitter.RemoveObserver(CoreEvents.Exiting, OnExiting);
 			Entities.RemoveAllEntities();
 
 			for (var i = 0; i < _sceneComponents.Length; i++)
@@ -375,12 +377,8 @@ namespace Nez
 
 			Camera = null;
 			Content.Dispose();
-			Core.GraphicsDevice.SetRenderTarget(null);
-			_sceneRenderTarget.Dispose();
 			Physics.Clear();
-
-			if (_destinationRenderTarget != null)
-				_destinationRenderTarget.Dispose();
+			DisposeAndUnbindRenderTargets();
 
 			Unload();
 		}
@@ -521,6 +519,19 @@ namespace Nez
 		void OnGraphicsDeviceReset() => UpdateResolutionScaler();
 		void OnOrientationChanged() => UpdateResolutionScaler();
 
+		void OnExiting() => DisposeAndUnbindRenderTargets();
+
+		private void DisposeAndUnbindRenderTargets() {
+			// make sure we unbind before disposing
+			Core.GraphicsDevice.SetRenderTarget(null);
+			
+			if(_sceneRenderTarget != null)
+				_sceneRenderTarget.Dispose();
+			
+			if(_destinationRenderTarget != null)
+				_destinationRenderTarget.Dispose();
+		}
+		
 		#endregion
 
 
@@ -713,14 +724,12 @@ namespace Nez
 			Input._resolutionOffset = _finalRenderDestinationRect.Location;
 
 			// resize our RenderTargets
-			if (_sceneRenderTarget != null)
-				_sceneRenderTarget.Dispose();
+			DisposeAndUnbindRenderTargets();
 			_sceneRenderTarget = RenderTarget.Create(renderTargetWidth, renderTargetHeight);
 
 			// only create the destinationRenderTarget if it already exists, which would indicate we have PostProcessors
 			if (_destinationRenderTarget != null)
 			{
-				_destinationRenderTarget.Dispose();
 				_destinationRenderTarget = RenderTarget.Create(renderTargetWidth, renderTargetHeight);
 			}
 
