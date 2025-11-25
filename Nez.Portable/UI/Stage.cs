@@ -124,7 +124,7 @@ namespace Nez.UI
 		{
 			if (debugUnderMouse || debugParentUnderMouse || debugTableUnderMouse != Table.TableDebug.None)
 			{
-				var mousePos = ScreenToStageCoordinates(Input.RawMousePosition.ToVector2());
+				var mousePos = ScreenToStageCoordinates(GetMousePosition());
 				var element = Hit(mousePos);
 				if (element == null)
 				{
