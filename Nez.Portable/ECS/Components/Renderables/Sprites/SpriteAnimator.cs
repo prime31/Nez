@@ -37,7 +37,7 @@ namespace Nez.Sprites
 			/// </summary>
 			PingPongOnce
 		}
-
+		
 		public enum State
 		{
 			None,
@@ -46,6 +46,12 @@ namespace Nez.Sprites
 			Completed
 		}
 
+		public enum PingPongLoopStates
+		{
+			Ping,
+			Pong
+		}
+		
 		/// <summary>
 		/// fired when an animation completes, includes the animation name;
 		/// </summary>
@@ -75,23 +81,38 @@ namespace Nez.Sprites
 		/// index of the current frame in sprite array of the current animation
 		/// </summary>
 		public int CurrentFrame { get; set; }
+		
+		/// <summary>
+		/// amount of frames in the current animation
+		/// </summary>
+		public int FrameCount { get; private set; }
 
 		/// <summary>
-		/// checks to see if the CurrentAnimation is running
+		/// returns the total elapsed time of the animation.
 		/// </summary>
-		public bool IsRunning => AnimationState == State.Running;
-
+		public float CurrentElapsedTime { get; private set; }
+		
 		/// <summary>
 		/// Provides access to list of available animations
 		/// </summary>
-		public Dictionary<string, SpriteAnimation> Animations { get { return _animations; } }
+		public Dictionary<string, SpriteAnimation> Animations { get; private set; } 
+			= new Dictionary<string, SpriteAnimation>();
 
-		readonly Dictionary<string, SpriteAnimation> _animations = new Dictionary<string, SpriteAnimation>();
+		/// <summary>
+		/// Mode of looping the animation.
+		/// It can have 5 different values: Loop, Once, ClampForever, PingPong and PingPongOnce. Defaults to Loop.
+		/// </summary>
+		public LoopMode CurrentLoopMode { get; private set; }
+		
+		/// <summary>
+		/// The amount of seconds remaining in the current frame
+		/// </summary>
+		public float FrameTimeLeft { get; private set; }
 
-		float _elapsedTime;
-		LoopMode _loopMode;
-
-
+		public PingPongLoopStates PingPongLoopState { get; set; }
+		
+		private bool _pingPongOnceAnimationStarted = false;
+		
 		public SpriteAnimator()
 		{ }
 
@@ -102,58 +123,67 @@ namespace Nez.Sprites
 			if (AnimationState != State.Running || CurrentAnimation == null)
 				return;
 
-			var animation = CurrentAnimation;
-			var secondsPerFrame = 1 / (animation.FrameRates[CurrentFrame] * Speed);
-			var iterationDuration = secondsPerFrame * animation.Sprites.Length;
-			var pingPongIterationDuration = animation.Sprites.Length < 3 ? iterationDuration : secondsPerFrame * (animation.Sprites.Length * 2 - 2);
-
-			_elapsedTime += Time.DeltaTime;
-			var time = Math.Abs(_elapsedTime);
-
-			// Once and PingPongOnce reset back to Time = 0 once they complete
-			if (_loopMode == LoopMode.Once && time > iterationDuration ||
-				_loopMode == LoopMode.PingPongOnce && time > pingPongIterationDuration)
+			CurrentElapsedTime += Time.DeltaTime;
+			FrameTimeLeft -= Time.DeltaTime;
+			if (ShouldChangeFrame())
 			{
-				AnimationState = State.Completed;
-				_elapsedTime = 0;
-				CurrentFrame = 0;
-				Sprite = animation.Sprites[0];
-				OnAnimationCompletedEvent?.Invoke(CurrentAnimationName);
-				return;
+				NextFrame();
 			}
-
-			if (_loopMode == LoopMode.ClampForever && time > iterationDuration)
-			{
-				AnimationState = State.Completed;
-				CurrentFrame = animation.Sprites.Length - 1;
-				Sprite = animation.Sprites[CurrentFrame];
-				OnAnimationCompletedEvent?.Invoke(CurrentAnimationName);
-				return;
-			}
-
-			// figure out which frame we are on
-			int i = Mathf.FloorToInt(time / secondsPerFrame);
-			int n = animation.Sprites.Length;
-			if (n > 2 && (_loopMode == LoopMode.PingPong || _loopMode == LoopMode.PingPongOnce))
-			{
-				// create a pingpong frame
-				int maxIndex = n - 1;
-				CurrentFrame = maxIndex - Math.Abs(maxIndex - i % (maxIndex * 2));
-			}
-			else
-				// create a looping frame
-				CurrentFrame = i % n;
-
-			Sprite = animation.Sprites[CurrentFrame];
 		}
 
+		public virtual void NextFrame()
+		{
+			switch (CurrentLoopMode)
+			{
+				case LoopMode.Loop:
+					SetFrame((CurrentFrame + 1) % FrameCount);
+					break;
+				
+				case LoopMode.Once:
+				case LoopMode.ClampForever:
+					var newFrame = CurrentFrame + 1;
+					if (newFrame >= FrameCount)
+					{
+						SetCompleted(CurrentLoopMode == LoopMode.Once);
+					}
+					else
+					{
+						SetFrame(newFrame);
+					}
+					break;
+				
+				case LoopMode.PingPong:
+					if (FrameCount == 1)
+					{
+						break;
+					}
+					
+					ParsePingPongLoop();
+					break;
+				case LoopMode.PingPongOnce:
+					if (CurrentFrame == 0)
+					{
+						if (_pingPongOnceAnimationStarted)
+						{
+							SetCompleted(true);
+							break;
+						}
+
+						_pingPongOnceAnimationStarted = true;
+					}
+
+					ParsePingPongLoop();
+					break;
+			}
+		}
+		
 		/// <summary>
 		/// adds all the animations from the SpriteAtlas
 		/// </summary>
 		public SpriteAnimator AddAnimationsFromAtlas(SpriteAtlas atlas)
 		{
 			for (var i = 0; i < atlas.AnimationNames.Length; i++)
-				_animations.Add(atlas.AnimationNames[i], atlas.SpriteAnimations[i]);
+				Animations.Add(atlas.AnimationNames[i], atlas.SpriteAnimations[i]);
 			return this;
 		}
 
@@ -165,7 +195,7 @@ namespace Nez.Sprites
 			// if we have no sprite use the first frame we find
 			if (Sprite == null && animation.Sprites.Length > 0)
 				SetSprite(animation.Sprites[0]);
-			_animations[name] = animation;
+			Animations[name] = animation;
 			return this;
 		}
 
@@ -176,29 +206,32 @@ namespace Nez.Sprites
 			AddAnimation(name, new SpriteAnimation(sprites, fps));
 			return this;
 		}
-
-		#region Playback
-
-		/// <summary>
-		/// plays the animation with the given name. If no loopMode is specified it is defaults to Loop
-		/// </summary>
-		public void Play(string name, LoopMode? loopMode = null)
-		{
-			CurrentAnimation = _animations[name];
-			CurrentAnimationName = name;
-			CurrentFrame = 0;
-			AnimationState = State.Running;
-
-			Sprite = CurrentAnimation.Sprites[0];
-			_elapsedTime = 0;
-			_loopMode = loopMode ?? LoopMode.Loop;
-		}
-
+		
 		/// <summary>
 		/// checks to see if the animation is playing (i.e. the animation is active. it may still be in the paused state)
 		/// </summary>
 		public bool IsAnimationActive(string name) => CurrentAnimation != null && CurrentAnimationName.Equals(name);
+		
+		/// <summary>
+		/// checks to see if the CurrentAnimation is running
+		/// </summary>
+		public bool IsRunning => AnimationState == State.Running;
 
+		/// <summary>
+		/// plays the animation with the given name. If no loopMode is specified it is defaults to Loop
+		/// </summary>
+		public void Play(string name, LoopMode loopMode = LoopMode.Loop)
+		{
+			CurrentAnimation = Animations[name];
+			CurrentAnimationName = name;
+			FrameCount = CurrentAnimation.FrameRates.Length;
+			
+			SetFrame(0);
+
+			CurrentLoopMode = loopMode;
+			AnimationState = State.Running;
+		}
+		
 		/// <summary>
 		/// pauses the animator
 		/// </summary>
@@ -217,9 +250,98 @@ namespace Nez.Sprites
 			CurrentAnimation = null;
 			CurrentAnimationName = null;
 			CurrentFrame = 0;
+			CurrentElapsedTime = 0;
 			AnimationState = State.None;
 		}
 
-		#endregion
+		/// <summary>
+		/// Sets the current frame for the animation
+		/// </summary>
+		/// <param name="frameIndex">Index of the desired frame</param>
+		public void SetFrame(int frameIndex)
+		{
+			CurrentFrame = frameIndex;
+			Sprite = CurrentAnimation.Sprites[frameIndex];
+			FrameTimeLeft = ConvertFrameRateToSeconds(CurrentAnimation.FrameRates[frameIndex]);
+		}
+
+		/// <summary>
+		/// Sets the animation as completed
+		/// </summary>
+		/// <param name="returnToFirstFrame">If the animation should return to the first frame before finishing</param>
+		public void SetCompleted(bool returnToFirstFrame = false)
+		{
+			if (returnToFirstFrame)
+			{
+				SetFrame(0);
+			}
+
+			PingPongLoopState = PingPongLoopStates.Ping;
+			_pingPongOnceAnimationStarted = false;
+			
+			CurrentElapsedTime = 0;
+			AnimationState = State.Completed;
+			OnAnimationCompletedEvent?.Invoke(CurrentAnimationName);
+		}
+		
+		/// <summary>
+		/// Checks if it needs to change the current animation frame
+		/// </summary>
+		/// <returns>True if it does need to change frame, false otherwise</returns>
+		private bool ShouldChangeFrame()
+		{
+			return FrameTimeLeft <= 0;
+		}
+		
+		/// <summary>
+		/// Converts an animation frame rate (1/60s) to seconds
+		/// </summary>
+		/// <param name="frameRate"></param>
+		/// <returns>The number of seconds as a float</returns>
+		private float ConvertFrameRateToSeconds(float frameRate)
+		{
+			return 1 / (frameRate * Speed);
+		}
+
+		private void ParsePingPongLoop()
+		{
+			switch (PingPongLoopState)
+			{
+				case PingPongLoopStates.Ping:
+					ParsePingLoop();
+					break;
+				case PingPongLoopStates.Pong:
+					ParsePongLoop();
+					break;
+			}
+		}
+		
+		private void ParsePingLoop()
+		{
+			var newFrame = CurrentFrame + 1;
+			if (newFrame >= FrameCount)
+			{
+				PingPongLoopState = PingPongLoopStates.Pong;
+				ParsePongLoop();
+			}
+			else
+			{
+				SetFrame(newFrame);
+			}
+		}
+		
+		private void ParsePongLoop()
+		{
+			var newFrame = CurrentFrame - 1;
+			if (newFrame < 0)
+			{
+				PingPongLoopState = PingPongLoopStates.Ping;
+				ParsePingLoop();
+			}
+			else
+			{
+				SetFrame(newFrame);
+			}
+		}
 	}
 }

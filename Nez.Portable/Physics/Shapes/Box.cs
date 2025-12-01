@@ -14,7 +14,7 @@ namespace Nez.PhysicsShapes
 
 		public Box(float width, float height) : base(BuildBox(width, height), true)
 		{
-			isBox = true;
+			IsBox = true;
 			Width = width;
 			Height = height;
 		}
@@ -62,7 +62,7 @@ namespace Nez.PhysicsShapes
 			Points[3] = new Vector2(-halfWidth, halfHeight);
 
 			for (var i = 0; i < Points.Length; i++)
-				_originalPoints[i] = Points[i];
+				OriginalPoints[i] = Points[i];
 		}
 
 
@@ -74,10 +74,10 @@ namespace Nez.PhysicsShapes
 			if (IsUnrotated)
 			{
 				if (other is Box && (other as Box).IsUnrotated)
-					return bounds.Intersects(ref (other as Box).bounds);
+					return Bounds.Intersects(ref (other as Box).Bounds);
 
 				if (other is Circle)
-					return Collisions.RectToCircle(ref bounds, other.position, (other as Circle).Radius);
+					return Collisions.RectToCircle(ref Bounds, other.Position, (other as Circle).Radius);
 			}
 
 			// fallthrough to standard cases
@@ -102,7 +102,7 @@ namespace Nez.PhysicsShapes
 		public override bool ContainsPoint(Vector2 point)
 		{
 			if (IsUnrotated)
-				return bounds.Contains(point);
+				return Bounds.Contains(point);
 
 			return base.ContainsPoint(point);
 		}

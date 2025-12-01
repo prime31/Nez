@@ -100,14 +100,14 @@ namespace Nez.Shadows
 
 			if (_polygon == null)
 				_polygon = new Polygon(verts);
-			else if (_polygon._originalPoints.Length == verts.Length)
-				_polygon._originalPoints = verts;
+			else if (_polygon.OriginalPoints.Length == verts.Length)
+				_polygon.OriginalPoints = verts;
 			else
 				_polygon.SetPoints(verts);
 
 			// rotate our verts based on the Entity.rotation and offset half of the spot angle so that the center of the spot points in
 			// the direction of rotation
-			Polygon.RotatePolygonVerts(Entity.Rotation - _spotAngle * 0.5f * Mathf.Deg2Rad, _polygon._originalPoints,
+			Polygon.RotatePolygonVerts(Entity.Rotation - _spotAngle * 0.5f * Mathf.Deg2Rad, _polygon.OriginalPoints,
 				_polygon.Points);
 		}
 
@@ -123,7 +123,7 @@ namespace Nez.Shadows
 		public override void DebugRender(Batcher batcher)
 		{
 			base.DebugRender(batcher);
-			batcher.DrawPolygon(_polygon.position, _polygon.Points, Debug.Colors.ColliderEdge, true,
+			batcher.DrawPolygon(_polygon.Position, _polygon.Points, Debug.Colors.ColliderEdge, true,
 				Debug.Size.LineSizeMultiplier);
 		}
 
@@ -135,7 +135,7 @@ namespace Nez.Shadows
 			{
 				// when rotation changes we need to update our verts to account for the new rotation
 				Polygon.RotatePolygonVerts(Entity.Rotation - _spotAngle * 0.5f * Mathf.Deg2Rad,
-					_polygon._originalPoints, _polygon.Points);
+					_polygon.OriginalPoints, _polygon.Points);
 			}
 		}
 
@@ -148,7 +148,7 @@ namespace Nez.Shadows
 		{
 			CollisionResult result;
 			var totalCollisions = 0;
-			_polygon.position = Entity.Transform.Position + _localOffset;
+			_polygon.Position = Entity.Transform.Position + _localOffset;
 
 			var neighbors = Physics.BoxcastBroadphase(Bounds, CollidesWithLayers);
 			foreach (var neighbor in neighbors)

@@ -22,7 +22,7 @@ namespace Nez.PhysicsShapes
 			var secondEdges = second.EdgeNormals;
 			var minIntervalDistance = float.PositiveInfinity;
 			var translationAxis = new Vector2();
-			var polygonOffset = first.position - second.position;
+			var polygonOffset = first.Position - second.Position;
 			Vector2 axis;
 
 			// Loop through all the edges of both polygons

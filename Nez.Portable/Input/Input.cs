@@ -169,6 +169,19 @@ namespace Nez
 			return _currentKbState.IsKeyDown(key) && !_previousKbState.IsKeyDown(key);
 		}
 
+		/// <summary>
+		/// only true if any of the keys are down this frame and not down the previous frame
+		/// </summary>
+		/// <returns><c>true</c>, if any of the keys pressed was gotten, <c>false</c> otherwise.</returns>
+		public static bool IsKeyPressed(Keys[] keys)
+		{
+			foreach (var key in keys)
+			{
+				if (IsKeyPressed(key))
+					return true;
+			}
+			return false;
+		}
 
 		/// <summary>
 		/// true the entire time the key is down
@@ -179,6 +192,19 @@ namespace Nez
 			return _currentKbState.IsKeyDown(key);
 		}
 
+		/// <summary>
+		/// only true if any of the keys are down
+		/// </summary>
+		/// <returns><c>true</c>, if any of the keys down was gotten, <c>false</c> otherwise.</returns>
+		public static bool IsKeyDown(Keys[] keys)
+		{
+			foreach (var key in keys)
+			{
+				if (IsKeyDown(key))
+					return true;
+			}
+			return false;
+		}
 
 		/// <summary>
 		/// true only the frame the key is released
@@ -189,6 +215,19 @@ namespace Nez
 			return !_currentKbState.IsKeyDown(key) && _previousKbState.IsKeyDown(key);
 		}
 
+		/// <summary>
+		/// true only if any of the keys are released
+		/// </summary>
+		/// <returns><c>true</c>, if any of the keys up was gotten, <c>false</c> otherwise.</returns>
+		public static bool IsKeyReleased(Keys[] keys)
+		{
+			foreach (var key in keys)
+			{
+				if (IsKeyReleased(key))
+					return true;
+			}
+			return false;
+		}
 
 		/// <summary>
 		/// only true if one of the keys is down this frame
@@ -217,6 +256,15 @@ namespace Nez
 		public static bool IsKeyReleased(Keys keyA, Keys keyB)
 		{
 			return IsKeyReleased(keyA) || IsKeyReleased(keyB);
+		}
+
+		/// <summary>
+		/// returns true if the keyboard state changed
+		/// </summary>
+		/// <returns><c>true</c>, if previous keyboard state does not equal current keyboard state, <c>false</c> otherwise.</returns>
+		public static bool HasKeyboardStateChanged()
+		{
+			return PreviousKeyboardState != CurrentKeyboardState;
 		}
 
 		#endregion
@@ -375,6 +423,15 @@ namespace Nez
 				pastPos *= _resolutionScale;
 				return ScaledMousePosition - pastPos;
 			}
+		}
+
+		/// <summary>
+		/// returns true if the mouse state changed
+		/// </summary>
+		/// <returns><c>true</c>, if previous mouse state does not equal current mouse state, <c>false</c> otherwise.</returns>
+		public static bool HasMouseStateChanged()
+		{
+			return PreviousMouseState != CurrentMouseState;
 		}
 
 		#endregion

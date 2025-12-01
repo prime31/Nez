@@ -15,8 +15,8 @@ namespace Nez.PhysicsShapes
 
 			for (int j = polygon.Points.Length - 1, i = 0; i < polygon.Points.Length; j = i, i++)
 			{
-				var edge1 = polygon.position + polygon.Points[j];
-				var edge2 = polygon.position + polygon.Points[i];
+				var edge1 = polygon.Position + polygon.Points[j];
+				var edge2 = polygon.Position + polygon.Points[i];
 				Vector2 intersection;
 				if (LineToLine(edge1, edge2, start, end, out intersection))
 				{
@@ -58,7 +58,7 @@ namespace Nez.PhysicsShapes
 			// calculate the length here and normalize d separately since we will need it to get the fraction if we have a hit
 			var lineLength = Vector2.Distance(start, end);
 			var d = (end - start) / lineLength;
-			var m = start - s.position;
+			var m = start - s.Position;
 			var b = Vector2.Dot(m, d);
 			var c = Vector2.Dot(m, m) - s.Radius * s.Radius;
 
@@ -81,7 +81,7 @@ namespace Nez.PhysicsShapes
 
 			hit.Point = start + hit.Fraction * d;
 			Vector2.Distance(ref start, ref hit.Point, out hit.Distance);
-			hit.Normal = Vector2.Normalize(hit.Point - s.position);
+			hit.Normal = Vector2.Normalize(hit.Point - s.Position);
 			hit.Fraction = hit.Distance / lineLength;
 
 			return true;

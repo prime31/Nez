@@ -73,7 +73,7 @@ namespace Nez
 
 
 	/// <summary>
-	/// Objects implementing this interface will have {@link #reset()} called when passed to {@link #push(Object)}
+	/// Objects implementing this interface will have <see cref="Reset"/> called when passed to <see cref="Pool.Free"/>
 	/// </summary>
 	public interface IPoolable
 	{

@@ -14,18 +14,18 @@ namespace Nez.Particles
 		/// </summary>
 		static Circle _circleCollisionShape = new Circle(0);
 
-		internal Vector2 position;
-		internal Vector2 spawnPosition;
+		public Vector2 Position;
+		public Vector2 SpawnPosition;
 		Vector2 _direction;
 
-		internal Color color;
+		public Color Color;
 
 		// stored at particle creation time and used for lerping the color
 		Color _startColor;
 
 		// stored at particle creation time and used for lerping the color
 		Color _finishColor;
-		internal float rotation;
+		public float Rotation;
 		float _rotationDelta;
 		float _radialAcceleration;
 		float _tangentialAcceleration;
@@ -33,7 +33,7 @@ namespace Nez.Particles
 		float _radiusDelta;
 		float _angle;
 		float _degreesPerSecond;
-		internal float particleSize;
+		public float ParticleSize;
 		float _particleSizeDelta;
 
 		float _timeToLive;
@@ -56,10 +56,10 @@ namespace Nez.Particles
 			// init the position of the Particle. This is based on the source position of the particle emitter
 			// plus a configured variance. The Random.minusOneToOne method allows the number to be both positive
 			// and negative
-			position.X = emitterConfig.SourcePositionVariance.X * Random.MinusOneToOne();
-			position.Y = emitterConfig.SourcePositionVariance.Y * Random.MinusOneToOne();
+			Position.X = emitterConfig.SourcePositionVariance.X * Random.MinusOneToOne();
+			Position.Y = emitterConfig.SourcePositionVariance.Y * Random.MinusOneToOne();
 
-			this.spawnPosition = spawnPosition;
+			this.SpawnPosition = spawnPosition;
 
 			// init the direction of the   The newAngle is calculated using the angle passed in and the
 			// angle variance.
@@ -102,7 +102,7 @@ namespace Nez.Particles
 			var particleFinishSize = emitterConfig.FinishParticleSize +
 			                         emitterConfig.FinishParticleSizeVariance * Random.MinusOneToOne();
 			_particleSizeDelta = (particleFinishSize - particleStartSize) / _timeToLive;
-			particleSize = MathHelper.Max(0, particleStartSize);
+			ParticleSize = MathHelper.Max(0, particleStartSize);
 
 
 			// calculate the color the particle should have when it starts its life. All the elements
@@ -114,7 +114,7 @@ namespace Nez.Particles
 				(int) (emitterConfig.StartColor.B + emitterConfig.StartColorVariance.B * Random.MinusOneToOne()),
 				(int) (emitterConfig.StartColor.A + emitterConfig.StartColorVariance.A * Random.MinusOneToOne())
 			);
-			color = _startColor;
+			Color = _startColor;
 
 			// calculate the color the particle should be when its life is over. This is done the same
 			// way as the start color above
@@ -131,7 +131,7 @@ namespace Nez.Particles
 			                                  emitterConfig.RotationStartVariance * Random.MinusOneToOne());
 			var endA = MathHelper.ToRadians(emitterConfig.RotationEnd +
 			                                emitterConfig.RotationEndVariance * Random.MinusOneToOne());
-			rotation = startA;
+			Rotation = startA;
 			_rotationDelta = (endA - startA) / _timeToLive;
 		}
 
@@ -163,16 +163,16 @@ namespace Nez.Particles
 						tmp.X = -Mathf.Cos(_angle) * _radius;
 						tmp.Y = -Mathf.Sin(_angle) * _radius;
 
-						_velocity = tmp - position;
-						position = tmp;
+						_velocity = tmp - Position;
+						Position = tmp;
 					}
 					else
 					{
 						Vector2 tmp, radial, tangential;
 						radial = Vector2.Zero;
 
-						if (position.X != 0 || position.Y != 0)
-							Vector2.Normalize(ref position, out radial);
+						if (Position.X != 0 || Position.Y != 0)
+							Vector2.Normalize(ref Position, out radial);
 
 						tangential = radial;
 						radial = radial * _radialAcceleration;
@@ -188,20 +188,20 @@ namespace Nez.Particles
 						tmp = _direction * Time.DeltaTime;
 
 						_velocity = tmp / Time.DeltaTime;
-						position = position + tmp;
+						Position = Position + tmp;
 					}
 				}
 
 				// update the particles color. we do the lerp from finish-to-start because timeToLive counts from particleLifespan to 0
 				var t = (_particleLifetime - _timeToLive) / _particleLifetime;
-				ColorExt.Lerp(ref _startColor, ref _finishColor, out color, t);
+				ColorExt.Lerp(ref _startColor, ref _finishColor, out Color, t);
 
 				// update the particle size
-				particleSize += _particleSizeDelta * Time.DeltaTime;
-				particleSize = MathHelper.Max(0, particleSize);
+				ParticleSize += _particleSizeDelta * Time.DeltaTime;
+				ParticleSize = MathHelper.Max(0, ParticleSize);
 
 				// update the rotation of the particle
-				rotation += _rotationDelta * Time.DeltaTime;
+				Rotation += _rotationDelta * Time.DeltaTime;
 
 
 				if (collisionConfig.Enabled)
@@ -211,7 +211,7 @@ namespace Nez.Particles
 					{
 						// handle after collision movement. we need to track velocity for this
 						_velocity += collisionConfig.Gravity * Time.DeltaTime;
-						position += _velocity * Time.DeltaTime;
+						Position += _velocity * Time.DeltaTime;
 
 						// if we move too slow we die
 						if (_velocity.LengthSquared() < collisionConfig.MinKillSpeedSquared)
@@ -219,11 +219,11 @@ namespace Nez.Particles
 					}
 
 					// should we use our spawnPosition as a reference or the parent Transforms position?
-					var pos = emitterConfig.SimulateInWorldSpace ? spawnPosition : rootPosition;
+					var pos = emitterConfig.SimulateInWorldSpace ? SpawnPosition : rootPosition;
 
-					_circleCollisionShape.RecalculateBounds(particleSize * 0.5f * collisionConfig.RadiusScale,
-						pos + position);
-					var neighbors = Physics.BoxcastBroadphase(ref _circleCollisionShape.bounds,
+					_circleCollisionShape.RecalculateBounds(ParticleSize * 0.5f * collisionConfig.RadiusScale,
+						pos + Position);
+					var neighbors = Physics.BoxcastBroadphase(ref _circleCollisionShape.Bounds,
 						collisionConfig.CollidesWithLayers);
 					foreach (var neighbor in neighbors)
 					{
@@ -231,7 +231,7 @@ namespace Nez.Particles
 						if (_circleCollisionShape.CollidesWithShape(neighbor.Shape, out result))
 						{
 							// handle the overlap
-							position -= result.MinimumTranslationVector;
+							Position -= result.MinimumTranslationVector;
 							CalculateCollisionResponseVelocity(collisionConfig.Friction, collisionConfig.Elasticity,
 								ref result.MinimumTranslationVector);
 

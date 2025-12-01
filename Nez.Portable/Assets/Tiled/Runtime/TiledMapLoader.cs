@@ -179,12 +179,33 @@ namespace Nez.Tiled
 			foreach (var p in xmlProp.Elements("property"))
 			{
 				var pname = p.Attribute("name").Value;
+				var isClass = p.Attribute("type") != null && p.Attribute("type").Value == "class";
+				XAttribute valueAttr;
+				var pval = string.Empty;
+				if (isClass)
+				{
+					// Loop through all descendant properties
+					foreach (var descendantProperty in p.Descendants())
+					{
+						// If the property has no attributes or is a class skip it
+						if (!descendantProperty.HasAttributes || descendantProperty.Attribute("type")?.Value == "class")
+						{
+							continue;
+						}
 
-				// Fallback to element value if no "value"
-				var valueAttr = p.Attribute("value");
-				var pval = valueAttr?.Value ?? p.Value;
+						pname = descendantProperty.Attribute("name")?.Value;
+						pval = descendantProperty.Attribute("value")?.Value;
+						dict.Add(pname, pval);
+					}
+				}
+				else
+				{
+					// Fallback to element value if no "value"
+					valueAttr = p.Attribute("value");
+					pval = valueAttr?.Value ?? p.Value;
 
-				dict.Add(pname, pval);
+					dict.Add(pname, pval);
+				}
 			}
 			return dict;
 		}
@@ -468,13 +489,26 @@ namespace Nez.Tiled
 				}
 			}
 
+			// obj.Properties might already have data from the above template, 
+			// so merge-in xObject's properties dict with the values from template
+			var properties = ParsePropertyDict(xObject.Element("properties"));
+			if (properties != null)
+			{
+				if (obj.Properties == null)
+					obj.Properties = new Dictionary<string, string>();
+
+				foreach (KeyValuePair<string, string> property in properties)
+					obj.Properties[property.Key] = property.Value;
+			}
+
+
 			obj.Id = (int?)xObject.Attribute("id") ?? (int?)obj.Id ?? 0;
 			obj.Name = (string)xObject.Attribute("name") ?? obj.Name ?? string.Empty;
 			obj.X = (float)xObject.Attribute("x");
 			obj.Y = (float)xObject.Attribute("y");
 			obj.Width = (float?)xObject.Attribute("width") ?? (float?)obj.Width ?? 0.0f;
 			obj.Height = (float?)xObject.Attribute("height") ?? (float?)obj.Height ?? 0.0f;
-			obj.Type = (string)xObject.Attribute("type") ?? (string)xObject.Attribute("class") ?? string.Empty;
+			obj.Type = (string)xObject.Attribute("type") ?? (string)xObject.Attribute("class") ?? (string)obj.Type ?? string.Empty;
 			obj.Visible = (bool?)xObject.Attribute("visible") ?? true;
 			obj.Rotation = (float?)xObject.Attribute("rotation") ?? (float?)obj.Rotation ?? 0.0f;
 
@@ -519,7 +553,6 @@ namespace Nez.Tiled
 				obj.ObjectType = TmxObjectType.Basic;
 			}
 
-			obj.Properties = ParsePropertyDict(xObject.Element("properties"));
 
 			return obj;
 		}

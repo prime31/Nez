@@ -357,7 +357,7 @@ namespace Nez.Spatial
 		public int OverlapRectangle(ref RectangleF rect, Collider[] results, int layerMask)
 		{
 			_overlapTestBox.UpdateBox(rect.Width, rect.Height);
-			_overlapTestBox.position = rect.Location;
+			_overlapTestBox.Position = rect.Location;
 
 			var resultCounter = 0;
 			var potentials = AabbBroadphase(ref rect, null, layerMask);
@@ -412,7 +412,7 @@ namespace Nez.Spatial
 			var bounds = new RectangleF(circleCenter.X - radius, circleCenter.Y - radius, radius * 2f, radius * 2f);
 
 			_overlapTestCirce.Radius = radius;
-			_overlapTestCirce.position = circleCenter;
+			_overlapTestCirce.Position = circleCenter;
 
 			var resultCounter = 0;
 			var potentials = AabbBroadphase(ref bounds, null, layerMask);

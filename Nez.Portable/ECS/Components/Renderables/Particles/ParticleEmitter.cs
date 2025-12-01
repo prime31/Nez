@@ -178,11 +178,11 @@ namespace Nez.Particles
 				else
 				{
 					// particle is good. collect min/max positions for the bounds
-					var pos = _emitterConfig.SimulateInWorldSpace ? currentParticle.spawnPosition : rootPosition;
-					pos += currentParticle.position;
+					var pos = _emitterConfig.SimulateInWorldSpace ? currentParticle.SpawnPosition : rootPosition;
+					pos += currentParticle.Position;
 					Vector2.Min(ref min, ref pos, out min);
 					Vector2.Max(ref max, ref pos, out max);
-					maxParticleSize = Math.Max(maxParticleSize, currentParticle.particleSize);
+					maxParticleSize = Math.Max(maxParticleSize, currentParticle.ParticleSize);
 				}
 			}
 
@@ -215,16 +215,16 @@ namespace Nez.Particles
 			for (var i = 0; i < _particles.Count; i++)
 			{
 				var currentParticle = _particles[i];
-				var pos = _emitterConfig.SimulateInWorldSpace ? currentParticle.spawnPosition : rootPosition;
+				var pos = _emitterConfig.SimulateInWorldSpace ? currentParticle.SpawnPosition : rootPosition;
 
 				if (_emitterConfig.Sprite == null)
-					batcher.Draw(Graphics.Instance.PixelTexture, pos + currentParticle.position, currentParticle.color,
-						currentParticle.rotation, Vector2.One, currentParticle.particleSize * 0.5f, SpriteEffects.None,
+					batcher.Draw(Graphics.Instance.PixelTexture, pos + currentParticle.Position, currentParticle.Color,
+						currentParticle.Rotation, Vector2.One, currentParticle.ParticleSize * 0.5f, SpriteEffects.None,
 						LayerDepth);
 				else
-					batcher.Draw(_emitterConfig.Sprite, pos + currentParticle.position,
-						currentParticle.color, currentParticle.rotation, _emitterConfig.Sprite.Center,
-						currentParticle.particleSize / _emitterConfig.Sprite.SourceRect.Width, SpriteEffects.None,
+					batcher.Draw(_emitterConfig.Sprite, pos + currentParticle.Position,
+						currentParticle.Color, currentParticle.Rotation, _emitterConfig.Sprite.Center,
+						currentParticle.ParticleSize / _emitterConfig.Sprite.SourceRect.Width, SpriteEffects.None,
 						LayerDepth);
 			}
 		}

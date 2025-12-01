@@ -74,6 +74,12 @@ namespace Nez
 		public Vector2 Max => new Vector2(Right, Bottom);
 
 		/// <summary>
+		/// gets the min point of the rectangle, the top-left corner
+		/// </summary>
+		/// <value>The max.</value>
+		public Vector2 Min => new Vector2(Left, Top);
+
+		/// <summary>
 		/// Whether or not this <see cref="RectangleF"/> has a <see cref="Width"/> and
 		/// <see cref="Height"/> of 0, and a <see cref="Location"/> of (0, 0).
 		/// </summary>

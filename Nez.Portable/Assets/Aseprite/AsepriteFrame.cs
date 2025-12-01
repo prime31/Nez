@@ -60,7 +60,7 @@ namespace Nez.Aseprite
 		/// A new array of color elements where each element represents the final pixels for this frame once flattened.
 		/// Order of color element starts with the top-left most pixel and is read left-to-right from top-to-bottom.
 		/// </returns>
-		public Color[] FlattenFrame(bool onlyVisibleLayers = true, bool includeBackgroundLayer = false)
+		public Color[] FlattenFrame(bool onlyVisibleLayers = true, bool includeBackgroundLayer = false, string layerName = null)
 		{
 			Color[] result = new Color[Width * Height];
 
@@ -73,6 +73,9 @@ namespace Nez.Aseprite
 
 				//  Are we processing cels on background layers?
 				if (cel.Layer.IsBackgroundLayer && !includeBackgroundLayer) { continue; }
+
+				//	If layer is specified, only select frame cels on that layer
+				if (layerName != null && !cel.Layer.Name.ToLower().Equals(layerName.ToLower())) {continue;}
 
 				//	Only process image cels for now.  
 				//	Note: Will look into adding tilemap cels in a future PR if it is requested enough or if someone
@@ -100,6 +103,78 @@ namespace Nez.Aseprite
 
 			return result;
 		}
+
+		/// <summary>
+/// Flattens this frame by blending all cel elements on the specified layers into a single image.
+/// </summary>
+/// <param name="onlyVisibleLayers">
+/// Indicates whether only cels that are on visible layers should be included when flattening this frame.
+/// </param>
+/// <param name="includeBackgroundLayer">
+/// Indicates whether the cel on the layer marked as the background layer in Aseprite should be included when
+/// flattening this frame.
+/// </param>
+/// <returns>
+/// A new array of color elements where each element represents the final pixels for this frame once flattened.
+/// Order of color element starts with the top-left most pixel and is read left-to-right from top-to-bottom.
+/// </returns>
+public Color[] FlattenFrameOnLayers(bool onlyVisibleLayers = true, bool includeBackgroundLayer = false, string[] layers = null)
+{
+	Color[] result = new Color[Width * Height];
+
+	for (int c = 0; c < Cels.Count; c++)
+	{
+		AsepriteCel cel = Cels[c];
+
+		//  Are we only processing cels on visible layers?
+		if (onlyVisibleLayers && !cel.Layer.IsVisible) { continue; }
+
+		//  Are we processing cels on background layers?
+		if (cel.Layer.IsBackgroundLayer && !includeBackgroundLayer) { continue; }
+
+		//	See if the current cel has the desired layers
+		if (layers != null)
+		{
+			bool layerFound = false;
+
+			foreach (var layer in layers)
+			{
+				if (cel.Layer.Name.ToLower().Equals(layer.ToLower()))
+					layerFound = true;
+			}
+			
+			if (!layerFound)
+			{
+				continue;
+			}
+		}
+
+		//	Only process image cels for now.  
+		//	Note: Will look into adding tilemap cels in a future PR if it is requested enough or if someone
+		//	else wants to add it in.  You can see how I do it in my MonoGame.Aseprite library for reference if
+		//	needed.
+		CheckCelType:
+		if (cel is AsepriteLinkedCel linkedCel)
+		{
+			cel = linkedCel.Cel;
+			goto CheckCelType;
+		}
+
+		if (cel is AsepriteImageCel imageCel)
+		{
+			BlendCel(backdrop: result,
+				source: imageCel.Pixels,
+				blendMode: imageCel.Layer.BlendMode,
+				celX: imageCel.Position.X,
+				celY: imageCel.Position.Y,
+				celWidth: imageCel.Width,
+				celOpacity: imageCel.Opacity,
+				layerOpacity: imageCel.Layer.Opacity);
+		}
+	}
+
+	return result;
+}
 
 		/// <summary>
 		/// Translates the data in this frame into a sprite.
