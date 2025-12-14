@@ -101,7 +101,7 @@ namespace Nez.Sprites
 				return;
 			}
 
-			FlipX = isFlippedY;
+			FlipY = isFlippedY;
 			LocalOffset *= new Vector2(1, -1);
 		}
 
