@@ -14,7 +14,7 @@ namespace Nez
 		/// <summary>
 		/// if null, all layers will be rendered
 		/// </summary>
-		public int[] LayerIndicesToRender;
+		public ITmxLayer[] LayersToRender;
 
 		public bool AutoUpdateTilesets = true;
 
@@ -34,7 +34,7 @@ namespace Nez
 			_shouldCreateColliders = shouldCreateColliders;
 
 			if (collisionLayerName != null)
-				CollisionLayer = tiledMap.TileLayers[collisionLayerName];
+				CollisionLayer = tiledMap.GetLayerRecursive(collisionLayerName) as TmxLayer;
 		}
 
 		/// <summary>
@@ -43,8 +43,8 @@ namespace Nez
 		/// <param name="layerName">Layer name.</param>
 		public void SetLayerToRender(string layerName)
 		{
-			LayerIndicesToRender = new int[1];
-			LayerIndicesToRender[0] = TiledMap.Layers.IndexOf(TiledMap.GetLayer(layerName));
+			LayersToRender = new ITmxLayer[1];
+			LayersToRender[0] = TiledMap.GetLayerRecursive(layerName);
 		}
 
 		/// <summary>
@@ -53,10 +53,10 @@ namespace Nez
 		/// <param name="layerNames">Layer names.</param>
 		public void SetLayersToRender(params string[] layerNames)
 		{
-			LayerIndicesToRender = new int[layerNames.Length];
+			LayersToRender = new ITmxLayer[layerNames.Length];
 
 			for (var i = 0; i < layerNames.Length; i++)
-				LayerIndicesToRender[i] = TiledMap.Layers.IndexOf(TiledMap.GetLayer(layerNames[i]));
+				LayersToRender[i] = TiledMap.GetLayerRecursive(layerNames[i]);
 		}
 
 
@@ -129,16 +129,16 @@ namespace Nez
 
 		public override void Render(Batcher batcher, Camera camera)
 		{
-			if (LayerIndicesToRender == null)
+			if (LayersToRender == null)
 			{
 				TiledRendering.RenderMap(TiledMap, batcher, Entity.Transform.Position + _localOffset, Transform.Scale, LayerDepth, camera.Bounds);
 			}
 			else
 			{
-				for (var i = 0; i < TiledMap.Layers.Count; i++)
+				foreach (var layer in LayersToRender)
 				{
-					if (TiledMap.Layers[i].Visible && LayerIndicesToRender.Contains(i))
-						TiledRendering.RenderLayer(TiledMap.Layers[i], batcher, Entity.Transform.Position + _localOffset, Transform.Scale, LayerDepth, camera.Bounds);
+					if (layer.Visible)
+						TiledRendering.RenderLayer(layer, batcher, Entity.Transform.Position + _localOffset, Transform.Scale, LayerDepth, camera.Bounds);
 				}
 			}
 		}
