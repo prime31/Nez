@@ -57,6 +57,41 @@ namespace Nez.Tiled
 		public ITmxLayer GetLayer(string name) => Layers.Contains(name) ? Layers[name] : null;
 
 		/// <summary>
+		/// gets the TiledLayer by name, searching recursively through all the group layers
+		/// </summary>
+		/// <returns>The layer.</returns>
+		/// <param name="name">Name.</param>
+		public ITmxLayer GetLayerRecursive(string name)
+		{
+			if (Layers.Contains(name))
+				return Layers[name];
+
+			foreach (var group in Groups)
+			{
+				var layer = FindLayerRecursive(group);
+				if (layer != null)
+					return layer;
+			}
+
+			return null;
+
+			ITmxLayer FindLayerRecursive(TmxGroup group)
+			{
+				if (group.Layers.Contains(name))
+					return group.Layers[name];
+
+				foreach (var g in group.Groups)
+				{
+					var layer = FindLayerRecursive(g);
+					if (layer != null)
+						return layer;
+				}
+
+				return null;
+			}
+		}
+
+		/// <summary>
 		/// gets the ITmxLayer by index
 		/// </summary>
 		/// <returns>The layer.</returns>
@@ -71,6 +106,14 @@ namespace Nez.Tiled
 		/// <param name="name">Name.</param>
 		/// <typeparam name="T">The 1st type parameter.</typeparam>
 		public T GetLayer<T>(string name) where T : ITmxLayer => (T)GetLayer(name);
+
+		/// <summary>
+		/// gets the ITmxLayer by name, searching recursively through all the group layers
+		/// </summary>
+		/// <returns>The layer.</returns>
+		/// <param name="name">Name.</param>
+		/// <typeparam name="T">The 1st type parameter.</typeparam>
+		public T GetLayerRecursive<T>(string name) where T : ITmxLayer => (T)GetLayerRecursive(name);
 
 		/// <summary>
 		/// gets the TmxObjectGroup with the given name
@@ -187,7 +230,7 @@ namespace Nez.Tiled
 
 			return y * TileHeight;
 		}
-		
+
 		struct OffsetHex
 		{
 			public int q;
