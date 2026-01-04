@@ -1,7 +1,7 @@
 ﻿using Nez.Tiled;
 using Microsoft.Xna.Framework;
 using System.Collections.Generic;
-
+using System.Linq;
 
 namespace Nez
 {
@@ -34,7 +34,7 @@ namespace Nez
 			_shouldCreateColliders = shouldCreateColliders;
 
 			if (collisionLayerName != null)
-				CollisionLayer = tiledMap.GetLayerRecursive(collisionLayerName) as TmxLayer;
+				CollisionLayer = tiledMap.GetLayer(collisionLayerName) as TmxLayer;
 		}
 
 		/// <summary>
@@ -44,7 +44,7 @@ namespace Nez
 		public void SetLayerToRender(string layerName)
 		{
 			LayersToRender = new ITmxLayer[1];
-			LayersToRender[0] = TiledMap.GetLayerRecursive(layerName);
+			LayersToRender[0] = TiledMap.GetLayer(layerName);
 		}
 
 		/// <summary>
@@ -56,7 +56,7 @@ namespace Nez
 			LayersToRender = new ITmxLayer[layerNames.Length];
 
 			for (var i = 0; i < layerNames.Length; i++)
-				LayersToRender[i] = TiledMap.GetLayerRecursive(layerNames[i]);
+				LayersToRender[i] = TiledMap.GetLayer(layerNames[i]);
 		}
 
 
