@@ -41,23 +41,31 @@ namespace Nez
 		/// sets this component to only render a single layer
 		/// </summary>
 		/// <param name="layerName">Layer name.</param>
-		public void SetLayerToRender(string layerName)
+		/// <param name="separator">An optional separator character to use to get layers nested in group layers.</param>
+		public void SetLayerToRender(string layerName, char separator = '/')
 		{
 			LayersToRender = new ITmxLayer[1];
-			LayersToRender[0] = TiledMap.GetLayer(layerName);
+			LayersToRender[0] = TiledMap.GetLayer(layerName, separator);
+		}
+
+		/// <summary>
+		/// sets which layers should be rendered by this component by name. If you know the indices you can set layerIndicesToRender directly.
+		/// </summary>
+		/// <param name="separator">An optional separator character to use to get layers nested in group layers.</param>
+		/// <param name="layerNames">Layer names.</param>
+		public void SetLayersToRender(char separator, params string[] layerNames)
+		{
+			LayersToRender = new ITmxLayer[layerNames.Length];
+
+			for (var i = 0; i < layerNames.Length; i++)
+				LayersToRender[i] = TiledMap.GetLayer(layerNames[i], separator);
 		}
 
 		/// <summary>
 		/// sets which layers should be rendered by this component by name. If you know the indices you can set layerIndicesToRender directly.
 		/// </summary>
 		/// <param name="layerNames">Layer names.</param>
-		public void SetLayersToRender(params string[] layerNames)
-		{
-			LayersToRender = new ITmxLayer[layerNames.Length];
-
-			for (var i = 0; i < layerNames.Length; i++)
-				LayersToRender[i] = TiledMap.GetLayer(layerNames[i]);
-		}
+		public void SetLayersToRender(params string[] layerNames) => SetLayersToRender('/', layerNames);
 
 
 		#region TiledMap queries
