@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using Microsoft.Xna.Framework;
@@ -272,7 +272,7 @@ namespace Nez.Spatial
 		public int Linecast(Vector2 start, Vector2 end, RaycastHit[] hits, int layerMask)
 		{
 			var ray = new Ray2D(start, end);
-			_raycastParser.Start(ref ray, hits, layerMask);
+			_raycastParser.Start(ref ray, hits, layerMask, _cellSize);
 
 			// get our start/end position in the same space as our grid
 			var currentCell = CellCoords(start.X, start.Y);
@@ -542,21 +542,23 @@ namespace Nez.Spatial
 
 		static Comparison<RaycastHit> compareRaycastHits = (a, b) => { return a.Distance.CompareTo(b.Distance); };
 
-		//int _cellSize;
-		//Rectangle _hitTesterRect; see note in checkRayIntersection
+		int _cellSize;
+		Rectangle _hitTesterRect;
 		RaycastHit[] _hits;
 		RaycastHit _tempHit;
 		List<Collider> _checkedColliders = new List<Collider>();
 		List<RaycastHit> _cellHits = new List<RaycastHit>();
+		List<RaycastHit> _foreignCellHits = new List<RaycastHit>();
 		Ray2D _ray;
 		int _layerMask;
 
 
-		public void Start(ref Ray2D ray, RaycastHit[] hits, int layerMask)
+		public void Start(ref Ray2D ray, RaycastHit[] hits, int layerMask, int cellSize)
 		{
 			_ray = ray;
 			_hits = hits;
 			_layerMask = layerMask;
+			_cellSize = cellSize;
 			HitCounter = 0;
 		}
 
@@ -574,6 +576,15 @@ namespace Nez.Spatial
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public bool CheckRayIntersection(int cellX, int cellY, List<Collider> cell)
 		{
+			// entering a new cell, clear out the hits from the previous cell
+			_cellHits.Clear();
+
+			// used to check if the raycast's hits are inside the current cell
+			_hitTesterRect.X = cellX * _cellSize;
+			_hitTesterRect.Y = cellY * _cellSize;
+			_hitTesterRect.Width = _cellSize;
+			_hitTesterRect.Height = _cellSize;
+
 			float fraction;
 			for (var i = 0; i < cell.Count; i++)
 			{
@@ -605,15 +616,28 @@ namespace Nez.Spatial
 						if (!Physics.RaycastsStartInColliders && potential.Shape.ContainsPoint(_ray.Start))
 							continue;
 
-						// TODO: make sure the collision point is in the current cell and if it isnt store it off for later evaluation
-						// this would be for giant objects with odd shapes that bleed into adjacent cells
-						//_hitTesterRect.X = cellX * _cellSize;
-						//_hitTesterRect.Y = cellY * _cellSize;
-						//if( !_hitTesterRect.Contains( _tempHit.point ) )
-
 						_tempHit.Collider = potential;
-						_cellHits.Add(_tempHit);
+
+						// colliders often bleed into multiple cells, which can cause the raycast to detect hits outside the
+						// cell we're currently checking. to ensure the hit results are sorted correctly, hits foreign to 
+						// this cell are saved in a separate list which is later checked in future cells.
+						if(!_hitTesterRect.Contains(_tempHit.Point))
+							_foreignCellHits.Add(_tempHit);
+						else
+							_cellHits.Add(_tempHit);
 					}
+				}
+			}
+
+			// check if any of our foreign cell hits are in this cell. if they are,
+			// add them to the current cell's list of hits.
+			for(int i = _foreignCellHits.Count - 1; i >= 0; i--)
+			{
+				var hit = _foreignCellHits[i];
+				if(_hitTesterRect.Contains(hit.Point))
+				{
+					_cellHits.Add(hit);
+					_foreignCellHits.RemoveAt(i);
 				}
 			}
 
@@ -642,6 +666,16 @@ namespace Nez.Spatial
 			_hits = null;
 			_checkedColliders.Clear();
 			_cellHits.Clear();
+
+#if DEBUG
+			// this *should* never happen if the ray cell traversal is working correctly, but leaving this debug test here for now just
+			// in case a missed edge case pops up.
+			if(_foreignCellHits.Count > 0)
+			{
+				Debug.Warn("{0} RaycastHit(s) were detected but never processed. This is a bug with Nez, please report it.", _foreignCellHits.Count);
+				_foreignCellHits.Clear();
+			}
+#endif
 		}
 	}
 }
