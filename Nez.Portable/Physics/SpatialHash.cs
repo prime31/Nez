@@ -667,15 +667,9 @@ namespace Nez.Spatial
 			_checkedColliders.Clear();
 			_cellHits.Clear();
 
-#if DEBUG
-			// this *should* never happen if the ray cell traversal is working correctly, but leaving this debug test here for now just
-			// in case a missed edge case pops up.
-			if(_foreignCellHits.Count > 0)
-			{
-				Debug.Warn("{0} RaycastHit(s) were detected but never processed. This is a bug with Nez, please report it.", _foreignCellHits.Count);
-				_foreignCellHits.Clear();
-			}
-#endif
+			// if the raycast ends early because it filled the _hits array, then _foreignCellHits might
+			// still have a few unprocessed hits in it, so it needs to be cleared.
+			_foreignCellHits.Clear();
 		}
 	}
 }
