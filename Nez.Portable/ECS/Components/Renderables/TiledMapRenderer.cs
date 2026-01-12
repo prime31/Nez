@@ -49,7 +49,8 @@ namespace Nez
 		}
 
 		/// <summary>
-		/// sets which layers should be rendered by this component by name. If you know the indices you can set layerIndicesToRender directly.
+		/// sets which layers should be rendered by this component by name. If you know the indices you can use
+		/// <see cref="SetLayerIndicesToRender"/> instead.
 		/// </summary>
 		/// <param name="separator">An optional separator character to use to get layers nested in group layers.</param>
 		/// <param name="layerNames">Layer names.</param>
@@ -62,10 +63,24 @@ namespace Nez
 		}
 
 		/// <summary>
-		/// sets which layers should be rendered by this component by name. If you know the indices you can set layerIndicesToRender directly.
+		/// sets which layers should be rendered by this component by name. If you know the indices you can use
+		/// <see cref="SetLayerIndicesToRender"/> instead.
 		/// </summary>
 		/// <param name="layerNames">Layer names.</param>
 		public void SetLayersToRender(params string[] layerNames) => SetLayersToRender('/', layerNames);
+
+		/// <summary>
+		/// sets which layers should be rendered by this component by index. Because the index is used on <see cref="TmxMap.Layers"/>,
+		/// using this function restricts you to top-level layers in the map.
+		/// </summary>
+		/// <param name="layerIndices">Layer indices.</param>
+		public void SetLayerIndicesToRender(params int[] layerIndices)
+		{
+			LayersToRender = new ITmxLayer[layerIndices.Length];
+
+			for (int i = 0; i < layerIndices.Length; i++)
+				LayersToRender[i] = TiledMap.Layers[i];
+		}
 
 
 		#region TiledMap queries
