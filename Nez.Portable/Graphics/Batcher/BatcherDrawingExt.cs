@@ -125,7 +125,7 @@ namespace Nez
 		                                 float thickness)
 		{
 			batcher.Draw(Graphics.Instance.PixelTexture, start, Graphics.Instance.PixelTexture.SourceRect, color,
-				radians, new Vector2(0f, 0.5f), new Vector2(length, thickness), SpriteEffects.None, 0);
+				radians, new Vector2(0f, 0f), new Vector2(length, thickness), SpriteEffects.None, 0);
 		}
 
 
