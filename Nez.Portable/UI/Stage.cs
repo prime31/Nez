@@ -855,6 +855,28 @@ namespace Nez.UI
 						return relativeToFocusable.GamepadRightElement;
 				}
 			}
+			else
+			{
+				switch (direction)
+				{
+					case Direction.Up:
+						if (relativeToFocusable.GamepadUpElement is IGamepadFocusable upElement)
+							return upElement;
+						break;
+					case Direction.Down:
+						if (relativeToFocusable.GamepadDownElement is IGamepadFocusable downElement)
+							return downElement;
+						break;
+					case Direction.Left:
+						if (relativeToFocusable.GamepadLeftElement is IGamepadFocusable leftElement)
+							return leftElement;
+						break;
+					case Direction.Right:
+						if (relativeToFocusable.GamepadRightElement is IGamepadFocusable rightElement)
+							return rightElement;
+						break;
+				}
+			}
 
 			IGamepadFocusable nextFocusable = null;
 			var distanceToNextButton = float.MaxValue;
