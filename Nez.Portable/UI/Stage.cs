@@ -787,10 +787,19 @@ namespace Nez.UI
 		/// </summary>
 		public void DisableGamepadFocus()
 		{
-    		_gamepadFocusElement = null;
-    		_isGamepadFocusEnabled = false;  
+			_gamepadFocusElement = null;
+			_isGamepadFocusEnabled = false;  
 		}
 
+		/// <summary>
+		/// Gets the element that the gamepad has focused.
+		/// </summary>
+		/// <returns>The keyboard focus.</returns>
+		public IGamepadFocusable GetGamepadFocusElement()
+		{
+			return _gamepadFocusElement;
+		}
+		
 		/// <summary>
 		/// Gets the element that will receive key events.
 		/// </summary>
