@@ -11,12 +11,13 @@ sampler s0;
 
 float _progress; // 0
 float _ratio;    // Screen.Width/Height
+float2 _circlePosition; // normalized screen position, default (0.5, 0.5)
 
 float4 _bgcolor; // = vec4(0.0, 0.0, 0.0, 1.0)
 
 float4 mainPS(float2 uv : TEXCOORD0) : COLOR0
 {
-	float dist = length((float2(uv.x, uv.y) - 0.5) * float2(1.0, 1.0 / _ratio));
+	float dist = length((float2(uv.x, uv.y) - _circlePosition) * float2(1.0, 1.0 / _ratio));
 
 	// branching is ok here as we statically depend on progress uniform
 	// (branching won't change over pixels)

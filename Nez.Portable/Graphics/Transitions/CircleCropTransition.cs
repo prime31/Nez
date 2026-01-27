@@ -24,6 +24,15 @@ namespace Nez
 		}
 
 		/// <summary>
+		/// Center position of the circle. Defaults to Screen Size / 2
+		/// </summary>
+		/// <value>Ratio of the screen.</value>
+		public Vector2 CirclePosition
+		{
+			set => _effect.Parameters["_circlePosition"].SetValue(value);
+		}
+
+		/// <summary>
 		/// Background color. Defaults to Black
 		/// </summary>
 		/// <value>The color for the background.</value>
@@ -52,6 +61,7 @@ namespace Nez
 			// load Effect and set defaults
 			_effect = Core.Content.LoadEffect("Content/nez/effects/transitions/CircleCrop.mgfxo");
 			Ratio = (float)Screen.Width / Screen.Height;
+			CirclePosition = new Vector2(0.5f, 0.5f);
 			BgColor = Color.Black;
 		}
 
