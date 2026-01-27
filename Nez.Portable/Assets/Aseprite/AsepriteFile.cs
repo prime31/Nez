@@ -318,12 +318,12 @@ namespace Nez.Aseprite
 		/// <returns>
 		/// A <see cref="Texture2D"/> instance with the flattened contents of the frame
 		/// </returns>
-		public Texture2D GetTextureFromFrameNumber(int frameNumber)
+		public Texture2D GetTextureFromFrameNumber(int frameNumber, string layerName = null)
 		{
 			// frameNumber is base-one in the aseprite app,
 			// but Frames array is base-zero, so we subtract 1
 			AsepriteFrame frame = Frames[frameNumber - 1];
-			Color[] pixels = frame.FlattenFrame(true, true);
+			Color[] pixels = frame.FlattenFrame(true, true, layerName);
 			Texture2D texture = new Texture2D(Core.GraphicsDevice, frame.Width, frame.Height);
 			texture.SetData<Color>(pixels);
 			return texture;
@@ -338,7 +338,7 @@ namespace Nez.Aseprite
 		/// <returns>
 		/// A <see cref="Texture2D"/> instance with the flattened contents of the single animation frame
 		/// </returns>
-		public Texture2D GetTextureFromFrameTagged(string tagName)
+		public Texture2D GetTextureFromFrameTagged(string tagName, string layerName = null)
 		{
 			int frameIndex = -1;
 			for (int i = 0; i < Tags.Count; i++)
@@ -355,7 +355,7 @@ namespace Nez.Aseprite
 
 			// frameNumber is base-one in the aseprite app,
 			// but Frames array is base-zero, so we add 1
-			return GetTextureFromFrameNumber(frameIndex + 1);
+			return GetTextureFromFrameNumber(frameIndex + 1, layerName);
 		}
 	}
 }
