@@ -660,6 +660,9 @@ namespace Nez.Tiled
 			layer.ParallaxFactorX = (float?)xImageLayer.Attribute("parallaxx") ?? 1.0f;
 			layer.ParallaxFactorY = (float?)xImageLayer.Attribute("parallaxy") ?? 1.0f;
 
+			layer.RepeatX = (bool?)xImageLayer.Attribute("repeatx") ?? false;
+			layer.RepeatY = (bool?)xImageLayer.Attribute("repeaty") ?? false;
+
 			var xImage = xImageLayer.Element("image");
 			if (xImage != null)
 				layer.Image = new TmxImage().LoadTmxImage(xImage, tmxDir, contentManager);
