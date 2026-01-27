@@ -182,7 +182,7 @@ namespace Nez.DeferredLighting
 			var objToWorld =
 				Matrix.CreateScale(light.Bounds.Width * light.Entity.Transform.Scale.X,
 					light.Bounds.Height * light.Entity.Transform.Scale.Y, 1f) * Matrix.CreateTranslation(
-					light.Bounds.X - light.Bounds.Width * 0.5f, light.Bounds.Y - light.Bounds.Height * 0.5f, 0);
+					light.Bounds.X, light.Bounds.Y, 0);
 			SetObjectToWorldMatrix(objToWorld);
 
 			CurrentTechnique = Techniques["DeferredAreaLight"];
