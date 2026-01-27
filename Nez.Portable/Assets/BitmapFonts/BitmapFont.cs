@@ -188,39 +188,51 @@ namespace Nez.BitmapFonts
 
 		public string WrapText(string text, float maxLineWidth)
 		{
-			var words = text.Split(' ');
-			var sb = new StringBuilder();
-			var lineWidth = 0f;
-
 			if (maxLineWidth < _spaceWidth)
 				return string.Empty;
 
-			foreach (var word in words)
+			// Split the entire text into lines based on existing explicit newlines
+			var paragraphs = text.Split(new[] { "\r\n", "\n", "\r" }, System.StringSplitOptions.None);
+			var output = new StringBuilder();
+
+			foreach (var paragraph in paragraphs)
 			{
-				var size = MeasureString(word);
-				if (lineWidth + size.X < maxLineWidth)
+				var words = paragraph.Split(' ');
+				var sb = new StringBuilder();
+				var lineWidth = 0f;
+
+				foreach (var word in words)
 				{
-					sb.Append(word + " ");
-					lineWidth += size.X + _spaceWidth;
-				}
-				else
-				{
-					if (size.X > maxLineWidth)
+					var size = MeasureString(word);
+
+					if (lineWidth + size.X < maxLineWidth || lineWidth == 0)
 					{
-						if (sb.ToString() == "")
-							sb.Append(WrapText(word.Insert(word.Length / 2, " ") + " ", maxLineWidth));
-						else
-							sb.Append("\n" + WrapText(word.Insert(word.Length / 2, " ") + " ", maxLineWidth));
+						sb.Append(word + " ");
+						lineWidth += size.X + _spaceWidth;
 					}
 					else
 					{
-						sb.Append("\n" + word + " ");
-						lineWidth = size.X + _spaceWidth;
+						if (size.X > maxLineWidth)
+						{
+							if (sb.ToString() == "")
+								sb.Append(WrapText(word.Insert(word.Length / 2, " ") + " ", maxLineWidth));
+							else
+								sb.Append("\n" + WrapText(word.Insert(word.Length / 2, " ") + " ", maxLineWidth));
+						}
+						else
+						{
+							// If the word doesn't fit, start a new line with the current word
+							output.AppendLine(sb.ToString());
+							sb.Clear();
+							sb.Append(word + " ");
+							lineWidth = size.X + _spaceWidth;
+						}
 					}
 				}
+				output.AppendLine(sb.ToString());
 			}
 
-			return sb.ToString();
+			return output.ToString();
 		}
 
 		/// <summary>
