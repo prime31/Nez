@@ -46,7 +46,7 @@ namespace Nez
 		/// </summary>
 		/// <param name="list">List.</param>
 		/// <typeparam name="T">The 1st type parameter.</typeparam>
-		public static T LastItem<T>(this IList<T> list)
+		public static T LastItem<T>(this IReadOnlyList<T> list)
 		{
 			return list[list.Count - 1];
 		}
@@ -58,7 +58,7 @@ namespace Nez
 		/// <returns>The item.</returns>
 		/// <param name="list">List.</param>
 		/// <typeparam name="T">The 1st type parameter.</typeparam>
-		public static T RandomItem<T>(this IList<T> list)
+		public static T RandomItem<T>(this IReadOnlyList<T> list)
 		{
 			return list[Random.Range(0, list.Count)];
 		}
@@ -71,7 +71,7 @@ namespace Nez
 		/// <param name="list">List.</param>
 		/// <param name="itemCount">The number of random items to return from the list.</param>
 		/// <typeparam name="T">The 1st type parameter.</typeparam>
-		public static List<T> RandomItems<T>(this IList<T> list, int itemCount)
+		public static List<T> RandomItems<T>(this IReadOnlyList<T> list, int itemCount)
 		{
 			var set = new HashSet<T>();
 			while (set.Count != itemCount)
