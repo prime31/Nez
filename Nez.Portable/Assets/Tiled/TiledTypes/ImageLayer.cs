@@ -13,6 +13,9 @@ namespace Nez.Tiled
 		public float ParallaxFactorX { get; set; }
 		public float ParallaxFactorY { get; set; }
 
+		public bool RepeatX { get; set; }
+		public bool RepeatY { get; set; }
+
 		public int? Width;
 		public int? Height;
 
