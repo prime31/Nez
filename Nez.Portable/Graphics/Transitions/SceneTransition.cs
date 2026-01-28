@@ -196,11 +196,13 @@ namespace Nez
 		/// <param name="duration">duration</param>
 		/// <param name="reverseDirection">if true, _progress will go from 1 to 0. If false, it goes form 0 to 1</param>
 		public IEnumerator TickEffectProgressProperty(Effect effect, float duration,
-		                                              EaseType easeType = EaseType.ExpoOut,
-		                                              bool reverseDirection = false)
+														EaseType easeType = EaseType.ExpoOut,
+														bool reverseDirection = false,
+														float customStart = 0f,
+														float customEnd = 1f)
 		{
-			var start = reverseDirection ? 1f : 0f;
-			var end = reverseDirection ? 0f : 1f;
+			var start = reverseDirection ? customEnd : customStart;
+			var end = reverseDirection ? customStart : customEnd;
 			var progressParam = effect.Parameters["_progress"];
 
 			var elapsed = 0f;
