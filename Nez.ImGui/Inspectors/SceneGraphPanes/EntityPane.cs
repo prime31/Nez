@@ -4,32 +4,14 @@ namespace Nez.ImGuiTools.SceneGraphPanes
 {
 	public class EntityPane
 	{
-		/// <summary>
-		/// if this number of entites is exceeded we switch to a list clipper to keep things fast
-		/// </summary>
-		const int MIN_ENTITIES_FOR_CLIPPER = 100;
 		string _newEntityName = "";
 
 		unsafe public void Draw()
 		{
-			if (Core.Scene.Entities.Count > MIN_ENTITIES_FOR_CLIPPER)
-			{
-				var clipperPtr = ImGuiNative.ImGuiListClipper_ImGuiListClipper();
-				var clipper = new ImGuiListClipperPtr(clipperPtr);
-				
-				clipper.Begin(Core.Scene.Entities.Count, -1);
+			ImGui.Text("Count: " + Core.Scene.Entities.Count);
 
-				while (clipper.Step())
-					for (var i = clipper.DisplayStart; i < clipper.DisplayEnd; i++)
-						DrawEntity(Core.Scene.Entities[i]);
-
-				ImGuiNative.ImGuiListClipper_destroy(clipperPtr);
-			}
-			else
-			{
-				for (var i = 0; i < Core.Scene.Entities.Count; i++)
-					DrawEntity(Core.Scene.Entities[i]);
-			}
+			for (var i = 0; i < Core.Scene.Entities.Count; i++)
+				DrawEntity(Core.Scene.Entities[i]);
 
 			NezImGui.MediumVerticalSpace();
 			if (NezImGui.CenteredButton("Create Entity", 0.6f))
@@ -66,7 +48,7 @@ namespace Nez.ImGuiTools.SceneGraphPanes
 
 			// we are looking for a double-click that is not on the arrow
 			if (ImGui.IsMouseDoubleClicked(0) && ImGui.IsItemClicked() &&
-			    (ImGui.GetMousePos().X - ImGui.GetItemRectMin().X) > ImGui.GetTreeNodeToLabelSpacing())
+				(ImGui.GetMousePos().X - ImGui.GetItemRectMin().X) > ImGui.GetTreeNodeToLabelSpacing())
 			{
 				Core.GetGlobalManager<ImGuiManager>().StartInspectingEntity(entity);
 			}
