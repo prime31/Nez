@@ -34,7 +34,7 @@ namespace Nez.DeferredLighting
 		/// <summary>
 		/// how far does this light reaches
 		/// </summary>
-		public float Radius => _radius;
+		public float Radius { get => _radius; set => SetRadius(value); }
 
 		/// <summary>
 		/// brightness of the light
