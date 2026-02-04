@@ -187,15 +187,15 @@ namespace Nez
 			}
 			else
 			{
-				// make sure we have a targetCollider for CameraWindow. If we dont bail out.
-				if (_targetCollider == null)
+				// make sure we have a targetCollider for CameraWindow attached to this Entity. If we dont bail out.
+				if (_targetCollider == null || _targetCollider.Entity != _targetEntity)
 				{
 					_targetCollider = _targetEntity.GetComponent<Collider>();
 					if (_targetCollider == null)
 						return;
 				}
 
-				var targetBounds = _targetEntity.GetComponent<Collider>().Bounds;
+				var targetBounds = _targetCollider.Bounds;
 				if (!_worldSpaceDeadzone.Contains(targetBounds))
 				{
 					// x-axis
@@ -215,6 +215,12 @@ namespace Nez
 
 		public void Follow(Entity targetEntity, CameraStyle cameraStyle = CameraStyle.CameraWindow, Measurement deadzoneMeasurement = Measurement.ScaledCameraBounds)
 		{
+			if (targetEntity != _targetEntity)
+			{
+				// new entity -> invalidate cached collider
+				_targetCollider = null;
+			}
+			
 			_targetEntity = targetEntity;
 			_cameraStyle = cameraStyle;
 			
