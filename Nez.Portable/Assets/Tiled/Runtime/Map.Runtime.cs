@@ -64,6 +64,9 @@ namespace Nez.Tiled
 			if (layers.Contains(path))
 				return layers[path];
 
+			if (string.IsNullOrEmpty(path))
+				return null;
+
 			// If we couldn't find a top-level layer exactly matching the requested name, try to search in group layers instead
 			var currentPath = path;
 			var currentLayers = layers;

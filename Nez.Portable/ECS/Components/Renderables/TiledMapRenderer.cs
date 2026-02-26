@@ -1,7 +1,6 @@
-﻿using Nez.Tiled;
+﻿using System.Collections.Generic;
 using Microsoft.Xna.Framework;
-using System.Collections.Generic;
-using System.Linq;
+using Nez.Tiled;
 
 namespace Nez
 {
@@ -52,7 +51,7 @@ namespace Nez
 		/// sets which layers should be rendered by this component by name. If you know the indices you can use
 		/// <see cref="SetLayerIndicesToRender"/> instead.
 		/// </summary>
-		/// <param name="separator">An optional separator character to use to get layers nested in group layers.</param>
+		/// <param name="separator">A separator character to use to get layers nested in group layers.</param>
 		/// <param name="layerNames">Layer names.</param>
 		public void SetLayersToRender(char separator, params string[] layerNames)
 		{
@@ -78,8 +77,11 @@ namespace Nez
 		{
 			LayersToRender = new ITmxLayer[layerIndices.Length];
 
-			for (int i = 0; i < layerIndices.Length; i++)
-				LayersToRender[i] = TiledMap.Layers[i];
+			for (var i = 0; i < layerIndices.Length; i++)
+			{
+				var index = layerIndices[i];
+				LayersToRender[i] = index > 0 && index < TiledMap.Layers.Count ? TiledMap.Layers[index] : null;
+			}
 		}
 
 
@@ -160,7 +162,7 @@ namespace Nez
 			{
 				foreach (var layer in LayersToRender)
 				{
-					if (layer.Visible)
+					if (layer != null && layer.Visible)
 						TiledRendering.RenderLayer(layer, batcher, Entity.Transform.Position + _localOffset, Transform.Scale, LayerDepth, camera.Bounds);
 				}
 			}
