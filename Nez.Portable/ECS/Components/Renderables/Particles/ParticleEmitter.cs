@@ -27,6 +27,23 @@ namespace Nez.Particles
 		}
 
 		/// <summary>
+		/// If true, the particle Sprite will render from its own origin rather than default Sprite.Center
+		/// </summary>
+		public bool ShouldRenderUsingSpriteOrigin
+		{
+			set
+			{
+				if (_emitterConfig.Sprite != null)
+				{
+					if(value)
+						_spriteRenderOrigin = _emitterConfig.Sprite.Origin;
+					else
+						_spriteRenderOrigin = _emitterConfig.Sprite.Center;
+				}
+			}
+		}
+
+		/// <summary>
 		/// config object with various properties to deal with particle collisions
 		/// </summary>
 		public ParticleCollisionConfig CollisionConfig;
@@ -65,6 +82,7 @@ namespace Nez.Particles
 		bool _playOnAwake;
 		[Inspectable] ParticleEmitterConfig _emitterConfig;
 
+		Vector2 _spriteRenderOrigin;
 
 		public ParticleEmitter() : this(new ParticleEmitterConfig())
 		{
@@ -85,6 +103,10 @@ namespace Nez.Particles
 			CollisionConfig.LifetimeLoss = 0f;
 			CollisionConfig.MinKillSpeedSquared = float.MinValue;
 			CollisionConfig.RadiusScale = 0.8f;
+
+			// render from the Sprite's Center rather than it's Origin.
+			// performs _spriteRenderOrigin = _emitterConfig.Sprite.Center;
+			ShouldRenderUsingSpriteOrigin = false;
 
 			Init();
 		}
@@ -223,7 +245,7 @@ namespace Nez.Particles
 						LayerDepth);
 				else
 					batcher.Draw(_emitterConfig.Sprite, pos + currentParticle.Position,
-						currentParticle.Color, currentParticle.Rotation, _emitterConfig.Sprite.Center,
+						currentParticle.Color, currentParticle.Rotation, _spriteRenderOrigin,
 						currentParticle.ParticleSize / _emitterConfig.Sprite.SourceRect.Width, SpriteEffects.None,
 						LayerDepth);
 			}
