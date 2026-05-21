@@ -324,11 +324,21 @@ namespace Nez
 			EndDebugDraw();
 		}
 
+#if MONOGAME_38
+        protected override void OnExiting(object sender, ExitingEventArgs args)
+        {
+            base.OnExiting(sender, args);
+            Emitter.Emit(CoreEvents.Exiting);
+        }
+
+#else
+
 		protected override void OnExiting(object sender, EventArgs args)
 		{
 			base.OnExiting(sender, args);
 			Emitter.Emit(CoreEvents.Exiting);
 		}
+#endif
 
 		#endregion
 

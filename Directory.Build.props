@@ -5,6 +5,10 @@ causing each csproj file to mess up the other.
 -->
 <Project>
   <PropertyGroup>
-    <MSBuildProjectExtensionsPath>obj\$(MSBuildProjectName)\</MSBuildProjectExtensionsPath>
+    <TargetFramework>net10.0</TargetFramework>
+    <AssemblyName>Nez</AssemblyName>
+    <RootNamespace>Nez</RootNamespace>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+	<GenerateTargetFrameworkAttribute>false</GenerateTargetFrameworkAttribute>
   </PropertyGroup>
 </Project>
