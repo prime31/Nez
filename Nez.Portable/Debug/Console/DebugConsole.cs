@@ -479,7 +479,7 @@ namespace Nez.Console
 			string[] args = new string[data.Length - 1];
 			for (int i = 1; i < data.Length; i++)
 				args[i - 1] = data[i];
-			ExecuteCommand(data[0].ToLower(), args);
+			ExecuteCommand(data[0], args);
 		}
 
 
