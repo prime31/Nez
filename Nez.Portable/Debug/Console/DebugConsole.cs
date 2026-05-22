@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using Microsoft.Xna.Framework.Input;
 using System.Reflection;
 using Microsoft.Xna.Framework;
@@ -814,7 +815,7 @@ namespace Nez.Console
 		{
 			try
 			{
-				return Convert.ToSingle(arg);
+				return Convert.ToSingle(arg, CultureInfo.InvariantCulture);
 			}
 			catch
 			{
