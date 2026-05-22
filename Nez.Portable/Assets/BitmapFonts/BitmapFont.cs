@@ -146,8 +146,17 @@ namespace Nez.BitmapFonts
 
 		/// <summary>
 		/// Index to get items within thsi collection using array index syntax.
+		/// Will return DefaultCharacter if the input character is not found.
 		/// </summary>
-		public Character this[char character] => Characters[character];
+		public Character this[char character]
+        {
+            get
+            {
+                if (Characters.TryGetValue(character, out var resultChar))
+                    return resultChar;
+                return DefaultCharacter;
+            }
+        }
 
 		public void Initialize(bool premultiplyAlpha)
 		{
@@ -271,11 +280,7 @@ namespace Nez.BitmapFonts
 
 					if (currentChar != null)
 						offsetX += Spacing.X + currentChar.XAdvance;
-
-					if (ContainsCharacter(c))
-						currentChar = this[c];
-					else
-						currentChar = DefaultCharacter;
+                    currentChar = this[c];
 
 					var proposedWidth = offsetX + currentChar.XAdvance + Spacing.X;
 					if (proposedWidth > width)
@@ -392,7 +397,7 @@ namespace Nez.BitmapFonts
 
 			return new Point(Math.Max(currentLineWidth, blockWidth), blockHeight);
 		}
-		
+
 		/// <summary>
 	///     Providers the size, in pixels, of the specified number when drawn with this font.
 	/// </summary>

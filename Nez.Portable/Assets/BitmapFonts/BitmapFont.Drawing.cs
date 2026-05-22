@@ -86,7 +86,7 @@ namespace Nez.BitmapFonts
 				if (currentChar != null)
 					offset.X += Spacing.X + currentChar.XAdvance;
 
-				currentChar = ContainsCharacter(c) ? this[c] : DefaultCharacter;
+				currentChar = this[c];
 
 				var p = offset;
 
@@ -114,13 +114,13 @@ namespace Nez.BitmapFonts
 				previousCharacter = c;
 			}
 		}
-		
+
 		/// <summary>
 		/// Submit a text string of sprites for drawing in the current batch.
 		/// This method variant offers the ability to draw multicolored text by providing a colorMap.
 		/// The colorMap is a dictionary where the key represents the zero-based index at which the text should
 		/// start being displayed in a different color, and the value is the corresponding color.
-		///  
+		///
 		/// </summary>
 		/// <param name="batcher">Batcher.</param>
 		/// <param name="text">The text which will be drawn.</param>
@@ -136,7 +136,7 @@ namespace Nez.BitmapFonts
 		                     float rotation, Vector2 origin, Vector2 scale, SpriteEffects effect, float depth, IDictionary<int, Color> colorMap)
 		{
 			Color currentColor = color;
-			
+
 			var flipAdjustment = Vector2.Zero;
 
 			var flippedVert = (effect & SpriteEffects.FlipVertically) == SpriteEffects.FlipVertically;
@@ -158,7 +158,7 @@ namespace Nez.BitmapFonts
 					flipAdjustment.Y = LineHeight - size.Y;
 				}
 			}
-			
+
 			var requiresTransformation = flippedHorz || flippedVert || rotation != 0f || scale != new Vector2(1);
 			if (requiresTransformation)
 			{
@@ -176,12 +176,12 @@ namespace Nez.BitmapFonts
 				if (colorMap.TryGetValue(i, out Color newColor)) {
 					currentColor = newColor;
 				}
-				
+
 				currentChar = DrawCurrentChar(batcher, currentColor, rotation, scale, effect, depth, currentChar, character, previousCharacter, flippedHorz, flippedVert, requiresTransformation, ref offset, position, origin);
 				previousCharacter = character;
 			}
 		}
-		
+
 		/// <summary>
 		/// Submits a number for drawing in the current batch.
 		/// </summary>
@@ -196,8 +196,8 @@ namespace Nez.BitmapFonts
 		/// <param name="depth">A depth of the layer of this number.</param>
 		/// <param name="useDefaultLineHeight">If true, only the lineHeight attribute of the bitmap font will be used to calculate the height.
 		/// If false, the height of the character image and the y offset will be considered when calculating the height.</param>
-		public void DrawInto(Batcher batcher, int number, Vector2 position, Color color, 
-							 float rotation, Vector2 origin, Vector2 scale, SpriteEffects effect, float depth, bool useDefaultLineHeight = true) 
+		public void DrawInto(Batcher batcher, int number, Vector2 position, Color color,
+							 float rotation, Vector2 origin, Vector2 scale, SpriteEffects effect, float depth, bool useDefaultLineHeight = true)
 		{
 			var flipAdjustment = Vector2.Zero;
 
@@ -207,13 +207,13 @@ namespace Nez.BitmapFonts
 			if (flippedVert || flippedHorz) {
 				var size = MeasureInt(number, useDefaultLineHeight);
 
-				if (flippedHorz) 
+				if (flippedHorz)
 				{
 					origin.X *= -1;
 					flipAdjustment.X = -size.X;
 				}
 
-				if (flippedVert) 
+				if (flippedVert)
 				{
 					origin.Y *= -1;
 					flipAdjustment.Y = LineHeight - size.Y;
@@ -222,7 +222,7 @@ namespace Nez.BitmapFonts
 
 			var requiresTransformation = flippedHorz || flippedVert || rotation != 0f || scale != new Vector2(1);
 
-			if (requiresTransformation) 
+			if (requiresTransformation)
 			{
 				ApplyTransformation(position, rotation, origin, scale, flippedHorz, flippedVert, flipAdjustment);
 			}
@@ -232,7 +232,7 @@ namespace Nez.BitmapFonts
 			var offset = requiresTransformation ? Vector2.Zero : position - origin;
 
 			char character;
-			
+
 			// We use uint because of special case int.minValue
 			uint positiveNumber;
 
@@ -267,7 +267,7 @@ namespace Nez.BitmapFonts
 		}
 
 		private void ApplyTransformation(Vector2 position, float rotation, Vector2 origin, Vector2 scale, bool flippedHorz,
-			bool flippedVert, Vector2 flipAdjustment) 
+			bool flippedVert, Vector2 flipAdjustment)
 		{
 			Matrix2D temp;
 			Matrix2D.CreateTranslation(-origin.X, -origin.Y, out _transformationMatrix);
@@ -283,7 +283,7 @@ namespace Nez.BitmapFonts
 
 		private Character DrawCurrentChar(Batcher batcher, Color color, float rotation, Vector2 scale, SpriteEffects effect,
 			float depth, Character currentChar, char character, char previousCharacter, bool flippedHorz, bool flippedVert,
-			bool requiresTransformation, ref Vector2 offset, Vector2 position, Vector2 origin) 
+			bool requiresTransformation, ref Vector2 offset, Vector2 position, Vector2 origin)
 		{
 			if (character == '\r')
 				return currentChar;
@@ -294,11 +294,11 @@ namespace Nez.BitmapFonts
 				offset.Y += LineHeight;
 				return null;
 			}
-			
+
 			if (currentChar != null)
 				offset.X += Spacing.X + currentChar.XAdvance;
 
-			currentChar = ContainsCharacter(character) ? this[character] : DefaultCharacter;
+			currentChar = this[character];
 
 			var p = offset;
 
@@ -323,7 +323,7 @@ namespace Nez.BitmapFonts
 
 			batcher.Draw(Textures[currentChar.TexturePage], destRect, currentChar.Bounds, color, rotation,
 				Vector2.Zero, effect, depth);
-			
+
 			return currentChar;
 		}
 

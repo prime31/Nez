@@ -702,20 +702,12 @@ namespace Nez.UI
 		void UpdateDisplayText()
 		{
 			var textLength = text.Length;
-
-			_textBuffer.Clear();
-			for (var i = 0; i < textLength; i++)
-			{
-				var c = text[i];
-				_textBuffer.Append(style.Font.HasCharacter(c) ? c : ' ');
-			}
-
-			var newDisplayText = _textBuffer.ToString();
+			// var newDisplayText = text;
 
 			if (passwordMode && style.Font.HasCharacter(passwordCharacter))
 			{
 				if (passwordBuffer == null)
-					passwordBuffer = new StringBuilder(newDisplayText.Length);
+					passwordBuffer = new StringBuilder(text.Length);
 				else if (passwordBuffer.Length > textLength)
 					passwordBuffer.Clear();
 
@@ -725,7 +717,7 @@ namespace Nez.UI
 			}
 			else
 			{
-				displayText = newDisplayText;
+				displayText = text;
 			}
 
 			//layout.setText( font, displayText );
@@ -760,7 +752,7 @@ namespace Nez.UI
 
 			glyphPositions.Add(x);
 
-			if (selectionStart > newDisplayText.Length)
+			if (selectionStart > text.Length)
 				selectionStart = textLength;
 		}
 
