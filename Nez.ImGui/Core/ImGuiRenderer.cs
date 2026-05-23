@@ -43,7 +43,6 @@ namespace Nez.ImGuiTools
 
 		List<int> _keys = new List<int>();
 
-
 		public ImGuiRenderer(Game game)
 		{
 			unsafe
@@ -143,6 +142,7 @@ namespace Nez.ImGuiTools
 		{
 			ImGui.GetIO().DeltaTime = deltaTime;
 			UpdateInput();
+			UpdateTextInput();
 			ImGui.NewFrame();
 		}
 
@@ -167,9 +167,29 @@ namespace Nez.ImGuiTools
 		delegate string GetClipboardTextDelegate();
 		delegate void SetClipboardTextDelegate(IntPtr userData, string txt);
 
-		static void SetClipboardText(IntPtr userData, string txt) => SDL2.SDL.SDL_SetClipboardText(txt);
+		static void SetClipboardText(IntPtr userData, string txt)
+		{
+			try
+			{
+				SDL3.SDL.SDL_SetClipboardText(txt);
+			}
+			catch (DllNotFoundException)
+			{
+				SDL2.SDL.SDL_SetClipboardText(txt);
+			}
+		}
 
-		static string GetClipboardText() => SDL2.SDL.SDL_GetClipboardText();
+		static string GetClipboardText()
+		{
+			try
+			{
+				return SDL3.SDL.SDL_GetClipboardText();
+			}
+			catch (DllNotFoundException)
+			{
+				return SDL2.SDL.SDL_GetClipboardText();
+			}
+		}
 #endif
 
 		/// <summary>
@@ -182,7 +202,14 @@ namespace Nez.ImGuiTools
 #if FNA
 			// forward clipboard methods to SDL
 			io.SetClipboardTextFn = Marshal.GetFunctionPointerForDelegate<SetClipboardTextDelegate>(SetClipboardText);
-			io.GetClipboardTextFn = Marshal.GetFunctionPointerForDelegate<GetClipboardTextDelegate>(SDL2.SDL.SDL_GetClipboardText);
+			try
+			{
+				io.GetClipboardTextFn = Marshal.GetFunctionPointerForDelegate<GetClipboardTextDelegate>(SDL3.SDL.SDL_GetClipboardText);
+			}
+			catch (DllNotFoundException)
+			{
+				io.GetClipboardTextFn = Marshal.GetFunctionPointerForDelegate<GetClipboardTextDelegate>(SDL2.SDL.SDL_GetClipboardText);
+			}									
 #endif
 
 			_keys.Add(io.KeyMap[(int)ImGuiKey.Tab] = (int)Keys.Tab);
@@ -277,6 +304,16 @@ namespace Nez.ImGuiTools
 			var scrollDelta = mouse.ScrollWheelValue - _scrollWheelValue;
 			io.MouseWheel = scrollDelta > 0 ? 1 : scrollDelta < 0 ? -1 : 0;
 			_scrollWheelValue = mouse.ScrollWheelValue;
+		}
+
+		void UpdateTextInput()
+		{
+#if FNA
+			if (ImGui.GetIO().WantTextInput && !TextInputEXT.IsTextInputActive())
+				TextInputEXT.StartTextInput();
+			else if (!ImGui.GetIO().WantTextInput && TextInputEXT.IsTextInputActive())
+				TextInputEXT.StopTextInput();
+#endif
 		}
 
 		#endregion
