@@ -33,6 +33,8 @@ namespace Nez
 
 		internal static byte[] GaussianBlurBytes => GetFileResourceBytes("Content/nez/effects/GaussianBlur.mgfxo");
 
+		internal static byte[] ColorVignetteBytes => GetFileResourceBytes("Content/nez/effects/ColorVignette.mgfxo");
+
 		internal static byte[] VignetteBytes => GetFileResourceBytes("Content/nez/effects/Vignette.mgfxo");
 
 		internal static byte[] LetterboxBytes => GetFileResourceBytes("Content/nez/effects/Letterbox.mgfxo");
