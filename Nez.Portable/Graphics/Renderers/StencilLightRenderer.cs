@@ -1,4 +1,5 @@
-﻿using System.Runtime.CompilerServices;
+﻿using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Nez.PhysicsShapes;
@@ -6,6 +7,20 @@ using Nez.Textures;
 
 namespace Nez
 {
+	/// <summary>
+	/// Lets a renderer pull shadow occluders from a custom source (e.g. a tile map's
+	/// merged rectangles) instead of querying the physics spatial hash.
+	/// </summary>
+	public interface ILightOccluderSource
+	{
+		/// <summary>
+		/// Fill <paramref name="output"/> with world-space polygons (CCW) that intersect <paramref name="bounds"/>.
+		/// The caller clears <paramref name="output"/> before the call.
+		/// </summary>
+		void GatherOccluders(RectangleF bounds, List<Vector2[]> output);
+	}
+
+
 	/// <summary>
 	/// StencilLightRenderer is used for 2d lights and shadows. This works by taking each light and doing the following:
 	/// - clear the stencil buffer
@@ -28,11 +43,20 @@ namespace Nez
 
 		/// <summary>
 		/// layer mask of all the layers this light should interact with. defaults to all layers.
+		/// Ignored when <see cref="OccluderSource"/> is set.
 		/// </summary>
 		public int CollidesWithLayers = Physics.AllLayers;
 
+		/// <summary>
+		/// Optional custom occluder source. When non-null, the renderer pulls shadow casters
+		/// from this instead of querying the physics spatial hash. Used to feed merged tile
+		/// rectangles instead of one collider per tile.
+		/// </summary>
+		public ILightOccluderSource OccluderSource;
+
 		const int CIRCLE_APPROXIMATION_VERTS = 12;
 		Vector2[] _vertBuffer = new Vector2[4];
+		readonly List<Vector2[]> _occluderBuffer = new List<Vector2[]>(64);
 		PrimitiveBatch _primitiveBatch;
 		DepthStencilState _depthStencilState;
 		BlendState _stencilOnlyBlendState;
@@ -92,25 +116,45 @@ namespace Nez
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		void RenderLight(IRenderable renderable, Camera cam)
 		{
-			// fetch all the Colliders in range
-			var colliders = Physics.BoxcastBroadphase(renderable.Bounds, CollidesWithLayers);
-			var colliderCount = IEnumerableExtensions.IEnumerableExt.Count(colliders);
+			IEnumerable<Collider> colliders = null;
+			int occluderCount;
 
-			if (colliderCount > 0)
+			if (OccluderSource != null)
+			{
+				_occluderBuffer.Clear();
+				OccluderSource.GatherOccluders(renderable.Bounds, _occluderBuffer);
+				occluderCount = _occluderBuffer.Count;
+			}
+			else
+			{
+				colliders = Physics.BoxcastBroadphase(renderable.Bounds, CollidesWithLayers);
+				occluderCount = IEnumerableExtensions.IEnumerableExt.Count(colliders);
+			}
+
+			if (occluderCount > 0)
 			{
 				Core.GraphicsDevice.DepthStencilState = _depthStencilState;
 				Core.GraphicsDevice.BlendState = _stencilOnlyBlendState;
 				Core.GraphicsDevice.Clear(ClearOptions.Stencil, new Color(0, 0, 0, 0), 0, 0);
 
 				_primitiveBatch.Begin(cam.ProjectionMatrix, cam.TransformMatrix);
-				foreach (var collider in colliders)
+				if (OccluderSource != null)
 				{
-					if (collider.Shape is Polygon shape)
-						RenderPolygon(shape, renderable.Bounds.Center);
-					else if (collider.Shape is Circle circle)
-						RenderCircle(circle, renderable.Bounds.Center);
-					else
-						throw new System.NotImplementedException();
+					var lightPos = renderable.Bounds.Center;
+					for (var i = 0; i < _occluderBuffer.Count; i++)
+						RenderVerts(Vector2.Zero, lightPos, _occluderBuffer[i]);
+				}
+				else
+				{
+					foreach (var collider in colliders)
+					{
+						if (collider.Shape is Polygon shape)
+							RenderPolygon(shape, renderable.Bounds.Center);
+						else if (collider.Shape is Circle circle)
+							RenderCircle(circle, renderable.Bounds.Center);
+						else
+							throw new System.NotImplementedException();
+					}
 				}
 				_primitiveBatch.End();
 			}
