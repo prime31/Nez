@@ -51,6 +51,7 @@ namespace Nez
 		/// global content manager for loading any assets that should stick around between scenes
 		/// </summary>
 		public new static NezContentManager Content;
+		public static float FPS;
 
 		/// <summary>
 		/// default SamplerState used by Materials. Note that this must be set at launch! Changing it after that time will result in only
@@ -386,6 +387,7 @@ namespace Nez
 			if (_frameCounterElapsedTime >= TimeSpan.FromSeconds(1))
 			{
 				var totalMemory = (GC.GetTotalMemory(false) / 1048576f).ToString("F");
+				FPS = _frameCounter;
 				Window.Title = string.Format("{0} {1} fps - {2} MB", _windowTitle, _frameCounter, totalMemory);
 				_frameCounter = 0;
 				_frameCounterElapsedTime -= TimeSpan.FromSeconds(1);
