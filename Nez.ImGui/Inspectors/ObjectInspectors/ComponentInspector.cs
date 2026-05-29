@@ -30,6 +30,9 @@ namespace Nez.ImGuiTools.ObjectInspectors
 				_name = _component.GetType().Name;
 			}
 
+			if (!string.IsNullOrEmpty(component.DebugName))
+				_name += $" ({component.DebugName})";
+
 			var methods = TypeInspectorUtils.GetAllMethodsWithAttribute<InspectorDelegateAttribute>(_component.GetType());
 			foreach (var method in methods)
 			{

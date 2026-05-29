@@ -15,6 +15,8 @@ namespace Nez
 	/// </summary>
 	public class Component : IComparable<Component>
 	{
+		public string DebugName;
+
 		/// <summary>
 		/// the Entity this Component is attached to
 		/// </summary>
