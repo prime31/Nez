@@ -10,7 +10,7 @@
 		<OutputType>Library</OutputType>
 		<RootNamespace>Nez.ImGuiTools</RootNamespace>
 		<AssemblyName>Nez.ImGui</AssemblyName>
-        <TargetFramework>netstandard2.0</TargetFramework>
+        <TargetFramework>net8.0</TargetFramework>
 		<AllowUnsafeBlocks>True</AllowUnsafeBlocks>
 		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
 		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
