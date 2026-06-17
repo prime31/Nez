@@ -1239,7 +1239,7 @@ namespace Nez.UI
 			else
 				eleY -= _visualAmountY;
 
-			float eleX = _widgetAreaBounds.Y;
+			float eleX = _widgetAreaBounds.X;
 			if (_scrollX)
 				eleX -= (int)_visualAmountX;
 
