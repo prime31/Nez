@@ -357,6 +357,31 @@ namespace Nez
 		}
 
 		/// <summary>
+		/// moves Vector2 start in the direction of Vector2 end by at most maxMove.
+		/// example: start = (0, 0), end = (6, 8), maxMove = 5, results in (3, 4)
+		/// </summary>
+		/// <param name="start">The starting position.</param>
+		/// <param name="target">The target position.</param>
+		/// <param name="maxMove">The maximal movement distance.</param>
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public static Vector2 Approach(Vector2 start, Vector2 target, float maxMove)
+		{
+			if (maxMove <= 0f || start == target)
+				return start;
+
+			Vector2 diff = target - start;
+			float length = diff.Length();
+
+			if (length < maxMove)
+				return target;
+			else
+			{
+				diff.Normalize();
+				return start + diff * maxMove;
+			}
+		}
+
+		/// <summary>
 		/// moves start angle towards end angle by shift amount clamping the result and choosing the shortest path. start can be less than or greater than end.
 		/// example 1: start is 30, end is 100, shift is 25 results in 55
 		/// example 2: start is 340, end is 30, shift is 25 results in 5 (365 is wrapped to 5)
@@ -611,12 +636,12 @@ namespace Nez
 			return Round(value / roundToNearest) * roundToNearest;
 		}
 
-        /// <summary>
-        /// Checks if the value passed falls under a certain threshold.
-        /// Useful for small, precise comparisons.
-        /// </summary>
-        /// <param name="value">The value to check.</param>
-        /// <param name="ep">The threshold to check the value with. <see cref="Epsilon"/> is used by default.</param>
+		/// <summary>
+		/// Checks if the value passed falls under a certain threshold.
+		/// Useful for small, precise comparisons.
+		/// </summary>
+		/// <param name="value">The value to check.</param>
+		/// <param name="ep">The threshold to check the value with. <see cref="Epsilon"/> is used by default.</param>
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static bool WithinEpsilon(float value, float ep = Epsilon)
 		{
