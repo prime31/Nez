@@ -544,7 +544,7 @@ namespace Nez
 		/// <param name="height">Height.</param>
 		/// <param name="sceneResolutionPolicy">Scene resolution policy.</param>
 		/// <param name="horizontalBleed">Horizontal bleed size. Used only if resolution policy is set to <see cref="SceneResolutionPolicy.BestFit"/>.</param>
-		/// <param name="verticalBleed">Horizontal bleed size. Used only if resolution policy is set to <see cref="SceneResolutionPolicy.BestFit"/>.</param>
+		/// <param name="verticalBleed">Vertical bleed size. Used only if resolution policy is set to <see cref="SceneResolutionPolicy.BestFit"/>.</param>
 		public void SetDesignResolution(int width, int height, SceneResolutionPolicy sceneResolutionPolicy,
 			int horizontalBleed = 0, int verticalBleed = 0)
 		{
