@@ -218,5 +218,15 @@ namespace Nez
 					return fourth;
 			}
 		}
+		
+		
+		/// <summary>
+		/// randomly returns one of the given values
+		/// </summary>
+		/// <typeparam name="T">The 1st type parameter.</typeparam>
+		public static T Choose<T>(params T[] options) 
+        {
+            return options[NextInt(options.Length)];
+        }
 	}
 }
