@@ -78,7 +78,7 @@ namespace Nez.Console
 		{
 			_commandHistory = new List<string>();
 			_drawCommands = new List<string>();
-			_commands = new Dictionary<string, CommandInfo>();
+			_commands = new Dictionary<string, CommandInfo>(StringComparer.OrdinalIgnoreCase);
 			_sorted = new List<string>();
 			_functionKeyActions = new Action[12];
 
@@ -409,7 +409,7 @@ namespace Nez.Console
 						else
 						{
 							_tabIndex--;
-							if (_tabIndex < 0 || (_tabSearch != "" && _sorted[_tabIndex].IndexOf(_tabSearch) != 0))
+							if (_tabIndex < 0 || (_tabSearch != "" && _sorted[_tabIndex].IndexOf(_tabSearch, StringComparison.OrdinalIgnoreCase) != 0))
 								FindLastTab();
 						}
 					}
@@ -424,7 +424,7 @@ namespace Nez.Console
 						{
 							_tabIndex++;
 							if (_tabIndex >= _sorted.Count ||
-							    (_tabSearch != "" && _sorted[_tabIndex].IndexOf(_tabSearch) != 0))
+							    (_tabSearch != "" && _sorted[_tabIndex].IndexOf(_tabSearch, StringComparison.OrdinalIgnoreCase) != 0))
 								FindFirstTab();
 						}
 					}
@@ -488,7 +488,7 @@ namespace Nez.Console
 		{
 			for (int i = 0; i < _sorted.Count; i++)
 			{
-				if (_tabSearch == "" || _sorted[i].IndexOf(_tabSearch) == 0)
+				if (_tabSearch == "" || _sorted[i].IndexOf(_tabSearch, StringComparison.OrdinalIgnoreCase) == 0)
 				{
 					_tabIndex = i;
 					break;
@@ -500,7 +500,7 @@ namespace Nez.Console
 		void FindLastTab()
 		{
 			for (int i = 0; i < _sorted.Count; i++)
-				if (_tabSearch == "" || _sorted[i].IndexOf(_tabSearch) == 0)
+				if (_tabSearch == "" || _sorted[i].IndexOf(_tabSearch, StringComparison.OrdinalIgnoreCase) == 0)
 					_tabIndex = i;
 		}
 
