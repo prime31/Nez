@@ -82,6 +82,12 @@ namespace Nez.Console
 			_sorted = new List<string>();
 			_functionKeyActions = new Action[12];
 
+#if FNA
+			TextInputEXT.TextInput += OnKeyTyped;
+#else
+			Core.Instance.Window.TextInput += OnKeyTyped;
+#endif
+
 			BuildCommandsList();
 		}
 
@@ -159,6 +165,22 @@ namespace Nez.Console
 
 		#region Updating and Rendering
 
+#if FNA
+		private void OnKeyTyped(char c)
+		{
+			if (IsOpen)
+				this.HandleKey(Keys.None, c);
+		}
+#else
+		private void OnKeyTyped(object sender, TextInputEventArgs e)
+		{
+			if (IsOpen)
+				this.HandleKey(e.Key, e.Character);
+			else if (e.Key == ConsoleKey)
+				IsOpen = true;
+		}
+#endif
+
 		internal void Update()
 		{
 			if (IsOpen)
@@ -170,6 +192,7 @@ namespace Nez.Console
 
 		void UpdateClosed()
 		{
+#if FNA
 			if (!_canOpen)
 			{
 				_canOpen = true;
@@ -178,7 +201,7 @@ namespace Nez.Console
 			{
 				IsOpen = true;
 			}
-
+#endif
 			for (var i = 0; i < _functionKeyActions.Length; i++)
 				if (Input.IsKeyPressed((Keys) (Keys.F1 + i)))
 					ExecuteFunctionKeyAction(i);
@@ -202,7 +225,7 @@ namespace Nez.Console
 
 					while (_repeatCounter >= REPEAT_DELAY)
 					{
-						HandleKey(_repeatKey.Value);
+						HandleKey(_repeatKey.Value, (char)0);
 						_repeatCounter -= REPEAT_EVERY;
 					}
 				}
@@ -210,22 +233,38 @@ namespace Nez.Console
 					_repeatKey = null;
 			}
 
+#if FNA
 			foreach (var key in Input.CurrentKeyboardState.GetPressedKeys())
 			{
 				if (Input.IsKeyPressed(key))
 				{
-					HandleKey(key);
+					HandleKey(key, (char)0);
 					break;
 				}
 			}
+#else
+			if (Input.IsKeyPressed(Keys.Up))
+				HandleKey(Keys.Up, (char) 0);
+			if (Input.IsKeyPressed(Keys.Down))
+				HandleKey(Keys.Down, (char)0);
+#endif
 		}
 
 
-		void HandleKey(Keys key)
+		void HandleKey(Keys key, char typed)
 		{
+			if (typed == '\t')
+			{
+#if !FNA
+				HandleKey(Keys.Tab, (char) 0);
+#endif
+				return;
+			}
+			
 			if (key != Keys.Tab && key != Keys.LeftShift && key != Keys.RightShift && key != Keys.RightAlt &&
 			    key != Keys.LeftAlt && key != Keys.RightControl && key != Keys.LeftControl)
 				_tabIndex = -1;
+			
 
 			if (key != ConsoleKey && key != Keys.Oem8 && key != Keys.Enter && _repeatKey != key)
 			{
@@ -236,144 +275,15 @@ namespace Nez.Console
 			switch (key)
 			{
 				default:
-					if (key.ToString().Length == 1)
-					{
-						if (InputUtils.IsShiftDown())
-							_currentText += key.ToString();
-						else
-							_currentText += key.ToString().ToLower();
-					}
-
-					break;
-
-				case (Keys.D1):
-					if (InputUtils.IsShiftDown())
-						_currentText += '!';
-					else
-						_currentText += '1';
-					break;
-				case (Keys.D2):
-					if (InputUtils.IsShiftDown())
-						_currentText += '@';
-					else
-						_currentText += '2';
-					break;
-				case (Keys.D3):
-					if (InputUtils.IsShiftDown())
-						_currentText += '#';
-					else
-						_currentText += '3';
-					break;
-				case (Keys.D4):
-					if (InputUtils.IsShiftDown())
-						_currentText += '$';
-					else
-						_currentText += '4';
-					break;
-				case (Keys.D5):
-					if (InputUtils.IsShiftDown())
-						_currentText += '%';
-					else
-						_currentText += '5';
-					break;
-				case (Keys.D6):
-					if (InputUtils.IsShiftDown())
-						_currentText += '^';
-					else
-						_currentText += '6';
-					break;
-				case (Keys.D7):
-					if (InputUtils.IsShiftDown())
-						_currentText += '&';
-					else
-						_currentText += '7';
-					break;
-				case (Keys.D8):
-					if (InputUtils.IsShiftDown())
-						_currentText += '*';
-					else
-						_currentText += '8';
-					break;
-				case (Keys.D9):
-					if (InputUtils.IsShiftDown())
-						_currentText += '(';
-					else
-						_currentText += '9';
-					break;
-				case (Keys.D0):
-					if (InputUtils.IsShiftDown())
-						_currentText += ')';
-					else
-						_currentText += '0';
-					break;
-				case (Keys.OemComma):
-					if (InputUtils.IsShiftDown())
-						_currentText += '<';
-					else
-						_currentText += ',';
-					break;
-				case Keys.OemPeriod:
-					if (InputUtils.IsShiftDown())
-						_currentText += '>';
-					else
-						_currentText += '.';
-					break;
-				case Keys.OemQuestion:
-					if (InputUtils.IsShiftDown())
-						_currentText += '?';
-					else
-						_currentText += '/';
-					break;
-				case Keys.OemSemicolon:
-					if (InputUtils.IsShiftDown())
-						_currentText += ':';
-					else
-						_currentText += ';';
-					break;
-				case Keys.OemQuotes:
-					if (InputUtils.IsShiftDown())
-						_currentText += '"';
-					else
-						_currentText += '\'';
-					break;
-				case Keys.OemBackslash:
-					if (InputUtils.IsShiftDown())
-						_currentText += '|';
-					else
-						_currentText += '\\';
-					break;
-				case Keys.OemOpenBrackets:
-					if (InputUtils.IsShiftDown())
-						_currentText += '{';
-					else
-						_currentText += '[';
-					break;
-				case Keys.OemCloseBrackets:
-					if (InputUtils.IsShiftDown())
-						_currentText += '}';
-					else
-						_currentText += ']';
-					break;
-				case Keys.OemMinus:
-					if (InputUtils.IsShiftDown())
-						_currentText += '_';
-					else
-						_currentText += '-';
-					break;
-				case Keys.OemPlus:
-					if (InputUtils.IsShiftDown())
-						_currentText += '+';
-					else
-						_currentText += '=';
-					break;
-
-				case Keys.Space:
-					_currentText += " ";
-					break;
-				case Keys.Back:
-					if (_currentText.Length > 0)
+					if (typed == (char)0)
+						break;
+					if((!char.IsWhiteSpace(typed) || typed == ' ') && !char.IsControl(typed))
+						_currentText += typed;
+					if (typed == 8 && _currentText?.Length > 0) // Backspace
 						_currentText = _currentText.Substring(0, _currentText.Length - 1);
+
 					break;
+
 				case Keys.Delete:
 					_currentText = "";
 					break;
@@ -460,7 +370,11 @@ namespace Nez.Console
 
 			if (key == ConsoleKey)
 			{
+#if FNA
 				IsOpen = _canOpen = false;
+#else
+				IsOpen = false;
+#endif
 			}
 		}
 
@@ -567,10 +481,10 @@ namespace Nez.Console
 			Graphics.Instance.Batcher.End();
 		}
 
-		#endregion
+#endregion
 
 
-		#region Execute
+#region Execute
 
 		void ExecuteCommand(string command, string[] args)
 		{
@@ -604,10 +518,10 @@ namespace Nez.Console
 			Instance._functionKeyActions[functionKey - 1] = () => Instance.ExecuteCommand(command, args);
 		}
 
-		#endregion
+#endregion
 
 
-		#region Parse Commands
+#region Parse Commands
 
 		void BuildCommandsList()
 		{
@@ -778,7 +692,7 @@ namespace Nez.Console
 		}
 
 
-		#region Parsing Arguments
+#region Parsing Arguments
 
 		static string ArgString(string arg)
 		{
@@ -823,8 +737,8 @@ namespace Nez.Console
 			}
 		}
 
-		#endregion
+#endregion
 
-		#endregion
+#endregion
 	}
 }
